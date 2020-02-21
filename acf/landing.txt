@@ -1,0 +1,3 @@
+Airbus A321   landing 115 kts  full flaps
+
+take_off climb 2500 ft/mn
