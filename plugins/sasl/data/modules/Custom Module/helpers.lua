@@ -42,7 +42,7 @@ end
 
 
 function datarefSetOff(df)
-  return set(df, 1)
+  return set(df, 0)
 end
 
 
