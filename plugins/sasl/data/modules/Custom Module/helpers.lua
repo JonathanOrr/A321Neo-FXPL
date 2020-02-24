@@ -37,12 +37,17 @@ end
 
 
 function datarefSetOn(df)
-  return set(df, 1)
+  datarefSetValue(df, 1)
 end
 
 
 function datarefSetOff(df)
-  return set(df, 0)
+  datarefSetValue(df, 0)
+end
+
+
+function datarefSetValue(df, value)
+  set(df, value)
 end
 
 

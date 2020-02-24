@@ -1,10 +1,11 @@
 
-local ext_pwr_button = createGlobalPropertyi("a321neo/electrical/ext_pwr_button", 0, false, true, true)
+local ext_pwr_source_on = createGlobalPropertyi("a321neo/electrical/ext_pwr_source_on", 0, false, true, false)
+local ext_pwr_on = createGlobalPropertyi("a321neo/electrical/ext_pwr_on", 0, false, true, true)
 
-local bat1_button = createGlobalPropertyi("a321neo/electrical/bat1_button", 0, false, true, true)
-local bat2_button = createGlobalPropertyi("a321neo/electrical/bat2_button", 0, false, true, true)
 
-local ext_pwr_on = createGlobalPropertyi("a321neo/electrical/ext_pwr_on", 0, false, true, false)
+local command_ext_pwr_connect = createCommand("a321neo/electrical/ext_pwr_connect", "Connect EXT PWR")
+local command_ext_pwr_disconnect = createCommand("a321neo/electrical/ext_pwr_disconnect", "Disconnect EXT PWR")
+
 local apu_gen_on = createGlobalPropertyi("a321neo/electrical/apu_gen_on", 0, false, true, true)
 local gen1_on = createGlobalPropertyi("a321neo/electrical/gen1_on", 0, false, true, true)
 local gen2_on = createGlobalPropertyi("a321neo/electrical/gen2_on", 0, false, true, true)
@@ -35,12 +36,20 @@ local wheel_on_ground = globalProperty("sim/flightmodel2/gear/on_ground[0]")
 
 
 function exp_pwr_on_and_pb_on()
-  return (datarefIsOn(ext_pwr_on) and datarefIsOnBit(ext_pwr_button, 1))
+  return datarefIsOn(ext_pwr_on) and datarefIsOn(ext_pwr_source_on)
 end
 
 --test
 local ac1_fault = false
 local ac2_fault = false
+
+sasl.registerCommandHandler(command_ext_pwr_connect, 0, function(phase)
+  if phase == SASL_COMMAND_BEGIN then datarefSetOn(ext_pwr_source_on) end
+end)
+
+sasl.registerCommandHandler(command_ext_pwr_disconnect, 0, function(phase)
+  if phase == SASL_COMMAND_BEGIN then datarefSetOff(ext_pwr_source_on) end
+end)
 
 
 function update()
