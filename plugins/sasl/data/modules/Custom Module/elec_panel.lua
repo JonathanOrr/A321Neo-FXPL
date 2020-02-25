@@ -1,16 +1,21 @@
 -- READ
 local ext_pwr_source_on = globalProperty("a321neo/electrical/ext_pwr_source_on")
 local dc_bat_bus_on = globalPropertyi("a321neo/electrical/dc_bat_bus_on")
+local dc_ess_bus_on = globalPropertyi("a321neo/electrical/dc_ess_bus_on")
+local ext_pwr_on = globalProperty("a321neo/electrical/ext_pwr_on")
+local bat1_on = globalPropertyi("a321neo/electrical/bat1_on")
+local bat2_on = globalPropertyi("a321neo/electrical/bat2_on")
+local gen1_on = globalPropertyi("a321neo/electrical/gen1_on")
+local gen2_on = globalPropertyi("a321neo/electrical/gen2_on")
+local apu_gen_on = globalPropertyi("a321neo/electrical/apu_gen_on")
 
 
 -- WRITE
--- BITS: 1 bit for bottom part of the button, 2 bit is the upper part of the bottom
 local ext_pwr_button = createGlobalPropertyi("a321neo/electrical/ext_pwr_button", 0, false, true, true)
 local ext_pwr_button_state = globalPropertyi("a321neo/electrical/ext_pwr_button_state")
 
 local bat1_button = createGlobalPropertyi("a321neo/electrical/bat1_button", 0, false, true, true)
 local bat1_button_state = globalPropertyi("a321neo/electrical/bat1_button_state")
-
 local bat2_button = createGlobalPropertyi("a321neo/electrical/bat2_button", 0, false, true, true)
 local bat2_button_state = globalPropertyi("a321neo/electrical/bat2_button_state")
 
@@ -22,23 +27,34 @@ local gen2_button = createGlobalPropertyi("a321neo/electrical/gen2_button", 0, f
 local gen2_button_state = globalPropertyi("a321neo/electrical/gen2_button_state")
 
 
-local ext_pwr_on = globalProperty("a321neo/electrical/ext_pwr_on")
-local bat1_on = globalPropertyi("a321neo/electrical/bat1_on")
-local bat2_on = globalPropertyi("a321neo/electrical/bat2_on")
-local gen1_on = globalPropertyi("a321neo/electrical/gen1_on")
-local gen2_on = globalPropertyi("a321neo/electrical/gen2_on")
-local apu_gen_on = globalPropertyi("a321neo/electrical/apu_gen_on")
 
 -- CMD
-local command_ext_pwr_button_push = createCommand("a321neo/electrical/ext_pwr_button_push", "Push EXT PWR")
-local command_bat1_button_push = createCommand("a321neo/electrical/bat1_button_push", "Push BAT 1")
-local command_bat2_button_push = createCommand("a321neo/electrical/bat2_button_push", "Push BAT 2")
+sasl.registerCommandHandler(createCommand("a321neo/electrical/ext_pwr_button_push", "Push EXT PWR"), 0, function(phase)
+ if phase == SASL_COMMAND_BEGIN then datarefFlip(ext_pwr_button_state) end
+end)
 
-local command_apu_gen_button_push = createCommand("a321neo/electrical/apu_gen_button_push", "Push APU GEN")
-local command_gen1_button_push = createCommand("a321neo/electrical/gen1_button_push", "Push GEN 1")
-local command_gen2_button_push = createCommand("a321neo/electrical/bat2_button_push", "Push GEN 2")
+sasl.registerCommandHandler(createCommand("a321neo/electrical/apu_gen_button_push", "Push APU GEN"), 0, function(phase)
+  if phase == SASL_COMMAND_BEGIN then datarefFlip(apu_gen_button_state) end
+end)
+
+sasl.registerCommandHandler(createCommand("a321neo/electrical/bat1_button_push", "Push BAT 1"), 0, function(phase)
+  if phase == SASL_COMMAND_BEGIN then datarefFlip(bat1_button_state) end
+end)
+
+sasl.registerCommandHandler(createCommand("a321neo/electrical/bat2_button_push", "Push BAT 2"), 0, function(phase)
+  if phase == SASL_COMMAND_BEGIN then datarefFlip(bat2_button_state) end
+end)
+
+sasl.registerCommandHandler(createCommand("a321neo/electrical/gen1_button_push", "Push GEN 1"), 0, function(phase)
+  if phase == SASL_COMMAND_BEGIN then datarefFlip(gen1_button_state) end
+end)
+
+sasl.registerCommandHandler(createCommand("a321neo/electrical/gen2_button_push", "Push GEN 2"), 0, function(phase)
+  if phase == SASL_COMMAND_BEGIN then datarefFlip(gen2_button_state) end
+end)
 
 
+-- BITS: 1 bit for bottom part of the button, 2 bit is the upper part of the bottom
 function update()
   datarefSetValue(ext_pwr_button, 0)
   datarefSetValue(bat1_button, 0)
@@ -63,39 +79,25 @@ function update()
     datarefSetBitValue(bat2_button, CONST.BOTTOM_BIT, get(dc_bat_bus_on)) -- off light
   end
 
-  if datarefIsOn(dc_bat_bus_on) and datarefIsOff(gen1_on)
+  if datarefIsOn(dc_ess_bus_on) and datarefIsOff(gen1_on) and datarefIsOn(gen1_button_state)
   then
       datarefSetBitValue(gen1_button, CONST.UPPER_BIT, 1) -- fault light
   end
 
-  if datarefIsOn(dc_bat_bus_on) and datarefIsOff(gen1_on)
+  if datarefIsOff(gen1_button_state) and datarefIsOn(dc_ess_bus_on)
+  then
+      datarefSetBitValue(gen1_button, CONST.UPPER_BIT, 0) -- fault light reset
+      datarefSetBitValue(gen1_button, CONST.BOTTOM_BIT, 1) -- off light
+  end
+
+  if datarefIsOn(dc_ess_bus_on) and datarefIsOff(gen2_on) and datarefIsOn(gen2_button_state)
   then
       datarefSetBitValue(gen2_button, CONST.UPPER_BIT, 1) -- fault light
   end
 
-
+  if datarefIsOff(gen2_button_state) and datarefIsOn(dc_ess_bus_on)
+  then
+      datarefSetBitValue(gen2_button, CONST.UPPER_BIT, 0) -- fault light reset
+      datarefSetBitValue(gen2_button, CONST.BOTTOM_BIT, 1) -- off light
+  end
 end
-
-sasl.registerCommandHandler(command_ext_pwr_button_push, 0, function(phase)
- if phase == SASL_COMMAND_BEGIN then datarefFlip(ext_pwr_button_state) end
-end)
-
-sasl.registerCommandHandler(command_apu_gen_button_push, 0, function(phase)
-  if phase == SASL_COMMAND_BEGIN then datarefFlip(apu_gen_button_state) end
-end)
-
-sasl.registerCommandHandler(command_bat1_button_push, 0, function(phase)
-  if phase == SASL_COMMAND_BEGIN then datarefFlip(bat1_button_state) end
-end)
-
-sasl.registerCommandHandler(command_bat2_button_push, 0, function(phase)
-  if phase == SASL_COMMAND_BEGIN then datarefFlip(bat2_button_state) end
-end)
-
-sasl.registerCommandHandler(command_gen1_button_push, 0, function(phase)
-  if phase == SASL_COMMAND_BEGIN then datarefFlip(gen1_button_state) end
-end)
-
-sasl.registerCommandHandler(command_gen2_button_push, 0, function(phase)
-  if phase == SASL_COMMAND_BEGIN then datarefFlip(gen2_button_state) end
-end)
