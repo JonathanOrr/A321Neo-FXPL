@@ -1,14 +1,19 @@
-
 local ext_pwr_source_on = createGlobalPropertyi("a321neo/electrical/ext_pwr_source_on", 0, false, true, false)
 local ext_pwr_on = createGlobalPropertyi("a321neo/electrical/ext_pwr_on", 0, false, true, true)
+local ext_pwr_button_state = createGlobalPropertyi("a321neo/electrical/ext_pwr_button_state", 0, false, true, true)
 
-
-local command_ext_pwr_connect = createCommand("a321neo/electrical/ext_pwr_connect", "Connect EXT PWR")
-local command_ext_pwr_disconnect = createCommand("a321neo/electrical/ext_pwr_disconnect", "Disconnect EXT PWR")
+local bat1_on = createGlobalPropertyi("a321neo/electrical/bat1_on", 0, false, true, true)
+local bat1_button_state = createGlobalPropertyi("a321neo/electrical/bat1_button_state", 0, false, true, true)
+local bat2_on = createGlobalPropertyi("a321neo/electrical/bat2_on", 0, false, true, true)
+local bat2_button_state = createGlobalPropertyi("a321neo/electrical/bat2_button_state", 0, false, true, true)
 
 local apu_gen_on = createGlobalPropertyi("a321neo/electrical/apu_gen_on", 0, false, true, true)
+local apu_gen_button_state = createGlobalPropertyi("a321neo/electrical/apu_gen_button_state", CONST.AUTO_BUTTON_STATE, false, true, true)
 local gen1_on = createGlobalPropertyi("a321neo/electrical/gen1_on", 0, false, true, true)
+local gen1_button_state = createGlobalPropertyi("a321neo/electrical/gen1_button_state", CONST.AUTO_BUTTON_STATE, false, true, true)
 local gen2_on = createGlobalPropertyi("a321neo/electrical/gen2_on", 0, false, true, true)
+local gen2_button_state = createGlobalPropertyi("a321neo/electrical/gen2_button_state", CONST.AUTO_BUTTON_STATE, false, true, true)
+
 local emer_gen_on = createGlobalPropertyi("a321neo/electrical/emer_gen_on", 0, false, true, true)
 
 local ac_bus1_on = createGlobalPropertyi("a321neo/electrical/ac_bus1_on", 0, false, true, true)
@@ -16,10 +21,10 @@ local ac_bus2_on = createGlobalPropertyi("a321neo/electrical/ac_bus2_on", 0, fal
 local ac_ess_bus_on = createGlobalPropertyi("a321neo/electrical/ac_ess_bus_on", 0, false, true, true)
 
 -- trs not used yet
-local tr1_on = createGlobalPropertyi("a321neo/electrical/tr1_on", 0, false, true, true)
-local tr2_on = createGlobalPropertyi("a321neo/electrical/tr2_on", 0, false, true, true)
-local tr_ess_on = createGlobalPropertyi("a321neo/electrical/tr_ess_on", 0, false, true, true)
-local tr_ent_on = createGlobalPropertyi("a321neo/electrical/tr_ent_on", 0, false, true, true)
+-- local tr1_on = createGlobalPropertyi("a321neo/electrical/tr1_on", 0, false, true, true)
+-- local tr2_on = createGlobalPropertyi("a321neo/electrical/tr2_on", 0, false, true, true)
+-- local tr_ess_on = createGlobalPropertyi("a321neo/electrical/tr_ess_on", 0, false, true, true)
+-- local tr_ent_on = createGlobalPropertyi("a321neo/electrical/tr_ent_on", 0, false, true, true)
 
 local dc_bus1_on = createGlobalPropertyi("a321neo/electrical/dc_bus1_on", 0, false, true, true)
 local dc_bus2_on = createGlobalPropertyi("a321neo/electrical/dc_bus2_on", 0, false, true, true)
@@ -27,22 +32,26 @@ local dc_bus_ent = createGlobalPropertyi("a321neo/electrical/dc_bus_ent_on", 0, 
 local dc_bat_bus_on = createGlobalPropertyi("a321neo/electrical/dc_bat_bus_on", 0, false, true, true)
 local dc_ess_bus_on = createGlobalPropertyi("a321neo/electrical/dc_ess_bus_on", 0, false, true, true)
 
-local bat1_on = createGlobalPropertyi("a321neo/electrical/bat1_on", 0, false, true, true)
-local bat2_on = createGlobalPropertyi("a321neo/electrical/bat2_on", 0, false, true, true)
+
+-- POWER
+local apu_running = globalPropertyi("a321neo/power/apu_running")
+local eng1_running = globalPropertyi("a321neo/power/eng1_running")
+local eng2_running = globalPropertyi("a321neo/power/eng2_running")
 
 -- MISC
 local indicated_airspeed = globalProperty("sim/flightmodel/position/indicated_airspeed")
 local wheel_on_ground = globalProperty("sim/flightmodel2/gear/on_ground[0]")
 
-
-function exp_pwr_on_and_pb_on()
-  return datarefIsOn(ext_pwr_on) and datarefIsOn(ext_pwr_source_on)
-end
-
 --test
 local ac1_fault = false
 local ac2_fault = false
 
+local bat1_normal = true
+local bat2_normal = true
+
+
+local command_ext_pwr_connect = createCommand("a321neo/electrical/ext_pwr_connect", "Connect EXT PWR")
+local command_ext_pwr_disconnect = createCommand("a321neo/electrical/ext_pwr_disconnect", "Disconnect EXT PWR")
 sasl.registerCommandHandler(command_ext_pwr_connect, 0, function(phase)
   if phase == SASL_COMMAND_BEGIN then datarefSetOn(ext_pwr_source_on) end
 end)
@@ -52,8 +61,19 @@ sasl.registerCommandHandler(command_ext_pwr_disconnect, 0, function(phase)
 end)
 
 
-function update()
+function states()
+  if datarefIsOn(ext_pwr_button_state) and datarefIsOn(ext_pwr_source_on) then datarefSetOn(ext_pwr_on) end
+  if datarefIsOn(apu_gen_button_state) and datarefIsOn(apu_running)       then datarefSetOn(apu_gen_on) end
+  if datarefIsOn(gen1_button_state)    and datarefIsOn(eng1_running)      then datarefSetOn(gen1_on) end
+  if datarefIsOn(gen2_button_state)    and datarefIsOn(eng2_running)      then datarefSetOn(gen2_on) end
+  if datarefIsOn(bat1_button_state)    and (bat1_normal)                  then datarefSetOn(bat1_on) end
+  if datarefIsOn(bat2_button_state)    and (bat2_normal)                  then datarefSetOn(bat2_on) end
+end
 
+
+
+function update()
+  states()
   -- Turn off ac_bus1_on and ac_bus2_on if no power
   -- if exp_pwr_on_and_pb_on() == false and datarefIsOff(gen1_on) and datarefIsOff(gen2_on) and datarefIsOff(apu_gen_on)
   -- then
@@ -68,7 +88,7 @@ function update()
   -- end
 
   -- all gens are interchangable
-  if exp_pwr_on_and_pb_on() or datarefIsOn(gen1_on) or  datarefIsOn(gen2_on) or datarefIsOn(apu_gen_on)
+  if datarefIsOn(ext_pwr_on) or datarefIsOn(gen1_on) or  datarefIsOn(gen2_on) or datarefIsOn(apu_gen_on)
   then
     if ac1_fault == false then datarefSetOn(ac_bus1_on) end
     if ac2_fault == false then datarefSetOn(ac_bus2_on) end
@@ -84,7 +104,7 @@ function update()
   then
     datarefSetOn(dc_bus2_on)
     -- power dc_bus_ent if enough power
-    if (datarefIsOn(gen1_on) and datarefIsOn(gen2_on)) or exp_pwr_on_and_pb_on() or datarefIsOn(apu_gen_on) then datarefSetOn(dc_bus_ent) end
+    if (datarefIsOn(gen1_on) and datarefIsOn(gen2_on)) or datarefIsOn(ext_pwr_on) or datarefIsOn(apu_gen_on) then datarefSetOn(dc_bus_ent) end
   end
 
   -- AC ESS FEED Auto Switching

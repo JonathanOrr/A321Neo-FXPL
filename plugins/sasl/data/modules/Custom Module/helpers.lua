@@ -1,5 +1,28 @@
 local bit = require("bit")
 
+function protect(tbl)
+  return setmetatable({}, {
+    __index = tbl,
+    __newindex = function(t, key, value)
+        error("attempting to change constant " ..
+               tostring(key) .. " to " .. tostring(value), 2)
+  end
+})
+end
+
+CONST = {
+    AUTO_BUTTON_STATE = 1,
+    OFF_BUTTON_STATE = 0,
+    ON_BUTTON_STATE = 0,
+    ON_DATAREF_STATE = 1,
+    OFF_DATAREF_STATE = 0,
+    AUTO_DATAREF_STATE = 1,
+    BOTTOM_BIT = 1,
+    UPPER_BIT = 2
+}
+CONST = protect(CONST)
+
+
 -- number ^= 1UL << n;
 function flipBitValue(value, bitNumber)
   return bit.bxor(1, bit.lshift(value, bitNumber - 1))
@@ -17,32 +40,41 @@ end
 
 --
 function datarefIsOn(df)
-  return get(df) == 1
+  return get(df) == CONST.ON_DATAREF_STATE
+end
+
+
+function datarefIsAuto(df)
+  return get(df) == CONST.AUTO_DATAREF_STATE
 end
 
 
 function datarefIsOnBit(df, bitNumber )
-  return checkBitValue(get(df), bitNumber, 1)
+  return checkBitValue(get(df), bitNumber,CONST.ON_DATAREF_STATE)
 end
 
 
 function datarefIsOffBit(df, bitNumber)
-  return checkBitValue(get(df), bitNumber, 0)
+  return checkBitValue(get(df), bitNumber, CONST.OFF_DATAREF_STATE)
 end
 
 
 function datarefIsOff(df)
-  return get(df) == 0
+  return get(df) == CONST.OFF_DATAREF_STATE
 end
 
 
 function datarefSetOn(df)
-  datarefSetValue(df, 1)
+  datarefSetValue(df, CONST.ON_DATAREF_STATE)
 end
 
 
 function datarefSetOff(df)
-  datarefSetValue(df, 0)
+  datarefSetValue(df, CONST.OFF_DATAREF_STATE)
+end
+
+function datarefSetBitValue(df, bitNumber, setValue)
+  set(df, setBitValue(get(df), bitNumber, setValue))
 end
 
 
