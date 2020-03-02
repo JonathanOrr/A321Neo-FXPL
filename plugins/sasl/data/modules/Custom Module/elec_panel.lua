@@ -8,7 +8,8 @@ local bat2_on = globalPropertyi("a321neo/electrical/bat2_on")
 local gen1_on = globalPropertyi("a321neo/electrical/gen1_on")
 local gen2_on = globalPropertyi("a321neo/electrical/gen2_on")
 local apu_gen_on = globalPropertyi("a321neo/electrical/apu_gen_on")
-
+local bat1_voltage = globalPropertyf("a321neo/electrical/bat1_voltage")
+local bat2_voltage = globalPropertyf("a321neo/electrical/bat2_voltage")
 
 -- WRITE
 local ext_pwr_button = createGlobalPropertyi("a321neo/electrical/ext_pwr_button", 0, false, true, true)
@@ -28,6 +29,20 @@ local gen2_button_state = globalPropertyi("a321neo/electrical/gen2_button_state"
 
 local ac_ess_feed_button = createGlobalPropertyi("a321neo/electrical/ac_ess_feed_button", 0, false, true, true)
 local ac_ess_feed_button_state = globalPropertyi("a321neo/electrical/ac_ess_feed_button_state")
+
+local bus_tie_button = createGlobalPropertyi("a321neo/electrical/bus_tie_button", 0, false, true, true)
+local bus_tie_button_state = globalPropertyi("a321neo/electrical/bus_tie_button_state")
+
+local gelley_button = createGlobalPropertyi("a321neo/electrical/gelley_button", 0, false, true, true)
+local gelley_button_state = globalPropertyi("a321neo/electrical/gelley_button_state")
+
+local commercial_button = createGlobalPropertyi("a321neo/electrical/commercial_button", 0, false, true, true)
+local commercial_button_state = globalPropertyi("a321neo/electrical/commercial_button_state")
+
+local idg1_button = createGlobalPropertyi("a321neo/electrical/idg1_button", 0, false, true, true)
+local idg1_button_state = globalPropertyi("a321neo/electrical/idg1_button_state")
+local idg2_button = createGlobalPropertyi("a321neo/electrical/idg2_button", 0, false, true, true)
+local idg2_button_state = globalPropertyi("a321neo/electrical/idg2_button_state")
 
 
 -- CMD

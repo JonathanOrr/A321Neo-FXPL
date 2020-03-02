@@ -1,18 +1,27 @@
 local ext_pwr_source_on = createGlobalPropertyi("a321neo/electrical/ext_pwr_source_on", 0, false, true, false)
 local ext_pwr_on = createGlobalPropertyi("a321neo/electrical/ext_pwr_on", 0, false, true, true)
-local ext_pwr_button_state = createGlobalPropertyi("a321neo/electrical/ext_pwr_button_state", 0, false, true, true)
+local ext_pwr_button_state = createGlobalPropertyi("a321neo/electrical/ext_pwr_button_state", CONST.OFF_BUTTON_STATE, false, true, true)
 
 local bat1_on = createGlobalPropertyi("a321neo/electrical/bat1_on", 0, false, true, true)
-local bat1_button_state = createGlobalPropertyi("a321neo/electrical/bat1_button_state", 0, false, true, true)
+local bat1_button_state = createGlobalPropertyi("a321neo/electrical/bat1_button_state", CONST.OFF_BUTTON_STATE, false, true, true)
 local bat2_on = createGlobalPropertyi("a321neo/electrical/bat2_on", 0, false, true, true)
-local bat2_button_state = createGlobalPropertyi("a321neo/electrical/bat2_button_state", 0, false, true, true)
+local bat2_button_state = createGlobalPropertyi("a321neo/electrical/bat2_button_state", CONST.OFF_BUTTON_STATE, false, true, true)
+local bat1_voltage = createGlobalPropertyf("a321neo/electrical/bat1_voltage", 0, false, true, true)
+local bat2_voltage = createGlobalPropertyf("a321neo/electrical/bat2_voltage", 0, false, true, true)
+
+local bus_tie_button_state = createGlobalPropertyi("a321neo/electrical/bus_tie_button_state", CONST.AUTO_BUTTON_STATE, false, true, true)
+local gelley_button_state = createGlobalPropertyi("a321neo/electrical/gelley_button_state", CONST.AUTO_BUTTON_STATE, false, true, true)
+local commercial_button_state = createGlobalPropertyi("a321neo/electrical/commercial_button_state", CONST.AUTO_BUTTON_STATE, false, true, true)
+
+local idg1_button_state = createGlobalPropertyi("a321neo/electrical/idg1_button_state", CONST.OFF_BUTTON_STATE, false, true, true)
+local idg2_button_state = createGlobalPropertyi("a321neo/electrical/idg2_button_state", CONST.OFF_BUTTON_STATE, false, true, true)
 
 local apu_gen_on = createGlobalPropertyi("a321neo/electrical/apu_gen_on", 0, false, true, true)
-local apu_gen_button_state = createGlobalPropertyi("a321neo/electrical/apu_gen_button_state", CONST.AUTO_BUTTON_STATE, false, true, true)
+local apu_gen_button_state = createGlobalPropertyi("a321neo/electrical/apu_gen_button_state", CONST.ON_BUTTON_STATE, false, true, true)
 local gen1_on = createGlobalPropertyi("a321neo/electrical/gen1_on", 0, false, true, true)
-local gen1_button_state = createGlobalPropertyi("a321neo/electrical/gen1_button_state", CONST.AUTO_BUTTON_STATE, false, true, true)
+local gen1_button_state = createGlobalPropertyi("a321neo/electrical/gen1_button_state", CONST.ON_BUTTON_STATE, false, true, true)
 local gen2_on = createGlobalPropertyi("a321neo/electrical/gen2_on", 0, false, true, true)
-local gen2_button_state = createGlobalPropertyi("a321neo/electrical/gen2_button_state", CONST.AUTO_BUTTON_STATE, false, true, true)
+local gen2_button_state = createGlobalPropertyi("a321neo/electrical/gen2_button_state", CONST.ON_BUTTON_STATE, false, true, true)
 
 local emer_gen_on = createGlobalPropertyi("a321neo/electrical/emer_gen_on", 0, false, true, true)
 
@@ -20,32 +29,32 @@ local ac_bus1_on = createGlobalPropertyi("a321neo/electrical/ac_bus1_on", 0, fal
 local ac_bus2_on = createGlobalPropertyi("a321neo/electrical/ac_bus2_on", 0, false, true, true)
 local ac_ess_bus_on = createGlobalPropertyi("a321neo/electrical/ac_ess_bus_on", 0, false, true, true)
 
--- trs not used yet
--- local tr1_on = createGlobalPropertyi("a321neo/electrical/tr1_on", 0, false, true, true)
--- local tr2_on = createGlobalPropertyi("a321neo/electrical/tr2_on", 0, false, true, true)
--- local tr_ess_on = createGlobalPropertyi("a321neo/electrical/tr_ess_on", 0, false, true, true)
--- local tr_ent_on = createGlobalPropertyi("a321neo/electrical/tr_ent_on", 0, false, true, true)
-
 local dc_bus1_on = createGlobalPropertyi("a321neo/electrical/dc_bus1_on", 0, false, true, true)
 local dc_bus2_on = createGlobalPropertyi("a321neo/electrical/dc_bus2_on", 0, false, true, true)
 local dc_bus_ent = createGlobalPropertyi("a321neo/electrical/dc_bus_ent_on", 0, false, true, true)
 local dc_bat_bus_on = createGlobalPropertyi("a321neo/electrical/dc_bat_bus_on", 0, false, true, true)
 local dc_ess_bus_on = createGlobalPropertyi("a321neo/electrical/dc_ess_bus_on", 0, false, true, true)
 
-local ac_ess_feed_button_state = createGlobalPropertyi("a321neo/electrical/ac_ess_feed_button_state", 0, false, true, true)
 local ac_ess_feed_on = createGlobalPropertyi("a321neo/electrical/ac_ess_feed_on", 0, false, true, true)
+local ac_ess_feed_button_state = createGlobalPropertyi("a321neo/electrical/ac_ess_feed_button_state", CONST.OFF_BUTTON_STATE, false, true, true)
+
+-- trs not used yet
+-- local tr1_on = createGlobalPropertyi("a321neo/electrical/tr1_on", 0, false, true, true)
+-- local tr2_on = createGlobalPropertyi("a321neo/electrical/tr2_on", 0, false, true, true)
+-- local tr_ess_on = createGlobalPropertyi("a321neo/electrical/tr_ess_on", 0, false, true, true)
+-- local tr_ent_on = createGlobalPropertyi("a321neo/electrical/tr_ent_on", 0, false, true, true)
 
 
--- POWER
+-- READ POWER
 local apu_running = globalPropertyi("a321neo/power/apu_running")
 local eng1_running = globalPropertyi("a321neo/power/eng1_running")
 local eng2_running = globalPropertyi("a321neo/power/eng2_running")
 
--- MISC
+-- READ MISC
 local indicated_airspeed = globalProperty("sim/flightmodel/position/indicated_airspeed")
 local wheel_on_ground = globalProperty("sim/flightmodel2/gear/on_ground[0]")
 
---test
+-- debug test
 local ac1_fault = false
 local ac2_fault = false
 
@@ -71,7 +80,7 @@ function states()
   if datarefIsOn(gen2_button_state)    and datarefIsOn(eng2_running)      then datarefSetOn(gen2_on) end
   if datarefIsOn(bat1_button_state)    and (bat1_normal)                  then datarefSetOn(bat1_on) end
   if datarefIsOn(bat2_button_state)    and (bat2_normal)                  then datarefSetOn(bat2_on) end
-  if datarefIsOn(ac_ess_feed_button_state) then datarefSetOn(ac_ess_feed_on)
+  if datarefIsOn(ac_ess_feed_button_state) then datarefSetOn(ac_ess_feed_on) end
 end
 
 
@@ -100,7 +109,8 @@ function update()
 
   if datarefIsOn(ac_bus1_on)
   then
-    datarefSetOn(ac_ess_bus_on)
+    -- if ac ess feed manualy swithech
+    if datarefIsOff(ac_ess_feed_on) then datarefSetOn(ac_ess_bus_on) end
     datarefSetOn(dc_bus1_on)
   end
 
