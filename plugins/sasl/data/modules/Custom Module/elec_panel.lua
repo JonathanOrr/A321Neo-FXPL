@@ -26,6 +26,8 @@ local gen1_button_state = globalPropertyi("a321neo/electrical/gen1_button_state"
 local gen2_button = createGlobalPropertyi("a321neo/electrical/gen2_button", 0, false, true, true)
 local gen2_button_state = globalPropertyi("a321neo/electrical/gen2_button_state")
 
+local ac_ess_feed_button = createGlobalPropertyi("a321neo/electrical/ac_ess_feed_button", 0, false, true, true)
+local ac_ess_feed_button_state = globalPropertyi("a321neo/electrical/ac_ess_feed_button_state")
 
 
 -- CMD
@@ -59,6 +61,8 @@ function update()
   datarefSetValue(ext_pwr_button, 0)
   datarefSetValue(bat1_button, 0)
   datarefSetValue(bat2_button, 0)
+  datarefSetValue(gen1_button, 0)
+  datarefSetValue(gen2_button, 0)
 
   if datarefIsOn(ext_pwr_on) and datarefIsOn(ext_pwr_source_on)
   then

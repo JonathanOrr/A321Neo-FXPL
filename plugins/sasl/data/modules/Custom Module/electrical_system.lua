@@ -32,6 +32,9 @@ local dc_bus_ent = createGlobalPropertyi("a321neo/electrical/dc_bus_ent_on", 0, 
 local dc_bat_bus_on = createGlobalPropertyi("a321neo/electrical/dc_bat_bus_on", 0, false, true, true)
 local dc_ess_bus_on = createGlobalPropertyi("a321neo/electrical/dc_ess_bus_on", 0, false, true, true)
 
+local ac_ess_feed_button_state = createGlobalPropertyi("a321neo/electrical/ac_ess_feed_button_state", 0, false, true, true)
+local ac_ess_feed_on = createGlobalPropertyi("a321neo/electrical/ac_ess_feed_on", 0, false, true, true)
+
 
 -- POWER
 local apu_running = globalPropertyi("a321neo/power/apu_running")
@@ -68,6 +71,7 @@ function states()
   if datarefIsOn(gen2_button_state)    and datarefIsOn(eng2_running)      then datarefSetOn(gen2_on) end
   if datarefIsOn(bat1_button_state)    and (bat1_normal)                  then datarefSetOn(bat1_on) end
   if datarefIsOn(bat2_button_state)    and (bat2_normal)                  then datarefSetOn(bat2_on) end
+  if datarefIsOn(ac_ess_feed_button_state) then datarefSetOn(ac_ess_feed_on)
 end
 
 
@@ -107,17 +111,14 @@ function update()
     if (datarefIsOn(gen1_on) and datarefIsOn(gen2_on)) or datarefIsOn(ext_pwr_on) or datarefIsOn(apu_gen_on) then datarefSetOn(dc_bus_ent) end
   end
 
-  -- AC ESS FEED Auto Switching
+  -- AC BUS 2 can supply AC ESS BUS, and ESS TR can supply DC ESS BUS, both via the AC ESS FEEDpb. This is done automatically with the AC ESS FEED Auto Switching
   if datarefIsOn(ac_bus2_on) and datarefIsOff(ac_bus1_on)
   then
     datarefSetOn(ac_ess_bus_on)
-  end
-
-  if datarefIsOn(ac_ess_bus_on) and datarefIsOff(ac_bus1_on)
-  then
     datarefSetOn(dc_ess_bus_on)
   end
 
+  -- Normal supply
   if datarefIsOn(dc_bus1_on)
   then
     datarefSetOn(dc_bat_bus_on)
@@ -133,22 +134,13 @@ function update()
   end
 
 
-  if datarefIsOn(bat1_on) and (datarefIsOff(dc_bus1_on) and datarefIsOff(dc_bus2_on))
+  if (datarefIsOn(bat1_on) or datarefIsOn(bat2_on))  and (datarefIsOff(ac_bus1_on) and datarefIsOff(ac_bus2_on))
   then
-      datarefSetOn(ac_ess_bus_on)
-      datarefSetOn(dc_ess_bus_on)
+      datarefSetOn(ac_ess_bus_on) -- via BAT 1
+      datarefSetOn(dc_ess_bus_on) -- via BAT 2
       datarefSetOff(dc_bat_bus_on)
       if get(indicated_airspeed) < 100.0 then datarefSetOn(dc_bat_bus_on) end
       if get(indicated_airspeed) < 50.0 then datarefSetOff(ac_ess_bus_on) end
-  end
-
-  if datarefIsOn(bat2_on) and (datarefIsOff(dc_bus1_on) and datarefIsOff(dc_bus2_on))
-  then
-    datarefSetOn(ac_ess_bus_on)
-    datarefSetOn(dc_ess_bus_on)
-    datarefSetOff(dc_bat_bus_on)
-    if get(indicated_airspeed) < 100.0 then datarefSetOn(dc_bat_bus_on) end
-    if get(indicated_airspeed) < 50.0 then datarefSetOff(ac_ess_bus_on) end
   end
 
   -- if datarefIsOn(dc_bat_bus_on)
@@ -156,7 +148,7 @@ function update()
   -- end
 
   -- handle if ac_bus1 and ac_bus2 lost in flight using RAT
-  if datarefIsOff(ac_bus1_on) and datarefIsOff(ac_bus2_on) and (get(indicated_airspeed) > 100.0 or datarefIsOff(wheel_on_ground) )
+  if datarefIsOff(ac_bus1_on) and datarefIsOff(ac_bus2_on) and (get(indicated_airspeed) >= 100.0 or datarefIsOff(wheel_on_ground) )
   then
     datarefSetOn(emer_gen_on)
   else
