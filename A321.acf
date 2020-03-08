@@ -102,7 +102,7 @@ P _door/0/_xyz/0 -1.0
 P _door/0/_xyz/1 0.0
 P _door/0/_xyz/2 17.600000381
 P _door/0/_xyz/count 3
-P _door/1/_ang_now 29.303184509
+P _door/1/_ang_now 0.0
 P _door/1/_ext_ang 0.0
 P _door/1/_ret_ang 100.0
 P _door/1/_type 3
@@ -110,7 +110,7 @@ P _door/1/_xyz/0 -1.500000000
 P _door/1/_xyz/1 0.0
 P _door/1/_xyz/2 14.500000000
 P _door/1/_xyz/count 3
-P _door/10/_ang_now 26.372871399
+P _door/10/_ang_now 0.0
 P _door/10/_ext_ang 0.0
 P _door/10/_ret_ang 90.0
 P _door/10/_type 3
@@ -135,7 +135,7 @@ P _door/2/_xyz/0 1.0
 P _door/2/_xyz/1 0.0
 P _door/2/_xyz/2 17.600000381
 P _door/2/_xyz/count 3
-P _door/3/_ang_now -29.303184509
+P _door/3/_ang_now 0.0
 P _door/3/_ext_ang 0.0
 P _door/3/_ret_ang -100.0
 P _door/3/_type 3
@@ -143,7 +143,7 @@ P _door/3/_xyz/0 1.500000000
 P _door/3/_xyz/1 0.0
 P _door/3/_xyz/2 14.500000000
 P _door/3/_xyz/count 3
-P _door/4/_ang_now 6.362716675
+P _door/4/_ang_now 20.152694702
 P _door/4/_ext_ang 0.0
 P _door/4/_ret_ang 90.0
 P _door/4/_type 2
@@ -151,7 +151,7 @@ P _door/4/_xyz/0 -13.0
 P _door/4/_xyz/1 -3.599999905
 P _door/4/_xyz/2 73.500000000
 P _door/4/_xyz/count 3
-P _door/5/_ang_now -6.362716675
+P _door/5/_ang_now -20.152694702
 P _door/5/_ext_ang 0.0
 P _door/5/_ret_ang -90.0
 P _door/5/_type 2
@@ -161,7 +161,7 @@ P _door/5/_xyz/2 73.500000000
 P _door/5/_xyz/count 3
 P _door/6/_type 0
 P _door/7/_type 0
-P _door/8/_ang_now -26.372871399
+P _door/8/_ang_now 0.0
 P _door/8/_ext_ang 0.0
 P _door/8/_ret_ang -90.0
 P _door/8/_type 3
@@ -209,10 +209,10 @@ P _gear/0/_latN 0.0
 P _gear/0/_latR 0.0
 P _gear/0/_leg_len 6.599999905
 P _gear/0/_lonE 7.0
-P _gear/0/_lonN 13.574806213
+P _gear/0/_lonN 27.824455261
 P _gear/0/_lonR 100.0
 P _gear/0/_scon 46865.578125000
-P _gear/0/_stat_def 0.180969268
+P _gear/0/_stat_def 0.180969238
 P _gear/0/_steerdeg_hispeed 5.0
 P _gear/0/_steerdeg_lospeed 75.0
 P _gear/0/_strut_comp 5.0
@@ -239,14 +239,14 @@ P _gear/1/_gear_x -12.010000229
 P _gear/1/_gear_y -2.799999952
 P _gear/1/_gear_z 72.379997253
 P _gear/1/_latE 0.0
-P _gear/1/_latN 5.655746460
+P _gear/1/_latN 17.913509369
 P _gear/1/_latR 80.0
 P _gear/1/_leg_len 8.199999809
 P _gear/1/_lonE -7.0
-P _gear/1/_lonN -6.505122185
+P _gear/1/_lonN -5.432568073
 P _gear/1/_lonR 0.0
 P _gear/1/_scon 71266.664062500
-P _gear/1/_stat_def 1.440532207
+P _gear/1/_stat_def 1.440531969
 P _gear/1/_steerdeg_hispeed 0.0
 P _gear/1/_steerdeg_lospeed 0.0
 P _gear/1/_strut_comp -0.500000000
@@ -273,14 +273,14 @@ P _gear/2/_gear_x 12.010000229
 P _gear/2/_gear_y -2.799999952
 P _gear/2/_gear_z 72.379997253
 P _gear/2/_latE 0.0
-P _gear/2/_latN -5.655746460
+P _gear/2/_latN -17.913509369
 P _gear/2/_latR -80.0
 P _gear/2/_leg_len 8.199999809
 P _gear/2/_lonE -7.0
-P _gear/2/_lonN -6.505122185
+P _gear/2/_lonN -5.432568073
 P _gear/2/_lonR 0.0
 P _gear/2/_scon 71266.664062500
-P _gear/2/_stat_def 1.440532207
+P _gear/2/_stat_def 1.440531969
 P _gear/2/_steerdeg_hispeed 0.0
 P _gear/2/_steerdeg_lospeed 0.0
 P _gear/2/_strut_comp -0.500000000
@@ -409,19 +409,19 @@ P _lite/5/_width 30.0
 P _lite/count 6
 P _lite_equip/_land_lite_off_on_retract_EQ 0
 P _lite_equip/_taxi_lite_off_on_retract_EQ 0
-P _obja/0/_obj_flags 25
-P _obja/0/_v10_att_file_stl business class.obj
+P _obja/0/_obj_flags 6169
+P _obja/0/_v10_att_file_stl cockpit.obj
 P _obja/0/_v10_att_part -1
 P _obja/0/_v10_att_phi_ref 0.0
 P _obja/0/_v10_att_psi_ref 0.0
 P _obja/0/_v10_att_the_ref 0.0
 P _obja/0/_v10_att_x_acf_prt_ref 0.0
 P _obja/0/_v10_att_y_acf_prt_ref 0.0
-P _obja/0/_v10_att_z_acf_prt_ref 73.0
-P _obja/0/_v10_is_internal 905260810
+P _obja/0/_v10_att_z_acf_prt_ref 0.0
+P _obja/0/_v10_is_internal 731197194
 P _obja/0/_v10_steers_with_gear 0
 P _obja/1/_obj_flags 25
-P _obja/1/_v10_att_file_stl cabin walls.obj
+P _obja/1/_v10_att_file_stl aft cabin.obj
 P _obja/1/_v10_att_part -1
 P _obja/1/_v10_att_phi_ref 0.0
 P _obja/1/_v10_att_psi_ref 0.0
@@ -429,10 +429,10 @@ P _obja/1/_v10_att_the_ref 0.0
 P _obja/1/_v10_att_x_acf_prt_ref 0.0
 P _obja/1/_v10_att_y_acf_prt_ref 0.0
 P _obja/1/_v10_att_z_acf_prt_ref 73.0
-P _obja/1/_v10_is_internal 905260810
+P _obja/1/_v10_is_internal 731197194
 P _obja/1/_v10_steers_with_gear 0
-P _obja/10/_obj_flags 24
-P _obja/10/_v10_att_file_stl v stab.obj
+P _obja/10/_obj_flags 25
+P _obja/10/_v10_att_file_stl front cabin.obj
 P _obja/10/_v10_att_part -1
 P _obja/10/_v10_att_phi_ref 0.0
 P _obja/10/_v10_att_psi_ref 0.0
@@ -440,10 +440,10 @@ P _obja/10/_v10_att_the_ref 0.0
 P _obja/10/_v10_att_x_acf_prt_ref 0.0
 P _obja/10/_v10_att_y_acf_prt_ref 0.0
 P _obja/10/_v10_att_z_acf_prt_ref 73.0
-P _obja/10/_v10_is_internal 905260810
+P _obja/10/_v10_is_internal 731197194
 P _obja/10/_v10_steers_with_gear 0
 P _obja/11/_obj_flags 24
-P _obja/11/_v10_att_file_stl wing.obj
+P _obja/11/_v10_att_file_stl h stab.obj
 P _obja/11/_v10_att_part -1
 P _obja/11/_v10_att_phi_ref 0.0
 P _obja/11/_v10_att_psi_ref 0.0
@@ -451,10 +451,10 @@ P _obja/11/_v10_att_the_ref 0.0
 P _obja/11/_v10_att_x_acf_prt_ref 0.0
 P _obja/11/_v10_att_y_acf_prt_ref 0.0
 P _obja/11/_v10_att_z_acf_prt_ref 73.0
-P _obja/11/_v10_is_internal 905260810
+P _obja/11/_v10_is_internal 731197194
 P _obja/11/_v10_steers_with_gear 0
 P _obja/12/_obj_flags 24
-P _obja/12/_v10_att_file_stl engine externals.obj
+P _obja/12/_v10_att_file_stl under carriage.obj
 P _obja/12/_v10_att_part -1
 P _obja/12/_v10_att_phi_ref 0.0
 P _obja/12/_v10_att_psi_ref 0.0
@@ -462,10 +462,10 @@ P _obja/12/_v10_att_the_ref 0.0
 P _obja/12/_v10_att_x_acf_prt_ref 0.0
 P _obja/12/_v10_att_y_acf_prt_ref 0.0
 P _obja/12/_v10_att_z_acf_prt_ref 73.0
-P _obja/12/_v10_is_internal 356069130
+P _obja/12/_v10_is_internal 731197194
 P _obja/12/_v10_steers_with_gear 0
 P _obja/13/_obj_flags 24
-P _obja/13/_v10_att_file_stl engine internals.obj
+P _obja/13/_v10_att_file_stl v stab.obj
 P _obja/13/_v10_att_part -1
 P _obja/13/_v10_att_phi_ref 0.0
 P _obja/13/_v10_att_psi_ref 0.0
@@ -473,10 +473,10 @@ P _obja/13/_v10_att_the_ref 0.0
 P _obja/13/_v10_att_x_acf_prt_ref 0.0
 P _obja/13/_v10_att_y_acf_prt_ref 0.0
 P _obja/13/_v10_att_z_acf_prt_ref 73.0
-P _obja/13/_v10_is_internal 356069130
+P _obja/13/_v10_is_internal 731197194
 P _obja/13/_v10_steers_with_gear 0
 P _obja/14/_obj_flags 24
-P _obja/14/_v10_att_file_stl engine pylons.obj
+P _obja/14/_v10_att_file_stl wing.obj
 P _obja/14/_v10_att_part -1
 P _obja/14/_v10_att_phi_ref 0.0
 P _obja/14/_v10_att_psi_ref 0.0
@@ -484,21 +484,21 @@ P _obja/14/_v10_att_the_ref 0.0
 P _obja/14/_v10_att_x_acf_prt_ref 0.0
 P _obja/14/_v10_att_y_acf_prt_ref 0.0
 P _obja/14/_v10_att_z_acf_prt_ref 73.0
-P _obja/14/_v10_is_internal 356069130
+P _obja/14/_v10_is_internal 731197194
 P _obja/14/_v10_steers_with_gear 0
-P _obja/2/_obj_flags 2073
-P _obja/2/_v10_att_file_stl cockpit_3d.obj
+P _obja/2/_obj_flags 25
+P _obja/2/_v10_att_file_stl business class.obj
 P _obja/2/_v10_att_part -1
 P _obja/2/_v10_att_phi_ref 0.0
 P _obja/2/_v10_att_psi_ref 0.0
 P _obja/2/_v10_att_the_ref 0.0
 P _obja/2/_v10_att_x_acf_prt_ref 0.0
 P _obja/2/_v10_att_y_acf_prt_ref 0.0
-P _obja/2/_v10_att_z_acf_prt_ref 6.400000095
-P _obja/2/_v10_is_internal 905260810
+P _obja/2/_v10_att_z_acf_prt_ref 73.0
+P _obja/2/_v10_is_internal 731197194
 P _obja/2/_v10_steers_with_gear 0
 P _obja/3/_obj_flags 25
-P _obja/3/_v10_att_file_stl economy.obj
+P _obja/3/_v10_att_file_stl cabin dividers.obj
 P _obja/3/_v10_att_part -1
 P _obja/3/_v10_att_phi_ref 0.0
 P _obja/3/_v10_att_psi_ref 0.0
@@ -506,10 +506,10 @@ P _obja/3/_v10_att_the_ref 0.0
 P _obja/3/_v10_att_x_acf_prt_ref 0.0
 P _obja/3/_v10_att_y_acf_prt_ref 0.0
 P _obja/3/_v10_att_z_acf_prt_ref 73.0
-P _obja/3/_v10_is_internal 905260810
+P _obja/3/_v10_is_internal 731197194
 P _obja/3/_v10_steers_with_gear 0
-P _obja/4/_obj_flags 24
-P _obja/4/_v10_att_file_stl fuselage.obj
+P _obja/4/_obj_flags 25
+P _obja/4/_v10_att_file_stl cabin roof and window frames.obj
 P _obja/4/_v10_att_part -1
 P _obja/4/_v10_att_phi_ref 0.0
 P _obja/4/_v10_att_psi_ref 0.0
@@ -517,10 +517,10 @@ P _obja/4/_v10_att_the_ref 0.0
 P _obja/4/_v10_att_x_acf_prt_ref 0.0
 P _obja/4/_v10_att_y_acf_prt_ref 0.0
 P _obja/4/_v10_att_z_acf_prt_ref 73.0
-P _obja/4/_v10_is_internal 905260810
+P _obja/4/_v10_is_internal 731197194
 P _obja/4/_v10_steers_with_gear 0
-P _obja/5/_obj_flags 24
-P _obja/5/_v10_att_file_stl h stab.obj
+P _obja/5/_obj_flags 25
+P _obja/5/_v10_att_file_stl economy.obj
 P _obja/5/_v10_att_part -1
 P _obja/5/_v10_att_phi_ref 0.0
 P _obja/5/_v10_att_psi_ref 0.0
@@ -528,43 +528,43 @@ P _obja/5/_v10_att_the_ref 0.0
 P _obja/5/_v10_att_x_acf_prt_ref 0.0
 P _obja/5/_v10_att_y_acf_prt_ref 0.0
 P _obja/5/_v10_att_z_acf_prt_ref 73.0
-P _obja/5/_v10_is_internal 905260810
+P _obja/5/_v10_is_internal 731197194
 P _obja/5/_v10_steers_with_gear 0
-P _obja/6/_obj_flags 25
-P _obja/6/_v10_att_file_stl object switches.obj
+P _obja/6/_obj_flags 24
+P _obja/6/_v10_att_file_stl engine externals.obj
 P _obja/6/_v10_att_part -1
 P _obja/6/_v10_att_phi_ref 0.0
 P _obja/6/_v10_att_psi_ref 0.0
 P _obja/6/_v10_att_the_ref 0.0
 P _obja/6/_v10_att_x_acf_prt_ref 0.0
 P _obja/6/_v10_att_y_acf_prt_ref 0.0
-P _obja/6/_v10_att_z_acf_prt_ref 6.400000095
-P _obja/6/_v10_is_internal 905260810
+P _obja/6/_v10_att_z_acf_prt_ref 73.0
+P _obja/6/_v10_is_internal 731197194
 P _obja/6/_v10_steers_with_gear 0
 P _obja/7/_obj_flags 24
-P _obja/7/_v10_att_file_stl panels.obj
+P _obja/7/_v10_att_file_stl engine internals.obj
 P _obja/7/_v10_att_part -1
 P _obja/7/_v10_att_phi_ref 0.0
 P _obja/7/_v10_att_psi_ref 0.0
 P _obja/7/_v10_att_the_ref 0.0
 P _obja/7/_v10_att_x_acf_prt_ref 0.0
 P _obja/7/_v10_att_y_acf_prt_ref 0.0
-P _obja/7/_v10_att_z_acf_prt_ref 6.400000095
-P _obja/7/_v10_is_internal 905260810
+P _obja/7/_v10_att_z_acf_prt_ref 73.0
+P _obja/7/_v10_is_internal 731197194
 P _obja/7/_v10_steers_with_gear 0
-P _obja/8/_obj_flags 25
-P _obja/8/_v10_att_file_stl throttle quadrant.obj
+P _obja/8/_obj_flags 24
+P _obja/8/_v10_att_file_stl fuselage.obj
 P _obja/8/_v10_att_part -1
 P _obja/8/_v10_att_phi_ref 0.0
 P _obja/8/_v10_att_psi_ref 0.0
 P _obja/8/_v10_att_the_ref 0.0
 P _obja/8/_v10_att_x_acf_prt_ref 0.0
 P _obja/8/_v10_att_y_acf_prt_ref 0.0
-P _obja/8/_v10_att_z_acf_prt_ref 6.400000095
-P _obja/8/_v10_is_internal 905260810
+P _obja/8/_v10_att_z_acf_prt_ref 73.0
+P _obja/8/_v10_is_internal 731197194
 P _obja/8/_v10_steers_with_gear 0
 P _obja/9/_obj_flags 24
-P _obja/9/_v10_att_file_stl under carriage.obj
+P _obja/9/_v10_att_file_stl engine pylons.obj
 P _obja/9/_v10_att_part -1
 P _obja/9/_v10_att_phi_ref 0.0
 P _obja/9/_v10_att_psi_ref 0.0
@@ -572,7 +572,7 @@ P _obja/9/_v10_att_the_ref 0.0
 P _obja/9/_v10_att_x_acf_prt_ref 0.0
 P _obja/9/_v10_att_y_acf_prt_ref 0.0
 P _obja/9/_v10_att_z_acf_prt_ref 73.0
-P _obja/9/_v10_is_internal 905260810
+P _obja/9/_v10_is_internal 731197194
 P _obja/9/_v10_steers_with_gear 0
 P _obja/count 15
 P _panel_inst_3d 0
@@ -33434,7 +33434,7 @@ P acf/_ailn2_sbrk 0.0
 P acf/_ailn2_up 0.0
 P acf/_ailn2_v1 0.0
 P acf/_ailn2_v2 999.0
-P acf/_ailn_def_time 0.0
+P acf/_ailn_def_time 0.500000000
 P acf/_ailn_dn_trim 5.0
 P acf/_ailn_tab 0.0
 P acf/_ailn_trim_time 20.0
@@ -35117,7 +35117,7 @@ P acf/_elev2_rat2 1.0
 P acf/_elev2_up 0.0
 P acf/_elev2_v1 0.0
 P acf/_elev2_v2 999.0
-P acf/_elev_def_time 0.0
+P acf/_elev_def_time 0.100000001
 P acf/_elev_dn_trim 0.0
 P acf/_elev_tab 0.0
 P acf/_elev_trim_time 20.0
@@ -35512,7 +35512,7 @@ P acf/_flap1_dn/11 0.0
 P acf/_flap1_dn/2 15.0
 P acf/_flap1_dn/3 20.0
 P acf/_flap1_dn/4 40.0
-P acf/_flap1_dn/5 25.0
+P acf/_flap1_dn/5 90.0
 P acf/_flap1_dn/6 0.0
 P acf/_flap1_dn/7 0.0
 P acf/_flap1_dn/8 0.0
@@ -35536,7 +35536,7 @@ P acf/_flap2_dn/11 0.0
 P acf/_flap2_dn/2 15.0
 P acf/_flap2_dn/3 20.0
 P acf/_flap2_dn/4 40.0
-P acf/_flap2_dn/5 25.0
+P acf/_flap2_dn/5 90.0
 P acf/_flap2_dn/6 0.0
 P acf/_flap2_dn/7 0.0
 P acf/_flap2_dn/8 0.0
@@ -36104,7 +36104,7 @@ P acf/_rudd2_rat2 1.0
 P acf/_rudd2_rt 0.0
 P acf/_rudd2_v1 0.0
 P acf/_rudd2_v2 999.0
-P acf/_rudd_def_time 0.0
+P acf/_rudd_def_time 1.200000048
 P acf/_rudd_lf_trim 5.0
 P acf/_rudd_rt_trim 5.0
 P acf/_rudd_tab 0.0
@@ -36150,7 +36150,7 @@ P acf/_slat2_dn/11 0.0
 P acf/_slat2_dn/2 0.800000012
 P acf/_slat2_dn/3 0.800000012
 P acf/_slat2_dn/4 1.0
-P acf/_slat2_dn/5 0.200000003
+P acf/_slat2_dn/5 1.0
 P acf/_slat2_dn/6 0.0
 P acf/_slat2_dn/7 0.0
 P acf/_slat2_dn/8 0.0
@@ -36172,8 +36172,8 @@ P acf/_snd_rpm_eng 2500.0
 P acf/_snd_rpm_prp 2500.0
 P acf/_solar_cover_part 0.0
 P acf/_solar_eta 0.0
-P acf/_speedbrake_ext_time 1.0
-P acf/_speedbrake_ret_time 1.0
+P acf/_speedbrake_ext_time 1.500000000
+P acf/_speedbrake_ret_time 1.500000000
 P acf/_speedbrake_size 6.0
 P acf/_spoi1_cratR 0.0
 P acf/_spoi1_cratT 0.0
@@ -36194,9 +36194,9 @@ P acf/_spoi2_rat2 1.0
 P acf/_spoi2_up 35.0
 P acf/_spoi2_v1 0.0
 P acf/_spoi2_v2 999.0
-P acf/_spoi2_with_flit_sbrk 40.0
+P acf/_spoi2_with_flit_sbrk 30.0
 P acf/_spoi2_with_grnd_pitch 0.0
-P acf/_spoi2_with_grnd_sbrk 60.0
+P acf/_spoi2_with_grnd_sbrk 50.0
 P acf/_spool_time_compressor_jet 5.0
 P acf/_spool_time_compressor_prop 1.0
 P acf/_spot1_3d_rgb/0 0.0
