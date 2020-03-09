@@ -3,6 +3,7 @@ I
 OBJ
 
 TEXTURE	cabin_texture/cabin_dividers_baked.png
+TEXTURE_LIT cabin_texture/cabin_dividers_baked.png
 POINT_COUNTS	1594	0	0	2064
 
 VT	1.89120889	0.10594874	-16.12670708	0	-0	1	0.70154065	0.42319858
