@@ -3,6 +3,7 @@ I
 OBJ
 
 TEXTURE	cabin_texture/front_cabin_baked.png
+TEXTURE_LIT cabin_texture/front_cabin_baked.png
 POINT_COUNTS	8896	0	0	27588
 
 VT	-0.12421343	2.02593398	-9.4539423	0.06972171	-0.99756575	0.0012255	0.65389967	0.40132913

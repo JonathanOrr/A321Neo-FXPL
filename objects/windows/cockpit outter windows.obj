@@ -2,6 +2,8 @@ I
 800
 OBJ
 
+TEXTURE	glass_tint.png
+TEXTURE_LIT	glass_tint.png
 TEXTURE_NORMAL	cockpit_window_baked_NML.png
 NORMAL_METALNESS
 GLOBAL_specular	1
