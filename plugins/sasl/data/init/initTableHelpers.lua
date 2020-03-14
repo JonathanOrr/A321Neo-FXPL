@@ -98,8 +98,8 @@ function private.writeTableToFile(fileName, t, tname)
                         f:write(indent.."};\n")
                     elseif vt == "string" then
                         f:write(indent.."["..kStr.."] = '"..v.."';\n")
-                    elseif vt == "number" then
-                        f:write(indent.."["..kStr.."] = "..v..";\n")
+                    elseif vt == "number" or vt == "boolean" then
+                        f:write(indent.."["..kStr.."] = "..tostring(v)..";\n")
                     end
                 end
             end
