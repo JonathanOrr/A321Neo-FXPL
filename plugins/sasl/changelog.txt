@@ -1,4 +1,19 @@
 ----------------------------------------------------------
+SASL 3.9.0 (XP11.25+ support)
+----------------------------------------------------------
+
+- Fixed tracking of 3D panel mouse position in multi-monitor configurations and with rotational offsets applied for monitors
+- Fixed bug with mouse cursor associated with 3D panel component being active after leaving 3D panel
+- Fixed configuring 3D positional sounds for Aircraft plugins
+- Fixed context windows states saving and restoring, also visibily is now saved as well
+- Added Lua functions to track 3D panel mouse position - <getCSMouseIsOnPanel>, <getCSPanelMousePos>
+- Added Lua routines to save and restore OGL internal line primitives settings
+- Added option to draw text vertically 
+- Added async variants of functions to perform data transfers from URL (Net interface)
+- Updated SASL Dev Widget UI (scrollbars, drefs & commands search, dynamic text size, bugfixes)
+- Updated SASL default cursors texture 
+
+----------------------------------------------------------
 SASL 3.8.0 (XP11.25+ support)
 ----------------------------------------------------------
 

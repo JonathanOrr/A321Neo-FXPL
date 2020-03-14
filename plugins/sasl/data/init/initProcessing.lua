@@ -191,19 +191,8 @@ end
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 
-local initUpdateDone = false
-
---- Performs some initialization during first update cycle
-function private.initUpdate()
-    if not initUpdateDone then
-        private.applyContextWindowsState()
-        initUpdateDone = true
-    end
-end
-
 --- Updates components.
 function update()
-    private.initUpdate()
     private.updateComponent(panel)
     private.updateComponent(popups)
     private.updateComponent(contextWindows)

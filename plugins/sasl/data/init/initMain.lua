@@ -889,6 +889,7 @@ function onMouseMove(x, y, layer)
             end
         end
         if layer == MB_LAYER_PANEL and x < 0 and y < 0 then
+            private.setCursor(nil)
             return resultCursor
         end
     else

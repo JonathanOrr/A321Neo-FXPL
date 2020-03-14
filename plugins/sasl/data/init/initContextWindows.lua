@@ -42,6 +42,8 @@ local function getContextWindowDecorationDef(window)
     }
 end
 
+local defaultWindowName = "cWindow"
+
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 
@@ -112,7 +114,7 @@ end
 --- @return ContextWindow
 function contextWindow(tbl)
     local window = {}
-    local cName = "cWindow"
+    local cName = defaultWindowName
     if tbl.name ~= nil then
         cName = tbl.name
     end
@@ -437,11 +439,13 @@ function contextWindow(tbl)
 
     -------------------------------------------------------------------------------
 
+    c.window = window
     c.saveState = createProperty(false)
     if get(tbl.saveState) then
         set(c.saveState, true)
+        private.applyContextWindowState(c)
     end
-    c.window = window
+
     contextWindows.component(c)
     return window
 end
@@ -455,12 +459,14 @@ function private.saveContextWindowsState()
     for _, c in ipairs(contextWindows.components) do
         local name = c.name
         local sstate = get(c.saveState)
-        if sstate and name ~= "cWindow" then
+        if sstate and name ~= defaultWindowName then
             local modeId, modeMonitor = c.window:getMode()
             local x, y, w, h = c.window:getPosition()
+            local vis = c.window:isVisible()
             cw[name] = {
                 mode = { modeId, modeMonitor },
-                position = { x, y, w, h }
+                position = { x, y, w, h },
+                visible = vis
             }
         end
     end
@@ -475,17 +481,20 @@ end
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 
-function private.applyContextWindowsState()
-    for _, c in ipairs(contextWindows.components) do
-        local name = c.name
-        if get(c.saveState) and name ~= "cWindow" then
-            local st = private.savedState.contextWindows[name]
-            if st then
-                local mode = st.mode
-                local p = st.position
-                if mode[1] ~= SASL_CW_MODE_VR then
-                    c.window:setMode(mode[1], mode[2])
-                    c.window:setPosition(p[1], p[2], p[3], p[4])
+--- Applies saved state for context window associated with component
+function private.applyContextWindowState(c)
+    local name = c.name
+    if name ~= defaultWindowName then
+        local st = private.savedState.contextWindows[name]
+        if st then
+            local mode = st.mode
+            local p = st.position
+            local visible = st.visible
+            if mode and p and mode[1] ~= SASL_CW_MODE_VR then
+                c.window:setMode(mode[1], mode[2])
+                c.window:setPosition(p[1], p[2], p[3], p[4])
+                if visible ~= nil then
+                    c.window:setIsVisible(visible)
                 end
             end
         end

@@ -347,3 +347,13 @@ createPerformanceTimer
 resetTimer
 stereographicLLtoXY
 stereographicXYtoLL
+getContextWindowResizing
+getContextWindowDragging
+getContextWindowPositionInternal
+getCSMouseIsOnPanel
+getCSPanelMousePos
+saveInternalLineState
+restoreInternalLineState
+setFontDirection
+downloadFileAsync
+downloadFileContentsAsync
