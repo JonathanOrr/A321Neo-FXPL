@@ -14,3 +14,7 @@ Nothing at this moment
 ## Developers
 
 You can check datarefs and command via sasl3 widget
+
+
+## Discord Server
+https://discord.gg/736HbJZ
