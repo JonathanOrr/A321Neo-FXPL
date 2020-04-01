@@ -102,7 +102,7 @@ P _door/0/_xyz/0 -1.0
 P _door/0/_xyz/1 0.0
 P _door/0/_xyz/2 17.600000381
 P _door/0/_xyz/count 3
-P _door/1/_ang_now 0.0
+P _door/1/_ang_now 100.0
 P _door/1/_ext_ang 0.0
 P _door/1/_ret_ang 100.0
 P _door/1/_type 3
@@ -110,7 +110,7 @@ P _door/1/_xyz/0 -1.500000000
 P _door/1/_xyz/1 0.0
 P _door/1/_xyz/2 14.500000000
 P _door/1/_xyz/count 3
-P _door/10/_ang_now 0.0
+P _door/10/_ang_now 90.0
 P _door/10/_ext_ang 0.0
 P _door/10/_ret_ang 90.0
 P _door/10/_type 3
@@ -135,7 +135,7 @@ P _door/2/_xyz/0 1.0
 P _door/2/_xyz/1 0.0
 P _door/2/_xyz/2 17.600000381
 P _door/2/_xyz/count 3
-P _door/3/_ang_now 0.0
+P _door/3/_ang_now -100.0
 P _door/3/_ext_ang 0.0
 P _door/3/_ret_ang -100.0
 P _door/3/_type 3
@@ -143,7 +143,7 @@ P _door/3/_xyz/0 1.500000000
 P _door/3/_xyz/1 0.0
 P _door/3/_xyz/2 14.500000000
 P _door/3/_xyz/count 3
-P _door/4/_ang_now 69.283607483
+P _door/4/_ang_now 0.0
 P _door/4/_ext_ang 0.0
 P _door/4/_ret_ang 90.0
 P _door/4/_type 2
@@ -151,7 +151,7 @@ P _door/4/_xyz/0 -13.0
 P _door/4/_xyz/1 -3.599999905
 P _door/4/_xyz/2 73.500000000
 P _door/4/_xyz/count 3
-P _door/5/_ang_now -69.283607483
+P _door/5/_ang_now 0.0
 P _door/5/_ext_ang 0.0
 P _door/5/_ret_ang -90.0
 P _door/5/_type 2
@@ -161,7 +161,7 @@ P _door/5/_xyz/2 73.500000000
 P _door/5/_xyz/count 3
 P _door/6/_type 0
 P _door/7/_type 0
-P _door/8/_ang_now 0.0
+P _door/8/_ang_now -90.0
 P _door/8/_ext_ang 0.0
 P _door/8/_ret_ang -90.0
 P _door/8/_type 3
@@ -209,7 +209,7 @@ P _gear/0/_latN 0.0
 P _gear/0/_latR 0.0
 P _gear/0/_leg_len 6.599999905
 P _gear/0/_lonE 7.0
-P _gear/0/_lonN 78.593063354
+P _gear/0/_lonN 7.0
 P _gear/0/_lonR 100.0
 P _gear/0/_scon 46865.578125000
 P _gear/0/_stat_def 0.589775324
@@ -239,14 +239,14 @@ P _gear/1/_gear_x -12.010000229
 P _gear/1/_gear_y -2.799999952
 P _gear/1/_gear_z 72.379997253
 P _gear/1/_latE 0.0
-P _gear/1/_latN 61.585426331
+P _gear/1/_latN 0.0
 P _gear/1/_latR 80.0
 P _gear/1/_leg_len 8.199999809
 P _gear/1/_lonE -7.0
-P _gear/1/_lonN -1.611275077
+P _gear/1/_lonN -7.0
 P _gear/1/_lonR 0.0
 P _gear/1/_scon 71266.664062500
-P _gear/1/_stat_def 1.306115031
+P _gear/1/_stat_def 1.306114912
 P _gear/1/_steerdeg_hispeed 0.0
 P _gear/1/_steerdeg_lospeed 0.0
 P _gear/1/_strut_comp -0.500000000
@@ -273,14 +273,14 @@ P _gear/2/_gear_x 12.010000229
 P _gear/2/_gear_y -2.799999952
 P _gear/2/_gear_z 72.379997253
 P _gear/2/_latE 0.0
-P _gear/2/_latN -61.585426331
+P _gear/2/_latN 0.0
 P _gear/2/_latR -80.0
 P _gear/2/_leg_len 8.199999809
 P _gear/2/_lonE -7.0
-P _gear/2/_lonN -1.611275077
+P _gear/2/_lonN -7.0
 P _gear/2/_lonR 0.0
 P _gear/2/_scon 71266.664062500
-P _gear/2/_stat_def 1.306115031
+P _gear/2/_stat_def 1.306114912
 P _gear/2/_steerdeg_hispeed 0.0
 P _gear/2/_steerdeg_lospeed 0.0
 P _gear/2/_strut_comp -0.500000000
@@ -33648,7 +33648,7 @@ P acf/_ailn_dn_trim 5.0
 P acf/_ailn_tab 0.0
 P acf/_ailn_trim_time 20.0
 P acf/_ailn_up_trim 5.0
-P acf/_airbus_FBW 0
+P acf/_airbus_FBW 1
 P acf/_alt_always_armed 1
 P acf/_alt_hard_locked_on_cws 0
 P acf/_alta_x_ctr 0.0
@@ -34295,9 +34295,9 @@ P acf/_beta_pitch 0.0
 P acf/_beta_prop_EQ 0
 P acf/_blown_flap_cl_inc 0.0
 P acf/_blown_flap_min_engag 0.0
-P acf/_board_1/0 -6.559999943
-P acf/_board_1/1 -1.309999943
-P acf/_board_1/2 16.399999619
+P acf/_board_1/0 -6.300000191
+P acf/_board_1/1 1.399999976
+P acf/_board_1/2 17.600000381
 P acf/_board_1/count 3
 P acf/_board_2/0 0.0
 P acf/_board_2/1 0.0
@@ -35301,7 +35301,7 @@ P acf/_drone_FBW_thro_per_deg_per_sec_error_Q 0.0
 P acf/_drone_FBW_thro_per_deg_per_sec_error_R 0.0
 P acf/_drone_FBW_washout_sqrt_throttle 0
 P acf/_drone_FBW_washout_vert_component 0
-P acf/_dump_altitude 13000.0
+P acf/_dump_altitude 12000.0
 P acf/_dump_press_below_1k 1
 P acf/_dump_press_wow 1
 P acf/_elec_drive_eta 1.0
@@ -35900,7 +35900,7 @@ P acf/_has_bagg_1 0
 P acf/_has_bagg_2 0
 P acf/_has_bagg_3 0
 P acf/_has_bagg_4 0
-P acf/_has_board_1 0
+P acf/_has_board_1 1
 P acf/_has_board_2 0
 P acf/_has_clutch_switch 0
 P acf/_has_com_radios 1
@@ -35917,7 +35917,7 @@ P acf/_has_get_tow 0
 P acf/_has_get_tow_new 0
 P acf/_has_give_tow 0
 P acf/_has_ground_pwr 0
-P acf/_has_hsi 0
+P acf/_has_hsi 1
 P acf/_has_litemap_tex_1 0
 P acf/_has_litemap_tex_2 0
 P acf/_has_pre_rotate 0
@@ -35945,8 +35945,8 @@ P acf/_hyd_engn_pump_0123/5 0
 P acf/_hyd_engn_pump_0123/6 0
 P acf/_hyd_engn_pump_0123/7 0
 P acf/_hyd_engn_pump_0123/count 8
-P acf/_hyd_flaps 0
-P acf/_hyd_flightcons 0
+P acf/_hyd_flaps 1
+P acf/_hyd_flightcons 1
 P acf/_hyd_gear 0
 P acf/_hyd_gear_fail_mode 0
 P acf/_hyd_gear_fail_speed 0.0
@@ -36157,7 +36157,7 @@ P acf/_part_descrip/93 TIJERA TREN PPAL
 P acf/_part_descrip/94 Nosegear axle truck
 P acf/_part_descrip/count 95
 P acf/_pe_xyz/0 -1.549999952
-P acf/_pe_xyz/1 2.549999952
+P acf/_pe_xyz/1 2.500000000
 P acf/_pe_xyz/2 9.149999619
 P acf/_pe_xyz/count 3
 P acf/_phase_hdng_tvect_in_at_00 0
@@ -37201,7 +37201,7 @@ ott_app_eng_HM ott_app_eng_HM.png
 
 PANEL_2D_END
 PANEL_3D_BEGIN
-rad_CDU739_2d CDU739_2d.png
+rad_CDU739_2d MCDU
   POS 236.500000 1427.000000
   DATAREF 
   LIGHT_MODE MECHANICAL
@@ -37209,8 +37209,530 @@ rad_CDU739_2d CDU739_2d.png
   KEY_FRAME 0.000000 0.000000 1.000000
   KEY_FRAME 1.000000 1.000000
 
-GROUP PFD
+GROUP MFD
   GROUP_OPEN
+  EFIS_map_s_HM map_s_HM.png
+    POS 757.000000 1092.000000
+    DATAREF 
+    LIGHT_MODE MECHANICAL
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 0.000000 0.000000 1.000000
+    KEY_FRAME 1.000000 1.000000
+
+END_GROUP
+GROUP generic buttons
+  gen_rotary generic dot on
+    POS 1094.571411 1062.000000
+    IMAGE Buttons/dot_on
+    DATAREF 
+    LIGHT_MODE MECHANICAL
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 0.000000 1.000000 1.000000
+    KEY_FRAME 1.000000 1.000000
+    DIGITS 2
+    ROTARY_TYPE PUSH
+    CLICK_RADIUS 20.000000
+    CLICK_RADIUS_DY 0.000000
+    OFFSET 0.000000
+    STEP1 1.000000
+    STEP2 1.000000
+    CURSOR DEFAULT
+    CLICK_DX 0
+    CLICK_DY 0
+
+  gen_rotary generic dot off
+    POS 1221.428589 1062.857056
+    IMAGE Buttons/dot_off
+    DATAREF 
+    LIGHT_MODE MECHANICAL
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 0.000000 1.000000 1.000000
+    KEY_FRAME 1.000000 1.000000
+    DIGITS 2
+    ROTARY_TYPE PUSH
+    CLICK_RADIUS 20.000000
+    CLICK_RADIUS_DY 0.000000
+    OFFSET 0.000000
+    STEP1 1.000000
+    STEP2 1.000000
+    CURSOR DEFAULT
+    CLICK_DX 0
+    CLICK_DY 0
+
+  gen_rotary generic dot on
+    POS 1349.142944 1062.571289
+    IMAGE Buttons/dot_fault
+    DATAREF 
+    LIGHT_MODE MECHANICAL
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 0.000000 1.000000 1.000000
+    KEY_FRAME 1.000000 1.000000
+    DIGITS 2
+    ROTARY_TYPE PUSH
+    CLICK_RADIUS 20.000000
+    CLICK_RADIUS_DY 0.000000
+    OFFSET 0.000000
+    STEP1 1.000000
+    STEP2 1.000000
+    CURSOR DEFAULT
+    CLICK_DX 0
+    CLICK_DY 0
+
+  gen_rotary generic fault on
+    POS 1477.428711 1062.999878
+    IMAGE Buttons/on_fault
+    DATAREF 
+    LIGHT_MODE MECHANICAL
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 0.000000 3.000000 1.000000
+    KEY_FRAME 1.000000 3.000000
+    DIGITS 4
+    ROTARY_TYPE PUSH
+    CLICK_RADIUS 20.000000
+    CLICK_RADIUS_DY 0.000000
+    OFFSET 0.000000
+    STEP1 1.000000
+    STEP2 1.000000
+    CURSOR DEFAULT
+    CLICK_DX 0
+    CLICK_DY 0
+
+  gen_rotary generic fault off
+    POS 1605.285889 1062.428467
+    IMAGE Buttons/off_fault
+    DATAREF 
+    LIGHT_MODE MECHANICAL
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 0.000000 3.000000 1.000000
+    KEY_FRAME 1.000000 3.000000
+    DIGITS 4
+    ROTARY_TYPE PUSH
+    CLICK_RADIUS 20.000000
+    CLICK_RADIUS_DY 0.000000
+    OFFSET 0.000000
+    STEP1 1.000000
+    STEP2 1.000000
+    CURSOR DEFAULT
+    CLICK_DX 0
+    CLICK_DY 0
+
+  gen_rotary gen disch
+    POS 1733.000000 1062.000000
+    IMAGE Buttons/fire_agent
+    DATAREF 
+    LIGHT_MODE MECHANICAL
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 0.000000 1.000000 1.000000
+    KEY_FRAME 1.000000 1.000000
+    DIGITS 2
+    ROTARY_TYPE PUSH
+    CLICK_RADIUS 20.000000
+    CLICK_RADIUS_DY 0.000000
+    OFFSET 0.000000
+    STEP1 1.000000
+    STEP2 1.000000
+    CURSOR DEFAULT
+    CLICK_DX 0
+    CLICK_DY 0
+
+  gen_rotary gen align
+    POS 1861.857300 1062.142700
+    IMAGE Buttons/align
+    DATAREF 
+    LIGHT_MODE MECHANICAL
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 0.000000 3.000000 1.000000
+    KEY_FRAME 1.000000 3.000000
+    DIGITS 4
+    ROTARY_TYPE PUSH
+    CLICK_RADIUS 20.000000
+    CLICK_RADIUS_DY 0.000000
+    OFFSET 0.000000
+    STEP1 1.000000
+    STEP2 1.000000
+    CURSOR DEFAULT
+    CLICK_DX 0
+    CLICK_DY 0
+
+  gen_rotary gen ovrd
+    POS 1989.000000 1062.000000
+    IMAGE Buttons/overide
+    DATAREF 
+    LIGHT_MODE MECHANICAL
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 0.000000 3.000000 1.000000
+    KEY_FRAME 1.000000 3.000000
+    DIGITS 4
+    ROTARY_TYPE PUSH
+    CLICK_RADIUS 20.000000
+    CLICK_RADIUS_DY 0.000000
+    OFFSET 0.000000
+    STEP1 1.000000
+    STEP2 1.000000
+    CURSOR DEFAULT
+    CLICK_DX 0
+    CLICK_DY 0
+
+  gen_rotary gen altn
+    POS 2117.857422 1062.142700
+    IMAGE Buttons/acessfeed
+    DATAREF 
+    LIGHT_MODE MECHANICAL
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 0.000000 3.000000 1.000000
+    KEY_FRAME 1.000000 3.000000
+    DIGITS 4
+    ROTARY_TYPE PUSH
+    CLICK_RADIUS 20.000000
+    CLICK_RADIUS_DY 0.000000
+    OFFSET 0.000000
+    STEP1 1.000000
+    STEP2 1.000000
+    CURSOR DEFAULT
+    CLICK_DX 0
+    CLICK_DY 0
+
+  gen_rotary gen autobrake
+    POS 2245.857422 1062.142700
+    IMAGE Buttons/autobrake
+    DATAREF 
+    LIGHT_MODE MECHANICAL
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 0.000000 2.000000 1.000000
+    KEY_FRAME 1.000000 2.000000
+    DIGITS 3
+    ROTARY_TYPE PUSH
+    CLICK_RADIUS 20.000000
+    CLICK_RADIUS_DY 0.000000
+    OFFSET 0.000000
+    STEP1 1.000000
+    STEP2 1.000000
+    CURSOR DEFAULT
+    CLICK_DX 0
+    CLICK_DY 0
+
+  gen_rotary gen brakefan
+    POS 2373.857422 1062.142700
+    IMAGE Buttons/brake_fan
+    DATAREF 
+    LIGHT_MODE MECHANICAL
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 0.000000 3.000000 1.000000
+    KEY_FRAME 1.000000 3.000000
+    DIGITS 4
+    ROTARY_TYPE PUSH
+    CLICK_RADIUS 20.000000
+    CLICK_RADIUS_DY 0.000000
+    OFFSET 0.000000
+    STEP1 1.000000
+    STEP2 1.000000
+    CURSOR DEFAULT
+    CLICK_DX 0
+    CLICK_DY 0
+
+  gen_rotary gen avail
+    POS 2501.857422 1062.142700
+    IMAGE Buttons/on_avil
+    DATAREF 
+    LIGHT_MODE MECHANICAL
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 0.000000 3.000000 1.000000
+    KEY_FRAME 1.000000 3.000000
+    DIGITS 4
+    ROTARY_TYPE PUSH
+    CLICK_RADIUS 20.000000
+    CLICK_RADIUS_DY 0.000000
+    OFFSET 0.000000
+    STEP1 1.000000
+    STEP2 1.000000
+    CURSOR DEFAULT
+    CLICK_DX 0
+    CLICK_DY 0
+
+  gen_rotary autoland
+    POS 2629.857422 1062.142700
+    IMAGE Buttons/autoland
+    DATAREF 
+    LIGHT_MODE MECHANICAL
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 0.000000 1.000000 1.000000
+    KEY_FRAME 1.000000 1.000000
+    DIGITS 2
+    ROTARY_TYPE PUSH
+    CLICK_RADIUS 20.000000
+    CLICK_RADIUS_DY 0.000000
+    OFFSET 0.000000
+    STEP1 1.000000
+    STEP2 1.000000
+    CURSOR DEFAULT
+    CLICK_DX 0
+    CLICK_DY 0
+
+  gen_rotary master caution
+    POS 2758.428955 1062.285522
+    IMAGE Buttons/master_caution
+    DATAREF 
+    LIGHT_MODE MECHANICAL
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 0.000000 1.000000 1.000000
+    KEY_FRAME 1.000000 1.000000
+    DIGITS 2
+    ROTARY_TYPE PUSH
+    CLICK_RADIUS 20.000000
+    CLICK_RADIUS_DY 0.000000
+    OFFSET 0.000000
+    STEP1 1.000000
+    STEP2 1.000000
+    CURSOR DEFAULT
+    CLICK_DX 0
+    CLICK_DY 0
+
+  gen_rotary master warning
+    POS 2886.000244 1062.285645
+    IMAGE Buttons/master_warning
+    DATAREF 
+    LIGHT_MODE MECHANICAL
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 0.000000 1.000000 1.000000
+    KEY_FRAME 1.000000 1.000000
+    DIGITS 2
+    ROTARY_TYPE PUSH
+    CLICK_RADIUS 20.000000
+    CLICK_RADIUS_DY 0.000000
+    OFFSET 0.000000
+    STEP1 1.000000
+    STEP2 1.000000
+    CURSOR DEFAULT
+    CLICK_DX 0
+    CLICK_DY 0
+
+END_GROUP
+rad_transponder_HM1 transponder_HM.png
+  POS 564.000000 1247.000000
+  DATAREF 
+  LIGHT_MODE MECHANICAL
+  LIGHT_RHEOSTAT 0
+  KEY_FRAME 0.000000 0.000000 1.000000
+  KEY_FRAME 1.000000 1.000000
+
+GROUP brake_press
+  CHAINED
+  gen_rotary brakepress_bg
+    POS 569.428589 1684.000000
+    IMAGE MIP/brake/brake
+    DATAREF 
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 0.000000 0.000000 1.000000
+    KEY_FRAME 1.000000 6.000000
+    DIGITS 1
+    ROTARY_TYPE NO_CLICK
+    CLICK_RADIUS 10.000000
+    CLICK_RADIUS_DY 0.000000
+    OFFSET 0.000000
+    STEP1 1.000000
+    STEP2 1.000000
+    CURSOR DEFAULT
+    CLICK_DX 0
+    CLICK_DY 0
+
+  gen_needle left_brake_press
+    POS 510.428284 1638.000000
+    IMAGE MIP/brake/br_needl
+    DATAREF sim/flightmodel/controls/parkbrake
+    LIGHT_MODE MECHANICAL
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 0.000000 90.000000 1.000000
+    KEY_FRAME 1.000000 45.000000 1.000000
+    KEY_FRAME 2.000000 5.000000
+    IS_DRAGGABLE 0
+    OFFSET 0.000000
+
+  gen_needle right_brake_press
+    POS 633.285828 1637.714355
+    IMAGE MIP/brake/br_needl
+    DATAREF sim/flightmodel/controls/parkbrake
+    LIGHT_MODE MECHANICAL
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 0.000000 270.000000 1.000000
+    KEY_FRAME 1.000000 315.000000 1.000000
+    KEY_FRAME 2.000000 355.000000
+    IS_DRAGGABLE 0
+    OFFSET 0.000000
+
+  gen_needle accu_press
+    POS 571.285767 1741.714355
+    IMAGE MIP/brake/br_needl
+    DATAREF sim/flightmodel/controls/parkbrake
+    LIGHT_MODE MECHANICAL
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 0.000000 150.000000 1.000000
+    KEY_FRAME 1.000000 210.000000
+    IS_DRAGGABLE 0
+    OFFSET 0.000000
+
+END_GROUP
+GROUP chrono
+  CHAINED
+  gen_rotary chrono_bg
+    POS 561.000000 1458.500000
+    IMAGE MIP/chrono/clock
+    DATAREF 
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 0.000000 0.000000 1.000000
+    KEY_FRAME 0.000000 0.000000
+    DIGITS 1
+    ROTARY_TYPE NO_CLICK
+    CLICK_RADIUS 10.000000
+    CLICK_RADIUS_DY 0.000000
+    OFFSET 0.000000
+    STEP1 1.000000
+    STEP2 1.000000
+    CURSOR DEFAULT
+    CLICK_DX 0
+    CLICK_DY 0
+
+  GROUP utc
+    CHAINED
+    gen_LED utc_hr
+      POS 496.000000 1458.333374
+      IMAGE text/yellow_led
+      DATAREF sim/cockpit2/clock_timer/zulu_time_hours
+      SIZE 0.600000
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 12.000000 12.000000
+      DIGITS 2
+      DECIMALS 0
+      PERIOD_WIDTH 0
+      LED_ROWS 0
+
+    gen_LED utc_min
+      POS 552.000000 1458.333374
+      IMAGE text/yellow_led
+      DATAREF sim/cockpit2/clock_timer/zulu_time_minutes
+      SIZE 0.600000
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 12.000000 12.000000
+      DIGITS 2
+      DECIMALS 0
+      PERIOD_WIDTH 0
+      LED_ROWS 0
+
+    gen_LED utc_sec
+      POS 606.000000 1457.333374
+      IMAGE text/yellow_led
+      DATAREF sim/cockpit2/clock_timer/zulu_time_minutes
+      SIZE 0.400000
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 12.000000 12.000000
+      DIGITS 2
+      DECIMALS 0
+      PERIOD_WIDTH 0
+      LED_ROWS 0
+
+  END_GROUP
+  GROUP chr
+    gen_LED chr_min
+      POS 520.000000 1539.333374
+      IMAGE text/yellow_led
+      DATAREF sim/cockpit2/clock_timer/elapsed_time_hours
+      SIZE 0.600000
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 12.000000 12.000000
+      DIGITS 2
+      DECIMALS 0
+      PERIOD_WIDTH 0
+      LED_ROWS 0
+
+    gen_LED chr_sec
+      POS 577.000000 1539.333374
+      IMAGE text/yellow_led
+      DATAREF sim/cockpit2/clock_timer/elapsed_time_minutes
+      SIZE 0.600000
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 12.000000 12.000000
+      DIGITS 2
+      DECIMALS 0
+      PERIOD_WIDTH 0
+      LED_ROWS 0
+
+  END_GROUP
+END_GROUP
+GROUP vor/dme
+  CHAINED
+  GROUP_OPEN
+  gen_rotary vor mask
+    POS 730.714294 1410.000000
+    IMAGE MIP/vor/vor_mask
+    DATAREF 
+    SIZE 1.200000
+    LIGHT_MODE MECHANICAL
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 0.000000 0.000000 1.000000
+    KEY_FRAME 1.000000 6.000000
+    DIGITS 1
+    ROTARY_TYPE NO_CLICK
+    CLICK_RADIUS 10.000000
+    CLICK_RADIUS_DY 0.000000
+    OFFSET 0.000000
+    STEP1 1.000000
+    STEP2 1.000000
+    CURSOR DEFAULT
+    CLICK_DX 0
+    CLICK_DY 0
+
+  ins_RMI_N12_HM RMI_N12_HM.png
+    POS 731.428589 1410.428711
+    DATAREF 
+    LIGHT_MODE BACK_LIT_MANUAL
+    LIGHT_RHEOSTAT 0
+    BUS_SRC 1
+    KEY_FRAME 0.000000 0.000000 1.000000
+    KEY_FRAME 1.000000 1.000000
+
+  gen_LED dme1
+    POS 674.285706 1497.285767
+    IMAGE text/yellow_led
+    DATAREF sim/cockpit/radios/adf1_dme_dist_m
+    SIZE 0.300000
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 0
+    BUS_SRC 1
+    KEY_FRAME 0.000000 0.000000 1.000000
+    KEY_FRAME 10.000000 10.000000
+    DIGITS 4
+    DECIMALS 1
+    PERIOD_WIDTH 10
+    LED_ROWS 0
+
+  gen_LED dme2
+    POS 741.285706 1497.285767
+    IMAGE text/yellow_led
+    DATAREF sim/cockpit/radios/adf2_dme_dist_m
+    SIZE 0.300000
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 0
+    BUS_SRC 1
+    KEY_FRAME 0.000000 0.000000 1.000000
+    KEY_FRAME 10.000000 10.000000
+    DIGITS 4
+    DECIMALS 1
+    PERIOD_WIDTH 10
+    LED_ROWS 0
+
+END_GROUP
+GROUP PFD
   gen_needle Horizon
     POS 487.000000 675.000000
     IMAGE PFD/horizon
@@ -37499,511 +38021,365 @@ GROUP PFD
     DIGITS 3
 
 END_GROUP
-GROUP MFD
-  GROUP_OPEN
-  EFIS_map_s_HM map_s_HM.png
-    POS 757.000000 1092.000000
-    DATAREF 
-    LIGHT_MODE MECHANICAL
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 1.000000
-
-  gen_pointer gen_pointer.png
-    POS 913.000000 1103.000000
-    IMAGE PFD/flaps_indicator
-    DATAREF sim/flightmodel2/controls/flap1_deploy_ratio
-    CLIP
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    BUS_SRC 3
-    KEY_FRAME 0.000000 -256.000000 1.000000
-    KEY_FRAME 1.000000 0.000000
-    IS_DRAGGABLE 0
-    IS_VERTICAL 1
-    OFFSET 0.000000
-
-  gen_pointer gen_pointer.png
-    POS 963.000000 1041.000000
-    IMAGE elevator
-    DATAREF sim/cockpit2/controls/elevator_trim
-    CLIP
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    BUS_SRC 3
-    KEY_FRAME -1.000000 -64.000000 1.000000
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 64.000000
-    IS_DRAGGABLE 0
-    IS_VERTICAL 1
-    OFFSET 0.000000
-
-END_GROUP
-GROUP center overhead pan
-  GROUP_OPEN
-  gen_rotary probe heat
-    POS 1620.000000 1722.000000
-    IMAGE Buttons/dot_on
-    DATAREF 
-    LIGHT_MODE MECHANICAL
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 1.000000
-    DIGITS 2
-    ROTARY_TYPE PUSH
-    CLICK_RADIUS 20.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary generic dot on
-    POS 1094.571411 1062.000000
-    IMAGE Buttons/dot_on
-    DATAREF 
-    LIGHT_MODE MECHANICAL
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 1.000000 1.000000
-    KEY_FRAME 1.000000 1.000000
-    DIGITS 2
-    ROTARY_TYPE PUSH
-    CLICK_RADIUS 20.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary generic dot off
-    POS 1221.428589 1062.857056
-    IMAGE Buttons/dot_off
-    DATAREF 
-    LIGHT_MODE MECHANICAL
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 1.000000 1.000000
-    KEY_FRAME 1.000000 1.000000
-    DIGITS 2
-    ROTARY_TYPE PUSH
-    CLICK_RADIUS 20.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary generic dot on
-    POS 1349.142944 1062.571289
-    IMAGE Buttons/dot_fault
-    DATAREF 
-    LIGHT_MODE MECHANICAL
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 1.000000 1.000000
-    KEY_FRAME 1.000000 1.000000
-    DIGITS 2
-    ROTARY_TYPE PUSH
-    CLICK_RADIUS 20.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary generic fault on
-    POS 1477.428711 1062.999878
-    IMAGE Buttons/on_fault
-    DATAREF 
-    LIGHT_MODE MECHANICAL
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 1.000000 1.000000
-    KEY_FRAME 1.000000 1.000000
-    DIGITS 4
-    ROTARY_TYPE PUSH
-    CLICK_RADIUS 20.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary generic fault off
-    POS 1605.285889 1062.428467
-    IMAGE Buttons/off_fault
-    DATAREF 
-    LIGHT_MODE MECHANICAL
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 1.000000 1.000000
-    KEY_FRAME 1.000000 1.000000
-    DIGITS 4
-    ROTARY_TYPE PUSH
-    CLICK_RADIUS 20.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary gen disch
-    POS 1733.857300 1062.142700
-    IMAGE Buttons/fire_agent
-    DATAREF 
-    LIGHT_MODE MECHANICAL
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 1.000000 1.000000
-    KEY_FRAME 1.000000 1.000000
-    DIGITS 2
-    ROTARY_TYPE PUSH
-    CLICK_RADIUS 20.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary gen align
-    POS 1861.857300 1062.142700
-    IMAGE Buttons/align
-    DATAREF 
-    LIGHT_MODE MECHANICAL
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 3.000000 1.000000
-    KEY_FRAME 1.000000 3.000000
-    DIGITS 4
-    ROTARY_TYPE PUSH
-    CLICK_RADIUS 20.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary gen ovrd
-    POS 1989.857300 1062.142700
-    IMAGE Buttons/overide
-    DATAREF 
-    LIGHT_MODE MECHANICAL
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 1.000000 1.000000
-    KEY_FRAME 1.000000 1.000000
-    DIGITS 4
-    ROTARY_TYPE PUSH
-    CLICK_RADIUS 20.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary gen altn
-    POS 2117.857422 1062.142700
-    IMAGE Buttons/acessfeed
-    DATAREF 
-    LIGHT_MODE MECHANICAL
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 1.000000 1.000000
-    KEY_FRAME 1.000000 1.000000
-    DIGITS 4
-    ROTARY_TYPE PUSH
-    CLICK_RADIUS 20.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary gen autobrake
-    POS 2245.857422 1062.142700
-    IMAGE Buttons/autobrake
-    DATAREF 
-    LIGHT_MODE MECHANICAL
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 2.000000 1.000000
-    KEY_FRAME 1.000000 2.000000
-    DIGITS 3
-    ROTARY_TYPE PUSH
-    CLICK_RADIUS 20.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary gen brakefan
-    POS 2373.857422 1062.142700
-    IMAGE Buttons/brake_fan
-    DATAREF 
-    LIGHT_MODE MECHANICAL
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 3.000000 1.000000
-    KEY_FRAME 1.000000 3.000000
-    DIGITS 4
-    ROTARY_TYPE PUSH
-    CLICK_RADIUS 20.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary gen avail
-    POS 2501.857422 1062.142700
-    IMAGE Buttons/on_avil
-    DATAREF 
-    LIGHT_MODE MECHANICAL
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 1.000000 1.000000
-    KEY_FRAME 1.000000 1.000000
-    DIGITS 4
-    ROTARY_TYPE PUSH
-    CLICK_RADIUS 20.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary autoland
-    POS 2629.857422 1062.142700
-    IMAGE Buttons/autoland
-    DATAREF 
-    LIGHT_MODE MECHANICAL
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 1.000000 1.000000
-    KEY_FRAME 1.000000 1.000000
-    DIGITS 2
-    ROTARY_TYPE PUSH
-    CLICK_RADIUS 20.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary master caution
-    POS 2758.428955 1062.285522
-    IMAGE Buttons/master_caution
-    DATAREF 
-    LIGHT_MODE MECHANICAL
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 0.000000
-    DIGITS 2
-    ROTARY_TYPE PUSH
-    CLICK_RADIUS 20.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary master warning
-    POS 2886.000244 1062.285645
-    IMAGE Buttons/master_warning
-    DATAREF 
-    LIGHT_MODE MECHANICAL
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 0.000000
-    DIGITS 2
-    ROTARY_TYPE PUSH
-    CLICK_RADIUS 20.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary manual pressure
-    POS 1489.000000 1722.000000
-    IMAGE Buttons/manual_pressure
-    DATAREF 
-    LIGHT_MODE MECHANICAL
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 1.000000
-    DIGITS 4
-    ROTARY_TYPE PUSH
-    CLICK_RADIUS 20.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary eng1 antiice
-    POS 1751.000000 1722.000000
-    IMAGE Buttons/on_fault
-    DATAREF 
-    LIGHT_MODE MECHANICAL
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 1.000000
-    DIGITS 4
-    ROTARY_TYPE PUSH
-    CLICK_RADIUS 20.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary wing heat
-    POS 2012.000000 1722.000000
-    IMAGE Buttons/on_fault
-    DATAREF 
-    LIGHT_MODE MECHANICAL
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 1.000000
-    DIGITS 4
-    ROTARY_TYPE PUSH
-    CLICK_RADIUS 20.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary emerlight indicator
-    POS 1356.000000 1722.000000
-    IMAGE Buttons/dot_off
-    DATAREF 
-    LIGHT_MODE MECHANICAL
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 1.000000
-    DIGITS 2
-    ROTARY_TYPE PUSH
-    CLICK_RADIUS 20.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary eng2 antiice
-    POS 1881.000000 1722.000000
-    IMAGE Buttons/on_fault
-    DATAREF 
-    LIGHT_MODE MECHANICAL
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 1.000000
-    DIGITS 4
-    ROTARY_TYPE PUSH
-    CLICK_RADIUS 20.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary apu bleed
-    POS 2143.285645 1723.857178
-    IMAGE Buttons/off_fault
-    DATAREF 
-    LIGHT_MODE MECHANICAL
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 1.000000
-    DIGITS 4
-    ROTARY_TYPE ROTARY
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary apu start
-    POS 1092.000000 1723.000000
-    IMAGE Buttons/apu_start
-    DATAREF 
-    LIGHT_MODE MECHANICAL
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 1.000000
-    DIGITS 4
-    ROTARY_TYPE PUSH
-    CLICK_RADIUS 20.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary apu master
-    POS 1225.000000 1722.000000
-    IMAGE Buttons/apu_master
-    DATAREF 
-    LIGHT_MODE MECHANICAL
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 1.000000
-    DIGITS 2
-    ROTARY_TYPE PUSH
-    CLICK_RADIUS 20.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-END_GROUP
-rad_transponder_HM1 transponder_HM.png
-  POS 564.000000 1247.000000
+EFIS_hsi_tape el_hsi_tape.png
+  POS 1303.000000 523.000000
   DATAREF 
   LIGHT_MODE MECHANICAL
   LIGHT_RHEOSTAT 0
   KEY_FRAME 0.000000 0.000000 1.000000
   KEY_FRAME 1.000000 1.000000
 
+EFIS_horizon el_horizon.png
+  POS 1303.000000 728.000000
+  DATAREF 
+  LIGHT_MODE MECHANICAL
+  LIGHT_RHEOSTAT 0
+  KEY_FRAME 0.000000 0.000000 1.000000
+  KEY_FRAME 1.000000 1.000000
+
+EFIS_airspeed el_airspeed.png
+  POS 1113.000000 728.500000
+  DATAREF 
+  LIGHT_MODE MECHANICAL
+  LIGHT_RHEOSTAT 0
+  KEY_FRAME 0.000000 0.000000 1.000000
+  KEY_FRAME 1.000000 1.000000
+
+EFIS_altitude el_altitude.png
+  POS 1494.000000 728.500000
+  DATAREF 
+  LIGHT_MODE MECHANICAL
+  LIGHT_RHEOSTAT 0
+  KEY_FRAME 0.000000 0.000000 1.000000
+  KEY_FRAME 1.000000 1.000000
+
+GROUP fcu
+  GROUP_OPEN
+  GROUP ap lables
+    GROUP_OPEN
+    gen_rotary hdgvs/trkfpa
+      POS 1018.000000 1751.500000
+      IMAGE glaresheild/fcu/fcu_4vsfpa
+      DATAREF sim/cockpit2/autopilot/trk_fpa
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000
+      DIGITS 2
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary vs/fpa
+      POS 1317.500000 1772.000000
+      IMAGE glaresheild/fcu/fcu_vsfpa
+      DATAREF sim/cockpit2/autopilot/trk_fpa
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000
+      DIGITS 2
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary ap_altlable
+      POS 1213.714355 1773.428589
+      IMAGE glaresheild/fcu/fcu_altlable
+      DATAREF 
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000
+      DIGITS 2
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary hdgtrk_lable
+      POS 886.000000 1772.500000
+      IMAGE glaresheild/fcu/fcu_hdgtrk
+      DATAREF sim/cockpit2/autopilot/trk_fpa
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000
+      DIGITS 2
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary mach/kt
+      POS 749.000000 1772.000000
+      IMAGE glaresheild/fcu/fcu_spdmch
+      DATAREF sim/cockpit/autopilot/airspeed_is_mach
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000
+      DIGITS 2
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+  END_GROUP
+  GROUP ap indications
+    GROUP_OPEN
+    gen_rotary hdg managed
+      POS 886.500000 1754.000000
+      IMAGE glaresheild/fcu/fcu_managed
+      DATAREF sim/cockpit2/autopilot/gpss_status
+      SIZE 0.500000
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000 1.000000
+      KEY_FRAME 2.000000 1.000000
+      DIGITS 2
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary spd managed
+      POS 764.000000 1754.000000
+      IMAGE glaresheild/fcu/fcu_managed
+      DATAREF sim/cockpit2/autopilot/fms_vnav
+      SIZE 0.500000
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000
+      DIGITS 2
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary vs dashes
+      POS 1292.333374 1754.000000
+      IMAGE glaresheild/fcu/fcu_line
+      DATAREF sim/cockpit2/autopilot/vvi_status
+      SIZE 0.500000
+      HIDE
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 1.000000 1.000000
+      KEY_FRAME 1.000000 0.000000 1.000000
+      KEY_FRAME 2.000000 0.000000
+      DIGITS 2
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary hdg dot
+      POS 922.000000 1752.000000
+      IMAGE glaresheild/fcu/fcu_dot
+      DATAREF sim/cockpit2/autopilot/heading_status
+      SIZE 0.500000
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000 1.000000
+      KEY_FRAME 2.000000 1.000000
+      DIGITS 2
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary spd dot
+      POS 798.000000 1752.000000
+      IMAGE glaresheild/fcu/fcu_dot
+      DATAREF sim/cockpit2/autopilot/autothrottle_on
+      SIZE 0.500000
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000
+      DIGITS 2
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary alt dot
+      POS 1224.000000 1751.000000
+      IMAGE glaresheild/fcu/fcu_dot
+      DATAREF sim/cockpit2/autopilot/altitude_hold_status
+      SIZE 0.500000
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000 1.000000
+      KEY_FRAME 2.000000 1.000000
+      DIGITS 2
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+  END_GROUP
+  GROUP spd
+    SHOW_EQUAL 0.000000 sim/cockpit2/autopilot/fms_vnav
+    gen_LED ap speed kt
+      POS 732.857178 1753.142822
+      IMAGE text/yellow_led
+      DATAREF sim/cockpit2/autopilot/airspeed_dial_kts_mach
+      SHOW_EQUAL 0.000000 sim/cockpit/autopilot/airspeed_is_mach
+      SIZE 0.500000
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 100.000000 100.000000
+      DIGITS 3
+      DECIMALS 0
+      PERIOD_WIDTH 0
+      LED_ROWS 0
+
+    gen_LED ap speed mach
+      POS 726.857178 1751.571411
+      IMAGE text/yellow_led
+      DATAREF sim/cockpit2/autopilot/airspeed_dial_kts_mach
+      SHOW_EQUAL 1.000000 sim/cockpit/autopilot/airspeed_is_mach
+      SIZE 0.500000
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 0.750000 0.750000
+      DIGITS 2
+      DECIMALS 2
+      PERIOD_WIDTH 0
+      LED_ROWS 0
+
+  END_GROUP
+  GROUP hdg
+    SHOW_EQUAL 0.000000 sim/cockpit2/autopilot/gpss_status
+    gen_LED ap hdg
+      POS 855.571411 1753.428589
+      IMAGE text/yellow_led
+      DATAREF sim/cockpit2/autopilot/heading_dial_deg_mag_pilot
+      SIZE 0.500000
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 360.000000 360.000000
+      DIGITS 3
+      DECIMALS 0
+      PERIOD_WIDTH 0
+      LED_ROWS 0
+
+  END_GROUP
+  GROUP alt
+    gen_LED ap alt
+      POS 1129.000000 1753.000000
+      IMAGE text/yellow_led
+      DATAREF sim/cockpit/autopilot/altitude
+      SIZE 0.500000
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 10000.000000 10000.000000
+      DIGITS 5
+      DECIMALS 0
+      PERIOD_WIDTH 0
+      LED_ROWS 0
+
+  END_GROUP
+  GROUP vs
+    SHOW_GREATER 1.000000 sim/cockpit2/autopilot/vvi_status
+    GROUP_OPEN
+    gen_LED ap fpa
+      POS 1290.714233 1751.857178
+      IMAGE text/yellow_led
+      DATAREF sim/cockpit2/autopilot/fpa
+      SHOW_EQUAL 1.000000 sim/cockpit2/autopilot/trk_fpa
+      SIZE 0.500000
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 3.000000 3.000000
+      DIGITS 2
+      DECIMALS 1
+      PERIOD_WIDTH 0
+      LED_ROWS 0
+
+    gen_LED ap vs
+      POS 1279.714233 1751.857178
+      IMAGE text/yellow_led
+      DATAREF sim/cockpit2/autopilot/vvi_dial_fpm
+      SHOW_EQUAL 0.000000 sim/cockpit2/autopilot/trk_fpa
+      SIZE 0.500000
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 100.000000 100.000000
+      DIGITS 4
+      DECIMALS 0
+      PERIOD_WIDTH 0
+      LED_ROWS 0
+
+  END_GROUP
+END_GROUP
 PANEL_3D_END

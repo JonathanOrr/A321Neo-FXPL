@@ -1,0 +1,7 @@
+A
+750 version
+ x   y  
+ 0 -253	// comment: Rose and bug offsets from center of rotation
+ 0 -320	// comment: Rose and bug offsets from center of rotation
+ 0   0	// comment: glideslope lateral and vertical displacement from center
+10   0	// comment: localizer and glideslope travel per dot deflection
