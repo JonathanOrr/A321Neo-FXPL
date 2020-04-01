@@ -2,7 +2,7 @@ I
 800
 OBJ
 
-TEXTURE	cockpit_textures/cockpit_seats_baked.png
+TEXTURE	cockpit_textures/cockpit_seats.png
 POINT_COUNTS	13782	0	0	64704
 
 VT	-0.73592961	0.56655324	-19.48237228	-0.99289441	0.11749849	0.01883666	0.93317509	0.4838675
@@ -20263,7 +20263,7 @@ IDX	13768
 IDX	13777
 IDX	13773
 
-	ATTR_shiny_rat	0.5
+	ATTR_shiny_rat	0
 	TRIS	0 21120
 	TRIS	21120 17544
 	TRIS	38664 18432
@@ -20271,4 +20271,4 @@ IDX	13773
 	TRIS	60528 3456
 	TRIS	63984 720
 
-# Build with Blender 2.81 (sub 16) (build b'26bd5ebd42e3'). Exported with XPlane2Blender 4.0.0-alpha.4+62.20191220203304
+# Build with Blender 2.81 (sub 16) (build b'f1aa4d18d49d'). Exported with XPlane2Blender 4.0.0-alpha.4+62.20191220203304
