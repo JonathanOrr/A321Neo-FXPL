@@ -212,7 +212,7 @@ P _gear/0/_lonE 7.0
 P _gear/0/_lonN 7.0
 P _gear/0/_lonR 100.0
 P _gear/0/_scon 46865.578125000
-P _gear/0/_stat_def 0.589775324
+P _gear/0/_stat_def 0.589775264
 P _gear/0/_steerdeg_hispeed 5.0
 P _gear/0/_steerdeg_lospeed 75.0
 P _gear/0/_strut_comp 5.0
@@ -246,7 +246,7 @@ P _gear/1/_lonE -7.0
 P _gear/1/_lonN -7.0
 P _gear/1/_lonR 0.0
 P _gear/1/_scon 71266.664062500
-P _gear/1/_stat_def 1.306114912
+P _gear/1/_stat_def 1.306115270
 P _gear/1/_steerdeg_hispeed 0.0
 P _gear/1/_steerdeg_lospeed 0.0
 P _gear/1/_strut_comp -0.500000000
@@ -280,7 +280,7 @@ P _gear/2/_lonE -7.0
 P _gear/2/_lonN -7.0
 P _gear/2/_lonR 0.0
 P _gear/2/_scon 71266.664062500
-P _gear/2/_stat_def 1.306114912
+P _gear/2/_stat_def 1.306115270
 P _gear/2/_steerdeg_hispeed 0.0
 P _gear/2/_steerdeg_lospeed 0.0
 P _gear/2/_strut_comp -0.500000000
@@ -33592,7 +33592,7 @@ P acf/_RSC_mingov_ENGN 0.0
 P acf/_RSC_mingreen_ENGN 0.0
 P acf/_RSC_redline_ENGN 1.0
 P acf/_SFC_ROC 0.0
-P acf/_SFC_alt_hi_JET 30000.0
+P acf/_SFC_alt_hi_JET 38000.0
 P acf/_SFC_alt_hi_PRP 0.0
 P acf/_SFC_alt_lo_JET 0.0
 P acf/_SFC_alt_lo_PRP 0.0
@@ -33648,7 +33648,7 @@ P acf/_ailn_dn_trim 5.0
 P acf/_ailn_tab 0.0
 P acf/_ailn_trim_time 20.0
 P acf/_ailn_up_trim 5.0
-P acf/_airbus_FBW 1
+P acf/_airbus_FBW 0
 P acf/_alt_always_armed 1
 P acf/_alt_hard_locked_on_cws 0
 P acf/_alta_x_ctr 0.0
@@ -34484,7 +34484,7 @@ P acf/_bus_gen_is_on/6 0
 P acf/_bus_gen_is_on/7 0
 P acf/_bus_gen_is_on/count 8
 P acf/_buses_always_tied 0
-P acf/_bypass_ratio 4.0
+P acf/_bypass_ratio 5.0
 P acf/_callsign A321
 P acf/_camera_fov_zoom 60.0
 P acf/_camera_offset_phi 0.0
@@ -34550,7 +34550,7 @@ P acf/_crew_2/0 0.0
 P acf/_crew_2/1 0.0
 P acf/_crew_2/2 0.0
 P acf/_crew_2/count 3
-P acf/_crit_alt_mtr 1724.0
+P acf/_crit_alt_mtr 0.0
 P acf/_cus_dig_dec/0 0
 P acf/_cus_dig_dec/1 0
 P acf/_cus_dig_dec/10 0
@@ -35556,8 +35556,8 @@ P acf/_esys_bus_bit_add/32 0
 P acf/_esys_bus_bit_add/33 0
 P acf/_esys_bus_bit_add/34 0
 P acf/_esys_bus_bit_add/35 0
-P acf/_esys_bus_bit_add/36 1
-P acf/_esys_bus_bit_add/37 1
+P acf/_esys_bus_bit_add/36 0
+P acf/_esys_bus_bit_add/37 0
 P acf/_esys_bus_bit_add/38 1
 P acf/_esys_bus_bit_add/42 0
 P acf/_esys_bus_bit_add/48 0
@@ -35662,8 +35662,8 @@ P acf/_esys_bus_bit_add/rel_ignitr4 0
 P acf/_esys_bus_bit_add/rel_ignitr5 0
 P acf/_esys_bus_bit_add/rel_ignitr6 0
 P acf/_esys_bus_bit_add/rel_ignitr7 0
-P acf/_esys_bus_bit_add/rel_inverter0 1
-P acf/_esys_bus_bit_add/rel_inverter1 1
+P acf/_esys_bus_bit_add/rel_inverter0 0
+P acf/_esys_bus_bit_add/rel_inverter1 0
 P acf/_esys_bus_bit_add/rel_lites_beac 1
 P acf/_esys_bus_bit_add/rel_lites_hud 1
 P acf/_esys_bus_bit_add/rel_lites_ins 1
@@ -35810,16 +35810,16 @@ P acf/_fuel_2/0 0.0
 P acf/_fuel_2/1 0.0
 P acf/_fuel_2/2 0.0
 P acf/_fuel_2/count 3
-P acf/_fuel_intro_time_jet 5.0
-P acf/_fuel_intro_time_prop 5.0
+P acf/_fuel_intro_time_jet 28.0
+P acf/_fuel_intro_time_prop 15.0
 P acf/_gear_EQ 1
 P acf/_gear_can_ret_on_ground 0
 P acf/_gear_extend_protect 0
 P acf/_gear_pumps 25.0
 P acf/_gear_warn_above_flap_rat 0.600000024
 P acf/_gear_warn_below_kias 170.0
-P acf/_gear_warn_below_thro_pct 50.0
-P acf/_generator_design_rpm_rat 0.750000000
+P acf/_gear_warn_below_thro_pct 45.0
+P acf/_generator_design_rpm_rat 0.250000000
 P acf/_get_tow/0 0.0
 P acf/_get_tow/1 0.0
 P acf/_get_tow/2 0.0
@@ -35886,7 +35886,7 @@ P acf/_ground_pwr/1 0.0
 P acf/_ground_pwr/2 0.0
 P acf/_ground_pwr/count 3
 P acf/_h_eqlbm 7.043947697
-P acf/_has_ADG 0
+P acf/_has_ADG 1
 P acf/_has_APU_bleed_air 1
 P acf/_has_APU_generator 1
 P acf/_has_APU_switch 1
@@ -35955,7 +35955,7 @@ P acf/_hyd_max_p_RAT 1.0
 P acf/_hyd_max_p_ele 0.0
 P acf/_hyd_max_p_eng 21.0
 P acf/_hyd_max_p_rot 0.0
-P acf/_hyd_nw_steer 0
+P acf/_hyd_nw_steer 1
 P acf/_hyd_prop_pump_0123/0 0
 P acf/_hyd_prop_pump_0123/1 0
 P acf/_hyd_prop_pump_0123/2 0
@@ -35972,10 +35972,10 @@ P acf/_idle_rat/count 2
 P acf/_incidence_with_flaps 0
 P acf/_inlet_compression_efficiency 0.850000024
 P acf/_inverted_fuel_oil_EQ 0
-P acf/_inverter_for_elec_gyros 1
+P acf/_inverter_for_elec_gyros 0
 P acf/_inverter_for_ind_trq 0
-P acf/_inverter_for_otto 1
-P acf/_inverter_for_radar 1
+P acf/_inverter_for_otto 0
+P acf/_inverter_for_radar 0
 P acf/_is_airliner 1
 P acf/_is_cargo 0
 P acf/_is_experimental 0
@@ -36008,7 +36008,7 @@ P acf/_load_alt_presel_on_alt_hit 1
 P acf/_load_presel_on_asi_hit 0
 P acf/_load_presel_on_vvi_hit 1
 P acf/_lock_n1 0.0
-P acf/_lock_n2 0.0
+P acf/_lock_n2 28.0
 P acf/_lock_with_elev_EQ 0
 P acf/_m_displaced 0.0
 P acf/_m_displaced_Y 0.0
@@ -36025,13 +36025,13 @@ P acf/_manufacturer Airbus
 P acf/_mast_bump_cyclic_ailn 0.0
 P acf/_mast_bump_cyclic_roll 0.0
 P acf/_max_CHT 500.0
-P acf/_max_EGT 1200.0
+P acf/_max_EGT 900.0
 P acf/_max_ITT 646.0
 P acf/_max_MP_limit 29.920000076
 P acf/_max_bat_amp 60.0
-P acf/_max_gen_amp0 60.0
-P acf/_max_gen_amp_per_gen/0 60.0
-P acf/_max_gen_amp_per_gen/1 60.0
+P acf/_max_gen_amp0 800.0
+P acf/_max_gen_amp_per_gen/0 78.0
+P acf/_max_gen_amp_per_gen/1 78.0
 P acf/_max_gen_amp_per_gen/2 0.0
 P acf/_max_gen_amp_per_gen/3 0.0
 P acf/_max_gen_amp_per_gen/4 0.0
@@ -36045,14 +36045,14 @@ P acf/_max_press_diff 8.350000381
 P acf/_max_vac 8.0
 P acf/_max_xmsn_P 1.0
 P acf/_max_xmsn_T 1.0
-P acf/_min_n1 10.0
-P acf/_min_n2 46.0
+P acf/_min_n1 0.0
+P acf/_min_n2 28.0
 P acf/_min_rwy_len 5000.0
 P acf/_min_vec_on_ground 0.0
 P acf/_mixt_x_ctr 0.0
-P acf/_n1_power_curve1 2.0
-P acf/_n1_power_curve2 3.0
-P acf/_n2_power_curve 3.500000000
+P acf/_n1_power_curve1 2.250000000
+P acf/_n1_power_curve2 2.400000095
+P acf/_n2_power_curve 3.019999981
 P acf/_name A321neo
 P acf/_new_plot_XP3D_cock/0 0
 P acf/_new_plot_XP3D_cock/1 1
@@ -36082,7 +36082,7 @@ P acf/_num_braking_wheels 0.0
 P acf/_num_buses 2
 P acf/_num_engn 2
 P acf/_num_generators 2
-P acf/_num_inverters 2
+P acf/_num_inverters 1
 P acf/_num_prop 0
 P acf/_num_xmsn 2
 P acf/_nw_side_k 0.0
@@ -36158,7 +36158,7 @@ P acf/_part_descrip/94 Nosegear axle truck
 P acf/_part_descrip/count 95
 P acf/_pe_xyz/0 -1.549999952
 P acf/_pe_xyz/1 2.500000000
-P acf/_pe_xyz/2 9.149999619
+P acf/_pe_xyz/2 9.0
 P acf/_pe_xyz/count 3
 P acf/_phase_hdng_tvect_in_at_00 0
 P acf/_phase_hdng_tvect_in_at_90 0
@@ -36174,8 +36174,8 @@ P acf/_pitch_cyc_with_v2_kts 0.0
 P acf/_power_max_limit 0.0
 P acf/_prim_is_epr 0
 P acf/_prop_inlet_recovery 0.0
-P acf/_prop_pitch_deg_per_sec 45.0
-P acf/_prop_pitch_deg_per_sec_unfeather 45.0
+P acf/_prop_pitch_deg_per_sec 1.0
+P acf/_prop_pitch_deg_per_sec_unfeather 1.0
 P acf/_prop_x_ctr 0.0
 P acf/_ptch_but_adjusts_alt_hold 0
 P acf/_puff_LMN/0 0.0
@@ -36197,7 +36197,7 @@ P acf/_radiator_frontal_area 0.0
 P acf/_radiator_in_propwash 0
 P acf/_radio_alt_callout_advance 0.0
 P acf/_red_hi_CHT 500.0
-P acf/_red_hi_EGT 1450.0
+P acf/_red_hi_EGT 950.0
 P acf/_red_hi_EPR 0.0
 P acf/_red_hi_FF 900.0
 P acf/_red_hi_ITT 680.0
@@ -36376,7 +36376,7 @@ P acf/_slat_with_Vind 0.0
 P acf/_slat_with_stall_EQ 0
 P acf/_slung_len 0.0
 P acf/_snd_N1 100.0
-P acf/_snd_kias 350.0
+P acf/_snd_kias 340.0
 P acf/_snd_rpm_eng 2500.0
 P acf/_snd_rpm_prp 2500.0
 P acf/_solar_cover_part 0.0
@@ -36406,8 +36406,8 @@ P acf/_spoi2_v2 999.0
 P acf/_spoi2_with_flit_sbrk 30.0
 P acf/_spoi2_with_grnd_pitch 0.0
 P acf/_spoi2_with_grnd_sbrk 50.0
-P acf/_spool_time_compressor_jet 5.0
-P acf/_spool_time_compressor_prop 1.0
+P acf/_spool_time_compressor_jet 4.099999905
+P acf/_spool_time_compressor_prop 5.0
 P acf/_spot1_3d_rgb/0 0.0
 P acf/_spot1_3d_rgb/1 0.0
 P acf/_spot1_3d_rgb/2 0.0
@@ -36464,11 +36464,11 @@ P acf/_stall_warn_is_variable 0
 P acf/_start_on_water 0
 P acf/_starter_engages_fuel 1
 P acf/_starter_engages_igniter_arm 1
-P acf/_starter_engages_igniter_on 1
+P acf/_starter_engages_igniter_on 0
 P acf/_starter_engages_ignition 1
-P acf/_starter_is_air_driven 0
-P acf/_starter_max_rpm_rat 0.600000024
-P acf/_starter_torque_rat 0.500000000
+P acf/_starter_is_air_driven 1
+P acf/_starter_max_rpm_rat 0.284999996
+P acf/_starter_torque_rat 0.166999996
 P acf/_steerdeg_castor 0.0
 P acf/_stickshaker 0
 P acf/_sweep_extend_protect 0
@@ -36592,13 +36592,13 @@ P acf/_tank_xyz_full/j_count 3
 P acf/_the_eqlbm 0.555054367
 P acf/_thro_non_vect_props_at_sin_vect 0
 P acf/_thro_x_ctr 0.0
-P acf/_throt_max_fwd_emr 1.009999990
-P acf/_throt_max_fwd_nrm 1.009999990
+P acf/_throt_max_fwd_emr 1.019999981
+P acf/_throt_max_fwd_nrm 1.0
 P acf/_throt_max_rev 0.850000024
-P acf/_throt_time_jet 4.0
-P acf/_throt_time_prop 1.0
+P acf/_throt_time_jet 1.700000048
+P acf/_throt_time_prop 4.0
 P acf/_thrust_max_limit 33000.0
-P acf/_thrust_rev_dep_time 1.0
+P acf/_thrust_rev_dep_time 2.0
 P acf/_tip_AOA_des 0.0
 P acf/_tip_mach_des_100 0.0
 P acf/_tip_mach_des_50 0.0
@@ -37574,6 +37574,7 @@ GROUP brake_press
 END_GROUP
 GROUP chrono
   CHAINED
+  GROUP_OPEN
   gen_rotary chrono_bg
     POS 561.000000 1458.500000
     IMAGE MIP/chrono/clock
@@ -37595,6 +37596,7 @@ GROUP chrono
 
   GROUP utc
     CHAINED
+    GROUP_OPEN
     gen_LED utc_hr
       POS 496.000000 1458.333374
       IMAGE text/yellow_led
@@ -37626,7 +37628,7 @@ GROUP chrono
     gen_LED utc_sec
       POS 606.000000 1457.333374
       IMAGE text/yellow_led
-      DATAREF sim/cockpit2/clock_timer/zulu_time_minutes
+      DATAREF sim/cockpit2/clock_timer/zulu_time_seconds
       SIZE 0.400000
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
@@ -37639,6 +37641,7 @@ GROUP chrono
 
   END_GROUP
   GROUP chr
+    CHAINED
     gen_LED chr_min
       POS 520.000000 1539.333374
       IMAGE text/yellow_led
@@ -37702,10 +37705,10 @@ GROUP vor/dme
     KEY_FRAME 1.000000 1.000000
 
   gen_LED dme1
-    POS 674.285706 1497.285767
+    POS 671.285706 1497.285767
     IMAGE text/yellow_led
-    DATAREF sim/cockpit/radios/adf1_dme_dist_m
-    SIZE 0.300000
+    DATAREF sim/cockpit/radios/nav1_dme_dist_m
+    SIZE 0.250000
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 0
     BUS_SRC 1
@@ -37717,10 +37720,10 @@ GROUP vor/dme
     LED_ROWS 0
 
   gen_LED dme2
-    POS 741.285706 1497.285767
+    POS 748.285706 1497.285767
     IMAGE text/yellow_led
-    DATAREF sim/cockpit/radios/adf2_dme_dist_m
-    SIZE 0.300000
+    DATAREF sim/cockpit/radios/nav2_dme_dist_m
+    SIZE 0.250000
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 0
     BUS_SRC 1
@@ -37733,6 +37736,7 @@ GROUP vor/dme
 
 END_GROUP
 GROUP PFD
+  CHAINED
   gen_needle Horizon
     POS 487.000000 675.000000
     IMAGE PFD/horizon
@@ -38053,10 +38057,9 @@ EFIS_altitude el_altitude.png
   KEY_FRAME 0.000000 0.000000 1.000000
   KEY_FRAME 1.000000 1.000000
 
-GROUP fcu
-  GROUP_OPEN
+GROUP fcu_display
+  CHAINED
   GROUP ap lables
-    GROUP_OPEN
     gen_rotary hdgvs/trkfpa
       POS 1018.000000 1751.500000
       IMAGE glaresheild/fcu/fcu_4vsfpa
@@ -38154,7 +38157,6 @@ GROUP fcu
 
   END_GROUP
   GROUP ap indications
-    GROUP_OPEN
     gen_rotary hdg managed
       POS 886.500000 1754.000000
       IMAGE glaresheild/fcu/fcu_managed
@@ -38349,7 +38351,6 @@ GROUP fcu
   END_GROUP
   GROUP vs
     SHOW_GREATER 1.000000 sim/cockpit2/autopilot/vvi_status
-    GROUP_OPEN
     gen_LED ap fpa
       POS 1290.714233 1751.857178
       IMAGE text/yellow_led
@@ -38382,4 +38383,161 @@ GROUP fcu
 
   END_GROUP
 END_GROUP
+gen_rotary ap1 button
+  POS 705.571411 1680.857178
+  IMAGE glaresheild/fcu_buttons/ap_ap1
+  DATAREF sim/cockpit2/autopilot/flight_director_mode
+  LIGHT_MODE GLASS_AUTO
+  LIGHT_RHEOSTAT 0
+  KEY_FRAME 0.000000 0.000000 1.000000
+  KEY_FRAME 1.000000 0.000000 1.000000
+  KEY_FRAME 2.000000 1.000000
+  DIGITS 2
+  ROTARY_TYPE NO_CLICK
+  CLICK_RADIUS 10.000000
+  CLICK_RADIUS_DY 0.000000
+  OFFSET 0.000000
+  STEP1 1.000000
+  STEP2 1.000000
+  CURSOR DEFAULT
+  CLICK_DX 0
+  CLICK_DY 0
+
+gen_rotary ap2 button
+  POS 762.142822 1680.714355
+  IMAGE glaresheild/fcu_buttons/ap_ap2
+  DATAREF sim/cockpit2/autopilot/flight_director2_mode
+  LIGHT_MODE GLASS_AUTO
+  LIGHT_RHEOSTAT 0
+  KEY_FRAME 0.000000 0.000000 1.000000
+  KEY_FRAME 1.000000 0.000000 1.000000
+  KEY_FRAME 2.000000 1.000000
+  DIGITS 2
+  ROTARY_TYPE NO_CLICK
+  CLICK_RADIUS 10.000000
+  CLICK_RADIUS_DY 0.000000
+  OFFSET 0.000000
+  STEP1 1.000000
+  STEP2 1.000000
+  CURSOR DEFAULT
+  CLICK_DX 0
+  CLICK_DY 0
+
+gen_rotary autothrust button
+  POS 818.571411 1680.000000
+  IMAGE glaresheild/fcu_buttons/ap_athr
+  DATAREF sim/cockpit2/autopilot/autothrottle_on
+  LIGHT_MODE GLASS_AUTO
+  LIGHT_RHEOSTAT 0
+  KEY_FRAME 0.000000 0.000000 1.000000
+  KEY_FRAME 1.000000 1.000000
+  DIGITS 2
+  ROTARY_TYPE NO_CLICK
+  CLICK_RADIUS 10.000000
+  CLICK_RADIUS_DY 0.000000
+  OFFSET 0.000000
+  STEP1 1.000000
+  STEP2 1.000000
+  CURSOR DEFAULT
+  CLICK_DX 0
+  CLICK_DY 0
+
+gen_rotary FD1 button
+  POS 875.000000 1673.142822
+  IMAGE glaresheild/fcu_buttons/ap_fd
+  DATAREF sim/cockpit2/autopilot/flight_director_mode
+  LIGHT_MODE GLASS_AUTO
+  LIGHT_RHEOSTAT 0
+  KEY_FRAME 0.000000 0.000000 1.000000
+  KEY_FRAME 1.000000 1.000000 1.000000
+  KEY_FRAME 2.000000 1.000000
+  DIGITS 2
+  ROTARY_TYPE NO_CLICK
+  CLICK_RADIUS 10.000000
+  CLICK_RADIUS_DY 0.000000
+  OFFSET 0.000000
+  STEP1 1.000000
+  STEP2 1.000000
+  CURSOR DEFAULT
+  CLICK_DX 0
+  CLICK_DY 0
+
+gen_rotary FD2 button
+  POS 931.857117 1673.857178
+  IMAGE glaresheild/fcu_buttons/ap_fd
+  DATAREF sim/cockpit2/autopilot/flight_director2_mode
+  LIGHT_MODE GLASS_AUTO
+  LIGHT_RHEOSTAT 0
+  KEY_FRAME 0.000000 0.000000 1.000000
+  KEY_FRAME 1.000000 1.000000 1.000000
+  KEY_FRAME 2.000000 1.000000
+  DIGITS 2
+  ROTARY_TYPE NO_CLICK
+  CLICK_RADIUS 10.000000
+  CLICK_RADIUS_DY 0.000000
+  OFFSET 0.000000
+  STEP1 1.000000
+  STEP2 1.000000
+  CURSOR DEFAULT
+  CLICK_DX 0
+  CLICK_DY 0
+
+gen_rotary appr button
+  POS 987.142883 1673.000000
+  IMAGE glaresheild/fcu_buttons/ap_appr
+  DATAREF sim/cockpit2/autopilot/approach_status
+  LIGHT_MODE GLASS_AUTO
+  LIGHT_RHEOSTAT 0
+  KEY_FRAME 0.000000 0.000000 1.000000
+  KEY_FRAME 1.000000 1.000000 1.000000
+  KEY_FRAME 2.000000 1.000000
+  DIGITS 2
+  ROTARY_TYPE NO_CLICK
+  CLICK_RADIUS 10.000000
+  CLICK_RADIUS_DY 0.000000
+  OFFSET 0.000000
+  STEP1 1.000000
+  STEP2 1.000000
+  CURSOR DEFAULT
+  CLICK_DX 0
+  CLICK_DY 0
+
+gen_rotary exped button
+  POS 1044.285767 1673.000000
+  IMAGE glaresheild/fcu_buttons/ap_exped
+  DATAREF 
+  LIGHT_MODE GLASS_AUTO
+  LIGHT_RHEOSTAT 0
+  KEY_FRAME 0.000000 0.000000 1.000000
+  KEY_FRAME 1.000000 1.000000
+  DIGITS 2
+  ROTARY_TYPE NO_CLICK
+  CLICK_RADIUS 10.000000
+  CLICK_RADIUS_DY 0.000000
+  OFFSET 0.000000
+  STEP1 1.000000
+  STEP2 1.000000
+  CURSOR DEFAULT
+  CLICK_DX 0
+  CLICK_DY 0
+
+gen_rotary loc button
+  POS 1100.428589 1673.142944
+  IMAGE glaresheild/fcu_buttons/ap_loc
+  DATAREF sim/cockpit2/autopilot/hnav_armed
+  LIGHT_MODE GLASS_AUTO
+  LIGHT_RHEOSTAT 0
+  KEY_FRAME 0.000000 0.000000 1.000000
+  KEY_FRAME 1.000000 1.000000
+  DIGITS 2
+  ROTARY_TYPE NO_CLICK
+  CLICK_RADIUS 10.000000
+  CLICK_RADIUS_DY 0.000000
+  OFFSET 0.000000
+  STEP1 1.000000
+  STEP2 1.000000
+  CURSOR DEFAULT
+  CLICK_DX 0
+  CLICK_DY 0
+
 PANEL_3D_END
