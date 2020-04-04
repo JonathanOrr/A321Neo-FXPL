@@ -9,7 +9,6 @@ sasl.options.setLuaErrorsHandling(SASL_STOP_PROCESSING)
 
 
 
-
 size = { 4096, 2048 }
 
 panelWidth3d = 4096
@@ -17,9 +16,11 @@ panelHeight3d = 2048
 
 
 
-
 components = {
-  power_system {},
-  electrical_system {},
-  flight_deck {},
+  --power_system {},
+  --electrical_system {},
+  --flight_deck {},
+  engine_and_apu {},
+  flight_controls {},
+  fcu_ap_at {}
  }
