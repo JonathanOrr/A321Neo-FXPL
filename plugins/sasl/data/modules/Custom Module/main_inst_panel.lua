@@ -1,4 +1,4 @@
 components = {
-  PFD { position= {345,1623,192,192} },
+  PFD { position= {0,660,970,540} },
   ND  { position= {563,1625,192,192} }
  }
