@@ -83,7 +83,6 @@ sasl.registerCommandHandler ( engine_mode_dn, 0 , function(phase)
 end)
 
 --script variables
-local init_complete = 0
 local ignition_1_required = 0
 local ignition_2_required = 0
 
@@ -99,23 +98,17 @@ function Math_clamp(val, min, max)
     end
 end
 
-function onPlaneLoaded()
-    init_complete = 0
-end
+--init
+set(apu_bleed_switch, 0)
+set(apu_gen, 1)
 
 function update()
-    --initialization
-    if init_complete == 0 then
-        set(apu_bleed_switch, 0)
-        set(apu_gen, 1)
-
-        if get(startup_running) == 1 then
-            set(engine_1_master_switch, 1)
-            set(engine_2_master_switch, 1)
-        end  
-
-        --initialization complete
-        init_complete = 1
+    
+    --start enging running
+    if get(startup_running) == 1 then
+        set(engine_1_master_switch, 1)
+        set(engine_2_master_switch, 1)
+        set(startup_running, 0)
     end
     
     --setting integer dataref range
