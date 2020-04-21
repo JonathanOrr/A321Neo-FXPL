@@ -21,6 +21,6 @@ https://discord.gg/736HbJZ
 
 
 ## Current Visual state
-![](https://media.discordapp.net/attachments/680434324163657931/687688057469796457/A321_-_2020-03-12_23.44.08.png)
-![](https://media.discordapp.net/attachments/680434324163657931/687688057117212683/A321_-_2020-03-12_23.43.19.png)
-![](https://media.discordapp.net/attachments/680434324163657931/687688058640007222/A321_-_2020-03-12_23.43.01.png)
+![](https://cdn.discordapp.com/attachments/700005517900251166/702020125129310229/unknown.png)
+![](https://cdn.discordapp.com/attachments/700005517900251166/700982689401929738/image0.jpg)
+![](https://cdn.discordapp.com/attachments/700005517900251166/700258576676945920/A321_-_2020-04-16_4.15.24_pm.png)
