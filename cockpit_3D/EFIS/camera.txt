@@ -1,0 +1,4 @@
+A
+750 version
+dx	dy		size of display in pixels
+85	85

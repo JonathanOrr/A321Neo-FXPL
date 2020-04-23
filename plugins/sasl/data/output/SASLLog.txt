@@ -1,0 +1,13 @@
+[A321NEO-FXPL INFO]: Initializing...
+[A321NEO-FXPL INFO]: Path to module: D:\SteamLibrary/steamapps/common/X-Plane 11/Aircraft/A321neo/plugins/sasl/data/modules/main.lua
+[A321NEO-FXPL INFO]: Loading module...
+[A321NEO-FXPL INFO]: [LUA]: loading	module
+[A321NEO-FXPL INFO]: [LUA]: including	helpers.lua
+[A321NEO-FXPL INFO]: [LUA]: including	global_datarefs.lua
+[A321NEO-FXPL INFO]: [LUA]: loading	engine_and_apu
+[A321NEO-FXPL INFO]: [LUA]: loading	cabin_screens
+[A321NEO-FXPL INFO]: [LUA]: loading	flight_controls
+[A321NEO-FXPL INFO]: [LUA]: loading	fcu_ap_at
+[A321NEO-FXPL INFO]: Module loaded
+[A321NEO-FXPL INFO]: Disabling...
+[A321NEO-FXPL INFO]: SASL plugin stopped...

@@ -1,4 +1,5 @@
 include("helpers.lua")
+include("global_datarefs.lua")
 
 sasl.options.setAircraftPanelRendering(true)
 sasl.options.setInteractivity(true)
@@ -21,6 +22,7 @@ components = {
   --electrical_system {},
   --flight_deck {},
   engine_and_apu {},
+  cabin_screens {},
   flight_controls {},
   fcu_ap_at {}
  }

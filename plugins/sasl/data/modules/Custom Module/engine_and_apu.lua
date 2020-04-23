@@ -18,8 +18,6 @@ local startup_running = globalProperty("sim/operation/prefs/startup_running")
 local apu_start_button_state = createGlobalPropertyi("a321neo/engine/apu_start_button", 0, false, true, false)
 local apu_avail = createGlobalPropertyi("a321neo/engine/apu_avil", 0, false, true, false)
 local engine_mode_knob = createGlobalPropertyi("a321neo/engine/engine_mode", 0, false, true, false)
-local engine_1_master_switch = createGlobalPropertyi("a321neo/engine/master_1", 0, false, true, false)
-local engine_2_master_switch = createGlobalPropertyi("a321neo/engine/master_2", 0, false, true, false)
 
 --a321neo command
 local apu_gen_toggle = sasl.createCommand("a321neo/electrical/APU_gen_toggle", "toggle apu generator")
@@ -65,8 +63,8 @@ sasl.registerCommandHandler ( a321_auto_start, 0 , function(phase)
         set(apu_start_position, 2)
         set(apu_bleed_switch, 1)
         set(engine_mode_knob, 1)
-        set(engine_1_master_switch, 1)
-        set(engine_2_master_switch, 1)
+        set(Engine_1_master_switch, 1)
+        set(Engine_2_master_switch, 1)
     end
 end)
 
@@ -106,15 +104,15 @@ function update()
     
     --start enging running
     if get(startup_running) == 1 then
-        set(engine_1_master_switch, 1)
-        set(engine_2_master_switch, 1)
+        set(Engine_1_master_switch, 1)
+        set(Engine_2_master_switch, 1)
         set(startup_running, 0)
     end
     
     --setting integer dataref range
     set(engine_mode_knob,Math_clamp(get(engine_mode_knob), -1, 1))
-    set(engine_1_master_switch,Math_clamp(get(engine_1_master_switch), 0, 1))
-    set(engine_2_master_switch,Math_clamp(get(engine_2_master_switch), 0, 1))
+    set(Engine_1_master_switch,Math_clamp(get(Engine_1_master_switch), 0, 1))
+    set(Engine_2_master_switch,Math_clamp(get(Engine_2_master_switch), 0, 1))
     
     --engine mode start
     if get(engine_mode_knob) == 1 
@@ -127,13 +125,13 @@ function update()
             ignition_2_required = 1
         end
         
-        if get(engine_1_master_switch) == 1 then
+        if get(Engine_1_master_switch) == 1 then
             if ignition_1_required == 1 then
                 set(engine_1_ignition_switch,4)
             end
         end
         
-        if get(engine_2_master_switch) == 1 then
+        if get(Engine_2_master_switch) == 1 then
             if ignition_2_required == 1 then
                 set(engine_2_ignition_switch,4)
             end
@@ -150,19 +148,19 @@ function update()
     end
 
     --engine master 1
-    if get(engine_1_master_switch) == 1
+    if get(Engine_1_master_switch) == 1
     then
         set(engine_1_mixture, 1.0)
-    elseif get(engine_1_master_switch) == 0
+    elseif get(Engine_1_master_switch) == 0
     then
         set(engine_1_mixture, 0.0)
     end
 
     --engine master 2
-    if get(engine_2_master_switch) == 1
+    if get(Engine_2_master_switch) == 1
     then
         set(engine_2_mixture, 1.0)
-    elseif get(engine_2_master_switch) == 0
+    elseif get(Engine_2_master_switch) == 0
     then
         set(engine_2_mixture, 0.0)
     end
