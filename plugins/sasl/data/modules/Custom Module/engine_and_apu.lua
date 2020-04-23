@@ -10,8 +10,6 @@ local engine_1_ignition_switch = globalProperty("sim/cockpit2/engine/actuators/i
 local engine_2_ignition_switch = globalProperty("sim/cockpit2/engine/actuators/ignition_key[1]")
 local engine_1_mixture = globalProperty("sim/cockpit2/engine/actuators/mixture_ratio[0]")
 local engine_2_mixture = globalProperty("sim/cockpit2/engine/actuators/mixture_ratio[1]")
-local engine_1_avail = globalProperty("sim/flightmodel/engine/ENGN_running[0]")
-local engine_2_avail = globalProperty("sim/flightmodel/engine/ENGN_running[1]")
 local startup_running = globalProperty("sim/operation/prefs/startup_running")
 
 --a321neo dataref
@@ -59,7 +57,7 @@ end)
 sasl.registerCommandHandler ( a321_auto_start, 0 , function(phase)
     if phase == SASL_COMMAND_BEGIN then
         set(battery_1, 1)
-        set(battery_1, 1)
+        set(battery_2, 1)
         set(apu_start_position, 2)
         set(apu_bleed_switch, 1)
         set(engine_mode_knob, 1)
@@ -118,10 +116,10 @@ function update()
     if get(engine_mode_knob) == 1 
     then 
         -- to confirm the engine needs starting to stop repetitive start
-        if get(engine_1_avail) ~= 1 then
+        if get(Engine_1_avail) ~= 1 then
             ignition_1_required = 1
         end
-        if get(engine_2_avail) ~= 1 then
+        if get(Engine_2_avail) ~= 1 then
             ignition_2_required = 1
         end
         

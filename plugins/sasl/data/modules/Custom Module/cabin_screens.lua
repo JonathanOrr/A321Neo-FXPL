@@ -19,6 +19,6 @@ function update()
     if get(Engine_1_master_switch) == 0 or get(Engine_2_master_switch) == 0 then
         set(cabin_screen_page, 0)
     elseif get(Engine_1_master_switch) == 1 and get(Engine_2_master_switch) == 1 then
-        set(cabin_screen_page, 2)
+        set(cabin_screen_page, 1)
     end
 end
