@@ -16,7 +16,7 @@ end
 function update()
     set(cabin_screen_page, Math_clamp(get(cabin_screen_page), 0, 2))
 
-    set(Distance_traveled_km, get(Distance_traveled_m) / 10)
+    set(Distance_traveled_km, get(Distance_traveled_m) / 1000)
     set(Groudn_speed_kmh, get(Ground_speed_ms) * 3.6)
 
     if get(Engine_1_master_switch) == 0 or get(Engine_2_master_switch) == 0 then
