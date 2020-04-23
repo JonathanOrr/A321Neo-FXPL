@@ -1,5 +1,5 @@
 include("helpers.lua")
-include("global_datarefs.lua")
+include("global_datarefs_functions.lua")
 
 sasl.options.setAircraftPanelRendering(true)
 sasl.options.setInteractivity(true)

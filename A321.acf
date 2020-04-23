@@ -143,7 +143,7 @@ P _door/3/_xyz/0 1.500000000
 P _door/3/_xyz/1 0.0
 P _door/3/_xyz/2 14.500000000
 P _door/3/_xyz/count 3
-P _door/4/_ang_now 40.690563202
+P _door/4/_ang_now 57.148563385
 P _door/4/_ext_ang 0.0
 P _door/4/_ret_ang 90.0
 P _door/4/_type 2
@@ -151,7 +151,7 @@ P _door/4/_xyz/0 -13.0
 P _door/4/_xyz/1 -3.599999905
 P _door/4/_xyz/2 73.500000000
 P _door/4/_xyz/count 3
-P _door/5/_ang_now -40.690563202
+P _door/5/_ang_now -57.148563385
 P _door/5/_ext_ang 0.0
 P _door/5/_ret_ang -90.0
 P _door/5/_type 2
@@ -209,10 +209,10 @@ P _gear/0/_latN 0.0
 P _gear/0/_latR 0.0
 P _gear/0/_leg_len 6.599999905
 P _gear/0/_lonE 7.0
-P _gear/0/_lonN 49.046916962
+P _gear/0/_lonN 66.053512573
 P _gear/0/_lonR 100.0
 P _gear/0/_scon 46865.578125000
-P _gear/0/_stat_def 0.589775205
+P _gear/0/_stat_def 0.589775383
 P _gear/0/_steerdeg_hispeed 5.0
 P _gear/0/_steerdeg_lospeed 75.0
 P _gear/0/_strut_comp 5.0
@@ -239,14 +239,14 @@ P _gear/1/_gear_x -12.010000229
 P _gear/1/_gear_y -2.799999952
 P _gear/1/_gear_z 72.379997253
 P _gear/1/_latE 0.0
-P _gear/1/_latN 36.169391632
+P _gear/1/_latN 50.798721313
 P _gear/1/_latR 80.0
 P _gear/1/_leg_len 8.199999809
 P _gear/1/_lonE -7.0
-P _gear/1/_lonN -3.835178375
+P _gear/1/_lonN -2.555111647
 P _gear/1/_lonR 0.0
 P _gear/1/_scon 71266.664062500
-P _gear/1/_stat_def 1.306114793
+P _gear/1/_stat_def 1.306114912
 P _gear/1/_steerdeg_hispeed 0.0
 P _gear/1/_steerdeg_lospeed 0.0
 P _gear/1/_strut_comp -0.500000000
@@ -273,14 +273,14 @@ P _gear/2/_gear_x 12.010000229
 P _gear/2/_gear_y -2.799999952
 P _gear/2/_gear_z 72.379997253
 P _gear/2/_latE 0.0
-P _gear/2/_latN -36.169391632
+P _gear/2/_latN -50.798721313
 P _gear/2/_latR -80.0
 P _gear/2/_leg_len 8.199999809
 P _gear/2/_lonE -7.0
-P _gear/2/_lonN -3.835178375
+P _gear/2/_lonN -2.555111647
 P _gear/2/_lonR 0.0
 P _gear/2/_scon 71266.664062500
-P _gear/2/_stat_def 1.306114793
+P _gear/2/_stat_def 1.306114912
 P _gear/2/_steerdeg_hispeed 0.0
 P _gear/2/_steerdeg_lospeed 0.0
 P _gear/2/_strut_comp -0.500000000
@@ -38706,25 +38706,196 @@ GROUP Cabin screens
   GROUP page 1
     SHOW_EQUAL 1.000000 a321neo/cabin/screen_page
     GROUP_OPEN
-    gen_rotary cabin screen pg1
-      POS 3530.000000 1470.000000
-      IMAGE cabin/world_map
-      DATAREF 
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 1.000000 0.000000
-      DIGITS 1
-      ROTARY_TYPE NO_CLICK
-      CLICK_RADIUS 10.000000
-      CLICK_RADIUS_DY 0.000000
-      OFFSET 0.000000
-      STEP1 1.000000
-      STEP2 1.000000
-      CURSOR DEFAULT
-      CLICK_DX 0
-      CLICK_DY 0
+    GROUP map metric
+      SHOW_EQUAL 0.000000 a321neo/cabin/sreen_unit
+      GROUP_OPEN
+      gen_rotary map metric
+        POS 3530.000000 1470.000000
+        IMAGE cabin/world_map_metric
+        DATAREF 
+        LIGHT_MODE GLASS_AUTO
+        LIGHT_RHEOSTAT 0
+        KEY_FRAME 0.000000 0.000000 1.000000
+        KEY_FRAME 1.000000 0.000000
+        DIGITS 1
+        ROTARY_TYPE NO_CLICK
+        CLICK_RADIUS 10.000000
+        CLICK_RADIUS_DY 0.000000
+        OFFSET 0.000000
+        STEP1 1.000000
+        STEP2 1.000000
+        CURSOR DEFAULT
+        CLICK_DX 0
+        CLICK_DY 0
 
+      gen_LED cabin gs kmh
+        POS 3975.000000 1665.000000
+        IMAGE cabin/cabin_screen_led
+        DATAREF a321neo/dynamics/groundspeed_kmh
+        SIZE 0.500000
+        LIGHT_MODE GLASS_AUTO
+        LIGHT_RHEOSTAT 0
+        KEY_FRAME 0.000000 0.000000 1.000000
+        KEY_FRAME 500.000000 500.000000
+        DIGITS 3
+        DECIMALS 0
+        PERIOD_WIDTH 0
+        LED_ROWS 0
+
+      gen_LED baro alt m
+        POS 3962.000000 1567.000000
+        IMAGE cabin/cabin_screen_led
+        DATAREF a321neo/cockpit/indicators/capt_baro_alt_m
+        SHOW_GREATER 2501.000000 sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot
+        SIZE 0.500000
+        LIGHT_MODE GLASS_AUTO
+        LIGHT_RHEOSTAT 0
+        KEY_FRAME 0.000000 0.000000 1.000000
+        KEY_FRAME 35000.000000 35000.000000
+        DIGITS 5
+        DECIMALS 0
+        PERIOD_WIDTH 0
+        LED_ROWS 0
+
+      gen_LED ra alt m
+        POS 3962.000000 1567.000000
+        IMAGE cabin/cabin_screen_led
+        DATAREF a321neo/cockpit/indicators/capt_ra_alt_m
+        SHOW_LESS 2500.000000 sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot
+        SIZE 0.500000
+        LIGHT_MODE GLASS_AUTO
+        LIGHT_RHEOSTAT 0
+        KEY_FRAME 0.000000 0.000000 1.000000
+        KEY_FRAME 35000.000000 35000.000000
+        DIGITS 5
+        DECIMALS 0
+        PERIOD_WIDTH 0
+        LED_ROWS 0
+
+      gen_LED cabin OAT c
+        POS 3974.000000 1479.000000
+        IMAGE cabin/cabin_screen_led
+        DATAREF sim/cockpit2/temperature/outside_air_temp_degc
+        SIZE 0.500000
+        LIGHT_MODE GLASS_AUTO
+        LIGHT_RHEOSTAT 0
+        KEY_FRAME 0.000000 0.000000 1.000000
+        KEY_FRAME 40.000000 40.000000
+        DIGITS 3
+        DECIMALS 0
+        PERIOD_WIDTH 0
+        LED_ROWS 0
+
+      gen_LED distance taveled km
+        POS 3968.000000 1362.000000
+        IMAGE cabin/cabin_screen_led
+        DATAREF a321neo/dynamics/distance_traveled_km
+        SIZE 0.500000
+        LIGHT_MODE GLASS_AUTO
+        LIGHT_RHEOSTAT 0
+        KEY_FRAME 0.000000 0.000000 1.000000
+        KEY_FRAME 8500.000000 8500.000000
+        DIGITS 4
+        DECIMALS 0
+        PERIOD_WIDTH 0
+        LED_ROWS 0
+
+    END_GROUP
+    GROUP map imperial
+      SHOW_EQUAL 1.000000 a321neo/cabin/sreen_unit
+      GROUP_OPEN
+      gen_rotary map imperial
+        POS 3530.000000 1470.000000
+        IMAGE cabin/world_map_imperial
+        DATAREF 
+        LIGHT_MODE GLASS_AUTO
+        LIGHT_RHEOSTAT 0
+        KEY_FRAME 0.000000 0.000000 1.000000
+        KEY_FRAME 1.000000 0.000000
+        DIGITS 1
+        ROTARY_TYPE NO_CLICK
+        CLICK_RADIUS 10.000000
+        CLICK_RADIUS_DY 0.000000
+        OFFSET 0.000000
+        STEP1 1.000000
+        STEP2 1.000000
+        CURSOR DEFAULT
+        CLICK_DX 0
+        CLICK_DY 0
+
+      gen_LED cabin gs mph
+        POS 3975.000000 1665.000000
+        IMAGE cabin/cabin_screen_led
+        DATAREF a321neo/dynamics/groundspeed_mph
+        SIZE 0.500000
+        LIGHT_MODE GLASS_AUTO
+        LIGHT_RHEOSTAT 0
+        KEY_FRAME 0.000000 0.000000 1.000000
+        KEY_FRAME 500.000000 500.000000
+        DIGITS 3
+        DECIMALS 0
+        PERIOD_WIDTH 0
+        LED_ROWS 0
+
+      gen_LED ra alt ft
+        POS 3962.000000 1567.000000
+        IMAGE cabin/cabin_screen_led
+        DATAREF sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot
+        SHOW_LESS 2500.000000 sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot
+        SIZE 0.500000
+        LIGHT_MODE GLASS_AUTO
+        LIGHT_RHEOSTAT 0
+        KEY_FRAME 0.000000 0.000000 1.000000
+        KEY_FRAME 35000.000000 35000.000000
+        DIGITS 5
+        DECIMALS 0
+        PERIOD_WIDTH 0
+        LED_ROWS 0
+
+      gen_LED baro alt ft
+        POS 3962.000000 1567.000000
+        IMAGE cabin/cabin_screen_led
+        DATAREF sim/cockpit2/gauges/indicators/altitude_ft_pilot
+        SHOW_GREATER 2501.000000 sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot
+        SIZE 0.500000
+        LIGHT_MODE GLASS_AUTO
+        LIGHT_RHEOSTAT 0
+        KEY_FRAME 0.000000 0.000000 1.000000
+        KEY_FRAME 35000.000000 35000.000000
+        DIGITS 5
+        DECIMALS 0
+        PERIOD_WIDTH 0
+        LED_ROWS 0
+
+      gen_LED cabin OAT F
+        POS 3974.000000 1479.000000
+        IMAGE cabin/cabin_screen_led
+        DATAREF sim/cockpit2/temperature/outside_air_temp_degf
+        SIZE 0.500000
+        LIGHT_MODE GLASS_AUTO
+        LIGHT_RHEOSTAT 0
+        KEY_FRAME 0.000000 0.000000 1.000000
+        KEY_FRAME 40.000000 40.000000
+        DIGITS 3
+        DECIMALS 0
+        PERIOD_WIDTH 0
+        LED_ROWS 0
+
+      gen_LED distance taveled mi
+        POS 3968.000000 1362.000000
+        IMAGE cabin/cabin_screen_led
+        DATAREF a321neo/dynamics/distance_traveled_mi
+        SIZE 0.500000
+        LIGHT_MODE GLASS_AUTO
+        LIGHT_RHEOSTAT 0
+        KEY_FRAME 0.000000 0.000000 1.000000
+        KEY_FRAME 8500.000000 8500.000000
+        DIGITS 4
+        DECIMALS 0
+        PERIOD_WIDTH 0
+        LED_ROWS 0
+
+    END_GROUP
     gen_rotary seatbelt sign
       POS 4038.500000 1747.500000
       IMAGE cabin/seat_belt
@@ -38762,62 +38933,6 @@ GROUP Cabin screens
       CURSOR DEFAULT
       CLICK_DX 0
       CLICK_DY 0
-
-    gen_LED ground speed cabin
-      POS 3975.000000 1665.000000
-      IMAGE cabin/cabin_screen_led
-      DATAREF a321neo/dynamics/groundspeed_kmh
-      SIZE 0.500000
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 500.000000 500.000000
-      DIGITS 3
-      DECIMALS 0
-      PERIOD_WIDTH 0
-      LED_ROWS 0
-
-    gen_LED cabin screen alt
-      POS 3962.000000 1567.000000
-      IMAGE cabin/cabin_screen_led
-      DATAREF sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot
-      SIZE 0.500000
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 35000.000000 35000.000000
-      DIGITS 5
-      DECIMALS 0
-      PERIOD_WIDTH 0
-      LED_ROWS 0
-
-    gen_LED cabin OAT
-      POS 3974.857178 1479.857178
-      IMAGE cabin/cabin_screen_led
-      DATAREF sim/cockpit2/temperature/outside_air_temp_degc
-      SIZE 0.500000
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 40.000000 40.000000
-      DIGITS 3
-      DECIMALS 0
-      PERIOD_WIDTH 0
-      LED_ROWS 0
-
-    gen_LED distance taveled
-      POS 3968.571533 1362.285767
-      IMAGE cabin/cabin_screen_led
-      DATAREF a321neo/dynamics/distance_traveled_km
-      SIZE 0.500000
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 8500.000000 8500.000000
-      DIGITS 4
-      DECIMALS 0
-      PERIOD_WIDTH 0
-      LED_ROWS 0
 
     GROUP cabin plane lon
       GROUP_OPEN
