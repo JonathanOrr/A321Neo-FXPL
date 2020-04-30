@@ -20,6 +20,9 @@ local cabin_unit_timer = sasl.createTimer()
 function update()
     set(cabin_screen_page, Math_clamp(get(cabin_screen_page), 0, 2))
 
+    --print(sasl.getFMSEntryInfo(sasl.countFMSEntries()-1))
+
+    --unit timmer
     if sasl.getElapsedSeconds(cabin_unit_timer) == 0 then
         sasl.startTimer(cabin_unit_timer)
     elseif sasl.getElapsedSeconds(cabin_unit_timer) > 12 then
@@ -32,6 +35,7 @@ function update()
         end
     end
 
+    --calculating different units for the display
     set(Capt_ra_alt_m, get(Capt_ra_alt_ft) / 3.281)
     set(Capt_baro_alt_m, get(Capt_baro_alt_ft) / 3.281)
     set(Distance_traveled_mi, get(Distance_traveled_m) / 1609)
