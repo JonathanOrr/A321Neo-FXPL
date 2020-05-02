@@ -49,6 +49,8 @@ local a321neo_wpt_toggle = sasl.createCommand("a321neo/cockpit/efis/wpt_toggle",
 local a321neo_vor_toggle = sasl.createCommand("a321neo/cockpit/efis/vor_toggle", "toggle vor on EFIS")
 local a321neo_ndb_toggle = sasl.createCommand("a321neo/cockpit/efis/ndb_toggle", "toggle ndb on EFIS")
 local a321neo_airport_toggle = sasl.createCommand("a321neo/cockpit/efis/airport_toggle", "toggle airport on EFIS")
+local a321neo_efis_mode_up = sasl.createCommand("a321neo/cockpit/efis/efis_mode_up", "a321 efis mode up")
+local a321neo_efis_mode_dn = sasl.createCommand("a321neo/cockpit/efis/efis_mode_dn", "a321 efis mode dn")
 
 --sim command handlers
 sasl.registerCommandHandler(sim_throttle_up, 0, function(phase)
@@ -175,6 +177,17 @@ sasl.registerCommandHandler(a321neo_airport_toggle, 0, function(phase)
     end
 end)
 
+sasl.registerCommandHandler(a321neo_efis_mode_up, 0, function (phase)
+    if phase == SASL_COMMAND_BEGIN then
+        set(a321neo_efis_mode, get(a321neo_efis_mode) + 1)
+    end
+end)
+
+sasl.registerCommandHandler(a321neo_efis_mode_dn, 0, function (phase)
+    if phase == SASL_COMMAND_BEGIN then
+        set(a321neo_efis_mode, get(a321neo_efis_mode) - 1)
+    end
+end)
 
 --custom function
 function Math_clamp(val, min, max)
@@ -209,8 +222,26 @@ onPlaneLoaded()
 
 function update()
     set(efis_range, Math_clamp(get(efis_range), 1 , 6))
+    set(a321neo_efis_mode, Math_clamp(get(a321neo_efis_mode), 0, 4))
 
     set(all_on_ground, (get(front_gear_on_ground) + get(left_gear_on_ground) + get(right_gear_on_ground))/3)
+
+    --customize efis modes
+    if get(a321neo_efis_mode) == 0 then
+        set(efis_map_mode, 0)
+    end
+    if get(a321neo_efis_mode) == 1 then
+        set(efis_map_mode, 1)
+    end
+    if get(a321neo_efis_mode) == 2 then
+        set(efis_map_mode, 3)
+    end
+    if get(a321neo_efis_mode) == 3 then
+        set(efis_map_mode, 2)
+    end
+    if get(a321neo_efis_mode) == 4 then
+        set(efis_map_mode, 4)
+    end
 
 
     --throttle detents
