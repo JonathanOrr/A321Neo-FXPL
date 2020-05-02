@@ -23,6 +23,7 @@ https://discord.gg/736HbJZ
 ![](https://cdn.discordapp.com/attachments/700005517900251166/700258576676945920/A321_-_2020-04-16_4.15.24_pm.png)
 
 ##Copyright
+
 A32NX Freeware Project
 Copyright © 2020 Jonathan Orr
 
