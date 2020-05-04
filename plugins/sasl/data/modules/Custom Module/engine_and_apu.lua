@@ -1,6 +1,7 @@
 --sim dataref
 local battery_1 = globalProperty("sim/cockpit/electrical/battery_array_on[0]")
 local battery_2 = globalProperty("sim/cockpit/electrical/battery_array_on[1]")
+local avionics = globalProperty("sim/cockpit2/switches/avionics_power_on")
 local apu_N1 = globalProperty("sim/cockpit2/electrical/APU_N1_percent")
 local apu_start_position = globalProperty("sim/cockpit2/electrical/APU_starter_switch")
 local apu_bleed_switch = globalProperty("sim/cockpit2/bleedair/actuators/apu_bleed")
@@ -10,16 +11,18 @@ local engine_1_ignition_switch = globalProperty("sim/cockpit2/engine/actuators/i
 local engine_2_ignition_switch = globalProperty("sim/cockpit2/engine/actuators/ignition_key[1]")
 local engine_1_mixture = globalProperty("sim/cockpit2/engine/actuators/mixture_ratio[0]")
 local engine_2_mixture = globalProperty("sim/cockpit2/engine/actuators/mixture_ratio[1]")
-local engine_1_avail = globalProperty("sim/flightmodel/engine/ENGN_running[0]")
-local engine_2_avail = globalProperty("sim/flightmodel/engine/ENGN_running[1]")
+local engine_1_N2 = globalProperty("sim/cockpit2/engine/indicators/N2_percent[0]")
+local engine_2_N2 = globalProperty("sim/cockpit2/engine/indicators/N2_percent[1]")
 local startup_running = globalProperty("sim/operation/prefs/startup_running")
 
 --a321neo dataref
 local apu_start_button_state = createGlobalPropertyi("a321neo/engine/apu_start_button", 0, false, true, false)
 local apu_avail = createGlobalPropertyi("a321neo/engine/apu_avil", 0, false, true, false)
 local engine_mode_knob = createGlobalPropertyi("a321neo/engine/engine_mode", 0, false, true, false)
-local engine_1_master_switch = createGlobalPropertyi("a321neo/engine/master_1", 0, false, true, false)
-local engine_2_master_switch = createGlobalPropertyi("a321neo/engine/master_2", 0, false, true, false)
+
+--sim command
+local instant_start_eng = sasl.findCommand("sim/operation/quick_start")
+local slow_start_eng = sasl.findCommand("sim/operation/auto_start")
 
 --a321neo command
 local apu_gen_toggle = sasl.createCommand("a321neo/electrical/APU_gen_toggle", "toggle apu generator")
@@ -28,6 +31,36 @@ local apu_master = sasl.createCommand("a321neo/engine/apu_master_toggle", "toggl
 local apu_start = sasl.createCommand("a321neo/engine/apu_start_toggle", "toggle APU start button")
 local engine_mode_up = sasl.createCommand("a321neo/engine/mode_up", "engine mode selector up")
 local engine_mode_dn = sasl.createCommand("a321neo/engine/mode_dn", "engine mode selector down")
+
+--unregistering sim commands
+
+
+--sim command handler
+sasl.registerCommandHandler ( instant_start_eng, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        set(battery_1, 1)
+        set(battery_2, 1)
+        set(apu_start_position, 2)
+        set(apu_bleed_switch, 1)
+        set(apu_gen, 1)
+        set(engine_mode_knob, 1)
+        set(Engine_1_master_switch, 1)
+        set(Engine_2_master_switch, 1)
+    end
+end)
+
+sasl.registerCommandHandler ( slow_start_eng, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        set(battery_1, 1)
+        set(battery_2, 1)
+        set(apu_start_position, 2)
+        set(apu_bleed_switch, 1)
+        set(apu_gen, 1)
+        set(engine_mode_knob, 1)
+        set(Engine_1_master_switch, 1)
+        set(Engine_2_master_switch, 1)
+    end
+end)
 
 --a321neo command handler
 sasl.registerCommandHandler ( apu_master, 0 , function(phase)
@@ -61,12 +94,13 @@ end)
 sasl.registerCommandHandler ( a321_auto_start, 0 , function(phase)
     if phase == SASL_COMMAND_BEGIN then
         set(battery_1, 1)
-        set(battery_1, 1)
+        set(battery_2, 1)
         set(apu_start_position, 2)
         set(apu_bleed_switch, 1)
+        set(apu_gen, 1)
         set(engine_mode_knob, 1)
-        set(engine_1_master_switch, 1)
-        set(engine_2_master_switch, 1)
+        set(Engine_1_master_switch, 1)
+        set(Engine_2_master_switch, 1)
     end
 end)
 
@@ -99,41 +133,56 @@ function Math_clamp(val, min, max)
 end
 
 --init
-set(apu_bleed_switch, 0)
-set(apu_gen, 1)
+function onPlaneLoaded()
+    set(apu_gen, 1)
+    set(apu_bleed_switch, 0)
+    
+    if get(startup_running) == 1 then
+        set(Engine_1_master_switch, 1)
+        set(Engine_2_master_switch, 1)
+    end
+end
+
+onPlaneLoaded()
 
 function update()
+    if get(battery_1) == 1 then
+        set(avionics, 1)
+    else
+        set(avionics, 0)
+    end
+
     
     --start enging running
     if get(startup_running) == 1 then
-        set(engine_1_master_switch, 1)
-        set(engine_2_master_switch, 1)
+        set(Engine_1_master_switch, 1)
+        set(Engine_2_master_switch, 1)
         set(startup_running, 0)
     end
     
     --setting integer dataref range
     set(engine_mode_knob,Math_clamp(get(engine_mode_knob), -1, 1))
-    set(engine_1_master_switch,Math_clamp(get(engine_1_master_switch), 0, 1))
-    set(engine_2_master_switch,Math_clamp(get(engine_2_master_switch), 0, 1))
+    set(Engine_1_master_switch,Math_clamp(get(Engine_1_master_switch), 0, 1))
+    set(Engine_2_master_switch,Math_clamp(get(Engine_2_master_switch), 0, 1))
     
     --engine mode start
     if get(engine_mode_knob) == 1 
     then 
         -- to confirm the engine needs starting to stop repetitive start
-        if get(engine_1_avail) ~= 1 then
+        if get(Engine_1_avail) ~= 1 then
             ignition_1_required = 1
         end
-        if get(engine_2_avail) ~= 1 then
+        if get(Engine_2_avail) ~= 1 then
             ignition_2_required = 1
         end
         
-        if get(engine_1_master_switch) == 1 then
+        if get(Engine_1_master_switch) == 1 then
             if ignition_1_required == 1 then
                 set(engine_1_ignition_switch,4)
             end
         end
         
-        if get(engine_2_master_switch) == 1 then
+        if get(Engine_2_master_switch) == 1 then
             if ignition_2_required == 1 then
                 set(engine_2_ignition_switch,4)
             end
@@ -150,19 +199,23 @@ function update()
     end
 
     --engine master 1
-    if get(engine_1_master_switch) == 1
+    if get(Engine_1_master_switch) == 1
     then
-        set(engine_1_mixture, 1.0)
-    elseif get(engine_1_master_switch) == 0
+        if get(engine_1_N2) > 25 then
+            set(engine_1_mixture, 1.0)
+        end
+    elseif get(Engine_1_master_switch) == 0
     then
         set(engine_1_mixture, 0.0)
     end
 
     --engine master 2
-    if get(engine_2_master_switch) == 1
+    if get(Engine_2_master_switch) == 1
     then
-        set(engine_2_mixture, 1.0)
-    elseif get(engine_2_master_switch) == 0
+        if get(engine_2_N2) > 25 then
+            set(engine_2_mixture, 1.0)
+        end
+    elseif get(Engine_2_master_switch) == 0
     then
         set(engine_2_mixture, 0.0)
     end
