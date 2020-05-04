@@ -1,3 +1,4 @@
-Airbus A321   landing 115 kts  full flaps
+Airbus A321NEO
+Vr 145kts flaps 2
 
-take_off climb 2500 ft/mn
+landing 140 kts  full flaps

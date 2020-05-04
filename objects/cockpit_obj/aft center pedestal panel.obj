@@ -4,6 +4,9 @@ OBJ
 
 TEXTURE	panel_textures/aft_center_pedestal.png
 TEXTURE_LIT	panel_textures/aft_center_pedestal_LIT.png
+TEXTURE_NORMAL	panel_textures/aft_center_pedestal_NML.png
+NORMAL_METALNESS
+GLOBAL_specular	1
 POINT_COUNTS	1347	0	0	2094
 
 VT	0.05871056	-0.00204138	-19.59940147	0	1	-0.00000004	0.3613008	0.73720336
@@ -1568,7 +1571,6 @@ IDX	1344
 IDX	1345
 IDX	1346
 
-		ATTR_shiny_rat	0.5
 		TRIS	0 180
 		TRIS	180 36
 		TRIS	216 36
