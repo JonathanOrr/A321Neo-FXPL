@@ -82,7 +82,6 @@ sasl.registerCommandHandler(sim_throttle_dn, 0, function(phase)
         if get(reverse_L_deployed) == 0 and get(reverse_R_deployed) == 0 then
             set(L_sim_throttle, get(L_throttle))
             set(R_sim_throttle, get(R_throttle))
-            print("throttle sync dn")
         end
     else
         throttle_press_moving_dn_by_user = 0
