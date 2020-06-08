@@ -24,5 +24,22 @@ components = {
   engine_and_apu {},
   cabin_screens {},
   flight_controls {},
-  fcu_ap_at {}
+  fcu_ap_at {},
+  MCDU {},
+  AT {},
  }
+
+ --windows
+Vnav_debug_window = contextWindow {
+  name = "VNAV DEBUG";
+  position = { 50 , 50 , 750 , 450};
+  noBackground = true ;
+  proportional = false ;
+  minimumSize = { 750 , 450 };
+  maximumSize = { 1125 , 675 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = true ;
+  components = {
+    vnav_debug {position = { 0 , 0 , 750 , 450 }}
+  };
+}

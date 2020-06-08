@@ -1,4 +1,4 @@
---custom datarefs
+--a321neo datarefs
 local cabin_screen_page = createGlobalPropertyi("a321neo/cabin/screen_page", 0, false, true, false)
 local cabin_screen_unit = createGlobalPropertyi("a321neo/cabin/sreen_unit", 0, false, true, false)
 

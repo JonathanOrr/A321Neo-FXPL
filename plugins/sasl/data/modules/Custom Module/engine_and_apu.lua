@@ -152,7 +152,6 @@ function update()
         set(avionics, 0)
     end
 
-    
     --start enging running
     if get(startup_running) == 1 then
         set(Engine_1_master_switch, 1)
@@ -203,6 +202,8 @@ function update()
     then
         if get(engine_1_N2) > 25 then
             set(engine_1_mixture, 1.0)
+        else
+            set(engine_1_mixture, 0)
         end
     elseif get(Engine_1_master_switch) == 0
     then
@@ -214,6 +215,8 @@ function update()
     then
         if get(engine_2_N2) > 25 then
             set(engine_2_mixture, 1.0)
+        else
+            set(engine_2_mixture, 0)
         end
     elseif get(Engine_2_master_switch) == 0
     then
