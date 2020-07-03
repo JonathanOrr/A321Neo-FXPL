@@ -21,8 +21,10 @@ local mcdu_message_index = createGlobalPropertyi("a321neo/debug/mcdu/message_ind
 --sim commands
 
 --a321neo commands
+--debugging commands
 local mcdu_debug_message = sasl.createCommand("a321neo/debug/mcdu/debug_message", "send a mcdu debug message")
---mcdu keyboard
+
+--mcdu keyboard commands
 --mcdu menu buttons
 local mcdu_DIR_key = createCommand("a321neo/cockpit/mcdu/dir", "MCDU DIR Key")
 local mcdu_PROG_key = createCommand("a321neo/cockpit/mcdu/prog", "MCDU PROG Key")
@@ -841,20 +843,20 @@ function draw()
     if get(mcdu_enabled) == 1 then
         sasl.gl.drawRectangle(0, 0, 320 , 285, mcdu_black)
         --draw title line
-        sasl.gl.drawText(B612MONO_regular, size[1]/2-140, size[2]/2+108,                      mcdu_title_L ,        20, false, false,TEXT_ALIGN_LEFT,     mcdu_title_L_cl)
-        sasl.gl.drawText(B612MONO_regular, size[1]/2,     size[2]/2+108,                      mcdu_title_M ,        20, false, false,TEXT_ALIGN_CENTER,   mcdu_title_M_cl)
-        sasl.gl.drawText(B612MONO_regular, size[1]/2+140, size[2]/2+108,                      mcdu_title_R ,        20, false, false,TEXT_ALIGN_RIGHT,    mcdu_title_R_cl)
+        sasl.gl.drawText(B612MONO_regular, size[1]/2-140, size[2]/2+108, mcdu_title_L , 20, false, false,TEXT_ALIGN_LEFT,   mcdu_title_L_cl)
+        sasl.gl.drawText(B612MONO_regular, size[1]/2,     size[2]/2+108, mcdu_title_M , 20, false, false,TEXT_ALIGN_CENTER, mcdu_title_M_cl)
+        sasl.gl.drawText(B612MONO_regular, size[1]/2+140, size[2]/2+108, mcdu_title_R , 20, false, false,TEXT_ALIGN_RIGHT,  mcdu_title_R_cl)
         --draw all horizontal lines
         for draw_lines = 1, 6, 1 do
         --draw left section
-        sasl.gl.drawText(B612MONO_regular, size[1]/2-140, size[2]/2+mcdu_s_ypos[draw_lines],  mcdu_s_L[draw_lines], 12, false, false,TEXT_ALIGN_LEFT,     mcdu_s_L_cl[draw_lines])
-        sasl.gl.drawText(B612MONO_regular, size[1]/2-140, size[2]/2+mcdu_l_ypos[draw_lines],  mcdu_l_L[draw_lines], 20, false, false,TEXT_ALIGN_LEFT,     mcdu_l_L_cl[draw_lines])
+        sasl.gl.drawText(B612MONO_regular, size[1]/2-140, size[2]/2+mcdu_s_ypos[draw_lines],  mcdu_s_L[draw_lines], 12, false, false,TEXT_ALIGN_LEFT,   mcdu_s_L_cl[draw_lines])
+        sasl.gl.drawText(B612MONO_regular, size[1]/2-140, size[2]/2+mcdu_l_ypos[draw_lines],  mcdu_l_L[draw_lines], 20, false, false,TEXT_ALIGN_LEFT,   mcdu_l_L_cl[draw_lines])
         --draw center section
-        sasl.gl.drawText(B612MONO_regular, size[1]/2,     size[2]/2+mcdu_s_ypos[draw_lines],  mcdu_s_M[draw_lines], 12, false, false,TEXT_ALIGN_CENTER,   mcdu_s_M_cl[draw_lines])
-        sasl.gl.drawText(B612MONO_regular, size[1]/2,     size[2]/2+mcdu_l_ypos[draw_lines],  mcdu_l_M[draw_lines], 20, false, false,TEXT_ALIGN_CENTER,   mcdu_l_M_cl[draw_lines])
+        sasl.gl.drawText(B612MONO_regular, size[1]/2,     size[2]/2+mcdu_s_ypos[draw_lines],  mcdu_s_M[draw_lines], 12, false, false,TEXT_ALIGN_CENTER, mcdu_s_M_cl[draw_lines])
+        sasl.gl.drawText(B612MONO_regular, size[1]/2,     size[2]/2+mcdu_l_ypos[draw_lines],  mcdu_l_M[draw_lines], 20, false, false,TEXT_ALIGN_CENTER, mcdu_l_M_cl[draw_lines])
         --draw right section
-        sasl.gl.drawText(B612MONO_regular, size[1]/2+140, size[2]/2+mcdu_s_ypos[draw_lines],  mcdu_s_R[draw_lines], 12, false, false,TEXT_ALIGN_RIGHT,    mcdu_s_R_cl[draw_lines])
-        sasl.gl.drawText(B612MONO_regular, size[1]/2+140, size[2]/2+mcdu_l_ypos[draw_lines],  mcdu_l_R[draw_lines], 20, false, false,TEXT_ALIGN_RIGHT,    mcdu_l_R_cl[draw_lines])
+        sasl.gl.drawText(B612MONO_regular, size[1]/2+140, size[2]/2+mcdu_s_ypos[draw_lines],  mcdu_s_R[draw_lines], 12, false, false,TEXT_ALIGN_RIGHT,  mcdu_s_R_cl[draw_lines])
+        sasl.gl.drawText(B612MONO_regular, size[1]/2+140, size[2]/2+mcdu_l_ypos[draw_lines],  mcdu_l_R[draw_lines], 20, false, false,TEXT_ALIGN_RIGHT,  mcdu_l_R_cl[draw_lines])
         end
 
         --drawing entry line

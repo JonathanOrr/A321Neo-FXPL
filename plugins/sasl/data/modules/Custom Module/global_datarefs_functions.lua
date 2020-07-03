@@ -1,4 +1,5 @@
 --global dataref for the A32NX project
+DELTA_TIME = globalProperty("sim/operation/misc/frame_rate_period")
 Capt_ra_alt_m = createGlobalPropertyf("a321neo/cockpit/indicators/capt_ra_alt_m", 0, false, true, false)
 Capt_baro_alt_m = createGlobalPropertyf("a321neo/cockpit/indicators/capt_baro_alt_m", 0, false, true, false)
 Distance_traveled_mi = createGlobalPropertyf("a321neo/dynamics/distance_traveled_mi", 0, false, true, false)
@@ -20,6 +21,19 @@ Engine_1_avail = globalProperty("sim/flightmodel/engine/ENGN_running[0]")
 Engine_2_avail = globalProperty("sim/flightmodel/engine/ENGN_running[1]")
 Aircraft_lat = globalProperty("sim/flightmodel/position/latitude")
 Aircraft_long = globalProperty("sim/flightmodel/position/longitude")
+
+--custom functions
+function Math_clamp(val, min, max)
+  if min > max then LogWarning("Min is larger than Max invalid") end
+  if val < min then
+      return min
+  elseif val > max then
+      return max
+  elseif val <= max and val >= min then
+      return val
+  end
+end
+
 
 function GC_distance_kt(lat1, lon1, lat2, lon2)
 
