@@ -27,6 +27,7 @@ components = {
   fcu_ap_at {},
   MCDU {},
   AT {},
+  ECAM {}
  }
 
  --windows
@@ -38,7 +39,7 @@ Vnav_debug_window = contextWindow {
   minimumSize = { 750 , 450 };
   maximumSize = { 1125 , 675 };
   gravity = { 0 , 1 , 0 , 1 };
-  visible = true ;
+  visible = false ;
   components = {
     vnav_debug {position = { 0 , 0 , 750 , 450 }}
   };
