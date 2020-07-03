@@ -13,6 +13,15 @@ PW_engine_enabled = createGlobalPropertyi("a321neo/customization/pw_engine_enabl
 Leap_engien_option = createGlobalPropertyi("a321neo/customization/leap_engine_enabled", 0, false, true, false)
 
 --global dataref variable from the Sim
+Battery_1 = globalProperty("sim/cockpit/electrical/battery_array_on[0]")
+Battery_2 = globalProperty("sim/cockpit/electrical/battery_array_on[1]")
+Apu_bleed_switch = globalProperty("sim/cockpit2/bleedair/actuators/apu_bleed")
+ENG_1_bleed_switch = globalProperty("sim/cockpit2/bleedair/actuators/engine_bleed_sov[0]")
+ENG_2_bleed_switch = globalProperty("sim/cockpit2/bleedair/actuators/engine_bleed_sov[1]")
+Left_bleed_avil = globalProperty("sim/cockpit2/bleedair/indicators/bleed_available_left")
+Mid_bleed_avil = globalProperty("sim/cockpit2/bleedair/indicators/bleed_available_center")
+Right_bleed_avil = globalProperty("sim/cockpit2/bleedair/indicators/bleed_available_right")
+OTA = globalProperty("sim/cockpit2/temperature/outside_air_temp_degc")
 Capt_ra_alt_ft = globalProperty("sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot")
 Capt_baro_alt_ft = globalProperty("sim/cockpit2/gauges/indicators/altitude_ft_pilot")
 Distance_traveled_m = globalProperty("sim/flightmodel/controls/dist")
@@ -34,6 +43,18 @@ function Math_clamp(val, min, max)
   end
 end
 
+--used to animate a value with a curve
+function Set_anim_value(current_value, target, min, max, speed)
+
+  if target >= (max - 0.001) and current_value >= (max - 0.01) then
+      return max
+  elseif target <= (min + 0.001) and current_value <= (min + 0.01) then
+      return min
+  else
+      return current_value + ((target - current_value) * (speed * get(DELTA_TIME)))
+  end
+
+end
 
 function GC_distance_kt(lat1, lon1, lat2, lon2)
 

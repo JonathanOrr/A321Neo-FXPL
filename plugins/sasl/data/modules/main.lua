@@ -27,6 +27,7 @@ components = {
   fcu_ap_at {},
   MCDU {},
   AT {},
+  aircond {},
   ECAM {}
  }
 
