@@ -40,7 +40,7 @@ local eng2_N1_thrust_cur = 0
 local B738DR_thrust1_leveler = 0
 local B738DR_thrust2_leveler = 0
 
-function set_anim_value(current_value, target, min, max, speed)
+function Set_anim_value(current_value, target, min, max, speed)
 
     if target >= (max - 0.001) and current_value >= (max - 0.01) then
         return max
@@ -296,8 +296,8 @@ function selected_speed()
 		thr1_target = math.max(thr1_target, 0.051)
 		thr2_target = math.max(thr2_target, 0.051)
 	end
-	eng1_N1_thrust_cur = set_anim_value(eng1_N1_thrust_cur, thr1_target, 0.0, 1.08, 0.5)	--2.0
-    eng2_N1_thrust_cur = set_anim_value(eng2_N1_thrust_cur, thr2_target, 0.0, 1.08, 0.5)	--2.0
+	eng1_N1_thrust_cur = Set_anim_value(eng1_N1_thrust_cur, thr1_target, 0.0, 1.08, 0.5)	--2.0
+    eng2_N1_thrust_cur = Set_anim_value(eng2_N1_thrust_cur, thr2_target, 0.0, 1.08, 0.5)	--2.0
 	------------------------
 	-- END PID
 	------------------------

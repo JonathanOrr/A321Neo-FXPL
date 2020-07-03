@@ -1,10 +1,7 @@
 --sim dataref
-local battery_1 = globalProperty("sim/cockpit/electrical/battery_array_on[0]")
-local battery_2 = globalProperty("sim/cockpit/electrical/battery_array_on[1]")
 local avionics = globalProperty("sim/cockpit2/switches/avionics_power_on")
 local apu_N1 = globalProperty("sim/cockpit2/electrical/APU_N1_percent")
 local apu_start_position = globalProperty("sim/cockpit2/electrical/APU_starter_switch")
-local apu_bleed_switch = globalProperty("sim/cockpit2/bleedair/actuators/apu_bleed")
 local apu_gen = globalProperty("sim/cockpit2/electrical/APU_generator_on")
 local apu_flap_open_ratio = globalProperty("sim/cockpit2/electrical/APU_door")
 local engine_1_ignition_switch = globalProperty("sim/cockpit2/engine/actuators/ignition_key[0]")
@@ -38,10 +35,10 @@ local engine_mode_dn = sasl.createCommand("a321neo/engine/mode_dn", "engine mode
 --sim command handler
 sasl.registerCommandHandler ( instant_start_eng, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(battery_1, 1)
-        set(battery_2, 1)
+        set(Battery_1, 1)
+        set(Battery_2, 1)
         set(apu_start_position, 2)
-        set(apu_bleed_switch, 1)
+        set(Apu_bleed_switch, 1)
         set(apu_gen, 1)
         set(engine_mode_knob, 1)
         set(Engine_1_master_switch, 1)
@@ -51,10 +48,10 @@ end)
 
 sasl.registerCommandHandler ( slow_start_eng, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(battery_1, 1)
-        set(battery_2, 1)
+        set(Battery_1, 1)
+        set(Battery_2, 1)
         set(apu_start_position, 2)
-        set(apu_bleed_switch, 1)
+        set(Apu_bleed_switch, 1)
         set(apu_gen, 1)
         set(engine_mode_knob, 1)
         set(Engine_1_master_switch, 1)
@@ -93,10 +90,10 @@ end)
 
 sasl.registerCommandHandler ( a321_auto_start, 0 , function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(battery_1, 1)
-        set(battery_2, 1)
+        set(Battery_1, 1)
+        set(Battery_2, 1)
         set(apu_start_position, 2)
-        set(apu_bleed_switch, 1)
+        set(Apu_bleed_switch, 1)
         set(apu_gen, 1)
         set(engine_mode_knob, 1)
         set(Engine_1_master_switch, 1)
@@ -135,7 +132,7 @@ end
 --init
 function onPlaneLoaded()
     set(apu_gen, 1)
-    set(apu_bleed_switch, 0)
+    set(Apu_bleed_switch, 0)
     
     if get(startup_running) == 1 then
         set(Engine_1_master_switch, 1)
@@ -146,7 +143,7 @@ end
 onPlaneLoaded()
 
 function update()
-    if get(battery_1) == 1 then
+    if get(Battery_1) == 1 then
         set(avionics, 1)
     else
         set(avionics, 0)
