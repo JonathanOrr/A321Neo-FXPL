@@ -31,7 +31,6 @@ local descend_crossover_altitude = 0
 local efis_range = globalProperty("sim/cockpit2/EFIS/map_range")
 local aircraft_vvi = globalProperty("sim/cockpit2/gauges/indicators/vvi_fpm_pilot")
 local ap_airspeed_is_mach = globalProperty("sim/cockpit2/autopilot/airspeed_is_mach")
-local DELTA_TIME = globalProperty("sim/operation/misc/frame_rate_period")
 
 --a321neo commands
 local vnav_debug_enable = sasl.createCommand("a321neo/debug/vnav/enable_visualization", "Enable the vertical flight path visualization")

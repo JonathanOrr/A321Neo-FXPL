@@ -2,18 +2,6 @@
 local cabin_screen_page = createGlobalPropertyi("a321neo/cabin/screen_page", 0, false, true, false)
 local cabin_screen_unit = createGlobalPropertyi("a321neo/cabin/sreen_unit", 0, false, true, false)
 
---custom functions
-function Math_clamp(val, min, max)
-    if min > max then LogWarning("Min is larger than Max invalid") end
-    if val < min then
-        return min
-    elseif val > max then
-        return max
-    elseif val <= max and val >= min then
-        return val
-    end
-end
-
 --custom timer
 local cabin_unit_timer = sasl.createTimer()
 

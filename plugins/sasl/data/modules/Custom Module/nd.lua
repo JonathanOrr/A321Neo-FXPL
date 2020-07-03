@@ -13,10 +13,4 @@ clAirbusMain= { 0, 0.125, 0.357}
 function draw()
   sasl.gl.drawRectangle(0, 0, 190 , 190 , clAirbusMain)
   sasl.gl.drawText(font1,0,0, "ND", 24, false, false, TEXT_ALIGN_LEFT, clRed)
--- local alt=get(altitude)
--- 	if alt <= get(alt_hold) - 500 or alt >= get(alt_hold) + 500 then -- If we are 500 ft below the target altitude of 500 ft above
--- 		sasl.gl.drawTextI(font1, 100, 0, string.format("%d", get(alt_hold)),  TEXT_ALIGN_CENTER, clRed) --Draw the text in red color since we are away from our target altitude
--- 	else
--- 		sasl.gl.drawTextI(font1, 100, 0, string.format("%d", get(alt_hold)),  TEXT_ALIGN_CENTER, clRed) --Draw the text in green color since we are capturing the target altitude
--- 	end
 end
