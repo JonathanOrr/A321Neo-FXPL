@@ -1,6 +1,5 @@
 --sim dataref
 local avionics = globalProperty("sim/cockpit2/switches/avionics_power_on")
-local apu_N1 = globalProperty("sim/cockpit2/electrical/APU_N1_percent")
 local apu_start_position = globalProperty("sim/cockpit2/electrical/APU_starter_switch")
 local apu_gen = globalProperty("sim/cockpit2/electrical/APU_generator_on")
 local apu_flap_open_ratio = globalProperty("sim/cockpit2/electrical/APU_door")
@@ -221,34 +220,34 @@ function update()
     end
 
     --apu availability
-    if get(apu_N1) == 100 then
+    if get(Apu_N1) == 100 then
         set(apu_avail, 1)
-    elseif get(apu_N1) < 100 then
+    elseif get(Apu_N1) < 100 then
         set(apu_avail, 0)
     end
 
     --apu start button state 0: off, 1: on, 2: avail
-    if get(apu_start_position) == 0 and get(apu_N1) < 100 then
+    if get(apu_start_position) == 0 and get(Apu_N1) < 100 then
         set(apu_start_button_state, 0)
     end
     
-    if get(apu_start_position) == 1 and get(apu_N1) < 100 then
+    if get(apu_start_position) == 1 and get(Apu_N1) < 100 then
         set(apu_start_button_state, 0)
     end
 
-    if get(apu_start_position) == 0 and get(apu_N1) == 100 then
+    if get(apu_start_position) == 0 and get(Apu_N1) == 100 then
         set(apu_start_button_state, 2)
     end 
     
-    if get(apu_start_position) == 1 and get(apu_N1) == 100 then
+    if get(apu_start_position) == 1 and get(Apu_N1) == 100 then
         set(apu_start_button_state, 2)
     end    
     
-    if get(apu_start_position) == 2 and get(apu_N1) < 100 then
+    if get(apu_start_position) == 2 and get(Apu_N1) < 100 then
         set(apu_start_button_state, 1)
     end 
     
-    if get(apu_start_position) == 2 and get(apu_N1) == 100 then
+    if get(apu_start_position) == 2 and get(Apu_N1) == 100 then
         set(apu_start_button_state, 2)
     end
 end
