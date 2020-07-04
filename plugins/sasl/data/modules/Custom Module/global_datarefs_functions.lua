@@ -1,3 +1,5 @@
+--global variables--
+
 --global dataref for the A32NX project--
 DELTA_TIME = globalProperty("sim/operation/misc/frame_rate_period")
 Capt_ra_alt_m = createGlobalPropertyf("a321neo/cockpit/indicators/capt_ra_alt_m", 0, false, true, false)
@@ -11,6 +13,8 @@ Engine_2_master_switch = createGlobalPropertyi("a321neo/engine/master_2", 0, fal
 Engine_option = createGlobalPropertyi("a321neo/customization/engine_option", 0, false, true, false) --0 CFM LEAP, 1 PW1000G
 PW_engine_enabled = createGlobalPropertyi("a321neo/customization/pw_engine_enabled", 0, false, true, false)
 Leap_engien_option = createGlobalPropertyi("a321neo/customization/leap_engine_enabled", 0, false, true, false)
+Ecam_previous_page = createGlobalPropertyi("a321neo/cockpit/ecam/previous", 11, false, true, false) --1ENG, 2BLEED, 3PRESS, 4ELEC, 5HYD, 6FUEL, 7APU, 8COND, 9DOOR, 10WHEEL, 11F/CTL, 12STS
+Ecam_current_page = createGlobalPropertyi("a321neo/cockpit/ecam/page_num", 11, false, true, false) --1ENG, 2BLEED, 3PRESS, 4ELEC, 5HYD, 6FUEL, 7APU, 8COND, 9DOOR, 10WHEEL, 11F/CTL, 12STS
 --aircon datarefs
 Cockpit_temp_req = createGlobalPropertyf("a321neo/cockpit/aircond/cockpit_temp_req", 21, false, true, false) --requested cockpit temperature
 Front_cab_temp_req = createGlobalPropertyf("a321neo/cockpit/aircond/front_cab_temp_req", 21, false, true, false) --requested front cabin temperature
@@ -20,11 +24,28 @@ Cockpit_temp = createGlobalPropertyf("a321neo/cockpit/aircond/cockpit_temp", 15,
 Front_cab_temp = createGlobalPropertyf("a321neo/cockpit/aircond/front_cab_temp", 15, false, true, false) --actual front cabin temperature
 Aft_cab_temp = createGlobalPropertyf("a321neo/cockpit/aircond/aft_cab_temp", 15, false, true, false) --actual aft cabin temperature
 Aft_cargo_temp = createGlobalPropertyf("a321neo/cockpit/aircond/aft_cargo_temp", 17, false, true, false) ---requested aft cargo temperature
+--apu
+Apu_gen_load = createGlobalPropertyf("a321neo/cockpit/apu/gen_load", 0, false, true, false)
+Apu_gen_volts = createGlobalPropertyf("a321neo/cockpit/apu/gen_volts", 0, false, true, false)
+Apu_gen_hz = createGlobalPropertyf("a321neo/cockpit/apu/gen_hz", 0, false, true, false)
+Apu_bleed_psi = createGlobalPropertyf("a321neo/cockpit/apu/bleed_psi", 0, false, true, false)
+Apu_bleed_state = createGlobalPropertyi("a321neo/apu/apu_bleed_state", 0, false, true, false)
+Apu_gen_state = createGlobalPropertyi("a321neo/cockpit/apu/apu_gen_state", 0, false, true, false)
+
 
 --global dataref variable from the Sim--
 Battery_1 = globalProperty("sim/cockpit/electrical/battery_array_on[0]")
 Battery_2 = globalProperty("sim/cockpit/electrical/battery_array_on[1]")
+Fuel_pump_1 = globalProperty("sim/cockpit2/engine/actuators/fuel_pump_on[0]")
+Fuel_pump_2 = globalProperty("sim/cockpit2/engine/actuators/fuel_pump_on[1]")
+Fuel_pump_3 = globalProperty("sim/cockpit2/engine/actuators/fuel_pump_on[2]")
+Fuel_pump_4 = globalProperty("sim/cockpit2/engine/actuators/fuel_pump_on[3]")
+Fuel_pump_5 = globalProperty("sim/cockpit2/engine/actuators/fuel_pump_on[4]")
+Fuel_pump_6 = globalProperty("sim/cockpit2/engine/actuators/fuel_pump_on[5]")
+Fuel_pump_7 = globalProperty("sim/cockpit2/engine/actuators/fuel_pump_on[6]")
+Fuel_pump_8 = globalProperty("sim/cockpit2/engine/actuators/fuel_pump_on[7]")
 Apu_N1 = globalProperty("sim/cockpit2/electrical/APU_N1_percent")
+APU_EGT = globalProperty("sim/cockpit2/electrical/APU_EGT_c")
 Apu_bleed_switch = globalProperty("sim/cockpit2/bleedair/actuators/apu_bleed")
 ENG_1_bleed_switch = globalProperty("sim/cockpit2/bleedair/actuators/engine_bleed_sov[0]")
 ENG_2_bleed_switch = globalProperty("sim/cockpit2/bleedair/actuators/engine_bleed_sov[1]")
@@ -69,6 +90,12 @@ function Set_anim_value(current_value, target, min, max, speed)
       return current_value + ((target - current_value) * (speed * get(DELTA_TIME)))
   end
 
+end
+
+--used for ecam automation
+function Goto_ecam(page_num)
+  set(Ecam_previous_page, get(Ecam_current_page))
+  set(Ecam_current_page, page_num)
 end
 
 function GC_distance_kt(lat1, lon1, lat2, lon2)
