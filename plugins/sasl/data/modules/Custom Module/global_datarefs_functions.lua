@@ -1,4 +1,4 @@
---global dataref for the A32NX project
+--global dataref for the A32NX project--
 DELTA_TIME = globalProperty("sim/operation/misc/frame_rate_period")
 Capt_ra_alt_m = createGlobalPropertyf("a321neo/cockpit/indicators/capt_ra_alt_m", 0, false, true, false)
 Capt_baro_alt_m = createGlobalPropertyf("a321neo/cockpit/indicators/capt_baro_alt_m", 0, false, true, false)
@@ -11,8 +11,17 @@ Engine_2_master_switch = createGlobalPropertyi("a321neo/engine/master_2", 0, fal
 Engine_option = createGlobalPropertyi("a321neo/customization/engine_option", 0, false, true, false) --0 CFM LEAP, 1 PW1000G
 PW_engine_enabled = createGlobalPropertyi("a321neo/customization/pw_engine_enabled", 0, false, true, false)
 Leap_engien_option = createGlobalPropertyi("a321neo/customization/leap_engine_enabled", 0, false, true, false)
+--aircon datarefs
+Cockpit_temp_req = createGlobalPropertyf("a321neo/cockpit/aircond/cockpit_temp_req", 21, false, true, false) --requested cockpit temperature
+Front_cab_temp_req = createGlobalPropertyf("a321neo/cockpit/aircond/front_cab_temp_req", 21, false, true, false) --requested front cabin temperature
+Aft_cab_temp_req = createGlobalPropertyf("a321neo/cockpit/aircond/aft_cab_temp_req", 21, false, true, false) --requested aft cabin temperature
+Aft_cargo_temp_req = createGlobalPropertyf("a321neo/cockpit/aircond/aft_cargo_temp_req", 21, false, true, false) ---requested aft cargo temperature
+Cockpit_temp = createGlobalPropertyf("a321neo/cockpit/aircond/cockpit_temp", 15, false, true, false) --actual cockpit temperature
+Front_cab_temp = createGlobalPropertyf("a321neo/cockpit/aircond/front_cab_temp", 15, false, true, false) --actual front cabin temperature
+Aft_cab_temp = createGlobalPropertyf("a321neo/cockpit/aircond/aft_cab_temp", 15, false, true, false) --actual aft cabin temperature
+Aft_cargo_temp = createGlobalPropertyf("a321neo/cockpit/aircond/aft_cargo_temp", 21, false, true, false) ---requested aft cargo temperature
 
---global dataref variable from the Sim
+--global dataref variable from the Sim--
 Battery_1 = globalProperty("sim/cockpit/electrical/battery_array_on[0]")
 Battery_2 = globalProperty("sim/cockpit/electrical/battery_array_on[1]")
 Apu_bleed_switch = globalProperty("sim/cockpit2/bleedair/actuators/apu_bleed")
@@ -22,6 +31,8 @@ Left_bleed_avil = globalProperty("sim/cockpit2/bleedair/indicators/bleed_availab
 Mid_bleed_avil = globalProperty("sim/cockpit2/bleedair/indicators/bleed_available_center")
 Right_bleed_avil = globalProperty("sim/cockpit2/bleedair/indicators/bleed_available_right")
 OTA = globalProperty("sim/cockpit2/temperature/outside_air_temp_degc")
+TAT = globalProperty("sim/weather/temperature_le_c")
+Gross_weight = globalProperty ("sim/flightmodel/weight/m_total")
 Capt_ra_alt_ft = globalProperty("sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot")
 Capt_baro_alt_ft = globalProperty("sim/cockpit2/gauges/indicators/altitude_ft_pilot")
 Distance_traveled_m = globalProperty("sim/flightmodel/controls/dist")
@@ -30,6 +41,9 @@ Engine_1_avail = globalProperty("sim/flightmodel/engine/ENGN_running[0]")
 Engine_2_avail = globalProperty("sim/flightmodel/engine/ENGN_running[1]")
 Aircraft_lat = globalProperty("sim/flightmodel/position/latitude")
 Aircraft_long = globalProperty("sim/flightmodel/position/longitude")
+ZULU_hours = globalProperty("sim/cockpit2/clock_timer/zulu_time_hours")
+ZULU_mins = globalProperty("sim/cockpit2/clock_timer/zulu_time_minutes")
+ZULU_secs = globalProperty("sim/cockpit2/clock_timer/zulu_time_seconds")
 
 --custom functions
 function Math_clamp(val, min, max)
