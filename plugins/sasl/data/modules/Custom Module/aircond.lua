@@ -59,7 +59,7 @@ function update()
         end
 
         --cargo aircon
-        if get(a321DR_aft_cargo_iso_valve) == 0 then
+        if get(a321DR_aft_cargo_iso_valve) == 1 then
             if get(a321DR_cargo_hot_air) == 1 then
                 --changing requested temperature to dialed in temperatures
                 set(Aft_cargo_temp_req, Set_anim_value(get(Aft_cargo_temp_req), 4 + 26 * get(a321DR_aft_cargo_temp_dial), 4, 30, 0.5))
@@ -68,6 +68,8 @@ function update()
             else
                 cargo_cond_off()
             end
+        else
+            cargo_cond_off()
         end
     else
         cab_cond_off()
