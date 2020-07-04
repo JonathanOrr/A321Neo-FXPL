@@ -1,3 +1,5 @@
+--local variables
+
 --sim dataref
 local avionics = globalProperty("sim/cockpit2/switches/avionics_power_on")
 local apu_start_position = globalProperty("sim/cockpit2/electrical/APU_starter_switch")
@@ -14,6 +16,7 @@ local startup_running = globalProperty("sim/operation/prefs/startup_running")
 --a321neo dataref
 local apu_start_button_state = createGlobalPropertyi("a321neo/engine/apu_start_button", 0, false, true, false)
 local apu_avail = createGlobalPropertyi("a321neo/engine/apu_avil", 0, false, true, false)
+local apu_fuel_lo_pr = createGlobalPropertyi("a321neo/cockpit/apu/apu_fuel_lo_pr", 0, false, true, false)
 local engine_mode_knob = createGlobalPropertyi("a321neo/engine/engine_mode", 0, false, true, false)
 
 --sim command
@@ -63,6 +66,7 @@ sasl.registerCommandHandler ( apu_master, 0 , function(phase)
     if phase == SASL_COMMAND_BEGIN then
         if get(apu_start_position) == 0 then
             set(apu_start_position, 1)
+            Goto_ecam(7)
         elseif get(apu_start_position) > 0 then
             set(apu_start_position, 0)
         end
@@ -220,34 +224,64 @@ function update()
     end
 
     --apu availability
-    if get(Apu_N1) == 100 then
+    if get(Apu_N1) > 95 then
         set(apu_avail, 1)
     elseif get(Apu_N1) < 100 then
         set(apu_avail, 0)
     end
 
+    --apu bleed states
+    if get(apu_avail) == 0 then
+        set(Apu_bleed_psi, Set_anim_value(get(Apu_bleed_psi), 0, 0, 39, 0.85))
+        set(Apu_bleed_state, 0)
+    elseif get(apu_avail) == 1 and get(Apu_bleed_switch) == 0 then
+        set(Apu_bleed_psi, Set_anim_value(get(Apu_bleed_psi), 0, 0, 39, 0.85))
+        set(Apu_bleed_state, 1)
+    elseif get(apu_avail) == 1 and get(Apu_bleed_switch) == 1 then
+        set(Apu_bleed_psi, Set_anim_value(get(Apu_bleed_psi), 39, 0, 39, 0.85))
+        set(Apu_bleed_state, 2)
+    end
+
+    --apu gen states
+    if get(apu_avail) == 0 then
+        set(Apu_gen_volts, Set_anim_value(get(Apu_gen_volts), 0, 0, 115, 0.95))
+        set(Apu_gen_hz, Set_anim_value(get(Apu_gen_hz), 0, 0, 400, 0.99))
+        set(Apu_gen_state, 0)
+    elseif get(apu_avail) == 1 and get(apu_gen) == 0 then
+        set(Apu_gen_volts, Set_anim_value(get(Apu_gen_volts), 0, 0, 115, 0.95))
+        set(Apu_gen_hz, Set_anim_value(get(Apu_gen_hz), 0, 0, 400, 0.99))
+        set(Apu_gen_state, 1)
+    elseif get(apu_avail) == 1 and get(apu_gen) == 1 then
+        set(Apu_gen_volts, Set_anim_value(get(Apu_gen_volts), 115, 0, 115, 0.95))
+        set(Apu_gen_hz, Set_anim_value(get(Apu_gen_hz), 400, 0, 400, 0.99))
+        set(Apu_gen_state, 2)
+    end
+
+    if (get(Fuel_pump_1) == 0 and
+       get(Fuel_pump_2) == 0 and
+       get(Fuel_pump_3) == 0 and
+       get(Fuel_pump_4) == 0 and
+       get(Fuel_pump_5) == 0 and
+       get(Fuel_pump_6) == 0 and
+       get(Fuel_pump_7) == 0 and
+       get(Fuel_pump_8) == 0) and get(apu_start) ==1 then
+        set(apu_fuel_lo_pr, 1)
+    else
+        set(apu_fuel_lo_pr, 0)
+    end
+
     --apu start button state 0: off, 1: on, 2: avail
     if get(apu_start_position) == 0 and get(Apu_N1) < 100 then
         set(apu_start_button_state, 0)
-    end
-    
-    if get(apu_start_position) == 1 and get(Apu_N1) < 100 then
+    elseif get(apu_start_position) == 1 and get(Apu_N1) < 100 then
         set(apu_start_button_state, 0)
-    end
-
-    if get(apu_start_position) == 0 and get(Apu_N1) == 100 then
+    elseif get(apu_start_position) == 0 and get(Apu_N1) > 95 then
         set(apu_start_button_state, 2)
-    end 
-    
-    if get(apu_start_position) == 1 and get(Apu_N1) == 100 then
+    elseif get(apu_start_position) == 1 and get(Apu_N1) > 95 then
         set(apu_start_button_state, 2)
-    end    
-    
-    if get(apu_start_position) == 2 and get(Apu_N1) < 100 then
+    elseif get(apu_start_position) == 2 and get(Apu_N1) < 100 then
         set(apu_start_button_state, 1)
-    end 
-    
-    if get(apu_start_position) == 2 and get(Apu_N1) == 100 then
+    elseif get(apu_start_position) == 2 and get(Apu_N1) > 100 then
         set(apu_start_button_state, 2)
     end
 end

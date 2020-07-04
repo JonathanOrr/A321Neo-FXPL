@@ -1,10 +1,13 @@
 position= {3187,499,900,900}
 size = {900, 900}
 
+--local variables
+local apu_avail_timer = -1
+
 --sim datarefs
 
 --a32NX datarefs
-local a321DR_ecam_page_num = createGlobalPropertyi("a321neo/cockpit/ecam/page_num", 8, false, true, false) --1ENG, 2BLEED, 3PRESS, 4ELEC, 5HYD, 6FUEL, 7APU, 8COND, 9DOOR, 10WHEEL, 11F/CTL, 12STS
+local apu_needle_state = createGlobalPropertyi("a321neo/cockpit/apu/apu_needle_state", 0, false, true, false) --0xx, 1operational
 
 --fonts
 local B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
@@ -39,23 +42,45 @@ local function draw_ecam_lower_section()
     sasl.gl.drawText(B612MONO_regular, size[1]/2+375, size[2]/2-374, math.floor(get(Gross_weight)), 30, false, false, TEXT_ALIGN_RIGHT, mcdu_blue)
 end
 
+function update()
+    if get(Apu_N1) == 0 then
+        set(apu_needle_state, 0)
+    elseif get(Apu_N1) > 1 then
+        set(apu_needle_state, 1)
+    end
+end
+
 --drawing the ECAM
 function draw()
-    if get(a321DR_ecam_page_num) == 1 then --eng
+    if get(Ecam_current_page) == 1 then --eng
 
-    elseif get(a321DR_ecam_page_num) == 2 then --bleed
+    elseif get(Ecam_current_page) == 2 then --bleed
 
-    elseif get(a321DR_ecam_page_num) == 3 then --press
+    elseif get(Ecam_current_page) == 3 then --press
 
-    elseif get(a321DR_ecam_page_num) == 4 then --elec
+    elseif get(Ecam_current_page) == 4 then --elec
 
-    elseif get(a321DR_ecam_page_num) == 5 then --hyd
+    elseif get(Ecam_current_page) == 5 then --hyd
 
-    elseif get(a321DR_ecam_page_num) == 6 then --fuel
+    elseif get(Ecam_current_page) == 6 then --fuel
 
-    elseif get(a321DR_ecam_page_num) == 7 then --apu
-
-    elseif get(a321DR_ecam_page_num) == 8 then --cond
+    elseif get(Ecam_current_page) == 7 then --apu
+        --apu gen section--
+        if get(Apu_gen_state) == 2 then
+            sasl.gl.drawText(B612MONO_regular, size[1]/2-235, size[2]/2+257, math.floor(get(Apu_gen_load)), 23, false, false, TEXT_ALIGN_RIGHT, mcdu_green)
+            sasl.gl.drawText(B612MONO_regular, size[1]/2-235, size[2]/2+224, math.floor(get(Apu_gen_volts)), 23, false, false, TEXT_ALIGN_RIGHT, mcdu_green)
+            sasl.gl.drawText(B612MONO_regular, size[1]/2-235, size[2]/2+192, math.floor(get(Apu_gen_hz)), 23, false, false, TEXT_ALIGN_RIGHT, mcdu_green)
+        end
+        --apu bleed--
+        if get(Apu_bleed_state) > 0 then
+            sasl.gl.drawText(B612MONO_regular, size[1]/2+270, size[2]/2+186, math.floor(get(Apu_bleed_psi)), 23, false, false, TEXT_ALIGN_RIGHT, mcdu_green)
+        end
+        --needles--
+        if get(apu_needle_state) == 1 then
+            sasl.gl.drawText(B612MONO_regular, size[1]/2-180, size[2]/2-60, math.floor(get(Apu_N1)), 30, false, false, TEXT_ALIGN_CENTER, mcdu_green)
+            sasl.gl.drawText(B612MONO_regular, size[1]/2-180, size[2]/2-260, math.floor(get(APU_EGT)), 30, false, false, TEXT_ALIGN_CENTER, mcdu_green)
+        end
+    elseif get(Ecam_current_page) == 8 then --cond
         --cabin--
         --actual temperature
         sasl.gl.drawText(B612MONO_regular, size[1]/2-212, size[2]/2+210, math.floor(get(Cockpit_temp)), 30, false, false, TEXT_ALIGN_CENTER, mcdu_green)
@@ -71,13 +96,13 @@ function draw()
         sasl.gl.drawText(B612MONO_regular, size[1]/2+168, size[2]/2-59, math.floor(get(Aft_cargo_temp)), 30, false, false, TEXT_ALIGN_CENTER, mcdu_green)
         --requested temperatures
         sasl.gl.drawText(B612MONO_regular, size[1]/2+168, size[2]/2-92, math.floor(get(Aft_cargo_temp_req)), 30, false, false, TEXT_ALIGN_CENTER, mcdu_green)
-    elseif get(a321DR_ecam_page_num) == 9 then --door
+    elseif get(Ecam_current_page) == 9 then --door
 
-    elseif get(a321DR_ecam_page_num) == 10 then --wheel
+    elseif get(Ecam_current_page) == 10 then --wheel
 
-    elseif get(a321DR_ecam_page_num) == 11 then --f/ctl
+    elseif get(Ecam_current_page) == 11 then --f/ctl
 
-    elseif get(a321DR_ecam_page_num) == 12 then --STS
+    elseif get(Ecam_current_page) == 12 then --STS
 
     end
 
