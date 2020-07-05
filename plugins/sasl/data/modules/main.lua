@@ -28,6 +28,7 @@ components = {
   MCDU {},
   AT {},
   aircond {},
+  wheel {},
   ECAM {}
  }
 
