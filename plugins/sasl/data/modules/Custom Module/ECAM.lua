@@ -99,6 +99,9 @@ function draw()
     elseif get(Ecam_current_page) == 9 then --door
 
     elseif get(Ecam_current_page) == 10 then --wheel
+        --brakes temps--
+        sasl.gl.drawText(B612MONO_regular, size[1]/2-168, size[2]/2, math.floor(get(Left_brakes_temp)), 30, false, false, TEXT_ALIGN_CENTER, mcdu_green)
+        sasl.gl.drawText(B612MONO_regular, size[1]/2+168, size[2]/2, math.floor(get(Right_brakes_temp)), 30, false, false, TEXT_ALIGN_CENTER, mcdu_green)
 
     elseif get(Ecam_current_page) == 11 then --f/ctl
 

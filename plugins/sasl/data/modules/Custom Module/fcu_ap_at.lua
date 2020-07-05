@@ -32,7 +32,6 @@ local TOGA = createGlobalPropertyi("a321neo/cockpit/controls/thrust/TOGA", 0, fa
 local FLEX_MCT = createGlobalPropertyi("a321neo/cockpit/controls/thrust/FLEX_MCT", 0, false, true, false)
 local CL = createGlobalPropertyi("a321neo/cockpit/controls/thrust/CL", 0, false, true, false)
 local MAN_thrust = createGlobalPropertyi("a321neo/cockpit/controls/thrust/MAN_thrust", 0, false, true, false)
-local all_on_ground = createGlobalPropertyi("a321neo/dynamics/all_wheels_on_ground", 0, false, true, false)
 local L_throttle = createGlobalPropertyf("a321neo/cockpit/controls/throttle_1", 0, false, true, false)
 local R_throttle = createGlobalPropertyf("a321neo/cockpit/controls/throttle_2", 0, false, true, false)
 
@@ -93,7 +92,7 @@ sasl.registerCommandHandler(sim_throttle_dn, 0, function(phase)
         set(L_throttle, get(L_sim_throttle))
         set(R_throttle, get(R_sim_throttle))
 
-        if get(all_on_ground) == 0 and get(L_sim_throttle) == 0 and get(R_sim_throttle) then
+        if get(All_on_ground) == 0 and get(L_sim_throttle) == 0 and get(R_sim_throttle) then
             sasl.commandBegin(auto_throttle_off_cmd)
         end
     else
@@ -223,7 +222,8 @@ function update()
     set(efis_range, Math_clamp(get(efis_range), 1 , 6))
     set(a321neo_efis_mode, Math_clamp(get(a321neo_efis_mode), 0, 4))
 
-    set(all_on_ground, (get(front_gear_on_ground) + get(left_gear_on_ground) + get(right_gear_on_ground))/3)
+    set(Aft_wheel_on_ground, math.floor((get(left_gear_on_ground) + get(right_gear_on_ground))/2))
+    set(All_on_ground, math.floor((get(front_gear_on_ground) + get(left_gear_on_ground) + get(right_gear_on_ground))/3))
 
     --customize efis modes
     if get(a321neo_efis_mode) == 0 then
@@ -280,7 +280,7 @@ function update()
     end
 
     --ground auto thrust trigger
-    if get(all_on_ground) == 1 then
+    if get(All_on_ground) == 1 then
         --TOGA
         if get(L_sim_throttle) > 0.95 and get(R_sim_throttle) > 0.95 and get(L_sim_throttle) < 1 and get(R_sim_throttle) < 1 then
             sasl.commandBegin(auto_throttle_on_cmd)
