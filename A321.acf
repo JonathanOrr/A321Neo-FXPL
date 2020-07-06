@@ -143,7 +143,7 @@ P _door/3/_xyz/0 1.500000000
 P _door/3/_xyz/1 0.0
 P _door/3/_xyz/2 14.500000000
 P _door/3/_xyz/count 3
-P _door/4/_ang_now 39.506893158
+P _door/4/_ang_now 71.051223755
 P _door/4/_ext_ang 0.0
 P _door/4/_ret_ang 90.0
 P _door/4/_type 2
@@ -151,7 +151,7 @@ P _door/4/_xyz/0 -13.0
 P _door/4/_xyz/1 -3.599999905
 P _door/4/_xyz/2 73.500000000
 P _door/4/_xyz/count 3
-P _door/5/_ang_now -39.506893158
+P _door/5/_ang_now -71.051223755
 P _door/5/_ext_ang 0.0
 P _door/5/_ret_ang -90.0
 P _door/5/_type 2
@@ -209,10 +209,10 @@ P _gear/0/_latN 0.0
 P _gear/0/_latR 0.0
 P _gear/0/_leg_len 5.400000095
 P _gear/0/_lonE 0.0
-P _gear/0/_lonN 43.018619537
+P _gear/0/_lonN 77.366882324
 P _gear/0/_lonR 98.0
 P _gear/0/_scon 47252.898437500
-P _gear/0/_stat_def 0.399389684
+P _gear/0/_stat_def 0.399389774
 P _gear/0/_steerdeg_hispeed 5.0
 P _gear/0/_steerdeg_lospeed 75.0
 P _gear/0/_strut_comp 0.0
@@ -239,14 +239,14 @@ P _gear/1/_gear_x -12.010000229
 P _gear/1/_gear_y -2.799999952
 P _gear/1/_gear_z 69.800003052
 P _gear/1/_latE 0.0
-P _gear/1/_latN 35.117240906
+P _gear/1/_latN 63.156639099
 P _gear/1/_latR 80.0
 P _gear/1/_leg_len 8.199999809
 P _gear/1/_lonE -7.0
-P _gear/1/_lonN -3.927241564
+P _gear/1/_lonN -1.473794103
 P _gear/1/_lonR 0.0
 P _gear/1/_scon 71266.664062500
-P _gear/1/_stat_def 1.367629409
+P _gear/1/_stat_def 1.367629290
 P _gear/1/_steerdeg_hispeed 0.0
 P _gear/1/_steerdeg_lospeed 0.0
 P _gear/1/_strut_comp -0.500000000
@@ -273,14 +273,14 @@ P _gear/2/_gear_x 12.010000229
 P _gear/2/_gear_y -2.799999952
 P _gear/2/_gear_z 69.800003052
 P _gear/2/_latE 0.0
-P _gear/2/_latN -35.117240906
+P _gear/2/_latN -63.156639099
 P _gear/2/_latR -80.0
 P _gear/2/_leg_len 8.199999809
 P _gear/2/_lonE -7.0
-P _gear/2/_lonN -3.927241564
+P _gear/2/_lonN -1.473794103
 P _gear/2/_lonR 0.0
 P _gear/2/_scon 71266.664062500
-P _gear/2/_stat_def 1.367629409
+P _gear/2/_stat_def 1.367629290
 P _gear/2/_steerdeg_hispeed 0.0
 P _gear/2/_steerdeg_lospeed 0.0
 P _gear/2/_strut_comp -0.500000000
@@ -24421,7 +24421,7 @@ P _part/85/_part_specs_invis 1
 P _part/85/_part_tex 0
 P _part/85/_part_the -83.0
 P _part/85/_part_x 0.0
-P _part/85/_part_y -10.990610123
+P _part/85/_part_y -10.990609169
 P _part/85/_part_z 17.530000687
 P _part/85/_patt_con 0
 P _part/85/_patt_prt 0
@@ -35836,7 +35836,7 @@ P acf/_feather_prop_with_oilp 0
 P acf/_feathered_pitch 0.0
 P acf/_ff_rat_idle_JET 0.039999999
 P acf/_ff_rat_idle_PRP 0.0
-P acf/_file_writer_version 115023
+P acf/_file_writer_version 114100
 P acf/_flap1_cd 0.100000001
 P acf/_flap1_cl 0.779999971
 P acf/_flap1_cm -0.689999998
@@ -36046,6 +36046,8 @@ P acf/_has_get_tow_new 0
 P acf/_has_give_tow 0
 P acf/_has_ground_pwr 0
 P acf/_has_hsi 1
+P acf/_has_litemap_tex_1 0
+P acf/_has_litemap_tex_2 0
 P acf/_has_pre_rotate 0
 P acf/_has_push_back 0
 P acf/_has_radio_alt_callout 1
@@ -36737,7 +36739,6 @@ P acf/_truck_lon_sep 3.0
 P acf/_tvec_hdng 0.0
 P acf/_tvec_ptch 0.0
 P acf/_tvec_roll 0.0
-P acf/_use_1140_fm 0
 P acf/_use_cus_gear_damping 0
 P acf/_use_cus_gear_defs 0
 P acf/_use_manual_prop_inc 0
@@ -39283,12 +39284,13 @@ GROUP ECAM lower du
   GROUP ECAM WHEEL
     SHOW_EQUAL 10.000000 a321neo/cockpit/ecam/page_num
     LOCKED
-    GROUP_OPEN
+    HIDE
     gen_rotary apu page backgound
       POS 3638.000000 694.000000
       IMAGE MIP/ecam lower du/WHEEL/WHEEL
       DATAREF 
       LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -39309,6 +39311,7 @@ GROUP ECAM lower du
       IMAGE MIP/ecam lower du/WHEEL/rightgeardoor
       DATAREF sim/aircraft/parts/acf_gear_deploy[2]
       LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 2.000000 1.000000
@@ -39331,6 +39334,7 @@ GROUP ECAM lower du
       IMAGE MIP/ecam lower du/WHEEL/geardoor
       DATAREF sim/aircraft/parts/acf_gear_deploy[1]
       LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 2.000000 1.000000
@@ -39353,6 +39357,7 @@ GROUP ECAM lower du
       IMAGE MIP/ecam lower du/WHEEL/nosegeardoor
       DATAREF sim/aircraft/parts/acf_gear_deploy[0]
       LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -39375,6 +39380,7 @@ GROUP ECAM lower du
       IMAGE MIP/ecam lower du/WHEEL/leftnosegeardoor
       DATAREF sim/aircraft/parts/acf_gear_deploy[0]
       LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 1.000000 1.000000
@@ -39397,6 +39403,7 @@ GROUP ECAM lower du
       IMAGE MIP/ecam lower du/WHEEL/gear
       DATAREF sim/aircraft/parts/acf_gear_deploy[1]
       LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -39419,6 +39426,7 @@ GROUP ECAM lower du
       IMAGE MIP/ecam lower du/WHEEL/gear
       DATAREF sim/aircraft/parts/acf_gear_deploy[2]
       LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -39441,6 +39449,7 @@ GROUP ECAM lower du
       IMAGE MIP/ecam lower du/WHEEL/gear
       DATAREF sim/aircraft/parts/acf_gear_deploy[0]
       LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -39463,6 +39472,7 @@ GROUP ECAM lower du
       IMAGE MIP/ecam lower du/WHEEL/spoiler
       DATAREF 
       LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -39484,6 +39494,7 @@ GROUP ECAM lower du
       DATAREF 
       SHOW_GREATER 0.010000 sim/flightmodel2/wing/speedbrake1_deg[0]
       LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -39505,6 +39516,7 @@ GROUP ECAM lower du
       DATAREF 
       SHOW_GREATER 0.010000 sim/flightmodel/controls/wing2r_spo2def[0]
       LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -39526,6 +39538,7 @@ GROUP ECAM lower du
       DATAREF 
       SHOW_GREATER 0.010000 sim/flightmodel/controls/wing2r_spo2def[0]
       LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -39547,6 +39560,7 @@ GROUP ECAM lower du
       DATAREF 
       SHOW_GREATER 0.010000 sim/flightmodel/controls/wing2l_spo2def[0]
       LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -39568,6 +39582,7 @@ GROUP ECAM lower du
       DATAREF 
       SHOW_GREATER 0.010000 sim/flightmodel/controls/wing2r_spo2def[0]
       LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -39589,6 +39604,7 @@ GROUP ECAM lower du
       DATAREF 
       SHOW_GREATER 0.010000 sim/flightmodel/controls/wing2l_spo2def[0]
       LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -39610,6 +39626,7 @@ GROUP ECAM lower du
       DATAREF 
       SHOW_GREATER 0.010000 sim/flightmodel/controls/wing2r_spo2def[0]
       LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -39631,6 +39648,7 @@ GROUP ECAM lower du
       DATAREF 
       SHOW_GREATER 0.010000 sim/flightmodel/controls/wing2l_spo2def[0]
       LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -39652,6 +39670,7 @@ GROUP ECAM lower du
       DATAREF 
       SHOW_GREATER 0.010000 sim/flightmodel2/wing/speedbrake2_deg[0]
       LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -39673,6 +39692,7 @@ GROUP ECAM lower du
       DATAREF 
       SHOW_GREATER 0.010000 sim/flightmodel/controls/wing2r_spo2def[0]
       LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -39694,6 +39714,7 @@ GROUP ECAM lower du
       DATAREF 
       SHOW_GREATER 0.010000 sim/flightmodel/controls/wing2l_spo2def[0]
       LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -40488,5 +40509,187 @@ GROUP ECAM lower du
       CLICK_DY 0
 
   END_GROUP
+END_GROUP
+GROUP ECAM CAB PRESS
+  SHOW_EQUAL 3.000000 a321neo/cockpit/ecam/page_num
+  GROUP_OPEN
+  gen_rotary Background
+    POS 3637.714355 694.857178
+    IMAGE MIP/ecam lower du/CAB PRESS/cab_press
+    DATAREF 
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 0.000000 0.000000 1.000000
+    KEY_FRAME 1.000000 0.000000
+    DIGITS 1
+    ROTARY_TYPE NO_CLICK
+    CLICK_RADIUS 10.000000
+    CLICK_RADIUS_DY 0.000000
+    OFFSET 0.000000
+    STEP1 1.000000
+    STEP2 1.000000
+    CURSOR DEFAULT
+    CLICK_DX 0
+    CLICK_DY 0
+
+  gen_rotary Triangle
+    POS 3322.000000 440.000000
+    IMAGE MIP/ecam lower du/CAB PRESS/Triangle
+    DATAREF abc
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 0.000000 0.000000 1.000000
+    KEY_FRAME 1.000000 1.000000
+    DIGITS 2
+    ROTARY_TYPE NO_CLICK
+    CLICK_RADIUS 10.000000
+    CLICK_RADIUS_DY 0.000000
+    OFFSET 0.000000
+    STEP1 1.000000
+    STEP2 1.000000
+    CURSOR DEFAULT
+    CLICK_DX 0
+    CLICK_DY 0
+
+  gen_rotary Triangle 2
+    POS 3955.000000 440.000000
+    IMAGE MIP/ecam lower du/CAB PRESS/Triangle
+    DATAREF abc
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 0.000000 0.000000 1.000000
+    KEY_FRAME 1.000000 1.000000
+    DIGITS 2
+    ROTARY_TYPE NO_CLICK
+    CLICK_RADIUS 10.000000
+    CLICK_RADIUS_DY 0.000000
+    OFFSET 0.000000
+    STEP1 1.000000
+    STEP2 1.000000
+    CURSOR DEFAULT
+    CLICK_DX 0
+    CLICK_DY 0
+
+  gen_rotary gen_rotary.png
+    POS 4017.571533 635.714294
+    IMAGE MIP/ecam lower du/CAB PRESS/Needle_4
+    DATAREF abc
+    LIGHT_MODE MECHANICAL
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 0.000000 0.000000 1.000000
+    KEY_FRAME 1.000000 1.000000
+    DIGITS 2
+    ROTARY_TYPE NO_CLICK
+    CLICK_RADIUS 10.000000
+    CLICK_RADIUS_DY 0.000000
+    OFFSET 0.000000
+    STEP1 1.000000
+    STEP2 1.000000
+    CURSOR DEFAULT
+    CLICK_DX 0
+    CLICK_DY 0
+
+  gen_rotary gen_rotary.png
+    POS 3626.000000 436.000000
+    IMAGE MIP/ecam lower du/CAB PRESS/Needle_2_2
+    DATAREF abc
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 0.000000 1.000000 1.000000
+    KEY_FRAME 1.000000 0.000000
+    DIGITS 2
+    ROTARY_TYPE NO_CLICK
+    CLICK_RADIUS 10.000000
+    CLICK_RADIUS_DY 0.000000
+    OFFSET 0.000000
+    STEP1 1.000000
+    STEP2 1.000000
+    CURSOR DEFAULT
+    CLICK_DX 0
+    CLICK_DY 0
+
+  gen_rotary gen_rotary.png 2
+    POS 3438.000000 437.000000
+    IMAGE MIP/ecam lower du/CAB PRESS/Needle_2
+    DATAREF abc
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 1.000000 1.000000 1.000000
+    KEY_FRAME 0.000000 0.000000
+    DIGITS 2
+    ROTARY_TYPE NO_CLICK
+    CLICK_RADIUS 10.000000
+    CLICK_RADIUS_DY 0.000000
+    OFFSET 0.000000
+    STEP1 1.000000
+    STEP2 1.000000
+    CURSOR DEFAULT
+    CLICK_DX 0
+    CLICK_DY 0
+
+  gen_needle gen_needle.png
+    POS 3366.000000 885.000000
+    IMAGE MIP/ecam lower du/CAB PRESS/Needle
+    DATAREF 
+sim/cockpit/pressure/cabin_pressure_differential_psi
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 0.000000 -37.000000 1.000000
+    KEY_FRAME 8.000000 113.000000
+    IS_DRAGGABLE 0
+    OFFSET 0.000000
+
+  gen_needle gen_needle.png 2
+    POS 3642.428467 884.714294
+    IMAGE MIP/ecam lower du/CAB PRESS/Needle
+    DATAREF sim/cockpit/pressure/cabin_vvi_actual_m_msec
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME -2000.000000 -90.000000 1.000000
+    KEY_FRAME 2000.000000 90.000000
+    IS_DRAGGABLE 0
+    OFFSET 0.000000
+
+  gen_needle gen_needle.png 2 2
+    POS 3916.428467 885.571411
+    IMAGE MIP/ecam lower du/CAB PRESS/Needle
+    DATAREF sim/cockpit/pressure/cabin_altitude_actual_m_msl
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 0.000000 -50.000000 1.000000
+    KEY_FRAME 1000.000000 120.000000
+    IS_DRAGGABLE 0
+    OFFSET 0.000000
+
+  gen_needle gen_needle.png
+    POS 3881.857178 498.428589
+    IMAGE MIP/ecam lower du/CAB PRESS/Needle_3
+    DATAREF abc
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 0.000000 293.000000 1.000000
+    KEY_FRAME 1.000000 360.000000
+    IS_DRAGGABLE 0
+    OFFSET 0.000000
+
+  gen_rotary gen_rotary.png
+    POS 3637.000000 707.000000
+    IMAGE MIP/ecam lower du/CAB PRESS/SYS
+    DATAREF abc
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 1.000000 1.000000 1.000000
+    KEY_FRAME 0.000000 0.000000
+    DIGITS 2
+    ROTARY_TYPE NO_CLICK
+    CLICK_RADIUS 10.000000
+    CLICK_RADIUS_DY 0.000000
+    OFFSET 0.000000
+    STEP1 1.000000
+    STEP2 1.000000
+    CURSOR DEFAULT
+    CLICK_DX 0
+    CLICK_DY 0
+
 END_GROUP
 PANEL_3D_END
