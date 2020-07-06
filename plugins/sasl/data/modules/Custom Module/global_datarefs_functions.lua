@@ -11,14 +11,11 @@ Ground_speed_mph = createGlobalPropertyf("a321neo/dynamics/groundspeed_mph", 0, 
 --wheel
 Aft_wheel_on_ground = createGlobalPropertyi("a321neo/dynamics/aft_wheels_on_ground", 0, false, true, false)
 All_on_ground = createGlobalPropertyi("a321neo/dynamics/all_wheels_on_ground", 0, false, true, false)
-Left_l_brakes_temp = createGlobalPropertyf("a321neo/dynamics/wheel/left_l_brakes_temp", 10, false, true, false) --left gear temperature
-Left_r_brakes_temp = createGlobalPropertyf("a321neo/dynamics/wheel/left_r_brakes_temp", 10, false, true, false) --left gear temperature
-Right_l_brakes_temp = createGlobalPropertyf("a321neo/dynamics/wheel/right_l_brakes_temp", 10, false, true, false) --right gear temperature
-Right_r_brakes_temp = createGlobalPropertyf("a321neo/dynamics/wheel/right_r_brakes_temp", 10, false, true, false) --right gear temperature
-Left_l_brakes_hot = createGlobalPropertyi("a321neo/dynamics/wheel/left_l_brakes_hot", 0, false, true, false) --brake temp > 400
-Left_r_brakes_hot = createGlobalPropertyi("a321neo/dynamics/wheel/left_r_brakes_hot", 0, false, true, false) --brake temp > 400
-Right_l_brakes_hot = createGlobalPropertyi("a321neo/dynamics/wheel/right_l_brakes_hot", 0, false, true, false) --brake temp > 400
-Right_r_brakes_hot = createGlobalPropertyi("a321neo/dynamics/wheel/right_r_brakes_hot", 0, false, true, false) --brake temp > 400
+Brakes_fan = createGlobalPropertyi("a321neo/dynamics/wheel/brakes_fan", 0, false, true, false)
+Left_brakes_temp = createGlobalPropertyf("a321neo/dynamics/wheel/left_brakes_temp", 10, false, true, false) --left brakes temperature
+Right_brakes_temp = createGlobalPropertyf("a321neo/dynamics/wheel/right_brakes_temp", 10, false, true, false) --right brakes temperature
+Left_tire_psi = createGlobalPropertyf("a321neo/dynamics/wheel/left_tire_psi", 210, false, true, false) --left tire psi
+Right_tire_psi = createGlobalPropertyf("a321neo/dynamics/wheel/right_tire_psi", 210, false, true, false) --right tire psi
 --engines
 Engine_1_master_switch = createGlobalPropertyi("a321neo/engine/master_1", 0, false, true, false)
 Engine_2_master_switch = createGlobalPropertyi("a321neo/engine/master_2", 0, false, true, false)
@@ -70,6 +67,7 @@ TAT = globalProperty("sim/weather/temperature_le_c")
 Gross_weight = globalProperty ("sim/flightmodel/weight/m_total")
 Capt_ra_alt_ft = globalProperty("sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot")
 Capt_baro_alt_ft = globalProperty("sim/cockpit2/gauges/indicators/altitude_ft_pilot")
+IAS = globalProperty("sim/flightmodel/position/indicated_airspeed")
 Distance_traveled_m = globalProperty("sim/flightmodel/controls/dist")
 Ground_speed_ms = globalProperty("sim/flightmodel/position/groundspeed")
 Actual_brake_ratio = globalProperty("sim/flightmodel/controls/parkbrake")
@@ -93,7 +91,7 @@ function Math_clamp(val, min, max)
   end
 end
 
---used to animate a value with a curve
+--used to animate a value with a curve USE ONLY WITH FLOAT VALUES
 function Set_anim_value(current_value, target, min, max, speed)
 
   if target >= (max - 0.001) and current_value >= (max - 0.01) then
