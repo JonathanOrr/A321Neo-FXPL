@@ -1,16 +1,67 @@
---[[ informations
+position = {75,1690,320,285}
+size = {320, 285}
 
+--[[
+--
+--
+--      CONSTS DECLARATION
+--
+--
+--]]
+
+local MCDU_DRAW_SIZE = {w = 320, h = 285} -- idk if size table is required by anything else, this is for internal reference
+
+--define the const size, align and row.
+local MCDU_DIV_SIZE = {"s", "l"}
+local MCDU_DIV_ALIGN = {"L", "C", "R"}
+local MCDU_DIV_ROW = {1,2,3,4,5,6}
+
+--line spacing
+local MCDU_DRAW_OFFSET = {x = 7, y = 240} -- starting offset for line drawing
+local MCDU_DRAW_SPACING = {x = 156, y = -18.5} -- change in offset per line drawn
+
+local MCDU_DRAW_TEXT_SIZE = {s = 12, l = 20}
+
+--[[
 the vertical line spacing for large text is 36 sasl units and the text size is 20
 the lines' y coordinate in desending order for large text is 108, 72, 36, 0, -36, -72, -108
 
 the vertical line spacing for large text is 36 sasl units and the text size is 12
 the lines' y coordinate in desending order for large text is 90, 54, 18, 0, -18, -54, -90
-
-
 --]]
 
-position= {75,1690,320,285}
-size = {320, 285}
+--reference table for drawing
+local MCDU_DISP_COLOR = 
+{
+    ["white"] = {1.0, 1.0, 1.0},
+    ["blue"] = {0.004, 1.0, 1.0},
+    ["green"] = {0.004, 1, 0.004},
+    ["orange"] = {0.843, 0.49, 0},
+    ["black"] = {0,0,0,1},
+}
+local MCDU_DISP_TEXT_SIZE =
+{
+    ["s"] = MCDU_DRAW_TEXT_SIZE.s,
+    ["l"] = MCDU_DRAW_TEXT_SIZE.l,
+}
+local MCDU_DISP_ALIGN =
+{
+    ["L"] = TEXT_ALIGN_LEFT,
+    ["C"] = TEXT_ALIGN_CENTER,
+    ["R"] = TEXT_ALIGN_RIGHT,
+}
+
+--fonts
+local B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
+
+
+--[[
+--
+--
+--      COMMAND REGISTERATION
+--
+--
+--]]
 
 --sim dataref
 
@@ -18,14 +69,14 @@ size = {320, 285}
 local mcdu_page = createGlobalPropertyi("a321neo/cockpit/mcdu/mcdu_page", 0, false, true, false) --0 mcdu info page, 1 init page, 2 f-pln page
 local mcdu_enabled = createGlobalPropertyi("a321neo/debug/mcdu/mcdu_enabled", 1, false, true, false)
 local mcdu_message_index = createGlobalPropertyi("a321neo/debug/mcdu/message_index", 0, false, true, false)
+
 --sim commands
 
 --a321neo commands
---debugging commands
 local mcdu_debug_message = sasl.createCommand("a321neo/debug/mcdu/debug_message", "send a mcdu debug message")
 
---mcdu keyboard commands
---mcdu menu buttons
+--mcdu keyboard
+--  mcdu menu buttons
 local mcdu_DIR_key = createCommand("a321neo/cockpit/mcdu/dir", "MCDU DIR Key")
 local mcdu_PROG_key = createCommand("a321neo/cockpit/mcdu/prog", "MCDU PROG Key")
 local mcdu_PERF_key = createCommand("a321neo/cockpit/mcdu/perf", "MCDU PERF Key")
@@ -38,179 +89,65 @@ local mcdu_SECFPLN_key = createCommand("a321neo/cockpit/mcdu/secfpln", "MCDU SEC
 local mcdu_ATCCOMM_key = createCommand("a321neo/cockpit/mcdu/atccomm", "MCDU ATC COMM Key")
 local mcdu_MCDUMENU_key = createCommand("a321neo/cockpit/mcdu/mcdumenu", "MCDU MCDU MENU Key")
 local mcdu_AIRPORT_key = createCommand("a321neo/cockpit/mcdu/airport", "MCDU AIRPORT Key")
---mcdu letters
-local mcdu_A_key = createCommand("a321neo/cockpit/mcdu/A", "MCDU A Key")
-local mcdu_B_key = createCommand("a321neo/cockpit/mcdu/B", "MCDU B Key")
-local mcdu_C_key = createCommand("a321neo/cockpit/mcdu/C", "MCDU C Key")
-local mcdu_D_key = createCommand("a321neo/cockpit/mcdu/D", "MCDU D Key")
-local mcdu_E_key = createCommand("a321neo/cockpit/mcdu/E", "MCDU E Key")
-local mcdu_F_key = createCommand("a321neo/cockpit/mcdu/F", "MCDU F Key")
-local mcdu_G_key = createCommand("a321neo/cockpit/mcdu/G", "MCDU G Key")
-local mcdu_H_key = createCommand("a321neo/cockpit/mcdu/H", "MCDU H Key")
-local mcdu_I_key = createCommand("a321neo/cockpit/mcdu/I", "MCDU I Key")
-local mcdu_J_key = createCommand("a321neo/cockpit/mcdu/J", "MCDU J Key")
-local mcdu_K_key = createCommand("a321neo/cockpit/mcdu/K", "MCDU K Key")
-local mcdu_L_key = createCommand("a321neo/cockpit/mcdu/L", "MCDU L Key")
-local mcdu_M_key = createCommand("a321neo/cockpit/mcdu/M", "MCDU M Key")
-local mcdu_N_key = createCommand("a321neo/cockpit/mcdu/N", "MCDU N Key")
-local mcdu_O_key = createCommand("a321neo/cockpit/mcdu/O", "MCDU O Key")
-local mcdu_P_key = createCommand("a321neo/cockpit/mcdu/P", "MCDU P Key")
-local mcdu_Q_key = createCommand("a321neo/cockpit/mcdu/Q", "MCDU Q Key")
-local mcdu_R_key = createCommand("a321neo/cockpit/mcdu/R", "MCDU R Key")
-local mcdu_S_key = createCommand("a321neo/cockpit/mcdu/S", "MCDU S Key")
-local mcdu_T_key = createCommand("a321neo/cockpit/mcdu/T", "MCDU T Key")
-local mcdu_U_key = createCommand("a321neo/cockpit/mcdu/U", "MCDU U Key")
-local mcdu_V_key = createCommand("a321neo/cockpit/mcdu/V", "MCDU V Key")
-local mcdu_W_key = createCommand("a321neo/cockpit/mcdu/W", "MCDU W Key")
-local mcdu_X_key = createCommand("a321neo/cockpit/mcdu/X", "MCDU X Key")
-local mcdu_Y_key = createCommand("a321neo/cockpit/mcdu/Y", "MCDU Y Key")
-local mcdu_Z_key = createCommand("a321neo/cockpit/mcdu/Z", "MCDU Z Key")
---MCDU numpad
-local mcdu_1_key = createCommand("a321neo/cockpit/mcdu/1", "MCDU 1 Key")
-local mcdu_2_key = createCommand("a321neo/cockpit/mcdu/2", "MCDU 2 Key")
-local mcdu_3_key = createCommand("a321neo/cockpit/mcdu/3", "MCDU 3 Key")
-local mcdu_4_key = createCommand("a321neo/cockpit/mcdu/4", "MCDU 4 Key")
-local mcdu_5_key = createCommand("a321neo/cockpit/mcdu/5", "MCDU 5 Key")
-local mcdu_6_key = createCommand("a321neo/cockpit/mcdu/6", "MCDU 6 Key")
-local mcdu_7_key = createCommand("a321neo/cockpit/mcdu/7", "MCDU 7 Key")
-local mcdu_8_key = createCommand("a321neo/cockpit/mcdu/8", "MCDU 8 Key")
-local mcdu_9_key = createCommand("a321neo/cockpit/mcdu/9", "MCDU 9 Key")
-local mcdu_0_key = createCommand("a321neo/cockpit/mcdu/0", "MCDU 0 Key")
-local mcdu_decimal_key = createCommand("a321neo/cockpit/mcdu/decimal", "MCDU Decimal Key")
+
 local mcdu_positive_negative_key = createCommand("a321neo/cockpit/mcdu/positive_negative", "MCDU Positive Negative Key")
 
 local mcdu_clr_key = createCommand("a321neo/cockpit/mcdu/clr", "MCDU CLR Key")
 
-local mcdu_page_up = sasl.createCommand("a321neo/cockpit/mcdu/page_up", "mcdu page up")
-local mcdu_page_dn = sasl.createCommand("a321neo/cockpit/mcdu/page_dn", "mcdu page down")
+local mcdu_page_up = sasl.createCommand("a321neo/cockpit/mcdu/page_up", "MCDU page up Key")
+local mcdu_page_dn = sasl.createCommand("a321neo/cockpit/mcdu/page_dn", "MCDU page down Key")
+--  mcdu entry inputs
+--      alphanumeric and decimal
+local MCDU_ENTRY_KEYS = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "."}
 
---fonts
-local B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
+local mcdu_inp_key = {}
+for i,key in ipairs(MCDU_ENTRY_KEYS) do
+	-- create the command
+	mcdu_inp_key[key] = createCommand("a321neo/cockpit/mcdu/" .. key, "MCDU Character " .. key .. " Key")
+	-- register the command
+	sasl.registerCommandHandler(mcdu_inp_key[key], 0, function (phase)
+		if phase == SASL_COMMAND_BEGIN then
+			if #mcdu_entry < 22 then
+				mcdu_entry = mcdu_entry .. key
+			end
+		end
+	end)
+end
 
---colors
-local mcdu_white = {1.0, 1.0, 1.0}
-local mcdu_blue = {0.004, 1.0, 1.0}
-local mcdu_green = {0.004, 1, 0.004}
-local mcdu_orange = {0.843, 0.49, 0}
-local mcdu_black = {0,0,0,1}
+--[[
+--
+--
+--      FMC DATA INITIALIZATION
+--
+--
+--]]
+
+-- init all rows to format as color "white"
+local mcdu_dat = {}
+for i,size in ipairs(MCDU_DIV_SIZE) do
+	mcdu_dat[size] = {}
+	for j,align in ipairs(MCDU_DIV_ALIGN) do
+		mcdu_dat[size][align] = {}
+		for k,row in ipairs(MCDU_DIV_ROW) do
+			-- print(size .. ", " .. align .. ", " .. row)
+			-- init in here
+			mcdu_dat[size][align][row] = {txt = size .. "" .. align .. " " .. row, col = "white"}
+		end
+	end
+end
 
 --mcdu line colors
-local mcdu_title_L_cl = mcdu_white
-local mcdu_title_M_cl = mcdu_white
-local mcdu_title_R_cl = mcdu_white
---mcdu left section
-local mcdu_s_L_cl = {}
-mcdu_s_L_cl[1] = mcdu_white
-mcdu_s_L_cl[2] = mcdu_white
-mcdu_s_L_cl[3] = mcdu_white
-mcdu_s_L_cl[4] = mcdu_white
-mcdu_s_L_cl[5] = mcdu_white
-mcdu_s_L_cl[6] = mcdu_white
-local mcdu_l_L_cl = {}
-mcdu_l_L_cl[1] = mcdu_white
-mcdu_l_L_cl[2] = mcdu_white
-mcdu_l_L_cl[3] = mcdu_white
-mcdu_l_L_cl[4] = mcdu_white
-mcdu_l_L_cl[5] = mcdu_white
-mcdu_l_L_cl[6] = mcdu_white
---mcdu center section
-local mcdu_s_M_cl = {}
-mcdu_s_M_cl[1] = mcdu_white
-mcdu_s_M_cl[2] = mcdu_white
-mcdu_s_M_cl[3] = mcdu_white
-mcdu_s_M_cl[4] = mcdu_white
-mcdu_s_M_cl[5] = mcdu_white
-mcdu_s_M_cl[6] = mcdu_white
-local mcdu_l_M_cl = {}
-mcdu_l_M_cl[1] = mcdu_white
-mcdu_l_M_cl[2] = mcdu_white
-mcdu_l_M_cl[3] = mcdu_white
-mcdu_l_M_cl[4] = mcdu_white
-mcdu_l_M_cl[5] = mcdu_white
-mcdu_l_M_cl[6] = mcdu_white
---mcdu right section
-local mcdu_s_R_cl = {}
-mcdu_s_R_cl[1] = mcdu_white
-mcdu_s_R_cl[2] = mcdu_white
-mcdu_s_R_cl[3] = mcdu_white
-mcdu_s_R_cl[4] = mcdu_white
-mcdu_s_R_cl[5] = mcdu_white
-mcdu_s_R_cl[6] = mcdu_white
-local mcdu_l_R_cl = {}
-mcdu_l_R_cl[1] = mcdu_white
-mcdu_l_R_cl[2] = mcdu_white
-mcdu_l_R_cl[3] = mcdu_white
-mcdu_l_R_cl[4] = mcdu_white
-mcdu_l_R_cl[5] = mcdu_white
-mcdu_l_R_cl[6] = mcdu_white
+local mcdu_title_L_cl = "white"
+local mcdu_title_M_cl = "white"
+local mcdu_title_R_cl = "white"
+
 
 --sasl variables
---mcdu lines vertical locations
-local mcdu_s_ypos = {
-    90,
-    54,
-    18,
-    -18,
-    -54,
-    -90
-}
-local mcdu_l_ypos = {
-    72,
-    36,
-    0,
-    -36,
-    -72,
-    -108
-}
 --mcdu lines(max munber of character is 22)
 local mcdu_title_L = "TITLE"
 local mcdu_title_M = "TITLE"
 local mcdu_title_R = "TITLE"
 --MCDU left section
-local mcdu_s_L = {}
-mcdu_s_L[1] = "1 s L"
-mcdu_s_L[2] = "2 s L"
-mcdu_s_L[3] = "3 s L"
-mcdu_s_L[4] = "4 s L"
-mcdu_s_L[5] = "5 s L"
-mcdu_s_L[6] = "6 s L"
-local mcdu_l_L = {}
-mcdu_l_L[1] = "1 l L"
-mcdu_l_L[2] = "2 l L"
-mcdu_l_L[3] = "3 l L"
-mcdu_l_L[4] = "4 l L"
-mcdu_l_L[5] = "5 l L"
-mcdu_l_L[6] = "6 l L"
---MCDU center section
-local mcdu_s_M = {}
-mcdu_s_M[1] = "1 s M"
-mcdu_s_M[2] = "2 s M"
-mcdu_s_M[3] = "3 s M"
-mcdu_s_M[4] = "4 s M"
-mcdu_s_M[5] = "5 s M"
-mcdu_s_M[6] = "6 s M"
-local mcdu_l_M = {}
-mcdu_l_M[1] = "1 l M"
-mcdu_l_M[2] = "2 l M"
-mcdu_l_M[3] = "3 l M"
-mcdu_l_M[4] = "4 l M"
-mcdu_l_M[5] = "5 l M"
-mcdu_l_M[6] = "6 l M"
---MCDU right section
-local mcdu_s_R = {}
-mcdu_s_R[1] = "1 s R"
-mcdu_s_R[2] = "2 s R"
-mcdu_s_R[3] = "3 s R"
-mcdu_s_R[4] = "4 s R"
-mcdu_s_R[5] = "5 s R"
-mcdu_s_R[6] = "6 s R"
-local mcdu_l_R = {}
-mcdu_l_R[1] = "1 l R"
-mcdu_l_R[2] = "2 l R"
-mcdu_l_R[3] = "3 l R"
-mcdu_l_R[4] = "4 l R"
-mcdu_l_R[5] = "5 l R"
-mcdu_l_R[6] = "6 l R"
 --entry line
 local mcdu_entry = ""
 local mcdu_messages = {}
@@ -261,302 +198,6 @@ sasl.registerCommandHandler(mcdu_debug_message, 0, function (phase)
 end)
 --mcdu menu keys
 
---mcdu alphabets
-sasl.registerCommandHandler(mcdu_A_key, 0, function (phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if #mcdu_entry < 22 then
-            mcdu_entry = mcdu_entry .. "A"
-        end
-    end
-end)
-
-sasl.registerCommandHandler(mcdu_B_key, 0, function (phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if #mcdu_entry < 22 then
-            mcdu_entry = mcdu_entry .. "B"
-        end
-    end
-end)
-
-sasl.registerCommandHandler(mcdu_C_key, 0, function (phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if #mcdu_entry < 22 then
-            mcdu_entry = mcdu_entry .. "C"
-        end
-    end
-end)
-
-sasl.registerCommandHandler(mcdu_D_key, 0, function (phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if #mcdu_entry < 22 then
-            mcdu_entry = mcdu_entry .. "D"
-        end
-    end
-end)
-
-sasl.registerCommandHandler(mcdu_E_key, 0, function (phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if #mcdu_entry < 22 then
-            mcdu_entry = mcdu_entry .. "E"
-        end
-    end
-end)
-
-sasl.registerCommandHandler(mcdu_F_key, 0, function (phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if #mcdu_entry < 22 then
-            mcdu_entry = mcdu_entry .. "F"
-        end
-    end
-end)
-
-sasl.registerCommandHandler(mcdu_G_key, 0, function (phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if #mcdu_entry < 22 then
-            mcdu_entry = mcdu_entry .. "G"
-        end
-    end
-end)
-
-sasl.registerCommandHandler(mcdu_H_key, 0, function (phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if #mcdu_entry < 22 then
-            mcdu_entry = mcdu_entry .. "H"
-        end
-    end
-end)
-
-sasl.registerCommandHandler(mcdu_I_key, 0, function (phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if #mcdu_entry < 22 then
-            mcdu_entry = mcdu_entry .. "I"
-        end
-    end
-end)
-
-sasl.registerCommandHandler(mcdu_J_key, 0, function (phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if #mcdu_entry < 22 then
-            mcdu_entry = mcdu_entry .. "J"
-        end
-    end
-end)
-
-sasl.registerCommandHandler(mcdu_K_key, 0, function (phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if #mcdu_entry < 22 then
-            mcdu_entry = mcdu_entry .. "K"
-        end
-    end
-end)
-
-sasl.registerCommandHandler(mcdu_L_key, 0, function (phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if #mcdu_entry < 22 then
-            mcdu_entry = mcdu_entry .. "L"
-        end
-    end
-end)
-
-sasl.registerCommandHandler(mcdu_M_key, 0, function (phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if #mcdu_entry < 22 then
-            mcdu_entry = mcdu_entry .. "M"
-        end
-    end
-end)
-
-sasl.registerCommandHandler(mcdu_N_key, 0, function (phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if #mcdu_entry < 22 then
-            mcdu_entry = mcdu_entry .. "N"
-        end
-    end
-end)
-
-sasl.registerCommandHandler(mcdu_O_key, 0, function (phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if #mcdu_entry < 22 then
-            mcdu_entry = mcdu_entry .. "O"
-        end
-    end
-end)
-
-sasl.registerCommandHandler(mcdu_P_key, 0, function (phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if #mcdu_entry < 22 then
-            mcdu_entry = mcdu_entry .. "P"
-        end
-    end
-end)
-
-sasl.registerCommandHandler(mcdu_Q_key, 0, function (phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if #mcdu_entry < 22 then
-            mcdu_entry = mcdu_entry .. "Q"
-        end
-    end
-end)
-
-sasl.registerCommandHandler(mcdu_R_key, 0, function (phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if #mcdu_entry < 22 then
-            mcdu_entry = mcdu_entry .. "R"
-        end
-    end
-end)
-
-sasl.registerCommandHandler(mcdu_S_key, 0, function (phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if #mcdu_entry < 22 then
-            mcdu_entry = mcdu_entry .. "S"
-        end
-    end
-end)
-
-sasl.registerCommandHandler(mcdu_T_key, 0, function (phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if #mcdu_entry < 22 then
-            mcdu_entry = mcdu_entry .. "T"
-        end
-    end
-end)
-
-sasl.registerCommandHandler(mcdu_U_key, 0, function (phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if #mcdu_entry < 22 then
-            mcdu_entry = mcdu_entry .. "U"
-        end
-    end
-end)
-
-sasl.registerCommandHandler(mcdu_V_key, 0, function (phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if #mcdu_entry < 22 then
-            mcdu_entry = mcdu_entry .. "V"
-        end
-    end
-end)
-
-sasl.registerCommandHandler(mcdu_W_key, 0, function (phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if #mcdu_entry < 22 then
-            mcdu_entry = mcdu_entry .. "W"
-        end
-    end
-end)
-
-sasl.registerCommandHandler(mcdu_X_key, 0, function (phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if #mcdu_entry < 22 then
-            mcdu_entry = mcdu_entry .. "X"
-        end
-    end
-end)
-
-sasl.registerCommandHandler(mcdu_Y_key, 0, function (phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if #mcdu_entry < 22 then
-            mcdu_entry = mcdu_entry .. "Y"
-        end
-    end
-end)
-
-sasl.registerCommandHandler(mcdu_Z_key, 0, function (phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if #mcdu_entry < 22 then
-            mcdu_entry = mcdu_entry .. "Z"
-        end
-    end
-end)
---mcdu numpad
-sasl.registerCommandHandler(mcdu_1_key, 0, function (phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if #mcdu_entry < 22 then
-            mcdu_entry = mcdu_entry .. 1
-        end
-    end
-end)
-
-sasl.registerCommandHandler(mcdu_2_key, 0, function (phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if #mcdu_entry < 22 then
-            mcdu_entry = mcdu_entry .. 2
-        end
-    end
-end)
-
-sasl.registerCommandHandler(mcdu_3_key, 0, function (phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if #mcdu_entry < 22 then
-            mcdu_entry = mcdu_entry .. 3
-        end
-    end
-end)
-
-sasl.registerCommandHandler(mcdu_4_key, 0, function (phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if #mcdu_entry < 22 then
-            mcdu_entry = mcdu_entry .. 4
-        end
-    end
-end)
-
-sasl.registerCommandHandler(mcdu_5_key, 0, function (phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if #mcdu_entry < 22 then
-            mcdu_entry = mcdu_entry .. 5
-        end
-    end
-end)
-
-sasl.registerCommandHandler(mcdu_6_key, 0, function (phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if #mcdu_entry < 22 then
-            mcdu_entry = mcdu_entry .. 6
-        end
-    end
-end)
-
-sasl.registerCommandHandler(mcdu_7_key, 0, function (phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if #mcdu_entry < 22 then
-            mcdu_entry = mcdu_entry .. 7
-        end
-    end
-end)
-
-sasl.registerCommandHandler(mcdu_8_key, 0, function (phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if #mcdu_entry < 22 then
-            mcdu_entry = mcdu_entry .. 8
-        end
-    end
-end)
-
-sasl.registerCommandHandler(mcdu_9_key, 0, function (phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if #mcdu_entry < 22 then
-            mcdu_entry = mcdu_entry .. 9
-        end
-    end
-end)
-
-sasl.registerCommandHandler(mcdu_0_key, 0, function (phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if #mcdu_entry < 22 then
-            mcdu_entry = mcdu_entry .. 0
-        end
-    end
-end)
-
-sasl.registerCommandHandler(mcdu_decimal_key, 0, function (phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if #mcdu_entry < 22 then
-            mcdu_entry = mcdu_entry .. "."
-        end
-    end
-end)
 
 sasl.registerCommandHandler(mcdu_positive_negative_key, 0, function (phase)
     if phase == SASL_COMMAND_BEGIN then
@@ -602,6 +243,7 @@ sasl.registerCommandHandler(mcdu_page_dn, 0, function (phase)
     end
 end)
 
+--[[
 
 --define all page functionalities(!!!!!!!!!because of 60 upvalue limit per function!!!!!!!!!)
 local function mcdu_info_page()
@@ -719,8 +361,14 @@ local function mcdu_fpln()
         mcdu_l_R[5] = wpt5_alt
 end
 
+
 --main loop
 function update()
+    print("a")
+    dat = {"A", "B"}
+    for i,key in ipairs(dat) do
+        print(dat)
+    end
     --engine option logic
     if get(Engine_option) == 0 then
         set(Leap_engien_option, 1)
@@ -837,36 +485,58 @@ function update()
         mcdu_fpln()
     end
 end
+--]]
 
 --drawing the MCDU display
 function draw()
     if get(mcdu_enabled) == 1 then
-        sasl.gl.drawRectangle(0, 0, 320 , 285, mcdu_black)
+        sasl.gl.drawRectangle(0, 0, 320 , 285, MCDU_DISP_COLOR["black"])
+        disp_size = {MCDU_DRAW_SIZE.w, MCDU_DRAW_SIZE.h} -- for debugging
+        --[[
         --draw title line
-        sasl.gl.drawText(B612MONO_regular, size[1]/2-140, size[2]/2+108, mcdu_title_L , 20, false, false,TEXT_ALIGN_LEFT,   mcdu_title_L_cl)
-        sasl.gl.drawText(B612MONO_regular, size[1]/2,     size[2]/2+108, mcdu_title_M , 20, false, false,TEXT_ALIGN_CENTER, mcdu_title_M_cl)
-        sasl.gl.drawText(B612MONO_regular, size[1]/2+140, size[2]/2+108, mcdu_title_R , 20, false, false,TEXT_ALIGN_RIGHT,  mcdu_title_R_cl)
+        sasl.gl.drawText(B612MONO_regular, disp_size[1]/2-140, disp_size[2]/2+108,                      mcdu_title_L ,        20, false, false,TEXT_ALIGN_LEFT,     mcdu_title_L_cl)
+        sasl.gl.drawText(B612MONO_regular, disp_size[1]/2,     disp_size[2]/2+108,                      mcdu_title_M ,        20, false, false,TEXT_ALIGN_CENTER,   mcdu_title_M_cl)
+        sasl.gl.drawText(B612MONO_regular, disp_size[1]/2+140, disp_size[2]/2+108,                      mcdu_title_R ,        20, false, false,TEXT_ALIGN_RIGHT,    mcdu_title_R_cl)
+        --]]
         --draw all horizontal lines
-        for draw_lines = 1, 6, 1 do
-        --draw left section
-        sasl.gl.drawText(B612MONO_regular, size[1]/2-140, size[2]/2+mcdu_s_ypos[draw_lines],  mcdu_s_L[draw_lines], 12, false, false,TEXT_ALIGN_LEFT,   mcdu_s_L_cl[draw_lines])
-        sasl.gl.drawText(B612MONO_regular, size[1]/2-140, size[2]/2+mcdu_l_ypos[draw_lines],  mcdu_l_L[draw_lines], 20, false, false,TEXT_ALIGN_LEFT,   mcdu_l_L_cl[draw_lines])
-        --draw center section
-        sasl.gl.drawText(B612MONO_regular, size[1]/2,     size[2]/2+mcdu_s_ypos[draw_lines],  mcdu_s_M[draw_lines], 12, false, false,TEXT_ALIGN_CENTER, mcdu_s_M_cl[draw_lines])
-        sasl.gl.drawText(B612MONO_regular, size[1]/2,     size[2]/2+mcdu_l_ypos[draw_lines],  mcdu_l_M[draw_lines], 20, false, false,TEXT_ALIGN_CENTER, mcdu_l_M_cl[draw_lines])
-        --draw right section
-        sasl.gl.drawText(B612MONO_regular, size[1]/2+140, size[2]/2+mcdu_s_ypos[draw_lines],  mcdu_s_R[draw_lines], 12, false, false,TEXT_ALIGN_RIGHT,  mcdu_s_R_cl[draw_lines])
-        sasl.gl.drawText(B612MONO_regular, size[1]/2+140, size[2]/2+mcdu_l_ypos[draw_lines],  mcdu_l_R[draw_lines], 20, false, false,TEXT_ALIGN_RIGHT,  mcdu_l_R_cl[draw_lines])
+        for i,draw_row in ipairs(MCDU_DIV_ROW) do
+            for j,draw_size in ipairs(MCDU_DIV_SIZE) do
+                draw_act_row = ((i - 1) * 2) + (j - 1) -- draw actual row
+
+                for k,draw_align in ipairs(MCDU_DIV_ALIGN) do
+
+                    -- spacings
+                    disp_x = MCDU_DRAW_OFFSET.x
+                    disp_x = disp_x + (MCDU_DRAW_SPACING.x * (k - 1)) -- so -140, 0, 140
+
+                    disp_y = MCDU_DRAW_OFFSET.y
+                    disp_y = disp_y + (MCDU_DRAW_SPACING.y * draw_act_row) -- so 108, 90, 72
+
+                    -- text size 
+                    disp_text_size = MCDU_DISP_TEXT_SIZE[draw_size]
+                    -- text alignment
+                    disp_align = MCDU_DISP_ALIGN[draw_align]
+
+                    -- text data
+                    --print(draw_size .. " " .. draw_align .. " " .. draw_row)
+                    dat = mcdu_dat[draw_size][draw_align][draw_row]
+                    disp_text = dat.txt
+                    disp_color = MCDU_DISP_COLOR[dat.col]
+
+                    -- now draw it!
+                    sasl.gl.drawText(B612MONO_regular, disp_x, disp_y, disp_text, disp_text_size, false, false, disp_align, disp_color)
+                end
+            end
         end
 
         --drawing entry line
         if mcdu_message_active == 0 then
-            sasl.gl.drawText(B612MONO_regular, size[1]/2-140, size[2]/2-132, mcdu_entry, 20, false, false, TEXT_ALIGN_LEFT, mcdu_white)
+            sasl.gl.drawText(B612MONO_regular, disp_size[1]/2-140, disp_size[2]/2-132, mcdu_entry, 20, false, false, TEXT_ALIGN_LEFT, MCDU_DISP_COLOR["white"])
         end
 
         if mcdu_message_active == 1 then
             if #mcdu_messages > 0 then
-                sasl.gl.drawText(B612MONO_regular, size[1]/2-140, size[2]/2-132, mcdu_messages[#mcdu_messages], 20, false, false, TEXT_ALIGN_LEFT, mcdu_white)
+                sasl.gl.drawText(B612MONO_regular, disp_size[1]/2-140, disp_size[2]/2-132, mcdu_messages[#mcdu_messages], 20, false, false, TEXT_ALIGN_LEFT, MCDU_DISP_COLOR["white"])
             end
         end
     end
