@@ -9,13 +9,9 @@ function update()
 
 	if get(Aft_wheel_on_ground) == 1 then
 		if get(Actual_brake_ratio) >  0 then
-			math.randomseed(os.time())
 			set(Left_l_brakes_temp, get(Left_l_brakes_temp) + (get(Actual_brake_ratio) * (0.05 * get(groundspeed_kts)) ^ 1.975) * get(DELTA_TIME))
-			math.randomseed(os.time())
 			set(Left_r_brakes_temp, get(Left_r_brakes_temp) + (get(Actual_brake_ratio) * (0.05 * get(groundspeed_kts)) ^ 1.975) * get(DELTA_TIME))
-			math.randomseed(os.time())
 			set(Right_l_brakes_temp, get(Right_l_brakes_temp) + (get(Actual_brake_ratio) * (0.05 * get(groundspeed_kts)) ^ 1.975) * get(DELTA_TIME))
-			math.randomseed(os.time())
 			set(Right_r_brakes_temp, get(Right_r_brakes_temp) + (get(Actual_brake_ratio) * (0.05 * get(groundspeed_kts)) ^ 1.975) * get(DELTA_TIME))
 		end
 	end
