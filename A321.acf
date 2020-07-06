@@ -102,7 +102,7 @@ P _door/0/_xyz/0 -1.0
 P _door/0/_xyz/1 0.0
 P _door/0/_xyz/2 17.600000381
 P _door/0/_xyz/count 3
-P _door/1/_ang_now 72.168090820
+P _door/1/_ang_now 0.0
 P _door/1/_ext_ang 0.0
 P _door/1/_ret_ang 100.0
 P _door/1/_type 3
@@ -110,7 +110,7 @@ P _door/1/_xyz/0 -1.500000000
 P _door/1/_xyz/1 0.0
 P _door/1/_xyz/2 14.500000000
 P _door/1/_xyz/count 3
-P _door/10/_ang_now 64.951286316
+P _door/10/_ang_now 0.0
 P _door/10/_ext_ang 0.0
 P _door/10/_ret_ang 90.0
 P _door/10/_type 3
@@ -135,7 +135,7 @@ P _door/2/_xyz/0 1.0
 P _door/2/_xyz/1 0.0
 P _door/2/_xyz/2 17.600000381
 P _door/2/_xyz/count 3
-P _door/3/_ang_now -72.168090820
+P _door/3/_ang_now 0.0
 P _door/3/_ext_ang 0.0
 P _door/3/_ret_ang -100.0
 P _door/3/_type 3
@@ -143,7 +143,7 @@ P _door/3/_xyz/0 1.500000000
 P _door/3/_xyz/1 0.0
 P _door/3/_xyz/2 14.500000000
 P _door/3/_xyz/count 3
-P _door/4/_ang_now 2.504875183
+P _door/4/_ang_now 55.939937592
 P _door/4/_ext_ang 0.0
 P _door/4/_ret_ang 90.0
 P _door/4/_type 2
@@ -151,7 +151,7 @@ P _door/4/_xyz/0 -13.0
 P _door/4/_xyz/1 -3.599999905
 P _door/4/_xyz/2 73.500000000
 P _door/4/_xyz/count 3
-P _door/5/_ang_now -2.504875183
+P _door/5/_ang_now -55.939937592
 P _door/5/_ext_ang 0.0
 P _door/5/_ret_ang -90.0
 P _door/5/_type 2
@@ -161,7 +161,7 @@ P _door/5/_xyz/2 73.500000000
 P _door/5/_xyz/count 3
 P _door/6/_type 0
 P _door/7/_type 0
-P _door/8/_ang_now -64.951286316
+P _door/8/_ang_now 0.0
 P _door/8/_ext_ang 0.0
 P _door/8/_ret_ang -90.0
 P _door/8/_type 3
@@ -209,7 +209,7 @@ P _gear/0/_latN 0.0
 P _gear/0/_latR 0.0
 P _gear/0/_leg_len 5.400000095
 P _gear/0/_lonE 0.0
-P _gear/0/_lonN 2.727523804
+P _gear/0/_lonN 60.912376404
 P _gear/0/_lonR 98.0
 P _gear/0/_scon 47252.898437500
 P _gear/0/_stat_def 0.399389744
@@ -239,14 +239,14 @@ P _gear/1/_gear_x -12.010000229
 P _gear/1/_gear_y -2.799999952
 P _gear/1/_gear_z 69.800003052
 P _gear/1/_latE 0.0
-P _gear/1/_latN 2.226554871
+P _gear/1/_latN 49.724388123
 P _gear/1/_latR 80.0
 P _gear/1/_leg_len 8.199999809
 P _gear/1/_lonE -7.0
-P _gear/1/_lonN -6.805176735
+P _gear/1/_lonN -2.649116039
 P _gear/1/_lonR 0.0
 P _gear/1/_scon 71266.664062500
-P _gear/1/_stat_def 1.367629409
+P _gear/1/_stat_def 1.367629290
 P _gear/1/_steerdeg_hispeed 0.0
 P _gear/1/_steerdeg_lospeed 0.0
 P _gear/1/_strut_comp -0.500000000
@@ -273,14 +273,14 @@ P _gear/2/_gear_x 12.010000229
 P _gear/2/_gear_y -2.799999952
 P _gear/2/_gear_z 69.800003052
 P _gear/2/_latE 0.0
-P _gear/2/_latN -2.226554871
+P _gear/2/_latN -49.724388123
 P _gear/2/_latR -80.0
 P _gear/2/_leg_len 8.199999809
 P _gear/2/_lonE -7.0
-P _gear/2/_lonN -6.805176735
+P _gear/2/_lonN -2.649116039
 P _gear/2/_lonR 0.0
 P _gear/2/_scon 71266.664062500
-P _gear/2/_stat_def 1.367629409
+P _gear/2/_stat_def 1.367629290
 P _gear/2/_steerdeg_hispeed 0.0
 P _gear/2/_steerdeg_lospeed 0.0
 P _gear/2/_strut_comp -0.500000000
@@ -37698,7 +37698,6 @@ rad_transponder_HM1 transponder_HM.png
   KEY_FRAME 1.000000 1.000000
 
 GROUP brake_press
-  CHAINED
   GROUP_OPEN
   gen_rotary brakepress_bg
     POS 569.000000 1684.000000
@@ -38617,11 +38616,11 @@ GROUP batteries voltage
 
 END_GROUP
 GROUP ECAM upper du
+  GROUP_OPEN
   gen_rotary eng display
     POS 278.000000 785.000000
     IMAGE MIP/ecam upper du/eng_disp
     DATAREF 
-    LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -40470,10 +40469,29 @@ gen_rotary r_spoiler2 2 2
   CLICK_DX 0
   CLICK_DY 0
 
-gen_rotary gen_rotary.png
-  POS 3640.285645 693.285706
+gen_rotary brake_left
+  POS 3359.000000 585.500000
   IMAGE MIP/ecam lower du/WHEEL/Frame
-  DATAREF a321neo/cockpit/wheel/hot_brakes
+  DATAREF a321neo/dynamics/wheel/left_brakes_temp
+  LIGHT_MODE GLASS_AUTO
+  LIGHT_RHEOSTAT 0
+  KEY_FRAME 0.000000 0.000000 1.000000
+  KEY_FRAME 1.000000 1.000000
+  DIGITS 2
+  ROTARY_TYPE NO_CLICK
+  CLICK_RADIUS 10.000000
+  CLICK_RADIUS_DY 0.000000
+  OFFSET 0.000000
+  STEP1 1.000000
+  STEP2 1.000000
+  CURSOR DEFAULT
+  CLICK_DX 0
+  CLICK_DY 0
+
+gen_rotary brake_right
+  POS 3926.000000 585.500000
+  IMAGE MIP/ecam lower du/WHEEL/Frame
+  DATAREF a321neo/dynamics/wheel/right_brakes_temp
   LIGHT_MODE GLASS_AUTO
   LIGHT_RHEOSTAT 0
   KEY_FRAME 0.000000 0.000000 1.000000
