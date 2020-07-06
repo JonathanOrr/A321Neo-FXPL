@@ -8,17 +8,24 @@ Distance_traveled_mi = createGlobalPropertyf("a321neo/dynamics/distance_traveled
 Distance_traveled_km = createGlobalPropertyf("a321neo/dynamics/distance_traveled_km", 0, false, true, false)
 Ground_speed_kmh = createGlobalPropertyf("a321neo/dynamics/groundspeed_kmh", 0, false, true, false)
 Ground_speed_mph = createGlobalPropertyf("a321neo/dynamics/groundspeed_mph", 0, false, true, true)
+--wheel
 Aft_wheel_on_ground = createGlobalPropertyi("a321neo/dynamics/aft_wheels_on_ground", 0, false, true, false)
 All_on_ground = createGlobalPropertyi("a321neo/dynamics/all_wheels_on_ground", 0, false, true, false)
-Left_brakes_temp = createGlobalPropertyf("a321neo/dynamics/wheel/left_brakes_temp", 10, false, true, false) --left gear temperature
-Right_brakes_temp = createGlobalPropertyf("a321neo/dynamics/wheel/right_brakes_temp", 10, false, true, false) --right gear temperature
-Left_brakes_hot = createGlobalPropertyi("a321neo/dynamics/wheel/left_brakes_hot", 0, false, true, false) --brake temp > 380
-Right_brakes_hot = createGlobalPropertyi("a321neo/dynamics/wheel/right_brakes_hot", 0, false, true, false) --brake temp > 380
+Left_l_brakes_temp = createGlobalPropertyf("a321neo/dynamics/wheel/left_l_brakes_temp", 10, false, true, false) --left gear temperature
+Left_r_brakes_temp = createGlobalPropertyf("a321neo/dynamics/wheel/left_r_brakes_temp", 10, false, true, false) --left gear temperature
+Right_l_brakes_temp = createGlobalPropertyf("a321neo/dynamics/wheel/right_l_brakes_temp", 10, false, true, false) --right gear temperature
+Right_r_brakes_temp = createGlobalPropertyf("a321neo/dynamics/wheel/right_r_brakes_temp", 10, false, true, false) --right gear temperature
+Left_l_brakes_hot = createGlobalPropertyi("a321neo/dynamics/wheel/left_l_brakes_hot", 0, false, true, false) --brake temp > 400
+Left_r_brakes_hot = createGlobalPropertyi("a321neo/dynamics/wheel/left_r_brakes_hot", 0, false, true, false) --brake temp > 400
+Right_l_brakes_hot = createGlobalPropertyi("a321neo/dynamics/wheel/right_l_brakes_hot", 0, false, true, false) --brake temp > 400
+Right_r_brakes_hot = createGlobalPropertyi("a321neo/dynamics/wheel/right_r_brakes_hot", 0, false, true, false) --brake temp > 400
+--engines
 Engine_1_master_switch = createGlobalPropertyi("a321neo/engine/master_1", 0, false, true, false)
 Engine_2_master_switch = createGlobalPropertyi("a321neo/engine/master_2", 0, false, true, false)
 Engine_option = createGlobalPropertyi("a321neo/customization/engine_option", 0, false, true, false) --0 CFM LEAP, 1 PW1000G
 PW_engine_enabled = createGlobalPropertyi("a321neo/customization/pw_engine_enabled", 0, false, true, false)
 Leap_engien_option = createGlobalPropertyi("a321neo/customization/leap_engine_enabled", 0, false, true, false)
+--ecam
 Ecam_previous_page = createGlobalPropertyi("a321neo/cockpit/ecam/previous", 10, false, true, false) --1ENG, 2BLEED, 3PRESS, 4ELEC, 5HYD, 6FUEL, 7APU, 8COND, 9DOOR, 10WHEEL, 11F/CTL, 12STS
 Ecam_current_page = createGlobalPropertyi("a321neo/cockpit/ecam/page_num", 10, false, true, false) --1ENG, 2BLEED, 3PRESS, 4ELEC, 5HYD, 6FUEL, 7APU, 8COND, 9DOOR, 10WHEEL, 11F/CTL, 12STS
 --aircon datarefs
