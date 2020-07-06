@@ -143,7 +143,7 @@ P _door/3/_xyz/0 1.500000000
 P _door/3/_xyz/1 0.0
 P _door/3/_xyz/2 14.500000000
 P _door/3/_xyz/count 3
-P _door/4/_ang_now 55.939937592
+P _door/4/_ang_now 39.506893158
 P _door/4/_ext_ang 0.0
 P _door/4/_ret_ang 90.0
 P _door/4/_type 2
@@ -151,7 +151,7 @@ P _door/4/_xyz/0 -13.0
 P _door/4/_xyz/1 -3.599999905
 P _door/4/_xyz/2 73.500000000
 P _door/4/_xyz/count 3
-P _door/5/_ang_now -55.939937592
+P _door/5/_ang_now -39.506893158
 P _door/5/_ext_ang 0.0
 P _door/5/_ret_ang -90.0
 P _door/5/_type 2
@@ -209,10 +209,10 @@ P _gear/0/_latN 0.0
 P _gear/0/_latR 0.0
 P _gear/0/_leg_len 5.400000095
 P _gear/0/_lonE 0.0
-P _gear/0/_lonN 60.912376404
+P _gear/0/_lonN 43.018619537
 P _gear/0/_lonR 98.0
 P _gear/0/_scon 47252.898437500
-P _gear/0/_stat_def 0.399389744
+P _gear/0/_stat_def 0.399389684
 P _gear/0/_steerdeg_hispeed 5.0
 P _gear/0/_steerdeg_lospeed 75.0
 P _gear/0/_strut_comp 0.0
@@ -239,14 +239,14 @@ P _gear/1/_gear_x -12.010000229
 P _gear/1/_gear_y -2.799999952
 P _gear/1/_gear_z 69.800003052
 P _gear/1/_latE 0.0
-P _gear/1/_latN 49.724388123
+P _gear/1/_latN 35.117240906
 P _gear/1/_latR 80.0
 P _gear/1/_leg_len 8.199999809
 P _gear/1/_lonE -7.0
-P _gear/1/_lonN -2.649116039
+P _gear/1/_lonN -3.927241564
 P _gear/1/_lonR 0.0
 P _gear/1/_scon 71266.664062500
-P _gear/1/_stat_def 1.367629290
+P _gear/1/_stat_def 1.367629409
 P _gear/1/_steerdeg_hispeed 0.0
 P _gear/1/_steerdeg_lospeed 0.0
 P _gear/1/_strut_comp -0.500000000
@@ -273,14 +273,14 @@ P _gear/2/_gear_x 12.010000229
 P _gear/2/_gear_y -2.799999952
 P _gear/2/_gear_z 69.800003052
 P _gear/2/_latE 0.0
-P _gear/2/_latN -49.724388123
+P _gear/2/_latN -35.117240906
 P _gear/2/_latR -80.0
 P _gear/2/_leg_len 8.199999809
 P _gear/2/_lonE -7.0
-P _gear/2/_lonN -2.649116039
+P _gear/2/_lonN -3.927241564
 P _gear/2/_lonR 0.0
 P _gear/2/_scon 71266.664062500
-P _gear/2/_stat_def 1.367629290
+P _gear/2/_stat_def 1.367629409
 P _gear/2/_steerdeg_hispeed 0.0
 P _gear/2/_steerdeg_lospeed 0.0
 P _gear/2/_strut_comp -0.500000000
@@ -35836,7 +35836,7 @@ P acf/_feather_prop_with_oilp 0
 P acf/_feathered_pitch 0.0
 P acf/_ff_rat_idle_JET 0.039999999
 P acf/_ff_rat_idle_PRP 0.0
-P acf/_file_writer_version 114100
+P acf/_file_writer_version 115023
 P acf/_flap1_cd 0.100000001
 P acf/_flap1_cl 0.779999971
 P acf/_flap1_cm -0.689999998
@@ -36046,8 +36046,6 @@ P acf/_has_get_tow_new 0
 P acf/_has_give_tow 0
 P acf/_has_ground_pwr 0
 P acf/_has_hsi 1
-P acf/_has_litemap_tex_1 0
-P acf/_has_litemap_tex_2 0
 P acf/_has_pre_rotate 0
 P acf/_has_push_back 0
 P acf/_has_radio_alt_callout 1
@@ -36063,9 +36061,9 @@ P acf/_hide_prop_at_90_vect 0
 P acf/_hoops_hud_EQ 0
 P acf/_hud_tapes_track_vector 0
 P acf/_hyd_brakes 0
-P acf/_hyd_ele_pump_0123 0
-P acf/_hyd_engn_pump_0123/0 3
-P acf/_hyd_engn_pump_0123/1 3
+P acf/_hyd_ele_pump_0123 2
+P acf/_hyd_engn_pump_0123/0 1
+P acf/_hyd_engn_pump_0123/1 2
 P acf/_hyd_engn_pump_0123/2 0
 P acf/_hyd_engn_pump_0123/3 0
 P acf/_hyd_engn_pump_0123/4 0
@@ -36080,7 +36078,7 @@ P acf/_hyd_gear_fail_mode 2
 P acf/_hyd_gear_fail_speed 235.0
 P acf/_hyd_max_p 3750.0
 P acf/_hyd_max_p_RAT 1.0
-P acf/_hyd_max_p_ele 0.0
+P acf/_hyd_max_p_ele 3000.0
 P acf/_hyd_max_p_eng 3000.0
 P acf/_hyd_max_p_rot 0.0
 P acf/_hyd_nw_steer 1
@@ -36214,7 +36212,7 @@ P acf/_num_inverters 1
 P acf/_num_prop 0
 P acf/_num_xmsn 2
 P acf/_nw_side_k 0.0
-P acf/_o2_bottle_liter 2152
+P acf/_o2_bottle_liter 3256
 P acf/_oilT_is_C 1
 P acf/_ott_asi_kts_off_for_full_def 50.0
 P acf/_ott_asi_sec_into_future 10.0
@@ -36739,6 +36737,7 @@ P acf/_truck_lon_sep 3.0
 P acf/_tvec_hdng 0.0
 P acf/_tvec_ptch 0.0
 P acf/_tvec_roll 0.0
+P acf/_use_1140_fm 0
 P acf/_use_cus_gear_damping 0
 P acf/_use_cus_gear_defs 0
 P acf/_use_manual_prop_inc 0
@@ -38616,7 +38615,6 @@ GROUP batteries voltage
 
 END_GROUP
 GROUP ECAM upper du
-  GROUP_OPEN
   gen_rotary eng display
     POS 278.000000 785.000000
     IMAGE MIP/ecam upper du/eng_disp
@@ -39282,6 +39280,436 @@ GROUP pfd
 END_GROUP
 GROUP ECAM lower du
   GROUP_OPEN
+  GROUP ECAM WHEEL
+    SHOW_EQUAL 10.000000 a321neo/cockpit/ecam/page_num
+    LOCKED
+    GROUP_OPEN
+    gen_rotary apu page backgound
+      POS 3638.000000 694.000000
+      IMAGE MIP/ecam lower du/WHEEL/WHEEL
+      DATAREF 
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000
+      DIGITS 1
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary left gear door 2
+      POS 3920.000000 736.500000
+      IMAGE MIP/ecam lower du/WHEEL/rightgeardoor
+      DATAREF sim/aircraft/parts/acf_gear_deploy[2]
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 2.000000 1.000000
+      KEY_FRAME 0.250000 0.000000 1.000000
+      KEY_FRAME 0.800000 1.000000 1.000000
+      KEY_FRAME 1.000000 2.000000
+      DIGITS 3
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary left gear door 2 2
+      POS 3360.000000 736.500000
+      IMAGE MIP/ecam lower du/WHEEL/geardoor
+      DATAREF sim/aircraft/parts/acf_gear_deploy[1]
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 2.000000 1.000000
+      KEY_FRAME 0.250000 0.000000 1.000000
+      KEY_FRAME 0.800000 1.000000 1.000000
+      KEY_FRAME 1.000000 2.000000
+      DIGITS 3
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary left gear door 2 2
+      POS 3694.000000 929.000000
+      IMAGE MIP/ecam lower du/WHEEL/nosegeardoor
+      DATAREF sim/aircraft/parts/acf_gear_deploy[0]
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 0.010000 1.000000 1.000000
+      KEY_FRAME 0.990000 1.000000 1.000000
+      KEY_FRAME 1.000000 0.000000
+      DIGITS 2
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary left gear door 2 2
+      POS 3588.000000 929.000000
+      IMAGE MIP/ecam lower du/WHEEL/leftnosegeardoor
+      DATAREF sim/aircraft/parts/acf_gear_deploy[0]
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 1.000000 1.000000
+      KEY_FRAME 0.010000 0.000000 1.000000
+      KEY_FRAME 0.950000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000
+      DIGITS 2
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary GearLock
+      POS 3354.000000 779.500000
+      IMAGE MIP/ecam lower du/WHEEL/gear
+      DATAREF sim/aircraft/parts/acf_gear_deploy[1]
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 0.100000 1.000000 1.000000
+      KEY_FRAME 0.950000 1.000000 1.000000
+      KEY_FRAME 1.000000 2.000000
+      DIGITS 3
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary GearLock 2
+      POS 3926.000000 779.500000
+      IMAGE MIP/ecam lower du/WHEEL/gear
+      DATAREF sim/aircraft/parts/acf_gear_deploy[2]
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 0.100000 1.000000 1.000000
+      KEY_FRAME 0.990000 1.000000 1.000000
+      KEY_FRAME 1.000000 2.000000
+      DIGITS 3
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary GearLock 2 2
+      POS 3641.000000 928.500000
+      IMAGE MIP/ecam lower du/WHEEL/gear
+      DATAREF sim/aircraft/parts/acf_gear_deploy[0]
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 0.050000 1.000000 1.000000
+      KEY_FRAME 0.950000 1.000000 1.000000
+      KEY_FRAME 1.000000 2.000000
+      DIGITS 3
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary spoiler track
+      POS 3641.500000 1053.500000
+      IMAGE MIP/ecam lower du/WHEEL/spoiler
+      DATAREF 
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000
+      DIGITS 1
+      ROTARY_TYPE ROTARY
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary r_spoiler1 2
+      POS 3697.000000 1096.000000
+      IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
+      DATAREF 
+      SHOW_GREATER 0.010000 sim/flightmodel2/wing/speedbrake1_deg[0]
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 6.000000
+      DIGITS 1
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary r_spoiler2 2
+      POS 3754.000000 1088.000000
+      IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
+      DATAREF 
+      SHOW_GREATER 0.010000 sim/flightmodel/controls/wing2r_spo2def[0]
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 6.000000
+      DIGITS 1
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary r_spoiler2 2 2
+      POS 3810.000000 1078.000000
+      IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
+      DATAREF 
+      SHOW_GREATER 0.010000 sim/flightmodel/controls/wing2r_spo2def[0]
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 6.000000
+      DIGITS 1
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary r_spoiler2 2 2 2
+      POS 3473.000000 1078.000000
+      IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
+      DATAREF 
+      SHOW_GREATER 0.010000 sim/flightmodel/controls/wing2l_spo2def[0]
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 6.000000
+      DIGITS 1
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary r_spoiler2 2 2 2
+      POS 3866.000000 1067.000000
+      IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
+      DATAREF 
+      SHOW_GREATER 0.010000 sim/flightmodel/controls/wing2r_spo2def[0]
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 6.000000
+      DIGITS 1
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary r_spoiler2 2 2 2 2
+      POS 3417.000000 1067.000000
+      IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
+      DATAREF 
+      SHOW_GREATER 0.010000 sim/flightmodel/controls/wing2l_spo2def[0]
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 6.000000
+      DIGITS 1
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary r_spoiler2 2 2 2 2
+      POS 3922.000000 1058.000000
+      IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
+      DATAREF 
+      SHOW_GREATER 0.010000 sim/flightmodel/controls/wing2r_spo2def[0]
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 6.000000
+      DIGITS 1
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary l_spoiler2 2
+      POS 3529.000000 1088.000000
+      IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
+      DATAREF 
+      SHOW_GREATER 0.010000 sim/flightmodel/controls/wing2l_spo2def[0]
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 6.000000
+      DIGITS 1
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary l_spoiler1 2
+      POS 3586.000000 1096.000000
+      IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
+      DATAREF 
+      SHOW_GREATER 0.010000 sim/flightmodel2/wing/speedbrake2_deg[0]
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 6.000000
+      DIGITS 1
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary r_spoiler2 2
+      POS 3754.000000 1088.000000
+      IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
+      DATAREF 
+      SHOW_GREATER 0.010000 sim/flightmodel/controls/wing2r_spo2def[0]
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 6.000000
+      DIGITS 1
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary r_spoiler2 2 2
+      POS 3360.000000 1058.000000
+      IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
+      DATAREF 
+      SHOW_GREATER 0.010000 sim/flightmodel/controls/wing2l_spo2def[0]
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 6.000000
+      DIGITS 1
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+  END_GROUP
   GROUP ECAM COND
     SHOW_EQUAL 8.000000 a321neo/cockpit/ecam/page_num
     LOCKED
@@ -40061,450 +40489,4 @@ GROUP ECAM lower du
 
   END_GROUP
 END_GROUP
-GROUP ECAM WHEEL
-  GROUP_OPEN
-  gen_rotary apu page backgound
-    POS 3638.000000 694.000000
-    IMAGE MIP/ecam lower du/WHEEL/WHEEL
-    DATAREF 
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 1.000000
-    DIGITS 1
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary left gear door 2
-    POS 3920.000000 736.500000
-    IMAGE MIP/ecam lower du/WHEEL/rightgeardoor
-    DATAREF sim/aircraft/parts/acf_gear_deploy[2]
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 2.000000 1.000000
-    KEY_FRAME 0.250000 0.000000 1.000000
-    KEY_FRAME 0.800000 1.000000 1.000000
-    KEY_FRAME 1.000000 2.000000
-    DIGITS 3
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary left gear door 2 2
-    POS 3360.000000 736.500000
-    IMAGE MIP/ecam lower du/WHEEL/geardoor
-    DATAREF sim/aircraft/parts/acf_gear_deploy[1]
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 2.000000 1.000000
-    KEY_FRAME 0.250000 0.000000 1.000000
-    KEY_FRAME 0.800000 1.000000 1.000000
-    KEY_FRAME 1.000000 2.000000
-    DIGITS 3
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary left gear door 2 2
-    POS 3694.000000 929.000000
-    IMAGE MIP/ecam lower du/WHEEL/nosegeardoor
-    DATAREF sim/aircraft/parts/acf_gear_deploy[0]
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 0.010000 1.000000 1.000000
-    KEY_FRAME 0.990000 1.000000 1.000000
-    KEY_FRAME 1.000000 0.000000
-    DIGITS 2
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary left gear door 2 2
-    POS 3588.000000 929.000000
-    IMAGE MIP/ecam lower du/WHEEL/leftnosegeardoor
-    DATAREF sim/aircraft/parts/acf_gear_deploy[0]
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 1.000000 1.000000
-    KEY_FRAME 0.010000 0.000000 1.000000
-    KEY_FRAME 0.950000 0.000000 1.000000
-    KEY_FRAME 1.000000 1.000000
-    DIGITS 2
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary GearLock
-    POS 3354.000000 779.500000
-    IMAGE MIP/ecam lower du/WHEEL/gear
-    DATAREF sim/aircraft/parts/acf_gear_deploy[1]
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 0.100000 1.000000 1.000000
-    KEY_FRAME 0.950000 1.000000 1.000000
-    KEY_FRAME 1.000000 2.000000
-    DIGITS 3
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary GearLock 2
-    POS 3926.000000 779.500000
-    IMAGE MIP/ecam lower du/WHEEL/gear
-    DATAREF sim/aircraft/parts/acf_gear_deploy[2]
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 0.100000 1.000000 1.000000
-    KEY_FRAME 0.990000 1.000000 1.000000
-    KEY_FRAME 1.000000 2.000000
-    DIGITS 3
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary GearLock 2 2
-    POS 3641.000000 928.500000
-    IMAGE MIP/ecam lower du/WHEEL/gear
-    DATAREF sim/aircraft/parts/acf_gear_deploy[0]
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 0.050000 1.000000 1.000000
-    KEY_FRAME 0.950000 1.000000 1.000000
-    KEY_FRAME 1.000000 2.000000
-    DIGITS 3
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary spoiler track
-    POS 3641.500000 1053.500000
-    IMAGE MIP/ecam lower du/WHEEL/spoiler
-    DATAREF 
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 6.000000
-    DIGITS 1
-    ROTARY_TYPE ROTARY
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-END_GROUP
-gen_rotary r_spoiler1 2
-  POS 3697.000000 1096.000000
-  IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
-  DATAREF 
-  SHOW_GREATER 0.010000 sim/flightmodel2/wing/speedbrake1_deg[0]
-  LIGHT_MODE GLASS_AUTO
-  LIGHT_RHEOSTAT 0
-  KEY_FRAME 0.000000 0.000000 1.000000
-  KEY_FRAME 1.000000 6.000000
-  DIGITS 1
-  ROTARY_TYPE NO_CLICK
-  CLICK_RADIUS 10.000000
-  CLICK_RADIUS_DY 0.000000
-  OFFSET 0.000000
-  STEP1 1.000000
-  STEP2 1.000000
-  CURSOR DEFAULT
-  CLICK_DX 0
-  CLICK_DY 0
-
-gen_rotary r_spoiler2 2
-  POS 3754.000000 1088.000000
-  IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
-  DATAREF 
-  SHOW_GREATER 0.010000 sim/flightmodel/controls/wing2r_spo2def[0]
-  LIGHT_MODE GLASS_AUTO
-  LIGHT_RHEOSTAT 0
-  KEY_FRAME 0.000000 0.000000 1.000000
-  KEY_FRAME 1.000000 6.000000
-  DIGITS 1
-  ROTARY_TYPE NO_CLICK
-  CLICK_RADIUS 10.000000
-  CLICK_RADIUS_DY 0.000000
-  OFFSET 0.000000
-  STEP1 1.000000
-  STEP2 1.000000
-  CURSOR DEFAULT
-  CLICK_DX 0
-  CLICK_DY 0
-
-gen_rotary r_spoiler2 2 2
-  POS 3810.000000 1078.000000
-  IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
-  DATAREF 
-  SHOW_GREATER 0.010000 sim/flightmodel/controls/wing2r_spo2def[0]
-  LIGHT_MODE GLASS_AUTO
-  LIGHT_RHEOSTAT 0
-  KEY_FRAME 0.000000 0.000000 1.000000
-  KEY_FRAME 1.000000 6.000000
-  DIGITS 1
-  ROTARY_TYPE NO_CLICK
-  CLICK_RADIUS 10.000000
-  CLICK_RADIUS_DY 0.000000
-  OFFSET 0.000000
-  STEP1 1.000000
-  STEP2 1.000000
-  CURSOR DEFAULT
-  CLICK_DX 0
-  CLICK_DY 0
-
-gen_rotary r_spoiler2 2 2 2
-  POS 3473.000000 1078.000000
-  IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
-  DATAREF 
-  SHOW_GREATER 0.010000 sim/flightmodel/controls/wing2l_spo2def[0]
-  LIGHT_MODE GLASS_AUTO
-  LIGHT_RHEOSTAT 0
-  KEY_FRAME 0.000000 0.000000 1.000000
-  KEY_FRAME 1.000000 6.000000
-  DIGITS 1
-  ROTARY_TYPE NO_CLICK
-  CLICK_RADIUS 10.000000
-  CLICK_RADIUS_DY 0.000000
-  OFFSET 0.000000
-  STEP1 1.000000
-  STEP2 1.000000
-  CURSOR DEFAULT
-  CLICK_DX 0
-  CLICK_DY 0
-
-gen_rotary r_spoiler2 2 2 2
-  POS 3866.000000 1067.000000
-  IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
-  DATAREF 
-  SHOW_GREATER 0.010000 sim/flightmodel/controls/wing2r_spo2def[0]
-  LIGHT_MODE GLASS_AUTO
-  LIGHT_RHEOSTAT 0
-  KEY_FRAME 0.000000 0.000000 1.000000
-  KEY_FRAME 1.000000 6.000000
-  DIGITS 1
-  ROTARY_TYPE NO_CLICK
-  CLICK_RADIUS 10.000000
-  CLICK_RADIUS_DY 0.000000
-  OFFSET 0.000000
-  STEP1 1.000000
-  STEP2 1.000000
-  CURSOR DEFAULT
-  CLICK_DX 0
-  CLICK_DY 0
-
-gen_rotary r_spoiler2 2 2 2 2
-  POS 3417.000000 1067.000000
-  IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
-  DATAREF 
-  SHOW_GREATER 0.010000 sim/flightmodel/controls/wing2l_spo2def[0]
-  LIGHT_MODE GLASS_AUTO
-  LIGHT_RHEOSTAT 0
-  KEY_FRAME 0.000000 0.000000 1.000000
-  KEY_FRAME 1.000000 6.000000
-  DIGITS 1
-  ROTARY_TYPE NO_CLICK
-  CLICK_RADIUS 10.000000
-  CLICK_RADIUS_DY 0.000000
-  OFFSET 0.000000
-  STEP1 1.000000
-  STEP2 1.000000
-  CURSOR DEFAULT
-  CLICK_DX 0
-  CLICK_DY 0
-
-gen_rotary r_spoiler2 2 2 2 2
-  POS 3922.000000 1058.000000
-  IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
-  DATAREF 
-  SHOW_GREATER 0.010000 sim/flightmodel/controls/wing2r_spo2def[0]
-  LIGHT_MODE GLASS_AUTO
-  LIGHT_RHEOSTAT 0
-  KEY_FRAME 0.000000 0.000000 1.000000
-  KEY_FRAME 1.000000 6.000000
-  DIGITS 1
-  ROTARY_TYPE NO_CLICK
-  CLICK_RADIUS 10.000000
-  CLICK_RADIUS_DY 0.000000
-  OFFSET 0.000000
-  STEP1 1.000000
-  STEP2 1.000000
-  CURSOR DEFAULT
-  CLICK_DX 0
-  CLICK_DY 0
-
-gen_rotary l_spoiler2 2
-  POS 3529.000000 1088.000000
-  IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
-  DATAREF 
-  SHOW_GREATER 0.010000 sim/flightmodel/controls/wing2l_spo2def[0]
-  LIGHT_MODE GLASS_AUTO
-  LIGHT_RHEOSTAT 0
-  KEY_FRAME 0.000000 0.000000 1.000000
-  KEY_FRAME 1.000000 6.000000
-  DIGITS 1
-  ROTARY_TYPE NO_CLICK
-  CLICK_RADIUS 10.000000
-  CLICK_RADIUS_DY 0.000000
-  OFFSET 0.000000
-  STEP1 1.000000
-  STEP2 1.000000
-  CURSOR DEFAULT
-  CLICK_DX 0
-  CLICK_DY 0
-
-gen_rotary l_spoiler1 2
-  POS 3586.000000 1096.000000
-  IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
-  DATAREF 
-  SHOW_GREATER 0.010000 sim/flightmodel2/wing/speedbrake2_deg[0]
-  LIGHT_MODE GLASS_AUTO
-  LIGHT_RHEOSTAT 0
-  KEY_FRAME 0.000000 0.000000 1.000000
-  KEY_FRAME 1.000000 6.000000
-  DIGITS 1
-  ROTARY_TYPE NO_CLICK
-  CLICK_RADIUS 10.000000
-  CLICK_RADIUS_DY 0.000000
-  OFFSET 0.000000
-  STEP1 1.000000
-  STEP2 1.000000
-  CURSOR DEFAULT
-  CLICK_DX 0
-  CLICK_DY 0
-
-gen_rotary r_spoiler2 2
-  POS 3754.000000 1088.000000
-  IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
-  DATAREF 
-  SHOW_GREATER 0.010000 sim/flightmodel/controls/wing2r_spo2def[0]
-  LIGHT_MODE GLASS_AUTO
-  LIGHT_RHEOSTAT 0
-  KEY_FRAME 0.000000 0.000000 1.000000
-  KEY_FRAME 1.000000 6.000000
-  DIGITS 1
-  ROTARY_TYPE NO_CLICK
-  CLICK_RADIUS 10.000000
-  CLICK_RADIUS_DY 0.000000
-  OFFSET 0.000000
-  STEP1 1.000000
-  STEP2 1.000000
-  CURSOR DEFAULT
-  CLICK_DX 0
-  CLICK_DY 0
-
-gen_rotary r_spoiler2 2 2
-  POS 3360.000000 1058.000000
-  IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
-  DATAREF 
-  SHOW_GREATER 0.010000 sim/flightmodel/controls/wing2l_spo2def[0]
-  LIGHT_MODE GLASS_AUTO
-  LIGHT_RHEOSTAT 0
-  KEY_FRAME 0.000000 0.000000 1.000000
-  KEY_FRAME 1.000000 6.000000
-  DIGITS 1
-  ROTARY_TYPE NO_CLICK
-  CLICK_RADIUS 10.000000
-  CLICK_RADIUS_DY 0.000000
-  OFFSET 0.000000
-  STEP1 1.000000
-  STEP2 1.000000
-  CURSOR DEFAULT
-  CLICK_DX 0
-  CLICK_DY 0
-
-gen_rotary brake_left
-  POS 3359.000000 585.500000
-  IMAGE MIP/ecam lower du/WHEEL/Frame
-  DATAREF a321neo/dynamics/wheel/left_brakes_temp
-  LIGHT_MODE GLASS_AUTO
-  LIGHT_RHEOSTAT 0
-  KEY_FRAME 0.000000 0.000000 1.000000
-  KEY_FRAME 1.000000 1.000000
-  DIGITS 2
-  ROTARY_TYPE NO_CLICK
-  CLICK_RADIUS 10.000000
-  CLICK_RADIUS_DY 0.000000
-  OFFSET 0.000000
-  STEP1 1.000000
-  STEP2 1.000000
-  CURSOR DEFAULT
-  CLICK_DX 0
-  CLICK_DY 0
-
-gen_rotary brake_right
-  POS 3926.000000 585.500000
-  IMAGE MIP/ecam lower du/WHEEL/Frame
-  DATAREF a321neo/dynamics/wheel/right_brakes_temp
-  LIGHT_MODE GLASS_AUTO
-  LIGHT_RHEOSTAT 0
-  KEY_FRAME 0.000000 0.000000 1.000000
-  KEY_FRAME 1.000000 1.000000
-  DIGITS 2
-  ROTARY_TYPE NO_CLICK
-  CLICK_RADIUS 10.000000
-  CLICK_RADIUS_DY 0.000000
-  OFFSET 0.000000
-  STEP1 1.000000
-  STEP2 1.000000
-  CURSOR DEFAULT
-  CLICK_DX 0
-  CLICK_DY 0
-
 PANEL_3D_END

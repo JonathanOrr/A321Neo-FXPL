@@ -13,6 +13,10 @@ local apu_needle_state = createGlobalPropertyi("a321neo/cockpit/apu/apu_needle_s
 local B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
 
 --colors
+local left_l_brake_temp_color = {1.0, 1.0, 1.0}
+local left_r_brake_temp_color = {1.0, 1.0, 1.0}
+local right_l_brake_temp_color = {1.0, 1.0, 1.0}
+local right_r_brake_temp_color = {1.0, 1.0, 1.0}
 local mcdu_white = {1.0, 1.0, 1.0}
 local mcdu_blue = {0.004, 1.0, 1.0}
 local mcdu_green = {0.004, 1, 0.004}
@@ -47,6 +51,30 @@ function update()
         set(apu_needle_state, 0)
     elseif get(Apu_N1) > 1 then
         set(apu_needle_state, 1)
+    end
+
+    if get(Left_l_brakes_hot) == 1 then
+        left_l_brake_temp_color = mcdu_orange
+    else
+        left_l_brake_temp_color = mcdu_white
+    end
+
+    if get(Left_r_brakes_hot) == 1 then
+        left_r_brake_temp_color = mcdu_orange
+    else
+        left_r_brake_temp_color = mcdu_white
+    end
+
+    if get(Right_l_brakes_hot) == 1 then
+        right_l_brake_temp_color = mcdu_orange
+    else
+        right_l_brake_temp_color = mcdu_white
+    end
+
+    if get(Right_r_brakes_hot) == 1 then
+        right_r_brake_temp_color = mcdu_orange
+    else
+        right_r_brake_temp_color = mcdu_white
     end
 end
 
@@ -100,8 +128,30 @@ function draw()
 
     elseif get(Ecam_current_page) == 10 then --wheel
         --brakes temps--
-        sasl.gl.drawText(B612MONO_regular, size[1]/2-168, size[2]/2, math.floor(get(Left_brakes_temp)), 30, false, false, TEXT_ALIGN_CENTER, mcdu_green)
-        sasl.gl.drawText(B612MONO_regular, size[1]/2+168, size[2]/2, math.floor(get(Right_brakes_temp)), 30, false, false, TEXT_ALIGN_CENTER, mcdu_green)
+        sasl.gl.drawText(B612MONO_regular, size[1]/2-360, size[2]/2-75, math.floor(get(Left_l_brakes_temp)), 30, false, false, TEXT_ALIGN_CENTER, mcdu_green)
+        sasl.gl.drawText(B612MONO_regular, size[1]/2-200, size[2]/2-75, math.floor(get(Left_r_brakes_temp)), 30, false, false, TEXT_ALIGN_CENTER, mcdu_green)
+        sasl.gl.drawText(B612MONO_regular, size[1]/2+200, size[2]/2-75, math.floor(get(Right_l_brakes_temp)), 30, false, false, TEXT_ALIGN_CENTER, mcdu_green)
+        sasl.gl.drawText(B612MONO_regular, size[1]/2+360, size[2]/2-75, math.floor(get(Right_r_brakes_temp)), 30, false, false, TEXT_ALIGN_CENTER, mcdu_green)
+        --brakes indications
+        sasl.gl.drawText(B612MONO_regular, size[1]/2-280, size[2]/2-75, "°C", 26, false, false, TEXT_ALIGN_CENTER, mcdu_blue)
+        sasl.gl.drawText(B612MONO_regular, size[1]/2-280, size[2]/2-120, "REL", 26, false, false, TEXT_ALIGN_CENTER, mcdu_white)
+        sasl.gl.drawText(B612MONO_regular, size[1]/2+280, size[2]/2-75, "°C", 26, false, false, TEXT_ALIGN_CENTER, mcdu_blue)
+        sasl.gl.drawText(B612MONO_regular, size[1]/2+280, size[2]/2-120, "REL", 26, false, false, TEXT_ALIGN_CENTER, mcdu_white)
+        sasl.gl.drawText(B612MONO_regular, size[1]/2-360, size[2]/2-120, "1", 26, false, false, TEXT_ALIGN_CENTER, mcdu_white)
+        sasl.gl.drawText(B612MONO_regular, size[1]/2-200, size[2]/2-120, "2", 26, false, false, TEXT_ALIGN_CENTER, mcdu_white)
+        sasl.gl.drawText(B612MONO_regular, size[1]/2+200, size[2]/2-120, "3", 26, false, false, TEXT_ALIGN_CENTER, mcdu_white)
+        sasl.gl.drawText(B612MONO_regular, size[1]/2+360, size[2]/2-120, "4", 26, false, false, TEXT_ALIGN_CENTER, mcdu_white)
+
+        --upper arcs
+        sasl.gl.drawArc(size[1]/2 - 360, size[2]/2 - 110, 76, 80, 60, 60, left_l_brake_temp_color)
+        sasl.gl.drawArc(size[1]/2 - 200, size[2]/2 - 110, 76, 80, 60, 60, left_r_brake_temp_color)
+        sasl.gl.drawArc(size[1]/2 + 200, size[2]/2 - 110, 76, 80, 60, 60, right_l_brake_temp_color)
+        sasl.gl.drawArc(size[1]/2 + 360, size[2]/2 - 110, 76, 80, 60, 60, right_r_brake_temp_color)
+        --lower arcs
+        sasl.gl.drawArc(size[1]/2 - 360, size[2]/2 - 110, 76, 80, 240, 60, mcdu_white)
+        sasl.gl.drawArc(size[1]/2 - 200, size[2]/2 - 110, 76, 80, 240, 60, mcdu_white)
+        sasl.gl.drawArc(size[1]/2 + 200, size[2]/2 - 110, 76, 80, 240, 60, mcdu_white)
+        sasl.gl.drawArc(size[1]/2 + 360, size[2]/2 - 110, 76, 80, 240, 60, mcdu_white)
 
     elseif get(Ecam_current_page) == 11 then --f/ctl
 
