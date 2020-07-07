@@ -22,6 +22,9 @@ local engine_mode_knob = createGlobalPropertyi("a321neo/engine/engine_mode", 0, 
 --sim command
 local instant_start_eng = sasl.findCommand("sim/operation/quick_start")
 local slow_start_eng = sasl.findCommand("sim/operation/auto_start")
+local reset_to_runway = sasl.findCommand("sim/operation/reset_to_runway")
+local reset_flight = sasl.findCommand("sim/operation/reset_flight")
+local go_to_default = sasl.findCommand("sim/operation/go_to_default")
 
 --a321neo command
 local apu_gen_toggle = sasl.createCommand("a321neo/electrical/APU_gen_toggle", "toggle apu generator")
@@ -35,6 +38,60 @@ local engine_mode_dn = sasl.createCommand("a321neo/engine/mode_dn", "engine mode
 
 
 --sim command handler
+sasl.registerCommandHandler ( reset_to_runway, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        if get(startup_running) == 1 then
+            set(Battery_1, 1)
+            set(Battery_2, 1)
+            set(apu_start_position, 2)
+            set(Apu_bleed_switch, 1)
+            set(apu_gen, 1)
+            set(engine_mode_knob, 1)
+            set(Engine_1_master_switch, 1)
+            set(Engine_2_master_switch, 1)
+        else
+            set(Engine_1_master_switch, 0)
+            set(Engine_2_master_switch, 0)
+        end
+    end
+end)
+
+sasl.registerCommandHandler ( reset_flight, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        if get(startup_running) == 1 then
+            set(Battery_1, 1)
+            set(Battery_2, 1)
+            set(apu_start_position, 2)
+            set(Apu_bleed_switch, 1)
+            set(apu_gen, 1)
+            set(engine_mode_knob, 1)
+            set(Engine_1_master_switch, 1)
+            set(Engine_2_master_switch, 1)
+        else
+            set(Engine_1_master_switch, 0)
+            set(Engine_2_master_switch, 0)
+        end
+    end
+end)
+
+sasl.registerCommandHandler ( go_to_default, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        if get(startup_running) == 1 then
+            set(Battery_1, 1)
+            set(Battery_2, 1)
+            set(apu_start_position, 2)
+            set(Apu_bleed_switch, 1)
+            set(apu_gen, 1)
+            set(engine_mode_knob, 1)
+            set(Engine_1_master_switch, 1)
+            set(Engine_2_master_switch, 1)
+        else
+            set(Engine_1_master_switch, 0)
+            set(Engine_2_master_switch, 0)
+        end
+    end
+end)
+
 sasl.registerCommandHandler ( instant_start_eng, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
         set(Battery_1, 1)
@@ -136,27 +193,34 @@ end
 function onPlaneLoaded()
     set(apu_gen, 1)
     set(Apu_bleed_switch, 0)
-    
+
     if get(startup_running) == 1 then
         set(Engine_1_master_switch, 1)
         set(Engine_2_master_switch, 1)
+    else
+        set(Engine_1_master_switch, 0)
+        set(Engine_2_master_switch, 0)
     end
 end
 
-onPlaneLoaded()
+function onAirportLoaded()
+    set(apu_gen, 1)
+    set(Apu_bleed_switch, 0)
+
+    if get(startup_running) == 1 then
+        set(Engine_1_master_switch, 1)
+        set(Engine_2_master_switch, 1)
+    else
+        set(Engine_1_master_switch, 0)
+        set(Engine_2_master_switch, 0)
+    end
+end
 
 function update()
     if get(Battery_1) == 1 then
         set(avionics, 1)
     else
         set(avionics, 0)
-    end
-
-    --start enging running
-    if get(startup_running) == 1 then
-        set(Engine_1_master_switch, 1)
-        set(Engine_2_master_switch, 1)
-        set(startup_running, 0)
     end
     
     --setting integer dataref range

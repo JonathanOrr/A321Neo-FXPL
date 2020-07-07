@@ -18,15 +18,13 @@ panelHeight3d = 2048
 
 
 components = {
-  --power_system {},
-  --electrical_system {},
-  --flight_deck {},
   engine_and_apu {},
   cabin_screens {},
   flight_controls {},
   fcu_ap_at {},
   MCDU {},
   AT {},
+  packs {},
   aircond {},
   wheel {},
   ECAM {}
@@ -46,3 +44,37 @@ Vnav_debug_window = contextWindow {
     vnav_debug {position = { 0 , 0 , 750 , 450 }}
   };
 }
+
+Packs_debug_window = contextWindow {
+  name = "PACKS DEBUG";
+  position = { 100 , 100 , 750 , 450};
+  noBackground = true ;
+  proportional = false ;
+  minimumSize = { 750 , 450 };
+  maximumSize = { 1125 , 675 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = true ;
+  components = {
+    packs_debug {position = { 0 , 0 , 750 , 450 }}
+  };
+}
+
+--menu item functions
+function Show_hide_vnav_debug()
+  Vnav_debug_window:setIsVisible(not Vnav_debug_window:isVisible())
+end
+
+function Show_hide_packs_debug()
+  Packs_debug_window:setIsVisible(not Packs_debug_window:isVisible())
+end
+
+-- create top level menu in plugins menu
+Menu_master	= sasl.appendMenuItem (PLUGINS_MENU_ID, "A321NEO" )
+-- add a submenu
+Menu_main	= sasl.createMenu ("", PLUGINS_MENU_ID, Menu_master)
+-- add menu entry
+ShowHideVnavDebug	= sasl.appendMenuItem(Menu_main, "Show/Hide VNAV Debug", Show_hide_vnav_debug)
+-- add menu entry
+ShowHidePacksDebug	= sasl.appendMenuItem(Menu_main, "Show/Hide PACKS Debug", Show_hide_packs_debug)
+--initialise menu item status
+sasl.setMenuItemState(Menu_main, ShowHideVnavDebug, MENU_UNCHECKED)
