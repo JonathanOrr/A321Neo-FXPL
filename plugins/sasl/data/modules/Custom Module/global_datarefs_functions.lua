@@ -17,14 +17,15 @@ Right_brakes_temp = createGlobalPropertyf("a321neo/dynamics/wheel/right_brakes_t
 Left_tire_psi = createGlobalPropertyf("a321neo/dynamics/wheel/left_tire_psi", 210, false, true, false) --left tire psi
 Right_tire_psi = createGlobalPropertyf("a321neo/dynamics/wheel/right_tire_psi", 210, false, true, false) --right tire psi
 --engines
+Engine_mode_knob = createGlobalPropertyi("a321neo/engine/engine_mode", 0, false, true, false) -- -1crank, 0norm, 1ignition
 Engine_1_master_switch = createGlobalPropertyi("a321neo/engine/master_1", 0, false, true, false)
 Engine_2_master_switch = createGlobalPropertyi("a321neo/engine/master_2", 0, false, true, false)
 Engine_option = createGlobalPropertyi("a321neo/customization/engine_option", 0, false, true, false) --0 CFM LEAP, 1 PW1000G
 PW_engine_enabled = createGlobalPropertyi("a321neo/customization/pw_engine_enabled", 0, false, true, false)
 Leap_engien_option = createGlobalPropertyi("a321neo/customization/leap_engine_enabled", 0, false, true, false)
 --ecam
-Ecam_previous_page = createGlobalPropertyi("a321neo/cockpit/ecam/previous", 3, false, true, false) --1ENG, 2BLEED, 3PRESS, 4ELEC, 5HYD, 6FUEL, 7APU, 8COND, 9DOOR, 10WHEEL, 11F/CTL, 12STS
-Ecam_current_page = createGlobalPropertyi("a321neo/cockpit/ecam/page_num", 3, false, true, false) --1ENG, 2BLEED, 3PRESS, 4ELEC, 5HYD, 6FUEL, 7APU, 8COND, 9DOOR, 10WHEEL, 11F/CTL, 12STS
+Ecam_previous_page = createGlobalPropertyi("a321neo/cockpit/ecam/previous", 2, false, true, false) --1ENG, 2BLEED, 3PRESS, 4ELEC, 5HYD, 6FUEL, 7APU, 8COND, 9DOOR, 10WHEEL, 11F/CTL, 12STS
+Ecam_current_page = createGlobalPropertyi("a321neo/cockpit/ecam/page_num", 2, false, true, false) --1ENG, 2BLEED, 3PRESS, 4ELEC, 5HYD, 6FUEL, 7APU, 8COND, 9DOOR, 10WHEEL, 11F/CTL, 12STS
 --aircon datarefs
 Cockpit_temp_req = createGlobalPropertyf("a321neo/cockpit/aircond/cockpit_temp_req", 21, false, true, false) --requested cockpit temperature
 Front_cab_temp_req = createGlobalPropertyf("a321neo/cockpit/aircond/front_cab_temp_req", 21, false, true, false) --requested front cabin temperature
@@ -35,7 +36,16 @@ Front_cab_temp = createGlobalPropertyf("a321neo/cockpit/aircond/front_cab_temp",
 Aft_cab_temp = createGlobalPropertyf("a321neo/cockpit/aircond/aft_cab_temp", 15, false, true, false) --actual aft cabin temperature
 Aft_cargo_temp = createGlobalPropertyf("a321neo/cockpit/aircond/aft_cargo_temp", 17, false, true, false) ---requested aft cargo temperature
 --PACKS
-
+A321_Pack_Flow = createGlobalPropertyi("a321neo/dynamics/packs/pack_flow", 0, false, true, false) --0low, 1norm, 2high
+L_HP_valve = createGlobalPropertyi("a321neo/dynamics/packs/l_hp_valve", 0, false, true, false)
+R_HP_valve = createGlobalPropertyi("a321neo/dynamics/packs/r_hp_valve", 0, false, true, false)
+X_bleed_valve = createGlobalPropertyi("a321neo/dynamics/packs/x_bleed_valve", 0, false, true, false) --0closed, 1auto, 2open
+L_bleed_temp = createGlobalPropertyf("a321neo/dynamics/packs/l_bleed_temp", 10, false, true, false)
+R_bleed_temp = createGlobalPropertyf("a321neo/dynamics/packs/r_bleed_temp", 10, false, true, false)
+L_compressor_temp = createGlobalPropertyf("a321neo/dynamics/packs/l_compressor_temp", 10, false, true, false)
+R_compressor_temp = createGlobalPropertyf("a321neo/dynamics/packs/r_compressor_temp", 10, false, true, false)
+L_pack_temp = createGlobalPropertyf("a321neo/dynamics/packs/l_temp_temp", 10, false, true, false)
+R_pack_temp = createGlobalPropertyf("a321neo/dynamics/packs/r_temp_temp", 10, false, true, false)
 --apu
 Apu_gen_load = createGlobalPropertyf("a321neo/cockpit/apu/gen_load", 0, false, true, false)
 Apu_gen_volts = createGlobalPropertyf("a321neo/cockpit/apu/gen_volts", 0, false, true, false)
@@ -72,7 +82,7 @@ Right_bleed_avil = globalProperty("sim/cockpit2/bleedair/indicators/bleed_availa
 Pack_L = globalProperty("sim/cockpit2/bleedair/actuators/pack_left")
 Pack_M = globalProperty("sim/cockpit2/bleedair/actuators/pack_center") --needs to be turned off as the A320 does not have one
 Pack_R = globalProperty("sim/cockpit2/bleedair/actuators/pack_right")
-Pack_flow = globalProperty("sim/cockpit2/pressurization/actuators/fan_setting") --Electric fan (vent blower) setting, consuming 0.1 of rel_HVAVC amps when running. 0 = Auto (Runs whenever air_cond_on or heater_on is on), 1 = Low, 2 = High
+Sim_pack_flow = globalProperty("sim/cockpit2/pressurization/actuators/fan_setting") --Electric fan (vent blower) setting, consuming 0.1 of rel_HVAVC amps when running. 0 = Auto (Runs whenever air_cond_on or heater_on is on), 1 = Low, 2 = High
 Left_pack_iso_valve = globalProperty("sim/cockpit2/bleedair/actuators/isol_valve_left") --Isolation Valve for left duct, close or open. This separates all engines on the left side of the plane, the left wing, and the left pack from the rest of the system
 Right_pack_iso_valve = globalProperty("sim/cockpit2/bleedair/actuators/isol_valve_right") --Isolation Valve for right duct, close or open. This separates all engines on the right side of the plane, the right wing, and the right pack from the rest of the system
 Cabin_delta_psi = globalProperty("sim/cockpit2/pressurization/indicators/pressure_diffential_psi")
