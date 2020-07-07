@@ -23,8 +23,8 @@ Engine_option = createGlobalPropertyi("a321neo/customization/engine_option", 0, 
 PW_engine_enabled = createGlobalPropertyi("a321neo/customization/pw_engine_enabled", 0, false, true, false)
 Leap_engien_option = createGlobalPropertyi("a321neo/customization/leap_engine_enabled", 0, false, true, false)
 --ecam
-Ecam_previous_page = createGlobalPropertyi("a321neo/cockpit/ecam/previous", 10, false, true, false) --1ENG, 2BLEED, 3PRESS, 4ELEC, 5HYD, 6FUEL, 7APU, 8COND, 9DOOR, 10WHEEL, 11F/CTL, 12STS
-Ecam_current_page = createGlobalPropertyi("a321neo/cockpit/ecam/page_num", 10, false, true, false) --1ENG, 2BLEED, 3PRESS, 4ELEC, 5HYD, 6FUEL, 7APU, 8COND, 9DOOR, 10WHEEL, 11F/CTL, 12STS
+Ecam_previous_page = createGlobalPropertyi("a321neo/cockpit/ecam/previous", 3, false, true, false) --1ENG, 2BLEED, 3PRESS, 4ELEC, 5HYD, 6FUEL, 7APU, 8COND, 9DOOR, 10WHEEL, 11F/CTL, 12STS
+Ecam_current_page = createGlobalPropertyi("a321neo/cockpit/ecam/page_num", 3, false, true, false) --1ENG, 2BLEED, 3PRESS, 4ELEC, 5HYD, 6FUEL, 7APU, 8COND, 9DOOR, 10WHEEL, 11F/CTL, 12STS
 --aircon datarefs
 Cockpit_temp_req = createGlobalPropertyf("a321neo/cockpit/aircond/cockpit_temp_req", 21, false, true, false) --requested cockpit temperature
 Front_cab_temp_req = createGlobalPropertyf("a321neo/cockpit/aircond/front_cab_temp_req", 21, false, true, false) --requested front cabin temperature
@@ -34,6 +34,8 @@ Cockpit_temp = createGlobalPropertyf("a321neo/cockpit/aircond/cockpit_temp", 15,
 Front_cab_temp = createGlobalPropertyf("a321neo/cockpit/aircond/front_cab_temp", 15, false, true, false) --actual front cabin temperature
 Aft_cab_temp = createGlobalPropertyf("a321neo/cockpit/aircond/aft_cab_temp", 15, false, true, false) --actual aft cabin temperature
 Aft_cargo_temp = createGlobalPropertyf("a321neo/cockpit/aircond/aft_cargo_temp", 17, false, true, false) ---requested aft cargo temperature
+--PACKS
+
 --apu
 Apu_gen_load = createGlobalPropertyf("a321neo/cockpit/apu/gen_load", 0, false, true, false)
 Apu_gen_volts = createGlobalPropertyf("a321neo/cockpit/apu/gen_volts", 0, false, true, false)
@@ -46,6 +48,7 @@ Apu_gen_state = createGlobalPropertyi("a321neo/cockpit/apu/apu_gen_state", 0, fa
 --global dataref variable from the Sim--
 Battery_1 = globalProperty("sim/cockpit/electrical/battery_array_on[0]")
 Battery_2 = globalProperty("sim/cockpit/electrical/battery_array_on[1]")
+--fuel
 Fuel_pump_1 = globalProperty("sim/cockpit2/engine/actuators/fuel_pump_on[0]")
 Fuel_pump_2 = globalProperty("sim/cockpit2/engine/actuators/fuel_pump_on[1]")
 Fuel_pump_3 = globalProperty("sim/cockpit2/engine/actuators/fuel_pump_on[2]")
@@ -54,30 +57,48 @@ Fuel_pump_5 = globalProperty("sim/cockpit2/engine/actuators/fuel_pump_on[4]")
 Fuel_pump_6 = globalProperty("sim/cockpit2/engine/actuators/fuel_pump_on[5]")
 Fuel_pump_7 = globalProperty("sim/cockpit2/engine/actuators/fuel_pump_on[6]")
 Fuel_pump_8 = globalProperty("sim/cockpit2/engine/actuators/fuel_pump_on[7]")
+--ENG and APU
+Engine_1_avail = globalProperty("sim/flightmodel/engine/ENGN_running[0]")
+Engine_2_avail = globalProperty("sim/flightmodel/engine/ENGN_running[1]")
 Apu_N1 = globalProperty("sim/cockpit2/electrical/APU_N1_percent")
 APU_EGT = globalProperty("sim/cockpit2/electrical/APU_EGT_c")
+--PACKs system
 Apu_bleed_switch = globalProperty("sim/cockpit2/bleedair/actuators/apu_bleed")
 ENG_1_bleed_switch = globalProperty("sim/cockpit2/bleedair/actuators/engine_bleed_sov[0]")
 ENG_2_bleed_switch = globalProperty("sim/cockpit2/bleedair/actuators/engine_bleed_sov[1]")
 Left_bleed_avil = globalProperty("sim/cockpit2/bleedair/indicators/bleed_available_left")
 Mid_bleed_avil = globalProperty("sim/cockpit2/bleedair/indicators/bleed_available_center")
 Right_bleed_avil = globalProperty("sim/cockpit2/bleedair/indicators/bleed_available_right")
+Pack_L = globalProperty("sim/cockpit2/bleedair/actuators/pack_left")
+Pack_M = globalProperty("sim/cockpit2/bleedair/actuators/pack_center") --needs to be turned off as the A320 does not have one
+Pack_R = globalProperty("sim/cockpit2/bleedair/actuators/pack_right")
+Pack_flow = globalProperty("sim/cockpit2/pressurization/actuators/fan_setting") --Electric fan (vent blower) setting, consuming 0.1 of rel_HVAVC amps when running. 0 = Auto (Runs whenever air_cond_on or heater_on is on), 1 = Low, 2 = High
+Left_pack_iso_valve = globalProperty("sim/cockpit2/bleedair/actuators/isol_valve_left") --Isolation Valve for left duct, close or open. This separates all engines on the left side of the plane, the left wing, and the left pack from the rest of the system
+Right_pack_iso_valve = globalProperty("sim/cockpit2/bleedair/actuators/isol_valve_right") --Isolation Valve for right duct, close or open. This separates all engines on the right side of the plane, the right wing, and the right pack from the rest of the system
+Cabin_delta_psi = globalProperty("sim/cockpit2/pressurization/indicators/pressure_diffential_psi")
+Set_cabin_alt_ft = globalProperty("sim/cockpit2/pressurization/actuators/cabin_altitude_ft")
+Cabin_alt_ft = globalProperty("sim/cockpit2/pressurization/indicators/cabin_altitude_ft")
+Set_cabin_vs = globalProperty("sim/cockpit2/pressurization/actuators/cabin_vvi_fpm")
+Cabin_vs = globalProperty("sim/cockpit2/pressurization/indicators/cabin_vvi_fpm")
+Out_flow_valve_ratio = globalProperty("sim/cockpit2/pressurization/indicators/outflow_valve")
+--instruments
 OTA = globalProperty("sim/cockpit2/temperature/outside_air_temp_degc")
 TAT = globalProperty("sim/weather/temperature_le_c")
 Gross_weight = globalProperty ("sim/flightmodel/weight/m_total")
 Capt_ra_alt_ft = globalProperty("sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot")
 Capt_baro_alt_ft = globalProperty("sim/cockpit2/gauges/indicators/altitude_ft_pilot")
 IAS = globalProperty("sim/flightmodel/position/indicated_airspeed")
-Distance_traveled_m = globalProperty("sim/flightmodel/controls/dist")
+--gear
 Front_gear_deployment = globalProperty("sim/flightmodel2/gear/deploy_ratio[0]")
 Left_gear_deployment = globalProperty("sim/flightmodel2/gear/deploy_ratio[1]")
 Right_gear_deployment = globalProperty("sim/flightmodel2/gear/deploy_ratio[2]")
 Ground_speed_ms = globalProperty("sim/flightmodel/position/groundspeed")
 Actual_brake_ratio = globalProperty("sim/flightmodel/controls/parkbrake")
-Engine_1_avail = globalProperty("sim/flightmodel/engine/ENGN_running[0]")
-Engine_2_avail = globalProperty("sim/flightmodel/engine/ENGN_running[1]")
+--position
 Aircraft_lat = globalProperty("sim/flightmodel/position/latitude")
 Aircraft_long = globalProperty("sim/flightmodel/position/longitude")
+Distance_traveled_m = globalProperty("sim/flightmodel/controls/dist")
+--time
 ZULU_hours = globalProperty("sim/cockpit2/clock_timer/zulu_time_hours")
 ZULU_mins = globalProperty("sim/cockpit2/clock_timer/zulu_time_minutes")
 ZULU_secs = globalProperty("sim/cockpit2/clock_timer/zulu_time_seconds")

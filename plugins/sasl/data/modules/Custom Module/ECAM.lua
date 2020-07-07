@@ -86,7 +86,10 @@ function draw()
     elseif get(Ecam_current_page) == 2 then --bleed
 
     elseif get(Ecam_current_page) == 3 then --press
-
+        --pressure info
+        sasl.gl.drawText(B612MONO_regular, size[1]/2-225, size[2]/2+150, math.floor(get(Cabin_delta_psi)), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        sasl.gl.drawText(B612MONO_regular, size[1]/2+30, size[2]/2+180, math.floor(get(Cabin_vs)), 30, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+        sasl.gl.drawText(B612MONO_regular, size[1]/2+290, size[2]/2+150, math.floor(get(Cabin_alt_ft)), 30, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
     elseif get(Ecam_current_page) == 4 then --elec
 
     elseif get(Ecam_current_page) == 5 then --hyd

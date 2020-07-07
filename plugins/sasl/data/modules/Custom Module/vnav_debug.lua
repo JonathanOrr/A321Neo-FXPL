@@ -41,6 +41,13 @@ sasl.registerCommandHandler(vnav_debug_enable, 0, function (phase)
 end)
 
 function update()
+    --change menu item state
+    if Vnav_debug_window:isVisible() == true then
+        sasl.setMenuItemState(Menu_main, ShowHideVnavDebug, MENU_CHECKED)
+    else
+        sasl.setMenuItemState(Menu_main, ShowHideVnavDebug, MENU_UNCHECKED)
+    end
+
     --record crossover altitude
     if get(ap_airspeed_is_mach) - ap_airspeed_is_mach_previous == 1 then
         climb_crossover_altitude = get(Capt_baro_alt_ft)
