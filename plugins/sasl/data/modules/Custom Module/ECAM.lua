@@ -47,7 +47,7 @@ local function draw_ecam_lower_section()
 end
 
 function update()
-    if get(Apu_N1) == 0 then
+    if get(Apu_N1) < 1 then
         set(apu_needle_state, 0)
     elseif get(Apu_N1) > 1 then
         set(apu_needle_state, 1)
