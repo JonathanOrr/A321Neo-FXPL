@@ -14,7 +14,7 @@ You can check datarefs and command via sasl3 widget
 
 
 ## Discord Server
-https://discord.gg/736HbJZ
+https://discord.gg/ByeyTXS
 
 
 ## Current Visual state
