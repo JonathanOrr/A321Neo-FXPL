@@ -100,6 +100,8 @@ local mcdu_page_dn = sasl.createCommand("a321neo/cockpit/mcdu/page_dn", "MCDU pa
 
 --alphanumeric and decimal
 local mcdu_inp_key = {}
+local mcdu_inp_page = {}
+
 for i,key in ipairs(MCDU_ENTRY_KEYS) do
 	-- create the command
 	mcdu_inp_key[key] = createCommand("a321neo/cockpit/mcdu/" .. key, "MCDU Character " .. key .. " Key")
@@ -121,6 +123,7 @@ for i,page in ipairs(MCDU_ENTRY_PAGES) do
 		if phase == SASL_COMMAND_BEGIN then
             mcdu_clear_all()
             set(mcdu_page, i * 100)
+            mcdu_sim_page[get(mcdu_page)]("render")
 		end
 	end)
 end
@@ -235,6 +238,12 @@ local function send_mcdu_message(message, status)
     mcdu_message_active = status
 end
 
+local function mcdu_ctrl_get_page()
+    sasl.commandOnce(sasl.findCommand("sim/FMS/index"))
+    sasl.commandOnce(sasl.findCommand("sim/FMS/ls_1l"))
+    return get(globalPropertys("sim/cockpit2/radios/indicators/fms_cdu1_text_line4"))
+end
+
 local function mcdu_clearall()
     mcdu_dat_title_L = {txt = "", col = "white"}
     mcdu_dat_title_C = {txt = "", col = "white"}
@@ -255,29 +264,33 @@ function update()
     if get(mcdu_page) == 0 then
         mcdu_clearall()
         set(mcdu_page, 505)
+        mcdu_sim_page[get(mcdu_page)]("render")
     end
-    mcdu_sim_page[get(mcdu_page)]("render")
 end
 
 -- 505 A/C Status
 mcdu_sim_page[505] =
 function (phase)
     if phase == "render" then
-        mcdu_dat_title_C = "A321 NEO"
+        mcdu_dat_title_C.txt = "A321 NEO"
 
-        mcdu_dat["s", "L", 1].txt = "eng"
+        mcdu_dat["s"]["L"][1].txt = "eng"
 
         if get(Engine_option) == 0 then
-            mcdu_dat["l", "L", 1] = {txt = "cfm-leap-1a", col = "blue"}
+            mcdu_dat["l"]["L"][1] = {txt = "cfm-leap-1a", col = "green"}
         else
-            mcdu_dat["l", "L", 1] = {txt = "pw-1130g-jm", col = "blue"}
+            mcdu_dat["l"]["L"][1] = {txt = "pw-1130g-jm", col = "green"}
         end
         
-        mcdu_dat["s", "L", 2].txt = "active nav data base"
-        mcdu_dat["s", "L", 3].txt = "second nav data base"
+        mcdu_dat["s"]["L"][2].txt = "active data base"
+        mcdu_dat["l"]["L"][2] = {txt = mcdu_ctrl_get_page(), col = "blue"}
+        mcdu_dat["s"]["L"][3].txt = "second data base"
+        mcdu_dat["l"]["L"][3] = {txt = "none", col = "blue"}
 
-        mcdu_dat["s", "L", 5].txt = "chg code"
-        mcdu_dat["s", "L", 6].txt = "idle/perf"
+        mcdu_dat["s"]["L"][5].txt = "chg code"
+        mcdu_dat["l"]["L"][5] = {txt = "[ ]", col = "blue"}
+        mcdu_dat["s"]["L"][6].txt = "idle/perf"
+        mcdu_dat["l"]["L"][6] = {txt = "+0.0/+0.0", col = "green"}
        
     end
 end
