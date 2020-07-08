@@ -7,6 +7,7 @@ size = {320, 285}
 --      CONSTS DECLARATION
 --
 --
+sasl.gl.setFontGlyphSpacingFactor ( number id , number factor )
 --]]
 
 local MCDU_DRAW_SIZE = {w = 320, h = 285} -- idk if size table is required by anything else, this is for internal reference
