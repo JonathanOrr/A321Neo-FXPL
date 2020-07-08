@@ -27,28 +27,6 @@ local sim_right_iso_cl = ECAM_GREEN
 local sim_l_iso_line_xy = {size[1]/2 - size[1]/4 - 65, size[2]/2+110, size[1]/2 - size[1]/4 - 35, size[2]/2+110}
 local sim_r_iso_line_xy = {size[1]/2 - size[1]/4 + 35, size[2]/2+110, size[1]/2 - size[1]/4 + 65, size[2]/2+110}
 
---initialisation--
-set(Pack_L, 1)
-set(Pack_M, 0)
-set(Pack_R, 1)
-set(Left_pack_iso_valve, 1)
-set(Right_pack_iso_valve, 0)
-
-function onPlaneLoaded()
-    set(Pack_L, 1)
-    set(Pack_M, 0)
-    set(Pack_R, 1)
-    set(Left_pack_iso_valve, 1)
-    set(Right_pack_iso_valve, 0)
-end
-
-function onAirportLoaded()
-    set(Pack_L, 1)
-    set(Pack_M, 0)
-    set(Pack_R, 1)
-    set(Left_pack_iso_valve, 1)
-    set(Right_pack_iso_valve, 0)
-end
 
 function update()
     --change menu item state
@@ -57,10 +35,6 @@ function update()
     else
         sasl.setMenuItemState(Menu_main, ShowHidePacksDebug, MENU_UNCHECKED)
     end
-
-    --create the A321 pack system
-    set(Left_pack_iso_valve, 1)
-    set(Pack_M, 0)
 
     if get(ENG_1_bleed_switch) == 1 then
         eng_1_bleed_cl = ECAM_GREEN

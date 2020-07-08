@@ -21,6 +21,10 @@ local ECAM_WHITE = {1.0, 1.0, 1.0}
 local ECAM_BLUE = {0.004, 1.0, 1.0}
 local ECAM_GREEN = {0.004, 1, 0.004}
 local ECAM_ORANGE = {0.843, 0.49, 0.0}
+local left_bleed_color = ECAM_ORANGE
+local right_bleed_color = ECAM_ORANGE
+local left_eng_avail_cl = ECAM_ORANGE
+local right_eng_avail_cl = ECAM_ORANGE
 
 --custom fucntions
 local function draw_ecam_lower_section()
@@ -51,6 +55,30 @@ function update()
         set(apu_needle_state, 0)
     elseif get(Apu_N1) > 1 then
         set(apu_needle_state, 1)
+    end
+
+    if get(Engine_1_avail) == 1 then
+        left_eng_avail_cl = ECAM_GREEN
+    else
+        left_eng_avail_cl = ECAM_ORANGE
+    end
+
+    if get(Engine_2_avail) == 1 then
+        right_eng_avail_cl = ECAM_GREEN
+    else
+        right_eng_avail_cl = ECAM_ORANGE
+    end
+
+    if get(Left_bleed_avil) > 0.1 then
+        left_bleed_color = ECAM_GREEN
+    else
+        left_bleed_color = ECAM_ORANGE
+    end
+
+    if get(Right_bleed_avil) > 0.1 then
+        right_bleed_color = ECAM_GREEN
+    else
+        right_bleed_color = ECAM_ORANGE
     end
 
     --wheels indications--
@@ -84,7 +112,23 @@ function draw()
     if get(Ecam_current_page) == 1 then --eng
 
     elseif get(Ecam_current_page) == 2 then --bleed
+        --engine avail--
+        sasl.gl.drawText(B612MONO_regular, size[1]/2-310, size[2]/2-200, "1", 28, false, false, TEXT_ALIGN_CENTER, left_eng_avail_cl)
+        sasl.gl.drawText(B612MONO_regular, size[1]/2+310, size[2]/2-200, "2", 28, false, false, TEXT_ALIGN_CENTER, right_eng_avail_cl)
 
+        --bleed temperature & pressure--
+        sasl.gl.drawText(B612MONO_regular, size[1]/2-250, size[2]/2-55, math.floor(get(L_bleed_press)), 28, false, false, TEXT_ALIGN_CENTER, left_bleed_color)
+        sasl.gl.drawText(B612MONO_regular, size[1]/2-250, size[2]/2-90, math.floor(get(L_bleed_temp)), 28, false, false, TEXT_ALIGN_CENTER, left_bleed_color)
+        sasl.gl.drawText(B612MONO_regular, size[1]/2+250, size[2]/2-55, math.floor(get(R_bleed_press)), 28, false, false, TEXT_ALIGN_CENTER, right_bleed_color)
+        sasl.gl.drawText(B612MONO_regular, size[1]/2+250, size[2]/2-90, math.floor(get(R_bleed_temp)), 28, false, false, TEXT_ALIGN_CENTER, right_bleed_color)
+
+        --compressor temperature--
+        sasl.gl.drawText(B612MONO_regular, size[1]/2-250, size[2]/2+193, math.floor(get(L_compressor_temp)), 28, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(B612MONO_regular, size[1]/2+250, size[2]/2+193, math.floor(get(R_compressor_temp)), 28, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+
+        --pre-cooler temperature--
+        sasl.gl.drawText(B612MONO_regular, size[1]/2-250, size[2]/2+296, math.floor(get(L_pack_temp)), 28, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(B612MONO_regular, size[1]/2+250, size[2]/2+296, math.floor(get(R_pack_temp)), 28, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
     elseif get(Ecam_current_page) == 3 then --press
         --pressure info
         sasl.gl.drawText(B612MONO_regular, size[1]/2-225, size[2]/2+150, math.floor(get(Cabin_delta_psi)), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)

@@ -41,9 +41,7 @@ function update()
         set(a321DR_bleed_avail, 0)
     end
 
-    if (get(Left_bleed_avil) >= 0.85 and get(ENG_1_bleed_switch) == 1) or 
-       (get(Mid_bleed_avil) >= 0.85 and get(Apu_bleed_switch) == 1) or 
-       (get(Right_bleed_avil) >= 0.85 and get(ENG_2_bleed_switch) == 1) then
+    if (get(Left_bleed_avil) >= 0.85 and get(Pack_L) == 1) or (get(Right_bleed_avil) >= 0.85 and get(Pack_R) == 1) then
         --cabin aircon
         if get(a321DR_cab_hot_air) == 1 then
             --changing requested temperature to dialed in temperatures
