@@ -94,7 +94,7 @@ P _cgpt/9/_w_now 1.0
 P _cgpt/9/_w_test 0.0
 P _cgpt/9/_z_ref 0.0
 P _cgpt/count 20
-P _door/0/_ang_now 0.0
+P _door/0/_ang_now 99.987037659
 P _door/0/_ext_ang 0.0
 P _door/0/_ret_ang 100.0
 P _door/0/_type 1
@@ -102,7 +102,7 @@ P _door/0/_xyz/0 -1.0
 P _door/0/_xyz/1 0.0
 P _door/0/_xyz/2 17.600000381
 P _door/0/_xyz/count 3
-P _door/1/_ang_now 0.0
+P _door/1/_ang_now 99.974075317
 P _door/1/_ext_ang 0.0
 P _door/1/_ret_ang 100.0
 P _door/1/_type 3
@@ -110,7 +110,7 @@ P _door/1/_xyz/0 -1.500000000
 P _door/1/_xyz/1 0.0
 P _door/1/_xyz/2 14.500000000
 P _door/1/_xyz/count 3
-P _door/10/_ang_now 0.0
+P _door/10/_ang_now 89.976669312
 P _door/10/_ext_ang 0.0
 P _door/10/_ret_ang 90.0
 P _door/10/_type 3
@@ -127,7 +127,7 @@ P _door/16/_type 0
 P _door/17/_type 0
 P _door/18/_type 0
 P _door/19/_type 0
-P _door/2/_ang_now 0.0
+P _door/2/_ang_now -99.987037659
 P _door/2/_ext_ang 0.0
 P _door/2/_ret_ang -100.0
 P _door/2/_type 1
@@ -135,7 +135,7 @@ P _door/2/_xyz/0 1.0
 P _door/2/_xyz/1 0.0
 P _door/2/_xyz/2 17.600000381
 P _door/2/_xyz/count 3
-P _door/3/_ang_now 0.0
+P _door/3/_ang_now -99.974075317
 P _door/3/_ext_ang 0.0
 P _door/3/_ret_ang -100.0
 P _door/3/_type 3
@@ -143,7 +143,7 @@ P _door/3/_xyz/0 1.500000000
 P _door/3/_xyz/1 0.0
 P _door/3/_xyz/2 14.500000000
 P _door/3/_xyz/count 3
-P _door/4/_ang_now 43.315799713
+P _door/4/_ang_now 89.997665405
 P _door/4/_ext_ang 0.0
 P _door/4/_ret_ang 90.0
 P _door/4/_type 2
@@ -151,7 +151,7 @@ P _door/4/_xyz/0 -13.0
 P _door/4/_xyz/1 -3.599999905
 P _door/4/_xyz/2 73.500000000
 P _door/4/_xyz/count 3
-P _door/5/_ang_now -43.315799713
+P _door/5/_ang_now -89.997665405
 P _door/5/_ext_ang 0.0
 P _door/5/_ret_ang -90.0
 P _door/5/_type 2
@@ -161,7 +161,7 @@ P _door/5/_xyz/2 73.500000000
 P _door/5/_xyz/count 3
 P _door/6/_type 0
 P _door/7/_type 0
-P _door/8/_ang_now 0.0
+P _door/8/_ang_now -89.976669312
 P _door/8/_ext_ang 0.0
 P _door/8/_ret_ang -90.0
 P _door/8/_type 3
@@ -209,7 +209,7 @@ P _gear/0/_latN 0.0
 P _gear/0/_latR 0.0
 P _gear/0/_leg_len 5.400000095
 P _gear/0/_lonE 0.0
-P _gear/0/_lonN 47.166091919
+P _gear/0/_lonN 97.997459412
 P _gear/0/_lonR 98.0
 P _gear/0/_scon 47252.898437500
 P _gear/0/_stat_def 0.399389744
@@ -239,14 +239,14 @@ P _gear/1/_gear_x -12.010000229
 P _gear/1/_gear_y -2.799999952
 P _gear/1/_gear_z 69.800003052
 P _gear/1/_latE 0.0
-P _gear/1/_latN 38.502929688
+P _gear/1/_latN 79.997924805
 P _gear/1/_latR 80.0
 P _gear/1/_leg_len 8.199999809
 P _gear/1/_lonE -7.0
-P _gear/1/_lonN -3.630993366
+P _gear/1/_lonN -0.000181480
 P _gear/1/_lonR 0.0
 P _gear/1/_scon 71266.664062500
-P _gear/1/_stat_def 1.367629528
+P _gear/1/_stat_def 1.367629409
 P _gear/1/_steerdeg_hispeed 0.0
 P _gear/1/_steerdeg_lospeed 0.0
 P _gear/1/_strut_comp -0.500000000
@@ -273,14 +273,14 @@ P _gear/2/_gear_x 12.010000229
 P _gear/2/_gear_y -2.799999952
 P _gear/2/_gear_z 69.800003052
 P _gear/2/_latE 0.0
-P _gear/2/_latN -38.502929688
+P _gear/2/_latN -79.997924805
 P _gear/2/_latR -80.0
 P _gear/2/_leg_len 8.199999809
 P _gear/2/_lonE -7.0
-P _gear/2/_lonN -3.630993366
+P _gear/2/_lonN -0.000181480
 P _gear/2/_lonR 0.0
 P _gear/2/_scon 71266.664062500
-P _gear/2/_stat_def 1.367629528
+P _gear/2/_stat_def 1.367629409
 P _gear/2/_steerdeg_hispeed 0.0
 P _gear/2/_steerdeg_lospeed 0.0
 P _gear/2/_strut_comp -0.500000000
@@ -35820,7 +35820,7 @@ P acf/_esys_bus_bit_add/rel_startr7 0
 P acf/_esys_bus_bit_add/rel_xpndr 1
 P acf/_esys_bus_bit_add/rel_yaw_damp 1
 P acf/_exhaust_hp_to_lb 0.0
-P acf/_exhaust_rat 0.500000000
+P acf/_exhaust_rat 0.100000001
 P acf/_face_jet 21.500000000
 P acf/_face_rocket 0.0
 P acf/_fadec_EQ_mixture 1
@@ -35938,7 +35938,7 @@ P acf/_fuel_2/0 0.0
 P acf/_fuel_2/1 0.0
 P acf/_fuel_2/2 0.0
 P acf/_fuel_2/count 3
-P acf/_fuel_intro_time_jet 28.0
+P acf/_fuel_intro_time_jet 27.899999619
 P acf/_fuel_intro_time_prop 5.0
 P acf/_gear_EQ 1
 P acf/_gear_can_ret_on_ground 0
@@ -36096,7 +36096,7 @@ P acf/_idle_rat/0 0.250000000
 P acf/_idle_rat/1 0.500000000
 P acf/_idle_rat/count 2
 P acf/_incidence_with_flaps 0
-P acf/_inlet_compression_efficiency 0.850000024
+P acf/_inlet_compression_efficiency 0.949999988
 P acf/_inverted_fuel_oil_EQ 0
 P acf/_inverter_for_elec_gyros 0
 P acf/_inverter_for_ind_trq 0
@@ -36134,7 +36134,7 @@ P acf/_load_alt_presel_on_alt_hit 1
 P acf/_load_presel_on_asi_hit 1
 P acf/_load_presel_on_vvi_hit 1
 P acf/_lock_n1 0.0
-P acf/_lock_n2 24.0
+P acf/_lock_n2 28.0
 P acf/_lock_with_elev_EQ 0
 P acf/_m_displaced 0.0
 P acf/_m_displaced_Y 0.0
@@ -36167,12 +36167,12 @@ P acf/_max_gen_amp_per_gen/7 0.0
 P acf/_max_gen_amp_per_gen/count 8
 P acf/_max_mach_eff 0.850000024
 P acf/_max_oilT 245.0
-P acf/_max_press_diff 8.350000381
+P acf/_max_press_diff 8.500000000
 P acf/_max_vac 8.0
 P acf/_max_xmsn_P 1.0
 P acf/_max_xmsn_T 1.0
 P acf/_min_n1 15.0
-P acf/_min_n2 24.0
+P acf/_min_n2 28.0
 P acf/_min_rwy_len 3800.0
 P acf/_min_vec_on_ground 0.0
 P acf/_mixt_x_ctr 0.0
@@ -36532,7 +36532,7 @@ P acf/_spoi2_v2 999.0
 P acf/_spoi2_with_flit_sbrk 30.0
 P acf/_spoi2_with_grnd_pitch 0.0
 P acf/_spoi2_with_grnd_sbrk 50.0
-P acf/_spool_time_compressor_jet 4.500000000
+P acf/_spool_time_compressor_jet 4.099999905
 P acf/_spool_time_compressor_prop 6.0
 P acf/_spot1_3d_rgb/0 0.0
 P acf/_spot1_3d_rgb/1 0.0
@@ -36594,7 +36594,7 @@ P acf/_starter_engages_igniter_on 0
 P acf/_starter_engages_ignition 0
 P acf/_starter_is_air_driven 1
 P acf/_starter_max_rpm_rat 0.284999996
-P acf/_starter_torque_rat 0.166999996
+P acf/_starter_torque_rat 0.119999997
 P acf/_steerdeg_castor 0.0
 P acf/_stickshaker 0
 P acf/_studio A32NX Project
@@ -36721,11 +36721,11 @@ P acf/_thro_non_vect_props_at_sin_vect 0
 P acf/_thro_x_ctr 0.0
 P acf/_throt_max_fwd_emr 1.019999981
 P acf/_throt_max_fwd_nrm 1.0
-P acf/_throt_max_rev 0.850000024
+P acf/_throt_max_rev 0.699999988
 P acf/_throt_time_jet 1.700000048
 P acf/_throt_time_prop 1.0
 P acf/_thrust_max_limit 33000.0
-P acf/_thrust_rev_dep_time 1.500000000
+P acf/_thrust_rev_dep_time 1.200000048
 P acf/_tip_AOA_des 0.0
 P acf/_tip_mach_des_100 0.0
 P acf/_tip_mach_des_50 0.0
@@ -40221,12 +40221,13 @@ GROUP ECAM lower du
     gen_rotary IP left
       POS 3388.857178 499.571411
       IMAGE MIP/ecam lower du/BLEED/IP
-      DATAREF sim/cockpit2/bleedair/actuators/engine_bleed_sov[0]
+      DATAREF a321neo/dynamics/packs/l_bleed_state[0]
       LOCKED
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 1.000000 1.000000
-      KEY_FRAME 1.000000 2.000000
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000 1.000000
+      KEY_FRAME 2.000000 2.000000
       DIGITS 3
       ROTARY_TYPE NO_CLICK
       CLICK_RADIUS 10.000000
@@ -40241,12 +40242,13 @@ GROUP ECAM lower du
     gen_rotary IP right
       POS 3889.000000 499.000000
       IMAGE MIP/ecam lower du/BLEED/IP
-      DATAREF sim/cockpit2/bleedair/actuators/engine_bleed_sov[1]
+      DATAREF a321neo/dynamics/packs/r_bleed_state[1]
       LOCKED
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 1.000000 1.000000
-      KEY_FRAME 1.000000 2.000000
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000 1.000000
+      KEY_FRAME 2.000000 2.000000
       DIGITS 3
       ROTARY_TYPE NO_CLICK
       CLICK_RADIUS 10.000000
@@ -40267,7 +40269,7 @@ GROUP ECAM lower du
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 1.000000 1.000000
       KEY_FRAME 1.000000 0.000000
-      DIGITS 3
+      DIGITS 2
       ROTARY_TYPE NO_CLICK
       CLICK_RADIUS 10.000000
       CLICK_RADIUS_DY 0.000000
@@ -40287,7 +40289,7 @@ GROUP ECAM lower du
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 1.000000 1.000000
       KEY_FRAME 1.000000 0.000000
-      DIGITS 3
+      DIGITS 2
       ROTARY_TYPE NO_CLICK
       CLICK_RADIUS 10.000000
       CLICK_RADIUS_DY 0.000000
@@ -40300,14 +40302,15 @@ GROUP ECAM lower du
 
     gen_rotary iso valve
       POS 3638.000000 736.000000
-      IMAGE MIP/ecam lower du/BLEED/Lower Horizontal Line
-      DATAREF a321neo/dynamics/packs/x_bleed_valve
+      IMAGE MIP/ecam lower du/BLEED/Lower_Horizontal_Line
+      DATAREF a321neo/dynamics/packs/x_bleed_bridge_state
       LOCKED
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
-      KEY_FRAME 1.000000 0.000000 1.000000
-      KEY_FRAME 0.000000 1.000000
-      DIGITS 2
+      KEY_FRAME 0.000000 2.000000 1.000000
+      KEY_FRAME 1.000000 1.000000 1.000000
+      KEY_FRAME 2.000000 0.000000
+      DIGITS 3
       ROTARY_TYPE NO_CLICK
       CLICK_RADIUS 10.000000
       CLICK_RADIUS_DY 0.000000
@@ -40454,14 +40457,15 @@ GROUP ECAM lower du
 
     gen_rotary APU Valve
       POS 3669.857178 617.571411
-      IMAGE MIP/ecam lower du/BLEED/APU Valve
-      DATAREF sim/cockpit2/bleedair/actuators/apu_bleed
+      IMAGE MIP/ecam lower du/BLEED/APU_Valve
+      DATAREF a321neo/apu/apu_bleed_state
       LOCKED
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 1.000000 1.000000
-      DIGITS 2
+      KEY_FRAME 1.000000 1.000000 1.000000
+      KEY_FRAME 2.000000 2.000000
+      DIGITS 3
       ROTARY_TYPE NO_CLICK
       CLICK_RADIUS 10.000000
       CLICK_RADIUS_DY 0.000000
@@ -40476,6 +40480,7 @@ GROUP ECAM lower du
       POS 3669.857178 553.571411
       IMAGE MIP/ecam lower du/BLEED/APU
       DATAREF 
+      SHOW_GREATER 1.000000 sim/cockpit2/electrical/APU_starter_switch
       LOCKED
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
