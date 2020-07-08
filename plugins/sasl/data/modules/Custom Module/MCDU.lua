@@ -245,14 +245,14 @@ local function mcdu_ctrl_get_page()
 end
 
 local function mcdu_clearall()
-    mcdu_dat_title_L = {txt = "", col = "white"}
-    mcdu_dat_title_C = {txt = "", col = "white"}
-    mcdu_dat_title_R = {txt = "", col = "white"}
+    mcdu_dat_title_L = {txt = "", col = "white", size = nil}
+    mcdu_dat_title_C = {txt = "", col = "white", size = nil}
+    mcdu_dat_title_R = {txt = "", col = "white", size = nil}
     for i,size in ipairs(MCDU_DIV_SIZE) do
         for j,align in ipairs(MCDU_DIV_ALIGN) do
             for k,row in ipairs(MCDU_DIV_ROW) do
                 --mcdu_dat[size][align][row] = {txt = size .. "" .. align .. " " .. row, col = "white"}
-                mcdu_dat[size][align][row] = {txt = "", col = "white"}
+                mcdu_dat[size][align][row] = {txt = nil, col = "white", size = nil}
             end
         end
     end
@@ -274,7 +274,7 @@ function (phase)
     if phase == "render" then
         mcdu_dat_title_C.txt = "A321 NEO"
 
-        mcdu_dat["s"]["L"][1].txt = "eng"
+        mcdu_dat["s"]["L"][1].txt = " eng"
 
         if get(Engine_option) == 0 then
             mcdu_dat["l"]["L"][1] = {txt = "cfm-leap-1a", col = "green"}
@@ -282,10 +282,17 @@ function (phase)
             mcdu_dat["l"]["L"][1] = {txt = "pw-1130g-jm", col = "green"}
         end
         
-        mcdu_dat["s"]["L"][2].txt = "active data base"
+        mcdu_dat["s"]["L"][2].txt = " active data base"
         mcdu_dat["l"]["L"][2] = {txt = mcdu_ctrl_get_page(), col = "blue"}
-        mcdu_dat["s"]["L"][3].txt = "second data base"
-        mcdu_dat["l"]["L"][3] = {txt = "none", col = "blue"}
+        mcdu_dat["s"]["L"][3].txt = " second data base"
+        mcdu_dat["l"]["L"][3] = {txt = " none", col = "blue", size = "s"}
+
+        --[[
+        mcdu_dat["l"]["L"][4][1] = {txt = "a", col = "white"}
+        mcdu_dat["l"]["L"][4][2] = {txt = " a", col = "blue", size = "s"}
+        mcdu_dat["l"]["L"][4][3] = {txt = "  a", col = "green"}
+        mcdu_dat["l"]["L"][4][4] = {txt = "   a", col = "orange", size = "s"}
+        --]]
 
         mcdu_dat["s"]["L"][5].txt = "chg code"
         mcdu_dat["l"]["L"][5] = {txt = "[ ]", col = "blue"}
@@ -303,17 +310,37 @@ end
 --
 --]]
 
+local function draw_dat(dat, draw_size, disp_x, disp_y, disp_text_align)
+    if dat.txt == nil then
+        return
+    end
+    disp_text = dat.txt:upper()
+    disp_color = MCDU_DISP_COLOR[dat.col]
+
+    -- is there a custom size
+    if dat.size == nil then
+        disp_size = draw_size
+    else
+        disp_size = dat.size
+    end
+
+    -- text size 
+    disp_text_size = MCDU_DISP_TEXT_SIZE[disp_size]
+    sasl.gl.setFontGlyphSpacingFactor(B612MONO_regular, MCDU_DISP_TEXT_SPACING[disp_size])
+
+    -- now draw it!
+    sasl.gl.drawText(B612MONO_regular, disp_x, disp_y, disp_text, disp_text_size, false, false, disp_text_align, disp_color)
+end
+
 --drawing the MCDU display
 function draw()
     if get(mcdu_enabled) == 1 then
         sasl.gl.drawRectangle(0, 0, 320 , 285, MCDU_DISP_COLOR["black"])
-        disp_size = {MCDU_DRAW_SIZE.w, MCDU_DRAW_SIZE.h} -- for debugging
-        --[[
+        draw_size = {MCDU_DRAW_SIZE.w, MCDU_DRAW_SIZE.h} -- for debugging
         --draw title line
-        sasl.gl.drawText(B612MONO_regular, disp_size[1]/2-140, disp_size[2]/2+108,                      mcdu_title_L ,        20, false, false,TEXT_ALIGN_LEFT,     mcdu_title_L_cl)
-        sasl.gl.drawText(B612MONO_regular, disp_size[1]/2,     disp_size[2]/2+108,                      mcdu_title_M ,        20, false, false,TEXT_ALIGN_CENTER,   mcdu_title_M_cl)
-        sasl.gl.drawText(B612MONO_regular, disp_size[1]/2+140, disp_size[2]/2+108,                      mcdu_title_R ,        20, false, false,TEXT_ALIGN_RIGHT,    mcdu_title_R_cl)
-        --]]
+        sasl.gl.drawText(B612MONO_regular, draw_size[1]/2-140, draw_size[2]/2+108, mcdu_dat_title_L.txt,        20, false, false,TEXT_ALIGN_LEFT, MCDU_DISP_COLOR[mcdu_dat_title_L.col])
+        sasl.gl.drawText(B612MONO_regular, draw_size[1]/2,     draw_size[2]/2+108, mcdu_dat_title_C.txt,        20, false, false,TEXT_ALIGN_CENTER, MCDU_DISP_COLOR[mcdu_dat_title_C.col])
+        sasl.gl.drawText(B612MONO_regular, draw_size[1]/2+140, draw_size[2]/2+108, mcdu_dat_title_R.txt,        20, false, false,TEXT_ALIGN_RIGHT, MCDU_DISP_COLOR[mcdu_dat_title_R.col])
         --draw all horizontal lines
         for i,draw_row in ipairs(MCDU_DIV_ROW) do
             for j,draw_size in ipairs(MCDU_DIV_SIZE) do
@@ -328,34 +355,31 @@ function draw()
                     disp_y = MCDU_DRAW_OFFSET.y
                     disp_y = disp_y + (MCDU_DRAW_SPACING.y * draw_act_row) -- so 108, 90, 72
 
-                    -- text size 
-                    disp_text_size = MCDU_DISP_TEXT_SIZE[draw_size]
-                    sasl.gl.setFontGlyphSpacingFactor(B612MONO_regular, MCDU_DISP_TEXT_SPACING[draw_size])
-
                     -- text alignment
                     disp_text_align = MCDU_DISP_TEXT_ALIGN[draw_align]
-                    
 
                     -- text data
-                    --print(draw_size .. " " .. draw_align .. " " .. draw_row)
-                    dat = mcdu_dat[draw_size][draw_align][draw_row]
-                    disp_text = dat.txt:upper()
-                    disp_color = MCDU_DISP_COLOR[dat.col]
-
-                    -- now draw it!
-                    sasl.gl.drawText(B612MONO_regular, disp_x, disp_y, disp_text, disp_text_size, false, false, disp_text_align, disp_color)
+                    dat_full = mcdu_dat[draw_size][draw_align][draw_row]
+                    if dat_full[1] == nil then
+                        draw_dat(dat_full, draw_size, disp_x, disp_y, disp_text_align)
+                    else
+                        for l,dat in pairs(dat_full) do
+                            draw_dat(dat, draw_size, disp_x, disp_y, disp_text_align)
+                        end
+                    end
                 end
             end
         end
+        draw_size = {MCDU_DRAW_SIZE.w, MCDU_DRAW_SIZE.h} -- for debugging
 
         --drawing entry line
         if mcdu_message_active == 0 then
-            sasl.gl.drawText(B612MONO_regular, disp_size[1]/2-140, disp_size[2]/2-132, mcdu_entry, 20, false, false, TEXT_ALIGN_LEFT, MCDU_DISP_COLOR["white"])
+            sasl.gl.drawText(B612MONO_regular, draw_size[1]/2-140, draw_size[2]/2-132, mcdu_entry, 20, false, false, TEXT_ALIGN_LEFT, MCDU_DISP_COLOR["white"])
         end
 
         if mcdu_message_active == 1 then
             if #mcdu_messages > 0 then
-                sasl.gl.drawText(B612MONO_regular, disp_size[1]/2-140, disp_size[2]/2-132, mcdu_messages[#mcdu_messages], 20, false, false, TEXT_ALIGN_LEFT, MCDU_DISP_COLOR["white"])
+                sasl.gl.drawText(B612MONO_regular, draw_size[1]/2-140, draw_size[2]/2-132, mcdu_messages[#mcdu_messages], 20, false, false, TEXT_ALIGN_LEFT, MCDU_DISP_COLOR["white"])
             end
         end
     end
