@@ -27,6 +27,7 @@ components = {
   packs {},
   aircond {},
   wheel {},
+  EWD {},
   ECAM {}
  }
 

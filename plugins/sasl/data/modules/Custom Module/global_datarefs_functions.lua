@@ -82,6 +82,10 @@ Fuel_pump_8 = globalProperty("sim/cockpit2/engine/actuators/fuel_pump_on[7]")
 --ENG and APU
 Engine_1_avail = globalProperty("sim/flightmodel/engine/ENGN_running[0]")
 Engine_2_avail = globalProperty("sim/flightmodel/engine/ENGN_running[1]")
+Eng_1_N1 = globalProperty("sim/flightmodel2/engines/N1_percent[0]")
+Eng_2_N1 = globalProperty("sim/flightmodel2/engines/N1_percent[1]")
+Eng_1_EGT_c = globalProperty("sim/cockpit2/engine/indicators/EGT_deg_C[0]")
+Eng_2_EGT_c = globalProperty("sim/cockpit2/engine/indicators/EGT_deg_C[1]")
 Apu_N1 = globalProperty("sim/cockpit2/electrical/APU_N1_percent")
 APU_EGT = globalProperty("sim/cockpit2/electrical/APU_EGT_c")
 --PACKs system
@@ -120,6 +124,8 @@ Actual_brake_ratio = globalProperty("sim/flightmodel/controls/parkbrake")
 Aircraft_lat = globalProperty("sim/flightmodel/position/latitude")
 Aircraft_long = globalProperty("sim/flightmodel/position/longitude")
 Distance_traveled_m = globalProperty("sim/flightmodel/controls/dist")
+--weights
+FOB = globalProperty("sim/flightmodel/weight/m_fuel_total")
 --time
 ZULU_hours = globalProperty("sim/cockpit2/clock_timer/zulu_time_hours")
 ZULU_mins = globalProperty("sim/cockpit2/clock_timer/zulu_time_minutes")
@@ -154,6 +160,12 @@ end
 function Goto_ecam(page_num)
   set(Ecam_previous_page, get(Ecam_current_page))
   set(Ecam_current_page, page_num)
+end
+
+--rounding
+function Round(num, numDecimalPlaces)
+  local mult = 10^(numDecimalPlaces or 0)
+  return math.floor(num * mult + 0.5) / mult
 end
 
 function GC_distance_kt(lat1, lon1, lat2, lon2)
