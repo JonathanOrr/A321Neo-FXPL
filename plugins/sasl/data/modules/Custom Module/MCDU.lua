@@ -51,9 +51,57 @@ local MCDU_DISP_TEXT_ALIGN =
 local B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
 
 -- alphanumeric & decimal FMC entry keys
-local MCDU_ENTRY_KEYS = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "."}
+local MCDU_ENTRY_KEYS = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", ".", "Δ"}
 local MCDU_ENTRY_PAGES = {"DIR", "PROG", "PERF", "INIT", "DATA", "F-PLN", "RAD NAV", "FUEL PRED", "SEC F-PLN", "ATC COMM", "MCDU MENU", "AIRP"}
 
+--[[
+--
+--
+--      MCDU DATA INITIALIZATION
+--
+--
+--]]
+
+-- init all rows to format as color "white"
+local mcdu_dat = {}
+for i,size in ipairs(MCDU_DIV_SIZE) do
+	mcdu_dat[size] = {}
+	for j,align in ipairs(MCDU_DIV_ALIGN) do
+		mcdu_dat[size][align] = {}
+	end
+end
+
+local mcdu_dat_title = {txt = "TITLE", col = "white"}
+
+--entry line
+local mcdu_entry = ""
+local mcdu_messages = {}
+
+--mcdu status
+local mcdu_message_active = 0
+local mcdu_init_status = 0
+
+--mcdu page call functions
+local mcdu_sim_page = {}
+
+--define custom functionalities
+local function mcdu_send_message(message, status)
+    table.insert(mcdu_messages, message)
+    mcdu_message_active = status
+end
+
+--clear MCDU
+local function mcdu_clearall()
+    mcdu_dat_title = {txt = "", col = "white", size = nil}
+    for i,size in ipairs(MCDU_DIV_SIZE) do
+        for j,align in ipairs(MCDU_DIV_ALIGN) do
+            for k,row in ipairs(MCDU_DIV_ROW) do
+                --mcdu_dat[size][align][row] = {txt = size .. "" .. align .. " " .. row, col = "white"}
+                mcdu_dat[size][align][row] = {txt = nil, col = "white", size = nil}
+            end
+        end
+    end
+end
 
 --[[
 --
@@ -63,41 +111,23 @@ local MCDU_ENTRY_PAGES = {"DIR", "PROG", "PERF", "INIT", "DATA", "F-PLN", "RAD N
 --
 --]]
 
---sim dataref
-
 --a321neo dataref
 local mcdu_page = createGlobalPropertyi("a321neo/cockpit/mcdu/mcdu_page", 0, false, true, false)
 local mcdu_enabled = createGlobalPropertyi("a321neo/debug/mcdu/mcdu_enabled", 1, false, true, false)
 local mcdu_message_index = createGlobalPropertyi("a321neo/debug/mcdu/message_index", 0, false, true, false)
 
---sim commands
-
 --a321neo commands
 local mcdu_debug_message = sasl.createCommand("a321neo/debug/mcdu/debug_message", "send a mcdu debug message")
 
---mcdu keyboard
 --mcdu menu buttons
-local mcdu_DIR_key = createCommand("a321neo/cockpit/mcdu/dir", "MCDU DIR Key")
-local mcdu_PROG_key = createCommand("a321neo/cockpit/mcdu/prog", "MCDU PROG Key")
-local mcdu_PERF_key = createCommand("a321neo/cockpit/mcdu/perf", "MCDU PERF Key")
-local mcdu_INIT_key = createCommand("a321neo/cockpit/mcdu/init", "MCDU INIT Key")
-local mcdu_DATA_key = createCommand("a321neo/cockpit/mcdu/data", "MCDU DATA Key")
-local mcdu_FPLN_key = createCommand("a321neo/cockpit/mcdu/fpln", "MCDU F-PLN Key")
-local mcdu_RADNAV_key = createCommand("a321neo/cockpit/mcdu/radnav", "MCDU RAD NAV Key")
-local mcdu_FUELPRED_key = createCommand("a321neo/cockpit/mcdu/fuelpred", "MCDU FUEL PRED Key")
-local mcdu_SECFPLN_key = createCommand("a321neo/cockpit/mcdu/secfpln", "MCDU SEC F-PLN Key")
-local mcdu_ATCCOMM_key = createCommand("a321neo/cockpit/mcdu/atccomm", "MCDU ATC COMM Key")
-local mcdu_MCDUMENU_key = createCommand("a321neo/cockpit/mcdu/mcdumenu", "MCDU MCDU MENU Key")
-local mcdu_AIRPORT_key = createCommand("a321neo/cockpit/mcdu/airport", "MCDU AIRPORT Key")
-
 local mcdu_positive_negative_key = createCommand("a321neo/cockpit/mcdu/positive_negative", "MCDU Positive Negative Key")
 
 local mcdu_clr_key = createCommand("a321neo/cockpit/mcdu/clr", "MCDU CLR Key")
 
 local mcdu_page_up = sasl.createCommand("a321neo/cockpit/mcdu/page_up", "MCDU page up Key")
 local mcdu_page_dn = sasl.createCommand("a321neo/cockpit/mcdu/page_dn", "MCDU page down Key")
---mcdu entry inputs
 
+--mcdu entry inputs
 --alphanumeric and decimal
 local mcdu_inp_key = {}
 local mcdu_inp_page = {}
@@ -115,6 +145,7 @@ for i,key in ipairs(MCDU_ENTRY_KEYS) do
 	end)
 end
 
+--entry pages
 for i,page in ipairs(MCDU_ENTRY_PAGES) do
 	-- create the command
 	mcdu_inp_page[page] = createCommand("a321neo/cockpit/mcdu/" .. page, "MCDU Character " .. page .. " page")
@@ -129,7 +160,7 @@ for i,page in ipairs(MCDU_ENTRY_PAGES) do
 end
 
 --sim command handlers
-
+--
 --a321neo command handlers
 --debuggin
 sasl.registerCommandHandler(mcdu_debug_message, 0, function (phase)
@@ -137,9 +168,8 @@ sasl.registerCommandHandler(mcdu_debug_message, 0, function (phase)
         send_mcdu_message("MCDU DEBUG MESSAGE", 1)
     end
 end)
+
 --mcdu menu keys
-
-
 sasl.registerCommandHandler(mcdu_positive_negative_key, 0, function (phase)
     if phase == SASL_COMMAND_BEGIN then
         if #mcdu_entry < 22 then
@@ -182,36 +212,6 @@ sasl.registerCommandHandler(mcdu_page_dn, 0, function (phase)
     end
 end)
 
---[[
---
---
---      MCDU DATA INITIALIZATION
---
---
---]]
-
--- init all rows to format as color "white"
-local mcdu_dat = {}
-for i,size in ipairs(MCDU_DIV_SIZE) do
-	mcdu_dat[size] = {}
-	for j,align in ipairs(MCDU_DIV_ALIGN) do
-		mcdu_dat[size][align] = {}
-	end
-end
-
-local mcdu_dat_title_L = {txt = "TITLE", col = "white"}
-local mcdu_dat_title_C = {txt = "TITLE", col = "white"}
-local mcdu_dat_title_R = {txt = "TITLE", col = "white"}
-
---sasl variables
---MCDU left section
---entry line
-local mcdu_entry = ""
-local mcdu_messages = {}
-
---mcdu status
-local mcdu_message_active = 0
-local mcdu_init_status = 0
 
 --[[
 --
@@ -289,25 +289,23 @@ function draw()
         sasl.gl.drawRectangle(0, 0, 320 , 285, MCDU_DISP_COLOR["black"])
         local draw_size = {MCDU_DRAW_SIZE.w, MCDU_DRAW_SIZE.h} -- for debugging
         --draw title line
-        sasl.gl.drawText(B612MONO_regular, draw_size[1]/2-140, draw_size[2]/2+108, mcdu_dat_title_L.txt,        20, false, false,TEXT_ALIGN_LEFT, MCDU_DISP_COLOR[mcdu_dat_title_L.col])
-        sasl.gl.drawText(B612MONO_regular, draw_size[1]/2,     draw_size[2]/2+108, mcdu_dat_title_C.txt,        20, false, false,TEXT_ALIGN_CENTER, MCDU_DISP_COLOR[mcdu_dat_title_C.col])
-        sasl.gl.drawText(B612MONO_regular, draw_size[1]/2+140, draw_size[2]/2+108, mcdu_dat_title_R.txt,        20, false, false,TEXT_ALIGN_RIGHT, MCDU_DISP_COLOR[mcdu_dat_title_R.col])
+        if mcdu_dat_title[1] == nil then
+            draw_dat(mcdu_dat_title, "l", MCDU_DRAW_OFFSET.x - 140, MCDU_DRAW_OFFSET.y + 258, MCDU_DISP_TEXT_ALIGN["L"])
+        else
+            for l,dat in pairs(mcdu_dat_title) do
+                draw_dat(dat, "l", MCDU_DRAW_OFFSET.x - 140, MCDU_DRAW_OFFSET.y + 258, MCDU_DISP_TEXT_ALIGN["L"])
+            end
+        end
+        --sasl.gl.drawText(B612MONO_regular, draw_size[1]/2-140, draw_size[2]/2+108, mcdu_dat_title.txt, 20, false, false,TEXT_ALIGN_LEFT, MCDU_DISP_COLOR[mcdu_dat_title_L.col])
+
         --draw all horizontal lines
         for i,line in ipairs(draw_lines) do
             sasl.gl.setFontGlyphSpacingFactor(B612MONO_regular, line.disp_spacing)
             sasl.gl.drawText(B612MONO_regular, line.disp_x, line.disp_y, line.disp_text, line.disp_text_size, false, false, line.disp_text_align, line.disp_color)
         end
 
-        --drawing entry line
-        if mcdu_message_active == 0 then
-            sasl.gl.drawText(B612MONO_regular, draw_size[1]/2-140, draw_size[2]/2-132, mcdu_entry, 20, false, false, TEXT_ALIGN_LEFT, MCDU_DISP_COLOR["white"])
-        end
-
-        if mcdu_message_active == 1 then
-            if #mcdu_messages > 0 then
-                sasl.gl.drawText(B612MONO_regular, draw_size[1]/2-140, draw_size[2]/2-132, mcdu_messages[#mcdu_messages], 20, false, false, TEXT_ALIGN_LEFT, MCDU_DISP_COLOR["white"])
-            end
-        end
+        --drawing scratchpad
+        sasl.gl.drawText(B612MONO_regular, draw_size[1]/2-140, draw_size[2]/2-132, mcdu_entry, 20, false, false, TEXT_ALIGN_LEFT, MCDU_DISP_COLOR["white"])
     end
 end
 
@@ -323,41 +321,23 @@ end
 --      14.7.5 would be (0705 - 200) so 0505 so 505
 --
 --      0 - nothing
---      505 - A/C Status
+--      100 - dir
+--      200 - prog
+--      300 - perf
+--      400 - init
+--      500 - data
+--        505 - data A/C status
+--      600 - f-pln
+--      700 - rad nav
+--      800 - fuel pred
+--      900 - sec f-pln
+--      1000 - mcdu menu
+--      1100 - airp
 --
 --
 --]]
 
-local mcdu_sim_page = {}
-
---define custom functionalities
-local function send_mcdu_message(message, status)
-    table.insert(mcdu_messages, message)
-    mcdu_message_active = status
-end
-
-local function mcdu_ctrl_get_page()
-    sasl.commandOnce(sasl.findCommand("sim/FMS/index"))
-    sasl.commandOnce(sasl.findCommand("sim/FMS/ls_1l"))
-    return get(globalPropertys("sim/cockpit2/radios/indicators/fms_cdu1_text_line4"))
-end
-
-local function mcdu_clearall()
-    mcdu_dat_title_L = {txt = "", col = "white", size = nil}
-    mcdu_dat_title_C = {txt = "", col = "white", size = nil}
-    mcdu_dat_title_R = {txt = "", col = "white", size = nil}
-    for i,size in ipairs(MCDU_DIV_SIZE) do
-        for j,align in ipairs(MCDU_DIV_ALIGN) do
-            for k,row in ipairs(MCDU_DIV_ROW) do
-                --mcdu_dat[size][align][row] = {txt = size .. "" .. align .. " " .. row, col = "white"}
-                mcdu_dat[size][align][row] = {txt = nil, col = "white", size = nil}
-            end
-        end
-    end
-end
-
---registering command handlers last as putting in variables coming after the handler will crash the plugin
-
+--update
 function update()
     if get(mcdu_page) == 0 then
         mcdu_clearall()
@@ -366,11 +346,39 @@ function update()
     end
 end
 
--- 505 A/C Status
+local function mcdu_ctrl_get_line(line)
+    return get(globalPropertys("sim/cockpit2/radios/indicators/fms_cdu1_text_line" .. line))
+end
+
+local function mcdu_ctrl_get_page()
+    sasl.commandOnce(sasl.findCommand("sim/FMS/index"))
+    sasl.commandOnce(sasl.findCommand("sim/FMS/ls_1l"))
+    return mcdu_ctrl_get_line(4)
+end
+
+-- 00 template
+mcdu_sim_page[00] =
+function (phase)
+    if phase == "render" then
+        mcdu_dat_title.txt = "          a321-521nx"
+    end
+end
+
+-- 500 data
+mcdu_sim_page[500] =
+function (phase)
+    if phase == "render" then
+        mcdu_dat_title.txt = "     data index"
+
+        draw_update()
+    end
+end
+
+-- 505 data A/C status
 mcdu_sim_page[505] =
 function (phase)
     if phase == "render" then
-        mcdu_dat_title_C.txt = "A321 NEO"
+        mcdu_dat_title.txt = "          a321-521nx"
 
         mcdu_dat["s"]["L"][1].txt = " eng"
 
@@ -400,4 +408,16 @@ function (phase)
         draw_update()
     end
 end
+
+-- 700 RAD NAV
+mcdu_sim_page[700] =
+function (phase)
+    if phase == "render" then
+        mcdu_dat_title.txt = "        radio nav"
+
+        draw_update()
+    end
+end
+
+
 
