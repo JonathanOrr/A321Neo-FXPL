@@ -4,6 +4,20 @@ size = {320, 285}
 --[[
 --
 --
+--      A32NX MCDU
+--
+--      CONSTS DECLARATION
+--      MCDU DATA INITIALIZATION
+--      DATA & COMMAND REGISTRATION
+--
+--      MCDU PAGE SIMULATION
+--
+--
+--]]
+
+--[[
+--
+--
 --      CONSTS DECLARATION
 --
 --
@@ -53,6 +67,7 @@ local B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
 -- alphanumeric & decimal FMC entry keys
 local MCDU_ENTRY_KEYS = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", ".", "Δ"}
 local MCDU_ENTRY_PAGES = {"DIR", "PROG", "PERF", "INIT", "DATA", "F-PLN", "RAD NAV", "FUEL PRED", "SEC F-PLN", "ATC COMM", "MCDU MENU", "AIRP"}
+local MCDU_ENTRY_SIDE = {"1L", "2L", "3L", "4L", "5L", "6L", "1R", "2R", "3R", "4R", "5R", "6R"}
 
 --[[
 --
@@ -64,14 +79,14 @@ local MCDU_ENTRY_PAGES = {"DIR", "PROG", "PERF", "INIT", "DATA", "F-PLN", "RAD N
 
 -- init all rows to format as color "white"
 local mcdu_dat = {}
+local mcdu_dat_title = {}
+
 for i,size in ipairs(MCDU_DIV_SIZE) do
 	mcdu_dat[size] = {}
 	for j,align in ipairs(MCDU_DIV_ALIGN) do
 		mcdu_dat[size][align] = {}
 	end
 end
-
-local mcdu_dat_title = {txt = "TITLE", col = "white"}
 
 --entry line
 local mcdu_entry = ""
@@ -103,6 +118,13 @@ local function mcdu_clearall()
     end
 end
 
+--load MCDU page
+local function mcdu_open_page(id)
+    mcdu_clearall()
+    set(mcdu_page, id)
+    mcdu_sim_page[get(mcdu_page)]("render")
+end
+
 --[[
 --
 --
@@ -128,10 +150,11 @@ local mcdu_page_up = sasl.createCommand("a321neo/cockpit/mcdu/page_up", "MCDU pa
 local mcdu_page_dn = sasl.createCommand("a321neo/cockpit/mcdu/page_dn", "MCDU page down Key")
 
 --mcdu entry inputs
---alphanumeric and decimal
 local mcdu_inp_key = {}
 local mcdu_inp_page = {}
+local mcdu_inp_side = {}
 
+--entry keys alphanumerics and special
 for i,key in ipairs(MCDU_ENTRY_KEYS) do
 	-- create the command
 	mcdu_inp_key[key] = createCommand("a321neo/cockpit/mcdu/" .. key, "MCDU Character " .. key .. " Key")
@@ -152,9 +175,19 @@ for i,page in ipairs(MCDU_ENTRY_PAGES) do
 	-- register the command
 	sasl.registerCommandHandler(mcdu_inp_page[page], 0, function (phase)
 		if phase == SASL_COMMAND_BEGIN then
-            mcdu_clear_all()
-            set(mcdu_page, i * 100)
-            mcdu_sim_page[get(mcdu_page)]("render")
+            mcdu_open_page(i * 100)
+		end
+	end)
+end
+
+--entry left/right side buttons
+for i,page in ipairs(MCDU_ENTRY_SIDE) do
+	-- create the command
+	mcdu_inp_side[page] = createCommand("a321neo/cockpit/mcdu/" .. page, "MCDU Character " .. page .. " page")
+	-- register the command
+	sasl.registerCommandHandler(mcdu_inp_side[page], 0, function (phase)
+		if phase == SASL_COMMAND_BEGIN then
+            mcdu_sim_page[get(mcdu_page)](page)
 		end
 	end)
 end
@@ -339,10 +372,8 @@ end
 
 --update
 function update()
-    if get(mcdu_page) == 0 then
-        mcdu_clearall()
-        set(mcdu_page, 505)
-        mcdu_sim_page[get(mcdu_page)]("render")
+    if get(mcdu_page) == 0 then --on start
+        mcdu_open_page(505) --open 505 A/C status
     end
 end
 
@@ -361,6 +392,16 @@ mcdu_sim_page[00] =
 function (phase)
     if phase == "render" then
         mcdu_dat_title.txt = "          a321-521nx"
+
+        --[[
+        mcdu_dat["l"]["L"][3].txt = "a"
+        mcdu_dat["l"]["L"][4][1] = {txt = "a", col = "white"}
+        mcdu_dat["l"]["L"][4][2] = {txt = " a", col = "blue", size = "s"}
+        mcdu_dat["l"]["L"][4][3] = {txt = "  a", col = "green"}
+        mcdu_dat["l"]["L"][4][4] = {txt = "   a", col = "orange", size = "s"}
+        --]]
+
+        draw_updates()
     end
 end
 
@@ -370,7 +411,12 @@ function (phase)
     if phase == "render" then
         mcdu_dat_title.txt = "     data index"
 
+        mcdu_dat["l"]["L"][4].txt = "<a/c status"
+
         draw_update()
+    end
+    if phase == "4L" then
+        mcdu_open_page(505) -- open 505 data A/C status
     end
 end
 
@@ -393,12 +439,6 @@ function (phase)
         mcdu_dat["s"]["L"][3].txt = " second data base"
         mcdu_dat["l"]["L"][3] = {txt = " none", col = "blue", size = "s"}
 
-        --[[
-        mcdu_dat["l"]["L"][4][1] = {txt = "a", col = "white"}
-        mcdu_dat["l"]["L"][4][2] = {txt = " a", col = "blue", size = "s"}
-        mcdu_dat["l"]["L"][4][3] = {txt = "  a", col = "green"}
-        mcdu_dat["l"]["L"][4][4] = {txt = "   a", col = "orange", size = "s"}
-        --]]
 
         mcdu_dat["s"]["L"][5].txt = "chg code"
         mcdu_dat["l"]["L"][5] = {txt = "[ ]", col = "blue"}
