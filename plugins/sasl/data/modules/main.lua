@@ -22,7 +22,6 @@ components = {
   cabin_screens {},
   flight_controls {},
   fcu_ap_at {},
-  MCDU {},
   AT {},
   packs {},
   aircond {},
