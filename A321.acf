@@ -94,7 +94,7 @@ P _cgpt/9/_w_now 1.0
 P _cgpt/9/_w_test 0.0
 P _cgpt/9/_z_ref 0.0
 P _cgpt/count 20
-P _door/0/_ang_now 35.969284058
+P _door/0/_ang_now 0.0
 P _door/0/_ext_ang 0.0
 P _door/0/_ret_ang 100.0
 P _door/0/_type 1
@@ -127,7 +127,7 @@ P _door/16/_type 0
 P _door/17/_type 0
 P _door/18/_type 0
 P _door/19/_type 0
-P _door/2/_ang_now -35.969284058
+P _door/2/_ang_now 0.0
 P _door/2/_ext_ang 0.0
 P _door/2/_ret_ang -100.0
 P _door/2/_type 1
@@ -143,7 +143,7 @@ P _door/3/_xyz/0 1.500000000
 P _door/3/_xyz/1 0.0
 P _door/3/_xyz/2 14.500000000
 P _door/3/_xyz/count 3
-P _door/4/_ang_now 78.474472046
+P _door/4/_ang_now 59.133277893
 P _door/4/_ext_ang 0.0
 P _door/4/_ret_ang 90.0
 P _door/4/_type 2
@@ -151,7 +151,7 @@ P _door/4/_xyz/0 -13.0
 P _door/4/_xyz/1 -3.599999905
 P _door/4/_xyz/2 73.500000000
 P _door/4/_xyz/count 3
-P _door/5/_ang_now -78.474472046
+P _door/5/_ang_now -59.133277893
 P _door/5/_ext_ang 0.0
 P _door/5/_ret_ang -90.0
 P _door/5/_type 2
@@ -209,10 +209,10 @@ P _gear/0/_latN 0.0
 P _gear/0/_latR 0.0
 P _gear/0/_leg_len 5.400000095
 P _gear/0/_lonE 0.0
-P _gear/0/_lonN 85.449981689
+P _gear/0/_lonN 64.389572144
 P _gear/0/_lonR 98.0
 P _gear/0/_scon 47252.898437500
-P _gear/0/_stat_def 0.399389803
+P _gear/0/_stat_def 0.399389714
 P _gear/0/_steerdeg_hispeed 5.0
 P _gear/0/_steerdeg_lospeed 75.0
 P _gear/0/_strut_comp 0.0
@@ -239,11 +239,11 @@ P _gear/1/_gear_x -12.010000229
 P _gear/1/_gear_y -2.799999952
 P _gear/1/_gear_z 69.800003052
 P _gear/1/_latE 0.0
-P _gear/1/_latN 69.755088806
+P _gear/1/_latN 52.562911987
 P _gear/1/_latR 80.0
 P _gear/1/_leg_len 8.199999809
 P _gear/1/_lonE -7.0
-P _gear/1/_lonN -0.896430016
+P _gear/1/_lonN -2.400745153
 P _gear/1/_lonR 0.0
 P _gear/1/_scon 71266.664062500
 P _gear/1/_stat_def 1.367629409
@@ -273,11 +273,11 @@ P _gear/2/_gear_x 12.010000229
 P _gear/2/_gear_y -2.799999952
 P _gear/2/_gear_z 69.800003052
 P _gear/2/_latE 0.0
-P _gear/2/_latN -69.755088806
+P _gear/2/_latN -52.562911987
 P _gear/2/_latR -80.0
 P _gear/2/_leg_len 8.199999809
 P _gear/2/_lonE -7.0
-P _gear/2/_lonN -0.896430016
+P _gear/2/_lonN -2.400745153
 P _gear/2/_lonR 0.0
 P _gear/2/_scon 71266.664062500
 P _gear/2/_stat_def 1.367629409
@@ -24421,7 +24421,7 @@ P _part/85/_part_specs_invis 1
 P _part/85/_part_tex 0
 P _part/85/_part_the -83.0
 P _part/85/_part_x 0.0
-P _part/85/_part_y -10.990609169
+P _part/85/_part_y -10.990610123
 P _part/85/_part_z 17.530000687
 P _part/85/_patt_con 0
 P _part/85/_patt_prt 0
@@ -41484,7 +41484,7 @@ gen_pointer Heading Tape
   CLIP
   LIGHT_MODE GLASS_AUTO
   LIGHT_RHEOSTAT 0
-  KEY_FRAME 0.000000 1290.500000 1.000000
+  KEY_FRAME 0.000000 1291.000000 1.000000
   KEY_FRAME 340.000000 -1588.000000
   IS_DRAGGABLE 0
   IS_VERTICAL 0
@@ -41501,6 +41501,32 @@ gen_pointer Speed Tape
   KEY_FRAME 40.000000 1389.000000 1.000000
   KEY_FRAME 460.000000 -981.000000 1.000000
   KEY_FRAME 461.000000 -981.000000
+  IS_DRAGGABLE 0
+  IS_VERTICAL 1
+  OFFSET 0.000000
+
+gen_pointer Accel Arrow
+  POS 1456.000000 820.000000
+  IMAGE MIP/pfd/Accel Arrow
+  DATAREF sim/cockpit2/gauges/indicators/airspeed_acceleration_kts_sec_pilot
+  CLIP
+  LIGHT_MODE GLASS_AUTO
+  LIGHT_RHEOSTAT 0
+  KEY_FRAME 0.000000 -363.000000 1.000000
+  KEY_FRAME 4.000000 -133.000000
+  IS_DRAGGABLE 0
+  IS_VERTICAL 1
+  OFFSET 0.000000
+
+gen_pointer Decel Arrow
+  POS 1456.000000 550.000000
+  IMAGE MIP/pfd/Decel Arrow
+  DATAREF sim/cockpit2/gauges/indicators/airspeed_acceleration_kts_sec_pilot
+  CLIP
+  LIGHT_MODE GLASS_AUTO
+  LIGHT_RHEOSTAT 0
+  KEY_FRAME 0.000000 363.000000 1.000000
+  KEY_FRAME -4.000000 133.000000
   IS_DRAGGABLE 0
   IS_VERTICAL 1
   OFFSET 0.000000
