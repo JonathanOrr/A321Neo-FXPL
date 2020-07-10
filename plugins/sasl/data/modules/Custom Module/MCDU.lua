@@ -66,7 +66,7 @@ local B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
 -- alphanumeric & decimal FMC entry keys
 local MCDU_ENTRY_KEYS = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", ".", "Δ"}
 local MCDU_ENTRY_PAGES = {"DIR", "PROG", "PERF", "INIT", "DATA", "F-PLN", "RAD NAV", "FUEL PRED", "SEC F-PLN", "ATC COMM", "MCDU MENU", "AIRP"}
-local MCDU_ENTRY_SIDE = {"1L", "2L", "3L", "4L", "5L", "6L", "1R", "2R", "3R", "4R", "5R", "6R"}
+local MCDU_ENTRY_SIDES = {"L1", "L2", "L3", "L4", "L5", "L6", "R1", "R2", "R3", "R4", "R5", "R6", "slew_up", "slew_down", "slew_left", "slew_right"}
 
 --[[
 --
@@ -102,6 +102,29 @@ local mcdu_sim_page = {}
 local function mcdu_send_message(message, status)
     table.insert(mcdu_messages, message)
     mcdu_message_active = status
+end
+
+local function mcdu_get_entry(expected_format)
+    --[[
+    -- expected_format
+    --
+    -- can be an array of formats, any of them is accepted and returns which format
+    --
+    -- ! - number
+    -- @ - character
+    -- # - anything
+    --
+    -- for example ####/!!@@
+    -- can accept
+    -- ksea/12ab    ACCEPT 
+    -- ksea12ab     REJECT expected '/' in 5th character
+    -- ksea/12      REJECT length
+    -- ksea/abab    REJECT expected number as 6th character
+    -- ksea/1212    REJECT expected character as 8th character
+    --]]
+    me = mcdu_entry
+    mcdu_entry = ""
+    return me
 end
 
 --clear MCDU
@@ -147,108 +170,99 @@ local mcdu_message_index = createGlobalPropertyi("a321neo/debug/mcdu/message_ind
 --a321neo commands
 local mcdu_debug_message = sasl.createCommand("a321neo/debug/mcdu/debug_message", "send a mcdu debug message")
 
---mcdu menu buttons
-local mcdu_positive_negative_key = createCommand("a321neo/cockpit/mcdu/positive_negative", "MCDU Positive Negative Key")
-
-local mcdu_clr_key = createCommand("a321neo/cockpit/mcdu/clr", "MCDU CLR Key")
-
-local mcdu_page_up = sasl.createCommand("a321neo/cockpit/mcdu/page_up", "MCDU page up Key")
-local mcdu_page_dn = sasl.createCommand("a321neo/cockpit/mcdu/page_dn", "MCDU page down Key")
-
 --mcdu entry inputs
-local mcdu_inp_key = {}
-local mcdu_inp_page = {}
-local mcdu_inp_side = {}
+local mcdu_inp = {}
 
---entry keys alphanumerics and special
-for i,key in ipairs(MCDU_ENTRY_KEYS) do
-	-- create the command
-	mcdu_inp_key[key] = createCommand("a321neo/cockpit/mcdu/key/" .. key, "MCDU " .. key .. " Key")
-	-- register the command
-	sasl.registerCommandHandler(mcdu_inp_key[key], 0, function (phase)
-		if phase == SASL_COMMAND_BEGIN then
-			if #mcdu_entry < 22 then
-				mcdu_entry = mcdu_entry .. key
-			end
-		end
-	end)
-end
-
---entry pages
-for i,page in ipairs(MCDU_ENTRY_PAGES) do
-	-- create the command
-	mcdu_inp_page[page] = createCommand("a321neo/cockpit/mcdu/page/" .. page, "MCDU " .. page .. " Page")
-	-- register the command
-	sasl.registerCommandHandler(mcdu_inp_page[page], 0, function (phase)
-		if phase == SASL_COMMAND_BEGIN then
-            mcdu_open_page(i * 100)
-		end
-	end)
-end
-
---entry left/right side buttons
-for i,side in ipairs(MCDU_ENTRY_SIDE) do
-	-- create the command
-	mcdu_inp_side[side] = createCommand("a321neo/cockpit/mcdu/side/" .. side, "MCDU " .. side .. " Side Button")
-	-- register the command
-	sasl.registerCommandHandler(mcdu_inp_side[side], 0, function (phase)
-		if phase == SASL_COMMAND_BEGIN then
-            mcdu_sim_page[get(mcdu_page)](side)
-		end
-	end)
-end
-
---sim command handlers
---
---a321neo command handlers
---debuggin
-sasl.registerCommandHandler(mcdu_debug_message, 0, function (phase)
-    if phase == SASL_COMMAND_BEGIN then
-        send_mcdu_message("MCDU DEBUG MESSAGE", 1)
-    end
-end)
-
---mcdu menu keys
-sasl.registerCommandHandler(mcdu_positive_negative_key, 0, function (phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if #mcdu_entry < 22 then
-            if string.sub(mcdu_entry, #mcdu_entry, #mcdu_entry) == "-" then
-                mcdu_entry = string.sub(mcdu_entry, 0, #mcdu_entry - 1) .. "+"
-            elseif string.sub(mcdu_entry, #mcdu_entry, #mcdu_entry) == "+" then
-                mcdu_entry = string.sub(mcdu_entry, 0, #mcdu_entry - 1) .. "-"
-            elseif string.sub(mcdu_entry, #mcdu_entry, #mcdu_entry) ~= "+" and string.sub(mcdu_entry, #mcdu_entry, #mcdu_entry) ~= "-" then
-                mcdu_entry = mcdu_entry .. "-"
+local MCDU_ENTRY = 
+{
+    {
+        ref_name = "key",               --the group of the command
+        ref_desc = "Key",               --the description of the command
+        ref_entries = MCDU_ENTRY_KEYS,  --the group of keys
+        ref_callback =                  --what they should do
+        function (count, val)
+            if #mcdu_entry < 22 then
+                mcdu_entry = mcdu_entry .. val
             end
         end
-    end
-end)
-
-sasl.registerCommandHandler(mcdu_clr_key, 0, function (phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if mcdu_message_active > 0 then
-            table.remove(mcdu_messages)
-        else
-            if #mcdu_entry > 0 then
-                mcdu_entry = ""
+    },
+    {
+        ref_name = "page",
+        ref_desc = "Page",
+        ref_entries = MCDU_ENTRY_PAGES,
+        ref_callback = 
+        function (count, val)
+            mcdu_open_page(count * 100)
+        end
+    },
+    {
+        ref_name = "side",
+        ref_desc = "Side key",
+        ref_entries = MCDU_ENTRY_SIDES,
+        ref_callback = 
+        function (count, val)
+            mcdu_sim_page[get(mcdu_page)](val)
+        end
+    },
+    {
+        ref_name = "misc",
+        ref_desc = "Clear key",
+        ref_entries = {"clr"},
+        ref_callback = 
+        function (count, val)
+            if mcdu_message_active > 0 then
+                table.remove(mcdu_messages)
             else
-                if #mcdu_entry == 0 then
-                    mcdu_entry = "CLR"
+                if #mcdu_entry > 0 then
+                    mcdu_entry = ""
+                else
+                    if #mcdu_entry == 0 then
+                        mcdu_entry = "CLR"
+                    end
                 end
             end
         end
-    end
-end)
+    },
+    {
+        ref_name = "misc",
+        ref_desc = "positive_negative",
+        ref_entries = {"postive_negative"},
+        ref_callback = 
+        function (count, val)
+            if #mcdu_entry < 22 then
+                if string.sub(mcdu_entry, #mcdu_entry, #mcdu_entry) == "-" then
+                    mcdu_entry = string.sub(mcdu_entry, 0, #mcdu_entry - 1) .. "+"
+                elseif string.sub(mcdu_entry, #mcdu_entry, #mcdu_entry) == "+" then
+                    mcdu_entry = string.sub(mcdu_entry, 0, #mcdu_entry - 1) .. "-"
+                elseif string.sub(mcdu_entry, #mcdu_entry, #mcdu_entry) ~= "+" and string.sub(mcdu_entry, #mcdu_entry, #mcdu_entry) ~= "-" then
+                    mcdu_entry = mcdu_entry .. "-"
+                end
+            end
+        end
+    }
+}
 
-sasl.registerCommandHandler(mcdu_page_up, 0, function (phase)
-    if phase == SASL_COMMAND_BEGIN then
-        mcdu_fpln_page = mcdu_fpln_page + 1
-        mcdu_sim_page[get(mcdu_page)]("slew up")
+--register all entry keys
+for i,entry_category in ipairs(MCDU_ENTRY) do
+    for count,entry in ipairs(entry_category.ref_entries) do
+        mcdu_inp[entry] = createCommand("a321neo/cockpit/mcdu/" .. entry_category.ref_name .. "/" .. entry, "MCDU " .. entry .. " " .. entry_category.ref_desc)
+        sasl.registerCommandHandler(mcdu_inp[entry], 0, function (phase)
+            if phase == SASL_COMMAND_BEGIN then
+                entry_category.ref_callback(count, entry)
+            end
+        end)
     end
-end)
+end
 
-sasl.registerCommandHandler(mcdu_page_dn, 0, function (phase)
+--a321neo command handlers
+--debuggin
+local hokey_pokey = false --wonder what this does
+sasl.registerCommandHandler(mcdu_debug_message, 0, function (phase)
     if phase == SASL_COMMAND_BEGIN then
-        mcdu_sim_page[get(mcdu_page)]("slew dn")
+        hokey_pokey = true
+        for i,f in ipairs({"white", "blue", "orange", "green"}) do
+            MCDU_DISP_COLOR[f] = {1, 0, 0} 
+        end
     end
 end)
 
@@ -286,7 +300,6 @@ local function draw_dat(dat, draw_size, disp_x, disp_y, disp_text_align)
     -- now draw it!
     table.insert(draw_lines, {disp_x = disp_x, disp_y = disp_y, disp_text = disp_text, disp_text_size = disp_text_size, disp_text_align = disp_text_align, disp_color = disp_color, disp_spacing = disp_spacing})
 end
-
 
 local function draw_update()
     -- clear all line which need to be drawn
@@ -332,8 +345,37 @@ local function draw_update()
     end
 end
 
+local function colorize()
+    for i,f in ipairs({"white", "blue", "orange", "green"}) do
+        c = {}
+        c[0] = MCDU_DISP_COLOR[f][1];c[1] = MCDU_DISP_COLOR[f][2];c[2] = MCDU_DISP_COLOR[f][3]
+        print(c[0] .. " " .. c[1] .. " " .. c[2])
+        inc = 0.1
+        if c[0] < 1 and c[1] == 0 and c[2] == 0 then
+            c[0] = c[0] + inc
+        elseif c[0] == 1 and c[1] < 1 and c[2] == 0 then
+            c[1] = c[1] + inc
+        elseif c[0] <= 1 and c[0] > 0 and c[1] == 1 and c[2] == 0 then
+            c[0] = c[0] - inc
+        elseif c[0] == 0 and c[1] == 1 and c[2] < 1 then
+            c[2] = c[2] + inc
+        elseif c[0] == 0 and c[1] <= 1 and c[1] > 0 and c[2] == 1 then
+            c[1] = c[1] - inc
+        elseif c[0] < 1 and c[1] == 0 and c[2] == 1 then
+            c[0] = c[0] + inc
+        elseif c[0] == 1 and c[1] == 0 and c[2] <= 1 and c[2] > 0 then
+            c[2] = c[2] - inc
+        end
+        MCDU_DISP_COLOR[f][1] = math.min(math.max(c[0], 0), 1); MCDU_DISP_COLOR[f][2] = math.min(math.max(c[1], 0), 1); MCDU_DISP_COLOR[f][3] = math.min(math.max(c[2], 0), 1)
+    end
+    draw_update()
+end
+
 --drawing the MCDU display
 function draw()
+    if hokey_pokey then
+        colorize()
+    end
     if get(mcdu_enabled) == 1 then
         sasl.gl.drawRectangle(0, 0, 320 , 285, MCDU_DISP_COLOR["black"])
         local draw_size = {MCDU_DRAW_SIZE.w, MCDU_DRAW_SIZE.h} -- for debugging
@@ -372,8 +414,9 @@ end
 --      700 - rad nav
 --      800 - fuel pred
 --      900 - sec f-pln
---      1000 - mcdu menu
---      1100 - airp
+--      1000 - atc commm
+--      1100 - mcdu menu
+--      1200 - airp
 --
 --
 --]]
@@ -444,7 +487,7 @@ function (phase)
         mcdu_dat["l"]["L"][1][1] = {txt = "  a", col = "blue", size = "s"}
         --]]
 
-        draw_updates()
+        draw_update()
     end
 end
 
@@ -454,14 +497,36 @@ function (phase)
     if phase == "render" then
         mcdu_dat_title.txt = "          init"
 
-        mcdu_dat["s"]["L"][1].txt = "□"
-        --[[
-        mcdu_dat["s"]["L"][1].txt = "a"
-        mcdu_dat["l"]["L"][1][1] = {txt = " a", col = "green"}
-        mcdu_dat["l"]["L"][1][1] = {txt = "  a", col = "blue", size = "s"}
-        --]]
+        mcdu_dat["s"]["L"][1].txt = " co rte"
+        mcdu_dat["l"]["L"][1] = {txt = "□□□□□□□", col = "orange"}
 
-        draw_updates()
+        mcdu_dat["s"]["R"][1].txt = " from/to  "
+        mcdu_dat["l"]["R"][1] = {txt = "□□□□/□□□□", col = "orange"}
+
+        mcdu_dat["s"]["L"][2].txt = "altn/co route"
+        mcdu_dat["l"]["L"][2].txt = "----/---------"
+
+        mcdu_dat["s"]["L"][3].txt = "flt nbr"
+        mcdu_dat["l"]["L"][3] = {txt = "□□□□□□□□", col = "orange"}
+
+        mcdu_dat["s"]["L"][4].txt = "lat"
+        mcdu_dat["l"]["L"][4].txt = "----.-"
+
+        mcdu_dat["s"]["R"][4].txt = "long"
+        mcdu_dat["l"]["R"][4].txt = "-----.--"
+
+        mcdu_dat["s"]["L"][5].txt = "cost index"
+        mcdu_dat["l"]["L"][5].txt = "---"
+
+        mcdu_dat["l"]["R"][5].txt = "wind>"
+
+        mcdu_dat["s"]["L"][6].txt = "crz fl/temp"
+        mcdu_dat["l"]["L"][6].txt = "-----/---°"
+
+        mcdu_dat["s"]["R"][6].txt = "tropo "
+        mcdu_dat["l"]["R"][6] = {txt = "36090", col = "blue", size = "s"}
+
+        draw_update()
     end
 end
 -- 500 data
@@ -470,11 +535,20 @@ function (phase)
     if phase == "render" then
         mcdu_dat_title.txt = "     data index"
 
+        mcdu_dat["s"]["L"][1].txt = " position"
+        mcdu_dat["l"]["L"][1].txt = "<monitor"
+
+        mcdu_dat["s"]["L"][2].txt = " irs"
+        mcdu_dat["l"]["L"][2].txt = "<monitor"
+
+        mcdu_dat["s"]["L"][3].txt = " gps"
+        mcdu_dat["l"]["L"][3].txt = "<monitor"
+
         mcdu_dat["l"]["L"][4].txt = "<a/c status"
 
         draw_update()
     end
-    if phase == "4L" then
+    if phase == "L4" then
         mcdu_open_page(505) -- open 505 data A/C status
     end
 end
@@ -515,7 +589,7 @@ function (phase)
     end
 end
 
--- 700 RAD NAV
+-- 700 rad nav
 mcdu_sim_page[700] =
 function (phase)
     if phase == "render" then
@@ -560,5 +634,69 @@ function (phase)
     end
 end
 
+-- 1100 mcdu menu
+mcdu_sim_page[1100] =
+function (phase)
+    if phase == "render" then
+        mcdu_dat_title.txt = "        mcdu menu"
+        mcdu_dat["l"]["L"][1].txt = "<fmgc"
 
+        mcdu_dat["l"]["R"][6].txt = "debug>"
+        draw_update()
+    end
+    if phase == "L1" then
+        mcdu_open_page(505) -- open 505 data a/c status
+    end
+    if phase == "R6" then
+        mcdu_open_page(1101) -- open 1101 mcdu menu debug
+    end
+end
 
+-- 1101 mcdu menu debug
+mcdu_sim_page[1101] =
+function (phase)
+    if phase == "render" then
+        mcdu_dat_title.txt = "    a32nx project"
+
+        mcdu_dat["s"]["L"][1].txt = "mcdu version"
+        mcdu_dat["l"]["L"][1].txt = "v1.0"
+        mcdu_dat["l"]["L"][2].txt = "<colours"
+
+        mcdu_dat["l"]["R"][6].txt = "return>"
+        draw_update()
+    end
+    if phase == "L2" then
+        mcdu_open_page(1102) -- open 1102 mcdu menu debug
+    end
+    if phase == "R6" then
+        mcdu_open_page(1100) -- open 1100 mcdu menu
+    end
+end
+-- 1102 mcdu menu debug colours
+mcdu_sim_page[1102] =
+function (phase)
+    if phase == "render" then
+        for i,col in ipairs({"white", "blue", "green", "orange"}) do
+            mcdu_dat["s"]["L"][i].txt = col .. " colour"
+            mcdu_dat["l"]["L"][i] = {txt = "<R" .. MCDU_DISP_COLOR[col][1] .. "G" .. MCDU_DISP_COLOR[col][2] .. "B" .. MCDU_DISP_COLOR[col][3], col = col}
+        end
+        mcdu_dat["l"]["L"][5].txt = "format e.g. R0.10"
+        mcdu_dat["l"]["L"][6].txt = "<disco mode"
+
+        mcdu_dat["l"]["R"][6].txt = "return>"
+        draw_update()
+    end
+    if phase == "L1" then
+        input = mcdu_get_entry("r!.!!g!.!!b!.!!")
+        MCDU_DISP_COLOR[col][1] = input
+    end
+    if phase == "L6" then
+        hokey_pokey = true
+        for i,f in ipairs({"white", "blue", "orange", "green"}) do
+            MCDU_DISP_COLOR[f] = {1, 0, 0} 
+        end
+    end
+    if phase == "R6" then
+        mcdu_open_page(1101) -- open 1101 mcdu menu debug
+    end
+end
