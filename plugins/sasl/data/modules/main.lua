@@ -23,7 +23,6 @@ components = {
   flight_controls {},
   fcu_ap_at {},
   AT {},
-  MCDU {},
   packs {},
   aircond {},
   wheel {},
@@ -60,6 +59,20 @@ Packs_debug_window = contextWindow {
   };
 }
 
+FBW_debug_window = contextWindow {
+  name = "FBW DEBUG";
+  position = { 150 , 150 , 340 , 500};
+  noBackground = true ;
+  proportional = false ;
+  minimumSize = { 340 , 500 };
+  maximumSize = { 680 , 1000 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = true ;
+  components = {
+    FBW_debug {position = { 0 , 0 , 340 , 500 }}
+  };
+}
+
 --menu item functions
 function Show_hide_vnav_debug()
   Vnav_debug_window:setIsVisible(not Vnav_debug_window:isVisible())
@@ -67,6 +80,10 @@ end
 
 function Show_hide_packs_debug()
   Packs_debug_window:setIsVisible(not Packs_debug_window:isVisible())
+end
+
+function Show_hide_FBW_debug()
+  FBW_debug_window:setIsVisible(not Packs_debug_window:isVisible())
 end
 
 -- create top level menu in plugins menu
@@ -77,5 +94,9 @@ Menu_main	= sasl.createMenu ("", PLUGINS_MENU_ID, Menu_master)
 ShowHideVnavDebug	= sasl.appendMenuItem(Menu_main, "Show/Hide VNAV Debug", Show_hide_vnav_debug)
 -- add menu entry
 ShowHidePacksDebug	= sasl.appendMenuItem(Menu_main, "Show/Hide PACKS Debug", Show_hide_packs_debug)
+-- add menu entry
+ShowHideFBWDebug	= sasl.appendMenuItem(Menu_main, "Show/Hide FBW Debug", Show_hide_FBW_debug)
 --initialise menu item status
 sasl.setMenuItemState(Menu_main, ShowHideVnavDebug, MENU_UNCHECKED)
+sasl.setMenuItemState(Menu_main, ShowHidePacksDebug, MENU_UNCHECKED)
+sasl.setMenuItemState(Menu_main, ShowHideFBWDebug, MENU_UNCHECKED)
