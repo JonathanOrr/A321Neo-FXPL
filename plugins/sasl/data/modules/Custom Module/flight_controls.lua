@@ -1,3 +1,8 @@
+--variables--
+local total_roll = 0
+local total_pitch = 0
+local total_yaw = 0
+
 --sim datarefs
 local roll = globalProperty("sim/joystick/yoke_roll_ratio")
 local pitch = globalProperty("sim/joystick/yoke_pitch_ratio")
@@ -18,15 +23,18 @@ local elev_trim_ratio = globalProperty("sim/cockpit2/controls/elevator_trim")
 local max_elev_trim_up = globalProperty("sim/aircraft/controls/acf_hstb_trim_up")
 local max_elev_trim_dn = globalProperty("sim/aircraft/controls/acf_hstb_trim_dn")
 
-local left_aileron = globalProperty("sim/flightmodel/controls/lail1def") --25 deg up -25 deg down
-local left_outboard_spoilers = globalProperty("sim/flightmodel/controls/wing2l_spo2def") --roll spoilers 35 deg up with ailerons starts at 20% aileron, 35 degrees in flight decel, 50 degrees for ground spoilers
+local left_aileron = globalProperty("sim/flightmodel/controls/wing2l_ail1def") -- -25 deg up 25 deg down
+local left_inboard_spoilers = globalProperty("sim/flightmodel/controls/wing1l_spo1def")--50 degrees ground spoilers
+local left_outboard_spoilers2 = globalProperty("sim/flightmodel/controls/wing2l_spo1def") --roll spoilers 25 deg max up with ailerons when speed brake full, with flaps down it can roll up to 25 deg, does not deploy in flight if speed below 150 or in a.floor toga, normally 0 degrees starts at 18% aileron, 15 degrees in flight decel, 50 degrees for ground spoilers
+local left_outboard_spoilers345 = globalProperty("sim/flightmodel/controls/wing2l_spo2def") --roll spoilers 35 deg max up with ailerons when speed brake full, with flaps down it can roll up to 35 deg, does not deploy in flight if speed below 150 or in a.floor toga, normally 25 degrees starts at 18% aileron, 25 degrees in flight decel, 50 degrees for ground spoilers
 local left_outboard_flaps = globalProperty("sim/flightmodel/controls/wing2l_fla2def") -- flap detents 0 = 0, 1 = 10, 2 = 15, 3 = 20, 4 = 40
 local left_inboard_flaps = globalProperty("sim/flightmodel/controls/wing1l_fla1def") -- flap detents 0 = 0, 1 = 10, 2 = 15, 3 = 20, 4 = 40
-local right_aileron = globalProperty("sim/flightmodel/controls/rail1def") --25 deg up -25 deg down
-local right_outboard_spoilers = globalProperty("sim/flightmodel/controls/wing2r_spo2def") --roll spoilers 35 deg up with ailerons starts at 20% aileron, 35 degrees in flight decel, 50 degrees for ground spoilers
+local right_aileron = globalProperty("sim/flightmodel/controls/wing2r_ail1def") -- -25 deg up 25 deg down
+local right_inboard_spoilers = globalProperty("sim/flightmodel/controls/wing1r_spo1def")--50 degrees ground spoilers
+local right_outboard_spoilers2 = globalProperty("sim/flightmodel/controls/wing2r_spo1def") --roll spoilers 25 deg max up with ailerons when speed brake full, with flaps down it can roll up to 25 deg, does not deploy in flight if speed below 150 or in a.floor toga, normally 0 degrees starts at 18% aileron, 15 degrees in flight decel, 50 degrees for ground spoilers
+local right_outboard_spoilers345 = globalProperty("sim/flightmodel/controls/wing2r_spo2def") --roll spoilers 35 deg max up with ailerons when speed brake full, with flaps down it can roll up to 35 deg, does not deploy in flight if speed below 150 or in a.floor toga, normally 25 degrees starts at 18% aileron, 25 degrees in flight decel, 50 degrees for ground spoilers
 local right_outboard_flaps = globalProperty("sim/flightmodel/controls/wing2r_fla2def") -- flap detents 0 = 0, 1 = 10, 2 = 15, 3 = 20, 4 = 40
 local right_inboard_flaps = globalProperty("sim/flightmodel/controls/wing1r_fla1def") -- flap detents 0 = 0, 1 = 10, 2 = 15, 3 = 20, 4 = 40
-local inboard_spoilers = globalProperty("sim/flightmodel2/wing/speedbrake1_deg[0]") --35 degrees in flight decel, 50 degrees ground spoilers
 local slats = globalProperty("sim/flightmodel2/controls/slat1_deploy_ratio") --deploys with flaps 0 = 0, 1 = 0.7, 2 = 0.8, 3 = 0.8, 4 = 1
 
 local horizontal_stabilizer_deflection = globalProperty("sim/flightmodel2/controls/stabilizer_deflection_degrees")
@@ -53,63 +61,45 @@ end
 set(elev_trim_degrees, 0)
 
 function update()
-
     --sync and identify the elevator trim degrees
     set(elev_trim_degrees, get_elev_trim_degrees())
 
-    --fly by wire--
-    if get(FBW_on) == 0 then--direct law
-        set(elev_trim_ratio, 0)
-        set(horizontal_stabilizer_deflection, 0)
+    --summing the controls
+    if get(Flight_director_1_mode) == 2 or get(Flight_director_2_mode) == 2 then -- if the autopilot is on
+        total_roll = get(roll) + get(roll_artstab) + get(servo_roll)
+        total_pitch = get(pitch) + get(pitch_artstab) + get(servo_pitch)
+        total_yaw = get(yaw) + get(yaw_artstab) + get(servo_yaw)
+    else
+        total_roll = get(roll) + get(roll_artstab)
+        total_pitch = get(pitch) + get(pitch_artstab)
+        total_yaw = get(yaw) + get(yaw_artstab)
+    end
 
-        set(left_aileron, -25 * get(roll) + get(servo_roll))
-        set(right_aileron, 25 * get(roll) + get(servo_roll))
 
-        if get(roll) + get(servo_roll) < -0.2 then
-            set(left_outboard_spoilers, -35 * ((get(roll) + get(servo_roll) + 0.2)/0.8))
+    if get(override_surfaces) == 1 then
+        Set_dataref_linear_anim(left_aileron, 25 * (total_roll), -25, 25, 50, 0.5)
+        Set_dataref_linear_anim(right_aileron, -25 * (total_roll), -25, 25, 50, 0.5)
+
+        if total_roll < -0.18 then
+            Set_dataref_linear_anim(left_outboard_spoilers345, -25 * ((total_roll + 0.2)/0.8), 0, 25, 46.5, 0.5)
         else
-            set(left_outboard_spoilers, 0)
+            Set_dataref_linear_anim(left_outboard_spoilers345, 0, 0, 25, 46.5, 0.5)
         end
 
-        if get(roll) + get(servo_roll) > 0.2 then
-            set(right_outboard_spoilers, 35 * ((get(roll) + get(servo_roll) - 0.2)/0.8))
+        if total_roll > 0.18 then
+            Set_dataref_linear_anim(right_outboard_spoilers345, 25 * ((total_roll - 0.2)/0.8), 0, 25, 46.5, 0.5)
         else
-            set(right_outboard_spoilers, 0)
+            Set_dataref_linear_anim(right_outboard_spoilers345, 0, 0, 25, 46.5, 0.5)
         end
 
-        if get(pitch) + get(servo_pitch) >= 0 then
-            set(elevators_hstab_1, -30 * (get(pitch) + get(servo_pitch)))
-            set(elevators_hstab_2, -30 * (get(pitch) + get(servo_pitch)))
+        if total_pitch >= 0 then
+            Set_dataref_linear_anim(elevators_hstab_1, -30 * (total_pitch), -30, 17, 50, 0.5)
+            Set_dataref_linear_anim(elevators_hstab_2, -30 * (total_pitch), -30, 17, 50, 0.5)
         else
-            set(elevators_hstab_1, -17 * (get(pitch) + get(servo_pitch)))
-            set(elevators_hstab_2, -17 * (get(pitch) + get(servo_pitch)))
+            Set_dataref_linear_anim(elevators_hstab_1, -17 * (total_pitch), -30, 17, 50, 0.5)
+            Set_dataref_linear_anim(elevators_hstab_2, -17 * (total_pitch), -30, 17, 50, 0.5)
         end
 
-        set(rudder, 30 * (get(yaw) + get(servo_yaw)))
-    else--normal law
-        set(left_aileron, -25 * (get(roll) + get(roll_artstab) + get(servo_roll)))
-        set(right_aileron, 25 * (get(roll) + get(roll_artstab) + get(servo_roll)))
-
-        if get(roll) + get(roll_artstab) + get(servo_roll) < -0.2 then
-            set(left_outboard_spoilers, -35 * ((get(roll) + get(roll_artstab) + get(servo_roll) + 0.2)/0.8))
-        else
-            set(left_outboard_spoilers, 0)
-        end
-
-        if get(roll) + get(roll_artstab) + get(servo_roll) > 0.2 then
-            set(right_outboard_spoilers, 35 * ((get(roll) + get(roll_artstab) + get(servo_roll) - 0.2)/0.8))
-        else
-            set(right_outboard_spoilers, 0)
-        end
-
-        if get(pitch) + get(pitch_artstab) + get(servo_pitch) >= 0 then
-            set(elevators_hstab_1, -30 * (get(pitch) + get(pitch_artstab) + get(servo_pitch)))
-            set(elevators_hstab_2, -30 * (get(pitch) + get(pitch_artstab) + get(servo_pitch)))
-        else
-            set(elevators_hstab_1, -17 * (get(pitch) + get(pitch_artstab) + get(servo_pitch)))
-            set(elevators_hstab_2, -17 * (get(pitch) + get(pitch_artstab) + get(servo_pitch)))
-        end
-
-        set(rudder, 30 * (get(yaw) + get(yaw_artstab) + get(servo_yaw)))
+        Set_dataref_linear_anim(rudder, 30 * (total_yaw), -30, 30, 25, 0.5)
     end
 end

@@ -20,10 +20,10 @@ panelHeight3d = 2048
 components = {
   engine_and_apu {},
   cabin_screens {},
+  FBW {},
   flight_controls {},
   fcu_ap_at {},
   AT {},
-  MCDU {},
   packs {},
   aircond {},
   wheel {},
@@ -65,8 +65,8 @@ FBW_debug_window = contextWindow {
   position = { 150 , 150 , 340 , 500};
   noBackground = true ;
   proportional = false ;
-  minimumSize = { 340 , 500 };
-  maximumSize = { 680 , 1000 };
+  minimumSize = { 170 , 250 };
+  maximumSize = { 340 , 500 };
   gravity = { 0 , 1 , 0 , 1 };
   visible = true ;
   components = {

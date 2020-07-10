@@ -69,9 +69,37 @@ Apu_bleed_state = createGlobalPropertyi("a321neo/apu/apu_bleed_state", 0, false,
 Apu_gen_state = createGlobalPropertyi("a321neo/cockpit/apu/apu_gen_state", 0, false, true, false)--0apu off gen off, 1apu on gen off, 2apu on gen on
 --FBW--
 FBW_on = createGlobalPropertyi("a321neo/dynamics/fctl/FBW_on", 1, false, true, false)
+Roll_l_lim = createGlobalPropertyf("a321neo/dynamics/FBW/roll_l_lim", 0, false, true, false)
+Roll_r_lim = createGlobalPropertyf("a321neo/dynamics/FBW/roll_r_lim", 0, false, true, false)
+Pitch_u_lim = createGlobalPropertyf("a321neo/dynamics/FBW/pitch_u_lim", 0, false, true, false)
+Pitch_d_lim = createGlobalPropertyf("a321neo/dynamics/FBW/pitch_d_lim", 0, false, true, false)
+Pitch_G_up = createGlobalPropertyf("a321neo/dynamics/FBW/pitch_G_up", 0, false, true, false)
+Pitch_G_down = createGlobalPropertyf("a321neo/dynamics/FBW/pitch_G_dowm", 0, false, true, false)
+G_load_command = createGlobalPropertyf("a321neo/dynamics/FBW/G_load_command", 1, false, true, false)
 
 
 --global dataref variable from the Sim--
+--autopilot
+Flight_director_1_mode = globalProperty("sim/cockpit2/autopilot/flight_director_mode")
+Flight_director_2_mode = globalProperty("sim/cockpit2/autopilot/flight_director2_mode")
+--flight controls
+Roll = globalProperty("sim/joystick/yoke_roll_ratio")
+Pitch = globalProperty("sim/joystick/yoke_pitch_ratio")
+Yaw = globalProperty("sim/joystick/yoke_heading_ratio")
+Roll_artstab = globalProperty("sim/joystick/artstab_roll_ratio")
+Pitch_artstab = globalProperty("sim/joystick/artstab_pitch_ratio")
+Yaw_artstab = globalProperty("sim/joystick/artstab_heading_ratio")
+Servo_roll = globalProperty("sim/joystick/servo_roll_ratio")
+Servo_pitch = globalProperty("sim/joystick/servo_pitch_ratio")
+Servo_yaw = globalProperty("sim/joystick/servo_heading_ratio")
+Flightmodel_roll = globalProperty("sim/flightmodel/position/true_phi")
+Flightmodel_pitch = globalProperty("sim/flightmodel/position/true_theta")
+Elev_trim_ratio = globalProperty("sim/cockpit2/controls/elevator_trim")
+Horizontal_stabilizer_pitch = globalProperty("sim/flightmodel2/controls/stabilizer_deflection_degrees")
+Override_artstab = globalProperty("sim/operation/override/override_artstab")
+Total_vertical_g_load = globalProperty("sim/flightmodel/forces/g_nrml")
+Roll_rate = globalProperty("sim/flightmodel/position/P")
+--electrical system
 Battery_1 = globalProperty("sim/cockpit/electrical/battery_array_on[0]")
 Battery_2 = globalProperty("sim/cockpit/electrical/battery_array_on[1]")
 --fuel
@@ -164,6 +192,22 @@ function Set_anim_value(current_value, target, min, max, speed)
 
 end
 
+--used to animate a value with a curve USE ONLY WITH FLOAT VALUES
+function Set_linear_anim_value(current_value, target, min, max, speed, dead_zone)
+  if target - current_value < dead_zone and target - current_value > -dead_zone then
+    return target
+  elseif target < current_value then
+    return Math_clamp(current_value - (speed * get(DELTA_TIME)), min, max)
+  elseif target > current_value then
+    return Math_clamp(current_value + (speed * get(DELTA_TIME)), min, max)
+  end
+end
+
+-- for giving datarefs linear delayed outputs by using set_linear_anim_value
+function Set_dataref_linear_anim(dataref, target, min, max, speed, dead_zone)
+  set(dataref, Set_linear_anim_value(get(dataref), target, min, max, speed, dead_zone))
+end
+
 --used for ecam automation
 function Goto_ecam(page_num)
   set(Ecam_previous_page, get(Ecam_current_page))
@@ -206,4 +250,44 @@ function GC_distance_km(lat1, lon1, lat2, lon2)
   
   return distance
   
+end
+
+function FBW_PD(pd_array, error)
+    local last_error = pd_array.Current_error
+	pd_array.Current_error = error + pd_array.Error_offset
+
+	--Proportional--
+	local correction = pd_array.Current_error * pd_array.P_gain
+
+	--derivative--
+	correction = correction + (pd_array.Current_error - last_error) * pd_array.D_gain
+
+	--limit and rescale output range--
+	correction = Math_clamp(correction, pd_array.Min_error, pd_array.Max_error) / pd_array.Max_error
+
+	return correction
+end
+
+function FBW_PID(pid_array, error)
+    local last_error = pid_array.Current_error
+	pid_array.Current_error = error + pid_array.Error_offset
+
+	--Proportional--
+	local correction = pid_array.Current_error * pid_array.P_gain
+
+	--integral--
+	pid_array.Integral = (pid_array.Integral * (pid_array.I_delay - 1) + pid_array.Current_error) / pid_array.I_delay
+
+	--clamping the integral to minimise the delay
+	pid_array.Integral = Math_clamp(pid_array.Integral, pid_array.Min_error, pid_array.Max_error)
+
+	correction = correction + pid_array.Integral * pid_array.I_gain
+
+	--derivative--
+	correction = correction + (pid_array.Current_error - last_error) * pid_array.D_gain
+
+	--limit and rescale output range--
+	correction = Math_clamp(correction, pid_array.Min_error, pid_array.Max_error) / pid_array.Max_error
+
+	return correction
 end
