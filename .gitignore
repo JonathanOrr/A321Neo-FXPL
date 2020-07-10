@@ -2,4 +2,4 @@
 plugins/sasl/data/output/SASLLog.txt
 plugins/sasl/data/modules/configuration/wprefs.ini
 plugins/sasl/data/modules/configuration/wprefs.ini
-*.swp
+**.swp

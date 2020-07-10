@@ -61,7 +61,7 @@ local MCDU_DISP_TEXT_ALIGN =
 }
 
 --fonts
-local B612MONO_regular = sasl.gl.loadFont("fonts/A320PanelFont_V0.2b.ttf")
+local B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
 
 -- alphanumeric & decimal FMC entry keys
 local MCDU_ENTRY_KEYS = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", ".", "Δ"}
@@ -163,7 +163,7 @@ local mcdu_inp_side = {}
 --entry keys alphanumerics and special
 for i,key in ipairs(MCDU_ENTRY_KEYS) do
 	-- create the command
-	mcdu_inp_key[key] = createCommand("a321neo/cockpit/mcdu/" .. key, "MCDU Character " .. key .. " Key")
+	mcdu_inp_key[key] = createCommand("a321neo/cockpit/mcdu/key/" .. key, "MCDU " .. key .. " Key")
 	-- register the command
 	sasl.registerCommandHandler(mcdu_inp_key[key], 0, function (phase)
 		if phase == SASL_COMMAND_BEGIN then
@@ -177,7 +177,7 @@ end
 --entry pages
 for i,page in ipairs(MCDU_ENTRY_PAGES) do
 	-- create the command
-	mcdu_inp_page[page] = createCommand("a321neo/cockpit/mcdu/" .. page, "MCDU Character " .. page .. " page")
+	mcdu_inp_page[page] = createCommand("a321neo/cockpit/mcdu/page/" .. page, "MCDU " .. page .. " Page")
 	-- register the command
 	sasl.registerCommandHandler(mcdu_inp_page[page], 0, function (phase)
 		if phase == SASL_COMMAND_BEGIN then
@@ -189,7 +189,7 @@ end
 --entry left/right side buttons
 for i,side in ipairs(MCDU_ENTRY_SIDE) do
 	-- create the command
-	mcdu_inp_side[side] = createCommand("a321neo/cockpit/mcdu/" .. side, "MCDU Character " .. side .. " side key")
+	mcdu_inp_side[side] = createCommand("a321neo/cockpit/mcdu/side/" .. side, "MCDU " .. side .. " Side Button")
 	-- register the command
 	sasl.registerCommandHandler(mcdu_inp_side[side], 0, function (phase)
 		if phase == SASL_COMMAND_BEGIN then
@@ -242,12 +242,13 @@ end)
 sasl.registerCommandHandler(mcdu_page_up, 0, function (phase)
     if phase == SASL_COMMAND_BEGIN then
         mcdu_fpln_page = mcdu_fpln_page + 1
+        mcdu_sim_page[get(mcdu_page)]("slew up")
     end
 end)
 
 sasl.registerCommandHandler(mcdu_page_dn, 0, function (phase)
     if phase == SASL_COMMAND_BEGIN then
-        mcdu_fpln_page = mcdu_fpln_page - 1
+        mcdu_sim_page[get(mcdu_page)]("slew dn")
     end
 end)
 
@@ -438,7 +439,7 @@ function (phase)
         mcdu_dat_title.txt = "          a321-521nx"
 
         --[[
-        mcdu_dat["s"]["L"][1].txt = "a"
+        mcdu_dat["s"]["L"][1].txt = "□"
         mcdu_dat["l"]["L"][1][1] = {txt = " a", col = "green"}
         mcdu_dat["l"]["L"][1][1] = {txt = "  a", col = "blue", size = "s"}
         --]]
@@ -447,6 +448,22 @@ function (phase)
     end
 end
 
+-- 400 init
+mcdu_sim_page[400] =
+function (phase)
+    if phase == "render" then
+        mcdu_dat_title.txt = "          init"
+
+        mcdu_dat["s"]["L"][1].txt = "□"
+        --[[
+        mcdu_dat["s"]["L"][1].txt = "a"
+        mcdu_dat["l"]["L"][1][1] = {txt = " a", col = "green"}
+        mcdu_dat["l"]["L"][1][1] = {txt = "  a", col = "blue", size = "s"}
+        --]]
+
+        draw_updates()
+    end
+end
 -- 500 data
 mcdu_sim_page[500] =
 function (phase)
@@ -466,13 +483,14 @@ end
 mcdu_sim_page[505] =
 function (phase)
     if phase == "render" then
-        mcdu_dat_title.txt = "        a321-521nx"
 
         mcdu_dat["s"]["L"][1].txt = " eng"
 
         if get(Engine_option) == 0 then
+            mcdu_dat_title.txt = "        a321-521nx"
             mcdu_dat["l"]["L"][1] = {txt = "cfm-leap-1a", col = "green"}
         else
+            mcdu_dat_title.txt = "        a321-721nx"
             mcdu_dat["l"]["L"][1] = {txt = "pw-1130g-jm", col = "green"}
         end
         
