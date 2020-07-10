@@ -143,7 +143,7 @@ P _door/3/_xyz/0 1.500000000
 P _door/3/_xyz/1 0.0
 P _door/3/_xyz/2 14.500000000
 P _door/3/_xyz/count 3
-P _door/4/_ang_now 12.173912048
+P _door/4/_ang_now 51.008476257
 P _door/4/_ext_ang 0.0
 P _door/4/_ret_ang 90.0
 P _door/4/_type 2
@@ -151,7 +151,7 @@ P _door/4/_xyz/0 -13.0
 P _door/4/_xyz/1 -3.599999905
 P _door/4/_xyz/2 73.500000000
 P _door/4/_xyz/count 3
-P _door/5/_ang_now -12.173912048
+P _door/5/_ang_now -51.008476257
 P _door/5/_ext_ang 0.0
 P _door/5/_ret_ang -90.0
 P _door/5/_type 2
@@ -209,10 +209,10 @@ P _gear/0/_latN 0.0
 P _gear/0/_latR 0.0
 P _gear/0/_leg_len 5.400000095
 P _gear/0/_lonE 0.0
-P _gear/0/_lonN 13.256042480
+P _gear/0/_lonN 55.542560577
 P _gear/0/_lonR 98.0
 P _gear/0/_scon 47252.898437500
-P _gear/0/_stat_def 0.399389863
+P _gear/0/_stat_def 0.399389684
 P _gear/0/_steerdeg_hispeed 5.0
 P _gear/0/_steerdeg_lospeed 75.0
 P _gear/0/_strut_comp 0.0
@@ -239,14 +239,14 @@ P _gear/1/_gear_x -12.010000229
 P _gear/1/_gear_y -2.799999952
 P _gear/1/_gear_z 69.800003052
 P _gear/1/_latE 0.0
-P _gear/1/_latN 10.821258545
+P _gear/1/_latN 45.340866089
 P _gear/1/_latR 80.0
 P _gear/1/_leg_len 8.199999809
 P _gear/1/_lonE -7.0
-P _gear/1/_lonN -6.053140163
+P _gear/1/_lonN -3.032674074
 P _gear/1/_lonR 0.0
 P _gear/1/_scon 71266.664062500
-P _gear/1/_stat_def 1.367629290
+P _gear/1/_stat_def 1.367629170
 P _gear/1/_steerdeg_hispeed 0.0
 P _gear/1/_steerdeg_lospeed 0.0
 P _gear/1/_strut_comp -0.500000000
@@ -273,14 +273,14 @@ P _gear/2/_gear_x 12.010000229
 P _gear/2/_gear_y -2.799999952
 P _gear/2/_gear_z 69.800003052
 P _gear/2/_latE 0.0
-P _gear/2/_latN -10.821258545
+P _gear/2/_latN -45.340866089
 P _gear/2/_latR -80.0
 P _gear/2/_leg_len 8.199999809
 P _gear/2/_lonE -7.0
-P _gear/2/_lonN -6.053140163
+P _gear/2/_lonN -3.032674074
 P _gear/2/_lonR 0.0
 P _gear/2/_scon 71266.664062500
-P _gear/2/_stat_def 1.367629290
+P _gear/2/_stat_def 1.367629170
 P _gear/2/_steerdeg_hispeed 0.0
 P _gear/2/_steerdeg_lospeed 0.0
 P _gear/2/_strut_comp -0.500000000
@@ -24421,7 +24421,7 @@ P _part/85/_part_specs_invis 1
 P _part/85/_part_tex 0
 P _part/85/_part_the -83.0
 P _part/85/_part_x 0.0
-P _part/85/_part_y -10.990609169
+P _part/85/_part_y -10.990610123
 P _part/85/_part_z 17.530000687
 P _part/85/_patt_con 0
 P _part/85/_patt_prt 0
@@ -41477,86 +41477,106 @@ GROUP EWD
     OFFSET 0.000000
 
 END_GROUP
-gen_pointer 000b
-  POS 2086.500000 694.500000
-  IMAGE MIP/pfd/alt tape/000b
+gen_pointer 1
+  POS 2085.500000 687.500000
+  IMAGE MIP/pfd/alt tape/1
   DATAREF sim/cockpit2/gauges/indicators/altitude_ft_pilot
+  CLIP
   LIGHT_MODE GLASS_AUTO
   LIGHT_RHEOSTAT 0
-  KEY_FRAME -2000.000000 398.000000 1.000000
-  KEY_FRAME 0.000000 -441.000000
+  KEY_FRAME -1000.000000 791.000000 1.000000
+  KEY_FRAME 3500.000000 -1100.000000
   IS_DRAGGABLE 0
   IS_VERTICAL 1
   OFFSET 0.000000
 
-gen_pointer 000-080
-  POS 2086.500000 694.500000
-  IMAGE MIP/pfd/alt tape/000-080
+gen_pointer 2
+  POS 2085.500000 687.500000
+  IMAGE MIP/pfd/alt tape/2
   DATAREF sim/cockpit2/gauges/indicators/altitude_ft_pilot
+  CLIP
   LIGHT_MODE GLASS_AUTO
   LIGHT_RHEOSTAT 0
-  KEY_FRAME 0.000000 1678.000000 1.000000
-  KEY_FRAME 8000.000000 -1681.000000
+  KEY_FRAME 4000.000000 1189.000000 1.000000
+  KEY_FRAME 9000.000000 -909.000000
   IS_DRAGGABLE 0
   IS_VERTICAL 1
   OFFSET 0.000000
 
-gen_pointer 080-160
-  POS 2086.500000 694.500000
-  IMAGE MIP/pfd/alt tape/080-160
+gen_pointer 3
+  POS 2085.500000 687.500000
+  IMAGE MIP/pfd/alt tape/3
   DATAREF sim/cockpit2/gauges/indicators/altitude_ft_pilot
+  CLIP
   LIGHT_MODE GLASS_AUTO
   LIGHT_RHEOSTAT 0
-  KEY_FRAME 8000.000000 1679.000000 1.000000
-  KEY_FRAME 16000.000000 -1678.000000
+  KEY_FRAME 10000.000000 1171.000000 1.000000
+  KEY_FRAME 15000.000000 -930.000000
   IS_DRAGGABLE 0
   IS_VERTICAL 1
   OFFSET 0.000000
 
-gen_pointer 160-240
-  POS 2086.500000 694.500000
-  IMAGE MIP/pfd/alt tape/160-240
+gen_pointer 4
+  POS 2085.500000 687.500000
+  IMAGE MIP/pfd/alt tape/4
   DATAREF sim/cockpit2/gauges/indicators/altitude_ft_pilot
+  CLIP
   LIGHT_MODE GLASS_AUTO
   LIGHT_RHEOSTAT 0
-  KEY_FRAME 16000.000000 1682.000000 1.000000
-  KEY_FRAME 24000.000000 -1682.000000
+  KEY_FRAME 16000.000000 1149.000000 1.000000
+  KEY_FRAME 21000.000000 -950.000000
   IS_DRAGGABLE 0
   IS_VERTICAL 1
   OFFSET 0.000000
 
-gen_pointer 240-320
-  POS 2086.500000 694.500000
-  IMAGE MIP/pfd/alt tape/240-320
+gen_pointer 5
+  POS 2085.500000 687.500000
+  IMAGE MIP/pfd/alt tape/5
   DATAREF sim/cockpit2/gauges/indicators/altitude_ft_pilot
+  CLIP
   LIGHT_MODE GLASS_AUTO
   LIGHT_RHEOSTAT 0
-  KEY_FRAME 24000.000000 1678.000000 1.000000
-  KEY_FRAME 32000.000000 -1677.000000
+  KEY_FRAME 22000.000000 1130.000000 1.000000
+  KEY_FRAME 27000.000000 -970.000000
   IS_DRAGGABLE 0
   IS_VERTICAL 1
   OFFSET 0.000000
 
-gen_pointer 320-400
-  POS 2086.500000 694.500000
-  IMAGE MIP/pfd/alt tape/320-400
+gen_pointer 6
+  POS 2085.500000 687.500000
+  IMAGE MIP/pfd/alt tape/6
   DATAREF sim/cockpit2/gauges/indicators/altitude_ft_pilot
+  CLIP
   LIGHT_MODE GLASS_AUTO
   LIGHT_RHEOSTAT 0
-  KEY_FRAME 32000.000000 1683.000000 1.000000
-  KEY_FRAME 40000.000000 -1672.000000
+  KEY_FRAME 28000.000000 1110.000000 1.000000
+  KEY_FRAME 33000.000000 -990.000000
   IS_DRAGGABLE 0
   IS_VERTICAL 1
   OFFSET 0.000000
 
-gen_pointer 400a
-  POS 2086.500000 694.500000
-  IMAGE MIP/pfd/alt tape/400a
+gen_pointer 7
+  POS 2085.500000 687.500000
+  IMAGE MIP/pfd/alt tape/7
   DATAREF sim/cockpit2/gauges/indicators/altitude_ft_pilot
+  CLIP
   LIGHT_MODE GLASS_AUTO
   LIGHT_RHEOSTAT 0
-  KEY_FRAME 40000.000000 1189.000000 1.000000
-  KEY_FRAME 45000.000000 -925.000000
+  KEY_FRAME 34000.000000 1089.000000 1.000000
+  KEY_FRAME 39000.000000 -1011.000000
+  IS_DRAGGABLE 0
+  IS_VERTICAL 1
+  OFFSET 0.000000
+
+gen_pointer 8
+  POS 2085.500000 687.500000
+  IMAGE MIP/pfd/alt tape/8
+  DATAREF sim/cockpit2/gauges/indicators/altitude_ft_pilot
+  CLIP
+  LIGHT_MODE GLASS_AUTO
+  LIGHT_RHEOSTAT 0
+  KEY_FRAME 40000.000000 1069.000000 1.000000
+  KEY_FRAME 45000.000000 -1031.000000
   IS_DRAGGABLE 0
   IS_VERTICAL 1
   OFFSET 0.000000
@@ -41668,7 +41688,7 @@ gen_rotary LSH
   CLICK_DY 0
 
 gen_rotary LSV
-  POS 2001.000000 685.500000
+  POS 2001.000000 685.000000
   IMAGE MIP/pfd/LSV
   DATAREF 
   LIGHT_MODE GLASS_AUTO
