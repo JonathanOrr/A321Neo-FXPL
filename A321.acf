@@ -143,7 +143,7 @@ P _door/3/_xyz/0 1.500000000
 P _door/3/_xyz/1 0.0
 P _door/3/_xyz/2 14.500000000
 P _door/3/_xyz/count 3
-P _door/4/_ang_now 51.008476257
+P _door/4/_ang_now 53.898715973
 P _door/4/_ext_ang 0.0
 P _door/4/_ret_ang 90.0
 P _door/4/_type 2
@@ -151,7 +151,7 @@ P _door/4/_xyz/0 -13.0
 P _door/4/_xyz/1 -3.599999905
 P _door/4/_xyz/2 73.500000000
 P _door/4/_xyz/count 3
-P _door/5/_ang_now -51.008476257
+P _door/5/_ang_now -53.898715973
 P _door/5/_ext_ang 0.0
 P _door/5/_ret_ang -90.0
 P _door/5/_type 2
@@ -209,10 +209,10 @@ P _gear/0/_latN 0.0
 P _gear/0/_latR 0.0
 P _gear/0/_leg_len 5.400000095
 P _gear/0/_lonE 0.0
-P _gear/0/_lonN 55.542560577
+P _gear/0/_lonN 58.689712524
 P _gear/0/_lonR 98.0
 P _gear/0/_scon 47252.898437500
-P _gear/0/_stat_def 0.399389684
+P _gear/0/_stat_def 0.399389744
 P _gear/0/_steerdeg_hispeed 5.0
 P _gear/0/_steerdeg_lospeed 75.0
 P _gear/0/_strut_comp 0.0
@@ -239,14 +239,14 @@ P _gear/1/_gear_x -12.010000229
 P _gear/1/_gear_y -2.799999952
 P _gear/1/_gear_z 69.800003052
 P _gear/1/_latE 0.0
-P _gear/1/_latN 45.340866089
+P _gear/1/_latN 47.909969330
 P _gear/1/_latR 80.0
 P _gear/1/_leg_len 8.199999809
 P _gear/1/_lonE -7.0
-P _gear/1/_lonN -3.032674074
+P _gear/1/_lonN -2.807877541
 P _gear/1/_lonR 0.0
 P _gear/1/_scon 71266.664062500
-P _gear/1/_stat_def 1.367629170
+P _gear/1/_stat_def 1.367629647
 P _gear/1/_steerdeg_hispeed 0.0
 P _gear/1/_steerdeg_lospeed 0.0
 P _gear/1/_strut_comp -0.500000000
@@ -273,14 +273,14 @@ P _gear/2/_gear_x 12.010000229
 P _gear/2/_gear_y -2.799999952
 P _gear/2/_gear_z 69.800003052
 P _gear/2/_latE 0.0
-P _gear/2/_latN -45.340866089
+P _gear/2/_latN -47.909969330
 P _gear/2/_latR -80.0
 P _gear/2/_leg_len 8.199999809
 P _gear/2/_lonE -7.0
-P _gear/2/_lonN -3.032674074
+P _gear/2/_lonN -2.807877541
 P _gear/2/_lonR 0.0
 P _gear/2/_scon 71266.664062500
-P _gear/2/_stat_def 1.367629170
+P _gear/2/_stat_def 1.367629647
 P _gear/2/_steerdeg_hispeed 0.0
 P _gear/2/_steerdeg_lospeed 0.0
 P _gear/2/_strut_comp -0.500000000
@@ -25891,7 +25891,7 @@ P _part/86/_part_specs_invis 0
 P _part/86/_part_tex 0
 P _part/86/_part_the 0.0
 P _part/86/_part_x -12.010000229
-P _part/86/_part_y -9.571249008
+P _part/86/_part_y -9.571248055
 P _part/86/_part_z 70.799331665
 P _part/86/_patt_con 0
 P _part/86/_patt_prt 0
@@ -27361,7 +27361,7 @@ P _part/87/_part_specs_invis 0
 P _part/87/_part_tex 0
 P _part/87/_part_the 0.0
 P _part/87/_part_x 12.010000229
-P _part/87/_part_y -9.571249008
+P _part/87/_part_y -9.571248055
 P _part/87/_part_z 70.799331665
 P _part/87/_patt_con 0
 P _part/87/_patt_prt 0
@@ -41691,6 +41691,106 @@ gen_rotary LSV
   POS 2001.000000 685.000000
   IMAGE MIP/pfd/LSV
   DATAREF 
+  LIGHT_MODE GLASS_AUTO
+  LIGHT_RHEOSTAT 0
+  KEY_FRAME 0.000000 0.000000 1.000000
+  KEY_FRAME 1.000000 6.000000
+  DIGITS 1
+  ROTARY_TYPE NO_CLICK
+  CLICK_RADIUS 10.000000
+  CLICK_RADIUS_DY 0.000000
+  OFFSET 0.000000
+  STEP1 1.000000
+  STEP2 1.000000
+  CURSOR DEFAULT
+  CLICK_DX 0
+  CLICK_DY 0
+
+gen_needle Roll Center
+  POS 1758.500000 685.000000
+  IMAGE MIP/pfd/Beta Target Upper
+  DATAREF sim/cockpit2/gauges/indicators/roll_AHARS_deg_pilot
+  LIGHT_MODE GLASS_AUTO
+  LIGHT_RHEOSTAT 0
+  KEY_FRAME 0.000000 0.000000 1.000000
+  KEY_FRAME 30.000000 -30.000000
+  IS_DRAGGABLE 0
+  OFFSET 0.000000
+
+GROUP Beta Target
+  GROUP_ANIMATE_MODE ROTATE
+  GROUP_WIDTH 0
+  GROUP_HEIGHT 0
+  DATAREF sim/cockpit2/gauges/indicators/roll_AHARS_deg_pilot
+  POS 0.000000 0.000000
+  KEY_FRAME 0.000000 0.000000 1.000000
+  KEY_FRAME 30.000000 -30.000000
+  ROTATE_OFFSET_X 0.000000
+  ROTATE_OFFSET_Y 0.000000
+  gen_pointer Beta Target
+    POS 1758.500000 685.000000
+    IMAGE MIP/pfd/beta target
+    DATAREF sim/cockpit2/gauges/indicators/slip_deg
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME -5.000000 -50.000000 1.000000
+    KEY_FRAME 5.000000 50.000000
+    IS_DRAGGABLE 0
+    IS_VERTICAL 0
+    OFFSET 0.000000
+
+END_GROUP
+gen_pointer alt target
+  POS 2053.500000 685.500000
+  IMAGE MIP/pfd/target alt
+  DATAREF sim/cockpit2/autopilot/altitude_dial_ft
+  CLIP
+  LIGHT_MODE GLASS_AUTO
+  LIGHT_RHEOSTAT 0
+  KEY_FRAME 0.000000 0.000000 1.000000
+  KEY_FRAME 500.000000 212.000000
+  IS_DRAGGABLE 0
+  IS_VERTICAL 1
+  OFFSET 0.000000
+
+gen_rotary Alt Out Of Range
+  POS 2095.500000 686.500000
+  IMAGE MIP/pfd/ALT STBY
+  DATAREF 
+  HIDE
+  LIGHT_MODE GLASS_AUTO
+  LIGHT_RHEOSTAT 0
+  KEY_FRAME 0.000000 0.000000 1.000000
+  KEY_FRAME 1.000000 0.000000
+  DIGITS 1
+  ROTARY_TYPE NO_CLICK
+  CLICK_RADIUS 10.000000
+  CLICK_RADIUS_DY 0.000000
+  OFFSET 0.000000
+  STEP1 1.000000
+  STEP2 1.000000
+  CURSOR DEFAULT
+  CLICK_DX 0
+  CLICK_DY 0
+
+gen_pointer Alt Tape Ground Red
+  POS 2118.000000 684.500000
+  IMAGE MIP/pfd/Alt Ground
+  DATAREF sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_copilot
+  CLIP
+  LIGHT_MODE GLASS_AUTO
+  LIGHT_RHEOSTAT 0
+  KEY_FRAME 0.000000 -297.000000 1.000000
+  KEY_FRAME 500.000000 -507.000000
+  IS_DRAGGABLE 0
+  IS_VERTICAL 1
+  OFFSET 0.000000
+
+gen_rotary Alt Box
+  POS 2095.500000 686.500000
+  IMAGE MIP/pfd/alt frame
+  DATAREF 
+  HIDE
   LIGHT_MODE GLASS_AUTO
   LIGHT_RHEOSTAT 0
   KEY_FRAME 0.000000 0.000000 1.000000
