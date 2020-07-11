@@ -13,7 +13,8 @@ local vvi = globalProperty("sim/cockpit2/gauges/indicators/vvi_fpm_pilot")
 --a32nx dataref--
 local ground_track_delta = createGlobalPropertyf("a321neo/cockpit/PFD/ground_track_delta", 0, false, true, false)
 local max_speed = createGlobalPropertyf("a321neo/cockpit/PFD/max_speed", 0, false, true, false)
-local stall_speed = createGlobalPropertyf("a321neo/cockpit/PFD/stall_speed", 138, false, true, false) -- clean stall 138kts
+local a_floor_speed = createGlobalPropertyf("a321neo/cockpit/PFD/a_floor_speed", 0, false, true, false) -- AFLOOR at 7.5 degrees AoA
+local stall_speed = createGlobalPropertyf("a321neo/cockpit/PFD/stall_speed", 0, false, true, false) -- stall at 9 degrees AoA
 
 --fonts
 local B612regular = sasl.gl.loadFont("fonts/B612-Regular.ttf")
@@ -31,6 +32,8 @@ local vvi_cl = PFD_GREEN
 function update()
     set(ground_track_delta, get(ground_track) - get(current_heading))
 
+    set(a_floor_speed, get(IAS) * (get(Alpha)/7.5))
+    set(stall_speed, get(IAS) * (get(Alpha)/9))
 
     vvi_cl = PFD_GREEN
     if get(vvi) > -1000 and get(vvi) < 1000 then
