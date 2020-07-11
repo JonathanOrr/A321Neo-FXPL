@@ -27,22 +27,25 @@ function draw()
     sasl.gl.drawText(B612MONO_regular, 20, 460, "YOU ARE IN:", 28, false, false, TEXT_ALIGN_LEFT, FBW_WHITE)
     if get(FBW_on) == 1 then
         sasl.gl.drawText(B612MONO_regular, 20, 410, "NORMAL LAW", 40, false, false, TEXT_ALIGN_LEFT, FBW_GREEN)
-        sasl.gl.drawText(B612MONO_regular, 20, 380, "YOU ARE COMMANDING: " .. Round(get(G_load_command), 1) .. "G", 15, false, false, TEXT_ALIGN_LEFT, FBW_GREEN)
-        sasl.gl.drawText(B612MONO_regular, 20, 360, "PULLING: " .. Round(get(Total_vertical_g_load), 1) .. "G", 15, false, false, TEXT_ALIGN_LEFT, FBW_GREEN)
+        sasl.gl.drawText(B612MONO_regular, 20, 390, "YOU ARE COMMANDING: " .. Round(get(G_load_command), 1) .. "G", 15, false, false, TEXT_ALIGN_LEFT, FBW_GREEN)
+        sasl.gl.drawText(B612MONO_regular, 20, 370, "PULLING: " .. Round(get(Total_vertical_g_load), 1) .. "G", 15, false, false, TEXT_ALIGN_LEFT, FBW_GREEN)
+        sasl.gl.drawText(B612MONO_regular, 20, 350, "COMMANDING: " .. Round(get(Roll_rate_command), 1) .. " DEG/S", 15, false, false, TEXT_ALIGN_LEFT, FBW_GREEN)
+        sasl.gl.drawText(B612MONO_regular, 20, 330, "ROLLING: " .. Round(get(Roll_rate), 1) .. " DEG/S", 15, false, false, TEXT_ALIGN_LEFT, FBW_GREEN)
     else
         sasl.gl.drawText(B612MONO_regular, 20, 400, "DIRECT LAW", 40, false, false, TEXT_ALIGN_LEFT, FBW_ORANGE)
     end
 
     sasl.gl.drawRectangle(size[1]/2-10 + 150 * get(Roll_artstab), (size[2]/2-90) - 150 * get(Pitch_artstab), 20, 20, FBW_ORANGE)
-    sasl.gl.drawCircle(size[1]/2 + 150 * get(Roll), (size[2]/2-80) - 150 * get(Pitch), 10, true, FBW_GREEN)
 
     sasl.gl.drawCircle(size[1]/2 + 150 * 0, (size[2]/2-80) - 150 * get(Pitch_d_lim), 10, true, FBW_RED)
     sasl.gl.drawCircle(size[1]/2 + 150 * 0, (size[2]/2-80) - 150 * get(Pitch_u_lim), 10, true, FBW_RED)
     sasl.gl.drawCircle(size[1]/2 + 150 * get(Roll_l_lim), (size[2]/2-80) - 150 * 0, 10, true, FBW_RED)
     sasl.gl.drawCircle(size[1]/2 + 150 * get(Roll_r_lim), (size[2]/2-80) - 150 * 0, 10, true, FBW_RED)
 
-    sasl.gl.drawCircle(size[1]/2 + 150 * 0, (size[2]/2-80) - 150 * get(Pitch_G_down), 10, true, FBW_BLUE)
-    sasl.gl.drawCircle(size[1]/2 + 150 * 0, (size[2]/2-80) - 150 * get(Pitch_G_up), 10, true, FBW_BLUE)
+    sasl.gl.drawCircle(size[1]/2 + 150 * get(Roll_rate_output), (size[2]/2-80) - 150 * 0, 10, true, FBW_BLUE)
+    sasl.gl.drawCircle(size[1]/2 + 150 * 0, (size[2]/2-80) - 150 * get(G_output), 10, true, FBW_BLUE)
+
+    sasl.gl.drawCircle(size[1]/2 + 150 * get(Roll), (size[2]/2-80) - 150 * get(Pitch), 10, true, FBW_GREEN)
 
     sasl.gl.drawRectangle(300, 405, 20, 75 * get(Elev_trim_ratio), FBW_GREEN)
     sasl.gl.drawFrame (300, 330, 20, 150, FBW_WHITE)
