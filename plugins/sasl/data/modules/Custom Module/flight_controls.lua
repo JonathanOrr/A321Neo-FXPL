@@ -66,12 +66,12 @@ function update()
 
     --summing the controls
     if get(Flight_director_1_mode) == 2 or get(Flight_director_2_mode) == 2 then -- if the autopilot is on
-        total_roll = get(roll) + get(roll_artstab) + get(servo_roll)
-        total_pitch = get(pitch) + get(pitch_artstab) + get(servo_pitch)
-        total_yaw = get(yaw) + get(yaw_artstab) + get(servo_yaw)
+        total_roll = get(roll) + get(roll_artstab)-- + get(servo_roll)
+        total_pitch = get(pitch) + get(pitch_artstab)-- + get(servo_pitch)
+        total_yaw = get(yaw) + get(yaw_artstab)-- + get(servo_yaw)
     else
-        total_roll = get(roll) + get(roll_artstab)
-        total_pitch = get(pitch) + get(pitch_artstab)
+        total_roll = get(roll_artstab) -- roll rate commanding
+        total_pitch = get(pitch_artstab) --G commanding
         total_yaw = get(yaw) + get(yaw_artstab)
     end
 
