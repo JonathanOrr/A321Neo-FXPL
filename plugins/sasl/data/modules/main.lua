@@ -19,14 +19,15 @@ panelHeight3d = 2048
 
 components = {
   engine_and_apu {},
-  cabin_screens {},
   FBW {},
+  cabin_screens {},
   flight_controls {},
   fcu_ap_at {},
   AT {},
   packs {},
   aircond {},
   wheel {},
+  PFD {},
   EWD {},
   ECAM {}
  }
