@@ -12,7 +12,6 @@ local vvi = globalProperty("sim/cockpit2/gauges/indicators/vvi_fpm_pilot")
 
 --a32nx dataref--
 local ground_track_delta = createGlobalPropertyf("a321neo/cockpit/PFD/ground_track_delta", 0, false, true, false)
-local max_speed = createGlobalPropertyf("a321neo/cockpit/PFD/max_speed", 0, false, true, false)
 local a_floor_speed = createGlobalPropertyf("a321neo/cockpit/PFD/a_floor_speed", 0, false, true, false) -- AFLOOR at 7.5 degrees AoA
 local stall_speed = createGlobalPropertyf("a321neo/cockpit/PFD/stall_speed", 0, false, true, false) -- stall at 9 degrees AoA
 
@@ -29,11 +28,38 @@ local PFD_ORANGE = {0.725, 0.521, 0.18}
 local PFD_GREY = {0.3, 0.3, 0.3}
 local vvi_cl = PFD_GREEN
 
+--max speed array
+local max_speeds_kts = {
+    280,
+    230,
+    215,
+    200,
+    185,
+    177
+}
+
 function update()
     set(ground_track_delta, get(ground_track) - get(current_heading))
 
-    set(a_floor_speed, get(IAS) * (get(Alpha)/7.5))
-    set(stall_speed, get(IAS) * (get(Alpha)/9))
+    --a floor speed and stall speed
+    set(a_floor_speed, get(IAS) * (get(Alpha)/7.5))--7.5 degrees of AoA
+    set(stall_speed, get(IAS) * (get(Alpha)/9))--9 degrees of AoA
+
+    --max speeds calculation
+    if get(Flaps_handle_ratio) == 0 and get(Gear_handle) == 0 then
+        set(Max_speed, 330)
+    elseif get(Gear_handle) == 1 or get(Flaps_handle_ratio) > 0 then
+        set(Max_speed, max_speeds_kts[1])
+        if get(Flaps_handle_ratio) == 0.25 then
+            set(Max_speed, max_speeds_kts[3])
+        elseif get(Flaps_handle_ratio) == 0.5 then
+            set(Max_speed, max_speeds_kts[4])
+        elseif get(Flaps_handle_ratio) == 0.75 then
+            set(Max_speed, max_speeds_kts[5])
+        elseif get(Flaps_handle_ratio) == 1 then
+            set(Max_speed, max_speeds_kts[6])
+        end
+    end
 
     vvi_cl = PFD_GREEN
     if get(vvi) > -1000 and get(vvi) < 1000 then
