@@ -110,8 +110,8 @@ function update()
     --5.5 deg/s down pitch rate
     set(Pitch_rate_d_lim, FBW_PD(A32nx_FBW_pitch_rate_down,  -5.5 - get(Pitch_rate)))
 
-    --AOA 9.5 degrees slightly above stall protection
-    set(AOA_lim, Math_clamp(FBW_PD(A32nx_FBW_AOA_protection,  9.5 - get(Alpha)), -1, 0))
+    --AOA 9 degrees slightly above stall protection
+    set(AOA_lim, Math_clamp(FBW_PD(A32nx_FBW_AOA_protection,  9 - get(Alpha)), -1, 0))
 
     --Max speed protection MAX + 10
     set(MAX_spd_lim, -Math_clamp(FBW_PD(A32nx_FBW_MAX_spd_protection,  (get(Max_speed) + 10) - get(IAS)), -1, 0))
@@ -138,8 +138,6 @@ function update()
         --30 degrees roll right
         set(Roll_r_lim, FBW_PD(A32nx_FBW_roll_right_no_stick,   33 - get(Flightmodel_roll)))
     end
-
-    print(get(MAX_spd_lim))
 
     if get(FBW_on) == 1 then
         set(Roll_artstab, get(Roll_l_lim) + get(Roll_r_lim) + get(Roll_rate_output))

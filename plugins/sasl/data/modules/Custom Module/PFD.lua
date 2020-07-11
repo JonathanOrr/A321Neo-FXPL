@@ -48,8 +48,8 @@ function update()
     set(stall_speed_delta, get(stall_speed) - get(IAS))
 
     --a floor speed and stall speed
-    set(a_floor_speed, get(IAS) * (get(Alpha)/7.5))--7.5 degrees of AoA
-    set(stall_speed, get(IAS) * (get(Alpha)/9))--9 degrees of AoA
+    set(a_floor_speed, Set_anim_value(get(a_floor_speed), get(IAS) * (get(Alpha)/10), 0, 350, 0.4))--9.5 degrees of AoA
+    set(stall_speed, Set_anim_value(get(stall_speed), get(IAS) * (get(Alpha)/14), 0, 350, 0.8))--14 degrees of AoA
 
     --max speeds calculation
     if get(Flaps_handle_ratio) == 0 and get(Gear_handle) == 0 then
