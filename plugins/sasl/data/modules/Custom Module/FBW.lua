@@ -119,7 +119,7 @@ function update()
 
     if get(G_load_command) == 1 then
         --command 1G
-        set(G_output, FBW_PID(A32nx_FBW_1G_command,  1 - get(Total_vertical_g_load)))
+        set(G_output, FBW_PD(A32nx_FBW_1G_command,  1 - get(Total_vertical_g_load)))
     else
         --G command
         set(G_output, FBW_PD(A32nx_FBW_G_command,  get(G_load_command) - get(Total_vertical_g_load)))
