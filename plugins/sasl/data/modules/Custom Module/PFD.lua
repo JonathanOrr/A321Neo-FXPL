@@ -13,7 +13,9 @@ local vvi = globalProperty("sim/cockpit2/gauges/indicators/vvi_fpm_pilot")
 --a32nx dataref--
 local ground_track_delta = createGlobalPropertyf("a321neo/cockpit/PFD/ground_track_delta", 0, false, true, false)
 local a_floor_speed = createGlobalPropertyf("a321neo/cockpit/PFD/a_floor_speed", 0, false, true, false) -- AFLOOR at 7.5 degrees AoA
+local a_floor_speed_delta = createGlobalPropertyf("a321neo/cockpit/PFD/a_floor_speed_delta", 0, false, true, false)
 local stall_speed = createGlobalPropertyf("a321neo/cockpit/PFD/stall_speed", 0, false, true, false) -- stall at 9 degrees AoA
+local stall_speed_delta = createGlobalPropertyf("a321neo/cockpit/PFD/stall_speed_delta", 0, false, true, false)
 
 --fonts
 local B612regular = sasl.gl.loadFont("fonts/B612-Regular.ttf")
@@ -39,7 +41,11 @@ local max_speeds_kts = {
 }
 
 function update()
+    --PFD deltas
     set(ground_track_delta, get(ground_track) - get(current_heading))
+    set(Max_speed_delta, get(Max_speed) - get(IAS))
+    set(a_floor_speed_delta, get(a_floor_speed) - get(IAS))
+    set(stall_speed_delta, get(stall_speed) - get(IAS))
 
     --a floor speed and stall speed
     set(a_floor_speed, get(IAS) * (get(Alpha)/7.5))--7.5 degrees of AoA
