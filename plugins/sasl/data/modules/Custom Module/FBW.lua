@@ -27,7 +27,6 @@ local A32nx_FBW_elev_trim = {P_gain = 1, I_gain = 1, D_gain = 10, I_delay = 120,
 --variables--
 
 --sim datarefs
-local flaps_handle_ratio = globalProperty("sim/cockpit2/controls/flap_ratio")
 --a32nx datarefs
 
 --initialise FBW
@@ -56,7 +55,7 @@ function update()
             set(Roll_rate_command, 0)
         end
 
-        if get(flaps_handle_ratio) < 0.1 then--
+        if get(Flaps_handle_ratio) < 0.1 then--
             if get(Pitch) + get(Servo_pitch) > 0.1 then
                 set(G_load_command, 1.5 * (get(Pitch) + get(Servo_pitch)) + 1)
             elseif get(Pitch) < -0.1 then
@@ -82,7 +81,7 @@ function update()
             set(Roll_rate_command, 0)
         end
 
-        if get(flaps_handle_ratio) < 0.1 then--
+        if get(Flaps_handle_ratio) < 0.1 then--
             if get(Pitch) > 0.1 then
                 set(G_load_command, 1.5 * get(Pitch) + 1)
             elseif get(Pitch) < -0.1 then
@@ -111,11 +110,11 @@ function update()
     --5.5 deg/s down pitch rate
     set(Pitch_rate_d_lim, FBW_PD(A32nx_FBW_pitch_rate_down,  -5.5 - get(Pitch_rate)))
 
-    --AOA 7.5 degrees near stall protection
-    set(AOA_lim, FBW_PD(A32nx_FBW_AOA_protection,  9.5 - get(Alpha)))
+    --AOA 9.5 degrees slightly above stall protection
+    set(AOA_lim, Math_clamp(FBW_PD(A32nx_FBW_AOA_protection,  9.5 - get(Alpha)), -1, 0))
 
     --Max speed protection MAX + 10
-    set(MAX_spd_lim, FBW_PD(A32nx_FBW_MAX_spd_protection,  310 - get(IAS)))
+    set(MAX_spd_lim, -Math_clamp(FBW_PD(A32nx_FBW_MAX_spd_protection,  (get(Max_speed) + 10) - get(IAS)), -1, 0))
 
     if get(G_load_command) == 1 then
         --command 1G
@@ -140,10 +139,12 @@ function update()
         set(Roll_r_lim, FBW_PD(A32nx_FBW_roll_right_no_stick,   33 - get(Flightmodel_roll)))
     end
 
+    print(get(MAX_spd_lim))
+
     if get(FBW_on) == 1 then
         set(Roll_artstab, get(Roll_l_lim) + get(Roll_r_lim) + get(Roll_rate_output))
         --if get(Pitch) > 0.1 or get(Pitch) < -0.1 then
-            set(Pitch_artstab, (get(Pitch_d_lim) + get(Pitch_u_lim)) + (get(Pitch_rate_d_lim) + get(Pitch_rate_u_lim)) + get(G_output) + (get(AOA_lim) - 1))
+            set(Pitch_artstab, (get(Pitch_d_lim) + get(Pitch_u_lim)) + (get(Pitch_rate_d_lim) + get(Pitch_rate_u_lim)) + get(G_output) + get(AOA_lim) + get(MAX_spd_lim))
         --else
         --    set(Pitch_artstab, (get(Pitch_d_lim) + get(Pitch_u_lim)))
         --end
