@@ -111,8 +111,8 @@ function update()
     --5.5 deg/s down pitch rate
     set(Pitch_rate_d_lim, FBW_PD(A32nx_FBW_pitch_rate_down,  -5.5 - get(Pitch_rate)))
 
-    --AOA 13 degrees near stall protection
-    set(AOA_lim, FBW_PD(A32nx_FBW_AOA_protection,  13 - get(Alpha)))
+    --AOA 7.5 degrees near stall protection
+    set(AOA_lim, FBW_PD(A32nx_FBW_AOA_protection,  9.5 - get(Alpha)))
 
     --Max speed protection MAX + 10
     set(MAX_spd_lim, FBW_PD(A32nx_FBW_MAX_spd_protection,  310 - get(IAS)))
