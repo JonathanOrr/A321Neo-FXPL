@@ -5,53 +5,17 @@ local A32nx_FBW_roll_left =  {P_gain = 1, D_gain = 10, Current_error = 0, Min_er
 local A32nx_FBW_roll_right = {P_gain = 1, D_gain = 10, Current_error = 0, Min_error = -15, Max_error = 15, Error_offset = 0}
 local A32nx_FBW_roll_left_no_stick =  {P_gain = 1, D_gain = 25, Current_error = 0, Min_error = -5, Max_error = 5, Error_offset = 0}
 local A32nx_FBW_roll_right_no_stick = {P_gain = 1, D_gain = 25, Current_error = 0, Min_error = -5, Max_error = 5, Error_offset = 0}
-local A32nx_FBW_pitch_up =   {P_gain = 1, D_gain = 10, Current_error = 0, Min_error = -15, Max_error = 15, Error_offset = 0}
-local A32nx_FBW_pitch_down = {P_gain = 1, D_gain = 10, Current_error = 0, Min_error = -15, Max_error = 15, Error_offset = 0}
+local A32nx_FBW_pitch_up =   {P_gain = 1, D_gain = 10, Current_error = 0, Min_error = -5, Max_error = 5, Error_offset = 0}
+local A32nx_FBW_pitch_down = {P_gain = 1, D_gain = 10, Current_error = 0, Min_error = -5, Max_error = 5, Error_offset = 0}
+local A32nx_FBW_pitch_rate_up =   {P_gain = 1, D_gain = 10, Current_error = 0, Min_error = -5.5, Max_error = 5.5, Error_offset = 0}
+local A32nx_FBW_pitch_rate_down =   {P_gain = 1, D_gain = 10, Current_error = 0, Min_error = -5.5, Max_error = 5.5, Error_offset = 0}
 local A32nx_FBW_roll_rate_command = {P_gain = 10, I_gain = 1, D_gain = 10, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -15, Max_error = 15, Error_offset = 0}
+local A32nx_FBW_1G_command = {P_gain = 1, I_gain = 1, D_gain = 1.5, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -0.25, Max_error = 0.25, Error_offset = 0}
 local A32nx_FBW_G_command = {P_gain = 1.5, I_gain = 1, D_gain = 10, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -2.5, Max_error = 2.5, Error_offset = 0}
+local A32nx_FBW_AOA_protection = {P_gain = 1, I_gain = 1, D_gain = 10, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -5, Max_error = 5, Error_offset = 0}
+local A32nx_FBW_MAX_spd_protection = {P_gain = 1, I_gain = 1, D_gain = 10, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -5, Max_error = 5, Error_offset = 0}
 
 local A32nx_FBW_elev_trim = {P_gain = 1, I_gain = 1, D_gain = 10, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -35, Max_error = 35, Error_offset = 0}
-
---PID funtions--
-function FBW_PD(pd_array, error)
-    local last_error = pd_array.Current_error
-	pd_array.Current_error = error + pd_array.Error_offset
-
-	--Proportional--
-	local correction = pd_array.Current_error * pd_array.P_gain
-
-	--derivative--
-	correction = correction + (pd_array.Current_error - last_error) * pd_array.D_gain
-
-	--limit and rescale output range--
-	correction = Math_clamp(correction, pd_array.Min_error, pd_array.Max_error) / pd_array.Max_error
-
-	return correction
-end
-
-function FBW_PID(pid_array, error)
-    local last_error = pid_array.Current_error
-	pid_array.Current_error = error + pid_array.Error_offset
-
-	--Proportional--
-	local correction = pid_array.Current_error * pid_array.P_gain
-
-	--integral--
-	pid_array.Integral = (pid_array.Integral * (pid_array.I_delay - 1) + pid_array.Current_error) / pid_array.I_delay
-
-	--clamping the integral to minimise the delay
-	pid_array.Integral = Math_clamp(pid_array.Integral, pid_array.Min_error, pid_array.Max_error)
-
-	correction = correction + pid_array.Integral * pid_array.I_gain
-
-	--derivative--
-	correction = correction + (pid_array.Current_error - last_error) * pid_array.D_gain
-
-	--limit and rescale output range--
-	correction = Math_clamp(correction, pid_array.Min_error, pid_array.Max_error) / pid_array.Max_error
-
-	return correction
-end
 
 --[[establishing the FBW laws:
     NORMAL LAW: 30 UP, 15 DOWN, stick active: 67 LEFT & RIGHT, not active 30 LEFT & RIGHT, 14 degrees alpha, OVERSPEED protection, roll rate of 30, 2.5G to -1G in normal flight,2G to 0G if flaps down envelop, always CWS
@@ -65,6 +29,20 @@ end
 --sim datarefs
 local flaps_handle_ratio = globalProperty("sim/cockpit2/controls/flap_ratio")
 --a32nx datarefs
+
+--initialise FBW
+set(Override_artstab, 1)
+set(Override_control_surfaces, 1)
+
+function onPlaneLoaded()
+    set(Override_artstab, 1)
+    set(Override_control_surfaces, 1)
+end
+
+function onAirportLoaded()
+    set(Override_artstab, 1)
+    set(Override_control_surfaces, 1)
+end
 
 function update()
     set(Override_artstab, 1)
@@ -128,9 +106,20 @@ function update()
     --30 degrees climb and command G load
     set(Pitch_u_lim, FBW_PD(A32nx_FBW_pitch_up,  30 - get(Flightmodel_pitch)))
 
+    --5.5 deg/s up pitch rate
+    set(Pitch_rate_u_lim, FBW_PD(A32nx_FBW_pitch_rate_up,  5.5 - get(Pitch_rate)))
+    --5.5 deg/s down pitch rate
+    set(Pitch_rate_d_lim, FBW_PD(A32nx_FBW_pitch_rate_down,  -5.5 - get(Pitch_rate)))
+
+    --AOA 13 degrees near stall protection
+    set(AOA_lim, FBW_PD(A32nx_FBW_AOA_protection,  13 - get(Alpha)))
+
+    --Max speed protection MAX + 10
+    set(MAX_spd_lim, FBW_PD(A32nx_FBW_MAX_spd_protection,  310 - get(IAS)))
+
     if get(G_load_command) == 1 then
         --command 1G
-        set(G_output, FBW_PID(A32nx_FBW_G_command,  get(G_load_command) - get(Total_vertical_g_load)))
+        set(G_output, FBW_PID(A32nx_FBW_1G_command,  1 - get(Total_vertical_g_load)))
     else
         --G command
         set(G_output, FBW_PD(A32nx_FBW_G_command,  get(G_load_command) - get(Total_vertical_g_load)))
@@ -154,7 +143,7 @@ function update()
     if get(FBW_on) == 1 then
         set(Roll_artstab, get(Roll_l_lim) + get(Roll_r_lim) + get(Roll_rate_output))
         --if get(Pitch) > 0.1 or get(Pitch) < -0.1 then
-            set(Pitch_artstab, (get(Pitch_d_lim) + get(Pitch_u_lim)) + get(G_output))
+            set(Pitch_artstab, (get(Pitch_d_lim) + get(Pitch_u_lim)) + (get(Pitch_rate_d_lim) + get(Pitch_rate_u_lim)) + get(G_output) + (get(AOA_lim) - 1))
         --else
         --    set(Pitch_artstab, (get(Pitch_d_lim) + get(Pitch_u_lim)))
         --end
