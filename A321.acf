@@ -102,7 +102,7 @@ P _door/0/_xyz/0 -1.0
 P _door/0/_xyz/1 0.0
 P _door/0/_xyz/2 17.600000381
 P _door/0/_xyz/count 3
-P _door/1/_ang_now 0.0
+P _door/1/_ang_now 30.779174805
 P _door/1/_ext_ang 0.0
 P _door/1/_ret_ang 100.0
 P _door/1/_type 3
@@ -110,7 +110,7 @@ P _door/1/_xyz/0 -1.500000000
 P _door/1/_xyz/1 0.0
 P _door/1/_xyz/2 14.500000000
 P _door/1/_xyz/count 3
-P _door/10/_ang_now 0.0
+P _door/10/_ang_now 27.701259613
 P _door/10/_ext_ang 0.0
 P _door/10/_ret_ang 90.0
 P _door/10/_type 3
@@ -135,7 +135,7 @@ P _door/2/_xyz/0 1.0
 P _door/2/_xyz/1 0.0
 P _door/2/_xyz/2 17.600000381
 P _door/2/_xyz/count 3
-P _door/3/_ang_now 0.0
+P _door/3/_ang_now -30.779174805
 P _door/3/_ext_ang 0.0
 P _door/3/_ret_ang -100.0
 P _door/3/_type 3
@@ -143,7 +143,7 @@ P _door/3/_xyz/0 1.500000000
 P _door/3/_xyz/1 0.0
 P _door/3/_xyz/2 14.500000000
 P _door/3/_xyz/count 3
-P _door/4/_ang_now 66.271301270
+P _door/4/_ang_now 6.229873657
 P _door/4/_ext_ang 0.0
 P _door/4/_ret_ang 90.0
 P _door/4/_type 2
@@ -151,7 +151,7 @@ P _door/4/_xyz/0 -13.0
 P _door/4/_xyz/1 -3.599999905
 P _door/4/_xyz/2 73.500000000
 P _door/4/_xyz/count 3
-P _door/5/_ang_now -66.271301270
+P _door/5/_ang_now -6.229873657
 P _door/5/_ext_ang 0.0
 P _door/5/_ret_ang -90.0
 P _door/5/_type 2
@@ -161,7 +161,7 @@ P _door/5/_xyz/2 73.500000000
 P _door/5/_xyz/count 3
 P _door/6/_type 0
 P _door/7/_type 0
-P _door/8/_ang_now 0.0
+P _door/8/_ang_now -27.701259613
 P _door/8/_ext_ang 0.0
 P _door/8/_ret_ang -90.0
 P _door/8/_type 3
@@ -209,10 +209,10 @@ P _gear/0/_latN 0.0
 P _gear/0/_latR 0.0
 P _gear/0/_leg_len 5.400000095
 P _gear/0/_lonE 0.0
-P _gear/0/_lonN 72.162086487
+P _gear/0/_lonN 6.783645630
 P _gear/0/_lonR 98.0
 P _gear/0/_scon 47252.898437500
-P _gear/0/_stat_def 0.399389714
+P _gear/0/_stat_def 0.399389684
 P _gear/0/_steerdeg_hispeed 5.0
 P _gear/0/_steerdeg_lospeed 75.0
 P _gear/0/_strut_comp 0.0
@@ -239,14 +239,14 @@ P _gear/1/_gear_x -12.010000229
 P _gear/1/_gear_y -2.799999952
 P _gear/1/_gear_z 69.800003052
 P _gear/1/_latE 0.0
-P _gear/1/_latN 58.907825470
+P _gear/1/_latN 5.537666321
 P _gear/1/_latR 80.0
 P _gear/1/_leg_len 8.199999809
 P _gear/1/_lonE -7.0
-P _gear/1/_lonN -1.845565200
+P _gear/1/_lonN -6.515454292
 P _gear/1/_lonR 0.0
 P _gear/1/_scon 71266.664062500
-P _gear/1/_stat_def 1.367629290
+P _gear/1/_stat_def 1.367629170
 P _gear/1/_steerdeg_hispeed 0.0
 P _gear/1/_steerdeg_lospeed 0.0
 P _gear/1/_strut_comp -0.500000000
@@ -273,14 +273,14 @@ P _gear/2/_gear_x 12.010000229
 P _gear/2/_gear_y -2.799999952
 P _gear/2/_gear_z 69.800003052
 P _gear/2/_latE 0.0
-P _gear/2/_latN -58.907825470
+P _gear/2/_latN -5.537666321
 P _gear/2/_latR -80.0
 P _gear/2/_leg_len 8.199999809
 P _gear/2/_lonE -7.0
-P _gear/2/_lonN -1.845565200
+P _gear/2/_lonN -6.515454292
 P _gear/2/_lonR 0.0
 P _gear/2/_scon 71266.664062500
-P _gear/2/_stat_def 1.367629290
+P _gear/2/_stat_def 1.367629170
 P _gear/2/_steerdeg_hispeed 0.0
 P _gear/2/_steerdeg_lospeed 0.0
 P _gear/2/_strut_comp -0.500000000
@@ -35836,7 +35836,7 @@ P acf/_feather_prop_with_oilp 0
 P acf/_feathered_pitch 0.0
 P acf/_ff_rat_idle_JET 0.039999999
 P acf/_ff_rat_idle_PRP 0.0
-P acf/_file_writer_version 115026
+P acf/_file_writer_version 114100
 P acf/_flap1_cd 0.100000001
 P acf/_flap1_cl 0.779999971
 P acf/_flap1_cm -0.689999998
@@ -36046,6 +36046,8 @@ P acf/_has_get_tow_new 0
 P acf/_has_give_tow 0
 P acf/_has_ground_pwr 0
 P acf/_has_hsi 0
+P acf/_has_litemap_tex_1 0
+P acf/_has_litemap_tex_2 0
 P acf/_has_pre_rotate 0
 P acf/_has_push_back 0
 P acf/_has_radio_alt_callout 1
@@ -36737,7 +36739,6 @@ P acf/_truck_lon_sep 3.0
 P acf/_tvec_hdng 0.0
 P acf/_tvec_ptch 0.0
 P acf/_tvec_roll 0.0
-P acf/_use_1140_fm 0
 P acf/_use_cus_gear_damping 0
 P acf/_use_cus_gear_defs 0
 P acf/_use_manual_prop_inc 0
@@ -41998,7 +41999,7 @@ gen_rotary Diaoond Right
   CLICK_DY 0
 
 gen_needle Isis Horizon
-  POS 2696.000000 1395.285767
+  POS 2702.000000 1395.285767
   IMAGE MIP/isis/isis horizon
   DATAREF sim/cockpit2/gauges/indicators/roll_AHARS_deg_pilot
   CLIP
@@ -42070,10 +42071,64 @@ gen_rotary ISIS
   CLICK_DX 0
   CLICK_DY 0
 
+gen_pointer isis alt
+  POS 2901.500000 1404.000000
+  IMAGE MIP/isis/alt/1
+  DATAREF sim/cockpit2/gauges/indicators/altitude_ft_pilot
+  CLIP
+  LIGHT_MODE GLASS_AUTO
+  LIGHT_RHEOSTAT 0
+  KEY_FRAME 0.000000 831.000000 1.000000
+  KEY_FRAME 9500.000000 -1202.000000
+  IS_DRAGGABLE 0
+  IS_VERTICAL 1
+  OFFSET 0.000000
+
+gen_pointer isis alt 2
+  POS 2901.500000 1404.000000
+  IMAGE MIP/isis/alt/2
+  DATAREF sim/cockpit2/gauges/indicators/altitude_ft_pilot
+  CLIP
+  LIGHT_MODE GLASS_AUTO
+  LIGHT_RHEOSTAT 0
+  KEY_FRAME 11000.000000 1318.000000 1.000000
+  KEY_FRAME 23000.000000 -1249.000000
+  IS_DRAGGABLE 0
+  IS_VERTICAL 1
+  OFFSET 0.000000
+
+gen_pointer isis alt 3
+  POS 2901.500000 1404.000000
+  IMAGE MIP/isis/alt/3
+  DATAREF sim/cockpit2/gauges/indicators/altitude_ft_pilot
+  CLIP
+  LIGHT_MODE GLASS_AUTO
+  LIGHT_RHEOSTAT 0
+  KEY_FRAME 24000.000000 1378.000000 1.000000
+  KEY_FRAME 37000.000000 -1404.000000
+  IS_DRAGGABLE 0
+  IS_VERTICAL 1
+  OFFSET 0.000000
+
+gen_pointer isis alt 4
+  POS 2901.500000 1404.000000
+  IMAGE MIP/isis/alt/4
+  DATAREF sim/cockpit2/gauges/indicators/altitude_ft_pilot
+  CLIP
+  LIGHT_MODE GLASS_AUTO
+  LIGHT_RHEOSTAT 0
+  KEY_FRAME 37500.000000 1331.000000 1.000000
+  KEY_FRAME 48000.000000 -916.000000 1.000000
+  KEY_FRAME 99999.000000 -916.000000
+  IS_DRAGGABLE 0
+  IS_VERTICAL 1
+  OFFSET 0.000000
+
 gen_rotary altbox
   POS 2880.500000 1404.500000
   IMAGE MIP/isis/altbox
   DATAREF 
+  HIDE
   LIGHT_MODE GLASS_AUTO
   LIGHT_RHEOSTAT 0
   KEY_FRAME 0.000000 0.000000 1.000000
@@ -42094,7 +42149,7 @@ gen_pointer isis spd
   IMAGE MIP/isis/alt
   DATAREF sim/cockpit2/gauges/indicators/airspeed_kts_pilot
   CLIP
-  LIGHT_MODE MECHANICAL
+  LIGHT_MODE GLASS_AUTO
   LIGHT_RHEOSTAT 0
   KEY_FRAME 0.000000 1080.000000 1.000000
   KEY_FRAME 510.000000 -1002.000000
