@@ -54,9 +54,28 @@ local MCDU_DISP_TEXT_SPACING =
     ["l"] = 1.0,
 }
 local MCDU_DISP_TEXT_ALIGN =
-{if #mcdu_entry < 22 then
-				mcdu_entry = mcdu_entry .. key
-			endrmat as color "white"
+{
+    ["L"] = TEXT_ALIGN_LEFT,
+    ["C"] = TEXT_ALIGN_CENTER,
+    ["R"] = TEXT_ALIGN_RIGHT,
+}
+
+--fonts
+local B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
+
+-- alphanumeric & decimal FMC entry keys
+local MCDU_ENTRY_KEYS = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", ".", "Δ"}
+local MCDU_ENTRY_PAGES = {"DIR", "PROG", "PERF", "INIT", "DATA", "F-PLN", "RAD NAV", "FUEL PRED", "SEC F-PLN", "ATC COMM", "MCDU MENU", "AIRP"}
+local MCDU_ENTRY_SIDES = {"L1", "L2", "L3", "L4", "L5", "L6", "R1", "R2", "R3", "R4", "R5", "R6", "slew_up", "slew_down", "slew_left", "slew_right"}
+
+--[[
+--
+--
+--      MCDU DATA INITIALIZATION
+--
+--
+--]]
+
 local mcdu_dat = {}
 local mcdu_dat_title = {}
 
@@ -79,38 +98,56 @@ local function mcdu_send_message(message)
     table.insert(mcdu_messages, message)
 end
 
-local function mcdu_eval_entry(str, expected_format)
-    eval_start,eval_end = string.find(str, expected_format)
-    if eval_start ~= nil and eval_start == 1 and eval_end == #str then
-        return true
-    else
-        return false
+local function mcdu_eval_entry(str, format)
+    pass = true
+    if #str ~= #format then
+        pass = false
     end
+
+    for i = 1,#format do
+        if string.sub(format, i, i) == "!" then
+            if string.find(string.sub(str, i, i), "%d") == nil then
+                pass = false
+            end
+        elseif string.sub(format, i, i) == "@" then
+            if string.find(string.sub(str, i, i), "%a") == nil then
+                pass = false
+            end
+        else
+            if string.sub(str, i, i) ~= string.upper(string.sub(format, i, i)) then 
+                pass = false
+            end
+        end
+    end
+    return pass
 end
 
 local function mcdu_get_entry(expected_formats)
     --[[
     -- expected_format
     --
-    -- can accept multiple inputs %d for digits, %a for letters
+    -- can accept multiple inputs ! for digits, @ for letters
     -- https://www.lua.org/pil/20.2.html
     --]]
-    if expected_formats[1] == nil
-        pass = false
+    if expected_formats[1] ~= nil then
+        local pass = false
+        variation = 0
         for i,format in ipairs(expected_formats) do-- expected_formats is a table
             if mcdu_eval_entry(mcdu_entry, format) then
+                variation = i
                 pass = true
             end
         end
         if pass then
-            return expected_formats[i], i
+            print("a")
+            return mcdu_entry, variation 
         else
             mcdu_send_message("invalid format")
-            return nil
+            return nil, nil
         end
     else
         if mcdu_eval_entry(mcdu_entry, expected_formats) then
-            return expected_formats
+            return mcdu_entry
         else
             mcdu_send_message("invalid format")
             return nil
@@ -167,6 +204,8 @@ local mcdu_debug_message = sasl.createCommand("a321neo/debug/mcdu/debug_message"
 --mcdu entry inputs
 local mcdu_inp = {}
 
+local entry_cooldown = 0
+
 local MCDU_ENTRY = 
 {
     {
@@ -175,8 +214,11 @@ local MCDU_ENTRY =
         ref_entries = MCDU_ENTRY_KEYS,  --the group of keys
         ref_callback =                  --what they should do
         function (count, val)
-            if #mcdu_entry < 22 then
-                mcdu_entry = mcdu_entry .. val
+            if get(TIME) - entry_cooldown > get(DELTA_TIME) then
+                entry_cooldown = get(TIME)
+                if #mcdu_entry < 22 then
+                    mcdu_entry = mcdu_entry .. val
+                end
             end
         end
     },
@@ -204,7 +246,7 @@ local MCDU_ENTRY =
         ref_entries = {"clr"},
         ref_callback = 
         function (count, val)
-            if mcdu_message_active > 0 then
+            if #mcdu_messages > 0 then
                 table.remove(mcdu_messages)
             else
                 if #mcdu_entry > 0 then
@@ -440,7 +482,8 @@ end
 --update
 function update()
     if get(mcdu_page) == 0 then --on start
-        mcdu_open_page(505) --open 505 A/C status
+        --mcdu_open_page(505) --open 505 A/C status
+        mcdu_open_page(1102) --open 505 A/C status
     end
 
     if #mcdu_messages > 0 and mcdu_entry == "" then
@@ -670,6 +713,19 @@ function (phase)
         mcdu_open_page(1100) -- open 1100 mcdu menu
     end
 end
+
+local function mcdu_parse_colour(callback)
+    if mcdu_get_entry({"r!.!!", "g!.!!", "b!.!!"}) ~= nil then
+        input, variation = mcdu_get_entry({"r!.!!", "g!.!!", "b!.!!"})
+        print(input, variation)
+        input_col = string.sub(input, 2, 2) .. "." .. string.sub(input, 4,5)
+        callback(input, variation)
+        mcdu_open_page(1102) -- reload page
+    else
+        print("fail")
+        mcdu_send_message("format e.g. b0.50")
+    end
+end
 -- 1102 mcdu menu debug colours
 mcdu_sim_page[1102] =
 function (phase)
@@ -685,12 +741,24 @@ function (phase)
         draw_update()
     end
     if phase == "L1" then
-        input, variation = mcdu_get_entry({"r%d.%d%d", "g%d.%d%d", "b%d.%d%d"})
-        if input ~= nil then
-            MCDU_DISP_COLOR[col][variation] = input
-        else
-            mcdu_send_message("format e.g. b0.50")
-        end
+        mcdu_parse_colour(function (input, variation)
+            MCDU_DISP_COLOR["white"][variation] = input_col
+        end)
+    end
+    if phase == "L2" then
+        mcdu_parse_colour(function (input, variation)
+            MCDU_DISP_COLOR["blue"][variation] = input_col
+        end)
+    end
+    if phase == "L3" then
+        mcdu_parse_colour(function (input, variation)
+            MCDU_DISP_COLOR["green"][variation] = input_col
+        end)
+    end
+    if phase == "L4" then
+        mcdu_parse_colour(function (input, variation)
+            MCDU_DISP_COLOR["orange"][variation] = input_col
+        end)
     end
     if phase == "L6" then
         hokey_pokey = true
