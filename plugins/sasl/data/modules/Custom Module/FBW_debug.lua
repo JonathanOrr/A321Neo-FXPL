@@ -9,6 +9,7 @@ local FBW_ORANGE = {0.725, 0.521, 0.18}
 local FBW_RED = {1, 0.0, 0.0}
 
 --fonts
+local B612regular = sasl.gl.loadFont("fonts/B612-Regular.ttf")
 local B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
 
 function update()
@@ -31,33 +32,46 @@ function draw()
         sasl.gl.drawText(B612MONO_regular, 20, 370, "PULLING: " .. Round(get(Total_vertical_g_load), 1) .. "G", 15, false, false, TEXT_ALIGN_LEFT, FBW_GREEN)
         sasl.gl.drawText(B612MONO_regular, 20, 350, "COMMANDING: " .. Round(get(Roll_rate_command), 1) .. " DEG/S", 15, false, false, TEXT_ALIGN_LEFT, FBW_GREEN)
         sasl.gl.drawText(B612MONO_regular, 20, 330, "ROLLING: " .. Round(get(Roll_rate), 1) .. " DEG/S", 15, false, false, TEXT_ALIGN_LEFT, FBW_GREEN)
+
+        --artificial stability sum
+        sasl.gl.drawRectangle(size[1]/2-10 + 150 * get(Roll_artstab), (size[2]/2-90) - 150 * get(Pitch_artstab), 20, 20, FBW_ORANGE)
+
+        --flight envelops
+        sasl.gl.drawCircle(size[1]/2 + 150 * 0, (size[2]/2-80) - 150 * get(Pitch_d_lim), 10, true, FBW_RED)
+        sasl.gl.drawCircle(size[1]/2 + 150 * 0, (size[2]/2-80) - 150 * get(Pitch_u_lim), 10, true, FBW_RED)
+        sasl.gl.drawCircle(size[1]/2 + 150 * get(Roll_l_lim), (size[2]/2-80) - 150 * 0, 10, true, FBW_RED)
+        sasl.gl.drawCircle(size[1]/2 + 150 * get(Roll_r_lim), (size[2]/2-80) - 150 * 0, 10, true, FBW_RED)
+
+        --pitch rate limits
+        sasl.gl.drawArc(size[1]/2 + 150 * 0, (size[2]/2-80) - 150 * get(Pitch_rate_u_lim), 8, 10, 0, 360, FBW_RED)
+        sasl.gl.drawArc(size[1]/2 + 150 * 0, (size[2]/2-80) - 150 * get(Pitch_rate_d_lim), 8,10, 0, 360, FBW_RED)
+
+        --max speed and AOA protections
+        sasl.gl.drawArc(size[1]/2 + 150 * 0, (size[2]/2-80) - 150 * get(AOA_lim), 8,10, 0, 360, FBW_ORANGE)
+        sasl.gl.drawArc(size[1]/2 + 150 * 0, (size[2]/2-80) - 150 * get(MAX_spd_lim), 8,10, 0, 360, FBW_BLUE)
+
+        --roll rate and G load command
+        sasl.gl.drawCircle(size[1]/2 + 150 * get(Roll_rate_output), (size[2]/2-80) - 150 * 0, 10, true, FBW_BLUE)
+        sasl.gl.drawCircle(size[1]/2 + 150 * 0, (size[2]/2-80) - 150 * get(G_output), 10, true, FBW_BLUE)
+
+        --elevator trim
+        sasl.gl.drawText(B612MONO_regular, 310, 483, "CWS", 15, false, false, TEXT_ALIGN_CENTER, FBW_GREEN)
+        sasl.gl.drawRectangle(300, 405, 20, 75 * get(Elev_trim_ratio), FBW_GREEN)
+        sasl.gl.drawFrame (300, 330, 20, 150, FBW_WHITE)
     else
-        sasl.gl.drawText(B612MONO_regular, 20, 400, "DIRECT LAW", 40, false, false, TEXT_ALIGN_LEFT, FBW_ORANGE)
+        sasl.gl.drawText(B612MONO_regular, 20, 410, "DIRECT LAW", 40, false, false, TEXT_ALIGN_LEFT, FBW_ORANGE)
+        sasl.gl.drawText(B612MONO_regular, 20, 390, "INPUTS ARE LINEAR", 15, false, false, TEXT_ALIGN_LEFT, FBW_ORANGE)
+        sasl.gl.drawText(B612MONO_regular, 20, 370, "NO LIMITATIONS", 15, false, false, TEXT_ALIGN_LEFT, FBW_ORANGE)
+        sasl.gl.drawText(B612MONO_regular, 20, 350, "USE MANUAL TRIM", 15, false, false, TEXT_ALIGN_LEFT, FBW_ORANGE)
+
+        --elevator trim
+        sasl.gl.drawText(B612regular, 310, 485, "MAN TRIM", 12, false, false, TEXT_ALIGN_CENTER, FBW_ORANGE)
+        sasl.gl.drawRectangle(300, 405, 20, 75 * get(Elev_trim_ratio), FBW_ORANGE)
+        sasl.gl.drawFrame (300, 330, 20, 150, FBW_WHITE)
     end
 
-    --artificial stability sum
-    sasl.gl.drawRectangle(size[1]/2-10 + 150 * get(Roll_artstab), (size[2]/2-90) - 150 * get(Pitch_artstab), 20, 20, FBW_ORANGE)
-
-    --flight envelops
-    sasl.gl.drawCircle(size[1]/2 + 150 * 0, (size[2]/2-80) - 150 * get(Pitch_d_lim), 10, true, FBW_RED)
-    sasl.gl.drawCircle(size[1]/2 + 150 * 0, (size[2]/2-80) - 150 * get(Pitch_u_lim), 10, true, FBW_RED)
-    sasl.gl.drawCircle(size[1]/2 + 150 * get(Roll_l_lim), (size[2]/2-80) - 150 * 0, 10, true, FBW_RED)
-    sasl.gl.drawCircle(size[1]/2 + 150 * get(Roll_r_lim), (size[2]/2-80) - 150 * 0, 10, true, FBW_RED)
-
-    --pitch rate limits
-    sasl.gl.drawArc(size[1]/2 + 150 * 0, (size[2]/2-80) - 150 * get(Pitch_rate_u_lim), 8, 10, 0, 360, FBW_RED)
-    sasl.gl.drawArc(size[1]/2 + 150 * 0, (size[2]/2-80) - 150 * get(Pitch_rate_d_lim), 8,10, 0, 360, FBW_RED)
-
-    --max speed and AOA protections
-    sasl.gl.drawArc(size[1]/2 + 150 * 0, (size[2]/2-80) - 150 * get(AOA_lim), 8,10, 0, 360, FBW_ORANGE)
-    sasl.gl.drawArc(size[1]/2 + 150 * 0, (size[2]/2-80) - 150 * get(MAX_spd_lim), 8,10, 0, 360, FBW_BLUE)
-
-    --roll rate and G load command
-    sasl.gl.drawCircle(size[1]/2 + 150 * get(Roll_rate_output), (size[2]/2-80) - 150 * 0, 10, true, FBW_BLUE)
-    sasl.gl.drawCircle(size[1]/2 + 150 * 0, (size[2]/2-80) - 150 * get(G_output), 10, true, FBW_BLUE)
-
+    --player input
     sasl.gl.drawCircle(size[1]/2 + 150 * get(Roll), (size[2]/2-80) - 150 * get(Pitch), 10, true, FBW_GREEN)
 
-    sasl.gl.drawRectangle(300, 405, 20, 75 * get(Elev_trim_ratio), FBW_GREEN)
-    sasl.gl.drawFrame (300, 330, 20, 150, FBW_WHITE)
+    
 end
