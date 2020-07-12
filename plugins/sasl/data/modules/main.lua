@@ -24,6 +24,7 @@ components = {
   flight_controls {},
   fcu_ap_at {},
   AT {},
+  MCDU {},
   packs {},
   aircond {},
   wheel {},
