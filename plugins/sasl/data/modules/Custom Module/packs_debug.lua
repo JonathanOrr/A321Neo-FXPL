@@ -30,7 +30,7 @@ local sim_r_iso_line_xy = {size[1]/2 - size[1]/4 + 35, size[2]/2+110, size[1]/2 
 
 function update()
     --change menu item state
-    if Vnav_debug_window:isVisible() == true then
+    if Packs_debug_window:isVisible() == true then
         sasl.setMenuItemState(Menu_main, ShowHidePacksDebug, MENU_CHECKED)
     else
         sasl.setMenuItemState(Menu_main, ShowHidePacksDebug, MENU_UNCHECKED)

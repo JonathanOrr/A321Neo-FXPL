@@ -13,10 +13,10 @@ local B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
 
 function update()
     --change menu item state
-    if Vnav_debug_window:isVisible() == true then
-        sasl.setMenuItemState(Menu_main, ShowHidePacksDebug, MENU_CHECKED)
+    if FBW_debug_window:isVisible() == true then
+        sasl.setMenuItemState(Menu_main, ShowHideFBWDebug, MENU_CHECKED)
     else
-        sasl.setMenuItemState(Menu_main, ShowHidePacksDebug, MENU_UNCHECKED)
+        sasl.setMenuItemState(Menu_main, ShowHideFBWDebug, MENU_UNCHECKED)
     end
 end
 
