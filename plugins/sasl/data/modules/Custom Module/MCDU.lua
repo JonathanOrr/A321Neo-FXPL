@@ -538,8 +538,6 @@ local function mcdu_ctrl_set_fpln_origin(input)
     mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/ls_1l"})
 end
 
-mcdu_ctrl_add_inst({type = "INPUT", arg = "apple"})
-
 -- 00 template
 mcdu_sim_page[00] =
 function (phase)
