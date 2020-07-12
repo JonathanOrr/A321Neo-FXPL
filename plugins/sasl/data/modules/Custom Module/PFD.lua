@@ -73,11 +73,15 @@ function update()
         vvi_left_pixel_offset = 442 + 150 * get(vvi)/1000
 
         vvi_number_display = Round(math.abs(math.floor(get(vvi))), -2)/100
-        
+
         if vvi_number_display ~= 10 or vvi_number_display ~= 10 then
             vvi_number_display = "0" .. Round(math.abs(math.floor(get(vvi))), -2)/100
         end
-        
+
+        if get(vvi) > -100 and get(vvi) < 100 then
+            vvi_number_display = "01"
+        end
+
     elseif (get(vvi) > -2000 and get(vvi) < -1000) or (get(vvi) > 1000 and get(vvi) < 2000) then -- -2000 to 2000
         vvi_left_pixel_offset = Math_clamp(442 + 150 * get(vvi)/1000, 292, 592)
         if get(vvi) > 0 then
