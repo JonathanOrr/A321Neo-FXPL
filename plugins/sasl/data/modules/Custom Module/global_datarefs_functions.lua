@@ -71,7 +71,7 @@ Apu_bleed_psi = createGlobalPropertyf("a321neo/cockpit/apu/bleed_psi", 0, false,
 Apu_bleed_state = createGlobalPropertyi("a321neo/apu/apu_bleed_state", 0, false, true, false)--0apu off bleed off, 1apu on bleed off, 2apu on bleed on
 Apu_gen_state = createGlobalPropertyi("a321neo/cockpit/apu/apu_gen_state", 0, false, true, false)--0apu off gen off, 1apu on gen off, 2apu on gen on
 --FBW--
-FBW_status = createGlobalPropertyi("a321neo/dynamics/fctl/FBW_on", 2, false, true, false)--2=NORMAL law, 1=ALT law, 0==DIRECT law
+FBW_status = createGlobalPropertyi("a321neo/dynamics/fctl/FBW_on", 3, false, true, false)--3=NORMAL law, 2=ALT 1 law, 1=ALT2 law, 0==DIRECT law
 Roll_l_lim = createGlobalPropertyf("a321neo/dynamics/FBW/roll_l_lim", 0, false, true, false)
 Roll_r_lim = createGlobalPropertyf("a321neo/dynamics/FBW/roll_r_lim", 0, false, true, false)
 Pitch_u_lim = createGlobalPropertyf("a321neo/dynamics/FBW/pitch_u_lim", 0, false, true, false)
@@ -80,14 +80,17 @@ Pitch_rate_u_lim = createGlobalPropertyf("a321neo/dynamics/FBW/pitch_rate_u_lim"
 Pitch_rate_d_lim = createGlobalPropertyf("a321neo/dynamics/FBW/pitch_rate_d_lim", 0, false, true, false)
 AOA_lim = createGlobalPropertyf("a321neo/dynamics/FBW/AOA_lim", 0, false, true, false)
 MAX_spd_lim = createGlobalPropertyf("a321neo/dynamics/FBW/MAX_spd_lim", 0, false, true, false)
-Roll_rate_output = createGlobalPropertyf("a321neo/dynamics/FBW/roll_rate_output", 0, false, true, false)
-G_output = createGlobalPropertyf("a321neo/dynamics/FBW/G_output", 0, false, true, false)
 Roll_rate_command = createGlobalPropertyf("a321neo/dynamics/FBW/roll_rate_command", 0, false, true, false)--15 degrees max for normal law, 30 degrees in ALT2 or DIRECT
+Roll_rate_output = createGlobalPropertyf("a321neo/dynamics/FBW/roll_rate_output", 0, false, true, false)
 G_load_command = createGlobalPropertyf("a321neo/dynamics/FBW/G_load_command", 1, false, true, false)--2.5G to -1G in normal flight, with flaps 2G to 0G
+G_output = createGlobalPropertyf("a321neo/dynamics/FBW/G_output", 0, false, true, false)
 ELAC_1 = createGlobalPropertyf("a321neo/dynamics/FBW/ELAC_1", 1, false, true, false)--elevator aileron computer 1
 ELAC_2 = createGlobalPropertyf("a321neo/dynamics/FBW/ELAC_2", 1, false, true, false)--elevator aileron computer 2
 FAC_1 = createGlobalPropertyf("a321neo/dynamics/FBW/FAC_1", 1, false, true, false)--flight augmentation computer 1
 FAC_2 = createGlobalPropertyf("a321neo/dynamics/FBW/FAC_2", 1, false, true, false)--flight augmentation computer 2
+SEC_1 = createGlobalPropertyf("a321neo/dynamics/FBW/SEC_1", 1, false, true, false)--spoiler elevator computer 1
+SEC_2 = createGlobalPropertyf("a321neo/dynamics/FBW/SEC_2", 1, false, true, false)--spoiler elevator computer 2
+SEC_3 = createGlobalPropertyf("a321neo/dynamics/FBW/SEC_3", 1, false, true, false)--spoiler elevator computer 3
 
 
 --global dataref variable from the Sim--
