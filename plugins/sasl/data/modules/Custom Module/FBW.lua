@@ -13,7 +13,6 @@ local A32nx_FBW_roll_rate_command = {P_gain = 10, I_gain = 1, D_gain = 10, I_del
 --local A32nx_FBW_1G_command = {P_gain = 1, I_gain = 1, D_gain = 1.5, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -0.25, Max_error = 0.25, Error_offset = 0}
 local A32nx_FBW_1G_command = {P_gain = 1.5, I_gain = 1, D_gain = 10, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -15, Max_error = 15, Error_offset = 0}
 local A32nx_FBW_G_command = {P_gain = 1.5, I_gain = 1, D_gain = 10, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -2.5, Max_error = 2.5, Error_offset = 0}
-local A32nx_FBW_ALT_G_command = {P_gain = 10, I_gain = 1, D_gain = 10, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -15, Max_error = 15, Error_offset = 0}
 local A32nx_FBW_AOA_protection = {P_gain = 1, I_gain = 1, D_gain = 10, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -5, Max_error = 5, Error_offset = 0}
 local A32nx_FBW_MAX_spd_protection = {P_gain = 1, I_gain = 1, D_gain = 10, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -5, Max_error = 5, Error_offset = 0}
 
@@ -211,13 +210,8 @@ function update()
         --command 0 pitch rate
         set(G_output, FBW_PID(A32nx_FBW_1G_command, 0 - get(Pitch_rate)))
     else
-        if get(FBW_status) == 2 then
-            --G command
-            set(G_output, FBW_PD(A32nx_FBW_G_command, get(G_load_command) - get(Total_vertical_g_load)))
-        else
-            --ALT G command
-            set(G_output, FBW_PD(A32nx_FBW_ALT_G_command, get(G_load_command) - get(Total_vertical_g_load)))
-        end
+        --G command
+        set(G_output, FBW_PD(A32nx_FBW_G_command, get(G_load_command) - get(Total_vertical_g_load)))
     end
 
     --command roll rate
@@ -235,7 +229,7 @@ function update()
         set(Roll_r_lim, FBW_PD(A32nx_FBW_roll_right_no_stick,   33 - get(Flightmodel_roll)))
     end
 
-    if get(FBW_status) == 2 then--normal law
+    if get(FBW_status) == 3 then--normal law
         set(Roll_artstab, get(Roll_l_lim) + get(Roll_r_lim) + get(Roll_rate_output))
         --if get(Pitch) > 0.1 or get(Pitch) < -0.1 then
             set(Pitch_artstab, (get(Pitch_d_lim) + get(Pitch_u_lim)) + (get(Pitch_rate_d_lim) + get(Pitch_rate_u_lim)) + get(G_output) + get(AOA_lim) + get(MAX_spd_lim))
@@ -253,10 +247,25 @@ function update()
                 set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), FBW_PID(A32nx_FBW_elev_trim, get(Pitch_artstab) + (0 - get(Pitch_rate))), -1, 1, 0.1))
             end
         end
-    elseif get(FBW_status) == 1 then--ALT law(no roll, no pitch)
+    elseif get(FBW_status) == 2 then--ALT 1 law(no roll)
         set(Roll_artstab, get(Roll))
         --if get(Pitch) > 0.1 or get(Pitch) < -0.1 then
-        set(Pitch_artstab, get(G_output))
+        set(Pitch_artstab, (get(Pitch_rate_d_lim) + get(Pitch_rate_u_lim)) + get(G_output))
+
+        if get(Flight_director_1_mode) ~= 2 and get(Flight_director_2_mode) ~= 2 then
+            --CWS trimming--
+            if get(Pitch) > 0.05 then
+                set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), FBW_PID(A32nx_FBW_elev_trim, get(G_load_command) - get(Total_vertical_g_load)), -1, 1, 0.08))
+            elseif get(Pitch) < -0.05 then
+                set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), FBW_PID(A32nx_FBW_elev_trim, get(G_load_command) - get(Total_vertical_g_load)), -1, 1, 0.08))
+            else
+                set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), FBW_PID(A32nx_FBW_elev_trim, get(Pitch_artstab) + (0 - get(Pitch_rate))), -1, 1, 0.1))
+            end
+        end
+    elseif get(FBW_status) == 1 then--ALT 2 law(no pitch)
+        set(Roll_artstab, get(Roll_rate_output))
+        --if get(Pitch) > 0.1 or get(Pitch) < -0.1 then
+        set(Pitch_artstab, get(Pitch))
 
         if get(Flight_director_1_mode) ~= 2 and get(Flight_director_2_mode) ~= 2 then
             --CWS trimming--
@@ -270,7 +279,7 @@ function update()
         end
 
         --set(Horizontal_stabilizer_pitch, Set_linear_anim_value(get(Horizontal_stabilizer_pitch), FBW_PD(A32nx_FBW_elev_trim, 1 - get(Total_vertical_g_load)), -3.5, 11, 10, 0.01))
-    else
+    else--direct law
         set(Roll_artstab, get(Roll))
         set(Pitch_artstab, get(Pitch))
     end
