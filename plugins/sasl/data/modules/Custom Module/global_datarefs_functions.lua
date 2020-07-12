@@ -71,7 +71,7 @@ Apu_bleed_psi = createGlobalPropertyf("a321neo/cockpit/apu/bleed_psi", 0, false,
 Apu_bleed_state = createGlobalPropertyi("a321neo/apu/apu_bleed_state", 0, false, true, false)--0apu off bleed off, 1apu on bleed off, 2apu on bleed on
 Apu_gen_state = createGlobalPropertyi("a321neo/cockpit/apu/apu_gen_state", 0, false, true, false)--0apu off gen off, 1apu on gen off, 2apu on gen on
 --FBW--
-FBW_on = createGlobalPropertyi("a321neo/dynamics/fctl/FBW_on", 1, false, true, false)
+FBW_status = createGlobalPropertyi("a321neo/dynamics/fctl/FBW_on", 2, false, true, false)--2=NORMAL law, 1=ALT law, 0==DIRECT law
 Roll_l_lim = createGlobalPropertyf("a321neo/dynamics/FBW/roll_l_lim", 0, false, true, false)
 Roll_r_lim = createGlobalPropertyf("a321neo/dynamics/FBW/roll_r_lim", 0, false, true, false)
 Pitch_u_lim = createGlobalPropertyf("a321neo/dynamics/FBW/pitch_u_lim", 0, false, true, false)
@@ -84,6 +84,10 @@ Roll_rate_output = createGlobalPropertyf("a321neo/dynamics/FBW/roll_rate_output"
 G_output = createGlobalPropertyf("a321neo/dynamics/FBW/G_output", 0, false, true, false)
 Roll_rate_command = createGlobalPropertyf("a321neo/dynamics/FBW/roll_rate_command", 0, false, true, false)--15 degrees max for normal law, 30 degrees in ALT2 or DIRECT
 G_load_command = createGlobalPropertyf("a321neo/dynamics/FBW/G_load_command", 1, false, true, false)--2.5G to -1G in normal flight, with flaps 2G to 0G
+ELAC_1 = createGlobalPropertyf("a321neo/dynamics/FBW/ELAC_1", 1, false, true, false)--elevator aileron computer 1
+ELAC_2 = createGlobalPropertyf("a321neo/dynamics/FBW/ELAC_2", 1, false, true, false)--elevator aileron computer 2
+FAC_1 = createGlobalPropertyf("a321neo/dynamics/FBW/FAC_1", 1, false, true, false)--flight augmentation computer 1
+FAC_2 = createGlobalPropertyf("a321neo/dynamics/FBW/FAC_2", 1, false, true, false)--flight augmentation computer 2
 
 
 --global dataref variable from the Sim--
