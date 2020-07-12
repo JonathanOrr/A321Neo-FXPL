@@ -93,11 +93,11 @@ function update()
         end
 
         if total_pitch >= 0 then
-            Set_dataref_linear_anim(elevators_hstab_1, -30 * (total_pitch), -30, 17, 50, 0.5)
-            Set_dataref_linear_anim(elevators_hstab_2, -30 * (total_pitch), -30, 17, 50, 0.5)
+            Set_dataref_linear_anim(elevators_hstab_1, -30 * (total_pitch), -30, 17, 300, 0.5)
+            Set_dataref_linear_anim(elevators_hstab_2, -30 * (total_pitch), -30, 17, 300, 0.5)
         else
-            Set_dataref_linear_anim(elevators_hstab_1, -17 * (total_pitch), -30, 17, 50, 0.5)
-            Set_dataref_linear_anim(elevators_hstab_2, -17 * (total_pitch), -30, 17, 50, 0.5)
+            Set_dataref_linear_anim(elevators_hstab_1, -17 * (total_pitch), -30, 17, 300, 0.5)
+            Set_dataref_linear_anim(elevators_hstab_2, -17 * (total_pitch), -30, 17, 300, 0.5)
         end
 
         Set_dataref_linear_anim(rudder, 30 * (total_yaw), -30, 30, 25, 0.5)

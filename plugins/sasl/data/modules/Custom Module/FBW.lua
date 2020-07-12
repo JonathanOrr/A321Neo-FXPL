@@ -7,10 +7,12 @@ local A32nx_FBW_roll_left_no_stick =  {P_gain = 1, D_gain = 25, Current_error = 
 local A32nx_FBW_roll_right_no_stick = {P_gain = 1, D_gain = 25, Current_error = 0, Min_error = -5, Max_error = 5, Error_offset = 0}
 local A32nx_FBW_pitch_up =   {P_gain = 1, D_gain = 10, Current_error = 0, Min_error = -5, Max_error = 5, Error_offset = 0}
 local A32nx_FBW_pitch_down = {P_gain = 1, D_gain = 10, Current_error = 0, Min_error = -5, Max_error = 5, Error_offset = 0}
-local A32nx_FBW_pitch_rate_up =   {P_gain = 1, D_gain = 10, Current_error = 0, Min_error = -5.5, Max_error = 5.5, Error_offset = 0}
-local A32nx_FBW_pitch_rate_down =   {P_gain = 1, D_gain = 10, Current_error = 0, Min_error = -5.5, Max_error = 5.5, Error_offset = 0}
+local A32nx_FBW_pitch_rate_up =   {P_gain = 1, D_gain = 10, Current_error = 0, Min_error = -2, Max_error = 2, Error_offset = 0}
+local A32nx_FBW_pitch_rate_down =   {P_gain = 1, D_gain = 10, Current_error = 0, Min_error = -2, Max_error = 2, Error_offset = 0}
 local A32nx_FBW_roll_rate_command = {P_gain = 10, I_gain = 1, D_gain = 10, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -15, Max_error = 15, Error_offset = 0}
-local A32nx_FBW_1G_command = {P_gain = 1, I_gain = 1, D_gain = 1.5, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -0.25, Max_error = 0.25, Error_offset = 0}
+--local A32nx_FBW_1G_command = {P_gain = 1, I_gain = 1, D_gain = 1.5, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -0.25, Max_error = 0.25, Error_offset = 0}
+local A32nx_FBW_1G_command = {P_gain = 10, I_gain = 1, D_gain = 10, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -15, Max_error = 15, Error_offset = 0}
+--local A32nx_FBW_1G_command = {P_gain = 1, I_gain = 1, D_gain = 10, I_delay = 320, Integral = 0, Current_error = 0, Min_error = -5000, Max_error = 5000, Error_offset = 0}
 local A32nx_FBW_G_command = {P_gain = 1.5, I_gain = 1, D_gain = 10, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -2.5, Max_error = 2.5, Error_offset = 0}
 local A32nx_FBW_AOA_protection = {P_gain = 1, I_gain = 1, D_gain = 10, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -5, Max_error = 5, Error_offset = 0}
 local A32nx_FBW_MAX_spd_protection = {P_gain = 1, I_gain = 1, D_gain = 10, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -5, Max_error = 5, Error_offset = 0}
@@ -27,6 +29,7 @@ local A32nx_FBW_elev_trim = {P_gain = 1, I_gain = 1, D_gain = 10, I_delay = 120,
 --variables--
 
 --sim datarefs
+local vvi = globalProperty("sim/cockpit2/gauges/indicators/vvi_fpm_pilot")
 --a32nx datarefs
 
 --initialise FBW
@@ -47,7 +50,7 @@ function update()
     set(Override_artstab, 1)
 
     if get(Flight_director_1_mode) == 2 or get(Flight_director_2_mode) == 2 then
-        if get(Roll) + get(Servo_roll) > 0.1 then
+        if get(Roll) + get(Servo_roll) > 0.05 then
             set(Roll_rate_command, 15 * (get(Roll) + get(Servo_roll)))
         elseif get(Roll) + get(Servo_roll) < -0.1 then
             set(Roll_rate_command, 15 * (get(Roll) + get(Servo_roll)))
@@ -56,7 +59,7 @@ function update()
         end
 
         if get(Flaps_handle_ratio) < 0.1 then--
-            if get(Pitch) + get(Servo_pitch) > 0.1 then
+            if get(Pitch) + get(Servo_pitch) > 0.05 then
                 set(G_load_command, 1.5 * (get(Pitch) + get(Servo_pitch)) + 1)
             elseif get(Pitch) < -0.1 then
                 set(G_load_command, 2 * (get(Pitch) + get(Servo_pitch)) + 1)
@@ -64,7 +67,7 @@ function update()
                 set(G_load_command, 1)
             end
         else
-            if get(Pitch) + get(Servo_pitch) > 0.1 then
+            if get(Pitch) + get(Servo_pitch) > 0.5 then
                 set(G_load_command, (get(Pitch) + get(Servo_pitch)) + 1)
             elseif get(Pitch) < -0.1 then
                 set(G_load_command, (get(Pitch) + get(Servo_pitch)) + 1)
@@ -73,7 +76,7 @@ function update()
             end
         end
     else
-        if get(Roll) > 0.1 then
+        if get(Roll) > 0.05 then
             set(Roll_rate_command, 15 * get(Roll))
         elseif get(Roll) < -0.1 then
             set(Roll_rate_command, 15 * get(Roll))
@@ -81,7 +84,7 @@ function update()
             set(Roll_rate_command, 0)
         end
 
-        if get(Flaps_handle_ratio) < 0.1 then--
+        if get(Flaps_handle_ratio) < 0.05 then--
             if get(Pitch) > 0.1 then
                 set(G_load_command, 1.5 * get(Pitch) + 1)
             elseif get(Pitch) < -0.1 then
@@ -90,7 +93,7 @@ function update()
                 set(G_load_command, 1)
             end
         else
-            if get(Pitch) > 0.1 then
+            if get(Pitch) > 0.05 then
                 set(G_load_command, get(Pitch) + 1)
             elseif get(Pitch) < -0.1 then
                 set(G_load_command, get(Pitch) + 1)
@@ -106,9 +109,9 @@ function update()
     set(Pitch_u_lim, FBW_PD(A32nx_FBW_pitch_up,  30 - get(Flightmodel_pitch)))
 
     --5.5 deg/s up pitch rate
-    set(Pitch_rate_u_lim, FBW_PD(A32nx_FBW_pitch_rate_up,  5.5 - get(Pitch_rate)))
+    set(Pitch_rate_u_lim, FBW_PD(A32nx_FBW_pitch_rate_up,  7.5 - get(Pitch_rate)))
     --5.5 deg/s down pitch rate
-    set(Pitch_rate_d_lim, FBW_PD(A32nx_FBW_pitch_rate_down,  -5.5 - get(Pitch_rate)))
+    set(Pitch_rate_d_lim, FBW_PD(A32nx_FBW_pitch_rate_down,  -8.5 - get(Pitch_rate)))
 
     --AOA 9 degrees slightly above stall protection
     set(AOA_lim, Math_clamp(FBW_PD(A32nx_FBW_AOA_protection,  9 - get(Alpha)), -1, 0))
@@ -117,8 +120,8 @@ function update()
     set(MAX_spd_lim, -Math_clamp(FBW_PD(A32nx_FBW_MAX_spd_protection,  (get(Max_speed) + 10) - get(IAS)), -1, 0))
 
     if get(G_load_command) == 1 then
-        --command 1G
-        set(G_output, FBW_PD(A32nx_FBW_1G_command,  1 - get(Total_vertical_g_load)))
+        --command 0 pitch rate
+        set(G_output, FBW_PID(A32nx_FBW_1G_command, 0 - get(Pitch_rate)))
     else
         --G command
         set(G_output, FBW_PD(A32nx_FBW_G_command,  get(G_load_command) - get(Total_vertical_g_load)))
