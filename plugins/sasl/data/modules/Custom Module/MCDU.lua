@@ -39,8 +39,8 @@ local MCDU_DISP_COLOR =
 {
     ["white"] = {1.0, 1.0, 1.0},
     ["blue"] = {0.004, 1.0, 1.0},
-    ["green"] = {0.004, 1, 0.004},
-    ["orange"] = {0.843, 0.49, 0},
+    ["green"] = {0.184, 0.733, 0.219},
+    ["orange"] = {0.725, 0.521, 0.18},
     ["black"] = {0,0,0,1},
 }
 local MCDU_DISP_TEXT_SIZE =

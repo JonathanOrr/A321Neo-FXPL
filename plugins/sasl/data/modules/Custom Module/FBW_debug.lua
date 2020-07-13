@@ -25,8 +25,8 @@ function draw()
     sasl.gl.drawRectangle(0,0,size[1],size[2], FBW_BLACK)
     sasl.gl.drawFrame (20, 20, 300, 300, FBW_WHITE)
 
-    sasl.gl.drawText(B612MONO_regular, 20, 460, "YOU ARE IN:", 28, false, false, TEXT_ALIGN_LEFT, FBW_WHITE)
-    if get(FBW_status) == 3 then
+    sasl.gl.drawText(B612MONO_regular, 20, 450, "YOU ARE IN:", 28, false, false, TEXT_ALIGN_LEFT, FBW_WHITE)
+    if get(FBW_status) == 2 then
         sasl.gl.drawText(B612MONO_regular, 20, 410, "NORMAL LAW", 40, false, false, TEXT_ALIGN_LEFT, FBW_GREEN)
         sasl.gl.drawText(B612MONO_regular, 20, 390, "YOU ARE COMMANDING: " .. Round(get(G_load_command), 1) .. "G", 15, false, false, TEXT_ALIGN_LEFT, FBW_GREEN)
         sasl.gl.drawText(B612MONO_regular, 20, 370, "PULLING: " .. Round(get(Total_vertical_g_load), 1) .. "G", 15, false, false, TEXT_ALIGN_LEFT, FBW_GREEN)
@@ -55,11 +55,17 @@ function draw()
         sasl.gl.drawCircle(size[1]/2 + 150 * 0, (size[2]/2-80) - 150 * get(G_output), 10, true, FBW_BLUE)
 
         --elevator trim
-        sasl.gl.drawText(B612MONO_regular, 310, 483, "CWS", 15, false, false, TEXT_ALIGN_CENTER, FBW_GREEN)
+        if get(FBW_ground_mode) == 1 then
+            sasl.gl.drawText(B612regular, 78, 480, "GROUND MODE", 15, false, false, TEXT_ALIGN_CENTER, FBW_BLUE)
+            sasl.gl.drawText(B612MONO_regular, 310, 483, "CWS", 15, false, false, TEXT_ALIGN_CENTER, FBW_RED)
+        else
+            sasl.gl.drawText(B612MONO_regular, 310, 483, "CWS", 15, false, false, TEXT_ALIGN_CENTER, FBW_GREEN)
+        end
+
         sasl.gl.drawRectangle(300, 405, 20, 75 * get(Elev_trim_ratio), FBW_GREEN)
         sasl.gl.drawFrame (300, 330, 20, 150, FBW_WHITE)
-    elseif get(FBW_status) == 2 then
-        sasl.gl.drawText(B612MONO_regular, 20, 410, "ALT 1 LAW", 40, false, false, TEXT_ALIGN_LEFT, FBW_ORANGE)
+    elseif get(FBW_status) == 1 then
+        sasl.gl.drawText(B612MONO_regular, 20, 410, "ALT LAW", 40, false, false, TEXT_ALIGN_LEFT, FBW_ORANGE)
         sasl.gl.drawText(B612MONO_regular, 20, 390, "YOU ARE COMMANDING: " .. Round(get(G_load_command), 1) .. "G", 15, false, false, TEXT_ALIGN_LEFT, FBW_ORANGE)
         sasl.gl.drawText(B612MONO_regular, 20, 370, "PULLING: " .. Round(get(Total_vertical_g_load), 1) .. "G", 15, false, false, TEXT_ALIGN_LEFT, FBW_ORANGE)
         sasl.gl.drawText(B612MONO_regular, 20, 350, "ROLL CONTROL IS LINEAR", 15, false, false, TEXT_ALIGN_LEFT, FBW_ORANGE)
@@ -73,26 +79,6 @@ function draw()
 
         --G command
         sasl.gl.drawCircle(size[1]/2 + 150 * 0, (size[2]/2-80) - 150 * get(G_output), 10, true, FBW_BLUE)
-
-        --elevator trim
-        sasl.gl.drawText(B612MONO_regular, 310, 483, "CWS", 15, false, false, TEXT_ALIGN_CENTER, FBW_GREEN)
-        sasl.gl.drawRectangle(300, 405, 20, 75 * get(Elev_trim_ratio), FBW_GREEN)
-        sasl.gl.drawFrame (300, 330, 20, 150, FBW_WHITE)
-    elseif get(FBW_status) == 1 then
-        sasl.gl.drawText(B612MONO_regular, 20, 410, "ALT 2 LAW", 40, false, false, TEXT_ALIGN_LEFT, FBW_ORANGE)
-        sasl.gl.drawText(B612MONO_regular, 20, 390, "PITCH IS LINEAR", 15, false, false, TEXT_ALIGN_LEFT, FBW_ORANGE)
-        sasl.gl.drawText(B612MONO_regular, 20, 370, "COMMANDING: " .. Round(get(Roll_rate_command), 1) .. " DEG/S", 15, false, false, TEXT_ALIGN_LEFT, FBW_ORANGE)
-        sasl.gl.drawText(B612MONO_regular, 20, 350, "ROLLING: " .. Round(get(Roll_rate), 1) .. " DEG/S", 15, false, false, TEXT_ALIGN_LEFT, FBW_ORANGE)
-
-        --artificial stability sum
-        sasl.gl.drawRectangle(size[1]/2-10 + 150 * get(Roll_artstab), (size[2]/2-90) - 150 * get(Pitch_artstab), 20, 20, FBW_ORANGE)
-
-        --pitch rate limits
-        sasl.gl.drawArc(size[1]/2 + 150 * 0, (size[2]/2-80) - 150 * get(Pitch_rate_u_lim), 8, 10, 0, 360, FBW_RED)
-        sasl.gl.drawArc(size[1]/2 + 150 * 0, (size[2]/2-80) - 150 * get(Pitch_rate_d_lim), 8,10, 0, 360, FBW_RED)
-
-        --roll rate command
-        sasl.gl.drawCircle(size[1]/2 + 150 * get(Roll_rate_output), (size[2]/2-80) - 150 * 0, 10, true, FBW_BLUE)
 
         --elevator trim
         sasl.gl.drawText(B612MONO_regular, 310, 483, "CWS", 15, false, false, TEXT_ALIGN_CENTER, FBW_GREEN)
