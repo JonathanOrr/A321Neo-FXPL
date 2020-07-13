@@ -28,6 +28,7 @@ local A32nx_FBW_elev_trim = {P_gain = 1, I_gain = 1, D_gain = 10, I_delay = 120,
 --variables--
 local FBW_alt_law_gear_extended = 0 --FBW supposed to be in alt law and gear is extended puting it into direct law
 local FBW_restart_required = 0 --not in normal law require restart to restore
+local ground_mode_transition_timer = 3.5 --for delayed transition
 
 --sim datarefs
 
@@ -136,6 +137,19 @@ end
 function update()
     set(Override_artstab, 1)
 
+    --ground mode detection--
+    if get(Aft_wheel_on_ground) == 1 then
+        ground_mode_transition_timer = 3.5
+        set(FBW_ground_mode, 1)
+    else
+        if ground_mode_transition_timer < 0 then
+            set(FBW_ground_mode, 0)
+        else
+            ground_mode_transition_timer = ground_mode_transition_timer - 1 * get(DELTA_TIME)
+        end
+    end
+
+    --input interpretation--
     if get(Flight_director_1_mode) == 2 or get(Flight_director_2_mode) == 2 then
         if get(Roll) + get(Servo_roll) > 0.05 then
             set(Roll_rate_command, 15 * (get(Roll) + get(Servo_roll)))
@@ -190,6 +204,7 @@ function update()
         end
     end
 
+    --FBW laws constraints--
     --15 degrees dive and command G load
     set(Pitch_d_lim, FBW_PD(A32nx_FBW_pitch_down, -15 - get(Flightmodel_pitch)))
     --30 degrees climb and command G load
@@ -229,43 +244,35 @@ function update()
         set(Roll_r_lim, FBW_PD(A32nx_FBW_roll_right_no_stick,   33 - get(Flightmodel_roll)))
     end
 
-    if get(FBW_status) == 3 then--normal law
+    --apply the laws to the surfaces--
+    if get(FBW_status) == 2 then--normal law
         set(Roll_artstab, get(Roll_l_lim) + get(Roll_r_lim) + get(Roll_rate_output))
         --if get(Pitch) > 0.1 or get(Pitch) < -0.1 then
             set(Pitch_artstab, (get(Pitch_d_lim) + get(Pitch_u_lim)) + (get(Pitch_rate_d_lim) + get(Pitch_rate_u_lim)) + get(G_output) + get(AOA_lim) + get(MAX_spd_lim))
         --else
-        --    set(Pitch_artstab, (get(Pitch_d_lim) + get(Pitch_u_lim)))
+            --set(Pitch_artstab, (get(Pitch_d_lim) + get(Pitch_u_lim)) + get(G_output))
         --end
-
-        if get(Flight_director_1_mode) ~= 2 and get(Flight_director_2_mode) ~= 2 then
-            --CWS trimming--
-            if get(Pitch) > 0.05 then
-                set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), FBW_PID(A32nx_FBW_elev_trim, get(G_load_command) - get(Total_vertical_g_load)), -1, 1, 0.08))
-            elseif get(Pitch) < -0.05 then
-                set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), FBW_PID(A32nx_FBW_elev_trim, get(G_load_command) - get(Total_vertical_g_load)), -1, 1, 0.08))
-            else
-                set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), FBW_PID(A32nx_FBW_elev_trim, get(Pitch_artstab) + (0 - get(Pitch_rate))), -1, 1, 0.1))
+        if get(FBW_ground_mode) == 0 then
+            set(Roll_artstab, get(Roll_l_lim) + get(Roll_r_lim) + get(Roll_rate_output))
+            set(Pitch_artstab, (get(Pitch_d_lim) + get(Pitch_u_lim)) + (get(Pitch_rate_d_lim) + get(Pitch_rate_u_lim)) + get(G_output) + get(AOA_lim) + get(MAX_spd_lim))
+            if get(Flight_director_1_mode) ~= 2 and get(Flight_director_2_mode) ~= 2 then
+                --CWS trimming--
+                if get(Pitch) > 0.05 then
+                    set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), FBW_PID(A32nx_FBW_elev_trim, get(G_load_command) - get(Total_vertical_g_load)), -1, 1, 0.08))
+                elseif get(Pitch) < -0.05 then
+                    set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), FBW_PID(A32nx_FBW_elev_trim, get(G_load_command) - get(Total_vertical_g_load)), -1, 1, 0.08))
+                else
+                    set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), FBW_PID(A32nx_FBW_elev_trim, get(Pitch_artstab) + (0 - get(Pitch_rate))), -1, 1, 0.1))
+                end
             end
+        else
+            set(Roll_artstab, get(Roll_l_lim) + get(Roll_r_lim) + get(Roll))
+            set(Pitch_artstab, (get(Pitch_d_lim) + get(Pitch_u_lim)) + (get(Pitch_rate_d_lim) + get(Pitch_rate_u_lim)) + get(Pitch))
         end
-    elseif get(FBW_status) == 2 then--ALT 1 law(no roll)
+    elseif get(FBW_status) == 1 then--ALT 2 law(no roll)
         set(Roll_artstab, get(Roll))
         --if get(Pitch) > 0.1 or get(Pitch) < -0.1 then
         set(Pitch_artstab, (get(Pitch_rate_d_lim) + get(Pitch_rate_u_lim)) + get(G_output))
-
-        if get(Flight_director_1_mode) ~= 2 and get(Flight_director_2_mode) ~= 2 then
-            --CWS trimming--
-            if get(Pitch) > 0.05 then
-                set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), FBW_PID(A32nx_FBW_elev_trim, get(G_load_command) - get(Total_vertical_g_load)), -1, 1, 0.08))
-            elseif get(Pitch) < -0.05 then
-                set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), FBW_PID(A32nx_FBW_elev_trim, get(G_load_command) - get(Total_vertical_g_load)), -1, 1, 0.08))
-            else
-                set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), FBW_PID(A32nx_FBW_elev_trim, get(Pitch_artstab) + (0 - get(Pitch_rate))), -1, 1, 0.1))
-            end
-        end
-    elseif get(FBW_status) == 1 then--ALT 2 law(no pitch)
-        set(Roll_artstab, get(Roll_rate_output))
-        --if get(Pitch) > 0.1 or get(Pitch) < -0.1 then
-        set(Pitch_artstab, get(Pitch))
 
         if get(Flight_director_1_mode) ~= 2 and get(Flight_director_2_mode) ~= 2 then
             --CWS trimming--

@@ -71,7 +71,8 @@ Apu_bleed_psi = createGlobalPropertyf("a321neo/cockpit/apu/bleed_psi", 0, false,
 Apu_bleed_state = createGlobalPropertyi("a321neo/apu/apu_bleed_state", 0, false, true, false)--0apu off bleed off, 1apu on bleed off, 2apu on bleed on
 Apu_gen_state = createGlobalPropertyi("a321neo/cockpit/apu/apu_gen_state", 0, false, true, false)--0apu off gen off, 1apu on gen off, 2apu on gen on
 --FBW--
-FBW_status = createGlobalPropertyi("a321neo/dynamics/fctl/FBW_on", 3, false, true, false)--3=NORMAL law, 2=ALT 1 law, 1=ALT2 law, 0==DIRECT law
+FBW_status = createGlobalPropertyi("a321neo/dynamics/FBW/FBW_on", 2, false, true, false)--2=NORMAL law, 1=ALT2 law, 0==DIRECT law
+FBW_ground_mode = createGlobalPropertyi("a321neo/dynamics/FBW/in_ground_mode", 0, false, true, false)--if the aircraft is on ground and FBW is in normal law
 Roll_l_lim = createGlobalPropertyf("a321neo/dynamics/FBW/roll_l_lim", 0, false, true, false)
 Roll_r_lim = createGlobalPropertyf("a321neo/dynamics/FBW/roll_r_lim", 0, false, true, false)
 Pitch_u_lim = createGlobalPropertyf("a321neo/dynamics/FBW/pitch_u_lim", 0, false, true, false)
