@@ -106,23 +106,27 @@ function update()
 
         --flap inputs
         if get(Flaps_handle_deploy_ratio) >= 0 then
+            set(slats, Math_clamp(0.7 * get(Flaps_handle_deploy_ratio)/0.25, 0, 0.7))
             set(left_inboard_flaps, Math_clamp(10 * get(Flaps_handle_deploy_ratio)/0.25, 0, 10))
             set(left_outboard_flaps, Math_clamp(10 * get(Flaps_handle_deploy_ratio)/0.25, 0, 10))
             set(right_inboard_flaps, Math_clamp(10 * get(Flaps_handle_deploy_ratio)/0.25, 0, 10))
             set(right_outboard_flaps, Math_clamp(10 * get(Flaps_handle_deploy_ratio)/0.25, 0, 10))
             if get(Flaps_handle_deploy_ratio) > 0.25 then
+                set(slats, Math_clamp(get(slats) + 0.1 * (get(Flaps_handle_deploy_ratio)-0.25)/0.25, 0.7, 0.8))
                 set(left_inboard_flaps, Math_clamp(get(left_inboard_flaps) + 5 * (get(Flaps_handle_deploy_ratio)-0.25)/0.25, 10, 15))
                 set(left_outboard_flaps, Math_clamp(get(left_outboard_flaps) + 5 * (get(Flaps_handle_deploy_ratio)-0.25)/0.25, 10, 15))
                 set(right_inboard_flaps, Math_clamp(get(right_inboard_flaps) + 5 * (get(Flaps_handle_deploy_ratio)-0.25)/0.25, 10, 15))
                 set(right_outboard_flaps, Math_clamp(get(right_outboard_flaps) + 5 * (get(Flaps_handle_deploy_ratio)-0.25)/0.25, 10, 15))
             end
             if get(Flaps_handle_deploy_ratio) > 0.5 then
+                set(slats, Math_clamp(get(slats) + 0 * (get(Flaps_handle_deploy_ratio)-0.50)/0.25, 0.8, 0.8))
                 set(left_inboard_flaps, Math_clamp(get(left_inboard_flaps) + 5 * (get(Flaps_handle_deploy_ratio)-0.50)/0.25, 15, 20))
                 set(left_outboard_flaps, Math_clamp(get(left_outboard_flaps) + 5 * (get(Flaps_handle_deploy_ratio)-0.50)/0.25, 15, 20))
                 set(right_inboard_flaps, Math_clamp(get(right_inboard_flaps) + 5 * (get(Flaps_handle_deploy_ratio)-0.50)/0.25, 15, 20))
                 set(right_outboard_flaps, Math_clamp(get(right_outboard_flaps) + 5 * (get(Flaps_handle_deploy_ratio)-0.50)/0.25, 15, 20))
             end
             if get(Flaps_handle_deploy_ratio) > 0.75 then
+                set(slats, Math_clamp(get(slats) + 0.2 * (get(Flaps_handle_deploy_ratio)-0.75)/0.25, 0.8, 1))
                 set(left_inboard_flaps, Math_clamp(get(left_inboard_flaps) + 20 * (get(Flaps_handle_deploy_ratio)-0.75)/0.25, 20, 40))
                 set(left_outboard_flaps, Math_clamp(get(left_outboard_flaps) + 20 * (get(Flaps_handle_deploy_ratio)-0.75)/0.25, 20, 40))
                 set(right_inboard_flaps, Math_clamp(get(right_inboard_flaps) + 20 * (get(Flaps_handle_deploy_ratio)-0.75)/0.25, 20, 40))
