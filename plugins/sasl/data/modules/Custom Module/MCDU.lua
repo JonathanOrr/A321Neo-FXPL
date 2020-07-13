@@ -64,7 +64,7 @@ local MCDU_DISP_TEXT_ALIGN =
 local B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
 
 -- alphanumeric & decimal FMC entry keys
-local MCDU_ENTRY_KEYS = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", ".", "Δ"}
+local MCDU_ENTRY_KEYS = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", ".", "Δ", " "}
 local MCDU_ENTRY_PAGES = {"DIR", "PROG", "PERF", "INIT", "DATA", "F-PLN", "RAD NAV", "FUEL PRED", "SEC F-PLN", "ATC COMM", "MCDU MENU", "AIRP"}
 local MCDU_ENTRY_SIDES = {"L1", "L2", "L3", "L4", "L5", "L6", "R1", "R2", "R3", "R4", "R5", "R6", "slew_up", "slew_down", "slew_left", "slew_right"}
 
@@ -106,13 +106,17 @@ local function mcdu_eval_entry(str, format)
 
     for i = 1,#format do
         if string.sub(format, i, i) == "!" then
+            -- digit
             if string.find(string.sub(str, i, i), "%d") == nil then
                 pass = false
             end
         elseif string.sub(format, i, i) == "@" then
+            -- letter
             if string.find(string.sub(str, i, i), "%a") == nil then
                 pass = false
             end
+        elseif string.sub(format, i, i) == "#" then
+            -- do nothing
         else
             if string.sub(str, i, i) ~= string.upper(string.sub(format, i, i)) then 
                 pass = false
@@ -126,7 +130,7 @@ local function mcdu_get_entry(expected_formats)
     --[[
     -- expected_format
     --
-    -- can accept multiple inputs ! for digits, @ for letters
+    -- can accept multiple inputs ! for digits, @ for letters, # for anything
     -- https://www.lua.org/pil/20.2.html
     --]]
     if expected_formats[1] ~= nil then
@@ -477,13 +481,25 @@ local function mcdu_ctrl_exe_inst()
     if inst.type == "GET_LN" then
         inst.callback(get(globalPropertys("sim/cockpit2/radios/indicators/fms_cdu1_text_line" .. inst.arg)))
     end
+    if inst.type == "INPUT" then
+        if string.sub(get(globalPropertys("sim/cockpit2/radios/indicators/fms_cdu1_text_line13")), 2, 2) == " " then
+        print("inputarg")
+            for i = 0,#inst.arg - 1 do
+                table.insert(mcdu_ctrl_instructions, {type = "CMD", arg = "sim/FMS/key_" .. string.upper(string.sub(inst.arg, #inst.arg - i, #inst.arg - i))})
+            end
+        else
+        print("inputdel" .. string.sub(get(globalPropertys("sim/cockpit2/radios/indicators/fms_cdu1_text_line13")), 2, 2))
+            sasl.commandOnce(findCommand("sim/FMS/key_clear"))
+            --delete the entire scratchpad
+            table.insert(mcdu_ctrl_instructions, inst)
+        end
+    end
 end
 
 --update
 function update()
     if get(mcdu_page) == 0 then --on start
-        --mcdu_open_page(505) --open 505 A/C status
-        mcdu_open_page(1102) --open 505 A/C status
+       mcdu_open_page(505) --open 505 A/C status
     end
 
     if #mcdu_messages > 0 and mcdu_entry == "" then
@@ -514,6 +530,12 @@ local function mcdu_ctrl_get_cycle(callback)
     mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/index"})
     mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/ls_1l"})
     mcdu_ctrl_add_inst({type = "GET_LN", arg = "4", callback = callback})
+end
+
+local function mcdu_ctrl_set_fpln_origin(input)
+    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/fpln"})
+    mcdu_ctrl_add_inst({type = "INPUT", arg = input})
+    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/ls_1l"})
 end
 
 -- 00 template
@@ -568,6 +590,13 @@ function (phase)
         mcdu_dat["l"]["R"][6] = {txt = "36090", col = "blue", size = "s"}
 
         draw_update()
+    end
+    if phase == "R1" then
+        input, variation = mcdu_get_entry("####/####")
+        if input ~= nil then
+            mcdu_ctrl_set_fpln_origin(input[1] .. input[2] .. input[3] .. input[4])
+            mcdu_ctrl_set_fpln_dest(input[6] .. input[7] .. input[8] .. input[9])
+        end
     end
 end
 -- 500 data
