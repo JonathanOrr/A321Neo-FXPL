@@ -402,7 +402,6 @@ local function colorize()
     for i,f in ipairs({"white", "blue", "orange", "green"}) do
         c = {}
         c[0] = MCDU_DISP_COLOR[f][1];c[1] = MCDU_DISP_COLOR[f][2];c[2] = MCDU_DISP_COLOR[f][3]
-        print(c[0] .. " " .. c[1] .. " " .. c[2])
         inc = 0.1
         if c[0] < 1 and c[1] == 0 and c[2] == 0 then
             c[0] = c[0] + inc
@@ -510,7 +509,7 @@ local function mcdu_ctrl_exe_inst()
     end
 end
 
-mcdu_entry = "30"
+mcdu_entry = "ksea/kbfi"
 
 --update
 function update()
@@ -543,7 +542,6 @@ local function fmgs_dat_get(dat_name, dat_init, dat_init_col, dat_set_col, dat_f
         fmgs_dat[dat_name] = " " .. fmgs_dat[dat_name]
     end
 
-    print(fmgs_dat[dat_name] .. " " .. dat_init)
     if fmgs_dat[dat_name] == dat_init then
         return {txt = fmgs_dat[dat_name], col = dat_init_col}
     else
@@ -593,24 +591,7 @@ local function fmgs_dat_get_txt(dat_name, dat_init, dat_format_callback)
     end
 end
 
---[[
-local function sleep(n)
-    local t = sasl.createTimer()
-    sasl.startTimer(t)
-    local t0 = sasl.getElapsedSeconds(t)
-    while sasl.getElapsedSeconds(t) - t0 <= n do end
-end
---]]
-
 local function mcdu_ctrl_get_cycle(callback)
-    --[[
-    sasl.commandOnce(findCommand("sim/FMS/index"))
-    sleep(1)
-    sasl.commandOnce(findCommand("sim/FMS/ls_1l"))
-    sleep(1)
-    callback(get(globalPropertys("sim/cockpit2/radios/indicators/fms_cdu1_text_line4")))
-    --]]
-
     mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/index"})
     mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/ls_1l"})
     mcdu_ctrl_add_inst({type = "GET_LN", arg = "4", callback = callback})
@@ -639,6 +620,16 @@ local function mcdu_ctrl_set_fpln_dest(input)
     mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/fpln"})
     mcdu_ctrl_add_inst({type = "INPUT", arg = input})
     mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/ls_1r"})
+end
+
+local function mcdu_ctrl_get_origin_latlon(origin, callback)
+    print("start")
+    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/index"})
+    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/ls_2r"})
+    mcdu_ctrl_add_inst({type = "INPUT", arg = origin})
+    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/ls_1l"})
+    mcdu_ctrl_add_inst({type = "GET_LN", arg = "4", callback = callback})
+    print("end")
 end
 
 -- 00 template
@@ -679,10 +670,10 @@ function (phase)
         mcdu_dat["l"]["L"][3] = fmgs_dat_get("flt nbr", "{{{{{{{{", "orange", "blue")
 
         mcdu_dat["s"]["L"][4].txt = "lat"
-        mcdu_dat["l"]["L"][4].txt = "----.-"
+        mcdu_dat["l"]["L"][4] = fmgs_dat_get("lat", "----.-", "white", "blue")
 
         mcdu_dat["s"]["R"][4].txt = "long"
-        mcdu_dat["l"]["R"][4].txt = "-----.--"
+        mcdu_dat["l"]["R"][4] = fmgs_dat_get("lon", "-----.--", "white", "blue")
 
         mcdu_dat["s"]["L"][5].txt = "cost index"
         mcdu_dat["l"]["L"][5] = fmgs_dat_get("cost index", "{{{", "orange", "blue")
@@ -700,7 +691,6 @@ function (phase)
                 end
             end
         )
-
         mcdu_dat["l"]["L"][6].txt = mcdu_dat["l"]["L"][6].txt .. "/" .. fmgs_dat_get_txt("crz temp", "---") .. "°"
 
         mcdu_dat["s"]["R"][6].txt = "tropo "
@@ -724,7 +714,6 @@ function (phase)
     if phase == "L6" then
         input, variation = mcdu_get_entry({"!!", "!!!", "fl!!!", "/!", "/!!", "/-!", "/-!!"})
 
-        print(input .. " " .. variation)
         if variation == 1 then
             fmgs_dat["crz fl"] = input * 100
             fmgs_dat["crz temp"] = math.floor(input * -0.2 + 16)
@@ -757,6 +746,11 @@ function (phase)
                 mcdu_ctrl_try_catch(function(val)
                     fmgs_dat["dest"] = input:sub(6,9)
                     mcdu_open_page(400) -- reload
+                    mcdu_ctrl_get_origin_latlon(input:sub(1,4), function(val)
+                        fmgs_dat["lat"] = val:sub(2,3) .. val:sub(6,9) .. val:sub(1,1)
+                        fmgs_dat["lon"] = val:sub(13,15) .. val:sub(18,22) .. val:sub(12,12)
+                        mcdu_open_page(400) -- reload
+                    end)
                 end)
             end)
         end
