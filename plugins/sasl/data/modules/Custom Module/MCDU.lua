@@ -71,11 +71,12 @@ local MCDU_ENTRY_SIDES = {"L1", "L2", "L3", "L4", "L5", "L6", "R1", "R2", "R3", 
 --[[
 --
 --
---      MCDU DATA INITIALIZATION
+--      FMGS & MCDU DATA INITIALIZATION
 --
 --
 --]]
 
+local fmgs_dat = {}
 local mcdu_dat = {}
 local mcdu_dat_title = {}
 
@@ -299,10 +300,7 @@ end
 local hokey_pokey = false --wonder what this does
 sasl.registerCommandHandler(mcdu_debug_message, 0, function (phase)
     if phase == SASL_COMMAND_BEGIN then
-        hokey_pokey = true
-        for i,f in ipairs({"white", "blue", "orange", "green"}) do
-            MCDU_DISP_COLOR[f] = {1, 0, 0} 
-        end
+        mcdu_send_message("debug")
     end
 end)
 
@@ -496,14 +494,18 @@ local function mcdu_ctrl_exe_inst()
     end
 end
 
+mcdu_entry = "KSEA/x"
+
 --update
 function update()
     if get(mcdu_page) == 0 then --on start
-       mcdu_open_page(505) --open 505 A/C status
+       --mcdu_open_page(505) --open 505 A/C status
+       mcdu_open_page(400) --open 505 A/C status
     end
 
+    print(#mcdu_messages)
     if #mcdu_messages > 0 and mcdu_entry == "" then
-        mcdu_entry = mcdu_messages[#mcdu_messages]
+        mcdu_entry = mcdu_messages[#mcdu_messages]:upper()
         table.remove(mcdu_messages)
     end
     mcdu_ctrl_exe_inst()
@@ -532,10 +534,30 @@ local function mcdu_ctrl_get_cycle(callback)
     mcdu_ctrl_add_inst({type = "GET_LN", arg = "4", callback = callback})
 end
 
+-- returns the result for error checking
+local function mcdu_ctrl_try_catch(callback)
+    mcdu_ctrl_add_inst({type = "GET_LN", arg = "13", callback = 
+    function (val) 
+        if val:sub(1,2) ~= "[I" then -- [INVALID ENTRY]
+            callback(val) 
+        else
+            mcdu_send_message("not in database")-- INVALID ENTRY
+        end
+    end})
+end
+
 local function mcdu_ctrl_set_fpln_origin(input)
+    mcdu_entry = ""
     mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/fpln"})
     mcdu_ctrl_add_inst({type = "INPUT", arg = input})
     mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/ls_1l"})
+end
+
+local function mcdu_ctrl_set_fpln_dest(input)
+    mcdu_entry = ""
+    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/fpln"})
+    mcdu_ctrl_add_inst({type = "INPUT", arg = input})
+    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/ls_1r"})
 end
 
 -- 00 template
@@ -555,6 +577,8 @@ function (phase)
 end
 
 -- 400 init
+fmgs_dat["origin"] = "□□□□" 
+fmgs_dat["dest"] = "□□□□" 
 mcdu_sim_page[400] =
 function (phase)
     if phase == "render" then
@@ -564,7 +588,7 @@ function (phase)
         mcdu_dat["l"]["L"][1] = {txt = "□□□□□□□", col = "orange"}
 
         mcdu_dat["s"]["R"][1].txt = " from/to  "
-        mcdu_dat["l"]["R"][1] = {txt = "□□□□/□□□□", col = "orange"}
+        mcdu_dat["l"]["R"][1] = {txt = fmgs_dat["origin"] .. "/" .. fmgs_dat["dest"] , col = "orange"}
 
         mcdu_dat["s"]["L"][2].txt = "altn/co route"
         mcdu_dat["l"]["L"][2].txt = "----/---------"
@@ -592,10 +616,13 @@ function (phase)
         draw_update()
     end
     if phase == "R1" then
-        input, variation = mcdu_get_entry("####/####")
+        input = mcdu_get_entry("####/####")
         if input ~= nil then
-            mcdu_ctrl_set_fpln_origin(input[1] .. input[2] .. input[3] .. input[4])
-            mcdu_ctrl_set_fpln_dest(input[6] .. input[7] .. input[8] .. input[9])
+            mcdu_ctrl_set_fpln_origin(input:sub(1,4))
+            mcdu_ctrl_try_catch(function(val)
+                fmgs_dat["origin"] = val
+            end)
+            mcdu_ctrl_set_fpln_dest(input:sub(6,9))
         end
     end
 end
@@ -645,9 +672,6 @@ function (phase)
         end)
         mcdu_dat["s"]["L"][3].txt = " second data base"
         mcdu_dat["l"]["L"][3] = {txt = " none", col = "blue", size = "s"}
-
-        mcdu_dat["l"]["L"][4].txt = "WORK IN PROGRESS"
-
 
         mcdu_dat["s"]["L"][5].txt = "chg code"
         mcdu_dat["l"]["L"][5] = {txt = "[ ]", col = "blue"}
