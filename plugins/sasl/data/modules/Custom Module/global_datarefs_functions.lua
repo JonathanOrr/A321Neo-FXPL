@@ -87,13 +87,13 @@ Roll_rate_command = createGlobalPropertyf("a321neo/dynamics/FBW/roll_rate_comman
 Roll_rate_output = createGlobalPropertyf("a321neo/dynamics/FBW/roll_rate_output", 0, false, true, false)
 G_load_command = createGlobalPropertyf("a321neo/dynamics/FBW/G_load_command", 1, false, true, false)--2.5G to -1G in normal flight, with flaps 2G to 0G
 G_output = createGlobalPropertyf("a321neo/dynamics/FBW/G_output", 0, false, true, false)
-ELAC_1 = createGlobalPropertyf("a321neo/dynamics/FBW/ELAC_1", 1, false, true, false)--elevator aileron computer 1
-ELAC_2 = createGlobalPropertyf("a321neo/dynamics/FBW/ELAC_2", 1, false, true, false)--elevator aileron computer 2
-FAC_1 = createGlobalPropertyf("a321neo/dynamics/FBW/FAC_1", 1, false, true, false)--flight augmentation computer 1
-FAC_2 = createGlobalPropertyf("a321neo/dynamics/FBW/FAC_2", 1, false, true, false)--flight augmentation computer 2
-SEC_1 = createGlobalPropertyf("a321neo/dynamics/FBW/SEC_1", 1, false, true, false)--spoiler elevator computer 1
-SEC_2 = createGlobalPropertyf("a321neo/dynamics/FBW/SEC_2", 1, false, true, false)--spoiler elevator computer 2
-SEC_3 = createGlobalPropertyf("a321neo/dynamics/FBW/SEC_3", 1, false, true, false)--spoiler elevator computer 3
+ELAC_1 = createGlobalPropertyi("a321neo/dynamics/FBW/ELAC_1", 1, false, true, false)--elevator aileron computer 1
+ELAC_2 = createGlobalPropertyi("a321neo/dynamics/FBW/ELAC_2", 1, false, true, false)--elevator aileron computer 2
+FAC_1 = createGlobalPropertyi("a321neo/dynamics/FBW/FAC_1", 1, false, true, false)--flight augmentation computer 1
+FAC_2 = createGlobalPropertyi("a321neo/dynamics/FBW/FAC_2", 1, false, true, false)--flight augmentation computer 2
+SEC_1 = createGlobalPropertyi("a321neo/dynamics/FBW/SEC_1", 1, false, true, false)--spoiler elevator computer 1
+SEC_2 = createGlobalPropertyi("a321neo/dynamics/FBW/SEC_2", 1, false, true, false)--spoiler elevator computer 2
+SEC_3 = createGlobalPropertyi("a321neo/dynamics/FBW/SEC_3", 1, false, true, false)--spoiler elevator computer 3
 
 
 --global dataref variable from the Sim--

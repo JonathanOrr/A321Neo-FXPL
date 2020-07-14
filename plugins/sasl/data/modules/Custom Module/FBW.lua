@@ -12,7 +12,7 @@ local A32nx_FBW_pitch_rate_down =   {P_gain = 1, D_gain = 10, Current_error = 0,
 local A32nx_FBW_roll_rate_command = {P_gain = 10, I_gain = 1, D_gain = 10, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -15, Max_error = 15, Error_offset = 0}
 --local A32nx_FBW_1G_command = {P_gain = 1, I_gain = 1, D_gain = 1.5, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -0.25, Max_error = 0.25, Error_offset = 0}
 local A32nx_FBW_1G_command = {P_gain = 1.5, I_gain = 1, D_gain = 10, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -15, Max_error = 15, Error_offset = 0}
-local A32nx_FBW_G_command = {P_gain = 1.5, I_gain = 1, D_gain = 10, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -2.5, Max_error = 2.5, Error_offset = 0}
+local A32nx_FBW_G_command = {P_gain = 1.5, I_gain = 1, D_gain = 2.5, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -2.5, Max_error = 2.5, Error_offset = 0}
 local A32nx_FBW_AOA_protection = {P_gain = 1, I_gain = 1, D_gain = 10, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -5, Max_error = 5, Error_offset = 0}
 local A32nx_FBW_MAX_spd_protection = {P_gain = 1, I_gain = 1, D_gain = 10, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -5, Max_error = 5, Error_offset = 0}
 
@@ -28,7 +28,8 @@ local A32nx_FBW_elev_trim = {P_gain = 1, I_gain = 1, D_gain = 10, I_delay = 120,
 --variables--
 local FBW_alt_law_gear_extended = 0 --FBW supposed to be in alt law and gear is extended puting it into direct law
 local FBW_restart_required = 0 --not in normal law require restart to restore
-local ground_mode_transition_timer = 3.5 --for delayed transition
+local ground_mode_transition_timer = 0 --(3.5) for delayed transition
+local flare_mode_transition_timer = 0 --(2.5) for delayed transition
 
 --sim datarefs
 
@@ -140,7 +141,9 @@ function update()
     --ground mode detection--
     if get(Aft_wheel_on_ground) == 1 then
         ground_mode_transition_timer = 3.5
-        set(FBW_ground_mode, 1)
+        if flare_mode_transition_timer < 0 then
+            set(FBW_ground_mode, 1)
+        end
     else
         if ground_mode_transition_timer < 0 then
             set(FBW_ground_mode, 0)
@@ -151,8 +154,13 @@ function update()
 
     if get(Flaps_handle_ratio) > 0.5 and get(Capt_ra_alt_ft) < 100 and get(VVI) < 0 and get(VVI) > -4000 and get(Aft_wheel_on_ground) == 0 then
         set(FBW_flare_mode, 1)
+        flare_mode_transition_timer = 2.5
     else
-        set(FBW_flare_mode, 0)
+        if flare_mode_transition_timer < 0 then
+            set(FBW_flare_mode, 0)
+        else
+            flare_mode_transition_timer = flare_mode_transition_timer - 1 * get(DELTA_TIME)
+        end
     end
 
     --input interpretation--
@@ -278,11 +286,11 @@ function update()
                     if get(Capt_ra_alt_ft) < 35 then
                         --pitch down slightly
                         set(FBW_flaring, 1)
-                        set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), FBW_PID(A32nx_FBW_elev_trim, get(Pitch_artstab) + (-3.2 - get(Pitch_rate))), -1, 1, 0.1))
+                        set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), FBW_PID(A32nx_FBW_elev_trim, get(Pitch_artstab) + (-2.1 - get(Pitch_rate))), -1, 1, 0.1))
                         if get(Pitch) > 0.05 then
-                            set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), FBW_PID(A32nx_FBW_elev_trim, (-3.2 - get(Pitch_rate)) + (get(G_load_command) - get(Total_vertical_g_load))), -1, 1, 0.08))
+                            set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), FBW_PID(A32nx_FBW_elev_trim, (-2.1 - get(Pitch_rate)) + (get(G_load_command) - get(Total_vertical_g_load))), -1, 1, 0.08))
                         elseif get(Pitch) < -0.05 then
-                            set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), FBW_PID(A32nx_FBW_elev_trim, (-3.2 - get(Pitch_rate)) + (get(G_load_command) - get(Total_vertical_g_load))), -1, 1, 0.08))
+                            set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), FBW_PID(A32nx_FBW_elev_trim, (-2.1 - get(Pitch_rate)) + (get(G_load_command) - get(Total_vertical_g_load))), -1, 1, 0.08))
                         end
                     else--not below 35 ft
                         set(FBW_flaring, 0)
