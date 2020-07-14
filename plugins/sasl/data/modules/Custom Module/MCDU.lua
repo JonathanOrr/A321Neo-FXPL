@@ -1,13 +1,15 @@
 position = {75,1690,320,285}
 size = {320, 285}
 
+local NIL = "unique-nil-identifier" -- used for input return and checking
+
 --[[
 --
 --
 --      A32NX MCDU
 --
 --      CONSTS DECLARATION
---      MCDU DATA INITIALIZATION
+--      FMGS & MCDU DATA INITIALIZATION
 --      DATA & COMMAND REGISTRATION
 --      MCDU PAGE SIMULATION
 --
@@ -21,7 +23,6 @@ size = {320, 285}
 --
 --
 --]]
-
 local MCDU_DRAW_SIZE = {w = 320, h = 285} -- idk if size table is required by anything else, this is for internal reference
 
 --define the const size, align and row.
@@ -134,33 +135,32 @@ local function mcdu_get_entry(expected_formats)
     -- can accept multiple inputs ! for digits, @ for letters, # for anything
     -- https://www.lua.org/pil/20.2.html
     --]]
+    me = mcdu_entry
+    mcdu_entry = ""
+
     if expected_formats[1] ~= nil then
         local pass = false
         variation = 0
         for i,format in ipairs(expected_formats) do-- expected_formats is a table
-            if mcdu_eval_entry(mcdu_entry, format) then
+            if mcdu_eval_entry(me, format) then
                 variation = i
                 pass = true
             end
         end
         if pass then
-            print("a")
-            return mcdu_entry, variation 
+            return me, variation 
         else
             mcdu_send_message("invalid format")
-            return nil, nil
+            return NIL, NIL
         end
     else
-        if mcdu_eval_entry(mcdu_entry, expected_formats) then
-            return mcdu_entry
+        if mcdu_eval_entry(me, expected_formats) then
+            return me
         else
             mcdu_send_message("invalid format")
-            return nil
+            return NIL
         end
     end
-    me = mcdu_entry
-    mcdu_entry = ""
-    return me
 end
 
 --clear MCDU
@@ -481,20 +481,21 @@ local function mcdu_ctrl_exe_inst()
     end
     if inst.type == "INPUT" then
         if string.sub(get(globalPropertys("sim/cockpit2/radios/indicators/fms_cdu1_text_line13")), 2, 2) == " " then
-        print("inputarg")
             for i = 0,#inst.arg - 1 do
                 table.insert(mcdu_ctrl_instructions, {type = "CMD", arg = "sim/FMS/key_" .. string.upper(string.sub(inst.arg, #inst.arg - i, #inst.arg - i))})
             end
         else
-        print("inputdel" .. string.sub(get(globalPropertys("sim/cockpit2/radios/indicators/fms_cdu1_text_line13")), 2, 2))
             sasl.commandOnce(findCommand("sim/FMS/key_clear"))
             --delete the entire scratchpad
             table.insert(mcdu_ctrl_instructions, inst)
         end
     end
+    if inst.type == "NOOP" then
+        -- no operation
+    end
 end
 
-mcdu_entry = "KSEA/x"
+mcdu_entry = "KSEA/KBFI"
 
 --update
 function update()
@@ -503,7 +504,6 @@ function update()
        mcdu_open_page(400) --open 505 A/C status
     end
 
-    print(#mcdu_messages)
     if #mcdu_messages > 0 and mcdu_entry == "" then
         mcdu_entry = mcdu_messages[#mcdu_messages]:upper()
         table.remove(mcdu_messages)
@@ -536,10 +536,11 @@ end
 
 -- returns the result for error checking
 local function mcdu_ctrl_try_catch(callback)
+    mcdu_ctrl_add_inst({type = "NOOP"})
     mcdu_ctrl_add_inst({type = "GET_LN", arg = "13", callback = 
     function (val) 
         if val:sub(1,2) ~= "[I" then -- [INVALID ENTRY]
-            callback(val) 
+            callback() 
         else
             mcdu_send_message("not in database")-- INVALID ENTRY
         end
@@ -547,14 +548,12 @@ local function mcdu_ctrl_try_catch(callback)
 end
 
 local function mcdu_ctrl_set_fpln_origin(input)
-    mcdu_entry = ""
     mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/fpln"})
     mcdu_ctrl_add_inst({type = "INPUT", arg = input})
     mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/ls_1l"})
 end
 
 local function mcdu_ctrl_set_fpln_dest(input)
-    mcdu_entry = ""
     mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/fpln"})
     mcdu_ctrl_add_inst({type = "INPUT", arg = input})
     mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/ls_1r"})
@@ -588,7 +587,12 @@ function (phase)
         mcdu_dat["l"]["L"][1] = {txt = "□□□□□□□", col = "orange"}
 
         mcdu_dat["s"]["R"][1].txt = " from/to  "
-        mcdu_dat["l"]["R"][1] = {txt = fmgs_dat["origin"] .. "/" .. fmgs_dat["dest"] , col = "orange"}
+        mcdu_dat["l"]["R"][1].txt = fmgs_dat["origin"] .. "/" .. fmgs_dat["dest"]
+        if fmgs_dat["origin"] == "□□□□" or fmgs_dat["dest"] == "□□□□" then
+            mcdu_dat["l"]["R"][1].col = "orange"
+        else
+            mcdu_dat["l"]["R"][1].col = "blue"
+        end
 
         mcdu_dat["s"]["L"][2].txt = "altn/co route"
         mcdu_dat["l"]["L"][2].txt = "----/---------"
@@ -617,12 +621,17 @@ function (phase)
     end
     if phase == "R1" then
         input = mcdu_get_entry("####/####")
-        if input ~= nil then
+        if input ~= NIL then
             mcdu_ctrl_set_fpln_origin(input:sub(1,4))
             mcdu_ctrl_try_catch(function(val)
-                fmgs_dat["origin"] = val
+                fmgs_dat["origin"] = input:sub(1,4)
+
+                mcdu_ctrl_set_fpln_dest(input:sub(6,9))
+                mcdu_ctrl_try_catch(function(val)
+                    fmgs_dat["dest"] = input:sub(6,9)
+                    mcdu_open_page(400) -- reload
+                end)
             end)
-            mcdu_ctrl_set_fpln_dest(input:sub(6,9))
         end
     end
 end
@@ -705,7 +714,7 @@ function (phase)
 
         mcdu_dat["s"]["L"][3].txt = "ils /freq"
         mcdu_dat["l"]["L"][3][1] = {txt = "[  ]", col = "blue"}
-        mcdu_dat["l"]["L"][3][2] = {txt = "    /108.10", col = "blue", size = "s"}
+        mcdu_dat["l"]["L"][3][2] = {txt = "    /08.10", col = "blue", size = "s"}
 
         mcdu_dat["s"]["R"][3].txt = "chan/ mls"
         mcdu_dat["l"]["R"][3].txt = "---/--- "
