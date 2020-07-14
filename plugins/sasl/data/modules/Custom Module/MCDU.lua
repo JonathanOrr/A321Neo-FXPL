@@ -755,6 +755,9 @@ function (phase)
             end)
         end
     end
+    --slew up (used for lat lon)
+    if phase == "slew_up" then
+    end
 end
 -- 500 data
 mcdu_sim_page[500] =
@@ -810,6 +813,25 @@ function (phase)
 
        
         draw_update()
+    end
+end
+
+fmgs_dat["fpln"] = {}
+fmgs_dat["fpln"][0] = {}
+fmgs_dat["fpln"][0].name = "eggw"
+fmgs_dat["fpln"][0].time = "----"
+fmgs_dat["fpln"][0].spd = "---"
+fmgs_dat["fpln"][0].alt = "-----"
+-- 600 f-pln
+mcdu_sim_page[600] =
+function (phase)
+    if phase == "render" then
+        for i = 1,5 do
+            mcdu_dat["s"]["L"][i] = fmgs_dat["fpln"][0].name
+            mcdu_dat["l"]["L"][i] = {txt = "+0.0/+0.0", col = "green"}
+        end
+        mcdu_dat["s"]["L"][6] = " dest   utc  dist  efob"
+        mcdu_dat["l"]["L"][6] = fmgs_dat["dest"] 
     end
 end
 
