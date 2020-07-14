@@ -137,6 +137,10 @@ local function mcdu_get_entry(expected_formats)
     --]]
     me = mcdu_entry
     mcdu_entry = ""
+    
+    if expected_formats == nil then
+        return me
+    end
 
     if expected_formats[1] ~= nil then
         local pass = false
@@ -150,14 +154,14 @@ local function mcdu_get_entry(expected_formats)
         if pass then
             return me, variation 
         else
-            mcdu_send_message("invalid format")
+            mcdu_send_message("format error")
             return NIL, NIL
         end
     else
         if mcdu_eval_entry(me, expected_formats) then
             return me
         else
-            mcdu_send_message("invalid format")
+            mcdu_send_message("format error")
             return NIL
         end
     end
@@ -255,7 +259,7 @@ local MCDU_ENTRY =
                 table.remove(mcdu_messages)
             else
                 if #mcdu_entry > 0 then
-                    mcdu_entry = ""
+                    mcdu_entry = mcdu_entry:sub(1,#mcdu_entry - 1) 
                 else
                     if #mcdu_entry == 0 then
                         mcdu_entry = "CLR"
@@ -320,7 +324,7 @@ local function draw_dat(dat, draw_size, disp_x, disp_y, disp_text_align)
     if dat.txt == nil then
         return
     end
-    disp_text = dat.txt:upper()
+    disp_text = tostring(dat.txt):upper()
     disp_color = MCDU_DISP_COLOR[dat.col]
 
     -- is there a custom size
@@ -334,6 +338,17 @@ local function draw_dat(dat, draw_size, disp_x, disp_y, disp_text_align)
     disp_text_size = MCDU_DISP_TEXT_SIZE[disp_size]
     -- text spacing
     disp_spacing = MCDU_DISP_TEXT_SPACING[disp_size]
+
+    -- replace { with the box
+    text = ""
+    for j = 1,#disp_text do
+        if disp_text:sub(j,j) == "{" then
+            text = text .. "□"
+        else
+            text = text .. disp_text:sub(j,j)
+        end
+    end
+    disp_text = text
 
     -- now draw it!
     table.insert(draw_lines, {disp_x = disp_x, disp_y = disp_y, disp_text = disp_text, disp_text_size = disp_text_size, disp_text_align = disp_text_align, disp_color = disp_color, disp_spacing = disp_spacing})
@@ -495,7 +510,7 @@ local function mcdu_ctrl_exe_inst()
     end
 end
 
-mcdu_entry = "KSEA/KBFI"
+mcdu_entry = "30"
 
 --update
 function update()
@@ -509,6 +524,73 @@ function update()
         table.remove(mcdu_messages)
     end
     mcdu_ctrl_exe_inst()
+end
+
+local function fmgs_dat_get(dat_name, dat_init, dat_init_col, dat_set_col, dat_format_callback)
+    --[[
+    -- dat_name     name of data from fmgs_dat
+    -- dat_init     value the data starts with initially
+    -- dat_init_col colour when data hasn't been set
+    -- dat_set_col  colour when data has been set
+    -- dat_format_callback (optional) format callback when data has been set
+    --]]
+    if fmgs_dat[dat_name] == nil then
+        fmgs_dat[dat_name] = dat_init
+    end
+
+    --padding
+    while #tostring(fmgs_dat[dat_name]) < #dat_init do
+        fmgs_dat[dat_name] = " " .. fmgs_dat[dat_name]
+    end
+
+    print(fmgs_dat[dat_name] .. " " .. dat_init)
+    if fmgs_dat[dat_name] == dat_init then
+        return {txt = fmgs_dat[dat_name], col = dat_init_col}
+    else
+        if dat_format_callback == nil then
+            dat_format_callback = function (val) return val end
+        end
+
+        val = tostring(dat_format_callback(tostring(fmgs_dat[dat_name])))
+        --padding
+        while #val < #dat_init do
+            val = " " .. val
+        end
+
+        return {txt = val, col = dat_set_col}
+    end
+end
+
+local function fmgs_dat_get_txt(dat_name, dat_init, dat_format_callback)
+    --[[
+    -- dat_name     name of data from fmgs_dat
+    -- dat_init     value the data starts with initially
+    -- dat_format_callback (optional) format callback when data has been set
+    --]]
+    if fmgs_dat[dat_name] == nil then
+        fmgs_dat[dat_name] = dat_init
+    end
+
+    --padding
+    while #tostring(fmgs_dat[dat_name]) < #dat_init do
+        fmgs_dat[dat_name] = " " .. fmgs_dat[dat_name]
+    end
+
+    if fmgs_dat[dat_name] == dat_init then
+        return fmgs_dat[dat_name]
+    else
+        if dat_format_callback == nil then
+            dat_format_callback = function (val) return val end
+        end
+
+        val = tostring(dat_format_callback(tostring(fmgs_dat[dat_name])))
+        --padding
+        while #val < #dat_init do
+            val = " " .. val
+        end
+
+        return val
+    end
 end
 
 --[[
@@ -576,29 +658,25 @@ function (phase)
 end
 
 -- 400 init
-fmgs_dat["origin"] = "□□□□" 
-fmgs_dat["dest"] = "□□□□" 
 mcdu_sim_page[400] =
 function (phase)
     if phase == "render" then
         mcdu_dat_title.txt = "          init"
 
         mcdu_dat["s"]["L"][1].txt = " co rte"
-        mcdu_dat["l"]["L"][1] = {txt = "□□□□□□□", col = "orange"}
+        mcdu_dat["l"]["L"][1] = fmgs_dat_get("co rte", "{{{{{{{{{{", "orange", "blue")
 
         mcdu_dat["s"]["R"][1].txt = " from/to  "
-        mcdu_dat["l"]["R"][1].txt = fmgs_dat["origin"] .. "/" .. fmgs_dat["dest"]
-        if fmgs_dat["origin"] == "□□□□" or fmgs_dat["dest"] == "□□□□" then
-            mcdu_dat["l"]["R"][1].col = "orange"
-        else
-            mcdu_dat["l"]["R"][1].col = "blue"
-        end
+
+        mcdu_dat["l"]["R"][1] = fmgs_dat_get("origin", "{{{{", "orange", "blue")
+        mcdu_dat["l"]["R"][1].txt = mcdu_dat["l"]["R"][1].txt .. "/" .. fmgs_dat_get_txt("dest", "{{{{")
 
         mcdu_dat["s"]["L"][2].txt = "altn/co route"
         mcdu_dat["l"]["L"][2].txt = "----/---------"
 
         mcdu_dat["s"]["L"][3].txt = "flt nbr"
-        mcdu_dat["l"]["L"][3] = {txt = "□□□□□□□□", col = "orange"}
+
+        mcdu_dat["l"]["L"][3] = fmgs_dat_get("flt nbr", "{{{{{{{{", "orange", "blue")
 
         mcdu_dat["s"]["L"][4].txt = "lat"
         mcdu_dat["l"]["L"][4].txt = "----.-"
@@ -607,18 +685,67 @@ function (phase)
         mcdu_dat["l"]["R"][4].txt = "-----.--"
 
         mcdu_dat["s"]["L"][5].txt = "cost index"
-        mcdu_dat["l"]["L"][5].txt = "---"
+        mcdu_dat["l"]["L"][5] = fmgs_dat_get("cost index", "{{{", "orange", "blue")
 
         mcdu_dat["l"]["R"][5].txt = "wind>"
 
         mcdu_dat["s"]["L"][6].txt = "crz fl/temp"
-        mcdu_dat["l"]["L"][6].txt = "-----/---°"
+
+        mcdu_dat["l"]["L"][6] = fmgs_dat_get("crz fl", "-----", "white", "blue", 
+            function (val) 
+                if #val > 4 then
+                    return "FL" .. val:sub(1,3)
+                else
+                    return val:sub(1,4)
+                end
+            end
+        )
+
+        mcdu_dat["l"]["L"][6].txt = mcdu_dat["l"]["L"][6].txt .. "/" .. fmgs_dat_get_txt("crz temp", "---") .. "°"
 
         mcdu_dat["s"]["R"][6].txt = "tropo "
         mcdu_dat["l"]["R"][6] = {txt = "36090", col = "blue", size = "s"}
 
         draw_update()
     end
+    -- flt nbr
+    if phase == "L3" then
+        input = mcdu_get_entry()
+        fmgs_dat["flt nbr"] = input
+        mcdu_open_page(400) -- reload
+    end
+    -- cost index
+    if phase == "L5" then
+        input, variation = mcdu_get_entry({"!!!", "!!", "!"})
+        fmgs_dat["cost index"] = input
+        mcdu_open_page(400) -- reload
+    end
+    -- crz fl/temp
+    if phase == "L6" then
+        input, variation = mcdu_get_entry({"!!", "!!!", "fl!!!", "/!", "/!!", "/-!", "/-!!"})
+
+        print(input .. " " .. variation)
+        if variation == 1 then
+            fmgs_dat["crz fl"] = input * 100
+            fmgs_dat["crz temp"] = math.floor(input * -0.2 + 16)
+        elseif variation == 2 then
+            fmgs_dat["crz fl"] = input * 100
+            fmgs_dat["crz temp"] = math.floor(input * -0.2 + 16)
+        elseif variation == 3 then
+            fmgs_dat["crz fl"] = input:sub(3,5) * 100
+            fmgs_dat["crz temp"] = math.floor(input * -0.2 + 16)
+        elseif variation == 4 then
+            fmgs_dat["crz temp"] = input:sub(2,3) * -1
+        elseif variation == 5 then
+            fmgs_dat["crz temp"] = input:sub(2,4) * -1
+        elseif variation == 6 then
+            fmgs_dat["crz temp"] = input:sub(2,3)
+        elseif variation == 7 then
+            fmgs_dat["crz temp"] = input:sub(2,4)
+        end
+        mcdu_open_page(400) -- reload
+    end
+    -- from/to
     if phase == "R1" then
         input = mcdu_get_entry("####/####")
         if input ~= NIL then
@@ -779,12 +906,10 @@ end
 local function mcdu_parse_colour(callback)
     if mcdu_get_entry({"r!.!!", "g!.!!", "b!.!!"}) ~= nil then
         input, variation = mcdu_get_entry({"r!.!!", "g!.!!", "b!.!!"})
-        print(input, variation)
         input_col = string.sub(input, 2, 2) .. "." .. string.sub(input, 4,5)
         callback(input, variation)
         mcdu_open_page(1102) -- reload page
     else
-        print("fail")
         mcdu_send_message("format e.g. b0.50")
     end
 end
