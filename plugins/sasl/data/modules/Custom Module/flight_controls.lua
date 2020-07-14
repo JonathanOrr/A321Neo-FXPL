@@ -52,9 +52,9 @@ local function get_elev_trim_degrees()
         return 0
     elseif get(elev_trim_ratio) > 0 then
         return get(elev_trim_ratio) * get(max_elev_trim_up)
-        elseif get(elev_trim_ratio) < 0 then
-            return get(elev_trim_ratio) * get(max_elev_trim_dn)
-        end
+    elseif get(elev_trim_ratio) < 0 then
+        return get(elev_trim_ratio) * get(max_elev_trim_dn)
+    end
 end
 
 --init
@@ -77,23 +77,34 @@ function update()
 
 
     if get(override_surfaces) == 1 then
-        --ailerons
-        Set_dataref_linear_anim(left_aileron, 25 * (total_roll), -25, 25, 50, 0.5)
-        Set_dataref_linear_anim(right_aileron, -25 * (total_roll), -25, 25, 50, 0.5)
+
+        if get(Speedbrake_handle_ratio) == 1 then
+            if get(Aft_wheel_on_ground) == 1 then
+                --ailerons
+                Set_dataref_linear_anim(left_aileron, -25, -25, 25, 50, 0.5)
+                Set_dataref_linear_anim(right_aileron, -25, -25, 25, 50, 0.5)
+            end
+        else
+            --ailerons
+            Set_dataref_linear_anim(left_aileron, 25 * (total_roll) + 5 * get(Flaps_handle_deploy_ratio), -25, 25, 50, 0.5)
+            Set_dataref_linear_anim(right_aileron, -25 * (total_roll) + 5 * get(Flaps_handle_deploy_ratio), -25, 25, 50, 0.5)
+        end
 
         --left roll spoilers
-        if total_roll < -0.18 then
-            Set_dataref_linear_anim(left_outboard_spoilers345, -25 * ((total_roll + 0.2)/0.8), 0, 25, 46.5, 0.5)
-        else
-            Set_dataref_linear_anim(left_outboard_spoilers345, 0, 0, 25, 46.5, 0.5)
-        end
+        --if total_roll < -0.18 then
+            Set_dataref_linear_anim(left_outboard_spoilers2, -25 * ((total_roll + 0.18)/0.82) + 15 * get(Speedbrake_handle_ratio), 0, 25, 46.5, 0.5)
+            Set_dataref_linear_anim(left_outboard_spoilers345, -25 * ((total_roll + 0.18)/0.82) + 25 * get(Speedbrake_handle_ratio), 0, 35, 46.5, 0.5)
+        --else
+            --Set_dataref_linear_anim(left_outboard_spoilers345, 35 * get(Speedbrake_handle_ratio), 0, 25, 46.5, 0.5)
+        --end
 
         --right roll spoilers
-        if total_roll > 0.18 then
-            Set_dataref_linear_anim(right_outboard_spoilers345, 25 * ((total_roll - 0.2)/0.8), 0, 25, 46.5, 0.5)
-        else
-            Set_dataref_linear_anim(right_outboard_spoilers345, 0, 0, 25, 46.5, 0.5)
-        end
+        --if total_roll > 0.18 then
+            Set_dataref_linear_anim(right_outboard_spoilers2, 25 * ((total_roll - 0.18)/0.82) + 15 * get(Speedbrake_handle_ratio), 0, 25, 46.5, 0.5)
+            Set_dataref_linear_anim(right_outboard_spoilers345, 25 * ((total_roll - 0.18)/0.82) + 25 * get(Speedbrake_handle_ratio), 0, 35, 46.5, 0.5)
+        --else
+            --Set_dataref_linear_anim(right_outboard_spoilers345, 0, 0, 25, 46.5, 0.5)
+        --end
 
         --pitch inputs
         if total_pitch >= 0 then
