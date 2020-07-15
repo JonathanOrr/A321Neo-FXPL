@@ -240,7 +240,6 @@ local function fmgs_dat_get_txt(dat_name, dat_init, dat_format_callback)
     while #tostring(fmgs_dat[dat_name]) < #dat_init do
         fmgs_dat[dat_name] = " " .. fmgs_dat[dat_name]
     end
-
     if fmgs_dat[dat_name] == dat_init then
         return fmgs_dat[dat_name]
     else
@@ -524,13 +523,18 @@ local mcdu_ctrl_instructions = {}
 local mcdu_ctrl_listeners = {}
 
 --add a listener for when the function value changes, callback is called
-local function mcdu_ctrl_add_listener(data_func, callback)
-    table.insert(mcdu_ctrl_listeners, {data_func = data_func, data_func_cache = data_func(), callback = callback})
+local function mcdu_ctrl_add_listener(data_func_cache, data_func, callback)
+    if data_func_cache == nil then
+        data_func_cache = data_func()
+    end
+    table.insert(mcdu_ctrl_listeners, {data_func = data_func, data_func_cache = data_func_cache, callback = callback})
 end
 
 --check whether listener has changed or not
 local function mcdu_ctrl_exe_listener(listener)
-    if listener.data_func() ~= listener.data_func_cache then
+    d = listener.data_func()
+    if d ~= listener.data_func_cache then
+        listener.data_func_cache = d
         listener.callback()
     end
 end
@@ -655,13 +659,11 @@ local function mcdu_ctrl_set_fpln_dest(input)
 end
 
 local function mcdu_ctrl_get_origin_latlon(origin, callback)
-    print("start")
     mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/index"})
     mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/ls_2r"})
     mcdu_ctrl_add_inst({type = "INPUT", arg = origin})
     mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/ls_1l"})
     mcdu_ctrl_add_inst({type = "GET_LN", arg = "4", callback = callback})
-    print("end")
 end
 
 -- 00 template
@@ -701,12 +703,24 @@ function (phase)
 
         mcdu_dat["l"]["L"][3] = fmgs_dat_get("flt nbr", "{{{{{{{{", "orange", "blue")
 
-        mcdu_dat["l"]["R"][3] = fmgs_dat_get("irs_aligned", "align irs>", "orange", "white")
+        --irs align
+        if fmgs_dat_get_txt("irs aligned", "hide") == "show" then
+            mcdu_dat["l"]["R"][3] = {txt = "align irs>", col = "orange"}
+        end
 
+        fmgs_dat_get_txt("latlon sel", "nil") -- init latlon selection for irs alignment
+
+        --lat & lon
+        mcdu_dat["s"]["R"][4].txt = "lon"
         mcdu_dat["s"]["L"][4].txt = "lat"
-        mcdu_dat["l"]["L"][4] = fmgs_dat_get("lat", "----.-", "white", "blue")
 
-        mcdu_dat["s"]["R"][4].txt = "long"
+        if fmgs_dat["latlon sel"] == "lat" then
+            mcdu_dat["s"]["L"][4].txt = "lat⇅"
+        elseif fmgs_dat["latlon sel"] == "lon" then
+            mcdu_dat["s"]["R"][4].txt = "⇅lon"
+        end
+
+        mcdu_dat["l"]["L"][4] = fmgs_dat_get("lat", "----.-", "white", "blue")
         mcdu_dat["l"]["R"][4] = fmgs_dat_get("lon", "-----.--", "white", "blue")
 
         mcdu_dat["s"]["L"][5].txt = "cost index"
@@ -783,10 +797,20 @@ function (phase)
                     mcdu_ctrl_get_origin_latlon(input:sub(1,4), function(val)
                         fmgs_dat["lat"] = val:sub(2,3) .. val:sub(6,9) .. val:sub(1,1)
                         fmgs_dat["lon"] = val:sub(13,15) .. val:sub(18,22) .. val:sub(12,12)
+                       
+                        --add listener for when ADIRS are turned on
+                        mcdu_ctrl_add_listener(0, function () return get(Adirs_sys_on) end, function ()
+                            --IRS are online but not aligned?
+                            if get(Adirs_irs_aligned) == 0 and get(Adirs_sys_on) == 1 then
+                                fmgs_dat["irs aligned"] = "show"
+                                fmgs_dat["latlon sel"] = "lat"
+                            end
 
-                        if get(Adirs_irs_aligned) == 0 and get(Adirs_sys_on) == 1 then
-                            fmgs_dat["irs aligned"] = "align irs>"
-                        end
+                            --if on init page, reload it
+                            if get(mcdu_page) == 400 then
+                                mcdu_open_page(400) -- reload
+                            end
+                        end)
 
                         mcdu_open_page(400) -- reload
                     end)
@@ -794,10 +818,109 @@ function (phase)
             end)
         end
     end
+    -- align irs>
+    if phase == "R3" then
+        if fmgs_dat["irs aligned"] == "show" then
+            fmgs_dat["irs aligned"] = "hide"
+            fmgs_dat["latlon sel"] = "nil"
+        end
+        mcdu_open_page(400) -- reload
+    end
+    --slew left/right (used for lat lon)
+    if phase == "slew_left" or phase == "slew_right" then
+        if fmgs_dat["latlon sel"] == "lat" then
+            fmgs_dat["latlon sel"] = "lon"
+        elseif fmgs_dat["latlon sel"] == "lon" then
+            fmgs_dat["latlon sel"] = "lat"
+        end
+        mcdu_open_page(400) -- reload
+    end
     --slew up (used for lat lon)
     if phase == "slew_up" then
-        if fmgs_dat["irs_aligned"] == "align irs>" then
+        if fmgs_dat["latlon sel"] == "lat" then
+            lat = tonumber(fmgs_dat["lat"]:sub(1,6))
+            lat_dir = fmgs_dat["lat"]:sub(7,7)
+
+            if lat < 9000 then
+                lat = lat + 0.1
+            end
+
+            --padding decimal
+            if lat == math.floor(lat) then
+                lat = lat .. ".0"
+            end
+            fmgs_dat["lat"] = lat .. lat_dir
+        elseif fmgs_dat["latlon sel"] == "lon" then
+            lon = tonumber(fmgs_dat["lon"]:sub(1,8))
+            lon_dir = fmgs_dat["lon"]:sub(9,9)
+
+            if lon < 18000 then
+                lon = lon + 0.01
+            end
+
+            --padding decimal
+            if tostring(lon * 10) == tostring(math.floor(lon * 10)) then
+                if lon == math.floor(lon) then
+                    lon = lon .. ".00"
+                else
+                    lon = lon .. "0"
+                end
+            end
+            fmgs_dat["lon"] = lon .. lon_dir
         end
+        mcdu_open_page(400) -- reload
+    end
+    --slew down (used for lat lon)
+    if phase == "slew_down" then
+        if fmgs_dat["latlon sel"] == "lat" then
+            lat = tonumber(fmgs_dat["lat"]:sub(1,6))
+            print(lat)
+            lat_dir = fmgs_dat["lat"]:sub(7,7)
+
+            if lat > 0 then
+                lat = lat - 0.1
+            elseif lat == 0 then
+                lat = 0.1
+                --flip
+                if lat_dir == "N" then
+                    lat_dir = "S"
+                else 
+                    lat_dir = "N"
+                end
+            end
+
+            --padding decimal
+            if lat == math.floor(lat) then
+                lat = lat .. ".0"
+            end
+            fmgs_dat["lat"] = lat .. lat_dir
+        elseif fmgs_dat["latlon sel"] == "lon" then
+            lon = tonumber(fmgs_dat["lon"]:sub(1,8))
+            lon_dir = fmgs_dat["lon"]:sub(9,9)
+
+            if lon > 0 then
+                lon = lon - 0.01
+            elseif lon == 0 then
+                lon = 0.1
+                --flip
+                if lon_dir == "W" then
+                    lon_dir = "E"
+                else 
+                    lon_dir = "W"
+                end
+            end
+
+            --padding decimal
+            if tostring(lon * 10) == tostring(math.floor(lon * 10)) then
+                if lon == math.floor(lon) then
+                    lon = lon .. ".00"
+                else
+                    lon = lon .. "0"
+                end
+            end
+            fmgs_dat["lon"] = lon .. lon_dir
+        end
+        mcdu_open_page(400) -- reload
     end
 end
 -- 500 data
