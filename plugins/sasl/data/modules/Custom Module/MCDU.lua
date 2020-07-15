@@ -669,6 +669,8 @@ function (phase)
 
         mcdu_dat["l"]["L"][3] = fmgs_dat_get("flt nbr", "{{{{{{{{", "orange", "blue")
 
+        mcdu_dat["l"]["R"][3] = fmgs_dat_get("irs_aligned", "align irs>", "orange", "white")
+
         mcdu_dat["s"]["L"][4].txt = "lat"
         mcdu_dat["l"]["L"][4] = fmgs_dat_get("lat", "----.-", "white", "blue")
 
@@ -749,6 +751,11 @@ function (phase)
                     mcdu_ctrl_get_origin_latlon(input:sub(1,4), function(val)
                         fmgs_dat["lat"] = val:sub(2,3) .. val:sub(6,9) .. val:sub(1,1)
                         fmgs_dat["lon"] = val:sub(13,15) .. val:sub(18,22) .. val:sub(12,12)
+
+                        if get(Adirs_irs_aligned) == 0 and get(Adirs_sys_on) == 1 then
+                            fmgs_dat["irs aligned"] = "align irs>"
+                        end
+
                         mcdu_open_page(400) -- reload
                     end)
                 end)
@@ -757,6 +764,8 @@ function (phase)
     end
     --slew up (used for lat lon)
     if phase == "slew_up" then
+        if fmgs_dat["irs_aligned"] == "align irs>" then
+        end
     end
 end
 -- 500 data
@@ -765,15 +774,11 @@ function (phase)
     if phase == "render" then
         mcdu_dat_title.txt = "     data index"
 
-        mcdu_dat["s"]["L"][1].txt = " position"
         mcdu_dat["l"]["L"][1].txt = "<monitor"
-
         mcdu_dat["s"]["L"][2].txt = " irs"
         mcdu_dat["l"]["L"][2].txt = "<monitor"
-
         mcdu_dat["s"]["L"][3].txt = " gps"
         mcdu_dat["l"]["L"][3].txt = "<monitor"
-
         mcdu_dat["l"]["L"][4].txt = "<a/c status"
 
         draw_update()
