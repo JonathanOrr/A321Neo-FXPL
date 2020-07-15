@@ -97,9 +97,11 @@ function update()
             Set_dataref_linear_anim(right_outboard_spoilers2, 50 * get(Speedbrake_handle_ratio), 0, 50, 46.5, 0.5)
             Set_dataref_linear_anim(right_outboard_spoilers345, 50 * get(Speedbrake_handle_ratio), 0, 50, 46.5, 0.5)
         else
+            Set_dataref_linear_anim(left_inboard_spoilers, 0, 0, 50, 46.5, 0.5)
             Set_dataref_linear_anim(left_outboard_spoilers2, -10 * ((total_roll + 0.18)/0.82) + 15 * get(Speedbrake_handle_ratio), 0, 25, 46.5, 0.5)
             Set_dataref_linear_anim(left_outboard_spoilers345, -25 * ((total_roll + 0.18)/0.82) + 25 * get(Speedbrake_handle_ratio), 0, 35, 46.5, 0.5)
 
+            Set_dataref_linear_anim(right_inboard_spoilers, 0, 0, 50, 46.5, 0.5)
             Set_dataref_linear_anim(right_outboard_spoilers2, 10 * ((total_roll - 0.18)/0.82) + 15 * get(Speedbrake_handle_ratio), 0, 25, 46.5, 0.5)
             Set_dataref_linear_anim(right_outboard_spoilers345, 25 * ((total_roll - 0.18)/0.82) + 25 * get(Speedbrake_handle_ratio), 0, 35, 46.5, 0.5)
         end
