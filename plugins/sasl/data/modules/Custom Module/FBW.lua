@@ -12,7 +12,7 @@ local A32nx_FBW_pitch_rate_down =   {P_gain = 1, D_gain = 10, Current_error = 0,
 local A32nx_FBW_roll_rate_command = {P_gain = 10, I_gain = 1, D_gain = 10, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -15, Max_error = 15, Error_offset = 0}
 --local A32nx_FBW_1G_command = {P_gain = 1, I_gain = 1, D_gain = 1.5, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -0.25, Max_error = 0.25, Error_offset = 0}
 local A32nx_FBW_1G_command = {P_gain = 1.5, I_gain = 1, D_gain = 10, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -15, Max_error = 15, Error_offset = 0}
-local A32nx_FBW_G_command = {P_gain = 1.5, I_gain = 1, D_gain = 2.5, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -2.5, Max_error = 2.5, Error_offset = 0}
+local A32nx_FBW_G_command = {P_gain = 1.5, I_gain = 1, D_gain = 2.5, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -1, Max_error = 1, Error_offset = 0}
 local A32nx_FBW_AOA_protection = {P_gain = 1, I_gain = 1, D_gain = 10, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -5, Max_error = 5, Error_offset = 0}
 local A32nx_FBW_MAX_spd_protection = {P_gain = 1, I_gain = 1, D_gain = 10, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -5, Max_error = 5, Error_offset = 0}
 
@@ -236,15 +236,25 @@ function update()
     set(MAX_spd_lim, -Math_clamp(FBW_PD(A32nx_FBW_MAX_spd_protection,  (get(Max_speed) + 10) - get(IAS)), -1, 0))
 
     if get(G_load_command) == 1 then
-        --command 0 pitch rate
-        set(G_output, FBW_PID(A32nx_FBW_1G_command, 0 - get(Pitch_rate)))
+        if get(FBW_status) == 2 then
+            --command 0 pitch rate clamped to stop integral build up
+            set(G_output, Set_anim_value(get(G_output), Math_clamp(FBW_PID(A32nx_FBW_1G_command, 0 - get(Pitch_rate)), get(Pitch_d_lim), get(Pitch_u_lim)), -1, 1, 0.5))
+        else
+            --command 0 pitch rate
+            set(G_output, Set_anim_value(get(G_output), FBW_PID(A32nx_FBW_1G_command, 0 - get(Pitch_rate)), -1, 1, 0.5))
+        end
     else
-        --G command
-        set(G_output, FBW_PD(A32nx_FBW_G_command, get(G_load_command) - get(Total_vertical_g_load)))
+        if get(FBW_status) == 2 then
+            --G command clamped to stop integral build up
+            set(G_output, Set_anim_value(get(G_output), Math_clamp(FBW_PD(A32nx_FBW_G_command, get(G_load_command) - get(Total_vertical_g_load)), get(Pitch_d_lim), get(Pitch_u_lim)), -1, 1, 0.5))
+        else
+            --G command
+            set(G_output, Set_anim_value(get(G_output), FBW_PD(A32nx_FBW_G_command, get(G_load_command) - get(Total_vertical_g_load)), -1, 1, 0.5))
+        end
     end
 
     --command roll rate
-    set(Roll_rate_output, FBW_PD(A32nx_FBW_roll_rate_command,  get(Roll_rate_command) - get(Roll_rate)))
+    set(Roll_rate_output, Set_anim_value(get(Roll_rate_output), Math_clamp(FBW_PD(A32nx_FBW_roll_rate_command,  get(Roll_rate_command) - get(Roll_rate)), get(Roll_l_lim), get(Roll_r_lim)), -1, 1, 0.5))
 
     if get(Roll) + get(Servo_roll) > 0.1 or get(Roll) + get(Servo_roll) < -0.1 then
         --67 degrees roll left
@@ -264,8 +274,8 @@ function update()
         --set(Pitch_artstab, (get(Pitch_d_lim) + get(Pitch_u_lim)) + (get(Pitch_rate_d_lim) + get(Pitch_rate_u_lim)) + get(G_output) + get(AOA_lim) + get(MAX_spd_lim))
 
         if get(FBW_ground_mode) == 0 then
-            set(Roll_artstab, get(Roll_l_lim) + get(Roll_r_lim) + get(Roll_rate_output))
-            set(Pitch_artstab, (get(Pitch_d_lim) + get(Pitch_u_lim)) + (get(Pitch_rate_d_lim) + get(Pitch_rate_u_lim)) + get(G_output) + get(AOA_lim) + get(MAX_spd_lim))
+            set(Roll_artstab, get(Roll_rate_output))
+            set(Pitch_artstab, get(G_output) + get(AOA_lim) + get(MAX_spd_lim))
         else
             set(Roll_artstab, get(Roll_l_lim) + get(Roll_r_lim) + get(Roll))
             set(Pitch_artstab, (get(Pitch_d_lim) + get(Pitch_u_lim)) + (get(Pitch_rate_d_lim) + get(Pitch_rate_u_lim)) + get(Pitch))
@@ -310,7 +320,7 @@ function update()
     elseif get(FBW_status) == 1 then--ALT 2 law(no roll)
         set(Roll_artstab, get(Roll))
         --if get(Pitch) > 0.1 or get(Pitch) < -0.1 then
-        set(Pitch_artstab, (get(Pitch_rate_d_lim) + get(Pitch_rate_u_lim)) + get(G_output))
+        set(Pitch_artstab,  get(G_output))
 
         if get(Flight_director_1_mode) ~= 2 and get(Flight_director_2_mode) ~= 2 then
             --CWS trimming--
