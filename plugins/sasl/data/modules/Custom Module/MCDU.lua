@@ -11,6 +11,7 @@ local NIL = "unique-nil-identifier" -- used for input return and checking
 --      CONSTS DECLARATION
 --      FMGS & MCDU DATA INITIALIZATION
 --      DATA & COMMAND REGISTRATION
+--      MCDU - XP FUNC CONTROLS
 --      MCDU PAGE SIMULATION
 --
 --
@@ -189,6 +190,73 @@ local function mcdu_open_page(id)
     mcdu_sim_page[get(mcdu_page)]("render")
 end
 
+--get FMGS data with initialisation
+local function fmgs_dat_get(dat_name, dat_init, dat_init_col, dat_set_col, dat_format_callback)
+    --[[
+    -- dat_name     name of data from fmgs_dat
+    -- dat_init     value the data starts with initially
+    -- dat_init_col colour when data hasn't been set
+    -- dat_set_col  colour when data has been set
+    -- dat_format_callback (optional) format callback when data has been set
+    --]]
+    if fmgs_dat[dat_name] == nil then
+        fmgs_dat[dat_name] = dat_init
+    end
+
+    --padding
+    while #tostring(fmgs_dat[dat_name]) < #dat_init do
+        fmgs_dat[dat_name] = " " .. fmgs_dat[dat_name]
+    end
+
+    if fmgs_dat[dat_name] == dat_init then
+        return {txt = fmgs_dat[dat_name], col = dat_init_col}
+    else
+        if dat_format_callback == nil then
+            dat_format_callback = function (val) return val end
+        end
+
+        val = tostring(dat_format_callback(tostring(fmgs_dat[dat_name])))
+        --padding
+        while #val < #dat_init do
+            val = " " .. val
+        end
+
+        return {txt = val, col = dat_set_col}
+    end
+end
+
+--get FMGS data with initialisation sans colouring. GET PURE TEXT
+local function fmgs_dat_get_txt(dat_name, dat_init, dat_format_callback)
+    --[[
+    -- dat_name     name of data from fmgs_dat
+    -- dat_init     value the data starts with initially
+    -- dat_format_callback (optional) format callback when data has been set
+    --]]
+    if fmgs_dat[dat_name] == nil then
+        fmgs_dat[dat_name] = dat_init
+    end
+
+    --padding
+    while #tostring(fmgs_dat[dat_name]) < #dat_init do
+        fmgs_dat[dat_name] = " " .. fmgs_dat[dat_name]
+    end
+
+    if fmgs_dat[dat_name] == dat_init then
+        return fmgs_dat[dat_name]
+    else
+        if dat_format_callback == nil then
+            dat_format_callback = function (val) return val end
+        end
+
+        val = tostring(dat_format_callback(tostring(fmgs_dat[dat_name])))
+        --padding
+        while #val < #dat_init do
+            val = " " .. val
+        end
+
+        return val
+    end
+end
 
 
 --[[
@@ -447,39 +515,32 @@ end
 --[[
 --
 --
---      MCDU PAGE SIMULATION
---
---      loosely based on
---      http://www.a320dp.com/A320_DP/nav-flight-management/sys-14.0.0.html
---      
---      WARNING - the website has an outdated MCDU, consult ToLiss for actual data
---      14.7.5 would be (0705 - 200) so 0505 so 505
---
---      0 - nothing
---      100 - dir
---      200 - prog
---      300 - perf
---      400 - init
---      500 - data
---        505 - data A/C status
---      600 - f-pln
---      700 - rad nav
---      800 - fuel pred
---      900 - sec f-pln
---      1000 - atc commm
---      1100 - mcdu menu
---      1200 - airp
+--      MCDU - XP FUNC CONTROLS
 --
 --
 --]]
 
-
 local mcdu_ctrl_instructions = {}
+local mcdu_ctrl_listeners = {}
 
+--add a listener for when the function value changes, callback is called
+local function mcdu_ctrl_add_listener(data_func, callback)
+    table.insert(mcdu_ctrl_listeners, {data_func = data_func, data_func_cache = data_func(), callback = callback})
+end
+
+--check whether listener has changed or not
+local function mcdu_ctrl_exe_listener(listener)
+    if listener.data_func() ~= listener.data_func_cache then
+        listener.callback()
+    end
+end
+
+--add an XP FMC instruction for the XP FMC to execute
 local function mcdu_ctrl_add_inst(inst)
     table.insert(mcdu_ctrl_instructions, 1, inst)
 end
 
+--execute the next XP FMC instruction
 local function mcdu_ctrl_exe_inst()
     if #mcdu_ctrl_instructions == 0 then
 		return
@@ -518,78 +579,49 @@ function update()
        mcdu_open_page(400) --open 505 A/C status
     end
 
+    -- display next message
     if #mcdu_messages > 0 and mcdu_entry == "" then
         mcdu_entry = mcdu_messages[#mcdu_messages]:upper()
         table.remove(mcdu_messages)
     end
+
+    -- check and execute all listeners
+    for i, listener in ipairs(mcdu_ctrl_listeners) do
+        mcdu_ctrl_exe_listener(listener)
+    end
+
+    -- check and execute next XP FMC instruction
     mcdu_ctrl_exe_inst()
 end
 
-local function fmgs_dat_get(dat_name, dat_init, dat_init_col, dat_set_col, dat_format_callback)
-    --[[
-    -- dat_name     name of data from fmgs_dat
-    -- dat_init     value the data starts with initially
-    -- dat_init_col colour when data hasn't been set
-    -- dat_set_col  colour when data has been set
-    -- dat_format_callback (optional) format callback when data has been set
-    --]]
-    if fmgs_dat[dat_name] == nil then
-        fmgs_dat[dat_name] = dat_init
-    end
-
-    --padding
-    while #tostring(fmgs_dat[dat_name]) < #dat_init do
-        fmgs_dat[dat_name] = " " .. fmgs_dat[dat_name]
-    end
-
-    if fmgs_dat[dat_name] == dat_init then
-        return {txt = fmgs_dat[dat_name], col = dat_init_col}
-    else
-        if dat_format_callback == nil then
-            dat_format_callback = function (val) return val end
-        end
-
-        val = tostring(dat_format_callback(tostring(fmgs_dat[dat_name])))
-        --padding
-        while #val < #dat_init do
-            val = " " .. val
-        end
-
-        return {txt = val, col = dat_set_col}
-    end
-end
-
-local function fmgs_dat_get_txt(dat_name, dat_init, dat_format_callback)
-    --[[
-    -- dat_name     name of data from fmgs_dat
-    -- dat_init     value the data starts with initially
-    -- dat_format_callback (optional) format callback when data has been set
-    --]]
-    if fmgs_dat[dat_name] == nil then
-        fmgs_dat[dat_name] = dat_init
-    end
-
-    --padding
-    while #tostring(fmgs_dat[dat_name]) < #dat_init do
-        fmgs_dat[dat_name] = " " .. fmgs_dat[dat_name]
-    end
-
-    if fmgs_dat[dat_name] == dat_init then
-        return fmgs_dat[dat_name]
-    else
-        if dat_format_callback == nil then
-            dat_format_callback = function (val) return val end
-        end
-
-        val = tostring(dat_format_callback(tostring(fmgs_dat[dat_name])))
-        --padding
-        while #val < #dat_init do
-            val = " " .. val
-        end
-
-        return val
-    end
-end
+--[[
+--
+--
+--      MCDU PAGE SIMULATION
+--
+--      loosely based on
+--      http://www.a320dp.com/A320_DP/nav-flight-management/sys-14.0.0.html
+--      
+--      WARNING - the website has an outdated MCDU, consult ToLiss for actual data
+--      14.7.5 would be (0705 - 200) so 0505 so 505
+--
+--      0 - nothing
+--      100 - dir
+--      200 - prog
+--      300 - perf
+--      400 - init
+--      500 - data
+--        505 - data A/C status
+--      600 - f-pln
+--      700 - rad nav
+--      800 - fuel pred
+--      900 - sec f-pln
+--      1000 - atc commm
+--      1100 - mcdu menu
+--      1200 - airp
+--
+--
+--]]
 
 local function mcdu_ctrl_get_cycle(callback)
     mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/index"})
