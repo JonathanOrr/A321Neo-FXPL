@@ -574,6 +574,17 @@ local function mcdu_ctrl_exe_inst()
     end
 end
 
+--sasl get nav aid information
+local function mcdu_ctrl_get_nav(find_nameid, find_type)
+    id = sasl.findNavAid(find_nameid, nil, nil, nil, nil, find_type)
+    if id == -1 then
+        id = sasl.findNavAid(nil, find_nameid:upper(), nil, nil, nil, find_type) 
+    end
+    local nav = {}
+    nav.navtype, nav.lat, nav.lon, nav.height, nav.freq, nav.hdg, nav.id, nav.name, nav.loadedDSF = sasl.getNavAidInfo(id)
+    return nav
+end
+
 mcdu_entry = "ksea/kbfi"
 
 --update
@@ -794,7 +805,9 @@ function (phase)
                 mcdu_ctrl_try_catch(function(val)
                     fmgs_dat["dest"] = input:sub(6,9)
                     mcdu_open_page(400) -- reload
+
                     mcdu_ctrl_get_origin_latlon(input:sub(1,4), function(val)
+                        --get lat lon from XP FMC
                         fmgs_dat["lat"] = val:sub(2,3) .. val:sub(6,9) .. val:sub(1,1)
                         fmgs_dat["lon"] = val:sub(13,15) .. val:sub(18,22) .. val:sub(12,12)
                        
@@ -806,12 +819,18 @@ function (phase)
                                 fmgs_dat["latlon sel"] = "lat"
                             end
 
+                            lat = tonumber(fmgs_dat["lat"]:sub(1,6))
+                            print(lat)
+                            lat_dir = fmgs_dat["lat"]:sub(7,7)
+
+                            lon = tonumber(fmgs_dat["lon"]:sub(1,8))
+                            lon_dir = fmgs_dat["lon"]:sub(9,9)
+
                             --if on init page, reload it
                             if get(mcdu_page) == 400 then
                                 mcdu_open_page(400) -- reload
                             end
                         end)
-
                         mcdu_open_page(400) -- reload
                     end)
                 end)
@@ -838,9 +857,6 @@ function (phase)
     --slew up (used for lat lon)
     if phase == "slew_up" then
         if fmgs_dat["latlon sel"] == "lat" then
-            lat = tonumber(fmgs_dat["lat"]:sub(1,6))
-            lat_dir = fmgs_dat["lat"]:sub(7,7)
-
             if lat < 9000 then
                 lat = lat + 0.1
             end
@@ -851,9 +867,6 @@ function (phase)
             end
             fmgs_dat["lat"] = lat .. lat_dir
         elseif fmgs_dat["latlon sel"] == "lon" then
-            lon = tonumber(fmgs_dat["lon"]:sub(1,8))
-            lon_dir = fmgs_dat["lon"]:sub(9,9)
-
             if lon < 18000 then
                 lon = lon + 0.01
             end
@@ -873,10 +886,6 @@ function (phase)
     --slew down (used for lat lon)
     if phase == "slew_down" then
         if fmgs_dat["latlon sel"] == "lat" then
-            lat = tonumber(fmgs_dat["lat"]:sub(1,6))
-            print(lat)
-            lat_dir = fmgs_dat["lat"]:sub(7,7)
-
             if lat > 0 then
                 lat = lat - 0.1
             elseif lat == 0 then
@@ -895,9 +904,6 @@ function (phase)
             end
             fmgs_dat["lat"] = lat .. lat_dir
         elseif fmgs_dat["latlon sel"] == "lon" then
-            lon = tonumber(fmgs_dat["lon"]:sub(1,8))
-            lon_dir = fmgs_dat["lon"]:sub(9,9)
-
             if lon > 0 then
                 lon = lon - 0.01
             elseif lon == 0 then
@@ -923,6 +929,7 @@ function (phase)
         mcdu_open_page(400) -- reload
     end
 end
+
 -- 500 data
 mcdu_sim_page[500] =
 function (phase)
@@ -982,6 +989,7 @@ fmgs_dat["fpln"][0].name = "eggw"
 fmgs_dat["fpln"][0].time = "----"
 fmgs_dat["fpln"][0].spd = "---"
 fmgs_dat["fpln"][0].alt = "-----"
+
 -- 600 f-pln
 mcdu_sim_page[600] =
 function (phase)
