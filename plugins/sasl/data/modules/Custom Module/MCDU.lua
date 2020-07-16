@@ -190,6 +190,31 @@ local function mcdu_open_page(id)
     mcdu_sim_page[get(mcdu_page)]("render")
 end
 
+--pad a number up to a given dp
+--e.g. (2.4, 3) -> 2.400
+local function mcdu_pad_dp(number, required_dp)
+    return(string.format("%." .. required_dp .. "f", number))
+end
+
+--align an input to the right, given the total length
+--e.g. ("ad", 4) -> "  ad"
+local function mcdu_align_right(str, required_length)
+    while #tostring(str) < required_length do
+        str = " " .. str
+    end
+    return str
+end
+
+--toggle obj between two strings, a and b
+--e.g. ("ad", "ba", "ad") -> "ba"
+local function mcdu_toggle(obj, str_a, str_b)
+    if obj == str_a then
+        return str_b
+    elseif obj == str_b then
+        return str_a
+    end
+end
+
 --get FMGS data with initialisation
 local function fmgs_dat_get(dat_name, dat_init, dat_init_col, dat_set_col, dat_format_callback)
     --[[
@@ -204,9 +229,7 @@ local function fmgs_dat_get(dat_name, dat_init, dat_init_col, dat_set_col, dat_f
     end
 
     --padding
-    while #tostring(fmgs_dat[dat_name]) < #dat_init do
-        fmgs_dat[dat_name] = " " .. fmgs_dat[dat_name]
-    end
+    mcdu_align_right(fmgs_dat[dat_name], #dat_init)
 
     if fmgs_dat[dat_name] == dat_init then
         return {txt = fmgs_dat[dat_name], col = dat_init_col}
@@ -217,9 +240,7 @@ local function fmgs_dat_get(dat_name, dat_init, dat_init_col, dat_set_col, dat_f
 
         val = tostring(dat_format_callback(tostring(fmgs_dat[dat_name])))
         --padding
-        while #val < #dat_init do
-            val = " " .. val
-        end
+        mcdu_align_right(val, #dat_init)
 
         return {txt = val, col = dat_set_col}
     end
@@ -237,9 +258,8 @@ local function fmgs_dat_get_txt(dat_name, dat_init, dat_format_callback)
     end
 
     --padding
-    while #tostring(fmgs_dat[dat_name]) < #dat_init do
-        fmgs_dat[dat_name] = " " .. fmgs_dat[dat_name]
-    end
+    mcdu_align_right(fmgs_dat[dat_name], #dat_init)
+
     if fmgs_dat[dat_name] == dat_init then
         return fmgs_dat[dat_name]
     else
@@ -249,13 +269,12 @@ local function fmgs_dat_get_txt(dat_name, dat_init, dat_format_callback)
 
         val = tostring(dat_format_callback(tostring(fmgs_dat[dat_name])))
         --padding
-        while #val < #dat_init do
-            val = " " .. val
-        end
+        mcdu_align_right(val, #dat_init)
 
         return val
     end
 end
+
 
 
 --[[
@@ -657,16 +676,18 @@ local function mcdu_ctrl_try_catch(callback)
     end})
 end
 
-local function mcdu_ctrl_set_fpln_origin(input)
+local function mcdu_ctrl_set_fpln_origin(input, try_catch)
     mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/fpln"})
     mcdu_ctrl_add_inst({type = "INPUT", arg = input})
     mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/ls_1l"})
+    mcdu_ctrl_try_catch(try_catch)
 end
 
-local function mcdu_ctrl_set_fpln_dest(input)
+local function mcdu_ctrl_set_fpln_dest(input, try_catch)
     mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/fpln"})
     mcdu_ctrl_add_inst({type = "INPUT", arg = input})
     mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/ls_1r"})
+    mcdu_ctrl_try_catch(try_catch)
 end
 
 local function mcdu_ctrl_get_origin_latlon(origin, callback)
@@ -700,14 +721,14 @@ function (phase)
         mcdu_dat_title.txt = "          init"
 
         mcdu_dat["s"]["L"][1].txt = " co rte"
-        mcdu_dat["l"]["L"][1] = fmgs_dat_get("co rte", "{{{{{{{{{{", "orange", "blue")
+        mcdu_dat["l"]["L"][1] = fmgs_dat_get("co rte", "[         ]", "blue", "blue")
 
         mcdu_dat["s"]["R"][1].txt = " from/to  "
 
         mcdu_dat["l"]["R"][1] = fmgs_dat_get("origin", "{{{{", "orange", "blue")
         mcdu_dat["l"]["R"][1].txt = mcdu_dat["l"]["R"][1].txt .. "/" .. fmgs_dat_get_txt("dest", "{{{{")
 
-        mcdu_dat["s"]["L"][2].txt = "altn/co route"
+        mcdu_dat["s"]["L"][2].txt = "altn/co rte"
         mcdu_dat["l"]["L"][2].txt = "----/---------"
 
         mcdu_dat["s"]["L"][3].txt = "flt nbr"
@@ -741,7 +762,7 @@ function (phase)
 
         mcdu_dat["s"]["L"][6].txt = "crz fl/temp"
 
-        mcdu_dat["l"]["L"][6] = fmgs_dat_get("crz fl", "-----", "white", "blue", 
+        mcdu_dat["l"]["L"][6] = fmgs_dat_get("crz fl", "{{{{{", "orange", "blue", 
             function (val) 
                 if #val > 4 then
                     return "FL" .. val:sub(1,3)
@@ -750,7 +771,7 @@ function (phase)
                 end
             end
         )
-        mcdu_dat["l"]["L"][6].txt = mcdu_dat["l"]["L"][6].txt .. "/" .. fmgs_dat_get_txt("crz temp", "---") .. "°"
+        mcdu_dat["l"]["L"][6].txt = mcdu_dat["l"]["L"][6].txt .. "/" .. fmgs_dat_get_txt("crz temp", "{{{") .. "°"
 
         mcdu_dat["s"]["R"][6].txt = "tropo "
         mcdu_dat["l"]["R"][6] = {txt = "36090", col = "blue", size = "s"}
@@ -765,23 +786,40 @@ function (phase)
     end
     -- cost index
     if phase == "L5" then
-        input, variation = mcdu_get_entry({"!!!", "!!", "!"})
+        --format e.g. 100
+        input, variation = mcdu_get_entry({
+            "!!!", -- 100 cost index
+            "!!",  -- 10 cost index
+            "!"    -- 1 cost index
+        })
         fmgs_dat["cost index"] = input
         mcdu_open_page(400) -- reload
     end
     -- crz fl/temp
     if phase == "L6" then
-        input, variation = mcdu_get_entry({"!!", "!!!", "fl!!!", "/!", "/!!", "/-!", "/-!!"})
+        --format e.g. FL230
+        input, variation = mcdu_get_entry({
+            "!!",   -- 80 (8000 feet)
+            "!!!",  -- 230 (23000 feet)
+            "fl!!!",-- FL230 (23000 feet)
+            "/!",   -- 7 (-7 celcius)
+            "/!!",  -- 40 (-40 celcius)
+            "/-!",  -- -7 (-7 celcius)
+            "/-!!"  -- -40 (-40 celcius)
+        })
 
+        --automatically calculate crz temp
+        if variation >= 1 and variation <= 3 then
+            fmgs_dat["crz temp"] = math.floor(input * -0.2 + 16)
+        end
+
+        --set crz FL or crz temp
         if variation == 1 then
             fmgs_dat["crz fl"] = input * 100
-            fmgs_dat["crz temp"] = math.floor(input * -0.2 + 16)
         elseif variation == 2 then
             fmgs_dat["crz fl"] = input * 100
-            fmgs_dat["crz temp"] = math.floor(input * -0.2 + 16)
         elseif variation == 3 then
             fmgs_dat["crz fl"] = input:sub(3,5) * 100
-            fmgs_dat["crz temp"] = math.floor(input * -0.2 + 16)
         elseif variation == 4 then
             fmgs_dat["crz temp"] = input:sub(2,3) * -1
         elseif variation == 5 then
@@ -793,137 +831,121 @@ function (phase)
         end
         mcdu_open_page(400) -- reload
     end
+
     -- from/to
     if phase == "R1" then
+        --format e.g. ksea/kbfi
         input = mcdu_get_entry("####/####")
+        --check for correct entry
         if input ~= NIL then
-            mcdu_ctrl_set_fpln_origin(input:sub(1,4))
-            mcdu_ctrl_try_catch(function(val)
-                fmgs_dat["origin"] = input:sub(1,4)
+            --set orgin for XP FMC
+            --format e.g. ksea/kbfi
+            airp_origin = input:sub(1,4)
+            airp_dest = input:sub(6,9)
 
-                mcdu_ctrl_set_fpln_dest(input:sub(6,9))
-                mcdu_ctrl_try_catch(function(val)
-                    fmgs_dat["dest"] = input:sub(6,9)
-                    mcdu_open_page(400) -- reload
+            --get origin from XP FMC
+            mcdu_ctrl_set_fpln_origin(airp_origin, function(val) --callback
+            fmgs_dat["origin"] = airp_origin
 
-                    mcdu_ctrl_get_origin_latlon(input:sub(1,4), function(val)
-                        --get lat lon from XP FMC
-                        fmgs_dat["lat"] = val:sub(2,3) .. val:sub(6,9) .. val:sub(1,1)
-                        fmgs_dat["lon"] = val:sub(13,15) .. val:sub(18,22) .. val:sub(12,12)
-                       
-                        --add listener for when ADIRS are turned on
-                        mcdu_ctrl_add_listener(0, function () return get(Adirs_sys_on) end, function ()
-                            --IRS are online but not aligned?
-                            if get(Adirs_irs_aligned) == 0 and get(Adirs_sys_on) == 1 then
-                                fmgs_dat["irs aligned"] = "show"
-                                fmgs_dat["latlon sel"] = "lat"
-                            end
+            --get dest from XP FMC
+            mcdu_ctrl_set_fpln_dest(airp_dest, function(val) --callback
+            fmgs_dat["dest"] = airp_dest
 
-                            lat = tonumber(fmgs_dat["lat"]:sub(1,6))
-                            print(lat)
-                            lat_dir = fmgs_dat["lat"]:sub(7,7)
+            mcdu_open_page(400) -- reload
 
-                            lon = tonumber(fmgs_dat["lon"]:sub(1,8))
-                            lon_dir = fmgs_dat["lon"]:sub(9,9)
+            print("A")
+            --get lat lon from XP FMC
+            mcdu_ctrl_get_origin_latlon(input:sub(1,4), function(val) --callback
+            print("A")
+            --format e.g. N12°34.56 must be convert to 1234.5N
+            fmgs_dat["lat"] = val:sub(2,3) .. val:sub(6,9) .. val:sub(1,1)
+            --format e.g. W123°45.67 must be convert to 12345.67W
+            fmgs_dat["lon"] = val:sub(13,15) .. val:sub(18,22) .. val:sub(12,12)
 
-                            --if on init page, reload it
-                            if get(mcdu_page) == 400 then
-                                mcdu_open_page(400) -- reload
-                            end
-                        end)
+            mcdu_open_page(400) -- reload
+
+            --add listener for when ADIRS are turned on
+            mcdu_ctrl_add_listener(0,                       --default value
+                function () return get(Adirs_sys_on) end,   --get data function
+                function ()                                 --callback
+                    --IRS are online but not aligned?
+                    if get(Adirs_irs_aligned) == 0 and get(Adirs_sys_on) == 1 then
+                        fmgs_dat["irs aligned"] = "show"
+                        fmgs_dat["latlon sel"] = "lat"
+                    end
+
+                    --set lat
+                    --format e.g. 1234.5N
+                    lat = tonumber(fmgs_dat["lat"]:sub(1,6))
+                    lat_dir = fmgs_dat["lat"]:sub(7,7)
+
+                    --set lon
+                    --format e.g. 12345.67W
+                    lon = tonumber(fmgs_dat["lon"]:sub(1,8))
+                    lon_dir = fmgs_dat["lon"]:sub(9,9)
+
+                    --if on init page, reload it
+                    if get(mcdu_page) == 400 then
                         mcdu_open_page(400) -- reload
-                    end)
-                end)
-            end)
+                    end
+                end
+            )
+
+            end) --end callback
+            end) --end callback
+            end) --end callback
+            mcdu_open_page(400) -- reload
         end
     end
+
     -- align irs>
     if phase == "R3" then
+        --is the irs not aligned?
         if fmgs_dat["irs aligned"] == "show" then
-            fmgs_dat["irs aligned"] = "hide"
-            fmgs_dat["latlon sel"] = "nil"
+            --then align it
+            fmgs_dat["irs aligned"] = "hide"    --hide irs align>
+            fmgs_dat["latlon sel"] = "nil"      --stop lat/lon selection
         end
         mcdu_open_page(400) -- reload
     end
+
     --slew left/right (used for lat lon)
     if phase == "slew_left" or phase == "slew_right" then
-        if fmgs_dat["latlon sel"] == "lat" then
-            fmgs_dat["latlon sel"] = "lon"
-        elseif fmgs_dat["latlon sel"] == "lon" then
-            fmgs_dat["latlon sel"] = "lat"
-        end
+        --toggle between lat and lon select
+        fmgs_dat["latlon sel"] = mcdu_toggle(fmgs_dat["latlon sel"], "lat", "lon")
         mcdu_open_page(400) -- reload
     end
+
     --slew up (used for lat lon)
-    if phase == "slew_up" then
-        if fmgs_dat["latlon sel"] == "lat" then
-            if lat < 9000 then
-                lat = lat + 0.1
-            end
-
-            --padding decimal
-            if lat == math.floor(lat) then
-                lat = lat .. ".0"
-            end
-            fmgs_dat["lat"] = lat .. lat_dir
-        elseif fmgs_dat["latlon sel"] == "lon" then
-            if lon < 18000 then
-                lon = lon + 0.01
-            end
-
-            --padding decimal
-            if tostring(lon * 10) == tostring(math.floor(lon * 10)) then
-                if lon == math.floor(lon) then
-                    lon = lon .. ".00"
-                else
-                    lon = lon .. "0"
-                end
-            end
-            fmgs_dat["lon"] = lon .. lon_dir
+    if phase == "slew_up" or phase == "slew_down" then
+        if phase == "slew_up" then
+            increment = 1
+        else
+            increment = -1
         end
-        mcdu_open_page(400) -- reload
-    end
-    --slew down (used for lat lon)
-    if phase == "slew_down" then
         if fmgs_dat["latlon sel"] == "lat" then
-            if lat > 0 then
-                lat = lat - 0.1
-            elseif lat == 0 then
+            --change lat from 0-9000.0
+            lat = Math_clamp(lat + increment * 0.1, 0, 9000)
+            --flip
+            if lat == 0 then
                 lat = 0.1
-                --flip
-                if lat_dir == "N" then
-                    lat_dir = "S"
-                else 
-                    lat_dir = "N"
-                end
+                lat_dir = mcdu_toggle(lat_dir, "N", "S") --flip
             end
-
             --padding decimal
-            if lat == math.floor(lat) then
-                lat = lat .. ".0"
-            end
+            lat = mcdu_pad_dp(lat, 1)
+            --assign
             fmgs_dat["lat"] = lat .. lat_dir
         elseif fmgs_dat["latlon sel"] == "lon" then
-            if lon > 0 then
-                lon = lon - 0.01
-            elseif lon == 0 then
+            --change lon from 0-180000.00
+            lon = Math_clamp(lon + increment * 0.01, 0, 18000)
+            --flip
+            if lon == 0 then
                 lon = 0.1
-                --flip
-                if lon_dir == "W" then
-                    lon_dir = "E"
-                else 
-                    lon_dir = "W"
-                end
+                lon_dir = mcdu_toggle(lon_dir, "W", "E") --flip
             end
-
             --padding decimal
-            if tostring(lon * 10) == tostring(math.floor(lon * 10)) then
-                if lon == math.floor(lon) then
-                    lon = lon .. ".00"
-                else
-                    lon = lon .. "0"
-                end
-            end
+            lon = mcdu_pad_dp(lon, 2)
+            --assign
             fmgs_dat["lon"] = lon .. lon_dir
         end
         mcdu_open_page(400) -- reload
@@ -994,12 +1016,17 @@ fmgs_dat["fpln"][0].alt = "-----"
 mcdu_sim_page[600] =
 function (phase)
     if phase == "render" then
+        fpln_page = fmgs_dat["fpln page"]
         for i = 1,5 do
-            mcdu_dat["s"]["L"][i] = fmgs_dat["fpln"][0].name
+            fpln_page = (fpln_page + 1) % #mcdu_dat["fpln"]
+
+            mcdu_dat["s"]["L"][i][0] = fmgs_dat["fpln"][0].name
             mcdu_dat["l"]["L"][i] = {txt = "+0.0/+0.0", col = "green"}
         end
-        mcdu_dat["s"]["L"][6] = " dest   utc  dist  efob"
-        mcdu_dat["l"]["L"][6] = fmgs_dat["dest"] 
+        mcdu_dat["s"]["L"][6] = "dest    time  dist  efob"
+        mcdu_dat["l"]["L"][6] = fmgs_dat["fpln"].dest
+        mcdu_dat["l"]["L"][6] = "        " .. fmgs_dat["fpln"].time
+        draw_update()
     end
 end
 
@@ -1089,7 +1116,9 @@ end
 
 local function mcdu_parse_colour(callback)
     if mcdu_get_entry({"r!.!!", "g!.!!", "b!.!!"}) ~= nil then
+        --format e.g. r0.00
         input, variation = mcdu_get_entry({"r!.!!", "g!.!!", "b!.!!"})
+        --check for correct entry
         input_col = string.sub(input, 2, 2) .. "." .. string.sub(input, 4,5)
         callback(input, variation)
         mcdu_open_page(1102) -- reload page
