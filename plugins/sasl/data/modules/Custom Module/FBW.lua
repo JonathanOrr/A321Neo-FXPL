@@ -9,10 +9,10 @@ local A32nx_FBW_pitch_up =   {P_gain = 1, D_gain = 10, Current_error = 0, Min_er
 local A32nx_FBW_pitch_down = {P_gain = 1, D_gain = 10, Current_error = 0, Min_error = -5, Max_error = 5, Error_offset = 0}
 local A32nx_FBW_pitch_rate_up =   {P_gain = 1, D_gain = 10, Current_error = 0, Min_error = -0.5, Max_error = 0.5, Error_offset = 0}
 local A32nx_FBW_pitch_rate_down =   {P_gain = 1, D_gain = 10, Current_error = 0, Min_error = -0.5, Max_error = 0.5, Error_offset = 0}
-local A32nx_FBW_roll_rate_command = {P_gain = 10, I_gain = 1, D_gain = 10, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -15, Max_error = 15, Error_offset = 0}
+local A32nx_FBW_roll_rate_command = {P_gain = 0.8, I_gain = 1, D_gain = 2, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -1, Max_error = 1, Error_offset = 0}
 --local A32nx_FBW_1G_command = {P_gain = 1, I_gain = 1, D_gain = 1.5, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -0.25, Max_error = 0.25, Error_offset = 0}
 local A32nx_FBW_1G_command = {P_gain = 1.5, I_gain = 1, D_gain = 10, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -15, Max_error = 15, Error_offset = 0}
-local A32nx_FBW_G_command = {P_gain = 1.5, I_gain = 1, D_gain = 2.5, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -1, Max_error = 1, Error_offset = 0}
+local A32nx_FBW_G_command = {P_gain = 0.08, I_gain = 1, D_gain = 0.1, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -0.15, Max_error = 0.15, Error_offset = 0}
 local A32nx_FBW_AOA_protection = {P_gain = 1, I_gain = 1, D_gain = 10, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -5, Max_error = 5, Error_offset = 0}
 local A32nx_FBW_MAX_spd_protection = {P_gain = 1, I_gain = 1, D_gain = 10, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -5, Max_error = 5, Error_offset = 0}
 
@@ -246,15 +246,15 @@ function update()
     else
         if get(FBW_status) == 2 then
             --G command clamped to stop integral build up
-            set(G_output, Set_anim_value(get(G_output), Math_clamp(FBW_PD(A32nx_FBW_G_command, get(G_load_command) - get(Total_vertical_g_load)), get(Pitch_d_lim), get(Pitch_u_lim)), -1, 1, 0.5))
+            set(G_output, Set_anim_value(get(G_output), Math_clamp(FBW_PD(A32nx_FBW_G_command, get(G_load_command) - get(Total_vertical_g_load)), get(Pitch_d_lim), get(Pitch_u_lim)), -1, 1, 0.8))
         else
             --G command
-            set(G_output, Set_anim_value(get(G_output), FBW_PD(A32nx_FBW_G_command, get(G_load_command) - get(Total_vertical_g_load)), -1, 1, 0.5))
+            set(G_output, Set_anim_value(get(G_output), FBW_PD(A32nx_FBW_G_command, get(G_load_command) - get(Total_vertical_g_load)), -1, 1, 0.8))
         end
     end
 
     --command roll rate
-    set(Roll_rate_output, Set_anim_value(get(Roll_rate_output), Math_clamp(FBW_PD(A32nx_FBW_roll_rate_command,  get(Roll_rate_command) - get(Roll_rate)), get(Roll_l_lim), get(Roll_r_lim)), -1, 1, 0.5))
+    set(Roll_rate_output, Set_anim_value(get(Roll_rate_output), Math_clamp(FBW_PD(A32nx_FBW_roll_rate_command,  get(Roll_rate_command) - get(Roll_rate)), get(Roll_l_lim), get(Roll_r_lim)), -1, 1, 1.2))
 
     if get(Roll) + get(Servo_roll) > 0.1 or get(Roll) + get(Servo_roll) < -0.1 then
         --67 degrees roll left
