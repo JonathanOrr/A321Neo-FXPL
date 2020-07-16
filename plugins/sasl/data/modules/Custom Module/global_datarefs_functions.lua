@@ -226,7 +226,7 @@ end
 --used to animate a value with a linear delay USE ONLY WITH FLOAT VALUES
 function Set_linear_anim_value(current_value, target, min, max, speed, dead_zone)
   if target - current_value < dead_zone and target - current_value > -dead_zone then
-    return target
+    return Math_clamp(target, min, max)
   elseif target < current_value then
     return Math_clamp(current_value - (speed * get(DELTA_TIME)), min, max)
   elseif target > current_value then
