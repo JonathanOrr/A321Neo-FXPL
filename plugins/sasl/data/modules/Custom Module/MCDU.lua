@@ -93,7 +93,9 @@ end
 
 --entry line
 local mcdu_entry = ""
+local mcdu_entry_cache = "" --caches entry for when messages are shown
 local mcdu_messages = {}
+local mcdu_message_showing = false
 
 --mcdu page call functions
 local mcdu_sim_page = {}
@@ -271,8 +273,6 @@ local function fmgs_dat_get_txt(dat_name, dat_init, dat_format_callback)
             dat_format_callback = function (val) return val end
         end
 
-        print("[" .. dat_name)
-        print(dat_init .. "]")
         if type(dat_init) == "string" then
             val = tostring(dat_format_callback(tostring(val)))
             --padding
@@ -301,7 +301,6 @@ local PLANE_LOADED = false
 
 --a321neo dataref
 local mcdu_enabled = createGlobalPropertyi("a321neo/debug/mcdu/mcdu_enabled", 1, false, true, false)
-local mcdu_message_index = createGlobalPropertyi("a321neo/debug/mcdu/message_index", 0, false, true, false)
 
 --a321neo commands
 local mcdu_debug_message = sasl.createCommand("a321neo/debug/mcdu/debug_message", "send a mcdu debug message")
@@ -351,14 +350,16 @@ local MCDU_ENTRY =
         ref_entries = {"clr"},
         ref_callback = 
         function (count, val)
-            if #mcdu_messages > 0 then
-                table.remove(mcdu_messages)
+            if mcdu_message_showing then
+                mcdu_entry = mcdu_entry_cache
+                mcdu_message_showing = false
             else
                 if #mcdu_entry > 0 then
                     mcdu_entry = mcdu_entry:sub(1,#mcdu_entry - 1) 
                 else
                     if #mcdu_entry == 0 then
                         mcdu_entry = "CLR"
+                        mcdu_message_showing = true
                     end
                 end
             end
@@ -396,11 +397,12 @@ for i,entry_category in ipairs(MCDU_ENTRY) do
 end
 
 --a321neo command handlers
---debuggin
+--debugging
 local hokey_pokey = false --wonder what this does
 sasl.registerCommandHandler(mcdu_debug_message, 0, function (phase)
     if phase == SASL_COMMAND_BEGIN then
         mcdu_send_message("debug")
+        mcdu_open_page(get(mcdu_page))
     end
 end)
 
@@ -624,8 +626,10 @@ function update()
     end
 
     -- display next message
-    if #mcdu_messages > 0 and mcdu_entry == "" then
+    if #mcdu_messages > 0 and not mcdu_message_showing then
+        mcdu_entry_cache = mcdu_entry
         mcdu_entry = mcdu_messages[#mcdu_messages]:upper()
+        mcdu_message_showing = true
         table.remove(mcdu_messages)
     end
 
@@ -733,53 +737,63 @@ function (phase)
         fmgs_dat_init("fmgs init", false)   -- init has the fmgs been initialised? to false
         fmgs_dat_init("latlon sel", "nil") -- init latlon selection for irs alignment
 
+        --[[ CO RTE --]]
         mcdu_dat["s"]["L"][1].txt = " co rte"
+        --changes on fmgs airport init
         if fmgs_dat["fmgs init"] then
             mcdu_dat["l"]["L"][1] = fmgs_dat_get("co rte", "[         ]", "blue", "blue")
         else
             mcdu_dat["l"]["L"][1] = fmgs_dat_get("co rte", "{{{{{{{{{{", "orange", "blue")
         end
 
+        --[[ FROM / TO --]]
         mcdu_dat["s"]["R"][1].txt = " from/to  "
 
         mcdu_dat["l"]["R"][1] = fmgs_dat_get("origin", "{{{{", "orange", "blue")
         mcdu_dat["l"]["R"][1].txt = mcdu_dat["l"]["R"][1].txt .. "/" .. fmgs_dat_get_txt("dest", "{{{{")
 
+        --[[ ALTN / CO RTE --]]
         mcdu_dat["s"]["L"][2].txt = "altn/co rte"
         mcdu_dat["l"]["L"][2].txt = "----/---------"
 
+        --[[ FLT NBR --]]
         mcdu_dat["s"]["L"][3].txt = "flt nbr"
-
         mcdu_dat["l"]["L"][3] = fmgs_dat_get("flt nbr", "{{{{{{{{", "orange", "blue")
 
-        --irs align
+        --[[ IRS ALIGN --]]
         if fmgs_dat_get_txt("irs aligned", "hide") == "show" then
             mcdu_dat["l"]["R"][3] = {txt = "align irs>", col = "orange"}
         end
 
-        --lat & lon
-        mcdu_dat["s"]["R"][4].txt = "lon"
+        --[[ LAT / LONG --]]
+        mcdu_dat["s"]["R"][4].txt = "long"
         mcdu_dat["s"]["L"][4].txt = "lat"
 
+        --irs latlon change selection
         if fmgs_dat["latlon sel"] == "lat" then
             mcdu_dat["s"]["L"][4].txt = "lat⇅"
-        elseif fmgs_dat["latlon sel"] == "lon" then
-            mcdu_dat["s"]["R"][4].txt = "⇅lon"
+        elseif fmgs_dat["latlon sel"] == "long" then
+            mcdu_dat["s"]["R"][4].txt = "⇅long"
         end
 
         mcdu_dat["l"]["L"][4] = fmgs_dat_get("lat fmt", "----.-", "white", "blue")
         mcdu_dat["l"]["R"][4] = fmgs_dat_get("lon fmt", "-----.--", "white", "blue")
 
+        --[[ COST INDEX --]]
         mcdu_dat["s"]["L"][5].txt = "cost index"
+        --changes on fmgs airport init
         if fmgs_dat["fmgs init"] then
             mcdu_dat["l"]["L"][5] = fmgs_dat_get("cost index", "{{{", "orange", "blue")
         else
             mcdu_dat["l"]["L"][5] = fmgs_dat_get("cost index", "---", "white", "blue")
         end
 
+        --[[ WIND --]]
         mcdu_dat["l"]["R"][5].txt = "wind>"
 
+        --[[ CRZ FL/TEMP --]]
         mcdu_dat["s"]["L"][6].txt = "crz fl/temp"
+        --changes on fmgs airport init
         if fmgs_dat["fmgs init"] then
             crz_fl_init_txt = "{{{{{"
             crz_fl_init_col = "orange"
@@ -797,14 +811,17 @@ function (phase)
                 end
             end
         )
+        --changes on fmgs airport init
         if fmgs_dat["fmgs init"] then
             mcdu_dat["l"]["L"][6].txt = mcdu_dat["l"]["L"][6].txt .. "/" .. fmgs_dat_get_txt("crz temp", "{{{") .. "°"
         else
             mcdu_dat["l"]["L"][6].txt = mcdu_dat["l"]["L"][6].txt .. "/" .. fmgs_dat_get_txt("crz temp", "---") .. "°"
         end
 
+        --[[ TROPO --]]
         mcdu_dat["s"]["R"][6].txt = "tropo "
         fmgs_dat_init("tropo", 39060)
+        --grows bigger if changed
         if fmgs_dat["tropo"] == 39060 then
             tropo_size = "s"
         else
@@ -913,7 +930,6 @@ function (phase)
             fmgs_dat["lat fmt"] = val:sub(2,3) .. val:sub(6,9) .. val:sub(1,1)
             --format e.g. W123°45.67 must be convert to 12345.67W
             fmgs_dat["lon fmt"] = val:sub(13,15) .. val:sub(18,22) .. val:sub(12,12)
-            print(fmgs_dat["lat fmt"])
 
             mcdu_open_page(400) -- reload
 
@@ -929,13 +945,13 @@ function (phase)
 
                     --set lat
                     --format e.g. 1234.5N
-                    lat = tonumber(fmgs_dat["lat"]:sub(1,6))
-                    lat_dir = fmgs_dat["lat"]:sub(7,7)
+                    fmgs_dat["lat"] = tonumber(fmgs_dat["lat fmt"]:sub(1,6))
+                    fmgs_dat["lat_dir"] = fmgs_dat["lat fmt"]:sub(7,7)
 
                     --set lon
                     --format e.g. 12345.67W
-                    lon = tonumber(fmgs_dat["lon"]:sub(1,8))
-                    lon_dir = fmgs_dat["lon"]:sub(9,9)
+                    fmgs_dat["lon"] = tonumber(fmgs_dat["lon fmt"]:sub(1,8))
+                    fmgs_dat["lon_dir"] = fmgs_dat["lon fmt"]:sub(9,9)
 
                     --if on init page, reload it
                     if get(mcdu_page) == 400 then
@@ -963,10 +979,9 @@ function (phase)
 
     -- tropo
     if phase == "R6" then
-        input,variation = mcdu_get_entry("!!!")
-        if input ~= nil then
-            fmgs_dat["tropo"] = input * 100
-        end
+        input = mcdu_get_entry("!!!")
+        fmgs_dat["tropo"] = input * 100
+        mcdu_open_page(400) -- reload
     end
 
     -- slew left/right (used for lat lon)
@@ -985,28 +1000,28 @@ function (phase)
         end
         if fmgs_dat["latlon sel"] == "lat" then
             --change lat from 0-9000.0
-            lat = Math_clamp(lat + increment * 0.1, 0, 9000)
+            fmgs_dat["lat"] = Math_clamp(fmgs_dat["lat"] + increment * 0.1, 0, 9000)
             --flip
-            if lat == 0 or lat == 9000 then
-                lat = lat - increment * 0.1
-                lat_dir = mcdu_toggle(lat_dir, "N", "S") --flip
+            if fmgs_dat["lat"] == 0 or fmgs_dat["lat"] == 9000 then
+                fmgs_dat["lat"] = fmgs_dat["lat"] - increment * 0.1
+                fmgs_dat["lat_dir"] = mcdu_toggle(fmgs_dat["lat_dir"], "N", "S") --flip
             end
             --padding decimal
-            lat = mcdu_pad_dp(lat, 1)
+            fmgs_dat["lat"] = mcdu_pad_dp(fmgs_dat["lat"], 1)
             --assign
-            fmgs_dat["lat"] = lat .. lat_dir
+            fmgs_dat["lat fmt"] = fmgs_dat["lat"] .. fmgs_dat["lat_dir"]
         elseif fmgs_dat["latlon sel"] == "lon" then
             --change lon from 0-180000.00
-            lon = Math_clamp(lon + increment * 0.01, 0, 18000)
+            fmgs_dat["lon"] = Math_clamp(fmgs_dat["lon"] + increment * 0.01, 0, 18000)
             --flip
-            if lon == 0 or lon == 18000 then
-                lon = lon - increment * 0.01
-                lon_dir = mcdu_toggle(lon_dir, "W", "E") --flip
+            if fmgs_dat["lon"] == 0 or fmgs_dat["lon"] == 18000 then
+                fmgs_dat["lon"] = fmgs_dat["lon"] - increment * 0.01
+                fmgs_dat["lon_dir"] = mcdu_toggle(fmgs_dat["lon_dir"], "W", "E") --flip
             end
             --padding decimal
-            lon = mcdu_pad_dp(lon, 2)
+            fmgs_dat["lon"] = mcdu_pad_dp(fmgs_dat["lon"], 2)
             --assign
-            fmgs_dat["lon"] = lon .. lon_dir
+            fmgs_dat["lon fmt"] = fmgs_dat["lon"] .. fmgs_dat["lon_dir"]
         end
         mcdu_open_page(400) -- reload
     end
@@ -1066,29 +1081,40 @@ function (phase)
 end
 
 fmgs_dat["fpln"] = {}
-fmgs_dat["fpln"][0] = {}
-fmgs_dat["fpln"][0].name = "eggw"
-fmgs_dat["fpln"][0].time = "----"
-fmgs_dat["fpln"][0].spd = "---"
-fmgs_dat["fpln"][0].alt = "-----"
+fmgs_dat["fpln"][1] = {}
+fmgs_dat["fpln"][1].name = ""
+fmgs_dat["fpln"][1].time = "----"
+fmgs_dat["fpln"][1].spd = "---"
+fmgs_dat["fpln"][1].alt = "-----"
 
 -- 600 f-pln
 mcdu_sim_page[600] =
 function (phase)
     if phase == "render" then
         --initialize fpln index
-        fpln_index = fmgs_get_dat_txt("fpln index", 0)
+        fmgs_dat_init("fpln index", 0)
+        --if there is nothing in the fpln
+        if #fmgs_dat["fpln"] <= 1 then
+            mcdu_dat["l"]["L"][1].txt = "----- end of f-pln -----"
+            mcdu_dat["l"]["L"][2].txt = "----- no altn fpln -----"
+        else
+            --draw the f-pln
+            for i = 1,5 do
+                --increment fpln index, loop around flight plan.
+                fpln_index = (fpln_index + 1) % #mcdu_dat["fpln"]
 
-        for i = 1,5 do
-            --increment fpln index, loop around flight plan.
-            fpln_index = (fpln_index + 1) % #mcdu_dat["fpln"]
-
-            mcdu_dat["s"]["L"][i][0] = fmgs_dat["fpln"][0].name
-            mcdu_dat["l"]["L"][i] = {txt = "+0.0/+0.0", col = "green"}
+                mcdu_dat["s"]["L"][i][0] = fmgs_dat["fpln"][0].name
+                mcdu_dat["l"]["L"][i] = {txt = "+0.0/+0.0", col = "green"}
+            end
         end
+
         mcdu_dat["s"]["L"][6] = "dest    time  dist  efob"
-        mcdu_dat["l"]["L"][6] = fmgs_dat["fpln"].dest
-        mcdu_dat["l"]["L"][6] = "        " .. fmgs_dat["fpln"].time
+        --the last index of the f-pln must be the destination
+        dest_index = #fmgs_dat["fpln"]
+        mcdu_dat["l"]["L"][6][1] = fmgs_dat["fpln"][dest_index].name
+        mcdu_dat["l"]["L"][6][2] = "        " .. fmgs_dat["fpln"][dest_index].time
+        mcdu_dat["l"]["L"][6][3] = "             " .. fmgs_dat["fpln"][dest_index].dist
+        mcdu_dat["l"]["L"][6][4] = "                     --.-"
         draw_update()
     end
 end
