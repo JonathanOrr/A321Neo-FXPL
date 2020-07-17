@@ -70,7 +70,7 @@ Apu_gen_hz = createGlobalPropertyf("a321neo/cockpit/apu/gen_hz", 0, false, true,
 Apu_bleed_psi = createGlobalPropertyf("a321neo/cockpit/apu/bleed_psi", 0, false, true, false)
 Apu_bleed_state = createGlobalPropertyi("a321neo/apu/apu_bleed_state", 0, false, true, false)--0apu off bleed off, 1apu on bleed off, 2apu on bleed on
 Apu_gen_state = createGlobalPropertyi("a321neo/cockpit/apu/apu_gen_state", 0, false, true, false)--0apu off gen off, 1apu on gen off, 2apu on gen on
---FBW--
+--FBW
 FBW_status = createGlobalPropertyi("a321neo/dynamics/FBW/FBW_on", 2, false, true, false)--2=NORMAL law, 1=ALT2 law, 0==DIRECT law
 FBW_ground_mode = createGlobalPropertyi("a321neo/dynamics/FBW/in_ground_mode", 0, false, true, false)--if the aircraft is on ground and FBW is in normal law
 FBW_flare_mode = createGlobalPropertyi("a321neo/dynamics/FBW/in_flare_mode", 0, false, true, false)--if the aircraft is in flare mode
@@ -94,6 +94,22 @@ FAC_2 = createGlobalPropertyi("a321neo/dynamics/FBW/FAC_2", 1, false, true, fals
 SEC_1 = createGlobalPropertyi("a321neo/dynamics/FBW/SEC_1", 1, false, true, false)--spoiler elevator computer 1
 SEC_2 = createGlobalPropertyi("a321neo/dynamics/FBW/SEC_2", 1, false, true, false)--spoiler elevator computer 2
 SEC_3 = createGlobalPropertyi("a321neo/dynamics/FBW/SEC_3", 1, false, true, false)--spoiler elevator computer 3
+--electrical system
+Commercial_on = createGlobalPropertyi("a321neo/dynamics/electrical/commercial_on", 1, false, true, false)
+Gally_on = createGlobalPropertyi("a321neo/dynamics/electrical/gally_on", 1, false, true, false)
+DC_ess_bus_on = createGlobalPropertyi("a321neo/dynamics/electrical/dc_ess_bus_on", 1, false, true, false)
+DC_bus_1_on = createGlobalPropertyi("a321neo/dynamics/electrical/dc_bus_1_on", 1, false, true, false)
+DC_bus_2_on = createGlobalPropertyi("a321neo/dynamics/electrical/dc_bus_2_on", 1, false, true, false)
+ESS_TR_on = createGlobalPropertyi("a321neo/dynamics/electrical/ess_tr_on", 1, false, true, false)
+TR_1_on = createGlobalPropertyi("a321neo/dynamics/electrical/tr_1_on", 1, false, true, false)
+TR_2_on = createGlobalPropertyi("a321neo/dynamics/electrical/tr_2_on", 1, false, true, false)
+AC_ess_bus_on = createGlobalPropertyi("a321neo/dynamics/electrical/ac_ess_bus_on", 1, false, true, false)
+AC_ess_feed_1_on = createGlobalPropertyi("a321neo/dynamics/electrical/ac_ess_feed_1_on", 1, false, true, false)
+AC_ess_feed_2_on = createGlobalPropertyi("a321neo/dynamics/electrical/ac_ess_feed_2_on", 1, false, true, false)
+AC_bus_1_on = createGlobalPropertyi("a321neo/dynamics/electrical/ac_bus_1_on", 1, false, true, false)
+AC_bus_2_on = createGlobalPropertyi("a321neo/dynamics/electrical/ac_bus_2_on", 1, false, true, false)
+Gen_1_on = createGlobalPropertyi("a321neo/dynamics/electrical/gen_1_on", 1, false, true, false)
+Gen_2_on = createGlobalPropertyi("a321neo/dynamics/electrical/gen_2_on", 1, false, true, false)
 --ADIRS
 Adirs_sys_on = createGlobalPropertyi("a321neo/cockpit/adris/adirs_on", 0, false, true, false)
 Adirs_irs_aligned = createGlobalPropertyi("a321neo/cockpit/adris/irs_aligned", 0, false, true, false)
