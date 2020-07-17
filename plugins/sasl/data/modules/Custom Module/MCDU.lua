@@ -423,6 +423,7 @@ local function draw_dat(dat, draw_size, disp_x, disp_y, disp_text_align)
         return
     end
     disp_text = tostring(dat.txt):upper()
+    dat.col = dat.col or "white" --default colour
     disp_color = MCDU_DISP_COLOR[dat.col]
 
     -- is there a custom size
@@ -622,7 +623,7 @@ mcdu_entry = "ksea/kbfi"
 function update()
     if get(mcdu_page) == 0 then --on start
        --mcdu_open_page(505) --open 505 A/C status
-       mcdu_open_page(400) --open 505 A/C status
+       mcdu_open_page(600) --open 505 A/C status
     end
 
     -- display next message
@@ -1084,38 +1085,102 @@ fmgs_dat["fpln"] = {}
 fmgs_dat["fpln"][1] = {}
 fmgs_dat["fpln"][1].name = ""
 fmgs_dat["fpln"][1].time = "----"
+fmgs_dat["fpln"][1].dist = "-----"
 fmgs_dat["fpln"][1].spd = "---"
 fmgs_dat["fpln"][1].alt = "-----"
+fmgs_dat["fpln"][1].next = nil --flight discontinuity
+
+fmgs_dat["fpln fmt"] = {}
+
+local function fpln_addwpt(loc, name, time, dist, spd, alt, next)
+    wpt = {}
+    wpt.name = name or ""
+    wpt.time = time or "----"
+    wpt.dist = dist or "-----"
+    wpt.spd = spd or "---"
+    wpt.alt = alt or "-----"
+    wpt.next = next
+    table.insert(fmgs_dat["fpln"], loc, wpt)
+end
+
+
+--formats the fpln
+local function fpln_format()
+    --init local variables
+    fpln_fmt = {}
+    fpln = fmgs_dat["fpln"]
+
+    --init previous waypoint to first
+    wpt_prev = {next = fpln[1].name}
+
+    for i,wpt in ipairs(fpln) do
+        --is waypoint a blank?
+        if wpt.name ~= "" then
+            --check for flight discontinuities
+            if wpt_prev.next ~= wpt.name then
+                table.insert(fpln_fmt, "-- f-pln discontinuity -")
+            end
+            --insert waypoint
+            table.insert(fpln_fmt, wpt)
+            --set previous waypoint
+            wpt_prev = wpt
+        end
+    end
+    table.insert(fpln_fmt, "----- end of f-pln -----")
+    table.insert(fpln_fmt, "----- no altn f-pln ----")
+
+    --output
+    fmgs_dat["fpln fmt"] = fpln_fmt
+end
+
+fpln_addwpt(1, "kbfi", nil, nil, nil, nil, nil)
+fpln_addwpt(1, "ksea", nil, nil, nil, nil, nil)
 
 -- 600 f-pln
 mcdu_sim_page[600] =
 function (phase)
     if phase == "render" then
-        --initialize fpln index
         fmgs_dat_init("fpln index", 0)
-        --if there is nothing in the fpln
-        if #fmgs_dat["fpln"] <= 1 then
-            mcdu_dat["l"]["L"][1].txt = "----- end of f-pln -----"
-            mcdu_dat["l"]["L"][2].txt = "----- no altn fpln -----"
-        else
-            --draw the f-pln
-            for i = 1,5 do
-                --increment fpln index, loop around flight plan.
-                fpln_index = (fpln_index + 1) % #mcdu_dat["fpln"]
+        --format the fpln
+        fpln_format()
+        --initialize fpln page index
+        fpln_index = fmgs_dat["fpln index"]
+        --draw the f-pln
+        for i = 1, math.min(#fmgs_dat["fpln fmt"], 5) do
+            --increment fpln index, loop around flight plan.
+            fpln_index = fpln_index % #fmgs_dat["fpln fmt"] + 1
 
-                mcdu_dat["s"]["L"][i][0] = fmgs_dat["fpln"][0].name
-                mcdu_dat["l"]["L"][i] = {txt = "+0.0/+0.0", col = "green"}
+            fpln_wpt = fmgs_dat["fpln fmt"][fpln_index] or ""
+            print(i, fpln_index, fpln_wpt)
+            --is it a simple message?
+            if type(fpln_wpt) == "string" then
+                mcdu_dat["l"]["L"][i].txt = fpln_wpt
+            --is it a blank destination?
+            elseif fpln_wpt.name == "" then
+            --is it a waypoint?
+            else
+                mcdu_dat["s"]["L"][i] = {txt = "+0.0/+0.0", col = "green"}
+                mcdu_dat["l"]["L"][i].txt = fpln_wpt.name
             end
         end
 
-        mcdu_dat["s"]["L"][6] = "dest    time  dist  efob"
+        mcdu_dat["s"]["L"][6] = {txt = "dest    time  "}
+        mcdu_dat["s"]["R"][6] = {txt = "dist  efob"}
         --the last index of the f-pln must be the destination
         dest_index = #fmgs_dat["fpln"]
-        mcdu_dat["l"]["L"][6][1] = fmgs_dat["fpln"][dest_index].name
-        mcdu_dat["l"]["L"][6][2] = "        " .. fmgs_dat["fpln"][dest_index].time
-        mcdu_dat["l"]["L"][6][3] = "             " .. fmgs_dat["fpln"][dest_index].dist
-        mcdu_dat["l"]["L"][6][4] = "                     --.-"
+        mcdu_dat["l"]["L"][6][1] = {txt = fmgs_dat["fpln"][dest_index].name}
+        mcdu_dat["l"]["L"][6][2] = {txt = "        " .. fmgs_dat["fpln"][dest_index].time}
+        mcdu_dat["l"]["R"][6][2] = {txt = fmgs_dat["fpln"][dest_index].dist .. "      "}
+        mcdu_dat["l"]["R"][6][1] = {txt = "--.- "}
         draw_update()
+    end
+    if phase == "slew_down" then
+        --is flight plan long enough to slew up and down?
+        if #fmgs_dat["fpln fmt"] > 2 then
+            fmgs_dat["fpln index"] = fmgs_dat["fpln index"] % #fmgs_dat["fpln fmt"] + 1
+            print(fmgs_dat["fpln index"])
+        end
+        mcdu_open_page(600)
     end
 end
 
