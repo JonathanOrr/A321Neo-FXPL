@@ -1,7 +1,8 @@
 position = {75,1690,320,285}
 size = {320, 285}
 
-local NIL = "unique-nil-identifier" -- used for input return and checking
+local NIL = 0 -- used for input return and checking
+local NIL_UNIQUE = "unique-nil" -- used for input return and checking
 
 --[[
 --
@@ -79,6 +80,7 @@ local MCDU_ENTRY_SIDES = {"L1", "L2", "L3", "L4", "L5", "L6", "R1", "R2", "R3", 
 --]]
 
 local fmgs_dat = {}
+local fmgs_metadat = {}
 local mcdu_dat = {}
 local mcdu_dat_title = {}
 
@@ -215,6 +217,14 @@ local function mcdu_toggle(obj, str_a, str_b)
     end
 end
 
+--init FMGS data to 2nd argument
+local function fmgs_dat_init(dat_name, dat_init)
+    --is data uninitialised?
+    if fmgs_dat[dat_name] == nil then
+        fmgs_dat[dat_name] = dat_init
+    end
+end
+
 --get FMGS data with initialisation
 local function fmgs_dat_get(dat_name, dat_init, dat_init_col, dat_set_col, dat_format_callback)
     --[[
@@ -224,23 +234,22 @@ local function fmgs_dat_get(dat_name, dat_init, dat_init_col, dat_set_col, dat_f
     -- dat_set_col  colour when data has been set
     -- dat_format_callback (optional) format callback when data has been set
     --]]
+
     if fmgs_dat[dat_name] == nil then
-        fmgs_dat[dat_name] = dat_init
-    end
-
-    --padding
-    mcdu_align_right(fmgs_dat[dat_name], #dat_init)
-
-    if fmgs_dat[dat_name] == dat_init then
-        return {txt = fmgs_dat[dat_name], col = dat_init_col}
+        return {txt = dat_init, col = dat_init_col}
     else
+        val = fmgs_dat[dat_name]
         if dat_format_callback == nil then
             dat_format_callback = function (val) return val end
         end
 
-        val = tostring(dat_format_callback(tostring(fmgs_dat[dat_name])))
-        --padding
-        mcdu_align_right(val, #dat_init)
+        if type(dat_init) == "string" then
+            val = tostring(dat_format_callback(tostring(val)))
+            --padding
+            val = mcdu_align_right(val, #dat_init)
+        else
+            val = dat_format_callback(val)
+        end
 
         return {txt = val, col = dat_set_col}
     end
@@ -253,23 +262,24 @@ local function fmgs_dat_get_txt(dat_name, dat_init, dat_format_callback)
     -- dat_init     value the data starts with initially
     -- dat_format_callback (optional) format callback when data has been set
     --]]
+
     if fmgs_dat[dat_name] == nil then
-        fmgs_dat[dat_name] = dat_init
-    end
-
-    --padding
-    mcdu_align_right(fmgs_dat[dat_name], #dat_init)
-
-    if fmgs_dat[dat_name] == dat_init then
-        return fmgs_dat[dat_name]
+        return dat_init
     else
+        val = fmgs_dat[dat_name]
         if dat_format_callback == nil then
             dat_format_callback = function (val) return val end
         end
 
-        val = tostring(dat_format_callback(tostring(fmgs_dat[dat_name])))
-        --padding
-        mcdu_align_right(val, #dat_init)
+        print("[" .. dat_name)
+        print(dat_init .. "]")
+        if type(dat_init) == "string" then
+            val = tostring(dat_format_callback(tostring(val)))
+            --padding
+            val = mcdu_align_right(val, #dat_init)
+        else
+            val = dat_format_callback(val)
+        end
 
         return val
     end
@@ -720,8 +730,15 @@ function (phase)
     if phase == "render" then
         mcdu_dat_title.txt = "          init"
 
+        fmgs_dat_init("fmgs init", false)   -- init has the fmgs been initialised? to false
+        fmgs_dat_init("latlon sel", "nil") -- init latlon selection for irs alignment
+
         mcdu_dat["s"]["L"][1].txt = " co rte"
-        mcdu_dat["l"]["L"][1] = fmgs_dat_get("co rte", "[         ]", "blue", "blue")
+        if fmgs_dat["fmgs init"] then
+            mcdu_dat["l"]["L"][1] = fmgs_dat_get("co rte", "[         ]", "blue", "blue")
+        else
+            mcdu_dat["l"]["L"][1] = fmgs_dat_get("co rte", "{{{{{{{{{{", "orange", "blue")
+        end
 
         mcdu_dat["s"]["R"][1].txt = " from/to  "
 
@@ -740,8 +757,6 @@ function (phase)
             mcdu_dat["l"]["R"][3] = {txt = "align irs>", col = "orange"}
         end
 
-        fmgs_dat_get_txt("latlon sel", "nil") -- init latlon selection for irs alignment
-
         --lat & lon
         mcdu_dat["s"]["R"][4].txt = "lon"
         mcdu_dat["s"]["L"][4].txt = "lat"
@@ -752,17 +767,28 @@ function (phase)
             mcdu_dat["s"]["R"][4].txt = "⇅lon"
         end
 
-        mcdu_dat["l"]["L"][4] = fmgs_dat_get("lat", "----.-", "white", "blue")
-        mcdu_dat["l"]["R"][4] = fmgs_dat_get("lon", "-----.--", "white", "blue")
+        mcdu_dat["l"]["L"][4] = fmgs_dat_get("lat fmt", "----.-", "white", "blue")
+        mcdu_dat["l"]["R"][4] = fmgs_dat_get("lon fmt", "-----.--", "white", "blue")
 
         mcdu_dat["s"]["L"][5].txt = "cost index"
-        mcdu_dat["l"]["L"][5] = fmgs_dat_get("cost index", "{{{", "orange", "blue")
+        if fmgs_dat["fmgs init"] then
+            mcdu_dat["l"]["L"][5] = fmgs_dat_get("cost index", "{{{", "orange", "blue")
+        else
+            mcdu_dat["l"]["L"][5] = fmgs_dat_get("cost index", "---", "white", "blue")
+        end
 
         mcdu_dat["l"]["R"][5].txt = "wind>"
 
         mcdu_dat["s"]["L"][6].txt = "crz fl/temp"
-
-        mcdu_dat["l"]["L"][6] = fmgs_dat_get("crz fl", "{{{{{", "orange", "blue", 
+        if fmgs_dat["fmgs init"] then
+            crz_fl_init_txt = "{{{{{"
+            crz_fl_init_col = "orange"
+        else
+            crz_fl_init_txt = "-----"
+            crz_fl_init_col = "white"
+        end
+        mcdu_dat["l"]["L"][6] = fmgs_dat_get("crz fl", crz_fl_init_txt, crz_fl_init_col, "blue", 
+            --formatting
             function (val) 
                 if #val > 4 then
                     return "FL" .. val:sub(1,3)
@@ -771,10 +797,20 @@ function (phase)
                 end
             end
         )
-        mcdu_dat["l"]["L"][6].txt = mcdu_dat["l"]["L"][6].txt .. "/" .. fmgs_dat_get_txt("crz temp", "{{{") .. "°"
+        if fmgs_dat["fmgs init"] then
+            mcdu_dat["l"]["L"][6].txt = mcdu_dat["l"]["L"][6].txt .. "/" .. fmgs_dat_get_txt("crz temp", "{{{") .. "°"
+        else
+            mcdu_dat["l"]["L"][6].txt = mcdu_dat["l"]["L"][6].txt .. "/" .. fmgs_dat_get_txt("crz temp", "---") .. "°"
+        end
 
         mcdu_dat["s"]["R"][6].txt = "tropo "
-        mcdu_dat["l"]["R"][6] = {txt = "36090", col = "blue", size = "s"}
+        fmgs_dat_init("tropo", 39060)
+        if fmgs_dat["tropo"] == 39060 then
+            tropo_size = "s"
+        else
+            tropo_size = "l"
+        end
+        mcdu_dat["l"]["R"][6] = {txt = fmgs_dat["tropo"], col = "blue", size = tropo_size}
 
         draw_update()
     end
@@ -802,6 +838,10 @@ function (phase)
             "!!",   -- 80 (8000 feet)
             "!!!",  -- 230 (23000 feet)
             "fl!!!",-- FL230 (23000 feet)
+            "fl!!!/!",-- FL230/7 (23000 feet, -7 celcius)
+            "fl!!!/!!",-- FL230/40 (23000 feet, -40 celcius)
+            "fl!!!/-!",-- FL230/-7 (23000 feet, -40 celcius)
+            "fl!!!/-!!",-- FL230/-40 (23000 feet, -40 celcius)
             "/!",   -- 7 (-7 celcius)
             "/!!",  -- 40 (-40 celcius)
             "/-!",  -- -7 (-7 celcius)
@@ -821,12 +861,24 @@ function (phase)
         elseif variation == 3 then
             fmgs_dat["crz fl"] = input:sub(3,5) * 100
         elseif variation == 4 then
-            fmgs_dat["crz temp"] = input:sub(2,3) * -1
+            fmgs_dat["crz fl"] = input:sub(3,5) * 100
+            fmgs_dat["crz temp"] = input:sub(7,7) * -1
         elseif variation == 5 then
-            fmgs_dat["crz temp"] = input:sub(2,4) * -1
+            fmgs_dat["crz fl"] = input:sub(3,5) * 100
+            fmgs_dat["crz temp"] = input:sub(7,8) * -1
         elseif variation == 6 then
-            fmgs_dat["crz temp"] = input:sub(2,3)
+            fmgs_dat["crz fl"] = input:sub(3,5) * 100
+            fmgs_dat["crz temp"] = input:sub(7,8)
         elseif variation == 7 then
+            fmgs_dat["crz fl"] = input:sub(3,5) * 100
+            fmgs_dat["crz temp"] = input:sub(7,9)
+        elseif variation == 8 then
+            fmgs_dat["crz temp"] = input:sub(2,2) * -1
+        elseif variation == 9 then
+            fmgs_dat["crz temp"] = input:sub(2,3) * -1
+        elseif variation == 10 then
+            fmgs_dat["crz temp"] = input:sub(2,3)
+        elseif variation == 11 then
             fmgs_dat["crz temp"] = input:sub(2,4)
         end
         mcdu_open_page(400) -- reload
@@ -851,16 +903,17 @@ function (phase)
             mcdu_ctrl_set_fpln_dest(airp_dest, function(val) --callback
             fmgs_dat["dest"] = airp_dest
 
+            --set co rte
+            fmgs_dat["fmgs init"] = true
             mcdu_open_page(400) -- reload
 
-            print("A")
             --get lat lon from XP FMC
             mcdu_ctrl_get_origin_latlon(input:sub(1,4), function(val) --callback
-            print("A")
             --format e.g. N12°34.56 must be convert to 1234.5N
-            fmgs_dat["lat"] = val:sub(2,3) .. val:sub(6,9) .. val:sub(1,1)
+            fmgs_dat["lat fmt"] = val:sub(2,3) .. val:sub(6,9) .. val:sub(1,1)
             --format e.g. W123°45.67 must be convert to 12345.67W
-            fmgs_dat["lon"] = val:sub(13,15) .. val:sub(18,22) .. val:sub(12,12)
+            fmgs_dat["lon fmt"] = val:sub(13,15) .. val:sub(18,22) .. val:sub(12,12)
+            print(fmgs_dat["lat fmt"])
 
             mcdu_open_page(400) -- reload
 
@@ -902,21 +955,28 @@ function (phase)
     if phase == "R3" then
         --is the irs not aligned?
         if fmgs_dat["irs aligned"] == "show" then
-            --then align it
             fmgs_dat["irs aligned"] = "hide"    --hide irs align>
             fmgs_dat["latlon sel"] = "nil"      --stop lat/lon selection
         end
         mcdu_open_page(400) -- reload
     end
 
-    --slew left/right (used for lat lon)
+    -- tropo
+    if phase == "R6" then
+        input,variation = mcdu_get_entry("!!!")
+        if input ~= nil then
+            fmgs_dat["tropo"] = input * 100
+        end
+    end
+
+    -- slew left/right (used for lat lon)
     if phase == "slew_left" or phase == "slew_right" then
         --toggle between lat and lon select
         fmgs_dat["latlon sel"] = mcdu_toggle(fmgs_dat["latlon sel"], "lat", "lon")
         mcdu_open_page(400) -- reload
     end
 
-    --slew up (used for lat lon)
+    -- slew up (used for lat lon)
     if phase == "slew_up" or phase == "slew_down" then
         if phase == "slew_up" then
             increment = 1
@@ -927,8 +987,8 @@ function (phase)
             --change lat from 0-9000.0
             lat = Math_clamp(lat + increment * 0.1, 0, 9000)
             --flip
-            if lat == 0 then
-                lat = 0.1
+            if lat == 0 or lat == 9000 then
+                lat = lat - increment * 0.1
                 lat_dir = mcdu_toggle(lat_dir, "N", "S") --flip
             end
             --padding decimal
@@ -939,8 +999,8 @@ function (phase)
             --change lon from 0-180000.00
             lon = Math_clamp(lon + increment * 0.01, 0, 18000)
             --flip
-            if lon == 0 then
-                lon = 0.1
+            if lon == 0 or lon == 18000 then
+                lon = lon - increment * 0.01
                 lon_dir = mcdu_toggle(lon_dir, "W", "E") --flip
             end
             --padding decimal
@@ -1016,9 +1076,12 @@ fmgs_dat["fpln"][0].alt = "-----"
 mcdu_sim_page[600] =
 function (phase)
     if phase == "render" then
-        fpln_page = fmgs_dat["fpln page"]
+        --initialize fpln index
+        fpln_index = fmgs_get_dat_txt("fpln index", 0)
+
         for i = 1,5 do
-            fpln_page = (fpln_page + 1) % #mcdu_dat["fpln"]
+            --increment fpln index, loop around flight plan.
+            fpln_index = (fpln_index + 1) % #mcdu_dat["fpln"]
 
             mcdu_dat["s"]["L"][i][0] = fmgs_dat["fpln"][0].name
             mcdu_dat["l"]["L"][i] = {txt = "+0.0/+0.0", col = "green"}
