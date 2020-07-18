@@ -684,7 +684,8 @@ local function mcdu_ctrl_try_catch(callback)
     mcdu_ctrl_add_inst({type = "GET_LN", arg = "13", callback = 
     function (val) 
         if val:sub(1,2) ~= "[I" then -- [INVALID ENTRY]
-            callback() 
+            callback()
+
         else
             mcdu_send_message("not in database")-- INVALID ENTRY
         end
@@ -737,6 +738,8 @@ function (phase)
 
         fmgs_dat_init("fmgs init", false)   -- init has the fmgs been initialised? to false
         fmgs_dat_init("latlon sel", "nil") -- init latlon selection for irs alignment
+
+        fmgs_dat_init("crz temp alt", true) --init has crz temp been changed?
 
         --[[ CO RTE --]]
         mcdu_dat["s"]["L"][1].txt = " co rte"
@@ -802,7 +805,7 @@ function (phase)
             crz_fl_init_txt = "-----"
             crz_fl_init_col = "white"
         end
-        mcdu_dat["l"]["L"][6] = fmgs_dat_get("crz fl", crz_fl_init_txt, crz_fl_init_col, "blue", 
+        mcdu_dat["l"]["L"][6][1] = fmgs_dat_get("crz fl", crz_fl_init_txt, crz_fl_init_col, "blue", 
             --formatting
             function (val) 
                 if #val > 4 then
@@ -812,11 +815,19 @@ function (phase)
                 end
             end
         )
+        mcdu_dat["l"]["L"][6][1].txt = mcdu_dat["l"]["L"][6][1].txt .. "/" --append slant
+
+        --has crz temp been altered?
+        if fmgs_dat["crz temp alt"] then
+            crz_temp_size = "l"
+        else
+            crz_temp_size = "s"
+        end
         --changes on fmgs airport init
         if fmgs_dat["fmgs init"] then
-            mcdu_dat["l"]["L"][6].txt = mcdu_dat["l"]["L"][6].txt .. "/" .. fmgs_dat_get_txt("crz temp", "{{{") .. "°"
+            mcdu_dat["l"]["L"][6][2] = {txt = "      " .. fmgs_dat_get_txt("crz temp", "{{{") .. "°", col = mcdu_dat["l"]["L"][6][1].col, size = crz_temp_size}
         else
-            mcdu_dat["l"]["L"][6].txt = mcdu_dat["l"]["L"][6].txt .. "/" .. fmgs_dat_get_txt("crz temp", "---") .. "°"
+            mcdu_dat["l"]["L"][6][2] = {txt = "      " .. fmgs_dat_get_txt("crz temp", "---") .. "°", col = mcdu_dat["l"]["L"][6][1].col, size = crz_temp_size}
         end
 
         --[[ TROPO --]]
@@ -869,6 +880,9 @@ function (phase)
         --automatically calculate crz temp
         if variation >= 1 and variation <= 3 then
             fmgs_dat["crz temp"] = math.floor(input * -0.2 + 16)
+            fmgs_dat["crz temp alt"] = false --crz temp has not been altered
+        else
+            fmgs_dat["crz temp alt"] = true --crz temp has been manually altered
         end
 
         --set crz FL or crz temp
@@ -1082,27 +1096,20 @@ function (phase)
 end
 
 fmgs_dat["fpln"] = {}
-fmgs_dat["fpln"][1] = {}
-fmgs_dat["fpln"][1].name = ""
-fmgs_dat["fpln"][1].time = "----"
-fmgs_dat["fpln"][1].dist = "-----"
-fmgs_dat["fpln"][1].spd = "---"
-fmgs_dat["fpln"][1].alt = "-----"
-fmgs_dat["fpln"][1].next = nil --flight discontinuity
-
 fmgs_dat["fpln fmt"] = {}
 
-local function fpln_addwpt(loc, name, time, dist, spd, alt, next)
+local function fpln_addwpt(loc, via, name, trk, time, dist, spd, alt, next)
     wpt = {}
     wpt.name = name or ""
     wpt.time = time or "----"
     wpt.dist = dist or "-----"
     wpt.spd = spd or "---"
     wpt.alt = alt or "-----"
+    wpt.via = via or ""
+    wpt.trk = trk or ""
     wpt.next = next
     table.insert(fmgs_dat["fpln"], loc, wpt)
 end
-
 
 --formats the fpln
 local function fpln_format()
@@ -1118,7 +1125,7 @@ local function fpln_format()
         if wpt.name ~= "" then
             --check for flight discontinuities
             if wpt_prev.next ~= wpt.name then
-                table.insert(fpln_fmt, "-- f-pln discontinuity -")
+                table.insert(fpln_fmt, "---f-pln discontinuity--")
             end
             --insert waypoint
             table.insert(fpln_fmt, wpt)
@@ -1127,14 +1134,18 @@ local function fpln_format()
         end
     end
     table.insert(fpln_fmt, "----- end of f-pln -----")
-    table.insert(fpln_fmt, "----- no altn f-pln ----")
+    table.insert(fpln_fmt, "----- no altn fpln -----")
 
     --output
     fmgs_dat["fpln fmt"] = fpln_fmt
 end
 
-fpln_addwpt(1, "kbfi", nil, nil, nil, nil, nil)
-fpln_addwpt(1, "ksea", nil, nil, nil, nil, nil)
+fpln_addwpt(1, nil, nil, nil, nil, nil, nil, nil, nil)
+
+--DEMO
+fpln_addwpt(1, "kbfi", "kbfi", nil, nil, nil, nil, nil, nil)
+fpln_addwpt(1, "ksea", "ksea", nil, nil, nil, nil, nil, nil)
+fpln_addwpt(1, "chins3", "humpp", nil, 2341, 14, 297, 15000, "aubrn")
 
 -- 600 f-pln
 mcdu_sim_page[600] =
@@ -1159,8 +1170,38 @@ function (phase)
             elseif fpln_wpt.name == "" then
             --is it a waypoint?
             else
-                mcdu_dat["s"]["L"][i] = {txt = "+0.0/+0.0", col = "green"}
-                mcdu_dat["l"]["L"][i].txt = fpln_wpt.name
+                --[[ VIA --]]
+                --is via an airway/note or heading?
+                if type(fpln_wpt.via) == "string" then
+                    --is via an airway or note?
+                    if fpln_wpt.via:sub(1,1) ~= "(" then
+                        mcdu_dat["s"]["L"][i][1] = {txt = " " .. fpln_wpt.via}
+                    --via must be a note
+                    else
+                        mcdu_dat["s"]["L"][i][1] = {txt = " " .. fpln_wpt.via, col = "green"}
+                    end
+                --via must be a heading
+                else
+                    mcdu_dat["s"]["L"][i][1] = {txt = " H" .. fpln_wpt.via .. "°"}
+                end
+
+                --[[ NAME --]]
+                mcdu_dat["l"]["L"][i][1] = {txt = fpln_wpt.name, col = "green"}
+
+                --[[ TIME --]]
+                mcdu_dat["l"]["L"][i][2] = {txt = "        " .. fpln_wpt.time, col = "green", size = "s"}
+
+                --[[ TRK --]]
+                mcdu_dat["s"]["L"][i][2] = {txt = "        " .. fpln_wpt.trk, col = "green"}
+
+                --[[ DIST --]]
+                mcdu_dat["s"]["R"][i] = {txt = fpln_wpt.dist .. "     ", col = "green", size = "s"}
+
+                --[[ SPD --]]
+                mcdu_dat["l"]["R"][i][1] = {txt = fpln_wpt.spd .. "/      ", col = "green", size = "s"}
+
+                --[[ ALT --]]
+                mcdu_dat["l"]["R"][i][2] = {txt = fpln_wpt.alt, col = "green", size = "s"}
             end
         end
 
@@ -1174,10 +1215,17 @@ function (phase)
         mcdu_dat["l"]["R"][6][1] = {txt = "--.- "}
         draw_update()
     end
-    if phase == "slew_down" then
+
+    --slew up or down
+    if phase == "slew_up" or phase == "slew_down" then
+        if phase == "slew_up" then
+            increment = -1
+        else
+            increment = 1
+        end
         --is flight plan long enough to slew up and down?
         if #fmgs_dat["fpln fmt"] > 2 then
-            fmgs_dat["fpln index"] = fmgs_dat["fpln index"] % #fmgs_dat["fpln fmt"] + 1
+            fmgs_dat["fpln index"] = fmgs_dat["fpln index"] % #fmgs_dat["fpln fmt"] + increment 
             print(fmgs_dat["fpln index"])
         end
         mcdu_open_page(600)
