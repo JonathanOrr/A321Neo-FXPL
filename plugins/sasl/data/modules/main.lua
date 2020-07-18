@@ -1,4 +1,3 @@
-include("helpers.lua")
 include("global_datarefs_functions.lua")
 
 sasl.options.setAircraftPanelRendering(true)

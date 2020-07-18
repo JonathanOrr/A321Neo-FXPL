@@ -27,7 +27,7 @@ local A32nx_FBW_elev_trim = {P_gain = 1, I_gain = 1, D_gain = 10, I_delay = 120,
 
 --variables--
 local FBW_alt_law_gear_extended = 0 --FBW supposed to be in alt law and gear is extended puting it into direct law
-local FBW_restart_required = 0 --not in normal law require restart to restore
+local FBW_restore_required = 0 --not in normal law require restart to restore
 local ground_mode_transition_timer = 0 --(3.5) for delayed transition
 local flare_mode_transition_timer = 0 --(2.5) for delayed transition
 
@@ -44,42 +44,45 @@ local toggle_FAC_2 = sasl.createCommand("a321neo/FBW/toggle_FAC_2", "toggle FAC 
 --a32nx command handler
 sasl.registerCommandHandler (toggle_ELAC_1, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(ELAC_1, 1 - get(ELAC_1))
-
-        if get(ELAC_1) == 0 and FBW_restart_required == 1 then
-            FBW_restart_required = 0
+        if get(ELAC_1) == 0 and FBW_restore_required == 1 and Is_in_flight_envelop() == true and get(Gear_handle) == 0 then
+            FBW_restore_required = 0
+            set(FBW_status, 2)
         end
+
+        set(ELAC_1, 1 - get(ELAC_1))
     end
 end)
 
 sasl.registerCommandHandler (toggle_ELAC_2, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(ELAC_2, 1 - get(ELAC_2))
-
-        if get(ELAC_2) == 0 and FBW_restart_required == 1 then
-            FBW_restart_required = 0
+        if get(ELAC_2) == 0 and FBW_restore_required == 1 and Is_in_flight_envelop() == true and get(Gear_handle) == 0 then
+            FBW_restore_required = 0
+            set(FBW_status, 2)
         end
+
+        set(ELAC_2, 1 - get(ELAC_2))
     end
 end)
 
 sasl.registerCommandHandler (toggle_FAC_1, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(FAC_1, 1 - get(FAC_1))
-
-        if get(FAC_1) == 0 and FBW_restart_required == 1 then
-            FBW_restart_required = 0
+        if get(FAC_1) == 0 and FBW_restore_required == 1 and Is_in_flight_envelop() == true and get(Gear_handle) == 0 then
+            FBW_restore_required = 0
+            set(FBW_status, 2)
         end
+
+        set(FAC_1, 1 - get(FAC_1))
     end
 end)
 
 sasl.registerCommandHandler (toggle_FAC_2, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(FAC_2, 1 - get(FAC_2))
-
-        if get(FAC_2) == 0 and FBW_restart_required == 1 and Is_in_flight_envelop() == true then
-            FBW_restart_required = 0
-            print("restarted")
+        if get(FAC_2) == 0 and FBW_restore_required == 1 and Is_in_flight_envelop() == true and get(Gear_handle) == 0 then
+            FBW_restore_required = 0
+            set(FBW_status, 2)
         end
+
+        set(FAC_2, 1 - get(FAC_2))
     end
 end)
 
@@ -124,19 +127,45 @@ end
 --initialise FBW
 set(Override_artstab, 1)
 set(Override_control_surfaces, 1)
+FBW_restore_required = 0
+set(FBW_status, 2)
 
 function onPlaneLoaded()
     set(Override_artstab, 1)
     set(Override_control_surfaces, 1)
+    FBW_restore_required = 0
+    set(FBW_status, 2)
 end
 
 function onAirportLoaded()
     set(Override_artstab, 1)
     set(Override_control_surfaces, 1)
+    FBW_restore_required = 0
+    set(FBW_status, 2)
+end
+
+function onModuleShutdown()--reset things back so other planes will work
+    set(Override_artstab, 0)
+    set(Override_control_surfaces, 0)
 end
 
 function update()
     set(Override_artstab, 1)
+
+    --detect if the aircraft has stalled, if so enter ALT law, and if in ALT law and gear is down enter DIRECT law--
+    if get(FBW_ground_mode) == 0 and get(FBW_flare_mode) == 0 then
+        if get(Alpha) > 14 then
+            FBW_restore_required = 1
+        end
+    end
+
+    if FBW_restore_required == 1 then
+        if get(Gear_handle) == 0 then
+            set(FBW_status, 1)
+        else
+            set(FBW_status, 0)
+        end
+    end
 
     --ground mode detection--
     if get(Aft_wheel_on_ground) == 1 then
