@@ -200,6 +200,16 @@ local function mcdu_pad_dp(number, required_dp)
     return(string.format("%." .. required_dp .. "f", number))
 end
 
+--pad a number up to a given length
+--e.g. (50, 3) -> 050
+local function mcdu_pad_num(number, required_length)
+    str = tostring(number)
+    while #str < required_length do
+        str = "0" .. str
+    end
+    return str
+end
+
 --align an input to the right, given the total length
 --e.g. ("ad", 4) -> "  ad"
 local function mcdu_align_right(str, required_length)
@@ -208,6 +218,17 @@ local function mcdu_align_right(str, required_length)
     end
     return str
 end
+
+--align an input to the left, given the total length
+--e.g. ("ad", 4) -> "  ad"
+local function mcdu_align_left(str, required_length)
+    while #tostring(str) < required_length do
+        str = str .. " "
+    end
+    return str
+end
+
+
 
 --toggle obj between two strings, a and b
 --e.g. ("ad", "ba", "ad") -> "ba"
@@ -1098,16 +1119,19 @@ end
 fmgs_dat["fpln"] = {}
 fmgs_dat["fpln fmt"] = {}
 
-local function fpln_addwpt(loc, via, name, trk, time, dist, spd, alt, next)
+local function fpln_addwpt(loc, via, name, trk, time, dist, spd, alt, efob, windspd, windhdg, next)
     wpt = {}
     wpt.name = name or ""
     wpt.time = time or "----"
-    wpt.dist = dist or "-----"
+    wpt.dist = dist or ""
     wpt.spd = spd or "---"
     wpt.alt = alt or "-----"
     wpt.via = via or ""
     wpt.trk = trk or ""
     wpt.next = next
+    wpt.efob = efob or 5.5
+    wpt.windspd = windspd or 0
+    wpt.windhdg = windhdg or 0
     table.insert(fmgs_dat["fpln"], loc, wpt)
 end
 
@@ -1139,19 +1163,21 @@ local function fpln_format()
     --output
     fmgs_dat["fpln fmt"] = fpln_fmt
 end
-
-fpln_addwpt(1, nil, nil, nil, nil, nil, nil, nil, nil)
+-- loc via name trk time dist spd alt efob windspd windhdg next
+fpln_addwpt(1, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil)
 
 --DEMO
-fpln_addwpt(1, "kbfi", "kbfi", nil, nil, nil, nil, nil, nil)
-fpln_addwpt(1, "ksea", "ksea", nil, nil, nil, nil, nil, nil)
-fpln_addwpt(1, "chins3", "humpp", nil, 2341, 14, 297, 15000, "aubrn")
+table.remove(fmgs_dat["fpln"])
+fpln_addwpt(1, nil, "kbfi", nil, nil, nil, nil, nil, nil, nil, nil, nil) 
+fpln_addwpt(1, "chins3", "humpp", nil, 2341, 14, 297, 15000, nil, nil, nil, "aubrn")
+fpln_addwpt(1, nil, "ksea", nil, nil, nil, nil, nil, nil, nil, nil, "humpp")
 
 -- 600 f-pln
 mcdu_sim_page[600] =
 function (phase)
     if phase == "render" then
         fmgs_dat_init("fpln index", 0)
+        fmgs_dat_init("fpln page", 1)
         --format the fpln
         fpln_format()
         --initialize fpln page index
@@ -1162,14 +1188,16 @@ function (phase)
             fpln_index = fpln_index % #fmgs_dat["fpln fmt"] + 1
 
             fpln_wpt = fmgs_dat["fpln fmt"][fpln_index] or ""
-            print(i, fpln_index, fpln_wpt)
+            fmgs_dat["origin"] = "ksea"
             --is it a simple message?
             if type(fpln_wpt) == "string" then
                 mcdu_dat["l"]["L"][i].txt = fpln_wpt
-            --is it a blank destination?
-            elseif fpln_wpt.name == "" then
             --is it a waypoint?
             else
+                --set title
+                if i == 1 and fpln_wpt.name:sub(1,4) == fmgs_dat["origin"] then
+                    mcdu_dat_title.txt = " from"
+                end
                 --[[ VIA --]]
                 --is via an airway/note or heading?
                 if type(fpln_wpt.via) == "string" then
@@ -1197,23 +1225,57 @@ function (phase)
                 --[[ DIST --]]
                 mcdu_dat["s"]["R"][i] = {txt = fpln_wpt.dist .. "     ", col = "green", size = "s"}
 
-                --[[ SPD --]]
-                mcdu_dat["l"]["R"][i][1] = {txt = fpln_wpt.spd .. "/      ", col = "green", size = "s"}
+                if fmgs_dat["fpln page"] == 1 then
+                    --[[ TIME --]]
+                    mcdu_dat["l"]["L"][i][2] = {txt = "        " .. fpln_wpt.time, col = "green", size = "s"}
 
-                --[[ ALT --]]
-                mcdu_dat["l"]["R"][i][2] = {txt = fpln_wpt.alt, col = "green", size = "s"}
+                    --[[ SPD --]]
+                    mcdu_dat["l"]["R"][i][1] = {txt = fpln_wpt.spd .. "/      ", col = "green", size = "s"}
+
+                    --[[ ALT --]]
+                    mcdu_dat["l"]["R"][i][2] = {txt = fpln_wpt.alt, col = "green", size = "s"}
+                else
+                    --[[ EFOB --]]
+                    mcdu_dat["l"]["L"][i][2] = {txt = "        " .. fpln_wpt.efob, col = "green", size = "s"}
+
+                    --[[ WIND SPD --]]
+                    mcdu_dat["l"]["R"][i][1] = {txt = mcdu_align_left(fpln_wpt.windspd, 3), col = "green", size = "s"}
+
+                    --[[ WIND ALT --]]
+                    mcdu_dat["l"]["R"][i][2] = {txt = mcdu_pad_num(fpln_wpt.windhdg, 3) ..  "°/   ", col = "green", size = "s"}
+                end
             end
         end
 
+        --[[ DEST --]]
         mcdu_dat["s"]["L"][6] = {txt = "dest    time  "}
         mcdu_dat["s"]["R"][6] = {txt = "dist  efob"}
         --the last index of the f-pln must be the destination
         dest_index = #fmgs_dat["fpln"]
-        mcdu_dat["l"]["L"][6][1] = {txt = fmgs_dat["fpln"][dest_index].name}
-        mcdu_dat["l"]["L"][6][2] = {txt = "        " .. fmgs_dat["fpln"][dest_index].time}
-        mcdu_dat["l"]["R"][6][2] = {txt = fmgs_dat["fpln"][dest_index].dist .. "      "}
-        mcdu_dat["l"]["R"][6][1] = {txt = "--.- "}
+        dest_wpt = fmgs_dat["fpln"][dest_index]
+        mcdu_dat["l"]["L"][6][1] = {txt = dest_wpt.name}
+        mcdu_dat["l"]["L"][6][2] = {txt = "        " .. dest_wpt.time}
+        --formatting
+        if dest_wpt.dist == "" then
+            mcdu_dat["l"]["R"][6][2] = {txt = "-----      "}
+        else
+            mcdu_dat["l"]["R"][6][2] = {txt = dest_wpt.dist .. "      "}
+        end
+        --formatting
+        if dest_wpt.efob == "" then
+            mcdu_dat["l"]["R"][6][1] = {txt = "--.- "}
+        else
+            mcdu_dat["l"]["R"][6][1] = {txt = dest_wpt.efob .. " "}
+        end
+
         draw_update()
+    end
+
+    -- slew left/right (used for lat lon)
+    if phase == "slew_left" or phase == "slew_right" then
+        --toggle between lat and lon select
+        fmgs_dat["fpln page"] = mcdu_toggle(fmgs_dat["fpln page"], 1, 2)
+        mcdu_open_page(600) -- reload
     end
 
     --slew up or down
