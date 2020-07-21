@@ -638,13 +638,13 @@ local function mcdu_ctrl_get_nav(find_nameid, find_type)
     return nav
 end
 
-mcdu_entry = "ksea/kbfi"
+mcdu_entry = "R0.55"
 
 --update
 function update()
     if get(mcdu_page) == 0 then --on start
        --mcdu_open_page(505) --open 505 A/C status
-       mcdu_open_page(600) --open 505 A/C status
+       mcdu_open_page(1102) --open 505 A/C status
     end
 
     -- display next message
@@ -683,6 +683,7 @@ end
 --      500 - data
 --        505 - data A/C status
 --      600 - f-pln
+--        601 - f-pln lat rev
 --      700 - rad nav
 --      800 - fuel pred
 --      900 - sec f-pln
@@ -1069,6 +1070,7 @@ function (phase)
     if phase == "render" then
         mcdu_dat_title.txt = "     data index"
 
+        mcdu_dat["s"]["L"][1].txt = " position"
         mcdu_dat["l"]["L"][1].txt = "<monitor"
         mcdu_dat["s"]["L"][2].txt = " irs"
         mcdu_dat["l"]["L"][2].txt = "<monitor"
@@ -1216,9 +1218,6 @@ function (phase)
                 --[[ NAME --]]
                 mcdu_dat["l"]["L"][i][1] = {txt = fpln_wpt.name, col = "green"}
 
-                --[[ TIME --]]
-                mcdu_dat["l"]["L"][i][2] = {txt = "        " .. fpln_wpt.time, col = "green", size = "s"}
-
                 --[[ TRK --]]
                 mcdu_dat["s"]["L"][i][2] = {txt = "        " .. fpln_wpt.trk, col = "green"}
 
@@ -1271,6 +1270,19 @@ function (phase)
         draw_update()
     end
 
+    --if any of the side buttons are pushed
+    if phase:sub(1,1) == "R" or phase:sub(1,1) == "L" then
+
+        index = phase:sub(2,2)
+        wpt_check = mcdu_dat["l"]["L"][tonumber(index)][1] or "invalid"
+
+        --if valid wpt, open 601 f-pln lat rev page
+        if wpt_check ~= "invalid" then
+            fmgs_dat["lat rev wpt"] = wpt_check.txt
+            mcdu_open_page(601) -- 601 f-pln lat rev page
+        end
+    end
+
     -- slew left/right (used for lat lon)
     if phase == "slew_left" or phase == "slew_right" then
         --toggle between lat and lon select
@@ -1291,6 +1303,67 @@ function (phase)
             print(fmgs_dat["fpln index"])
         end
         mcdu_open_page(600)
+    end
+end
+
+-- 601 f-pln lat rev page
+mcdu_sim_page[601] =
+function (phase)
+    if phase == "render" then
+        fmgs_dat_init("lat rev wpt", "none")
+        --get the wpt in question's name
+        wpt_find_name = fmgs_dat["lat rev wpt"]
+        wpt = "invalid"
+        --find the wpt data with the name
+        for i, wpt_find in ipairs(fmgs_dat["fpln"]) do
+            if wpt_find.name == wpt_find_name then
+                wpt = wpt_find
+                break
+            end
+        end
+        if wpt == "invalid" then
+            mcdu_send_message("error 601 " .. wpt_find_name) --throw error!
+            return
+        end
+        mcdu_dat_title[1] = {txt = "   lat rev"}
+        mcdu_dat_title[2] = {txt = "           from", size = "s"}
+        mcdu_dat_title[3] = {txt = "                " .. wpt.name, col = "green"}
+
+        --get lat lon
+        fmgs_dat_init("lat fmt2", "")
+        fmgs_dat_init("lon fmt2", "")
+        if fmgs_dat["lat fmt2"] == "" then
+            --get lat lon from XP FMC
+            mcdu_ctrl_get_origin_latlon(wpt.name, function(val) --callback
+            --Nxx''xx.xx Wxxx''xx.xx
+            fmgs_dat["lat fmt2"] = val:sub(2,9) .. val:sub(1,1)
+            fmgs_dat["lon fmt2"] = val:sub(13,21) .. val:sub(12,12)
+
+            mcdu_open_page(601) -- reload
+            end) --end callback
+        end
+
+        mcdu_dat["s"]["L"][1] = {txt = "   " .. fmgs_dat["lat fmt2"] .. "/" .. fmgs_dat["lon fmt2"], col = "green"}
+
+        mcdu_dat["s"]["R"][2].txt = "ll xing/incr/no"
+        mcdu_dat["l"]["R"][2] = {txt = "[  ]°/[ ]°/[ ]", col = "blue"}
+
+        mcdu_dat["s"]["R"][3].txt = "next wpt "
+        mcdu_dat["l"]["R"][3] = {txt = "[    ]", col = "blue"}
+
+        mcdu_dat["s"]["R"][4].txt = "new dest "
+        mcdu_dat["l"]["R"][4] = {txt = "[  ]", col = "blue"}
+
+        --is wpt an airport?
+        if wpt.name:len() == 4 then
+            mcdu_dat["l"]["L"][1].txt = "<departure"
+            mcdu_dat["l"]["R"][1].txt = "fix info>"
+        end
+        draw_update()
+    end
+    
+    if phase == "R2" or phase == "R3" or phase == "R4" then
+        mcdu_send_message("not yet implemented!")
     end
 end
 
@@ -1378,17 +1451,19 @@ function (phase)
     end
 end
 
-local function mcdu_parse_colour(callback)
-    if mcdu_get_entry({"r!.!!", "g!.!!", "b!.!!"}) ~= nil then
+local function mcdu_set_colour(colour)
         --format e.g. r0.00
         input, variation = mcdu_get_entry({"r!.!!", "g!.!!", "b!.!!"})
         --check for correct entry
-        input_col = string.sub(input, 2, 2) .. "." .. string.sub(input, 4,5)
-        callback(input, variation)
-        mcdu_open_page(1102) -- reload page
-    else
-        mcdu_send_message("format e.g. b0.50")
-    end
+        if input ~= NIL then
+            print(input)
+            input_col = input:sub(2,2) .. "." .. string.sub(input, 4,5)
+            MCDU_DISP_COLOR[colour][variation] = input_col
+
+            mcdu_open_page(1102) -- reload page
+        else
+            mcdu_send_message("format e.g. b0.50")
+        end
 end
 -- 1102 mcdu menu debug colours
 mcdu_sim_page[1102] =
@@ -1405,24 +1480,16 @@ function (phase)
         draw_update()
     end
     if phase == "L1" then
-        mcdu_parse_colour(function (input, variation)
-            MCDU_DISP_COLOR["white"][variation] = input_col
-        end)
+        mcdu_set_colour("white")
     end
     if phase == "L2" then
-        mcdu_parse_colour(function (input, variation)
-            MCDU_DISP_COLOR["blue"][variation] = input_col
-        end)
+        mcdu_set_colour("blue")
     end
     if phase == "L3" then
-        mcdu_parse_colour(function (input, variation)
-            MCDU_DISP_COLOR["green"][variation] = input_col
-        end)
+        mcdu_set_colour("green")
     end
     if phase == "L4" then
-        mcdu_parse_colour(function (input, variation)
-            MCDU_DISP_COLOR["orange"][variation] = input_col
-        end)
+        mcdu_set_colour("orange")
     end
     if phase == "L6" then
         hokey_pokey = true
