@@ -5,6 +5,19 @@ local adirs_ir_align = {} -- 0-off 1-align
 local TIME_TO_ALIGN = 420 --average 420 seconds (7 min), we can do calculation based on latlon alignment delays later
 local TIME_TO_ONBAT = 5 --seven seconds before onbat light extinguishes
 
+
+local adirs_onbat = createGlobalPropertyi("a321neo/cockpit/adris/onbat", 0, false, true, false)
+local adirs_align = createGlobalPropertyi("a321neo/cockpit/adris/align", 0, false, true, false)
+
+local adirs_time_to_onbat = createGlobalPropertyf("a321neo/cockpit/adris/timetoonbat", 0, false, true, false)
+local adirs_time_to_align = createGlobalPropertyf("a321neo/cockpit/adris/timetoalign", 0, false, true, false)
+
+for i = 1,3 do
+  adirs_ir_switch_state[i] = createGlobalPropertyi("a321neo/cockpit/adris/ir" .. i .. "_switch_state", 0, false, true, false)
+  adirs_ir_align[i] = createGlobalPropertyi("a321neo/cockpit/adris/ir" .. i .. "_align", 0, false, true, false)
+end
+
+
 function update ()
     set(Adirs_sys_on, 0)
     for i = 1,3 do
