@@ -26,7 +26,7 @@ Engine_option = createGlobalPropertyi("a321neo/customization/engine_option", 0, 
 PW_engine_enabled = createGlobalPropertyi("a321neo/customization/pw_engine_enabled", 0, false, true, false)
 Leap_engien_option = createGlobalPropertyi("a321neo/customization/leap_engine_enabled", 0, false, true, false)
 --pfd
-Max_speed = createGlobalPropertyf("a321neo/cockpit/PFD/max_speed", 0, false, true, false)
+Max_speed = createGlobalPropertyf("a321neo/cockpit/PFD/max_speed", 330, false, true, false)
 Max_speed_delta = createGlobalPropertyf("a321neo/cockpit/PFD/max_speed_delta", 0, false, true, false)
 --ecam
 Ecam_previous_page = createGlobalPropertyi("a321neo/cockpit/ecam/previous", 2, false, true, false) --1ENG, 2BLEED, 3PRESS, 4ELEC, 5HYD, 6FUEL, 7APU, 8COND, 9DOOR, 10WHEEL, 11F/CTL, 12STS
@@ -70,8 +70,11 @@ Apu_gen_hz = createGlobalPropertyf("a321neo/cockpit/apu/gen_hz", 0, false, true,
 Apu_bleed_psi = createGlobalPropertyf("a321neo/cockpit/apu/bleed_psi", 0, false, true, false)
 Apu_bleed_state = createGlobalPropertyi("a321neo/apu/apu_bleed_state", 0, false, true, false)--0apu off bleed off, 1apu on bleed off, 2apu on bleed on
 Apu_gen_state = createGlobalPropertyi("a321neo/cockpit/apu/apu_gen_state", 0, false, true, false)--0apu off gen off, 1apu on gen off, 2apu on gen on
---FBW--
-FBW_on = createGlobalPropertyi("a321neo/dynamics/fctl/FBW_on", 1, false, true, false)
+--FBW
+FBW_status = createGlobalPropertyi("a321neo/dynamics/FBW/FBW_on", 2, false, true, false)--2=NORMAL law, 1=ALT2 law, 0==DIRECT law
+FBW_ground_mode = createGlobalPropertyi("a321neo/dynamics/FBW/in_ground_mode", 0, false, true, false)--if the aircraft is on ground and FBW is in normal law
+FBW_flare_mode = createGlobalPropertyi("a321neo/dynamics/FBW/in_flare_mode", 0, false, true, false)--if the aircraft is in flare mode
+FBW_flaring = createGlobalPropertyi("a321neo/dynamics/FBW/in_flaring", 0, false, true, false)--if the FBW is synthesising a flare
 Roll_l_lim = createGlobalPropertyf("a321neo/dynamics/FBW/roll_l_lim", 0, false, true, false)
 Roll_r_lim = createGlobalPropertyf("a321neo/dynamics/FBW/roll_r_lim", 0, false, true, false)
 Pitch_u_lim = createGlobalPropertyf("a321neo/dynamics/FBW/pitch_u_lim", 0, false, true, false)
@@ -80,10 +83,36 @@ Pitch_rate_u_lim = createGlobalPropertyf("a321neo/dynamics/FBW/pitch_rate_u_lim"
 Pitch_rate_d_lim = createGlobalPropertyf("a321neo/dynamics/FBW/pitch_rate_d_lim", 0, false, true, false)
 AOA_lim = createGlobalPropertyf("a321neo/dynamics/FBW/AOA_lim", 0, false, true, false)
 MAX_spd_lim = createGlobalPropertyf("a321neo/dynamics/FBW/MAX_spd_lim", 0, false, true, false)
-Roll_rate_output = createGlobalPropertyf("a321neo/dynamics/FBW/roll_rate_output", 0, false, true, false)
-G_output = createGlobalPropertyf("a321neo/dynamics/FBW/G_output", 0, false, true, false)
 Roll_rate_command = createGlobalPropertyf("a321neo/dynamics/FBW/roll_rate_command", 0, false, true, false)--15 degrees max for normal law, 30 degrees in ALT2 or DIRECT
+Roll_rate_output = createGlobalPropertyf("a321neo/dynamics/FBW/roll_rate_output", 0, false, true, false)
 G_load_command = createGlobalPropertyf("a321neo/dynamics/FBW/G_load_command", 1, false, true, false)--2.5G to -1G in normal flight, with flaps 2G to 0G
+G_output = createGlobalPropertyf("a321neo/dynamics/FBW/G_output", 0, false, true, false)
+ELAC_1 = createGlobalPropertyi("a321neo/dynamics/FBW/ELAC_1", 1, false, true, false)--elevator aileron computer 1
+ELAC_2 = createGlobalPropertyi("a321neo/dynamics/FBW/ELAC_2", 1, false, true, false)--elevator aileron computer 2
+FAC_1 = createGlobalPropertyi("a321neo/dynamics/FBW/FAC_1", 1, false, true, false)--flight augmentation computer 1
+FAC_2 = createGlobalPropertyi("a321neo/dynamics/FBW/FAC_2", 1, false, true, false)--flight augmentation computer 2
+SEC_1 = createGlobalPropertyi("a321neo/dynamics/FBW/SEC_1", 1, false, true, false)--spoiler elevator computer 1
+SEC_2 = createGlobalPropertyi("a321neo/dynamics/FBW/SEC_2", 1, false, true, false)--spoiler elevator computer 2
+SEC_3 = createGlobalPropertyi("a321neo/dynamics/FBW/SEC_3", 1, false, true, false)--spoiler elevator computer 3
+--electrical system
+Commercial_on = createGlobalPropertyi("a321neo/dynamics/electrical/commercial_on", 1, false, true, false)
+Gally_on = createGlobalPropertyi("a321neo/dynamics/electrical/gally_on", 1, false, true, false)
+DC_ess_bus_on = createGlobalPropertyi("a321neo/dynamics/electrical/dc_ess_bus_on", 1, false, true, false)
+DC_bus_1_on = createGlobalPropertyi("a321neo/dynamics/electrical/dc_bus_1_on", 1, false, true, false)
+DC_bus_2_on = createGlobalPropertyi("a321neo/dynamics/electrical/dc_bus_2_on", 1, false, true, false)
+ESS_TR_on = createGlobalPropertyi("a321neo/dynamics/electrical/ess_tr_on", 1, false, true, false)
+TR_1_on = createGlobalPropertyi("a321neo/dynamics/electrical/tr_1_on", 1, false, true, false)
+TR_2_on = createGlobalPropertyi("a321neo/dynamics/electrical/tr_2_on", 1, false, true, false)
+AC_ess_bus_on = createGlobalPropertyi("a321neo/dynamics/electrical/ac_ess_bus_on", 1, false, true, false)
+AC_ess_feed_1_on = createGlobalPropertyi("a321neo/dynamics/electrical/ac_ess_feed_1_on", 1, false, true, false)
+AC_ess_feed_2_on = createGlobalPropertyi("a321neo/dynamics/electrical/ac_ess_feed_2_on", 1, false, true, false)
+AC_bus_1_on = createGlobalPropertyi("a321neo/dynamics/electrical/ac_bus_1_on", 1, false, true, false)
+AC_bus_2_on = createGlobalPropertyi("a321neo/dynamics/electrical/ac_bus_2_on", 1, false, true, false)
+Gen_1_on = createGlobalPropertyi("a321neo/dynamics/electrical/gen_1_on", 1, false, true, false)
+Gen_2_on = createGlobalPropertyi("a321neo/dynamics/electrical/gen_2_on", 1, false, true, false)
+--ADIRS
+Adirs_sys_on = createGlobalPropertyi("a321neo/cockpit/adris/adirs_on", 0, false, true, false)
+Adirs_irs_aligned = createGlobalPropertyi("a321neo/cockpit/adris/irs_aligned", 0, false, true, false)
 
 
 --global dataref variable from the Sim--
@@ -101,6 +130,8 @@ Servo_roll = globalProperty("sim/joystick/servo_roll_ratio")
 Servo_pitch = globalProperty("sim/joystick/servo_pitch_ratio")
 Servo_yaw = globalProperty("sim/joystick/servo_heading_ratio")
 Flaps_handle_ratio = globalProperty("sim/cockpit2/controls/flap_ratio")
+Flaps_handle_deploy_ratio = globalProperty("sim/cockpit2/controls/flap_handle_deploy_ratio")
+Speedbrake_handle_ratio = globalProperty("sim/cockpit2/controls/speedbrake_ratio")
 Flightmodel_roll = globalProperty("sim/flightmodel/position/true_phi")
 Flightmodel_pitch = globalProperty("sim/flightmodel/position/true_theta")
 Elev_trim_ratio = globalProperty("sim/cockpit2/controls/elevator_trim")
@@ -136,6 +167,8 @@ Eng_1_FF_kgs = globalProperty("sim/cockpit2/engine/indicators/fuel_flow_kg_sec[0
 Eng_2_FF_kgs = globalProperty("sim/cockpit2/engine/indicators/fuel_flow_kg_sec[1]")
 Apu_N1 = globalProperty("sim/cockpit2/electrical/APU_N1_percent")
 APU_EGT = globalProperty("sim/cockpit2/electrical/APU_EGT_c")
+Eng_1_reverser_deployment = globalProperty("sim/flightmodel2/engines/thrust_reverser_deploy_ratio[0]")
+Eng_2_reverser_deployment = globalProperty("sim/flightmodel2/engines/thrust_reverser_deploy_ratio[1]")
 --PACKs system
 Apu_bleed_switch = globalProperty("sim/cockpit2/bleedair/actuators/apu_bleed")
 ENG_1_bleed_switch = globalProperty("sim/cockpit2/bleedair/actuators/engine_bleed_sov[0]")
@@ -156,6 +189,7 @@ Set_cabin_vs = globalProperty("sim/cockpit2/pressurization/actuators/cabin_vvi_f
 Cabin_vs = globalProperty("sim/cockpit2/pressurization/indicators/cabin_vvi_fpm")
 Out_flow_valve_ratio = globalProperty("sim/cockpit2/pressurization/indicators/outflow_valve")
 --instruments
+VVI = globalProperty("sim/cockpit2/gauges/indicators/vvi_fpm_pilot")
 OTA = globalProperty("sim/cockpit2/temperature/outside_air_temp_degc")
 TAT = globalProperty("sim/weather/temperature_le_c")
 Gross_weight = globalProperty ("sim/flightmodel/weight/m_total")
@@ -205,10 +239,10 @@ function Set_anim_value(current_value, target, min, max, speed)
 
 end
 
---used to animate a value with a curve USE ONLY WITH FLOAT VALUES
+--used to animate a value with a linear delay USE ONLY WITH FLOAT VALUES
 function Set_linear_anim_value(current_value, target, min, max, speed, dead_zone)
   if target - current_value < dead_zone and target - current_value > -dead_zone then
-    return target
+    return Math_clamp(target, min, max)
   elseif target < current_value then
     return Math_clamp(current_value - (speed * get(DELTA_TIME)), min, max)
   elseif target > current_value then

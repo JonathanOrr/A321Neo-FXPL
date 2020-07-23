@@ -52,9 +52,9 @@ local function get_elev_trim_degrees()
         return 0
     elseif get(elev_trim_ratio) > 0 then
         return get(elev_trim_ratio) * get(max_elev_trim_up)
-        elseif get(elev_trim_ratio) < 0 then
-            return get(elev_trim_ratio) * get(max_elev_trim_dn)
-        end
+    elseif get(elev_trim_ratio) < 0 then
+        return get(elev_trim_ratio) * get(max_elev_trim_dn)
+    end
 end
 
 --init
@@ -77,29 +77,146 @@ function update()
 
 
     if get(override_surfaces) == 1 then
-        Set_dataref_linear_anim(left_aileron, 25 * (total_roll), -25, 25, 50, 0.5)
-        Set_dataref_linear_anim(right_aileron, -25 * (total_roll), -25, 25, 50, 0.5)
 
-        if total_roll < -0.18 then
-            Set_dataref_linear_anim(left_outboard_spoilers345, -25 * ((total_roll + 0.2)/0.8), 0, 25, 46.5, 0.5)
+        if get(Speedbrake_handle_ratio) == 1 and get(Aft_wheel_on_ground) == 1 and (get(Eng_1_reverser_deployment) > 0.1 or get(Eng_2_reverser_deployment) > 0.1) then
+            --ailerons
+            Set_dataref_linear_anim(left_aileron, -25, -25, 25, 50, 0.5)
+            Set_dataref_linear_anim(right_aileron, -25, -25, 25, 50, 0.5)
         else
-            Set_dataref_linear_anim(left_outboard_spoilers345, 0, 0, 25, 46.5, 0.5)
+            --ailerons
+            Set_dataref_linear_anim(left_aileron, 25 * (total_roll) + (5 * get(Flaps_handle_deploy_ratio)), -25, 25, 50, 0.5)
+            Set_dataref_linear_anim(right_aileron, -25 * (total_roll) + (5 * get(Flaps_handle_deploy_ratio)), -25, 25, 50, 0.5)
         end
 
-        if total_roll > 0.18 then
-            Set_dataref_linear_anim(right_outboard_spoilers345, 25 * ((total_roll - 0.2)/0.8), 0, 25, 46.5, 0.5)
+        --roll spoilers--
+        if get(Aft_wheel_on_ground) == 1 and (get(Eng_1_reverser_deployment) > 0.1 or get(Eng_2_reverser_deployment) > 0.1) then --missing reverser logic
+            Set_dataref_linear_anim(left_inboard_spoilers, 50 * get(Speedbrake_handle_ratio), 0, 50, 46.5, 1)
+            Set_dataref_linear_anim(left_outboard_spoilers2, 50 * get(Speedbrake_handle_ratio), 0, 50, 46.5, 1)
+            Set_dataref_linear_anim(left_outboard_spoilers345, 50 * get(Speedbrake_handle_ratio), 0, 50, 46.5, 1)
+
+            Set_dataref_linear_anim(right_inboard_spoilers, 50 * get(Speedbrake_handle_ratio), 0, 50, 46.5, 1)
+            Set_dataref_linear_anim(right_outboard_spoilers2, 50 * get(Speedbrake_handle_ratio), 0, 50, 46.5, 1)
+            Set_dataref_linear_anim(right_outboard_spoilers345, 50 * get(Speedbrake_handle_ratio), 0, 50, 46.5, 1)
         else
-            Set_dataref_linear_anim(right_outboard_spoilers345, 0, 0, 25, 46.5, 0.5)
+            --left inboard spoiler
+            Set_dataref_linear_anim(left_inboard_spoilers, 0, 0, 50, 46.5, 1)
+            --left outboard spoiler 2
+            if get(left_outboard_spoilers2) > 25 then--come down from ground spoiler position
+                Set_dataref_linear_anim(left_outboard_spoilers2, 25, 0, 50, 46.5, 1)
+            else--normal control
+                if get(Flaps_handle_deploy_ratio) > 0 then--flaps down increase range of motion
+                    if get(Flaps_handle_deploy_ratio) > 0.75 or get(IAS) < 150 then--if flap in full detent or speed lower than 150 do not allow decel
+                        Set_dataref_linear_anim(left_outboard_spoilers2, -25 * ((total_roll + 0.18)/0.82), 0, 25, 46.5, 1)
+                    else
+                        Set_dataref_linear_anim(left_outboard_spoilers2, -25 * ((total_roll + 0.18)/0.82) + 15 * get(Speedbrake_handle_ratio), 0, 25, 46.5, 1)
+                    end
+                else--if flaps not down operate in normal range of motion
+                    if get(IAS) < 150 then--if speed lower than 150 do not allow decel
+                        Set_dataref_linear_anim(left_outboard_spoilers2, -15 * ((total_roll + 0.18)/0.82), 0, 25, 46.5, 1)
+                    else
+                        Set_dataref_linear_anim(left_outboard_spoilers2, -15 * ((total_roll + 0.18)/0.82) + 15 * get(Speedbrake_handle_ratio), 0, 25, 46.5, 1)
+                    end
+                end
+            end
+            --left outboard spoilers 345
+            if get(left_outboard_spoilers345) > 35 then--come down from ground spoiler position
+                Set_dataref_linear_anim(left_outboard_spoilers345, 35, 0, 50, 46.5, 1)
+            else--normal control
+                if get(Flaps_handle_deploy_ratio) > 0 then--flaps down increase range of motion
+                    if get(Flaps_handle_deploy_ratio) > 0.75 or get(IAS) < 150 then--if flap in full detent or speed lower than 150 do not allow decel
+                        Set_dataref_linear_anim(left_outboard_spoilers345, -35 * ((total_roll + 0.18)/0.82), 0, 35, 46.5, 1)
+                    else
+                        Set_dataref_linear_anim(left_outboard_spoilers345, -35 * ((total_roll + 0.18)/0.82) + 25 * get(Speedbrake_handle_ratio), 0, 35, 46.5, 1)
+                    end
+                else--if flaps not down operate in normal range of motion
+                    if get(IAS) < 150 then--if speed lower than 150 do not allow decel
+                        Set_dataref_linear_anim(left_outboard_spoilers345, -25 * ((total_roll + 0.18)/0.82), 0, 35, 46.5, 1)
+                    else
+                        Set_dataref_linear_anim(left_outboard_spoilers345, -25 * ((total_roll + 0.18)/0.82) + 25 * get(Speedbrake_handle_ratio), 0, 35, 46.5, 1)
+                    end
+                end
+            end
+
+            --right inboard spoiler
+            Set_dataref_linear_anim(right_inboard_spoilers, 0, 0, 50, 46.5, 1)
+            --right outboard spoiler 2
+            if get(right_outboard_spoilers2) > 25 then--come down from ground spoiler position
+                Set_dataref_linear_anim(right_outboard_spoilers2, 25, 0, 50, 46.5, 1)
+            else--normal control
+                if get(Flaps_handle_deploy_ratio) > 0 then--flaps down increase range of motion
+                    if get(Flaps_handle_deploy_ratio) > 0.75 or get(IAS) < 150 then--if flap in full detent or speed lower than 150 do not allow decel
+                        Set_dataref_linear_anim(right_outboard_spoilers2, 25 * ((total_roll - 0.18)/0.82), 0, 25, 46.5, 1)
+                    else
+                        Set_dataref_linear_anim(right_outboard_spoilers2, 25 * ((total_roll - 0.18)/0.82) + 15 * get(Speedbrake_handle_ratio), 0, 25, 46.5, 1)
+                    end
+                else--if flaps not down operate in normal range of motion
+                    if get(IAS) < 150 then--if speed lower than 150 do not allow decel
+                        Set_dataref_linear_anim(right_outboard_spoilers2, 15 * ((total_roll - 0.18)/0.82), 0, 25, 46.5, 1)
+                    else
+                        Set_dataref_linear_anim(right_outboard_spoilers2, 15 * ((total_roll - 0.18)/0.82) + 15 * get(Speedbrake_handle_ratio), 0, 25, 46.5, 1)
+                    end
+                end
+            end
+            --right outboard spoilers 345
+            if get(right_outboard_spoilers345) > 35 then--come down from ground spoiler position
+                Set_dataref_linear_anim(right_outboard_spoilers345, 35, 0, 50, 46.5, 1)
+            else--normal control
+                if get(Flaps_handle_deploy_ratio) > 0 then--flaps down increase range of motion
+                    if get(Flaps_handle_deploy_ratio) > 0.75 or get(IAS) < 150 then--if flap in full detent or speed lower than 150 do not allow decel
+                        Set_dataref_linear_anim(right_outboard_spoilers345, 35 * ((total_roll - 0.18)/0.82), 0, 35, 46.5, 1)
+                    else
+                        Set_dataref_linear_anim(right_outboard_spoilers345, 35 * ((total_roll - 0.18)/0.82) + 25 * get(Speedbrake_handle_ratio), 0, 35, 46.5, 1)
+                    end
+                else--if flaps not down operate in normal range of motion
+                    if get(IAS) < 150 then--if speed lower than 150 do not allow decel
+                        Set_dataref_linear_anim(right_outboard_spoilers345, 25 * ((total_roll - 0.18)/0.82), 0, 35, 46.5, 1)
+                    else
+                        Set_dataref_linear_anim(right_outboard_spoilers345, 25 * ((total_roll - 0.18)/0.82) + 25 * get(Speedbrake_handle_ratio), 0, 35, 46.5, 1)
+                    end
+                end
+            end
         end
 
+        --pitch inputs
         if total_pitch >= 0 then
-            Set_dataref_linear_anim(elevators_hstab_1, -30 * (total_pitch), -30, 17, 50, 0.5)
-            Set_dataref_linear_anim(elevators_hstab_2, -30 * (total_pitch), -30, 17, 50, 0.5)
+            Set_dataref_linear_anim(elevators_hstab_1, -30 * (total_pitch), -30, 17, 150, 1)
+            Set_dataref_linear_anim(elevators_hstab_2, -30 * (total_pitch), -30, 17, 150, 1)
         else
-            Set_dataref_linear_anim(elevators_hstab_1, -17 * (total_pitch), -30, 17, 50, 0.5)
-            Set_dataref_linear_anim(elevators_hstab_2, -17 * (total_pitch), -30, 17, 50, 0.5)
+            Set_dataref_linear_anim(elevators_hstab_1, -17 * (total_pitch), -30, 17, 150, 1)
+            Set_dataref_linear_anim(elevators_hstab_2, -17 * (total_pitch), -30, 17, 150, 1)
         end
 
+        --flap inputs
+        if get(Flaps_handle_deploy_ratio) >= 0 then
+            set(slats, Math_clamp(0.7 * get(Flaps_handle_deploy_ratio)/0.25, 0, 0.7))
+            set(left_inboard_flaps, Math_clamp(10 * get(Flaps_handle_deploy_ratio)/0.25, 0, 10))
+            set(left_outboard_flaps, Math_clamp(10 * get(Flaps_handle_deploy_ratio)/0.25, 0, 10))
+            set(right_inboard_flaps, Math_clamp(10 * get(Flaps_handle_deploy_ratio)/0.25, 0, 10))
+            set(right_outboard_flaps, Math_clamp(10 * get(Flaps_handle_deploy_ratio)/0.25, 0, 10))
+            if get(Flaps_handle_deploy_ratio) > 0.25 then
+                set(slats, Math_clamp(get(slats) + 0.1 * (get(Flaps_handle_deploy_ratio)-0.25)/0.25, 0.7, 0.8))
+                set(left_inboard_flaps, Math_clamp(get(left_inboard_flaps) + 5 * (get(Flaps_handle_deploy_ratio)-0.25)/0.25, 10, 15))
+                set(left_outboard_flaps, Math_clamp(get(left_outboard_flaps) + 5 * (get(Flaps_handle_deploy_ratio)-0.25)/0.25, 10, 15))
+                set(right_inboard_flaps, Math_clamp(get(right_inboard_flaps) + 5 * (get(Flaps_handle_deploy_ratio)-0.25)/0.25, 10, 15))
+                set(right_outboard_flaps, Math_clamp(get(right_outboard_flaps) + 5 * (get(Flaps_handle_deploy_ratio)-0.25)/0.25, 10, 15))
+            end
+            if get(Flaps_handle_deploy_ratio) > 0.5 then
+                set(slats, Math_clamp(get(slats) + 0 * (get(Flaps_handle_deploy_ratio)-0.50)/0.25, 0.8, 0.8))
+                set(left_inboard_flaps, Math_clamp(get(left_inboard_flaps) + 5 * (get(Flaps_handle_deploy_ratio)-0.50)/0.25, 15, 20))
+                set(left_outboard_flaps, Math_clamp(get(left_outboard_flaps) + 5 * (get(Flaps_handle_deploy_ratio)-0.50)/0.25, 15, 20))
+                set(right_inboard_flaps, Math_clamp(get(right_inboard_flaps) + 5 * (get(Flaps_handle_deploy_ratio)-0.50)/0.25, 15, 20))
+                set(right_outboard_flaps, Math_clamp(get(right_outboard_flaps) + 5 * (get(Flaps_handle_deploy_ratio)-0.50)/0.25, 15, 20))
+            end
+            if get(Flaps_handle_deploy_ratio) > 0.75 then
+                set(slats, Math_clamp(get(slats) + 0.2 * (get(Flaps_handle_deploy_ratio)-0.75)/0.25, 0.8, 1))
+                set(left_inboard_flaps, Math_clamp(get(left_inboard_flaps) + 20 * (get(Flaps_handle_deploy_ratio)-0.75)/0.25, 20, 40))
+                set(left_outboard_flaps, Math_clamp(get(left_outboard_flaps) + 20 * (get(Flaps_handle_deploy_ratio)-0.75)/0.25, 20, 40))
+                set(right_inboard_flaps, Math_clamp(get(right_inboard_flaps) + 20 * (get(Flaps_handle_deploy_ratio)-0.75)/0.25, 20, 40))
+                set(right_outboard_flaps, Math_clamp(get(right_outboard_flaps) + 20 * (get(Flaps_handle_deploy_ratio)-0.75)/0.25, 20, 40))
+            end
+        end
+
+        --rudder
         Set_dataref_linear_anim(rudder, 30 * (total_yaw), -30, 30, 25, 0.5)
     end
 end
