@@ -1,4 +1,3 @@
-include("helpers.lua")
 include("global_datarefs_functions.lua")
 
 sasl.options.setAircraftPanelRendering(true)
@@ -24,6 +23,8 @@ components = {
   flight_controls {},
   fcu_ap_at {},
   AT {},
+  ADIRS {},
+  MCDU {},
   packs {},
   aircond {},
   wheel {},
@@ -85,7 +86,7 @@ function Show_hide_packs_debug()
 end
 
 function Show_hide_FBW_debug()
-  FBW_debug_window:setIsVisible(not Packs_debug_window:isVisible())
+  FBW_debug_window:setIsVisible(not FBW_debug_window:isVisible())
 end
 
 -- create top level menu in plugins menu

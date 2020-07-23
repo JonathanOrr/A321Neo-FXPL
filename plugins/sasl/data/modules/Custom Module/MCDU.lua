@@ -1,14 +1,18 @@
 position = {75,1690,320,285}
 size = {320, 285}
 
+local NIL = 0 -- used for input return and checking
+local NIL_UNIQUE = "unique-nil" -- used for input return and checking
+
 --[[
 --
 --
 --      A32NX MCDU
 --
 --      CONSTS DECLARATION
---      MCDU DATA INITIALIZATION
+--      FMGS & MCDU DATA INITIALIZATION
 --      DATA & COMMAND REGISTRATION
+--      MCDU - XP FUNC CONTROLS
 --      MCDU PAGE SIMULATION
 --
 --
@@ -21,7 +25,6 @@ size = {320, 285}
 --
 --
 --]]
-
 local MCDU_DRAW_SIZE = {w = 320, h = 285} -- idk if size table is required by anything else, this is for internal reference
 
 --define the const size, align and row.
@@ -39,8 +42,8 @@ local MCDU_DISP_COLOR =
 {
     ["white"] = {1.0, 1.0, 1.0},
     ["blue"] = {0.004, 1.0, 1.0},
-    ["green"] = {0.004, 1, 0.004},
-    ["orange"] = {0.843, 0.49, 0},
+    ["green"] = {0.184, 0.733, 0.219},
+    ["orange"] = {0.725, 0.521, 0.18},
     ["black"] = {0,0,0,1},
 }
 local MCDU_DISP_TEXT_SIZE =
@@ -54,9 +57,30 @@ local MCDU_DISP_TEXT_SPACING =
     ["l"] = 1.0,
 }
 local MCDU_DISP_TEXT_ALIGN =
-{if #mcdu_entry < 22 then
-				mcdu_entry = mcdu_entry .. key
-			endrmat as color "white"
+{
+    ["L"] = TEXT_ALIGN_LEFT,
+    ["C"] = TEXT_ALIGN_CENTER,
+    ["R"] = TEXT_ALIGN_RIGHT,
+}
+
+--fonts
+local B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
+
+-- alphanumeric & decimal FMC entry keys
+local MCDU_ENTRY_KEYS = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", ".", "Δ", "/", " "}
+local MCDU_ENTRY_PAGES = {"DIR", "PROG", "PERF", "INIT", "DATA", "F-PLN", "RAD NAV", "FUEL PRED", "SEC F-PLN", "ATC COMM", "MCDU MENU", "AIRP"}
+local MCDU_ENTRY_SIDES = {"L1", "L2", "L3", "L4", "L5", "L6", "R1", "R2", "R3", "R4", "R5", "R6", "slew_up", "slew_down", "slew_left", "slew_right"}
+
+--[[
+--
+--
+--      FMGS & MCDU DATA INITIALIZATION
+--
+--
+--]]
+
+local fmgs_dat = {}
+local fmgs_metadat = {}
 local mcdu_dat = {}
 local mcdu_dat_title = {}
 
@@ -69,7 +93,9 @@ end
 
 --entry line
 local mcdu_entry = ""
+local mcdu_entry_cache = "" --caches entry for when messages are shown
 local mcdu_messages = {}
+local mcdu_message_showing = false
 
 --mcdu page call functions
 local mcdu_sim_page = {}
@@ -79,46 +105,71 @@ local function mcdu_send_message(message)
     table.insert(mcdu_messages, message)
 end
 
-local function mcdu_eval_entry(str, expected_format)
-    eval_start,eval_end = string.find(str, expected_format)
-    if eval_start ~= nil and eval_start == 1 and eval_end == #str then
-        return true
-    else
-        return false
+local function mcdu_eval_entry(str, format)
+    pass = true
+    if #str ~= #format then
+        pass = false
     end
+
+    for i = 1,#format do
+        if string.sub(format, i, i) == "!" then
+            -- digit
+            if string.find(string.sub(str, i, i), "%d") == nil then
+                pass = false
+            end
+        elseif string.sub(format, i, i) == "@" then
+            -- letter
+            if string.find(string.sub(str, i, i), "%a") == nil then
+                pass = false
+            end
+        elseif string.sub(format, i, i) == "#" then
+            -- do nothing
+        else
+            if string.sub(str, i, i) ~= string.upper(string.sub(format, i, i)) then 
+                pass = false
+            end
+        end
+    end
+    return pass
 end
 
 local function mcdu_get_entry(expected_formats)
     --[[
     -- expected_format
     --
-    -- can accept multiple inputs %d for digits, %a for letters
+    -- can accept multiple inputs ! for digits, @ for letters, # for anything
     -- https://www.lua.org/pil/20.2.html
     --]]
-    if expected_formats[1] == nil
-        pass = false
+    me = mcdu_entry
+    mcdu_entry = ""
+    
+    if expected_formats == nil then
+        return me
+    end
+
+    if expected_formats[1] ~= nil then
+        local pass = false
+        variation = 0
         for i,format in ipairs(expected_formats) do-- expected_formats is a table
-            if mcdu_eval_entry(mcdu_entry, format) then
+            if mcdu_eval_entry(me, format) then
+                variation = i
                 pass = true
             end
         end
         if pass then
-            return expected_formats[i], i
+            return me, variation 
         else
-            mcdu_send_message("invalid format")
-            return nil
+            mcdu_send_message("format error")
+            return NIL, NIL
         end
     else
-        if mcdu_eval_entry(mcdu_entry, expected_formats) then
-            return expected_formats
+        if mcdu_eval_entry(me, expected_formats) then
+            return me
         else
-            mcdu_send_message("invalid format")
-            return nil
+            mcdu_send_message("format error")
+            return NIL
         end
     end
-    me = mcdu_entry
-    mcdu_entry = ""
-    return me
 end
 
 --clear MCDU
@@ -143,6 +194,118 @@ local function mcdu_open_page(id)
     mcdu_sim_page[get(mcdu_page)]("render")
 end
 
+--pad a number up to a given dp
+--e.g. (2.4, 3) -> 2.400
+local function mcdu_pad_dp(number, required_dp)
+    return(string.format("%." .. required_dp .. "f", number))
+end
+
+--pad a number up to a given length
+--e.g. (50, 3) -> 050
+local function mcdu_pad_num(number, required_length)
+    str = tostring(number)
+    while #str < required_length do
+        str = "0" .. str
+    end
+    return str
+end
+
+--align an input to the right, given the total length
+--e.g. ("ad", 4) -> "  ad"
+local function mcdu_align_right(str, required_length)
+    while #tostring(str) < required_length do
+        str = " " .. str
+    end
+    return str
+end
+
+--align an input to the left, given the total length
+--e.g. ("ad", 4) -> "  ad"
+local function mcdu_align_left(str, required_length)
+    while #tostring(str) < required_length do
+        str = str .. " "
+    end
+    return str
+end
+
+
+
+--toggle obj between two strings, a and b
+--e.g. ("ad", "ba", "ad") -> "ba"
+local function mcdu_toggle(obj, str_a, str_b)
+    if obj == str_a then
+        return str_b
+    elseif obj == str_b then
+        return str_a
+    end
+end
+
+--init FMGS data to 2nd argument
+local function fmgs_dat_init(dat_name, dat_init)
+    --is data uninitialised?
+    if fmgs_dat[dat_name] == nil then
+        fmgs_dat[dat_name] = dat_init
+    end
+end
+
+--get FMGS data with initialisation
+local function fmgs_dat_get(dat_name, dat_init, dat_init_col, dat_set_col, dat_format_callback)
+    --[[
+    -- dat_name     name of data from fmgs_dat
+    -- dat_init     value the data starts with initially
+    -- dat_init_col colour when data hasn't been set
+    -- dat_set_col  colour when data has been set
+    -- dat_format_callback (optional) format callback when data has been set
+    --]]
+
+    if fmgs_dat[dat_name] == nil then
+        return {txt = dat_init, col = dat_init_col}
+    else
+        val = fmgs_dat[dat_name]
+        if dat_format_callback == nil then
+            dat_format_callback = function (val) return val end
+        end
+
+        if type(dat_init) == "string" then
+            val = tostring(dat_format_callback(tostring(val)))
+            --padding
+            val = mcdu_align_right(val, #dat_init)
+        else
+            val = dat_format_callback(val)
+        end
+
+        return {txt = val, col = dat_set_col}
+    end
+end
+
+--get FMGS data with initialisation sans colouring. GET PURE TEXT
+local function fmgs_dat_get_txt(dat_name, dat_init, dat_format_callback)
+    --[[
+    -- dat_name     name of data from fmgs_dat
+    -- dat_init     value the data starts with initially
+    -- dat_format_callback (optional) format callback when data has been set
+    --]]
+
+    if fmgs_dat[dat_name] == nil then
+        return dat_init
+    else
+        val = fmgs_dat[dat_name]
+        if dat_format_callback == nil then
+            dat_format_callback = function (val) return val end
+        end
+
+        if type(dat_init) == "string" then
+            val = tostring(dat_format_callback(tostring(val)))
+            --padding
+            val = mcdu_align_right(val, #dat_init)
+        else
+            val = dat_format_callback(val)
+        end
+
+        return val
+    end
+end
+
 
 
 --[[
@@ -159,13 +322,14 @@ local PLANE_LOADED = false
 
 --a321neo dataref
 local mcdu_enabled = createGlobalPropertyi("a321neo/debug/mcdu/mcdu_enabled", 1, false, true, false)
-local mcdu_message_index = createGlobalPropertyi("a321neo/debug/mcdu/message_index", 0, false, true, false)
 
 --a321neo commands
 local mcdu_debug_message = sasl.createCommand("a321neo/debug/mcdu/debug_message", "send a mcdu debug message")
 
 --mcdu entry inputs
 local mcdu_inp = {}
+
+local entry_cooldown = 0
 
 local MCDU_ENTRY = 
 {
@@ -175,8 +339,11 @@ local MCDU_ENTRY =
         ref_entries = MCDU_ENTRY_KEYS,  --the group of keys
         ref_callback =                  --what they should do
         function (count, val)
-            if #mcdu_entry < 22 then
-                mcdu_entry = mcdu_entry .. val
+            if get(TIME) - entry_cooldown > get(DELTA_TIME) then
+                entry_cooldown = get(TIME)
+                if #mcdu_entry < 22 then
+                    mcdu_entry = mcdu_entry .. val
+                end
             end
         end
     },
@@ -204,14 +371,16 @@ local MCDU_ENTRY =
         ref_entries = {"clr"},
         ref_callback = 
         function (count, val)
-            if mcdu_message_active > 0 then
-                table.remove(mcdu_messages)
+            if mcdu_message_showing then
+                mcdu_entry = mcdu_entry_cache
+                mcdu_message_showing = false
             else
                 if #mcdu_entry > 0 then
-                    mcdu_entry = ""
+                    mcdu_entry = mcdu_entry:sub(1,#mcdu_entry - 1) 
                 else
                     if #mcdu_entry == 0 then
                         mcdu_entry = "CLR"
+                        mcdu_message_showing = true
                     end
                 end
             end
@@ -249,14 +418,12 @@ for i,entry_category in ipairs(MCDU_ENTRY) do
 end
 
 --a321neo command handlers
---debuggin
+--debugging
 local hokey_pokey = false --wonder what this does
 sasl.registerCommandHandler(mcdu_debug_message, 0, function (phase)
     if phase == SASL_COMMAND_BEGIN then
-        hokey_pokey = true
-        for i,f in ipairs({"white", "blue", "orange", "green"}) do
-            MCDU_DISP_COLOR[f] = {1, 0, 0} 
-        end
+        mcdu_send_message("debug")
+        mcdu_open_page(get(mcdu_page))
     end
 end)
 
@@ -276,7 +443,8 @@ local function draw_dat(dat, draw_size, disp_x, disp_y, disp_text_align)
     if dat.txt == nil then
         return
     end
-    disp_text = dat.txt:upper()
+    disp_text = tostring(dat.txt):upper()
+    dat.col = dat.col or "white" --default colour
     disp_color = MCDU_DISP_COLOR[dat.col]
 
     -- is there a custom size
@@ -290,6 +458,17 @@ local function draw_dat(dat, draw_size, disp_x, disp_y, disp_text_align)
     disp_text_size = MCDU_DISP_TEXT_SIZE[disp_size]
     -- text spacing
     disp_spacing = MCDU_DISP_TEXT_SPACING[disp_size]
+
+    -- replace { with the box
+    text = ""
+    for j = 1,#disp_text do
+        if disp_text:sub(j,j) == "{" then
+            text = text .. "□"
+        else
+            text = text .. disp_text:sub(j,j)
+        end
+    end
+    disp_text = text
 
     -- now draw it!
     table.insert(draw_lines, {disp_x = disp_x, disp_y = disp_y, disp_text = disp_text, disp_text_size = disp_text_size, disp_text_align = disp_text_align, disp_color = disp_color, disp_spacing = disp_spacing})
@@ -343,7 +522,6 @@ local function colorize()
     for i,f in ipairs({"white", "blue", "orange", "green"}) do
         c = {}
         c[0] = MCDU_DISP_COLOR[f][1];c[1] = MCDU_DISP_COLOR[f][2];c[2] = MCDU_DISP_COLOR[f][3]
-        print(c[0] .. " " .. c[1] .. " " .. c[2])
         inc = 0.1
         if c[0] < 1 and c[1] == 0 and c[2] == 0 then
             c[0] = c[0] + inc
@@ -389,6 +567,106 @@ end
 --[[
 --
 --
+--      MCDU - XP FUNC CONTROLS
+--
+--
+--]]
+
+local mcdu_ctrl_instructions = {}
+local mcdu_ctrl_listeners = {}
+
+--add a listener for when the function value changes, callback is called
+local function mcdu_ctrl_add_listener(data_func_cache, data_func, callback)
+    if data_func_cache == nil then
+        data_func_cache = data_func()
+    end
+    table.insert(mcdu_ctrl_listeners, {data_func = data_func, data_func_cache = data_func_cache, callback = callback})
+end
+
+--check whether listener has changed or not
+local function mcdu_ctrl_exe_listener(listener)
+    d = listener.data_func()
+    if d ~= listener.data_func_cache then
+        listener.data_func_cache = d
+        listener.callback()
+    end
+end
+
+--add an XP FMC instruction for the XP FMC to execute
+local function mcdu_ctrl_add_inst(inst)
+    table.insert(mcdu_ctrl_instructions, 1, inst)
+end
+
+--execute the next XP FMC instruction
+local function mcdu_ctrl_exe_inst()
+    if #mcdu_ctrl_instructions == 0 then
+		return
+	end
+
+	inst = mcdu_ctrl_instructions[#mcdu_ctrl_instructions]
+	table.remove(mcdu_ctrl_instructions)
+    if inst.type == "CMD" then
+        sasl.commandOnce(findCommand(inst.arg))
+    end
+    if inst.type == "GET_LN" then
+        inst.callback(get(globalPropertys("sim/cockpit2/radios/indicators/fms_cdu1_text_line" .. inst.arg)))
+    end
+    if inst.type == "INPUT" then
+        if string.sub(get(globalPropertys("sim/cockpit2/radios/indicators/fms_cdu1_text_line13")), 2, 2) == " " then
+            for i = 0,#inst.arg - 1 do
+                table.insert(mcdu_ctrl_instructions, {type = "CMD", arg = "sim/FMS/key_" .. string.upper(string.sub(inst.arg, #inst.arg - i, #inst.arg - i))})
+            end
+        else
+            sasl.commandOnce(findCommand("sim/FMS/key_clear"))
+            --delete the entire scratchpad
+            table.insert(mcdu_ctrl_instructions, inst)
+        end
+    end
+    if inst.type == "NOOP" then
+        -- no operation
+    end
+end
+
+--sasl get nav aid information
+local function mcdu_ctrl_get_nav(find_nameid, find_type)
+    id = sasl.findNavAid(find_nameid, nil, nil, nil, nil, find_type)
+    if id == -1 then
+        id = sasl.findNavAid(nil, find_nameid:upper(), nil, nil, nil, find_type) 
+    end
+    local nav = {}
+    nav.navtype, nav.lat, nav.lon, nav.height, nav.freq, nav.hdg, nav.id, nav.name, nav.loadedDSF = sasl.getNavAidInfo(id)
+    return nav
+end
+
+mcdu_entry = "R0.55"
+
+--update
+function update()
+    if get(mcdu_page) == 0 then --on start
+       --mcdu_open_page(505) --open 505 A/C status
+       mcdu_open_page(1102) --open 505 A/C status
+    end
+
+    -- display next message
+    if #mcdu_messages > 0 and not mcdu_message_showing then
+        mcdu_entry_cache = mcdu_entry
+        mcdu_entry = mcdu_messages[#mcdu_messages]:upper()
+        mcdu_message_showing = true
+        table.remove(mcdu_messages)
+    end
+
+    -- check and execute all listeners
+    for i, listener in ipairs(mcdu_ctrl_listeners) do
+        mcdu_ctrl_exe_listener(listener)
+    end
+
+    -- check and execute next XP FMC instruction
+    mcdu_ctrl_exe_inst()
+end
+
+--[[
+--
+--
 --      MCDU PAGE SIMULATION
 --
 --      loosely based on
@@ -405,6 +683,7 @@ end
 --      500 - data
 --        505 - data A/C status
 --      600 - f-pln
+--        601 - f-pln lat rev
 --      700 - rad nav
 --      800 - fuel pred
 --      900 - sec f-pln
@@ -415,60 +694,44 @@ end
 --
 --]]
 
-
-local mcdu_ctrl_instructions = {}
-
-local function mcdu_ctrl_add_inst(inst)
-    table.insert(mcdu_ctrl_instructions, 1, inst)
-end
-
-local function mcdu_ctrl_exe_inst()
-    if #mcdu_ctrl_instructions == 0 then
-		return
-	end
-
-	inst = mcdu_ctrl_instructions[#mcdu_ctrl_instructions]
-	table.remove(mcdu_ctrl_instructions)
-    if inst.type == "CMD" then
-        sasl.commandOnce(findCommand(inst.arg))
-    end
-    if inst.type == "GET_LN" then
-        inst.callback(get(globalPropertys("sim/cockpit2/radios/indicators/fms_cdu1_text_line" .. inst.arg)))
-    end
-end
-
---update
-function update()
-    if get(mcdu_page) == 0 then --on start
-        mcdu_open_page(505) --open 505 A/C status
-    end
-
-    if #mcdu_messages > 0 and mcdu_entry == "" then
-        mcdu_entry = mcdu_messages[#mcdu_messages]
-        table.remove(mcdu_messages)
-    end
-    mcdu_ctrl_exe_inst()
-end
-
---[[
-local function sleep(n)
-    local t = sasl.createTimer()
-    sasl.startTimer(t)
-    local t0 = sasl.getElapsedSeconds(t)
-    while sasl.getElapsedSeconds(t) - t0 <= n do end
-end
---]]
-
 local function mcdu_ctrl_get_cycle(callback)
-    --[[
-    sasl.commandOnce(findCommand("sim/FMS/index"))
-    sleep(1)
-    sasl.commandOnce(findCommand("sim/FMS/ls_1l"))
-    sleep(1)
-    callback(get(globalPropertys("sim/cockpit2/radios/indicators/fms_cdu1_text_line4")))
-    --]]
-
     mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/index"})
+    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/ls_1l"})
+    mcdu_ctrl_add_inst({type = "GET_LN", arg = "4", callback = callback})
+end
+
+-- returns the result for error checking
+local function mcdu_ctrl_try_catch(callback)
+    mcdu_ctrl_add_inst({type = "NOOP"})
+    mcdu_ctrl_add_inst({type = "GET_LN", arg = "13", callback = 
+    function (val) 
+        if val:sub(1,2) ~= "[I" then -- [INVALID ENTRY]
+            callback()
+
+        else
+            mcdu_send_message("not in database")-- INVALID ENTRY
+        end
+    end})
+end
+
+local function mcdu_ctrl_set_fpln_origin(input, try_catch)
+    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/fpln"})
+    mcdu_ctrl_add_inst({type = "INPUT", arg = input})
+    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/ls_1l"})
+    mcdu_ctrl_try_catch(try_catch)
+end
+
+local function mcdu_ctrl_set_fpln_dest(input, try_catch)
+    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/fpln"})
+    mcdu_ctrl_add_inst({type = "INPUT", arg = input})
+    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/ls_1r"})
+    mcdu_ctrl_try_catch(try_catch)
+end
+
+local function mcdu_ctrl_get_origin_latlon(origin, callback)
+    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/index"})
+    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/ls_2r"})
+    mcdu_ctrl_add_inst({type = "INPUT", arg = origin})
     mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/ls_1l"})
     mcdu_ctrl_add_inst({type = "GET_LN", arg = "4", callback = callback})
 end
@@ -495,38 +758,312 @@ function (phase)
     if phase == "render" then
         mcdu_dat_title.txt = "          init"
 
+        fmgs_dat_init("fmgs init", false)   -- init has the fmgs been initialised? to false
+        fmgs_dat_init("latlon sel", "nil") -- init latlon selection for irs alignment
+
+        fmgs_dat_init("crz temp alt", true) --init has crz temp been changed?
+
+        --[[ CO RTE --]]
         mcdu_dat["s"]["L"][1].txt = " co rte"
-        mcdu_dat["l"]["L"][1] = {txt = "□□□□□□□", col = "orange"}
+        --changes on fmgs airport init
+        if fmgs_dat["fmgs init"] then
+            mcdu_dat["l"]["L"][1] = fmgs_dat_get("co rte", "[         ]", "blue", "blue")
+        else
+            mcdu_dat["l"]["L"][1] = fmgs_dat_get("co rte", "{{{{{{{{{{", "orange", "blue")
+        end
 
+        --[[ FROM / TO --]]
         mcdu_dat["s"]["R"][1].txt = " from/to  "
-        mcdu_dat["l"]["R"][1] = {txt = "□□□□/□□□□", col = "orange"}
 
-        mcdu_dat["s"]["L"][2].txt = "altn/co route"
+        mcdu_dat["l"]["R"][1] = fmgs_dat_get("origin", "{{{{", "orange", "blue")
+        mcdu_dat["l"]["R"][1].txt = mcdu_dat["l"]["R"][1].txt .. "/" .. fmgs_dat_get_txt("dest", "{{{{")
+
+        --[[ ALTN / CO RTE --]]
+        mcdu_dat["s"]["L"][2].txt = "altn/co rte"
         mcdu_dat["l"]["L"][2].txt = "----/---------"
 
+        --[[ FLT NBR --]]
         mcdu_dat["s"]["L"][3].txt = "flt nbr"
-        mcdu_dat["l"]["L"][3] = {txt = "□□□□□□□□", col = "orange"}
+        mcdu_dat["l"]["L"][3] = fmgs_dat_get("flt nbr", "{{{{{{{{", "orange", "blue")
 
-        mcdu_dat["s"]["L"][4].txt = "lat"
-        mcdu_dat["l"]["L"][4].txt = "----.-"
+        --[[ IRS ALIGN --]]
+        if fmgs_dat_get_txt("irs aligned", "hide") == "show" then
+            mcdu_dat["l"]["R"][3] = {txt = "align irs>", col = "orange"}
+        end
 
+        --[[ LAT / LONG --]]
         mcdu_dat["s"]["R"][4].txt = "long"
-        mcdu_dat["l"]["R"][4].txt = "-----.--"
+        mcdu_dat["s"]["L"][4].txt = "lat"
 
+        --irs latlon change selection
+        if fmgs_dat["latlon sel"] == "lat" then
+            mcdu_dat["s"]["L"][4].txt = "lat⇅"
+        elseif fmgs_dat["latlon sel"] == "long" then
+            mcdu_dat["s"]["R"][4].txt = "⇅long"
+        end
+
+        mcdu_dat["l"]["L"][4] = fmgs_dat_get("lat fmt", "----.-", "white", "blue")
+        mcdu_dat["l"]["R"][4] = fmgs_dat_get("lon fmt", "-----.--", "white", "blue")
+
+        --[[ COST INDEX --]]
         mcdu_dat["s"]["L"][5].txt = "cost index"
-        mcdu_dat["l"]["L"][5].txt = "---"
+        --changes on fmgs airport init
+        if fmgs_dat["fmgs init"] then
+            mcdu_dat["l"]["L"][5] = fmgs_dat_get("cost index", "{{{", "orange", "blue")
+        else
+            mcdu_dat["l"]["L"][5] = fmgs_dat_get("cost index", "---", "white", "blue")
+        end
 
+        --[[ WIND --]]
         mcdu_dat["l"]["R"][5].txt = "wind>"
 
+        --[[ CRZ FL/TEMP --]]
         mcdu_dat["s"]["L"][6].txt = "crz fl/temp"
-        mcdu_dat["l"]["L"][6].txt = "-----/---°"
+        --changes on fmgs airport init
+        if fmgs_dat["fmgs init"] then
+            crz_fl_init_txt = "{{{{{"
+            crz_fl_init_col = "orange"
+        else
+            crz_fl_init_txt = "-----"
+            crz_fl_init_col = "white"
+        end
+        mcdu_dat["l"]["L"][6][1] = fmgs_dat_get("crz fl", crz_fl_init_txt, crz_fl_init_col, "blue", 
+            --formatting
+            function (val) 
+                if #val > 4 then
+                    return "FL" .. val:sub(1,3)
+                else
+                    return val:sub(1,4)
+                end
+            end
+        )
+        mcdu_dat["l"]["L"][6][1].txt = mcdu_dat["l"]["L"][6][1].txt .. "/" --append slant
 
+        --has crz temp been altered?
+        if fmgs_dat["crz temp alt"] then
+            crz_temp_size = "l"
+        else
+            crz_temp_size = "s"
+        end
+        --changes on fmgs airport init
+        if fmgs_dat["fmgs init"] then
+            mcdu_dat["l"]["L"][6][2] = {txt = "      " .. fmgs_dat_get_txt("crz temp", "{{{") .. "°", col = mcdu_dat["l"]["L"][6][1].col, size = crz_temp_size}
+        else
+            mcdu_dat["l"]["L"][6][2] = {txt = "      " .. fmgs_dat_get_txt("crz temp", "---") .. "°", col = mcdu_dat["l"]["L"][6][1].col, size = crz_temp_size}
+        end
+
+        --[[ TROPO --]]
         mcdu_dat["s"]["R"][6].txt = "tropo "
-        mcdu_dat["l"]["R"][6] = {txt = "36090", col = "blue", size = "s"}
+        fmgs_dat_init("tropo", 39060)
+        --grows bigger if changed
+        if fmgs_dat["tropo"] == 39060 then
+            tropo_size = "s"
+        else
+            tropo_size = "l"
+        end
+        mcdu_dat["l"]["R"][6] = {txt = fmgs_dat["tropo"], col = "blue", size = tropo_size}
 
         draw_update()
     end
+    -- flt nbr
+    if phase == "L3" then
+        input = mcdu_get_entry()
+        fmgs_dat["flt nbr"] = input
+        mcdu_open_page(400) -- reload
+    end
+    -- cost index
+    if phase == "L5" then
+        --format e.g. 100
+        input, variation = mcdu_get_entry({
+            "!!!", -- 100 cost index
+            "!!",  -- 10 cost index
+            "!"    -- 1 cost index
+        })
+        fmgs_dat["cost index"] = input
+        mcdu_open_page(400) -- reload
+    end
+    -- crz fl/temp
+    if phase == "L6" then
+        --format e.g. FL230
+        input, variation = mcdu_get_entry({
+            "!!",   -- 80 (8000 feet)
+            "!!!",  -- 230 (23000 feet)
+            "fl!!!",-- FL230 (23000 feet)
+            "fl!!!/!",-- FL230/7 (23000 feet, -7 celcius)
+            "fl!!!/!!",-- FL230/40 (23000 feet, -40 celcius)
+            "fl!!!/-!",-- FL230/-7 (23000 feet, -40 celcius)
+            "fl!!!/-!!",-- FL230/-40 (23000 feet, -40 celcius)
+            "/!",   -- 7 (-7 celcius)
+            "/!!",  -- 40 (-40 celcius)
+            "/-!",  -- -7 (-7 celcius)
+            "/-!!"  -- -40 (-40 celcius)
+        })
+
+        --automatically calculate crz temp
+        if variation >= 1 and variation <= 3 then
+            fmgs_dat["crz temp"] = math.floor(input * -0.2 + 16)
+            fmgs_dat["crz temp alt"] = false --crz temp has not been altered
+        else
+            fmgs_dat["crz temp alt"] = true --crz temp has been manually altered
+        end
+
+        --set crz FL or crz temp
+        if variation == 1 then
+            fmgs_dat["crz fl"] = input * 100
+        elseif variation == 2 then
+            fmgs_dat["crz fl"] = input * 100
+        elseif variation == 3 then
+            fmgs_dat["crz fl"] = input:sub(3,5) * 100
+        elseif variation == 4 then
+            fmgs_dat["crz fl"] = input:sub(3,5) * 100
+            fmgs_dat["crz temp"] = input:sub(7,7) * -1
+        elseif variation == 5 then
+            fmgs_dat["crz fl"] = input:sub(3,5) * 100
+            fmgs_dat["crz temp"] = input:sub(7,8) * -1
+        elseif variation == 6 then
+            fmgs_dat["crz fl"] = input:sub(3,5) * 100
+            fmgs_dat["crz temp"] = input:sub(7,8)
+        elseif variation == 7 then
+            fmgs_dat["crz fl"] = input:sub(3,5) * 100
+            fmgs_dat["crz temp"] = input:sub(7,9)
+        elseif variation == 8 then
+            fmgs_dat["crz temp"] = input:sub(2,2) * -1
+        elseif variation == 9 then
+            fmgs_dat["crz temp"] = input:sub(2,3) * -1
+        elseif variation == 10 then
+            fmgs_dat["crz temp"] = input:sub(2,3)
+        elseif variation == 11 then
+            fmgs_dat["crz temp"] = input:sub(2,4)
+        end
+        mcdu_open_page(400) -- reload
+    end
+
+    -- from/to
+    if phase == "R1" then
+        --format e.g. ksea/kbfi
+        input = mcdu_get_entry("####/####")
+        --check for correct entry
+        if input ~= NIL then
+            --set orgin for XP FMC
+            --format e.g. ksea/kbfi
+            airp_origin = input:sub(1,4)
+            airp_dest = input:sub(6,9)
+
+            --get origin from XP FMC
+            mcdu_ctrl_set_fpln_origin(airp_origin, function(val) --callback
+            fmgs_dat["origin"] = airp_origin
+
+            --get dest from XP FMC
+            mcdu_ctrl_set_fpln_dest(airp_dest, function(val) --callback
+            fmgs_dat["dest"] = airp_dest
+
+            --set co rte
+            fmgs_dat["fmgs init"] = true
+            mcdu_open_page(400) -- reload
+
+            --get lat lon from XP FMC
+            mcdu_ctrl_get_origin_latlon(input:sub(1,4), function(val) --callback
+            --format e.g. N12°34.56 must be convert to 1234.5N
+            fmgs_dat["lat fmt"] = val:sub(2,3) .. val:sub(6,9) .. val:sub(1,1)
+            --format e.g. W123°45.67 must be convert to 12345.67W
+            fmgs_dat["lon fmt"] = val:sub(13,15) .. val:sub(18,22) .. val:sub(12,12)
+
+            mcdu_open_page(400) -- reload
+
+            --add listener for when ADIRS are turned on
+            mcdu_ctrl_add_listener(0,                       --default value
+                function () return get(Adirs_sys_on) end,   --get data function
+                function ()                                 --callback
+                    --IRS are online but not aligned?
+                    if get(Adirs_irs_aligned) == 0 and get(Adirs_sys_on) == 1 then
+                        fmgs_dat["irs aligned"] = "show"
+                        fmgs_dat["latlon sel"] = "lat"
+                    end
+
+                    --set lat
+                    --format e.g. 1234.5N
+                    fmgs_dat["lat"] = tonumber(fmgs_dat["lat fmt"]:sub(1,6))
+                    fmgs_dat["lat_dir"] = fmgs_dat["lat fmt"]:sub(7,7)
+
+                    --set lon
+                    --format e.g. 12345.67W
+                    fmgs_dat["lon"] = tonumber(fmgs_dat["lon fmt"]:sub(1,8))
+                    fmgs_dat["lon_dir"] = fmgs_dat["lon fmt"]:sub(9,9)
+
+                    --if on init page, reload it
+                    if get(mcdu_page) == 400 then
+                        mcdu_open_page(400) -- reload
+                    end
+                end
+            )
+
+            end) --end callback
+            end) --end callback
+            end) --end callback
+            mcdu_open_page(400) -- reload
+        end
+    end
+
+    -- align irs>
+    if phase == "R3" then
+        --is the irs not aligned?
+        if fmgs_dat["irs aligned"] == "show" then
+            fmgs_dat["irs aligned"] = "hide"    --hide irs align>
+            fmgs_dat["latlon sel"] = "nil"      --stop lat/lon selection
+        end
+        mcdu_open_page(400) -- reload
+    end
+
+    -- tropo
+    if phase == "R6" then
+        input = mcdu_get_entry("!!!")
+        fmgs_dat["tropo"] = input * 100
+        mcdu_open_page(400) -- reload
+    end
+
+    -- slew left/right (used for lat lon)
+    if phase == "slew_left" or phase == "slew_right" then
+        --toggle between lat and lon select
+        fmgs_dat["latlon sel"] = mcdu_toggle(fmgs_dat["latlon sel"], "lat", "lon")
+        mcdu_open_page(400) -- reload
+    end
+
+    -- slew up (used for lat lon)
+    if phase == "slew_up" or phase == "slew_down" then
+        if phase == "slew_up" then
+            increment = 1
+        else
+            increment = -1
+        end
+        if fmgs_dat["latlon sel"] == "lat" then
+            --change lat from 0-9000.0
+            fmgs_dat["lat"] = Math_clamp(fmgs_dat["lat"] + increment * 0.1, 0, 9000)
+            --flip
+            if fmgs_dat["lat"] == 0 or fmgs_dat["lat"] == 9000 then
+                fmgs_dat["lat"] = fmgs_dat["lat"] - increment * 0.1
+                fmgs_dat["lat_dir"] = mcdu_toggle(fmgs_dat["lat_dir"], "N", "S") --flip
+            end
+            --padding decimal
+            fmgs_dat["lat"] = mcdu_pad_dp(fmgs_dat["lat"], 1)
+            --assign
+            fmgs_dat["lat fmt"] = fmgs_dat["lat"] .. fmgs_dat["lat_dir"]
+        elseif fmgs_dat["latlon sel"] == "lon" then
+            --change lon from 0-180000.00
+            fmgs_dat["lon"] = Math_clamp(fmgs_dat["lon"] + increment * 0.01, 0, 18000)
+            --flip
+            if fmgs_dat["lon"] == 0 or fmgs_dat["lon"] == 18000 then
+                fmgs_dat["lon"] = fmgs_dat["lon"] - increment * 0.01
+                fmgs_dat["lon_dir"] = mcdu_toggle(fmgs_dat["lon_dir"], "W", "E") --flip
+            end
+            --padding decimal
+            fmgs_dat["lon"] = mcdu_pad_dp(fmgs_dat["lon"], 2)
+            --assign
+            fmgs_dat["lon fmt"] = fmgs_dat["lon"] .. fmgs_dat["lon_dir"]
+        end
+        mcdu_open_page(400) -- reload
+    end
 end
+
 -- 500 data
 mcdu_sim_page[500] =
 function (phase)
@@ -535,13 +1072,10 @@ function (phase)
 
         mcdu_dat["s"]["L"][1].txt = " position"
         mcdu_dat["l"]["L"][1].txt = "<monitor"
-
         mcdu_dat["s"]["L"][2].txt = " irs"
         mcdu_dat["l"]["L"][2].txt = "<monitor"
-
         mcdu_dat["s"]["L"][3].txt = " gps"
         mcdu_dat["l"]["L"][3].txt = "<monitor"
-
         mcdu_dat["l"]["L"][4].txt = "<a/c status"
 
         draw_update()
@@ -574,9 +1108,6 @@ function (phase)
         mcdu_dat["s"]["L"][3].txt = " second data base"
         mcdu_dat["l"]["L"][3] = {txt = " none", col = "blue", size = "s"}
 
-        mcdu_dat["l"]["L"][4].txt = "WORK IN PROGRESS"
-
-
         mcdu_dat["s"]["L"][5].txt = "chg code"
         mcdu_dat["l"]["L"][5] = {txt = "[ ]", col = "blue"}
         mcdu_dat["s"]["L"][6].txt = "idle/perf"
@@ -584,6 +1115,255 @@ function (phase)
 
        
         draw_update()
+    end
+end
+
+fmgs_dat["fpln"] = {}
+fmgs_dat["fpln fmt"] = {}
+
+local function fpln_addwpt(loc, via, name, trk, time, dist, spd, alt, efob, windspd, windhdg, next)
+    wpt = {}
+    wpt.name = name or ""
+    wpt.time = time or "----"
+    wpt.dist = dist or ""
+    wpt.spd = spd or "---"
+    wpt.alt = alt or "-----"
+    wpt.via = via or ""
+    wpt.trk = trk or ""
+    wpt.next = next
+    wpt.efob = efob or 5.5
+    wpt.windspd = windspd or 0
+    wpt.windhdg = windhdg or 0
+    table.insert(fmgs_dat["fpln"], loc, wpt)
+end
+
+--formats the fpln
+local function fpln_format()
+    --init local variables
+    fpln_fmt = {}
+    fpln = fmgs_dat["fpln"]
+
+    --init previous waypoint to first
+    wpt_prev = {next = fpln[1].name}
+
+    for i,wpt in ipairs(fpln) do
+        --is waypoint a blank?
+        if wpt.name ~= "" then
+            --check for flight discontinuities
+            if wpt_prev.next ~= wpt.name then
+                table.insert(fpln_fmt, "---f-pln discontinuity--")
+            end
+            --insert waypoint
+            table.insert(fpln_fmt, wpt)
+            --set previous waypoint
+            wpt_prev = wpt
+        end
+    end
+    table.insert(fpln_fmt, "----- end of f-pln -----")
+    table.insert(fpln_fmt, "----- no altn fpln -----")
+
+    --output
+    fmgs_dat["fpln fmt"] = fpln_fmt
+end
+-- loc via name trk time dist spd alt efob windspd windhdg next
+fpln_addwpt(1, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil)
+
+--DEMO
+table.remove(fmgs_dat["fpln"])
+fpln_addwpt(1, nil, "kbfi", nil, nil, nil, nil, nil, nil, nil, nil, nil) 
+fpln_addwpt(1, "chins3", "humpp", nil, 2341, 14, 297, 15000, nil, nil, nil, "aubrn")
+fpln_addwpt(1, nil, "ksea", nil, nil, nil, nil, nil, nil, nil, nil, "humpp")
+
+-- 600 f-pln
+mcdu_sim_page[600] =
+function (phase)
+    if phase == "render" then
+        fmgs_dat_init("fpln index", 0)
+        fmgs_dat_init("fpln page", 1)
+        --format the fpln
+        fpln_format()
+        --initialize fpln page index
+        fpln_index = fmgs_dat["fpln index"]
+        --draw the f-pln
+        for i = 1, math.min(#fmgs_dat["fpln fmt"], 5) do
+            --increment fpln index, loop around flight plan.
+            fpln_index = fpln_index % #fmgs_dat["fpln fmt"] + 1
+
+            fpln_wpt = fmgs_dat["fpln fmt"][fpln_index] or ""
+            fmgs_dat["origin"] = "ksea"
+            --is it a simple message?
+            if type(fpln_wpt) == "string" then
+                mcdu_dat["l"]["L"][i].txt = fpln_wpt
+            --is it a waypoint?
+            else
+                --set title
+                if i == 1 and fpln_wpt.name:sub(1,4) == fmgs_dat["origin"] then
+                    mcdu_dat_title.txt = " from"
+                end
+                --[[ VIA --]]
+                --is via an airway/note or heading?
+                if type(fpln_wpt.via) == "string" then
+                    --is via an airway or note?
+                    if fpln_wpt.via:sub(1,1) ~= "(" then
+                        mcdu_dat["s"]["L"][i][1] = {txt = " " .. fpln_wpt.via}
+                    --via must be a note
+                    else
+                        mcdu_dat["s"]["L"][i][1] = {txt = " " .. fpln_wpt.via, col = "green"}
+                    end
+                --via must be a heading
+                else
+                    mcdu_dat["s"]["L"][i][1] = {txt = " H" .. fpln_wpt.via .. "°"}
+                end
+
+                --[[ NAME --]]
+                mcdu_dat["l"]["L"][i][1] = {txt = fpln_wpt.name, col = "green"}
+
+                --[[ TRK --]]
+                mcdu_dat["s"]["L"][i][2] = {txt = "        " .. fpln_wpt.trk, col = "green"}
+
+                --[[ DIST --]]
+                mcdu_dat["s"]["R"][i] = {txt = fpln_wpt.dist .. "     ", col = "green", size = "s"}
+
+                if fmgs_dat["fpln page"] == 1 then
+                    --[[ TIME --]]
+                    mcdu_dat["l"]["L"][i][2] = {txt = "        " .. fpln_wpt.time, col = "green", size = "s"}
+
+                    --[[ SPD --]]
+                    mcdu_dat["l"]["R"][i][1] = {txt = fpln_wpt.spd .. "/      ", col = "green", size = "s"}
+
+                    --[[ ALT --]]
+                    mcdu_dat["l"]["R"][i][2] = {txt = fpln_wpt.alt, col = "green", size = "s"}
+                else
+                    --[[ EFOB --]]
+                    mcdu_dat["l"]["L"][i][2] = {txt = "        " .. fpln_wpt.efob, col = "green", size = "s"}
+
+                    --[[ WIND SPD --]]
+                    mcdu_dat["l"]["R"][i][1] = {txt = mcdu_align_left(fpln_wpt.windspd, 3), col = "green", size = "s"}
+
+                    --[[ WIND ALT --]]
+                    mcdu_dat["l"]["R"][i][2] = {txt = mcdu_pad_num(fpln_wpt.windhdg, 3) ..  "°/   ", col = "green", size = "s"}
+                end
+            end
+        end
+
+        --[[ DEST --]]
+        mcdu_dat["s"]["L"][6] = {txt = "dest    time  "}
+        mcdu_dat["s"]["R"][6] = {txt = "dist  efob"}
+        --the last index of the f-pln must be the destination
+        dest_index = #fmgs_dat["fpln"]
+        dest_wpt = fmgs_dat["fpln"][dest_index]
+        mcdu_dat["l"]["L"][6][1] = {txt = dest_wpt.name}
+        mcdu_dat["l"]["L"][6][2] = {txt = "        " .. dest_wpt.time}
+        --formatting
+        if dest_wpt.dist == "" then
+            mcdu_dat["l"]["R"][6][2] = {txt = "-----      "}
+        else
+            mcdu_dat["l"]["R"][6][2] = {txt = dest_wpt.dist .. "      "}
+        end
+        --formatting
+        if dest_wpt.efob == "" then
+            mcdu_dat["l"]["R"][6][1] = {txt = "--.- "}
+        else
+            mcdu_dat["l"]["R"][6][1] = {txt = dest_wpt.efob .. " "}
+        end
+
+        draw_update()
+    end
+
+    --if any of the side buttons are pushed
+    if phase:sub(1,1) == "R" or phase:sub(1,1) == "L" then
+
+        index = phase:sub(2,2)
+        wpt_check = mcdu_dat["l"]["L"][tonumber(index)][1] or "invalid"
+
+        --if valid wpt, open 601 f-pln lat rev page
+        if wpt_check ~= "invalid" then
+            fmgs_dat["lat rev wpt"] = wpt_check.txt
+            mcdu_open_page(601) -- 601 f-pln lat rev page
+        end
+    end
+
+    -- slew left/right (used for lat lon)
+    if phase == "slew_left" or phase == "slew_right" then
+        --toggle between lat and lon select
+        fmgs_dat["fpln page"] = mcdu_toggle(fmgs_dat["fpln page"], 1, 2)
+        mcdu_open_page(600) -- reload
+    end
+
+    --slew up or down
+    if phase == "slew_up" or phase == "slew_down" then
+        if phase == "slew_up" then
+            increment = -1
+        else
+            increment = 1
+        end
+        --is flight plan long enough to slew up and down?
+        if #fmgs_dat["fpln fmt"] > 2 then
+            fmgs_dat["fpln index"] = fmgs_dat["fpln index"] % #fmgs_dat["fpln fmt"] + increment 
+            print(fmgs_dat["fpln index"])
+        end
+        mcdu_open_page(600)
+    end
+end
+
+-- 601 f-pln lat rev page
+mcdu_sim_page[601] =
+function (phase)
+    if phase == "render" then
+        fmgs_dat_init("lat rev wpt", "none")
+        --get the wpt in question's name
+        wpt_find_name = fmgs_dat["lat rev wpt"]
+        wpt = "invalid"
+        --find the wpt data with the name
+        for i, wpt_find in ipairs(fmgs_dat["fpln"]) do
+            if wpt_find.name == wpt_find_name then
+                wpt = wpt_find
+                break
+            end
+        end
+        if wpt == "invalid" then
+            mcdu_send_message("error 601 " .. wpt_find_name) --throw error!
+            return
+        end
+        mcdu_dat_title[1] = {txt = "   lat rev"}
+        mcdu_dat_title[2] = {txt = "           from", size = "s"}
+        mcdu_dat_title[3] = {txt = "                " .. wpt.name, col = "green"}
+
+        --get lat lon
+        fmgs_dat_init("lat fmt2", "")
+        fmgs_dat_init("lon fmt2", "")
+        if fmgs_dat["lat fmt2"] == "" then
+            --get lat lon from XP FMC
+            mcdu_ctrl_get_origin_latlon(wpt.name, function(val) --callback
+            --Nxx''xx.xx Wxxx''xx.xx
+            fmgs_dat["lat fmt2"] = val:sub(2,9) .. val:sub(1,1)
+            fmgs_dat["lon fmt2"] = val:sub(13,21) .. val:sub(12,12)
+
+            mcdu_open_page(601) -- reload
+            end) --end callback
+        end
+
+        mcdu_dat["s"]["L"][1] = {txt = "   " .. fmgs_dat["lat fmt2"] .. "/" .. fmgs_dat["lon fmt2"], col = "green"}
+
+        mcdu_dat["s"]["R"][2].txt = "ll xing/incr/no"
+        mcdu_dat["l"]["R"][2] = {txt = "[  ]°/[ ]°/[ ]", col = "blue"}
+
+        mcdu_dat["s"]["R"][3].txt = "next wpt "
+        mcdu_dat["l"]["R"][3] = {txt = "[    ]", col = "blue"}
+
+        mcdu_dat["s"]["R"][4].txt = "new dest "
+        mcdu_dat["l"]["R"][4] = {txt = "[  ]", col = "blue"}
+
+        --is wpt an airport?
+        if wpt.name:len() == 4 then
+            mcdu_dat["l"]["L"][1].txt = "<departure"
+            mcdu_dat["l"]["R"][1].txt = "fix info>"
+        end
+        draw_update()
+    end
+    
+    if phase == "R2" or phase == "R3" or phase == "R4" then
+        mcdu_send_message("not yet implemented!")
     end
 end
 
@@ -609,7 +1389,7 @@ function (phase)
 
         mcdu_dat["s"]["L"][3].txt = "ils /freq"
         mcdu_dat["l"]["L"][3][1] = {txt = "[  ]", col = "blue"}
-        mcdu_dat["l"]["L"][3][2] = {txt = "    /108.10", col = "blue", size = "s"}
+        mcdu_dat["l"]["L"][3][2] = {txt = "    /08.10", col = "blue", size = "s"}
 
         mcdu_dat["s"]["R"][3].txt = "chan/ mls"
         mcdu_dat["l"]["R"][3].txt = "---/--- "
@@ -670,6 +1450,21 @@ function (phase)
         mcdu_open_page(1100) -- open 1100 mcdu menu
     end
 end
+
+local function mcdu_set_colour(colour)
+        --format e.g. r0.00
+        input, variation = mcdu_get_entry({"r!.!!", "g!.!!", "b!.!!"})
+        --check for correct entry
+        if input ~= NIL then
+            print(input)
+            input_col = input:sub(2,2) .. "." .. string.sub(input, 4,5)
+            MCDU_DISP_COLOR[colour][variation] = input_col
+
+            mcdu_open_page(1102) -- reload page
+        else
+            mcdu_send_message("format e.g. b0.50")
+        end
+end
 -- 1102 mcdu menu debug colours
 mcdu_sim_page[1102] =
 function (phase)
@@ -685,12 +1480,16 @@ function (phase)
         draw_update()
     end
     if phase == "L1" then
-        input, variation = mcdu_get_entry({"r%d.%d%d", "g%d.%d%d", "b%d.%d%d"})
-        if input ~= nil then
-            MCDU_DISP_COLOR[col][variation] = input
-        else
-            mcdu_send_message("format e.g. b0.50")
-        end
+        mcdu_set_colour("white")
+    end
+    if phase == "L2" then
+        mcdu_set_colour("blue")
+    end
+    if phase == "L3" then
+        mcdu_set_colour("green")
+    end
+    if phase == "L4" then
+        mcdu_set_colour("orange")
     end
     if phase == "L6" then
         hokey_pokey = true
