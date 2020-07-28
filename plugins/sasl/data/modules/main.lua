@@ -1,4 +1,6 @@
-include("global_datarefs_functions.lua")
+include("cockpit_datarefs.lua")
+include("dynamic_datarefs.lua")
+include("global_functions.lua")
 
 sasl.options.setAircraftPanelRendering(true)
 sasl.options.setInteractivity(true)
