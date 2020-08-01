@@ -94,7 +94,7 @@ P _cgpt/9/_w_now 1.0
 P _cgpt/9/_w_test 0.0
 P _cgpt/9/_z_ref 0.0
 P _cgpt/count 20
-P _door/0/_ang_now 53.617897034
+P _door/0/_ang_now 1.209442139
 P _door/0/_ext_ang 0.0
 P _door/0/_ret_ang 100.0
 P _door/0/_type 1
@@ -102,7 +102,7 @@ P _door/0/_xyz/0 -1.0
 P _door/0/_xyz/1 0.0
 P _door/0/_xyz/2 17.600000381
 P _door/0/_xyz/count 3
-P _door/1/_ang_now 7.235794067
+P _door/1/_ang_now 0.0
 P _door/1/_ext_ang 0.0
 P _door/1/_ret_ang 100.0
 P _door/1/_type 3
@@ -110,7 +110,7 @@ P _door/1/_xyz/0 -1.500000000
 P _door/1/_xyz/1 0.0
 P _door/1/_xyz/2 14.500000000
 P _door/1/_xyz/count 3
-P _door/10/_ang_now 6.512214661
+P _door/10/_ang_now 0.0
 P _door/10/_ext_ang 0.0
 P _door/10/_ret_ang 90.0
 P _door/10/_type 3
@@ -127,7 +127,7 @@ P _door/16/_type 0
 P _door/17/_type 0
 P _door/18/_type 0
 P _door/19/_type 0
-P _door/2/_ang_now -53.617897034
+P _door/2/_ang_now -1.209442139
 P _door/2/_ext_ang 0.0
 P _door/2/_ret_ang -100.0
 P _door/2/_type 1
@@ -135,7 +135,7 @@ P _door/2/_xyz/0 1.0
 P _door/2/_xyz/1 0.0
 P _door/2/_xyz/2 17.600000381
 P _door/2/_xyz/count 3
-P _door/3/_ang_now -7.235794067
+P _door/3/_ang_now 0.0
 P _door/3/_ext_ang 0.0
 P _door/3/_ret_ang -100.0
 P _door/3/_type 3
@@ -143,7 +143,7 @@ P _door/3/_xyz/0 1.500000000
 P _door/3/_xyz/1 0.0
 P _door/3/_xyz/2 14.500000000
 P _door/3/_xyz/count 3
-P _door/4/_ang_now 81.651222229
+P _door/4/_ang_now 72.217697144
 P _door/4/_ext_ang 0.0
 P _door/4/_ret_ang 90.0
 P _door/4/_type 2
@@ -151,7 +151,7 @@ P _door/4/_xyz/0 -13.0
 P _door/4/_xyz/1 -3.599999905
 P _door/4/_xyz/2 73.500000000
 P _door/4/_xyz/count 3
-P _door/5/_ang_now -81.651222229
+P _door/5/_ang_now -72.217697144
 P _door/5/_ext_ang 0.0
 P _door/5/_ret_ang -90.0
 P _door/5/_type 2
@@ -161,7 +161,7 @@ P _door/5/_xyz/2 73.500000000
 P _door/5/_xyz/count 3
 P _door/6/_type 0
 P _door/7/_type 0
-P _door/8/_ang_now -6.512214661
+P _door/8/_ang_now 0.0
 P _door/8/_ext_ang 0.0
 P _door/8/_ret_ang -90.0
 P _door/8/_type 3
@@ -209,10 +209,10 @@ P _gear/0/_latN 0.0
 P _gear/0/_latR 0.0
 P _gear/0/_leg_len 5.400000095
 P _gear/0/_lonE 0.0
-P _gear/0/_lonN 88.909111023
+P _gear/0/_lonN 78.637054443
 P _gear/0/_lonR 98.0
 P _gear/0/_scon 47252.898437500
-P _gear/0/_stat_def 0.399389684
+P _gear/0/_stat_def 0.399389714
 P _gear/0/_steerdeg_hispeed 5.0
 P _gear/0/_steerdeg_lospeed 75.0
 P _gear/0/_strut_comp 0.0
@@ -239,11 +239,11 @@ P _gear/1/_gear_x -12.010000229
 P _gear/1/_gear_y -2.799999952
 P _gear/1/_gear_z 69.800003052
 P _gear/1/_latE 0.0
-P _gear/1/_latN 72.578865051
+P _gear/1/_latN 64.193511963
 P _gear/1/_latR 80.0
 P _gear/1/_leg_len 8.199999809
 P _gear/1/_lonE -7.0
-P _gear/1/_lonN -0.649349451
+P _gear/1/_lonN -1.383067846
 P _gear/1/_lonR 0.0
 P _gear/1/_scon 71266.664062500
 P _gear/1/_stat_def 1.367629409
@@ -273,11 +273,11 @@ P _gear/2/_gear_x 12.010000229
 P _gear/2/_gear_y -2.799999952
 P _gear/2/_gear_z 69.800003052
 P _gear/2/_latE 0.0
-P _gear/2/_latN -72.578865051
+P _gear/2/_latN -64.193511963
 P _gear/2/_latR -80.0
 P _gear/2/_leg_len 8.199999809
 P _gear/2/_lonE -7.0
-P _gear/2/_lonN -0.649349451
+P _gear/2/_lonN -1.383067846
 P _gear/2/_lonR 0.0
 P _gear/2/_scon 71266.664062500
 P _gear/2/_stat_def 1.367629409
@@ -37953,12 +37953,11 @@ GROUP fcu_display
   END_GROUP
 END_GROUP
 GROUP glareshield buttons
-  LOCKED
+  GROUP_OPEN
   gen_rotary ap1 button
-    POS 705.571411 1680.857178
-    IMAGE glaresheild/fcu_buttons/ap_ap1
-    DATAREF sim/cockpit2/autopilot/flight_director_mode
-    LOCKED
+    POS 706.000000 1680.000000
+    IMAGE glaresheild/fcu_buttons/ap1
+    DATAREF abc
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -37976,10 +37975,9 @@ GROUP glareshield buttons
     CLICK_DY 0
 
   gen_rotary ap2 button
-    POS 762.142822 1680.714355
-    IMAGE glaresheild/fcu_buttons/ap_ap2
-    DATAREF sim/cockpit2/autopilot/flight_director2_mode
-    LOCKED
+    POS 770.000000 1680.000000
+    IMAGE glaresheild/fcu_buttons/ap2
+    DATAREF abc
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -37997,10 +37995,9 @@ GROUP glareshield buttons
     CLICK_DY 0
 
   gen_rotary autothrust button
-    POS 818.571411 1680.000000
-    IMAGE glaresheild/fcu_buttons/ap_athr
-    DATAREF sim/cockpit2/autopilot/autothrottle_on
-    LOCKED
+    POS 834.000000 1680.000000
+    IMAGE glaresheild/fcu_buttons/athr
+    DATAREF abc
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -38017,10 +38014,9 @@ GROUP glareshield buttons
     CLICK_DY 0
 
   gen_rotary FD1 button
-    POS 875.000000 1673.000000
-    IMAGE glaresheild/fcu_buttons/ap_fd
-    DATAREF sim/cockpit2/autopilot/flight_director_mode
-    LOCKED
+    POS 706.000000 1622.000000
+    IMAGE glaresheild/fcu_buttons/fd
+    DATAREF abc
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -38038,10 +38034,9 @@ GROUP glareshield buttons
     CLICK_DY 0
 
   gen_rotary FD2 button
-    POS 931.000000 1673.000000
-    IMAGE glaresheild/fcu_buttons/ap_fd
-    DATAREF sim/cockpit2/autopilot/flight_director2_mode
-    LOCKED
+    POS 770.000000 1622.000000
+    IMAGE glaresheild/fcu_buttons/fd
+    DATAREF abc
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -38059,10 +38054,9 @@ GROUP glareshield buttons
     CLICK_DY 0
 
   gen_rotary appr button
-    POS 987.000000 1673.000000
-    IMAGE glaresheild/fcu_buttons/ap_appr
-    DATAREF sim/cockpit2/autopilot/approach_status
-    LOCKED
+    POS 834.000000 1622.000000
+    IMAGE glaresheild/fcu_buttons/appr
+    DATAREF abc
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -38080,10 +38074,9 @@ GROUP glareshield buttons
     CLICK_DY 0
 
   gen_rotary exped button
-    POS 1044.000000 1673.000000
-    IMAGE glaresheild/fcu_buttons/ap_exped
-    DATAREF 
-    LOCKED
+    POS 898.000000 1622.000000
+    IMAGE glaresheild/fcu_buttons/exped
+    DATAREF abc
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -38100,10 +38093,9 @@ GROUP glareshield buttons
     CLICK_DY 0
 
   gen_rotary loc button
-    POS 1100.000000 1673.000000
-    IMAGE glaresheild/fcu_buttons/ap_loc
-    DATAREF sim/cockpit2/autopilot/hnav_armed
-    LOCKED
+    POS 898.000000 1672.000000
+    IMAGE glaresheild/fcu_buttons/loc
+    DATAREF abc
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -38120,10 +38112,9 @@ GROUP glareshield buttons
     CLICK_DY 0
 
   gen_rotary ils button
-    POS 1156.000000 1673.000000
-    IMAGE glaresheild/fcu_buttons/ap_ils
-    DATAREF 
-    LOCKED
+    POS 962.000000 1672.000000
+    IMAGE glaresheild/fcu_buttons/ls
+    DATAREF abc
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -38140,10 +38131,9 @@ GROUP glareshield buttons
     CLICK_DY 0
 
   gen_rotary cstr button
-    POS 1212.000000 1673.000000
-    IMAGE glaresheild/fcu_buttons/ap_cstr
-    DATAREF a321neo/cockpit/efis/csrt_on
-    LOCKED
+    POS 1026.000000 1672.000000
+    IMAGE glaresheild/fcu_buttons/cstr
+    DATAREF abc
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -38160,10 +38150,9 @@ GROUP glareshield buttons
     CLICK_DY 0
 
   gen_rotary wpt button
-    POS 1268.000000 1673.000000
-    IMAGE glaresheild/fcu_buttons/ap_wpt
-    DATAREF sim/cockpit2/EFIS/EFIS_fix_on
-    LOCKED
+    POS 1090.000000 1672.000000
+    IMAGE glaresheild/fcu_buttons/wpt
+    DATAREF abc
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -38180,10 +38169,9 @@ GROUP glareshield buttons
     CLICK_DY 0
 
   gen_rotary vor button
-    POS 1324.000000 1673.000000
-    IMAGE glaresheild/fcu_buttons/ap_vord
-    DATAREF sim/cockpit2/EFIS/EFIS_vor_on
-    LOCKED
+    POS 1090.000000 1622.000000
+    IMAGE glaresheild/fcu_buttons/vord
+    DATAREF abc
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -38200,10 +38188,9 @@ GROUP glareshield buttons
     CLICK_DY 0
 
   gen_rotary ndb button
-    POS 1380.000000 1673.000000
-    IMAGE glaresheild/fcu_buttons/ap_ndb
-    DATAREF sim/cockpit2/EFIS/EFIS_ndb_on
-    LOCKED
+    POS 962.000000 1622.000000
+    IMAGE glaresheild/fcu_buttons/ndb
+    DATAREF abc
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -38220,10 +38207,9 @@ GROUP glareshield buttons
     CLICK_DY 0
 
   gen_rotary appr button
-    POS 1436.000000 1673.000000
-    IMAGE glaresheild/fcu_buttons/ap_arpt
-    DATAREF sim/cockpit2/EFIS/EFIS_airport_on
-    LOCKED
+    POS 1026.000000 1622.000000
+    IMAGE glaresheild/fcu_buttons/appr
+    DATAREF abc
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
