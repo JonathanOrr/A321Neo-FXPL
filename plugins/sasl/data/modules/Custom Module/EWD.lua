@@ -52,7 +52,9 @@ local function draw_left_memo()
     local distance = 38
 
     for i=0,6 do
-        sasl.gl.drawText(B612regular, size[1]/2-430, size[2]/2-200-distance*i, get(EWD_left_memo[i]), 30, false, false, TEXT_ALIGN_LEFT, match_msg_colors[get(EWD_left_memo_colors[i])])
+        if get(EWD_left_memo_colors[i]) > 0 then
+            sasl.gl.drawText(B612MONO_regular, size[1]/2-430, size[2]/2-200-distance*i, get(EWD_left_memo[i]), 30, false, false, TEXT_ALIGN_LEFT, match_msg_colors[get(EWD_left_memo_colors[i])])
+        end
     end
 
 end
@@ -61,7 +63,9 @@ local function draw_right_memo()
     local distance = 38
 
     for i=0,6 do
-        sasl.gl.drawText(B612regular, size[1]/2+150, size[2]/2-200-distance*i, get(EWD_right_memo[i]), 30, false, false, TEXT_ALIGN_LEFT, match_msg_colors[get(EWD_right_memo_colors[i])])
+        if get(EWD_right_memo_colors[i]) > 0 then
+            sasl.gl.drawText(B612MONO_regular, size[1]/2+150, size[2]/2-200-distance*i, get(EWD_right_memo[i]), 30, false, false, TEXT_ALIGN_LEFT, match_msg_colors[get(EWD_right_memo_colors[i])])
+        end
     end
 end
 
