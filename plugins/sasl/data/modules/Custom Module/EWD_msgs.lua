@@ -124,7 +124,7 @@ function update_left_list()
         list_left:put(LEVEL_1, {COL_CAUTION, "      (PROT LOST)"})
         list_left:put(LEVEL_1, {COL_ACTIONS, "SPD BRK........DO NOT USE"})
         list_left:put(LEVEL_1, {COL_ACTIONS, "MAX SPEED.........305/.80"})
-        list_left:put(LEVEL_1, {COL_ACTIONS, "MAX PITCH TRIM........USE"})
+        list_left:put(LEVEL_1, {COL_ACTIONS, "MAN PITCH TRIM........USE"})
         list_left:put(LEVEL_1, {COL_ACTIONS, "MANEUVER WITH CARE"})
     end 
 
