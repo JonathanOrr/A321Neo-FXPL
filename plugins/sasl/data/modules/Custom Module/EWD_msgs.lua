@@ -1,7 +1,3 @@
---sim datarefs
-
---a32nx datarefs
-
 --colors
 local COL_INVISIBLE = 0    
 local COL_WARNING = 1       -- RED
@@ -21,7 +17,7 @@ for i=0,6 do
     set(EWD_right_memo_colors[i], COL_INDICATION)
 end
 
--- external tool
+-- PriorityQueue external implementation
 -- Source: https://rosettacode.org/wiki/Priority_queue#Lua
 -- License: GNU Free Documentation License 1.2
 PriorityQueue = {
@@ -60,6 +56,10 @@ setmetatable(PriorityQueue, PriorityQueue)
 local list_right = PriorityQueue()
 local list_left  = PriorityQueue()
 
+--
+-- RIGHT side of the EWD messages
+--
+-- This works as a simple priority queue, color is the priority
 function update_right_list()
 
     list_right = PriorityQueue()
@@ -98,6 +98,13 @@ function publish_right_list()
     end
 
 end
+
+--
+-- LEFT side of the EWD messages
+--
+-- In this case we cannot use a simple priority queue, because sub-messages are present and
+-- may be of different colors. According to airbus specification, there are 3 levels of warning
+-- messages (1,2,3) that establish the priority
 
 function update_left_list()
     local LEVEL_1=1 -- Highest emergency
