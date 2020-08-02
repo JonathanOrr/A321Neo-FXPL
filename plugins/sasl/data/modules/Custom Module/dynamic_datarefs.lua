@@ -87,7 +87,19 @@ Gen_2_on = createGlobalPropertyi("a321neo/dynamics/electrical/gen_2_on", 1, fals
 --ADIRS
 Adirs_sys_on = createGlobalPropertyi("a321neo/cockpit/adris/adirs_on", 0, false, true, false)
 Adirs_irs_aligned = createGlobalPropertyi("a321neo/cockpit/adris/irs_aligned", 0, false, true, false)
-
+-- EWD
+EWD_left_memo = {}
+EWD_left_memo_colors = {}
+for i=0,6 do
+	EWD_left_memo[i] = createGlobalPropertys("a321neo/cockpit/EWD/EWD_left_memo[".. i .. "]", "", false, true, false)
+	EWD_left_memo_colors[i] = createGlobalPropertyi("a321neo/cockpit/EWD/EWD_left_memo_colors[".. i .. "]", 0, false, true, false)
+end
+EWD_right_memo = {}
+EWD_right_memo_colors = {}
+for i=0,6 do
+	EWD_right_memo[i] = createGlobalPropertys("a321neo/cockpit/EWD/EWD_right_memo[".. i .. "]", "", false, true, false)
+	EWD_right_memo_colors[i] = createGlobalPropertyi("a321neo/cockpit/EWD/EWD_right_memo_colors[".. i .. "]", 0, false, true, false)
+end
 
 --global dataref variable from the Sim--
 --autopilot
@@ -187,3 +199,4 @@ FOB = globalProperty("sim/flightmodel/weight/m_fuel_total")
 ZULU_hours = globalProperty("sim/cockpit2/clock_timer/zulu_time_hours")
 ZULU_mins = globalProperty("sim/cockpit2/clock_timer/zulu_time_minutes")
 ZULU_secs = globalProperty("sim/cockpit2/clock_timer/zulu_time_seconds")
+
