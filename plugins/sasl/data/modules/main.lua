@@ -32,6 +32,7 @@ components = {
   wheel {},
   PFD {},
   EWD {},
+  EWD_msgs {},
   ECAM {}
  }
 
