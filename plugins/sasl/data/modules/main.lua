@@ -36,9 +36,23 @@ components = {
  }
 
  --windows
+MCDU_window = contextWindow {
+  name = "Airbus MCDU";
+  position = { 150 , 150 , 463 , 683 };
+  noBackground = true ;
+  proportional = false ;
+  minimumSize = { 463 , 683 };
+  maximumSize = { 877 , 1365 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = true ;
+  components = {
+    MCDU_popup {position = { 0 , 0 , 463 , 683 }}
+  };
+}
+
 Vnav_debug_window = contextWindow {
   name = "VNAV DEBUG";
-  position = { 50 , 50 , 750 , 450};
+  position = { 50 , 50 , 750 , 450 };
   noBackground = true ;
   proportional = false ;
   minimumSize = { 750 , 450 };
@@ -52,7 +66,7 @@ Vnav_debug_window = contextWindow {
 
 Packs_debug_window = contextWindow {
   name = "PACKS DEBUG";
-  position = { 100 , 100 , 750 , 450};
+  position = { 100 , 100 , 750 , 450 };
   noBackground = true ;
   proportional = false ;
   minimumSize = { 750 , 450 };
@@ -66,19 +80,23 @@ Packs_debug_window = contextWindow {
 
 FBW_debug_window = contextWindow {
   name = "FBW DEBUG";
-  position = { 150 , 150 , 340 , 500};
+  position = { 150 , 150 , 340 , 500 };
   noBackground = true ;
   proportional = false ;
   minimumSize = { 170 , 250 };
   maximumSize = { 340 , 500 };
   gravity = { 0 , 1 , 0 , 1 };
-  visible = true ;
+  visible = false ;
   components = {
     FBW_debug {position = { 0 , 0 , 340 , 500 }}
   };
 }
 
 --menu item functions
+function Show_hide_MCDU()
+  MCDU_window:setIsVisible(not MCDU_window:isVisible())
+end
+
 function Show_hide_vnav_debug()
   Vnav_debug_window:setIsVisible(not Vnav_debug_window:isVisible())
 end
@@ -95,6 +113,8 @@ end
 Menu_master	= sasl.appendMenuItem (PLUGINS_MENU_ID, "A321NEO" )
 -- add a submenu
 Menu_main	= sasl.createMenu ("", PLUGINS_MENU_ID, Menu_master)
+-- add menu entry
+ShowHideMCDU        = sasl.appendMenuItem(Menu_main, "Show/Hide MCDU", Show_hide_MCDU)
 -- add menu entry
 ShowHideVnavDebug	= sasl.appendMenuItem(Menu_main, "Show/Hide VNAV Debug", Show_hide_vnav_debug)
 -- add menu entry

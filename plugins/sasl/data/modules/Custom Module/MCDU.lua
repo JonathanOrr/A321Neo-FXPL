@@ -25,7 +25,7 @@ local NIL_UNIQUE = "unique-nil" -- used for input return and checking
 --
 --
 --]]
-local MCDU_DRAW_SIZE = {w = 320, h = 285} -- idk if size table is required by anything else, this is for internal reference
+local MCDU_DRAW_SIZE = {w = size[1], h = size[2]} -- idk if size table is required by anything else, this is for internal reference
 
 --define the const size, align and row.
 local MCDU_DIV_SIZE = {"s", "l"}
@@ -315,14 +315,6 @@ end
 --
 --
 --]]
-
---sim dataref
-local TIME = globalProperty("sim/time/total_running_time_sec")
-local PLANE_LOADED = false
-
---a321neo dataref
-local mcdu_enabled = createGlobalPropertyi("a321neo/debug/mcdu/mcdu_enabled", 1, false, true, false)
-
 --a321neo commands
 local mcdu_debug_message = sasl.createCommand("a321neo/debug/mcdu/debug_message", "send a mcdu debug message")
 
@@ -411,7 +403,9 @@ for i,entry_category in ipairs(MCDU_ENTRY) do
         mcdu_inp[entry] = createCommand("a321neo/cockpit/mcdu/" .. entry_category.ref_name .. "/" .. entry, "MCDU " .. entry .. " " .. entry_category.ref_desc)
         sasl.registerCommandHandler(mcdu_inp[entry], 0, function (phase)
             if phase == SASL_COMMAND_BEGIN then
-                entry_category.ref_callback(count, entry)
+                if get(Mcdu_enabled) == 1 then
+                    entry_category.ref_callback(count, entry)
+                end
             end
         end)
     end
@@ -548,7 +542,15 @@ function draw()
     if hokey_pokey then
         colorize()
     end
-    if get(mcdu_enabled) == 1 then
+    if get(Mcdu_enabled) == 1 then
+        --MCDU popup
+        --Mcdu_draw_ok = true
+        MCDU_set_popup("draw lines", draw_lines)
+        MCDU_set_popup("mcdu entry", mcdu_entry)
+        MCDU_set_popup("enabled", true)
+        --Mcdu_disp_color = MCDU_DISP_COLOR
+        --Mcdu_draw_lines = draw_lines
+
         sasl.gl.drawRectangle(0, 0, 320 , 285, MCDU_DISP_COLOR["black"])
         local draw_size = {MCDU_DRAW_SIZE.w, MCDU_DRAW_SIZE.h} -- for debugging
         --sasl.gl.drawText(B612MONO_regular, draw_size[1]/2-140, draw_size[2]/2+108, mcdu_dat_title.txt, 20, false, false,TEXT_ALIGN_LEFT, MCDU_DISP_COLOR[mcdu_dat_title_L.col])
@@ -644,7 +646,7 @@ mcdu_entry = "R0.55"
 function update()
     if get(mcdu_page) == 0 then --on start
        --mcdu_open_page(505) --open 505 A/C status
-       mcdu_open_page(1102) --open 505 A/C status
+       mcdu_open_page(400) --open 505 A/C status
     end
 
     -- display next message
