@@ -16,6 +16,7 @@ PHASE_2ND_ENG_OFF    = 10
 set(EWD_flight_phase, PHASE_UNKNOWN)
 
 local already_took_off = false
+local was_above_80_kts = false
 
 -- TODO:
 -- Manage the case of malfunctioning pilot radioaltimeter 
@@ -82,6 +83,7 @@ function update()
     and get(IAS) >= 80
     then
         check_and_stop_timer()
+        was_above_80_kts = true
         set(EWD_flight_phase, PHASE_ABOVE_80_KTS)
         return
     end
@@ -92,7 +94,8 @@ function update()
     -- - Climbing (TO or Go-Around)
     if get(All_on_ground) == 0
     and (get(Capt_ra_alt_ft) <= 1500)
-    and get(VVI) > 0
+    and get(VVI) >= 0
+    and was_above_80_kts == true
     then
         check_and_stop_timer()
         already_took_off = true
@@ -118,6 +121,7 @@ function update()
     if get(All_on_ground)  == 0
     and get(Capt_ra_alt_ft) <= 800
     and get(VVI) < 0
+    and already_took_off  == true
     then
         check_and_stop_timer()
         set(EWD_flight_phase, PHASE_FINAL)
@@ -144,6 +148,7 @@ function update()
             set(EWD_flight_phase, PHASE_ELEC_PWR)
             check_and_stop_timer()
             already_took_off = false
+            was_above_80_kts = false
             return
         end
     end
