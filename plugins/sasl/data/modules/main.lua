@@ -80,6 +80,20 @@ FBW_debug_window = contextWindow {
   };
 }
 
+EWD_debug_window = contextWindow {
+  name = "EWD DEBUG";
+  position = { 200 , 200 , 340 , 200};
+  noBackground = true ;
+  proportional = false ;
+  minimumSize = { 340 , 200 };
+  maximumSize = { 340 , 200 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = false ;
+  components = {
+    EWD_debug {position = { 0 , 0 , 340 , 200 }}
+  };
+}
+
 --menu item functions
 function Show_hide_vnav_debug()
   Vnav_debug_window:setIsVisible(not Vnav_debug_window:isVisible())
@@ -93,6 +107,10 @@ function Show_hide_FBW_debug()
   FBW_debug_window:setIsVisible(not FBW_debug_window:isVisible())
 end
 
+function Show_hide_EWD_debug()
+  EWD_debug_window:setIsVisible(not EWD_debug_window:isVisible())
+end
+
 -- create top level menu in plugins menu
 Menu_master	= sasl.appendMenuItem (PLUGINS_MENU_ID, "A321NEO" )
 -- add a submenu
@@ -103,7 +121,10 @@ ShowHideVnavDebug	= sasl.appendMenuItem(Menu_main, "Show/Hide VNAV Debug", Show_
 ShowHidePacksDebug	= sasl.appendMenuItem(Menu_main, "Show/Hide PACKS Debug", Show_hide_packs_debug)
 -- add menu entry
 ShowHideFBWDebug	= sasl.appendMenuItem(Menu_main, "Show/Hide FBW Debug", Show_hide_FBW_debug)
+-- add menu entry
+ShowHideEWDDebug	= sasl.appendMenuItem(Menu_main, "Show/Hide EWD Debug", Show_hide_EWD_debug)
 --initialise menu item status
 sasl.setMenuItemState(Menu_main, ShowHideVnavDebug, MENU_UNCHECKED)
 sasl.setMenuItemState(Menu_main, ShowHidePacksDebug, MENU_UNCHECKED)
 sasl.setMenuItemState(Menu_main, ShowHideFBWDebug, MENU_UNCHECKED)
+sasl.setMenuItemState(Menu_main, ShowHideEWDDebug, MENU_UNCHECKED)
