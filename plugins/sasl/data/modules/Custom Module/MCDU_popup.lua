@@ -32,7 +32,33 @@ function draw()
     end
 end
 
-function onKeyDown ( component , char , key , shDown , ctrlDown , altOptDown )
-print ( " Char : " ..string.char ( char ) )
-end
+function keyHandler (charCode, virtualKeyCode, shiftDown, ctrlDown, altOptDown, event)
+    --is it a key down or key hold event?
+    if event == 0 or event == 2 then
+        if charCode == SASL_KEY_RETURN or
+           charCode == SASL_KEY_ESCAPE or
+           charCode == SASL_KEY_TAB
+           then
+            --noop
+        elseif charCode == SASL_KEY_DELETE then
+            sasl.commandOnce(sasl.findCommand("a321neo/cockpit/mcdu/misc/clr"))
+        elseif charCode == SASL_KEY_UP then
+            sasl.commandOnce(sasl.findCommand("a321neo/cockpit/mcdu/side/slew_up"))
+        elseif charCode == SASL_KEY_DOWN then
+            sasl.commandOnce(sasl.findCommand("a321neo/cockpit/mcdu/side/slew_down"))
+        elseif charCode == SASL_KEY_LEFT then
+            sasl.commandOnce(sasl.findCommand("a321neo/cockpit/mcdu/side/slew_left"))
+        elseif charCode == SASL_KEY_RIGHT then
+            sasl.commandOnce(sasl.findCommand("a321neo/cockpit/mcdu/side/slew_right"))
+        else
+            print ( " Char : " ..string.char ( charCode ) .. " a" .. event)
+            sasl.commandOnce(sasl.findCommand("a321neo/cockpit/mcdu/key/" .. string.char(charCode):upper()))
+        end
+    end
+    sasl.options.setInteractivity (false) 
+    return true
+end
+
+sasl.registerGlobalKeyHandler (keyHandler)
+
 
