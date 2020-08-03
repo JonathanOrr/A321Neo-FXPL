@@ -33,6 +33,7 @@ components = {
   PFD {},
   EWD {},
   EWD_msgs {},
+  EWD_flight_phases {},
   ECAM {}
  }
 
