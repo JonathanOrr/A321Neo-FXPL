@@ -29,3 +29,6 @@ Eng2_bleed_off = createGlobalPropertyi("a321neo/cockpit/packs/eng2_off", 0, fals
 Capt_ra_alt_m = createGlobalPropertyf("a321neo/cockpit/indicators/capt_ra_alt_m", 0, false, true, false)
 Capt_baro_alt_m = createGlobalPropertyf("a321neo/cockpit/indicators/capt_baro_alt_m", 0, false, true, false)
 Window_ice_test = createGlobalPropertyf("a321neo/cockpit/window_ice", 0, false, true, false)
+--MCDU
+Mcdu_enabled = createGlobalPropertyi("a321neo/debug/mcdu/mcdu_enabled", 1, false, true, false)
+
