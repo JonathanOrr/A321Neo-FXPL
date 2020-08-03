@@ -1,20 +1,20 @@
 --colors
 local COL_INVISIBLE = 0    
 local COL_WARNING = 1       -- RED
-local COL_CAUTION = 2       -- AMBER
-local COL_INDICATION = 3    -- GREEN
-local COL_REMARKS = 4       -- WHITE
-local COL_ACTIONS = 5       -- BLUE
-local COL_SPECIAL = 6       -- MAGENTA
+local COL_SPECIAL = 2       -- MAGENTA
+local COL_CAUTION = 3       -- AMBER
+local COL_INDICATION = 4    -- GREEN
+local COL_REMARKS = 5       -- WHITE
+local COL_ACTIONS = 6       -- BLUE
 
 --initialisation--
 for i=0,6 do
     set(EWD_left_memo[i], "LINE " .. i)
-    set(EWD_left_memo_colors[i], COL_WARNING)
+    set(EWD_left_memo_colors[i], COL_INVISIBLE)
 end
 for i=0,6 do
     set(EWD_right_memo[i], "LINE " .. i)
-    set(EWD_right_memo_colors[i], COL_INDICATION)
+    set(EWD_right_memo_colors[i], COL_INVISIBLE)
 end
 
 -- PriorityQueue external implementation

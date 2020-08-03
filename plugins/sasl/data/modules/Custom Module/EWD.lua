@@ -17,11 +17,11 @@ local ECAM_GREY = {0.3, 0.3, 0.3}
 local match_msg_colors = {}
 match_msg_colors[0] = ECAM_WHITE
 match_msg_colors[1] = ECAM_RED
-match_msg_colors[2] = ECAM_ORANGE
-match_msg_colors[3] = ECAM_GREEN
-match_msg_colors[4] = ECAM_WHITE
-match_msg_colors[5] = ECAM_BLUE
-match_msg_colors[6] = ECAM_MAGENTA
+match_msg_colors[2] = ECAM_MAGENTA
+match_msg_colors[3] = ECAM_ORANGE
+match_msg_colors[4] = ECAM_GREEN
+match_msg_colors[5] = ECAM_WHITE
+match_msg_colors[6] = ECAM_BLUE
 
 function update()
     set(Eng_1_FF_kgm, get(Eng_1_FF_kgs) * 3600)
