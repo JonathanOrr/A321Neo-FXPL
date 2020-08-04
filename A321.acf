@@ -94,7 +94,7 @@ P _cgpt/9/_w_now 1.0
 P _cgpt/9/_w_test 0.0
 P _cgpt/9/_z_ref 0.0
 P _cgpt/count 20
-P _door/0/_ang_now 0.0
+P _door/0/_ang_now 78.537643433
 P _door/0/_ext_ang 0.0
 P _door/0/_ret_ang 100.0
 P _door/0/_type 1
@@ -102,7 +102,7 @@ P _door/0/_xyz/0 -1.0
 P _door/0/_xyz/1 0.0
 P _door/0/_xyz/2 17.600000381
 P _door/0/_xyz/count 3
-P _door/1/_ang_now 85.960845947
+P _door/1/_ang_now 57.075290680
 P _door/1/_ext_ang 0.0
 P _door/1/_ret_ang 100.0
 P _door/1/_type 3
@@ -110,7 +110,7 @@ P _door/1/_xyz/0 -1.500000000
 P _door/1/_xyz/1 0.0
 P _door/1/_xyz/2 14.500000000
 P _door/1/_xyz/count 3
-P _door/10/_ang_now 77.364761353
+P _door/10/_ang_now 51.367759705
 P _door/10/_ext_ang 0.0
 P _door/10/_ret_ang 90.0
 P _door/10/_type 3
@@ -127,7 +127,7 @@ P _door/16/_type 0
 P _door/17/_type 0
 P _door/18/_type 0
 P _door/19/_type 0
-P _door/2/_ang_now 0.0
+P _door/2/_ang_now -78.537643433
 P _door/2/_ext_ang 0.0
 P _door/2/_ret_ang -100.0
 P _door/2/_type 1
@@ -135,7 +135,7 @@ P _door/2/_xyz/0 1.0
 P _door/2/_xyz/1 0.0
 P _door/2/_xyz/2 17.600000381
 P _door/2/_xyz/count 3
-P _door/3/_ang_now -85.960845947
+P _door/3/_ang_now -57.075290680
 P _door/3/_ext_ang 0.0
 P _door/3/_ret_ang -100.0
 P _door/3/_type 3
@@ -143,7 +143,7 @@ P _door/3/_xyz/0 1.500000000
 P _door/3/_xyz/1 0.0
 P _door/3/_xyz/2 14.500000000
 P _door/3/_xyz/count 3
-P _door/4/_ang_now 1.263526917
+P _door/4/_ang_now 86.136779785
 P _door/4/_ext_ang 0.0
 P _door/4/_ret_ang 90.0
 P _door/4/_type 2
@@ -151,7 +151,7 @@ P _door/4/_xyz/0 -13.0
 P _door/4/_xyz/1 -3.599999905
 P _door/4/_xyz/2 73.500000000
 P _door/4/_xyz/count 3
-P _door/5/_ang_now -1.263526917
+P _door/5/_ang_now -86.136779785
 P _door/5/_ext_ang 0.0
 P _door/5/_ret_ang -90.0
 P _door/5/_type 2
@@ -161,7 +161,7 @@ P _door/5/_xyz/2 73.500000000
 P _door/5/_xyz/count 3
 P _door/6/_type 0
 P _door/7/_type 0
-P _door/8/_ang_now -77.364761353
+P _door/8/_ang_now -51.367759705
 P _door/8/_ext_ang 0.0
 P _door/8/_ret_ang -90.0
 P _door/8/_type 3
@@ -209,10 +209,10 @@ P _gear/0/_latN 0.0
 P _gear/0/_latR 0.0
 P _gear/0/_leg_len 5.400000095
 P _gear/0/_lonE 0.0
-P _gear/0/_lonN 1.375839233
+P _gear/0/_lonN 93.793380737
 P _gear/0/_lonR 98.0
 P _gear/0/_scon 47252.898437500
-P _gear/0/_stat_def 0.399389654
+P _gear/0/_stat_def 0.399389714
 P _gear/0/_steerdeg_hispeed 5.0
 P _gear/0/_steerdeg_lospeed 75.0
 P _gear/0/_strut_comp 0.0
@@ -239,14 +239,14 @@ P _gear/1/_gear_x -12.010000229
 P _gear/1/_gear_y -2.799999952
 P _gear/1/_gear_z 69.800003052
 P _gear/1/_latE 0.0
-P _gear/1/_latN 1.123130798
+P _gear/1/_latN 76.566024780
 P _gear/1/_latR 80.0
 P _gear/1/_leg_len 8.199999809
 P _gear/1/_lonE -7.0
-P _gear/1/_lonN -6.901725769
+P _gear/1/_lonN -0.300472975
 P _gear/1/_lonR 0.0
 P _gear/1/_scon 71266.664062500
-P _gear/1/_stat_def 1.367629528
+P _gear/1/_stat_def 1.367629290
 P _gear/1/_steerdeg_hispeed 0.0
 P _gear/1/_steerdeg_lospeed 0.0
 P _gear/1/_strut_comp -0.500000000
@@ -273,14 +273,14 @@ P _gear/2/_gear_x 12.010000229
 P _gear/2/_gear_y -2.799999952
 P _gear/2/_gear_z 69.800003052
 P _gear/2/_latE 0.0
-P _gear/2/_latN -1.123130798
+P _gear/2/_latN -76.566024780
 P _gear/2/_latR -80.0
 P _gear/2/_leg_len 8.199999809
 P _gear/2/_lonE -7.0
-P _gear/2/_lonN -6.901725769
+P _gear/2/_lonN -0.300472975
 P _gear/2/_lonR 0.0
 P _gear/2/_scon 71266.664062500
-P _gear/2/_stat_def 1.367629528
+P _gear/2/_stat_def 1.367629290
 P _gear/2/_steerdeg_hispeed 0.0
 P _gear/2/_steerdeg_lospeed 0.0
 P _gear/2/_strut_comp -0.500000000
@@ -35869,7 +35869,7 @@ P acf/_feather_prop_with_oilp 0
 P acf/_feathered_pitch 0.0
 P acf/_ff_rat_idle_JET 0.039999999
 P acf/_ff_rat_idle_PRP 0.0
-P acf/_file_writer_version 114100
+P acf/_file_writer_version 115029
 P acf/_flap1_cd 0.100000001
 P acf/_flap1_cl 0.779999971
 P acf/_flap1_cm -0.689999998
@@ -36079,8 +36079,6 @@ P acf/_has_get_tow_new 0
 P acf/_has_give_tow 0
 P acf/_has_ground_pwr 0
 P acf/_has_hsi 0
-P acf/_has_litemap_tex_1 0
-P acf/_has_litemap_tex_2 0
 P acf/_has_pre_rotate 0
 P acf/_has_push_back 0
 P acf/_has_radio_alt_callout 1
@@ -36772,6 +36770,7 @@ P acf/_truck_lon_sep 3.0
 P acf/_tvec_hdng 0.0
 P acf/_tvec_ptch 0.0
 P acf/_tvec_roll 0.0
+P acf/_use_1140_fm 0
 P acf/_use_cus_gear_damping 0
 P acf/_use_cus_gear_defs 0
 P acf/_use_manual_prop_inc 0
@@ -38218,7 +38217,7 @@ GROUP glareshield buttons
 
   gen_rotary appr button
     POS 1026.000000 1662.000000
-    IMAGE glaresheild/fcu_buttons/appr
+    IMAGE glaresheild/fcu_buttons/arpt
     DATAREF abc
     LOCKED
     LIGHT_MODE BACK_LIT_AUTO
@@ -38239,6 +38238,7 @@ GROUP glareshield buttons
 END_GROUP
 GROUP Buttons and Lights
   LOCKED
+  GROUP_OPEN
   GROUP ADIRS
     LOCKED
     gen_rotary IR1
@@ -38831,7 +38831,7 @@ GROUP Buttons and Lights
       CLICK_DX 0
       CLICK_DY 0
 
-    gen_rotary Electric Pump
+    gen_rotary Electric Y Pump
       POS 3406.000000 201.000000
       IMAGE Buttons/elecpump
       DATAREF abc
@@ -39548,7 +39548,7 @@ GROUP Buttons and Lights
       CLICK_DX 0
       CLICK_DY 0
 
-    gen_rotary APU Master 2
+    gen_rotary APU start
       POS 512.000000 201.000000
       IMAGE Buttons/apu_start
       DATAREF abc
@@ -39754,7 +39754,7 @@ GROUP Buttons and Lights
       CLICK_DX 0
       CLICK_DY 0
 
-    gen_rotary Extract 2
+    gen_rotary cab fans
       POS 1024.000000 725.000000
       IMAGE Buttons/dot_off
       DATAREF abc
@@ -39814,7 +39814,7 @@ GROUP Buttons and Lights
       CLICK_DX 0
       CLICK_DY 0
 
-    gen_rotary N1 Mode
+    gen_rotary dual cooling
       POS 640.000000 725.000000
       IMAGE Buttons/dot_on
       DATAREF abc
@@ -39855,7 +39855,7 @@ GROUP Buttons and Lights
     CLICK_DX 0
     CLICK_DY 0
 
-  gen_rotary Engine 1
+  gen_rotary Engine 2
     POS 360.000000 70.000000
     IMAGE Buttons/fire
     DATAREF abc
@@ -39875,7 +39875,7 @@ GROUP Buttons and Lights
     CLICK_DX 0
     CLICK_DY 0
 
-  gen_rotary Engine 2
+  gen_rotary Engine 1
     POS 232.000000 70.000000
     IMAGE Buttons/fire
     DATAREF abc
@@ -39935,7 +39935,7 @@ GROUP Buttons and Lights
     CLICK_DX 0
     CLICK_DY 0
 
-  gen_rotary Master Warning 2
+  gen_rotary Master causion
     POS 3918.000000 201.000000
     IMAGE Buttons/master_caution
     DATAREF abc
@@ -46534,6 +46534,63 @@ gen_rotary gen_rotary.png 2 2
   KEY_FRAME 0.000000 0.000000 1.000000
   KEY_FRAME 1.000000 1.000000
   DIGITS 2
+  ROTARY_TYPE NO_CLICK
+  CLICK_RADIUS 10.000000
+  CLICK_RADIUS_DY 0.000000
+  OFFSET 0.000000
+  STEP1 1.000000
+  STEP2 1.000000
+  CURSOR DEFAULT
+  CLICK_DX 0
+  CLICK_DY 0
+
+gen_rotary gen_rotary.png
+  POS 1188.000000 1180.000000
+  IMAGE center_pedestal/draims/uppointer
+  DATAREF 
+  LIGHT_MODE BACK_LIT_AUTO
+  LIGHT_RHEOSTAT 0
+  KEY_FRAME 0.000000 0.000000 1.000000
+  KEY_FRAME 1.000000 6.000000
+  DIGITS 1
+  ROTARY_TYPE NO_CLICK
+  CLICK_RADIUS 10.000000
+  CLICK_RADIUS_DY 0.000000
+  OFFSET 0.000000
+  STEP1 1.000000
+  STEP2 1.000000
+  CURSOR DEFAULT
+  CLICK_DX 0
+  CLICK_DY 0
+
+gen_rotary gen_rotary.png
+  POS 1188.000000 1132.000000
+  IMAGE center_pedestal/draims/downpointer
+  DATAREF 
+  LIGHT_MODE BACK_LIT_AUTO
+  LIGHT_RHEOSTAT 0
+  KEY_FRAME 0.000000 0.000000 1.000000
+  KEY_FRAME 1.000000 6.000000
+  DIGITS 1
+  ROTARY_TYPE NO_CLICK
+  CLICK_RADIUS 10.000000
+  CLICK_RADIUS_DY 0.000000
+  OFFSET 0.000000
+  STEP1 1.000000
+  STEP2 1.000000
+  CURSOR DEFAULT
+  CLICK_DX 0
+  CLICK_DY 0
+
+gen_rotary gen_rotary.png
+  POS 1562.000000 1458.000000
+  IMAGE mcdu temp
+  DATAREF 
+  LIGHT_MODE BACK_LIT_AUTO
+  LIGHT_RHEOSTAT 0
+  KEY_FRAME 0.000000 0.000000 1.000000
+  KEY_FRAME 1.000000 6.000000
+  DIGITS 1
   ROTARY_TYPE NO_CLICK
   CLICK_RADIUS 10.000000
   CLICK_RADIUS_DY 0.000000
