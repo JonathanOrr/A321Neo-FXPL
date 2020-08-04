@@ -149,14 +149,12 @@ local click_rect_all = {}
 for i,click_rect in ipairs(CLICK_RECTS) do
     for j = 1, click_rect.rpt.x do
         for k = 1, click_rect.rpt.y do
-            print (j .. " " .. k)
             rpt_x = j - 1
             rpt_y = k - 1
             cmd = "nil"
             if click_rect.cmd[k] ~= nil then
                 if click_rect.cmd[k][j] ~= nil then
                     cmd = click_rect.cmd[k][j]
-                    print(cmd)
                 end
             end
             table.insert(click_rect_all, {
