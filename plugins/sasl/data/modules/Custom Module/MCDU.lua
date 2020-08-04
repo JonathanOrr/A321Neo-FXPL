@@ -68,7 +68,7 @@ local B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
 
 -- alphanumeric & decimal FMC entry keys
 local MCDU_ENTRY_KEYS = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", ".", "Δ", "/", " "}
-local MCDU_ENTRY_PAGES = {"DIR", "PROG", "PERF", "INIT", "DATA", "F-PLN", "RAD NAV", "FUEL PRED", "SEC F-PLN", "ATC COMM", "MCDU MENU", "AIRP"}
+local MCDU_ENTRY_PAGES = {"dir", "prog", "perf", "init", "data", "f-pln", "rad nav", "fuel pred", "sec f-pln", "atc comm", "mcdu menu", "air port"}
 local MCDU_ENTRY_SIDES = {"L1", "L2", "L3", "L4", "L5", "L6", "R1", "R2", "R3", "R4", "R5", "R6", "slew_up", "slew_down", "slew_left", "slew_right"}
 
 --[[
@@ -381,7 +381,7 @@ local MCDU_ENTRY =
     {
         ref_name = "misc",
         ref_desc = "positive_negative",
-        ref_entries = {"postive_negative"},
+        ref_entries = {"positive_negative"},
         ref_callback = 
         function (count, val)
             if #mcdu_entry < 22 then
@@ -689,9 +689,9 @@ end
 --      700 - rad nav
 --      800 - fuel pred
 --      900 - sec f-pln
---      1000 - atc commm
+--      1000 - atc comm
 --      1100 - mcdu menu
---      1200 - airp
+--      1200 - air port
 --
 --
 --]]
@@ -903,7 +903,7 @@ function (phase)
 
         --automatically calculate crz temp
         if variation >= 1 and variation <= 3 then
-            fmgs_dat["crz temp"] = math.floor(input * -0.2 + 16)
+            fmgs_dat["crz temp"] = math.floor(tonumber(input) * -0.2 + 16)
             fmgs_dat["crz temp alt"] = false --crz temp has not been altered
         else
             fmgs_dat["crz temp alt"] = true --crz temp has been manually altered
