@@ -1251,7 +1251,6 @@ function (phase)
             fpln_index = fpln_index % #fmgs_dat["fpln fmt"] + 1
 
             fpln_wpt = fmgs_dat["fpln fmt"][fpln_index] or ""
-            fmgs_dat["origin"] = "ksea"
             --is it a simple message?
             if type(fpln_wpt) == "string" then
                 mcdu_dat["l"]["L"][i].txt = fpln_wpt
@@ -1620,7 +1619,7 @@ function (phase)
         mcdu_dat["l"]["R"][1] = {txt = "jonathan orr", col = "blue"}
         mcdu_dat["l"]["R"][2] = {txt = "henrick ku", col = "green"}
         mcdu_dat["s"]["R"][3].txt = "mcdu written by"
-        mcdu_dat["l"]["R"][3] = {txt = "chaidhat c.", col = "orange"}
+        mcdu_dat["l"]["R"][3] = {txt = "chaidhat chaimongkol", col = "orange"}
 
         draw_update()
     end

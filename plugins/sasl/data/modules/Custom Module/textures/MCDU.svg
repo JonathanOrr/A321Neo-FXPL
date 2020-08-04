@@ -179,9 +179,9 @@
      inkscape:window-height="1017"
      id="namedview817"
      showgrid="false"
-     inkscape:zoom="0.41596692"
-     inkscape:cx="102.58419"
-     inkscape:cy="916.6572"
+     inkscape:zoom="0.83193384"
+     inkscape:cx="356.21013"
+     inkscape:cy="483.93048"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
@@ -192,7 +192,7 @@
      id="layer1"
      inkscape:label="Layer 1"
      sodipodi:insensitive="true"
-     style="display:inline">
+     style="display:none">
     <image
        width="877.33331"
        height="1365.3333"
@@ -1284,16 +1284,16 @@
        id="text1177"
        y="735.20099"
        x="129.91254"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;letter-spacing:0px;word-spacing:0px;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        xml:space="preserve"><tspan
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          y="735.20099"
          x="129.91254"
          id="tspan1175"
          sodipodi:role="line">DIR</tspan></text>
     <text
        xml:space="preserve"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        x="239.61752"
        y="735.20099"
        id="text1181"><tspan
@@ -1301,59 +1301,59 @@
          id="tspan1179"
          x="239.61752"
          y="735.20099"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1">PROG</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;">PROG</tspan></text>
     <text
        id="text1185"
        y="735.20099"
        x="347.61752"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        xml:space="preserve"><tspan
          id="tspan1183"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          y="735.20099"
          x="347.61752"
          sodipodi:role="line">PERF</tspan></text>
     <text
        xml:space="preserve"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        x="457.11752"
        y="735.20099"
        id="text1189"><tspan
          sodipodi:role="line"
          x="457.11752"
          y="735.20099"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          id="tspan1187">INIT</tspan></text>
     <text
        id="text1193"
        y="735.20099"
        x="565.91791"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        xml:space="preserve"><tspan
          id="tspan1191"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          y="735.20099"
          x="565.91791"
          sodipodi:role="line">DATA</tspan></text>
     <text
        xml:space="preserve"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        x="563.91791"
        y="791.60065"
        id="text1197"><tspan
          sodipodi:role="line"
          x="563.91791"
          y="791.60065"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          id="tspan1195">ATC</tspan></text>
     <text
        id="text1201"
        y="815.60065"
        x="563.91791"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        xml:space="preserve"><tspan
          id="tspan1199"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          y="815.60065"
          x="563.91791"
          sodipodi:role="line">COMM</tspan></text>
@@ -1361,65 +1361,65 @@
        id="text1205"
        y="791.60065"
        x="673.91791"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        xml:space="preserve"><tspan
          id="tspan1203"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          y="791.60065"
          x="673.91791"
          sodipodi:role="line">MCDU</tspan></text>
     <text
        xml:space="preserve"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        x="673.91791"
        y="815.60065"
        id="text1209"><tspan
          sodipodi:role="line"
          x="673.91791"
          y="815.60065"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          id="tspan1207">MENU</tspan></text>
     <text
        id="text1213"
        y="791.60065"
        x="456.51822"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        xml:space="preserve"><tspan
          id="tspan1211"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          y="791.60065"
          x="456.51822"
          sodipodi:role="line">SEC</tspan></text>
     <text
        xml:space="preserve"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        x="457.41806"
        y="815.60065"
        id="text1217"><tspan
          sodipodi:role="line"
          x="457.41806"
          y="815.60065"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          id="tspan1215">F-PLN</tspan></text>
     <text
        xml:space="preserve"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        x="348.61789"
        y="791.60065"
        id="text1221"><tspan
          sodipodi:role="line"
          x="348.61789"
          y="791.60065"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          id="tspan1219">FUEL</tspan></text>
     <text
        id="text1225"
        y="815.60065"
        x="348.61789"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        xml:space="preserve"><tspan
          id="tspan1223"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          y="815.60065"
          x="348.61789"
          sodipodi:role="line">PRED</tspan></text>
@@ -1427,49 +1427,49 @@
        id="text1229"
        y="791.60065"
        x="239.51817"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        xml:space="preserve"><tspan
          id="tspan1227"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          y="791.60065"
          x="239.51817"
          sodipodi:role="line">RAD</tspan></text>
     <text
        xml:space="preserve"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        x="239.51817"
        y="815.60065"
        id="text1233"><tspan
          sodipodi:role="line"
          x="239.51817"
          y="815.60065"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          id="tspan1231">NAV</tspan></text>
     <text
        xml:space="preserve"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        x="129.11836"
        y="863.60065"
        id="text1237"><tspan
          sodipodi:role="line"
          x="129.11836"
          y="863.60065"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          id="tspan1235">AIR</tspan></text>
     <text
        id="text1241"
        y="887.60065"
        x="129.11836"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        xml:space="preserve"><tspan
          id="tspan1239"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          y="887.60065"
          x="129.11836"
          sodipodi:role="line">PORT</tspan></text>
     <text
        xml:space="preserve"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;letter-spacing:0px;word-spacing:0px;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        x="129.91254"
        y="802.80066"
        id="text1245"><tspan
@@ -1477,26 +1477,26 @@
          id="tspan1243"
          x="129.91254"
          y="802.80066"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1">F-PLN</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;">F-PLN</tspan></text>
     <text
        xml:space="preserve"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        x="771.91791"
        y="797.60065"
        id="text1249"><tspan
          sodipodi:role="line"
          x="771.91791"
          y="797.60065"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          id="tspan1247">DIM</tspan></text>
     <text
        id="text1253"
        y="745.60065"
        x="771.91791"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        xml:space="preserve"><tspan
          id="tspan1251"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          y="745.60065"
          x="771.91791"
          sodipodi:role="line">BRT</tspan></text>
@@ -1507,7 +1507,7 @@
        height="16.365742"
        width="6.4039855"
        id="rect1255"
-       style="display:inline;opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+       style="display:inline;opacity:1;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <path
        inkscape:transform-center-x="-1.9400226e-06"
        transform="matrix(0.53672951,0,0,0.90947192,107.34925,85.130614)"
@@ -1524,10 +1524,10 @@
        sodipodi:cx="246.94337"
        sodipodi:sides="3"
        id="path1257"
-       style="display:inline;opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="display:inline;opacity:1;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        sodipodi:type="star" />
     <g
-       style="display:inline;opacity:1"
+       style="display:inline;opacity:1;fill:#ff9c61;fill-opacity:1"
        id="g1263">
       <rect
          ry="0"
@@ -1536,7 +1536,7 @@
          height="16.365742"
          width="6.4039855"
          id="rect1259"
-         style="display:inline;opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         style="display:inline;opacity:1;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          transform="scale(1,-1)" />
       <path
          inkscape:transform-center-x="-1.9400226e-06"
@@ -1554,16 +1554,16 @@
          sodipodi:cx="246.94337"
          sodipodi:sides="3"
          id="path1261"
-         style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         style="opacity:1;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          sodipodi:type="star" />
     </g>
     <g
-       style="display:inline;opacity:1"
+       style="display:inline;opacity:1;fill:#ff9c61;fill-opacity:1"
        transform="rotate(-90,185.84113,1062.5632)"
        id="g1269">
       <rect
          transform="scale(1,-1)"
-         style="display:inline;opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         style="display:inline;opacity:1;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          id="rect1265"
          width="6.4039855"
          height="16.365742"
@@ -1572,7 +1572,7 @@
          ry="0" />
       <path
          sodipodi:type="star"
-         style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         style="opacity:1;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          id="path1267"
          sodipodi:sides="3"
          sodipodi:cx="246.94337"
@@ -1590,7 +1590,7 @@
          inkscape:transform-center-x="-1.9400226e-06" />
     </g>
     <g
-       style="display:inline;opacity:1"
+       style="display:inline;opacity:1;fill:#ff9c61;fill-opacity:1"
        id="g1275"
        transform="matrix(0,-1,-1,0,1137.9046,1174.4043)">
       <rect
@@ -1600,7 +1600,7 @@
          height="16.365742"
          width="6.4039855"
          id="rect1271"
-         style="display:inline;opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         style="display:inline;opacity:1;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          transform="scale(1,-1)" />
       <path
          inkscape:transform-center-x="-1.9400226e-06"
@@ -1618,336 +1618,336 @@
          sodipodi:cx="246.94337"
          sodipodi:sides="3"
          id="path1273"
-         style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         style="opacity:1;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          sodipodi:type="star" />
     </g>
     <text
        xml:space="preserve"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        x="391.25671"
        y="904.50635"
        id="text1279"><tspan
          sodipodi:role="line"
          x="391.25671"
          y="904.50635"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          id="tspan1277">A</tspan></text>
     <text
        id="text1283"
        y="904.50635"
        x="480.65634"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        xml:space="preserve"><tspan
          id="tspan1281"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          y="904.50635"
          x="480.65634"
          sodipodi:role="line">B</tspan></text>
     <text
        xml:space="preserve"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        x="566.65637"
        y="904.50635"
        id="text1287"><tspan
          sodipodi:role="line"
          x="566.65637"
          y="904.50635"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          id="tspan1285">C</tspan></text>
     <text
        id="text1291"
        y="904.50635"
        x="655.95636"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        xml:space="preserve"><tspan
          id="tspan1289"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          y="904.50635"
          x="655.95636"
          sodipodi:role="line">D</tspan></text>
     <text
        xml:space="preserve"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        x="743.65631"
        y="904.50635"
        id="text1295"><tspan
          sodipodi:role="line"
          x="743.65631"
          y="904.50635"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          id="tspan1293">E</tspan></text>
     <text
        id="text1299"
        y="988.50635"
        x="391.25671"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        xml:space="preserve"><tspan
          id="tspan1297"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          y="988.50635"
          x="391.25671"
          sodipodi:role="line">F</tspan></text>
     <text
        xml:space="preserve"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        x="480.65634"
        y="988.50635"
        id="text1303"><tspan
          sodipodi:role="line"
          x="480.65634"
          y="988.50635"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          id="tspan1301">G</tspan></text>
     <text
        id="text1307"
        y="988.50635"
        x="566.65637"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        xml:space="preserve"><tspan
          id="tspan1305"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          y="988.50635"
          x="566.65637"
          sodipodi:role="line">H</tspan></text>
     <text
        xml:space="preserve"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        x="655.95636"
        y="988.50635"
        id="text1311"><tspan
          sodipodi:role="line"
          x="655.95636"
          y="988.50635"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          id="tspan1309">I</tspan></text>
     <text
        id="text1315"
        y="988.50635"
        x="743.65631"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        xml:space="preserve"><tspan
          id="tspan1313"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          y="988.50635"
          x="743.65631"
          sodipodi:role="line">J</tspan></text>
     <text
        xml:space="preserve"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        x="391.25671"
        y="1068.5063"
        id="text1319"><tspan
          sodipodi:role="line"
          x="391.25671"
          y="1068.5063"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          id="tspan1317">K</tspan></text>
     <text
        id="text1323"
        y="1068.5063"
        x="480.65634"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        xml:space="preserve"><tspan
          id="tspan1321"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          y="1068.5063"
          x="480.65634"
          sodipodi:role="line">L</tspan></text>
     <text
        xml:space="preserve"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        x="566.65637"
        y="1068.5063"
        id="text1327"><tspan
          sodipodi:role="line"
          x="566.65637"
          y="1068.5063"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          id="tspan1325">M</tspan></text>
     <text
        id="text1331"
        y="1068.5063"
        x="655.95636"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        xml:space="preserve"><tspan
          id="tspan1329"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          y="1068.5063"
          x="655.95636"
          sodipodi:role="line">N</tspan></text>
     <text
        xml:space="preserve"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        x="743.65631"
        y="1068.5063"
        id="text1335"><tspan
          sodipodi:role="line"
          x="743.65631"
          y="1068.5063"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          id="tspan1333">O</tspan></text>
     <text
        id="text1339"
        y="1152.5063"
        x="391.25671"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        xml:space="preserve"><tspan
          id="tspan1337"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          y="1152.5063"
          x="391.25671"
          sodipodi:role="line">P</tspan></text>
     <text
        xml:space="preserve"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        x="480.65634"
        y="1152.5063"
        id="text1343"><tspan
          sodipodi:role="line"
          x="480.65634"
          y="1152.5063"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          id="tspan1341">Q</tspan></text>
     <text
        id="text1347"
        y="1152.5063"
        x="566.65637"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        xml:space="preserve"><tspan
          id="tspan1345"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          y="1152.5063"
          x="566.65637"
          sodipodi:role="line">R</tspan></text>
     <text
        xml:space="preserve"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        x="655.95636"
        y="1152.5063"
        id="text1351"><tspan
          sodipodi:role="line"
          x="655.95636"
          y="1152.5063"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          id="tspan1349">S</tspan></text>
     <text
        id="text1355"
        y="1152.5063"
        x="743.65631"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        xml:space="preserve"><tspan
          id="tspan1353"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          y="1152.5063"
          x="743.65631"
          sodipodi:role="line">T</tspan></text>
     <text
        xml:space="preserve"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        x="391.25671"
        y="1232.5062"
        id="text1359"><tspan
          sodipodi:role="line"
          x="391.25671"
          y="1232.5062"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          id="tspan1357">U</tspan></text>
     <text
        id="text1363"
        y="1232.5062"
        x="480.65634"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        xml:space="preserve"><tspan
          id="tspan1361"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          y="1232.5062"
          x="480.65634"
          sodipodi:role="line">V</tspan></text>
     <text
        xml:space="preserve"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        x="566.65637"
        y="1232.5062"
        id="text1367"><tspan
          sodipodi:role="line"
          x="566.65637"
          y="1232.5062"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          id="tspan1365">W</tspan></text>
     <text
        id="text1371"
        y="1232.5062"
        x="655.95636"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        xml:space="preserve"><tspan
          id="tspan1369"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          y="1232.5062"
          x="655.95636"
          sodipodi:role="line">X</tspan></text>
     <text
        xml:space="preserve"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        x="743.65631"
        y="1232.5062"
        id="text1375"><tspan
          sodipodi:role="line"
          x="743.65631"
          y="1232.5062"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          id="tspan1373">Y</tspan></text>
     <text
        id="text1379"
        y="1316.2063"
        x="391.25671"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        xml:space="preserve"><tspan
          id="tspan1377"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          y="1316.2063"
          x="391.25671"
          sodipodi:role="line">Z</tspan></text>
     <text
        xml:space="preserve"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        x="480.65634"
        y="1316.2063"
        id="text1383"><tspan
          sodipodi:role="line"
          x="480.65634"
          y="1316.2063"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          id="tspan1381">/</tspan></text>
     <text
        id="text1387"
        y="1311.3578"
        x="568.67657"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:34.66666794px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:34.66666794px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        xml:space="preserve"><tspan
          id="tspan1385"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:34.66666794px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:34.66666794px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          y="1311.3578"
          x="568.67657"
          sodipodi:role="line">SP</tspan></text>
     <text
        xml:space="preserve"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:34.66666794px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:34.66666794px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        x="743.47626"
        y="1306.9132"
        id="text1391"><tspan
          sodipodi:role="line"
          x="743.47626"
          y="1306.9132"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          id="tspan1389">CLR</tspan></text>
     <text
        id="text1395"
        y="1293.9838"
        x="656.60645"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:34.66666794px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:34.66666794px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        xml:space="preserve"><tspan
          id="tspan1393"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          y="1293.9838"
          x="656.60645"
          sodipodi:role="line">QVFY</tspan></text>
@@ -1967,82 +1967,82 @@
        sodipodi:cx="661.42267"
        sodipodi:sides="3"
        id="path1397"
-       style="display:inline;opacity:1;fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:13.65979195;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="display:inline;opacity:1;fill:#ff9c61;fill-opacity:1;stroke:#ff9c61;stroke-width:13.65979195;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        sodipodi:type="star" />
     <text
        id="text1401"
        y="1103.2181"
        x="128.56717"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        xml:space="preserve"><tspan
          id="tspan1399"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          y="1103.2181"
          x="128.56717"
          sodipodi:role="line">1</tspan></text>
     <text
        xml:space="preserve"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        x="214.86725"
        y="1103.2181"
        id="text1405"><tspan
          sodipodi:role="line"
          x="214.86725"
          y="1103.2181"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          id="tspan1403">2</tspan></text>
     <text
        id="text1409"
        y="1103.2181"
        x="214.86725"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        xml:space="preserve"><tspan
          id="tspan1407"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          y="1103.2181"
          x="214.86725"
          sodipodi:role="line">2</tspan></text>
     <text
        xml:space="preserve"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        x="298.86725"
        y="1103.2181"
        id="text1413"><tspan
          sodipodi:role="line"
          x="298.86725"
          y="1103.2181"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          id="tspan1411">3</tspan></text>
     <text
        xml:space="preserve"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        x="128.56717"
        y="1175.2181"
        id="text1417"><tspan
          sodipodi:role="line"
          x="128.56717"
          y="1175.2181"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          id="tspan1415">4</tspan></text>
     <text
        xml:space="preserve"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        x="214.86725"
        y="1175.2181"
        id="text1421"><tspan
          sodipodi:role="line"
          x="214.86725"
          y="1175.2181"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          id="tspan1419">5</tspan></text>
     <text
        id="text1425"
        y="1175.2181"
        x="298.86725"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        xml:space="preserve"><tspan
          id="tspan1423"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          y="1175.2181"
          x="298.86725"
          sodipodi:role="line">6</tspan></text>
@@ -2050,10 +2050,10 @@
        id="text1429"
        y="1246.7183"
        x="128.56717"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        xml:space="preserve"><tspan
          id="tspan1427"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          y="1246.7183"
          x="128.56717"
          sodipodi:role="line">7</tspan></text>
@@ -2061,43 +2061,43 @@
        id="text1433"
        y="1246.7183"
        x="214.86725"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        xml:space="preserve"><tspan
          id="tspan1431"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          y="1246.7183"
          x="214.86725"
          sodipodi:role="line">8</tspan></text>
     <text
        xml:space="preserve"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        x="298.86725"
        y="1246.7183"
        id="text1437"><tspan
          sodipodi:role="line"
          x="298.86725"
          y="1246.7183"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          id="tspan1435">9</tspan></text>
     <text
        xml:space="preserve"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        x="214.86725"
        y="1316.7183"
        id="text1441"><tspan
          sodipodi:role="line"
          x="214.86725"
          y="1316.7183"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          id="tspan1439">0</tspan></text>
     <text
        id="text1445"
        y="1316.7183"
        x="296.86725"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        xml:space="preserve"><tspan
          id="tspan1443"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:48px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          y="1316.7183"
          x="296.86725"
          sodipodi:role="line">/</tspan></text>
@@ -2106,26 +2106,26 @@
        cy="1298.3741"
        cx="129.15546"
        id="circle1447"
-       style="display:inline;opacity:1;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+       style="display:inline;opacity:1;fill:#ff9c61;fill-opacity:1;stroke:#ff9c61;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <text
        xml:space="preserve"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        x="286.95312"
        y="1297.839"
        id="text1451"><tspan
          sodipodi:role="line"
          x="286.95312"
          y="1297.839"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:37.33333206px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:37.33333206px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          id="tspan1449">+</tspan></text>
     <text
        id="text1455"
        y="1318.0107"
        x="309.92657"
-       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+       style="display:inline;opacity:1;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:23.28816414px;line-height:1.25;font-family:T7Font;-inkscape-font-specification:T7Font;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
        xml:space="preserve"><tspan
          id="tspan1453"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:37.33333206px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:37.33333206px;font-family:'A320 panel font';-inkscape-font-specification:'A320 panel font';text-align:center;text-anchor:middle;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:0.99999994;stroke-opacity:1;"
          y="1318.0107"
          x="309.92657"
          sodipodi:role="line">-</tspan></text>
@@ -2136,9 +2136,9 @@
        height="41.060528"
        width="37.344662"
        id="rect1457"
-       style="display:inline;opacity:1;fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+       style="display:inline;opacity:1;fill:none;fill-opacity:1;stroke:#ff9c61;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <rect
-       style="display:inline;opacity:1;fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="display:inline;opacity:1;fill:none;fill-opacity:1;stroke:#ff9c61;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect1459"
        width="37.344662"
        height="41.060528"
@@ -2152,9 +2152,9 @@
        height="41.060528"
        width="37.344662"
        id="rect1461"
-       style="display:inline;opacity:1;fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+       style="display:inline;opacity:1;fill:none;fill-opacity:1;stroke:#ff9c61;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <rect
-       style="display:inline;opacity:1;fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="display:inline;opacity:1;fill:none;fill-opacity:1;stroke:#ff9c61;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect1463"
        width="37.344662"
        height="41.060528"
@@ -2167,9 +2167,9 @@
        height="1.713986"
        width="30.851749"
        id="rect1465"
-       style="display:inline;opacity:1;fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+       style="display:inline;opacity:1;fill:#ff9c61;fill-opacity:1;stroke:#ff9c61;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <rect
-       style="display:inline;opacity:1;fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="display:inline;opacity:1;fill:#ff9c61;fill-opacity:1;stroke:#ff9c61;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect1467"
        width="30.851749"
        height="1.713986"
@@ -2181,9 +2181,9 @@
        height="1.713986"
        width="30.851749"
        id="rect1469"
-       style="display:inline;opacity:1;fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+       style="display:inline;opacity:1;fill:#ff9c61;fill-opacity:1;stroke:#ff9c61;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <rect
-       style="display:inline;opacity:1;fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="display:inline;opacity:1;fill:#ff9c61;fill-opacity:1;stroke:#ff9c61;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect1471"
        width="30.851749"
        height="1.713986"
@@ -2195,16 +2195,16 @@
        height="1.713986"
        width="30.851749"
        id="rect1473"
-       style="display:inline;opacity:1;fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+       style="display:inline;opacity:1;fill:#ff9c61;fill-opacity:1;stroke:#ff9c61;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <rect
-       style="display:inline;opacity:1;fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="display:inline;opacity:1;fill:#ff9c61;fill-opacity:1;stroke:#ff9c61;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect1475"
        width="30.851749"
        height="1.713986"
        x="25.919456"
        y="580.90161" />
     <rect
-       style="display:inline;opacity:1;fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="display:inline;opacity:1;fill:#ff9c61;fill-opacity:1;stroke:#ff9c61;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect1477"
        width="30.851749"
        height="1.713986"
@@ -2216,9 +2216,9 @@
        height="1.713986"
        width="30.851749"
        id="rect1479"
-       style="display:inline;opacity:1;fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+       style="display:inline;opacity:1;fill:#ff9c61;fill-opacity:1;stroke:#ff9c61;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <rect
-       style="display:inline;opacity:1;fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="display:inline;opacity:1;fill:#ff9c61;fill-opacity:1;stroke:#ff9c61;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect1481"
        width="30.851749"
        height="1.713986"
@@ -2230,9 +2230,9 @@
        height="1.713986"
        width="30.851749"
        id="rect1483"
-       style="display:inline;opacity:1;fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+       style="display:inline;opacity:1;fill:#ff9c61;fill-opacity:1;stroke:#ff9c61;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <rect
-       style="display:inline;opacity:1;fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="display:inline;opacity:1;fill:#ff9c61;fill-opacity:1;stroke:#ff9c61;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect1485"
        width="30.851749"
        height="1.713986"
@@ -2244,16 +2244,16 @@
        height="1.713986"
        width="30.851749"
        id="rect1487"
-       style="display:inline;opacity:1;fill:none;fill-opacity:1;stroke:#ffffff;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+       style="display:inline;opacity:1;fill:#ff9c61;fill-opacity:1;stroke:#ff9c61;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <rect
        y="190.46938"
        x="102.11961"
        height="10.161936"
        width="40.370743"
        id="rect1489"
-       style="display:inline;opacity:1;fill:url(#linearGradient991);fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+       style="display:inline;opacity:1;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <rect
-       style="display:inline;opacity:1;fill:url(#linearGradient995);fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="display:inline;opacity:1;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect1491"
        width="40.370743"
        height="10.161936"
@@ -2265,9 +2265,9 @@
        height="10.161936"
        width="40.370743"
        id="rect1493"
-       style="display:inline;opacity:1;fill:url(#linearGradient999);fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+       style="display:inline;opacity:1;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <rect
-       style="display:inline;opacity:1;fill:url(#linearGradient1003);fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="display:inline;opacity:1;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect1495"
        width="40.370743"
        height="10.161936"
@@ -2279,9 +2279,9 @@
        height="10.161936"
        width="40.370743"
        id="rect1497"
-       style="display:inline;opacity:1;fill:url(#linearGradient1007);fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+       style="display:inline;opacity:1;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <rect
-       style="display:inline;opacity:1;fill:url(#linearGradient1011);fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="display:inline;opacity:1;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect1499"
        width="40.370743"
        height="10.161936"
@@ -2289,7 +2289,7 @@
        y="568.46936" />
     <rect
        transform="scale(-1,1)"
-       style="display:inline;opacity:1;fill:url(#linearGradient1025);fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="display:inline;opacity:1;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect1501"
        width="40.370743"
        height="10.161936"
@@ -2302,10 +2302,10 @@
        height="10.161936"
        width="40.370743"
        id="rect1503"
-       style="display:inline;opacity:1;fill:url(#linearGradient1027);fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+       style="display:inline;opacity:1;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <rect
        transform="scale(-1,1)"
-       style="display:inline;opacity:1;fill:url(#linearGradient1029);fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="display:inline;opacity:1;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect1505"
        width="40.370743"
        height="10.161936"
@@ -2318,10 +2318,10 @@
        height="10.161936"
        width="40.370743"
        id="rect1507"
-       style="display:inline;opacity:1;fill:url(#linearGradient1031);fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+       style="display:inline;opacity:1;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <rect
        transform="scale(-1,1)"
-       style="display:inline;opacity:1;fill:url(#linearGradient1033);fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="display:inline;opacity:1;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect1509"
        width="40.370743"
        height="10.161936"
@@ -2334,6 +2334,6 @@
        height="10.161936"
        width="40.370743"
        id="rect1511"
-       style="display:inline;opacity:1;fill:url(#linearGradient1035);fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+       style="display:inline;opacity:1;fill:#ff9c61;fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
   </g>
 </svg>
