@@ -6,6 +6,6 @@ local hud_h_transform = createGlobalPropertyf("a321neo/dynamics/hud/horizontal_t
 local hud_v_transform = createGlobalPropertyf("a321neo/dynamics/hud/vertical_transform", 0, false, true, false)
 
 function update()
-    set(hud_h_transform, (get(Head_x)-default_head_x)*2000)
-    set(hud_v_transform, (get(Head_y)-default_head_y)*2000)
+    set(hud_h_transform, (get(Head_x)-default_head_x)*6020)
+    set(hud_v_transform, (get(Head_y)-default_head_y)*6020)
 end
