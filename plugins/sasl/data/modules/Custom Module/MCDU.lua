@@ -1539,7 +1539,7 @@ function (phase)
     if phase == "L6" then
         mcdu_open_page(600) -- open 600 f-pln
     end
-    if phase == "slew_up" or phase = "slew_down" then
+    if phase == "slew_up" or phase == "slew_down" then
         if phase == "slew_up" then
             offset = offset + 1
         else
