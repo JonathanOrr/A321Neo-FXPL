@@ -316,7 +316,10 @@ end
 --
 --]]
 --a321neo commands
-local mcdu_debug_message = sasl.createCommand("a321neo/debug/mcdu/debug_message", "send a mcdu debug message")
+local mcdu_debug_get = sasl.createCommand("a321neo/debug/mcdu/get_data", "retrieve FMGS data from pointer a321neo/cockpit/mdu/mcdu_debug_pointer to a321neo/cockpit/mcdu/mcdu_debug_dat")
+local mcdu_debug_set = sasl.createCommand("a321neo/debug/mcdu/set_data", "inject FMGS data from pointer a321neo/cockpit/mdu/mcdu_debug_pointer to a321neo/cockpit/mcdu/mcdu_debug_dat")
+local mcdu_debug_pointer = createGlobalPropertys("a321neo/cockpit/mcdu/mcdu_debug_pointer")
+local mcdu_debug_dat = createGlobalPropertys("a321neo/cockpit/mcdu/mcdu_debug_dat")
 
 --mcdu entry inputs
 local mcdu_inp = {}
@@ -414,9 +417,17 @@ end
 --a321neo command handlers
 --debugging
 local hokey_pokey = false --wonder what this does
-sasl.registerCommandHandler(mcdu_debug_message, 0, function (phase)
+sasl.registerCommandHandler(mcdu_debug_get, 0, function (phase)
     if phase == SASL_COMMAND_BEGIN then
-        mcdu_send_message("debug")
+        print("MCDU DEBUG get " .. fmgs_dat[get(mcdu_debug_pointer)])
+        set(mcdu_debug_dat, fmgs_dat[get(mcdu_debug_pointer)])
+        mcdu_open_page(get(mcdu_page))
+    end
+end)
+sasl.registerCommandHandler(mcdu_debug_set, 0, function (phase)
+    if phase == SASL_COMMAND_BEGIN then
+        print("MCDU DEBUG set " .. fmgs_dat[get(mcdu_debug_pointer)])
+        fmgs_dat[get(mcdu_debug_pointer)] = get(mcdu_debug_dat)
         mcdu_open_page(get(mcdu_page))
     end
 end)
@@ -640,7 +651,7 @@ local function mcdu_ctrl_get_nav(find_nameid, find_type)
     return nav
 end
 
-mcdu_entry = "R0.55"
+mcdu_entry = ""
 
 --update
 function update()
@@ -749,6 +760,42 @@ function (phase)
         mcdu_dat["l"]["L"][1][1] = {txt = " a", col = "green"}
         mcdu_dat["l"]["L"][1][1] = {txt = "  a", col = "blue", size = "s"}
         --]]
+
+        draw_update()
+    end
+end
+
+-- 100 dir
+mcdu_sim_page[100] =
+function (phase)
+    if phase == "render" then
+        mcdu_dat_title.txt = "          dir"
+
+        mcdu_dat["l"]["L"][1].txt = "not yet implemented"
+
+        draw_update()
+    end
+end
+
+-- 200 prog
+mcdu_sim_page[200] =
+function (phase)
+    if phase == "render" then
+        mcdu_dat_title.txt = "          prog"
+
+        mcdu_dat["l"]["L"][1].txt = "not yet implemented"
+
+        draw_update()
+    end
+end
+
+-- 300 perf
+mcdu_sim_page[300] =
+function (phase)
+    if phase == "render" then
+        mcdu_dat_title.txt = "          perf"
+
+        mcdu_dat["l"]["L"][1].txt = "not yet implemented"
 
         draw_update()
     end
@@ -903,8 +950,14 @@ function (phase)
 
         --automatically calculate crz temp
         if variation >= 1 and variation <= 3 then
-            fmgs_dat["crz temp"] = math.floor(tonumber(input) * -0.2 + 16)
+            if variation ~= 3 then
+                alt = input
+            else
+                alt = input:sub(3,5)
+            end
+            fmgs_dat["crz temp"] = math.floor(tonumber(alt) * -0.2 + 16)
             fmgs_dat["crz temp alt"] = false --crz temp has not been altered
+
         else
             fmgs_dat["crz temp alt"] = true --crz temp has been manually altered
         end
@@ -915,7 +968,7 @@ function (phase)
         elseif variation == 2 then
             fmgs_dat["crz fl"] = input * 100
         elseif variation == 3 then
-            fmgs_dat["crz fl"] = input:sub(3,5) * 100
+            fmgs_dat["crz fl"] = tonumber(input:sub(3,5)) * 100
         elseif variation == 4 then
             fmgs_dat["crz fl"] = input:sub(3,5) * 100
             fmgs_dat["crz temp"] = input:sub(7,7) * -1
@@ -1414,6 +1467,42 @@ function (phase)
     end
 end
 
+-- 800 fuel pred
+mcdu_sim_page[800] =
+function (phase)
+    if phase == "render" then
+        mcdu_dat_title.txt = "          fuel pred"
+
+        mcdu_dat["l"]["L"][1].txt = "not yet implemented"
+
+        draw_update()
+    end
+end
+
+-- 900 sec f-pln
+mcdu_sim_page[900] =
+function (phase)
+    if phase == "render" then
+        mcdu_dat_title.txt = "          sec f-pln"
+
+        mcdu_dat["l"]["L"][1].txt = "not yet implemented"
+
+        draw_update()
+    end
+end
+
+-- 1000 atc comm
+mcdu_sim_page[1000] =
+function (phase)
+    if phase == "render" then
+        mcdu_dat_title.txt = "          atc comm"
+
+        mcdu_dat["l"]["L"][1].txt = "not yet implemented"
+
+        draw_update()
+    end
+end
+
 -- 1100 mcdu menu
 mcdu_sim_page[1100] =
 function (phase)
@@ -1421,25 +1510,29 @@ function (phase)
         mcdu_dat_title.txt = "        mcdu menu"
         mcdu_dat["l"]["L"][1].txt = "<fmgc"
 
-        mcdu_dat["l"]["R"][6].txt = "debug>"
+        mcdu_dat["l"]["R"][6].txt = "options>"
         draw_update()
     end
     if phase == "L1" then
         mcdu_open_page(505) -- open 505 data a/c status
     end
     if phase == "R6" then
-        mcdu_open_page(1101) -- open 1101 mcdu menu debug
+        mcdu_open_page(1101) -- open 1101 mcdu menu options
     end
 end
 
--- 1101 mcdu menu debug
+-- 1101 mcdu menu options
 mcdu_sim_page[1101] =
 function (phase)
     if phase == "render" then
-        mcdu_dat_title.txt = "    a32nx project"
+        mcdu_dat_title.txt = "     a32nx project"
 
         mcdu_dat["s"]["L"][1].txt = "mcdu version"
-        mcdu_dat["l"]["L"][1].txt = "v1.0"
+        mcdu_dat["l"]["L"][1].txt = "v0.1"
+        mcdu_dat["s"]["R"][1].txt = "developers"
+        mcdu_dat["l"]["R"][1] = {txt = "jonathan orr", col = "green"}
+        mcdu_dat["l"]["R"][2] = {txt = "henrick ku", col = "orange"}
+        mcdu_dat["l"]["R"][3] = {txt = "chaidhat c.", col = "blue"}
         mcdu_dat["l"]["L"][2].txt = "<colours"
 
         mcdu_dat["l"]["R"][6].txt = "return>"
@@ -1467,7 +1560,8 @@ local function mcdu_set_colour(colour)
             mcdu_send_message("format e.g. b0.50")
         end
 end
--- 1102 mcdu menu debug colours
+
+-- 1102 mcdu menu options colours
 mcdu_sim_page[1102] =
 function (phase)
     if phase == "render" then
@@ -1503,3 +1597,16 @@ function (phase)
         mcdu_open_page(1101) -- open 1101 mcdu menu debug
     end
 end
+
+-- 1200 air port
+mcdu_sim_page[1200] =
+function (phase)
+    if phase == "render" then
+        mcdu_dat_title.txt = "          air port"
+
+        mcdu_dat["l"]["L"][1].txt = "not yet implemented"
+
+        draw_update()
+    end
+end
+
