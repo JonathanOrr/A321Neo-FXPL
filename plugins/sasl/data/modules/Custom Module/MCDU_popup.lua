@@ -170,6 +170,7 @@ end
 
 function draw()
     sasl.gl.drawTexture(MCDU_OVERLAY, 0, 0, 877, 1365)
+    sasl.gl.drawTexture(MCDU_OVERLAY_LIT, 0, 0, 877, 1365)
     if get(Mcdu_enabled) == 1 then
         --does enabled exist?
         if MCDU_get_popup("enabled") ~= nil then

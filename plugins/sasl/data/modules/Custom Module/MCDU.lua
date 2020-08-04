@@ -656,8 +656,7 @@ mcdu_entry = ""
 --update
 function update()
     if get(mcdu_page) == 0 then --on start
-       --mcdu_open_page(505) --open 505 A/C status
-       mcdu_open_page(400) --open 505 A/C status
+       mcdu_open_page(505) --open 505 A/C status
     end
 
     -- display next message
@@ -697,6 +696,8 @@ end
 --        505 - data A/C status
 --      600 - f-pln
 --        601 - f-pln lat rev
+--        602 - f-pln lat rev dept airport
+--        603 - f-pln lat rev dest airport
 --      700 - rad nav
 --      800 - fuel pred
 --      900 - sec f-pln
@@ -1168,8 +1169,13 @@ function (phase)
         mcdu_dat["s"]["L"][6].txt = "idle/perf"
         mcdu_dat["l"]["L"][6] = {txt = "+0.0/+0.0", col = "green"}
 
+        mcdu_dat["l"]["R"][6].txt = "options>"
+
        
         draw_update()
+    end
+    if phase == "R6" then
+        mcdu_open_page(1101) -- open 1101 mcdu menu options
     end
 end
 
@@ -1224,10 +1230,10 @@ end
 fpln_addwpt(1, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil)
 
 --DEMO
-table.remove(fmgs_dat["fpln"])
-fpln_addwpt(1, nil, "kbfi", nil, nil, nil, nil, nil, nil, nil, nil, nil) 
-fpln_addwpt(1, "chins3", "humpp", nil, 2341, 14, 297, 15000, nil, nil, nil, "aubrn")
-fpln_addwpt(1, nil, "ksea", nil, nil, nil, nil, nil, nil, nil, nil, "humpp")
+--table.remove(fmgs_dat["fpln"])
+--fpln_addwpt(1, nil, "kbfi", nil, nil, nil, nil, nil, nil, nil, nil, nil) 
+--fpln_addwpt(1, "chins3", "humpp", nil, 2341, 14, 297, 15000, nil, nil, nil, "aubrn")
+--fpln_addwpt(1, nil, "ksea", nil, nil, nil, nil, nil, nil, nil, nil, "humpp")
 
 -- 600 f-pln
 mcdu_sim_page[600] =
@@ -1405,6 +1411,80 @@ function (phase)
 
         mcdu_dat["s"]["R"][3].txt = "next wpt "
         mcdu_dat["l"]["R"][3] = {txt = "[    ]", col = "blue"}
+        --if wpt is not dept airport
+        if wpt.name ~= fmgs_dat["dest"] then
+            mcdu_dat["s"]["R"][4].txt = "new dest "
+            mcdu_dat["l"]["R"][4] = {txt = "[  ]", col = "blue"}
+        end
+
+        --is wpt the dept airport?
+        if wpt.name == fmgs_dat["origin"] then
+            mcdu_dat["l"]["L"][1].txt = "<departure"
+            mcdu_dat["l"]["R"][1].txt = "fix info>"
+        --is wpt the dept airport?
+        elseif wpt.name == fmgs_dat["origin"] then
+            mcdu_dat["l"]["R"][1].txt = "arrival>"
+            mcdu_dat["l"]["L"][3].txt = "<altn"
+        end
+
+        mcdu_dat["l"]["R"][6].txt = "<return"
+
+        draw_update()
+    end
+    
+    if phase == "R2" or phase == "R3" or phase == "R4" then
+        mcdu_send_message("not yet implemented!")
+    end
+    if phase == "R6" then
+        mcdu_open_page(600) -- open 600 f-pln
+    end
+end
+
+-- 602 f-pln lat rev page dept airport
+mcdu_sim_page[602] =
+function (phase)
+    if phase == "render" then
+        mcdu_dat_title[1] = {txt = "departure"}
+        mcdu_dat_title[2] = {txt = "           from", size = "s"}
+        mcdu_dat_title[3] = {txt = "                " .. wpt.name, col = "green"}
+
+        fmgs_dat_init("lat rev wpt", "none")
+        --get the wpt in question's name
+        wpt_find_name = fmgs_dat["lat rev wpt"]
+        wpt = "invalid"
+        --find the wpt data with the name
+        for i, wpt_find in ipairs(fmgs_dat["fpln"]) do
+            if wpt_find.name == wpt_find_name then
+                wpt = wpt_find
+                break
+            end
+        end
+        if wpt == "invalid" then
+            mcdu_send_message("error 601 " .. wpt_find_name) --throw error!
+            return
+        end
+
+        --get lat lon
+        fmgs_dat_init("lat fmt2", "")
+        fmgs_dat_init("lon fmt2", "")
+        if fmgs_dat["lat fmt2"] == "" then
+            --get lat lon from XP FMC
+            mcdu_ctrl_get_origin_latlon(wpt.name, function(val) --callback
+            --Nxx''xx.xx Wxxx''xx.xx
+            fmgs_dat["lat fmt2"] = val:sub(2,9) .. val:sub(1,1)
+            fmgs_dat["lon fmt2"] = val:sub(13,21) .. val:sub(12,12)
+
+            mcdu_open_page(601) -- reload
+            end) --end callback
+        end
+
+        mcdu_dat["s"]["L"][1] = {txt = "   " .. fmgs_dat["lat fmt2"] .. "/" .. fmgs_dat["lon fmt2"], col = "green"}
+
+        mcdu_dat["s"]["R"][2].txt = "ll xing/incr/no"
+        mcdu_dat["l"]["R"][2] = {txt = "[  ]°/[ ]°/[ ]", col = "blue"}
+
+        mcdu_dat["s"]["R"][3].txt = "next wpt "
+        mcdu_dat["l"]["R"][3] = {txt = "[    ]", col = "blue"}
 
         mcdu_dat["s"]["R"][4].txt = "new dest "
         mcdu_dat["l"]["R"][4] = {txt = "[  ]", col = "blue"}
@@ -1414,11 +1494,17 @@ function (phase)
             mcdu_dat["l"]["L"][1].txt = "<departure"
             mcdu_dat["l"]["R"][1].txt = "fix info>"
         end
+
+        mcdu_dat["l"]["R"][6].txt = "<return"
+
         draw_update()
     end
     
     if phase == "R2" or phase == "R3" or phase == "R4" then
         mcdu_send_message("not yet implemented!")
+    end
+    if phase == "R6" then
+        mcdu_open_page(600) -- open 600 f-pln
     end
 end
 
@@ -1527,19 +1613,22 @@ function (phase)
     if phase == "render" then
         mcdu_dat_title.txt = "     a32nx project"
 
-        mcdu_dat["s"]["L"][1].txt = "mcdu version"
-        mcdu_dat["l"]["L"][1].txt = "v0.1"
-        mcdu_dat["s"]["R"][1].txt = "developers"
-        mcdu_dat["l"]["R"][1] = {txt = "jonathan orr", col = "green"}
-        mcdu_dat["l"]["R"][2] = {txt = "henrick ku", col = "orange"}
-        mcdu_dat["l"]["R"][3] = {txt = "chaidhat c.", col = "blue"}
+        mcdu_dat["l"]["L"][1].txt = "<about"
         mcdu_dat["l"]["L"][2].txt = "<colours"
 
-        mcdu_dat["l"]["R"][6].txt = "return>"
+        mcdu_dat["s"]["R"][1].txt = "developers"
+        mcdu_dat["l"]["R"][1] = {txt = "jonathan orr", col = "blue"}
+        mcdu_dat["l"]["R"][2] = {txt = "henrick ku", col = "green"}
+        mcdu_dat["s"]["R"][3].txt = "mcdu written by"
+        mcdu_dat["l"]["R"][3] = {txt = "chaidhat c.", col = "orange"}
+
         draw_update()
     end
+    if phase == "L1" then
+        mcdu_open_page(1102) -- open 1102 mcdu menu options about
+    end
     if phase == "L2" then
-        mcdu_open_page(1102) -- open 1102 mcdu menu debug
+        mcdu_open_page(1103) -- open 1103 mcdu menu options colours
     end
     if phase == "R6" then
         mcdu_open_page(1100) -- open 1100 mcdu menu
@@ -1555,16 +1644,39 @@ local function mcdu_set_colour(colour)
             input_col = input:sub(2,2) .. "." .. string.sub(input, 4,5)
             MCDU_DISP_COLOR[colour][variation] = input_col
 
-            mcdu_open_page(1102) -- reload page
+            mcdu_open_page(1103) -- reload page
         else
             mcdu_send_message("format e.g. b0.50")
         end
 end
 
--- 1102 mcdu menu options colours
+-- 1102 mcdu menu options about
 mcdu_sim_page[1102] =
 function (phase)
     if phase == "render" then
+        mcdu_dat_title.txt = "     a32nx about"
+        mcdu_dat["s"]["L"][1].txt = "mcdu version"
+        mcdu_dat["l"]["L"][1].txt = "v1.0"
+        mcdu_dat["s"]["L"][2].txt = "license"
+        mcdu_dat["l"]["L"][2].txt = "gpl 3.0"
+
+        mcdu_dat["s"]["L"][3].txt = "github.com"
+        mcdu_dat["l"]["L"][3].txt = "jonathanorr/a321neo-fxpl"
+
+        mcdu_dat["l"]["R"][6].txt = "return>"
+
+        draw_update()
+    end
+    if phase == "R6" then
+        mcdu_open_page(1101) -- open 1101 mcdu menu options
+    end
+end
+
+-- 1103 mcdu menu options colours
+mcdu_sim_page[1103] =
+function (phase)
+    if phase == "render" then
+        mcdu_dat_title.txt = "     a32nx colours"
         for i,col in ipairs({"white", "blue", "green", "orange"}) do
             mcdu_dat["s"]["L"][i].txt = col .. " colour"
             mcdu_dat["l"]["L"][i] = {txt = "<R" .. MCDU_DISP_COLOR[col][1] .. "G" .. MCDU_DISP_COLOR[col][2] .. "B" .. MCDU_DISP_COLOR[col][3], col = col}
@@ -1594,7 +1706,7 @@ function (phase)
         end
     end
     if phase == "R6" then
-        mcdu_open_page(1101) -- open 1101 mcdu menu debug
+        mcdu_open_page(1101) -- open 1101 mcdu menu options
     end
 end
 
