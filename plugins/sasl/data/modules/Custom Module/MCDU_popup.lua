@@ -2,6 +2,7 @@ size = {877, 1365}
 
 local B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
 local MCDU_OVERLAY = sasl.gl.loadImage("textures/MCDU.png", 0, 0, 877, 1365)
+local MCDU_OVERLAY_LIT = sasl.gl.loadImage("textures/MCDU_LIT.png", 0, 0, 877, 1365)
 
 local WHITELIST = "1234567890qwertyuiopasdfghjklzxcvbnm./ "
 
@@ -169,7 +170,9 @@ for i,click_rect in ipairs(CLICK_RECTS) do
 end
 
 function draw()
+    lit = get(globalPropertyf("sim/graphics/misc/light_attenuation")) 
     sasl.gl.drawTexture(MCDU_OVERLAY, 0, 0, 877, 1365)
+    sasl.gl.drawTexture(MCDU_OVERLAY_LIT, 0, 0, 877, 1365, {1, 1, 1, lit})
     --sasl.gl.drawTexture(MCDU_OVERLAY_LIT, 0, 0, 877, 1365)
     if get(Mcdu_enabled) == 1 then
         --does enabled exist?
