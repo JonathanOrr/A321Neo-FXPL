@@ -92,6 +92,10 @@ Adirs_irs_aligned = createGlobalPropertyi("a321neo/cockpit/adris/irs_aligned", 0
 
 
 --global dataref variable from the Sim--
+--camera
+Head_x = globalProperty("sim/graphics/view/pilots_head_x")
+Head_y = globalProperty("sim/graphics/view/pilots_head_y")
+Head_z = globalProperty("sim/graphics/view/pilots_head_z")
 --autopilot
 Flight_director_1_mode = globalProperty("sim/cockpit2/autopilot/flight_director_mode")
 Flight_director_2_mode = globalProperty("sim/cockpit2/autopilot/flight_director2_mode")
