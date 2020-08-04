@@ -750,6 +750,32 @@ local function mcdu_ctrl_get_origin_latlon(origin, callback)
     mcdu_ctrl_add_inst({type = "GET_LN", arg = "4", callback = callback})
 end
 
+local function mcdu_ctrl_get_runways_origin(callback, final_callback)
+    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/dep_arr"})
+    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/ls_1l"})
+    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/prev"})
+    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/prev"})
+    mcdu_ctrl_add_inst({type = "GET_LN", arg = "2", callback = callback})
+    mcdu_ctrl_add_inst({type = "GET_LN", arg = "4", callback = callback})
+    mcdu_ctrl_add_inst({type = "GET_LN", arg = "6", callback = callback})
+    mcdu_ctrl_add_inst({type = "GET_LN", arg = "8", callback = callback})
+    mcdu_ctrl_add_inst({type = "GET_LN", arg = "10", callback = callback})
+    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/next"})
+    mcdu_ctrl_add_inst({type = "GET_LN", arg = "2", callback = callback})
+    mcdu_ctrl_add_inst({type = "GET_LN", arg = "4", callback = callback})
+    mcdu_ctrl_add_inst({type = "GET_LN", arg = "6", callback = callback})
+    mcdu_ctrl_add_inst({type = "GET_LN", arg = "8", callback = callback})
+    mcdu_ctrl_add_inst({type = "GET_LN", arg = "10", callback = callback})
+
+    --invoke final callback
+    mcdu_ctrl_add_inst({type = "GET_LN", arg = "1", callback = final_callback})
+end
+
+local function mcdu_ctrl_get_sids(callback)
+    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/dep_arr"})
+    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/ls_1l"})
+end
+
 -- 00 template
 mcdu_sim_page[00] =
 function (phase)
@@ -1231,9 +1257,9 @@ fpln_addwpt(1, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil)
 
 --DEMO
 --table.remove(fmgs_dat["fpln"])
---fpln_addwpt(1, nil, "kbfi", nil, nil, nil, nil, nil, nil, nil, nil, nil) 
---fpln_addwpt(1, "chins3", "humpp", nil, 2341, 14, 297, 15000, nil, nil, nil, "aubrn")
---fpln_addwpt(1, nil, "ksea", nil, nil, nil, nil, nil, nil, nil, nil, "humpp")
+fpln_addwpt(1, nil, "kbfi", nil, nil, nil, nil, nil, nil, nil, nil, nil) 
+fpln_addwpt(1, "chins3", "humpp", nil, 2341, 14, 297, 15000, nil, nil, nil, "aubrn")
+fpln_addwpt(1, nil, "ksea", nil, nil, nil, nil, nil, nil, nil, nil, "humpp")
 
 -- 600 f-pln
 mcdu_sim_page[600] =
@@ -1411,90 +1437,98 @@ function (phase)
         mcdu_dat["s"]["R"][3].txt = "next wpt "
         mcdu_dat["l"]["R"][3] = {txt = "[    ]", col = "blue"}
         --if wpt is not dept airport
-        if wpt.name ~= fmgs_dat["dest"] then
+        if wpt.name:upper():sub(1,4) ~= fmgs_dat["dest"] then
             mcdu_dat["s"]["R"][4].txt = "new dest "
             mcdu_dat["l"]["R"][4] = {txt = "[  ]", col = "blue"}
         end
 
         --is wpt the dept airport?
-        if wpt.name == fmgs_dat["origin"] then
+        if wpt.name:upper():sub(1,4) == fmgs_dat["origin"] then
+            print("aa")
             mcdu_dat["l"]["L"][1].txt = "<departure"
             mcdu_dat["l"]["R"][1].txt = "fix info>"
         --is wpt the dept airport?
-        elseif wpt.name == fmgs_dat["origin"] then
+        elseif wpt.name:upper():sub(1,4) == fmgs_dat["dest"] then
             mcdu_dat["l"]["R"][1].txt = "arrival>"
             mcdu_dat["l"]["L"][3].txt = "<altn"
         end
 
-        mcdu_dat["l"]["R"][6].txt = "<return"
+        mcdu_dat["l"]["L"][6].txt = "<return"
 
         draw_update()
     end
     
+    --departure
+    if phase == "L1" then
+        --is wpt the dept airport?
+        if wpt.name:upper():sub(1,4) == fmgs_dat["origin"] then
+            mcdu_open_page(602) -- open 602 f-pln lat rev page dept airport
+        end
+    end
+    --arrival/fix info
+    if phase == "R1" then
+        --is wpt the dept airport?
+        if wpt.name:upper():sub(1,4) == fmgs_dat["dest"] then
+            mcdu_open_page(603) -- open 603 f-pln lat rev page dest airport
+        else
+            mcdu_send_message("not yet implemented!")
+        end
+    end
+    --altn
+    if phase == "L3" then
+        --is wpt the dept airport?
+        if wpt.name:upper():sub(1,4) == fmgs_dat["origin"] then
+            mcdu_open_page(602) -- open 602 f-pln lat rev page dept airport
+        end
+    end
     if phase == "R2" or phase == "R3" or phase == "R4" then
         mcdu_send_message("not yet implemented!")
     end
-    if phase == "R6" then
+    if phase == "L6" then
         mcdu_open_page(600) -- open 600 f-pln
     end
 end
+
+fmgs_dat["origin"] = "KSEA"
+fmgs_dat["dest"] = "KBFI"
 
 -- 602 f-pln lat rev page dept airport
 mcdu_sim_page[602] =
 function (phase)
     if phase == "render" then
-        mcdu_dat_title[1] = {txt = "departure"}
-        mcdu_dat_title[2] = {txt = "           from", size = "s"}
-        mcdu_dat_title[3] = {txt = "                " .. wpt.name, col = "green"}
+        mcdu_dat_title[1] = {txt = " departure"}
+        mcdu_dat_title[2] = {txt = "             from", size = "s"}
+        mcdu_dat_title[3] = {txt = "                  " .. wpt.name, col = "green"}
 
-        fmgs_dat_init("lat rev wpt", "none")
-        --get the wpt in question's name
-        wpt_find_name = fmgs_dat["lat rev wpt"]
-        wpt = "invalid"
-        --find the wpt data with the name
-        for i, wpt_find in ipairs(fmgs_dat["fpln"]) do
-            if wpt_find.name == wpt_find_name then
-                wpt = wpt_find
-                break
+        mcdu_dat["s"]["L"][1].txt = " rwy      sid     trans"
+        mcdu_dat["l"]["L"][1].txt = " ---     ------  ------"
+
+        fmgs_dat["runways"] = {}
+        fmgs_dat["terminate"] = false
+        mcdu_ctrl_get_runways_origin(function (val) 
+                if not fmgs_dat["terminate"] then
+                    if val:sub(19,24) ~= "      " then
+                        table.insert(fmgs_dat["runways"], val:sub(19,24))
+                        print(val:sub(19,24))
+                    else
+                        fmgs_dat["terminate"] = true
+                    end
+                end
+            end,
+        function()
+            
+            mcdu_dat["s"]["L"][2].txt = " available runways"
+            line = 2
+            offset = 1
+            fmgs_dat["offset"] = 0
+            for i,runway in ipairs(fmgs_dat["runways"]) do
+                mcdu_dat["l"]["L"][line] = {txt = "<" .. runway:sub(4,6), col = "blue"}
+                line = ((line + 1) % 4) + 2
             end
-        end
-        if wpt == "invalid" then
-            mcdu_send_message("error 601 " .. wpt_find_name) --throw error!
-            return
-        end
+            draw_update()
+        end) --end callback
 
-        --get lat lon
-        fmgs_dat_init("lat fmt2", "")
-        fmgs_dat_init("lon fmt2", "")
-        if fmgs_dat["lat fmt2"] == "" then
-            --get lat lon from XP FMC
-            mcdu_ctrl_get_origin_latlon(wpt.name, function(val) --callback
-            --Nxx''xx.xx Wxxx''xx.xx
-            fmgs_dat["lat fmt2"] = val:sub(2,9) .. val:sub(1,1)
-            fmgs_dat["lon fmt2"] = val:sub(13,21) .. val:sub(12,12)
-
-            mcdu_open_page(601) -- reload
-            end) --end callback
-        end
-
-        mcdu_dat["s"]["L"][1] = {txt = "   " .. fmgs_dat["lat fmt2"] .. "/" .. fmgs_dat["lon fmt2"], col = "green"}
-
-        mcdu_dat["s"]["R"][2].txt = "ll xing/incr/no"
-        mcdu_dat["l"]["R"][2] = {txt = "[  ]°/[ ]°/[ ]", col = "blue"}
-
-        mcdu_dat["s"]["R"][3].txt = "next wpt "
-        mcdu_dat["l"]["R"][3] = {txt = "[    ]", col = "blue"}
-
-        mcdu_dat["s"]["R"][4].txt = "new dest "
-        mcdu_dat["l"]["R"][4] = {txt = "[  ]", col = "blue"}
-
-        --is wpt an airport?
-        if wpt.name:len() == 4 then
-            mcdu_dat["l"]["L"][1].txt = "<departure"
-            mcdu_dat["l"]["R"][1].txt = "fix info>"
-        end
-
-        mcdu_dat["l"]["R"][6].txt = "<return"
+        mcdu_dat["l"]["L"][6].txt = "<return"
 
         draw_update()
     end
@@ -1502,7 +1536,36 @@ function (phase)
     if phase == "R2" or phase == "R3" or phase == "R4" then
         mcdu_send_message("not yet implemented!")
     end
-    if phase == "R6" then
+    if phase == "L6" then
+        mcdu_open_page(600) -- open 600 f-pln
+    end
+    if phase == "slew_up" or phase = "slew_down" then
+        if phase == "slew_up" then
+            offset = offset + 1
+        else
+            offset = offset - 1
+        end
+        mcdu_open_page(600) -- open 600 f-pln
+    end
+end
+
+-- 603 f-pln lat rev page dest airport
+mcdu_sim_page[603] =
+function (phase)
+    if phase == "render" then
+        mcdu_dat_title[1] = {txt = " arrival"}
+        mcdu_dat_title[2] = {txt = "           from", size = "s"}
+        mcdu_dat_title[3] = {txt = "                  " .. wpt.name, col = "green"}
+
+        mcdu_dat["l"]["L"][6].txt = "<return"
+
+        draw_update()
+    end
+    
+    if phase == "R2" or phase == "R3" or phase == "R4" then
+        mcdu_send_message("not yet implemented!")
+    end
+    if phase == "L6" then
         mcdu_open_page(600) -- open 600 f-pln
     end
 end

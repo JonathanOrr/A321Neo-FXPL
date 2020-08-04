@@ -53,6 +53,7 @@ CLICK_RECT_PAGES.cmd[1][2] = "a321neo/cockpit/mcdu/page/prog"
 CLICK_RECT_PAGES.cmd[1][3] = "a321neo/cockpit/mcdu/page/perf"
 CLICK_RECT_PAGES.cmd[1][4] = "a321neo/cockpit/mcdu/page/init"
 CLICK_RECT_PAGES.cmd[1][5] = "a321neo/cockpit/mcdu/page/data"
+CLICK_RECT_PAGES.cmd[1][6] = "sim/FMS/CDU_popup"
 
 CLICK_RECT_PAGES.cmd[2] = {}
 CLICK_RECT_PAGES.cmd[2][1] = "a321neo/cockpit/mcdu/page/f-pln"
