@@ -143,7 +143,7 @@ P _door/3/_xyz/0 1.500000000
 P _door/3/_xyz/1 0.0
 P _door/3/_xyz/2 14.500000000
 P _door/3/_xyz/count 3
-P _door/4/_ang_now 9.762641907
+P _door/4/_ang_now 20.597618103
 P _door/4/_ext_ang 0.0
 P _door/4/_ret_ang 90.0
 P _door/4/_type 2
@@ -151,7 +151,7 @@ P _door/4/_xyz/0 -13.0
 P _door/4/_xyz/1 -3.599999905
 P _door/4/_xyz/2 73.500000000
 P _door/4/_xyz/count 3
-P _door/5/_ang_now -9.762641907
+P _door/5/_ang_now -20.597618103
 P _door/5/_ext_ang 0.0
 P _door/5/_ret_ang -90.0
 P _door/5/_type 2
@@ -209,7 +209,7 @@ P _gear/0/_latN 0.0
 P _gear/0/_latR 0.0
 P _gear/0/_leg_len 5.400000095
 P _gear/0/_lonE 0.0
-P _gear/0/_lonN 10.630432129
+P _gear/0/_lonN 22.428520203
 P _gear/0/_lonR 98.0
 P _gear/0/_scon 47252.898437500
 P _gear/0/_stat_def 0.399389744
@@ -239,14 +239,14 @@ P _gear/1/_gear_x -12.010000229
 P _gear/1/_gear_y -2.799999952
 P _gear/1/_gear_z 69.800003052
 P _gear/1/_latE 0.0
-P _gear/1/_latN 8.677902222
+P _gear/1/_latN 18.308998108
 P _gear/1/_latR 80.0
 P _gear/1/_leg_len 8.199999809
 P _gear/1/_lonE -7.0
-P _gear/1/_lonN -6.240683556
+P _gear/1/_lonN -5.397962570
 P _gear/1/_lonR 0.0
 P _gear/1/_scon 71266.664062500
-P _gear/1/_stat_def 1.367629170
+P _gear/1/_stat_def 1.367629528
 P _gear/1/_steerdeg_hispeed 0.0
 P _gear/1/_steerdeg_lospeed 0.0
 P _gear/1/_strut_comp -0.500000000
@@ -273,14 +273,14 @@ P _gear/2/_gear_x 12.010000229
 P _gear/2/_gear_y -2.799999952
 P _gear/2/_gear_z 69.800003052
 P _gear/2/_latE 0.0
-P _gear/2/_latN -8.677902222
+P _gear/2/_latN -18.308998108
 P _gear/2/_latR -80.0
 P _gear/2/_leg_len 8.199999809
 P _gear/2/_lonE -7.0
-P _gear/2/_lonN -6.240683556
+P _gear/2/_lonN -5.397962570
 P _gear/2/_lonR 0.0
 P _gear/2/_scon 71266.664062500
-P _gear/2/_stat_def 1.367629170
+P _gear/2/_stat_def 1.367629528
 P _gear/2/_steerdeg_hispeed 0.0
 P _gear/2/_steerdeg_lospeed 0.0
 P _gear/2/_strut_comp -0.500000000
@@ -39919,6 +39919,7 @@ GROUP Buttons and Lights
     IMAGE Buttons/master_caution
     DATAREF abc
     LOCKED
+    HIDE
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -46610,7 +46611,7 @@ GROUP hud vertical
     IS_VERTICAL 0
     OFFSET 0.000000
     gen_needle Horizon
-      POS 3445.000000 2342.000000
+      POS 3445.000000 2438.000000
       IMAGE hud/horizon
       DATAREF sim/cockpit2/gauges/indicators/roll_AHARS_deg_pilot
       CLIP
