@@ -1,4 +1,4 @@
-position= {3187,499,900,900}
+position= {3187,539,900,900}
 size = {900, 900}
 
 --local variables
