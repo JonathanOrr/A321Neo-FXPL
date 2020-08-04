@@ -3,6 +3,8 @@ size = {877, 1365}
 local B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
 local MCDU_OVERLAY = sasl.gl.loadImage("textures/MCDU.png", 0, 0, 877, 1365)
 
+local WHITELIST = "1234567890qwertyuiopasdfghjklzxcvbnm./ "
+
 function update()
     --change menu item state
     if MCDU_window:isVisible() == true then
@@ -41,6 +43,8 @@ function onKeyDown ( component , charCode , key , shDown , ctrlDown , altOptDown
             --noop
         elseif charCode == SASL_KEY_DELETE then
             sasl.commandOnce(sasl.findCommand("a321neo/cockpit/mcdu/misc/clr"))
+        elseif string.char(charCode) == "+" or string.char(charCode) == "-" then
+            sasl.commandOnce(sasl.findCommand("a321neo/cockpit/mcdu/misc/postive_negative"))
         elseif charCode == SASL_KEY_UP then
             sasl.commandOnce(sasl.findCommand("a321neo/cockpit/mcdu/side/slew_up"))
         elseif charCode == SASL_KEY_DOWN then
@@ -50,7 +54,15 @@ function onKeyDown ( component , charCode , key , shDown , ctrlDown , altOptDown
         elseif charCode == SASL_KEY_RIGHT then
             sasl.commandOnce(sasl.findCommand("a321neo/cockpit/mcdu/side/slew_right"))
         else
-            sasl.commandOnce(sasl.findCommand("a321neo/cockpit/mcdu/key/" .. string.char(charCode):upper()))
+            local pass = false
+            for i = 1, string.len(WHITELIST) do
+                if string.char(charCode):lower() == WHITELIST:sub(i,i) then
+                    pass = true
+                end
+            end
+            if pass then
+                sasl.commandOnce(sasl.findCommand("a321neo/cockpit/mcdu/key/" .. string.char(charCode):upper()))
+            end
         end
     return true
 end
