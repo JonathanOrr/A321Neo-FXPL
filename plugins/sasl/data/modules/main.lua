@@ -46,7 +46,7 @@ MCDU_window = contextWindow {
   gravity = { 0 , 1 , 0 , 1 };
   visible = true ;
   components = {
-    MCDU_popup {position = { 0 , 0 , 463 , 683 }}
+    MCDU_popup {position = { 0 , 0 , 463 , 683 }, focused = true}
   };
 }
 

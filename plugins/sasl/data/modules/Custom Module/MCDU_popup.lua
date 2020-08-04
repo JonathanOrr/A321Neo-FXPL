@@ -32,9 +32,8 @@ function draw()
     end
 end
 
-function keyHandler (charCode, virtualKeyCode, shiftDown, ctrlDown, altOptDown, event)
+function onKeyDown ( component , charCode , key , shDown , ctrlDown , altOptDown )
     --is it a key down or key hold event?
-    if event == 0 or event == 2 then
         if charCode == SASL_KEY_RETURN or
            charCode == SASL_KEY_ESCAPE or
            charCode == SASL_KEY_TAB
@@ -51,14 +50,7 @@ function keyHandler (charCode, virtualKeyCode, shiftDown, ctrlDown, altOptDown, 
         elseif charCode == SASL_KEY_RIGHT then
             sasl.commandOnce(sasl.findCommand("a321neo/cockpit/mcdu/side/slew_right"))
         else
-            print ( " Char : " ..string.char ( charCode ) .. " a" .. event)
             sasl.commandOnce(sasl.findCommand("a321neo/cockpit/mcdu/key/" .. string.char(charCode):upper()))
         end
-    end
-    sasl.options.setInteractivity (false) 
     return true
 end
-
-sasl.registerGlobalKeyHandler (keyHandler)
-
-
