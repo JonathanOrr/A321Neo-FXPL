@@ -89,12 +89,14 @@ Adirs_sys_on = createGlobalPropertyi("a321neo/cockpit/adris/adirs_on", 0, false,
 Adirs_irs_aligned = createGlobalPropertyi("a321neo/cockpit/adris/irs_aligned", 0, false, true, false)
 -- EWD
 EWD_left_memo = {}
+EWD_left_memo_group = {}
 EWD_left_memo_colors = {}
+EWD_left_memo_group_colors = {}
 for i=0,6 do
 	EWD_left_memo[i] = createGlobalPropertys("a321neo/cockpit/EWD/EWD_left_memo[".. i .. "]", "", false, true, false)
 	EWD_left_memo_group[i] = createGlobalPropertys("a321neo/cockpit/EWD/EWD_left_memo_group[".. i .. "]", "", false, true, false)
-	EWD_left_memo_group_colors[i] = createGlobalPropertyi("a321neo/cockpit/EWD/EWD_left_memo_group_colors[".. i .. "]", 0, false, true, false)
 	EWD_left_memo_colors[i] = createGlobalPropertyi("a321neo/cockpit/EWD/EWD_left_memo_colors[".. i .. "]", 0, false, true, false)
+	EWD_left_memo_group_colors[i] = createGlobalPropertyi("a321neo/cockpit/EWD/EWD_left_memo_group_colors[".. i .. "]", 0, false, true, false)
 end
 EWD_right_memo = {}
 EWD_right_memo_colors = {}
@@ -104,7 +106,7 @@ for i=0,6 do
 end
 EWD_flight_phase = createGlobalPropertyi("a321neo/cockpit/EWD/flight_phase", 0, false, true, false)
 EWD_box_adv        = createGlobalPropertyi("a321neo/cockpit/EWD/box_adv", 1, false, true, false) -- Advisory box: 1 displayed, 0 hidden
-EWD_box_sts        = createGlobalPropertyi("a321neo/cockpit/EWD/box_sts", 1, false, true, false) -- STS box: 1 displayed, 0 hidden
+EWD_box_sts        = createGlobalPropertyi("a321neo/cockpit/EWD/box_sts", 0, false, true, false) -- STS box: 1 displayed, 0 hidden
 EWD_arrow_overflow = createGlobalPropertyi("a321neo/cockpit/EWD/arrow_overflow", 0, false, true, false) -- Overflow arrow: 1 displayed, 0 hidden
 TO_Config_is_ready = createGlobalPropertyi("a321neo/cockpit/EWD/to_config_ready", 0, false, true, false) -- Overflow arrow: 1 displayed, 0 hidden
 

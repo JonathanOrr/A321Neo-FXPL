@@ -73,7 +73,7 @@ local function draw_right_memo()
 
     for i=0,6 do
         if get(EWD_right_memo_colors[i]) > 0 then
-            sasl.gl.drawText(B612MONO_regular, size[1]/2+150, size[2]/2-200-distance*i, get(EWD_right_memo[i]), 30, false, false, TEXT_ALIGN_LEFT, match_msg_colors[get(EWD_right_memo_colors[i])])
+            sasl.gl.drawText(B612MONO_regular, size[1]/2+140, size[2]/2-200-distance*i, get(EWD_right_memo[i]), 30, false, false, TEXT_ALIGN_LEFT, match_msg_colors[get(EWD_right_memo_colors[i])])
         end
     end
 end

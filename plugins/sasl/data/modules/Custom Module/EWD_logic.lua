@@ -24,6 +24,9 @@ local left_messages_list = {
     MessageGroup_MEMO_TAKEOFF
 }
 
+local left_messages_list_cleared = {
+
+}
 
 -- PriorityQueue external implementation
 -- Source: https://rosettacode.org/wiki/Priority_queue#Lua
@@ -76,7 +79,7 @@ function update_right_list()
     list_right = PriorityQueue()
 
     -- Initbition messages, these are always triggered when the related modes are actives
-    if get(EWD_flight_phase) == PHASE_ABOVE_80_KTS or get(EWD_flight_phase) == PHASE_LIFTOFF then
+    if get(EWD_flight_phase) == PHASE_1ST_ENG_TO_PWR or get(EWD_flight_phase) == PHASE_ABOVE_80_KTS or get(EWD_flight_phase) == PHASE_LIFTOFF then
         list_right:put(COL_SPECIAL, "T.O INHIBIT")
     end
     if get(EWD_flight_phase) == PHASE_FINAL or get(EWD_flight_phase) == PHASE_TOUCHDOWN then
@@ -237,9 +240,9 @@ function publish_left_list()
     local limit = false
 
     set(EWD_arrow_overflow, 0)
-    for i=1, 7 do
+    for i=0, 7 do
         set(EWD_left_memo_group[i], "")
-        set(EWD_left_memo_group_color[i], COL_INVISIBLE)
+        set(EWD_left_memo_group_colors[i], COL_INVISIBLE)
     end
 
     for prio, msg in list_left.pop, list_left do
@@ -249,16 +252,19 @@ function publish_left_list()
         end
         
         -- Set the name of the group
-        set(EWD_left_memo_group[tot_messages], m.text())
-        set(EWD_left_memo_group_color[tot_messages], m.color())
+        set(EWD_left_memo_group[tot_messages], msg.text())
+        set(EWD_left_memo_group_colors[tot_messages], msg.color())
 
-        for i,m in ipairs(m.messages) do
+        for i,m in ipairs(msg.messages) do
+            if limit then                   -- Extra message not shown
+                set(EWD_arrow_overflow, 1)  -- Let's display the overflow arrow
+                break
+            end
             set(EWD_left_memo[tot_messages], m.text())
             set(EWD_left_memo_colors[tot_messages], m.color())        
             tot_messages = tot_messages + 1
             if tot_messages >= 7 then
                 limit = true
-                break
             end 
         end
         
