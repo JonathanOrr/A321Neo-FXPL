@@ -1,4 +1,5 @@
 include('EWD_flight_phases.lua')
+include('EWD_msgs/to_ldg_memos.lua')
 
 --colors
 local COL_INVISIBLE = 0    
@@ -18,6 +19,10 @@ for i=0,6 do
     set(EWD_right_memo[i], "LINE " .. i)
     set(EWD_right_memo_colors[i], COL_INVISIBLE)
 end
+
+local left_messages_list = {
+    MessageGroup_MEMO_TAKEOFF
+}
 
 
 -- PriorityQueue external implementation
@@ -203,66 +208,60 @@ end
 -- may be of different colors. According to airbus specification, there are 3 levels of warning
 -- messages (1,2,3) that establish the priority
 
--- TODO the update of the left list must be rewritten in a more structured way, the following are
--- just example to test the print
 
 function update_left_list()
-    local LEVEL_1=1 -- Highest emergency
-    local LEVEL_2=2
-    local LEVEL_3=3
-    local NORMAL=4  -- Normal messages
 
     list_left  = PriorityQueue()
 
-    if get(FBW_status) == 1 then
-        list_left:put(LEVEL_1, {COL_CAUTION, "F/CTL ALTN LAW"})
-        list_left:put(LEVEL_1, {COL_CAUTION, "      (PROT LOST)"})
-        list_left:put(LEVEL_1, {COL_ACTIONS, "MAX SPEED.........330/.82"})
-    end 
-    if get(FBW_status) == 0 then
-        list_left:put(LEVEL_1, {COL_CAUTION, "F/CTL DIRECT LAW"})
-        list_left:put(LEVEL_1, {COL_CAUTION, "      (PROT LOST)"})
-        list_left:put(LEVEL_1, {COL_ACTIONS, "SPD BRK........DO NOT USE"})
-        list_left:put(LEVEL_1, {COL_ACTIONS, "MAX SPEED.........305/.80"})
-        list_left:put(LEVEL_1, {COL_ACTIONS, "MAN PITCH TRIM........USE"})
-        list_left:put(LEVEL_1, {COL_ACTIONS, "MANEUVER WITH CARE"})
-    end
-    
-    -- Takeoff phase warning and cautions
-    if (get(EWD_flight_phase) == PHASE_1ST_ENG_TO_PWR or get(EWD_flight_phase) == PHASE_ABOVE_80_KTS) then
-    
-        if get(Speedbrake_handle_ratio) > 0 then
-            list_left:put(LEVEL_1, {COL_WARNING, "SPD BRK NOT RETRACTED"})
+    for i, m in ipairs(left_messages_list) do
+        if (m.is_active() and (not m.is_inhibited())) then
+            m.shown = true
+        end    
+        if not m.is_active() then
+            m.shown = false
         end
-    
-        if get(Actual_brake_ratio) > 0 then
-            list_left:put(LEVEL_1, {COL_WARNING, "CONFIG PARK BRK ON"})
+        if m.shown then
+            -- This may happend for two reasons:
+            -- - the condition of the if at the beginning of this loop is true
+            -- - the message has been activated in a previous flight phase and consequently still
+            --   visible.
+            
+            list_left:put(m.priority, m) 
         end
-
     end
-
-    if get(Left_brakes_temp) > 400 or get(Right_brakes_temp) > 400
-    and get(EWD_flight_phase) ~= PHASE_ABOVE_80_KTS
-    and get(EWD_flight_phase) ~= PHASE_TOUCHDOWN
-    then
-        list_left:put(LEVEL_2, {COL_CAUTION, "BRAKES HOT"})        
-    end
-
 
 end
 
 function publish_left_list()
-    tot_messages = 0
+    local tot_messages = 0
+    local limit = false
 
-    for prio, msg_arr in list_left.pop, list_left do
+    set(EWD_arrow_overflow, 0)
+    for i=1, 7 do
+        set(EWD_left_memo_group[i], "")
+        set(EWD_left_memo_group_color[i], COL_INVISIBLE)
+    end
 
-        set(EWD_left_memo[tot_messages], msg_arr[2])
-        set(EWD_left_memo_colors[tot_messages], msg_arr[1])
-        
-        tot_messages = tot_messages + 1
-        if tot_messages >= 7 then
+    for prio, msg in list_left.pop, list_left do
+        if limit then                   -- Extra message not shown
+            set(EWD_arrow_overflow, 1)  -- Let's display the overflow arrow
             break
-        end 
+        end
+        
+        -- Set the name of the group
+        set(EWD_left_memo_group[tot_messages], m.text())
+        set(EWD_left_memo_group_color[tot_messages], m.color())
+
+        for i,m in ipairs(m.messages) do
+            set(EWD_left_memo[tot_messages], m.text())
+            set(EWD_left_memo_colors[tot_messages], m.color())        
+            tot_messages = tot_messages + 1
+            if tot_messages >= 7 then
+                limit = true
+                break
+            end 
+        end
+        
     end
     
     for i=tot_messages, 7 do

@@ -56,6 +56,11 @@ local function draw_left_memo()
     local distance = 38
 
     for i=0,6 do
+        if get(EWD_left_memo_group_colors[i]) > 0 then
+            sasl.gl.drawText(B612MONO_regular, size[1]/2-430, size[2]/2-200-distance*i, get(EWD_left_memo_group[i]), 30, false, false, TEXT_ALIGN_LEFT, match_msg_colors[get(EWD_left_memo_group_colors[i])])
+            -- TODO Print underline
+        end
+
         if get(EWD_left_memo_colors[i]) > 0 then
             sasl.gl.drawText(B612MONO_regular, size[1]/2-430, size[2]/2-200-distance*i, get(EWD_left_memo[i]), 30, false, false, TEXT_ALIGN_LEFT, match_msg_colors[get(EWD_left_memo_colors[i])])
         end
