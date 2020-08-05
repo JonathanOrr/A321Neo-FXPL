@@ -1,4 +1,4 @@
-include('common.lua')
+include('EWD_msgs/common.lua')
 
 --
 -- Timers
@@ -12,7 +12,7 @@ timer_2nd_engine_on_started = false
 
 Message_TO_AUTOBRK = {
     text = function(self)
-        if (get(Autobrakes)) then
+        if (get(Autobrakes) == 3) then
             return "    AUTO BRK MAX"
         else
             return "    AUTO BRK..........MAX"
@@ -20,7 +20,7 @@ Message_TO_AUTOBRK = {
     end,
 
     color = function(self)
-        if (get(Autobrakes)) then
+        if (get(Autobrakes) == 3) then
             return COL_INDICATION
         else
             return COL_ACTIONS
@@ -34,7 +34,7 @@ Message_TO_AUTOBRK = {
 
 Message_TO_SIGNS = {
     text = function(self)
-        if (get(Seatbelts) and get(NoSmoking)) then
+        if (get(Seatbelts) ~= 0 and get(NoSmoking) ~= 0) then
             return "    SIGNS ON"
         else
             return "    SIGNS..............ON"
@@ -42,7 +42,7 @@ Message_TO_SIGNS = {
     end,
 
     color = function(self)
-        if (get(Seatbelts) and get(NoSmoking)) then
+        if (get(Seatbelts) ~= 0 and get(NoSmoking) ~= 0) then
             return COL_INDICATION
         else
             return COL_ACTIONS
@@ -56,7 +56,7 @@ Message_TO_SIGNS = {
 
 Message_TO_CABIN = {
     text = function(self)
-        if (get(CabinIsReady)) then
+        if (get(CabinIsReady) == 1) then
             return "    CABIN CHECK"
         else
             return "    CABIN...........CHECK"
@@ -64,7 +64,7 @@ Message_TO_CABIN = {
     end,
 
     color = function(self)
-        if (get(CabinIsReady)) then
+        if (get(CabinIsReady) == 1) then
             return COL_INDICATION
         else
             return COL_ACTIONS
@@ -123,7 +123,7 @@ Message_TO_FLAPS = {
 Message_TO_CONFIG = {
     
     text = function(self)
-        if get(TO_Config_is_ready) then
+        if get(TO_Config_is_ready) == 1 then
             return "    T.O. CONFIG NORMAL"
         else
             return "    T.O. CONFIG......TEST"
@@ -131,7 +131,7 @@ Message_TO_CONFIG = {
     end,
 
     color = function(self)
-        if self.is_ready() then
+        if get(TO_Config_is_ready) == 1 then
             return COL_INDICATION
         else
             return COL_ACTIONS
@@ -177,7 +177,7 @@ MessageGroup_MEMO_TAKEOFF = {
             sasl.startTimer(timer_2nd_engine_on)
             timer_2nd_engine_on_started = true
         else
-            if sasl.getElapsedSeconds(timer_2nd_engine_on) > 120 then
+            if (get(EWD_flight_phase) == PHASE_1ST_ENG_ON) and sasl.getElapsedSeconds(timer_2nd_engine_on) > 120 then
                 return true
             end
         end        
