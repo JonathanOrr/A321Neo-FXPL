@@ -94,7 +94,7 @@ P _cgpt/9/_w_now 1.0
 P _cgpt/9/_w_test 0.0
 P _cgpt/9/_z_ref 0.0
 P _cgpt/count 20
-P _door/0/_ang_now 61.088348389
+P _door/0/_ang_now 0.0
 P _door/0/_ext_ang 0.0
 P _door/0/_ret_ang 100.0
 P _door/0/_type 1
@@ -102,7 +102,7 @@ P _door/0/_xyz/0 -1.0
 P _door/0/_xyz/1 0.0
 P _door/0/_xyz/2 17.600000381
 P _door/0/_xyz/count 3
-P _door/1/_ang_now 22.176696777
+P _door/1/_ang_now 81.782974243
 P _door/1/_ext_ang 0.0
 P _door/1/_ret_ang 100.0
 P _door/1/_type 3
@@ -110,7 +110,7 @@ P _door/1/_xyz/0 -1.500000000
 P _door/1/_xyz/1 0.0
 P _door/1/_xyz/2 14.500000000
 P _door/1/_xyz/count 3
-P _door/10/_ang_now 19.959030151
+P _door/10/_ang_now 73.604675293
 P _door/10/_ext_ang 0.0
 P _door/10/_ret_ang 90.0
 P _door/10/_type 3
@@ -127,7 +127,7 @@ P _door/16/_type 0
 P _door/17/_type 0
 P _door/18/_type 0
 P _door/19/_type 0
-P _door/2/_ang_now -61.088348389
+P _door/2/_ang_now 0.0
 P _door/2/_ext_ang 0.0
 P _door/2/_ret_ang -100.0
 P _door/2/_type 1
@@ -135,7 +135,7 @@ P _door/2/_xyz/0 1.0
 P _door/2/_xyz/1 0.0
 P _door/2/_xyz/2 17.600000381
 P _door/2/_xyz/count 3
-P _door/3/_ang_now -22.176696777
+P _door/3/_ang_now -81.782974243
 P _door/3/_ext_ang 0.0
 P _door/3/_ret_ang -100.0
 P _door/3/_type 3
@@ -143,7 +143,7 @@ P _door/3/_xyz/0 1.500000000
 P _door/3/_xyz/1 0.0
 P _door/3/_xyz/2 14.500000000
 P _door/3/_xyz/count 3
-P _door/4/_ang_now 82.995903015
+P _door/4/_ang_now 1.639533997
 P _door/4/_ext_ang 0.0
 P _door/4/_ret_ang 90.0
 P _door/4/_type 2
@@ -151,7 +151,7 @@ P _door/4/_xyz/0 -13.0
 P _door/4/_xyz/1 -3.599999905
 P _door/4/_xyz/2 73.500000000
 P _door/4/_xyz/count 3
-P _door/5/_ang_now -82.995903015
+P _door/5/_ang_now -1.639533997
 P _door/5/_ext_ang 0.0
 P _door/5/_ret_ang -90.0
 P _door/5/_type 2
@@ -161,7 +161,7 @@ P _door/5/_xyz/2 73.500000000
 P _door/5/_xyz/count 3
 P _door/6/_type 0
 P _door/7/_type 0
-P _door/8/_ang_now -19.959030151
+P _door/8/_ang_now -73.604675293
 P _door/8/_ext_ang 0.0
 P _door/8/_ret_ang -90.0
 P _door/8/_type 3
@@ -209,7 +209,7 @@ P _gear/0/_latN 0.0
 P _gear/0/_latR 0.0
 P _gear/0/_leg_len 5.400000095
 P _gear/0/_lonE 0.0
-P _gear/0/_lonN 90.373313904
+P _gear/0/_lonN 1.785270691
 P _gear/0/_lonR 98.0
 P _gear/0/_scon 47252.898437500
 P _gear/0/_stat_def 0.399389744
@@ -239,14 +239,14 @@ P _gear/1/_gear_x -12.010000229
 P _gear/1/_gear_y -2.799999952
 P _gear/1/_gear_z 69.800003052
 P _gear/1/_latE 0.0
-P _gear/1/_latN 73.774139404
+P _gear/1/_latN 1.457359314
 P _gear/1/_latR 80.0
 P _gear/1/_leg_len 8.199999809
 P _gear/1/_lonE -7.0
-P _gear/1/_lonN -0.544763148
+P _gear/1/_lonN -6.872480869
 P _gear/1/_lonR 0.0
 P _gear/1/_scon 71266.664062500
-P _gear/1/_stat_def 1.367629528
+P _gear/1/_stat_def 1.367629170
 P _gear/1/_steerdeg_hispeed 0.0
 P _gear/1/_steerdeg_lospeed 0.0
 P _gear/1/_strut_comp -0.500000000
@@ -273,14 +273,14 @@ P _gear/2/_gear_x 12.010000229
 P _gear/2/_gear_y -2.799999952
 P _gear/2/_gear_z 69.800003052
 P _gear/2/_latE 0.0
-P _gear/2/_latN -73.774139404
+P _gear/2/_latN -1.457359314
 P _gear/2/_latR -80.0
 P _gear/2/_leg_len 8.199999809
 P _gear/2/_lonE -7.0
-P _gear/2/_lonN -0.544763148
+P _gear/2/_lonN -6.872480869
 P _gear/2/_lonR 0.0
 P _gear/2/_scon 71266.664062500
-P _gear/2/_stat_def 1.367629528
+P _gear/2/_stat_def 1.367629170
 P _gear/2/_steerdeg_hispeed 0.0
 P _gear/2/_steerdeg_lospeed 0.0
 P _gear/2/_strut_comp -0.500000000
@@ -38217,7 +38217,6 @@ GROUP glareshield buttons
 END_GROUP
 GROUP Buttons and Lights
   LOCKED
-  GROUP_OPEN
   GROUP ADIRS
     LOCKED
     gen_rotary IR1
@@ -43042,13 +43041,10 @@ GROUP EWD
 
 END_GROUP
 GROUP PFD
-  LOCKED
-  GROUP_OPEN
   gen_needle horizon
     POS 1758.500000 724.500000
     IMAGE MIP/pfd/ADI
     DATAREF sim/cockpit2/gauges/indicators/roll_AHARS_deg_pilot
-    LOCKED
     CLIP
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 0
@@ -43063,7 +43059,6 @@ GROUP PFD
     POS 1761.000000 734.000000
     IMAGE MIP/pfd/static blue
     DATAREF sim/cockpit2/gauges/indicators/roll_AHARS_deg_pilot
-    LOCKED
     CLIP
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 0
@@ -43074,7 +43069,6 @@ GROUP PFD
     NEEDLE_OFFSET_Y -10.000000
 
   GROUP Group Translate red
-    LOCKED
     GROUP_ANIMATE_MODE TRANSLATE
     GROUP_WIDTH 0
     GROUP_HEIGHT 0
@@ -43087,7 +43081,6 @@ GROUP PFD
     IS_VERTICAL 1
     OFFSET 0.000000
     GROUP Group Translate Red
-      LOCKED
       GROUP_ANIMATE_MODE TRANSLATE
       GROUP_WIDTH 0
       GROUP_HEIGHT 0
@@ -43103,7 +43096,6 @@ GROUP PFD
         POS 1761.000000 724.000000
         IMAGE MIP/pfd/static red
         DATAREF sim/cockpit2/gauges/indicators/roll_AHARS_deg_pilot
-        LOCKED
         CLIP
         LIGHT_MODE GLASS_AUTO
         LIGHT_RHEOSTAT 0
@@ -43116,7 +43108,6 @@ GROUP PFD
     END_GROUP
   END_GROUP
   GROUP New Group
-    LOCKED
     GROUP_ANIMATE_MODE TRANSLATE
     GROUP_WIDTH 0
     GROUP_HEIGHT 0
@@ -43130,7 +43121,6 @@ GROUP PFD
       POS 1759.500000 724.500000
       IMAGE MIP/pfd/Bird
       DATAREF a321neo/cockpit/PFD/ground_track_delta
-      LOCKED
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -43141,14 +43131,12 @@ GROUP PFD
 
   END_GROUP
   GROUP Diamonds
-    LOCKED
     gen_pointer Diamond
       POS 1759.000000 451.500000
       IMAGE MIP/pfd/Diamond
       DATAREF sim/cockpit2/radios/indicators/hsi_vdef_dots_pilot
       SHOW_LESS 2.000000 sim/cockpit2/radios/indicators/hsi_vdef_dots_pilot
       SHOW_GREATER -2.000000 sim/cockpit2/radios/indicators/hsi_vdef_dots_pilot
-      LOCKED
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME -2.000000 -169.000000 1.000000
@@ -43163,7 +43151,6 @@ GROUP PFD
       DATAREF sim/cockpit2/radios/indicators/hsi_hdef_dots_pilot
       SHOW_LESS 2.000000 sim/cockpit2/radios/indicators/hsi_vdef_dots_pilot
       SHOW_GREATER -2.000000 sim/cockpit2/radios/indicators/hsi_vdef_dots_pilot
-      LOCKED
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME -2.000000 169.000000 1.000000
@@ -43177,7 +43164,6 @@ GROUP PFD
       IMAGE MIP/pfd/Diamond Left
       DATAREF 
       SHOW_LESS -2.000000 sim/cockpit2/radios/indicators/hsi_vdef_dots_pilot
-      LOCKED
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -43198,7 +43184,6 @@ GROUP PFD
       IMAGE MIP/pfd/Diamond Right
       DATAREF 
       SHOW_GREATER 2.000000 sim/cockpit2/radios/indicators/hsi_vdef_dots_pilot
-      LOCKED
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -43218,7 +43203,6 @@ GROUP PFD
       POS 2702.000000 1435.000000
       IMAGE MIP/isis/isis horizon
       DATAREF sim/cockpit2/gauges/indicators/roll_AHARS_deg_pilot
-      LOCKED
       CLIP
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
@@ -43234,7 +43218,6 @@ GROUP PFD
       IMAGE MIP/pfd/Diamond Up
       DATAREF 
       SHOW_LESS -2.000000 sim/cockpit2/radios/indicators/hsi_vdef_dots_pilot
-      LOCKED
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -43255,7 +43238,6 @@ GROUP PFD
       IMAGE MIP/pfd/Diamond Down
       DATAREF 
       SHOW_GREATER 2.000000 sim/cockpit2/radios/indicators/hsi_vdef_dots_pilot
-      LOCKED
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -43273,12 +43255,10 @@ GROUP PFD
 
   END_GROUP
   GROUP Alt Tape
-    LOCKED
     gen_pointer 1
       POS 2085.500000 727.500000
       IMAGE MIP/pfd/alt tape/1
       DATAREF sim/cockpit2/gauges/indicators/altitude_ft_pilot
-      LOCKED
       CLIP
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
@@ -43292,7 +43272,6 @@ GROUP PFD
       POS 2085.500000 727.500000
       IMAGE MIP/pfd/alt tape/2
       DATAREF sim/cockpit2/gauges/indicators/altitude_ft_pilot
-      LOCKED
       CLIP
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
@@ -43306,7 +43285,6 @@ GROUP PFD
       POS 2085.500000 727.500000
       IMAGE MIP/pfd/alt tape/3
       DATAREF sim/cockpit2/gauges/indicators/altitude_ft_pilot
-      LOCKED
       CLIP
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
@@ -43320,7 +43298,6 @@ GROUP PFD
       POS 2085.500000 727.500000
       IMAGE MIP/pfd/alt tape/4
       DATAREF sim/cockpit2/gauges/indicators/altitude_ft_pilot
-      LOCKED
       CLIP
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
@@ -43334,7 +43311,6 @@ GROUP PFD
       POS 2085.500000 727.500000
       IMAGE MIP/pfd/alt tape/5
       DATAREF sim/cockpit2/gauges/indicators/altitude_ft_pilot
-      LOCKED
       CLIP
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
@@ -43348,7 +43324,6 @@ GROUP PFD
       POS 2085.500000 727.500000
       IMAGE MIP/pfd/alt tape/6
       DATAREF sim/cockpit2/gauges/indicators/altitude_ft_pilot
-      LOCKED
       CLIP
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
@@ -43362,7 +43337,6 @@ GROUP PFD
       POS 2085.500000 727.500000
       IMAGE MIP/pfd/alt tape/7
       DATAREF sim/cockpit2/gauges/indicators/altitude_ft_pilot
-      LOCKED
       CLIP
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
@@ -43376,7 +43350,6 @@ GROUP PFD
       POS 2085.500000 727.500000
       IMAGE MIP/pfd/alt tape/8
       DATAREF sim/cockpit2/gauges/indicators/altitude_ft_pilot
-      LOCKED
       CLIP
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
@@ -43388,12 +43361,10 @@ GROUP PFD
 
   END_GROUP
   GROUP Heading Tape
-    LOCKED
     gen_pointer Heading Tape
       POS 1751.000000 351.000000
       IMAGE MIP/pfd/hdg tape
       DATAREF sim/cockpit2/gauges/indicators/heading_AHARS_deg_mag_pilot
-      LOCKED
       CLIP
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
@@ -43407,7 +43378,6 @@ GROUP PFD
       POS 1759.000000 346.500000
       IMAGE MIP/pfd/track hdg
       DATAREF a321neo/cockpit/PFD/ground_track_delta
-      LOCKED
       CLIP
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
@@ -43419,12 +43389,11 @@ GROUP PFD
 
   END_GROUP
   GROUP Speed Tape
-    LOCKED
+    GROUP_OPEN
     gen_pointer Speed Tape
       POS 1441.000000 733.000000
       IMAGE MIP/pfd/spd tape
       DATAREF sim/cockpit2/gauges/indicators/airspeed_kts_pilot
-      LOCKED
       CLIP
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
@@ -43440,7 +43409,6 @@ GROUP PFD
       POS 1456.000000 860.000000
       IMAGE MIP/pfd/Accel Arrow
       DATAREF sim/cockpit2/gauges/indicators/airspeed_acceleration_kts_sec_pilot
-      LOCKED
       CLIP
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
@@ -43455,7 +43423,6 @@ GROUP PFD
       POS 1456.000000 590.000000
       IMAGE MIP/pfd/Decel Arrow
       DATAREF sim/cockpit2/gauges/indicators/airspeed_acceleration_kts_sec_pilot
-      LOCKED
       CLIP
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
@@ -43471,7 +43438,6 @@ GROUP PFD
       POS 1485.500000 727.500000
       IMAGE MIP/pfd/Overspeed
       DATAREF a321neo/cockpit/PFD/max_speed_delta
-      LOCKED
       CLIP
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
@@ -43486,7 +43452,6 @@ GROUP PFD
       IMAGE MIP/pfd/Vprot
       DATAREF a321neo/cockpit/PFD/a_floor_speed_delta
       SHOW_EQUAL 0.000000 a321neo/dynamics/aft_wheels_on_ground
-      LOCKED
       CLIP
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
@@ -43501,7 +43466,6 @@ GROUP PFD
       IMAGE MIP/pfd/Stall
       DATAREF a321neo/cockpit/PFD/stall_speed_delta
       SHOW_EQUAL 0.000000 a321neo/dynamics/aft_wheels_on_ground
-      LOCKED
       HIDE
       CLIP
       LIGHT_MODE GLASS_AUTO
@@ -43516,7 +43480,6 @@ GROUP PFD
       POS 1465.500000 727.500000
       IMAGE MIP/pfd/Flap Speed
       DATAREF def
-      LOCKED
       CLIP
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
@@ -43531,7 +43494,6 @@ GROUP PFD
     POS 1815.000000 733.000000
     IMAGE MIP/pfd/PFD bgd
     DATAREF 
-    LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -43551,7 +43513,6 @@ GROUP PFD
     POS 1758.500000 725.000000
     IMAGE MIP/pfd/Beta Target Upper
     DATAREF sim/cockpit2/gauges/indicators/roll_AHARS_deg_pilot
-    LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -43560,12 +43521,10 @@ GROUP PFD
     OFFSET 0.000000
 
   GROUP LS
-    LOCKED
     gen_rotary LSH
       POS 1759.000000 451.000000
       IMAGE MIP/pfd/LSH
       DATAREF 
-      LOCKED
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -43585,7 +43544,6 @@ GROUP PFD
       POS 2001.000000 725.000000
       IMAGE MIP/pfd/LSV
       DATAREF 
-      LOCKED
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -43603,7 +43561,6 @@ GROUP PFD
 
   END_GROUP
   GROUP Beta Target
-    LOCKED
     GROUP_ANIMATE_MODE ROTATE
     GROUP_WIDTH 0
     GROUP_HEIGHT 0
@@ -43617,7 +43574,6 @@ GROUP PFD
       POS 1758.500000 725.000000
       IMAGE MIP/pfd/beta target
       DATAREF sim/cockpit2/gauges/indicators/sideslip_degrees
-      LOCKED
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME -5.000000 -50.000000 1.000000
@@ -43628,12 +43584,10 @@ GROUP PFD
 
   END_GROUP
   GROUP ALT
-    LOCKED
     gen_pointer alt target
       POS 2053.500000 725.500000
       IMAGE MIP/pfd/target alt
       DATAREF sim/cockpit2/autopilot/altitude_dial_ft
-      LOCKED
       CLIP
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
@@ -43647,7 +43601,6 @@ GROUP PFD
       POS 2118.000000 724.500000
       IMAGE MIP/pfd/Alt Ground
       DATAREF sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_copilot
-      LOCKED
       CLIP
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
@@ -43661,7 +43614,6 @@ GROUP PFD
       POS 2095.500000 726.500000
       IMAGE MIP/pfd/alt frame
       DATAREF 
-      LOCKED
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -43682,7 +43634,6 @@ GROUP PFD
       IMAGE MIP/pfd/ALT STBY
       DATAREF 
       SHOW_GREATER 45000.000000 sim/cockpit2/gauges/indicators/altitude_ft_pilot
-      LOCKED
       HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
@@ -43702,9 +43653,7 @@ GROUP PFD
   END_GROUP
   GROUP Stick Input
     SHOW_EQUAL 1.000000 a321neo/dynamics/aft_wheels_on_ground[0]
-    LOCKED
     GROUP Translation
-      LOCKED
       GROUP_OPEN
       GROUP_ANIMATE_MODE TRANSLATE
       GROUP_WIDTH 0
@@ -43719,7 +43668,6 @@ GROUP PFD
         POS 1759.500000 724.500000
         IMAGE MIP/pfd/stick input
         DATAREF sim/joystick/yoke_roll_ratio
-        LOCKED
         LIGHT_MODE GLASS_AUTO
         LIGHT_RHEOSTAT 0
         KEY_FRAME -1.000000 -160.000000 1.000000
@@ -43733,7 +43681,6 @@ GROUP PFD
       POS 1758.500000 725.500000
       IMAGE MIP/pfd/stick input frame
       DATAREF 
-      LOCKED
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -43755,7 +43702,6 @@ GROUP PFD
     IMAGE MIP/pfd/spd stby
     DATAREF 
     SHOW_GREATER 460.000000 sim/cockpit2/gauges/indicators/airspeed_kts_pilot
-    LOCKED
     HIDE
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 0
@@ -46610,21 +46556,6 @@ GROUP hud vertical
     KEY_FRAME 1.000000 1.000000
     IS_VERTICAL 0
     OFFSET 0.000000
-    gen_needle Attitude
-      POS 3445.000000 2342.000000
-      IMAGE hud/attitude
-      DATAREF sim/cockpit2/gauges/indicators/roll_AHARS_deg_pilot
-      CLIP
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 90.000000 1.000000
-      KEY_FRAME 45.000000 45.000000
-      IS_DRAGGABLE 0
-      OFFSET 0.000000
-      DEFLECT_SRC PITCH_ELEC
-      DEFLECT_PIX 3312.000000
-      NEEDLE_OFFSET_Y 96.000000
-
     gen_rotary hud
       POS 3445.000000 2342.000000
       IMAGE hud/hud
@@ -46645,6 +46576,466 @@ GROUP hud vertical
       CLICK_DX 0
       CLICK_DY 0
 
+    gen_needle Attitude
+      POS 3428.000000 2280.500000
+      IMAGE hud/attitude
+      DATAREF sim/cockpit2/gauges/indicators/roll_AHARS_deg_pilot
+      CLIP
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 90.000000 1.000000
+      KEY_FRAME 45.000000 45.000000
+      IS_DRAGGABLE 0
+      OFFSET 0.000000
+      DEFLECT_SRC PITCH_ELEC
+      DEFLECT_PIX 3312.000000
+      NEEDLE_OFFSET_Y 157.000000
+
+    gen_pointer Alt Tens
+      POS 3943.000000 2253.000000
+      IMAGE hud/alt tens
+      DATAREF sim/cockpit2/gauges/indicators/altitude_ft_pilot
+      KF_WRAP_TOP
+      CLIP
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 55.000000 1.000000
+      KEY_FRAME 200.000000 -55.000000
+      IS_DRAGGABLE 0
+      IS_VERTICAL 1
+      OFFSET 0.000000
+
+    GROUP Alt Numbers
+      gen_LED Alt Display
+        POS 3910.000000 2254.000000
+        IMAGE hud/Alt Numbers/hud numbers
+        DATAREF sim/cockpit2/gauges/indicators/altitude_ft_pilot
+        SIZE 1.100000
+        LIGHT_MODE GLASS_AUTO
+        LIGHT_RHEOSTAT 0
+        KEY_FRAME 0.000000 0.000000 1.000000
+        KEY_FRAME 35000.000000 350.000000
+        DIGITS 4
+        DECIMALS 1
+        PERIOD_WIDTH 0
+        LED_ROWS 0
+
+      gen_LED Alt Display 2
+        POS 3892.000000 2254.000000
+        IMAGE hud/Alt Numbers/hud numbers
+        DATAREF sim/cockpit2/gauges/indicators/altitude_ft_pilot
+        SHOW_LESS 99.500000 sim/cockpit2/gauges/indicators/altitude_ft_pilot
+        SIZE 1.100000
+        LIGHT_MODE GLASS_AUTO
+        LIGHT_RHEOSTAT 0
+        KEY_FRAME 0.000000 0.000000 1.000000
+        KEY_FRAME 35000.000000 0.000000
+        DIGITS 4
+        DECIMALS 1
+        PERIOD_WIDTH 0
+        LED_ROWS 0
+
+    END_GROUP
+    GROUP Alt Tape Upper
+      gen_pointer Alt Tape 1
+        POS 3892.500000 2355.000000
+        IMAGE hud/alt tapes/1
+        DATAREF sim/cockpit2/gauges/indicators/altitude_ft_pilot
+        CLIP
+        LIGHT_MODE GLASS_AUTO
+        LIGHT_RHEOSTAT 0
+        KEY_FRAME 33500.000000 1757.000000 1.000000
+        KEY_FRAME 45000.000000 -1947.000000
+        IS_DRAGGABLE 0
+        IS_VERTICAL 1
+        OFFSET 0.000000
+
+      gen_pointer Alt Tape 2
+        POS 3892.500000 2355.000000
+        IMAGE hud/alt tapes/2
+        DATAREF sim/cockpit2/gauges/indicators/altitude_ft_pilot
+        CLIP
+        LIGHT_MODE GLASS_AUTO
+        LIGHT_RHEOSTAT 0
+        KEY_FRAME 22000.000000 1710.000000 1.000000
+        KEY_FRAME 33000.000000 -1832.000000
+        IS_DRAGGABLE 0
+        IS_VERTICAL 1
+        OFFSET 0.000000
+
+      gen_pointer Alt Tape 3
+        POS 3892.500000 2355.000000
+        IMAGE hud/alt tapes/3
+        DATAREF sim/cockpit2/gauges/indicators/altitude_ft_pilot
+        CLIP
+        LIGHT_MODE GLASS_AUTO
+        LIGHT_RHEOSTAT 0
+        KEY_FRAME 10500.000000 1662.000000 1.000000
+        KEY_FRAME 21500.000000 -1880.000000
+        IS_DRAGGABLE 0
+        IS_VERTICAL 1
+        OFFSET 0.000000
+
+      gen_pointer Alt Tape 4
+        POS 3892.500000 2355.000000
+        IMAGE hud/alt tapes/4
+        DATAREF sim/cockpit2/gauges/indicators/altitude_ft_pilot
+        CLIP
+        LIGHT_MODE GLASS_AUTO
+        LIGHT_RHEOSTAT 0
+        KEY_FRAME -1000.000000 1616.000000 1.000000
+        KEY_FRAME 10000.000000 -1927.000000
+        IS_DRAGGABLE 0
+        IS_VERTICAL 1
+        OFFSET 0.000000
+
+    END_GROUP
+    GROUP Alt Tape Lower
+      gen_pointer Alt Tape 1 2
+        POS 3892.500000 2151.000000
+        IMAGE hud/alt tapes/1
+        DATAREF sim/cockpit2/gauges/indicators/altitude_ft_pilot
+        CLIP
+        LIGHT_MODE GLASS_AUTO
+        LIGHT_RHEOSTAT 0
+        KEY_FRAME 33500.000000 1961.000000 1.000000
+        KEY_FRAME 45000.000000 -1743.000000
+        IS_DRAGGABLE 0
+        IS_VERTICAL 1
+        OFFSET 0.000000
+
+      gen_pointer Alt Tape 2 2
+        POS 3892.500000 2151.000000
+        IMAGE hud/alt tapes/2
+        DATAREF sim/cockpit2/gauges/indicators/altitude_ft_pilot
+        CLIP
+        LIGHT_MODE GLASS_AUTO
+        LIGHT_RHEOSTAT 0
+        KEY_FRAME 22000.000000 1913.000000 1.000000
+        KEY_FRAME 33000.000000 -1628.000000
+        IS_DRAGGABLE 0
+        IS_VERTICAL 1
+        OFFSET 0.000000
+
+      gen_pointer Alt Tape 3 2
+        POS 3892.500000 2151.000000
+        IMAGE hud/alt tapes/3
+        DATAREF sim/cockpit2/gauges/indicators/altitude_ft_pilot
+        CLIP
+        LIGHT_MODE GLASS_AUTO
+        LIGHT_RHEOSTAT 0
+        KEY_FRAME 10500.000000 1866.000000 1.000000
+        KEY_FRAME 21500.000000 -1676.000000
+        IS_DRAGGABLE 0
+        IS_VERTICAL 1
+        OFFSET 0.000000
+
+      gen_pointer Alt Tape 4 2
+        POS 3892.500000 2151.000000
+        IMAGE hud/alt tapes/4
+        DATAREF sim/cockpit2/gauges/indicators/altitude_ft_pilot
+        CLIP
+        LIGHT_MODE GLASS_AUTO
+        LIGHT_RHEOSTAT 0
+        KEY_FRAME -1000.000000 1820.000000 1.000000
+        KEY_FRAME 10000.000000 -1723.000000
+        IS_DRAGGABLE 0
+        IS_VERTICAL 1
+        OFFSET 0.000000
+
+    END_GROUP
+    gen_pointer Speed Tape
+      POS 2927.500000 2253.000000
+      IMAGE hud/spd tape
+      DATAREF sim/cockpit2/gauges/indicators/airspeed_kts_pilot
+      CLIP
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 1005.000000 1.000000
+      KEY_FRAME 30.000000 1005.000000 1.000000
+      KEY_FRAME 500.000000 -1063.000000
+      IS_DRAGGABLE 0
+      IS_VERTICAL 1
+      OFFSET 0.000000
+
+    GROUP VS Translate
+      GROUP_ANIMATE_MODE TRANSLATE
+      GROUP_WIDTH 0
+      GROUP_HEIGHT 0
+      DATAREF sim/cockpit2/gauges/indicators/vvi_fpm_pilot
+      POS 0.000000 0.000000
+      KEY_FRAME -9999.000000 -70.000000 1.000000
+      KEY_FRAME -2000.000000 -70.000000 1.000000
+      KEY_FRAME 0.000000 0.000000
+      IS_VERTICAL 1
+      OFFSET 0.000000
+      gen_LED VS Numbers
+        POS 4032.000000 2227.000000
+        IMAGE hud/hud numbers
+        DATAREF sim/cockpit2/gauges/indicators/vvi_fpm_pilot
+        SHOW_LESS -49.000000 sim/cockpit2/gauges/indicators/vvi_fpm_pilot
+        LIGHT_MODE GLASS_AUTO
+        LIGHT_RHEOSTAT 0
+        KEY_FRAME -9999.000000 -99.000000 1.000000
+        KEY_FRAME 0.000000 0.000000 1.000000
+        KEY_FRAME 9999.000000 99.000000
+        DIGITS 2
+        DECIMALS 0
+        PERIOD_WIDTH 0
+        LED_ROWS 0
+
+    END_GROUP
+    GROUP VS Translate 2
+      GROUP_OPEN
+      GROUP_ANIMATE_MODE TRANSLATE
+      GROUP_WIDTH 0
+      GROUP_HEIGHT 0
+      DATAREF sim/cockpit2/gauges/indicators/vvi_fpm_pilot
+      POS 0.000000 47.000000
+      KEY_FRAME 9999.000000 70.000000 1.000000
+      KEY_FRAME 2000.000000 70.000000 1.000000
+      KEY_FRAME 0.000000 0.000000
+      IS_VERTICAL 1
+      OFFSET 0.000000
+      gen_LED VS Numbers 2
+        POS 4032.000000 2277.000000
+        IMAGE hud/hud numbers
+        DATAREF sim/cockpit2/gauges/indicators/vvi_fpm_pilot
+        SHOW_GREATER 49.000000 sim/cockpit2/gauges/indicators/vvi_fpm_pilot
+        LIGHT_MODE GLASS_AUTO
+        LIGHT_RHEOSTAT 0
+        KEY_FRAME -9999.000000 -99.000000 1.000000
+        KEY_FRAME 0.000000 0.000000 1.000000
+        KEY_FRAME 9999.000000 99.000000
+        DIGITS 2
+        DECIMALS 0
+        PERIOD_WIDTH 0
+        LED_ROWS 0
+
+    END_GROUP
+    gen_pointer Accel Arrow
+      POS 2952.000000 2345.500000
+      IMAGE hud/accel
+      DATAREF sim/cockpit2/gauges/indicators/airspeed_acceleration_kts_sec_pilot
+      CLIP
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 -295.000000 1.000000
+      KEY_FRAME 4.000000 -120.000000
+      IS_DRAGGABLE 0
+      IS_VERTICAL 1
+      OFFSET 0.000000
+
+    gen_needle Roll Arrow
+      POS 3448.000000 2439.000000
+      IMAGE hud/roll
+      DATAREF sim/cockpit2/gauges/indicators/roll_AHARS_deg_pilot
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 90.000000 -90.000000
+      IS_DRAGGABLE 0
+      OFFSET 0.000000
+
+    gen_needle VS Pointer
+      POS 4047.000000 2253.000000
+      IMAGE hud/vs
+      DATAREF sim/cockpit2/gauges/indicators/vvi_fpm_pilot
+      CLIP
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 9999.000000 60.000000 1.000000
+      KEY_FRAME 2000.000000 60.000000 1.000000
+      KEY_FRAME 700.000000 35.000000 1.000000
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME -700.000000 -35.000000 1.000000
+      KEY_FRAME -2000.000000 -60.000000 1.000000
+      KEY_FRAME -9999.000000 -60.000000
+      IS_DRAGGABLE 0
+      OFFSET 0.000000
+      NEEDLE_OFFSET_X 20.000000
+
+    gen_pointer Accel Arrow 2
+      POS 2952.000000 2160.500000
+      IMAGE hud/decel
+      DATAREF sim/cockpit2/gauges/indicators/airspeed_acceleration_kts_sec_pilot
+      CLIP
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 295.000000 1.000000
+      KEY_FRAME -4.000000 120.000000
+      IS_DRAGGABLE 0
+      IS_VERTICAL 1
+      OFFSET 0.000000
+
+    GROUP Bird Group Translat
+      GROUP_OPEN
+      GROUP_ANIMATE_MODE TRANSLATE
+      GROUP_WIDTH 0
+      GROUP_HEIGHT 0
+      DATAREF a321neo/cockpit/PFD/ground_track_delta
+      POS 0.000000 0.000000
+      KEY_FRAME -5.000000 -370.000000 1.000000
+      KEY_FRAME 0.000000 0.000000
+      IS_VERTICAL 0
+      OFFSET 0.000000
+      GROUP New Group
+        GROUP_OPEN
+        GROUP_ANIMATE_MODE TRANSLATE
+        GROUP_WIDTH 0
+        GROUP_HEIGHT 0
+        DATAREF sim/flightmodel/position/alpha
+        POS 0.000000 0.000000
+        KEY_FRAME 0.000000 0.000000 1.000000
+        KEY_FRAME 5.000000 -185.000000
+        IS_VERTICAL 1
+        OFFSET 0.000000
+        GROUP Radio Alt
+          SHOW_LESS 2500.000000 sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot
+          SHOW_GREATER 3.000000 sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot
+          GROUP_OPEN
+          gen_LED gen_LED.png
+            POS 3447.000000 2362.000000
+            IMAGE hud/Alt Numbers/hud numbers
+            DATAREF sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot
+            LIGHT_MODE GLASS_AUTO
+            LIGHT_RHEOSTAT 0
+            KEY_FRAME 0.000000 0.000000 1.000000
+            KEY_FRAME 2500.000000 250.000000
+            DIGITS 4
+            DECIMALS 1
+            PERIOD_WIDTH 0
+            LED_ROWS 0
+
+          gen_LED gen_LED.png 2
+            POS 3483.000000 2362.000000
+            IMAGE hud/Alt Numbers/hud numbers
+            DATAREF sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot
+            LIGHT_MODE GLASS_AUTO
+            LIGHT_RHEOSTAT 0
+            KEY_FRAME 0.000000 0.000000 1.000000
+            KEY_FRAME 2500.000000 2500.000000
+            DIGITS 1
+            DECIMALS 1
+            PERIOD_WIDTH 0
+            LED_ROWS 0
+
+          gen_LED gen_LED.png 2 2
+            POS 3483.000000 2362.000000
+            IMAGE hud/Alt Numbers/hud numbers
+            DATAREF sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot
+            LIGHT_MODE GLASS_AUTO
+            LIGHT_RHEOSTAT 0
+            KEY_FRAME 0.000000 0.000000 1.000000
+            KEY_FRAME 2500.000000 0.000000
+            DIGITS 2
+            DECIMALS 1
+            PERIOD_WIDTH 0
+            LED_ROWS 0
+
+        END_GROUP
+        gen_needle Bird
+          POS 3447.000000 2439.000000
+          IMAGE hud/bird
+          DATAREF sim/cockpit2/gauges/indicators/roll_AHARS_deg_pilot
+          LIGHT_MODE GLASS_AUTO
+          LIGHT_RHEOSTAT 0
+          KEY_FRAME 0.000000 0.000000 1.000000
+          KEY_FRAME 90.000000 0.000000
+          IS_DRAGGABLE 0
+          OFFSET 0.000000
+
+      END_GROUP
+    END_GROUP
+    GROUP Pulsing Arrows
+      GROUP_ANIMATE_MODE TRANSLATE
+      GROUP_WIDTH 0
+      GROUP_HEIGHT 0
+      DATAREF a321neo/cockpit/PFD/ground_track_delta
+      POS 0.000000 0.000000
+      KEY_FRAME -5.000000 -370.000000 1.000000
+      KEY_FRAME 0.000000 0.000000
+      IS_VERTICAL 0
+      OFFSET 0.000000
+      GROUP New Group 2
+        GROUP_OPEN
+        GROUP_ANIMATE_MODE TRANSLATE
+        GROUP_WIDTH 0
+        GROUP_HEIGHT 0
+        DATAREF sim/flightmodel/position/alpha
+        POS 10.000000 -10.000000
+        KEY_FRAME 0.000000 0.000000 1.000000
+        KEY_FRAME 5.000000 -185.000000
+        IS_VERTICAL 1
+        OFFSET 0.000000
+        GROUP New Group
+          SHOW_LESS 35.000000 sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot
+          SHOW_GREATER 5.000000 sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot
+          GROUP_OPEN
+          GROUP New Group
+            SHOW_LESS 0.000000 sim/cockpit2/gauges/indicators/vvi_fpm_pilot
+            GROUP_OPEN
+            gen_needle Bird 2
+              POS 3447.000000 2453.500000
+              IMAGE hud/pulsing arrows
+              DATAREF sim/cockpit2/gauges/indicators/roll_AHARS_deg_pilot
+              LIGHT_MODE GLASS_AUTO
+              LIGHT_RHEOSTAT 0
+              KEY_FRAME 0.000000 0.000000 1.000000
+              KEY_FRAME 90.000000 0.000000
+              IS_DRAGGABLE 0
+              OFFSET 0.000000
+
+          END_GROUP
+        END_GROUP
+      END_GROUP
+    END_GROUP
+    GROUP Chevrons
+      GROUP_ANIMATE_MODE TRANSLATE
+      GROUP_WIDTH 0
+      GROUP_HEIGHT 0
+      DATAREF a321neo/cockpit/PFD/ground_track_delta
+      POS 10.000000 -10.000000
+      KEY_FRAME -5.000000 -370.000000 1.000000
+      KEY_FRAME 0.000000 0.000000
+      IS_VERTICAL 0
+      OFFSET 0.000000
+      GROUP Acceleration
+        GROUP_OPEN
+        GROUP_ANIMATE_MODE TRANSLATE
+        GROUP_WIDTH 0
+        GROUP_HEIGHT 0
+        DATAREF sim/cockpit2/gauges/indicators/airspeed_acceleration_kts_sec_pilot
+        POS 0.000000 0.000000
+        KEY_FRAME 0.000000 0.000000 1.000000
+        KEY_FRAME 4.000000 30.000000
+        IS_VERTICAL 1
+        OFFSET 0.000000
+        GROUP New Group 2
+          GROUP_OPEN
+          GROUP_ANIMATE_MODE TRANSLATE
+          GROUP_WIDTH 0
+          GROUP_HEIGHT 0
+          DATAREF sim/flightmodel/position/alpha
+          POS 10.000000 -10.000000
+          KEY_FRAME 0.000000 0.000000 1.000000
+          KEY_FRAME 5.000000 -185.000000
+          IS_VERTICAL 1
+          OFFSET 0.000000
+          gen_needle Chevrons
+            POS 3447.000000 2439.000000
+            IMAGE hud/chevrons
+            DATAREF sim/cockpit2/gauges/indicators/roll_AHARS_deg_pilot
+            LIGHT_MODE GLASS_AUTO
+            LIGHT_RHEOSTAT 0
+            KEY_FRAME 0.000000 0.000000 1.000000
+            KEY_FRAME 90.000000 0.000000
+            IS_DRAGGABLE 0
+            OFFSET 0.000000
+
+        END_GROUP
+      END_GROUP
+    END_GROUP
   END_GROUP
 END_GROUP
 PANEL_3D_END
