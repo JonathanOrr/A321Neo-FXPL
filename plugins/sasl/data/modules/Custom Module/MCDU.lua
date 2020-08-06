@@ -983,7 +983,7 @@ function (phase)
 
         draw_update()
     end
-    -- flt nbr
+	-- flt nbr
     if phase == "L3" then
         input = mcdu_get_entry()
         fmgs_dat["flt nbr"] = input
@@ -1233,6 +1233,24 @@ function (phase)
             fmgs_dat["lon fmt"] = fmgs_dat["lon"] .. fmgs_dat["lon_dir"]
         end
         mcdu_open_page(400) -- reload
+    end
+end
+
+-- 402 IRS
+mcdu_sim_page[100] =
+function (phase)
+    if phase == "render" then
+        mcdu_dat_title.txt = "        irs init"
+
+		mcdu_dat["s"]["L"][3].txt = "   irs1 off"
+        mcdu_dat["l"]["L"][3].txt = "    --'--.--/---'--.--"
+		mcdu_dat["s"]["L"][4].txt = "   irs2 off"
+        mcdu_dat["l"]["L"][4].txt = "    --'--.--/---'--.--"
+		mcdu_dat["s"]["L"][5].txt = "   irs3 off"
+        mcdu_dat["l"]["L"][5].txt = "    --'--.--/---'--.--"
+		mcdu_dat["l"]["L"][6].txt = "<return"
+
+        draw_update()
     end
 end
 
