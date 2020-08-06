@@ -29,7 +29,7 @@ local MCDU_DRAW_SIZE = {w = size[1], h = size[2]} -- idk if size table is requir
 
 --define the const size, align and row.
 local MCDU_DIV_SIZE = {"s", "l"}
-local MCDU_DIV_ALIGN = {"L", "C", "R"}
+local MCDU_DIV_ALIGN = {"L", "C", "R"} -- TODO: removed center
 local MCDU_DIV_ROW = {1,2,3,4,5,6}
 
 --line spacing
@@ -320,6 +320,8 @@ local mcdu_debug_get = sasl.createCommand("a321neo/debug/mcdu/get_data", "retrie
 local mcdu_debug_set = sasl.createCommand("a321neo/debug/mcdu/set_data", "inject FMGS data from pointer a321neo/cockpit/mdu/mcdu_debug_pointer to a321neo/cockpit/mcdu/mcdu_debug_dat")
 local mcdu_debug_pointer = createGlobalPropertys("a321neo/cockpit/mcdu/mcdu_debug_pointer")
 local mcdu_debug_dat = createGlobalPropertys("a321neo/cockpit/mcdu/mcdu_debug_dat")
+
+local mcdu_debug_busy = createGlobalPropertyi("a321neo/cockpit/mcdu/mcdu_debug_busy")
 
 --mcdu entry inputs
 local mcdu_inp = {}
@@ -613,8 +615,10 @@ end
 --execute the next XP FMC instruction
 local function mcdu_ctrl_exe_inst()
     if #mcdu_ctrl_instructions == 0 then
+        set(mcdu_debug_busy, 0)
 		return
 	end
+    set(mcdu_debug_busy, 1)
 
 	inst = mcdu_ctrl_instructions[#mcdu_ctrl_instructions]
 	table.remove(mcdu_ctrl_instructions)
@@ -622,7 +626,8 @@ local function mcdu_ctrl_exe_inst()
         sasl.commandOnce(findCommand(inst.arg))
     end
     if inst.type == "GET_LN" then
-        inst.callback(get(globalPropertys("sim/cockpit2/radios/indicators/fms_cdu1_text_line" .. inst.arg)))
+        refcon = inst.refcon or 0
+        inst.callback(get(globalPropertys("sim/cockpit2/radios/indicators/fms_cdu1_text_line" .. inst.arg)), refcon)
     end
     if inst.type == "INPUT" then
         if string.sub(get(globalPropertys("sim/cockpit2/radios/indicators/fms_cdu1_text_line13")), 2, 2) == " " then
@@ -642,14 +647,46 @@ end
 
 --sasl get nav aid information
 local function mcdu_ctrl_get_nav(find_nameid, find_type)
-    id = sasl.findNavAid(find_nameid, nil, nil, nil, nil, find_type)
+    --find by name
+    id = sasl.findNavAid(find_nameid:upper(), nil, nil, nil, nil, find_type)
+    --if name is not found
     if id == -1 then
+        --find by id
         id = sasl.findNavAid(nil, find_nameid:upper(), nil, nil, nil, find_type) 
     end
     local nav = {}
     nav.navtype, nav.lat, nav.lon, nav.height, nav.freq, nav.hdg, nav.id, nav.name, nav.loadedDSF = sasl.getNavAidInfo(id)
+    print("nav")
+    print("type " .. nav.navtype)
+    print("lat " .. nav.lat)
+    print("lon " .. nav.lon)
+    print("height " .. nav.height)
+    print("freq " .. nav.freq)
+    print("hdg " .. nav.hdg)
+    print("id " .. nav.id)
+    print("name " .. nav.name)
     return nav
 end
+
+--[[
+--mcdu_ctrl_get_nav("ksea", NAV_ILS)
+--id = sasl.findFirstNavAidOfType(NAV_ILS)
+--id = sasl.findNavAid(nil, "KSEA 16C", nil, nil, nil, NAV_OUTERMARKER)
+for i = 0,10 do
+    local nav = {}
+    nav.navtype, nav.lat, nav.lon, nav.height, nav.freq, nav.hdg, nav.id, nav.name, nav.loadedDSF = sasl.getNavAidInfo(id)
+    print("nav")
+    print("type " .. nav.navtype)
+    print("lat " .. nav.lat)
+    print("lon " .. nav.lon)
+    print("height " .. nav.height)
+    print("freq " .. nav.freq)
+    print("hdg " .. nav.hdg)
+    print("id " .. nav.id)
+    print("name " .. nav.name)
+    id = sasl.getNextNavAid (id)
+end
+--]]
 
 mcdu_entry = ""
 
@@ -750,25 +787,30 @@ local function mcdu_ctrl_get_origin_latlon(origin, callback)
     mcdu_ctrl_add_inst({type = "GET_LN", arg = "4", callback = callback})
 end
 
-local function mcdu_ctrl_get_runways_origin(callback, final_callback)
+local function mcdu_ctrl_get_runway_length(runway, refcon, callback)
+    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/index"})
+    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/ls_2r"})
+    mcdu_ctrl_add_inst({type = "INPUT", arg = runway})
+    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/ls_1l"})
+    mcdu_ctrl_add_inst({type = "GET_LN", arg = "6", callback = callback, refcon = refcon})
+end
+
+local function mcdu_ctrl_get_runways_origin(accessor_callback)
     mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/dep_arr"})
     mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/ls_1l"})
     mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/prev"})
     mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/prev"})
-    mcdu_ctrl_add_inst({type = "GET_LN", arg = "2", callback = callback})
-    mcdu_ctrl_add_inst({type = "GET_LN", arg = "4", callback = callback})
-    mcdu_ctrl_add_inst({type = "GET_LN", arg = "6", callback = callback})
-    mcdu_ctrl_add_inst({type = "GET_LN", arg = "8", callback = callback})
-    mcdu_ctrl_add_inst({type = "GET_LN", arg = "10", callback = callback})
+    mcdu_ctrl_add_inst({type = "GET_LN", arg = "2", callback = accessor_callback})
+    mcdu_ctrl_add_inst({type = "GET_LN", arg = "4", callback = accessor_callback})
+    mcdu_ctrl_add_inst({type = "GET_LN", arg = "6", callback = accessor_callback})
+    mcdu_ctrl_add_inst({type = "GET_LN", arg = "8", callback = accessor_callback})
+    mcdu_ctrl_add_inst({type = "GET_LN", arg = "10", callback = accessor_callback})
     mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/next"})
-    mcdu_ctrl_add_inst({type = "GET_LN", arg = "2", callback = callback})
-    mcdu_ctrl_add_inst({type = "GET_LN", arg = "4", callback = callback})
-    mcdu_ctrl_add_inst({type = "GET_LN", arg = "6", callback = callback})
-    mcdu_ctrl_add_inst({type = "GET_LN", arg = "8", callback = callback})
-    mcdu_ctrl_add_inst({type = "GET_LN", arg = "10", callback = callback})
-
-    --invoke final callback
-    mcdu_ctrl_add_inst({type = "GET_LN", arg = "1", callback = final_callback})
+    mcdu_ctrl_add_inst({type = "GET_LN", arg = "2", callback = accessor_callback})
+    mcdu_ctrl_add_inst({type = "GET_LN", arg = "4", callback = accessor_callback})
+    mcdu_ctrl_add_inst({type = "GET_LN", arg = "6", callback = accessor_callback})
+    mcdu_ctrl_add_inst({type = "GET_LN", arg = "8", callback = accessor_callback})
+    mcdu_ctrl_add_inst({type = "GET_LN", arg = "10", callback = accessor_callback})
 end
 
 local function mcdu_ctrl_get_sids(callback)
@@ -1049,6 +1091,7 @@ function (phase)
             fmgs_dat["lat fmt"] = val:sub(2,3) .. val:sub(6,9) .. val:sub(1,1)
             --format e.g. W123°45.67 must be convert to 12345.67W
             fmgs_dat["lon fmt"] = val:sub(13,15) .. val:sub(18,22) .. val:sub(12,12)
+            print("lat lon upload")
 
             mcdu_open_page(400) -- reload
 
@@ -1079,9 +1122,56 @@ function (phase)
                 end
             )
 
+            --get SID
+            fmgs_dat["runways"] = {}
+            terminate = false
+            mcdu_ctrl_get_runways_origin(function (val) --accessor callback
+            --val is runway name
+            runway_name = val:sub(22,24)
+            --is there any more runways?
+            if not terminate then
+                --is this not a blank line?
+                if runway_name ~= "   " then
+
+                    --get runway length
+                    airport = fmgs_dat["origin"]:upper()
+
+                    index = 0
+                    mcdu_ctrl_get_runway_length(
+                        airport .. runway_name, --input arg
+                        runway_name, --refcon arg
+                        function (val, refcon) --callback arg
+                            --val is runway length
+                            --format e.g. from  9420FT to 9420
+                            runway_length = ""
+                            --start after space, so at i = 2 not i = 1
+                            for i = 2, string.len(val) do
+                                --has it reached f in FT?
+                                if val:sub(i,i) == "F" then
+                                    break
+                                end
+                                runway_length = val:sub(2,i)
+                            end
+                            --refcon is runway_name
+                            runway_name = refcon
+
+                            --record name and length
+                            table.insert(fmgs_dat["runways"], {index = index, name = runway_name, length = runway_length})
+
+                            index = index + 1
+                        end
+                    ) --end callback
+                else
+                    --all runways recorded. stop
+                    fmgs_dat["terminate"] = true
+                end
+            end
+
             end) --end callback
             end) --end callback
             end) --end callback
+            end) --end callback
+
             mcdu_open_page(400) -- reload
         end
     end
@@ -1444,7 +1534,6 @@ function (phase)
 
         --is wpt the dept airport?
         if wpt.name:upper():sub(1,4) == fmgs_dat["origin"] then
-            print("aa")
             mcdu_dat["l"]["L"][1].txt = "<departure"
             mcdu_dat["l"]["R"][1].txt = "fix info>"
         --is wpt the dept airport?
@@ -1502,31 +1591,50 @@ function (phase)
 
         mcdu_dat["s"]["L"][1].txt = " rwy      sid     trans"
         mcdu_dat["l"]["L"][1].txt = " ---     ------  ------"
-
-        fmgs_dat["runways"] = {}
-        fmgs_dat["terminate"] = false
-        mcdu_ctrl_get_runways_origin(function (val) 
-                if not fmgs_dat["terminate"] then
-                    if val:sub(19,24) ~= "      " then
-                        table.insert(fmgs_dat["runways"], val:sub(19,24))
-                        print(val:sub(19,24))
-                    else
-                        fmgs_dat["terminate"] = true
-                    end
-                end
-            end,
-        function()
             
-            mcdu_dat["s"]["L"][2].txt = " available runways"
-            line = 2
-            offset = 1
-            fmgs_dat["offset"] = 0
-            for i,runway in ipairs(fmgs_dat["runways"]) do
-                mcdu_dat["l"]["L"][line] = {txt = "<" .. runway:sub(4,6), col = "blue"}
-                line = ((line + 1) % 4) + 2
+        mcdu_dat["s"]["L"][2].txt = " available runways"
+        line = 2
+        offset = 1
+        fmgs_dat["offset"] = 0
+
+        --set airport in question
+        airport = fmgs_dat["origin"]
+        for i,runway in ipairs(fmgs_dat["runways"]) do
+            --get ILS data
+            ils = mcdu_ctrl_get_nav(airport .. " " .. runway.name, NAV_ILS)
+
+            --get ILS freq
+            --format e.g. 11170 to 111.70
+            ils.freq = tostring(ils.freq)
+            freq = ils.freq:sub(1,3) .. "." .. ils.freq:sub(5,7)
+
+            --get ILS crs
+            ils.hdg = degTrueToDegMagnetic(ils.hdg)
+            if ils.hdg > 180 then
+                --format e.g. 342 to -18
+                ils.hdg = ils.hdg - 360
             end
-            draw_update()
-        end) --end callback
+            --how many digits?
+            ils.hdg = tostring(ils.hdg)
+            if string.len(ils.hdg) == 1 then
+                hdg = ils.hdg:sub(1,1)
+            elseif string.len(ils.hdg) == 2 then
+                hdg = ils.hdg:sub(1,2)
+            else
+                hdg = ils.hdg:sub(1,3)
+            end
+            
+            --format e.g. from RW16C to 16C
+
+            mcdu_dat["l"]["L"][line] = {txt = "<" .. runway.name .. "   " .. runway.length .. "FT", col = "blue"}
+            mcdu_dat["l"]["R"][line] = {txt = "crs" .. hdg .. "   ", col = "blue", size = "s"}
+            --display runway length
+            mcdu_dat["s"]["L"][line + 1] = {txt = "       ILS", col = "blue"}
+            mcdu_dat["s"]["R"][line + 1] = {txt = ils.id .. "/" .. freq, col = "blue"}
+
+            --does runway length already exist for this runway?
+            line = ((line + 1) % 4) + 2
+        end
 
         mcdu_dat["l"]["L"][6].txt = "<return"
 
@@ -1721,7 +1829,6 @@ function (phase)
         mcdu_dat["l"]["L"][1].txt = "v1.0"
         mcdu_dat["s"]["L"][2].txt = "license"
         mcdu_dat["l"]["L"][2].txt = "gpl 3.0"
-
         mcdu_dat["s"]["L"][3].txt = "github.com"
         mcdu_dat["l"]["L"][3].txt = "jonathanorr/a321neo-fxpl"
 
