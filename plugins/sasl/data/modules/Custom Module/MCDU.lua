@@ -1757,9 +1757,12 @@ end
 mcdu_sim_page[900] =
 function (phase)
     if phase == "render" then
-        mcdu_dat_title.txt = "          sec f-pln"
+        mcdu_dat_title.txt = "        sec f-pln"
 
-        mcdu_dat["l"]["L"][1].txt = "not yet implemented"
+		mcdu_dat["l"]["L"][1] = {txt = "←copy active", col = "blue"}
+		mcdu_dat["l"]["R"][1].txt = "init>"
+		mcdu_dat["l"]["L"][2].txt = "<sec f-pln"
+		mcdu_dat["l"]["L"][6] = {txt = "        inop page", col = "orange"}
 
         draw_update()
     end
@@ -1799,16 +1802,17 @@ end
 mcdu_sim_page[1101] =
 function (phase)
     if phase == "render" then
-        mcdu_dat_title.txt = "     a32nx project"
+        mcdu_dat_title.txt = "       a32nx project"
 
         mcdu_dat["l"]["L"][1].txt = "<about"
         mcdu_dat["l"]["L"][2].txt = "<colours"
-
-        mcdu_dat["s"]["R"][1].txt = "developers"
-        mcdu_dat["l"]["R"][1] = {txt = "jonathan orr", col = "blue"}
-        mcdu_dat["l"]["R"][2] = {txt = "henrick ku", col = "green"}
-        mcdu_dat["s"]["R"][3].txt = "mcdu written by"
-        mcdu_dat["l"]["R"][3] = {txt = "chaidhat chaimongkol", col = "orange"}
+		mcdu_dat["l"]["R"][3] = {txt = "credits         ", col = "blue"}
+        mcdu_dat["s"]["R"][4] = {txt = "head developer      ", col = "white"}
+        mcdu_dat["l"]["R"][4] = {txt = "jonathan orr       ", col = "green"}
+		mcdu_dat["s"]["R"][5] = {txt = "avionics         ", col = "white"}
+        mcdu_dat["l"]["R"][5] = {txt = "henrick ku        ", col = "green"}
+        mcdu_dat["s"]["R"][6] = {txt = "mcdu written by     ", col = "white"}
+        mcdu_dat["l"]["R"][6] = {txt = "chaidhat chaimongkol   ", col = "green"}
 
         draw_update()
     end
@@ -1842,7 +1846,7 @@ end
 mcdu_sim_page[1102] =
 function (phase)
     if phase == "render" then
-        mcdu_dat_title.txt = "     a32nx about"
+        mcdu_dat_title.txt = "    version and license"
         mcdu_dat["s"]["L"][1].txt = "mcdu version"
         mcdu_dat["l"]["L"][1].txt = "v1.0"
         mcdu_dat["s"]["L"][2].txt = "license"
