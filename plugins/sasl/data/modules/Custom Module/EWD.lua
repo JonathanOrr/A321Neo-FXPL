@@ -58,7 +58,10 @@ local function draw_left_memo()
     for i=0,6 do
         if get(EWD_left_memo_group_colors[i]) > 0 then
             sasl.gl.drawText(B612MONO_regular, size[1]/2-430, size[2]/2-200-distance*i, get(EWD_left_memo_group[i]), 30, false, false, TEXT_ALIGN_LEFT, match_msg_colors[get(EWD_left_memo_group_colors[i])])
-            -- TODO Print underline
+            
+            -- Print the underline
+            width, height = sasl.gl.measureText(B612MONO_regular, get(EWD_left_memo_group[i]), 30, false, false)
+            sasl.gl.drawWideLine(size[1]/2-430 + 3, size[2]/2-200-distance*i - 5, size[1]/2-430 + width + 3, size[2]/2-200-distance*i - 5, 5, match_msg_colors[get(EWD_left_memo_group_colors[i])])
         end
 
         if get(EWD_left_memo_colors[i]) > 0 then
