@@ -45,16 +45,30 @@ PriorityQueue = {
             q[q.last] = v
         end,
         pop = function(self)
+          continue = true
+          while continue do
+            continue = false
             for p, q in pairs(self) do
                 if q.first <= q.last then
                     local v = q[q.first]
                     q[q.first] = nil
                     q.first = q.first + 1
-                    return p, v
+                    if v then
+                        return p, v
+                    else
+                      continue = true
+                      break
+                    end
                 else
                     self[p] = nil
                 end
             end
+          end
+        end,
+        setmax = function(self, n)
+            for i=1,n do
+                self:put(i, nil)
+            end 
         end
     },
     __call = function(cls)
@@ -77,6 +91,7 @@ function update_right_list()
 
     -- Let's clear the priority queue
     list_right = PriorityQueue()
+    list_right:setmax(PRIORITY_LEVEL_MEMO)
 
     -- Initbition messages, these are always triggered when the related modes are actives
     if get(EWD_flight_phase) == PHASE_1ST_ENG_TO_PWR or get(EWD_flight_phase) == PHASE_ABOVE_80_KTS or get(EWD_flight_phase) == PHASE_LIFTOFF then
@@ -215,6 +230,7 @@ end
 function update_left_list()
 
     list_left  = PriorityQueue()
+    list_left:setmax(PRIORITY_LEVEL_MEMO)
 
     for i, m in ipairs(left_messages_list) do
         if (m.is_active() and (not m.is_inhibited())) then
