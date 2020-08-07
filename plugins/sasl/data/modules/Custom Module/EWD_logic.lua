@@ -21,7 +21,8 @@ for i=0,6 do
 end
 
 local left_messages_list = {
-    MessageGroup_MEMO_TAKEOFF
+    MessageGroup_MEMO_TAKEOFF,
+    MessageGroup_MEMO_LANDING,
 }
 
 local left_messages_list_cleared = {
@@ -276,11 +277,13 @@ function publish_left_list()
                 set(EWD_arrow_overflow, 1)  -- Let's display the overflow arrow
                 break
             end
-            set(EWD_left_memo[tot_messages], m.text())
-            set(EWD_left_memo_colors[tot_messages], m.color())        
-            tot_messages = tot_messages + 1
-            if tot_messages >= 7 then
-                limit = true
+            if m.is_active() then
+                set(EWD_left_memo[tot_messages], m.text())
+                set(EWD_left_memo_colors[tot_messages], m.color())        
+                tot_messages = tot_messages + 1
+                if tot_messages >= 7 then
+                    limit = true
+                end
             end 
         end
         
