@@ -2,6 +2,7 @@ include('EWD_flight_phases.lua')
 include('EWD_msgs/brakes_and_antiskid.lua')
 include('EWD_msgs/FBW.lua')
 include('EWD_msgs/flight_controls.lua')
+include('EWD_msgs/misc.lua')
 include('EWD_msgs/to_ldg_memos.lua')
 
 --colors
@@ -28,6 +29,8 @@ local left_messages_list = {
     MessageGroup_MEMO_TAKEOFF,
     MessageGroup_MEMO_LANDING,
     MessageGroup_GND_SPEEDBRAKES,
+    MessageGroup_SEAT_BELTS,
+    MessageGroup_NO_SMOKING,
 
     -- Cautions
     MessageGroup_FBW_ALTN_DIRECT_LAW,
