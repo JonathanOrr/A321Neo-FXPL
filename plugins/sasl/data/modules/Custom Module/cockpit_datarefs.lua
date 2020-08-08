@@ -34,3 +34,5 @@ Window_ice_test = createGlobalPropertyf("a321neo/cockpit/window_ice", 0, false, 
 Seatbelts = globalProperty("sim/cockpit2/annunciators/fasten_seatbelt")
 NoSmoking = globalProperty("sim/cockpit2/annunciators/no_smoking")
 CabinIsReady = createGlobalPropertyi("a321neo/cockpit/cabin_ready", 0, false, true, false)  -- 0 cabin is not ready, 1 cabin is ready
+--MCDU
+Mcdu_enabled = createGlobalPropertyi("a321neo/debug/mcdu/mcdu_enabled", 1, false, true, false)
