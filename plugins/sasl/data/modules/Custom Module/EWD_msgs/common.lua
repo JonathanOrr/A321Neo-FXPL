@@ -1,0 +1,29 @@
+
+-- Severity level of the message
+PRIORITY_LEVEL_3 = 1
+PRIORITY_LEVEL_2 = 2
+PRIORITY_LEVEL_1 = 3 
+PRIORITY_LEVEL_ADV = 4 
+PRIORITY_LEVEL_MEMO = 5
+
+
+-- Flight phases according to FCOM
+PHASE_UNKNOWN        = 0
+PHASE_ELEC_PWR       = 1
+PHASE_1ST_ENG_ON     = 2
+PHASE_1ST_ENG_TO_PWR = 3
+PHASE_ABOVE_80_KTS   = 4
+PHASE_LIFTOFF        = 5
+PHASE_AIRBONE        = 6 
+PHASE_FINAL          = 7        
+PHASE_TOUCHDOWN      = 8
+PHASE_BELOW_80_KTS   = 9 
+PHASE_2ND_ENG_OFF    = 10
+
+COL_INVISIBLE = 0    
+COL_WARNING = 1       -- RED
+COL_SPECIAL = 2       -- MAGENTA
+COL_CAUTION = 3       -- AMBER
+COL_INDICATION = 4    -- GREEN
+COL_REMARKS = 5       -- WHITE
+COL_ACTIONS = 6       -- BLUE

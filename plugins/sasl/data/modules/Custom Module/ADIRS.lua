@@ -9,7 +9,6 @@ local adirs_onbat = createGlobalPropertyi("a321neo/cockpit/adris/onbat", 0, fals
 local adirs_align = createGlobalPropertyi("a321neo/cockpit/adris/align", 0, false, true, false)
 
 local adirs_time_to_onbat = createGlobalPropertyf("a321neo/cockpit/adris/timetoonbat", 0, false, true, false)
-local adirs_time_to_align = createGlobalPropertyf("a321neo/cockpit/adris/timetoalign", 0, false, true, false)
 
 for i = 1,3 do
   adirs_ir_switch_state[i] = createGlobalPropertyi("a321neo/cockpit/adris/ir" .. i .. "_switch_state", 0, false, true, false)
@@ -25,16 +24,16 @@ function update ()
     end
 
     if get(Adirs_sys_on) == 1 then --ADIRS are on
-        if get(adirs_time_to_align) ~= 0 then --if ADIRS are still aligning
-            set(adirs_time_to_align, get(adirs_time_to_align) - get(DELTA_TIME)) --reduce their time to align
+        if get(Adirs_time_to_align) ~= 0 then --if ADIRS are still aligning
+            set(Adirs_time_to_align, get(Adirs_time_to_align) - get(DELTA_TIME)) --reduce their time to align
             set(adirs_time_to_onbat, get(adirs_time_to_onbat) - get(DELTA_TIME)) --reduce their time to align
         end
     else
-        set(adirs_time_to_align, TIME_TO_ALIGN) --set their time to align back to max time
+        set(Adirs_time_to_align, TIME_TO_ALIGN) --set their time to align back to max time
         set(adirs_time_to_onbat, TIME_TO_ONBAT) --set their time to align back to max time
     end
 
-    if get(adirs_time_to_align) > 0 then
+    if get(Adirs_time_to_align) > 0 then
         set(adirs_align, 1)
     else
         set(adirs_align, 0)
