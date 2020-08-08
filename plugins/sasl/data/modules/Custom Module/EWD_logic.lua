@@ -1,4 +1,9 @@
 include('EWD_flight_phases.lua')
+include('EWD_msgs/brakes_and_antiskid.lua')
+include('EWD_msgs/FBW.lua')
+include('EWD_msgs/flight_controls.lua')
+include('EWD_msgs/misc.lua')
+include('EWD_msgs/to_ldg_memos.lua')
 
 --colors
 local COL_INVISIBLE = 0    
@@ -19,6 +24,26 @@ for i=0,6 do
     set(EWD_right_memo_colors[i], COL_INVISIBLE)
 end
 
+local left_messages_list = {
+    -- Normal messages
+    MessageGroup_MEMO_TAKEOFF,
+    MessageGroup_MEMO_LANDING,
+    MessageGroup_GND_SPEEDBRAKES,
+    MessageGroup_SEAT_BELTS,
+    MessageGroup_NO_SMOKING,
+    MessageGroup_IRS_ALIGN,
+
+    -- Cautions
+    MessageGroup_FBW_ALTN_DIRECT_LAW,
+    MessageGroup_BRAKES_HOT,
+    
+    -- Warnings
+    MessageGroup_CONFIG_TAKEOFF
+}
+
+local left_messages_list_cleared = {
+
+}
 
 -- PriorityQueue external implementation
 -- Source: https://rosettacode.org/wiki/Priority_queue#Lua
@@ -37,16 +62,30 @@ PriorityQueue = {
             q[q.last] = v
         end,
         pop = function(self)
+          continue = true
+          while continue do
+            continue = false
             for p, q in pairs(self) do
                 if q.first <= q.last then
                     local v = q[q.first]
                     q[q.first] = nil
                     q.first = q.first + 1
-                    return p, v
+                    if v then
+                        return p, v
+                    else
+                      continue = true
+                      break
+                    end
                 else
                     self[p] = nil
                 end
             end
+          end
+        end,
+        setmax = function(self, n)
+            for i=1,n do
+                self:put(i, nil)
+            end 
         end
     },
     __call = function(cls)
@@ -69,9 +108,10 @@ function update_right_list()
 
     -- Let's clear the priority queue
     list_right = PriorityQueue()
+    list_right:setmax(PRIORITY_LEVEL_MEMO)
 
     -- Initbition messages, these are always triggered when the related modes are actives
-    if get(EWD_flight_phase) == PHASE_ABOVE_80_KTS or get(EWD_flight_phase) == PHASE_LIFTOFF then
+    if get(EWD_flight_phase) == PHASE_1ST_ENG_TO_PWR or get(EWD_flight_phase) == PHASE_ABOVE_80_KTS or get(EWD_flight_phase) == PHASE_LIFTOFF then
         list_right:put(COL_SPECIAL, "T.O INHIBIT")
     end
     if get(EWD_flight_phase) == PHASE_FINAL or get(EWD_flight_phase) == PHASE_TOUCHDOWN then
@@ -150,10 +190,6 @@ function update_right_list()
     -- TODO Anti-ice: ICE NOT DET, green, if ice no longer detected after 190 secs of pressing WING ANTI ICE
     -- TODO Anti-ice: ENG A. ICE, green, if one or both of ENG ANTI ICE is ON
     -- TODO Anti-ice: ICE NOT DET, green, if ice no longer detected after 190 secs of pressing ENG ANTI ICE
-
-    -- TODO IRS IN ALIGN (X MN), green, if IRS still in align during phase 1
-    -- TODO IRS IN ALIGN (X MN), amber, if IRS still in align during phase 2
-    -- TODO IRS IN ALIGN, amber, if IRS still in align during phases 3 <= x <= 9
     
     -- TODO windshear: PRED W/S OFF if windshear (weather panel) is selected OFF
     --                  green in phases 1,2,6,10
@@ -168,6 +204,8 @@ function update_right_list()
     --            ALT RPTG is selected OFF or TCAS failed
 
     -- TODO Ignition: IGNITION in green when continuous ignition is activated 
+
+    -- TODO Lights: LDG LT
 
 end
 
@@ -203,66 +241,66 @@ end
 -- may be of different colors. According to airbus specification, there are 3 levels of warning
 -- messages (1,2,3) that establish the priority
 
--- TODO the update of the left list must be rewritten in a more structured way, the following are
--- just example to test the print
 
 function update_left_list()
-    local LEVEL_1=1 -- Highest emergency
-    local LEVEL_2=2
-    local LEVEL_3=3
-    local NORMAL=4  -- Normal messages
 
     list_left  = PriorityQueue()
+    list_left:setmax(PRIORITY_LEVEL_MEMO)
 
-    if get(FBW_status) == 1 then
-        list_left:put(LEVEL_1, {COL_CAUTION, "F/CTL ALTN LAW"})
-        list_left:put(LEVEL_1, {COL_CAUTION, "      (PROT LOST)"})
-        list_left:put(LEVEL_1, {COL_ACTIONS, "MAX SPEED.........330/.82"})
-    end 
-    if get(FBW_status) == 0 then
-        list_left:put(LEVEL_1, {COL_CAUTION, "F/CTL DIRECT LAW"})
-        list_left:put(LEVEL_1, {COL_CAUTION, "      (PROT LOST)"})
-        list_left:put(LEVEL_1, {COL_ACTIONS, "SPD BRK........DO NOT USE"})
-        list_left:put(LEVEL_1, {COL_ACTIONS, "MAX SPEED.........305/.80"})
-        list_left:put(LEVEL_1, {COL_ACTIONS, "MAN PITCH TRIM........USE"})
-        list_left:put(LEVEL_1, {COL_ACTIONS, "MANEUVER WITH CARE"})
-    end
-    
-    -- Takeoff phase warning and cautions
-    if (get(EWD_flight_phase) == PHASE_1ST_ENG_TO_PWR or get(EWD_flight_phase) == PHASE_ABOVE_80_KTS) then
-    
-        if get(Speedbrake_handle_ratio) > 0 then
-            list_left:put(LEVEL_1, {COL_WARNING, "SPD BRK NOT RETRACTED"})
+    for i, m in ipairs(left_messages_list) do
+        if (m.is_active() and (not m.is_inhibited())) then
+            m.shown = true
+        end    
+        if not m.is_active() then
+            m.shown = false
         end
-    
-        if get(Actual_brake_ratio) > 0 then
-            list_left:put(LEVEL_1, {COL_WARNING, "CONFIG PARK BRK ON"})
+        if m.shown then
+            -- This may happend for two reasons:
+            -- - the condition of the if at the beginning of this loop is true
+            -- - the message has been activated in a previous flight phase and consequently still
+            --   visible.
+            list_left:put(m.priority, m) 
         end
-
     end
-
-    if get(Left_brakes_temp) > 400 or get(Right_brakes_temp) > 400
-    and get(EWD_flight_phase) ~= PHASE_ABOVE_80_KTS
-    and get(EWD_flight_phase) ~= PHASE_TOUCHDOWN
-    then
-        list_left:put(LEVEL_2, {COL_CAUTION, "BRAKES HOT"})        
-    end
-
 
 end
 
 function publish_left_list()
-    tot_messages = 0
+    local tot_messages = 0
+    local limit = false
 
-    for prio, msg_arr in list_left.pop, list_left do
+    set(EWD_arrow_overflow, 0)
+    for i=0, 7 do
+        set(EWD_left_memo_group[i], "")
+        set(EWD_left_memo_group_colors[i], COL_INVISIBLE)
+    end
 
-        set(EWD_left_memo[tot_messages], msg_arr[2])
-        set(EWD_left_memo_colors[tot_messages], msg_arr[1])
-        
-        tot_messages = tot_messages + 1
-        if tot_messages >= 7 then
+
+    for prio, msg in list_left.pop, list_left do
+        if limit then                   -- Extra message not shown
+            set(EWD_arrow_overflow, 1)  -- Let's display the overflow arrow
             break
-        end 
+        end
+
+        -- Set the name of the group
+        set(EWD_left_memo_group[tot_messages], msg.text())
+        set(EWD_left_memo_group_colors[tot_messages], msg.color())
+
+        for i,m in ipairs(msg.messages) do
+            if limit then                   -- Extra message not shown
+                set(EWD_arrow_overflow, 1)  -- Let's display the overflow arrow
+                break
+            end
+            if m.is_active() then
+                set(EWD_left_memo[tot_messages], m.text())
+                set(EWD_left_memo_colors[tot_messages], m.color())        
+                tot_messages = tot_messages + 1
+                if tot_messages >= 7 then
+                    limit = true
+                end
+            end 
+        end
+        
     end
     
     for i=tot_messages, 7 do

@@ -12,8 +12,8 @@ PHASE_TOUCHDOWN      = 8
 PHASE_BELOW_80_KTS   = 9 
 PHASE_2ND_ENG_OFF    = 10
 
-
 set(EWD_flight_phase, PHASE_UNKNOWN)
+
 
 local already_took_off = false
 local was_above_80_kts = false
@@ -110,6 +110,7 @@ function update()
     and (get(Capt_ra_alt_ft) > 1500 or (get(Capt_ra_alt_ft) > 800 and get(VVI) <= 0))
     then
         check_and_stop_timer()
+        already_took_off = true
         set(EWD_flight_phase, PHASE_AIRBONE)
         return
     end
@@ -124,6 +125,7 @@ function update()
     and already_took_off  == true
     then
         check_and_stop_timer()
+        already_took_off = true
         set(EWD_flight_phase, PHASE_FINAL)
         return
     end
