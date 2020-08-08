@@ -1,7 +1,8 @@
 include('EWD_flight_phases.lua')
-include('EWD_msgs/to_ldg_memos.lua')
 include('EWD_msgs/brakes_and_antiskid.lua')
+include('EWD_msgs/FBW.lua')
 include('EWD_msgs/flight_controls.lua')
+include('EWD_msgs/to_ldg_memos.lua')
 
 --colors
 local COL_INVISIBLE = 0    
@@ -29,6 +30,7 @@ local left_messages_list = {
     MessageGroup_GND_SPEEDBRAKES,
 
     -- Cautions
+    MessageGroup_FBW_ALTN_DIRECT_LAW,
     MessageGroup_BRAKES_HOT,
     
     -- Warnings
