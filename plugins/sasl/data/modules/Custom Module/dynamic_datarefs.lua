@@ -2,6 +2,7 @@
 
 --global dataref for the A32NX project--
 DELTA_TIME = globalProperty("sim/operation/misc/frame_rate_period")
+TIME = globalProperty("sim/time/total_running_time_sec")
 Distance_traveled_mi = createGlobalPropertyf("a321neo/dynamics/distance_traveled_mi", 0, false, true, false)
 Distance_traveled_km = createGlobalPropertyf("a321neo/dynamics/distance_traveled_km", 0, false, true, false)
 Ground_speed_kmh = createGlobalPropertyf("a321neo/dynamics/groundspeed_kmh", 0, false, true, false)
@@ -113,6 +114,10 @@ EWD_arrow_overflow = createGlobalPropertyi("a321neo/cockpit/EWD/arrow_overflow",
 TO_Config_is_ready = createGlobalPropertyi("a321neo/cockpit/EWD/to_config_ready", 0, false, true, false) -- Overflow arrow: 1 displayed, 0 hidden
 
 --global dataref variable from the Sim--
+--camera
+Head_x = globalProperty("sim/graphics/view/pilots_head_x")
+Head_y = globalProperty("sim/graphics/view/pilots_head_y")
+Head_z = globalProperty("sim/graphics/view/pilots_head_z")
 --autopilot
 Flight_director_1_mode = globalProperty("sim/cockpit2/autopilot/flight_director_mode")
 Flight_director_2_mode = globalProperty("sim/cockpit2/autopilot/flight_director2_mode")
@@ -203,6 +208,7 @@ Actual_brake_ratio = globalProperty("sim/flightmodel/controls/parkbrake")
 --position
 Aircraft_lat = globalProperty("sim/flightmodel/position/latitude")
 Aircraft_long = globalProperty("sim/flightmodel/position/longitude")
+Elevation_m = globalProperty("sim/flightmodel/position/elevation")
 Distance_traveled_m = globalProperty("sim/flightmodel/controls/dist")
 --weights
 FOB = globalProperty("sim/flightmodel/weight/m_fuel_total")
@@ -210,4 +216,5 @@ FOB = globalProperty("sim/flightmodel/weight/m_fuel_total")
 ZULU_hours = globalProperty("sim/cockpit2/clock_timer/zulu_time_hours")
 ZULU_mins = globalProperty("sim/cockpit2/clock_timer/zulu_time_minutes")
 ZULU_secs = globalProperty("sim/cockpit2/clock_timer/zulu_time_seconds")
+
 
