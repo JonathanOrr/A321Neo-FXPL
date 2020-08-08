@@ -40,7 +40,7 @@ Message_PROT_LOST = {
 
 Message_FBW_DO_NOT_SPD_BRK = {
     text = function(self)
-            return "SPD BRK........DO NOT USE"
+            return " SPD BRK.......DO NOT USE"
     end,
     color = function(self)
             return COL_ACTIONS
@@ -53,9 +53,9 @@ Message_FBW_DO_NOT_SPD_BRK = {
 Message_FBW_SPEED_LIMIT = {
     text = function(self)
         if get(FBW_status) == 1 then
-            return "MAX SPEED.........330/.82"
+            return " MAX SPEED........330/.82"
         else
-            return "MAX SPEED.........305/.80"        
+            return " MAX SPEED........305/.80"        
         end
     end,
     color = function(self)
@@ -68,7 +68,7 @@ Message_FBW_SPEED_LIMIT = {
 
 Message_FBW_MAN_PITCH_TRIM = {
     text = function(self)
-            return "MAN PITCH TRIM........USE"
+            return " - MAN PITCH TRIM.....USE"
     end,
     color = function(self)
             return COL_ACTIONS
@@ -80,7 +80,7 @@ Message_FBW_MAN_PITCH_TRIM = {
 
 Message_FBW_MANEUVER_WITH_CARE = {
     text = function(self)
-            return "MANEUVER WITH CARE"
+            return " MANEUVER WITH CARE"
     end,
     color = function(self)
             return COL_ACTIONS
