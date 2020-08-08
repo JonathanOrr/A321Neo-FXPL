@@ -240,6 +240,7 @@ MessageGroup_MEMO_TAKEOFF = {
                 timer_2nd_engine_on_started = true
             else
                 if (get(EWD_flight_phase) == PHASE_1ST_ENG_ON) and sasl.getElapsedSeconds(timer_2nd_engine_on) > 120 then
+                    set(EWD_is_to_memo_showed, 1)
                     return true
                 end
             end        
@@ -252,6 +253,7 @@ MessageGroup_MEMO_TAKEOFF = {
 
         -- TODO Check TO CONFIG BUTTON
 
+        set(EWD_is_to_memo_showed, 0)
         return false 
     end,
 
@@ -288,10 +290,12 @@ MessageGroup_MEMO_LANDING = {
     is_active = function(self)
         -- Active if in phase 7 or below 2000ft if LDG down, until below 80 kts
         if (get(Gear_handle) == 1 and get(EWD_flight_phase) == PHASE_AIRBONE and get(Capt_ra_alt_ft) < 2000) or (get(EWD_flight_phase) == PHASE_FINAL) or (get(EWD_flight_phase) == PHASE_TOUCHDOWN) then
+            set(EWD_is_ldg_memo_showed, 1)
             return true
+        else
+            set(EWD_is_ldg_memo_showed, 0)
+            return false 
         end
-
-        return false 
     end,
 
     -- Method to check if this message is currently inhibithed
