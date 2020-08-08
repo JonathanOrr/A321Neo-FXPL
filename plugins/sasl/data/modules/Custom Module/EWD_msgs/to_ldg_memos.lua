@@ -348,6 +348,31 @@ Message_CONFIG_TAKEOFF_FLAPS = {
             end
 }
 
+Message_CONFIG_TAKEOFF_PITCH_TRIM = {
+            text = function(self)
+                    return "       PITCH TRIM NOT IN TO"
+            end,
+            color = function(self)
+                    return COL_WARNING
+            end,
+            is_active = function(self)
+              return get(Elev_trim_ratio) > (3.5/13.5) or get(Elev_trim_ratio) < (-3/4)
+            end
+}
+
+Message_CONFIG_TAKEOFF_RUD_TRIM = {
+            text = function(self)
+                    return "       RUD TRIM NOT IN T.O "
+
+            end,
+            color = function(self)
+                    return COL_WARNING
+            end,
+            is_active = function(self)
+              return get(Rudder_trim_ratio) ~= 0
+            end
+}
+
 MessageGroup_CONFIG_TAKEOFF = {
 
     shown = false,
@@ -364,8 +389,9 @@ MessageGroup_CONFIG_TAKEOFF = {
     messages = {
         Message_CONFIG_TAKEOFF_BRAKES,
         Message_CONFIG_TAKEOFF_SPDBRK,
-        Message_CONFIG_TAKEOFF_FLAPS
-        -- TODO Pitch/Rudder Trim
+        Message_CONFIG_TAKEOFF_FLAPS,
+        Message_CONFIG_TAKEOFF_PITCH_TRIM,
+        Message_CONFIG_TAKEOFF_RUD_TRIM
     },
 
     is_active = function(self)

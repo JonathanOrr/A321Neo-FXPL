@@ -190,10 +190,6 @@ function update_right_list()
     -- TODO Anti-ice: ICE NOT DET, green, if ice no longer detected after 190 secs of pressing WING ANTI ICE
     -- TODO Anti-ice: ENG A. ICE, green, if one or both of ENG ANTI ICE is ON
     -- TODO Anti-ice: ICE NOT DET, green, if ice no longer detected after 190 secs of pressing ENG ANTI ICE
-
-    -- TODO IRS IN ALIGN (X MN), green, if IRS still in align during phase 1
-    -- TODO IRS IN ALIGN (X MN), amber, if IRS still in align during phase 2
-    -- TODO IRS IN ALIGN, amber, if IRS still in align during phases 3 <= x <= 9
     
     -- TODO windshear: PRED W/S OFF if windshear (weather panel) is selected OFF
     --                  green in phases 1,2,6,10
