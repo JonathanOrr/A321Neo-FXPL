@@ -31,6 +31,7 @@ local left_messages_list = {
     MessageGroup_GND_SPEEDBRAKES,
     MessageGroup_SEAT_BELTS,
     MessageGroup_NO_SMOKING,
+    MessageGroup_IRS_ALIGN,
 
     -- Cautions
     MessageGroup_FBW_ALTN_DIRECT_LAW,
@@ -262,7 +263,6 @@ function update_left_list()
             -- - the condition of the if at the beginning of this loop is true
             -- - the message has been activated in a previous flight phase and consequently still
             --   visible.
-            
             list_left:put(m.priority, m) 
         end
     end
@@ -279,12 +279,13 @@ function publish_left_list()
         set(EWD_left_memo_group_colors[i], COL_INVISIBLE)
     end
 
+
     for prio, msg in list_left.pop, list_left do
         if limit then                   -- Extra message not shown
             set(EWD_arrow_overflow, 1)  -- Let's display the overflow arrow
             break
         end
-        
+
         -- Set the name of the group
         set(EWD_left_memo_group[tot_messages], msg.text())
         set(EWD_left_memo_group_colors[tot_messages], msg.color())

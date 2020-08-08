@@ -360,7 +360,7 @@ MessageGroup_CONFIG_TAKEOFF = {
             end,
 
     priority = PRIORITY_LEVEL_3,
-
+ 
     messages = {
         Message_CONFIG_TAKEOFF_BRAKES,
         Message_CONFIG_TAKEOFF_SPDBRK,

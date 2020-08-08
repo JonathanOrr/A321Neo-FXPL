@@ -88,6 +88,7 @@ Gen_2_on = createGlobalPropertyi("a321neo/dynamics/electrical/gen_2_on", 1, fals
 --ADIRS
 Adirs_sys_on = createGlobalPropertyi("a321neo/cockpit/adris/adirs_on", 0, false, true, false)
 Adirs_irs_aligned = createGlobalPropertyi("a321neo/cockpit/adris/irs_aligned", 0, false, true, false)
+Adirs_time_to_align = createGlobalPropertyf("a321neo/cockpit/adris/timetoalign", 0, false, true, false)
 -- EWD
 EWD_left_memo = {}
 EWD_left_memo_group = {}
