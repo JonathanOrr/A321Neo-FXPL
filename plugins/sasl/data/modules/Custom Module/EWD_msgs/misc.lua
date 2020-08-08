@@ -85,3 +85,56 @@ MessageGroup_NO_SMOKING = {
     end
 
 }
+
+
+--------------------------------------------------------------------------------
+-- NORMAL/CAUTION: IRS_ALIGN
+--------------------------------------------------------------------------------
+
+MessageGroup_IRS_ALIGN = {
+
+    shown = false,
+
+    text  = function(self)
+                return ""
+            end,
+    color = function(self)
+                return COL_INDICATION
+            end,
+
+    priority = PRIORITY_LEVEL_1,
+
+    messages = {
+        {
+            text = function(self)
+                local minutes = math.floor(get(Adirs_time_to_align) / 60)
+                if get(EWD_flight_phase) <= 2 then
+                    return "IRS IN ALIGN " .. minutes .. " MN"
+                else
+                    return "IRS IN ALIGN"
+                end
+            end,
+            color = function(self)
+                if get(EWD_flight_phase) <= 1 then
+                    return COL_INDICATION
+                else
+                    return COL_CAUTION                
+                end
+            end,
+            is_active = function(self)
+              return true
+            end
+        }
+    },
+
+    -- Method to check if this message group is active
+    is_active = function(self)
+        return get(Adirs_irs_aligned) == 0 
+    end,
+
+    -- Method to check if this message is currently inhibithed
+    is_inhibited = function(self)
+        return false
+    end
+
+}
