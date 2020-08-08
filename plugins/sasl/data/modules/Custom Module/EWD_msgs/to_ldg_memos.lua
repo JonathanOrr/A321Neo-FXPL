@@ -100,7 +100,7 @@ Message_TOLDG_SPLRS = {
 
 Message_TO_FLAPS = {
     text = function(self)
-        if (get(Flaps_handle_ratio) > 0 and get(Flaps_handle_ratio) < 0.5) then -- todo check values
+        if (get(Flaps_handle_ratio) > 0 and get(Flaps_handle_ratio) < 0.5) then -- TODO check values
             return "    FLAPS T.O."
         else
             return "    FLAPS............T.O."
@@ -108,7 +108,7 @@ Message_TO_FLAPS = {
     end,
 
     color = function(self)
-        if (get(Flaps_handle_ratio) > 0 and get(Flaps_handle_ratio) < 0.5) then -- todo check values
+        if (get(Flaps_handle_ratio) > 0 and get(Flaps_handle_ratio) < 0.5) then -- TODO check values
             return COL_INDICATION
         else
             return COL_ACTIONS
@@ -305,3 +305,84 @@ MessageGroup_MEMO_LANDING = {
     end
 
 }
+
+
+
+
+----------------------------------------------------------------------------------------------------
+-- WARNING: TAKEOFF CONFIG
+----------------------------------------------------------------------------------------------------
+Message_CONFIG_TAKEOFF_BRAKES = {
+            text = function(self)
+                    return "       PARK BRK ON"
+            end,
+            color = function(self)
+                    return COL_WARNING
+            end,
+            is_active = function(self)
+              return get(Actual_brake_ratio) > 0
+            end
+}
+
+Message_CONFIG_TAKEOFF_SPDBRK = {
+            text = function(self)
+                    return "       SPDBRK NOT RETRACTED"
+            end,
+            color = function(self)
+                    return COL_WARNING
+            end,
+            is_active = function(self)
+              return get(Speedbrake_handle_ratio) > 0
+            end
+}
+
+Message_CONFIG_TAKEOFF_FLAPS = {
+            text = function(self)
+                    return "       FLAPS NOT IN T.O CFG"
+            end,
+            color = function(self)
+                    return COL_WARNING
+            end,
+            is_active = function(self)
+              return not (get(Flaps_handle_ratio) > 0 and get(Flaps_handle_ratio) < 0.5)
+            end
+}
+
+MessageGroup_CONFIG_TAKEOFF = {
+
+    shown = false,
+
+    text  = function(self)
+                return "CONFIG"
+            end,
+    color = function(self)
+                return COL_WARNING
+            end,
+
+    priority = PRIORITY_LEVEL_3,
+
+    messages = {
+        Message_CONFIG_TAKEOFF_BRAKES,
+        Message_CONFIG_TAKEOFF_SPDBRK,
+        Message_CONFIG_TAKEOFF_FLAPS
+        -- TODO Pitch/Rudder Trim
+    },
+
+    is_active = function(self)
+        local active = false
+        for i, msg in ipairs(MessageGroup_CONFIG_TAKEOFF.messages) do
+            if msg.is_active() then
+                active = true
+                break
+            end
+        end
+        return active and (get(EWD_flight_phase) == PHASE_1ST_ENG_TO_PWR or get(EWD_flight_phase) == PHASE_ABOVE_80_KTS)
+    end,
+
+    is_inhibited = function(self)
+        -- Never inhibited
+        return false
+    end
+
+}
+

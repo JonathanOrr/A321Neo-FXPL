@@ -23,12 +23,16 @@ for i=0,6 do
 end
 
 local left_messages_list = {
+    -- Normal messages
     MessageGroup_MEMO_TAKEOFF,
     MessageGroup_MEMO_LANDING,
     MessageGroup_GND_SPEEDBRAKES,
 
     -- Cautions
     MessageGroup_BRAKES_HOT,
+    
+    -- Warnings
+    MessageGroup_CONFIG_TAKEOFF
 }
 
 local left_messages_list_cleared = {
@@ -198,6 +202,8 @@ function update_right_list()
     --            ALT RPTG is selected OFF or TCAS failed
 
     -- TODO Ignition: IGNITION in green when continuous ignition is activated 
+
+    -- TODO Lights: LDG LT
 
 end
 
