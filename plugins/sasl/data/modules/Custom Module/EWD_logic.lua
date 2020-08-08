@@ -1,6 +1,7 @@
 include('EWD_flight_phases.lua')
 include('EWD_msgs/to_ldg_memos.lua')
 include('EWD_msgs/brakes_and_antiskid.lua')
+include('EWD_msgs/flight_controls.lua')
 
 --colors
 local COL_INVISIBLE = 0    
@@ -24,7 +25,10 @@ end
 local left_messages_list = {
     MessageGroup_MEMO_TAKEOFF,
     MessageGroup_MEMO_LANDING,
-    MessageGroup_BRAKES_HOT
+    MessageGroup_GND_SPEEDBRAKES,
+
+    -- Cautions
+    MessageGroup_BRAKES_HOT,
 }
 
 local left_messages_list_cleared = {
