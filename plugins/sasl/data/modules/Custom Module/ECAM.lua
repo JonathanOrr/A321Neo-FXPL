@@ -119,117 +119,250 @@ function update()
 	end
 end
 
+local function draw_sts_page_left(messages)
+    local default_visible_left_offset = size[2]/2+320
+    local visible_left_offset = size[2]/2+320 + 630 * get(Ecam_sts_scroll_page)
 
-local function draw_sts_page_left()
-    x_left_pos        = size[1]/2-410
-    visible_left_offset  = size[2]/2+250
+    if #messages > 0 then
+        is_sts_normal = false
+    end
     
+    for i,msg in ipairs(messages) do
+        if visible_left_offset < 130 then
+            is_sts_overflow = true
+            break
+        end
+        if visible_left_offset <= default_visible_left_offset then
+            msg.draw(visible_left_offset)
+        end
+        visible_left_offset = visible_left_offset - 35 - msg.bottom_extra_padding
+    end
+end
+
+
+local function prepare_sts_page_left()
+    x_left_pos        = size[1]/2-410
+
+    messages = {}
+    
+    -- SPEED LIMIT    
     max_knots, max_mach = ecam_sts:get_max_speed()
     if max_knots ~= 0 then
-        sasl.gl.drawText(B612MONO_regular, x_left_pos, size[2]/2+330, "MAX SPD............".. max_knots .." / ." .. max_mach, 28, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
-        is_sts_normal = false
+        table.insert(messages, {
+            bottom_extra_padding = 0,
+            draw = function(top_position)
+                sasl.gl.drawText(B612MONO_regular, x_left_pos, top_position, "MAX SPD............".. max_knots .." / ." .. max_mach, 28, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+            end
+            }
+        )
     end
     
+    -- FLIGHT LEVEL LIMIT
     max_fl = ecam_sts:get_max_fl()
     if max_fl ~= 0 then
-        sasl.gl.drawText(B612MONO_regular, x_left_pos, size[2]/2+300, "MAX FL.............".. max_fl .." / MEA", 28, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
-        is_sts_normal = false
+        table.insert(messages, {
+            bottom_extra_padding = 0,
+            draw = function(top_position)
+                sasl.gl.drawText(B612MONO_regular, x_left_pos, top_position, "MAX FL.............".. max_fl .." / MEA", 28, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+            end
+            }
+        )
     end
     
+    -- APPR PROC
     appr_proc = ecam_sts:get_appr_proc()
     if #appr_proc > 0 then
-        is_sts_normal = false
-        drawUnderlineText(B612MONO_regular, x_left_pos, visible_left_offset, "APPR PROC:", 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
-        
-        visible_left_offset = visible_left_offset - 40
+        table.insert(messages, {
+            bottom_extra_padding = 5,
+            draw = function(top_position)
+                drawUnderlineText(B612MONO_regular, x_left_pos, top_position, "APPR PROC:", 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+            end
+            }
+        )
         
         for i,msg in ipairs(appr_proc) do
-            sasl.gl.drawText(B612MONO_regular, x_left_pos, visible_left_offset, "   " .. msg.text, 28, false, false, TEXT_ALIGN_LEFT, msg.color)
-            visible_left_offset = visible_left_offset - 35
+            table.insert(messages, {
+                bottom_extra_padding = 0,
+                draw = function(top_position)
+                    sasl.gl.drawText(B612MONO_regular, x_left_pos, top_position, "   " .. msg.text, 28, false, false, TEXT_ALIGN_LEFT, msg.color)
+                end
+                }
+            )
         end
         
-        visible_left_offset = visible_left_offset - 50
+        -- Extra spacing after APPR PROC
+        table.insert(messages, {
+            bottom_extra_padding = 15,
+            draw = function(top_position) end
+            }
+        )
     end
-    
+
+    -- PROCEDURES
     procedures = ecam_sts:get_procedures()
     if #procedures > 0 then
-        is_sts_normal = false
+       
         for i,msg in ipairs(procedures) do
-            sasl.gl.drawText(B612MONO_regular, x_left_pos, visible_left_offset, msg.text, 28, false, false, TEXT_ALIGN_LEFT, msg.color)
-            visible_left_offset = visible_left_offset - 35
+            table.insert(messages, {
+                bottom_extra_padding = 0,
+                draw = function(top_position)
+                    sasl.gl.drawText(B612MONO_regular, x_left_pos, top_position, msg.text, 28, false, false, TEXT_ALIGN_LEFT, msg.color)
+                end
+                }
+            )
         end
         
-        visible_left_offset = visible_left_offset - 50
+        -- Extra spacing after PROCEDURES
+        table.insert(messages, {
+            bottom_extra_padding = 15,
+            draw = function(top_position) end
+            }
+        )
     end
     
+    -- INFORMATION
     information = ecam_sts:get_information()
      if #information > 0 then
-        is_sts_normal = false
+       
         for i,msg in ipairs(information) do
-            sasl.gl.drawText(B612MONO_regular, x_left_pos, visible_left_offset, msg, 28, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
-            visible_left_offset = visible_left_offset - 35
+            table.insert(messages, {
+                bottom_extra_padding = 0,
+                draw = function(top_position)
+                    sasl.gl.drawText(B612MONO_regular, x_left_pos, top_position, msg, 28, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+                end
+                }
+            )
         end
         
-        visible_left_offset = visible_left_offset - 50
+        -- Extra spacing after INFORMATION
+        table.insert(messages, {
+            bottom_extra_padding = 15,
+            draw = function(top_position) end
+            }
+        )
     end
     
+    -- CANCELLED CAUTION
     cancelled_cautions = ecam_sts:get_cancelled_cautions()
     if #cancelled_cautions > 0 then
-        is_sts_normal = false
+       
+        table.insert(messages, {
+            bottom_extra_padding = 5,
+            draw = function(top_position)
+                drawUnderlineText(B612MONO_regular, x_left_pos+85, top_position, "CANCELLED CAUTION", 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+            end
+            }
+        )
         
-        drawUnderlineText(B612MONO_regular, x_left_pos+85, visible_left_offset, "CANCELLED CAUTION", 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
-        visible_left_offset = visible_left_offset - 40
         for i,msg in ipairs(cancelled_cautions) do
-            drawUnderlineText(B612MONO_regular, x_left_pos, visible_left_offset, msg.title, 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
-            width, height = sasl.gl.measureText(B612MONO_regular, msg.title, 28, false, false)
-            sasl.gl.drawText(B612MONO_regular, x_left_pos + width + 28, visible_left_offset, msg.text, 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
-            visible_left_offset = visible_left_offset - 35
+            table.insert(messages, {
+                bottom_extra_padding = 0,
+                draw = function(top_position)
+                    drawUnderlineText(B612MONO_regular, x_left_pos, top_position, msg.title, 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+                    width, height = sasl.gl.measureText(B612MONO_regular, msg.title, 28, false, false)
+                    sasl.gl.drawText(B612MONO_regular, x_left_pos + width + 28, top_position, msg.text, 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+                end
+                }
+            )
         end
     end
     
+    return messages
 end
-local function draw_sts_page_right()
 
+
+local function draw_sts_page_right(messages)
+    local default_visible_right_offset = size[2]/2+330
+    local visible_right_offset = size[2]/2+330 + 650 * get(Ecam_sts_scroll_page)
+
+    if #messages > 0 then
+        is_sts_normal = false
+    end
+
+    for i,msg in ipairs(messages) do
+        if visible_right_offset < 130 then
+            is_sts_overflow = true
+            break
+        end
+        if visible_right_offset <= default_visible_right_offset then
+            msg.draw(visible_right_offset)
+        end
+        visible_right_offset = visible_right_offset - 35 - msg.bottom_extra_padding
+    end
+
+    
+end
+
+local function prepare_sts_page_right()
     x_right_pos       = size[1]/2 + 140
     x_right_title_pos = size[1]/2 + 200
 
-
-    visible_right_offset = size[2]/2+330
-
+    messages = {}
+    
+    -- INOP SYS
     inop_sys = ecam_sts:get_inop_sys()
     if #inop_sys > 0 then
-        is_sts_normal = false
-        drawUnderlineText(B612MONO_regular, x_right_title_pos, visible_right_offset, "INOP SYS", 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
-        visible_right_offset = visible_right_offset - 40
+        table.insert(messages, {
+            bottom_extra_padding = 5,
+            draw = function(top_position)
+                drawUnderlineText(B612MONO_regular, x_right_title_pos, top_position, "INOP SYS", 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+            end
+            }
+        )
         
         for i,msg in ipairs(inop_sys) do
-            sasl.gl.drawText(B612MONO_regular, x_right_pos, visible_right_offset, msg, 28, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
-            visible_right_offset = visible_right_offset - 35
+            table.insert(messages, {
+                bottom_extra_padding = 0,
+                draw = function(top_position)
+                    sasl.gl.drawText(B612MONO_regular, x_right_pos, top_position, msg, 28, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
+                end
+                }
+            )
         end
-        visible_right_offset = visible_right_offset - 50
-    end
-    
-    maintainance = ecam_sts:get_maintainance()
-    if #maintainance > 0 then
-        is_sts_normal = false
-        drawUnderlineText(B612MONO_regular, x_right_title_pos-20, visible_right_offset, "MAINTENANCE", 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
-        visible_right_offset = visible_right_offset - 40
         
-        for i,msg in ipairs(maintainance) do
-            sasl.gl.drawText(B612MONO_regular, x_right_pos, visible_right_offset, msg, 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
-            visible_right_offset = visible_right_offset - 35
-        end
-        visible_right_offset = visible_right_offset - 50
+        -- Extra spacing between INOP SYS and maintenance
+        table.insert(messages, {
+            bottom_extra_padding = 15,
+            draw = function(top_position) end
+            }
+        )
     end
     
+    -- MAINTENANCE
+    maintenance = ecam_sts:get_maintenance()
+    if #inop_sys > 0 then
+        table.insert(messages, {
+            bottom_extra_padding = 5,
+            draw = function(top_position)
+                drawUnderlineText(B612MONO_regular, x_right_title_pos-20, top_position, "MAINTENANCE", 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+            end
+            }
+        )
+        
+        for i,msg in ipairs(maintenance) do
+            table.insert(messages, {
+                bottom_extra_padding = 0,
+                draw = function(top_position)
+                    sasl.gl.drawText(B612MONO_regular, x_right_pos, top_position, msg, 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+                end
+                }
+            )
+        end
+    end
+    
+    return messages
 end
+
 local function draw_sts_page()
 
     is_sts_normal   = true
     is_sts_overflow = false
 
-    draw_sts_page_left()
-    draw_sts_page_right()
+    local left_messages = prepare_sts_page_left()
+    draw_sts_page_left(left_messages)
+    
+    local right_messages = prepare_sts_page_right()
+    draw_sts_page_right(right_messages)
 
     if is_sts_normal then
         sasl.gl.drawText(B612MONO_regular, x_left_pos, size[2]/2, "NORMAL", 28, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)

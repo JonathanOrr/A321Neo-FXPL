@@ -11,6 +11,8 @@ Max_speed_delta = createGlobalPropertyf("a321neo/cockpit/PFD/max_speed_delta", 0
 --ecam
 Ecam_previous_page = createGlobalPropertyi("a321neo/cockpit/ecam/previous", 2, false, true, false) --1ENG, 2BLEED, 3PRESS, 4ELEC, 5HYD, 6FUEL, 7APU, 8COND, 9DOOR, 10WHEEL, 11F/CTL, 12STS
 Ecam_current_page = createGlobalPropertyi("a321neo/cockpit/ecam/page_num", 2, false, true, false) --1ENG, 2BLEED, 3PRESS, 4ELEC, 5HYD, 6FUEL, 7APU, 8COND, 9DOOR, 10WHEEL, 11F/CTL, 12STS
+Ecam_sts_scroll_page = createGlobalPropertyi("a321neo/cockpit/ecam/sts_scroll_page", 0, false, true, false) --Current scroll page for STS, 0 is the first page
+
 --autobrakes
 Autobrakes = createGlobalPropertyi("a321neo/cockpit/autobrakes", 0, false, true, false) -- 0: off, 1: low, 2:med, 3:max
 --aircon datarefs

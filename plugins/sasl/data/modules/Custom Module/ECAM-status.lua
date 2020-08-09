@@ -37,7 +37,7 @@ ecam_sts = {
     end,
     
     get_information = function()
-        return { "CAT 1 ONLY", "SLATS SLOW"}
+        return { "CAT 1 ONLY", "SLATS SLOW", "D","E", "F"}
     end,
     
     get_cancelled_cautions = function()
@@ -50,8 +50,11 @@ ecam_sts = {
         return { "G+B HYD", "CAT 3", "G RSVR", "L+R AIL", "SPLR 1+3+5", "L ELEV", "AP 1+2", "REVERSER 1", "NORM BRK", "NW STEER" }
     end,
     
-    get_maintainance = function()
-        return { "APU", "AIR COND" }
+    get_maintenance = function()
+        return { "A", "B","C"  }
     end
     
 }
+
+
+
