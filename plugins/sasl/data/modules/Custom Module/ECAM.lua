@@ -1,6 +1,8 @@
 position= {3187,539,900,900}
 size = {900, 900}
 
+include('ECAM-status.lua')
+
 --local variables
 local apu_avail_timer = -1
 
@@ -25,6 +27,16 @@ local left_bleed_color = ECAM_ORANGE
 local right_bleed_color = ECAM_ORANGE
 local left_eng_avail_cl = ECAM_ORANGE
 local right_eng_avail_cl = ECAM_ORANGE
+
+-- misc
+local is_sts_normal   = true
+local is_sts_overflow = false
+
+local function drawUnderlineText(font, x, y, text, size, bold, italic, align, color)
+    sasl.gl.drawText(font, x, y, text, size, bold, italic, align, color)
+    width, height = sasl.gl.measureText(B612MONO_regular, text, size, false, false)
+    sasl.gl.drawWideLine(x + 3, y - 5, x + width + 3, y - 5, 4, color)
+end
 
 --custom fucntions
 local function draw_ecam_lower_section()
@@ -105,6 +117,128 @@ function update()
 	else
 		right_tire_psi_color = ECAM_WHITE
 	end
+end
+
+
+local function draw_sts_page_left()
+    x_left_pos        = size[1]/2-410
+    visible_left_offset  = size[2]/2+250
+    
+    max_knots, max_mach = ecam_sts:get_max_speed()
+    if max_knots ~= 0 then
+        sasl.gl.drawText(B612MONO_regular, x_left_pos, size[2]/2+330, "MAX SPD............".. max_knots .." / ." .. max_mach, 28, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+        is_sts_normal = false
+    end
+    
+    max_fl = ecam_sts:get_max_fl()
+    if max_fl ~= 0 then
+        sasl.gl.drawText(B612MONO_regular, x_left_pos, size[2]/2+300, "MAX FL.............".. max_fl .." / MEA", 28, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+        is_sts_normal = false
+    end
+    
+    appr_proc = ecam_sts:get_appr_proc()
+    if #appr_proc > 0 then
+        is_sts_normal = false
+        drawUnderlineText(B612MONO_regular, x_left_pos, visible_left_offset, "APPR PROC:", 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+        
+        visible_left_offset = visible_left_offset - 40
+        
+        for i,msg in ipairs(appr_proc) do
+            sasl.gl.drawText(B612MONO_regular, x_left_pos, visible_left_offset, "   " .. msg.text, 28, false, false, TEXT_ALIGN_LEFT, msg.color)
+            visible_left_offset = visible_left_offset - 35
+        end
+        
+        visible_left_offset = visible_left_offset - 50
+    end
+    
+    procedures = ecam_sts:get_procedures()
+    if #procedures > 0 then
+        is_sts_normal = false
+        for i,msg in ipairs(procedures) do
+            sasl.gl.drawText(B612MONO_regular, x_left_pos, visible_left_offset, msg.text, 28, false, false, TEXT_ALIGN_LEFT, msg.color)
+            visible_left_offset = visible_left_offset - 35
+        end
+        
+        visible_left_offset = visible_left_offset - 50
+    end
+    
+    information = ecam_sts:get_information()
+     if #information > 0 then
+        is_sts_normal = false
+        for i,msg in ipairs(information) do
+            sasl.gl.drawText(B612MONO_regular, x_left_pos, visible_left_offset, msg, 28, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+            visible_left_offset = visible_left_offset - 35
+        end
+        
+        visible_left_offset = visible_left_offset - 50
+    end
+    
+    cancelled_cautions = ecam_sts:get_cancelled_cautions()
+    if #cancelled_cautions > 0 then
+        is_sts_normal = false
+        
+        drawUnderlineText(B612MONO_regular, x_left_pos+85, visible_left_offset, "CANCELLED CAUTION", 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+        visible_left_offset = visible_left_offset - 40
+        for i,msg in ipairs(cancelled_cautions) do
+            drawUnderlineText(B612MONO_regular, x_left_pos, visible_left_offset, msg.title, 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+            width, height = sasl.gl.measureText(B612MONO_regular, msg.title, 28, false, false)
+            sasl.gl.drawText(B612MONO_regular, x_left_pos + width + 28, visible_left_offset, msg.text, 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+            visible_left_offset = visible_left_offset - 35
+        end
+    end
+    
+end
+local function draw_sts_page_right()
+
+    x_right_pos       = size[1]/2 + 140
+    x_right_title_pos = size[1]/2 + 200
+
+
+    visible_right_offset = size[2]/2+330
+
+    inop_sys = ecam_sts:get_inop_sys()
+    if #inop_sys > 0 then
+        is_sts_normal = false
+        drawUnderlineText(B612MONO_regular, x_right_title_pos, visible_right_offset, "INOP SYS", 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+        visible_right_offset = visible_right_offset - 40
+        
+        for i,msg in ipairs(inop_sys) do
+            sasl.gl.drawText(B612MONO_regular, x_right_pos, visible_right_offset, msg, 28, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
+            visible_right_offset = visible_right_offset - 35
+        end
+        visible_right_offset = visible_right_offset - 50
+    end
+    
+    maintainance = ecam_sts:get_maintainance()
+    if #maintainance > 0 then
+        is_sts_normal = false
+        drawUnderlineText(B612MONO_regular, x_right_title_pos-20, visible_right_offset, "MAINTENANCE", 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+        visible_right_offset = visible_right_offset - 40
+        
+        for i,msg in ipairs(maintainance) do
+            sasl.gl.drawText(B612MONO_regular, x_right_pos, visible_right_offset, msg, 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+            visible_right_offset = visible_right_offset - 35
+        end
+        visible_right_offset = visible_right_offset - 50
+    end
+    
+end
+local function draw_sts_page()
+
+    is_sts_normal   = true
+    is_sts_overflow = false
+
+    draw_sts_page_left()
+    draw_sts_page_right()
+
+    if is_sts_normal then
+        sasl.gl.drawText(B612MONO_regular, x_left_pos, size[2]/2, "NORMAL", 28, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+    end
+
+    if is_sts_overflow then
+        sasl.gl.drawWideLine ( size[1]/2+121, size[2]/2-270 , size[1]/2+121  , size[2]/2-315 , 8 , ECAM_GREEN )
+        sasl.gl.drawTriangle ( size[1]/2+106, size[2]/2-300 , size[1]/2+121 , size[2]/2-330 , size[1]/2+136, size[2]/2-300 , ECAM_GREEN )
+    end 
 end
 
 --drawing the ECAM
@@ -211,7 +345,7 @@ function draw()
     elseif get(Ecam_current_page) == 11 then --f/ctl
 
     elseif get(Ecam_current_page) == 12 then --STS
-
+        draw_sts_page()
     end
 
     draw_ecam_lower_section()
