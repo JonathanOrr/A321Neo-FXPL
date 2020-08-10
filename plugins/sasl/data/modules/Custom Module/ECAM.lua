@@ -335,7 +335,7 @@ local function prepare_sts_page_right()
     
     -- MAINTENANCE
     maintenance = ecam_sts:get_maintenance()
-    if #inop_sys > 0 then
+    if #maintenance > 0 then
         table.insert(messages, {
             bottom_extra_padding = 5,
             draw = function(top_position)

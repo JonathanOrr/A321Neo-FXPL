@@ -8,36 +8,96 @@ local ECAM_RED = {1.0, 0.0, 0.0}
 local ECAM_MAGENTA = {1.0, 0.0, 1.0}
 local ECAM_GREY = {0.3, 0.3, 0.3}
 
+local function put_inop_sys_msg_2(messages, dr_1, dr_2, title)
+    if get(dr_1) == 0 and get(dr_2) == 0 then
+        table.insert(messages, title .. " 1 + 2")
+    elseif get(dr_1) == 0 then
+        table.insert(messages, title .. " 1")
+    elseif get(dr_2) == 0 then
+        table.insert(messages, title .. " 2")
+    end
+end
+
+local function put_inop_sys_msg_3(dr_1, dr_2, dr_3, title)
+    if get(dr_1) == 0 and get(dr_2) == 0 and get(dr_3) == 0 then
+        table.insert(messages, title .. " 1 + 2 + 3")
+    elseif get(dr_1) == 0 and get(dr_2) == 0 then
+        table.insert(messages, title .. " 1 + 2")
+    elseif get(dr_1) == 0 and get(dr_3) == 0 then
+        table.insert(messages, title .. " 1 + 3")
+    elseif get(dr_2) == 0 and get(dr_3) == 0 then
+        table.insert(messages, title .. " 2 + 3")
+    elseif get(dr_1) == 0 then
+        table.insert(messages, title .. " 1")
+    elseif get(dr_2) == 0 then
+        table.insert(messages, title .. " 2")
+    elseif get(dr_3) == 0 then
+        table.insert(messages, title .. " 3")
+    end
+end
+
 
 ecam_sts = {
     
     get_max_speed = function()
-        return 250,80
+        if get(FBW_status) == 0 then    -- direct law
+            return 320,77
+        elseif get(FBW_status) == 1 then
+            return 320,82 -- TODO should be .77 if dual HYD failure
+        end
+        
+        return 0,0
     end,
     
     get_max_fl = function()
-        return 100
+        return 0
     end,
     
     get_appr_proc = function()
-        return {
-            { text="-FOR LDG.......USE FLAP 3", color=ECAM_BLUE},
-            { text=".IF PERF PERMITS:",       color=ECAM_WHITE},
-            { text="-X BLEED.............OPEN", color=ECAM_BLUE}
-        }
+    
+        local messages = {}
+        if get(FBW_status) < 2 then -- altn or direct law
+            table.insert(messages, { text="-FOR LDG.......USE FLAP 3", color=ECAM_BLUE})
+            table.insert(messages, { text="-GPWS LDG FLAP 3.......ON", color=ECAM_BLUE})
+        end
+    
+        return messages
     end,
     
     get_procedures = function()
-        return {
-            { text="L/G...............GRVTY EXTN", color=ECAM_BLUE},
-            { text="LDG SPD INCREM..........10KT", color=ECAM_BLUE},
-            { text="LDG DIST...............X 1.8", color=ECAM_BLUE},
-
-        }
+    
+        local messages = {}
+        
+        if get(FBW_status) < 2 then -- altn or direct law
+            if get(FBW_status) == 0 then -- direct law
+                table.insert(messages, { text="MAN PITCH TRIM...........USE", color=ECAM_BLUE})
+            end
+            table.insert(messages, {text="APPR SPD...........VREF + 10", color=ECAM_BLUE})
+            table.insert(messages, {text="LDG DIST PROC..........APPLY", color=ECAM_BLUE})
+        end
+        
+        return messages
     end,
     
     get_information = function()
-        return { "CAT 1 ONLY", "SLATS SLOW", "D","E", "F"}
+        local messages = {}
+        
+        -- ELEC
+        if get(Battery_1) == 0 or get(Battery_2) == 0 then
+            table.insert(messages, "APU BAT START NOT AVAIL")
+        end
+        
+        -- FBW
+        if get(FBW_status) == 0 then
+            table.insert(messages, "DIRECT LAW")
+            table.insert(messages, "MANEUVER WITH CARE")
+            table.insert(messages, "USE SPD BRK WITH CARE")
+        end
+        if get(FBW_status) == 1 then
+            table.insert(messages, "ALTN LAW : PROT LOST")
+        end
+    
+        return messages
     end,
     
     get_cancelled_cautions = function()
@@ -47,7 +107,25 @@ ecam_sts = {
     end,
     
     get_inop_sys = function()
-        return { "G+B HYD", "CAT 3", "G RSVR", "L+R AIL", "SPLR 1+3+5", "L ELEV", "AP 1+2", "REVERSER 1", "NORM BRK", "NW STEER" }
+        local messages = {}
+        
+        -- AIR
+        put_inop_sys_msg_2(messages, L_pack_Flow,R_pack_Flow, "PACK")
+        
+        -- ELAC / SEC / FAC
+        put_inop_sys_msg_2(messages, ELAC_1, ELAC_2, "ELAC")
+        put_inop_sys_msg_3(messages, SEC_1, SEC_2, SEC_3, "SEC")
+        put_inop_sys_msg_2(messages, FAC_1, FAC_2, "FAC")
+        
+        -- FBW
+        if get(FBW_status) < 2 then
+            table.insert(messages, "F/CTL PROT")
+        end
+        
+        -- ELEC
+        put_inop_sys_msg_2(messages, Gen_1_on, Gen_2_on, "GEN")
+
+        return messages
     end,
     
     get_maintenance = function()
