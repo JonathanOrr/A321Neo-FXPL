@@ -2,6 +2,7 @@ position= {3187,539,900,900}
 size = {900, 900}
 
 include('ECAM-status.lua')
+include('ECAM-automation.lua')
 
 --local variables
 local apu_avail_timer = -1
@@ -117,6 +118,10 @@ function update()
 	else
 		right_tire_psi_color = ECAM_WHITE
 	end
+	
+	update_page()
+	update_leds()
+	
 end
 
 local function draw_sts_page_left(messages)
