@@ -479,6 +479,8 @@ function draw()
 
     elseif get(Ecam_current_page) == 12 then --STS
         draw_sts_page()
+    elseif get(Ecam_current_page) == 13 then --CRUISE
+        
     end
 
     draw_ecam_lower_section()
