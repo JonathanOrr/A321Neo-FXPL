@@ -110,6 +110,7 @@ function update()
     and (get(Capt_ra_alt_ft) > 1500 or (get(Capt_ra_alt_ft) > 800 and get(VVI) <= 0))
     then
         check_and_stop_timer()
+        was_above_80_kts = true -- This is necessary for sim mid-air start
         already_took_off = true
         set(EWD_flight_phase, PHASE_AIRBONE)
         return
