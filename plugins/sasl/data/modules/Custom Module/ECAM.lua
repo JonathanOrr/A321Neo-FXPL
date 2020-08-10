@@ -121,6 +121,7 @@ function update()
 	
 	update_page()
 	update_leds()
+	ecam_update_leds()
 	
 end
 
