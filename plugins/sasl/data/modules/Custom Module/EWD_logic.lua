@@ -6,6 +6,11 @@ include('EWD_msgs/flight_controls.lua')
 include('EWD_msgs/misc.lua')
 include('EWD_msgs/to_ldg_memos.lua')
 
+-- commands
+local Ecam_btn_cmd_CLR = sasl.findCommand("a321neo/cockpit/ecam/buttons/cmd_clr")
+
+sasl.registerCommandHandler (Ecam_btn_cmd_CLR,   0 , function(phase) ewd_clear_button_handler(phase) end )
+
 --colors
 local COL_INVISIBLE = 0    
 local COL_WARNING = 1       -- RED
@@ -48,9 +53,11 @@ local left_messages_list_cleared = {
 
 }
 
+local left_current_message = nil;   -- It contains (if exists) the first message group *clearable*
+
 local land_asap = false;
 
--- PriorityQueue external implementation
+-- PriorityQueue external implementation (modified)
 -- Source: https://rosettacode.org/wiki/Priority_queue#Lua
 -- License: GNU Free Documentation License 1.2
 -- This is basically a normal priority queue. You can use object:put(priority, content) and
@@ -109,7 +116,7 @@ local list_left  = PriorityQueue()
 -- RIGHT side of the EWD messages
 --
 -- This works as a simple priority queue, color is the priority
-function update_right_list()
+local function update_right_list()
 
     -- Let's clear the priority queue
     list_right = PriorityQueue()
@@ -216,7 +223,7 @@ function update_right_list()
 
 end
 
-function publish_right_list()
+local function publish_right_list()
     local limit = false
     tot_messages = 0
 
@@ -255,7 +262,7 @@ end
 -- messages (1,2,3) that establish the priority
 
 
-function update_left_list()
+local function update_left_list()
 
     list_left  = PriorityQueue()
     list_left:setmax(PRIORITY_LEVEL_MEMO)
@@ -282,11 +289,14 @@ function update_left_list()
 
 end
 
-function publish_left_list()
+local function publish_left_list()
     local tot_messages = 0
     local limit = false
 
+    left_current_message = nil;
+    set(Ecam_EDW_requested_page, 0)
     set(EWD_arrow_overflow, 0)
+
     for i=0, 7 do
         set(EWD_left_memo_group[i], "")
         set(EWD_left_memo_group_colors[i], COL_INVISIBLE)
@@ -298,6 +308,12 @@ function publish_left_list()
             set(EWD_arrow_overflow, 1)  -- Let's display the overflow arrow
             break
         end
+        
+        if left_current_message == nil and (msg.color() == COL_WARNING or msg.color() == COL_CAUTION) then
+            -- This is the first clearable message, we save it to clear it later with the CLR pushbutton
+            -- see also the function ewd_clear_button_handler
+            left_current_message = msg
+        end  
 
         -- Set the name of the group
         set(EWD_left_memo_group[tot_messages], msg.text())
@@ -324,6 +340,14 @@ function publish_left_list()
         set(EWD_left_memo[i], "")
         set(EWD_left_memo_colors[i], COL_INVISIBLE)
     end
+    
+    if left_current_message ~= nil then
+        if left_current_message.sd_page ~= nil then
+            -- ECAM page change request
+            -- We put this number of the dataref
+            set(Ecam_EDW_requested_page, left_current_message.sd_page)
+        end
+    end
 
 end
 
@@ -334,3 +358,31 @@ function update()
     update_right_list()
     publish_right_list()
 end
+
+function ewd_clear_button_handler(phase)
+    if phase ~= SASL_COMMAND_BEGIN then
+        return
+    end
+
+    if left_current_message == nil then
+        return  -- Nothing to clear
+    end
+
+    if get(Ecam_is_sts_clearable) == 1 then
+        return  -- STS is clearable, CLR should not affect EWD
+    end
+    
+    -- Ok, we have a message, and STS page is not clearable.
+    -- Let's search and move the message to the list of cleared message
+    for i, m in ipairs(left_messages_list) do
+        if m == left_current_message then
+            table.insert(left_messages_list_cleared, m)
+            table.remove(left_messages_list, i)
+            return
+        end
+    end
+    
+    print("ERROR: This should not happend, clearing a non-existent message.")
+    
+end
+
