@@ -63,6 +63,8 @@ sasl.registerCommandHandler (Ecam_btn_cmd_WHEEL, 0 , function(phase) user_press_
 sasl.registerCommandHandler (Ecam_btn_cmd_FCTL,  0 , function(phase) user_press_page_button(phase,ECAM_PAGE_FCTL) end )
 sasl.registerCommandHandler (Ecam_btn_cmd_STS,   0 , function(phase) user_press_page_button(phase,ECAM_PAGE_STS) end )
 
+sasl.registerCommandHandler (Ecam_btn_cmd_ALL,   0 , function(phase) user_press_all(phase) end )
+
 -------------------------------------------------------------------------------
 -- Variables
 -------------------------------------------------------------------------------
@@ -147,7 +149,7 @@ end
 
 
 -- Update the page when no pushbuttons are pressed, no ecam messages, no status, etc,
-function update_page_normal()
+local function update_page_normal()
 
     local curr_time = get(TIME)
 
@@ -210,18 +212,40 @@ function update_page_normal()
     end    
 end
 
+local function update_page_all()
+-- TODO
+
+end
+
 -- This function update the page when ecam automatic is in action
-function update_page()
+function ecam_update_page()
     if get(Ecam_current_status) == ECAM_STATUS_SHOW_USER then
         -- User is forcing a page, nothing to do
         return
     end
     
-    if get(Ecam_current_status) == ECAM_STATUS_NORMAL then
-        update_page_normal()
+    if get(Ecam_EDW_requested_page) == 0 then
+        -- If EDW does not have requested a page, we have normal situation or ALL button
+        if get(Ecam_current_status) == ECAM_STATUS_NORMAL then
+            update_page_normal()
+            return
+        end
+        
+        if get(Ecam_current_status) == ECAM_STATUS_SHOW_ALL then
+            update_page_all()
+            return
+        end
     else
-    
+        -- Otherwise we have two cases:
+        -- - Show the page of affected system
+        -- - Show the status page to clear
+        if get(Ecam_current_status) ~= ECAM_STATUS_SHOW_EWD_STS then
+            set(Ecam_current_status, ECAM_STATUS_SHOW_EWD)
+            Goto_ecam(get(Ecam_EDW_requested_page))
+        else
+            Goto_ecam(ECAM_PAGE_STS)        
+        end
     end
-
+    
 end
 

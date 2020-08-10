@@ -119,8 +119,7 @@ function update()
 		right_tire_psi_color = ECAM_WHITE
 	end
 	
-	update_page()
-	update_leds()
+	ecam_update_page()
 	ecam_update_leds()
 	
 end

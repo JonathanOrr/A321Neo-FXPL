@@ -32,10 +32,10 @@ components = {
   aircond {},
   wheel {},
   PFD {},
+  ECAM {},
   EWD {},
   EWD_logic {},
   EWD_flight_phases {},
-  ECAM {},
   HUD {}
  }
 
