@@ -1,5 +1,6 @@
 include('EWD_flight_phases.lua')
 include('EWD_msgs/brakes_and_antiskid.lua')
+include('EWD_msgs/engines_and_apu.lua')
 include('EWD_msgs/FBW.lua')
 include('EWD_msgs/flight_controls.lua')
 include('EWD_msgs/misc.lua')
@@ -36,14 +37,18 @@ local left_messages_list = {
     -- Cautions
     MessageGroup_FBW_ALTN_DIRECT_LAW,
     MessageGroup_BRAKES_HOT,
+    MessageGroup_APU_SHUTDOWN,
     
     -- Warnings
-    MessageGroup_CONFIG_TAKEOFF
+    MessageGroup_CONFIG_TAKEOFF,
+    MessageGroup_APU_FIRE
 }
 
 local left_messages_list_cleared = {
 
 }
+
+local land_asap = false;
 
 -- PriorityQueue external implementation
 -- Source: https://rosettacode.org/wiki/Priority_queue#Lua
@@ -110,6 +115,11 @@ function update_right_list()
     list_right = PriorityQueue()
     list_right:setmax(PRIORITY_LEVEL_MEMO)
 
+    -- Land ASAP    
+    if land_asap then
+        list_right:put(COL_WARNING, "LAND ASAP")
+    end
+
     -- Initbition messages, these are always triggered when the related modes are actives
     if get(EWD_flight_phase) == PHASE_1ST_ENG_TO_PWR or get(EWD_flight_phase) == PHASE_ABOVE_80_KTS or get(EWD_flight_phase) == PHASE_LIFTOFF then
         list_right:put(COL_SPECIAL, "T.O INHIBIT")
@@ -153,11 +163,8 @@ function update_right_list()
             end
         end
     end
-    if get(Speedbrake_handle_ratio) < 0 then
-        list_right:put(COL_INDICATION, "GND SPLRS ARMED")
-    end
-    
-    -- TODO LAND ASAP
+
+
     
     -- TODO RAM Air: RAM AIR ON green if related pushbutton switch is ON
     -- TODO Pressurization: MAN LDG ELEV green if LDG ELEV switch is not in AUTO
@@ -210,12 +217,17 @@ function update_right_list()
 end
 
 function publish_right_list()
-
+    local limit = false
     tot_messages = 0
 
     for prio,msg in list_right.pop, list_right do
         -- We extract all the messages in order of priority and insertion order
         -- and we set the corresponding messages until the memo is full
+
+        if limit then
+            set(EWD_arrow_overflow, 1)  -- Let's display the overflow arrow
+            break
+        end
         
         set(EWD_right_memo[tot_messages], msg)
         set(EWD_right_memo_colors[tot_messages], prio)
@@ -223,7 +235,8 @@ function publish_right_list()
         
         tot_messages = tot_messages + 1
         if tot_messages >= 7 then
-            break   -- TODO Draw the arrow
+            limit = true
+            break
         end 
     end
 
@@ -260,6 +273,10 @@ function update_left_list()
             -- - the message has been activated in a previous flight phase and consequently still
             --   visible.
             list_left:put(m.priority, m) 
+            
+            if m.land_asap ~= nil and m.land_asap == true then
+                land_asap = true
+            end
         end
     end
 
