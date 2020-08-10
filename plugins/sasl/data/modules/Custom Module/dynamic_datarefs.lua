@@ -38,6 +38,7 @@ R_compressor_temp = createGlobalPropertyf("a321neo/dynamics/packs/r_compressor_t
 L_pack_temp = createGlobalPropertyf("a321neo/dynamics/packs/l_pack_temp", 10, false, true, false)
 R_pack_temp = createGlobalPropertyf("a321neo/dynamics/packs/r_pack_temp", 10, false, true, false)
 --apu
+Apu_start_position = globalProperty("sim/cockpit2/electrical/APU_starter_switch") --apu start button state 0: off, 1: on, 2: avail
 Apu_avail = createGlobalPropertyi("a321neo/engine/apu_avil", 0, false, true, false)
 Apu_gen_load = createGlobalPropertyf("a321neo/cockpit/apu/gen_load", 0, false, true, false)
 Apu_gen_volts = createGlobalPropertyf("a321neo/cockpit/apu/gen_volts", 0, false, true, false)

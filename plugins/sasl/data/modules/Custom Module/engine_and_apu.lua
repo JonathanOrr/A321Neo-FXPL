@@ -4,7 +4,6 @@ local ignition_2_required = 0
 
 --sim dataref
 local avionics = globalProperty("sim/cockpit2/switches/avionics_power_on")
-local apu_start_position = globalProperty("sim/cockpit2/electrical/APU_starter_switch")
 local apu_gen = globalProperty("sim/cockpit2/electrical/APU_generator_on")
 local apu_flap_open_ratio = globalProperty("sim/cockpit2/electrical/APU_door")
 local engine_1_ignition_switch = globalProperty("sim/cockpit2/engine/actuators/ignition_key[0]")
@@ -36,6 +35,8 @@ local engine_mode_dn = sasl.createCommand("a321neo/engine/mode_dn", "engine mode
 
 --unregistering sim commands
 
+-- timers
+local timer_auto_start_stop = sasl.createTimer() -- Stop ignition after 40 seconds from auto-start
 
 --sim command handler
 sasl.registerCommandHandler ( reset_to_runway, 0, function(phase)
@@ -43,12 +44,14 @@ sasl.registerCommandHandler ( reset_to_runway, 0, function(phase)
         if get(startup_running) == 1 then
             set(Battery_1, 1)
             set(Battery_2, 1)
-            set(apu_start_position, 2)
+            set(Apu_start_position, 2)
             set(Apu_bleed_switch, 1)
             set(apu_gen, 1)
             set(Engine_mode_knob, 1)
             set(Engine_1_master_switch, 1)
             set(Engine_2_master_switch, 1)
+            sasl.resetTimer(timer_auto_start_stop)
+            sasl.startTimer(timer_auto_start_stop)
         else
             set(Engine_1_master_switch, 0)
             set(Engine_2_master_switch, 0)
@@ -61,7 +64,7 @@ sasl.registerCommandHandler ( reset_flight, 0, function(phase)
         if get(startup_running) == 1 then
             set(Battery_1, 1)
             set(Battery_2, 1)
-            set(apu_start_position, 2)
+            set(Apu_start_position, 2)
             set(Apu_bleed_switch, 1)
             set(apu_gen, 1)
             set(Engine_mode_knob, 1)
@@ -79,12 +82,14 @@ sasl.registerCommandHandler ( go_to_default, 0, function(phase)
         if get(startup_running) == 1 then
             set(Battery_1, 1)
             set(Battery_2, 1)
-            set(apu_start_position, 2)
+            set(Apu_start_position, 2)
             set(Apu_bleed_switch, 1)
             set(apu_gen, 1)
             set(Engine_mode_knob, 1)
             set(Engine_1_master_switch, 1)
             set(Engine_2_master_switch, 1)
+            sasl.resetTimer(timer_auto_start_stop)
+            sasl.startTimer(timer_auto_start_stop)
         else
             set(Engine_1_master_switch, 0)
             set(Engine_2_master_switch, 0)
@@ -96,12 +101,14 @@ sasl.registerCommandHandler ( instant_start_eng, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
         set(Battery_1, 1)
         set(Battery_2, 1)
-        set(apu_start_position, 2)
+        set(Apu_start_position, 2)
         set(Apu_bleed_switch, 1)
         set(apu_gen, 1)
         set(Engine_mode_knob, 1)
         set(Engine_1_master_switch, 1)
         set(Engine_2_master_switch, 1)
+        sasl.resetTimer(timer_auto_start_stop)
+        sasl.startTimer(timer_auto_start_stop)
     end
 end)
 
@@ -109,31 +116,32 @@ sasl.registerCommandHandler ( slow_start_eng, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
         set(Battery_1, 1)
         set(Battery_2, 1)
-        set(apu_start_position, 2)
+        set(Apu_start_position, 2)
         set(Apu_bleed_switch, 1)
         set(apu_gen, 1)
         set(Engine_mode_knob, 1)
         set(Engine_1_master_switch, 1)
         set(Engine_2_master_switch, 1)
+        sasl.resetTimer(timer_auto_start_stop)
+        sasl.startTimer(timer_auto_start_stop)
     end
 end)
 
 --a321neo command handler
 sasl.registerCommandHandler ( apu_master, 0 , function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        if get(apu_start_position) == 0 then
-            set(apu_start_position, 1)
-            Goto_ecam(7)
-        elseif get(apu_start_position) > 0 then
-            set(apu_start_position, 0)
+        if get(Apu_start_position) == 0 then
+            set(Apu_start_position, 1)
+        elseif get(Apu_start_position) > 0 then
+            set(Apu_start_position, 0)
         end
     end
 end)
 
 sasl.registerCommandHandler ( apu_start, 0 , function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        if get(apu_start_position) == 1 then
-            set(apu_start_position, 2)
+        if get(Apu_start_position) == 1 then
+            set(Apu_start_position, 2)
         end
     end
 end)
@@ -152,7 +160,7 @@ sasl.registerCommandHandler ( a321_auto_start, 0 , function(phase)
     if phase == SASL_COMMAND_BEGIN then
         set(Battery_1, 1)
         set(Battery_2, 1)
-        set(apu_start_position, 2)
+        set(Apu_start_position, 2)
         set(Apu_bleed_switch, 1)
         set(apu_gen, 1)
         set(Engine_mode_knob, 1)
@@ -227,6 +235,12 @@ function update()
         set(avionics, 1)
     else
         set(avionics, 0)
+    end
+    
+    if sasl.getElapsedSeconds(timer_auto_start_stop) > 40 then  -- Stop ignition after auto-start
+        sasl.stopTimer(timer_auto_start_stop)
+        sasl.resetTimer(timer_auto_start_stop)
+        set(Engine_mode_knob, 0)
     end
     
     --setting integer dataref range
@@ -341,17 +355,17 @@ function update()
     end
 
     --apu start button state 0: off, 1: on, 2: avail
-    if get(apu_start_position) == 0 and get(Apu_N1) < 100 then
+    if get(Apu_start_position) == 0 and get(Apu_N1) < 100 then
         set(apu_start_button_state, 0)
-    elseif get(apu_start_position) == 1 and get(Apu_N1) < 100 then
+    elseif get(Apu_start_position) == 1 and get(Apu_N1) < 100 then
         set(apu_start_button_state, 0)
-    elseif get(apu_start_position) == 0 and get(Apu_N1) > 95 then
+    elseif get(Apu_start_position) == 0 and get(Apu_N1) > 95 then
         set(apu_start_button_state, 2)
-    elseif get(apu_start_position) == 1 and get(Apu_N1) > 95 then
+    elseif get(Apu_start_position) == 1 and get(Apu_N1) > 95 then
         set(apu_start_button_state, 2)
-    elseif get(apu_start_position) == 2 and get(Apu_N1) < 100 then
+    elseif get(Apu_start_position) == 2 and get(Apu_N1) < 100 then
         set(apu_start_button_state, 1)
-    elseif get(apu_start_position) == 2 and get(Apu_N1) > 100 then
+    elseif get(Apu_start_position) == 2 and get(Apu_N1) > 100 then
         set(apu_start_button_state, 2)
     end
 end
