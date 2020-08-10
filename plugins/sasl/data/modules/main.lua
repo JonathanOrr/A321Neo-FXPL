@@ -95,17 +95,17 @@ FBW_debug_window = contextWindow {
   };
 }
 
-EWD_debug_window = contextWindow {
-  name = "EWD DEBUG";
+ECAM_debug_window = contextWindow {
+  name = "ECAM DEBUG";
   position = { 200 , 200 , 340 , 200};
   noBackground = true ;
   proportional = false ;
-  minimumSize = { 340 , 200 };
-  maximumSize = { 340 , 200 };
+  minimumSize = { 340 , 400 };
+  maximumSize = { 340 , 400 };
   gravity = { 0 , 1 , 0 , 1 };
   visible = false ;
   components = {
-    EWD_debug {position = { 0 , 0 , 340 , 200 }}
+    ECAM_debug {position = { 0 , 0 , 340 , 200 }}
   };
 }
 
@@ -126,8 +126,8 @@ function Show_hide_FBW_debug()
   FBW_debug_window:setIsVisible(not FBW_debug_window:isVisible())
 end
 
-function Show_hide_EWD_debug()
-  EWD_debug_window:setIsVisible(not EWD_debug_window:isVisible())
+function Show_hide_ECAM_debug()
+  ECAM_debug_window:setIsVisible(not ECAM_debug_window:isVisible())
 end
 
 -- create top level menu in plugins menu
@@ -143,9 +143,9 @@ ShowHidePacksDebug	= sasl.appendMenuItem(Menu_main, "Show/Hide PACKS Debug", Sho
 -- add menu entry
 ShowHideFBWDebug	= sasl.appendMenuItem(Menu_main, "Show/Hide FBW Debug", Show_hide_FBW_debug)
 -- add menu entry
-ShowHideEWDDebug	= sasl.appendMenuItem(Menu_main, "Show/Hide EWD Debug", Show_hide_EWD_debug)
+ShowHideECAMDebug	= sasl.appendMenuItem(Menu_main, "Show/Hide ECAM Debug", Show_hide_ECAM_debug)
 --initialise menu item status
 sasl.setMenuItemState(Menu_main, ShowHideVnavDebug, MENU_UNCHECKED)
 sasl.setMenuItemState(Menu_main, ShowHidePacksDebug, MENU_UNCHECKED)
 sasl.setMenuItemState(Menu_main, ShowHideFBWDebug, MENU_UNCHECKED)
-sasl.setMenuItemState(Menu_main, ShowHideEWDDebug, MENU_UNCHECKED)
+sasl.setMenuItemState(Menu_main, ShowHideECAMDebug, MENU_UNCHECKED)
