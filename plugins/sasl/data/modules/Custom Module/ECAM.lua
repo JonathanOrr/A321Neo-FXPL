@@ -258,8 +258,7 @@ local function prepare_sts_page_left()
                 bottom_extra_padding = 0,
                 draw = function(top_position)
                     drawUnderlineText(B612MONO_regular, x_left_pos, top_position, msg.title, 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
-                    width, height = sasl.gl.measureText(B612MONO_regular, msg.title, 28, false, false)
-                    sasl.gl.drawText(B612MONO_regular, x_left_pos + width + 28, top_position, msg.text, 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+                    sasl.gl.drawText(B612MONO_regular, x_left_pos, top_position, msg.text, 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
                 end
                 }
             )
@@ -490,7 +489,7 @@ function draw()
     
     -- Update STS box
     set(EWD_box_sts, 0)
-    if (not ecam_sts:is_normal()) or (not ecam_sts:is_normal_maintenance() and get(EWD_flight_phase) == PHASE_2ND_ENG_OFF ) then
+    if (not ecam_sts:is_normal()) or (not ecam_sts:is_normal_maintenance() and get(EWD_flight_phase) == 10 ) then
         if get(Ecam_current_status) ~= ECAM_STATUS_SHOW_EWD_STS and get(Ecam_current_status) ~= ECAM_STATUS_SHOW_EWD then
             set(EWD_box_sts, 1)
         end
