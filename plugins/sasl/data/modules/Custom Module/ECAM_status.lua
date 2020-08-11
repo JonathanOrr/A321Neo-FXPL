@@ -1,4 +1,4 @@
---colors
+    --colors
 local ECAM_WHITE = {1.0, 1.0, 1.0}
 local ECAM_HIGH_GREY = {0.6, 0.6, 0.6}
 local ECAM_BLUE = {0.004, 1.0, 1.0}
@@ -134,7 +134,20 @@ ecam_sts = {
     end,
     
     get_maintenance = function()
-        return { "A", "B","C"  }
+        return { "TODO", "TODO", "TODO"  }
+    end,
+    
+    is_normal = function()
+        local spd_1, spd_2 = ecam_sts:get_max_speed()
+        local max_fl = ecam_sts:get_max_fl()
+
+        return spd_1 == 0 and spd_2 == 0 and max_fl > 0 and #ecam_sts:get_appr_proc() == 0 and
+               #ecam_sts:get_information() == 0 and #ecam_sts:get_cancelled_cautions() == 0 and
+               #ecam_sts:get_inop_sys() == 0
+    end,
+    
+    is_normal_maintenance = function()
+        return #ecam_sts:get_maintenance() == 0
     end
     
 }

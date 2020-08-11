@@ -85,8 +85,8 @@ local function draw_extras()
 
     -- STS BOX
     if get(EWD_box_sts) == 1 then
-        sasl.gl.drawText(B612MONO_regular, size[1]/2+88, size[2]/2-445, "STS", 30, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)    
-        sasl.gl.drawFrame ( size[1]/2+87, size[2]/2-447, 62, 28 , ECAM_WHITE)
+        sasl.gl.drawText(B612MONO_regular, size[1]/2+88, size[2]/2-440, "STS", 30, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)    
+        sasl.gl.drawFrame ( size[1]/2+87, size[2]/2-442, 62, 28 , ECAM_WHITE)
     end 
 
     -- ADV BOX

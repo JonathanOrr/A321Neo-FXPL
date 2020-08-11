@@ -30,8 +30,6 @@ local left_eng_avail_cl = ECAM_ORANGE
 local right_eng_avail_cl = ECAM_ORANGE
 
 -- misc
-local is_sts_normal   = true
-local is_sts_overflow = false
 
 local function drawUnderlineText(font, x, y, text, size, bold, italic, align, color)
     sasl.gl.drawText(font, x, y, text, size, bold, italic, align, color)
@@ -128,13 +126,9 @@ local function draw_sts_page_left(messages)
     local default_visible_left_offset = size[2]/2+320
     local visible_left_offset = size[2]/2+320 + 630 * get(Ecam_sts_scroll_page)
 
-    if #messages > 0 then
-        is_sts_normal = false
-    end
-    
     for i,msg in ipairs(messages) do
         if visible_left_offset < 130 then
-            is_sts_overflow = true
+            set(Ecam_arrow_overflow, 1)
             break
         end
         if visible_left_offset <= default_visible_left_offset then
@@ -280,13 +274,9 @@ local function draw_sts_page_right(messages)
     local default_visible_right_offset = size[2]/2+330
     local visible_right_offset = size[2]/2+330 + 650 * get(Ecam_sts_scroll_page)
 
-    if #messages > 0 then
-        is_sts_normal = false
-    end
-
     for i,msg in ipairs(messages) do
         if visible_right_offset < 130 then
-            is_sts_overflow = true
+            set(Ecam_arrow_overflow, 1)
             break
         end
         if visible_right_offset <= default_visible_right_offset then
@@ -360,8 +350,7 @@ end
 
 local function draw_sts_page()
 
-    is_sts_normal   = true
-    is_sts_overflow = false
+    set(Ecam_arrow_overflow, 0)
 
     local left_messages = prepare_sts_page_left()
     draw_sts_page_left(left_messages)
@@ -369,11 +358,13 @@ local function draw_sts_page()
     local right_messages = prepare_sts_page_right()
     draw_sts_page_right(right_messages)
 
-    if is_sts_normal then
+    set(EWD_box_sts, 0)
+
+    if ecam_sts:is_normal() then
         sasl.gl.drawText(B612MONO_regular, x_left_pos, size[2]/2, "NORMAL", 28, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
     end
 
-    if is_sts_overflow then
+    if get(Ecam_arrow_overflow) == 1 then
         sasl.gl.drawWideLine ( size[1]/2+121, size[2]/2-270 , size[1]/2+121  , size[2]/2-315 , 8 , ECAM_GREEN )
         sasl.gl.drawTriangle ( size[1]/2+106, size[2]/2-300 , size[1]/2+121 , size[2]/2-330 , size[1]/2+136, size[2]/2-300 , ECAM_GREEN )
     end 
@@ -496,4 +487,12 @@ function draw()
     end
 
     draw_ecam_lower_section()
+    
+    -- Update STS box
+    set(EWD_box_sts, 0)
+    if (not ecam_sts:is_normal()) or (not ecam_sts:is_normal_maintenance() and get(EWD_flight_phase) == PHASE_2ND_ENG_OFF ) then
+        if get(Ecam_current_status) ~= ECAM_STATUS_SHOW_EWD_STS and get(Ecam_current_status) ~= ECAM_STATUS_SHOW_EWD then
+            set(EWD_box_sts, 1)
+        end
+    end
 end

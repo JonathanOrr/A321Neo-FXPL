@@ -16,11 +16,11 @@ local ECAM_PAGE_FCTL  = 11
 local ECAM_PAGE_STS   = 12
 local ECAM_PAGE_CRUISE= 13
 
-local ECAM_STATUS_NORMAL       = 0  -- No buttons pressed, no warning, normal situation, page displayed depends on flight phase
-local ECAM_STATUS_SHOW_USER    = 1  -- User has pressed a page button
-local ECAM_STATUS_SHOW_ALL     = 2  -- ALL button has been pressed
-local ECAM_STATUS_SHOW_EWD     = 3  -- Dealing with EWD
-local ECAM_STATUS_SHOW_EWD_STS = 4  -- Dealing with EWD - final STS page
+ECAM_STATUS_NORMAL       = 0  -- No buttons pressed, no warning, normal situation, page displayed depends on flight phase
+ECAM_STATUS_SHOW_USER    = 1  -- User has pressed a page button
+ECAM_STATUS_SHOW_ALL     = 2  -- ALL button has been pressed
+ECAM_STATUS_SHOW_EWD     = 3  -- Dealing with EWD
+ECAM_STATUS_SHOW_EWD_STS = 4  -- Dealing with EWD - final STS page
 
 -------------------------------------------------------------------------------
 -- Commands
@@ -50,20 +50,21 @@ local Ecam_btn_cmd_RCL   = createCommand("a321neo/cockpit/ecam/buttons/cmd_rcl",
 -------------------------------------------------------------------------------
 -- Command registration
 -------------------------------------------------------------------------------
-sasl.registerCommandHandler (Ecam_btn_cmd_ENG,   0 , function(phase) user_press_page_button(phase,ECAM_PAGE_ENG) end )
-sasl.registerCommandHandler (Ecam_btn_cmd_BLEED, 0 , function(phase) user_press_page_button(phase,ECAM_PAGE_BLEED) end )
-sasl.registerCommandHandler (Ecam_btn_cmd_PRESS, 0 , function(phase) user_press_page_button(phase,ECAM_PAGE_PRESS) end )
-sasl.registerCommandHandler (Ecam_btn_cmd_ELEC,  0 , function(phase) user_press_page_button(phase,ECAM_PAGE_ELEC) end )
-sasl.registerCommandHandler (Ecam_btn_cmd_HYD,   0 , function(phase) user_press_page_button(phase,ECAM_PAGE_HYD) end )
-sasl.registerCommandHandler (Ecam_btn_cmd_FUEL,  0 , function(phase) user_press_page_button(phase,ECAM_PAGE_FUEL) end )
-sasl.registerCommandHandler (Ecam_btn_cmd_APU,   0 , function(phase) user_press_page_button(phase,ECAM_PAGE_APU) end )
-sasl.registerCommandHandler (Ecam_btn_cmd_COND,  0 , function(phase) user_press_page_button(phase,ECAM_PAGE_COND) end )
-sasl.registerCommandHandler (Ecam_btn_cmd_DOOR,  0 , function(phase) user_press_page_button(phase,ECAM_PAGE_DOOR) end )
-sasl.registerCommandHandler (Ecam_btn_cmd_WHEEL, 0 , function(phase) user_press_page_button(phase,ECAM_PAGE_WHEEL) end )
-sasl.registerCommandHandler (Ecam_btn_cmd_FCTL,  0 , function(phase) user_press_page_button(phase,ECAM_PAGE_FCTL) end )
-sasl.registerCommandHandler (Ecam_btn_cmd_STS,   0 , function(phase) user_press_page_button(phase,ECAM_PAGE_STS) end )
+sasl.registerCommandHandler (Ecam_btn_cmd_ENG,   0 , function(phase) ecam_user_press_page_button(phase,ECAM_PAGE_ENG) end )
+sasl.registerCommandHandler (Ecam_btn_cmd_BLEED, 0 , function(phase) ecam_user_press_page_button(phase,ECAM_PAGE_BLEED) end )
+sasl.registerCommandHandler (Ecam_btn_cmd_PRESS, 0 , function(phase) ecam_user_press_page_button(phase,ECAM_PAGE_PRESS) end )
+sasl.registerCommandHandler (Ecam_btn_cmd_ELEC,  0 , function(phase) ecam_user_press_page_button(phase,ECAM_PAGE_ELEC) end )
+sasl.registerCommandHandler (Ecam_btn_cmd_HYD,   0 , function(phase) ecam_user_press_page_button(phase,ECAM_PAGE_HYD) end )
+sasl.registerCommandHandler (Ecam_btn_cmd_FUEL,  0 , function(phase) ecam_user_press_page_button(phase,ECAM_PAGE_FUEL) end )
+sasl.registerCommandHandler (Ecam_btn_cmd_APU,   0 , function(phase) ecam_user_press_page_button(phase,ECAM_PAGE_APU) end )
+sasl.registerCommandHandler (Ecam_btn_cmd_COND,  0 , function(phase) ecam_user_press_page_button(phase,ECAM_PAGE_COND) end )
+sasl.registerCommandHandler (Ecam_btn_cmd_DOOR,  0 , function(phase) ecam_user_press_page_button(phase,ECAM_PAGE_DOOR) end )
+sasl.registerCommandHandler (Ecam_btn_cmd_WHEEL, 0 , function(phase) ecam_user_press_page_button(phase,ECAM_PAGE_WHEEL) end )
+sasl.registerCommandHandler (Ecam_btn_cmd_FCTL,  0 , function(phase) ecam_user_press_page_button(phase,ECAM_PAGE_FCTL) end )
+sasl.registerCommandHandler (Ecam_btn_cmd_STS,   0 , function(phase) ecam_user_press_page_button(phase,ECAM_PAGE_STS) end )
 
-sasl.registerCommandHandler (Ecam_btn_cmd_ALL,   0 , function(phase) user_press_all(phase) end )
+sasl.registerCommandHandler (Ecam_btn_cmd_ALL,   0 , function(phase) ecam_user_press_all(phase) end )
+sasl.registerCommandHandler (Ecam_btn_cmd_CLR,   0 , function(phase) ecam_user_press_clr_status(phase) end )
 
 -------------------------------------------------------------------------------
 -- Variables
@@ -77,7 +78,7 @@ local page_normal_eng_last_show = 0
 -------------------------------------------------------------------------------
 -- Functions
 -------------------------------------------------------------------------------
-function user_press_page_button(phase, which_page)
+function ecam_user_press_page_button(phase, which_page)
     if phase ~= SASL_COMMAND_BEGIN then
         return
     end
@@ -86,7 +87,9 @@ function user_press_page_button(phase, which_page)
 
         if get(Ecam_current_page) == which_page then
             -- User is de-activating the page (s)he previously selected
-            set(Ecam_current_status, ECAM_STATUS_NORMAL)    -- Resume normal mode, page will be changed automatically
+            -- Resume normal mode, page will be changed automatically
+            set(Ecam_current_status, ECAM_STATUS_NORMAL) 
+            -- If another mode was selected, page will change automatically at next sasl run
         else
             Goto_ecam(which_page)        
         end
@@ -96,6 +99,31 @@ function user_press_page_button(phase, which_page)
         Goto_ecam(which_page)
     end
 
+end
+
+function ecam_user_press_clr_status(phase)
+    if phase ~= SASL_COMMAND_BEGIN then
+        return
+    end
+    
+    if get(Ecam_current_status) ~= ECAM_STATUS_SHOW_EWD_STS then
+        return  -- Not the mode we are interested in
+    end
+    
+    if get(Ecam_is_sts_clearable) == 0 then
+        return  -- STS not clearable, i.e. CLR goes to EWD
+    end
+    
+    if get(Ecam_arrow_overflow) == 1 then
+        -- We have overflow, so CLR will scroll page until the end
+        set(Ecam_sts_scroll_page, get(Ecam_sts_scroll_page) + 1)
+        return
+    end
+    
+    -- Ok we finished scrolling ECAM, so we can clear the status page, by resuming normal mode
+    set(Ecam_is_sts_clearable, 0)
+    set(Ecam_current_status, ECAM_STATUS_NORMAL)
+    
 end
 
 -- This function update the pushbutton leds status
@@ -212,6 +240,10 @@ local function update_page_normal()
     end    
 end
 
+function ecam_user_press_all()
+
+end
+
 local function update_page_all()
 -- TODO
 
@@ -221,6 +253,13 @@ end
 function ecam_update_page()
     if get(Ecam_current_status) == ECAM_STATUS_SHOW_USER then
         -- User is forcing a page, nothing to do
+        return
+    end
+    
+    if get(Ecam_is_sts_clearable) == 1 then
+        -- We didn't cleared the sts page, so let's go there and change mode
+            set(Ecam_current_status, ECAM_STATUS_SHOW_EWD_STS)
+            Goto_ecam(ECAM_PAGE_STS)
         return
     end
     
@@ -239,11 +278,12 @@ function ecam_update_page()
         -- Otherwise we have two cases:
         -- - Show the page of affected system
         -- - Show the status page to clear
-        if get(Ecam_current_status) ~= ECAM_STATUS_SHOW_EWD_STS then
+        if get(Ecam_EDW_requested_page) ~= ECAM_PAGE_STS then
             set(Ecam_current_status, ECAM_STATUS_SHOW_EWD)
             Goto_ecam(get(Ecam_EDW_requested_page))
         else
-            Goto_ecam(ECAM_PAGE_STS)        
+            set(Ecam_current_status, ECAM_STATUS_SHOW_EWD_STS)
+            Goto_ecam(ECAM_PAGE_STS)
         end
     end
     

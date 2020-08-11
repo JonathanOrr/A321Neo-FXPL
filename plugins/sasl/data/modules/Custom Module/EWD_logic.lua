@@ -8,8 +8,10 @@ include('EWD_msgs/to_ldg_memos.lua')
 
 -- commands
 local Ecam_btn_cmd_CLR = sasl.findCommand("a321neo/cockpit/ecam/buttons/cmd_clr")
+local Ecam_btn_cmd_RCL = sasl.findCommand("a321neo/cockpit/ecam/buttons/cmd_rcl")
 
 sasl.registerCommandHandler (Ecam_btn_cmd_CLR,   0 , function(phase) ewd_clear_button_handler(phase) end )
+sasl.registerCommandHandler (Ecam_btn_cmd_RCL,   0 , function(phase) ewd_recall_button_handler(phase) end )
 
 --colors
 local COL_INVISIBLE = 0    
@@ -30,6 +32,8 @@ for i=0,6 do
     set(EWD_right_memo_colors[i], COL_INVISIBLE)
 end
 
+-- This is the list of triggerable messages for the left. When a message is cleared with CLR, the
+-- message is removed from the list and moved to the next list "left_messages_list_cleared"
 local left_messages_list = {
     -- Normal messages
     MessageGroup_MEMO_TAKEOFF,
@@ -49,13 +53,18 @@ local left_messages_list = {
     MessageGroup_APU_FIRE
 }
 
-local left_messages_list_cleared = {
+local left_messages_list_cleared = {    -- List of message cleared with CLR
 
 }
 
-local left_current_message = nil;   -- It contains (if exists) the first message group *clearable*
+local left_messages_list_cancelled = {  -- List of message cancelled with EMER CANC
 
-local land_asap = false;
+}
+
+
+local left_current_message = nil;   -- It contains (if exists) the first message group *clearable*
+local left_was_clearing = false     -- True when a warning/caution message exists and status page not yet displayed
+local land_asap = false;            -- If true, the LAND ASAP message appears (according to flight phase)
 
 -- PriorityQueue external implementation (modified)
 -- Source: https://rosettacode.org/wiki/Priority_queue#Lua
@@ -123,7 +132,7 @@ local function update_right_list()
     list_right:setmax(PRIORITY_LEVEL_MEMO)
 
     -- Land ASAP    
-    if land_asap then
+    if land_asap and get(EWD_flight_phase) >= PHASE_ABOVE_80_KTS and get(EWD_flight_phase) <= PHASE_TOUCHDOWN then
         list_right:put(COL_WARNING, "LAND ASAP")
     end
 
@@ -341,11 +350,38 @@ local function publish_left_list()
         set(EWD_left_memo_colors[i], COL_INVISIBLE)
     end
     
+    -- Update the ECAM requested page (if necessary)
     if left_current_message ~= nil then
         if left_current_message.sd_page ~= nil then
             -- ECAM page change request
             -- We put this number of the dataref
             set(Ecam_EDW_requested_page, left_current_message.sd_page)
+        end
+        left_was_clearing = true
+    else
+        if left_was_clearing then
+            
+            -- We cleared all the pages, so, let's display the STATUS page for clearing it
+            set(Ecam_is_sts_clearable, 1)
+            set(Ecam_EDW_requested_page, ECAM_PAGE_STS)
+            left_was_clearing = false
+        end
+    end
+    
+    
+
+end
+
+-- This function checks if any message in the cleared list has been
+-- deactivated, in that case, we move it back to the original list
+-- so that, if retriggered, it will be showed again
+local function check_cleared_list()
+
+    -- Let's loop backward so that the remove of the item of the table is safe
+    for i=#left_messages_list_cleared,1,-1 do
+        if not left_messages_list_cleared[i].is_active() then
+            table.insert(left_messages_list, left_messages_list_cleared[i])
+            table.remove(left_messages_list_cleared, i)
         end
     end
 
@@ -357,6 +393,8 @@ function update()
     publish_left_list()
     update_right_list()
     publish_right_list()
+    
+    check_cleared_list()
 end
 
 function ewd_clear_button_handler(phase)
@@ -383,6 +421,20 @@ function ewd_clear_button_handler(phase)
     end
     
     print("ERROR: This should not happend, clearing a non-existent message.")
+    
+end
+
+function ewd_recall_button_handler(phase)
+    if phase ~= SASL_COMMAND_BEGIN then
+        return
+    end
+
+    -- Move back all the messages from the cleared list to the normal list
+    for i,msg in ipairs(left_messages_list_cleared) do
+        table.insert(left_messages_list, msg)
+    end
+
+    left_messages_list_cleared = {}
     
 end
 
