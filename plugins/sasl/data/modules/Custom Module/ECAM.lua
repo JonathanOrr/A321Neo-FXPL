@@ -1,8 +1,8 @@
 position= {3187,539,900,900}
 size = {900, 900}
 
-include('ECAM-status.lua')
-include('ECAM-automation.lua')
+include('ECAM_status.lua')
+include('ECAM_automation.lua')
 
 --local variables
 local apu_avail_timer = -1
