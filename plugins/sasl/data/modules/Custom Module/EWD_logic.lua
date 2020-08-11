@@ -42,6 +42,7 @@ local left_messages_list = {
     MessageGroup_SEAT_BELTS,
     MessageGroup_NO_SMOKING,
     MessageGroup_IRS_ALIGN,
+    MessageGroup_NORMAL,
 
     -- Cautions
     MessageGroup_FBW_ALTN_DIRECT_LAW,
@@ -427,6 +428,10 @@ end
 function ewd_recall_button_handler(phase)
     if phase ~= SASL_COMMAND_BEGIN then
         return
+    end
+
+    if #left_messages_list_cleared == 0 then
+        set(EWD_show_normal, get(TIME)) 
     end
 
     -- Move back all the messages from the cleared list to the normal list

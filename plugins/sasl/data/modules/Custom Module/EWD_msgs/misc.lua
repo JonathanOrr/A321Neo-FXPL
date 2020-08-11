@@ -88,6 +88,56 @@ MessageGroup_NO_SMOKING = {
 
 
 --------------------------------------------------------------------------------
+-- NORMAL: NORMAL
+-- This is used in some cases to show "NORMAL" on ECAM, e.g. when you press the
+-- RCL button and no messages are available to be recalled
+--------------------------------------------------------------------------------
+
+MessageGroup_NORMAL = {
+
+    shown = false,
+
+    text  = function(self)
+                return ""
+            end,
+    color = function(self)
+                return COL_INDICATION
+            end,
+
+    priority = PRIORITY_LEVEL_MEMO,
+
+    messages = {
+        {
+            text = function(self)
+                    return "NORMAL"
+            end,
+            color = function(self)
+                    return COL_INDICATION
+            end,
+            is_active = function(self)
+              return true
+            end
+        }
+    },
+
+    -- Method to check if this message group is active
+    is_active = function(self)
+        if (get(TIME) - get(EWD_show_normal)) < 10 then
+            return true
+        else
+            return false
+        end
+    end,
+
+    -- Method to check if this message is currently inhibithed
+    is_inhibited = function(self)
+        return false
+    end
+
+}
+
+
+--------------------------------------------------------------------------------
 -- NORMAL/CAUTION: IRS_ALIGN
 --------------------------------------------------------------------------------
 

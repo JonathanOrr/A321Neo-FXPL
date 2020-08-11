@@ -1,3 +1,4 @@
+
     --colors
 local ECAM_WHITE = {1.0, 1.0, 1.0}
 local ECAM_HIGH_GREY = {0.6, 0.6, 0.6}
@@ -101,9 +102,13 @@ ecam_sts = {
     end,
     
     get_cancelled_cautions = function()
-        return {
-            { title="NAV", text="IR 2 FAULT"}
-        }
+        local messages = {}
+        
+        for i, m in ipairs(_G.ewd_left_messages_list_cancelled) do
+            table.insert(messages, {title = m.text(), text = m.messages[1].text() })
+        end
+    
+        return messages
     end,
     
     get_inop_sys = function()
