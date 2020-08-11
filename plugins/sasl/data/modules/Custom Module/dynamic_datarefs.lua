@@ -114,6 +114,7 @@ EWD_box_adv        = createGlobalPropertyi("a321neo/cockpit/EWD/box_adv", 0, fal
 EWD_box_sts        = createGlobalPropertyi("a321neo/cockpit/EWD/box_sts", 0, false, true, false) -- STS box: 1 displayed, 0 hidden
 EWD_arrow_overflow = createGlobalPropertyi("a321neo/cockpit/EWD/arrow_overflow", 0, false, true, false) -- Overflow arrow: 1 displayed, 0 hidden
 TO_Config_is_ready = createGlobalPropertyi("a321neo/cockpit/EWD/to_config_ready", 0, false, true, false) -- TO Config: 1 executed OK, 0 not executed or error
+EWD_show_normal    = createGlobalPropertyi("a321neo/cockpit/EWD/show_normal_msg", 0, false, true, false) -- Time value to trigger "NORMAL" message on EWD (set this to get(TIME) to show the message)
 -- ECAM
 Ecam_is_sts_clearable = createGlobalPropertyi("a321neo/cockpit/ecam/is_sts_clearable", 0, false, true, false) -- 0: NO, 1: YES, this is used to decide whether CLR clear the EDW or the STS page
 Ecam_EDW_requested_page = createGlobalPropertyi("a321neo/cockpit/ecam/edw_requested_page", 0, false, true, false) -- Page requested by EDW (can be overriden by pilot action)
