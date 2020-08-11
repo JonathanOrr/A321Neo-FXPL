@@ -1,3 +1,4 @@
+include('ECAM_status.lua')
 include('EWD_flight_phases.lua')
 include('EWD_msgs/brakes_and_antiskid.lua')
 include('EWD_msgs/engines_and_apu.lua')
@@ -7,11 +8,13 @@ include('EWD_msgs/misc.lua')
 include('EWD_msgs/to_ldg_memos.lua')
 
 -- commands
-local Ecam_btn_cmd_CLR = sasl.findCommand("a321neo/cockpit/ecam/buttons/cmd_clr")
-local Ecam_btn_cmd_RCL = sasl.findCommand("a321neo/cockpit/ecam/buttons/cmd_rcl")
+local Ecam_btn_cmd_CLR   = sasl.findCommand("a321neo/cockpit/ecam/buttons/cmd_clr")
+local Ecam_btn_cmd_RCL   = sasl.findCommand("a321neo/cockpit/ecam/buttons/cmd_rcl")
+local Ecam_btn_cmd_EMERC = sasl.findCommand("a321neo/cockpit/ecam/buttons/cmd_emercanc")
 
 sasl.registerCommandHandler (Ecam_btn_cmd_CLR,   0 , function(phase) ewd_clear_button_handler(phase) end )
 sasl.registerCommandHandler (Ecam_btn_cmd_RCL,   0 , function(phase) ewd_recall_button_handler(phase) end )
+sasl.registerCommandHandler (Ecam_btn_cmd_EMERC, 0 , function(phase) ewd_emercanc_button_handler(phase) end )
 
 --colors
 local COL_INVISIBLE = 0    
@@ -58,7 +61,10 @@ local left_messages_list_cleared = {    -- List of message cleared with CLR
 
 }
 
-local left_messages_list_cancelled = {  -- List of message cancelled with EMER CANC
+
+_G.ewd_left_messages_list_cancelled = {  -- List of message cancelled with EMER CANC 
+                                         -- (this is in the global table because we need to access from other files)
+                                         -- Not the cleanest way, but it is an effective small solution
 
 }
 
@@ -443,3 +449,27 @@ function ewd_recall_button_handler(phase)
     
 end
 
+function ewd_emercanc_button_handler(phase)
+    if phase ~= SASL_COMMAND_BEGIN then
+        return
+    end
+
+    if left_current_message == nil then
+        return  -- Nothing to cancel
+    end
+
+    if left_current_message.color() == COL_WARNING then
+        return  -- Warning cannot be de-activated (canceled for the remainer of the flight)
+    end
+    
+    -- Ok, we have a message, and STS page is not clearable.
+    -- Let's search and move the message to the list of cleared message
+    for i, m in ipairs(left_messages_list) do
+        if m == left_current_message then
+            table.insert(_G.ewd_left_messages_list_cancelled, m)   -- For convenience, ewd_left_messages_list_cancelled is defined in ECAM_status.lua
+            table.remove(left_messages_list, i)
+            return
+        end
+    end
+
+end
