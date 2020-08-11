@@ -485,7 +485,14 @@ function draw()
     elseif get(Ecam_current_page) == 12 then --STS
         draw_sts_page()
     elseif get(Ecam_current_page) == 13 then --CRUISE
-        
+        --temperatures 
+        sasl.gl.drawText(B612MONO_regular, size[1]/2-330, size[2]/2-250, math.floor(get(Cockpit_temp)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(B612MONO_regular, size[1]/2-190, size[2]/2-250, math.floor(get(Front_cab_temp)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(B612MONO_regular, size[1]/2-70, size[2]/2-250, math.floor(get(Aft_cab_temp)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        --cab press
+        sasl.gl.drawText(B612MONO_regular, size[1]/2+10, size[2]/2-105, Round(get(Cabin_delta_psi),1), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        sasl.gl.drawText(B612MONO_regular, size[1]/2+300, size[2]/2-185, math.floor(get(Cabin_vs)), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        sasl.gl.drawText(B612MONO_regular, size[1]/2+300, size[2]/2-290, math.floor(get(Cabin_alt_ft)), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     end
 
     draw_ecam_lower_section()
