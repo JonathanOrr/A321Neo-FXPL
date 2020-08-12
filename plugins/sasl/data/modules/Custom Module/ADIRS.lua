@@ -9,6 +9,7 @@ local adirs_onbat = createGlobalPropertyi("a321neo/cockpit/adris/onbat", 0, fals
 local adirs_align = createGlobalPropertyi("a321neo/cockpit/adris/align", 0, false, true, false)
 
 local adirs_time_to_onbat = createGlobalPropertyf("a321neo/cockpit/adris/timetoonbat", 0, false, true, false)
+local Adirs_time_to_align = createGlobalPropertyf("a321neo/cockpit/adris/timetoalign", 0, false, true, false)
 
 for i = 1,3 do
   adirs_ir_switch_state[i] = createGlobalPropertyi("a321neo/cockpit/adris/ir" .. i .. "_switch_state", 0, false, true, false)
