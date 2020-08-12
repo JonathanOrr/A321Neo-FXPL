@@ -11,8 +11,8 @@ local A32nx_FBW_pitch_rate_up =   {P_gain = 1, D_gain = 10, Current_error = 0, M
 local A32nx_FBW_pitch_rate_down =   {P_gain = 1, D_gain = 10, Current_error = 0, Min_error = -0.5, Max_error = 0.5, Error_offset = 0}
 local A32nx_FBW_roll_rate_command = {P_gain = 0.8, I_gain = 1, D_gain = 2, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -1, Max_error = 1, Error_offset = 0}
 --local A32nx_FBW_1G_command = {P_gain = 1, I_gain = 1, D_gain = 1.5, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -0.25, Max_error = 0.25, Error_offset = 0}
-local A32nx_FBW_1G_command = {P_gain = 1.5, I_gain = 1, D_gain = 10, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -15, Max_error = 15, Error_offset = 0}
-local A32nx_FBW_G_command = {P_gain = 0.16, I_gain = 1, D_gain = 7.5, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -0.15, Max_error = 0.15, Error_offset = 0}
+local A32nx_FBW_1G_command = {P_gain = 0.16, I_gain = 1, D_gain = 10, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -0.15, Max_error = 0.15, Error_offset = 0}
+local A32nx_FBW_G_command = {P_gain = 0.16, I_gain = 1, D_gain = 7.8, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -0.15, Max_error = 0.15, Error_offset = 0}
 local A32nx_FBW_AOA_protection = {P_gain = 1, I_gain = 1, D_gain = 10, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -5, Max_error = 5, Error_offset = 0}
 local A32nx_FBW_MAX_spd_protection = {P_gain = 1, I_gain = 1, D_gain = 10, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -5, Max_error = 5, Error_offset = 0}
 
@@ -275,10 +275,10 @@ function update()
     else
         if get(FBW_status) == 2 then
             --G command clamped to stop integral build up
-            set(G_output, Set_anim_value(get(G_output), Math_clamp(FBW_PD(A32nx_FBW_G_command, get(G_load_command) - get(Total_vertical_g_load)), get(Pitch_d_lim), get(Pitch_u_lim)), -1, 1, 0.8))
+            set(G_output, Set_anim_value(get(G_output), Math_clamp(FBW_PD(A32nx_FBW_G_command, get(G_load_command) - get(Total_vertical_g_load)), get(Pitch_d_lim), get(Pitch_u_lim)), -1, 1, 0.35))
         else
             --G command
-            set(G_output, Set_anim_value(get(G_output), FBW_PD(A32nx_FBW_G_command, get(G_load_command) - get(Total_vertical_g_load)), -1, 1, 0.8))
+            set(G_output, Set_anim_value(get(G_output), FBW_PD(A32nx_FBW_G_command, get(G_load_command) - get(Total_vertical_g_load)), -1, 1, 0.35))
         end
     end
 
