@@ -267,10 +267,10 @@ function update()
     if get(G_load_command) == 1 then
         if get(FBW_status) == 2 then
             --command 0 pitch rate clamped to stop integral build up
-            set(G_output, Set_anim_value(get(G_output), Math_clamp(FBW_PID(A32nx_FBW_1G_command, 0 - get(Pitch_rate)), get(Pitch_d_lim), get(Pitch_u_lim)), -1, 1, 0.5))
+            set(G_output, Set_anim_value(get(G_output), Math_clamp(FBW_PID(A32nx_FBW_1G_command, 0 - get(Pitch_rate)), get(Pitch_d_lim), get(Pitch_u_lim)), -1, 1, 0.8))
         else
             --command 0 pitch rate
-            set(G_output, Set_anim_value(get(G_output), FBW_PID(A32nx_FBW_1G_command, 0 - get(Pitch_rate)), -1, 1, 0.5))
+            set(G_output, Set_anim_value(get(G_output), FBW_PID(A32nx_FBW_1G_command, 0 - get(Pitch_rate)), -1, 1, 0.8))
         end
     else
         if get(FBW_status) == 2 then
