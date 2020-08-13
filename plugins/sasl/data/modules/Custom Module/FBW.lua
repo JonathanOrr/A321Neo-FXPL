@@ -11,7 +11,7 @@ local A32nx_FBW_pitch_rate_up =   {P_gain = 1, D_gain = 10, Current_error = 0, M
 local A32nx_FBW_pitch_rate_down =   {P_gain = 1, D_gain = 10, Current_error = 0, Min_error = -0.5, Max_error = 0.5, Error_offset = 0}
 local A32nx_FBW_roll_rate_command = {P_gain = 0.8, I_gain = 1, D_gain = 2, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -1, Max_error = 1, Error_offset = 0}
 --local A32nx_FBW_1G_command = {P_gain = 1, I_gain = 1, D_gain = 1.5, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -0.25, Max_error = 0.25, Error_offset = 0}
-local A32nx_FBW_1G_command = {P_gain = 0.16, I_gain = 1, D_gain = 10, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -0.15, Max_error = 0.15, Error_offset = 0}
+local A32nx_FBW_1G_command = {P_gain = 150, I_gain = 10, D_gain = 1000, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -0.15, Max_error = 0.15, Error_offset = 0}
 local A32nx_FBW_G_command = {P_gain = 0.16, I_gain = 1, D_gain = 7.8, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -0.15, Max_error = 0.15, Error_offset = 0}
 local A32nx_FBW_AOA_protection = {P_gain = 1, I_gain = 1, D_gain = 10, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -5, Max_error = 5, Error_offset = 0}
 local A32nx_FBW_MAX_spd_protection = {P_gain = 1, I_gain = 1, D_gain = 10, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -5, Max_error = 5, Error_offset = 0}
@@ -26,6 +26,7 @@ local A32nx_FBW_elev_trim = {P_gain = 1, I_gain = 1, D_gain = 10, I_delay = 120,
 ]]
 
 --variables--
+local last_pitch = 0
 local FBW_alt_law_gear_extended = 0 --FBW supposed to be in alt law and gear is extended puting it into direct law
 local FBW_restore_required = 0 --not in normal law require restart to restore
 local ground_mode_transition_timer = 0 --(3.5) for delayed transition
@@ -152,6 +153,10 @@ end
 function update()
     set(Override_artstab, 1)
 
+    --calculate abs pitch rate
+    set(Abs_pitch_rate, get(Flightmodel_pitch) - last_pitch)
+    last_pitch = Math_clamp(get(Flightmodel_pitch),-1000,1000)
+
     --detect if the aircraft has stalled, if so enter ALT law, and if in ALT law and gear is down enter DIRECT law--
     if get(FBW_ground_mode) == 0 and get(FBW_flare_mode) == 0 then
         if get(Alpha) > 14 then
@@ -267,10 +272,10 @@ function update()
     if get(G_load_command) == 1 then
         if get(FBW_status) == 2 then
             --command 0 pitch rate clamped to stop integral build up
-            set(G_output, Set_anim_value(get(G_output), Math_clamp(FBW_PID(A32nx_FBW_1G_command, 0 - get(Pitch_rate)), get(Pitch_d_lim), get(Pitch_u_lim)), -1, 1, 0.8))
+            set(G_output, Set_anim_value(get(G_output), Math_clamp(FBW_PID(A32nx_FBW_1G_command, 0 - get(Abs_pitch_rate)), get(Pitch_d_lim), get(Pitch_u_lim)), -1, 1, 0.8))
         else
             --command 0 pitch rate
-            set(G_output, Set_anim_value(get(G_output), FBW_PID(A32nx_FBW_1G_command, 0 - get(Pitch_rate)), -1, 1, 0.8))
+            set(G_output, Set_anim_value(get(G_output), FBW_PID(A32nx_FBW_1G_command, 0 - get(Abs_pitch_rate)), -1, 1, 0.8))
         end
     else
         if get(FBW_status) == 2 then
