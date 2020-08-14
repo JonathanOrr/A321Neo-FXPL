@@ -7,11 +7,6 @@ include('EWD_msgs/flight_controls.lua')
 include('EWD_msgs/misc.lua')
 include('EWD_msgs/to_ldg_memos.lua')
 
--- commands
-local Ecam_btn_cmd_CLR   = sasl.findCommand("a321neo/cockpit/ecam/buttons/cmd_clr")
-local Ecam_btn_cmd_RCL   = sasl.findCommand("a321neo/cockpit/ecam/buttons/cmd_rcl")
-local Ecam_btn_cmd_EMERC = sasl.findCommand("a321neo/cockpit/ecam/buttons/cmd_emercanc")
-
 sasl.registerCommandHandler (Ecam_btn_cmd_CLR,   0 , function(phase) ewd_clear_button_handler(phase) end )
 sasl.registerCommandHandler (Ecam_btn_cmd_RCL,   0 , function(phase) ewd_recall_button_handler(phase) end )
 sasl.registerCommandHandler (Ecam_btn_cmd_EMERC, 0 , function(phase) ewd_emercanc_button_handler(phase) end )

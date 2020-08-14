@@ -1,3 +1,4 @@
+include("cockpit_commands.lua")
 include("cockpit_datarefs.lua")
 include("dynamic_datarefs.lua")
 include("failures_datarefs.lua")
