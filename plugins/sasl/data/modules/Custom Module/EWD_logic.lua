@@ -68,6 +68,8 @@ local left_current_message = nil;   -- It contains (if exists) the first message
 local left_was_clearing = false     -- True when a warning/caution message exists and status page not yet displayed
 local land_asap = false;            -- If true, the LAND ASAP message appears (according to flight phase)
 
+local rcl_start_press_time = 0;     -- The time the user started to press RCL button (this is needed to compute how many seconds elapsed for a long-press)
+
 -- PriorityQueue external implementation (modified)
 -- Source: https://rosettacode.org/wiki/Priority_queue#Lua
 -- License: GNU Free Documentation License 1.2
@@ -427,20 +429,46 @@ function ewd_clear_button_handler(phase)
 end
 
 function ewd_recall_button_handler(phase)
-    if phase ~= SASL_COMMAND_BEGIN then
+    if phase == SASL_COMMAND_BEGIN then
+        rcl_start_press_time = get(TIME)
         return
     end
 
-    if #left_messages_list_cleared == 0 then
-        set(EWD_show_normal, get(TIME)) 
+    if phase == SASL_COMMAND_END then
+
+        if get(TIME) - rcl_start_press_time <= 3 then
+        
+            -- This is a short-press RCL -> it restores the cleared messages (but not the emerg cancelled messages)
+        
+            if #left_messages_list_cleared == 0 then
+                set(EWD_show_normal, get(TIME)) 
+            end
+
+            -- Move back all the messages from the cleared list to the normal list
+            for i,msg in ipairs(left_messages_list_cleared) do
+                table.insert(left_messages_list, msg)
+            end
+
+            left_messages_list_cleared = {}            
+        
+        end
     end
 
-    -- Move back all the messages from the cleared list to the normal list
-    for i,msg in ipairs(left_messages_list_cleared) do
-        table.insert(left_messages_list, msg)
-    end
+    if rcl_start_press_time ~= 0 and (get(TIME) - rcl_start_press_time >= 3) then
+        rcl_start_press_time = 0
+        
+        -- This is a long-press RCL -> it restores the emerg cancelled messages
+        if #_G.ewd_left_messages_list_cancelled == 0 then
+                set(EWD_show_normal, get(TIME)) 
+        end
+        
+        for i,msg in ipairs(_G.ewd_left_messages_list_cancelled) do
+            table.insert(left_messages_list, msg)
+        end
 
-    left_messages_list_cleared = {}
+        _G.ewd_left_messages_list_cancelled = {}            
+        
+    end
     
 end
 
