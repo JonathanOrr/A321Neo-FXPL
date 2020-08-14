@@ -24,6 +24,7 @@ local was_above_80_kts = false
 -- We need a timer to reset the phase after 5 minutes after engine is shutdown, as per specification.
 local timer_reset_phase = sasl.createTimer()
 local timer_is_running  = false
+local last_update_time  = 0
 
 function check_and_stop_timer()
     if timer_is_running then 
@@ -35,11 +36,18 @@ end
 
 function update()
 
+    -- We update the flight phase only if the previous update was more than 1 seconds ago
+    if get(TIME) - last_update_time <= 1 then
+        return  -- Do nothing
+    else
+        last_update_time = get(TIME)
+    end
+
     -- Phase 1:
     -- - Aircraft on ground
     -- - No engines
     -- - Never took off
-    if  get(All_on_ground)  == 1 
+    if  get(Any_wheel_on_ground)  == 1 
     and get(Engine_1_avail) == 0
     and get(Engine_2_avail) == 0
     and already_took_off  == false
@@ -52,7 +60,7 @@ function update()
     -- - Aircraft on ground
     -- - At least one engine ON
     -- - Never took off
-    if  get(All_on_ground)  == 1 
+    if  get(Any_wheel_on_ground)  == 1 
     and (get(Engine_1_avail) == 1 or get(Engine_2_avail) == 1)
     and (get(Eng_1_N1) < 74 and get(Eng_2_N1) < 74)
     and already_took_off == false
@@ -65,7 +73,7 @@ function update()
     -- - Aircraft on ground
     -- - At least one engine at takeoff power
     -- - IAS <= 80
-    if  get(All_on_ground)  == 1 
+    if  get(Any_wheel_on_ground)  == 1 
     and (get(Eng_1_N1) >= 74 or get(Eng_2_N1) >= 74)
     and get(IAS) <= 80
     then
@@ -78,7 +86,7 @@ function update()
     -- - Aircraft on ground
     -- - At least one engine at takeoff power
     -- - IAS > 80
-    if get(All_on_ground) == 1
+    if get(Any_wheel_on_ground) == 1
     and (get(Eng_1_N1) >= 74 or get(Eng_2_N1) >= 74)
     and get(IAS) >= 80
     then
@@ -92,7 +100,7 @@ function update()
     -- - Aircraft airbone
     -- - RA altitude <= 1500
     -- - Climbing (TO or Go-Around)
-    if get(All_on_ground) == 0
+    if get(Any_wheel_on_ground) == 0
     and (get(Capt_ra_alt_ft) <= 1500)
     and get(VVI) >= 0
     and was_above_80_kts == true
@@ -106,7 +114,7 @@ function update()
     -- Phase 6:
     -- - Aircraft airbone
     -- - RA altitude > 1500 if climbing or RA altitude > 800 if descending
-    if get(All_on_ground)  == 0
+    if get(Any_wheel_on_ground)  == 0
     and (get(Capt_ra_alt_ft) > 1500 or (get(Capt_ra_alt_ft) > 800 and get(VVI) <= 0))
     then
         check_and_stop_timer()
@@ -120,7 +128,7 @@ function update()
     -- - Aircraft airbone
     -- - RA altitude <= 800
     -- - Descending
-    if get(All_on_ground)  == 0
+    if get(Any_wheel_on_ground)  == 0
     and get(Capt_ra_alt_ft) <= 800
     and get(VVI) < 0
     and already_took_off  == true
@@ -136,7 +144,7 @@ function update()
     -- - IAS >= 80
     -- - Already took off
     if get(IAS) >= 80
-    and get(All_on_ground) == 1
+    and get(Any_wheel_on_ground) == 1
     and already_took_off  == true
     then
         check_and_stop_timer()
@@ -162,7 +170,7 @@ function update()
     -- - all engines off
     -- - Already took off
     
-    if  get(All_on_ground)  == 1 
+    if  get(Any_wheel_on_ground)  == 1 
     and (get(Engine_1_avail) == 0 and get(Engine_2_avail) == 0)
     and already_took_off  == true
     then
@@ -181,7 +189,7 @@ function update()
     -- - Timer never started
 
     if get(IAS) < 80
-    and get(All_on_ground)  == 1 
+    and get(Any_wheel_on_ground)  == 1 
     and already_took_off  == true
     and (not timer_is_running)
     then

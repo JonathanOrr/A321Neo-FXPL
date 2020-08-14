@@ -224,7 +224,12 @@ function update()
 
     set(Aft_wheel_on_ground, math.floor((get(left_gear_on_ground) + get(right_gear_on_ground))/2))
     set(All_on_ground, math.floor((get(front_gear_on_ground) + get(left_gear_on_ground) + get(right_gear_on_ground))/3))
-
+    if get(front_gear_on_ground) == 1 or get(left_gear_on_ground) == 1 or get(right_gear_on_ground) == 1 then
+        set(Any_wheel_on_ground, 1)
+    else
+        set(Any_wheel_on_ground, 0)
+    end
+    
     --customize efis modes
     if get(a321neo_efis_mode) == 0 then
         set(efis_map_mode, 0)
