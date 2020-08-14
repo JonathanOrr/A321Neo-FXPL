@@ -69,6 +69,7 @@ local left_was_clearing = false     -- True when a warning/caution message exist
 local land_asap = false;            -- If true, the LAND ASAP message appears (according to flight phase)
 
 local rcl_start_press_time = 0;     -- The time the user started to press RCL button (this is needed to compute how many seconds elapsed for a long-press)
+local flight_phase_not_one = false; -- See function check_reset() 
 
 -- PriorityQueue external implementation (modified)
 -- Source: https://rosettacode.org/wiki/Priority_queue#Lua
@@ -391,6 +392,33 @@ local function check_cleared_list()
 
 end
 
+local function restore_cancelled_messages()
+    if #_G.ewd_left_messages_list_cancelled == 0 then
+        set(EWD_show_normal, get(TIME)) 
+    end
+
+    for i,msg in ipairs(_G.ewd_left_messages_list_cancelled) do
+        table.insert(left_messages_list, msg)
+    end
+
+    _G.ewd_left_messages_list_cancelled = {}            
+end
+
+-- This function check if the flight phase is move from X to 1, that means that a reset occurs
+-- (restart of the flight, or 5 minutes after engine shutdown occurs). In this case, we need to
+-- re-enable all the cancelled cautions (according to FCOM)
+local function check_reset()
+    if not flight_phase_not_one then
+        if get(EWD_flight_phase) >= 2 then
+            flight_phase_not_one = true
+        end
+    elseif get(EWD_flight_phase) == 1 then
+        -- Reset occurred
+        flight_phase_not_one = false
+        restore_cancelled_messages()
+    end
+end
+
 function update()
 
     update_left_list()
@@ -399,6 +427,7 @@ function update()
     publish_right_list()
     
     check_cleared_list()
+    check_reset()
 end
 
 function ewd_clear_button_handler(phase)
@@ -458,15 +487,7 @@ function ewd_recall_button_handler(phase)
         rcl_start_press_time = 0
         
         -- This is a long-press RCL -> it restores the emerg cancelled messages
-        if #_G.ewd_left_messages_list_cancelled == 0 then
-                set(EWD_show_normal, get(TIME)) 
-        end
-        
-        for i,msg in ipairs(_G.ewd_left_messages_list_cancelled) do
-            table.insert(left_messages_list, msg)
-        end
-
-        _G.ewd_left_messages_list_cancelled = {}            
+        restore_cancelled_messages()
         
     end
     
