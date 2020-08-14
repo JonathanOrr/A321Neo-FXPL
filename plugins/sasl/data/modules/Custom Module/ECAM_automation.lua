@@ -51,6 +51,8 @@ local timer_cruise_page_started = false
 local page_normal_apu_last_show = 0
 local page_normal_eng_last_show = 0
 
+local page_all_start_time       = 0
+
 -------------------------------------------------------------------------------
 -- Functions
 -------------------------------------------------------------------------------
@@ -143,8 +145,10 @@ function ecam_update_leds()
     elseif get(Ecam_current_page) == ECAM_PAGE_STS then
         set(Ecam_btn_light_STS, 1)
     end
-
-    -- TODO CLR led
+    
+    if get(Ecam_current_status) == ECAM_STATUS_SHOW_EWD or get(Ecam_current_status) == ECAM_STATUS_SHOW_EWD_STS then
+        set(Ecam_btn_light_CLR, 1)
+    end
     
     -- TODO Advisory blinking leds
 
@@ -216,13 +220,23 @@ local function update_page_normal()
     end    
 end
 
-function ecam_user_press_all()
-
+function ecam_user_press_all(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        set(Ecam_current_status, ECAM_STATUS_SHOW_ALL)
+        page_all_start_time = get(TIME)
+    elseif phase == SASL_COMMAND_END then
+        set(Ecam_current_status, ECAM_STATUS_SHOW_USER)
+    end
 end
 
-local function update_page_all()
--- TODO
+local function update_page_all(phase)
 
+    if get(TIME) - page_all_start_time >= 1 then
+        page_all_start_time = get(TIME)
+        local curr_page = get(Ecam_current_page)
+        local next_page = (curr_page + 1) % 12
+        set(Ecam_current_page, next_page)
+    end
 end
 
 -- This function update the page when ecam automatic is in action
