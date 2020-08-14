@@ -122,7 +122,7 @@ MessageGroup_NORMAL = {
 
     -- Method to check if this message group is active
     is_active = function(self)
-        if (get(TIME) - get(EWD_show_normal)) < 10 then
+        if (get(TIME) - get(EWD_show_normal)) < 5 then  -- Active for 5 seconds
             return true
         else
             return false
