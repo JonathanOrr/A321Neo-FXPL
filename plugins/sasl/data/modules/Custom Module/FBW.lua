@@ -10,13 +10,21 @@ local A32nx_FBW_pitch_down = {P_gain = 1, D_gain = 10, Current_error = 0, Min_er
 local A32nx_FBW_pitch_rate_up =   {P_gain = 1, D_gain = 10, Current_error = 0, Min_error = -0.5, Max_error = 0.5, Error_offset = 0}
 local A32nx_FBW_pitch_rate_down =   {P_gain = 1, D_gain = 10, Current_error = 0, Min_error = -0.5, Max_error = 0.5, Error_offset = 0}
 local A32nx_FBW_roll_rate_command = {P_gain = 0.8, I_gain = 1, D_gain = 2, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -1, Max_error = 1, Error_offset = 0}
---local A32nx_FBW_1G_command = {P_gain = 1, I_gain = 1, D_gain = 1.5, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -0.25, Max_error = 0.25, Error_offset = 0}
-local A32nx_FBW_1G_command = {P_gain = 150, I_gain = 10, D_gain = 1000, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -0.15, Max_error = 0.15, Error_offset = 0}
+local A32nx_FBW_0pitch_command = {P_gain = 150, I_gain = 10, D_gain = 1000, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -0.15, Max_error = 0.15, Error_offset = 0}
+local A32nx_FBW_0vpath_command = {P_gain = 2.45, I_gain = 5.8, D_gain = 240, I_delay = 60, Integral = 0, Current_error = 0, Min_error = -0.10, Max_error = 0.10, Error_offset = 0}
 local A32nx_FBW_G_command = {P_gain = 0.16, I_gain = 1, D_gain = 7.8, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -0.15, Max_error = 0.15, Error_offset = 0}
 local A32nx_FBW_AOA_protection = {P_gain = 1, I_gain = 1, D_gain = 10, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -5, Max_error = 5, Error_offset = 0}
 local A32nx_FBW_MAX_spd_protection = {P_gain = 1, I_gain = 1, D_gain = 10, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -5, Max_error = 5, Error_offset = 0}
 
-local A32nx_FBW_elev_trim = {P_gain = 1, I_gain = 1, D_gain = 10, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -0.5, Max_error = 0.5, Error_offset = 0}
+local A32nx_FBW_pitch_elev_trim = {P_gain = 1, I_gain = 1, D_gain = 10, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -0.35, Max_error = 0.35, Error_offset = 0}
+local A32nx_FBW_vpath_elev_trim = {P_gain = 2.45, I_gain = 5.8, D_gain = 240, I_delay = 60, Integral = 0, Current_error = 0, Min_error = -0.15, Max_error = 0.15, Error_offset = 0}
+
+--datarefs for live tunning
+local live_P_gain = createGlobalPropertyf("a321neo/debug/pid/live_p_gain", 2.5, false, true, false)
+local live_I_gain = createGlobalPropertyf("a321neo/debug/pid/live_I_gain", 5.8, false, true, false)
+local live_D_gain = createGlobalPropertyf("a321neo/debug/pid/live_d_gain", 220, false, true, false)
+local live_max_lim = createGlobalPropertyf("a321neo/debug/pid/live_max_lim", 0.1, false, true, false)
+local live_min_lim = createGlobalPropertyf("a321neo/debug/pid/live_min_lim", -0.1, false, true, false)
 
 --[[establishing the FBW laws:
     NORMAL LAW: 30 UP, 15 DOWN, stick active: 67 LEFT & RIGHT, not active 30 LEFT & RIGHT, 14 degrees alpha, OVERSPEED protection, roll rate of 30, 2.5G to -1G in normal flight,2G to 0G if flaps down envelop, always CWS
@@ -27,6 +35,7 @@ local A32nx_FBW_elev_trim = {P_gain = 1, I_gain = 1, D_gain = 10, I_delay = 120,
 
 --variables--
 local last_pitch = 0
+local last_vpath = 0
 local FBW_alt_law_gear_extended = 0 --FBW supposed to be in alt law and gear is extended puting it into direct law
 local FBW_restore_required = 0 --not in normal law require restart to restore
 local ground_mode_transition_timer = 0 --(3.5) for delayed transition
@@ -155,7 +164,11 @@ function update()
 
     --calculate abs pitch rate
     set(Abs_pitch_rate, get(Flightmodel_pitch) - last_pitch)
-    last_pitch = Math_clamp(get(Flightmodel_pitch),-1000,1000)
+    last_pitch = get(Flightmodel_pitch)
+
+    --calculate abs vpath pitch rate
+    set(Abs_vpath_pitch_rate, get(Vpath) - last_vpath)
+    last_vpath = get(Vpath)
 
     --detect if the aircraft has stalled, if so enter ALT law, and if in ALT law and gear is down enter DIRECT law--
     if get(FBW_ground_mode) == 0 and get(FBW_flare_mode) == 0 then
@@ -271,11 +284,21 @@ function update()
 
     if get(G_load_command) == 1 then
         if get(FBW_status) == 2 then
-            --command 0 pitch rate clamped to stop integral build up
-            set(G_output, Set_anim_value(get(G_output), Math_clamp(FBW_PID(A32nx_FBW_1G_command, 0 - get(Abs_pitch_rate)), get(Pitch_d_lim), get(Pitch_u_lim)), -1, 1, 0.8))
+            if get(FBW_pitch_mode) == 1 then--hold vpath
+                --command 0 vpath pitch rate clamped to stop integral build up
+                set(G_output, Set_anim_value(get(G_output), Math_clamp(FBW_PID(A32nx_FBW_0vpath_command, 0 - get(Abs_vpath_pitch_rate)), get(Pitch_d_lim), get(Pitch_u_lim)), -1, 1, 0.215))
+            else--hold pitch 
+                --command 0 pitch rate clamped to stop integral build up
+                set(G_output, Set_anim_value(get(G_output), Math_clamp(FBW_PID(A32nx_FBW_0pitch_command, 0 - get(Abs_pitch_rate)), get(Pitch_d_lim), get(Pitch_u_lim)), -1, 1, 1.15))
+            end
         else
-            --command 0 pitch rate
-            set(G_output, Set_anim_value(get(G_output), FBW_PID(A32nx_FBW_1G_command, 0 - get(Abs_pitch_rate)), -1, 1, 0.8))
+            if get(FBW_pitch_mode) == 1 then--hold vpath
+                --command 0 vpath pitch rate
+                set(G_output, Set_anim_value(get(G_output), FBW_PID(A32nx_FBW_0vpath_command, 0 - get(Abs_vpath_pitch_rate)), -1, 1, 0.215))
+            else--hold pitch 
+                --command 0 pitch rate
+                set(G_output, Set_anim_value(get(G_output), FBW_PID(A32nx_FBW_0pitch_command, 0 - get(Abs_pitch_rate)), -1, 1, 1.15))
+            end
         end
     else
         if get(FBW_status) == 2 then
@@ -320,30 +343,30 @@ function update()
             if get(FBW_ground_mode) == 0 then
                 if get(FBW_flare_mode) == 0 then--flare mode
                     set(FBW_flaring, 0)
-                    set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), FBW_PID(A32nx_FBW_elev_trim, get(Pitch_artstab) + (0 - get(Pitch_rate))), -1, 1, 0.1))
+                    set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), FBW_PID(A32nx_FBW_vpath_elev_trim, get(Pitch_artstab) + (0 - get(Abs_vpath_pitch_rate))), -1, 1, 0.05))
                     if get(Pitch) > 0.05 then
-                        set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), FBW_PID(A32nx_FBW_elev_trim, get(G_load_command) - get(Total_vertical_g_load)), -1, 1, 0.08))
+                        set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), FBW_PID(A32nx_FBW_pitch_elev_trim, get(G_load_command) - get(Total_vertical_g_load)), -1, 1, 0.08))
                     elseif get(Pitch) < -0.05 then
-                        set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), FBW_PID(A32nx_FBW_elev_trim, get(G_load_command) - get(Total_vertical_g_load)), -1, 1, 0.08))
+                        set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), FBW_PID(A32nx_FBW_pitch_elev_trim, get(G_load_command) - get(Total_vertical_g_load)), -1, 1, 0.08))
                     end
                 else
                     if get(Capt_ra_alt_ft) < 35 then
                         --pitch down slightly
                         set(FBW_flaring, 1)
-                        set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), FBW_PID(A32nx_FBW_elev_trim, get(Pitch_artstab) + (-1.5 - get(Pitch_rate))), -1, 1, 0.1))
+                        set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), FBW_PID(A32nx_FBW_vpath_elev_trim, get(Pitch_artstab) + (-1 - get(Pitch_rate))), -1, 1, 0.1))
                         if get(Pitch) > 0.05 then
-                            set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), FBW_PID(A32nx_FBW_elev_trim, (-1.5 - get(Pitch_rate)) + (get(G_load_command) - get(Total_vertical_g_load))), -1, 1, 0.08))
+                            set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), FBW_PID(A32nx_FBW_pitch_elev_trim, (-1 - get(Pitch_rate)) + (get(G_load_command) - get(Total_vertical_g_load))), -1, 1, 0.08))
                         elseif get(Pitch) < -0.05 then
-                            set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), FBW_PID(A32nx_FBW_elev_trim, (-1.5 - get(Pitch_rate)) + (get(G_load_command) - get(Total_vertical_g_load))), -1, 1, 0.08))
+                            set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), FBW_PID(A32nx_FBW_pitch_elev_trim, (-1 - get(Pitch_rate)) + (get(G_load_command) - get(Total_vertical_g_load))), -1, 1, 0.08))
                         end
                     else--not below 35 ft
                         set(FBW_flaring, 0)
                         --normal trim
-                        set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), FBW_PID(A32nx_FBW_elev_trim, get(Pitch_artstab) + (0 - get(Pitch_rate))), -1, 1, 0.1))
+                        set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), FBW_PID(A32nx_FBW_vpath_elev_trim, get(Pitch_artstab) + (0 - get(Abs_vpath_pitch_rate))), -1, 1, 0.05))
                         if get(Pitch) > 0.05 then
-                            set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), FBW_PID(A32nx_FBW_elev_trim, get(G_load_command) - get(Total_vertical_g_load)), -1, 1, 0.08))
+                            set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), FBW_PID(A32nx_FBW_pitch_elev_trim, get(G_load_command) - get(Total_vertical_g_load)), -1, 1, 0.08))
                         elseif get(Pitch) < -0.05 then
-                            set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), FBW_PID(A32nx_FBW_elev_trim, get(G_load_command) - get(Total_vertical_g_load)), -1, 1, 0.08))
+                            set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), FBW_PID(A32nx_FBW_pitch_elev_trim, get(G_load_command) - get(Total_vertical_g_load)), -1, 1, 0.08))
                         end
                     end
                 end
@@ -356,7 +379,7 @@ function update()
         --if get(Pitch) > 0.1 or get(Pitch) < -0.1 then
         set(Pitch_artstab,  get(G_output))
 
-        if get(Flight_director_1_mode) ~= 2 and get(Flight_director_2_mode) ~= 2 then
+        --[[if get(Flight_director_1_mode) ~= 2 and get(Flight_director_2_mode) ~= 2 then
             --CWS trimming--
             if get(Pitch) > 0.05 then
                 set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), FBW_PID(A32nx_FBW_elev_trim, get(G_load_command) - get(Total_vertical_g_load)), -1, 1, 0.08))
@@ -365,9 +388,7 @@ function update()
             else
                 set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), FBW_PID(A32nx_FBW_elev_trim, get(Pitch_artstab) + (0 - get(Pitch_rate))), -1, 1, 0.1))
             end
-        end
-
-        --set(Horizontal_stabilizer_pitch, Set_linear_anim_value(get(Horizontal_stabilizer_pitch), FBW_PD(A32nx_FBW_elev_trim, 1 - get(Total_vertical_g_load)), -3.5, 11, 10, 0.01))
+        end]]
     else--direct law
         set(Roll_artstab, get(Roll))
         set(Pitch_artstab, get(Pitch))

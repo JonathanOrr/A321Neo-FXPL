@@ -91,9 +91,23 @@ FBW_debug_window = contextWindow {
   minimumSize = { 170 , 250 };
   maximumSize = { 340 , 500 };
   gravity = { 0 , 1 , 0 , 1 };
-  visible = false ;
+  visible = true ;
   components = {
     FBW_debug {position = { 0 , 0 , 340 , 500 }}
+  };
+}
+
+FBW_graph = contextWindow {
+  name = "FBW GRAPH";
+  position = { 50 , 50 , 420 , 340};
+  noBackground = true ;
+  proportional = false ;
+  minimumSize = { 420 , 340 };
+  maximumSize = { 420 , 340 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = true ;
+  components = {
+    FBW_graph {position = { 0 , 0 , 420 , 340 }}
   };
 }
 
@@ -128,6 +142,10 @@ function Show_hide_FBW_debug()
   FBW_debug_window:setIsVisible(not FBW_debug_window:isVisible())
 end
 
+function Show_hide_FBW_graph()
+  FBW_graph:setIsVisible(not FBW_graph:isVisible())
+end
+
 function Show_hide_ECAM_debug()
   ECAM_debug_window:setIsVisible(not ECAM_debug_window:isVisible())
 end
@@ -144,6 +162,8 @@ ShowHideVnavDebug	= sasl.appendMenuItem(Menu_main, "Show/Hide VNAV Debug", Show_
 ShowHidePacksDebug	= sasl.appendMenuItem(Menu_main, "Show/Hide PACKS Debug", Show_hide_packs_debug)
 -- add menu entry
 ShowHideFBWDebug	= sasl.appendMenuItem(Menu_main, "Show/Hide FBW Debug", Show_hide_FBW_debug)
+-- add menu entry
+ShowHideFBWGraph	= sasl.appendMenuItem(Menu_main, "Show/Hide FBW Graph", Show_hide_FBW_graph)
 -- add menu entry
 ShowHideECAMDebug	= sasl.appendMenuItem(Menu_main, "Show/Hide ECAM Debug", Show_hide_ECAM_debug)
 --initialise menu item status

@@ -16,9 +16,6 @@ local roll_artstab = globalProperty("sim/joystick/artstab_roll_ratio")
 local pitch_artstab = globalProperty("sim/joystick/artstab_pitch_ratio")
 local yaw_artstab = globalProperty("sim/joystick/artstab_heading_ratio")
 
-local override_artstab = globalProperty("sim/operation/override/override_artstab")
-local override_surfaces = globalProperty("sim/operation/override/override_control_surfaces")
-
 local elev_trim_ratio = globalProperty("sim/cockpit2/controls/elevator_trim")
 local max_elev_trim_up = globalProperty("sim/aircraft/controls/acf_hstb_trim_up")
 local max_elev_trim_dn = globalProperty("sim/aircraft/controls/acf_hstb_trim_dn")
@@ -76,7 +73,7 @@ function update()
     end
 
 
-    if get(override_surfaces) == 1 then
+    if get(Override_control_surfaces) == 1 then
 
         if get(Speedbrake_handle_ratio) == 1 and get(Aft_wheel_on_ground) == 1 and (get(Eng_1_reverser_deployment) > 0.1 or get(Eng_2_reverser_deployment) > 0.1) then
             --ailerons
