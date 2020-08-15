@@ -10,6 +10,7 @@ include('EWD_msgs/to_ldg_memos.lua')
 sasl.registerCommandHandler (Ecam_btn_cmd_CLR,   0 , function(phase) ewd_clear_button_handler(phase) end )
 sasl.registerCommandHandler (Ecam_btn_cmd_RCL,   0 , function(phase) ewd_recall_button_handler(phase) end )
 sasl.registerCommandHandler (Ecam_btn_cmd_EMERC, 0 , function(phase) ewd_emercanc_button_handler(phase) end )
+sasl.registerCommandHandler (Ecam_btn_cmd_TOCFG, 0 , function(phase) ewd_tocfg_button_handler(phase) end )
 
 --colors
 local COL_INVISIBLE = 0    
@@ -49,7 +50,10 @@ local left_messages_list = {
     
     -- Warnings
     MessageGroup_CONFIG_TAKEOFF,
-    MessageGroup_APU_FIRE
+    MessageGroup_APU_FIRE,
+    
+    -- Misc
+    MessageGroup_TOCONFIG_NORMAL -- This must be the last message
 }
 
 local left_messages_list_cleared = {    -- List of message cleared with CLR
@@ -362,7 +366,9 @@ local function publish_left_list()
             -- We put this number of the dataref
             set(Ecam_EDW_requested_page, left_current_message.sd_page)
         end
-        left_was_clearing = true
+        if get(TO_Config_is_pressed) == 0 then
+            left_was_clearing = true
+        end
     else
         if left_was_clearing then
             
@@ -392,8 +398,8 @@ local function check_cleared_list()
 
 end
 
-local function restore_cancelled_messages()
-    if #_G.ewd_left_messages_list_cancelled == 0 then
+local function restore_cancelled_messages(show_normal)
+    if #_G.ewd_left_messages_list_cancelled == 0 and show_normal then
         set(EWD_show_normal, get(TIME)) 
     end
 
@@ -409,13 +415,13 @@ end
 -- re-enable all the cancelled cautions (according to FCOM)
 local function check_reset()
     if not flight_phase_not_one then
-        if get(EWD_flight_phase) >= 2 then
+        if get(EWD_flight_phase) >= 2 and get(TO_Config_is_pressed) == 0 then
             flight_phase_not_one = true
         end
     elseif get(EWD_flight_phase) == 1 then
         -- Reset occurred
         flight_phase_not_one = false
-        restore_cancelled_messages()
+        restore_cancelled_messages(false)
     end
 end
 
@@ -487,7 +493,7 @@ function ewd_recall_button_handler(phase)
         rcl_start_press_time = 0
         
         -- This is a long-press RCL -> it restores the emerg cancelled messages
-        restore_cancelled_messages()
+        restore_cancelled_messages(true)
         
     end
     
@@ -514,6 +520,18 @@ function ewd_emercanc_button_handler(phase)
             table.remove(left_messages_list, i)
             return
         end
+    end
+
+end
+
+function ewd_tocfg_button_handler(phase) 
+    if phase == SASL_COMMAND_BEGIN then
+        set(TO_Config_is_pressed, 1)
+    end
+
+
+    if phase == SASL_COMMAND_END then
+        set(TO_Config_is_pressed, 0)
     end
 
 end
