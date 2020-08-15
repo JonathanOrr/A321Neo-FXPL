@@ -43,6 +43,14 @@ function update()
         last_update_time = get(TIME)
     end
 
+    if get(TO_Config_is_pressed) == 1 then   -- Override flight phase when TO CONFIG button is pressed
+        if get(EWD_flight_phase) ~= PHASE_1ST_ENG_TO_PWR then
+            set(TO_Config_is_ready, 1)
+        end
+        set(EWD_flight_phase, PHASE_1ST_ENG_TO_PWR)
+        return 
+    end    
+    
     -- Phase 1:
     -- - Aircraft on ground
     -- - No engines

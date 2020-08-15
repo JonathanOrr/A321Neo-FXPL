@@ -402,6 +402,11 @@ MessageGroup_CONFIG_TAKEOFF = {
                 break
             end
         end
+        
+        if active then
+            set(TO_Config_is_ready, 0)
+        end
+        
         return active and (get(EWD_flight_phase) == PHASE_1ST_ENG_TO_PWR or get(EWD_flight_phase) == PHASE_ABOVE_80_KTS)
     end,
 
@@ -411,4 +416,44 @@ MessageGroup_CONFIG_TAKEOFF = {
     end
 
 }
+
+
+MessageGroup_TOCONFIG_NORMAL = {
+
+    shown = false,
+
+    text  = function(self)
+                return ""
+            end,
+    color = function(self)
+                return COL_INDICATION
+            end,
+
+    priority = PRIORITY_LEVEL_MEMO,
+
+    messages = {
+        { text = function(self)
+                    return "T.O CONFIG NORMAL"
+          end,
+          color = function(self)
+            return COL_INDICATION
+          end,
+          is_active = function(self)
+            return true
+          end}
+    },
+
+    is_active = function(self)
+        return get(TO_Config_is_pressed) == 1 and get(TO_Config_is_ready) == 1
+    end,
+
+    is_inhibited = function(self)
+        -- Never inhibited
+        return false
+    end
+
+}
+
+
+
 
