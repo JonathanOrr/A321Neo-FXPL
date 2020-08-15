@@ -50,6 +50,7 @@ local timer_cruise_page         = sasl.createTimer()    -- Used in update_page_n
 local timer_cruise_page_started = false
 local page_normal_apu_last_show = 0
 local page_normal_eng_last_show = 0
+local page_normal_fctl_last_show = 0
 
 local page_all_start_time       = 0
 
@@ -185,8 +186,20 @@ local function update_page_normal()
     if get(EWD_flight_phase) == 0 or get(EWD_flight_phase) == 1 then
         Goto_ecam(ECAM_PAGE_DOOR)
     elseif get(EWD_flight_phase) == 2 then
-        -- TODO Add sidestick deflection
-        Goto_ecam(ECAM_PAGE_WHEEL)
+        local sidestick_roll = globalProperty("sim/joystick/yoke_roll_ratio")
+        local sidestick_pitch = globalProperty("sim/joystick/yoke_pitch_ratio")
+        local rudder_pos = globalProperty("sim/joystick/yoke_heading_ratio")
+    
+        -- Check: https://aviation.stackexchange.com/questions/46018/what-are-the-mechanical-deflection-angles-for-airbus-side-stick-controllers
+        -- for angles
+        if math.abs(get(sidestick_roll)*20) > 3 or math.abs(get(sidestick_pitch)*16) > 3 or (get(rudder_pos)*30) > 22 then
+            Goto_ecam(ECAM_PAGE_FCTL)
+            page_normal_fctl_last_show = get(TIME)
+        elseif get(TIME) - page_normal_fctl_last_show < 20 then
+            Goto_ecam(ECAM_PAGE_FCTL)
+        else
+            Goto_ecam(ECAM_PAGE_WHEEL)
+        end
     elseif get(EWD_flight_phase) >= 3 and get(EWD_flight_phase) <= 5 then
         Goto_ecam(ECAM_PAGE_ENG)
     elseif get(EWD_flight_phase) == 6 then
