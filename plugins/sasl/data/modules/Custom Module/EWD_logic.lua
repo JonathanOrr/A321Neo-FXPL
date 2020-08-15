@@ -189,7 +189,9 @@ local function update_right_list()
         end
     end
 
-
+    if get(Engine_mode_knob) == 1 then -- TODO This may be replaced with the actual ignition dataref (not the button status)
+        list_right:put(COL_INDICATION, "IGNITION")
+    end
     
     -- TODO RAM Air: RAM AIR ON green if related pushbutton switch is ON
     -- TODO Pressurization: MAN LDG ELEV green if LDG ELEV switch is not in AUTO
@@ -200,7 +202,7 @@ local function update_right_list()
     -- TODO Steer: NW STRG DISC when the nose wheel steering selector is in the towing position
     --             GREEN: if no engine is running, AMBER: is at least one engine is running
     
-    -- TODO Audio: AUDIO 3 XFRD displayed green if audo switching selector not in NORM
+    -- TODO Audio: AUDIO 3 XFRD displayed green if audio switching selector not in NORM
     -- TODO Acars: ACARS CALL (pulsing green) if received an ACARS message requesting voice conversation
     -- TODO Acars: VHF 3 VOICE (pulsing green) if VHF 3 in voice mode and ACARS comm interrupted (?)
     -- TODO Acars: ACARS MSG (pulsing green) if new ACARS message received
@@ -234,8 +236,6 @@ local function update_right_list()
 
     -- TODO TCAS: TCAS STBY in green if ATC STBY is selected or TCAS STBY is selected or 
     --            ALT RPTG is selected OFF or TCAS failed
-
-    -- TODO Ignition: IGNITION in green when continuous ignition is activated 
 
     -- TODO Lights: LDG LT
 
