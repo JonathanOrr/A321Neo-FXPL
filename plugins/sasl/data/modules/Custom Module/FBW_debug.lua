@@ -91,6 +91,18 @@ function draw()
             sasl.gl.drawText(B612regular, 263, 480, "PITCH", 15, false, false, TEXT_ALIGN_CENTER, FBW_ORANGE)
         end
 
+        --yaw limits indication
+        if get(Yaw_lim) == 30 then
+            sasl.gl.drawFrame (236, 450, 56, 20, FBW_GREEN)
+            sasl.gl.drawText(B612regular, 263, 454, Round(get(Yaw_lim), 1) .. "°", 15, false, false, TEXT_ALIGN_CENTER, FBW_GREEN)
+        elseif get(Yaw_lim) < 30 and get(Yaw_lim) >= 3.45 then
+            sasl.gl.drawFrame (236, 450, 56, 20, FBW_ORANGE)
+            sasl.gl.drawText(B612regular, 263, 454, Round(get(Yaw_lim), 1) .. "°", 15, false, false, TEXT_ALIGN_CENTER, FBW_ORANGE)
+        elseif get(Yaw_lim) < 3.45 and get(Yaw_lim) >= 3.4 then
+            sasl.gl.drawFrame (236, 450, 56, 20, FBW_RED)
+            sasl.gl.drawText(B612regular, 263, 454, Round(get(Yaw_lim), 1) .. "°", 15, false, false, TEXT_ALIGN_CENTER, FBW_RED)
+        end
+
         --artificial stability sum
         sasl.gl.drawRectangle(245 + 70 * get(Roll_artstab), 85 - 70 * get(Pitch_artstab), 10, 10, FBW_ORANGE)
 
@@ -130,6 +142,18 @@ function draw()
         else
             sasl.gl.drawFrame (236, 476, 56, 20, FBW_ORANGE)
             sasl.gl.drawText(B612regular, 263, 480, "PITCH", 15, false, false, TEXT_ALIGN_CENTER, FBW_ORANGE)
+        end
+
+        --yaw limits indication
+        if get(Yaw_lim) == 30 then
+            sasl.gl.drawFrame (236, 450, 56, 20, FBW_GREEN)
+            sasl.gl.drawText(B612regular, 263, 454, Round(get(Yaw_lim), 1) .. "°", 15, false, false, TEXT_ALIGN_CENTER, FBW_GREEN)
+        elseif get(Yaw_lim) < 30 and get(Yaw_lim) >= 3.45 then
+            sasl.gl.drawFrame (236, 450, 56, 20, FBW_ORANGE)
+            sasl.gl.drawText(B612regular, 263, 454, Round(get(Yaw_lim), 1) .. "°", 15, false, false, TEXT_ALIGN_CENTER, FBW_ORANGE)
+        elseif get(Yaw_lim) < 3.45 and get(Yaw_lim) >= 3.4 then
+            sasl.gl.drawFrame (236, 450, 56, 20, FBW_RED)
+            sasl.gl.drawText(B612regular, 263, 454, Round(get(Yaw_lim), 1) .. "°", 15, false, false, TEXT_ALIGN_CENTER, FBW_RED)
         end
 
         --artificial stability sum
