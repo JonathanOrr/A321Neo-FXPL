@@ -66,6 +66,7 @@ G_output = createGlobalPropertyf("a321neo/dynamics/FBW/G_output", 0, false, true
 Vpath_output = createGlobalPropertyf("a321neo/dynamics/FBW/vpath_output", 0, false, true, false)
 Abs_pitch_rate = createGlobalPropertyf("a321neo/dynamics/FBW/abs_Q", 0, false, true, false)
 Abs_vpath_pitch_rate = createGlobalPropertyf("a321neo/dynamics/FBW/abs_vpath_Q", 0, false, true, false)
+Persec_vpath_pitch_rate = createGlobalPropertyf("a321neo/dynamics/FBW/vpath_Q_s", 0, false, true, false)
 ELAC_1 = createGlobalPropertyi("a321neo/dynamics/FBW/ELAC_1", 1, false, true, false)--elevator aileron computer 1
 ELAC_2 = createGlobalPropertyi("a321neo/dynamics/FBW/ELAC_2", 1, false, true, false)--elevator aileron computer 2
 FAC_1 = createGlobalPropertyi("a321neo/dynamics/FBW/FAC_1", 1, false, true, false)--flight augmentation computer 1
