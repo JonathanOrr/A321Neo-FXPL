@@ -15,7 +15,13 @@ local B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
 function onMouseDown ( component , x , y , button , parentX , parentY )
     if button == MB_LEFT then
         if x >= 236 and x <= 292 and y >= 476 and y <= 496 then
-            set(FBW_pitch_mode, 1 - get(FBW_pitch_mode))
+            if get(FBW_pitch_mode) == 2 then
+                set(FBW_pitch_mode, 1)
+            elseif get(FBW_pitch_mode) == 1 then
+                set(FBW_pitch_mode, 0)
+            else
+                set(FBW_pitch_mode, 2)
+            end
         end
     end
 end
@@ -69,9 +75,12 @@ function draw()
         end
 
         --pitch mode indication
-        if get(FBW_pitch_mode) == 1 then
+        if get(FBW_pitch_mode) == 2 then
             sasl.gl.drawFrame (236, 476, 56, 20, FBW_GREEN)
             sasl.gl.drawText(B612regular, 263, 480, "VPATH", 15, false, false, TEXT_ALIGN_CENTER, FBW_GREEN)
+        elseif get(FBW_pitch_mode) == 1 then
+            sasl.gl.drawFrame (236, 476, 56, 20, FBW_ORANGE)
+            sasl.gl.drawText(B612regular, 263, 480, "VPATH", 15, false, false, TEXT_ALIGN_CENTER, FBW_ORANGE)
         else
             sasl.gl.drawFrame (236, 476, 56, 20, FBW_ORANGE)
             sasl.gl.drawText(B612regular, 263, 480, "PITCH", 15, false, false, TEXT_ALIGN_CENTER, FBW_ORANGE)
@@ -104,9 +113,12 @@ function draw()
         sasl.gl.drawText(B612MONO_regular, 20, 365, "ROLL CONTROL IS LINEAR", 15, false, false, TEXT_ALIGN_LEFT, FBW_ORANGE)
 
         --pitch mode indication
-        if get(FBW_pitch_mode) == 1 then
+        if get(FBW_pitch_mode) == 2 then
             sasl.gl.drawFrame (236, 476, 56, 20, FBW_GREEN)
             sasl.gl.drawText(B612regular, 263, 480, "VPATH", 15, false, false, TEXT_ALIGN_CENTER, FBW_GREEN)
+        elseif get(FBW_pitch_mode) == 1 then
+            sasl.gl.drawFrame (236, 476, 56, 20, FBW_ORANGE)
+            sasl.gl.drawText(B612regular, 263, 480, "VPATH", 15, false, false, TEXT_ALIGN_CENTER, FBW_ORANGE)
         else
             sasl.gl.drawFrame (236, 476, 56, 20, FBW_ORANGE)
             sasl.gl.drawText(B612regular, 263, 480, "PITCH", 15, false, false, TEXT_ALIGN_CENTER, FBW_ORANGE)
