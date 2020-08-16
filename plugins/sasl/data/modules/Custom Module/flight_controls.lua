@@ -214,6 +214,14 @@ function update()
         end
 
         --rudder
-        Set_dataref_linear_anim(rudder, 30 * (total_yaw), -30, 30, 25, 0.5)
+        if get(IAS) <= 140 then
+            set(Yaw_lim, 30)
+        else
+            set(Yaw_lim, -26.6 * math.sqrt(1 - ((Math_clamp(get(IAS), 140, 380) - 380)^2) / 57600) + 30)
+        end
+
+        Set_dataref_linear_anim(rudder, get(Yaw_lim) * (total_yaw), -30, 30, 25, 0.5)
+
+
     end
 end
