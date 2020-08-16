@@ -4,6 +4,7 @@ include('EWD_msgs/brakes_and_antiskid.lua')
 include('EWD_msgs/engines_and_apu.lua')
 include('EWD_msgs/FBW.lua')
 include('EWD_msgs/flight_controls.lua')
+include('EWD_msgs/gears_and_doors.lua')
 include('EWD_msgs/misc.lua')
 include('EWD_msgs/to_ldg_memos.lua')
 
@@ -47,10 +48,12 @@ local left_messages_list = {
     MessageGroup_FBW_ALTN_DIRECT_LAW,
     MessageGroup_BRAKES_HOT,
     MessageGroup_APU_SHUTDOWN,
+    MessageGroup_GEAR_NOT_UPLOCKED,
     
     -- Warnings
     MessageGroup_CONFIG_TAKEOFF,
     MessageGroup_APU_FIRE,
+    MessageGroup_GEAR_NOT_DOWNLOCKED,
     
     -- Misc
     MessageGroup_TOCONFIG_NORMAL -- This must be the last message
