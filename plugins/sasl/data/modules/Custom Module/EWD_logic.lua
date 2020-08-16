@@ -54,6 +54,7 @@ local left_messages_list = {
     MessageGroup_CONFIG_TAKEOFF,
     MessageGroup_APU_FIRE,
     MessageGroup_GEAR_NOT_DOWNLOCKED,
+    MessageGroup_GEAR_NOT_DOWN,
     
     -- Misc
     MessageGroup_TOCONFIG_NORMAL -- This must be the last message
