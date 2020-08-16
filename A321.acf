@@ -94,7 +94,7 @@ P _cgpt/9/_w_now 1.0
 P _cgpt/9/_w_test 0.0
 P _cgpt/9/_z_ref 0.0
 P _cgpt/count 20
-P _door/0/_ang_now 0.0
+P _door/0/_ang_now 99.810066223
 P _door/0/_ext_ang 0.0
 P _door/0/_ret_ang 100.0
 P _door/0/_type 1
@@ -102,7 +102,7 @@ P _door/0/_xyz/0 -1.0
 P _door/0/_xyz/1 0.0
 P _door/0/_xyz/2 17.600000381
 P _door/0/_xyz/count 3
-P _door/1/_ang_now 81.782974243
+P _door/1/_ang_now 99.620140076
 P _door/1/_ext_ang 0.0
 P _door/1/_ret_ang 100.0
 P _door/1/_type 3
@@ -110,7 +110,7 @@ P _door/1/_xyz/0 -1.500000000
 P _door/1/_xyz/1 0.0
 P _door/1/_xyz/2 14.500000000
 P _door/1/_xyz/count 3
-P _door/10/_ang_now 73.604675293
+P _door/10/_ang_now 89.658126831
 P _door/10/_ext_ang 0.0
 P _door/10/_ret_ang 90.0
 P _door/10/_type 3
@@ -127,7 +127,7 @@ P _door/16/_type 0
 P _door/17/_type 0
 P _door/18/_type 0
 P _door/19/_type 0
-P _door/2/_ang_now 0.0
+P _door/2/_ang_now -99.810066223
 P _door/2/_ext_ang 0.0
 P _door/2/_ret_ang -100.0
 P _door/2/_type 1
@@ -135,7 +135,7 @@ P _door/2/_xyz/0 1.0
 P _door/2/_xyz/1 0.0
 P _door/2/_xyz/2 17.600000381
 P _door/2/_xyz/count 3
-P _door/3/_ang_now -81.782974243
+P _door/3/_ang_now -99.620140076
 P _door/3/_ext_ang 0.0
 P _door/3/_ret_ang -100.0
 P _door/3/_type 3
@@ -143,7 +143,7 @@ P _door/3/_xyz/0 1.500000000
 P _door/3/_xyz/1 0.0
 P _door/3/_xyz/2 14.500000000
 P _door/3/_xyz/count 3
-P _door/4/_ang_now 1.639533997
+P _door/4/_ang_now 89.965812683
 P _door/4/_ext_ang 0.0
 P _door/4/_ret_ang 90.0
 P _door/4/_type 2
@@ -151,7 +151,7 @@ P _door/4/_xyz/0 -13.0
 P _door/4/_xyz/1 -3.599999905
 P _door/4/_xyz/2 73.500000000
 P _door/4/_xyz/count 3
-P _door/5/_ang_now -1.639533997
+P _door/5/_ang_now -89.965812683
 P _door/5/_ext_ang 0.0
 P _door/5/_ret_ang -90.0
 P _door/5/_type 2
@@ -161,7 +161,7 @@ P _door/5/_xyz/2 73.500000000
 P _door/5/_xyz/count 3
 P _door/6/_type 0
 P _door/7/_type 0
-P _door/8/_ang_now -73.604675293
+P _door/8/_ang_now -89.658126831
 P _door/8/_ext_ang 0.0
 P _door/8/_ret_ang -90.0
 P _door/8/_type 3
@@ -209,10 +209,10 @@ P _gear/0/_latN 0.0
 P _gear/0/_latR 0.0
 P _gear/0/_leg_len 5.400000095
 P _gear/0/_lonE 0.0
-P _gear/0/_lonN 1.785270691
+P _gear/0/_lonN 97.962776184
 P _gear/0/_lonR 98.0
 P _gear/0/_scon 47252.898437500
-P _gear/0/_stat_def 0.399389744
+P _gear/0/_stat_def 0.399389654
 P _gear/0/_steerdeg_hispeed 5.0
 P _gear/0/_steerdeg_lospeed 75.0
 P _gear/0/_strut_comp 0.0
@@ -239,14 +239,14 @@ P _gear/1/_gear_x -12.010000229
 P _gear/1/_gear_y -2.799999952
 P _gear/1/_gear_z 69.800003052
 P _gear/1/_latE 0.0
-P _gear/1/_latN 1.457359314
+P _gear/1/_latN 79.969612122
 P _gear/1/_latR 80.0
 P _gear/1/_leg_len 8.199999809
 P _gear/1/_lonE -7.0
-P _gear/1/_lonN -6.872480869
+P _gear/1/_lonN -0.002659035
 P _gear/1/_lonR 0.0
 P _gear/1/_scon 71266.664062500
-P _gear/1/_stat_def 1.367629170
+P _gear/1/_stat_def 1.367629290
 P _gear/1/_steerdeg_hispeed 0.0
 P _gear/1/_steerdeg_lospeed 0.0
 P _gear/1/_strut_comp -0.500000000
@@ -273,14 +273,14 @@ P _gear/2/_gear_x 12.010000229
 P _gear/2/_gear_y -2.799999952
 P _gear/2/_gear_z 69.800003052
 P _gear/2/_latE 0.0
-P _gear/2/_latN -1.457359314
+P _gear/2/_latN -79.969612122
 P _gear/2/_latR -80.0
 P _gear/2/_leg_len 8.199999809
 P _gear/2/_lonE -7.0
-P _gear/2/_lonN -6.872480869
+P _gear/2/_lonN -0.002659035
 P _gear/2/_lonR 0.0
 P _gear/2/_scon 71266.664062500
-P _gear/2/_stat_def 1.367629170
+P _gear/2/_stat_def 1.367629290
 P _gear/2/_steerdeg_hispeed 0.0
 P _gear/2/_steerdeg_lospeed 0.0
 P _gear/2/_strut_comp -0.500000000
@@ -34288,6 +34288,7 @@ P acf/_ann_wav_file/185 0n.wav
 P acf/_ann_wav_file/186 0n.wav
 P acf/_ann_wav_file/187 0n.wav
 P acf/_ann_wav_file/188 0n.wav
+P acf/_ann_wav_file/189 mute.wav
 P acf/_ann_wav_file/19 primer_in.wav
 P acf/_ann_wav_file/20 primer_out.wav
 P acf/_ann_wav_file/21 Pz339_mastercaution.wav
@@ -35847,7 +35848,7 @@ P acf/_feather_prop_with_oilp 0
 P acf/_feathered_pitch 0.0
 P acf/_ff_rat_idle_JET 0.039999999
 P acf/_ff_rat_idle_PRP 0.0
-P acf/_file_writer_version 114100
+P acf/_file_writer_version 115029
 P acf/_flap1_cd 0.100000001
 P acf/_flap1_cl 0.779999971
 P acf/_flap1_cm -0.689999998
@@ -36057,8 +36058,6 @@ P acf/_has_get_tow_new 0
 P acf/_has_give_tow 0
 P acf/_has_ground_pwr 0
 P acf/_has_hsi 0
-P acf/_has_litemap_tex_1 0
-P acf/_has_litemap_tex_2 0
 P acf/_has_pre_rotate 0
 P acf/_has_push_back 0
 P acf/_has_radio_alt_callout 1
@@ -36750,6 +36749,7 @@ P acf/_truck_lon_sep 3.0
 P acf/_tvec_hdng 0.0
 P acf/_tvec_ptch 0.0
 P acf/_tvec_roll 0.0
+P acf/_use_1140_fm 0
 P acf/_use_cus_gear_damping 0
 P acf/_use_cus_gear_defs 0
 P acf/_use_manual_prop_inc 0
@@ -37349,6 +37349,68 @@ EFIS_map_s_HM map_s_HM.png
 
 PANEL_2D_END
 PANEL_3D_BEGIN
+GROUP Brake Gauge
+  gen_rotary Brake Gauge
+    POS 1128.000000 1366.000000
+    IMAGE MIP/brake/brake
+    DATAREF 
+    SIZE 0.700000
+    LOCKED
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 0.000000 0.000000 1.000000
+    KEY_FRAME 1.000000 6.000000
+    DIGITS 1
+    ROTARY_TYPE NO_CLICK
+    CLICK_RADIUS 10.000000
+    CLICK_RADIUS_DY 0.000000
+    OFFSET 0.000000
+    STEP1 1.000000
+    STEP2 1.000000
+    CURSOR DEFAULT
+    CLICK_DX 0
+    CLICK_DY 0
+
+  gen_needle Brake Needle 1
+    POS 1044.000000 1301.500000
+    IMAGE MIP/brake/Needle
+    DATAREF sim/cockpit2/controls/left_brake_ratio
+    SIZE 0.700000
+    LOCKED
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 1.000000 0.000000 1.000000
+    KEY_FRAME 0.000000 90.000000
+    IS_DRAGGABLE 0
+    OFFSET 0.000000
+
+  gen_needle Brake Needle 1 2
+    POS 1217.000000 1301.500000
+    IMAGE MIP/brake/Needle
+    DATAREF sim/cockpit2/controls/right_brake_ratio
+    SIZE 0.700000
+    LOCKED
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 1.000000 0.000000 1.000000
+    KEY_FRAME 0.000000 -90.000000
+    IS_DRAGGABLE 0
+    OFFSET 0.000000
+
+  gen_needle Brake Needle 1 2 2
+    POS 1130.000000 1450.500000
+    IMAGE MIP/brake/Needle
+    DATAREF sim/cockpit2/controls/parking_brake_ratio
+    SIZE 0.700000
+    LOCKED
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 0.000000 -135.000000 1.000000
+    KEY_FRAME 1.000000 -228.000000
+    IS_DRAGGABLE 0
+    OFFSET 0.000000
+
+END_GROUP
 rad_CDU739_2d MCDU
   POS 236.500000 1467.000000
   DATAREF 
@@ -37393,68 +37455,6 @@ rad_transponder_HM1 transponder_HM.png
   KEY_FRAME 0.000000 0.000000 1.000000
   KEY_FRAME 1.000000 1.000000
 
-GROUP brake_press
-  LOCKED
-  CHAINED
-  gen_rotary brakepress_bg
-    POS 569.000000 1724.000000
-    IMAGE MIP/brake/brake
-    DATAREF 
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 6.000000
-    DIGITS 1
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_needle left_brake_press
-    POS 510.428284 1678.000000
-    IMAGE MIP/brake/br_needl
-    DATAREF sim/flightmodel/controls/parkbrake
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 90.000000 1.000000
-    KEY_FRAME 1.000000 45.000000 1.000000
-    KEY_FRAME 2.000000 5.000000
-    IS_DRAGGABLE 0
-    OFFSET 0.000000
-
-  gen_needle right_brake_press
-    POS 633.000000 1677.000000
-    IMAGE MIP/brake/br_needl
-    DATAREF sim/flightmodel/controls/parkbrake
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 270.000000 1.000000
-    KEY_FRAME 1.000000 315.000000 1.000000
-    KEY_FRAME 2.000000 355.000000
-    IS_DRAGGABLE 0
-    OFFSET 0.000000
-
-  gen_needle accu_press
-    POS 571.285767 1781.714355
-    IMAGE MIP/brake/br_needl
-    DATAREF sim/flightmodel/controls/parkbrake
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 150.000000 1.000000
-    KEY_FRAME 1.000000 210.000000
-    IS_DRAGGABLE 0
-    OFFSET 0.000000
-
-END_GROUP
 GROUP chrono
   LOCKED
   CHAINED
@@ -38832,6 +38832,7 @@ GROUP Buttons and Lights
   END_GROUP
   GROUP FUEL
     LOCKED
+    GROUP_OPEN
     gen_rotary Left Tank Pump 1
       POS 3406.000000 70.000000
       IMAGE Buttons/off_fault
@@ -43041,6 +43042,7 @@ GROUP EWD
 
 END_GROUP
 GROUP PFD
+  GROUP_OPEN
   gen_needle horizon
     POS 1758.500000 724.500000
     IMAGE MIP/pfd/ADI
@@ -43068,45 +43070,21 @@ GROUP PFD
     OFFSET 0.000000
     NEEDLE_OFFSET_Y -10.000000
 
-  GROUP Group Translate red
-    GROUP_ANIMATE_MODE TRANSLATE
-    GROUP_WIDTH 0
-    GROUP_HEIGHT 0
-    DATAREF sim/flightmodel/position/theta
-    POS 0.000000 40.000000
-    KEY_FRAME -18.500000 -200.000000 1.000000
-    KEY_FRAME 0.000000 4.000000 1.000000
-    KEY_FRAME 18.500000 -185.000000 1.000000
-    KEY_FRAME 18.500010 -185.000000
-    IS_VERTICAL 1
+  gen_needle Red Static
+    POS 1761.000000 724.000000
+    IMAGE MIP/pfd/static red
+    DATAREF sim/cockpit2/gauges/indicators/roll_AHARS_deg_pilot
+    CLIP
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 0.000000 0.000000 1.000000
+    KEY_FRAME 350.000000 -350.000000
+    IS_DRAGGABLE 0
     OFFSET 0.000000
-    GROUP Group Translate Red
-      GROUP_ANIMATE_MODE TRANSLATE
-      GROUP_WIDTH 0
-      GROUP_HEIGHT 0
-      DATAREF sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_copilot
-      POS 0.000000 40.000000
-      KEY_FRAME 99999.000000 0.000000 1.000000
-      KEY_FRAME 100.000000 0.000000 1.000000
-      KEY_FRAME 0.000000 191.000000 1.000000
-      KEY_FRAME -99999.000000 191.000000
-      IS_VERTICAL 1
-      OFFSET 0.000000
-      gen_needle Red Static
-        POS 1761.000000 724.000000
-        IMAGE MIP/pfd/static red
-        DATAREF sim/cockpit2/gauges/indicators/roll_AHARS_deg_pilot
-        CLIP
-        LIGHT_MODE GLASS_AUTO
-        LIGHT_RHEOSTAT 0
-        KEY_FRAME 0.000000 0.000000 1.000000
-        KEY_FRAME 350.000000 -350.000000
-        IS_DRAGGABLE 0
-        OFFSET 0.000000
-        NEEDLE_OFFSET_Y -5.000000
+    DEFLECT_SRC PITCH_ELEC
+    DEFLECT_PIX 900.000000
+    NEEDLE_OFFSET_Y -5.000000
 
-    END_GROUP
-  END_GROUP
   GROUP New Group
     GROUP_ANIMATE_MODE TRANSLATE
     GROUP_WIDTH 0
@@ -46531,7 +46509,6 @@ gen_rotary gen_rotary.png
   CLICK_DY 0
 
 GROUP hud vertical
-  GROUP_OPEN
   GROUP_ANIMATE_MODE TRANSLATE
   GROUP_WIDTH 1280
   GROUP_HEIGHT 1024
