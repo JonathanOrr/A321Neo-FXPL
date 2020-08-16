@@ -83,6 +83,19 @@ function GC_distance_km(lat1, lon1, lat2, lon2)
     
 end
 
+function FBW_P_no_lim(pd_array, error)
+    local last_error = pd_array.Current_error
+    pd_array.Current_error = error + pd_array.Error_offset
+  
+    --Proportional--
+    local correction = pd_array.Current_error * pd_array.P_gain
+  
+    --limit and rescale output range--
+    correction = correction / pd_array.Max_error
+  
+    return correction
+end
+
 function FBW_PD(pd_array, error)
     local last_error = pd_array.Current_error
     pd_array.Current_error = error + pd_array.Error_offset
@@ -95,6 +108,22 @@ function FBW_PD(pd_array, error)
   
     --limit and rescale output range--
     correction = Math_clamp(correction, pd_array.Min_error, pd_array.Max_error) / pd_array.Max_error
+  
+    return correction
+end
+
+function FBW_PD_no_lim(pd_array, error)
+    local last_error = pd_array.Current_error
+    pd_array.Current_error = error + pd_array.Error_offset
+  
+    --Proportional--
+    local correction = pd_array.Current_error * pd_array.P_gain
+  
+    --derivative--
+    correction = correction + (pd_array.Current_error - last_error) * pd_array.D_gain
+  
+    --limit and rescale output range--
+    correction = correction / pd_array.Max_error
   
     return correction
 end
@@ -119,6 +148,30 @@ function FBW_PID(pid_array, error)
   
     --limit and rescale output range--
     correction = Math_clamp(correction, pid_array.Min_error, pid_array.Max_error) / pid_array.Max_error
+  
+    return correction
+end
+
+function FBW_PID_no_lim(pid_array, error)
+    local last_error = pid_array.Current_error
+    pid_array.Current_error = error + pid_array.Error_offset
+  
+    --Proportional--
+    local correction = pid_array.Current_error * pid_array.P_gain
+  
+    --integral--
+    pid_array.Integral = (pid_array.Integral * (pid_array.I_delay - 1) + pid_array.Current_error) / pid_array.I_delay
+  
+    --clamping the integral to minimise the delay
+    pid_array.Integral = Math_clamp(pid_array.Integral, pid_array.Min_error, pid_array.Max_error)
+  
+    correction = correction + pid_array.Integral * pid_array.I_gain
+  
+    --derivative--
+    correction = correction + (pid_array.Current_error - last_error) * pid_array.D_gain
+  
+    --limit and rescale output range--
+    correction = correction / pid_array.Max_error
   
     return correction
 end
