@@ -7,7 +7,7 @@ local time_gear_up = 0  -- Time from when the handle is moved up
 -- WARNING: GEAR NOT DOWNLOCKED
 ----------------------------------------------------------------------------------------------------
 
-MessageGroup_GEAR_NOT_DOWNLOCKED_INIT = {
+Message_GEAR_NOT_DOWNLOCKED_INIT = {
     text = function(self)
         return "    GEAR NOT DOWNLOCKED"
     end,
@@ -79,7 +79,7 @@ MessageGroup_GEAR_NOT_DOWNLOCKED = {
     sd_page = ECAM_PAGE_WHEEL,
 
     messages = {
-        MessageGroup_GEAR_NOT_DOWNLOCKED_INIT,
+        Message_GEAR_NOT_DOWNLOCKED_INIT,
         Message_GEAR_RECYCLE,
         Message_GEAR_IF_UNSUCCESSFUL,
         Message_GEAR_GRVTY_EXTN
@@ -120,10 +120,10 @@ MessageGroup_GEAR_NOT_DOWNLOCKED = {
 }
 
 ----------------------------------------------------------------------------------------------------
--- WARNING: GEAR NOT UPLOCKED
+-- CAUTION: GEAR NOT UPLOCKED
 ----------------------------------------------------------------------------------------------------
 
-MessageGroup_GEAR_NOT_UPLOCKED_INIT = {
+Message_GEAR_NOT_UPLOCKED_INIT = {
     text = function(self)
         return "    GEAR NOT UPLOCKED"
     end,
@@ -197,7 +197,7 @@ MessageGroup_GEAR_NOT_UPLOCKED = {
     sd_page = ECAM_PAGE_WHEEL,
 
     messages = {
-        MessageGroup_GEAR_NOT_UPLOCKED_INIT,
+        Message_GEAR_NOT_UPLOCKED_INIT,
         Message_GEAR_MAX_SPEED,
         Message_GEAR_RECYCLE,
         Message_GEAR_IF_UNSUCCESSFUL,
@@ -236,6 +236,66 @@ MessageGroup_GEAR_NOT_UPLOCKED = {
         return get(EWD_flight_phase) == PHASE_1ST_ENG_TO_PWR or get(EWD_flight_phase) == PHASE_ABOVE_80_KTS or get(EWD_flight_phase) == PHASE_FINAL or
                get(EWD_flight_phase) == PHASE_TOUCHDOWN or get(EWD_flight_phase) == PHASE_BELOW_80_KTS or get(EWD_flight_phase) == PHASE_2ND_ENG_OFF
         
+    end
+
+}
+
+
+----------------------------------------------------------------------------------------------------
+-- WARNING: GEAR NOT DOWN
+----------------------------------------------------------------------------------------------------
+
+Message_GEAR_NOT_DOWN_INIT = {
+    text = function(self)
+        return "    GEAR NOT DOWN"
+    end,
+
+    color = function(self)
+        return COL_WARNING
+    end,
+
+    is_active = function(self)
+      return true -- Always active when group is active
+    end
+}
+
+MessageGroup_GEAR_NOT_DOWN = {
+
+    shown = false,
+
+    text  = function(self)
+                return "L/G"
+            end,
+    color = function(self)
+                return COL_WARNING
+            end,
+
+    priority = PRIORITY_LEVEL_3,
+
+    messages = {
+        Message_GEAR_NOT_DOWN_INIT,
+        Message_GEAR_DOWN
+    },
+
+    -- Method to check if this message group is active
+    is_active = function(self)
+       
+        if get(Gear_handle) ~= 1 then
+            if get(Capt_ra_alt_ft) < 750 and get(Flaps_handle_ratio) > 0.75 then
+                return true
+            end
+
+            if get(Capt_ra_alt_ft) < 750 and get(Eng_1_N1) < 75 and get(Eng_2_N1) < 75 then
+                return true
+            end
+        end
+        return false
+    end,
+
+    -- Method to check if this message is currently inhibithed
+    is_inhibited = function(self)
+        -- During takeoff and landing at high speed
+        return get(EWD_flight_phase) == PHASE_1ST_ENG_TO_PWR or get(EWD_flight_phase) == PHASE_ABOVE_80_KTS or get(EWD_flight_phase) == PHASE_LIFTOFF 
     end
 
 }
