@@ -41,13 +41,28 @@ end
 ecam_sts = {
     
     get_max_speed = function()
+    
+        max_kn   = 999
+        max_mach = 999
+    
         if get(FBW_status) == 0 then    -- direct law
-            return 320,77
+            max_kn = math.min(max_kn, 320)
+            max_mach = math.min(max_mach, 77)
         elseif get(FBW_status) == 1 then
-            return 320,82 -- TODO should be .77 if dual HYD failure
+            max_kn = math.min(max_kn, 320)
+            max_mach = math.min(max_mach, 82)-- TODO should be .77 if dual HYD failure
         end
         
-        return 0,0
+        if get(FAILURE_gear) == 1 then
+            max_kn = math.min(max_kn, 280)
+            max_mach = math.min(max_mach, 67)
+        end
+        
+        if max_kn == 999 then
+            return 0,0
+        else
+            return max_kn, max_mach
+        end
     end,
     
     get_max_fl = function()
@@ -62,6 +77,10 @@ ecam_sts = {
             table.insert(messages, { text="-GPWS LDG FLAP 3.......ON", color=ECAM_BLUE})
         end
     
+        if get(FAILURE_gear) == 2 then
+            table.insert(messages, { text="-L/G...........GRVTY EXTN", color=ECAM_BLUE})
+        end
+        
         return messages
     end,
     
@@ -97,6 +116,10 @@ ecam_sts = {
         if get(FBW_status) == 1 then
             table.insert(messages, "ALTN LAW : PROT LOST")
         end
+        
+        if get(FAILURE_gear) == 1 then
+            table.insert(messages, "INCREASED FUEL CONSUMP")        
+        end
     
         return messages
     end,
@@ -113,6 +136,8 @@ ecam_sts = {
     
     get_inop_sys = function()
         local messages = {}
+        
+        local inop_cat3_dual = false
         
         -- AIR
         put_inop_sys_msg_2(messages, L_pack_Flow,R_pack_Flow, "PACK")
@@ -133,6 +158,18 @@ ecam_sts = {
         -- ENGINES and APU
         if get(FAILURE_Apu) == 6 or get(FAILURE_Apu_fire) == 6 then
             table.insert(messages, "APU")
+        end
+        
+        -- L/G
+        if get(FAILURE_gear) == 1 then
+            table.insert(messages, "L/G RETRACT")
+        elseif get(FAILURE_gear) == 2 then
+            table.insert(messages, "N.W. STEER")
+            inop_cat3_dual = true
+        end
+        
+        if inop_cat3_dual then
+            table.insert(messages, "CAT 3 DUAL")        
         end
 
         return messages
