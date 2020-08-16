@@ -11,7 +11,7 @@ local A32nx_FBW_pitch_rate_up =   {P_gain = 1, D_gain = 10, Current_error = 0, M
 local A32nx_FBW_pitch_rate_down =   {P_gain = 1, D_gain = 10, Current_error = 0, Min_error = -0.5, Max_error = 0.5, Error_offset = 0}
 local A32nx_FBW_roll_rate_command = {P_gain = 0.8, I_gain = 1, D_gain = 2, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -1, Max_error = 1, Error_offset = 0}
 local A32nx_FBW_0pitch_command = {P_gain = 150, I_gain = 10, D_gain = 1000, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -0.15, Max_error = 0.15, Error_offset = 0}
-local A32nx_FBW_0vpath_command = {P_gain = 2.45, I_gain = 5.8, D_gain = 240, I_delay = 60, Integral = 0, Current_error = 0, Min_error = -0.10, Max_error = 0.10, Error_offset = 0}
+local A32nx_FBW_0vpath_command = {P_gain = 2.45, I_gain = 5.6, D_gain = 240, I_delay = 60, Integral = 0, Current_error = 0, Min_error = -0.10, Max_error = 0.10, Error_offset = 0}
 local A32nx_FBW_G_command = {P_gain = 0.16, I_gain = 1, D_gain = 7.8, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -0.15, Max_error = 0.15, Error_offset = 0}
 local A32nx_FBW_AOA_protection = {P_gain = 1, I_gain = 1, D_gain = 10, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -5, Max_error = 5, Error_offset = 0}
 local A32nx_FBW_MAX_spd_protection = {P_gain = 1, I_gain = 1, D_gain = 10, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -5, Max_error = 5, Error_offset = 0}
@@ -271,11 +271,6 @@ function update()
     --30 degrees climb and command G load
     set(Pitch_u_lim, FBW_PD(A32nx_FBW_pitch_up,  30 - get(Flightmodel_pitch)))
 
-    --5.5 deg/s up pitch rate
-    set(Pitch_rate_u_lim, FBW_PD(A32nx_FBW_pitch_rate_up,  7.5 - get(Pitch_rate)))
-    --5.5 deg/s down pitch rate
-    set(Pitch_rate_d_lim, FBW_PD(A32nx_FBW_pitch_rate_down,  -9.5 - get(Pitch_rate)))
-
     --AOA 9 degrees slightly above stall protection
     set(AOA_lim, Math_clamp(FBW_PD(A32nx_FBW_AOA_protection,  9 - get(Alpha)), -1, 0))
 
@@ -286,15 +281,17 @@ function update()
         if get(FBW_status) == 2 then
             if get(FBW_pitch_mode) == 1 then--hold vpath
                 --command 0 vpath pitch rate clamped to stop integral build up
-                set(G_output, Set_anim_value(get(G_output), Math_clamp(FBW_PID(A32nx_FBW_0vpath_command, 0 - get(Abs_vpath_pitch_rate)), get(Pitch_d_lim), get(Pitch_u_lim)), -1, 1, 0.215))
+                set(Vpath_output, Set_anim_value(get(Vpath_output), Math_clamp(Math_clamp(FBW_PID(A32nx_FBW_0vpath_command, 0 - get(Abs_vpath_pitch_rate)), -1, get(AOA_lim)+1), get(Pitch_d_lim), get(Pitch_u_lim)), -1, 1, 0.215))
+                set(G_output, get(Vpath_output))
             else--hold pitch 
                 --command 0 pitch rate clamped to stop integral build up
-                set(G_output, Set_anim_value(get(G_output), Math_clamp(FBW_PID(A32nx_FBW_0pitch_command, 0 - get(Abs_pitch_rate)), get(Pitch_d_lim), get(Pitch_u_lim)), -1, 1, 1.15))
+                set(G_output, Set_anim_value(get(G_output), Math_clamp(Math_clamp(FBW_PID(A32nx_FBW_0pitch_command, 0 - get(Abs_pitch_rate)), -1, get(AOA_lim)+1), get(Pitch_d_lim), get(Pitch_u_lim)), -1, 1, 1.15))
             end
         else
             if get(FBW_pitch_mode) == 1 then--hold vpath
                 --command 0 vpath pitch rate
-                set(G_output, Set_anim_value(get(G_output), FBW_PID(A32nx_FBW_0vpath_command, 0 - get(Abs_vpath_pitch_rate)), -1, 1, 0.215))
+                set(Vpath_output, Set_anim_value(get(Vpath_output), FBW_PID(A32nx_FBW_0vpath_command, 0 - get(Abs_vpath_pitch_rate)), -1, 1, 0.215))
+                set(G_output, get(Vpath_output))
             else--hold pitch 
                 --command 0 pitch rate
                 set(G_output, Set_anim_value(get(G_output), FBW_PID(A32nx_FBW_0pitch_command, 0 - get(Abs_pitch_rate)), -1, 1, 1.15))
@@ -335,7 +332,7 @@ function update()
             set(Pitch_artstab, get(G_output) + get(AOA_lim) + get(MAX_spd_lim))
         else
             set(Roll_artstab, get(Roll_l_lim) + get(Roll_r_lim) + get(Roll))
-            set(Pitch_artstab, (get(Pitch_d_lim) + get(Pitch_u_lim)) + (get(Pitch_rate_d_lim) + get(Pitch_rate_u_lim)) + get(Pitch))
+            set(Pitch_artstab, (get(Pitch_d_lim) + get(Pitch_u_lim)) + get(Pitch))
         end
 
         if get(Flight_director_1_mode) ~= 2 and get(Flight_director_2_mode) ~= 2 then
@@ -376,19 +373,18 @@ function update()
         end
     elseif get(FBW_status) == 1 then--ALT 2 law(no roll)
         set(Roll_artstab, get(Roll))
-        --if get(Pitch) > 0.1 or get(Pitch) < -0.1 then
         set(Pitch_artstab,  get(G_output))
 
-        --[[if get(Flight_director_1_mode) ~= 2 and get(Flight_director_2_mode) ~= 2 then
+        if get(Flight_director_1_mode) ~= 2 and get(Flight_director_2_mode) ~= 2 then
             --CWS trimming--
             if get(Pitch) > 0.05 then
-                set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), FBW_PID(A32nx_FBW_elev_trim, get(G_load_command) - get(Total_vertical_g_load)), -1, 1, 0.08))
+                set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), FBW_PID(A32nx_FBW_pitch_elev_trim, get(G_load_command) - get(Total_vertical_g_load)), -1, 1, 0.08))
             elseif get(Pitch) < -0.05 then
-                set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), FBW_PID(A32nx_FBW_elev_trim, get(G_load_command) - get(Total_vertical_g_load)), -1, 1, 0.08))
+                set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), FBW_PID(A32nx_FBW_pitch_elev_trim, get(G_load_command) - get(Total_vertical_g_load)), -1, 1, 0.08))
             else
-                set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), FBW_PID(A32nx_FBW_elev_trim, get(Pitch_artstab) + (0 - get(Pitch_rate))), -1, 1, 0.1))
+                set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), FBW_PID(A32nx_FBW_vpath_elev_trim, get(Pitch_artstab) + (0 - get(Abs_vpath_pitch_rate))), -1, 1, 0.05))
             end
-        end]]
+        end
     else--direct law
         set(Roll_artstab, get(Roll))
         set(Pitch_artstab, get(Pitch))
