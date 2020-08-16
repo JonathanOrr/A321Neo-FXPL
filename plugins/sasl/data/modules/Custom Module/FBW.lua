@@ -11,7 +11,7 @@ local A32nx_FBW_roll_rate_command = {P_gain = 0.8, I_gain = 1, D_gain = 2, I_del
 local A32nx_FBW_0pitch_command = {P_gain = 150, I_gain = 10, D_gain = 1000, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -0.15, Max_error = 0.15, Error_offset = 0}
 local A32nx_FBW_FPS_dep_0vpath = {P_gain = 2.45, I_gain = 5.6, D_gain = 300, I_delay = 60, Integral = 0, Current_error = 0, Min_error = -0.1, Max_error = 0.1, Error_offset = 0}
 local A32nx_FBW_FPS_indep_0vpath = {P_gain = 2.6, I_gain = 5.8, D_gain = 320, I_delay = 75, Integral = 0, Current_error = 0, Min_error = -22.5, Max_error = 22.5, Error_offset = 0}
-local A32nx_FBW_1G_command = {P_gain = 2.6, I_gain = 5.8, D_gain = 320, I_delay = 75, Integral = 0, Current_error = 0, Min_error = -22.5, Max_error = 22.5, Error_offset = 0}
+local A32nx_FBW_1G_command = {P_gain = 0.16, I_gain = 1, D_gain = 45, I_delay = 80, Integral = 0, Current_error = 0, Min_error = -0.15, Max_error = 0.15, Error_offset = 0}
 local A32nx_FBW_G_command = {P_gain = 0.16, I_gain = 1, D_gain = 7.8, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -0.15, Max_error = 0.15, Error_offset = 0}
 local A32nx_FBW_AOA_protection = {P_gain = 1, I_gain = 1, D_gain = 10, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -5, Max_error = 5, Error_offset = 0}
 local A32nx_FBW_MAX_spd_protection = {P_gain = 1, I_gain = 1, D_gain = 10, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -5, Max_error = 5, Error_offset = 0}
@@ -163,11 +163,11 @@ end
 function update()
     set(Override_artstab, 1)
 
-    A32nx_FBW_1G_command.P_gain = get(live_P_gain)
-    A32nx_FBW_1G_command.I_gain = get(live_I_gain)
-    A32nx_FBW_1G_command.D_gain = get(live_D_gain)
-    A32nx_FBW_1G_command.Max_error = get(live_max_lim)
-    A32nx_FBW_1G_command.Min_error = get(live_min_lim)
+    --A32nx_FBW_1G_command.P_gain = get(live_P_gain)
+    --A32nx_FBW_1G_command.I_gain = get(live_I_gain)
+    --A32nx_FBW_1G_command.D_gain = get(live_D_gain)
+    --A32nx_FBW_1G_command.Max_error = get(live_max_lim)
+    --A32nx_FBW_1G_command.Min_error = get(live_min_lim)
 
     --calculate abs pitch rate
     set(Abs_pitch_rate, get(Flightmodel_pitch) - last_pitch)
@@ -175,6 +175,7 @@ function update()
 
     --calculate abs vpath pitch rate
     set(Abs_vpath_pitch_rate, get(Vpath) - last_vpath)
+    --calculate vpath pitch rate per second
     if get(DELTA_TIME) > 0 then
         set(Persec_vpath_pitch_rate, (get(Vpath) - last_vpath) / get(DELTA_TIME))
     else
@@ -291,21 +292,26 @@ function update()
 
     if get(G_load_command) == 1 then
         if get(FBW_status) == 2 then
-            if get(FBW_pitch_mode) == 2 then--hold persec vpath
-                --command 0 vpath pitch rate clamped to stop integral build up
-                --set(Vpath_output, Set_anim_value(get(Vpath_output), Math_clamp(Math_clamp(FBW_PID(A32nx_FBW_FPS_indep_0vpath, 0 - get(Persec_vpath_pitch_rate)), -1, get(AOA_lim)+1), get(Pitch_d_lim), get(Pitch_u_lim)), -1, 1, 0.8))
-                set(Vpath_output, Set_anim_value(get(Vpath_output), Math_clamp(Math_clamp(FBW_PID(A32nx_FBW_1G_command, 1 - get(Total_vertical_g_load)), -1, get(AOA_lim)+1), get(Pitch_d_lim), get(Pitch_u_lim)), -1, 1, get(live_curve_speed)))
-                --set(Vpath_output, Math_clamp(Math_clamp(FBW_PID_no_lim(A32nx_FBW_0G_command, 1 - get(Total_vertical_g_load)), -1, get(AOA_lim)+1), get(Pitch_d_lim), get(Pitch_u_lim)))
+            if get(FBW_pitch_mode) == 3 then--hold 1G
+                --command 1 G clamped to stop integral build up
+                set(Vpath_output, Set_anim_value(get(Neutral_G_output), Math_clamp(Math_clamp(FBW_PID(A32nx_FBW_1G_command, 1 - get(Total_vertical_g_load)), -1, get(AOA_lim)+1), get(Pitch_d_lim), get(Pitch_u_lim)), -1, 1, 0.35))
+                set(G_output, get(Neutral_G_output))
+            elseif get(FBW_pitch_mode) == 2 then--hold persec vpath
+                set(Vpath_output, Set_anim_value(get(Vpath_output), Math_clamp(Math_clamp(FBW_PID(A32nx_FBW_FPS_indep_0vpath, 0 - get(Persec_vpath_pitch_rate)), -1, get(AOA_lim)+1), get(Pitch_d_lim), get(Pitch_u_lim)), -1, 1, 0.8))
                 set(G_output, get(Vpath_output))
             elseif get(FBW_pitch_mode) == 1 then--hold abs vpath
                 set(Vpath_output, Set_anim_value(get(Vpath_output), Math_clamp(Math_clamp(FBW_PID(A32nx_FBW_FPS_dep_0vpath, 0 - get(Abs_vpath_pitch_rate)), -1, get(AOA_lim)+1), get(Pitch_d_lim), get(Pitch_u_lim)), -1, 1, 0.215))
                 set(G_output, get(Vpath_output))
             else--hold pitch
             --command 0 pitch rate clamped to stop integral build up
-                set(G_output, Set_anim_value(get(G_output), Math_clamp(Math_clamp(FBW_PID_no_lim(A32nx_FBW_0pitch_command, 0 - get(Abs_pitch_rate)), -1, get(AOA_lim)+1), get(Pitch_d_lim), get(Pitch_u_lim)), -1, 1, 1.15))
+                set(G_output, Set_anim_value(get(G_output), Math_clamp(Math_clamp(FBW_PID(A32nx_FBW_0pitch_command, 0 - get(Abs_pitch_rate)), -1, get(AOA_lim)+1), get(Pitch_d_lim), get(Pitch_u_lim)), -1, 1, 1.15))
             end
         else
-            if get(FBW_pitch_mode) == 2 then--hold persec vpath
+            if get(FBW_pitch_mode) == 3 then--hold 1G
+                --command 1 G clamped to stop integral build up
+                set(Vpath_output, Set_anim_value(get(Neutral_G_output), FBW_PID(A32nx_FBW_1G_command, 1 - get(Total_vertical_g_load)), -1, 1, 0.35))
+                set(G_output, get(Neutral_G_output))
+            elseif get(FBW_pitch_mode) == 2 then--hold persec vpath
                 --command 0 vpath pitch rate clamped to stop integral build up
                 set(Vpath_output, Set_anim_value(get(Vpath_output), FBW_PID(A32nx_FBW_FPS_indep_0vpath, 0 - get(Persec_vpath_pitch_rate)), -1, 1, 0.8))
                 set(G_output, get(Vpath_output))
