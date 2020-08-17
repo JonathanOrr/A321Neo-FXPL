@@ -43,7 +43,9 @@ end)
 sasl.registerCommandHandler (Toggle_max_autobrake, 0, function(phase)
 	if phase == SASL_COMMAND_BEGIN then
 		if get(Autobrakes_sim) ~= 0 then
-			set(Autobrakes_sim, 0)
+			if get(All_on_ground) == 1 then
+				set(Autobrakes_sim, 0)
+			end
 		elseif get(Autobrakes_sim) == 0 then
 			set(Autobrakes_sim, 1)
 			if get(IAS) > 55 then
