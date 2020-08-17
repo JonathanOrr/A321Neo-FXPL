@@ -20,6 +20,15 @@ Right_tire_psi = createGlobalPropertyf("a321neo/dynamics/wheel/right_tire_psi", 
 Engine_option = createGlobalPropertyi("a321neo/customization/engine_option", 0, false, true, false) --0 CFM LEAP, 1 PW1000G
 PW_engine_enabled = createGlobalPropertyi("a321neo/customization/pw_engine_enabled", 0, false, true, false)
 Leap_engien_option = createGlobalPropertyi("a321neo/customization/leap_engine_enabled", 0, false, true, false)
+--aircond
+Cockpit_temp_req = createGlobalPropertyf("a321neo/dynamics/aircond/cockpit_temp_req", 21, false, true, false) --requested cockpit temperature
+Front_cab_temp_req = createGlobalPropertyf("a321neo/dynamics/aircond/front_cab_temp_req", 21, false, true, false) --requested front cabin temperature
+Aft_cab_temp_req = createGlobalPropertyf("a321neo/dynamics/aircond/aft_cab_temp_req", 21, false, true, false) --requested aft cabin temperature
+Aft_cargo_temp_req = createGlobalPropertyf("a321neo/dynamics/aircond/aft_cargo_temp_req", 17, false, true, false) ---requested aft cargo temperature
+Cockpit_temp = createGlobalPropertyf("a321neo/dynamics/aircond/cockpit_temp", 15, false, true, false) --actual cockpit temperature
+Front_cab_temp = createGlobalPropertyf("a321neo/dynamics/aircond/front_cab_temp", 15, false, true, false) --actual front cabin temperature
+Aft_cab_temp = createGlobalPropertyf("a321neo/dynamics/aircond/aft_cab_temp", 15, false, true, false) --actual aft cabin temperature
+Aft_cargo_temp = createGlobalPropertyf("a321neo/dynamics/aircond/aft_cargo_temp", 17, false, true, false) ---requested aft cargo temperature
 --PACKS
 L_pack_Flow = createGlobalPropertyi("a321neo/dynamics/packs/l_pack_flow", 0, false, true, false) --0low, 1norm, 2high
 R_pack_Flow = createGlobalPropertyi("a321neo/dynamics/packs/r_pack_flow", 0, false, true, false) --0low, 1norm, 2high
