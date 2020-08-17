@@ -20,7 +20,9 @@ sasl.registerCommandHandler (Toggle_lo_autobrake, 0, function(phase)
 			set(Autobrakes_sim, 2)
 		elseif get(Autobrakes_sim) == 2 then
 			set(Autobrakes_sim, 1)
-			set(Cockpit_parkbrake_ratio, 0)
+			if get(IAS) > 55 then
+				set(Cockpit_parkbrake_ratio, 0)
+			end
 		end
     end
 end)
@@ -31,7 +33,9 @@ sasl.registerCommandHandler (Toggle_med_autobrake, 0, function(phase)
 			set(Autobrakes_sim, 4)
 		elseif get(Autobrakes_sim) == 4 then
 			set(Autobrakes_sim, 1)
-			set(Cockpit_parkbrake_ratio, 0)
+			if get(IAS) > 55 then
+				set(Cockpit_parkbrake_ratio, 0)
+			end
 		end
     end
 end)
@@ -42,7 +46,9 @@ sasl.registerCommandHandler (Toggle_max_autobrake, 0, function(phase)
 			set(Autobrakes_sim, 0)
 		elseif get(Autobrakes_sim) == 0 then
 			set(Autobrakes_sim, 1)
-			set(Cockpit_parkbrake_ratio, 0)
+			if get(IAS) > 55 then
+				set(Cockpit_parkbrake_ratio, 0)
+			end
 		end
     end
 end)
@@ -72,7 +78,7 @@ function update()
 	elseif get(Autobrakes_sim) == 0 then
 		set(Autobrakes_max_button_state, 1)--01
 		set(Autobrakes, 3)
-		if get(Cockpit_parkbrake_ratio) > 0 then
+		if get(Cockpit_parkbrake_ratio) > 0 and get(IAS) > 55 then
 			set(Autobrakes_lo_button_state, 2)--10
 			set(Autobrakes, 3)
 		end
@@ -83,7 +89,7 @@ function update()
 			if get(Autobrakes_sim) == 2 then
 				set(Autobrakes_lo_button_state, 1)--01
 				set(Autobrakes, 1)
-				if get(Cockpit_parkbrake_ratio) > 0 then
+				if get(Cockpit_parkbrake_ratio) > 0 and get(IAS) > 55 then
 					set(Autobrakes_lo_button_state, 2)--10
 					set(Autobrakes, 1)
 				end
@@ -95,7 +101,7 @@ function update()
 			if get(Autobrakes_sim) == 4 then
 				set(Autobrakes_med_button_state, 1)--01
 				set(Autobrakes, 2)
-				if get(Cockpit_parkbrake_ratio) > 0 then
+				if get(Cockpit_parkbrake_ratio) > 0 and get(IAS) > 55 then
 					set(Autobrakes_med_button_state, 2)--10
 					set(Autobrakes, 2)
 				end
