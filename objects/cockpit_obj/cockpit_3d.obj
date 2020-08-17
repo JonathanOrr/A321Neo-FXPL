@@ -23155,14 +23155,11 @@ IDX	18512
 	TRIS	38112 6
 	ATTR_draw_disable
 	ATTR_no_cockpit
-	ATTR_manip_wrap	rotate_medium	0	0	0	1	a321neo/cockpit/aircond/aft_cab_temp_dial	Aft cabin temperature
-	ATTR_manip_wheel	0.05
+	ATTR_manip_command_knob	rotate_medium	321neo/cockpit/aircond/aft_cab_temp_dial_up	321neo/cockpit/aircond/aft_cab_temp_dial_dn	Aft cabin temperature
 	TRIS	1572 66
-	ATTR_manip_delta	rotate_medium	0	0	0	1	a321neo/cockpit/aircond/aft_cargo_temp_dial	Cargo temperature
-	ATTR_manip_wheel	0.05
+	ATTR_manip_command_knob	rotate_medium	a321neo/cockpit/aircond/aft_cargo_temp_dial_up	a321neo/cockpit/aircond/aft_cargo_temp_dial_dn	Cargo temperature
 	TRIS	1722 66
-	ATTR_manip_delta	rotate_medium	0	0	0	1	a321neo/cockpit/aircond/cockpit_temp_dial	Cockpit temperature
-	ATTR_manip_wheel	0.05
+	ATTR_manip_command_knob	rotate_medium	a321neo/cockpit/aircond/cockpit_temp_dial_up	a321neo/cockpit/aircond/cockpit_temp_dial_dn	Cockpit temperature
 	TRIS	4200 66
 	ATTR_manip_toggle	button	1	0	a321neo/cockpit/engine/master_1	Engine Master 1
 	ATTR_manip_wheel	1
@@ -23174,20 +23171,17 @@ IDX	18512
 	TRIS	17574 66
 	ATTR_manip_command_knob	up_down	sim/flight_controls/flaps_up	sim/flight_controls/flaps_down	Flaps
 	TRIS	18228 30
-	ATTR_manip_drag_axis	rotate_medium	0	0	0	0	0	a321neo/cockpit/aircond/front_cab_temp_dial	Fwd cabin temperature
-	ATTR_manip_wheel	0.05
+	ATTR_manip_command_knob	rotate_medium	a321neo/cockpit/aircond/front_cab_temp_dial_up	a321neo/cockpit/aircond/front_cab_temp_dial_dn	Fwd cabin temperature
 	TRIS	18438 66
 	ATTR_manip_command_knob	hand	sim/flight_controls/pitch_trim_down	sim/flight_controls/pitch_trim_up	Elevator trim
 	TRIS	20298 180
-	ATTR_manip_delta	rotate_medium	0	0	0	2	a321neo/cockpit/packs/pack_flow_dial	PACK FLOW
-	ATTR_manip_wheel	1
+	ATTR_manip_command_knob	rotate_medium	a321neo/cockpit/packs/pack_flow_dial_up	a321neo/cockpit/packs/pack_flow_dial_dn	PACK FLOW
 	TRIS	38544 66
 	ATTR_manip_command_knob	hand	sim/flight_controls/pitch_trim_down	sim/flight_controls/pitch_trim_up	Elevator trim
 	TRIS	39552 180
 	ATTR_manip_command_knob	up_down	sim/flight_controls/speed_brakes_up_one	sim/flight_controls/speed_brakes_down_one	Speedbrakes
 	TRIS	40626 30
-	ATTR_manip_radio	rotate_medium	0	a321neo/cockpit/packs/x_bleed_dial	X BLEED
-	ATTR_manip_wheel	1
+	ATTR_manip_command_knob	rotate_medium	a321neo/cockpit/packs/x_bleed_dial_up	a321neo/cockpit/packs/x_bleed_dial_dn	X BLEED
 	TRIS	41412 66
 
 # Build with Blender 2.83.0 (build b'211b6c29f771'). Exported with XPlane2Blender 4.0.0-beta.1+75.20200310161256
