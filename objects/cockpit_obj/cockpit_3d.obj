@@ -22889,51 +22889,51 @@ IDX10	18626	18627	18624	18626	18628	18629	18630	18631	18628	18630
 		TRIS	6768 84
 		TRIS	6852 6
 		ANIM_begin
-		ANIM_hide	0	0.80000001	a321neo/cockpit/source_switching/ecam_displaying_status
+		ANIM_hide	0	0.80000001	a321neo/cockpit/source_switching/ECAM_ecam_show
 		TRIS	15810 6
 		ANIM_end
 		ANIM_begin
-		ANIM_hide	0	0.80000001	a321neo/cockpit/source_switching/ecam_displaying_status
+		ANIM_hide	0	0.80000001	a321neo/cockpit/source_switching/ECAM_ewd_show
 		TRIS	15816 6
 		ANIM_end
 		ANIM_begin
-		ANIM_hide	0	0.80000001	a321neo/cockpit/source_switching/ecam_displaying_status
+		ANIM_hide	0	0.80000001	a321neo/cockpit/source_switching/ECAM_nd_show
 		TRIS	15906 6
 		ANIM_end
 		ANIM_begin
-		ANIM_hide	0	0.80000001	a321neo/cockpit/source_switching/ecam_displaying_status
+		ANIM_hide	0	0.80000001	a321neo/cockpit/source_switching/ECAM_pfd_show
 		TRIS	15912 6
 		ANIM_end
 		ANIM_begin
-		ANIM_hide	0	0.80000001	a321neo/cockpit/source_switching/ewd_displaying_status
+		ANIM_hide	0	0.80000001	a321neo/cockpit/source_switching/EWD_ecam_show
 		TRIS	480 6
 		ANIM_end
 		ANIM_begin
-		ANIM_hide	0	0.80000001	a321neo/cockpit/source_switching/ewd_displaying_status
+		ANIM_hide	0	0.80000001	a321neo/cockpit/source_switching/EWD_ewd_show
 		TRIS	486 6
 		ANIM_end
 		ANIM_begin
-		ANIM_hide	0	0.80000001	a321neo/cockpit/source_switching/ewd_displaying_status
+		ANIM_hide	0	0.80000001	a321neo/cockpit/source_switching/EWD_nd_show
 		TRIS	492 6
 		ANIM_end
 		ANIM_begin
-		ANIM_hide	0	0.80000001	a321neo/cockpit/source_switching/ewd_displaying_status
+		ANIM_hide	0	0.80000001	a321neo/cockpit/source_switching/EWD_pfd_show
 		TRIS	498 6
 		ANIM_end
 		ANIM_begin
-		ANIM_hide	0	0.80000001	a321neo/cockpit/source_switching/fo_nd_displaying_status
+		ANIM_hide	0	0.80000001	a321neo/cockpit/source_switching/Fo_nd_ecam_show
 		TRIS	18342 6
 		ANIM_end
 		ANIM_begin
-		ANIM_hide	0	0.80000001	a321neo/cockpit/source_switching/fo_nd_displaying_status
+		ANIM_hide	0	0.80000001	a321neo/cockpit/source_switching/Fo_nd_ewd_show
 		TRIS	18348 6
 		ANIM_end
 		ANIM_begin
-		ANIM_hide	0	0.80000001	a321neo/cockpit/source_switching/fo_nd_displaying_status
+		ANIM_hide	0	0.80000001	a321neo/cockpit/source_switching/Fo_nd_nd_show
 		TRIS	18354 6
 		ANIM_end
 		ANIM_begin
-		ANIM_hide	0	0.80000001	a321neo/cockpit/source_switching/fo_nd_displaying_status
+		ANIM_hide	0	0.80000001	a321neo/cockpit/source_switching/Fo_nd_pfd_show
 		TRIS	18360 6
 		ANIM_end
 		ANIM_begin
