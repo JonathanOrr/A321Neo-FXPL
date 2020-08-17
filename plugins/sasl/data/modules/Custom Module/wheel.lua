@@ -78,6 +78,8 @@ function update()
 		set(Autobrakes_max_button_state, 0)--00
 		set(Autobrakes, 0)
 	elseif get(Autobrakes_sim) == 0 then
+		set(Autobrakes_lo_button_state, 0)--00
+		set(Autobrakes_med_button_state, 0)--00
 		set(Autobrakes_max_button_state, 1)--01
 		set(Autobrakes, 3)
 		if get(Cockpit_parkbrake_ratio) > 0 and get(IAS) > 55 then
