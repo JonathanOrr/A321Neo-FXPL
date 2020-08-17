@@ -112,9 +112,6 @@ function update()
 		end
 	end
 
-
-
-
 	--convert m/s to kts
 	set(groundspeed_kts, get(Ground_speed_ms)*1.94384)
 
