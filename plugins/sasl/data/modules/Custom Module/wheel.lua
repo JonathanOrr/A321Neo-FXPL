@@ -109,6 +109,9 @@ function update()
 				set(Autobrakes_med_button_state, 0)--00
 				set(Autobrakes, 0)
 			end
+		else
+			set(Autobrakes_lo_button_state, 0)--00
+			set(Autobrakes_med_button_state, 0)--00
 		end
 	end
 
