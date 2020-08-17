@@ -147,11 +147,7 @@ end)
 
 sasl.registerCommandHandler ( apu_gen_toggle, 0 , function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        if get(apu_gen) == 1 then
-            set(apu_gen, 0)
-        elseif get(apu_gen) == 0 then
-            set(apu_gen, 1)
-        end
+        set(apu_gen, 1 - get(apu_gen))
     end
 end)
 

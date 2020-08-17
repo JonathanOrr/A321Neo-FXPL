@@ -22,6 +22,8 @@ Ecam_btn_cmd_ALL   = createCommand("a321neo/cockpit/ecam/buttons/cmd_all", "ALL 
 Ecam_btn_cmd_RCL   = createCommand("a321neo/cockpit/ecam/buttons/cmd_rcl", "RCL pushbutton")
 
 --aircond
+Toggle_cab_hotair = createCommand("a321neo/cockpit/aircond/toggle_cab_hotair", "Toggle cabin hot air")
+Toggle_cargo_hotair = createCommand("a321neo/cockpit/aircond/toggle_cargo_hotair", "Toggle cargo hot air")
 Cockpit_temp_dial_up = createCommand("a321neo/cockpit/aircond/cockpit_temp_dial_up", "Cockpit temp dial up")
 Cockpit_temp_dial_dn = createCommand("a321neo/cockpit/aircond/cockpit_temp_dial_dn", "Cockpit temp dial down")
 Front_cab_temp_dial_up = createCommand("a321neo/cockpit/aircond/front_cab_temp_dial_up", "Front cab temp dia up")
@@ -32,6 +34,8 @@ Aft_cargo_temp_dial_up = createCommand("a321neo/cockpit/aircond/aft_cargo_temp_d
 Aft_cargo_temp_dial_dn = createCommand("a321neo/cockpit/aircond/aft_cargo_temp_dial_dn", "Aft cargo temp dial down")
 
 --packs & bleed
+Toggle_eng1_bleed = createCommand("a321neo/cockpit/bleed/toggle_eng1_bleed", "Toggle ENG 1 bleed")
+Toggle_eng2_bleed = createCommand("a321neo/cockpit/bleed/toggle_eng2_bleed", "Toggle ENG 2 bleed")
 Pack_flow_dial_up = createCommand("a321neo/cockpit/packs/pack_flow_dial_up", "Pack flow dial up")
 Pack_flow_dial_dn = createCommand("a321neo/cockpit/packs/pack_flow_dial_dn", "Pack flow dial down")
 X_bleed_dial_up = createCommand("a321neo/cockpit/packs/x_bleed_dial_up", "x bleed dial up")
