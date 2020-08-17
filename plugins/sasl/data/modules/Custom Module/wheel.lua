@@ -68,31 +68,40 @@ function update()
 		set(Autobrakes_lo_button_state, 0)--00
 		set(Autobrakes_med_button_state, 0)--00
 		set(Autobrakes_max_button_state, 0)--00
+		set(Autobrakes, 0)
 	elseif get(Autobrakes_sim) == 0 then
 		set(Autobrakes_max_button_state, 1)--01
+		set(Autobrakes, 3)
 		if get(Cockpit_parkbrake_ratio) > 0 then
 			set(Autobrakes_lo_button_state, 2)--10
+			set(Autobrakes, 3)
 		end
 	else
 		if get(Autobrakes_sim) > 1 then
 			set(Autobrakes_max_button_state, 0)--00
-			--med autobrake states
+			--lo autobrake states
 			if get(Autobrakes_sim) == 2 then
 				set(Autobrakes_lo_button_state, 1)--01
+				set(Autobrakes, 1)
 				if get(Cockpit_parkbrake_ratio) > 0 then
 					set(Autobrakes_lo_button_state, 2)--10
+					set(Autobrakes, 1)
 				end
 			else
 				set(Autobrakes_lo_button_state, 0)--00
+				set(Autobrakes, 0)
 			end
-			--max autobrake states
-			if get(Autobrakes_sim) == 2 then
+			--med autobrake states
+			if get(Autobrakes_sim) == 4 then
 				set(Autobrakes_med_button_state, 1)--01
+				set(Autobrakes, 2)
 				if get(Cockpit_parkbrake_ratio) > 0 then
 					set(Autobrakes_med_button_state, 2)--10
+					set(Autobrakes, 2)
 				end
 			else
 				set(Autobrakes_med_button_state, 0)--00
+				set(Autobrakes, 0)
 			end
 		end
 	end
