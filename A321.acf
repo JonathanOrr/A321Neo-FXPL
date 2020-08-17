@@ -94,7 +94,7 @@ P _cgpt/9/_w_now 1.0
 P _cgpt/9/_w_test 0.0
 P _cgpt/9/_z_ref 0.0
 P _cgpt/count 20
-P _door/0/_ang_now 0.0
+P _door/0/_ang_now 54.782451630
 P _door/0/_ext_ang 0.0
 P _door/0/_ret_ang 100.0
 P _door/0/_type 1
@@ -102,7 +102,7 @@ P _door/0/_xyz/0 -1.0
 P _door/0/_xyz/1 0.0
 P _door/0/_xyz/2 17.600000381
 P _door/0/_xyz/count 3
-P _door/1/_ang_now 0.0
+P _door/1/_ang_now 9.564903259
 P _door/1/_ext_ang 0.0
 P _door/1/_ret_ang 100.0
 P _door/1/_type 3
@@ -110,7 +110,7 @@ P _door/1/_xyz/0 -1.500000000
 P _door/1/_xyz/1 0.0
 P _door/1/_xyz/2 14.500000000
 P _door/1/_xyz/count 3
-P _door/10/_ang_now 0.0
+P _door/10/_ang_now 8.608413696
 P _door/10/_ext_ang 0.0
 P _door/10/_ret_ang 90.0
 P _door/10/_type 3
@@ -127,7 +127,7 @@ P _door/16/_type 0
 P _door/17/_type 0
 P _door/18/_type 0
 P _door/19/_type 0
-P _door/2/_ang_now 0.0
+P _door/2/_ang_now -54.782451630
 P _door/2/_ext_ang 0.0
 P _door/2/_ret_ang -100.0
 P _door/2/_type 1
@@ -135,7 +135,7 @@ P _door/2/_xyz/0 1.0
 P _door/2/_xyz/1 0.0
 P _door/2/_xyz/2 17.600000381
 P _door/2/_xyz/count 3
-P _door/3/_ang_now 0.0
+P _door/3/_ang_now -9.564903259
 P _door/3/_ext_ang 0.0
 P _door/3/_ret_ang -100.0
 P _door/3/_type 3
@@ -143,7 +143,7 @@ P _door/3/_xyz/0 1.500000000
 P _door/3/_xyz/1 0.0
 P _door/3/_xyz/2 14.500000000
 P _door/3/_xyz/count 3
-P _door/4/_ang_now 11.624122620
+P _door/4/_ang_now 81.860839844
 P _door/4/_ext_ang 0.0
 P _door/4/_ret_ang 90.0
 P _door/4/_type 2
@@ -151,7 +151,7 @@ P _door/4/_xyz/0 -13.0
 P _door/4/_xyz/1 -3.599999905
 P _door/4/_xyz/2 73.500000000
 P _door/4/_xyz/count 3
-P _door/5/_ang_now -11.624122620
+P _door/5/_ang_now -81.860839844
 P _door/5/_ext_ang 0.0
 P _door/5/_ret_ang -90.0
 P _door/5/_type 2
@@ -161,7 +161,7 @@ P _door/5/_xyz/2 73.500000000
 P _door/5/_xyz/count 3
 P _door/6/_type 0
 P _door/7/_type 0
-P _door/8/_ang_now 0.0
+P _door/8/_ang_now -8.608413696
 P _door/8/_ext_ang 0.0
 P _door/8/_ret_ang -90.0
 P _door/8/_type 3
@@ -209,10 +209,10 @@ P _gear/0/_latN 0.0
 P _gear/0/_latR 0.0
 P _gear/0/_leg_len 5.400000095
 P _gear/0/_lonE 0.0
-P _gear/0/_lonN 12.657371521
+P _gear/0/_lonN 89.137359619
 P _gear/0/_lonR 98.0
 P _gear/0/_scon 47252.898437500
-P _gear/0/_stat_def 0.399389744
+P _gear/0/_stat_def 0.399389774
 P _gear/0/_steerdeg_hispeed 5.0
 P _gear/0/_steerdeg_lospeed 75.0
 P _gear/0/_strut_comp 0.0
@@ -239,11 +239,11 @@ P _gear/1/_gear_x -12.010000229
 P _gear/1/_gear_y -2.799999952
 P _gear/1/_gear_z 69.800003052
 P _gear/1/_latE 0.0
-P _gear/1/_latN 10.332550049
+P _gear/1/_latN 72.765190125
 P _gear/1/_latR 80.0
 P _gear/1/_leg_len 8.199999809
 P _gear/1/_lonE -7.0
-P _gear/1/_lonN -6.095901966
+P _gear/1/_lonN -0.633045673
 P _gear/1/_lonR 0.0
 P _gear/1/_scon 71266.664062500
 P _gear/1/_stat_def 1.367629290
@@ -273,11 +273,11 @@ P _gear/2/_gear_x 12.010000229
 P _gear/2/_gear_y -2.799999952
 P _gear/2/_gear_z 69.800003052
 P _gear/2/_latE 0.0
-P _gear/2/_latN -10.332550049
+P _gear/2/_latN -72.765190125
 P _gear/2/_latR -80.0
 P _gear/2/_leg_len 8.199999809
 P _gear/2/_lonE -7.0
-P _gear/2/_lonN -6.095901966
+P _gear/2/_lonN -0.633045673
 P _gear/2/_lonR 0.0
 P _gear/2/_scon 71266.664062500
 P _gear/2/_stat_def 1.367629290
@@ -24399,7 +24399,7 @@ P _part/85/_part_specs_invis 1
 P _part/85/_part_tex 0
 P _part/85/_part_the -83.0
 P _part/85/_part_x 0.0
-P _part/85/_part_y -10.990610123
+P _part/85/_part_y -10.990609169
 P _part/85/_part_z 17.530000687
 P _part/85/_patt_con 0
 P _part/85/_patt_prt 0
@@ -37359,68 +37359,6 @@ rad_transponder_HM1 transponder_HM.png
   KEY_FRAME 0.000000 0.000000 1.000000
   KEY_FRAME 1.000000 1.000000
 
-GROUP brake_press
-  LOCKED
-  CHAINED
-  gen_rotary brakepress_bg
-    POS 569.000000 1724.000000
-    IMAGE MIP/brake/brake
-    DATAREF 
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 6.000000
-    DIGITS 1
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_needle left_brake_press
-    POS 510.428284 1678.000000
-    IMAGE MIP/brake/br_needl
-    DATAREF sim/flightmodel/controls/parkbrake
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 90.000000 1.000000
-    KEY_FRAME 1.000000 45.000000 1.000000
-    KEY_FRAME 2.000000 5.000000
-    IS_DRAGGABLE 0
-    OFFSET 0.000000
-
-  gen_needle right_brake_press
-    POS 633.000000 1677.000000
-    IMAGE MIP/brake/br_needl
-    DATAREF sim/flightmodel/controls/parkbrake
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 270.000000 1.000000
-    KEY_FRAME 1.000000 315.000000 1.000000
-    KEY_FRAME 2.000000 355.000000
-    IS_DRAGGABLE 0
-    OFFSET 0.000000
-
-  gen_needle accu_press
-    POS 571.285767 1781.714355
-    IMAGE MIP/brake/br_needl
-    DATAREF sim/flightmodel/controls/parkbrake
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 150.000000 1.000000
-    KEY_FRAME 1.000000 210.000000
-    IS_DRAGGABLE 0
-    OFFSET 0.000000
-
-END_GROUP
 GROUP chrono
   LOCKED
   CHAINED
@@ -47004,4 +46942,60 @@ GROUP hud vertical
     END_GROUP
   END_GROUP
 END_GROUP
+gen_rotary Brake Gauge
+  POS 1111.142822 1373.642822
+  IMAGE MIP/brake/brake
+  DATAREF 
+  SIZE 0.700000
+  LIGHT_MODE GLASS_AUTO
+  LIGHT_RHEOSTAT 0
+  KEY_FRAME 0.000000 0.000000 1.000000
+  KEY_FRAME 1.000000 6.000000
+  DIGITS 1
+  ROTARY_TYPE NO_CLICK
+  CLICK_RADIUS 10.000000
+  CLICK_RADIUS_DY 0.000000
+  OFFSET 0.000000
+  STEP1 1.000000
+  STEP2 1.000000
+  CURSOR DEFAULT
+  CLICK_DX 0
+  CLICK_DY 0
+
+gen_needle Needle 1
+  POS 1026.000000 1308.500000
+  IMAGE MIP/brake/Needle
+  DATAREF sim/cockpit2/controls/left_brake_ratio
+  SIZE 0.700000
+  LIGHT_MODE GLASS_AUTO
+  LIGHT_RHEOSTAT 0
+  KEY_FRAME 0.000000 90.000000 1.000000
+  KEY_FRAME 1.000000 0.000000
+  IS_DRAGGABLE 0
+  OFFSET 0.000000
+
+gen_needle Needle 1 2
+  POS 1200.000000 1308.500000
+  IMAGE MIP/brake/Needle
+  DATAREF sim/cockpit2/controls/right_brake_ratio
+  SIZE 0.700000
+  LIGHT_MODE GLASS_AUTO
+  LIGHT_RHEOSTAT 0
+  KEY_FRAME 0.000000 -90.000000 1.000000
+  KEY_FRAME 1.000000 0.000000
+  IS_DRAGGABLE 0
+  OFFSET 0.000000
+
+gen_needle Needle 1 2 2
+  POS 1112.000000 1458.000000
+  IMAGE MIP/brake/Needle
+  DATAREF sim/cockpit2/controls/parking_brake_ratio
+  SIZE 0.700000
+  LIGHT_MODE GLASS_AUTO
+  LIGHT_RHEOSTAT 0
+  KEY_FRAME 0.000000 225.000000 1.000000
+  KEY_FRAME 1.000000 132.000000
+  IS_DRAGGABLE 0
+  OFFSET 0.000000
+
 PANEL_3D_END
