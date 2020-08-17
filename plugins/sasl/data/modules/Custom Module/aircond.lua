@@ -10,7 +10,7 @@ sasl.registerCommandHandler ( Cockpit_temp_dial_up, 0, function(phase)
         set(Cockpit_temp_dial, get(Cockpit_temp_dial) + 0.05)
     end
     if phase == SASL_COMMAND_CONTINUE then
-        set(Cockpit_temp_dial, get(Cockpit_temp_dial) + 0.05 * get(DELTA_TIME))
+        set(Cockpit_temp_dial, get(Cockpit_temp_dial) + 0.5 * get(DELTA_TIME))
     end
 end)
 
@@ -19,7 +19,7 @@ sasl.registerCommandHandler ( Cockpit_temp_dial_dn, 0, function(phase)
         set(Cockpit_temp_dial, get(Cockpit_temp_dial) - 0.05)
     end
     if phase == SASL_COMMAND_CONTINUE then
-        set(Cockpit_temp_dial, get(Cockpit_temp_dial) - 0.05 * get(DELTA_TIME))
+        set(Cockpit_temp_dial, get(Cockpit_temp_dial) - 0.5 * get(DELTA_TIME))
     end
 end)
 
@@ -28,7 +28,7 @@ sasl.registerCommandHandler ( Front_cab_temp_dial_up, 0, function(phase)
         set(Front_cab_temp_dial, get(Front_cab_temp_dial) + 0.05)
     end
     if phase == SASL_COMMAND_CONTINUE then
-        set(Front_cab_temp_dial, get(Front_cab_temp_dial) + 0.05 * get(DELTA_TIME))
+        set(Front_cab_temp_dial, get(Front_cab_temp_dial) + 0.5 * get(DELTA_TIME))
     end
 end)
 
@@ -37,7 +37,7 @@ sasl.registerCommandHandler ( Front_cab_temp_dial_dn, 0, function(phase)
         set(Front_cab_temp_dial, get(Front_cab_temp_dial) - 0.05)
     end
     if phase == SASL_COMMAND_CONTINUE then
-        set(Front_cab_temp_dial, get(Front_cab_temp_dial) - 0.05 * get(DELTA_TIME))
+        set(Front_cab_temp_dial, get(Front_cab_temp_dial) - 0.5 * get(DELTA_TIME))
     end
 end)
 
@@ -46,7 +46,7 @@ sasl.registerCommandHandler ( Aft_cab_temp_dial_up, 0, function(phase)
         set(Aft_cab_temp_dial, get(Aft_cab_temp_dial) + 0.05)
     end
     if phase == SASL_COMMAND_CONTINUE then
-        set(Aft_cab_temp_dial, get(Aft_cab_temp_dial) + 0.05 * get(DELTA_TIME))
+        set(Aft_cab_temp_dial, get(Aft_cab_temp_dial) + 0.5 * get(DELTA_TIME))
     end
 end)
 
@@ -55,7 +55,7 @@ sasl.registerCommandHandler ( Aft_cab_temp_dial_dn, 0, function(phase)
         set(Aft_cab_temp_dial, get(Aft_cab_temp_dial) - 0.05)
     end
     if phase == SASL_COMMAND_CONTINUE then
-        set(Aft_cab_temp_dial, get(Aft_cab_temp_dial) - 0.05 * get(DELTA_TIME))
+        set(Aft_cab_temp_dial, get(Aft_cab_temp_dial) - 0.5 * get(DELTA_TIME))
     end
 end)
 
@@ -64,7 +64,7 @@ sasl.registerCommandHandler ( Aft_cargo_temp_dial_up, 0, function(phase)
         set(Aft_cargo_temp_dial, get(Aft_cargo_temp_dial) + 0.05)
     end
     if phase == SASL_COMMAND_CONTINUE then
-        set(Aft_cargo_temp_dial, get(Aft_cargo_temp_dial) + 0.05 * get(DELTA_TIME))
+        set(Aft_cargo_temp_dial, get(Aft_cargo_temp_dial) + 0.5 * get(DELTA_TIME))
     end
 end)
 
@@ -73,7 +73,7 @@ sasl.registerCommandHandler ( Aft_cargo_temp_dial_dn, 0, function(phase)
         set(Aft_cargo_temp_dial, get(Aft_cargo_temp_dial) - 0.05)
     end
     if phase == SASL_COMMAND_CONTINUE then
-        set(Aft_cargo_temp_dial, get(Aft_cargo_temp_dial) - 0.05 * get(DELTA_TIME))
+        set(Aft_cargo_temp_dial, get(Aft_cargo_temp_dial) - 0.5 * get(DELTA_TIME))
     end
 end)
 
@@ -82,7 +82,7 @@ sasl.registerCommandHandler ( Toggle_cab_hotair, 0, function(phase)
         set(Cab_hot_air, 1-  get(Cab_hot_air))
     end
     if phase == SASL_COMMAND_CONTINUE then
-        set(Aft_cargo_temp_dial, get(Aft_cargo_temp_dial) - 0.05 * get(DELTA_TIME))
+        set(Aft_cargo_temp_dial, get(Aft_cargo_temp_dial) - 0.5 * get(DELTA_TIME))
     end
 end)
 
