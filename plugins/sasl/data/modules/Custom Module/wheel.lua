@@ -82,7 +82,7 @@ function update()
 		set(Autobrakes_med_button_state, 0)--00
 		set(Autobrakes_max_button_state, 1)--01
 		set(Autobrakes, 3)
-		if get(Cockpit_parkbrake_ratio) > 0 and get(IAS) > 55 then
+		if get(Cockpit_parkbrake_ratio) > 0 and get(IAS) > 55 and get(Any_wheel_on_ground) == 1  then
 			set(Autobrakes_lo_button_state, 2)--10
 			set(Autobrakes, 3)
 		end
@@ -93,7 +93,7 @@ function update()
 			if get(Autobrakes_sim) == 2 then
 				set(Autobrakes_lo_button_state, 1)--01
 				set(Autobrakes, 1)
-				if get(Cockpit_parkbrake_ratio) > 0 and get(IAS) > 55 then
+				if get(Cockpit_parkbrake_ratio) > 0 and get(IAS) > 55 and get(Any_wheel_on_ground) == 1 then
 					set(Autobrakes_lo_button_state, 2)--10
 					set(Autobrakes, 1)
 				end
@@ -105,7 +105,7 @@ function update()
 			if get(Autobrakes_sim) == 4 then
 				set(Autobrakes_med_button_state, 1)--01
 				set(Autobrakes, 2)
-				if get(Cockpit_parkbrake_ratio) > 0 and get(IAS) > 55 then
+				if get(Cockpit_parkbrake_ratio) > 0 and get(IAS) > 55 and get(Any_wheel_on_ground) == 1 then
 					set(Autobrakes_med_button_state, 2)--10
 					set(Autobrakes, 2)
 				end
