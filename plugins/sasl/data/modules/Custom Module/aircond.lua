@@ -4,6 +4,57 @@
 local a321DR_aft_cargo_iso_valve = createGlobalPropertyi("a321neo/cockpit/aircond/aft_cargo_iso_valve", 1, false, true, false)
 local a321DR_bleed_avail = createGlobalPropertyi("a321neo/cockpit/aircond/bleed_avail", 0, false, true, false)
 
+--register commands
+sasl.registerCommandHandler ( Cockpit_temp_dial_up, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        set(Cockpit_temp_dial, get(Cockpit_temp_dial) + 0.05)
+    end
+end)
+
+sasl.registerCommandHandler ( Cockpit_temp_dial_dn, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        set(Cockpit_temp_dial, get(Cockpit_temp_dial) - 0.05)
+    end
+end)
+
+sasl.registerCommandHandler ( Front_cab_temp_dial_up, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        set(Front_cab_temp_dial, get(Front_cab_temp_dial) + 0.05)
+    end
+end)
+
+sasl.registerCommandHandler ( Front_cab_temp_dial_dn, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        set(Front_cab_temp_dial, get(Front_cab_temp_dial) - 0.05)
+    end
+end)
+
+sasl.registerCommandHandler ( Aft_cab_temp_dial_up, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        set(Aft_cab_temp_dial, get(Aft_cab_temp_dial) + 0.05)
+    end
+end)
+
+sasl.registerCommandHandler ( Aft_cab_temp_dial_dn, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        set(Aft_cab_temp_dial, get(Aft_cab_temp_dial) - 0.05)
+    end
+end)
+
+sasl.registerCommandHandler ( Aft_cargo_temp_dial_up, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        set(Aft_cargo_temp_dial, get(Aft_cargo_temp_dial) + 0.05)
+    end
+end)
+
+sasl.registerCommandHandler ( Aft_cargo_temp_dial_dn, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        set(Aft_cargo_temp_dial, get(Aft_cargo_temp_dial) - 0.05)
+    end
+end)
+
+
+
 --custom functions
 local function cab_cond_off()
     --changing requested temperature to lowest temperature

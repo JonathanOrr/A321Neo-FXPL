@@ -9,6 +9,32 @@ set(Pack_R, 1)
 set(Left_pack_iso_valve, 1)
 set(Right_pack_iso_valve, 0)
 
+--register commands--
+sasl.registerCommandHandler ( Pack_flow_dial_up, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        set(A321_Pack_Flow_dial, get(A321_Pack_Flow_dial) + 1)
+    end
+end)
+
+sasl.registerCommandHandler ( Pack_flow_dial_dn, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        set(A321_Pack_Flow_dial, get(A321_Pack_Flow_dial) - 1)
+    end
+end)
+
+sasl.registerCommandHandler ( X_bleed_dial_up, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        set(X_bleed_dial, get(X_bleed_dial) + 1)
+    end
+end)
+
+sasl.registerCommandHandler ( X_bleed_dial_dn, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        set(X_bleed_dial, get(X_bleed_dial) - 1)
+    end
+end)
+
+
 function onPlaneLoaded()
     set(Pack_L, 1)
     set(Pack_M, 0)
