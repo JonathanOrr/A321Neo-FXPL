@@ -30,8 +30,8 @@ local apu_gen_toggle = sasl.createCommand("a321neo/electrical/APU_gen_toggle", "
 local a321_auto_start = sasl.createCommand("a321neo/engine/auto_start", "auto_start")
 local apu_master = sasl.createCommand("a321neo/engine/apu_master_toggle", "toggle APU master button")
 local apu_start = sasl.createCommand("a321neo/engine/apu_start_toggle", "toggle APU start button")
-local engine_mode_up = sasl.createCommand("a321neo/engine/mode_up", "engine mode selector up")
-local engine_mode_dn = sasl.createCommand("a321neo/engine/mode_dn", "engine mode selector down")
+local engine_mode_up = sasl.createCommand("a321neo/cockpit/engine/mode_up", "engine mode selector up")
+local engine_mode_dn = sasl.createCommand("a321neo/cockpit/engine/mode_dn", "engine mode selector down")
 
 --unregistering sim commands
 
