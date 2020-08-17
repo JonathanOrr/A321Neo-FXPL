@@ -226,6 +226,7 @@ Capt_ra_alt_ft = globalProperty("sim/cockpit2/gauges/indicators/radio_altimeter_
 Capt_baro_alt_ft = globalProperty("sim/cockpit2/gauges/indicators/altitude_ft_pilot")
 IAS = globalProperty("sim/flightmodel/position/indicated_airspeed")
 --gear
+Autobrakes_sim = globalProperty("sim/cockpit2/switches/auto_brake_level")--0RTO, 1off, 2, 3, 4, 5
 Gear_handle = globalProperty("sim/cockpit2/controls/gear_handle_down")
 Front_gear_deployment = globalProperty("sim/flightmodel2/gear/deploy_ratio[0]")
 Left_gear_deployment = globalProperty("sim/flightmodel2/gear/deploy_ratio[1]")

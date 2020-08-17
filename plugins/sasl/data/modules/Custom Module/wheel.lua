@@ -7,7 +7,99 @@ local right_tire_psi_no_delay = 210
 --a32nx dataref
 local groundspeed_kts = createGlobalPropertyf("a321neo/dynamics/groundspeed_kts", 0, false, true, false) --ground speed in kts
 
+--resgister commands
+sasl.registerCommandHandler (Toggle_brake_fan, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        set(Brakes_fan, 1 - get(Brakes_fan))
+    end
+end)
+
+sasl.registerCommandHandler (Toggle_lo_autobrake, 0, function(phase)
+	if phase == SASL_COMMAND_BEGIN then
+		if get(Autobrakes_sim) == 1 then
+			set(Autobrakes_sim, 2)
+		elseif get(Autobrakes_sim) == 2 then
+			set(Autobrakes_sim, 1)
+			set(Cockpit_parkbrake_ratio, 0)
+		end
+    end
+end)
+
+sasl.registerCommandHandler (Toggle_med_autobrake, 0, function(phase)
+	if phase == SASL_COMMAND_BEGIN then
+		if get(Autobrakes_sim) == 1 then
+			set(Autobrakes_sim, 4)
+		elseif get(Autobrakes_sim) == 4 then
+			set(Autobrakes_sim, 1)
+			set(Cockpit_parkbrake_ratio, 0)
+		end
+    end
+end)
+
+sasl.registerCommandHandler (Toggle_max_autobrake, 0, function(phase)
+	if phase == SASL_COMMAND_BEGIN then
+		if get(Autobrakes_sim) == 1 then
+			set(Autobrakes_sim, 0)
+		elseif get(Autobrakes_sim) == 0 then
+			set(Autobrakes_sim, 1)
+			set(Cockpit_parkbrake_ratio, 0)
+		end
+    end
+end)
+
 function update()
+	--update Brake fan button states follwing 00, 01, 10, 11
+	if get(Brakes_fan) == 0 then
+		if (get(Left_brakes_temp) + get(Right_brakes_temp)) / 2 < 400 then
+			set(Brake_fan_button_state, 0)--00
+		else
+			set(Brake_fan_button_state, 2)--10
+		end
+	else
+		if (get(Left_brakes_temp) + get(Right_brakes_temp)) / 2 < 400 then
+			set(Brake_fan_button_state, 1)--01
+		else
+			set(Brake_fan_button_state, 3)--11
+		end
+	end
+
+	--update autobrake button status follwing 00, 01, 10, 11
+	if get(Autobrakes_sim) == 1 then
+		set(Autobrakes_lo_button_state, 0)--00
+		set(Autobrakes_med_button_state, 0)--00
+		set(Autobrakes_max_button_state, 0)--00
+	elseif get(Autobrakes_sim) == 0 then
+		set(Autobrakes_max_button_state, 1)--01
+		if get(Cockpit_parkbrake_ratio) > 0 then
+			set(Autobrakes_lo_button_state, 2)--10
+		end
+	else
+		if get(Autobrakes_sim) > 1 then
+			set(Autobrakes_max_button_state, 0)--00
+			--med autobrake states
+			if get(Autobrakes_sim) == 2 then
+				set(Autobrakes_lo_button_state, 1)--01
+				if get(Cockpit_parkbrake_ratio) > 0 then
+					set(Autobrakes_lo_button_state, 2)--10
+				end
+			else
+				set(Autobrakes_lo_button_state, 0)--00
+			end
+			--max autobrake states
+			if get(Autobrakes_sim) == 2 then
+				set(Autobrakes_med_button_state, 1)--01
+				if get(Cockpit_parkbrake_ratio) > 0 then
+					set(Autobrakes_med_button_state, 2)--10
+				end
+			else
+				set(Autobrakes_med_button_state, 0)--00
+			end
+		end
+	end
+
+
+
+
 	--convert m/s to kts
 	set(groundspeed_kts, get(Ground_speed_ms)*1.94384)
 
