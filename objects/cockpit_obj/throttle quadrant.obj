@@ -8329,7 +8329,7 @@ IDX10	5958	5905	5907	5958	5905	5958	5932	5906	5905	5932
 					ANIM_begin
 					ANIM_trans	-0.02101	0.02652	0.15468	-0.02101	0.02652	0.15468
 					ANIM_rotate_begin	1	0	0	a321neo/cockpit/controls/throttle_1
-					ANIM_rotate_key	-1	45.00010371
+					ANIM_rotate_key	-1	90.00020741
 					ANIM_rotate_key	-0.001	45.00010371
 					ANIM_rotate_key	0	0
 					ANIM_rotate_key	1	0
@@ -8356,7 +8356,7 @@ IDX10	5958	5905	5907	5958	5905	5958	5932	5906	5905	5932
 					ANIM_begin
 					ANIM_trans	0.02101	0.02652	0.15468	0.02101	0.02652	0.15468
 					ANIM_rotate_begin	1	0	0	a321neo/cockpit/controls/throttle_2
-					ANIM_rotate_key	-1	45.00010371
+					ANIM_rotate_key	-1	90.00020741
 					ANIM_rotate_key	-0.001	45.00010371
 					ANIM_rotate_key	0	0
 					ANIM_rotate_key	1	0
