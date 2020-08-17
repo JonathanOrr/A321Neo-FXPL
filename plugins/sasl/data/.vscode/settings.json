@@ -4,6 +4,10 @@
         "sasl",
         "onPlaneLoaded",
         "onAirportLoaded",
-        "update"
+        "update",
+        "createCommand",
+        "LogWarning",
+        "TEXT_ALIGN_RIGHT",
+        "TEXT_ALIGN_LEFT"
     ]
 }
