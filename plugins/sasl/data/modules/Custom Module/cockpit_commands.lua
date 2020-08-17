@@ -30,6 +30,7 @@ Toggle_max_autobrake = createCommand("a321neo/cockpit/wheel/toggle_max_autobrake
 --aircond
 Toggle_cab_hotair = createCommand("a321neo/cockpit/aircond/toggle_cab_hotair", "Toggle cabin hot air")
 Toggle_cargo_hotair = createCommand("a321neo/cockpit/aircond/toggle_cargo_hotair", "Toggle cargo hot air")
+Toggle_aft_cargo_iso_valve = createCommand("a321neo/cockpit/aircond/toggle_aft_cargo_iso_valve", "Toggle aft cargo iso valve")
 Cockpit_temp_dial_up = createCommand("a321neo/cockpit/aircond/cockpit_temp_dial_up", "Cockpit temp dial up")
 Cockpit_temp_dial_dn = createCommand("a321neo/cockpit/aircond/cockpit_temp_dial_dn", "Cockpit temp dial down")
 Front_cab_temp_dial_up = createCommand("a321neo/cockpit/aircond/front_cab_temp_dial_up", "Front cab temp dia up")

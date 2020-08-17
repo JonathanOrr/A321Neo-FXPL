@@ -32,6 +32,7 @@ components = {
   packs {},
   aircond {},
   wheel {},
+  source_switching {},
   PFD {},
   ECAM {},
   EWD {},
