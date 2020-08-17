@@ -113,6 +113,7 @@ function ecam_update_leds()
     set(Ecam_btn_light_BLEED,0)
     set(Ecam_btn_light_PRESS,0)
     set(Ecam_btn_light_ELEC, 0)
+    set(Ecam_btn_light_HYD,  0)
     set(Ecam_btn_light_FUEL, 0)
     set(Ecam_btn_light_APU,  0)
     set(Ecam_btn_light_COND, 0)
@@ -131,6 +132,8 @@ function ecam_update_leds()
         elseif get(Ecam_current_page) == ECAM_PAGE_PRESS then
             set(Ecam_btn_light_PRESS, 1)
         elseif get(Ecam_current_page) == ECAM_PAGE_ELEC then
+            set(Ecam_btn_light_ELEC, 1)
+        elseif get(Ecam_current_page) == ECAM_PAGE_HYD then
             set(Ecam_btn_light_ELEC, 1)
         elseif get(Ecam_current_page) == ECAM_PAGE_FUEL then
             set(Ecam_btn_light_FUEL, 1)
