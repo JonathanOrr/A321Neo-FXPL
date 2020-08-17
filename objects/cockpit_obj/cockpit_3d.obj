@@ -23245,7 +23245,7 @@ IDX	18552
 	TRIS	18438 66
 	ATTR_manip_command_knob	hand	sim/flight_controls/pitch_trim_down	sim/flight_controls/pitch_trim_up	Elevator trim
 	TRIS	20298 180
-	ATTR_manip_command	rotate_medium	sim/flight_controls/nwheel_steer_toggle	Toggle N/W STRG
+	ATTR_manip_command	button	sim/flight_controls/nwheel_steer_toggle	Toggle N/W STRG
 	TRIS	38370 66
 	ATTR_manip_command_knob	rotate_medium	a321neo/cockpit/packs/pack_flow_dial_up	a321neo/cockpit/packs/pack_flow_dial_dn	PACK FLOW
 	TRIS	38610 66
