@@ -13,24 +13,28 @@ set(Right_pack_iso_valve, 0)
 sasl.registerCommandHandler ( Pack_flow_dial_up, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
         set(A321_Pack_Flow_dial, get(A321_Pack_Flow_dial) + 1)
+        set(A321_Pack_Flow_dial, Math_clamp(get(A321_Pack_Flow_dial), 0, 2))
     end
 end)
 
 sasl.registerCommandHandler ( Pack_flow_dial_dn, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
         set(A321_Pack_Flow_dial, get(A321_Pack_Flow_dial) - 1)
+        set(A321_Pack_Flow_dial, Math_clamp(get(A321_Pack_Flow_dial), 0, 2))
     end
 end)
 
 sasl.registerCommandHandler ( X_bleed_dial_up, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
         set(X_bleed_dial, get(X_bleed_dial) + 1)
+        set(X_bleed_dial, Math_clamp(get(X_bleed_dial), 0, 2))
     end
 end)
 
 sasl.registerCommandHandler ( X_bleed_dial_dn, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
         set(X_bleed_dial, get(X_bleed_dial) - 1)
+        set(X_bleed_dial, Math_clamp(get(X_bleed_dial), 0, 2))
     end
 end)
 
