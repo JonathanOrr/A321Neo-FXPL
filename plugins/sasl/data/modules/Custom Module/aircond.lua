@@ -1,7 +1,7 @@
 --sim datarefs
 
 --a32NX datarefs
-local a321DR_aft_cargo_iso_valve = createGlobalPropertyi("a321neo/cockpit/aircond/aft_cargo_iso_valve", 1, false, true, false)
+local aft_cargo_iso_valve = createGlobalPropertyi("a321neo/cockpit/aircond/aft_cargo_iso_valve", 1, false, true, false)
 local a321DR_bleed_avail = createGlobalPropertyi("a321neo/cockpit/aircond/bleed_avail", 0, false, true, false)
 
 --register commands
@@ -92,6 +92,11 @@ sasl.registerCommandHandler ( Toggle_cargo_hotair, 0, function(phase)
     end
 end)
 
+sasl.registerCommandHandler ( Toggle_aft_cargo_iso_valve, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        set(aft_cargo_iso_valve, 1 - get(aft_cargo_iso_valve))
+    end
+end)
 
 --custom functions
 local function cab_cond_off()
@@ -140,7 +145,7 @@ function update()
         end
 
         --cargo aircon
-        if get(a321DR_aft_cargo_iso_valve) == 1 then
+        if get(aft_cargo_iso_valve) == 1 then
             if get(Cargo_hot_air) == 1 then
                 --changing requested temperature to dialed in temperatures
                 set(Aft_cargo_temp_req, Set_anim_value(get(Aft_cargo_temp_req), 4 + 26 * get(Aft_cargo_temp_dial), 4, 30, 0.5))
