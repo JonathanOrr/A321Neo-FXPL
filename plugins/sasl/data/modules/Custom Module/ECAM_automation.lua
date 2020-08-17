@@ -122,29 +122,31 @@ function ecam_update_leds()
     set(Ecam_btn_light_CLR,  0)
     set(Ecam_btn_light_STS,  0)
 
-    -- Let's turn on the led of the current page
-    if get(Ecam_current_page) == ECAM_PAGE_ENG then
-        set(Ecam_btn_light_ENG, 1)
-    elseif get(Ecam_current_page) == ECAM_PAGE_BLEED then
-        set(Ecam_btn_light_BLEED, 1)
-    elseif get(Ecam_current_page) == ECAM_PAGE_PRESS then
-        set(Ecam_btn_light_PRESS, 1)
-    elseif get(Ecam_current_page) == ECAM_PAGE_ELEC then
-        set(Ecam_btn_light_ELEC, 1)
-    elseif get(Ecam_current_page) == ECAM_PAGE_FUEL then
-        set(Ecam_btn_light_FUEL, 1)
-    elseif get(Ecam_current_page) == ECAM_PAGE_APU then
-        set(Ecam_btn_light_APU, 1)
-    elseif get(Ecam_current_page) == ECAM_PAGE_COND then
-        set(Ecam_btn_light_COND, 1)
-    elseif get(Ecam_current_page) == ECAM_PAGE_DOOR then
-        set(Ecam_btn_light_DOOR, 1)
-    elseif get(Ecam_current_page) == ECAM_PAGE_WHEEL then
-        set(Ecam_btn_light_WHEEL, 1)
-    elseif get(Ecam_current_page) == ECAM_PAGE_FCTL then
-        set(Ecam_btn_light_FCTL, 1)
-    elseif get(Ecam_current_page) == ECAM_PAGE_STS then
-        set(Ecam_btn_light_STS, 1)
+    if get(Ecam_current_status) ~= ECAM_STATUS_NORMAL then
+        -- Let's turn on the led of the current page
+        if get(Ecam_current_page) == ECAM_PAGE_ENG then
+            set(Ecam_btn_light_ENG, 1)
+        elseif get(Ecam_current_page) == ECAM_PAGE_BLEED then
+            set(Ecam_btn_light_BLEED, 1)
+        elseif get(Ecam_current_page) == ECAM_PAGE_PRESS then
+            set(Ecam_btn_light_PRESS, 1)
+        elseif get(Ecam_current_page) == ECAM_PAGE_ELEC then
+            set(Ecam_btn_light_ELEC, 1)
+        elseif get(Ecam_current_page) == ECAM_PAGE_FUEL then
+            set(Ecam_btn_light_FUEL, 1)
+        elseif get(Ecam_current_page) == ECAM_PAGE_APU then
+            set(Ecam_btn_light_APU, 1)
+        elseif get(Ecam_current_page) == ECAM_PAGE_COND then
+            set(Ecam_btn_light_COND, 1)
+        elseif get(Ecam_current_page) == ECAM_PAGE_DOOR then
+            set(Ecam_btn_light_DOOR, 1)
+        elseif get(Ecam_current_page) == ECAM_PAGE_WHEEL then
+            set(Ecam_btn_light_WHEEL, 1)
+        elseif get(Ecam_current_page) == ECAM_PAGE_FCTL then
+            set(Ecam_btn_light_FCTL, 1)
+        elseif get(Ecam_current_page) == ECAM_PAGE_STS then
+            set(Ecam_btn_light_STS, 1)
+        end
     end
     
     if get(Ecam_current_status) == ECAM_STATUS_SHOW_EWD or get(Ecam_current_status) == ECAM_STATUS_SHOW_EWD_STS then
