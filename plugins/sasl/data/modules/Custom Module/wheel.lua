@@ -16,7 +16,7 @@ end)
 
 sasl.registerCommandHandler (Toggle_lo_autobrake, 0, function(phase)
 	if phase == SASL_COMMAND_BEGIN then
-		if get(Autobrakes_sim) == 1 then
+		if get(Autobrakes_sim) ~= 2 then
 			set(Autobrakes_sim, 2)
 		elseif get(Autobrakes_sim) == 2 then
 			set(Autobrakes_sim, 1)
@@ -29,7 +29,7 @@ end)
 
 sasl.registerCommandHandler (Toggle_med_autobrake, 0, function(phase)
 	if phase == SASL_COMMAND_BEGIN then
-		if get(Autobrakes_sim) == 1 then
+		if get(Autobrakes_sim) ~= 4 then
 			set(Autobrakes_sim, 4)
 		elseif get(Autobrakes_sim) == 4 then
 			set(Autobrakes_sim, 1)
@@ -42,7 +42,7 @@ end)
 
 sasl.registerCommandHandler (Toggle_max_autobrake, 0, function(phase)
 	if phase == SASL_COMMAND_BEGIN then
-		if get(Autobrakes_sim) == 1 then
+		if get(Autobrakes_sim) ~= 0 then
 			set(Autobrakes_sim, 0)
 		elseif get(Autobrakes_sim) == 0 then
 			set(Autobrakes_sim, 1)
