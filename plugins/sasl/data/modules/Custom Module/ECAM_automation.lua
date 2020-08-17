@@ -252,7 +252,7 @@ local function update_page_all(phase)
     if get(TIME) - page_all_start_time >= 1 then
         page_all_start_time = get(TIME)
         local curr_page = get(Ecam_current_page)
-        local next_page = (curr_page + 1) % 12
+        local next_page = (curr_page % 12) + 1
         set(Ecam_current_page, next_page)
     end
 end
