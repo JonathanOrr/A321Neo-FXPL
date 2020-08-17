@@ -13,6 +13,18 @@ Autobrakes_max_button_state = createGlobalPropertyi("a321neo/cockpit/wheel/autob
 Eng1_bleed_off_button = createGlobalPropertyi("a321neo/cockpit/packs/eng1_bleed_off", 0, false, true, false) --0 is on 1 if off
 Eng2_bleed_off_button = createGlobalPropertyi("a321neo/cockpit/packs/eng2_bleed_off", 0, false, true, false) --0 is on 1 if off
 ---------------------------------------------------------------------------------------------------------------------------------------
+--source switching
+Display_source_override = createGlobalPropertyi("a321neo/cockpit/source_switching/display_source_override", 0, false, true, false)--override all source switching to allow full manual switching
+
+Capt_pfd_displaying_status = createGlobalPropertyi("a321neo/cockpit/source_switching/capt_pfd_displaying_status", 1, false, true, false)--used for source switching changing the possitions of the screens
+Capt_nd_displaying_status = createGlobalPropertyi("a321neo/cockpit/source_switching/capt_nd_displaying_status", 2, false, true, false)--used for source switching changing the possitions of the screens
+Fo_pfd_displaying_status = createGlobalPropertyi("a321neo/cockpit/source_switching/fo_pfd_displaying_status", 1, false, true, false)--used for source switching changing the possitions of the screens
+Fo_nd_displaying_status = createGlobalPropertyi("a321neo/cockpit/source_switching/fo_nd_displaying_status", 2, false, true, false)--used for source switching changing the possitions of the screens
+EWD_displaying_status = createGlobalPropertyi("a321neo/cockpit/source_switching/ewd_displaying_status", 3, false, true, false)--used for source switching changing the possitions of the screens
+ECAM_displaying_status = createGlobalPropertyi("a321neo/cockpit/source_switching/ecam_displaying_status", 4, false, true, false)--used for source switching changing the possitions of the screens
+
+ECAM_on_nd_dial = createGlobalPropertyi("a321neo/cockpit/source_switching/ECAM_on_nd_dial", 0, false, true, false)--used to swap the position of the ECAM with the NDs -1capt, 0norm, 1FO
+
 --engine & apu
 Engine_mode_knob = createGlobalPropertyi("a321neo/cockpit/engine/engine_mode", 0, false, true, false) -- -1crank, 0norm, 1ignition
 Engine_1_master_switch = createGlobalPropertyi("a321neo/cockpit/engine/master_1", 0, false, true, false)
