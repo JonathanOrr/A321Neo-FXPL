@@ -23024,10 +23024,14 @@ IDX	18512
 			TRIS	1488 84
 			TRIS	3144 84
 			TRIS	4434 84
+			ATTR_manip_command	button	a321neo/FBW/toggle_ELAC_1	Toggle ELAC 1
 			TRIS	16086 84
+			ATTR_manip_none
 			TRIS	16254 84
 			TRIS	17640 84
+			ATTR_manip_command	button	a321neo/FBW/toggle_FAC_1	Toggle FAC 1
 			TRIS	17976 84
+			ATTR_manip_none
 			TRIS	18144 84
 			TRIS	18588 84
 			TRIS	18840 84
@@ -23046,35 +23050,52 @@ IDX	18512
 			TRIS	3312 84
 			TRIS	3774 84
 			TRIS	4026 84
+			ATTR_manip_command	button	a321neo/cockpit/aircond/toggle_cargo_hotair	Toggle cargo hot air
 			TRIS	4110 84
+			ATTR_manip_none
 			TRIS	15660 84
+			ATTR_manip_command	button	a321neo/FBW/toggle_ELAC_2	Toggle ELAC 2
 			TRIS	16002 84
+			ATTR_manip_none
 			TRIS	17094 84
 			TRIS	17430 84
 			TRIS	17808 84
+			ATTR_manip_command	button	a321neo/FBW/toggle_FAC_2	Toggle FAC 2
 			TRIS	17892 84
+			ATTR_manip_none
 			TRIS	18504 84
 			TRIS	40038 84
 			TRIS	40122 84
 		TRIS	1236 84
 		TRIS	1872 84
+		ATTR_manip_command	button	sim/bleed_air/apu_toggle	Toggle APU bleed
 		TRIS	1956 84
+		ATTR_manip_command	button	a321neo/electrical/APU_gen_toggle	Toggle APU generator
 		TRIS	2040 84
+		ATTR_manip_none
 		TRIS	2124 84
 		TRIS	2292 84
+		ATTR_manip_command	button	sim/electrical/battery_1_toggle	Toggle battery 1
 		TRIS	2964 84
+		ATTR_manip_command	button	sim/electrical/battery_2_toggle	Toggle battery 2
 		TRIS	3048 84
+		ATTR_manip_none
 		TRIS	3132 12
 		TRIS	3396 84
 		TRIS	3690 84
+		ATTR_manip_command	button	a321neo/cockpit/aircond/toggle_cab_hotair	Toggle cabin hot air
 		TRIS	3858 84
+		ATTR_manip_none
 		TRIS	3942 84
 		TRIS	4266 84
 		TRIS	4686 84
 		TRIS	4770 84
 		TRIS	6792 84
+		ATTR_manip_command	button	a321neo/cockpit/bleed/toggle_eng1_bleed	ENG 1 BLEED
 		TRIS	16422 84
+		ATTR_manip_command	button	a321neo/cockpit/bleed/toggle_eng2_bleed	ENG 2 BLEED
 		TRIS	16590 84
+		ATTR_manip_none
 		TRIS	16842 84
 		TRIS	16926 84
 		TRIS	17010 84

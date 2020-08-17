@@ -38,6 +38,17 @@ sasl.registerCommandHandler ( X_bleed_dial_dn, 0, function(phase)
     end
 end)
 
+sasl.registerCommandHandler ( Toggle_eng1_bleed, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        set(Eng1_bleed_off_button, 1 - get(Eng1_bleed_off_button))
+    end
+end)
+
+sasl.registerCommandHandler ( Toggle_eng2_bleed, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        set(Eng2_bleed_off_button, 1 - get(Eng2_bleed_off_button))
+    end
+end)
 
 function onPlaneLoaded()
     set(Pack_L, 1)

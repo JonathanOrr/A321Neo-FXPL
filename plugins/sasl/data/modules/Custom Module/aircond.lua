@@ -77,6 +77,20 @@ sasl.registerCommandHandler ( Aft_cargo_temp_dial_dn, 0, function(phase)
     end
 end)
 
+sasl.registerCommandHandler ( Toggle_cab_hotair, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        set(Cab_hot_air, 1-  get(Cab_hot_air))
+    end
+    if phase == SASL_COMMAND_CONTINUE then
+        set(Aft_cargo_temp_dial, get(Aft_cargo_temp_dial) - 0.05 * get(DELTA_TIME))
+    end
+end)
+
+sasl.registerCommandHandler ( Toggle_cargo_hotair, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        set(Cargo_hot_air, 1 - get(Cargo_hot_air))
+    end
+end)
 
 
 --custom functions
