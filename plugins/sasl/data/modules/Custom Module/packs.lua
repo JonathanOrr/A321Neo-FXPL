@@ -107,7 +107,7 @@ function update()
     if get(Engine_1_avail) == 1 then--engine 1 is running
         set(ENG_1_bleed_switch, 1)--l bleed on
         set(L_bleed_state, 2)
-        if get(Eng1_bleed_off) == 1 then--l bleed manually switched off
+        if get(Eng1_bleed_off_button) == 1 then--l bleed manually switched off
             set(ENG_1_bleed_switch, 0)--l bleed off
             set(L_bleed_state, 1)
         end
@@ -119,7 +119,7 @@ function update()
     if get(Engine_2_avail) == 1 then--engine 2 is running
         set(ENG_2_bleed_switch, 1)--r bleed on
         set(R_bleed_state, 2)
-        if get(Eng2_bleed_off) == 1 then--l bleed manually switched off
+        if get(Eng2_bleed_off_button) == 1 then--l bleed manually switched off
             set(ENG_2_bleed_switch, 0)--r bleed off
             set(L_bleed_state, 1)
         end

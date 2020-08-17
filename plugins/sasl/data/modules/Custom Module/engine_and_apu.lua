@@ -15,7 +15,6 @@ local engine_2_N2 = globalProperty("sim/cockpit2/engine/indicators/N2_percent[1]
 local startup_running = globalProperty("sim/operation/prefs/startup_running")
 
 --a321neo dataref
-local apu_start_button_state = createGlobalPropertyi("a321neo/engine/apu_start_button", 0, false, true, false)
 local apu_fuel_lo_pr = createGlobalPropertyi("a321neo/cockpit/apu/apu_fuel_lo_pr", 0, false, true, false)
 
 --sim command
@@ -28,8 +27,8 @@ local go_to_default = sasl.findCommand("sim/operation/go_to_default")
 --a321neo command
 local apu_gen_toggle = sasl.createCommand("a321neo/electrical/APU_gen_toggle", "toggle apu generator")
 local a321_auto_start = sasl.createCommand("a321neo/engine/auto_start", "auto_start")
-local apu_master = sasl.createCommand("a321neo/engine/apu_master_toggle", "toggle APU master button")
-local apu_start = sasl.createCommand("a321neo/engine/apu_start_toggle", "toggle APU start button")
+local apu_master = sasl.createCommand("a321neo/cockpit/engine/apu_master_toggle", "toggle APU master button")
+local apu_start = sasl.createCommand("a321neo/cockpit/engine/apu_start_toggle", "toggle APU start button")
 local engine_mode_up = sasl.createCommand("a321neo/cockpit/engine/mode_up", "engine mode selector up")
 local engine_mode_dn = sasl.createCommand("a321neo/cockpit/engine/mode_dn", "engine mode selector down")
 
@@ -236,7 +235,7 @@ function update()
     else
         set(avionics, 0)
     end
-    
+
     if sasl.getElapsedSeconds(timer_auto_start_stop) > 40 then  -- Stop ignition after auto-start
         sasl.stopTimer(timer_auto_start_stop)
         sasl.resetTimer(timer_auto_start_stop)
@@ -314,7 +313,7 @@ function update()
         set(Apu_avail, 0)
     end
 
-    --apu bleed states
+    --apu (ecam) bleed states
     if get(Apu_avail) == 0 then
         set(Apu_bleed_psi, Set_anim_value(get(Apu_bleed_psi), 0, 0, 39, 0.85))
         set(Apu_bleed_state, 0)
@@ -326,7 +325,7 @@ function update()
         set(Apu_bleed_state, 2)
     end
 
-    --apu gen states
+    --apu (ecam) gen states
     if get(Apu_avail) == 0 then
         set(Apu_gen_volts, Set_anim_value(get(Apu_gen_volts), 0, 0, 115, 0.95))
         set(Apu_gen_hz, Set_anim_value(get(Apu_gen_hz), 0, 0, 400, 0.99))
@@ -354,18 +353,25 @@ function update()
         set(apu_fuel_lo_pr, 0)
     end
 
+    --apu master button state
+    if get(Apu_start_position) == 0 then
+        set(Apu_master_button_state, 0)--blank
+    else
+        set(Apu_master_button_state, 1)--on
+    end
+
     --apu start button state 0: off, 1: on, 2: avail
     if get(Apu_start_position) == 0 and get(Apu_N1) < 100 then
-        set(apu_start_button_state, 0)
+        set(Apu_start_button_state, 0)
     elseif get(Apu_start_position) == 1 and get(Apu_N1) < 100 then
-        set(apu_start_button_state, 0)
+        set(Apu_start_button_state, 0)
     elseif get(Apu_start_position) == 0 and get(Apu_N1) > 95 then
-        set(apu_start_button_state, 2)
+        set(Apu_start_button_state, 2)
     elseif get(Apu_start_position) == 1 and get(Apu_N1) > 95 then
-        set(apu_start_button_state, 2)
+        set(Apu_start_button_state, 2)
     elseif get(Apu_start_position) == 2 and get(Apu_N1) < 100 then
-        set(apu_start_button_state, 1)
+        set(Apu_start_button_state, 1)
     elseif get(Apu_start_position) == 2 and get(Apu_N1) > 100 then
-        set(apu_start_button_state, 2)
+        set(Apu_start_button_state, 2)
     end
 end
