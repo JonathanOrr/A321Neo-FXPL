@@ -140,7 +140,7 @@ ecam_sts = {
         local inop_cat3_dual = false
         
         -- AIR
-        put_inop_sys_msg_2(messages, L_pack_Flow,R_pack_Flow, "PACK")
+        put_inop_sys_msg_2(messages, Left_bleed_avil, Right_bleed_avil, "PACK")
         
         -- ELAC / SEC / FAC
         put_inop_sys_msg_2(messages, ELAC_1, ELAC_2, "ELAC")
@@ -176,7 +176,7 @@ ecam_sts = {
     end,
     
     get_maintenance = function()
-        return { "TODO", "TODO", "TODO"  }
+        return {  } -- TODO
     end,
     
     is_normal = function()
