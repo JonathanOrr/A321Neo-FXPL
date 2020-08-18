@@ -92,7 +92,7 @@ FBW_debug_window = contextWindow {
   minimumSize = { 170 , 250 };
   maximumSize = { 340 , 500 };
   gravity = { 0 , 1 , 0 , 1 };
-  visible = true ;
+  visible = false ;
   components = {
     FBW_debug {position = { 0 , 0 , 340 , 500 }}
   };
@@ -106,7 +106,7 @@ FBW_graph = contextWindow {
   minimumSize = { 420 , 340 };
   maximumSize = { 420 , 340 };
   gravity = { 0 , 1 , 0 , 1 };
-  visible = true ;
+  visible = false ;
   components = {
     FBW_graph {position = { 0 , 0 , 420 , 340 }}
   };
@@ -123,6 +123,20 @@ ECAM_debug_window = contextWindow {
   visible = false ;
   components = {
     ECAM_debug {position = { 0 , 0 , 340 , 200 }}
+  };
+}
+
+ECAM_debug_window = contextWindow {
+  name = "DMC DEBUG";
+  position = { 200 , 200 , 400 , 200};
+  noBackground = true ;
+  proportional = false ;
+  minimumSize = { 400 , 200 };
+  maximumSize = { 400 , 200 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = true ;
+  components = {
+    dmc_debug {position = { 0 , 0 , 400 , 200 }}
   };
 }
 
