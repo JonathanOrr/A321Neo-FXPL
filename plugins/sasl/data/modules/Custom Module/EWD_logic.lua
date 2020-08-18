@@ -1,5 +1,6 @@
 include('ECAM_status.lua')
 include('EWD_flight_phases.lua')
+include('EWD_msgs/bleed.lua')
 include('EWD_msgs/brakes_and_antiskid.lua')
 include('EWD_msgs/engines_and_apu.lua')
 include('EWD_msgs/FBW.lua')
@@ -49,6 +50,7 @@ local left_messages_list = {
     MessageGroup_BRAKES_HOT,
     MessageGroup_APU_SHUTDOWN,
     MessageGroup_GEAR_NOT_UPLOCKED,
+    MessageGroup_BLEED_OFF,
     
     -- Warnings
     MessageGroup_CONFIG_TAKEOFF,
@@ -250,6 +252,8 @@ local function update_right_list()
     --            ALT RPTG is selected OFF or TCAS failed
 
     -- TODO Lights: LDG LT
+    -- TODO Lights: STROBE LT OFF (green) - in flight only
+    
 
 end
 
