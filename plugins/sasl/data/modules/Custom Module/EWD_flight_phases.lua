@@ -82,7 +82,9 @@ function update()
     -- - At least one engine at takeoff power
     -- - IAS <= 80
     if  get(Any_wheel_on_ground)  == 1 
-    and (get(Eng_1_N1) >= 74 or get(Eng_2_N1) >= 74)
+    and (get(Eng_1_N1) >= 74 or get(Eng_2_N1) >= 74) 
+    and get(Eng_1_reverser_deployment) < 0.1 
+    and get(Eng_2_reverser_deployment) < 0.1
     and get(IAS) <= 80
     then
         check_and_stop_timer()
@@ -96,6 +98,8 @@ function update()
     -- - IAS > 80
     if get(Any_wheel_on_ground) == 1
     and (get(Eng_1_N1) >= 74 or get(Eng_2_N1) >= 74)
+    and get(Eng_1_reverser_deployment) < 0.1
+    and get(Eng_2_reverser_deployment) < 0.1
     and get(IAS) >= 80
     then
         check_and_stop_timer()
