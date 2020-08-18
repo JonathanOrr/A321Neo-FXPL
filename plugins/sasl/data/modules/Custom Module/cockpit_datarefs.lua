@@ -14,12 +14,14 @@ Eng1_bleed_off_button = createGlobalPropertyi("a321neo/cockpit/packs/eng1_bleed_
 Eng2_bleed_off_button = createGlobalPropertyi("a321neo/cockpit/packs/eng2_bleed_off", 0, false, true, false) --0 is on 1 if off
 ---------------------------------------------------------------------------------------------------------------------------------------
 --source switching
-Capt_pfd_displaying_status = createGlobalPropertyi("a321neo/cockpit/source_switching/capt_pfd_displaying_status", 1, false, true, false)--used for source switching changing the positions of the screens
-Capt_nd_displaying_status = createGlobalPropertyi("a321neo/cockpit/source_switching/capt_nd_displaying_status", 2, false, true, false)--used for source switching changing the positions of the screens
-Fo_pfd_displaying_status = createGlobalPropertyi("a321neo/cockpit/source_switching/fo_pfd_displaying_status", 1, false, true, false)--used for source switching changing the positions of the screens
-Fo_nd_displaying_status = createGlobalPropertyi("a321neo/cockpit/source_switching/fo_nd_displaying_status", 2, false, true, false)--used for source switching changing the positions of the screens
-EWD_displaying_status = createGlobalPropertyi("a321neo/cockpit/source_switching/ewd_displaying_status", 3, false, true, false)--used for source switching changing the positions of the screens
-ECAM_displaying_status = createGlobalPropertyi("a321neo/cockpit/source_switching/ecam_displaying_status", 4, false, true, false)--used for source switching changing the positions of the screens
+Override_DMC = createGlobalPropertyi("a321neo/cockpit/source_switching/override_DMC", 0, false, true, false)--override display source control computers
+
+Capt_pfd_displaying_status = createGlobalPropertyi("a321neo/cockpit/source_switching/capt_pfd_displaying_status", 1, false, true, false)--source being displayed 1pfd, 2nd, 3ewd, 4ecam
+Capt_nd_displaying_status = createGlobalPropertyi("a321neo/cockpit/source_switching/capt_nd_displaying_status", 2, false, true, false)--source being displayed 1pfd, 2nd, 3ewd, 4ecam
+Fo_pfd_displaying_status = createGlobalPropertyi("a321neo/cockpit/source_switching/fo_pfd_displaying_status", 1, false, true, false)--source being displayed 1pfd, 2nd, 3ewd, 4ecam
+Fo_nd_displaying_status = createGlobalPropertyi("a321neo/cockpit/source_switching/fo_nd_displaying_status", 2, false, true, false)--source being displayed 1pfd, 2nd, 3ewd, 4ecam
+EWD_displaying_status = createGlobalPropertyi("a321neo/cockpit/source_switching/ewd_displaying_status", 3, false, true, false)--source being displayed 1pfd, 2nd, 3ewd, 4ecam
+ECAM_displaying_status = createGlobalPropertyi("a321neo/cockpit/source_switching/ecam_displaying_status", 4, false, true, false)--source being displayed 1pfd, 2nd, 3ewd, 4ecam
 
 Capt_pfd_pfd_show = createGlobalPropertyf("a321neo/cockpit/source_switching/capt_pfd_pfd_show", 1, false, true, false)--used for source switching changing the positions of the screens
 Capt_pfd_nd_show = createGlobalPropertyf("a321neo/cockpit/source_switching/capt_pfd_nd_show", 0, false, true, false)--used for source switching changing the positions of the screens

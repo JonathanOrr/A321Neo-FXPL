@@ -7,6 +7,15 @@ local ECAM = 4
 --a32nx datarefs
 
 function update()
+    if get(Override_DMC) == 0 then
+        set(Capt_pfd_displaying_status, 1)
+        set(Capt_nd_displaying_status, 2)
+        set(Fo_pfd_displaying_status, 1)
+        set(Fo_nd_displaying_status, 2)
+        set(EWD_displaying_status, 3)
+        set(ECAM_displaying_status, 4)
+    end
+
     --capt PFD show and hide--
     if get(Capt_pfd_displaying_status) == PFD then
         set(Capt_pfd_pfd_show, 1)
