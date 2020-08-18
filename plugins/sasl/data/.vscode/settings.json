@@ -9,6 +9,8 @@
         "LogWarning",
         "TEXT_ALIGN_RIGHT",
         "TEXT_ALIGN_LEFT",
-        "SASL_COMMAND_CONTINUE"
+        "SASL_COMMAND_CONTINUE",
+        "draw",
+        "TEXT_ALIGN_CENTER"
     ]
 }
