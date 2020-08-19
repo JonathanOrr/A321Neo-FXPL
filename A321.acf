@@ -102,7 +102,7 @@ P _door/0/_xyz/0 -1.0
 P _door/0/_xyz/1 0.0
 P _door/0/_xyz/2 17.600000381
 P _door/0/_xyz/count 3
-P _door/1/_ang_now 0.0
+P _door/1/_ang_now 92.065132141
 P _door/1/_ext_ang 0.0
 P _door/1/_ret_ang 100.0
 P _door/1/_type 3
@@ -110,7 +110,7 @@ P _door/1/_xyz/0 -1.500000000
 P _door/1/_xyz/1 0.0
 P _door/1/_xyz/2 14.500000000
 P _door/1/_xyz/count 3
-P _door/10/_ang_now 0.0
+P _door/10/_ang_now 82.858619690
 P _door/10/_ext_ang 0.0
 P _door/10/_ret_ang 90.0
 P _door/10/_type 3
@@ -135,7 +135,7 @@ P _door/2/_xyz/0 1.0
 P _door/2/_xyz/1 0.0
 P _door/2/_xyz/2 17.600000381
 P _door/2/_xyz/count 3
-P _door/3/_ang_now 0.0
+P _door/3/_ang_now -92.065132141
 P _door/3/_ext_ang 0.0
 P _door/3/_ret_ang -100.0
 P _door/3/_type 3
@@ -143,7 +143,7 @@ P _door/3/_xyz/0 1.500000000
 P _door/3/_xyz/1 0.0
 P _door/3/_xyz/2 14.500000000
 P _door/3/_xyz/count 3
-P _door/4/_ang_now 71.792465210
+P _door/4/_ang_now 0.714141846
 P _door/4/_ext_ang 0.0
 P _door/4/_ret_ang 90.0
 P _door/4/_type 2
@@ -151,7 +151,7 @@ P _door/4/_xyz/0 -13.0
 P _door/4/_xyz/1 -3.599999905
 P _door/4/_xyz/2 73.500000000
 P _door/4/_xyz/count 3
-P _door/5/_ang_now -71.792465210
+P _door/5/_ang_now -0.714141846
 P _door/5/_ext_ang 0.0
 P _door/5/_ret_ang -90.0
 P _door/5/_type 2
@@ -161,7 +161,7 @@ P _door/5/_xyz/2 73.500000000
 P _door/5/_xyz/count 3
 P _door/6/_type 0
 P _door/7/_type 0
-P _door/8/_ang_now 0.0
+P _door/8/_ang_now -82.858619690
 P _door/8/_ext_ang 0.0
 P _door/8/_ret_ang -90.0
 P _door/8/_type 3
@@ -209,10 +209,10 @@ P _gear/0/_latN 0.0
 P _gear/0/_latR 0.0
 P _gear/0/_leg_len 5.400000095
 P _gear/0/_lonE 0.0
-P _gear/0/_lonN 78.174018860
+P _gear/0/_lonN 0.777618408
 P _gear/0/_lonR 98.0
 P _gear/0/_scon 47252.898437500
-P _gear/0/_stat_def 0.399389684
+P _gear/0/_stat_def 0.399389654
 P _gear/0/_steerdeg_hispeed 5.0
 P _gear/0/_steerdeg_lospeed 75.0
 P _gear/0/_strut_comp 0.0
@@ -239,11 +239,11 @@ P _gear/1/_gear_x -12.010000229
 P _gear/1/_gear_y -2.799999952
 P _gear/1/_gear_z 69.800003052
 P _gear/1/_latE 0.0
-P _gear/1/_latN 63.815525055
+P _gear/1/_latN 0.634788513
 P _gear/1/_latR 80.0
 P _gear/1/_leg_len 8.199999809
 P _gear/1/_lonE -7.0
-P _gear/1/_lonN -1.416141510
+P _gear/1/_lonN -6.944456100
 P _gear/1/_lonR 0.0
 P _gear/1/_scon 71266.664062500
 P _gear/1/_stat_def 1.367629290
@@ -273,11 +273,11 @@ P _gear/2/_gear_x 12.010000229
 P _gear/2/_gear_y -2.799999952
 P _gear/2/_gear_z 69.800003052
 P _gear/2/_latE 0.0
-P _gear/2/_latN -63.815525055
+P _gear/2/_latN -0.634788513
 P _gear/2/_latR -80.0
 P _gear/2/_leg_len 8.199999809
 P _gear/2/_lonE -7.0
-P _gear/2/_lonN -1.416141510
+P _gear/2/_lonN -6.944456100
 P _gear/2/_lonR 0.0
 P _gear/2/_scon 71266.664062500
 P _gear/2/_stat_def 1.367629290
@@ -38120,11 +38120,14 @@ GROUP glareshield buttons
 
 END_GROUP
 GROUP Buttons and Lights
+  LOCKED
   GROUP ADIRS
+    LOCKED
     gen_rotary IR1
       POS 1426.000000 201.000000
       IMAGE Buttons/align
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -38144,6 +38147,7 @@ GROUP Buttons and Lights
       POS 1554.000000 201.000000
       IMAGE Buttons/align
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -38163,6 +38167,7 @@ GROUP Buttons and Lights
       POS 1682.000000 201.000000
       IMAGE Buttons/align
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -38182,6 +38187,7 @@ GROUP Buttons and Lights
       POS 1426.000000 70.000000
       IMAGE Buttons/align_switch
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -38201,6 +38207,7 @@ GROUP Buttons and Lights
       POS 1554.000000 70.000000
       IMAGE Buttons/align_switch
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -38220,6 +38227,7 @@ GROUP Buttons and Lights
       POS 1682.000000 70.000000
       IMAGE Buttons/align_switch
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -38237,10 +38245,12 @@ GROUP Buttons and Lights
 
   END_GROUP
   GROUP Panel Lower Left
+    LOCKED
     gen_rotary ELAC1
       POS 1998.000000 201.000000
       IMAGE Buttons/off_fault
       DATAREF a321neo/dynamics/FBW/ELAC_1
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 1.000000 0.000000 1.000000
@@ -38260,6 +38270,7 @@ GROUP Buttons and Lights
       POS 2126.000000 201.000000
       IMAGE Buttons/off_fault
       DATAREF a321neo/dynamics/FBW/SEC_1
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -38279,6 +38290,7 @@ GROUP Buttons and Lights
       POS 2254.000000 201.000000
       IMAGE Buttons/off_fault
       DATAREF a321neo/dynamics/FBW/FAC_1
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 1.000000 0.000000 1.000000
@@ -38298,6 +38310,7 @@ GROUP Buttons and Lights
       POS 1870.000000 70.000000
       IMAGE Buttons/smoke
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -38317,6 +38330,7 @@ GROUP Buttons and Lights
       POS 1998.000000 70.000000
       IMAGE Buttons/dot_fault
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -38336,6 +38350,7 @@ GROUP Buttons and Lights
       POS 2126.000000 70.000000
       IMAGE Buttons/off_fault
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -38355,6 +38370,7 @@ GROUP Buttons and Lights
       POS 2254.000000 70.000000
       IMAGE Buttons/off_fault
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -38374,6 +38390,7 @@ GROUP Buttons and Lights
       POS 2382.000000 70.000000
       IMAGE Buttons/dot_off
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -38393,6 +38410,7 @@ GROUP Buttons and Lights
       POS 2510.000000 70.000000
       IMAGE Buttons/dot_off
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -38412,6 +38430,7 @@ GROUP Buttons and Lights
       POS 2638.000000 70.000000
       IMAGE Buttons/dot_off
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -38431,6 +38450,7 @@ GROUP Buttons and Lights
       POS 2382.000000 201.000000
       IMAGE Buttons/dot_on
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -38450,6 +38470,7 @@ GROUP Buttons and Lights
       POS 2510.000000 201.000000
       IMAGE Buttons/sys on
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -38469,6 +38490,7 @@ GROUP Buttons and Lights
       POS 2638.000000 201.000000
       IMAGE Buttons/elecpump
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -38489,6 +38511,7 @@ GROUP Buttons and Lights
       POS 2766.000000 201.000000
       IMAGE Buttons/call
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -38506,10 +38529,12 @@ GROUP Buttons and Lights
 
   END_GROUP
   GROUP Fire Agents
+    LOCKED
     gen_rotary Agent 1
       POS 2766.000000 70.000000
       IMAGE Buttons/fire_agent
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -38529,6 +38554,7 @@ GROUP Buttons and Lights
       POS 2894.000000 70.000000
       IMAGE Buttons/fire_agent
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -38548,6 +38574,7 @@ GROUP Buttons and Lights
       POS 3022.000000 70.000000
       IMAGE Buttons/fire_agent
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -38567,6 +38594,7 @@ GROUP Buttons and Lights
       POS 3150.000000 70.000000
       IMAGE Buttons/fire_agent
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -38586,6 +38614,7 @@ GROUP Buttons and Lights
       POS 3278.000000 70.000000
       IMAGE Buttons/fire_agent
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -38603,10 +38632,12 @@ GROUP Buttons and Lights
 
   END_GROUP
   GROUP HYD
+    LOCKED
     gen_rotary Eng 1 Pump
       POS 2894.000000 201.000000
       IMAGE Buttons/off_fault
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -38626,6 +38657,7 @@ GROUP Buttons and Lights
       POS 3022.000000 201.000000
       IMAGE Buttons/off_fault
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -38645,6 +38677,7 @@ GROUP Buttons and Lights
       POS 3150.000000 201.000000
       IMAGE Buttons/off_fault
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -38664,6 +38697,7 @@ GROUP Buttons and Lights
       POS 3278.000000 201.000000
       IMAGE Buttons/off_fault
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -38683,6 +38717,7 @@ GROUP Buttons and Lights
       POS 3406.000000 201.000000
       IMAGE Buttons/elecpump
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -38700,10 +38735,12 @@ GROUP Buttons and Lights
 
   END_GROUP
   GROUP FUEL
+    LOCKED
     gen_rotary Left Tank Pump 1
       POS 3406.000000 70.000000
       IMAGE Buttons/off_fault
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -38723,6 +38760,7 @@ GROUP Buttons and Lights
       POS 3534.000000 70.000000
       IMAGE Buttons/off_fault
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -38742,6 +38780,7 @@ GROUP Buttons and Lights
       POS 3662.000000 70.000000
       IMAGE Buttons/off_fault
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -38761,6 +38800,7 @@ GROUP Buttons and Lights
       POS 3790.000000 70.000000
       IMAGE Buttons/manual_pressure
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -38780,6 +38820,7 @@ GROUP Buttons and Lights
       POS 3918.000000 70.000000
       IMAGE Buttons/off_fault
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -38799,6 +38840,7 @@ GROUP Buttons and Lights
       POS 3534.000000 201.000000
       IMAGE Buttons/off_fault
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -38818,6 +38860,7 @@ GROUP Buttons and Lights
       POS 3662.000000 201.000000
       IMAGE Buttons/off_fault
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -38837,6 +38880,7 @@ GROUP Buttons and Lights
       POS 3790.000000 201.000000
       IMAGE Buttons/on_open
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -38854,10 +38898,12 @@ GROUP Buttons and Lights
 
   END_GROUP
   GROUP ELEC
+    LOCKED
     gen_rotary Battery 1
       POS 1280.000000 201.000000
       IMAGE Buttons/off_fault
       DATAREF sim/cockpit/electrical/battery_array_on[0]
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 1.000000 0.000000 1.000000
@@ -38877,6 +38923,7 @@ GROUP Buttons and Lights
       POS 1152.000000 201.000000
       IMAGE Buttons/off_fault
       DATAREF sim/cockpit/electrical/battery_array_on[1]
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 1.000000 0.000000 1.000000
@@ -38896,6 +38943,7 @@ GROUP Buttons and Lights
       POS 1024.000000 201.000000
       IMAGE Buttons/dot_off
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -38915,6 +38963,7 @@ GROUP Buttons and Lights
       POS 896.000000 201.000000
       IMAGE Buttons/off_fault
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -38934,6 +38983,7 @@ GROUP Buttons and Lights
       POS 768.000000 201.000000
       IMAGE Buttons/acessfeed
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -38953,6 +39003,7 @@ GROUP Buttons and Lights
       POS 1280.000000 70.000000
       IMAGE Buttons/dot_fault
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -38972,6 +39023,7 @@ GROUP Buttons and Lights
       POS 512.000000 70.000000
       IMAGE Buttons/dot_fault
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -38991,6 +39043,7 @@ GROUP Buttons and Lights
       POS 1152.000000 70.000000
       IMAGE Buttons/off_fault
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -39010,6 +39063,7 @@ GROUP Buttons and Lights
       POS 1024.000000 70.000000
       IMAGE Buttons/off_fault
       DATAREF sim/cockpit2/electrical/APU_generator_on
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 1.000000 1.000000
@@ -39029,6 +39083,7 @@ GROUP Buttons and Lights
       POS 896.000000 70.000000
       IMAGE Buttons/dot_off
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -39048,6 +39103,7 @@ GROUP Buttons and Lights
       POS 768.000000 70.000000
       IMAGE Buttons/apu_start
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -39067,6 +39123,7 @@ GROUP Buttons and Lights
       POS 640.000000 70.000000
       IMAGE Buttons/off_fault
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -39084,10 +39141,12 @@ GROUP Buttons and Lights
 
   END_GROUP
   GROUP AIR COND
+    LOCKED
     gen_rotary Pack 1
       POS 1280.000000 332.000000
       IMAGE Buttons/off_fault
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -39107,6 +39166,7 @@ GROUP Buttons and Lights
       POS 1152.000000 332.000000
       IMAGE Buttons/off_fault
       DATAREF a321neo/cockpit/packs/eng1_bleed_off
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -39126,6 +39186,7 @@ GROUP Buttons and Lights
       POS 1024.000000 332.000000
       IMAGE Buttons/elecpump
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -39146,6 +39207,7 @@ GROUP Buttons and Lights
       POS 896.000000 332.000000
       IMAGE Buttons/on_fault
       DATAREF sim/cockpit2/bleedair/actuators/apu_bleed
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -39165,6 +39227,7 @@ GROUP Buttons and Lights
       POS 768.000000 332.000000
       IMAGE Buttons/off_fault
       DATAREF a321neo/cockpit/packs/eng2_bleed_off
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -39184,6 +39247,7 @@ GROUP Buttons and Lights
       POS 640.000000 332.000000
       IMAGE Buttons/off_fault
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -39203,6 +39267,7 @@ GROUP Buttons and Lights
       POS 512.000000 332.000000
       IMAGE Buttons/off_fault
       DATAREF a321neo/cockpit/aircond/cab_hot_air
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 1.000000 0.000000 1.000000
@@ -39220,10 +39285,12 @@ GROUP Buttons and Lights
 
   END_GROUP
   GROUP Anti Ice Cab Press
+    LOCKED
     gen_rotary Wing Anti Ice
       POS 1280.000000 463.000000
       IMAGE Buttons/on_fault
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -39243,6 +39310,7 @@ GROUP Buttons and Lights
       POS 1152.000000 463.000000
       IMAGE Buttons/on_fault
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -39262,6 +39330,7 @@ GROUP Buttons and Lights
       POS 1024.000000 463.000000
       IMAGE Buttons/on_fault
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -39281,6 +39350,7 @@ GROUP Buttons and Lights
       POS 896.000000 463.000000
       IMAGE Buttons/dot_on
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -39300,6 +39370,7 @@ GROUP Buttons and Lights
       POS 768.000000 463.000000
       IMAGE Buttons/manual_pressure
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -39319,6 +39390,7 @@ GROUP Buttons and Lights
       POS 640.000000 463.000000
       IMAGE Buttons/elecpump
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -39337,10 +39409,12 @@ GROUP Buttons and Lights
 
   END_GROUP
   GROUP APU
+    LOCKED
     gen_rotary APU Master
       POS 640.000000 201.000000
       IMAGE Buttons/on_fault
       DATAREF a321neo/cockpit/engine/apu_master_button_state
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -39360,6 +39434,7 @@ GROUP Buttons and Lights
       POS 512.000000 201.000000
       IMAGE Buttons/apu_start
       DATAREF a321neo/cockpit/engine/apu_start_button_state
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -39380,6 +39455,7 @@ GROUP Buttons and Lights
     POS 512.000000 463.000000
     IMAGE Buttons/dot_off
     DATAREF abc
+    LOCKED
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -39396,10 +39472,12 @@ GROUP Buttons and Lights
     CLICK_DY 0
 
   GROUP Flight Control R
+    LOCKED
     gen_rotary ELAC2
       POS 1280.000000 594.000000
       IMAGE Buttons/off_fault
       DATAREF a321neo/dynamics/FBW/ELAC_2
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 1.000000 0.000000 1.000000
@@ -39419,6 +39497,7 @@ GROUP Buttons and Lights
       POS 1152.000000 594.000000
       IMAGE Buttons/off_fault
       DATAREF a321neo/dynamics/FBW/SEC_2
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -39438,6 +39517,7 @@ GROUP Buttons and Lights
       POS 1024.000000 594.000000
       IMAGE Buttons/off_fault
       DATAREF a321neo/dynamics/FBW/SEC_3
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -39457,6 +39537,7 @@ GROUP Buttons and Lights
       POS 896.000000 594.000000
       IMAGE Buttons/off_fault
       DATAREF a321neo/dynamics/FBW/FAC_2
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 1.000000 0.000000 1.000000
@@ -39474,10 +39555,12 @@ GROUP Buttons and Lights
 
   END_GROUP
   GROUP Panel Lower Right
+    LOCKED
     gen_rotary Cargo Hot Air
       POS 370.000000 605.000000
       IMAGE Buttons/off_fault
       DATAREF a321neo/cockpit/aircond/cargo_hot_air
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 1.000000 0.000000 1.000000
@@ -39497,6 +39580,7 @@ GROUP Buttons and Lights
       POS 230.000000 605.000000
       IMAGE Buttons/off_fault
       DATAREF a321neo/cockpit/aircond/aft_cargo_iso_valve
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 1.000000 0.000000 1.000000
@@ -39516,6 +39600,7 @@ GROUP Buttons and Lights
       POS 768.000000 594.000000
       IMAGE Buttons/smoke
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -39535,6 +39620,7 @@ GROUP Buttons and Lights
       POS 640.000000 594.000000
       IMAGE Buttons/smoke
       DATAREF 
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -39554,6 +39640,7 @@ GROUP Buttons and Lights
       POS 1280.000000 725.000000
       IMAGE Buttons/overide
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -39573,6 +39660,7 @@ GROUP Buttons and Lights
       POS 1152.000000 725.000000
       IMAGE Buttons/overide
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -39592,6 +39680,7 @@ GROUP Buttons and Lights
       POS 1024.000000 725.000000
       IMAGE Buttons/dot_off
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -39611,6 +39700,7 @@ GROUP Buttons and Lights
       POS 896.000000 725.000000
       IMAGE Buttons/dot_on
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -39630,6 +39720,7 @@ GROUP Buttons and Lights
       POS 768.000000 725.000000
       IMAGE Buttons/dot_on
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -39649,6 +39740,7 @@ GROUP Buttons and Lights
       POS 640.000000 725.000000
       IMAGE Buttons/dot_on
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -39669,6 +39761,7 @@ GROUP Buttons and Lights
     POS 512.000000 725.000000
     IMAGE Buttons/cpdlc
     DATAREF abc
+    LOCKED
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -39688,6 +39781,7 @@ GROUP Buttons and Lights
     POS 360.000000 70.000000
     IMAGE Buttons/fire
     DATAREF abc
+    LOCKED
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -39707,6 +39801,7 @@ GROUP Buttons and Lights
     POS 232.000000 70.000000
     IMAGE Buttons/fire
     DATAREF abc
+    LOCKED
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -39726,6 +39821,7 @@ GROUP Buttons and Lights
     POS 104.000000 70.000000
     IMAGE Buttons/terrradar
     DATAREF abc
+    LOCKED
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -39745,6 +39841,7 @@ GROUP Buttons and Lights
     POS 1870.000000 201.000000
     IMAGE Buttons/master_warning
     DATAREF abc
+    LOCKED
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -39764,6 +39861,7 @@ GROUP Buttons and Lights
     POS 3918.000000 201.000000
     IMAGE Buttons/master_caution
     DATAREF abc
+    LOCKED
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -39783,6 +39881,7 @@ GROUP Buttons and Lights
     POS 740.000000 1416.000000
     IMAGE Buttons/autobrake
     DATAREF a321neo/cockpit/wheel/autobrakes_lo_button_state
+    LOCKED
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -39802,6 +39901,7 @@ GROUP Buttons and Lights
     POS 885.000000 1282.000000
     IMAGE Buttons/autobrake
     DATAREF a321neo/cockpit/wheel/autobrakes_med_button_state
+    LOCKED
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -39821,6 +39921,7 @@ GROUP Buttons and Lights
     POS 740.000000 1282.000000
     IMAGE Buttons/autobrake
     DATAREF a321neo/cockpit/wheel/autobrakes_max_button_state
+    LOCKED
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -39840,6 +39941,7 @@ GROUP Buttons and Lights
     POS 885.000000 1416.000000
     IMAGE Buttons/brake_fan
     DATAREF a321neo/cockpit/wheel/brake_fan_button_state
+    LOCKED
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -39859,6 +39961,7 @@ GROUP Buttons and Lights
     POS 740.000000 1555.000000
     IMAGE Buttons/gearlight
     DATAREF sim/aircraft/parts/acf_gear_deploy[1]
+    LOCKED
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -39881,6 +39984,7 @@ GROUP Buttons and Lights
     POS 885.000000 1555.000000
     IMAGE Buttons/gearlight
     DATAREF sim/aircraft/parts/acf_gear_deploy[2]
+    LOCKED
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -39904,6 +40008,7 @@ GROUP Buttons and Lights
     POS 566.000000 1704.000000
     IMAGE Buttons/gearlight
     DATAREF sim/aircraft/parts/acf_gear_deploy[0]
+    LOCKED
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -39927,6 +40032,7 @@ GROUP Buttons and Lights
     POS 512.000000 558.000000
     IMAGE Buttons/on bat
     DATAREF abc
+    LOCKED
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -44227,13 +44333,16 @@ GROUP Radio
 
 END_GROUP
 GROUP MCDU
+  LOCKED
   GROUP Upper Buttons
+    LOCKED
     gen_rotary SK
       POS 49.000000 1059.500000
       IMAGE center_pedestal/cdu/SK
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -44251,8 +44360,9 @@ GROUP MCDU
       POS 128.000000 1060.000000
       IMAGE center_pedestal/cdu/DIR
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -44270,8 +44380,9 @@ GROUP MCDU
       POS 128.000000 1000.000000
       IMAGE center_pedestal/cdu/FPLN
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -44289,8 +44400,9 @@ GROUP MCDU
       POS 218.000000 1060.000000
       IMAGE center_pedestal/cdu/PROG
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -44308,8 +44420,9 @@ GROUP MCDU
       POS 218.000000 1000.000000
       IMAGE center_pedestal/cdu/RADNAV
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -44327,8 +44440,9 @@ GROUP MCDU
       POS 308.000000 1060.000000
       IMAGE center_pedestal/cdu/PERF
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -44346,8 +44460,9 @@ GROUP MCDU
       POS 308.000000 1000.000000
       IMAGE center_pedestal/cdu/FUELPRED
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -44365,8 +44480,9 @@ GROUP MCDU
       POS 398.000000 1060.000000
       IMAGE center_pedestal/cdu/INIT
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -44384,8 +44500,9 @@ GROUP MCDU
       POS 398.000000 1000.000000
       IMAGE center_pedestal/cdu/SECFPLN
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -44403,8 +44520,9 @@ GROUP MCDU
       POS 488.000000 1060.000000
       IMAGE center_pedestal/cdu/DATA
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -44422,8 +44540,9 @@ GROUP MCDU
       POS 488.000000 1000.000000
       IMAGE center_pedestal/cdu/ATCCOMM
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -44441,6 +44560,7 @@ GROUP MCDU
       POS 578.000000 1060.000000
       IMAGE center_pedestal/cdu/BLANK
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -44460,8 +44580,9 @@ GROUP MCDU
       POS 43.000000 1000.000000
       IMAGE center_pedestal/cdu/AIRPORT
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -44479,8 +44600,9 @@ GROUP MCDU
       POS 578.000000 1000.000000
       IMAGE center_pedestal/cdu/MCDUMENU
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -44496,12 +44618,14 @@ GROUP MCDU
 
   END_GROUP
   GROUP Arrows
+    LOCKED
     gen_rotary ARROW L
       POS 43.000000 940.000000
       IMAGE center_pedestal/cdu/LEFTARROW
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -44519,8 +44643,9 @@ GROUP MCDU
       POS 128.000000 940.000000
       IMAGE center_pedestal/cdu/RIGHTARROW
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -44538,8 +44663,9 @@ GROUP MCDU
       POS 43.000000 880.000000
       IMAGE center_pedestal/cdu/UPARROW
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -44557,8 +44683,9 @@ GROUP MCDU
       POS 128.000000 880.000000
       IMAGE center_pedestal/cdu/DOWNARROW
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -44574,12 +44701,14 @@ GROUP MCDU
 
   END_GROUP
   GROUP Keys
+    LOCKED
     gen_rotary A
       POS 200.000000 950.000000
       IMAGE center_pedestal/cdu/A
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -44597,8 +44726,9 @@ GROUP MCDU
       POS 250.000000 950.000000
       IMAGE center_pedestal/cdu/B
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -44616,8 +44746,9 @@ GROUP MCDU
       POS 300.000000 950.000000
       IMAGE center_pedestal/cdu/C
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -44635,8 +44766,9 @@ GROUP MCDU
       POS 350.000000 950.000000
       IMAGE center_pedestal/cdu/D
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -44654,8 +44786,9 @@ GROUP MCDU
       POS 400.000000 950.000000
       IMAGE center_pedestal/cdu/E
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -44673,8 +44806,9 @@ GROUP MCDU
       POS 200.000000 900.000000
       IMAGE center_pedestal/cdu/F
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -44692,8 +44826,9 @@ GROUP MCDU
       POS 250.000000 900.000000
       IMAGE center_pedestal/cdu/G
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -44711,8 +44846,9 @@ GROUP MCDU
       POS 300.000000 900.000000
       IMAGE center_pedestal/cdu/H
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -44730,8 +44866,9 @@ GROUP MCDU
       POS 350.000000 900.000000
       IMAGE center_pedestal/cdu/I
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -44749,8 +44886,9 @@ GROUP MCDU
       POS 400.000000 900.000000
       IMAGE center_pedestal/cdu/J
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -44768,8 +44906,9 @@ GROUP MCDU
       POS 250.000000 850.000000
       IMAGE center_pedestal/cdu/L
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -44787,8 +44926,9 @@ GROUP MCDU
       POS 300.000000 850.000000
       IMAGE center_pedestal/cdu/M
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -44806,8 +44946,9 @@ GROUP MCDU
       POS 350.000000 850.000000
       IMAGE center_pedestal/cdu/N
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -44825,8 +44966,9 @@ GROUP MCDU
       POS 400.000000 850.000000
       IMAGE center_pedestal/cdu/O
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -44844,8 +44986,9 @@ GROUP MCDU
       POS 200.000000 850.000000
       IMAGE center_pedestal/cdu/K
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -44863,8 +45006,9 @@ GROUP MCDU
       POS 200.000000 800.000000
       IMAGE center_pedestal/cdu/P
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -44882,8 +45026,9 @@ GROUP MCDU
       POS 250.000000 800.000000
       IMAGE center_pedestal/cdu/Q
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -44901,8 +45046,9 @@ GROUP MCDU
       POS 300.000000 800.000000
       IMAGE center_pedestal/cdu/R
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -44920,8 +45066,9 @@ GROUP MCDU
       POS 350.000000 800.000000
       IMAGE center_pedestal/cdu/S
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -44939,8 +45086,9 @@ GROUP MCDU
       POS 400.000000 800.000000
       IMAGE center_pedestal/cdu/T
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -44958,8 +45106,9 @@ GROUP MCDU
       POS 250.000000 750.000000
       IMAGE center_pedestal/cdu/V
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -44977,8 +45126,9 @@ GROUP MCDU
       POS 300.000000 750.000000
       IMAGE center_pedestal/cdu/W
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -44996,8 +45146,9 @@ GROUP MCDU
       POS 350.000000 750.000000
       IMAGE center_pedestal/cdu/X
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -45015,8 +45166,9 @@ GROUP MCDU
       POS 400.000000 750.000000
       IMAGE center_pedestal/cdu/Y
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -45034,8 +45186,9 @@ GROUP MCDU
       POS 200.000000 750.000000
       IMAGE center_pedestal/cdu/U
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -45053,8 +45206,9 @@ GROUP MCDU
       POS 200.000000 700.000000
       IMAGE center_pedestal/cdu/Z
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -45072,8 +45226,9 @@ GROUP MCDU
       POS 250.000000 700.000000
       IMAGE center_pedestal/cdu/SLASH
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -45091,8 +45246,9 @@ GROUP MCDU
       POS 300.000000 700.000000
       IMAGE center_pedestal/cdu/SP
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -45110,8 +45266,9 @@ GROUP MCDU
       POS 350.000000 700.000000
       IMAGE center_pedestal/cdu/OVFY
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -45129,8 +45286,9 @@ GROUP MCDU
       POS 400.000000 700.000000
       IMAGE center_pedestal/cdu/CLR
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -45148,8 +45306,9 @@ GROUP MCDU
       POS 450.000000 950.000000
       IMAGE center_pedestal/cdu/BRT
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -45167,8 +45326,9 @@ GROUP MCDU
       POS 30.000000 820.000000
       IMAGE center_pedestal/cdu/1
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -45186,8 +45346,9 @@ GROUP MCDU
       POS 75.000000 820.000000
       IMAGE center_pedestal/cdu/2
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -45205,8 +45366,9 @@ GROUP MCDU
       POS 120.000000 820.000000
       IMAGE center_pedestal/cdu/3
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -45224,8 +45386,9 @@ GROUP MCDU
       POS 30.000000 775.000000
       IMAGE center_pedestal/cdu/4
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -45243,8 +45406,9 @@ GROUP MCDU
       POS 75.000000 775.000000
       IMAGE center_pedestal/cdu/5
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -45262,8 +45426,9 @@ GROUP MCDU
       POS 120.000000 775.000000
       IMAGE center_pedestal/cdu/6
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -45281,8 +45446,9 @@ GROUP MCDU
       POS 75.000000 730.000000
       IMAGE center_pedestal/cdu/8
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -45300,8 +45466,9 @@ GROUP MCDU
       POS 120.000000 730.000000
       IMAGE center_pedestal/cdu/9
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -45319,8 +45486,9 @@ GROUP MCDU
       POS 75.000000 685.000000
       IMAGE center_pedestal/cdu/0
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -45338,8 +45506,9 @@ GROUP MCDU
       POS 120.000000 685.000000
       IMAGE center_pedestal/cdu/PLUSMINUS
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -45357,8 +45526,9 @@ GROUP MCDU
       POS 30.000000 730.000000
       IMAGE center_pedestal/cdu/7
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -45376,8 +45546,9 @@ GROUP MCDU
       POS 30.000000 685.000000
       IMAGE center_pedestal/cdu/DOT
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -45395,8 +45566,9 @@ GROUP MCDU
       POS 450.000000 900.000000
       IMAGE center_pedestal/cdu/DIM
       DATAREF 
+      LOCKED
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
+      LIGHT_RHEOSTAT 1
       KEY_FRAME 0.000000 0.000000 1.000000
       KEY_FRAME 1.000000 1.000000
       DIGITS 1
@@ -45420,7 +45592,7 @@ GROUP ECAM Buttons
     DATAREF 
     LOCKED
     LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 6.000000
     DIGITS 1
@@ -45440,7 +45612,7 @@ GROUP ECAM Buttons
     DATAREF 
     LOCKED
     LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 6.000000
     DIGITS 1
@@ -45460,7 +45632,7 @@ GROUP ECAM Buttons
     DATAREF 
     LOCKED
     LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 6.000000
     DIGITS 1
@@ -45480,7 +45652,7 @@ GROUP ECAM Buttons
     DATAREF 
     LOCKED
     LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 6.000000
     DIGITS 1
@@ -45500,7 +45672,7 @@ GROUP ECAM Buttons
     DATAREF 
     LOCKED
     LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 6.000000
     DIGITS 1
@@ -45520,7 +45692,7 @@ GROUP ECAM Buttons
     DATAREF 
     LOCKED
     LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 6.000000
     DIGITS 1
@@ -45540,7 +45712,7 @@ GROUP ECAM Buttons
     DATAREF 
     LOCKED
     LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 6.000000
     DIGITS 1
@@ -45560,7 +45732,7 @@ GROUP ECAM Buttons
     DATAREF 
     LOCKED
     LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 6.000000
     DIGITS 1
@@ -45580,7 +45752,7 @@ GROUP ECAM Buttons
     DATAREF 
     LOCKED
     LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 6.000000
     DIGITS 1
@@ -45600,7 +45772,7 @@ GROUP ECAM Buttons
     DATAREF 
     LOCKED
     LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 6.000000
     DIGITS 1
@@ -45620,7 +45792,7 @@ GROUP ECAM Buttons
     DATAREF 
     LOCKED
     LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 6.000000
     DIGITS 1
@@ -45640,7 +45812,7 @@ GROUP ECAM Buttons
     DATAREF 
     LOCKED
     LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 6.000000
     DIGITS 1
@@ -45680,7 +45852,7 @@ GROUP ECAM Buttons
     DATAREF 
     LOCKED
     LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 6.000000
     DIGITS 1
@@ -45700,7 +45872,7 @@ GROUP ECAM Buttons
     DATAREF 
     LOCKED
     LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 6.000000
     DIGITS 1
@@ -45720,7 +45892,7 @@ GROUP ECAM Buttons
     DATAREF 
     LOCKED
     LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 6.000000
     DIGITS 1
@@ -45740,7 +45912,7 @@ GROUP ECAM Buttons
     DATAREF 
     LOCKED
     LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 6.000000
     DIGITS 1
@@ -46019,14 +46191,12 @@ GROUP ECAM Button Lights
 
 END_GROUP
 GROUP Draims Buttons
-  LOCKED
   gen_rotary gen_rotary.png
     POS 727.714233 1143.714233
     IMAGE center_pedestal/draims/vhf
     DATAREF 
-    LOCKED
     LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 6.000000
     DIGITS 1
@@ -46044,9 +46214,8 @@ GROUP Draims Buttons
     POS 776.714233 1143.285645
     IMAGE center_pedestal/draims/hf
     DATAREF 
-    LOCKED
     LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 6.000000
     DIGITS 1
@@ -46064,9 +46233,8 @@ GROUP Draims Buttons
     POS 824.714233 1143.285645
     IMAGE center_pedestal/draims/tel
     DATAREF 
-    LOCKED
     LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 6.000000
     DIGITS 1
@@ -46084,9 +46252,8 @@ GROUP Draims Buttons
     POS 727.285645 1117.285645
     IMAGE center_pedestal/draims/atc
     DATAREF 
-    LOCKED
     LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 6.000000
     DIGITS 1
@@ -46104,7 +46271,6 @@ GROUP Draims Buttons
     POS 776.571350 1116.285645
     IMAGE center_pedestal/draims/blank
     DATAREF 
-    LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -46124,9 +46290,8 @@ GROUP Draims Buttons
     POS 824.142761 1115.714233
     IMAGE center_pedestal/draims/menu
     DATAREF 
-    LOCKED
     LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 6.000000
     DIGITS 1
@@ -46144,9 +46309,8 @@ GROUP Draims Buttons
     POS 870.999878 1143.285645
     IMAGE center_pedestal/draims/nav
     DATAREF 
-    LOCKED
     LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 6.000000
     DIGITS 1
@@ -46164,9 +46328,8 @@ GROUP Draims Buttons
     POS 871.285583 1116.714233
     IMAGE center_pedestal/draims/upkey
     DATAREF 
-    LOCKED
     LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 6.000000
     DIGITS 1
@@ -46184,9 +46347,8 @@ GROUP Draims Buttons
     POS 907.000000 1131.000000
     IMAGE center_pedestal/draims/leftkey
     DATAREF 
-    LOCKED
     LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 6.000000
     DIGITS 1
@@ -46204,9 +46366,8 @@ GROUP Draims Buttons
     POS 933.000000 1131.000000
     IMAGE center_pedestal/draims/rightkey
     DATAREF 
-    LOCKED
     LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 6.000000
     DIGITS 1
@@ -46224,9 +46385,8 @@ GROUP Draims Buttons
     POS 968.714294 1130.714233
     IMAGE center_pedestal/draims/clr
     DATAREF 
-    LOCKED
     LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 6.000000
     DIGITS 1
@@ -46244,9 +46404,8 @@ GROUP Draims Buttons
     POS 748.000000 1186.000000
     IMAGE center_pedestal/draims/vhf1
     DATAREF 
-    LOCKED
     LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 6.000000
     DIGITS 1
@@ -46264,9 +46423,8 @@ GROUP Draims Buttons
     POS 834.000000 1186.000000
     IMAGE center_pedestal/draims/vhf2
     DATAREF 
-    LOCKED
     LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 6.000000
     DIGITS 1
@@ -46284,9 +46442,8 @@ GROUP Draims Buttons
     POS 921.000000 1185.000000
     IMAGE center_pedestal/draims/vhf3
     DATAREF 
-    LOCKED
     LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 6.000000
     DIGITS 1
@@ -46304,9 +46461,8 @@ GROUP Draims Buttons
     POS 1011.000000 1186.000000
     IMAGE center_pedestal/draims/hf1
     DATAREF 
-    LOCKED
     LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 6.000000
     DIGITS 1
@@ -46324,9 +46480,8 @@ GROUP Draims Buttons
     POS 1101.000000 1186.000000
     IMAGE center_pedestal/draims/hf2
     DATAREF 
-    LOCKED
     LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 6.000000
     DIGITS 1
@@ -46344,9 +46499,8 @@ GROUP Draims Buttons
     POS 1033.000000 1127.000000
     IMAGE center_pedestal/draims/tel1
     DATAREF 
-    LOCKED
     LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 6.000000
     DIGITS 1
@@ -46364,9 +46518,8 @@ GROUP Draims Buttons
     POS 1122.000000 1127.000000
     IMAGE center_pedestal/draims/tel2
     DATAREF 
-    LOCKED
     LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 6.000000
     DIGITS 1
@@ -46384,9 +46537,8 @@ GROUP Draims Buttons
     POS 657.000000 1186.000000
     IMAGE center_pedestal/draims/int
     DATAREF 
-    LOCKED
     LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 6.000000
     DIGITS 1
@@ -46404,9 +46556,8 @@ GROUP Draims Buttons
     POS 657.000000 1130.000000
     IMAGE center_pedestal/draims/cab
     DATAREF 
-    LOCKED
     LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 6.000000
     DIGITS 1
@@ -46424,9 +46575,8 @@ GROUP Draims Buttons
     POS 571.000000 1130.000000
     IMAGE center_pedestal/draims/pa
     DATAREF 
-    LOCKED
     LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 6.000000
     DIGITS 1
@@ -46445,7 +46595,6 @@ GROUP Draims Buttons
     IMAGE center_pedestal/ecam/green
     DATAREF abc
     SIZE 0.700000
-    LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -46466,7 +46615,6 @@ GROUP Draims Buttons
     IMAGE center_pedestal/ecam/green
     DATAREF abc
     SIZE 0.700000
-    LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -46487,7 +46635,6 @@ GROUP Draims Buttons
     IMAGE center_pedestal/ecam/green
     DATAREF abc
     SIZE 0.700000
-    LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -46508,7 +46655,6 @@ GROUP Draims Buttons
     IMAGE center_pedestal/ecam/green
     DATAREF abc
     SIZE 0.700000
-    LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -46529,7 +46675,6 @@ GROUP Draims Buttons
     IMAGE center_pedestal/ecam/green
     DATAREF abc
     SIZE 0.700000
-    LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -46550,7 +46695,6 @@ GROUP Draims Buttons
     IMAGE center_pedestal/ecam/green
     DATAREF abc
     SIZE 0.700000
-    LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -46571,7 +46715,6 @@ GROUP Draims Buttons
     IMAGE center_pedestal/ecam/green
     DATAREF abc
     SIZE 0.700000
-    LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -46592,7 +46735,6 @@ GROUP Draims Buttons
     IMAGE center_pedestal/ecam/green
     DATAREF abc
     SIZE 0.700000
-    LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -46613,7 +46755,6 @@ GROUP Draims Buttons
     IMAGE center_pedestal/ecam/green
     DATAREF abc
     SIZE 0.700000
-    LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -46634,7 +46775,6 @@ GROUP Draims Buttons
     IMAGE center_pedestal/ecam/green
     DATAREF abc
     SIZE 0.700000
-    LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -46654,9 +46794,8 @@ GROUP Draims Buttons
     POS 1188.000000 1180.000000
     IMAGE center_pedestal/draims/uppointer
     DATAREF 
-    LOCKED
     LIGHT_MODE BACK_LIT_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 6.000000
     DIGITS 1
@@ -46674,9 +46813,8 @@ GROUP Draims Buttons
     POS 1188.000000 1132.000000
     IMAGE center_pedestal/draims/downpointer
     DATAREF 
-    LOCKED
     LIGHT_MODE BACK_LIT_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 6.000000
     DIGITS 1
@@ -47261,11 +47399,13 @@ GROUP hud vertical
   END_GROUP
 END_GROUP
 GROUP Brake Indicator
+  LOCKED
   gen_rotary Brake Gauge
     POS 1111.000000 1373.500000
     IMAGE MIP/brake/brake
     DATAREF 
     SIZE 0.700000
+    LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -47286,6 +47426,7 @@ GROUP Brake Indicator
     IMAGE MIP/brake/Needle
     DATAREF sim/cockpit2/controls/left_brake_ratio
     SIZE 0.700000
+    LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 90.000000 1.000000
@@ -47298,6 +47439,7 @@ GROUP Brake Indicator
     IMAGE MIP/brake/Needle
     DATAREF sim/cockpit2/controls/right_brake_ratio
     SIZE 0.700000
+    LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 -90.000000 1.000000
@@ -47310,6 +47452,7 @@ GROUP Brake Indicator
     IMAGE MIP/brake/Needle
     DATAREF sim/cockpit2/controls/parking_brake_ratio
     SIZE 0.700000
+    LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 225.000000 1.000000
@@ -47318,156 +47461,158 @@ GROUP Brake Indicator
     OFFSET 0.000000
 
 END_GROUP
-gen_rotary DCDU Screen
-  POS 2223.000000 1780.000000
-  IMAGE MIP/dcdu/screen
-  DATAREF 
-  LIGHT_MODE GLASS_AUTO
-  LIGHT_RHEOSTAT 0
-  KEY_FRAME 0.000000 0.000000 1.000000
-  KEY_FRAME 1.000000 6.000000
-  DIGITS 1
-  ROTARY_TYPE NO_CLICK
-  CLICK_RADIUS 10.000000
-  CLICK_RADIUS_DY 0.000000
-  OFFSET 0.000000
-  STEP1 1.000000
-  STEP2 1.000000
-  CURSOR DEFAULT
-  CLICK_DX 0
-  CLICK_DY 0
+GROUP DCDU
+  gen_rotary DCDU Screen
+    POS 2223.500000 1780.500000
+    IMAGE MIP/dcdu/screen
+    DATAREF 
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 0.000000 0.000000 1.000000
+    KEY_FRAME 1.000000 6.000000
+    DIGITS 1
+    ROTARY_TYPE NO_CLICK
+    CLICK_RADIUS 10.000000
+    CLICK_RADIUS_DY 0.000000
+    OFFSET 0.000000
+    STEP1 1.000000
+    STEP2 1.000000
+    CURSOR DEFAULT
+    CLICK_DX 0
+    CLICK_DY 0
 
-gen_rotary Bright Dim
-  POS 1856.357178 1831.642822
-  IMAGE MIP/dcdu/brtdim
-  DATAREF 
-  LIGHT_MODE GLASS_AUTO
-  LIGHT_RHEOSTAT 0
-  KEY_FRAME 0.000000 0.000000 1.000000
-  KEY_FRAME 1.000000 6.000000
-  DIGITS 1
-  ROTARY_TYPE NO_CLICK
-  CLICK_RADIUS 10.000000
-  CLICK_RADIUS_DY 0.000000
-  OFFSET 0.000000
-  STEP1 1.000000
-  STEP2 1.000000
-  CURSOR DEFAULT
-  CLICK_DX 0
-  CLICK_DY 0
+  gen_rotary Bright Dim
+    POS 1856.500000 1831.500000
+    IMAGE MIP/dcdu/brtdim
+    DATAREF 
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 1
+    KEY_FRAME 0.000000 0.000000 1.000000
+    KEY_FRAME 1.000000 6.000000
+    DIGITS 1
+    ROTARY_TYPE NO_CLICK
+    CLICK_RADIUS 10.000000
+    CLICK_RADIUS_DY 0.000000
+    OFFSET 0.000000
+    STEP1 1.000000
+    STEP2 1.000000
+    CURSOR DEFAULT
+    CLICK_DX 0
+    CLICK_DY 0
 
-gen_rotary Bright Dim 2
-  POS 1941.000000 1628.142822
-  IMAGE MIP/dcdu/straightline
-  DATAREF 
-  LIGHT_MODE GLASS_AUTO
-  LIGHT_RHEOSTAT 0
-  KEY_FRAME 0.000000 0.000000 1.000000
-  KEY_FRAME 1.000000 6.000000
-  DIGITS 1
-  ROTARY_TYPE NO_CLICK
-  CLICK_RADIUS 10.000000
-  CLICK_RADIUS_DY 0.000000
-  OFFSET 0.000000
-  STEP1 1.000000
-  STEP2 1.000000
-  CURSOR DEFAULT
-  CLICK_DX 0
-  CLICK_DY 0
+  gen_rotary Bright Dim 2
+    POS 1941.000000 1628.000000
+    IMAGE MIP/dcdu/straightline
+    DATAREF 
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 1
+    KEY_FRAME 0.000000 0.000000 1.000000
+    KEY_FRAME 1.000000 6.000000
+    DIGITS 1
+    ROTARY_TYPE NO_CLICK
+    CLICK_RADIUS 10.000000
+    CLICK_RADIUS_DY 0.000000
+    OFFSET 0.000000
+    STEP1 1.000000
+    STEP2 1.000000
+    CURSOR DEFAULT
+    CLICK_DX 0
+    CLICK_DY 0
 
-gen_rotary Bright Dim 2
-  POS 1939.857178 1815.000000
-  IMAGE MIP/dcdu/msgminus
-  DATAREF 
-  LIGHT_MODE GLASS_AUTO
-  LIGHT_RHEOSTAT 0
-  KEY_FRAME 0.000000 0.000000 1.000000
-  KEY_FRAME 1.000000 6.000000
-  DIGITS 1
-  ROTARY_TYPE NO_CLICK
-  CLICK_RADIUS 10.000000
-  CLICK_RADIUS_DY 0.000000
-  OFFSET 0.000000
-  STEP1 1.000000
-  STEP2 1.000000
-  CURSOR DEFAULT
-  CLICK_DX 0
-  CLICK_DY 0
+  gen_rotary Bright Dim 2
+    POS 1939.857178 1815.000000
+    IMAGE MIP/dcdu/msgminus
+    DATAREF 
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 1
+    KEY_FRAME 0.000000 0.000000 1.000000
+    KEY_FRAME 1.000000 6.000000
+    DIGITS 1
+    ROTARY_TYPE NO_CLICK
+    CLICK_RADIUS 10.000000
+    CLICK_RADIUS_DY 0.000000
+    OFFSET 0.000000
+    STEP1 1.000000
+    STEP2 1.000000
+    CURSOR DEFAULT
+    CLICK_DX 0
+    CLICK_DY 0
 
-gen_rotary Bright Dim 2 2
-  POS 1939.714355 1771.000000
-  IMAGE MIP/dcdu/msgplus
-  DATAREF 
-  LIGHT_MODE GLASS_AUTO
-  LIGHT_RHEOSTAT 0
-  KEY_FRAME 0.000000 0.000000 1.000000
-  KEY_FRAME 1.000000 6.000000
-  DIGITS 1
-  ROTARY_TYPE NO_CLICK
-  CLICK_RADIUS 10.000000
-  CLICK_RADIUS_DY 0.000000
-  OFFSET 0.000000
-  STEP1 1.000000
-  STEP2 1.000000
-  CURSOR DEFAULT
-  CLICK_DX 0
-  CLICK_DY 0
+  gen_rotary Bright Dim 2 2
+    POS 1939.714355 1771.000000
+    IMAGE MIP/dcdu/msgplus
+    DATAREF 
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 1
+    KEY_FRAME 0.000000 0.000000 1.000000
+    KEY_FRAME 1.000000 6.000000
+    DIGITS 1
+    ROTARY_TYPE NO_CLICK
+    CLICK_RADIUS 10.000000
+    CLICK_RADIUS_DY 0.000000
+    OFFSET 0.000000
+    STEP1 1.000000
+    STEP2 1.000000
+    CURSOR DEFAULT
+    CLICK_DX 0
+    CLICK_DY 0
 
-gen_rotary Bright Dim 2 2 2
-  POS 1939.714355 1727.000000
-  IMAGE MIP/dcdu/pageminus
-  DATAREF 
-  LIGHT_MODE GLASS_AUTO
-  LIGHT_RHEOSTAT 0
-  KEY_FRAME 0.000000 0.000000 1.000000
-  KEY_FRAME 1.000000 6.000000
-  DIGITS 1
-  ROTARY_TYPE NO_CLICK
-  CLICK_RADIUS 10.000000
-  CLICK_RADIUS_DY 0.000000
-  OFFSET 0.000000
-  STEP1 1.000000
-  STEP2 1.000000
-  CURSOR DEFAULT
-  CLICK_DX 0
-  CLICK_DY 0
+  gen_rotary Bright Dim 2 2 2
+    POS 1939.714355 1727.000000
+    IMAGE MIP/dcdu/pageminus
+    DATAREF 
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 1
+    KEY_FRAME 0.000000 0.000000 1.000000
+    KEY_FRAME 1.000000 6.000000
+    DIGITS 1
+    ROTARY_TYPE NO_CLICK
+    CLICK_RADIUS 10.000000
+    CLICK_RADIUS_DY 0.000000
+    OFFSET 0.000000
+    STEP1 1.000000
+    STEP2 1.000000
+    CURSOR DEFAULT
+    CLICK_DX 0
+    CLICK_DY 0
 
-gen_rotary Bright Dim 2 2 2 2
-  POS 1940.142944 1684.428589
-  IMAGE MIP/dcdu/pageplus
-  DATAREF 
-  LIGHT_MODE GLASS_AUTO
-  LIGHT_RHEOSTAT 0
-  KEY_FRAME 0.000000 0.000000 1.000000
-  KEY_FRAME 1.000000 6.000000
-  DIGITS 1
-  ROTARY_TYPE NO_CLICK
-  CLICK_RADIUS 10.000000
-  CLICK_RADIUS_DY 0.000000
-  OFFSET 0.000000
-  STEP1 1.000000
-  STEP2 1.000000
-  CURSOR DEFAULT
-  CLICK_DX 0
-  CLICK_DY 0
+  gen_rotary Bright Dim 2 2 2 2
+    POS 1940.142944 1684.428589
+    IMAGE MIP/dcdu/pageplus
+    DATAREF 
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 1
+    KEY_FRAME 0.000000 0.000000 1.000000
+    KEY_FRAME 1.000000 6.000000
+    DIGITS 1
+    ROTARY_TYPE NO_CLICK
+    CLICK_RADIUS 10.000000
+    CLICK_RADIUS_DY 0.000000
+    OFFSET 0.000000
+    STEP1 1.000000
+    STEP2 1.000000
+    CURSOR DEFAULT
+    CLICK_DX 0
+    CLICK_DY 0
 
-gen_rotary Bright Dim 2 2 2 2
-  POS 1855.000000 1753.571411
-  IMAGE MIP/dcdu/print
-  DATAREF 
-  LIGHT_MODE GLASS_AUTO
-  LIGHT_RHEOSTAT 0
-  KEY_FRAME 0.000000 0.000000 1.000000
-  KEY_FRAME 1.000000 6.000000
-  DIGITS 1
-  ROTARY_TYPE NO_CLICK
-  CLICK_RADIUS 10.000000
-  CLICK_RADIUS_DY 0.000000
-  OFFSET 0.000000
-  STEP1 1.000000
-  STEP2 1.000000
-  CURSOR DEFAULT
-  CLICK_DX 0
-  CLICK_DY 0
+  gen_rotary Bright Dim 2 2 2 2
+    POS 1855.000000 1753.571411
+    IMAGE MIP/dcdu/print
+    DATAREF 
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 1
+    KEY_FRAME 0.000000 0.000000 1.000000
+    KEY_FRAME 1.000000 6.000000
+    DIGITS 1
+    ROTARY_TYPE NO_CLICK
+    CLICK_RADIUS 10.000000
+    CLICK_RADIUS_DY 0.000000
+    OFFSET 0.000000
+    STEP1 1.000000
+    STEP2 1.000000
+    CURSOR DEFAULT
+    CLICK_DX 0
+    CLICK_DY 0
 
+END_GROUP
 PANEL_3D_END
