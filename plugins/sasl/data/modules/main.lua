@@ -126,7 +126,7 @@ ECAM_debug_window = contextWindow {
   };
 }
 
-ECAM_debug_window = contextWindow {
+DMC_debug_window = contextWindow {
   name = "DMC DEBUG";
   position = { 200 , 200 , 400 , 200};
   noBackground = true ;
@@ -134,7 +134,7 @@ ECAM_debug_window = contextWindow {
   minimumSize = { 400 , 200 };
   maximumSize = { 400 , 200 };
   gravity = { 0 , 1 , 0 , 1 };
-  visible = true ;
+  visible = false ;
   components = {
     dmc_debug {position = { 0 , 0 , 400 , 200 }}
   };
@@ -165,6 +165,11 @@ function Show_hide_ECAM_debug()
   ECAM_debug_window:setIsVisible(not ECAM_debug_window:isVisible())
 end
 
+function Show_hide_DMC_debug()
+  DMC_debug_window:setIsVisible(not DMC_debug_window:isVisible())
+end
+
+
 -- create top level menu in plugins menu
 Menu_master	= sasl.appendMenuItem (PLUGINS_MENU_ID, "A321NEO" )
 -- add a submenu
@@ -181,8 +186,11 @@ ShowHideFBWDebug	= sasl.appendMenuItem(Menu_main, "Show/Hide FBW Debug", Show_hi
 ShowHideFBWGraph	= sasl.appendMenuItem(Menu_main, "Show/Hide FBW Graph", Show_hide_FBW_graph)
 -- add menu entry
 ShowHideECAMDebug	= sasl.appendMenuItem(Menu_main, "Show/Hide ECAM Debug", Show_hide_ECAM_debug)
+-- add menu entry
+ShowHideDMCDebug	= sasl.appendMenuItem(Menu_main, "Show/Hide DMC Debug", Show_hide_DMC_debug)
 --initialise menu item status
 sasl.setMenuItemState(Menu_main, ShowHideVnavDebug, MENU_UNCHECKED)
 sasl.setMenuItemState(Menu_main, ShowHidePacksDebug, MENU_UNCHECKED)
 sasl.setMenuItemState(Menu_main, ShowHideFBWDebug, MENU_UNCHECKED)
 sasl.setMenuItemState(Menu_main, ShowHideECAMDebug, MENU_UNCHECKED)
+sasl.setMenuItemState(Menu_main, ShowHideDMCDebug, MENU_UNCHECKED)

@@ -1,5 +1,6 @@
 include('ECAM_status.lua')
 include('EWD_flight_phases.lua')
+include('EWD_msgs/bleed.lua')
 include('EWD_msgs/brakes_and_antiskid.lua')
 include('EWD_msgs/engines_and_apu.lua')
 include('EWD_msgs/FBW.lua')
@@ -49,6 +50,7 @@ local left_messages_list = {
     MessageGroup_BRAKES_HOT,
     MessageGroup_APU_SHUTDOWN,
     MessageGroup_GEAR_NOT_UPLOCKED,
+    MessageGroup_BLEED_OFF,
     
     -- Warnings
     MessageGroup_CONFIG_TAKEOFF,
@@ -197,11 +199,19 @@ local function update_right_list()
         list_right:put(COL_INDICATION, "IGNITION")
     end
     
+
+    if get(Autobrakes_sim) == 2 then
+        list_right:put(COL_INDICATION, "AUTO BRK LO")
+    elseif get(Autobrakes_sim) == 4 then
+        list_right:put(COL_INDICATION, "AUTO BRK MED")
+    elseif get(Autobrakes_sim) == 0 then
+        list_right:put(COL_INDICATION, "AUTO BRK MAX")
+    end
+
+    -- TODO Autobrake fail: AUTO BRK OFF (any flight phase, amber)
+
     -- TODO RAM Air: RAM AIR ON green if related pushbutton switch is ON
     -- TODO Pressurization: MAN LDG ELEV green if LDG ELEV switch is not in AUTO
-
-    -- TODO Autobrake: AUTO BRK LO/MED/MAX (any flight phase)
-    -- TODO Autobrake fail: AUTO BRK OFF (any flight phase, amber)
 
     -- TODO Steer: NW STRG DISC when the nose wheel steering selector is in the towing position
     --             GREEN: if no engine is running, AMBER: is at least one engine is running
@@ -242,6 +252,8 @@ local function update_right_list()
     --            ALT RPTG is selected OFF or TCAS failed
 
     -- TODO Lights: LDG LT
+    -- TODO Lights: STROBE LT OFF (green) - in flight only
+    
 
 end
 
