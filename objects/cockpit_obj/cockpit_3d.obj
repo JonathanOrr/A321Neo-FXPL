@@ -23585,7 +23585,7 @@ IDX	18750
 		ANIM_rotate	1	0	0	-90.00020741	-90.00020741
 		ANIM_rotate_begin	1	0	0	sim/cockpit2/controls/speedbrake_ratio
 		ANIM_rotate_key	-0.5	-33.00007605
-		ANIM_rotate_key	0	-24.99986694
+		ANIM_rotate_key	0	-31.5000743
 		ANIM_rotate_key	0.25	-12.1701967
 		ANIM_rotate_key	0.5	4.37395966
 		ANIM_rotate_key	1	32.77433147
@@ -23593,7 +23593,7 @@ IDX	18750
 			ATTR_draw_disable
 			ATTR_no_cockpit
 			ATTR_manip_drag_rotate	hand	-0.08944025	-0.01406479	-19.80591774	-1	0	0	33.00006581	-32.7742939	0	-0.5	1	0	0	sim/cockpit2/controls/speedbrake_ratio	none	Speedbrakes
-			ATTR_manip_keyframe	0	24.99987377
+			ATTR_manip_keyframe	0	31.50008455
 			ATTR_manip_keyframe	0.25	12.17016937
 			ATTR_manip_keyframe	0.5	-4.373908
 			TRIS	41394 30
