@@ -221,10 +221,8 @@ function update()
     end
 
     --packs flow avail--
-    if (get(Left_bleed_avil) > 0.1 or get(Mid_bleed_avil) > 0.1 or get(Right_bleed_avil) > 0.1) then
-        if get(Pack_L) == 1 or get(Pack_R) == 1 then
-            set(Packs_avail, 1)
-        end
+    if (get(Pack_L) == 1 and get(Left_bleed_avil) > 0.1) or (get(Pack_R) == 1 and get(Right_bleed_avil) > 0.1) then
+        set(Packs_avail, 1)
     else
         set(Packs_avail, 0)
     end
