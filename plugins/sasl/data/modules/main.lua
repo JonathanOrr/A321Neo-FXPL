@@ -38,7 +38,8 @@ components = {
   EWD {},
   EWD_logic {},
   EWD_flight_phases {},
-  HUD {}
+  HUD {},
+  DCDU {}
  }
 
  --windows
