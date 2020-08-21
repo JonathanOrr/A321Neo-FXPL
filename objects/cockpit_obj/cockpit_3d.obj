@@ -23599,7 +23599,7 @@ IDX	18750
 			ANIM_trans_end
 				ATTR_draw_disable
 				ATTR_no_cockpit
-				ATTR_manip_drag_axis	hand	0	0	1	-0.5	1	sim/cockpit2/controls/speedbrake_ratio	Speedbrakes
+				ATTR_manip_drag_axis	hand	0	0	0.5	-0.5	1	sim/cockpit2/controls/speedbrake_ratio	Speedbrakes
 				ATTR_manip_wheel	0.1
 				TRIS	41394 30
 			ANIM_end
