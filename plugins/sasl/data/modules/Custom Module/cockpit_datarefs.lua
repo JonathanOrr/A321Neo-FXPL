@@ -23,17 +23,13 @@ Fo_nd_displaying_status = createGlobalPropertyf("a321neo/cockpit/source_switchin
 EWD_displaying_status = createGlobalPropertyf("a321neo/cockpit/source_switching/ewd_displaying_status", 3, false, true, false)--source being displayed 1pfd, 2nd, 3ewd, 4ecam
 ECAM_displaying_status = createGlobalPropertyf("a321neo/cockpit/source_switching/ecam_displaying_status", 4, false, true, false)--source being displayed 1pfd, 2nd, 3ewd, 4ecam
 
-Capt_pfd_show = createGlobalPropertyfa("a321neo/cockpit/source_switching/capt_pfd_show", 4, false, true, false)--used for source switching changing the positions of the screens
-
-Capt_nd_show = createGlobalPropertyfa("a321neo/cockpit/source_switching/Capt_nd_show", 4, false, true, false)--used for source switching changing the positions of the screens
-
-Fo_pfd_show = createGlobalPropertyfa("a321neo/cockpit/source_switching/Fo_pfd_show", 4, false, true, false)--used for source switching changing the positions of the screens
-
-Fo_nd_show = createGlobalPropertyfa("a321neo/cockpit/source_switching/Fo_nd_show", 4, false, true, false)--used for source switching changing the positions of the screens
-
-EWD_show = createGlobalPropertyfa("a321neo/cockpit/source_switching/EWD_show", 4, false, true, false)--used for source switching changing the positions of the screens
-
-ECAM_show = createGlobalPropertyfa("a321neo/cockpit/source_switching/ECAM_show", 4, false, true, false)--used for source switching changing the positions of the screens
+--the index follows the source proirity[0,1,2,3] pfd, nd, ewd, ecam^^^^
+Capt_pfd_show = createGlobalPropertyfa("a321neo/cockpit/source_switching/capt_pfd_show", 4, false, true, false)--used for source switching changing the positions of the screens(automated)
+Capt_nd_show = createGlobalPropertyfa("a321neo/cockpit/source_switching/Capt_nd_show", 4, false, true, false)--used for source switching changing the positions of the screens(automated)
+Fo_pfd_show = createGlobalPropertyfa("a321neo/cockpit/source_switching/Fo_pfd_show", 4, false, true, false)--used for source switching changing the positions of the screens(automated)
+Fo_nd_show = createGlobalPropertyfa("a321neo/cockpit/source_switching/Fo_nd_show", 4, false, true, false)--used for source switching changing the positions of the screens(automated)
+EWD_show = createGlobalPropertyfa("a321neo/cockpit/source_switching/EWD_show", 4, false, true, false)--used for source switching changing the positions of the screens(automated)
+ECAM_show = createGlobalPropertyfa("a321neo/cockpit/source_switching/ECAM_show", 4, false, true, false)--used for source switching changing the positions of the screens(automated)
 
 ECAM_on_nd_dial = createGlobalPropertyi("a321neo/cockpit/source_switching/ECAM_on_nd_dial", 0, false, true, false)--used to swap the position of the ECAM with the NDs -1capt, 0norm, 1FO
 
