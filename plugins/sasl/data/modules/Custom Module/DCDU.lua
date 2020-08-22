@@ -9,13 +9,18 @@ local ECAM_BLUE = {0.004, 1.0, 1.0}
 local ECAM_GREEN = {0.184, 0.733, 0.219}
 local ECAM_ORANGE = {0.725, 0.521, 0.18}
 
+local MESSAGE_TYPE_WILCO = 1
+local MESSAGE_TYPE_ROGER = 2
+local MESSAGE_TYPE_CONFIRM_WILCO = 11
+local MESSAGE_TYPE_CONFIRM_ROGER = 12
+
 local display_btm_left  = {{text="", color=ECAM_BLACK}, {text="", color=ECAM_BLACK}, {text="", color=ECAM_BLACK}}
 local display_btm_right = {{text="", color=ECAM_BLACK}, {text="", color=ECAM_BLACK}, {text="", color=ECAM_BLACK}}
 local display_title = {text="", color=ECAM_BLACK}
 local display_r = {{text="", color=ECAM_BLACK}, {text="", color=ECAM_BLACK}}
 local display_l = {{text="", color=ECAM_BLACK}, {text="", color=ECAM_BLACK}}
 local display_running_text = {text="", color=ECAM_GREEN}
-local display_show_ack = true
+local display_ack = {text="", color="", background=false}
 local display_top = {{text="", color=ECAM_BLACK}, {text="", color=ECAM_BLACK}, {text="", color=ECAM_BLACK}, {text="", color=ECAM_BLACK}, {text="", color=ECAM_BLACK}}
 
 local was_connected  = true
@@ -28,6 +33,8 @@ local curr_atc_lat = 0
 local curr_atc_lon = 0
 local array_ctr = {}
 local nearest_ctr = nil
+
+local current_messages = {{msg_text="ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ", msg_type=MESSAGE_TYPE_CONFIRM_WILCO, msg_time="1200", msg_source="LIML"}}
 
 local function init_array_ctr()
     array_ctr = Read_CSV(moduleDirectory .. "/Custom Module/data/ctr.csv")
@@ -56,7 +63,7 @@ end
 
 
 local function reset_display() 
-    display_show_ack = false
+    display_ack = {text="", color="", background=false}
     
     display_top[1].text = ""
     display_top[2].text = ""
@@ -78,6 +85,79 @@ local function reset_display()
     display_btm_right[2].text = ""
     display_btm_right[3].text = ""
     
+
+end
+
+local function display_message(message_text, message_type, msg_time, msg_source)
+
+    reset_display()
+
+    display_running_text.text = msg_time .. "Z FROM " .. msg_source
+ 
+    local MAX_LINE_LENGTH = 28
+
+    local message_length = string.len(message_text)
+    
+    local total_num_pages = math.ceil(message_length/(MAX_LINE_LENGTH*5))
+    set(DCDU_pages_total, total_num_pages)
+    local start_page = get(DCDU_page_no)*MAX_LINE_LENGTH*5
+   
+    
+    for i=1,5 do
+        display_top[i].text  = string.sub(message_text,start_page + (i-1) * MAX_LINE_LENGTH + 1, start_page + i * MAX_LINE_LENGTH)
+        display_top[i].color = ECAM_WHITE
+    end
+    
+    if total_num_pages > 1 then
+        display_r[1].text  = "PGE"
+        display_r[1].color = ECAM_WHITE
+        display_r[2].text  = (get(DCDU_page_no) + 1 ) .. "/" .. total_num_pages
+        display_r[2].color = ECAM_WHITE
+    end
+    
+    if get(DCDU_msgs_total) > 1 then
+        display_l[1].text  = "MSG"
+        display_l[1].color = ECAM_WHITE
+        display_l[2].text  = (get(DCDU_msg_no) + 1 ) .. "/" .. get(DCDU_msgs_total) 
+        display_l[2].color = ECAM_WHITE
+    end
+
+    display_ack.text = "OPEN"
+    display_ack.color = ECAM_BLUE
+    display_ack.background = false
+    
+    if message_type == MESSAGE_TYPE_WILCO then
+        display_btm_right[3].text = "WILCO *"
+        display_btm_right[1].text = "STBY *"
+        display_btm_left[1].text = "* UNABLE"
+    end
+    
+    if message_type == MESSAGE_TYPE_ROGER then
+        display_btm_right[3].text = "ROGER *"
+        display_btm_right[1].text = "STBY *"
+    end
+    
+    if message_type == MESSAGE_TYPE_CONFIRM_WILCO or message_type == MESSAGE_TYPE_CONFIRM_ROGER then
+        display_btm_right[3].text = "SEND *"
+        display_btm_left[1].text  = "* CANCEL"
+        display_title.text = "CONFIRM"
+        display_title.color = ECAM_BLUE
+        display_ack.color = ECAM_BLUE
+        display_ack.background = true
+    end
+
+    if message_type == MESSAGE_TYPE_CONFIRM_WILCO then
+        display_ack.text = "WILCO"    
+    end
+    if message_type == MESSAGE_TYPE_CONFIRM_ROGER then
+        display_ack.text = "ROGER"
+    end
+
+
+    display_btm_right[1].color = ECAM_BLUE 
+    display_btm_right[3].color = ECAM_BLUE 
+    display_btm_left[1].color = ECAM_BLUE 
+    display_btm_left[3].color = ECAM_BLUE 
 
 end
 
@@ -137,7 +217,7 @@ local function update_satcom_vhf_connection()
     if math.random (1, 10000) == 5000 then  -- Random satellite disconnection
         is_satcom_connected = 0
     end
-    
+
     local is_vhf_connected = 2
     local distance_vhf = 999
 
@@ -167,7 +247,6 @@ local function update_connected_atc()
         temp_atc_id = ""
         temp_atc_name = ""
     end
-
 
     if get(EWD_flight_phase) == 6 and nearest_ctr ~= nil then
         temp_atc_id   = nearest_ctr[1]
@@ -208,12 +287,19 @@ function update()
         return
     end
     
+
+    
     if get(Acars_status) > 0 then   -- TODO and no messages
-        if change_occured or not was_connected then
-            change_occured = false
-            update_no_messages()
+    
+        if #current_messages > 0 then
+            display_message(current_messages[1].msg_text, current_messages[1].msg_type, current_messages[1].msg_time, current_messages[1].msg_source)
+        else
+            if change_occured or not was_connected then
+                change_occured = false
+                update_no_messages()
+                return
+            end
         end
-        return
     end
 
     was_connected = true
@@ -238,9 +324,14 @@ function draw()
 
     sasl.gl.drawText (B612MONO_regular, 10, size[2]-20, display_running_text.text , 17, false, false, TEXT_ALIGN_LEFT, display_running_text.color )
 
-    if display_show_ack then
-        sasl.gl.drawRectangle ( size[1]-60, size[2]-33, 60 , 32 , ECAM_GREEN )
-        sasl.gl.drawText (B612MONO_regular, size[1]-8, size[2]-25, "ACK" , 25, false, false, TEXT_ALIGN_RIGHT, ECAM_BLACK )
+    if display_ack.text ~= "" then
+    
+        if display_ack.background then
+            sasl.gl.drawRectangle ( size[1]-100, size[2]-33, 100 , 32 , display_ack.color )
+            sasl.gl.drawText (B612MONO_regular, size[1]-8, size[2]-25, display_ack.text , 25, false, false, TEXT_ALIGN_RIGHT, ECAM_BLACK )
+        else
+            sasl.gl.drawText (B612MONO_regular, size[1]-8, size[2]-25, display_ack.text , 25, false, false, TEXT_ALIGN_RIGHT, display_ack.color )
+        end
     end
     
     sasl.gl.drawText (B612MONO_regular, 10, size[2]-56,  display_top[1].text , 25, false, false, TEXT_ALIGN_LEFT, display_top[1].color )
