@@ -141,13 +141,10 @@ function onMouseDown ( component , x , y , button , parentX , parentY )
             else
                 print("clicked somewhere else")
                 manual_switching_in_progress = 0
+                return
             end
         end
-    end
-end
 
-function onMouseUp( component , x , y , button , parentX , parentY )
-    if button == MB_LEFT then
         if get(Override_DMC) == 1 then
             if manual_switching_in_progress == 0 then
                 --click regions for the screens--
