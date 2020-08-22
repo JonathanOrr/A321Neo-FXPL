@@ -58,92 +58,6 @@ function onMouseDown ( component , x , y , button , parentX , parentY )
             set(Override_DMC, 1 - get(Override_DMC))
         end
 
-        if manual_switching_in_progress ~= 0 then
-            --click regions for the sources--
-            --PFD--
-            if x >= size[1]/2 - 160 and x <= size[1]/2 - 160 + 50 and y >= size[2]/2 - 25 and y <= size[2]/2 - 25 + 50 then
-                if manual_switching_in_progress == 1 then
-                    set(Capt_pfd_displaying_status, 1)
-                elseif manual_switching_in_progress == 2 then
-                    set(Capt_nd_displaying_status, 1)
-                elseif manual_switching_in_progress == 3 then
-                    set(EWD_displaying_status, 1)
-                elseif manual_switching_in_progress == 4 then
-                    set(Fo_nd_displaying_status, 1)
-                elseif manual_switching_in_progress == 5 then
-                    set(Fo_pfd_displaying_status, 1)
-                elseif manual_switching_in_progress == 6 then
-                    set(ECAM_displaying_status, 1)
-                end
-                manual_switching_in_progress = 0
-                print("clicked pfd source")
-            end
-            --ND--
-            if x >= size[1]/2 - 70 and x <= size[1]/2 - 70 + 50 and y >= size[2]/2 - 25 and y <= size[2]/2 - 25 + 50 then
-                if manual_switching_in_progress == 1 then
-                    set(Capt_pfd_displaying_status, 2)
-                elseif manual_switching_in_progress == 2 then
-                    set(Capt_nd_displaying_status, 2)
-                elseif manual_switching_in_progress == 3 then
-                    set(EWD_displaying_status, 2)
-                elseif manual_switching_in_progress == 4 then
-                    set(Fo_nd_displaying_status, 2)
-                elseif manual_switching_in_progress == 5 then
-                    set(Fo_pfd_displaying_status, 2)
-                elseif manual_switching_in_progress == 6 then
-                    set(ECAM_displaying_status, 2)
-                end
-                print("clicked nd source")
-                manual_switching_in_progress = 0
-            end
-            --EWD--
-            if x >= size[1]/2 + 20 and x <= size[1]/2 + 20 + 50 and y >= size[2]/2 - 25 and y <= size[2]/2 - 25 + 50 then
-                if manual_switching_in_progress == 1 then
-                    set(Capt_pfd_displaying_status, 3)
-                elseif manual_switching_in_progress == 2 then
-                    set(Capt_nd_displaying_status, 3)
-                elseif manual_switching_in_progress == 3 then
-                    set(EWD_displaying_status, 3)
-                elseif manual_switching_in_progress == 4 then
-                    set(Fo_nd_displaying_status, 3)
-                elseif manual_switching_in_progress == 5 then
-                    set(Fo_pfd_displaying_status, 3)
-                elseif manual_switching_in_progress == 6 then
-                    set(ECAM_displaying_status, 3)
-                end
-                print("clicked ewd source")
-                manual_switching_in_progress = 0
-            end
-            --ECAM--
-            if x >= size[1]/2 + 110 and x <= size[1]/2 + 110 + 50 and y >= size[2]/2 - 25 and y <= size[2]/2 - 25 + 50 then
-                if manual_switching_in_progress == 1 then
-                    set(Capt_pfd_displaying_status, 4)
-                elseif manual_switching_in_progress == 2 then
-                    set(Capt_nd_displaying_status, 4)
-                elseif manual_switching_in_progress == 3 then
-                    set(EWD_displaying_status, 4)
-                elseif manual_switching_in_progress == 4 then
-                    set(Fo_nd_displaying_status, 4)
-                elseif manual_switching_in_progress == 5 then
-                    set(Fo_pfd_displaying_status, 4)
-                elseif manual_switching_in_progress == 6 then
-                    set(ECAM_displaying_status, 4)
-                end
-                print("clicked ecam source")
-                manual_switching_in_progress = 0
-            end
-
-            --clicking anywhwere else
-            if (x >= size[1]/2 - 160 and x <= size[1]/2 - 160 + 50 and y >= size[2]/2 - 25 and y <= size[2]/2 - 25 + 50) or
-                (x >= size[1]/2 - 70 and x <= size[1]/2 - 70 + 50 and y >= size[2]/2 - 25 and y <= size[2]/2 - 25 + 50) or
-                (x >= size[1]/2 + 20 and x <= size[1]/2 + 20 + 50 and y >= size[2]/2 - 25 and y <= size[2]/2 - 25 + 50) or
-                (x >= size[1]/2 + 110 and x <= size[1]/2 + 110 + 50 and y >= size[2]/2 - 25 and y <= size[2]/2 - 25 + 50) then
-            else
-                print("clicked somewhere else")
-                manual_switching_in_progress = 0
-            end
-        end
-
         if get(Override_DMC) == 1 then
             if manual_switching_in_progress == 0 then
                 --click regions for the screens--
@@ -176,6 +90,92 @@ function onMouseDown ( component , x , y , button , parentX , parentY )
                 if x >= size[1]/2 - 25 and x <= size[1]/2 - 25 + 50 and y >= size[2]/2 - 65 and y <= size[2]/2 - 65 + 50 then
                     print("clicked ecam")
                     manual_switching_in_progress = 6
+                end
+            end
+
+            if manual_switching_in_progress ~= 0 then
+                --click regions for the sources--
+                --PFD--
+                if x >= size[1]/2 - 160 and x <= size[1]/2 - 160 + 50 and y >= size[2]/2 - 25 and y <= size[2]/2 - 25 + 50 then
+                    if manual_switching_in_progress == 1 then
+                        set(Capt_pfd_displaying_status, 1)
+                    elseif manual_switching_in_progress == 2 then
+                        set(Capt_nd_displaying_status, 1)
+                    elseif manual_switching_in_progress == 3 then
+                        set(EWD_displaying_status, 1)
+                    elseif manual_switching_in_progress == 4 then
+                        set(Fo_nd_displaying_status, 1)
+                    elseif manual_switching_in_progress == 5 then
+                        set(Fo_pfd_displaying_status, 1)
+                    elseif manual_switching_in_progress == 6 then
+                        set(ECAM_displaying_status, 1)
+                    end
+                    manual_switching_in_progress = 0
+                    print("clicked pfd source")
+                end
+                --ND--
+                if x >= size[1]/2 - 70 and x <= size[1]/2 - 70 + 50 and y >= size[2]/2 - 25 and y <= size[2]/2 - 25 + 50 then
+                    if manual_switching_in_progress == 1 then
+                        set(Capt_pfd_displaying_status, 2)
+                    elseif manual_switching_in_progress == 2 then
+                        set(Capt_nd_displaying_status, 2)
+                    elseif manual_switching_in_progress == 3 then
+                        set(EWD_displaying_status, 2)
+                    elseif manual_switching_in_progress == 4 then
+                        set(Fo_nd_displaying_status, 2)
+                    elseif manual_switching_in_progress == 5 then
+                        set(Fo_pfd_displaying_status, 2)
+                    elseif manual_switching_in_progress == 6 then
+                        set(ECAM_displaying_status, 2)
+                    end
+                    print("clicked nd source")
+                    manual_switching_in_progress = 0
+                end
+                --EWD--
+                if x >= size[1]/2 + 20 and x <= size[1]/2 + 20 + 50 and y >= size[2]/2 - 25 and y <= size[2]/2 - 25 + 50 then
+                    if manual_switching_in_progress == 1 then
+                        set(Capt_pfd_displaying_status, 3)
+                    elseif manual_switching_in_progress == 2 then
+                        set(Capt_nd_displaying_status, 3)
+                    elseif manual_switching_in_progress == 3 then
+                        set(EWD_displaying_status, 3)
+                    elseif manual_switching_in_progress == 4 then
+                        set(Fo_nd_displaying_status, 3)
+                    elseif manual_switching_in_progress == 5 then
+                        set(Fo_pfd_displaying_status, 3)
+                    elseif manual_switching_in_progress == 6 then
+                        set(ECAM_displaying_status, 3)
+                    end
+                    print("clicked ewd source")
+                    manual_switching_in_progress = 0
+                end
+                --ECAM--
+                if x >= size[1]/2 + 110 and x <= size[1]/2 + 110 + 50 and y >= size[2]/2 - 25 and y <= size[2]/2 - 25 + 50 then
+                    if manual_switching_in_progress == 1 then
+                        set(Capt_pfd_displaying_status, 4)
+                    elseif manual_switching_in_progress == 2 then
+                        set(Capt_nd_displaying_status, 4)
+                    elseif manual_switching_in_progress == 3 then
+                        set(EWD_displaying_status, 4)
+                    elseif manual_switching_in_progress == 4 then
+                        set(Fo_nd_displaying_status, 4)
+                    elseif manual_switching_in_progress == 5 then
+                        set(Fo_pfd_displaying_status, 4)
+                    elseif manual_switching_in_progress == 6 then
+                        set(ECAM_displaying_status, 4)
+                    end
+                    print("clicked ecam source")
+                    manual_switching_in_progress = 0
+                end
+    
+                --clicking anywhwere else
+                if (x >= size[1]/2 - 160 and x <= size[1]/2 - 160 + 50 and y >= size[2]/2 - 25 and y <= size[2]/2 - 25 + 50) or
+                    (x >= size[1]/2 - 70 and x <= size[1]/2 - 70 + 50 and y >= size[2]/2 - 25 and y <= size[2]/2 - 25 + 50) or
+                    (x >= size[1]/2 + 20 and x <= size[1]/2 + 20 + 50 and y >= size[2]/2 - 25 and y <= size[2]/2 - 25 + 50) or
+                    (x >= size[1]/2 + 110 and x <= size[1]/2 + 110 + 50 and y >= size[2]/2 - 25 and y <= size[2]/2 - 25 + 50) then
+                else
+                    print("clicked somewhere else")
+                    manual_switching_in_progress = 0
                 end
             end
         end
