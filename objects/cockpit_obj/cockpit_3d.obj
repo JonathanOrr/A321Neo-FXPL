@@ -23033,7 +23033,7 @@ IDX	18750
 		TRIS	4260 6
 		ANIM_end
 		ANIM_begin
-		ANIM_show	0	0.80000001	a321neo/cockpit/source_switching/capt_pfd_displaying_status
+		ANIM_show	3.79999995	4.19999981	a321neo/cockpit/source_switching/capt_pfd_displaying_status
 		TRIS	4266 6
 		ANIM_end
 		ANIM_begin
