@@ -13,6 +13,7 @@
         "draw",
         "TEXT_ALIGN_CENTER",
         "MB_LEFT",
-        "onMouseDown"
+        "onMouseDown",
+        "onMouseUp"
     ]
 }
