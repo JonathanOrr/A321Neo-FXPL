@@ -23033,19 +23033,19 @@ IDX	18750
 		TRIS	4260 6
 		ANIM_end
 		ANIM_begin
-		ANIM_show	3.79999995	4.19999981	a321neo/cockpit/source_switching/capt_pfd_displaying_status
+		ANIM_hide	0	0.80000001	a321neo/cockpit/source_switching/capt_pfd_show[3]
 		TRIS	4266 6
 		ANIM_end
 		ANIM_begin
-		ANIM_show	2.79999995	3.20000005	a321neo/cockpit/source_switching/capt_pfd_displaying_status
+		ANIM_hide	0	0.80000001	a321neo/cockpit/source_switching/capt_pfd_show[2]
 		TRIS	4272 6
 		ANIM_end
 		ANIM_begin
-		ANIM_show	1.79999995	2.20000005	a321neo/cockpit/source_switching/capt_pfd_displaying_status
+		ANIM_hide	0	0.80000001	a321neo/cockpit/source_switching/capt_pfd_show[1]
 		TRIS	4278 6
 		ANIM_end
 		ANIM_begin
-		ANIM_show	1.20000005	0.80000001	a321neo/cockpit/source_switching/capt_pfd_displaying_status
+		ANIM_hide	0	0.80000001	a321neo/cockpit/source_switching/capt_pfd_show[0]
 		TRIS	4284 6
 		ANIM_end
 		TRIS	4458 6
