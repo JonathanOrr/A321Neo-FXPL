@@ -27,6 +27,20 @@ Toggle_lo_autobrake = createCommand("a321neo/cockpit/wheel/toggle_lo_autobrake",
 Toggle_med_autobrake = createCommand("a321neo/cockpit/wheel/toggle_med_autobrake", "Toggle MED autobrake")
 Toggle_max_autobrake = createCommand("a321neo/cockpit/wheel/toggle_max_autobrake", "Toggle MAX autobrake")
 
+--brightness control
+Capt_PFD_brightness_up = createCommand("a321neo/cockpit/brightness/capt_pfd_brightness_up", "Captain PFD brightness up")
+Capt_PFD_brightness_dn = createCommand("a321neo/cockpit/brightness/capt_pfd_brightness_dn", "Captain PFD brightness down")
+Capt_ND_brightness_up = createCommand("a321neo/cockpit/brightness/capt_nd_brightness_up", "Captain ND brightness up")
+Capt_ND_brightness_dn = createCommand("a321neo/cockpit/brightness/capt_nd_brightness_dn", "Captain ND brightness down")
+Fo_PFD_brightness_up = createCommand("a321neo/cockpit/brightness/fo_pfd_brightness_up", "First Officer PFD brightness up")
+Fo_PFD_brightness_dn = createCommand("a321neo/cockpit/brightness/fo_pfd_brightness_dn", "First Officer PFD brightness down")
+Fo_ND_brightness_up = createCommand("a321neo/cockpit/brightness/fo_nd_brightness_up", "First Officer ND brightness up")
+Fo_ND_brightness_dn = createCommand("a321neo/cockpit/brightness/fo_nd_brightness_dn", "First Officer ND brightness down")
+EWD_brightness_up = createCommand("a321neo/cockpit/brightness/ewd_brightness_up", "EWD brightness up")
+EWD_brightness_dn = createCommand("a321neo/cockpit/brightness/ewd_brightness_dn", "EWD brightness down")
+ECAM_brightness_up = createCommand("a321neo/cockpit/brightness/ecam_brightness_up", "ECAM brightness up")
+ECAM_brightness_dn = createCommand("a321neo/cockpit/brightness/ecam_brightness_dn", "ECAM brightness down")
+
 --aircond
 Toggle_cab_hotair = createCommand("a321neo/cockpit/aircond/toggle_cab_hotair", "Toggle cabin hot air")
 Toggle_cargo_hotair = createCommand("a321neo/cockpit/aircond/toggle_cargo_hotair", "Toggle cargo hot air")

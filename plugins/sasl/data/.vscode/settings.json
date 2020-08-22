@@ -14,6 +14,17 @@
         "TEXT_ALIGN_CENTER",
         "MB_LEFT",
         "onMouseDown",
-        "onMouseUp"
+        "onMouseUp",
+        "components",
+        "panelHeight3d",
+        "panelWidth3d",
+        "size",
+        "SASL_STOP_PROCESSING",
+        "position",
+        "BLEND",
+        "BLEND_EQUATION_ADD",
+        "BLEND_SOURCE_ALPHA",
+        "BLEND_DESTINATION_ALPHA",
+        "BLEND_ONE_MINUS_SOURCE_ALPHA"
     ]
 }
