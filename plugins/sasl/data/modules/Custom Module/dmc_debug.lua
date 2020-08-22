@@ -77,6 +77,7 @@ function onMouseDown ( component , x , y , button , parentX , parentY )
                 end
                 manual_switching_in_progress = 0
                 print("clicked pfd source")
+                return
             end
             --ND--
             if x >= size[1]/2 - 70 and x <= size[1]/2 - 70 + 50 and y >= size[2]/2 - 25 and y <= size[2]/2 - 25 + 50 then
@@ -95,6 +96,7 @@ function onMouseDown ( component , x , y , button , parentX , parentY )
                 end
                 print("clicked nd source")
                 manual_switching_in_progress = 0
+                return
             end
             --EWD--
             if x >= size[1]/2 + 20 and x <= size[1]/2 + 20 + 50 and y >= size[2]/2 - 25 and y <= size[2]/2 - 25 + 50 then
@@ -113,6 +115,7 @@ function onMouseDown ( component , x , y , button , parentX , parentY )
                 end
                 print("clicked ewd source")
                 manual_switching_in_progress = 0
+                return
             end
             --ECAM--
             if x >= size[1]/2 + 110 and x <= size[1]/2 + 110 + 50 and y >= size[2]/2 - 25 and y <= size[2]/2 - 25 + 50 then
@@ -131,6 +134,7 @@ function onMouseDown ( component , x , y , button , parentX , parentY )
                 end
                 print("clicked ecam source")
                 manual_switching_in_progress = 0
+                return
             end
 
             --clicking anywhwere else
@@ -224,40 +228,40 @@ function update()
 
     --FO PFD show and hide--
     if get(Fo_pfd_displaying_status) == PFD then
-        fo_nd_color = DMC_GREEN
-        fo_nd_frame_color = DMC_GREEN
+        fo_pfd_color = DMC_GREEN
+        fo_pfd_frame_color = DMC_GREEN
         fo_pfd_text = "PFD"
     elseif get(Fo_pfd_displaying_status) == ND then
-        fo_nd_color = DMC_ORANGE
-        fo_nd_frame_color = DMC_ORANGE
+        fo_pfd_color = DMC_ORANGE
+        fo_pfd_frame_color = DMC_ORANGE
         fo_pfd_text = "ND"
     elseif get(Fo_pfd_displaying_status) == EWD then
-        fo_nd_color = DMC_ORANGE
-        fo_nd_frame_color = DMC_ORANGE
+        fo_pfd_color = DMC_ORANGE
+        fo_pfd_frame_color = DMC_ORANGE
         fo_pfd_text = "EWD"
     elseif get(Fo_pfd_displaying_status) == ECAM then
-        fo_nd_color = DMC_ORANGE
-        fo_nd_frame_color = DMC_ORANGE
+        fo_pfd_color = DMC_ORANGE
+        fo_pfd_frame_color = DMC_ORANGE
         fo_pfd_text = "ECAM"
     end
 
     --FO ND show and hide--
     if get(Fo_nd_displaying_status) == PFD then
-        fo_pfd_color = DMC_ORANGE
-        fo_pfd_frame_color = DMC_ORANGE
-        capt_nd_text = "PFD"
+        fo_nd_color = DMC_ORANGE
+        fo_nd_frame_color = DMC_ORANGE
+        fo_nd_text = "PFD"
     elseif get(Fo_nd_displaying_status) == ND then
-        fo_pfd_color = DMC_GREEN
-        fo_pfd_frame_color = DMC_GREEN
-        capt_nd_text = "ND"
+        fo_nd_color = DMC_GREEN
+        fo_nd_frame_color = DMC_GREEN
+        fo_nd_text = "ND"
     elseif get(Fo_nd_displaying_status) == EWD then
-        fo_pfd_color = DMC_ORANGE
-        fo_pfd_frame_color = DMC_ORANGE
-        capt_nd_text = "EWD"
+        fo_nd_color = DMC_ORANGE
+        fo_nd_frame_color = DMC_ORANGE
+        fo_nd_text = "EWD"
     elseif get(Fo_nd_displaying_status) == ECAM then
-        fo_pfd_color = DMC_ORANGE
-        fo_pfd_frame_color = DMC_ORANGE
-        capt_nd_text = "ECAM"
+        fo_nd_color = DMC_ORANGE
+        fo_nd_frame_color = DMC_ORANGE
+        fo_nd_text = "ECAM"
     end
 
     --EWD show and hide--
