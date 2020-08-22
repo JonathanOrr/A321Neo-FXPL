@@ -16,7 +16,7 @@ local DMC_RED = {1, 0.0, 0.0}
 
 local DMC_indicator_color = DMC_GREEN
 
---the color indications on the UI: green is normal function, amber is swiched to another no default source, red is a turned of display, white is manual source override
+--the color indications on the UI: green is normal function, amber is swiched to another no default source, red is a turned off display, white is manual source override
 local capt_pfd_color = DMC_GREEN
 local capt_pfd_text_color = DMC_WHITE
 local capt_pfd_text = "PFD"

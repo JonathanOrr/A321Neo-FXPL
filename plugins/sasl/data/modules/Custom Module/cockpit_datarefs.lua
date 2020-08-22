@@ -13,6 +13,14 @@ Autobrakes_max_button_state = createGlobalPropertyi("a321neo/cockpit/wheel/autob
 Eng1_bleed_off_button = createGlobalPropertyi("a321neo/cockpit/packs/eng1_bleed_off", 0, false, true, false) --0 is on 1 if off
 Eng2_bleed_off_button = createGlobalPropertyi("a321neo/cockpit/packs/eng2_bleed_off", 0, false, true, false) --0 is on 1 if off
 ---------------------------------------------------------------------------------------------------------------------------------------
+--display brightness
+Capt_PFD_brightness = createGlobalPropertyf("a321neo/cockpit/brightness/capt_pfd_brightness", 0, false, true, false)
+Capt_ND_brightness = createGlobalPropertyf("a321neo/cockpit/brightness/capt_nd_brightness", 0, false, true, false)
+Fo_PFD_brightness = createGlobalPropertyf("a321neo/cockpit/brightness/fo_pfd_brightness", 0, false, true, false)
+Fo_ND_brightness = createGlobalPropertyf("a321neo/cockpit/brightness/fo_nd_brightness", 0, false, true, false)
+EWD_brightness = createGlobalPropertyf("a321neo/cockpit/brightness/ewd_brightness", 0, false, true, false)
+ECAM_brightness = createGlobalPropertyf("a321neo/cockpit/brightness/ecam_brightness", 0, false, true, false)
+
 --source switching
 Override_DMC = createGlobalPropertyi("a321neo/cockpit/source_switching/override_DMC", 0, false, true, false)--override display source control computers
 
