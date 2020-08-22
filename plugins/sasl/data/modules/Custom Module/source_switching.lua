@@ -16,7 +16,7 @@ function update()
         set(ECAM_displaying_status, 4)
     end
 
-    --capt PFD show and hide--
+    --[[capt PFD show and hide--
     if get(Capt_pfd_displaying_status) == PFD then
         set(Capt_pfd_pfd_show, 1)
     else
@@ -146,6 +146,6 @@ function update()
         set(ECAM_ecam_show, 1)
     else
         set(ECAM_ecam_show, 0)
-    end
+    end]]
 
 end
