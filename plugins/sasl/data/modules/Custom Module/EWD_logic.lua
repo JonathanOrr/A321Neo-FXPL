@@ -208,6 +208,15 @@ local function update_right_list()
         list_right:put(COL_INDICATION, "AUTO BRK MAX")
     end
 
+    -- ACARS
+    if get(Acars_status) == 0 then
+        list_right:put(COL_INDICATION, "ACARS STBY")
+    end
+    -- TODO Audio: AUDIO 3 XFRD displayed green if audio switching selector not in NORM
+    -- TODO Acars: ACARS CALL (pulsing green) if received an ACARS message requesting voice conversation
+    -- TODO Acars: VHF 3 VOICE (pulsing green) if VHF 3 in voice mode and ACARS comm interrupted (?)
+    -- TODO Acars: ACARS MSG (pulsing green) if new ACARS message received
+
     -- TODO Autobrake fail: AUTO BRK OFF (any flight phase, amber)
 
     -- TODO RAM Air: RAM AIR ON green if related pushbutton switch is ON
@@ -216,11 +225,7 @@ local function update_right_list()
     -- TODO Steer: NW STRG DISC when the nose wheel steering selector is in the towing position
     --             GREEN: if no engine is running, AMBER: is at least one engine is running
     
-    -- TODO Audio: AUDIO 3 XFRD displayed green if audio switching selector not in NORM
-    -- TODO Acars: ACARS CALL (pulsing green) if received an ACARS message requesting voice conversation
-    -- TODO Acars: VHF 3 VOICE (pulsing green) if VHF 3 in voice mode and ACARS comm interrupted (?)
-    -- TODO Acars: ACARS MSG (pulsing green) if new ACARS message received
-    -- TODO Acars: ACARS STBY (green) if ACARS communication is lost
+
     
     -- TODO Elec: EMERG GEN displayed in green when emergency generator is running
     
