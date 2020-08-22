@@ -101,9 +101,9 @@ end)
 --custom functions
 local function cab_cond_off()
     --changing requested temperature to lowest temperature
-    set(Cockpit_temp_req, Set_anim_value(get(Cockpit_temp_req), 12, 12, 30, 0.5))
-    set(Front_cab_temp_req, Set_anim_value(get(Front_cab_temp_req), 12, 12, 30, 0.5))
-    set(Aft_cab_temp_req, Set_anim_value(get(Aft_cab_temp_req), 12, 12, 30, 0.5))
+    set(Cockpit_temp_req, Set_anim_value(get(Cockpit_temp_req), get(OTA), -100, 100, 0.5))
+    set(Front_cab_temp_req, Set_anim_value(get(Front_cab_temp_req), get(OTA), -100, 100, 0.5))
+    set(Aft_cab_temp_req, Set_anim_value(get(Aft_cab_temp_req), get(OTA), -100, 100, 0.5))
     --changing actual temperature to outside temperatures
     set(Cockpit_temp, Set_anim_value(get(Cockpit_temp), get(OTA), -100, 100, 0.05))
     set(Front_cab_temp, Set_anim_value(get(Front_cab_temp), get(OTA), -100, 100, 0.05))
@@ -112,7 +112,7 @@ end
 
 local function cargo_cond_off()
     --changing requested temperature to lowest temperature
-    set(Aft_cargo_temp_req, Set_anim_value(get(Aft_cargo_temp_req), 4, 4, 30, 0.5))
+    set(Aft_cargo_temp_req, Set_anim_value(get(Aft_cargo_temp_req), get(OTA), -100, 100, 0.5))
     --changing actual temperature to outside temperatures
     set(Aft_cargo_temp, Set_anim_value(get(Aft_cargo_temp), get(OTA), -100, 100, 0.05))
 end
