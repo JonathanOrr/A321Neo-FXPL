@@ -18,27 +18,21 @@ local DMC_indicator_color = DMC_GREEN
 
 --the color indications on the UI: green is normal function, amber is swiched to another no default source, red is a turned of display, white is manual source override
 local capt_pfd_color = DMC_GREEN
-local capt_pfd_frame_color = DMC_GREEN
 local capt_pfd_text_color = DMC_WHITE
 local capt_pfd_text = "PFD"
 local capt_nd_color = DMC_GREEN
-local capt_nd_frame_color = DMC_GREEN
 local capt_nd_text_color = DMC_WHITE
 local capt_nd_text = "ND"
 local fo_pfd_color = DMC_GREEN
-local fo_pfd_frame_color = DMC_GREEN
 local fo_pfd_text_color = DMC_WHITE
 local fo_pfd_text = "PFD"
 local fo_nd_color = DMC_GREEN
-local fo_nd_frame_color = DMC_GREEN
 local fo_nd_text_color = DMC_WHITE
 local fo_nd_text = "ND"
 local ewd_color = DMC_GREEN
-local ewd_frame_color = DMC_GREEN
 local ewd_text_color = DMC_WHITE
 local ewd_text = "EWD"
 local ecam_color = DMC_GREEN
-local ecam_frame_color = DMC_GREEN
 local ecam_text_color = DMC_WHITE
 local ecam_text = "ECAM"
 
@@ -191,114 +185,114 @@ function update()
     --capt PFD show and hide--
     if get(Capt_pfd_displaying_status) == PFD then
         capt_pfd_color = DMC_GREEN
-        capt_pfd_frame_color = DMC_GREEN
+        capt_pfd_text_color = DMC_GREEN
         capt_pfd_text = "PFD"
     elseif get(Capt_pfd_displaying_status) == ND then
         capt_pfd_color = DMC_ORANGE
-        capt_pfd_frame_color = DMC_ORANGE
+        capt_pfd_text_color = DMC_ORANGE
         capt_pfd_text = "ND"
     elseif get(Capt_pfd_displaying_status) == EWD then
         capt_pfd_color = DMC_ORANGE
-        capt_pfd_frame_color = DMC_ORANGE
+        capt_pfd_text_color = DMC_ORANGE
         capt_pfd_text = "EWD"
     elseif get(Capt_pfd_displaying_status) == ECAM then
         capt_pfd_color = DMC_ORANGE
-        capt_pfd_frame_color = DMC_ORANGE
+        capt_pfd_text_color = DMC_ORANGE
         capt_pfd_text = "ECAM"
     end
 
     --capt ND show and hide--
     if get(Capt_nd_displaying_status) == PFD then
         capt_nd_color = DMC_ORANGE
-        capt_nd_frame_color = DMC_ORANGE
+        capt_nd_text_color = DMC_ORANGE
         capt_nd_text = "PFD"
     elseif get(Capt_nd_displaying_status) == ND then
         capt_nd_color = DMC_GREEN
-        capt_nd_frame_color = DMC_GREEN
+        capt_nd_text_color = DMC_GREEN
         capt_nd_text = "ND"
     elseif get(Capt_nd_displaying_status) == EWD then
         capt_nd_color = DMC_ORANGE
-        capt_nd_frame_color = DMC_ORANGE
+        capt_nd_text_color = DMC_ORANGE
         capt_nd_text = "EWD"
     elseif get(Capt_nd_displaying_status) == ECAM then
         capt_nd_color = DMC_ORANGE
-        capt_nd_frame_color = DMC_ORANGE
+        capt_nd_text_color = DMC_ORANGE
         capt_nd_text = "ECAM"
     end
 
     --FO PFD show and hide--
     if get(Fo_pfd_displaying_status) == PFD then
         fo_pfd_color = DMC_GREEN
-        fo_pfd_frame_color = DMC_GREEN
+        fo_pfd_text_color = DMC_GREEN
         fo_pfd_text = "PFD"
     elseif get(Fo_pfd_displaying_status) == ND then
         fo_pfd_color = DMC_ORANGE
-        fo_pfd_frame_color = DMC_ORANGE
+        fo_pfd_text_color = DMC_ORANGE
         fo_pfd_text = "ND"
     elseif get(Fo_pfd_displaying_status) == EWD then
         fo_pfd_color = DMC_ORANGE
-        fo_pfd_frame_color = DMC_ORANGE
+        fo_pfd_text_color = DMC_ORANGE
         fo_pfd_text = "EWD"
     elseif get(Fo_pfd_displaying_status) == ECAM then
         fo_pfd_color = DMC_ORANGE
-        fo_pfd_frame_color = DMC_ORANGE
+        fo_pfd_text_color = DMC_ORANGE
         fo_pfd_text = "ECAM"
     end
 
     --FO ND show and hide--
     if get(Fo_nd_displaying_status) == PFD then
         fo_nd_color = DMC_ORANGE
-        fo_nd_frame_color = DMC_ORANGE
+        fo_nd_text_color = DMC_ORANGE
         fo_nd_text = "PFD"
     elseif get(Fo_nd_displaying_status) == ND then
         fo_nd_color = DMC_GREEN
-        fo_nd_frame_color = DMC_GREEN
+        fo_nd_text_color = DMC_GREEN
         fo_nd_text = "ND"
     elseif get(Fo_nd_displaying_status) == EWD then
         fo_nd_color = DMC_ORANGE
-        fo_nd_frame_color = DMC_ORANGE
+        fo_nd_text_color = DMC_ORANGE
         fo_nd_text = "EWD"
     elseif get(Fo_nd_displaying_status) == ECAM then
         fo_nd_color = DMC_ORANGE
-        fo_nd_frame_color = DMC_ORANGE
+        fo_nd_text_color = DMC_ORANGE
         fo_nd_text = "ECAM"
     end
 
     --EWD show and hide--
     if get(EWD_displaying_status) == PFD then
         ewd_color = DMC_ORANGE
-        ewd_frame_color = DMC_ORANGE
+        ewd_text_color = DMC_ORANGE
         ewd_text = "PFD"
     elseif get(EWD_displaying_status) == ND then
         ewd_color = DMC_ORANGE
-        ewd_frame_color = DMC_ORANGE
+        ewd_text_color = DMC_ORANGE
         ewd_text = "ND"
     elseif get(EWD_displaying_status) == EWD then
         ewd_color = DMC_GREEN
-        ewd_frame_color = DMC_GREEN
+        ewd_text_color = DMC_GREEN
         ewd_text = "EWD"
     elseif get(EWD_displaying_status) == ECAM then
         ewd_color = DMC_ORANGE
-        ewd_frame_color = DMC_ORANGE
+        ewd_text_color = DMC_ORANGE
         ewd_text = "ECAM"
     end
 
     --ECAM show and hide--
     if get(ECAM_displaying_status) == PFD then
         ecam_color = DMC_ORANGE
-        ecam_frame_color = DMC_ORANGE
+        ecam_text_color = DMC_ORANGE
         ecam_text = "PFD"
     elseif get(ECAM_displaying_status) == ND then
         ecam_color = DMC_ORANGE
-        ecam_frame_color = DMC_ORANGE
+        ecam_text_color = DMC_ORANGE
         ecam_text = "ND"
     elseif get(ECAM_displaying_status) == EWD then
         ecam_color = DMC_ORANGE
-        ecam_frame_color = DMC_ORANGE
+        ecam_text_color = DMC_ORANGE
         ecam_text = "EWD"
     elseif get(ECAM_displaying_status) == ECAM then
         ecam_color = DMC_GREEN
-        ecam_frame_color = DMC_GREEN
+        ecam_text_color = DMC_GREEN
         ecam_text = "ECAM"
     end
 
@@ -317,17 +311,11 @@ function update()
         DMC_indicator_color = DMC_RED
 
         capt_pfd_color = DMC_WHITE
-        capt_pfd_text_color = DMC_BLACK
         capt_nd_color = DMC_WHITE
-        capt_nd_text_color = DMC_BLACK
         fo_pfd_color = DMC_WHITE
-        fo_pfd_text_color = DMC_BLACK
         fo_nd_color = DMC_WHITE
-        fo_nd_text_color = DMC_BLACK
         ewd_color = DMC_WHITE
-        ewd_text_color = DMC_BLACK
         ecam_color = DMC_WHITE
-        ecam_text_color = DMC_BLACK
     end
 end
 
@@ -356,21 +344,6 @@ function draw()
         --ECAM--
         sasl.gl.drawRectangle(size[1]/2 - 25, size[2]/2 - 65, 50, 50, ecam_color)
         sasl.gl.drawText(B612MONO_bold, size[1]/2, size[2]/2 - 48, ecam_text, 19.5, false, false, TEXT_ALIGN_CENTER, ecam_text_color)
-
-        --draw overrode status indications frame
-        if get(Override_DMC) == 1 then
-            sasl.gl.drawFrame(size[1]/2 - 175, size[2]/2 + 10, 50, 50, capt_pfd_frame_color)
-            --Capt ND--
-            sasl.gl.drawFrame(size[1]/2 - 100, size[2]/2 + 10, 50, 50, capt_nd_frame_color)
-            --EWD--
-            sasl.gl.drawFrame(size[1]/2 - 25, size[2]/2 + 10, 50, 50, ewd_frame_color)
-            --FO ND--
-            sasl.gl.drawFrame(size[1]/2 + 50, size[2]/2 + 10, 50, 50, fo_nd_frame_color)
-            --FO PFD--
-            sasl.gl.drawFrame(size[1]/2 + 125, size[2]/2 + 10, 50, 50, fo_pfd_frame_color)
-            --ECAM--
-            sasl.gl.drawFrame(size[1]/2 - 25, size[2]/2 - 65, 50, 50, ecam_frame_color)
-        end
     else
         sasl.gl.drawText(B612MONO_regular, size[1]/2, size[2]/2 + 45, "PLEASE SELECT SOURCE", 22, false, false, TEXT_ALIGN_CENTER, DMC_WHITE)
 
