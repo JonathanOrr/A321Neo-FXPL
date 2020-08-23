@@ -23597,90 +23597,159 @@ IDX	19120
 		TRIS	4788 84
 		ATTR_manip_command	button	a321neo/cockpit/ecam/buttons/cmd_door	ECAM DOOR page
 		TRIS	7530 84
-		ATTR_manip_none
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_dot_key	DRAIMS 1 . key
 		TRIS	7614 156
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_0_key	DRAIMS 1 0 key
 		TRIS	7770 156
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_1_key	DRAIMS 1 1 key
 		TRIS	7926 156
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_2_key	DRAIMS 1 2 key
 		TRIS	8082 156
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_3_key	DRAIMS 1 3 key
 		TRIS	8238 156
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_4_key	DRAIMS 1 4 key
 		TRIS	8394 156
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_5_key	DRAIMS 1 5 key
 		TRIS	8550 156
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_6_key	DRAIMS 1 6 key
 		TRIS	8706 156
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_7_key	DRAIMS 1 7 key
 		TRIS	8862 156
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_8_key	DRAIMS 1 8 key
 		TRIS	9018 156
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_9_key	DRAIMS 1 9 key
 		TRIS	9174 156
+		ATTR_manip_none
 		TRIS	9330 84
 		TRIS	9414 84
 		TRIS	9498 84
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_clr_key	DRAIMS 1 CLR key
 		TRIS	9582 156
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_source_dn_button	DRAIMS 1 source down button
 		TRIS	9738 84
+		ATTR_manip_none
 		TRIS	9822 84
 		TRIS	9906 84
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_hf_button	DRAIMS 1 HF button
 		TRIS	9990 84
+		ATTR_manip_none
 		TRIS	10074 84
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_l_1_button	DRAIMS 1 left 1 button
 		TRIS	10158 84
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_l_2_button	DRAIMS 1 left 2 button
 		TRIS	10242 84
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_l_3_button	DRAIMS 1 left 3 button
 		TRIS	10326 84
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_l_4_button	DRAIMS 1 left 4 button
 		TRIS	10410 84
+		ATTR_manip_none
 		TRIS	10494 84
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_nav_button	DRAIMS 1 NAV button
 		TRIS	10578 84
+		ATTR_manip_none
 		TRIS	10662 84
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_r_1_button	DRAIMS 1 right 1 button
 		TRIS	10746 84
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_r_2_button	DRAIMS 1 right 2 button
 		TRIS	10830 84
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_r_3_button	DRAIMS 1 right 3 button
 		TRIS	10914 84
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_r_4_button	DRAIMS 1 right 4 button
 		TRIS	10998 84
+		ATTR_manip_none
 		TRIS	474 6
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_r_tcas_button	DRAIMS 1 right TCAS button
 		TRIS	11082 84
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_l_tcas_button	DRAIMS 1 left TCAS button
 		TRIS	11166 84
+		ATTR_manip_none
 		TRIS	11250 84
 		TRIS	11334 84
 		TRIS	11418 84
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_source_up_button	DRAIMS 1 source up button
 		TRIS	11502 84
+		ATTR_manip_none
 		TRIS	11586 84
 		TRIS	11670 84
 		TRIS	11754 84
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_vhf_button	DRAIMS 1 VHF button
 		TRIS	11838 84
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_dot_key	DRAIMS 2 . key
 		TRIS	11922 156
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_0_key	DRAIMS 2 0 key
 		TRIS	12078 156
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_1_key	DRAIMS 2 1 key
 		TRIS	12234 156
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_2_key	DRAIMS 2 2 key
 		TRIS	12390 156
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_3_key	DRAIMS 2 3 key
 		TRIS	12546 156
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_4_key	DRAIMS 2 4 key
 		TRIS	12702 156
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_5_key	DRAIMS 2 5 key
 		TRIS	12858 156
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_6_key	DRAIMS 2 6 key
 		TRIS	13014 156
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_7_key	DRAIMS 2 7 key
 		TRIS	13170 156
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_8_key	DRAIMS 2 8 key
 		TRIS	13326 156
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_9_key	DRAIMS 2 9 key
 		TRIS	13482 156
+		ATTR_manip_none
 		TRIS	13638 84
 		TRIS	13722 84
 		TRIS	13806 84
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_clr_key	DRAIMS 2 CLR key
 		TRIS	13890 156
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_source_dn_button	DRAIMS 2 source down button
 		TRIS	14046 84
+		ATTR_manip_none
 		TRIS	14130 84
 		TRIS	14214 84
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_hf_button	DRAIMS 2 HF button
 		TRIS	14298 84
+		ATTR_manip_none
 		TRIS	14382 84
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_l_1_button	DRAIMS 2 left 1 button
 		TRIS	14466 84
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_l_2_button	DRAIMS 2 left 2 button
 		TRIS	14550 84
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_l_3_button	DRAIMS 2 left 3 button
 		TRIS	14634 84
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_l_4_button	DRAIMS 2 left 4 button
 		TRIS	14718 84
+		ATTR_manip_none
 		TRIS	14802 84
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_nav_button	DRAIMS 2 NAV button
 		TRIS	14886 84
+		ATTR_manip_none
 		TRIS	14970 84
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_r_1_button	DRAIMS 2 right 1 button
 		TRIS	15054 84
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_r_2_button	DRAIMS 2 right 2 button
 		TRIS	15138 84
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_r_3_button	DRAIMS 2 right 3 button
 		TRIS	15222 84
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_r_4_button	DRAIMS 2 right 4 button
 		TRIS	15306 84
+		ATTR_manip_none
 		TRIS	486 6
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_r_tcas_button	DRAIMS 2 right TCAS button
 		TRIS	15390 84
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_l_tcas_button	DRAIMS 2 left TCAS button
 		TRIS	15474 84
+		ATTR_manip_none
 		TRIS	15558 84
 		TRIS	15642 84
 		TRIS	15726 84
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_source_up_button	DRAIMS 2 source up button
 		TRIS	15810 84
+		ATTR_manip_none
 		TRIS	15894 84
 		TRIS	15978 84
 		TRIS	16062 84
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_vhf_button	DRAIMS 2 VHF button
 		TRIS	16146 84
 		ATTR_manip_command	button	a321neo/cockpit/ecam/buttons/cmd_clr	ECAM CLR
 		TRIS	16398 84

@@ -40,6 +40,7 @@ components = {
   EWD_flight_phases {},
   HUD {},
   DCDU {},
+  DRAIMS {},
   display_brightness {}
  }
 

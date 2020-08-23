@@ -69,8 +69,6 @@ function update()
         end
     end
 
-    print(Math_lerp(330, max_speeds_kts[1], (get(Front_gear_deployment) + get(Left_gear_deployment) + get(Right_gear_deployment)) / 3))
-
     vvi_cl = PFD_GREEN
     if get(vvi) > -1000 and get(vvi) < 1000 then
         --v/s -1000 to 1000
