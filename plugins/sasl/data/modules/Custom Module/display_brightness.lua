@@ -16,112 +16,113 @@ local ECAM_brightness_alpha = {0.0, 0.0, 0.0, 1}
 --capt pfd
 sasl.registerCommandHandler ( Capt_PFD_brightness_up, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(Cockpit_temp_dial, get(Cockpit_temp_dial) + 0.05)
+        set(Capt_PFD_brightness, Math_clamp(get(Capt_PFD_brightness) + 0.05, 0, 1))
     end
     if phase == SASL_COMMAND_CONTINUE then
-        set(Cockpit_temp_dial, get(Cockpit_temp_dial) + 0.5 * get(DELTA_TIME))
+        set(Capt_PFD_brightness, Math_clamp(get(Capt_PFD_brightness) + 0.5 * get(DELTA_TIME), 0, 1))
     end
 end)
 sasl.registerCommandHandler ( Capt_PFD_brightness_dn, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(Cockpit_temp_dial, get(Cockpit_temp_dial) + 0.05)
+        set(Capt_PFD_brightness, Math_clamp(get(Capt_PFD_brightness) - 0.05, 0, 1))
     end
     if phase == SASL_COMMAND_CONTINUE then
-        set(Cockpit_temp_dial, get(Cockpit_temp_dial) + 0.5 * get(DELTA_TIME))
+        set(Capt_PFD_brightness, Math_clamp(get(Capt_PFD_brightness) - 0.5 * get(DELTA_TIME), 0, 1))
     end
 end)
 
 --capt nd
 sasl.registerCommandHandler ( Capt_ND_brightness_up, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(Cockpit_temp_dial, get(Cockpit_temp_dial) + 0.05)
+        set(Capt_ND_brightness, Math_clamp(get(Capt_ND_brightness) + 0.05, 0, 1))
     end
     if phase == SASL_COMMAND_CONTINUE then
-        set(Cockpit_temp_dial, get(Cockpit_temp_dial) + 0.5 * get(DELTA_TIME))
+        set(Capt_ND_brightness, Math_clamp(get(Capt_ND_brightness) + 0.5 * get(DELTA_TIME), 0, 1))
     end
 end)
 sasl.registerCommandHandler ( Capt_ND_brightness_dn, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(Cockpit_temp_dial, get(Cockpit_temp_dial) + 0.05)
+        set(Capt_ND_brightness, Math_clamp(get(Capt_ND_brightness) - 0.05, 0, 1))
     end
     if phase == SASL_COMMAND_CONTINUE then
-        set(Cockpit_temp_dial, get(Cockpit_temp_dial) + 0.5 * get(DELTA_TIME))
+        set(Capt_ND_brightness, Math_clamp(get(Capt_ND_brightness) - 0.5 * get(DELTA_TIME), 0, 1))
     end
 end)
 
 --fo pfd
 sasl.registerCommandHandler ( Fo_PFD_brightness_up, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(Cockpit_temp_dial, get(Cockpit_temp_dial) + 0.05)
+        set(Fo_PFD_brightness, Math_clamp(get(Fo_PFD_brightness) + 0.05, 0, 1))
     end
     if phase == SASL_COMMAND_CONTINUE then
-        set(Cockpit_temp_dial, get(Cockpit_temp_dial) + 0.5 * get(DELTA_TIME))
+        set(Fo_PFD_brightness, Math_clamp(get(Fo_PFD_brightness) + 0.5 * get(DELTA_TIME), 0, 1))
     end
 end)
 sasl.registerCommandHandler ( Fo_PFD_brightness_dn, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(Cockpit_temp_dial, get(Cockpit_temp_dial) + 0.05)
+        set(Fo_PFD_brightness, Math_clamp(get(Fo_PFD_brightness) - 0.05, 0, 1))
     end
     if phase == SASL_COMMAND_CONTINUE then
-        set(Cockpit_temp_dial, get(Cockpit_temp_dial) + 0.5 * get(DELTA_TIME))
+        set(Fo_PFD_brightness, Math_clamp(get(Fo_PFD_brightness) - 0.5 * get(DELTA_TIME), 0, 1))
     end
 end)
 
 --fo nd
 sasl.registerCommandHandler ( Fo_ND_brightness_up, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(Cockpit_temp_dial, get(Cockpit_temp_dial) + 0.05)
+        set(Fo_ND_brightness, Math_clamp(get(Fo_ND_brightness) + 0.05, 0, 1))
     end
     if phase == SASL_COMMAND_CONTINUE then
-        set(Cockpit_temp_dial, get(Cockpit_temp_dial) + 0.5 * get(DELTA_TIME))
+        set(Fo_ND_brightness, Math_clamp(get(Fo_ND_brightness) + 0.5 * get(DELTA_TIME), 0, 1))
     end
 end)
 sasl.registerCommandHandler ( Fo_ND_brightness_dn, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(Cockpit_temp_dial, get(Cockpit_temp_dial) + 0.05)
+        set(Fo_ND_brightness, Math_clamp(get(Fo_ND_brightness) - 0.05, 0, 1))
     end
     if phase == SASL_COMMAND_CONTINUE then
-        set(Cockpit_temp_dial, get(Cockpit_temp_dial) + 0.5 * get(DELTA_TIME))
+        set(Fo_ND_brightness, Math_clamp(get(Fo_ND_brightness) - 0.5 * get(DELTA_TIME), 0, 1))
     end
 end)
 
 --ewd
 sasl.registerCommandHandler ( EWD_brightness_up, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(Cockpit_temp_dial, get(Cockpit_temp_dial) + 0.05)
+        set(EWD_brightness, Math_clamp(get(EWD_brightness) + 0.05, 0, 1))
     end
     if phase == SASL_COMMAND_CONTINUE then
-        set(Cockpit_temp_dial, get(Cockpit_temp_dial) + 0.5 * get(DELTA_TIME))
+        set(EWD_brightness, Math_clamp(get(EWD_brightness) + 0.5 * get(DELTA_TIME), 0, 1))
     end
 end)
 sasl.registerCommandHandler ( EWD_brightness_dn, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(Cockpit_temp_dial, get(Cockpit_temp_dial) + 0.05)
+        set(EWD_brightness, Math_clamp(get(EWD_brightness) - 0.05, 0, 1))
     end
     if phase == SASL_COMMAND_CONTINUE then
-        set(Cockpit_temp_dial, get(Cockpit_temp_dial) + 0.5 * get(DELTA_TIME))
+        set(EWD_brightness, Math_clamp(get(EWD_brightness) - 0.5 * get(DELTA_TIME), 0, 1))
     end
 end)
 
 --ecam
 sasl.registerCommandHandler ( ECAM_brightness_up, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(Cockpit_temp_dial, get(Cockpit_temp_dial) + 0.05)
+        set(ECAM_brightness, Math_clamp(get(ECAM_brightness) + 0.05, 0, 1))
     end
     if phase == SASL_COMMAND_CONTINUE then
-        set(Cockpit_temp_dial, get(Cockpit_temp_dial) + 0.5 * get(DELTA_TIME))
+        set(ECAM_brightness, Math_clamp(get(ECAM_brightness) + 0.5 * get(DELTA_TIME), 0, 1))
     end
 end)
 sasl.registerCommandHandler ( ECAM_brightness_dn, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(Cockpit_temp_dial, get(Cockpit_temp_dial) + 0.05)
+        set(ECAM_brightness, Math_clamp(get(ECAM_brightness) - 0.05, 0, 1))
     end
     if phase == SASL_COMMAND_CONTINUE then
-        set(Cockpit_temp_dial, get(Cockpit_temp_dial) + 0.5 * get(DELTA_TIME))
+        set(ECAM_brightness, Math_clamp(get(ECAM_brightness) - 0.5 * get(DELTA_TIME), 0, 1))
     end
 end)
 
 function update()
+
     set(Total_element_brightness, 1)
 
     Capt_PFD_brightness_alpha[4] = 1 - get(Capt_PFD_brightness)
