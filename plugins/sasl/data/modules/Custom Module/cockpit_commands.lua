@@ -40,6 +40,18 @@ EWD_brightness_up = createCommand("a321neo/cockpit/brightness/ewd_brightness_up"
 EWD_brightness_dn = createCommand("a321neo/cockpit/brightness/ewd_brightness_dn", "EWD brightness down")
 ECAM_brightness_up = createCommand("a321neo/cockpit/brightness/ecam_brightness_up", "ECAM brightness up")
 ECAM_brightness_dn = createCommand("a321neo/cockpit/brightness/ecam_brightness_dn", "ECAM brightness down")
+DCDU_1_brightness_up = createCommand("a321neo/cockpit/brightness/dcdu_1_brightness_up", "DCDU 1 brightness up")
+DCDU_1_brightness_dn = createCommand("a321neo/cockpit/brightness/dcdu_1_brightness_dn", "DCDU 1 brightness down")
+DCDU_2_brightness_up = createCommand("a321neo/cockpit/brightness/dcdu_2_brightness_up", "DCDU 2 brightness up")
+DCDU_2_brightness_dn = createCommand("a321neo/cockpit/brightness/dcdu_2_brightness_dn", "DCDU 2 brightness down")
+MCDU_1_brightness_up = createCommand("a321neo/cockpit/brightness/mcdu_1_brightness_up", "MCDU 1 brightness up")
+MCDU_1_brightness_dn = createCommand("a321neo/cockpit/brightness/mcdu_1_brightness_dn", "MCDU 1 brightness down")
+MCDU_2_brightness_up = createCommand("a321neo/cockpit/brightness/mcdu_2_brightness_up", "MCDU 2 brightness up")
+MCDU_2_brightness_dn = createCommand("a321neo/cockpit/brightness/mcdu_2_brightness_dn", "MCDU 2 brightness down")
+DRAIMS_1_brightness_up = createCommand("a321neo/cockpit/brightness/draims_1_brightness_up", "DRAIMS 1 brightness up")
+DRAIMS_1_brightness_dn = createCommand("a321neo/cockpit/brightness/draims_1_brightness_dn", "DRAIMS 1 brightness down")
+DRAIMS_2_brightness_up = createCommand("a321neo/cockpit/brightness/draims_2_brightness_up", "DRAIMS 2 brightness up")
+DRAIMS_2_brightness_dn = createCommand("a321neo/cockpit/brightness/draims_2_brightness_dn", "DRAIMS 2 brightness down")
 
 --aircond
 Toggle_cab_hotair = createCommand("a321neo/cockpit/aircond/toggle_cab_hotair", "Toggle cabin hot air")
