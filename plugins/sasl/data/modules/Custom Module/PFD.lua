@@ -52,18 +52,20 @@ function update()
     set(stall_speed, Set_anim_value(get(stall_speed), get(IAS) * (get(Alpha)/14), 0, 350, 0.8))--14 degrees of AoA
 
     --max speeds calculation
-    if get(Flaps_handle_ratio) == 0 and get(Gear_handle) == 0 then
+    if get(Flaps_handle_deploy_ratio) == 0 and (get(Front_gear_deployment) + get(Left_gear_deployment) + get(Right_gear_deployment)) / 3 == 0 then
         set(Max_speed, 330)
-    elseif get(Gear_handle) == 1 or get(Flaps_handle_ratio) > 0 then
-        set(Max_speed, max_speeds_kts[1])
-        if get(Flaps_handle_ratio) == 0.25 then
-            set(Max_speed, max_speeds_kts[3])
-        elseif get(Flaps_handle_ratio) == 0.5 then
-            set(Max_speed, max_speeds_kts[4])
-        elseif get(Flaps_handle_ratio) == 0.75 then
-            set(Max_speed, max_speeds_kts[5])
-        elseif get(Flaps_handle_ratio) == 1 then
-            set(Max_speed, max_speeds_kts[6])
+    elseif (get(Front_gear_deployment) + get(Left_gear_deployment) + get(Right_gear_deployment)) / 3 > 0 or get(Flaps_handle_deploy_ratio) > 0 then
+        set(Max_speed, Math_lerp(330, max_speeds_kts[1], (get(Front_gear_deployment) + get(Left_gear_deployment) + get(Right_gear_deployment)) / 3))
+        if get(Gear_handle) == 1 and get(Flaps_handle_deploy_ratio) > 0 then
+            set(Max_speed, Math_lerp(Math_lerp(330, max_speeds_kts[1], (get(Front_gear_deployment) + get(Left_gear_deployment) + get(Right_gear_deployment)) / 3), max_speeds_kts[3], Math_clamp(get(Flaps_handle_deploy_ratio),0, 0.25) / 0.25) +
+                           Math_lerp(0, max_speeds_kts[4] - max_speeds_kts[3], (Math_clamp(get(Flaps_handle_deploy_ratio),0.25, 0.5) - 0.25) / 0.25) +
+                           Math_lerp(0, max_speeds_kts[5] - max_speeds_kts[4], (Math_clamp(get(Flaps_handle_deploy_ratio),0.5, 0.75) - 0.5) / 0.25) +
+                           Math_lerp(0, max_speeds_kts[5] - max_speeds_kts[4], (Math_clamp(get(Flaps_handle_deploy_ratio),0.75, 1) - 0.75) / 0.25))
+        elseif get(Gear_handle) == 0 and get(Flaps_handle_deploy_ratio) > 0 then
+            set(Max_speed, Math_lerp(330, max_speeds_kts[3], Math_clamp(get(Flaps_handle_deploy_ratio), 0, 0.25) / 0.25) +
+                           Math_lerp(0, max_speeds_kts[4] - max_speeds_kts[3], (Math_clamp(get(Flaps_handle_deploy_ratio),0.25, 0.5) - 0.25) / 0.25) +
+                           Math_lerp(0, max_speeds_kts[5] - max_speeds_kts[4], (Math_clamp(get(Flaps_handle_deploy_ratio),0.5, 0.75) - 0.5) / 0.25) +
+                           Math_lerp(0, max_speeds_kts[5] - max_speeds_kts[4], (Math_clamp(get(Flaps_handle_deploy_ratio),0.75, 1) - 0.75) / 0.25))
         end
     end
 

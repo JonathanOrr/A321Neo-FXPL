@@ -13,47 +13,97 @@ Autobrakes_max_button_state = createGlobalPropertyi("a321neo/cockpit/wheel/autob
 Eng1_bleed_off_button = createGlobalPropertyi("a321neo/cockpit/packs/eng1_bleed_off", 0, false, true, false) --0 is on 1 if off
 Eng2_bleed_off_button = createGlobalPropertyi("a321neo/cockpit/packs/eng2_bleed_off", 0, false, true, false) --0 is on 1 if off
 ---------------------------------------------------------------------------------------------------------------------------------------
+--display brightness
+Total_element_brightness = globalProperty("sim/cockpit/electrical/instrument_brightness")
+
+Capt_PFD_brightness = createGlobalPropertyf("a321neo/cockpit/brightness/capt_pfd_brightness", 1, false, true, false)
+Capt_ND_brightness = createGlobalPropertyf("a321neo/cockpit/brightness/capt_nd_brightness", 1, false, true, false)
+Fo_PFD_brightness = createGlobalPropertyf("a321neo/cockpit/brightness/fo_pfd_brightness", 1, false, true, false)
+Fo_ND_brightness = createGlobalPropertyf("a321neo/cockpit/brightness/fo_nd_brightness", 1, false, true, false)
+EWD_brightness = createGlobalPropertyf("a321neo/cockpit/brightness/ewd_brightness", 1, false, true, false)
+ECAM_brightness = createGlobalPropertyf("a321neo/cockpit/brightness/ecam_brightness", 1, false, true, false)
+DCDU_1_brightness = createGlobalPropertyf("a321neo/cockpit/brightness/dcdu_1_brightness", 1, false, true, false)
+DCDU_2_brightness = createGlobalPropertyf("a321neo/cockpit/brightness/dcdu_2_brightness", 1, false, true, false)
+MCDU_1_brightness = createGlobalPropertyf("a321neo/cockpit/brightness/mcdu_1_brightness", 1, false, true, false)
+MCDU_2_brightness = createGlobalPropertyf("a321neo/cockpit/brightness/mcdu_2_brightness", 1, false, true, false)
+DRAIMS_1_brightness = createGlobalPropertyf("a321neo/cockpit/brightness/draims_1_brightness", 1, false, true, false)
+DRAIMS_2_brightness = createGlobalPropertyf("a321neo/cockpit/brightness/draims_2_brightness", 1, false, true, false)
+
+--draims--
+DRAIMS_current_page = createGlobalPropertyi("a321neo/cockpit/draims/current_page", 1, false, true, false)--the page the draims unit is currently displaying 1VHF, 2HFs, 3TEL, 4ATC, 5MENU, 6NAV, 7ILS, 8VOR, 9ADF
+DRAIMS_line_1_speaker_shown = createGlobalPropertyi("a321neo/cockpit/draims/line_1_speaker_shown", 0, false, true, false)--if the little speaker on the first line is shown
+DRAIMS_line_2_speaker_shown = createGlobalPropertyi("a321neo/cockpit/draims/line_2_speaker_shown", 0, false, true, false)--if the little speaker on the second line is shown
+DRAIMS_line_3_speaker_shown = createGlobalPropertyi("a321neo/cockpit/draims/line_3_speaker_shown", 0, false, true, false)--if the little speaker on the third line is shown
+DRAIMS_format_error = createGlobalPropertyi("a321neo/cockpit/draims/format_error", 0, false, true, false)--if the format error message is shown ---> 1 invalid freqency format, 2 VHF out of range, 3 ILS out of range, 4 ILS freq spacing error(not odd), 5 VOR out of range, 6 VOR freq spacing error, 7 ADF out of range, 8 sqwk out of range, 9 sqwk integer only, 10 cursor in use, 11 more than 1 decimal point
+
+VHF_1_freq_swapped = globalProperty("sim/cockpit2/radios/actuators/com1_right_is_selected")--if the left and the right side vhf 1 freqencies are swapped very useful
+VHF_1_freq_Mhz = globalProperty("sim/cockpit2/radios/actuators/com1_frequency_Mhz")--vhf 1 freq Mhz >xxx<.xx, range from 118.000 to 137.000
+VHF_1_freq_khz = globalProperty("sim/cockpit2/radios/actuators/com1_frequency_khz")--vhf 1 freq khz xxx.>xx<, range from 118.000 to 137.000
+VHF_1_stby_freq_Mhz = globalProperty("sim/cockpit2/radios/actuators/com1_standby_frequency_Mhz")--vhf 1 stby freq Mhz >xxx<.xx, range from 118.000 to 137.000
+VHF_1_stby_freq_khz = globalProperty("sim/cockpit2/radios/actuators/com1_standby_frequency_khz")--vhf 1 stby freq khz xxx.>xx<, range from 118.000 to 137.000
+VHF_2_freq_swapped = globalProperty("sim/cockpit2/radios/actuators/com2_right_is_selected")--if the left and the right side vhf 2 freqencies are swapped very useful
+VHF_2_freq_Mhz = globalProperty("sim/cockpit2/radios/actuators/com2_frequency_Mhz")--vhf 2 freq Mhz >xxx<.xx, range from 118.000 to 137.000
+VHF_2_freq_khz = globalProperty("sim/cockpit2/radios/actuators/com2_frequency_khz")--vhf 2 freq khz xxx.>xx<, range from 118.000 to 137.000
+VHF_2_stby_freq_Mhz = globalProperty("sim/cockpit2/radios/actuators/com2_standby_frequency_Mhz")--vhf 2 stby freq Mhz >xxx<.xx, range from 118.000 to 137.000
+VHF_2_stby_freq_khz = globalProperty("sim/cockpit2/radios/actuators/com2_standby_frequency_khz")--vhf 2 stby freq khz xxx.>xx<, range from 118.000 to 137.000
+
+DRAIMS_cursor_pos = createGlobalPropertyf("a321neo/cockpit/draims/cursor_position", 3, false, true, false)--DRAIMS VHF blue cursor position
+DRAIMS_cursor_freq_Mhz = createGlobalPropertyf("a321neo/cockpit/draims/cursor_frequency_Mhz", 121, false, true, false)--vhf 3 guard freq khz xxx.>xx<, when touched should be 121.500
+DRAIMS_cursor_freq_khz = createGlobalPropertyf("a321neo/cockpit/draims/cursor_guard_frequency_khz", 5, false, true, false)--vhf 3 guard freq khz xxx.>xx<, when touched should be 121.500
+
+Radio_nav_selection = globalProperty("sim/cockpit2/radios/actuators/audio_nav_selection")--0=nav1, 1=nav2, 2=adf1, 3=adf2, 9=none
+NAV_1_freq_Mhz = globalProperty("sim/cockpit2/radios/actuators/nav1_frequency_Mhz")--nav 1 freq Mhz >xxx<.xx, ILS range from 108.100 to 111.950 with xxx.>x<xx always being odd, VOR from 108.000 to 117.950 with 50 khz spacing and first 4 Mhz shared with ILS
+NAV_1_freq_khz = globalProperty("sim/cockpit2/radios/actuators/nav1_frequency_khz")--nav 1 freq khz xxx.>xx<, ILS range from 108.100 to 111.950 with xxx.>x<xx always being odd, VOR from 108.00 to 117.950 with 50 khz spacing and first 4 Mhz shared with ILS
+NAV_1_capt_obs = globalProperty("sim/cockpit2/radios/actuators/nav1_obs_deg_mag_pilot")--captain nav 1 obs
+NAV_1_fo_obs = globalProperty("sim/cockpit2/radios/actuators/nav1_obs_deg_mag_copilot")--first officer nav 1 obs
+ADF_1_freq_hz = globalProperty("sim/cockpit2/radios/actuators/adf1_frequency_hz")--adf 1 freq hz typically 190hz to 535hz
+NAV_2_freq_Mhz = globalProperty("sim/cockpit2/radios/actuators/nav2_frequency_Mhz")--nav 2 freq Mhz >xxx<.xx, ILS range from 108.100 to 111.950 with xxx.>x<xx always being odd, VOR from 108.00 to 117.950 with 50 khz spacing and first 4 Mhz shared with ILS
+NAV_2_freq_khz = globalProperty("sim/cockpit2/radios/actuators/nav2_frequency_khz")--nav 2 freq khz xxx.>xx<, ILS range from 108.100 to 111.950 with xxx.>x<xx always being odd, VOR from 108.00 to 117.950 with 50 khz spacing and first 4 Mhz shared with ILS
+NAV_2_capt_obs = globalProperty("sim/cockpit2/radios/actuators/nav2_obs_deg_mag_pilot")--captain nav 2 obs
+NAV_2_fo_obs = globalProperty("sim/cockpit2/radios/actuators/nav2_obs_deg_mag_copilot")--first officer nav 2 obs
+ADF_2_freq_hz = globalProperty("sim/cockpit2/radios/actuators/adf2_frequency_hz")--adf 2 freq hz typically 190hz to 535hz
+
+Sqwk_identifying = globalProperty("sim/cockpit2/radios/indicators/transponder_id")--if the transponder is identifiying right now
+Sqwk_code = globalProperty("sim/cockpit2/radios/actuators/transponder_code")--sqwk code range 0000 to 7777
+Sqwk_mode = globalProperty("sim/cockpit2/radios/actuators/transponder_mode") --Transponder mode (off=0,stdby=1,on=2,test=3) --> a321 0off, 1stby, 2TA, 2RA
+DRAIMS_Sqwk_mode = createGlobalPropertyi("a321neo/cockpit/draims/transponder_mode", 0, false, true, false)--0off, 1stby, 2TA, 3RA
+
+VHF_transmit_dest = globalProperty("sim/cockpit2/radios/actuators/audio_com_selection")--6=com1,7=com2
+VHF_1_transmit_selected = createGlobalPropertyi("a321neo/cockpit/draims/vhf_1_transmit_selected", 0, false, true, false)--0off, 1selected
+VHF_2_transmit_selected = createGlobalPropertyi("a321neo/cockpit/draims/vhf_2_transmit_selected", 0, false, true, false)--0off, 1selected
+
+VHF_1_audio_selected = globalProperty("sim/cockpit2/radios/actuators/audio_selection_com1")
+VHF_2_audio_selected = globalProperty("sim/cockpit2/radios/actuators/audio_selection_com2")
+NAV_1_audio_selected = globalProperty("sim/cockpit2/radios/actuators/audio_selection_nav1")
+NAV_2_audio_selected = globalProperty("sim/cockpit2/radios/actuators/audio_selection_nav2")
+ADF_1_audio_selected = globalProperty("sim/cockpit2/radios/actuators/audio_selection_adf1")
+ADF_2_audio_selected = globalProperty("sim/cockpit2/radios/actuators/audio_selection_adf2")
+VHF_1_volume = globalProperty("sim/cockpit2/radios/actuators/audio_volume_com1")
+VHF_2_volume = globalProperty("sim/cockpit2/radios/actuators/audio_volume_com2")
+NAV_1_volume = globalProperty("sim/cockpit2/radios/actuators/audio_volume_nav1")
+NAV_2_volume = globalProperty("sim/cockpit2/radios/actuators/audio_volume_nav2")
+ADF_1_volume = globalProperty("sim/cockpit2/radios/actuators/audio_volume_adf1")
+ADF_2_volume = globalProperty("sim/cockpit2/radios/actuators/audio_volume_adf2")
+
 --source switching
 Override_DMC = createGlobalPropertyi("a321neo/cockpit/source_switching/override_DMC", 0, false, true, false)--override display source control computers
 
-Capt_pfd_displaying_status = createGlobalPropertyi("a321neo/cockpit/source_switching/capt_pfd_displaying_status", 1, false, true, false)--source being displayed 1pfd, 2nd, 3ewd, 4ecam
-Capt_nd_displaying_status = createGlobalPropertyi("a321neo/cockpit/source_switching/capt_nd_displaying_status", 2, false, true, false)--source being displayed 1pfd, 2nd, 3ewd, 4ecam
-Fo_pfd_displaying_status = createGlobalPropertyi("a321neo/cockpit/source_switching/fo_pfd_displaying_status", 1, false, true, false)--source being displayed 1pfd, 2nd, 3ewd, 4ecam
-Fo_nd_displaying_status = createGlobalPropertyi("a321neo/cockpit/source_switching/fo_nd_displaying_status", 2, false, true, false)--source being displayed 1pfd, 2nd, 3ewd, 4ecam
-EWD_displaying_status = createGlobalPropertyi("a321neo/cockpit/source_switching/ewd_displaying_status", 3, false, true, false)--source being displayed 1pfd, 2nd, 3ewd, 4ecam
-ECAM_displaying_status = createGlobalPropertyi("a321neo/cockpit/source_switching/ecam_displaying_status", 4, false, true, false)--source being displayed 1pfd, 2nd, 3ewd, 4ecam
+Capt_pfd_displaying_status = createGlobalPropertyf("a321neo/cockpit/source_switching/capt_pfd_displaying_status", 1, false, true, false)--source being displayed 1pfd, 2nd, 3ewd, 4ecam
+Capt_nd_displaying_status = createGlobalPropertyf("a321neo/cockpit/source_switching/capt_nd_displaying_status", 2, false, true, false)--source being displayed 1pfd, 2nd, 3ewd, 4ecam
+Fo_pfd_displaying_status = createGlobalPropertyf("a321neo/cockpit/source_switching/fo_pfd_displaying_status", 1, false, true, false)--source being displayed 1pfd, 2nd, 3ewd, 4ecam
+Fo_nd_displaying_status = createGlobalPropertyf("a321neo/cockpit/source_switching/fo_nd_displaying_status", 2, false, true, false)--source being displayed 1pfd, 2nd, 3ewd, 4ecam
+EWD_displaying_status = createGlobalPropertyf("a321neo/cockpit/source_switching/ewd_displaying_status", 3, false, true, false)--source being displayed 1pfd, 2nd, 3ewd, 4ecam
+ECAM_displaying_status = createGlobalPropertyf("a321neo/cockpit/source_switching/ecam_displaying_status", 4, false, true, false)--source being displayed 1pfd, 2nd, 3ewd, 4ecam
 
-Capt_pfd_pfd_show = createGlobalPropertyf("a321neo/cockpit/source_switching/capt_pfd_pfd_show", 1, false, true, false)--used for source switching changing the positions of the screens
-Capt_pfd_nd_show = createGlobalPropertyf("a321neo/cockpit/source_switching/capt_pfd_nd_show", 0, false, true, false)--used for source switching changing the positions of the screens
-Capt_pfd_ewd_show = createGlobalPropertyf("a321neo/cockpit/source_switching/capt_pfd_ewd_show", 0, false, true, false)--used for source switching changing the positions of the screens
-Capt_pfd_ecam_show = createGlobalPropertyf("a321neo/cockpit/source_switching/capt_pfd_ecam_show", 0, false, true, false)--used for source switching changing the positions of the screens
+--the index follows the source proirity[0,1,2,3] pfd, nd, ewd, ecam^^^^
+Capt_pfd_show = createGlobalPropertyfa("a321neo/cockpit/source_switching/capt_pfd_show", 4, false, true, false)--used for source switching changing the positions of the screens(automated)
+Capt_nd_show = createGlobalPropertyfa("a321neo/cockpit/source_switching/capt_nd_show", 4, false, true, false)--used for source switching changing the positions of the screens(automated)
+Fo_pfd_show = createGlobalPropertyfa("a321neo/cockpit/source_switching/fo_pfd_show", 4, false, true, false)--used for source switching changing the positions of the screens(automated)
+Fo_nd_show = createGlobalPropertyfa("a321neo/cockpit/source_switching/fo_nd_show", 4, false, true, false)--used for source switching changing the positions of the screens(automated)
+EWD_show = createGlobalPropertyfa("a321neo/cockpit/source_switching/ewd_show", 4, false, true, false)--used for source switching changing the positions of the screens(automated)
+ECAM_show = createGlobalPropertyfa("a321neo/cockpit/source_switching/ecam_show", 4, false, true, false)--used for source switching changing the positions of the screens(automated)
 
-Capt_nd_pfd_show = createGlobalPropertyf("a321neo/cockpit/source_switching/Capt_nd_pfd_show", 0, false, true, false)--used for source switching changing the positions of the screens
-Capt_nd_nd_show = createGlobalPropertyf("a321neo/cockpit/source_switching/Capt_nd_nd_show", 1, false, true, false)--used for source switching changing the positions of the screens
-Capt_nd_ewd_show = createGlobalPropertyf("a321neo/cockpit/source_switching/Capt_nd_ewd_show", 0, false, true, false)--used for source switching changing the positions of the screens
-Capt_nd_ecam_show = createGlobalPropertyf("a321neo/cockpit/source_switching/Capt_nd_ecam_show", 0, false, true, false)--used for source switching changing the positions of the screens
-
-Fo_pfd_pfd_show = createGlobalPropertyf("a321neo/cockpit/source_switching/Fo_pfd_pfd_show", 1, false, true, false)--used for source switching changing the positions of the screens
-Fo_pfd_nd_show = createGlobalPropertyf("a321neo/cockpit/source_switching/Fo_pfd_nd_show", 0, false, true, false)--used for source switching changing the positions of the screens
-Fo_pfd_ewd_show = createGlobalPropertyf("a321neo/cockpit/source_switching/Fo_pfd_ewd_show", 0, false, true, false)--used for source switching changing the positions of the screens
-Fo_pfd_ecam_show = createGlobalPropertyf("a321neo/cockpit/source_switching/Fo_pfd_ecam_show", 0, false, true, false)--used for source switching changing the positions of the screens
-
-Fo_nd_pfd_show = createGlobalPropertyf("a321neo/cockpit/source_switching/Fo_nd_pfd_show", 0, false, true, false)--used for source switching changing the positions of the screens
-Fo_nd_nd_show = createGlobalPropertyf("a321neo/cockpit/source_switching/Fo_nd_nd_show", 1, false, true, false)--used for source switching changing the positions of the screens
-Fo_nd_ewd_show = createGlobalPropertyf("a321neo/cockpit/source_switching/Fo_nd_ewd_show", 0, false, true, false)--used for source switching changing the positions of the screens
-Fo_nd_ecam_show = createGlobalPropertyf("a321neo/cockpit/source_switching/Fo_nd_ecam_show", 0, false, true, false)--used for source switching changing the positions of the screens
-
-EWD_pfd_show = createGlobalPropertyf("a321neo/cockpit/source_switching/EWD_pfd_show", 0, false, true, false)--used for source switching changing the positions of the screens
-EWD_nd_show = createGlobalPropertyf("a321neo/cockpit/source_switching/EWD_nd_show", 0, false, true, false)--used for source switching changing the positions of the screens
-EWD_ewd_show = createGlobalPropertyf("a321neo/cockpit/source_switching/EWD_ewd_show", 1, false, true, false)--used for source switching changing the positions of the screens
-EWD_ecam_show = createGlobalPropertyf("a321neo/cockpit/source_switching/EWD_ecam_show", 0, false, true, false)--used for source switching changing the positions of the screens
-
-ECAM_pfd_show = createGlobalPropertyf("a321neo/cockpit/source_switching/ECAM_pfd_show", 0, false, true, false)--used for source switching changing the positions of the screens
-ECAM_nd_show = createGlobalPropertyf("a321neo/cockpit/source_switching/ECAM_nd_show", 0, false, true, false)--used for source switching changing the positions of the screens
-ECAM_ewd_show = createGlobalPropertyf("a321neo/cockpit/source_switching/ECAM_ewd_show", 0, false, true, false)--used for source switching changing the positions of the screens
-ECAM_ecam_show = createGlobalPropertyf("a321neo/cockpit/source_switching/ECAM_ecam_show", 1, false, true, false)--used for source switching changing the positions of the screens
-
-ECAM_on_nd_dial = createGlobalPropertyi("a321neo/cockpit/source_switching/ECAM_on_nd_dial", 0, false, true, false)--used to swap the position of the ECAM with the NDs -1capt, 0norm, 1FO
+ECAM_on_nd_dial = createGlobalPropertyi("a321neo/cockpit/source_switching/ECAM_on_nd_dial", 0, false, true, false)--used to swap the position of the ECAM with the NDs 0capt, 1norm, 2FO
 
 --engine & apu
 Engine_mode_knob = createGlobalPropertyi("a321neo/cockpit/engine/engine_mode", 0, false, true, false) -- -1crank, 0norm, 1ignition
@@ -61,9 +111,11 @@ Engine_1_master_switch = createGlobalPropertyi("a321neo/cockpit/engine/master_1"
 Engine_2_master_switch = createGlobalPropertyi("a321neo/cockpit/engine/master_2", 0, false, true, false)
 Eng_1_FF_kgm = createGlobalPropertyf("a321neo/cockpit/engine/engine_1_fuel_flow_kg_min", 0, false, true, false)
 Eng_2_FF_kgm = createGlobalPropertyf("a321neo/cockpit/engine/engine_2_fuel_flow_kg_min", 0, false, true, false)
+
 --pfd
 Max_speed = createGlobalPropertyf("a321neo/cockpit/PFD/max_speed", 330, false, true, false)
 Max_speed_delta = createGlobalPropertyf("a321neo/cockpit/PFD/max_speed_delta", 0, false, true, false)
+
 -- ECAM
 Ecam_previous_page  = createGlobalPropertyi("a321neo/cockpit/ecam/previous", 13, false, true, false) --1ENG, 2BLEED, 3PRESS, 4ELEC, 5HYD, 6FUEL, 7APU, 8COND, 9DOOR, 10WHEEL, 11F/CTL, 12STS
 Ecam_current_page   = createGlobalPropertyi("a321neo/cockpit/ecam/page_num", 13, false, true, false) --1ENG, 2BLEED, 3PRESS, 4ELEC, 5HYD, 6FUEL, 7APU, 8COND, 9DOOR, 10WHEEL, 11F/CTL, 12STS
@@ -94,15 +146,18 @@ Cockpit_temp_dial = createGlobalPropertyf("a321neo/cockpit/aircond/cockpit_temp_
 Front_cab_temp_dial = createGlobalPropertyf("a321neo/cockpit/aircond/front_cab_temp_dial", 0.5, false, true, false) --front cabin temperature dial position
 Aft_cab_temp_dial = createGlobalPropertyf("a321neo/cockpit/aircond/aft_cab_temp_dial", 0.5, false, true, false) --aft cabin temperature dial position
 Aft_cargo_temp_dial = createGlobalPropertyf("a321neo/cockpit/aircond/aft_cargo_temp_dial", 0.5, false, true, false) --aft cargo temperature dial position
+
 --packs
 X_bleed_dial = createGlobalPropertyi("a321neo/cockpit/packs/x_bleed_dial", 1, false, true, false) --0closed, 1auto, 2open
 A321_Pack_Flow_dial = createGlobalPropertyi("a321neo/cockpit/packs/pack_flow_dial", 0, false, true, false) --the pack flow dial 0low, 1norm, 2high
+
 --misc
 Capt_ra_alt_m = createGlobalPropertyf("a321neo/cockpit/indicators/capt_ra_alt_m", 0, false, true, false)
 Capt_baro_alt_m = createGlobalPropertyf("a321neo/cockpit/indicators/capt_baro_alt_m", 0, false, true, false)
 Seatbelts = globalProperty("sim/cockpit2/annunciators/fasten_seatbelt")
 NoSmoking = globalProperty("sim/cockpit2/annunciators/no_smoking")
 CabinIsReady = createGlobalPropertyi("a321neo/cockpit/cabin_ready", 0, false, true, false)  -- 0 cabin is not ready, 1 cabin is ready
+
 --MCDU
 Mcdu_enabled = createGlobalPropertyi("a321neo/debug/mcdu/mcdu_enabled", 1, false, true, false)
 

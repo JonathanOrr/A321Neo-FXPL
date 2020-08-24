@@ -18,134 +18,134 @@ function update()
 
     --capt PFD show and hide--
     if get(Capt_pfd_displaying_status) == PFD then
-        set(Capt_pfd_pfd_show, 1)
+        set(Capt_pfd_show, 1, 1)
     else
-        set(Capt_pfd_pfd_show, 0)
+        set(Capt_pfd_show, 0, 1)
     end
     if get(Capt_pfd_displaying_status) == ND then
-        set(Capt_pfd_nd_show, 1)
+        set(Capt_pfd_show, 1, 2)
     else
-        set(Capt_pfd_nd_show, 0)
+        set(Capt_pfd_show, 0, 2)
     end
     if get(Capt_pfd_displaying_status) == EWD then
-        set(Capt_pfd_ewd_show, 1)
+        set(Capt_pfd_show, 1, 3)
     else
-        set(Capt_pfd_ewd_show, 0)
+        set(Capt_pfd_show, 0, 3)
     end
     if get(Capt_pfd_displaying_status) == ECAM then
-        set(Capt_pfd_ecam_show, 1)
+        set(Capt_pfd_show, 1, 4)
     else
-        set(Capt_pfd_ecam_show, 0)
+        set(Capt_pfd_show, 0, 4)
     end
 
     --capt ND show and hide--
     if get(Capt_nd_displaying_status) == PFD then
-        set(Capt_nd_pfd_show, 1)
+        set(Capt_nd_show, 1, 1)
     else
-        set(Capt_nd_pfd_show, 0)
+        set(Capt_nd_show, 0, 1)
     end
     if get(Capt_nd_displaying_status) == ND then
-        set(Capt_nd_nd_show, 1)
+        set(Capt_nd_show, 1, 2)
     else
-        set(Capt_nd_nd_show, 0)
+        set(Capt_nd_show, 0, 2)
     end
     if get(Capt_nd_displaying_status) == EWD then
-        set(Capt_nd_ewd_show, 1)
+        set(Capt_nd_show, 1, 3)
     else
-        set(Capt_nd_ewd_show, 0)
+        set(Capt_nd_show, 0, 3)
     end
     if get(Capt_nd_displaying_status) == ECAM then
-        set(Capt_nd_ecam_show, 1)
+        set(Capt_nd_show, 1, 4)
     else
-        set(Capt_nd_ecam_show, 0)
+        set(Capt_nd_show, 0, 4)
     end
 
     --FO PFD show and hide--
     if get(Fo_pfd_displaying_status) == PFD then
-        set(Fo_pfd_pfd_show, 1)
+        set(Fo_pfd_show, 1, 1)
     else
-        set(Fo_pfd_pfd_show, 0)
+        set(Fo_pfd_show, 0, 1)
     end
     if get(Fo_pfd_displaying_status) == ND then
-        set(Fo_pfd_nd_show, 1)
+        set(Fo_pfd_show, 1, 2)
     else
-        set(Fo_pfd_nd_show, 0)
+        set(Fo_pfd_show, 0, 2)
     end
     if get(Fo_pfd_displaying_status) == EWD then
-        set(Fo_pfd_ewd_show, 1)
+        set(Fo_pfd_show, 1, 3)
     else
-        set(Fo_pfd_ewd_show, 0)
+        set(Fo_pfd_show, 0, 3)
     end
     if get(Fo_pfd_displaying_status) == ECAM then
-        set(Fo_pfd_ecam_show, 1)
+        set(Fo_pfd_show, 1, 4)
     else
-        set(Fo_pfd_ecam_show, 0)
+        set(Fo_pfd_show, 0, 4)
     end
 
     --FO ND show and hide--
     if get(Fo_nd_displaying_status) == PFD then
-        set(Fo_nd_pfd_show, 1)
+        set(Fo_nd_show, 1, 1)
     else
-        set(Fo_nd_pfd_show, 0)
+        set(Fo_nd_show, 0, 1)
     end
     if get(Fo_nd_displaying_status) == ND then
-        set(Fo_nd_nd_show, 1)
+        set(Fo_nd_show, 1, 2)
     else
-        set(Fo_nd_nd_show, 0)
+        set(Fo_nd_show, 0, 2)
     end
     if get(Fo_nd_displaying_status) == EWD then
-        set(Fo_nd_ewd_show, 1)
+        set(Fo_nd_show, 1, 3)
     else
-        set(Fo_nd_ewd_show, 0)
+        set(Fo_nd_show, 0, 3)
     end
     if get(Fo_nd_displaying_status) == ECAM then
-        set(Fo_nd_ecam_show, 1)
+        set(Fo_nd_show, 1, 4)
     else
-        set(Fo_nd_ecam_show, 0)
+        set(Fo_nd_show, 0, 4)
     end
 
     --EWD show and hide--
     if get(EWD_displaying_status) == PFD then
-        set(EWD_pfd_show, 1)
+        set(EWD_show, 1, 1)
     else
-        set(EWD_pfd_show, 0)
+        set(EWD_show, 0, 1)
     end
     if get(EWD_displaying_status) == ND then
-        set(EWD_nd_show, 1)
+        set(EWD_show, 1, 2)
     else
-        set(EWD_nd_show, 0)
+        set(EWD_show, 0, 2)
     end
     if get(EWD_displaying_status) == EWD then
-        set(EWD_ewd_show, 1)
+        set(EWD_show, 1, 3)
     else
-        set(EWD_ewd_show, 0)
+        set(EWD_show, 0, 3)
     end
     if get(EWD_displaying_status) == ECAM then
-        set(EWD_ecam_show, 1)
+        set(EWD_show, 1, 4)
     else
-        set(EWD_ecam_show, 0)
+        set(EWD_show, 0, 4)
     end
 
     --ECAM show and hide--
     if get(ECAM_displaying_status) == PFD then
-        set(ECAM_pfd_show, 1)
+        set(ECAM_show, 1, 1)
     else
-        set(ECAM_pfd_show, 0)
+        set(ECAM_show, 0, 1)
     end
     if get(ECAM_displaying_status) == ND then
-        set(ECAM_nd_show, 1)
+        set(ECAM_show, 1, 2)
     else
-        set(ECAM_nd_show, 0)
+        set(ECAM_show, 0, 2)
     end
     if get(ECAM_displaying_status) == EWD then
-        set(ECAM_ewd_show, 1)
+        set(ECAM_show, 1, 3)
     else
-        set(ECAM_ewd_show, 0)
+        set(ECAM_show, 0, 3)
     end
     if get(ECAM_displaying_status) == ECAM then
-        set(ECAM_ecam_show, 1)
+        set(ECAM_show, 1, 4)
     else
-        set(ECAM_ecam_show, 0)
+        set(ECAM_show, 0, 4)
     end
 
 end
