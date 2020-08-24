@@ -1,13 +1,16 @@
+----------------------------------------------------------------------------------------------------
+-- DCDU Button handlers
+----------------------------------------------------------------------------------------------------
 
 -- Register commands
-sasl.registerCommandHandler (DCDU_cmd_msg_plus,   0 , function(phase) dcdu_message_plus(phase) end )
-sasl.registerCommandHandler (DCDU_cmd_msg_minus,   0 , function(phase) dcdu_message_minus(phase) end )
-sasl.registerCommandHandler (DCDU_cmd_page_plus,   0 , function(phase) dcdu_page_plus(phase) end )
-sasl.registerCommandHandler (DCDU_cmd_page_minus,   0 , function(phase) dcdu_page_minus(phase) end )
-sasl.registerCommandHandler (DCDU_cmd_left_btm,   0 , function(phase) dcdu_left_btm(phase) end )
-sasl.registerCommandHandler (DCDU_cmd_left_top,   0 , function(phase) dcdu_left_top(phase) end )
-sasl.registerCommandHandler (DCDU_cmd_right_btm,   0 , function(phase) dcdu_right_btm(phase) end )
-sasl.registerCommandHandler (DCDU_cmd_right_top,   0 , function(phase) dcdu_right_top(phase) end )
+sasl.registerCommandHandler (DCDU_cmd_msg_plus,  0, function(phase) dcdu_message_plus(phase)  end )
+sasl.registerCommandHandler (DCDU_cmd_msg_minus, 0, function(phase) dcdu_message_minus(phase) end )
+sasl.registerCommandHandler (DCDU_cmd_page_plus, 0, function(phase) dcdu_page_plus(phase)     end )
+sasl.registerCommandHandler (DCDU_cmd_page_minus,0, function(phase) dcdu_page_minus(phase)    end )
+sasl.registerCommandHandler (DCDU_cmd_left_btm,  0, function(phase) dcdu_left_btm(phase)      end )
+sasl.registerCommandHandler (DCDU_cmd_left_top,  0, function(phase) dcdu_left_top(phase)      end )
+sasl.registerCommandHandler (DCDU_cmd_right_btm, 0, function(phase) dcdu_right_btm(phase)     end )
+sasl.registerCommandHandler (DCDU_cmd_right_top, 0, function(phase) dcdu_right_top(phase)     end )
 
 function dcdu_message_plus(phase)
     if phase ~= SASL_COMMAND_BEGIN then

@@ -1,16 +1,35 @@
+----------------------------------------------------------------------------------------------------
+-- DCDU Graphics & Logic
+--
+-- The DCDU logic works as follows:
+-- - The Acars_status dataref is updated according to VHF and SATCOM communications (see function `update_satcom_vhf_connection` for details) 
+-- - If Acars_status == 0 the disconnession message is showed
+-- - If Acars_status > 0 we have a connection. The selection of the ATC to show depends on the current status of the flight (see function `update_connected_atc`)
+-- - If Acars_status > 0 and at least a message exists in the array `current_messages`, the message in the position `get(DCDU_msg_no)` is shown
+-- Each message has the following format: {msg_text="Text", msg_type=MESSAGE_TYPE_CONFIRM_WILCO, msg_time="1200", msg_source="LIML"}
+-- The message type initially refers to the type of the message, i.e. WILCO or ROGER. Then it moves to the CONFIRM, SENDING and SEND stage, depending on user inputs
+-- Please check the following constants
+----------------------------------------------------------------------------------------------------
+
 position= {1990,1866,463,325}
 size = {463, 325}
 
-include('DCDU_handlers.lua')
+include('DCDU_handlers.lua')    -- DCDU handlers contains the button handlers
 
 local B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
 
+----------------------------------------------------------------------------------------------------
+-- Constants
+----------------------------------------------------------------------------------------------------
+
+-- Colors
 local ECAM_BLACK = {0, 0, 0}
 local ECAM_WHITE = {1.0, 1.0, 1.0}
 local ECAM_BLUE = {0.004, 1.0, 1.0}
 local ECAM_GREEN = {0.184, 0.733, 0.219}
 local ECAM_ORANGE = {0.725, 0.521, 0.18}
 
+-- Message types
 local MESSAGE_TYPE_WILCO = 1
 local MESSAGE_TYPE_ROGER = 2
 
@@ -29,6 +48,11 @@ local MESSAGE_TYPE_SENT_ROGER = 32
 local MESSAGE_TYPE_SENT_UNABLE = 35
 local MESSAGE_TYPE_SENT_STDBY = 36
 
+----------------------------------------------------------------------------------------------------
+-- Global/Local variables
+----------------------------------------------------------------------------------------------------
+
+-- Text status in each region of the DCDU display
 local display_btm_left  = {{text="", color=ECAM_BLACK}, {text="", color=ECAM_BLACK}, {text="", color=ECAM_BLACK}}
 local display_btm_right = {{text="", color=ECAM_BLACK}, {text="", color=ECAM_BLACK}, {text="", color=ECAM_BLACK}}
 local display_title = {text="", color=ECAM_BLACK}
@@ -38,10 +62,11 @@ local display_running_text = {text="", color=ECAM_GREEN}
 local display_ack = {text="", color="", background=false}
 local display_top = {{text="", color=ECAM_BLACK}, {text="", color=ECAM_BLACK}, {text="", color=ECAM_BLACK}, {text="", color=ECAM_BLACK}, {text="", color=ECAM_BLACK}}
 
+-- A couple of boolean to manage the status
 local was_connected  = true
-change_occured = true
 local updated_connection = false
 
+-- Current ATC information
 local curr_atc_id   = ""
 local curr_atc_name = ""
 local curr_atc_lat = 0
@@ -49,17 +74,29 @@ local curr_atc_lon = 0
 local array_ctr = {}
 local nearest_ctr = nil
 
-time_to_send = 0
+-- The time when a message switch from the status CONFIRM to the status SENDING. After 3 seconds from this time,
+-- the status switch to SENT
+time_to_send = 0    -- It must stay at zero unless a message is in the status SENDING
 
+-- The most important array: the list of currenctly active messages
 current_messages   = {}
-current_msg_status = 0
--- {msg_text="ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ", msg_type=MESSAGE_TYPE_CONFIRM_WILCO, msg_time="1200", msg_source="LIML"}
+
+-- A boolean to avoid to re-draw everything every update call.
+change_occured = true
+
+----------------------------------------------------------------------------------------------------
+-- Functions
+----------------------------------------------------------------------------------------------------
+
+-- Inizialization of the array of ATC CTR messages. This is an intensive operation because it
+-- requires to parse the whole text file and should be performed only once at startup
 local function init_array_ctr()
     array_ctr = Read_CSV(moduleDirectory .. "/Custom Module/data/ctr.csv")
 end
+init_array_ctr()    -- This funciton is immediately called at startup
 
-init_array_ctr()
-
+-- Function to search the nearest ATC CTR. Avoid to call this function too frequently.
+-- The nearest CTR is put into the `nearest_ctr` variable
 local function update_nearest_ctr()
     min_distance = 99999;
     min_i = 0;
@@ -76,10 +113,9 @@ local function update_nearest_ctr()
     end
 
     nearest_ctr = array_ctr[min_i]
-    
 end
 
-
+-- Clears all the text. The DCDU screen becomes black (with except of the fixed lines)
 local function reset_display() 
     display_ack = {text="", color="", background=false}
     
@@ -102,10 +138,10 @@ local function reset_display()
     display_btm_right[1].text = ""
     display_btm_right[2].text = ""
     display_btm_right[3].text = ""
-    
 
 end
 
+-- The core function: this function shows the message according to its type
 local function display_message(message_text, message_type, msg_time, msg_source)
 
     reset_display()
@@ -210,6 +246,7 @@ local function display_message(message_text, message_type, msg_time, msg_source)
 
 end
 
+-- Function called when no connection is active
 local function update_no_connection()
 
     reset_display()
@@ -227,6 +264,7 @@ local function update_no_connection()
     
 end
 
+-- Function called when connection is ok but no messages are present
 local function update_no_messages(double_conn)
 
     reset_display()
@@ -252,8 +290,10 @@ local function update_no_messages(double_conn)
     
 end
 
+-- Update the SATCOM and VHF status
 local function update_satcom_vhf_connection()
 
+    -- SATCOM
     local is_satcom_connected = 1
     if math.abs(get(Aircraft_lat)) > 75 then
         is_satcom_connected = 0 -- SATCOM is not available over 75 degrees
@@ -267,8 +307,11 @@ local function update_satcom_vhf_connection()
         is_satcom_connected = 0
     end
 
+    -- VHF
     local is_vhf_connected = 2
     local distance_vhf = 999
+
+    -- TODO Check VHF3
 
     if curr_atc_id ~= "" then
         distance_vhf = GC_distance_km(curr_atc_lat, curr_atc_lon, get(Aircraft_lat), get(Aircraft_long))
@@ -281,14 +324,20 @@ local function update_satcom_vhf_connection()
         is_vhf_connected = 0    
     end
 
-    set(Acars_status, is_satcom_connected + is_vhf_connected) 
+    set(Acars_status, is_satcom_connected + is_vhf_connected) -- 0 not connected, 1 only satcom, 2 only vhf, 3 both
 end
 
+-- Update the current ATC name
 local function update_connected_atc()
+
+    -- Two cases:
+    -- - Not airbone: nearest airport
+    -- - Airbone: nearest CTR (it does not use the real CTR boundaries)
 
     local temp_atc_id = ""
     local temp_atc_name = ""
 
+    -- Search the nearest airport (this is needed even if we are airbone for VHF check!)
     testID = sasl.findNavAid (nil, nil, get(Aircraft_lat), get(Aircraft_long), nil, NAV_AIRPORT)
     if testID ~= -1 then
         types, arptLat, arptLon, height, freg, heading, temp_atc_id, temp_atc_name, inCurDSF = sasl.getNavAidInfo(testID)
@@ -297,11 +346,13 @@ local function update_connected_atc()
         temp_atc_name = ""
     end
 
+    -- But if we are airbone, let's switch to ACC
     if get(EWD_flight_phase) == 6 and nearest_ctr ~= nil then
         temp_atc_id   = nearest_ctr[1]
         temp_atc_name = nearest_ctr[2] .. " ACC"
     end
 
+    -- If changes, let's update everything
     if temp_atc_id ~= curr_atc_id then
         curr_atc_id = temp_atc_id
         curr_atc_name = temp_atc_name
@@ -311,26 +362,30 @@ local function update_connected_atc()
     end
 end
 
+-- To add a new message, a new message text is put in dataref Acars_incoming_message, the type in
+-- Acars_incoming_message_type and the string length in Acars_incoming_message_length. This function
+-- automatically reset the type
 local function check_new_messages()
     if get(Acars_incoming_message_type) == 0 then
-        return
+        return  -- No new message
     end
     
     -- The following sub is needed to remove any text after the termination character
     msg_text = get(Acars_incoming_message)
     msg_text = string.sub(msg_text, 0, get(Acars_incoming_message_length))
-    
+
+    -- Create the new message and add it to the table    
     new_message = {msg_text=msg_text, msg_type=get(Acars_incoming_message_type), msg_time=get(ZULU_hours) .. get(ZULU_mins), msg_source="USER"}
-    
+    table.insert(current_messages, new_message)
+
+    -- Reset & Update the datarefs    
     set(Acars_incoming_message_type, 0)
     set(Acars_incoming_message, "")
-    
-    table.insert(current_messages, new_message)
-    
     set(DCDU_msgs_total, #current_messages)
     
 end
 
+-- This function switches the status SENDING to SENT when needed (after 3 seconds).
 local function update_sending_message()
     if time_to_send > 0 and get(TIME) - time_to_send > 3  then
         current_messages[1].msg_type = current_messages[1].msg_type + 10
@@ -342,8 +397,10 @@ function update()
 
     check_new_messages()
 
-    if math.ceil(get(TIME)) % 5 == 0 then  -- Update connection every 5 sec
-        if not updated_connection then
+
+    -- Update connection status and CTR every 5 seconds and 60 seconds
+    if math.ceil(get(TIME)) % 5 == 0 then  -- Update connection status every 5 sec
+        if not updated_connection then     -- This is to avoid multiple calls
            updated_connection = true
            update_satcom_vhf_connection()
            if math.ceil(get(TIME)) % 60 == 0 then  -- Update the ATC CTR every minute (quite computational intensive)
@@ -354,6 +411,7 @@ function update()
         updated_connection = false
     end
 
+    -- Update the connected ATC (CTR has been already computed)
     update_connected_atc()
 
     if get(Acars_status) == 0 then
@@ -364,10 +422,8 @@ function update()
         end
         return
     end
-    
-
-    
-    if get(Acars_status) > 0 then   -- TODO and no messages
+        
+    if get(Acars_status) > 0 then
     
         if #current_messages > 0 then
             display_message(current_messages[get(DCDU_msg_no)+1].msg_text, current_messages[get(DCDU_msg_no)+1].msg_type, current_messages[get(DCDU_msg_no)+1].msg_time, current_messages[get(DCDU_msg_no)+1].msg_source)
@@ -384,6 +440,7 @@ function update()
     was_connected = true
 end
 
+-- The draw fuction. No logic here, just graphic
 function draw()
 
     sasl.gl.drawText (B612MONO_regular, 10, 20, display_btm_left[3].text, 20, false, false, TEXT_ALIGN_LEFT, display_btm_left[3].color )
@@ -418,9 +475,5 @@ function draw()
     sasl.gl.drawText (B612MONO_regular, 10, size[2]-128, display_top[3].text, 25, false, false, TEXT_ALIGN_LEFT, display_top[3].color )
     sasl.gl.drawText (B612MONO_regular, 10, size[2]-164, display_top[4].text, 25, false, false, TEXT_ALIGN_LEFT, display_top[4].color )
     sasl.gl.drawText (B612MONO_regular, 10, size[2]-200, display_top[5].text, 25, false, false, TEXT_ALIGN_LEFT, display_top[5].color )
-
---    testID = sasl.findNavAid (nil, nil, get(Aircraft_lat) , get(Aircraft_long), nil, NAV_AIRPORT)
---    types, arptLat ,arptLon ,height ,freg ,heading ,id ,name ,inCurDSF = sasl.getNavAidInfo(testID)
---    print(types , arptLat , arptLon , height , freg , heading , id , name , inCurDSF)
     
 end
