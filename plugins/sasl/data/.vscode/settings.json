@@ -25,6 +25,8 @@
         "BLEND_EQUATION_ADD",
         "BLEND_SOURCE_ALPHA",
         "BLEND_DESTINATION_ALPHA",
-        "BLEND_ONE_MINUS_SOURCE_ALPHA"
+        "BLEND_ONE_MINUS_SOURCE_ALPHA",
+        "forced",
+        "TEXT_RENDER_FORCED_MONO"
     ]
 }

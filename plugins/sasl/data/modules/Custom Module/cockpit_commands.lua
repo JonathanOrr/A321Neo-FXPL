@@ -67,8 +67,8 @@ Draims_r_3_button = createCommand("a321neo/cockpit/draims/draims_r_3_button", "D
 Draims_r_4_button = createCommand("a321neo/cockpit/draims/draims_r_4_button", "DRAIMS right 4 button")
 Draims_l_tcas_button = createCommand("a321neo/cockpit/draims/draims_l_tcas_button", "DRAIMS left TCAS button")
 Draims_r_tcas_button = createCommand("a321neo/cockpit/draims/draims_r_tcas_button", "DRAIMS right TCAS button")
-Draims_source_up_button = createCommand("a321neo/cockpit/draims/draims_source_up_button", "DRAIMS source up button")
-Draims_source_dn_button = createCommand("a321neo/cockpit/draims/draims_source_dn_button", "DRAIMS source down button")
+Draims_cursor_up_button = createCommand("a321neo/cockpit/draims/draims_source_up_button", "DRAIMS source up button")
+Draims_cursor_dn_button = createCommand("a321neo/cockpit/draims/draims_source_dn_button", "DRAIMS source down button")
 Draims_1_key = createCommand("a321neo/cockpit/draims/draims_1_key", "DRAIMS numbpad 1 key")
 Draims_2_key = createCommand("a321neo/cockpit/draims/draims_2_key", "DRAIMS numbpad 2 key")
 Draims_3_key = createCommand("a321neo/cockpit/draims/draims_3_key", "DRAIMS numbpad 3 key")
@@ -81,6 +81,8 @@ Draims_9_key = createCommand("a321neo/cockpit/draims/draims_9_key", "DRAIMS numb
 Draims_0_key = createCommand("a321neo/cockpit/draims/draims_0_key", "DRAIMS numbpad 0 key")
 Draims_dot_key = createCommand("a321neo/cockpit/draims/draims_dot_key", "DRAIMS numbpad . key")
 Draims_clr_key = createCommand("a321neo/cockpit/draims/draims_clr_key", "DRAIMS numbpad clr key")
+
+Sqwk_ident = sasl.findCommand("sim/transponder/transponder_ident")
 
 --aircond
 Toggle_cab_hotair = createCommand("a321neo/cockpit/aircond/toggle_cab_hotair", "Toggle cabin hot air")
