@@ -47,3 +47,16 @@ Pack_flow_dial_up = createCommand("a321neo/cockpit/packs/pack_flow_dial_up", "Pa
 Pack_flow_dial_dn = createCommand("a321neo/cockpit/packs/pack_flow_dial_dn", "Pack flow dial down")
 X_bleed_dial_up = createCommand("a321neo/cockpit/packs/x_bleed_dial_up", "x bleed dial up")
 X_bleed_dial_dn = createCommand("a321neo/cockpit/packs/x_bleed_dial_dn", "x bleed dial down")
+
+-- DCDU
+DCDU_cmd_msg_plus = createCommand("a321neo/cockpit/DCDU/msg_plus", "Next Message")
+DCDU_cmd_msg_minus = createCommand("a321neo/cockpit/DCDU/msg_minus", "Previous Message")
+DCDU_cmd_page_plus = createCommand("a321neo/cockpit/DCDU/page_plus", "Next Page")
+DCDU_cmd_page_minus = createCommand("a321neo/cockpit/DCDU/page_minus", "Previous Page")
+DCDU_cmd_left_btm = createCommand("a321neo/cockpit/DCDU/left_btm", "Button Bottom-Left")
+DCDU_cmd_left_top = createCommand("a321neo/cockpit/DCDU/left_top", "Button Top-Left")
+DCDU_cmd_right_btm = createCommand("a321neo/cockpit/DCDU/right_btm", "Button Bottom-Right")
+DCDU_cmd_right_top = createCommand("a321neo/cockpit/DCDU/right_top", "Button Top-Right")
+
+
+

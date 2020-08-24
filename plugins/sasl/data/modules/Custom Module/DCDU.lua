@@ -1,6 +1,8 @@
 position= {1990,1866,463,325}
 size = {463, 325}
 
+include('DCDU_handlers.lua')
+
 local B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
 
 local ECAM_BLACK = {0, 0, 0}
@@ -34,8 +36,8 @@ local curr_atc_lon = 0
 local array_ctr = {}
 local nearest_ctr = nil
 
-local current_messages = {{msg_text="ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ", msg_type=MESSAGE_TYPE_CONFIRM_WILCO, msg_time="1200", msg_source="LIML"}}
-
+local current_messages = {}
+-- {msg_text="ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ", msg_type=MESSAGE_TYPE_CONFIRM_WILCO, msg_time="1200", msg_source="LIML"}
 local function init_array_ctr()
     array_ctr = Read_CSV(moduleDirectory .. "/Custom Module/data/ctr.csv")
 end
@@ -262,7 +264,30 @@ local function update_connected_atc()
     end
 end
 
+local function check_new_messages()
+    if get(Acars_incoming_message_type) == 0 then
+        return
+    end
+    
+    -- The following sub is needed to remove any text after the termination character
+    -- (LUA is very stupid)
+    msg_text = get(Acars_incoming_message)
+    msg_text = string.sub(msg_text, 0, string.len(msg_text))
+    
+    new_message = {msg_text=msg_text, msg_type=get(Acars_incoming_message_type), msg_time=get(ZULU_hours) .. get(ZULU_mins), msg_source="USER"}
+    
+    set(Acars_incoming_message_type, 0)
+    set(Acars_incoming_message, "")
+    
+    table.insert(current_messages, new_message)
+    
+    set(DCDU_msgs_total, #current_messages)
+    
+end
+
 function update()
+
+    check_new_messages()
 
     if math.ceil(get(TIME)) % 5 == 0 then  -- Update connection every 5 sec
         if not updated_connection then
@@ -292,7 +317,7 @@ function update()
     if get(Acars_status) > 0 then   -- TODO and no messages
     
         if #current_messages > 0 then
-            display_message(current_messages[1].msg_text, current_messages[1].msg_type, current_messages[1].msg_time, current_messages[1].msg_source)
+            display_message(current_messages[get(DCDU_msg_no)+1].msg_text, current_messages[get(DCDU_msg_no)+1].msg_type, current_messages[get(DCDU_msg_no)+1].msg_time, current_messages[get(DCDU_msg_no)+1].msg_source)
         else
             if change_occured or not was_connected then
                 change_occured = false

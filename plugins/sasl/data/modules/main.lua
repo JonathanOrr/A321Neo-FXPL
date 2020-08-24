@@ -141,6 +141,20 @@ DMC_debug_window = contextWindow {
   };
 }
 
+DCDU_window = contextWindow {
+  name = "DCDU Management";
+  position = { 150 , 150 , 463 , 683 };
+  noBackground = true ;
+  proportional = false ;
+  minimumSize = { 400 , 400 };
+  maximumSize = { 400 , 400 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = true ;
+  components = {
+    DCDU_window {position = { 0 , 0 , 463 , 683 }, focused = true}
+  };
+}
+
 --menu item functions
 function Show_hide_MCDU()
   MCDU_window:setIsVisible(not MCDU_window:isVisible())
@@ -170,6 +184,9 @@ function Show_hide_DMC_debug()
   DMC_debug_window:setIsVisible(not DMC_debug_window:isVisible())
 end
 
+function Show_hide_DCDU()
+  DCDU_window:setIsVisible(not DCDU_window:isVisible())
+end
 
 -- create top level menu in plugins menu
 Menu_master	= sasl.appendMenuItem (PLUGINS_MENU_ID, "A321NEO" )
@@ -189,6 +206,10 @@ ShowHideFBWGraph	= sasl.appendMenuItem(Menu_main, "Show/Hide FBW Graph", Show_hi
 ShowHideECAMDebug	= sasl.appendMenuItem(Menu_main, "Show/Hide ECAM Debug", Show_hide_ECAM_debug)
 -- add menu entry
 ShowHideDMCDebug	= sasl.appendMenuItem(Menu_main, "Show/Hide DMC Debug", Show_hide_DMC_debug)
+-- add menu entry
+ShowHideDCDU        = sasl.appendMenuItem(Menu_main, "Show/Hide DCDU Management", Show_hide_DCDU)
+
+
 --initialise menu item status
 sasl.setMenuItemState(Menu_main, ShowHideVnavDebug, MENU_UNCHECKED)
 sasl.setMenuItemState(Menu_main, ShowHidePacksDebug, MENU_UNCHECKED)
