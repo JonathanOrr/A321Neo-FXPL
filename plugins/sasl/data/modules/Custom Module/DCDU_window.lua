@@ -52,7 +52,7 @@ function draw()
         sasl.gl.drawText(B612MONO_regular, 340, size[2]-250, "KO", 15, false, false, TEXT_ALIGN_LEFT, {1.0, 0.0, 0.0})    
     end
     sasl.gl.drawText(B612MONO_regular, 10, size[2]-280, "VHF conditions:",  12, false, false, TEXT_ALIGN_LEFT, {1.0, 1.0, 1.0})
-    sasl.gl.drawText(B612MONO_regular, 10, size[2]-295, " - VHF3 tuned to ACARS (TODO)",  11, false, false, TEXT_ALIGN_LEFT, {1.0, 1.0, 1.0})
+    sasl.gl.drawText(B612MONO_regular, 10, size[2]-295, " - VHF3 tuned to DATA (TODO)",  11, false, false, TEXT_ALIGN_LEFT, {1.0, 1.0, 1.0})
     sasl.gl.drawText(B612MONO_regular, 10, size[2]-310, " - Nearest airport < 300 km ",  11, false, false, TEXT_ALIGN_LEFT, {1.0, 1.0, 1.0})
     sasl.gl.drawText(B612MONO_regular, 10, size[2]-325, "SATCOM conditions:",  12, false, false, TEXT_ALIGN_LEFT, {1.0, 1.0, 1.0})
     sasl.gl.drawText(B612MONO_regular, 10, size[2]-340, " - Not over 75°/-75° latitude",  11, false, false, TEXT_ALIGN_LEFT, {1.0, 1.0, 1.0})
@@ -83,15 +83,21 @@ end
 
 function onMouseDown (component , x , y , button , parentX , parentY)
     
+    if string.len(temp_text) == 0 then
+        return true
+    end
+    
     if x >= 30 and x <=150 and y>= size[2]-175 and y<= size[2]-175+22 then
         set(Acars_incoming_message, temp_text)
         set(Acars_incoming_message_type, 1)
+        set(Acars_incoming_message_length, string.len(temp_text))
         temp_text = ""
     end
     
     if x >= 230 and x <=350 and y>= size[2]-175 and y<= size[2]-175+22 then
         set(Acars_incoming_message, temp_text)
         set(Acars_incoming_message_type, 2)
+        set(Acars_incoming_message_length, string.len(temp_text))
         temp_text = ""
     end
 

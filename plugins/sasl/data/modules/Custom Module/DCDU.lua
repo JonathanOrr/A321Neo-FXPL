@@ -104,10 +104,12 @@ local function display_message(message_text, message_type, msg_time, msg_source)
     set(DCDU_pages_total, total_num_pages)
     local start_page = get(DCDU_page_no)*MAX_LINE_LENGTH*5
    
-    
     for i=1,5 do
         display_top[i].text  = string.sub(message_text,start_page + (i-1) * MAX_LINE_LENGTH + 1, start_page + i * MAX_LINE_LENGTH)
         display_top[i].color = ECAM_WHITE
+        if i*MAX_LINE_LENGTH > message_length then            
+            break
+        end
     end
     
     if total_num_pages > 1 then
@@ -270,9 +272,8 @@ local function check_new_messages()
     end
     
     -- The following sub is needed to remove any text after the termination character
-    -- (LUA is very stupid)
     msg_text = get(Acars_incoming_message)
-    msg_text = string.sub(msg_text, 0, string.len(msg_text))
+    msg_text = string.sub(msg_text, 0, get(Acars_incoming_message_length))
     
     new_message = {msg_text=msg_text, msg_type=get(Acars_incoming_message_type), msg_time=get(ZULU_hours) .. get(ZULU_mins), msg_source="USER"}
     
