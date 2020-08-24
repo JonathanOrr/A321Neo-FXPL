@@ -84,7 +84,7 @@ end
 function onMouseDown (component , x , y , button , parentX , parentY)
     
     if string.len(temp_text) == 0 then
-        return true
+        return true 
     end
     
     if x >= 30 and x <=150 and y>= size[2]-175 and y<= size[2]-175+22 then

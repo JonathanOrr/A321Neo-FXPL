@@ -13,8 +13,21 @@ local ECAM_ORANGE = {0.725, 0.521, 0.18}
 
 local MESSAGE_TYPE_WILCO = 1
 local MESSAGE_TYPE_ROGER = 2
+
 local MESSAGE_TYPE_CONFIRM_WILCO = 11
 local MESSAGE_TYPE_CONFIRM_ROGER = 12
+local MESSAGE_TYPE_CONFIRM_UNABLE = 15
+local MESSAGE_TYPE_CONFIRM_STDBY = 16
+
+local MESSAGE_TYPE_SENDING_WILCO = 21
+local MESSAGE_TYPE_SENDING_ROGER = 22
+local MESSAGE_TYPE_SENDING_UNABLE = 25
+local MESSAGE_TYPE_SENDING_STDBY = 26
+
+local MESSAGE_TYPE_SENT_WILCO = 31
+local MESSAGE_TYPE_SENT_ROGER = 32
+local MESSAGE_TYPE_SENT_UNABLE = 35
+local MESSAGE_TYPE_SENT_STDBY = 36
 
 local display_btm_left  = {{text="", color=ECAM_BLACK}, {text="", color=ECAM_BLACK}, {text="", color=ECAM_BLACK}}
 local display_btm_right = {{text="", color=ECAM_BLACK}, {text="", color=ECAM_BLACK}, {text="", color=ECAM_BLACK}}
@@ -26,7 +39,7 @@ local display_ack = {text="", color="", background=false}
 local display_top = {{text="", color=ECAM_BLACK}, {text="", color=ECAM_BLACK}, {text="", color=ECAM_BLACK}, {text="", color=ECAM_BLACK}, {text="", color=ECAM_BLACK}}
 
 local was_connected  = true
-local change_occured = true
+change_occured = true
 local updated_connection = false
 
 local curr_atc_id   = ""
@@ -36,7 +49,10 @@ local curr_atc_lon = 0
 local array_ctr = {}
 local nearest_ctr = nil
 
-local current_messages = {}
+time_to_send = 0
+
+current_messages   = {}
+current_msg_status = 0
 -- {msg_text="ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ", msg_type=MESSAGE_TYPE_CONFIRM_WILCO, msg_time="1200", msg_source="LIML"}
 local function init_array_ctr()
     array_ctr = Read_CSV(moduleDirectory .. "/Custom Module/data/ctr.csv")
@@ -141,7 +157,8 @@ local function display_message(message_text, message_type, msg_time, msg_source)
         display_btm_right[1].text = "STBY *"
     end
     
-    if message_type == MESSAGE_TYPE_CONFIRM_WILCO or message_type == MESSAGE_TYPE_CONFIRM_ROGER then
+    if message_type == MESSAGE_TYPE_CONFIRM_WILCO or message_type == MESSAGE_TYPE_CONFIRM_ROGER or 
+       message_type == MESSAGE_TYPE_CONFIRM_UNABLE or message_type == MESSAGE_TYPE_CONFIRM_STDBY then
         display_btm_right[3].text = "SEND *"
         display_btm_left[1].text  = "* CANCEL"
         display_title.text = "CONFIRM"
@@ -150,18 +167,46 @@ local function display_message(message_text, message_type, msg_time, msg_source)
         display_ack.background = true
     end
 
-    if message_type == MESSAGE_TYPE_CONFIRM_WILCO then
+    if message_type == MESSAGE_TYPE_CONFIRM_WILCO or message_type == MESSAGE_TYPE_SENDING_WILCO or message_type == MESSAGE_TYPE_SENT_WILCO then
         display_ack.text = "WILCO"    
     end
-    if message_type == MESSAGE_TYPE_CONFIRM_ROGER then
+    if message_type == MESSAGE_TYPE_CONFIRM_ROGER or message_type == MESSAGE_TYPE_SENDING_ROGER or message_type == MESSAGE_TYPE_SENT_ROGER then
         display_ack.text = "ROGER"
     end
 
+    if message_type == MESSAGE_TYPE_CONFIRM_UNABLE or message_type == MESSAGE_TYPE_SENDING_UNABLE or message_type == MESSAGE_TYPE_SENT_UNABLE then
+        display_ack.text = "UNABLE"    
+    end
+
+    if message_type == MESSAGE_TYPE_CONFIRM_STDBY or message_type == MESSAGE_TYPE_SENDING_STDBY or message_type == MESSAGE_TYPE_SENT_STDBY then
+        display_ack.text = "STBY"    
+    end
+    
+    if message_type == MESSAGE_TYPE_SENDING_WILCO or message_type == MESSAGE_TYPE_SENDING_ROGER or
+       message_type == MESSAGE_TYPE_SENDING_UNABLE or message_type == MESSAGE_TYPE_SENDING_STDBY then
+        
+        display_title.text = "SENDING"
+        display_title.color = ECAM_WHITE
+        display_ack.color = ECAM_BLUE
+        display_ack.background = true
+    end
+    
+    if message_type == MESSAGE_TYPE_SENT_WILCO or message_type == MESSAGE_TYPE_SENT_ROGER or
+       message_type == MESSAGE_TYPE_SENT_UNABLE or message_type == MESSAGE_TYPE_SENT_STDBY then
+        
+        display_title.text = "SENT"
+        display_title.color = ECAM_GREEN
+        display_ack.color = ECAM_GREEN
+        display_ack.background = true
+        display_btm_right[3].text = "CLOSE *"
+        
+    end
 
     display_btm_right[1].color = ECAM_BLUE 
     display_btm_right[3].color = ECAM_BLUE 
     display_btm_left[1].color = ECAM_BLUE 
     display_btm_left[3].color = ECAM_BLUE 
+
 
 end
 
@@ -286,6 +331,13 @@ local function check_new_messages()
     
 end
 
+local function update_sending_message()
+    if time_to_send > 0 and get(TIME) - time_to_send > 3  then
+        current_messages[1].msg_type = current_messages[1].msg_type + 10
+        time_to_send = 0
+    end
+end
+
 function update()
 
     check_new_messages()
@@ -319,6 +371,7 @@ function update()
     
         if #current_messages > 0 then
             display_message(current_messages[get(DCDU_msg_no)+1].msg_text, current_messages[get(DCDU_msg_no)+1].msg_type, current_messages[get(DCDU_msg_no)+1].msg_time, current_messages[get(DCDU_msg_no)+1].msg_source)
+            update_sending_message()
         else
             if change_occured or not was_connected then
                 change_occured = false
