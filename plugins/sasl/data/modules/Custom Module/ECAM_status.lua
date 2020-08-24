@@ -172,6 +172,10 @@ ecam_sts = {
             table.insert(messages, "CAT 3 DUAL")        
         end
 
+        if get(FAILURE_TCAS) == 6 then
+            table.insert(messages, "TCAS")                
+        end
+
         return messages
     end,
     

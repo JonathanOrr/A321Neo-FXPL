@@ -7,6 +7,7 @@ include('EWD_msgs/FBW.lua')
 include('EWD_msgs/flight_controls.lua')
 include('EWD_msgs/gears_and_doors.lua')
 include('EWD_msgs/misc.lua')
+include('EWD_msgs/nav.lua')
 include('EWD_msgs/to_ldg_memos.lua')
 
 sasl.registerCommandHandler (Ecam_btn_cmd_CLR,   0 , function(phase) ewd_clear_button_handler(phase) end )
@@ -51,6 +52,7 @@ local left_messages_list = {
     MessageGroup_APU_SHUTDOWN,
     MessageGroup_GEAR_NOT_UPLOCKED,
     MessageGroup_BLEED_OFF,
+    MessageGroup_TCAS_FAULT,
     
     -- Warnings
     MessageGroup_CONFIG_TAKEOFF,
@@ -195,7 +197,7 @@ local function update_right_list()
         end
     end
 
-    if get(Engine_mode_knob) == 1 then -- TODO This may be replaced with the actual ignition dataref (not the button status)
+    if get(Engine_mode_knob) == 1 then
         list_right:put(COL_INDICATION, "IGNITION")
     end
     
@@ -212,6 +214,14 @@ local function update_right_list()
     if get(Acars_status) == 0 then
         list_right:put(COL_INDICATION, "ACARS STBY")
     end
+    
+    -- TCAS
+    if get(DRAIMS_Sqwk_mode) < 2 then
+        list_right:put(COL_INDICATION, "TCAS STBY")
+    elseif get(DRAIMS_Sqwk_mode) == 2 then
+        list_right:put(COL_INDICATION, "TCAS TA ONLY")
+    end
+    
     -- TODO Audio: AUDIO 3 XFRD displayed green if audio switching selector not in NORM
     -- TODO Acars: ACARS CALL (pulsing green) if received an ACARS message requesting voice conversation
     -- TODO Acars: VHF 3 VOICE (pulsing green) if VHF 3 in voice mode and ACARS comm interrupted (?)
@@ -252,9 +262,6 @@ local function update_right_list()
     -- TODO GPWS: GPWS FLAP 3 in green if related pushbutton is ON
     -- TODO GPWS: GPWS FLAP MODE OFF in green if related pushbutton is OFF
     -- TODO GPWS: TERR STBY in green if position is too inaccurate to show terrain on ND
-
-    -- TODO TCAS: TCAS STBY in green if ATC STBY is selected or TCAS STBY is selected or 
-    --            ALT RPTG is selected OFF or TCAS failed
 
     -- TODO Lights: LDG LT
     -- TODO Lights: STROBE LT OFF (green) - in flight only
