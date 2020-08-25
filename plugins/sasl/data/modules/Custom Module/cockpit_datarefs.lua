@@ -75,6 +75,9 @@ VHF_transmit_dest_manual = globalProperty("sim/cockpit2/radios/actuators/audio_c
 VHF_1_transmit_selected = createGlobalPropertyi("a321neo/cockpit/draims/vhf_1_transmit_selected", 0, false, true, false)--0off, 1selected
 VHF_2_transmit_selected = createGlobalPropertyi("a321neo/cockpit/draims/vhf_2_transmit_selected", 0, false, true, false)--0off, 1selected
 
+DRAIMS_dynamic_NAV_audio_selected = createGlobalPropertyi("a321neo/cockpit/draims/dynamic_nav_audio_selected", 0, false, true, false)--0off, 1selected
+DRAIMS_dynamic_NAV_volume = createGlobalPropertyf("a321neo/cockpit/draims/dynamic_nav_volume", 1, false, true, false)--volume of dynamic navigation audio
+
 VHF_1_audio_selected = globalProperty("sim/cockpit2/radios/actuators/audio_selection_com1")
 VHF_2_audio_selected = globalProperty("sim/cockpit2/radios/actuators/audio_selection_com2")
 NAV_1_audio_selected = globalProperty("sim/cockpit2/radios/actuators/audio_selection_nav1")
@@ -85,6 +88,9 @@ VHF_1_volume = globalProperty("sim/cockpit2/radios/actuators/audio_volume_com1")
 VHF_2_volume = globalProperty("sim/cockpit2/radios/actuators/audio_volume_com2")
 NAV_1_volume = globalProperty("sim/cockpit2/radios/actuators/audio_volume_nav1")
 NAV_2_volume = globalProperty("sim/cockpit2/radios/actuators/audio_volume_nav2")
+DME_volume = globalProperty("sim/cockpit2/radios/actuators/audio_volume_dme")
+DME_1_volume = globalProperty("sim/cockpit2/radios/actuators/audio_volume_dme1")
+DME_2_volume = globalProperty("sim/cockpit2/radios/actuators/audio_volume_dme2")
 ADF_1_volume = globalProperty("sim/cockpit2/radios/actuators/audio_volume_adf1")
 ADF_2_volume = globalProperty("sim/cockpit2/radios/actuators/audio_volume_adf2")
 

@@ -761,10 +761,122 @@ sasl.registerCommandHandler ( Draims_transmit_VHF2_button, 0, function(phase)
     end
 end)
 
+--dynamic nav
+sasl.registerCommandHandler ( Draims_dynamic_NAV_toggle, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        set(DRAIMS_dynamic_NAV_audio_selected, 1 - get(DRAIMS_dynamic_NAV_audio_selected))
+    end
+end)
+sasl.registerCommandHandler ( Draims_dynamic_NAV_volume_up, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        set(DRAIMS_dynamic_NAV_volume, Math_clamp(get(DRAIMS_dynamic_NAV_volume) + 0.05, 0, 1))
+    end
+    if phase == SASL_COMMAND_CONTINUE then
+        set(DRAIMS_dynamic_NAV_volume, Math_clamp(get(DRAIMS_dynamic_NAV_volume) + 0.5 * get(DELTA_TIME), 0, 1))
+    end
+end)
+sasl.registerCommandHandler ( Draims_dynamic_NAV_volume_dn, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        set(DRAIMS_dynamic_NAV_volume, Math_clamp(get(DRAIMS_dynamic_NAV_volume) - 0.05, 0, 1))
+    end
+    if phase == SASL_COMMAND_CONTINUE then
+        set(DRAIMS_dynamic_NAV_volume, Math_clamp(get(DRAIMS_dynamic_NAV_volume) - 0.5 * get(DELTA_TIME), 0, 1))
+    end
+end)
+
+--vhf 1 volume
+sasl.registerCommandHandler ( Draims_VHF1_volume_up, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        set(VHF_1_volume, Math_clamp(get(VHF_1_volume) + 0.05, 0, 1))
+    end
+    if phase == SASL_COMMAND_CONTINUE then
+        set(VHF_1_volume, Math_clamp(get(VHF_1_volume) + 0.5 * get(DELTA_TIME), 0, 1))
+    end
+end)
+sasl.registerCommandHandler ( Draims_VHF1_volume_dn, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        set(VHF_1_volume, Math_clamp(get(VHF_1_volume) - 0.05, 0, 1))
+    end
+    if phase == SASL_COMMAND_CONTINUE then
+        set(VHF_1_volume, Math_clamp(get(VHF_1_volume) - 0.5 * get(DELTA_TIME), 0, 1))
+    end
+end)
+
+--vhf 2 volume
+sasl.registerCommandHandler ( Draims_VHF2_volume_up, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        set(VHF_2_volume, Math_clamp(get(VHF_2_volume) + 0.05, 0, 1))
+    end
+    if phase == SASL_COMMAND_CONTINUE then
+        set(VHF_2_volume, Math_clamp(get(VHF_2_volume) + 0.5 * get(DELTA_TIME), 0, 1))
+    end
+end)
+sasl.registerCommandHandler ( Draims_VHF2_volume_dn, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        set(VHF_2_volume, Math_clamp(get(VHF_2_volume) - 0.05, 0, 1))
+    end
+    if phase == SASL_COMMAND_CONTINUE then
+        set(VHF_2_volume, Math_clamp(get(VHF_2_volume) - 0.5 * get(DELTA_TIME), 0, 1))
+    end
+end)
+
 function update()
     --deactivate easter eggs when there are entry in the scratchpad
     if #DRAIMS_entry > 0 then
         set(DRAIMS_easter_egg, 0)
+    end
+    
+    --dynamic nav volume control
+    if get(DRAIMS_dynamic_NAV_audio_selected) == 0 then--kill all volumes
+        set(NAV_1_volume, 0)
+        set(NAV_2_volume, 0)
+        set(DME_volume, 0)
+        set(DME_1_volume, 0)
+        set(DME_2_volume, 0)
+        set(ADF_1_volume, 0)
+        set(ADF_2_volume, 0)
+    elseif get(DRAIMS_dynamic_NAV_audio_selected) == 1 then
+        if get(Audio_nav_selection) == 9 then--inactive
+            set(NAV_1_volume, 0)
+            set(NAV_2_volume, 0)
+            set(DME_volume, 0)
+            set(DME_1_volume, 0)
+            set(DME_2_volume, 0)
+            set(ADF_1_volume, 0)
+            set(ADF_2_volume, 0)
+        elseif get(Audio_nav_selection) == 0 then--nav 1
+            set(NAV_1_volume, get(DRAIMS_dynamic_NAV_volume))
+            set(NAV_2_volume, 0)
+            set(DME_volume, 0)
+            set(DME_1_volume, 0)
+            set(DME_2_volume, 0)
+            set(ADF_1_volume, 0)
+            set(ADF_2_volume, 0)
+        elseif get(Audio_nav_selection) == 1 then--nav 2
+            set(NAV_1_volume, 0)
+            set(NAV_2_volume, get(DRAIMS_dynamic_NAV_volume))
+            set(DME_volume, 0)
+            set(DME_1_volume, 0)
+            set(DME_2_volume, 0)
+            set(ADF_1_volume, 0)
+            set(ADF_2_volume, 0)
+        elseif get(Audio_nav_selection) == 2 then--adf 1
+            set(NAV_1_volume, 0)
+            set(NAV_2_volume, 0)
+            set(DME_volume, 0)
+            set(DME_1_volume, 0)
+            set(DME_2_volume, 0)
+            set(ADF_1_volume, get(DRAIMS_dynamic_NAV_volume))
+            set(ADF_2_volume, 0)
+        elseif get(Audio_nav_selection) == 3 then--adf 2
+            set(NAV_1_volume, 0)
+            set(NAV_2_volume, 0)
+            set(DME_volume, 0)
+            set(DME_1_volume, 0)
+            set(DME_2_volume, 0)
+            set(ADF_1_volume, 0)
+            set(ADF_2_volume, get(DRAIMS_dynamic_NAV_volume))
+        end
     end
 
     --tcas modes
