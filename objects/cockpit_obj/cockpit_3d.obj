@@ -23478,26 +23478,46 @@ IDX	19120
 		ANIM_end
 		TRIS	4632 6
 		TRIS	5328 138
+		ATTR_manip_command	button	a321neo/cockpit/DCDU/left_top	DCDU 1 top left side button
 		TRIS	5526 84
+		ATTR_manip_command	button	a321neo/cockpit/DCDU/left_btm	DCDU 1 bottom left side button
 		TRIS	5610 84
+		ATTR_manip_command	button	a321neo/cockpit/DCDU/msg_plus	DCDU 1 MSG +
 		TRIS	5694 84
+		ATTR_manip_command	button	a321neo/cockpit/DCDU/msg_minus	DCDU 1 MSG -
 		TRIS	5778 84
+		ATTR_manip_command	button	a321neo/cockpit/DCDU/page_plus	DCDU 1 PGE +
 		TRIS	5862 84
+		ATTR_manip_command	button	a321neo/cockpit/DCDU/page_minus	DCDU 1 PGE -
 		TRIS	5946 84
+		ATTR_manip_none
 		TRIS	6030 138
+		ATTR_manip_command	button	a321neo/cockpit/DCDU/right_top	DCDU 1 top right side button
 		TRIS	6168 84
+		ATTR_manip_command	button	a321neo/cockpit/DCDU/right_btm	DCDU 1 bottom right side button
 		TRIS	6252 84
+		ATTR_manip_none
 		TRIS	6336 6
 		TRIS	6348 138
+		ATTR_manip_command	hand	a321neo/cockpit/DCDU/left_top	DCDU 2 top left side button
 		TRIS	6546 84
+		ATTR_manip_command	hand	a321neo/cockpit/DCDU/left_btm	DCDU 2 bottom left side button
 		TRIS	6630 84
+		ATTR_manip_command	hand	a321neo/cockpit/DCDU/msg_plus	DCDU 2 MSG +
 		TRIS	6714 84
+		ATTR_manip_command	hand	a321neo/cockpit/DCDU/msg_minus	DCDU 2 MSG -
 		TRIS	6798 84
+		ATTR_manip_command	hand	a321neo/cockpit/DCDU/page_plus	DCDU 2 PGE +
 		TRIS	6882 84
+		ATTR_manip_command	hand	a321neo/cockpit/DCDU/page_minus	DCDU 2 PGE -
 		TRIS	6966 84
+		ATTR_manip_none
 		TRIS	7050 138
+		ATTR_manip_command	hand	a321neo/cockpit/DCDU/right_top	DCDU 2 top right side button
 		TRIS	7188 84
+		ATTR_manip_command	hand	a321neo/cockpit/DCDU/right_btm	DCDU 2 bottom right side button
 		TRIS	7272 84
+		ATTR_manip_none
 		TRIS	7356 6
 		ANIM_begin
 		ANIM_hide	0	0.80000001	a321neo/cockpit/source_switching/ecam_show[3]
@@ -23625,7 +23645,7 @@ IDX	19120
 		TRIS	9498 84
 		ATTR_manip_command	button	a321neo/cockpit/draims/draims_clr_key	DRAIMS 1 CLR key
 		TRIS	9582 156
-		ATTR_manip_command	button	a321neo/cockpit/draims/draims_source_dn_button	DRAIMS 1 source down button
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_cursor_dn_button	DRAIMS 1 cursor down button
 		TRIS	9738 84
 		ATTR_manip_none
 		TRIS	9822 84
@@ -23666,11 +23686,11 @@ IDX	19120
 		TRIS	11250 84
 		TRIS	11334 84
 		TRIS	11418 84
-		ATTR_manip_command	button	a321neo/cockpit/draims/draims_source_up_button	DRAIMS 1 source up button
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_cursor_up_button	DRAIMS 1 cursor up button
 		TRIS	11502 84
-		ATTR_manip_command	button	sim/audio_panel/transmit_audio_com1	Transmit to VHF 1
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_transmit_vhf_1_button	Transmit to VHF 1
 		TRIS	11586 84
-		ATTR_manip_command	button	sim/audio_panel/transmit_audio_com2	Transmit to VHF 2
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_transmit_vhf_2_button	Transmit to VHF 2
 		TRIS	11670 84
 		ATTR_manip_none
 		TRIS	11754 84
@@ -23704,7 +23724,7 @@ IDX	19120
 		TRIS	13806 84
 		ATTR_manip_command	button	a321neo/cockpit/draims/draims_clr_key	DRAIMS 2 CLR key
 		TRIS	13890 156
-		ATTR_manip_command	button	a321neo/cockpit/draims/draims_source_dn_button	DRAIMS 2 source down button
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_cursor_dn_button	DRAIMS 2 cursor down button
 		TRIS	14046 84
 		ATTR_manip_none
 		TRIS	14130 84
@@ -23745,11 +23765,11 @@ IDX	19120
 		TRIS	15558 84
 		TRIS	15642 84
 		TRIS	15726 84
-		ATTR_manip_command	button	a321neo/cockpit/draims/draims_source_up_button	DRAIMS 2 source up button
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_cursor_up_button	DRAIMS 2 cursor up button
 		TRIS	15810 84
-		ATTR_manip_command	button	sim/audio_panel/transmit_audio_com1	Transmit to VHF 1
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_transmit_vhf_1_button	Transmit to VHF 1
 		TRIS	15894 84
-		ATTR_manip_command	button	sim/audio_panel/transmit_audio_com2	Transmit to VHF 2
+		ATTR_manip_command	button	a321neo/cockpit/draims/draims_transmit_vhf_2_button	Transmit to VHF 2
 		TRIS	15978 84
 		ATTR_manip_none
 		TRIS	16062 84
