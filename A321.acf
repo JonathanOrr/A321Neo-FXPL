@@ -143,7 +143,7 @@ P _door/3/_xyz/0 1.500000000
 P _door/3/_xyz/1 0.0
 P _door/3/_xyz/2 14.500000000
 P _door/3/_xyz/count 3
-P _door/4/_ang_now 35.357212067
+P _door/4/_ang_now 17.480644226
 P _door/4/_ext_ang 0.0
 P _door/4/_ret_ang 90.0
 P _door/4/_type 2
@@ -151,7 +151,7 @@ P _door/4/_xyz/0 -13.0
 P _door/4/_xyz/1 -3.599999905
 P _door/4/_xyz/2 73.500000000
 P _door/4/_xyz/count 3
-P _door/5/_ang_now -35.357212067
+P _door/5/_ang_now -17.480644226
 P _door/5/_ext_ang 0.0
 P _door/5/_ret_ang -90.0
 P _door/5/_type 2
@@ -209,10 +209,10 @@ P _gear/0/_latN 0.0
 P _gear/0/_latR 0.0
 P _gear/0/_leg_len 5.400000095
 P _gear/0/_lonE 0.0
-P _gear/0/_lonN 38.500076294
+P _gear/0/_lonN 19.034477234
 P _gear/0/_lonR 98.0
 P _gear/0/_scon 47252.898437500
-P _gear/0/_stat_def 0.399389863
+P _gear/0/_stat_def 0.399389774
 P _gear/0/_steerdeg_hispeed 5.0
 P _gear/0/_steerdeg_lospeed 75.0
 P _gear/0/_strut_comp 0.0
@@ -239,14 +239,14 @@ P _gear/1/_gear_x -12.010000229
 P _gear/1/_gear_y -2.799999952
 P _gear/1/_gear_z 69.800003052
 P _gear/1/_latE 0.0
-P _gear/1/_latN 31.428634644
+P _gear/1/_latN 15.538345337
 P _gear/1/_latR 80.0
 P _gear/1/_leg_len 8.199999809
 P _gear/1/_lonE -7.0
-P _gear/1/_lonN -4.249994755
+P _gear/1/_lonN -5.640394211
 P _gear/1/_lonR 0.0
 P _gear/1/_scon 71266.664062500
-P _gear/1/_stat_def 1.367629290
+P _gear/1/_stat_def 1.367629766
 P _gear/1/_steerdeg_hispeed 0.0
 P _gear/1/_steerdeg_lospeed 0.0
 P _gear/1/_strut_comp -0.500000000
@@ -273,14 +273,14 @@ P _gear/2/_gear_x 12.010000229
 P _gear/2/_gear_y -2.799999952
 P _gear/2/_gear_z 69.800003052
 P _gear/2/_latE 0.0
-P _gear/2/_latN -31.428634644
+P _gear/2/_latN -15.538345337
 P _gear/2/_latR -80.0
 P _gear/2/_leg_len 8.199999809
 P _gear/2/_lonE -7.0
-P _gear/2/_lonN -4.249994755
+P _gear/2/_lonN -5.640394211
 P _gear/2/_lonR 0.0
 P _gear/2/_scon 71266.664062500
-P _gear/2/_stat_def 1.367629290
+P _gear/2/_stat_def 1.367629766
 P _gear/2/_steerdeg_hispeed 0.0
 P _gear/2/_steerdeg_lospeed 0.0
 P _gear/2/_strut_comp -0.500000000
@@ -25869,7 +25869,7 @@ P _part/86/_part_specs_invis 0
 P _part/86/_part_tex 0
 P _part/86/_part_the 0.0
 P _part/86/_part_x -12.010000229
-P _part/86/_part_y -9.571249008
+P _part/86/_part_y -9.571248055
 P _part/86/_part_z 70.799331665
 P _part/86/_patt_con 0
 P _part/86/_patt_prt 0
@@ -27339,7 +27339,7 @@ P _part/87/_part_specs_invis 0
 P _part/87/_part_tex 0
 P _part/87/_part_the 0.0
 P _part/87/_part_x 12.010000229
-P _part/87/_part_y -9.571249008
+P _part/87/_part_y -9.571248055
 P _part/87/_part_z 70.799331665
 P _part/87/_patt_con 0
 P _part/87/_patt_prt 0
@@ -35814,7 +35814,7 @@ P acf/_feather_prop_with_oilp 0
 P acf/_feathered_pitch 0.0
 P acf/_ff_rat_idle_JET 0.039999999
 P acf/_ff_rat_idle_PRP 0.0
-P acf/_file_writer_version 115031
+P acf/_file_writer_version 115029
 P acf/_flap1_cd 0.100000001
 P acf/_flap1_cl 0.779999971
 P acf/_flap1_cm -0.689999998
@@ -40415,6 +40415,192 @@ GROUP Cabin screens
 END_GROUP
 GROUP ECAM lower du
   LOCKED
+  GROUP_OPEN
+  GROUP ECAM DOOR
+    SHOW_EQUAL 9.000000 a321neo/cockpit/ecam/page_num
+    LOCKED
+    gen_rotary door bgd
+      POS 3637.000000 734.000000
+      IMAGE MIP/ecam lower du/DOOR/Background
+      DATAREF 
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 0.000000
+      DIGITS 1
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 0.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary Static Doors
+      POS 3641.500000 798.000000
+      IMAGE MIP/ecam lower du/DOOR/static doors
+      DATAREF 
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 6.000000
+      DIGITS 1
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary Doors L1
+      POS 3475.500000 936.500000
+      IMAGE MIP/ecam lower du/DOOR/cabin left
+      DATAREF abc
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000
+      DIGITS 2
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary Doors L2
+      POS 3475.500000 504.500000
+      IMAGE MIP/ecam lower du/DOOR/cabin left
+      DATAREF abc
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000
+      DIGITS 2
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary Doors R1
+      POS 3805.500000 936.500000
+      IMAGE MIP/ecam lower du/DOOR/cabin right
+      DATAREF abc
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000
+      DIGITS 2
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary Doors R2
+      POS 3805.500000 504.500000
+      IMAGE MIP/ecam lower du/DOOR/cabin right
+      DATAREF abc
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000
+      DIGITS 2
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary Doors Cargo 1
+      POS 3775.500000 842.500000
+      IMAGE MIP/ecam lower du/DOOR/cargo
+      DATAREF abc
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000
+      DIGITS 2
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary Doors Cargo 2
+      POS 3775.500000 603.500000
+      IMAGE MIP/ecam lower du/DOOR/cargo
+      DATAREF abc
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000
+      DIGITS 2
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary cab vs pos neg
+      POS 3848.000000 1011.000000
+      IMAGE MIP/ecam lower du/DOOR/Arrow
+      DATAREF abc
+      SIZE 0.900000
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000
+      DIGITS 2
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+  END_GROUP
   GROUP ECAM ENGINE
     SHOW_EQUAL 1.000000 a321neo/cockpit/ecam/page_num
     LOCKED
@@ -40710,51 +40896,6 @@ GROUP ECAM lower du
       DIGITS 1
       ROTARY_TYPE NO_CLICK
       CLICK_RADIUS 0.000000
-      CLICK_RADIUS_DY 0.000000
-      OFFSET 0.000000
-      STEP1 1.000000
-      STEP2 1.000000
-      CURSOR DEFAULT
-      CLICK_DX 0
-      CLICK_DY 0
-
-  END_GROUP
-  GROUP ECAM DOOR
-    SHOW_EQUAL 9.000000 a321neo/cockpit/ecam/page_num
-    LOCKED
-    gen_rotary door bgd
-      POS 3637.000000 734.000000
-      IMAGE MIP/ecam lower du/DOOR/Background
-      DATAREF 
-      LOCKED
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 1.000000 0.000000
-      DIGITS 1
-      ROTARY_TYPE NO_CLICK
-      CLICK_RADIUS 0.000000
-      CLICK_RADIUS_DY 0.000000
-      OFFSET 0.000000
-      STEP1 1.000000
-      STEP2 1.000000
-      CURSOR DEFAULT
-      CLICK_DX 0
-      CLICK_DY 0
-
-    gen_rotary cab vs pos neg
-      POS 3848.000000 1011.000000
-      IMAGE MIP/ecam lower du/DOOR/Arrow
-      DATAREF abc
-      SIZE 0.900000
-      LOCKED
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 1.000000 1.000000
-      DIGITS 2
-      ROTARY_TYPE NO_CLICK
-      CLICK_RADIUS 10.000000
       CLICK_RADIUS_DY 0.000000
       OFFSET 0.000000
       STEP1 1.000000
@@ -42784,14 +42925,11 @@ GROUP ECAM lower du
   END_GROUP
   GROUP ECAM FCTL
     SHOW_EQUAL 11.000000 a321neo/cockpit/ecam/page_num
-    LOCKED
-    HIDE
+    GROUP_OPEN
     gen_rotary fctl_background
       POS 3637.000000 733.000000
       IMAGE MIP/ecam lower du/FCTL/FCTL
       DATAREF 
-      LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -42811,8 +42949,6 @@ GROUP ECAM lower du
       POS 3637.000000 734.000000
       IMAGE MIP/ecam lower du/FCTL/Hydraulics
       DATAREF 
-      LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -42831,14 +42967,13 @@ GROUP ECAM lower du
     gen_pointer aileron_left
       POS 3339.000000 856.000000
       IMAGE MIP/ecam lower du/FCTL/ArrowLeft
-      DATAREF sim/flightmodel/controls/lail1def
-      LOCKED
-      HIDE
+      DATAREF sim/flightmodel/controls/wing2l_ail1def
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
-      KEY_FRAME -25.000000 -90.000000 1.000000
+      KEY_FRAME 25.000000 -90.000000 1.000000
+      KEY_FRAME 5.000000 -16.000000 1.000000
       KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 25.000000 90.000000
+      KEY_FRAME -25.000000 90.000000
       IS_DRAGGABLE 0
       IS_VERTICAL 1
       OFFSET 0.000000
@@ -42846,14 +42981,13 @@ GROUP ECAM lower du
     gen_pointer aileron_right
       POS 3936.000000 856.000000
       IMAGE MIP/ecam lower du/FCTL/ArrowRight
-      DATAREF sim/flightmodel/controls/rail1def
-      LOCKED
-      HIDE
+      DATAREF sim/flightmodel/controls/wing2r_ail1def
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
-      KEY_FRAME -25.000000 -90.000000 1.000000
+      KEY_FRAME 25.000000 -90.000000 1.000000
+      KEY_FRAME 5.000000 -16.000000 1.000000
       KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 25.000000 90.000000
+      KEY_FRAME -25.000000 90.000000
       IS_DRAGGABLE 0
       IS_VERTICAL 1
       OFFSET 0.000000
@@ -42861,9 +42995,7 @@ GROUP ECAM lower du
     gen_pointer elevator
       POS 3458.000000 589.000000
       IMAGE MIP/ecam lower du/FCTL/ArrowLeft
-      DATAREF sim/flightmodel2/wing/elevator1_deg[0]
-      LOCKED
-      HIDE
+      DATAREF sim/flightmodel/controls/hstab1_elv1def[0]
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 17.000000 -55.000000 1.000000
@@ -42876,9 +43008,7 @@ GROUP ECAM lower du
     gen_pointer elevator 2
       POS 3821.000000 589.000000
       IMAGE MIP/ecam lower du/FCTL/ArrowRight
-      DATAREF sim/flightmodel2/wing/elevator1_deg[0]
-      LOCKED
-      HIDE
+      DATAREF sim/flightmodel/controls/hstab2_elv1def[0]
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 17.000000 -55.000000 1.000000
@@ -42891,27 +43021,24 @@ GROUP ECAM lower du
     gen_needle rudder_needle
       POS 3637.500000 599.000000
       IMAGE MIP/ecam lower du/FCTL/RudderGreen
-      DATAREF sim/flightmodel2/wing/rudder1_deg[0]
-      LOCKED
-      HIDE
+      DATAREF sim/flightmodel/controls/vstab1_rud1def[0]
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
-      KEY_FRAME -30.000000 -28.000000 1.000000
-      KEY_FRAME 30.000000 28.000000
+      KEY_FRAME 30.000000 -28.000000 1.000000
+      KEY_FRAME -30.000000 28.000000
       IS_DRAGGABLE 0
       OFFSET 0.000000
 
     gen_rotary l_spoiler1
       POS 3582.000000 1074.000000
       IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
-      DATAREF 
+      DATAREF sim/flightmodel/controls/wing1l_spo1def
       SHOW_GREATER 0.010000 sim/flightmodel2/wing/speedbrake2_deg[0]
-      LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 1.000000 6.000000
+      KEY_FRAME 0.000000 -1.000000 1.000000
+      KEY_FRAME 2.500000 0.000000 1.000000
+      KEY_FRAME 50.000000 0.000000
       DIGITS 1
       ROTARY_TYPE NO_CLICK
       CLICK_RADIUS 10.000000
@@ -42926,14 +43053,13 @@ GROUP ECAM lower du
     gen_rotary l_spoiler2
       POS 3526.000000 1065.000000
       IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
-      DATAREF 
+      DATAREF sim/flightmodel/controls/wing2l_spo1def
       SHOW_GREATER 0.010000 sim/flightmodel/controls/wing2l_spo2def[0]
-      LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 1.000000 6.000000
+      KEY_FRAME 0.000000 -1.000000 1.000000
+      KEY_FRAME 2.500000 0.000000 1.000000
+      KEY_FRAME 50.000000 0.000000
       DIGITS 1
       ROTARY_TYPE NO_CLICK
       CLICK_RADIUS 10.000000
@@ -42948,14 +43074,13 @@ GROUP ECAM lower du
     gen_rotary l_spoiler3
       POS 3470.000000 1056.000000
       IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
-      DATAREF 
+      DATAREF sim/flightmodel/controls/wing2l_spo2def
       SHOW_GREATER 0.010000 sim/flightmodel/controls/wing2l_spo2def[0]
-      LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 1.000000 6.000000
+      KEY_FRAME 0.000000 -1.000000 1.000000
+      KEY_FRAME 2.500000 0.000000 1.000000
+      KEY_FRAME 50.000000 0.000000
       DIGITS 1
       ROTARY_TYPE NO_CLICK
       CLICK_RADIUS 10.000000
@@ -42970,14 +43095,13 @@ GROUP ECAM lower du
     gen_rotary l_spoiler4
       POS 3414.000000 1046.000000
       IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
-      DATAREF 
+      DATAREF sim/flightmodel/controls/wing2l_spo2def
       SHOW_GREATER 0.010000 sim/flightmodel/controls/wing2l_spo2def[0]
-      LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 1.000000 6.000000
+      KEY_FRAME 0.000000 -1.000000 1.000000
+      KEY_FRAME 2.500000 0.000000 1.000000
+      KEY_FRAME 50.000000 0.000000
       DIGITS 1
       ROTARY_TYPE NO_CLICK
       CLICK_RADIUS 10.000000
@@ -42992,14 +43116,13 @@ GROUP ECAM lower du
     gen_rotary l_spoiler5
       POS 3357.000000 1037.000000
       IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
-      DATAREF 
+      DATAREF sim/flightmodel/controls/wing2l_spo2def
       SHOW_GREATER 0.010000 sim/flightmodel/controls/wing2l_spo2def[0]
-      LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 1.000000 6.000000
+      KEY_FRAME 0.000000 -1.000000 1.000000
+      KEY_FRAME 2.500000 0.000000 1.000000
+      KEY_FRAME 50.000000 0.000000
       DIGITS 1
       ROTARY_TYPE NO_CLICK
       CLICK_RADIUS 10.000000
@@ -43014,14 +43137,13 @@ GROUP ECAM lower du
     gen_rotary r_spoiler1
       POS 3694.000000 1074.000000
       IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
-      DATAREF 
+      DATAREF sim/flightmodel/controls/wing1r_spo1def
       SHOW_GREATER 0.010000 sim/flightmodel2/wing/speedbrake1_deg[0]
-      LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 1.000000 6.000000
+      KEY_FRAME 0.000000 -1.000000 1.000000
+      KEY_FRAME 2.500000 1.000000 1.000000
+      KEY_FRAME 50.000000 1.000000
       DIGITS 1
       ROTARY_TYPE NO_CLICK
       CLICK_RADIUS 10.000000
@@ -43036,14 +43158,13 @@ GROUP ECAM lower du
     gen_rotary r_spoiler2
       POS 3750.000000 1065.000000
       IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
-      DATAREF 
+      DATAREF sim/flightmodel/controls/wing2r_spo1def
       SHOW_GREATER 0.010000 sim/flightmodel/controls/wing2r_spo2def[0]
-      LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 1.000000 6.000000
+      KEY_FRAME 0.000000 -1.000000 1.000000
+      KEY_FRAME 2.500000 1.000000 1.000000
+      KEY_FRAME 50.000000 1.000000
       DIGITS 1
       ROTARY_TYPE NO_CLICK
       CLICK_RADIUS 10.000000
@@ -43058,14 +43179,13 @@ GROUP ECAM lower du
     gen_rotary r_spoiler3
       POS 3807.000000 1056.000000
       IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
-      DATAREF 
+      DATAREF sim/flightmodel/controls/wing2r_spo2def
       SHOW_GREATER 0.010000 sim/flightmodel/controls/wing2r_spo2def[0]
-      LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 1.000000 6.000000
+      KEY_FRAME 0.000000 -1.000000 1.000000
+      KEY_FRAME 2.500000 1.000000 1.000000
+      KEY_FRAME 50.000000 1.000000
       DIGITS 1
       ROTARY_TYPE NO_CLICK
       CLICK_RADIUS 10.000000
@@ -43080,14 +43200,13 @@ GROUP ECAM lower du
     gen_rotary r_spoiler4
       POS 3862.000000 1046.000000
       IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
-      DATAREF 
+      DATAREF sim/flightmodel/controls/wing2r_spo2def
       SHOW_GREATER 0.010000 sim/flightmodel/controls/wing2r_spo2def[0]
-      LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 1.000000 6.000000
+      KEY_FRAME 0.000000 -1.000000 1.000000
+      KEY_FRAME 2.500000 1.000000 1.000000
+      KEY_FRAME 50.000000 1.000000
       DIGITS 1
       ROTARY_TYPE NO_CLICK
       CLICK_RADIUS 10.000000
@@ -43102,14 +43221,13 @@ GROUP ECAM lower du
     gen_rotary r_spoiler5
       POS 3919.000000 1037.000000
       IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
-      DATAREF 
+      DATAREF sim/flightmodel/controls/wing2r_spo2def
       SHOW_GREATER 0.010000 sim/flightmodel/controls/wing2r_spo2def[0]
-      LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 1.000000 6.000000
+      KEY_FRAME 0.000000 -1.000000 1.000000
+      KEY_FRAME 2.500000 1.000000 1.000000
+      KEY_FRAME 50.000000 1.000000
       DIGITS 1
       ROTARY_TYPE NO_CLICK
       CLICK_RADIUS 10.000000
@@ -43393,6 +43511,7 @@ GROUP PFD
 
   GROUP Rotation
     LOCKED
+    GROUP_OPEN
     GROUP_ANIMATE_MODE ROTATE
     GROUP_WIDTH 300
     GROUP_HEIGHT 300
@@ -43893,6 +44012,76 @@ GROUP PFD
     CLICK_DX 0
     CLICK_DY 0
 
+  gen_pointer alt target
+    POS 2053.500000 725.500000
+    IMAGE MIP/pfd/target alt
+    DATAREF sim/cockpit2/autopilot/altitude_dial_ft
+    LOCKED
+    CLIP
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 0.000000 0.000000 1.000000
+    KEY_FRAME 500.000000 212.000000
+    IS_DRAGGABLE 0
+    IS_VERTICAL 1
+    OFFSET 0.000000
+
+  gen_pointer Alt Tape Ground Red
+    POS 2118.000000 724.500000
+    IMAGE MIP/pfd/Alt Ground
+    DATAREF sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_copilot
+    LOCKED
+    CLIP
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 0.000000 -297.000000 1.000000
+    KEY_FRAME 500.000000 -507.000000
+    IS_DRAGGABLE 0
+    IS_VERTICAL 1
+    OFFSET 0.000000
+
+  gen_rotary Alt Box
+    POS 2094.500000 726.500000
+    IMAGE MIP/pfd/alt frame
+    DATAREF 
+    LOCKED
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 0.000000 0.000000 1.000000
+    KEY_FRAME 1.000000 6.000000
+    DIGITS 1
+    ROTARY_TYPE NO_CLICK
+    CLICK_RADIUS 10.000000
+    CLICK_RADIUS_DY 0.000000
+    OFFSET 0.000000
+    STEP1 1.000000
+    STEP2 1.000000
+    CURSOR DEFAULT
+    CLICK_DX 0
+    CLICK_DY 0
+
+  gen_rotary Alt Out Of Range
+    POS 2095.500000 726.500000
+    IMAGE MIP/pfd/ALT STBY
+    DATAREF 
+    SHOW_GREATER 45000.000000 sim/cockpit2/gauges/indicators/altitude_ft_pilot
+    LOCKED
+    HIDE
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 0.000000 0.000000 1.000000
+    KEY_FRAME 1.000000 0.000000
+    DIGITS 1
+    ROTARY_TYPE NO_CLICK
+    CLICK_RADIUS 10.000000
+    CLICK_RADIUS_DY 0.000000
+    OFFSET 0.000000
+    STEP1 1.000000
+    STEP2 1.000000
+    CURSOR DEFAULT
+    CLICK_DX 0
+    CLICK_DY 0
+
   gen_needle Roll Center
     POS 1758.500000 725.000000
     IMAGE MIP/pfd/Beta Target Upper
@@ -43961,92 +44150,23 @@ GROUP PFD
     ROTATE_OFFSET_Y 0.000000
     GROUP ALT
       LOCKED
-      gen_pointer alt target
-        POS 2053.500000 725.500000
-        IMAGE MIP/pfd/target alt
-        DATAREF sim/cockpit2/autopilot/altitude_dial_ft
+      GROUP_OPEN
+      gen_pointer Beta Target
+        POS 1758.500000 725.000000
+        IMAGE MIP/pfd/beta target
+        DATAREF sim/cockpit2/gauges/indicators/sideslip_degrees
         LOCKED
-        CLIP
         LIGHT_MODE GLASS_AUTO
         LIGHT_RHEOSTAT 0
-        KEY_FRAME 0.000000 0.000000 1.000000
-        KEY_FRAME 500.000000 212.000000
+        KEY_FRAME -359.000000 -50.000000 1.000000
+        KEY_FRAME -10.000000 -50.000000 1.000000
+        KEY_FRAME 10.000000 50.000000 1.000000
+        KEY_FRAME 359.000000 50.000000
         IS_DRAGGABLE 0
-        IS_VERTICAL 1
+        IS_VERTICAL 0
         OFFSET 0.000000
-
-      gen_pointer Alt Tape Ground Red
-        POS 2118.000000 724.500000
-        IMAGE MIP/pfd/Alt Ground
-        DATAREF sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_copilot
-        LOCKED
-        CLIP
-        LIGHT_MODE GLASS_AUTO
-        LIGHT_RHEOSTAT 0
-        KEY_FRAME 0.000000 -297.000000 1.000000
-        KEY_FRAME 500.000000 -507.000000
-        IS_DRAGGABLE 0
-        IS_VERTICAL 1
-        OFFSET 0.000000
-
-      gen_rotary Alt Box
-        POS 2094.500000 726.500000
-        IMAGE MIP/pfd/alt frame
-        DATAREF 
-        LOCKED
-        LIGHT_MODE GLASS_AUTO
-        LIGHT_RHEOSTAT 0
-        KEY_FRAME 0.000000 0.000000 1.000000
-        KEY_FRAME 1.000000 6.000000
-        DIGITS 1
-        ROTARY_TYPE NO_CLICK
-        CLICK_RADIUS 10.000000
-        CLICK_RADIUS_DY 0.000000
-        OFFSET 0.000000
-        STEP1 1.000000
-        STEP2 1.000000
-        CURSOR DEFAULT
-        CLICK_DX 0
-        CLICK_DY 0
-
-      gen_rotary Alt Out Of Range
-        POS 2095.500000 726.500000
-        IMAGE MIP/pfd/ALT STBY
-        DATAREF 
-        SHOW_GREATER 45000.000000 sim/cockpit2/gauges/indicators/altitude_ft_pilot
-        LOCKED
-        HIDE
-        LIGHT_MODE GLASS_AUTO
-        LIGHT_RHEOSTAT 0
-        KEY_FRAME 0.000000 0.000000 1.000000
-        KEY_FRAME 1.000000 0.000000
-        DIGITS 1
-        ROTARY_TYPE NO_CLICK
-        CLICK_RADIUS 10.000000
-        CLICK_RADIUS_DY 0.000000
-        OFFSET 0.000000
-        STEP1 1.000000
-        STEP2 1.000000
-        CURSOR DEFAULT
-        CLICK_DX 0
-        CLICK_DY 0
 
     END_GROUP
-    gen_pointer Beta Target
-      POS 1758.500000 725.000000
-      IMAGE MIP/pfd/beta target
-      DATAREF sim/cockpit2/gauges/indicators/sideslip_degrees
-      LOCKED
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME -359.000000 -50.000000 1.000000
-      KEY_FRAME -10.000000 -50.000000 1.000000
-      KEY_FRAME 10.000000 50.000000 1.000000
-      KEY_FRAME 359.000000 50.000000
-      IS_DRAGGABLE 0
-      IS_VERTICAL 0
-      OFFSET 0.000000
-
   END_GROUP
   GROUP Alt Numbers
     LOCKED
@@ -46389,677 +46509,678 @@ GROUP ECAM Button Lights
 END_GROUP
 GROUP Draims Buttons
   LOCKED
-  GROUP_OPEN
-  gen_rotary draims vhf
-    POS 727.714233 1143.714233
-    IMAGE center_pedestal/draims/vhf
-    DATAREF 
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 1
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 6.000000
-    DIGITS 1
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
+  GROUP DRAIMS
+    gen_rotary draims vhf
+      POS 727.714233 1143.714233
+      IMAGE center_pedestal/draims/vhf
+      DATAREF 
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 1
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 6.000000
+      DIGITS 1
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
 
-  gen_rotary draims hf
-    POS 776.714233 1143.285645
-    IMAGE center_pedestal/draims/hf
-    DATAREF 
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 1
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 6.000000
-    DIGITS 1
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
+    gen_rotary draims hf
+      POS 776.714233 1143.285645
+      IMAGE center_pedestal/draims/hf
+      DATAREF 
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 1
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 6.000000
+      DIGITS 1
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
 
-  gen_rotary draims  tel
-    POS 824.714233 1143.285645
-    IMAGE center_pedestal/draims/tel
-    DATAREF 
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 1
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 6.000000
-    DIGITS 1
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
+    gen_rotary draims  tel
+      POS 824.714233 1143.285645
+      IMAGE center_pedestal/draims/tel
+      DATAREF 
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 1
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 6.000000
+      DIGITS 1
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
 
-  gen_rotary draims atc
-    POS 727.285645 1117.285645
-    IMAGE center_pedestal/draims/atc
-    DATAREF 
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 1
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 6.000000
-    DIGITS 1
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
+    gen_rotary draims atc
+      POS 727.285645 1117.285645
+      IMAGE center_pedestal/draims/atc
+      DATAREF 
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 1
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 6.000000
+      DIGITS 1
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
 
-  gen_rotary draims blank
-    POS 776.571350 1116.285645
-    IMAGE center_pedestal/draims/blank
-    DATAREF 
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 6.000000
-    DIGITS 1
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
+    gen_rotary draims blank
+      POS 776.571350 1116.285645
+      IMAGE center_pedestal/draims/blank
+      DATAREF 
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 6.000000
+      DIGITS 1
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
 
-  gen_rotary draims menu
-    POS 824.142761 1115.714233
-    IMAGE center_pedestal/draims/menu
-    DATAREF 
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 1
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 6.000000
-    DIGITS 1
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
+    gen_rotary draims menu
+      POS 824.142761 1115.714233
+      IMAGE center_pedestal/draims/menu
+      DATAREF 
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 1
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 6.000000
+      DIGITS 1
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
 
-  gen_rotary draims nav
-    POS 870.999878 1143.285645
-    IMAGE center_pedestal/draims/nav
-    DATAREF 
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 1
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 6.000000
-    DIGITS 1
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
+    gen_rotary draims nav
+      POS 870.999878 1143.285645
+      IMAGE center_pedestal/draims/nav
+      DATAREF 
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 1
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 6.000000
+      DIGITS 1
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
 
-  gen_rotary draims bottom arrow
-    POS 871.285583 1116.714233
-    IMAGE center_pedestal/draims/upkey
-    DATAREF 
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 1
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 6.000000
-    DIGITS 1
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
+    gen_rotary draims bottom arrow
+      POS 871.285583 1116.714233
+      IMAGE center_pedestal/draims/upkey
+      DATAREF 
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 1
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 6.000000
+      DIGITS 1
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
 
-  gen_rotary draims right arrow
-    POS 907.000000 1131.000000
-    IMAGE center_pedestal/draims/leftkey
-    DATAREF 
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 1
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 6.000000
-    DIGITS 1
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
+    gen_rotary draims right arrow
+      POS 907.000000 1131.000000
+      IMAGE center_pedestal/draims/leftkey
+      DATAREF 
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 1
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 6.000000
+      DIGITS 1
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
 
-  gen_rotary draims left arrow
-    POS 933.000000 1131.000000
-    IMAGE center_pedestal/draims/rightkey
-    DATAREF 
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 1
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 6.000000
-    DIGITS 1
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
+    gen_rotary draims left arrow
+      POS 933.000000 1131.000000
+      IMAGE center_pedestal/draims/rightkey
+      DATAREF 
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 1
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 6.000000
+      DIGITS 1
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
 
-  gen_rotary draims clr
-    POS 968.714294 1130.714233
-    IMAGE center_pedestal/draims/clr
-    DATAREF 
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 1
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 6.000000
-    DIGITS 1
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
+    gen_rotary draims clr
+      POS 968.714294 1130.714233
+      IMAGE center_pedestal/draims/clr
+      DATAREF 
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 1
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 6.000000
+      DIGITS 1
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
 
-  gen_rotary draims vhf1
-    POS 748.000000 1186.000000
-    IMAGE center_pedestal/draims/vhf1
-    DATAREF 
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 1
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 6.000000
-    DIGITS 1
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
+    gen_rotary draims vhf1
+      POS 748.000000 1186.000000
+      IMAGE center_pedestal/draims/vhf1
+      DATAREF 
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 1
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 6.000000
+      DIGITS 1
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
 
-  gen_rotary draims vhf2
-    POS 834.000000 1186.000000
-    IMAGE center_pedestal/draims/vhf2
-    DATAREF 
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 1
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 6.000000
-    DIGITS 1
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
+    gen_rotary draims vhf2
+      POS 834.000000 1186.000000
+      IMAGE center_pedestal/draims/vhf2
+      DATAREF 
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 1
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 6.000000
+      DIGITS 1
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
 
-  gen_rotary draims vhf3
-    POS 921.000000 1185.000000
-    IMAGE center_pedestal/draims/vhf3
-    DATAREF 
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 1
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 6.000000
-    DIGITS 1
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
+    gen_rotary draims vhf3
+      POS 921.000000 1185.000000
+      IMAGE center_pedestal/draims/vhf3
+      DATAREF 
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 1
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 6.000000
+      DIGITS 1
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
 
-  gen_rotary draims hf1
-    POS 1011.000000 1186.000000
-    IMAGE center_pedestal/draims/hf1
-    DATAREF 
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 1
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 6.000000
-    DIGITS 1
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
+    gen_rotary draims hf1
+      POS 1011.000000 1186.000000
+      IMAGE center_pedestal/draims/hf1
+      DATAREF 
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 1
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 6.000000
+      DIGITS 1
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
 
-  gen_rotary draims hf2
-    POS 1101.000000 1186.000000
-    IMAGE center_pedestal/draims/hf2
-    DATAREF 
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 1
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 6.000000
-    DIGITS 1
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
+    gen_rotary draims hf2
+      POS 1101.000000 1186.000000
+      IMAGE center_pedestal/draims/hf2
+      DATAREF 
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 1
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 6.000000
+      DIGITS 1
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
 
-  gen_rotary draims tel1
-    POS 1033.000000 1127.000000
-    IMAGE center_pedestal/draims/tel1
-    DATAREF 
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 1
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 6.000000
-    DIGITS 1
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
+    gen_rotary draims tel1
+      POS 1033.000000 1127.000000
+      IMAGE center_pedestal/draims/tel1
+      DATAREF 
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 1
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 6.000000
+      DIGITS 1
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
 
-  gen_rotary draims tel2
-    POS 1122.000000 1127.000000
-    IMAGE center_pedestal/draims/tel2
-    DATAREF 
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 1
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 6.000000
-    DIGITS 1
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
+    gen_rotary draims tel2
+      POS 1122.000000 1127.000000
+      IMAGE center_pedestal/draims/tel2
+      DATAREF 
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 1
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 6.000000
+      DIGITS 1
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
 
-  gen_rotary draims int
-    POS 657.000000 1186.000000
-    IMAGE center_pedestal/draims/int
-    DATAREF 
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 1
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 6.000000
-    DIGITS 1
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
+    gen_rotary draims int
+      POS 657.000000 1186.000000
+      IMAGE center_pedestal/draims/int
+      DATAREF 
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 1
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 6.000000
+      DIGITS 1
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
 
-  gen_rotary draims cab
-    POS 657.000000 1130.000000
-    IMAGE center_pedestal/draims/cab
-    DATAREF 
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 1
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 6.000000
-    DIGITS 1
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
+    gen_rotary draims cab
+      POS 657.000000 1130.000000
+      IMAGE center_pedestal/draims/cab
+      DATAREF 
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 1
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 6.000000
+      DIGITS 1
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
 
-  gen_rotary draims pa
-    POS 571.000000 1130.000000
-    IMAGE center_pedestal/draims/pa
-    DATAREF 
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 1
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 6.000000
-    DIGITS 1
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
+    gen_rotary draims pa
+      POS 571.000000 1130.000000
+      IMAGE center_pedestal/draims/pa
+      DATAREF 
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 1
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 6.000000
+      DIGITS 1
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
 
-  gen_rotary draims int light
-    POS 656.000000 1198.000000
-    IMAGE center_pedestal/ecam/green
-    DATAREF abc
-    SIZE 0.700000
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 1.000000
-    DIGITS 2
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
+    gen_rotary draims int light
+      POS 656.000000 1198.000000
+      IMAGE center_pedestal/ecam/green
+      DATAREF abc
+      SIZE 0.700000
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000
+      DIGITS 2
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
 
-  gen_rotary draims cab light
-    POS 656.000000 1142.000000
-    IMAGE center_pedestal/ecam/green
-    DATAREF abc
-    SIZE 0.700000
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 1.000000
-    DIGITS 2
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
+    gen_rotary draims cab light
+      POS 656.000000 1142.000000
+      IMAGE center_pedestal/ecam/green
+      DATAREF abc
+      SIZE 0.700000
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000
+      DIGITS 2
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
 
-  gen_rotary draims pa light
-    POS 571.000000 1142.000000
-    IMAGE center_pedestal/ecam/green
-    DATAREF abc
-    SIZE 0.700000
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 1.000000
-    DIGITS 2
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
+    gen_rotary draims pa light
+      POS 571.000000 1142.000000
+      IMAGE center_pedestal/ecam/green
+      DATAREF abc
+      SIZE 0.700000
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000
+      DIGITS 2
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
 
-  gen_rotary draims vhf1 light
-    POS 747.000000 1198.000000
-    IMAGE center_pedestal/ecam/green
-    DATAREF a321neo/cockpit/draims/vhf_1_transmit_selected
-    SIZE 0.700000
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 1.000000
-    DIGITS 2
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
+    gen_rotary draims vhf1 light
+      POS 747.000000 1198.000000
+      IMAGE center_pedestal/ecam/green
+      DATAREF a321neo/cockpit/draims/vhf_1_transmit_selected
+      SIZE 0.700000
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000
+      DIGITS 2
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
 
-  gen_rotary draims vhf2 light
-    POS 833.000000 1198.000000
-    IMAGE center_pedestal/ecam/green
-    DATAREF a321neo/cockpit/draims/vhf_2_transmit_selected
-    SIZE 0.700000
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 1.000000
-    DIGITS 2
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
+    gen_rotary draims vhf2 light
+      POS 833.000000 1198.000000
+      IMAGE center_pedestal/ecam/green
+      DATAREF a321neo/cockpit/draims/vhf_2_transmit_selected
+      SIZE 0.700000
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000
+      DIGITS 2
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
 
-  gen_rotary draims vhf3 light
-    POS 921.000000 1198.000000
-    IMAGE center_pedestal/ecam/green
-    DATAREF abc
-    SIZE 0.700000
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 1.000000
-    DIGITS 2
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
+    gen_rotary draims vhf3 light
+      POS 921.000000 1198.000000
+      IMAGE center_pedestal/ecam/green
+      DATAREF abc
+      SIZE 0.700000
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000
+      DIGITS 2
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
 
-  gen_rotary draims hf1 light
-    POS 1011.000000 1198.000000
-    IMAGE center_pedestal/ecam/green
-    DATAREF abc
-    SIZE 0.700000
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 1.000000
-    DIGITS 2
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
+    gen_rotary draims hf1 light
+      POS 1011.000000 1198.000000
+      IMAGE center_pedestal/ecam/green
+      DATAREF abc
+      SIZE 0.700000
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000
+      DIGITS 2
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
 
-  gen_rotary draims hf2 light
-    POS 1100.000000 1198.000000
-    IMAGE center_pedestal/ecam/green
-    DATAREF abc
-    SIZE 0.700000
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 1.000000
-    DIGITS 2
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
+    gen_rotary draims hf2 light
+      POS 1100.000000 1198.000000
+      IMAGE center_pedestal/ecam/green
+      DATAREF abc
+      SIZE 0.700000
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000
+      DIGITS 2
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
 
-  gen_rotary draims tel1 light
-    POS 1033.000000 1138.000000
-    IMAGE center_pedestal/ecam/green
-    DATAREF abc
-    SIZE 0.700000
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 1.000000
-    DIGITS 2
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
+    gen_rotary draims tel1 light
+      POS 1033.000000 1138.000000
+      IMAGE center_pedestal/ecam/green
+      DATAREF abc
+      SIZE 0.700000
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000
+      DIGITS 2
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
 
-  gen_rotary draims tel2 light
-    POS 1123.000000 1137.000000
-    IMAGE center_pedestal/ecam/green
-    DATAREF abc
-    SIZE 0.700000
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 1.000000
-    DIGITS 2
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
+    gen_rotary draims tel2 light
+      POS 1123.000000 1137.000000
+      IMAGE center_pedestal/ecam/green
+      DATAREF abc
+      SIZE 0.700000
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000
+      DIGITS 2
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
 
-  gen_rotary draims up arrow
-    POS 1188.000000 1180.000000
-    IMAGE center_pedestal/draims/uppointer
-    DATAREF 
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 1
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 6.000000
-    DIGITS 1
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
+    gen_rotary draims up arrow
+      POS 1188.000000 1180.000000
+      IMAGE center_pedestal/draims/uppointer
+      DATAREF 
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 1
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 6.000000
+      DIGITS 1
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
 
-  gen_rotary draims down arrow
-    POS 1188.000000 1132.000000
-    IMAGE center_pedestal/draims/downpointer
-    DATAREF 
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 1
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 6.000000
-    DIGITS 1
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
+    gen_rotary draims down arrow
+      POS 1188.000000 1132.000000
+      IMAGE center_pedestal/draims/downpointer
+      DATAREF 
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 1
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 6.000000
+      DIGITS 1
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
 
+  END_GROUP
 END_GROUP
 gen_rotary gen_rotary.png
   POS 1562.000000 1458.000000
@@ -47752,7 +47873,7 @@ GROUP DCDU
     CLICK_DY 0
 
   gen_rotary Bright Dim 2
-    POS 1939.857178 1815.000000
+    POS 1939.000000 1815.000000
     IMAGE MIP/dcdu/msgminus
     DATAREF 
     LIGHT_MODE GLASS_AUTO
@@ -47771,7 +47892,7 @@ GROUP DCDU
     CLICK_DY 0
 
   gen_rotary Bright Dim 2 2
-    POS 1939.714355 1771.000000
+    POS 1939.000000 1771.000000
     IMAGE MIP/dcdu/msgplus
     DATAREF 
     LIGHT_MODE GLASS_AUTO
@@ -47790,7 +47911,7 @@ GROUP DCDU
     CLICK_DY 0
 
   gen_rotary Bright Dim 2 2 2
-    POS 1939.714355 1727.000000
+    POS 1939.000000 1727.000000
     IMAGE MIP/dcdu/pageminus
     DATAREF 
     LIGHT_MODE GLASS_AUTO
@@ -47944,7 +48065,7 @@ GROUP ISIS Buttons
     CLICK_DY 0
 
 END_GROUP
-GROUP New Group
+GROUP Fire PB
   gen_rotary Fire PB Right
     POS 2890.500000 1750.000000
     IMAGE Buttons/fire_pb
