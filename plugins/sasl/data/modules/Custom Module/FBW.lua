@@ -5,8 +5,8 @@ local A32nx_FBW_roll_left =  {P_gain = 1, D_gain = 10, Current_error = 0, Min_er
 local A32nx_FBW_roll_right = {P_gain = 1, D_gain = 10, Current_error = 0, Min_error = -15, Max_error = 15, Error_offset = 0}
 local A32nx_FBW_roll_left_no_stick =  {P_gain = 1, D_gain = 25, Current_error = 0, Min_error = -5, Max_error = 5, Error_offset = 0}
 local A32nx_FBW_roll_right_no_stick = {P_gain = 1, D_gain = 25, Current_error = 0, Min_error = -5, Max_error = 5, Error_offset = 0}
-local A32nx_FBW_pitch_up =   {P_gain = 1, D_gain = 10, Current_error = 0, Min_error = -5, Max_error = 5, Error_offset = 0}
-local A32nx_FBW_pitch_down = {P_gain = 1, D_gain = 10, Current_error = 0, Min_error = -5, Max_error = 5, Error_offset = 0}
+local A32nx_FBW_pitch_up =   {P_gain = 1, D_gain = 75, Current_error = 0, Min_error = -2.5, Max_error = 2.5, Error_offset = 0}
+local A32nx_FBW_pitch_down = {P_gain = 1, D_gain = 75, Current_error = 0, Min_error = -2.5, Max_error = 2.5, Error_offset = 0}
 local A32nx_FBW_roll_rate_command = {P_gain = 0.8, I_gain = 1, D_gain = 2, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -1, Max_error = 1, Error_offset = 0}
 local A32nx_FBW_0pitch_command = {P_gain = 150, I_gain = 10, D_gain = 1000, I_delay = 120, Integral = 0, Current_error = 0, Min_error = -0.15, Max_error = 0.15, Error_offset = 0}
 local A32nx_FBW_FPS_dep_0vpath = {P_gain = 2.45, I_gain = 5.6, D_gain = 300, I_delay = 60, Integral = 0, Current_error = 0, Min_error = -0.1, Max_error = 0.1, Error_offset = 0}

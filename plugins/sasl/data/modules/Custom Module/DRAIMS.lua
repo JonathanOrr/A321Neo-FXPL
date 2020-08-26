@@ -6,11 +6,32 @@ local DRAIMS_entry = ""
 local ident_box_timer = 0--used to fade alpha
 local vhf_cursor_box_timer = 0--used to fade alpha
 local nav_cursor_box_timer = 0--used to fade alpha
-
-local vhf_1_monitoring_buffer
+local crs_suggest_box_timer = 0--used to fade alpha
 
 local cursor_Mhz_swap_buffer = 0
 local cursor_khz_swap_buffer = 0
+
+--navaid infos
+local finding_navaid_id = {} --1 ils, 2 nav1, 3 nav2, 4 adf1, 5 adf2
+local NAVs_type = {} --1 ils, 2 nav1, 3 nav2, 4 adf1, 5 adf2
+local NAVs_latitude = {} --1 ils, 2 nav1, 3 nav2, 4 adf1, 5 adf2
+local NAVs_longitude = {} --1 ils, 2 nav1, 3 nav2, 4 adf1, 5 adf2
+local NAVs_height = {} --1 ils, 2 nav1, 3 nav2, 4 adf1, 5 adf2
+local NAVs_frequency = {} --1 ils, 2 nav1, 3 nav2, 4 adf1, 5 adf2
+local NAVs_heading = {} --1 ils, 2 nav1, 3 nav2, 4 adf1, 5 adf2
+local NAVs_id = {} --1 ils, 2 nav1, 3 nav2, 4 adf1, 5 adf2
+local NAVs_name = {} --1 ils, 2 nav1, 3 nav2, 4 adf1, 5 adf2
+local NAVs_isInsideLoadedDSFs = {} --1 ils, 2 nav1, 3 nav2, 4 adf1, 5 adf2
+
+--navaid name scrolling timer and position
+local vor1_scrolling_timer = 1
+local vor1_scrolling_position = 1
+local vor2_scrolling_timer = 1
+local vor2_scrolling_position = 1
+local adf1_scrolling_timer = 1
+local adf1_scrolling_position = 1
+local adf2_scrolling_timer = 1
+local adf2_scrolling_position = 1
 
 --DMC colors
 local DRAIMS_BLACK = {0,0,0}
@@ -23,6 +44,7 @@ local DRAIMS_RED = {1, 0.0, 0.0}
 local ident_box_cl = {0.004, 1.0, 1.0, 1}
 local vhf_cursor_box_cl = {0.004, 1.0, 1.0, 1}
 local nav_cursor_box_cl = {0.184, 0.733, 0.219, 1}
+local crs_suggest_box_cl = {0.184, 0.733, 0.219, 1}
 local ils_menu_cl = {0.184, 0.733, 0.219, 1}
 local vor_menu_cl = {0.184, 0.733, 0.219, 1}
 local adf_menu_cl = {0.184, 0.733, 0.219, 1}
@@ -68,10 +90,26 @@ local function chk_dec_pt_fmt()--checking how many decimal points there are
 end
 
 local function check_sqwk_fmt()
+    local digit_exceeded_7 = 0
+
     if chk_dec_pt_fmt() == true then
-        if tonumber(DRAIMS_entry) >= 0 and tonumber(DRAIMS_entry) <= 7777 then
-            if tonumber(DRAIMS_entry) - math.floor(tonumber(DRAIMS_entry)) == 0 then
-                return true
+        if tonumber(DRAIMS_entry) >= 0 and tonumber(DRAIMS_entry) <= 7777 then--check for max range
+            if tonumber(DRAIMS_entry) - math.floor(tonumber(DRAIMS_entry)) == 0 then--check for no dp
+                for i = 1, #DRAIMS_entry do--cycle through every digit
+                    if string.sub(DRAIMS_entry, i, i) ~= "." then--if the character is not a dp then
+                        --if the number is within 0 to 7 incl. then correct, if not then add it to the counter
+                        if tonumber(string.sub(DRAIMS_entry, i, i)) < 0 or tonumber(string.sub(DRAIMS_entry, i, i)) > 7 then
+                            digit_exceeded_7 = digit_exceeded_7 + 1
+                        end
+                    end
+                end
+                --check all digits
+                if digit_exceeded_7 == 0 then
+                    return true--no digits exceeded 7 fmt correct
+                else
+                    set(DRAIMS_format_error, 19)
+                    return false--1 or more digits exceeded 7 fmt error
+                end
             else
                 set(DRAIMS_format_error, 9)--sqwk integer only
                 return false
@@ -87,7 +125,9 @@ end
 
 local function check_vhf_fmt()--check for the VHF entry format
     if chk_dec_pt_fmt() == true then
-        if (tonumber(DRAIMS_entry) >= 118 and tonumber(DRAIMS_entry) <= 137) or (tonumber(DRAIMS_entry) > 0 and tonumber(DRAIMS_entry) < 1) then
+        if (tonumber(DRAIMS_entry) >= 118000 and tonumber(DRAIMS_entry) <= 137000) or--no dp format
+            (tonumber(DRAIMS_entry) >= 118 and tonumber(DRAIMS_entry) <= 137) or--full format
+            (tonumber(DRAIMS_entry) > 0 and tonumber(DRAIMS_entry) < 1) then--only dp format
             return true
         else
             set(DRAIMS_format_error, 2)--vhf out of range
@@ -98,40 +138,65 @@ local function check_vhf_fmt()--check for the VHF entry format
     end
 end
 
-local function check_if_entry_is_ils()--check if the nav1 frequency is a VOR freq
+local function check_if_entry_is_ils()--check if the nav1 frequency is a ils freq
     if #DRAIMS_entry > 0 then
         if get(chk_dec_pt_fmt) == true then
-            if tonumber(DRAIMS_entry) >= 1 then--full format entry
-                if tonumber(DRAIMS_entry) >= 108.1 and tonumber(DRAIMS_entry) <= 111.95 then--if the frequency you enterd is in the correct range
-                    if (string.sub(tostring(Round((tonumber(DRAIMS_entry) - math.floor(tonumber(DRAIMS_entry))) * 100)), 1, 1) == "1" or
-                        string.sub(tostring(Round((tonumber(DRAIMS_entry) - math.floor(tonumber(DRAIMS_entry))) * 100)), 1, 1) == "3" or
-                        string.sub(tostring(Round((tonumber(DRAIMS_entry) - math.floor(tonumber(DRAIMS_entry))) * 100)), 1, 1) == "5" or
-                        string.sub(tostring(Round((tonumber(DRAIMS_entry) - math.floor(tonumber(DRAIMS_entry))) * 100)), 1, 1) == "7" or
-                        string.sub(tostring(Round((tonumber(DRAIMS_entry) - math.floor(tonumber(DRAIMS_entry))) * 100)), 1, 1) == "9") and
-                        (Round((tonumber(DRAIMS_entry) - math.floor(tonumber(DRAIMS_entry))) * 100) % 10 == 0 or
-                        Round((tonumber(DRAIMS_entry) - math.floor(tonumber(DRAIMS_entry))) * 100) % 5 == 0) then
+            if tonumber(DRAIMS_entry) >= 108.1 and tonumber(DRAIMS_entry) <= 111.95 then--full format entry with dp
+                if (string.sub(Fwd_string_fill(tostring(Round((tonumber(DRAIMS_entry) - math.floor(tonumber(DRAIMS_entry))) * 100)), "0", 2), 1, 1) == "1" or
+                    string.sub(Fwd_string_fill(tostring(Round((tonumber(DRAIMS_entry) - math.floor(tonumber(DRAIMS_entry))) * 100)), "0", 2), 1, 1) == "3" or
+                    string.sub(Fwd_string_fill(tostring(Round((tonumber(DRAIMS_entry) - math.floor(tonumber(DRAIMS_entry))) * 100)), "0", 2), 1, 1) == "5" or
+                    string.sub(Fwd_string_fill(tostring(Round((tonumber(DRAIMS_entry) - math.floor(tonumber(DRAIMS_entry))) * 100)), "0", 2), 1, 1) == "7" or
+                    string.sub(Fwd_string_fill(tostring(Round((tonumber(DRAIMS_entry) - math.floor(tonumber(DRAIMS_entry))) * 100)), "0", 2), 1, 1) == "9") then
+                    if(string.sub(Fwd_string_fill(tostring(Round((tonumber(DRAIMS_entry) - math.floor(tonumber(DRAIMS_entry))) * 100)), "0", 2), 2, 2) == "0" or
+                        string.sub(Fwd_string_fill(tostring(Round((tonumber(DRAIMS_entry) - math.floor(tonumber(DRAIMS_entry))) * 100)), "0", 2), 2, 2) == "5") then
+                        print(string.sub(Fwd_string_fill(tostring(Round((tonumber(DRAIMS_entry) - math.floor(tonumber(DRAIMS_entry))) * 100)), "0", 2), 1, 10))
                         return true--the entry is the correct ILS format
                     else
-                        set(DRAIMS_format_error, 4)
-                        return false--the xxx.>x<x position is not a odd number
+                        set(DRAIMS_format_error, 18)
+                        return false--the xxx.x>x< position is not 0 or 5
                     end
-                else
-                    set(DRAIMS_format_error, 3)
-                    return false--the freq is not in the ils range
-                end
-            elseif tonumber(DRAIMS_entry) < 1 then--only decimal entry
-                if (string.sub(tostring(Round((tonumber(DRAIMS_entry) - math.floor(tonumber(DRAIMS_entry))) * 100)), 1, 1) == "1" or
-                    string.sub(tostring(Round((tonumber(DRAIMS_entry) - math.floor(tonumber(DRAIMS_entry))) * 100)), 1, 1) == "3" or
-                    string.sub(tostring(Round((tonumber(DRAIMS_entry) - math.floor(tonumber(DRAIMS_entry))) * 100)), 1, 1) == "5" or
-                    string.sub(tostring(Round((tonumber(DRAIMS_entry) - math.floor(tonumber(DRAIMS_entry))) * 100)), 1, 1) == "7" or
-                    string.sub(tostring(Round((tonumber(DRAIMS_entry) - math.floor(tonumber(DRAIMS_entry))) * 100)), 1, 1) == "9") and
-                    (Round((tonumber(DRAIMS_entry) - math.floor(tonumber(DRAIMS_entry))) * 100) % 10 == 0 or
-                    Round((tonumber(DRAIMS_entry) - math.floor(tonumber(DRAIMS_entry))) * 100) % 5 == 0) then
-                    return true--the entry is the correct ILS format
                 else
                     set(DRAIMS_format_error, 4)
                     return false--the xxx.>x<x position is not a odd number
                 end
+            elseif tonumber(DRAIMS_entry) >= 10810 and tonumber(DRAIMS_entry) <= 11195 then--full format entry without dp
+                if (string.sub(Fwd_string_fill(tostring(Round((tonumber(DRAIMS_entry) / 100 - math.floor(tonumber(DRAIMS_entry) / 100)) * 100)), "0", 2), 1, 1) == "1" or
+                    string.sub(Fwd_string_fill(tostring(Round((tonumber(DRAIMS_entry) / 100 - math.floor(tonumber(DRAIMS_entry) / 100)) * 100)), "0", 2), 1, 1) == "3" or
+                    string.sub(Fwd_string_fill(tostring(Round((tonumber(DRAIMS_entry) / 100 - math.floor(tonumber(DRAIMS_entry) / 100)) * 100)), "0", 2), 1, 1) == "5" or
+                    string.sub(Fwd_string_fill(tostring(Round((tonumber(DRAIMS_entry) / 100 - math.floor(tonumber(DRAIMS_entry) / 100)) * 100)), "0", 2), 1, 1) == "7" or
+                    string.sub(Fwd_string_fill(tostring(Round((tonumber(DRAIMS_entry) / 100 - math.floor(tonumber(DRAIMS_entry) / 100)) * 100)), "0", 2), 1, 1) == "9") then
+                    if(string.sub(Fwd_string_fill(tostring(Round((tonumber(DRAIMS_entry) / 100 - math.floor(tonumber(DRAIMS_entry) / 100)) * 100)), "0", 2), 2, 2) == "0" or
+                        string.sub(Fwd_string_fill(tostring(Round((tonumber(DRAIMS_entry) / 100 - math.floor(tonumber(DRAIMS_entry) / 100)) * 100)), "0", 2), 2, 2) == "5") then
+                        print(string.sub(Fwd_string_fill(tostring(Round((tonumber(DRAIMS_entry) / 100 - math.floor(tonumber(DRAIMS_entry) / 100)) * 100)), "0", 2), 1, 10))
+                        return true--the entry is the correct ILS format
+                    else
+                        set(DRAIMS_format_error, 18)
+                        return false--the xxx.x>x< position is not 0 or 5
+                    end
+                else
+                    set(DRAIMS_format_error, 4)
+                    return false--the xxx.>x<x position is not a odd number
+                end
+            elseif tonumber(DRAIMS_entry) > 0 and tonumber(DRAIMS_entry) < 1 then--only decimal entry
+                if (string.sub(Fwd_string_fill(tostring(Round(tonumber(DRAIMS_entry) * 100)), "0", 2), 1, 1) == "1" or
+                    string.sub(Fwd_string_fill(tostring(Round(tonumber(DRAIMS_entry) * 100)), "0", 2), 1, 1) == "3" or
+                    string.sub(Fwd_string_fill(tostring(Round(tonumber(DRAIMS_entry) * 100)), "0", 2), 1, 1) == "5" or
+                    string.sub(Fwd_string_fill(tostring(Round(tonumber(DRAIMS_entry) * 100)), "0", 2), 1, 1) == "7" or
+                    string.sub(Fwd_string_fill(tostring(Round(tonumber(DRAIMS_entry) * 100)), "0", 2), 1, 1) == "9") then
+                    if(string.sub(Fwd_string_fill(tostring(Round(tonumber(DRAIMS_entry) * 100)), "0", 2), 2, 2) == "0" or
+                        string.sub(Fwd_string_fill(tostring(Round(tonumber(DRAIMS_entry) * 100)), "0", 2), 2, 2) == "5") then
+                        return true--the entry is the correct ILS format
+                    else
+                        set(DRAIMS_format_error, 18)
+                        return false--the xxx.x>x< position is not 0 or 5
+                    end
+                else
+                    set(DRAIMS_format_error, 4)
+                    return false--the xxx.>x<x position is not a odd number
+                end
+            else
+                set(DRAIMS_format_error, 3)
+                return false--the freq is not in the ils range
             end
         else
             return false--decimal point fmt error
@@ -144,20 +209,7 @@ end
 local function check_vor_fmt()--check VOR entry format
     if #DRAIMS_entry > 0 then
         if get(chk_dec_pt_fmt) == true then
-            if tonumber(DRAIMS_entry) >= 1 then--full format entry
-                if tonumber(DRAIMS_entry) >= 108 and tonumber(DRAIMS_entry) <= 117.95 then--if the frequency you enterd is in the correct range
-                    if Round((tonumber(DRAIMS_entry) - math.floor(tonumber(DRAIMS_entry))) * 100) % 10 == 0 or
-                        Round((tonumber(DRAIMS_entry) - math.floor(tonumber(DRAIMS_entry))) * 100) % 5 == 0 then
-                        return true--the entry is the correct VOR format
-                    else
-                        set(DRAIMS_format_error, 6)
-                        return false--the xxx.x>x< position is not 0 or 5
-                    end
-                else
-                    set(DRAIMS_format_error, 5)
-                    return false--the freq is not in the VOR range
-                end
-            elseif tonumber(DRAIMS_entry) < 1 then--only decimal entry
+            if tonumber(DRAIMS_entry) >= 108 and tonumber(DRAIMS_entry) <= 117.95 then--full format entry with dp
                 if Round((tonumber(DRAIMS_entry) - math.floor(tonumber(DRAIMS_entry))) * 100) % 10 == 0 or
                     Round((tonumber(DRAIMS_entry) - math.floor(tonumber(DRAIMS_entry))) * 100) % 5 == 0 then
                     return true--the entry is the correct VOR format
@@ -165,6 +217,25 @@ local function check_vor_fmt()--check VOR entry format
                     set(DRAIMS_format_error, 6)
                     return false--the xxx.x>x< position is not 0 or 5
                 end
+            elseif tonumber(DRAIMS_entry) >= 10800 and tonumber(DRAIMS_entry) <= 11795 then--full format entry without dp
+                if Round((tonumber(DRAIMS_entry) / 100 - math.floor(tonumber(DRAIMS_entry) / 100)) * 100) % 10 == 0 or
+                    Round((tonumber(DRAIMS_entry) / 100 - math.floor(tonumber(DRAIMS_entry) / 100)) * 100) % 5 == 0 then
+                    return true--the entry is the correct VOR format
+                else
+                    set(DRAIMS_format_error, 6)
+                    return false--the xxx.x>x< position is not 0 or 5
+                end
+            elseif tonumber(DRAIMS_entry) > 0 and tonumber(DRAIMS_entry) < 1 then--only decimal entry
+                if Round(tonumber(DRAIMS_entry) * 100) % 10 == 0 or
+                    Round(tonumber(DRAIMS_entry) * 100) % 5 == 0 then
+                    return true--the entry is the correct VOR format
+                else
+                    set(DRAIMS_format_error, 6)
+                    return false--the xxx.x>x< position is not 0 or 5
+                end
+            else
+                set(DRAIMS_format_error, 5)
+                return false--the freq is not in the VOR range
             end
         else
             return false--decimal point fmt error
@@ -188,7 +259,11 @@ local function chk_crs_fmt()
                 set(DRAIMS_format_error, 16)--crs out of range
                 return false
             end
+        else
+            return false
         end
+    else
+        return false
     end
 end
 
@@ -263,11 +338,17 @@ sasl.registerCommandHandler ( Draims_l_1_button, 0, function(phase)
             DRAIMS_entry = string.sub(DRAIMS_entry, 1, 6)--cut the length to rescale for NAV freqs
         elseif get(DRAIMS_current_page) == 7 then-- on ils page
             if check_if_entry_is_ils() == true then
-                if tonumber(DRAIMS_entry) >= 1 then--full format entry
+                if tonumber(DRAIMS_entry) >= 108.1 and tonumber(DRAIMS_entry) <= 111.95 then--full format entry
                     set(NAV_1_freq_Mhz, math.floor(tonumber(DRAIMS_entry)))
                     set(NAV_2_freq_Mhz, math.floor(tonumber(DRAIMS_entry)))
                     set(NAV_1_freq_10khz, tostring(Round((tonumber(DRAIMS_entry) - math.floor(tonumber(DRAIMS_entry))) * 100)))
                     set(NAV_2_freq_10khz, tostring(Round((tonumber(DRAIMS_entry) - math.floor(tonumber(DRAIMS_entry))) * 100)))
+                    DRAIMS_entry = ""
+                elseif tonumber(DRAIMS_entry) >= 10810 and tonumber(DRAIMS_entry) <= 11195 then--full format entry without dp
+                    set(NAV_1_freq_Mhz, math.floor(tonumber(DRAIMS_entry) / 100))
+                    set(NAV_2_freq_Mhz, math.floor(tonumber(DRAIMS_entry) / 100))
+                    set(NAV_1_freq_10khz, tostring(Round((tonumber(DRAIMS_entry) / 100 - math.floor(tonumber(DRAIMS_entry) / 100)) * 100)))
+                    set(NAV_2_freq_10khz, tostring(Round((tonumber(DRAIMS_entry) / 100 - math.floor(tonumber(DRAIMS_entry) / 100)) * 100)))
                     DRAIMS_entry = ""
                 elseif tonumber(DRAIMS_entry) < 1 then--decimal entry
                     set(NAV_1_freq_10khz, tostring(Round((tonumber(DRAIMS_entry) - math.floor(tonumber(DRAIMS_entry))) * 100)))
@@ -277,11 +358,15 @@ sasl.registerCommandHandler ( Draims_l_1_button, 0, function(phase)
             end
         elseif get(DRAIMS_current_page) == 8 then-- on vor page
             if check_vor_fmt() == true then
-                if tonumber(DRAIMS_entry) >= 1 then--full format entry
+                if tonumber(DRAIMS_entry) >= 108 and tonumber(DRAIMS_entry) <= 117.95 then--full format entry
                     set(NAV_1_freq_Mhz, math.floor(tonumber(DRAIMS_entry)))
                     set(NAV_1_freq_10khz, tostring(Round((tonumber(DRAIMS_entry) - math.floor(tonumber(DRAIMS_entry))) * 100)))
                     DRAIMS_entry = ""
-                elseif tonumber(DRAIMS_entry) < 1 then--decimal entry
+                elseif tonumber(DRAIMS_entry) >= 10800 and tonumber(DRAIMS_entry) <= 11795 then--full format entry without dp
+                    set(NAV_1_freq_Mhz, math.floor(tonumber(DRAIMS_entry) / 100))
+                    set(NAV_1_freq_10khz, tostring(Round((tonumber(DRAIMS_entry) / 100 - math.floor(tonumber(DRAIMS_entry) / 100)) * 100)))
+                    DRAIMS_entry = ""
+                elseif tonumber(DRAIMS_entry) > 0 and tonumber(DRAIMS_entry) < 1 then--decimal entry
                     set(NAV_1_freq_10khz, tostring(Round((tonumber(DRAIMS_entry) - math.floor(tonumber(DRAIMS_entry))) * 100)))
                     DRAIMS_entry = ""
                 end
@@ -306,11 +391,15 @@ sasl.registerCommandHandler ( Draims_l_2_button, 0, function(phase)
             DRAIMS_entry = string.sub(DRAIMS_entry, 1, 6)--cut the length to rescale for NAV freqs
         elseif get(DRAIMS_current_page) == 8 then-- on vor page
             if check_vor_fmt() == true then
-                if tonumber(DRAIMS_entry) >= 1 then--full format entry
+                if tonumber(DRAIMS_entry) >= 108 and tonumber(DRAIMS_entry) <= 117.95 then--full format entry
                     set(NAV_2_freq_Mhz, math.floor(tonumber(DRAIMS_entry)))
                     set(NAV_2_freq_10khz, tostring(Round((tonumber(DRAIMS_entry) - math.floor(tonumber(DRAIMS_entry))) * 100)))
                     DRAIMS_entry = ""
-                elseif tonumber(DRAIMS_entry) < 1 then--decimal entry
+                elseif tonumber(DRAIMS_entry) >= 10800 and tonumber(DRAIMS_entry) <= 11795 then--full format entry without dp
+                    set(NAV_2_freq_Mhz, math.floor(tonumber(DRAIMS_entry) / 100))
+                    set(NAV_2_freq_10khz, tostring(Round((tonumber(DRAIMS_entry) / 100 - math.floor(tonumber(DRAIMS_entry) / 100)) * 100)))
+                    DRAIMS_entry = ""
+                elseif tonumber(DRAIMS_entry) > 0 and tonumber(DRAIMS_entry) < 1 then--decimal entry
                     set(NAV_2_freq_10khz, tostring(Round((tonumber(DRAIMS_entry) - math.floor(tonumber(DRAIMS_entry))) * 100)))
                     DRAIMS_entry = ""
                 end
@@ -371,9 +460,13 @@ sasl.registerCommandHandler ( Draims_r_1_button, 0, function(phase)
             else
                 if #DRAIMS_entry > 0 then
                     if check_vhf_fmt() == true then
-                        if tonumber(DRAIMS_entry) >= 1 then
+                        if tonumber(DRAIMS_entry) >= 118 and tonumber(DRAIMS_entry) <= 137 then--full format with dp
                             set(VHF_1_stby_freq_Mhz, math.floor(tonumber(DRAIMS_entry)))
                             set(VHF_1_stby_freq_khz, Round((tonumber(DRAIMS_entry) - math.floor(tonumber(DRAIMS_entry))) * 1000))
+                            DRAIMS_entry = ""
+                        elseif tonumber(DRAIMS_entry) >= 118000 and tonumber(DRAIMS_entry) <= 137000 then--no dp full format
+                            set(VHF_1_stby_freq_Mhz, math.floor(tonumber(DRAIMS_entry) / 1000))
+                            set(VHF_1_stby_freq_khz, Round((tonumber(DRAIMS_entry) / 1000 - math.floor(tonumber(DRAIMS_entry) / 1000)) * 1000))
                             DRAIMS_entry = ""
                         else--only decimal(edit decimal only)
                             set(VHF_1_stby_freq_khz, Round((tonumber(DRAIMS_entry) - math.floor(tonumber(DRAIMS_entry))) * 1000))
@@ -408,6 +501,17 @@ sasl.registerCommandHandler ( Draims_r_1_button, 0, function(phase)
                 set(NAV_2_capt_obs, tonumber(DRAIMS_entry))
                 set(NAV_2_fo_obs, tonumber(DRAIMS_entry))
                 DRAIMS_entry = ""
+            else
+                if #DRAIMS_entry == 0 then
+                    if finding_navaid_id[1] ~= NAV_NOT_FOUND then
+                        if Round(get(NAV_1_capt_obs)) ~= Round(NAVs_heading[1]) then
+                            set(NAV_1_capt_obs, NAVs_heading[1])
+                            set(NAV_1_fo_obs, NAVs_heading[1])
+                            set(NAV_2_capt_obs, NAVs_heading[1])
+                            set(NAV_2_fo_obs, NAVs_heading[1])
+                        end
+                    end
+                end
             end
         elseif get(DRAIMS_current_page) == 8 then-- on vor page
             if chk_crs_fmt() == true then
@@ -440,9 +544,13 @@ sasl.registerCommandHandler ( Draims_r_2_button, 0, function(phase)
             else
                 if #DRAIMS_entry > 0 then
                     if check_vhf_fmt() == true then
-                        if tonumber(DRAIMS_entry) >= 1 then
+                        if tonumber(DRAIMS_entry) >= 118 and tonumber(DRAIMS_entry) <= 137 then--full format with dp
                             set(VHF_2_stby_freq_Mhz, math.floor(tonumber(DRAIMS_entry)))
                             set(VHF_2_stby_freq_khz, Round((tonumber(DRAIMS_entry) - math.floor(tonumber(DRAIMS_entry))) * 1000))
+                            DRAIMS_entry = ""
+                        elseif tonumber(DRAIMS_entry) >= 118000 and tonumber(DRAIMS_entry) <= 137000 then--no dp full format
+                            set(VHF_2_stby_freq_Mhz, math.floor(tonumber(DRAIMS_entry) / 1000))
+                            set(VHF_2_stby_freq_khz, Round((tonumber(DRAIMS_entry) / 1000 - math.floor(tonumber(DRAIMS_entry) / 1000)) * 1000))
                             DRAIMS_entry = ""
                         else--only decimal(edit decimal only)
                             set(VHF_2_stby_freq_khz, Round((tonumber(DRAIMS_entry) - math.floor(tonumber(DRAIMS_entry))) * 1000))
@@ -486,9 +594,13 @@ sasl.registerCommandHandler ( Draims_r_3_button, 0, function(phase)
             if get(DRAIMS_VHF_cursor_pos) == 3 then
                 if #DRAIMS_entry > 0 then
                     if check_vhf_fmt() == true then
-                        if tonumber(DRAIMS_entry) >= 1 then
+                        if tonumber(DRAIMS_entry) >= 118 and tonumber(DRAIMS_entry) <= 137 then--full format with dp
                             set(DRAIMS_cursor_freq_Mhz, math.floor(tonumber(DRAIMS_entry)))
                             set(DRAIMS_cursor_freq_khz, Round((tonumber(DRAIMS_entry) - math.floor(tonumber(DRAIMS_entry))) * 1000))
+                            DRAIMS_entry = ""
+                        elseif tonumber(DRAIMS_entry) >= 118000 and tonumber(DRAIMS_entry) <= 137000 then--no dp full format
+                            set(DRAIMS_cursor_freq_Mhz, math.floor(tonumber(DRAIMS_entry) / 1000))
+                            set(DRAIMS_cursor_freq_khz, Round((tonumber(DRAIMS_entry) / 1000 - math.floor(tonumber(DRAIMS_entry) / 1000)) * 1000))
                             DRAIMS_entry = ""
                         else--only decimal(edit decimal only)
                             set(DRAIMS_cursor_freq_khz, Round((tonumber(DRAIMS_entry) - math.floor(tonumber(DRAIMS_entry))) * 1000))
@@ -825,7 +937,54 @@ function update()
     if #DRAIMS_entry > 0 then
         set(DRAIMS_easter_egg, 0)
     end
-    
+
+    --search and store all navaid info for information and suggestion display
+    finding_navaid_id[1] = sasl.findNavAid ( nil , nil , get(Aircraft_lat) , get(Aircraft_long) , get(globalProperty("sim/cockpit2/radios/actuators/nav1_frequency_hz")), NAV_ILS)
+    finding_navaid_id[2] = sasl.findNavAid ( nil , nil , get(Aircraft_lat) , get(Aircraft_long) , get(globalProperty("sim/cockpit2/radios/actuators/nav1_frequency_hz")), NAV_VOR)
+    finding_navaid_id[3] = sasl.findNavAid ( nil , nil , get(Aircraft_lat) , get(Aircraft_long) , get(globalProperty("sim/cockpit2/radios/actuators/nav2_frequency_hz")), NAV_VOR)
+    finding_navaid_id[4] = sasl.findNavAid ( nil , nil , get(Aircraft_lat) , get(Aircraft_long) , get(globalProperty("sim/cockpit2/radios/actuators/adf1_frequency_hz")), NAV_NDB)
+    finding_navaid_id[5] = sasl.findNavAid ( nil , nil , get(Aircraft_lat) , get(Aircraft_long) , get(globalProperty("sim/cockpit2/radios/actuators/adf2_frequency_hz")), NAV_NDB)
+    --aquire navaid info
+    NAVs_type[1], NAVs_latitude[1], NAVs_longitude[1], NAVs_height[1], NAVs_frequency[1], NAVs_heading[1], NAVs_id[1], NAVs_name[1], NAVs_isInsideLoadedDSFs[1] = sasl.getNavAidInfo(finding_navaid_id[1])
+    NAVs_type[2], NAVs_latitude[2], NAVs_longitude[2], NAVs_height[2], NAVs_frequency[2], NAVs_heading[2], NAVs_id[2], NAVs_name[2], NAVs_isInsideLoadedDSFs[2] = sasl.getNavAidInfo(finding_navaid_id[2])
+    NAVs_type[1], NAVs_latitude[3], NAVs_longitude[3], NAVs_height[3], NAVs_frequency[3], NAVs_heading[3], NAVs_id[3], NAVs_name[3], NAVs_isInsideLoadedDSFs[3] = sasl.getNavAidInfo(finding_navaid_id[3])
+    NAVs_type[1], NAVs_latitude[4], NAVs_longitude[4], NAVs_height[4], NAVs_frequency[4], NAVs_heading[4], NAVs_id[4], NAVs_name[4], NAVs_isInsideLoadedDSFs[4] = sasl.getNavAidInfo(finding_navaid_id[4])
+    NAVs_type[1], NAVs_latitude[5], NAVs_longitude[5], NAVs_height[5], NAVs_frequency[5], NAVs_heading[5], NAVs_id[5], NAVs_name[5], NAVs_isInsideLoadedDSFs[5] = sasl.getNavAidInfo(finding_navaid_id[5])
+
+    --scrolling through the names of the navaid if longer than 10 characters
+    --vor 1
+    if #NAVs_name[2] - 8 > 11 then
+        vor1_scrolling_timer = Math_cycle(vor1_scrolling_timer + 0.5 * get(DELTA_TIME), 1, #NAVs_name[2] -11 -8 + 1)-- -11 because that's the max length -8 to remove the "VOR/DME" and the end +1 to make sure it cycles after you see the last character
+        vor1_scrolling_position = math.floor(vor1_scrolling_timer)
+    else
+        vor1_scrolling_timer = 1
+        vor1_scrolling_position = 1
+    end
+    --vor 2
+    if #NAVs_name[3] - 8 > 11 then
+        vor2_scrolling_timer = Math_cycle(vor2_scrolling_timer + 0.5 * get(DELTA_TIME), 1, #NAVs_name[3] -11 -8 + 1)-- -11 because that's the max length -8 to remove the "VOR/DME" and the end +1 to make sure it cycles after you see the last character
+        vor2_scrolling_position = math.floor(vor2_scrolling_timer)
+    else
+        vor2_scrolling_timer = 1
+        vor2_scrolling_position = 1
+    end
+    --adf 1
+    if #NAVs_name[4] - 4 > 11 then
+        adf1_scrolling_timer = Math_cycle(adf1_scrolling_timer + 0.5 * get(DELTA_TIME), 1, #NAVs_name[4] -11 -4 + 1)-- -11 because that's the max length -4 to remove the "NDB" and the end +1 to make sure it cycles after you see the last character
+        adf1_scrolling_position = math.floor(adf1_scrolling_timer)
+    else
+        adf1_scrolling_timer = 1
+        adf1_scrolling_position = 1
+    end
+    --adf 2
+    if #NAVs_name[5] - 4 > 11 then
+        adf2_scrolling_timer = Math_cycle(adf2_scrolling_timer + 0.5 * get(DELTA_TIME), 1, #NAVs_name[5] -11 -4 + 1)-- -11 because that's the max length -4 to remove the "NDB" and the end +1 to make sure it cycles after you see the last character
+        adf2_scrolling_position = math.floor(adf2_scrolling_timer)
+    else
+        adf2_scrolling_timer = 1
+        adf2_scrolling_position = 1
+    end
+
     --dynamic nav volume control
     if get(DRAIMS_dynamic_NAV_audio_selected) == 0 then--kill all volumes
         set(NAV_1_volume, 0)
@@ -928,6 +1087,20 @@ function update()
         ident_box_timer = 0
     end
 
+    --crs suggest box fade in and out
+    if finding_navaid_id[1] ~= NAV_NOT_FOUND then
+        if Round(get(NAV_1_capt_obs)) ~= Round(NAVs_heading[1]) then
+            crs_suggest_box_timer = crs_suggest_box_timer + math.pi * get(DELTA_TIME)
+            crs_suggest_box_cl[4] = (math.sin(crs_suggest_box_timer - math.pi / 2) - -1) / 2
+        else
+            crs_suggest_box_timer = 0
+            crs_suggest_box_cl[4] = Set_anim_value(crs_suggest_box_cl[4], 0, 0, 1, 2.5)
+        end
+    else
+        crs_suggest_box_timer = 0
+        crs_suggest_box_cl[4] = Set_anim_value(crs_suggest_box_cl[4], 0, 0, 1, 2.5)
+    end
+
     --blue cursors box fade in and out
     if get(DRAIMS_VHF_cursor_pos) ~= 3 then
         vhf_cursor_box_timer = vhf_cursor_box_timer + math.pi * get(DELTA_TIME)
@@ -937,7 +1110,7 @@ function update()
         vhf_cursor_box_cl[4] = 1
     end
 
-    --blue cursors box fade in and out
+    --green cursors box fade in and out
     if get(DRAIMS_current_page) == 6 then--nav page
         if get(Audio_nav_selection) == 9 then--if none of the NAV freqs are being listened to cursor goes to white
             nav_cursor_box_cl[1] = DRAIMS_WHITE[1]
@@ -974,6 +1147,9 @@ function update()
                 nav_cursor_box_cl[4] = 1
             end
         end
+    else
+        nav_cursor_box_timer = 0
+        nav_cursor_box_cl[4] = 1
     end
 end
 
@@ -1281,24 +1457,95 @@ function draw()
            string.sub(Fwd_string_fill(tostring(get(NAV_1_freq_Mhz)), "0", 3) .. "." .. Fwd_string_fill(tostring(get(NAV_1_freq_10khz)), "0", 2), 5, 5) ~= "9") or
            (tonumber(Fwd_string_fill(tostring(get(NAV_1_freq_Mhz)), "0", 3) .. "." .. Fwd_string_fill(tostring(get(NAV_1_freq_10khz)), "0", 2)) < 108.1 or
             tonumber(Fwd_string_fill(tostring(get(NAV_1_freq_Mhz)), "0", 3) .. "." .. Fwd_string_fill(tostring(get(NAV_1_freq_10khz)), "0", 2)) > 111.95) then --not a ILS frequency so must be using VOR
-            sasl.gl.drawText(A320_panel_font, 125, 315, "VOR", 50, false, false, TEXT_ALIGN_CENTER, DRAIMS_GREEN)
-            sasl.gl.drawText(A320_panel_font_MONO, 465, 315, Round(get(NAV_1_capt_obs)), 54, false, false, TEXT_ALIGN_CENTER, DRAIMS_GREEN)
+            if finding_navaid_id[2] ~= NAV_NOT_FOUND then
+                sasl.gl.drawText(A320_panel_font, 125, 315, "VOR", 50, false, false, TEXT_ALIGN_CENTER, DRAIMS_GREEN)
+            else
+                sasl.gl.drawText(A320_panel_font, 125, 315, "INVLD", 50, false, false, TEXT_ALIGN_CENTER, DRAIMS_WHITE)
+            end
         else
+            --ils 1 freq
             sasl.gl.drawText(A320_panel_font_MONO, 125, 315, Fwd_string_fill(tostring(get(NAV_1_freq_Mhz)), "0", 3) .. "." .. Fwd_string_fill(tostring(get(NAV_1_freq_10khz)), "0", 2), 54, false, false, TEXT_ALIGN_CENTER, DRAIMS_WHITE)
-            sasl.gl.drawText(A320_panel_font_MONO, 465, 315, Round(get(NAV_1_capt_obs)), 54, false, false, TEXT_ALIGN_CENTER, DRAIMS_WHITE)
+            --ils 1 name
+            sasl.gl.drawText(A320_panel_font, 315, 315, NAVs_name[1], 22, false, false, TEXT_ALIGN_CENTER, DRAIMS_GREEN)
+            --navaid 1 ID
+            sasl.gl.drawText(A320_panel_font, 10, 360, NAVs_id[1], 22, false, false, TEXT_ALIGN_LEFT, DRAIMS_GREEN)
         end
-    elseif get(DRAIMS_current_page) == 8 then--vor page
-        --nav 1
-        sasl.gl.drawText(A320_panel_font_MONO, 125, 315, Fwd_string_fill(tostring(get(NAV_1_freq_Mhz)), "0", 3) .. "." .. Fwd_string_fill(tostring(get(NAV_1_freq_10khz)), "0", 2), 54, false, false, TEXT_ALIGN_CENTER, DRAIMS_WHITE)
+
+        --obs suggestion
+        sasl.gl.drawText(A320_panel_font, 550, 338, Round(NAVs_heading[1]), 32, false, false, TEXT_ALIGN_CENTER, crs_suggest_box_cl)
+
+        --draw suggestion box
+        sasl.gl.drawWideLine(515, 372, 585, 372, 3, crs_suggest_box_cl)
+        sasl.gl.drawWideLine(514, 329, 514, 370, 3, crs_suggest_box_cl)
+        sasl.gl.drawWideLine(587, 329, 587, 370, 3, crs_suggest_box_cl)
+        sasl.gl.drawWideLine(515, 328, 585, 328, 3, crs_suggest_box_cl)
+        sasl.gl.drawArc ( 515, 370, 0, 3, 90, 90, crs_suggest_box_cl)
+        sasl.gl.drawArc ( 585, 370, 0, 3, 0, 90, crs_suggest_box_cl)
+        sasl.gl.drawArc ( 515, 329, 0, 3, 180, 90, crs_suggest_box_cl)
+        sasl.gl.drawArc ( 585, 329, 0, 3, 270, 90, crs_suggest_box_cl)
+
+        --ils 1 obs
         sasl.gl.drawText(A320_panel_font_MONO, 465, 315, Round(get(NAV_1_capt_obs)), 54, false, false, TEXT_ALIGN_CENTER, DRAIMS_WHITE)
-        --nav 2
-        sasl.gl.drawText(A320_panel_font_MONO, 125, 215, Fwd_string_fill(tostring(get(NAV_2_freq_Mhz)), "0", 3) .. "." .. Fwd_string_fill(tostring(get(NAV_2_freq_10khz)), "0", 2), 54, false, false, TEXT_ALIGN_CENTER, DRAIMS_WHITE)
+    elseif get(DRAIMS_current_page) == 8 then--vor page
+        --show if the nav 1 freq is actually a VOR freq
+        if finding_navaid_id[2] ~= NAV_NOT_FOUND then
+            --nav 1
+            sasl.gl.drawText(A320_panel_font_MONO, 125, 315, Fwd_string_fill(tostring(get(NAV_1_freq_Mhz)), "0", 3) .. "." .. Fwd_string_fill(tostring(get(NAV_1_freq_10khz)), "0", 2), 54, false, false, TEXT_ALIGN_CENTER, DRAIMS_WHITE)
+            --navaid 1 name
+            sasl.gl.drawText(A320_panel_font, 300, 315, string.sub(string.sub(NAVs_name[2], vor1_scrolling_position, vor1_scrolling_position + 11), 1, #NAVs_name[2] - 8), 25, false, false, TEXT_ALIGN_CENTER, DRAIMS_GREEN)
+            --navaid 1 ID
+            sasl.gl.drawText(A320_panel_font, 10, 360, NAVs_id[2], 25, false, false, TEXT_ALIGN_LEFT, DRAIMS_GREEN)
+        else
+            --show ILS if the frequency matches a ILS system
+            if finding_navaid_id[1] ~= NAV_NOT_FOUND then
+            --nav 1
+                sasl.gl.drawText(A320_panel_font, 125, 315, "ILS", 54, false, false, TEXT_ALIGN_CENTER, DRAIMS_GREEN)
+            else--show invalid if freq doesn't match ils nor vor
+                sasl.gl.drawText(A320_panel_font, 125, 315, "INVLD", 54, false, false, TEXT_ALIGN_CENTER, DRAIMS_WHITE)
+            end
+        end
+        --obs 1
+        sasl.gl.drawText(A320_panel_font_MONO, 465, 315, Round(get(NAV_1_capt_obs)), 54, false, false, TEXT_ALIGN_CENTER, DRAIMS_WHITE)
+        
+        --show if the nav 2 freq is actually a VOR freq
+        if finding_navaid_id[3] ~= NAV_NOT_FOUND then
+            --nav 2
+            sasl.gl.drawText(A320_panel_font_MONO, 125, 215, Fwd_string_fill(tostring(get(NAV_2_freq_Mhz)), "0", 3) .. "." .. Fwd_string_fill(tostring(get(NAV_2_freq_10khz)), "0", 2), 54, false, false, TEXT_ALIGN_CENTER, DRAIMS_WHITE)
+            --navaid 2 name
+            sasl.gl.drawText(A320_panel_font, 300, 215, string.sub(string.sub(NAVs_name[3], vor2_scrolling_position, vor2_scrolling_position + 11), 1, #NAVs_name[3] - 8), 25, false, false, TEXT_ALIGN_CENTER, DRAIMS_GREEN)
+            --navaid 2 ID
+            sasl.gl.drawText(A320_panel_font, 10, 260, NAVs_id[3], 25, false, false, TEXT_ALIGN_LEFT, DRAIMS_GREEN)
+        else
+            --show ILS if the frequency matches a ILS system
+            if sasl.findNavAid ( nil , nil , get(Aircraft_lat) , get(Aircraft_long) , get(globalProperty("sim/cockpit2/radios/actuators/nav2_frequency_hz")), NAV_ILS) ~= NAV_NOT_FOUND then--used because there isn't 2 ILS entrys
+            --nav 2
+                sasl.gl.drawText(A320_panel_font, 125, 215, "ILS", 54, false, false, TEXT_ALIGN_CENTER, DRAIMS_GREEN)
+            else--show invalid if freq doesn't match ils nor vor
+                sasl.gl.drawText(A320_panel_font, 125, 215, "INVLD", 54, false, false, TEXT_ALIGN_CENTER, DRAIMS_WHITE)
+            end
+        end
+        --obs 2
         sasl.gl.drawText(A320_panel_font_MONO, 465, 215, Round(get(NAV_2_capt_obs)), 54, false, false, TEXT_ALIGN_CENTER, DRAIMS_WHITE)
     elseif get(DRAIMS_current_page) == 9 then--adf page
         --adf 1
         sasl.gl.drawText(A320_panel_font_MONO, 125, 315, Fwd_string_fill(tostring(get(ADF_1_freq_hz)), "0", 3), 54, false, false, TEXT_ALIGN_CENTER, DRAIMS_WHITE)
+        --show the adf 1 id and name if it is found
+        if finding_navaid_id[4] ~= NAV_NOT_FOUND then
+            --adf 1 name
+            sasl.gl.drawText(A320_panel_font, 300, 315, string.sub(string.sub(NAVs_name[4], adf1_scrolling_position, adf1_scrolling_position + 11), 1, #NAVs_name[4] - 4), 25, false, false, TEXT_ALIGN_CENTER, DRAIMS_GREEN)
+            --adf 1 id
+            sasl.gl.drawText(A320_panel_font, 10, 360, NAVs_id[4], 25, false, false, TEXT_ALIGN_LEFT, DRAIMS_GREEN)
+        end
+
         --adf 2
         sasl.gl.drawText(A320_panel_font_MONO, 125, 215, Fwd_string_fill(tostring(get(ADF_2_freq_hz)), "0", 3), 54, false, false, TEXT_ALIGN_CENTER, DRAIMS_WHITE)
+        --show the adf 2 id and name if it is found
+        if finding_navaid_id[5] ~= NAV_NOT_FOUND then
+            --adf 2 name
+            sasl.gl.drawText(A320_panel_font, 300, 215, string.sub(string.sub(NAVs_name[5], adf2_scrolling_position, adf2_scrolling_position + 11), 1, #NAVs_name[5] - 4), 25, false, false, TEXT_ALIGN_CENTER, DRAIMS_GREEN)
+            --adf 2 id
+            sasl.gl.drawText(A320_panel_font, 10, 260, NAVs_id[5], 25, false, false, TEXT_ALIGN_LEFT, DRAIMS_GREEN)
+        end
     end
 
 
@@ -1416,6 +1663,16 @@ function draw()
         sasl.gl.drawText(A320_panel_font, 425, 48, "NO DEC", 28, false, false, TEXT_ALIGN_LEFT, DRAIMS_ORANGE)
         sasl.gl.drawText(A320_panel_font, 425, 26, "INT ONLY", 28, false, false, TEXT_ALIGN_LEFT, DRAIMS_ORANGE)
         sasl.gl.drawText(A320_panel_font, 425, 4, "xxx", 28, false, false, TEXT_ALIGN_LEFT, DRAIMS_ORANGE)
+    elseif get(DRAIMS_format_error) == 18 then--ils last digit 0 or 5
+        sasl.gl.drawText(A320_panel_font, 425, 70, "ILS FREQ SP", 28, false, false, TEXT_ALIGN_LEFT, DRAIMS_ORANGE)
+        sasl.gl.drawText(A320_panel_font, 425, 48, "xxx.x>x< MHZ", 28, false, false, TEXT_ALIGN_LEFT, DRAIMS_ORANGE)
+        sasl.gl.drawText(A320_panel_font, 498, 26, "^", 28, false, false, TEXT_ALIGN_LEFT, DRAIMS_ORANGE)
+        sasl.gl.drawText(A320_panel_font, 425, 4, "0 OR 5", 28, false, false, TEXT_ALIGN_LEFT, DRAIMS_ORANGE)
+    elseif get(DRAIMS_format_error) == 19 then--sqwk 0 to 7 per digit
+        sasl.gl.drawText(A320_panel_font, 425, 70, "SQWK FMT", 28, false, false, TEXT_ALIGN_LEFT, DRAIMS_ORANGE)
+        sasl.gl.drawText(A320_panel_font, 425, 48, "0 TO 7", 28, false, false, TEXT_ALIGN_LEFT, DRAIMS_ORANGE)
+        sasl.gl.drawText(A320_panel_font, 425, 26, "PER DIGIT", 28, false, false, TEXT_ALIGN_LEFT, DRAIMS_ORANGE)
+        sasl.gl.drawText(A320_panel_font, 425, 4, "xxxx", 28, false, false, TEXT_ALIGN_LEFT, DRAIMS_ORANGE)
     end
 
     --DRAIMS SQWK

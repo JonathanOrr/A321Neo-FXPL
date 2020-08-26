@@ -28,6 +28,21 @@
         "BLEND_ONE_MINUS_SOURCE_ALPHA",
         "forced",
         "TEXT_RENDER_FORCED_MONO",
-        "NAV_AIRPORT"
+        "NAV_AIRPORT",
+        "NAV_VOR",
+        "AV_UNKNOWN",
+        "NAV_AIRPORT",
+        "NAV_NDB",
+        "NAV_VOR",
+        "NAV_ILS",
+        "NAV_LOCALIZER",
+        "NAV_GLIDESLOPE",
+        "NAV_OUTERMARKER",
+        "NAV_MIDDLEMARKER",
+        "NAV_INNERMARKER",
+        "NAV_FIX",
+        "NAV_DME",
+        "NAV_NOT_FOUN",
+        "NAV_NOT_FOUND"
     ]
 }
