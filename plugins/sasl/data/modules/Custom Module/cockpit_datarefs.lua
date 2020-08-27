@@ -31,9 +31,6 @@ DRAIMS_2_brightness = createGlobalPropertyf("a321neo/cockpit/brightness/draims_2
 
 --draims--
 DRAIMS_current_page = createGlobalPropertyi("a321neo/cockpit/draims/current_page", 1, false, true, false)--the page the draims unit is currently displaying 1VHF, 2HFs, 3TEL, 4ATC, 5MENU, 6NAV, 7ILS, 8VOR, 9ADF
-DRAIMS_line_1_speaker_shown = createGlobalPropertyi("a321neo/cockpit/draims/line_1_speaker_shown", 0, false, true, false)--if the little speaker on the first line is shown
-DRAIMS_line_2_speaker_shown = createGlobalPropertyi("a321neo/cockpit/draims/line_2_speaker_shown", 0, false, true, false)--if the little speaker on the second line is shown
-DRAIMS_line_3_speaker_shown = createGlobalPropertyi("a321neo/cockpit/draims/line_3_speaker_shown", 0, false, true, false)--if the little speaker on the third line is shown
 DRAIMS_format_error = createGlobalPropertyi("a321neo/cockpit/draims/format_error", 0, false, true, false)--if the format error message is shown ---> 1 invalid freqency format, 2 VHF out of range, 3 ILS out of range, 4 ILS freq spacing error(not odd), 5 VOR out of range, 6 VOR freq spacing error, 7 ADF out of range, 8 sqwk out of range, 9 sqwk integer only, 10 cursor in use, 11 more than 1 decimal point, 12 only decimal points, 13 cursor and VHF is identical, 14 green cursor use only, 15 crs integer only, 16 crs out of range, 17 ADF int only, 18 ils xxx.x>x< not 0 or 5, 19 sqwk 0 to 7 per digit
 DRAIMS_easter_egg = createGlobalPropertyi("a321neo/cockpit/draims/easter_egg", 0, false, true, false)--if the user clicks the empty scratchpad
 

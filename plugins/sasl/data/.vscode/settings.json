@@ -43,6 +43,7 @@
         "NAV_FIX",
         "NAV_DME",
         "NAV_NOT_FOUN",
-        "NAV_NOT_FOUND"
+        "NAV_NOT_FOUND",
+        "moduleDirectory"
     ]
 }
