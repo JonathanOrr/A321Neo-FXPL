@@ -86,6 +86,8 @@ time_to_send = 0    -- It must stay at zero unless a message is in the status SE
 
 -- The most important array: the list of currenctly active messages
 current_messages   = {}
+-- The past messages (no actions possible, just view)
+past_messages   = {}
 
 -- A boolean to avoid to re-draw everything every update call.
 change_occured = true
@@ -245,7 +247,28 @@ local function display_message_sent(message_text, message_type)
 end
 
 local function display_message_done(message_text, message_type)
-
+    display_title.text = "RECALL MODE"
+    display_title.color = ECAM_WHITE
+    display_ack.color = ECAM_GREEN
+    display_ack.background = true
+    display_btm_right[3].text = "CLOSE *"
+        
+    if message_type == MESSAGE_TYPE_WILCO then
+        display_ack.text = "WILCO"
+    elseif message_type == MESSAGE_TYPE_ROGER then
+        display_ack.text = "ROGER"
+    elseif message_type == MESSAGE_TYPE_AFFIRM then
+        display_ack.text = "AFFIRM"
+    elseif message_type == MESSAGE_TYPE_NEGATIVE then
+        display_ack.text = "NEGATIVE"
+    elseif message_type == MESSAGE_TYPE_NORESP then
+        display_ack.text = "ACK"
+    elseif message_type == MESSAGE_TYPE_UNABLE then
+        display_ack.text = "UNABLE"
+    elseif message_type == MESSAGE_TYPE_STDBY then
+        display_ack.text = "STBY"
+    end
+        
 end
 
 
@@ -266,7 +289,7 @@ local function display_message(message_text, message_type, message_status, msg_t
    
     for i=1,5 do
         display_top[i].text  = string.sub(message_text,start_page + (i-1) * MAX_LINE_LENGTH + 1, start_page + i * MAX_LINE_LENGTH)
-        if message_status == MESSAGE_STATUS_SENT then
+        if message_status == MESSAGE_STATUS_SENT or message_status == MESSAGE_STATUS_DONE then
             display_top[i].color = ECAM_GREEN        
         else
             display_top[i].color = ECAM_WHITE
@@ -349,6 +372,23 @@ local function update_no_messages(double_conn)
     end
     display_btm_right[3].text = "RECALL *"
     display_btm_right[3].color = ECAM_BLUE
+    
+    display_running_text.text = get(ZULU_hours) .. get(ZULU_mins) .. "Z"
+    
+end
+
+-- RECALL is called but no messages are present
+local function update_no_recall_messages()
+    reset_display()
+    
+    display_btm_right[3].text = "CLOSE *"
+    display_btm_right[3].color = ECAM_BLUE    
+    
+    display_top[3].text  = "        NO MESSAGES"
+    display_top[3].color = ECAM_GREEN
+    
+    display_title.text = "RECALL MODE"
+    display_title.color = ECAM_WHITE
     
     display_running_text.text = get(ZULU_hours) .. get(ZULU_mins) .. "Z"
     
@@ -445,8 +485,9 @@ local function check_new_messages()
     -- Reset & Update the datarefs    
     set(Acars_incoming_message_type, 0)
     set(Acars_incoming_message, "")
-    set(DCDU_msgs_total, #current_messages)
-    
+    if get(DCDU_recall_mode) == 0 then
+        set(DCDU_msgs_total, #current_messages)
+    end
 end
 
 -- This function switches the status SENDING to SENT when needed (after 3 seconds).
@@ -488,6 +529,15 @@ function update()
             was_connected = false
             update_no_connection()
         end
+    end
+
+    if get(DCDU_recall_mode) == 1 then
+        if #past_messages == 0 then
+            update_no_recall_messages()
+        else
+            display_message(past_messages[get(DCDU_msg_no)+1].msg_text, past_messages[get(DCDU_msg_no)+1].msg_type, past_messages[get(DCDU_msg_no)+1].msg_status, past_messages[get(DCDU_msg_no)+1].msg_time, past_messages[get(DCDU_msg_no)+1].msg_source)
+        end
+        
         return
     end
         
@@ -503,9 +553,9 @@ function update()
                 return
             end
         end
+        was_connected = true
     end
 
-    was_connected = true
 end
 
 -- The draw fuction. No logic here, just graphic

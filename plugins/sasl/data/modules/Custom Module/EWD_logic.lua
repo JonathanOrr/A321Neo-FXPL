@@ -216,7 +216,7 @@ local function update_right_list()
         list_right:put(COL_INDICATION, "ACARS STBY")
     end
     
-    if get(DCDU_msgs_total) > 0 then
+    if get(DCDU_msgs_total) > 0 and get(DCDU_recall_mode) == 0 then
         list_right:put(COL_INDICATION_BLINKING, "ACARS MSG")    
     end
     

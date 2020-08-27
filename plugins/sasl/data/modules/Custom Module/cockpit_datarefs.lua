@@ -175,4 +175,4 @@ DCDU_page_no = createGlobalPropertyi("a321neo/cockpit/DCDU/page_no", 0, false, t
 DCDU_msg_no  = createGlobalPropertyi("a321neo/cockpit/DCDU/msg_no" , 0, false, true, false) -- Current message number, from 0
 DCDU_pages_total = createGlobalPropertyi("a321neo/cockpit/DCDU/pages_total", 0, false, true, false) -- Total number of pages
 DCDU_msgs_total  = createGlobalPropertyi("a321neo/cockpit/DCDU/msgs_total" , 0, false, true, false) -- Total number of messages
-
+DCDU_recall_mode = createGlobalPropertyi("a321neo/cockpit/DCDU/recall_mode" , 0, false, true, false) -- 1 if in recall mode, 0 otherwise

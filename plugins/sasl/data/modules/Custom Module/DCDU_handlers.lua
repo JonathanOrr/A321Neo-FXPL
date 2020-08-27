@@ -17,16 +17,21 @@ function dcdu_message_plus(phase)
         return
     end
     
-    if #current_messages == 0 then
+    if get(DCDU_recall_mode) == 0 and #current_messages == 0 then
         return
     end 
-    
-    msg = current_messages[get(DCDU_msg_no)+1]
-    
-    if msg.msg_status == MESSAGE_STATUS_SENDING then
+    if get(DCDU_recall_mode) == 1 and #past_messages == 0 then
         return
+    end 
+
+    if get(DCDU_recall_mode) == 0 then
+        msg = current_messages[get(DCDU_msg_no)+1]
+
+        if msg.msg_status == MESSAGE_STATUS_SENDING then
+            return
+        end
     end
-    
+        
     local msg_no  = get(DCDU_msg_no)
     local msg_tot = get(DCDU_msgs_total)
     
@@ -42,14 +47,20 @@ function dcdu_message_minus(phase)
         return
     end
 
-    if #current_messages == 0 then
+    if get(DCDU_recall_mode) == 0 and #current_messages == 0 then
         return
     end 
-    
-    msg = current_messages[get(DCDU_msg_no)+1]
-    
-    if msg.msg_status == MESSAGE_STATUS_SENDING then
+    if get(DCDU_recall_mode) == 1 and #past_messages == 0 then
         return
+    end 
+
+    
+    if get(DCDU_recall_mode) == 0 then
+        msg = current_messages[get(DCDU_msg_no)+1]
+
+        if msg.msg_status == MESSAGE_STATUS_SENDING then
+            return
+        end
     end
     
     local msg_no = get(DCDU_msg_no)
@@ -66,9 +77,13 @@ function dcdu_page_plus(phase)
         return
     end
     
-    if #current_messages == 0 then
+    if get(DCDU_recall_mode) == 0 and #current_messages == 0 then
         return
     end 
+    if get(DCDU_recall_mode) == 1 and #past_messages == 0 then
+        return
+    end 
+
 
     
     local page_no  = get(DCDU_page_no)
@@ -84,9 +99,13 @@ function dcdu_page_minus(phase)
         return
     end
 
-    if #current_messages == 0 then
+    if get(DCDU_recall_mode) == 0 and #current_messages == 0 then
         return
     end 
+    if get(DCDU_recall_mode) == 1 and #past_messages == 0 then
+        return
+    end 
+
 
     local page_no = get(DCDU_page_no)
     
@@ -100,8 +119,8 @@ function dcdu_left_btm(phase)
         return
     end
     
-    if #current_messages == 0 then
-        return -- Well, nothing to do if not messages are present
+    if #current_messages == 0 or get(DCDU_recall_mode) == 1 then
+        return -- Well, nothing to do if not messages are present or in recall mode
     end
     
     msg = current_messages[get(DCDU_msg_no)+1]
@@ -118,7 +137,7 @@ function dcdu_left_top(phase)
         return
     end
     
-    if #current_messages == 0 then
+    if #current_messages == 0 or get(DCDU_recall_mode) == 1 then
         return -- Well, nothing to do if not messages are present
     end
     
@@ -143,6 +162,7 @@ local function remove_curr_message()
     i = get(DCDU_msg_no)+1
     msg = current_messages[i]
     msg.msg_status = MESSAGE_STATUS_DONE
+    table.insert(past_messages, msg)
     table.remove(current_messages,i)
     set(DCDU_msgs_total, #current_messages)
     set(DCDU_msg_no, math.max(0, i-1-1))
@@ -155,9 +175,20 @@ function dcdu_right_btm(phase)
         return
     end
     
+    if get(DCDU_recall_mode) == 1 then
+        set(DCDU_recall_mode, 0)
+        set(DCDU_msg_no, 0)
+        set(DCDU_msgs_total, #current_messages)
+        change_occured = true
+        return
+    end
+    
     if #current_messages == 0 then
+        set(DCDU_recall_mode, 1)
+        set(DCDU_msg_no, 0)
+        set(DCDU_msgs_total, #past_messages)
+        change_occured = true
         return -- Well, nothing to do if not messages are present
-               -- TODO Recall
     end
     
     msg = current_messages[get(DCDU_msg_no)+1]
