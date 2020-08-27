@@ -17,6 +17,16 @@ function dcdu_message_plus(phase)
         return
     end
     
+    if #current_messages == 0 then
+        return
+    end 
+    
+    msg = current_messages[get(DCDU_msg_no)+1]
+    
+    if msg.msg_status == MESSAGE_STATUS_SENDING then
+        return
+    end
+    
     local msg_no  = get(DCDU_msg_no)
     local msg_tot = get(DCDU_msgs_total)
     
@@ -29,6 +39,16 @@ end
 
 function dcdu_message_minus(phase)
     if phase ~= SASL_COMMAND_BEGIN then
+        return
+    end
+
+    if #current_messages == 0 then
+        return
+    end 
+    
+    msg = current_messages[get(DCDU_msg_no)+1]
+    
+    if msg.msg_status == MESSAGE_STATUS_SENDING then
         return
     end
     
@@ -46,6 +66,11 @@ function dcdu_page_plus(phase)
         return
     end
     
+    if #current_messages == 0 then
+        return
+    end 
+
+    
     local page_no  = get(DCDU_page_no)
     local page_tot = get(DCDU_pages_total)
     
@@ -58,6 +83,10 @@ function dcdu_page_minus(phase)
     if phase ~= SASL_COMMAND_BEGIN then
         return
     end
+
+    if #current_messages == 0 then
+        return
+    end 
 
     local page_no = get(DCDU_page_no)
     
@@ -75,7 +104,13 @@ function dcdu_left_btm(phase)
         return -- Well, nothing to do if not messages are present
     end
     
+    msg = current_messages[get(DCDU_msg_no)+1]
+    if msg.msg_type == MESSAGE_TYPE_AFFNEG then
+        msg.msg_type   = MESSAGE_TYPE_NEGATIVE
+        msg.msg_status = MESSAGE_STATUS_CONFIRM
+    end
     
+    change_occured = true
 end
 
 function dcdu_left_top(phase)
@@ -87,6 +122,32 @@ function dcdu_left_top(phase)
         return -- Well, nothing to do if not messages are present
     end
     
+    msg = current_messages[get(DCDU_msg_no)+1]
+    
+    if msg.msg_status == MESSAGE_STATUS_NEW then
+        if msg.msg_type == MESSAGE_TYPE_WILCO or msg.msg_type == MESSAGE_TYPE_ROGER then
+            -- Switch to "CONFIRM WILCO/ROGER" status
+            msg.msg_type = MESSAGE_TYPE_UNABLE
+            msg.msg_status = MESSAGE_STATUS_CONFIRM
+        end
+    elseif msg.msg_status == MESSAGE_STATUS_CONFIRM then
+            msg.msg_status = MESSAGE_STATUS_NEW
+            msg.msg_type = msg.msg_type_orig
+    end
+    
+    change_occured = true
+    
+end
+
+local function remove_curr_message()
+    i = get(DCDU_msg_no)+1
+    msg = current_messages[i]
+    msg.msg_status = MESSAGE_STATUS_DONE
+    table.remove(current_messages,i)
+    set(DCDU_msgs_total, #current_messages)
+    set(DCDU_msg_no, math.max(0, i-1-1))
+    set(DCDU_page_no, 0)
+    change_occured = true
 end
 
 function dcdu_right_btm(phase)
@@ -99,22 +160,26 @@ function dcdu_right_btm(phase)
                -- TODO Recall
     end
     
-    if current_messages[1].msg_type < 20 then
-        -- Switch to "CONFIRM WILCO/ROGER" status
-        current_messages[1].msg_type = current_messages[1].msg_type + 10
-        if current_messages[1].msg_type > 10 then
-            time_to_send = get(TIME)        
+    msg = current_messages[get(DCDU_msg_no)+1]
+    
+    if msg.msg_status == MESSAGE_STATUS_NEW then
+        if msg.msg_type == MESSAGE_TYPE_WILCO or msg.msg_type == MESSAGE_TYPE_ROGER then
+            -- Switch to "CONFIRM WILCO/ROGER" status
+            msg.msg_status = MESSAGE_STATUS_CONFIRM
+        elseif msg.msg_type == MESSAGE_TYPE_AFFNEG then
+            msg.msg_type   = MESSAGE_TYPE_AFFIRM
+            msg.msg_status = MESSAGE_STATUS_CONFIRM
+        elseif msg.msg_type == MESSAGE_TYPE_NORESP then
+            remove_curr_message()
         end
-        return
+    elseif msg.msg_status == MESSAGE_STATUS_CONFIRM then
+            msg.msg_status = MESSAGE_STATUS_SENDING
+            time_to_send = get(TIME)        
+    elseif msg.msg_status == MESSAGE_STATUS_SENT or msg.msg_type == MESSAGE_TYPE_NORESP then
+        remove_curr_message()
     end
     
-    if current_messages[1].msg_type > 30 then
-        table.remove(current_messages,1)
-        set(DCDU_msgs_total, #current_messages)
-        set(DCDU_msg_no, math.max(0, get(DCDU_msg_no)))
-        set(DCDU_page_no, 0)
-        change_occured = true
-    end
+    change_occured = true
     
 end
 
@@ -127,8 +192,17 @@ function dcdu_right_top(phase)
         return -- Well, nothing to do if not messages are present
     end
     
+    msg = current_messages[get(DCDU_msg_no)+1]
     
+    if msg.msg_status == MESSAGE_STATUS_NEW then
+        if msg.msg_type == MESSAGE_TYPE_WILCO or msg.msg_type == MESSAGE_TYPE_ROGER or
+           msg.msg_type == MESSAGE_TYPE_AFFNEG then
+            msg.msg_type   = MESSAGE_TYPE_STDBY
+            msg.msg_status = MESSAGE_STATUS_CONFIRM
+        end
+    end    
     
+    change_occured = true
 end
 
 

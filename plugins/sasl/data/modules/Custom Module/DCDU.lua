@@ -6,10 +6,18 @@
 -- - If Acars_status == 0 the disconnession message is showed
 -- - If Acars_status > 0 we have a connection. The selection of the ATC to show depends on the current status of the flight (see function `update_connected_atc`)
 -- - If Acars_status > 0 and at least a message exists in the array `current_messages`, the message in the position `get(DCDU_msg_no)` is shown
--- Each message has the following format: {msg_text="Text", msg_type=MESSAGE_TYPE_CONFIRM_WILCO, msg_time="1200", msg_source="LIML"}
+-- Each message has the following format: {msg_text="Text", msg_type=MESSAGE_TYPE_WILCO, msg_type_orig=MESSAGE_TYPE_WILCO, msg_status=MESSAGE_STATUS_NEW, msg_time="1200", msg_source="LIML"}
 -- The message type initially refers to the type of the message, i.e. WILCO or ROGER. Then it moves to the CONFIRM, SENDING and SEND stage, depending on user inputs
 -- Please check the following constants
 ----------------------------------------------------------------------------------------------------
+
+-- Messages to be implemented:
+-- ROGER 7500 (ACK)
+
+-- Auto-metar (ACK)
+-- ALTIMETER [altimeter] (ROGER)
+-- [facility designation] ALTIMETER [altimeter] (ROGER)
+-- RADAR CONTACT [position] (ROGER)
 
 position= {1990,1866,463,325}
 size = {463, 325}
@@ -30,23 +38,21 @@ local ECAM_GREEN = {0.184, 0.733, 0.219}
 local ECAM_ORANGE = {0.725, 0.521, 0.18}
 
 -- Message types
-local MESSAGE_TYPE_WILCO = 1
-local MESSAGE_TYPE_ROGER = 2
+MESSAGE_TYPE_WILCO    = 1
+MESSAGE_TYPE_ROGER    = 2
+MESSAGE_TYPE_AFFNEG   = 3
+MESSAGE_TYPE_AFFIRM   = 4
+MESSAGE_TYPE_NEGATIVE = 5
+MESSAGE_TYPE_NORESP   = 6
+MESSAGE_TYPE_UNABLE   = 10
+MESSAGE_TYPE_STDBY    = 11
 
-local MESSAGE_TYPE_CONFIRM_WILCO = 11
-local MESSAGE_TYPE_CONFIRM_ROGER = 12
-local MESSAGE_TYPE_CONFIRM_UNABLE = 15
-local MESSAGE_TYPE_CONFIRM_STDBY = 16
-
-local MESSAGE_TYPE_SENDING_WILCO = 21
-local MESSAGE_TYPE_SENDING_ROGER = 22
-local MESSAGE_TYPE_SENDING_UNABLE = 25
-local MESSAGE_TYPE_SENDING_STDBY = 26
-
-local MESSAGE_TYPE_SENT_WILCO = 31
-local MESSAGE_TYPE_SENT_ROGER = 32
-local MESSAGE_TYPE_SENT_UNABLE = 35
-local MESSAGE_TYPE_SENT_STDBY = 36
+-- Message status
+MESSAGE_STATUS_NEW     = 1
+MESSAGE_STATUS_CONFIRM = 2
+MESSAGE_STATUS_SENDING = 3
+MESSAGE_STATUS_SENT    = 4
+MESSAGE_STATUS_DONE    = 5
 
 ----------------------------------------------------------------------------------------------------
 -- Global/Local variables
@@ -141,8 +147,110 @@ local function reset_display()
 
 end
 
+local function display_message_new(message_text, message_type)
+    display_ack.text = "OPEN"
+    display_ack.color = ECAM_BLUE
+    display_ack.background = false
+    
+    if message_type == MESSAGE_TYPE_WILCO then
+        display_btm_right[3].text = "WILCO *"
+        display_btm_right[1].text = "STBY *"
+        display_btm_left[1].text = "* UNABLE"
+    elseif message_type == MESSAGE_TYPE_ROGER then
+        display_btm_right[3].text = "ROGER *"
+        display_btm_right[1].text = "STBY *"
+        display_btm_left[1].text = "* UNABLE"
+    elseif message_type == MESSAGE_TYPE_AFFNEG then
+        display_btm_right[3].text = "AFFIRM *"
+        display_btm_right[1].text = "STBY *"
+        display_btm_left[3].text = "* NEGAT."
+    elseif message_type == MESSAGE_TYPE_NORESP then
+        display_ack.text = "ACK"
+        display_ack.color = ECAM_GREEN
+        display_ack.background = true
+        display_btm_right[3].text = "CLOSE *"
+    end    
+    
+end
+
+local function display_message_confirm(message_text, message_type)
+    
+    display_btm_right[3].text = "SEND *"
+    display_btm_left[1].text  = "* CANCEL"
+    display_title.text = "CONFIRM"
+    display_title.color = ECAM_BLUE
+    display_ack.color = ECAM_BLUE
+    display_ack.background = true
+    
+    if message_type == MESSAGE_TYPE_WILCO then
+        display_ack.text = "WILCO"
+    elseif message_type == MESSAGE_TYPE_ROGER then
+        display_ack.text = "ROGER"
+    elseif message_type == MESSAGE_TYPE_AFFIRM then
+        display_ack.text = "AFFIRM"
+    elseif message_type == MESSAGE_TYPE_NEGATIVE then
+        display_ack.text = "NEGATIVE"
+    elseif message_type == MESSAGE_TYPE_UNABLE then
+        display_ack.text = "UNABLE"
+    elseif message_type == MESSAGE_TYPE_STDBY then
+        display_ack.text = "STBY"
+    end
+    
+end
+
+local function display_message_sending(message_text, message_type)
+    display_title.text = "SENDING"
+    display_title.color = ECAM_WHITE
+    display_ack.color = ECAM_BLUE
+    display_ack.background = true
+    
+    if message_type == MESSAGE_TYPE_WILCO then
+        display_ack.text = "WILCO"
+    elseif message_type == MESSAGE_TYPE_ROGER then
+        display_ack.text = "ROGER"
+    elseif message_type == MESSAGE_TYPE_AFFIRM then
+        display_ack.text = "AFFIRM"
+    elseif message_type == MESSAGE_TYPE_NEGATIVE then
+        display_ack.text = "NEGATIVE"
+    elseif message_type == MESSAGE_TYPE_UNABLE then
+        display_ack.text = "UNABLE"
+    elseif message_type == MESSAGE_TYPE_STDBY then
+        display_ack.text = "STBY"
+    end
+    
+
+end
+
+local function display_message_sent(message_text, message_type)
+    display_title.text = "SENT"
+    display_title.color = ECAM_GREEN
+    display_ack.color = ECAM_GREEN
+    display_ack.background = true
+    display_btm_right[3].text = "CLOSE *"
+        
+    if message_type == MESSAGE_TYPE_WILCO then
+        display_ack.text = "WILCO"
+    elseif message_type == MESSAGE_TYPE_ROGER then
+        display_ack.text = "ROGER"
+    elseif message_type == MESSAGE_TYPE_AFFIRM then
+        display_ack.text = "AFFIRM"
+    elseif message_type == MESSAGE_TYPE_NEGATIVE then
+        display_ack.text = "NEGATIVE"
+    elseif message_type == MESSAGE_TYPE_UNABLE then
+        display_ack.text = "UNABLE"
+    elseif message_type == MESSAGE_TYPE_STDBY then
+        display_ack.text = "STBY"
+    end
+        
+end
+
+local function display_message_done(message_text, message_type)
+
+end
+
+
 -- The core function: this function shows the message according to its type
-local function display_message(message_text, message_type, msg_time, msg_source)
+local function display_message(message_text, message_type, message_status, msg_time, msg_source)
 
     reset_display()
 
@@ -158,7 +266,11 @@ local function display_message(message_text, message_type, msg_time, msg_source)
    
     for i=1,5 do
         display_top[i].text  = string.sub(message_text,start_page + (i-1) * MAX_LINE_LENGTH + 1, start_page + i * MAX_LINE_LENGTH)
-        display_top[i].color = ECAM_WHITE
+        if message_status == MESSAGE_STATUS_SENT then
+            display_top[i].color = ECAM_GREEN        
+        else
+            display_top[i].color = ECAM_WHITE
+        end
         if i*MAX_LINE_LENGTH > message_length then            
             break
         end
@@ -178,71 +290,23 @@ local function display_message(message_text, message_type, msg_time, msg_source)
         display_l[2].color = ECAM_WHITE
     end
 
-    display_ack.text = "OPEN"
-    display_ack.color = ECAM_BLUE
-    display_ack.background = false
-    
-    if message_type == MESSAGE_TYPE_WILCO then
-        display_btm_right[3].text = "WILCO *"
-        display_btm_right[1].text = "STBY *"
-        display_btm_left[1].text = "* UNABLE"
-    end
-    
-    if message_type == MESSAGE_TYPE_ROGER then
-        display_btm_right[3].text = "ROGER *"
-        display_btm_right[1].text = "STBY *"
-    end
-    
-    if message_type == MESSAGE_TYPE_CONFIRM_WILCO or message_type == MESSAGE_TYPE_CONFIRM_ROGER or 
-       message_type == MESSAGE_TYPE_CONFIRM_UNABLE or message_type == MESSAGE_TYPE_CONFIRM_STDBY then
-        display_btm_right[3].text = "SEND *"
-        display_btm_left[1].text  = "* CANCEL"
-        display_title.text = "CONFIRM"
-        display_title.color = ECAM_BLUE
-        display_ack.color = ECAM_BLUE
-        display_ack.background = true
-    end
-
-    if message_type == MESSAGE_TYPE_CONFIRM_WILCO or message_type == MESSAGE_TYPE_SENDING_WILCO or message_type == MESSAGE_TYPE_SENT_WILCO then
-        display_ack.text = "WILCO"    
-    end
-    if message_type == MESSAGE_TYPE_CONFIRM_ROGER or message_type == MESSAGE_TYPE_SENDING_ROGER or message_type == MESSAGE_TYPE_SENT_ROGER then
-        display_ack.text = "ROGER"
-    end
-
-    if message_type == MESSAGE_TYPE_CONFIRM_UNABLE or message_type == MESSAGE_TYPE_SENDING_UNABLE or message_type == MESSAGE_TYPE_SENT_UNABLE then
-        display_ack.text = "UNABLE"    
-    end
-
-    if message_type == MESSAGE_TYPE_CONFIRM_STDBY or message_type == MESSAGE_TYPE_SENDING_STDBY or message_type == MESSAGE_TYPE_SENT_STDBY then
-        display_ack.text = "STBY"    
-    end
-    
-    if message_type == MESSAGE_TYPE_SENDING_WILCO or message_type == MESSAGE_TYPE_SENDING_ROGER or
-       message_type == MESSAGE_TYPE_SENDING_UNABLE or message_type == MESSAGE_TYPE_SENDING_STDBY then
-        
-        display_title.text = "SENDING"
-        display_title.color = ECAM_WHITE
-        display_ack.color = ECAM_BLUE
-        display_ack.background = true
-    end
-    
-    if message_type == MESSAGE_TYPE_SENT_WILCO or message_type == MESSAGE_TYPE_SENT_ROGER or
-       message_type == MESSAGE_TYPE_SENT_UNABLE or message_type == MESSAGE_TYPE_SENT_STDBY then
-        
-        display_title.text = "SENT"
-        display_title.color = ECAM_GREEN
-        display_ack.color = ECAM_GREEN
-        display_ack.background = true
-        display_btm_right[3].text = "CLOSE *"
-        
-    end
 
     display_btm_right[1].color = ECAM_BLUE 
     display_btm_right[3].color = ECAM_BLUE 
     display_btm_left[1].color = ECAM_BLUE 
     display_btm_left[3].color = ECAM_BLUE 
 
+    if message_status == MESSAGE_STATUS_NEW then
+        display_message_new(message_text, message_type)
+    elseif message_status == MESSAGE_STATUS_CONFIRM then
+        display_message_confirm(message_text, message_type)
+    elseif message_status == MESSAGE_STATUS_SENDING then
+        display_message_sending(message_text, message_type)
+    elseif message_status == MESSAGE_STATUS_SENT then
+        display_message_sent(message_text, message_type)
+    elseif message_status == MESSAGE_STATUS_DONE then
+        display_message_done(message_text, message_type)
+    end
 
 end
 
@@ -375,7 +439,7 @@ local function check_new_messages()
     msg_text = string.sub(msg_text, 0, get(Acars_incoming_message_length))
 
     -- Create the new message and add it to the table    
-    new_message = {msg_text=msg_text, msg_type=get(Acars_incoming_message_type), msg_time=get(ZULU_hours) .. get(ZULU_mins), msg_source="USER"}
+    new_message = {msg_text=msg_text, msg_type=get(Acars_incoming_message_type), msg_type_orig=get(Acars_incoming_message_type), msg_status=MESSAGE_STATUS_NEW, msg_time=get(ZULU_hours) .. get(ZULU_mins), msg_source="USER"}
     table.insert(current_messages, new_message)
 
     -- Reset & Update the datarefs    
@@ -388,8 +452,11 @@ end
 -- This function switches the status SENDING to SENT when needed (after 3 seconds).
 local function update_sending_message()
     if time_to_send > 0 and get(TIME) - time_to_send > 3  then
-        current_messages[1].msg_type = current_messages[1].msg_type + 10
+        if get(Acars_status) ~= 0 then
+            current_messages[get(DCDU_msg_no)+1].msg_status = MESSAGE_STATUS_SENT
+        end
         time_to_send = 0
+        change_occurred = true
     end
 end
 
@@ -406,6 +473,7 @@ function update()
            if math.ceil(get(TIME)) % 60 == 0 then  -- Update the ATC CTR every minute (quite computational intensive)
                 update_nearest_ctr()
            end
+            change_occured = true
         end
     else
         updated_connection = false
@@ -426,7 +494,7 @@ function update()
     if get(Acars_status) > 0 then
     
         if #current_messages > 0 then
-            display_message(current_messages[get(DCDU_msg_no)+1].msg_text, current_messages[get(DCDU_msg_no)+1].msg_type, current_messages[get(DCDU_msg_no)+1].msg_time, current_messages[get(DCDU_msg_no)+1].msg_source)
+            display_message(current_messages[get(DCDU_msg_no)+1].msg_text, current_messages[get(DCDU_msg_no)+1].msg_type, current_messages[get(DCDU_msg_no)+1].msg_status, current_messages[get(DCDU_msg_no)+1].msg_time, current_messages[get(DCDU_msg_no)+1].msg_source)
             update_sending_message()
         else
             if change_occured or not was_connected then
@@ -463,7 +531,8 @@ function draw()
     if display_ack.text ~= "" then
     
         if display_ack.background then
-            sasl.gl.drawRectangle ( size[1]-100, size[2]-33, 100 , 32 , display_ack.color )
+            width, height = sasl.gl.measureText(B612MONO_regular, display_ack.text, 25, false, false)
+            sasl.gl.drawRectangle ( size[1]-width-10, size[2]-33, width+10 , 32 , display_ack.color )
             sasl.gl.drawText (B612MONO_regular, size[1]-8, size[2]-25, display_ack.text , 25, false, false, TEXT_ALIGN_RIGHT, ECAM_BLACK )
         else
             sasl.gl.drawText (B612MONO_regular, size[1]-8, size[2]-25, display_ack.text , 25, false, false, TEXT_ALIGN_RIGHT, display_ack.color )
