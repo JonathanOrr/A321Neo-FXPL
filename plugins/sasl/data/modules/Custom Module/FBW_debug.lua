@@ -92,7 +92,7 @@ function draw()
         end
 
         --yaw limits indication
-        if get(Yaw_lim) == 30 then
+        if get(Yaw_lim) >= 25 then
             sasl.gl.drawFrame (236, 450, 56, 20, FBW_GREEN)
             sasl.gl.drawText(B612regular, 263, 454, Round(get(Yaw_lim), 1) .. "°", 15, false, false, TEXT_ALIGN_CENTER, FBW_GREEN)
         elseif get(Yaw_lim) < 30 and get(Yaw_lim) >= 3.45 then

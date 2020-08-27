@@ -470,8 +470,13 @@ function draw()
         sasl.gl.drawArc(size[1]/2 + 200, size[2]/2 - 110, 76, 80, 240, 60, right_tire_psi_color)
         sasl.gl.drawArc(size[1]/2 + 360, size[2]/2 - 110, 76, 80, 240, 60, right_tire_psi_color)
 
-    elseif get(Ecam_current_page) == 11 then --f/ctl
-
+    elseif get(Ecam_current_page) == 11 then
+        sasl.gl.drawText(B612MONO_regular, size[1]/2-25, size[2]/2-50, tostring(math.floor(math.abs(get(Elev_trim_degrees)))) .. "." ..  tostring(math.floor((math.abs(get(Elev_trim_degrees)) - math.floor(math.abs(get(Elev_trim_degrees)))) * 10)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        if get(Elev_trim_degrees) >= 0 then
+            sasl.gl.drawText(B612MONO_regular, size[1]/2+45, size[2]/2-50, "UP", 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        else
+            sasl.gl.drawText(B612MONO_regular, size[1]/2+45, size[2]/2-50, "DN", 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        end
     elseif get(Ecam_current_page) == 12 then --STS
         draw_sts_page()
     elseif get(Ecam_current_page) == 13 then --CRUISE

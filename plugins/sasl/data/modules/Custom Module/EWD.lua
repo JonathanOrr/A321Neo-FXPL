@@ -34,21 +34,21 @@ end
 
 local function draw_engines()
     --N1--
-    sasl.gl.drawText(B612regular, size[1]/2-100, size[2]/2+280, Round(get(Eng_1_N1), 1), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    sasl.gl.drawText(B612regular, size[1]/2+250, size[2]/2+280, Round(get(Eng_2_N1), 1), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(B612MONO_regular, size[1]/2-100, size[2]/2+280, tostring(math.floor(get(Eng_1_N1))) .. "." .. tostring(math.floor((get(Eng_1_N1) - math.floor(get(Eng_1_N1))) * 10)), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(B612MONO_regular, size[1]/2+250, size[2]/2+280, tostring(math.floor(get(Eng_2_N1))) .. "." .. tostring(math.floor((get(Eng_2_N1) - math.floor(get(Eng_2_N1))) * 10)), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     --EGT--
-    sasl.gl.drawText(B612regular, size[1]/2-174, size[2]/2+149, math.floor(get(Eng_1_EGT_c)), 28, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-    sasl.gl.drawText(B612regular, size[1]/2+174, size[2]/2+149, math.floor(get(Eng_2_EGT_c)), 28, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+    sasl.gl.drawText(B612MONO_regular, size[1]/2-174, size[2]/2+149, math.floor(get(Eng_1_EGT_c)), 28, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+    sasl.gl.drawText(B612MONO_regular, size[1]/2+174, size[2]/2+149, math.floor(get(Eng_2_EGT_c)), 28, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
     --N2--
     if get(Engine_mode_knob) == 1 or get(Engine_mode_knob) == -1 then
         sasl.gl.drawRectangle(size[1]/2-205, size[2]/2+70, 65, 32, ECAM_GREY)
         sasl.gl.drawRectangle(size[1]/2+135, size[2]/2+70, 65, 32, ECAM_GREY)
     end
-    sasl.gl.drawText(B612regular, size[1]/2-150, size[2]/2+75, math.floor(get(Eng_1_N2)), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    sasl.gl.drawText(B612regular, size[1]/2+150, size[2]/2+75, math.floor(get(Eng_2_N2)), 30, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+    sasl.gl.drawText(B612MONO_regular, size[1]/2-150, size[2]/2+75, math.floor(get(Eng_1_N2)), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(B612MONO_regular, size[1]/2+150, size[2]/2+75, math.floor(get(Eng_2_N2)), 30, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
     --FF--
-    sasl.gl.drawText(B612regular, size[1]/2-150, size[2]/2+3, math.floor(get(Eng_1_FF_kgm)), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    sasl.gl.drawText(B612regular, size[1]/2+150, size[2]/2+3, math.floor(get(Eng_2_FF_kgm)), 30, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+    sasl.gl.drawText(B612MONO_regular, size[1]/2-150, size[2]/2+3, math.floor(get(Eng_1_FF_kgm)), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(B612MONO_regular, size[1]/2+150, size[2]/2+3, math.floor(get(Eng_2_FF_kgm)), 30, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
 
 end
 

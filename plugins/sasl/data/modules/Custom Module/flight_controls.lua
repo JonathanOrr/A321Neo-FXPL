@@ -39,9 +39,7 @@ local elevators_hstab_1 = globalProperty("sim/flightmodel/controls/hstab1_elv1de
 local elevators_hstab_2 = globalProperty("sim/flightmodel/controls/hstab2_elv1def") --elevators -17 deg down 30 deg up
 local rudder = globalProperty("sim/flightmodel/controls/vstab1_rud1def") --rudder 30 deg left -30 deg right
 
---a321neo datarefs
-local elev_trim_degrees = createGlobalPropertyf("a321neo/cockpit/controls/elevator_trim_degrees", 0, false, true, false)
-
+local yaw_limit_clamping_upper_limit = 25--normal law 25 all other laws 30
 
 --custom functions
 local function get_elev_trim_degrees()
@@ -55,11 +53,11 @@ local function get_elev_trim_degrees()
 end
 
 --init
-set(elev_trim_degrees, 0)
+set(Elev_trim_degrees, 0)
 
 function update()
     --sync and identify the elevator trim degrees
-    set(elev_trim_degrees, get_elev_trim_degrees())
+    set(Elev_trim_degrees, get_elev_trim_degrees())
 
     --summing the controls
     if get(Flight_director_1_mode) == 2 or get(Flight_director_2_mode) == 2 then -- if the autopilot is on
@@ -214,10 +212,16 @@ function update()
         end
 
         --rudder
-        if get(IAS) <= 140 then
-            set(Yaw_lim, 30)
+        if get(FBW_status) == 2 then
+            yaw_limit_clamping_upper_limit = Set_anim_value(yaw_limit_clamping_upper_limit, 25, 25, 30, 1)
         else
-            set(Yaw_lim, -26.6 * math.sqrt(1 - ((Math_clamp(get(IAS), 140, 380) - 380)^2) / 57600) + 30)
+            yaw_limit_clamping_upper_limit = Set_anim_value(yaw_limit_clamping_upper_limit, 30, 25, 30, 1)
+        end
+
+        if get(IAS) <= 140 then
+            set(Yaw_lim, Math_clamp(30, 3.4, yaw_limit_clamping_upper_limit))
+        else
+            set(Yaw_lim, Math_clamp(-26.6 * math.sqrt(1 - ((Math_clamp(get(IAS), 140, 380) - 380)^2) / 57600) + 30, 3.4, yaw_limit_clamping_upper_limit))
         end
 
         Set_dataref_linear_anim(rudder, get(Yaw_lim) * (total_yaw), -30, 30, 25, 0.5)
