@@ -23,6 +23,7 @@ local COL_CAUTION = 3       -- AMBER
 local COL_INDICATION = 4    -- GREEN
 local COL_REMARKS = 5       -- WHITE
 local COL_ACTIONS = 6       -- BLUE
+local COL_INDICATION_BLINKING = 7    -- GREEN (blinking) - right part only
 
 --initialisation--
 for i=0,6 do
@@ -215,6 +216,10 @@ local function update_right_list()
         list_right:put(COL_INDICATION, "ACARS STBY")
     end
     
+    if get(DCDU_msgs_total) > 0 then
+        list_right:put(COL_INDICATION_BLINKING, "ACARS MSG")    
+    end
+    
     -- TCAS
     if get(DRAIMS_Sqwk_mode) < 2 then
         list_right:put(COL_INDICATION, "TCAS STBY")
@@ -225,7 +230,6 @@ local function update_right_list()
     -- TODO Audio: AUDIO 3 XFRD displayed green if audio switching selector not in NORM
     -- TODO Acars: ACARS CALL (pulsing green) if received an ACARS message requesting voice conversation
     -- TODO Acars: VHF 3 VOICE (pulsing green) if VHF 3 in voice mode and ACARS comm interrupted (?)
-    -- TODO Acars: ACARS MSG (pulsing green) if new ACARS message received
 
     -- TODO Autobrake fail: AUTO BRK OFF (any flight phase, amber)
 

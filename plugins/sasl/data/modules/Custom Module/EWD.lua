@@ -10,6 +10,7 @@ local ECAM_WHITE = {1.0, 1.0, 1.0}
 local ECAM_HIGH_GREY = {0.6, 0.6, 0.6}
 local ECAM_BLUE = {0.004, 1.0, 1.0}
 local ECAM_GREEN = {0.184, 0.733, 0.219}
+local ECAM_HIGH_GREEN = {0.3, 1, 0.4}
 local ECAM_ORANGE = {0.725, 0.521, 0.18}
 local ECAM_RED = {1.0, 0.0, 0.0}
 local ECAM_MAGENTA = {1.0, 0.0, 1.0}
@@ -23,6 +24,7 @@ match_msg_colors[3] = ECAM_ORANGE
 match_msg_colors[4] = ECAM_GREEN
 match_msg_colors[5] = ECAM_WHITE
 match_msg_colors[6] = ECAM_BLUE
+match_msg_colors[7] = ECAM_GREEN -- Blinking
 
 local time_blinking = sasl.createTimer()
 sasl.startTimer(time_blinking)
@@ -76,7 +78,11 @@ local function draw_right_memo()
 
     for i=0,6 do
         if get(EWD_right_memo_colors[i]) > 0 then
-            sasl.gl.drawText(B612MONO_regular, size[1]/2+140, size[2]/2-200-distance*i, get(EWD_right_memo[i]), 30, false, false, TEXT_ALIGN_LEFT, match_msg_colors[get(EWD_right_memo_colors[i])])
+            if get(EWD_right_memo_colors[i]) ~= 7 or get(TIME) % 2 > 1 then -- If color is COL_INDICATION_BLINKING we blink for 1 second every 2 seconds.
+                sasl.gl.drawText(B612MONO_regular, size[1]/2+140, size[2]/2-200-distance*i, get(EWD_right_memo[i]), 30, false, false, TEXT_ALIGN_LEFT, match_msg_colors[get(EWD_right_memo_colors[i])])
+            else
+                sasl.gl.drawText(B612MONO_regular, size[1]/2+140, size[2]/2-200-distance*i, get(EWD_right_memo[i]), 30, false, false, TEXT_ALIGN_LEFT, ECAM_HIGH_GREEN)            
+            end
         end
     end
 end
