@@ -127,5 +127,11 @@ DCDU_cmd_left_top = createCommand("a321neo/cockpit/DCDU/left_top", "Button Top-L
 DCDU_cmd_right_btm = createCommand("a321neo/cockpit/DCDU/right_btm", "Button Bottom-Right")
 DCDU_cmd_right_top = createCommand("a321neo/cockpit/DCDU/right_top", "Button Top-Right")
 
-
+-- ADIRS
+ADIRS_cmd_ADR1 = createCommand("a321neo/cockpit/ADIRS/ADR1_cmd", "Toggle ADR 1")
+ADIRS_cmd_ADR2 = createCommand("a321neo/cockpit/ADIRS/ADR2_cmd", "Toggle ADR 2")
+ADIRS_cmd_ADR3 = createCommand("a321neo/cockpit/ADIRS/ADR3_cmd", "Toggle ADR 3")
+ADIRS_cmd_IR1 = createCommand("a321neo/cockpit/ADIRS/IR1_cmd", "Toggle IR 1")
+ADIRS_cmd_IR2 = createCommand("a321neo/cockpit/ADIRS/IR2_cmd", "Toggle IR 2")
+ADIRS_cmd_IR3 = createCommand("a321neo/cockpit/ADIRS/IR3_cmd", "Toggle IR 3")
 
