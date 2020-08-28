@@ -1,5 +1,5 @@
-position= {0,0,535,40}
-size = {535, 40}
+position= {0,0,4096,4096}
+size = {4096, 4096}
 
 --fonts
 local B612regular = sasl.gl.loadFont("fonts/B612-Regular.ttf")
@@ -17,6 +17,24 @@ local MCDU_1_brightness_alpha = {0.0, 0.0, 0.0, 1}
 local MCDU_2_brightness_alpha = {0.0, 0.0, 0.0, 1}
 local DRAIMS_1_brightness_alpha = {0.0, 0.0, 0.0, 1}
 local DRAIMS_2_brightness_alpha = {0.0, 0.0, 0.0, 1}
+local ISIS_brightness_alpha = {0.0, 0.0, 0.0, 1}
+
+local Capt_PFD_lut_alpha = {1, 1, 1, 1}
+local Capt_ND_lut_alpha = {1, 1, 1, 1}
+local EWD_lut_alpha = {1, 1, 1, 1}
+local FO_ND_lut_alpha = {1, 1, 1, 1}
+local FO_PFD_lut_alpha = {1, 1, 1, 1}
+local ECAM_lut_alpha = {1, 1, 1, 1}
+local DCDU_1_lut_alpha = {1, 1, 1, 1}
+local DCDU_2_lut_alpha = {1, 1, 1, 1}
+local MCDU_1_lut_alpha = {1, 1, 1, 1}
+local MCDU_2_lut_alpha = {1, 1, 1, 1}
+local DRAIMS_1_lut_alpha = {1, 1, 1, 1}
+local DRAIMS_2_lut_alpha = {1, 1, 1, 1}
+local ISIS_lut_alpha = {1, 1, 1, 1}
+
+--image textures
+local screen_lut_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/LUT.png")
 
 --register commands
 --capt pfd
@@ -235,9 +253,43 @@ sasl.registerCommandHandler ( DRAIMS_2_brightness_dn, 0, function(phase)
     end
 end)
 
+--isis
+sasl.registerCommandHandler ( ISIS_brightness_up, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        set(ISIS_brightness, Math_clamp(get(ISIS_brightness) + 0.05, 0, 1))
+    end
+    if phase == SASL_COMMAND_CONTINUE then
+        set(ISIS_brightness, Math_clamp(get(ISIS_brightness) + 0.5 * get(DELTA_TIME), 0, 1))
+    end
+end)
+sasl.registerCommandHandler ( ISIS_brightness_dn, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        set(ISIS_brightness, Math_clamp(get(ISIS_brightness) - 0.05, 0, 1))
+    end
+    if phase == SASL_COMMAND_CONTINUE then
+        set(ISIS_brightness, Math_clamp(get(ISIS_brightness) - 0.5 * get(DELTA_TIME), 0, 1))
+    end
+end)
+
 function update()
     set(Total_element_brightness, 1)
 
+    --calculate brightness lut
+    Capt_PFD_lut_alpha[4] = Math_clamp(get(Capt_PFD_brightness) / 0.4, 0, 1) * Math_clamp((1 - get(Sun_pitch) / 1.5), 0, 1)
+    Capt_ND_lut_alpha[4] = Math_clamp(get(Capt_ND_brightness) / 0.4, 0, 1) * Math_clamp((1 - get(Sun_pitch) / 1.5), 0, 1)
+    EWD_lut_alpha[4] =  Math_clamp(get(EWD_brightness) / 0.4, 0, 1) * Math_clamp((1 - get(Sun_pitch) / 1.5), 0, 1)
+    FO_ND_lut_alpha[4] = Math_clamp(get(Fo_ND_brightness) / 0.4, 0, 1) * Math_clamp((1 - get(Sun_pitch) / 1.5), 0, 1)
+    FO_PFD_lut_alpha[4] = Math_clamp(get(Fo_PFD_brightness) / 0.4, 0, 1) * Math_clamp((1 - get(Sun_pitch) / 1.5), 0, 1)
+    ECAM_lut_alpha[4] = Math_clamp(get(ECAM_brightness) / 0.4, 0, 1) * Math_clamp((1 - get(Sun_pitch) / 1.5), 0, 1)
+    DCDU_1_lut_alpha[4] = Math_clamp(get(DCDU_1_brightness) / 0.4, 0, 1) * Math_clamp((1 - get(Sun_pitch) / 1.5), 0, 1)
+    DCDU_2_lut_alpha[4] = Math_clamp(get(DCDU_2_brightness) / 0.4, 0, 1) * Math_clamp((1 - get(Sun_pitch) / 1.5), 0, 1)
+    MCDU_1_lut_alpha[4] = Math_clamp(get(MCDU_1_brightness) / 0.4, 0, 1) * Math_clamp((1 - get(Sun_pitch) / 1.5), 0, 1)
+    MCDU_2_lut_alpha[4] = Math_clamp(get(MCDU_2_brightness) / 0.4, 0, 1) * Math_clamp((1 - get(Sun_pitch) / 1.5), 0, 1)
+    DRAIMS_1_lut_alpha[4] = Math_clamp(get(DRAIMS_1_brightness) / 0.4, 0, 1) * Math_clamp((1 - get(Sun_pitch) / 1.5), 0, 1)
+    DRAIMS_2_lut_alpha[4] = Math_clamp(get(DRAIMS_2_brightness) / 0.4, 0, 1) * Math_clamp((1 - get(Sun_pitch) / 1.5), 0, 1)
+    ISIS_lut_alpha[4] = Math_clamp(get(ISIS_brightness) / 0.4, 0, 1) * Math_clamp((1 - get(Sun_pitch) / 1.5), 0, 1)
+
+    --calculate brightness darkness
     Capt_PFD_brightness_alpha[4] = 1 - get(Capt_PFD_brightness)
     Capt_ND_brightness_alpha[4] = 1 - get(Capt_ND_brightness)
     EWD_brightness_alpha[4] = 1 - get(EWD_brightness)
@@ -250,11 +302,27 @@ function update()
     MCDU_2_brightness_alpha[4] = 1 - get(MCDU_2_brightness)
     DRAIMS_1_brightness_alpha[4] = 1 - get(DRAIMS_1_brightness)
     DRAIMS_2_brightness_alpha[4] = 1 - get(DRAIMS_2_brightness)
+    ISIS_brightness_alpha[4] = 1 - get(ISIS_brightness)
 end
 
 function draw()
     sasl.gl.setBlendEquation ( BLEND_EQUATION_ADD )
     sasl.gl.setBlendFunction ( BLEND_SOURCE_ALPHA, BLEND_ONE_MINUS_SOURCE_ALPHA)
+    sasl.gl.drawTexture(screen_lut_img, 0, 0, 40, 40, Capt_PFD_lut_alpha)
+    sasl.gl.drawTexture(screen_lut_img, 45, 0, 40, 40, Capt_ND_lut_alpha)
+    sasl.gl.drawTexture(screen_lut_img, 90, 0, 40, 40, EWD_lut_alpha)
+    sasl.gl.drawTexture(screen_lut_img, 135, 0, 40, 40, FO_ND_lut_alpha)
+    sasl.gl.drawTexture(screen_lut_img, 180, 0, 40, 40, FO_PFD_lut_alpha)
+    sasl.gl.drawTexture(screen_lut_img, 225, 0, 40, 40, ECAM_lut_alpha)
+    sasl.gl.drawTexture(screen_lut_img, 270, 0, 40, 40, DCDU_1_lut_alpha)
+    sasl.gl.drawTexture(screen_lut_img, 315, 0, 40, 40, DCDU_2_lut_alpha)
+    sasl.gl.drawTexture(screen_lut_img, 360, 0, 40, 40, MCDU_1_lut_alpha)
+    sasl.gl.drawTexture(screen_lut_img, 405, 0, 40, 40, MCDU_2_lut_alpha)
+    sasl.gl.drawTexture(screen_lut_img, 450, 0, 40, 40, DRAIMS_1_lut_alpha)
+    sasl.gl.drawTexture(screen_lut_img, 495, 0, 40, 40, DRAIMS_2_lut_alpha)
+    sasl.gl.drawTexture(screen_lut_img, 540, 0, 40, 40, ISIS_lut_alpha)
+
+    --draw the brightness lut
     sasl.gl.drawRectangle(0, 0, 40, 40, Capt_PFD_brightness_alpha)
     sasl.gl.drawRectangle(45, 0, 40, 40, Capt_ND_brightness_alpha)
     sasl.gl.drawRectangle(90, 0, 40, 40, EWD_brightness_alpha)
@@ -267,5 +335,6 @@ function draw()
     sasl.gl.drawRectangle(405, 0, 40, 40, MCDU_2_brightness_alpha)
     sasl.gl.drawRectangle(450, 0, 40, 40, DRAIMS_1_brightness_alpha)
     sasl.gl.drawRectangle(495, 0, 40, 40, DRAIMS_2_brightness_alpha)
+    sasl.gl.drawRectangle(540, 0, 40, 40, ISIS_brightness_alpha)
     sasl.gl.resetBlending ()
 end

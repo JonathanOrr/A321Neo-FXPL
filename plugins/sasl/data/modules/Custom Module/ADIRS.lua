@@ -60,8 +60,8 @@ function update ()
     elseif get(Aircraft_lat) <= -70.2 and get(Aircraft_lat) >= -78.25 then
         set(TIME_TO_ALIGN, 1020)
     elseif get(Aircraft_lat) < 0 and get(Aircraft_lat) > -60 then
-    set(TIME_TO_ALIGN, lerp(300, 600, (get(Aircraft_lat) / -60)))
+        set(TIME_TO_ALIGN, lerp(300, 600, (get(Aircraft_lat) / -60)))
     else set(TIME_TO_ALIGN, nil)
-    logInfo("Latitude is greater than 78.25- too high for IRS alignment")
+        logInfo("Latitude is greater than 78.25- too high for IRS alignment")
     end
 end

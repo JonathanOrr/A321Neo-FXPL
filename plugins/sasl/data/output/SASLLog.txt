@@ -1,0 +1,60 @@
+[A32NX-A321NEO INFO]: Initializing...
+[A32NX-A321NEO INFO]: Path to module: D:\SteamLibrary/steamapps/common/X-Plane 11/Aircraft/A321neo master/plugins/sasl/data/modules/main.lua
+[A32NX-A321NEO INFO]: Loading module...
+[A32NX-A321NEO INFO]: [LUA]: loading	module
+[A32NX-A321NEO INFO]: [LUA]: including	cockpit_commands.lua
+[A32NX-A321NEO INFO]: [LUA]: including	cockpit_datarefs.lua
+[A32NX-A321NEO INFO]: [LUA]: including	dynamic_datarefs.lua
+[A32NX-A321NEO INFO]: [LUA]: including	failures_datarefs.lua
+[A32NX-A321NEO INFO]: [LUA]: including	global_functions.lua
+[A32NX-A321NEO INFO]: [LUA]: loading	engine_and_apu
+[A32NX-A321NEO INFO]: [LUA]: loading	FBW
+[A32NX-A321NEO INFO]: [LUA]: loading	cabin_screens
+[A32NX-A321NEO INFO]: [LUA]: loading	flight_controls
+[A32NX-A321NEO INFO]: [LUA]: loading	fcu_ap_at
+[A32NX-A321NEO INFO]: [LUA]: loading	AT
+[A32NX-A321NEO INFO]: [LUA]: loading	ADIRS
+[A32NX-A321NEO INFO]: [LUA]: loading	MCDU
+[A32NX-A321NEO INFO]: [LUA]: loading	packs
+[A32NX-A321NEO INFO]: [LUA]: loading	aircond
+[A32NX-A321NEO INFO]: [LUA]: loading	wheel
+[A32NX-A321NEO INFO]: [LUA]: loading	source_switching
+[A32NX-A321NEO INFO]: [LUA]: loading	PFD
+[A32NX-A321NEO INFO]: [LUA]: loading	ECAM
+[A32NX-A321NEO INFO]: [LUA]: including	ECAM_status.lua
+[A32NX-A321NEO INFO]: [LUA]: including	ECAM_automation.lua
+[A32NX-A321NEO INFO]: [LUA]: loading	EWD
+[A32NX-A321NEO INFO]: [LUA]: loading	EWD_logic
+[A32NX-A321NEO INFO]: [LUA]: including	ECAM_status.lua
+[A32NX-A321NEO INFO]: [LUA]: including	EWD_flight_phases.lua
+[A32NX-A321NEO INFO]: [LUA]: including	EWD_msgs/bleed.lua
+[A32NX-A321NEO INFO]: [LUA]: including	EWD_msgs/common.lua
+[A32NX-A321NEO INFO]: [LUA]: including	EWD_msgs/brakes_and_antiskid.lua
+[A32NX-A321NEO INFO]: [LUA]: including	EWD_msgs/common.lua
+[A32NX-A321NEO INFO]: [LUA]: including	EWD_msgs/engines_and_apu.lua
+[A32NX-A321NEO INFO]: [LUA]: including	EWD_msgs/common.lua
+[A32NX-A321NEO INFO]: [LUA]: including	EWD_msgs/FBW.lua
+[A32NX-A321NEO INFO]: [LUA]: including	EWD_msgs/flight_controls.lua
+[A32NX-A321NEO INFO]: [LUA]: including	EWD_msgs/gears_and_doors.lua
+[A32NX-A321NEO INFO]: [LUA]: including	EWD_msgs/common.lua
+[A32NX-A321NEO INFO]: [LUA]: including	EWD_msgs/misc.lua
+[A32NX-A321NEO INFO]: [LUA]: including	EWD_msgs/nav.lua
+[A32NX-A321NEO INFO]: [LUA]: including	EWD_msgs/to_ldg_memos.lua
+[A32NX-A321NEO INFO]: [LUA]: including	EWD_msgs/common.lua
+[A32NX-A321NEO INFO]: [LUA]: loading	EWD_flight_phases
+[A32NX-A321NEO INFO]: [LUA]: loading	HUD
+[A32NX-A321NEO INFO]: [LUA]: loading	DCDU
+[A32NX-A321NEO INFO]: [LUA]: including	DCDU_handlers.lua
+[A32NX-A321NEO INFO]: [LUA]: loading	DRAIMS
+[A32NX-A321NEO INFO]: [LUA]: loading	display_brightness
+[A32NX-A321NEO INFO]: [LUA]: loading	MCDU_popup
+[A32NX-A321NEO INFO]: [LUA]: loading	vnav_debug
+[A32NX-A321NEO INFO]: [LUA]: loading	packs_debug
+[A32NX-A321NEO INFO]: [LUA]: loading	FBW_debug
+[A32NX-A321NEO INFO]: [LUA]: loading	FBW_graph
+[A32NX-A321NEO INFO]: [LUA]: loading	ECAM_debug
+[A32NX-A321NEO INFO]: [LUA]: loading	dmc_debug
+[A32NX-A321NEO INFO]: [LUA]: loading	DCDU_window
+[A32NX-A321NEO INFO]: Module loaded
+[A32NX-A321NEO INFO]: Disabling...
+[A32NX-A321NEO INFO]: SASL plugin stopped...

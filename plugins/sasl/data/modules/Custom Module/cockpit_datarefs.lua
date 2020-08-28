@@ -28,6 +28,7 @@ MCDU_1_brightness = createGlobalPropertyf("a321neo/cockpit/brightness/mcdu_1_bri
 MCDU_2_brightness = createGlobalPropertyf("a321neo/cockpit/brightness/mcdu_2_brightness", 1, false, true, false)
 DRAIMS_1_brightness = createGlobalPropertyf("a321neo/cockpit/brightness/draims_1_brightness", 1, false, true, false)
 DRAIMS_2_brightness = createGlobalPropertyf("a321neo/cockpit/brightness/draims_2_brightness", 1, false, true, false)
+ISIS_brightness = createGlobalPropertyf("a321neo/cockpit/brightness/isis_brightness", 1, false, true, false)
 
 --draims--
 DRAIMS_current_page = createGlobalPropertyi("a321neo/cockpit/draims/current_page", 1, false, true, false)--the page the draims unit is currently displaying 1VHF, 2HFs, 3TEL, 4ATC, 5MENU, 6NAV, 7ILS, 8VOR, 9ADF
@@ -77,6 +78,7 @@ DRAIMS_dynamic_NAV_volume = createGlobalPropertyf("a321neo/cockpit/draims/dynami
 
 VHF_1_audio_selected = globalProperty("sim/cockpit2/radios/actuators/audio_selection_com1")
 VHF_2_audio_selected = globalProperty("sim/cockpit2/radios/actuators/audio_selection_com2")
+VHF_3_monitor_selected = createGlobalPropertyi("a321neo/cockpit/draims/vhf_3_monitor_selected", 0, false, true, false)--0off, 1selected(USE FOR DCDU DATALINK)
 NAV_1_audio_selected = globalProperty("sim/cockpit2/radios/actuators/audio_selection_nav1")
 NAV_2_audio_selected = globalProperty("sim/cockpit2/radios/actuators/audio_selection_nav2")
 ADF_1_audio_selected = globalProperty("sim/cockpit2/radios/actuators/audio_selection_adf1")

@@ -52,6 +52,8 @@ DRAIMS_1_brightness_up = createCommand("a321neo/cockpit/brightness/draims_1_brig
 DRAIMS_1_brightness_dn = createCommand("a321neo/cockpit/brightness/draims_1_brightness_dn", "DRAIMS 1 brightness down")
 DRAIMS_2_brightness_up = createCommand("a321neo/cockpit/brightness/draims_2_brightness_up", "DRAIMS 2 brightness up")
 DRAIMS_2_brightness_dn = createCommand("a321neo/cockpit/brightness/draims_2_brightness_dn", "DRAIMS 2 brightness down")
+ISIS_brightness_up = createCommand("a321neo/cockpit/brightness/isis_brightness_up", "ISIS brightness up")
+ISIS_brightness_dn = createCommand("a321neo/cockpit/brightness/isis_brightness_dn", "ISIS brightness down")
 
 --draims
 Draims_VHF_button = createCommand("a321neo/cockpit/draims/draims_vhf_button", "DRAIMS VHF button")
@@ -63,6 +65,7 @@ Draims_VHF1_volume_up = createCommand("a321neo/cockpit/draims/draims_vhf1_volume
 Draims_VHF1_volume_dn = createCommand("a321neo/cockpit/draims/draims_vhf1_volume_dn", "DRAIMS VHF 1 volume down")
 Draims_VHF2_volume_up = createCommand("a321neo/cockpit/draims/draims_vhf2_volume_up", "DRAIMS VHF 2 volume up")
 Draims_VHF2_volume_dn = createCommand("a321neo/cockpit/draims/draims_vhf2_volume_dn", "DRAIMS VHF 2 volume down")
+Draims_VHF3_monitor_toggle = createCommand("a321neo/cockpit/draims/draims_vhf3_monitor_toggle", "DRAIMS toggle VHF 3 monitoring")
 Draims_dynamic_NAV_toggle = createCommand("a321neo/cockpit/draims/draims_dynamic_nav_toggle", "DRAIMS toggle dynamic audio navigation")
 Draims_dynamic_NAV_volume_up = createCommand("a321neo/cockpit/draims/draims_dynamic_nav_volume_up", "DRAIMS dynamic audio navigation volume up")
 Draims_dynamic_NAV_volume_dn = createCommand("a321neo/cockpit/draims/draims_dynamic_nav_volume_dn", "DRAIMS dynamic audio navigation volume down")
