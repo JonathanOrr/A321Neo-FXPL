@@ -244,7 +244,8 @@ FOB = globalProperty("sim/flightmodel/weight/m_fuel_total")
 ZULU_hours = globalProperty("sim/cockpit2/clock_timer/zulu_time_hours")
 ZULU_mins = globalProperty("sim/cockpit2/clock_timer/zulu_time_minutes")
 ZULU_secs = globalProperty("sim/cockpit2/clock_timer/zulu_time_seconds")
-
+--misc
+Sun_pitch = globalProperty("sim/graphics/scenery/sun_pitch_degrees")
 
 -- ACARS & DCDU
 Acars_status = createGlobalPropertyi("a321neo/dynamics/ACARS/comm_status", 0, false, true, false) -- 0 no connection, 1 - SATCOM only, 2 - VHF only, 3 - Both

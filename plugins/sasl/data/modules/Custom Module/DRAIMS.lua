@@ -23,6 +23,9 @@ local NAVs_id = {} --1 ils, 2 nav1, 3 nav2, 4 adf1, 5 adf2
 local NAVs_name = {} --1 ils, 2 nav1, 3 nav2, 4 adf1, 5 adf2
 local NAVs_isInsideLoadedDSFs = {} --1 ils, 2 nav1, 3 nav2, 4 adf1, 5 adf2
 
+local NAVs_name_text_widths = {}
+local NAVs_name_text_heights = {}
+
 --navaid name scrolling timer and position
 local vor1_scrolling_x_pos = 1
 local vor1_scrolling_alignment = TEXT_ALIGN_CENTER
@@ -539,6 +542,89 @@ local function animate_nav_cursor()
     nav_cusor_y3_pos = Set_anim_value(nav_cusor_y3_pos, DRAIMS_cusor_y3_array[get(DRAIMS_NAV_cursor_pos)], 109, 309, 25)--animate cursor box position
     nav_cusor_y4_pos = Set_anim_value(nav_cusor_y4_pos, DRAIMS_cusor_y4_array[get(DRAIMS_NAV_cursor_pos)], 108, 308, 25)--animate cursor box position
     nav_cusor_speaker_y_pos = Set_anim_value(nav_cusor_speaker_y_pos, nav_cusor_speaker_y_array[get(DRAIMS_NAV_cursor_pos)], 145, 345, 25)--animate cursor box position
+end
+
+--drawing functions
+local function draw_ident_alert_box()
+    --draw ident alert box
+    if get(Sqwk_identifying) == 1 then
+        sasl.gl.drawWideLine(15, 66, 119, 66, 3, ident_box_cl)
+        sasl.gl.drawWideLine(14, 20, 14, 64, 3, ident_box_cl)
+        sasl.gl.drawWideLine(121, 20, 121, 64, 3, ident_box_cl)
+        sasl.gl.drawWideLine(15, 19, 119, 19, 3, ident_box_cl)
+        sasl.gl.drawArc ( 15, 64, 0, 3, 90, 90, ident_box_cl)
+        sasl.gl.drawArc ( 119, 64, 0, 3, 0, 90, ident_box_cl)
+        sasl.gl.drawArc ( 15, 20, 0, 3, 180, 90, ident_box_cl)
+        sasl.gl.drawArc ( 119, 20, 0, 3, 270, 90, ident_box_cl)
+    end
+end
+
+local function draw_nav_cursor()
+    --draw nav cursor
+    sasl.gl.drawWideLine(355, nav_cusor_y1_pos, 575, nav_cusor_y1_pos, 3, nav_cursor_box_cl)
+    sasl.gl.drawWideLine(354, nav_cusor_y3_pos, 354, nav_cusor_y2_pos, 3, nav_cursor_box_cl)
+    sasl.gl.drawWideLine(577, nav_cusor_y3_pos, 577, nav_cusor_y2_pos, 3, nav_cursor_box_cl)
+    sasl.gl.drawWideLine(355, nav_cusor_y4_pos, 575, nav_cusor_y4_pos, 3, nav_cursor_box_cl)
+    sasl.gl.drawArc ( 355, nav_cusor_y2_pos, 0, 3, 90, 90, nav_cursor_box_cl)
+    sasl.gl.drawArc ( 575, nav_cusor_y2_pos, 0, 3, 0, 90, nav_cursor_box_cl)
+    sasl.gl.drawArc ( 355, nav_cusor_y3_pos, 0, 3, 180, 90, nav_cursor_box_cl)
+    sasl.gl.drawArc ( 575, nav_cusor_y3_pos, 0, 3, 270, 90, nav_cursor_box_cl)
+
+    sasl.gl.drawText(A320_panel_font, 380, nav_cusor_text_y_pos, nav_cursor_l_b_text, 28, false, false, TEXT_ALIGN_LEFT, nav_cursor_l_b_text_cl)
+    sasl.gl.drawText(A320_panel_font, 550, nav_cusor_text_y_pos, nav_cursor_r_b_text, 28, false, false, TEXT_ALIGN_RIGHT, nav_cursor_r_b_text_cl)
+
+    --cursor movement indicator
+    if get(DRAIMS_NAV_cursor_pos) == 3 or get(DRAIMS_NAV_cursor_pos) == 2 then
+        sasl.gl.drawTriangle(362, nav_cursor_up_arrow_y1_pos, 370, nav_cursor_up_arrow_y2_pos, 378, nav_cursor_up_arrow_y1_pos, DRAIMS_WHITE)
+    end
+    sasl.gl.drawWideLine(370, nav_cusor_arrow_stick_y1_pos, 370, nav_cusor_arrow_stick_y2_pos, 4, DRAIMS_WHITE)
+    if get(DRAIMS_NAV_cursor_pos) == 1 or get(DRAIMS_NAV_cursor_pos) == 2 then
+        sasl.gl.drawTriangle(362, nav_cursor_down_arrow_y1_pos, 370, nav_cursor_down_arrow_y2_pos, 378, nav_cursor_down_arrow_y1_pos, DRAIMS_WHITE)
+    end
+
+    sasl.gl.drawTexture (draims_speaker_img, 380, nav_cusor_speaker_y_pos, 35, 42, {1, 1, 1, nav_cusor_speaker_alpha})
+end
+
+local function draw_hf_curosr()
+    --draw nav cursor
+    sasl.gl.drawWideLine(355, vhf_cusor_y1_pos, 575, vhf_cusor_y1_pos, 3, vhf_cursor_box_cl)
+    sasl.gl.drawWideLine(354, vhf_cusor_y3_pos, 354, vhf_cusor_y2_pos, 3, vhf_cursor_box_cl)
+    sasl.gl.drawWideLine(577, vhf_cusor_y3_pos, 577, vhf_cusor_y2_pos, 3, vhf_cursor_box_cl)
+    sasl.gl.drawWideLine(355, vhf_cusor_y4_pos, 575, vhf_cusor_y4_pos, 3, vhf_cursor_box_cl)
+    sasl.gl.drawArc ( 355, vhf_cusor_y2_pos, 0, 3, 90, 90, vhf_cursor_box_cl)
+    sasl.gl.drawArc ( 575, vhf_cusor_y2_pos, 0, 3, 0, 90, vhf_cursor_box_cl)
+    sasl.gl.drawArc ( 355, vhf_cusor_y3_pos, 0, 3, 180, 90, vhf_cursor_box_cl)
+    sasl.gl.drawArc ( 575, vhf_cusor_y3_pos, 0, 3, 270, 90, vhf_cursor_box_cl)
+
+    if get(DRAIMS_VHF_cursor_pos) ~= 3 then
+        sasl.gl.drawText(A320_panel_font, 550, vhf_cusor_text_y_pos, "NO SWAP", 28, false, false, TEXT_ALIGN_RIGHT, DRAIMS_WHITE)
+    else
+        sasl.gl.drawText(A320_panel_font, 465, 144, "INOP", 50, false, false, TEXT_ALIGN_CENTER, DRAIMS_BLUE)
+    end
+
+    --cursor movement indicator
+    if get(DRAIMS_VHF_cursor_pos) == 3 or get(DRAIMS_VHF_cursor_pos) == 2 then
+        sasl.gl.drawTriangle(362, vhf_cursor_up_arrow_y1_pos, 370, vhf_cursor_up_arrow_y2_pos, 378, vhf_cursor_up_arrow_y1_pos, DRAIMS_WHITE)
+    end
+    sasl.gl.drawWideLine(370, vhf_cusor_arrow_stick_y1_pos, 370, vhf_cusor_arrow_stick_y2_pos, 4, DRAIMS_WHITE)
+    if get(DRAIMS_VHF_cursor_pos) == 1 or get(DRAIMS_VHF_cursor_pos) == 2 then
+        sasl.gl.drawTriangle(362, vhf_cursor_down_arrow_y1_pos, 370, vhf_cursor_down_arrow_y2_pos, 378, vhf_cursor_down_arrow_y1_pos, DRAIMS_WHITE)
+    end
+
+    --draw cursor in use indication
+    if get(DRAIMS_VHF_cursor_pos) ~= 3 then
+        sasl.gl.drawText(A320_panel_font, 465, 115, "IN USE", 28, false, false, TEXT_ALIGN_CENTER, DRAIMS_BLUE)
+
+        --cursor box moved by the up and down arrows
+        sasl.gl.drawWideLine(355, 192, 575, 192, 3, vhf_cursor_box_cl)
+        sasl.gl.drawWideLine(354, 109, 354, 190, 3, vhf_cursor_box_cl)
+        sasl.gl.drawWideLine(577, 109, 577, 190, 3, vhf_cursor_box_cl)
+        sasl.gl.drawWideLine(355, 108, 575, 108, 3, vhf_cursor_box_cl)
+        sasl.gl.drawArc ( 355, 190, 0, 3, 90, 90, vhf_cursor_box_cl)
+        sasl.gl.drawArc ( 575, 190, 0, 3, 0, 90, vhf_cursor_box_cl)
+        sasl.gl.drawArc ( 355, 109, 0, 3, 180, 90, vhf_cursor_box_cl)
+        sasl.gl.drawArc ( 575, 109, 0, 3, 270, 90, vhf_cursor_box_cl)
+    end
 end
 
 --register commands--
@@ -1169,6 +1255,13 @@ sasl.registerCommandHandler ( Draims_VHF2_volume_dn, 0, function(phase)
     end
 end)
 
+--vhf 3 volume
+sasl.registerCommandHandler (Draims_VHF3_monitor_toggle, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        set(VHF_3_monitor_selected, 1 - get(VHF_3_monitor_selected))
+    end
+end)
+
 function update()
     --deactivate easter eggs when there are entry in the scratchpad
     if #DRAIMS_entry > 0 then
@@ -1191,7 +1284,8 @@ function update()
     --scrolling through the names of the navaid if longer than 10 characters
     --vor 1
     if #NAVs_name[2] - 8 > 11 then
-        vor1_scrolling_x_pos = Math_cycle(vor1_scrolling_x_pos - 24 * get(DELTA_TIME), 220 - (#NAVs_name[2] -11 -8) * 19.5, 220)-- -11 because that's the max length -8 to remove the "VOR/DME" and the end
+        NAVs_name_text_widths[2], NAVs_name_text_heights[2] = sasl.gl.measureText(A320_panel_font, string.sub(NAVs_name[2], 1, -11 -8), 25, false, false)
+        vor1_scrolling_x_pos = Math_cycle(vor1_scrolling_x_pos - 24 * get(DELTA_TIME), 220 - NAVs_name_text_widths[2], 220)-- -11 because that's the max length -8 to remove the "VOR/DME" and the end
         vor1_scrolling_alignment = TEXT_ALIGN_LEFT
     else
         vor1_scrolling_x_pos = 300
@@ -1199,7 +1293,8 @@ function update()
     end
     --vor 2
     if #NAVs_name[3] - 8 > 11 then
-        vor2_scrolling_x_pos = Math_cycle(vor2_scrolling_x_pos - 24 * get(DELTA_TIME), 220 - (#NAVs_name[3] -11 -8) * 19.5, 220)-- -11 because that's the max length -8 to remove the "VOR/DME" and the end
+        NAVs_name_text_widths[3], NAVs_name_text_heights[3] = sasl.gl.measureText(A320_panel_font, string.sub(NAVs_name[3], 1, -11 -8), 25, false, false)
+        vor2_scrolling_x_pos = Math_cycle(vor2_scrolling_x_pos - 24 * get(DELTA_TIME), 220 - NAVs_name_text_widths[3], 220)-- -11 because that's the max length -8 to remove the "VOR/DME" and the end
         vor2_scrolling_alignment = TEXT_ALIGN_LEFT
     else
         vor2_scrolling_x_pos = 300
@@ -1207,7 +1302,8 @@ function update()
     end
     --adf 1
     if #NAVs_name[4] - 4 > 11 then
-        adf1_scrolling_x_pos = Math_cycle(adf1_scrolling_x_pos - 24 * get(DELTA_TIME), 220 - (#NAVs_name[4] -11 -4) * 19.5, 220)-- -11 because that's the max length -4 to remove the "NDB" and the end
+        NAVs_name_text_widths[4], NAVs_name_text_heights[4] = sasl.gl.measureText(A320_panel_font, string.sub(NAVs_name[4], 1, -11 -4), 25, false, false)
+        adf1_scrolling_x_pos = Math_cycle(adf1_scrolling_x_pos - 24 * get(DELTA_TIME), 220 - NAVs_name_text_widths[4], 220)-- -11 because that's the max length -4 to remove the "NDB" and the end
         adf1_scrolling_alignment = TEXT_ALIGN_LEFT
     else
         adf1_scrolling_x_pos = 300
@@ -1215,7 +1311,8 @@ function update()
     end
     --adf 2
     if #NAVs_name[5] - 4 > 11 then
-        adf2_scrolling_x_pos = Math_cycle(adf2_scrolling_x_pos - 24 * get(DELTA_TIME), 220 - (#NAVs_name[5] -11 -4) * 19.5, 220)-- -11 because that's the max length -4 to remove the "NDB" and the end
+        NAVs_name_text_widths[5], NAVs_name_text_heights[5] = sasl.gl.measureText(A320_panel_font, string.sub(NAVs_name[5], 1, -11 -4), 25, false, false)
+        adf2_scrolling_x_pos = Math_cycle(adf2_scrolling_x_pos - 24 * get(DELTA_TIME), 220 - NAVs_name_text_widths[5], 220)-- -11 because that's the max length -4 to remove the "NDB" and the end
         adf2_scrolling_alignment = TEXT_ALIGN_LEFT
     else
         adf2_scrolling_x_pos = 300
@@ -1297,6 +1394,11 @@ function update()
         DRAIMS_line_2_speaker_alpha = Set_anim_value(DRAIMS_line_2_speaker_alpha, 1, 0, 1, 15)
     else
         DRAIMS_line_2_speaker_alpha = Set_anim_value(DRAIMS_line_2_speaker_alpha, 0, 0, 1, 15)
+    end
+    if get(VHF_3_monitor_selected) == 1 then
+        DRAIMS_line_3_speaker_alpha = Set_anim_value(DRAIMS_line_3_speaker_alpha, 1, 0, 1, 15)
+    else
+        DRAIMS_line_3_speaker_alpha = Set_anim_value(DRAIMS_line_3_speaker_alpha, 0, 0, 1, 15)
     end
 
     --ident box fade in and out
@@ -1383,8 +1485,10 @@ function draw()
                     sasl.gl.drawText(A320_panel_font, 465, 115, "EMER", 28, false, false, TEXT_ALIGN_CENTER, DRAIMS_WHITE)
                 end
             end
+            --draw vhf 3 speaker
+            sasl.gl.drawTexture (draims_speaker_img, 300 - (35 * 0.6) / 2, 115, 35 * 0.6, 42 * 0.6 , {1, 1, 1, DRAIMS_line_3_speaker_alpha})
 
-            --draw nav cursor---------------------------------------------------------------------------------------------------------------------------
+            --draw vhf cursor---------------------------------------------------------------------------------------------------------------------------
             sasl.gl.drawWideLine(355, vhf_cusor_y1_pos, 575, vhf_cusor_y1_pos, 3, vhf_cursor_box_cl)
             sasl.gl.drawWideLine(354, vhf_cusor_y3_pos, 354, vhf_cusor_y2_pos, 3, vhf_cursor_box_cl)
             sasl.gl.drawWideLine(577, vhf_cusor_y3_pos, 577, vhf_cusor_y2_pos, 3, vhf_cursor_box_cl)
@@ -1422,7 +1526,7 @@ function draw()
                 sasl.gl.drawArc ( 355, 109, 0, 3, 180, 90, vhf_cursor_box_cl)
                 sasl.gl.drawArc ( 575, 109, 0, 3, 270, 90, vhf_cursor_box_cl)
             end
-            ------------------------------------------------------------------------------------------------------------------------------------------------
+            ---------------------------------------------------------------------------------------------------------------------------------------------------------------
         elseif get(DRAIMS_current_page) == 2 then--hf page
             --hf 1
             sasl.gl.drawText(A320_panel_font, 125, 332, "INOP", 68, false, false, TEXT_ALIGN_CENTER, DRAIMS_WHITE)
@@ -1440,73 +1544,16 @@ function draw()
                 sasl.gl.drawText(A320_panel_font, 465, 244, "INOP", 50, false, false, TEXT_ALIGN_CENTER, DRAIMS_BLUE)
             end
 
-            --draw nav cursor
-            sasl.gl.drawWideLine(355, vhf_cusor_y1_pos, 575, vhf_cusor_y1_pos, 3, vhf_cursor_box_cl)
-            sasl.gl.drawWideLine(354, vhf_cusor_y3_pos, 354, vhf_cusor_y2_pos, 3, vhf_cursor_box_cl)
-            sasl.gl.drawWideLine(577, vhf_cusor_y3_pos, 577, vhf_cusor_y2_pos, 3, vhf_cursor_box_cl)
-            sasl.gl.drawWideLine(355, vhf_cusor_y4_pos, 575, vhf_cusor_y4_pos, 3, vhf_cursor_box_cl)
-            sasl.gl.drawArc ( 355, vhf_cusor_y2_pos, 0, 3, 90, 90, vhf_cursor_box_cl)
-            sasl.gl.drawArc ( 575, vhf_cusor_y2_pos, 0, 3, 0, 90, vhf_cursor_box_cl)
-            sasl.gl.drawArc ( 355, vhf_cusor_y3_pos, 0, 3, 180, 90, vhf_cursor_box_cl)
-            sasl.gl.drawArc ( 575, vhf_cusor_y3_pos, 0, 3, 270, 90, vhf_cursor_box_cl)
-
-            if get(DRAIMS_VHF_cursor_pos) ~= 3 then
-                sasl.gl.drawText(A320_panel_font, 550, vhf_cusor_text_y_pos, "NO SWAP", 28, false, false, TEXT_ALIGN_RIGHT, DRAIMS_WHITE)
-            else
-                sasl.gl.drawText(A320_panel_font, 465, 144, "INOP", 50, false, false, TEXT_ALIGN_CENTER, DRAIMS_BLUE)
-            end
-
-            --cursor movement indicator
-            if get(DRAIMS_VHF_cursor_pos) == 3 or get(DRAIMS_VHF_cursor_pos) == 2 then
-                sasl.gl.drawTriangle(362, vhf_cursor_up_arrow_y1_pos, 370, vhf_cursor_up_arrow_y2_pos, 378, vhf_cursor_up_arrow_y1_pos, DRAIMS_WHITE)
-            end
-            sasl.gl.drawWideLine(370, vhf_cusor_arrow_stick_y1_pos, 370, vhf_cusor_arrow_stick_y2_pos, 4, DRAIMS_WHITE)
-            if get(DRAIMS_VHF_cursor_pos) == 1 or get(DRAIMS_VHF_cursor_pos) == 2 then
-                sasl.gl.drawTriangle(362, vhf_cursor_down_arrow_y1_pos, 370, vhf_cursor_down_arrow_y2_pos, 378, vhf_cursor_down_arrow_y1_pos, DRAIMS_WHITE)
-            end
-
-            --draw cursor in use indication
-            if get(DRAIMS_VHF_cursor_pos) ~= 3 then
-                sasl.gl.drawText(A320_panel_font, 465, 115, "IN USE", 28, false, false, TEXT_ALIGN_CENTER, DRAIMS_BLUE)
-
-                --cursor box moved by the up and down arrows
-                sasl.gl.drawWideLine(355, 192, 575, 192, 3, vhf_cursor_box_cl)
-                sasl.gl.drawWideLine(354, 109, 354, 190, 3, vhf_cursor_box_cl)
-                sasl.gl.drawWideLine(577, 109, 577, 190, 3, vhf_cursor_box_cl)
-                sasl.gl.drawWideLine(355, 108, 575, 108, 3, vhf_cursor_box_cl)
-                sasl.gl.drawArc ( 355, 190, 0, 3, 90, 90, vhf_cursor_box_cl)
-                sasl.gl.drawArc ( 575, 190, 0, 3, 0, 90, vhf_cursor_box_cl)
-                sasl.gl.drawArc ( 355, 109, 0, 3, 180, 90, vhf_cursor_box_cl)
-                sasl.gl.drawArc ( 575, 109, 0, 3, 270, 90, vhf_cursor_box_cl)
-            end
+            --DRAW HF CURSOR------------------------------------------------------------------------------------------------------------------------------------------------
+            draw_hf_curosr()
+            
         elseif get(DRAIMS_current_page) == 6 then--nav page
             sasl.gl.drawText(A320_panel_font, 560, 344, "ILS", 50, false, false, TEXT_ALIGN_RIGHT, ils_menu_cl)
             sasl.gl.drawText(A320_panel_font, 560, 244, "VOR", 50, false, false, TEXT_ALIGN_RIGHT, vor_menu_cl)
             sasl.gl.drawText(A320_panel_font, 560, 144, "ADF", 50, false, false, TEXT_ALIGN_RIGHT, adf_menu_cl)
 
-            --draw nav cursor
-            sasl.gl.drawWideLine(355, nav_cusor_y1_pos, 575, nav_cusor_y1_pos, 3, nav_cursor_box_cl)
-            sasl.gl.drawWideLine(354, nav_cusor_y3_pos, 354, nav_cusor_y2_pos, 3, nav_cursor_box_cl)
-            sasl.gl.drawWideLine(577, nav_cusor_y3_pos, 577, nav_cusor_y2_pos, 3, nav_cursor_box_cl)
-            sasl.gl.drawWideLine(355, nav_cusor_y4_pos, 575, nav_cusor_y4_pos, 3, nav_cursor_box_cl)
-            sasl.gl.drawArc ( 355, nav_cusor_y2_pos, 0, 3, 90, 90, nav_cursor_box_cl)
-            sasl.gl.drawArc ( 575, nav_cusor_y2_pos, 0, 3, 0, 90, nav_cursor_box_cl)
-            sasl.gl.drawArc ( 355, nav_cusor_y3_pos, 0, 3, 180, 90, nav_cursor_box_cl)
-            sasl.gl.drawArc ( 575, nav_cusor_y3_pos, 0, 3, 270, 90, nav_cursor_box_cl)
-
-            sasl.gl.drawText(A320_panel_font, 380, nav_cusor_text_y_pos, nav_cursor_l_b_text, 28, false, false, TEXT_ALIGN_LEFT, nav_cursor_l_b_text_cl)
-            sasl.gl.drawText(A320_panel_font, 550, nav_cusor_text_y_pos, nav_cursor_r_b_text, 28, false, false, TEXT_ALIGN_RIGHT, nav_cursor_r_b_text_cl)
-
-            --cursor movement indicator
-            if get(DRAIMS_NAV_cursor_pos) == 3 or get(DRAIMS_NAV_cursor_pos) == 2 then
-                sasl.gl.drawTriangle(362, nav_cursor_up_arrow_y1_pos, 370, nav_cursor_up_arrow_y2_pos, 378, nav_cursor_up_arrow_y1_pos, DRAIMS_WHITE)
-            end
-            sasl.gl.drawWideLine(370, nav_cusor_arrow_stick_y1_pos, 370, nav_cusor_arrow_stick_y2_pos, 4, DRAIMS_WHITE)
-            if get(DRAIMS_NAV_cursor_pos) == 1 or get(DRAIMS_NAV_cursor_pos) == 2 then
-                sasl.gl.drawTriangle(362, nav_cursor_down_arrow_y1_pos, 370, nav_cursor_down_arrow_y2_pos, 378, nav_cursor_down_arrow_y1_pos, DRAIMS_WHITE)
-            end
-
-            sasl.gl.drawTexture (draims_speaker_img, 380, nav_cusor_speaker_y_pos, 35, 42, {1, 1, 1, nav_cusor_speaker_alpha})
+            --DRAW NAV CURSOR-----------------------------------------------------------------------------------------------------------------------------------------------
+            draw_nav_cursor()
 
         elseif get(DRAIMS_current_page) == 7 then--ils page
             if (string.sub(Fwd_string_fill(tostring(get(NAV_1_freq_Mhz)), "0", 3) .. "." .. Fwd_string_fill(tostring(get(NAV_1_freq_10khz)), "0", 2), 5, 5) ~= "1" and
@@ -1753,16 +1800,7 @@ function draw()
             sasl.gl.drawText(A320_panel_font_MONO, 68, 25, Fwd_string_fill(tostring(get(Sqwk_code)), "0", 4), 45, false, false, TEXT_ALIGN_CENTER, DRAIMS_WHITE)
         end
 
-        --draw ident alert box
-        if get(Sqwk_identifying) == 1 then
-            sasl.gl.drawWideLine(15, 66, 119, 66, 3, ident_box_cl)
-            sasl.gl.drawWideLine(14, 20, 14, 64, 3, ident_box_cl)
-            sasl.gl.drawWideLine(121, 20, 121, 64, 3, ident_box_cl)
-            sasl.gl.drawWideLine(15, 19, 119, 19, 3, ident_box_cl)
-            sasl.gl.drawArc ( 15, 64, 0, 3, 90, 90, ident_box_cl)
-            sasl.gl.drawArc ( 119, 64, 0, 3, 0, 90, ident_box_cl)
-            sasl.gl.drawArc ( 15, 20, 0, 3, 180, 90, ident_box_cl)
-            sasl.gl.drawArc ( 119, 20, 0, 3, 270, 90, ident_box_cl)
-        end
+        --draw the ident alert box
+        draw_ident_alert_box()
     end
 end
