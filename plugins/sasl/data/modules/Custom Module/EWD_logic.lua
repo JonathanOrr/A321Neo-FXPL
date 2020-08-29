@@ -220,6 +220,10 @@ local function update_right_list()
         list_right:put(COL_INDICATION_BLINKING, "ACARS MSG")    
     end
     
+    if get(VHF_3_monitor_selected) == 1 then
+        list_right:put(COL_INDICATION_BLINKING, "VHF 3 VOICE")    
+    end
+    
     -- TCAS
     if get(DRAIMS_Sqwk_mode) < 2 then
         list_right:put(COL_INDICATION, "TCAS STBY")
@@ -227,9 +231,10 @@ local function update_right_list()
         list_right:put(COL_INDICATION, "TCAS TA ONLY")
     end
     
+    
+    
     -- TODO Audio: AUDIO 3 XFRD displayed green if audio switching selector not in NORM
     -- TODO Acars: ACARS CALL (pulsing green) if received an ACARS message requesting voice conversation
-    -- TODO Acars: VHF 3 VOICE (pulsing green) if VHF 3 in voice mode and ACARS comm interrupted (?)
 
     -- TODO Autobrake fail: AUTO BRK OFF (any flight phase, amber)
 

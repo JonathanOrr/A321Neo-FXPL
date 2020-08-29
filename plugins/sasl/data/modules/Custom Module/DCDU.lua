@@ -425,7 +425,11 @@ local function update_satcom_vhf_connection()
     end
     
     if math.random (1, 10000) == 5000 then -- Random VHF disconnection
-        is_vhf_connected = 0    
+        is_vhf_connected = 0
+    end
+
+    if get(VHF_3_monitor_selected) == 1 then
+        is_vhf_connected = 0
     end
 
     set(Acars_status, is_satcom_connected + is_vhf_connected) -- 0 not connected, 1 only satcom, 2 only vhf, 3 both
