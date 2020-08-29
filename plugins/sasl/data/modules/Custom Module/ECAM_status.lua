@@ -88,10 +88,20 @@ ecam_sts = {
     
         local messages = {}
         
+        local appr_p_10_landing = false
+        
         if get(FBW_status) < 2 then -- altn or direct law
             if get(FBW_status) == 0 then -- direct law
                 table.insert(messages, { text="MAN PITCH TRIM...........USE", color=ECAM_BLUE})
             end
+            appr_p_10_landing = true
+        end
+        
+        if get(Nosewheel_Steering_and_AS) == 0 then
+            appr_p_10_landing = true
+        end
+        
+        if appr_p_10_landing then
             table.insert(messages, {text="APPR SPD...........VREF + 10", color=ECAM_BLUE})
             table.insert(messages, {text="LDG DIST PROC..........APPLY", color=ECAM_BLUE})
         end
@@ -121,6 +131,10 @@ ecam_sts = {
             table.insert(messages, "INCREASED FUEL CONSUMP")        
         end
     
+        if get(Nosewheel_Steering_and_AS) == 0 or get(FAILURE_gear) == 2 then
+            table.insert(messages, "CAT 3 SINGLE ONLY")
+        end
+    
         return messages
     end,
     
@@ -138,9 +152,10 @@ ecam_sts = {
         local messages = {}
         
         local inop_cat3_dual = false
+        local inop_steer = false
         
         -- AIR
-        put_inop_sys_msg_2(messages, Left_bleed_avil, Right_bleed_avil, "PACK")
+        --put_inop_sys_msg_2(messages, Left_bleed_avil, Right_bleed_avil, "PACK")
         
         -- ELAC / SEC / FAC
         put_inop_sys_msg_2(messages, ELAC_1, ELAC_2, "ELAC")
@@ -164,16 +179,31 @@ ecam_sts = {
         if get(FAILURE_gear) == 1 then
             table.insert(messages, "L/G RETRACT")
         elseif get(FAILURE_gear) == 2 then
-            table.insert(messages, "N.W. STEER")
+            inop_steer = true
             inop_cat3_dual = true
         end
         
-        if inop_cat3_dual then
-            table.insert(messages, "CAT 3 DUAL")        
-        end
 
         if get(FAILURE_TCAS) == 6 then
             table.insert(messages, "TCAS")                
+        end
+
+        if get(Nosewheel_Steering_and_AS) == 0 then
+            table.insert(messages, "ANTI SKID")
+            table.insert(messages, "BSCU CH 1")
+            table.insert(messages, "BSCU CH 2")
+            inop_steer = true
+            inop_cat3_dual = true            
+        end
+
+
+        -- LEAVE THESE AT THE LAST
+        if inop_cat3_dual then
+            table.insert(messages, "CAT 3 DUAL")        
+        end
+        
+        if inop_steer then
+            table.insert(messages, "N.W. STEER")
         end
 
         return messages
@@ -197,6 +227,4 @@ ecam_sts = {
     end
     
 }
-
-
 

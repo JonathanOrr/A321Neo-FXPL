@@ -50,6 +50,7 @@ local left_messages_list = {
     -- Cautions
     MessageGroup_FBW_ALTN_DIRECT_LAW,
     MessageGroup_BRAKES_HOT,
+    MessageGroup_ADKIS_NWS,
     MessageGroup_APU_SHUTDOWN,
     MessageGroup_GEAR_NOT_UPLOCKED,
     MessageGroup_BLEED_OFF,

@@ -104,6 +104,8 @@ MessageGroup_BRAKES_HOT = {
 
     priority = PRIORITY_LEVEL_2,
 
+    sd_page = ECAM_PAGE_WHEEL,
+
     messages = {
         Message_BRAKES_HOT,
         Message_BRAKES_FAN,
@@ -123,6 +125,69 @@ MessageGroup_BRAKES_HOT = {
     is_inhibited = function(self)
         -- During takeoff and landing at high speed
         return get(EWD_flight_phase) == PHASE_ABOVE_80_KTS or get(EWD_flight_phase) == PHASE_TOUCHDOWN
+    end
+
+}
+
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: A/SKID/NWS OFF
+----------------------------------------------------------------------------------------------------
+Message_ADKIS_NWS = {
+    text = function(self)
+        return "       ANTI SKID/NWS OFF"
+    end,
+
+    color = function(self)
+        return COL_CAUTION
+    end,
+
+    is_active = function(self)
+      return true -- Always active when group is active
+    end
+}
+
+Message_ADKIS_MAX_PRESS = {
+    text = function(self)
+        return "MAX BRK PR.......1000 PSI"
+    end,
+
+    color = function(self)
+        return COL_ACTIONS
+    end,
+
+  is_active = function(self)
+      return true
+  end
+}
+
+MessageGroup_ADKIS_NWS = {
+
+    shown = false,
+
+    text  = function(self)
+                return "BRAKES"
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_WHEEL,
+    
+    messages = {
+        Message_ADKIS_NWS,
+        Message_ADKIS_MAX_PRESS,
+    },
+
+    is_active = function(self)
+        return get(Nosewheel_Steering_and_AS) == 0
+    end,
+
+    is_inhibited = function(self)
+        -- During takeoff and landing at high speed
+        return get(EWD_flight_phase) == PHASE_ABOVE_80_KTS or get(EWD_flight_phase) == PHASE_LIFTOFF
     end
 
 }
