@@ -1,5 +1,5 @@
 [A32NX-A321NEO INFO]: Initializing...
-[A32NX-A321NEO INFO]: Path to module: D:\SteamLibrary/steamapps/common/X-Plane 11/Aircraft/A321neo master/plugins/sasl/data/modules/main.lua
+[A32NX-A321NEO INFO]: Path to module: D:\Documents/programs/X-Plane 11/Aircraft/Chai112/A321Neo-FXPL/plugins/sasl/data/modules/main.lua
 [A32NX-A321NEO INFO]: Loading module...
 [A32NX-A321NEO INFO]: [LUA]: loading	module
 [A32NX-A321NEO INFO]: [LUA]: including	cockpit_commands.lua

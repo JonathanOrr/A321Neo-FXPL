@@ -1,5 +1,5 @@
-position = {75,1690,320,285}
-size = {320, 285}
+position = {0, 0, 4096, 2048}
+size = {4096, 2048}
 
 local NIL = 0 -- used for input return and checking
 local NIL_UNIQUE = "unique-nil" -- used for input return and checking
@@ -322,6 +322,7 @@ local mcdu_debug_pointer = createGlobalPropertys("a321neo/cockpit/mcdu/mcdu_debu
 local mcdu_debug_dat = createGlobalPropertys("a321neo/cockpit/mcdu/mcdu_debug_dat")
 
 local mcdu_debug_busy = createGlobalPropertyi("a321neo/cockpit/mcdu/mcdu_debug_busy")
+local mcdu_irs_aligned = createGlobalPropertyi("a321neo/cockpit/mcdu/mcdu_irs_aligned", 1)
 
 --mcdu entry inputs
 local mcdu_inp = {}
@@ -552,6 +553,8 @@ end
 
 --drawing the MCDU display
 function draw()
+    sasl.gl.drawRectangle(1282, 1449, 560, 530, {0,0,0})
+    --[[
     if hokey_pokey then
         colorize()
     end
@@ -564,7 +567,6 @@ function draw()
         --Mcdu_disp_color = MCDU_DISP_COLOR
         --Mcdu_draw_lines = draw_lines
 
-        sasl.gl.drawRectangle(0, 0, 320 , 285, MCDU_DISP_COLOR["black"])
         local draw_size = {MCDU_DRAW_SIZE.w, MCDU_DRAW_SIZE.h} -- for debugging
         --sasl.gl.drawText(B612MONO_regular, draw_size[1]/2-140, draw_size[2]/2+108, mcdu_dat_title.txt, 20, false, false,TEXT_ALIGN_LEFT, MCDU_DISP_COLOR[mcdu_dat_title_L.col])
 
@@ -577,6 +579,7 @@ function draw()
         --drawing scratchpad
         sasl.gl.drawText(B612MONO_regular, draw_size[1]/2-140, draw_size[2]/2-132, mcdu_entry, 20, false, false, TEXT_ALIGN_LEFT, MCDU_DISP_COLOR["white"])
     end
+    --]]
 end
 
 --[[
@@ -1181,6 +1184,7 @@ function (phase)
         --is the irs not aligned?
         if fmgs_dat["irs aligned"] == "show" then
             fmgs_dat["irs aligned"] = "hide"    --hide irs align>
+            set(mcdu_irs_aligned, 1)
             fmgs_dat["latlon sel"] = "nil"      --stop lat/lon selection
         end
         mcdu_open_page(400) -- reload
