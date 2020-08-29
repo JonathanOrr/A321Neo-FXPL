@@ -25,16 +25,16 @@ local NIL_UNIQUE = "unique-nil" -- used for input return and checking
 --
 --
 --]]
-local MCDU_DRAW_SIZE = {w = size[1], h = size[2]} -- idk if size table is required by anything else, this is for internal reference
+local MCDU_DRAW_SIZE = {w = 320, h = 285} -- idk if size table is required by anything else, this is for internal reference
 
 --define the const size, align and row.
 local MCDU_DIV_SIZE = {"s", "l"}
-local MCDU_DIV_ALIGN = {"L", "C", "R"} -- TODO: removed center
+local MCDU_DIV_ALIGN = {"L", "R"}
 local MCDU_DIV_ROW = {1,2,3,4,5,6}
 
 --line spacing
 local MCDU_DRAW_OFFSET = {x = 7, y = 240} -- starting offset for line drawing
-local MCDU_DRAW_SPACING = {x = 156, y = -18.5} -- change in offset per line drawn
+local MCDU_DRAW_SPACING = {x = 308, y = -18.5} -- change in offset per line drawn
 local MCDU_DRAW_TEXT_SIZE = {s = 12, l = 20} -- font size
 
 --reference table for drawing
@@ -59,7 +59,6 @@ local MCDU_DISP_TEXT_SPACING =
 local MCDU_DISP_TEXT_ALIGN =
 {
     ["L"] = TEXT_ALIGN_LEFT,
-    ["C"] = TEXT_ALIGN_CENTER,
     ["R"] = TEXT_ALIGN_RIGHT,
 }
 
@@ -554,7 +553,6 @@ end
 --drawing the MCDU display
 function draw()
     sasl.gl.drawRectangle(1282, 1449, 560, 530, {0,0,0})
-    --[[
     if hokey_pokey then
         colorize()
     end
@@ -573,13 +571,14 @@ function draw()
         --draw all horizontal lines
         for i,line in ipairs(draw_lines) do
             sasl.gl.setFontGlyphSpacingFactor(B612MONO_regular, line.disp_spacing)
+            print(line.disp_text)
+            print(line.disp_x)
             sasl.gl.drawText(B612MONO_regular, line.disp_x, line.disp_y, line.disp_text, line.disp_text_size, false, false, line.disp_text_align, line.disp_color)
         end
 
         --drawing scratchpad
         sasl.gl.drawText(B612MONO_regular, draw_size[1]/2-140, draw_size[2]/2-132, mcdu_entry, 20, false, false, TEXT_ALIGN_LEFT, MCDU_DISP_COLOR["white"])
     end
-    --]]
 end
 
 --[[
