@@ -157,7 +157,12 @@ MessageGroup_IRS_ALIGN = {
     messages = {
         {
             text = function(self)
-                local minutes = math.floor(get(Adirs_time_to_align) / 60)
+                local time_left_irs_1 = get(TIME) - get(Adirs_irs_begin_time[1])
+                local time_left_irs_2 = get(TIME) - get(Adirs_irs_begin_time[2])
+                local time_left_irs_3 = get(TIME) - get(Adirs_irs_begin_time[3])
+                local time_max = math.max(math.max(time_left_irs_1, time_left_irs_2), time_left_irs_3)
+            
+                local minutes = math.floor(get(time_max) / 60)
                 if get(EWD_flight_phase) <= 2 then
                     return "IRS IN ALIGN " .. minutes .. " MN"
                 else
@@ -179,7 +184,10 @@ MessageGroup_IRS_ALIGN = {
 
     -- Method to check if this message group is active
     is_active = function(self)
-        return get(Adirs_irs_aligned) == 0 
+        irs1_is_aligning = get(TIME) - get(Adirs_irs_begin_time[1]) < get(Adirs_total_time_to_align)
+        irs2_is_aligning = get(TIME) - get(Adirs_irs_begin_time[2]) < get(Adirs_total_time_to_align)
+        irs3_is_aligning = get(TIME) - get(Adirs_irs_begin_time[3]) < get(Adirs_total_time_to_align)
+        return irs1_is_aligning or irs2_is_aligning or irs3_is_aligning
     end,
 
     -- Method to check if this message is currently inhibithed

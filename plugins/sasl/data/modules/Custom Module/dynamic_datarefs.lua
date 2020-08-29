@@ -102,9 +102,16 @@ AC_bus_2_on = createGlobalPropertyi("a321neo/dynamics/electrical/ac_bus_2_on", 1
 Gen_1_on = createGlobalPropertyi("a321neo/dynamics/electrical/gen_1_on", 1, false, true, false)
 Gen_2_on = createGlobalPropertyi("a321neo/dynamics/electrical/gen_2_on", 1, false, true, false)
 --ADIRS
-Adirs_sys_on = createGlobalPropertyi("a321neo/cockpit/adris/adirs_on", 0, false, true, false)
-Adirs_irs_aligned = createGlobalPropertyi("a321neo/cockpit/adris/irs_aligned", 0, false, true, false)
-Adirs_time_to_align = createGlobalPropertyf("a321neo/cockpit/adris/timetoalign", 0, false, true, false)
+Adirs_irs_is_aligned = {}
+Adirs_irs_is_aligned[1] = createGlobalPropertyi("a321neo/cockpit/ADIRS/irs_1_aligned", 0, false, true, false)
+Adirs_irs_is_aligned[2] = createGlobalPropertyi("a321neo/cockpit/ADIRS/irs_2_aligned", 0, false, true, false)
+Adirs_irs_is_aligned[3] = createGlobalPropertyi("a321neo/cockpit/ADIRS/irs_3_aligned", 0, false, true, false)
+Adirs_total_time_to_align = createGlobalPropertyf("a321neo/cockpit/ADIRS/total_time", 0, false, true, false)  -- Total time (depending on latitude, to align the IRS)
+Adirs_irs_begin_time = {}
+Adirs_irs_begin_time[1] = createGlobalPropertyf("a321neo/cockpit/ADIRS/irs_1_time_begin_align", 0, false, true, false)  -- Time from the begin of alignment of IRS1
+Adirs_irs_begin_time[2] = createGlobalPropertyf("a321neo/cockpit/ADIRS/irs_2_time_begin_align", 0, false, true, false)  -- Time from the begin of alignment of IRS2
+Adirs_irs_begin_time[3] = createGlobalPropertyf("a321neo/cockpit/ADIRS/irs_3_time_begin_align", 0, false, true, false)  -- Time from the begin of alignment of IRS3
+
 -- EWD
 EWD_left_memo = {}
 EWD_left_memo_group = {}

@@ -1,67 +1,129 @@
---a321neo dataref
-local adirs_ir_switch_state = {} -- 0-off 1-nav 2-att
-local adirs_ir_align = {} -- 0-off 1-align
-
-local TIME_TO_ALIGN = 420 --average 420 seconds (7 min), we can do calculation based on latlon alignment delays later
-local TIME_TO_ONBAT = 5 --seven seconds before onbat light extinguishes
-
+----------------------------------------------------------------------------------------------------
+-- Constants
+----------------------------------------------------------------------------------------------------
+local TIME_TO_ONBAT = 5 --five seconds before onbat light extinguishes if AC available
+local TIME_TO_START_ADR = 1 -- 1 second
+----------------------------------------------------------------------------------------------------
+-- Local datarefs
+----------------------------------------------------------------------------------------------------
 local adirs_onbat = createGlobalPropertyi("a321neo/cockpit/adris/onbat", 0, false, true, false)
 local adirs_align = createGlobalPropertyi("a321neo/cockpit/adris/align", 0, false, true, false)
-
 local adirs_time_to_onbat = createGlobalPropertyf("a321neo/cockpit/adris/timetoonbat", 0, false, true, false)
 
-for i = 1,3 do
-  adirs_ir_switch_state[i] = createGlobalPropertyi("a321neo/cockpit/adris/ir" .. i .. "_switch_state", 0, false, true, false)
-  adirs_ir_align[i] = createGlobalPropertyi("a321neo/cockpit/adris/ir" .. i .. "_align", 0, false, true, false)
-end
+----------------------------------------------------------------------------------------------------
+-- Global/Local variables
+----------------------------------------------------------------------------------------------------
+local is_adr_ok = {false, false, false}
+local adr_time_begin = {0,0,0}
+local adr_switch_status = {false,false,false}
 
-function update ()
-    set(Adirs_sys_on, 0)
-    for i = 1,3 do
-        if get(adirs_ir_switch_state[i]) ~= 0 then --is the ADIRS not set to OFF?
-            set(Adirs_sys_on, 1) --that means the ADIRS is online.
-        end
-    end
+----------------------------------------------------------------------------------------------------
+-- Registering commands
+----------------------------------------------------------------------------------------------------
+sasl.registerCommandHandler (ADIRS_cmd_ADR1, 0, function(phase) ADIRS_handler_toggle_ADR(phase, 1) end )
+sasl.registerCommandHandler (ADIRS_cmd_ADR2, 0, function(phase) ADIRS_handler_toggle_ADR(phase, 2) end )
+sasl.registerCommandHandler (ADIRS_cmd_ADR3, 0, function(phase) ADIRS_handler_toggle_ADR(phase, 3) end )
+ 
 
-    if get(Adirs_sys_on) == 1 then --ADIRS are on
-        if get(Adirs_time_to_align) ~= 0 then --if ADIRS are still aligning
-            set(Adirs_time_to_align, get(Adirs_time_to_align) - get(DELTA_TIME)) --reduce their time to align
-            set(adirs_time_to_onbat, get(adirs_time_to_onbat) - get(DELTA_TIME)) --reduce their time to align
-        end
-    else
-        set(Adirs_time_to_align, TIME_TO_ALIGN) --set their time to align back to max time
-        set(adirs_time_to_onbat, TIME_TO_ONBAT) --set their time to align back to max time
-    end
+----------------------------------------------------------------------------------------------------
+-- Functions
+----------------------------------------------------------------------------------------------------
 
-    if get(Adirs_time_to_align) > 0 then
-        set(adirs_align, 1)
-    else
-        set(adirs_align, 0)
-    end
-    if get(adirs_time_to_onbat) > 0 then
-        set(adirs_onbat, 1)
-    else
-        set(adirs_onbat, 0)
-    end
+local function get_time_to_align()
 
     --add function for linear interpolation (source: https://codea.io/talk/discussion/7448/linear-interpolation)
     function lerp(pos1, pos2, perc)
         return (1-perc)*pos1 + perc*pos2 -- Linear Interpolation
     end
---set hard values for latitudes between 60 and 70.2 and 70.2 and 78.25 and interpolate for the rest
-    if get(Aircraft_lat) >= 60 and get(Aircraft_lat) < 70.2 then
-        set(TIME_TO_ALIGN, 600)
-    elseif get(Aircraft_lat) >= 70.2 and get(Aircraft_lat) <= 78.25 then
-        set(TIME_TO_ALIGN, 1020)
-    elseif get(Aircraft_lat) >= 0 and get(Aircraft_lat) < 60  then
-        set(TIME_TO_ALIGN, lerp(300, 600, (get(Aircraft_lat) / 60)))
-    elseif get(Aircraft_lat) <= -60 and get(Aircraft_lat) > -70.2 then
-        set(TIME_TO_ALIGN, 60)
-    elseif get(Aircraft_lat) <= -70.2 and get(Aircraft_lat) >= -78.25 then
-        set(TIME_TO_ALIGN, 1020)
-    elseif get(Aircraft_lat) < 0 and get(Aircraft_lat) > -60 then
-        set(TIME_TO_ALIGN, lerp(300, 600, (get(Aircraft_lat) / -60)))
-    else set(TIME_TO_ALIGN, nil)
-        logInfo("Latitude is greater than 78.25- too high for IRS alignment")
+    
+    --set hard values for latitudes between 60 and 70.2 and 70.2 and 78.25 and interpolate for the rest
+    local lat = get(Aircraft_lat)
+    if lat >= 60 and lat < 70.2 then
+        return 600
+    elseif lat >= 70.2 and get(Aircraft_lat) <= 78.25 then
+        return 1020
+    elseif lat >= 0 and lat < 60  then
+        return lerp(300, 600, (lat / 60))
+    elseif lat <= -60 and lat > -70.2 then
+        return 60
+    elseif lat <= -70.2 and lat >= -78.25 then
+        return 1020
+    elseif lat < 0 and lat > -60 then
+        return lerp(300, 600, (get(Aircraft_lat) / -60))
+    else
+        return nil -- Latitude is greater than 78.25- too high for IRS alignment
     end
+end
+
+local function update_status_adrs(i)
+
+    is_adr_ok[i] = false
+
+    if adr_switch_status[i] then
+        -- ADR is on
+    
+        if get(ADIRS_rotary_btn[i]) > 0 then
+            -- Corresponding ADRIS rotary button is NAV or ATT (doesn't matter for ADRs)
+
+            if get(FAILURE_ADR[i]) == 1 then
+                -- Failed ADR, just switch on the button
+                set(ADIRS_light_ADR[i], 2)
+            elseif adr_time_begin[i] > 0 then
+                if get(TIME) - adr_time_begin[i] > TIME_TO_START_ADR then
+                   -- After TIME_TO_START_ADR, the ADR changes the status to ON
+                   is_adr_ok[i] = true
+                   set(ADIRS_light_ADR[i], 0)
+                end
+            else
+                -- ADIRS rotary button just switched to ATT or NAV, let's update the time
+                -- of the beginning of aligmnet
+                adr_time_begin[i] = get(TIME)
+                set(ADIRS_light_ADR[i], 2)
+            end
+        else
+            -- ON but no aligned
+            if get(FAILURE_ADR[i]) == 1 then
+                set(ADIRS_light_ADR[i], 2)
+            else
+                set(ADIRS_light_ADR[i], 0)
+            end
+        end
+    elseif get(FAILURE_ADR[i]) == 1 then
+        -- ADR failed and switched OFF
+        set(ADIRS_light_ADR[i], 3)
+    else
+        -- ADR switched OFF (but working)
+        set(ADIRS_light_ADR[i], 1)
+    end    
+    
+end
+
+local function update_adrs()
+    -- ADRs are quite simple:
+    -- The pilot turn the rotary switch to NAV, FAULT illuminates and after 1 second the ADR is available
+    -- ATT position does not affect the ADRs
+
+    update_status_adrs(1)
+    update_status_adrs(2)
+    update_status_adrs(3)
+
+end
+
+function ADIRS_handler_toggle_ADR(phase, n)
+    if phase ~= SASL_COMMAND_BEGIN then
+        return
+    end
+
+    adr_switch_status[n] = not adr_switch_status[n]
+end
+
+----------------------------------------------------------------------------------------------------
+-- update()
+----------------------------------------------------------------------------------------------------
+
+function update ()
+
+    set(Adirs_total_time_to_align, get_time_to_align())
+
+    update_adrs()
 end

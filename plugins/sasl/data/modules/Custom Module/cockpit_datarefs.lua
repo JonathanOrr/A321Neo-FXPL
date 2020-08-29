@@ -181,14 +181,17 @@ DCDU_recall_mode = createGlobalPropertyi("a321neo/cockpit/DCDU/recall_mode" , 0,
 
 -- ADIRS
 ADIRS_light_onbat   = createGlobalPropertyi("a321neo/cockpit/ADIRS/on_bat", 0, false, true, false)   --0: OFF, 1: ON
-ADIRS_light_IR1   = createGlobalPropertyi("a321neo/cockpit/ADIRS/buttons/light_IR1", 0, false, true, false)   --00: No lights, 01: [OFF], 10: FAULT, 11 [OFF] + FAULT
-ADIRS_light_IR2   = createGlobalPropertyi("a321neo/cockpit/ADIRS/buttons/light_IR2", 0, false, true, false)   --00: No lights, 01: [OFF], 10: FAULT, 11 [OFF] + FAULT
-ADIRS_light_IR3   = createGlobalPropertyi("a321neo/cockpit/ADIRS/buttons/light_IR3", 0, false, true, false)   --00: No lights, 01: [OFF], 10: FAULT, 11 [OFF] + FAULT
-ADIRS_light_ADR1  = createGlobalPropertyi("a321neo/cockpit/ADIRS/buttons/light_ADR1", 0, false, true, false)   --00: No lights, 01: [OFF], 10: FAULT, 11 [OFF] + FAULT
-ADIRS_light_ADR2  = createGlobalPropertyi("a321neo/cockpit/ADIRS/buttons/light_ADR2", 0, false, true, false)   --00: No lights, 01: [OFF], 10: FAULT, 11 [OFF] + FAULT
-ADIRS_light_ADR3  = createGlobalPropertyi("a321neo/cockpit/ADIRS/buttons/light_ADR3", 0, false, true, false)   --00: No lights, 01: [OFF], 10: FAULT, 11 [OFF] + FAULT
+ADIRS_light_IR = {}
+ADIRS_light_ADR = {}
+ADIRS_light_IR[1]   = createGlobalPropertyi("a321neo/cockpit/ADIRS/buttons/light_IR1", 0, false, true, false)   --00: No lights, 01: [OFF], 10: FAULT, 11 [OFF] + FAULT
+ADIRS_light_IR[2]   = createGlobalPropertyi("a321neo/cockpit/ADIRS/buttons/light_IR2", 0, false, true, false)   --00: No lights, 01: [OFF], 10: FAULT, 11 [OFF] + FAULT
+ADIRS_light_IR[3]   = createGlobalPropertyi("a321neo/cockpit/ADIRS/buttons/light_IR3", 0, false, true, false)   --00: No lights, 01: [OFF], 10: FAULT, 11 [OFF] + FAULT
+ADIRS_light_ADR[1]  = createGlobalPropertyi("a321neo/cockpit/ADIRS/buttons/light_ADR1", 0, false, true, false)   --00: No lights, 01: [OFF], 10: FAULT, 11 [OFF] + FAULT
+ADIRS_light_ADR[2]  = createGlobalPropertyi("a321neo/cockpit/ADIRS/buttons/light_ADR2", 0, false, true, false)   --00: No lights, 01: [OFF], 10: FAULT, 11 [OFF] + FAULT
+ADIRS_light_ADR[3]  = createGlobalPropertyi("a321neo/cockpit/ADIRS/buttons/light_ADR3", 0, false, true, false)   --00: No lights, 01: [OFF], 10: FAULT, 11 [OFF] + FAULT
 
-ADIRS_rotary_btn_1  = createGlobalPropertyi("a321neo/cockpit/ADIRS/buttons/mode_1", 0, false, true, false)   -- 0 OFF, 1 NAV, 2 ATT
-ADIRS_rotary_btn_2  = createGlobalPropertyi("a321neo/cockpit/ADIRS/buttons/mode_2", 0, false, true, false)   -- 0 OFF, 1 NAV, 2 ATT
-ADIRS_rotary_btn_3  = createGlobalPropertyi("a321neo/cockpit/ADIRS/buttons/mode_3", 0, false, true, false)   -- 0 OFF, 1 NAV, 2 ATT
+ADIRS_rotary_btn = {}
+ADIRS_rotary_btn[1]  = createGlobalPropertyi("a321neo/cockpit/ADIRS/buttons/mode_1", 0, false, true, false)   -- 0 OFF, 1 NAV, 2 ATT
+ADIRS_rotary_btn[2]  = createGlobalPropertyi("a321neo/cockpit/ADIRS/buttons/mode_2", 0, false, true, false)   -- 0 OFF, 1 NAV, 2 ATT
+ADIRS_rotary_btn[3]  = createGlobalPropertyi("a321neo/cockpit/ADIRS/buttons/mode_3", 0, false, true, false)   -- 0 OFF, 1 NAV, 2 ATT
 
