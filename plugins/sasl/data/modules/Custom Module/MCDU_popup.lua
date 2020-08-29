@@ -183,7 +183,8 @@ function draw()
                 for i,line in ipairs(MCDU_get_popup("draw lines")) do
                     sasl.gl.setFontGlyphSpacingFactor(B612MONO_regular, line.disp_spacing)
                     --sasl.gl.drawText(B612MONO_regular, (line.disp_x * 2) + 98, (line.disp_y * 2) + 345, line.disp_text, line.disp_text_size * 1.2, false, false, line.disp_text_align, line.disp_color)
-                    sasl.gl.drawText(B612MONO_regular, (line.disp_x * 1.83) + 140, (line.disp_y * 2.03) + 700, line.disp_text, line.disp_text_size * 1.7, false, false, line.disp_text_align, line.disp_color)
+                    scale_factor = 1.07
+                    sasl.gl.drawText(B612MONO_regular, (line.disp_x * scale_factor) + 140, (line.disp_y * scale_factor) + 700, line.disp_text, line.disp_text_size * scale_factor, false, false, line.disp_text_align, line.disp_color)
                 end
             end
             --drawing scratchpad

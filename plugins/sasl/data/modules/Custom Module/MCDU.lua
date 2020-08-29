@@ -1,5 +1,5 @@
-position = {0, 0, 4096, 2048}
-size = {4096, 2048}
+position = {1282, 1449, 560, 530}
+size = {560, 530}
 
 local NIL = 0 -- used for input return and checking
 local NIL_UNIQUE = "unique-nil" -- used for input return and checking
@@ -25,17 +25,15 @@ local NIL_UNIQUE = "unique-nil" -- used for input return and checking
 --
 --
 --]]
-local MCDU_DRAW_SIZE = {w = size[1], h = size[2]} -- idk if size table is required by anything else, this is for internal reference
 
 --define the const size, align and row.
 local MCDU_DIV_SIZE = {"s", "l"}
-local MCDU_DIV_ALIGN = {"L", "C", "R"} -- TODO: removed center
+local MCDU_DIV_ALIGN = {"L", "R"}
 local MCDU_DIV_ROW = {1,2,3,4,5,6}
 
 --line spacing
-local MCDU_DRAW_OFFSET = {x = 7, y = 240} -- starting offset for line drawing
-local MCDU_DRAW_SPACING = {x = 156, y = -18.5} -- change in offset per line drawn
-local MCDU_DRAW_TEXT_SIZE = {s = 12, l = 20} -- font size
+local MCDU_DRAW_OFFSET = {x = 20, y = 420} -- starting offset for line drawing
+local MCDU_DRAW_SPACING = {x = 520, y = -35.3} -- change in offset per line drawn
 
 --reference table for drawing
 local MCDU_DISP_COLOR = 
@@ -46,22 +44,28 @@ local MCDU_DISP_COLOR =
     ["orange"] = {0.725, 0.521, 0.18},
     ["black"] = {0,0,0,1},
 }
+
+--font size
 local MCDU_DISP_TEXT_SIZE =
 {
-    ["s"] = MCDU_DRAW_TEXT_SIZE.s,
-    ["l"] = MCDU_DRAW_TEXT_SIZE.l,
+    ["s"] = 19.51,
+    ["l"] = 33.4,
 }
+
+--font glyph spacing
 local MCDU_DISP_TEXT_SPACING =
 {
-    ["s"] = 1.667,
-    ["l"] = 1.0,
+    ["s"] = 1.735,
+    ["l"] = 0.99,
 }
+
+--alignment
 local MCDU_DISP_TEXT_ALIGN =
 {
     ["L"] = TEXT_ALIGN_LEFT,
-    ["C"] = TEXT_ALIGN_CENTER,
     ["R"] = TEXT_ALIGN_RIGHT,
 }
+
 
 --fonts
 local B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
@@ -482,6 +486,14 @@ local function draw_dat(dat, draw_size, disp_x, disp_y, disp_text_align)
     table.insert(draw_lines, {disp_x = disp_x, disp_y = disp_y, disp_text = disp_text, disp_text_size = disp_text_size, disp_text_align = disp_text_align, disp_color = disp_color, disp_spacing = disp_spacing})
 end
 
+local function draw_get_x(align)
+    return MCDU_DRAW_OFFSET.x + (MCDU_DRAW_SPACING.x * (align - 1))
+end
+
+local function draw_get_y(line)
+    return MCDU_DRAW_OFFSET.y + (MCDU_DRAW_SPACING.y * (line - 1))
+end
+
 local function draw_update()
     -- clear all line which need to be drawn
     draw_lines = {}
@@ -494,11 +506,8 @@ local function draw_update()
             for k,draw_align in ipairs(MCDU_DIV_ALIGN) do
 
                 -- spacings
-                disp_x = MCDU_DRAW_OFFSET.x
-                disp_x = disp_x + (MCDU_DRAW_SPACING.x * (k - 1)) -- so -140, 0, 140
-
-                disp_y = MCDU_DRAW_OFFSET.y
-                disp_y = disp_y + (MCDU_DRAW_SPACING.y * draw_act_row) -- so 108, 90, 72
+                disp_x = draw_get_x(k)
+                disp_y = draw_get_y(draw_act_row)
 
                 -- text alignment
                 disp_text_align = MCDU_DISP_TEXT_ALIGN[draw_align]
@@ -518,10 +527,10 @@ local function draw_update()
 
     --draw title line
     if mcdu_dat_title[1] == nil then
-        draw_dat(mcdu_dat_title, "l", MCDU_DRAW_OFFSET.x, MCDU_DRAW_OFFSET.y + 20, MCDU_DISP_TEXT_ALIGN["L"])
+        draw_dat(mcdu_dat_title, "l", draw_get_x(1), draw_get_y(-0.5), MCDU_DISP_TEXT_ALIGN["L"])
     else
         for l,dat in pairs(mcdu_dat_title) do
-            draw_dat(dat, "l", MCDU_DRAW_OFFSET.x, MCDU_DRAW_OFFSET.y + 20, MCDU_DISP_TEXT_ALIGN["L"])
+            draw_dat(dat, "l", draw_get_x(1), draw_get_y(-0.5), MCDU_DISP_TEXT_ALIGN["L"])
         end
     end
 end
@@ -553,33 +562,26 @@ end
 
 --drawing the MCDU display
 function draw()
-    sasl.gl.drawRectangle(1282, 1449, 560, 530, {0,0,0})
-    --[[
+    --sasl.gl.drawRectangle(0, 0, 560, 530, {1,0,0})
     if hokey_pokey then
         colorize()
     end
     if get(Mcdu_enabled) == 1 then
-        --MCDU popup
-        --Mcdu_draw_ok = true
         MCDU_set_popup("draw lines", draw_lines)
         MCDU_set_popup("mcdu entry", mcdu_entry)
         MCDU_set_popup("enabled", true)
-        --Mcdu_disp_color = MCDU_DISP_COLOR
-        --Mcdu_draw_lines = draw_lines
-
-        local draw_size = {MCDU_DRAW_SIZE.w, MCDU_DRAW_SIZE.h} -- for debugging
-        --sasl.gl.drawText(B612MONO_regular, draw_size[1]/2-140, draw_size[2]/2+108, mcdu_dat_title.txt, 20, false, false,TEXT_ALIGN_LEFT, MCDU_DISP_COLOR[mcdu_dat_title_L.col])
 
         --draw all horizontal lines
         for i,line in ipairs(draw_lines) do
             sasl.gl.setFontGlyphSpacingFactor(B612MONO_regular, line.disp_spacing)
             sasl.gl.drawText(B612MONO_regular, line.disp_x, line.disp_y, line.disp_text, line.disp_text_size, false, false, line.disp_text_align, line.disp_color)
+            --                                                            1234566543210
+            --sasl.gl.drawText(B612MONO_regular, line.disp_x, line.disp_y, "aaaaaaaaaaaaa", line.disp_text_size, false, false, line.disp_text_align, line.disp_color)
         end
 
-        --drawing scratchpad
-        sasl.gl.drawText(B612MONO_regular, draw_size[1]/2-140, draw_size[2]/2-132, mcdu_entry, 20, false, false, TEXT_ALIGN_LEFT, MCDU_DISP_COLOR["white"])
+        --draw scratchpad
+        sasl.gl.drawText(B612MONO_regular, draw_get_x(1), draw_get_y(12), mcdu_entry, MCDU_DISP_TEXT_SIZE["l"], false, false, MCDU_DISP_TEXT_ALIGN["L"], MCDU_DISP_COLOR["white"])
     end
-    --]]
 end
 
 --[[
