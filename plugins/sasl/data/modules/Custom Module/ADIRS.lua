@@ -3,20 +3,13 @@
 ----------------------------------------------------------------------------------------------------
 local TIME_TO_ONBAT = 5 --five seconds before onbat light extinguishes if AC available
 local TIME_TO_START_ADR = 1 -- 1 second
-----------------------------------------------------------------------------------------------------
--- Local datarefs
-----------------------------------------------------------------------------------------------------
-local adirs_onbat = createGlobalPropertyi("a321neo/cockpit/adris/onbat", 0, false, true, false)
-
 
 ----------------------------------------------------------------------------------------------------
 -- Global/Local variables
 ----------------------------------------------------------------------------------------------------
-local is_adr_ok = {false, false, false}
 local adr_time_begin = {0,0,0}
 local adr_switch_status = {false,false,false}
 
-local is_irs_ok  = {false, false, false}
 local is_irs_att = {false, false, false}
 local ir_switch_status = {false,false,false}
 
@@ -62,7 +55,7 @@ end
 
 local function update_status_adrs(i)
 
-    is_adr_ok[i] = false
+    set(Adirs_adr_is_ok[i], 0)
 
     if adr_switch_status[i] then
         -- ADR is on
@@ -76,12 +69,13 @@ local function update_status_adrs(i)
             elseif adr_time_begin[i] > 0 then
                 if get(TIME) - adr_time_begin[i] > TIME_TO_START_ADR then
                    -- After TIME_TO_START_ADR, the ADR changes the status to ON
-                   is_adr_ok[i] = true
+                   set(Adirs_adr_is_ok[i], 1)
                    set(ADIRS_light_ADR[i], 0)
                 end
             else
                 -- ADIRS rotary button just switched to ATT or NAV, let's update the time
                 -- of the beginning of aligmnet
+                set(Adirs_total_time_to_align, get_time_to_align())
                 adr_time_begin[i] = get(TIME)
                 set(ADIRS_light_ADR[i], 2)
             end
@@ -106,7 +100,6 @@ end
 
 local function update_status_irs(i)
 
-    is_irs_ok[i]  = false
     is_irs_att[i] = false
 
     if ir_switch_status[i] then
@@ -121,10 +114,11 @@ local function update_status_irs(i)
             elseif get(Adirs_irs_begin_time[i]) > 0 then
                 if get(TIME) - get(Adirs_irs_begin_time[i]) > get(Adirs_total_time_to_align) then
                     -- Align finished
-                   is_irs_ok[i] = true
+                   set(Adirs_ir_is_ok,1)
                    set(ADIRS_light_IR[i], 0)
                 end
             else
+                set(Adirs_total_time_to_align, get_time_to_align())
                 -- ADIRS rotary button just switched to NAV
                 set(Adirs_irs_begin_time[i], get(TIME))
             end
@@ -140,7 +134,7 @@ local function update_status_irs(i)
         end
         
         if get(ADIRS_rotary_btn[i]) == 2 then
-            if is_irs_ok[i] == false then
+            if get(Adirs_ir_is_ok) == 0 then
                 is_irs_att[i] = true    -- ATT mode
             end
         end
@@ -191,20 +185,18 @@ end
 ----------------------------------------------------------------------------------------------------
 
 function update ()
-
-    set(Adirs_total_time_to_align, 20)
-
+    
     update_adrs()
     
     -- Check if Captain and FO ADRs is ok. It depends also on the pedestal switch
     local is_capt_adr_ok = 0
     local is_fo_adr_ok = 0
      
-    if (is_adr_ok[1] and get(ADIRS_source_rotary_ATHDG) ~= -1) or (is_adr_ok[3] and get(ADIRS_source_rotary_ATHDG) == -1) then
+    if (get(Adirs_adr_is_ok[1]) == 1 and get(ADIRS_source_rotary_ATHDG) ~= -1) or (get(Adirs_adr_is_ok[3]) == 1 and get(ADIRS_source_rotary_ATHDG) == -1) then
         is_capt_adr_ok = 1
     end
     
-    if (is_adr_ok[2] and get(ADIRS_source_rotary_ATHDG) ~= 1) or (is_adr_ok[3] and get(ADIRS_source_rotary_ATHDG) ==  1) then
+    if (get(Adirs_adr_is_ok[2]) == 1 and get(ADIRS_source_rotary_ATHDG) ~= 1) or (get(Adirs_adr_is_ok[3]) == 1 and get(ADIRS_source_rotary_ATHDG) ==  1) then
         is_fo_adr_ok = 1
     end
     
@@ -214,11 +206,11 @@ function update ()
     local is_capt_irs_ok = 0
     local is_fo_irs_ok = 0
      
-    if (is_irs_ok[1] and get(ADIRS_source_rotary_AIRDATA) ~= -1) or (is_irs_ok[3] and get(ADIRS_source_rotary_AIRDATA) == -1) then
+    if (get(Adirs_ir_is_ok[1]) == 1 and get(ADIRS_source_rotary_AIRDATA) ~= -1) or (get(Adirs_ir_is_ok[3]) == 1 and get(ADIRS_source_rotary_AIRDATA) == -1) then
         is_capt_irs_ok = 1
     end
     
-    if (is_irs_ok[2] and get(ADIRS_source_rotary_AIRDATA) ~=  1) or (is_irs_ok[3] and get(ADIRS_source_rotary_AIRDATA) ==  1) then
+    if (get(Adirs_ir_is_ok[2]) == 1 and get(ADIRS_source_rotary_AIRDATA) ~=  1) or (get(Adirs_ir_is_ok[3]) == 1 and get(ADIRS_source_rotary_AIRDATA) ==  1) then
         is_fo_irs_ok = 1
     end
     

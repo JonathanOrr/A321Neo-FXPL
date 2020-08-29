@@ -1,5 +1,6 @@
 include('ECAM_status.lua')
 include('EWD_flight_phases.lua')
+include('EWD_msgs/adirs.lua')
 include('EWD_msgs/bleed.lua')
 include('EWD_msgs/brakes_and_antiskid.lua')
 include('EWD_msgs/engines_and_apu.lua')
@@ -55,12 +56,15 @@ local left_messages_list = {
     MessageGroup_GEAR_NOT_UPLOCKED,
     MessageGroup_BLEED_OFF,
     MessageGroup_TCAS_FAULT,
+    MessageGroup_ADR_FAULT_SINGLE,
+    MessageGroup_ADR_FAULT_DOUBLE,
     
     -- Warnings
     MessageGroup_CONFIG_TAKEOFF,
     MessageGroup_APU_FIRE,
     MessageGroup_GEAR_NOT_DOWNLOCKED,
     MessageGroup_GEAR_NOT_DOWN,
+    MessageGroup_ADR_FAULT_TRIPLE,
     
     -- Misc
     MessageGroup_TOCONFIG_NORMAL -- This must be the last message
