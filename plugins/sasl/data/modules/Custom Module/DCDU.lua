@@ -505,9 +505,26 @@ local function update_sending_message()
     end
 end
 
+function update_new_message_light()
+
+    set(DCDU_new_msgs, 0)
+    
+    if #current_messages == 0 then
+        return
+    end
+    
+    for i,m in ipairs(current_messages) do
+        if m.msg_status < MESSAGE_STATUS_SENDING then
+            set(DCDU_new_msgs, 1)
+        end 
+    end
+
+end
+
 function update()
 
     check_new_messages()
+    update_new_message_light()
 
 
     -- Update connection status and CTR every 5 seconds and 60 seconds
