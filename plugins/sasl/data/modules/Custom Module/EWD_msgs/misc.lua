@@ -157,12 +157,22 @@ MessageGroup_IRS_ALIGN = {
     messages = {
         {
             text = function(self)
-                local time_left_irs_1 = get(TIME) - get(Adirs_irs_begin_time[1])
-                local time_left_irs_2 = get(TIME) - get(Adirs_irs_begin_time[2])
-                local time_left_irs_3 = get(TIME) - get(Adirs_irs_begin_time[3])
-                local time_max = math.max(math.max(time_left_irs_1, time_left_irs_2), time_left_irs_3)
+                local time_left_irs_1 = get(Adirs_irs_begin_time[1]) + get(Adirs_total_time_to_align) - get(TIME) 
+                local time_left_irs_2 = get(Adirs_irs_begin_time[2]) + get(Adirs_total_time_to_align) - get(TIME) 
+                local time_left_irs_3 = get(Adirs_irs_begin_time[3]) + get(Adirs_total_time_to_align) - get(TIME) 
+                local time_max = 0
+
+                if get(Adirs_irs_begin_time[1]) > 0 then
+                    time_max = math.max(time_max, time_left_irs_1)
+                end
+                if get(Adirs_irs_begin_time[2]) > 0 then
+                    time_max = math.max(time_max, time_left_irs_2)
+                end
+                if get(Adirs_irs_begin_time[3]) > 0 then
+                    time_max = math.max(time_max, time_left_irs_3)
+                end
             
-                local minutes = math.floor(get(time_max) / 60)
+                local minutes = math.floor(time_max / 60)
                 if get(EWD_flight_phase) <= 2 then
                     return "IRS IN ALIGN " .. minutes .. " MN"
                 else
@@ -184,9 +194,9 @@ MessageGroup_IRS_ALIGN = {
 
     -- Method to check if this message group is active
     is_active = function(self)
-        irs1_is_aligning = get(TIME) - get(Adirs_irs_begin_time[1]) < get(Adirs_total_time_to_align)
-        irs2_is_aligning = get(TIME) - get(Adirs_irs_begin_time[2]) < get(Adirs_total_time_to_align)
-        irs3_is_aligning = get(TIME) - get(Adirs_irs_begin_time[3]) < get(Adirs_total_time_to_align)
+        irs1_is_aligning = get(Adirs_irs_begin_time[1]) > 0 and (get(TIME) - get(Adirs_irs_begin_time[1]) < get(Adirs_total_time_to_align))
+        irs2_is_aligning = get(Adirs_irs_begin_time[2]) > 0 and (get(TIME) - get(Adirs_irs_begin_time[2]) < get(Adirs_total_time_to_align))
+        irs3_is_aligning = get(Adirs_irs_begin_time[3]) > 0 and (get(TIME) - get(Adirs_irs_begin_time[3]) < get(Adirs_total_time_to_align))
         return irs1_is_aligning or irs2_is_aligning or irs3_is_aligning
     end,
 

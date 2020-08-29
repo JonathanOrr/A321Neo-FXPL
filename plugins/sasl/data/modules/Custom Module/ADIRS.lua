@@ -7,8 +7,7 @@ local TIME_TO_START_ADR = 1 -- 1 second
 -- Local datarefs
 ----------------------------------------------------------------------------------------------------
 local adirs_onbat = createGlobalPropertyi("a321neo/cockpit/adris/onbat", 0, false, true, false)
-local adirs_align = createGlobalPropertyi("a321neo/cockpit/adris/align", 0, false, true, false)
-local adirs_time_to_onbat = createGlobalPropertyf("a321neo/cockpit/adris/timetoonbat", 0, false, true, false)
+
 
 ----------------------------------------------------------------------------------------------------
 -- Global/Local variables
@@ -17,13 +16,19 @@ local is_adr_ok = {false, false, false}
 local adr_time_begin = {0,0,0}
 local adr_switch_status = {false,false,false}
 
+local is_irs_ok  = {false, false, false}
+local is_irs_att = {false, false, false}
+local ir_switch_status = {false,false,false}
+
 ----------------------------------------------------------------------------------------------------
 -- Registering commands
 ----------------------------------------------------------------------------------------------------
 sasl.registerCommandHandler (ADIRS_cmd_ADR1, 0, function(phase) ADIRS_handler_toggle_ADR(phase, 1) end )
 sasl.registerCommandHandler (ADIRS_cmd_ADR2, 0, function(phase) ADIRS_handler_toggle_ADR(phase, 2) end )
 sasl.registerCommandHandler (ADIRS_cmd_ADR3, 0, function(phase) ADIRS_handler_toggle_ADR(phase, 3) end )
- 
+sasl.registerCommandHandler (ADIRS_cmd_IR1, 0, function(phase) ADIRS_handler_toggle_IR(phase, 1) end )
+sasl.registerCommandHandler (ADIRS_cmd_IR2, 0, function(phase) ADIRS_handler_toggle_IR(phase, 2) end )
+sasl.registerCommandHandler (ADIRS_cmd_IR3, 0, function(phase) ADIRS_handler_toggle_IR(phase, 3) end )
 
 ----------------------------------------------------------------------------------------------------
 -- Functions
@@ -81,6 +86,8 @@ local function update_status_adrs(i)
                 set(ADIRS_light_ADR[i], 2)
             end
         else
+            adr_time_begin[i] = 0
+
             -- ON but no aligned
             if get(FAILURE_ADR[i]) == 1 then
                 set(ADIRS_light_ADR[i], 2)
@@ -95,8 +102,58 @@ local function update_status_adrs(i)
         -- ADR switched OFF (but working)
         set(ADIRS_light_ADR[i], 1)
     end    
-    
 end
+
+local function update_status_irs(i)
+
+    is_irs_ok[i]  = false
+    is_irs_att[i] = false
+
+    if ir_switch_status[i] then
+        -- IRS is on
+    
+        if get(ADIRS_rotary_btn[i]) > 0 then
+            -- Corresponding ADRIS rotary button is NAV (full mode)
+
+            if get(FAILURE_IR[i]) > 0 then
+                -- Failed IRS, just switch on the button
+                set(ADIRS_light_ADR[i], 2)
+            elseif get(Adirs_irs_begin_time[i]) > 0 then
+                if get(TIME) - get(Adirs_irs_begin_time[i]) > get(Adirs_total_time_to_align) then
+                    -- Align finished
+                   is_irs_ok[i] = true
+                   set(ADIRS_light_IR[i], 0)
+                end
+            else
+                -- ADIRS rotary button just switched to NAV
+                set(Adirs_irs_begin_time[i], get(TIME))
+            end
+
+        else
+            -- ON but no aligned
+            set(Adirs_irs_begin_time[i], 0)
+            if get(FAILURE_IR[i]) > 0 then
+                set(ADIRS_light_IR[i], 2)
+            else
+                set(ADIRS_light_IR[i], 0)
+            end
+        end
+        
+        if get(ADIRS_rotary_btn[i]) == 2 then
+            if is_irs_ok[i] == false then
+                is_irs_att[i] = true    -- ATT mode
+            end
+        end
+        
+    elseif get(FAILURE_IR[i]) == 1 then
+        -- ADR failed and switched OFF
+        set(ADIRS_light_IR[i], 3)
+    else
+        -- ADR switched OFF (but working)
+        set(ADIRS_light_IR[i], 1)
+    end    
+end
+
 
 local function update_adrs()
     -- ADRs are quite simple:
@@ -106,6 +163,10 @@ local function update_adrs()
     update_status_adrs(1)
     update_status_adrs(2)
     update_status_adrs(3)
+    
+    update_status_irs(1)
+    update_status_irs(2)
+    update_status_irs(3)
 
 end
 
@@ -117,13 +178,52 @@ function ADIRS_handler_toggle_ADR(phase, n)
     adr_switch_status[n] = not adr_switch_status[n]
 end
 
+function ADIRS_handler_toggle_IR(phase, n)
+    if phase ~= SASL_COMMAND_BEGIN then
+        return
+    end
+
+    ir_switch_status[n] = not ir_switch_status[n]
+end
+
 ----------------------------------------------------------------------------------------------------
 -- update()
 ----------------------------------------------------------------------------------------------------
 
 function update ()
 
-    set(Adirs_total_time_to_align, get_time_to_align())
+    set(Adirs_total_time_to_align, 20)
 
     update_adrs()
+    
+    -- Check if Captain and FO ADRs is ok. It depends also on the pedestal switch
+    local is_capt_adr_ok = 0
+    local is_fo_adr_ok = 0
+     
+    if (is_adr_ok[1] and get(ADIRS_source_rotary_ATHDG) ~= -1) or (is_adr_ok[3] and get(ADIRS_source_rotary_ATHDG) == -1) then
+        is_capt_adr_ok = 1
+    end
+    
+    if (is_adr_ok[2] and get(ADIRS_source_rotary_ATHDG) ~= 1) or (is_adr_ok[3] and get(ADIRS_source_rotary_ATHDG) ==  1) then
+        is_fo_adr_ok = 1
+    end
+    
+    set(Adirs_capt_has_ADR, is_capt_adr_ok)
+    set(Adirs_fo_has_ADR, is_fo_adr_ok)
+
+    local is_capt_irs_ok = 0
+    local is_fo_irs_ok = 0
+     
+    if (is_irs_ok[1] and get(ADIRS_source_rotary_AIRDATA) ~= -1) or (is_irs_ok[3] and get(ADIRS_source_rotary_AIRDATA) == -1) then
+        is_capt_irs_ok = 1
+    end
+    
+    if (is_irs_ok[2] and get(ADIRS_source_rotary_AIRDATA) ~=  1) or (is_irs_ok[3] and get(ADIRS_source_rotary_AIRDATA) ==  1) then
+        is_fo_irs_ok = 1
+    end
+    
+    set(Adirs_capt_has_IR, is_capt_irs_ok)
+    set(Adirs_fo_has_IR, is_fo_irs_ok)
+
+    
 end

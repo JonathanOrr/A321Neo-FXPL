@@ -197,3 +197,7 @@ ADIRS_rotary_btn[1]  = createGlobalPropertyi("a321neo/cockpit/ADIRS/buttons/mode
 ADIRS_rotary_btn[2]  = createGlobalPropertyi("a321neo/cockpit/ADIRS/buttons/mode_2", 0, false, true, false)   -- 0 OFF, 1 NAV, 2 ATT
 ADIRS_rotary_btn[3]  = createGlobalPropertyi("a321neo/cockpit/ADIRS/buttons/mode_3", 0, false, true, false)   -- 0 OFF, 1 NAV, 2 ATT
 
+ADIRS_source_rotary_ATHDG   = createGlobalPropertyi("a321neo/cockpit/ADIRS/buttons/atthdg_source", 0, false, true, false)    -- Pedestal switch, 0 NORM, -1 CAPT3, 1 FO3
+ADIRS_source_rotary_AIRDATA = createGlobalPropertyi("a321neo/cockpit/ADIRS/buttons/airdata_source", 0, false, true, false)   -- Pedestal switch, 0 NORM, -1 CAPT3, 1 FO3
+
+
