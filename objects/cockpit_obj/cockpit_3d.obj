@@ -25114,86 +25114,156 @@ IDX	20296
 		TRIS	20904 84
 		ATTR_manip_command	button	a321neo/cockpit/ecam/buttons/cmd_hyd	ECAM HYD page
 		TRIS	21984 84
-		ATTR_manip_none
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/misc/positive_negative	
 		TRIS	23610 156
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/.	
 		TRIS	23766 156
+		ATTR_manip_none
 		TRIS	23922 84
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/0	
 		TRIS	24006 156
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/1	
 		TRIS	24162 156
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/2	
 		TRIS	24318 156
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/3	
 		TRIS	24474 156
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/4	
 		TRIS	24630 156
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/5	
 		TRIS	24786 156
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/6	
 		TRIS	24942 156
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/7	
 		TRIS	25098 156
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/8	
 		TRIS	25254 156
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/9	
 		TRIS	25410 156
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/A	
 		TRIS	25566 84
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/page/air port	
 		TRIS	25650 132
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/page/atc comm	
 		TRIS	25782 132
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/B	
 		TRIS	25914 84
+		ATTR_manip_none
 		TRIS	25998 132
 		TRIS	26130 132
 		ATTR_manip_command	button	a321neo/cockpit/brightness/mcdu_1_brightness_up	Increase MCDU 1 brightness
 		TRIS	26262 84
-		ATTR_manip_none
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/C	
 		TRIS	26346 84
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/misc/clr	
 		TRIS	26430 84
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/D	
 		TRIS	26514 84
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/page/data	
 		TRIS	26598 132
 		ATTR_manip_command	button	a321neo/cockpit/brightness/mcdu_1_brightness_dn	Decrease MCDU 1 brightness
 		TRIS	26730 84
-		ATTR_manip_none
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/page/dir	
 		TRIS	26814 132
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/side/slew_down	
 		TRIS	26946 132
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/E	
 		TRIS	27078 84
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/F	
 		TRIS	27162 84
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/page/f-pln	
 		TRIS	27246 132
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/page/fuel pred	
 		TRIS	27378 132
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/G	
 		TRIS	27510 84
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/H	
 		TRIS	27594 84
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/I	
 		TRIS	27678 84
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/page/init	
 		TRIS	27762 132
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/J	
 		TRIS	27894 84
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/K	
 		TRIS	27978 84
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/L	
 		TRIS	28062 84
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/side/slew_left	
 		TRIS	28146 132
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/side/L1	
 		TRIS	28278 132
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/side/L2	
 		TRIS	28410 132
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/side/L3	
 		TRIS	28542 132
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/side/L4	
 		TRIS	28674 132
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/side/L5	
 		TRIS	28806 132
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/side/L6	
 		TRIS	28938 132
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/M	
 		TRIS	29070 84
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/page/mcdu menu	
 		TRIS	29154 132
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/N	
 		TRIS	29286 84
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/page/rad nav	
 		TRIS	29370 132
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/O	
 		TRIS	29502 84
+		ATTR_manip_none
 		TRIS	29586 84
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/P	
 		TRIS	29670 84
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/page/perf	
 		TRIS	29754 132
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/page/prog	
 		TRIS	29886 132
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/Q	
 		TRIS	30018 84
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/R	
 		TRIS	30102 84
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/side/slew_right	
 		TRIS	30186 132
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/side/R1	
 		TRIS	30318 132
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/side/R2	
 		TRIS	30450 132
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/side/R3	
 		TRIS	30582 132
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/side/R4	
 		TRIS	30714 132
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/side/R5	
 		TRIS	30846 132
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/side/R6	
 		TRIS	30978 132
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/S	
 		TRIS	31110 84
+		ATTR_manip_none
 		TRIS	870 6
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/page/sec f-pln	
 		TRIS	31194 132
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/ 	
 		TRIS	31326 84
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/T	
 		TRIS	31410 84
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/U	
 		TRIS	31494 84
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/side/slew_up	
 		TRIS	31578 132
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/V	
 		TRIS	31710 84
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/W	
 		TRIS	31794 84
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/X	
 		TRIS	31878 84
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/Y	
 		TRIS	31962 84
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/Z	
 		TRIS	32046 84
+		ATTR_manip_none
 		TRIS	32130 156
 		TRIS	32286 156
 		TRIS	32442 84
@@ -25286,9 +25356,13 @@ IDX	20296
 		TRIS	876 6
 		TRIS	468 6
 		TRIS	480 6
+			ATTR_manip_command	button	a321neo/cockpit/ADIRS/ADR2_cmd	Toggle air data reference unit 2
 			TRIS	1368 84
+			ATTR_manip_command	button	a321neo/cockpit/ADIRS/ADR1_cmd	Toggle air data reference unit 1
 			TRIS	1452 84
+			ATTR_manip_command	button	a321neo/cockpit/ADIRS/ADR3_cmd	Toggle air data reference unit 3
 			TRIS	1536 84
+			ATTR_manip_none
 			TRIS	3390 84
 			TRIS	4872 84
 			ATTR_manip_command	button	a321neo/FBW/toggle_ELAC_1	Toggle ELAC 1
@@ -25305,9 +25379,13 @@ IDX	20296
 			TRIS	21642 84
 			TRIS	21726 84
 			TRIS	21810 84
+			ATTR_manip_command	button	a321neo/cockpit/ADIRS/IR1_cmd	Toggle inertial reference unit 1
 			TRIS	22236 84
+			ATTR_manip_command	button	a321neo/cockpit/ADIRS/IR2_cmd	Toggle inertial reference unit 2
 			TRIS	22320 84
+			ATTR_manip_command	button	a321neo/cockpit/ADIRS/IR3_cmd	Toggle inertial reference unit 3
 			TRIS	22404 84
+			ATTR_manip_none
 			TRIS	22500 84
 			TRIS	41064 6
 			TRIS	41304 84
