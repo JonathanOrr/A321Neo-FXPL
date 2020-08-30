@@ -135,3 +135,15 @@ ADIRS_cmd_IR1 = createCommand("a321neo/cockpit/ADIRS/IR1_cmd", "Toggle IR 1")
 ADIRS_cmd_IR2 = createCommand("a321neo/cockpit/ADIRS/IR2_cmd", "Toggle IR 2")
 ADIRS_cmd_IR3 = createCommand("a321neo/cockpit/ADIRS/IR3_cmd", "Toggle IR 3")
 
+ADIRS_cmd_knob_1_up   = createCommand("a321neo/cockpit/ADIRS/knob_1_up", "Move right the knob")
+ADIRS_cmd_knob_2_up   = createCommand("a321neo/cockpit/ADIRS/knob_2_up", "Move right the knob")
+ADIRS_cmd_knob_3_up   = createCommand("a321neo/cockpit/ADIRS/knob_3_up", "Move right the knob")
+ADIRS_cmd_knob_1_down = createCommand("a321neo/cockpit/ADIRS/knob_1_down", "Move left the knob")
+ADIRS_cmd_knob_2_down = createCommand("a321neo/cockpit/ADIRS/knob_2_down", "Move left the knob")
+ADIRS_cmd_knob_3_down = createCommand("a321neo/cockpit/ADIRS/knob_3_down", "Move left the knob")
+
+ADIRS_cmd_source_ATHDG_up     = createCommand("a321neo/cockpit/ADIRS/ATHDG_up", "Move right the knob")
+ADIRS_cmd_source_AIRDATA_up   = createCommand("a321neo/cockpit/ADIRS/AIRDATA_up", "Move right the knob")
+ADIRS_cmd_source_ATHDG_down   = createCommand("a321neo/cockpit/ADIRS/ATHDG_down", "Move left the knob")
+ADIRS_cmd_source_AIRDATA_down = createCommand("a321neo/cockpit/ADIRS/AIRDATA_down", "Move left the knob")
+

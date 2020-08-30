@@ -4,6 +4,11 @@
 local TIME_TO_ONBAT = 5 --five seconds before onbat light extinguishes if AC available
 local TIME_TO_START_ADR = 1 -- 1 second
 
+local LIGHT_NORM       = 0
+local LIGHT_OFF        = 1
+local LIGHT_FAILED     = 10
+local LIGHT_FAILED_OFF = 11
+
 ----------------------------------------------------------------------------------------------------
 -- Global/Local variables
 ----------------------------------------------------------------------------------------------------
@@ -19,9 +24,21 @@ local ir_switch_status = {false,false,false}
 sasl.registerCommandHandler (ADIRS_cmd_ADR1, 0, function(phase) ADIRS_handler_toggle_ADR(phase, 1) end )
 sasl.registerCommandHandler (ADIRS_cmd_ADR2, 0, function(phase) ADIRS_handler_toggle_ADR(phase, 2) end )
 sasl.registerCommandHandler (ADIRS_cmd_ADR3, 0, function(phase) ADIRS_handler_toggle_ADR(phase, 3) end )
-sasl.registerCommandHandler (ADIRS_cmd_IR1, 0, function(phase) ADIRS_handler_toggle_IR(phase, 1) end )
-sasl.registerCommandHandler (ADIRS_cmd_IR2, 0, function(phase) ADIRS_handler_toggle_IR(phase, 2) end )
-sasl.registerCommandHandler (ADIRS_cmd_IR3, 0, function(phase) ADIRS_handler_toggle_IR(phase, 3) end )
+sasl.registerCommandHandler (ADIRS_cmd_IR1, 0,  function(phase) ADIRS_handler_toggle_IR(phase, 1) end )
+sasl.registerCommandHandler (ADIRS_cmd_IR2, 0,  function(phase) ADIRS_handler_toggle_IR(phase, 2) end )
+sasl.registerCommandHandler (ADIRS_cmd_IR3, 0,  function(phase) ADIRS_handler_toggle_IR(phase, 3) end )
+
+sasl.registerCommandHandler (ADIRS_cmd_knob_1_up, 0,   function(phase)  Knob_handler_up_int(phase, ADIRS_rotary_btn[1], 0, 2) end )
+sasl.registerCommandHandler (ADIRS_cmd_knob_2_up, 0,   function(phase)  Knob_handler_up_int(phase, ADIRS_rotary_btn[2], 0, 2) end )
+sasl.registerCommandHandler (ADIRS_cmd_knob_3_up, 0,   function(phase)  Knob_handler_up_int(phase, ADIRS_rotary_btn[3], 0, 2) end )
+sasl.registerCommandHandler (ADIRS_cmd_knob_1_down, 0, function(phase) Knob_handler_down_int(phase, ADIRS_rotary_btn[1], 0, 2) end )
+sasl.registerCommandHandler (ADIRS_cmd_knob_2_down, 0, function(phase) Knob_handler_down_int(phase, ADIRS_rotary_btn[2], 0, 2) end )
+sasl.registerCommandHandler (ADIRS_cmd_knob_3_down, 0, function(phase) Knob_handler_down_int(phase, ADIRS_rotary_btn[3], 0, 2) end )
+
+sasl.registerCommandHandler (ADIRS_cmd_source_ATHDG_up, 0,     function(phase) Knob_handler_up_int(phase, ADIRS_source_rotary_ATHDG, -1, 1) end )
+sasl.registerCommandHandler (ADIRS_cmd_source_ATHDG_down, 0,   function(phase) Knob_handler_down_int(phase, ADIRS_source_rotary_ATHDG, -1, 1) end )
+sasl.registerCommandHandler (ADIRS_cmd_source_AIRDATA_up, 0,   function(phase) Knob_handler_up_int(phase, ADIRS_source_rotary_AIRDATA, -1, 1) end )
+sasl.registerCommandHandler (ADIRS_cmd_source_AIRDATA_down, 0, function(phase) Knob_handler_down_int(phase, ADIRS_source_rotary_AIRDATA, -1, 1) end )
 
 ----------------------------------------------------------------------------------------------------
 -- Functions
@@ -65,36 +82,36 @@ local function update_status_adrs(i)
 
             if get(FAILURE_ADR[i]) == 1 then
                 -- Failed ADR, just switch on the button
-                set(ADIRS_light_ADR[i], 2)
+                set(ADIRS_light_ADR[i], LIGHT_FAILED)
             elseif adr_time_begin[i] > 0 then
                 if get(TIME) - adr_time_begin[i] > TIME_TO_START_ADR then
                    -- After TIME_TO_START_ADR, the ADR changes the status to ON
-                   set(Adirs_adr_is_ok[i], 1)
-                   set(ADIRS_light_ADR[i], 0)
+                   set(Adirs_adr_is_ok[i], LIGHT_OFF)
+                   set(ADIRS_light_ADR[i], LIGHT_NORM)
                 end
             else
                 -- ADIRS rotary button just switched to ATT or NAV, let's update the time
                 -- of the beginning of aligmnet
                 set(Adirs_total_time_to_align, get_time_to_align())
                 adr_time_begin[i] = get(TIME)
-                set(ADIRS_light_ADR[i], 2)
+                set(ADIRS_light_ADR[i], LIGHT_FAILED)
             end
         else
             adr_time_begin[i] = 0
 
             -- ON but no aligned
             if get(FAILURE_ADR[i]) == 1 then
-                set(ADIRS_light_ADR[i], 2)
+                set(ADIRS_light_ADR[i], LIGHT_FAILED)
             else
-                set(ADIRS_light_ADR[i], 0)
+                set(ADIRS_light_ADR[i], LIGHT_NORM)
             end
         end
     elseif get(FAILURE_ADR[i]) == 1 then
         -- ADR failed and switched OFF
-        set(ADIRS_light_ADR[i], 3)
+        set(ADIRS_light_ADR[i], LIGHT_FAILED_OFF)
     else
         -- ADR switched OFF (but working)
-        set(ADIRS_light_ADR[i], 1)
+        set(ADIRS_light_ADR[i], LIGHT_OFF)
     end    
 end
 
@@ -110,13 +127,13 @@ local function update_status_irs(i)
 
             if get(FAILURE_IR[i]) > 0 then
                 -- Failed IRS, just switch on the button
-                set(ADIRS_light_ADR[i], 2)
+                set(ADIRS_light_IR[i], LIGHT_FAILED)
             elseif get(Adirs_irs_begin_time[i]) > 0 then
                 if get(TIME) - get(Adirs_irs_begin_time[i]) > get(Adirs_total_time_to_align) then
                     -- Align finished
                    set(Adirs_ir_is_ok,1)
-                   set(ADIRS_light_IR[i], 0)
                 end
+                set(ADIRS_light_IR[i], LIGHT_NORM)
             else
                 set(Adirs_total_time_to_align, get_time_to_align())
                 -- ADIRS rotary button just switched to NAV
@@ -127,9 +144,9 @@ local function update_status_irs(i)
             -- ON but no aligned
             set(Adirs_irs_begin_time[i], 0)
             if get(FAILURE_IR[i]) > 0 then
-                set(ADIRS_light_IR[i], 2)
+                set(ADIRS_light_IR[i], LIGHT_FAILED)
             else
-                set(ADIRS_light_IR[i], 0)
+                set(ADIRS_light_IR[i], LIGHT_NORM)
             end
         end
         
@@ -141,10 +158,10 @@ local function update_status_irs(i)
         
     elseif get(FAILURE_IR[i]) == 1 then
         -- ADR failed and switched OFF
-        set(ADIRS_light_IR[i], 3)
+        set(ADIRS_light_IR[i], LIGHT_FAILED_OFF)
     else
         -- ADR switched OFF (but working)
-        set(ADIRS_light_IR[i], 1)
+        set(ADIRS_light_IR[i], LIGHT_OFF)
     end    
 end
 

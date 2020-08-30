@@ -253,6 +253,42 @@ function Read_CSV(file)
     return result_full
 end
 
+-- Generic handler for a float knob
+-- Usage example: sasl.registerCommandHandler(Knob_dataref, 0, function(phase) Knob_handler_up_float(phase, value_dataref, 0, 3) end)
+function Knob_handler_up_float(phase, dataref, min, max) 
+    if phase == SASL_COMMAND_BEGIN then
+        set(dataref, Math_clamp(get(dataref) + 0.05, min, max))
+    elseif phase == SASL_COMMAND_CONTINUE then
+        set(dataref, Math_clamp(get(dataref) + 0.05 * get(DELTA_TIME), min, max))
+    end
+end
+
+-- Generic handler for a float knob
+-- Usage example: sasl.registerCommandHandler(Knob_dataref, 0, function(phase) Knob_handler_down_float(phase, value_dataref, 0, 3) end)
+function Knob_handler_down_float(phase, dataref, min, max) 
+    if phase == SASL_COMMAND_BEGIN then
+        set(dataref, Math_clamp(get(dataref) - 0.05, min, max))
+    elseif phase == SASL_COMMAND_CONTINUE then
+        set(dataref, Math_clamp(get(dataref) - 0.05 * get(DELTA_TIME), min, max))
+    end
+end
+
+-- Generic handler for a integer knob
+-- Usage example: sasl.registerCommandHandler(Knob_dataref, 0, function(phase) Knob_handler_up_int(phase, value_dataref, 0, 3) end)
+function Knob_handler_up_int(phase, dataref, min, max) 
+    if phase == SASL_COMMAND_BEGIN then
+        set(dataref, Math_clamp(get(dataref) + 1, min, max))
+    end
+end
+
+-- Generic handler for a integer knob
+-- Usage example: sasl.registerCommandHandler(Knob_dataref, 0, function(phase) Knob_handler_down_int(phase, value_dataref, 0, 3) end)
+function Knob_handler_down_int(phase, dataref, min, max) 
+    if phase == SASL_COMMAND_BEGIN then
+        set(dataref, Math_clamp(get(dataref) - 1, min, max))
+    end
+end
+
 Mcdu_popup = {}
 
 function MCDU_get_popup(id) return Mcdu_popup[id] end
