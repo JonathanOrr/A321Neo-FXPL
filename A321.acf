@@ -94,7 +94,7 @@ P _cgpt/9/_w_now 1.0
 P _cgpt/9/_w_test 0.0
 P _cgpt/9/_z_ref 0.0
 P _cgpt/count 20
-P _door/0/_ang_now 0.0
+P _door/0/_ang_now 74.719444275
 P _door/0/_ext_ang 0.0
 P _door/0/_ret_ang 100.0
 P _door/0/_type 1
@@ -102,7 +102,7 @@ P _door/0/_xyz/0 -1.0
 P _door/0/_xyz/1 0.0
 P _door/0/_xyz/2 17.600000381
 P _door/0/_xyz/count 3
-P _door/1/_ang_now 7.577537537
+P _door/1/_ang_now 49.438884735
 P _door/1/_ext_ang 0.0
 P _door/1/_ret_ang 100.0
 P _door/1/_type 3
@@ -110,7 +110,7 @@ P _door/1/_xyz/0 -1.500000000
 P _door/1/_xyz/1 0.0
 P _door/1/_xyz/2 14.500000000
 P _door/1/_xyz/count 3
-P _door/10/_ang_now 6.819786072
+P _door/10/_ang_now 44.494995117
 P _door/10/_ext_ang 0.0
 P _door/10/_ret_ang 90.0
 P _door/10/_type 3
@@ -127,7 +127,7 @@ P _door/16/_type 0
 P _door/17/_type 0
 P _door/18/_type 0
 P _door/19/_type 0
-P _door/2/_ang_now 0.0
+P _door/2/_ang_now -74.719444275
 P _door/2/_ext_ang 0.0
 P _door/2/_ret_ang -100.0
 P _door/2/_type 1
@@ -135,7 +135,7 @@ P _door/2/_xyz/0 1.0
 P _door/2/_xyz/1 0.0
 P _door/2/_xyz/2 17.600000381
 P _door/2/_xyz/count 3
-P _door/3/_ang_now -7.577537537
+P _door/3/_ang_now -49.438884735
 P _door/3/_ext_ang 0.0
 P _door/3/_ret_ang -100.0
 P _door/3/_type 3
@@ -143,7 +143,7 @@ P _door/3/_xyz/0 1.500000000
 P _door/3/_xyz/1 0.0
 P _door/3/_xyz/2 14.500000000
 P _door/3/_xyz/count 3
-P _door/4/_ang_now 8.318023682
+P _door/4/_ang_now 85.449501038
 P _door/4/_ext_ang 0.0
 P _door/4/_ret_ang 90.0
 P _door/4/_type 2
@@ -151,7 +151,7 @@ P _door/4/_xyz/0 -13.0
 P _door/4/_xyz/1 -3.599999905
 P _door/4/_xyz/2 73.500000000
 P _door/4/_xyz/count 3
-P _door/5/_ang_now -8.318023682
+P _door/5/_ang_now -85.449501038
 P _door/5/_ext_ang 0.0
 P _door/5/_ret_ang -90.0
 P _door/5/_type 2
@@ -161,7 +161,7 @@ P _door/5/_xyz/2 73.500000000
 P _door/5/_xyz/count 3
 P _door/6/_type 0
 P _door/7/_type 0
-P _door/8/_ang_now -6.819786072
+P _door/8/_ang_now -44.494995117
 P _door/8/_ext_ang 0.0
 P _door/8/_ret_ang -90.0
 P _door/8/_type 3
@@ -209,10 +209,10 @@ P _gear/0/_latN 0.0
 P _gear/0/_latR 0.0
 P _gear/0/_leg_len 5.400000095
 P _gear/0/_lonE 0.0
-P _gear/0/_lonN 9.057403564
+P _gear/0/_lonN 93.045013428
 P _gear/0/_lonR 98.0
 P _gear/0/_scon 47252.898437500
-P _gear/0/_stat_def 0.399389803
+P _gear/0/_stat_def 0.399389625
 P _gear/0/_steerdeg_hispeed 5.0
 P _gear/0/_steerdeg_lospeed 75.0
 P _gear/0/_strut_comp 0.0
@@ -239,11 +239,11 @@ P _gear/1/_gear_x -12.010000229
 P _gear/1/_gear_y -2.799999952
 P _gear/1/_gear_z 69.800003052
 P _gear/1/_latE 0.0
-P _gear/1/_latN 7.393798828
+P _gear/1/_latN 75.955108643
 P _gear/1/_latR 80.0
 P _gear/1/_leg_len 8.199999809
 P _gear/1/_lonE -7.0
-P _gear/1/_lonN -6.353042603
+P _gear/1/_lonN -0.353927791
 P _gear/1/_lonR 0.0
 P _gear/1/_scon 71266.664062500
 P _gear/1/_stat_def 1.367629409
@@ -273,11 +273,11 @@ P _gear/2/_gear_x 12.010000229
 P _gear/2/_gear_y -2.799999952
 P _gear/2/_gear_z 69.800003052
 P _gear/2/_latE 0.0
-P _gear/2/_latN -7.393798828
+P _gear/2/_latN -75.955108643
 P _gear/2/_latR -80.0
 P _gear/2/_leg_len 8.199999809
 P _gear/2/_lonE -7.0
-P _gear/2/_lonN -6.353042603
+P _gear/2/_lonN -0.353927791
 P _gear/2/_lonR 0.0
 P _gear/2/_scon 71266.664062500
 P _gear/2/_stat_def 1.367629409
@@ -24399,7 +24399,7 @@ P _part/85/_part_specs_invis 1
 P _part/85/_part_tex 0
 P _part/85/_part_the -83.0
 P _part/85/_part_x 0.0
-P _part/85/_part_y -10.990609169
+P _part/85/_part_y -10.990610123
 P _part/85/_part_z 17.530000687
 P _part/85/_patt_con 0
 P _part/85/_patt_prt 0
@@ -38121,13 +38121,11 @@ GROUP glareshield buttons
 END_GROUP
 GROUP Buttons and Lights
   LOCKED
-  GROUP_OPEN
   GROUP ADIRS
     LOCKED
-    GROUP_OPEN
     gen_rotary IR1
       POS 1426.000000 201.000000
-      IMAGE Buttons/align
+      IMAGE Buttons/align_switch
       DATAREF a321neo/cockpit/ADIRS/buttons/light_IR1
       LOCKED
       LIGHT_MODE BACK_LIT_AUTO
@@ -38149,7 +38147,7 @@ GROUP Buttons and Lights
 
     gen_rotary IR3
       POS 1554.000000 201.000000
-      IMAGE Buttons/align
+      IMAGE Buttons/align_switch
       DATAREF a321neo/cockpit/ADIRS/buttons/light_IR3
       LOCKED
       LIGHT_MODE BACK_LIT_AUTO
@@ -38171,7 +38169,7 @@ GROUP Buttons and Lights
 
     gen_rotary IR2
       POS 1682.000000 201.000000
-      IMAGE Buttons/align
+      IMAGE Buttons/align_switch
       DATAREF a321neo/cockpit/ADIRS/buttons/light_IR2
       LOCKED
       LIGHT_MODE BACK_LIT_AUTO
@@ -43302,9 +43300,8 @@ GROUP ECAM lower du
       LOCKED
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 1.000000 1.000000 1.000000
-      KEY_FRAME 3.000000 1.000000
+      KEY_FRAME 0.000000 1.000000 1.000000
+      KEY_FRAME 1.000000 0.000000
       DIGITS 2
       ROTARY_TYPE NO_CLICK
       CLICK_RADIUS 10.000000
@@ -43323,9 +43320,8 @@ GROUP ECAM lower du
       LOCKED
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 1.000000 1.000000 1.000000
-      KEY_FRAME 3.000000 1.000000
+      KEY_FRAME 0.000000 1.000000 1.000000
+      KEY_FRAME 1.000000 0.000000
       DIGITS 2
       ROTARY_TYPE NO_CLICK
       CLICK_RADIUS 10.000000
@@ -43344,9 +43340,8 @@ GROUP ECAM lower du
       LOCKED
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 1.000000 1.000000 1.000000
-      KEY_FRAME 3.000000 1.000000
+      KEY_FRAME 0.000000 1.000000 1.000000
+      KEY_FRAME 1.000000 0.000000
       DIGITS 2
       ROTARY_TYPE NO_CLICK
       CLICK_RADIUS 10.000000
@@ -43365,9 +43360,8 @@ GROUP ECAM lower du
       LOCKED
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 1.000000 1.000000 1.000000
-      KEY_FRAME 3.000000 1.000000
+      KEY_FRAME 0.000000 1.000000 1.000000
+      KEY_FRAME 1.000000 0.000000
       DIGITS 2
       ROTARY_TYPE NO_CLICK
       CLICK_RADIUS 10.000000
@@ -43386,9 +43380,8 @@ GROUP ECAM lower du
       LOCKED
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 1.000000 1.000000 1.000000
-      KEY_FRAME 3.000000 1.000000
+      KEY_FRAME 0.000000 1.000000 1.000000
+      KEY_FRAME 1.000000 0.000000
       DIGITS 2
       ROTARY_TYPE NO_CLICK
       CLICK_RADIUS 10.000000
