@@ -403,6 +403,7 @@ local function publish_left_list()
     
     -- Update the ECAM requested page (if necessary)
     if left_current_message ~= nil then
+        set(EWD_is_clerable, 1)
         if left_current_message.sd_page ~= nil then
             -- ECAM page change request
             -- We put this number of the dataref
@@ -412,6 +413,7 @@ local function publish_left_list()
             left_was_clearing = true
         end
     else
+        set(EWD_is_clerable, 0)
         if left_was_clearing then
             
             -- We cleared all the pages, so, let's display the STATUS page for clearing it

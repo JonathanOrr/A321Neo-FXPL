@@ -152,7 +152,7 @@ function ecam_update_leds()
         end
     end
     
-    if get(Ecam_current_status) == ECAM_STATUS_SHOW_EWD or get(Ecam_current_status) == ECAM_STATUS_SHOW_EWD_STS then
+    if get(Ecam_current_status) == ECAM_STATUS_SHOW_EWD or get(Ecam_current_status) == ECAM_STATUS_SHOW_EWD_STS or get(EWD_is_clerable) == 1 then
         set(Ecam_btn_light_CLR, 1)
     end
     
