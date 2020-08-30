@@ -248,7 +248,7 @@ MessageGroup_ADR_FAULT_TRIPLE = {
               return true
             end
 
-        },
+        },  
         {
             text = function(self)
                 return " - ADR 1 + 2 + 3......OFF"

@@ -151,7 +151,7 @@ DCDU_window = contextWindow {
   minimumSize = { 400 , 400 };
   maximumSize = { 400 , 400 };
   gravity = { 0 , 1 , 0 , 1 };
-  visible = true ;
+  visible = false ;
   components = {
     DCDU_window {position = { 0 , 0 , 463 , 683 }, focused = true}
   };

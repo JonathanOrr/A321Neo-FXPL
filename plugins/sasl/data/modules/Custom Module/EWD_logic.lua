@@ -324,6 +324,10 @@ end
 
 local function update_left_list()
 
+    if get(EWD_flight_phase) == 0 then  -- Don't update EWD is the flight phase is unknown. This should not happen.
+        return
+    end
+
     list_left  = PriorityQueue()
     list_left:setmax(PRIORITY_LEVEL_MEMO)
 

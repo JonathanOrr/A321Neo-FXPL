@@ -2,7 +2,7 @@
 -- Constants
 ----------------------------------------------------------------------------------------------------
 local TIME_TO_ONBAT = 5 --five seconds before onbat light extinguishes if AC available
-local TIME_TO_START_ADR = 1 -- 1 second
+local TIME_TO_START_ADR = 2
 
 local LIGHT_NORM       = 0
 local LIGHT_OFF        = 1
@@ -12,6 +12,12 @@ local LIGHT_FAILED_OFF = 11
 ----------------------------------------------------------------------------------------------------
 -- Global/Local variables
 ----------------------------------------------------------------------------------------------------
+local cmd_auto_board = sasl.findCommand("sim/operation/auto_board")  -- Prep electrical system for boarding
+local cmd_auto_start = sasl.findCommand("sim/operation/auto_start")  -- Auto start aircraft
+local cmd_quick_start = sasl.findCommand("sim/operation/quick_start") -- Auto start engines
+
+
+
 local adr_time_begin = {0,0,0}
 local adr_switch_status = {false,false,false}
 
@@ -40,9 +46,27 @@ sasl.registerCommandHandler (ADIRS_cmd_source_ATHDG_down, 0,   function(phase) K
 sasl.registerCommandHandler (ADIRS_cmd_source_AIRDATA_up, 0,   function(phase) Knob_handler_up_int(phase, ADIRS_source_rotary_AIRDATA, -1, 1) end )
 sasl.registerCommandHandler (ADIRS_cmd_source_AIRDATA_down, 0, function(phase) Knob_handler_down_int(phase, ADIRS_source_rotary_AIRDATA, -1, 1) end )
 
+sasl.registerCommandHandler (cmd_auto_board, 0, function() adirs_prep_elec_for_boarding() end )
+sasl.registerCommandHandler (cmd_auto_start, 0, function() adirs_prep_elec_for_boarding() end )
+sasl.registerCommandHandler (cmd_quick_start, 0, function() adirs_prep_elec_for_boarding() end )
+
 ----------------------------------------------------------------------------------------------------
 -- Functions
 ----------------------------------------------------------------------------------------------------
+
+function adirs_prep_elec_for_boarding()
+	ADIRS_handler_toggle_ADR(SASL_COMMAND_BEGIN, 1)
+	ADIRS_handler_toggle_ADR(SASL_COMMAND_BEGIN, 2)
+	ADIRS_handler_toggle_ADR(SASL_COMMAND_BEGIN, 3)
+	ADIRS_handler_toggle_IR(SASL_COMMAND_BEGIN, 1)
+	ADIRS_handler_toggle_IR(SASL_COMMAND_BEGIN, 2)
+	ADIRS_handler_toggle_IR(SASL_COMMAND_BEGIN, 3)
+	
+	set(ADIRS_rotary_btn[1],1)
+	set(ADIRS_rotary_btn[2],1)
+	set(ADIRS_rotary_btn[3],1)
+	
+end
 
 local function get_time_to_align()
 
@@ -134,6 +158,11 @@ local function update_status_irs(i)
                    set(Adirs_ir_is_ok,1)
                 end
                 set(ADIRS_light_IR[i], LIGHT_NORM)
+                
+                if get(TIME) - get(Adirs_irs_begin_time[i]) < TIME_TO_ONBAT then    -- TODO ADD AC/DC SWITCH
+                    set(ADIRS_light_onbat, 1)
+                end
+                
             else
                 set(Adirs_total_time_to_align, get_time_to_align())
                 -- ADIRS rotary button just switched to NAV
@@ -174,6 +203,9 @@ local function update_adrs()
     update_status_adrs(1)
     update_status_adrs(2)
     update_status_adrs(3)
+    
+    set(ADIRS_light_onbat, 0)
+
     
     update_status_irs(1)
     update_status_irs(2)
