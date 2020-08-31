@@ -1,20 +1,11 @@
 position= {2279,539,900,900}
 size = {900, 900}
 
+include('constants.lua')
+
 --fonts
 local B612regular = sasl.gl.loadFont("fonts/B612-Regular.ttf")
 local B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
-
---colors
-local ECAM_WHITE = {1.0, 1.0, 1.0}
-local ECAM_HIGH_GREY = {0.6, 0.6, 0.6}
-local ECAM_BLUE = {0.004, 1.0, 1.0}
-local ECAM_GREEN = {0.184, 0.733, 0.219}
-local ECAM_HIGH_GREEN = {0.3, 1, 0.4}
-local ECAM_ORANGE = {0.725, 0.521, 0.18}
-local ECAM_RED = {1.0, 0.0, 0.0}
-local ECAM_MAGENTA = {1.0, 0.0, 1.0}
-local ECAM_GREY = {0.3, 0.3, 0.3}
 
 local match_msg_colors = {}
 match_msg_colors[0] = ECAM_WHITE

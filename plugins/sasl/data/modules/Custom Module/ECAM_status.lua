@@ -1,14 +1,4 @@
-
-    --colors
-local ECAM_WHITE = {1.0, 1.0, 1.0}
-local ECAM_HIGH_GREY = {0.6, 0.6, 0.6}
-local ECAM_BLUE = {0.004, 1.0, 1.0}
-local ECAM_GREEN = {0.184, 0.733, 0.219}
-local ECAM_ORANGE = {0.725, 0.521, 0.18}
-local ECAM_RED = {1.0, 0.0, 0.0}
-local ECAM_MAGENTA = {1.0, 0.0, 1.0}
-local ECAM_GREY = {0.3, 0.3, 0.3}
-
+include('constants.lua')
 include('EWD_msgs/adirs.lua')
 
 local function put_inop_sys_msg_2(messages, dr_1, dr_2, title)

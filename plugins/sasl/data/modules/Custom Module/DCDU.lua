@@ -30,12 +30,7 @@ local B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
 -- Constants
 ----------------------------------------------------------------------------------------------------
 
--- Colors
-local ECAM_BLACK = {0, 0, 0}
-local ECAM_WHITE = {1.0, 1.0, 1.0}
-local ECAM_BLUE = {0.004, 1.0, 1.0}
-local ECAM_GREEN = {0.184, 0.733, 0.219}
-local ECAM_ORANGE = {0.725, 0.521, 0.18}
+include('constants.lua')
 
 -- Message types
 MESSAGE_TYPE_WILCO    = 1
