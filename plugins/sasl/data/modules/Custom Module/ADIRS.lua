@@ -55,13 +55,11 @@ sasl.registerCommandHandler (cmd_reset_flight, 0, function(phase) adirs_prep_ele
 sasl.registerCommandHandler (cmd_reset_to_runway, 0, function(phase) adirs_prep_elec_for_boarding(phase) end )
 sasl.registerCommandHandler (cmd_go_to_default, 0, function(phase) adirs_prep_elec_for_boarding(phase) end )
 
-print(cmd_reset_flight)
-
 ----------------------------------------------------------------------------------------------------
 -- Functions
 ----------------------------------------------------------------------------------------------------
 
-function adirs_prep_elec_for_boarding(phase, cmd) 
+function adirs_prep_elec_for_boarding(phase) 
     if phase == SASL_COMMAND_BEGIN then
 	    ADIRS_handler_toggle_ADR(SASL_COMMAND_BEGIN, 1)
 	    ADIRS_handler_toggle_ADR(SASL_COMMAND_BEGIN, 2)
