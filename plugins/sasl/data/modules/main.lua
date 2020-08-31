@@ -41,6 +41,7 @@ components = {
   HUD {},
   DCDU {},
   DRAIMS {},
+  failures_manager {},
   display_brightness {}
  }
 

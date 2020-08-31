@@ -1,3 +1,8 @@
+-- General
+ReqMasterCaution      = createGlobalPropertyi("a321neo/failures/req_master_caution", 0, false, true, false) -- When a component (typically EWD) wants to trigger a caution put this to 1
+ReqMasterWarning      = createGlobalPropertyi("a321neo/failures/req_master_warning", 0, false, true, false) -- When a component (typically EWD) wants to trigger a warning put this to 1
+
+-- Systems
 FAILURE_Apu = globalProperty("sim/operation/failures/rel_apu")
 FAILURE_Apu_fire = globalProperty("sim/operation/failures/rel_apu_fire")
 FAILURE_TCAS = globalProperty("sim/operation/failures/rel_xpndr")

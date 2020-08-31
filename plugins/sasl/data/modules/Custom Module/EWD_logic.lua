@@ -336,7 +336,15 @@ local function update_left_list()
 
     for i, m in ipairs(left_messages_list) do
         if (m.is_active() and (not m.is_inhibited())) then
-            m.shown = true
+            if not m.shown then
+                m.shown = true
+                if m.color() == COL_WARNING then
+                    set(ReqMasterWarning, 1)
+                end
+                if m.color() == COL_CAUTION then
+                    set(ReqMasterCaution, 1)
+                end 
+            end
         end    
         if not m.is_active() then
             m.shown = false

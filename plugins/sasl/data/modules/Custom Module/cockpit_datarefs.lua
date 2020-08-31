@@ -206,4 +206,7 @@ Adirs_capt_has_IR     = createGlobalPropertyi("a321neo/cockpit/ADIRS/capt_has_IR
 Adirs_fo_has_ADR    = createGlobalPropertyi("a321neo/cockpit/ADIRS/fo_has_ADR", 0, false, true, false) -- 0: FAIL, 1: OK. It provides: altitude, airspeed, mach, AoA, temperature, overspeed warning
 Adirs_fo_has_IR     = createGlobalPropertyi("a321neo/cockpit/ADIRS/fo_has_IR", 0, false, true, false) -- 0: FAIL, 1: partial, 2: complete. It provides: attitude (1,2), heading (1,2), track (only 2), accelerations (only 2), angular rates (only 2), ground speed (only 2), position (only 2)
 
-
+-- Failures
+MasterCaution         = createGlobalPropertyi("a321neo/failures/master_caution", 0, false, true, false) -- Button light dataref - 0: OFF, 1: ON
+MasterWarning         = createGlobalPropertyi("a321neo/failures/master_warning", 0, false, true, false) -- Button light dataref - 0: OFF, 1: ON
+MasterWarningBlinking = createGlobalPropertyi("a321neo/failures/master_warning_blink", 0, false, true, false) -- Button light dataref - 0: OFF, 1: ON

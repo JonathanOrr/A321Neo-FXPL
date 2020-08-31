@@ -147,3 +147,7 @@ ADIRS_cmd_source_AIRDATA_up   = createCommand("a321neo/cockpit/ADIRS/AIRDATA_up"
 ADIRS_cmd_source_ATHDG_down   = createCommand("a321neo/cockpit/ADIRS/ATHDG_down", "Move left the knob")
 ADIRS_cmd_source_AIRDATA_down = createCommand("a321neo/cockpit/ADIRS/AIRDATA_down", "Move left the knob")
 
+-- Failures
+Failures_cancel_master_caution   = createCommand("a321neo/cockpit/cancel_master_caution", "Move left the knob")
+Failures_cancel_master_warning   = createCommand("a321neo/cockpit/cancel_master_warning", "Move left the knob")
+
