@@ -31,9 +31,9 @@ end
 function update()
     --change menu item state
     if FBW_debug_window:isVisible() == true then
-        sasl.setMenuItemState(Menu_main, ShowHideFBWDebug, MENU_CHECKED)
+        sasl.setMenuItemState(Menu_debug, ShowHideFBWDebug, MENU_CHECKED)
     else
-        sasl.setMenuItemState(Menu_main, ShowHideFBWDebug, MENU_UNCHECKED)
+        sasl.setMenuItemState(Menu_debug, ShowHideFBWDebug, MENU_UNCHECKED)
     end
 end
 

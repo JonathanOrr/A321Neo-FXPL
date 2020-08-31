@@ -182,6 +182,12 @@ function onMouseDown ( component , x , y , button , parentX , parentY )
 end
 
 function update()
+    if DMC_debug_window:isVisible() == true then
+        sasl.setMenuItemState(Menu_debug, ShowHideDMCDebug, MENU_CHECKED)
+    else
+        sasl.setMenuItemState(Menu_debug, ShowHideDMCDebug, MENU_UNCHECKED)
+    end
+
     --capt PFD show and hide--
     if get(Capt_pfd_displaying_status) == PFD then
         capt_pfd_color = DMC_GREEN

@@ -158,6 +158,21 @@ DCDU_window = contextWindow {
   };
 }
 
+failures_window = contextWindow {
+  name = "Failures Management";
+  position = { 150 , 150 , 600 , 600 };
+  noBackground = true ;
+  proportional = false ;
+  minimumSize = { 600 , 600 };
+  maximumSize = { 600 , 600 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = false ;
+  components = {
+    failures_window {position = { 0 , 0 , 600 , 600 }}
+  };
+}
+
+
 --menu item functions
 function Show_hide_MCDU()
   MCDU_window:setIsVisible(not MCDU_window:isVisible())
@@ -191,31 +206,27 @@ function Show_hide_DCDU()
   DCDU_window:setIsVisible(not DCDU_window:isVisible())
 end
 
+function Show_hide_Failures()
+  failures_window:setIsVisible(not failures_window:isVisible())
+end
+
 -- create top level menu in plugins menu
 Menu_master	= sasl.appendMenuItem (PLUGINS_MENU_ID, "A321NEO" )
 -- add a submenu
 Menu_main	= sasl.createMenu ("", PLUGINS_MENU_ID, Menu_master)
--- add menu entry
+
 ShowHideMCDU        = sasl.appendMenuItem(Menu_main, "Show/Hide MCDU", Show_hide_MCDU)
--- add menu entry
-ShowHideVnavDebug	= sasl.appendMenuItem(Menu_main, "Show/Hide VNAV Debug", Show_hide_vnav_debug)
--- add menu entry
-ShowHidePacksDebug	= sasl.appendMenuItem(Menu_main, "Show/Hide PACKS Debug", Show_hide_packs_debug)
--- add menu entry
-ShowHideFBWDebug	= sasl.appendMenuItem(Menu_main, "Show/Hide FBW Debug", Show_hide_FBW_debug)
--- add menu entry
-ShowHideFBWGraph	= sasl.appendMenuItem(Menu_main, "Show/Hide FBW Graph", Show_hide_FBW_graph)
--- add menu entry
-ShowHideECAMDebug	= sasl.appendMenuItem(Menu_main, "Show/Hide ECAM Debug", Show_hide_ECAM_debug)
--- add menu entry
-ShowHideDMCDebug	= sasl.appendMenuItem(Menu_main, "Show/Hide DMC Debug", Show_hide_DMC_debug)
--- add menu entry
 ShowHideDCDU        = sasl.appendMenuItem(Menu_main, "Show/Hide DCDU Management", Show_hide_DCDU)
+ShowHideFailures        = sasl.appendMenuItem(Menu_main, "Show/Hide Failures Management", Show_hide_Failures)
+
+Menu_debug_item	= sasl.appendMenuItem (Menu_main, "Debug" )
+-- add a submenu
+Menu_debug	= sasl.createMenu ("", Menu_main, Menu_debug_item)
+ShowHideVnavDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide VNAV Debug", Show_hide_vnav_debug)
+ShowHidePacksDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide PACKS Debug", Show_hide_packs_debug)
+ShowHideFBWDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide FBW Debug", Show_hide_FBW_debug)
+ShowHideFBWGraph	= sasl.appendMenuItem(Menu_debug, "Show/Hide FBW Graph", Show_hide_FBW_graph)
+ShowHideECAMDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide ECAM Debug", Show_hide_ECAM_debug)
+ShowHideDMCDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide DMC Debug", Show_hide_DMC_debug)
 
 
---initialise menu item status
-sasl.setMenuItemState(Menu_main, ShowHideVnavDebug, MENU_UNCHECKED)
-sasl.setMenuItemState(Menu_main, ShowHidePacksDebug, MENU_UNCHECKED)
-sasl.setMenuItemState(Menu_main, ShowHideFBWDebug, MENU_UNCHECKED)
-sasl.setMenuItemState(Menu_main, ShowHideECAMDebug, MENU_UNCHECKED)
-sasl.setMenuItemState(Menu_main, ShowHideDMCDebug, MENU_UNCHECKED)

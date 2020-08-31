@@ -43,9 +43,9 @@ end)
 function update()
     --change menu item state
     if Vnav_debug_window:isVisible() == true then
-        sasl.setMenuItemState(Menu_main, ShowHideVnavDebug, MENU_CHECKED)
+        sasl.setMenuItemState(Menu_debug, ShowHideVnavDebug, MENU_CHECKED)
     else
-        sasl.setMenuItemState(Menu_main, ShowHideVnavDebug, MENU_UNCHECKED)
+        sasl.setMenuItemState(Menu_debug, ShowHideVnavDebug, MENU_UNCHECKED)
     end
 
     --record crossover altitude

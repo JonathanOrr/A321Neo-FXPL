@@ -11,9 +11,9 @@ local B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
 function update()
     --change menu item state
     if ECAM_debug_window:isVisible() == true then
-        sasl.setMenuItemState(Menu_main, ShowHideECAMDebug, MENU_CHECKED)
+        sasl.setMenuItemState(Menu_debug, ShowHideECAMDebug, MENU_CHECKED)
     else
-        sasl.setMenuItemState(Menu_main, ShowHideECAMDebug, MENU_UNCHECKED)
+        sasl.setMenuItemState(Menu_debug, ShowHideECAMDebug, MENU_UNCHECKED)
     end
 end
 

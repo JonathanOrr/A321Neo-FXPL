@@ -42,9 +42,9 @@ local graph2_x_offset_sum = 0
 
 function update()
     if FBW_graph:isVisible() == true then
-        sasl.setMenuItemState(Menu_main, ShowHideFBWGraph, MENU_CHECKED)
+        sasl.setMenuItemState(Menu_debug, ShowHideFBWGraph, MENU_CHECKED)
       else
-        sasl.setMenuItemState(Menu_main, ShowHideFBWGraph, MENU_UNCHECKED)
+        sasl.setMenuItemState(Menu_debug, ShowHideFBWGraph, MENU_UNCHECKED)
       end
 
     graph1_x_offset_sum = 0
