@@ -15,8 +15,10 @@ local LIGHT_FAILED_OFF = 11
 local cmd_auto_board = sasl.findCommand("sim/operation/auto_board")  -- Prep electrical system for boarding
 local cmd_auto_start = sasl.findCommand("sim/operation/auto_start")  -- Auto start aircraft
 local cmd_quick_start = sasl.findCommand("sim/operation/quick_start") -- Auto start engines
-
-
+local cmd_reset_flight = sasl.findCommand("sim/operation/reset_flight") -- Reset in flight
+local cmd_reset_to_runway = sasl.findCommand("sim/operation/reset_to_runway") -- Reset on runway
+local cmd_go_to_default = sasl.findCommand("sim/operation/go_to_default")
+local startup_running = globalProperty("sim/operation/prefs/startup_running")
 
 local adr_time_begin = {0,0,0}
 local adr_switch_status = {false,false,false}
@@ -46,26 +48,43 @@ sasl.registerCommandHandler (ADIRS_cmd_source_ATHDG_down, 0,   function(phase) K
 sasl.registerCommandHandler (ADIRS_cmd_source_AIRDATA_up, 0,   function(phase) Knob_handler_up_int(phase, ADIRS_source_rotary_AIRDATA, -1, 1) end )
 sasl.registerCommandHandler (ADIRS_cmd_source_AIRDATA_down, 0, function(phase) Knob_handler_down_int(phase, ADIRS_source_rotary_AIRDATA, -1, 1) end )
 
-sasl.registerCommandHandler (cmd_auto_board, 0, function() adirs_prep_elec_for_boarding() end )
-sasl.registerCommandHandler (cmd_auto_start, 0, function() adirs_prep_elec_for_boarding() end )
-sasl.registerCommandHandler (cmd_quick_start, 0, function() adirs_prep_elec_for_boarding() end )
+sasl.registerCommandHandler (cmd_auto_board, 0, function(phase) adirs_prep_elec_for_boarding(phase) end )
+sasl.registerCommandHandler (cmd_auto_start, 0, function(phase) adirs_prep_elec_for_boarding(phase) end )
+sasl.registerCommandHandler (cmd_quick_start, 0, function(phase) adirs_prep_elec_for_boarding(phase) end )
+sasl.registerCommandHandler (cmd_reset_flight, 0, function(phase) adirs_prep_elec_for_boarding(phase) end )
+sasl.registerCommandHandler (cmd_reset_to_runway, 0, function(phase) adirs_prep_elec_for_boarding(phase) end )
+sasl.registerCommandHandler (cmd_go_to_default, 0, function(phase) adirs_prep_elec_for_boarding(phase) end )
+
+print(cmd_reset_flight)
 
 ----------------------------------------------------------------------------------------------------
 -- Functions
 ----------------------------------------------------------------------------------------------------
 
-function adirs_prep_elec_for_boarding()
-	ADIRS_handler_toggle_ADR(SASL_COMMAND_BEGIN, 1)
-	ADIRS_handler_toggle_ADR(SASL_COMMAND_BEGIN, 2)
-	ADIRS_handler_toggle_ADR(SASL_COMMAND_BEGIN, 3)
-	ADIRS_handler_toggle_IR(SASL_COMMAND_BEGIN, 1)
-	ADIRS_handler_toggle_IR(SASL_COMMAND_BEGIN, 2)
-	ADIRS_handler_toggle_IR(SASL_COMMAND_BEGIN, 3)
-	
-	set(ADIRS_rotary_btn[1],1)
-	set(ADIRS_rotary_btn[2],1)
-	set(ADIRS_rotary_btn[3],1)
-	
+function adirs_prep_elec_for_boarding(phase, cmd) 
+    if phase == SASL_COMMAND_BEGIN then
+	    ADIRS_handler_toggle_ADR(SASL_COMMAND_BEGIN, 1)
+	    ADIRS_handler_toggle_ADR(SASL_COMMAND_BEGIN, 2)
+	    ADIRS_handler_toggle_ADR(SASL_COMMAND_BEGIN, 3)
+	    ADIRS_handler_toggle_IR(SASL_COMMAND_BEGIN, 1)
+	    ADIRS_handler_toggle_IR(SASL_COMMAND_BEGIN, 2)
+	    ADIRS_handler_toggle_IR(SASL_COMMAND_BEGIN, 3)
+	    
+	    set(ADIRS_rotary_btn[1],1)
+	    set(ADIRS_rotary_btn[2],1)
+	    set(ADIRS_rotary_btn[3],1)
+	    
+	    adr_time_begin[1] = get(TIME) - TIME_TO_START_ADR - 2
+	    adr_time_begin[2] = get(TIME) - TIME_TO_START_ADR - 2
+	    adr_time_begin[3] = get(TIME) - TIME_TO_START_ADR - 2
+
+        set(Adirs_irs_begin_time[1], get(TIME) - 2)
+        set(Adirs_irs_begin_time[2], get(TIME) - 2)
+        set(Adirs_irs_begin_time[3], get(TIME) - 2)
+        set(Adirs_total_time_to_align, 1)
+
+    end	
+
 end
 
 local function get_time_to_align()
@@ -142,6 +161,7 @@ end
 local function update_status_irs(i)
 
     is_irs_att[i] = false
+    set(Adirs_ir_is_ok[i],0)
 
     if ir_switch_status[i] then
         -- IRS is on
@@ -152,10 +172,10 @@ local function update_status_irs(i)
             if get(FAILURE_IR[i]) > 0 then
                 -- Failed IRS, just switch on the button
                 set(ADIRS_light_IR[i], LIGHT_FAILED)
-            elseif get(Adirs_irs_begin_time[i]) > 0 then
+            elseif get(Adirs_irs_begin_time[i]) ~= 0 then
                 if get(TIME) - get(Adirs_irs_begin_time[i]) > get(Adirs_total_time_to_align) then
                     -- Align finished
-                   set(Adirs_ir_is_ok,1)
+                   set(Adirs_ir_is_ok[i],1)
                 end
                 set(ADIRS_light_IR[i], LIGHT_NORM)
                 
@@ -180,7 +200,7 @@ local function update_status_irs(i)
         end
         
         if get(ADIRS_rotary_btn[i]) == 2 then
-            if get(Adirs_ir_is_ok) == 0 then
+            if get(Adirs_ir_is_ok[i]) == 0 then
                 is_irs_att[i] = true    -- ATT mode
             end
         end
@@ -241,11 +261,11 @@ function update ()
     local is_capt_adr_ok = 0
     local is_fo_adr_ok = 0
      
-    if (get(Adirs_adr_is_ok[1]) == 1 and get(ADIRS_source_rotary_ATHDG) ~= -1) or (get(Adirs_adr_is_ok[3]) == 1 and get(ADIRS_source_rotary_ATHDG) == -1) then
+    if (get(Adirs_adr_is_ok[1]) == 1 and get(ADIRS_source_rotary_AIRDATA) ~= -1) or (get(Adirs_adr_is_ok[3]) == 1 and get(ADIRS_source_rotary_AIRDATA) == -1) then
         is_capt_adr_ok = 1
     end
     
-    if (get(Adirs_adr_is_ok[2]) == 1 and get(ADIRS_source_rotary_ATHDG) ~= 1) or (get(Adirs_adr_is_ok[3]) == 1 and get(ADIRS_source_rotary_ATHDG) ==  1) then
+    if (get(Adirs_adr_is_ok[2]) == 1 and get(ADIRS_source_rotary_AIRDATA) ~= 1) or (get(Adirs_adr_is_ok[3]) == 1 and get(ADIRS_source_rotary_AIRDATA) ==  1) then
         is_fo_adr_ok = 1
     end
     
@@ -255,11 +275,11 @@ function update ()
     local is_capt_irs_ok = 0
     local is_fo_irs_ok = 0
      
-    if (get(Adirs_ir_is_ok[1]) == 1 and get(ADIRS_source_rotary_AIRDATA) ~= -1) or (get(Adirs_ir_is_ok[3]) == 1 and get(ADIRS_source_rotary_AIRDATA) == -1) then
+    if (get(Adirs_ir_is_ok[1]) == 1 and get(ADIRS_source_rotary_ATHDG) ~= -1) or (get(Adirs_ir_is_ok[3]) == 1 and get(ADIRS_source_rotary_ATHDG) == -1) then
         is_capt_irs_ok = 1
     end
     
-    if (get(Adirs_ir_is_ok[2]) == 1 and get(ADIRS_source_rotary_AIRDATA) ~=  1) or (get(Adirs_ir_is_ok[3]) == 1 and get(ADIRS_source_rotary_AIRDATA) ==  1) then
+    if (get(Adirs_ir_is_ok[2]) == 1 and get(ADIRS_source_rotary_ATHDG) ~=  1) or (get(Adirs_ir_is_ok[3]) == 1 and get(ADIRS_source_rotary_ATHDG) ==  1) then
         is_fo_irs_ok = 1
     end
     

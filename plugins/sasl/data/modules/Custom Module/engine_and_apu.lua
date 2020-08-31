@@ -60,7 +60,6 @@ end)
 
 sasl.registerCommandHandler ( reset_flight, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        if get(startup_running) == 1 then
             set(Battery_1, 1)
             set(Battery_2, 1)
             set(Apu_start_position, 2)
@@ -69,10 +68,6 @@ sasl.registerCommandHandler ( reset_flight, 0, function(phase)
             set(Engine_mode_knob, 1)
             set(Engine_1_master_switch, 1)
             set(Engine_2_master_switch, 1)
-        else
-            set(Engine_1_master_switch, 0)
-            set(Engine_2_master_switch, 0)
-        end
     end
 end)
 

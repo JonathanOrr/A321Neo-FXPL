@@ -58,6 +58,8 @@ local left_messages_list = {
     MessageGroup_TCAS_FAULT,
     MessageGroup_ADR_FAULT_SINGLE,
     MessageGroup_ADR_FAULT_DOUBLE,
+    MessageGroup_IR_FAULT_SINGLE,
+    MessageGroup_IR_FAULT_DOUBLE,
     
     -- Warnings
     MessageGroup_CONFIG_TAKEOFF,
@@ -65,6 +67,7 @@ local left_messages_list = {
     MessageGroup_GEAR_NOT_DOWNLOCKED,
     MessageGroup_GEAR_NOT_DOWN,
     MessageGroup_ADR_FAULT_TRIPLE,
+    MessageGroup_IR_FAULT_TRIPLE,
     
     -- Misc
     MessageGroup_TOCONFIG_NORMAL -- This must be the last message

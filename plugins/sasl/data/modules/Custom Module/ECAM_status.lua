@@ -9,6 +9,8 @@ local ECAM_RED = {1.0, 0.0, 0.0}
 local ECAM_MAGENTA = {1.0, 0.0, 1.0}
 local ECAM_GREY = {0.3, 0.3, 0.3}
 
+include('EWD_msgs/adirs.lua')
+
 local function put_inop_sys_msg_2(messages, dr_1, dr_2, title)
     if get(dr_1) == 0 and get(dr_2) == 0 then
         table.insert(messages, title .. " 1 + 2")
@@ -106,6 +108,15 @@ ecam_sts = {
             table.insert(messages, {text="LDG DIST PROC..........APPLY", color=ECAM_BLUE})
         end
         
+        if MessageGroup_ADR_FAULT_TRIPLE:is_active() then
+            table.insert(messages, {text="RUD WITH CARE ABV 160 KT", color=ECAM_BLUE})
+        end
+        
+        if MessageGroup_IR_FAULT_SINGLE:is_active() or MessageGroup_IR_FAULT_DOUBLE:is_active() or MessageGroup_IR_FAULT_TRIPLE:is_active() then
+            table.insert(messages, {text="IR MAY BE AVAIL IN ATT", color=ECAM_WHITE})     
+        end
+        
+        
         return messages
     end,
     
@@ -124,15 +135,19 @@ ecam_sts = {
             table.insert(messages, "USE SPD BRK WITH CARE")
         end
         if get(FBW_status) == 1 then
+            table.insert(messages, "WHEN L/G DN : DIRECT LAW")
             table.insert(messages, "ALTN LAW : PROT LOST")
         end
         
         if get(FAILURE_gear) == 1 then
             table.insert(messages, "INCREASED FUEL CONSUMP")        
         end
-    
-        if get(Nosewheel_Steering_and_AS) == 0 or get(FAILURE_gear) == 2 then
+
+   
+        if get(Nosewheel_Steering_and_AS) == 0 or get(FAILURE_gear) == 2 or MessageGroup_ADR_FAULT_SINGLE:is_active() or MessageGroup_IR_FAULT_SINGLE:is_active() then
             table.insert(messages, "CAT 3 SINGLE ONLY")
+        elseif MessageGroup_ADR_FAULT_DOUBLE:is_active() or MessageGroup_ADR_FAULT_TRIPLE:is_active() or MessageGroup_IR_FAULT_DOUBLE:is_active() or MessageGroup_IR_FAULT_TRIPLE:is_active() then
+            table.insert(messages, "CAT 1 ONLY")
         end
     
         return messages
@@ -153,6 +168,8 @@ ecam_sts = {
         
         local inop_cat3_dual = false
         local inop_steer = false
+        local inop_aps   = false
+        local inop_atr   = false
         
         -- AIR
         --put_inop_sys_msg_2(messages, Left_bleed_avil, Right_bleed_avil, "PACK")
@@ -196,12 +213,61 @@ ecam_sts = {
             inop_cat3_dual = true            
         end
 
-
+        if MessageGroup_ADR_FAULT_SINGLE:is_active() then
+            table.insert(messages, "ADR " .. MessageGroup_ADR_FAULT_SINGLE:get_failed())
+            inop_cat3_dual = true
+        end
+        if MessageGroup_ADR_FAULT_DOUBLE:is_active() then
+            a, b = MessageGroup_ADR_FAULT_DOUBLE:get_failed()
+            table.insert(messages, "ADR " .. a .. " + " .. b)
+            table.insert(messages, "RUD TRV LIM")
+            inop_cat3_dual = true
+            inop_aps = true
+        end
+        
+        if MessageGroup_ADR_FAULT_TRIPLE:is_active() then
+            table.insert(messages, "ADR 1 + 2 + 3")
+            table.insert(messages, "RUD TRV LIM")
+            table.insert(messages, "WINDSHEAR DET")
+            inop_cat3_dual = true
+            inop_aps = true
+            inop_atr = true
+        end
+ 
+        if MessageGroup_IR_FAULT_SINGLE:is_active() then
+            table.insert(messages, "IR " .. MessageGroup_IR_FAULT_SINGLE:get_failed())
+            inop_cat3_dual = true
+        end
+        if MessageGroup_IR_FAULT_DOUBLE:is_active() then
+            a,b = MessageGroup_IR_FAULT_DOUBLE:get_failed()
+            table.insert(messages, "IR " .. a .. " + " .. b)
+            table.insert(messages, "YAW DAMPER")
+            inop_cat3_dual = true
+            inop_aps = true
+            inop_atr = true
+        end
+        
+        if MessageGroup_IR_FAULT_TRIPLE:is_active() then
+            table.insert(messages, "IR 1 + 2 + 3")
+            table.insert(messages, "YAW DAMPER")
+            inop_cat3_dual = true
+            inop_aps = true
+            inop_atr = true
+        end
+        
         -- LEAVE THESE AT THE LAST
         if inop_cat3_dual then
             table.insert(messages, "CAT 3 DUAL")        
         end
+
+        if inop_aps then
+            table.insert(messages, "AP 1 + 2")        
+        end
         
+        if inop_atr then
+            table.insert(messages, "A/THR")        
+        end
+                
         if inop_steer then
             table.insert(messages, "N.W. STEER")
         end
