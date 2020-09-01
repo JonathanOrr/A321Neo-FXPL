@@ -25731,8 +25731,10 @@ IDX	20496
 		ATTR_manip_none
 		TRIS	23166 6
 		TRIS	780 84
+		ATTR_manip_command	button	a321neo/cockpit/cancel_master_caution	Accept master caution
 		TRIS	23604 84
 		TRIS	23688 84
+		ATTR_manip_command	button	a321neo/cockpit/cancel_master_warning	Accept master warning
 		TRIS	23772 84
 		TRIS	23856 84
 		ATTR_manip_command	button		
