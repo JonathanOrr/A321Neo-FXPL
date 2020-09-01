@@ -10,7 +10,7 @@ local function put_inop_sys_msg_2(messages, dr_1, dr_2, title)
     end
 end
 
-local function put_inop_sys_msg_3(dr_1, dr_2, dr_3, title)
+local function put_inop_sys_msg_3(messages, dr_1, dr_2, dr_3, title)
     if get(dr_1) == 0 and get(dr_2) == 0 and get(dr_3) == 0 then
         table.insert(messages, title .. " 1 + 2 + 3")
     elseif get(dr_1) == 0 and get(dr_2) == 0 then
