@@ -177,7 +177,7 @@ function update()
     set(Abs_vpath_pitch_rate, get(Vpath) - last_vpath)
     --calculate vpath pitch rate per second
     if get(DELTA_TIME) > 0 then
-        set(Persec_vpath_pitch_rate, (get(Vpath) - last_vpath) / get(DELTA_TIME))
+        set(Persec_vpath_pitch_rate, Set_anim_value(get(Persec_vpath_pitch_rate), (get(Vpath) - last_vpath) / get(DELTA_TIME), -1000000, 1000000, 26.5))
     else
         set(Persec_vpath_pitch_rate, 0)
     end
