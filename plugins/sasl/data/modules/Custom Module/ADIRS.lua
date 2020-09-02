@@ -206,9 +206,11 @@ local function update_status_irs(i)
     elseif get(FAILURE_IR[i]) == 1 then
         -- ADR failed and switched OFF
         set(ADIRS_light_IR[i], LIGHT_FAILED_OFF)
+        set(Adirs_irs_begin_time[i], 0)
     else
         -- ADR switched OFF (but working)
         set(ADIRS_light_IR[i], LIGHT_OFF)
+        set(Adirs_irs_begin_time[i], 0)
     end    
 end
 
@@ -274,15 +276,29 @@ function update ()
     local is_fo_irs_ok = 0
      
     if (get(Adirs_ir_is_ok[1]) == 1 and get(ADIRS_source_rotary_ATHDG) ~= -1) or (get(Adirs_ir_is_ok[3]) == 1 and get(ADIRS_source_rotary_ATHDG) == -1) then
-        is_capt_irs_ok = 1
+        is_capt_irs_ok = 2
     end
     
     if (get(Adirs_ir_is_ok[2]) == 1 and get(ADIRS_source_rotary_ATHDG) ~=  1) or (get(Adirs_ir_is_ok[3]) == 1 and get(ADIRS_source_rotary_ATHDG) ==  1) then
-        is_fo_irs_ok = 1
+        is_fo_irs_ok = 2
     end
     
+    if (is_irs_att[1] and get(ADIRS_source_rotary_ATHDG) ~= -1) or (is_irs_att[3] and get(ADIRS_source_rotary_ATHDG) == -1) then
+        is_capt_irs_ok = 1
+    end
+    if (is_irs_att[2] and get(ADIRS_source_rotary_ATHDG) ~= -1) or (is_irs_att[3] and get(ADIRS_source_rotary_ATHDG) == 1) then
+        is_fo_irs_ok = 1
+    end
+
     set(Adirs_capt_has_IR, is_capt_irs_ok)
     set(Adirs_fo_has_IR, is_fo_irs_ok)
 
+    if math.floor(get(TIME)*2) % 2 == 0 then
+        set(Adirs_capt_has_ADR_blink, is_capt_adr_ok)
+        set(Adirs_capt_has_IR_blink, is_capt_irs_ok)
+    else
+        set(Adirs_capt_has_ADR_blink, 1)
+        set(Adirs_capt_has_IR_blink, 2)    
+    end
     
 end
