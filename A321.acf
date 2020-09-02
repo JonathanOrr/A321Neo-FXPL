@@ -143,7 +143,7 @@ P _door/3/_xyz/0 1.500000000
 P _door/3/_xyz/1 0.0
 P _door/3/_xyz/2 14.500000000
 P _door/3/_xyz/count 3
-P _door/4/_ang_now 64.434562683
+P _door/4/_ang_now 29.472003937
 P _door/4/_ext_ang 0.0
 P _door/4/_ret_ang 90.0
 P _door/4/_type 2
@@ -151,7 +151,7 @@ P _door/4/_xyz/0 -13.0
 P _door/4/_xyz/1 -3.599999905
 P _door/4/_xyz/2 73.500000000
 P _door/4/_xyz/count 3
-P _door/5/_ang_now -64.434562683
+P _door/5/_ang_now -29.472003937
 P _door/5/_ext_ang 0.0
 P _door/5/_ret_ang -90.0
 P _door/5/_type 2
@@ -209,10 +209,10 @@ P _gear/0/_latN 0.0
 P _gear/0/_latR 0.0
 P _gear/0/_leg_len 5.400000095
 P _gear/0/_lonE 0.0
-P _gear/0/_lonN 70.162078857
+P _gear/0/_lonN 32.091735840
 P _gear/0/_lonR 98.0
 P _gear/0/_scon 47252.898437500
-P _gear/0/_stat_def 0.399389684
+P _gear/0/_stat_def 0.399389803
 P _gear/0/_steerdeg_hispeed 5.0
 P _gear/0/_steerdeg_lospeed 75.0
 P _gear/0/_strut_comp 0.0
@@ -239,14 +239,14 @@ P _gear/1/_gear_x -12.010000229
 P _gear/1/_gear_y -2.799999952
 P _gear/1/_gear_z 69.800003052
 P _gear/1/_latE 0.0
-P _gear/1/_latN 57.275169373
+P _gear/1/_latN 26.197338104
 P _gear/1/_latR 80.0
 P _gear/1/_leg_len 8.199999809
 P _gear/1/_lonE -7.0
-P _gear/1/_lonN -1.988422751
+P _gear/1/_lonN -4.707733154
 P _gear/1/_lonR 0.0
 P _gear/1/_scon 71266.664062500
-P _gear/1/_stat_def 1.367629528
+P _gear/1/_stat_def 1.367629766
 P _gear/1/_steerdeg_hispeed 0.0
 P _gear/1/_steerdeg_lospeed 0.0
 P _gear/1/_strut_comp -0.500000000
@@ -273,14 +273,14 @@ P _gear/2/_gear_x 12.010000229
 P _gear/2/_gear_y -2.799999952
 P _gear/2/_gear_z 69.800003052
 P _gear/2/_latE 0.0
-P _gear/2/_latN -57.275169373
+P _gear/2/_latN -26.197338104
 P _gear/2/_latR -80.0
 P _gear/2/_leg_len 8.199999809
 P _gear/2/_lonE -7.0
-P _gear/2/_lonN -1.988422751
+P _gear/2/_lonN -4.707733154
 P _gear/2/_lonR 0.0
 P _gear/2/_scon 71266.664062500
-P _gear/2/_stat_def 1.367629528
+P _gear/2/_stat_def 1.367629766
 P _gear/2/_steerdeg_hispeed 0.0
 P _gear/2/_steerdeg_lospeed 0.0
 P _gear/2/_strut_comp -0.500000000
@@ -24399,7 +24399,7 @@ P _part/85/_part_specs_invis 1
 P _part/85/_part_tex 0
 P _part/85/_part_the -83.0
 P _part/85/_part_x 0.0
-P _part/85/_part_y -10.990610123
+P _part/85/_part_y -10.990609169
 P _part/85/_part_z 17.530000687
 P _part/85/_patt_con 0
 P _part/85/_patt_prt 0
@@ -25869,7 +25869,7 @@ P _part/86/_part_specs_invis 0
 P _part/86/_part_tex 0
 P _part/86/_part_the 0.0
 P _part/86/_part_x -12.010000229
-P _part/86/_part_y -9.571249008
+P _part/86/_part_y -9.571248055
 P _part/86/_part_z 70.799331665
 P _part/86/_patt_con 0
 P _part/86/_patt_prt 0
@@ -27339,7 +27339,7 @@ P _part/87/_part_specs_invis 0
 P _part/87/_part_tex 0
 P _part/87/_part_the 0.0
 P _part/87/_part_x 12.010000229
-P _part/87/_part_y -9.571249008
+P _part/87/_part_y -9.571248055
 P _part/87/_part_z 70.799331665
 P _part/87/_patt_con 0
 P _part/87/_patt_prt 0
@@ -35814,7 +35814,7 @@ P acf/_feather_prop_with_oilp 0
 P acf/_feathered_pitch 0.0
 P acf/_ff_rat_idle_JET 0.039999999
 P acf/_ff_rat_idle_PRP 0.0
-P acf/_file_writer_version 115032
+P acf/_file_writer_version 115029
 P acf/_flap1_cd 0.100000001
 P acf/_flap1_cl 0.779999971
 P acf/_flap1_cm -0.689999998
@@ -38121,7 +38121,6 @@ GROUP glareshield buttons
 END_GROUP
 GROUP Buttons and Lights
   LOCKED
-  GROUP_OPEN
   GROUP ADIRS
     LOCKED
     gen_rotary IR1
@@ -43648,6 +43647,7 @@ GROUP EWD
   END_GROUP
 END_GROUP
 GROUP PFD
+  GROUP_OPEN
   gen_needle horizon
     POS 1758.500000 724.500000
     IMAGE MIP/pfd/ADI
@@ -44009,6 +44009,7 @@ GROUP PFD
 
   END_GROUP
   GROUP Speed Tape
+    GROUP_OPEN
     gen_pointer Speed Tape
       POS 1441.000000 733.000000
       IMAGE MIP/pfd/spd tape
@@ -44277,6 +44278,7 @@ GROUP PFD
     OFFSET 0.000000
 
   GROUP LS
+    SHOW_EQUAL -1.000000 abc
     gen_rotary LSH
       POS 1759.000000 451.000000
       IMAGE MIP/pfd/LSH
@@ -44400,6 +44402,85 @@ GROUP PFD
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 0.000000
+    DIGITS 1
+    ROTARY_TYPE NO_CLICK
+    CLICK_RADIUS 10.000000
+    CLICK_RADIUS_DY 0.000000
+    OFFSET 0.000000
+    STEP1 1.000000
+    STEP2 1.000000
+    CURSOR DEFAULT
+    CLICK_DX 0
+    CLICK_DY 0
+
+END_GROUP
+GROUP PFD Standby Covers
+  GROUP_OPEN
+  gen_rotary Attitude Stby
+    POS 1754.500000 707.500000
+    IMAGE MIP/pfd/Standby/att
+    DATAREF a321neo/cockpit/ADIRS/capt_has_IR
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 1.000000 -1.000000 1.000000
+    KEY_FRAME 0.000000 0.000000
+    DIGITS 1
+    ROTARY_TYPE NO_CLICK
+    CLICK_RADIUS 10.000000
+    CLICK_RADIUS_DY 0.000000
+    OFFSET 0.000000
+    STEP1 1.000000
+    STEP2 1.000000
+    CURSOR DEFAULT
+    CLICK_DX 0
+    CLICK_DY 0
+
+  gen_rotary Speed Standby
+    POS 1456.500000 722.500000
+    IMAGE MIP/pfd/Standby/spd
+    DATAREF a321neo/cockpit/ADIRS/capt_has_ADR
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 1.000000 -1.000000 1.000000
+    KEY_FRAME 0.000000 0.000000
+    DIGITS 1
+    ROTARY_TYPE NO_CLICK
+    CLICK_RADIUS 10.000000
+    CLICK_RADIUS_DY 0.000000
+    OFFSET 0.000000
+    STEP1 1.000000
+    STEP2 1.000000
+    CURSOR DEFAULT
+    CLICK_DX 0
+    CLICK_DY 0
+
+  gen_rotary Altitude Standby
+    POS 2114.500000 708.000000
+    IMAGE MIP/pfd/Standby/alt
+    DATAREF a321neo/cockpit/ADIRS/capt_has_ADR
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 1.000000 -1.000000 1.000000
+    KEY_FRAME 0.000000 0.000000
+    DIGITS 1
+    ROTARY_TYPE NO_CLICK
+    CLICK_RADIUS 10.000000
+    CLICK_RADIUS_DY 0.000000
+    OFFSET 0.000000
+    STEP1 1.000000
+    STEP2 1.000000
+    CURSOR DEFAULT
+    CLICK_DX 0
+    CLICK_DY 0
+
+  gen_rotary Heading Standby
+    POS 1760.500000 351.000000
+    IMAGE MIP/pfd/Standby/hdg
+    DATAREF a321neo/cockpit/ADIRS/capt_has_IR
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 1.000000 -1.000000 1.000000
+    KEY_FRAME 0.000000 0.000000
     DIGITS 1
     ROTARY_TYPE NO_CLICK
     CLICK_RADIUS 10.000000
