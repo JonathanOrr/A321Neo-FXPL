@@ -210,14 +210,27 @@ function Show_hide_Failures()
   failures_window:setIsVisible(not failures_window:isVisible())
 end
 
+function IRs_instaneous_align()
+    ADIRS_cmd_instantaneous_align = sasl.findCommand("a321neo/cockpit/ADIRS/instantaneous_align")
+    sasl.messageWindow (500 , 500 , 300 , 100 , " IRs auto-align " , 
+                    " I will instantaneous align ONLY the IR turned ON and with knob selector to NAV ",
+                    1 , " Understood " , function() sasl.commandOnce (ADIRS_cmd_instantaneous_align) end)
+end
+
 -- create top level menu in plugins menu
 Menu_master	= sasl.appendMenuItem (PLUGINS_MENU_ID, "A321NEO" )
 -- add a submenu
 Menu_main	= sasl.createMenu ("", PLUGINS_MENU_ID, Menu_master)
 
 ShowHideMCDU        = sasl.appendMenuItem(Menu_main, "Show/Hide MCDU", Show_hide_MCDU)
-ShowHideDCDU        = sasl.appendMenuItem(Menu_main, "Show/Hide DCDU Management", Show_hide_DCDU)
-ShowHideFailures        = sasl.appendMenuItem(Menu_main, "Show/Hide Failures Management", Show_hide_Failures)
+ShowHideDCDU        = sasl.appendMenuItem(Menu_main, "Show/Hide DCDU Manager", Show_hide_DCDU)
+ShowHideFailures        = sasl.appendMenuItem(Menu_main, "Show/Hide Failures Manager", Show_hide_Failures)
+
+sasl.appendMenuSeparator(Menu_main)
+
+ADIRSAlign        = sasl.appendMenuItem(Menu_main, "Instaneous align IRs", IRs_instaneous_align)
+
+sasl.appendMenuSeparator(Menu_main)
 
 Menu_debug_item	= sasl.appendMenuItem (Menu_main, "Debug" )
 -- add a submenu

@@ -60,6 +60,8 @@ sasl.registerCommandHandler (cmd_reset_flight, 0, function(phase) adirs_prep_ele
 sasl.registerCommandHandler (cmd_reset_to_runway, 0, function(phase) adirs_prep_elec_for_boarding(phase) end )
 sasl.registerCommandHandler (cmd_go_to_default, 0, function(phase) adirs_prep_elec_for_boarding(phase) end )
 
+sasl.registerCommandHandler (ADIRS_cmd_instantaneous_align, 0, function(phase) adirst_inst_align(phase) end )
+
 ----------------------------------------------------------------------------------------------------
 -- Functions
 ----------------------------------------------------------------------------------------------------
@@ -88,6 +90,18 @@ function adirs_prep_elec_for_boarding(phase)
 
     end	
 
+end
+
+function adirst_inst_align(phase)
+    if phase ~= SASL_COMMAND_BEGIN then
+        return
+    end
+    
+   set(Adirs_total_time_to_align, 1)
+   set(Adirs_irs_begin_time[1], get(TIME) - 2)
+   set(Adirs_irs_begin_time[2], get(TIME) - 2)
+   set(Adirs_irs_begin_time[3], get(TIME) - 2)
+    
 end
 
 local function get_time_to_align()
