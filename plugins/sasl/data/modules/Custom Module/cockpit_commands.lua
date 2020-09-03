@@ -147,6 +147,20 @@ ADIRS_cmd_source_AIRDATA_up   = createCommand("a321neo/cockpit/ADIRS/AIRDATA_up"
 ADIRS_cmd_source_ATHDG_down   = createCommand("a321neo/cockpit/ADIRS/ATHDG_down", "Move left the knob")
 ADIRS_cmd_source_AIRDATA_down = createCommand("a321neo/cockpit/ADIRS/AIRDATA_down", "Move left the knob")
 
+--doors
+Door_1_l_toggle = createCommand("a321neo/cockpit/door/toggle_door_1_l", "Open/Close door 1 L")
+Door_1_r_toggle = createCommand("a321neo/cockpit/door/toggle_door_1_r", "Open/Close door 1 R")
+Door_2_l_toggle = createCommand("a321neo/cockpit/door/toggle_door_2_l", "Open/Close door 2 L")
+Door_2_r_toggle = createCommand("a321neo/cockpit/door/toggle_door_2_r", "Open/Close door 2 R")
+Door_3_l_toggle = createCommand("a321neo/cockpit/door/toggle_door_3_l", "Open/Close door 3 L")
+Door_3_r_toggle = createCommand("a321neo/cockpit/door/toggle_door_3_r", "Open/Close door 3 R")
+Overwing_exit_1_l_toggle = createCommand("a321neo/cockpit/door/toggle_overwing_exit_1_l", "Open/Close overwing exit 1 L")
+Overwing_exit_1_r_toggle = createCommand("a321neo/cockpit/door/toggle_overwing_exit_1_r", "Open/Close overwing exit 1 R")
+Overwing_exit_2_l_toggle = createCommand("a321neo/cockpit/door/toggle_overwing_exit_2_l", "Open/Close overwing exit 2 L")
+Overwing_exit_2_r_toggle = createCommand("a321neo/cockpit/door/toggle_overwing_exit_2_r", "Open/Close overwing exit 2 R")
+Cargo_1_toggle = createCommand("a321neo/cockpit/door/toggle_cargo_1", "Open/Close cargo 1")
+Cargo_2_toggle = createCommand("a321neo/cockpit/door/toggle_cargo_2", "Open/Close cargo 2")
+
 -- Failures
 Failures_cancel_master_caution   = createCommand("a321neo/cockpit/cancel_master_caution", "Move left the knob")
 Failures_cancel_master_warning   = createCommand("a321neo/cockpit/cancel_master_warning", "Move left the knob")

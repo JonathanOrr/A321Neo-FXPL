@@ -42,7 +42,8 @@ components = {
   DCDU {},
   DRAIMS {},
   failures_manager {},
-  display_brightness {}
+  display_brightness {},
+  doors {}
  }
 
  --windows

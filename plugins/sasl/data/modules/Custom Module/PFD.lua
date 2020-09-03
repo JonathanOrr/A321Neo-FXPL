@@ -118,12 +118,15 @@ function update()
 end
 
 function draw()
-    sasl.gl.drawWideLine(848, vvi_left_pixel_offset, 900, 442, 4, vvi_cl)
-    if get(vvi) >= 0 then
-        sasl.gl.drawRectangle(850, vvi_left_pixel_offset + 6, 34, 22, PFD_BLACK)
-        sasl.gl.drawText(B612MONO_regular, 852, vvi_left_pixel_offset + 8, vvi_number_display, 23, false, false, TEXT_ALIGN_LEFT, vvi_cl)
-    else
-        sasl.gl.drawRectangle(850, vvi_left_pixel_offset - 28, 34, 22, PFD_BLACK)
-        sasl.gl.drawText(B612MONO_regular, 852, vvi_left_pixel_offset - 26, vvi_number_display, 23, false, false, TEXT_ALIGN_LEFT, vvi_cl)
+    --show and hide the V/S indicators according to the airdata
+    if get(Adirs_capt_has_ADR) == 1 then
+        sasl.gl.drawWideLine(848, vvi_left_pixel_offset, 900, 442, 4, vvi_cl)
+        if get(vvi) >= 0 then
+            sasl.gl.drawRectangle(850, vvi_left_pixel_offset + 6, 34, 22, PFD_BLACK)
+            sasl.gl.drawText(B612MONO_regular, 852, vvi_left_pixel_offset + 8, vvi_number_display, 23, false, false, TEXT_ALIGN_LEFT, vvi_cl)
+        else
+            sasl.gl.drawRectangle(850, vvi_left_pixel_offset - 28, 34, 22, PFD_BLACK)
+            sasl.gl.drawText(B612MONO_regular, 852, vvi_left_pixel_offset - 26, vvi_number_display, 23, false, false, TEXT_ALIGN_LEFT, vvi_cl)
+        end
     end
 end
