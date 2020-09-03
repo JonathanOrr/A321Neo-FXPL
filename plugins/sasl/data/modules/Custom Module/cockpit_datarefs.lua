@@ -126,6 +126,13 @@ Fo_landing_system_enabled = createGlobalPropertyi("a321neo/cockpit/PFD/fo_ls_ena
 Max_speed = createGlobalPropertyf("a321neo/cockpit/PFD/max_speed", 330, false, true, false)
 Max_speed_delta = createGlobalPropertyf("a321neo/cockpit/PFD/max_speed_delta", 0, false, true, false)
 
+PFD_Capt_IAS = createGlobalPropertyf("a321neo/cockpit/PFD/capt_ias", 0, false, true, false) -- Displayed IAS CAPT (affected by ADIRS)
+PFD_Fo_IAS = createGlobalPropertyf("a321neo/cockpit/PFD/fo_ias", 0, false, true, false)   -- Displayed IAS F/O (affected by ADIRS)
+PFD_Capt_Baro_Altitude = createGlobalPropertyf("a321neo/cockpit/PFD/capt_baro_alt", 0, false, true, false) -- Displayed Altitude CAPT (affected by ADIRS)
+PFD_Fo_Baro_Altitude = createGlobalPropertyf("a321neo/cockpit/PFD/fo_baro_alt", 0, false, true, false)   -- Displayed Altitude F/O (affected by ADIRS)
+PFD_Capt_VS = createGlobalPropertyf("a321neo/cockpit/PFD/capt_vs", 0, false, true, false) -- Displayed V/S CAPT (affected by ADIRS)
+PFD_Fo_VS = createGlobalPropertyf("a321neo/cockpit/PFD/fo_vs", 0, false, true, false)   -- Displayed V/S F/O (affected by ADIRS)
+
 -- ECAM
 Ecam_previous_page  = createGlobalPropertyi("a321neo/cockpit/ecam/previous", 13, false, true, false) --1ENG, 2BLEED, 3PRESS, 4ELEC, 5HYD, 6FUEL, 7APU, 8COND, 9DOOR, 10WHEEL, 11F/CTL, 12STS
 Ecam_current_page   = createGlobalPropertyi("a321neo/cockpit/ecam/page_num", 13, false, true, false) --1ENG, 2BLEED, 3PRESS, 4ELEC, 5HYD, 6FUEL, 7APU, 8COND, 9DOOR, 10WHEEL, 11F/CTL, 12STS

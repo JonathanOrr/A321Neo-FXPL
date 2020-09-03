@@ -254,6 +254,14 @@ Gross_weight = globalProperty ("sim/flightmodel/weight/m_total")
 Capt_ra_alt_ft = globalProperty("sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot")
 Capt_baro_alt_ft = globalProperty("sim/cockpit2/gauges/indicators/altitude_ft_pilot")
 IAS = globalProperty("sim/flightmodel/position/indicated_airspeed")
+
+Capt_IAS     = globalProperty("sim/cockpit2/gauges/indicators/airspeed_kts_pilot")   -- Consider to use PFD_Capt_IAS instead (check cockpit_datarefs.lua)
+Fo_IAS       = globalProperty("sim/cockpit2/gauges/indicators/airspeed_kts_copilot") -- Consider to use PFD_Fo_IAS instead (check cockpit_datarefs.lua)
+Capt_Baro_Alt= globalProperty("sim/cockpit2/gauges/indicators/altitude_ft_pilot")    -- Consider to use PFD_Capt_Baro_Altitude instead (check cockpit_datarefs.lua)
+Fo_Baro_Alt  = globalProperty("sim/cockpit2/gauges/indicators/altitude_ft_copilot")  -- Consider to use PFD_Fo_Baro_Altitude instead (check cockpit_datarefs.lua)
+Capt_VVI     = globalProperty("sim/cockpit2/gauges/indicators/vvi_fpm_pilot")        -- Consider to use PFD_Capt_VS instead (check cockpit_datarefs.lua)
+Fo_VVI       = globalProperty("sim/cockpit2/gauges/indicators/vvi_fpm_copilot")      -- Consider to use PFD_Fo_VS instead (check cockpit_datarefs.lua)
+
 --gear
 Autobrakes_sim = globalProperty("sim/cockpit2/switches/auto_brake_level")--0RTO, 1off, 2, 3, 4, 5
 Gear_handle = globalProperty("sim/cockpit2/controls/gear_handle_down")

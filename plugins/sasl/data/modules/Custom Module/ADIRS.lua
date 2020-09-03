@@ -26,6 +26,9 @@ local adr_switch_status = {true,true,true}
 local is_irs_att = {false, false, false}
 local ir_switch_status = {true,true,true}
 
+local ias_3_offset = math.random() * 2 - 1   -- Max offset IAS between ADR1/2 and ADR3: +1/-1
+local alt_3_offset = math.random() * 20 - 10 -- Max offset Altitude between ADR1/2 and ADR3: +10/-10
+
 ----------------------------------------------------------------------------------------------------
 -- Custom commands (internal only, refers to cockpit_commands.lua for switch commands
 ----------------------------------------------------------------------------------------------------
@@ -295,6 +298,40 @@ local function update_status_datarefs(is_capt_adr_ok, is_fo_adr_ok, is_capt_irs_
     end
 end
 
+local function update_output_datarefs()
+
+    local orig_capt_ias = get(Capt_IAS)
+    local orig_fo_ias   = get(Fo_IAS)
+    local orig_capt_alt = get(Capt_Baro_Alt)
+    local orig_fo_alt  = get(Fo_Baro_Alt)
+    local orig_capt_vs  = get(Capt_VVI)
+    local orig_fo_vs    = get(Fo_VVI)
+    
+    
+    if get(ADIRS_source_rotary_AIRDATA) ~= -1 then
+        -- IR1 used for capt
+        set(PFD_Capt_IAS, orig_capt_ias)
+        set(PFD_Capt_Baro_Altitude, orig_capt_alt)
+    else
+        -- IR3 used for capt
+        set(PFD_Capt_IAS, orig_capt_ias + ias_3_offset)
+        set(PFD_Capt_Baro_Altitude, orig_capt_alt + alt_3_offset)
+    end
+    set(PFD_Capt_VS, math.floor(orig_capt_vs+0.5))
+
+    if get(ADIRS_source_rotary_AIRDATA) ~= 1 then
+        -- IR1 used for capt
+        set(PFD_Fo_IAS, orig_fo_ias)
+        set(PFD_Fo_Baro_Altitude, orig_fo_alt)
+    else
+        -- IR3 used for Fo
+        set(PFD_Fo_IAS, orig_fo_ias + ias_3_offset)
+        set(PFD_Fo_Baro_Altitude, orig_fo_alt + alt_3_offset)
+    end
+    set(PFD_Fo_VS, math.floor(orig_fo_vs+0.5))
+
+
+end
 
 ----------------------------------------------------------------------------------------------------
 -- update()
@@ -336,5 +373,7 @@ function update ()
     end
 
     update_status_datarefs(is_capt_adr_ok, is_fo_adr_ok, is_capt_irs_ok, is_fo_irs_ok)
+
+    update_output_datarefs()
     
 end
