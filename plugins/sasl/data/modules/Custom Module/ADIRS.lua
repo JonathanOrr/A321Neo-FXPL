@@ -34,33 +34,33 @@ ADIRS_cmd_instantaneous_align     = createCommand("a321neo/cockpit/ADIRS/instant
 ----------------------------------------------------------------------------------------------------
 -- Registering commands
 ----------------------------------------------------------------------------------------------------
-sasl.registerCommandHandler (ADIRS_cmd_ADR1, 0, function(phase) ADIRS_handler_toggle_ADR(phase, 1) end )
-sasl.registerCommandHandler (ADIRS_cmd_ADR2, 0, function(phase) ADIRS_handler_toggle_ADR(phase, 2) end )
-sasl.registerCommandHandler (ADIRS_cmd_ADR3, 0, function(phase) ADIRS_handler_toggle_ADR(phase, 3) end )
-sasl.registerCommandHandler (ADIRS_cmd_IR1, 0,  function(phase) ADIRS_handler_toggle_IR(phase, 1) end )
-sasl.registerCommandHandler (ADIRS_cmd_IR2, 0,  function(phase) ADIRS_handler_toggle_IR(phase, 2) end )
-sasl.registerCommandHandler (ADIRS_cmd_IR3, 0,  function(phase) ADIRS_handler_toggle_IR(phase, 3) end )
+sasl.registerCommandHandler (ADIRS_cmd_ADR1, 0, function(phase) ADIRS_handler_toggle_ADR(phase, 1); return 1 end )
+sasl.registerCommandHandler (ADIRS_cmd_ADR2, 0, function(phase) ADIRS_handler_toggle_ADR(phase, 2); return 1 end )
+sasl.registerCommandHandler (ADIRS_cmd_ADR3, 0, function(phase) ADIRS_handler_toggle_ADR(phase, 3); return 1 end )
+sasl.registerCommandHandler (ADIRS_cmd_IR1, 0,  function(phase) ADIRS_handler_toggle_IR(phase, 1); return 1 end )
+sasl.registerCommandHandler (ADIRS_cmd_IR2, 0,  function(phase) ADIRS_handler_toggle_IR(phase, 2); return 1 end )
+sasl.registerCommandHandler (ADIRS_cmd_IR3, 0,  function(phase) ADIRS_handler_toggle_IR(phase, 3); return 1 end )
 
-sasl.registerCommandHandler (ADIRS_cmd_knob_1_up, 0,   function(phase)  Knob_handler_up_int(phase, ADIRS_rotary_btn[1], 0, 2) end )
-sasl.registerCommandHandler (ADIRS_cmd_knob_2_up, 0,   function(phase)  Knob_handler_up_int(phase, ADIRS_rotary_btn[2], 0, 2) end )
-sasl.registerCommandHandler (ADIRS_cmd_knob_3_up, 0,   function(phase)  Knob_handler_up_int(phase, ADIRS_rotary_btn[3], 0, 2) end )
-sasl.registerCommandHandler (ADIRS_cmd_knob_1_down, 0, function(phase) Knob_handler_down_int(phase, ADIRS_rotary_btn[1], 0, 2) end )
-sasl.registerCommandHandler (ADIRS_cmd_knob_2_down, 0, function(phase) Knob_handler_down_int(phase, ADIRS_rotary_btn[2], 0, 2) end )
-sasl.registerCommandHandler (ADIRS_cmd_knob_3_down, 0, function(phase) Knob_handler_down_int(phase, ADIRS_rotary_btn[3], 0, 2) end )
+sasl.registerCommandHandler (ADIRS_cmd_knob_1_up, 0,   function(phase)  Knob_handler_up_int(phase, ADIRS_rotary_btn[1], 0, 2); return 1 end )
+sasl.registerCommandHandler (ADIRS_cmd_knob_2_up, 0,   function(phase)  Knob_handler_up_int(phase, ADIRS_rotary_btn[2], 0, 2); return 1 end )
+sasl.registerCommandHandler (ADIRS_cmd_knob_3_up, 0,   function(phase)  Knob_handler_up_int(phase, ADIRS_rotary_btn[3], 0, 2); return 1 end )
+sasl.registerCommandHandler (ADIRS_cmd_knob_1_down, 0, function(phase) Knob_handler_down_int(phase, ADIRS_rotary_btn[1], 0, 2); return 1 end )
+sasl.registerCommandHandler (ADIRS_cmd_knob_2_down, 0, function(phase) Knob_handler_down_int(phase, ADIRS_rotary_btn[2], 0, 2); return 1 end )
+sasl.registerCommandHandler (ADIRS_cmd_knob_3_down, 0, function(phase) Knob_handler_down_int(phase, ADIRS_rotary_btn[3], 0, 2); return 1 end )
 
-sasl.registerCommandHandler (ADIRS_cmd_source_ATHDG_up, 0,     function(phase) Knob_handler_up_int(phase, ADIRS_source_rotary_ATHDG, -1, 1) end )
-sasl.registerCommandHandler (ADIRS_cmd_source_ATHDG_down, 0,   function(phase) Knob_handler_down_int(phase, ADIRS_source_rotary_ATHDG, -1, 1) end )
-sasl.registerCommandHandler (ADIRS_cmd_source_AIRDATA_up, 0,   function(phase) Knob_handler_up_int(phase, ADIRS_source_rotary_AIRDATA, -1, 1) end )
-sasl.registerCommandHandler (ADIRS_cmd_source_AIRDATA_down, 0, function(phase) Knob_handler_down_int(phase, ADIRS_source_rotary_AIRDATA, -1, 1) end )
+sasl.registerCommandHandler (ADIRS_cmd_source_ATHDG_up, 0,     function(phase) Knob_handler_up_int(phase, ADIRS_source_rotary_ATHDG, -1, 1); return 1 end )
+sasl.registerCommandHandler (ADIRS_cmd_source_ATHDG_down, 0,   function(phase) Knob_handler_down_int(phase, ADIRS_source_rotary_ATHDG, -1, 1); return 1 end )
+sasl.registerCommandHandler (ADIRS_cmd_source_AIRDATA_up, 0,   function(phase) Knob_handler_up_int(phase, ADIRS_source_rotary_AIRDATA, -1, 1); return 1 end )
+sasl.registerCommandHandler (ADIRS_cmd_source_AIRDATA_down, 0, function(phase) Knob_handler_down_int(phase, ADIRS_source_rotary_AIRDATA, -1, 1); return 1 end )
 
-sasl.registerCommandHandler (cmd_auto_board, 0, function(phase) adirs_prep_elec_for_boarding(phase) end )
-sasl.registerCommandHandler (cmd_auto_start, 0, function(phase) adirs_prep_elec_for_boarding(phase) end )
-sasl.registerCommandHandler (cmd_quick_start, 0, function(phase) adirs_prep_elec_for_boarding(phase) end )
-sasl.registerCommandHandler (cmd_reset_flight, 0, function(phase) adirs_prep_elec_for_boarding(phase) end )
-sasl.registerCommandHandler (cmd_reset_to_runway, 0, function(phase) adirs_prep_elec_for_boarding(phase) end )
-sasl.registerCommandHandler (cmd_go_to_default, 0, function(phase) adirs_prep_elec_for_boarding(phase) end )
+sasl.registerCommandHandler (cmd_auto_board, 0, function(phase) adirs_prep_elec_for_boarding(phase); return 1 end )
+sasl.registerCommandHandler (cmd_auto_start, 0, function(phase) adirs_prep_elec_for_boarding(phase); return 1 end )
+sasl.registerCommandHandler (cmd_quick_start, 0, function(phase) adirs_prep_elec_for_boarding(phase); return 1 end )
+sasl.registerCommandHandler (cmd_reset_flight, 0, function(phase) adirs_prep_elec_for_boarding(phase); return 1 end )
+sasl.registerCommandHandler (cmd_reset_to_runway, 0, function(phase) adirs_prep_elec_for_boarding(phase); return 1 end )
+sasl.registerCommandHandler (cmd_go_to_default, 0, function(phase) adirs_prep_elec_for_boarding(phase); return 1 end )
 
-sasl.registerCommandHandler (ADIRS_cmd_instantaneous_align, 0, function(phase) adirst_inst_align(phase) end )
+sasl.registerCommandHandler (ADIRS_cmd_instantaneous_align, 0, function(phase) adirst_inst_align(phase); return 1 end )
 
 ----------------------------------------------------------------------------------------------------
 -- Functions
@@ -68,13 +68,13 @@ sasl.registerCommandHandler (ADIRS_cmd_instantaneous_align, 0, function(phase) a
 
 function adirs_prep_elec_for_boarding(phase) 
     if phase == SASL_COMMAND_BEGIN then
-	    ADIRS_handler_toggle_ADR(SASL_COMMAND_BEGIN, 1)
-	    ADIRS_handler_toggle_ADR(SASL_COMMAND_BEGIN, 2)
-	    ADIRS_handler_toggle_ADR(SASL_COMMAND_BEGIN, 3)
-	    ADIRS_handler_toggle_IR(SASL_COMMAND_BEGIN, 1)
-	    ADIRS_handler_toggle_IR(SASL_COMMAND_BEGIN, 2)
-	    ADIRS_handler_toggle_IR(SASL_COMMAND_BEGIN, 3)
-	    
+	    adr_switch_status[1] = true
+	    adr_switch_status[2] = true
+	    adr_switch_status[3] = true
+	    ir_switch_status[1] = true
+	    ir_switch_status[2] = true
+	    ir_switch_status[3] = true
+       
 	    set(ADIRS_rotary_btn[1],1)
 	    set(ADIRS_rotary_btn[2],1)
 	    set(ADIRS_rotary_btn[3],1)

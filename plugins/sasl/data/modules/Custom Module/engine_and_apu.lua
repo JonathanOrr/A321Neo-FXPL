@@ -56,6 +56,7 @@ sasl.registerCommandHandler ( reset_to_runway, 0, function(phase)
             set(Engine_2_master_switch, 0)
         end
     end
+    return 1
 end)
 
 sasl.registerCommandHandler ( reset_flight, 0, function(phase)
@@ -69,6 +70,7 @@ sasl.registerCommandHandler ( reset_flight, 0, function(phase)
             set(Engine_1_master_switch, 1)
             set(Engine_2_master_switch, 1)
     end
+    return 1
 end)
 
 sasl.registerCommandHandler ( go_to_default, 0, function(phase)
@@ -89,6 +91,7 @@ sasl.registerCommandHandler ( go_to_default, 0, function(phase)
             set(Engine_2_master_switch, 0)
         end
     end
+    return 1
 end)
 
 sasl.registerCommandHandler ( instant_start_eng, 0, function(phase)
@@ -104,6 +107,7 @@ sasl.registerCommandHandler ( instant_start_eng, 0, function(phase)
         sasl.resetTimer(timer_auto_start_stop)
         sasl.startTimer(timer_auto_start_stop)
     end
+    return 1
 end)
 
 sasl.registerCommandHandler ( slow_start_eng, 0, function(phase)
@@ -119,6 +123,7 @@ sasl.registerCommandHandler ( slow_start_eng, 0, function(phase)
         sasl.resetTimer(timer_auto_start_stop)
         sasl.startTimer(timer_auto_start_stop)
     end
+    return 1
 end)
 
 --a321neo command handler
@@ -138,12 +143,14 @@ sasl.registerCommandHandler ( apu_start, 0 , function(phase)
             set(Apu_start_position, 2)
         end
     end
+    return 1
 end)
 
 sasl.registerCommandHandler ( apu_gen_toggle, 0 , function(phase)
     if phase == SASL_COMMAND_BEGIN then
         set(apu_gen, 1 - get(apu_gen))
     end
+    return 1
 end)
 
 sasl.registerCommandHandler ( a321_auto_start, 0 , function(phase)
@@ -157,18 +164,21 @@ sasl.registerCommandHandler ( a321_auto_start, 0 , function(phase)
         set(Engine_1_master_switch, 1)
         set(Engine_2_master_switch, 1)
     end
+    return 1
 end)
 
 sasl.registerCommandHandler ( engine_mode_up, 0 , function(phase)
     if phase == SASL_COMMAND_BEGIN then
         set(Engine_mode_knob, get(Engine_mode_knob) + 1)
     end
+    return 1
 end)
 
 sasl.registerCommandHandler ( engine_mode_dn, 0 , function(phase)
     if phase == SASL_COMMAND_BEGIN then
         set(Engine_mode_knob, get(Engine_mode_knob) - 1)
     end
+    return 1
 end)
 
 --custom functions
