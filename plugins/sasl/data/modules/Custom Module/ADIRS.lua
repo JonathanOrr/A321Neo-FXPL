@@ -147,17 +147,16 @@ local function update_status_adrs(i)
                 -- Failed ADR, just switch on the button
                 set(ADIRS_light_ADR[i], LIGHT_FAILED)
             elseif adr_time_begin[i] > 0 then
+                set(ADIRS_light_ADR[i], LIGHT_NORM)
                 if get(TIME) - adr_time_begin[i] > TIME_TO_START_ADR then
                    -- After TIME_TO_START_ADR, the ADR changes the status to ON
-                   set(Adirs_adr_is_ok[i], LIGHT_OFF)
-                   set(ADIRS_light_ADR[i], LIGHT_NORM)
+                   set(Adirs_adr_is_ok[i], 1)
                 end
             else
                 -- ADIRS rotary button just switched to ATT or NAV, let's update the time
                 -- of the beginning of aligmnet
                 set(Adirs_total_time_to_align, get_time_to_align())
                 adr_time_begin[i] = get(TIME)
-                set(ADIRS_light_ADR[i], LIGHT_FAILED)
             end
         else
             adr_time_begin[i] = 0
@@ -197,8 +196,12 @@ local function update_status_irs(i)
                     -- Align finished
                    set(Adirs_ir_is_ok[i],1)
                 end
-                set(ADIRS_light_IR[i], LIGHT_NORM)
                 
+                if get(TIME) - get(Adirs_irs_begin_time[i]) > 0.3 then
+                    set(ADIRS_light_IR[i], LIGHT_NORM)
+                else
+                    set(ADIRS_light_IR[i], LIGHT_FAILED)                
+                end
                 if get(TIME) - get(Adirs_irs_begin_time[i]) < TIME_TO_ONBAT then    -- TODO ADD AC/DC SWITCH
                     set(ADIRS_light_onbat, 1)
                 end
