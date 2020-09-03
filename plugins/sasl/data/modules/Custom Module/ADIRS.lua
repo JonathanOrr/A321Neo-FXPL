@@ -21,10 +21,15 @@ local cmd_go_to_default = sasl.findCommand("sim/operation/go_to_default")
 local startup_running = globalProperty("sim/operation/prefs/startup_running")
 
 local adr_time_begin = {0,0,0}
-local adr_switch_status = {false,false,false}
+local adr_switch_status = {true,true,true}
 
 local is_irs_att = {false, false, false}
-local ir_switch_status = {false,false,false}
+local ir_switch_status = {true,true,true}
+
+----------------------------------------------------------------------------------------------------
+-- Custom commands (internal only, refers to cockpit_commands.lua for switch commands
+----------------------------------------------------------------------------------------------------
+ADIRS_cmd_instantaneous_align     = createCommand("a321neo/cockpit/ADIRS/instantaneous_align", "Move right the knob")
 
 ----------------------------------------------------------------------------------------------------
 -- Registering commands
@@ -249,6 +254,34 @@ function ADIRS_handler_toggle_IR(phase, n)
     ir_switch_status[n] = not ir_switch_status[n]
 end
 
+local function update_status_datarefs(is_capt_adr_ok, is_fo_adr_ok, is_capt_irs_ok, is_fo_irs_ok)
+
+    -- Update the status
+    -- - ADR has 1 status: OFF (0) or ON (1)
+    -- - IR has 2 statuses: OFF (0) or ATT/HDG only (1) or OK (2)
+    set(Adirs_capt_has_ADR, is_capt_adr_ok)
+    set(Adirs_fo_has_ADR, is_fo_adr_ok)
+    set(Adirs_capt_has_IR, is_capt_irs_ok)
+    set(Adirs_fo_has_IR, is_fo_irs_ok)
+
+
+    -- Let's update the blinking datarefs: they are needed for the PFD in order to blink the
+    -- static parts not coded in LUA
+    local BLINKING_HZ = 2    -- 2 Hz
+    if math.floor(get(TIME)*BLINKING_HZ) % 2 == 0 then
+        set(Adirs_capt_has_ADR_blink, is_capt_adr_ok)
+        set(Adirs_capt_has_IR_blink, is_capt_irs_ok)
+        set(Adirs_fo_has_ADR_blink, is_fo_adr_ok)
+        set(Adirs_fo_has_IR_blink, is_fo_irs_ok)
+    else
+        set(Adirs_capt_has_ADR_blink, 1)
+        set(Adirs_capt_has_IR_blink, 2)    
+        set(Adirs_fo_has_ADR_blink, 1)
+        set(Adirs_fo_has_IR_blink, 2)    
+    end
+end
+
+
 ----------------------------------------------------------------------------------------------------
 -- update()
 ----------------------------------------------------------------------------------------------------
@@ -257,7 +290,7 @@ function update ()
     
     update_adrs()
     
-    -- Check if Captain and FO ADRs is ok. It depends also on the pedestal switch
+    -- Check if Captain and FO ADRs are ok. It depends also on the pedestal switch
     local is_capt_adr_ok = 0
     local is_fo_adr_ok = 0
      
@@ -268,10 +301,8 @@ function update ()
     if (get(Adirs_adr_is_ok[2]) == 1 and get(ADIRS_source_rotary_AIRDATA) ~= 1) or (get(Adirs_adr_is_ok[3]) == 1 and get(ADIRS_source_rotary_AIRDATA) ==  1) then
         is_fo_adr_ok = 1
     end
-    
-    set(Adirs_capt_has_ADR, is_capt_adr_ok)
-    set(Adirs_fo_has_ADR, is_fo_adr_ok)
 
+    -- Check if Captain and FO IRs are ok. It depends also on the pedestal switch
     local is_capt_irs_ok = 0
     local is_fo_irs_ok = 0
      
@@ -290,15 +321,6 @@ function update ()
         is_fo_irs_ok = 1
     end
 
-    set(Adirs_capt_has_IR, is_capt_irs_ok)
-    set(Adirs_fo_has_IR, is_fo_irs_ok)
-
-    if math.floor(get(TIME)*2) % 2 == 0 then
-        set(Adirs_capt_has_ADR_blink, is_capt_adr_ok)
-        set(Adirs_capt_has_IR_blink, is_capt_irs_ok)
-    else
-        set(Adirs_capt_has_ADR_blink, 1)
-        set(Adirs_capt_has_IR_blink, 2)    
-    end
+    update_status_datarefs(is_capt_adr_ok, is_fo_adr_ok, is_capt_irs_ok, is_fo_irs_ok)
     
 end
