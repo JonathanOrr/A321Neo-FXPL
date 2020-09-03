@@ -229,7 +229,7 @@ ShowHideFailures        = sasl.appendMenuItem(Menu_main, "Show/Hide Failures Man
 
 sasl.appendMenuSeparator(Menu_main)
 
-ADIRSAlign        = sasl.appendMenuItem(Menu_main, "Instaneous align IRs", IRs_instaneous_align)
+ADIRSAlign        = sasl.appendMenuItem(Menu_main, "Instantaneous align IRs", IRs_instaneous_align)
 
 sasl.appendMenuSeparator(Menu_main)
 
