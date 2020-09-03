@@ -27,5 +27,15 @@ end
 
 
 function ECAM_status_get_max_fl()
-    return 0
+    local max_fl = 0
+    
+    -- In any door is open...
+    if get(Overwing_exit_1_l_ratio) > 0 or get(Overwing_exit_1_r_ratio) > 0 or
+       get(Overwing_exit_2_l_ratio) > 0 or get(Overwing_exit_2_r_ratio) > 0 or
+       get(Cargo_1_ratio) > 0 or get(Cargo_2_ratio) > 0 or get(Door_1_l_ratio) > 0 or
+       get(Door_1_r_ratio) > 0 or get(Door_2_l_ratio) > 0 or get(Door_2_r_ratio) > 0 or
+       get(Door_3_l_ratio) > 0 or get(Door_3_r_ratio) > 0 then
+        max_fl = 100
+    end
+    return max_fl
 end

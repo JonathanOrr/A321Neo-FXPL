@@ -3,6 +3,7 @@ include('EWD_flight_phases.lua')
 include('EWD_msgs/adirs.lua')
 include('EWD_msgs/bleed.lua')
 include('EWD_msgs/brakes_and_antiskid.lua')
+include('EWD_msgs/doors.lua')
 include('EWD_msgs/engines_and_apu.lua')
 include('EWD_msgs/FBW.lua')
 include('EWD_msgs/flight_controls.lua')
@@ -60,6 +61,9 @@ local left_messages_list = {
     MessageGroup_ADR_FAULT_DOUBLE,
     MessageGroup_IR_FAULT_SINGLE,
     MessageGroup_IR_FAULT_DOUBLE,
+    MessageGroup_DOORS_CABIN,
+    MessageGroup_DOORS_CARGO,
+    MessageGroup_DOORS_EMER_EXIT,
     
     -- Warnings
     MessageGroup_CONFIG_TAKEOFF,
