@@ -121,6 +121,8 @@ Eng_1_FF_kgm = createGlobalPropertyf("a321neo/cockpit/engine/engine_1_fuel_flow_
 Eng_2_FF_kgm = createGlobalPropertyf("a321neo/cockpit/engine/engine_2_fuel_flow_kg_min", 0, false, true, false)
 
 --pfd
+Capt_landing_system_enabled = createGlobalPropertyi("a321neo/cockpit/PFD/capt_ls_enabled", 0, false, true, false)--for the LS button on the PFD
+Fo_landing_system_enabled = createGlobalPropertyi("a321neo/cockpit/PFD/fo_ls_enabled", 0, false, true, false)--for the LS button on the PFD
 Max_speed = createGlobalPropertyf("a321neo/cockpit/PFD/max_speed", 330, false, true, false)
 Max_speed_delta = createGlobalPropertyf("a321neo/cockpit/PFD/max_speed_delta", 0, false, true, false)
 
@@ -210,6 +212,21 @@ Adirs_fo_has_ADR    = createGlobalPropertyi("a321neo/cockpit/ADIRS/fo_has_ADR", 
 Adirs_fo_has_IR     = createGlobalPropertyi("a321neo/cockpit/ADIRS/fo_has_IR", 0, false, true, false) -- 0: FAIL, 1: partial, 2: complete. It provides: attitude (1,2), heading (1,2), track (only 2), accelerations (only 2), angular rates (only 2), ground speed (only 2), position (only 2)
 Adirs_fo_has_ADR_blink = createGlobalPropertyi("a321neo/cockpit/ADIRS/fo_has_ADR_blinking", 0, false, true, false) -- This is used for blinking the PFD messages
 Adirs_fo_has_IR_blink  = createGlobalPropertyi("a321neo/cockpit/ADIRS/fo_has_IR_blinking", 0, false, true, false) -- This is used for blinking the PFD messages
+
+--doors
+Ecam_door_click_shown = createGlobalPropertyf("a321neo/cockpit/door/ecam_door_click_shown", 0, false, true, false)--used to show and hide the click spots on the ecam door page
+Door_1_l_switch = createGlobalPropertyi("a321neo/cockpit/door/door_1_l_switch", 0, false, true, false)--commanded door positions
+Door_1_r_switch = createGlobalPropertyi("a321neo/cockpit/door/door_1_r_switch", 0, false, true, false)--commanded door positions
+Door_2_l_switch = createGlobalPropertyi("a321neo/cockpit/door/door_2_l_switch", 0, false, true, false)--commanded door positions
+Door_2_r_switch = createGlobalPropertyi("a321neo/cockpit/door/door_2_r_switch", 0, false, true, false)--commanded door positions
+Door_3_l_switch = createGlobalPropertyi("a321neo/cockpit/door/door_3_l_switch", 0, false, true, false)--commanded door positions
+Door_3_r_switch = createGlobalPropertyi("a321neo/cockpit/door/door_3_r_switch", 0, false, true, false)--commanded door positions
+Overwing_exit_1_l_switch = createGlobalPropertyi("a321neo/cockpit/door/overwing_exit_1_l_switch", 0, false, true, false)--commanded door positions
+Overwing_exit_1_r_switch = createGlobalPropertyi("a321neo/cockpit/door/overwing_exit_1_r_switch", 0, false, true, false)--commanded door positions
+Overwing_exit_2_l_switch = createGlobalPropertyi("a321neo/cockpit/door/overwing_exit_2_l_switch", 0, false, true, false)--commanded door positions
+Overwing_exit_2_r_switch = createGlobalPropertyi("a321neo/cockpit/door/overwing_exit_2_r_switch", 0, false, true, false)--commanded door positions
+Cargo_1_switch = createGlobalPropertyi("a321neo/cockpit/door/cargo_1_switch", 0, false, true, false)--commanded door positions
+Cargo_2_switch = createGlobalPropertyi("a321neo/cockpit/door/cargo_2_switch", 0, false, true, false)--commanded door positions
 
 -- Failures
 MasterCaution         = createGlobalPropertyi("a321neo/failures/master_caution", 0, false, true, false) -- Button light dataref - 0: OFF, 1: ON

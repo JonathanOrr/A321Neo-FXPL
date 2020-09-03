@@ -28,7 +28,7 @@ A32nx_target_spd = createGlobalPropertyi("a32nx/debug/target_speed", 225, false,
 A32nx_thrust_control_output = createGlobalPropertyf("a32nx/debug/thrust_control_output", 0, false, true, false)
 
 --global pid array
-A32nx_auto_thrust = {P_gain = 0.55, I_gain = 10, D_gain = 0.75, I_delay = 100, Integral = 0, Current_error = 0, Min_error = -5, Max_error = 5, Error_offset = 5}
+A32nx_auto_thrust = {P_gain = 1.05, I_gain = 10, D_gain = 1.35, I_delay = 100, Integral = 0, Current_error = 0, Min_error = -12, Max_error = 12, Error_offset = 5}
 A32nx_auto_thrust_trim = {P_gain = 0.55, I_gain = 10, D_gain = 0.75, I_delay = 100, Integral = 0, Current_error = 0, Min_error = -5, Max_error = 5, Error_offset = 0}
 
 Autothrust_output = 0
