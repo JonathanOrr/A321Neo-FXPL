@@ -310,7 +310,6 @@ local function publish_right_list()
         tot_messages = tot_messages + 1
         if tot_messages >= 7 then
             limit = true
-            break
         end 
     end
 
@@ -374,7 +373,6 @@ local function publish_left_list()
 
     left_current_message = nil;
     set(Ecam_EDW_requested_page, 0)
-    set(EWD_arrow_overflow, 0)
 
     for i=0, 7 do
         set(EWD_left_memo_group[i], "")
@@ -490,6 +488,7 @@ end
 
 function update()
 
+    set(EWD_arrow_overflow, 0)
     update_left_list()
     publish_left_list()
     update_right_list()
