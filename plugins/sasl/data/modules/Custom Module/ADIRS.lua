@@ -9,6 +9,8 @@ local LIGHT_OFF        = 1
 local LIGHT_FAILED     = 10
 local LIGHT_FAILED_OFF = 11
 
+local BLINKING_DATAREFS_SEC = 9
+
 ----------------------------------------------------------------------------------------------------
 -- Global/Local variables
 ----------------------------------------------------------------------------------------------------
@@ -28,6 +30,14 @@ local ir_switch_status = {true,true,true}
 
 local ias_3_offset = math.random() * 2 - 1   -- Max offset IAS between ADR1/2 and ADR3: +1/-1
 local alt_3_offset = math.random() * 20 - 10 -- Max offset Altitude between ADR1/2 and ADR3: +10/-10
+
+local blinkers_data = {
+    {started_to_blink=0, dataref=Adirs_capt_has_ADR_blink, inactive_value=1, active_value=0,active=false},
+    {started_to_blink=0, dataref=Adirs_capt_has_IR_blink,  inactive_value=2, active_value=0,active=false},
+    {started_to_blink=0, dataref=Adirs_fo_has_ADR_blink,   inactive_value=1, active_value=0,active=false},
+    {started_to_blink=0, dataref=Adirs_fo_has_IR_blink,    inactive_value=2, active_value=0,active=false}
+}   -- Used for blinking datarefs, to know when a dataref started to blink
+
 
 ----------------------------------------------------------------------------------------------------
 -- Custom commands (internal only, refers to cockpit_commands.lua for switch commands
@@ -274,6 +284,37 @@ function ADIRS_handler_toggle_IR(phase, n)
     ir_switch_status[n] = not ir_switch_status[n]
 end
 
+local function blink_dataref(blink_data)
+
+    -- Blinking the datarefs for the PFD follows this procedure:
+    -- - Every time an ADIRS error occurs, the corresponding datareg starts to blink
+    -- - It blinks for 9 seconds, then it stops
+
+    if not blink_data.active then   -- Just set inactive value and exit
+        blink_data.started_to_blink = 0
+        set(blink_data.dataref, blink_data.inactive_value)
+        return
+    end
+    
+    if blink_data.started_to_blink == 0 then    -- First time it starts to blink
+        blink_data.started_to_blink = get(TIME)
+    end
+    
+    if get(TIME) - blink_data.started_to_blink < BLINKING_DATAREFS_SEC then
+        -- Ok let's blink
+        if math.floor(get(TIME)*2) % 2 == 0 then
+            -- Blink every 1 second (500ms off, 500ms on
+            set(blink_data.dataref, blink_data.active_value)
+        else
+            set(blink_data.dataref, blink_data.inactive_value)
+        end
+    else
+        -- Time elapsed -> steady state
+        set(blink_data.dataref, blink_data.active_value)
+    end
+
+end
+
 local function update_status_datarefs(is_capt_adr_ok, is_fo_adr_ok, is_capt_irs_ok, is_fo_irs_ok)
 
     -- Update the status
@@ -284,21 +325,22 @@ local function update_status_datarefs(is_capt_adr_ok, is_fo_adr_ok, is_capt_irs_
     set(Adirs_capt_has_IR, is_capt_irs_ok)
     set(Adirs_fo_has_IR, is_fo_irs_ok)
 
-
     -- Let's update the blinking datarefs: they are needed for the PFD in order to blink the
     -- static parts not coded in LUA
-    local BLINKING_HZ = 2    -- 2 Hz
-    if math.floor(get(TIME)*BLINKING_HZ) % 2 == 0 then
-        set(Adirs_capt_has_ADR_blink, is_capt_adr_ok)
-        set(Adirs_capt_has_IR_blink, is_capt_irs_ok)
-        set(Adirs_fo_has_ADR_blink, is_fo_adr_ok)
-        set(Adirs_fo_has_IR_blink, is_fo_irs_ok)
-    else
-        set(Adirs_capt_has_ADR_blink, 1)
-        set(Adirs_capt_has_IR_blink, 2)    
-        set(Adirs_fo_has_ADR_blink, 1)
-        set(Adirs_fo_has_IR_blink, 2)    
-    end
+    blinkers_data[1].active       = is_capt_adr_ok ~= 1
+    blinkers_data[1].active_value = is_capt_adr_ok
+    blinkers_data[2].active       = is_capt_irs_ok ~= 2
+    blinkers_data[2].active_value = is_capt_irs_ok
+    blinkers_data[3].active       = is_fo_adr_ok ~= 1
+    blinkers_data[3].active_value = is_fo_adr_ok
+    blinkers_data[4].active       = is_fo_irs_ok ~= 2
+    blinkers_data[4].active_value = is_fo_irs_ok
+    
+    blink_dataref(blinkers_data[1]) -- Adirs_capt_has_ADR_blink
+    blink_dataref(blinkers_data[2]) -- Adirs_capt_has_IR_blink
+    blink_dataref(blinkers_data[3]) -- Adirs_fo_has_ADR_blink
+    blink_dataref(blinkers_data[4]) -- Adirs_fo_has_IR_blink
+
 end
 
 local function update_output_datarefs()
