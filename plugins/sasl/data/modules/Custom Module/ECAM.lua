@@ -369,6 +369,24 @@ local function draw_sts_page()
     end 
 end
 
+local function draw_hydraulic_page()
+    local y_psi_pos = size[2]/2+275
+
+    local g_psi = get(Hydraulic_G_press)
+    g_psi = g_psi - g_psi % 50
+    sasl.gl.drawText(B612MONO_regular, 160, y_psi_pos, g_psi, 30, false, false, TEXT_ALIGN_CENTER, g_psi >= 1450 and ECAM_GREEN or ECAM_ORANGE)
+
+    local b_psi = get(Hydraulic_B_press)
+    b_psi = b_psi - b_psi % 50
+    sasl.gl.drawText(B612MONO_regular, 455, y_psi_pos, b_psi, 30, false, false, TEXT_ALIGN_CENTER, b_psi >= 1450 and ECAM_GREEN or ECAM_ORANGE)
+
+    local y_psi = get(Hydraulic_Y_press)
+    y_psi = y_psi - y_psi % 50
+    sasl.gl.drawText(B612MONO_regular, 750, y_psi_pos, y_psi, 30, false, false, TEXT_ALIGN_CENTER, y_psi >= 1450 and ECAM_GREEN or ECAM_ORANGE)
+
+
+end
+
 --drawing the ECAM
 function draw()
     if get(Ecam_current_page) == 1 then --eng
@@ -399,7 +417,7 @@ function draw()
     elseif get(Ecam_current_page) == 4 then --elec
 
     elseif get(Ecam_current_page) == 5 then --hyd
-
+        draw_hydraulic_page()
     elseif get(Ecam_current_page) == 6 then --fuel
 
     elseif get(Ecam_current_page) == 7 then --apu
