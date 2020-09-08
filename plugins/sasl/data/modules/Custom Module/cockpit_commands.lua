@@ -165,3 +165,11 @@ Cargo_2_toggle = createCommand("a321neo/cockpit/door/toggle_cargo_2", "Open/Clos
 Failures_cancel_master_caution   = createCommand("a321neo/cockpit/cancel_master_caution", "Move left the knob")
 Failures_cancel_master_warning   = createCommand("a321neo/cockpit/cancel_master_warning", "Move left the knob")
 
+-- HYD
+HYD_cmd_Eng1Pump   = createCommand("a321neo/cockpit/HYD/toggle_eng_pump_1", "Toggle HYD Engine 1 pump")
+HYD_cmd_Eng2Pump   = createCommand("a321neo/cockpit/HYD/toggle_eng_pump_2", "Toggle HYD Engine 2 pump")
+HYD_cmd_PTU        = createCommand("a321neo/cockpit/HYD/toggle_PTU", "Toggle HYD PTU pump")
+HYD_cmd_B_ElecPump = createCommand("a321neo/cockpit/HYD/toggle_elec_pump_B", "Toggle HYD Elec Blue pump")
+HYD_cmd_Y_ElecPump = createCommand("a321neo/cockpit/HYD/toggle_elec_pump_Y", "Toggle HYD Elec Yellow pump")
+HYD_cmd_RAT_man_on = createCommand("a321neo/cockpit/HYD/RAT_manual", "Force RAT out")
+
