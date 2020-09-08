@@ -43,7 +43,8 @@ components = {
   DRAIMS {},
   failures_manager {},
   display_brightness {},
-  doors {}
+  doors {},
+  hydraulics {}
  }
 
  --windows

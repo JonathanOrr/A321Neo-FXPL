@@ -281,12 +281,19 @@ FOB = globalProperty("sim/flightmodel/weight/m_fuel_total")
 ZULU_hours = globalProperty("sim/cockpit2/clock_timer/zulu_time_hours")
 ZULU_mins = globalProperty("sim/cockpit2/clock_timer/zulu_time_minutes")
 ZULU_secs = globalProperty("sim/cockpit2/clock_timer/zulu_time_seconds")
---misc
-Sun_pitch = globalProperty("sim/graphics/scenery/sun_pitch_degrees")
+
+-- Misc
+Sun_pitch  = globalProperty("sim/graphics/scenery/sun_pitch_degrees")
+is_RAT_out = createGlobalPropertyi("a321neo/dynamics/is_RAT_out", 0, false, true, false)    -- Is Ram Air Turbine out? 0: no, 1: yes (it does NOT mean that the generator is on) 
 
 -- ACARS & DCDU
 Acars_status = createGlobalPropertyi("a321neo/dynamics/ACARS/comm_status", 0, false, true, false) -- 0 no connection, 1 - SATCOM only, 2 - VHF only, 3 - Both
 Acars_incoming_message = createGlobalPropertys("a321neo/dynamics/ACARS/incoming_msg", "", false, true, false) -- Message that is currently receiving
 Acars_incoming_message_type = createGlobalPropertyi("a321neo/dynamics/ACARS/incoming_msg_type", 0, false, true, false) -- Type of message that is currently receiving, 0 - no message
 Acars_incoming_message_length = createGlobalPropertyi("a321neo/dynamics/ACARS/incoming_msg_len", 0, false, true, false) -- Length of the message (do not use string.len, it doesn't work)
+
+-- HYD
+Hydraulic_G_press = createGlobalPropertyi("a321neo/dynamics/HYD/G_press", 0, false, true, false) 
+Hydraulic_B_press = createGlobalPropertyi("a321neo/dynamics/HYD/B_press", 0, false, true, false) 
+Hydraulic_Y_press = createGlobalPropertyi("a321neo/dynamics/HYD/Y_press", 0, false, true, false) 
 
