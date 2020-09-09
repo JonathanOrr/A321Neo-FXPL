@@ -11,8 +11,8 @@ local Y = 3
 local PSI_AVG_ENGINE_PUMP = 3000    -- Average PSI when engine pump is active (normal conditions)
 local PSI_AVG_ELEC_PUMP   = 2950    -- Average PSI when electric pump is active (normal conditions)
 local PSI_VAR_EE_PUMP     = 50      -- +/- variation PSI when engine or electric pump is active (normal conditions)
-local PSI_AVG_PTU_PUMP    = 2650    -- Average PSI when PTU pump is active (sink system)
-local PSI_VAR_PTU_PUMP    = 250     -- +/- variation PSI when PTU pump is active (sink system)
+local PSI_AVG_PTU_PUMP    = 2600    -- Average PSI when PTU pump is active (sink system)
+local PSI_VAR_PTU_PUMP    = 200     -- +/- variation PSI when PTU pump is active (sink system)
 local PSI_AVG_RAT_PUMP    = 2500    -- Average PSI when RAT pump is active and speed is good
 local PSI_VAR_RAT_PUMP    = 100     -- +/- variation PSI when RAT pump is active and speed is good
 local PSI_RAT_MIN_SPD     = 140     -- Minimum speed such that RAT is provided good hyd
@@ -28,6 +28,8 @@ local y_sys = nil
 
 local last_press_update = 0
 local last_press_target_update = 0
+
+local last_PTU_change_status = 0    -- To save the last time we changed the status of PTU
 
 local status_buttons = {
     eng1pump  = true,
@@ -195,15 +197,35 @@ local function update_sys_status()
     b_sys.is_elec_pump_on = status_buttons.elecBpump
     y_sys.is_elec_pump_on = status_buttons.elecYpump
 
-    g_sys.is_ptu_on = false
-    y_sys.is_ptu_on = false
+
     if is_ptu_enabled() then
-        if y_sys.press_curr - g_sys.press_curr > 500 then
+        if y_sys.press_curr - g_sys.press_curr > 500 or (g_sys.is_ptu_on and y_sys.press_curr - g_sys.press_curr > 150) then
             g_sys.is_ptu_on = true  -- Y is feeding the G system
-        elseif g_sys.press_curr - y_sys.press_curr > 500 then
-            y_sys.is_ptu_on = true  -- G is feeding the Y system        
+            y_sys.is_ptu_on = false
+        elseif g_sys.press_curr - y_sys.press_curr > 500 or (y_sys.is_ptu_on and g_sys.press_curr - y_sys.press_curr > 150) then
+            y_sys.is_ptu_on = true  -- G is feeding the Y system
+            g_sys.is_ptu_on = false
+        else
+            g_sys.is_ptu_on = false
+            y_sys.is_ptu_on = false
         end
+    else
+        g_sys.is_ptu_on = false
+        y_sys.is_ptu_on = false    
     end
+
+    if status_buttons.PTU then  -- TODO Add PTU failure
+        if y_sys.is_ptu_on then
+            set(Hydraulic_PTU_status, 3)    
+        elseif g_sys.is_ptu_on then
+            set(Hydraulic_PTU_status, 2)            
+        else
+            set(Hydraulic_PTU_status, 1)            
+        end
+    else
+            set(Hydraulic_PTU_status, 0)    
+    end
+
     
     if get(is_RAT_out) == 1 then
         b_sys.is_rat_pump_on = true
@@ -216,6 +238,14 @@ local function update_datarefs()
     set(Hydraulic_G_press, g_sys.press_curr)
     set(Hydraulic_B_press, b_sys.press_curr)
     set(Hydraulic_Y_press, y_sys.press_curr)
+    
+    -- TODO Add faults to buttons
+    set(Hyd_light_Eng1Pump, status_buttons.eng1pump and 0 or 1)
+    set(Hyd_light_Eng2Pump, status_buttons.eng2pump and 0 or 1)
+    set(Hyd_light_PTU, status_buttons.PTU and 0 or 1)
+    set(Hyd_light_B_ElecPump, status_buttons.elecBpump and 0 or 1)
+    set(Hyd_light_Y_ElecPump, status_buttons.elecYpump and 1 or 0)
+    
 end
 
 function update()
@@ -242,19 +272,6 @@ function update()
         update_datarefs()
     end
 
-    print(
-    status_buttons.eng1pump,
-    status_buttons.eng2pump,
-    status_buttons.elecBpump,
-    status_buttons.elecYpump,
-    status_buttons.PTU
-    )
-    
-    print(
-    g_sys.press_target,
-    b_sys.press_target,
-    y_sys.press_target
-    )
 
 end
 

@@ -293,7 +293,11 @@ Acars_incoming_message_type = createGlobalPropertyi("a321neo/dynamics/ACARS/inco
 Acars_incoming_message_length = createGlobalPropertyi("a321neo/dynamics/ACARS/incoming_msg_len", 0, false, true, false) -- Length of the message (do not use string.len, it doesn't work)
 
 -- HYD
-Hydraulic_G_press = createGlobalPropertyi("a321neo/dynamics/HYD/G_press", 0, false, true, false) 
-Hydraulic_B_press = createGlobalPropertyi("a321neo/dynamics/HYD/B_press", 0, false, true, false) 
-Hydraulic_Y_press = createGlobalPropertyi("a321neo/dynamics/HYD/Y_press", 0, false, true, false) 
+Hydraulic_G_press    = createGlobalPropertyi("a321neo/dynamics/HYD/G_press", 0, false, true, false) 
+Hydraulic_B_press    = createGlobalPropertyi("a321neo/dynamics/HYD/B_press", 0, false, true, false) 
+Hydraulic_Y_press    = createGlobalPropertyi("a321neo/dynamics/HYD/Y_press", 0, false, true, false) 
+Hydraulic_G_qty      = createGlobalPropertyf("a321neo/dynamics/HYD/G_qty", 0, false, true, false) -- In percentage 0;1
+Hydraulic_B_qty      = createGlobalPropertyf("a321neo/dynamics/HYD/B_qty", 0, false, true, false) -- In percentage 0;1
+Hydraulic_Y_qty      = createGlobalPropertyf("a321neo/dynamics/HYD/Y_qty", 0, false, true, false) -- In percentage 0;1
+Hydraulic_PTU_status = createGlobalPropertyi("a321neo/dynamics/HYD/PTU_stats", 0, false, true, false) -- 0: OFF, 1: ON idle, 2: ON Y->G, 3: G->Y
 
