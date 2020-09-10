@@ -227,6 +227,10 @@ Apu_N1 = globalProperty("sim/cockpit2/electrical/APU_N1_percent")
 APU_EGT = globalProperty("sim/cockpit2/electrical/APU_EGT_c")
 Eng_1_reverser_deployment = globalProperty("sim/flightmodel2/engines/thrust_reverser_deploy_ratio[0]")
 Eng_2_reverser_deployment = globalProperty("sim/flightmodel2/engines/thrust_reverser_deploy_ratio[1]")
+
+Eng_1_Fire_valve = createGlobalPropertyi("a321neo/dynamics/engines/fire_valve_1", 0, false, true, false) -- 0 open - normal, 1 - closed - fire pushbutton triggered
+Eng_2_Fire_valve = createGlobalPropertyi("a321neo/dynamics/engines/fire_valve_2", 0, false, true, false) -- 0 open - normal, 1 - closed - fire pushbutton triggered
+
 --PACKs system
 Apu_bleed_switch = globalProperty("sim/cockpit2/bleedair/actuators/apu_bleed")
 ENG_1_bleed_switch = globalProperty("sim/cockpit2/bleedair/actuators/engine_bleed_sov[0]")
