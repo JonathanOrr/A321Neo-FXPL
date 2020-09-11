@@ -83,6 +83,7 @@ end
 
 local function draw_quantity_bars(qty_G, qty_B, qty_Y)
 
+    -- GREEN
     y_top = size[2]/2-310+140 * get(Hydraulic_G_qty)
     local qty_color = ECAM_GREEN
     if get(Hydraulic_G_qty) < 0.18 then
@@ -90,8 +91,29 @@ local function draw_quantity_bars(qty_G, qty_B, qty_Y)
     elseif  get(Hydraulic_G_qty) < 0.83 then
         -- TODO blinking
     end
-    
     sasl.gl.drawWidePolyLine( {160, size[2]/2-308, 145, size[2]/2-308, 145, y_top, 157, y_top+10, 145, y_top+20 }, 4, qty_color)
+
+    -- BLUE
+    y_top = size[2]/2-310+140 * get(Hydraulic_B_qty)
+    local qty_color = ECAM_GREEN
+    if get(Hydraulic_B_qty) < 0.31 then
+        qty_color = ECAM_ORANGE
+    elseif  get(Hydraulic_B_qty) < 0.8 then
+        -- TODO blinking
+    end
+    sasl.gl.drawWidePolyLine( {453, size[2]/2-308, 453-15, size[2]/2-308, 453-15, y_top, 453-3, y_top+10, 453-15, y_top+20 }, 4, qty_color)
+
+    -- YELLOW
+    y_top = size[2]/2-310+140 * get(Hydraulic_Y_qty)
+    local qty_color = ECAM_GREEN
+    if get(Hydraulic_Y_qty) < 0.22 then
+        qty_color = ECAM_ORANGE
+    elseif  get(Hydraulic_Y_qty) < 0.81 then
+        -- TODO blinking
+    end
+    sasl.gl.drawWidePolyLine( {745, size[2]/2-308, 730, size[2]/2-308, 730, y_top, 742, y_top+10, 730, y_top+20 }, 4, qty_color)
+
+
 end
 
 local function draw_failures()

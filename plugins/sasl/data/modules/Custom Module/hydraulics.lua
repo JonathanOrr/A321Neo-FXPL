@@ -106,7 +106,7 @@ function HydSystem:create (o)
 end
 
 function HydSystem:update_press()
-    print(self.id, self.is_engine_pump_on, self.is_elec_pump_on)
+
     if self.is_engine_pump_on then
         -- Ok engine pump is ON, this is the best, no matter about the others pumps
         self.press_target = math.random(PSI_AVG_ENGINE_PUMP - PSI_VAR_EE_PUMP, PSI_AVG_ENGINE_PUMP + PSI_VAR_EE_PUMP)           
@@ -147,7 +147,6 @@ function HydSystem:update_press()
             self.press_target = math.random(avg_press - var_press, avg_press + var_press)      
         end
     else
-        print("Nothing on")
         -- No pressure system
         self.press_target = 0
     end
@@ -171,6 +170,13 @@ function HydSystem:update_curr_press()
     
     self.press_curr = self.press_curr + var
 
+end
+
+function HydSystem:update_qty()
+
+    if self.qty_curr == 0 then
+        self.qty_curr = math.random()*(self.qty_high_limit - self.qty_norm_limit) + self.qty_norm_limit
+    end
 end
 
 ----------------------------------------------------------------------------------------------------
@@ -239,6 +245,10 @@ local function update_datarefs()
     set(Hydraulic_B_press, b_sys.press_curr)
     set(Hydraulic_Y_press, y_sys.press_curr)
     
+    set(Hydraulic_G_qty, g_sys.qty_curr / g_sys.qty_high_limit)
+    set(Hydraulic_B_qty, b_sys.qty_curr / b_sys.qty_high_limit)
+    set(Hydraulic_Y_qty, y_sys.qty_curr / y_sys.qty_high_limit)
+    
     -- TODO Add faults to buttons
     set(Hyd_light_Eng1Pump, status_buttons.eng1pump and 0 or 1)
     set(Hyd_light_Eng2Pump, status_buttons.eng2pump and 0 or 1)
@@ -262,12 +272,16 @@ function update()
         y_sys:update_press()
     end
 
-    if curr_time - last_press_update > 100 then -- Update the pressure every 100ms
+    if curr_time - last_press_update > 100 then -- Update the pressure and qty every 100ms
         last_press_update = curr_time
         
         g_sys:update_curr_press()
         b_sys:update_curr_press()
         y_sys:update_curr_press()
+        
+        g_sys:update_qty()
+        b_sys:update_qty()
+        y_sys:update_qty()
         
         update_datarefs()
     end
