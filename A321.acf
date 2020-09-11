@@ -41865,7 +41865,7 @@ GROUP ECAM lower du
     gen_rotary PTU
       POS 3639.000000 914.500000
       IMAGE MIP/ecam lower du/HYD/PTU
-      DATAREF a321neo/dynamics/HYD/PTU_stats
+      DATAREF a321neo/dynamics/HYD/PTU_status
       LOCKED
       HIDE
       LIGHT_MODE GLASS_AUTO

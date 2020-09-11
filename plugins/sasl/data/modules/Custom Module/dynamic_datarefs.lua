@@ -303,5 +303,7 @@ Hydraulic_Y_press    = createGlobalPropertyi("a321neo/dynamics/HYD/Y_press", 0, 
 Hydraulic_G_qty      = createGlobalPropertyf("a321neo/dynamics/HYD/G_qty", 0, false, true, false) -- In percentage 0;1
 Hydraulic_B_qty      = createGlobalPropertyf("a321neo/dynamics/HYD/B_qty", 0, false, true, false) -- In percentage 0;1
 Hydraulic_Y_qty      = createGlobalPropertyf("a321neo/dynamics/HYD/Y_qty", 0, false, true, false) -- In percentage 0;1
-Hydraulic_PTU_status = createGlobalPropertyi("a321neo/dynamics/HYD/PTU_stats", 0, false, true, false) -- 0: OFF, 1: ON idle, 2: ON Y->G, 3: G->Y
+Hydraulic_PTU_status = createGlobalPropertyi("a321neo/dynamics/HYD/PTU_status", 0, false, true, false) -- 0: OFF, 1: ON idle, 2: ON Y->G, 3: G->Y
+Hydraulic_RAT_status = createGlobalPropertyi("a321neo/dynamics/HYD/RAT_status", 0, false, true, false) -- 0: OFF ready, 1: Running OK, 2: FAULT or low speed
+
 

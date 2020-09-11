@@ -11,13 +11,13 @@ local function draw_psi_numbers(g_psi, b_psi, y_psi)
     sasl.gl.drawText(B612MONO_regular, 160, y_psi_pos, g_psi, 36, false, false, TEXT_ALIGN_CENTER, g_color)
     sasl.gl.drawWideLine (160, y_psi_pos-20 , 160, y_psi_pos-240, 4 , g_color)
 
-    local b_color = y_psi >= 1450 and ECAM_GREEN or ECAM_ORANGE
+    local b_color = b_psi >= 1450 and ECAM_GREEN or ECAM_ORANGE
     sasl.gl.drawText(B612MONO_regular, 453, y_psi_pos, b_psi, 36, false, false, TEXT_ALIGN_CENTER, b_color)
-    sasl.gl.drawWideLine (453, y_psi_pos-20 , 453, y_psi_pos-285, 4 , g_color)
+    sasl.gl.drawWideLine (453, y_psi_pos-20 , 453, y_psi_pos-285, 4 , b_color)
         
     local y_color = y_psi >= 1450 and ECAM_GREEN or ECAM_ORANGE
     sasl.gl.drawText(B612MONO_regular, 745, y_psi_pos, y_psi, 36, false, false, TEXT_ALIGN_CENTER, y_color)
-    sasl.gl.drawWideLine (745, y_psi_pos-20 , 745, y_psi_pos-240, 4 , g_color)
+    sasl.gl.drawWideLine (745, y_psi_pos-20 , 745, y_psi_pos-240, 4 , y_color)
 end
 
 local function draw_rectangles(g_psi, b_psi, y_psi)
@@ -43,7 +43,7 @@ local function draw_rectangles(g_psi, b_psi, y_psi)
     ----------------------
     color_rectangle = ECAM_ORANGE
     if get(Hyd_light_B_ElecPump) % 10 == 1 then
-        sasl.gl.drawWideLine (453-35, y_psi_pos-335, 453+35, y_psi_pos-335, 4, ECAM_ORANGE)
+        sasl.gl.drawWideLine (453-35, y_psi_pos-335+25, 453+35, y_psi_pos-335+25, 4, ECAM_ORANGE)
     elseif b_psi >= 1450 then
         color_rectangle = ECAM_GREEN
         sasl.gl.drawWideLine (453, y_psi_pos-335, 453, y_psi_pos-335+50, 4, ECAM_GREEN)
@@ -117,37 +117,70 @@ local function draw_quantity_bars(qty_G, qty_B, qty_Y)
 end
 
 local function draw_failures()
-    sasl.gl.drawText(B612MONO_regular, 250, size[2]/2-185, "LO AIR", 32, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
-    sasl.gl.drawText(B612MONO_regular, 250, size[2]/2-230, "PRESS", 32, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)        
-    sasl.gl.drawText(B612MONO_regular, 250, size[2]/2-310, "OVHT", 42, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
 
-    sasl.gl.drawText(B612MONO_regular, 540, size[2]/2-185, "LO AIR", 32, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
-    sasl.gl.drawText(B612MONO_regular, 540, size[2]/2-230, "PRESS", 32, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)        
-    sasl.gl.drawText(B612MONO_regular, 540, size[2]/2-310, "OVHT", 42, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+    if get(FAILURE_HYD_G_low_air) == 1 then
+        sasl.gl.drawText(B612MONO_regular, 250, size[2]/2-185, "LO AIR", 32, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(B612MONO_regular, 250, size[2]/2-230, "PRESS", 32, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+    end        
+    if get(FAILURE_HYD_G_R_overheat) == 1 then
+        sasl.gl.drawText(B612MONO_regular, 250, size[2]/2-310, "OVHT", 42, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+    end
+
+    if get(FAILURE_HYD_B_low_air) == 1 then
+        sasl.gl.drawText(B612MONO_regular, 540, size[2]/2-185, "LO AIR", 32, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(B612MONO_regular, 540, size[2]/2-230, "PRESS", 32, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+    end
+    if get(FAILURE_HYD_B_R_overheat) == 1 then
+        sasl.gl.drawText(B612MONO_regular, 540, size[2]/2-310, "OVHT", 42, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+    end
     
-    sasl.gl.drawText(B612MONO_regular, 830, size[2]/2-185, "LO AIR", 32, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
-    sasl.gl.drawText(B612MONO_regular, 830, size[2]/2-230, "PRESS", 32, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)        
-    sasl.gl.drawText(B612MONO_regular, 830, size[2]/2-310, "OVHT", 42, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+    if get(FAILURE_HYD_Y_low_air) == 1 then
+        sasl.gl.drawText(B612MONO_regular, 830, size[2]/2-185, "LO AIR", 32, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(B612MONO_regular, 830, size[2]/2-230, "PRESS", 32, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+    end
+    if get(FAILURE_HYD_Y_R_overheat) == 1 then
+        sasl.gl.drawText(B612MONO_regular, 830, size[2]/2-310, "OVHT", 42, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+    end
 end
 
 local function draw_extra_pumps()
 
-    -- Yellow ELEC pump
-    sasl.gl.drawText(B612MONO_regular, 840, size[2]/2+100, "ELEC", 26, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    sasl.gl.drawText(B612MONO_regular, 840, size[2]/2+70, "OVHT", 26, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+    -- Yellow ELEC arrow and messages
+    if get(Hyd_light_Y_ElecPump) == 11 then
+        sasl.gl.drawTriangle (770 , size[2]/2+95 , 795 , size[2]/2+110 , 795 , size[2]/2+80 , ECAM_ORANGE)
+    elseif get(Hyd_light_Y_ElecPump) == 1 then
+        sasl.gl.drawWideLine ( 747, size[2]/2+95 , 772, size[2]/2+95, 4 , ECAM_GREEN)
+        sasl.gl.drawTriangle ( 770 , size[2]/2+95 , 795 , size[2]/2+110 , 795 , size[2]/2+80 , ECAM_GREEN )
+    else
+        sasl.gl.drawWidePolyLine({770, size[2]/2+95, 795, size[2]/2+110, 795, size[2]/2+80, 770, size[2]/2+95}, 4, ECAM_WHITE )
+    end
     
-    sasl.gl.drawWideLine ( 747, size[2]/2+95 , 772, size[2]/2+95, 4 , ECAM_ORANGE)
-    sasl.gl.drawTriangle ( 770 , size[2]/2+95 , 795 , size[2]/2+110 , 795 , size[2]/2+80 , ECAM_ORANGE )
+    sasl.gl.drawText(B612MONO_regular, 840, size[2]/2+100, "ELEC", 26, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE) -- Should become orange when no elec power
+    
+    if get(FAILURE_HYD_Y_E_overheat) == 1 then
+        sasl.gl.drawText(B612MONO_regular, 840, size[2]/2+70, "OVHT", 26, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+    end    
+
     
     -- BLUE ELEC pump messages
-    sasl.gl.drawText(B612MONO_regular, 540, size[2]/2-10, "ELEC", 26, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    sasl.gl.drawText(B612MONO_regular, 540, size[2]/2-40, "OVHT", 26, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
-
-    -- RAT messages
-    sasl.gl.drawText(B612MONO_regular, 370, size[2]/2+85, "RAT", 26, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    sasl.gl.drawWideLine ( 428, size[2]/2+95 , 453, size[2]/2+95, 4 , ECAM_GREEN)
-    sasl.gl.drawTriangle ( 432 , size[2]/2+95 , 407 , size[2]/2+110 , 407 , size[2]/2+80 , ECAM_GREEN )
+    sasl.gl.drawText(B612MONO_regular, 540, size[2]/2-10, "ELEC", 26, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE) -- Should become orange when no elec power
     
+    if get(FAILURE_HYD_B_E_overheat) == 1 then
+        sasl.gl.drawText(B612MONO_regular, 540, size[2]/2-40, "OVHT", 26, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+    end    
+
+    -- RAT text and arrow
+    if get(Hydraulic_RAT_status) == 0 then
+        sasl.gl.drawText(B612MONO_regular, 370, size[2]/2+85, "RAT", 26, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+        sasl.gl.drawWidePolyLine( {432 , size[2]/2+95 , 407 , size[2]/2+110 , 407 , size[2]/2+80, 432 , size[2]/2+95}, 4, ECAM_WHITE)
+    elseif get(Hydraulic_RAT_status) == 1 then
+        sasl.gl.drawText(B612MONO_regular, 370, size[2]/2+85, "RAT", 26, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawTriangle ( 432 , size[2]/2+95 , 407 , size[2]/2+110 , 407 , size[2]/2+80 , ECAM_GREEN )
+        sasl.gl.drawWideLine ( 428, size[2]/2+95 , 453, size[2]/2+95, 4 , ECAM_GREEN)
+    else
+        sasl.gl.drawText(B612MONO_regular, 370, size[2]/2+85, "RAT", 26, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+        sasl.gl.drawTriangle ( 432 , size[2]/2+95 , 407 , size[2]/2+110 , 407 , size[2]/2+80 , ECAM_ORANGE )
+    end
 end
 
 function draw_hydraulic_page()

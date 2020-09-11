@@ -198,9 +198,9 @@ end
 local function update_sys_status()
 
     -- TODO Add failures + Electrical
-    g_sys.is_engine_pump_on = status_buttons.eng1pump
-    y_sys.is_engine_pump_on = status_buttons.eng2pump
-    b_sys.is_elec_pump_on = status_buttons.elecBpump
+    g_sys.is_engine_pump_on = status_buttons.eng1pump and get(Engine_1_avail) == 1
+    y_sys.is_engine_pump_on = status_buttons.eng2pump and get(Engine_2_avail) == 1
+    b_sys.is_elec_pump_on = status_buttons.elecBpump and (get(Engine_1_avail) == 1 or  get(Engine_2_avail) == 1)
     y_sys.is_elec_pump_on = status_buttons.elecYpump
 
 
