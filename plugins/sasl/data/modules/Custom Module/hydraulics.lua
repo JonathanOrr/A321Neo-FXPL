@@ -68,6 +68,10 @@ function hyd_toggle_button(phase, id)
     end
 end
 
+local function is_any_cargo_door_operating()
+    return (get(Cargo_1_ratio) > 0 and get(Cargo_1_ratio) < 1) or (get(Cargo_2_ratio) > 0 and get(Cargo_2_ratio) < 1) 
+end
+
 ----------------------------------------------------------------------------------------------------
 -- Classes
 ----------------------------------------------------------------------------------------------------
@@ -106,6 +110,15 @@ function HydSystem:create (o)
 end
 
 function HydSystem:update_press()
+
+    if self.id == Y then
+        if is_any_cargo_door_operating() then
+            -- In this case we must disable the Y system
+            self.press_target = 0
+            return
+        end
+    end
+
 
     if self.is_engine_pump_on then
         -- Ok engine pump is ON, this is the best, no matter about the others pumps
@@ -161,7 +174,11 @@ function HydSystem:update_curr_press()
     
     local var = (self.press_target - self.press_curr) / 10
     if var > 0 and var > PSI_STEP then
-        var = PSI_STEP
+        if self.id == B then
+            var = PSI_STEP * 0.7 -- Blue is a little slower
+        else
+            var = PSI_STEP
+        end
         var = var + math.random(-5,5)
     elseif var < 0 and var < -PSI_STEP then
         var = -PSI_STEP
@@ -191,8 +208,23 @@ end
 
 init_hyd_systems()
 
+
 local function is_ptu_enabled()
-    return status_buttons.PTU -- TODO
+
+    if not status_buttons.PTU then
+        return false
+    end
+
+    -- PTU has a complex activation logic:
+
+    local first_and = get(Actual_brake_ratio) == 0  -- TODO NWS STEERING
+    -- Engines Both OFF or both ON
+    local engines_both_off_or_on = get(Engine_1_master_switch) + get(Engine_2_master_switch) ~= 1
+    local the_or = first_and or engines_both_off_or_on or get(All_on_ground) == 0
+    local second_and = the_or and (math.abs(g_sys.press_curr - y_sys.press_curr) > 500 or (g_sys.is_ptu_on and y_sys.press_curr - g_sys.press_curr > 150) or (y_sys.is_ptu_on and g_sys.press_curr - y_sys.press_curr > 150))
+    local inibith = (not status_buttons.elecYpump) and is_any_cargo_door_operating()
+
+    return second_and and (not inibith)
 end
 
 local function update_sys_status()
@@ -254,7 +286,12 @@ local function update_datarefs()
     set(Hyd_light_Eng2Pump, status_buttons.eng2pump and 0 or 1)
     set(Hyd_light_PTU, status_buttons.PTU and 0 or 1)
     set(Hyd_light_B_ElecPump, status_buttons.elecBpump and 0 or 1)
-    set(Hyd_light_Y_ElecPump, status_buttons.elecYpump and 1 or 0)
+    
+    if (not is_any_cargo_door_operating()) and status_buttons.elecYpump then
+        set(Hyd_light_Y_ElecPump, 1)
+    else
+        set(Hyd_light_Y_ElecPump, 0)    
+    end
     
 end
 
