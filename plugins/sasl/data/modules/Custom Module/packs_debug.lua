@@ -1,3 +1,5 @@
+include('constants.lua')
+
 --sim datarefs
 
 --a32nx datarefs
@@ -7,10 +9,6 @@ local B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
 
 --colors
 local BLACK = {0.0, 0.0, 0.0}
-local ECAM_WHITE = {1.0, 1.0, 1.0}
-local ECAM_BLUE = {0.004, 1.0, 1.0}
-local ECAM_GREEN = {0.184, 0.733, 0.219}
-local ECAM_ORANGE = {0.725, 0.521, 0.18}
 local eng_1_bleed_cl = ECAM_ORANGE
 local apugpu_bleed_cl = ECAM_ORANGE
 local eng_2_bleed_cl = ECAM_ORANGE
