@@ -22,7 +22,6 @@ FAILURE_IR[2] = createGlobalPropertyi("a321neo/failures/adirs/ir_2", 0, false, t
 FAILURE_IR[3] = createGlobalPropertyi("a321neo/failures/adirs/ir_3", 0, false, true, false) -- 0: OK, 1: FAILED partial, 2: complete FAILURE
 
 
-
 FAILURE_HYD_Y_E_overheat = createGlobalPropertyi("a321neo/failures/HYD/Y_E_overheat", 0, false, true, false) -- Yellow Elec pump 0: normal 1: overheat
 FAILURE_HYD_B_E_overheat = createGlobalPropertyi("a321neo/failures/HYD/B_E_overheat", 0, false, true, false) -- Blue Elec pump 0: normal 1: overheat
 FAILURE_HYD_G_R_overheat = createGlobalPropertyi("a321neo/failures/HYD/G_R_overheat", 0, false, true, false) -- Green Reservoir 0: normal 1: overheat
@@ -31,4 +30,12 @@ FAILURE_HYD_Y_R_overheat = createGlobalPropertyi("a321neo/failures/HYD/Y_R_overh
 FAILURE_HYD_G_low_air    = createGlobalPropertyi("a321neo/failures/HYD/G_low_air", 0, false, true, false) -- Green LO air press Reservoir 0: normal 1: overheat
 FAILURE_HYD_B_low_air    = createGlobalPropertyi("a321neo/failures/HYD/B_low_air", 0, false, true, false) -- Blue LO air press Reservoir 0: normal 1: overheat
 FAILURE_HYD_Y_low_air    = createGlobalPropertyi("a321neo/failures/HYD/Y_low_air", 0, false, true, false) -- Yellow LO air press Reservoir 0: normal 1: overheat
-
+FAILURE_HYD_G_leak       = createGlobalPropertyi("a321neo/failures/HYD/G_leak", 0, false, true, false) -- Green system has a leak! (0: normal, 1:leak)
+FAILURE_HYD_B_leak       = createGlobalPropertyi("a321neo/failures/HYD/G_leak", 0, false, true, false) -- Blue system has a leak! (0: normal, 1:leak)
+FAILURE_HYD_Y_leak       = createGlobalPropertyi("a321neo/failures/HYD/G_leak", 0, false, true, false) -- Yellow system has a leak! (0: normal, 1:leak)
+FAILURE_HYD_G_pump       = createGlobalPropertyi("a321neo/failures/HYD/G_pump", 0, false, true, false) -- ENG1 pump failure
+FAILURE_HYD_Y_pump       = createGlobalPropertyi("a321neo/failures/HYD/Y_pump", 0, false, true, false) -- ENG2 pump failure
+FAILURE_HYD_B_pump       = createGlobalPropertyi("a321neo/failures/HYD/B_pump", 0, false, true, false) -- BLUE elec pump failure
+FAILURE_HYD_Y_E_pump     = createGlobalPropertyi("a321neo/failures/HYD/Y_elec_pump", 0, false, true, false) -- Y elec pump failure
+FAILURE_HYD_RAT          = createGlobalPropertyi("a321neo/failures/HYD/rat", 0, false, true, false) -- RAT failure
+FAILURE_HYD_PTU          = createGlobalPropertyi("a321neo/failures/HYD/ptu", 0, false, true, false) -- PTU failure

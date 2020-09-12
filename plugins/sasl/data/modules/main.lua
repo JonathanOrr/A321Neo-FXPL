@@ -162,15 +162,15 @@ DCDU_window = contextWindow {
 
 failures_window = contextWindow {
   name = "Failures Management";
-  position = { 150 , 150 , 600 , 600 };
+  position = { 150 , 150 , 800 , 600 };
   noBackground = true ;
   proportional = false ;
-  minimumSize = { 600 , 600 };
-  maximumSize = { 600 , 600 };
+  minimumSize = { 800 , 600 };
+  maximumSize = { 800 , 600 };
   gravity = { 0 , 1 , 0 , 1 };
   visible = false ;
   components = {
-    failures_window {position = { 0 , 0 , 600 , 600 }}
+    failures_window {position = { 0 , 0 , 800 , 600 }}
   };
 }
 
