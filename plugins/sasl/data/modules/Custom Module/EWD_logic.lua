@@ -223,6 +223,21 @@ local function update_right_list()
         list_right:put(COL_INDICATION, "AUTO BRK MAX")
     end
 
+    -- HYD
+    if get(Hydraulic_RAT_status) > 0 then
+        list_right:put(COL_INDICATION, "RAT OUT")
+    end
+    if get(Hydraulic_PTU_status) > 1 then
+        list_right:put(COL_INDICATION, "HYD PTU")
+    end
+
+    -- TCAS
+    if get(DRAIMS_Sqwk_mode) < 2 then
+        list_right:put(COL_INDICATION, "TCAS STBY")
+    elseif get(DRAIMS_Sqwk_mode) == 2 then
+        list_right:put(COL_INDICATION, "TCAS TA ONLY")
+    end
+    
     -- ACARS
     if get(Acars_status) == 0 then
         list_right:put(COL_INDICATION, "ACARS STBY")
@@ -235,15 +250,6 @@ local function update_right_list()
     if get(VHF_3_monitor_selected) == 1 then
         list_right:put(COL_INDICATION_BLINKING, "VHF 3 VOICE")    
     end
-    
-    -- TCAS
-    if get(DRAIMS_Sqwk_mode) < 2 then
-        list_right:put(COL_INDICATION, "TCAS STBY")
-    elseif get(DRAIMS_Sqwk_mode) == 2 then
-        list_right:put(COL_INDICATION, "TCAS TA ONLY")
-    end
-    
-    
     
     -- TODO Audio: AUDIO 3 XFRD displayed green if audio switching selector not in NORM
     -- TODO Acars: ACARS CALL (pulsing green) if received an ACARS message requesting voice conversation
@@ -266,9 +272,6 @@ local function update_right_list()
     --                          green - X FEED valve ON and X FEED not fully closed
     --                          amber if in flight phases 3,4,5
     -- TODO Fuel: REFUELG: green, fuel control panel door open or cockpit PWR pushbutton refuel panel ON
-    
-    -- TODO Hyd: RAT OUT, green, if ram air turbine is out
-    -- TODO Hyd: HYD PTU, green, if PTU is running
     
     -- TODO Anti-ice: WING A. ICE, green, if WING ANTI ICE is ON
     -- TODO Anti-ice: ICE NOT DET, green, if ice no longer detected after 190 secs of pressing WING ANTI ICE
