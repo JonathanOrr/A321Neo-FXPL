@@ -1,30 +1,26 @@
+----------------------------------------------------------------------------------------------------
+-- A32NX MCDU
+--
+--
+-- CONSTS DECLARATION
+-- FMGS & MCDU DATA INITIALIZATION
+-- DATA & COMMAND REGISTRATION
+-- MCDU - XP FUNC CONTROLS
+-- MCDU PAGE SIMULATION
+----------------------------------------------------------------------------------------------------
+
+--[[
+--
+--
+--      CONSTS DECLARATION
+--
+--
+--]]
+
 position = {1282, 1449, 560, 530}
 size = {560, 530}
 
 local NIL = 0 -- used for input return and checking
-local NIL_UNIQUE = "unique-nil" -- used for input return and checking
-
---[[
---
---
---      A32NX MCDU
---
---      CONSTS DECLARATION
---      FMGS & MCDU DATA INITIALIZATION
---      DATA & COMMAND REGISTRATION
---      MCDU - XP FUNC CONTROLS
---      MCDU PAGE SIMULATION
---
---
---]]
-
---[[
---
---
---      CONSTS DECLARATION
---
---
---]]
 
 --define the const size, align and row.
 local MCDU_DIV_SIZE = {"s", "l"}
@@ -71,7 +67,7 @@ local MCDU_DISP_TEXT_ALIGN =
 local B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
 
 -- alphanumeric & decimal FMC entry keys
-local MCDU_ENTRY_KEYS = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", ".", "Δ", "/", " "}
+local MCDU_ENTRY_KEYS = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", ".", "wpt", "/", "space"}
 local MCDU_ENTRY_PAGES = {"dir", "prog", "perf", "init", "data", "f-pln", "rad nav", "fuel pred", "sec f-pln", "atc comm", "mcdu menu", "air port"}
 local MCDU_ENTRY_SIDES = {"L1", "L2", "L3", "L4", "L5", "L6", "R1", "R2", "R3", "R4", "R5", "R6", "slew_up", "slew_down", "slew_left", "slew_right"}
 
@@ -341,6 +337,13 @@ local MCDU_ENTRY =
         ref_entries = MCDU_ENTRY_KEYS,  --the group of keys
         ref_callback =                  --what they should do
         function (count, val)
+
+            if val == "wpt" then
+                val = "Δ"
+            elseif val == "space" then
+                val = " "
+            end
+
             if get(TIME) - entry_cooldown > get(DELTA_TIME) then
                 entry_cooldown = get(TIME)
                 if #mcdu_entry < 22 then
