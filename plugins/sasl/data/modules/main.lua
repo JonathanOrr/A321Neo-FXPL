@@ -44,7 +44,7 @@ components = {
   failures_manager {},
   display_brightness {},
   doors {},
-  hydraulics {}
+  hydraulics {},
  }
 
  --windows
@@ -174,6 +174,19 @@ failures_window = contextWindow {
   };
 }
 
+Checklist_window = contextWindow {
+  name = "A32NX Interactive Checklist";
+  position = { 50 , 50 , 480 , 510 };
+  noBackground = true ;
+  proportional = false ;
+  minimumSize = { 230 , 255 };
+  maximumSize = { 480 , 510 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = true ;
+  components = {
+    checklist {position = { 0 , 0 , 480 , 510 }}
+  };
+}
 
 --menu item functions
 function Show_hide_MCDU()
@@ -212,6 +225,10 @@ function Show_hide_Failures()
   failures_window:setIsVisible(not failures_window:isVisible())
 end
 
+function Show_hide_Checklist()
+  Checklist_window:setIsVisible(not Checklist_window:isVisible())
+end
+
 function IRs_instaneous_align()
     ADIRS_cmd_instantaneous_align = sasl.findCommand("a321neo/cockpit/ADIRS/instantaneous_align")
     sasl.messageWindow (500 , 500 , 300 , 100 , " IRs auto-align " , 
@@ -224,9 +241,10 @@ Menu_master	= sasl.appendMenuItem (PLUGINS_MENU_ID, "A321NEO" )
 -- add a submenu
 Menu_main	= sasl.createMenu ("", PLUGINS_MENU_ID, Menu_master)
 
+ShowHideChecklist   = sasl.appendMenuItem(Menu_main, "Show/Hide Checklist", Show_hide_Checklist)
 ShowHideMCDU        = sasl.appendMenuItem(Menu_main, "Show/Hide MCDU", Show_hide_MCDU)
 ShowHideDCDU        = sasl.appendMenuItem(Menu_main, "Show/Hide DCDU Manager", Show_hide_DCDU)
-ShowHideFailures        = sasl.appendMenuItem(Menu_main, "Show/Hide Failures Manager", Show_hide_Failures)
+ShowHideFailures    = sasl.appendMenuItem(Menu_main, "Show/Hide Failures Manager", Show_hide_Failures)
 
 sasl.appendMenuSeparator(Menu_main)
 

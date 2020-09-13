@@ -172,6 +172,9 @@ Ecam_arrow_overflow = createGlobalPropertyi("a321neo/cockpit/ecam/arrow_overflow
 Head_x = globalProperty("sim/graphics/view/pilots_head_x")
 Head_y = globalProperty("sim/graphics/view/pilots_head_y")
 Head_z = globalProperty("sim/graphics/view/pilots_head_z")
+Head_phi = globalProperty("sim/graphics/view/pilots_head_phi")--roll
+Head_psi = globalProperty("sim/graphics/view/pilots_head_psi")--yaw
+Head_the = globalProperty("sim/graphics/view/pilots_head_the")--pitch
 --autopilot
 Flight_director_1_mode = globalProperty("sim/cockpit2/autopilot/flight_director_mode")
 Flight_director_2_mode = globalProperty("sim/cockpit2/autopilot/flight_director2_mode")
@@ -288,7 +291,7 @@ ZULU_secs = globalProperty("sim/cockpit2/clock_timer/zulu_time_seconds")
 
 -- Misc
 Sun_pitch  = globalProperty("sim/graphics/scenery/sun_pitch_degrees")
-is_RAT_out = createGlobalPropertyi("a321neo/dynamics/is_RAT_out", 0, false, true, false)    -- Is Ram Air Turbine out? 0: no, 1: yes (it does NOT mean that the generator is on) 
+is_RAT_out = createGlobalPropertyi("a321neo/dynamics/is_RAT_out", 0, false, true, false)-- Is Ram Air Turbine out? 0: no, 1: yes (it does NOT mean that the generator is on)
 
 -- ACARS & DCDU
 Acars_status = createGlobalPropertyi("a321neo/dynamics/ACARS/comm_status", 0, false, true, false) -- 0 no connection, 1 - SATCOM only, 2 - VHF only, 3 - Both
@@ -297,9 +300,9 @@ Acars_incoming_message_type = createGlobalPropertyi("a321neo/dynamics/ACARS/inco
 Acars_incoming_message_length = createGlobalPropertyi("a321neo/dynamics/ACARS/incoming_msg_len", 0, false, true, false) -- Length of the message (do not use string.len, it doesn't work)
 
 -- HYD
-Hydraulic_G_press    = createGlobalPropertyi("a321neo/dynamics/HYD/G_press", 0, false, true, false) 
-Hydraulic_B_press    = createGlobalPropertyi("a321neo/dynamics/HYD/B_press", 0, false, true, false) 
-Hydraulic_Y_press    = createGlobalPropertyi("a321neo/dynamics/HYD/Y_press", 0, false, true, false) 
+Hydraulic_G_press    = createGlobalPropertyi("a321neo/dynamics/HYD/G_press", 0, false, true, false)
+Hydraulic_B_press    = createGlobalPropertyi("a321neo/dynamics/HYD/B_press", 0, false, true, false)
+Hydraulic_Y_press    = createGlobalPropertyi("a321neo/dynamics/HYD/Y_press", 0, false, true, false)
 Hydraulic_G_qty      = createGlobalPropertyf("a321neo/dynamics/HYD/G_qty", 0, false, true, false) -- In percentage 0;1
 Hydraulic_B_qty      = createGlobalPropertyf("a321neo/dynamics/HYD/B_qty", 0, false, true, false) -- In percentage 0;1
 Hydraulic_Y_qty      = createGlobalPropertyf("a321neo/dynamics/HYD/Y_qty", 0, false, true, false) -- In percentage 0;1
