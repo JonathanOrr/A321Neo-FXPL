@@ -176,15 +176,15 @@ failures_window = contextWindow {
 
 Checklist_window = contextWindow {
   name = "A32NX Interactive Checklist";
-  position = { 50 , 50 , 480 , 510 };
+  position = { 50 , 50 , 480 , 550 };
   noBackground = true ;
   proportional = false ;
-  minimumSize = { 230 , 255 };
-  maximumSize = { 480 , 510 };
+  minimumSize = { 240 , 275 };
+  maximumSize = { 480 , 550 };
   gravity = { 0 , 1 , 0 , 1 };
   visible = true ;
   components = {
-    checklist {position = { 0 , 0 , 480 , 510 }}
+    checklist {position = { 0 , 0 , 480 , 550 }}
   };
 }
 
