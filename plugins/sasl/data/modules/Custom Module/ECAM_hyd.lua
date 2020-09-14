@@ -9,18 +9,26 @@ local function draw_psi_numbers(g_psi, b_psi, y_psi)
     -- GREEN
     local g_color = g_psi >= 1450 and ECAM_GREEN or ECAM_ORANGE
     sasl.gl.drawText(B612MONO_regular, 160, y_psi_pos, g_psi, 36, false, false, TEXT_ALIGN_CENTER, g_color)
-    sasl.gl.drawWideLine (160, y_psi_pos-20 , 160, y_psi_pos-240, 4 , g_color)
+    sasl.gl.drawWideLine (160, y_psi_pos-20 , 160, y_psi_pos-230, 4 , g_color)
 
     local b_color = b_psi >= 1450 and ECAM_GREEN or ECAM_ORANGE
     sasl.gl.drawText(B612MONO_regular, 453, y_psi_pos, b_psi, 36, false, false, TEXT_ALIGN_CENTER, b_color)
-    sasl.gl.drawWideLine (453, y_psi_pos-20 , 453, y_psi_pos-285, 4 , b_color)
+    sasl.gl.drawWideLine (453, y_psi_pos-20 , 453, y_psi_pos-275, 4 , b_color)
         
     local y_color = y_psi >= 1450 and ECAM_GREEN or ECAM_ORANGE
     sasl.gl.drawText(B612MONO_regular, 745, y_psi_pos, y_psi, 36, false, false, TEXT_ALIGN_CENTER, y_color)
-    sasl.gl.drawWideLine (745, y_psi_pos-20 , 745, y_psi_pos-240, 4 , y_color)
+    sasl.gl.drawWideLine (745, y_psi_pos-20 , 745, y_psi_pos-230, 4 , y_color)
+end
+
+local function draw_single_square_border(x,y,rect_size,color)
+    
+    x = x - rect_size/2
+    sasl.gl.drawWidePolyLine( {x, y, x+rect_size, y, x+rect_size, y+rect_size, x, y+rect_size, x, y-2}, 4, color)
 end
 
 local function draw_rectangles(g_psi, b_psi, y_psi)
+    local rect_size = 60
+
     ----------------------
     -- GREEN Rectangle  --
     ----------------------
@@ -28,45 +36,45 @@ local function draw_rectangles(g_psi, b_psi, y_psi)
     -- Draw the internal of the rectangle
     local color_rectangle = ECAM_ORANGE
     if get(Hyd_light_Eng1Pump) % 10 == 1 then
-        sasl.gl.drawWideLine (125, y_psi_pos-265 , 195, y_psi_pos-265, 4, ECAM_ORANGE)
+        sasl.gl.drawWideLine (160-rect_size/2, y_psi_pos-290+rect_size/2 , 160+rect_size/2, y_psi_pos-290+rect_size/2, 4, ECAM_ORANGE)
     elseif g_psi >= 1450 then
         color_rectangle = ECAM_GREEN
-        sasl.gl.drawWideLine (160, y_psi_pos-290, 160, y_psi_pos-290+50, 4, ECAM_GREEN)
+        sasl.gl.drawWideLine (160, y_psi_pos-290, 160, y_psi_pos-290+rect_size, 4, ECAM_GREEN)
     else
-        sasl.gl.drawText(B612MONO_regular, 160, y_psi_pos-280, "LO", 45, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(B612MONO_regular, 160, y_psi_pos-275, "LO", 40, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
     -- Draw the rectangle external
-    sasl.gl.drawWidePolyLine( {125, y_psi_pos-290, 125+70, y_psi_pos-290, 125+70, y_psi_pos-290+50, 125, y_psi_pos-290+50, 125, y_psi_pos-290 }, 4, color_rectangle)
+    draw_single_square_border(160, y_psi_pos-290, rect_size, color_rectangle)
 
     ----------------------
     -- BLUE Rectangle   --
     ----------------------
     color_rectangle = ECAM_ORANGE
     if get(Hyd_light_B_ElecPump) % 10 == 1 then
-        sasl.gl.drawWideLine (453-35, y_psi_pos-335+25, 453+35, y_psi_pos-335+25, 4, ECAM_ORANGE)
+        sasl.gl.drawWideLine (453-rect_size/2, y_psi_pos-335+rect_size/2, 453+rect_size/2, y_psi_pos-335+rect_size/2, 4, ECAM_ORANGE)
     elseif b_psi >= 1450 then
         color_rectangle = ECAM_GREEN
-        sasl.gl.drawWideLine (453, y_psi_pos-335, 453, y_psi_pos-335+50, 4, ECAM_GREEN)
+        sasl.gl.drawWideLine (453, y_psi_pos-335, 453, y_psi_pos-335+rect_size, 4, ECAM_GREEN)
     else
-        sasl.gl.drawText(B612MONO_regular, 452, y_psi_pos-325, "LO", 45, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(B612MONO_regular, 452, y_psi_pos-320, "LO", 40, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
     -- Draw the rectangle external
-    sasl.gl.drawWidePolyLine( {418, y_psi_pos-335, 418+70, y_psi_pos-335, 418+70, y_psi_pos-335+50, 418, y_psi_pos-335+50, 418, y_psi_pos-335 }, 4, color_rectangle)
+    draw_single_square_border(452, y_psi_pos-335, rect_size, color_rectangle)
 
     ----------------------
     -- YELLOW Rectangle --
     ----------------------
     color_rectangle = ECAM_ORANGE
     if get(Hyd_light_Eng2Pump) % 10 == 1 then
-        sasl.gl.drawWideLine (745-35, y_psi_pos-265 , 745+35, y_psi_pos-265, 4, ECAM_ORANGE)
+        sasl.gl.drawWideLine (745-rect_size/2, y_psi_pos-290+rect_size/2 , 745+rect_size/2, y_psi_pos-290+rect_size/2, 4, ECAM_ORANGE)
     elseif y_psi >= 1450 then
         color_rectangle = ECAM_GREEN
-        sasl.gl.drawWideLine (745, y_psi_pos-290, 745, y_psi_pos-290+50, 4, ECAM_GREEN)
+        sasl.gl.drawWideLine (745, y_psi_pos-290, 745, y_psi_pos-290+rect_size, 4, ECAM_GREEN)
     else
-        sasl.gl.drawText(B612MONO_regular, 745, y_psi_pos-280, "LO", 45, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(B612MONO_regular, 745, y_psi_pos-275, "LO", 40, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
     -- Draw the rectangle external
-    sasl.gl.drawWidePolyLine( {710, y_psi_pos-290, 710+70, y_psi_pos-290, 710+70, y_psi_pos-290+50, 710, y_psi_pos-290+50, 710, y_psi_pos-290 }, 4, color_rectangle)
+    draw_single_square_border(745, y_psi_pos-290, rect_size, color_rectangle)
     
 end
 
