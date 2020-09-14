@@ -212,13 +212,18 @@ ADIRS_source_rotary_AIRDATA = createGlobalPropertyi("a321neo/cockpit/ADIRS/butto
 
 Adirs_capt_has_ADR    = createGlobalPropertyi("a321neo/cockpit/ADIRS/capt_has_ADR", 0, false, true, false) -- 0: FAIL, 1: OK. It provides: altitude, airspeed, mach, AoA, temperature, overspeed warning
 Adirs_capt_has_IR     = createGlobalPropertyi("a321neo/cockpit/ADIRS/capt_has_IR", 0, false, true, false) -- 0: FAIL, 1: partial, 2: complete. It provides: attitude (1,2), heading (1,2), track (only 2), accelerations (only 2), angular rates (only 2), ground speed (only 2), position (only 2)
+Adirs_capt_has_ATT  = createGlobalPropertyi("a321neo/cockpit/ADIRS/capt_has_ATT", 0, false, true, false) -- Captain has attitude information
+Adirs_capt_has_ATT_blink  = createGlobalPropertyi("a321neo/cockpit/ADIRS/capt_has_ATT_blink", 0, false, true, false) -- Captain has attitude information (blinking)
+
 Adirs_capt_has_ADR_blink = createGlobalPropertyi("a321neo/cockpit/ADIRS/capt_has_ADR_blinking", 0, false, true, false) -- This is used for blinking the PFD messages
 Adirs_capt_has_IR_blink  = createGlobalPropertyi("a321neo/cockpit/ADIRS/capt_has_IR_blinking", 0, false, true, false) -- This is used for blinking the PFD messages
 
 Adirs_fo_has_ADR    = createGlobalPropertyi("a321neo/cockpit/ADIRS/fo_has_ADR", 0, false, true, false) -- 0: FAIL, 1: OK. It provides: altitude, airspeed, mach, AoA, temperature, overspeed warning
 Adirs_fo_has_IR     = createGlobalPropertyi("a321neo/cockpit/ADIRS/fo_has_IR", 0, false, true, false) -- 0: FAIL, 1: partial, 2: complete. It provides: attitude (1,2), heading (1,2), track (only 2), accelerations (only 2), angular rates (only 2), ground speed (only 2), position (only 2)
+Adirs_fo_has_ATT  = createGlobalPropertyi("a321neo/cockpit/ADIRS/fo_has_ATT", 0, false, true, false) -- Captain has attitude information
 Adirs_fo_has_ADR_blink = createGlobalPropertyi("a321neo/cockpit/ADIRS/fo_has_ADR_blinking", 0, false, true, false) -- This is used for blinking the PFD messages
 Adirs_fo_has_IR_blink  = createGlobalPropertyi("a321neo/cockpit/ADIRS/fo_has_IR_blinking", 0, false, true, false) -- This is used for blinking the PFD messages
+Adirs_fo_has_ATT_blink  = createGlobalPropertyi("a321neo/cockpit/ADIRS/fo_has_ATT_blink", 0, false, true, false) -- F/O has attitude information (blinking)
 
 --doors
 Ecam_door_click_shown = createGlobalPropertyf("a321neo/cockpit/door/ecam_door_click_shown", 0, false, true, false)--used to show and hide the click spots on the ecam door page

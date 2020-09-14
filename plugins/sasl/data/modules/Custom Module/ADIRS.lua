@@ -2,7 +2,8 @@
 -- Constants
 ----------------------------------------------------------------------------------------------------
 local TIME_TO_ONBAT = 5 --five seconds before onbat light extinguishes if AC available
-local TIME_TO_START_ADR = 2
+local TIME_TO_START_ADR    = 2
+local TIME_TO_GET_ATTITUDE = 20
 
 local LIGHT_NORM       = 0
 local LIGHT_OFF        = 1
@@ -25,17 +26,20 @@ local startup_running = globalProperty("sim/operation/prefs/startup_running")
 local adr_time_begin = {0,0,0}
 local adr_switch_status = {true,true,true}
 
-local is_irs_att = {false, false, false}
+local is_irs_att_mode = {false, false, false}
+local has_irs_att = {false, false, false} -- Has IRs aligned at least the attitude?
 local ir_switch_status = {true,true,true}
 
 local ias_3_offset = math.random() * 2 - 1   -- Max offset IAS between ADR1/2 and ADR3: +1/-1
 local alt_3_offset = math.random() * 20 - 10 -- Max offset Altitude between ADR1/2 and ADR3: +10/-10
 
 local blinkers_data = {
-    {started_to_blink=0, dataref=Adirs_capt_has_ADR_blink, inactive_value=1, active_value=0,active=false},
-    {started_to_blink=0, dataref=Adirs_capt_has_IR_blink,  inactive_value=2, active_value=0,active=false},
-    {started_to_blink=0, dataref=Adirs_fo_has_ADR_blink,   inactive_value=1, active_value=0,active=false},
-    {started_to_blink=0, dataref=Adirs_fo_has_IR_blink,    inactive_value=2, active_value=0,active=false}
+    {started_to_blink=0, dataref=Adirs_capt_has_ADR_blink, active=false},
+    {started_to_blink=0, dataref=Adirs_capt_has_IR_blink,  active=false},
+    {started_to_blink=0, dataref=Adirs_fo_has_ADR_blink,   active=false},
+    {started_to_blink=0, dataref=Adirs_fo_has_IR_blink,    active=false},
+    {started_to_blink=0, dataref=Adirs_capt_has_ATT_blink, active=false},
+    {started_to_blink=0, dataref=Adirs_fo_has_ATT_blink,   active=false}
 }   -- Used for blinking datarefs, to know when a dataref started to blink
 
 
@@ -189,7 +193,8 @@ end
 
 local function update_status_irs(i)
 
-    is_irs_att[i] = false
+    is_irs_att_mode[i] = false
+    has_irs_att[i] = false
     set(Adirs_ir_is_ok[i],0)
 
     if ir_switch_status[i] then
@@ -205,6 +210,10 @@ local function update_status_irs(i)
                 if get(TIME) - get(Adirs_irs_begin_time[i]) > get(Adirs_total_time_to_align) then
                     -- Align finished
                    set(Adirs_ir_is_ok[i],1)
+                end
+                
+                if get(TIME) - get(Adirs_irs_begin_time[i]) > TIME_TO_GET_ATTITUDE then
+                    has_irs_att[i] = true
                 end
                 
                 if get(TIME) - get(Adirs_irs_begin_time[i]) > 0.3 then
@@ -234,7 +243,7 @@ local function update_status_irs(i)
         
         if get(ADIRS_rotary_btn[i]) == 2 then
             if get(Adirs_ir_is_ok[i]) == 0 then
-                is_irs_att[i] = true    -- ATT mode
+                is_irs_att_mode[i] = true    -- ATT mode
             end
         end
         
@@ -292,7 +301,7 @@ local function blink_dataref(blink_data)
 
     if not blink_data.active then   -- Just set inactive value and exit
         blink_data.started_to_blink = 0
-        set(blink_data.dataref, blink_data.active_value)
+        set(blink_data.dataref, 0)
         return
     end
     
@@ -304,43 +313,44 @@ local function blink_dataref(blink_data)
         -- Ok let's blink
         if math.floor(get(TIME)*2) % 2 == 0 then
             -- Blink every 1 second (500ms off, 500ms on
-            set(blink_data.dataref, blink_data.active_value)
+            set(blink_data.dataref, 1)
         else
-            set(blink_data.dataref, blink_data.inactive_value)
+            set(blink_data.dataref, 0)
         end
     else
         -- Time elapsed -> steady state
-        set(blink_data.dataref, blink_data.active_value)
+        set(blink_data.dataref, 0)
     end
 
 end
 
-local function update_status_datarefs(is_capt_adr_ok, is_fo_adr_ok, is_capt_irs_ok, is_fo_irs_ok)
+local function update_status_datarefs(is_capt_adr_ok, is_fo_adr_ok, is_capt_irs_ok, is_fo_irs_ok, has_capt_att, has_fo_att)
 
     -- Update the status
     -- - ADR has 1 status: OFF (0) or ON (1)
     -- - IR has 2 statuses: OFF (0) or ATT/HDG only (1) or OK (2)
     set(Adirs_capt_has_ADR, is_capt_adr_ok)
-    set(Adirs_fo_has_ADR, is_fo_adr_ok)
-    set(Adirs_capt_has_IR, is_capt_irs_ok)
-    set(Adirs_fo_has_IR, is_fo_irs_ok)
+    set(Adirs_fo_has_ADR,   is_fo_adr_ok)
+    set(Adirs_capt_has_IR,  is_capt_irs_ok)
+    set(Adirs_fo_has_IR,    is_fo_irs_ok)
+    set(Adirs_capt_has_ATT, has_capt_att)
+    set(Adirs_fo_has_ATT,   has_fo_att)
 
     -- Let's update the blinking datarefs: they are needed for the PFD in order to blink the
     -- static parts not coded in LUA
     blinkers_data[1].active       = is_capt_adr_ok ~= 1
-    blinkers_data[1].active_value = is_capt_adr_ok
     blinkers_data[2].active       = is_capt_irs_ok ~= 2
-    blinkers_data[2].active_value = is_capt_irs_ok
     blinkers_data[3].active       = is_fo_adr_ok ~= 1
-    blinkers_data[3].active_value = is_fo_adr_ok
     blinkers_data[4].active       = is_fo_irs_ok ~= 2
-    blinkers_data[4].active_value = is_fo_irs_ok
+    blinkers_data[5].active       = has_capt_att ~= 1
+    blinkers_data[6].active       = has_fo_att ~= 1
     
     blink_dataref(blinkers_data[1]) -- Adirs_capt_has_ADR_blink
     blink_dataref(blinkers_data[2]) -- Adirs_capt_has_IR_blink
     blink_dataref(blinkers_data[3]) -- Adirs_fo_has_ADR_blink
     blink_dataref(blinkers_data[4]) -- Adirs_fo_has_IR_blink
-
+    blink_dataref(blinkers_data[5]) -- Adirs_fo_has_ATT_blink
+    blink_dataref(blinkers_data[6]) -- Adirs_fo_has_ATT_blink
 end
 
 local function update_output_datarefs()
@@ -401,6 +411,10 @@ function update ()
     -- Check if Captain and FO IRs are ok. It depends also on the pedestal switch
     local is_capt_irs_ok = 0
     local is_fo_irs_ok = 0
+    local has_capt_att = 0
+    local has_fo_att   = 0
+    
+    
      
     if (get(Adirs_ir_is_ok[1]) == 1 and get(ADIRS_source_rotary_ATHDG) ~= -1) or (get(Adirs_ir_is_ok[3]) == 1 and get(ADIRS_source_rotary_ATHDG) == -1) then
         is_capt_irs_ok = 2
@@ -410,14 +424,24 @@ function update ()
         is_fo_irs_ok = 2
     end
     
-    if (is_irs_att[1] and get(ADIRS_source_rotary_ATHDG) ~= -1) or (is_irs_att[3] and get(ADIRS_source_rotary_ATHDG) == -1) then
+    if (is_irs_att_mode[1] and get(ADIRS_source_rotary_ATHDG) ~= -1) or (is_irs_att_mode[3] and get(ADIRS_source_rotary_ATHDG) == -1) then
         is_capt_irs_ok = 1
     end
-    if (is_irs_att[2] and get(ADIRS_source_rotary_ATHDG) ~= -1) or (is_irs_att[3] and get(ADIRS_source_rotary_ATHDG) == 1) then
+    if (is_irs_att_mode[2] and get(ADIRS_source_rotary_ATHDG) ~= -1) or (is_irs_att_mode[3] and get(ADIRS_source_rotary_ATHDG) == 1) then
         is_fo_irs_ok = 1
     end
 
-    update_status_datarefs(is_capt_adr_ok, is_fo_adr_ok, is_capt_irs_ok, is_fo_irs_ok)
+    if (has_irs_att[1] and get(ADIRS_source_rotary_ATHDG) ~= -1) or (has_irs_att[3] and get(ADIRS_source_rotary_ATHDG) == -1) then
+        has_capt_att = 1
+    end
+    if (has_irs_att[2] and get(ADIRS_source_rotary_ATHDG) ~= -1) or (has_irs_att[3] and get(ADIRS_source_rotary_ATHDG) == 1) then
+        has_fo_att = 1;
+    end
+
+        
+
+
+    update_status_datarefs(is_capt_adr_ok, is_fo_adr_ok, is_capt_irs_ok, is_fo_irs_ok, has_capt_att, has_fo_att)
 
     update_output_datarefs()
     
