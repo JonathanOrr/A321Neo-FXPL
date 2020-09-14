@@ -44,6 +44,10 @@
         "NAV_DME",
         "NAV_NOT_FOUN",
         "NAV_NOT_FOUND",
-        "moduleDirectory"
+        "moduleDirectory",
+        "checklist",
+        "PLUGINS_MENU_ID",
+        "MENU_CHECKED",
+        "MENU_UNCHECKED"
     ]
 }

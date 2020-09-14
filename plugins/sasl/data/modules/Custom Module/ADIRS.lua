@@ -133,7 +133,7 @@ local function get_time_to_align()
     elseif lat >= 0 and lat < 60  then
         return lerp(300, 600, (lat / 60))
     elseif lat <= -60 and lat > -70.2 then
-        return 60
+        return 600
     elseif lat <= -70.2 and lat >= -78.25 then
         return 1020
     elseif lat < 0 and lat > -60 then
