@@ -173,3 +173,20 @@ HYD_cmd_B_ElecPump = createCommand("a321neo/cockpit/HYD/toggle_elec_pump_B", "To
 HYD_cmd_Y_ElecPump = createCommand("a321neo/cockpit/HYD/toggle_elec_pump_Y", "Toggle HYD Elec Yellow pump")
 HYD_cmd_RAT_man_on = createCommand("a321neo/cockpit/HYD/RAT_manual", "Force RAT out")
 
+-- ELEC
+ELEC_cmd_Commercial   = createCommand("a321neo/cockpit/electrical/commercial", "Toggle commercial power")
+ELEC_cmd_Galley       = createCommand("a321neo/cockpit/electrical/galley", "Toggle galley")
+ELEC_cmd_AC_ess_feed  = createCommand("a321neo/cockpit/electrical/AC_ESS_FEED", "Press AC ESS FEED button")
+ELEC_cmd_BUS_tie      = createCommand("a321neo/cockpit/electrical/BUS_tie", "Press BUS TIE button")
+ELEC_cmd_IDG1         = createCommand("a321neo/cockpit/electrical/IDG_1", "Press IDG1 button")
+ELEC_cmd_IDG2         = createCommand("a321neo/cockpit/electrical/IDG_2", "Press IDG2 button")
+ELEC_cmd_GEN1         = createCommand("a321neo/cockpit/electrical/GEN_1", "Press GEN1 button")
+ELEC_cmd_GEN2         = createCommand("a321neo/cockpit/electrical/GEN_2", "Press GEN2 button")
+ELEC_cmd_APU_GEN      = createCommand("a321neo/cockpit/electrical/APU_GEN", "Press APU GEN button")
+ELEC_cmd_EXT_PWR      = createCommand("a321neo/cockpit/electrical/EXT_PWR", "Press EXT PWR button")
+
+ELEC_cmd_EMER_GEN_TEST   = createCommand("a321neo/cockpit/electrical/EMER_GEN_1_LINE", "Press EMER_GEN_TEST on the EMER ELEC PWR panel")
+ELEC_cmd_EMER_GEN1_LINE  = createCommand("a321neo/cockpit/electrical/EMER_GEN_1_LINE", "Press GEN 1 LINE button on the EMER ELEC PWR panel")
+ELEC_cmd_EMER_RAT        = createCommand("a321neo/cockpit/electrical/EMER_GEN_1_LINE", "Press GEN 1 LINE button on the EMER ELEC PWR panel")
+
+

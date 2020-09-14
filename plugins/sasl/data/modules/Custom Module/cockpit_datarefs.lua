@@ -242,10 +242,27 @@ MasterWarningBlinking = createGlobalPropertyi("a321neo/failures/master_warning_b
 
 
 -- HYD
-Hyd_light_Eng1Pump  = createGlobalPropertyi("a321neo/cockpit/HYD/buttons/Eng1_pump", 0, false, true, false)          --00: No lights, 01: [OFF], 10: FAULT, 11 [OFF] + FAULT
-Hyd_light_Eng2Pump  = createGlobalPropertyi("a321neo/cockpit/HYD/buttons/Eng2_pump", 0, false, true, false)          --00: No lights, 01: [OFF], 10: FAULT, 11 [OFF] + FAULT
-Hyd_light_PTU       = createGlobalPropertyi("a321neo/cockpit/HYD/buttons/PTU", 0, false, true, false)                --00: No lights, 01: [OFF], 10: FAULT, 11 [OFF] + FAULT
+Hyd_light_Eng1Pump  = createGlobalPropertyi("a321neo/cockpit/HYD/buttons/Eng1_pump", 0, false, true, false)   --00: No lights, 01: [OFF], 10: FAULT, 11 [OFF] + FAULT
+Hyd_light_Eng2Pump  = createGlobalPropertyi("a321neo/cockpit/HYD/buttons/Eng2_pump", 0, false, true, false)   --00: No lights, 01: [OFF], 10: FAULT, 11 [OFF] + FAULT
+Hyd_light_PTU       = createGlobalPropertyi("a321neo/cockpit/HYD/buttons/PTU", 0, false, true, false)         --00: No lights, 01: [OFF], 10: FAULT, 11 [OFF] + FAULT
 Hyd_light_B_ElecPump= createGlobalPropertyi("a321neo/cockpit/HYD/buttons/B_Elec_pump", 0, false, true, false) --00: No lights, 01: [OFF], 10: FAULT, 11 [OFF] + FAULT
 Hyd_light_Y_ElecPump= createGlobalPropertyi("a321neo/cockpit/HYD/buttons/Y_Elec_pump", 0, false, true, false) --00: No lights, 01: [ON],  10: FAULT, 11 [ON] + FAULT
 
+-- ELEC
+Elec_light_battery_1  = createGlobalPropertyi("a321neo/cockpit/electrical/buttons/battery_1", 0, false, true, false) --00: No lights, 01: [OFF], 10: FAULT, 11 [OFF] + FAULT
+Elec_light_battery_2  = createGlobalPropertyi("a321neo/cockpit/electrical/buttons/battery_2", 0, false, true, false) --00: No lights, 01: [OFF], 10: FAULT, 11 [OFF] + FAULT
+
+Elec_light_Commercial   = createGlobalPropertyi("a321neo/cockpit/electrical/buttons/commercial", 0, false, true, false)  --00: No lights, 01: [OFF],
+Elec_light_Galley       = createGlobalPropertyi("a321neo/cockpit/electrical/buttons/galley", 0, false, true, false)      --00: No lights, 01: [OFF], 10: FAULT, 11 [OFF] + FAULT
+Elec_light_AC_ess_feed  = createGlobalPropertyi("a321neo/cockpit/electrical/buttons/AC_ess_feed", 0, false, true, false) --00: No lights, 01: [ALTN], 10: FAULT, 11 [ALTN] + FAULT
+Elec_light_BUS_tie      = createGlobalPropertyi("a321neo/cockpit/electrical/buttons/BUS_tie", 0, false, true, false)     --00: No lights, 01: [OFF]
+Elec_light_IDG1         = createGlobalPropertyi("a321neo/cockpit/electrical/buttons/IDG1", 0, false, true, false)        --00: No lights, 10: FAULT
+Elec_light_IDG2         = createGlobalPropertyi("a321neo/cockpit/electrical/buttons/IDG2", 0, false, true, false)        --00: No lights, 10: FAULT
+Elec_light_GEN1         = createGlobalPropertyi("a321neo/cockpit/electrical/buttons/GEN1", 0, false, true, false)        --00: No lights, 01: [OFF], 10: FAULT, 11 [OFF] + FAULT
+Elec_light_GEN2         = createGlobalPropertyi("a321neo/cockpit/electrical/buttons/GEN2", 0, false, true, false)        --00: No lights, 01: [OFF], 10: FAULT, 11 [OFF] + FAULT
+Elec_light_APU_GEN      = createGlobalPropertyi("a321neo/cockpit/electrical/buttons/APU_GEN", 0, false, true, false)     --00: No lights, 01: [OFF], 10: FAULT, 11 [OFF] + FAULT
+Elec_light_EXT_PWR      = createGlobalPropertyi("a321neo/cockpit/electrical/buttons/EXT_PWR", 0, false, true, false)     --00: No lights, 01: [ON], 10: AVAIL, 11 [ON] + AVAIL
+
+Elec_light_EMER_GEN1_LINE= createGlobalPropertyi("a321neo/cockpit/electrical/buttons/EMER_GEN_1_LINE", 0, false, true, false) --00: No lights, 01: [OFF], 10: SMOKE, 11 [OFF] + SMOKE
+Elec_light_RAT_FAULT     = createGlobalPropertyi("a321neo/cockpit/electrical/buttons/EMER_RAT_FAULT", 0, false, true, false)  --00: No lights, 10: FAULT
 

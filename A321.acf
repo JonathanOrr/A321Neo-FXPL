@@ -38343,12 +38343,14 @@ GROUP Buttons and Lights
     gen_rotary Gen 1 Line
       POS 1870.000000 70.000000
       IMAGE Buttons/smoke
-      DATAREF abc
+      DATAREF a321neo/cockpit/electrical/buttons/EMER_GEN_1_LINE
       LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 3.000000 3.000000
+      KEY_FRAME 1.000000 1.000000 1.000000
+      KEY_FRAME 10.000000 2.000000 1.000000
+      KEY_FRAME 11.000000 3.000000
       DIGITS 4
       ROTARY_TYPE NO_CLICK
       CLICK_RADIUS 20.000000
@@ -38363,12 +38365,12 @@ GROUP Buttons and Lights
     gen_rotary RAT
       POS 1998.000000 70.000000
       IMAGE Buttons/dot_fault
-      DATAREF abc
+      DATAREF a321neo/cockpit/electrical/buttons/EMER_RAT_FAULT
       LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 1.000000 1.000000
+      KEY_FRAME 10.000000 1.000000
       DIGITS 2
       ROTARY_TYPE NO_CLICK
       CLICK_RADIUS 20.000000
@@ -38670,12 +38672,14 @@ GROUP Buttons and Lights
     gen_rotary Eng 1 Pump
       POS 2894.000000 201.000000
       IMAGE Buttons/off_fault
-      DATAREF abc
+      DATAREF a321neo/cockpit/HYD/buttons/Eng1_pump
       LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 3.000000 3.000000
+      KEY_FRAME 1.000000 1.000000 1.000000
+      KEY_FRAME 10.000000 2.000000 1.000000
+      KEY_FRAME 11.000000 3.000000
       DIGITS 4
       ROTARY_TYPE NO_CLICK
       CLICK_RADIUS 20.000000
@@ -38687,15 +38691,17 @@ GROUP Buttons and Lights
       CLICK_DX 0
       CLICK_DY 0
 
-    gen_rotary Elec Pump
+    gen_rotary Elec B Pump
       POS 3022.000000 201.000000
       IMAGE Buttons/off_fault
-      DATAREF abc
+      DATAREF a321neo/cockpit/HYD/buttons/B_Elec_pump
       LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 3.000000 3.000000
+      KEY_FRAME 1.000000 1.000000 1.000000
+      KEY_FRAME 10.000000 2.000000 1.000000
+      KEY_FRAME 11.000000 3.000000
       DIGITS 4
       ROTARY_TYPE NO_CLICK
       CLICK_RADIUS 20.000000
@@ -38710,12 +38716,14 @@ GROUP Buttons and Lights
     gen_rotary PTU
       POS 3150.000000 201.000000
       IMAGE Buttons/off_fault
-      DATAREF abc
+      DATAREF a321neo/cockpit/HYD/buttons/PTU
       LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 3.000000 3.000000
+      KEY_FRAME 1.000000 1.000000 1.000000
+      KEY_FRAME 10.000000 2.000000 1.000000
+      KEY_FRAME 11.000000 3.000000
       DIGITS 4
       ROTARY_TYPE NO_CLICK
       CLICK_RADIUS 20.000000
@@ -38730,12 +38738,14 @@ GROUP Buttons and Lights
     gen_rotary Eng 2 Pump
       POS 3278.000000 201.000000
       IMAGE Buttons/off_fault
-      DATAREF abc
+      DATAREF a321neo/cockpit/HYD/buttons/Eng2_pump
       LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 3.000000 3.000000
+      KEY_FRAME 1.000000 1.000000 1.000000
+      KEY_FRAME 10.000000 2.000000 1.000000
+      KEY_FRAME 11.000000 3.000000
       DIGITS 4
       ROTARY_TYPE NO_CLICK
       CLICK_RADIUS 20.000000
@@ -38750,12 +38760,14 @@ GROUP Buttons and Lights
     gen_rotary Electric Y Pump
       POS 3406.000000 201.000000
       IMAGE Buttons/elecpump
-      DATAREF abc
+      DATAREF a321neo/cockpit/HYD/buttons/Y_Elec_pump
       LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 3.000000 3.000000
+      KEY_FRAME 1.000000 1.000000 1.000000
+      KEY_FRAME 10.000000 2.000000 1.000000
+      KEY_FRAME 11.000000 3.000000
       DIGITS 4
       ROTARY_TYPE NO_CLICK
       CLICK_RADIUS 20.000000
@@ -38936,12 +38948,14 @@ GROUP Buttons and Lights
     gen_rotary Battery 1
       POS 1280.000000 201.000000
       IMAGE Buttons/off_fault
-      DATAREF sim/cockpit/electrical/battery_array_on[0]
+      DATAREF a321neo/cockpit/electrical/buttons/battery_1
       LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
-      KEY_FRAME 1.000000 0.000000 1.000000
-      KEY_FRAME 0.000000 1.000000
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000 1.000000
+      KEY_FRAME 10.000000 2.000000 1.000000
+      KEY_FRAME 11.000000 3.000000
       DIGITS 4
       ROTARY_TYPE NO_CLICK
       CLICK_RADIUS 20.000000
@@ -38956,12 +38970,14 @@ GROUP Buttons and Lights
     gen_rotary Battery 2
       POS 1152.000000 201.000000
       IMAGE Buttons/off_fault
-      DATAREF sim/cockpit/electrical/battery_array_on[1]
+      DATAREF a321neo/cockpit/electrical/buttons/battery_2
       LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
-      KEY_FRAME 1.000000 0.000000 1.000000
-      KEY_FRAME 0.000000 1.000000
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000 1.000000
+      KEY_FRAME 10.000000 2.000000 1.000000
+      KEY_FRAME 11.000000 3.000000
       DIGITS 4
       ROTARY_TYPE NO_CLICK
       CLICK_RADIUS 20.000000
@@ -38976,7 +38992,7 @@ GROUP Buttons and Lights
     gen_rotary Commercial
       POS 1024.000000 201.000000
       IMAGE Buttons/dot_off
-      DATAREF abc
+      DATAREF a321neo/cockpit/electrical/buttons/commercial
       LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
@@ -38996,12 +39012,14 @@ GROUP Buttons and Lights
     gen_rotary Galley
       POS 896.000000 201.000000
       IMAGE Buttons/off_fault
-      DATAREF abc
+      DATAREF a321neo/cockpit/electrical/buttons/galley
       LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 3.000000 3.000000
+      KEY_FRAME 1.000000 1.000000 1.000000
+      KEY_FRAME 10.000000 2.000000 1.000000
+      KEY_FRAME 11.000000 3.000000
       DIGITS 4
       ROTARY_TYPE NO_CLICK
       CLICK_RADIUS 20.000000
@@ -39016,12 +39034,14 @@ GROUP Buttons and Lights
     gen_rotary AC Ess Feed
       POS 768.000000 201.000000
       IMAGE Buttons/acessfeed
-      DATAREF abc
+      DATAREF a321neo/cockpit/electrical/buttons/AC_ess_feed
       LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 3.000000 3.000000
+      KEY_FRAME 1.000000 1.000000 1.000000
+      KEY_FRAME 10.000000 2.000000 1.000000
+      KEY_FRAME 11.000000 3.000000
       DIGITS 4
       ROTARY_TYPE NO_CLICK
       CLICK_RADIUS 20.000000
@@ -39036,12 +39056,12 @@ GROUP Buttons and Lights
     gen_rotary IDG1
       POS 1280.000000 70.000000
       IMAGE Buttons/dot_fault
-      DATAREF abc
+      DATAREF a321neo/cockpit/electrical/buttons/IDG1
       LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 1.000000 1.000000
+      KEY_FRAME 10.000000 1.000000
       DIGITS 2
       ROTARY_TYPE NO_CLICK
       CLICK_RADIUS 20.000000
@@ -39056,12 +39076,12 @@ GROUP Buttons and Lights
     gen_rotary IDG2
       POS 512.000000 70.000000
       IMAGE Buttons/dot_fault
-      DATAREF abc
+      DATAREF a321neo/cockpit/electrical/buttons/IDG2
       LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 1.000000 1.000000
+      KEY_FRAME 10.000000 1.000000
       DIGITS 2
       ROTARY_TYPE NO_CLICK
       CLICK_RADIUS 20.000000
@@ -39076,12 +39096,14 @@ GROUP Buttons and Lights
     gen_rotary GEN 1
       POS 1152.000000 70.000000
       IMAGE Buttons/off_fault
-      DATAREF abc
+      DATAREF a321neo/cockpit/electrical/buttons/GEN1
       LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 3.000000 3.000000
+      KEY_FRAME 1.000000 1.000000 1.000000
+      KEY_FRAME 10.000000 2.000000 1.000000
+      KEY_FRAME 11.000000 3.000000
       DIGITS 4
       ROTARY_TYPE NO_CLICK
       CLICK_RADIUS 20.000000
@@ -39096,12 +39118,14 @@ GROUP Buttons and Lights
     gen_rotary APU GEN
       POS 1024.000000 70.000000
       IMAGE Buttons/off_fault
-      DATAREF sim/cockpit2/electrical/APU_generator_on
+      DATAREF a321neo/cockpit/electrical/buttons/APU_GEN
       LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 1.000000 1.000000
-      KEY_FRAME 1.000000 0.000000
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000 1.000000
+      KEY_FRAME 10.000000 2.000000 1.000000
+      KEY_FRAME 11.000000 3.000000
       DIGITS 4
       ROTARY_TYPE NO_CLICK
       CLICK_RADIUS 20.000000
@@ -39116,7 +39140,7 @@ GROUP Buttons and Lights
     gen_rotary Bus Tie
       POS 896.000000 70.000000
       IMAGE Buttons/dot_off
-      DATAREF abc
+      DATAREF a321neo/cockpit/electrical/buttons/BUS_tie
       LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
@@ -39136,12 +39160,14 @@ GROUP Buttons and Lights
     gen_rotary Ext Pwr
       POS 768.000000 70.000000
       IMAGE Buttons/apu_start
-      DATAREF abc
+      DATAREF a321neo/cockpit/electrical/buttons/EXT_PWR
       LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 3.000000 3.000000
+      KEY_FRAME 1.000000 1.000000 1.000000
+      KEY_FRAME 10.000000 2.000000 1.000000
+      KEY_FRAME 11.000000 3.000000
       DIGITS 4
       ROTARY_TYPE NO_CLICK
       CLICK_RADIUS 20.000000
@@ -39156,12 +39182,14 @@ GROUP Buttons and Lights
     gen_rotary GEN 2
       POS 640.000000 70.000000
       IMAGE Buttons/off_fault
-      DATAREF abc
+      DATAREF a321neo/cockpit/electrical/buttons/GEN2
       LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 3.000000 3.000000
+      KEY_FRAME 1.000000 1.000000 1.000000
+      KEY_FRAME 10.000000 2.000000 1.000000
+      KEY_FRAME 11.000000 3.000000
       DIGITS 4
       ROTARY_TYPE NO_CLICK
       CLICK_RADIUS 20.000000
