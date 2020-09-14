@@ -292,7 +292,7 @@ local function blink_dataref(blink_data)
 
     if not blink_data.active then   -- Just set inactive value and exit
         blink_data.started_to_blink = 0
-        set(blink_data.dataref, blink_data.inactive_value)
+        set(blink_data.dataref, blink_data.active_value)
         return
     end
     
