@@ -95,10 +95,8 @@ HydSystem = {
     qty_high_limit    = 0,      -- Under this value normal conditions occur
     qty_curr          = 0,
     
-    is_bleed_ok       = false,  -- Is bleed air provided to the hyd system? (bleed availability + failure)
-    is_temperature_ok = false,   -- is the temperature ok? (failure dataref)
-    
-    ptu_is_increasing = true   -- Internal use, to check if ptu pressure is increasing or descrising, do not set manually
+    ptu_is_increasing = true,   -- Internal use, to check if ptu pressure is increasing or descrising, do not set manually
+    qty_initialized   = false   -- Internal use, to check if qty has been already initialized
 }
 
 -- Constructor for the class
@@ -191,8 +189,21 @@ end
 
 function HydSystem:update_qty()
 
-    if self.qty_curr == 0 then
+    if self.qty_initialized == false then
+        self.qty_initialized = true
         self.qty_curr = math.random()*(self.qty_high_limit - self.qty_norm_limit) + self.qty_norm_limit
+    end
+    
+    if self.qty_curr > 0 then   -- LEAK failures
+        if self.id == G and get(FAILURE_HYD_G_leak) == 1 then
+            self.qty_curr = math.max(0, self.qty_curr - math.random()*0.1)
+        end
+        if self.id == B and get(FAILURE_HYD_B_leak) == 1 then
+            self.qty_curr = math.max(0,self.qty_curr - math.random()*0.1)
+        end
+        if self.id == Y and get(FAILURE_HYD_Y_leak) == 1 then
+            self.qty_curr = math.max(0,self.qty_curr - math.random()*0.1)
+        end
     end
 end
 
@@ -229,19 +240,19 @@ end
 
 local function update_sys_status()
 
-    -- TODO Add failures + Electrical
-    g_sys.is_engine_pump_on = status_buttons.eng1pump and get(Engine_1_avail) == 1
-    y_sys.is_engine_pump_on = status_buttons.eng2pump and get(Engine_2_avail) == 1
-    b_sys.is_elec_pump_on = status_buttons.elecBpump and (get(Engine_1_avail) == 1 or  get(Engine_2_avail) == 1)
-    y_sys.is_elec_pump_on = status_buttons.elecYpump
+    -- TODO Electrical
+    g_sys.is_engine_pump_on = status_buttons.eng1pump and get(Engine_1_avail) == 1 and get(FAILURE_HYD_G_pump) == 0 and get(Hydraulic_G_qty) > 0
+    y_sys.is_engine_pump_on = status_buttons.eng2pump and get(Engine_2_avail) == 1 and get(FAILURE_HYD_Y_pump) == 0 and get(Hydraulic_Y_qty) > 0
+    b_sys.is_elec_pump_on = status_buttons.elecBpump and (get(Engine_1_avail) == 1 or  get(Engine_2_avail) == 1) and get(FAILURE_HYD_B_pump) == 0 and get(Hydraulic_B_qty) > 0
+    y_sys.is_elec_pump_on = status_buttons.elecYpump and get(FAILURE_HYD_Y_E_pump) == 0 and get(Hydraulic_Y_qty) > 0
 
 
-    if is_ptu_enabled() then
+    if is_ptu_enabled() and get(FAILURE_HYD_PTU) == 0 then
         if y_sys.press_curr - g_sys.press_curr > 500 or (g_sys.is_ptu_on and y_sys.press_curr - g_sys.press_curr > 150) then
-            g_sys.is_ptu_on = true  -- Y is feeding the G system
+            g_sys.is_ptu_on = true  and get(Hydraulic_G_qty) > 0 -- Y is feeding the G system
             y_sys.is_ptu_on = false
         elseif g_sys.press_curr - y_sys.press_curr > 500 or (y_sys.is_ptu_on and g_sys.press_curr - y_sys.press_curr > 150) then
-            y_sys.is_ptu_on = true  -- G is feeding the Y system
+            y_sys.is_ptu_on = true  and get(Hydraulic_Y_qty) > 0 -- G is feeding the Y system
             g_sys.is_ptu_on = false
         else
             g_sys.is_ptu_on = false
@@ -252,7 +263,7 @@ local function update_sys_status()
         y_sys.is_ptu_on = false    
     end
 
-    if status_buttons.PTU then  -- TODO Add PTU failure
+    if status_buttons.PTU and get(FAILURE_HYD_PTU) == 0 then
         if y_sys.is_ptu_on then
             set(Hydraulic_PTU_status, 3)    
         elseif g_sys.is_ptu_on then
@@ -281,18 +292,23 @@ local function update_datarefs()
     set(Hydraulic_B_qty, b_sys.qty_curr / b_sys.qty_high_limit)
     set(Hydraulic_Y_qty, y_sys.qty_curr / y_sys.qty_high_limit)
     
-    -- TODO Add faults to buttons
-    set(Hyd_light_Eng1Pump, status_buttons.eng1pump and 0 or 1)
-    set(Hyd_light_Eng2Pump, status_buttons.eng2pump and 0 or 1)
-    set(Hyd_light_PTU, status_buttons.PTU and 0 or 1)
-    set(Hyd_light_B_ElecPump, status_buttons.elecBpump and 0 or 1)
+    local light_eng_1_pump = (status_buttons.eng1pump and 0 or 1) + get(FAILURE_HYD_G_pump) * 10  
+    set(Hyd_light_Eng1Pump, light_eng_1_pump)
+
+    local light_eng_2_pump = (status_buttons.eng2pump and 0 or 1) + get(FAILURE_HYD_Y_pump) * 10  
+    set(Hyd_light_Eng2Pump, light_eng_2_pump)
+
+    local light_ptu = (status_buttons.PTU and 0 or 1) + get(FAILURE_HYD_PTU) * 10  
+    set(Hyd_light_PTU, light_ptu)
     
+    local light_b_pump =  (status_buttons.elecBpump and 0 or 1) + get(FAILURE_HYD_B_pump) * 10  
+    set(Hyd_light_B_ElecPump,light_b_pump)
+    
+    local light_y_elec_pump = get(FAILURE_HYD_Y_E_pump) * 10 
     if (not is_any_cargo_door_operating()) and status_buttons.elecYpump then
-        set(Hyd_light_Y_ElecPump, 1)
-    else
-        set(Hyd_light_Y_ElecPump, 0)    
+        light_y_elec_pump = light_y_elec_pump + 1
     end
-    
+    set(Hyd_light_Y_ElecPump, light_y_elec_pump)
 end
 
 function update()
