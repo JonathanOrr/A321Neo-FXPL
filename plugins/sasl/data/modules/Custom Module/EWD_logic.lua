@@ -8,6 +8,7 @@ include('EWD_msgs/engines_and_apu.lua')
 include('EWD_msgs/FBW.lua')
 include('EWD_msgs/flight_controls.lua')
 include('EWD_msgs/gears_and_doors.lua')
+include('EWD_msgs/hydraulic.lua')
 include('EWD_msgs/misc.lua')
 include('EWD_msgs/nav.lua')
 include('EWD_msgs/to_ldg_memos.lua')
@@ -64,7 +65,15 @@ local left_messages_list = {
     MessageGroup_DOORS_CABIN,
     MessageGroup_DOORS_CARGO,
     MessageGroup_DOORS_EMER_EXIT,
-    
+    MessageGroup_HYD_ELEC_PUMP_B_OVHT,
+    MessageGroup_HYD_ELEC_PUMP_Y_OVHT,
+    MessageGroup_HYD_B_RSVR_OVHT,
+    MessageGroup_HYD_B_RSVR_LO_LVL,
+    MessageGroup_HYD_B_RSVR_LO_AIR_PRESS,
+    MessageGroup_HYD_G_RSVR_OVHT,
+    MessageGroup_HYD_G_RSVR_LO_LVL,
+    MessageGroup_HYD_G_RSVR_LO_AIR_PRESS,
+        
     -- Warnings
     MessageGroup_CONFIG_TAKEOFF,
     MessageGroup_APU_FIRE,
