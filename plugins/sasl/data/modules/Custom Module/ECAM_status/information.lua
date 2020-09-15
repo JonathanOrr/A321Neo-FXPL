@@ -4,7 +4,7 @@ function ECAM_status_get_information()
     local messages = {}
 
     -- ELEC
-    if get(Battery_1) == 0 or get(Battery_2) == 0 then
+    if get(XP_Battery_1) == 0 or get(XP_Battery_2) == 0 then
         table.insert(messages, "APU BAT START NOT AVAIL")
     end
 

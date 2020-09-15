@@ -86,22 +86,35 @@ FAC_2 = createGlobalPropertyi("a321neo/dynamics/FBW/FAC_2", 1, false, true, fals
 SEC_1 = createGlobalPropertyi("a321neo/dynamics/FBW/SEC_1", 1, false, true, false)--spoiler elevator computer 1
 SEC_2 = createGlobalPropertyi("a321neo/dynamics/FBW/SEC_2", 1, false, true, false)--spoiler elevator computer 2
 SEC_3 = createGlobalPropertyi("a321neo/dynamics/FBW/SEC_3", 1, false, true, false)--spoiler elevator computer 3
---electrical system
-Commercial_on = createGlobalPropertyi("a321neo/dynamics/electrical/commercial_on", 1, false, true, false)
-Gally_on = createGlobalPropertyi("a321neo/dynamics/electrical/gally_on", 1, false, true, false)
-DC_ess_bus_on = createGlobalPropertyi("a321neo/dynamics/electrical/dc_ess_bus_on", 1, false, true, false)
-DC_bus_1_on = createGlobalPropertyi("a321neo/dynamics/electrical/dc_bus_1_on", 1, false, true, false)
-DC_bus_2_on = createGlobalPropertyi("a321neo/dynamics/electrical/dc_bus_2_on", 1, false, true, false)
-ESS_TR_on = createGlobalPropertyi("a321neo/dynamics/electrical/ess_tr_on", 1, false, true, false)
-TR_1_on = createGlobalPropertyi("a321neo/dynamics/electrical/tr_1_on", 1, false, true, false)
-TR_2_on = createGlobalPropertyi("a321neo/dynamics/electrical/tr_2_on", 1, false, true, false)
-AC_ess_bus_on = createGlobalPropertyi("a321neo/dynamics/electrical/ac_ess_bus_on", 1, false, true, false)
-AC_ess_feed_1_on = createGlobalPropertyi("a321neo/dynamics/electrical/ac_ess_feed_1_on", 1, false, true, false)
-AC_ess_feed_2_on = createGlobalPropertyi("a321neo/dynamics/electrical/ac_ess_feed_2_on", 1, false, true, false)
-AC_bus_1_on = createGlobalPropertyi("a321neo/dynamics/electrical/ac_bus_1_on", 1, false, true, false)
-AC_bus_2_on = createGlobalPropertyi("a321neo/dynamics/electrical/ac_bus_2_on", 1, false, true, false)
-Gen_1_on = createGlobalPropertyi("a321neo/dynamics/electrical/gen_1_on", 1, false, true, false)
-Gen_2_on = createGlobalPropertyi("a321neo/dynamics/electrical/gen_2_on", 1, false, true, false)
+
+-- Electrical system
+--- BUSES (0: not providing elec power, 1: providing elec power) - influenced by switches, faults, engine status etc.
+Commercial_pwrd = createGlobalPropertyi("a321neo/dynamics/electrical/bus/commercial_powered", 0, false, true, false)
+Gally_pwrd      = createGlobalPropertyi("a321neo/dynamics/electrical/bus/galley_powered", 0, false, true, false)
+HOT_bus_1_pwrd  = createGlobalPropertyi("a321neo/dynamics/electrical/bus/hot_1_powered", 0, false, true, false)
+HOT_bus_2_pwrd  = createGlobalPropertyi("a321neo/dynamics/electrical/bus/hot_2_powered", 0, false, true, false)
+DC_ess_bus_pwrd = createGlobalPropertyi("a321neo/dynamics/electrical/bus/dc_ess_powered", 0, false, true, false)
+DC_shed_ess_pwrd= createGlobalPropertyi("a321neo/dynamics/electrical/bus/dc_ess_shed_powered", 0, false, true, false)
+DC_bat_bus_pwrd = createGlobalPropertyi("a321neo/dynamics/electrical/bus/dc_bat_powered", 0, false, true, false)
+DC_bus_1_pwrd   = createGlobalPropertyi("a321neo/dynamics/electrical/bus/dc_1_powered", 0, false, true, false)
+DC_bus_2_pwrd   = createGlobalPropertyi("a321neo/dynamics/electrical/bus/dc_2_powered", 0, false, true, false)
+AC_ess_bus_pwrd = createGlobalPropertyi("a321neo/dynamics/electrical/bus/ac_ess_powered", 0, false, true, false)
+AC_bus_1_pwrd   = createGlobalPropertyi("a321neo/dynamics/electrical/bus/ac_1_powered", 0, false, true, false)
+AC_bus_2_pwrd   = createGlobalPropertyi("a321neo/dynamics/electrical/bus/ac_2_powered", 0, false, true, false)
+
+--- TRS/INV (0: not working, 1: working) - influenced by switches, faults, etc.
+TR_ESS_online = createGlobalPropertyi("a321neo/dynamics/electrical/trs/tr_ess_online", 0, false, true, false)
+TR_1_online   = createGlobalPropertyi("a321neo/dynamics/electrical/trs/tr_1_online", 0, false, true, false)
+TR_2_online   = createGlobalPropertyi("a321neo/dynamics/electrical/trs/tr_2_online", 0, false, true, false)
+INV_online   = createGlobalPropertyi("a321neo/dynamics/electrical/trs/INV_online", 0, false, true, false)
+
+--- ELEC sources (0: not providing elec power, 1: providing elec power) - influenced by switches, faults, etc.
+Gen_1_pwr  = createGlobalPropertyi("a321neo/dynamics/electrical/sources/gen_1_pwr", 0, false, true, false)
+Gen_2_pwr  = createGlobalPropertyi("a321neo/dynamics/electrical/sources/gen_2_pwr", 0, false, true, false)
+Gen_APU_pwr = createGlobalPropertyi("a321neo/dynamics/electrical/sources/gen_APU_pwr", 0, false, true, false) -- See also Apu_gen_state
+Gen_EXT_pwr = createGlobalPropertyi("a321neo/dynamics/electrical/sources/gen_EXT_pwr", 0, false, true, false)
+Gen_EMER_pwr = createGlobalPropertyi("a321neo/dynamics/electrical/sources/gen_EMER_pwr", 0, false, true, false)
+
 --ADIRS
 Adirs_adr_is_ok = {}
 Adirs_adr_is_ok[1] = createGlobalPropertyf("a321neo/cockpit/ADIRS/adr_1_is_ok", 0, false, true, false)  -- 0: not working (failed or off), 1: working
@@ -204,8 +217,8 @@ Pitch_rate = globalProperty("sim/flightmodel/position/Q")
 Vpath = globalProperty("sim/flightmodel/position/vpath")
 Alpha = globalProperty("sim/flightmodel/position/alpha")
 --electrical system
-Battery_1 = globalProperty("sim/cockpit/electrical/battery_array_on[0]")
-Battery_2 = globalProperty("sim/cockpit/electrical/battery_array_on[1]")
+XP_Battery_1 = globalProperty("sim/cockpit2/electrical/battery_on[0]")
+XP_Battery_2 = globalProperty("sim/cockpit2/electrical/battery_on[1]")
 --fuel
 Fuel_pump_1 = globalProperty("sim/cockpit2/engine/actuators/fuel_pump_on[0]")
 Fuel_pump_2 = globalProperty("sim/cockpit2/engine/actuators/fuel_pump_on[1]")

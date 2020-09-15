@@ -11,7 +11,8 @@ sasl.options.set3DRendering(true)
 -- devel
 sasl.options.setLuaErrorsHandling(SASL_STOP_PROCESSING)
 
-
+-- Initialize the random seed for math.random
+math.randomseed( os.time() )
 
 size = { 4096, 2048 }
 
@@ -45,6 +46,7 @@ components = {
   display_brightness {},
   doors {},
   hydraulics {},
+  electrical {}
  }
 
  --windows

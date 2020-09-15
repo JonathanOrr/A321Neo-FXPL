@@ -271,3 +271,8 @@ Elec_light_EXT_PWR      = createGlobalPropertyi("a321neo/cockpit/electrical/butt
 Elec_light_EMER_GEN1_LINE= createGlobalPropertyi("a321neo/cockpit/electrical/buttons/EMER_GEN_1_LINE", 0, false, true, false) --00: No lights, 01: [OFF], 10: SMOKE, 11 [OFF] + SMOKE
 Elec_light_RAT_FAULT     = createGlobalPropertyi("a321neo/cockpit/electrical/buttons/EMER_RAT_FAULT", 0, false, true, false)  --00: No lights, 10: FAULT
 
+
+Elec_bat_1_V  = createGlobalPropertyf("a321neo/cockpit/electrical/battery_1_voltage", 0, false, true, false)
+Elec_bat_2_V  = createGlobalPropertyf("a321neo/cockpit/electrical/battery_2_voltage", 0, false, true, false)
+
+

@@ -41,8 +41,8 @@ local timer_auto_start_stop = sasl.createTimer() -- Stop ignition after 40 secon
 sasl.registerCommandHandler ( reset_to_runway, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
         if get(startup_running) == 1 then
-            set(Battery_1, 1)
-            set(Battery_2, 1)
+            set(XP_Battery_1, 1)
+            set(XP_Battery_2, 1)
             set(Apu_start_position, 2)
             set(Apu_bleed_switch, 1)
             set(apu_gen, 1)
@@ -61,8 +61,8 @@ end)
 
 sasl.registerCommandHandler ( reset_flight, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-            set(Battery_1, 1)
-            set(Battery_2, 1)
+            set(XP_Battery_1, 1)
+            set(XP_Battery_2, 1)
             set(Apu_start_position, 2)
             set(Apu_bleed_switch, 1)
             set(apu_gen, 1)
@@ -76,8 +76,8 @@ end)
 sasl.registerCommandHandler ( go_to_default, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
         if get(startup_running) == 1 then
-            set(Battery_1, 1)
-            set(Battery_2, 1)
+            set(XP_Battery_1, 1)
+            set(XP_Battery_2, 1)
             set(Apu_start_position, 2)
             set(Apu_bleed_switch, 1)
             set(apu_gen, 1)
@@ -96,8 +96,8 @@ end)
 
 sasl.registerCommandHandler ( instant_start_eng, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(Battery_1, 1)
-        set(Battery_2, 1)
+        set(XP_Battery_1, 1)
+        set(XP_Battery_2, 1)
         set(Apu_start_position, 2)
         set(Apu_bleed_switch, 1)
         set(apu_gen, 1)
@@ -112,8 +112,8 @@ end)
 
 sasl.registerCommandHandler ( slow_start_eng, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(Battery_1, 1)
-        set(Battery_2, 1)
+        set(XP_Battery_1, 1)
+        set(XP_Battery_2, 1)
         set(Apu_start_position, 2)
         set(Apu_bleed_switch, 1)
         set(apu_gen, 1)
@@ -155,8 +155,8 @@ end)
 
 sasl.registerCommandHandler ( a321_auto_start, 0 , function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(Battery_1, 1)
-        set(Battery_2, 1)
+        set(XP_Battery_1, 1)
+        set(XP_Battery_2, 1)
         set(Apu_start_position, 2)
         set(Apu_bleed_switch, 1)
         set(apu_gen, 1)
@@ -231,7 +231,7 @@ function onAirportLoaded()
 end
 
 function update()
-    if get(Battery_1) == 1 then
+    if get(XP_Battery_1) == 1 then
         set(avionics, 1)
     else
         set(avionics, 0)
