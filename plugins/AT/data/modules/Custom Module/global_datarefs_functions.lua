@@ -28,17 +28,39 @@ A32nx_target_spd = createGlobalPropertyi("a32nx/debug/target_speed", 225, false,
 A32nx_thrust_control_output = createGlobalPropertyf("a32nx/debug/thrust_control_output", 0, false, true, false)
 
 --global pid array
-A32nx_auto_thrust = {P_gain = 1.05, I_gain = 10, D_gain = 1.35, I_delay = 100, Integral = 0, Current_error = 0, Min_error = -12, Max_error = 12, Error_offset = 5}
-A32nx_auto_thrust_trim = {P_gain = 0.55, I_gain = 10, D_gain = 0.75, I_delay = 100, Integral = 0, Current_error = 0, Min_error = -5, Max_error = 5, Error_offset = 0}
+A32nx_auto_thrust = {P_gain = 1.1, I_gain = 1, D_gain = 5.2, Proportional = 0, Integral_sum = 0, Integral = 0, Derivative = 0, Integral_min = -15, Integral_max = 15,Current_error = 0, Min_error = -15, Max_error = 15}
 
 Autothrust_output = 0
 Smoothed_error = 0
 
+--rounding
+function Round(num, numDecimalPlaces)
+    local mult = 10^(numDecimalPlaces or 0)
+    return math.floor(num * mult + 0.5) / mult
+end
 
---experimental
-D_value = 0
+--string functions--
+--append string_to_fill_it_with to the front of a string to achive the length of to_what_length
+function Fwd_string_fill(string_to_fill, string_to_fill_it_with, to_what_length)
+    for i = #string_to_fill, to_what_length - 1 do
+        string_to_fill = string_to_fill_it_with .. string_to_fill
+    end
+
+    return string_to_fill
+end
+
+--append string_to_fill_it_with to the end of a string to achive the length of to_what_length
+function Aft_string_fill(string_to_fill, string_to_fill_it_with, to_what_length)
+    for i = #string_to_fill, to_what_length - 1 do
+        string_to_fill = string_to_fill .. string_to_fill_it_with
+    end
+
+    return string_to_fill
+end
 
 --global functions
+
+--[[historical PID versions
 function A32nx_PID(pid_array, error)
     local last_error = pid_array.Current_error
 	pid_array.Current_error = error + pid_array.Error_offset
@@ -67,9 +89,9 @@ end
 
 function A32nx_PID_time_indep(pid_array, error)
     local last_error = pid_array.Current_error
-    
+
     if get(DELTA_TIME) ~= 0 then
-        pid_array.Current_error = error + pid_array.Error_offset
+        pid_array.Current_error = error
 
 	    --Proportional--
 	    local correction = pid_array.Current_error * pid_array.P_gain
@@ -88,14 +110,43 @@ function A32nx_PID_time_indep(pid_array, error)
 	    --limit and rescale output range--
         correction = Math_clamp(Math_clamp(correction, pid_array.Min_error, pid_array.Max_error) / pid_array.Max_error , 0, 1)
 
-        D_value = (((pid_array.Current_error - last_error) / get(DELTA_TIME)) * pid_array.D_gain )
+	    return correction
+
+    end
+
+end]]
+
+--new PID with improved integral calculation
+function A32nx_PID_new(pid_array, error)
+    local correction = 0
+    local last_error = pid_array.Current_error
+    pid_array.Current_error = error
+
+    if get(DELTA_TIME) ~= 0 then
+
+        --Proportional--
+        pid_array.Proportional = pid_array.Current_error * pid_array.P_gain
+
+	    --integral--(clamped to stop windup)
+	    pid_array.Integral_sum = Math_clamp(pid_array.Integral + pid_array.Current_error * get(DELTA_TIME), pid_array.Integral_min, pid_array.Integral_max)
+        pid_array.Integral = Math_clamp(pid_array.Integral_sum * pid_array.I_gain, pid_array.Integral_min, pid_array.Integral_max)
+
+        --derivative--
+        pid_array.Derivative = ((pid_array.Current_error - last_error) / get(DELTA_TIME)) * pid_array.D_gain
+
+        --sigma
+        correction = pid_array.Proportional + pid_array.Integral + pid_array.Derivative
+
+	    --limit and rescale output range--
+        correction = Math_clamp(Math_clamp(correction, pid_array.Min_error, pid_array.Max_error) / pid_array.Max_error , 0, 1)
+
 	    return correction
 
     end
 
 end
 
-function set_anim_value(current_value, target, min, max, speed)
+function Set_anim_value(current_value, target, min, max, speed)
 
     if target >= (max - 0.001) and current_value >= (max - 0.01) then
         return max
@@ -107,7 +158,7 @@ function set_anim_value(current_value, target, min, max, speed)
 
 end
 
-function rescale(in1, out1, in2, out2, x)
+function Rescale(in1, out1, in2, out2, x)
 
     if x < in1 then return out1 end
     if x > in2 then return out2 end
@@ -124,5 +175,17 @@ function Math_clamp(val, min, max)
         return max
     elseif val <= max and val >= min then
         return val
+    end
+end
+
+function Set_linear_anim_value(current_value, target, min, max, speed)
+    if get(DELTA_TIME) ~= 0 then
+        if target - current_value < (speed + (speed * 0.005)) * get(DELTA_TIME) and target - current_value > -(speed + (speed * 0.005)) * get(DELTA_TIME) then
+          return Math_clamp(target, min, max)
+        elseif target < current_value then
+          return Math_clamp(current_value - (speed * get(DELTA_TIME)), min, max)
+        elseif target > current_value then
+          return Math_clamp(current_value + (speed * get(DELTA_TIME)), min, max)
+        end
     end
 end

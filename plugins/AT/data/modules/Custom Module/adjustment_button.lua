@@ -73,36 +73,28 @@ function onMouseDown ( component , x , y , button , parentX , parentY )
             A32nx_auto_thrust.D_gain = A32nx_auto_thrust.D_gain + 0.1
         end
 
-        --i delay - --
-        if x >= size[1]/2-160 and x <= size[1]/2-160+20 and y >= size[2]/2-5 and y <= size[2]/2-5+20 then
-            A32nx_auto_thrust.I_delay = A32nx_auto_thrust.I_delay - 1
+        --max i - --
+        if x >= size[1]/4-50 and x <= size[1]/4-50+20 and y >= size[2]/2-5 and y <= size[2]/2-5+20 then
+            A32nx_auto_thrust.Integral_min = A32nx_auto_thrust.Integral_min + 1
+            A32nx_auto_thrust.Integral_max = A32nx_auto_thrust.Integral_max - 1
         end
 
-        --i delay + --
-        if x >= size[1]/2-80 and x <= size[1]/2-80+20 and y >= size[2]/2-5 and y <= size[2]/2-5+20 then
-            A32nx_auto_thrust.I_delay = A32nx_auto_thrust.I_delay + 1
+        --max i + --
+        if x >= size[1]/4+30 and x <= size[1]/4+30+20 and y >= size[2]/2-5 and y <= size[2]/2-5+20 then
+            A32nx_auto_thrust.Integral_min = A32nx_auto_thrust.Integral_min - 1
+            A32nx_auto_thrust.Integral_max = A32nx_auto_thrust.Integral_max + 1
         end
 
-        --min error - --
-        if x >= size[1]/2-50 and x <= size[1]/2-50+20 and y >= size[2]/2-5 and y <= size[2]/2-5+20 then
+        --max error - --
+        if x >= 3 * size[1]/4-50 and x <= 3 * size[1]/4-50+20 and y >= size[2]/2-5 and y <= size[2]/2-5+20 then
             A32nx_auto_thrust.Min_error = A32nx_auto_thrust.Min_error + 1
             A32nx_auto_thrust.Max_error = A32nx_auto_thrust.Max_error - 1
         end
 
-        --min error + --
-        if x >= size[1]/2+30 and x <= size[1]/2+30+20 and y >= size[2]/2-5 and y <= size[2]/2-5+20 then
+        --max error + --
+        if x >= 3 * size[1]/4+30 and x <= 3 * size[1]/4+30+20 and y >= size[2]/2-5 and y <= size[2]/2-5+20 then
             A32nx_auto_thrust.Min_error = A32nx_auto_thrust.Min_error - 1
             A32nx_auto_thrust.Max_error = A32nx_auto_thrust.Max_error + 1
-        end
-
-        --error offset - --
-        if x >= size[1]/2+60 and x <= size[1]/2+60+20 and y >= size[2]/2-5 and y <= size[2]/2-5+20 then
-            A32nx_auto_thrust.Error_offset = A32nx_auto_thrust.Error_offset - 1
-        end
-
-        --error offset + --
-        if x >= size[1]/2+140 and x <= size[1]/2+140+20 and y >= size[2]/2-5 and y <= size[2]/2-5+20 then
-            A32nx_auto_thrust.Error_offset = A32nx_auto_thrust.Error_offset + 1
         end
     end
 end
@@ -132,7 +124,7 @@ function draw()
     sasl.gl.drawCircle(size[1]/2-70,  size[2]/2+65, 10, true, white)
     sasl.gl.drawText(B612_bold, size[1]/2-150, size[2]/2 + 55, "-", 32, false, false, TEXT_ALIGN_CENTER, black)
     sasl.gl.drawText(B612_bold, size[1]/2-70,  size[2]/2 + 55, "+", 32, false, false, TEXT_ALIGN_CENTER, black)
-    
+
     --i gain button--
     sasl.gl.drawCircle(size[1]/2-40, size[2]/2+65, 10, true, white)
     sasl.gl.drawCircle(size[1]/2+40, size[2]/2+65, 10, true, white)
@@ -145,21 +137,15 @@ function draw()
     sasl.gl.drawText(B612_bold, size[1]/2+70,  size[2]/2 + 55, "-", 32, false, false, TEXT_ALIGN_CENTER, black)
     sasl.gl.drawText(B612_bold, size[1]/2+150, size[2]/2 + 55, "+", 32, false, false, TEXT_ALIGN_CENTER, black)
 
-    --i delay button--
-    sasl.gl.drawCircle(size[1]/2-150, size[2]/2+5, 10, true, white)
-    sasl.gl.drawCircle(size[1]/2-70,  size[2]/2+5, 10, true, white)
-    sasl.gl.drawText(B612_bold, size[1]/2-150, size[2]/2 - 5, "-", 32, false, false, TEXT_ALIGN_CENTER, black)
-    sasl.gl.drawText(B612_bold, size[1]/2-70,  size[2]/2 - 5, "+", 32, false, false, TEXT_ALIGN_CENTER, black)
-    
-    --min button--
-    sasl.gl.drawCircle(size[1]/2-40, size[2]/2+5, 10, true, white)
-    sasl.gl.drawCircle(size[1]/2+40, size[2]/2+5, 10, true, white)
-    sasl.gl.drawText(B612_bold, size[1]/2-40, size[2]/2 - 5, "-", 32, false, false, TEXT_ALIGN_CENTER, black)
-    sasl.gl.drawText(B612_bold, size[1]/2+40, size[2]/2 - 5, "+", 32, false, false, TEXT_ALIGN_CENTER, black)
+    --max i button--
+    sasl.gl.drawCircle(size[1]/4-40, size[2]/2+5, 10, true, white)
+    sasl.gl.drawCircle(size[1]/4+40,  size[2]/2+5, 10, true, white)
+    sasl.gl.drawText(B612_bold, size[1]/4-40, size[2]/2 - 5, "-", 32, false, false, TEXT_ALIGN_CENTER, black)
+    sasl.gl.drawText(B612_bold, size[1]/4+40,  size[2]/2 - 5, "+", 32, false, false, TEXT_ALIGN_CENTER, black)
 
-    --max button--
-    sasl.gl.drawCircle(size[1]/2+70,  size[2]/2+5, 10, true, white)
-    sasl.gl.drawCircle(size[1]/2+150, size[2]/2+5, 10, true, white)
-    sasl.gl.drawText(B612_bold, size[1]/2+70,  size[2]/2 - 5, "-", 32, false, false, TEXT_ALIGN_CENTER, black)
-    sasl.gl.drawText(B612_bold, size[1]/2+150, size[2]/2 - 5, "+", 32, false, false, TEXT_ALIGN_CENTER, black)
+    --max error button--
+    sasl.gl.drawCircle(3 * size[1]/4-40, size[2]/2+5, 10, true, white)
+    sasl.gl.drawCircle(3 * size[1]/4+40, size[2]/2+5, 10, true, white)
+    sasl.gl.drawText(B612_bold, 3 * size[1]/4-40, size[2]/2 - 5, "-", 32, false, false, TEXT_ALIGN_CENTER, black)
+    sasl.gl.drawText(B612_bold, 3 * size[1]/4+40, size[2]/2 - 5, "+", 32, false, false, TEXT_ALIGN_CENTER, black)
 end
