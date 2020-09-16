@@ -20,15 +20,21 @@ SimDR_aircraft_acceleration = globalProperty("sim/cockpit2/gauges/indicators/air
 SimDR_manual_set_thro = globalProperty("sim/flightmodel/engine/ENGN_thro_use[0]")
 SimDR_throttle = globalProperty("sim/cockpit2/engine/actuators/throttle_jet_rev_ratio_all")
 SimDR_override_throttle = globalProperty("sim/operation/override/override_throttles")
+SimDR_override_artstab = globalProperty("sim/operation/override/override_artstab")
 DELTA_TIME = globalProperty("sim/operation/misc/frame_rate_period")
 
 --global a32nx datarefs
 A32nx_autothrust_on = createGlobalPropertyi("a32nx/debug/auto_thrust_on", 0, false, true, false)
-A32nx_target_spd = createGlobalPropertyi("a32nx/debug/target_speed", 225, false, true, false)
+A32nx_target_spd = createGlobalPropertyi("a32nx/debug/target_speed", 180, false, true, false)
 A32nx_thrust_control_output = createGlobalPropertyf("a32nx/debug/thrust_control_output", 0, false, true, false)
 
 --global pid array
-A32nx_auto_thrust = {P_gain = 1.1, I_gain = 1, D_gain = 5.2, Proportional = 0, Integral_sum = 0, Integral = 0, Derivative = 0, Integral_min = -15, Integral_max = 15,Current_error = 0, Min_error = -15, Max_error = 15}
+A32nx_auto_thrust = {P_gain = 1.1, I_gain = 1, D_gain = 3.5, I_time = 5, Proportional = 0, Integral_sum = 0, Integral = 0, Derivative = 0, Integral_min = -15, Integral_max = 15, Current_error = 0, Min_error = -15, Max_error = 15}
+A32nx_FD_roll = {P_gain = 1, I_gain = 0, D_gain = 0.32, I_time = 1, Proportional = 0, Integral_sum = 0, Integral = 0, Derivative = 0, Integral_min = -10, Integral_max = 10, Current_error = 0, Min_error = -15, Max_error = 15}
+A32nx_FD_pitch = {P_gain = 1, I_gain = 1, D_gain = 0.65, I_time = 3, Proportional = 0, Integral_sum = 0, Integral = 0, Derivative = 0, Integral_min = -12000, Integral_max = 12000, Current_error = 0, Min_error = -12000, Max_error = 12000}
+A32nx_rwy_roll = {P_gain = 1, I_gain = 0, D_gain = 2, I_time = 1, Proportional = 0, Integral_sum = 0, Integral = 0, Derivative = 0, Integral_min = -30, Integral_max = 30, Current_error = 0, Min_error = -30, Max_error = 30}
+A32nx_stick_roll = {P_gain = 1, I_gain = 0, D_gain = 2, I_time = 1, Proportional = 0, Integral_sum = 0, Integral = 0, Derivative = 0, Integral_min = -30, Integral_max = 30, Current_error = 0, Min_error = -30, Max_error = 30}
+A32nx_stick_pitch = {P_gain = 2.5, I_gain = 1, D_gain = 10, I_time = 2, Proportional = 0, Integral_sum = 0, Integral = 0, Derivative = 0, Integral_min = -30, Integral_max = 30, Current_error = 0, Min_error = -30, Max_error = 30}
 
 Autothrust_output = 0
 Smoothed_error = 0
@@ -128,7 +134,7 @@ function A32nx_PID_new(pid_array, error)
         pid_array.Proportional = pid_array.Current_error * pid_array.P_gain
 
 	    --integral--(clamped to stop windup)
-	    pid_array.Integral_sum = Math_clamp(pid_array.Integral + pid_array.Current_error * get(DELTA_TIME), pid_array.Integral_min, pid_array.Integral_max)
+	    pid_array.Integral_sum = Math_clamp(pid_array.Integral + (pid_array.Current_error * get(DELTA_TIME)) / pid_array.I_time, pid_array.Integral_min, pid_array.Integral_max)
         pid_array.Integral = Math_clamp(pid_array.Integral_sum * pid_array.I_gain, pid_array.Integral_min, pid_array.Integral_max)
 
         --derivative--
@@ -139,6 +145,35 @@ function A32nx_PID_new(pid_array, error)
 
 	    --limit and rescale output range--
         correction = Math_clamp(Math_clamp(correction, pid_array.Min_error, pid_array.Max_error) / pid_array.Max_error , 0, 1)
+
+	    return correction
+
+    end
+
+end
+
+function A32nx_PID_new_neg_avail(pid_array, error)
+    local correction = 0
+    local last_error = pid_array.Current_error
+    pid_array.Current_error = error
+
+    if get(DELTA_TIME) ~= 0 then
+
+        --Proportional--
+        pid_array.Proportional = pid_array.Current_error * pid_array.P_gain
+
+	    --integral--(clamped to stop windup)
+	    pid_array.Integral_sum = Math_clamp(pid_array.Integral + (pid_array.Current_error * get(DELTA_TIME)) / pid_array.I_time, pid_array.Integral_min, pid_array.Integral_max)
+        pid_array.Integral = Math_clamp(pid_array.Integral_sum * pid_array.I_gain, pid_array.Integral_min, pid_array.Integral_max)
+
+        --derivative--
+        pid_array.Derivative = ((pid_array.Current_error - last_error) / get(DELTA_TIME)) * pid_array.D_gain
+
+        --sigma
+        correction = pid_array.Proportional + pid_array.Integral + pid_array.Derivative
+
+	    --limit and rescale output range--
+        correction = Math_clamp(correction, pid_array.Min_error, pid_array.Max_error) / pid_array.Max_error
 
 	    return correction
 

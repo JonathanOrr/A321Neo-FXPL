@@ -14,6 +14,10 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.]]
 
+function onModuleShutdown()
+    set(SimDR_override_throttle, 0)
+end
+
 function update()
 
     if get(A32nx_autothrust_on) == 1 then

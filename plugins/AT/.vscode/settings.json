@@ -6,6 +6,12 @@
         "MENU_CHECKED",
         "MENU_UNCHECKED",
         "PLUGINS_MENU_ID",
-        "SASL_STOP_PROCESSING"
+        "SASL_STOP_PROCESSING",
+        "onModuleShutdown",
+        "onMouseWheel",
+        "MB_LEFT",
+        "onMouseDown",
+        "update",
+        "draw"
     ]
 }

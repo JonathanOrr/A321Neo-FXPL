@@ -22,16 +22,17 @@ local B612_regular = sasl.gl.loadFont("fonts/B612-Regular.ttf")
 local B612_MONO_bold = sasl.gl.loadFont("fonts/B612Mono-Bold.ttf")
 
 --colors
-local black = {0,0,0}
-local white = {1,1,1}
-local green = {0.004, 1, 0.004}
-local blue = {0.004, 1.0, 1.0}
-local orange = {0.843, 0.49, 0}
-local red = {1, 0, 0}
+
+--colors
+local WHITE = {1.0, 1.0, 1.0}
+local RED = {1, 0, 0}
+local LIGHT_BLUE = {0, 0.708, 1}
+local LIGHT_GREY = {0.2039, 0.2235, 0.247}
+local DARK_GREY = {0.1568, 0.1803, 0.2039}
 
 --variables
 local button_color = {}
-button_color = red
+button_color = WHITE
 
 local button_text = ""
 
@@ -43,20 +44,15 @@ end
 
 function update()
     if get(A32nx_autothrust_on) == 1 then
-        button_color = red
+        button_color = RED
         button_text = "DISABLE"
     else
-        button_color = white
+        button_color = LIGHT_GREY
         button_text = "ENABLE"
     end
 end
 
 function draw()
-    sasl.gl.drawCircle(size[1]/2-70,  size[2]/2+10, 10, true, button_color)
-    sasl.gl.drawCircle(size[1]/2+70,  size[2]/2+10, 10, true, button_color)
-    sasl.gl.drawCircle(size[1]/2-70,  size[2]/2-10, 10, true, button_color)
-    sasl.gl.drawCircle(size[1]/2+70,  size[2]/2-10, 10, true, button_color)
-    sasl.gl.drawRectangle(0, 10, 160 , 20, button_color)
-    sasl.gl.drawRectangle(10, 0, 140 , 40, button_color)
-    sasl.gl.drawText(B612_MONO_bold, size[1]/2, size[2]/2-10, button_text, 25, false, false, TEXT_ALIGN_CENTER, black)
+    sasl.gl.drawRectangle(0, 0, size[1], size[2], button_color)
+    sasl.gl.drawText(B612_MONO_bold, size[1]/2, size[2]/2-10, button_text, 25, false, false, TEXT_ALIGN_CENTER, WHITE)
 end

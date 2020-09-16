@@ -20,6 +20,8 @@ size = {340, 420}
 --fonts
 local B612_regular = sasl.gl.loadFont("fonts/B612-Regular.ttf")
 local B612_bold = sasl.gl.loadFont("fonts/B612-Bold.ttf")
+local B612_MONO_regular = sasl.gl.loadFont("fonts/B612MONO-Regular.ttf")
+local B612_MONO_bold = sasl.gl.loadFont("fonts/B612MONO-Bold.ttf")
 
 --colors
 local black = {0,0,0}
@@ -28,6 +30,12 @@ local green = {0.004, 1, 0.004}
 local blue = {0.004, 1.0, 1.0}
 local orange = {0.843, 0.49, 0}
 local red = {1, 0, 0}
+
+--colors
+local WHITE = {1.0, 1.0, 1.0}
+local LIGHT_BLUE = {0, 0.708, 1}
+local LIGHT_GREY = {0.2039, 0.2235, 0.247}
+local DARK_GREY = {0.1568, 0.1803, 0.2039}
 
 --mouse click
 function onMouseDown ( component , x , y , button , parentX , parentY )
@@ -44,12 +52,12 @@ function onMouseDown ( component , x , y , button , parentX , parentY )
         end
 
         --p gain - --
-        if x >= size[1]/2-160 and x <= size[1]/2-160+20 and y >= size[2]/2+55 and y <= size[2]/2+55+20 then
+        if x >= size[1]/6-50 and x <= size[1]/6-50+20 and y >= size[2]/2+55 and y <= size[2]/2+55+20 then
             A32nx_auto_thrust.P_gain = A32nx_auto_thrust.P_gain - 0.1
         end
 
         --p gain + --
-        if x >= size[1]/2-80 and x <= size[1]/2-80+20 and y >= size[2]/2+55 and y <= size[2]/2+55+20 then
+        if x >= size[1]/6+30 and x <= size[1]/6+30+20 and y >= size[2]/2+55 and y <= size[2]/2+55+20 then
             A32nx_auto_thrust.P_gain = A32nx_auto_thrust.P_gain + 0.1
         end
 
@@ -64,35 +72,45 @@ function onMouseDown ( component , x , y , button , parentX , parentY )
         end
 
         --d gain - --
-        if x >= size[1]/2+60 and x <= size[1]/2+60+20 and y >= size[2]/2+55 and y <= size[2]/2+55+20 then
+        if x >= 5 * size[1]/6-50 and x <= 5 * size[1]/6-50+20 and y >= size[2]/2+55 and y <= size[2]/2+55+20 then
             A32nx_auto_thrust.D_gain = A32nx_auto_thrust.D_gain - 0.1
         end
 
         --d gain + --
-        if x >= size[1]/2+140 and x <= size[1]/2+140+20 and y >= size[2]/2+55 and y <= size[2]/2+55+20 then
+        if x >= 5 * size[1]/6+30 and x <= 5 * size[1]/6+30+20 and y >= size[2]/2+55 and y <= size[2]/2+55+20 then
             A32nx_auto_thrust.D_gain = A32nx_auto_thrust.D_gain + 0.1
         end
 
+        --i time - --
+        if x >= size[1]/6-50 and x <= size[1]/6-50+20 and y >= size[2]/2-5 and y <= size[2]/2-5+20 then
+            A32nx_auto_thrust.I_time = A32nx_auto_thrust.I_time - 1
+        end
+
+        --i time + --
+        if x >= size[1]/6+30 and x <= size[1]/6+30+20 and y >= size[2]/2-5 and y <= size[2]/2-5+20 then
+            A32nx_auto_thrust.I_time = A32nx_auto_thrust.I_time + 1
+        end
+
         --max i - --
-        if x >= size[1]/4-50 and x <= size[1]/4-50+20 and y >= size[2]/2-5 and y <= size[2]/2-5+20 then
+        if x >= size[1]/2-50 and x <= size[1]/2-50+20 and y >= size[2]/2-5 and y <= size[2]/2-5+20 then
             A32nx_auto_thrust.Integral_min = A32nx_auto_thrust.Integral_min + 1
             A32nx_auto_thrust.Integral_max = A32nx_auto_thrust.Integral_max - 1
         end
 
         --max i + --
-        if x >= size[1]/4+30 and x <= size[1]/4+30+20 and y >= size[2]/2-5 and y <= size[2]/2-5+20 then
+        if x >= size[1]/2+30 and x <= size[1]/2+30+20 and y >= size[2]/2-5 and y <= size[2]/2-5+20 then
             A32nx_auto_thrust.Integral_min = A32nx_auto_thrust.Integral_min - 1
             A32nx_auto_thrust.Integral_max = A32nx_auto_thrust.Integral_max + 1
         end
 
         --max error - --
-        if x >= 3 * size[1]/4-50 and x <= 3 * size[1]/4-50+20 and y >= size[2]/2-5 and y <= size[2]/2-5+20 then
+        if x >= 5 * size[1]/6-50 and x <= 5 * size[1]/6-50+20 and y >= size[2]/2-5 and y <= size[2]/2-5+20 then
             A32nx_auto_thrust.Min_error = A32nx_auto_thrust.Min_error + 1
             A32nx_auto_thrust.Max_error = A32nx_auto_thrust.Max_error - 1
         end
 
         --max error + --
-        if x >= 3 * size[1]/4+30 and x <= 3 * size[1]/4+30+20 and y >= size[2]/2-5 and y <= size[2]/2-5+20 then
+        if x >= 5 * size[1]/6+30 and x <= 5 * size[1]/6+30+20 and y >= size[2]/2-5 and y <= size[2]/2-5+20 then
             A32nx_auto_thrust.Min_error = A32nx_auto_thrust.Min_error - 1
             A32nx_auto_thrust.Max_error = A32nx_auto_thrust.Max_error + 1
         end
@@ -114,38 +132,44 @@ function draw()
 
     --drawing adjustment buttons
     --taget speed button--
-    sasl.gl.drawCircle(size[1]/2-65, size[2]/2+125, 15, true, white)
-    sasl.gl.drawCircle(size[1]/2+65, size[2]/2+125, 15, true, white)
-    sasl.gl.drawText(B612_bold, size[1]/2-65, size[2]/2 + 110, "-", 50, false, false, TEXT_ALIGN_CENTER, black)
-    sasl.gl.drawText(B612_bold, size[1]/2+65, size[2]/2 + 110, "+", 50, false, false, TEXT_ALIGN_CENTER, black)
+    sasl.gl.drawRectangle(size[1]/2-80, size[2]/2+110, 30, 30, LIGHT_GREY)
+    sasl.gl.drawRectangle(size[1]/2+50, size[2]/2+110, 30, 30, LIGHT_GREY)
+    sasl.gl.drawText(B612_MONO_regular, size[1]/2-65, size[2]/2 + 110, "-", 50, false, false, TEXT_ALIGN_CENTER, WHITE)
+    sasl.gl.drawText(B612_MONO_regular, size[1]/2+65, size[2]/2 + 110, "+", 50, false, false, TEXT_ALIGN_CENTER, WHITE)
 
     --p gain button--
-    sasl.gl.drawCircle(size[1]/2-150, size[2]/2+65, 10, true, white)
-    sasl.gl.drawCircle(size[1]/2-70,  size[2]/2+65, 10, true, white)
-    sasl.gl.drawText(B612_bold, size[1]/2-150, size[2]/2 + 55, "-", 32, false, false, TEXT_ALIGN_CENTER, black)
-    sasl.gl.drawText(B612_bold, size[1]/2-70,  size[2]/2 + 55, "+", 32, false, false, TEXT_ALIGN_CENTER, black)
+    sasl.gl.drawRectangle(size[1]/6-50, size[2]/2+55, 20, 20, LIGHT_GREY)
+    sasl.gl.drawRectangle(size[1]/6+30, size[2]/2+55, 20, 20, LIGHT_GREY)
+    sasl.gl.drawText(B612_MONO_regular, size[1]/6-40, size[2]/2 + 55, "-", 32, false, false, TEXT_ALIGN_CENTER, WHITE)
+    sasl.gl.drawText(B612_MONO_regular, size[1]/6+40, size[2]/2 + 55, "+", 32, false, false, TEXT_ALIGN_CENTER, WHITE)
 
     --i gain button--
-    sasl.gl.drawCircle(size[1]/2-40, size[2]/2+65, 10, true, white)
-    sasl.gl.drawCircle(size[1]/2+40, size[2]/2+65, 10, true, white)
-    sasl.gl.drawText(B612_bold, size[1]/2-40, size[2]/2 + 55, "-", 32, false, false, TEXT_ALIGN_CENTER, black)
-    sasl.gl.drawText(B612_bold, size[1]/2+40, size[2]/2 + 55, "+", 32, false, false, TEXT_ALIGN_CENTER, black)
+    sasl.gl.drawRectangle(size[1]/2-50, size[2]/2+55, 20, 20, LIGHT_GREY)
+    sasl.gl.drawRectangle(size[1]/2+30, size[2]/2+55, 20, 20, LIGHT_GREY)
+    sasl.gl.drawText(B612_MONO_regular, size[1]/2-40, size[2]/2 + 55, "-", 32, false, false, TEXT_ALIGN_CENTER, WHITE)
+    sasl.gl.drawText(B612_MONO_regular, size[1]/2+40, size[2]/2 + 55, "+", 32, false, false, TEXT_ALIGN_CENTER, WHITE)
 
     --d gain button--
-    sasl.gl.drawCircle(size[1]/2+70,  size[2]/2+65, 10, true, white)
-    sasl.gl.drawCircle(size[1]/2+150, size[2]/2+65, 10, true, white)
-    sasl.gl.drawText(B612_bold, size[1]/2+70,  size[2]/2 + 55, "-", 32, false, false, TEXT_ALIGN_CENTER, black)
-    sasl.gl.drawText(B612_bold, size[1]/2+150, size[2]/2 + 55, "+", 32, false, false, TEXT_ALIGN_CENTER, black)
+    sasl.gl.drawRectangle(5 * size[1]/6-50,  size[2]/2+55, 20, 20, LIGHT_GREY)
+    sasl.gl.drawRectangle(5 * size[1]/6+30, size[2]/2+55, 20, 20, LIGHT_GREY)
+    sasl.gl.drawText(B612_MONO_regular, 5 * size[1]/6-40,  size[2]/2 + 55, "-", 32, false, false, TEXT_ALIGN_CENTER, WHITE)
+    sasl.gl.drawText(B612_MONO_regular, 5 * size[1]/6+40, size[2]/2 + 55, "+", 32, false, false, TEXT_ALIGN_CENTER, WHITE)
+
+    --i time button--
+    sasl.gl.drawRectangle(size[1]/6-50, size[2]/2-5, 20, 20, LIGHT_GREY)
+    sasl.gl.drawRectangle(size[1]/6+30,  size[2]/2-5, 20, 20, LIGHT_GREY)
+    sasl.gl.drawText(B612_MONO_regular, size[1]/6-40, size[2]/2 - 5, "-", 32, false, false, TEXT_ALIGN_CENTER, WHITE)
+    sasl.gl.drawText(B612_MONO_regular, size[1]/6+40,  size[2]/2 - 5, "+", 32, false, false, TEXT_ALIGN_CENTER, WHITE)
 
     --max i button--
-    sasl.gl.drawCircle(size[1]/4-40, size[2]/2+5, 10, true, white)
-    sasl.gl.drawCircle(size[1]/4+40,  size[2]/2+5, 10, true, white)
-    sasl.gl.drawText(B612_bold, size[1]/4-40, size[2]/2 - 5, "-", 32, false, false, TEXT_ALIGN_CENTER, black)
-    sasl.gl.drawText(B612_bold, size[1]/4+40,  size[2]/2 - 5, "+", 32, false, false, TEXT_ALIGN_CENTER, black)
+    sasl.gl.drawRectangle(size[1]/2-50, size[2]/2-5, 20, 20, LIGHT_GREY)
+    sasl.gl.drawRectangle(size[1]/2+30,  size[2]/2-5, 20, 20, LIGHT_GREY)
+    sasl.gl.drawText(B612_MONO_regular, size[1]/2-40, size[2]/2 - 5, "-", 32, false, false, TEXT_ALIGN_CENTER, WHITE)
+    sasl.gl.drawText(B612_MONO_regular, size[1]/2+40,  size[2]/2 - 5, "+", 32, false, false, TEXT_ALIGN_CENTER, WHITE)
 
     --max error button--
-    sasl.gl.drawCircle(3 * size[1]/4-40, size[2]/2+5, 10, true, white)
-    sasl.gl.drawCircle(3 * size[1]/4+40, size[2]/2+5, 10, true, white)
-    sasl.gl.drawText(B612_bold, 3 * size[1]/4-40, size[2]/2 - 5, "-", 32, false, false, TEXT_ALIGN_CENTER, black)
-    sasl.gl.drawText(B612_bold, 3 * size[1]/4+40, size[2]/2 - 5, "+", 32, false, false, TEXT_ALIGN_CENTER, black)
+    sasl.gl.drawRectangle(5 * size[1]/6-50, size[2]/2-5, 20, 20, LIGHT_GREY)
+    sasl.gl.drawRectangle(5 * size[1]/6+30, size[2]/2-5, 20, 20, LIGHT_GREY)
+    sasl.gl.drawText(B612_MONO_regular, 5 * size[1]/6-40, size[2]/2 - 5, "-", 32, false, false, TEXT_ALIGN_CENTER, WHITE)
+    sasl.gl.drawText(B612_MONO_regular, 5 * size[1]/6+40, size[2]/2 - 5, "+", 32, false, false, TEXT_ALIGN_CENTER, WHITE)
 end
