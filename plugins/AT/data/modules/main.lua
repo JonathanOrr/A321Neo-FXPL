@@ -58,6 +58,20 @@ A32nx_at_graph = contextWindow {
   };
 }
 
+A32nx_FD = contextWindow {
+  name = "A32NX FD POINTERS";
+  position = { 50 , 500 , 800 , 400};
+  noBackground = true ;
+  proportional = false ;
+  minimumSize = { 400 , 200 };
+  maximumSize = { 800 , 400 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = false ;
+  components = {
+    fd {position = { 0 , 0 , 800 , 400 }}
+  };
+}
+
 
 --menu item functions
 function show_hide_ui()
@@ -68,32 +82,45 @@ function show_hide_graph()
   A32nx_at_graph:setIsVisible(not A32nx_at_graph:isVisible())
 end
 
+function show_hide_fd()
+  A32nx_FD:setIsVisible(not A32nx_FD:isVisible())
+end
+
 
 --change menu item status
 function update()
   if A32nx_at_UI:isVisible() == true then
-    sasl.setMenuItemState(menu_main, showHideUi, MENU_CHECKED)
+    sasl.setMenuItemState(Menu_main, ShowHideUi, MENU_CHECKED)
   else
-    sasl.setMenuItemState(menu_main, showHideUi, MENU_UNCHECKED)
+    sasl.setMenuItemState(Menu_main, ShowHideUi, MENU_UNCHECKED)
   end
 
   if A32nx_at_graph:isVisible() == true then
-    sasl.setMenuItemState(menu_main, showHideGraph, MENU_CHECKED)
+    sasl.setMenuItemState(Menu_main, ShowHideGraph, MENU_CHECKED)
   else
-    sasl.setMenuItemState(menu_main, showHideGraph, MENU_UNCHECKED)
+    sasl.setMenuItemState(Menu_main, ShowHideGraph, MENU_UNCHECKED)
+  end
+
+  if A32nx_FD:isVisible() == true then
+    sasl.setMenuItemState(Menu_main, ShowHideFd, MENU_CHECKED)
+  else
+    sasl.setMenuItemState(Menu_main, ShowHideFd, MENU_UNCHECKED)
   end
 
   updateAll(components)
 end
 
 -- create top level menu in plugins menu
-menu_master	= sasl.appendMenuItem (PLUGINS_MENU_ID, "A32NX ADAPTIVE A/T" )
+Menu_master	= sasl.appendMenuItem (PLUGINS_MENU_ID, "A32NX ADAPTIVE A/T" )
 -- add a submenu
-menu_main	= sasl.createMenu ("", PLUGINS_MENU_ID, menu_master)
+Menu_main	= sasl.createMenu ("", PLUGINS_MENU_ID, Menu_master)
 -- add menu entry
-showHideUi	= sasl.appendMenuItem(menu_main, "Show/Hide UI", show_hide_ui)
+ShowHideUi	= sasl.appendMenuItem(Menu_main, "Show/Hide UI", show_hide_ui)
 -- add menu entry
-showHideGraph	= sasl.appendMenuItem(menu_main, "Show/Hide Debug Graph", show_hide_graph)
+ShowHideFd	= sasl.appendMenuItem(Menu_main, "Show/Hide FD", show_hide_fd)
+-- add menu entry
+ShowHideGraph	= sasl.appendMenuItem(Menu_main, "Show/Hide Debug Graph", show_hide_graph)
 --initialise menu item status
-sasl.setMenuItemState(menu_main, showHideUi, MENU_UNCHECKED)
-sasl.setMenuItemState(menu_main, showHideGraph, MENU_UNCHECKED)
+sasl.setMenuItemState(Menu_main, ShowHideUi, MENU_UNCHECKED)
+sasl.setMenuItemState(Menu_main, ShowHideFd, MENU_UNCHECKED)
+sasl.setMenuItemState(Menu_main, ShowHideGraph, MENU_UNCHECKED)

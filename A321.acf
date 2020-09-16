@@ -40068,7 +40068,7 @@ GROUP batteries voltage
   gen_LED bat1 voltage
     POS 492.000000 1222.000000
     IMAGE text/yellow_led
-    DATAREF sim/cockpit2/electrical/battery_voltage_indicated_volts[0]
+    DATAREF a321neo/cockpit/electrical/battery_1_voltage
     SIZE 0.400000
     LOCKED
     LIGHT_MODE GLASS_AUTO
@@ -40083,7 +40083,7 @@ GROUP batteries voltage
   gen_LED bat2 voltage
     POS 492.000000 1175.000000
     IMAGE text/yellow_led
-    DATAREF sim/cockpit2/electrical/battery_voltage_indicated_volts[1]
+    DATAREF a321neo/cockpit/electrical/battery_2_voltage
     SIZE 0.400000
     LOCKED
     LIGHT_MODE GLASS_AUTO

@@ -25704,13 +25704,15 @@ IDX	20520
 			TRIS	21504 84
 			TRIS	43086 84
 			TRIS	43170 84
+		ATTR_manip_command	button	a321neo/cockpit/electrical/AC_ESS_FEED	Alternate AC essential feed
 		TRIS	1284 84
+		ATTR_manip_none
 		TRIS	1920 84
 		ATTR_manip_command	button	sim/bleed_air/apu_toggle	Toggle APU bleed
 		TRIS	2004 84
 		ATTR_manip_none
 		TRIS	2088 198
-		ATTR_manip_command	button	a321neo/electrical/APU_gen_toggle	Toggle APU generator
+		ATTR_manip_command	button	a321neo/cockpit/electrical/APU_GEN	Toggle APU generator
 		TRIS	2286 84
 		ATTR_manip_command	button	a321neo/cockpit/engine/apu_master_toggle	Toggle APU Master
 		TRIS	2370 84
@@ -25722,13 +25724,17 @@ IDX	20520
 		TRIS	3294 84
 		ATTR_manip_none
 		TRIS	3378 12
+		ATTR_manip_command	button	a321neo/cockpit/HYD/toggle_elec_pump_B	Toggle B HYD electrical pump
 		TRIS	3642 84
+		ATTR_manip_command	button	a321neo/cockpit/electrical/BUS_tie	Toggle electrical bus tie
 		TRIS	3936 84
 		ATTR_manip_command	button	a321neo/cockpit/aircond/toggle_cab_hotair	Toggle cabin hot air
 		TRIS	4104 84
 		ATTR_manip_none
 		TRIS	4188 84
+		ATTR_manip_command	button	a321neo/cockpit/electrical/commercial	Toggle commercial power
 		TRIS	4902 84
+		ATTR_manip_none
 		TRIS	5322 84
 		TRIS	5406 84
 		TRIS	7560 84
@@ -25745,28 +25751,42 @@ IDX	20520
 		TRIS	19674 84
 		TRIS	19758 84
 		TRIS	19842 198
+		ATTR_manip_command	button	a321neo/cockpit/electrical/EXT_PWR	Toggle external power
 		TRIS	20532 84
+		ATTR_manip_none
 		TRIS	21354 84
+		ATTR_manip_command	button	a321neo/cockpit/electrical/galley	Toggle galley power
 		TRIS	21672 84
+		ATTR_manip_command	button	a321neo/cockpit/electrical/GEN_1	Toggle generator 1
 		TRIS	21756 84
+		ATTR_manip_command	button	a321neo/cockpit/electrical/GEN_2	Toggle generator 2
 		TRIS	21924 84
+		ATTR_manip_command	button	a321neo/cockpit/HYD/toggle_eng_pump_1	Toggle ENG 1 pump for G HYD
 		TRIS	22260 84
+		ATTR_manip_command	button	a321neo/cockpit/electrical/IDG_1	Disconnect IDG 1 from ENG 1
 		TRIS	22434 84
+		ATTR_manip_command	button	a321neo/cockpit/electrical/IDG_2	Disconnect IDG 2 from ENG 2
 		TRIS	22518 84
+		ATTR_manip_none
 		TRIS	23472 84
 		TRIS	23556 84
 		TRIS	41016 84
 		TRIS	41436 84
 		TRIS	41520 84
 		TRIS	41838 84
+		ATTR_manip_command	button	a321neo/cockpit/HYD/toggle_PTU	Toggle PTU
 		TRIS	41922 84
+		ATTR_manip_none
 		TRIS	42006 84
 		TRIS	42090 84
 		TRIS	42912 84
 		TRIS	42996 84
 		TRIS	44208 84
+		ATTR_manip_command	button	a321neo/cockpit/HYD/toggle_elec_pump_Y	Toggle Y HYD electrical pump
 		TRIS	44526 84
+		ATTR_manip_command	button	a321neo/cockpit/HYD/toggle_eng_pump_2	Toggle ENG 2 pump for Y HYD
 		TRIS	44610 84
+	ATTR_manip_none
 		TRIS	0 84
 		TRIS	84 84
 		TRIS	168 84

@@ -185,8 +185,8 @@ ELEC_cmd_GEN2         = createCommand("a321neo/cockpit/electrical/GEN_2", "Press
 ELEC_cmd_APU_GEN      = createCommand("a321neo/cockpit/electrical/APU_GEN", "Press APU GEN button")
 ELEC_cmd_EXT_PWR      = createCommand("a321neo/cockpit/electrical/EXT_PWR", "Press EXT PWR button")
 
-ELEC_cmd_EMER_GEN_TEST   = createCommand("a321neo/cockpit/electrical/EMER_GEN_1_LINE", "Press EMER_GEN_TEST on the EMER ELEC PWR panel")
+ELEC_cmd_EMER_GEN_TEST   = createCommand("a321neo/cockpit/electrical/EMER_GEN_TEST", "Press EMER_GEN_TEST on the EMER ELEC PWR panel")
 ELEC_cmd_EMER_GEN1_LINE  = createCommand("a321neo/cockpit/electrical/EMER_GEN_1_LINE", "Press GEN 1 LINE button on the EMER ELEC PWR panel")
-ELEC_cmd_EMER_RAT        = createCommand("a321neo/cockpit/electrical/EMER_GEN_1_LINE", "Press GEN 1 LINE button on the EMER ELEC PWR panel")
+ELEC_cmd_EMER_RAT        = createCommand("a321neo/cockpit/electrical/EMER_GEN_RAT", "Press RAT MAN ON button on the EMER ELEC PWR panel")
 
 

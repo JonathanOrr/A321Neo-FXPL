@@ -14,14 +14,20 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.]]
 
+function onModuleShutdown()
+    set(SimDR_override_throttle, 0)
+end
+
 function update()
 
     if get(A32nx_autothrust_on) == 1 then
 
         if get(DELTA_TIME) ~= 0 then
-            Smoothed_error = set_anim_value(Smoothed_error, get(A32nx_target_spd) - get(SimDR_aircraft_ias), -1000, 1000, 12.5)
-            Autothrust_output = A32nx_PID_time_indep(A32nx_auto_thrust, Smoothed_error)
-		    set(SimDR_throttle, set_anim_value(get(SimDR_throttle), Autothrust_output, 0, 1, 0.5))
+            Smoothed_error = Set_anim_value(Smoothed_error, get(A32nx_target_spd) - get(SimDR_aircraft_ias), -1000, 1000, 12.5)
+            Autothrust_output = A32nx_PID_new(A32nx_auto_thrust, Smoothed_error)
+            set(SimDR_throttle, Set_linear_anim_value(get(SimDR_throttle), Autothrust_output, 0, 1, 0.5))
+
+            ---print("P: " .. A32nx_auto_thrust.Proportional, "I: " .. A32nx_auto_thrust.Integral, "D: " .. A32nx_auto_thrust.Derivative)
         end
 	end
 

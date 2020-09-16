@@ -54,7 +54,7 @@ function ECAM_status_get_inop_sys()
         end
         
         -- ELEC
-        put_inop_sys_msg_2(messages, Gen_1_on, Gen_2_on, "GEN")
+        --put_inop_sys_msg_2(messages, Gen_1_on, Gen_2_on, "GEN")
 
         -- ENGINES and APU
         if get(FAILURE_Apu) == 6 or get(FAILURE_Apu_fire) == 6 then
