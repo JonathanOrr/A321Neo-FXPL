@@ -115,9 +115,9 @@ function adirst_inst_align(phase)
     end
     
    set(Adirs_total_time_to_align, 1)
-   set(Adirs_irs_begin_time[1], get(TIME) - 2)
-   set(Adirs_irs_begin_time[2], get(TIME) - 2)
-   set(Adirs_irs_begin_time[3], get(TIME) - 2)
+   set(Adirs_irs_begin_time[1], math.max(0, get(TIME) - 20))
+   set(Adirs_irs_begin_time[2], math.max(0, get(TIME) - 20))
+   set(Adirs_irs_begin_time[3], math.max(0, get(TIME) - 20))
     
 end
 
@@ -358,7 +358,7 @@ local function update_output_datarefs()
     local orig_capt_ias = get(Capt_IAS)
     local orig_fo_ias   = get(Fo_IAS)
     local orig_capt_alt = get(Capt_Baro_Alt)
-    local orig_fo_alt  = get(Fo_Baro_Alt)
+    local orig_fo_alt   = get(Fo_Baro_Alt)
     local orig_capt_vs  = get(Capt_VVI)
     local orig_fo_vs    = get(Fo_VVI)
     
