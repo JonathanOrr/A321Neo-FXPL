@@ -31,10 +31,10 @@ A32nx_thrust_control_output = createGlobalPropertyf("a32nx/debug/thrust_control_
 --global pid array
 A32nx_auto_thrust = {P_gain = 1.1, I_gain = 1, D_gain = 3.5, I_time = 5, Proportional = 0, Integral_sum = 0, Integral = 0, Derivative = 0, Integral_min = -15, Integral_max = 15, Current_error = 0, Min_error = -15, Max_error = 15}
 A32nx_FD_roll = {P_gain = 1, I_gain = 0, D_gain = 0.32, I_time = 1, Proportional = 0, Integral_sum = 0, Integral = 0, Derivative = 0, Integral_min = -10, Integral_max = 10, Current_error = 0, Min_error = -15, Max_error = 15}
-A32nx_FD_pitch = {P_gain = 1, I_gain = 1, D_gain = 0.65, I_time = 3, Proportional = 0, Integral_sum = 0, Integral = 0, Derivative = 0, Integral_min = -12000, Integral_max = 12000, Current_error = 0, Min_error = -12000, Max_error = 12000}
+A32nx_FD_pitch = {P_gain = 1, I_gain = 1, D_gain = 1, I_time = 3, Proportional = 0, Integral_sum = 0, Integral = 0, Derivative = 0, Integral_min = -12000, Integral_max = 12000, Current_error = 0, Min_error = -12000, Max_error = 12000}
 A32nx_rwy_roll = {P_gain = 1, I_gain = 0, D_gain = 2, I_time = 1, Proportional = 0, Integral_sum = 0, Integral = 0, Derivative = 0, Integral_min = -30, Integral_max = 30, Current_error = 0, Min_error = -30, Max_error = 30}
 A32nx_stick_roll = {P_gain = 1, I_gain = 0, D_gain = 2, I_time = 1, Proportional = 0, Integral_sum = 0, Integral = 0, Derivative = 0, Integral_min = -30, Integral_max = 30, Current_error = 0, Min_error = -30, Max_error = 30}
-A32nx_stick_pitch = {P_gain = 2.5, I_gain = 1, D_gain = 10, I_time = 2, Proportional = 0, Integral_sum = 0, Integral = 0, Derivative = 0, Integral_min = -30, Integral_max = 30, Current_error = 0, Min_error = -30, Max_error = 30}
+A32nx_stick_pitch = {P_gain = 4, I_gain = 1, D_gain = 6, I_time = 2, Proportional = 0, Integral_sum = 0, Integral = 0, Derivative = 0, Integral_min = -30, Integral_max = 30, Current_error = 0, Min_error = -30, Max_error = 30}
 
 Autothrust_output = 0
 Smoothed_error = 0
