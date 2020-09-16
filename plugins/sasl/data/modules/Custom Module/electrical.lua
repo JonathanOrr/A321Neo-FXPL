@@ -9,6 +9,7 @@ local function update_buttons_datarefs()
 end
 
 function update()
+    update_generators()
     update_batteries()
     update_buttons_datarefs()
 end
