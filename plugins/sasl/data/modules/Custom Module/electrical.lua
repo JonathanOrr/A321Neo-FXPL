@@ -2,6 +2,7 @@
 -- Electrical Logic file
 
 include('electrical_batteries.lua')
+include('electrical_generators.lua')
 
 local function update_buttons_datarefs()
 

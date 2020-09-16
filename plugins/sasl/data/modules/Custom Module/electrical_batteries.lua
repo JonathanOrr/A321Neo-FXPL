@@ -17,7 +17,7 @@ batteries = {
     {
         switch_status = false, 
         curr_voltage = 0,
-        curr_amps    = 0,                                          -- + Recharching - Discharging
+        curr_amps    = -BAT_LOSS_AMPS,                                          -- + Recharching - Discharging
         curr_charge  = BAT_CAPACITY_AMPH-math.random(0,10)/10,       -- In Ah (start fully charged, with a bit of noise)
         is_charging  = false,
         is_connected_to_dc_bus = false,
@@ -31,7 +31,7 @@ batteries = {
     {
         switch_status = false, 
         curr_voltage = 0,
-        curr_amps    = 0,                                          -- + Recharching - Discharging
+        curr_amps    = -BAT_LOSS_AMPS,                                          -- + Recharching - Discharging
         curr_charge  = BAT_CAPACITY_AMPH-math.random(0,10)/10,       -- In Ah (start fully charged, with a bit of noise)
         is_charging  = false,
         is_connected_to_dc_bus = false,
@@ -44,6 +44,12 @@ batteries = {
     }
 }
 
+ELEC_sys.batteries = batteries
+
+----------------------------------------------------------------------------------------------------
+-- Functions
+----------------------------------------------------------------------------------------------------
+
 local function update_battery_voltage(bat)
 
     if bat.is_charging and bat.curr_amps < 0 then
@@ -52,8 +58,6 @@ local function update_battery_voltage(bat)
     if not bat.is_charging and bat.curr_amps > 0 then
         bat.curr_amps = 0   -- This should not happen
     end
-
-    bat.curr_amps = bat.curr_amps - BAT_LOSS_AMPS
 
     bat.curr_charge = bat.curr_charge + bat.curr_amps * get(DELTA_TIME) / 3600
     
@@ -77,7 +81,10 @@ local function update_battery_buses(bat)
     end
 
     -- Battery recharging
-    if get(DC_bat_bus_pwrd) == 1 and bat.curr_voltage < BAT_CHARGE_TRIG_AT then
+    if  get(DC_bat_bus_pwrd) == 1                                      -- Something else is powering the bat bus
+        and (bat.is_charging or bat.curr_voltage < BAT_CHARGE_TRIG_AT) -- Battery is already charging OR it reached the minimum voltage for charging
+        and bat.curr_voltage < BAT_TOP_VOLTAGE_LIMIT then              -- Battery is not fully charged
+
         if get(All_on_ground) == 1 then
             bat.is_connected_to_dc_bus = true
             bat.is_charging  = true
