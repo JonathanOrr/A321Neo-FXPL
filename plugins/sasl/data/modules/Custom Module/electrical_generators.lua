@@ -42,7 +42,6 @@ generators = {
         curr_voltage = 0,
         curr_amps    = 0, -- Always negative
         curr_hz = 0,
-        is_connected_to_ac_bus = false,
         drs = {
             pwr          = Gen_1_pwr,
             failure      = FAILURE_ELEC_GEN_1,
@@ -56,7 +55,6 @@ generators = {
         curr_voltage = 0,
         curr_amps    = 0, -- Always negative
         curr_hz = 0,
-        is_connected_to_ac_bus = false,
         drs = {
             pwr          = Gen_2_pwr,
             failure      = FAILURE_ELEC_GEN_2,
@@ -70,7 +68,6 @@ generators = {
         curr_voltage = 0,
         curr_amps    = 0, -- Always negative
         curr_hz = 0,
-        is_connected_to_ac_bus = false,
         drs = {
             pwr          = Gen_APU_pwr,
             failure      = FAILURE_ELEC_GEN_APU,
@@ -84,7 +81,6 @@ generators = {
         curr_voltage = 0,
         curr_amps    = 0, -- Always negative
         curr_hz = 0,
-        is_connected_to_ac_bus = false,
         drs = {
             pwr          = Gen_EXT_pwr,
             failure      = FAILURE_ELEC_GEN_EXT,
@@ -98,7 +94,6 @@ generators = {
         curr_voltage = 0,
         curr_amps    = 0, -- Always negative (unless you want the RAT to become your desk fan :))
         curr_hz = 0,
-        is_connected_to_ac_bus = false,
         drs = {
             pwr          = Gen_EMER_pwr,
             failure      = FAILURE_ELEC_GEN_EMER,
@@ -138,10 +133,10 @@ local function update_eng_gen(x)
     if x.switch_status then
         if x.source_status and get(x.drs.failure) == 0 then
             x.curr_voltage = Set_anim_value(x.curr_voltage, GEN_RANGE_VOLTAGE_NOM, 0, GEN_RANGE_VOLTAGE_NOM, 0.90)
-            x.curr_hz = Set_anim_value(x.curr_hz, GEN_RANGE_HZ_NOM, 0, 400, 0.70)
+            x.curr_hz = Set_anim_value(x.curr_hz, GEN_RANGE_HZ_NOM, 0, 400, 0.90)
         else
             x.curr_voltage = Set_anim_value(x.curr_voltage, 0, 0, GEN_RANGE_VOLTAGE_NOM, 0.90)
-            x.curr_hz = Set_anim_value(x.curr_hz, 0, 0, GEN_RANGE_HZ_NOM, 0.70)
+            x.curr_hz = Set_anim_value(x.curr_hz, 0, 0, GEN_RANGE_HZ_NOM, 0.90)
         end
     else
         x.curr_voltage = 0
@@ -156,7 +151,7 @@ local function update_apu_gen(x)
     if x.switch_status then
         if x.source_status and get(x.drs.failure) == 0 then
             x.curr_voltage = Set_anim_value(x.curr_voltage, GEN_RANGE_VOLTAGE_NOM, 0, GEN_RANGE_VOLTAGE_NOM, 0.95)
-            x.curr_hz = Set_anim_value(x.curr_hz, GEN_RANGE_HZ_NOM, 0, 400, 0.80)
+            x.curr_hz = Set_anim_value(x.curr_hz, GEN_RANGE_HZ_NOM, 0, 400, 0.90)
         else
             x.curr_voltage = Set_anim_value(x.curr_voltage, 0, 0, GEN_RANGE_VOLTAGE_NOM, 0.95)
             x.curr_hz = Set_anim_value(x.curr_hz, 0, 0, GEN_RANGE_HZ_NOM, 0.95)
@@ -222,6 +217,8 @@ local function update_generator_datarefs(x)
     
     if x.curr_voltage >= GEN_LOW_VOLTAGE_LIMIT and x.curr_hz >= GEN_LOW_HZ_LIMIT then
         set(x.drs.pwr, 1)
+    else
+        set(x.drs.pwr, 0)
     end
     
 end
