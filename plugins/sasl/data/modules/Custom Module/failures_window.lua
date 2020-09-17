@@ -52,6 +52,13 @@ local failures_data = {
     {
         group="ELECTRICAL",
         failures={
+            {name="BAT 1\nFAILURE", status=false, dataref=FAILURE_ELEC_battery_1 },
+            {name="BAT 2\nFAILURE", status=false, dataref=FAILURE_ELEC_battery_2 },
+            {name="GEN 1\nFAILURE", status=false, dataref=FAILURE_ELEC_GEN_1 },
+            {name="GEN 2\nFAILURE", status=false, dataref=FAILURE_ELEC_GEN_2 },
+            {name="APU GENERATOR\nFAILURE", status=false, dataref=FAILURE_ELEC_GEN_APU },
+            {name="RAT GENERATOR\nFAILURE", status=false, dataref=FAILURE_ELEC_GEN_EMER },
+            {name="EXT PWR\nFAILURE", status=false, dataref=FAILURE_ELEC_GEN_EXT }
         }
     },
     {
