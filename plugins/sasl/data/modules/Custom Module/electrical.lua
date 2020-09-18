@@ -4,6 +4,7 @@
 include('electrical_batteries.lua')
 include('electrical_buses.lua')
 include('electrical_generators.lua')
+include('electrical_tr_and_inv.lua')
 
 local function update_buttons_datarefs()
 
@@ -14,4 +15,5 @@ function update()
     update_buses()
     update_batteries()
     update_buttons_datarefs()
+    update_trs_and_inv()
 end
