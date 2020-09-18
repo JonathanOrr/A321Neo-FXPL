@@ -122,6 +122,9 @@ local function update_tr(x)
         if get(TR_1_online) == 1 and get(TR_2_online) == 1 then
             return -- If the normal TR are active, it makes no sense for TR ESS to work
         end
+        if get(INV_online) == 1 then
+            return -- It has no sense to run the TR ESS when static elec is powering AC bus
+        end
     end
     
     if get(x.drs.input_bus) == 1 and get(x.drs.failure) == 0 then
@@ -140,19 +143,19 @@ local function update_datarefs()
         set(INV_online, 0)    
     end
     
-    if trs[TR_1].curr_voltage >= DC_VOLTAGE_NOM*0.9 then
+    if trs[TR_1].curr_voltage >= DC_VOLTAGE_NOM*0.9 and trs[TR_1].status then
         set(TR_1_online, 1)
     else
         set(TR_1_online, 0)
     end
     
-    if trs[TR_2].curr_voltage >= DC_VOLTAGE_NOM*0.9 then
+    if trs[TR_2].curr_voltage >= DC_VOLTAGE_NOM*0.9 and trs[TR_2].status then
         set(TR_2_online, 1)
     else
         set(TR_2_online, 0)    
     end
     
-    if trs[TR_ESS].curr_voltage >= DC_VOLTAGE_NOM*0.9 then
+    if trs[TR_ESS].curr_voltage >= DC_VOLTAGE_NOM*0.9 and trs[TR_ESS].status then
         set(TR_ESS_online, 1)
     else
         set(TR_ESS_online, 0)    

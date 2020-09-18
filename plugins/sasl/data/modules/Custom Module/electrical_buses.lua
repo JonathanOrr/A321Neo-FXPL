@@ -157,10 +157,11 @@ local function update_dc_ess()
 
     -- The order of this if-elseif matches the real source priority! Do not change it!
 
-    if get(TR_1_online) == 1 then
-        buses.dc_ess_powered_by = TR_1
-    elseif get(TR_ESS_online) == 1 then
+
+    if get(TR_ESS_online) == 1 then
         buses.dc_ess_powered_by = TR_ESS
+    elseif get(TR_1_online) == 1 then
+        buses.dc_ess_powered_by = TR_1
     elseif get(HOT_bus_2_pwrd) and batteries[2].switch_status == true then
         buses.dc_ess_powered_by = BAT_2
     end
