@@ -293,4 +293,5 @@ Mcdu_popup = {}
 
 function MCDU_get_popup(id) return Mcdu_popup[id] end
 function MCDU_set_popup(id, val) Mcdu_popup[id] = val end
-  
+
+ELEC_sys = {}

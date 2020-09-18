@@ -148,6 +148,20 @@ DMC_debug_window = contextWindow {
   };
 }
 
+ELEC_debug_window = contextWindow {
+  name = "ELEC DEBUG";
+  position = { 200 , 200 , 600 , 600};
+  noBackground = true ;
+  proportional = false ;
+  minimumSize = { 600 , 600 };
+  maximumSize = { 600 , 600 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = false ;
+  components = {
+    electrical_debug {position = { 0 , 0 , 600 , 600 }}
+  };
+}
+
 DCDU_window = contextWindow {
   name = "DCDU Management";
   position = { 150 , 150 , 463 , 683 };
@@ -184,7 +198,7 @@ Checklist_window = contextWindow {
   minimumSize = { 240 , 275 };
   maximumSize = { 480 , 550 };
   gravity = { 0 , 1 , 0 , 1 };
-  visible = true ;
+  visible = false ;
   components = {
     checklist {position = { 0 , 0 , 480 , 550 }}
   };
@@ -217,6 +231,10 @@ end
 
 function Show_hide_DMC_debug()
   DMC_debug_window:setIsVisible(not DMC_debug_window:isVisible())
+end
+
+function Show_hide_ELEC_debug()
+  ELEC_debug_window:setIsVisible(not ELEC_debug_window:isVisible())
 end
 
 function Show_hide_DCDU()
@@ -263,5 +281,6 @@ ShowHideFBWDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide FBW Debug", Show_h
 ShowHideFBWGraph	= sasl.appendMenuItem(Menu_debug, "Show/Hide FBW Graph", Show_hide_FBW_graph)
 ShowHideECAMDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide ECAM Debug", Show_hide_ECAM_debug)
 ShowHideDMCDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide DMC Debug", Show_hide_DMC_debug)
+ShowHideELECDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide ELEC Debug", Show_hide_ELEC_debug)
 
 
