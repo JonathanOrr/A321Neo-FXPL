@@ -14,6 +14,9 @@ bus_source_labels[2] = "GEN 2"
 bus_source_labels[3] = "GEN APU"
 bus_source_labels[4] = "GEN EXT"
 bus_source_labels[5] = "GEN EMER"
+bus_source_labels[11] = "AC BUS 1"
+bus_source_labels[12] = "AC BUS 2"
+bus_source_labels[21] = "ST.INV"
 bus_source_labels[99] = "BUS TIE"
 
 local B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
@@ -138,5 +141,11 @@ function draw()
                         12, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
     sasl.gl.drawText(B612MONO_regular, 180, size[2]-590, bus_source_labels[ELEC_sys.buses.ac2_powered_by],
                         12, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
+
+    sasl.gl.drawText(B612MONO_regular, 300, size[2]-570, "AC ESS BUS powered by: ",
+                        12, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, 480, size[2]-570, bus_source_labels[ELEC_sys.buses.ac_ess_powered_by],
+                        12, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
+
     
 end
