@@ -55,3 +55,5 @@ FAILURE_ELEC_TR_1   = createGlobalPropertyi("a321neo/failures/electrical/tr_1", 
 FAILURE_ELEC_TR_2   = createGlobalPropertyi("a321neo/failures/electrical/tr_2", 0, false, true, false) -- TR 2
 FAILURE_ELEC_TR_ESS = createGlobalPropertyi("a321neo/failures/electrical/tr_ess", 0, false, true, false) -- TR ESS
 
+FAILURE_ELEC_GALLEY = createGlobalPropertyi("a321neo/failures/electrical/galley", 0, false, true, false) 
+
