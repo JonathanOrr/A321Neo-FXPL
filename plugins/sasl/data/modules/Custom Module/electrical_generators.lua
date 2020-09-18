@@ -23,6 +23,9 @@ sasl.registerCommandHandler (ELEC_cmd_APU_GEN,  0, function(phase) elec_gen_togg
 sasl.registerCommandHandler (ELEC_cmd_EXT_PWR,  0, function(phase) elec_gen_toggle(phase, 4) end )
 sasl.registerCommandHandler (ELEC_cmd_EMER_RAT,  0, function(phase) elec_gen_toggle(phase, 5) end )
 
+sasl.registerCommandHandler (ELEC_cmd_IDG1,  0, function(phase) elec_disc_idg(phase, 1) end )
+sasl.registerCommandHandler (ELEC_cmd_IDG2,  0, function(phase) elec_disc_idg(phase, 2) end )
+
 ----------------------------------------------------------------------------------------------------
 -- Global/Local variables
 ----------------------------------------------------------------------------------------------------
@@ -42,10 +45,14 @@ generators = {
         curr_voltage = 0,
         curr_amps    = 0, -- Always negative
         curr_hz = 0,
+        idg_status = true,
         drs = {
             pwr          = Gen_1_pwr,
             failure      = FAILURE_ELEC_GEN_1,
-            switch_light = Elec_light_GEN1
+            switch_light = Elec_light_GEN1,
+            idg_light    = Elec_light_IDG1,
+            idg_fail_1   = FAILURE_ELEC_IDG1_temp,
+            idg_fail_2   = FAILURE_ELEC_IDG1_oil,
         }
     },
     {   -- GEN_2
@@ -55,10 +62,14 @@ generators = {
         curr_voltage = 0,
         curr_amps    = 0, -- Always negative
         curr_hz = 0,
+        idg_status = true,
         drs = {
             pwr          = Gen_2_pwr,
             failure      = FAILURE_ELEC_GEN_2,
-            switch_light = Elec_light_GEN2
+            switch_light = Elec_light_GEN2,
+            idg_light    = Elec_light_IDG2,
+            idg_fail_1   = FAILURE_ELEC_IDG2_temp,
+            idg_fail_2   = FAILURE_ELEC_IDG2_oil,
         }
     },
     {   -- GEN_APU
@@ -108,6 +119,14 @@ ELEC_sys.generators = generators
 -- Functions
 ----------------------------------------------------------------------------------------------------
 
+function elec_disc_idg(phase, id)
+    if phase ~= SASL_COMMAND_BEGIN then
+        return
+    end
+    
+    generators[id].idg_status = false
+end
+
 function elec_gen_toggle(phase, id)
     if phase ~= SASL_COMMAND_BEGIN then
         return
@@ -131,7 +150,7 @@ local function update_eng_gen(x)
     end
     
     if x.switch_status then
-        if x.source_status and get(x.drs.failure) == 0 then
+        if x.source_status and get(x.drs.failure) == 0 and x.idg_status then
             x.curr_voltage = Set_anim_value(x.curr_voltage, GEN_RANGE_VOLTAGE_NOM, 0, GEN_RANGE_VOLTAGE_NOM, 0.90)
             x.curr_hz = Set_anim_value(x.curr_hz, GEN_RANGE_HZ_NOM, 0, 400, 0.90)
         else
@@ -209,8 +228,10 @@ local function update_generator_datarefs(x)
         int_value = get(x.drs.failure)==1 and 10 or 0 -- Switch status not showed
     elseif x.id == GEN_EXT then
         int_value = (1-int_value) + (x.source_status and 10 or 0)
+    elseif x.drs.idg_light ~= nil then
+        int_value = int_value + ((get(x.drs.failure)==1 or not x.idg_status) and 10 or 0)
     else
-        int_value = int_value + (get(x.drs.failure)==1 and 10 or 0)
+        int_value = int_value + (get(x.drs.failure)==1 and 10 or 0)    
     end
     
     set(x.drs.switch_light, int_value)
@@ -219,6 +240,14 @@ local function update_generator_datarefs(x)
         set(x.drs.pwr, 1)
     else
         set(x.drs.pwr, 0)
+    end
+    
+    if x.drs.idg_light ~= nil then
+        if get(x.drs.idg_fail_1) + get(x.drs.idg_fail_2) > 0 then
+            set(x.drs.idg_light, 10)
+        else
+            set(x.drs.idg_light, 0)
+        end
     end
     
 end

@@ -103,7 +103,7 @@ end
 
 local function update_battery_datarefs(bat)
     -- Check if there is sufficient voltage to power HOT bus
-    set(bat.drs.hotbus, bat.curr_voltage > BAT_LOW_VOLTAGE_LIMIT and 1 or 0)
+    set(bat.drs.hotbus, (bat.curr_voltage > BAT_LOW_VOLTAGE_LIMIT and get(bat.drs.failure) == 0) and 1 or 0)
     
     set(bat.drs.voltage, bat.curr_voltage)
     set(bat.drs.switch_light, bat.switch_status and 0 or 1)

@@ -100,7 +100,7 @@ local function update_static_inv()
         end
    end
    
-   if stat_inv.status then
+   if stat_inv.status and get(stat_inv.drs.failure)==0 then
         if time_start_stinv == 0 then
             time_start_stinv = get(TIME)
         elseif get(TIME) - time_start_stinv > WAIT_TIME_STINV then

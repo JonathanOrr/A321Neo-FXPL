@@ -57,3 +57,8 @@ FAILURE_ELEC_TR_ESS = createGlobalPropertyi("a321neo/failures/electrical/tr_ess"
 
 FAILURE_ELEC_GALLEY = createGlobalPropertyi("a321neo/failures/electrical/galley", 0, false, true, false) 
 
+FAILURE_ELEC_IDG1_temp = createGlobalPropertyi("a321neo/failures/electrical/idg1_temp", 0, false, true, false)
+FAILURE_ELEC_IDG1_oil  = createGlobalPropertyi("a321neo/failures/electrical/idg1_oil", 0, false, true, false)
+FAILURE_ELEC_IDG2_temp = createGlobalPropertyi("a321neo/failures/electrical/idg2_temp", 0, false, true, false)
+FAILURE_ELEC_IDG2_oil  = createGlobalPropertyi("a321neo/failures/electrical/idg2_oil", 0, false, true, false)
+
