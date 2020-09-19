@@ -43,6 +43,8 @@ local FD_roll_delta = 0
 local FD_activated = createGlobalPropertyi("a32nx/debug/fd_activated", 0, false, true, false)
 local target_hdg = createGlobalPropertyi("a32nx/debug/target_hdg", 180, false, true, false)
 local target_vs = createGlobalPropertyi("a32nx/debug/target_vs", 0, false, true, false)
+local Dataref_pitch_delta = createGlobalPropertyf("a32nx/debug/FD_pitch_delta", 0, false, true, false)
+local Dataref_roll_delta = createGlobalPropertyf("a32nx/debug/FD_roll_delta", 0, false, true, false)
 
 --mouse click
 function onMouseDown ( component , x , y , button , parentX , parentY )
@@ -97,6 +99,9 @@ function update()
 
     FD_pitch_delta = Math_clamp(FD_pitch - get(aircraft_pitch) , -30, 30)
     FD_roll_delta = Math_clamp(FD_roll - get(aircraft_roll), -30, 30)
+
+    set(Dataref_pitch_delta, FD_pitch_delta)
+    set(Dataref_roll_delta, FD_roll_delta)
 
     if get(FD_activated) == 1 then
         FD_button_color = RED
