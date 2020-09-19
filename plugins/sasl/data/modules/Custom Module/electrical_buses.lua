@@ -163,7 +163,7 @@ local function update_dc_ess()
         buses.dc_ess_powered_by = TR_ESS
     elseif get(TR_1_online) == 1 then
         buses.dc_ess_powered_by = TR_1
-    elseif get(HOT_bus_2_pwrd) and batteries[2].switch_status == true then
+    elseif get(HOT_bus_2_pwrd) and ELEC_sys.batteries[2].switch_status == true then
         buses.dc_ess_powered_by = BAT_2
     end
 end
@@ -177,6 +177,10 @@ local function update_dc_bat_bus()
         buses.dc_bat_bus_powered_by = TR_1
     elseif get(TR_2_online) == 1 then
         buses.dc_bat_bus_powered_by = TR_2
+    elseif ELEC_sys.batteries[1].is_connected_to_dc_bus then
+        buses.dc_bat_bus_powered_by = BAT_1     
+    elseif ELEC_sys.batteries[2].is_connected_to_dc_bus then
+        buses.dc_bat_bus_powered_by = BAT_2
     end
 end
 

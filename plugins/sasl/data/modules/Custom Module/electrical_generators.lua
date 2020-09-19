@@ -13,8 +13,6 @@ local GEN_RANGE_HZ_LOW  = 388        -- Normal conditions - LO freq value
 local GEN_RANGE_HZ_NOM  = 400        -- Normal conditions - Nominal freq value
 local GEN_RANGE_HZ_HIGH = 402        -- Normal conditions - HI freq value
 
-local GEN_ENGINE_RATED_CURR = 261    -- Maximum current provided by the engine gen (this is not enforced but used to compute the load %)
-local GEN_ENGINE_APU_CURR   = 261    -- Maximum current provided by the APU gen (this is not enforced but used to compute the load %)
 
 ----------------------------------------------------------------------------------------------------
 -- Commands
