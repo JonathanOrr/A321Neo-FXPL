@@ -143,7 +143,7 @@ P _door/3/_xyz/0 1.500000000
 P _door/3/_xyz/1 0.0
 P _door/3/_xyz/2 14.500000000
 P _door/3/_xyz/count 3
-P _door/4/_ang_now 30.159805298
+P _door/4/_ang_now 14.440330505
 P _door/4/_ext_ang 0.0
 P _door/4/_ret_ang 90.0
 P _door/4/_type 2
@@ -151,7 +151,7 @@ P _door/4/_xyz/0 -13.0
 P _door/4/_xyz/1 -3.599999905
 P _door/4/_xyz/2 73.500000000
 P _door/4/_xyz/count 3
-P _door/5/_ang_now -30.159805298
+P _door/5/_ang_now -14.440330505
 P _door/5/_ext_ang 0.0
 P _door/5/_ret_ang -90.0
 P _door/5/_type 2
@@ -209,10 +209,10 @@ P _gear/0/_latN 0.0
 P _gear/0/_latR 0.0
 P _gear/0/_leg_len 5.400000095
 P _gear/0/_lonE 0.0
-P _gear/0/_lonN 32.840675354
+P _gear/0/_lonN 15.723915100
 P _gear/0/_lonR 98.0
 P _gear/0/_scon 47252.898437500
-P _gear/0/_stat_def 0.399389625
+P _gear/0/_stat_def 0.399389744
 P _gear/0/_steerdeg_hispeed 5.0
 P _gear/0/_steerdeg_lospeed 75.0
 P _gear/0/_strut_comp 0.0
@@ -239,14 +239,14 @@ P _gear/1/_gear_x -12.010000229
 P _gear/1/_gear_y -2.799999952
 P _gear/1/_gear_z 69.800003052
 P _gear/1/_latE 0.0
-P _gear/1/_latN 26.808715820
+P _gear/1/_latN 12.835853577
 P _gear/1/_latR 80.0
 P _gear/1/_leg_len 8.199999809
 P _gear/1/_lonE -7.0
-P _gear/1/_lonN -4.654237270
+P _gear/1/_lonN -5.876863003
 P _gear/1/_lonR 0.0
 P _gear/1/_scon 71266.664062500
-P _gear/1/_stat_def 1.367629528
+P _gear/1/_stat_def 1.367629647
 P _gear/1/_steerdeg_hispeed 0.0
 P _gear/1/_steerdeg_lospeed 0.0
 P _gear/1/_strut_comp -0.500000000
@@ -273,14 +273,14 @@ P _gear/2/_gear_x 12.010000229
 P _gear/2/_gear_y -2.799999952
 P _gear/2/_gear_z 69.800003052
 P _gear/2/_latE 0.0
-P _gear/2/_latN -26.808715820
+P _gear/2/_latN -12.835853577
 P _gear/2/_latR -80.0
 P _gear/2/_leg_len 8.199999809
 P _gear/2/_lonE -7.0
-P _gear/2/_lonN -4.654237270
+P _gear/2/_lonN -5.876863003
 P _gear/2/_lonR 0.0
 P _gear/2/_scon 71266.664062500
-P _gear/2/_stat_def 1.367629528
+P _gear/2/_stat_def 1.367629647
 P _gear/2/_steerdeg_hispeed 0.0
 P _gear/2/_steerdeg_lospeed 0.0
 P _gear/2/_strut_comp -0.500000000
@@ -25891,7 +25891,7 @@ P _part/86/_part_specs_invis 0
 P _part/86/_part_tex 0
 P _part/86/_part_the 0.0
 P _part/86/_part_x -12.010000229
-P _part/86/_part_y -9.571249008
+P _part/86/_part_y -9.571248055
 P _part/86/_part_z 70.799331665
 P _part/86/_patt_con 0
 P _part/86/_patt_prt 0
@@ -27361,7 +27361,7 @@ P _part/87/_part_specs_invis 0
 P _part/87/_part_tex 0
 P _part/87/_part_the 0.0
 P _part/87/_part_x 12.010000229
-P _part/87/_part_y -9.571249008
+P _part/87/_part_y -9.571248055
 P _part/87/_part_z 70.799331665
 P _part/87/_patt_con 0
 P _part/87/_patt_prt 0
@@ -44717,6 +44717,35 @@ GROUP PFD
     CLICK_DX 0
     CLICK_DY 0
 
+  GROUP Flight Directors
+    LOCKED
+    gen_pointer Flight Director V
+      POS 1759.000000 724.000000
+      IMAGE MIP/pfd/fd/fdh
+      DATAREF a32nx/debug/FD_pitch_delta
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME -30.000000 -130.000000 1.000000
+      KEY_FRAME 30.000000 130.000000
+      IS_DRAGGABLE 0
+      IS_VERTICAL 1
+      OFFSET 0.000000
+
+    gen_pointer Flight Director G
+      POS 1759.000000 724.000000
+      IMAGE MIP/pfd/fd/fdv
+      DATAREF a32nx/debug/FD_roll_delta
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME -30.000000 -130.000000 1.000000
+      KEY_FRAME 30.000000 130.000000
+      IS_DRAGGABLE 0
+      IS_VERTICAL 0
+      OFFSET 0.000000
+
+  END_GROUP
 END_GROUP
 GROUP PFD Standby Covers
   LOCKED
@@ -44904,7 +44933,7 @@ GROUP LS
     gen_pointer Diamond
       POS 1759.000000 451.500000
       IMAGE MIP/pfd/Diamond
-      DATAREF sim/cockpit2/radios/indicators/hsi_vdef_dots_pilot
+      DATAREF sim/cockpit2/radios/indicators/hsi_hdef_dots_pilot
       SHOW_LESS 1.990000 sim/cockpit2/radios/indicators/hsi_vdef_dots_pilot
       SHOW_GREATER -1.990000 sim/cockpit2/radios/indicators/hsi_vdef_dots_pilot
       LOCKED
@@ -44919,7 +44948,7 @@ GROUP LS
     gen_pointer VDiamond
       POS 1992.500000 726.000000
       IMAGE MIP/pfd/VDiamond
-      DATAREF sim/cockpit2/radios/indicators/hsi_hdef_dots_pilot
+      DATAREF sim/cockpit2/radios/indicators/hsi_vdef_dots_pilot
       SHOW_LESS 1.990000 sim/cockpit2/radios/indicators/hsi_vdef_dots_pilot
       SHOW_GREATER -1.990000 sim/cockpit2/radios/indicators/hsi_vdef_dots_pilot
       LOCKED
@@ -44935,7 +44964,7 @@ GROUP LS
       POS 1579.000000 451.000000
       IMAGE MIP/pfd/Diamond Left
       DATAREF 
-      SHOW_LESS -1.990000 sim/cockpit2/radios/indicators/hsi_vdef_dots_pilot
+      SHOW_LESS -1.990000 sim/cockpit2/radios/indicators/hsi_hdef_dots_pilot
       LOCKED
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
@@ -44956,7 +44985,7 @@ GROUP LS
       POS 1940.000000 452.000000
       IMAGE MIP/pfd/Diamond Right
       DATAREF 
-      SHOW_GREATER 1.990000 sim/cockpit2/radios/indicators/hsi_vdef_dots_pilot
+      SHOW_GREATER 1.990000 sim/cockpit2/radios/indicators/hsi_hdef_dots_pilot
       LOCKED
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
@@ -45234,6 +45263,27 @@ GROUP Isis
     DECIMALS 1
     PERIOD_WIDTH 0
     LED_ROWS 0
+
+  gen_rotary neg
+    POS 2760.500000 1529.000000
+    IMAGE MIP/isis/neg
+    DATAREF 
+    SHOW_LESS 0.000000 sim/cockpit2/gauges/indicators/altitude_ft_pilot
+    SIZE 0.940000
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 0.000000 0.000000 1.000000
+    KEY_FRAME 1.000000 0.000000
+    DIGITS 1
+    ROTARY_TYPE ROTARY
+    CLICK_RADIUS 10.000000
+    CLICK_RADIUS_DY 0.000000
+    OFFSET 0.000000
+    STEP1 1.000000
+    STEP2 1.000000
+    CURSOR DEFAULT
+    CLICK_DX 0
+    CLICK_DY 0
 
   GROUP Rotation
     GROUP_ANIMATE_MODE ROTATE
@@ -48114,7 +48164,7 @@ GROUP hud vertical
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 55.000000 1.000000
-      KEY_FRAME 200.000000 -55.000000
+      KEY_FRAME 100.000000 -55.000000
       IS_DRAGGABLE 0
       IS_VERTICAL 1
       OFFSET 0.000000
@@ -48318,7 +48368,6 @@ GROUP hud vertical
     END_GROUP
     GROUP VS Translate 2
       LOCKED
-      GROUP_OPEN
       GROUP_ANIMATE_MODE TRANSLATE
       GROUP_WIDTH 0
       GROUP_HEIGHT 0
@@ -48407,7 +48456,6 @@ GROUP hud vertical
 
     GROUP Bird Group Translat
       LOCKED
-      GROUP_OPEN
       GROUP_ANIMATE_MODE TRANSLATE
       GROUP_WIDTH 0
       GROUP_HEIGHT 0
@@ -48589,6 +48637,70 @@ GROUP hud vertical
         END_GROUP
       END_GROUP
     END_GROUP
+    GROUP HUD LS
+      gen_rotary LSV
+        POS 3837.500000 2252.500000
+        IMAGE hud/LS/lsv
+        DATAREF 
+        LIGHT_MODE GLASS_AUTO
+        LIGHT_RHEOSTAT 0
+        KEY_FRAME 0.000000 0.000000 1.000000
+        KEY_FRAME 1.000000 6.000000
+        DIGITS 1
+        ROTARY_TYPE NO_CLICK
+        CLICK_RADIUS 10.000000
+        CLICK_RADIUS_DY 0.000000
+        OFFSET 0.000000
+        STEP1 1.000000
+        STEP2 1.000000
+        CURSOR DEFAULT
+        CLICK_DX 0
+        CLICK_DY 0
+
+      gen_rotary LSH
+        POS 3447.500000 1969.500000
+        IMAGE hud/LS/lsh
+        DATAREF 
+        LIGHT_MODE GLASS_AUTO
+        LIGHT_RHEOSTAT 0
+        KEY_FRAME 0.000000 0.000000 1.000000
+        KEY_FRAME 1.000000 6.000000
+        DIGITS 1
+        ROTARY_TYPE NO_CLICK
+        CLICK_RADIUS 10.000000
+        CLICK_RADIUS_DY 0.000000
+        OFFSET 0.000000
+        STEP1 1.000000
+        STEP2 1.000000
+        CURSOR DEFAULT
+        CLICK_DX 0
+        CLICK_DY 0
+
+      gen_pointer LSVDiamond
+        POS 3837.500000 2253.500000
+        IMAGE hud/LS/lsvdiamond
+        DATAREF sim/cockpit2/radios/indicators/hsi_vdef_dots_pilot
+        LIGHT_MODE GLASS_AUTO
+        LIGHT_RHEOSTAT 0
+        KEY_FRAME -2.000000 80.000000 1.000000
+        KEY_FRAME 2.000000 -80.000000
+        IS_DRAGGABLE 0
+        IS_VERTICAL 1
+        OFFSET 0.000000
+
+      gen_pointer LSHDiamond
+        POS 3447.500000 1969.500000
+        IMAGE hud/LS/lshdiamond
+        DATAREF sim/cockpit2/radios/indicators/hsi_hdef_dots_pilot
+        LIGHT_MODE GLASS_AUTO
+        LIGHT_RHEOSTAT 0
+        KEY_FRAME -2.000000 -80.000000 1.000000
+        KEY_FRAME 2.000000 80.000000
+        IS_DRAGGABLE 0
+        IS_VERTICAL 0
+        OFFSET 0.000000
+
+    END_GROUP
   END_GROUP
 END_GROUP
 GROUP Brake Indicator
@@ -48655,10 +48767,12 @@ GROUP Brake Indicator
 
 END_GROUP
 GROUP DCDU
+  LOCKED
   gen_rotary DCDU Screen
     POS 2223.500000 1780.500000
     IMAGE MIP/dcdu/screen
     DATAREF 
+    LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -48678,6 +48792,7 @@ GROUP DCDU
     POS 1856.500000 1831.500000
     IMAGE MIP/dcdu/brtdim
     DATAREF 
+    LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -48697,6 +48812,7 @@ GROUP DCDU
     POS 1941.000000 1628.000000
     IMAGE MIP/dcdu/straightline
     DATAREF 
+    LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -48716,6 +48832,7 @@ GROUP DCDU
     POS 1939.000000 1815.000000
     IMAGE MIP/dcdu/msgminus
     DATAREF 
+    LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -48735,6 +48852,7 @@ GROUP DCDU
     POS 1939.000000 1771.000000
     IMAGE MIP/dcdu/msgplus
     DATAREF 
+    LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -48754,6 +48872,7 @@ GROUP DCDU
     POS 1939.000000 1727.000000
     IMAGE MIP/dcdu/pageminus
     DATAREF 
+    LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -48773,6 +48892,7 @@ GROUP DCDU
     POS 1940.000000 1684.000000
     IMAGE MIP/dcdu/pageplus
     DATAREF 
+    LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -48792,6 +48912,7 @@ GROUP DCDU
     POS 1855.000000 1753.000000
     IMAGE MIP/dcdu/print
     DATAREF 
+    LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -48968,25 +49089,4 @@ GROUP Fire PB
     CLICK_DY 0
 
 END_GROUP
-gen_rotary neg
-  POS 2760.500000 1529.000000
-  IMAGE MIP/isis/neg
-  DATAREF 
-  SHOW_LESS 0.000000 sim/cockpit2/gauges/indicators/altitude_ft_pilot
-  SIZE 0.940000
-  LIGHT_MODE GLASS_AUTO
-  LIGHT_RHEOSTAT 0
-  KEY_FRAME 0.000000 0.000000 1.000000
-  KEY_FRAME 1.000000 0.000000
-  DIGITS 1
-  ROTARY_TYPE ROTARY
-  CLICK_RADIUS 10.000000
-  CLICK_RADIUS_DY 0.000000
-  OFFSET 0.000000
-  STEP1 1.000000
-  STEP2 1.000000
-  CURSOR DEFAULT
-  CLICK_DX 0
-  CLICK_DY 0
-
 PANEL_3D_END
