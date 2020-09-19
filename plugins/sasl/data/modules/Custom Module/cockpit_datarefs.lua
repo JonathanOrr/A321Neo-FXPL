@@ -146,6 +146,13 @@ Ecam_fctl_is_elevator_R_ok   = createGlobalPropertyi("a321neo/cockpit/ecam/fctl_
 Ecam_fctl_is_elevator_L_ok   = createGlobalPropertyi("a321neo/cockpit/ecam/fctl_is_elevator_L_ok", 0, false, true, false) -- 1 ok, 0 not working
 Ecam_fctl_is_pitch_trim_ok = createGlobalPropertyi("a321neo/cockpit/ecam/fctl_is_pitch_trim_ok", 0, false, true, false) -- 1 ok, 0 not working
 
+Ecam_elec_bat_1_status = createGlobalPropertyi("a321neo/cockpit/ecam/electrical/bat_1_status", 0, false, true, false) -- 1 on, 0 off
+Ecam_elec_bat_2_status = createGlobalPropertyi("a321neo/cockpit/ecam/electrical/bat_2_status", 0, false, true, false) -- 1 on, 0 off
+Ecam_elec_apu_gen_status = createGlobalPropertyi("a321neo/cockpit/ecam/electrical/apu_gen_status", 0, false, true, false) -- 0: apu off, 1: gen off, 2: online, 3:failed
+Ecam_elec_tr_ess_status = createGlobalPropertyi("a321neo/cockpit/ecam/electrical/tr_ess_status", 0, false, true, false) -- 0: TR off, 1: TR on, 2: TR failed
+Ecam_elec_rat_status = createGlobalPropertyi("a321neo/cockpit/ecam/electrical/emer_gen_status", 0, false, true, false) -- 0: RAT off, 1: RAT on, 2: RAT failed
+
+
 -- ECAM button lights
 Ecam_btn_light_ENG   = createGlobalPropertyi("a321neo/cockpit/ecam/buttons/light_eng", 0, false, true, false)   --0: OFF, 1: ON
 Ecam_btn_light_BLEED = createGlobalPropertyi("a321neo/cockpit/ecam/buttons/light_bleed", 0, false, true, false) --0: OFF, 1: ON

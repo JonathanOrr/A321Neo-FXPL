@@ -4,6 +4,7 @@ size = {900, 900}
 include('ECAM_status.lua')
 include('ECAM_automation.lua')
 include('ECAM_hyd.lua')
+include('ECAM_elec.lua')
 include('constants.lua')
 
 --local variables
@@ -397,7 +398,7 @@ function draw()
         sasl.gl.drawText(B612MONO_regular, size[1]/2+30, size[2]/2+180, math.floor(get(Cabin_vs)), 30, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
         sasl.gl.drawText(B612MONO_regular, size[1]/2+290, size[2]/2+150, math.floor(get(Cabin_alt_ft)), 30, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
     elseif get(Ecam_current_page) == 4 then --elec
-
+        draw_elec_page()
     elseif get(Ecam_current_page) == 5 then --hyd
         draw_hydraulic_page()
     elseif get(Ecam_current_page) == 6 then --fuel
