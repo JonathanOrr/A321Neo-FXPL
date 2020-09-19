@@ -137,6 +137,12 @@ PFD_Fo_VS = createGlobalPropertyf("a321neo/cockpit/PFD/fo_vs", 0, false, true, f
 Ecam_previous_page  = createGlobalPropertyi("a321neo/cockpit/ecam/previous", 13, false, true, false) --1ENG, 2BLEED, 3PRESS, 4ELEC, 5HYD, 6FUEL, 7APU, 8COND, 9DOOR, 10WHEEL, 11F/CTL, 12STS
 Ecam_current_page   = createGlobalPropertyi("a321neo/cockpit/ecam/page_num", 13, false, true, false) --1ENG, 2BLEED, 3PRESS, 4ELEC, 5HYD, 6FUEL, 7APU, 8COND, 9DOOR, 10WHEEL, 11F/CTL, 12STS
 
+Ecam_fctl_is_rudder_ok     = createGlobalPropertyi("a321neo/cockpit/ecam/fctl_is_rudder_ok", 0, false, true, false) -- 1 ok, 0 not working
+Ecam_fctl_is_aileron_ok    = createGlobalPropertyi("a321neo/cockpit/ecam/fctl_is_aileron_ok", 0, false, true, false) -- 1 ok, 0 not working
+Ecam_fctl_is_elevator_R_ok   = createGlobalPropertyi("a321neo/cockpit/ecam/fctl_is_elevator_R_ok", 0, false, true, false) -- 1 ok, 0 not working
+Ecam_fctl_is_elevator_L_ok   = createGlobalPropertyi("a321neo/cockpit/ecam/fctl_is_elevator_L_ok", 0, false, true, false) -- 1 ok, 0 not working
+Ecam_fctl_is_pitch_trim_ok = createGlobalPropertyi("a321neo/cockpit/ecam/fctl_is_pitch_trim_ok", 0, false, true, false) -- 1 ok, 0 not working
+
 -- ECAM button lights
 Ecam_btn_light_ENG   = createGlobalPropertyi("a321neo/cockpit/ecam/buttons/light_eng", 0, false, true, false)   --0: OFF, 1: ON
 Ecam_btn_light_BLEED = createGlobalPropertyi("a321neo/cockpit/ecam/buttons/light_bleed", 0, false, true, false) --0: OFF, 1: ON
@@ -154,6 +160,7 @@ Ecam_btn_light_STS   = createGlobalPropertyi("a321neo/cockpit/ecam/buttons/light
 
 --flight controls
 Elev_trim_degrees = createGlobalPropertyf("a321neo/cockpit/controls/elevator_trim_degrees", 0, false, true, false)
+
 
 --wheel
 Cockpit_parkbrake_ratio = globalProperty("sim/cockpit2/controls/parking_brake_ratio")

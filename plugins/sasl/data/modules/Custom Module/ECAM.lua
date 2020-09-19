@@ -471,6 +471,13 @@ function draw()
         sasl.gl.drawArc(size[1]/2 + 360, size[2]/2 - 110, 76, 80, 240, 60, right_tire_psi_color)
 
     elseif get(Ecam_current_page) == 11 then
+        set(Ecam_fctl_is_rudder_ok, (get(Hydraulic_G_press) >= 1450 or get(Hydraulic_Y_press) >= 1450 or get(Hydraulic_B_press) >= 1450) and 1 or 0) 
+        set(Ecam_fctl_is_aileron_ok, (get(Hydraulic_G_press) >= 1450 or get(Hydraulic_B_press) >= 1450) and 1 or 0) 
+        set(Ecam_fctl_is_elevator_R_ok, (get(Hydraulic_Y_press) >= 1450 or get(Hydraulic_B_press) >= 1450) and 1 or 0)
+        set(Ecam_fctl_is_elevator_L_ok, (get(Hydraulic_G_press) >= 1450 or get(Hydraulic_B_press) >= 1450) and 1 or 0) 
+        set(Ecam_fctl_is_pitch_trim_ok, (get(Hydraulic_G_press) >= 1450 or get(Hydraulic_Y_press) >= 1450 or get(Hydraulic_B_press) >= 1450) and 1 or 0) 
+        
+
         sasl.gl.drawText(B612MONO_regular, size[1]/2-25, size[2]/2-50, tostring(math.floor(math.abs(get(Elev_trim_degrees)))) .. "." ..  tostring(math.floor((math.abs(get(Elev_trim_degrees)) - math.floor(math.abs(get(Elev_trim_degrees)))) * 10)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
         if get(Elev_trim_degrees) >= 0 then
             sasl.gl.drawText(B612MONO_regular, size[1]/2+45, size[2]/2-50, "UP", 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
