@@ -116,8 +116,8 @@ function update()
         vvi_number_display = Round(math.abs(math.floor(get(vvi))), -3)/100
     end
     
-    set(PFD_Capt_Ground_line, Math_clamp(get(Capt_ra_alt_ft), 0, 570)/570)
-    set(PFD_Fo_Ground_line, Math_clamp(get(Fo_ra_alt_ft), 0, 570)/570)
+    set(PFD_Capt_Ground_line, Math_clamp( get(Capt_ra_alt_ft)/570 + get(Flightmodel_pitch)/18, 0, 1))
+    set(PFD_Fo_Ground_line, Math_clamp( get(Fo_ra_alt_ft)/570 + get(Flightmodel_pitch)/18, 0, 1))
     
 end
 
