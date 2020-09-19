@@ -49,3 +49,16 @@ FAILURE_ELEC_GEN_2     = createGlobalPropertyi("a321neo/failures/electrical/gen_
 FAILURE_ELEC_GEN_APU   = createGlobalPropertyi("a321neo/failures/electrical/gen_apu", 0, false, true, false) -- GEN APU failure
 FAILURE_ELEC_GEN_EMER  = createGlobalPropertyi("a321neo/failures/electrical/gen_emer", 0, false, true, false) -- GEN EMER failure
 FAILURE_ELEC_GEN_EXT   = createGlobalPropertyi("a321neo/failures/electrical/gen_ext", 0, false, true, false) -- GEN EXT failure
+
+FAILURE_ELEC_STATIC_INV= createGlobalPropertyi("a321neo/failures/electrical/static_inv", 0, false, true, false) -- STATIC INV failure
+FAILURE_ELEC_TR_1   = createGlobalPropertyi("a321neo/failures/electrical/tr_1", 0, false, true, false) -- TR 1
+FAILURE_ELEC_TR_2   = createGlobalPropertyi("a321neo/failures/electrical/tr_2", 0, false, true, false) -- TR 2
+FAILURE_ELEC_TR_ESS = createGlobalPropertyi("a321neo/failures/electrical/tr_ess", 0, false, true, false) -- TR ESS
+
+FAILURE_ELEC_GALLEY = createGlobalPropertyi("a321neo/failures/electrical/galley", 0, false, true, false) 
+
+FAILURE_ELEC_IDG1_temp = createGlobalPropertyi("a321neo/failures/electrical/idg1_temp", 0, false, true, false)
+FAILURE_ELEC_IDG1_oil  = createGlobalPropertyi("a321neo/failures/electrical/idg1_oil", 0, false, true, false)
+FAILURE_ELEC_IDG2_temp = createGlobalPropertyi("a321neo/failures/electrical/idg2_temp", 0, false, true, false)
+FAILURE_ELEC_IDG2_oil  = createGlobalPropertyi("a321neo/failures/electrical/idg2_oil", 0, false, true, false)
+

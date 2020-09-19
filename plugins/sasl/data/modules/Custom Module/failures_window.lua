@@ -56,9 +56,17 @@ local failures_data = {
             {name="BAT 2\nFAILURE", status=false, dataref=FAILURE_ELEC_battery_2 },
             {name="GEN 1\nFAILURE", status=false, dataref=FAILURE_ELEC_GEN_1 },
             {name="GEN 2\nFAILURE", status=false, dataref=FAILURE_ELEC_GEN_2 },
-            {name="APU GENERATOR\nFAILURE", status=false, dataref=FAILURE_ELEC_GEN_APU },
-            {name="RAT GENERATOR\nFAILURE", status=false, dataref=FAILURE_ELEC_GEN_EMER },
-            {name="EXT PWR\nFAILURE", status=false, dataref=FAILURE_ELEC_GEN_EXT }
+            {name="APU GEN\nFAILURE", status=false, dataref=FAILURE_ELEC_GEN_APU },
+            {name="RAT GEN\nFAILURE", status=false, dataref=FAILURE_ELEC_GEN_EMER },
+            {name="EXT PWR\nFAILURE", status=false, dataref=FAILURE_ELEC_GEN_EXT },
+            {name="STATIC INV.\nFAILURE", status=false, dataref=FAILURE_ELEC_STATIC_INV },
+            {name="TR 1\nFAILURE", status=false, dataref=FAILURE_ELEC_TR_1 },
+            {name="TR 2\nFAILURE", status=false, dataref=FAILURE_ELEC_TR_2 },
+            {name="TR ESS\nFAILURE", status=false, dataref=FAILURE_ELEC_TR_ESS },
+            {name="IDG 1\nOVERHEAT", status=false, dataref=FAILURE_ELEC_IDG1_temp },
+            {name="IDG 1\nLOW OIL", status=false, dataref=FAILURE_ELEC_IDG1_oil },
+            {name="IDG 2\nOVERHEAT", status=false, dataref=FAILURE_ELEC_IDG2_temp },
+            {name="IDG 2\nLOW OIL", status=false, dataref=FAILURE_ELEC_IDG2_oil },
         }
     },
     {

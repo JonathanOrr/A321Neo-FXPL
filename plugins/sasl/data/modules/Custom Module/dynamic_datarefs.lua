@@ -99,6 +99,7 @@ DC_bat_bus_pwrd = createGlobalPropertyi("a321neo/dynamics/electrical/bus/dc_bat_
 DC_bus_1_pwrd   = createGlobalPropertyi("a321neo/dynamics/electrical/bus/dc_1_powered", 0, false, true, false)
 DC_bus_2_pwrd   = createGlobalPropertyi("a321neo/dynamics/electrical/bus/dc_2_powered", 0, false, true, false)
 AC_ess_bus_pwrd = createGlobalPropertyi("a321neo/dynamics/electrical/bus/ac_ess_powered", 0, false, true, false)
+AC_ess_shed_pwrd= createGlobalPropertyi("a321neo/dynamics/electrical/bus/ac_ess_shed_powered", 0, false, true, false)
 AC_bus_1_pwrd   = createGlobalPropertyi("a321neo/dynamics/electrical/bus/ac_1_powered", 0, false, true, false)
 AC_bus_2_pwrd   = createGlobalPropertyi("a321neo/dynamics/electrical/bus/ac_2_powered", 0, false, true, false)
 
