@@ -44,8 +44,9 @@ buses = {
     dc_bat_bus_powered_by = 0,
     
     is_ac_ess_shed_on = 0,
-    is_dc_ess_shed_on = 0
+    is_dc_ess_shed_on = 0,
     
+    pwr_consumption = {}
 }
 
 ELEC_sys.buses = buses
@@ -203,6 +204,12 @@ local function update_shed()
                               or buses.ac_ess_powered_by == GEN_EMER
     buses.is_dc_ess_shed_on = buses.dc1_powered_by > 0 or buses.dc2_powered_by > 0 
                               or buses.dc_ess_powered_by == TR_ESS
+end
+
+function reset_pwr_consumption()
+    for i=1,13 do
+        buses.pwr_consumption[i] = 0
+    end
 end
 
 function update_buses()

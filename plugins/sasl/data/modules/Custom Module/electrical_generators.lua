@@ -1,3 +1,5 @@
+include('constants.lua')
+
 ----------------------------------------------------------------------------------------------------
 -- Constants
 ----------------------------------------------------------------------------------------------------
@@ -252,10 +254,28 @@ local function update_generator_datarefs(x)
     
 end
 
+local function update_generator_load(x)
+    x.curr_amps = 0
+
+    if ELEC_sys.buses.ac1_powered_by == x.id then
+        x.curr_amps = x.curr_amps-ELEC_sys.buses.pwr_consumption[ELEC_BUS_AC_1]
+    end
+    if ELEC_sys.buses.ac2_powered_by == x.id then
+        x.curr_amps = x.curr_amps-ELEC_sys.buses.pwr_consumption[ELEC_BUS_AC_2]
+    end
+    if ELEC_sys.buses.ac_ess_powered_by == x.id then
+        x.curr_amps = x.curr_amps-ELEC_sys.buses.pwr_consumption[ELEC_BUS_AC_ESS]
+        if ELEC_sys.buses.is_ac_ess_shed_on then
+            x.curr_amps = x.curr_amps-ELEC_sys.buses.pwr_consumption[ELEC_BUS_AC_ESS_SHED]            
+        end
+    end
+end
+
 function update_generators()
 
     for i,x in ipairs(generators) do
         update_generator_value(x)
+        update_generator_load(x)
     end
 
     for i,x in ipairs(generators) do
