@@ -273,6 +273,7 @@ OTA = globalProperty("sim/cockpit2/temperature/outside_air_temp_degc")
 TAT = globalProperty("sim/weather/temperature_le_c")
 Gross_weight = globalProperty ("sim/flightmodel/weight/m_total")
 Capt_ra_alt_ft = globalProperty("sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot")
+Fo_ra_alt_ft = globalProperty("sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_copilot")
 Capt_baro_alt_ft = globalProperty("sim/cockpit2/gauges/indicators/altitude_ft_pilot")
 IAS = globalProperty("sim/flightmodel/position/indicated_airspeed")
 
