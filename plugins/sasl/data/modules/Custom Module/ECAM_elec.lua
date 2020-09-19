@@ -48,18 +48,20 @@ local function draw_battery_contactor(i,x)
     x_end = x_start + 78
     y = size[2]/2+373
     
-    if ELEC_sys.batteries[i].curr_amps < -1 then
-        sasl.gl.drawWideLine(x_start, y, x_end, y, 3, ECAM_AMBER)
+    local curr_amps = ELEC_sys.batteries[i].curr_source_amps-ELEC_sys.batteries[i].curr_sink_amps
+    
+    if curr_amps < -1 then
+        sasl.gl.drawWideLine(x_start, y, x_end, y, 3, ECAM_ORANGE)
         if i == 1 then
-            sasl.gl.drawTriangle (x_end-15, y+10 , x_end-15, y-10, x_end+1, y, ECAM_AMBER)
+            sasl.gl.drawTriangle (x_end-15, y+10 , x_end-15, y-10, x_end+1, y, ECAM_ORANGE)
         else
-            sasl.gl.drawTriangle (x_start+15, y+10 , x_start+15, y-10, x_start-1, y, ECAM_AMBER)
+            sasl.gl.drawTriangle (x_start+15, y+10 , x_start+15, y-10, x_start-1, y, ECAM_ORANGE)
         end
     else
         sasl.gl.drawWideLine(x_start, y, x_end, y, 3, ECAM_GREEN)
     end
     
-    if ELEC_sys.batteries[i].curr_amps > 1 then
+    if curr_amps > 1 then
         if i == 1 then
             sasl.gl.drawTriangle (x_start+15, y+10 , x_start+15, y-10, x_start-1, y, ECAM_GREEN)
         else
@@ -69,9 +71,11 @@ local function draw_battery_contactor(i,x)
 end
 
 local function draw_battery(i, x)
+
+    local curr_amps = ELEC_sys.batteries[i].curr_sink_amps-ELEC_sys.batteries[i].curr_source_amps
     local failed_bat = (i == 1 and get(FAILURE_ELEC_battery_1) == 1) or (i == 2 and get(FAILURE_ELEC_battery_2) == 1)
     local bat_1_status = (ELEC_sys.batteries[i].curr_voltage < 25 or ELEC_sys.batteries[i].curr_voltage > 31 or
-                         ELEC_sys.batteries[i].curr_amps < -5 or failed_bat) and ELEC_sys.batteries[i].switch_status
+                         curr_amps < -5 or failed_bat) and ELEC_sys.batteries[i].switch_status
 
     sasl.gl.drawText(B612MONO_regular, x, size[2]/2+395, "BAT " .. i, 26, false, false, 
                      TEXT_ALIGN_LEFT, bat_1_status and ECAM_ORANGE or ECAM_WHITE)
@@ -86,9 +90,9 @@ local function draw_battery(i, x)
                          (ELEC_sys.batteries[i].curr_voltage < 25 or ELEC_sys.batteries[i].curr_voltage > 31)
                          and ECAM_ORANGE or ECAM_GREEN)
         sasl.gl.drawText(B612MONO_regular, x+60, size[2]/2+330,
-                         math.floor(-ELEC_sys.batteries[i].curr_amps+0.5), 26, false, false, 
+                         -math.floor(curr_amps+0.5), 26, false, false, 
                          TEXT_ALIGN_RIGHT,
-                         ELEC_sys.batteries[i].curr_amps < -5 and ECAM_ORANGE or ECAM_GREEN)
+                         curr_amps < -5 and ECAM_ORANGE or ECAM_GREEN)
         draw_battery_contactor(i,x)
     end
 

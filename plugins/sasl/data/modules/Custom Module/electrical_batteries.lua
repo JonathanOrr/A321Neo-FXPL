@@ -15,9 +15,11 @@ local BAT_CHARGING_CURRENT  = BAT_CAPACITY_AMPH / 5
 ----------------------------------------------------------------------------------------------------
 batteries = {
     {
+        id = 1,
         switch_status = false, 
         curr_voltage = 0,
-        curr_amps    = -BAT_LOSS_AMPS,                                          -- + Recharching - Discharging
+        curr_source_amps = 0,
+        curr_sink_amps = 0,
         curr_charge  = BAT_CAPACITY_AMPH-math.random(0,10)/10,       -- In Ah (start fully charged, with a bit of noise)
         is_charging  = false,
         is_connected_to_dc_bus = false,
@@ -29,9 +31,11 @@ batteries = {
         }
     },
     {
+        id = 2,
         switch_status = false, 
         curr_voltage = 0,
-        curr_amps    = -BAT_LOSS_AMPS,                                          -- + Recharching - Discharging
+        curr_source_amps = 0,
+        curr_sink_amps = 0,
         curr_charge  = BAT_CAPACITY_AMPH-math.random(0,10)/10,       -- In Ah (start fully charged, with a bit of noise)
         is_charging  = false,
         is_connected_to_dc_bus = false,
@@ -52,14 +56,8 @@ ELEC_sys.batteries = batteries
 
 local function update_battery_voltage(bat)
 
-    if bat.is_charging and bat.curr_amps < 0 then
-        bat.curr_amps = 0   -- This should not happen
-    end
-    if not bat.is_charging and bat.curr_amps > 0 then
-        bat.curr_amps = 0   -- This should not happen
-    end
-
-    bat.curr_charge = bat.curr_charge + bat.curr_amps * get(DELTA_TIME) / 3600
+    bat.curr_charge = bat.curr_charge + (bat.curr_sink_amps-bat.curr_source_amps) 
+                      * get(DELTA_TIME) / 3600
     
     -- Let's compute the voltage now    -- TODO Voltage is non-linear actually...
     bat.curr_voltage = math.max(0, BAT_TOP_VOLTAGE_LIMIT * (bat.curr_charge/BAT_CAPACITY_AMPH))
@@ -69,7 +67,6 @@ end
 local function update_battery_buses(bat)
 
     bat.is_connected_to_dc_bus = false
-    bat.is_charging  = false
 
     if not bat.switch_status or get(bat.drs.failure) == 1 then -- Battery switch is off or battery failed
         return
@@ -85,14 +82,20 @@ local function update_battery_buses(bat)
         and (bat.is_charging or bat.curr_voltage < BAT_CHARGE_TRIG_AT) -- Battery is already charging OR it reached the minimum voltage for charging
         and bat.curr_voltage < BAT_TOP_VOLTAGE_LIMIT then              -- Battery is not fully charged
 
+        bat.curr_sink_amps = BAT_CHARGING_CURRENT + bat.curr_source_amps
+
         if get(All_on_ground) == 1 then
             bat.is_connected_to_dc_bus = true
             bat.is_charging  = true
+            
         else
             -- TODO Start recharging after 30 minutes not immediately
             bat.is_connected_to_dc_bus = true
             bat.is_charging  = true
         end
+    else
+        bat.curr_sink_amps = 0
+        bat.is_charging  = false
     end
     
     if get(AC_bus_1_pwrd) == 0 and get(AC_bus_1_pwrd) == 0 and get(Gen_EMER_pwr) == 0 then
@@ -109,6 +112,19 @@ local function update_battery_datarefs(bat)
     set(bat.drs.switch_light, (bat.switch_status and 0 or 1) + get(bat.drs.failure)*10 )
 end
 
+local function update_battery_load(x)
+
+    if x.id == 1 then
+        x.curr_source_amps = BAT_LOSS_AMPS+ELEC_sys.buses.pwr_consumption[ELEC_BUS_HOT_BUS_1]
+    else
+        x.curr_source_amps = BAT_LOSS_AMPS+ELEC_sys.buses.pwr_consumption[ELEC_BUS_HOT_BUS_2]
+    end
+    
+    if x.is_connected_to_dc_bus and ELEC_sys.buses.dc_bat_bus_powered_by == (40 + x.id) then
+        x.curr_source_amps = ELEC_sys.buses.pwr_consumption[ELEC_BUS_DC_BAT_BUS]
+    end
+end
+
 function update_batteries()
 
     batteries[1].switch_status = get(XP_Battery_1) == 1
@@ -117,10 +133,15 @@ function update_batteries()
     update_battery_voltage(batteries[1])
     update_battery_voltage(batteries[2])
 
+    update_battery_load(batteries[1])
+    update_battery_load(batteries[2])
+
     update_battery_buses(batteries[1])
     update_battery_buses(batteries[2])
 
     update_battery_datarefs(batteries[1])
     update_battery_datarefs(batteries[2])
+    
+
 end
 
