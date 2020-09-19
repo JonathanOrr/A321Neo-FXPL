@@ -1,3 +1,4 @@
+include('constants.lua')
 ----------------------------------------------------------------------------------------------------
 -- Hydraulics Logic file
 
@@ -47,7 +48,7 @@ sasl.registerCommandHandler (HYD_cmd_Eng2Pump,     0, function(phase) hyd_toggle
 sasl.registerCommandHandler (HYD_cmd_B_ElecPump,   0, function(phase) hyd_toggle_button(phase, 3) end )
 sasl.registerCommandHandler (HYD_cmd_Y_ElecPump,   0, function(phase) hyd_toggle_button(phase, 4) end )
 sasl.registerCommandHandler (HYD_cmd_PTU,          0, function(phase) hyd_toggle_button(phase, 5) end )
-sasl.registerCommandHandler (HYD_cmd_RAT_man_on,   0, function(phase) if phase == SASL_COMMAND_BEGIN then set(is_RAT_out, 1) end end )
+sasl.registerCommandHandler (HYD_cmd_RAT_man_on,   0, function(phase) if phase == SASL_COMMAND_BEGIN and get(HOT_bus_2_pwrd) == 1 then set(is_RAT_out, 1) end end )
 
 
 
@@ -122,7 +123,7 @@ function HydSystem:update_press()
         -- Ok engine pump is ON, this is the best, no matter about the others pumps
         self.press_target = math.random(PSI_AVG_ENGINE_PUMP - PSI_VAR_EE_PUMP, PSI_AVG_ENGINE_PUMP + PSI_VAR_EE_PUMP)           
     elseif self.is_elec_pump_on then
-        self.press_target = math.random(PSI_AVG_ELEC_PUMP - PSI_VAR_EE_PUMP, PSI_AVG_ELEC_PUMP + PSI_VAR_EE_PUMP)            
+        self.press_target = math.random(PSI_AVG_ELEC_PUMP - PSI_VAR_EE_PUMP, PSI_AVG_ELEC_PUMP + PSI_VAR_EE_PUMP)
     elseif self.is_ptu_on then
         -- PTU should oscillate, not just random. So, let's take a random variation number from 10 to 200
         local variation = math.random(50, 400)
@@ -162,6 +163,20 @@ function HydSystem:update_press()
         self.press_target = 0
     end
 
+end
+
+function HydSystem:update_elec()
+    -- Source for pwr consumption: https://www.eaton.com/ecm/idcplg?IdcService=GET_FILE&allowInterrupt=1&RevisionSelectionMethod=LatestReleased&noSaveAs=0&Rendition=Primary&dDocName=CT_194574
+    if (not self.is_engine_pump_on) and self.is_elec_pump_on then
+        if self.id == Y then
+            ELEC_sys.add_power_consumption(ELEC_BUS_AC_2, 40, 45)
+        elseif  self.id == B then
+            ELEC_sys.add_power_consumption(ELEC_BUS_AC_1, 40, 45)
+        end
+    end
+    if self.is_ptu_on then
+        ELEC_sys.add_power_consumption(ELEC_BUS_DC_2, 0, 1) -- The PTU power consumption is almost null
+    end
 end
 
 function HydSystem:update_curr_press()
@@ -243,11 +258,11 @@ local function update_sys_status()
     -- TODO Electrical
     g_sys.is_engine_pump_on = status_buttons.eng1pump and get(Engine_1_avail) == 1 and get(FAILURE_HYD_G_pump) == 0 and get(Hydraulic_G_qty) > 0
     y_sys.is_engine_pump_on = status_buttons.eng2pump and get(Engine_2_avail) == 1 and get(FAILURE_HYD_Y_pump) == 0 and get(Hydraulic_Y_qty) > 0
-    b_sys.is_elec_pump_on = status_buttons.elecBpump and (get(Engine_1_avail) == 1 or  get(Engine_2_avail) == 1) and get(FAILURE_HYD_B_pump) == 0 and get(Hydraulic_B_qty) > 0
-    y_sys.is_elec_pump_on = status_buttons.elecYpump and get(FAILURE_HYD_Y_E_pump) == 0 and get(Hydraulic_Y_qty) > 0
+    b_sys.is_elec_pump_on = status_buttons.elecBpump and (get(Engine_1_avail) == 1 or  get(Engine_2_avail) == 1) and get(FAILURE_HYD_B_pump) == 0 and get(Hydraulic_B_qty) > 0 and get(AC_bus_1_pwrd) == 1
+    y_sys.is_elec_pump_on = status_buttons.elecYpump and get(FAILURE_HYD_Y_E_pump) == 0 and get(Hydraulic_Y_qty) > 0 and get(AC_bus_2_pwrd) == 1
 
 
-    if is_ptu_enabled() and get(FAILURE_HYD_PTU) == 0 then
+    if is_ptu_enabled() and get(FAILURE_HYD_PTU) == 0 and get(DC_bus_2_pwrd) == 1 then
         if y_sys.press_curr - g_sys.press_curr > 500 or (g_sys.is_ptu_on and y_sys.press_curr - g_sys.press_curr > 150) then
             g_sys.is_ptu_on = true  and get(Hydraulic_G_qty) > 0 -- Y is feeding the G system
             y_sys.is_ptu_on = false
@@ -263,7 +278,7 @@ local function update_sys_status()
         y_sys.is_ptu_on = false    
     end
 
-    if status_buttons.PTU and get(FAILURE_HYD_PTU) == 0 then
+    if status_buttons.PTU and get(FAILURE_HYD_PTU) == 0 and get(DC_bus_2_pwrd) == 1 then
         if y_sys.is_ptu_on then
             set(Hydraulic_PTU_status, 3)    
         elseif g_sys.is_ptu_on then
@@ -339,6 +354,9 @@ function update()
         update_datarefs()
     end
 
+    -- Update power consumption
+    b_sys:update_elec()
+    y_sys:update_elec()
 
 end
 

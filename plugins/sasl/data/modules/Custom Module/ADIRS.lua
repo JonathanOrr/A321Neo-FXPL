@@ -1,3 +1,4 @@
+include('constants.lua')
 ----------------------------------------------------------------------------------------------------
 -- Constants
 ----------------------------------------------------------------------------------------------------
@@ -147,6 +148,58 @@ local function get_time_to_align()
     end
 end
 
+local function update_adr_elec_pwr(i)
+-- 35 W ADR https://aerospace.honeywell.com/content/dam/aero/en-us/documents/learn/products/sensors/brochures/C61-0308-000-001-AirDataComputer-bro.pdf?download=true
+
+    if i == 1 then
+        if get(AC_ess_bus_pwrd) == 1 and get(TIME) - get(Adirs_irs_begin_time[i]) >= TIME_TO_ONBAT then
+            ELEC_sys.add_power_consumption(ELEC_BUS_AC_ESS, 0.28, 0.30)
+        elseif get(HOT_bus_2_pwrd) == 1 then
+            ELEC_sys.add_power_consumption(ELEC_BUS_HOT_BUS_2, 1.2, 1.25)        
+        end
+    elseif i == 2 then
+        if get(AC_bus_2_pwrd) == 1 and get(TIME) - get(Adirs_irs_begin_time[i]) >= TIME_TO_ONBAT then
+            ELEC_sys.add_power_consumption(ELEC_BUS_AC_2, 0.28, 0.30)
+        elseif get(HOT_bus_2_pwrd) == 1 then
+            ELEC_sys.add_power_consumption(ELEC_BUS_HOT_BUS_2, 1.2, 1.25)        
+        end
+    else
+        if get(AC_bus_1_pwrd) == 1 and get(TIME) - get(Adirs_irs_begin_time[i]) >= TIME_TO_ONBAT then
+            ELEC_sys.add_power_consumption(ELEC_BUS_AC_1, 0.28, 0.30)
+        elseif get(HOT_bus_1_pwrd) == 1 then
+            ELEC_sys.add_power_consumption(ELEC_BUS_HOT_BUS_1, 1.2, 1.25)        
+        end
+    end
+end
+
+local function update_irs_elec_pwr(i)
+    -- 39 W https://aerospace.honeywell.com/content/dam/aero/en-us/documents/learn/products/navigation-and-radios/brochures/C61-0668-000-000-ADIRS-For-Airbus-May-2007-bro.pdf?download=true
+
+    if i == 1 then
+        if get(AC_ess_bus_pwrd) == 1 and get(TIME) - get(Adirs_irs_begin_time[i]) >= TIME_TO_ONBAT then
+            ELEC_sys.add_power_consumption(ELEC_BUS_AC_ESS, 0.3, 0.33)
+        elseif get(HOT_bus_2_pwrd) == 1 then
+            set(ADIRS_light_onbat, 1)
+            ELEC_sys.add_power_consumption(ELEC_BUS_HOT_BUS_2, 1.2, 1.39)        
+        end
+    elseif i == 2 then
+        if get(AC_bus_2_pwrd) == 1 and get(TIME) - get(Adirs_irs_begin_time[i]) >= TIME_TO_ONBAT then
+            ELEC_sys.add_power_consumption(ELEC_BUS_AC_2, 0.3, 0.33)
+        elseif get(HOT_bus_2_pwrd) == 1 then
+            set(ADIRS_light_onbat, 1)
+            ELEC_sys.add_power_consumption(ELEC_BUS_HOT_BUS_2, 1.2, 1.39)        
+        end
+    else
+        if get(AC_bus_1_pwrd) == 1 and get(TIME) - get(Adirs_irs_begin_time[i]) >= TIME_TO_ONBAT then
+            ELEC_sys.add_power_consumption(ELEC_BUS_AC_1, 0.3, 0.33)
+        elseif get(HOT_bus_1_pwrd) == 1 then
+            set(ADIRS_light_onbat, 1)
+            ELEC_sys.add_power_consumption(ELEC_BUS_HOT_BUS_1, 1.2, 1.39)        
+        end
+    end
+end
+
+
 local function update_status_adrs(i)
 
     set(Adirs_adr_is_ok[i], 0)
@@ -156,6 +209,9 @@ local function update_status_adrs(i)
     
         if get(ADIRS_rotary_btn[i]) > 0 then
             -- Corresponding ADRIS rotary button is NAV or ATT (doesn't matter for ADRs)
+
+            -- Update elec power consumption
+            update_adr_elec_pwr(i)
 
             if get(FAILURE_ADR[i]) == 1 then
                 -- Failed ADR, just switch on the button
@@ -191,6 +247,8 @@ local function update_status_adrs(i)
     end    
 end
 
+
+
 local function update_status_irs(i)
 
     is_irs_att_mode[i] = false
@@ -203,6 +261,9 @@ local function update_status_irs(i)
         if get(ADIRS_rotary_btn[i]) > 0 then
             -- Corresponding ADRIS rotary button is NAV (full mode)
 
+            -- Update elec power consumption
+            update_irs_elec_pwr(i)
+            
             if get(FAILURE_IR[i]) > 0 then
                 -- Failed IRS, just switch on the button
                 set(ADIRS_light_IR[i], LIGHT_FAILED)
@@ -220,9 +281,6 @@ local function update_status_irs(i)
                     set(ADIRS_light_IR[i], LIGHT_NORM)
                 else
                     set(ADIRS_light_IR[i], LIGHT_FAILED)                
-                end
-                if get(TIME) - get(Adirs_irs_begin_time[i]) < TIME_TO_ONBAT then    -- TODO ADD AC/DC SWITCH
-                    set(ADIRS_light_onbat, 1)
                 end
                 
             else
