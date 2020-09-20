@@ -4,7 +4,7 @@ AC or DC, but not both (some exceptions exist, like adirs). Most all the compone
 connected to buses and NOT directly to batteries/generators/etc. 
 
 ## List of buses
-Each of the following datarefs has only two state: 0 - OFF, 1 - Powered. They are affected by switches, faults, etc.
+Each of the following datarefs has only two possible states: 0 - OFF, 1 - Powered. They are affected by switches, faults, etc.
 
 | Bus name    | Type | Is powered?  (Dataref)                              | Note                                                                          |
 |-------------|------|-----------------------------------------------------|-------------------------------------------------------------------------------|
@@ -41,7 +41,7 @@ To each bus is also assigned a numerical id and a constant in `constants.lua` fi
 | Commercial  | ELEC_BUS_COMMERCIAL  | 13             |
 
 ## List of generators and other devices
-Each of the following datarefs has only two state: 0 - OFF, 1 - Powered. They are affected by switches, faults, etc. DO NOT use this datarefs for checking if a component (not belonging to elec system) is powered or not, use the previous datarefs!
+Each of the following datarefs has only two possible states: 0 - OFF, 1 - Powered. They are affected by switches, faults, etc. DO NOT use this datarefs for checking if a component (not belonging to elec system) is powered or not, use the previous bus datarefs!
 
 | Bus name | Type     | Is powered?  (Dataref)                           | Note                      |
 |----------|----------|--------------------------------------------------|---------------------------|
@@ -67,7 +67,7 @@ To add the power consumption use this global function:
 
   `ELEC_sys.add_power_consumption(bus, min_amps, max_amps)`
 
-where `bus` is one of the constant of the previous table on bus constants, and `min_amps`/`max_amps` are the minimum/maximum currents (elec logic will randomly select a value in this range. If you want it to be constnat, just use the same value for min and max).
+where `bus` is one of the constant of the previous table on bus constants, and `min_amps`/`max_amps` are the minimum/maximum currents (elec logic will randomly select a value in this range. If you want it to be constant, just use the same value for min and max).
 
 If you have the power consumption in watt, remember the power formula: `Current [A] = Power [Watt] / Voltage [V]`. So, pay attention if the bus is a DC bus (Voltage=28V) o AC bus (Voltage=115V) to compute the current. 
 
