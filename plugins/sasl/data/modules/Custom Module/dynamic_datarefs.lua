@@ -116,6 +116,9 @@ Gen_APU_pwr = createGlobalPropertyi("a321neo/dynamics/electrical/sources/gen_APU
 Gen_EXT_pwr = createGlobalPropertyi("a321neo/dynamics/electrical/sources/gen_EXT_pwr", 0, false, true, false)
 Gen_EMER_pwr = createGlobalPropertyi("a321neo/dynamics/electrical/sources/gen_EMER_pwr", 0, false, true, false)
 
+IDG_1_temp = createGlobalPropertyf("a321neo/dynamics/electrical/IDG_1_temp", 0, false, true, false)
+IDG_2_temp = createGlobalPropertyf("a321neo/dynamics/electrical/IDG_2_temp", 0, false, true, false)
+
 --ADIRS
 Adirs_adr_is_ok = {}
 Adirs_adr_is_ok[1] = createGlobalPropertyf("a321neo/cockpit/ADIRS/adr_1_is_ok", 0, false, true, false)  -- 0: not working (failed or off), 1: working

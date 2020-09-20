@@ -51,6 +51,7 @@ generators = {
             failure      = FAILURE_ELEC_GEN_1,
             switch_light = Elec_light_GEN1,
             idg_light    = Elec_light_IDG1,
+            idg_temp     = IDG_1_temp,
             idg_fail_1   = FAILURE_ELEC_IDG1_temp,
             idg_fail_2   = FAILURE_ELEC_IDG1_oil,
         }
@@ -68,6 +69,7 @@ generators = {
             failure      = FAILURE_ELEC_GEN_2,
             switch_light = Elec_light_GEN2,
             idg_light    = Elec_light_IDG2,
+            idg_temp     = IDG_2_temp,
             idg_fail_1   = FAILURE_ELEC_IDG2_temp,
             idg_fail_2   = FAILURE_ELEC_IDG2_oil,
         }
@@ -273,11 +275,29 @@ local function update_generator_load(x)
     end
 end
 
+local function update_idg(x)
+
+    if x.drs.idg_temp == nil then
+        return
+    end
+
+    local temperature = get(x.drs.idg_temp)
+    
+    if x.idg_status and ((x.id == 1 and get(Eng_1_N1) > 5) or (x.id == 2 and get(Eng_2_N1) > 5)) then
+        local target = 80 + 50 * (get(Eng_1_N1))/100 + (get(x.drs.idg_fail_1) == 0 and 0 or 100)
+        temperature = Set_anim_value(temperature, target, get(OTA), 300, 0.02)
+    else
+        temperature = Set_anim_value(temperature, get(OTA), get(OTA), 300, 0.05)        
+    end
+    set(x.drs.idg_temp, temperature)
+end
+
 function update_generators()
 
     for i,x in ipairs(generators) do
         update_generator_value(x)
         update_generator_load(x)
+        update_idg(x)
     end
 
     for i,x in ipairs(generators) do

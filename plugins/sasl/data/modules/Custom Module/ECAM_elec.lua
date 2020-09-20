@@ -404,6 +404,38 @@ local function draw_bat_dc_bus_lines()
     end
 end
 
+local function draw_idg_legends(i,x)
+
+    local IDG_color = (ELEC_sys.generators[i].idg_status or get(ELEC_sys.generators[i].drs.idg_fail_2) == 1 or
+    get(ELEC_sys.generators[i].drs.idg_fail_1) == 1) and ECAM_WHITE or ECAM_ORANGE
+    sasl.gl.drawText(B612MONO_regular, x, size[2]/2-260, "IDG" .. i, 26, false, false, TEXT_ALIGN_LEFT, IDG_color )
+
+
+    
+    if not ELEC_sys.generators[i].idg_status then
+        sasl.gl.drawText(B612MONO_regular, x, size[2]/2-300, "DISC", 26, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE )
+    elseif get(ELEC_sys.generators[i].drs.idg_fail_2) == 1 then
+        sasl.gl.drawText(B612MONO_regular, x, size[2]/2-300, "LO PR", 26, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
+    end
+
+    sasl.gl.drawText(B612MONO_regular, x+150-200*(i==2 and 1 or 0), 
+    size[2]/2-260, "°C", 26, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+
+    local temp_color = ECAM_GREEN
+    local temp_value = get(ELEC_sys.generators[i].drs.idg_temp)
+    if temp_value > 185 then
+        temp_color = ECAM_ORANGE
+    elseif temp_value > 147 then
+        if math.floor(get(TIME)%2) == 1 then
+            temp_color = ECAM_HIGH_GREEN
+        end
+    end
+    sasl.gl.drawText(B612MONO_regular, x+150-200*(i==2 and 1 or 0), 
+    size[2]/2-260, math.floor(temp_value), 26, false, false, TEXT_ALIGN_RIGHT, temp_color)
+
+
+end
+
 function draw_elec_page()
 
     update_draw_datarefs()
@@ -426,4 +458,8 @@ function draw_elec_page()
     draw_shed_legends()
     draw_ess_bus_lines()
     draw_bat_dc_bus_lines()
+    
+    draw_idg_legends(1,50)
+    draw_idg_legends(2,790)
+    
 end
