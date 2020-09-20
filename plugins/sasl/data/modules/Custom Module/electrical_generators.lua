@@ -132,11 +132,12 @@ function elec_gen_toggle(phase, id)
         return
     end
     
-    generators[id].switch_status = not generators[id].switch_status
-    
     if id == GEN_EMER then
         -- Extract the RAT
-        sasl.commandOnce(HYD_cmd_RAT_man_on)
+        sasl.commandOnce(HYD_cmd_RAT_man_on)        -- TODO Automatically extract the rat if power is loses
+        generators[id].switch_status = true
+    else
+        generators[id].switch_status = not generators[id].switch_status    
     end
     
 end
@@ -202,6 +203,9 @@ local function update_rat_gen(x)
     if x.switch_status and x.source_status and get(x.drs.failure) == 0 then
         x.curr_voltage = GEN_LOW_VOLTAGE_LIMIT + 12 * (get(Hydraulic_B_press) - 1400) / 1500
         x.curr_hz = GEN_LOW_HZ_LIMIT + 25 * (get(Hydraulic_B_press) - 1400) / 1500
+        if x.curr_hz > 405 then
+            x.curr_hz = 405
+        end
     else
         x.curr_voltage = 0
         x.curr_hz = 0
