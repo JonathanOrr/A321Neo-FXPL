@@ -150,15 +150,15 @@ DMC_debug_window = contextWindow {
 
 ELEC_debug_window = contextWindow {
   name = "ELEC DEBUG";
-  position = { 200 , 200 , 800 , 600};
+  position = { 200 , 200 , 1000 , 600};
   noBackground = true ;
   proportional = false ;
-  minimumSize = { 800 , 600 };
-  maximumSize = { 800 , 600 };
+  minimumSize = { 1000 , 600 };
+  maximumSize = { 1000 , 600 };
   gravity = { 0 , 1 , 0 , 1 };
   visible = false ;
   components = {
-    electrical_debug {position = { 0 , 0 , 800 , 600 }}
+    electrical_debug {position = { 0 , 0 , 1000 , 600 }}
   };
 }
 

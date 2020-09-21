@@ -27,18 +27,7 @@ function update()
     update_consumptions()
     
     -- Just for testing
-    ELEC_sys.add_power_consumption(ELEC_BUS_AC_1, 1, 1)
-    ELEC_sys.add_power_consumption(ELEC_BUS_AC_2, 1, 1)
-    ELEC_sys.add_power_consumption(ELEC_BUS_AC_ESS, 1, 1)
-    ELEC_sys.add_power_consumption(ELEC_BUS_AC_ESS_SHED, 1, 1)
-    ELEC_sys.add_power_consumption(ELEC_BUS_DC_1, 1, 1)
-    ELEC_sys.add_power_consumption(ELEC_BUS_DC_2, 1, 1)
-    ELEC_sys.add_power_consumption(ELEC_BUS_DC_ESS, 1, 1)
-    ELEC_sys.add_power_consumption(ELEC_BUS_DC_ESS_SHED, 1, 1)
-    ELEC_sys.add_power_consumption(ELEC_BUS_DC_BAT_BUS, 1, 1)
-    ELEC_sys.add_power_consumption(ELEC_BUS_HOT_BUS_1, 100, 100)
-    ELEC_sys.add_power_consumption(ELEC_BUS_HOT_BUS_2, 100, 100)
-    ELEC_sys.add_power_consumption(ELEC_BUS_GALLEY, 1, 1)
-    ELEC_sys.add_power_consumption(ELEC_BUS_COMMERCIAL, 1, 1)
+    -- ELEC_sys.add_power_consumption(ELEC_BUS_HOT_BUS_1, 10, 10)
+
     
 end

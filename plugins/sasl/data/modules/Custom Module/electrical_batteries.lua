@@ -120,8 +120,12 @@ local function update_battery_load(x)
         x.curr_source_amps = BAT_LOSS_AMPS+ELEC_sys.buses.pwr_consumption[ELEC_BUS_HOT_BUS_2]
     end
     
-    if x.is_connected_to_dc_bus and ELEC_sys.buses.dc_bat_bus_powered_by == (40 + x.id) then
-        x.curr_source_amps = ELEC_sys.buses.pwr_consumption[ELEC_BUS_DC_BAT_BUS]
+    if x.is_connected_to_dc_bus then
+        if ELEC_sys.buses.dc_bat_bus_powered_by == (40 + x.id) then
+            x.curr_source_amps = ELEC_sys.buses.pwr_consumption[ELEC_BUS_DC_BAT_BUS]
+        elseif ELEC_sys.buses.dc_bat_bus_powered_by >= 30 and ELEC_sys.buses.dc_bat_bus_powered_by < 40 then
+            ELEC_sys.add_power_consumption(ELEC_BUS_DC_BAT_BUS, x.curr_sink_amps, x.curr_sink_amps)
+        end
     end
 end
 

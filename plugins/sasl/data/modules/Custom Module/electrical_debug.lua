@@ -1,4 +1,4 @@
-size = {800, 600}
+size = {1000, 600}
 
 include('constants.lua')
 
@@ -28,6 +28,7 @@ bus_source_labels[99] = "BUS TIE"
 local B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
 
 local function print_value_dec(x, y, label, value)
+    if value == nil then value = 0 end
     sasl.gl.drawText(B612MONO_regular, x, y, label .. ": " .. round(value,2), 12, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
 end
 
@@ -162,36 +163,53 @@ function draw()
     print_bus_source(310, 395, size[2]-590, "DC 2 BUS: ", ELEC_sys.buses.dc2_powered_by)
     print_bus_source(450, 540, size[2]-570, "BAT BUS: ", ELEC_sys.buses.dc_bat_bus_powered_by)
 --    print_bus_source(200, 480, size[2]-570, "DC 1 BUS pwrd by: ", ELEC_sys.buses.dc_1_powered_by)
-   
 
+    sasl.gl.drawText(B612MONO_regular, 580, size[2]-70, "Bus currents", 15, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+   print_value_dec(580,  size[2]-90, "HOT BUS 1 (A)", ELEC_sys.buses.pwr_consumption[ELEC_BUS_HOT_BUS_1])
+   print_value_dec(580,  size[2]-110, "HOT BUS 2 (A)", ELEC_sys.buses.pwr_consumption[ELEC_BUS_HOT_BUS_2])
+   print_value_dec(580,  size[2]-130, "DC BUS 1 (A)", ELEC_sys.buses.pwr_consumption[ELEC_BUS_DC_1])
+   print_value_dec(580,  size[2]-150, "DC BUS 2 (A)", ELEC_sys.buses.pwr_consumption[ELEC_BUS_DC_2])
+   print_value_dec(580,  size[2]-170, "DC ESS (A)", ELEC_sys.buses.pwr_consumption[ELEC_BUS_DC_ESS])
+   print_value_dec(580,  size[2]-190, "DC SHED ESS (A)", ELEC_sys.buses.pwr_consumption[ELEC_BUS_DC_ESS_SHED])
+   print_value_dec(580,  size[2]-210, "BAT BUS (A)", ELEC_sys.buses.pwr_consumption[ELEC_BUS_DC_BAT_BUS])
+   print_value_dec(580,  size[2]-230, "AC BUS 1 (A)", ELEC_sys.buses.pwr_consumption[ELEC_BUS_AC_1])
+   print_value_dec(580,  size[2]-250, "AC BUS 2 (A)", ELEC_sys.buses.pwr_consumption[ELEC_BUS_AC_2])
+   print_value_dec(580,  size[2]-270, "AC ESS (A)", ELEC_sys.buses.pwr_consumption[ELEC_BUS_AC_ESS])
+   print_value_dec(580,  size[2]-290, "AC SHED ESS (A)", ELEC_sys.buses.pwr_consumption[ELEC_BUS_AC_ESS_SHED])
+   print_value_dec(580,  size[2]-310, "AC STAT INV (A)", ELEC_sys.buses.pwr_consumption[ELEC_BUS_STAT_INV])
+   print_value_dec(580,  size[2]-330, "COMMERCIAL (A)", ELEC_sys.buses.pwr_consumption[ELEC_BUS_COMMERCIAL])
+   print_value_dec(580,  size[2]-350, "GALLEY (A)", ELEC_sys.buses.pwr_consumption[ELEC_BUS_GALLEY])
+    sasl.gl.drawFrame(575, size[2]-360, 190, 310, ECAM_BLUE)
+    
     -- INV and TR
-    sasl.gl.drawText(B612MONO_regular, 580, size[2]-70, "Static Inverter", 15, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
-    print_bool(580,  size[2]-90, "Is active", ELEC_sys.stat_inv.status)
-    print_value_dec(580,  size[2]-110, "Voltage (V)", ELEC_sys.stat_inv.curr_voltage)
-    print_value_dec(580,  size[2]-130, "Frequency (Hz)", ELEC_sys.stat_inv.curr_hz)
-    print_value_dec(580,  size[2]-150, "Curr. OUT (A)", ELEC_sys.stat_inv.curr_out_amps)
-    print_value_dec(580,  size[2]-170, "Curr. IN (A)", ELEC_sys.stat_inv.curr_in_amps)
-    sasl.gl.drawFrame(575, size[2]-180, 190, 130, ECAM_ORANGE)
+    sasl.gl.drawText(B612MONO_regular, 800, size[2]-70, "Static Inverter", 15, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    print_bool(800,  size[2]-90, "Is active", ELEC_sys.stat_inv.status)
+    print_value_dec(800,  size[2]-110, "Voltage (V)", ELEC_sys.stat_inv.curr_voltage)
+    print_value_dec(800,  size[2]-130, "Frequency (Hz)", ELEC_sys.stat_inv.curr_hz)
+    print_value_dec(800,  size[2]-150, "Curr. OUT (A)", ELEC_sys.stat_inv.curr_out_amps)
+    print_value_dec(800,  size[2]-170, "Curr. IN (A)", ELEC_sys.stat_inv.curr_in_amps)
+    sasl.gl.drawFrame(795, size[2]-180, 190, 130, ECAM_ORANGE)
     
-    sasl.gl.drawText(B612MONO_regular, 580, size[2]-220, "TR 1", 15, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
-    print_bool(580,  size[2]-240, "Is active", ELEC_sys.trs[1].status)
-    print_value_dec(580,  size[2]-260, "Voltage (V)", ELEC_sys.trs[1].curr_voltage)
-    print_value_dec(580,  size[2]-280, "Curr. OUT (A)", ELEC_sys.trs[1].curr_out_amps)
-    print_value_dec(580,  size[2]-300, "Curr. IN (A)", ELEC_sys.trs[1].curr_in_amps)
-    sasl.gl.drawFrame(575, size[2]-310, 150, 110, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, 800, size[2]-220, "TR 1", 15, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    print_bool(800,  size[2]-240, "Is active", ELEC_sys.trs[1].status)
+    print_value_dec(800,  size[2]-260, "Voltage (V)", ELEC_sys.trs[1].curr_voltage)
+    print_value_dec(800,  size[2]-280, "Curr. OUT (A)", ELEC_sys.trs[1].curr_out_amps)
+    print_value_dec(800,  size[2]-300, "Curr. IN (A)", ELEC_sys.trs[1].curr_in_amps)
+    sasl.gl.drawFrame(795, size[2]-310, 190, 110, ECAM_WHITE)
 
-    sasl.gl.drawText(B612MONO_regular, 580, size[2]-330, "TR 2", 15, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
-    print_bool(580,  size[2]-350, "Is active", ELEC_sys.trs[2].status)
-    print_value_dec(580,  size[2]-370, "Voltage (V)", ELEC_sys.trs[2].curr_voltage)
-    print_value_dec(580,  size[2]-390, "Curr. OUT (A)", ELEC_sys.trs[2].curr_out_amps)
-    print_value_dec(580,  size[2]-410, "Curr. IN (A)", ELEC_sys.trs[2].curr_in_amps)
-    sasl.gl.drawFrame(575, size[2]-420, 150, 110, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, 800, size[2]-330, "TR 2", 15, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    print_bool(800,  size[2]-350, "Is active", ELEC_sys.trs[2].status)
+    print_value_dec(800,  size[2]-370, "Voltage (V)", ELEC_sys.trs[2].curr_voltage)
+    print_value_dec(800,  size[2]-390, "Curr. OUT (A)", ELEC_sys.trs[2].curr_out_amps)
+    print_value_dec(800,  size[2]-410, "Curr. IN (A)", ELEC_sys.trs[2].curr_in_amps)
+    sasl.gl.drawFrame(795, size[2]-420, 190, 110, ECAM_WHITE)
     
-    sasl.gl.drawText(B612MONO_regular, 580, size[2]-440, "TR ESS", 15, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
-    print_bool(580,  size[2]-460, "Is active", ELEC_sys.trs[3].status)
-    print_value_dec(580,  size[2]-480, "Voltage (V)", ELEC_sys.trs[3].curr_voltage)
-    print_value_dec(580,  size[2]-500, "Curr. OUT (A)", ELEC_sys.trs[3].curr_out_amps)
-    print_value_dec(580,  size[2]-520, "Curr. IN (A)", ELEC_sys.trs[3].curr_in_amps)
-    sasl.gl.drawFrame(575, size[2]-530, 150, 110, ECAM_ORANGE)
+    sasl.gl.drawText(B612MONO_regular, 800, size[2]-440, "TR ESS", 15, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    print_bool(800,  size[2]-460, "Is active", ELEC_sys.trs[3].status)
+    print_value_dec(800,  size[2]-480, "Voltage (V)", ELEC_sys.trs[3].curr_voltage)
+    print_value_dec(800,  size[2]-500, "Curr. OUT (A)", ELEC_sys.trs[3].curr_out_amps)
+    print_value_dec(800,  size[2]-520, "Curr. IN (A)", ELEC_sys.trs[3].curr_in_amps)
+    sasl.gl.drawFrame(795, size[2]-530, 190, 110, ECAM_ORANGE)
+    
     
 end

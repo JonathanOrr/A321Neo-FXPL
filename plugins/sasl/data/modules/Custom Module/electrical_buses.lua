@@ -249,7 +249,7 @@ local function update_stat_inv()
 end
 
 function reset_pwr_consumption()
-    for i=1,13 do
+    for i=1,14 do
         buses.pwr_consumption[i] = 0
     end
 end

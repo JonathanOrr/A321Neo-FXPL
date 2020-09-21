@@ -140,7 +140,7 @@ local function draw_tr(i, x)
                      (ELEC_sys.trs[i].curr_voltage < 25 or ELEC_sys.trs[i].curr_voltage > 31)
                      and ECAM_ORANGE or ECAM_GREEN)
     sasl.gl.drawText(B612MONO_regular, x+60, size[2]/2+100,
-                     math.floor(-ELEC_sys.trs[i].curr_out_amps+0.5), 28, false, false, 
+                     math.floor(ELEC_sys.trs[i].curr_out_amps+0.5), 28, false, false, 
                      TEXT_ALIGN_RIGHT,
                      ELEC_sys.trs[i].curr_out_amps <= 5 and ECAM_ORANGE or ECAM_GREEN)
     

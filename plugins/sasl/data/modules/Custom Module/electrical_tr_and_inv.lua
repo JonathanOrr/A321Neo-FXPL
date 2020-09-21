@@ -13,6 +13,8 @@ local DC_VOLTAGE_NOM  = 28    -- Normal conditions - Nominal volt value
 
 local WAIT_TIME_STINV = 0.2   -- Wait time for static inverter to start (ms)
 
+local POWER_LOSS = 0.02 -- The TR is not perfect, it will loose some power...
+
 ----------------------------------------------------------------------------------------------------
 -- Global/Local variables
 ----------------------------------------------------------------------------------------------------
@@ -164,12 +166,51 @@ local function update_datarefs()
     
 end
 
+local function update_tr_load(tr)
+
+    tr.curr_out_amps = 0
+    tr.curr_in_amps = 0
+
+    if not tr.status then
+        return
+    end
+
+    if ELEC_sys.buses.dc1_powered_by == 30+tr.id or ELEC_sys.buses.dc1_powered_by == 99 then
+        tr.curr_out_amps = tr.curr_out_amps + ELEC_sys.buses.pwr_consumption[ELEC_BUS_DC_1]
+    end
+    if ELEC_sys.buses.dc2_powered_by == 30+tr.id or ELEC_sys.buses.dc2_powered_by == 99 then
+        tr.curr_out_amps = tr.curr_out_amps + ELEC_sys.buses.pwr_consumption[ELEC_BUS_DC_2]
+    end
+    if ELEC_sys.buses.dc1_powered_by == 30+tr.id then
+        tr.curr_out_amps = tr.curr_out_amps + ELEC_sys.buses.pwr_consumption[ELEC_BUS_DC_ESS]
+        if get(DC_shed_ess_pwrd) == 1 then
+            tr.curr_out_amps = tr.curr_out_amps + ELEC_sys.buses.pwr_consumption[ELEC_BUS_DC_ESS_SHED]
+        end
+    end
+    
+    if ELEC_sys.buses.dc_bat_bus_powered_by == 30+tr.id then
+        tr.curr_out_amps = tr.curr_out_amps + ELEC_sys.buses.pwr_consumption[ELEC_BUS_DC_BAT_BUS]
+    end
+
+    -- Now let's convert the output amps in input amps
+    tr.curr_in_amps = tr.curr_out_amps * tr.curr_voltage / AC_VOLTAGE_NOM
+    tr.curr_in_amps = tr.curr_in_amps * (1+POWER_LOSS)
+end
+
 function update_trs_and_inv()
 
     update_tr(trs[1])
     update_tr(trs[2])
     update_tr(trs[3])
     update_static_inv()
+
+    update_tr_load(trs[1])
+    update_tr_load(trs[2])
+    update_tr_load(trs[3])
+
+    ELEC_sys.add_power_consumption(ELEC_BUS_AC_1, trs[1].curr_in_amps, trs[1].curr_in_amps)   
+    ELEC_sys.add_power_consumption(ELEC_BUS_AC_2, trs[2].curr_in_amps, trs[2].curr_in_amps)   
+    ELEC_sys.add_power_consumption(ELEC_BUS_AC_ESS, trs[3].curr_in_amps, trs[3].curr_in_amps)   
     
     update_datarefs()
 end
