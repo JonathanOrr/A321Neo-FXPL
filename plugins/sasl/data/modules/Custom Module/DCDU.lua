@@ -23,6 +23,7 @@ position= {1990,1866,463,325}
 size = {463, 325}
 
 include('DCDU_handlers.lua')    -- DCDU handlers contains the button handlers
+include('constants.lua')
 
 local B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
 
@@ -576,6 +577,11 @@ end
 
 -- The draw fuction. No logic here, just graphic
 function draw()
+
+    if get(AC_bus_1_pwrd) == 0 then
+        return -- Bus is not powered on, this component cannot work
+    end
+    ELEC_sys.add_power_consumption(ELEC_BUS_AC_1, 0.26, 0.26)   -- 30W (just hypothesis)
 
     sasl.gl.drawText (B612MONO_regular, 10, 20, display_btm_left[3].text, 20, false, false, TEXT_ALIGN_LEFT, display_btm_left[3].color )
     sasl.gl.drawText (B612MONO_regular, 10, 50, display_btm_left[2].text, 20, false, false, TEXT_ALIGN_LEFT, display_btm_left[2].color )
