@@ -22,6 +22,8 @@ local BAT_2 = 42
 local CROSS_TIEBAT_BUS = 98
 local GEN_FAKE_BUS_TIE = 99
 
+local BUS_SWITCH_DELAY = 0.2
+
 ----------------------------------------------------------------------------------------------------
 -- Commands
 ----------------------------------------------------------------------------------------------------
@@ -69,8 +71,31 @@ function elec_bus_acc_ess_toggle(phase)
     ac_ess_bus_pushbutton_status = not ac_ess_bus_pushbutton_status
 end
 
+
+local switch_time = {}
+
+local function delay_output_bus(output, prev_output_val, bus, max_time)
+
+    if prev_output_val == output then
+        return output
+    end
+
+    if output ~= 0 then
+        if switch_time[bus] == nil then
+            switch_time[bus] = get(TIME)
+        elseif get(TIME) - switch_time[bus] > max_time then
+            switch_time[bus] = nil
+            return output
+        end
+    end
+    return 0
+end 
+
+
+
 local function update_ac_1()
 
+    local prev_by = buses.ac1_powered_by
     buses.ac1_powered_by  = 0
 
     -- The order of this if-elseif matches the real source priority! Do not change it!
@@ -85,11 +110,15 @@ local function update_ac_1()
         buses.ac1_powered_by = GEN_FAKE_BUS_TIE
     end
 
+    buses.ac1_powered_by = delay_output_bus(buses.ac1_powered_by, prev_by, ELEC_BUS_AC_1, BUS_SWITCH_DELAY)
+
 end
+
 
 
 local function update_ac_2()
 
+    local prev_by = buses.ac2_powered_by
     buses.ac2_powered_by  = 0
 
     -- The order of this if-elseif matches the real source priority! Do not change it!
@@ -104,11 +133,12 @@ local function update_ac_2()
         buses.ac2_powered_by = GEN_FAKE_BUS_TIE
     end
 
-
-
+    buses.ac2_powered_by = delay_output_bus(buses.ac2_powered_by, prev_by, ELEC_BUS_AC_2, BUS_SWITCH_DELAY)
 end
 
 local function update_ac_ess()
+
+    local prev_by = buses.ac_ess_powered_by
 
     if ac_ess_bus_pushbutton_status then
         buses.ac_ess_powered_by = buses.ac2_powered_by ~= 0 and AC_BUS_2 or 0
@@ -123,6 +153,8 @@ local function update_ac_ess()
             buses.ac_ess_powered_by = STATIC_INVERTER
         end
     end
+    
+    buses.ac_ess_powered_by = delay_output_bus(buses.ac_ess_powered_by, prev_by, ELEC_BUS_AC_ESS, BUS_SWITCH_DELAY)
     
 end
 
