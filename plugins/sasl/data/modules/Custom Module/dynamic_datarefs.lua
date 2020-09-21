@@ -102,6 +102,8 @@ AC_ess_bus_pwrd = createGlobalPropertyi("a321neo/dynamics/electrical/bus/ac_ess_
 AC_ess_shed_pwrd= createGlobalPropertyi("a321neo/dynamics/electrical/bus/ac_ess_shed_powered", 0, false, true, false)
 AC_bus_1_pwrd   = createGlobalPropertyi("a321neo/dynamics/electrical/bus/ac_1_powered", 0, false, true, false)
 AC_bus_2_pwrd   = createGlobalPropertyi("a321neo/dynamics/electrical/bus/ac_2_powered", 0, false, true, false)
+AC_STAT_INV_pwrd= createGlobalPropertyi("a321neo/dynamics/electrical/bus/ac_stat_inv", 0, false, true, false) -- This is powered on ground when stat. inverter is active
+
 
 --- TRS/INV (0: not working, 1: working) - influenced by switches, faults, etc.
 TR_ESS_online = createGlobalPropertyi("a321neo/dynamics/electrical/trs/tr_ess_online", 0, false, true, false)

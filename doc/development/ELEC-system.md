@@ -19,6 +19,7 @@ Each of the following datarefs has only two possible states: 0 - OFF, 1 - Powere
 | AC 2        | AC   | a321neo/dynamics/electrical/bus/ac_2_powered        |                                                                               |
 | AC ESS      | AC   | a321neo/dynamics/electrical/bus/ac_ess_powered      |                                                                               |
 | AC ESS SHED | AC   | a321neo/dynamics/electrical/bus/ac_ess_shed_powered | Part of the AC ESS bus that can be powered off under some failure conditions. |
+| AC STAT INV | AC   | a321neo/dynamics/electrical/bus/ac_stat_inv         | This is powered when static inverter is on.                                   |
 | Galley      | AC   | a321neo/dynamics/electrical/bus/galley_powered      | Main and secondary galley, in-seat power supply.                              |
 | Commercial  | AC   | a321neo/dynamics/electrical/bus/commercial_powered  | Cabin and cargo lights, toilets, entertainment, etc.                          |
 
@@ -37,6 +38,7 @@ To each bus is also assigned a numerical id and a constant in `constants.lua` fi
 | AC 2        | ELEC_BUS_AC_2        | 2              |
 | AC ESS      | ELEC_BUS_AC_ESS      | 3              |
 | AC ESS SHED | ELEC_BUS_AC_ESS_SHED | 4              |
+| AC STAT INV | ELEC_BUS_STAT_INV    | 14              |
 | Galley      | ELEC_BUS_GALLEY      | 12             |
 | Commercial  | ELEC_BUS_COMMERCIAL  | 13             |
 

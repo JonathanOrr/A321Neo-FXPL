@@ -45,6 +45,7 @@ buses = {
     
     is_ac_ess_shed_on = 0,
     is_dc_ess_shed_on = 0,
+    is_stat_inv_bus_on = 0,
     
     pwr_consumption = {}
 }
@@ -118,7 +119,7 @@ local function update_ac_ess()
     if buses.ac_ess_powered_by == 0 then
         if get(Gen_EMER_pwr) == 1 then
             buses.ac_ess_powered_by = GEN_EMER
-        elseif get(INV_online) == 1 then
+        elseif get(INV_online) == 1 and get(Ground_speed_ms) > 50 then
             buses.ac_ess_powered_by = STATIC_INVERTER
         end
     end
@@ -163,7 +164,7 @@ local function update_dc_ess()
         buses.dc_ess_powered_by = TR_ESS
     elseif get(TR_1_online) == 1 then
         buses.dc_ess_powered_by = TR_1
-    elseif get(HOT_bus_2_pwrd) and ELEC_sys.batteries[2].switch_status == true then
+    elseif get(HOT_bus_2_pwrd) and ELEC_sys.batteries[2].switch_status == true and get(ELEC_sys.batteries[2].drs.hotbus) == 1 then
         buses.dc_ess_powered_by = BAT_2
     end
 end
@@ -198,6 +199,7 @@ local function update_datarefs()
     set(AC_ess_shed_pwrd, buses.is_ac_ess_shed_on and 1 or 0)
     set(DC_shed_ess_pwrd, buses.is_dc_ess_shed_on and 1 or 0)
 
+    set(AC_STAT_INV_pwrd, buses.is_stat_inv_bus_on and 1 or 0)
 
     set(Elec_light_BUS_tie, bus_tie_pushbutton_status and 0 or 1)
     set(Elec_light_AC_ess_feed, (ac_ess_bus_pushbutton_status and 1 or 0) + (buses.ac_ess_powered_by>0 and 0 or 10)) 
@@ -208,6 +210,10 @@ local function update_shed()
                               or buses.ac_ess_powered_by == GEN_EMER
     buses.is_dc_ess_shed_on = buses.dc1_powered_by > 0 or buses.dc2_powered_by > 0 
                               or buses.dc_ess_powered_by == TR_ESS
+end
+
+local function update_stat_inv()
+    buses.is_stat_inv_bus_on = get(INV_online) == 1
 end
 
 function reset_pwr_consumption()
@@ -225,6 +231,7 @@ function update_buses()
     update_dc_ess()
     update_dc_bat_bus()
     update_shed()
+    update_stat_inv()
 
     update_datarefs()
     

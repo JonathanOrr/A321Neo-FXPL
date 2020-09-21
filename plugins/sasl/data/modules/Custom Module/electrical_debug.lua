@@ -146,9 +146,10 @@ function draw()
     print_bool(390,  size[2]-250, "AC BUS 2", get(AC_bus_2_pwrd) == 1)
     print_bool(390,  size[2]-270, "AC ESS", get(AC_ess_bus_pwrd) == 1)
     print_bool(390,  size[2]-290, "AC SHED ESS", get(AC_ess_shed_pwrd) == 1)
-    print_bool(390,  size[2]-310, "COMMERCIAL", get(Commercial_pwrd) == 1)
-    print_bool(390,  size[2]-330, "GALLEY", get(Gally_pwrd) == 1)
-    sasl.gl.drawFrame(385, size[2]-340, 170, 290, ECAM_BLUE)
+    print_bool(390,  size[2]-310, "AC STAT INV", get(AC_STAT_INV_pwrd) == 1)
+    print_bool(390,  size[2]-330, "COMMERCIAL", get(Commercial_pwrd) == 1)
+    print_bool(390,  size[2]-350, "GALLEY", get(Gally_pwrd) == 1)
+    sasl.gl.drawFrame(385, size[2]-360, 170, 310, ECAM_BLUE)
 
     -- Bus internals
     sasl.gl.drawText(B612MONO_regular, 10, size[2]-550, "Bus sources", 15, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
