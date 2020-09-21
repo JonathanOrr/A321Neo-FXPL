@@ -3,6 +3,7 @@
 
 include('electrical_batteries.lua')
 include('electrical_buses.lua')
+include('electrical_consumptions.lua')
 include('electrical_generators.lua')
 include('electrical_tr_and_inv.lua')
 include('electrical_misc.lua')
@@ -23,6 +24,7 @@ function update()
     
     reset_pwr_consumption()
     
+    update_consumptions()
     
     -- Just for testing
     ELEC_sys.add_power_consumption(ELEC_BUS_AC_1, 1, 1)

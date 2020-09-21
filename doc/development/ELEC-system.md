@@ -63,7 +63,7 @@ Each of the following datarefs has only two possible states: 0 - OFF, 1 - Powere
 When you create a component in lua, you probably want to connect it to the power supply. To do that, you have to perform two actions:
 1. Check if the bus related to the component is powered up (by using the datarefs)
 2. Assign the power consumption to the bus (by using a specific function, see later)
-You usually want to check at the beggining of the `update()` function, but this is not mandatory. Power consumption must be updated at every call of update().
+You usually want to check at the begining of the `update()` or `draw()` function, but this is not mandatory. Power consumption must be updated at every call of update().
 
 To add the power consumption use this global function:
 

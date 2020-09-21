@@ -1,6 +1,8 @@
 position = {1852, 1449, 600, 400}
 size = {600, 400}
 
+include('constants.lua')
+
 --variables
 local DRAIMS_entry = ""
 local ident_box_timer = 0--used to fade alpha
@@ -1425,6 +1427,23 @@ function update()
 end
 
 function draw()
+
+    if get(DC_ess_bus_pwrd) == 0 then
+        return -- Bus is not powered on, this component cannot work
+    end
+    ELEC_sys.add_power_consumption(ELEC_BUS_DC_ESS, 1, 1)     -- Screens (just hypothesis)
+    ELEC_sys.add_power_consumption(ELEC_BUS_DC_ESS, 0.5, 0.5) -- VHF1 (just hypothesis)
+    ELEC_sys.add_power_consumption(ELEC_BUS_DC_2, 0.5, 0.5)   -- VHF2 (just hypothesis)
+    ELEC_sys.add_power_consumption(ELEC_BUS_DC_1, 0.2, 0.2)   -- intercom and other stuffs (just hypothesis)
+
+    ELEC_sys.add_power_consumption(ELEC_BUS_AC_ESS, 0.05, 0.05)   -- VOR1 (just hypothesis)
+    ELEC_sys.add_power_consumption(ELEC_BUS_AC_2, 0.15, 0.15)     -- VOR2, ADF2, DME2 (just hypothesis)
+    ELEC_sys.add_power_consumption(ELEC_BUS_AC_ESS_SHED, 0.1, 0.1) -- ADF1, DME1 (just hypothesis)
+
+    ELEC_sys.add_power_consumption(ELEC_BUS_AC_ESS_SHED, 0.5, 0.5) -- ATC1/tcas (just hypothesis)
+    ELEC_sys.add_power_consumption(ELEC_BUS_AC_2, 0.5, 0.5)        -- ATC2/tcas (just hypothesis)
+
+
     --draw the DRAIMS if both of the DRAIMS screens are on
     if get(DRAIMS_1_brightness) > 0 or get(DRAIMS_2_brightness) > 0 then
         --DRAIMS top section--

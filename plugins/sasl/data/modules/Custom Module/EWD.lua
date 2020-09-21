@@ -106,6 +106,12 @@ local function draw_extras()
 end
 
 function draw()
+
+    if get(AC_ess_bus_pwrd) == 0 then   -- TODO This should be fixed when screens move around
+        return -- Bus is not powered on, this component cannot work
+    end
+    ELEC_sys.add_power_consumption(ELEC_BUS_AC_ESS, 0.43, 0.43)   -- 50W (just hypothesis)
+
     draw_engines()
     draw_left_memo()
     draw_right_memo()

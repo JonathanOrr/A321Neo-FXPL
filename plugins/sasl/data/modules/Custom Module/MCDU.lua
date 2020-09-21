@@ -20,6 +20,8 @@
 position = {1282, 1449, 560, 530}
 size = {560, 530}
 
+include('constants.lua')
+
 local NIL = 0 -- used for input return and checking
 
 --define the const size, align and row.
@@ -565,6 +567,12 @@ end
 
 --drawing the MCDU display
 function draw()
+
+    if get(AC_ess_bus_pwrd) == 0 then   -- TODO MCDU2 is on AC2
+        return -- Bus is not powered on, this component cannot work
+    end
+    ELEC_sys.add_power_consumption(ELEC_BUS_AC_ESS, 0.26, 0.26)   -- 30W (just hypothesis)
+
     --sasl.gl.drawRectangle(0, 0, 560, 530, {1,0,0})
     if hokey_pokey then
         colorize()

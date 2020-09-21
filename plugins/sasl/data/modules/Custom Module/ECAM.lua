@@ -372,6 +372,13 @@ end
 
 --drawing the ECAM
 function draw()
+
+    if get(AC_bus_2_pwrd) == 0 then    -- TODO This should be fixed when screens move around
+        return -- Bus is not powered on, this component cannot work
+    end
+    ELEC_sys.add_power_consumption(ELEC_BUS_AC_2, 0.43, 0.43)   -- 50W (just hypothesis)
+
+
     if get(Ecam_current_page) == 1 then --eng
 
     elseif get(Ecam_current_page) == 2 then --bleed

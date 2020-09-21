@@ -1,6 +1,8 @@
 position = {1365, 539, 900, 900}
 size = {900, 900}
 
+include('constants.lua')
+
 --varibles--
 local vvi_left_pixel_offset = 0
 local vvi_number_display = 0
@@ -122,6 +124,12 @@ function update()
 end
 
 function draw()
+
+    if get(AC_ess_bus_pwrd) == 0 then   -- TODO This should be fixed when screens move around
+        return -- Bus is not powered on, this component cannot work
+    end
+    ELEC_sys.add_power_consumption(ELEC_BUS_AC_ESS, 0.26, 0.26)   -- 30W (just hypothesis)
+
     --show and hide the V/S indicators according to the airdata
     if get(Adirs_capt_has_ADR) == 1 then
         sasl.gl.drawWideLine(848, vvi_left_pixel_offset, 900, 442, 4, vvi_cl)
