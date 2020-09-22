@@ -46,5 +46,10 @@ function update()
     -- Just for testing
     -- ELEC_sys.add_power_consumption(ELEC_BUS_HOT_BUS_1, 10, 10)
 
-    
+end
+
+function onAirportLoaded()
+    if get(Startup_running) == 1 or get(Capt_ra_alt_ft) > 20 then
+        prep_misc_on_flight()
+    end    
 end

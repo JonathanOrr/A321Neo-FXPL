@@ -16,13 +16,6 @@ local BLINKING_DATAREFS_SEC = 9
 ----------------------------------------------------------------------------------------------------
 -- Global/Local variables
 ----------------------------------------------------------------------------------------------------
-local cmd_auto_board = sasl.findCommand("sim/operation/auto_board")  -- Prep electrical system for boarding
-local cmd_auto_start = sasl.findCommand("sim/operation/auto_start")  -- Auto start aircraft
-local cmd_quick_start = sasl.findCommand("sim/operation/quick_start") -- Auto start engines
-local cmd_reset_flight = sasl.findCommand("sim/operation/reset_flight") -- Reset in flight
-local cmd_reset_to_runway = sasl.findCommand("sim/operation/reset_to_runway") -- Reset on runway
-local cmd_go_to_default = sasl.findCommand("sim/operation/go_to_default")
-local startup_running = globalProperty("sim/operation/prefs/startup_running")
 
 local adr_time_begin = {0,0,0}
 local adr_switch_status = {true,true,true}
@@ -71,21 +64,12 @@ sasl.registerCommandHandler (ADIRS_cmd_source_ATHDG_down, 0,   function(phase) K
 sasl.registerCommandHandler (ADIRS_cmd_source_AIRDATA_up, 0,   function(phase) Knob_handler_up_int(phase, ADIRS_source_rotary_AIRDATA, -1, 1); return 1 end )
 sasl.registerCommandHandler (ADIRS_cmd_source_AIRDATA_down, 0, function(phase) Knob_handler_down_int(phase, ADIRS_source_rotary_AIRDATA, -1, 1); return 1 end )
 
-sasl.registerCommandHandler (cmd_auto_board, 0, function(phase) adirs_prep_elec_for_boarding(phase); return 1 end )
-sasl.registerCommandHandler (cmd_auto_start, 0, function(phase) adirs_prep_elec_for_boarding(phase); return 1 end )
-sasl.registerCommandHandler (cmd_quick_start, 0, function(phase) adirs_prep_elec_for_boarding(phase); return 1 end )
-sasl.registerCommandHandler (cmd_reset_flight, 0, function(phase) adirs_prep_elec_for_boarding(phase); return 1 end )
-sasl.registerCommandHandler (cmd_reset_to_runway, 0, function(phase) adirs_prep_elec_for_boarding(phase); return 1 end )
-sasl.registerCommandHandler (cmd_go_to_default, 0, function(phase) adirs_prep_elec_for_boarding(phase); return 1 end )
-
 sasl.registerCommandHandler (ADIRS_cmd_instantaneous_align, 0, function(phase) adirst_inst_align(phase); return 1 end )
 
-----------------------------------------------------------------------------------------------------
--- Functions
-----------------------------------------------------------------------------------------------------
-
-function adirs_prep_elec_for_boarding(phase) 
-    if phase == SASL_COMMAND_BEGIN then
+function onAirportLoaded()
+    if get(Startup_running) == 1 or get(Capt_ra_alt_ft) > 20 then
+        print("AUTO ALIGN ADIRS")
+    
 	    adr_switch_status[1] = true
 	    adr_switch_status[2] = true
 	    adr_switch_status[3] = true
@@ -101,14 +85,16 @@ function adirs_prep_elec_for_boarding(phase)
 	    adr_time_begin[2] = get(TIME) - TIME_TO_START_ADR - 2
 	    adr_time_begin[3] = get(TIME) - TIME_TO_START_ADR - 2
 
-        set(Adirs_irs_begin_time[1], get(TIME) - 2)
-        set(Adirs_irs_begin_time[2], get(TIME) - 2)
-        set(Adirs_irs_begin_time[3], get(TIME) - 2)
+        set(Adirs_irs_begin_time[1], get(TIME) - TIME_TO_GET_ATTITUDE)
+        set(Adirs_irs_begin_time[2], get(TIME) - TIME_TO_GET_ATTITUDE)
+        set(Adirs_irs_begin_time[3], get(TIME) - TIME_TO_GET_ATTITUDE)
         set(Adirs_total_time_to_align, 1)
-
-    end	
-
+    end
 end
+
+----------------------------------------------------------------------------------------------------
+-- Functions
+----------------------------------------------------------------------------------------------------
 
 function adirst_inst_align(phase)
     if phase ~= SASL_COMMAND_BEGIN then

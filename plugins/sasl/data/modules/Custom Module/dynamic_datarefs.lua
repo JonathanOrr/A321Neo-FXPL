@@ -8,6 +8,7 @@ Distance_traveled_mi = createGlobalPropertyf("a321neo/dynamics/distance_traveled
 Distance_traveled_km = createGlobalPropertyf("a321neo/dynamics/distance_traveled_km", 0, false, true, false)
 Ground_speed_kmh = createGlobalPropertyf("a321neo/dynamics/groundspeed_kmh", 0, false, true, false)
 Ground_speed_mph = createGlobalPropertyf("a321neo/dynamics/groundspeed_mph", 0, false, true, true)
+Startup_running = globalProperty("sim/operation/prefs/startup_running") -- 1 if user asked to startup with engines running
 --wheel
 Aft_wheel_on_ground = createGlobalPropertyi("a321neo/dynamics/aft_wheels_on_ground", 0, false, true, false)
 All_on_ground = createGlobalPropertyi("a321neo/dynamics/all_wheels_on_ground", 0, false, true, false)

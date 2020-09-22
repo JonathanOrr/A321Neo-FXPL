@@ -65,3 +65,8 @@ function update_misc_loads()
         ELEC_sys.add_power_consumption(ELEC_BUS_AC_2, 24, 26)   -- 3000W ?
     end
 end
+
+function prep_misc_on_flight()
+    is_galley_switch_on = true
+    is_commercial_switch_on = true
+end
