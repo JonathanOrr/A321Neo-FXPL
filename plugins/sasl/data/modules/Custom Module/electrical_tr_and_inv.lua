@@ -204,13 +204,41 @@ function update_trs_and_inv()
     update_tr(trs[3])
     update_static_inv()
 
+    update_datarefs()
+end
+
+function update_trs_loads()
     update_tr_load(trs[1])
     update_tr_load(trs[2])
     update_tr_load(trs[3])
 
-    ELEC_sys.add_power_consumption(ELEC_BUS_AC_1, trs[1].curr_in_amps, trs[1].curr_in_amps)   
-    ELEC_sys.add_power_consumption(ELEC_BUS_AC_2, trs[2].curr_in_amps, trs[2].curr_in_amps)   
-    ELEC_sys.add_power_consumption(ELEC_BUS_AC_ESS, trs[3].curr_in_amps, trs[3].curr_in_amps)   
+    ELEC_sys.add_power_consumption(ELEC_BUS_AC_1, trs[1].curr_in_amps, trs[1].curr_in_amps)
+    ELEC_sys.add_power_consumption(ELEC_BUS_AC_2, trs[2].curr_in_amps, trs[2].curr_in_amps)
+    ELEC_sys.add_power_consumption(ELEC_BUS_AC_ESS, trs[3].curr_in_amps, trs[3].curr_in_amps)
     
-    update_datarefs()
 end
+
+function update_stinv_loads()
+    stat_inv.curr_out_amps = 0
+    stat_inv.curr_in_amps = 0
+
+    if not stat_inv.status then
+        return
+    end
+
+    if ELEC_sys.buses.ac_ess_powered_by == 21 then
+        stat_inv.curr_out_amps = stat_inv.curr_out_amps + ELEC_sys.buses.pwr_consumption[ELEC_BUS_AC_ESS]
+        if get(AC_ess_shed_pwrd) == 1 then
+            stat_inv.curr_out_amps = stat_inv.curr_out_amps + ELEC_sys.buses.pwr_consumption[ELEC_BUS_AC_ESS_SHED]
+        end
+    end
+    
+    stat_inv.curr_out_amps = stat_inv.curr_out_amps + ELEC_sys.buses.pwr_consumption[ELEC_BUS_STAT_INV]
+    
+    stat_inv.curr_in_amps = stat_inv.curr_out_amps * stat_inv.curr_voltage / DC_VOLTAGE_NOM
+    stat_inv.curr_in_amps = stat_inv.curr_in_amps * (1+POWER_LOSS)
+
+    ELEC_sys.add_power_consumption(ELEC_BUS_HOT_BUS_1, stat_inv.curr_in_amps, stat_inv.curr_in_amps)
+
+end
+

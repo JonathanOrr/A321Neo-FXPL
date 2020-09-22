@@ -26,7 +26,13 @@ local GEN_FAKE_BUS_TIE = 99
 local GEN_ENGINE_RATED_CURR = 261    -- Maximum current provided by the engine gen (this is not enforced but used to compute the load %)
 local GEN_ENGINE_APU_CURR   = 261    -- Maximum current provided by the APU gen (this is not enforced but used to compute the load %)
 
+local UPDATE_PERIOD = 0.5
+
 local B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
+
+local loads = {
+    gen = {}
+}
 
 local function draw_open_arrow_up(x,y,color)
     sasl.gl.drawWidePolyLine( {x, y, x-10, y-15, x+10, y-15, x, y }, 3, color)
@@ -180,7 +186,7 @@ local function draw_apu_gen()
     end
 
     sasl.gl.drawText(B612MONO_regular, 335, size[2]/2-182, 
-                     math.floor(-ELEC_sys.generators[3].curr_amps/GEN_ENGINE_APU_CURR*100+0.5), 28, false, false,
+                     loads.gen[3], 28, false, false,
                      TEXT_ALIGN_RIGHT,
                      (-ELEC_sys.generators[3].curr_amps > GEN_ENGINE_APU_CURR)
                      and ECAM_ORANGE or ECAM_GREEN)
@@ -250,7 +256,7 @@ local function draw_gen(x, i)
     end
 
     sasl.gl.drawText(B612MONO_regular, x-12, size[2]/2-145, 
-                     math.floor(-ELEC_sys.generators[i].curr_amps/GEN_ENGINE_RATED_CURR*100+0.5), 28, false, false,
+                     loads.gen[i], 28, false, false,
                      TEXT_ALIGN_RIGHT,
                      (-ELEC_sys.generators[i].curr_amps > GEN_ENGINE_RATED_CURR)
                      and ECAM_ORANGE or ECAM_GREEN)
@@ -438,6 +444,7 @@ end
 
 function draw_elec_page()
 
+    update_elec_parameters()
     update_draw_datarefs()
     
     draw_battery(1, 180)
@@ -463,3 +470,18 @@ function draw_elec_page()
     draw_idg_legends(2,790)
     
 end
+
+local last_time_update = 0
+
+function update_elec_parameters()
+    if get(TIME) - last_time_update > UPDATE_PERIOD then
+        last_time_update = get(TIME)
+        
+        loads.gen[1] = math.floor(-ELEC_sys.generators[1].curr_amps/GEN_ENGINE_RATED_CURR*100+0.5) 
+        loads.gen[2] = math.floor(-ELEC_sys.generators[2].curr_amps/GEN_ENGINE_RATED_CURR*100+0.5) 
+        loads.gen[3] = math.floor(-ELEC_sys.generators[3].curr_amps/GEN_ENGINE_RATED_CURR*100+0.5) 
+        
+    end
+end
+
+

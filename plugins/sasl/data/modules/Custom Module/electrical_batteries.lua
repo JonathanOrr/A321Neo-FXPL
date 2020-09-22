@@ -137,9 +137,6 @@ function update_batteries()
     update_battery_voltage(batteries[1])
     update_battery_voltage(batteries[2])
 
-    update_battery_load(batteries[1])
-    update_battery_load(batteries[2])
-
     update_battery_buses(batteries[1])
     update_battery_buses(batteries[2])
 
@@ -147,5 +144,10 @@ function update_batteries()
     update_battery_datarefs(batteries[2])
     
 
+end
+
+function update_battery_loads()
+    update_battery_load(batteries[1])
+    update_battery_load(batteries[2])
 end
 

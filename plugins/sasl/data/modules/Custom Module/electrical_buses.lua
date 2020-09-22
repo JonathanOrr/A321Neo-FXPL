@@ -49,7 +49,8 @@ buses = {
     is_dc_ess_shed_on = 0,
     is_stat_inv_bus_on = 0,
     
-    pwr_consumption = {}
+    pwr_consumption = {},       -- Used in current computation
+    pwr_consumption_last = {}   -- Last
 }
 
 ELEC_sys.buses = buses

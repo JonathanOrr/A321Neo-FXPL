@@ -296,11 +296,16 @@ function update_generators()
 
     for i,x in ipairs(generators) do
         update_generator_value(x)
-        update_generator_load(x)
         update_idg(x)
     end
 
     for i,x in ipairs(generators) do
         update_generator_datarefs(x)
+    end
+end
+
+function update_generators_loads()
+    for i,x in ipairs(generators) do
+        update_generator_load(x)
     end
 end
