@@ -187,6 +187,89 @@ MessageGroup_HYD_B_RSVR_LO_AIR_PRESS = {
     end
 }
 
+----------------------------------------------------------------------------------------------------
+-- CAUTION: B SYS LO PR
+----------------------------------------------------------------------------------------------------
+MessageGroup_HYD_B_SYS_LO_PR = {
+    shown = false,
+
+    text  = function(self)
+                return "HYD"
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_1,
+    
+    sd_page = ECAM_PAGE_HYD,
+    
+    messages = {
+        {
+            text = function(self) return "    B SYS LO PR" end,
+            color = function(self) return COL_CAUTION end,
+            is_active = function(self) return true end
+        }
+    },
+
+    already_trig = false,
+
+    is_active = function(self)
+        if get(Hydraulic_B_press) <= 1450 then
+            already_trig = true
+            return true
+        elseif already_trig and get(Hydraulic_B_press) < 1750 then
+            return true
+        else
+            already_trig = false
+            return false
+        end
+    end,
+
+    is_inhibited = function(self)
+        return not(get(EWD_flight_phase) == PHASE_1ST_ENG_TO_PWR or get(EWD_flight_phase) == PHASE_AIRBONE or
+                (get(EWD_flight_phase) == PHASE_1ST_ENG_ON and get(Engine_1_avail) == 1
+                and get(Engine_2_avail) == 1))
+
+    end
+}
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: B ELEC PUMP LO PR
+----------------------------------------------------------------------------------------------------
+MessageGroup_HYD_B_ELEC_PUMP_LO_PR = {
+
+    shown = false,
+
+    text  = function(self)
+                return "HYD"
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_HYD,
+    
+    messages = {
+        {
+            text = function(self) return "    B ELEC PUMP LO PR" end,
+            color = function(self) return COL_CAUTION end,
+            is_active = function(self) return true end
+        },
+        Message_HYD_TURN_OFF_B
+    },
+
+    is_active = function(self)
+        return get(FAILURE_HYD_B_pump) == 1
+    end,
+
+    is_inhibited = function(self)
+        return get(EWD_flight_phase) == PHASE_ABOVE_80_KTS or get(EWD_flight_phase) == PHASE_LIFTOFF or
+               get(EWD_flight_phase) == PHASE_FINAL or get(EWD_flight_phase) == PHASE_TOUCHDOWN
+    end
+}
 
 
 ----------------------------------------------------------------------------------------------------
@@ -315,7 +398,7 @@ Message_HYD_IF_G_PRESS_FLUCTUATE = {
     end,
 
   is_active = function(self)
-      return Message_HYD_TURN_OFF_G:is_active()
+      return Message_HYD_TURN_OFF_G:is_active() or Message_HYD_TURN_OFF_PTU:is_active()
   end
 }
 
@@ -356,6 +439,91 @@ MessageGroup_HYD_G_RSVR_LO_AIR_PRESS = {
     end
 }
 
+----------------------------------------------------------------------------------------------------
+-- CAUTION: G SYS LO PR
+----------------------------------------------------------------------------------------------------
+MessageGroup_HYD_G_SYS_LO_PR = {
+    shown = false,
+
+    text  = function(self)
+                return "HYD"
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_1,
+    
+    sd_page = ECAM_PAGE_HYD,
+    
+    messages = {
+        {
+            text = function(self) return "    G SYS LO PR" end,
+            color = function(self) return COL_CAUTION end,
+            is_active = function(self) return true end
+        }
+    },
+
+    already_trig = false,
+
+    is_active = function(self)
+        if get(Hydraulic_G_press) <= 1450 then
+            already_trig = true
+            return true
+        elseif already_trig and get(Hydraulic_G_press) < 1750 then
+            return true
+        else
+            already_trig = false
+            return false
+        end
+    end,
+
+    is_inhibited = function(self)
+        return not(get(EWD_flight_phase) == PHASE_1ST_ENG_TO_PWR or get(EWD_flight_phase) == PHASE_AIRBONE or
+                (get(EWD_flight_phase) == PHASE_1ST_ENG_ON and get(Engine_1_avail) == 1
+                and get(Engine_2_avail) == 1))
+
+    end
+}
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: G ENG 1 PUMP LO PR
+----------------------------------------------------------------------------------------------------
+MessageGroup_HYD_G_ENG1_PUMP_LO_PR = {
+
+    shown = false,
+
+    text  = function(self)
+                return "HYD"
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_HYD,
+    
+    messages = {
+        {
+            text = function(self) return "    G ENG 1 PUMP LO PR" end,
+            color = function(self) return COL_CAUTION end,
+            is_active = function(self) return true end
+        },
+        Message_HYD_TURN_OFF_G
+    },
+
+    is_active = function(self)
+        return get(FAILURE_HYD_G_pump) == 1
+    end,
+
+    is_inhibited = function(self)
+        return get(EWD_flight_phase) == PHASE_ABOVE_80_KTS or get(EWD_flight_phase) == PHASE_LIFTOFF or
+               get(EWD_flight_phase) == PHASE_FINAL or get(EWD_flight_phase) == PHASE_TOUCHDOWN
+    end
+}
+
+
 
 ----------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
@@ -367,7 +535,21 @@ MessageGroup_HYD_G_RSVR_LO_AIR_PRESS = {
 -- CAUTION: Y ELEC PUMP OVHT
 ----------------------------------------------------------------------------------------------------
 
-Message_HYD_TURN_OFF_Y = {
+Message_HYD_TURN_OFF_ENG2_Y = {
+    text = function(self)
+        return " - YELLOW ENG2 PUMP...OFF"
+    end,
+
+    color = function(self)
+        return COL_ACTIONS
+    end,
+
+  is_active = function(self)
+      return get(Hyd_light_Eng2Pump) % 2 == 0
+  end
+}
+
+Message_HYD_TURN_OFF_ELEC_Y = {
     text = function(self)
         return " - YELLOW ELEC PUMP...OFF"
     end,
@@ -402,7 +584,7 @@ MessageGroup_HYD_ELEC_PUMP_Y_OVHT = {
             color = function(self) return COL_CAUTION end,
             is_active = function(self) return true end
         },
-        Message_HYD_TURN_OFF_Y
+        Message_HYD_TURN_OFF_ELEC_Y
     },
 
     is_active = function(self)
@@ -414,4 +596,529 @@ MessageGroup_HYD_ELEC_PUMP_Y_OVHT = {
                get(EWD_flight_phase) == PHASE_FINAL or get(EWD_flight_phase) == PHASE_TOUCHDOWN
     end
 }
+
+MessageGroup_HYD_ELEC_PUMP_Y_FAIL = {
+
+    shown = false,
+
+    text  = function(self)
+                return "HYD"
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_HYD,
+    
+    messages = {
+        {
+            text = function(self) return "    Y ELEC PUMP FAIL" end,
+            color = function(self) return COL_CAUTION end,
+            is_active = function(self) return true end
+        },
+        Message_HYD_TURN_OFF_ELEC_Y
+    },
+
+    is_active = function(self)
+        return get(FAILURE_HYD_Y_E_pump) == 1
+    end,
+
+    is_inhibited = function(self)
+        return get(EWD_flight_phase) == PHASE_1ST_ENG_TO_PWR or get(EWD_flight_phase) == PHASE_ABOVE_80_KTS or get(EWD_flight_phase) == PHASE_LIFTOFF or
+               get(EWD_flight_phase) == PHASE_FINAL or get(EWD_flight_phase) == PHASE_TOUCHDOWN
+    end
+}
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: Y RSVR OVHT
+----------------------------------------------------------------------------------------------------
+MessageGroup_HYD_Y_RSVR_OVHT = {
+
+    shown = false,
+
+    text  = function(self)
+                return "HYD"
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_HYD,
+    
+    messages = {
+        {
+            text = function(self) return "    Y RSVR OVHT" end,
+            color = function(self) return COL_CAUTION end,
+            is_active = function(self) return true end
+        },
+        Message_HYD_TURN_OFF_PTU,
+        Message_HYD_TURN_OFF_ENG2_Y,
+        Message_HYD_TURN_OFF_ELEC_Y
+    },
+
+    is_active = function(self)
+        return get(FAILURE_HYD_Y_R_overheat) == 1
+    end,
+
+    is_inhibited = function(self)
+        return get(EWD_flight_phase) == PHASE_1ST_ENG_TO_PWR or get(EWD_flight_phase) == PHASE_ABOVE_80_KTS or get(EWD_flight_phase) == PHASE_LIFTOFF or
+               get(EWD_flight_phase) == PHASE_FINAL or get(EWD_flight_phase) == PHASE_TOUCHDOWN
+    end
+}
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: Y LO LVL
+----------------------------------------------------------------------------------------------------
+MessageGroup_HYD_Y_RSVR_LO_LVL = {
+
+    shown = false,
+
+    text  = function(self)
+                return "HYD"
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_HYD,
+    
+    messages = {
+        {
+            text = function(self) return "    Y RSVR LO LVL" end,
+            color = function(self) return COL_CAUTION end,
+            is_active = function(self) return true end
+        },
+        Message_HYD_TURN_OFF_PTU,
+        Message_HYD_TURN_OFF_ENG2_Y,
+        Message_HYD_TURN_OFF_ELEC_Y
+    },
+
+    is_active = function(self)
+        return get(Hydraulic_Y_qty) < 0.18
+    end,
+
+    is_inhibited = function(self)
+        return get(EWD_flight_phase) == PHASE_ABOVE_80_KTS or get(EWD_flight_phase) == PHASE_LIFTOFF or
+               get(EWD_flight_phase) == PHASE_FINAL or get(EWD_flight_phase) == PHASE_TOUCHDOWN
+    end
+}
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: Y RSVR LO AIR PR
+----------------------------------------------------------------------------------------------------
+
+
+Message_HYD_IF_Y_PRESS_FLUCTUATE = {
+    text = function(self)
+        return " · IF PRESS FLUCTUATES:"
+    end,
+
+    color = function(self)
+        return COL_REMARKS
+    end,
+
+  is_active = function(self)
+      return Message_HYD_TURN_OFF_ENG2_Y:is_active() or Message_HYD_TURN_OFF_PTU:is_active() or
+      Message_HYD_TURN_OFF_ELEC_Y:is_active()
+  end
+}
+
+
+MessageGroup_HYD_Y_RSVR_LO_AIR_PRESS = {
+
+    shown = false,
+
+    text  = function(self)
+                return "HYD"
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_HYD,
+    
+    messages = {
+        {
+            text = function(self) return "    Y RSVR LO AIR PR" end,
+            color = function(self) return COL_CAUTION end,
+            is_active = function(self) return true end
+        },
+        Message_HYD_IF_Y_PRESS_FLUCTUATE,
+        Message_HYD_TURN_OFF_PTU,
+        Message_HYD_TURN_OFF_ENG2_Y,
+        Message_HYD_TURN_OFF_ELEC_Y
+    },
+
+    is_active = function(self)
+        return get(FAILURE_HYD_Y_low_air) == 1
+    end,
+
+    is_inhibited = function(self)
+        return get(EWD_flight_phase) == PHASE_1ST_ENG_TO_PWR or get(EWD_flight_phase) == PHASE_ABOVE_80_KTS or get(EWD_flight_phase) == PHASE_LIFTOFF or
+               get(EWD_flight_phase) == PHASE_FINAL or get(EWD_flight_phase) == PHASE_TOUCHDOWN
+    end
+}
+
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: Y SYS LO PR
+----------------------------------------------------------------------------------------------------
+MessageGroup_HYD_Y_SYS_LO_PR = {
+    shown = false,
+
+    text  = function(self)
+                return "HYD"
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_1,
+    
+    sd_page = ECAM_PAGE_HYD,
+    
+    messages = {
+        {
+            text = function(self) return "    Y SYS LO PR" end,
+            color = function(self) return COL_CAUTION end,
+            is_active = function(self) return true end
+        }
+    },
+
+    already_trig = false,
+
+    is_active = function(self)
+        if get(Hydraulic_Y_press) <= 1450 then
+            already_trig = true
+            return true
+        elseif already_trig and get(Hydraulic_Y_press) < 1750 then
+            return true
+        else
+            already_trig = false
+            return false
+        end
+    end,
+
+    is_inhibited = function(self)
+        return not(get(EWD_flight_phase) == PHASE_1ST_ENG_TO_PWR or get(EWD_flight_phase) == PHASE_AIRBONE or
+                (get(EWD_flight_phase) == PHASE_1ST_ENG_ON and get(Engine_1_avail) == 1
+                and get(Engine_2_avail) == 1))
+
+    end
+}
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: Y ENG 2 PUMP LO PR
+----------------------------------------------------------------------------------------------------
+MessageGroup_HYD_Y_ENG2_PUMP_LO_PR = {
+
+    shown = false,
+
+    text  = function(self)
+                return "HYD"
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_HYD,
+    
+    messages = {
+        {
+            text = function(self) return "    Y ENG 2 PUMP LO PR" end,
+            color = function(self) return COL_CAUTION end,
+            is_active = function(self) return true end
+        },
+        Message_HYD_TURN_OFF_ENG2_Y
+    },
+
+    is_active = function(self)
+        return get(FAILURE_HYD_Y_pump) == 1
+    end,
+
+    is_inhibited = function(self)
+        return get(EWD_flight_phase) == PHASE_ABOVE_80_KTS or get(EWD_flight_phase) == PHASE_LIFTOFF or
+               get(EWD_flight_phase) == PHASE_FINAL or get(EWD_flight_phase) == PHASE_TOUCHDOWN
+    end
+}
+
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+-- EXTRAS
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: PTU FAULT
+----------------------------------------------------------------------------------------------------
+MessageGroup_HYD_PTU_FAULT = {
+
+    shown = false,
+
+    text  = function(self)
+                return "HYD"
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_HYD,
+    
+    messages = {
+        {
+            text = function(self) return "    PTU FAULT" end,
+            color = function(self) return COL_CAUTION end,
+            is_active = function(self) return true end
+        },
+        Message_HYD_TURN_OFF_PTU
+    },
+
+    is_active = function(self)
+        return get(FAILURE_HYD_PTU) == 1
+    end,
+
+    is_inhibited = function(self)
+        return get(EWD_flight_phase) == PHASE_1ST_ENG_TO_PWR or get(EWD_flight_phase) == PHASE_ABOVE_80_KTS 
+               or get(EWD_flight_phase) == PHASE_LIFTOFF or get(EWD_flight_phase) == PHASE_FINAL
+               or get(EWD_flight_phase) == PHASE_TOUCHDOWN or get(EWD_flight_phase) == PHASE_BELOW_80_KTS
+    end
+}
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: RAT FAULT
+----------------------------------------------------------------------------------------------------
+MessageGroup_HYD_RAT_FAULT = {
+
+    shown = false,
+
+    text  = function(self)
+                return "HYD"
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_HYD,
+    
+    messages = {
+        {
+            text = function(self) return "    RAT FAULT" end,
+            color = function(self) return COL_CAUTION end,
+            is_active = function(self) return true end
+        }
+    },
+
+    is_active = function(self)
+        return get(FAILURE_HYD_RAT) == 1
+    end,
+
+    is_inhibited = function(self)
+        return get(EWD_flight_phase) == PHASE_1ST_ENG_TO_PWR or get(EWD_flight_phase) == PHASE_ABOVE_80_KTS 
+               or get(EWD_flight_phase) == PHASE_LIFTOFF or get(EWD_flight_phase) == PHASE_FINAL
+               or get(EWD_flight_phase) == PHASE_TOUCHDOWN or get(EWD_flight_phase) == PHASE_BELOW_80_KTS
+    end
+}
+
+
+----------------------------------------------------------------------------------------------------
+-- WARNING: B + Y SYS LO PR
+----------------------------------------------------------------------------------------------------
+
+Message_HYD_TURN_OFF_ELEC_Y_IF_ENG_FAIL = {
+    text = function(self)
+        return " - YELLOW ELEC PUMP....ON"
+    end,
+
+    color = function(self)
+        return COL_ACTIONS
+    end,
+
+  is_active = function(self)
+      return MessageGroup_HYD_Y_ENG2_PUMP_LO_PR:is_active() and get(Hyd_light_Y_ElecPump) % 2 == 0
+  end
+}
+
+Message_HYD_RAT_MAN_ON_IF_B_LOST = {
+    text = function(self)
+        return " - RAT.............MAN ON"
+    end,
+
+    color = function(self)
+        return COL_ACTIONS
+    end,
+
+  is_active = function(self)
+      return MessageGroup_HYD_B_ELEC_PUMP_LO_PR:is_active() and get(is_RAT_out) == 0
+  end
+}
+
+Message_HYD_RAT_MIN_ON_IF_B_LOST = {
+    text = function(self)
+        return "MIN RAT SPD........140 KT"
+    end,
+
+    color = function(self)
+        return COL_ACTIONS
+    end,
+
+  is_active = function(self)
+      return MessageGroup_HYD_B_ELEC_PUMP_LO_PR:is_active()
+  end
+}
+
+Message_HYD_MANEUVER_WITH_CARE = {
+    text = function(self)
+        return "MANEUVER WITH CARE"
+    end,
+
+    color = function(self)
+        return COL_ACTIONS
+    end,
+
+  is_active = function(self)
+      return true
+  end
+}
+
+
+MessageGroup_HYD_B_AND_Y_LO_PR = {
+
+    shown = false,
+
+    text  = function(self)
+                return "HYD"
+            end,
+    color = function(self)
+                return COL_WARNING
+            end,
+
+    priority = PRIORITY_LEVEL_3,
+    
+    sd_page = ECAM_PAGE_HYD,
+    
+    messages = {
+        {
+            text = function(self) return "    B + Y SYS LO PR" end,
+            color = function(self) return COL_WARNING end,
+            is_active = function(self) return true end
+        },
+        Message_HYD_TURN_OFF_ELEC_Y_IF_ENG_FAIL,
+        Message_HYD_RAT_MAN_ON_IF_B_LOST,
+        Message_HYD_RAT_MIN_ON_IF_B_LOST,
+        Message_HYD_TURN_OFF_ENG2_Y,
+        Message_HYD_TURN_OFF_B,
+        Message_HYD_MANEUVER_WITH_CARE
+        
+    },
+
+    land_asap = true,
+
+    is_active = function(self)
+        return MessageGroup_HYD_Y_SYS_LO_PR:is_active() and MessageGroup_HYD_B_SYS_LO_PR:is_active()
+    end,
+
+    is_inhibited = function(self)
+        return get(EWD_flight_phase) == PHASE_ABOVE_80_KTS or get(EWD_flight_phase) == PHASE_LIFTOFF 
+    end
+}
+
+----------------------------------------------------------------------------------------------------
+-- WARNING: G + Y SYS LO PR
+----------------------------------------------------------------------------------------------------
+MessageGroup_HYD_G_AND_Y_LO_PR = {
+
+    shown = false,
+
+    text  = function(self)
+                return "HYD"
+            end,
+    color = function(self)
+                return COL_WARNING
+            end,
+
+    priority = PRIORITY_LEVEL_3,
+    
+    sd_page = ECAM_PAGE_HYD,
+    
+    messages = {
+        {
+            text = function(self) return "    G + Y SYS LO PR" end,
+            color = function(self) return COL_WARNING end,
+            is_active = function(self) return true end
+        },
+        Message_HYD_TURN_OFF_ELEC_Y_IF_ENG_FAIL,
+        Message_HYD_TURN_OFF_ENG2_Y,
+        Message_HYD_TURN_OFF_G,
+        Message_HYD_MANEUVER_WITH_CARE
+        
+    },
+
+    land_asap = true,
+
+    is_active = function(self)
+        return MessageGroup_HYD_Y_SYS_LO_PR:is_active() and MessageGroup_HYD_G_SYS_LO_PR:is_active()
+    end,
+
+    is_inhibited = function(self)
+        return get(EWD_flight_phase) == PHASE_ABOVE_80_KTS or get(EWD_flight_phase) == PHASE_LIFTOFF 
+    end
+}
+
+----------------------------------------------------------------------------------------------------
+-- WARNING: G + B SYS LO PR
+----------------------------------------------------------------------------------------------------
+MessageGroup_HYD_G_AND_B_LO_PR = {
+
+    shown = false,
+
+    text  = function(self)
+                return "HYD"
+            end,
+    color = function(self)
+                return COL_WARNING
+            end,
+
+    priority = PRIORITY_LEVEL_3,
+    
+    sd_page = ECAM_PAGE_HYD,
+    
+    messages = {
+        {
+            text = function(self) return "    G + B SYS LO PR" end,
+            color = function(self) return COL_WARNING end,
+            is_active = function(self) return true end
+        },
+        Message_HYD_RAT_MAN_ON_IF_B_LOST,
+        Message_HYD_RAT_MIN_ON_IF_B_LOST,
+        Message_HYD_TURN_OFF_G,
+        Message_HYD_TURN_OFF_B,
+        Message_HYD_MANEUVER_WITH_CARE
+        
+    },
+
+    land_asap = true,
+
+    is_active = function(self)
+        return MessageGroup_HYD_G_SYS_LO_PR:is_active() and MessageGroup_HYD_B_SYS_LO_PR:is_active()
+    end,
+
+    is_inhibited = function(self)
+        return get(EWD_flight_phase) == PHASE_ABOVE_80_KTS or get(EWD_flight_phase) == PHASE_LIFTOFF 
+    end
+}
+
 

@@ -65,15 +65,27 @@ local left_messages_list = {
     MessageGroup_DOORS_CABIN,
     MessageGroup_DOORS_CARGO,
     MessageGroup_DOORS_EMER_EXIT,
+    MessageGroup_HYD_G_RSVR_LO_LVL,
+    MessageGroup_HYD_B_RSVR_LO_LVL,
+    MessageGroup_HYD_Y_RSVR_LO_LVL,
+    MessageGroup_HYD_G_ENG1_PUMP_LO_PR,
+    MessageGroup_HYD_B_ELEC_PUMP_LO_PR,
+    MessageGroup_HYD_Y_ENG2_PUMP_LO_PR,
+    MessageGroup_HYD_ELEC_PUMP_Y_FAIL,
     MessageGroup_HYD_ELEC_PUMP_B_OVHT,
     MessageGroup_HYD_ELEC_PUMP_Y_OVHT,
-    MessageGroup_HYD_B_RSVR_OVHT,
-    MessageGroup_HYD_B_RSVR_LO_LVL,
-    MessageGroup_HYD_B_RSVR_LO_AIR_PRESS,
     MessageGroup_HYD_G_RSVR_OVHT,
-    MessageGroup_HYD_G_RSVR_LO_LVL,
+    MessageGroup_HYD_B_RSVR_OVHT,
+    MessageGroup_HYD_Y_RSVR_OVHT,
+    MessageGroup_HYD_B_RSVR_LO_AIR_PRESS,
     MessageGroup_HYD_G_RSVR_LO_AIR_PRESS,
-        
+    MessageGroup_HYD_Y_RSVR_LO_AIR_PRESS,
+    MessageGroup_HYD_B_SYS_LO_PR,
+    MessageGroup_HYD_G_SYS_LO_PR,
+    MessageGroup_HYD_Y_SYS_LO_PR,
+    MessageGroup_HYD_RAT_FAULT,
+    MessageGroup_HYD_PTU_FAULT,
+    
     -- Warnings
     MessageGroup_CONFIG_TAKEOFF,
     MessageGroup_APU_FIRE,
@@ -81,7 +93,9 @@ local left_messages_list = {
     MessageGroup_GEAR_NOT_DOWN,
     MessageGroup_ADR_FAULT_TRIPLE,
     MessageGroup_IR_FAULT_TRIPLE,
-    
+    MessageGroup_HYD_B_AND_Y_LO_PR,
+    MessageGroup_HYD_G_AND_B_LO_PR,
+    MessageGroup_HYD_G_AND_Y_LO_PR,
     -- Misc
     MessageGroup_TOCONFIG_NORMAL -- This must be the last message
 }
