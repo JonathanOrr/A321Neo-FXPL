@@ -200,7 +200,7 @@ end
 
 local function update_rat_gen(x)
 
-    x.source_status = get(Hydraulic_B_press) > 1400 and get(Hydraulic_RAT_status) == 1
+    x.source_status = get(Hydraulic_B_press) > 1400 and get(is_RAT_out) == 1
 
     if x.switch_status and x.source_status and get(x.drs.failure) == 0 then
         x.curr_voltage = GEN_LOW_VOLTAGE_LIMIT + 12 * (get(Hydraulic_B_press) - 1400) / 1500

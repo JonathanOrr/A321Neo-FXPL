@@ -292,7 +292,17 @@ local function update_sys_status()
 
     
     if get(is_RAT_out) == 1 then
-        b_sys.is_rat_pump_on = true
+        b_sys.is_rat_pump_on = get(FAILURE_HYD_RAT)  == 0
+    
+        if get(FAILURE_HYD_RAT) == 1 then
+            set(Hydraulic_RAT_status, 2)
+        elseif get(IAS) < 140 then
+            set(Hydraulic_RAT_status, 2)
+        else
+            set(Hydraulic_RAT_status, 1)
+        end
+    else
+        set(Hydraulic_RAT_status, 0)
     end
 
 end
