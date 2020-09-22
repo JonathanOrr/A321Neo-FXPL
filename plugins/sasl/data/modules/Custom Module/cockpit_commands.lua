@@ -173,6 +173,8 @@ HYD_cmd_B_ElecPump = createCommand("a321neo/cockpit/HYD/toggle_elec_pump_B", "To
 HYD_cmd_Y_ElecPump = createCommand("a321neo/cockpit/HYD/toggle_elec_pump_Y", "Toggle HYD Elec Yellow pump")
 HYD_cmd_RAT_man_on = createCommand("a321neo/cockpit/HYD/RAT_manual", "Force RAT out")
 
+HYD_reset_systems  = createCommand("a321neo/internals/HYD/reset_systems", "Reset HYD quantity systems")
+
 -- ELEC
 ELEC_cmd_Commercial   = createCommand("a321neo/cockpit/electrical/commercial", "Toggle commercial power")
 ELEC_cmd_Galley       = createCommand("a321neo/cockpit/electrical/galley", "Toggle galley")

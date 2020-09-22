@@ -256,6 +256,37 @@ function IRs_instaneous_align()
                     1 , " Understood " , function() sasl.commandOnce (ADIRS_cmd_instantaneous_align) end)
 end
 
+function Reset_RAT()
+    if get(All_on_ground) == 0 then
+        sasl.messageWindow (500 , 500 , 300 , 150 , " This is a ground-only operation " , 
+                "In order to stow the RAT you must be on ground and press a switch in a panel accessible from the belly of the aircraft.",
+                2 , " Cancel " , function() end, " I'm spiderman ", function() set(is_RAT_out, 0) end)
+    else
+        set(is_RAT_out, 0)
+    end
+end
+
+function Reset_HYD()
+    if get(All_on_ground) == 0 then
+        sasl.messageWindow (500 , 500 , 300 , 150 , " This is a ground-only operation " , 
+                "In order to refill the HYD systems you must be on ground, open a panel accessible from the belly of the aircraft and do fancy stuff with tubes and pumps.",
+                2 , " Cancel " , function() end, " I'm spiderman ", function() sasl.commandOnce(HYD_reset_systems) end)
+    else
+        sasl.commandOnce(HYD_reset_systems)
+    end
+end
+
+function Reset_IDG()
+    if get(All_on_ground) == 0 then
+        sasl.messageWindow (500 , 500 , 300 , 150 , " This is a ground-only operation " , 
+                "In order to reconnect the IDGs you must be on ground, open the engine cowl and pull a special ring.",
+                2 , " Cancel " , function() end, " I'm spiderman ", function() ELEC_sys.generators[1].idg_status = true; ELEC_sys.generators[2].idg_status = true end)
+    else
+        ELEC_sys.generators[1].idg_status = true
+        ELEC_sys.generators[2].idg_status = true
+    end
+end
+
 -- create top level menu in plugins menu
 Menu_master	= sasl.appendMenuItem (PLUGINS_MENU_ID, "A321NEO" )
 -- add a submenu
@@ -270,10 +301,17 @@ sasl.appendMenuSeparator(Menu_main)
 
 ADIRSAlign        = sasl.appendMenuItem(Menu_main, "Instantaneous align IRs", IRs_instaneous_align)
 
+-- Maintenance submenu
+Maintenance_item  = sasl.appendMenuItem (Menu_main, "Maintenance")
+Maintenance_menu  = sasl.createMenu ("", Menu_main, Maintenance_item)
+ShowHideVnavDebug	= sasl.appendMenuItem(Maintenance_menu, "Stow the RAT", Reset_RAT)
+ShowHideVnavDebug	= sasl.appendMenuItem(Maintenance_menu, "Refill HYD systems", Reset_HYD)
+ShowHideVnavDebug	= sasl.appendMenuItem(Maintenance_menu, "Reconnect IDGs", Reset_IDG)
+
 sasl.appendMenuSeparator(Menu_main)
 
+-- DEBUG submenu
 Menu_debug_item	= sasl.appendMenuItem (Menu_main, "Debug" )
--- add a submenu
 Menu_debug	= sasl.createMenu ("", Menu_main, Menu_debug_item)
 ShowHideVnavDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide VNAV Debug", Show_hide_vnav_debug)
 ShowHidePacksDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide PACKS Debug", Show_hide_packs_debug)

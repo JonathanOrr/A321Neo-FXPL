@@ -50,7 +50,19 @@ sasl.registerCommandHandler (HYD_cmd_Y_ElecPump,   0, function(phase) hyd_toggle
 sasl.registerCommandHandler (HYD_cmd_PTU,          0, function(phase) hyd_toggle_button(phase, 5) end )
 sasl.registerCommandHandler (HYD_cmd_RAT_man_on,   0, function(phase) if phase == SASL_COMMAND_BEGIN and get(HOT_bus_2_pwrd) == 1 then set(is_RAT_out, 1) end end )
 
+sasl.registerCommandHandler (HYD_reset_systems,    0, function(phase) hyd_reset_systems(phase) end )
 
+function hyd_reset_systems(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        set(FAILURE_HYD_G_leak, 0)
+        set(FAILURE_HYD_B_leak, 0)
+        set(FAILURE_HYD_Y_leak, 0)
+
+        g_sys.qty_initialized = false
+        b_sys.qty_initialized = false
+        y_sys.qty_initialized = false
+    end
+end
 
 function hyd_toggle_button(phase, id)
     if phase ~= SASL_COMMAND_BEGIN then
