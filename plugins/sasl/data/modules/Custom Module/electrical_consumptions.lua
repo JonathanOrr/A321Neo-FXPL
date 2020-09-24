@@ -26,4 +26,43 @@ function update_consumptions()
         ELEC_sys.add_power_consumption(ELEC_BUS_AC_ESS_SHED, 0.2, 0.2)
         ELEC_sys.add_power_consumption(ELEC_BUS_DC_ESS_SHED, 0.1, 0.1)
     end
+    
+    -- FADEC and engine related stuffs
+    if get(Eng_1_Fire_valve) == 0 then
+        -- FADEC has power if fire valve is open
+        ELEC_sys.add_power_consumption(ELEC_BUS_DC_ESS_SHED, 0.5, 0.5)
+        ELEC_sys.add_power_consumption(ELEC_BUS_DC_BAT_BUS, 0.5, 0.5)
+        ELEC_sys.add_power_consumption(ELEC_BUS_DC_1, 0.05, 0.05)
+    end
+    if get(Eng_2_Fire_valve) == 0 then
+        -- FADEC has power if fire valve is open
+        ELEC_sys.add_power_consumption(ELEC_BUS_DC_ESS_SHED, 0.5, 0.5)
+        ELEC_sys.add_power_consumption(ELEC_BUS_DC_2, 0.55, 0.55)
+    end
+    if get(Engine_mode_knob) == 1 then    -- Ignition mode
+        ELEC_sys.add_power_consumption(ELEC_BUS_AC_ESS, 0.1, 0.1)
+        if get(Engine_1_avail) == 0 then
+            ELEC_sys.add_power_consumption(ELEC_BUS_AC_1, 1, 1.2)
+        end
+        if get(Engine_2_avail) == 0 then
+            ELEC_sys.add_power_consumption(ELEC_BUS_AC_2, 1, 1.2)
+        end
+    end
+    
+    -- Staring APU
+    if get(Apu_master_button_state) == 1 then    
+        ELEC_sys.add_power_consumption(ELEC_BUS_DC_BAT_BUS, 0.5, 0.5)   -- Control unit
+    
+        --if get(Apu_N1) < 10 then    -- Starter motor
+        --    ELEC_sys.add_power_consumption(ELEC_BUS_DC_BAT_BUS, 70, 90) -- Like an car engine?
+        --elseif get(Apu_N1) < 90 then
+        --    ELEC_sys.add_power_consumption(ELEC_BUS_DC_BAT_BUS, 2, 2)
+        --end
+    end
+    
+    -- BLEED computers
+    ELEC_sys.add_power_consumption(ELEC_BUS_DC_ESS_SHED, 0.5, 0.5)
+    ELEC_sys.add_power_consumption(ELEC_BUS_DC_2, 0.5, 0.5)
+    
+    
 end
