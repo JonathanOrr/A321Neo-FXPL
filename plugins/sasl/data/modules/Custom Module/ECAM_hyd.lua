@@ -3,7 +3,15 @@ include('constants.lua')
 
 local B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
 local y_psi_pos = size[2]/2+265 -- Starting top point (the PSI numbers position)
-    
+
+local function get_color_green_blinking()
+    if math.floor(get(TIME)) % 2 == 0 then
+        return ECAM_GREEN
+    else
+        return ECAM_HIGH_GREEN
+    end
+end
+
 local function draw_psi_numbers(g_psi, b_psi, y_psi)
 
     -- GREEN
@@ -97,7 +105,7 @@ local function draw_quantity_bars(qty_G, qty_B, qty_Y)
     if get(Hydraulic_G_qty) < 0.18 then
         qty_color = ECAM_ORANGE
     elseif  get(Hydraulic_G_qty) < 0.83 then
-        -- TODO blinking
+        qty_color = get_color_green_blinking()
     end
     sasl.gl.drawWidePolyLine( {160, size[2]/2-308, 145, size[2]/2-308, 145, y_top, 157, y_top+10, 145, y_top+20 }, 4, qty_color)
 
@@ -107,7 +115,7 @@ local function draw_quantity_bars(qty_G, qty_B, qty_Y)
     if get(Hydraulic_B_qty) < 0.31 then
         qty_color = ECAM_ORANGE
     elseif  get(Hydraulic_B_qty) < 0.8 then
-        -- TODO blinking
+        qty_color = get_color_green_blinking()
     end
     sasl.gl.drawWidePolyLine( {453, size[2]/2-308, 453-15, size[2]/2-308, 453-15, y_top, 453-3, y_top+10, 453-15, y_top+20 }, 4, qty_color)
 
@@ -117,7 +125,7 @@ local function draw_quantity_bars(qty_G, qty_B, qty_Y)
     if get(Hydraulic_Y_qty) < 0.22 then
         qty_color = ECAM_ORANGE
     elseif  get(Hydraulic_Y_qty) < 0.81 then
-        -- TODO blinking
+        qty_color = get_color_green_blinking()
     end
     sasl.gl.drawWidePolyLine( {745, size[2]/2-308, 730, size[2]/2-308, 730, y_top, 742, y_top+10, 730, y_top+20 }, 4, qty_color)
 
@@ -163,7 +171,8 @@ local function draw_extra_pumps()
         sasl.gl.drawWidePolyLine({770, size[2]/2+95, 795, size[2]/2+110, 795, size[2]/2+80, 770, size[2]/2+95}, 4, ECAM_WHITE )
     end
     
-    sasl.gl.drawText(B612MONO_regular, 840, size[2]/2+100, "ELEC", 26, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE) -- Should become orange when no elec power
+    local elec_color = get(AC_bus_2_pwrd) == 1 and ECAM_WHITE or ECAM_ORANGE
+    sasl.gl.drawText(B612MONO_regular, 840, size[2]/2+100, "ELEC", 26, false, false, TEXT_ALIGN_CENTER, elec_color)
     
     if get(FAILURE_HYD_Y_E_overheat) == 1 then
         sasl.gl.drawText(B612MONO_regular, 840, size[2]/2+70, "OVHT", 26, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
@@ -171,7 +180,8 @@ local function draw_extra_pumps()
 
     
     -- BLUE ELEC pump messages
-    sasl.gl.drawText(B612MONO_regular, 540, size[2]/2-10, "ELEC", 26, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE) -- Should become orange when no elec power
+    local elec_color = get(AC_bus_1_pwrd) == 1 and ECAM_WHITE or ECAM_ORANGE
+    sasl.gl.drawText(B612MONO_regular, 540, size[2]/2-10, "ELEC", 26, false, false, TEXT_ALIGN_CENTER, elec_color)
     
     if get(FAILURE_HYD_B_E_overheat) == 1 then
         sasl.gl.drawText(B612MONO_regular, 540, size[2]/2-40, "OVHT", 26, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)

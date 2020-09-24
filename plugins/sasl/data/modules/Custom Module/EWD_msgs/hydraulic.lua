@@ -1032,7 +1032,7 @@ MessageGroup_HYD_B_AND_Y_LO_PR = {
     end,
 
     is_inhibited = function(self)
-        return get(EWD_flight_phase) == PHASE_ABOVE_80_KTS or get(EWD_flight_phase) == PHASE_LIFTOFF 
+        return get(EWD_flight_phase) == PHASE_ELEC_PWR or get(EWD_flight_phase) == PHASE_ABOVE_80_KTS or get(EWD_flight_phase) == PHASE_LIFTOFF or get(EWD_flight_phase) == PHASE_2ND_ENG_OFF
     end
 }
 
@@ -1074,7 +1074,7 @@ MessageGroup_HYD_G_AND_Y_LO_PR = {
     end,
 
     is_inhibited = function(self)
-        return get(EWD_flight_phase) == PHASE_ABOVE_80_KTS or get(EWD_flight_phase) == PHASE_LIFTOFF 
+        return get(EWD_flight_phase) == PHASE_ELEC_PWR or get(EWD_flight_phase) == PHASE_ABOVE_80_KTS or get(EWD_flight_phase) == PHASE_LIFTOFF or get(EWD_flight_phase) == PHASE_2ND_ENG_OFF
     end
 }
 
@@ -1117,7 +1117,7 @@ MessageGroup_HYD_G_AND_B_LO_PR = {
     end,
 
     is_inhibited = function(self)
-        return get(EWD_flight_phase) == PHASE_ABOVE_80_KTS or get(EWD_flight_phase) == PHASE_LIFTOFF 
+        return get(EWD_flight_phase) == PHASE_ELEC_PWR or get(EWD_flight_phase) == PHASE_ABOVE_80_KTS or get(EWD_flight_phase) == PHASE_LIFTOFF or get(EWD_flight_phase) == PHASE_2ND_ENG_OFF
     end
 }
 

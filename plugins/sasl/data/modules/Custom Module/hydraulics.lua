@@ -267,7 +267,6 @@ end
 
 local function update_sys_status()
 
-    -- TODO Electrical
     g_sys.is_engine_pump_on = status_buttons.eng1pump and get(Engine_1_avail) == 1 and get(FAILURE_HYD_G_pump) == 0 and get(Hydraulic_G_qty) > 0
     y_sys.is_engine_pump_on = status_buttons.eng2pump and get(Engine_2_avail) == 1 and get(FAILURE_HYD_Y_pump) == 0 and get(Hydraulic_Y_qty) > 0
     b_sys.is_elec_pump_on = status_buttons.elecBpump and (get(Engine_1_avail) == 1 or  get(Engine_2_avail) == 1) and get(FAILURE_HYD_B_pump) == 0 and get(Hydraulic_B_qty) > 0 and get(AC_bus_1_pwrd) == 1
