@@ -267,10 +267,35 @@ local function update_generator_load(x)
     if ELEC_sys.buses.ac2_powered_by == x.id then
         x.curr_amps = x.curr_amps-ELEC_sys.buses.pwr_consumption[ELEC_BUS_AC_2]
     end
-    if ELEC_sys.buses.ac_ess_powered_by == x.id then
+    if ELEC_sys.buses.ac_ess_powered_by == x.id or
+       (ELEC_sys.buses.ac1_powered_by == x.id and ELEC_sys.buses.ac_ess_powered_by == 11) or
+       (ELEC_sys.buses.ac2_powered_by == x.id and ELEC_sys.buses.ac_ess_powered_by == 12) then
         x.curr_amps = x.curr_amps-ELEC_sys.buses.pwr_consumption[ELEC_BUS_AC_ESS]
         if ELEC_sys.buses.is_ac_ess_shed_on then
             x.curr_amps = x.curr_amps-ELEC_sys.buses.pwr_consumption[ELEC_BUS_AC_ESS_SHED]            
+        end
+    end
+    
+    -- BUS TIE case
+    -- This is ugly, but I cannot find another solution for now...
+    if x.id <= 2 and get(x.drs.pwr) == 1 then
+        if ELEC_sys.buses.ac1_powered_by == 99 then
+            x.curr_amps = x.curr_amps-ELEC_sys.buses.pwr_consumption[ELEC_BUS_AC_1]
+            if ELEC_sys.buses.ac_ess_powered_by == 11 then
+                x.curr_amps = x.curr_amps-ELEC_sys.buses.pwr_consumption[ELEC_BUS_AC_ESS]
+                if ELEC_sys.buses.is_ac_ess_shed_on then
+                    x.curr_amps = x.curr_amps-ELEC_sys.buses.pwr_consumption[ELEC_BUS_AC_ESS_SHED]            
+                end
+            end
+        end
+        if ELEC_sys.buses.ac2_powered_by == 99 then
+            x.curr_amps = x.curr_amps-ELEC_sys.buses.pwr_consumption[ELEC_BUS_AC_2]
+            if ELEC_sys.buses.ac_ess_powered_by == 12 then
+                x.curr_amps = x.curr_amps-ELEC_sys.buses.pwr_consumption[ELEC_BUS_AC_ESS]
+                if ELEC_sys.buses.is_ac_ess_shed_on then
+                    x.curr_amps = x.curr_amps-ELEC_sys.buses.pwr_consumption[ELEC_BUS_AC_ESS_SHED]            
+                end
+            end
         end
     end
 end
