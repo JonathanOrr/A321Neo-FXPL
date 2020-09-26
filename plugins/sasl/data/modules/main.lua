@@ -35,6 +35,7 @@ components = {
   wheel {},
   source_switching {},
   PFD {},
+  ISIS {},
   ECAM {},
   EWD {},
   EWD_logic {},

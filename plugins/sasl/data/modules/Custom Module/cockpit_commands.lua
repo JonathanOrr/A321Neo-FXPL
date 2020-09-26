@@ -191,4 +191,5 @@ ELEC_cmd_EMER_GEN_TEST   = createCommand("a321neo/cockpit/electrical/EMER_GEN_TE
 ELEC_cmd_EMER_GEN1_LINE  = createCommand("a321neo/cockpit/electrical/EMER_GEN_1_LINE", "Press GEN 1 LINE button on the EMER ELEC PWR panel")
 ELEC_cmd_EMER_RAT        = createCommand("a321neo/cockpit/electrical/EMER_GEN_RAT", "Press RAT MAN ON button on the EMER ELEC PWR panel")
 
-
+--
+ISIS_cmd_LS          = createCommand("a321neo/cockpit/ISIS/LS", "Press LS button on ISIS")

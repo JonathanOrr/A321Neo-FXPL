@@ -293,3 +293,8 @@ Elec_bat_1_V  = createGlobalPropertyf("a321neo/cockpit/electrical/battery_1_volt
 Elec_bat_2_V  = createGlobalPropertyf("a321neo/cockpit/electrical/battery_2_voltage", 0, false, true, false)
 
 
+-- ISIS
+ISIS_landing_system_enabled = createGlobalPropertyi("a321neo/cockpit/ISIS/isis_ls_enabled", 0, false, true, false)-- LS status for the ISIS: 0-off, 1-on
+ISIS_powered = createGlobalPropertyi("a321neo/cockpit/ISIS/isis_is_powered", 0, false, true, false)-- ISIS is powered: 0-no, 1-yes
+ISIS_ready   = createGlobalPropertyi("a321neo/cockpit/ISIS/isis_is_ready", 0, false, true, false)-- ISIS is ready to use: 0-off, 1-on
+
