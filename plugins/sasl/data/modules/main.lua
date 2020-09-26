@@ -47,7 +47,8 @@ components = {
   display_brightness {},
   doors {},
   hydraulics {},
-  electrical {}
+  electrical {},
+  sounds {}
  }
 
  --windows
