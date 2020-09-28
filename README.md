@@ -19,7 +19,7 @@ You can check the [Github developer page](https://github.com/JonathanOrr/A321Neo
 * [Jonathan](https://github.com/JonathanOrr) (project leader)
 * [Henrick](https://github.com/KuHenrick)
 * [Chai](https://github.com/Chai112)
-* [Federico](https://github.com/federeghe)
+* [RicoRico](https://github.com/rico23rico)
 
 
 ## Discord Server
@@ -27,5 +27,6 @@ https://discord.gg/ByeyTXS
 
 
 ## Current Visual state
-![](https://cdn.discordapp.com/attachments/700005517900251166/700258576676945920/A321_-_2020-04-16_4.15.24_pm.png)
+![](https://cdn.discordapp.com/attachments/691973360556441610/759809658285326346/A321_-_2020-09-27_15.45.47.png)
+![](https://cdn.discordapp.com/attachments/691973360556441610/759809671611285534/A321_-_2020-09-23_19.53.12.png)
 
