@@ -255,21 +255,23 @@ end
 
 -- Generic handler for a float knob
 -- Usage example: sasl.registerCommandHandler(Knob_dataref, 0, function(phase) Knob_handler_up_float(phase, value_dataref, 0, 3) end)
-function Knob_handler_up_float(phase, dataref, min, max) 
+function Knob_handler_up_float(phase, dataref, min, max, step)
+    step = step or 0.5  -- Defualt value
     if phase == SASL_COMMAND_BEGIN then
-        set(dataref, Math_clamp(get(dataref) + 0.05, min, max))
+        set(dataref, Math_clamp(get(dataref) + step, min, max))
     elseif phase == SASL_COMMAND_CONTINUE then
-        set(dataref, Math_clamp(get(dataref) + 0.05 * get(DELTA_TIME), min, max))
+        set(dataref, Math_clamp(get(dataref) + step * get(DELTA_TIME), min, max))
     end
 end
 
 -- Generic handler for a float knob
 -- Usage example: sasl.registerCommandHandler(Knob_dataref, 0, function(phase) Knob_handler_down_float(phase, value_dataref, 0, 3) end)
-function Knob_handler_down_float(phase, dataref, min, max) 
+function Knob_handler_down_float(phase, dataref, min, max, step) 
+    step = step or 0.5  -- Defualt value
     if phase == SASL_COMMAND_BEGIN then
-        set(dataref, Math_clamp(get(dataref) - 0.05, min, max))
+        set(dataref, Math_clamp(get(dataref) - step, min, max))
     elseif phase == SASL_COMMAND_CONTINUE then
-        set(dataref, Math_clamp(get(dataref) - 0.05 * get(DELTA_TIME), min, max))
+        set(dataref, Math_clamp(get(dataref) - step * get(DELTA_TIME), min, max))
     end
 end
 
@@ -323,5 +325,4 @@ function Delayed_Button:get()
     end
     return self.curr_value
 end
-
 

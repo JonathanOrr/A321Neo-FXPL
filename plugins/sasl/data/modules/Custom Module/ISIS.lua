@@ -10,6 +10,9 @@ local B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
 
 -- Toggle LS
 sasl.registerCommandHandler (ISIS_cmd_LS, 0, function(phase) set(ISIS_landing_system_enabled, get(ISIS_landing_system_enabled) == 1 and 0 or 1) end )
+sasl.registerCommandHandler (ISIS_cmd_Knob_c, 0,  function(phase) Knob_handler_up_float(phase, Stby_Baro, 28, 31, 0.01) end) 
+sasl.registerCommandHandler (ISIS_cmd_Knob_cc, 0,  function(phase) Knob_handler_down_float(phase, Stby_Baro, 28, 31, 0.01) end) 
+
 
 local isis_start_time = 0
 
