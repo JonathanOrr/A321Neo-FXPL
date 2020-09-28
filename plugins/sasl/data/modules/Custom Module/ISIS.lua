@@ -1,8 +1,12 @@
-position= {2073, 1434,500,500}
+position= {2480,1443,500,500}
 size = {500, 500}
+
+include('constants.lua')
 
 local TIME_TO_ALIGN_SEC = 90
 
+-- Font
+local B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
 
 -- Toggle LS
 sasl.registerCommandHandler (ISIS_cmd_LS, 0, function(phase) set(ISIS_landing_system_enabled, get(ISIS_landing_system_enabled) == 1 and 0 or 1) end )
@@ -10,7 +14,38 @@ sasl.registerCommandHandler (ISIS_cmd_LS, 0, function(phase) set(ISIS_landing_sy
 local isis_start_time = 0
 
 function draw()
+    if get(ISIS_powered) == 0 then
+        return
+    end
+    if get(ISIS_ready) == 0 then
+        -- Not ready, draw the countdown
+        local remaning_time = math.ceil(TIME_TO_ALIGN_SEC - get(TIME) + isis_start_time)
+        if remaning_time > 0 then
+            sasl.gl.drawText (B612MONO_regular, 272, 112, remaning_time, 25, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+        end
+    else
+        -- Ready, draw the altitude in meters
+        local meter_alt = math.floor(get(Stby_Alt) * 0.3048)
+        sasl.gl.drawText (B612MONO_regular, 350, 456, meter_alt, 28, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
 
+        local baro_mmhg = Round(get(Stby_Baro),2)
+        if baro_mmhg ~= 29.92 then
+            local baro_kpa  = Round(33.8639 * get(Stby_Baro),0)
+            sasl.gl.drawText (B612MONO_regular, 222, 40, baro_kpa .. "/" .. baro_mmhg, 28, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+        else
+            sasl.gl.drawText (B612MONO_regular, 222, 40, "STD", 28, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+        end        
+        
+        if get(Adirs_capt_has_ADR) == 1 then
+            -- Mach number, this is available only if the ADR for the Capt is ok
+            local good_mach = Round(get(Capt_Mach) * 100, 0)
+            if good_mach < 100 then
+                sasl.gl.drawText (B612MONO_regular, 60, 40, "." .. good_mach, 27, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+            else
+                sasl.gl.drawText (B612MONO_regular, 60, 40, good_mach/100, 27, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)            
+            end
+        end
+    end
 end
 
 function update()
