@@ -216,12 +216,12 @@ MessageGroup_HYD_B_SYS_LO_PR = {
 
     is_active = function(self)
         if get(Hydraulic_B_press) <= 1450 then
-            already_trig = true
+            MessageGroup_HYD_B_SYS_LO_PR.already_trig = true
             return true
-        elseif already_trig and get(Hydraulic_B_press) < 1750 then
+        elseif MessageGroup_HYD_B_SYS_LO_PR.already_trig and get(Hydraulic_B_press) < 1750 then
             return true
         else
-            already_trig = false
+            MessageGroup_HYD_B_SYS_LO_PR.already_trig = false
             return false
         end
     end,
@@ -468,12 +468,12 @@ MessageGroup_HYD_G_SYS_LO_PR = {
 
     is_active = function(self)
         if get(Hydraulic_G_press) <= 1450 then
-            already_trig = true
+            MessageGroup_HYD_G_SYS_LO_PR.already_trig = true
             return true
-        elseif already_trig and get(Hydraulic_G_press) < 1750 then
+        elseif MessageGroup_HYD_G_SYS_LO_PR.already_trig and get(Hydraulic_G_press) < 1750 then
             return true
         else
-            already_trig = false
+            MessageGroup_HYD_G_SYS_LO_PR.already_trig = false
             return false
         end
     end,
@@ -797,12 +797,12 @@ MessageGroup_HYD_Y_SYS_LO_PR = {
 
     is_active = function(self)
         if get(Hydraulic_Y_press) <= 1450 then
-            already_trig = true
+            MessageGroup_HYD_Y_SYS_LO_PR.already_trig = true
             return true
-        elseif already_trig and get(Hydraulic_Y_press) < 1750 then
+        elseif MessageGroup_HYD_Y_SYS_LO_PR.already_trig and get(Hydraulic_Y_press) < 1750 then
             return true
         else
-            already_trig = false
+            MessageGroup_HYD_Y_SYS_LO_PR.already_trig = false
             return false
         end
     end,

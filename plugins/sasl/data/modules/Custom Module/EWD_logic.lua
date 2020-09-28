@@ -18,6 +18,8 @@ sasl.registerCommandHandler (Ecam_btn_cmd_RCL,   0 , function(phase) ewd_recall_
 sasl.registerCommandHandler (Ecam_btn_cmd_EMERC, 0 , function(phase) ewd_emercanc_button_handler(phase) end )
 sasl.registerCommandHandler (Ecam_btn_cmd_TOCFG, 0 , function(phase) ewd_tocfg_button_handler(phase) end )
 
+local STARTUP_WAIT_SECS = 10 -- Startup delay
+
 --colors
 local COL_INVISIBLE = 0    
 local COL_WARNING = 1       -- RED
@@ -37,6 +39,9 @@ for i=0,6 do
     set(EWD_right_memo[i], "LINE " .. i)
     set(EWD_right_memo_colors[i], COL_INVISIBLE)
 end
+
+-- Variables
+local sim_loaded_at = 0 -- Time the sim it was re-loaded, see onAirportLoaded()
 
 -- This is the list of triggerable messages for the left. When a message is cleared with CLR, the
 -- message is removed from the list and moved to the next list "left_messages_list_cleared"
@@ -168,6 +173,11 @@ PriorityQueue = {
 }
 
 setmetatable(PriorityQueue, PriorityQueue)
+
+function onAirportLoaded()  -- We need to wait some seconds before processing EWD messages from the sim
+                            -- start, especially when the flight is started in flight and not on ground.
+    sim_loaded_at = get(TIME)
+end
 
 -- 
 
@@ -513,6 +523,11 @@ local function check_reset()
 end
 
 function update()
+
+    if get(TIME) - sim_loaded_at < STARTUP_WAIT_SECS then
+
+        return -- Wait some seconds before generates EWD messages
+    end
 
     set(EWD_arrow_overflow, 0)
     update_left_list()
