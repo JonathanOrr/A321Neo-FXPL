@@ -1,6 +1,6 @@
 I
 10 Version
-_hobs_time 727801.413496
+_hobs_time 728609.314400
 _iql_view_type_0 v_3dc
 _iql_pe_x_0 -0.444705
 _iql_pe_y_0 2.221778
@@ -86,15 +86,15 @@ _iql_circ_dis_6 32.996056
 _iql_pscroll_x_pix_6 0.000000
 _iql_pscroll_y_pix_6 391.000000
 _iql_view_type_7 v_3dc
-_iql_pe_x_7 -1.785891
-_iql_pe_y_7 1.912809
-_iql_pe_z_7 8.110955
-_iql_look_os_psi_7 -70.987152
-_iql_look_os_the_7 9.669378
-_iql_zoom_rat_7 1.000000
-_iql_circ_psi_7 208.237366
-_iql_circ_the_7 27.381779
-_iql_circ_dis_7 191.049576
+_iql_pe_x_7 0.039595
+_iql_pe_y_7 8.843897
+_iql_pe_z_7 21.970896
+_iql_look_os_psi_7 359.581879
+_iql_look_os_the_7 -4.532818
+_iql_zoom_rat_7 2.079922
+_iql_circ_psi_7 349.956787
+_iql_circ_the_7 69.616142
+_iql_circ_dis_7 804.006104
 _iql_pscroll_x_pix_7 0.000000
 _iql_pscroll_y_pix_7 391.000000
 _iql_view_type_8 v_3dc
@@ -121,7 +121,7 @@ _iql_circ_the_9 44.326107
 _iql_circ_dis_9 87.539528
 _iql_pscroll_x_pix_9 0.000000
 _iql_pscroll_y_pix_9 358.000000
-_livery_req 1
+_livery_req 0
 _track_up_0 0
 _data_fields_0 0
 _ils_cdi_auto_0 1
