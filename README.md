@@ -19,7 +19,7 @@ You can check the [Github developer page](https://github.com/JonathanOrr/A321Neo
 * [Jonathan](https://github.com/JonathanOrr) (project leader)
 * [Henrick](https://github.com/KuHenrick)
 * [Chai](https://github.com/Chai112)
-* [Federico](https://github.com/federeghe)
+* [RicoRico](https://github.com/rico23rico)
 
 
 ## Discord Server
