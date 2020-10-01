@@ -79,60 +79,60 @@ local function draw_flight_control_section_480x400(x_pos, y_pos)
 
     --draw roll control ring
     --bank angle indications
-    sasl.gl.drawArc((2 * x_pos + 480) / 4, y_pos + 125, 103, 110, 0, 360, LIGHT_GREY)
-    sasl.gl.drawArc((2 * x_pos + 480) / 4, y_pos + 125, 103, 110, -67, 134, WHITE)
-    sasl.gl.drawArc((2 * x_pos + 480) / 4, y_pos + 125, 103, 110, 113, 134, WHITE)
-    sasl.gl.drawArc((2 * x_pos + 480) / 4, y_pos + 125, 103, 110, 0, -get(Flightmodel_roll), RED)
-    sasl.gl.drawArc((2 * x_pos + 480) / 4, y_pos + 125, 103, 110, 180, -get(Flightmodel_roll), RED)
-    sasl.gl.drawArc((2 * x_pos + 480) / 4, y_pos + 125, 103, 110, 0, Math_clamp(-get(Flightmodel_roll), -125, 125), ORANGE)
-    sasl.gl.drawArc((2 * x_pos + 480) / 4, y_pos + 125, 103, 110, 180, Math_clamp(-get(Flightmodel_roll), -125, 125), ORANGE)
-    sasl.gl.drawArc((2 * x_pos + 480) / 4, y_pos + 125, 103, 110, 0, Math_clamp(-get(Flightmodel_roll), -67, 67), LIGHT_BLUE)
-    sasl.gl.drawArc((2 * x_pos + 480) / 4, y_pos + 125, 103, 110, 180, Math_clamp(-get(Flightmodel_roll), -67, 67), LIGHT_BLUE)
+    sasl.gl.drawArc((2 * x_pos + 480) / 2 - 480 / 4, y_pos + 125, 103, 110, 0, 360, LIGHT_GREY)
+    sasl.gl.drawArc((2 * x_pos + 480) / 2 - 480 / 4, y_pos + 125, 103, 110, -67, 134, WHITE)
+    sasl.gl.drawArc((2 * x_pos + 480) / 2 - 480 / 4, y_pos + 125, 103, 110, 113, 134, WHITE)
+    sasl.gl.drawArc((2 * x_pos + 480) / 2 - 480 / 4, y_pos + 125, 103, 110, 0, -get(Flightmodel_roll), RED)
+    sasl.gl.drawArc((2 * x_pos + 480) / 2 - 480 / 4, y_pos + 125, 103, 110, 180, -get(Flightmodel_roll), RED)
+    sasl.gl.drawArc((2 * x_pos + 480) / 2 - 480 / 4, y_pos + 125, 103, 110, 0, Math_clamp(-get(Flightmodel_roll), -125, 125), ORANGE)
+    sasl.gl.drawArc((2 * x_pos + 480) / 2 - 480 / 4, y_pos + 125, 103, 110, 180, Math_clamp(-get(Flightmodel_roll), -125, 125), ORANGE)
+    sasl.gl.drawArc((2 * x_pos + 480) / 2 - 480 / 4, y_pos + 125, 103, 110, 0, Math_clamp(-get(Flightmodel_roll), -67, 67), LIGHT_BLUE)
+    sasl.gl.drawArc((2 * x_pos + 480) / 2 - 480 / 4, y_pos + 125, 103, 110, 180, Math_clamp(-get(Flightmodel_roll), -67, 67), LIGHT_BLUE)
     --roll rate indications
-    sasl.gl.drawArc((2 * x_pos + 480) / 4, y_pos + 125, 94, 101, 0, 360, LIGHT_GREY)
-    sasl.gl.drawArc((2 * x_pos + 480) / 4, y_pos + 125, 94, 101, -15, 30, WHITE)
-    sasl.gl.drawArc((2 * x_pos + 480) / 4, y_pos + 125, 94, 101, 165, 30, WHITE)
-    sasl.gl.drawArc((2 * x_pos + 480) / 4, y_pos + 125, 94, 101, 0, -get(Roll_rate), ORANGE)
-    sasl.gl.drawArc((2 * x_pos + 480) / 4, y_pos + 125, 94, 101, 180, -get(Roll_rate), ORANGE)
-    sasl.gl.drawArc((2 * x_pos + 480) / 4, y_pos + 125, 94, 101, 0, Math_clamp(-get(Roll_rate), -15, 15), LIGHT_BLUE)
-    sasl.gl.drawArc((2 * x_pos + 480) / 4, y_pos + 125, 94, 101, 180, Math_clamp(-get(Roll_rate), -15, 15), LIGHT_BLUE)
+    sasl.gl.drawArc((2 * x_pos + 480) / 2 - 480 / 4, y_pos + 125, 94, 101, 0, 360, LIGHT_GREY)
+    sasl.gl.drawArc((2 * x_pos + 480) / 2 - 480 / 4, y_pos + 125, 94, 101, -15, 30, WHITE)
+    sasl.gl.drawArc((2 * x_pos + 480) / 2 - 480 / 4, y_pos + 125, 94, 101, 165, 30, WHITE)
+    sasl.gl.drawArc((2 * x_pos + 480) / 2 - 480 / 4, y_pos + 125, 94, 101, 0, -get(Roll_rate), ORANGE)
+    sasl.gl.drawArc((2 * x_pos + 480) / 2 - 480 / 4, y_pos + 125, 94, 101, 180, -get(Roll_rate), ORANGE)
+    sasl.gl.drawArc((2 * x_pos + 480) / 2 - 480 / 4, y_pos + 125, 94, 101, 0, Math_clamp(-get(Roll_rate), -15, 15), LIGHT_BLUE)
+    sasl.gl.drawArc((2 * x_pos + 480) / 2 - 480 / 4, y_pos + 125, 94, 101, 180, Math_clamp(-get(Roll_rate), -15, 15), LIGHT_BLUE)
     --aircraft image
-    sasl.gl.drawRotatedTextureCenter (aircraft_behind_img, get(Flightmodel_roll), (2 * x_pos + 480)/ 4, y_pos + 125, (2 * x_pos + 480)/ 4 - (160 / 2), y_pos + 125 - (53 /2) + 6, 160, 53, {1,1,1})
+    sasl.gl.drawRotatedTextureCenter (aircraft_behind_img, get(Flightmodel_roll), (2 * x_pos + 480) / 2 - 480 / 4, y_pos + 125, (2 * x_pos + 480) / 2 - 480 / 4 - (160 / 2), y_pos + 125 - (53 /2) + 6, 160, 53, {1,1,1})
     --text indications
-    sasl.gl.drawArc((2 * x_pos + 480) / 4, y_pos + 125, 20, 92, 270- 40, 80, {LIGHT_GREY[1], LIGHT_GREY[2], LIGHT_GREY[3], 0.6})
-    sasl.gl.drawText(B612_MONO_bold, (2 * x_pos + 480) / 4, y_pos + 125 - 35, "ROLL", 12, false, false, TEXT_ALIGN_CENTER, WHITE)
-    sasl.gl.drawText(B612_MONO_bold, (2 * x_pos + 480) / 4, y_pos + 125 - 50, string.format("%.2f", tostring(get(Flightmodel_roll))) .. "°", 12, false, false, TEXT_ALIGN_CENTER, LIGHT_BLUE)
-    sasl.gl.drawText(B612_MONO_bold, (2 * x_pos + 480) / 4, y_pos + 125 - 65, "ROLL RATE", 12, false, false, TEXT_ALIGN_CENTER, WHITE)
-    sasl.gl.drawText(B612_MONO_bold, (2 * x_pos + 480) / 4, y_pos + 125 - 80, string.format("%.1f", tostring(get(Roll_rate))) .. "°/S", 12, false, false, TEXT_ALIGN_CENTER, LIGHT_BLUE)
+    sasl.gl.drawArc((2 * x_pos + 480) / 2 - 480 / 4, y_pos + 125, 20, 92, 270- 40, 80, {LIGHT_GREY[1], LIGHT_GREY[2], LIGHT_GREY[3], 0.6})
+    sasl.gl.drawText(B612_MONO_bold, (2 * x_pos + 480) / 2 - 480 / 4, y_pos + 125 - 35, "ROLL", 12, false, false, TEXT_ALIGN_CENTER, WHITE)
+    sasl.gl.drawText(B612_MONO_bold, (2 * x_pos + 480) / 2 - 480 / 4, y_pos + 125 - 50, string.format("%.2f", tostring(get(Flightmodel_roll))) .. "°", 12, false, false, TEXT_ALIGN_CENTER, LIGHT_BLUE)
+    sasl.gl.drawText(B612_MONO_bold, (2 * x_pos + 480) / 2 - 480 / 4, y_pos + 125 - 65, "ROLL RATE", 12, false, false, TEXT_ALIGN_CENTER, WHITE)
+    sasl.gl.drawText(B612_MONO_bold, (2 * x_pos + 480) / 2 - 480 / 4, y_pos + 125 - 80, string.format("%.1f", tostring(get(Roll_rate))) .. "°/S", 12, false, false, TEXT_ALIGN_CENTER, LIGHT_BLUE)
 
 
     --draw G load control ring
     --pitch indications
-    sasl.gl.drawArc(3 * (2 * x_pos + 480) / 4, y_pos + 125, 103, 110, 0, 360, LIGHT_GREY)
-    sasl.gl.drawArc(3 * (2 * x_pos + 480) / 4, y_pos + 125, 103, 110, -15, 45, WHITE)
-    sasl.gl.drawArc(3 * (2 * x_pos + 480) / 4, y_pos + 125, 103, 110, 165, 45, WHITE)
-    sasl.gl.drawArc(3 * (2 * x_pos + 480) / 4, y_pos + 125, 103, 110, 0, get(Flightmodel_pitch), RED)
-    sasl.gl.drawArc(3 * (2 * x_pos + 480) / 4, y_pos + 125, 103, 110, 180, get(Flightmodel_pitch), RED)
-    sasl.gl.drawArc(3 * (2 * x_pos + 480) / 4, y_pos + 125, 103, 110, 0, Math_clamp(get(Flightmodel_pitch), -30, 50), ORANGE)
-    sasl.gl.drawArc(3 * (2 * x_pos + 480) / 4, y_pos + 125, 103, 110, 180, Math_clamp(get(Flightmodel_pitch), -30, 50), ORANGE)
-    sasl.gl.drawArc(3 * (2 * x_pos + 480) / 4, y_pos + 125, 103, 110, 0, Math_clamp(get(Flightmodel_pitch), -15, 30), LIGHT_BLUE)
-    sasl.gl.drawArc(3 * (2 * x_pos + 480) / 4, y_pos + 125, 103, 110, 180, Math_clamp(get(Flightmodel_pitch), -15, 30), LIGHT_BLUE)
-    --g load indications
-    sasl.gl.drawArc(3 * (2 * x_pos + 480) / 4, y_pos + 125, 94, 101, 0, 360, LIGHT_GREY)
-    sasl.gl.drawArc(3 * (2 * x_pos + 480) / 4, y_pos + 125, 94, 101, (lower_g_lim) * 10, (upper_g_lim -lower_g_lim) * 10, WHITE)
-    sasl.gl.drawArc(3 * (2 * x_pos + 480) / 4, y_pos + 125, 94, 101, 180 + (lower_g_lim ) * 10, (upper_g_lim -lower_g_lim) * 10, WHITE)
-    sasl.gl.drawArc(3 * (2 * x_pos + 480) / 4, y_pos + 125, 94, 101, 0, get(Total_vertical_g_load) * 10, ORANGE)
-    sasl.gl.drawArc(3 * (2 * x_pos + 480) / 4, y_pos + 125, 94, 101, 180, get(Total_vertical_g_load) * 10, ORANGE)
-    sasl.gl.drawArc(3 * (2 * x_pos + 480) / 4, y_pos + 125, 94, 101, 0, Math_clamp(get(Total_vertical_g_load) * 10, lower_g_lim * 10, upper_g_lim * 10), LIGHT_BLUE)
-    sasl.gl.drawArc(3 * (2 * x_pos + 480) / 4, y_pos + 125, 94, 101, 180, Math_clamp(get(Total_vertical_g_load) * 10, lower_g_lim * 10, upper_g_lim * 10), LIGHT_BLUE)
+    sasl.gl.drawArc((2 * x_pos + 480) / 2 + 480 / 4, y_pos + 125, 103, 110, 0, 360, LIGHT_GREY)
+    sasl.gl.drawArc((2 * x_pos + 480) / 2 + 480 / 4, y_pos + 125, 103, 110, -15, 45, WHITE)
+    sasl.gl.drawArc((2 * x_pos + 480) / 2 + 480 / 4, y_pos + 125, 103, 110, 165, 45, WHITE)
+    sasl.gl.drawArc((2 * x_pos + 480) / 2 + 480 / 4, y_pos + 125, 103, 110, 0, get(Flightmodel_pitch), RED)
+    sasl.gl.drawArc((2 * x_pos + 480) / 2 + 480 / 4, y_pos + 125, 103, 110, 180, get(Flightmodel_pitch), RED)
+    sasl.gl.drawArc((2 * x_pos + 480) / 2 + 480 / 4, y_pos + 125, 103, 110, 0, Math_clamp(get(Flightmodel_pitch), -30, 50), ORANGE)
+    sasl.gl.drawArc((2 * x_pos + 480) / 2 + 480 / 4, y_pos + 125, 103, 110, 180, Math_clamp(get(Flightmodel_pitch), -30, 50), ORANGE)
+    sasl.gl.drawArc((2 * x_pos + 480) / 2 + 480 / 4, y_pos + 125, 103, 110, 0, Math_clamp(get(Flightmodel_pitch), -15, 30), LIGHT_BLUE)
+    sasl.gl.drawArc((2 * x_pos + 480) / 2 + 480 / 4, y_pos + 125, 103, 110, 180, Math_clamp(get(Flightmodel_pitch), -15, 30), LIGHT_BLUE)
+    --g load indicat
+    sasl.gl.drawArc((2 * x_pos + 480) / 2 + 480 / 4, y_pos + 125, 94, 101, 0, 360, LIGHT_GREY)
+    sasl.gl.drawArc((2 * x_pos + 480) / 2 + 480 / 4, y_pos + 125, 94, 101, (lower_g_lim) * 10, (upper_g_lim -lower_g_lim) * 10, WHITE)
+    sasl.gl.drawArc((2 * x_pos + 480) / 2 + 480 / 4, y_pos + 125, 94, 101, 180 + (lower_g_lim ) * 10, (upper_g_lim -lower_g_lim) * 10, WHITE)
+    sasl.gl.drawArc((2 * x_pos + 480) / 2 + 480 / 4, y_pos + 125, 94, 101, 0, get(Total_vertical_g_load) * 10, ORANGE)
+    sasl.gl.drawArc((2 * x_pos + 480) / 2 + 480 / 4, y_pos + 125, 94, 101, 180, get(Total_vertical_g_load) * 10, ORANGE)
+    sasl.gl.drawArc((2 * x_pos + 480) / 2 + 480 / 4, y_pos + 125, 94, 101, 0, Math_clamp(get(Total_vertical_g_load) * 10, lower_g_lim * 10, upper_g_lim * 10), LIGHT_BLUE)
+    sasl.gl.drawArc((2 * x_pos + 480) / 2 + 480 / 4, y_pos + 125, 94, 101, 180, Math_clamp(get(Total_vertical_g_load) * 10, lower_g_lim * 10, upper_g_lim * 10), LIGHT_BLUE)
     --aircraft image
-    sasl.gl.drawRotatedTextureCenter (aircraft_side_img, -get(Flightmodel_pitch), 3 * (2 * x_pos + 480) / 4, y_pos + 125, 3 * (2 * x_pos + 480) / 4 - (160 / 2), y_pos + 125 - (53 /2) + 12, 160, 53, {1,1,1})
+    sasl.gl.drawRotatedTextureCenter (aircraft_side_img, -get(Flightmodel_pitch), (2 * x_pos + 480) / 2 + 480 / 4, y_pos + 125, (2 * x_pos + 480) / 2 + 480 / 4 - (160 / 2), y_pos + 125 - (53 /2) + 12, 160, 53, {1,1,1})
     --text indications
-    sasl.gl.drawArc(3 * (2 * x_pos + 480) / 4, y_pos + 125, 20, 92, 270- 40, 80, {LIGHT_GREY[1], LIGHT_GREY[2], LIGHT_GREY[3], 0.6})
-    sasl.gl.drawText(B612_MONO_bold, 3 * (2 * x_pos + 480) / 4, y_pos + 125 - 35, "PITCH", 12, false, false, TEXT_ALIGN_CENTER, WHITE)
-    sasl.gl.drawText(B612_MONO_bold, 3 * (2 * x_pos + 480) / 4, y_pos + 125 - 50, string.format("%.2f", tostring(get(Flightmodel_pitch))) .. "°", 12, false, false, TEXT_ALIGN_CENTER, LIGHT_BLUE)
-    sasl.gl.drawText(B612_MONO_bold, 3 * (2 * x_pos + 480) / 4, y_pos + 125 - 65, "G LOAD", 12, false, false, TEXT_ALIGN_CENTER, WHITE)
-    sasl.gl.drawText(B612_MONO_bold, 3 * (2 * x_pos + 480) / 4, y_pos + 125 - 80, string.format("%.1f", tostring(get(Total_vertical_g_load))) .. "G", 12, false, false, TEXT_ALIGN_CENTER, LIGHT_BLUE)
+    sasl.gl.drawArc((2 * x_pos + 480) / 2 + 480 / 4, y_pos + 125, 20, 92, 270- 40, 80, {LIGHT_GREY[1], LIGHT_GREY[2], LIGHT_GREY[3], 0.6})
+    sasl.gl.drawText(B612_MONO_bold, (2 * x_pos + 480) / 2 + 480 / 4, y_pos + 125 - 35, "PITCH", 12, false, false, TEXT_ALIGN_CENTER, WHITE)
+    sasl.gl.drawText(B612_MONO_bold, (2 * x_pos + 480) / 2 + 480 / 4, y_pos + 125 - 50, string.format("%.2f", tostring(get(Flightmodel_pitch))) .. "°", 12, false, false, TEXT_ALIGN_CENTER, LIGHT_BLUE)
+    sasl.gl.drawText(B612_MONO_bold, (2 * x_pos + 480) / 2 + 480 / 4, y_pos + 125 - 65, "G LOAD", 12, false, false, TEXT_ALIGN_CENTER, WHITE)
+    sasl.gl.drawText(B612_MONO_bold, (2 * x_pos + 480) / 2 + 480 / 4, y_pos + 125 - 80, string.format("%.1f", tostring(get(Total_vertical_g_load))) .. "G", 12, false, false, TEXT_ALIGN_CENTER, LIGHT_BLUE)
 
 
     --sasl.gl.drawLine((2 * x_pos + 480) / 4, 0, (2 * x_pos + 480) / 4, size[2], LIGHT_BLUE)
@@ -141,6 +141,18 @@ local function draw_flight_control_section_480x400(x_pos, y_pos)
     --sasl.gl.drawLine(3 * (2 * x_pos + 480) / 4, 0, 3 * (2 * x_pos + 480) / 4, size[2], LIGHT_BLUE)
     --sasl.gl.drawLine(0,  y_pos + 125, size[1],  y_pos + 125, LIGHT_BLUE)
 
+end
+
+local function draw_flaps_section_180x70(x_pos, y_pos)
+    --draw the background
+    sasl.gl.drawRectangle(x_pos, y_pos, 180, 70, DARK_GREY)
+    sasl.gl.drawText(B612_MONO_bold, (2 * x_pos + 180) / 2, (2 * y_pos + 70) / 2 + 20, "FLAPS CONFIG", 12, false, false, TEXT_ALIGN_CENTER, WHITE)
+
+    local handle_configs = {"CLEAN", "1", "2", "3", "FULL"}
+    local internal_configs = {"CLEAN", "1", "1 + F", "2", "3", "FULL"}
+
+    sasl.gl.drawText(B612_MONO_bold, (2 * x_pos + 180) / 2 - 180 / 4, (2 * y_pos + 70) / 2 - 10, handle_configs[get(Flaps_handle_position) + 1], 12, false, false, TEXT_ALIGN_CENTER, WHITE)
+    sasl.gl.drawText(B612_MONO_bold, (2 * x_pos + 180) / 2 + 180 / 4, (2 * y_pos + 70) / 2 - 10, internal_configs[get(Flaps_internal_config) + 1], 12, false, false, TEXT_ALIGN_CENTER, WHITE)
 end
 
 function onMouseWheel(component, x, y, button, parentX, parentY, value)
@@ -171,4 +183,5 @@ function draw()
     sasl.gl.drawRectangle(0, 0, size[1], size[2], LIGHT_GREY)
 
     draw_flight_control_section_480x400(5, flight_control_section_y_pos)
+    draw_flaps_section_180x70(5 + 480 + 5, size[2] - 5 - 70)
 end

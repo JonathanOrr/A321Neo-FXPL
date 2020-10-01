@@ -53,24 +53,6 @@ function update()
     set(a_floor_speed, Set_anim_value(get(a_floor_speed), get(IAS) * (get(Alpha)/10), 0, 350, 0.4))--9.5 degrees of AoA
     set(stall_speed, Set_anim_value(get(stall_speed), get(IAS) * (get(Alpha)/14), 0, 350, 0.8))--14 degrees of AoA
 
-    --max speeds calculation
-    if get(Flaps_handle_deploy_ratio) == 0 and (get(Front_gear_deployment) + get(Left_gear_deployment) + get(Right_gear_deployment)) / 3 == 0 then
-        set(Max_speed, 330)
-    elseif (get(Front_gear_deployment) + get(Left_gear_deployment) + get(Right_gear_deployment)) / 3 > 0 or get(Flaps_handle_deploy_ratio) > 0 then
-        set(Max_speed, Math_lerp(330, max_speeds_kts[1], (get(Front_gear_deployment) + get(Left_gear_deployment) + get(Right_gear_deployment)) / 3))
-        if get(Gear_handle) == 1 and get(Flaps_handle_deploy_ratio) > 0 then
-            set(Max_speed, Math_lerp(Math_lerp(330, max_speeds_kts[1], (get(Front_gear_deployment) + get(Left_gear_deployment) + get(Right_gear_deployment)) / 3), max_speeds_kts[3], Math_clamp(get(Flaps_handle_deploy_ratio),0, 0.25) / 0.25) +
-                           Math_lerp(0, max_speeds_kts[4] - max_speeds_kts[3], (Math_clamp(get(Flaps_handle_deploy_ratio),0.25, 0.5) - 0.25) / 0.25) +
-                           Math_lerp(0, max_speeds_kts[5] - max_speeds_kts[4], (Math_clamp(get(Flaps_handle_deploy_ratio),0.5, 0.75) - 0.5) / 0.25) +
-                           Math_lerp(0, max_speeds_kts[5] - max_speeds_kts[4], (Math_clamp(get(Flaps_handle_deploy_ratio),0.75, 1) - 0.75) / 0.25))
-        elseif get(Gear_handle) == 0 and get(Flaps_handle_deploy_ratio) > 0 then
-            set(Max_speed, Math_lerp(330, max_speeds_kts[3], Math_clamp(get(Flaps_handle_deploy_ratio), 0, 0.25) / 0.25) +
-                           Math_lerp(0, max_speeds_kts[4] - max_speeds_kts[3], (Math_clamp(get(Flaps_handle_deploy_ratio),0.25, 0.5) - 0.25) / 0.25) +
-                           Math_lerp(0, max_speeds_kts[5] - max_speeds_kts[4], (Math_clamp(get(Flaps_handle_deploy_ratio),0.5, 0.75) - 0.5) / 0.25) +
-                           Math_lerp(0, max_speeds_kts[5] - max_speeds_kts[4], (Math_clamp(get(Flaps_handle_deploy_ratio),0.75, 1) - 0.75) / 0.25))
-        end
-    end
-
     vvi_cl = PFD_GREEN
     if get(vvi) > -1000 and get(vvi) < 1000 then
         --v/s -1000 to 1000

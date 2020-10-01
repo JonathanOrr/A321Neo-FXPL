@@ -211,8 +211,8 @@ local function update_page_normal()
     
         -- Check FCOM for the following conditions
         is_takeoff_power  = get(Eng_1_N1) >= 74 or get(Eng_2_N1) >= 74
-        top_condition     = get(Flaps_handle_deploy_ratio) > 0 or is_takeoff_power
-        bottom_condition  = get(Flaps_handle_deploy_ratio) == 0 and not is_takeoff_power
+        top_condition     = get(Flaps_deployed_angle) > 0 or is_takeoff_power
+        bottom_condition  = get(Flaps_deployed_angle) == 0 and not is_takeoff_power
         if top_condition and not timer_cruise_page then
             sasl.resetTimer(timer_cruise_page)
             sasl.startTimer(timer_cruise_page)

@@ -41,20 +41,20 @@ function update()
     set(Valpha_MAX, Set_anim_value(get(Valpha_MAX), get(IAS) * (get(Alpha)/11), 0, 350, 0.8))--11 degs AoA
 
     --fix this chunk of crap later when you figure out how to convert Mach to kts
-    if get(Flaps_travel_ratio) == 0 and (get(Front_gear_deployment) + get(Left_gear_deployment) + get(Right_gear_deployment)) / 3 == 0 then
+    if get(Flaps_deployed_angle) == 0 and (get(Front_gear_deployment) + get(Left_gear_deployment) + get(Right_gear_deployment)) / 3 == 0 then
         set(VMAX, 350)
-    elseif (get(Front_gear_deployment) + get(Left_gear_deployment) + get(Right_gear_deployment)) / 3 > 0 or get(Flaps_travel_ratio) > 0 then
+    elseif (get(Front_gear_deployment) + get(Left_gear_deployment) + get(Right_gear_deployment)) / 3 > 0 or get(Flaps_deployed_angle) > 0 then
         set(VMAX, Math_lerp(350, max_speeds_kts[1], (get(Front_gear_deployment) + get(Left_gear_deployment) + get(Right_gear_deployment)) / 3))
-        if get(Gear_handle) == 1 and get(Flaps_travel_ratio) > 0 then
-            set(VMAX, Math_lerp(Math_lerp(350, max_speeds_kts[1], (get(Front_gear_deployment) + get(Left_gear_deployment) + get(Right_gear_deployment)) / 3), max_speeds_kts[3], Math_clamp(get(Flaps_travel_ratio),0, 0.25) / 0.25) +
-                      Math_lerp(0, max_speeds_kts[4] - max_speeds_kts[3], (Math_clamp(get(Flaps_travel_ratio),0.25, 0.5) - 0.25) / 0.25) +
-                      Math_lerp(0, max_speeds_kts[5] - max_speeds_kts[4], (Math_clamp(get(Flaps_travel_ratio),0.5, 0.75) - 0.5) / 0.25) +
-                      Math_lerp(0, max_speeds_kts[5] - max_speeds_kts[4], (Math_clamp(get(Flaps_travel_ratio),0.75, 1) - 0.75) / 0.25))
-        elseif get(Gear_handle) == 0 and get(Flaps_travel_ratio) > 0 then
-            set(VMAX, Math_lerp(350, max_speeds_kts[3], Math_clamp(get(Flaps_travel_ratio), 0, 0.25) / 0.25) +
-                      Math_lerp(0, max_speeds_kts[4] - max_speeds_kts[3], (Math_clamp(get(Flaps_travel_ratio),0.25, 0.5) - 0.25) / 0.25) +
-                      Math_lerp(0, max_speeds_kts[5] - max_speeds_kts[4], (Math_clamp(get(Flaps_travel_ratio),0.5, 0.75) - 0.5) / 0.25) +
-                      Math_lerp(0, max_speeds_kts[5] - max_speeds_kts[4], (Math_clamp(get(Flaps_travel_ratio),0.75, 1) - 0.75) / 0.25))
+        if get(Gear_handle) == 1 and get(Flaps_deployed_angle) > 0 then
+            set(VMAX, Math_lerp(Math_lerp(350, max_speeds_kts[1], (get(Front_gear_deployment) + get(Left_gear_deployment) + get(Right_gear_deployment)) / 3), max_speeds_kts[3], Math_clamp(get(Flaps_deployed_angle),0, 0.25) / 0.25) +
+                      Math_lerp(0, max_speeds_kts[4] - max_speeds_kts[3], (Math_clamp(get(Flaps_deployed_angle),0.25, 0.5) - 0.25) / 0.25) +
+                      Math_lerp(0, max_speeds_kts[5] - max_speeds_kts[4], (Math_clamp(get(Flaps_deployed_angle),0.5, 0.75) - 0.5) / 0.25) +
+                      Math_lerp(0, max_speeds_kts[5] - max_speeds_kts[4], (Math_clamp(get(Flaps_deployed_angle),0.75, 1) - 0.75) / 0.25))
+        elseif get(Gear_handle) == 0 and get(Flaps_deployed_angle) > 0 then
+            set(VMAX, Math_lerp(350, max_speeds_kts[3], Math_clamp(get(Flaps_deployed_angle), 0, 0.25) / 0.25) +
+                      Math_lerp(0, max_speeds_kts[4] - max_speeds_kts[3], (Math_clamp(get(Flaps_deployed_angle),0.25, 0.5) - 0.25) / 0.25) +
+                      Math_lerp(0, max_speeds_kts[5] - max_speeds_kts[4], (Math_clamp(get(Flaps_deployed_angle),0.5, 0.75) - 0.5) / 0.25) +
+                      Math_lerp(0, max_speeds_kts[5] - max_speeds_kts[4], (Math_clamp(get(Flaps_deployed_angle),0.75, 1) - 0.75) / 0.25))
         end
     end
 

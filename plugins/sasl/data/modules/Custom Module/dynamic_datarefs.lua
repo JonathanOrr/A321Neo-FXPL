@@ -332,8 +332,6 @@ Yaw_artstab = globalProperty("sim/joystick/artstab_heading_ratio")
 Servo_roll = globalProperty("sim/joystick/servo_roll_ratio")
 Servo_pitch = globalProperty("sim/joystick/servo_pitch_ratio")
 Servo_yaw = globalProperty("sim/joystick/servo_heading_ratio")
-Flaps_handle_ratio = globalProperty("sim/cockpit2/controls/flap_ratio")
-Flaps_handle_deploy_ratio = globalProperty("sim/cockpit2/controls/flap_handle_deploy_ratio")
 Speedbrake_handle_ratio = globalProperty("sim/cockpit2/controls/speedbrake_ratio")
 Flightmodel_roll = globalProperty("sim/flightmodel/position/true_phi")
 Flightmodel_pitch = globalProperty("sim/flightmodel/position/true_theta")
@@ -347,24 +345,30 @@ Roll_rate = globalProperty("sim/flightmodel/position/P")
 Pitch_rate = globalProperty("sim/flightmodel/position/Q")
 Vpath = globalProperty("sim/flightmodel/position/vpath")
 Alpha = globalProperty("sim/flightmodel/position/alpha")
-Flaps_internal_config = createGlobalPropertyf("a321neo/dynamics/surfaces/flaps_internal_config", 0, false, true, false)--0 = clean, 1 = 1, 2 = 1+f, 3 = 2, 4 = 3, 5 = full
-Flaps_travel_ratio = createGlobalPropertyf("a321neo/dynamics/surfaces/flaps_travel_ratio", 0, false, true, false)
 Aircraft_total_weight_kgs = globalProperty("sim/flightmodel/weight/m_total")
+--flaps control
+Flaps_handle_ratio = globalProperty("sim/cockpit2/controls/flap_ratio")
+Flaps_handle_position = createGlobalPropertyf("a321neo/dynamics/surfaces/flaps_handle_position", 0, false, true, false)--0, 1, 2, 3, full
+Flaps_internal_config = createGlobalPropertyf("a321neo/dynamics/surfaces/flaps_internal_config", 0, false, true, false)--0 = clean, 1 = 1, 2 = 1+f, 3 = 2, 4 = 3, 5 = full
 
 --surfaces
+--wing control surfaces
 Left_aileron = globalProperty("sim/flightmodel/controls/wing2l_ail1def") -- -25 deg up 25 deg down
 Left_inboard_spoilers = globalProperty("sim/flightmodel/controls/wing1l_spo1def")--50 degrees ground spoilers
 Left_outboard_spoilers2 = globalProperty("sim/flightmodel/controls/wing2l_spo1def") --roll spoilers 25 deg max up with ailerons when speed brake full, with flaps down it can roll up to 25 deg, does not deploy in flight if speed below 150 or in a.floor toga, normally 0 degrees starts at 18% aileron, 15 degrees in flight decel, 50 degrees for ground spoilers
 Left_outboard_spoilers345 = globalProperty("sim/flightmodel/controls/wing2l_spo2def") --roll spoilers 35 deg max up with ailerons when speed brake full, with flaps down it can roll up to 35 deg, does not deploy in flight if speed below 150 or in a.floor toga, normally 25 degrees starts at 18% aileron, 25 degrees in flight decel, 50 degrees for ground spoilers
-Left_outboard_flaps = globalProperty("sim/flightmodel/controls/wing2l_fla2def") -- flap detents 0 = 0, 1 = 10, 2 = 15, 3 = 20, 4 = 40
-Left_inboard_flaps = globalProperty("sim/flightmodel/controls/wing1l_fla1def") -- flap detents 0 = 0, 1 = 10, 2 = 15, 3 = 20, 4 = 40
 Right_aileron = globalProperty("sim/flightmodel/controls/wing2r_ail1def") -- -25 deg up 25 deg down
 Right_inboard_spoilers = globalProperty("sim/flightmodel/controls/wing1r_spo1def")--50 degrees ground spoilers
 Right_outboard_spoilers2 = globalProperty("sim/flightmodel/controls/wing2r_spo1def") --roll spoilers 25 deg max up with ailerons when speed brake full, with flaps down it can roll up to 25 deg, does not deploy in flight if speed below 150 or in a.floor toga, normally 0 degrees starts at 18% aileron, 15 degrees in flight decel, 50 degrees for ground spoilers
 Right_outboard_spoilers345 = globalProperty("sim/flightmodel/controls/wing2r_spo2def") --roll spoilers 35 deg max up with ailerons when speed brake full, with flaps down it can roll up to 35 deg, does not deploy in flight if speed below 150 or in a.floor toga, normally 25 degrees starts at 18% aileron, 25 degrees in flight decel, 50 degrees for ground spoilers
+--high lift devices
+Slats = globalProperty("sim/flightmodel2/controls/slat1_deploy_ratio") --deploys with flaps 0 = 0, 1 = 0.7, 2 = 0.8, 3 = 0.8, 4 = 1
+Flaps_deployed_angle = createGlobalPropertyf("a321neo/dynamics/surfaces/flaps_deployed_angle", 0, false, true, false)--0, 0, 10, 15, 20, 40
+Left_outboard_flaps = globalProperty("sim/flightmodel/controls/wing2l_fla2def") -- flap detents 0 = 0, 1 = 10, 2 = 15, 3 = 20, 4 = 40
+Left_inboard_flaps = globalProperty("sim/flightmodel/controls/wing1l_fla1def") -- flap detents 0 = 0, 1 = 10, 2 = 15, 3 = 20, 4 = 40
 Right_outboard_flaps = globalProperty("sim/flightmodel/controls/wing2r_fla2def") -- flap detents 0 = 0, 1 = 10, 2 = 15, 3 = 20, 4 = 40
 Right_inboard_flaps = globalProperty("sim/flightmodel/controls/wing1r_fla1def") -- flap detents 0 = 0, 1 = 10, 2 = 15, 3 = 20, 4 = 40
-Slats = globalProperty("sim/flightmodel2/controls/slat1_deploy_ratio") --deploys with flaps 0 = 0, 1 = 0.7, 2 = 0.8, 3 = 0.8, 4 = 1
+--stabilizers
 Horizontal_stabilizer_deflection = globalProperty("sim/flightmodel2/controls/stabilizer_deflection_degrees")
 Elevators_hstab_1 = globalProperty("sim/flightmodel/controls/hstab1_elv1def") --elevators -17 deg down 30 deg up
 Elevators_hstab_2 = globalProperty("sim/flightmodel/controls/hstab2_elv1def") --elevators -17 deg down 30 deg up
