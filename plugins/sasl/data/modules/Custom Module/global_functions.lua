@@ -10,6 +10,22 @@ function Math_clamp(val, min, max)
     end
 end
 
+function Math_clamp_lower(val, min)
+    if val < min then
+        return min
+    elseif val >= min then
+        return val
+    end
+end
+
+function Math_clamp_higer(val, max)
+    if val > max then
+        return max
+    elseif val <= max then
+        return val
+    end
+end
+
 --used to cycle a value e.g. 1 --> 2 --> 3 |
 --                           ^<----------<--
 function Math_cycle(val, start, finish)
@@ -58,19 +74,21 @@ function Math_rescale(in1, out1, in2, out2, x)
 end
 
 --used to animate a value with a linear delay USE ONLY WITH FLOAT VALUES
-function Set_linear_anim_value(current_value, target, min, max, speed, dead_zone)
-    if target - current_value < dead_zone and target - current_value > -dead_zone then
-      return Math_clamp(target, min, max)
-    elseif target < current_value then
-      return Math_clamp(current_value - (speed * get(DELTA_TIME)), min, max)
-    elseif target > current_value then
-      return Math_clamp(current_value + (speed * get(DELTA_TIME)), min, max)
+function Set_linear_anim_value(current_value, target, min, max, speed)
+    if get(DELTA_TIME) ~= 0 then
+        if target - current_value < (speed + (speed * 0.005)) * get(DELTA_TIME) and target - current_value > -(speed + (speed * 0.005)) * get(DELTA_TIME) then
+          return Math_clamp(target, min, max)
+        elseif target < current_value then
+          return Math_clamp(current_value - (speed * get(DELTA_TIME)), min, max)
+        elseif target > current_value then
+          return Math_clamp(current_value + (speed * get(DELTA_TIME)), min, max)
+        end
     end
 end
 
 -- for giving datarefs linear delayed outputs by using set_linear_anim_value
-function Set_dataref_linear_anim(dataref, target, min, max, speed, dead_zone)
-    set(dataref, Set_linear_anim_value(get(dataref), target, min, max, speed, dead_zone))
+function Set_dataref_linear_anim(dataref, target, min, max, speed)
+    set(dataref, Set_linear_anim_value(get(dataref), target, min, max, speed))
 end
 
 --string functions--

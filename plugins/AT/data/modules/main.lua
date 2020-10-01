@@ -26,7 +26,7 @@ sasl.options.setLuaErrorsHandling(SASL_STOP_PROCESSING)
 --size = { 4096, 2048 }
 
 components = {
-  AT {}
+  AT {},
 }
 
 --windows
@@ -71,7 +71,6 @@ A32nx_FD = contextWindow {
     fd {position = { 0 , 0 , 800 , 400 }}
   };
 }
-
 
 --menu item functions
 function show_hide_ui()

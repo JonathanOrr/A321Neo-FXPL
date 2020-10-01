@@ -50,8 +50,8 @@ function update()
     p_gain = A32nx_auto_thrust.P_gain
     i_gain = A32nx_auto_thrust.I_gain
     d_gain = A32nx_auto_thrust.D_gain
-    integral_time = A32nx_auto_thrust.I_time
-    max_integral = A32nx_auto_thrust.Integral_max
+    --integral_time = A32nx_auto_thrust.I_time
+    --max_integral = A32nx_auto_thrust.Integral_max
     integral_sum = A32nx_auto_thrust.Integral_sum
     integral = A32nx_auto_thrust.Integral
     max_error = A32nx_auto_thrust.Max_error
@@ -85,9 +85,9 @@ function draw()
 
     --integral info--
     sasl.gl.drawText(B612_MONO_regular, size[1]/6,       size[2]/2 + 25, "I TIME",                                         12, false, false, TEXT_ALIGN_CENTER, WHITE)
-    sasl.gl.drawText(B612_MONO_regular, size[1]/6,       size[2]/2 - 5,  integral_time,                                           28, false, false, TEXT_ALIGN_CENTER, WHITE)
+    --sasl.gl.drawText(B612_MONO_regular, size[1]/6,       size[2]/2 - 5,  integral_time,                                           28, false, false, TEXT_ALIGN_CENTER, WHITE)
     sasl.gl.drawText(B612_MONO_regular, size[1]/2,       size[2]/2 + 25, "I RANGE",                                        12, false, false, TEXT_ALIGN_CENTER, WHITE)
-    sasl.gl.drawText(B612_MONO_regular, size[1]/2,       size[2]/2 - 5,  max_integral,                                            28, false, false, TEXT_ALIGN_CENTER, WHITE)
+    --sasl.gl.drawText(B612_MONO_regular, size[1]/2,       size[2]/2 - 5,  max_integral,                                            28, false, false, TEXT_ALIGN_CENTER, WHITE)
     sasl.gl.drawText(B612_MONO_regular, size[1]/4,       size[2]/2 - 35, "INTEGRAL SUM",                                          12, false, false, TEXT_ALIGN_CENTER, WHITE)
     sasl.gl.drawText(B612_MONO_regular, size[1]/4,       size[2]/2 - 65, string.format("%.2f", tostring(Round(integral_sum, 2))), 28, false, false, TEXT_ALIGN_CENTER, WHITE)
     sasl.gl.drawText(B612_MONO_regular, 3* size[1]/4,    size[2]/2 - 35, "INTEGRAL",                                              12, false, false, TEXT_ALIGN_CENTER, WHITE)

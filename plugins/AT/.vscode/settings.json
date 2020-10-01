@@ -12,6 +12,17 @@
         "MB_LEFT",
         "onMouseDown",
         "update",
-        "draw"
+        "draw",
+        "moduleDirectory",
+        "get",
+        "set",
+        "globalProperty",
+        "createGlobalPropertyf",
+        "createGlobalPropertyi",
+        "include",
+        "components",
+        "addSearchResourcesPath",
+        "updateAll",
+        "addSearchPath"
     ]
 }

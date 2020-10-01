@@ -23,7 +23,7 @@ panelHeight3d = 2048
 
 components = {
   engine_and_apu {},
-  FBW {},
+  FBW_main {},
   cabin_screens {},
   flight_controls {},
   fcu_ap_at {},
@@ -94,17 +94,17 @@ Packs_debug_window = contextWindow {
   };
 }
 
-FBW_debug_window = contextWindow {
-  name = "FBW DEBUG";
-  position = { 150 , 150 , 340 , 500 };
+SSS_FBW_UI = contextWindow {
+  name = "SSS FBW UI";
+  position = { 50 , 250 , 1000 , 600};
   noBackground = true ;
   proportional = false ;
-  minimumSize = { 170 , 250 };
-  maximumSize = { 340 , 500 };
+  minimumSize = { 500 , 300 };
+  maximumSize = { 1000 , 600 };
   gravity = { 0 , 1 , 0 , 1 };
-  visible = false ;
+  visible = true ;
   components = {
-    FBW_debug {position = { 0 , 0 , 340 , 500 }}
+    FBW_UI {position = { 0 , 0 , 1000 , 600 }}
   };
 }
 
@@ -219,8 +219,8 @@ function Show_hide_packs_debug()
   Packs_debug_window:setIsVisible(not Packs_debug_window:isVisible())
 end
 
-function Show_hide_FBW_debug()
-  FBW_debug_window:setIsVisible(not FBW_debug_window:isVisible())
+function Show_hide_FBW_UI()
+  SSS_FBW_UI:setIsVisible(not SSS_FBW_UI:isVisible())
 end
 
 function Show_hide_FBW_graph()
@@ -317,7 +317,7 @@ Menu_debug_item	= sasl.appendMenuItem (Menu_main, "Debug" )
 Menu_debug	= sasl.createMenu ("", Menu_main, Menu_debug_item)
 ShowHideVnavDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide VNAV Debug", Show_hide_vnav_debug)
 ShowHidePacksDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide PACKS Debug", Show_hide_packs_debug)
-ShowHideFBWDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide FBW Debug", Show_hide_FBW_debug)
+ShowHideFBWUI	= sasl.appendMenuItem(Menu_debug, "Show/Hide FBW UI", Show_hide_FBW_UI)
 ShowHideFBWGraph	= sasl.appendMenuItem(Menu_debug, "Show/Hide FBW Graph", Show_hide_FBW_graph)
 ShowHideECAMDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide ECAM Debug", Show_hide_ECAM_debug)
 ShowHideDMCDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide DMC Debug", Show_hide_DMC_debug)

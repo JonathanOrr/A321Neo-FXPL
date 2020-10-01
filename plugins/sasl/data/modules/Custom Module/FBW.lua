@@ -1,6 +1,4 @@
 --PID and PD array
---array format PD_array = {P_gain, D_gain, Current_error, Min_error, Max_error, Error_offset}
---array format PID_array = {P_gain, I_gain, D_gain, I_delay, Integral, Current_error, Min_error, Max_error, Error_offset}
 local A32nx_FBW_roll_left =  {P_gain = 1, D_gain = 75, Current_error = 0, Min_error = -2.5, Max_error = 2.5, Error_offset = 0}
 local A32nx_FBW_roll_right = {P_gain = 1, D_gain = 75, Current_error = 0, Min_error = -2.5, Max_error = 2.5, Error_offset = 0}
 local A32nx_FBW_roll_left_no_stick =  {P_gain = 1, D_gain = 25, Current_error = 0, Min_error = -5, Max_error = 5, Error_offset = 0}
@@ -160,7 +158,7 @@ function onModuleShutdown()--reset things back so other planes will work
     set(Override_control_surfaces, 0)
 end
 
-function update()
+--[[function update()
     set(Override_artstab, 1)
 
     --A32nx_FBW_1G_command.P_gain = get(live_P_gain)
@@ -415,4 +413,4 @@ function update()
         set(Roll_artstab, get(Roll))
         set(Pitch_artstab, get(Pitch))
     end
-end
+end]]
