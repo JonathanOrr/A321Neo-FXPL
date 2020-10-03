@@ -313,21 +313,41 @@ Hydraulic_PTU_status = createGlobalPropertyi("a321neo/dynamics/HYD/PTU_status", 
 Hydraulic_RAT_status = createGlobalPropertyi("a321neo/dynamics/HYD/RAT_status", 0, false, true, false) -- 0: OFF ready, 1: Running OK, 2: FAULT or low speed
 
 --aircraft limits
-Capt_VMAX =		   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/capt_maximum_aircraft_speed", 0, false, true, false)--uses different pilot's mach
-Fo_VMAX =		   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fo_maximum_aircraft_speed", 0, false, true, false)
+Capt_VMAX =		   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/capt_vmax_speed", 0, false, true, false)--uses different pilot's mach
+Fo_VMAX =		   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fo_vmax_speed", 0, false, true, false)
 S_speed = 		   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/s_speed", 0, false, true, false)
 F_speed = 		   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/f_speed", 0, false, true, false)
-VLS = 			   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/vls", 0, false, true, false)
+VLS = 			   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/vls_speed", 0, false, true, false)
 Capt_GD =		   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/capt_green_dot_speed", 0, false, true, false)--uses different pilot's baro alt
 Fo_GD = 		   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fo_green_dot_speed", 0, false, true, false)
 Capt_VSW = 		   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/capt_stall_warning_speed", 0, false, true, false)--uses different pilot's alpha
 Fo_VSW = 		   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fo_stall_warning_speed", 0, false, true, false)
 Capt_Valpha_prot = createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/capt_alpha_prot_speed", 0, false, true, false)--uses different pilot's alpha
 Fo_Valpha_prot =   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fo_alpha_prot_speed", 0, false, true, false)
-Capt_Vtoga_prot =   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/capt_toga_prot_speed", 0, false, true, false)--uses different pilot's alpha
-Fo_Vtoga_prot =   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fo_toga_prot_speed", 0, false, true, false)
+Capt_Vtoga_prot =  createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/capt_toga_prot_speed", 0, false, true, false)--uses different pilot's alpha
+Fo_Vtoga_prot =    createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fo_toga_prot_speed", 0, false, true, false)
 Capt_Valpha_MAX =  createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/capt_alpha_max_speed", 0, false, true, false)--uses different pilot's alpha
 Fo_Valpha_MAX =    createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fo_alpha_max_speed", 0, false, true, false)
+--value deltas
+Capt_VMAX_delta =		 createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/delta/capt_vmax", 0, false, true, false)--uses different pilot's mach
+Fo_VMAX_delta =		   	 createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/delta/fo_vmax", 0, false, true, false)
+Capt_S_speed_delta = 	 createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/delta/capt_s", 0, false, true, false)--uses different pilot's IAS
+Fo_S_speed_delta = 		 createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/delta/fo_s", 0, false, true, false)
+Capt_F_speed_delta = 	 createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/delta/capt_f", 0, false, true, false)--uses different pilot's IAS
+Fo_F_speed_delta = 		 createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/delta/fo_f", 0, false, true, false)
+Capt_VLS_delta = 		 createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/delta/capt_vls", 0, false, true, false)--uses different pilot's IAS
+Fo_VLS_delta = 			 createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/delta/fo_vls", 0, false, true, false)
+Capt_GD_delta =		   	 createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/delta/capt_green_dot", 0, false, true, false)--uses different pilot's baro alt
+Fo_GD_delta = 		     createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/delta/fo_green_dot", 0, false, true, false)
+Capt_VSW_delta = 		 createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/delta/capt_stall_warning", 0, false, true, false)--uses different pilot's alpha
+Fo_VSW_delta = 		   	 createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/delta/fo_stall_warning", 0, false, true, false)
+Capt_Valpha_prot_delta = createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/delta/capt_alpha_prot", 0, false, true, false)--uses different pilot's alpha
+Fo_Valpha_prot_delta =   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/delta/fo_alpha_prot", 0, false, true, false)
+Capt_Vtoga_prot_delta =  createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/delta/capt_toga_prot", 0, false, true, false)--uses different pilot's alpha
+Fo_Vtoga_prot_delta =    createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/delta/fo_toga_prot", 0, false, true, false)
+Capt_Valpha_MAX_delta =  createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/delta/capt_alpha_max", 0, false, true, false)--uses different pilot's alpha
+Fo_Valpha_MAX_delta =    createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/delta/fo_alpha_max", 0, false, true, false)
+
 Aircraft_total_weight_kgs = globalProperty("sim/flightmodel/weight/m_total")
 
 --flight controls
