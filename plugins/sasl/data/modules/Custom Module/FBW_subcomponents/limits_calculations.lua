@@ -64,7 +64,6 @@ end
 function update()
     if get(PFD_Capt_Baro_Altitude) > 24600 then
         set(Capt_VMAX, get(PFD_Capt_IAS) * (VMAX_speeds[1] / get(Capt_Mach)))
-        set(Max_speed, get(PFD_Capt_IAS) * (VMAX_speeds[1] / get(Capt_Mach)))
     else
         set(Capt_VMAX, VMAX_speeds[2])
     end
@@ -94,14 +93,14 @@ function update()
     set(Capt_GD, (1.5 * get(Aircraft_total_weight_kgs) / 1000 + 110) + Math_clamp_lower((get(PFD_Capt_Baro_Altitude) - 20000) / 1000, 0))
     set(Fo_GD,   (1.5 * get(Aircraft_total_weight_kgs) / 1000 + 110) + Math_clamp_lower((get(PFD_Fo_Baro_Altitude)   - 20000) / 1000, 0))
     --stall speeds(configuration dependent)
-    set(Capt_VSW,         Set_anim_value(get(Capt_VSW),         get(PFD_Capt_IAS) * (get(Alpha) / vsw_aprot_alphas[get(Flaps_internal_config) + 1]), 0, 350, 0.5))
-    set(Fo_VSW,           Set_anim_value(get(Fo_VSW),           get(PFD_Fo_IAS)   * (get(Alpha) / vsw_aprot_alphas[get(Flaps_internal_config) + 1]), 0, 350, 0.5))
-    set(Capt_Valpha_prot, Set_anim_value(get(Capt_Valpha_prot), get(PFD_Capt_IAS) * (get(Alpha) / vsw_aprot_alphas[get(Flaps_internal_config) + 1]), 0, 350, 0.5))
-    set(Fo_Valpha_prot,   Set_anim_value(get(Fo_Valpha_prot),   get(PFD_Fo_IAS)   * (get(Alpha) / vsw_aprot_alphas[get(Flaps_internal_config) + 1]), 0, 350, 0.5))
-    set(Capt_Vtoga_prot,  Set_anim_value(get(Capt_Vtoga_prot),  get(PFD_Capt_IAS) * (get(Alpha) / toga_prot_alphas[get(Flaps_internal_config) + 1]), 0, 350, 0.5))
-    set(Fo_Vtoga_prot,    Set_anim_value(get(Fo_Vtoga_prot),    get(PFD_Fo_IAS)   * (get(Alpha) / toga_prot_alphas[get(Flaps_internal_config) + 1]), 0, 350, 0.5))
-    set(Capt_Valpha_MAX,  Set_anim_value(get(Capt_Valpha_MAX),  get(PFD_Capt_IAS) * (get(Alpha) / alpha_max_alphas[get(Flaps_internal_config) + 1]), 0, 350, 0.5))
-    set(Fo_Valpha_MAX,    Set_anim_value(get(Fo_Valpha_MAX),    get(PFD_Fo_IAS)   * (get(Alpha) / alpha_max_alphas[get(Flaps_internal_config) + 1]), 0, 350, 0.5))
+    set(Capt_VSW,         Set_anim_value(get(Capt_VSW),         get(PFD_Capt_IAS) -  (get(PFD_Capt_IAS) * (1 - (get(Alpha) / vsw_aprot_alphas[get(Flaps_internal_config) + 1]))) / 3, 0, 350, 0.6))
+    set(Fo_VSW,           Set_anim_value(get(Fo_VSW),           get(PFD_Fo_IAS)   -  (get(PFD_Fo_IAS)   * (1 - (get(Alpha) / vsw_aprot_alphas[get(Flaps_internal_config) + 1]))) / 3, 0, 350, 0.6))
+    set(Capt_Valpha_prot, Set_anim_value(get(Capt_Valpha_prot), get(PFD_Capt_IAS) -  (get(PFD_Capt_IAS) * (1 - (get(Alpha) / vsw_aprot_alphas[get(Flaps_internal_config) + 1]))) / 3, 0, 350, 0.6))
+    set(Fo_Valpha_prot,   Set_anim_value(get(Fo_Valpha_prot),   get(PFD_Fo_IAS)   -  (get(PFD_Fo_IAS)   * (1 - (get(Alpha) / vsw_aprot_alphas[get(Flaps_internal_config) + 1]))) / 3, 0, 350, 0.6))
+    set(Capt_Vtoga_prot,  Set_anim_value(get(Capt_Vtoga_prot),  get(PFD_Capt_IAS) -  (get(PFD_Capt_IAS) * (1 - (get(Alpha) / toga_prot_alphas[get(Flaps_internal_config) + 1]))) / 3, 0, 350, 0.6))
+    set(Fo_Vtoga_prot,    Set_anim_value(get(Fo_Vtoga_prot),    get(PFD_Fo_IAS)   -  (get(PFD_Fo_IAS)   * (1 - (get(Alpha) / toga_prot_alphas[get(Flaps_internal_config) + 1]))) / 3, 0, 350, 0.6))
+    set(Capt_Valpha_MAX,  Set_anim_value(get(Capt_Valpha_MAX),  get(PFD_Capt_IAS) -  (get(PFD_Capt_IAS) * (1 - (get(Alpha) / alpha_max_alphas[get(Flaps_internal_config) + 1]))) / 2, 0, 350, 0.6))
+    set(Fo_Valpha_MAX,    Set_anim_value(get(Fo_Valpha_MAX),    get(PFD_Fo_IAS)   -  (get(PFD_Fo_IAS)   * (1 - (get(Alpha) / alpha_max_alphas[get(Flaps_internal_config) + 1]))) / 2, 0, 350, 0.6))
 
     --calculate_value_delta
     set(Capt_VMAX_delta,        get(PFD_Capt_IAS) - get(Capt_VMAX))
@@ -120,8 +119,8 @@ function update()
     set(Fo_Valpha_prot_delta,   get(PFD_Fo_IAS)   - get(Fo_Valpha_prot))
     set(Capt_Vtoga_prot_delta,  get(PFD_Capt_IAS) - get(Capt_Vtoga_prot))
     set(Fo_Vtoga_prot_delta,    get(PFD_Fo_IAS)   - get(Fo_Vtoga_prot))
-    set(Capt_Valpha_MAX_delta,  get(PFD_Capt_IAS) - get(Capt_Valpha_MAX_delta))
-    set(Fo_Valpha_MAX_delta,    get(PFD_Fo_IAS)   - get(Fo_Valpha_MAX_delta))
+    set(Capt_Valpha_MAX_delta,  get(PFD_Capt_IAS) - get(Capt_Valpha_MAX))
+    set(Fo_Valpha_MAX_delta,    get(PFD_Fo_IAS)   - get(Fo_Valpha_MAX))
 
     if get(FBW_status) == 2 then
         yaw_limit_clamping_upper_limit = Set_anim_value(yaw_limit_clamping_upper_limit, 25, 25, 30, 31 * get(DELTA_TIME))

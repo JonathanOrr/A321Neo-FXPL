@@ -270,7 +270,6 @@ Fo_Mach    = globalProperty("sim/cockpit2/gauges/indicators/mach_copilot")
 Stby_Alt     = globalProperty("sim/cockpit2/gauges/indicators/altitude_ft_stby")     -- Altitude in the stdby instrument
 Stby_IAS     = globalProperty("sim/cockpit2/gauges/indicators/airspeed_kts_stby")    -- IAS in the stdby instrument
 Stby_Baro    = globalProperty("sim/cockpit2/gauges/actuators/barometer_setting_in_hg_stby") -- Baro settings for STBY
-	
 
 --gear
 Autobrakes_sim = globalProperty("sim/cockpit2/switches/auto_brake_level")--0RTO, 1off, 2, 3, 4, 5
@@ -405,9 +404,9 @@ Right_outboard_flaps = globalProperty("sim/flightmodel/controls/wing2r_fla2def")
 Right_inboard_flaps =  globalProperty("sim/flightmodel/controls/wing1r_fla1def")
 SFCC_1_status = 	   createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/sfcc_1_status", 1, false, true, false)--slats flaps control computer 1
 SFCC_2_status = 	   createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/sfcc_2_status", 1, false, true, false)--slats flaps control computer 2
-Slats_powered = 	   createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/slats_powered", 1, false, true, false)--is slats hydraulicly powered
+Slats_ecam_amber = 	   createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/slats_ecam_amber", 0, false, true, false)--slats indication on the ecam is amber
 Slats_in_transit = 	   createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/slats_in_transit", 0, false, true, false)--slats moving
-Flaps_powered = 	   createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/flaps_powered", 1, false, true, false)--is flaps hydraulicly powered
+Flaps_ecam_amber = 	   createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/flaps_ecam_amber", 0, false, true, false)--flaps indication on the ecam is amber
 Flaps_in_transit = 	   createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/flaps_in_transit", 0, false, true, false)--flaps moving
 Flaps_deployed_angle = createGlobalPropertyf("a321neo/dynamics/FBW/slats_and_flaps/flaps_deployed_angle", 0, false, true, false)--0, 0, 10, 15, 20, 40
 --stabilizers

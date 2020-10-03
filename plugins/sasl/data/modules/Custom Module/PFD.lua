@@ -45,13 +45,6 @@ local max_speeds_kts = {
 function update()
     --PFD deltas
     set(ground_track_delta, get(ground_track) - get(current_heading))
-    set(Max_speed_delta, get(Max_speed) - get(IAS))
-    set(a_floor_speed_delta, get(a_floor_speed) - get(IAS))
-    set(stall_speed_delta, get(stall_speed) - get(IAS))
-
-    --a floor speed and stall speed
-    set(a_floor_speed, Set_anim_value(get(a_floor_speed), get(IAS) * (get(Alpha)/10), 0, 350, 0.4))--9.5 degrees of AoA
-    set(stall_speed, Set_anim_value(get(stall_speed), get(IAS) * (get(Alpha)/14), 0, 350, 0.8))--14 degrees of AoA
 
     vvi_cl = PFD_GREEN
     if get(vvi) > -1000 and get(vvi) < 1000 then

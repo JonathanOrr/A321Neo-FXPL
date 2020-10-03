@@ -75,6 +75,9 @@ function onModuleShutdown()
 end
 
 function update()
+    --calculate V/S
+    --print(get(Capt_TAT) * math.tan(get(Vpath)) * 101.269)
+
     if get(DELTA_TIME) ~= 0 then
         FD_roll = Set_linear_anim_value(FD_roll, A32nx_PID_new_neg_avail(A32nx_FD_roll, get(target_hdg) - get(aircraft_heading)) * 30, -30, 30, 10)
         FD_pitch = Set_linear_anim_value(FD_pitch, A32nx_PID_new_neg_avail(A32nx_FD_pitch, get(target_vs) - get(vvi)) * 30, -30, 30, 10)

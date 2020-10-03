@@ -76,18 +76,34 @@ local function slats_flaps_calc_and_control()
     --slats
     if get(Hydraulic_G_press) > 1450 and get(Hydraulic_B_press) > 1450 and get(SFCC_1_status) == 1 and get(SFCC_2_status) == 1 then
         slats_speed = 0.0625
+        set(Slats_ecam_amber, 0)
     elseif (get(Hydraulic_G_press) < 1450 and get(Hydraulic_B_press) < 1450) or (get(SFCC_1_status) == 0 and get(SFCC_2_status) == 0) then
         slats_speed = 0
+        --make ecame slats indication yellow refer to FCOM 1.27.50 P6
+        if get(All_on_ground) == 1 and get(Engine_1_avail) == 0 and get(Engine_2_avail) == 0 then
+            set(Slats_ecam_amber, 0)
+        else
+            set(Slats_ecam_amber, 1)
+        end
     else
         slats_speed = 0.0625 / 2
+        set(Slats_ecam_amber, 0)
     end
     --flaps
     if get(Hydraulic_G_press) > 1450 and get(Hydraulic_Y_press) > 1450 and get(SFCC_1_status) == 1 and get(SFCC_2_status) == 1 then
         flaps_speed = 2.5
+        set(Flaps_ecam_amber, 0)
     elseif (get(Hydraulic_G_press) < 1450 and get(Hydraulic_Y_press) < 1450) or (get(SFCC_1_status) == 0 and get(SFCC_2_status) == 0) then
         flaps_speed = 0
+        --make ecame flaps indication yellow refer to FCOM 1.27.50 P6
+        if get(All_on_ground) == 1 and get(Engine_1_avail) == 0 and get(Engine_2_avail) == 0 then
+            set(Flaps_ecam_amber, 0)
+        else
+            set(Flaps_ecam_amber, 1)
+        end
     else
         flaps_speed = 2.5 / 2
+        set(Flaps_ecam_amber, 0)
     end
 
     local past_slats_pos = get(Slats)
