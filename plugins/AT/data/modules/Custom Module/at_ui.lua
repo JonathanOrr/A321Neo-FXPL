@@ -42,8 +42,8 @@ local DARK_GREY = {0.1568, 0.1803, 0.2039}
 --fonts
 local B612_regular = sasl.gl.loadFont("fonts/B612-Regular.ttf")
 local B612_bold = sasl.gl.loadFont("fonts/B612-Bold.ttf")
-local B612_MONO_regular = sasl.gl.loadFont("fonts/B612MONO-Regular.ttf")
-local B612_MONO_bold = sasl.gl.loadFont("fonts/B612MONO-Bold.ttf")
+local B612_MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
+local B612_MONO_bold = sasl.gl.loadFont("fonts/B612Mono-Bold.ttf")
 
 function update()
     target_speed = get(A32nx_target_spd)

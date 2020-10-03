@@ -20,8 +20,8 @@ size = {340, 420}
 --fonts
 local B612_regular = sasl.gl.loadFont("fonts/B612-Regular.ttf")
 local B612_bold = sasl.gl.loadFont("fonts/B612-Bold.ttf")
-local B612_MONO_regular = sasl.gl.loadFont("fonts/B612MONO-Regular.ttf")
-local B612_MONO_bold = sasl.gl.loadFont("fonts/B612MONO-Bold.ttf")
+local B612_MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
+local B612_MONO_bold = sasl.gl.loadFont("fonts/B612Mono-Bold.ttf")
 
 --colors
 local black = {0,0,0}
