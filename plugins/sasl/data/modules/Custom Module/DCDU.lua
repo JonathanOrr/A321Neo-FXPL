@@ -50,6 +50,9 @@ MESSAGE_STATUS_SENDING = 3
 MESSAGE_STATUS_SENT    = 4
 MESSAGE_STATUS_DONE    = 5
 
+-- 10 seconds after power on
+FIRST_CONNECTION_TIME = 10
+
 ----------------------------------------------------------------------------------------------------
 -- Global/Local variables
 ----------------------------------------------------------------------------------------------------
@@ -75,6 +78,9 @@ local curr_atc_lat = 0
 local curr_atc_lon = 0
 local array_ctr = {}
 local nearest_ctr = nil
+
+-- Power on time
+local powered_on_at = 0
 
 -- The time when a message switch from the status CONFIRM to the status SENDING. After 3 seconds from this time,
 -- the status switch to SENT
@@ -340,7 +346,7 @@ local function update_no_connection()
     display_title.text = "LINK LOST"
     display_title.color = ECAM_ORANGE
 
-    display_btm_right[3].text = "CLOSE *"
+    display_btm_right[3].text = "RECALL *"
     display_btm_right[3].color = ECAM_BLUE
     
     display_running_text.text = get(ZULU_hours) .. get(ZULU_mins) .. "Z"
@@ -393,14 +399,30 @@ end
 -- Update the SATCOM and VHF status
 local function update_satcom_vhf_connection()
 
+    if get(AC_bus_1_pwrd) == 0 then
+        -- No power? No connection
+        set(Acars_status, 0)
+        powered_on_at = 0
+        return
+    elseif powered_on_at == 0 then
+        powered_on_at = get(TIME)
+    end
+    
+    if get(TIME) - powered_on_at < FIRST_CONNECTION_TIME then
+        set(Acars_status, 0)
+        return
+    end
+
     -- SATCOM
     local is_satcom_connected = 1
     if math.abs(get(Aircraft_lat)) > 75 then
         is_satcom_connected = 0 -- SATCOM is not available over 75 degrees
     end
-    if math.abs(get(Flightmodel_roll)) > 45 then
+    if math.abs(get(Flightmodel_roll)) > 30 then
         is_satcom_connected = 0 -- The antenna of the SATCOM is no more towards the sky
     end
+    
+    print(get(Flightmodel_roll))
     
     math.randomseed(get(TIME))
     if math.random (1, 10000) == 5000 then  -- Random satellite disconnection
@@ -410,8 +432,6 @@ local function update_satcom_vhf_connection()
     -- VHF
     local is_vhf_connected = 2
     local distance_vhf = 999
-
-    -- TODO Check VHF3
 
     if curr_atc_id ~= "" then
         distance_vhf = GC_distance_km(curr_atc_lat, curr_atc_lon, get(Aircraft_lat), get(Aircraft_long))
@@ -528,24 +548,23 @@ function update()
         if not updated_connection then     -- This is to avoid multiple calls
            updated_connection = true
            update_satcom_vhf_connection()
+           -- Update the connected ATC (CTR has been already computed)
+           update_connected_atc()
+
            if math.ceil(get(TIME)) % 60 == 0 then  -- Update the ATC CTR every minute (quite computational intensive)
                 update_nearest_ctr()
            end
             change_occured = true
         end
+
     else
         updated_connection = false
     end
 
-    -- Update the connected ATC (CTR has been already computed)
-    update_connected_atc()
-
     if get(Acars_status) == 0 then
         -- No connection, nothing to do
-        if was_connected then
-            was_connected = false
-            update_no_connection()
-        end
+        was_connected = false
+        update_no_connection()
     end
 
     if get(DCDU_recall_mode) == 1 then
