@@ -422,8 +422,6 @@ local function update_satcom_vhf_connection()
         is_satcom_connected = 0 -- The antenna of the SATCOM is no more towards the sky
     end
     
-    print(get(Flightmodel_roll))
-    
     math.randomseed(get(TIME))
     if math.random (1, 10000) == 5000 then  -- Random satellite disconnection
         is_satcom_connected = 0

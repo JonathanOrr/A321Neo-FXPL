@@ -67,6 +67,7 @@ local failures_data = {
             {name="IDG 1\nLOW OIL", status=false, dataref=FAILURE_ELEC_IDG1_oil },
             {name="IDG 2\nOVERHEAT", status=false, dataref=FAILURE_ELEC_IDG2_temp },
             {name="IDG 2\nLOW OIL", status=false, dataref=FAILURE_ELEC_IDG2_oil },
+            {name="GALLEY\nFAILURE", status=false, dataref=FAILURE_ELEC_GALLEY }
         }
     },
     {
