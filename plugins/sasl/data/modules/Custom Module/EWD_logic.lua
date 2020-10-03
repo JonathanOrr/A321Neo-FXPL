@@ -4,6 +4,7 @@ include('EWD_msgs/adirs.lua')
 include('EWD_msgs/bleed.lua')
 include('EWD_msgs/brakes_and_antiskid.lua')
 include('EWD_msgs/doors.lua')
+include('EWD_msgs/electrical.lua')
 include('EWD_msgs/engines_and_apu.lua')
 include('EWD_msgs/FBW.lua')
 include('EWD_msgs/flight_controls.lua')
@@ -90,17 +91,19 @@ local left_messages_list = {
     MessageGroup_HYD_Y_SYS_LO_PR,
     MessageGroup_HYD_RAT_FAULT,
     MessageGroup_HYD_PTU_FAULT,
+    MessageGroup_ELEC_BAT_OFF,
+    MessageGroup_ELEC_BAT_FAULT,
     
     -- Warnings
     MessageGroup_CONFIG_TAKEOFF,
     MessageGroup_APU_FIRE,
     MessageGroup_GEAR_NOT_DOWNLOCKED,
     MessageGroup_GEAR_NOT_DOWN,
-    MessageGroup_ADR_FAULT_TRIPLE,
-    MessageGroup_IR_FAULT_TRIPLE,
     MessageGroup_HYD_B_AND_Y_LO_PR,
     MessageGroup_HYD_G_AND_B_LO_PR,
     MessageGroup_HYD_G_AND_Y_LO_PR,
+    MessageGroup_ADR_FAULT_TRIPLE,
+    MessageGroup_IR_FAULT_TRIPLE,
     -- Misc
     MessageGroup_TOCONFIG_NORMAL -- This must be the last message
 }
