@@ -265,6 +265,7 @@ Fo_Baro_Alt  = globalProperty("sim/cockpit2/gauges/indicators/altitude_ft_copilo
 Capt_VVI     = globalProperty("sim/cockpit2/gauges/indicators/vvi_fpm_pilot")        -- Consider to use PFD_Capt_VS instead (check cockpit_datarefs.lua)
 Fo_VVI       = globalProperty("sim/cockpit2/gauges/indicators/vvi_fpm_copilot")      -- Consider to use PFD_Fo_VS instead (check cockpit_datarefs.lua)
 Capt_Mach    = globalProperty("sim/cockpit2/gauges/indicators/mach_pilot")
+Fo_Mach    = globalProperty("sim/cockpit2/gauges/indicators/mach_copilot")
 
 Stby_Alt     = globalProperty("sim/cockpit2/gauges/indicators/altitude_ft_stby")     -- Altitude in the stdby instrument
 Stby_IAS     = globalProperty("sim/cockpit2/gauges/indicators/airspeed_kts_stby")    -- IAS in the stdby instrument
@@ -312,15 +313,22 @@ Hydraulic_PTU_status = createGlobalPropertyi("a321neo/dynamics/HYD/PTU_status", 
 Hydraulic_RAT_status = createGlobalPropertyi("a321neo/dynamics/HYD/RAT_status", 0, false, true, false) -- 0: OFF ready, 1: Running OK, 2: FAULT or low speed
 
 --aircraft limits
-VLS = createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/vls", 0, false, true, false)
-F_speed = createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/f_speed", 0, false, true, false)
-S_speed = createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/s_speed", 0, false, true, false)
-GD = createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/green_dot_speed", 0, false, true, false)
-Valpha_prot = createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/alpha_prot_speed", 0, false, true, false)
-Valpha_MAX = createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/alpha_max_speed", 0, false, true, false)
-VSW = createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/stall_warning_speed", 0, false, true, false)
-VMAX = createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/maximum_aircraft_speed", 0, false, true, false)
-Yaw_lim = createGlobalPropertyf("a321neo/dynamics/FBW/yaw_lim", 30, false, true, false)
+Capt_VMAX =		   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/capt_maximum_aircraft_speed", 0, false, true, false)--uses different pilot's mach
+Fo_VMAX =		   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fo_maximum_aircraft_speed", 0, false, true, false)
+S_speed = 		   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/s_speed", 0, false, true, false)
+F_speed = 		   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/f_speed", 0, false, true, false)
+VLS = 			   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/vls", 0, false, true, false)
+Capt_GD =		   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/capt_green_dot_speed", 0, false, true, false)--uses different pilot's baro alt
+Fo_GD = 		   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fo_green_dot_speed", 0, false, true, false)
+Capt_VSW = 		   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/capt_stall_warning_speed", 0, false, true, false)--uses different pilot's alpha
+Fo_VSW = 		   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fo_stall_warning_speed", 0, false, true, false)
+Capt_Valpha_prot = createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/capt_alpha_prot_speed", 0, false, true, false)--uses different pilot's alpha
+Fo_Valpha_prot =   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fo_alpha_prot_speed", 0, false, true, false)
+Capt_Vtoga_prot =   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/capt_toga_prot_speed", 0, false, true, false)--uses different pilot's alpha
+Fo_Vtoga_prot =   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fo_toga_prot_speed", 0, false, true, false)
+Capt_Valpha_MAX =  createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/capt_alpha_max_speed", 0, false, true, false)--uses different pilot's alpha
+Fo_Valpha_MAX =    createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fo_alpha_max_speed", 0, false, true, false)
+Aircraft_total_weight_kgs = globalProperty("sim/flightmodel/weight/m_total")
 
 --flight controls
 Roll = globalProperty("sim/joystick/yoke_roll_ratio")
@@ -345,31 +353,46 @@ Roll_rate = globalProperty("sim/flightmodel/position/P")
 Pitch_rate = globalProperty("sim/flightmodel/position/Q")
 Vpath = globalProperty("sim/flightmodel/position/vpath")
 Alpha = globalProperty("sim/flightmodel/position/alpha")
-Aircraft_total_weight_kgs = globalProperty("sim/flightmodel/weight/m_total")
 --flaps control
 Flaps_handle_ratio = globalProperty("sim/cockpit2/controls/flap_ratio")
 Flaps_handle_position = createGlobalPropertyf("a321neo/dynamics/surfaces/flaps_handle_position", 0, false, true, false)--0, 1, 2, 3, full
 Flaps_internal_config = createGlobalPropertyf("a321neo/dynamics/surfaces/flaps_internal_config", 0, false, true, false)--0 = clean, 1 = 1, 2 = 1+f, 3 = 2, 4 = 3, 5 = full
 
 --surfaces
---wing control surfaces
-Left_aileron = globalProperty("sim/flightmodel/controls/wing2l_ail1def") -- -25 deg up 25 deg down
-Left_inboard_spoilers = globalProperty("sim/flightmodel/controls/wing1l_spo1def")--50 degrees ground spoilers
-Left_outboard_spoilers2 = globalProperty("sim/flightmodel/controls/wing2l_spo1def") --roll spoilers 25 deg max up with ailerons when speed brake full, with flaps down it can roll up to 25 deg, does not deploy in flight if speed below 150 or in a.floor toga, normally 0 degrees starts at 18% aileron, 15 degrees in flight decel, 50 degrees for ground spoilers
-Left_outboard_spoilers345 = globalProperty("sim/flightmodel/controls/wing2l_spo2def") --roll spoilers 35 deg max up with ailerons when speed brake full, with flaps down it can roll up to 35 deg, does not deploy in flight if speed below 150 or in a.floor toga, normally 25 degrees starts at 18% aileron, 25 degrees in flight decel, 50 degrees for ground spoilers
+--flight computers status
+ELAC_1_status = createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/elac_1_status", 1, false, true, false)--elevator aileron computer(protection outputs)
+ELAC_2_status = createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/elac_2_status", 1, false, true, false)
+FAC_1_status = 	createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/fac_1_status",  1, false, true, false)--flight augmentation computer(speeds calculations)
+FAC_2_status = 	createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/fac_2_status",  1, false, true, false)
+SEC_1_status = 	createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/sec_1_status",  1, false, true, false)--spolier and elevator computer
+SEC_2_status = 	createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/sec_2_status",  1, false, true, false)
+SEC_3_status = 	createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/sec_3_status",  1, false, true, false)
+--ailerons
+Left_aileron =  globalProperty("sim/flightmodel/controls/wing2l_ail1def") -- -25 deg up 25 deg down
 Right_aileron = globalProperty("sim/flightmodel/controls/wing2r_ail1def") -- -25 deg up 25 deg down
-Right_inboard_spoilers = globalProperty("sim/flightmodel/controls/wing1r_spo1def")--50 degrees ground spoilers
-Right_outboard_spoilers2 = globalProperty("sim/flightmodel/controls/wing2r_spo1def") --roll spoilers 25 deg max up with ailerons when speed brake full, with flaps down it can roll up to 25 deg, does not deploy in flight if speed below 150 or in a.floor toga, normally 0 degrees starts at 18% aileron, 15 degrees in flight decel, 50 degrees for ground spoilers
+--spoilers
+Left_inboard_spoilers =      globalProperty("sim/flightmodel/controls/wing1l_spo1def")--50 degrees ground spoilers
+Left_outboard_spoilers2 =    globalProperty("sim/flightmodel/controls/wing2l_spo1def") --roll spoilers 25 deg max up with ailerons when speed brake full, with flaps down it can roll up to 25 deg, does not deploy in flight if speed below 150 or in a.floor toga, normally 0 degrees starts at 18% aileron, 15 degrees in flight decel, 50 degrees for ground spoilers
+Left_outboard_spoilers345 =  globalProperty("sim/flightmodel/controls/wing2l_spo2def") --roll spoilers 35 deg max up with ailerons when speed brake full, with flaps down it can roll up to 35 deg, does not deploy in flight if speed below 150 or in a.floor toga, normally 25 degrees starts at 18% aileron, 25 degrees in flight decel, 50 degrees for ground spoilers
+Right_inboard_spoilers =     globalProperty("sim/flightmodel/controls/wing1r_spo1def")--50 degrees ground spoilers
+Right_outboard_spoilers2 =   globalProperty("sim/flightmodel/controls/wing2r_spo1def") --roll spoilers 25 deg max up with ailerons when speed brake full, with flaps down it can roll up to 25 deg, does not deploy in flight if speed below 150 or in a.floor toga, normally 0 degrees starts at 18% aileron, 15 degrees in flight decel, 50 degrees for ground spoilers
 Right_outboard_spoilers345 = globalProperty("sim/flightmodel/controls/wing2r_spo2def") --roll spoilers 35 deg max up with ailerons when speed brake full, with flaps down it can roll up to 35 deg, does not deploy in flight if speed below 150 or in a.floor toga, normally 25 degrees starts at 18% aileron, 25 degrees in flight decel, 50 degrees for ground spoilers
 --high lift devices
-Slats = globalProperty("sim/flightmodel2/controls/slat1_deploy_ratio") --deploys with flaps 0 = 0, 1 = 0.7, 2 = 0.8, 3 = 0.8, 4 = 1
-Flaps_deployed_angle = createGlobalPropertyf("a321neo/dynamics/surfaces/flaps_deployed_angle", 0, false, true, false)--0, 0, 10, 15, 20, 40
-Left_outboard_flaps = globalProperty("sim/flightmodel/controls/wing2l_fla2def") -- flap detents 0 = 0, 1 = 10, 2 = 15, 3 = 20, 4 = 40
-Left_inboard_flaps = globalProperty("sim/flightmodel/controls/wing1l_fla1def") -- flap detents 0 = 0, 1 = 10, 2 = 15, 3 = 20, 4 = 40
-Right_outboard_flaps = globalProperty("sim/flightmodel/controls/wing2r_fla2def") -- flap detents 0 = 0, 1 = 10, 2 = 15, 3 = 20, 4 = 40
-Right_inboard_flaps = globalProperty("sim/flightmodel/controls/wing1r_fla1def") -- flap detents 0 = 0, 1 = 10, 2 = 15, 3 = 20, 4 = 40
+Slats =                globalProperty("sim/flightmodel2/controls/slat1_deploy_ratio") --deploys with flaps 0 = 0, 1 = 0.7, 2 = 0.8, 3 = 0.8, 4 = 1
+Left_outboard_flaps =  globalProperty("sim/flightmodel/controls/wing2l_fla2def") -- flap detents 0 = 0, 1 = 10, 2 = 15, 3 = 20, 4 = 40
+Left_inboard_flaps =   globalProperty("sim/flightmodel/controls/wing1l_fla1def")
+Right_outboard_flaps = globalProperty("sim/flightmodel/controls/wing2r_fla2def")
+Right_inboard_flaps =  globalProperty("sim/flightmodel/controls/wing1r_fla1def")
+SFCC_1_status = 	   createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/sfcc_1_status", 1, false, true, false)--slats flaps control computer 1
+SFCC_2_status = 	   createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/sfcc_2_status", 1, false, true, false)--slats flaps control computer 2
+Slats_powered = 	   createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/slats_powered", 1, false, true, false)--is slats hydraulicly powered
+Slats_in_transit = 	   createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/slats_in_transit", 0, false, true, false)--slats moving
+Flaps_powered = 	   createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/flaps_powered", 1, false, true, false)--is flaps hydraulicly powered
+Flaps_in_transit = 	   createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/flaps_in_transit", 0, false, true, false)--flaps moving
+Flaps_deployed_angle = createGlobalPropertyf("a321neo/dynamics/FBW/slats_and_flaps/flaps_deployed_angle", 0, false, true, false)--0, 0, 10, 15, 20, 40
 --stabilizers
 Horizontal_stabilizer_deflection = globalProperty("sim/flightmodel2/controls/stabilizer_deflection_degrees")
 Elevators_hstab_1 = globalProperty("sim/flightmodel/controls/hstab1_elv1def") --elevators -17 deg down 30 deg up
 Elevators_hstab_2 = globalProperty("sim/flightmodel/controls/hstab2_elv1def") --elevators -17 deg down 30 deg up
 Rudder = globalProperty("sim/flightmodel/controls/vstab1_rud1def") --rudder 30 deg left -30 deg right
+Yaw_lim = createGlobalPropertyf("a321neo/dynamics/FBW/yaw_lim", 30, false, true, false)

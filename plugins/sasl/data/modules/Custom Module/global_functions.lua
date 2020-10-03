@@ -75,7 +75,7 @@ end
 
 --used to animate a value with a linear delay USE ONLY WITH FLOAT VALUES
 function Set_linear_anim_value(current_value, target, min, max, speed)
-    if get(DELTA_TIME) ~= 0 then
+    if get(DELTA_TIME) ~= 0 and speed ~= 0 then
         if target - current_value < (speed + (speed * 0.005)) * get(DELTA_TIME) and target - current_value > -(speed + (speed * 0.005)) * get(DELTA_TIME) then
           return Math_clamp(target, min, max)
         elseif target < current_value then
@@ -83,6 +83,8 @@ function Set_linear_anim_value(current_value, target, min, max, speed)
         elseif target > current_value then
           return Math_clamp(current_value + (speed * get(DELTA_TIME)), min, max)
         end
+    else
+        return current_value
     end
 end
 

@@ -3,8 +3,8 @@ size = {800, 600}
 include('constants.lua')
 
 -- Constants
-local X_START_MENU_RECT = 170
-local X_START_MENU_TEXT = 220
+local X_START_MENU_RECT = 165
+local X_START_MENU_TEXT = 215
 local Y_START_MENU_RECT = size[2]-90
 local Y_START_MENU_TEXT = size[2]-80
 local X_SIZE_MENU_RECT = 100
@@ -72,6 +72,8 @@ local failures_data = {
     {
         group="F/CTL",
         failures={
+            {name="SFCC 1\nFAILURE", status=false, dataref=FAILURE_SFCC_1 },
+            {name="SFCC 2\nFAILURE", status=false, dataref=FAILURE_SFCC_2 },
         }
     },
     {
@@ -96,7 +98,7 @@ local failures_data = {
             {name="ELEC Y PUMP\nFAILURE", status=false, dataref=FAILURE_HYD_Y_E_pump },
             {name="RAT\nFAILURE", status=false, dataref=FAILURE_HYD_RAT },
             {name="PTU\nFAILURE", status=false, dataref=FAILURE_HYD_PTU },
-        
+
             {name="ELEC PUMP B\nOVHT", status=false, dataref=FAILURE_HYD_B_E_overheat },
             {name="ELEC PUMP Y\nOVHT", status=false, dataref=FAILURE_HYD_Y_E_overheat },
             {name="RESERVOIR G\nOVHT", status=false, dataref=FAILURE_HYD_G_R_overheat },
@@ -108,7 +110,7 @@ local failures_data = {
   }
     },
 
-    
+
     {
         group="L/G",
         failures={
@@ -139,7 +141,7 @@ function update()
     else
         sasl.setMenuItemState(Menu_main, ShowHideFailures, MENU_UNCHECKED)
     end
-    
+
 end
 
 local function draw_warning_caution()
@@ -148,13 +150,13 @@ local function draw_warning_caution()
     else
         sasl.gl.drawRectangle (10, size[2]-110, 64, 64, {0,0,0})    
     end
-    
+
     if get(MasterWarningBlinking) == 1 then
         sasl.gl.drawTexture(master_warning_image, 80, size[2]-110, 64, 64)
     else
         sasl.gl.drawRectangle (80, size[2]-110, 64, 64, {0,0,0})
     end
-    
+
 end
 
 local function create_button(text, offset_x, offset_y)
@@ -162,13 +164,13 @@ local function create_button(text, offset_x, offset_y)
     local rect_y = Y_START_MENU_RECT-offset_y*Y_SPACING_MENU
     local text_x = X_START_MENU_TEXT+offset_x*X_SPACING_MENU
     local text_y = Y_START_MENU_TEXT-offset_y*Y_SPACING_MENU
-    
-    sasl.gl.drawRectangle (rect_x, rect_y, X_SIZE_MENU_RECT, Y_SIZE_MENU_RECT, ECAM_HIGH_GREY)
-    
+
+    sasl.gl.drawRectangle (rect_x, rect_y, X_SIZE_MENU_RECT, Y_SIZE_MENU_RECT, UI_LIGHT_GREY)
+
     if group_selected > 0 and failures_data[group_selected].group == text then 
-        sasl.gl.drawText(B612MONO_regular, text_x, text_y, text, 14, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)    
+        sasl.gl.drawText(B612MONO_regular, text_x, text_y, text, 14, false, false, TEXT_ALIGN_CENTER, UI_LIGHT_BLUE)
     else
-        sasl.gl.drawText(B612MONO_regular, text_x, text_y, text, 14, false, false, TEXT_ALIGN_CENTER, {0,0,0})
+        sasl.gl.drawText(B612MONO_regular, text_x, text_y, text, 14, false, false, TEXT_ALIGN_CENTER, UI_WHITE)
     end
 end
 
@@ -178,10 +180,10 @@ local function create_failure_button(failure, offset_x, offset_y)
     local rect_y = Y_START_FAIL_RECT-offset_y*Y_SPACING_MENU
     local text_x = X_START_MENU_TEXT+offset_x*X_SPACING_MENU
     local text_y = Y_START_FAIL_TEXT-offset_y*Y_SPACING_MENU+10
-    
-    sasl.gl.drawRectangle (rect_x, rect_y, X_SIZE_MENU_RECT, Y_SIZE_MENU_RECT, ECAM_HIGH_GREY)
-    sasl.gl.drawFrame (rect_x, rect_y, X_SIZE_MENU_RECT, Y_SIZE_MENU_RECT, failure.status and ECAM_RED or ECAM_GREEN )
-    sasl.gl.drawText(B612MONO_regular, text_x, text_y, failure.name, 12, false, false, TEXT_ALIGN_CENTER, failure.status and ECAM_RED or {0,0,0})
+
+    sasl.gl.drawRectangle (rect_x, rect_y, X_SIZE_MENU_RECT, Y_SIZE_MENU_RECT, UI_LIGHT_GREY)
+    sasl.gl.drawFrame (rect_x, rect_y, X_SIZE_MENU_RECT, Y_SIZE_MENU_RECT, failure.status and ECAM_RED or UI_LIGHT_BLUE)
+    sasl.gl.drawText(B612MONO_regular, text_x, text_y, failure.name, 12, false, false, TEXT_ALIGN_CENTER, failure.status and ECAM_RED or UI_WHITE)
 
 end
 
@@ -201,12 +203,14 @@ end
 
 function draw()
 
-    
+    --draw background
+    sasl.gl.drawRectangle(0, 0, size[1], size[2], UI_LIGHT_GREY)
+    sasl.gl.drawRectangle(5, 5, size[1]-10, size[2]-10, UI_DARK_GREY)
     -- Fixed elements
-    sasl.gl.drawText(B612MONO_regular, 10, size[2]-30, "Failures Manager", 30, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, 10, size[2]-40, "Failures Manager", 30, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
     sasl.gl.drawLine(160,10,160,550, ECAM_WHITE)
     sasl.gl.drawText(B612MONO_regular, 10, size[2]-130, "Active Failures", 12, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
-    sasl.gl.drawText(B612MONO_regular, 340, size[2]-10, "DO NOT USE X-PLANE FAILURES MENU! It doesn't work with\nthis airplane and strange things may happen. Please use\nONLY this menu to simulate random or intentional failures.", 12, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
+    sasl.gl.drawText(B612MONO_regular, 340, size[2]-20, "DO NOT USE X-PLANE FAILURES MENU! It doesn't work with\nthis airplane and strange things may happen. Please use\nONLY this menu to simulate random or intentional failures.", 12, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
 
     draw_warning_caution()
 
@@ -214,21 +218,21 @@ function draw()
     for i, x in ipairs(failures_data) do
         create_button(x.group, (i-1)%6, math.floor((i-1)/6))
     end
-    
+
     -- Failure buttons
     if group_selected == 0 then
         return
     end
-    
+
     fail_tot_lines = 0
     for i, x in ipairs(failures_data[group_selected].failures) do
         create_failure_button(x, (i-1)%6, math.floor((i-1)/6))
         fail_tot_lines = fail_tot_lines + 1
     end
     fail_tot_lines = math.floor(fail_tot_lines/6) + 1
-    
+
     draw_active_failures()
-    
+
 end
 
 local function mouse_handler_menu(x, y)

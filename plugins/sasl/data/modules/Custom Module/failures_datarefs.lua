@@ -62,3 +62,5 @@ FAILURE_ELEC_IDG1_oil  = createGlobalPropertyi("a321neo/failures/electrical/idg1
 FAILURE_ELEC_IDG2_temp = createGlobalPropertyi("a321neo/failures/electrical/idg2_temp", 0, false, true, false)
 FAILURE_ELEC_IDG2_oil  = createGlobalPropertyi("a321neo/failures/electrical/idg2_oil", 0, false, true, false)
 
+FAILURE_SFCC_1 = createGlobalPropertyi("a321neo/failures/fctl/sfcc_1", 0, false, true, false)--slats flaps computer 1 failure
+FAILURE_SFCC_2 = createGlobalPropertyi("a321neo/failures/fctl/sfcc_2", 0, false, true, false)--slats flaps computer 1 failure

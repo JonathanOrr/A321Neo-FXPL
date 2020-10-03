@@ -25,7 +25,6 @@ components = {
   engine_and_apu {},
   FBW_main {},
   cabin_screens {},
-  flight_controls {},
   fcu_ap_at {},
   AT {},
   ADIRS {},
