@@ -212,7 +212,7 @@ P _gear/0/_lonE 0.0
 P _gear/0/_lonN 0.0
 P _gear/0/_lonR 98.0
 P _gear/0/_scon 47252.898437500
-P _gear/0/_stat_def 0.399389714
+P _gear/0/_stat_def 0.399389744
 P _gear/0/_steerdeg_hispeed 5.0
 P _gear/0/_steerdeg_lospeed 75.0
 P _gear/0/_strut_comp 0.0
@@ -246,7 +246,7 @@ P _gear/1/_lonE -7.0
 P _gear/1/_lonN -7.0
 P _gear/1/_lonR 0.0
 P _gear/1/_scon 71266.664062500
-P _gear/1/_stat_def 1.367629409
+P _gear/1/_stat_def 1.367629290
 P _gear/1/_steerdeg_hispeed 0.0
 P _gear/1/_steerdeg_lospeed 0.0
 P _gear/1/_strut_comp -0.500000000
@@ -280,7 +280,7 @@ P _gear/2/_lonE -7.0
 P _gear/2/_lonN -7.0
 P _gear/2/_lonR 0.0
 P _gear/2/_scon 71266.664062500
-P _gear/2/_stat_def 1.367629409
+P _gear/2/_stat_def 1.367629290
 P _gear/2/_steerdeg_hispeed 0.0
 P _gear/2/_steerdeg_lospeed 0.0
 P _gear/2/_strut_comp -0.500000000
@@ -43794,6 +43794,7 @@ GROUP ECAM lower du
 END_GROUP
 GROUP EWD
   LOCKED
+  GROUP_OPEN
   gen_rotary ewd bgd
     POS 2729.000000 734.500000
     IMAGE MIP/ecam upper du/EWD/Background
@@ -44027,16 +44028,42 @@ GROUP EWD
   gen_rotary Flap Target
     POS 2930.500000 633.500000
     IMAGE MIP/ecam upper du/EWD/flaptogo
-    DATAREF sim/cockpit2/controls/flap_ratio
+    DATAREF a321neo/dynamics/surfaces/flaps_internal_config
+    SHOW_GREATER 0.100000 a321neo/dynamics/FBW/slats_and_flaps/flaps_in_transit
     LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 1.000000 1.000000
-    KEY_FRAME 0.250000 2.000000 1.000000
-    KEY_FRAME 0.500000 3.000000 1.000000
-    KEY_FRAME 0.750000 4.000000 1.000000
-    KEY_FRAME 0.990000 4.000000 1.000000
-    KEY_FRAME 1.000000 5.000000
+    KEY_FRAME 0.000000 0.000000 1.000000
+    KEY_FRAME 1.000000 1.000000 1.000000
+    KEY_FRAME 2.000000 2.000000 1.000000
+    KEY_FRAME 3.000000 3.000000 1.000000
+    KEY_FRAME 4.000000 4.000000 1.000000
+    KEY_FRAME 5.000000 5.000000
+    DIGITS 6
+    ROTARY_TYPE NO_CLICK
+    CLICK_RADIUS 10.000000
+    CLICK_RADIUS_DY 0.000000
+    OFFSET 0.000000
+    STEP1 1.000000
+    STEP2 1.000000
+    CURSOR DEFAULT
+    CLICK_DX 0
+    CLICK_DY 0
+
+  gen_rotary Slat Target
+    POS 2930.500000 633.500000
+    IMAGE MIP/ecam upper du/EWD/slattogo
+    DATAREF a321neo/dynamics/surfaces/flaps_internal_config
+    SHOW_GREATER 0.100000 a321neo/dynamics/FBW/slats_and_flaps/slats_in_transit
+    LOCKED
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 0.000000 0.000000 1.000000
+    KEY_FRAME 1.000000 1.000000 1.000000
+    KEY_FRAME 2.000000 2.000000 1.000000
+    KEY_FRAME 3.000000 3.000000 1.000000
+    KEY_FRAME 4.000000 4.000000 1.000000
+    KEY_FRAME 5.000000 5.000000
     DIGITS 6
     ROTARY_TYPE NO_CLICK
     CLICK_RADIUS 10.000000
@@ -44070,6 +44097,7 @@ GROUP EWD
 
   GROUP Slats
     LOCKED
+    GROUP_OPEN
     GROUP_ANIMATE_MODE TRANSLATE
     GROUP_WIDTH 0
     GROUP_HEIGHT 0
@@ -44099,32 +44127,31 @@ GROUP EWD
 
   END_GROUP
   GROUP Flaps
-    LOCKED
+    GROUP_OPEN
     GROUP_ANIMATE_MODE TRANSLATE
     GROUP_WIDTH 0
     GROUP_HEIGHT 0
-    DATAREF sim/flightmodel2/controls/flap_handle_deploy_ratio
+    DATAREF sim/flightmodel/controls/wing1l_fla1def
     POS 0.000000 0.000000
     KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 0.250000 -13.000000 1.000000
-    KEY_FRAME 0.500000 -24.000000 1.000000
-    KEY_FRAME 0.750000 -32.000000 1.000000
-    KEY_FRAME 1.000000 -43.000000
+    KEY_FRAME 10.000000 -13.000000 1.000000
+    KEY_FRAME 15.000000 -24.000000 1.000000
+    KEY_FRAME 20.000000 -33.000000 1.000000
+    KEY_FRAME 40.000000 -43.000000
     IS_VERTICAL 1
     OFFSET 0.000000
     gen_pointer Flaps
-      POS 3020.500000 691.500000
+      POS 3019.500000 691.500000
       IMAGE MIP/ecam upper du/EWD/flap
-      DATAREF sim/flightmodel2/controls/flap_handle_deploy_ratio
-      LOCKED
+      DATAREF sim/flightmodel/controls/wing2l_fla2def
       CLIP
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 -188.000000 1.000000
-      KEY_FRAME 0.250000 -133.000000 1.000000
-      KEY_FRAME 0.500000 -90.000000 1.000000
-      KEY_FRAME 0.750000 -46.000000 1.000000
-      KEY_FRAME 1.000000 -1.000000
+      KEY_FRAME 0.000000 -189.000000 1.000000
+      KEY_FRAME 10.000000 -134.000000 1.000000
+      KEY_FRAME 15.000000 -91.000000 1.000000
+      KEY_FRAME 20.000000 -47.000000 1.000000
+      KEY_FRAME 40.000000 -1.000000
       IS_DRAGGABLE 0
       IS_VERTICAL 0
       OFFSET 0.000000
@@ -44906,6 +44933,7 @@ GROUP PFD
 
   GROUP Flight Directors
     LOCKED
+    GROUP_OPEN
     gen_pointer Flight Director V
       POS 1759.000000 724.000000
       IMAGE MIP/pfd/fd/fdh
@@ -44913,8 +44941,8 @@ GROUP PFD
       LOCKED
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
-      KEY_FRAME -30.000000 -130.000000 1.000000
-      KEY_FRAME 30.000000 130.000000
+      KEY_FRAME -30.000000 -108.000000 1.000000
+      KEY_FRAME 30.000000 108.000000
       IS_DRAGGABLE 0
       IS_VERTICAL 1
       OFFSET 0.000000
@@ -44926,8 +44954,8 @@ GROUP PFD
       LOCKED
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
-      KEY_FRAME -30.000000 -130.000000 1.000000
-      KEY_FRAME 30.000000 130.000000
+      KEY_FRAME -30.000000 -108.000000 1.000000
+      KEY_FRAME 30.000000 108.000000
       IS_DRAGGABLE 0
       IS_VERTICAL 0
       OFFSET 0.000000
@@ -45296,7 +45324,6 @@ END_GROUP
 GROUP Isis
   SHOW_EQUAL 1.000000 a321neo/cockpit/ISIS/isis_is_powered
   LOCKED
-  GROUP_OPEN
   gen_needle Isis Horizon
     POS 2702.000000 1435.000000
     IMAGE MIP/isis/isis horizon
@@ -49382,10 +49409,12 @@ GROUP Fire PB
 
 END_GROUP
 GROUP Screen Covers
+  HIDE
   gen_rotary PFD Off
     POS 1815.000000 733.000000
     IMAGE ColdAndDark/ColdAndDark
     DATAREF a321neo/dynamics/electrical/bus/ac_ess_powered
+    HIDE
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -49405,6 +49434,7 @@ GROUP Screen Covers
     POS 2729.000000 734.500000
     IMAGE ColdAndDark/ColdAndDark
     DATAREF a321neo/dynamics/electrical/bus/ac_ess_powered
+    HIDE
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -49424,6 +49454,7 @@ GROUP Screen Covers
     POS 3637.000000 734.000000
     IMAGE ColdAndDark/ColdAndDark
     DATAREF a321neo/dynamics/electrical/bus/ac_2_powered
+    HIDE
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
