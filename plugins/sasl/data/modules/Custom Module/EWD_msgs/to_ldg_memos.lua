@@ -100,7 +100,7 @@ Message_TOLDG_SPLRS = {
 
 Message_TO_FLAPS = {
     text = function(self)
-        if get(Flaps_internal_config) == 2 then
+        if get(Flaps_internal_config) >= 2 and get(Flaps_internal_config) < 5 then
             return "    FLAPS T.O."
         else
             return "    FLAPS............T.O."
@@ -108,7 +108,7 @@ Message_TO_FLAPS = {
     end,
 
     color = function(self)
-        if get(Flaps_internal_config) == 2 then
+        if get(Flaps_internal_config) >= 2 and get(Flaps_internal_config) < 5 then
             return COL_INDICATION
         else
             return COL_ACTIONS
@@ -344,7 +344,7 @@ Message_CONFIG_TAKEOFF_FLAPS = {
                     return COL_WARNING
             end,
             is_active = function(self)
-              return get(Flaps_internal_config) ~= 2 
+              return get(Flaps_internal_config) < 2 or get(Flaps_internal_config) == 5 
             end
 }
 
