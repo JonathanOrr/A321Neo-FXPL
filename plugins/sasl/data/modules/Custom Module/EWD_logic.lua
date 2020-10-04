@@ -48,8 +48,6 @@ local sim_loaded_at = 0 -- Time the sim it was re-loaded, see onAirportLoaded()
 -- message is removed from the list and moved to the next list "left_messages_list_cleared"
 local left_messages_list = {
     -- Normal messages
-    MessageGroup_MEMO_TAKEOFF,
-    MessageGroup_MEMO_LANDING,
     MessageGroup_GND_SPEEDBRAKES,
     MessageGroup_SEAT_BELTS,
     MessageGroup_NO_SMOKING,
@@ -104,7 +102,10 @@ local left_messages_list = {
     MessageGroup_HYD_G_AND_Y_LO_PR,
     MessageGroup_ADR_FAULT_TRIPLE,
     MessageGroup_IR_FAULT_TRIPLE,
+    
     -- Misc
+    MessageGroup_MEMO_TAKEOFF,
+    MessageGroup_MEMO_LANDING,
     MessageGroup_TOCONFIG_NORMAL -- This must be the last message
 }
 
@@ -259,12 +260,15 @@ local function update_right_list()
         list_right:put(COL_INDICATION, "AUTO BRK MAX")
     end
 
-    -- HYD
+    -- HYD & ELEC
     if get(Hydraulic_RAT_status) > 0 then
         list_right:put(COL_INDICATION, "RAT OUT")
     end
     if get(Hydraulic_PTU_status) > 1 then
         list_right:put(COL_INDICATION, "HYD PTU")
+    end
+    if get(Gen_EMER_pwr) == 1 then
+        list_right:put(COL_INDICATION, "EMERG GEN")
     end
 
     -- TCAS
@@ -287,6 +291,8 @@ local function update_right_list()
         list_right:put(COL_INDICATION_BLINKING, "VHF 3 VOICE")    
     end
     
+
+    
     -- TODO Audio: AUDIO 3 XFRD displayed green if audio switching selector not in NORM
     -- TODO Acars: ACARS CALL (pulsing green) if received an ACARS message requesting voice conversation
 
@@ -297,10 +303,6 @@ local function update_right_list()
 
     -- TODO Steer: NW STRG DISC when the nose wheel steering selector is in the towing position
     --             GREEN: if no engine is running, AMBER: is at least one engine is running
-    
-
-    
-    -- TODO Elec: EMERG GEN displayed in green when emergency generator is running
     
     -- TODO Fuel: OUTR TK FUEL XFRD in green if at least 1 transfer valve is open
     -- TODO Fuel: CTR TK FEEDG, green, if at least one center fuel pump is ON
@@ -391,6 +393,7 @@ local function update_left_list()
         if not m.is_active() then
             m.shown = false
         end
+
         if m.shown then
             -- This may happend for two reasons:
             -- - the condition of the if at the beginning of this loop is true
@@ -431,25 +434,27 @@ local function publish_left_list()
             left_current_message = msg
         end  
 
-        -- Set the name of the group
-        set(EWD_left_memo_group[tot_messages], msg.text())
-        set(EWD_left_memo_group_colors[tot_messages], msg.color())
+        if tot_messages == 0 or msg.priority ~= PRIORITY_LEVEL_MEMO then  -- Ignore the MEMO if other messages are present
 
-        for i,m in ipairs(msg.messages) do
-            if limit then                   -- Extra message not shown
-                set(EWD_arrow_overflow, 1)  -- Let's display the overflow arrow
-                break
-            end
-            if m.is_active() then
-                set(EWD_left_memo[tot_messages], m.text())
-                set(EWD_left_memo_colors[tot_messages], m.color())        
-                tot_messages = tot_messages + 1
-                if tot_messages >= 7 then
-                    limit = true
+            -- Set the name of the group
+            set(EWD_left_memo_group[tot_messages], msg.text())
+            set(EWD_left_memo_group_colors[tot_messages], msg.color())
+
+            for i,m in ipairs(msg.messages) do
+                if limit then                   -- Extra message not shown
+                    set(EWD_arrow_overflow, 1)  -- Let's display the overflow arrow
+                    break
                 end
-            end 
-        end
-        
+                if m.is_active() then
+                    set(EWD_left_memo[tot_messages], m.text())
+                    set(EWD_left_memo_colors[tot_messages], m.color())        
+                    tot_messages = tot_messages + 1
+                    if tot_messages >= 7 then
+                        limit = true
+                    end
+                end 
+            end
+        end        
     end
     
     for i=tot_messages, 7 do
