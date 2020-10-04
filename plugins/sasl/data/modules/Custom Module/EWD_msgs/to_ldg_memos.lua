@@ -100,7 +100,7 @@ Message_TOLDG_SPLRS = {
 
 Message_TO_FLAPS = {
     text = function(self)
-        if (get(Flaps_handle_ratio) > 0 and get(Flaps_handle_ratio) < 0.5) then -- TODO check values
+        if get(Flaps_internal_config) == 2 then
             return "    FLAPS T.O."
         else
             return "    FLAPS............T.O."
@@ -108,7 +108,7 @@ Message_TO_FLAPS = {
     end,
 
     color = function(self)
-        if (get(Flaps_handle_ratio) > 0 and get(Flaps_handle_ratio) < 0.5) then -- TODO check values
+        if get(Flaps_internal_config) == 2 then
             return COL_INDICATION
         else
             return COL_ACTIONS
@@ -146,13 +146,13 @@ Message_LDG_FLAPS = {
 
     text = function(self)
         if get(FBW_status) < 2 then -- alternate or direct law
-            if (get(Flaps_handle_ratio) > 0.6 and get(Flaps_handle_ratio) <= 0.8) then -- TODO check values
+            if get(Flaps_internal_config) == 4 then
                 return "    FLAPS CONF 3"
             else
                 return "    FLAPS..........CONF 3"
             end
         else    -- normal law
-            if (get(Flaps_handle_ratio) > 0.8 and get(Flaps_handle_ratio) <= 1) then -- TODO check values
+            if get(Flaps_internal_config) == 5 then
                 return "    FLAPS FULL"
             else
                 return "    FLAPS............FULL"
@@ -163,13 +163,13 @@ Message_LDG_FLAPS = {
 
     color = function(self)
          if get(FBW_status) < 2 then -- alternate or direct law
-            if (get(Flaps_handle_ratio) > 0.6 and get(Flaps_handle_ratio) <= 0.8) then -- TODO check values
+            if get(Flaps_internal_config) == 4 then
                 return COL_INDICATION
             else
                 return COL_ACTIONS
             end
         else    -- normal law
-            if (get(Flaps_handle_ratio) > 0.8 and get(Flaps_handle_ratio) <= 1) then -- TODO check values
+            if get(Flaps_internal_config) == 5 then
                 return COL_INDICATION
             else
                 return COL_ACTIONS
@@ -344,7 +344,7 @@ Message_CONFIG_TAKEOFF_FLAPS = {
                     return COL_WARNING
             end,
             is_active = function(self)
-              return not (get(Flaps_handle_ratio) > 0 and get(Flaps_handle_ratio) < 0.5)
+              return get(Flaps_internal_config) ~= 2 
             end
 }
 
