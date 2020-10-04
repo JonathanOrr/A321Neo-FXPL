@@ -478,13 +478,45 @@ function draw()
         sasl.gl.drawArc(size[1]/2 + 200, size[2]/2 - 110, 76, 80, 240, 60, right_tire_psi_color)
         sasl.gl.drawArc(size[1]/2 + 360, size[2]/2 - 110, 76, 80, 240, 60, right_tire_psi_color)
 
-    elseif get(Ecam_current_page) == 11 then
-        set(Ecam_fctl_is_rudder_ok, (get(Hydraulic_G_press) >= 1450 or get(Hydraulic_Y_press) >= 1450 or get(Hydraulic_B_press) >= 1450) and 1 or 0) 
-        set(Ecam_fctl_is_aileron_ok, (get(Hydraulic_G_press) >= 1450 or get(Hydraulic_B_press) >= 1450) and 1 or 0) 
-        set(Ecam_fctl_is_elevator_R_ok, (get(Hydraulic_Y_press) >= 1450 or get(Hydraulic_B_press) >= 1450) and 1 or 0)
-        set(Ecam_fctl_is_elevator_L_ok, (get(Hydraulic_G_press) >= 1450 or get(Hydraulic_B_press) >= 1450) and 1 or 0) 
-        set(Ecam_fctl_is_pitch_trim_ok, (get(Hydraulic_G_press) >= 1450 or get(Hydraulic_Y_press) >= 1450 or get(Hydraulic_B_press) >= 1450) and 1 or 0) 
-        
+    elseif get(Ecam_current_page) == 11 then    -- F/CTL
+    
+        local is_G_ok = get(Hydraulic_G_press) >= 1450 
+        local is_B_ok = get(Hydraulic_B_press) >= 1450 
+        local is_Y_ok = get(Hydraulic_Y_press) >= 1450 
+        set(Ecam_fctl_is_rudder_ok, (is_G_ok or is_Y_ok or is_B_ok) and 1 or 0) 
+        set(Ecam_fctl_is_aileron_ok, (is_G_ok or is_B_ok) and 1 or 0) 
+        set(Ecam_fctl_is_elevator_R_ok, (is_Y_ok or is_B_ok) and 1 or 0)
+        set(Ecam_fctl_is_elevator_L_ok, (is_G_ok or is_B_ok) and 1 or 0) 
+        set(Ecam_fctl_is_pitch_trim_ok, (is_G_ok or is_Y_ok) and 1 or 0) 
+
+        -- rudder
+        sasl.gl.drawText(B612MONO_regular, size[1]/2-29, size[2]/2-165, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawText(B612MONO_regular, size[1]/2+2, size[2]/2-165, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawText(B612MONO_regular, size[1]/2+31, size[2]/2-165, "Y", 30, false, false, TEXT_ALIGN_CENTER, is_Y_ok and ECAM_GREEN or ECAM_ORANGE)
+
+        -- spdbrk
+        sasl.gl.drawText(B612MONO_regular, size[1]/2-29, size[2]-47, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawText(B612MONO_regular, size[1]/2+2, size[2]-47, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawText(B612MONO_regular, size[1]/2+31, size[2]-47, "Y", 30, false, false, TEXT_ALIGN_CENTER, is_Y_ok and ECAM_GREEN or ECAM_ORANGE)
+
+        -- elevators        
+        sasl.gl.drawText(B612MONO_regular, size[1]/2-265, size[2]/2-190, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawText(B612MONO_regular, size[1]/2-234, size[2]/2-190, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
+
+        sasl.gl.drawText(B612MONO_regular, size[1]/2+237, size[2]/2-190, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawText(B612MONO_regular, size[1]/2+268, size[2]/2-190, "Y", 30, false, false, TEXT_ALIGN_CENTER, is_Y_ok and ECAM_GREEN or ECAM_ORANGE)
+
+        -- pitch trim
+        sasl.gl.drawText(B612MONO_regular, size[1]/2+98, size[2]/2-10, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawText(B612MONO_regular, size[1]/2+126, size[2]/2-10, "Y", 30, false, false, TEXT_ALIGN_CENTER, is_Y_ok and ECAM_GREEN or ECAM_ORANGE)
+
+        -- ailerons        
+        sasl.gl.drawText(B612MONO_regular, size[1]/2-265, size[2]/2+45, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawText(B612MONO_regular, size[1]/2-234, size[2]/2+45, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
+
+        sasl.gl.drawText(B612MONO_regular, size[1]/2+237, size[2]/2+45, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawText(B612MONO_regular, size[1]/2+268, size[2]/2+45, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
+
 
         sasl.gl.drawText(B612MONO_regular, size[1]/2-25, size[2]/2-50, tostring(math.floor(math.abs(get(Elev_trim_degrees)))) .. "." ..  tostring(math.floor((math.abs(get(Elev_trim_degrees)) - math.floor(math.abs(get(Elev_trim_degrees)))) * 10)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
         if get(Elev_trim_degrees) >= 0 then
