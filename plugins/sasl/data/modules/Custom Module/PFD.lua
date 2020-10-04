@@ -42,7 +42,48 @@ local max_speeds_kts = {
     177
 }
 
+
+local function update_radioalt() 
+    local curr_radio_alt = math.floor(get(Capt_ra_alt_ft))
+    
+    local color = 0
+    
+    if get(DH_alt_ft) > 0 then  -- Decision Height is set
+        if curr_radio_alt <= get(DH_alt_ft)+100 then
+            color = 1
+        end    
+    else
+        if curr_radio_alt <= 400 then
+            color = 1
+        end
+    end
+    
+    set(PFD_Capt_radioalt_col, color)
+    
+    -- Rouding (rounding 10 feet above 50 feet, rounding 5 feet above 10 feet)
+    if curr_radio_alt > 50 then
+        curr_radio_alt = curr_radio_alt - curr_radio_alt % 10
+    elseif curr_radio_alt > 10 then
+        curr_radio_alt = curr_radio_alt - curr_radio_alt % 5
+    end
+    
+
+    set(PFD_Capt_radioalt_val, curr_radio_alt)
+
+    if curr_radio_alt > 2500 then
+        set(PFD_Capt_radioalt_status, 0)
+    elseif math.abs(get(Flightmodel_roll)) > 30 or math.abs(get(Flightmodel_pitch)) > 30 or get(FAILURE_radioalt_cap) == 1 then
+        set(PFD_Capt_radioalt_status, 2)
+    else
+        set(PFD_Capt_radioalt_status, 1)    
+    end
+
+
+end
+
+
 function update()
+
     --PFD deltas
     set(ground_track_delta, get(ground_track) - get(current_heading))
 
@@ -96,6 +137,8 @@ function update()
     set(PFD_Capt_Ground_line, Math_clamp( get(Capt_ra_alt_ft)/120 + get(Flightmodel_pitch)/18, 0, 1))
     set(PFD_Fo_Ground_line, Math_clamp( get(Fo_ra_alt_ft)/120 + get(Flightmodel_pitch)/18, 0, 1))
     
+    update_radioalt()
+    
 end
 
 function draw()
@@ -116,4 +159,5 @@ function draw()
             sasl.gl.drawText(B612MONO_regular, 852, vvi_left_pixel_offset - 26, vvi_number_display, 23, false, false, TEXT_ALIGN_LEFT, vvi_cl)
         end
     end
+    
 end

@@ -136,6 +136,10 @@ PFD_Fo_VS = createGlobalPropertyf("a321neo/cockpit/PFD/fo_vs", 0, false, true, f
 PFD_Capt_Ground_line = createGlobalPropertyf("a321neo/cockpit/PFD/capt_att_ground_line", 0, false, true, false)   -- Ground line on ATT moving during t/o or landing
 PFD_Fo_Ground_line = createGlobalPropertyf("a321neo/cockpit/PFD/fo_att_ground_line", 0, false, true, false)   -- Ground line on ATT moving during t/o or landing
 
+PFD_Capt_radioalt_val = createGlobalPropertyi("a321neo/cockpit/PFD/capt_radioalt_val", 0, false, true, false)
+PFD_Capt_radioalt_col = createGlobalPropertyi("a321neo/cockpit/PFD/capt_radioalt_col", 0, false, true, false)       -- 0: green, 1: amber
+PFD_Capt_radioalt_status = createGlobalPropertyi("a321neo/cockpit/PFD/capt_radioalt_status", 0, false, true, false) -- 0: not shown, 1: shown, 2: error "RA" showed
+
 -- ECAM
 Ecam_previous_page  = createGlobalPropertyi("a321neo/cockpit/ecam/previous", 13, false, true, false) --1ENG, 2BLEED, 3PRESS, 4ELEC, 5HYD, 6FUEL, 7APU, 8COND, 9DOOR, 10WHEEL, 11F/CTL, 12STS
 Ecam_current_page   = createGlobalPropertyi("a321neo/cockpit/ecam/page_num", 4, false, true, false) --1ENG, 2BLEED, 3PRESS, 4ELEC, 5HYD, 6FUEL, 7APU, 8COND, 9DOOR, 10WHEEL, 11F/CTL, 12STS

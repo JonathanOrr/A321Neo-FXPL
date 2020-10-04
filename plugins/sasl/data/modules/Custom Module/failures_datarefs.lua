@@ -2,6 +2,9 @@
 ReqMasterCaution      = createGlobalPropertyi("a321neo/failures/req_master_caution", 0, false, true, false) -- When a component (typically EWD) wants to trigger a caution put this to 1
 ReqMasterWarning      = createGlobalPropertyi("a321neo/failures/req_master_warning", 0, false, true, false) -- When a component (typically EWD) wants to trigger a warning put this to 1
 
+-- Instruments
+FAILURE_radioalt_cap = createGlobalPropertyi("a321neo/failures/pfd/capt_radioalt", 0, false, true, false) -- 0: OK, 1: FAILED
+
 -- Systems
 FAILURE_Apu = globalProperty("sim/operation/failures/rel_apu")
 FAILURE_Apu_fire = globalProperty("sim/operation/failures/rel_apu_fire")
@@ -39,8 +42,6 @@ FAILURE_HYD_B_pump       = createGlobalPropertyi("a321neo/failures/HYD/B_pump", 
 FAILURE_HYD_Y_E_pump     = createGlobalPropertyi("a321neo/failures/HYD/Y_elec_pump", 0, false, true, false) -- Y elec pump failure
 FAILURE_HYD_RAT          = createGlobalPropertyi("a321neo/failures/HYD/rat", 0, false, true, false) -- RAT failure
 FAILURE_HYD_PTU          = createGlobalPropertyi("a321neo/failures/HYD/ptu", 0, false, true, false) -- PTU failure
-
-
 
 FAILURE_ELEC_battery_1 = createGlobalPropertyi("a321neo/failures/electrical/bat_1", 0, false, true, false) -- BAT1 failure
 FAILURE_ELEC_battery_2 = createGlobalPropertyi("a321neo/failures/electrical/bat_2", 0, false, true, false) -- BAT2 failure

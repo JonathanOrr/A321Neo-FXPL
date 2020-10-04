@@ -257,6 +257,8 @@ Capt_ra_alt_ft = globalProperty("sim/cockpit2/gauges/indicators/radio_altimeter_
 Fo_ra_alt_ft = globalProperty("sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_copilot")
 Capt_baro_alt_ft = globalProperty("sim/cockpit2/gauges/indicators/altitude_ft_pilot")
 IAS = globalProperty("sim/flightmodel/position/indicated_airspeed")
+DH_alt_ft = globalProperty("sim/cockpit/misc/radio_altimeter_minimum")
+
 
 Capt_IAS     = globalProperty("sim/cockpit2/gauges/indicators/airspeed_kts_pilot")   -- Consider to use PFD_Capt_IAS instead (check cockpit_datarefs.lua)
 Fo_IAS       = globalProperty("sim/cockpit2/gauges/indicators/airspeed_kts_copilot") -- Consider to use PFD_Fo_IAS instead (check cockpit_datarefs.lua)
