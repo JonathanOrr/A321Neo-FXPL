@@ -284,7 +284,7 @@ function update()
     --engine master 1
     if get(Engine_1_master_switch) == 1
     then
-        if get(engine_1_N2) > 25 then
+        if get(engine_1_N2) > 16 then
             set(engine_1_mixture, 1.0)
         else
             set(engine_1_mixture, 0)
@@ -297,7 +297,7 @@ function update()
     --engine master 2
     if get(Engine_2_master_switch) == 1
     then
-        if get(engine_2_N2) > 25 then
+        if get(engine_2_N2) > 16 then
             set(engine_2_mixture, 1.0)
         else
             set(engine_2_mixture, 0)
