@@ -175,13 +175,15 @@ local function update_tr_load(tr)
         return
     end
 
-    if ELEC_sys.buses.dc1_powered_by == 30+tr.id or ELEC_sys.buses.dc1_powered_by == 99 then
-        tr.curr_out_amps = tr.curr_out_amps + ELEC_sys.buses.pwr_consumption[ELEC_BUS_DC_1]
+    if tr.id ~= 3 then
+        if ELEC_sys.buses.dc1_powered_by == 30+tr.id or ELEC_sys.buses.dc1_powered_by == 98 then
+            tr.curr_out_amps = tr.curr_out_amps + ELEC_sys.buses.pwr_consumption[ELEC_BUS_DC_1]
+        end
+        if ELEC_sys.buses.dc2_powered_by == 30+tr.id or ELEC_sys.buses.dc2_powered_by == 98 then
+            tr.curr_out_amps = tr.curr_out_amps + ELEC_sys.buses.pwr_consumption[ELEC_BUS_DC_2]
+        end
     end
-    if ELEC_sys.buses.dc2_powered_by == 30+tr.id or ELEC_sys.buses.dc2_powered_by == 99 then
-        tr.curr_out_amps = tr.curr_out_amps + ELEC_sys.buses.pwr_consumption[ELEC_BUS_DC_2]
-    end
-    if ELEC_sys.buses.dc1_powered_by == 30+tr.id then
+    if ELEC_sys.buses.dc_ess_powered_by == 30+tr.id then
         tr.curr_out_amps = tr.curr_out_amps + ELEC_sys.buses.pwr_consumption[ELEC_BUS_DC_ESS]
         if get(DC_shed_ess_pwrd) == 1 then
             tr.curr_out_amps = tr.curr_out_amps + ELEC_sys.buses.pwr_consumption[ELEC_BUS_DC_ESS_SHED]

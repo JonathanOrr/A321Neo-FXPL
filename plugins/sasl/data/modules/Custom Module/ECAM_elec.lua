@@ -171,7 +171,7 @@ local function draw_ess_tr()
                      (ELEC_sys.trs[3].curr_voltage < 25 or ELEC_sys.trs[3].curr_voltage > 31)
                      and ECAM_ORANGE or ECAM_GREEN)
     sasl.gl.drawText(B612MONO_regular, 400, size[2]/2+95,
-                     math.floor(-ELEC_sys.trs[3].curr_out_amps+0.5), 28, false, false, 
+                     math.floor(ELEC_sys.trs[3].curr_out_amps+0.5), 28, false, false, 
                      TEXT_ALIGN_RIGHT,
                      ELEC_sys.trs[3].curr_out_amps <= 5 and ECAM_ORANGE or ECAM_GREEN)
     
@@ -318,7 +318,7 @@ local function draw_emer_gen()
 end
 
 local function draw_ext_pwr()
-    if not ELEC_sys.generators[GEN_EXT].switch_status then
+    if not ELEC_sys.generators[GEN_EXT].switch_status or not ELEC_sys.generators[GEN_EXT].source_status then
         return  -- Nothing to do
     end
     
@@ -401,10 +401,11 @@ end
 
 local function draw_bat_dc_bus_lines()
 
-    if ELEC_sys.buses.dc_bat_bus_powered_by == TR_1 then
+    if ELEC_sys.buses.dc_bat_bus_powered_by == TR_1 or ELEC_sys.buses.dc1_powered_by == CROSS_TIEBAT_BUS then
         sasl.gl.drawWideLine(380, size[2]/2+359, 380, size[2]/2+295, 3, ECAM_GREEN)
         sasl.gl.drawWideLine(380, size[2]/2+295, 138, size[2]/2+295, 3, ECAM_GREEN)
-    elseif ELEC_sys.buses.dc_bat_bus_powered_by == TR_2 then
+    end
+    if ELEC_sys.buses.dc_bat_bus_powered_by == TR_2 or ELEC_sys.buses.dc2_powered_by == CROSS_TIEBAT_BUS then
         sasl.gl.drawWideLine(530, size[2]/2+359, 530, size[2]/2+295, 3, ECAM_GREEN)
         sasl.gl.drawWideLine(530, size[2]/2+295, 761, size[2]/2+295, 3, ECAM_GREEN)
     end
