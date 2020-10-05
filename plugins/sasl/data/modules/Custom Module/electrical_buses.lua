@@ -33,8 +33,6 @@ sasl.registerCommandHandler (ELEC_cmd_AC_ess_feed,  0, function(phase) elec_bus_
 ----------------------------------------------------------------------------------------------------
 -- Global/Local variables
 ----------------------------------------------------------------------------------------------------
-local bus_tie_pushbutton_status = true
-local ac_ess_bus_pushbutton_status = false  -- true: alternate, false: normal
 
 buses = {
     ac1_powered_by = 0,
@@ -50,7 +48,10 @@ buses = {
     is_stat_inv_bus_on = 0,
     
     pwr_consumption = {},       -- Used in current computation
-    pwr_consumption_last = {}   -- Last
+    pwr_consumption_last = {},   -- Last
+    
+    bus_tie_pushbutton_status = true,
+    ac_ess_bus_pushbutton_status = false -- true: alternate, false: normal
 }
 
 ELEC_sys.buses = buses
@@ -62,14 +63,14 @@ function elec_bus_tie_toggle(phase)
     if phase ~= SASL_COMMAND_BEGIN then
         return
     end
-    bus_tie_pushbutton_status = not bus_tie_pushbutton_status
+    buses.bus_tie_pushbutton_status = not buses.bus_tie_pushbutton_status
 end
 
 function elec_bus_acc_ess_toggle(phase)
     if phase ~= SASL_COMMAND_BEGIN then
         return
     end
-    ac_ess_bus_pushbutton_status = not ac_ess_bus_pushbutton_status
+    buses.ac_ess_bus_pushbutton_status = not buses.ac_ess_bus_pushbutton_status
 end
 
 
@@ -107,7 +108,7 @@ local function update_ac_1()
         buses.ac1_powered_by = GEN_EXT
     elseif get(Gen_APU_pwr) == 1 then
         buses.ac1_powered_by = GEN_APU
-    elseif bus_tie_pushbutton_status and get(AC_bus_2_pwrd) == 1 and buses.ac2_powered_by ~= GEN_FAKE_BUS_TIE then
+    elseif buses.bus_tie_pushbutton_status and get(AC_bus_2_pwrd) == 1 and buses.ac2_powered_by ~= GEN_FAKE_BUS_TIE then
         buses.ac1_powered_by = GEN_FAKE_BUS_TIE
     end
 
@@ -130,7 +131,7 @@ local function update_ac_2()
         buses.ac2_powered_by = GEN_EXT
     elseif get(Gen_APU_pwr) == 1 then
         buses.ac2_powered_by = GEN_APU
-    elseif bus_tie_pushbutton_status and get(AC_bus_1_pwrd) == 1 and buses.ac1_powered_by ~= GEN_FAKE_BUS_TIE then
+    elseif buses.bus_tie_pushbutton_status and get(AC_bus_1_pwrd) == 1 and buses.ac1_powered_by ~= GEN_FAKE_BUS_TIE then
         buses.ac2_powered_by = GEN_FAKE_BUS_TIE
     end
 
@@ -141,7 +142,7 @@ local function update_ac_ess()
 
     local prev_by = buses.ac_ess_powered_by
 
-    if ac_ess_bus_pushbutton_status then
+    if buses.ac_ess_bus_pushbutton_status then
         buses.ac_ess_powered_by = buses.ac2_powered_by ~= 0 and AC_BUS_2 or 0
     else
         buses.ac_ess_powered_by = buses.ac1_powered_by ~= 0 and AC_BUS_1 or 0
@@ -234,8 +235,8 @@ local function update_datarefs()
 
     set(AC_STAT_INV_pwrd, buses.is_stat_inv_bus_on and 1 or 0)
 
-    set(Elec_light_BUS_tie, bus_tie_pushbutton_status and 0 or 1)
-    set(Elec_light_AC_ess_feed, (ac_ess_bus_pushbutton_status and 1 or 0) + (buses.ac_ess_powered_by>0 and 0 or 10)) 
+    set(Elec_light_BUS_tie, buses.bus_tie_pushbutton_status and 0 or 1)
+    set(Elec_light_AC_ess_feed, (buses.ac_ess_bus_pushbutton_status and 1 or 0) + (buses.ac_ess_powered_by>0 and 0 or 10)) 
 end
 
 local function update_shed()

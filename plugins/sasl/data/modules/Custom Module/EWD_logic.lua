@@ -102,6 +102,8 @@ local left_messages_list = {
     MessageGroup_HYD_G_AND_Y_LO_PR,
     MessageGroup_ADR_FAULT_TRIPLE,
     MessageGroup_IR_FAULT_TRIPLE,
+    MessageGroup_ELEC_EMER_CONFIG,
+    MessageGroup_ELEC_ESS_BUSES_ON_BAT,
     
     -- Misc
     MessageGroup_MEMO_TAKEOFF,
