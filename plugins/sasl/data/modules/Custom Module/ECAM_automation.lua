@@ -53,31 +53,41 @@ local page_normal_eng_last_show = 0
 local page_normal_fctl_last_show = 0
 
 local page_all_start_time       = 0
+local press_start_time = 0
 
 -------------------------------------------------------------------------------
 -- Functions
 -------------------------------------------------------------------------------
 function ecam_user_press_page_button(phase, which_page)
-    if phase ~= SASL_COMMAND_BEGIN then
-        return
-    end
-    if get(Ecam_current_status) == ECAM_STATUS_SHOW_USER then
-        -- We are already in user mode
+    if phase == SASL_COMMAND_BEGIN then
+        if get(Ecam_current_status) == ECAM_STATUS_SHOW_USER then
+            -- We are already in user mode
 
-        if get(Ecam_current_page) == which_page then
-            -- User is de-activating the page (s)he previously selected
-            -- Resume normal mode, page will be changed automatically
-            set(Ecam_current_status, ECAM_STATUS_NORMAL) 
-            -- If another mode was selected, page will change automatically at next sasl run
+            if get(Ecam_current_page) == which_page then
+                -- User is de-activating the page (s)he previously selected
+                -- Resume normal mode, page will be changed automatically
+                set(Ecam_current_status, ECAM_STATUS_NORMAL) 
+                -- If another mode was selected, page will change automatically at next sasl run
+            else
+                Goto_ecam(which_page)        
+            end
         else
-            Goto_ecam(which_page)        
+            -- Change the page in *any* case (forced by user)
+            set(Ecam_current_status,ECAM_STATUS_SHOW_USER)
+            Goto_ecam(which_page)
         end
-    else
-        -- Change the page in *any* case (forced by user)
-        set(Ecam_current_status,ECAM_STATUS_SHOW_USER)
-        Goto_ecam(which_page)
+        press_start_time = get(TIME)
+    elseif phase == SASL_COMMAND_CONTINUE and get(AC_bus_2_pwrd) == 0 then  -- Fail of ecam
+        if get(TIME) - press_start_time > 0.5 then            
+            -- Ok, Transfer displays
+                
+            set(Override_DMC, 1)
+            set(EWD_displaying_status, 4)
+        end
+    elseif phase == SASL_COMMAND_END then
+        press_start_time = 0
+        set(Override_DMC, 0)
     end
-
 end
 
 function ecam_user_press_clr_status(phase)
