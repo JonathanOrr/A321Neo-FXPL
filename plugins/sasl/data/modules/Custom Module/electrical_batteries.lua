@@ -78,7 +78,7 @@ local function update_battery_buses(bat)
     end
 
     -- Battery recharging
-    if  get(DC_bat_bus_pwrd) == 1                                      -- Something else is powering the bat bus
+    if  get(DC_bat_bus_pwrd) == 1  and (ELEC_sys.buses.dc_bat_bus_powered_by < 40 or ELEC_sys.buses.dc_bat_bus_powered_by == 98) -- Something else is powering the bat bus
         and (bat.is_charging or bat.curr_voltage < BAT_CHARGE_TRIG_AT) -- Battery is already charging OR it reached the minimum voltage for charging
         and bat.curr_voltage < BAT_TOP_VOLTAGE_LIMIT then              -- Battery is not fully charged
 
@@ -122,7 +122,7 @@ local function update_battery_load(x)
     
     if x.is_connected_to_dc_bus then
         if ELEC_sys.buses.dc_bat_bus_powered_by == (40 + x.id) then
-            x.curr_source_amps = ELEC_sys.buses.pwr_consumption[ELEC_BUS_DC_BAT_BUS]
+            x.curr_source_amps = x.curr_source_amps + ELEC_sys.buses.pwr_consumption[ELEC_BUS_DC_BAT_BUS]
         elseif ELEC_sys.buses.dc_bat_bus_powered_by >= 30 and ELEC_sys.buses.dc_bat_bus_powered_by < 40 then
             ELEC_sys.add_power_consumption(ELEC_BUS_DC_BAT_BUS, x.curr_sink_amps, x.curr_sink_amps)
         end
