@@ -5,6 +5,7 @@ include('ECAM_status.lua')
 include('ECAM_automation.lua')
 include('ECAM_hyd.lua')
 include('ECAM_elec.lua')
+include('ECAM_fuel.lua')
 include('constants.lua')
 
 --local variables
@@ -409,7 +410,7 @@ function draw()
     elseif get(Ecam_current_page) == 5 then --hyd
         draw_hydraulic_page()
     elseif get(Ecam_current_page) == 6 then --fuel
-
+        draw_fuel_page()
     elseif get(Ecam_current_page) == 7 then --apu
         --apu gen section--
         if get(Apu_gen_state) == 2 then

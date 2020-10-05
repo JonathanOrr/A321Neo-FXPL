@@ -417,3 +417,12 @@ Elevators_hstab_1 = globalProperty("sim/flightmodel/controls/hstab1_elv1def") --
 Elevators_hstab_2 = globalProperty("sim/flightmodel/controls/hstab2_elv1def") --elevators -17 deg down 30 deg up
 Rudder = globalProperty("sim/flightmodel/controls/vstab1_rud1def") --rudder 30 deg left -30 deg right
 Yaw_lim = createGlobalPropertyf("a321neo/dynamics/FBW/yaw_lim", 30, false, true, false)
+
+-- Fuel
+Fuel_quantity = {}
+Fuel_quantity[0] =   globalProperty("sim/cockpit2/fuel/fuel_quantity[0]")
+Fuel_quantity[1] =   globalProperty("sim/cockpit2/fuel/fuel_quantity[1]")
+Fuel_quantity[2] =   globalProperty("sim/cockpit2/fuel/fuel_quantity[2]")
+
+
+
