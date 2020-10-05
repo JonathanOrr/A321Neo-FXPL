@@ -191,6 +191,19 @@ ELEC_cmd_EMER_GEN_TEST   = createCommand("a321neo/cockpit/electrical/EMER_GEN_TE
 ELEC_cmd_EMER_GEN1_LINE  = createCommand("a321neo/cockpit/electrical/EMER_GEN_1_LINE", "Press GEN 1 LINE button on the EMER ELEC PWR panel")
 ELEC_cmd_EMER_RAT        = createCommand("a321neo/cockpit/electrical/EMER_GEN_RAT", "Press RAT MAN ON button on the EMER ELEC PWR panel")
 
+ELEC_vent_blower      = createCommand("a321neo/cockpit/electrical/toggle_vent_blower", "Press BLOWER in the VENTILATION panel")
+ELEC_vent_extract     = createCommand("a321neo/cockpit/electrical/toggle_vent_extract", "Press EXTRACT in the VENTILATION panel")
+
+-- FUEL
+FUEL_cmd_L_TK_pump_1      = createCommand("a321neo/cockpit/fuel/L_TK_pump_1", "Press L TK 1 pump button in the FUEL panel")
+FUEL_cmd_L_TK_pump_2      = createCommand("a321neo/cockpit/fuel/L_TK_pump_2", "Press L TK 2 pump button in the FUEL panel")
+FUEL_cmd_R_TK_pump_1      = createCommand("a321neo/cockpit/fuel/R_TK_pump_1", "Press R TK 1 pump button in the FUEL panel")
+FUEL_cmd_R_TK_pump_2      = createCommand("a321neo/cockpit/fuel/R_TK_pump_2", "Press R TK 2 pump button in the FUEL panel")
+FUEL_cmd_C_TK_pump_1      = createCommand("a321neo/cockpit/fuel/C_TK_pump_1", "Press C TK 1 pump button in the FUEL panel")
+FUEL_cmd_C_TK_pump_2      = createCommand("a321neo/cockpit/fuel/C_TK_pump_2", "Press C TK 2 pump button in the FUEL panel")
+FUEL_cmd_C_TK_mode        = createCommand("a321neo/cockpit/fuel/C_TK_mode", "Press MODE SEL button in the FUEL panel")
+FUEL_cmd_X_FEED           = createCommand("a321neo/cockpit/fuel/X_FEED", "Press X FEED button in the FUEL panel")
+
 -- Standby instrument
 ISIS_cmd_LS          = createCommand("a321neo/cockpit/ISIS/LS", "Press LS button on ISIS")
 ISIS_cmd_Knob_c      = createCommand("a321neo/cockpit/ISIS/Knob_C", "Rotate ISIS knob clockwise")  -- Knob clockwise
