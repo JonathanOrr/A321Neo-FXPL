@@ -327,7 +327,7 @@ MessageGroup_ELEC_EMER_CONFIG = {
     land_asap = true,
 
     is_active = function(self)
-        return (get(Gen_1_pwr) == 0 and get(Gen_2_pwr) ==0 and get(Gen_APU_pwr) == 0 and get(Gen_EXT_pwr) == 0)
+        return (get(Gen_1_pwr) == 0 and get(Gen_2_pwr) ==0 and get(Gen_APU_pwr) == 0 and get(Gen_EXT_pwr) == 0) and not ovveride_ELEC_always_on
     end,
 
     is_inhibited = function(self)

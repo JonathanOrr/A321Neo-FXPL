@@ -19,7 +19,12 @@ size = { 4096, 2048 }
 panelWidth3d = 4096
 panelHeight3d = 2048
 
-
+-- THIS IS FOR DEVELOPMENT ONLY
+-- If you set this variable to true, all the electrical buses are set of be ON even if the power
+-- source is not available. This means that you immediately get all the electrical power on all
+-- buses. This is useful for development. Please consider that eletrical load is no more valid if
+-- you enable this option and other strange effects on electrical system may happen.
+ovveride_ELEC_always_on = false
 
 components = {
   engine_and_apu {},
@@ -321,5 +326,5 @@ ShowHideFBWGraph	= sasl.appendMenuItem(Menu_debug, "Show/Hide FBW Graph", Show_h
 ShowHideECAMDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide ECAM Debug", Show_hide_ECAM_debug)
 ShowHideDMCDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide DMC Debug", Show_hide_DMC_debug)
 ShowHideELECDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide ELEC Debug", Show_hide_ELEC_debug)
-
+DeActivateELECover	= sasl.appendMenuItem(Menu_debug, "(De)activate override ELEC always ON", function() ovveride_ELEC_always_on = not ovveride_ELEC_always_on end)
 

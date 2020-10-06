@@ -221,20 +221,36 @@ end
 
 local function update_datarefs()
 
-    set(AC_bus_1_pwrd, buses.ac1_powered_by > 0 and 1 or 0)
-    set(AC_bus_2_pwrd, buses.ac2_powered_by > 0 and 1 or 0)
-    set(AC_ess_bus_pwrd, buses.ac_ess_powered_by > 0 and 1 or 0)
+    if ovveride_ELEC_always_on then -- For DEBUG only
+        set(AC_bus_1_pwrd, 1)
+        set(AC_bus_2_pwrd, 1)
+        set(AC_ess_bus_pwrd, 1)
+        
+        set(DC_bus_1_pwrd, 1)
+        set(DC_bus_2_pwrd, 1)
+        set(DC_ess_bus_pwrd, 1)
+        set(DC_bat_bus_pwrd, 1)
+
+        set(AC_ess_shed_pwrd, 1)
+        set(DC_shed_ess_pwrd, 1)
+
+        set(AC_STAT_INV_pwrd, 1)
+    else
+        set(AC_bus_1_pwrd, buses.ac1_powered_by > 0 and 1 or 0)
+        set(AC_bus_2_pwrd, buses.ac2_powered_by > 0 and 1 or 0)
+        set(AC_ess_bus_pwrd, buses.ac_ess_powered_by > 0 and 1 or 0)
+        
+        set(DC_bus_1_pwrd, buses.dc1_powered_by > 0 and 1 or 0)
+        set(DC_bus_2_pwrd, buses.dc2_powered_by > 0 and 1 or 0)
+        set(DC_ess_bus_pwrd, buses.dc_ess_powered_by > 0 and 1 or 0)
+        set(DC_bat_bus_pwrd, buses.dc_bat_bus_powered_by > 0 and 1 or 0)
+
+        set(AC_ess_shed_pwrd, buses.is_ac_ess_shed_on and 1 or 0)
+        set(DC_shed_ess_pwrd, buses.is_dc_ess_shed_on and 1 or 0)
+
+        set(AC_STAT_INV_pwrd, buses.is_stat_inv_bus_on and 1 or 0)
+    end
     
-    set(DC_bus_1_pwrd, buses.dc1_powered_by > 0 and 1 or 0)
-    set(DC_bus_2_pwrd, buses.dc2_powered_by > 0 and 1 or 0)
-    set(DC_ess_bus_pwrd, buses.dc_ess_powered_by > 0 and 1 or 0)
-    set(DC_bat_bus_pwrd, buses.dc_bat_bus_powered_by > 0 and 1 or 0)
-
-    set(AC_ess_shed_pwrd, buses.is_ac_ess_shed_on and 1 or 0)
-    set(DC_shed_ess_pwrd, buses.is_dc_ess_shed_on and 1 or 0)
-
-    set(AC_STAT_INV_pwrd, buses.is_stat_inv_bus_on and 1 or 0)
-
     set(Elec_light_BUS_tie, buses.bus_tie_pushbutton_status and 0 or 1)
     set(Elec_light_AC_ess_feed, (buses.ac_ess_bus_pushbutton_status and 1 or 0) + (buses.ac_ess_powered_by>0 and 0 or 10)) 
 end

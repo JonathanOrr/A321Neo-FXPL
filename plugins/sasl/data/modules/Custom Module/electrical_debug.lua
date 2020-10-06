@@ -211,5 +211,11 @@ function draw()
     print_value_dec(800,  size[2]-520, "Curr. IN (A)", ELEC_sys.trs[3].curr_in_amps)
     sasl.gl.drawFrame(795, size[2]-530, 190, 110, ECAM_ORANGE)
     
-    
+    if ovveride_ELEC_always_on then
+        sasl.gl.drawText(B612MONO_regular, 580, size[2]-420, "OVERRIDE MODE", 20, false, false, TEXT_ALIGN_LEFT, ECAM_RED )
+        sasl.gl.drawText(B612MONO_regular, 580, size[2]-450, "DATA UNRELIABLE", 18, false, false, TEXT_ALIGN_LEFT, ECAM_MAGENTA )
+        sasl.gl.drawText(B612MONO_regular, 580, size[2]-470, "Check the variable", 12, false, false, TEXT_ALIGN_LEFT, ECAM_MAGENTA )
+        sasl.gl.drawText(B612MONO_regular, 580, size[2]-490, "`ovveride_ELEC_always_on`", 12, false, false, TEXT_ALIGN_LEFT, ECAM_MAGENTA )
+        sasl.gl.drawText(B612MONO_regular, 580, size[2]-510, "in the `main.lua` file.", 12, false, false, TEXT_ALIGN_LEFT, ECAM_MAGENTA )
+    end
 end
