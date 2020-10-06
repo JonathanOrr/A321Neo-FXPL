@@ -63,5 +63,16 @@ FAILURE_ELEC_IDG1_oil  = createGlobalPropertyi("a321neo/failures/electrical/idg1
 FAILURE_ELEC_IDG2_temp = createGlobalPropertyi("a321neo/failures/electrical/idg2_temp", 0, false, true, false)
 FAILURE_ELEC_IDG2_oil  = createGlobalPropertyi("a321neo/failures/electrical/idg2_oil", 0, false, true, false)
 
+FAILURE_ELEC_AC1_bus = createGlobalPropertyi("a321neo/failures/electrical/bus_ac1", 0, false, true, false)
+FAILURE_ELEC_AC2_bus = createGlobalPropertyi("a321neo/failures/electrical/bus_ac2", 0, false, true, false)
+FAILURE_ELEC_AC_ESS_bus = createGlobalPropertyi("a321neo/failures/electrical/bus_ac_ess", 0, false, true, false)
+FAILURE_ELEC_AC_ESS_SHED_bus = createGlobalPropertyi("a321neo/failures/electrical/bus_ac_ess_shed", 0, false, true, false)
+FAILURE_ELEC_DC1_bus = createGlobalPropertyi("a321neo/failures/electrical/bus_dc1", 0, false, true, false)
+FAILURE_ELEC_DC2_bus = createGlobalPropertyi("a321neo/failures/electrical/bus_dc2", 0, false, true, false)
+FAILURE_ELEC_DC_ESS_bus = createGlobalPropertyi("a321neo/failures/electrical/bus_dc_ess", 0, false, true, false)
+FAILURE_ELEC_DC_ESS_SHED_bus = createGlobalPropertyi("a321neo/failures/electrical/bus_dc_ess_shed", 0, false, true, false)
+FAILURE_ELEC_DC_BAT_bus = createGlobalPropertyi("a321neo/failures/electrical/bus_dc_bat", 0, false, true, false)
+
 FAILURE_SFCC_1 = createGlobalPropertyi("a321neo/failures/fctl/sfcc_1", 0, false, true, false)--slats flaps computer 1 failure
 FAILURE_SFCC_2 = createGlobalPropertyi("a321neo/failures/fctl/sfcc_2", 0, false, true, false)--slats flaps computer 1 failure
+

@@ -102,7 +102,9 @@ local function update_ac_1()
 
     -- The order of this if-elseif matches the real source priority! Do not change it!
 
-    if get(Gen_1_pwr) == 1 then
+    if get(FAILURE_ELEC_AC1_bus) == 1 then
+        return  -- Not powered
+    elseif get(Gen_1_pwr) == 1 then
         buses.ac1_powered_by = GEN_1
     elseif get(Gen_EXT_pwr) == 1 then
         buses.ac1_powered_by = GEN_EXT
@@ -125,7 +127,9 @@ local function update_ac_2()
 
     -- The order of this if-elseif matches the real source priority! Do not change it!
 
-    if get(Gen_2_pwr) == 1 then
+    if get(FAILURE_ELEC_AC2_bus) == 1 then
+        return  -- Not powered
+    elseif get(Gen_2_pwr) == 1 then
         buses.ac2_powered_by = GEN_2
     elseif get(Gen_EXT_pwr) == 1 then
         buses.ac2_powered_by = GEN_EXT
@@ -142,7 +146,13 @@ local function update_ac_ess()
 
     local prev_by = buses.ac_ess_powered_by
 
-    if buses.ac_ess_bus_pushbutton_status then
+    buses.ac_ess_powered_by = 0
+    
+    if get(FAILURE_ELEC_AC_ESS_bus) == 1 then
+        return
+    end
+
+    if buses.ac_ess_bus_pushbutton_status then  -- Depends on the button in the overhead panel
         buses.ac_ess_powered_by = buses.ac2_powered_by ~= 0 and AC_BUS_2 or 0
     else
         buses.ac_ess_powered_by = buses.ac1_powered_by ~= 0 and AC_BUS_1 or 0
@@ -165,8 +175,9 @@ local function update_dc_1()
     buses.dc1_powered_by  = 0
 
     -- The order of this if-elseif matches the real source priority! Do not change it!
-
-    if get(TR_1_online) == 1 then
+    if get(FAILURE_ELEC_DC1_bus) == 1 then
+        return
+    elseif get(TR_1_online) == 1 then
         buses.dc1_powered_by = TR_1
     elseif buses.dc2_powered_by > 0 and buses.dc2_powered_by ~= CROSS_TIEBAT_BUS then
         buses.dc1_powered_by = CROSS_TIEBAT_BUS
@@ -179,8 +190,9 @@ local function update_dc_2()
     buses.dc2_powered_by  = 0
 
     -- The order of this if-elseif matches the real source priority! Do not change it!
-
-    if get(TR_2_online) == 1 then
+    if get(FAILURE_ELEC_DC2_bus) == 1 then
+        return
+    elseif get(TR_2_online) == 1 then
         buses.dc2_powered_by = TR_2
     elseif buses.dc1_powered_by > 0 and buses.dc1_powered_by ~= CROSS_TIEBAT_BUS then
         buses.dc2_powered_by = CROSS_TIEBAT_BUS
@@ -193,8 +205,9 @@ local function update_dc_ess()
 
     -- The order of this if-elseif matches the real source priority! Do not change it!
 
-
-    if get(TR_ESS_online) == 1 then
+    if get(FAILURE_ELEC_DC_ESS_bus) == 1 then
+        return
+    elseif get(TR_ESS_online) == 1 then
         buses.dc_ess_powered_by = TR_ESS
     elseif get(TR_1_online) == 1 then
         buses.dc_ess_powered_by = TR_1
@@ -208,7 +221,9 @@ local function update_dc_bat_bus()
 
     -- The order of this if-elseif matches the real source priority! Do not change it!
 
-    if get(TR_1_online) == 1 then
+    if get(FAILURE_ELEC_DC_BAT_bus) == 1 then
+        return
+    elseif get(TR_1_online) == 1 then
         buses.dc_bat_bus_powered_by = TR_1
     elseif get(TR_2_online) == 1 then
         buses.dc_bat_bus_powered_by = TR_2
@@ -256,10 +271,12 @@ local function update_datarefs()
 end
 
 local function update_shed()
-    buses.is_ac_ess_shed_on = buses.ac1_powered_by > 0 or buses.ac2_powered_by > 0
-                              or buses.ac_ess_powered_by == GEN_EMER
-    buses.is_dc_ess_shed_on = buses.dc1_powered_by > 0 or buses.dc2_powered_by > 0 
-                              or buses.dc_ess_powered_by == TR_ESS
+    buses.is_ac_ess_shed_on = get(FAILURE_ELEC_AC_ESS_SHED_bus) == 0 and 
+                              (buses.ac1_powered_by > 0 or buses.ac2_powered_by > 0
+                              or buses.ac_ess_powered_by == GEN_EMER)
+    buses.is_dc_ess_shed_on = get(FAILURE_ELEC_DC_ESS_SHED_bus) == 0 and
+                              (buses.dc1_powered_by > 0 or buses.dc2_powered_by > 0 
+                              or buses.dc_ess_powered_by == TR_ESS)
 end
 
 local function update_stat_inv()

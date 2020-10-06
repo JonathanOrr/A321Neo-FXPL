@@ -67,7 +67,16 @@ local failures_data = {
             {name="IDG 1\nLOW OIL", status=false, dataref=FAILURE_ELEC_IDG1_oil },
             {name="IDG 2\nOVERHEAT", status=false, dataref=FAILURE_ELEC_IDG2_temp },
             {name="IDG 2\nLOW OIL", status=false, dataref=FAILURE_ELEC_IDG2_oil },
-            {name="GALLEY\nFAILURE", status=false, dataref=FAILURE_ELEC_GALLEY }
+            {name="GALLEY\nFAILURE", status=false, dataref=FAILURE_ELEC_GALLEY },
+            {name="AC 1 BUS\nFAILURE", status=false, dataref=FAILURE_ELEC_AC1_bus },
+            {name="AC 2 BUS\nFAILURE", status=false, dataref=FAILURE_ELEC_AC2_bus },
+            {name="AC ESS BUS\nFAILURE", status=false, dataref=FAILURE_ELEC_AC_ESS_bus },
+            {name="AC ESS BUS\nSHED", status=false, dataref=FAILURE_ELEC_AC_ESS_SHED_bus },
+            {name="DC 1 BUS\nFAILURE", status=false, dataref=FAILURE_ELEC_DC1_bus },
+            {name="DC 2 BUS\nFAILURE", status=false, dataref=FAILURE_ELEC_DC2_bus },
+            {name="DC ESS BUS\nFAILURE", status=false, dataref=FAILURE_ELEC_DC_ESS_bus },
+            {name="DC ESS BUS\nSHED", status=false, dataref=FAILURE_ELEC_DC_ESS_SHED_bus },
+            {name="DC BAT BUS\nFAILURE", status=false, dataref=FAILURE_ELEC_DC_BAT_bus }
         }
     },
     {
