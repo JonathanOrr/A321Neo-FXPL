@@ -20,6 +20,7 @@ sasl.registerCommandHandler (Ecam_btn_cmd_EMERC, 0 , function(phase) ewd_emercan
 sasl.registerCommandHandler (Ecam_btn_cmd_TOCFG, 0 , function(phase) ewd_tocfg_button_handler(phase) end )
 
 local STARTUP_WAIT_SECS = 10 -- Startup delay
+local MIN_TIME_FOR_DISPLAY = 1 -- Min time a failure must be active to be displayed in seconds
 
 --colors
 local COL_INVISIBLE = 0    
@@ -383,17 +384,24 @@ local function update_left_list()
     for i, m in ipairs(left_messages_list) do
         if (m.is_active() and (not m.is_inhibited())) then
             if not m.shown then
-                m.shown = true
-                if m.color() == COL_WARNING then
-                    set(ReqMasterWarning, 1)
+            
+                if m.begin_time == nil then
+                    m.begin_time = get(TIME)
+                elseif get(TIME) - m.begin_time > MIN_TIME_FOR_DISPLAY then
+            
+                    m.shown = true
+                    if m.color() == COL_WARNING then
+                        set(ReqMasterWarning, 1)
+                    end
+                    if m.color() == COL_CAUTION then
+                        set(ReqMasterCaution, 1)
+                    end 
                 end
-                if m.color() == COL_CAUTION then
-                    set(ReqMasterCaution, 1)
-                end 
             end
         end    
         if not m.is_active() then
             m.shown = false
+            m.begin_time = nil
         end
 
         if m.shown then
@@ -402,7 +410,7 @@ local function update_left_list()
             -- - the message has been activated in a previous flight phase and consequently still
             --   visible.
             list_left:put(m.priority, m) 
-            
+
             if m.land_asap ~= nil and m.land_asap == true then
                 land_asap = true
             end
