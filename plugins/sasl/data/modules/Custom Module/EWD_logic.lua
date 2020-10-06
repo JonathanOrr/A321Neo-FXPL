@@ -90,6 +90,8 @@ local left_messages_list = {
     MessageGroup_HYD_Y_SYS_LO_PR,
     MessageGroup_HYD_RAT_FAULT,
     MessageGroup_HYD_PTU_FAULT,
+    MessageGroup_ELEC_AC_BUS_1_FAULT,
+    MessageGroup_ELEC_AC_BUS_2_FAULT,
     MessageGroup_ELEC_BAT_OFF,
     MessageGroup_ELEC_BAT_FAULT,
     

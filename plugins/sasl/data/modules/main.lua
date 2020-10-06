@@ -106,7 +106,7 @@ SSS_FBW_UI = contextWindow {
   minimumSize = { 500 , 300 };
   maximumSize = { 1000 , 600 };
   gravity = { 0 , 1 , 0 , 1 };
-  visible = true ;
+  visible = false ;
   components = {
     FBW_UI {position = { 0 , 0 , 1000 , 600 }}
   };

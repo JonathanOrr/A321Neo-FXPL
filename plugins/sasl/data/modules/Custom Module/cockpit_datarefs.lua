@@ -296,6 +296,9 @@ Elec_light_RAT_FAULT     = createGlobalPropertyi("a321neo/cockpit/electrical/but
 Elec_bat_1_V  = createGlobalPropertyf("a321neo/cockpit/electrical/battery_1_voltage", 0, false, true, false)
 Elec_bat_2_V  = createGlobalPropertyf("a321neo/cockpit/electrical/battery_2_voltage", 0, false, true, false)
 
+Elec_light_blower = createGlobalPropertyi("a321neo/cockpit/electrical/blower", 0, false, true, false)     --00: No lights, 01: [OVRD], 10: FAULT, 11 [OVRD] + FAULT
+
+Elec_light_extract = createGlobalPropertyi("a321neo/cockpit/electrical/extract", 0, false, true, false)     --00: No lights, 01: [OVRD], 10: FAULT, 11 [OVRD] + FAULT
 
 -- ISIS
 ISIS_landing_system_enabled = createGlobalPropertyi("a321neo/cockpit/ISIS/isis_ls_enabled", 0, false, true, false)-- LS status for the ISIS: 0-off, 1-on

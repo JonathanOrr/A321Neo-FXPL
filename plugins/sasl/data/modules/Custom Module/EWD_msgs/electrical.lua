@@ -255,6 +255,18 @@ Message_ELEC_FUEL_GRAVITY_PROC = {
     is_active = function(self) return true end
 }
 
+Message_ELEC_BLOWER_OVRD = {
+    text = function(self) return " - BLOWER............OVRD" end,
+    color = function(self) return COL_ACTIONS end,
+    is_active = function(self) return get(Elec_light_blower) % 2 == 0 end
+}
+
+Message_ELEC_EXTRACT_OVRD = {
+    text = function(self) return " - EXTRACT...........OVRD" end,
+    color = function(self) return COL_ACTIONS end,
+    is_active = function(self) return get(Elec_light_extract) % 2 == 0 end
+}
+
 Message_ELEC_FAC_1_OFF_ON = {
     text = function(self)
         return " - FAC 1......OFF THEN ON"
@@ -318,20 +330,24 @@ MessageGroup_ELEC_EMER_CONFIG = {
         Message_ELEC_FUEL_GRAVITY_1,
         Message_ELEC_FUEL_GRAVITY_PROC,
         Message_ELEC_FAC_1_OFF_ON,
-        -- TODO ADD BLOWER + EXTRACT
+        Message_ELEC_BLOWER_OVRD,
+        Message_ELEC_EXTRACT_OVRD,
         Message_ELEC_LDG_ELEV_ADJ
         
         
     },
 
+
     land_asap = true,
 
     is_active = function(self)
-        return (get(Gen_1_pwr) == 0 and get(Gen_2_pwr) ==0 and get(Gen_APU_pwr) == 0 and get(Gen_EXT_pwr) == 0) and not ovveride_ELEC_always_on
+        local condition =  (get(Gen_1_pwr) == 0 and get(Gen_2_pwr) ==0 and get(Gen_APU_pwr) == 0 and get(Gen_EXT_pwr) == 0) and not ovveride_ELEC_always_on
+
+        return condition
     end,
 
     is_inhibited = function(self)
-        return get(EWD_flight_phase) == PHASE_ELEC_PWR and get(EWD_flight_phase) == PHASE_ABOVE_80_KTS or get(EWD_flight_phase) == PHASE_TOUCHDOWN and get(EWD_flight_phase) == PHASE_2ND_ENG_OFF
+        return get(EWD_flight_phase) == PHASE_ELEC_PWR or get(EWD_flight_phase) == PHASE_ABOVE_80_KTS or get(EWD_flight_phase) == PHASE_TOUCHDOWN or get(EWD_flight_phase) == PHASE_2ND_ENG_OFF
     end
 }
 
@@ -380,6 +396,78 @@ MessageGroup_ELEC_ESS_BUSES_ON_BAT = {
 ----------------------------------------------------------------------------------------------------
 -- CAUTION: AC BUS 1 FAULT
 ----------------------------------------------------------------------------------------------------
+
+MessageGroup_ELEC_AC_BUS_1_FAULT = {
+
+    shown = false,
+
+    text  = function(self)
+                return "ELEC"   
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_ELEC,
+    
+    messages = {
+        {
+            text = function(self) return "     AC BUS 1 FAULT" end,
+            color = function(self) return COL_CAUTION end,
+            is_active = function(self) return true end
+        },
+        Message_ELEC_BLOWER_OVRD
+    },
+
+    is_active = function(self)
+        return get(AC_bus_1_pwrd) == 0
+    end,
+
+    is_inhibited = function(self)
+        return get(EWD_flight_phase) == PHASE_ELEC_PWR or get(EWD_flight_phase) == PHASE_ABOVE_80_KTS or get(EWD_flight_phase) == PHASE_TOUCHDOWN or get(EWD_flight_phase) == PHASE_2ND_ENG_OFF
+    end
+}
+
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: AC BUS 2 FAULT
+----------------------------------------------------------------------------------------------------
+
+MessageGroup_ELEC_AC_BUS_2_FAULT = {
+
+    shown = false,
+
+    text  = function(self)
+                return "ELEC"   
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_ELEC,
+    
+    messages = {
+        {
+            text = function(self) return "     AC BUS 2 FAULT" end,
+            color = function(self) return COL_CAUTION end,
+            is_active = function(self) return true end
+        },
+        Message_ELEC_EXTRACT_OVRD
+    },
+
+    is_active = function(self)
+        return get(AC_bus_2_pwrd) == 0
+    end,
+
+    is_inhibited = function(self)
+        return get(EWD_flight_phase) == PHASE_ELEC_PWR or get(EWD_flight_phase) == PHASE_ABOVE_80_KTS or get(EWD_flight_phase) == PHASE_TOUCHDOWN or get(EWD_flight_phase) == PHASE_2ND_ENG_OFF
+    end
+}
+
 
 
 
