@@ -199,8 +199,10 @@ FUEL_cmd_L_TK_pump_1      = createCommand("a321neo/cockpit/fuel/L_TK_pump_1", "P
 FUEL_cmd_L_TK_pump_2      = createCommand("a321neo/cockpit/fuel/L_TK_pump_2", "Press L TK 2 pump button in the FUEL panel")
 FUEL_cmd_R_TK_pump_1      = createCommand("a321neo/cockpit/fuel/R_TK_pump_1", "Press R TK 1 pump button in the FUEL panel")
 FUEL_cmd_R_TK_pump_2      = createCommand("a321neo/cockpit/fuel/R_TK_pump_2", "Press R TK 2 pump button in the FUEL panel")
-FUEL_cmd_C_TK_pump_1      = createCommand("a321neo/cockpit/fuel/C_TK_pump_1", "Press C TK 1 pump button in the FUEL panel")
-FUEL_cmd_C_TK_pump_2      = createCommand("a321neo/cockpit/fuel/C_TK_pump_2", "Press C TK 2 pump button in the FUEL panel")
+FUEL_cmd_C_TK_XFR_1       = createCommand("a321neo/cockpit/fuel/C_TK_XFR_1", "Press C TK 1 XFR button in the FUEL panel")
+FUEL_cmd_C_TK_XFR_2       = createCommand("a321neo/cockpit/fuel/C_TK_XFR_2", "Press C TK 2 XFR button in the FUEL panel")
+FUEL_cmd_ACT_TK_XFR       = createCommand("a321neo/cockpit/fuel/ACT_TK_FWD", "Press ACT TK FWD button in the FUEL panel")
+FUEL_cmd_RCT_TK_XFR       = createCommand("a321neo/cockpit/fuel/RCT_TK_FWD", "Press RCT TK FWD button in the FUEL panel")
 FUEL_cmd_C_TK_mode        = createCommand("a321neo/cockpit/fuel/C_TK_mode", "Press MODE SEL button in the FUEL panel")
 FUEL_cmd_X_FEED           = createCommand("a321neo/cockpit/fuel/X_FEED", "Press X FEED button in the FUEL panel")
 
