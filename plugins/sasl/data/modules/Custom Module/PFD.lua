@@ -44,7 +44,7 @@ local max_speeds_kts = {
 
 
 local function update_radioalt() 
-    local curr_radio_alt = math.floor(get(Capt_ra_alt_ft))
+    local curr_radio_alt = math.floor(get(Capt_ra_alt_ft)) - 1
     
     local color = 0
     
@@ -79,6 +79,19 @@ local function update_radioalt()
     end
 
 
+end
+
+local function update_tailstrike_indicators()
+
+    if get(Capt_ra_alt_ft) < 400 and get(EWD_flight_phase) == PHASE_FINAL then
+        if get(Flightmodel_pitch) > 13 then
+            set(PFD_Capt_tailstrike_ind, (math.floor(get(TIME)*2) % 2 == 1 ) and 1 or 0)
+        else
+            set(PFD_Capt_tailstrike_ind, 1)    
+        end
+    else
+        set(PFD_Capt_tailstrike_ind, 0)
+    end
 end
 
 
@@ -138,6 +151,8 @@ function update()
     set(PFD_Fo_Ground_line, Math_clamp( get(Fo_ra_alt_ft)/120 + get(Flightmodel_pitch)/18, 0, 1))
     
     update_radioalt()
+    
+    update_tailstrike_indicators()
     
 end
 
