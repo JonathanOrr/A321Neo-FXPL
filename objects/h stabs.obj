@@ -3069,47 +3069,47 @@ IDX10	2290	2287	1734	2292	2290	2288	2287	2292	2290	2287
 		ANIM_trans	-2.19962	0.21345	1.2127399	-2.19962	0.21345	1.2127399
 		ANIM_rotate_begin	0	1	-0	sim/flightmodel/controls/hstab1_elv1def
 		ANIM_rotate_key	0	0
-		ANIM_rotate_key	-8.5	-0.72765639
-		ANIM_rotate_key	-17	-1.0267404
-		ANIM_rotate_key	-8.5	-0.72765639
+		ANIM_rotate_key	8.5	-0.72765639
+		ANIM_rotate_key	17	-1.0267404
+		ANIM_rotate_key	8.5	-0.72765639
 		ANIM_rotate_key	0	0
-		ANIM_rotate_key	7.5	0.98949815
-		ANIM_rotate_key	15	2.2952688
-		ANIM_rotate_key	22.5	3.9041344
-		ANIM_rotate_key	30	5.7994786
-		ANIM_rotate_key	22.5	3.9041344
-		ANIM_rotate_key	15	2.2952688
-		ANIM_rotate_key	7.5	0.98949815
+		ANIM_rotate_key	-7.5	0.98949815
+		ANIM_rotate_key	-15	2.2952688
+		ANIM_rotate_key	-22.5	3.9041344
+		ANIM_rotate_key	-30	5.7994786
+		ANIM_rotate_key	-22.5	3.9041344
+		ANIM_rotate_key	-15	2.2952688
+		ANIM_rotate_key	-7.5	0.98949815
 		ANIM_rotate_key	0	0
 		ANIM_rotate_end
 		ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/hstab1_elv1def
 		ANIM_rotate_key	0	0
-		ANIM_rotate_key	-8.5	3.0939722
-		ANIM_rotate_key	-17	6.2589911
-		ANIM_rotate_key	-8.5	3.0939722
+		ANIM_rotate_key	8.5	3.0939722
+		ANIM_rotate_key	17	6.2589911
+		ANIM_rotate_key	8.5	3.0939722
 		ANIM_rotate_key	0	0
-		ANIM_rotate_key	7.5	-2.6247196
-		ANIM_rotate_key	15	-5.1090647
-		ANIM_rotate_key	22.5	-7.4140739
-		ANIM_rotate_key	30	-9.5007863
-		ANIM_rotate_key	22.5	-7.4140739
-		ANIM_rotate_key	15	-5.1090647
-		ANIM_rotate_key	7.5	-2.6247196
+		ANIM_rotate_key	-7.5	-2.6247196
+		ANIM_rotate_key	-15	-5.1090647
+		ANIM_rotate_key	-22.5	-7.4140739
+		ANIM_rotate_key	-30	-9.5007863
+		ANIM_rotate_key	-22.5	-7.4140739
+		ANIM_rotate_key	-15	-5.1090647
+		ANIM_rotate_key	-7.5	-2.6247196
 		ANIM_rotate_key	0	0
 		ANIM_rotate_end
 		ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/hstab1_elv1def
 		ANIM_rotate_key	0	0
-		ANIM_rotate_key	-8.5	7.864419
-		ANIM_rotate_key	-17	15.724827
-		ANIM_rotate_key	-8.5	7.864419
+		ANIM_rotate_key	8.5	7.864419
+		ANIM_rotate_key	17	15.724827
+		ANIM_rotate_key	8.5	7.864419
 		ANIM_rotate_key	0	0
-		ANIM_rotate_key	7.5	-6.9791987
-		ANIM_rotate_key	15	-14.023715
-		ANIM_rotate_key	22.5	-21.155321
-		ANIM_rotate_key	30	-28.390632
-		ANIM_rotate_key	22.5	-21.155321
-		ANIM_rotate_key	15	-14.023715
-		ANIM_rotate_key	7.5	-6.9791987
+		ANIM_rotate_key	-7.5	-6.9791987
+		ANIM_rotate_key	-15	-14.023715
+		ANIM_rotate_key	-22.5	-21.155321
+		ANIM_rotate_key	-30	-28.390632
+		ANIM_rotate_key	-22.5	-21.155321
+		ANIM_rotate_key	-15	-14.023715
+		ANIM_rotate_key	-7.5	-6.9791987
 		ANIM_rotate_key	0	0
 		ANIM_rotate_end
 		TRIS	3714 1908
@@ -3118,51 +3118,51 @@ IDX10	2290	2287	1734	2292	2290	2288	2287	2292	2290	2287
 		ANIM_trans	2.19962	0.21345	1.2127399	2.19962	0.21345	1.2127399
 		ANIM_rotate_begin	0	1	-0	sim/flightmodel/controls/hstab1_elv1def
 		ANIM_rotate_key	0	0
-		ANIM_rotate_key	-8.5	0.72765639
-		ANIM_rotate_key	-17	1.0267404
-		ANIM_rotate_key	-8.5	0.72765639
+		ANIM_rotate_key	8.5	0.72765639
+		ANIM_rotate_key	17	1.0267404
+		ANIM_rotate_key	8.5	0.72765639
 		ANIM_rotate_key	0	0
-		ANIM_rotate_key	7.5	-0.98949815
-		ANIM_rotate_key	15	-2.2952688
-		ANIM_rotate_key	22.5	-3.9041344
-		ANIM_rotate_key	30	-5.7994786
-		ANIM_rotate_key	22.5	-3.9041344
-		ANIM_rotate_key	15	-2.2952688
-		ANIM_rotate_key	7.5	-0.98949815
+		ANIM_rotate_key	-7.5	-0.98949815
+		ANIM_rotate_key	-15	-2.2952688
+		ANIM_rotate_key	-22.5	-3.9041344
+		ANIM_rotate_key	-30	-5.7994786
+		ANIM_rotate_key	-22.5	-3.9041344
+		ANIM_rotate_key	-15	-2.2952688
+		ANIM_rotate_key	-7.5	-0.98949815
 		ANIM_rotate_key	0	0
 		ANIM_rotate_end
 		ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/hstab1_elv1def
 		ANIM_rotate_key	0	0
-		ANIM_rotate_key	-8.5	-3.0939722
-		ANIM_rotate_key	-17	-6.2589911
-		ANIM_rotate_key	-8.5	-3.0939722
+		ANIM_rotate_key	8.5	-3.0939722
+		ANIM_rotate_key	17	-6.2589911
+		ANIM_rotate_key	8.5	-3.0939722
 		ANIM_rotate_key	0	0
-		ANIM_rotate_key	7.5	2.6247196
-		ANIM_rotate_key	15	5.1090647
-		ANIM_rotate_key	22.5	7.4140739
-		ANIM_rotate_key	30	9.5007863
-		ANIM_rotate_key	22.5	7.4140739
-		ANIM_rotate_key	15	5.1090647
-		ANIM_rotate_key	7.5	2.6247196
+		ANIM_rotate_key	-7.5	2.6247196
+		ANIM_rotate_key	-15	5.1090647
+		ANIM_rotate_key	-22.5	7.4140739
+		ANIM_rotate_key	-30	9.5007863
+		ANIM_rotate_key	-22.5	7.4140739
+		ANIM_rotate_key	-15	5.1090647
+		ANIM_rotate_key	-7.5	2.6247196
 		ANIM_rotate_key	0	0
 		ANIM_rotate_end
 		ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/hstab1_elv1def
 		ANIM_rotate_key	0	0
-		ANIM_rotate_key	-8.5	7.864419
-		ANIM_rotate_key	-17	15.724827
-		ANIM_rotate_key	-8.5	7.864419
+		ANIM_rotate_key	8.5	7.864419
+		ANIM_rotate_key	17	15.724827
+		ANIM_rotate_key	8.5	7.864419
 		ANIM_rotate_key	0	0
-		ANIM_rotate_key	7.5	-6.9791987
-		ANIM_rotate_key	15	-14.023715
-		ANIM_rotate_key	22.5	-21.155321
-		ANIM_rotate_key	30	-28.390632
-		ANIM_rotate_key	22.5	-21.155321
-		ANIM_rotate_key	15	-14.023715
-		ANIM_rotate_key	7.5	-6.9791987
+		ANIM_rotate_key	-7.5	-6.9791987
+		ANIM_rotate_key	-15	-14.023715
+		ANIM_rotate_key	-22.5	-21.155321
+		ANIM_rotate_key	-30	-28.390632
+		ANIM_rotate_key	-22.5	-21.155321
+		ANIM_rotate_key	-15	-14.023715
+		ANIM_rotate_key	-7.5	-6.9791987
 		ANIM_rotate_key	0	0
 		ANIM_rotate_end
 		TRIS	5622 1908
 		ANIM_end
 	ANIM_end
 
-# Build with Blender 2.90.0 (build b'0330d1af29c0'). Exported with XPlane2Blender 4.0.0-beta.3+89.20200830022522
+# Build with Blender 2.90.1 (build b'3e85bb34d0d7'). Exported with XPlane2Blender 4.0.0-beta.3+89.20200830022522
