@@ -12,13 +12,13 @@ local OFF   = 2
 local SYSON = 3
 local SYSON_MAN = 4
 
-local LEFT  = 0
-local RIGHT = 1
-local CENTER= 2
+local LEFT  = 1
+local RIGHT = 2
+local CENTER= 0
 local ACT   = 3
 local RCT   = 4
 
-local TOT_MAX_FUEL   = 40755
+local TOT_MAX_FUEL   = 40001
 local LR_MAX_FUEL    = 9247
 local C_MAX_FUEL     = 6445
 local ACT_MAX_FUEL   = 5000
@@ -65,6 +65,8 @@ local start_press_time = 0
 local last_update_press_time = 0
 local remaining_time = 0
 local end_light = false
+
+local fast_speed = false
 
 local function update_btn_status()
 
@@ -153,13 +155,17 @@ function update_refuel()
     
     remaining_time = math.abs(diff)/KG_PER_SEC
     
-    local tot_valves_open = (valve_switch_status[LEFT] and 1 or 0) 
-                          + (valve_switch_status[RIGHT] and 1 or 0) 
-                          + (valve_switch_status[CENTER] and 1 or 0)
-                          + (valve_switch_status[ACT] and 1 or 0) 
-                          + (valve_switch_status[RCT] and 1 or 0)
+    local tot_valves_open = ((valve_switch_status[LEFT]  and get(Fuel_quantity[LEFT]) <= LR_MAX_FUEL)   and 1 or 0) 
+                          + ((valve_switch_status[RIGHT] and get(Fuel_quantity[RIGHT]) <= LR_MAX_FUEL)  and 1 or 0) 
+                          + ((valve_switch_status[CENTER] and get(Fuel_quantity[CENTER]) <= C_MAX_FUEL) and 1 or 0)
+                          + ((valve_switch_status[ACT] and get(Fuel_quantity[ACT]) <= ACT_MAX_FUEL)     and 1 or 0) 
+                          + ((valve_switch_status[RCT] and get(Fuel_quantity[RCT]) <= RCT_MAX_FUEL)     and 1 or 0)
 
     local add = KG_PER_SEC * get(DELTA_TIME) / tot_valves_open * (diff >= 0 and 1 or -1)
+    
+    if fast_speed then
+        add = add * 500
+    end
     
     if valve_switch_status[LEFT] then
         local fuel_curr = get(Fuel_quantity[LEFT])
@@ -293,7 +299,7 @@ function draw()
         sasl.gl.drawText(B612MONO_regular, 730, 500, math.ceil(remaining_time/60) .. " min", 14, false, false, TEXT_ALIGN_RIGHT, UI_WHITE)
 
         sasl.gl.drawRectangle (575, 440, 200, 30, UI_LIGHT_GREY)
-        sasl.gl.drawText(B612MONO_regular, 585, 450, "Instantaneous Refuel", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+        sasl.gl.drawText(B612MONO_regular, 625, 450, "Fast Refuel", 14, false, false, TEXT_ALIGN_LEFT, fast_speed and UI_LIGHT_BLUE or UI_WHITE)
     end
         
     if btn_light_battery == ON then
@@ -353,6 +359,8 @@ function onMouseDown (component , x , y , button , parentX , parentY)
         refuel_handler()
     elseif x >= 220 and x <= 220+58 and y >=180 and y <= 180+58 then
         mode_sel_handler()
+    elseif x >= 575 and x <= 575+200 and y >= 440 and y <= 440+30 then
+        fast_speed = not fast_speed
     end
 
     return true
