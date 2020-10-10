@@ -1,0 +1,11 @@
+{
+    "Lua.diagnostics.globals": [
+        "sasl",
+        "moduleDirectory",
+        "TEXT_ALIGN_CENTER",
+        "TEXT_ALIGN_RIGHT",
+        "TEXT_ALIGN_LEFT",
+        "MENU_CHECKED",
+        "MENU_UNCHECKED"
+    ]
+}
