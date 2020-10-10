@@ -420,9 +420,11 @@ Yaw_lim = createGlobalPropertyf("a321neo/dynamics/FBW/yaw_lim", 30, false, true,
 
 -- Fuel
 Fuel_quantity = {}
-Fuel_quantity[0] =   globalProperty("sim/cockpit2/fuel/fuel_quantity[0]")
-Fuel_quantity[1] =   globalProperty("sim/cockpit2/fuel/fuel_quantity[1]")
-Fuel_quantity[2] =   globalProperty("sim/cockpit2/fuel/fuel_quantity[2]")
+Fuel_quantity[0] =   globalProperty("sim/flightmodel/weight/m_fuel[0]")
+Fuel_quantity[1] =   globalProperty("sim/flightmodel/weight/m_fuel[1]")
+Fuel_quantity[2] =   globalProperty("sim/flightmodel/weight/m_fuel[2]")
+Fuel_quantity[3] =   globalProperty("sim/flightmodel/weight/m_fuel[3]")
+Fuel_quantity[4] =   globalProperty("sim/flightmodel/weight/m_fuel[4]")
 
 
 

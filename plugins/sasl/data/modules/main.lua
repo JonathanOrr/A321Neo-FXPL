@@ -210,6 +210,20 @@ Checklist_window = contextWindow {
   };
 }
 
+fuel_window = contextWindow {
+  name = "Refuel Panel";
+  position = { 150 , 150 , 800 , 600 };
+  noBackground = true ;
+  proportional = false ;
+  minimumSize = { 800 , 600 };
+  maximumSize = { 800 , 600 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = true ;
+  components = {
+    fuel_window {position = { 0 , 0 , 800 , 600 }}
+  };
+}
+
 --menu item functions
 function Show_hide_MCDU()
   MCDU_window:setIsVisible(not MCDU_window:isVisible())
@@ -253,6 +267,10 @@ end
 
 function Show_hide_Checklist()
   Checklist_window:setIsVisible(not Checklist_window:isVisible())
+end
+
+function Show_hide_Fuel()
+  fuel_window:setIsVisible(not fuel_window:isVisible())
 end
 
 function IRs_instaneous_align()
@@ -302,10 +320,13 @@ ShowHideChecklist   = sasl.appendMenuItem(Menu_main, "Show/Hide Checklist", Show
 ShowHideMCDU        = sasl.appendMenuItem(Menu_main, "Show/Hide MCDU", Show_hide_MCDU)
 ShowHideDCDU        = sasl.appendMenuItem(Menu_main, "Show/Hide DCDU Manager", Show_hide_DCDU)
 ShowHideFailures    = sasl.appendMenuItem(Menu_main, "Show/Hide Failures Manager", Show_hide_Failures)
+ShowHideFuel        = sasl.appendMenuItem(Menu_main, "Show/Hide Fuel Panel", Show_hide_Fuel)
 
 sasl.appendMenuSeparator(Menu_main)
 
 ADIRSAlign        = sasl.appendMenuItem(Menu_main, "Instantaneous align IRs", IRs_instaneous_align)
+
+
 
 -- Maintenance submenu
 Maintenance_item  = sasl.appendMenuItem (Menu_main, "Maintenance")
