@@ -13751,7 +13751,7 @@ IDX	8385
 
 	ANIM_begin
 	ANIM_trans	-14.8468	0.43303001	3.06055	-14.8468	0.43303001	3.06055
-	ANIM_rotate_begin	0	1	-0	sim/flightmodel/controls/wing2l_ail1def
+	ANIM_rotate_begin	0	1	-0	sim/flightmodel/controls/wing4l_ail1def
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	5	-0.37987103
 	ANIM_rotate_key	10	-0.62280514
@@ -13765,7 +13765,7 @@ IDX	8385
 	ANIM_rotate_key	-20	2.8453085
 	ANIM_rotate_key	-25	3.8714759
 	ANIM_rotate_end
-	ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing2l_ail1def
+	ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing4l_ail1def
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	5	1.6667342
 	ANIM_rotate_key	10	3.3586785
@@ -13779,7 +13779,7 @@ IDX	8385
 	ANIM_rotate_key	-20	-6.1885172
 	ANIM_rotate_key	-25	-7.5613242
 	ANIM_rotate_end
-	ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing2l_ail1def
+	ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing4l_ail1def
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	5	4.6930973
 	ANIM_rotate_key	10	9.3816106
@@ -13798,14 +13798,14 @@ IDX	8385
 	TRIS	4194 348
 		ANIM_begin
 		ANIM_trans	-4.83988	-0.90833998	-0.14721	-4.83988	-0.90833998	-0.14721
-		ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing1l_fla1def
+		ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing2l_fla1def
 		ANIM_rotate_key	0	7.5974201
 		ANIM_rotate_key	10	7.5974201
 		ANIM_rotate_key	15	7.5974201
 		ANIM_rotate_key	20	7.5974201
 		ANIM_rotate_key	40	7.5974201
 		ANIM_rotate_end
-		ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing1l_fla1def
+		ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing2l_fla1def
 		ANIM_rotate_key	0	-5.6178511
 		ANIM_rotate_key	10	2.8223902
 		ANIM_rotate_key	15	6.5225515
@@ -13817,14 +13817,14 @@ IDX	8385
 	TRIS	4542 348
 		ANIM_begin
 		ANIM_trans	-8.2800598	-0.50013	0.41227001	-8.2800598	-0.50013	0.41227001
-		ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing2l_fla2def
+		ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing3l_fla2def
 		ANIM_rotate_key	0	5.703222
 		ANIM_rotate_key	10	5.703222
 		ANIM_rotate_key	15	5.703222
 		ANIM_rotate_key	20	5.703222
 		ANIM_rotate_key	40	5.703222
 		ANIM_rotate_end
-		ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing2l_fla2def
+		ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing3l_fla2def
 		ANIM_rotate_key	0	-4.1487875
 		ANIM_rotate_key	10	3.5311389
 		ANIM_rotate_key	15	6.1312213
@@ -13836,14 +13836,14 @@ IDX	8385
 	TRIS	4890 348
 		ANIM_begin
 		ANIM_trans	-11.87962	-0.11907	1.50563	-11.87962	-0.11907	1.50563
-		ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing2l_fla2def
+		ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing3l_fla2def
 		ANIM_rotate_key	0	5.6946275
 		ANIM_rotate_key	10	5.6946275
 		ANIM_rotate_key	15	5.6946275
 		ANIM_rotate_key	20	5.6946275
 		ANIM_rotate_key	40	5.6946275
 		ANIM_rotate_end
-		ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing2l_fla2def
+		ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing3l_fla2def
 		ANIM_rotate_key	0	-3.6096342
 		ANIM_rotate_key	10	2.1904175
 		ANIM_rotate_key	15	4.670179
@@ -13853,28 +13853,28 @@ IDX	8385
 		TRIS	1908 954
 		ANIM_end
 	ANIM_begin
-	ANIM_trans_begin	sim/flightmodel/controls/wing1l_fla1def
+	ANIM_trans_begin	sim/flightmodel/controls/wing2l_fla1def
 	ANIM_trans_key	0	-4.3159099	-0.68283999	-0.2114
 	ANIM_trans_key	10	-4.31598	-0.66601998	0.25446999
 	ANIM_trans_key	15	-4.31598	-0.66601998	0.25446999
 	ANIM_trans_key	20	-4.31598	-0.66601998	0.25446999
 	ANIM_trans_key	40	-4.31598	-0.66601998	0.25446999
 	ANIM_trans_end
-	ANIM_rotate_begin	0	1	-0	sim/flightmodel/controls/wing1l_fla1def
+	ANIM_rotate_begin	0	1	-0	sim/flightmodel/controls/wing2l_fla1def
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	10	-1.4341134
 	ANIM_rotate_key	15	-2.1377056
 	ANIM_rotate_key	20	-2.8258279
 	ANIM_rotate_key	40	-5.3187673
 	ANIM_rotate_end
-	ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing1l_fla1def
+	ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing2l_fla1def
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	10	0.12433184
 	ANIM_rotate_key	15	0.2784575
 	ANIM_rotate_key	20	0.49274372
 	ANIM_rotate_key	40	1.9125332
 	ANIM_rotate_end
-	ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing1l_fla1def
+	ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing2l_fla1def
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	10	9.8944084
 	ANIM_rotate_key	15	14.840179
@@ -13885,28 +13885,28 @@ IDX	8385
 		TRIS	5910 360
 		ANIM_begin
 		ANIM_trans	4.3159099	0.68283999	0.2114	4.3159099	0.68283999	0.2114
-		ANIM_trans_begin	sim/flightmodel/controls/wing1l_fla1def
+		ANIM_trans_begin	sim/flightmodel/controls/wing2l_fla1def
 		ANIM_trans_key	0	-3.5146999	-0.78180999	0.56309003
 		ANIM_trans_key	10	-3.51369	-0.79076999	0.60413998
 		ANIM_trans_key	15	-3.51369	-0.79076999	0.60413998
 		ANIM_trans_key	20	-3.51369	-0.79076999	0.60413998
 		ANIM_trans_key	40	-3.51369	-0.79076999	0.60413998
 		ANIM_trans_end
-		ANIM_rotate_begin	0	1	-0	sim/flightmodel/controls/wing1l_fla1def
+		ANIM_rotate_begin	0	1	-0	sim/flightmodel/controls/wing2l_fla1def
 		ANIM_rotate_key	0	0
 		ANIM_rotate_key	10	0
 		ANIM_rotate_key	15	0
 		ANIM_rotate_key	20	-0.692133
 		ANIM_rotate_key	40	-1.3785364
 		ANIM_rotate_end
-		ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing1l_fla1def
+		ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing2l_fla1def
 		ANIM_rotate_key	0	0
 		ANIM_rotate_key	10	0
 		ANIM_rotate_key	15	0
 		ANIM_rotate_key	20	0.041825921
 		ANIM_rotate_key	40	0.14323945
 		ANIM_rotate_end
-		ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing1l_fla1def
+		ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing2l_fla1def
 		ANIM_rotate_key	0	0
 		ANIM_rotate_key	10	0
 		ANIM_rotate_key	15	0
@@ -13917,28 +13917,28 @@ IDX	8385
 		ANIM_end
 	ANIM_end
 	ANIM_begin
-	ANIM_trans_begin	sim/flightmodel/controls/wing2l_fla2def
+	ANIM_trans_begin	sim/flightmodel/controls/wing3l_fla2def
 	ANIM_trans_key	0	-9.09058	-0.12886	0.76128
 	ANIM_trans_key	10	-9.0890503	-0.12374	1.22664
 	ANIM_trans_key	15	-9.0890503	-0.12374	1.22664
 	ANIM_trans_key	20	-9.0890503	-0.12374	1.22664
 	ANIM_trans_key	40	-9.0890503	-0.12374	1.22664
 	ANIM_trans_end
-	ANIM_rotate_begin	0	1	-0	sim/flightmodel/controls/wing2l_fla2def
+	ANIM_rotate_begin	0	1	-0	sim/flightmodel/controls/wing3l_fla2def
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	10	-0.6594744
 	ANIM_rotate_key	15	-0.76375277
 	ANIM_rotate_key	20	-0.72765639
 	ANIM_rotate_key	40	0.83938318
 	ANIM_rotate_end
-	ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing2l_fla2def
+	ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing3l_fla2def
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	10	3.1558516
 	ANIM_rotate_key	15	4.8644116
 	ANIM_rotate_key	20	6.5758368
 	ANIM_rotate_key	40	13.216991
 	ANIM_rotate_end
-	ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing2l_fla2def
+	ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing3l_fla2def
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	10	9.3781733
 	ANIM_rotate_key	15	14.068405
@@ -13949,28 +13949,28 @@ IDX	8385
 		TRIS	7254 363
 		ANIM_begin
 		ANIM_trans	9.09058	0.12886	-0.76128	9.09058	0.12886	-0.76128
-		ANIM_trans_begin	sim/flightmodel/controls/wing2l_fla2def
+		ANIM_trans_begin	sim/flightmodel/controls/wing3l_fla2def
 		ANIM_trans_key	0	-9.5138903	-0.083240002	1.57478
 		ANIM_trans_key	10	-9.5125704	-0.092529997	1.6157399
 		ANIM_trans_key	15	-9.5125704	-0.092529997	1.6157399
 		ANIM_trans_key	20	-9.5125704	-0.092529997	1.6157399
 		ANIM_trans_key	40	-9.5125704	-0.092529997	1.6157399
 		ANIM_trans_end
-		ANIM_rotate_begin	0	1	-0	sim/flightmodel/controls/wing2l_fla2def
+		ANIM_rotate_begin	0	1	-0	sim/flightmodel/controls/wing3l_fla2def
 		ANIM_rotate_key	0	0
 		ANIM_rotate_key	10	0
 		ANIM_rotate_key	15	0
 		ANIM_rotate_key	20	-0.39476791
 		ANIM_rotate_key	40	-0.66291217
 		ANIM_rotate_end
-		ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing2l_fla2def
+		ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing3l_fla2def
 		ANIM_rotate_key	0	0
 		ANIM_rotate_key	10	0
 		ANIM_rotate_key	15	0
 		ANIM_rotate_key	20	1.5171923
 		ANIM_rotate_key	40	3.0613134
 		ANIM_rotate_end
-		ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing2l_fla2def
+		ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing3l_fla2def
 		ANIM_rotate_key	0	0
 		ANIM_rotate_key	10	0
 		ANIM_rotate_key	15	0
@@ -14103,7 +14103,7 @@ IDX	8385
 	ANIM_end
 	ANIM_begin
 	ANIM_trans	14.8468	0.43303001	3.06055	14.8468	0.43303001	3.06055
-	ANIM_rotate_begin	0	1	-0	sim/flightmodel/controls/wing2r_ail1def
+	ANIM_rotate_begin	0	1	-0	sim/flightmodel/controls/wing4r_ail1def
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	5	0.37987103
 	ANIM_rotate_key	10	0.62280514
@@ -14117,7 +14117,7 @@ IDX	8385
 	ANIM_rotate_key	-20	-2.8453085
 	ANIM_rotate_key	-25	-3.8714759
 	ANIM_rotate_end
-	ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing2r_ail1def
+	ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing4r_ail1def
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	5	-1.6667342
 	ANIM_rotate_key	10	-3.3586785
@@ -14131,7 +14131,7 @@ IDX	8385
 	ANIM_rotate_key	-20	6.1885172
 	ANIM_rotate_key	-25	7.5613242
 	ANIM_rotate_end
-	ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing2r_ail1def
+	ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing4r_ail1def
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	5	4.6930973
 	ANIM_rotate_key	10	9.3816106
@@ -14151,14 +14151,14 @@ IDX	8385
 		ANIM_begin
 		ANIM_trans	4.83988	-0.90833998	-0.14721	4.83988	-0.90833998	-0.14721
 		ANIM_rotate	0	0	-1	-15.194841	-15.194841
-		ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing1l_fla1def
+		ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing2r_fla1def
 		ANIM_rotate_key	0	7.5974201
 		ANIM_rotate_key	10	7.5974201
 		ANIM_rotate_key	15	7.5974201
 		ANIM_rotate_key	20	7.5974201
 		ANIM_rotate_key	40	7.5974201
 		ANIM_rotate_end
-		ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing1l_fla1def
+		ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing2r_fla1def
 		ANIM_rotate_key	0	-5.6178511
 		ANIM_rotate_key	10	2.8223902
 		ANIM_rotate_key	15	6.5225515
@@ -14171,14 +14171,14 @@ IDX	8385
 		ANIM_begin
 		ANIM_trans	8.2800598	-0.50013	0.41227001	8.2800598	-0.50013	0.41227001
 		ANIM_rotate	0	0	-1	-11.406444	-11.406444
-		ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing2l_fla2def
+		ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing3r_fla2def
 		ANIM_rotate_key	0	5.703222
 		ANIM_rotate_key	10	5.703222
 		ANIM_rotate_key	15	5.703222
 		ANIM_rotate_key	20	5.703222
 		ANIM_rotate_key	40	5.703222
 		ANIM_rotate_end
-		ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing2l_fla2def
+		ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing3r_fla2def
 		ANIM_rotate_key	0	-4.1487875
 		ANIM_rotate_key	10	3.5311389
 		ANIM_rotate_key	15	6.1312213
@@ -14191,14 +14191,14 @@ IDX	8385
 		ANIM_begin
 		ANIM_trans	11.87962	-0.11907	1.50563	11.87962	-0.11907	1.50563
 		ANIM_rotate	0	0	-1	-11.389255	-11.389255
-		ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing2l_fla2def
+		ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing3r_fla2def
 		ANIM_rotate_key	0	5.6946275
 		ANIM_rotate_key	10	5.6946275
 		ANIM_rotate_key	15	5.6946275
 		ANIM_rotate_key	20	5.6946275
 		ANIM_rotate_key	40	5.6946275
 		ANIM_rotate_end
-		ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing2l_fla2def
+		ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing3r_fla2def
 		ANIM_rotate_key	0	-3.6096342
 		ANIM_rotate_key	10	2.1904175
 		ANIM_rotate_key	15	4.670179
@@ -14208,28 +14208,28 @@ IDX	8385
 		TRIS	12201 954
 		ANIM_end
 	ANIM_begin
-	ANIM_trans_begin	sim/flightmodel/controls/wing1r_fla1def
+	ANIM_trans_begin	sim/flightmodel/controls/wing2r_fla1def
 	ANIM_trans_key	0	4.3159099	-0.68283999	-0.2114
 	ANIM_trans_key	10	4.31598	-0.66601998	0.25446999
 	ANIM_trans_key	15	4.31598	-0.66601998	0.25446999
 	ANIM_trans_key	20	4.31598	-0.66601998	0.25446999
 	ANIM_trans_key	40	4.31598	-0.66601998	0.25446999
 	ANIM_trans_end
-	ANIM_rotate_begin	0	1	-0	sim/flightmodel/controls/wing1r_fla1def
+	ANIM_rotate_begin	0	1	-0	sim/flightmodel/controls/wing2r_fla1def
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	10	1.4341134
 	ANIM_rotate_key	15	2.1377056
 	ANIM_rotate_key	20	2.8258279
 	ANIM_rotate_key	40	5.3187673
 	ANIM_rotate_end
-	ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing1r_fla1def
+	ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing2r_fla1def
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	10	-0.12433184
 	ANIM_rotate_key	15	-0.2784575
 	ANIM_rotate_key	20	-0.49274372
 	ANIM_rotate_key	40	-1.9125332
 	ANIM_rotate_end
-	ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing1r_fla1def
+	ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing2r_fla1def
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	10	9.8944084
 	ANIM_rotate_key	15	14.840179
@@ -14240,28 +14240,28 @@ IDX	8385
 		TRIS	16203 360
 		ANIM_begin
 		ANIM_trans	-4.3159099	0.68283999	0.2114	-4.3159099	0.68283999	0.2114
-		ANIM_trans_begin	sim/flightmodel/controls/wing1r_fla1def
+		ANIM_trans_begin	sim/flightmodel/controls/wing2r_fla1def
 		ANIM_trans_key	0	3.5146999	-0.78180999	0.56309003
 		ANIM_trans_key	10	3.51369	-0.79076999	0.60413998
 		ANIM_trans_key	15	3.51369	-0.79076999	0.60413998
 		ANIM_trans_key	20	3.51369	-0.79076999	0.60413998
 		ANIM_trans_key	40	3.51369	-0.79076999	0.60413998
 		ANIM_trans_end
-		ANIM_rotate_begin	0	1	-0	sim/flightmodel/controls/wing1r_fla1def
+		ANIM_rotate_begin	0	1	-0	sim/flightmodel/controls/wing2r_fla1def
 		ANIM_rotate_key	0	0
 		ANIM_rotate_key	10	0
 		ANIM_rotate_key	15	0
 		ANIM_rotate_key	20	0.692133
 		ANIM_rotate_key	40	1.3785364
 		ANIM_rotate_end
-		ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing1r_fla1def
+		ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing2r_fla1def
 		ANIM_rotate_key	0	0
 		ANIM_rotate_key	10	0
 		ANIM_rotate_key	15	0
 		ANIM_rotate_key	20	-0.041825921
 		ANIM_rotate_key	40	-0.14323945
 		ANIM_rotate_end
-		ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing1r_fla1def
+		ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing2r_fla1def
 		ANIM_rotate_key	0	0
 		ANIM_rotate_key	10	0
 		ANIM_rotate_key	15	0
@@ -14272,28 +14272,28 @@ IDX	8385
 		ANIM_end
 	ANIM_end
 	ANIM_begin
-	ANIM_trans_begin	sim/flightmodel/controls/wing2l_fla2def
+	ANIM_trans_begin	sim/flightmodel/controls/wing3r_fla2def
 	ANIM_trans_key	0	9.09058	-0.12886	0.76128
 	ANIM_trans_key	10	9.0890503	-0.12374	1.22664
 	ANIM_trans_key	15	9.0890503	-0.12374	1.22664
 	ANIM_trans_key	20	9.0890503	-0.12374	1.22664
 	ANIM_trans_key	40	9.0890503	-0.12374	1.22664
 	ANIM_trans_end
-	ANIM_rotate_begin	0	1	-0	sim/flightmodel/controls/wing2l_fla2def
+	ANIM_rotate_begin	0	1	-0	sim/flightmodel/controls/wing3r_fla2def
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	10	0.6594744
 	ANIM_rotate_key	15	0.76375277
 	ANIM_rotate_key	20	0.72765639
 	ANIM_rotate_key	40	-0.83938318
 	ANIM_rotate_end
-	ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing2l_fla2def
+	ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing3r_fla2def
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	10	-3.1558516
 	ANIM_rotate_key	15	-4.8644116
 	ANIM_rotate_key	20	-6.5758368
 	ANIM_rotate_key	40	-13.216991
 	ANIM_rotate_end
-	ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing2l_fla2def
+	ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing3r_fla2def
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	10	9.3781733
 	ANIM_rotate_key	15	14.068405
@@ -14304,28 +14304,28 @@ IDX	8385
 		TRIS	17547 363
 		ANIM_begin
 		ANIM_trans	-9.09058	0.12886	-0.76128	-9.09058	0.12886	-0.76128
-		ANIM_trans_begin	sim/flightmodel/controls/wing2l_fla2def
+		ANIM_trans_begin	sim/flightmodel/controls/wing3r_fla2def
 		ANIM_trans_key	0	9.5138903	-0.083240002	1.57478
 		ANIM_trans_key	10	9.5125704	-0.092529997	1.6157399
 		ANIM_trans_key	15	9.5125704	-0.092529997	1.6157399
 		ANIM_trans_key	20	9.5125704	-0.092529997	1.6157399
 		ANIM_trans_key	40	9.5125704	-0.092529997	1.6157399
 		ANIM_trans_end
-		ANIM_rotate_begin	0	1	-0	sim/flightmodel/controls/wing2l_fla2def
+		ANIM_rotate_begin	0	1	-0	sim/flightmodel/controls/wing3r_fla2def
 		ANIM_rotate_key	0	0
 		ANIM_rotate_key	10	0
 		ANIM_rotate_key	15	0
 		ANIM_rotate_key	20	0.39476791
 		ANIM_rotate_key	40	0.66291217
 		ANIM_rotate_end
-		ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing2l_fla2def
+		ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing3r_fla2def
 		ANIM_rotate_key	0	0
 		ANIM_rotate_key	10	0
 		ANIM_rotate_key	15	0
 		ANIM_rotate_key	20	-1.5171923
 		ANIM_rotate_key	40	-3.0613134
 		ANIM_rotate_end
-		ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing2l_fla2def
+		ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing3r_fla2def
 		ANIM_rotate_key	0	0
 		ANIM_rotate_key	10	0
 		ANIM_rotate_key	15	0
@@ -14337,7 +14337,7 @@ IDX	8385
 	ANIM_end
 	ANIM_begin
 	ANIM_trans	5.3624701	-0.32113001	-0.28681001	5.3624701	-0.32113001	-0.28681001
-	ANIM_rotate_begin	0	1	-0	sim/flightmodel/controls/wing1r_spo1def
+	ANIM_rotate_begin	0	1	-0	sim/flightmodel/controls/wing2r_spo1def
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	5	-0.63025357
 	ANIM_rotate_key	10	-1.2553506
@@ -14350,7 +14350,7 @@ IDX	8385
 	ANIM_rotate_key	45	-5.1216699
 	ANIM_rotate_key	50	-5.5519611
 	ANIM_rotate_end
-	ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing1r_spo1def
+	ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing2r_spo1def
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	5	-0.027501973
 	ANIM_rotate_key	10	-0.10886198
@@ -14363,7 +14363,7 @@ IDX	8385
 	ANIM_rotate_key	45	-2.1010362
 	ANIM_rotate_key	50	-2.5622673
 	ANIM_rotate_end
-	ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing1r_spo1def
+	ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing2r_spo1def
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	5	-4.9600958
 	ANIM_rotate_key	10	-9.9190457
@@ -14380,7 +14380,7 @@ IDX	8385
 	ANIM_end
 	ANIM_begin
 	ANIM_trans	7.6867199	-0.089539997	0.25977001	7.6867199	-0.089539997	0.25977001
-	ANIM_rotate_begin	0	1	-0	sim/flightmodel/controls/wing2r_spo1def
+	ANIM_rotate_begin	0	1	-0	sim/flightmodel2/wing/speedbrake1_deg[5]
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	5	-0.46753355
 	ANIM_rotate_key	10	-1.0714311
@@ -14393,7 +14393,7 @@ IDX	8385
 	ANIM_rotate_key	45	-8.7920372
 	ANIM_rotate_key	50	-10.321835
 	ANIM_rotate_end
-	ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing2r_spo1def
+	ANIM_rotate_begin	0	0	-1	sim/flightmodel2/wing/speedbrake1_deg[5]
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	5	1.6713179
 	ANIM_rotate_key	10	3.298518
@@ -14406,7 +14406,7 @@ IDX	8385
 	ANIM_rotate_key	45	12.532879
 	ANIM_rotate_key	50	13.420963
 	ANIM_rotate_end
-	ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing2r_spo1def
+	ANIM_rotate_begin	1	0	-0	sim/flightmodel2/wing/speedbrake1_deg[5]
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	5	-4.6959621
 	ANIM_rotate_key	10	-9.4119776
@@ -14423,7 +14423,7 @@ IDX	8385
 	ANIM_end
 	ANIM_begin
 	ANIM_trans	9.3063002	0.04823	0.84327	9.3063002	0.04823	0.84327
-	ANIM_rotate_begin	0	1	-0	sim/flightmodel/controls/wing2r_spo2def
+	ANIM_rotate_begin	0	1	-0	sim/flightmodel2/wing/speedbrake2_deg[5]
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	5	-0.46753355
 	ANIM_rotate_key	10	-1.0714311
@@ -14436,7 +14436,7 @@ IDX	8385
 	ANIM_rotate_key	45	-8.793183
 	ANIM_rotate_key	50	-10.322981
 	ANIM_rotate_end
-	ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing2r_spo2def
+	ANIM_rotate_begin	0	0	-1	sim/flightmodel2/wing/speedbrake2_deg[5]
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	5	1.6713179
 	ANIM_rotate_key	10	3.298518
@@ -14449,7 +14449,7 @@ IDX	8385
 	ANIM_rotate_key	45	12.532306
 	ANIM_rotate_key	50	13.42039
 	ANIM_rotate_end
-	ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing2r_spo2def
+	ANIM_rotate_begin	1	0	-0	sim/flightmodel2/wing/speedbrake2_deg[5]
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	5	-4.6959621
 	ANIM_rotate_key	10	-9.4119776
@@ -14466,7 +14466,7 @@ IDX	8385
 	ANIM_end
 	ANIM_begin
 	ANIM_trans	10.82332	0.17765	1.38983	10.82332	0.17765	1.38983
-	ANIM_rotate_begin	0	1	-0	sim/flightmodel/controls/wing2r_spo2def
+	ANIM_rotate_begin	0	1	-0	sim/flightmodel/controls/wing3r_spo1def
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	5	-0.46982539
 	ANIM_rotate_key	10	-1.0760148
@@ -14479,7 +14479,7 @@ IDX	8385
 	ANIM_rotate_key	45	-8.8115178
 	ANIM_rotate_key	50	-10.343034
 	ANIM_rotate_end
-	ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing2r_spo2def
+	ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing3r_spo1def
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	5	1.670745
 	ANIM_rotate_key	10	3.2979451
@@ -14492,7 +14492,7 @@ IDX	8385
 	ANIM_rotate_key	45	12.524858
 	ANIM_rotate_key	50	13.411223
 	ANIM_rotate_end
-	ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing2r_spo2def
+	ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing3r_spo1def
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	5	-4.6959621
 	ANIM_rotate_key	10	-9.4114047
@@ -14509,7 +14509,7 @@ IDX	8385
 	ANIM_end
 	ANIM_begin
 	ANIM_trans	12.283	0.30254	1.91572	12.283	0.30254	1.91572
-	ANIM_rotate_begin	0	1	-0	sim/flightmodel/controls/wing2r_spo2def
+	ANIM_rotate_begin	0	1	-0	sim/flightmodel/controls/wing3r_spo2def
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	5	-0.46982539
 	ANIM_rotate_key	10	-1.0760148
@@ -14522,7 +14522,7 @@ IDX	8385
 	ANIM_rotate_key	45	-8.8115178
 	ANIM_rotate_key	50	-10.343034
 	ANIM_rotate_end
-	ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing2r_spo2def
+	ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing3r_spo2def
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	5	1.670745
 	ANIM_rotate_key	10	3.2979451
@@ -14535,7 +14535,7 @@ IDX	8385
 	ANIM_rotate_key	45	12.524858
 	ANIM_rotate_key	50	13.411223
 	ANIM_rotate_end
-	ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing2r_spo2def
+	ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing3r_spo2def
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	5	-4.6959621
 	ANIM_rotate_key	10	-9.4114047
@@ -14673,7 +14673,7 @@ IDX	8385
 	ANIM_end
 	ANIM_begin
 	ANIM_trans	-5.3624701	-0.32113001	-0.28681001	-5.3624701	-0.32113001	-0.28681001
-	ANIM_rotate_begin	0	1	-0	sim/flightmodel/controls/wing1l_spo1def
+	ANIM_rotate_begin	0	1	-0	sim/flightmodel/controls/wing2l_spo1def
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	5	0.63025357
 	ANIM_rotate_key	10	1.2553506
@@ -14686,7 +14686,7 @@ IDX	8385
 	ANIM_rotate_key	45	5.1216699
 	ANIM_rotate_key	50	5.5519611
 	ANIM_rotate_end
-	ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing1l_spo1def
+	ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing2l_spo1def
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	5	0.027501973
 	ANIM_rotate_key	10	0.10886198
@@ -14699,7 +14699,7 @@ IDX	8385
 	ANIM_rotate_key	45	2.1010362
 	ANIM_rotate_key	50	2.5622673
 	ANIM_rotate_end
-	ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing1l_spo1def
+	ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing2l_spo1def
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	5	-4.9600958
 	ANIM_rotate_key	10	-9.9190457
@@ -14716,7 +14716,7 @@ IDX	8385
 	ANIM_end
 	ANIM_begin
 	ANIM_trans	-7.6867199	-0.089539997	0.25977001	-7.6867199	-0.089539997	0.25977001
-	ANIM_rotate_begin	0	1	-0	sim/flightmodel/controls/wing2l_spo1def
+	ANIM_rotate_begin	0	1	-0	sim/flightmodel2/wing/speedbrake1_deg[4]
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	5	0.46753355
 	ANIM_rotate_key	10	1.0714311
@@ -14729,7 +14729,7 @@ IDX	8385
 	ANIM_rotate_key	45	8.7920372
 	ANIM_rotate_key	50	10.321835
 	ANIM_rotate_end
-	ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing2l_spo1def
+	ANIM_rotate_begin	0	0	-1	sim/flightmodel2/wing/speedbrake1_deg[4]
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	5	-1.6713179
 	ANIM_rotate_key	10	-3.298518
@@ -14742,7 +14742,7 @@ IDX	8385
 	ANIM_rotate_key	45	-12.532879
 	ANIM_rotate_key	50	-13.420963
 	ANIM_rotate_end
-	ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing2l_spo1def
+	ANIM_rotate_begin	1	0	-0	sim/flightmodel2/wing/speedbrake1_deg[4]
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	5	-4.6959621
 	ANIM_rotate_key	10	-9.4119776
@@ -14759,7 +14759,7 @@ IDX	8385
 	ANIM_end
 	ANIM_begin
 	ANIM_trans	-9.3063002	0.04823	0.84327	-9.3063002	0.04823	0.84327
-	ANIM_rotate_begin	0	1	-0	sim/flightmodel/controls/wing2l_spo2def
+	ANIM_rotate_begin	0	1	-0	sim/flightmodel2/wing/speedbrake2_deg[4]
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	5	0.46753355
 	ANIM_rotate_key	10	1.0714311
@@ -14772,7 +14772,7 @@ IDX	8385
 	ANIM_rotate_key	45	8.793183
 	ANIM_rotate_key	50	10.322981
 	ANIM_rotate_end
-	ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing2l_spo2def
+	ANIM_rotate_begin	0	0	-1	sim/flightmodel2/wing/speedbrake2_deg[4]
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	5	-1.6713179
 	ANIM_rotate_key	10	-3.298518
@@ -14785,7 +14785,7 @@ IDX	8385
 	ANIM_rotate_key	45	-12.532306
 	ANIM_rotate_key	50	-13.42039
 	ANIM_rotate_end
-	ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing2l_spo2def
+	ANIM_rotate_begin	1	0	-0	sim/flightmodel2/wing/speedbrake2_deg[4]
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	5	-4.6959621
 	ANIM_rotate_key	10	-9.4119776
@@ -14802,7 +14802,7 @@ IDX	8385
 	ANIM_end
 	ANIM_begin
 	ANIM_trans	-10.82332	0.17765	1.38983	-10.82332	0.17765	1.38983
-	ANIM_rotate_begin	0	1	-0	sim/flightmodel/controls/wing2l_spo2def
+	ANIM_rotate_begin	0	1	-0	sim/flightmodel/controls/wing3l_spo1def
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	5	0.46982539
 	ANIM_rotate_key	10	1.0760148
@@ -14815,7 +14815,7 @@ IDX	8385
 	ANIM_rotate_key	45	8.8115178
 	ANIM_rotate_key	50	10.343034
 	ANIM_rotate_end
-	ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing2l_spo2def
+	ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing3l_spo1def
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	5	-1.670745
 	ANIM_rotate_key	10	-3.2979451
@@ -14828,7 +14828,7 @@ IDX	8385
 	ANIM_rotate_key	45	-12.524858
 	ANIM_rotate_key	50	-13.411223
 	ANIM_rotate_end
-	ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing2l_spo2def
+	ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing3l_spo1def
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	5	-4.6959621
 	ANIM_rotate_key	10	-9.4114047
@@ -14845,7 +14845,7 @@ IDX	8385
 	ANIM_end
 	ANIM_begin
 	ANIM_trans	-12.283	0.30254	1.91572	-12.283	0.30254	1.91572
-	ANIM_rotate_begin	0	1	-0	sim/flightmodel/controls/wing2l_spo2def
+	ANIM_rotate_begin	0	1	-0	sim/flightmodel/controls/wing3l_spo2def
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	5	0.46982539
 	ANIM_rotate_key	10	1.0760148
@@ -14858,7 +14858,7 @@ IDX	8385
 	ANIM_rotate_key	45	8.8115178
 	ANIM_rotate_key	50	10.343034
 	ANIM_rotate_end
-	ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing2l_spo2def
+	ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/wing3l_spo2def
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	5	-1.670745
 	ANIM_rotate_key	10	-3.2979451
@@ -14871,7 +14871,7 @@ IDX	8385
 	ANIM_rotate_key	45	-12.524858
 	ANIM_rotate_key	50	-13.411223
 	ANIM_rotate_end
-	ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing2l_spo2def
+	ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/wing3l_spo2def
 	ANIM_rotate_key	0	0
 	ANIM_rotate_key	5	-4.6959621
 	ANIM_rotate_key	10	-9.4114047
@@ -14894,4 +14894,4 @@ IDX	8385
 		TRIS	8073 486
 		TRIS	18486 486
 
-# Build with Blender 2.90.0 (build b'0330d1af29c0'). Exported with XPlane2Blender 4.0.0-beta.3+89.20200830022522
+# Build with Blender 2.90.1 (build b'3e85bb34d0d7'). Exported with XPlane2Blender 4.0.0-beta.3+89.20200830022522

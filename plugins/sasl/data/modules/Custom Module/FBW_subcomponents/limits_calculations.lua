@@ -64,22 +64,30 @@ end
 function update()
     if get(PFD_Capt_Baro_Altitude) > 24600 then
         set(Capt_VMAX, get(PFD_Capt_IAS) * (VMAX_speeds[1] / get(Capt_Mach)))
+        set(Capt_VMAX_prot, get(PFD_Capt_IAS) * (VMAX_speeds[1] + 0.006) / get(Capt_Mach))
     else
         set(Capt_VMAX, VMAX_speeds[2])
+        set(Capt_VMAX_prot, VMAX_speeds[2] + 6)
     end
     if get(PFD_Fo_Baro_Altitude) > 24600 then
         set(Fo_VMAX, get(PFD_Fo_IAS) * (VMAX_speeds[1] / get(Fo_Mach)))
+        set(Fo_VMAX_prot, get(PFD_Fo_IAS) * (VMAX_speeds[1] + 0.006) / get(Fo_Mach))
     else
         set(Fo_VMAX, VMAX_speeds[2])
+        set(Fo_VMAX_prot, VMAX_speeds[2] + 6)
     end
     if get(Gear_handle) == 1 or get(Flaps_internal_config) > 0 then
         if (get(Front_gear_deployment) + get(Left_gear_deployment) + get(Right_gear_deployment)) / 3 > 0 then
             set(Capt_VMAX, VMAX_speeds[3])
             set(Fo_VMAX, VMAX_speeds[3])
+            set(Capt_VMAX_prot, VMAX_speeds[3] + 6)
+            set(Fo_VMAX_prot, VMAX_speeds[3] + 6)
         end
         if get(Flaps_internal_config) > 0 then
             set(Capt_VMAX, VMAX_speeds[get(Flaps_internal_config) + 3])
             set(Fo_VMAX, VMAX_speeds[get(Flaps_internal_config) + 3])
+            set(Capt_VMAX_prot, VMAX_speeds[get(Flaps_internal_config) + 3] + 6)
+            set(Fo_VMAX_prot, VMAX_speeds[get(Flaps_internal_config) + 3] + 6)
         end
     end
 
@@ -90,8 +98,8 @@ function update()
     end
     set(S_speed, 1.23 * Extract_vs1g(get(Aircraft_total_weight_kgs), 0, false))
     set(F_speed, 1.26 * Extract_vs1g(get(Aircraft_total_weight_kgs), 2, false))
-    set(Capt_GD, (1.5 * get(Aircraft_total_weight_kgs) / 1000 + 110) + Math_clamp_lower((get(PFD_Capt_Baro_Altitude) - 20000) / 1000, 0))
-    set(Fo_GD,   (1.5 * get(Aircraft_total_weight_kgs) / 1000 + 110) + Math_clamp_lower((get(PFD_Fo_Baro_Altitude)   - 20000) / 1000, 0))
+    set(Capt_GD, (2 * get(Aircraft_total_weight_kgs) / 1000 + 90) + Math_clamp_lower((get(PFD_Capt_Baro_Altitude) - 20000) / 1000, 0))
+    set(Fo_GD,   (2 * get(Aircraft_total_weight_kgs) / 1000 + 90) + Math_clamp_lower((get(PFD_Fo_Baro_Altitude)   - 20000) / 1000, 0))
     --stall speeds(configuration dependent)
     set(Capt_VSW,         Set_anim_value(get(Capt_VSW),         get(PFD_Capt_IAS) -  (get(PFD_Capt_IAS) * (1 - (get(Alpha) / vsw_aprot_alphas[get(Flaps_internal_config) + 1]))) / 2, 0, 350, 0.6))
     set(Fo_VSW,           Set_anim_value(get(Fo_VSW),           get(PFD_Fo_IAS)   -  (get(PFD_Fo_IAS)   * (1 - (get(Alpha) / vsw_aprot_alphas[get(Flaps_internal_config) + 1]))) / 2, 0, 350, 0.6))
@@ -99,10 +107,12 @@ function update()
     set(Fo_Valpha_prot,   Set_anim_value(get(Fo_Valpha_prot),   get(PFD_Fo_IAS)   -  (get(PFD_Fo_IAS)   * (1 - (get(Alpha) / vsw_aprot_alphas[get(Flaps_internal_config) + 1]))) / 2, 0, 350, 0.6))
     set(Capt_Vtoga_prot,  Set_anim_value(get(Capt_Vtoga_prot),  get(PFD_Capt_IAS) -  (get(PFD_Capt_IAS) * (1 - (get(Alpha) / toga_prot_alphas[get(Flaps_internal_config) + 1]))) / 2, 0, 350, 0.6))
     set(Fo_Vtoga_prot,    Set_anim_value(get(Fo_Vtoga_prot),    get(PFD_Fo_IAS)   -  (get(PFD_Fo_IAS)   * (1 - (get(Alpha) / toga_prot_alphas[get(Flaps_internal_config) + 1]))) / 2, 0, 350, 0.6))
-    set(Capt_Valpha_MAX,  Set_anim_value(get(Capt_Valpha_MAX),  get(PFD_Capt_IAS) -  (get(PFD_Capt_IAS) * (1 - (get(Alpha) / alpha_max_alphas[get(Flaps_internal_config) + 1]))) / 2, 0, 350, 0.6))
-    set(Fo_Valpha_MAX,    Set_anim_value(get(Fo_Valpha_MAX),    get(PFD_Fo_IAS)   -  (get(PFD_Fo_IAS)   * (1 - (get(Alpha) / alpha_max_alphas[get(Flaps_internal_config) + 1]))) / 2, 0, 350, 0.6))
+    set(Capt_Valpha_MAX,  Set_anim_value(get(Capt_Valpha_MAX),  get(PFD_Capt_IAS) -  (get(PFD_Capt_IAS) * (1 - (get(Alpha) / alpha_max_alphas[get(Flaps_internal_config) + 1]))) / 2, 0, 350, 1))
+    set(Fo_Valpha_MAX,    Set_anim_value(get(Fo_Valpha_MAX),    get(PFD_Fo_IAS)   -  (get(PFD_Fo_IAS)   * (1 - (get(Alpha) / alpha_max_alphas[get(Flaps_internal_config) + 1]))) / 2, 0, 350, 1))
 
     --calculate_value_delta
+    set(Capt_VMAX_prot_delta,   get(PFD_Capt_IAS) - get(Capt_VMAX_prot))
+    set(Fo_VMAX_prot_delta,     get(PFD_Fo_IAS)   - get(Fo_VMAX_prot))
     set(Capt_VMAX_delta,        get(PFD_Capt_IAS) - get(Capt_VMAX))
     set(Fo_VMAX_delta,          get(PFD_Fo_IAS)   - get(Fo_VMAX))
     set(Capt_S_speed_delta,     get(PFD_Capt_IAS) - get(S_speed))

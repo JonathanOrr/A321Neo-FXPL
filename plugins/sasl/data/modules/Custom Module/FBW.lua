@@ -175,11 +175,7 @@ end
     set(Abs_vpath_pitch_rate, get(Vpath) - last_vpath)
     --calculate vpath pitch rate per second
     if get(DELTA_TIME) > 0 then
-        set(Persec_vpath_pitch_rate, (get(Vpath) - last_vpath) / get(DELTA_TIME))
-    else
-        set(Persec_vpath_pitch_rate, 0)
-    end
-    last_vpath = get(Vpath)
+        
 
     --detect if the aircraft has stalled, if so enter ALT law, and if in ALT law and gear is down enter DIRECT law--
     if get(FBW_ground_mode) == 0 and get(FBW_flare_mode) == 0 then

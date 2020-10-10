@@ -46,6 +46,8 @@ local target_vs = createGlobalPropertyi("a32nx/debug/target_vs", 0, false, true,
 local Dataref_pitch_delta = createGlobalPropertyf("a32nx/debug/FD_pitch_delta", 0, false, true, false)
 local Dataref_roll_delta = createGlobalPropertyf("a32nx/debug/FD_roll_delta", 0, false, true, false)
 
+local last_active = 0
+local delta_active = 0
 --mouse click
 function onMouseDown ( component , x , y , button , parentX , parentY )
     if button == MB_LEFT then
@@ -78,11 +80,20 @@ function update()
     --calculate V/S
     --print(get(Capt_TAT) * math.tan(get(Vpath)) * 101.269)
 
+    delta_active = get(FD_activated) - last_active
+    last_active = get(FD_activated)
+    if delta_active == -1 then
+        set(roll_artstab, 0)
+        set(pitch_artstab, 0)
+        set(yaw_artstab, 0)
+    end
+
     if get(DELTA_TIME) ~= 0 then
         FD_roll = Set_linear_anim_value(FD_roll, A32nx_PID_new_neg_avail(A32nx_FD_roll, get(target_hdg) - get(aircraft_heading)) * 30, -30, 30, 10)
         FD_pitch = Set_linear_anim_value(FD_pitch, A32nx_PID_new_neg_avail(A32nx_FD_pitch, get(target_vs) - get(vvi)) * 30, -30, 30, 10)
 
         if get(FD_activated) == 1 then
+            A32nx_FD_pitch.I_gain = 1/3
             set(SimDR_override_artstab, 1)
             set(roll_artstab, Set_anim_value(get(roll_artstab), A32nx_PID_new_neg_avail(A32nx_stick_roll, FD_roll - get(aircraft_roll)), -1, 1, 0.5))
 
@@ -94,9 +105,8 @@ function update()
 
             set(pitch_artstab, Set_anim_value(get(pitch_artstab), A32nx_PID_new_neg_avail(A32nx_stick_pitch, FD_pitch - get(aircraft_pitch)), -1, 1, 1))
         else
-            set(roll_artstab, 0)
-            set(pitch_artstab, 0)
-            set(yaw_artstab, 0)
+            A32nx_FD_pitch.I_gain = 0
+            A32nx_FD_pitch.Integral_sum = 0
         end
     end
 

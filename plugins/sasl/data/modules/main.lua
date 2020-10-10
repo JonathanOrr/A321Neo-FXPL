@@ -3,6 +3,7 @@ include("cockpit_datarefs.lua")
 include("dynamic_datarefs.lua")
 include("failures_datarefs.lua")
 include("global_functions.lua")
+include(moduleDirectory .. "/Custom Module/FBW_subcomponents/fbw_system_subcomponents/PID_arrays.lua")
 
 sasl.options.setAircraftPanelRendering(true)
 sasl.options.setInteractivity(true)
@@ -19,8 +20,6 @@ size = { 4096, 2048 }
 panelWidth3d = 4096
 panelHeight3d = 2048
 
--- THIS IS FOR DEVELOPMENT ONLY
--- If you set this variable to true, all the electrical buses are set of be ON even if the power
 -- source is not available. This means that you immediately get all the electrical power on all
 -- buses. This is useful for development. Please consider that eletrical load is no more valid if
 -- you enable this option and other strange effects on electrical system may happen.
@@ -109,20 +108,6 @@ SSS_FBW_UI = contextWindow {
   visible = false ;
   components = {
     FBW_UI {position = { 0 , 0 , 1000 , 600 }}
-  };
-}
-
-FBW_graph = contextWindow {
-  name = "FBW GRAPH";
-  position = { 50 , 50 , 420 , 340};
-  noBackground = true ;
-  proportional = false ;
-  minimumSize = { 420 , 340 };
-  maximumSize = { 420 , 340 };
-  gravity = { 0 , 1 , 0 , 1 };
-  visible = false ;
-  components = {
-    FBW_graph {position = { 0 , 0 , 420 , 340 }}
   };
 }
 
@@ -241,10 +226,6 @@ function Show_hide_FBW_UI()
   SSS_FBW_UI:setIsVisible(not SSS_FBW_UI:isVisible())
 end
 
-function Show_hide_FBW_graph()
-  FBW_graph:setIsVisible(not FBW_graph:isVisible())
-end
-
 function Show_hide_ECAM_debug()
   ECAM_debug_window:setIsVisible(not ECAM_debug_window:isVisible())
 end
@@ -343,7 +324,6 @@ Menu_debug	= sasl.createMenu ("", Menu_main, Menu_debug_item)
 ShowHideVnavDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide VNAV Debug", Show_hide_vnav_debug)
 ShowHidePacksDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide PACKS Debug", Show_hide_packs_debug)
 ShowHideFBWUI	= sasl.appendMenuItem(Menu_debug, "Show/Hide FBW UI", Show_hide_FBW_UI)
-ShowHideFBWGraph	= sasl.appendMenuItem(Menu_debug, "Show/Hide FBW Graph", Show_hide_FBW_graph)
 ShowHideECAMDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide ECAM Debug", Show_hide_ECAM_debug)
 ShowHideDMCDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide DMC Debug", Show_hide_DMC_debug)
 ShowHideELECDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide ELEC Debug", Show_hide_ELEC_debug)
