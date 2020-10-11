@@ -212,7 +212,7 @@ P _gear/0/_lonE 6.0
 P _gear/0/_lonN 6.0
 P _gear/0/_lonR 99.0
 P _gear/0/_scon 52322.308593750
-P _gear/0/_stat_def 0.378928840
+P _gear/0/_stat_def 0.378928751
 P _gear/0/_steerdeg_hispeed 5.0
 P _gear/0/_steerdeg_lospeed 75.0
 P _gear/0/_strut_comp 0.899999976
@@ -60630,6 +60630,7 @@ GROUP PFD
   END_GROUP
   GROUP Speed Tape
     LOCKED
+    GROUP_OPEN
     gen_pointer Speed Tape
       POS 1441.000000 733.000000
       IMAGE MIP/pfd/spd tape
@@ -61123,7 +61124,7 @@ GROUP PFD
     OFFSET 0.000000
 
   gen_pointer Green Dot Speed
-    POS 1465.500000 727.500000
+    POS 1475.500000 727.500000
     IMAGE MIP/pfd/Green Dot
     DATAREF a321neo/dynamics/FBW/limit_speeds/delta/capt_green_dot
     LOCKED
@@ -61136,34 +61137,44 @@ GROUP PFD
     IS_VERTICAL 1
     OFFSET 0.000000
 
-  gen_pointer F Speed
-    POS 1507.000000 725.500000
-    IMAGE MIP/pfd/F Speed
-    DATAREF a321neo/dynamics/FBW/limit_speeds/delta/capt_f
-    LOCKED
-    CLIP
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME -20.000000 112.500000
-    IS_DRAGGABLE 0
-    IS_VERTICAL 1
-    OFFSET 0.000000
+  GROUP F speed group
+    SHOW_GREATER 3.000000 a321neo/dynamics/surfaces/flaps_internal_config
+    GROUP_OPEN
+    gen_pointer F Speed
+      POS 1507.000000 725.500000
+      IMAGE MIP/pfd/F Speed
+      DATAREF a321neo/dynamics/FBW/limit_speeds/delta/capt_f
+      SHOW_LESS 4.000000 a321neo/dynamics/surfaces/flaps_internal_config
+      LOCKED
+      CLIP
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME -20.000000 112.500000
+      IS_DRAGGABLE 0
+      IS_VERTICAL 1
+      OFFSET 0.000000
 
-  gen_pointer S Speed
-    POS 1507.000000 725.500000
-    IMAGE MIP/pfd/S Speed
-    DATAREF a321neo/dynamics/FBW/limit_speeds/delta/capt_s
-    LOCKED
-    CLIP
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME -20.000000 112.500000
-    IS_DRAGGABLE 0
-    IS_VERTICAL 1
-    OFFSET 0.000000
+  END_GROUP
+  GROUP s speed group
+    SHOW_GREATER 1.000000 a321neo/dynamics/surfaces/flaps_internal_config
+    GROUP_OPEN
+    gen_pointer S Speed
+      POS 1507.000000 725.500000
+      IMAGE MIP/pfd/S Speed
+      DATAREF a321neo/dynamics/FBW/limit_speeds/delta/capt_s
+      SHOW_LESS 2.000000 a321neo/dynamics/surfaces/flaps_internal_config
+      LOCKED
+      CLIP
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME -20.000000 112.500000
+      IS_DRAGGABLE 0
+      IS_VERTICAL 1
+      OFFSET 0.000000
 
+  END_GROUP
   GROUP Flight Directors
     LOCKED
     gen_pointer Flight Director V
