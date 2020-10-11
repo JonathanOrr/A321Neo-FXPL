@@ -212,7 +212,7 @@ P _gear/0/_lonE 6.0
 P _gear/0/_lonN 6.0
 P _gear/0/_lonR 99.0
 P _gear/0/_scon 52322.308593750
-P _gear/0/_stat_def 0.378928751
+P _gear/0/_stat_def 0.378928870
 P _gear/0/_steerdeg_hispeed 5.0
 P _gear/0/_steerdeg_lospeed 75.0
 P _gear/0/_strut_comp 0.899999976
@@ -246,7 +246,7 @@ P _gear/1/_lonE -6.0
 P _gear/1/_lonN -6.0
 P _gear/1/_lonR 0.0
 P _gear/1/_scon 83991.070312500
-P _gear/1/_stat_def 1.381937742
+P _gear/1/_stat_def 1.381937861
 P _gear/1/_steerdeg_hispeed 0.0
 P _gear/1/_steerdeg_lospeed 0.0
 P _gear/1/_strut_comp 0.400000006
@@ -280,7 +280,7 @@ P _gear/2/_lonE -6.0
 P _gear/2/_lonN -6.0
 P _gear/2/_lonR 0.0
 P _gear/2/_scon 83991.070312500
-P _gear/2/_stat_def 1.381937742
+P _gear/2/_stat_def 1.381937861
 P _gear/2/_steerdeg_hispeed 0.0
 P _gear/2/_steerdeg_lospeed 0.0
 P _gear/2/_strut_comp 0.400000006
@@ -53893,18 +53893,16 @@ GROUP fcu_display
   END_GROUP
 END_GROUP
 GROUP glareshield buttons
-  LOCKED
   gen_rotary ap1 button
     POS 706.000000 1720.000000
     IMAGE glaresheild/fcu_buttons/ap1
     DATAREF abc
-    LOCKED
-    LIGHT_MODE BACK_LIT_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 2
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 0.000000 1.000000
     KEY_FRAME 2.000000 1.000000
-    DIGITS 2
+    DIGITS 1
     ROTARY_TYPE NO_CLICK
     CLICK_RADIUS 10.000000
     CLICK_RADIUS_DY 0.000000
@@ -53919,13 +53917,12 @@ GROUP glareshield buttons
     POS 770.000000 1720.000000
     IMAGE glaresheild/fcu_buttons/ap2
     DATAREF abc
-    LOCKED
-    LIGHT_MODE BACK_LIT_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 2
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 0.000000 1.000000
     KEY_FRAME 2.000000 1.000000
-    DIGITS 2
+    DIGITS 1
     ROTARY_TYPE NO_CLICK
     CLICK_RADIUS 10.000000
     CLICK_RADIUS_DY 0.000000
@@ -53940,12 +53937,11 @@ GROUP glareshield buttons
     POS 834.000000 1720.000000
     IMAGE glaresheild/fcu_buttons/athr
     DATAREF abc
-    LOCKED
-    LIGHT_MODE BACK_LIT_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 2
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 1.000000
-    DIGITS 2
+    DIGITS 1
     ROTARY_TYPE NO_CLICK
     CLICK_RADIUS 10.000000
     CLICK_RADIUS_DY 0.000000
@@ -53960,13 +53956,12 @@ GROUP glareshield buttons
     POS 706.000000 1662.000000
     IMAGE glaresheild/fcu_buttons/fd
     DATAREF abc
-    LOCKED
-    LIGHT_MODE BACK_LIT_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 2
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 1.000000 1.000000
     KEY_FRAME 2.000000 1.000000
-    DIGITS 2
+    DIGITS 1
     ROTARY_TYPE NO_CLICK
     CLICK_RADIUS 10.000000
     CLICK_RADIUS_DY 0.000000
@@ -53981,13 +53976,12 @@ GROUP glareshield buttons
     POS 770.000000 1662.000000
     IMAGE glaresheild/fcu_buttons/fd
     DATAREF abc
-    LOCKED
-    LIGHT_MODE BACK_LIT_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 2
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 1.000000 1.000000
     KEY_FRAME 2.000000 1.000000
-    DIGITS 2
+    DIGITS 1
     ROTARY_TYPE NO_CLICK
     CLICK_RADIUS 10.000000
     CLICK_RADIUS_DY 0.000000
@@ -54002,13 +53996,12 @@ GROUP glareshield buttons
     POS 834.000000 1662.000000
     IMAGE glaresheild/fcu_buttons/appr
     DATAREF abc
-    LOCKED
-    LIGHT_MODE BACK_LIT_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 2
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 1.000000 1.000000
     KEY_FRAME 2.000000 1.000000
-    DIGITS 2
+    DIGITS 1
     ROTARY_TYPE NO_CLICK
     CLICK_RADIUS 10.000000
     CLICK_RADIUS_DY 0.000000
@@ -54020,15 +54013,14 @@ GROUP glareshield buttons
     CLICK_DY 0
 
   gen_rotary exped button
-    POS 898.000000 1662.000000
+    POS 898.000000 1661.000000
     IMAGE glaresheild/fcu_buttons/exped
     DATAREF abc
-    LOCKED
-    LIGHT_MODE BACK_LIT_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 2
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 1.000000
-    DIGITS 2
+    DIGITS 1
     ROTARY_TYPE NO_CLICK
     CLICK_RADIUS 10.000000
     CLICK_RADIUS_DY 0.000000
@@ -54043,12 +54035,11 @@ GROUP glareshield buttons
     POS 898.000000 1712.000000
     IMAGE glaresheild/fcu_buttons/loc
     DATAREF abc
-    LOCKED
-    LIGHT_MODE BACK_LIT_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 2
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 1.000000
-    DIGITS 2
+    DIGITS 1
     ROTARY_TYPE NO_CLICK
     CLICK_RADIUS 10.000000
     CLICK_RADIUS_DY 0.000000
@@ -54063,12 +54054,11 @@ GROUP glareshield buttons
     POS 962.000000 1712.000000
     IMAGE glaresheild/fcu_buttons/ls
     DATAREF a321neo/cockpit/PFD/capt_ls_enabled
-    LOCKED
-    LIGHT_MODE BACK_LIT_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 2
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 1.000000
-    DIGITS 2
+    DIGITS 1
     ROTARY_TYPE NO_CLICK
     CLICK_RADIUS 10.000000
     CLICK_RADIUS_DY 0.000000
@@ -54083,12 +54073,11 @@ GROUP glareshield buttons
     POS 1026.000000 1712.000000
     IMAGE glaresheild/fcu_buttons/cstr
     DATAREF abc
-    LOCKED
-    LIGHT_MODE BACK_LIT_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 2
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 1.000000
-    DIGITS 2
+    DIGITS 1
     ROTARY_TYPE NO_CLICK
     CLICK_RADIUS 10.000000
     CLICK_RADIUS_DY 0.000000
@@ -54103,12 +54092,11 @@ GROUP glareshield buttons
     POS 1090.000000 1712.000000
     IMAGE glaresheild/fcu_buttons/wpt
     DATAREF abc
-    LOCKED
-    LIGHT_MODE BACK_LIT_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 2
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 1.000000
-    DIGITS 2
+    DIGITS 1
     ROTARY_TYPE NO_CLICK
     CLICK_RADIUS 10.000000
     CLICK_RADIUS_DY 0.000000
@@ -54123,12 +54111,11 @@ GROUP glareshield buttons
     POS 1090.000000 1662.000000
     IMAGE glaresheild/fcu_buttons/vord
     DATAREF abc
-    LOCKED
-    LIGHT_MODE BACK_LIT_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 2
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 1.000000
-    DIGITS 2
+    DIGITS 1
     ROTARY_TYPE NO_CLICK
     CLICK_RADIUS 10.000000
     CLICK_RADIUS_DY 0.000000
@@ -54143,12 +54130,11 @@ GROUP glareshield buttons
     POS 962.000000 1662.000000
     IMAGE glaresheild/fcu_buttons/ndb
     DATAREF abc
-    LOCKED
-    LIGHT_MODE BACK_LIT_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 2
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 1.000000
-    DIGITS 2
+    DIGITS 1
     ROTARY_TYPE NO_CLICK
     CLICK_RADIUS 10.000000
     CLICK_RADIUS_DY 0.000000
@@ -54159,16 +54145,15 @@ GROUP glareshield buttons
     CLICK_DX 0
     CLICK_DY 0
 
-  gen_rotary appr button
+  gen_rotary arpt button
     POS 1026.000000 1662.000000
     IMAGE glaresheild/fcu_buttons/arpt
     DATAREF abc
-    LOCKED
-    LIGHT_MODE BACK_LIT_AUTO
-    LIGHT_RHEOSTAT 0
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 2
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 1.000000 1.000000
-    DIGITS 2
+    DIGITS 1
     ROTARY_TYPE NO_CLICK
     CLICK_RADIUS 10.000000
     CLICK_RADIUS_DY 0.000000
@@ -54179,6 +54164,288 @@ GROUP glareshield buttons
     CLICK_DX 0
     CLICK_DY 0
 
+  GROUP FCU Green Light
+    gen_rotary vord light
+      POS 1090.000000 1672.000000
+      IMAGE center_pedestal/ecam/green
+      DATAREF 
+      SIZE 0.500000
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000
+      DIGITS 2
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary arpt light
+      POS 1026.000000 1672.000000
+      IMAGE center_pedestal/ecam/green
+      DATAREF 
+      SIZE 0.500000
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000
+      DIGITS 2
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary ndb light
+      POS 962.000000 1672.000000
+      IMAGE center_pedestal/ecam/green
+      DATAREF 
+      SIZE 0.500000
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000
+      DIGITS 2
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary exped light
+      POS 898.000000 1672.000000
+      IMAGE center_pedestal/ecam/green
+      DATAREF 
+      SIZE 0.500000
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000
+      DIGITS 2
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary appr light
+      POS 834.000000 1672.000000
+      IMAGE center_pedestal/ecam/green
+      DATAREF 
+      SIZE 0.500000
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000
+      DIGITS 2
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary fd2 light
+      POS 770.000000 1672.000000
+      IMAGE center_pedestal/ecam/green
+      DATAREF 
+      SIZE 0.500000
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000
+      DIGITS 2
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary fd1 light
+      POS 706.000000 1672.000000
+      IMAGE center_pedestal/ecam/green
+      DATAREF 
+      SIZE 0.500000
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000
+      DIGITS 2
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary wpt light
+      POS 1090.000000 1722.000000
+      IMAGE center_pedestal/ecam/green
+      DATAREF 
+      SIZE 0.500000
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000
+      DIGITS 2
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary cstr light
+      POS 1026.000000 1722.000000
+      IMAGE center_pedestal/ecam/green
+      DATAREF 
+      SIZE 0.500000
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000
+      DIGITS 2
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary ls light
+      POS 962.000000 1722.000000
+      IMAGE center_pedestal/ecam/green
+      DATAREF 
+      SIZE 0.500000
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000
+      DIGITS 2
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary loc light
+      POS 898.000000 1722.000000
+      IMAGE center_pedestal/ecam/green
+      DATAREF 
+      SIZE 0.500000
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000
+      DIGITS 2
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary athr light
+      POS 834.000000 1734.000000
+      IMAGE center_pedestal/ecam/green
+      DATAREF 
+      SIZE 0.500000
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000
+      DIGITS 2
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary ap2 light
+      POS 769.000000 1734.000000
+      IMAGE center_pedestal/ecam/green
+      DATAREF 
+      SIZE 0.500000
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000
+      DIGITS 2
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary ap1 light
+      POS 706.000000 1734.000000
+      IMAGE center_pedestal/ecam/green
+      DATAREF 
+      SIZE 0.500000
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 1.000000
+      DIGITS 2
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+  END_GROUP
 END_GROUP
 GROUP Buttons and Lights
   LOCKED
@@ -54319,7 +54586,6 @@ GROUP Buttons and Lights
   END_GROUP
   GROUP Panel Lower Left
     LOCKED
-    GROUP_OPEN
     gen_rotary ELAC1
       POS 1998.000000 201.000000
       IMAGE Buttons/off_fault
@@ -60653,7 +60919,6 @@ GROUP PFD
   END_GROUP
   GROUP Speed Tape
     LOCKED
-    GROUP_OPEN
     gen_pointer Speed Tape
       POS 1441.000000 733.000000
       IMAGE MIP/pfd/spd tape
@@ -61162,7 +61427,6 @@ GROUP PFD
 
   GROUP F speed group
     SHOW_GREATER 3.000000 a321neo/dynamics/surfaces/flaps_internal_config
-    GROUP_OPEN
     gen_pointer F Speed
       POS 1507.000000 725.500000
       IMAGE MIP/pfd/F Speed
@@ -61181,7 +61445,6 @@ GROUP PFD
   END_GROUP
   GROUP s speed group
     SHOW_GREATER 1.000000 a321neo/dynamics/surfaces/flaps_internal_config
-    GROUP_OPEN
     gen_pointer S Speed
       POS 1507.000000 725.500000
       IMAGE MIP/pfd/S Speed
@@ -61197,6 +61460,247 @@ GROUP PFD
       IS_VERTICAL 1
       OFFSET 0.000000
 
+  END_GROUP
+  GROUP Bugs
+    LOCKED
+    gen_pointer Speed Bug Selected
+      POS 1493.500000 725.500000
+      IMAGE MIP/pfd/spd_selected_bug
+      DATAREF abc
+      LOCKED
+      CLIP
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME -40.000000 227.000000 1.000000
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 40.000000 -227.000000
+      IS_DRAGGABLE 0
+      IS_VERTICAL 1
+      OFFSET 0.000000
+
+    gen_pointer Speed Bug Managed
+      POS 1493.500000 725.500000
+      IMAGE MIP/pfd/spd_managed_bug
+      DATAREF abc
+      LOCKED
+      CLIP
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME -40.000000 227.000000 1.000000
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 40.000000 -227.000000
+      IS_DRAGGABLE 0
+      IS_VERTICAL 1
+      OFFSET 0.000000
+
+    gen_pointer Heading Bug Select
+      POS 1759.000000 376.500000
+      IMAGE MIP/pfd/hdg_selected_bug
+      DATAREF abc
+      LOCKED
+      CLIP
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME -20.000000 170.000000 1.000000
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 20.000000 -170.000000
+      IS_DRAGGABLE 0
+      IS_VERTICAL 0
+      OFFSET 0.000000
+
+    gen_pointer Heading Bug Managed
+      POS 1759.000000 376.500000
+      IMAGE MIP/pfd/hdg_managed_bug
+      DATAREF abc
+      LOCKED
+      CLIP
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME -20.000000 170.000000 1.000000
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 20.000000 -170.000000
+      IS_DRAGGABLE 0
+      IS_VERTICAL 0
+      OFFSET 0.000000
+
+    gen_rotary Heading Sel Box L
+      POS 1539.000000 320.500000
+      IMAGE MIP/pfd/Hdg Target Box
+      DATAREF 
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 6.000000
+      DIGITS 1
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary Heading Sel Box R
+      POS 1977.000000 320.500000
+      IMAGE MIP/pfd/Hdg Target Box
+      DATAREF 
+      LOCKED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 1.000000 6.000000
+      DIGITS 1
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+  END_GROUP
+  GROUP RA Display
+    SHOW_EQUAL 1.000000 a321neo/cockpit/PFD/capt_radioalt_status
+    GROUP_ANIMATE_MODE ROTATE
+    GROUP_WIDTH 0
+    GROUP_HEIGHT 0
+    DATAREF sim/cockpit2/gauges/indicators/roll_AHARS_deg_pilot
+    POS 1759.500000 724.500000
+    KEY_FRAME 0.000000 0.000000 1.000000
+    KEY_FRAME 1.000000 -1.000000
+    ROTATE_OFFSET_X 0.000000
+    ROTATE_OFFSET_Y 0.000000
+    GROUP RA Green
+      SHOW_EQUAL 0.000000 a321neo/cockpit/PFD/capt_radioalt_col
+      gen_LED RA Green 4 Dig
+        POS 1741.000000 512.000000
+        IMAGE MIP/pfd/ra display/ra green
+        DATAREF a321neo/cockpit/PFD/capt_radioalt_val
+        SHOW_LESS 2500.000000 a321neo/cockpit/PFD/capt_radioalt_val
+        SHOW_GREATER 999.000000 a321neo/cockpit/PFD/capt_radioalt_val
+        LIGHT_MODE GLASS_AUTO
+        LIGHT_RHEOSTAT 0
+        KEY_FRAME 0.000000 0.000000 1.000000
+        KEY_FRAME 3000.000000 3000.000000
+        DIGITS 6
+        DECIMALS 0
+        PERIOD_WIDTH 0
+        LED_ROWS 0
+
+      gen_LED RA Green 3 Dig
+        POS 1733.000000 512.000000
+        IMAGE MIP/pfd/ra display/ra green
+        DATAREF a321neo/cockpit/PFD/capt_radioalt_val
+        SHOW_LESS 999.000000 a321neo/cockpit/PFD/capt_radioalt_val
+        SHOW_GREATER 99.000000 a321neo/cockpit/PFD/capt_radioalt_val
+        LIGHT_MODE GLASS_AUTO
+        LIGHT_RHEOSTAT 0
+        KEY_FRAME 0.000000 0.000000 1.000000
+        KEY_FRAME 3000.000000 3000.000000
+        DIGITS 6
+        DECIMALS 0
+        PERIOD_WIDTH 0
+        LED_ROWS 0
+
+      gen_LED RA Green 2 Dig
+        POS 1725.000000 512.000000
+        IMAGE MIP/pfd/ra display/ra green
+        DATAREF a321neo/cockpit/PFD/capt_radioalt_val
+        SHOW_LESS 99.000000 a321neo/cockpit/PFD/capt_radioalt_val
+        SHOW_GREATER 9.900000 a321neo/cockpit/PFD/capt_radioalt_val
+        LIGHT_MODE GLASS_AUTO
+        LIGHT_RHEOSTAT 0
+        KEY_FRAME 0.000000 0.000000 1.000000
+        KEY_FRAME 3000.000000 3000.000000
+        DIGITS 6
+        DECIMALS 0
+        PERIOD_WIDTH 0
+        LED_ROWS 0
+
+      gen_LED RA Green 1 Dig
+        POS 1716.000000 512.000000
+        IMAGE MIP/pfd/ra display/ragreentens
+        DATAREF a321neo/cockpit/PFD/capt_radioalt_val
+        SHOW_LESS 9.900000 a321neo/cockpit/PFD/capt_radioalt_val
+        SHOW_GREATER -10.000000 a321neo/cockpit/PFD/capt_radioalt_val
+        LIGHT_MODE GLASS_AUTO
+        LIGHT_RHEOSTAT 0
+        KEY_FRAME 0.000000 0.000000 1.000000
+        KEY_FRAME 10.000000 10.000000
+        DIGITS 6
+        DECIMALS 0
+        PERIOD_WIDTH 0
+        LED_ROWS 0
+
+    END_GROUP
+    GROUP RA Amber
+      SHOW_EQUAL 1.000000 a321neo/cockpit/PFD/capt_radioalt_col
+      gen_LED RA Amber 4 Dig
+        POS 1741.000000 512.000000
+        IMAGE MIP/pfd/ra display/ra red
+        DATAREF a321neo/cockpit/PFD/capt_radioalt_val
+        SHOW_LESS 2500.000000 a321neo/cockpit/PFD/capt_radioalt_val
+        SHOW_GREATER 999.000000 a321neo/cockpit/PFD/capt_radioalt_val
+        LIGHT_MODE GLASS_AUTO
+        LIGHT_RHEOSTAT 0
+        KEY_FRAME 0.000000 0.000000 1.000000
+        KEY_FRAME 3000.000000 3000.000000
+        DIGITS 6
+        DECIMALS 0
+        PERIOD_WIDTH 0
+        LED_ROWS 0
+
+      gen_LED RA Amber 3 Dig 
+        POS 1733.000000 512.000000
+        IMAGE MIP/pfd/ra display/ra red
+        DATAREF a321neo/cockpit/PFD/capt_radioalt_val
+        SHOW_LESS 999.000000 a321neo/cockpit/PFD/capt_radioalt_val
+        SHOW_GREATER 99.000000 a321neo/cockpit/PFD/capt_radioalt_val
+        LIGHT_MODE GLASS_AUTO
+        LIGHT_RHEOSTAT 0
+        KEY_FRAME 0.000000 0.000000 1.000000
+        KEY_FRAME 3000.000000 3000.000000
+        DIGITS 6
+        DECIMALS 0
+        PERIOD_WIDTH 0
+        LED_ROWS 0
+
+      gen_LED RA Amber 2 Dig
+        POS 1725.000000 512.000000
+        IMAGE MIP/pfd/ra display/ra red
+        DATAREF a321neo/cockpit/PFD/capt_radioalt_val
+        SHOW_LESS 99.000000 a321neo/cockpit/PFD/capt_radioalt_val
+        SHOW_GREATER 9.900000 a321neo/cockpit/PFD/capt_radioalt_val
+        LIGHT_MODE GLASS_AUTO
+        LIGHT_RHEOSTAT 0
+        KEY_FRAME 0.000000 0.000000 1.000000
+        KEY_FRAME 3000.000000 3000.000000
+        DIGITS 6
+        DECIMALS 0
+        PERIOD_WIDTH 0
+        LED_ROWS 0
+
+      gen_LED RA Amber 1 Dig
+        POS 1716.000000 512.000000
+        IMAGE MIP/pfd/ra display/raambertens
+        DATAREF a321neo/cockpit/PFD/capt_radioalt_val
+        SHOW_LESS 9.900000 a321neo/cockpit/PFD/capt_radioalt_val
+        SHOW_GREATER -10.000000 a321neo/cockpit/PFD/capt_radioalt_val
+        LIGHT_MODE GLASS_AUTO
+        LIGHT_RHEOSTAT 0
+        KEY_FRAME 0.000000 0.000000 1.000000
+        KEY_FRAME 10.000000 10.000000
+        DIGITS 6
+        DECIMALS 0
+        PERIOD_WIDTH 0
+        LED_ROWS 0
+
+    END_GROUP
   END_GROUP
   GROUP Flight Directors
     LOCKED
@@ -61227,102 +61731,6 @@ GROUP PFD
       OFFSET 0.000000
 
   END_GROUP
-END_GROUP
-GROUP Bugs
-  gen_pointer Speed Bug Selected
-    POS 1493.500000 725.500000
-    IMAGE MIP/pfd/spd_selected_bug
-    DATAREF abc
-    CLIP
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME -40.000000 227.000000 1.000000
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 40.000000 -227.000000
-    IS_DRAGGABLE 0
-    IS_VERTICAL 1
-    OFFSET 0.000000
-
-  gen_pointer Speed Bug Managed
-    POS 1493.500000 725.500000
-    IMAGE MIP/pfd/spd_managed_bug
-    DATAREF abc
-    CLIP
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME -40.000000 227.000000 1.000000
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 40.000000 -227.000000
-    IS_DRAGGABLE 0
-    IS_VERTICAL 1
-    OFFSET 0.000000
-
-  gen_pointer Heading Bug Select
-    POS 1759.000000 376.500000
-    IMAGE MIP/pfd/hdg_selected_bug
-    DATAREF abc
-    CLIP
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME -20.000000 170.000000 1.000000
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 20.000000 -170.000000
-    IS_DRAGGABLE 0
-    IS_VERTICAL 0
-    OFFSET 0.000000
-
-  gen_pointer Heading Bug Managed
-    POS 1759.000000 376.500000
-    IMAGE MIP/pfd/hdg_managed_bug
-    DATAREF abc
-    CLIP
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME -20.000000 170.000000 1.000000
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 20.000000 -170.000000
-    IS_DRAGGABLE 0
-    IS_VERTICAL 0
-    OFFSET 0.000000
-
-  gen_rotary Heading Sel Box L
-    POS 1539.000000 320.500000
-    IMAGE MIP/pfd/Hdg Target Box
-    DATAREF 
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 6.000000
-    DIGITS 1
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary Heading Sel Box R
-    POS 1977.000000 320.500000
-    IMAGE MIP/pfd/Hdg Target Box
-    DATAREF 
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 6.000000
-    DIGITS 1
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
 END_GROUP
 GROUP PFD Standby Covers
   LOCKED
@@ -65832,144 +66240,5 @@ GROUP Screen Covers
     CLICK_DX 0
     CLICK_DY 0
 
-END_GROUP
-GROUP RA Display
-  SHOW_EQUAL 1.000000 a321neo/cockpit/PFD/capt_radioalt_status
-  GROUP_OPEN
-  GROUP_ANIMATE_MODE ROTATE
-  GROUP_WIDTH 0
-  GROUP_HEIGHT 0
-  DATAREF sim/cockpit2/gauges/indicators/roll_AHARS_deg_pilot
-  POS 1759.500000 724.500000
-  KEY_FRAME 0.000000 0.000000 1.000000
-  KEY_FRAME 1.000000 -1.000000
-  ROTATE_OFFSET_X 0.000000
-  ROTATE_OFFSET_Y 0.000000
-  GROUP RA Green
-    SHOW_EQUAL 0.000000 a321neo/cockpit/PFD/capt_radioalt_col
-    gen_LED RA Green 4 Dig
-      POS 1741.000000 512.000000
-      IMAGE MIP/pfd/ra display/ra green
-      DATAREF a321neo/cockpit/PFD/capt_radioalt_val
-      SHOW_LESS 2500.000000 a321neo/cockpit/PFD/capt_radioalt_val
-      SHOW_GREATER 999.000000 a321neo/cockpit/PFD/capt_radioalt_val
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 3000.000000 3000.000000
-      DIGITS 6
-      DECIMALS 0
-      PERIOD_WIDTH 0
-      LED_ROWS 0
-
-    gen_LED RA Green 3 Dig
-      POS 1733.000000 512.000000
-      IMAGE MIP/pfd/ra display/ra green
-      DATAREF a321neo/cockpit/PFD/capt_radioalt_val
-      SHOW_LESS 999.000000 a321neo/cockpit/PFD/capt_radioalt_val
-      SHOW_GREATER 99.000000 a321neo/cockpit/PFD/capt_radioalt_val
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 3000.000000 3000.000000
-      DIGITS 6
-      DECIMALS 0
-      PERIOD_WIDTH 0
-      LED_ROWS 0
-
-    gen_LED RA Green 2 Dig
-      POS 1725.000000 512.000000
-      IMAGE MIP/pfd/ra display/ra green
-      DATAREF a321neo/cockpit/PFD/capt_radioalt_val
-      SHOW_LESS 99.000000 a321neo/cockpit/PFD/capt_radioalt_val
-      SHOW_GREATER 9.900000 a321neo/cockpit/PFD/capt_radioalt_val
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 3000.000000 3000.000000
-      DIGITS 6
-      DECIMALS 0
-      PERIOD_WIDTH 0
-      LED_ROWS 0
-
-    gen_LED RA Green 1 Dig
-      POS 1716.000000 512.000000
-      IMAGE MIP/pfd/ra display/ragreentens
-      DATAREF a321neo/cockpit/PFD/capt_radioalt_val
-      SHOW_LESS 9.900000 a321neo/cockpit/PFD/capt_radioalt_val
-      SHOW_GREATER -10.000000 a321neo/cockpit/PFD/capt_radioalt_val
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 10.000000 10.000000
-      DIGITS 6
-      DECIMALS 0
-      PERIOD_WIDTH 0
-      LED_ROWS 0
-
-  END_GROUP
-  GROUP RA Amber
-    SHOW_EQUAL 1.000000 a321neo/cockpit/PFD/capt_radioalt_col
-    gen_LED RA Amber 4 Dig
-      POS 1741.000000 512.000000
-      IMAGE MIP/pfd/ra display/ra red
-      DATAREF a321neo/cockpit/PFD/capt_radioalt_val
-      SHOW_LESS 2500.000000 a321neo/cockpit/PFD/capt_radioalt_val
-      SHOW_GREATER 999.000000 a321neo/cockpit/PFD/capt_radioalt_val
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 3000.000000 3000.000000
-      DIGITS 6
-      DECIMALS 0
-      PERIOD_WIDTH 0
-      LED_ROWS 0
-
-    gen_LED RA Amber 3 Dig 
-      POS 1733.000000 512.000000
-      IMAGE MIP/pfd/ra display/ra red
-      DATAREF a321neo/cockpit/PFD/capt_radioalt_val
-      SHOW_LESS 999.000000 a321neo/cockpit/PFD/capt_radioalt_val
-      SHOW_GREATER 99.000000 a321neo/cockpit/PFD/capt_radioalt_val
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 3000.000000 3000.000000
-      DIGITS 6
-      DECIMALS 0
-      PERIOD_WIDTH 0
-      LED_ROWS 0
-
-    gen_LED RA Amber 2 Dig
-      POS 1725.000000 512.000000
-      IMAGE MIP/pfd/ra display/ra red
-      DATAREF a321neo/cockpit/PFD/capt_radioalt_val
-      SHOW_LESS 99.000000 a321neo/cockpit/PFD/capt_radioalt_val
-      SHOW_GREATER 9.900000 a321neo/cockpit/PFD/capt_radioalt_val
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 3000.000000 3000.000000
-      DIGITS 6
-      DECIMALS 0
-      PERIOD_WIDTH 0
-      LED_ROWS 0
-
-    gen_LED RA Amber 1 Dig
-      POS 1716.000000 512.000000
-      IMAGE MIP/pfd/ra display/raambertens
-      DATAREF a321neo/cockpit/PFD/capt_radioalt_val
-      SHOW_LESS 9.900000 a321neo/cockpit/PFD/capt_radioalt_val
-      SHOW_GREATER -10.000000 a321neo/cockpit/PFD/capt_radioalt_val
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 10.000000 10.000000
-      DIGITS 6
-      DECIMALS 0
-      PERIOD_WIDTH 0
-      LED_ROWS 0
-
-  END_GROUP
 END_GROUP
 PANEL_3D_END
