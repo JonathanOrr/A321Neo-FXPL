@@ -258,13 +258,13 @@ Message_ELEC_FUEL_GRAVITY_PROC = {
 Message_ELEC_BLOWER_OVRD = {
     text = function(self) return " - BLOWER............OVRD" end,
     color = function(self) return COL_ACTIONS end,
-    is_active = function(self) return get(Elec_light_blower) % 2 == 0 end
+    is_active = function(self) return get(Ventilation_blower) == 1 end
 }
 
 Message_ELEC_EXTRACT_OVRD = {
     text = function(self) return " - EXTRACT...........OVRD" end,
     color = function(self) return COL_ACTIONS end,
-    is_active = function(self) return get(Elec_light_extract) % 2 == 0 end
+    is_active = function(self) return get(Ventilation_extract) == 1 end
 }
 
 Message_ELEC_FAC_1_OFF_ON = {

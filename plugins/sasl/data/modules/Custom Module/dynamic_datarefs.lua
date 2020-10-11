@@ -31,6 +31,10 @@ Cockpit_temp = createGlobalPropertyf("a321neo/dynamics/aircond/cockpit_temp", 15
 Front_cab_temp = createGlobalPropertyf("a321neo/dynamics/aircond/front_cab_temp", 15, false, true, false) --actual front cabin temperature
 Aft_cab_temp = createGlobalPropertyf("a321neo/dynamics/aircond/aft_cab_temp", 15, false, true, false) --actual aft cabin temperature
 Aft_cargo_temp = createGlobalPropertyf("a321neo/dynamics/aircond/aft_cargo_temp", 17, false, true, false) ---requested aft cargo temperature
+
+Ventilation_blower  = createGlobalPropertyi("a321neo/dynamics/aircond/vent_blower", 0, false, true, false)  -- 0 normal, 1 override
+Ventilation_extract = createGlobalPropertyi("a321neo/dynamics/aircond/vent_extract", 0, false, true, false) -- 0 normal, 1 override
+
 --PACKS
 L_pack_Flow = createGlobalPropertyi("a321neo/dynamics/packs/l_pack_flow", 0, false, true, false) --0low, 1norm, 2high
 R_pack_Flow = createGlobalPropertyi("a321neo/dynamics/packs/r_pack_flow", 0, false, true, false) --0low, 1norm, 2high

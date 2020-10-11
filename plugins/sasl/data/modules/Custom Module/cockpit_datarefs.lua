@@ -191,6 +191,9 @@ Front_cab_temp_dial = createGlobalPropertyf("a321neo/cockpit/aircond/front_cab_t
 Aft_cab_temp_dial = createGlobalPropertyf("a321neo/cockpit/aircond/aft_cab_temp_dial", 0.5, false, true, false) --aft cabin temperature dial position
 Aft_cargo_temp_dial = createGlobalPropertyf("a321neo/cockpit/aircond/aft_cargo_temp_dial", 0.5, false, true, false) --aft cargo temperature dial position
 
+Ventilation_light_blower = createGlobalPropertyi("a321neo/cockpit/aircond/light_blower", 0, false, true, false)     --00: No lights, 01: [OVRD], 10: FAULT, 11 [OVRD] + FAULT
+Ventilation_light_extract = createGlobalPropertyi("a321neo/cockpit/aircond/light_extract", 0, false, true, false)     --00: No lights, 01: [OVRD], 10: FAULT, 11 [OVRD] + FAULT
+
 --packs
 X_bleed_dial = createGlobalPropertyi("a321neo/cockpit/packs/x_bleed_dial", 1, false, true, false) --0closed, 1auto, 2open
 A321_Pack_Flow_dial = createGlobalPropertyi("a321neo/cockpit/packs/pack_flow_dial", 0, false, true, false) --the pack flow dial 0low, 1norm, 2high
@@ -297,10 +300,6 @@ Elec_light_RAT_FAULT     = createGlobalPropertyi("a321neo/cockpit/electrical/but
 
 Elec_bat_1_V  = createGlobalPropertyf("a321neo/cockpit/electrical/battery_1_voltage", 0, false, true, false)
 Elec_bat_2_V  = createGlobalPropertyf("a321neo/cockpit/electrical/battery_2_voltage", 0, false, true, false)
-
-Elec_light_blower = createGlobalPropertyi("a321neo/cockpit/electrical/blower", 0, false, true, false)     --00: No lights, 01: [OVRD], 10: FAULT, 11 [OVRD] + FAULT
-
-Elec_light_extract = createGlobalPropertyi("a321neo/cockpit/electrical/extract", 0, false, true, false)     --00: No lights, 01: [OVRD], 10: FAULT, 11 [OVRD] + FAULT
 
 -- ISIS
 ISIS_landing_system_enabled = createGlobalPropertyi("a321neo/cockpit/ISIS/isis_ls_enabled", 0, false, true, false)-- LS status for the ISIS: 0-off, 1-on
