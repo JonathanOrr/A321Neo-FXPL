@@ -482,7 +482,15 @@ function update ()
         has_fo_att = 1;
     end
 
-        
+    -- Debug mode 
+    if ovveride_ADIRS_ok then
+        is_capt_adr_ok = 1
+        is_fo_adr_ok = 1
+        is_capt_irs_ok = 1
+        is_fo_irs_ok = 2
+        has_capt_att = 1
+        has_fo_att = 1
+    end
 
 
     update_status_datarefs(is_capt_adr_ok, is_fo_adr_ok, is_capt_irs_ok, is_fo_irs_ok, has_capt_att, has_fo_att)
