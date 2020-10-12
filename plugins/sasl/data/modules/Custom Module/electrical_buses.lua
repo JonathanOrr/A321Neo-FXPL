@@ -29,7 +29,7 @@ local BUS_SWITCH_DELAY = 0.2
 ----------------------------------------------------------------------------------------------------
 sasl.registerCommandHandler (ELEC_cmd_BUS_tie,  0, function(phase) elec_bus_tie_toggle(phase) end )
 sasl.registerCommandHandler (ELEC_cmd_AC_ess_feed,  0, function(phase) elec_bus_acc_ess_toggle(phase) end )
-
+sasl.registerCommandHandler (ELEC_cmd_EMER_GEN1_LINE, 0, function(phase) elec_gen1_line_toggle(phase) end )
 ----------------------------------------------------------------------------------------------------
 -- Global/Local variables
 ----------------------------------------------------------------------------------------------------
@@ -73,6 +73,13 @@ function elec_bus_acc_ess_toggle(phase)
     buses.ac_ess_bus_pushbutton_status = not buses.ac_ess_bus_pushbutton_status
 end
 
+function elec_gen1_line_toggle(phase)
+    if phase ~= SASL_COMMAND_BEGIN then
+        return
+    end
+    set(Gen_1_line_active, get(Gen_1_line_active) == 1 and 0 or 1)
+end
+
 
 local switch_time = {}
 
@@ -104,7 +111,7 @@ local function update_ac_1()
 
     if get(FAILURE_ELEC_AC1_bus) == 1 then
         return  -- Not powered
-    elseif get(Gen_1_pwr) == 1 then
+    elseif get(Gen_1_pwr) == 1 and get(Gen_1_line_active) == 0 then
         buses.ac1_powered_by = GEN_1
     elseif get(Gen_EXT_pwr) == 1 then
         buses.ac1_powered_by = GEN_EXT
@@ -267,7 +274,8 @@ local function update_datarefs()
     end
     
     set(Elec_light_BUS_tie, buses.bus_tie_pushbutton_status and 0 or 1)
-    set(Elec_light_AC_ess_feed, (buses.ac_ess_bus_pushbutton_status and 1 or 0) + (buses.ac_ess_powered_by>0 and 0 or 10)) 
+    set(Elec_light_AC_ess_feed, (buses.ac_ess_bus_pushbutton_status and 1 or 0) + (buses.ac_ess_powered_by>0 and 0 or 10))
+    set(Elec_light_EMER_GEN1_LINE, get(Gen_1_line_active)== 1 and 1 or 0)   -- TODO Add SMOKE indication
 end
 
 local function update_shed()

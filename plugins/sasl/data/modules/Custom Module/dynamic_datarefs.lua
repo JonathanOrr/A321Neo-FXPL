@@ -120,6 +120,7 @@ Gen_2_pwr  = createGlobalPropertyi("a321neo/dynamics/electrical/sources/gen_2_pw
 Gen_APU_pwr = createGlobalPropertyi("a321neo/dynamics/electrical/sources/gen_APU_pwr", 0, false, true, false) -- See also Apu_gen_state
 Gen_EXT_pwr = createGlobalPropertyi("a321neo/dynamics/electrical/sources/gen_EXT_pwr", 0, false, true, false)
 Gen_EMER_pwr = createGlobalPropertyi("a321neo/dynamics/electrical/sources/gen_EMER_pwr", 0, false, true, false)
+Gen_1_line_active = createGlobalPropertyi("a321neo/dynamics/electrical/gen_1_line_active", 0, false, true, false)   -- GEN 1 Line has been pressed, 0 normal 
 
 IDG_1_temp = createGlobalPropertyf("a321neo/dynamics/electrical/IDG_1_temp", 0, false, true, false)
 IDG_2_temp = createGlobalPropertyf("a321neo/dynamics/electrical/IDG_2_temp", 0, false, true, false)
@@ -388,7 +389,7 @@ Flaps_internal_config = createGlobalPropertyf("a321neo/dynamics/surfaces/flaps_i
 
 --surfaces
 --dev & debuging
-FBW_kill_switch = createGlobalPropertyi("a321neo/dynamics/FBW/debug/kill_switch", 0, false, true, false)
+FBW_kill_switch = createGlobalPropertyi("a321neo/dynamics/FBW/debug/kill_switch", 1, false, true, false)
 --animations
 Trim_wheel_smoothing_on = createGlobalPropertyi("a321neo/dynamics/FBW/animation/trim_wheel_smoothing_on", 1, false, true, false)--is the trim wheel is smoothed
 --flight envelope "sensors"
