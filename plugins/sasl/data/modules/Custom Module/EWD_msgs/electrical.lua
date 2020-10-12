@@ -470,4 +470,40 @@ MessageGroup_ELEC_AC_BUS_2_FAULT = {
 
 
 
+----------------------------------------------------------------------------------------------------
+-- CAUTION: GEN 1 LINE OFF
+----------------------------------------------------------------------------------------------------
+
+MessageGroup_ELEC_EMER_GEN_1_LINE_OFF = {
+
+    shown = false,
+
+    text  = function(self)
+                return "EMER"   
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_ELEC,
+    
+    messages = {
+        {
+            text = function(self) return "     GEN 1 LINE OFF" end,
+            color = function(self) return COL_CAUTION end,
+            is_active = function(self) return true end
+        }
+    },
+
+    is_active = function(self)
+        return get(Gen_1_line_active) == 1
+    end,
+
+    is_inhibited = function(self)
+        return not(get(EWD_flight_phase) == PHASE_1ST_ENG_ON or get(EWD_flight_phase) == PHASE_AIRBONE)
+    end
+}
+
 
