@@ -98,7 +98,24 @@ sasl.registerCommandHandler ( Toggle_aft_cargo_iso_valve, 0, function(phase)
     end
 end)
 
+sasl.registerCommandHandler ( ELEC_vent_blower, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        set(Ventilation_blower, get(Ventilation_blower) == 1 and 0 or 1)
+    end
+end)
+
+sasl.registerCommandHandler ( ELEC_vent_extract, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        set(Ventilation_extract, get(Ventilation_extract) == 1 and 0 or 1)
+    end
+end)
+
 --custom functions
+local function update_avio_ventilation()
+    set(Ventilation_light_blower, get(Ventilation_blower))      -- TODO Faults
+    set(Ventilation_light_extract, get(Ventilation_extract))    -- TODO Faults
+end
+
 local function cab_cond_off()
     --changing requested temperature to lowest temperature
     set(Cockpit_temp_req, Set_anim_value(get(Cockpit_temp_req), get(OTA), -100, 100, 0.5))
@@ -161,4 +178,7 @@ function update()
         cab_cond_off()
         cargo_cond_off()
     end
+    
+    update_avio_ventilation()
+    
 end
