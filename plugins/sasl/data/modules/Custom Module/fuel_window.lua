@@ -18,11 +18,11 @@ local CENTER= 0
 local ACT   = 3
 local RCT   = 4
 
-local TOT_MAX_FUEL   = 40001
-local LR_MAX_FUEL    = 9247
-local C_MAX_FUEL     = 6445
-local ACT_MAX_FUEL   = 5000
-local RCT_MAX_FUEL   = 10062
+local TOT_MAX_FUEL   = 40962
+local LR_MAX_FUEL    = 8449
+local C_MAX_FUEL     = 8941
+local ACT_MAX_FUEL   = 5031
+local RCT_MAX_FUEL   = 10089
 
 local KG_PER_SEC = 15
 
@@ -65,6 +65,7 @@ local start_press_time = 0
 local last_update_press_time = 0
 local remaining_time = 0
 local end_light = false
+local defueling = false
 
 local fast_speed = false
 
@@ -114,14 +115,14 @@ function update_desired_qty()
     local multiplier = 1
 
     if get(TIME) - start_press_time > 9 then
-        multiplier = 1000
-    elseif get(TIME) - start_press_time > 6 then
         multiplier = 100
-    elseif get(TIME) - start_press_time > 3 then
+    elseif get(TIME) - start_press_time > 6 then
         multiplier = 10
+    elseif get(TIME) - start_press_time > 3 then
+        multiplier = 5
     end
 
-    if get(TIME) - last_update_press_time < 0.1 then
+    if get(TIME) - last_update_press_time < 0.1/multiplier then
         return
     end
 
@@ -151,6 +152,12 @@ function update_refuel()
     if math.ceil(diff) == 0 then
         end_light = true
         return
+    end
+    
+    if diff > 0 then
+        defueling = false    
+    else
+        defueling = true
     end
     
     remaining_time = math.abs(diff)/KG_PER_SEC
@@ -195,10 +202,54 @@ function update_refuel()
  
 end
 
+local function update_auto_mode()
+    if not refuel_switch_status then
+        return  -- Refuel is not active
+    end
+    if mode_sel_switch_status then
+        return  -- Manual mode
+    end
+    
+    valve_switch_status[LEFT]  = false
+    valve_switch_status[RIGHT] = false
+    valve_switch_status[CENTER]= false
+    valve_switch_status[ACT]   = false
+    valve_switch_status[RCT]   = false
+    
+    if end_light == true then
+        return  -- Refuel end
+    end
+    
+    if not defueling then
+        if (get(Fuel_quantity[LEFT]) < LR_MAX_FUEL or get(Fuel_quantity[RIGHT]) < LR_MAX_FUEL) then
+            valve_switch_status[LEFT] = true
+            valve_switch_status[RIGHT] = true
+        elseif get(Fuel_quantity[CENTER]) < C_MAX_FUEL then
+            valve_switch_status[CENTER] = true
+        elseif get(Fuel_quantity[ACT]) < ACT_MAX_FUEL or get(Fuel_quantity[RCT]) < RCT_MAX_FUEL then
+            valve_switch_status[ACT] = true
+            valve_switch_status[RCT] = true
+        end
+    else
+        if get(Fuel_quantity[ACT]) > 0 or get(Fuel_quantity[RCT]) > 0 then
+            valve_switch_status[ACT] = true
+            valve_switch_status[RCT] = true  
+        elseif get(Fuel_quantity[CENTER]) > 0 then
+            valve_switch_status[CENTER] = true      
+        elseif (get(Fuel_quantity[LEFT]) > 0 or get(Fuel_quantity[RIGHT]) > 0) then
+            valve_switch_status[LEFT] = true
+            valve_switch_status[RIGHT] = true
+        end
+    
+    end
+    
+end
+
 function update()
     update_btn_status()
     update_desired_qty()
     
+    update_auto_mode()
     update_refuel()
     
 end
@@ -296,8 +347,11 @@ function draw()
 
     if refuel_switch_status then
         sasl.gl.drawText(B612MONO_regular, 530, 500, "Remaining time: ", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
-        sasl.gl.drawText(B612MONO_regular, 730, 500, math.ceil(remaining_time/60) .. " min", 14, false, false, TEXT_ALIGN_RIGHT, UI_WHITE)
-
+        if not end_light then
+            sasl.gl.drawText(B612MONO_regular, 730, 500, math.ceil(remaining_time/60) .. " min", 14, false, false, TEXT_ALIGN_RIGHT, UI_WHITE)
+        else
+            sasl.gl.drawText(B612MONO_regular, 730, 500, "DONE", 14, false, false, TEXT_ALIGN_RIGHT, UI_WHITE)        
+        end
         sasl.gl.drawRectangle (575, 440, 200, 30, UI_LIGHT_GREY)
         sasl.gl.drawText(B612MONO_regular, 625, 450, "Fast Refuel", 14, false, false, TEXT_ALIGN_LEFT, fast_speed and UI_LIGHT_BLUE or UI_WHITE)
     end
@@ -309,7 +363,7 @@ function draw()
         sasl.gl.drawText(SevenSegment, 400, 230, math.floor(get(Fuel_quantity[ACT])), 18, false, false, TEXT_ALIGN_RIGHT, {0, 0.6, 0.2})
         sasl.gl.drawText(SevenSegment, 400, 180, math.floor(get(Fuel_quantity[RCT])), 18, false, false, TEXT_ALIGN_RIGHT, {0, 0.6, 0.2})
 
-        sasl.gl.drawText(SevenSegment, 150, 365, presel_value, 18, false, false, TEXT_ALIGN_RIGHT, {0, 0.6, 0.2})
+        sasl.gl.drawText(SevenSegment, 150, 365, math.floor(presel_value), 18, false, false, TEXT_ALIGN_RIGHT, {0, 0.6, 0.2})
         sasl.gl.drawText(SevenSegment, 392, 365, math.floor(get(FOB)), 18, false, false, TEXT_ALIGN_RIGHT, {0, 0.6, 0.2})
     end
 end
