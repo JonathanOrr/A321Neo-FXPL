@@ -306,3 +306,7 @@ ISIS_landing_system_enabled = createGlobalPropertyi("a321neo/cockpit/ISIS/isis_l
 ISIS_powered = createGlobalPropertyi("a321neo/cockpit/ISIS/isis_is_powered", 0, false, true, false)-- ISIS is powered: 0-no, 1-yes
 ISIS_ready   = createGlobalPropertyi("a321neo/cockpit/ISIS/isis_is_ready", 0, false, true, false)-- ISIS is ready to use: 0-off, 1-on
 
+-- Fuel
+Fuel_light_pumps = createGlobalPropertyia("a321neo/cockpit/fuel/pumps", 8)
+
+

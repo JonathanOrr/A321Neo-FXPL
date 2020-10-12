@@ -76,3 +76,6 @@ FAILURE_ELEC_DC_BAT_bus = createGlobalPropertyi("a321neo/failures/electrical/bus
 FAILURE_SFCC_1 = createGlobalPropertyi("a321neo/failures/fctl/sfcc_1", 0, false, true, false)--slats flaps computer 1 failure
 FAILURE_SFCC_2 = createGlobalPropertyi("a321neo/failures/fctl/sfcc_2", 0, false, true, false)--slats flaps computer 1 failure
 
+FAILURE_FUEL = createGlobalPropertyia("a321neo/failures/fuel/pumps", 8)
+
+
