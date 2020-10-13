@@ -16,8 +16,6 @@ local apu_avail_timer = -1
 --a32NX datarefs
 local apu_needle_state = createGlobalPropertyi("a321neo/cockpit/apu/apu_needle_state", 0, false, true, false) --0xx, 1operational
 
---fonts
-local B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
 
 --colors
 local left_brake_temp_color = {1.0, 1.0, 1.0}
@@ -34,32 +32,32 @@ local right_eng_avail_cl = ECAM_ORANGE
 
 local function drawUnderlineText(font, x, y, text, size, bold, italic, align, color)
     sasl.gl.drawText(font, x, y, text, size, bold, italic, align, color)
-    width, height = sasl.gl.measureText(B612MONO_regular, text, size, false, false)
+    width, height = sasl.gl.measureText(Font_AirbusDUL, text, size, false, false)
     sasl.gl.drawWideLine(x + 3, y - 5, x + width + 3, y - 5, 4, color)
 end
 
 --custom fucntions
 local function draw_ecam_lower_section()
     --left section
-    sasl.gl.drawText(B612MONO_regular, size[1]/2-215, size[2]/2-373, math.floor(get(TAT)), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    sasl.gl.drawText(B612MONO_regular, size[1]/2-215, size[2]/2-409, math.floor(get(OTA)), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-215, size[2]/2-373, math.floor(get(TAT)), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-215, size[2]/2-409, math.floor(get(OTA)), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
 
     --center section
     --adding a 0 to the front of the time when single digit
     if get(ZULU_hours) < 10 then
-        sasl.gl.drawText(B612MONO_regular, size[1]/2-25, size[2]/2-408, "0" .. get(ZULU_hours), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-25, size[2]/2-408, "0" .. get(ZULU_hours), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     else
-        sasl.gl.drawText(B612MONO_regular, size[1]/2-25, size[2]/2-408, get(ZULU_hours), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-25, size[2]/2-408, get(ZULU_hours), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     end
 
     if get(ZULU_mins) < 10 then
-        sasl.gl.drawText(B612MONO_regular, size[1]/2+25, size[2]/2-408, "0" .. get(ZULU_mins), 30, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+25, size[2]/2-408, "0" .. get(ZULU_mins), 30, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
     else
-        sasl.gl.drawText(B612MONO_regular, size[1]/2+25, size[2]/2-408, get(ZULU_mins), 30, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+25, size[2]/2-408, get(ZULU_mins), 30, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
     end
 
     --right section
-    sasl.gl.drawText(B612MONO_regular, size[1]/2+375, size[2]/2-374, math.floor(get(Gross_weight)), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+375, size[2]/2-374, math.floor(get(Gross_weight)), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
 end
 
 function update()
@@ -151,7 +149,7 @@ local function prepare_sts_page_left()
         table.insert(messages, {
             bottom_extra_padding = 0,
             draw = function(top_position)
-                sasl.gl.drawText(B612MONO_regular, x_left_pos, top_position, "MAX SPD............".. max_knots .." / ." .. max_mach, 28, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+                sasl.gl.drawText(Font_AirbusDUL, x_left_pos, top_position, "MAX SPD............".. max_knots .." / ." .. max_mach, 28, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
             end
             }
         )
@@ -163,7 +161,7 @@ local function prepare_sts_page_left()
         table.insert(messages, {
             bottom_extra_padding = 0,
             draw = function(top_position)
-                sasl.gl.drawText(B612MONO_regular, x_left_pos, top_position, "MAX FL.............".. max_fl .." / MEA", 28, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+                sasl.gl.drawText(Font_AirbusDUL, x_left_pos, top_position, "MAX FL.............".. max_fl .." / MEA", 28, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
             end
             }
         )
@@ -175,7 +173,7 @@ local function prepare_sts_page_left()
         table.insert(messages, {
             bottom_extra_padding = 5,
             draw = function(top_position)
-                drawUnderlineText(B612MONO_regular, x_left_pos, top_position, "APPR PROC:", 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+                drawUnderlineText(Font_AirbusDUL, x_left_pos, top_position, "APPR PROC:", 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
             end
             }
         )
@@ -184,7 +182,7 @@ local function prepare_sts_page_left()
             table.insert(messages, {
                 bottom_extra_padding = 0,
                 draw = function(top_position)
-                    sasl.gl.drawText(B612MONO_regular, x_left_pos, top_position, "   " .. msg.text, 28, false, false, TEXT_ALIGN_LEFT, msg.color)
+                    sasl.gl.drawText(Font_AirbusDUL, x_left_pos, top_position, "   " .. msg.text, 28, false, false, TEXT_ALIGN_LEFT, msg.color)
                 end
                 }
             )
@@ -206,7 +204,7 @@ local function prepare_sts_page_left()
             table.insert(messages, {
                 bottom_extra_padding = 0,
                 draw = function(top_position)
-                    sasl.gl.drawText(B612MONO_regular, x_left_pos, top_position, msg.text, 28, false, false, TEXT_ALIGN_LEFT, msg.color)
+                    sasl.gl.drawText(Font_AirbusDUL, x_left_pos, top_position, msg.text, 28, false, false, TEXT_ALIGN_LEFT, msg.color)
                 end
                 }
             )
@@ -228,7 +226,7 @@ local function prepare_sts_page_left()
             table.insert(messages, {
                 bottom_extra_padding = 0,
                 draw = function(top_position)
-                    sasl.gl.drawText(B612MONO_regular, x_left_pos, top_position, msg, 28, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+                    sasl.gl.drawText(Font_AirbusDUL, x_left_pos, top_position, msg, 28, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
                 end
                 }
             )
@@ -249,7 +247,7 @@ local function prepare_sts_page_left()
         table.insert(messages, {
             bottom_extra_padding = 5,
             draw = function(top_position)
-                drawUnderlineText(B612MONO_regular, x_left_pos+85, top_position, "CANCELLED CAUTION", 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+                drawUnderlineText(Font_AirbusDUL, x_left_pos+85, top_position, "CANCELLED CAUTION", 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
             end
             }
         )
@@ -258,8 +256,8 @@ local function prepare_sts_page_left()
             table.insert(messages, {
                 bottom_extra_padding = 0,
                 draw = function(top_position)
-                    drawUnderlineText(B612MONO_regular, x_left_pos, top_position, msg.title, 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
-                    sasl.gl.drawText(B612MONO_regular, x_left_pos, top_position, msg.text, 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+                    drawUnderlineText(Font_AirbusDUL, x_left_pos, top_position, msg.title, 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+                    sasl.gl.drawText(Font_AirbusDUL, x_left_pos, top_position, msg.text, 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
                 end
                 }
             )
@@ -300,7 +298,7 @@ local function prepare_sts_page_right()
         table.insert(messages, {
             bottom_extra_padding = 5,
             draw = function(top_position)
-                drawUnderlineText(B612MONO_regular, x_right_title_pos, top_position, "INOP SYS", 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+                drawUnderlineText(Font_AirbusDUL, x_right_title_pos, top_position, "INOP SYS", 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
             end
             }
         )
@@ -309,7 +307,7 @@ local function prepare_sts_page_right()
             table.insert(messages, {
                 bottom_extra_padding = 0,
                 draw = function(top_position)
-                    sasl.gl.drawText(B612MONO_regular, x_right_pos, top_position, msg, 28, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
+                    sasl.gl.drawText(Font_AirbusDUL, x_right_pos, top_position, msg, 28, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
                 end
                 }
             )
@@ -329,7 +327,7 @@ local function prepare_sts_page_right()
         table.insert(messages, {
             bottom_extra_padding = 5,
             draw = function(top_position)
-                drawUnderlineText(B612MONO_regular, x_right_title_pos-20, top_position, "MAINTENANCE", 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+                drawUnderlineText(Font_AirbusDUL, x_right_title_pos-20, top_position, "MAINTENANCE", 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
             end
             }
         )
@@ -338,7 +336,7 @@ local function prepare_sts_page_right()
             table.insert(messages, {
                 bottom_extra_padding = 0,
                 draw = function(top_position)
-                    sasl.gl.drawText(B612MONO_regular, x_right_pos, top_position, msg, 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+                    sasl.gl.drawText(Font_AirbusDUL, x_right_pos, top_position, msg, 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
                 end
                 }
             )
@@ -361,7 +359,7 @@ local function draw_sts_page()
     set(EWD_box_sts, 0)
 
     if ecam_sts:is_normal() then
-        sasl.gl.drawText(B612MONO_regular, x_left_pos, size[2]/2, "NORMAL", 28, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, x_left_pos, size[2]/2, "NORMAL", 28, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
     end
 
     if get(Ecam_arrow_overflow) == 1 then
@@ -384,27 +382,27 @@ function draw()
 
     elseif get(Ecam_current_page) == 2 then --bleed
         --engine avail--
-        sasl.gl.drawText(B612MONO_regular, size[1]/2-310, size[2]/2-200, "1", 28, false, false, TEXT_ALIGN_CENTER, left_eng_avail_cl)
-        sasl.gl.drawText(B612MONO_regular, size[1]/2+310, size[2]/2-200, "2", 28, false, false, TEXT_ALIGN_CENTER, right_eng_avail_cl)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-310, size[2]/2-200, "1", 28, false, false, TEXT_ALIGN_CENTER, left_eng_avail_cl)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+310, size[2]/2-200, "2", 28, false, false, TEXT_ALIGN_CENTER, right_eng_avail_cl)
 
         --bleed temperature & pressure--
-        sasl.gl.drawText(B612MONO_regular, size[1]/2-250, size[2]/2-55, math.floor(get(L_bleed_press)), 28, false, false, TEXT_ALIGN_CENTER, left_bleed_color)
-        sasl.gl.drawText(B612MONO_regular, size[1]/2-250, size[2]/2-90, math.floor(get(L_bleed_temp)), 28, false, false, TEXT_ALIGN_CENTER, left_bleed_color)
-        sasl.gl.drawText(B612MONO_regular, size[1]/2+250, size[2]/2-55, math.floor(get(R_bleed_press)), 28, false, false, TEXT_ALIGN_CENTER, right_bleed_color)
-        sasl.gl.drawText(B612MONO_regular, size[1]/2+250, size[2]/2-90, math.floor(get(R_bleed_temp)), 28, false, false, TEXT_ALIGN_CENTER, right_bleed_color)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-250, size[2]/2-55, math.floor(get(L_bleed_press)), 28, false, false, TEXT_ALIGN_CENTER, left_bleed_color)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-250, size[2]/2-90, math.floor(get(L_bleed_temp)), 28, false, false, TEXT_ALIGN_CENTER, left_bleed_color)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+250, size[2]/2-55, math.floor(get(R_bleed_press)), 28, false, false, TEXT_ALIGN_CENTER, right_bleed_color)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+250, size[2]/2-90, math.floor(get(R_bleed_temp)), 28, false, false, TEXT_ALIGN_CENTER, right_bleed_color)
 
         --compressor temperature--
-        sasl.gl.drawText(B612MONO_regular, size[1]/2-250, size[2]/2+193, math.floor(get(L_compressor_temp)), 28, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-        sasl.gl.drawText(B612MONO_regular, size[1]/2+250, size[2]/2+193, math.floor(get(R_compressor_temp)), 28, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-250, size[2]/2+193, math.floor(get(L_compressor_temp)), 28, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+250, size[2]/2+193, math.floor(get(R_compressor_temp)), 28, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
 
         --pre-cooler temperature--
-        sasl.gl.drawText(B612MONO_regular, size[1]/2-250, size[2]/2+296, math.floor(get(L_pack_temp)), 28, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-        sasl.gl.drawText(B612MONO_regular, size[1]/2+250, size[2]/2+296, math.floor(get(R_pack_temp)), 28, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-250, size[2]/2+296, math.floor(get(L_pack_temp)), 28, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+250, size[2]/2+296, math.floor(get(R_pack_temp)), 28, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
     elseif get(Ecam_current_page) == 3 then --press
         --pressure info
-        sasl.gl.drawText(B612MONO_regular, size[1]/2-225, size[2]/2+150, math.floor(get(Cabin_delta_psi)), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-        sasl.gl.drawText(B612MONO_regular, size[1]/2+30, size[2]/2+180, math.floor(get(Cabin_vs)), 30, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
-        sasl.gl.drawText(B612MONO_regular, size[1]/2+290, size[2]/2+150, math.floor(get(Cabin_alt_ft)), 30, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-225, size[2]/2+150, math.floor(get(Cabin_delta_psi)), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+30, size[2]/2+180, math.floor(get(Cabin_vs)), 30, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+290, size[2]/2+150, math.floor(get(Cabin_alt_ft)), 30, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
     elseif get(Ecam_current_page) == 4 then --elec
         draw_elec_page()
     elseif get(Ecam_current_page) == 5 then --hyd
@@ -414,59 +412,59 @@ function draw()
     elseif get(Ecam_current_page) == 7 then --apu
         --apu gen section--
         if get(Apu_gen_state) == 2 then
-            sasl.gl.drawText(B612MONO_regular, size[1]/2-235, size[2]/2+257, math.floor(get(Apu_gen_load)), 23, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-            sasl.gl.drawText(B612MONO_regular, size[1]/2-235, size[2]/2+224, math.floor(get(Apu_gen_volts)), 23, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-            sasl.gl.drawText(B612MONO_regular, size[1]/2-235, size[2]/2+192, math.floor(get(Apu_gen_hz)), 23, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+            sasl.gl.drawText(Font_AirbusDUL, size[1]/2-235, size[2]/2+257, math.floor(get(Apu_gen_load)), 23, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+            sasl.gl.drawText(Font_AirbusDUL, size[1]/2-235, size[2]/2+224, math.floor(get(Apu_gen_volts)), 23, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+            sasl.gl.drawText(Font_AirbusDUL, size[1]/2-235, size[2]/2+192, math.floor(get(Apu_gen_hz)), 23, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
         end
         --apu bleed--
         if get(Apu_bleed_state) > 0 then
-            sasl.gl.drawText(B612MONO_regular, size[1]/2+270, size[2]/2+186, math.floor(get(Apu_bleed_psi)), 23, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+            sasl.gl.drawText(Font_AirbusDUL, size[1]/2+270, size[2]/2+186, math.floor(get(Apu_bleed_psi)), 23, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
         end
         --needles--
         if get(apu_needle_state) == 1 then
-            sasl.gl.drawText(B612MONO_regular, size[1]/2-180, size[2]/2-60, math.floor(get(Apu_N1)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-            sasl.gl.drawText(B612MONO_regular, size[1]/2-180, size[2]/2-260, math.floor(get(APU_EGT)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+            sasl.gl.drawText(Font_AirbusDUL, size[1]/2-180, size[2]/2-60, math.floor(get(Apu_N1)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+            sasl.gl.drawText(Font_AirbusDUL, size[1]/2-180, size[2]/2-260, math.floor(get(APU_EGT)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
         end
     elseif get(Ecam_current_page) == 8 then --cond
         --cabin--
         --actual temperature
-        sasl.gl.drawText(B612MONO_regular, size[1]/2-212, size[2]/2+210, math.floor(get(Cockpit_temp)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-        sasl.gl.drawText(B612MONO_regular, size[1]/2-13, size[2]/2+210, math.floor(get(Front_cab_temp)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-        sasl.gl.drawText(B612MONO_regular, size[1]/2+172, size[2]/2+210, math.floor(get(Aft_cab_temp)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-212, size[2]/2+210, math.floor(get(Cockpit_temp)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-13, size[2]/2+210, math.floor(get(Front_cab_temp)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+172, size[2]/2+210, math.floor(get(Aft_cab_temp)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
         --requested temperatures
-        sasl.gl.drawText(B612MONO_regular, size[1]/2-212, size[2]/2+170, math.floor(get(Cockpit_temp_req)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-        sasl.gl.drawText(B612MONO_regular, size[1]/2-13, size[2]/2+170, math.floor(get(Front_cab_temp_req)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-        sasl.gl.drawText(B612MONO_regular, size[1]/2+172, size[2]/2+170, math.floor(get(Aft_cab_temp_req)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-212, size[2]/2+170, math.floor(get(Cockpit_temp_req)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-13, size[2]/2+170, math.floor(get(Front_cab_temp_req)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+172, size[2]/2+170, math.floor(get(Aft_cab_temp_req)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
 
         --cargo--
         --actual temperature
-        sasl.gl.drawText(B612MONO_regular, size[1]/2+168, size[2]/2-59, math.floor(get(Aft_cargo_temp)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+168, size[2]/2-59, math.floor(get(Aft_cargo_temp)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
         --requested temperatures
-        sasl.gl.drawText(B612MONO_regular, size[1]/2+168, size[2]/2-92, math.floor(get(Aft_cargo_temp_req)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+168, size[2]/2-92, math.floor(get(Aft_cargo_temp_req)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
     elseif get(Ecam_current_page) == 9 then --door
 
     elseif get(Ecam_current_page) == 10 then --wheel
         --brakes temps--
-        sasl.gl.drawText(B612MONO_regular, size[1]/2-360, size[2]/2-75, math.floor(get(Left_brakes_temp)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-        sasl.gl.drawText(B612MONO_regular, size[1]/2-200, size[2]/2-75, math.floor(get(Left_brakes_temp)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-        sasl.gl.drawText(B612MONO_regular, size[1]/2+200, size[2]/2-75, math.floor(get(Right_brakes_temp)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-        sasl.gl.drawText(B612MONO_regular, size[1]/2+360, size[2]/2-75, math.floor(get(Right_brakes_temp)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-360, size[2]/2-75, math.floor(get(Left_brakes_temp)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-200, size[2]/2-75, math.floor(get(Left_brakes_temp)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+200, size[2]/2-75, math.floor(get(Right_brakes_temp)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+360, size[2]/2-75, math.floor(get(Right_brakes_temp)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
         --tire press
-        sasl.gl.drawText(B612MONO_regular, size[1]/2-360, size[2]/2-165, math.floor(get(Left_tire_psi)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-        sasl.gl.drawText(B612MONO_regular, size[1]/2-200, size[2]/2-165, math.floor(get(Left_tire_psi)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-        sasl.gl.drawText(B612MONO_regular, size[1]/2+200, size[2]/2-165, math.floor(get(Right_tire_psi)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-        sasl.gl.drawText(B612MONO_regular, size[1]/2+360, size[2]/2-165, math.floor(get(Right_tire_psi)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-360, size[2]/2-165, math.floor(get(Left_tire_psi)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-200, size[2]/2-165, math.floor(get(Left_tire_psi)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+200, size[2]/2-165, math.floor(get(Right_tire_psi)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+360, size[2]/2-165, math.floor(get(Right_tire_psi)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
         --brakes indications
-        sasl.gl.drawText(B612MONO_regular, size[1]/2-280, size[2]/2-75, "°C", 26, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
-        sasl.gl.drawText(B612MONO_regular, size[1]/2-280, size[2]/2-120, "REL", 26, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-        sasl.gl.drawText(B612MONO_regular, size[1]/2-280, size[2]/2-165, "PSI", 26, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
-        sasl.gl.drawText(B612MONO_regular, size[1]/2+280, size[2]/2-75, "°C", 26, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
-        sasl.gl.drawText(B612MONO_regular, size[1]/2+280, size[2]/2-120, "REL", 26, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-        sasl.gl.drawText(B612MONO_regular, size[1]/2+280, size[2]/2-165, "PSI", 26, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
-        sasl.gl.drawText(B612MONO_regular, size[1]/2-360, size[2]/2-120, "1", 26, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-        sasl.gl.drawText(B612MONO_regular, size[1]/2-200, size[2]/2-120, "2", 26, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-        sasl.gl.drawText(B612MONO_regular, size[1]/2+200, size[2]/2-120, "3", 26, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-        sasl.gl.drawText(B612MONO_regular, size[1]/2+360, size[2]/2-120, "4", 26, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-280, size[2]/2-75, "°C", 26, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-280, size[2]/2-120, "REL", 26, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-280, size[2]/2-165, "PSI", 26, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+280, size[2]/2-75, "°C", 26, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+280, size[2]/2-120, "REL", 26, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+280, size[2]/2-165, "PSI", 26, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-360, size[2]/2-120, "1", 26, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-200, size[2]/2-120, "2", 26, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+200, size[2]/2-120, "3", 26, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+360, size[2]/2-120, "4", 26, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
 
         --upper arcs
         sasl.gl.drawArc(size[1]/2 - 360, size[2]/2 - 110, 76, 80, 60, 60, left_brake_temp_color)
@@ -491,51 +489,51 @@ function draw()
         set(Ecam_fctl_is_pitch_trim_ok, (is_G_ok or is_Y_ok) and 1 or 0) 
 
         -- rudder
-        sasl.gl.drawText(B612MONO_regular, size[1]/2-29, size[2]/2-165, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
-        sasl.gl.drawText(B612MONO_regular, size[1]/2+2, size[2]/2-165, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
-        sasl.gl.drawText(B612MONO_regular, size[1]/2+31, size[2]/2-165, "Y", 30, false, false, TEXT_ALIGN_CENTER, is_Y_ok and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-29, size[2]/2-165, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+2, size[2]/2-165, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+31, size[2]/2-165, "Y", 30, false, false, TEXT_ALIGN_CENTER, is_Y_ok and ECAM_GREEN or ECAM_ORANGE)
 
         -- spdbrk
-        sasl.gl.drawText(B612MONO_regular, size[1]/2-29, size[2]-47, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
-        sasl.gl.drawText(B612MONO_regular, size[1]/2+2, size[2]-47, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
-        sasl.gl.drawText(B612MONO_regular, size[1]/2+31, size[2]-47, "Y", 30, false, false, TEXT_ALIGN_CENTER, is_Y_ok and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-29, size[2]-47, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+2, size[2]-47, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+31, size[2]-47, "Y", 30, false, false, TEXT_ALIGN_CENTER, is_Y_ok and ECAM_GREEN or ECAM_ORANGE)
 
         -- elevators        
-        sasl.gl.drawText(B612MONO_regular, size[1]/2-265, size[2]/2-190, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
-        sasl.gl.drawText(B612MONO_regular, size[1]/2-234, size[2]/2-190, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-265, size[2]/2-190, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-234, size[2]/2-190, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
 
-        sasl.gl.drawText(B612MONO_regular, size[1]/2+237, size[2]/2-190, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
-        sasl.gl.drawText(B612MONO_regular, size[1]/2+268, size[2]/2-190, "Y", 30, false, false, TEXT_ALIGN_CENTER, is_Y_ok and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+237, size[2]/2-190, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+268, size[2]/2-190, "Y", 30, false, false, TEXT_ALIGN_CENTER, is_Y_ok and ECAM_GREEN or ECAM_ORANGE)
 
         -- pitch trim
-        sasl.gl.drawText(B612MONO_regular, size[1]/2+98, size[2]/2-10, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
-        sasl.gl.drawText(B612MONO_regular, size[1]/2+126, size[2]/2-10, "Y", 30, false, false, TEXT_ALIGN_CENTER, is_Y_ok and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+98, size[2]/2-10, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+126, size[2]/2-10, "Y", 30, false, false, TEXT_ALIGN_CENTER, is_Y_ok and ECAM_GREEN or ECAM_ORANGE)
 
         -- ailerons        
-        sasl.gl.drawText(B612MONO_regular, size[1]/2-265, size[2]/2+45, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
-        sasl.gl.drawText(B612MONO_regular, size[1]/2-234, size[2]/2+45, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-265, size[2]/2+45, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-234, size[2]/2+45, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
 
-        sasl.gl.drawText(B612MONO_regular, size[1]/2+237, size[2]/2+45, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
-        sasl.gl.drawText(B612MONO_regular, size[1]/2+268, size[2]/2+45, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+237, size[2]/2+45, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+268, size[2]/2+45, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
 
 
-        sasl.gl.drawText(B612MONO_regular, size[1]/2-25, size[2]/2-50, tostring(math.floor(math.abs(get(Elev_trim_degrees)))) .. "." ..  tostring(math.floor((math.abs(get(Elev_trim_degrees)) - math.floor(math.abs(get(Elev_trim_degrees)))) * 10)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-25, size[2]/2-50, tostring(math.floor(math.abs(get(Elev_trim_degrees)))) .. "." ..  tostring(math.floor((math.abs(get(Elev_trim_degrees)) - math.floor(math.abs(get(Elev_trim_degrees)))) * 10)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
         if get(Elev_trim_degrees) >= 0 then
-            sasl.gl.drawText(B612MONO_regular, size[1]/2+45, size[2]/2-50, "UP", 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+            sasl.gl.drawText(Font_AirbusDUL, size[1]/2+45, size[2]/2-50, "UP", 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
         else
-            sasl.gl.drawText(B612MONO_regular, size[1]/2+45, size[2]/2-50, "DN", 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+            sasl.gl.drawText(Font_AirbusDUL, size[1]/2+45, size[2]/2-50, "DN", 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
         end
     elseif get(Ecam_current_page) == 12 then --STS
         draw_sts_page()
     elseif get(Ecam_current_page) == 13 then --CRUISE
         --temperatures 
-        sasl.gl.drawText(B612MONO_regular, size[1]/2-330, size[2]/2-250, math.floor(get(Cockpit_temp)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-        sasl.gl.drawText(B612MONO_regular, size[1]/2-190, size[2]/2-250, math.floor(get(Front_cab_temp)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-        sasl.gl.drawText(B612MONO_regular, size[1]/2-70, size[2]/2-250, math.floor(get(Aft_cab_temp)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-330, size[2]/2-250, math.floor(get(Cockpit_temp)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-190, size[2]/2-250, math.floor(get(Front_cab_temp)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-70, size[2]/2-250, math.floor(get(Aft_cab_temp)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
         --cab press
-        sasl.gl.drawText(B612MONO_regular, size[1]/2+10, size[2]/2-105, Round(get(Cabin_delta_psi),1), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-        sasl.gl.drawText(B612MONO_regular, size[1]/2+300, size[2]/2-185, math.floor(get(Cabin_vs)), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-        sasl.gl.drawText(B612MONO_regular, size[1]/2+300, size[2]/2-290, math.floor(get(Cabin_alt_ft)), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+10, size[2]/2-105, Round(get(Cabin_delta_psi),1), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+300, size[2]/2-185, math.floor(get(Cabin_vs)), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+300, size[2]/2-290, math.floor(get(Cabin_alt_ft)), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     end
 
     draw_ecam_lower_section()

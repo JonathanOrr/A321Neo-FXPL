@@ -19,10 +19,6 @@ local a_floor_speed_delta = createGlobalPropertyf("a321neo/cockpit/PFD/a_floor_s
 local stall_speed = createGlobalPropertyf("a321neo/cockpit/PFD/stall_speed", 0, false, true, false) -- stall at 9 degrees AoA
 local stall_speed_delta = createGlobalPropertyf("a321neo/cockpit/PFD/stall_speed_delta", 0, false, true, false)
 
---fonts
-local B612regular = sasl.gl.loadFont("fonts/B612-Regular.ttf")
-local B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
-
 --colors
 local PFD_BLACK = {0.0, 0.0, 0.0}
 local PFD_WHITE = {1.0, 1.0, 1.0}
@@ -168,10 +164,10 @@ function draw()
         sasl.gl.drawWideLine(848, vvi_left_pixel_offset, 900, 442+(vvi_left_pixel_offset-size[2]/2)/2.5, 4, vvi_cl)
         if get(vvi) >= 0 then
             sasl.gl.drawRectangle(850, vvi_left_pixel_offset + 6, 34, 22, PFD_BLACK)
-            sasl.gl.drawText(B612MONO_regular, 852, vvi_left_pixel_offset + 8, vvi_number_display, 23, false, false, TEXT_ALIGN_LEFT, vvi_cl)
+            sasl.gl.drawText(Font_AirbusDUL, 852, vvi_left_pixel_offset + 8, vvi_number_display, 23, false, false, TEXT_ALIGN_LEFT, vvi_cl)
         else
             sasl.gl.drawRectangle(850, vvi_left_pixel_offset - 28, 34, 22, PFD_BLACK)
-            sasl.gl.drawText(B612MONO_regular, 852, vvi_left_pixel_offset - 26, vvi_number_display, 23, false, false, TEXT_ALIGN_LEFT, vvi_cl)
+            sasl.gl.drawText(Font_AirbusDUL, 852, vvi_left_pixel_offset - 26, vvi_number_display, 23, false, false, TEXT_ALIGN_LEFT, vvi_cl)
         end
     end
     

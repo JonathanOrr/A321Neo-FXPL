@@ -3,10 +3,6 @@ size = {900, 900}
 
 include('constants.lua')
 
---fonts
-local B612regular = sasl.gl.loadFont("fonts/B612-Regular.ttf")
-local B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
-
 local match_msg_colors = {}
 match_msg_colors[0] = ECAM_WHITE
 match_msg_colors[1] = ECAM_RED
@@ -27,21 +23,21 @@ end
 
 local function draw_engines()
     --N1--
-    sasl.gl.drawText(B612MONO_regular, size[1]/2-100, size[2]/2+280, tostring(math.floor(get(Eng_1_N1))) .. "." .. tostring(math.floor((get(Eng_1_N1) - math.floor(get(Eng_1_N1))) * 10)), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    sasl.gl.drawText(B612MONO_regular, size[1]/2+250, size[2]/2+280, tostring(math.floor(get(Eng_2_N1))) .. "." .. tostring(math.floor((get(Eng_2_N1) - math.floor(get(Eng_2_N1))) * 10)), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-100, size[2]/2+280, tostring(math.floor(get(Eng_1_N1))) .. "." .. tostring(math.floor((get(Eng_1_N1) - math.floor(get(Eng_1_N1))) * 10)), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+250, size[2]/2+280, tostring(math.floor(get(Eng_2_N1))) .. "." .. tostring(math.floor((get(Eng_2_N1) - math.floor(get(Eng_2_N1))) * 10)), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     --EGT--
-    sasl.gl.drawText(B612MONO_regular, size[1]/2-174, size[2]/2+149, math.floor(get(Eng_1_EGT_c)), 28, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-    sasl.gl.drawText(B612MONO_regular, size[1]/2+174, size[2]/2+149, math.floor(get(Eng_2_EGT_c)), 28, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-174, size[2]/2+149, math.floor(get(Eng_1_EGT_c)), 28, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+174, size[2]/2+149, math.floor(get(Eng_2_EGT_c)), 28, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
     --N2--
     if get(Engine_mode_knob) == 1 or get(Engine_mode_knob) == -1 then
         sasl.gl.drawRectangle(size[1]/2-205, size[2]/2+70, 65, 32, ECAM_GREY)
         sasl.gl.drawRectangle(size[1]/2+135, size[2]/2+70, 65, 32, ECAM_GREY)
     end
-    sasl.gl.drawText(B612MONO_regular, size[1]/2-150, size[2]/2+75, math.floor(get(Eng_1_N2)), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    sasl.gl.drawText(B612MONO_regular, size[1]/2+150, size[2]/2+75, math.floor(get(Eng_2_N2)), 30, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-150, size[2]/2+75, math.floor(get(Eng_1_N2)), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+150, size[2]/2+75, math.floor(get(Eng_2_N2)), 30, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
     --FF--
-    sasl.gl.drawText(B612MONO_regular, size[1]/2-150, size[2]/2+3, math.floor(get(Eng_1_FF_kgm)), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    sasl.gl.drawText(B612MONO_regular, size[1]/2+150, size[2]/2+3, math.floor(get(Eng_2_FF_kgm)), 30, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-150, size[2]/2+3, math.floor(get(Eng_1_FF_kgm)), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+150, size[2]/2+3, math.floor(get(Eng_2_FF_kgm)), 30, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
 
 end
 
@@ -50,15 +46,15 @@ local function draw_left_memo()
 
     for i=0,6 do
         if get(EWD_left_memo_group_colors[i]) > 0 then
-            sasl.gl.drawText(B612MONO_regular, size[1]/2-430, size[2]/2-200-distance*i, get(EWD_left_memo_group[i]), 30, false, false, TEXT_ALIGN_LEFT, match_msg_colors[get(EWD_left_memo_group_colors[i])])
+            sasl.gl.drawText(Font_AirbusDUL, size[1]/2-430, size[2]/2-200-distance*i, get(EWD_left_memo_group[i]), 30, false, false, TEXT_ALIGN_LEFT, match_msg_colors[get(EWD_left_memo_group_colors[i])])
             
             -- Print the underline
-            width, height = sasl.gl.measureText(B612MONO_regular, get(EWD_left_memo_group[i]), 30, false, false)
-            sasl.gl.drawWideLine(size[1]/2-430 + 3, size[2]/2-200-distance*i - 5, size[1]/2-430 + width + 3, size[2]/2-200-distance*i - 5, 5, match_msg_colors[get(EWD_left_memo_group_colors[i])])
+            width, height = sasl.gl.measureText(Font_AirbusDUL, get(EWD_left_memo_group[i]), 30, false, false)
+            sasl.gl.drawWideLine(size[1]/2-430 + 1, size[2]/2-200-distance*i - 5, size[1]/2-430 + width + 2, size[2]/2-200-distance*i - 5, 3, match_msg_colors[get(EWD_left_memo_group_colors[i])])
         end
 
         if get(EWD_left_memo_colors[i]) > 0 then
-            sasl.gl.drawText(B612MONO_regular, size[1]/2-430, size[2]/2-200-distance*i, get(EWD_left_memo[i]), 30, false, false, TEXT_ALIGN_LEFT, match_msg_colors[get(EWD_left_memo_colors[i])])
+            sasl.gl.drawText(Font_AirbusDUL, size[1]/2-430, size[2]/2-200-distance*i, get(EWD_left_memo[i]), 30, false, false, TEXT_ALIGN_LEFT, match_msg_colors[get(EWD_left_memo_colors[i])])
         end
     end
 
@@ -70,9 +66,9 @@ local function draw_right_memo()
     for i=0,6 do
         if get(EWD_right_memo_colors[i]) > 0 then
             if get(EWD_right_memo_colors[i]) ~= 7 or get(TIME) % 2 > 1 then -- If color is COL_INDICATION_BLINKING we blink for 1 second every 2 seconds.
-                sasl.gl.drawText(B612MONO_regular, size[1]/2+140, size[2]/2-200-distance*i, get(EWD_right_memo[i]), 30, false, false, TEXT_ALIGN_LEFT, match_msg_colors[get(EWD_right_memo_colors[i])])
+                sasl.gl.drawText(Font_AirbusDUL, size[1]/2+140, size[2]/2-200-distance*i, get(EWD_right_memo[i]), 30, false, false, TEXT_ALIGN_LEFT, match_msg_colors[get(EWD_right_memo_colors[i])])
             else
-                sasl.gl.drawText(B612MONO_regular, size[1]/2+140, size[2]/2-200-distance*i, get(EWD_right_memo[i]), 30, false, false, TEXT_ALIGN_LEFT, ECAM_HIGH_GREEN)            
+                sasl.gl.drawText(Font_AirbusDUL, size[1]/2+140, size[2]/2-200-distance*i, get(EWD_right_memo[i]), 30, false, false, TEXT_ALIGN_LEFT, ECAM_HIGH_GREEN)            
             end
         end
     end
@@ -82,7 +78,7 @@ local function draw_extras()
 
     -- STS BOX
     if get(EWD_box_sts) == 1 then
-        sasl.gl.drawText(B612MONO_regular, size[1]/2+88, size[2]/2-440, "STS", 30, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)    
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+88, size[2]/2-440, "STS", 30, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)    
         sasl.gl.drawFrame ( size[1]/2+87, size[2]/2-442, 62, 28 , ECAM_WHITE)
     end 
 
@@ -94,7 +90,7 @@ local function draw_extras()
         if math.floor(sasl.getElapsedSeconds(time_blinking)) % 2 == 0 then
             color = ECAM_HIGH_GREY
         end
-        sasl.gl.drawText(B612MONO_regular, size[1]/2+88, size[2]/2-165, "ADV", 30, false, false, TEXT_ALIGN_LEFT, color)    
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+88, size[2]/2-165, "ADV", 30, false, false, TEXT_ALIGN_LEFT, color)    
         sasl.gl.drawFrame ( size[1]/2+87, size[2]/2-167, 62, 28 , color)
     end 
     
