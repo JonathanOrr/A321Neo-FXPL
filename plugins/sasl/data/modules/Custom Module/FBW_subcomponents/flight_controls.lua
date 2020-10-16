@@ -72,12 +72,10 @@ function update()
         total_yaw = get(Yaw) + get(yaw_artstab)
     end
 
-
     if get(Override_control_surfaces) == 1 then
         if get(DELTA_TIME) ~= 0 then
-            Ailerons_control(total_roll, false)
-            Spoilers_control(total_roll, false)
-
+            Ailerons_control(total_roll, false, 0)
+            Spoilers_control(total_roll, get(Speedbrake_handle_ratio), 0, true, Spoilers_var_table)
             Slats_flaps_calc_and_control()
 
             --Pitch inputs

@@ -382,10 +382,6 @@ Roll_rate = globalProperty("sim/flightmodel/position/P")
 Pitch_rate = globalProperty("sim/flightmodel/position/Q")
 Vpath = globalProperty("sim/flightmodel/position/vpath")
 Alpha = globalProperty("sim/flightmodel/position/alpha")
---flaps control
-Flaps_handle_ratio = globalProperty("sim/cockpit2/controls/flap_ratio")
-Flaps_handle_position = createGlobalPropertyf("a321neo/dynamics/surfaces/flaps_handle_position", 0, false, true, false)--0, 1, 2, 3, full
-Flaps_internal_config = createGlobalPropertyf("a321neo/dynamics/surfaces/flaps_internal_config", 0, false, true, false)--0 = clean, 1 = 1, 2 = 1+f, 3 = 2, 4 = 3, 5 = full
 
 --surfaces
 --dev & debuging
@@ -408,17 +404,20 @@ Left_aileron =  globalProperty("sim/flightmodel/controls/wing4l_ail1def") -- -25
 Right_aileron = globalProperty("sim/flightmodel/controls/wing4r_ail1def") -- -25 deg up 25 deg down
 --spoilers
 Speedbrakes_ratio = globalProperty("sim/flightmodel2/controls/speedbrake_ratio")--used to enable the rotation of spoiler 2 & 3 feed the sum of sidestick input & speedbrake handle in
-Left_spoiler_1 =   globalProperty("sim/flightmodel/controls/wing2l_spo1def")
-Left_spoiler_2 =   globalProperty("sim/flightmodel2/wing/speedbrake1_deg[4]")
-Left_spoiler_3 =   globalProperty("sim/flightmodel2/wing/speedbrake2_deg[4]")
-Left_spoiler_4 =   globalProperty("sim/flightmodel/controls/wing3l_spo1def")
-Left_spoiler_5 =   globalProperty("sim/flightmodel/controls/wing3l_spo2def")
+Left_spoiler_1 =  globalProperty("sim/flightmodel/controls/wing2l_spo1def")
+Left_spoiler_2 =  globalProperty("sim/flightmodel2/wing/speedbrake1_deg[4]")
+Left_spoiler_3 =  globalProperty("sim/flightmodel2/wing/speedbrake2_deg[4]")
+Left_spoiler_4 =  globalProperty("sim/flightmodel/controls/wing3l_spo1def")
+Left_spoiler_5 =  globalProperty("sim/flightmodel/controls/wing3l_spo2def")
 Right_spoiler_1 = globalProperty("sim/flightmodel/controls/wing2r_spo1def")
 Right_spoiler_2 = globalProperty("sim/flightmodel2/wing/speedbrake1_deg[5]")
 Right_spoiler_3 = globalProperty("sim/flightmodel2/wing/speedbrake2_deg[5]")
 Right_spoiler_4 = globalProperty("sim/flightmodel/controls/wing3r_spo1def")
 Right_spoiler_5 = globalProperty("sim/flightmodel/controls/wing3r_spo2def")
 --high lift devices
+Flaps_handle_ratio = globalProperty("sim/cockpit2/controls/flap_ratio")
+Flaps_handle_position = createGlobalPropertyf("a321neo/dynamics/surfaces/flaps_handle_position", 0, false, true, false)--0, 1, 2, 3, full
+Flaps_internal_config = createGlobalPropertyf("a321neo/dynamics/surfaces/flaps_internal_config", 0, false, true, false)--0 = clean, 1 = 1, 2 = 1+f, 3 = 2, 4 = 3, 5 = full
 Slats =                globalProperty("sim/flightmodel2/controls/slat1_deploy_ratio") --deploys with flaps 0 = 0, 1 = 0.7, 2 = 0.8, 3 = 0.8, 4 = 1
 Left_outboard_flaps =  globalProperty("sim/flightmodel/controls/wing3l_fla2def") -- flap detents 0 = 0, 1 = 10, 2 = 15, 3 = 20, 4 = 40
 Left_inboard_flaps =   globalProperty("sim/flightmodel/controls/wing2l_fla1def")
