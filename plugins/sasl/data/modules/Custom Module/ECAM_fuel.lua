@@ -17,8 +17,14 @@ end
 local function draw_open_arrow_up(x,y,color)
     sasl.gl.drawWidePolyLine( {x, y, x-10, y-20, x+10, y-20, x, y }, 3, color)
 end
+local function draw_open_arrow_left(x,y,color)
+    sasl.gl.drawWidePolyLine( {x, y, x+20, y+15, x+20, y-15, x, y }, 3, color)
+end
 local function draw_fill_arrow_up(x,y,color)
-    sasl.gl.drawTriangle( x, y, x-10, y-20, x+10, y-20, x, y, color)
+    sasl.gl.drawTriangle( x, y, x-10, y-20, x+10, y-20,color)
+end
+local function draw_fill_arrow_left(x,y,color)
+    sasl.gl.drawTriangle( x, y, x+20, y+15, x+20, y-15, color)
 end
 
 local function draw_tank_qty()
@@ -31,8 +37,8 @@ local function draw_tank_qty()
     
     local c_pump_fail_or_off = true -- TODO
     
-    local act_pump_fail = false -- TODO
-    local rct_pump_fail = true  -- TODO
+    local act_pump_fail = get(FAILURE_FUEL, 7) == 1
+    local rct_pump_fail = get(FAILURE_FUEL, 8) == 1
 
     -- Quantities per tank
     sasl.gl.drawText(Font_AirbusDUL, size[2]/2, size[2]/2, fuel_C, 36, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
@@ -140,10 +146,24 @@ end
 
 local function draw_apu_legend()
     
-    --local apu_text_color = (get(Apu_fuel_valve) == 1 and ) and ECAM_ORANGE or ECAM_WHITE
-    --sasl.gl.drawText(Font_AirbusDUL, size[2]/2-320, size[2]/2+200, "APU", 36, false, false, TEXT_ALIGN_CENTER, apu_color)
+    local apu_text_color = ECAM_WHITE
+    if get(Fire_pb_APU_status) == 1
+       or (get(Apu_fuel_valve) == 1 and get(Apu_master_button_state) % 2 == 0)
+       or (get(Apu_fuel_valve) == 0 and get(Apu_master_button_state) % 2 == 1)  then
+        apu_text_color = ECAM_ORANGE
+    end
+    sasl.gl.drawText(Font_AirbusDUL, size[2]/2-320, size[2]/2+200, "APU", 36, false, false, TEXT_ALIGN_CENTER, apu_text_color)
     
-    --if 
+    if get(Apu_fuel_valve) == 0 and apu_text_color == ECAM_WHITE then
+        draw_open_arrow_left(size[2]/2-280, size[2]/2+212, ECAM_WHITE)
+    elseif get(Apu_fuel_valve) == 1 and apu_text_color == ECAM_WHITE  then
+        draw_open_arrow_left(size[2]/2-280, size[2]/2+212, ECAM_GREEN)
+        sasl.gl.drawWideLine(size[2]/2-260, size[2]/2+212, size[2]/2-220, size[2]/2+212, 3 , ECAM_GREEN)
+    elseif get(Apu_fuel_valve) == 1 then
+        draw_fill_arrow_left(size[2]/2-280, size[2]/2+212, ECAM_ORANGE)
+        sasl.gl.drawWideLine(size[2]/2-260, size[2]/2+212, size[2]/2-220, size[2]/2+212, 3 , ECAM_ORANGE)
+    end
+    
     
 end
 
