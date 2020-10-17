@@ -148,7 +148,7 @@ fuel_window = contextWindow {
   minimumSize = { 800 , 600 };
   maximumSize = { 800 , 600 };
   gravity = { 0 , 1 , 0 , 1 };
-  visible = true ;
+  visible = false ;
   components = {
     fuel_window {position = { 0 , 0 , 800 , 600 }}
   };

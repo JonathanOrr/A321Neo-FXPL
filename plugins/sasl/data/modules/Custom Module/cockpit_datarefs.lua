@@ -158,6 +158,8 @@ Ecam_elec_apu_gen_status = createGlobalPropertyi("a321neo/cockpit/ecam/electrica
 Ecam_elec_tr_ess_status = createGlobalPropertyi("a321neo/cockpit/ecam/electrical/tr_ess_status", 0, false, true, false) -- 0: TR off, 1: TR on, 2: TR failed
 Ecam_elec_rat_status = createGlobalPropertyi("a321neo/cockpit/ecam/electrical/emer_gen_status", 0, false, true, false) -- 0: RAT off, 1: RAT on, 2: RAT failed
 
+Ecam_fuel_usage_1 = createGlobalPropertyi("a321neo/cockpit/ecam/fuel/usage_eng_1", 0, false, true, false)
+Ecam_fuel_usage_2 = createGlobalPropertyi("a321neo/cockpit/ecam/fuel/usage_eng_2", 0, false, true, false)
 
 -- ECAM button lights
 Ecam_btn_light_ENG   = createGlobalPropertyi("a321neo/cockpit/ecam/buttons/light_eng", 0, false, true, false)   --0: OFF, 1: ON
@@ -309,7 +311,6 @@ ISIS_ready   = createGlobalPropertyi("a321neo/cockpit/ISIS/isis_is_ready", 0, fa
 -- Fuel
 Fuel_light_pumps = createGlobalPropertyia("a321neo/cockpit/fuel/buttons/pumps", 8)  -- Array [0]=L1, [1]=L2, [2]=R1, [3]=R2, [4]=C1, [5]=C2, [6]=ACT, [7]=RCT
                                                                             -- 00: no lights, 01: OFF (FWD for ACT and RCT), 10: FAULT, 11: FAULT+OFF (FWD for ACT and RCT)
-
 Fuel_light_mode_sel = createGlobalPropertyi("a321neo/cockpit/fuel/buttons/c_mode_sel", 0, false, true, false)      --00: No lights, 01: [MAN], 10: FAULT, 11 [MAN] + FAULT
 Fuel_light_x_feed   = createGlobalPropertyi("a321neo/cockpit/fuel/buttons/x_feed", 0, false, true, false)      --00: No lights, 01: [ON], 10: OPEN, 11 [ON] + OPEN
 
