@@ -246,7 +246,7 @@ P _gear/1/_lonE -6.0
 P _gear/1/_lonN -6.0
 P _gear/1/_lonR 0.0
 P _gear/1/_scon 83991.070312500
-P _gear/1/_stat_def 1.381937742
+P _gear/1/_stat_def 1.381937981
 P _gear/1/_steerdeg_hispeed 0.0
 P _gear/1/_steerdeg_lospeed 0.0
 P _gear/1/_strut_comp 0.400000006
@@ -280,7 +280,7 @@ P _gear/2/_lonE -6.0
 P _gear/2/_lonN -6.0
 P _gear/2/_lonR 0.0
 P _gear/2/_scon 83991.070312500
-P _gear/2/_stat_def 1.381937742
+P _gear/2/_stat_def 1.381937981
 P _gear/2/_steerdeg_hispeed 0.0
 P _gear/2/_steerdeg_lospeed 0.0
 P _gear/2/_strut_comp 0.400000006
@@ -57060,7 +57060,7 @@ GROUP ECAM lower du
     gen_rotary Pump 1
       POS 3418.000000 831.000000
       IMAGE MIP/ecam lower du/FUEL/pump2
-      DATAREF abc
+      DATAREF a321neo/cockpit/ecam/fuel/valve_L_1
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -57079,7 +57079,7 @@ GROUP ECAM lower du
     gen_rotary Pump 2
       POS 3480.000000 831.000000
       IMAGE MIP/ecam lower du/FUEL/pump2
-      DATAREF abc
+      DATAREF a321neo/cockpit/ecam/fuel/valve_L_2
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -57098,7 +57098,7 @@ GROUP ECAM lower du
     gen_rotary Pump 3
       POS 3574.000000 823.000000
       IMAGE MIP/ecam lower du/FUEL/pump3
-      DATAREF abc
+      DATAREF a321neo/cockpit/ecam/fuel/valve_C_1
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -57117,7 +57117,7 @@ GROUP ECAM lower du
     gen_rotary Pump 4
       POS 3702.000000 823.000000
       IMAGE MIP/ecam lower du/FUEL/pump1
-      DATAREF abc
+      DATAREF a321neo/cockpit/ecam/fuel/valve_C_2
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -57136,7 +57136,7 @@ GROUP ECAM lower du
     gen_rotary Pump 5
       POS 3797.000000 831.000000
       IMAGE MIP/ecam lower du/FUEL/pump2
-      DATAREF abc
+      DATAREF a321neo/cockpit/ecam/fuel/valve_R_1
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -57155,7 +57155,7 @@ GROUP ECAM lower du
     gen_rotary Pump 6
       POS 3858.000000 831.000000
       IMAGE MIP/ecam lower du/FUEL/pump2
-      DATAREF abc
+      DATAREF a321neo/cockpit/ecam/fuel/valve_R_2
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -57174,7 +57174,7 @@ GROUP ECAM lower du
     gen_rotary Left Valve
       POS 3419.000000 1027.000000
       IMAGE MIP/ecam lower du/FUEL/GreenValve
-      DATAREF abc
+      DATAREF a321neo/cockpit/ecam/fuel/valve_ENG_1
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -57193,7 +57193,7 @@ GROUP ECAM lower du
     gen_rotary Left Valve 2
       POS 3859.000000 1026.000000
       IMAGE MIP/ecam lower du/FUEL/GreenValve
-      DATAREF abc
+      DATAREF a321neo/cockpit/ecam/fuel/valve_ENG_2
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -66192,6 +66192,25 @@ gen_rotary ND
   KEY_FRAME 0.000000 0.000000 1.000000
   KEY_FRAME 1.000000 6.000000
   DIGITS 1
+  ROTARY_TYPE NO_CLICK
+  CLICK_RADIUS 10.000000
+  CLICK_RADIUS_DY 0.000000
+  OFFSET 0.000000
+  STEP1 1.000000
+  STEP2 1.000000
+  CURSOR DEFAULT
+  CLICK_DX 0
+  CLICK_DY 0
+
+gen_rotary Crossfeed
+  POS 3639.714355 947.571411
+  IMAGE MIP/ecam lower du/FUEL/crossfeed
+  DATAREF a321neo/cockpit/ecam/fuel/valve_X_BLEED
+  LIGHT_MODE GLASS_AUTO
+  LIGHT_RHEOSTAT 0
+  KEY_FRAME 0.000000 0.000000 1.000000
+  KEY_FRAME 4.000000 4.000000
+  DIGITS 5
   ROTARY_TYPE NO_CLICK
   CLICK_RADIUS 10.000000
   CLICK_RADIUS_DY 0.000000
