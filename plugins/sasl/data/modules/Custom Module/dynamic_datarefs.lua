@@ -445,6 +445,13 @@ Fuel_quantity[1] =   globalProperty("sim/flightmodel/weight/m_fuel[1]")
 Fuel_quantity[2] =   globalProperty("sim/flightmodel/weight/m_fuel[2]")
 Fuel_quantity[3] =   globalProperty("sim/flightmodel/weight/m_fuel[3]")
 Fuel_quantity[4] =   globalProperty("sim/flightmodel/weight/m_fuel[4]")
+Fuel_pump_on = {}
+Fuel_pump_on[0]  = globalProperty("sim/cockpit2/fuel/fuel_tank_pump_on[0]")
+Fuel_pump_on[1]  = globalProperty("sim/cockpit2/fuel/fuel_tank_pump_on[1]")
+Fuel_pump_on[2]  = globalProperty("sim/cockpit2/fuel/fuel_tank_pump_on[2]")
+Fuel_pump_on[3]  = globalProperty("sim/cockpit2/fuel/fuel_tank_pump_on[3]")
+Fuel_pump_on[4]  = globalProperty("sim/cockpit2/fuel/fuel_tank_pump_on[4]")
 
-
+Fuel_tank_selector_eng_1 = globalProperty("sim/cockpit2/fuel/fuel_tank_selector_left")  -- 0=none,1=left,2=center,3=right,4=all
+Fuel_tank_selector_eng_2 = globalProperty("sim/cockpit2/fuel/fuel_tank_selector_right") -- 0=none,1=left,2=center,3=right,4=all
 

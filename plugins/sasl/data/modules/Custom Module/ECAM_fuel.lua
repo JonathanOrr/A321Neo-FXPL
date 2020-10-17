@@ -25,8 +25,8 @@ local function draw_tank_qty()
     local fuel_C  = math.floor(get(Fuel_quantity[FUEL_TANK_C]))
     local fuel_L  = math.floor(get(Fuel_quantity[FUEL_TANK_L]))
     local fuel_R  = math.floor(get(Fuel_quantity[FUEL_TANK_R]))
-    local fuel_ACT= math.floor(get(Fuel_quantity[FUEL_TANK_R]))
-    local fuel_RCT= math.floor(get(Fuel_quantity[FUEL_TANK_R]))
+    local fuel_ACT= math.floor(get(Fuel_quantity[FUEL_TANK_ACT]))
+    local fuel_RCT= math.floor(get(Fuel_quantity[FUEL_TANK_RCT]))
     
     local c_pump_fail_or_off = true -- TODO
     
