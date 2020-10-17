@@ -118,7 +118,7 @@ function update()
 	
 	ecam_update_page()
 	ecam_update_leds()
-	
+	ecam_update_fuel_page()
 end
 
 local function draw_sts_page_left(messages)

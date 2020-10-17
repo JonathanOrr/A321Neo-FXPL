@@ -177,3 +177,46 @@ function draw_fuel_page()
     draw_apu_legend()
     
 end
+
+
+function ecam_update_fuel_page()
+
+    -- L1
+    if not Fuel_sys.tank_pump_and_xfr[1].switch then
+        set(Ecam_fuel_valve_L_1, 1)
+    elseif not Fuel_sys.tank_pump_and_xfr[1].pressure_ok then
+        set(Ecam_fuel_valve_L_1, 2)
+    else
+        set(Ecam_fuel_valve_L_1, 3)
+    end
+
+    -- L2
+    if not Fuel_sys.tank_pump_and_xfr[2].switch then
+        set(Ecam_fuel_valve_L_1, 1)
+    elseif not Fuel_sys.tank_pump_and_xfr[2].pressure_ok then
+        set(Ecam_fuel_valve_L_1, 2)
+    else
+        set(Ecam_fuel_valve_L_1, 3)
+    end
+
+    -- R1
+    if not Fuel_sys.tank_pump_and_xfr[3].switch then
+        set(Ecam_fuel_valve_R_1, 1)
+    elseif not Fuel_sys.tank_pump_and_xfr[3].pressure_ok then
+        set(Ecam_fuel_valve_R_1, 2)
+    else
+        set(Ecam_fuel_valve_R_1, 3)
+    end
+
+    -- R2
+    if not Fuel_sys.tank_pump_and_xfr[4].switch then
+        set(Ecam_fuel_valve_R_2, 1)
+    elseif not Fuel_sys.tank_pump_and_xfr[4].pressure_ok then
+        set(Ecam_fuel_valve_R_2, 2)
+    else
+        set(Ecam_fuel_valve_R_2, 3)
+    end
+
+
+end
+

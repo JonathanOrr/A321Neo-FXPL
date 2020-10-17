@@ -161,6 +161,17 @@ Ecam_elec_rat_status = createGlobalPropertyi("a321neo/cockpit/ecam/electrical/em
 Ecam_fuel_usage_1 = createGlobalPropertyi("a321neo/cockpit/ecam/fuel/usage_eng_1", 0, false, true, false)
 Ecam_fuel_usage_2 = createGlobalPropertyi("a321neo/cockpit/ecam/fuel/usage_eng_2", 0, false, true, false)
 
+Ecam_fuel_valve_L_1 = createGlobalPropertyi("a321neo/cockpit/ecam/fuel/valve_L_1", 0, false, true, false) -- 0: closed OK, 1: closed amber, 2: LO PRESS, 3: open
+Ecam_fuel_valve_L_2 = createGlobalPropertyi("a321neo/cockpit/ecam/fuel/valve_L_2", 0, false, true, false) -- 0: closed OK, 1: closed amber, 2: LO PRESS, 3: open
+Ecam_fuel_valve_R_1 = createGlobalPropertyi("a321neo/cockpit/ecam/fuel/valve_R_1", 0, false, true, false) -- 0: closed OK, 1: closed amber, 2: LO PRESS, 3: open
+Ecam_fuel_valve_R_2 = createGlobalPropertyi("a321neo/cockpit/ecam/fuel/valve_R_2", 0, false, true, false) -- 0: closed OK, 1: closed amber, 2: LO PRESS, 3: open
+Ecam_fuel_valve_C_1 = createGlobalPropertyi("a321neo/cockpit/ecam/fuel/valve_C_1", 0, false, true, false) -- 0: closed GREEN, 1: closed AMBER+ARROW, 2: OPEN GREEN+ARROW
+Ecam_fuel_valve_C_2 = createGlobalPropertyi("a321neo/cockpit/ecam/fuel/valve_C_2", 0, false, true, false) -- 0: closed GREEN, 1: closed AMBER+ARROW, 2: OPEN GREEN+ARROW
+Ecam_fuel_valve_ENG_1   = createGlobalPropertyi("a321neo/cockpit/ecam/fuel/valve_ENG_1", 0, false, true, false) -- 0: closed OK, 1: closed amber, 2: open OK, 3: open amber, 4: transition
+Ecam_fuel_valve_ENG_2   = createGlobalPropertyi("a321neo/cockpit/ecam/fuel/valve_ENG_2", 0, false, true, false) -- 0: closed OK, 1: closed amber, 2: open OK, 3: open amber, 4: transition
+Ecam_fuel_valve_X_BLEED = createGlobalPropertyi("a321neo/cockpit/ecam/fuel/valve_X_BLEED", 0, false, true, false) -- 0: closed OK, 1: closed amber, 2: open OK, 3: open amber, 4: transition
+
+
 -- ECAM button lights
 Ecam_btn_light_ENG   = createGlobalPropertyi("a321neo/cockpit/ecam/buttons/light_eng", 0, false, true, false)   --0: OFF, 1: ON
 Ecam_btn_light_BLEED = createGlobalPropertyi("a321neo/cockpit/ecam/buttons/light_bleed", 0, false, true, false) --0: OFF, 1: ON

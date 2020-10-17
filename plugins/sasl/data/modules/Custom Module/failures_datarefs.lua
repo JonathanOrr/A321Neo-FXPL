@@ -79,4 +79,6 @@ FAILURE_FCTL_LAIL = createGlobalPropertyi("a321neo/failures/fctl/left_aileron", 
 FAILURE_FCTL_RAIL = createGlobalPropertyi("a321neo/failures/fctl/right_aileron", 0, false, true, false)--jam r aileron
 
 FAILURE_FUEL = createGlobalPropertyia("a321neo/failures/fuel/pumps", 8)
+FAILURE_FUEL_X_FEED = createGlobalPropertyi("a321neo/failures/fuel/x_feed_valve", 0, false, true, false)--x feed valve
+
 
