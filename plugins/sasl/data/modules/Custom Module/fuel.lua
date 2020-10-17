@@ -52,6 +52,8 @@ local eng2_fuel_status = 0 -- 0 : no fuel, 1 : gravity left, 2 : gravity right, 
 
 Fuel_sys.tank_pump_and_xfr = tank_pump_and_xfr
 
+set(Fuel_wing_L_temp, get(TAT))
+set(Fuel_wing_R_temp, get(TAT))
 ----------------------------------------------------------------------------------------------------
 -- Commands
 ----------------------------------------------------------------------------------------------------
@@ -102,7 +104,7 @@ local function update_single_pump(x)
         set(Fuel_light_pumps, 0, x)
     elseif not tank_pump_and_xfr[x].switch then
         set(Fuel_light_pumps, 1, x)
-    elseif get(FAILURE_FUEL, x) == 1 then
+    elseif not tank_pump_and_xfr[x].pressure_ok then
         set(Fuel_light_pumps, 10, x)
     else
         set(Fuel_light_pumps, 0, x)
@@ -113,13 +115,13 @@ local function update_single_extra(x)
     if not tank_pump_and_xfr[x].has_elec_pwr then
         set(Fuel_light_pumps, 0, x)
     else
-        set(Fuel_light_pumps, (tank_pump_and_xfr[x].switch and 1 or 0) + (get(FAILURE_FUEL, x) == 1 and 10 or 0), x)
+        set(Fuel_light_pumps, (tank_pump_and_xfr[x].switch and 1 or 0) + (tank_pump_and_xfr[x].pressure_ok and 0 or 10), x)
     end
 end
 
 local function update_lights()
 
-
+    C_tank_fault = get(Fuel_quantity[tank_CENTER]) > 250 and (get(Fuel_quantity[tank_RIGHT]) < 5000 or get(Fuel_quantity[tank_LEFT]) < 5000)
 
     -- Fuel fumps illuminated when off
     update_single_pump(L_TK_PUMP_1)
@@ -166,7 +168,7 @@ local function update_pump_dr()
     if eng2_fuel_status == 4 or eng2_fuel_status == 2 then
         -- Direct feed or gravity feed
         set(Fuel_pump_on[tank_RIGHT], 1)
-        set(Fuel_tank_selector_eng_2, 1)
+        set(Fuel_tank_selector_eng_2, 3)
     elseif eng2_fuel_status == 3 then
         -- Cross feed
         set(Fuel_tank_selector_eng_2, 4)
@@ -223,32 +225,32 @@ local function update_pumps_elec()
 end
 local function update_logic_wing_pumps() 
 
-    if tank_pump_and_xfr[L_TK_PUMP_1].switch and tank_pump_and_xfr[L_TK_PUMP_1].has_elec_pwr then
+    if tank_pump_and_xfr[L_TK_PUMP_1].switch and tank_pump_and_xfr[L_TK_PUMP_1].has_elec_pwr and get(FAILURE_FUEL, L_TK_PUMP_1) == 0 then
         if get(Gen_1_line_active) == 0 then
             ELEC_sys.add_power_consumption(ELEC_BUS_AC_1, 7, 8)   
         end
         tank_pump_and_xfr[L_TK_PUMP_1].status = true
     end
     
-    if tank_pump_and_xfr[L_TK_PUMP_2].switch and tank_pump_and_xfr[L_TK_PUMP_2].has_elec_pwr then
+    if tank_pump_and_xfr[L_TK_PUMP_2].switch and tank_pump_and_xfr[L_TK_PUMP_2].has_elec_pwr and get(FAILURE_FUEL, L_TK_PUMP_2) == 0 then
         ELEC_sys.add_power_consumption(ELEC_BUS_AC_2, 7, 8)     
         tank_pump_and_xfr[L_TK_PUMP_2].status = true
     end
 
-    if tank_pump_and_xfr[R_TK_PUMP_1].switch and tank_pump_and_xfr[R_TK_PUMP_1].has_elec_pwr then
+    if tank_pump_and_xfr[R_TK_PUMP_1].switch and tank_pump_and_xfr[R_TK_PUMP_1].has_elec_pwr and get(FAILURE_FUEL, R_TK_PUMP_1) == 0 then
         if get(Gen_1_line_active) == 0 then
             ELEC_sys.add_power_consumption(ELEC_BUS_AC_1, 7, 8)   
         end
         tank_pump_and_xfr[R_TK_PUMP_1].status = true
     end
     
-    if tank_pump_and_xfr[R_TK_PUMP_2].switch and tank_pump_and_xfr[R_TK_PUMP_2].has_elec_pwr then
+    if tank_pump_and_xfr[R_TK_PUMP_2].switch and tank_pump_and_xfr[R_TK_PUMP_2].has_elec_pwr and get(FAILURE_FUEL, R_TK_PUMP_2) == 0 then
         ELEC_sys.add_power_consumption(ELEC_BUS_AC_2, 7, 8)     
         tank_pump_and_xfr[R_TK_PUMP_2].status = true
     end
     
-    tank_pump_and_xfr[C_TK_XFR_1].status = tank_pump_and_xfr[C_TK_XFR_1].switch and tank_pump_and_xfr[C_TK_XFR_1].has_elec_pwr
-    tank_pump_and_xfr[C_TK_XFR_2].status = tank_pump_and_xfr[C_TK_XFR_2].switch and tank_pump_and_xfr[C_TK_XFR_2].has_elec_pwr
+    tank_pump_and_xfr[C_TK_XFR_1].status = tank_pump_and_xfr[C_TK_XFR_1].switch and tank_pump_and_xfr[C_TK_XFR_1].has_elec_pwr and get(FAILURE_FUEL, C_TK_XFR_1) == 0
+    tank_pump_and_xfr[C_TK_XFR_2].status = tank_pump_and_xfr[C_TK_XFR_2].switch and tank_pump_and_xfr[C_TK_XFR_2].has_elec_pwr and get(FAILURE_FUEL, C_TK_XFR_2) == 0
 
 
 end
@@ -375,6 +377,13 @@ local function update_transfer_fuel()
 
 end
 
+local function update_temps()
+
+    Set_dataref_linear_anim(Fuel_wing_L_temp, get(TAT), -50, 50, 0.1 + (1.0 - get(Fuel_quantity[tank_LEFT])/FUEL_LR_MAX)*0.5 )
+    Set_dataref_linear_anim(Fuel_wing_R_temp, get(TAT), -50, 50, 0.1 + (1.0 - get(Fuel_quantity[tank_RIGHT])/FUEL_LR_MAX)*0.5 )
+
+end
+
 ----------------------------------------------------------------------------------------------------
 -- Functions - Main
 ----------------------------------------------------------------------------------------------------
@@ -391,5 +400,7 @@ function update()
 
     update_lights()
     update_pump_dr()
+    
+    update_temps()
 end
 

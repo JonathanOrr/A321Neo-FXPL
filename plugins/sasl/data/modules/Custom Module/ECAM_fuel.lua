@@ -127,7 +127,7 @@ local function draw_fuel_usage_and_ff()
     if get(Engine_1_master_switch) == 0 and get(Engine_2_master_switch) == 0 then
         sasl.gl.drawText(Font_AirbusDUL, size[2]/2-120, size[2]/2-260, "xx", 36, false, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
     else
-        local total_ff = get(Eng_1_FF_kgm) + get(Eng_2_FF_kgm)
+        local total_ff = math.ceil(get(Eng_1_FF_kgm) + get(Eng_2_FF_kgm))
         sasl.gl.drawText(Font_AirbusDUL, size[2]/2-120, size[2]/2-260, total_ff, 36, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     end
     
@@ -163,7 +163,15 @@ local function draw_apu_legend()
         draw_fill_arrow_left(size[2]/2-280, size[2]/2+212, ECAM_ORANGE)
         sasl.gl.drawWideLine(size[2]/2-260, size[2]/2+212, size[2]/2-220, size[2]/2+212, 3 , ECAM_ORANGE)
     end
-    
+end
+
+local function draw_temps()
+    sasl.gl.drawText(Font_AirbusDUL, size[2]/2-300, size[2]/2-80, math.ceil(get(Fuel_wing_L_temp)), 26, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[2]/2-245, size[2]/2-80, "°C", 26, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+
+    sasl.gl.drawText(Font_AirbusDUL, size[2]/2+300, size[2]/2-80, math.ceil(get(Fuel_wing_R_temp)), 26, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[2]/2+345, size[2]/2-80, "°C", 26, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+
     
 end
 
@@ -175,7 +183,7 @@ function draw_fuel_page()
     draw_fuel_usage_and_ff()
     draw_engine_nr()
     draw_apu_legend()
-    
+    draw_temps()
 end
 
 

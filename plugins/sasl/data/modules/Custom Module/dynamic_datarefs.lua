@@ -455,3 +455,6 @@ Fuel_pump_on[4]  = globalProperty("sim/cockpit2/fuel/fuel_tank_pump_on[4]")
 Fuel_tank_selector_eng_1 = globalProperty("sim/cockpit2/fuel/fuel_tank_selector_left")  -- 0=none,1=left,2=center,3=right,4=all
 Fuel_tank_selector_eng_2 = globalProperty("sim/cockpit2/fuel/fuel_tank_selector_right") -- 0=none,1=left,2=center,3=right,4=all
 
+Fuel_wing_L_temp = createGlobalPropertyf("a321neo/dynamics/fuel/fuel_temp_L", 0, false, true, false) -- Temperature of the fuel LEFT wing
+Fuel_wing_R_temp = createGlobalPropertyf("a321neo/dynamics/fuel/fuel_temp_R", 0, false, true, false) -- Temperature of the fuel RIGHT wing
+
