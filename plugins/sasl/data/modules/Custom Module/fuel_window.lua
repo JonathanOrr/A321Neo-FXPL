@@ -19,12 +19,6 @@ local CENTER= 0
 local ACT   = 3
 local RCT   = 4
 
-local TOT_MAX_FUEL   = 40962
-local LR_MAX_FUEL    = 8449
-local C_MAX_FUEL     = 8941
-local ACT_MAX_FUEL   = 5031
-local RCT_MAX_FUEL   = 10089
-
 local KG_PER_SEC = 15
 
 local image_background     = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/fuel_window/background.png", 0, 0, 493, 586)
@@ -162,11 +156,11 @@ function update_refuel()
     
     remaining_time = math.abs(diff)/KG_PER_SEC
     
-    local tot_valves_open = ((valve_switch_status[LEFT]  and get(Fuel_quantity[LEFT]) <= LR_MAX_FUEL)   and 1 or 0) 
-                          + ((valve_switch_status[RIGHT] and get(Fuel_quantity[RIGHT]) <= LR_MAX_FUEL)  and 1 or 0) 
-                          + ((valve_switch_status[CENTER] and get(Fuel_quantity[CENTER]) <= C_MAX_FUEL) and 1 or 0)
-                          + ((valve_switch_status[ACT] and get(Fuel_quantity[ACT]) <= ACT_MAX_FUEL)     and 1 or 0) 
-                          + ((valve_switch_status[RCT] and get(Fuel_quantity[RCT]) <= RCT_MAX_FUEL)     and 1 or 0)
+    local tot_valves_open = ((valve_switch_status[LEFT]  and get(Fuel_quantity[LEFT]) <= FUEL_LR_MAX)   and 1 or 0) 
+                          + ((valve_switch_status[RIGHT] and get(Fuel_quantity[RIGHT]) <= FUEL_LR_MAX)  and 1 or 0) 
+                          + ((valve_switch_status[CENTER] and get(Fuel_quantity[CENTER]) <= FUEL_C_MAX) and 1 or 0)
+                          + ((valve_switch_status[ACT] and get(Fuel_quantity[ACT]) <= FUEL_ACT_MAX)     and 1 or 0) 
+                          + ((valve_switch_status[RCT] and get(Fuel_quantity[RCT]) <= FUEL_RCT_MAX)     and 1 or 0)
 
     local add = KG_PER_SEC * get(DELTA_TIME) / tot_valves_open * (diff >= 0 and 1 or -1)
     
@@ -176,27 +170,27 @@ function update_refuel()
     
     if valve_switch_status[LEFT] then
         local fuel_curr = get(Fuel_quantity[LEFT])
-        local fuel_next = Math_clamp(fuel_curr + add, 0, LR_MAX_FUEL)
+        local fuel_next = Math_clamp(fuel_curr + add, 0, FUEL_LR_MAX)
         set(Fuel_quantity[LEFT], fuel_next)
     end
     if valve_switch_status[RIGHT] then
         local fuel_curr = get(Fuel_quantity[RIGHT])
-        local fuel_next = Math_clamp(fuel_curr + add, 0, LR_MAX_FUEL)
+        local fuel_next = Math_clamp(fuel_curr + add, 0, FUEL_LR_MAX)
         set(Fuel_quantity[RIGHT], fuel_next)     
     end
     if valve_switch_status[CENTER] then
         local fuel_curr = get(Fuel_quantity[CENTER])
-        local fuel_next = Math_clamp(fuel_curr + add, 0, C_MAX_FUEL)
+        local fuel_next = Math_clamp(fuel_curr + add, 0, FUEL_C_MAX)
         set(Fuel_quantity[CENTER], fuel_next)
     end
     if valve_switch_status[ACT] then
         local fuel_curr = get(Fuel_quantity[ACT])
-        local fuel_next = Math_clamp(fuel_curr + add, 0, ACT_MAX_FUEL)
+        local fuel_next = Math_clamp(fuel_curr + add, 0, FUEL_ACT_MAX)
         set(Fuel_quantity[ACT], fuel_next)
     end
     if valve_switch_status[RCT] then
         local fuel_curr = get(Fuel_quantity[RCT])
-        local fuel_next = Math_clamp(fuel_curr + add, 0, RCT_MAX_FUEL)
+        local fuel_next = Math_clamp(fuel_curr + add, 0, FUEL_RCT_MAX)
         set(Fuel_quantity[RCT], fuel_next)
     end
  
@@ -221,12 +215,12 @@ local function update_auto_mode()
     end
     
     if not defueling then
-        if (get(Fuel_quantity[LEFT]) < LR_MAX_FUEL or get(Fuel_quantity[RIGHT]) < LR_MAX_FUEL) then
+        if (get(Fuel_quantity[LEFT]) < FUEL_LR_MAX or get(Fuel_quantity[RIGHT]) < FUEL_LR_MAX) then
             valve_switch_status[LEFT] = true
             valve_switch_status[RIGHT] = true
-        elseif get(Fuel_quantity[CENTER]) < C_MAX_FUEL then
+        elseif get(Fuel_quantity[CENTER]) < FUEL_C_MAX then
             valve_switch_status[CENTER] = true
-        elseif get(Fuel_quantity[ACT]) < ACT_MAX_FUEL or get(Fuel_quantity[RCT]) < RCT_MAX_FUEL then
+        elseif get(Fuel_quantity[ACT]) < FUEL_ACT_MAX or get(Fuel_quantity[RCT]) < FUEL_RCT_MAX then
             valve_switch_status[ACT] = true
             valve_switch_status[RCT] = true
         end
@@ -256,7 +250,7 @@ end
 
 local function draw_plane_icon()
 
-    left_perc = math.floor(get(Fuel_quantity[LEFT]) / LR_MAX_FUEL * 100)
+    left_perc = math.floor(get(Fuel_quantity[LEFT]) / FUEL_LR_MAX * 100)
     
     sasl.gl.drawText(B612MONO_regular, 582, 160, "LEFT", 14, false, false, TEXT_ALIGN_CENTER, UI_DARK_BLUE)
     sasl.gl.drawRectangle(566, 180, 30, 92/1.75, UI_LIGHT_GREY)
@@ -264,7 +258,7 @@ local function draw_plane_icon()
     sasl.gl.drawRectangle(566, 180, 30, 92/1.75*left_perc/100, UI_DARK_BLUE)
     sasl.gl.drawText(B612MONO_regular, 598, 240, left_perc .. "%", 14, false, false, TEXT_ALIGN_RIGHT, UI_DARK_BLUE)
 
-    right_perc = math.floor(get(Fuel_quantity[RIGHT]) / LR_MAX_FUEL * 100)
+    right_perc = math.floor(get(Fuel_quantity[RIGHT]) / FUEL_LR_MAX * 100)
 
     sasl.gl.drawText(B612MONO_regular, 762, 160, "RIGHT", 14, false, false, TEXT_ALIGN_CENTER, UI_DARK_BLUE)
     sasl.gl.drawRectangle(746, 180, 30, 92/1.75, UI_LIGHT_GREY)
@@ -272,7 +266,7 @@ local function draw_plane_icon()
     sasl.gl.drawRectangle(746, 180, 30, 92/1.75*right_perc/100, UI_DARK_BLUE)
     sasl.gl.drawText(B612MONO_regular, 778, 240, right_perc .. "%", 14, false, false, TEXT_ALIGN_RIGHT, UI_DARK_BLUE)
 
-    c_perc = math.floor(get(Fuel_quantity[CENTER]) / C_MAX_FUEL * 100)
+    c_perc = math.floor(get(Fuel_quantity[CENTER]) / FUEL_C_MAX * 100)
 
     sasl.gl.drawText(B612MONO_regular, 672, 190, "CTR", 14, false, false, TEXT_ALIGN_CENTER, UI_DARK_BLUE)
     sasl.gl.drawRectangle(656, 205, 30, 64/1.75, UI_DARK_GREY)
@@ -280,7 +274,7 @@ local function draw_plane_icon()
     sasl.gl.drawRectangle(656, 205, 30, 64/1.75*c_perc/100, UI_DARK_BLUE)
     sasl.gl.drawText(B612MONO_regular, 688, 245, c_perc .. "%", 14, false, false, TEXT_ALIGN_RIGHT, UI_DARK_BLUE)
     
-    act_perc = math.floor(get(Fuel_quantity[ACT]) / ACT_MAX_FUEL * 100)
+    act_perc = math.floor(get(Fuel_quantity[ACT]) / FUEL_ACT_MAX * 100)
     
     sasl.gl.drawText(B612MONO_regular, 672, 275, "ACT", 14, false, false, TEXT_ALIGN_CENTER, UI_DARK_BLUE)
     sasl.gl.drawRectangle(656, 290, 30, 50/1.75, UI_LIGHT_GREY)
@@ -288,7 +282,7 @@ local function draw_plane_icon()
     sasl.gl.drawRectangle(656, 290, 30, 50/1.75*act_perc/100, UI_DARK_BLUE)
     sasl.gl.drawText(B612MONO_regular, 688, 324, act_perc .. "%", 14, false, false, TEXT_ALIGN_RIGHT, UI_DARK_BLUE)
 
-    rct_perc = math.floor(get(Fuel_quantity[RCT]) / RCT_MAX_FUEL * 100)
+    rct_perc = math.floor(get(Fuel_quantity[RCT]) / FUEL_RCT_MAX * 100)
 
     sasl.gl.drawText(B612MONO_regular, 672, 85, "RCT", 14, false, false, TEXT_ALIGN_CENTER, UI_DARK_BLUE)
     sasl.gl.drawRectangle(656, 100, 30, 100/1.75, UI_LIGHT_GREY)

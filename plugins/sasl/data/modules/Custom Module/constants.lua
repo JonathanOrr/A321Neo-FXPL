@@ -49,6 +49,14 @@ PHASE_TOUCHDOWN      = 8
 PHASE_BELOW_80_KTS   = 9 
 PHASE_2ND_ENG_OFF    = 10
 
+-- FUEL
+
+FUEL_TOT_MAX   = 40962
+FUEL_LR_MAX    = 8449
+FUEL_C_MAX     = 8941
+FUEL_ACT_MAX   = 5031
+FUEL_RCT_MAX   = 10089
+
 -- Fonts
 Font_AirbusDUL = sasl.gl.loadFont("fonts/AirbusDULiberationMono.ttf")
 sasl.gl.setFontRenderMode(Font_AirbusDUL, TEXT_RENDER_FORCED_MONO, 0.6)
