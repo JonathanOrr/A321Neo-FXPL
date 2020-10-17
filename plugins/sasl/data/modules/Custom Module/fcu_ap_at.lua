@@ -18,9 +18,6 @@ local efis_nav2_voradf = globalProperty("sim/cockpit2/EFIS/EFIS_2_selection_pilo
 local efis_range = globalProperty("sim/cockpit2/EFIS/map_range")
 local L_sim_throttle = globalProperty("sim/cockpit2/engine/actuators/throttle_jet_rev_ratio[0]")
 local R_sim_throttle = globalProperty("sim/cockpit2/engine/actuators/throttle_jet_rev_ratio[1]")
-local front_gear_on_ground = globalProperty("sim/flightmodel2/gear/on_ground[0]")
-local left_gear_on_ground = globalProperty("sim/flightmodel2/gear/on_ground[1]")
-local right_gear_on_ground = globalProperty("sim/flightmodel2/gear/on_ground[2]")
 local auto_throttle_on = globalProperty("sim/cockpit2/autopilot/autothrottle_on")
 local reverse_L_deployed = globalProperty("sim/cockpit2/annunciators/reverser_on[0]")
 local reverse_R_deployed = globalProperty("sim/cockpit2/annunciators/reverser_on[1]")
@@ -222,13 +219,7 @@ function update()
     set(efis_range, Math_clamp(get(efis_range), 1 , 6))
     set(a321neo_efis_mode, Math_clamp(get(a321neo_efis_mode), 0, 4))
 
-    set(Aft_wheel_on_ground, math.floor((get(left_gear_on_ground) + get(right_gear_on_ground))/2))
-    set(All_on_ground, math.floor((get(front_gear_on_ground) + get(left_gear_on_ground) + get(right_gear_on_ground))/3))
-    if get(front_gear_on_ground) == 1 or get(left_gear_on_ground) == 1 or get(right_gear_on_ground) == 1 then
-        set(Any_wheel_on_ground, 1)
-    else
-        set(Any_wheel_on_ground, 0)
-    end
+    
     
     --customize efis modes
     if get(a321neo_efis_mode) == 0 then

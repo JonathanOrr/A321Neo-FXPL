@@ -212,7 +212,7 @@ P _gear/0/_lonE 6.0
 P _gear/0/_lonN 6.0
 P _gear/0/_lonR 99.0
 P _gear/0/_scon 52322.308593750
-P _gear/0/_stat_def 0.378928870
+P _gear/0/_stat_def 0.378928840
 P _gear/0/_steerdeg_hispeed 5.0
 P _gear/0/_steerdeg_lospeed 75.0
 P _gear/0/_strut_comp 0.899999976
@@ -246,7 +246,7 @@ P _gear/1/_lonE -6.0
 P _gear/1/_lonN -6.0
 P _gear/1/_lonR 0.0
 P _gear/1/_scon 83991.070312500
-P _gear/1/_stat_def 1.381937861
+P _gear/1/_stat_def 1.381937742
 P _gear/1/_steerdeg_hispeed 0.0
 P _gear/1/_steerdeg_lospeed 0.0
 P _gear/1/_strut_comp 0.400000006
@@ -280,7 +280,7 @@ P _gear/2/_lonE -6.0
 P _gear/2/_lonN -6.0
 P _gear/2/_lonR 0.0
 P _gear/2/_scon 83991.070312500
-P _gear/2/_stat_def 1.381937861
+P _gear/2/_stat_def 1.381937742
 P _gear/2/_steerdeg_hispeed 0.0
 P _gear/2/_steerdeg_lospeed 0.0
 P _gear/2/_strut_comp 0.400000006
@@ -53388,32 +53388,6 @@ rad_CDU739_2d MCDU
   KEY_FRAME 0.000000 0.000000 1.000000
   KEY_FRAME 1.000000 1.000000
 
-GROUP MFD
-  LOCKED
-  EFIS_map_s_HM map_s_HM.png
-    POS 229.000000 345.000000
-    DATAREF 
-    LOCKED
-    LIGHT_MODE MECHANICAL
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 1.000000
-
-  GROUP efis gs
-    SHOW_EQUAL 0.000000 a321neo/cockpit/efis/map_mode
-    LOCKED
-    GROUP_OPEN
-    EFIS_glideslope el_glideslope.png
-      POS 402.500000 345.500000
-      DATAREF 
-      LOCKED
-      LIGHT_MODE MECHANICAL
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 1.000000 1.000000
-
-  END_GROUP
-END_GROUP
 rad_transponder_HM1 transponder_HM.png
   POS 564.000000 1287.000000
   DATAREF 
@@ -62415,6 +62389,7 @@ GROUP Isis
 END_GROUP
 GROUP Radio
   LOCKED
+  GROUP_OPEN
   gen_rotary VHF
     POS 2152.000000 1393.000000
     IMAGE MIP/radio/VHF
@@ -66241,4 +66216,23 @@ GROUP Screen Covers
     CLICK_DY 0
 
 END_GROUP
+gen_rotary ND
+  POS 470.000000 2300.000000
+  IMAGE MIP/nd/bgd
+  DATAREF 
+  LIGHT_MODE GLASS_AUTO
+  LIGHT_RHEOSTAT 0
+  KEY_FRAME 0.000000 0.000000 1.000000
+  KEY_FRAME 1.000000 6.000000
+  DIGITS 1
+  ROTARY_TYPE NO_CLICK
+  CLICK_RADIUS 10.000000
+  CLICK_RADIUS_DY 0.000000
+  OFFSET 0.000000
+  STEP1 1.000000
+  STEP2 1.000000
+  CURSOR DEFAULT
+  CLICK_DX 0
+  CLICK_DY 0
+
 PANEL_3D_END

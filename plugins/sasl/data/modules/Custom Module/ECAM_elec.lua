@@ -28,8 +28,6 @@ local GEN_ENGINE_APU_CURR   = 261    -- Maximum current provided by the APU gen 
 
 local UPDATE_PERIOD = 0.5
 
-local B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
-
 local loads = {
     gen = {}
 }
@@ -113,19 +111,19 @@ local function draw_battery(i, x)
     local bat_1_status = (ELEC_sys.batteries[i].curr_voltage < 25 or ELEC_sys.batteries[i].curr_voltage > 31 or
                          curr_amps > 5 or failed_bat) and ELEC_sys.batteries[i].switch_status
 
-    sasl.gl.drawText(B612MONO_regular, x, size[2]/2+395, "BAT " .. i, 26, false, false, 
+    sasl.gl.drawText(Font_AirbusDUL, x, size[2]/2+395, "BAT " .. i, 26, false, false, 
                      TEXT_ALIGN_LEFT, bat_1_status and ECAM_ORANGE or ECAM_WHITE)
                      
     if ELEC_sys.batteries[i].switch_status then
-        sasl.gl.drawText(B612MONO_regular, x+65, size[2]/2+360, "V", 26, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
-        sasl.gl.drawText(B612MONO_regular, x+65, size[2]/2+330, "A", 26, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+        sasl.gl.drawText(Font_AirbusDUL, x+65, size[2]/2+360, "V", 26, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+        sasl.gl.drawText(Font_AirbusDUL, x+65, size[2]/2+330, "A", 26, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
 
-        sasl.gl.drawText(B612MONO_regular, x+60, size[2]/2+360, 
+        sasl.gl.drawText(Font_AirbusDUL, x+60, size[2]/2+360, 
                          math.floor(ELEC_sys.batteries[i].curr_voltage+0.5), 26, false, false,
                          TEXT_ALIGN_RIGHT,
                          (ELEC_sys.batteries[i].curr_voltage < 25 or ELEC_sys.batteries[i].curr_voltage > 31)
                          and ECAM_ORANGE or ECAM_GREEN)
-        sasl.gl.drawText(B612MONO_regular, x+60, size[2]/2+330,
+        sasl.gl.drawText(Font_AirbusDUL, x+60, size[2]/2+330,
                          -math.floor(curr_amps+0.5), 26, false, false, 
                          TEXT_ALIGN_RIGHT,
                          curr_amps < -5 and ECAM_ORANGE or ECAM_GREEN)
@@ -137,15 +135,15 @@ end
 local function draw_tr(i, x)
     local failed_tr = ELEC_sys.trs[i].curr_voltage < 25 or ELEC_sys.trs[i].curr_voltage > 31 or ELEC_sys.trs[i].curr_out_amps <= 5
     
-    sasl.gl.drawText(B612MONO_regular, x+20, size[2]/2+170, "TR " .. i, 26, false, false, 
+    sasl.gl.drawText(Font_AirbusDUL, x+20, size[2]/2+170, "TR " .. i, 26, false, false, 
                      TEXT_ALIGN_LEFT, failed_tr and ECAM_ORANGE or ECAM_WHITE)
     
-    sasl.gl.drawText(B612MONO_regular, x+60, size[2]/2+132, 
+    sasl.gl.drawText(Font_AirbusDUL, x+60, size[2]/2+132, 
                      math.floor(ELEC_sys.trs[i].curr_voltage+0.5), 28, false, false,
                      TEXT_ALIGN_RIGHT,
                      (ELEC_sys.trs[i].curr_voltage < 25 or ELEC_sys.trs[i].curr_voltage > 31)
                      and ECAM_ORANGE or ECAM_GREEN)
-    sasl.gl.drawText(B612MONO_regular, x+60, size[2]/2+100,
+    sasl.gl.drawText(Font_AirbusDUL, x+60, size[2]/2+100,
                      math.floor(ELEC_sys.trs[i].curr_out_amps+0.5), 28, false, false, 
                      TEXT_ALIGN_RIGHT,
                      ELEC_sys.trs[i].curr_out_amps <= 5 and ECAM_ORANGE or ECAM_GREEN)
@@ -165,12 +163,12 @@ local function draw_ess_tr()
         return -- Nothing to draw it's hidden
     end
     
-    sasl.gl.drawText(B612MONO_regular, 400, size[2]/2+125, 
+    sasl.gl.drawText(Font_AirbusDUL, 400, size[2]/2+125, 
                      math.floor(ELEC_sys.trs[3].curr_voltage+0.5), 28, false, false,
                      TEXT_ALIGN_RIGHT,
                      (ELEC_sys.trs[3].curr_voltage < 25 or ELEC_sys.trs[3].curr_voltage > 31)
                      and ECAM_ORANGE or ECAM_GREEN)
-    sasl.gl.drawText(B612MONO_regular, 400, size[2]/2+95,
+    sasl.gl.drawText(Font_AirbusDUL, 400, size[2]/2+95,
                      math.floor(ELEC_sys.trs[3].curr_out_amps+0.5), 28, false, false, 
                      TEXT_ALIGN_RIGHT,
                      ELEC_sys.trs[3].curr_out_amps <= 5 and ECAM_ORANGE or ECAM_GREEN)
@@ -185,19 +183,19 @@ local function draw_apu_gen()
         return  -- Nothing to do
     end
 
-    sasl.gl.drawText(B612MONO_regular, 335, size[2]/2-182, 
+    sasl.gl.drawText(Font_AirbusDUL, 335, size[2]/2-182, 
                      loads.gen[3], 28, false, false,
                      TEXT_ALIGN_RIGHT,
                      (-ELEC_sys.generators[3].curr_amps > GEN_ENGINE_APU_CURR)
                      and ECAM_ORANGE or ECAM_GREEN)
     
-    sasl.gl.drawText(B612MONO_regular, 335, size[2]/2-215, 
+    sasl.gl.drawText(Font_AirbusDUL, 335, size[2]/2-215, 
                      math.floor(ELEC_sys.generators[3].curr_voltage+0.5), 28, false, false,
                      TEXT_ALIGN_RIGHT,
                      (ELEC_sys.generators[3].curr_voltage < 110 or ELEC_sys.generators[3].curr_voltage > 120)
                      and ECAM_ORANGE or ECAM_GREEN)
 
-    sasl.gl.drawText(B612MONO_regular, 335, size[2]/2-246, 
+    sasl.gl.drawText(Font_AirbusDUL, 335, size[2]/2-246, 
                      math.floor(ELEC_sys.generators[3].curr_hz+0.5), 28, false, false,
                      TEXT_ALIGN_RIGHT,
                      (ELEC_sys.generators[3].curr_hz < 390 or ELEC_sys.generators[3].curr_hz > 410)
@@ -249,24 +247,24 @@ local function draw_gen(x, i)
         color_eng_num = ECAM_WHITE
     end
     
-    sasl.gl.drawText(B612MONO_regular, x, size[2]/2-112, i, 26, false, false, TEXT_ALIGN_LEFT, color_eng_num)
+    sasl.gl.drawText(Font_AirbusDUL, x, size[2]/2-112, i, 26, false, false, TEXT_ALIGN_LEFT, color_eng_num)
     
     if get(ELEC_sys.generators[i].drs.pwr)==0 then
         return  -- Nothing to do
     end
 
-    sasl.gl.drawText(B612MONO_regular, x-12, size[2]/2-145, 
+    sasl.gl.drawText(Font_AirbusDUL, x-12, size[2]/2-145, 
                      loads.gen[i], 28, false, false,
                      TEXT_ALIGN_RIGHT,
                      (-ELEC_sys.generators[i].curr_amps > GEN_ENGINE_RATED_CURR)
                      and ECAM_ORANGE or ECAM_GREEN)
-   sasl.gl.drawText(B612MONO_regular, x-12, size[2]/2-175, 
+   sasl.gl.drawText(Font_AirbusDUL, x-12, size[2]/2-175, 
                      math.floor(ELEC_sys.generators[i].curr_voltage+0.5), 28, false, false,
                      TEXT_ALIGN_RIGHT,
                      (ELEC_sys.generators[i].curr_voltage < 110 or ELEC_sys.generators[i].curr_voltage > 120)
                      and ECAM_ORANGE or ECAM_GREEN)
 
-    sasl.gl.drawText(B612MONO_regular, x-12, size[2]/2-208, 
+    sasl.gl.drawText(Font_AirbusDUL, x-12, size[2]/2-208, 
                      math.floor(ELEC_sys.generators[i].curr_hz+0.5), 28, false, false,
                      TEXT_ALIGN_RIGHT,
                      (ELEC_sys.generators[i].curr_hz < 390 or ELEC_sys.generators[i].curr_hz > 410)
@@ -281,13 +279,13 @@ local function draw_stat_inv()
         return  -- Nothing to do
     end
     
-    sasl.gl.drawText(B612MONO_regular, 608, size[2]/2-116, 
+    sasl.gl.drawText(Font_AirbusDUL, 608, size[2]/2-116, 
                      math.floor(ELEC_sys.stat_inv.curr_voltage+0.5), 28, false, false,
                      TEXT_ALIGN_RIGHT,
                      (ELEC_sys.stat_inv.curr_voltage < 110 or ELEC_sys.stat_inv.curr_voltage > 120)
                      and ECAM_ORANGE or ECAM_GREEN)
 
-    sasl.gl.drawText(B612MONO_regular, 608, size[2]/2-149, 
+    sasl.gl.drawText(Font_AirbusDUL, 608, size[2]/2-149, 
                      math.floor(ELEC_sys.stat_inv.curr_hz+0.5), 28, false, false,
                      TEXT_ALIGN_RIGHT,
                      (ELEC_sys.stat_inv.curr_hz < 390 or ELEC_sys.stat_inv.curr_hz > 410)
@@ -303,13 +301,13 @@ local function draw_emer_gen()
         return  -- Nothing to do
     end
     
-    sasl.gl.drawText(B612MONO_regular, 585, size[2]/2+125, 
+    sasl.gl.drawText(Font_AirbusDUL, 585, size[2]/2+125, 
                      math.floor(ELEC_sys.generators[5].curr_voltage+0.5), 28, false, false,
                      TEXT_ALIGN_RIGHT,
                      (ELEC_sys.generators[5].curr_voltage < 110 or ELEC_sys.generators[5].curr_voltage > 120)
                      and ECAM_ORANGE or ECAM_GREEN)
 
-    sasl.gl.drawText(B612MONO_regular, 585, size[2]/2+95, 
+    sasl.gl.drawText(Font_AirbusDUL, 585, size[2]/2+95, 
                      math.floor(ELEC_sys.generators[5].curr_hz+0.5), 28, false, false,
                      TEXT_ALIGN_RIGHT,
                      (ELEC_sys.generators[5].curr_hz < 390 or ELEC_sys.generators[5].curr_hz > 410)
@@ -322,13 +320,13 @@ local function draw_ext_pwr()
         return  -- Nothing to do
     end
     
-    sasl.gl.drawText(B612MONO_regular, 585, size[2]/2-218, 
+    sasl.gl.drawText(Font_AirbusDUL, 585, size[2]/2-218, 
                      math.floor(ELEC_sys.generators[4].curr_voltage+0.5), 28, false, false,
                      TEXT_ALIGN_RIGHT,
                      (ELEC_sys.generators[GEN_EXT].curr_voltage < 110 or ELEC_sys.generators[GEN_EXT].curr_voltage > 120)
                      and ECAM_ORANGE or ECAM_GREEN)
 
-    sasl.gl.drawText(B612MONO_regular, 585, size[2]/2-248, 
+    sasl.gl.drawText(Font_AirbusDUL, 585, size[2]/2-248, 
                      math.floor(ELEC_sys.generators[GEN_EXT].curr_hz+0.5), 28, false, false,
                      TEXT_ALIGN_RIGHT,
                      (ELEC_sys.generators[GEN_EXT].curr_hz < 390 or ELEC_sys.generators[GEN_EXT].curr_hz > 410)
@@ -388,12 +386,12 @@ end
 local function draw_shed_legends()
 
     if get(DC_shed_ess_pwrd) == 0 then
-        sasl.gl.drawText(B612MONO_regular, 450, size[2]/2+213,
+        sasl.gl.drawText(Font_AirbusDUL, 450, size[2]/2+213,
                          "SHED", 24, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE )
     
     end
     if get(AC_ess_shed_pwrd) == 0 then
-        sasl.gl.drawText(B612MONO_regular, 450, size[2]/2-28, 
+        sasl.gl.drawText(Font_AirbusDUL, 450, size[2]/2-28, 
                          "SHED", 24, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE )
     end
     
@@ -415,17 +413,17 @@ local function draw_idg_legends(i,x)
 
     local IDG_color = (ELEC_sys.generators[i].idg_status or get(ELEC_sys.generators[i].drs.idg_fail_2) == 1 or
     get(ELEC_sys.generators[i].drs.idg_fail_1) == 1) and ECAM_WHITE or ECAM_ORANGE
-    sasl.gl.drawText(B612MONO_regular, x, size[2]/2-260, "IDG" .. i, 26, false, false, TEXT_ALIGN_LEFT, IDG_color )
+    sasl.gl.drawText(Font_AirbusDUL, x, size[2]/2-260, "IDG" .. i, 26, false, false, TEXT_ALIGN_LEFT, IDG_color )
 
 
     
     if not ELEC_sys.generators[i].idg_status then
-        sasl.gl.drawText(B612MONO_regular, x, size[2]/2-300, "DISC", 26, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE )
+        sasl.gl.drawText(Font_AirbusDUL, x, size[2]/2-300, "DISC", 26, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE )
     elseif get(ELEC_sys.generators[i].drs.idg_fail_2) == 1 then
-        sasl.gl.drawText(B612MONO_regular, x, size[2]/2-300, "LO PR", 26, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, x, size[2]/2-300, "LO PR", 26, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
     end
 
-    sasl.gl.drawText(B612MONO_regular, x+150-200*(i==2 and 1 or 0), 
+    sasl.gl.drawText(Font_AirbusDUL, x+150-200*(i==2 and 1 or 0), 
     size[2]/2-260, "°C", 26, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
 
     local temp_color = ECAM_GREEN
@@ -437,7 +435,7 @@ local function draw_idg_legends(i,x)
             temp_color = ECAM_HIGH_GREEN
         end
     end
-    sasl.gl.drawText(B612MONO_regular, x+150-200*(i==2 and 1 or 0), 
+    sasl.gl.drawText(Font_AirbusDUL, x+150-200*(i==2 and 1 or 0), 
     size[2]/2-260, math.floor(temp_value), 26, false, false, TEXT_ALIGN_RIGHT, temp_color)
 
 
@@ -471,8 +469,8 @@ function draw_elec_page()
     draw_idg_legends(2,790)
     
     if ovveride_ELEC_always_on then
-        sasl.gl.drawText(B612MONO_regular, size[2]/2, size[2]/2+50, "OVERRIDE MODE", 80, false, false, TEXT_ALIGN_CENTER, ECAM_MAGENTA )
-        sasl.gl.drawText(B612MONO_regular, size[2]/2, size[2]/2-100, "INCORRECT INFO", 80, false, false, TEXT_ALIGN_CENTER, ECAM_MAGENTA )
+        sasl.gl.drawText(Font_AirbusDUL, size[2]/2, size[2]/2+50, "OVERRIDE MODE", 80, false, false, TEXT_ALIGN_CENTER, ECAM_MAGENTA )
+        sasl.gl.drawText(Font_AirbusDUL, size[2]/2, size[2]/2-100, "INCORRECT INFO", 80, false, false, TEXT_ALIGN_CENTER, ECAM_MAGENTA )
     end
     
 end

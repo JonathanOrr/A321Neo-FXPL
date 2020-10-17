@@ -1,8 +1,13 @@
---sim dataref
+--variables
 local left_brakes_temp_no_delay = 10
 local right_brakes_temp_no_delay = 10
 local left_tire_psi_no_delay = 210
 local right_tire_psi_no_delay = 210
+
+--sim dataref
+local front_gear_on_ground = globalProperty("sim/flightmodel2/gear/on_ground[0]")
+local left_gear_on_ground = globalProperty("sim/flightmodel2/gear/on_ground[1]")
+local right_gear_on_ground = globalProperty("sim/flightmodel2/gear/on_ground[2]")
 
 --a32nx dataref
 local groundspeed_kts = createGlobalPropertyf("a321neo/dynamics/groundspeed_kts", 0, false, true, false) --ground speed in kts
@@ -56,6 +61,15 @@ sasl.registerCommandHandler (Toggle_max_autobrake, 0, function(phase)
 end)
 
 function update()
+	--gear satus
+	set(Aft_wheel_on_ground, math.floor((get(left_gear_on_ground) + get(right_gear_on_ground))/2))
+    set(All_on_ground, math.floor((get(front_gear_on_ground) + get(left_gear_on_ground) + get(right_gear_on_ground))/3))
+    if get(front_gear_on_ground) == 1 or get(left_gear_on_ground) == 1 or get(right_gear_on_ground) == 1 then
+        set(Any_wheel_on_ground, 1)
+    else
+        set(Any_wheel_on_ground, 0)
+    end
+
 	--update Brake fan button states follwing 00, 01, 10, 11
 	if get(Brakes_fan) == 0 then
 		if (get(Left_brakes_temp) + get(Right_brakes_temp)) / 2 < 400 then

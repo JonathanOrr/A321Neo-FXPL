@@ -82,8 +82,10 @@ local failures_data = {
     {
         group="F/CTL",
         failures={
-            {name="SFCC 1\nFAILURE", status=false, dataref=FAILURE_SFCC_1 },
-            {name="SFCC 2\nFAILURE", status=false, dataref=FAILURE_SFCC_2 },
+            {name="SFCC 1\nFAILURE", status=false, dataref=FAILURE_FCTL_SFCC_1 },
+            {name="SFCC 2\nFAILURE", status=false, dataref=FAILURE_FCTL_SFCC_2 },
+            {name="L AILERON\nSTUCK", status=false, dataref=FAILURE_FCTL_LAIL },
+            {name="R AILERON\nSTUCK", status=false, dataref=FAILURE_FCTL_RAIL },
         }
     },
     {
