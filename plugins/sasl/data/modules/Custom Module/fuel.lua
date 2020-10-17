@@ -18,6 +18,13 @@ local C_TK_XFR_2   = 6
 local ACT_TK_XFR = 7
 local RCT_TK_XFR = 8
 
+-- Tanks
+local tank_LEFT  = 1
+local tank_RIGHT = 2
+local tank_CENTER= 0
+local tank_ACT   = 3
+local tank_RCT   = 4
+
 ----------------------------------------------------------------------------------------------------
 -- Global/Local variables
 ----------------------------------------------------------------------------------------------------
@@ -90,4 +97,20 @@ end
 function update()
     update_lights()
 end
+
+-- This function tells you if ACT or RCT (and which one) is going to transf to the CTR tank
+-- depending on the fuel quantity. This has been programmed similar to how ACTs logic works
+local function next_aux_fuel_tank()
+    if fuel_percentage(tank_ACT) > 50 then
+        return ACT
+    if fuel_percentage(tank_RCT) > 75 then
+        return RCT
+    if fuel_percentage(tank_ACT) > 0 then
+        return ACT
+    if fuel_percentage(tank_RCT) > 0 then
+        return RCT
+    return nil
+end
+
+
 

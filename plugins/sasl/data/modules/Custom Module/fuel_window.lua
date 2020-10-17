@@ -6,11 +6,12 @@ include('constants.lua')
 local B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
 local SevenSegment = sasl.gl.loadFont("fonts/DSEG7ModernMini-Light.ttf")
 
-local EMPTY = 0
-local ON    = 1
-local OFF   = 2
-local SYSON = 3
-local SYSON_MAN = 4
+local EMPTY    = 0
+local ON       = 1
+local OFF      = 2
+local ON_WHITE = 3
+local MANUAL   = 4
+local NORM     = 5
 
 local LEFT  = 1
 local RIGHT = 2
@@ -26,7 +27,7 @@ local RCT_MAX_FUEL   = 10089
 
 local KG_PER_SEC = 15
 
-local image_background     = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/fuel_window/background.png", 0, 0, 493, 584)
+local image_background     = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/fuel_window/background.png", 0, 0, 493, 586)
 local image_plane          = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/fuel_window/top-alpha.png", 0, 0, 497, 606)
 local image_end            = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/fuel_window/end-light.png", 0, 0, 31, 31)
 local image_selector = {}
@@ -37,8 +38,9 @@ local image_btn = {}
 image_btn[EMPTY]     = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/fuel_window/btn-empty.png", 0, 0, 128, 128)
 image_btn[OFF]       = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/fuel_window/btn-off.png", 0, 0, 128, 128)
 image_btn[ON]        = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/fuel_window/btn-on.png", 0, 0, 128, 128)
-image_btn[SYSON]     = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/fuel_window/btn-syson.png", 0, 0, 128, 128)
-image_btn[SYSON_MAN] = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/fuel_window/btn-syson-man.png", 0, 0, 128, 128)
+image_btn[ON_WHITE]        = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/fuel_window/btn-on-white.png", 0, 0, 128, 128)
+image_btn[MANUAL] = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/fuel_window/btn-man.png", 0, 0, 128, 128)
+image_btn[NORM] = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/fuel_window/btn-norm.png", 0, 0, 128, 128)
 
 local selector_switch_pos   = 0
 local battery_switch_status = false
@@ -71,7 +73,7 @@ local fast_speed = false
 
 local function update_btn_status()
 
-    btn_light_battery = (battery_switch_status or get(XP_Battery_1) == 1) and ON or EMPTY
+    btn_light_battery = (battery_switch_status and ON or (get(XP_Battery_1) == 1 and NORM or EMPTY))
 
     btn_light_left    = EMPTY
     btn_light_right   = EMPTY
@@ -79,9 +81,9 @@ local function update_btn_status()
     btn_light_act     = EMPTY
     btn_light_rct     = EMPTY
 
-    if btn_light_battery == ON then   -- we have elec power
+    if btn_light_battery ~= EMPTY then   -- we have elec power
         btn_light_refuel   = refuel_switch_status   and ON or OFF
-        btn_light_mode_sel = mode_sel_switch_status and SYSON_MAN or SYSON
+        btn_light_mode_sel = mode_sel_switch_status and MANUAL or EMPTY
         
         if mode_sel_switch_status then
             btn_light_left    = valve_switch_status[LEFT]   and ON or OFF
@@ -101,7 +103,7 @@ local function update_btn_status()
 end
 
 function update_desired_qty()
-    if btn_light_battery ~= ON then
+    if btn_light_battery == EMPTY then
         return
     end
 
@@ -114,15 +116,13 @@ function update_desired_qty()
 
     local multiplier = 1
 
-    if get(TIME) - start_press_time > 9 then
-        multiplier = 100
-    elseif get(TIME) - start_press_time > 6 then
-        multiplier = 10
+    if get(TIME) - start_press_time > 6 then
+        multiplier = 50
     elseif get(TIME) - start_press_time > 3 then
         multiplier = 5
     end
 
-    if get(TIME) - last_update_press_time < 0.1/multiplier then
+    if get(TIME) - last_update_press_time < 0.05/multiplier then
         return
     end
 
@@ -139,7 +139,7 @@ end
 
 function update_refuel()
     end_light = false
-    if btn_light_battery ~= ON then
+    if btn_light_battery == EMPTY then
         return
     end
     
@@ -299,46 +299,24 @@ end
 
 function draw()
 
-    sasl.gl.drawTexture(image_background, 0, 0, 493, 584)
+    sasl.gl.drawTexture(image_background, 0, 0, 493, 586)
     sasl.gl.drawTexture(image_plane, 505, 0, 331, 404)
 
     draw_plane_icon()
 
     if end_light then
-        sasl.gl.drawTexture(image_end, 350, 308, 31, 31)
+        sasl.gl.drawTexture(image_end, 196, 308, 31, 31)
     end
     
-    sasl.gl.drawText(B612MONO_regular, 80, 245, "BATTERY", 15, false, false, TEXT_ALIGN_CENTER, UI_WHITE)
-    sasl.gl.drawTexture(image_btn[btn_light_battery], 50, 180, 58, 58)
-
-    sasl.gl.drawText(B612MONO_regular, 165, 265, "REFUEL", 15, false, false, TEXT_ALIGN_CENTER, UI_WHITE)
-    sasl.gl.drawText(B612MONO_regular, 165, 245, "DEFUEL", 15, false, false, TEXT_ALIGN_CENTER, UI_WHITE)
-    sasl.gl.drawTexture(image_btn[btn_light_refuel], 135, 180, 58, 58)
-
-    sasl.gl.drawTexture(image_selector[selector_switch_pos], 90, 300, 66, 42)
-
-    
-    sasl.gl.drawText(B612MONO_regular, 250, 245, "MODE SEL", 15, false, false, TEXT_ALIGN_CENTER, UI_WHITE)
-    sasl.gl.drawText(B612MONO_regular, 290, 227, "A", 14, false, false, TEXT_ALIGN_CENTER, UI_WHITE)
-    sasl.gl.drawText(B612MONO_regular, 290, 210, "U", 14, false, false, TEXT_ALIGN_CENTER, UI_WHITE)
-    sasl.gl.drawText(B612MONO_regular, 290, 193, "T", 14, false, false, TEXT_ALIGN_CENTER, UI_WHITE)
-    sasl.gl.drawText(B612MONO_regular, 290, 176, "O", 14, false, false, TEXT_ALIGN_CENTER, UI_WHITE)
-    sasl.gl.drawTexture(image_btn[btn_light_mode_sel], 220, 180, 58, 58)
-
-    sasl.gl.drawText(B612MONO_regular, 80, 100, "LEFT", 15, false, false, TEXT_ALIGN_CENTER, UI_WHITE)
-    sasl.gl.drawTexture(image_btn[btn_light_left], 50, 30, 58, 58)
-
-    sasl.gl.drawText(B612MONO_regular, 165, 100, "CTR", 15, false, false, TEXT_ALIGN_CENTER, UI_WHITE)
-    sasl.gl.drawTexture(image_btn[btn_light_center], 135, 30, 58, 58)
-    
-    sasl.gl.drawText(B612MONO_regular, 250, 100, "RIGHT", 15, false, false, TEXT_ALIGN_CENTER, UI_WHITE)
-    sasl.gl.drawTexture(image_btn[btn_light_right], 220, 30, 58, 58)
-
-    sasl.gl.drawText(B612MONO_regular, 335, 100, "ACT", 15, false, false, TEXT_ALIGN_CENTER, UI_WHITE)
-    sasl.gl.drawTexture(image_btn[btn_light_act], 305, 30, 58, 58)
-
-    sasl.gl.drawText(B612MONO_regular, 420, 100, "RCT", 15, false, false, TEXT_ALIGN_CENTER, UI_WHITE)
-    sasl.gl.drawTexture(image_btn[btn_light_rct], 390, 30, 58, 58)
+    sasl.gl.drawTexture(image_btn[btn_light_battery], 377, 336, 51, 51)
+    sasl.gl.drawTexture(image_btn[btn_light_refuel], 45, 176, 51, 51)
+    sasl.gl.drawTexture(image_selector[selector_switch_pos], 95, 253, 66, 42)
+    sasl.gl.drawTexture(image_btn[btn_light_mode_sel], 135, 176, 51, 51)
+    sasl.gl.drawTexture(image_btn[btn_light_left], 250, 176, 51, 51)
+    sasl.gl.drawTexture(image_btn[btn_light_center], 321, 176, 51, 51)
+    sasl.gl.drawTexture(image_btn[btn_light_right], 392, 176, 51, 51)
+    sasl.gl.drawTexture(image_btn[btn_light_act], 276, 25, 51, 51)
+    sasl.gl.drawTexture(image_btn[btn_light_rct], 366, 24, 51, 51)
 
     if get(Any_wheel_on_ground) == 0 then
         sasl.gl.drawText(B612MONO_regular, 585, 550, "You are AIRBONE!", 17, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_RED)
@@ -355,16 +333,24 @@ function draw()
         sasl.gl.drawRectangle (575, 440, 200, 30, UI_LIGHT_GREY)
         sasl.gl.drawText(B612MONO_regular, 625, 450, "Fast Refuel", 14, false, false, TEXT_ALIGN_LEFT, fast_speed and UI_LIGHT_BLUE or UI_WHITE)
     end
-        
-    if btn_light_battery == ON then
-        sasl.gl.drawText(SevenSegment, 154, 455, math.floor(get(Fuel_quantity[LEFT])), 18, false, false, TEXT_ALIGN_RIGHT, {0, 0.6, 0.2})
-        sasl.gl.drawText(SevenSegment, 282, 455, math.floor(get(Fuel_quantity[CENTER])), 18, false, false, TEXT_ALIGN_RIGHT, {0, 0.6, 0.2})
-        sasl.gl.drawText(SevenSegment, 409, 455, math.floor(get(Fuel_quantity[RIGHT])), 18, false, false, TEXT_ALIGN_RIGHT, {0, 0.6, 0.2})
-        sasl.gl.drawText(SevenSegment, 400, 230, math.floor(get(Fuel_quantity[ACT])), 18, false, false, TEXT_ALIGN_RIGHT, {0, 0.6, 0.2})
-        sasl.gl.drawText(SevenSegment, 400, 180, math.floor(get(Fuel_quantity[RCT])), 18, false, false, TEXT_ALIGN_RIGHT, {0, 0.6, 0.2})
 
-        sasl.gl.drawText(SevenSegment, 150, 365, math.floor(presel_value), 18, false, false, TEXT_ALIGN_RIGHT, {0, 0.6, 0.2})
-        sasl.gl.drawText(SevenSegment, 392, 365, math.floor(get(FOB)), 18, false, false, TEXT_ALIGN_RIGHT, {0, 0.6, 0.2})
+    sasl.gl.drawText(SevenSegment, 147, 457, 88.88, 18, false, false, TEXT_ALIGN_RIGHT, {0.25, 0.25, 0.25})
+    sasl.gl.drawText(SevenSegment, 272, 457, 88.88, 18, false, false, TEXT_ALIGN_RIGHT, {0.25, 0.25, 0.25})
+    sasl.gl.drawText(SevenSegment, 408, 457, 88.88, 18, false, false, TEXT_ALIGN_RIGHT, {0.25, 0.25, 0.25})
+    sasl.gl.drawText(SevenSegment, 131, 72, 88.88, 18, false, false, TEXT_ALIGN_RIGHT, {0.25, 0.25, 0.25})
+    sasl.gl.drawText(SevenSegment, 131, 21, 88.88, 18, false, false, TEXT_ALIGN_RIGHT, {0.25, 0.25, 0.25})
+    sasl.gl.drawText(SevenSegment, 155, 316, 88.88, 18, false, false, TEXT_ALIGN_RIGHT, {0.25, 0.25, 0.25})
+    sasl.gl.drawText(SevenSegment, 326, 316, 88.88, 18, false, false, TEXT_ALIGN_RIGHT, {0.25, 0.25, 0.25})
+
+    if btn_light_battery ~= EMPTY then
+        sasl.gl.drawText(SevenSegment, 147, 457, Round_fill(get(Fuel_quantity[LEFT])/1000,2), 18, false, false, TEXT_ALIGN_RIGHT, {0, 0.6, 0.2})
+        sasl.gl.drawText(SevenSegment, 272, 457, Round_fill(get(Fuel_quantity[CENTER])/1000,2), 18, false, false, TEXT_ALIGN_RIGHT, {0, 0.6, 0.2})
+        sasl.gl.drawText(SevenSegment, 408, 457, Round_fill(get(Fuel_quantity[RIGHT])/1000,2), 18, false, false, TEXT_ALIGN_RIGHT, {0, 0.6, 0.2})
+        sasl.gl.drawText(SevenSegment, 131, 72, Round_fill(get(Fuel_quantity[ACT])/1000,2), 18, false, false, TEXT_ALIGN_RIGHT, {0, 0.6, 0.2})
+        sasl.gl.drawText(SevenSegment, 131, 21, Round_fill(get(Fuel_quantity[RCT])/1000,2), 18, false, false, TEXT_ALIGN_RIGHT, {0, 0.6, 0.2})
+
+        sasl.gl.drawText(SevenSegment, 155, 316, Round_fill(presel_value/1000,2), 18, false, false, TEXT_ALIGN_RIGHT, {0, 0.6, 0.2})
+        sasl.gl.drawText(SevenSegment, 326, 316, Round_fill(get(FOB)/1000,2), 18, false, false, TEXT_ALIGN_RIGHT, {0, 0.6, 0.2})
     end
 end
 
@@ -389,33 +375,41 @@ function onMouseUp(component , x , y , button , parentX , parentY)
 end
 
 function onMouseHold (component , x , y , button , parentX , parentY)
-    if x >= 85 and x <= 113 and y >=304 and y <= 339 then
-        selector_switch_pos = 1
-    elseif x >= 131 and x <= 160 and y >=304 and y <= 339 then
-        selector_switch_pos = 2
+    if y >=253 and y <= 253+42 then
+        if x >= 95 and x <= 95+30 then
+            selector_switch_pos = 1
+        elseif x >= 95+36 and x <= 95+66  then
+            selector_switch_pos = 2
+        end
     end
+
 end
 
 function onMouseDown (component , x , y , button , parentX , parentY)
-    if x >= 50 and x <= 50+58 and y >=30 and y <= 30+58 then
-        valve_handlers(LEFT) 
-    elseif x >= 135 and x <= 135+58 and y >=30 and y <= 30+58 then
-        valve_handlers(CENTER)
-    elseif x >= 220 and x <= 220+58 and y >=30 and y <= 30+58 then
-        valve_handlers(RIGHT)
-    elseif x >= 305 and x <= 305+58 and y >=30 and y <= 30+58 then
-        valve_handlers(ACT)
-    elseif x >= 390 and x <= 390+58 and y >=30 and y <= 30+58 then
-        valve_handlers(RCT)
-    elseif x >= 50 and x <= 50+58 and y >=180 and y <= 180+58 then
+    if y >=176 and y <= 176+51 then
+        if x >= 250 and x <= 250+51     then
+            valve_handlers(LEFT) 
+        elseif x >= 321 and x <= 321+51 then
+            valve_handlers(CENTER)
+        elseif x >= 392 and x <= 392+51 then
+            valve_handlers(RIGHT)
+        elseif x >= 45 and x <= 45+51   then
+            refuel_handler()
+        elseif x >= 135 and x <= 135+51 then
+            mode_sel_handler()
+        end    
+    elseif y >=24 and y <= 24+51 then
+        if x >= 276 and x <= 276+51 then
+            valve_handlers(ACT)
+        elseif x >= 366 and x <= 366+51 then
+            valve_handlers(RCT)
+        end
+    elseif x >= 377 and x <= 377+51 and y >=336 and y <= 336+51 then
         battery_handler()
-    elseif x >= 135 and x <= 135+58 and y >=180 and y <= 180+58 then
-        refuel_handler()
-    elseif x >= 220 and x <= 220+58 and y >=180 and y <= 180+58 then
-        mode_sel_handler()
     elseif x >= 575 and x <= 575+200 and y >= 440 and y <= 440+30 then
         fast_speed = not fast_speed
     end
+
 
     return true
 end

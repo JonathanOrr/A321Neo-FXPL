@@ -40,6 +40,10 @@ function Show_hide_Checklist()
   Checklist_window:setIsVisible(not Checklist_window:isVisible())
 end
 
+function Show_hide_Fuel()
+  fuel_window:setIsVisible(not fuel_window:isVisible())
+end
+
 function IRs_instaneous_align()
     ADIRS_cmd_instantaneous_align = sasl.findCommand("a321neo/cockpit/ADIRS/instantaneous_align")
     sasl.messageWindow (500 , 500 , 300 , 100 , " IRs auto-align " , 
@@ -87,6 +91,7 @@ ShowHideChecklist   = sasl.appendMenuItem(Menu_main, "Show/Hide Checklist", Show
 ShowHideMCDU        = sasl.appendMenuItem(Menu_main, "Show/Hide MCDU", Show_hide_MCDU)
 ShowHideDCDU        = sasl.appendMenuItem(Menu_main, "Show/Hide DCDU Manager", Show_hide_DCDU)
 ShowHideFailures    = sasl.appendMenuItem(Menu_main, "Show/Hide Failures Manager", Show_hide_Failures)
+ShowHideFuel        = sasl.appendMenuItem(Menu_main, "Show/Hide Fuel Panel", Show_hide_Fuel)
 
 sasl.appendMenuSeparator(Menu_main)
 

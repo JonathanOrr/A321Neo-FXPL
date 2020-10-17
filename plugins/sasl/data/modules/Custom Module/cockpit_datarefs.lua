@@ -307,6 +307,10 @@ ISIS_powered = createGlobalPropertyi("a321neo/cockpit/ISIS/isis_is_powered", 0, 
 ISIS_ready   = createGlobalPropertyi("a321neo/cockpit/ISIS/isis_is_ready", 0, false, true, false)-- ISIS is ready to use: 0-off, 1-on
 
 -- Fuel
-Fuel_light_pumps = createGlobalPropertyia("a321neo/cockpit/fuel/pumps", 8)
+Fuel_light_pumps = createGlobalPropertyia("a321neo/cockpit/fuel/pumps", 8)  -- Array [0]=L1, [1]=L2, [2]=R1, [3]=R2, [4]=C1, [5]=C2, [6]=ACT, [7]=RCT
+                                                                            -- 00: no lights, 01: OFF (FWD for ACT and RCT), 10: FAULT, 11: FAULT+OFF (FWD for ACT and RCT)
+
+Fuel_light_mode_sel = createGlobalPropertyi("a321neo/cockpit/fuel/c_mode_sel", 0, false, true, false)      --00: No lights, 01: [MAN], 10: FAULT, 11 [MAN] + FAULT
+Fuel_light_x_feed   = createGlobalPropertyi("a321neo/cockpit/fuel/x_feed", 0, false, true, false)      --00: No lights, 01: [ON], 10: OPEN, 11 [ON] + OPEN
 
 

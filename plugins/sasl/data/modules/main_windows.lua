@@ -140,3 +140,16 @@ Checklist_window = contextWindow {
   };
 }
 
+fuel_window = contextWindow {
+  name = "Refuel Panel";
+  position = { 150 , 150 , 800 , 600 };
+  noBackground = true ;
+  proportional = false ;
+  minimumSize = { 800 , 600 };
+  maximumSize = { 800 , 600 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = true ;
+  components = {
+    fuel_window {position = { 0 , 0 , 800 , 600 }}
+  };
+}
