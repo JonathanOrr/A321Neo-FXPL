@@ -21,10 +21,10 @@ local function draw_open_arrow_left(x,y,color)
     sasl.gl.drawWidePolyLine( {x, y, x+20, y+15, x+20, y-15, x, y }, 3, color)
 end
 local function draw_fill_arrow_up(x,y,color)
-    sasl.gl.drawTriangle( x, y, x-10, y-20, x+10, y-20,color)
+    sasl.gl.drawTriangle( x, y+1, x-11, y-21, x+11, y-21,color)
 end
 local function draw_fill_arrow_left(x,y,color)
-    sasl.gl.drawTriangle( x, y, x+20, y+15, x+20, y-15, color)
+    sasl.gl.drawTriangle( x, y, x+21, y+16, x+21, y-16, color)
 end
 
 local function draw_tank_qty()
@@ -64,7 +64,7 @@ end
 
 local function draw_fob_qty()
 
-    local any_failure = true -- TODO
+    local any_failure = (math.floor(get(Fuel_quantity[FUEL_TANK_C])) > 0 and (not Fuel_sys.tank_pump_and_xfr[5].status) and (not Fuel_sys.tank_pump_and_xfr[5].status) ) or (get(FAILURE_FUEL, 7) == 1) or (get(FAILURE_FUEL, 8) == 1)
 
     local fob = math.floor(get(FOB))
     -- FOB
@@ -80,11 +80,11 @@ end
 
 local function draw_arrows_act_rct()
 
-    local is_act_transfer_active = false     -- TODO
-    local is_rct_transfer_active = true     -- TODO
+    local is_act_transfer_active = Fuel_sys.tank_pump_and_xfr[7].pressure_ok
+    local is_rct_transfer_active = Fuel_sys.tank_pump_and_xfr[8].pressure_ok
 
     if is_act_transfer_active then
-        if get(Fuel_light_pumps[6]) == 1 then
+        if get(Fuel_light_pumps, 7) == 1 then
             draw_fill_arrow_up(size[2]/2-70, size[2]/2-50, ECAM_GREEN)
         else
             draw_open_arrow_up(size[2]/2-70, size[2]/2-50, ECAM_GREEN)
@@ -97,7 +97,8 @@ local function draw_arrows_act_rct()
         end
     end
     if is_rct_transfer_active then
-        if get(Fuel_light_pumps[7]) == 1 then
+        print(get(Fuel_light_pumps, 7))
+        if get(Fuel_light_pumps, 8) == 1 then
             draw_fill_arrow_up(size[2]/2+70, size[2]/2-50, ECAM_GREEN)
         else
             draw_open_arrow_up(size[2]/2+70, size[2]/2-50, ECAM_GREEN)

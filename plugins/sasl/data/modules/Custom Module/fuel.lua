@@ -100,7 +100,7 @@ end
 -- Functions - Logic
 ----------------------------------------------------------------------------------------------------
 
-local function update_single_pump(x)
+local function update_single_pump_LR(x)
     if not tank_pump_and_xfr[x].has_elec_pwr then
         set(Fuel_light_pumps, 0, x)
     elseif not tank_pump_and_xfr[x].switch then
@@ -112,12 +112,20 @@ local function update_single_pump(x)
     end
 end
 
-local function update_single_extra(x)
+local function update_single_pump_C(x)
     if not tank_pump_and_xfr[x].has_elec_pwr then
         set(Fuel_light_pumps, 0, x)
+    elseif not tank_pump_and_xfr[x].switch then
+        set(Fuel_light_pumps, 1, x)
+    elseif not tank_pump_and_xfr[x].status then
+        set(Fuel_light_pumps, 10, x)
     else
-        set(Fuel_light_pumps, (tank_pump_and_xfr[x].switch and 1 or 0) + (tank_pump_and_xfr[x].pressure_ok and 0 or 10), x)
+        set(Fuel_light_pumps, 0, x)
     end
+end
+
+local function update_single_extra(x)
+    set(Fuel_light_pumps, (tank_pump_and_xfr[x].switch and 1 or 0) + (tank_pump_and_xfr[x].pressure_ok and 0 or 10), x)
 end
 
 local function update_lights()
@@ -125,12 +133,12 @@ local function update_lights()
     C_tank_fault = get(Fuel_quantity[tank_CENTER]) > 250 and (get(Fuel_quantity[tank_RIGHT]) < 5000 or get(Fuel_quantity[tank_LEFT]) < 5000)
 
     -- Fuel fumps illuminated when off
-    update_single_pump(L_TK_PUMP_1)
-    update_single_pump(L_TK_PUMP_2)
-    update_single_pump(R_TK_PUMP_1)
-    update_single_pump(R_TK_PUMP_2)
-    update_single_pump(C_TK_XFR_1)
-    update_single_pump(C_TK_XFR_2)
+    update_single_pump_LR(L_TK_PUMP_1)
+    update_single_pump_LR(L_TK_PUMP_2)
+    update_single_pump_LR(R_TK_PUMP_1)
+    update_single_pump_LR(R_TK_PUMP_2)
+    update_single_pump_C(C_TK_XFR_1)
+    update_single_pump_C(C_TK_XFR_2)
 
     update_single_extra(ACT_TK_XFR)
     update_single_extra(RCT_TK_XFR)

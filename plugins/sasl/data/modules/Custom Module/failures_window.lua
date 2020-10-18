@@ -96,6 +96,11 @@ local failures_data = {
     {
         group="FUEL",
         failures={
+            {name="X FEED VALVE\nSTUCK", status=false, dataref=FAILURE_FUEL_X_FEED },
+            {name="FUEL PUMP\nL1 FAILURE", status=false, dataref=FAILURE_FUEL, nr=1},
+            {name="FUEL PUMP\nL2 FAILURE", status=false, dataref=FAILURE_FUEL, nr=2},
+            {name="FUEL PUMP\nR1 FAILURE", status=false, dataref=FAILURE_FUEL, nr=3},
+            {name="FUEL PUMP\nR2 FAILURE", status=false, dataref=FAILURE_FUEL, nr=4},
         }
     },
     {
@@ -263,9 +268,17 @@ local function mouse_handler_fail(x, y)
     if clicked_fail ~= nil then
         clicked_fail.status = not clicked_fail.status
         if clicked_fail.status then
-            set(clicked_fail.dataref, 1)
+            if clicked_fail.nr == nil then
+                set(clicked_fail.dataref, 1)
+            else
+                set(clicked_fail.dataref, 1, clicked_fail.nr)
+            end            
         else
-            set(clicked_fail.dataref, 0)
+            if clicked_fail.nr == nil then
+                set(clicked_fail.dataref, 0)
+            else
+                set(clicked_fail.dataref, 0, clicked_fail.nr)
+            end            
         end
     end
     
