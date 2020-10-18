@@ -212,7 +212,7 @@ P _gear/0/_lonE 6.0
 P _gear/0/_lonN 6.0
 P _gear/0/_lonR 99.0
 P _gear/0/_scon 52322.308593750
-P _gear/0/_stat_def 0.378928781
+P _gear/0/_stat_def 0.378928810
 P _gear/0/_steerdeg_hispeed 5.0
 P _gear/0/_steerdeg_lospeed 75.0
 P _gear/0/_strut_comp 0.899999976
@@ -246,7 +246,7 @@ P _gear/1/_lonE -6.0
 P _gear/1/_lonN -6.0
 P _gear/1/_lonR 0.0
 P _gear/1/_scon 83991.070312500
-P _gear/1/_stat_def 1.381937981
+P _gear/1/_stat_def 1.381937504
 P _gear/1/_steerdeg_hispeed 0.0
 P _gear/1/_steerdeg_lospeed 0.0
 P _gear/1/_strut_comp 0.400000006
@@ -280,7 +280,7 @@ P _gear/2/_lonE -6.0
 P _gear/2/_lonN -6.0
 P _gear/2/_lonR 0.0
 P _gear/2/_scon 83991.070312500
-P _gear/2/_stat_def 1.381937981
+P _gear/2/_stat_def 1.381937504
 P _gear/2/_steerdeg_hispeed 0.0
 P _gear/2/_steerdeg_lospeed 0.0
 P _gear/2/_strut_comp 0.400000006
@@ -53424,7 +53424,7 @@ GROUP chrono
     CHAINED
     gen_LED utc_hr
       POS 496.000000 1498.333374
-      IMAGE text/yellow_led
+      IMAGE text/white_led
       DATAREF sim/cockpit2/clock_timer/zulu_time_hours
       SIZE 0.600000
       LOCKED
@@ -53439,7 +53439,7 @@ GROUP chrono
 
     gen_LED utc_min
       POS 552.000000 1498.333374
-      IMAGE text/yellow_led
+      IMAGE text/white_led
       DATAREF sim/cockpit2/clock_timer/zulu_time_minutes
       SIZE 0.600000
       LOCKED
@@ -53454,7 +53454,7 @@ GROUP chrono
 
     gen_LED utc_sec
       POS 606.000000 1497.000000
-      IMAGE text/yellow_led
+      IMAGE text/white_led
       DATAREF sim/cockpit2/clock_timer/zulu_time_seconds
       SIZE 0.400000
       LOCKED
@@ -53471,9 +53471,10 @@ GROUP chrono
   GROUP chr
     LOCKED
     CHAINED
+    GROUP_OPEN
     gen_LED chr_min
       POS 520.000000 1579.333374
-      IMAGE text/yellow_led
+      IMAGE text/white_led
       DATAREF sim/cockpit2/clock_timer/elapsed_time_hours
       SIZE 0.600000
       LOCKED
@@ -53488,7 +53489,7 @@ GROUP chrono
 
     gen_LED chr_sec
       POS 577.000000 1579.333374
-      IMAGE text/yellow_led
+      IMAGE text/white_led
       DATAREF sim/cockpit2/clock_timer/elapsed_time_minutes
       SIZE 0.600000
       LOCKED
@@ -56753,7 +56754,6 @@ END_GROUP
 GROUP ECAM lower du
   LOCKED
   HIDE
-  GROUP_OPEN
   GROUP ECAM DOOR
     SHOW_EQUAL 9.000000 a321neo/cockpit/ecam/page_num
     LOCKED
@@ -57036,7 +57036,6 @@ GROUP ECAM lower du
   END_GROUP
   GROUP ECAM FUEL
     SHOW_EQUAL 6.000000 a321neo/cockpit/ecam/page_num
-    GROUP_OPEN
     gen_rotary Fuel
       POS 3637.000000 733.000000
       IMAGE MIP/ecam lower du/FUEL/fuel
@@ -57171,8 +57170,27 @@ GROUP ECAM lower du
       CLICK_DX 0
       CLICK_DY 0
 
-    gen_rotary Left Valve
-      POS 3419.000000 1027.000000
+    gen_rotary Crossfeed
+      POS 3639.714355 948.000000
+      IMAGE MIP/ecam lower du/FUEL/crossfeed
+      DATAREF a321neo/cockpit/ecam/fuel/valve_X_BLEED
+      LIGHT_MODE GLASS_AUTO
+      LIGHT_RHEOSTAT 0
+      KEY_FRAME 0.000000 0.000000 1.000000
+      KEY_FRAME 4.000000 4.000000
+      DIGITS 5
+      ROTARY_TYPE NO_CLICK
+      CLICK_RADIUS 10.000000
+      CLICK_RADIUS_DY 0.000000
+      OFFSET 0.000000
+      STEP1 1.000000
+      STEP2 1.000000
+      CURSOR DEFAULT
+      CLICK_DX 0
+      CLICK_DY 0
+
+    gen_rotary Engine 1
+      POS 3418.000000 1027.000000
       IMAGE MIP/ecam lower du/FUEL/GreenValve
       DATAREF a321neo/cockpit/ecam/fuel/valve_ENG_1
       LIGHT_MODE GLASS_AUTO
@@ -57190,8 +57208,8 @@ GROUP ECAM lower du
       CLICK_DX 0
       CLICK_DY 0
 
-    gen_rotary Left Valve 2
-      POS 3859.000000 1026.000000
+    gen_rotary Engine 2
+      POS 3858.000000 1026.000000
       IMAGE MIP/ecam lower du/FUEL/GreenValve
       DATAREF a321neo/cockpit/ecam/fuel/valve_ENG_2
       LIGHT_MODE GLASS_AUTO
@@ -60612,7 +60630,6 @@ GROUP PFD
   END_GROUP
   GROUP Rotation
     LOCKED
-    GROUP_OPEN
     GROUP_ANIMATE_MODE ROTATE
     GROUP_WIDTH 300
     GROUP_HEIGHT 300
@@ -60624,7 +60641,6 @@ GROUP PFD
     ROTATE_OFFSET_Y 0.000000
     GROUP Translation
       LOCKED
-      GROUP_OPEN
       GROUP_ANIMATE_MODE TRANSLATE
       GROUP_WIDTH 0
       GROUP_HEIGHT 0
@@ -60675,10 +60691,11 @@ GROUP PFD
   END_GROUP
   GROUP Bird
     LOCKED
+    GROUP_OPEN
     GROUP_ANIMATE_MODE TRANSLATE
     GROUP_WIDTH 0
     GROUP_HEIGHT 0
-    DATAREF sim/flightmodel/position/alpha
+    DATAREF a321neo/cockpit/PFD/capt_bird_vert_pos
     POS 0.000000 40.000000
     KEY_FRAME 0.000000 0.000000 1.000000
     KEY_FRAME 30.000000 -297.000000
@@ -60914,7 +60931,6 @@ GROUP PFD
       DATAREF a321neo/dynamics/FBW/limit_speeds/delta/capt_vls
       SHOW_EQUAL 0.000000 a321neo/dynamics/aft_wheels_on_ground
       LOCKED
-      HIDE
       CLIP
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
@@ -60930,7 +60946,6 @@ GROUP PFD
       DATAREF a321neo/dynamics/FBW/limit_speeds/delta/capt_vmax
       SHOW_EQUAL 0.000000 a321neo/dynamics/aft_wheels_on_ground
       LOCKED
-      HIDE
       CLIP
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
@@ -60946,7 +60961,6 @@ GROUP PFD
       DATAREF a321neo/dynamics/FBW/limit_speeds/delta/capt_alpha_prot
       SHOW_EQUAL 0.000000 a321neo/dynamics/aft_wheels_on_ground
       LOCKED
-      HIDE
       CLIP
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
@@ -60962,7 +60976,6 @@ GROUP PFD
       DATAREF a321neo/dynamics/FBW/limit_speeds/delta/capt_alpha_max
       SHOW_EQUAL 0.000000 a321neo/dynamics/aft_wheels_on_ground
       LOCKED
-      HIDE
       CLIP
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
@@ -61168,7 +61181,6 @@ GROUP PFD
     DATAREF 
     SHOW_GREATER 45000.000000 sim/cockpit2/gauges/indicators/altitude_ft_pilot
     LOCKED
-    HIDE
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -61303,7 +61315,6 @@ GROUP PFD
     DATAREF 
     SHOW_GREATER 460.000000 sim/cockpit2/gauges/indicators/airspeed_kts_pilot
     LOCKED
-    HIDE
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -61659,7 +61670,7 @@ GROUP PFD
       IS_VERTICAL 1
       OFFSET 0.000000
 
-    gen_pointer Flight Director G
+    gen_pointer Flight Director H
       POS 1759.000000 724.000000
       IMAGE MIP/pfd/fd/fdv
       DATAREF a32nx/debug/FD_roll_delta
@@ -61673,6 +61684,44 @@ GROUP PFD
       OFFSET 0.000000
 
   END_GROUP
+  gen_rotary ND
+    POS 470.000000 2300.000000
+    IMAGE MIP/nd/bgd
+    DATAREF 
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 0.000000 0.000000 1.000000
+    KEY_FRAME 1.000000 6.000000
+    DIGITS 1
+    ROTARY_TYPE NO_CLICK
+    CLICK_RADIUS 10.000000
+    CLICK_RADIUS_DY 0.000000
+    OFFSET 0.000000
+    STEP1 1.000000
+    STEP2 1.000000
+    CURSOR DEFAULT
+    CLICK_DX 0
+    CLICK_DY 0
+
+  gen_rotary Horizon FD Dot
+    POS 1759.000000 725.000000
+    IMAGE MIP/pfd/adi_fd_dot
+    DATAREF 
+    LIGHT_MODE GLASS_AUTO
+    LIGHT_RHEOSTAT 0
+    KEY_FRAME 0.000000 0.000000 1.000000
+    KEY_FRAME 1.000000 1.000000
+    DIGITS 1
+    ROTARY_TYPE NO_CLICK
+    CLICK_RADIUS 10.000000
+    CLICK_RADIUS_DY 0.000000
+    OFFSET 0.000000
+    STEP1 1.000000
+    STEP2 1.000000
+    CURSOR DEFAULT
+    CLICK_DX 0
+    CLICK_DY 0
+
 END_GROUP
 GROUP PFD Standby Covers
   LOCKED
@@ -66183,42 +66232,4 @@ GROUP Screen Covers
     CLICK_DY 0
 
 END_GROUP
-gen_rotary ND
-  POS 470.000000 2300.000000
-  IMAGE MIP/nd/bgd
-  DATAREF 
-  LIGHT_MODE GLASS_AUTO
-  LIGHT_RHEOSTAT 0
-  KEY_FRAME 0.000000 0.000000 1.000000
-  KEY_FRAME 1.000000 6.000000
-  DIGITS 1
-  ROTARY_TYPE NO_CLICK
-  CLICK_RADIUS 10.000000
-  CLICK_RADIUS_DY 0.000000
-  OFFSET 0.000000
-  STEP1 1.000000
-  STEP2 1.000000
-  CURSOR DEFAULT
-  CLICK_DX 0
-  CLICK_DY 0
-
-gen_rotary Crossfeed
-  POS 3639.714355 947.571411
-  IMAGE MIP/ecam lower du/FUEL/crossfeed
-  DATAREF a321neo/cockpit/ecam/fuel/valve_X_BLEED
-  LIGHT_MODE GLASS_AUTO
-  LIGHT_RHEOSTAT 0
-  KEY_FRAME 0.000000 0.000000 1.000000
-  KEY_FRAME 4.000000 4.000000
-  DIGITS 5
-  ROTARY_TYPE NO_CLICK
-  CLICK_RADIUS 10.000000
-  CLICK_RADIUS_DY 0.000000
-  OFFSET 0.000000
-  STEP1 1.000000
-  STEP2 1.000000
-  CURSOR DEFAULT
-  CLICK_DX 0
-  CLICK_DY 0
-
 PANEL_3D_END
