@@ -56,6 +56,12 @@ function Round(num, numDecimalPlaces)
     return math.floor(num * mult + 0.5) / mult
 end
 
+--rounding - showing leading zeros
+function Round_fill(num, numDecimalPlaces)
+    return string.format("%.2f", Round(num, numDecimalPlaces)) 
+end
+
+
 --used to animate a value with a curve USE ONLY WITH FLOAT VALUES
 function Set_anim_value(current_value, target, min, max, speed)
 
@@ -348,6 +354,7 @@ function MCDU_get_popup(id) return Mcdu_popup[id] end
 function MCDU_set_popup(id, val) Mcdu_popup[id] = val end
 
 ELEC_sys = {}
+Fuel_sys = {}
 
 
 -- Delayed button

@@ -49,6 +49,7 @@ components = {
   doors {},
   hydraulics {},
   electrical {},
+  fuel {},
   sounds {}
  }
 

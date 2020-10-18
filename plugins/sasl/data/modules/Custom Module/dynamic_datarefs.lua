@@ -62,6 +62,9 @@ Apu_gen_hz = createGlobalPropertyf("a321neo/cockpit/apu/gen_hz", 0, false, true,
 Apu_bleed_psi = createGlobalPropertyf("a321neo/cockpit/apu/bleed_psi", 0, false, true, false)
 Apu_bleed_state = createGlobalPropertyi("a321neo/apu/apu_bleed_state", 0, false, true, false)--0apu off bleed off, 1apu on bleed off, 2apu on bleed on(for ECAM!!!)
 Apu_gen_state = createGlobalPropertyi("a321neo/cockpit/apu/apu_gen_state", 0, false, true, false)--0apu off gen off, 1apu on gen off, 2apu on gen on(for ECAM!!!)
+Apu_fuel_valve  = createGlobalPropertyi("a321neo/cockpit/apu/fuel_valve", 0, false, true, false) -- 0 closed, 1 open
+Apu_fuel_source = createGlobalPropertyi("a321neo/cockpit/apu/fuel_source", 0, false, true, false) -- 0 none, 1 left side, 2 right side (x feed)
+
 --FBW
 FBW_status = createGlobalPropertyi("a321neo/dynamics/FBW/FBW_status", 2, false, true, false)--2=NORMAL law, 1=ALT2 law, 0==DIRECT law
 FBW_pitch_mode = createGlobalPropertyi("a321neo/dynamics/FBW/FBW_pitch_mode", 2, false, true, false)--0=holding pitch(stable), 1=holding vpath(unstable) 2=holding persec vpath(more stable) 3=holding 1G(most accurate)
@@ -230,8 +233,8 @@ APU_EGT = globalProperty("sim/cockpit2/electrical/APU_EGT_c")
 Eng_1_reverser_deployment = globalProperty("sim/flightmodel2/engines/thrust_reverser_deploy_ratio[0]")
 Eng_2_reverser_deployment = globalProperty("sim/flightmodel2/engines/thrust_reverser_deploy_ratio[1]")
 
-Eng_1_Fire_valve = createGlobalPropertyi("a321neo/dynamics/engines/fire_valve_1", 0, false, true, false) -- 0 open - normal, 1 - closed - fire pushbutton triggered
-Eng_2_Fire_valve = createGlobalPropertyi("a321neo/dynamics/engines/fire_valve_2", 0, false, true, false) -- 0 open - normal, 1 - closed - fire pushbutton triggered
+Eng_1_Firewall_valve = createGlobalPropertyi("a321neo/dynamics/engines/firewall_valve_1", 1, false, true, false) -- 0 open, 1 - closed, 2 : transit - firewall valve
+Eng_2_Firewall_valve = createGlobalPropertyi("a321neo/dynamics/engines/firewall_valve_2", 1, false, true, false) -- 0 open, 1 - closed, 2 : transit - firewall valve
 
 --PACKs system
 Apu_bleed_switch = globalProperty("sim/cockpit2/bleedair/actuators/apu_bleed")
@@ -439,9 +442,21 @@ Yaw_lim = createGlobalPropertyf("a321neo/dynamics/FBW/yaw_lim", 30, false, true,
 
 -- Fuel
 Fuel_quantity = {}
-Fuel_quantity[0] =   globalProperty("sim/cockpit2/fuel/fuel_quantity[0]")
-Fuel_quantity[1] =   globalProperty("sim/cockpit2/fuel/fuel_quantity[1]")
-Fuel_quantity[2] =   globalProperty("sim/cockpit2/fuel/fuel_quantity[2]")
+Fuel_quantity[0] =   globalProperty("sim/flightmodel/weight/m_fuel[0]")
+Fuel_quantity[1] =   globalProperty("sim/flightmodel/weight/m_fuel[1]")
+Fuel_quantity[2] =   globalProperty("sim/flightmodel/weight/m_fuel[2]")
+Fuel_quantity[3] =   globalProperty("sim/flightmodel/weight/m_fuel[3]")
+Fuel_quantity[4] =   globalProperty("sim/flightmodel/weight/m_fuel[4]")
+Fuel_pump_on = {}
+Fuel_pump_on[0]  = globalProperty("sim/cockpit2/fuel/fuel_tank_pump_on[0]")
+Fuel_pump_on[1]  = globalProperty("sim/cockpit2/fuel/fuel_tank_pump_on[1]")
+Fuel_pump_on[2]  = globalProperty("sim/cockpit2/fuel/fuel_tank_pump_on[2]")
+Fuel_pump_on[3]  = globalProperty("sim/cockpit2/fuel/fuel_tank_pump_on[3]")
+Fuel_pump_on[4]  = globalProperty("sim/cockpit2/fuel/fuel_tank_pump_on[4]")
 
+Fuel_tank_selector_eng_1 = globalProperty("sim/cockpit2/fuel/fuel_tank_selector_left")  -- 0=none,1=left,2=center,3=right,4=all
+Fuel_tank_selector_eng_2 = globalProperty("sim/cockpit2/fuel/fuel_tank_selector_right") -- 0=none,1=left,2=center,3=right,4=all
 
+Fuel_wing_L_temp = createGlobalPropertyf("a321neo/dynamics/fuel/fuel_temp_L", 0, false, true, false) -- Temperature of the fuel LEFT wing
+Fuel_wing_R_temp = createGlobalPropertyf("a321neo/dynamics/fuel/fuel_temp_R", 0, false, true, false) -- Temperature of the fuel RIGHT wing
 

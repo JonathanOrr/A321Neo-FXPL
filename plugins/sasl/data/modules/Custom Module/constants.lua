@@ -14,10 +14,11 @@ ECAM_MAGENTA = {1.0, 0.0, 1.0}
 ECAM_GREY = {0.3, 0.3, 0.3}
 ECAM_BLACK = {0, 0, 0}
 UI_WHITE = {1.0, 1.0, 1.0}
+UI_LIGHT_RED = {1.0, 0.3, 0.3}
 UI_LIGHT_BLUE = {0, 0.708, 1}
 UI_LIGHT_GREY = {0.2039, 0.2235, 0.247}
 UI_DARK_GREY = {0.1568, 0.1803, 0.2039}
-
+UI_DARK_BLUE = {0, 0.5, 0.7}
 
 -- ELEC buses
 ELEC_BUS_AC_1 = 1
@@ -47,6 +48,14 @@ PHASE_FINAL          = 7
 PHASE_TOUCHDOWN      = 8
 PHASE_BELOW_80_KTS   = 9 
 PHASE_2ND_ENG_OFF    = 10
+
+-- FUEL
+
+FUEL_TOT_MAX   = 40962
+FUEL_LR_MAX    = 8449
+FUEL_C_MAX     = 8941
+FUEL_ACT_MAX   = 5031
+FUEL_RCT_MAX   = 10089
 
 -- Fonts
 Font_AirbusDUL = sasl.gl.loadFont("fonts/AirbusDULiberationMono.ttf")
