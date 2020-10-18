@@ -354,10 +354,10 @@ local function draw_ess_bus_lines()
 
     -- AC
     if ELEC_sys.buses.ac_ess_powered_by == AC_BUS_1 then
-        sasl.gl.drawWideLine(211, size[2]/2+20, 355, size[2]/2+20, 3, ECAM_GREEN)
+        sasl.gl.drawWideLine(211, size[2]/2+24, 355, size[2]/2+24, 3, ECAM_GREEN)
     end
     if ELEC_sys.buses.ac_ess_powered_by == AC_BUS_2 then
-        sasl.gl.drawWideLine(560, size[2]/2+20, 688, size[2]/2+20, 3, ECAM_GREEN)
+        sasl.gl.drawWideLine(560, size[2]/2+24, 688, size[2]/2+24, 3, ECAM_GREEN)
     end
     if ELEC_sys.buses.ac_ess_powered_by == GEN_EMER then
         draw_open_arrow_down(540, size[2]/2+27, ECAM_GREEN)
