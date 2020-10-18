@@ -35,7 +35,7 @@ local function draw_tank_qty()
     local fuel_ACT= math.floor(get(Fuel_quantity[FUEL_TANK_ACT]))
     local fuel_RCT= math.floor(get(Fuel_quantity[FUEL_TANK_RCT]))
     
-    local c_pump_fail_or_off = true -- TODO
+    local c_pump_fail_or_off = fuel_C > 0 and (not Fuel_sys.tank_pump_and_xfr[5].status) and (not Fuel_sys.tank_pump_and_xfr[5].status)
     
     local act_pump_fail = get(FAILURE_FUEL, 7) == 1
     local rct_pump_fail = get(FAILURE_FUEL, 8) == 1
@@ -170,9 +170,14 @@ local function draw_temps()
     sasl.gl.drawText(Font_AirbusDUL, size[2]/2-245, size[2]/2-80, "°C", 26, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
 
     sasl.gl.drawText(Font_AirbusDUL, size[2]/2+300, size[2]/2-80, math.ceil(get(Fuel_wing_R_temp)), 26, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-    sasl.gl.drawText(Font_AirbusDUL, size[2]/2+345, size[2]/2-80, "°C", 26, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    sasl.gl.drawText(Font_AirbusDUL, size[2]/2+345, size[2]/2-80, "°C", 26, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE) 
+end
 
-    
+function draw_valve_lines()
+    if get(Ecam_fuel_valve_X_BLEED) == 0 or get(Ecam_fuel_valve_X_BLEED) == 1 then
+        sasl.gl.drawWideLine(size[2]/2-220, size[2]/2+215, size[2]/2-40, size[2]/2+215, 3 , ECAM_GREEN)
+        sasl.gl.drawWideLine(size[2]/2+220, size[2]/2+215, size[2]/2+40, size[2]/2+215, 3 , ECAM_GREEN)
+    end
 end
 
 function draw_fuel_page()
@@ -184,6 +189,7 @@ function draw_fuel_page()
     draw_engine_nr()
     draw_apu_legend()
     draw_temps()
+    draw_valve_lines()
 end
 
 
@@ -200,11 +206,11 @@ function ecam_update_fuel_page()
 
     -- L2
     if not Fuel_sys.tank_pump_and_xfr[2].switch then
-        set(Ecam_fuel_valve_L_1, 1)
+        set(Ecam_fuel_valve_L_2, 1)
     elseif not Fuel_sys.tank_pump_and_xfr[2].pressure_ok then
-        set(Ecam_fuel_valve_L_1, 2)
+        set(Ecam_fuel_valve_L_2, 2)
     else
-        set(Ecam_fuel_valve_L_1, 3)
+        set(Ecam_fuel_valve_L_2, 3)
     end
 
     -- R1
@@ -223,6 +229,29 @@ function ecam_update_fuel_page()
         set(Ecam_fuel_valve_R_2, 2)
     else
         set(Ecam_fuel_valve_R_2, 3)
+    end
+
+    -- C1
+    if not Fuel_sys.tank_pump_and_xfr[5].switch then
+        set(Ecam_fuel_valve_C_1, 0)
+    elseif not Fuel_sys.tank_pump_and_xfr[5].auto_status then
+        set(Ecam_fuel_valve_C_1, 0)
+    elseif not Fuel_sys.tank_pump_and_xfr[5].pressure_ok then
+        set(Ecam_fuel_valve_C_1, 2)
+    else
+        set(Ecam_fuel_valve_C_1, 1)
+    end
+
+
+    -- C2
+    if not Fuel_sys.tank_pump_and_xfr[6].switch then
+        set(Ecam_fuel_valve_C_2, 0)
+    elseif not Fuel_sys.tank_pump_and_xfr[6].auto_status then
+        set(Ecam_fuel_valve_C_2, 0)
+    elseif not Fuel_sys.tank_pump_and_xfr[6].pressure_ok then
+        set(Ecam_fuel_valve_C_2, 2)
+    else
+        set(Ecam_fuel_valve_C_2, 1)
     end
 
 
