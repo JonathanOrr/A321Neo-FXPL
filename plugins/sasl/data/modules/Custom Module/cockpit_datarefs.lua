@@ -143,6 +143,7 @@ PFD_Capt_radioalt_status = createGlobalPropertyi("a321neo/cockpit/PFD/capt_radio
 PFD_Capt_tailstrike_ind = createGlobalPropertyi("a321neo/cockpit/PFD/capt_tailstrike_ind", 0, false, true, false)   -- 0: not shown, 1: shown
 
 PFD_Capt_bird_vert_pos = createGlobalPropertyf("a321neo/cockpit/PFD/capt_bird_vert_pos", 0, false, true, false)
+PFD_Capt_bird_horiz_pos = createGlobalPropertyf("a321neo/cockpit/PFD/capt_bird_horiz_pos", 0, false, true, false)
 
 -- ECAM
 Ecam_previous_page  = createGlobalPropertyi("a321neo/cockpit/ecam/previous", 13, false, true, false) --1ENG, 2BLEED, 3PRESS, 4ELEC, 5HYD, 6FUEL, 7APU, 8COND, 9DOOR, 10WHEEL, 11F/CTL, 12STS

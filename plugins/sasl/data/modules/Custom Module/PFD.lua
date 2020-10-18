@@ -90,6 +90,13 @@ local function update_tailstrike_indicators()
     end
 end
 
+local function update_bird()
+    local rad_bank_angle = math.rad(get(Flightmodel_roll))
+    set(PFD_Capt_bird_vert_pos, get(Alpha) / math.cos(rad_bank_angle) - get(ground_track_delta) * math.sin(rad_bank_angle) )
+    set(PFD_Capt_bird_horiz_pos, get(ground_track_delta) * math.cos(rad_bank_angle))
+    
+    
+end
 
 function update()
 
@@ -146,12 +153,9 @@ function update()
     set(PFD_Capt_Ground_line, Math_clamp( get(Capt_ra_alt_ft)/120 + get(Flightmodel_pitch)/18, 0, 1))
     set(PFD_Fo_Ground_line, Math_clamp( get(Fo_ra_alt_ft)/120 + get(Flightmodel_pitch)/18, 0, 1))
     
-    set(PFD_Capt_bird_vert_pos, get(Alpha) / math.cos( math.rad(get(Flightmodel_roll))))
-    
     update_radioalt()
-    
     update_tailstrike_indicators()
-    
+    update_bird()
 end
 
 function draw()
