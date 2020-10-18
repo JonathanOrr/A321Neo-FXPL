@@ -101,6 +101,10 @@ local failures_data = {
             {name="FUEL PUMP\nL2 FAILURE", status=false, dataref=FAILURE_FUEL, nr=2},
             {name="FUEL PUMP\nR1 FAILURE", status=false, dataref=FAILURE_FUEL, nr=3},
             {name="FUEL PUMP\nR2 FAILURE", status=false, dataref=FAILURE_FUEL, nr=4},
+            {name="FUEL XFR\nC1 FAILURE", status=false, dataref=FAILURE_FUEL, nr=5},
+            {name="FUEL XFR\nC2 FAILURE", status=false, dataref=FAILURE_FUEL, nr=6},
+            {name="FUEL XFR ACT\nFAILURE", status=false, dataref=FAILURE_FUEL, nr=7},
+            {name="FUEL XFR RCT\nFFAILURE", status=false, dataref=FAILURE_FUEL, nr=8}
         }
     },
     {

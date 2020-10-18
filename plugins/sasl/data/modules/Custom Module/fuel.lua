@@ -222,11 +222,15 @@ local function update_logic_pumps()
             ELEC_sys.add_power_consumption(ELEC_BUS_AC_1, 7, 8)   
         end
         tank_pump_and_xfr[L_TK_PUMP_1].status = true
+    else
+        tank_pump_and_xfr[L_TK_PUMP_1].status = false
     end
     
     if tank_pump_and_xfr[L_TK_PUMP_2].switch and tank_pump_and_xfr[L_TK_PUMP_2].has_elec_pwr and get(FAILURE_FUEL, L_TK_PUMP_2) == 0 then
-        ELEC_sys.add_power_consumption(ELEC_BUS_AC_2, 7, 8)     
+        ELEC_sys.add_power_consumption(ELEC_BUS_AC_2, 7, 8)
         tank_pump_and_xfr[L_TK_PUMP_2].status = true
+    else
+        tank_pump_and_xfr[L_TK_PUMP_2].status = false    
     end
 
     if tank_pump_and_xfr[R_TK_PUMP_1].switch and tank_pump_and_xfr[R_TK_PUMP_1].has_elec_pwr and get(FAILURE_FUEL, R_TK_PUMP_1) == 0 then
@@ -234,11 +238,15 @@ local function update_logic_pumps()
             ELEC_sys.add_power_consumption(ELEC_BUS_AC_1, 7, 8)   
         end
         tank_pump_and_xfr[R_TK_PUMP_1].status = true
+    else
+        tank_pump_and_xfr[R_TK_PUMP_1].status = false    
     end
     
     if tank_pump_and_xfr[R_TK_PUMP_2].switch and tank_pump_and_xfr[R_TK_PUMP_2].has_elec_pwr and get(FAILURE_FUEL, R_TK_PUMP_2) == 0 then
         ELEC_sys.add_power_consumption(ELEC_BUS_AC_2, 7, 8)     
         tank_pump_and_xfr[R_TK_PUMP_2].status = true
+    else
+        tank_pump_and_xfr[R_TK_PUMP_2].status = false
     end
     
     tank_pump_and_xfr[C_TK_XFR_1].status = tank_pump_and_xfr[C_TK_XFR_1].switch and tank_pump_and_xfr[C_TK_XFR_1].has_elec_pwr and get(FAILURE_FUEL, C_TK_XFR_1) == 0
@@ -383,7 +391,7 @@ local function next_aux_fuel_tank()
     elseif rct_percentage > 0 then
         return RCT_TK_XFR
     else
-        return nil
+        return 0
     end
 end
 
@@ -400,8 +408,8 @@ local function update_act_rct_tank_pumps_auto()
                -- should not happen in any case if the aircraft is correctly refueled)
     end
 
-    next_tank = next_aux_fuel_tank()
-    if next_tank == nil then
+    local next_tank = next_aux_fuel_tank()
+    if next_tank == 0 then
         return -- No fuel in ACT nor in RCT
     end
 
@@ -489,6 +497,25 @@ local function update_temps()
 
 end
 
+local function update_fuel_usage()
+    
+    if get(EWD_flight_phase) == PHASE_2ND_ENG_OFF then
+        set(Ecam_fuel_usage_1, 0)
+        set(Ecam_fuel_usage_2, 0)
+        return
+    end
+    
+    local prev_eng1 = get(Ecam_fuel_usage_1)
+    local prev_eng2 = get(Ecam_fuel_usage_2)
+    local curr_flow_per_sec_1 = get(Eng_1_FF_kgs)
+    local curr_flow_per_sec_2 = get(Eng_2_FF_kgs)
+
+
+    set(Ecam_fuel_usage_1, prev_eng1 + curr_flow_per_sec_1 * get(DELTA_TIME))
+    set(Ecam_fuel_usage_2, prev_eng2 + curr_flow_per_sec_2 * get(DELTA_TIME))
+    
+end
+
 ----------------------------------------------------------------------------------------------------
 -- Functions - Main
 ----------------------------------------------------------------------------------------------------
@@ -508,5 +535,6 @@ function update()
     update_pump_dr()
     
     update_temps()
+    update_fuel_usage()
 end
 

@@ -49,9 +49,9 @@ local function draw_tank_qty()
     sasl.gl.drawText(Font_AirbusDUL, size[2]/2+100, size[2]/2-152, fuel_RCT, 36, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
 
     sasl.gl.drawText(Font_AirbusDUL, size[2]/2-100, size[2]/2-188, "ACT", 32, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    draw_wide_frame(size[2]/2+40, size[2]/2-160, size[2]/2+160, size[2]/2-120, 3, act_pump_fail and ECAM_ORANGE or ECAM_WHITE)
+    draw_wide_frame(size[2]/2-40, size[2]/2-160, size[2]/2-160, size[2]/2-120, 3, act_pump_fail and ECAM_ORANGE or ECAM_WHITE)
     sasl.gl.drawText(Font_AirbusDUL, size[2]/2+100, size[2]/2-188, "RCT", 32, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    draw_wide_frame(size[2]/2-40, size[2]/2-160, size[2]/2-160, size[2]/2-120, 3, rct_pump_fail and ECAM_ORANGE or ECAM_WHITE)
+    draw_wide_frame(size[2]/2+40, size[2]/2-160, size[2]/2+160, size[2]/2-120, 3, rct_pump_fail and ECAM_ORANGE or ECAM_WHITE)
     
     -- Box center tank
     if c_pump_fail_or_off then
@@ -97,7 +97,7 @@ local function draw_arrows_act_rct()
         end
     end
     if is_rct_transfer_active then
-        print(get(Fuel_light_pumps, 7))
+
         if get(Fuel_light_pumps, 8) == 1 then
             draw_fill_arrow_up(size[2]/2+70, size[2]/2-50, ECAM_GREEN)
         else
@@ -114,8 +114,8 @@ end
 
 local function draw_fuel_usage_and_ff()
 
-    local fuel_usage_1 = get(Ecam_fuel_usage_1)
-    local fuel_usage_2 = get(Ecam_fuel_usage_2)
+    local fuel_usage_1 = math.floor(get(Ecam_fuel_usage_1))
+    local fuel_usage_2 = math.floor(get(Ecam_fuel_usage_2))
     local fuel_usage_tot = fuel_usage_1 + fuel_usage_2
     
     local color = get(EWD_flight_phase) >= 2 and ECAM_GREEN or ECAM_WHITE
@@ -128,7 +128,7 @@ local function draw_fuel_usage_and_ff()
     if get(Engine_1_master_switch) == 0 and get(Engine_2_master_switch) == 0 then
         sasl.gl.drawText(Font_AirbusDUL, size[2]/2-120, size[2]/2-260, "xx", 36, false, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
     else
-        local total_ff = math.ceil(get(Eng_1_FF_kgm) + get(Eng_2_FF_kgm))
+        local total_ff = math.ceil(get(Eng_1_FF_kgs)*60 + get(Eng_2_FF_kgs)*60)
         sasl.gl.drawText(Font_AirbusDUL, size[2]/2-120, size[2]/2-260, total_ff, 36, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     end
     
@@ -235,24 +235,28 @@ function ecam_update_fuel_page()
     -- C1
     if not Fuel_sys.tank_pump_and_xfr[5].switch then
         set(Ecam_fuel_valve_C_1, 0)
+    elseif Fuel_sys.tank_pump_and_xfr[5].pressure_ok then
+        set(Ecam_fuel_valve_C_1, 1)
+    elseif get(FAILURE_FUEL, 5) == 1 then
+        set(Ecam_fuel_valve_C_1, 2)
     elseif not Fuel_sys.tank_pump_and_xfr[5].auto_status then
         set(Ecam_fuel_valve_C_1, 0)
-    elseif not Fuel_sys.tank_pump_and_xfr[5].pressure_ok then
-        set(Ecam_fuel_valve_C_1, 2)
     else
-        set(Ecam_fuel_valve_C_1, 1)
+        set(Ecam_fuel_valve_C_1, 2)
     end
 
 
     -- C2
     if not Fuel_sys.tank_pump_and_xfr[6].switch then
         set(Ecam_fuel_valve_C_2, 0)
+    elseif Fuel_sys.tank_pump_and_xfr[6].pressure_ok then
+        set(Ecam_fuel_valve_C_2, 1)
+    elseif get(FAILURE_FUEL, 5) == 1 then
+        set(Ecam_fuel_valve_C_2, 2)
     elseif not Fuel_sys.tank_pump_and_xfr[6].auto_status then
         set(Ecam_fuel_valve_C_2, 0)
-    elseif not Fuel_sys.tank_pump_and_xfr[6].pressure_ok then
-        set(Ecam_fuel_valve_C_2, 2)
     else
-        set(Ecam_fuel_valve_C_2, 1)
+        set(Ecam_fuel_valve_C_2, 2)
     end
 
 

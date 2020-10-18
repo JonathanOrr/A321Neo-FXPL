@@ -117,8 +117,8 @@ ECAM_on_nd_dial = createGlobalPropertyi("a321neo/cockpit/source_switching/ECAM_o
 Engine_mode_knob = createGlobalPropertyi("a321neo/cockpit/engine/engine_mode", 0, false, true, false) -- -1crank, 0norm, 1ignition
 Engine_1_master_switch = createGlobalPropertyi("a321neo/cockpit/engine/master_1", 0, false, true, false)
 Engine_2_master_switch = createGlobalPropertyi("a321neo/cockpit/engine/master_2", 0, false, true, false)
-Eng_1_FF_kgm = createGlobalPropertyf("a321neo/cockpit/engine/engine_1_fuel_flow_kg_min", 0, false, true, false)
-Eng_2_FF_kgm = createGlobalPropertyf("a321neo/cockpit/engine/engine_2_fuel_flow_kg_min", 0, false, true, false)
+Eng_1_FF_kgm = createGlobalPropertyf("a321neo/cockpit/engine/engine_1_fuel_flow_kg_min", 0, false, true, false) -- FIXME This is computed per hour not minute!
+Eng_2_FF_kgm = createGlobalPropertyf("a321neo/cockpit/engine/engine_2_fuel_flow_kg_min", 0, false, true, false) -- FIXME This is computed per hour not minute!
 
 --pfd
 Capt_landing_system_enabled = createGlobalPropertyi("a321neo/cockpit/PFD/capt_ls_enabled", 0, false, true, false)--for the LS button on the PFD
@@ -158,8 +158,8 @@ Ecam_elec_apu_gen_status = createGlobalPropertyi("a321neo/cockpit/ecam/electrica
 Ecam_elec_tr_ess_status = createGlobalPropertyi("a321neo/cockpit/ecam/electrical/tr_ess_status", 0, false, true, false) -- 0: TR off, 1: TR on, 2: TR failed
 Ecam_elec_rat_status = createGlobalPropertyi("a321neo/cockpit/ecam/electrical/emer_gen_status", 0, false, true, false) -- 0: RAT off, 1: RAT on, 2: RAT failed
 
-Ecam_fuel_usage_1 = createGlobalPropertyi("a321neo/cockpit/ecam/fuel/usage_eng_1", 0, false, true, false)
-Ecam_fuel_usage_2 = createGlobalPropertyi("a321neo/cockpit/ecam/fuel/usage_eng_2", 0, false, true, false)
+Ecam_fuel_usage_1 = createGlobalPropertyf("a321neo/cockpit/ecam/fuel/usage_eng_1", 0, false, true, false)
+Ecam_fuel_usage_2 = createGlobalPropertyf("a321neo/cockpit/ecam/fuel/usage_eng_2", 0, false, true, false)
 
 Ecam_fuel_valve_L_1 = createGlobalPropertyi("a321neo/cockpit/ecam/fuel/valve_L_1", 0, false, true, false) -- 0: closed OK, 1: closed amber, 2: LO PRESS, 3: open
 Ecam_fuel_valve_L_2 = createGlobalPropertyi("a321neo/cockpit/ecam/fuel/valve_L_2", 0, false, true, false) -- 0: closed OK, 1: closed amber, 2: LO PRESS, 3: open
