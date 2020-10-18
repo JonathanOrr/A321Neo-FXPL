@@ -8,6 +8,7 @@ include('EWD_msgs/electrical.lua')
 include('EWD_msgs/engines_and_apu.lua')
 include('EWD_msgs/FBW.lua')
 include('EWD_msgs/flight_controls.lua')
+include('EWD_msgs/fuel.lua')
 include('EWD_msgs/gears_and_doors.lua')
 include('EWD_msgs/hydraulic.lua')
 include('EWD_msgs/misc.lua')
@@ -53,6 +54,7 @@ local left_messages_list = {
     MessageGroup_SEAT_BELTS,
     MessageGroup_NO_SMOKING,
     MessageGroup_IRS_ALIGN,
+    MessageGroup_REFUELG,
     MessageGroup_NORMAL,
 
     -- Cautions
@@ -297,7 +299,23 @@ local function update_right_list()
         list_right:put(COL_INDICATION_BLINKING, "VHF 3 VOICE")    
     end
     
-
+    if get(Ecam_fuel_valve_X_BLEED) < 2 or get(Ecam_fuel_valve_X_BLEED) == 4 then
+        local is_amber = get(EWD_flight_phase) == PHASE_1ST_ENG_TO_PWR 
+                      or get(EWD_flight_phase) == PHASE_ABOVE_80_KTS 
+                      or get(EWD_flight_phase) == PHASE_LIFTOFF 
+        
+        list_right:put(is_amber and COL_CAUTION or COL_INDICATION, "FUEL X FEED")
+    end
+    
+    if Fuel_sys.tank_pump_and_xfr[5].pressure_ok or Fuel_sys.tank_pump_and_xfr[6].pressure_ok then
+        list_right:put(COL_INDICATION, "CTR TK XFRD")
+    end
+    if Fuel_sys.tank_pump_and_xfr[7].pressure_ok then
+        list_right:put(COL_INDICATION, "ACT TK XFRD")
+    end
+    if Fuel_sys.tank_pump_and_xfr[8].pressure_ok then
+        list_right:put(COL_INDICATION, "RCT TK XFRD")
+    end
     
     -- TODO Audio: AUDIO 3 XFRD displayed green if audio switching selector not in NORM
     -- TODO Acars: ACARS CALL (pulsing green) if received an ACARS message requesting voice conversation
@@ -309,13 +327,6 @@ local function update_right_list()
 
     -- TODO Steer: NW STRG DISC when the nose wheel steering selector is in the towing position
     --             GREEN: if no engine is running, AMBER: is at least one engine is running
-    
-    -- TODO Fuel: OUTR TK FUEL XFRD in green if at least 1 transfer valve is open
-    -- TODO Fuel: CTR TK FEEDG, green, if at least one center fuel pump is ON
-    -- TODO Fuel: FUEL X FEED:
-    --                          green - X FEED valve ON and X FEED not fully closed
-    --                          amber if in flight phases 3,4,5
-    -- TODO Fuel: REFUELG: green, fuel control panel door open or cockpit PWR pushbutton refuel panel ON
     
     -- TODO Anti-ice: WING A. ICE, green, if WING ANTI ICE is ON
     -- TODO Anti-ice: ICE NOT DET, green, if ice no longer detected after 190 secs of pressing WING ANTI ICE

@@ -66,9 +66,9 @@ local function draw_right_memo()
     for i=0,6 do
         if get(EWD_right_memo_colors[i]) > 0 then
             if get(EWD_right_memo_colors[i]) ~= 7 or get(TIME) % 2 > 1 then -- If color is COL_INDICATION_BLINKING we blink for 1 second every 2 seconds.
-                sasl.gl.drawText(Font_AirbusDUL, size[1]/2+140, size[2]/2-200-distance*i, get(EWD_right_memo[i]), 30, false, false, TEXT_ALIGN_LEFT, match_msg_colors[get(EWD_right_memo_colors[i])])
+                sasl.gl.drawText(Font_AirbusDUL, size[1]/2+160, size[2]/2-200-distance*i, get(EWD_right_memo[i]), 30, false, false, TEXT_ALIGN_LEFT, match_msg_colors[get(EWD_right_memo_colors[i])])
             else
-                sasl.gl.drawText(Font_AirbusDUL, size[1]/2+140, size[2]/2-200-distance*i, get(EWD_right_memo[i]), 30, false, false, TEXT_ALIGN_LEFT, ECAM_HIGH_GREEN)            
+                sasl.gl.drawText(Font_AirbusDUL, size[1]/2+160, size[2]/2-200-distance*i, get(EWD_right_memo[i]), 30, false, false, TEXT_ALIGN_LEFT, ECAM_HIGH_GREEN)            
             end
         end
     end
@@ -101,6 +101,23 @@ local function draw_extras()
     end 
 end
 
+local function draw_fuel_stuffs()
+    local fuel_on_board = math.floor(get(FOB))
+    
+    -- Check ECAM_fuel.lua to understand the following computation
+    local not_all_fuel_available = (math.floor(get(Fuel_quantity[0])) > 0
+                                    and (not Fuel_sys.tank_pump_and_xfr[5].status)
+                                    and (not Fuel_sys.tank_pump_and_xfr[5].status) ) 
+                                        or (get(FAILURE_FUEL, 7) == 1) or (get(FAILURE_FUEL, 8) == 1)
+                                        
+    sasl.gl.drawText(Font_AirbusDUL, 240, size[2]/2-120, fuel_on_board, 36, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    if not_all_fuel_available then
+        sasl.gl.drawWideLine(120, size[2]/2-125, 250, size[2]/2-125, 3 , ECAM_ORANGE)
+        sasl.gl.drawWideLine(120, size[2]/2-125, 120, size[2]/2-100, 3 , ECAM_ORANGE)
+        sasl.gl.drawWideLine(250, size[2]/2-125, 250, size[2]/2-100, 3 , ECAM_ORANGE)
+    end
+end
+
 function draw()
 
     if get(AC_ess_bus_pwrd) == 0 then   -- TODO This should be fixed when screens move around
@@ -112,5 +129,6 @@ function draw()
     draw_left_memo()
     draw_right_memo()
     draw_extras()
+    draw_fuel_stuffs()
 end
 

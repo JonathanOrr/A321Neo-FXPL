@@ -239,12 +239,17 @@ local function update_auto_mode()
     
 end
 
+local function update_ewd_refuelg()
+    set(Fuel_is_refuelG, (battery_switch_status or refuel_switch_status) and 1 or 0)
+end
+
 function update()
     update_btn_status()
     update_desired_qty()
     
     update_auto_mode()
     update_refuel()
+    update_ewd_refuelg()
     
 end
 

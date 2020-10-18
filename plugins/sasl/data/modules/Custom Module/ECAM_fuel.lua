@@ -64,7 +64,10 @@ end
 
 local function draw_fob_qty()
 
-    local any_failure = (math.floor(get(Fuel_quantity[FUEL_TANK_C])) > 0 and (not Fuel_sys.tank_pump_and_xfr[5].status) and (not Fuel_sys.tank_pump_and_xfr[5].status) ) or (get(FAILURE_FUEL, 7) == 1) or (get(FAILURE_FUEL, 8) == 1)
+    local any_failure = (math.floor(get(Fuel_quantity[FUEL_TANK_C])) > 0 
+                        and (not Fuel_sys.tank_pump_and_xfr[5].status)
+                        and (not Fuel_sys.tank_pump_and_xfr[5].status) ) 
+                            or (get(FAILURE_FUEL, 7) == 1) or (get(FAILURE_FUEL, 8) == 1)
 
     local fob = math.floor(get(FOB))
     -- FOB

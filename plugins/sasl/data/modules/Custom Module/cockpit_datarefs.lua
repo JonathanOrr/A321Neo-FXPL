@@ -327,6 +327,7 @@ Fuel_light_pumps = createGlobalPropertyia("a321neo/cockpit/fuel/buttons/pumps", 
                                                                             -- 00: no lights, 01: OFF (FWD for ACT and RCT), 10: FAULT, 11: FAULT+OFF (FWD for ACT and RCT)
 Fuel_light_mode_sel = createGlobalPropertyi("a321neo/cockpit/fuel/buttons/c_mode_sel", 0, false, true, false)      --00: No lights, 01: [MAN], 10: FAULT, 11 [MAN] + FAULT
 Fuel_light_x_feed   = createGlobalPropertyi("a321neo/cockpit/fuel/buttons/x_feed", 0, false, true, false)      --00: No lights, 01: [ON], 10: OPEN, 11 [ON] + OPEN
+Fuel_is_refuelG     = createGlobalPropertyi("a321neo/cockpit/fuel/refuelg", 0, false, true, false) -- Refuel panel is active (1: yes, 0 : no)
 
 -- Fire
 Fire_pb_APU_status = createGlobalPropertyi("a321neo/cockpit/fire/buttons/APU_pb", 0, false, true, false) 
