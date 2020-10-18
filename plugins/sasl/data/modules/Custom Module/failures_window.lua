@@ -104,7 +104,12 @@ local failures_data = {
             {name="FUEL XFR\nC1 FAILURE", status=false, dataref=FAILURE_FUEL, nr=5},
             {name="FUEL XFR\nC2 FAILURE", status=false, dataref=FAILURE_FUEL, nr=6},
             {name="FUEL XFR ACT\nFAILURE", status=false, dataref=FAILURE_FUEL, nr=7},
-            {name="FUEL XFR RCT\nFFAILURE", status=false, dataref=FAILURE_FUEL, nr=8}
+            {name="FUEL XFR RCT\nFFAILURE", status=false, dataref=FAILURE_FUEL, nr=8},
+            {name="APU VALVE\nSTUCK", status=false, dataref=FAILURE_FUEL_APU_VALVE_STUCK},
+            {name="APU PUMP\nFAILURE", status=false, dataref=FAILURE_FUEL_APU_PUMP_FAIL},
+            {name="ENG 1 FW\nVALVE STUCK", status=false, dataref=FAILURE_FUEL_ENG1_VALVE_STUCK},
+            {name="ENG 2 FW\nVALVE STUCK", status=false, dataref=FAILURE_FUEL_ENG2_VALVE_STUCK},
+            
         }
     },
     {

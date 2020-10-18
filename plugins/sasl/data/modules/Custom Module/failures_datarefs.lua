@@ -80,5 +80,10 @@ FAILURE_FCTL_RAIL = createGlobalPropertyi("a321neo/failures/fctl/right_aileron",
 
 FAILURE_FUEL = createGlobalPropertyia("a321neo/failures/fuel/pumps", 8)
 FAILURE_FUEL_X_FEED = createGlobalPropertyi("a321neo/failures/fuel/x_feed_valve", 0, false, true, false)--x feed valve
+FAILURE_FUEL_APU_VALVE_STUCK = createGlobalPropertyi("a321neo/failures/fuel/apu_valve_stuck", 0, false, true, false)
+FAILURE_FUEL_APU_PUMP_FAIL   = createGlobalPropertyi("a321neo/failures/fuel/apu_pump_fail", 0, false, true, false)
+FAILURE_FUEL_ENG1_VALVE_STUCK = createGlobalPropertyi("a321neo/failures/fuel/eng1_firewall_valve_stuck", 0, false, true, false)
+FAILURE_FUEL_ENG2_VALVE_STUCK = createGlobalPropertyi("a321neo/failures/fuel/eng2_firewall_valve_stuck", 0, false, true, false)
+
 
 

@@ -259,6 +259,35 @@ function ecam_update_fuel_page()
         set(Ecam_fuel_valve_C_2, 2)
     end
 
+    -- ENG 1 valve
+    if get(Eng_1_Firewall_valve) == 2 then
+        set(Ecam_fuel_valve_ENG_1, 4)   -- Transition
+    elseif get(Eng_1_Firewall_valve) == 1 and ( get(Engine_1_master_switch) == 1 and get(Fire_pb_ENG1_status) == 0 ) then
+        set(Ecam_fuel_valve_ENG_1, 1) -- Closed but should not
+    elseif get(Eng_1_Firewall_valve) == 0 and ( get(Engine_1_master_switch) == 0 or get(Fire_pb_ENG1_status) == 1 ) then
+        set(Ecam_fuel_valve_ENG_1, 3) -- Open but should not
+    elseif get(Eng_1_Firewall_valve) == 1 then
+        set(Ecam_fuel_valve_ENG_1, 0) -- Closed OK
+    elseif get(Eng_1_Firewall_valve) == 0 then
+        set(Ecam_fuel_valve_ENG_1, 2) -- Open OK
+    end
+
+    -- ENG 2 valve
+    if get(Eng_2_Firewall_valve) == 2 then
+        set(Ecam_fuel_valve_ENG_2, 4)   -- Transition
+    elseif get(Eng_2_Firewall_valve) == 1 and ( get(Engine_2_master_switch) == 1 and get(Fire_pb_ENG2_status) == 0 ) then
+        set(Ecam_fuel_valve_ENG_2, 1) -- Closed but should not
+    elseif get(Eng_2_Firewall_valve) == 0 and ( get(Engine_2_master_switch) == 0 or get(Fire_pb_ENG2_status) == 1 ) then
+        set(Ecam_fuel_valve_ENG_2, 3) -- Open but should not
+    elseif get(Eng_2_Firewall_valve) == 1 then
+        set(Ecam_fuel_valve_ENG_2, 0) -- Closed OK
+    elseif get(Eng_2_Firewall_valve) == 0 then
+        set(Ecam_fuel_valve_ENG_2, 2) -- Open OK
+    end
+
 
 end
+
+
+
 

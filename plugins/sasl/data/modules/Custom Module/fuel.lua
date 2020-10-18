@@ -516,6 +516,79 @@ local function update_fuel_usage()
     
 end
 
+local function set_apu_fuel_valve(is_open)
+    if get(FAILURE_FUEL_APU_VALVE_STUCK) == 0 then
+        set(Apu_fuel_valve, is_open and 1 or 0)
+    end
+end
+
+local function update_apu()
+
+    if get(Apu_master_button_state) % 2 == 0 then
+        -- APU master switch button is off
+        set(Apu_fuel_source, 0)
+        set_apu_fuel_valve(false)
+        return
+    end
+
+    set_apu_fuel_valve(true)
+    
+    -- APU cannot work by gravity, need fuel pressure or the APU pump
+    -- APU is connected to ENG1 line, so we can exploit the previous variable to know the status    
+
+    if eng1_fuel_status == 3 then   -- Ok normal, left side
+        set(Apu_fuel_source, 1)
+    elseif eng1_fuel_status == 4 then   -- Ok crossfeed, from right side
+        set(Apu_fuel_source, 2)
+    elseif eng1_fuel_status == 1 and get(FAILURE_FUEL_APU_PUMP_FAIL) == 1 then   -- Mh, only if the apu pump is ok
+        set(Apu_fuel_source, 1)
+        if get(AC_ess_shed_pwrd) == 1 then
+            ELEC_sys.add_power_consumption(ELEC_BUS_AC_ESS_SHED, 2, 3)
+        elseif get(AC_STAT_INV_pwrd) == 1 then
+            ELEC_sys.add_power_consumption(ELEC_BUS_STAT_INV, 2, 3)
+        else
+            --assert(false)   -- This should not happen: the APU must be flagged as failed if we are in this condition.
+        end
+    end
+    
+
+end
+
+local eng_1_fw_valve_position = 0
+local eng_2_fw_valve_position = 0
+
+local function update_eng_1_valve()
+    if get(FAILURE_FUEL_ENG1_VALVE_STUCK) == 1 then
+        return -- Valve stuck, cannot change position
+    end
+    
+    if get(Engine_1_master_switch) == 1 and get(Fire_pb_ENG1_status) == 0 then
+        eng_1_fw_valve_position = Set_linear_anim_value(eng_1_fw_valve_position, 1, 0, 1, 0.9)
+    end
+    
+    if get(Engine_1_master_switch) == 0 or get(Fire_pb_ENG1_status) == 1 then
+        eng_1_fw_valve_position = Set_linear_anim_value(eng_1_fw_valve_position, 0, 0, 1, 0.9)
+    end
+
+    set(Eng_1_Firewall_valve, eng_1_fw_valve_position == 1 and 0 or (eng_1_fw_valve_position == 0 and 1 or 2))
+end
+
+local function update_eng_2_valve()
+    if get(FAILURE_FUEL_ENG2_VALVE_STUCK) == 1 then
+        return -- Valve stuck, cannot change position
+    end
+    
+    if get(Engine_2_master_switch) == 1 and get(Fire_pb_ENG2_status) == 0 then
+        eng_2_fw_valve_position = Set_linear_anim_value(eng_2_fw_valve_position, 1, 0, 1, 0.95)
+    end
+    
+    if get(Engine_2_master_switch) == 0 or get(Fire_pb_ENG2_status) == 1 then
+        eng_2_fw_valve_position = Set_linear_anim_value(eng_2_fw_valve_position, 0, 0, 1, 0.95)
+    end
+
+    set(Eng_2_Firewall_valve, eng_2_fw_valve_position == 1 and 0 or (eng_2_fw_valve_position == 0 and 1 or 2))
+end
+
 ----------------------------------------------------------------------------------------------------
 -- Functions - Main
 ----------------------------------------------------------------------------------------------------
@@ -536,5 +609,8 @@ function update()
     
     update_temps()
     update_fuel_usage()
+    update_apu()
+    update_eng_1_valve()
+    update_eng_2_valve()
 end
 
