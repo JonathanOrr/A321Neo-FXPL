@@ -68,7 +68,6 @@ sasl.registerCommandHandler (ADIRS_cmd_instantaneous_align, 0, function(phase) a
 
 function onAirportLoaded()
     if get(Startup_running) == 1 or get(Capt_ra_alt_ft) > 20 then
-        print("AUTO ALIGN ADIRS")
     
 	    adr_switch_status[1] = true
 	    adr_switch_status[2] = true

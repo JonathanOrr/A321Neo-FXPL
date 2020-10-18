@@ -26,6 +26,7 @@ local tank_ACT   = 3
 local tank_RCT   = 4
 
 local FUEL_XFR_SPEED = 10
+local FUEL_LEAK_SPEED = 1
 
 ----------------------------------------------------------------------------------------------------
 -- Global/Local variables
@@ -94,6 +95,21 @@ function fuel_toggle_x_feed_mode(phase)
     end
     
     X_feed_mode = not X_feed_mode
+end
+
+function onAirportLoaded()
+    if get(Startup_running) == 1 or get(Capt_ra_alt_ft) > 20 then
+        tank_pump_and_xfr[L_TK_PUMP_1].switch = true
+        tank_pump_and_xfr[L_TK_PUMP_2].switch = true
+        tank_pump_and_xfr[R_TK_PUMP_1].switch = true
+        tank_pump_and_xfr[R_TK_PUMP_2].switch = true
+        tank_pump_and_xfr[C_TK_XFR_1].switch = true
+        tank_pump_and_xfr[C_TK_XFR_2].switch = true
+        tank_pump_and_xfr[ACT_TK_XFR].switch = false
+        tank_pump_and_xfr[RCT_TK_XFR].switch = false
+        C_tank_mode   = false
+        X_feed_mode   = false
+    end
 end
 
 ----------------------------------------------------------------------------------------------------
@@ -589,6 +605,16 @@ local function update_eng_2_valve()
     set(Eng_2_Firewall_valve, eng_2_fw_valve_position == 1 and 0 or (eng_2_fw_valve_position == 0 and 1 or 2))
 end
 
+local function update_fuel_leaks()
+    for i=1,5 do
+        if get(FAILURE_FUEL_LEAK, i) == 1 then
+            local leak_compute = get(DELTA_TIME) * FUEL_LEAK_SPEED
+            set(Fuel_quantity[i-1], math.max(0, get(Fuel_quantity[i-1]) - leak_compute))
+        end
+    end
+
+end
+
 ----------------------------------------------------------------------------------------------------
 -- Functions - Main
 ----------------------------------------------------------------------------------------------------
@@ -612,5 +638,7 @@ function update()
     update_apu()
     update_eng_1_valve()
     update_eng_2_valve()
+    
+    update_fuel_leaks()
 end
 

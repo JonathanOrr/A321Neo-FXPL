@@ -109,6 +109,13 @@ local failures_data = {
             {name="APU PUMP\nFAILURE", status=false, dataref=FAILURE_FUEL_APU_PUMP_FAIL},
             {name="ENG 1 FW\nVALVE STUCK", status=false, dataref=FAILURE_FUEL_ENG1_VALVE_STUCK},
             {name="ENG 2 FW\nVALVE STUCK", status=false, dataref=FAILURE_FUEL_ENG2_VALVE_STUCK},
+            {name="TANK CTR\nLEAK", status=false, dataref=FAILURE_FUEL_LEAK, nr=1},
+            {name="TANK L\nLEAK", status=false, dataref=FAILURE_FUEL_LEAK, nr=2},
+            {name="TANK R\nLEAK", status=false, dataref=FAILURE_FUEL_LEAK, nr=3},
+            {name="TANK ACT\nLEAK", status=false, dataref=FAILURE_FUEL_LEAK, nr=4},
+            {name="TANK RCT\nLEAK", status=false, dataref=FAILURE_FUEL_LEAK, nr=5},
+            
+            
             
         }
     },

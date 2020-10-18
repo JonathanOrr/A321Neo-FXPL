@@ -84,6 +84,6 @@ FAILURE_FUEL_APU_VALVE_STUCK = createGlobalPropertyi("a321neo/failures/fuel/apu_
 FAILURE_FUEL_APU_PUMP_FAIL   = createGlobalPropertyi("a321neo/failures/fuel/apu_pump_fail", 0, false, true, false)
 FAILURE_FUEL_ENG1_VALVE_STUCK = createGlobalPropertyi("a321neo/failures/fuel/eng1_firewall_valve_stuck", 0, false, true, false)
 FAILURE_FUEL_ENG2_VALVE_STUCK = createGlobalPropertyi("a321neo/failures/fuel/eng2_firewall_valve_stuck", 0, false, true, false)
-
+FAILURE_FUEL_LEAK = createGlobalPropertyia("a321neo/failures/fuel/leak", 5) -- Leak, 0: ctr, 1: l, 2: r, 3: act, 4: rct
 
 
