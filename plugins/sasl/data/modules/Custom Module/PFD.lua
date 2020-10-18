@@ -146,6 +146,8 @@ function update()
     set(PFD_Capt_Ground_line, Math_clamp( get(Capt_ra_alt_ft)/120 + get(Flightmodel_pitch)/18, 0, 1))
     set(PFD_Fo_Ground_line, Math_clamp( get(Fo_ra_alt_ft)/120 + get(Flightmodel_pitch)/18, 0, 1))
     
+    set(PFD_Capt_bird_vert_pos, get(Alpha) / math.cos( math.rad(get(Flightmodel_roll))))
+    
     update_radioalt()
     
     update_tailstrike_indicators()
