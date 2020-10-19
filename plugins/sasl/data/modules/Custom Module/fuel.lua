@@ -31,6 +31,14 @@ local FUEL_LEAK_SPEED = 1
 ----------------------------------------------------------------------------------------------------
 -- Global/Local variables
 ----------------------------------------------------------------------------------------------------
+
+-- Legend:
+-- - switch: position of the overhead panel switch
+-- - status: true if the pump CAN run, false otherwise
+-- - auto_status: true if the auto-system asked the pump to run
+-- - has_elec_pwr: is the pump electrically powered?
+-- - pressure_ok: is the pump actually delivering/transferring fuel?
+
 local tank_pump_and_xfr = {
     [L_TK_PUMP_1] = { switch = false, status = false, has_elec_pwr = false, pressure_ok = false },
     [L_TK_PUMP_2] = { switch = false, status = false, has_elec_pwr = false, pressure_ok = false },
@@ -41,6 +49,7 @@ local tank_pump_and_xfr = {
     [ACT_TK_XFR]  = { switch = false, status = false, auto_status = false, has_elec_pwr = false, pressure_ok = false },
     [RCT_TK_XFR]  = { switch = false, status = false, auto_status = false, has_elec_pwr = false, pressure_ok = false }
 }
+
 
 local C_tank_mode   = false -- false AUTO, true MANUAL
 local C_tank_fault  = false -- This does not depend on a fault datarefs
@@ -53,7 +62,10 @@ local eng2_fuel_status = 0 -- 0 : no fuel, 1 : gravity left, 2 : gravity right, 
 
 Fuel_sys.tank_pump_and_xfr = tank_pump_and_xfr
 
+local eng_1_fw_valve_position = 0   -- Firewall valve position (used internally, use the dataref for external use)
+local eng_2_fw_valve_position = 0   -- Firewall valve position (used internally, use the dataref for external use)
 
+-- Initially, the temperature of the fuel corresponds to the external one
 set(Fuel_wing_L_temp, get(TAT))
 set(Fuel_wing_R_temp, get(TAT))
 ----------------------------------------------------------------------------------------------------
@@ -98,6 +110,7 @@ function fuel_toggle_x_feed_mode(phase)
 end
 
 function onAirportLoaded()
+    -- When the aircraft is loaded in flight, let's switch on all the pumps
     if get(Startup_running) == 1 or get(Capt_ra_alt_ft) > 20 then
         tank_pump_and_xfr[L_TK_PUMP_1].switch = true
         tank_pump_and_xfr[L_TK_PUMP_2].switch = true
@@ -113,33 +126,40 @@ function onAirportLoaded()
 end
 
 ----------------------------------------------------------------------------------------------------
--- Functions - Logic
+-- Functions - Button light updates
 ----------------------------------------------------------------------------------------------------
 
+-- This function updates the button lights related to LEFT and RIGHT pumps
 local function update_single_pump_LR(x)
+    -- Note: FAULT + [OFF] can't occur with this button
+
     if not tank_pump_and_xfr[x].has_elec_pwr then
-        set(Fuel_light_pumps, 0, x)
+        set(Fuel_light_pumps, 0, x) -- No light
     elseif not tank_pump_and_xfr[x].switch then
-        set(Fuel_light_pumps, 1, x)
+        set(Fuel_light_pumps, 1, x) -- [OFF]
     elseif not tank_pump_and_xfr[x].pressure_ok then
-        set(Fuel_light_pumps, 10, x)
+        set(Fuel_light_pumps, 10, x) -- Fault
     else
-        set(Fuel_light_pumps, 0, x)
+        set(Fuel_light_pumps, 0, x) -- No light
     end
 end
 
+-- This function updates the button lights related to CENTER pumps
 local function update_single_pump_C(x)
+    -- Note: FAULT + [OFF] can't occur with this button
+
     if not tank_pump_and_xfr[x].has_elec_pwr then
-        set(Fuel_light_pumps, 0, x)
+        set(Fuel_light_pumps, 0, x) -- No light
     elseif not tank_pump_and_xfr[x].switch then
-        set(Fuel_light_pumps, 1, x)
+        set(Fuel_light_pumps, 1, x) -- [OFF]
     elseif not tank_pump_and_xfr[x].status then
-        set(Fuel_light_pumps, 10, x)
+        set(Fuel_light_pumps, 10, x) -- Fault
     else
-        set(Fuel_light_pumps, 0, x)
+        set(Fuel_light_pumps, 0, x)  -- No light
     end
 end
 
+-- This function updates the button lights related to ACT and RCT pumps
 local function update_single_extra(x)
     set(Fuel_light_pumps, (tank_pump_and_xfr[x].switch and 1 or 0) + (tank_pump_and_xfr[x].pressure_ok and 0 or 10), x)
 end
@@ -156,11 +176,13 @@ local function update_lights()
     update_single_pump_C(C_TK_XFR_1)
     update_single_pump_C(C_TK_XFR_2)
 
+    -- ACT and RCT illuminated when ON!
     update_single_extra(ACT_TK_XFR)
     update_single_extra(RCT_TK_XFR)
 
     -- X_feed and mode sel
     if get(DC_ess_bus_pwrd) == 1 then
+        -- The lights are on only if DC ESS is on
         set(Fuel_light_mode_sel, (C_tank_mode and 1 or 0) + (C_tank_fault and 10 or 0))
         set(Fuel_light_x_feed,   (X_feed_mode and 1 or 0) + (X_feed_status and 10 or 0))
     else
@@ -169,23 +191,31 @@ local function update_lights()
     end
 end
 
+----------------------------------------------------------------------------------------------------
+-- Functions - X-Plane dataref
+----------------------------------------------------------------------------------------------------
+
 local function update_pump_dr()
     set(Fuel_pump_on[tank_CENTER], 0) -- It should never be turned on because it does't feed engine
     set(Fuel_pump_on[tank_ACT],    0) -- It should never be turned on because it does't feed engine
     set(Fuel_pump_on[tank_RCT],    0) -- It should never be turned on because it does't feed engine
 
+    -- This function is a trick to map our logic on the X-Plane logic.
+    -- Only L1, L2, R1, R2 can feed the engines
+    -- X-Plane doesn't distinguish among L1 and L2 (or among R1 an R2), so from the standpoint of
+    -- X-Plane we have only 1 pump per tank.
 
     -- ENG1 - LEFT
     set(Fuel_pump_on[tank_LEFT], 0)
     if eng1_fuel_status == 3 or eng1_fuel_status == 1 then
         -- Direct feed or gravity feed
         set(Fuel_pump_on[tank_LEFT], 1)
-        set(Fuel_tank_selector_eng_1, 1)
+        set(Fuel_tank_selector_eng_1, 1)    -- This tells X-Plane to take fuel from the LEFT side
     elseif eng1_fuel_status == 4 then
         -- Cross feed
-        set(Fuel_tank_selector_eng_1, 4)
+        set(Fuel_tank_selector_eng_1, 4)    -- This tells X-Plane to take fuel from the ALL (RIGHT) side
     else
-        set(Fuel_tank_selector_eng_1, 0)
+        set(Fuel_tank_selector_eng_1, 0)    -- Ops, no fuel
     end
 
     -- ENG2 - RIGHT
@@ -193,15 +223,19 @@ local function update_pump_dr()
     if eng2_fuel_status == 4 or eng2_fuel_status == 2 then
         -- Direct feed or gravity feed
         set(Fuel_pump_on[tank_RIGHT], 1)
-        set(Fuel_tank_selector_eng_2, 3)
+        set(Fuel_tank_selector_eng_2, 3)    -- This tells X-Plane to take fuel from the RIGHT side
     elseif eng2_fuel_status == 3 then
         -- Cross feed
-        set(Fuel_tank_selector_eng_2, 4)
+        set(Fuel_tank_selector_eng_2, 4)    -- This tells X-Plane to take fuel from the ALL (LEFT) side
     else
         set(Fuel_tank_selector_eng_2, 0)
     end
     
 end
+
+----------------------------------------------------------------------------------------------------
+-- Functions - Logic
+----------------------------------------------------------------------------------------------------
 
 local function update_pumps_elec() 
 
@@ -330,20 +364,21 @@ local function update_x_feed_valve()
 end
 
 local function update_pumps_status()
-    tank_pump_and_xfr[L_TK_PUMP_1].pressure_ok =  tank_pump_and_xfr[L_TK_PUMP_1].status and get(Fuel_quantity[tank_LEFT]) > 100
-    tank_pump_and_xfr[L_TK_PUMP_2].pressure_ok =  tank_pump_and_xfr[L_TK_PUMP_2].status and get(Fuel_quantity[tank_LEFT]) > 100
-    tank_pump_and_xfr[R_TK_PUMP_1].pressure_ok =  tank_pump_and_xfr[R_TK_PUMP_1].status and get(Fuel_quantity[tank_RIGHT]) > 100
-    tank_pump_and_xfr[R_TK_PUMP_2].pressure_ok =  tank_pump_and_xfr[R_TK_PUMP_2].status and get(Fuel_quantity[tank_RIGHT]) > 100
+    tank_pump_and_xfr[L_TK_PUMP_1].pressure_ok = tank_pump_and_xfr[L_TK_PUMP_1].status and get(Fuel_quantity[tank_LEFT]) > 100
+    tank_pump_and_xfr[L_TK_PUMP_2].pressure_ok = tank_pump_and_xfr[L_TK_PUMP_2].status and get(Fuel_quantity[tank_LEFT]) > 100
+    tank_pump_and_xfr[R_TK_PUMP_1].pressure_ok = tank_pump_and_xfr[R_TK_PUMP_1].status and get(Fuel_quantity[tank_RIGHT]) > 100
+    tank_pump_and_xfr[R_TK_PUMP_2].pressure_ok = tank_pump_and_xfr[R_TK_PUMP_2].status and get(Fuel_quantity[tank_RIGHT]) > 100
 
     tank_pump_and_xfr[C_TK_XFR_1].pressure_ok =  tank_pump_and_xfr[C_TK_XFR_1].status and get(Fuel_quantity[tank_CENTER]) > 0
     tank_pump_and_xfr[C_TK_XFR_2].pressure_ok =  tank_pump_and_xfr[C_TK_XFR_2].status and get(Fuel_quantity[tank_CENTER]) > 0
-    if not C_tank_mode then
+    if not C_tank_mode then -- If the CTR tank is in auto mode
+        -- The tank is activated only if auto_status is requiring that
         tank_pump_and_xfr[C_TK_XFR_1].pressure_ok = tank_pump_and_xfr[C_TK_XFR_1].pressure_ok and tank_pump_and_xfr[C_TK_XFR_1].auto_status
         tank_pump_and_xfr[C_TK_XFR_2].pressure_ok = tank_pump_and_xfr[C_TK_XFR_2].pressure_ok and tank_pump_and_xfr[C_TK_XFR_2].auto_status 
     end
     
-    tank_pump_and_xfr[ACT_TK_XFR].pressure_ok =  tank_pump_and_xfr[ACT_TK_XFR].status and get(Fuel_quantity[tank_ACT]) > 0
-    tank_pump_and_xfr[RCT_TK_XFR].pressure_ok =  tank_pump_and_xfr[RCT_TK_XFR].status and get(Fuel_quantity[tank_RCT]) > 0
+    tank_pump_and_xfr[ACT_TK_XFR].pressure_ok = tank_pump_and_xfr[ACT_TK_XFR].status and get(Fuel_quantity[tank_ACT]) > 0
+    tank_pump_and_xfr[RCT_TK_XFR].pressure_ok = tank_pump_and_xfr[RCT_TK_XFR].status and get(Fuel_quantity[tank_RCT]) > 0
     tank_pump_and_xfr[ACT_TK_XFR].pressure_ok = tank_pump_and_xfr[ACT_TK_XFR].pressure_ok and (tank_pump_and_xfr[ACT_TK_XFR].auto_status or tank_pump_and_xfr[ACT_TK_XFR].switch)
     tank_pump_and_xfr[RCT_TK_XFR].pressure_ok = tank_pump_and_xfr[RCT_TK_XFR].pressure_ok and (tank_pump_and_xfr[RCT_TK_XFR].auto_status or tank_pump_and_xfr[RCT_TK_XFR].switch)
 
@@ -506,16 +541,24 @@ local function update_transfer_fuel()
 
 end
 
+-- Update fuel temperature datarefs
 local function update_temps()
 
-    Set_dataref_linear_anim(Fuel_wing_L_temp, get(TAT), -50, 50, 0.1 + (1.0 - get(Fuel_quantity[tank_LEFT])/FUEL_LR_MAX)*0.5 )
-    Set_dataref_linear_anim(Fuel_wing_R_temp, get(TAT), -50, 50, 0.1 + (1.0 - get(Fuel_quantity[tank_RIGHT])/FUEL_LR_MAX)*0.5 )
+    -- Temperature of the tank fuel depends on the external temperature on the slat edge.
+    -- The temperature of the fuel changes faster if the tank is near empty, while it takes
+    -- a lot of time to change the fuel temperature if the tank is full.
 
+    local speed_increase_L = (1.0 - get(Fuel_quantity[tank_LEFT])/FUEL_LR_MAX)*0.25
+    local speed_increase_R = (1.0 - get(Fuel_quantity[tank_RIGHT])/FUEL_LR_MAX)*0.25
+    Set_dataref_linear_anim(Fuel_wing_L_temp, get(TAT), -50, 50, 0.1 + speed_increase_L )
+    Set_dataref_linear_anim(Fuel_wing_R_temp, get(TAT), -50, 50, 0.1 + speed_increase_R )
 end
 
+-- Update fuel usage datarefs for using in ECAM
 local function update_fuel_usage()
     
     if get(EWD_flight_phase) == PHASE_2ND_ENG_OFF then
+        -- The counter is reset during the last phase of flight
         set(Ecam_fuel_usage_1, 0)
         set(Ecam_fuel_usage_2, 0)
         return
@@ -526,18 +569,19 @@ local function update_fuel_usage()
     local curr_flow_per_sec_1 = get(Eng_1_FF_kgs)
     local curr_flow_per_sec_2 = get(Eng_2_FF_kgs)
 
-
     set(Ecam_fuel_usage_1, prev_eng1 + curr_flow_per_sec_1 * get(DELTA_TIME))
     set(Ecam_fuel_usage_2, prev_eng2 + curr_flow_per_sec_2 * get(DELTA_TIME))
     
 end
 
+-- Helper function to move apu fuel valve
 local function set_apu_fuel_valve(is_open)
     if get(FAILURE_FUEL_APU_VALVE_STUCK) == 0 then
         set(Apu_fuel_valve, is_open and 1 or 0)
     end
 end
 
+-- Update the APU valve status
 local function update_apu()
 
     if get(Apu_master_button_state) % 2 == 0 then
@@ -563,15 +607,13 @@ local function update_apu()
         elseif get(AC_STAT_INV_pwrd) == 1 then
             ELEC_sys.add_power_consumption(ELEC_BUS_STAT_INV, 2, 3)
         else
+            -- TODO
             --assert(false)   -- This should not happen: the APU must be flagged as failed if we are in this condition.
         end
     end
     
 
 end
-
-local eng_1_fw_valve_position = 0
-local eng_2_fw_valve_position = 0
 
 local function update_eng_1_valve()
     if get(FAILURE_FUEL_ENG1_VALVE_STUCK) == 1 then
@@ -620,6 +662,8 @@ end
 ----------------------------------------------------------------------------------------------------
 
 function update()
+
+    -- Step 1 : update the pump statuses
     update_pumps_elec()
     update_logic_pumps()
     update_x_feed_valve()
@@ -627,18 +671,22 @@ function update()
     update_act_rct_tank_pumps_auto()
     update_pumps_status()
 
+    -- Step 2 : deliver or transfer fuel
     update_engine_fuel_status()
     update_transfer_fuel()
 
+    -- Step 3 : dataref updates
     update_lights()
     update_pump_dr()
-    
+
+    -- Step 4 : misc stuffs to update    
     update_temps()
     update_fuel_usage()
     update_apu()
     update_eng_1_valve()
     update_eng_2_valve()
-    
+
+    -- Step 5 : bad things
     update_fuel_leaks()
 end
 
