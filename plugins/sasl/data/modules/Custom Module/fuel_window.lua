@@ -126,7 +126,7 @@ function update_desired_qty()
         presel_value = presel_value + multiplier
     end
     
-    presel_value = Math_clamp(presel_value, 0, TOT_MAX_FUEL)
+    presel_value = Math_clamp(presel_value, 0, FUEL_TOT_MAX)
     
     last_update_press_time = get(TIME)
 end
