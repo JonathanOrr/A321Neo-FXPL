@@ -224,8 +224,6 @@ Eng_1_N1 = globalProperty("sim/flightmodel2/engines/N1_percent[0]")
 Eng_2_N1 = globalProperty("sim/flightmodel2/engines/N1_percent[1]")
 Eng_1_EGT_c = globalProperty("sim/cockpit2/engine/indicators/EGT_deg_C[0]")
 Eng_2_EGT_c = globalProperty("sim/cockpit2/engine/indicators/EGT_deg_C[1]")
-Eng_1_N2 = globalProperty("sim/flightmodel2/engines/N2_percent[0]")
-Eng_2_N2 = globalProperty("sim/flightmodel2/engines/N2_percent[1]")
 Eng_1_FF_kgs = globalProperty("sim/cockpit2/engine/indicators/fuel_flow_kg_sec[0]")
 Eng_2_FF_kgs = globalProperty("sim/cockpit2/engine/indicators/fuel_flow_kg_sec[1]")
 Apu_N1 = globalProperty("sim/cockpit2/electrical/APU_N1_percent")
@@ -233,8 +231,14 @@ APU_EGT = globalProperty("sim/cockpit2/electrical/APU_EGT_c")
 Eng_1_reverser_deployment = globalProperty("sim/flightmodel2/engines/thrust_reverser_deploy_ratio[0]")
 Eng_2_reverser_deployment = globalProperty("sim/flightmodel2/engines/thrust_reverser_deploy_ratio[1]")
 
-Eng_1_Firewall_valve = createGlobalPropertyi("a321neo/dynamics/engines/firewall_valve_1", 1, false, true, false) -- 0 open, 1 - closed, 2 : transit - firewall valve
-Eng_2_Firewall_valve = createGlobalPropertyi("a321neo/dynamics/engines/firewall_valve_2", 1, false, true, false) -- 0 open, 1 - closed, 2 : transit - firewall valve
+Eng_1_Firewall_valve = createGlobalPropertyi("a321neo/dynamics/engines/eng_1_firewall_valve_1", 1, false, true, false) -- 0 open, 1 - closed, 2 : transit - firewall valve
+Eng_2_Firewall_valve = createGlobalPropertyi("a321neo/dynamics/engines/eng_2_firewall_valve_2", 1, false, true, false) -- 0 open, 1 - closed, 2 : transit - firewall valve
+
+Eng_1_N1_enforce = globalProperty("sim/flightmodel/engine/ENGN_N1_[0]") -- You can write to this!
+Eng_2_N1_enforce = globalProperty("sim/flightmodel/engine/ENGN_N1_[1]") -- You can write to this!
+Eng_N1_idle = createGlobalPropertyi("a321neo/dynamics/engines/n1_idle", 1, false, true, false) -- current value (depends on altitude) for the minimum N1
+Eng_1_N2 = createGlobalPropertyi("a321neo/dynamics/engines/eng_1_n2", 1, false, true, false) -- Corrected value for N2
+Eng_2_N2 = createGlobalPropertyi("a321neo/dynamics/engines/eng_2_n2", 1, false, true, false) -- Corrected value for N2
 
 --PACKs system
 Apu_bleed_switch = globalProperty("sim/cockpit2/bleedair/actuators/apu_bleed")
