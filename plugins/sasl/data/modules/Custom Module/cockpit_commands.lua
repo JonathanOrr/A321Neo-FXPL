@@ -214,4 +214,6 @@ ISIS_cmd_Knob_cc     = createCommand("a321neo/cockpit/ISIS/Knob_CC", "Rotate ISI
 -- ENG
 ENG_cmd_manual_start_1 = createCommand("a321neo/cockpit/engine/manual_start_1", "Press Manual Start ENG1 pushbutton")
 ENG_cmd_manual_start_2 = createCommand("a321neo/cockpit/engine/manual_start_2", "Press Manual Start ENG1 pushbutton")
+ENG_cmd_dual_cooling   = createCommand("a321neo/cockpit/engine/dual_cooling", "Press Dual Cooling pushbutton")
+
 

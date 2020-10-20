@@ -12,7 +12,8 @@ MAX_EGT_OFFSET = 10  -- This is the maximum offset between one engine and the ot
 ENG_N1_CRANK    = 10  -- N1 used for cranking and cooling
 ENG_N1_CRANK_FF = 15  -- FF in case of wet cranking
 ENG_N1_CRANK_EGT= 95  -- Target EGT for cranking
- 
+ENG_N1_LL_IDLE  = 18.3 -- Value to determine if parameters control should be given to X-Plane 
+
 START_UP_PHASES_N2 = {
     {n2_start = 0,    n2_increase_per_sec = 0.26, fuel_flow = 0,   egt=0},
     {n2_start = 10,   n2_increase_per_sec = 1.5, fuel_flow = 0,    egt=97},
@@ -21,19 +22,21 @@ START_UP_PHASES_N2 = {
     {n2_start = 24,   n2_increase_per_sec = 1.25, fuel_flow = 100, egt=162},
     {n2_start = 26.8, n2_increase_per_sec = 1.25, fuel_flow = 100, egt=263},
     {n2_start = 31.8, n2_increase_per_sec = 0.44, fuel_flow = 120, egt=173},
-    {n2_start = 34.2, n2_increase_per_sec = 0.60, fuel_flow = 140, egt=229},
+    {n2_start = 34.2, n2_increase_per_sec = 0.60, fuel_flow = 140, egt=229}
 }
 START_UP_PHASES_N1 = {
-    {n1_set = 6.6,    n1_increase_per_sec = 0.60, fuel_flow = 160, egt=303},
-    {n1_set = 7.3,    n1_increase_per_sec = 0.20, fuel_flow = 180, egt=357},
-    {n1_set = 7.8,    n1_increase_per_sec = 0.20, fuel_flow = 220, egt=393},
-    {n1_set = 12.2,   n1_increase_per_sec = 0.60, fuel_flow = 260, egt=573},
-    {n1_set = 14.9,   n1_increase_per_sec = 0.60, fuel_flow = 280, egt=574},
-    {n1_set = 15.4,   n1_increase_per_sec = 1.16, fuel_flow = 300, egt=580},
-    {n1_set = 16.3,   n1_increase_per_sec = 1.08, fuel_flow = 320, egt=592},
-    {n1_set = 17.1,   n1_increase_per_sec = 0.83, fuel_flow = 340, egt=602},
-    {n1_set = 17.6,   n1_increase_per_sec = 0.79, fuel_flow = 360, egt=623},
-    {n1_set = 18.3,   n1_increase_per_sec = 0.24, fuel_flow = 380, egt=637},
+    {n1_set = 2,      n1_increase_per_sec = 3, fuel_flow = 140, egt=280, stop_ign=false},
+    {n1_set = 5,      n1_increase_per_sec = 0.60, fuel_flow = 140, egt=290, stop_ign=false},
+    {n1_set = 6.6,    n1_increase_per_sec = 0.60, fuel_flow = 160, egt=303, stop_ign=false},
+    {n1_set = 7.3,    n1_increase_per_sec = 0.20, fuel_flow = 180, egt=357, stop_ign=false},
+    {n1_set = 7.8,    n1_increase_per_sec = 0.20, fuel_flow = 220, egt=393, stop_ign=false},
+    {n1_set = 12.2,   n1_increase_per_sec = 0.60, fuel_flow = 260, egt=573, stop_ign=false},
+    {n1_set = 14.9,   n1_increase_per_sec = 0.60, fuel_flow = 280, egt=574, stop_ign=false},
+    {n1_set = 15.4,   n1_increase_per_sec = 1.16, fuel_flow = 300, egt=580, stop_ign=true},
+    {n1_set = 16.3,   n1_increase_per_sec = 1.08, fuel_flow = 320, egt=592, stop_ign=true},
+    {n1_set = 17.1,   n1_increase_per_sec = 0.83, fuel_flow = 340, egt=602, stop_ign=true},
+    {n1_set = 17.6,   n1_increase_per_sec = 0.79, fuel_flow = 360, egt=623, stop_ign=true},
+    {n1_set = 18.3,   n1_increase_per_sec = 0.24, fuel_flow = 380, egt=637, stop_ign=true},
 }
 
 ----------------------------------------------------------------------------------------------------
@@ -49,12 +52,15 @@ local eng_1_manual_switch = false   -- Is engine manual start enabled?
 local eng_2_manual_switch = false   -- Is engine manual start enabled?
 
 local eng_ignition_switch = globalPropertyia("sim/cockpit2/engine/actuators/ignition_key")
+local eng_igniters        = globalPropertyia("sim/cockpit2/engine/actuators/igniter_on")
+
 local eng_mixture         = globalPropertyfa("sim/cockpit2/engine/actuators/mixture_ratio")
 local eng_N1_enforce      = globalPropertyfa("sim/flightmodel/engine/ENGN_N1_")
 local eng_N2_enforce      = globalPropertyfa("sim/flightmodel/engine/ENGN_N2_")
 
 local eng_FF_kgs          = globalPropertyfa("sim/cockpit2/engine/indicators/fuel_flow_kg_sec")
 
+local eng_N1_off  = {0,0}   -- N1 for startup procedure
 local eng_N2_off  = {0,0}   -- N2 for startup procedure
 local eng_FF_off  = {0,0}   -- FF for startup procedure
 local eng_EGT_off = {get(OTA),get(OTA)}   -- EGT for startup procedure
@@ -125,7 +131,7 @@ end
 
 local function update_egt()
     local eng_1_n1 = get(Eng_1_N1)
-    if eng_1_n1 > 5 then
+    if eng_1_n1 > ENG_N1_LL_IDLE then
         local computed_egt = n1_to_egt(eng_1_n1, get(OTA))
         computed_egt = computed_egt + egt_eng_1_offset + math.random()*2 -- Let's add a bit of randomness
         Set_dataref_linear_anim(Eng_1_EGT_c, computed_egt, -50, 1500, 70)
@@ -134,7 +140,7 @@ local function update_egt()
     end
 
     local eng_2_n1 = get(Eng_2_N1)
-    if eng_2_n1 > 5 then
+    if eng_2_n1 > ENG_N1_LL_IDLE then
         local computed_egt = n1_to_egt(eng_2_n1, get(OTA))
         computed_egt = computed_egt + egt_eng_2_offset + math.random()*2 -- Let's add a bit of randomness
         Set_dataref_linear_anim(Eng_2_EGT_c, computed_egt, -50, 1500, 70)
@@ -146,15 +152,15 @@ end
 
 local function update_ff()
     local eng_1_n1 = get(Eng_1_N1)
-    if eng_1_n1 > 5 then
-        set(Eng_1_FF_kgs, eng_FF_kgs[1])
+    if eng_1_n1 > ENG_N1_LL_IDLE then
+        set(Eng_1_FF_kgs, get(eng_FF_kgs,1))
     else
         set(Eng_1_FF_kgs,eng_FF_off[1])
     end
 
-    local eng_2_n1 = get(Eng_1_N1)
-    if eng_2_n1 > 5 then
-        set(Eng_2_FF_kgs, eng_FF_kgs[2])
+    local eng_2_n1 = get(Eng_2_N1)
+    if eng_2_n1 > ENG_N1_LL_IDLE then
+        set(Eng_2_FF_kgs, get(eng_FF_kgs,2))
     else
         set(Eng_2_FF_kgs,eng_FF_off[2])
     end
@@ -162,7 +168,7 @@ local function update_ff()
 end
 
 local function update_avail()
-    if get(Eng_1_N1) > 18.3 and get(Engine_1_master_switch) == 1 then
+    if get(Eng_1_N1) > ENG_N1_LL_IDLE and get(Engine_1_master_switch) == 1 then
         if get(Engine_1_avail) == 0 then
             set(EWD_engine_avail_ind_1_start, get(TIME))
             set(Engine_1_avail, 1)
@@ -171,7 +177,7 @@ local function update_avail()
         set(Engine_1_avail, 0)    
         set(EWD_engine_avail_ind_1_start, 0)
     end
-    if get(Eng_2_N1) > 18.3 and get(Engine_2_master_switch) == 1 then
+    if get(Eng_2_N1) > ENG_N1_LL_IDLE and get(Engine_2_master_switch) == 1 then
         if get(Engine_2_avail) == 0 then
             set(EWD_engine_avail_ind_2_start, get(TIME))
             set(Engine_2_avail, 1)
@@ -188,15 +194,11 @@ end
 -- Functions - Ignition stuffs
 ----------------------------------------------------------------------------------------------------
 
-local function perform_starting_procedure(eng)
-
-end
-
-local function perform_crank_procedure(eng)
+local function perform_crank_procedure(eng, wet_cranking)
     if (eng==1 and get(Engine_1_avail) == 1) or (eng==2 and get(Engine_2_avail) == 1) then
         return  -- Crank has no sense if the engine is already running
     end
-    print(eng)
+
     set(eng_mixture, 0, eng)                                    -- No mixture for dry cranking
     set(eng_ignition_switch, 4, eng)                            -- Turn on ignition (necessary for x-plane to run the engine)
                                                                 -- We are not actually igniting the engine
@@ -208,7 +210,7 @@ local function perform_crank_procedure(eng)
     -- Set WGT for cranking
     eng_EGT_off[eng] = Set_linear_anim_value(eng_EGT_off[eng], ENG_N1_CRANK_EGT, -50, 1500, 2)
     
-    if (eng==1 and get(Engine_1_master_switch) == 1) or (eng==2 and get(Engine_2_master_switch) == 1) then
+    if wet_cranking then
         -- Wet cranking requested, let's spill a bit of fuel
         eng_FF_off[eng] = ENG_N1_CRANK_FF/3600
     else
@@ -217,6 +219,71 @@ local function perform_crank_procedure(eng)
     end
     
 end
+
+local function perform_starting_procedure_follow_n2(eng)
+    set(eng_mixture, 0, eng) -- No mixture in this phase
+    set(eng_ignition_switch, 4, eng)
+
+    for i=1,(#START_UP_PHASES_N2-1) do
+        if eng_N2_off[eng] < START_UP_PHASES_N2[i+1].n2_start then
+            eng_N2_off[eng] = eng_N2_off[eng] + START_UP_PHASES_N2[i].n2_increase_per_sec * get(DELTA_TIME)
+            set(eng_N2_enforce, eng_N2_off[1], eng)
+            eng_FF_off[eng] = START_UP_PHASES_N2[i].fuel_flow  / 3600
+            
+            perc = (eng_N2_off[eng] - START_UP_PHASES_N2[i].n2_start) / (START_UP_PHASES_N2[i+1].n2_start - START_UP_PHASES_N2[i].n2_start)
+            eng_EGT_off[eng] = Math_lerp(START_UP_PHASES_N2[i].egt, START_UP_PHASES_N2[i+1].egt, perc)
+            
+            break
+        end
+    end
+end
+
+local function perform_starting_procedure_follow_n1(eng)
+    set(eng_mixture, 1, eng) -- No mixture in this phase
+    set(eng_ignition_switch, 4, eng)
+    set(eng_igniters, 1, eng)
+
+
+    for i=1,(#START_UP_PHASES_N1-1) do
+        local curr_N1 = math.max(eng_N1_off[eng],2)
+        if curr_N1 < START_UP_PHASES_N1[i+1].n1_set then
+        
+            local new_N1 = curr_N1 + START_UP_PHASES_N1[i].n1_increase_per_sec * get(DELTA_TIME)
+            eng_N1_off[eng] = new_N1
+            set(eng_N1_enforce, new_N1, eng)
+
+            eng_FF_off[eng] = START_UP_PHASES_N1[i].fuel_flow  / 3600
+            
+            perc = (curr_N1 - START_UP_PHASES_N1[i].n1_set) / (START_UP_PHASES_N1[i+1].n1_set - START_UP_PHASES_N1[i].n1_set)
+            eng_EGT_off[eng] = Math_lerp(START_UP_PHASES_N1[i].egt, START_UP_PHASES_N1[i+1].egt, perc)
+            
+            if START_UP_PHASES_N1[i].stop_ign then -- This is used to avoid a bump in the final part of the engine startup
+                set(eng_ignition_switch, 0, eng)
+                set(eng_igniters, 0, eng)
+            end
+            
+            break
+        end
+    end
+end
+
+local function perform_starting_procedure(eng)
+    if eng_N2_off[eng] < 9.5 then
+        -- Ok let's start by cranking the engine to start rotation
+        perform_crank_procedure(eng, false)
+        return
+    end
+    
+    if eng_N2_off[eng] < START_UP_PHASES_N2[#START_UP_PHASES_N2].n2_start then
+        perform_starting_procedure_follow_n2(eng)
+    elseif eng_N1_off[eng] < START_UP_PHASES_N1[#START_UP_PHASES_N1].n1_set then
+        perform_starting_procedure_follow_n1(eng)
+    else
+        set(eng_ignition_switch, 3, eng)
+    end
+    
+end
+
 
 local function update_starter_datarefs()
     --setting integer dataref range
@@ -230,21 +297,21 @@ local function update_startup()
     local require_cooldown = {true, true}
 
     if get(Engine_mode_knob) == 1 then      -- Ignition
-        if get(Engine_1_master_switch) == 1 then
+        if get(Engine_1_master_switch) == 1 and get(Engine_1_avail) == 0  then
             perform_starting_procedure(1)
             require_cooldown[1] = false
         end
-        if get(Engine_2_master_switch) == 1 then
+        if get(Engine_2_master_switch) == 1 and get(Engine_2_avail) == 0 then
             perform_starting_procedure(2)
             require_cooldown[2] = false
         end
     elseif get(Engine_mode_knob) == -1 then -- Crank
         if eng_1_manual_switch then
-            perform_crank_procedure(1)
+            perform_crank_procedure(1, get(Engine_1_master_switch) == 1)
             require_cooldown[1] = false
         end
         if eng_2_manual_switch then
-            perform_crank_procedure(2)
+            perform_crank_procedure(2, get(Engine_2_master_switch) == 1)
             require_cooldown[2] = false
         end
     end
@@ -258,6 +325,8 @@ local function update_startup()
         -- Set EGT and FF to zero
         eng_EGT_off[1] = Set_linear_anim_value(eng_EGT_off[1], get(OTA), -50, 1500, 1)
         eng_FF_off[1] = 0
+        eng_N1_off[1] = Set_linear_anim_value(eng_N1_off[1], 0, 0, 120, 2)
+        set(eng_igniters, 0, 1)
     end
     if get(Engine_2_avail) == 0 and require_cooldown[2] then    -- Turn off the engine
         -- Set N2 to zero
@@ -267,12 +336,14 @@ local function update_startup()
         -- Set EGT and FF to zero
         eng_EGT_off[2] = Set_linear_anim_value(eng_EGT_off[2], get(OTA), -50, 1500, 1)
         eng_FF_off[2] = 0
+        eng_N1_off[2] = Set_linear_anim_value(eng_N1_off[2], 0, 0, 120, 2)
+        set(eng_igniters, 0, 2)
     end
 
 end
 
 function update()
-
+    update_starter_datarefs()
     update_startup()
 
     update_n1_minimum()
