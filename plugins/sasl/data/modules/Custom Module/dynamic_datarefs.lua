@@ -366,6 +366,8 @@ Fo_Valpha_MAX_delta =    createGlobalPropertyf("a321neo/dynamics/FBW/limit_speed
 
 Aircraft_total_weight_kgs = globalProperty("sim/flightmodel/weight/m_total")
 
+--AUTO THRUST--
+
 --flight controls
 Roll = globalProperty("sim/joystick/yoke_roll_ratio")
 Pitch = globalProperty("sim/joystick/yoke_pitch_ratio")

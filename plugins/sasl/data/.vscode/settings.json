@@ -48,6 +48,7 @@
         "checklist",
         "PLUGINS_MENU_ID",
         "MENU_CHECKED",
-        "MENU_UNCHECKED"
+        "MENU_UNCHECKED",
+        "SASL_COMMAND_END"
     ]
 }

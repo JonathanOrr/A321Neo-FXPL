@@ -3,6 +3,7 @@
 addSearchPath(moduleDirectory .. "/Custom Module/FBW_subcomponents/")
 
 components = {
+    autothrust {},
     limits_calculations {},
     flight_controls {}
 }

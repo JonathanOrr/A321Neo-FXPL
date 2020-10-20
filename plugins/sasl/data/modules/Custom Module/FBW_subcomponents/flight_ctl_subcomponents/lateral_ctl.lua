@@ -102,8 +102,11 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
     --HYDs           G Y B Y G
     --SECs           3 3 1 1 2
 
+    --limit input range
+    spdbrk_input = Math_clamp(spdbrk_input, 0, 1)
+
     --properties
-    local roll_poilers_threshold = 0.1--amount of sidestick deflection needed to trigger the roll spoilers
+    local roll_spoilers_threshold = {0.1, 0.1, 0.3, 0.1, 0.1}--amount of sidestick deflection needed to trigger the roll spoilers
 
     local l_spoilers_total_max_def = {40, 40, 40, 40, 40}
     local r_spoilers_total_max_def = {40, 40, 40, 40, 40}
@@ -159,7 +162,6 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
         r_spoilers_spdbrk_spd[3] = Math_lerp(0, 8, get(Hydraulic_B_press) / 1450)
         l_spoilers_roll_spd[3] = Math_lerp(0, 40, get(Hydraulic_B_press) / 1450)
         r_spoilers_roll_spd[3] = Math_lerp(0, 40, get(Hydraulic_B_press) / 1450)
-
     end
     if get(Hydraulic_Y_press) < 1450 then
         l_spoilers_spdbrk_spd[2] = Math_lerp(0, 8, get(Hydraulic_Y_press) / 1450)
@@ -181,43 +183,37 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
 
     --left speedbrakes input translation
     l_spoilers_spdbrk_targets = {
-        l_spoilers_spdbrk_max_def[1] * math.abs(Math_clamp(spdbrk_input, 0, 1)),
-        l_spoilers_spdbrk_max_def[2] * math.abs(Math_clamp(spdbrk_input, 0, 1)),
-        l_spoilers_spdbrk_max_def[3] * math.abs(Math_clamp(spdbrk_input, 0, 1)),
-        l_spoilers_spdbrk_max_def[4] * math.abs(Math_clamp(spdbrk_input, 0, 1)),
-        l_spoilers_spdbrk_max_def[5] * math.abs(Math_clamp(spdbrk_input, 0, 1)),
+        l_spoilers_spdbrk_max_def[1] * spdbrk_input,
+        l_spoilers_spdbrk_max_def[2] * spdbrk_input,
+        l_spoilers_spdbrk_max_def[3] * spdbrk_input,
+        l_spoilers_spdbrk_max_def[4] * spdbrk_input,
+        l_spoilers_spdbrk_max_def[5] * spdbrk_input,
     }
     --right speedbrakes input translation
     r_spoilers_spdbrk_targets = {
-        r_spoilers_spdbrk_max_def[1] * math.abs(Math_clamp(spdbrk_input, 0, 1)),
-        r_spoilers_spdbrk_max_def[2] * math.abs(Math_clamp(spdbrk_input, 0, 1)),
-        r_spoilers_spdbrk_max_def[3] * math.abs(Math_clamp(spdbrk_input, 0, 1)),
-        r_spoilers_spdbrk_max_def[4] * math.abs(Math_clamp(spdbrk_input, 0, 1)),
-        r_spoilers_spdbrk_max_def[5] * math.abs(Math_clamp(spdbrk_input, 0, 1)),
+        r_spoilers_spdbrk_max_def[1] * spdbrk_input,
+        r_spoilers_spdbrk_max_def[2] * spdbrk_input,
+        r_spoilers_spdbrk_max_def[3] * spdbrk_input,
+        r_spoilers_spdbrk_max_def[4] * spdbrk_input,
+        r_spoilers_spdbrk_max_def[5] * spdbrk_input,
     }
 
     --left roll spoilers input translation
     l_spoilers_roll_targets = {
-        l_spoilers_roll_max_def[1] * math.abs(Math_clamp(lateral_input, -1, 0)),
-        l_spoilers_roll_max_def[2] * math.abs(Math_clamp(lateral_input, -1, 0)),
-        l_spoilers_roll_max_def[3] * math.abs(Math_clamp(lateral_input, -1, 0)),
-        l_spoilers_roll_max_def[4] * math.abs(Math_clamp(lateral_input, -1, 0)),
-        l_spoilers_roll_max_def[5] * math.abs(Math_clamp(lateral_input, -1, 0)),
+        l_spoilers_roll_max_def[1] * Math_rescale(roll_spoilers_threshold[1], 0, 1, 1, math.abs(Math_clamp(lateral_input, -1, 0))),
+        l_spoilers_roll_max_def[2] * Math_rescale(roll_spoilers_threshold[2], 0, 1, 1, math.abs(Math_clamp(lateral_input, -1, 0))),
+        l_spoilers_roll_max_def[3] * Math_rescale(roll_spoilers_threshold[3], 0, 1, 1, math.abs(Math_clamp(lateral_input, -1, 0))),
+        l_spoilers_roll_max_def[4] * Math_rescale(roll_spoilers_threshold[4], 0, 1, 1, math.abs(Math_clamp(lateral_input, -1, 0))),
+        l_spoilers_roll_max_def[5] * Math_rescale(roll_spoilers_threshold[5], 0, 1, 1, math.abs(Math_clamp(lateral_input, -1, 0))),
     }
     --right roll spoilers input translation
     r_spoilers_roll_targets = {
-        r_spoilers_roll_max_def[1] * math.abs(Math_clamp(lateral_input, 0, 1)),
-        r_spoilers_roll_max_def[2] * math.abs(Math_clamp(lateral_input, 0, 1)),
-        r_spoilers_roll_max_def[3] * math.abs(Math_clamp(lateral_input, 0, 1)),
-        r_spoilers_roll_max_def[4] * math.abs(Math_clamp(lateral_input, 0, 1)),
-        r_spoilers_roll_max_def[5] * math.abs(Math_clamp(lateral_input, 0, 1)),
+        r_spoilers_roll_max_def[1] * Math_rescale(roll_spoilers_threshold[1], 0, 1, 1, math.abs(Math_clamp(lateral_input, 0, 1))),
+        r_spoilers_roll_max_def[2] * Math_rescale(roll_spoilers_threshold[2], 0, 1, 1, math.abs(Math_clamp(lateral_input, 0, 1))),
+        r_spoilers_roll_max_def[3] * Math_rescale(roll_spoilers_threshold[3], 0, 1, 1, math.abs(Math_clamp(lateral_input, 0, 1))),
+        r_spoilers_roll_max_def[4] * Math_rescale(roll_spoilers_threshold[4], 0, 1, 1, math.abs(Math_clamp(lateral_input, 0, 1))),
+        r_spoilers_roll_max_def[5] * Math_rescale(roll_spoilers_threshold[5], 0, 1, 1, math.abs(Math_clamp(lateral_input, 0, 1))),
     }
-
-    --Don't roll if threshold haven't passed
-    if -roll_poilers_threshold < lateral_input and lateral_input < roll_poilers_threshold then
-        l_spoilers_roll_targets = {0, 0, 0, 0, 0}
-        r_spoilers_roll_targets = {0, 0, 0, 0, 0}
-    end
 
     --GROUND SPOILERS MODE--
     --0 = NOT EXTENDED
