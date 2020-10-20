@@ -39,6 +39,19 @@ local function draw_engines()
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-150, size[2]/2+3, math.floor(get(Eng_1_FF_kgm)), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2+150, size[2]/2+3, math.floor(get(Eng_2_FF_kgm)), 30, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
 
+    -- AVAIL box --
+    if get(EWD_engine_avail_ind_1_start) ~= 0 and get(TIME) - get(EWD_engine_avail_ind_1_start) < 10 then
+        set(EWD_engine_avail_ind_1, 1)
+    else
+        set(EWD_engine_avail_ind_1, 0)
+    end
+
+    if get(EWD_engine_avail_ind_2_start) ~= 0 and get(TIME) - get(EWD_engine_avail_ind_2_start) < 10 then
+        set(EWD_engine_avail_ind_2, 1)
+    else
+        set(EWD_engine_avail_ind_2, 0)
+    end
+
 end
 
 local function draw_left_memo()
