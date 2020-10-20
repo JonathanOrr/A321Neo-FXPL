@@ -278,7 +278,7 @@ Fo_Baro_Alt  = globalProperty("sim/cockpit2/gauges/indicators/altitude_ft_copilo
 Capt_VVI     = globalProperty("sim/cockpit2/gauges/indicators/vvi_fpm_pilot")        -- Consider to use PFD_Capt_VS instead (check cockpit_datarefs.lua)
 Fo_VVI       = globalProperty("sim/cockpit2/gauges/indicators/vvi_fpm_copilot")      -- Consider to use PFD_Fo_VS instead (check cockpit_datarefs.lua)
 Capt_Mach    = globalProperty("sim/cockpit2/gauges/indicators/mach_pilot")
-Fo_Mach    = globalProperty("sim/cockpit2/gauges/indicators/mach_copilot")
+Fo_Mach      = globalProperty("sim/cockpit2/gauges/indicators/mach_copilot")
 
 Stby_Alt     = globalProperty("sim/cockpit2/gauges/indicators/altitude_ft_stby")     -- Altitude in the stdby instrument
 Stby_IAS     = globalProperty("sim/cockpit2/gauges/indicators/airspeed_kts_stby")    -- IAS in the stdby instrument
@@ -366,7 +366,10 @@ Fo_Valpha_MAX_delta =    createGlobalPropertyf("a321neo/dynamics/FBW/limit_speed
 
 Aircraft_total_weight_kgs = globalProperty("sim/flightmodel/weight/m_total")
 
---AUTO THRUST--
+--AUTO THRUST / FADEC--
+Override_throttle = globalProperty("sim/operation/override/override_throttles")
+Override_eng_1_lever = globalProperty("sim/flightmodel/engine/ENGN_thro_use[0]")
+Override_eng_2_lever = globalProperty("sim/flightmodel/engine/ENGN_thro_use[1]")
 
 --flight controls
 Roll = globalProperty("sim/joystick/yoke_roll_ratio")

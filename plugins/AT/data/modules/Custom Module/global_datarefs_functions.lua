@@ -76,7 +76,7 @@ A32nx_stick_roll = {P_gain = 1, I_gain = 0, D_gain = 2, Proportional = 0, Integr
 A32nx_stick_pitch = {P_gain = 4, I_gain = 0.5, D_gain = 6, Proportional = 0, Integral_sum = 0, Integral = 0, Derivative = 0, Current_error = 0, Min_error = -30, Max_error = 30}
 
 Autothrust_output = 0
-Smoothed_error = 0
+Smoothed_PV = 0
 
 --linear interpolation
 function Math_lerp(pos1, pos2, perc)
@@ -171,13 +171,13 @@ function A32nx_PID_time_indep(pid_array, error)
 end]]
 
 --new PID with improved integral calculation
-function A32nx_PID_new(pid_array, error)
+function A32nx_AT_PID(pid_array, Set_Point, PV)
     local correction = 0
-    local last_error = pid_array.Current_error
+    local last_PV = PV
 
     if get(DELTA_TIME) ~= 0 then
 
-        pid_array.Current_error = error
+        pid_array.Current_error = Set_Point - PV
 
         --Proportional--
         pid_array.Proportional = pid_array.Current_error * pid_array.P_gain
@@ -187,7 +187,7 @@ function A32nx_PID_new(pid_array, error)
         pid_array.Integral = Math_clamp(pid_array.Integral_sum * pid_array.I_gain, pid_array.Min_error * (1 / pid_array.I_gain), pid_array.Max_error * (1 / pid_array.I_gain))
 
         --derivative--
-        pid_array.Derivative = ((pid_array.Current_error - last_error) / get(DELTA_TIME)) * pid_array.D_gain
+        pid_array.Derivative = ((PV - last_PV) / get(DELTA_TIME)) * pid_array.D_gain
 
         --sigma
         correction = pid_array.Proportional + pid_array.Integral + pid_array.Derivative
@@ -195,9 +195,9 @@ function A32nx_PID_new(pid_array, error)
 	    --limit and rescale output range--
         correction = ((Math_clamp(correction, pid_array.Min_error, pid_array.Max_error) / pid_array.Max_error) + 1) / 2
 
-	    return correction
-
     end
+
+    return correction
 
 end
 
@@ -225,9 +225,9 @@ function A32nx_PID_new_neg_avail(pid_array, error)
 	    --limit and rescale output range--
         correction = Math_clamp(correction, pid_array.Min_error, pid_array.Max_error) / pid_array.Max_error
 
-	    return correction
-
     end
+
+    return correction
 
 end
 
