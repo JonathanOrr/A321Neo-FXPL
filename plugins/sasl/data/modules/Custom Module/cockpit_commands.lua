@@ -211,3 +211,7 @@ ISIS_cmd_LS          = createCommand("a321neo/cockpit/ISIS/LS", "Press LS button
 ISIS_cmd_Knob_c      = createCommand("a321neo/cockpit/ISIS/Knob_C", "Rotate ISIS knob clockwise")  -- Knob clockwise
 ISIS_cmd_Knob_cc     = createCommand("a321neo/cockpit/ISIS/Knob_CC", "Rotate ISIS knob counter-clockwise") -- Knob counter-clockwise
 
+-- ENG
+ENG_cmd_manual_start_1 = createCommand("a321neo/cockpit/engine/manual_start_1", "Press Manual Start ENG1 pushbutton")
+ENG_cmd_manual_start_2 = createCommand("a321neo/cockpit/engine/manual_start_2", "Press Manual Start ENG1 pushbutton")
+

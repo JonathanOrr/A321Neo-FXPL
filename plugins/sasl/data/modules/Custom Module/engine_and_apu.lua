@@ -243,69 +243,66 @@ function update()
         set(Engine_mode_knob, 0)
     end
     
-    --setting integer dataref range
-    set(Engine_mode_knob,Math_clamp(get(Engine_mode_knob), -1, 1))
-    set(Engine_1_master_switch,Math_clamp(get(Engine_1_master_switch), 0, 1))
-    set(Engine_2_master_switch,Math_clamp(get(Engine_2_master_switch), 0, 1))
+
     
     --engine mode start
-    if get(Engine_mode_knob) == 1 
-    then 
+--    if get(Engine_mode_knob) == 1 
+--    then 
         -- to confirm the engine needs starting to stop repetitive start
-        if get(Engine_1_avail) ~= 1 then
-            ignition_1_required = 1
-        end
-        if get(Engine_2_avail) ~= 1 then
-            ignition_2_required = 1
-        end
+--        if get(Engine_1_avail) ~= 1 then
+--            ignition_1_required = 1
+--        end
+--        if get(Engine_2_avail) ~= 1 then
+--            ignition_2_required = 1
+--        end
         
-        if get(Engine_1_master_switch) == 1 then
-            if ignition_1_required == 1 then
-                set(engine_1_ignition_switch,4)
-            end
-        end
+--        if get(Engine_1_master_switch) == 1 then
+--            if ignition_1_required == 1 then
+--                set(engine_1_ignition_switch,4)
+--            end
+--        end
         
-        if get(Engine_2_master_switch) == 1 then
-            if ignition_2_required == 1 then
-                set(engine_2_ignition_switch,4)
-            end
-        end
-    end
+--        if get(Engine_2_master_switch) == 1 then
+--           if ignition_2_required == 1 then
+--                set(engine_2_ignition_switch,4)
+--            end
+--        end
+--    end
 
     --engine mode norm
-    if get(Engine_mode_knob) == 0
-    then
-        ignition_1_required = 0
-        ignition_2_required = 0
-        set(engine_1_ignition_switch,0)
-        set(engine_2_ignition_switch,0)
-    end
+--    if get(Engine_mode_knob) == 0
+--    then
+--        ignition_1_required = 0
+--        ignition_2_required = 0
+--        set(engine_1_ignition_switch,0)
+--        set(engine_2_ignition_switch,0)
+--    end
 
     --engine master 1
-    if get(Engine_1_master_switch) == 1
-    then
-        if get(engine_1_N2) > 16 then
-            set(engine_1_mixture, 1.0)
-        else
-            set(engine_1_mixture, 0)
-        end
-    elseif get(Engine_1_master_switch) == 0
-    then
-        set(engine_1_mixture, 0.0)
-    end
+--    if get(Engine_1_master_switch) == 1
+--    then
+--        if get(engine_1_N2) > 16 then
+--            set(engine_1_mixture, 1.0)
+--        else
+--           set(engine_1_mixture, 0)
+--        end
+--    elseif get(Engine_1_master_switch) == 0
+--    then
+--        set(engine_1_mixture, 0.0)
+--    end
 
     --engine master 2
-    if get(Engine_2_master_switch) == 1
-    then
-        if get(engine_2_N2) > 16 then
-            set(engine_2_mixture, 1.0)
-        else
-            set(engine_2_mixture, 0)
-        end
-    elseif get(Engine_2_master_switch) == 0
-    then
-        set(engine_2_mixture, 0.0)
-    end
+--    if get(Engine_2_master_switch) == 1
+--    then
+--        if get(engine_2_N2) > 16 then
+--            set(engine_2_mixture, 1.0)
+--        else
+--            set(engine_2_mixture, 0)
+--        end
+--    elseif get(Engine_2_master_switch) == 0
+--    then
+--        set(engine_2_mixture, 0.0)
+--    end
 
     --apu availability
     if get(Apu_N1) > 95 then
