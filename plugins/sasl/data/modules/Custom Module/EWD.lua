@@ -3,6 +3,21 @@ size = {900, 900}
 
 include('constants.lua')
 
+PARAM_DELAY    = 0.15 -- Time to filter out the parameters (they are updated every PARAM_DELAY seconds)
+local last_params_update = 0
+
+params = {
+    eng1_n1 = 0,
+    eng2_n1 = 0,
+    eng1_n2 = 0,
+    eng2_n2 = 0,
+    eng1_egt = 0,
+    eng2_egt = 0,
+    eng1_ff = 0,
+    eng2_ff = 0,
+   last_update = 0
+}
+
 local match_msg_colors = {}
 match_msg_colors[0] = ECAM_WHITE
 match_msg_colors[1] = ECAM_RED
@@ -17,27 +32,49 @@ local time_blinking = sasl.createTimer()
 sasl.startTimer(time_blinking)
 
 function update()
-    set(Eng_1_FF_kgm, get(Eng_1_FF_kgs) * 3600)
-    set(Eng_2_FF_kgm, get(Eng_2_FF_kgs) * 3600)
+    if get(TIME) - params.last_update > PARAM_DELAY then
+        params.eng1_n1 = get(Eng_1_N1)
+        params.eng2_n1 = get(Eng_2_N1)
+        params.eng1_n2 = get(Eng_1_N2)
+        params.eng2_n2 = get(Eng_2_N2)
+        if params.eng1_n1 < 5 then params.eng1_n1 = 0 end
+        if params.eng2_n1 < 5 then params.eng2_n1 = 0 end
+        
+        params.eng1_egt = math.floor(get(Eng_1_EGT_c))
+        params.eng2_egt = math.floor(get(Eng_2_EGT_c))
+
+        params.eng1_ff = math.floor(get(Eng_1_FF_kgs)*360)*10
+        params.eng2_ff = math.floor(get(Eng_2_FF_kgs)*360)*10 
+
+        
+        params.last_update = get(TIME)
+    end
 end
 
 local function draw_engines()
-    --N1--
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-100, size[2]/2+280, tostring(math.floor(get(Eng_1_N1))) .. "." .. tostring(math.floor((get(Eng_1_N1) - math.floor(get(Eng_1_N1))) * 10)), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+250, size[2]/2+280, tostring(math.floor(get(Eng_2_N1))) .. "." .. tostring(math.floor((get(Eng_2_N1) - math.floor(get(Eng_2_N1))) * 10)), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    --N1--    
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-115, size[2]/2+280, math.floor(params.eng1_n1) .. "." , 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-100, size[2]/2+280, math.floor((params.eng1_n1%1)*10)  , 24, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+235, size[2]/2+280, math.floor(params.eng2_n1) .. "." , 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+250, size[2]/2+280, math.floor((params.eng1_n1%1)*10)  , 24, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     --EGT--
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-174, size[2]/2+149, math.floor(get(Eng_1_EGT_c)), 28, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+174, size[2]/2+149, math.floor(get(Eng_2_EGT_c)), 28, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-140, size[2]/2+150, params.eng1_egt, 28, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+210, size[2]/2+150, params.eng2_egt, 28, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     --N2--
-    if get(Engine_mode_knob) == 1 or get(Engine_mode_knob) == -1 then
-        sasl.gl.drawRectangle(size[1]/2-205, size[2]/2+70, 65, 32, ECAM_GREY)
-        sasl.gl.drawRectangle(size[1]/2+135, size[2]/2+70, 65, 32, ECAM_GREY)
-    end
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-150, size[2]/2+75, math.floor(get(Eng_1_N2)), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+150, size[2]/2+75, math.floor(get(Eng_2_N2)), 30, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+    --if get(Engine_mode_knob) == 1 or get(Engine_mode_knob) == -1 then -- TODO
+    --    sasl.gl.drawRectangle(size[1]/2-205, size[2]/2+70, 65, 32, ECAM_GREY)
+    --    sasl.gl.drawRectangle(size[1]/2+135, size[2]/2+70, 65, 32, ECAM_GREY)
+    --end
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-145, size[2]/2+75, math.floor(params.eng1_n2) .. "." , 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-130, size[2]/2+75, math.floor((params.eng1_n2%1)*10) , 24, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+180, size[2]/2+75, math.floor(params.eng2_n2) .. "." , 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+195, size[2]/2+75, math.floor((params.eng2_n2%1)*10) , 24, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    
     --FF--
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-150, size[2]/2+3, math.floor(get(Eng_1_FF_kgm)), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+150, size[2]/2+3, math.floor(get(Eng_2_FF_kgm)), 30, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-130, size[2]/2+3, params.eng1_ff, 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+195, size[2]/2+3, params.eng2_ff, 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
 
     -- AVAIL box --
     if get(EWD_engine_avail_ind_1_start) ~= 0 and get(TIME) - get(EWD_engine_avail_ind_1_start) < 10 then

@@ -348,39 +348,31 @@ function Knob_handler_down_int(phase, dataref, min, max)
     end
 end
 
+--drawing functions
+function Sasl_DrawWideFrame(x, y, width, height, line_width, align_center_in_out, color)
+    if align_center_in_out == 0 then--center of line
+        sasl.gl.drawWideLine(x - (line_width / 2), y + height,           x + width + (line_width / 2), y + height,                      line_width, color)
+        sasl.gl.drawWideLine(x,                    y + (line_width / 2), x,                            y + (height - (line_width / 2)), line_width, color)
+        sasl.gl.drawWideLine(x + width,            y + (line_width / 2), x + width,                    y + (height - (line_width / 2)), line_width, color)
+        sasl.gl.drawWideLine(x - (line_width / 2), y,                    x + width + (line_width / 2), y,                               line_width, color)
+    elseif align_center_in_out == 1 then
+        sasl.gl.drawWideLine(x - line_width,               y + height + (line_width / 2), x + width + line_width,       y + height + (line_width / 2), line_width, color)
+        sasl.gl.drawWideLine(x - (line_width / 2),         y,                             x - (line_width / 2),         y + height,                    line_width, color)
+        sasl.gl.drawWideLine(x + width + (line_width / 2), y,                             x + width + (line_width / 2), y + height,                    line_width, color)
+        sasl.gl.drawWideLine(x - line_width,               y - (line_width / 2),          x + width + line_width,       y - (line_width / 2),          line_width, color)
+    elseif align_center_in_out == 2 then
+        sasl.gl.drawWideLine(x,                            y + height - (line_width / 2), x + width,                    y + height - (line_width / 2), line_width, color)
+        sasl.gl.drawWideLine(x + (line_width / 2),         y + line_width,                x + (line_width / 2),         y + (height - line_width),     line_width, color)
+        sasl.gl.drawWideLine(x + width - (line_width / 2), y + line_width,                x + width - (line_width / 2), y + (height - line_width),     line_width, color)
+        sasl.gl.drawWideLine(x,                            y + (line_width / 2),          x + width,                    y + (line_width / 2),          line_width, color)
+    end
+end
+
+
+ELEC_sys = {}
+Fuel_sys = {}
 Mcdu_popup = {}
 
 function MCDU_get_popup(id) return Mcdu_popup[id] end
 function MCDU_set_popup(id, val) Mcdu_popup[id] = val end
-
-ELEC_sys = {}
-Fuel_sys = {}
-
-
--- Delayed button
-Delayed_Button = {
-
-    delay       = 0,
-    curr_value  = false,
-    next_value  = false,
-    switch_time = 0
-}
--- Constructor for the class
-function Delayed_Button:create (o)
-    o = o or {}   -- create object if user does not provide one
-    setmetatable(o, self)
-    self.__index = self
-    return o
-end
-function Delayed_Button:set(x)
-    self.next_value = x
-    self.switch_time = get(TIME)
-end
-function Delayed_Button:get()
-    if self.switch_time ~= 0 and get(TIME) - self.switch_time > self.delay then
-        self.curr_value = self.next_value
-        self.switch_time = 0
-    end
-    return self.curr_value
-end
 

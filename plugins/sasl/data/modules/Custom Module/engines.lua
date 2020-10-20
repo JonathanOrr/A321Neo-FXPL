@@ -8,6 +8,7 @@
 ----------------------------------------------------------------------------------------------------
 include('constants.lua')
 
+MAX_EGT_OFFSET = 10  -- This is the maximum offset between one engine and the other in terms of EGT
 
 START_UP_PHASES_N2 = {
     {n2_start = 0,    n2_increase_per_sec = 0.26, fuel_flow = 0,   stop=false},
@@ -27,7 +28,9 @@ START_UP_PHASES_N1 = {
 ----------------------------------------------------------------------------------------------------
 
 local eng_starting_phase = {0, 0}
-
+local egt_eng_1_offset = math.random() * MAX_EGT_OFFSET * 2 - MAX_EGT_OFFSET
+local egt_eng_2_offset = math.random() * MAX_EGT_OFFSET * 2 - MAX_EGT_OFFSET
+local last_params_update = 0
 ----------------------------------------------------------------------------------------------------
 -- Commands
 ----------------------------------------------------------------------------------------------------
@@ -50,6 +53,10 @@ end
 
 local function min_n1(altitude)
     return 5.577955*math.log(0.03338352*altitude+23.66644)+1.724586
+end
+
+local function n1_to_egt(n1, outside_temperature)
+    return 1067.597 + (525.8561 - 1067.597)/(1 + (n1/76.42303)^4.611082) + (outside_temperature-6) *2
 end
 
 local function update_n1_minimum()
@@ -86,6 +93,28 @@ local function update_n2()
 
 end
 
+
+local function update_egt()
+    local eng_1_n1 = get(Eng_1_N1)
+    if eng_1_n1 > 5 then
+        local computed_egt = n1_to_egt(eng_1_n1, get(OTA))
+        computed_egt = computed_egt + egt_eng_1_offset + math.random()*2 -- Let's add a bit of randomness
+        Set_dataref_linear_anim(Eng_1_EGT_c, computed_egt, -50, 1500, 70)
+    else
+        -- Starting or off TODO
+    end
+
+    local eng_2_n1 = get(Eng_2_N1)
+    if eng_2_n1 > 5 then
+        local computed_egt = n1_to_egt(eng_2_n1, get(OTA))
+        computed_egt = computed_egt + egt_eng_2_offset + math.random()*2 -- Let's add a bit of randomness
+        Set_dataref_linear_anim(Eng_2_EGT_c, computed_egt, -50, 1500, 70)
+    else
+        -- Starting or off TODO
+    end
+
+end
+
 local function update_avail()
     if get(Eng_1_N1) > 18.3 and get(Engine_1_master_switch) == 1 then
         if get(Engine_1_avail) == 0 then
@@ -109,15 +138,23 @@ local function update_avail()
     
 end
 
+----------------------------------------------------------------------------------------------------
+-- Functions - Ignition stuffs
+----------------------------------------------------------------------------------------------------
+
 local function perform_starting_procedure(eng)
 
 end
+
+
 
 function update()
 
     perform_starting_procedure()
 
+
     update_n1_minimum()
     update_n2()
-    update_avail() 
+    update_egt()
+    update_avail()
 end
