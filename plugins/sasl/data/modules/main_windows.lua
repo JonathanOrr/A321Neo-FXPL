@@ -98,6 +98,20 @@ ELEC_debug_window = contextWindow {
   };
 }
 
+ENG_debug_window = contextWindow {
+  name = "ENG DEBUG";
+  position = { 200 , 200 , 500 , 500};
+  noBackground = true ;
+  proportional = false ;
+  minimumSize = { 500 , 500 };
+  maximumSize = { 500 , 500 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = true ;
+  components = {
+    engines_debug {position = { 0 , 0 , 500 , 500 }}
+  };
+}
+
 DCDU_window = contextWindow {
   name = "DCDU Management";
   position = { 150 , 150 , 463 , 683 };
