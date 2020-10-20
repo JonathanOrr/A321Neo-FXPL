@@ -337,6 +337,8 @@ EWD_engine_avail_ind_1_start = createGlobalPropertyi("a321neo/cockpit/ewd/ENG1_a
 EWD_engine_avail_ind_2_start = createGlobalPropertyi("a321neo/cockpit/ewd/ENG2_avail_indicator_start", 0, false, true, false) -- Time point when the engine is avail
 EWD_engine_avail_ind_1 = createGlobalPropertyi("a321neo/cockpit/ewd/ENG1_avail_indicator", 0, false, true, false) -- 1 : avail showed, 0 : none
 EWD_engine_avail_ind_2 = createGlobalPropertyi("a321neo/cockpit/ewd/ENG2_avail_indicator", 0, false, true, false) -- 1 : avail showed, 0 : none
+EWD_engine_1_rev_ind = createGlobalPropertyi("a321neo/cockpit/ewd/ENG1_rev_ind", 0, false, true, false) -- 0: no rev, 2: rev amber, 2: rev amber HIGH, 4: rev green
+EWD_engine_2_rev_ind = createGlobalPropertyi("a321neo/cockpit/ewd/ENG2_rev_ind", 0, false, true, false) -- 0: no rev, 2: rev amber, 2: rev amber HIGH, 4: rev green
 
 --ENG
 L_sim_throttle = globalProperty("sim/cockpit2/engine/actuators/throttle_jet_rev_ratio[0]")

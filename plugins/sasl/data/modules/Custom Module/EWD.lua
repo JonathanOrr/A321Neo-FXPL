@@ -6,7 +6,7 @@ include('constants.lua')
 PARAM_DELAY    = 0.15 -- Time to filter out the parameters (they are updated every PARAM_DELAY seconds)
 local last_params_update = 0
 
-params = {
+local params = {
     eng1_n1 = 0,
     eng2_n1 = 0,
     eng1_n2 = 0,
@@ -15,8 +15,10 @@ params = {
     eng2_egt = 0,
     eng1_ff = 0,
     eng2_ff = 0,
-   last_update = 0
+    last_update = 0
 }
+
+local eng_idle_start = 0  -- When the engines went to IDLE
 
 local match_msg_colors = {}
 match_msg_colors[0] = ECAM_WHITE
@@ -31,7 +33,39 @@ match_msg_colors[7] = ECAM_GREEN -- Blinking
 local time_blinking = sasl.createTimer()
 sasl.startTimer(time_blinking)
 
+local function update_reverse_indication()
+    -- ENG1 Reverse
+    if get(Eng_1_reverser_deployment) > 0 then
+        if get(EWD_flight_phase) >= 5 and get(EWD_flight_phase) <= 7 then
+            -- Blink
+            set(EWD_engine_1_rev_ind, (math.floor(get(TIME)*2) / 10 % 2) == 1 and 1 or 2)            
+        elseif get(Eng_1_reverser_deployment) > 0.98 then
+            set(EWD_engine_1_rev_ind, 3)    -- Green
+        else
+            set(EWD_engine_1_rev_ind, 1)    -- Amber
+        end
+    else
+        set(EWD_engine_1_rev_ind, 0)    -- No reverse indication
+    end
+
+    -- ENG2 Reverse    
+    if get(Eng_2_reverser_deployment) > 0 then
+        if get(EWD_flight_phase) >= 5 and get(EWD_flight_phase) <= 7 then
+            -- Blink
+            set(EWD_engine_2_rev_ind, (math.floor(get(TIME)*2) % 2) == 1 and 1 or 2)            
+        elseif get(Eng_2_reverser_deployment) > 0.98 then
+            set(EWD_engine_2_rev_ind, 3)    -- Green
+        else
+            set(EWD_engine_2_rev_ind, 1)    -- Amber
+        end
+    else
+        set(EWD_engine_2_rev_ind, 0)    -- No reverse indication
+    end
+end
+
 function update()
+
+    -- Update the parameter every PARAM_DELAY seconds
     if get(TIME) - params.last_update > PARAM_DELAY then
         params.eng1_n1 = get(Eng_1_N1)
         params.eng2_n1 = get(Eng_2_N1)
@@ -49,6 +83,16 @@ function update()
         
         params.last_update = get(TIME)
     end
+    
+    if params.eng1_n1 < get(Eng_N1_idle) + 1 and params.eng2_n1 < get(Eng_N1_idle) + 1 and get(Any_wheel_on_ground) == 0 then
+        if eng_idle_start == 0 then
+            eng_idle_start = get(TIME)
+        end
+    else
+        eng_idle_start = 0
+    end
+    
+    update_reverse_indication()
 end
 
 local function draw_engines()
@@ -88,7 +132,17 @@ local function draw_engines()
     else
         set(EWD_engine_avail_ind_2, 0)
     end
-
+    
+    -- IDLE indication
+    if eng_idle_start ~= 0 then
+        color = ECAM_GREEN
+        if get(TIME) - eng_idle_start < 10 then
+            if (math.floor(get(TIME)*2)) % 2 == 1 then -- Blinking
+                color = ECAM_HIGH_GREEN
+            end
+        end
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2+380, "IDLE" , 30, false, false, TEXT_ALIGN_CENTER, color)        
+    end
 end
 
 local function draw_left_memo()
