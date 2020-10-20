@@ -56,16 +56,16 @@ local function update_n1_minimum()
     local curr_altitude = get(Elevation_m) * 3.28084
     local curr_n1 = get(Eng_1_N1)
     local comp_min_n1 = min_n1(curr_altitude)
-    
+    local always_a_minimum = 18.5
     set(Eng_N1_idle, comp_min_n1)
     
-    if curr_n1 < comp_min_n1 and get(Engine_1_avail) == 1 then
-        set(Eng_1_N1_enforce, comp_min_n1)
+    if curr_n1 < always_a_minimum and get(Engine_1_avail) == 1 then
+        set(Eng_1_N1_enforce, always_a_minimum)
     end
 
     curr_n1 = get(Eng_2_N1)
-    if curr_n1 < comp_min_n1 and get(Engine_2_avail) == 1 then
-        set(Eng_2_N1_enforce, comp_min_n1)
+    if curr_n1 < always_a_minimum and get(Engine_2_avail) == 1 then
+        set(Eng_2_N1_enforce, always_a_minimum)
     end
 end
 
@@ -87,7 +87,7 @@ local function update_n2()
 end
 
 local function update_avail()
-    if get(Eng_1_N1) > 18.4 and get(Engine_1_master_switch) == 1 then
+    if get(Eng_1_N1) > 18.3 and get(Engine_1_master_switch) == 1 then
         if get(Engine_1_avail) == 0 then
             set(EWD_engine_avail_ind_1_start, get(TIME))
             set(Engine_1_avail, 1)
@@ -96,7 +96,7 @@ local function update_avail()
         set(Engine_1_avail, 0)    
         set(EWD_engine_avail_ind_1_start, 0)
     end
-    if get(Eng_2_N1) > 18.4 and get(Engine_2_master_switch) == 1 then
+    if get(Eng_2_N1) > 18.3 and get(Engine_2_master_switch) == 1 then
         if get(Engine_2_avail) == 0 then
             set(EWD_engine_avail_ind_2_start, get(TIME))
             set(Engine_2_avail, 1)
