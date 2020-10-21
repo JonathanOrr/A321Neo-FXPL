@@ -13,7 +13,7 @@ local DARK_GREY = {0.1568, 0.1803, 0.2039}
 local B612_MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
 
 --GRAPH PROPERTIES--
-local graph_time_limit = 2.5 --5 seconds across the x axis
+local graph_time_limit = 5 --seconds across the x axis
 
 P_array = {}
 I_array = {}
@@ -134,7 +134,10 @@ function update()
         sasl.setMenuItemState(Menu_main, ShowHidePIDUI, MENU_UNCHECKED)
     end
 
-    Update_PID_historys(0 + 5, 0 + 5, 400, 250, AT_PID_arrays.SSS_L_N1)
+    Update_PID_historys(0 + 5, 0 + 5, 400, 250, FBW_PID_arrays.SSS_FBW_roll_rate)
+
+    print("P: " .. FBW_PID_arrays.SSS_FBW_roll_rate.Proportional)
+    print("D: " .. FBW_PID_arrays.SSS_FBW_roll_rate.Derivative)
 end
 
 function draw()

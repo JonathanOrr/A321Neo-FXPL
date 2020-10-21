@@ -52,7 +52,7 @@ function update()
         end
 
         --avoid delayed actuall or previous compensation while transitioning
-        FBW_PID_arrays.SSS_FBW_roll_rate.I_gain = 0
+        FBW_PID_arrays.SSS_FBW_roll_rate.I_time = 0
         FBW_PID_arrays.SSS_FBW_roll_rate.Integral_sum = 0
         Roll_rate_input = 15 * get(Roll)
     else
@@ -62,23 +62,23 @@ function update()
             roll_limits = 33
         end
 
-        FBW_PID_arrays.SSS_FBW_roll_rate.I_gain = 0.5
+        FBW_PID_arrays.SSS_FBW_roll_rate.I_time = 0.5
         Roll_rate_input = 0
     end
 
     --pitch---------------------------------------------------------------------------------------
     if get(Flaps_internal_config) == 0 then
         if get(Pitch) > 0.05 then
-            --SSS_FBW_G_load_pitch.I_gain = 0
+            --SSS_FBW_G_load_pitch.I_time = 0
             --SSS_FBW_G_load_pitch.Integral_sum = 0
             G_input = Set_anim_value(G_input, 1.5 * get(Pitch) + 1, -1, 2.5, 1)
         elseif get(Pitch) < -0.05 then
-            --SSS_FBW_G_load_pitch.I_gain = 0
+            --SSS_FBW_G_load_pitch.I_time = 0
             --SSS_FBW_G_load_pitch.Integral_sum = 0
             G_input = Set_anim_value(G_input, 2 * get(Pitch) + 1, -1, 2.5, 1)
         else
             G_input = Set_anim_value(G_input, 1, -1, 2.5, 2)
-            --SSS_FBW_G_load_pitch.I_gain = 0.04
+            --SSS_FBW_G_load_pitch.I_time = 0.04
         end
     else
         if get(Pitch) > 0.05 then
@@ -101,7 +101,7 @@ function update()
         vmax_prot_output = Math_lerp(-1, SSS_PID(FBW_PID_arrays.SSS_FBW_vmax_prot_pitch, (get(PFD_Capt_IAS) + get(PFD_Fo_IAS)) / 2 - (get(Capt_VMAX_prot) + get(Fo_VMAX_prot)) / 2), vmax_prot_activation_ratio)
 
         if get(FBW_kill_switch) == 0 then
-            set(Roll_artstab, Set_anim_value(get(Roll_artstab), Math_clamp_higher(Math_clamp_lower(SSS_PID(FBW_PID_arrays.SSS_FBW_roll_rate, Roll_rate_input - get(True_roll_rate)), left_roll_limit_output), right_roll_limit_output), -1, 1, 0.8))
+            set(Roll_artstab, Set_anim_value(get(Roll_artstab), Math_clamp_higher(Math_clamp_lower(SSS_PID_DPV(FBW_PID_arrays.SSS_FBW_roll_rate, Roll_rate_input, get(True_roll_rate)), left_roll_limit_output), right_roll_limit_output), -1, 1, 0.8))
             set(Pitch_artstab, Set_anim_value(get(Pitch_artstab), Math_clamp(Math_clamp_higher(Math_clamp_lower(G_output, vmax_prot_output), SSS_PID(FBW_PID_arrays.SSS_FBW_stall_prot_pitch, 11 - get(Alpha))), SSS_PID(FBW_PID_arrays.SSS_FBW_pitch_down_limit, -15 - get(Flightmodel_pitch)), SSS_PID(FBW_PID_arrays.SSS_FBW_pitch_up_limit, 30 - get(Flightmodel_pitch))),-1, 1, 0.55))
 
             if get(Any_wheel_on_ground) ~= 1 then

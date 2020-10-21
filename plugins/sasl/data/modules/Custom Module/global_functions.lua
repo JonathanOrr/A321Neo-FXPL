@@ -170,7 +170,7 @@ function FBW_P_no_lim(pd_array, error)
     local correction = pd_array.Current_error * pd_array.P_gain
 
     --limit and rescale output range--
-    correction = correction / pd_array.Max_error
+    correction = correction / pd_array.Max_out
 
     return correction
 end
@@ -186,7 +186,7 @@ function FBW_PD(pd_array, error)
     correction = correction + (pd_array.Current_error - last_error) * pd_array.D_gain
 
     --limit and rescale output range--
-    correction = Math_clamp(correction, pd_array.Min_error, pd_array.Max_error) / pd_array.Max_error
+    correction = Math_clamp(correction, pd_array.Min_out, pd_array.Max_out) / pd_array.Max_out
 
     return correction
 end
@@ -203,8 +203,8 @@ function SSS_PID_NO_LIM(pid_array, error)
         pid_array.Proportional = pid_array.Current_error * pid_array.P_gain
 
 	    --integral--(clamped to stop windup)
-	    pid_array.Integral_sum = Math_clamp(pid_array.Integral_sum + (pid_array.Current_error * get(DELTA_TIME)), pid_array.Min_error * (1 / pid_array.I_gain), pid_array.Max_error * (1 / pid_array.I_gain))
-        pid_array.Integral = Math_clamp(pid_array.Integral_sum * pid_array.I_gain, pid_array.Min_error * (1 / pid_array.I_gain), pid_array.Max_error * (1 / pid_array.I_gain))
+	    pid_array.Integral_sum = Math_clamp(pid_array.Integral_sum + (pid_array.Current_error * get(DELTA_TIME)), pid_array.Min_out * (1 / pid_array.I_gain), pid_array.Max_out * (1 / pid_array.I_gain))
+        pid_array.Integral = Math_clamp(pid_array.Integral_sum * pid_array.I_gain, pid_array.Min_out * (1 / pid_array.I_gain), pid_array.Max_out * (1 / pid_array.I_gain))
 
         --derivative--
         pid_array.Derivative = ((pid_array.Current_error - last_error) / get(DELTA_TIME)) * pid_array.D_gain
@@ -233,8 +233,8 @@ function SSS_PID(pid_array, error)
         pid_array.Proportional = pid_array.Current_error * pid_array.P_gain
 
 	    --integral--(clamped to stop windup)
-	    pid_array.Integral_sum = Math_clamp(pid_array.Integral_sum + (pid_array.Current_error * get(DELTA_TIME)), pid_array.Min_error * (1 / pid_array.I_gain), pid_array.Max_error * (1 / pid_array.I_gain))
-        pid_array.Integral = Math_clamp(pid_array.Integral_sum * pid_array.I_gain, pid_array.Min_error * (1 / pid_array.I_gain), pid_array.Max_error * (1 / pid_array.I_gain))
+	    pid_array.Integral_sum = Math_clamp(pid_array.Integral_sum + (pid_array.Current_error * get(DELTA_TIME)), pid_array.Error_margin * pid_array.Min_out * pid_array.I_time, pid_array.Error_margin * pid_array.Max_out * pid_array.I_time)
+        pid_array.Integral = Math_clamp(pid_array.Integral_sum * 1 / pid_array.I_time, pid_array.Error_margin * pid_array.Min_out, pid_array.Error_margin * pid_array.Max_out)
 
         --derivative--
         if pid_array.Smooth_derivative == true then
@@ -243,11 +243,70 @@ function SSS_PID(pid_array, error)
             pid_array.Derivative = ((pid_array.Current_error - last_error) / get(DELTA_TIME)) * pid_array.D_gain
         end
 
+        --nil value return 0
+        if pid_array.Proportional == nil then
+            pid_array.Proportional = 0
+        end
+        if pid_array.Integral == nil then
+            pid_array.Integral = 0
+        end
+        if pid_array.Derivative == nil then
+            pid_array.Derivative = 0
+        end
+
         --sigma
         correction = pid_array.Proportional + pid_array.Integral + pid_array.Derivative
 
 	    --limit and rescale output range--
-        correction = Math_clamp(correction, pid_array.Min_error, pid_array.Max_error) / pid_array.Max_error
+        correction = Math_clamp(correction, pid_array.Min_out * pid_array.Error_margin, pid_array.Max_out * pid_array.Error_margin) / pid_array.Error_margin
+
+    end
+
+    return correction
+end
+
+function SSS_PID_DPV(pid_array, Set_Point, PV)
+    local correction = 0
+    local last_PV = pid_array.PV
+
+    if get(DELTA_TIME) ~= 0 then
+
+        if pid_array.Smooth_PV == true then
+            pid_array.PV = Set_anim_value(pid_array.PV, Set_Point - PV, -1000000000000000, 1000000000000000, pid_array.PV_curve_spd)
+        else
+            pid_array.PV = PV
+        end
+
+        --Proportional--
+        pid_array.Proportional = (Set_Point - PV) * pid_array.P_gain
+
+	    --integral--(clamped to stop windup)
+	    pid_array.Integral_sum = Math_clamp(pid_array.Integral_sum + ((Set_Point - PV) * get(DELTA_TIME)), pid_array.Error_margin * pid_array.Min_out * pid_array.I_time, pid_array.Error_margin * pid_array.Max_out * pid_array.I_time)
+        pid_array.Integral = Math_clamp(pid_array.Integral_sum * 1 / pid_array.I_time, pid_array.Error_margin * pid_array.Min_out, pid_array.Error_margin * pid_array.Max_out)
+
+        --derivative--
+        if pid_array.Smooth_derivative == true then
+            pid_array.Derivative = Set_anim_value(pid_array.Derivative, ((last_PV - pid_array.PV) / get(DELTA_TIME)) * pid_array.D_gain, -1000000000000000, 1000000000000000, pid_array.Derivative_curve_spd)
+        else
+            pid_array.Derivative = ((last_PV - pid_array.PV) / get(DELTA_TIME)) * pid_array.D_gain
+        end
+
+        --nil value return 0
+        if pid_array.Proportional == nil then
+            pid_array.Proportional = 0
+        end
+        if pid_array.Integral == nil then
+            pid_array.Integral = 0
+        end
+        if pid_array.Derivative == nil then
+            pid_array.Derivative = 0
+        end
+
+        --sigma
+        correction = pid_array.Proportional + pid_array.Integral + pid_array.Derivative
+
+	    --limit and rescale output range--
+        correction = Math_clamp(correction, pid_array.Min_out * pid_array.Error_margin, pid_array.Max_out * pid_array.Error_margin) / pid_array.Error_margin
 
     end
 
@@ -266,7 +325,7 @@ function FBW_PID_no_lim(pid_array, error)
 
     --clamping the integral to minimise the delay
 
-    pid_array.Integral = Math_clamp(pid_array.Integral, pid_array.Min_error, pid_array.Max_error)
+    pid_array.Integral = Math_clamp(pid_array.Integral, pid_array.Min_out, pid_array.Max_out)
 
     correction = correction + pid_array.Integral * pid_array.I_gain
 
@@ -274,7 +333,7 @@ function FBW_PID_no_lim(pid_array, error)
     correction = correction + (pid_array.Current_error - last_error) * pid_array.D_gain
 
     --limit and rescale output range--
-    correction = correction / pid_array.Max_error
+    correction = correction / pid_array.Max_out
 
     return correction
 end
