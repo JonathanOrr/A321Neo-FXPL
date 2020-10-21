@@ -212,10 +212,9 @@ function SSS_PID_NO_LIM(pid_array, error)
         --sigma
         correction = pid_array.Proportional + pid_array.Integral + pid_array.Derivative
 
-	    return correction
-
     end
 
+    return correction
 end
 
 function SSS_PID(pid_array, error)
@@ -250,10 +249,9 @@ function SSS_PID(pid_array, error)
 	    --limit and rescale output range--
         correction = Math_clamp(correction, pid_array.Min_error, pid_array.Max_error) / pid_array.Max_error
 
-	    return correction
-
     end
 
+    return correction
 end
 
 function FBW_PID_no_lim(pid_array, error)

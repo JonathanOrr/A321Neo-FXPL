@@ -68,7 +68,7 @@ Override_control_surfaces = globalProperty("sim/operation/override/override_cont
 
 
 --global pid array
-A32nx_auto_thrust = {P_gain = 1.6, I_gain = 0.2, D_gain = 4.5, Proportional = 0, Integral_sum = 0, Integral = 0, Derivative = 0, Current_error = 0, Min_error = -15, Max_error = 15}
+A32nx_auto_thrust = {P_gain = 1.6, I_time = 5, D_gain = 4.5, Proportional = 0, Integral_sum = 0, Integral = 0, Derivative = 0, PV = 0, Min_out = 0, Max_out = 1, Error_margin = 15}
 A32nx_FD_roll = {P_gain = 1, I_gain = 0, D_gain = 0.32, Proportional = 0, Integral_sum = 0, Integral = 0, Derivative = 0, Current_error = 0, Min_error = -15, Max_error = 15}
 A32nx_FD_pitch = {P_gain = 1, I_gain = 1/3, D_gain = 0.35, Proportional = 0, Integral_sum = 0, Integral = 0, Derivative = 0, Current_error = 0, Min_error = -12000, Max_error = 12000}
 A32nx_rwy_roll = {P_gain = 1, I_gain = 0, D_gain = 2, Proportional = 0, Integral_sum = 0, Integral = 0, Derivative = 0, Current_error = 0, Min_error = -30, Max_error = 30}
@@ -171,29 +171,29 @@ function A32nx_PID_time_indep(pid_array, error)
 end]]
 
 --new PID with improved integral calculation
-function A32nx_AT_PID(pid_array, Set_Point, PV)
+function NEW_PID(pid_array, Set_Point, PV)
     local correction = 0
-    local last_PV = PV
+    local last_PV = pid_array.PV
 
     if get(DELTA_TIME) ~= 0 then
 
-        pid_array.Current_error = Set_Point - PV
+        pid_array.PV = PV
 
         --Proportional--
-        pid_array.Proportional = pid_array.Current_error * pid_array.P_gain
+        pid_array.Proportional = (Set_Point - PV) * pid_array.P_gain
 
 	    --integral--(clamped to stop windup)
-	    pid_array.Integral_sum = Math_clamp(pid_array.Integral_sum + (pid_array.Current_error * get(DELTA_TIME)), pid_array.Min_error * (1 / pid_array.I_gain), pid_array.Max_error * (1 / pid_array.I_gain))
-        pid_array.Integral = Math_clamp(pid_array.Integral_sum * pid_array.I_gain, pid_array.Min_error * (1 / pid_array.I_gain), pid_array.Max_error * (1 / pid_array.I_gain))
+	    pid_array.Integral_sum = Math_clamp(pid_array.Integral_sum + ((Set_Point - PV) * get(DELTA_TIME)), pid_array.Error_margin * pid_array.Min_out * pid_array.I_time, pid_array.Error_margin * pid_array.Max_out * pid_array.I_time)
+        pid_array.Integral = Math_clamp(pid_array.Integral_sum * 1 / pid_array.I_time, pid_array.Error_margin * pid_array.Min_out * pid_array.I_time, pid_array.Error_margin * pid_array.Max_out * pid_array.I_time)
 
         --derivative--
-        pid_array.Derivative = ((PV - last_PV) / get(DELTA_TIME)) * pid_array.D_gain
+        pid_array.Derivative = ((last_PV - pid_array.PV) / get(DELTA_TIME)) * pid_array.D_gain
 
         --sigma
         correction = pid_array.Proportional + pid_array.Integral + pid_array.Derivative
 
 	    --limit and rescale output range--
-        correction = ((Math_clamp(correction, pid_array.Min_error, pid_array.Max_error) / pid_array.Max_error) + 1) / 2
+        correction = Math_clamp(correction, pid_array.Error_margin * pid_array.Min_out, pid_array.Error_margin * pid_array.Max_out) / pid_array.Error_margin
 
     end
 

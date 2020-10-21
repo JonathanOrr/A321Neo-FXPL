@@ -1,6 +1,6 @@
 --inclue components
 include("FBW_subcomponents/autothrust_subcomponents/lever_input_functions.lua")
-include("FBW_subcomponents/autothrust_subcomponents/AT_PID.lua")
+include("FBW_subcomponents/autothrust_subcomponents/AT_PID_functions.lua")
 
 --sim dataref
 local reverse_L_deployed = globalProperty("sim/cockpit2/annunciators/reverser_on[0]")
@@ -39,7 +39,7 @@ end
 
 function update()
     --FADEC N1 CONTROL--
-    N1_control()
+    N1_control(AT_PID_arrays.SSS_L_N1, AT_PID_arrays.SSS_R_N1, false)
 
     --throttle detents
     --TOGA
