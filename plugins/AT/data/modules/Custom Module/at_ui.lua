@@ -48,13 +48,13 @@ local B612_MONO_bold = sasl.gl.loadFont("fonts/B612Mono-Bold.ttf")
 function update()
     target_speed = get(A32nx_target_spd)
     p_gain = A32nx_auto_thrust.P_gain
-    i_gain = A32nx_auto_thrust.I_gain
+    i_gain = A32nx_auto_thrust.I_time
     d_gain = A32nx_auto_thrust.D_gain
     --integral_time = A32nx_auto_thrust.I_time
     --max_integral = A32nx_auto_thrust.Integral_max
     integral_sum = A32nx_auto_thrust.Integral_sum
     integral = A32nx_auto_thrust.Integral
-    max_error = A32nx_auto_thrust.Max_error
+    max_error = A32nx_auto_thrust.Error_margin
 
     updateAll(components)
 end
@@ -74,7 +74,7 @@ function draw()
     --pid gains--
     sasl.gl.drawText(B612_MONO_regular, size[1]/6,       size[2]/2 + 85, "P GAIN", 12, false, false, TEXT_ALIGN_CENTER, WHITE)
     sasl.gl.drawText(B612_MONO_regular, size[1]/6,       size[2]/2 + 55, p_gain,   20, false, false, TEXT_ALIGN_CENTER, WHITE)
-    sasl.gl.drawText(B612_MONO_regular, size[1]/2,       size[2]/2 + 85, "I GAIN", 12, false, false, TEXT_ALIGN_CENTER, WHITE)
+    sasl.gl.drawText(B612_MONO_regular, size[1]/2,       size[2]/2 + 85, "I TIME", 12, false, false, TEXT_ALIGN_CENTER, WHITE)
     sasl.gl.drawText(B612_MONO_regular, size[1]/2,       size[2]/2 + 55, i_gain,   20, false, false, TEXT_ALIGN_CENTER, WHITE)
     sasl.gl.drawText(B612_MONO_regular, 5 * size[1]/6, size[2]/2 + 85, "D GAIN", 12, false, false, TEXT_ALIGN_CENTER, WHITE)
     sasl.gl.drawText(B612_MONO_regular, 5 * size[1]/6, size[2]/2 + 55, d_gain,   20, false, false, TEXT_ALIGN_CENTER, WHITE)

@@ -51,9 +51,9 @@ function update()
             roll_limits = 67
         end
 
-        --avoid delayed actuall or previouse compensation while transitioning
-        SSS_FBW_roll_rate.I_gain = 0
-        SSS_FBW_roll_rate.Integral_sum = 0
+        --avoid delayed actuall or previous compensation while transitioning
+        FBW_PID_arrays.SSS_FBW_roll_rate.I_gain = 0
+        FBW_PID_arrays.SSS_FBW_roll_rate.Integral_sum = 0
         Roll_rate_input = 15 * get(Roll)
     else
         if vmax_prot_activation_ratio > 0 then
@@ -62,7 +62,7 @@ function update()
             roll_limits = 33
         end
 
-        SSS_FBW_roll_rate.I_gain = 0.5
+        FBW_PID_arrays.SSS_FBW_roll_rate.I_gain = 0.5
         Roll_rate_input = 0
     end
 
@@ -90,19 +90,19 @@ function update()
         end
     end
 
-    G_output = SSS_PID(SSS_FBW_G_load_pitch, G_input - get(Total_vertical_g_load))
+    G_output = SSS_PID(FBW_PID_arrays.SSS_FBW_G_load_pitch, G_input - get(Total_vertical_g_load))
     vmax_prot_activation_ratio = Math_clamp((get(PFD_Capt_IAS) - get(Capt_VMAX)) / (get(Capt_VMAX_prot) - get(Capt_VMAX)), 0, 1)
 
     if get(DELTA_TIME) ~= 0 then
-        left_roll_limit_output = SSS_PID(SSS_FBW_roll_left_limit, -roll_limits - get(Flightmodel_roll))
-        right_roll_limit_output = SSS_PID(SSS_FBW_roll_right_limit, roll_limits - get(Flightmodel_roll))
+        left_roll_limit_output = SSS_PID(FBW_PID_arrays.SSS_FBW_roll_left_limit, -roll_limits - get(Flightmodel_roll))
+        right_roll_limit_output = SSS_PID(FBW_PID_arrays.SSS_FBW_roll_right_limit, roll_limits - get(Flightmodel_roll))
 
         --slowly start to enable the pitch for vmax protection as the speed overshoots vmax and heads towards vmax prot
-        vmax_prot_output = Math_lerp(-1, SSS_PID(SSS_FBW_vmax_prot_pitch, (get(PFD_Capt_IAS) + get(PFD_Fo_IAS)) / 2 - (get(Capt_VMAX_prot) + get(Fo_VMAX_prot)) / 2), vmax_prot_activation_ratio)
+        vmax_prot_output = Math_lerp(-1, SSS_PID(FBW_PID_arrays.SSS_FBW_vmax_prot_pitch, (get(PFD_Capt_IAS) + get(PFD_Fo_IAS)) / 2 - (get(Capt_VMAX_prot) + get(Fo_VMAX_prot)) / 2), vmax_prot_activation_ratio)
 
         if get(FBW_kill_switch) == 0 then
-            set(Roll_artstab, Set_anim_value(get(Roll_artstab), Math_clamp_higher(Math_clamp_lower(SSS_PID(SSS_FBW_roll_rate, Roll_rate_input - get(True_roll_rate)), left_roll_limit_output), right_roll_limit_output), -1, 1, 0.8))
-            set(Pitch_artstab, Set_anim_value(get(Pitch_artstab), Math_clamp(Math_clamp_higher(Math_clamp_lower(G_output, vmax_prot_output), SSS_PID(SSS_FBW_stall_prot_pitch, 11 - get(Alpha))), SSS_PID(SSS_FBW_pitch_down_limit, -15 - get(Flightmodel_pitch)), SSS_PID(SSS_FBW_pitch_up_limit, 30 - get(Flightmodel_pitch))),-1, 1, 0.55))
+            set(Roll_artstab, Set_anim_value(get(Roll_artstab), Math_clamp_higher(Math_clamp_lower(SSS_PID(FBW_PID_arrays.SSS_FBW_roll_rate, Roll_rate_input - get(True_roll_rate)), left_roll_limit_output), right_roll_limit_output), -1, 1, 0.8))
+            set(Pitch_artstab, Set_anim_value(get(Pitch_artstab), Math_clamp(Math_clamp_higher(Math_clamp_lower(G_output, vmax_prot_output), SSS_PID(FBW_PID_arrays.SSS_FBW_stall_prot_pitch, 11 - get(Alpha))), SSS_PID(FBW_PID_arrays.SSS_FBW_pitch_down_limit, -15 - get(Flightmodel_pitch)), SSS_PID(FBW_PID_arrays.SSS_FBW_pitch_up_limit, 30 - get(Flightmodel_pitch))),-1, 1, 0.55))
 
             if get(Any_wheel_on_ground) ~= 1 then
                 --set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), SSS_PID(SSS_FBW_CWS_trim, 0 - get(Vpath_pitch_rate)), -1, 1, 0.1))

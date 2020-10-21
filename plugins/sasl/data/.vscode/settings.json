@@ -49,6 +49,8 @@
         "PLUGINS_MENU_ID",
         "MENU_CHECKED",
         "MENU_UNCHECKED",
-        "SASL_COMMAND_END"
+        "SASL_COMMAND_END",
+        "PIS",
+        "PID_UI"
     ]
 }

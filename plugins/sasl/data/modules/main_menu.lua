@@ -16,6 +16,10 @@ function Show_hide_FBW_UI()
   SSS_FBW_UI:setIsVisible(not SSS_FBW_UI:isVisible())
 end
 
+function Show_hide_PID_UI()
+  PID_UI_window:setIsVisible(not PID_UI_window:isVisible())
+end
+
 function Show_hide_ECAM_debug()
   ECAM_debug_window:setIsVisible(not ECAM_debug_window:isVisible())
 end
@@ -116,6 +120,7 @@ Menu_debug	= sasl.createMenu ("", Menu_main, Menu_debug_item)
 ShowHideVnavDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide VNAV Debug", Show_hide_vnav_debug)
 ShowHidePacksDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide PACKS Debug", Show_hide_packs_debug)
 ShowHideFBWUI	= sasl.appendMenuItem(Menu_debug, "Show/Hide FBW UI", Show_hide_FBW_UI)
+ShowHidePIDUI	= sasl.appendMenuItem(Menu_debug, "Show/Hide PID UI", Show_hide_PID_UI)
 ShowHideECAMDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide ECAM Debug", Show_hide_ECAM_debug)
 ShowHideDMCDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide DMC Debug", Show_hide_DMC_debug)
 ShowHideELECDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide ELEC Debug", Show_hide_ELEC_debug)

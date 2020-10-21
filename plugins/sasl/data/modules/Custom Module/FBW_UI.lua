@@ -4,7 +4,6 @@ include('FBW_subcomponents/UI_subcomponents/envelop_module.lua')
 include('FBW_subcomponents/UI_subcomponents/flaps_module.lua')
 include('FBW_subcomponents/UI_subcomponents/flight_control_module.lua')
 include('FBW_subcomponents/UI_subcomponents/speed_limit_module.lua')
-include('FBW_subcomponents/UI_subcomponents/PID_graph_module.lua')
 
 size = {1000, 600}
 
@@ -54,7 +53,6 @@ function update()
 
     Update_slats_flaps_module_480x180(Slats_flaps_module)
     Update_limit_speeds_module_480x160(5 + 480 + 5, UI_scroll_y_pos - 5 - 160, Limit_speeds_module)
-    Update_pid_graph_module_960x340(5, UI_scroll_y_pos - 5 - 160 - 5 - 180 - 5 - 240 - 5 - 340)
 end
 
 function draw()
@@ -65,5 +63,4 @@ function draw()
     Draw_slats_flaps_module_480x180(5, UI_scroll_y_pos - 5 - 160 - 5 - 180, Slats_flaps_module)
     Draw_envelop_module_480x240(5, UI_scroll_y_pos - 5 - 160 - 5 - 180 - 5 - 240)
     Draw_limit_speeds_module_480x160(5 + 480 + 5, UI_scroll_y_pos - 5 - 160, Limit_speeds_module)
-    Draw_pid_graph_module_960x340(5, UI_scroll_y_pos - 5 - 160 - 5 - 180 - 5 - 240 - 5 - 340)
 end

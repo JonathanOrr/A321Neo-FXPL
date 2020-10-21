@@ -24,10 +24,10 @@ function update()
 
         if get(DELTA_TIME) ~= 0 then
             Smoothed_PV = Set_anim_value(Smoothed_PV, get(SimDR_aircraft_ias), -1000, 1000, 12.5)
-            Autothrust_output = A32nx_AT_PID(A32nx_auto_thrust, get(A32nx_target_spd), Smoothed_PV)
+            Autothrust_output = NEW_PID(A32nx_auto_thrust, get(A32nx_target_spd), Smoothed_PV)
             set(SimDR_throttle, Set_linear_anim_value(get(SimDR_throttle), Autothrust_output, 0, 1, 0.5))
 
-            ---print("P: " .. A32nx_auto_thrust.Proportional, "I: " .. A32nx_auto_thrust.Integral, "D: " .. A32nx_auto_thrust.Derivative)
+            --print("P: " .. A32nx_auto_thrust.Proportional, "I: " .. A32nx_auto_thrust.Integral, "D: " .. A32nx_auto_thrust.Derivative)
         end
 	end
 

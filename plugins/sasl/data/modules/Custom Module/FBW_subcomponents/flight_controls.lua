@@ -75,7 +75,7 @@ function update()
     if get(Override_control_surfaces) == 1 then
         if get(DELTA_TIME) ~= 0 then
             Ailerons_control(total_roll, false, 0)
-            Spoilers_control(total_roll, get(Speedbrake_handle_ratio), 0, true, Spoilers_var_table)
+            Spoilers_control(total_roll, get(Speedbrake_handle_ratio), 0, false, Spoilers_var_table)
             Slats_flaps_calc_and_control()
 
             --Pitch inputs

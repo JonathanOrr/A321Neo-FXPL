@@ -68,7 +68,7 @@ function update()
         end
     end
 
-    output2_array[#output2_array+1] = size[2]/2 + (A32nx_auto_thrust.Derivative / A32nx_auto_thrust.Max_error) * 150
+    output2_array[#output2_array+1] = size[2]/2 + (A32nx_auto_thrust.Derivative / A32nx_auto_thrust.Error_margin) * 150
     timeline2_array[#timeline2_array+1] = get(DELTA_TIME)*30
 
     for i = 1, #timeline2_array do

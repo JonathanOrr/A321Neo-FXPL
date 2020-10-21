@@ -3,7 +3,7 @@ include("cockpit_datarefs.lua")
 include("dynamic_datarefs.lua")
 include("failures_datarefs.lua")
 include("global_functions.lua")
-include("FBW_subcomponents/fbw_system_subcomponents/PID_arrays.lua")
+include("FBW_subcomponents/PID_arrays.lua")
 
 sasl.options.setAircraftPanelRendering(true)
 sasl.options.setInteractivity(true)
