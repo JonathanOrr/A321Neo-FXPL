@@ -136,8 +136,8 @@ function update()
 
     Update_PID_historys(0 + 5, 0 + 5, 400, 250, FBW_PID_arrays.SSS_FBW_roll_rate)
 
-    print("P: " .. FBW_PID_arrays.SSS_FBW_roll_rate.Proportional)
-    print("D: " .. FBW_PID_arrays.SSS_FBW_roll_rate.Derivative)
+    --print("P: " .. FBW_PID_arrays.SSS_FBW_roll_rate.Proportional)
+    --print("D: " .. FBW_PID_arrays.SSS_FBW_roll_rate.Derivative)
 end
 
 function draw()

@@ -5,7 +5,7 @@ AT_PID_arrays = {
 }
 
 FBW_PID_arrays = {
-    SSS_FBW_roll_rate =        {Name = "ROLL RATE", Type = "FBW_I_time_d(e)",  P_gain = 1, I_time = 0, D_gain = 0.5, Proportional = 0, Integral_sum = 0, Integral = 0, Derivative = 0, PV = 0, Min_out = -1, Max_out = 1, Error_margin = 4, Smooth_PV = false, PV_curve_spd = nil , Smooth_derivative = true, Derivative_curve_spd = 2.5},
+    SSS_FBW_roll_rate =        {Name = "ROLL RATE", Type = "FBW_I_time_d(e)",  P_gain = 2, I_time = 1, D_gain = 0.92, Proportional = 0, Integral_sum = 0, Integral = 0, Derivative = 0, PV = 0, Min_out = -1, Max_out = 1, Error_margin = 25, Smooth_PV = false, PV_curve_spd = nil , Smooth_derivative = true, Derivative_curve_spd = 2.5},
     SSS_FBW_roll_left_limit =  {Name = "LROLL LIM", Type = "FBW_I_time_d(e)",  P_gain = 1, I_time = 0, D_gain = 0.75, Proportional = 0, Integral_sum = 0, Integral = 0, Derivative = 0, Current_error = 0, Min_out = -1, Max_out = 1, Error_margin = 34, Smooth_error = false, Error_curve_spd = nil , Smooth_derivative = false, Derivative_curve_spd = nil},
     SSS_FBW_roll_right_limit = {Name = "RROLL LIM", Type = "FBW_I_time_d(e)",  P_gain = 1, I_time = 0, D_gain = 0.75, Proportional = 0, Integral_sum = 0, Integral = 0, Derivative = 0, Current_error = 0, Min_out = -1, Max_out = 1, Error_margin = 34, Smooth_error = false, Error_curve_spd = nil , Smooth_derivative = false, Derivative_curve_spd = nil},
 

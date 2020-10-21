@@ -88,7 +88,7 @@ function update()
             end
 
             --Rudder
-            Set_dataref_linear_anim(Rudder, get(Yaw_lim) * (total_yaw), -30, 30, 25)
+            --Set_dataref_linear_anim(Rudder, get(Yaw_lim) * (total_yaw), -30, 30, 25)
 
         end
     end
