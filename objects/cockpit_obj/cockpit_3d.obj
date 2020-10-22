@@ -25739,12 +25739,13 @@ IDX10	20556	20557	20554	20556	20558	20559	20560	20561	20558	20560
 			TRIS	4464 84
 			ATTR_manip_command	button	a321neo/cockpit/aircond/toggle_cargo_hotair	Toggle cargo hot air
 			TRIS	4548 84
-			ATTR_manip_none
+			ATTR_manip_command	button	a321neo/cockpit/engine/dual_cooling	ENG Dual cooling
 			TRIS	17748 84
 			ATTR_manip_command	button	a321neo/FBW/toggle_ELAC_2	Toggle ELAC 2
 			TRIS	18216 84
-			ATTR_manip_none
+			ATTR_manip_command	button	a321neo/cockpit/engine/manual_start_1	Manual start ENG 1
 			TRIS	19506 84
+			ATTR_manip_command	button	a321neo/cockpit/engine/manual_start_2	Manual start ENG 2
 			TRIS	20040 84
 			ATTR_manip_command	button	a321neo/cockpit/electrical/toggle_vent_extract	Toggle extract fan & door
 			TRIS	20616 84
