@@ -45,55 +45,9 @@ local flare_mode_transition_timer = 0 --(2.5) for delayed transition
 --a32nx datarefs
 
 --a32nx commands
-local toggle_ELAC_1 = sasl.createCommand("a321neo/FBW/toggle_ELAC_1", "toggle ELAC 1")
-local toggle_ELAC_2 = sasl.createCommand("a321neo/FBW/toggle_ELAC_2", "toggle ELAC 1")
-local toggle_FAC_1 = sasl.createCommand("a321neo/FBW/toggle_FAC_1", "toggle FAC 1")
-local toggle_FAC_2 = sasl.createCommand("a321neo/FBW/toggle_FAC_2", "toggle FAC 2")
 
 --a32nx command handler
-sasl.registerCommandHandler (toggle_ELAC_1, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if get(ELAC_1) == 0 and FBW_restore_required == 1 and Is_in_flight_envelop() == true and get(Gear_handle) == 0 then
-            FBW_restore_required = 0
-            set(FBW_status, 2)
-        end
 
-        set(ELAC_1, 1 - get(ELAC_1))
-    end
-end)
-
-sasl.registerCommandHandler (toggle_ELAC_2, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if get(ELAC_2) == 0 and FBW_restore_required == 1 and Is_in_flight_envelop() == true and get(Gear_handle) == 0 then
-            FBW_restore_required = 0
-            set(FBW_status, 2)
-        end
-
-        set(ELAC_2, 1 - get(ELAC_2))
-    end
-end)
-
-sasl.registerCommandHandler (toggle_FAC_1, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if get(FAC_1) == 0 and FBW_restore_required == 1 and Is_in_flight_envelop() == true and get(Gear_handle) == 0 then
-            FBW_restore_required = 0
-            set(FBW_status, 2)
-        end
-
-        set(FAC_1, 1 - get(FAC_1))
-    end
-end)
-
-sasl.registerCommandHandler (toggle_FAC_2, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if get(FAC_2) == 0 and FBW_restore_required == 1 and Is_in_flight_envelop() == true and get(Gear_handle) == 0 then
-            FBW_restore_required = 0
-            set(FBW_status, 2)
-        end
-
-        set(FAC_2, 1 - get(FAC_2))
-    end
-end)
 
 --custom functions
 function Is_in_flight_envelop()

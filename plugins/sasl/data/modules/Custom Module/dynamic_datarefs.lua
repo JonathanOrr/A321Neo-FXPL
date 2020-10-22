@@ -85,13 +85,6 @@ G_output = createGlobalPropertyf("a321neo/dynamics/FBW/G_output", 0, false, true
 Vpath_output = createGlobalPropertyf("a321neo/dynamics/FBW/vpath_output", 0, false, true, false)
 Abs_pitch_rate = createGlobalPropertyf("a321neo/dynamics/FBW/abs_Q", 0, false, true, false)
 Abs_vpath_pitch_rate = createGlobalPropertyf("a321neo/dynamics/FBW/abs_vpath_Q", 0, false, true, false)
-ELAC_1 = createGlobalPropertyi("a321neo/dynamics/FBW/ELAC_1", 1, false, true, false)--elevator aileron computer 1
-ELAC_2 = createGlobalPropertyi("a321neo/dynamics/FBW/ELAC_2", 1, false, true, false)--elevator aileron computer 2
-FAC_1 = createGlobalPropertyi("a321neo/dynamics/FBW/FAC_1", 1, false, true, false)--flight augmentation computer 1
-FAC_2 = createGlobalPropertyi("a321neo/dynamics/FBW/FAC_2", 1, false, true, false)--flight augmentation computer 2
-SEC_1 = createGlobalPropertyi("a321neo/dynamics/FBW/SEC_1", 1, false, true, false)--spoiler elevator computer 1
-SEC_2 = createGlobalPropertyi("a321neo/dynamics/FBW/SEC_2", 1, false, true, false)--spoiler elevator computer 2
-SEC_3 = createGlobalPropertyi("a321neo/dynamics/FBW/SEC_3", 1, false, true, false)--spoiler elevator computer 3
 
 -- Electrical system
 --- BUSES (0: not providing elec power, 1: providing elec power) - influenced by switches, faults, engine status etc.
@@ -427,7 +420,7 @@ Right_spoiler_3 = globalProperty("sim/flightmodel2/wing/speedbrake2_deg[5]")
 Right_spoiler_4 = globalProperty("sim/flightmodel/controls/wing3r_spo1def")
 Right_spoiler_5 = globalProperty("sim/flightmodel/controls/wing3r_spo2def")
 --high lift devices
-Flaps_handle_ratio = globalProperty("sim/cockpit2/controls/flap_ratio")
+Flaps_handle_ratio = 	globalProperty("sim/cockpit2/controls/flap_ratio")
 Flaps_handle_position = createGlobalPropertyf("a321neo/dynamics/surfaces/flaps_handle_position", 0, false, true, false)--0, 1, 2, 3, full
 Flaps_internal_config = createGlobalPropertyf("a321neo/dynamics/surfaces/flaps_internal_config", 0, false, true, false)--0 = clean, 1 = 1, 2 = 1+f, 3 = 2, 4 = 3, 5 = full
 Slats =                globalProperty("sim/flightmodel2/controls/slat1_deploy_ratio") --deploys with flaps 0 = 0, 1 = 0.7, 2 = 0.8, 3 = 0.8, 4 = 1

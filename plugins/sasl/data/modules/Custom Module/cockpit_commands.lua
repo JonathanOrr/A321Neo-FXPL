@@ -211,3 +211,11 @@ ISIS_cmd_LS          = createCommand("a321neo/cockpit/ISIS/LS", "Press LS button
 ISIS_cmd_Knob_c      = createCommand("a321neo/cockpit/ISIS/Knob_C", "Rotate ISIS knob clockwise")  -- Knob clockwise
 ISIS_cmd_Knob_cc     = createCommand("a321neo/cockpit/ISIS/Knob_CC", "Rotate ISIS knob counter-clockwise") -- Knob counter-clockwise
 
+--FBW
+Toggle_ELAC_1 = sasl.createCommand("a321neo/cockpit/FBW/toggle_elac_1", "toggle ELAC 1")
+Toggle_ELAC_2 = sasl.createCommand("a321neo/cockpit/FBW/toggle_elac_2", "toggle ELAC 2")
+Toggle_FAC_1 = sasl.createCommand("a321neo/cockpit/FBW/toggle_fac_1", "toggle FAC 1")
+Toggle_FAC_2 = sasl.createCommand("a321neo/cockpit/FBW/toggle_fac_2", "toggle FAC 2")
+Toggle_SEC_1 = sasl.createCommand("a321neo/cockpit/FBW/toggle_sec_1", "toggle SEC 1")
+Toggle_SEC_2 = sasl.createCommand("a321neo/cockpit/FBW/toggle_sec_2", "toggle SEC 2")
+Toggle_SEC_3 = sasl.createCommand("a321neo/cockpit/FBW/toggle_sec_3", "toggle SEC 3")

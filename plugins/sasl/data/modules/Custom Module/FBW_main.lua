@@ -1,5 +1,5 @@
 --include("FBW_subcomponents/limits_calculations.lua")
---include("FBW_subcomponents/flight_controls.lua")
+include("FBW_subcomponents/fbw_system_subcomponents/flt_computers.lua")
 addSearchPath(moduleDirectory .. "/Custom Module/FBW_subcomponents/")
 
 components = {
@@ -7,6 +7,15 @@ components = {
     limits_calculations {},
     flight_controls {}
 }
+
+--register commands
+sasl.registerCommandHandler (Toggle_ELAC_1, 0, Toggle_elac_1_callback)
+sasl.registerCommandHandler (Toggle_ELAC_2, 0, Toggle_elac_2_callback)
+sasl.registerCommandHandler (Toggle_FAC_1, 0, Toggle_fac_1_callback)
+sasl.registerCommandHandler (Toggle_FAC_2, 0, Toggle_fac_2_callback)
+sasl.registerCommandHandler (Toggle_SEC_1, 0, Toggle_sec_1_callback)
+sasl.registerCommandHandler (Toggle_SEC_2, 0, Toggle_sec_2_callback)
+sasl.registerCommandHandler (Toggle_SEC_3, 0, Toggle_sec_3_callback)
 
 --previous values
 local last_kill_value = 0--used to put the controls to nuetural when killing the FBW
@@ -26,6 +35,8 @@ local G_output = 0
 
 function update()
     updateAll(components)
+    Fctl_computuers_status_computation(Fctl_computers_var_table)
+    Compute_fctl_button_states()
 
     kill_delta = get(FBW_kill_switch) - last_kill_value
     last_kill_value = get(FBW_kill_switch)
@@ -47,17 +58,17 @@ function update()
     --ROLL--------------------------------------------------------------------------------------
     if get(Roll) <= -0.05 or 0.05 <= get(Roll) then
         if vmax_prot_activation_ratio > 0 then
-            roll_limits = 45
+            roll_limits = Set_linear_anim_value(roll_limits, 45, -180, 180, 12.5)
         else
-            roll_limits = 67
+            roll_limits = Set_linear_anim_value(roll_limits, 67, -180, 180, 12.5)
         end
 
         Roll_rate_input = 15 * get(Roll)
     else
         if vmax_prot_activation_ratio > 0 then
-            roll_limits = 1
+            roll_limits = Set_linear_anim_value(roll_limits, 1, -180, 180, 12.5)
         else
-            roll_limits = 33
+            roll_limits = Set_linear_anim_value(roll_limits, 33, -180, 180, 12.5)
         end
 
         Roll_rate_input = 0
@@ -88,8 +99,8 @@ function update()
     end
 
     FBW_PID_arrays.SSS_FBW_G_load_pitch.Min_out = Math_clamp_lower(vmax_prot_output, SSS_PID(FBW_PID_arrays.SSS_FBW_pitch_down_limit, -15 - get(Flightmodel_pitch)))
-    FBW_PID_arrays.SSS_FBW_G_load_pitch.Max_out = Math_clamp_higher(SSS_PID(FBW_PID_arrays.SSS_FBW_stall_prot_pitch, 11 - get(Alpha)), SSS_PID(FBW_PID_arrays.SSS_FBW_pitch_up_limit, 30 - get(Flightmodel_pitch)))
-    G_output = SSS_PID(FBW_PID_arrays.SSS_FBW_G_load_pitch, G_input - get(Total_vertical_g_load))
+    FBW_PID_arrays.SSS_FBW_G_load_pitch.Max_out = Math_clamp_higher(SSS_PID(FBW_PID_arrays.SSS_FBW_stall_prot_pitch, 100 - get(Alpha)), SSS_PID(FBW_PID_arrays.SSS_FBW_pitch_up_limit, 30 - get(Flightmodel_pitch)))
+    G_output = SSS_PID_DPV(FBW_PID_arrays.SSS_FBW_G_load_pitch, G_input, get(Total_vertical_g_load))
     vmax_prot_activation_ratio = Math_clamp((get(PFD_Capt_IAS) - get(Capt_VMAX)) / (get(Capt_VMAX_prot) - get(Capt_VMAX)), 0, 1)
 
     if get(DELTA_TIME) ~= 0 then

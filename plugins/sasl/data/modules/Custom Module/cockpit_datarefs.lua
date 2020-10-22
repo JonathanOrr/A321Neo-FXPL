@@ -9,9 +9,27 @@ Autobrakes_lo_button_state = createGlobalPropertyi("a321neo/cockpit/wheel/autobr
 Autobrakes_med_button_state = createGlobalPropertyi("a321neo/cockpit/wheel/autobrakes_med_button_state", 0, false, true, false)--blank, on, decel(should not happen), decel on
 Autobrakes_max_button_state = createGlobalPropertyi("a321neo/cockpit/wheel/autobrakes_max_button_state", 0, false, true, false)--blank, on, decel(should not happen), decel on
 
+--FBW
+ELAC_1_button_state = createGlobalPropertyi("a321neo/cockpit/FBW/elac_1_button_state", 0, false, true, false) --00: No lights, 01: [OFF], 10: FAULT, 11 [OFF] + FAULT
+ELAC_2_button_state = createGlobalPropertyi("a321neo/cockpit/FBW/elac_2_button_state", 0, false, true, false) --00: No lights, 01: [OFF], 10: FAULT, 11 [OFF] + FAULT
+FAC_1_button_state = createGlobalPropertyi("a321neo/cockpit/FBW/fac_1_button_state", 0, false, true, false) --00: No lights, 01: [OFF], 10: FAULT, 11 [OFF] + FAULT
+FAC_2_button_state = createGlobalPropertyi("a321neo/cockpit/FBW/fac_2_button_state", 0, false, true, false) --00: No lights, 01: [OFF], 10: FAULT, 11 [OFF] + FAULT
+SEC_1_button_state = createGlobalPropertyi("a321neo/cockpit/FBW/sec_1_button_state", 0, false, true, false) --00: No lights, 01: [OFF], 10: FAULT, 11 [OFF] + FAULT
+SEC_2_button_state = createGlobalPropertyi("a321neo/cockpit/FBW/sec_2_button_state", 0, false, true, false) --00: No lights, 01: [OFF], 10: FAULT, 11 [OFF] + FAULT
+SEC_3_button_state = createGlobalPropertyi("a321neo/cockpit/FBW/sec_3_button_state", 0, false, true, false) --00: No lights, 01: [OFF], 10: FAULT, 11 [OFF] + FAULT
+
 --BUTTON COMMANDED POSTION-- e.g. button commanding on, off but lights on the button can show otherwise(fault on, fault off....)
 Eng1_bleed_off_button = createGlobalPropertyi("a321neo/cockpit/packs/eng1_bleed_off", 0, false, true, false) --0 is on 1 if off
 Eng2_bleed_off_button = createGlobalPropertyi("a321neo/cockpit/packs/eng2_bleed_off", 0, false, true, false) --0 is on 1 if off
+
+--FBW
+ELAC_1_off_button = createGlobalPropertyi("a321neo/cockpit/FBW/elac_1_off", 0, false, true, false) --0 is on 1 if off
+ELAC_2_off_button = createGlobalPropertyi("a321neo/cockpit/FBW/elac_2_off", 0, false, true, false) --0 is on 1 if off
+FAC_1_off_button = createGlobalPropertyi("a321neo/cockpit/FBW/fac_1_off", 0, false, true, false) --0 is on 1 if off
+FAC_2_off_button = createGlobalPropertyi("a321neo/cockpit/FBW/fac_2_off", 0, false, true, false) --0 is on 1 if off
+SEC_1_off_button = createGlobalPropertyi("a321neo/cockpit/FBW/sec_1_off", 0, false, true, false) --0 is on 1 if off
+SEC_2_off_button = createGlobalPropertyi("a321neo/cockpit/FBW/sec_2_off", 0, false, true, false) --0 is on 1 if off
+SEC_3_off_button = createGlobalPropertyi("a321neo/cockpit/FBW/sec_3_off", 0, false, true, false) --0 is on 1 if off
 ---------------------------------------------------------------------------------------------------------------------------------------
 --display brightness
 Total_element_brightness = globalProperty("sim/cockpit/electrical/instrument_brightness")

@@ -18,6 +18,7 @@ local graph_time_limit = 5 --seconds across the x axis
 P_array = {}
 I_array = {}
 D_array = {}
+Sum_array = {}
 DELTA_TIME_array = {}
 DELTA_TIME_sum = 0
 Graph_x_offset_sum = 0
@@ -55,6 +56,7 @@ function Update_PID_historys(x_pos, y_pos, width, height, PID_array)
             P_array[#P_array + 1] = Math_clamp(PID_array.Proportional, -PID_array.Error_margin, PID_array.Error_margin) / PID_array.Error_margin
             I_array[#I_array + 1] = Math_clamp(PID_array.Integral, -PID_array.Error_margin, PID_array.Error_margin) / PID_array.Error_margin
             D_array[#D_array + 1] = Math_clamp(PID_array.Derivative, -PID_array.Error_margin, PID_array.Error_margin) / PID_array.Error_margin
+            Sum_array[#Sum_array + 1] = PID_array.Output
             DELTA_TIME_array[#DELTA_TIME_array + 1] = get(DELTA_TIME)
         end
 
@@ -64,6 +66,7 @@ function Update_PID_historys(x_pos, y_pos, width, height, PID_array)
             P_array[i] = P_array[i + 1]
             I_array[i] = I_array[i + 1]
             D_array[i] = D_array[i + 1]
+            Sum_array[i] = Sum_array[i + 1]
             DELTA_TIME_array[i] = DELTA_TIME_array[i + 1]
             end
         end
@@ -71,16 +74,14 @@ function Update_PID_historys(x_pos, y_pos, width, height, PID_array)
     end
 end
 
-function Draw_PID_graph(x_pos, y_pos, width, height, P_color, I_color, D_color)
+function Draw_PID_graph(x_pos, y_pos, width, height, P_color, I_color, D_color, Output_color)
     local CENTER_X = (2 * x_pos + width) / 2
     local CENTER_Y = (2 * y_pos + height) / 2
     local END_X = x_pos + width
     local END_Y = y_pos + height
 
     sasl.gl.drawRectangle(x_pos, y_pos, width, height, DARK_GREY)
-    sasl.gl.drawLine(x_pos, CENTER_Y + height / 2, END_X, CENTER_Y + height / 2, RED)
-    sasl.gl.drawLine(x_pos, CENTER_Y - height / 2, END_X, CENTER_Y - height / 2, RED)
-    sasl.gl.drawLine(x_pos, CENTER_Y, END_X, CENTER_Y, ORANGE)
+    sasl.gl.drawLine(x_pos, CENTER_Y, END_X, CENTER_Y, LIGHT_GREY)
 
     Graph_x_offset_sum = 0
 
@@ -89,6 +90,7 @@ function Draw_PID_graph(x_pos, y_pos, width, height, P_color, I_color, D_color)
 
         if i > 1 then
             --draw all PID array lines
+            sasl.gl.drawLine(x_pos + Graph_x_offset_sum - DELTA_TIME_array[i] / graph_time_limit * width, CENTER_Y + Sum_array[i - 1] * height / 2, x_pos + Graph_x_offset_sum, CENTER_Y + Sum_array[i] * height / 2, Output_color)
             sasl.gl.drawLine(x_pos + Graph_x_offset_sum - DELTA_TIME_array[i] / graph_time_limit * width, CENTER_Y + D_array[i - 1] * height / 2, x_pos + Graph_x_offset_sum, CENTER_Y + D_array[i] * height / 2, D_color)
             sasl.gl.drawLine(x_pos + Graph_x_offset_sum - DELTA_TIME_array[i] / graph_time_limit * width, CENTER_Y + I_array[i - 1] * height / 2, x_pos + Graph_x_offset_sum, CENTER_Y + I_array[i] * height / 2, I_color)
             sasl.gl.drawLine(x_pos + Graph_x_offset_sum - DELTA_TIME_array[i] / graph_time_limit * width, CENTER_Y + P_array[i - 1] * height / 2, x_pos + Graph_x_offset_sum, CENTER_Y + P_array[i] * height / 2, P_color)
@@ -134,7 +136,7 @@ function update()
         sasl.setMenuItemState(Menu_main, ShowHidePIDUI, MENU_UNCHECKED)
     end
 
-    Update_PID_historys(0 + 5, 0 + 5, 400, 250, FBW_PID_arrays.SSS_FBW_roll_rate)
+    Update_PID_historys(0 + 5, 0 + 5, 400, 250, FBW_PID_arrays.SSS_FBW_G_load_pitch)
 
     --print("P: " .. FBW_PID_arrays.SSS_FBW_roll_rate.Proportional)
     --print("D: " .. FBW_PID_arrays.SSS_FBW_roll_rate.Derivative)
@@ -143,6 +145,6 @@ end
 function draw()
     sasl.gl.drawRectangle(0, 0, size[1], size[2], LIGHT_GREY)
 
-    Draw_PID_graph(0 + 5, 0 + 5, 400, 250, WHITE, LIGHT_BLUE, GREEN)
+    Draw_PID_graph(0 + 5, 0 + 5, 400, 250, WHITE, LIGHT_BLUE, GREEN, ORANGE)
     --Draw_list_of_PID_arrays(500, 180, 80, 30, WHITE, LIGHT_BLUE)
 end

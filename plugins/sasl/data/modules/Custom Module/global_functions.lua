@@ -218,7 +218,6 @@ function SSS_PID_NO_LIM(pid_array, error)
 end
 
 function SSS_PID(pid_array, error)
-    local correction = 0
     local last_error = pid_array.Current_error
 
     if get(DELTA_TIME) ~= 0 then
@@ -255,18 +254,17 @@ function SSS_PID(pid_array, error)
         end
 
         --sigma
-        correction = pid_array.Proportional + pid_array.Integral + pid_array.Derivative
+        pid_array.Output = pid_array.Proportional + pid_array.Integral + pid_array.Derivative
 
 	    --limit and rescale output range--
-        correction = Math_clamp(correction, pid_array.Min_out * pid_array.Error_margin, pid_array.Max_out * pid_array.Error_margin) / pid_array.Error_margin
+        pid_array.Output = Math_clamp(pid_array.Output, pid_array.Min_out * pid_array.Error_margin, pid_array.Max_out * pid_array.Error_margin) / pid_array.Error_margin
 
     end
 
-    return correction
+    return pid_array.Output
 end
 
 function SSS_PID_DPV(pid_array, Set_Point, PV)
-    local correction = 0
     local last_PV = pid_array.PV
 
     if get(DELTA_TIME) ~= 0 then
@@ -303,14 +301,14 @@ function SSS_PID_DPV(pid_array, Set_Point, PV)
         end
 
         --sigma
-        correction = pid_array.Proportional + pid_array.Integral + pid_array.Derivative
+        pid_array.Output = pid_array.Proportional + pid_array.Integral + pid_array.Derivative
 
 	    --limit and rescale output range--
-        correction = Math_clamp(correction, pid_array.Min_out * pid_array.Error_margin, pid_array.Max_out * pid_array.Error_margin) / pid_array.Error_margin
+        pid_array.Output = Math_clamp(pid_array.Output, pid_array.Min_out * pid_array.Error_margin, pid_array.Max_out * pid_array.Error_margin) / pid_array.Error_margin
 
     end
 
-    return correction
+    return pid_array.Output
 end
 
 function FBW_PID_no_lim(pid_array, error)

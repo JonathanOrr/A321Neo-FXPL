@@ -25700,12 +25700,12 @@ IDX10	20556	20557	20554	20556	20558	20559	20560	20561	20558	20560
 			ATTR_manip_none
 			TRIS	3390 84
 			TRIS	5070 84
-			ATTR_manip_command	button	a321neo/FBW/toggle_ELAC_1	Toggle ELAC 1
+			ATTR_manip_command	button	a321neo/cockpit/FBW/toggle_elac_1	Toggle ELAC 1
 			TRIS	18300 84
 			ATTR_manip_none
 			TRIS	18468 84
 			TRIS	20250 84
-			ATTR_manip_command	button	a321neo/FBW/toggle_FAC_1	Toggle FAC 1
+			ATTR_manip_command	button	a321neo/cockpit/FBW/toggle_fac_1	Toggle FAC 1
 			TRIS	20784 84
 			ATTR_manip_none
 			TRIS	20952 84
@@ -25728,8 +25728,9 @@ IDX10	20556	20557	20554	20556	20558	20559	20560	20561	20558	20560
 			TRIS	41736 84
 			ATTR_manip_command	button	a321neo/cockpit/electrical/EMER_GEN_RAT	RAT and Emergency generator
 			TRIS	42240 84
-			ATTR_manip_none
+			ATTR_manip_command	button	a321neo/cockpit/FBW/toggle_sec_1	Toggle SEC 1
 			TRIS	43320 84
+		ATTR_manip_none
 			TRIS	1686 84
 			ATTR_manip_command	button	a321neo/cockpit/electrical/toggle_vent_blower	Toggle blower fan & door
 			TRIS	3558 84
@@ -25741,7 +25742,7 @@ IDX10	20556	20557	20554	20556	20558	20559	20560	20561	20558	20560
 			TRIS	4548 84
 			ATTR_manip_command	button	a321neo/cockpit/engine/dual_cooling	ENG Dual cooling
 			TRIS	17748 84
-			ATTR_manip_command	button	a321neo/FBW/toggle_ELAC_2	Toggle ELAC 2
+			ATTR_manip_command	button	a321neo/cockpit/FBW/toggle_elac_2	Toggle ELAC 2
 			TRIS	18216 84
 			ATTR_manip_command	button	a321neo/cockpit/engine/manual_start_1	Manual start ENG 1
 			TRIS	19506 84
@@ -25749,11 +25750,13 @@ IDX10	20556	20557	20554	20556	20558	20559	20560	20561	20558	20560
 			TRIS	20040 84
 			ATTR_manip_command	button	a321neo/cockpit/electrical/toggle_vent_extract	Toggle extract fan & door
 			TRIS	20616 84
-			ATTR_manip_command	button	a321neo/FBW/toggle_FAC_2	Toggle FAC 2
+			ATTR_manip_command	button	a321neo/cockpit/FBW/toggle_fac_2	Toggle FAC 2
 			TRIS	20700 84
 			ATTR_manip_none
 			TRIS	21504 84
+			ATTR_manip_command	button	a321neo/cockpit/FBW/toggle_sec_2	Toggle SEC 2
 			TRIS	43152 84
+			ATTR_manip_command	button	a321neo/cockpit/FBW/toggle_sec_3	Toggle SEC 3
 			TRIS	43236 84
 		ATTR_manip_command	button	a321neo/cockpit/electrical/AC_ESS_FEED	Alternate AC essential feed
 		TRIS	1284 84

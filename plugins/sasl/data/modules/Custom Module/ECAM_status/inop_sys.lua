@@ -34,25 +34,25 @@ end
 function ECAM_status_get_inop_sys()
 
         local messages = {}
-        
+
         local inop_cat3_dual = false
         local inop_steer = false
         local inop_aps   = false
         local inop_atr   = false
-        
+
         -- AIR
         --put_inop_sys_msg_2(messages, Left_bleed_avil, Right_bleed_avil, "PACK")
-        
+
         -- ELAC / SEC / FAC
-        put_inop_sys_msg_2(messages, ELAC_1, ELAC_2, "ELAC")
-        put_inop_sys_msg_3(messages, SEC_1, SEC_2, SEC_3, "SEC")
-        put_inop_sys_msg_2(messages, FAC_1, FAC_2, "FAC")
-        
+        put_inop_sys_msg_2(messages, ELAC_1_status, ELAC_2_status, "ELAC")
+        put_inop_sys_msg_3(messages, SEC_1_status, SEC_2_status, SEC_3_status, "SEC")
+        put_inop_sys_msg_2(messages, FAC_1_status, FAC_2_status, "FAC")
+
         -- FBW
         if get(FBW_status) < 2 then
             table.insert(messages, "F/CTL PROT")
         end
-        
+
         -- ELEC
         --put_inop_sys_msg_2(messages, Gen_1_on, Gen_2_on, "GEN")
 
@@ -60,7 +60,7 @@ function ECAM_status_get_inop_sys()
         if get(FAILURE_Apu) == 6 or get(FAILURE_Apu_fire) == 6 then
             table.insert(messages, "APU")
         end
-        
+
         -- L/G
         if get(FAILURE_gear) == 1 then
             table.insert(messages, "L/G RETRACT")
@@ -68,7 +68,7 @@ function ECAM_status_get_inop_sys()
             inop_steer = true
             inop_cat3_dual = true
         end
-        
+
 
         if get(FAILURE_TCAS) == 6 then
             table.insert(messages, "TCAS")                
