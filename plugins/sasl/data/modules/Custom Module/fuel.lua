@@ -83,6 +83,8 @@ sasl.registerCommandHandler (FUEL_cmd_RCT_TK_XFR,      0, function(phase) fuel_t
 sasl.registerCommandHandler (FUEL_cmd_C_TK_mode,      0, function(phase) fuel_toggle_tank_mode(phase) end )
 sasl.registerCommandHandler (FUEL_cmd_X_FEED,         0, function(phase) fuel_toggle_x_feed_mode(phase) end )
 
+sasl.registerCommandHandler (FUEL_cmd_internal_qs,    0, function(phase) fuel_quick_start(phase) end )
+
 ----------------------------------------------------------------------------------------------------
 -- Functions - Commands
 ----------------------------------------------------------------------------------------------------
@@ -109,9 +111,8 @@ function fuel_toggle_x_feed_mode(phase)
     X_feed_mode = not X_feed_mode
 end
 
-function onAirportLoaded()
-    -- When the aircraft is loaded in flight, let's switch on all the pumps
-    if get(Startup_running) == 1 or get(Capt_ra_alt_ft) > 20 then
+function fuel_quick_start(phase)
+    if phase == SASL_COMMAND_BEGIN then
         tank_pump_and_xfr[L_TK_PUMP_1].switch = true
         tank_pump_and_xfr[L_TK_PUMP_2].switch = true
         tank_pump_and_xfr[R_TK_PUMP_1].switch = true
@@ -124,6 +125,14 @@ function onAirportLoaded()
         X_feed_mode   = false
     end
 end
+
+function onAirportLoaded()
+    -- When the aircraft is loaded in flight, let's switch on all the pumps
+    if get(Startup_running) == 1 or get(Capt_ra_alt_ft) > 20 then
+        fuel_quick_start(SASL_COMMAND_BEGIN)
+    end
+end
+
 
 ----------------------------------------------------------------------------------------------------
 -- Functions - Button light updates

@@ -38,93 +38,6 @@ local engine_mode_dn = sasl.createCommand("a321neo/cockpit/engine/mode_dn", "eng
 local timer_auto_start_stop = sasl.createTimer() -- Stop ignition after 40 seconds from auto-start
 
 --sim command handler
-sasl.registerCommandHandler ( reset_to_runway, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if get(startup_running) == 1 then
-            set(XP_Battery_1, 1)
-            set(XP_Battery_2, 1)
-            set(Apu_start_position, 2)
-            set(Apu_bleed_switch, 1)
-            set(apu_gen, 1)
-            set(Engine_mode_knob, 1)
-            set(Engine_1_master_switch, 1)
-            set(Engine_2_master_switch, 1)
-            sasl.resetTimer(timer_auto_start_stop)
-            sasl.startTimer(timer_auto_start_stop)
-        else
-            set(Engine_1_master_switch, 0)
-            set(Engine_2_master_switch, 0)
-        end
-    end
-    return 1
-end)
-
-sasl.registerCommandHandler ( reset_flight, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-            set(XP_Battery_1, 1)
-            set(XP_Battery_2, 1)
-            set(Apu_start_position, 2)
-            set(Apu_bleed_switch, 1)
-            set(apu_gen, 1)
-            set(Engine_mode_knob, 1)
-            set(Engine_1_master_switch, 1)
-            set(Engine_2_master_switch, 1)
-    end
-    return 1
-end)
-
-sasl.registerCommandHandler ( go_to_default, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if get(startup_running) == 1 then
-            set(XP_Battery_1, 1)
-            set(XP_Battery_2, 1)
-            set(Apu_start_position, 2)
-            set(Apu_bleed_switch, 1)
-            set(apu_gen, 1)
-            set(Engine_mode_knob, 1)
-            set(Engine_1_master_switch, 1)
-            set(Engine_2_master_switch, 1)
-            sasl.resetTimer(timer_auto_start_stop)
-            sasl.startTimer(timer_auto_start_stop)
-        else
-            set(Engine_1_master_switch, 0)
-            set(Engine_2_master_switch, 0)
-        end
-    end
-    return 1
-end)
-
-sasl.registerCommandHandler ( instant_start_eng, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        set(XP_Battery_1, 1)
-        set(XP_Battery_2, 1)
-        set(Apu_start_position, 2)
-        set(Apu_bleed_switch, 1)
-        set(apu_gen, 1)
-        set(Engine_mode_knob, 1)
-        set(Engine_1_master_switch, 1)
-        set(Engine_2_master_switch, 1)
-        sasl.resetTimer(timer_auto_start_stop)
-        sasl.startTimer(timer_auto_start_stop)
-    end
-    return 1
-end)
-
-sasl.registerCommandHandler ( slow_start_eng, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        set(XP_Battery_1, 1)
-        set(XP_Battery_2, 1)
-        set(Apu_start_position, 2)
-        set(Apu_bleed_switch, 1)
-        set(apu_gen, 1)
-        set(Engine_mode_knob, 1)
-        set(Engine_1_master_switch, 1)
-        set(Engine_2_master_switch, 1)
-        sasl.resetTimer(timer_auto_start_stop)
-        sasl.startTimer(timer_auto_start_stop)
-    end
-    return 1
-end)
 
 --a321neo command handler
 sasl.registerCommandHandler ( apu_master, 0 , function(phase)
@@ -196,39 +109,7 @@ end
 --init
 set(apu_gen, 1)
 set(Apu_bleed_switch, 0)
-if get(startup_running) == 1 then
-    set(Engine_1_master_switch, 1)
-    set(Engine_2_master_switch, 1)
-else
-    set(Engine_1_master_switch, 0)
-    set(Engine_2_master_switch, 0)
-end
 
-function onPlaneLoaded()
-    set(apu_gen, 1)
-    set(Apu_bleed_switch, 0)
-
-    if get(startup_running) == 1 then
-        set(Engine_1_master_switch, 1)
-        set(Engine_2_master_switch, 1)
-    else
-        set(Engine_1_master_switch, 0)
-        set(Engine_2_master_switch, 0)
-    end
-end
-
-function onAirportLoaded()
-    set(apu_gen, 1)
-    set(Apu_bleed_switch, 0)
-
-    if get(startup_running) == 1 then
-        set(Engine_1_master_switch, 1)
-        set(Engine_2_master_switch, 1)
-    else
-        set(Engine_1_master_switch, 0)
-        set(Engine_2_master_switch, 0)
-    end
-end
 
 function update()
     if get(XP_Battery_1) == 1 then
@@ -243,69 +124,66 @@ function update()
         set(Engine_mode_knob, 0)
     end
     
-    --setting integer dataref range
-    set(Engine_mode_knob,Math_clamp(get(Engine_mode_knob), -1, 1))
-    set(Engine_1_master_switch,Math_clamp(get(Engine_1_master_switch), 0, 1))
-    set(Engine_2_master_switch,Math_clamp(get(Engine_2_master_switch), 0, 1))
+
     
     --engine mode start
-    if get(Engine_mode_knob) == 1 
-    then 
+--    if get(Engine_mode_knob) == 1 
+--    then 
         -- to confirm the engine needs starting to stop repetitive start
-        if get(Engine_1_avail) ~= 1 then
-            ignition_1_required = 1
-        end
-        if get(Engine_2_avail) ~= 1 then
-            ignition_2_required = 1
-        end
+--        if get(Engine_1_avail) ~= 1 then
+--            ignition_1_required = 1
+--        end
+--        if get(Engine_2_avail) ~= 1 then
+--            ignition_2_required = 1
+--        end
         
-        if get(Engine_1_master_switch) == 1 then
-            if ignition_1_required == 1 then
-                set(engine_1_ignition_switch,4)
-            end
-        end
+--        if get(Engine_1_master_switch) == 1 then
+--            if ignition_1_required == 1 then
+--                set(engine_1_ignition_switch,4)
+--            end
+--        end
         
-        if get(Engine_2_master_switch) == 1 then
-            if ignition_2_required == 1 then
-                set(engine_2_ignition_switch,4)
-            end
-        end
-    end
+--        if get(Engine_2_master_switch) == 1 then
+--           if ignition_2_required == 1 then
+--                set(engine_2_ignition_switch,4)
+--            end
+--        end
+--    end
 
     --engine mode norm
-    if get(Engine_mode_knob) == 0
-    then
-        ignition_1_required = 0
-        ignition_2_required = 0
-        set(engine_1_ignition_switch,0)
-        set(engine_2_ignition_switch,0)
-    end
+--    if get(Engine_mode_knob) == 0
+--    then
+--        ignition_1_required = 0
+--        ignition_2_required = 0
+--        set(engine_1_ignition_switch,0)
+--        set(engine_2_ignition_switch,0)
+--    end
 
     --engine master 1
-    if get(Engine_1_master_switch) == 1
-    then
-        if get(engine_1_N2) > 16 then
-            set(engine_1_mixture, 1.0)
-        else
-            set(engine_1_mixture, 0)
-        end
-    elseif get(Engine_1_master_switch) == 0
-    then
-        set(engine_1_mixture, 0.0)
-    end
+--    if get(Engine_1_master_switch) == 1
+--    then
+--        if get(engine_1_N2) > 16 then
+--            set(engine_1_mixture, 1.0)
+--        else
+--           set(engine_1_mixture, 0)
+--        end
+--    elseif get(Engine_1_master_switch) == 0
+--    then
+--        set(engine_1_mixture, 0.0)
+--    end
 
     --engine master 2
-    if get(Engine_2_master_switch) == 1
-    then
-        if get(engine_2_N2) > 16 then
-            set(engine_2_mixture, 1.0)
-        else
-            set(engine_2_mixture, 0)
-        end
-    elseif get(Engine_2_master_switch) == 0
-    then
-        set(engine_2_mixture, 0.0)
-    end
+--    if get(Engine_2_master_switch) == 1
+--    then
+--        if get(engine_2_N2) > 16 then
+--            set(engine_2_mixture, 1.0)
+--        else
+--            set(engine_2_mixture, 0)
+--        end
+--    elseif get(Engine_2_master_switch) == 0
+--    then
+--        set(engine_2_mixture, 0.0)
+--    end
 
     --apu availability
     if get(Apu_N1) > 95 then

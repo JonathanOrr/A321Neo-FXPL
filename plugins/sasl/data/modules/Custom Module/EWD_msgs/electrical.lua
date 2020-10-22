@@ -341,7 +341,7 @@ MessageGroup_ELEC_EMER_CONFIG = {
     land_asap = true,
 
     is_active = function(self)
-        local condition =  (get(Gen_1_pwr) == 0 and get(Gen_2_pwr) ==0 and get(Gen_APU_pwr) == 0 and get(Gen_EXT_pwr) == 0) and not ovveride_ELEC_always_on
+        local condition =  (get(Gen_1_pwr) == 0 and get(Gen_2_pwr) ==0 and get(Gen_APU_pwr) == 0 and get(Gen_EXT_pwr) == 0) and not override_ELEC_always_on
 
         return condition
     end,

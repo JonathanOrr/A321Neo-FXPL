@@ -205,11 +205,13 @@ FUEL_cmd_ACT_TK_XFR       = createCommand("a321neo/cockpit/fuel/ACT_TK_FWD", "Pr
 FUEL_cmd_RCT_TK_XFR       = createCommand("a321neo/cockpit/fuel/RCT_TK_FWD", "Press RCT TK FWD button in the FUEL panel")
 FUEL_cmd_C_TK_mode        = createCommand("a321neo/cockpit/fuel/C_TK_mode", "Press MODE SEL button in the FUEL panel")
 FUEL_cmd_X_FEED           = createCommand("a321neo/cockpit/fuel/X_FEED", "Press X FEED button in the FUEL panel")
+FUEL_cmd_internal_qs      = sasl.createCommand("a321neo/internals/fuel/quick_start", "Used during quick start") -- This is used only for sasl internals
 
 -- Standby instrument
 ISIS_cmd_LS          = createCommand("a321neo/cockpit/ISIS/LS", "Press LS button on ISIS")
 ISIS_cmd_Knob_c      = createCommand("a321neo/cockpit/ISIS/Knob_C", "Rotate ISIS knob clockwise")  -- Knob clockwise
 ISIS_cmd_Knob_cc     = createCommand("a321neo/cockpit/ISIS/Knob_CC", "Rotate ISIS knob counter-clockwise") -- Knob counter-clockwise
+
 
 --FBW
 Toggle_ELAC_1 = sasl.createCommand("a321neo/cockpit/FBW/toggle_elac_1", "toggle ELAC 1")
@@ -219,3 +221,9 @@ Toggle_FAC_2 = sasl.createCommand("a321neo/cockpit/FBW/toggle_fac_2", "toggle FA
 Toggle_SEC_1 = sasl.createCommand("a321neo/cockpit/FBW/toggle_sec_1", "toggle SEC 1")
 Toggle_SEC_2 = sasl.createCommand("a321neo/cockpit/FBW/toggle_sec_2", "toggle SEC 2")
 Toggle_SEC_3 = sasl.createCommand("a321neo/cockpit/FBW/toggle_sec_3", "toggle SEC 3")
+
+-- ENG
+ENG_cmd_manual_start_1 = createCommand("a321neo/cockpit/engine/manual_start_1", "Press Manual Start ENG1 pushbutton")
+ENG_cmd_manual_start_2 = createCommand("a321neo/cockpit/engine/manual_start_2", "Press Manual Start ENG1 pushbutton")
+ENG_cmd_dual_cooling   = createCommand("a321neo/cockpit/engine/dual_cooling", "Press Dual Cooling pushbutton")
+
