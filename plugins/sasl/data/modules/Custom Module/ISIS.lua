@@ -31,11 +31,11 @@ function draw()
         local baro_mmhg = Round(get(Stby_Baro),2)
         if baro_mmhg ~= 29.92 then
             local baro_kpa  = Round(33.8639 * get(Stby_Baro),0)
-            sasl.gl.drawText (Font_AirbusDUL, 222, 40, baro_kpa .. "/" .. baro_mmhg, 28, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+            sasl.gl.drawText (Font_AirbusDUL, 222, 40, string.format("%.2f", tostring(baro_kpa)) .. "/" .. string.format("%.2f", tostring(baro_mmhg)), 28, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
         else
             sasl.gl.drawText (Font_AirbusDUL, 222, 40, "STD", 28, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
-        end        
-        
+        end
+
         if get(Adirs_capt_has_ADR) == 1 then
             -- Mach number, this is available only if the ADR for the Capt is ok
             local good_mach = Round(get(Capt_Mach) * 100, 0)
