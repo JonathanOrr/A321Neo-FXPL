@@ -2,6 +2,23 @@
 -- Engine parameters computation and ignition phase file
 ----------------------------------------------------------------------------------------------------
 
+-- Engine start procedure: how it works?
+--
+-- The following conditions switch the status of the engine to "avail" (in the x-plane dataref):
+-- - sim/cockpit2/engine/actuators/igniter_on = 1
+-- - sim/cockpit/engine/starter_duration = 100
+-- - sim/flightmodel/engine/ENGNN1 > 5
+-- DO NOT USE sim/cockpit2/engine/actuators/ignition_key, it will start the engine using the X-Plane
+-- procedure (and we don't want that)
+
+-- Our procedure is divided in 3 phases:
+-- - Phase 1:  N2 from 0 to 10: cranking the engine using perform_crank_procedure()
+-- - Phase 2:  N2 from 10 to 34.2: it manually controls the N2 according to the
+--             perform_starting_procedure_follow_n2(eng), and the array START_UP_PHASES_N2
+-- - Phase 3:  N1 from 0ish to 18.3: it manually controls the N1 according to the
+--             perform_starting_procedure_follow_n1(eng), and the array START_UP_PHASES_N1
+
+
 
 ----------------------------------------------------------------------------------------------------
 -- Constants
@@ -337,34 +354,40 @@ local function update_startup()
 
     local require_cooldown = {true, true}
 
-    if get(Engine_mode_knob) == 1 then      -- Ignition
-        if get(Engine_1_master_switch) == 1 and get(Engine_1_avail) == 0  then
+    local does_engine_1_can_start_or_crank = get(Engine_1_avail) == 0 and get(L_bleed_press) > 10
+    local does_engine_2_can_start_or_crank = get(Engine_2_avail) == 0 and get(R_bleed_press) > 10
+
+    -- CASE 1: IGNITION
+    if get(Engine_mode_knob) == 1 then
+        if get(Engine_1_master_switch) == 1 and does_engine_1_can_start_or_crank then
             perform_starting_procedure(1)
             require_cooldown[1] = false
         end
-        if get(Engine_2_master_switch) == 1 and get(Engine_2_avail) == 0 then
+        if get(Engine_2_master_switch) == 1 and does_engine_2_can_start_or_crank then
             perform_starting_procedure(2)
             require_cooldown[2] = false
         end
+        
+    -- CASE 2: CRANK
     elseif get(Engine_mode_knob) == -1 then -- Crank
-        if eng_1_manual_switch then
+        if eng_1_manual_switch and does_engine_1_can_start_or_crank then
             perform_crank_procedure(1, get(Engine_1_master_switch) == 1)
             require_cooldown[1] = false
         end
-        if eng_2_manual_switch then
+        if eng_2_manual_switch and does_engine_2_can_start_or_crank then
             perform_crank_procedure(2, get(Engine_2_master_switch) == 1)
             require_cooldown[2] = false
         end
     end
     
-    -- No ignition, engine is off of shutting down
+    -- CASE 3: No ignition, no crank, engine is off of shutting down
     if get(Engine_1_avail) == 0  and require_cooldown[1] then    -- Turn off the engine
         -- Set N2 to zero
         eng_N2_off[1] = Set_linear_anim_value(eng_N2_off[1], 0, 0, 120, 1)
         set(eng_N2_enforce, eng_N2_off[1], 1)
         
         -- Set EGT and FF to zero
-        eng_EGT_off[1] = Set_linear_anim_value(eng_EGT_off[1], get(OTA), -50, 1500, 1)
+        eng_EGT_off[1] = Set_linear_anim_value(eng_EGT_off[1], get(OTA), -50, 1500, 10)
         eng_FF_off[1] = 0
         eng_N1_off[1] = Set_linear_anim_value(eng_N1_off[1], 0, 0, 120, 2)
         set(eng_igniters, 0, 1)
@@ -375,7 +398,7 @@ local function update_startup()
         set(eng_N2_enforce, eng_N2_off[2], 2)
         
         -- Set EGT and FF to zero
-        eng_EGT_off[2] = Set_linear_anim_value(eng_EGT_off[2], get(OTA), -50, 1500, 1)
+        eng_EGT_off[2] = Set_linear_anim_value(eng_EGT_off[2], get(OTA), -50, 1500, 10)
         eng_FF_off[2] = 0
         eng_N1_off[2] = Set_linear_anim_value(eng_N1_off[2], 0, 0, 120, 2)
         set(eng_igniters, 0, 2)
