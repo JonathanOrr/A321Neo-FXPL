@@ -23,7 +23,7 @@ panelWidth3d = 4096
 panelHeight3d = 2048
 
 components = {
-  engine_and_apu {},
+  apu {},
   engines {},
   FBW_main {},
   cabin_screens {},

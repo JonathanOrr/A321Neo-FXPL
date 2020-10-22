@@ -48,19 +48,19 @@ local START_UP_PHASES_N2 = {
 }
 
 local START_UP_PHASES_N1 = {
-    {n1_set = 2,      n1_increase_per_sec = 1, fuel_flow = 140, egt=280, stop_ign=false},
-    {n1_set = 5,      n1_increase_per_sec = 0.60, fuel_flow = 140, egt=290, stop_ign=false},
-    {n1_set = 6.6,    n1_increase_per_sec = 0.60, fuel_flow = 160, egt=303, stop_ign=false},
-    {n1_set = 7.3,    n1_increase_per_sec = 0.20, fuel_flow = 180, egt=357, stop_ign=false},
-    {n1_set = 7.8,    n1_increase_per_sec = 0.20, fuel_flow = 220, egt=393, stop_ign=false},
-    {n1_set = 12.2,   n1_increase_per_sec = 0.60, fuel_flow = 260, egt=573, stop_ign=false},
-    {n1_set = 14.9,   n1_increase_per_sec = 0.60, fuel_flow = 280, egt=574, stop_ign=true},
-    {n1_set = 15.4,   n1_increase_per_sec = 1.16, fuel_flow = 300, egt=580, stop_ign=true},
-    {n1_set = 16.3,   n1_increase_per_sec = 1.08, fuel_flow = 320, egt=592, stop_ign=true},
-    {n1_set = 17.1,   n1_increase_per_sec = 0.83, fuel_flow = 340, egt=602, stop_ign=true},
-    {n1_set = 17.6,   n1_increase_per_sec = 0.79, fuel_flow = 360, egt=623, stop_ign=true},
-    {n1_set = 18.3,   n1_increase_per_sec = 0.24, fuel_flow = 380, egt=637, stop_ign=true},
-    {n1_set = 18.3,   n1_increase_per_sec = 0.24, fuel_flow = 380, egt=637, stop_ign=true},
+    {n1_set = 2,      n1_increase_per_sec = 1, fuel_flow = 140, egt=280},
+    {n1_set = 5,      n1_increase_per_sec = 0.60, fuel_flow = 140, egt=290},
+    {n1_set = 6.6,    n1_increase_per_sec = 0.60, fuel_flow = 160, egt=303},
+    {n1_set = 7.3,    n1_increase_per_sec = 0.20, fuel_flow = 180, egt=357},
+    {n1_set = 7.8,    n1_increase_per_sec = 0.20, fuel_flow = 220, egt=393},
+    {n1_set = 12.2,   n1_increase_per_sec = 0.60, fuel_flow = 260, egt=573},
+    {n1_set = 14.9,   n1_increase_per_sec = 0.60, fuel_flow = 280, egt=574},
+    {n1_set = 15.4,   n1_increase_per_sec = 1.16, fuel_flow = 300, egt=580},
+    {n1_set = 16.3,   n1_increase_per_sec = 1.08, fuel_flow = 320, egt=592},
+    {n1_set = 17.1,   n1_increase_per_sec = 0.83, fuel_flow = 340, egt=602},
+    {n1_set = 17.6,   n1_increase_per_sec = 0.79, fuel_flow = 360, egt=623},
+    {n1_set = 18.3,   n1_increase_per_sec = 0.24, fuel_flow = 380, egt=637},
+    {n1_set = 18.3,   n1_increase_per_sec = 0.24, fuel_flow = 380, egt=637},
 }
 
 ----------------------------------------------------------------------------------------------------
@@ -123,11 +123,27 @@ function onAirportLoaded()
     end
 end
 
+function engines_mode_up(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        set(Engine_mode_knob, get(Engine_mode_knob) + 1)
+    end
+    return 1
+end
+
+function engines_mode_down(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        set(Engine_mode_knob, get(Engine_mode_knob) - 1)
+    end
+    return 1
+end
+
 ----------------------------------------------------------------------------------------------------
 -- Commands
 ----------------------------------------------------------------------------------------------------
 sasl.registerCommandHandler (ENG_cmd_manual_start_1,     0, function(phase) if phase == SASL_COMMAND_BEGIN then eng_1_manual_switch = not eng_1_manual_switch end end )
 sasl.registerCommandHandler (ENG_cmd_manual_start_2,     0, function(phase) if phase == SASL_COMMAND_BEGIN then eng_2_manual_switch = not eng_2_manual_switch end end )
+sasl.registerCommandHandler (ENG_cmd_mode_up,            0, function(phase) engines_mode_up(phase) end)
+sasl.registerCommandHandler (ENG_cmd_mode_down,          0, function(phase) engines_mode_down(phase) end)
 sasl.registerCommandHandler (sasl.findCommand("sim/operation/auto_start"),  1, engines_auto_slow_start )
 sasl.registerCommandHandler (sasl.findCommand("sim/operation/quick_start"), 1, engines_auto_quick_start )
 
@@ -254,21 +270,28 @@ end
 ----------------------------------------------------------------------------------------------------
 
 local function perform_crank_procedure(eng, wet_cranking)
+    -- This is PHASE 1
+    
     if (eng==1 and get(Engine_1_avail) == 1) or (eng==2 and get(Engine_2_avail) == 1) then
-        return  -- Crank has no sense if the engine is already running
+        -- Just for precaution, crank has no sense if the engine is already running
+        -- In chase, just don't do anything
+        return
     end
+    
+    -- Crank doesn't do anything special. Just warm up and run the N2 turbine
 
-    set(eng_mixture, 0, eng)                                    -- No mixture for dry cranking
+    set(eng_mixture, 0, eng) -- No mixture for dry cranking
 
     -- Set N2 for cranking
     eng_N2_off[eng] = Set_linear_anim_value(eng_N2_off[eng], ENG_N1_CRANK, 0, 120, 0.25)
     set(eng_N2_enforce, eng_N2_off[eng], eng)
     
-    -- Set WGT for cranking
+    -- Set EGT for cranking
     eng_EGT_off[eng] = Set_linear_anim_value(eng_EGT_off[eng], ENG_N1_CRANK_EGT, -50, 1500, 2)
     
     if wet_cranking then
         -- Wet cranking requested, let's spill a bit of fuel
+        -- This is not actually consuming fuel but well, it's a minimum amount
         eng_FF_off[eng] = ENG_N1_CRANK_FF/3600
     else
         -- Dry cranking
@@ -278,66 +301,95 @@ local function perform_crank_procedure(eng, wet_cranking)
 end
 
 local function perform_starting_procedure_follow_n2(eng)
+    -- This is PHASE 2
+
     set(eng_mixture, 0, eng) -- No mixture in this phase
 
     for i=1,(#START_UP_PHASES_N2-1) do
+        -- For each phase... 
+
         if eng_N2_off[eng] < START_UP_PHASES_N2[i+1].n2_start then
+            -- We have found the correct phase
+            
+            -- Let's compute the new N2
             eng_N2_off[eng] = eng_N2_off[eng] + START_UP_PHASES_N2[i].n2_increase_per_sec * get(DELTA_TIME)
             set(eng_N2_enforce, eng_N2_off[eng], eng)
+            
+            -- Let's set the fuel flow
             eng_FF_off[eng] = START_UP_PHASES_N2[i].fuel_flow  / 3600
             
+            -- And let's compute the EGT
             perc = (eng_N2_off[eng] - START_UP_PHASES_N2[i].n2_start) / (START_UP_PHASES_N2[i+1].n2_start - START_UP_PHASES_N2[i].n2_start)
             eng_EGT_off[eng] = Math_lerp(START_UP_PHASES_N2[i].egt, START_UP_PHASES_N2[i+1].egt, perc)
             
-            break
+            break -- Don't need to check the other phases
         end
+
     end
 end
 
 local function perform_starting_procedure_follow_n1(eng)
-    set(eng_mixture, 1, eng) -- Mixture in this phase
-    set(eng_igniters, 1, eng)
+    -- This is PHASE 3
+
+    set(eng_mixture, 1, eng)  -- Mixture in this phase
+    set(eng_igniters, 1, eng) -- and igniters as well
 
 
     for i=1,(#START_UP_PHASES_N1-1) do
-        local curr_N1 = math.max(eng_N1_off[eng],2)
-        if curr_N1 < START_UP_PHASES_N1[i+1].n1_set then
+        -- For each phase...
         
+        -- Get the current N1, but it can't be zero 
+        local curr_N1 = math.max(eng_N1_off[eng],2)
+        
+        if curr_N1 < START_UP_PHASES_N1[i+1].n1_set then
+            -- We have found the correct phase
+            
+            -- Let's compute the new N2
             local new_N1 = curr_N1 + START_UP_PHASES_N1[i].n1_increase_per_sec * get(DELTA_TIME)
             eng_N1_off[eng] = new_N1
             set(eng_N1_enforce, new_N1, eng)
 
+            -- Let's set the fuel flow
             eng_FF_off[eng] = START_UP_PHASES_N1[i].fuel_flow  / 3600
             
+            -- Let's compute the EGT
             perc = (curr_N1 - START_UP_PHASES_N1[i].n1_set) / (START_UP_PHASES_N1[i+1].n1_set - START_UP_PHASES_N1[i].n1_set)
             eng_EGT_off[eng] = Math_lerp(START_UP_PHASES_N1[i].egt, START_UP_PHASES_N1[i+1].egt, perc)
             
-            break
+            break -- Don't need to check the other phases
         end
     end
     
     if eng_N1_off[eng] > 12 then
-
+        -- When N1 is more than 12 we can shutdown the igniters. This is necessary, otherwise the
+        -- engine will go over the minimum idle
         set(eng_igniters, 0, eng)
     end
 end
 
 local function perform_starting_procedure(eng)
     if eng_N2_off[eng] < 9.5 then
-        -- Ok let's start by cranking the engine to start rotation
+        -- Phase 1: Ok let's start by cranking the engine to start rotation
         perform_crank_procedure(eng, false)
         return
     end
     
-    if eng_N2_off[eng] < START_UP_PHASES_N2[#START_UP_PHASES_N2].n2_start then
+    -- If the N2 is larger than 10, then we can start the real startup procedure
+    
+    if eng_N2_off[eng] < START_UP_PHASES_N2[#START_UP_PHASES_N2].n2_start then  -- 1st phase
 
+        -- Oh yes, this is a funny thing. You need to set this dataref to 100 to cheat X-Plane
+        -- to convince it that the engine has been ignited (but it's not! We don't want X-Plane to
+        -- control the ignition with the ignition_key).
         set(starter_duration, MAGIC_NUMBER, eng)
 
+        -- Phase 2: Controlling the N2  
         perform_starting_procedure_follow_n2(eng)
     elseif eng_N1_off[eng] < START_UP_PHASES_N1[#START_UP_PHASES_N1].n1_set then
+        -- Phase 3: Controlling the N1
         perform_starting_procedure_follow_n1(eng)
     else
-
+        -- Yeeeh engine ready
     end
     
 end
@@ -352,6 +404,7 @@ end
 
 local function update_startup()
 
+    -- An array we need later to see if the engine requires cooldown (=shutdown) or not
     local require_cooldown = {true, true}
 
     local does_engine_1_can_start_or_crank = get(Engine_1_avail) == 0 and get(L_bleed_press) > 10
@@ -439,7 +492,12 @@ end
 
 function update()
     update_starter_datarefs()
+    
     if get(FLIGHT_TIME) > 0.5 then
+        -- This condition is needed because otherwise the startup overrides the values set by the
+        -- engines_auto_quick_start() function when the simulation is started in flight. So, let's
+        -- wait 500ms before allowing the startup sequence to work (I don't think you are so fast to
+        -- turn the ignition knob and the master switch 500ms after the simulation is started ;-)
         update_startup()
     end
 

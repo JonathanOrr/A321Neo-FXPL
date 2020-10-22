@@ -8,6 +8,8 @@ include('electrical_generators.lua')
 include('electrical_tr_and_inv.lua')
 include('electrical_misc.lua')
 
+local avionics = globalProperty("sim/cockpit2/switches/avionics_power_on")
+
 ELEC_sys.add_power_consumption = function (bus, current_min, current_max)
     ELEC_sys.buses.pwr_consumption[bus] = ELEC_sys.buses.pwr_consumption[bus] + math.random()*(current_max-current_min) + current_min
 end
@@ -43,8 +45,11 @@ function update()
     
     update_consumptions()   -- Check electical_consumptions.lua
     
-    -- Just for testing
-    -- ELEC_sys.add_power_consumption(ELEC_BUS_HOT_BUS_1, 10, 10)
+    if get(XP_Battery_1) == 1 then
+        set(avionics, 1)
+    else
+        set(avionics, 0)
+    end
 
 end
 

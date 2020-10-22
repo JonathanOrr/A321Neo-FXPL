@@ -135,6 +135,9 @@ ECAM_on_nd_dial = createGlobalPropertyi("a321neo/cockpit/source_switching/ECAM_o
 Engine_mode_knob = createGlobalPropertyi("a321neo/cockpit/engine/engine_mode", 0, false, true, false) -- -1crank, 0norm, 1ignition
 Engine_1_master_switch = createGlobalPropertyi("a321neo/cockpit/engine/master_1", 0, false, true, false)
 Engine_2_master_switch = createGlobalPropertyi("a321neo/cockpit/engine/master_2", 0, false, true, false)
+Engine_1_man_start  = createGlobalPropertyi("a321neo/cockpit/engine/manual_start_1", 0, false, true, false) -- 0: OFF (no show), 1: ON (blue)
+Engine_2_man_start  = createGlobalPropertyi("a321neo/cockpit/engine/manual_start_2", 0, false, true, false) -- 0: OFF (no show), 1: ON (blue)
+Engine_dual_cooling = createGlobalPropertyi("a321neo/cockpit/engine/dual_cooling", 0, false, true, false)   -- 0: OFF (no show), 1: ON (blue)
 
 --pfd
 Capt_landing_system_enabled = createGlobalPropertyi("a321neo/cockpit/PFD/capt_ls_enabled", 0, false, true, false)--for the LS button on the PFD
