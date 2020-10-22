@@ -64,7 +64,7 @@ P _cgpt/3/_w_now 20490.359375000
 P _cgpt/3/_w_test 9500.0
 P _cgpt/3/_z_ref 68.769996643
 P _cgpt/4/_name fuel tank #4
-P _cgpt/4/_w_max 11212.700195312
+P _cgpt/4/_w_max 11212.700195313
 P _cgpt/4/_w_now 12333.968750000
 P _cgpt/4/_w_test 5000.0
 P _cgpt/4/_z_ref 63.159999847
@@ -102,7 +102,7 @@ P _door/0/_xyz/0 -1.0
 P _door/0/_xyz/1 0.0
 P _door/0/_xyz/2 17.600000381
 P _door/0/_xyz/count 3
-P _door/1/_ang_now 0.0
+P _door/1/_ang_now 100.0
 P _door/1/_ext_ang 0.0
 P _door/1/_ret_ang 100.0
 P _door/1/_type 3
@@ -110,7 +110,7 @@ P _door/1/_xyz/0 -1.500000000
 P _door/1/_xyz/1 0.0
 P _door/1/_xyz/2 14.500000000
 P _door/1/_xyz/count 3
-P _door/10/_ang_now 0.0
+P _door/10/_ang_now 90.0
 P _door/10/_ext_ang 0.0
 P _door/10/_ret_ang 90.0
 P _door/10/_type 3
@@ -135,7 +135,7 @@ P _door/2/_xyz/0 1.0
 P _door/2/_xyz/1 0.0
 P _door/2/_xyz/2 17.600000381
 P _door/2/_xyz/count 3
-P _door/3/_ang_now 0.0
+P _door/3/_ang_now -100.0
 P _door/3/_ext_ang 0.0
 P _door/3/_ret_ang -100.0
 P _door/3/_type 3
@@ -143,7 +143,7 @@ P _door/3/_xyz/0 1.500000000
 P _door/3/_xyz/1 0.0
 P _door/3/_xyz/2 14.500000000
 P _door/3/_xyz/count 3
-P _door/4/_ang_now 33.596282959
+P _door/4/_ang_now 0.0
 P _door/4/_ext_ang 0.0
 P _door/4/_ret_ang 90.0
 P _door/4/_type 2
@@ -151,7 +151,7 @@ P _door/4/_xyz/0 -13.0
 P _door/4/_xyz/1 -3.599999905
 P _door/4/_xyz/2 73.500000000
 P _door/4/_xyz/count 3
-P _door/5/_ang_now -33.596282959
+P _door/5/_ang_now 0.0
 P _door/5/_ext_ang 0.0
 P _door/5/_ret_ang -90.0
 P _door/5/_type 2
@@ -161,7 +161,7 @@ P _door/5/_xyz/2 73.500000000
 P _door/5/_xyz/count 3
 P _door/6/_type 0
 P _door/7/_type 0
-P _door/8/_ang_now 0.0
+P _door/8/_ang_now -90.0
 P _door/8/_ext_ang 0.0
 P _door/8/_ret_ang -90.0
 P _door/8/_type 3
@@ -209,7 +209,7 @@ P _gear/0/_latN 0.0
 P _gear/0/_latR 0.0
 P _gear/0/_leg_len 5.249343872
 P _gear/0/_lonE 6.0
-P _gear/0/_lonN 40.716159821
+P _gear/0/_lonN 6.0
 P _gear/0/_lonR 99.0
 P _gear/0/_scon 52322.308593750
 P _gear/0/_stat_def 0.378928781
@@ -239,11 +239,11 @@ P _gear/1/_gear_x -12.303149223
 P _gear/1/_gear_y -2.788713932
 P _gear/1/_gear_z 71.194229126
 P _gear/1/_latE 0.0
-P _gear/1/_latN 30.983238220
+P _gear/1/_latN 0.0
 P _gear/1/_latR 83.0
 P _gear/1/_leg_len 8.202099800
 P _gear/1/_lonE -6.0
-P _gear/1/_lonN -3.760247707
+P _gear/1/_lonN -6.0
 P _gear/1/_lonR 0.0
 P _gear/1/_scon 83991.070312500
 P _gear/1/_stat_def 1.381937742
@@ -273,11 +273,11 @@ P _gear/2/_gear_x 12.303149223
 P _gear/2/_gear_y -2.788713932
 P _gear/2/_gear_z 71.194229126
 P _gear/2/_latE 0.0
-P _gear/2/_latN -30.983238220
+P _gear/2/_latN 0.0
 P _gear/2/_latR -83.0
 P _gear/2/_leg_len 8.202099800
 P _gear/2/_lonE -6.0
-P _gear/2/_lonN -3.760247707
+P _gear/2/_lonN -6.0
 P _gear/2/_lonR 0.0
 P _gear/2/_scon 83991.070312500
 P _gear/2/_stat_def 1.381937742
@@ -9868,7 +9868,7 @@ P _part/14/_geo_xyz/11,3,1 1.604208231
 P _part/14/_geo_xyz/11,3,2 81.487556458
 P _part/14/_geo_xyz/11,4,0 -49.882705688
 P _part/14/_geo_xyz/11,4,1 1.596782327
-P _part/14/_geo_xyz/11,4,2 82.708007812
+P _part/14/_geo_xyz/11,4,2 82.708007813
 P _part/14/_geo_xyz/11,5,0 -49.896846771
 P _part/14/_geo_xyz/11,5,1 1.438310504
 P _part/14/_geo_xyz/11,5,2 84.232650757
@@ -9922,7 +9922,7 @@ P _part/14/_geo_xyz/12,3,1 1.604208231
 P _part/14/_geo_xyz/12,3,2 81.487556458
 P _part/14/_geo_xyz/12,4,0 -49.882705688
 P _part/14/_geo_xyz/12,4,1 1.596782327
-P _part/14/_geo_xyz/12,4,2 82.708007812
+P _part/14/_geo_xyz/12,4,2 82.708007813
 P _part/14/_geo_xyz/12,5,0 -49.896846771
 P _part/14/_geo_xyz/12,5,1 1.438310504
 P _part/14/_geo_xyz/12,5,2 84.232650757
@@ -11338,7 +11338,7 @@ P _part/15/_geo_xyz/11,3,1 1.604208231
 P _part/15/_geo_xyz/11,3,2 81.487556458
 P _part/15/_geo_xyz/11,4,0 49.882705688
 P _part/15/_geo_xyz/11,4,1 1.596782327
-P _part/15/_geo_xyz/11,4,2 82.708007812
+P _part/15/_geo_xyz/11,4,2 82.708007813
 P _part/15/_geo_xyz/11,5,0 49.896846771
 P _part/15/_geo_xyz/11,5,1 1.438310504
 P _part/15/_geo_xyz/11,5,2 84.232650757
@@ -11392,7 +11392,7 @@ P _part/15/_geo_xyz/12,3,1 1.604208231
 P _part/15/_geo_xyz/12,3,2 81.487556458
 P _part/15/_geo_xyz/12,4,0 49.882705688
 P _part/15/_geo_xyz/12,4,1 1.596782327
-P _part/15/_geo_xyz/12,4,2 82.708007812
+P _part/15/_geo_xyz/12,4,2 82.708007813
 P _part/15/_geo_xyz/12,5,0 49.896846771
 P _part/15/_geo_xyz/12,5,1 1.438310504
 P _part/15/_geo_xyz/12,5,2 84.232650757
@@ -12771,22 +12771,22 @@ P _part/16/_geo_xyz/10,9,0 -17.125591278
 P _part/16/_geo_xyz/10,9,1 3.910663366
 P _part/16/_geo_xyz/10,9,2 139.669921875
 P _part/16/_geo_xyz/11,0,0 -20.115180969
-P _part/16/_geo_xyz/11,0,1 4.520691872
+P _part/16/_geo_xyz/11,0,1 4.520691395
 P _part/16/_geo_xyz/11,0,2 139.198394775
 P _part/16/_geo_xyz/11,1,0 -20.106256485
-P _part/16/_geo_xyz/11,1,1 4.593374252
+P _part/16/_geo_xyz/11,1,1 4.593373775
 P _part/16/_geo_xyz/11,1,2 139.320434570
 P _part/16/_geo_xyz/11,10,0 -20.137491226
-P _part/16/_geo_xyz/11,10,1 4.338985443
+P _part/16/_geo_xyz/11,10,1 4.338984966
 P _part/16/_geo_xyz/11,10,2 140.215454102
 P _part/16/_geo_xyz/11,11,0 -20.133029938
-P _part/16/_geo_xyz/11,11,1 4.375326633
+P _part/16/_geo_xyz/11,11,1 4.375326157
 P _part/16/_geo_xyz/11,11,2 139.605224609
 P _part/16/_geo_xyz/11,12,0 -20.124105453
-P _part/16/_geo_xyz/11,12,1 4.448009491
+P _part/16/_geo_xyz/11,12,1 4.448009014
 P _part/16/_geo_xyz/11,12,2 139.320434570
 P _part/16/_geo_xyz/11,13,0 -20.115180969
-P _part/16/_geo_xyz/11,13,1 4.520691872
+P _part/16/_geo_xyz/11,13,1 4.520691395
 P _part/16/_geo_xyz/11,13,2 139.198394775
 P _part/16/_geo_xyz/11,14,0 0.0
 P _part/16/_geo_xyz/11,14,1 0.0
@@ -12801,28 +12801,28 @@ P _part/16/_geo_xyz/11,17,0 0.0
 P _part/16/_geo_xyz/11,17,1 0.0
 P _part/16/_geo_xyz/11,17,2 0.0
 P _part/16/_geo_xyz/11,2,0 -20.097332001
-P _part/16/_geo_xyz/11,2,1 4.666057110
+P _part/16/_geo_xyz/11,2,1 4.666056633
 P _part/16/_geo_xyz/11,2,2 139.605224609
 P _part/16/_geo_xyz/11,3,0 -20.092870712
-P _part/16/_geo_xyz/11,3,1 4.702398300
+P _part/16/_geo_xyz/11,3,1 4.702397823
 P _part/16/_geo_xyz/11,3,2 140.215454102
 P _part/16/_geo_xyz/11,4,0 -20.092870712
-P _part/16/_geo_xyz/11,4,1 4.702398300
+P _part/16/_geo_xyz/11,4,1 4.702397823
 P _part/16/_geo_xyz/11,4,2 141.029098511
 P _part/16/_geo_xyz/11,5,0 -20.107067108
-P _part/16/_geo_xyz/11,5,1 4.586766720
+P _part/16/_geo_xyz/11,5,1 4.586766243
 P _part/16/_geo_xyz/11,5,2 142.452987671
 P _part/16/_geo_xyz/11,6,0 -20.115180969
-P _part/16/_geo_xyz/11,6,1 4.520691872
+P _part/16/_geo_xyz/11,6,1 4.520691395
 P _part/16/_geo_xyz/11,6,2 143.266632080
 P _part/16/_geo_xyz/11,7,0 -20.115180969
-P _part/16/_geo_xyz/11,7,1 4.520691872
+P _part/16/_geo_xyz/11,7,1 4.520691395
 P _part/16/_geo_xyz/11,7,2 143.266632080
 P _part/16/_geo_xyz/11,8,0 -20.123294830
-P _part/16/_geo_xyz/11,8,1 4.454617023
+P _part/16/_geo_xyz/11,8,1 4.454616547
 P _part/16/_geo_xyz/11,8,2 142.452987671
 P _part/16/_geo_xyz/11,9,0 -20.137491226
-P _part/16/_geo_xyz/11,9,1 4.338985443
+P _part/16/_geo_xyz/11,9,1 4.338984966
 P _part/16/_geo_xyz/11,9,2 141.029098511
 P _part/16/_geo_xyz/12,0,0 -19.713937759
 P _part/16/_geo_xyz/12,0,1 4.970252991
@@ -13419,22 +13419,22 @@ P _part/16/_geo_xyz/4,9,0 -8.089887619
 P _part/16/_geo_xyz/4,9,1 2.625697374
 P _part/16/_geo_xyz/4,9,2 135.592376709
 P _part/16/_geo_xyz/5,0,0 -11.058246613
-P _part/16/_geo_xyz/5,0,1 3.408639908
+P _part/16/_geo_xyz/5,0,1 3.408639669
 P _part/16/_geo_xyz/5,0,2 133.378723145
 P _part/16/_geo_xyz/5,1,0 -11.040829659
-P _part/16/_geo_xyz/5,1,1 3.550487995
+P _part/16/_geo_xyz/5,1,1 3.550487757
 P _part/16/_geo_xyz/5,1,2 133.616912842
 P _part/16/_geo_xyz/5,10,0 -11.101788521
-P _part/16/_geo_xyz/5,10,1 3.054019690
+P _part/16/_geo_xyz/5,10,1 3.054019451
 P _part/16/_geo_xyz/5,10,2 135.363632202
 P _part/16/_geo_xyz/5,11,0 -11.093080521
-P _part/16/_geo_xyz/5,11,1 3.124943733
+P _part/16/_geo_xyz/5,11,1 3.124943495
 P _part/16/_geo_xyz/5,11,2 134.172683716
 P _part/16/_geo_xyz/5,12,0 -11.075663567
-P _part/16/_geo_xyz/5,12,1 3.266791821
+P _part/16/_geo_xyz/5,12,1 3.266791582
 P _part/16/_geo_xyz/5,12,2 133.616912842
 P _part/16/_geo_xyz/5,13,0 -11.058246613
-P _part/16/_geo_xyz/5,13,1 3.408639908
+P _part/16/_geo_xyz/5,13,1 3.408639669
 P _part/16/_geo_xyz/5,13,2 133.378723145
 P _part/16/_geo_xyz/5,14,0 0.0
 P _part/16/_geo_xyz/5,14,1 0.0
@@ -13449,46 +13449,46 @@ P _part/16/_geo_xyz/5,17,0 0.0
 P _part/16/_geo_xyz/5,17,1 0.0
 P _part/16/_geo_xyz/5,17,2 0.0
 P _part/16/_geo_xyz/5,2,0 -11.023412704
-P _part/16/_geo_xyz/5,2,1 3.692336082
+P _part/16/_geo_xyz/5,2,1 3.692335844
 P _part/16/_geo_xyz/5,2,2 134.172683716
 P _part/16/_geo_xyz/5,3,0 -11.014704704
-P _part/16/_geo_xyz/5,3,1 3.763260126
+P _part/16/_geo_xyz/5,3,1 3.763259888
 P _part/16/_geo_xyz/5,3,2 135.363632202
 P _part/16/_geo_xyz/5,4,0 -11.014704704
-P _part/16/_geo_xyz/5,4,1 3.763260126
+P _part/16/_geo_xyz/5,4,1 3.763259888
 P _part/16/_geo_xyz/5,4,2 136.951553345
 P _part/16/_geo_xyz/5,5,0 -11.042412758
-P _part/16/_geo_xyz/5,5,1 3.537592649
+P _part/16/_geo_xyz/5,5,1 3.537592411
 P _part/16/_geo_xyz/5,5,2 139.730422974
 P _part/16/_geo_xyz/5,6,0 -11.058246613
-P _part/16/_geo_xyz/5,6,1 3.408639908
+P _part/16/_geo_xyz/5,6,1 3.408639669
 P _part/16/_geo_xyz/5,6,2 141.318359375
 P _part/16/_geo_xyz/5,7,0 -11.058246613
-P _part/16/_geo_xyz/5,7,1 3.408639908
+P _part/16/_geo_xyz/5,7,1 3.408639669
 P _part/16/_geo_xyz/5,7,2 141.318359375
 P _part/16/_geo_xyz/5,8,0 -11.074080467
-P _part/16/_geo_xyz/5,8,1 3.279687166
+P _part/16/_geo_xyz/5,8,1 3.279686928
 P _part/16/_geo_xyz/5,8,2 139.730422974
 P _part/16/_geo_xyz/5,9,0 -11.101788521
-P _part/16/_geo_xyz/5,9,1 3.054019690
+P _part/16/_geo_xyz/5,9,1 3.054019451
 P _part/16/_geo_xyz/5,9,2 136.951553345
 P _part/16/_geo_xyz/6,0,0 -11.058246613
-P _part/16/_geo_xyz/6,0,1 3.408639908
+P _part/16/_geo_xyz/6,0,1 3.408639669
 P _part/16/_geo_xyz/6,0,2 133.378723145
 P _part/16/_geo_xyz/6,1,0 -11.040829659
-P _part/16/_geo_xyz/6,1,1 3.550487995
+P _part/16/_geo_xyz/6,1,1 3.550487757
 P _part/16/_geo_xyz/6,1,2 133.616912842
 P _part/16/_geo_xyz/6,10,0 -11.101788521
-P _part/16/_geo_xyz/6,10,1 3.054019690
+P _part/16/_geo_xyz/6,10,1 3.054019451
 P _part/16/_geo_xyz/6,10,2 135.363632202
 P _part/16/_geo_xyz/6,11,0 -11.093080521
-P _part/16/_geo_xyz/6,11,1 3.124943733
+P _part/16/_geo_xyz/6,11,1 3.124943495
 P _part/16/_geo_xyz/6,11,2 134.172683716
 P _part/16/_geo_xyz/6,12,0 -11.075663567
-P _part/16/_geo_xyz/6,12,1 3.266791821
+P _part/16/_geo_xyz/6,12,1 3.266791582
 P _part/16/_geo_xyz/6,12,2 133.616912842
 P _part/16/_geo_xyz/6,13,0 -11.058246613
-P _part/16/_geo_xyz/6,13,1 3.408639908
+P _part/16/_geo_xyz/6,13,1 3.408639669
 P _part/16/_geo_xyz/6,13,2 133.378723145
 P _part/16/_geo_xyz/6,14,0 0.0
 P _part/16/_geo_xyz/6,14,1 0.0
@@ -13503,46 +13503,46 @@ P _part/16/_geo_xyz/6,17,0 0.0
 P _part/16/_geo_xyz/6,17,1 0.0
 P _part/16/_geo_xyz/6,17,2 0.0
 P _part/16/_geo_xyz/6,2,0 -11.023412704
-P _part/16/_geo_xyz/6,2,1 3.692336082
+P _part/16/_geo_xyz/6,2,1 3.692335844
 P _part/16/_geo_xyz/6,2,2 134.172683716
 P _part/16/_geo_xyz/6,3,0 -11.014704704
-P _part/16/_geo_xyz/6,3,1 3.763260126
+P _part/16/_geo_xyz/6,3,1 3.763259888
 P _part/16/_geo_xyz/6,3,2 135.363632202
 P _part/16/_geo_xyz/6,4,0 -11.014704704
-P _part/16/_geo_xyz/6,4,1 3.763260126
+P _part/16/_geo_xyz/6,4,1 3.763259888
 P _part/16/_geo_xyz/6,4,2 136.951553345
 P _part/16/_geo_xyz/6,5,0 -11.042412758
-P _part/16/_geo_xyz/6,5,1 3.537592649
+P _part/16/_geo_xyz/6,5,1 3.537592411
 P _part/16/_geo_xyz/6,5,2 139.730422974
 P _part/16/_geo_xyz/6,6,0 -11.058246613
-P _part/16/_geo_xyz/6,6,1 3.408639908
+P _part/16/_geo_xyz/6,6,1 3.408639669
 P _part/16/_geo_xyz/6,6,2 141.318359375
 P _part/16/_geo_xyz/6,7,0 -11.058246613
-P _part/16/_geo_xyz/6,7,1 3.408639908
+P _part/16/_geo_xyz/6,7,1 3.408639669
 P _part/16/_geo_xyz/6,7,2 141.318359375
 P _part/16/_geo_xyz/6,8,0 -11.074080467
-P _part/16/_geo_xyz/6,8,1 3.279687166
+P _part/16/_geo_xyz/6,8,1 3.279686928
 P _part/16/_geo_xyz/6,8,2 139.730422974
 P _part/16/_geo_xyz/6,9,0 -11.101788521
-P _part/16/_geo_xyz/6,9,1 3.054019690
+P _part/16/_geo_xyz/6,9,1 3.054019451
 P _part/16/_geo_xyz/6,9,2 136.951553345
 P _part/16/_geo_xyz/7,0,0 -14.077225685
-P _part/16/_geo_xyz/7,0,1 3.779323816
+P _part/16/_geo_xyz/7,0,1 3.779323578
 P _part/16/_geo_xyz/7,0,2 135.318618774
 P _part/16/_geo_xyz/7,1,0 -14.062640190
-P _part/16/_geo_xyz/7,1,1 3.898116827
+P _part/16/_geo_xyz/7,1,1 3.898116589
 P _part/16/_geo_xyz/7,1,2 135.518096924
 P _part/16/_geo_xyz/7,10,0 -14.113690376
-P _part/16/_geo_xyz/7,10,1 3.482341528
+P _part/16/_geo_xyz/7,10,1 3.482341290
 P _part/16/_geo_xyz/7,10,2 136.980911255
 P _part/16/_geo_xyz/7,11,0 -14.106397629
-P _part/16/_geo_xyz/7,11,1 3.541738033
+P _part/16/_geo_xyz/7,11,1 3.541737795
 P _part/16/_geo_xyz/7,11,2 135.983535767
 P _part/16/_geo_xyz/7,12,0 -14.091811180
-P _part/16/_geo_xyz/7,12,1 3.660530806
+P _part/16/_geo_xyz/7,12,1 3.660530567
 P _part/16/_geo_xyz/7,12,2 135.518096924
 P _part/16/_geo_xyz/7,13,0 -14.077225685
-P _part/16/_geo_xyz/7,13,1 3.779323816
+P _part/16/_geo_xyz/7,13,1 3.779323578
 P _part/16/_geo_xyz/7,13,2 135.318618774
 P _part/16/_geo_xyz/7,14,0 0.0
 P _part/16/_geo_xyz/7,14,1 0.0
@@ -13560,43 +13560,43 @@ P _part/16/_geo_xyz/7,2,0 -14.048053741
 P _part/16/_geo_xyz/7,2,1 4.016909599
 P _part/16/_geo_xyz/7,2,2 135.983535767
 P _part/16/_geo_xyz/7,3,0 -14.040760994
-P _part/16/_geo_xyz/7,3,1 4.076306343
+P _part/16/_geo_xyz/7,3,1 4.076305866
 P _part/16/_geo_xyz/7,3,2 136.980911255
 P _part/16/_geo_xyz/7,4,0 -14.040760994
-P _part/16/_geo_xyz/7,4,1 4.076306343
+P _part/16/_geo_xyz/7,4,1 4.076305866
 P _part/16/_geo_xyz/7,4,2 138.310745239
 P _part/16/_geo_xyz/7,5,0 -14.063965797
-P _part/16/_geo_xyz/7,5,1 3.887317419
+P _part/16/_geo_xyz/7,5,1 3.887317181
 P _part/16/_geo_xyz/7,5,2 140.637954712
 P _part/16/_geo_xyz/7,6,0 -14.077225685
-P _part/16/_geo_xyz/7,6,1 3.779323816
+P _part/16/_geo_xyz/7,6,1 3.779323578
 P _part/16/_geo_xyz/7,6,2 141.967788696
 P _part/16/_geo_xyz/7,7,0 -14.077225685
-P _part/16/_geo_xyz/7,7,1 3.779323816
+P _part/16/_geo_xyz/7,7,1 3.779323578
 P _part/16/_geo_xyz/7,7,2 141.967788696
 P _part/16/_geo_xyz/7,8,0 -14.090485573
-P _part/16/_geo_xyz/7,8,1 3.671330214
+P _part/16/_geo_xyz/7,8,1 3.671329975
 P _part/16/_geo_xyz/7,8,2 140.637954712
 P _part/16/_geo_xyz/7,9,0 -14.113690376
-P _part/16/_geo_xyz/7,9,1 3.482341528
+P _part/16/_geo_xyz/7,9,1 3.482341290
 P _part/16/_geo_xyz/7,9,2 138.310745239
 P _part/16/_geo_xyz/8,0,0 -14.077225685
-P _part/16/_geo_xyz/8,0,1 3.779323816
+P _part/16/_geo_xyz/8,0,1 3.779323578
 P _part/16/_geo_xyz/8,0,2 135.318618774
 P _part/16/_geo_xyz/8,1,0 -14.062640190
-P _part/16/_geo_xyz/8,1,1 3.898116827
+P _part/16/_geo_xyz/8,1,1 3.898116589
 P _part/16/_geo_xyz/8,1,2 135.518096924
 P _part/16/_geo_xyz/8,10,0 -14.113690376
-P _part/16/_geo_xyz/8,10,1 3.482341528
+P _part/16/_geo_xyz/8,10,1 3.482341290
 P _part/16/_geo_xyz/8,10,2 136.980911255
 P _part/16/_geo_xyz/8,11,0 -14.106397629
-P _part/16/_geo_xyz/8,11,1 3.541738033
+P _part/16/_geo_xyz/8,11,1 3.541737795
 P _part/16/_geo_xyz/8,11,2 135.983535767
 P _part/16/_geo_xyz/8,12,0 -14.091811180
-P _part/16/_geo_xyz/8,12,1 3.660530806
+P _part/16/_geo_xyz/8,12,1 3.660530567
 P _part/16/_geo_xyz/8,12,2 135.518096924
 P _part/16/_geo_xyz/8,13,0 -14.077225685
-P _part/16/_geo_xyz/8,13,1 3.779323816
+P _part/16/_geo_xyz/8,13,1 3.779323578
 P _part/16/_geo_xyz/8,13,2 135.318618774
 P _part/16/_geo_xyz/8,14,0 0.0
 P _part/16/_geo_xyz/8,14,1 0.0
@@ -13614,25 +13614,25 @@ P _part/16/_geo_xyz/8,2,0 -14.048053741
 P _part/16/_geo_xyz/8,2,1 4.016909599
 P _part/16/_geo_xyz/8,2,2 135.983535767
 P _part/16/_geo_xyz/8,3,0 -14.040760994
-P _part/16/_geo_xyz/8,3,1 4.076306343
+P _part/16/_geo_xyz/8,3,1 4.076305866
 P _part/16/_geo_xyz/8,3,2 136.980911255
 P _part/16/_geo_xyz/8,4,0 -14.040760994
-P _part/16/_geo_xyz/8,4,1 4.076306343
+P _part/16/_geo_xyz/8,4,1 4.076305866
 P _part/16/_geo_xyz/8,4,2 138.310745239
 P _part/16/_geo_xyz/8,5,0 -14.063965797
-P _part/16/_geo_xyz/8,5,1 3.887317419
+P _part/16/_geo_xyz/8,5,1 3.887317181
 P _part/16/_geo_xyz/8,5,2 140.637954712
 P _part/16/_geo_xyz/8,6,0 -14.077225685
-P _part/16/_geo_xyz/8,6,1 3.779323816
+P _part/16/_geo_xyz/8,6,1 3.779323578
 P _part/16/_geo_xyz/8,6,2 141.967788696
 P _part/16/_geo_xyz/8,7,0 -14.077225685
-P _part/16/_geo_xyz/8,7,1 3.779323816
+P _part/16/_geo_xyz/8,7,1 3.779323578
 P _part/16/_geo_xyz/8,7,2 141.967788696
 P _part/16/_geo_xyz/8,8,0 -14.090485573
-P _part/16/_geo_xyz/8,8,1 3.671330214
+P _part/16/_geo_xyz/8,8,1 3.671329975
 P _part/16/_geo_xyz/8,8,2 140.637954712
 P _part/16/_geo_xyz/8,9,0 -14.113690376
-P _part/16/_geo_xyz/8,9,1 3.482341528
+P _part/16/_geo_xyz/8,9,1 3.482341290
 P _part/16/_geo_xyz/8,9,2 138.310745239
 P _part/16/_geo_xyz/9,0,0 -17.096202850
 P _part/16/_geo_xyz/9,0,1 4.150007725
@@ -14241,22 +14241,22 @@ P _part/17/_geo_xyz/10,9,0 17.125591278
 P _part/17/_geo_xyz/10,9,1 3.910663366
 P _part/17/_geo_xyz/10,9,2 139.669921875
 P _part/17/_geo_xyz/11,0,0 20.115180969
-P _part/17/_geo_xyz/11,0,1 4.520691872
+P _part/17/_geo_xyz/11,0,1 4.520691395
 P _part/17/_geo_xyz/11,0,2 139.198394775
 P _part/17/_geo_xyz/11,1,0 20.106256485
-P _part/17/_geo_xyz/11,1,1 4.593374252
+P _part/17/_geo_xyz/11,1,1 4.593373775
 P _part/17/_geo_xyz/11,1,2 139.320434570
 P _part/17/_geo_xyz/11,10,0 20.137491226
-P _part/17/_geo_xyz/11,10,1 4.338985443
+P _part/17/_geo_xyz/11,10,1 4.338984966
 P _part/17/_geo_xyz/11,10,2 140.215454102
 P _part/17/_geo_xyz/11,11,0 20.133029938
-P _part/17/_geo_xyz/11,11,1 4.375326633
+P _part/17/_geo_xyz/11,11,1 4.375326157
 P _part/17/_geo_xyz/11,11,2 139.605224609
 P _part/17/_geo_xyz/11,12,0 20.124105453
-P _part/17/_geo_xyz/11,12,1 4.448009491
+P _part/17/_geo_xyz/11,12,1 4.448009014
 P _part/17/_geo_xyz/11,12,2 139.320434570
 P _part/17/_geo_xyz/11,13,0 20.115180969
-P _part/17/_geo_xyz/11,13,1 4.520691872
+P _part/17/_geo_xyz/11,13,1 4.520691395
 P _part/17/_geo_xyz/11,13,2 139.198394775
 P _part/17/_geo_xyz/11,14,0 0.0
 P _part/17/_geo_xyz/11,14,1 0.0
@@ -14271,28 +14271,28 @@ P _part/17/_geo_xyz/11,17,0 0.0
 P _part/17/_geo_xyz/11,17,1 0.0
 P _part/17/_geo_xyz/11,17,2 0.0
 P _part/17/_geo_xyz/11,2,0 20.097332001
-P _part/17/_geo_xyz/11,2,1 4.666057110
+P _part/17/_geo_xyz/11,2,1 4.666056633
 P _part/17/_geo_xyz/11,2,2 139.605224609
 P _part/17/_geo_xyz/11,3,0 20.092870712
-P _part/17/_geo_xyz/11,3,1 4.702398300
+P _part/17/_geo_xyz/11,3,1 4.702397823
 P _part/17/_geo_xyz/11,3,2 140.215454102
 P _part/17/_geo_xyz/11,4,0 20.092870712
-P _part/17/_geo_xyz/11,4,1 4.702398300
+P _part/17/_geo_xyz/11,4,1 4.702397823
 P _part/17/_geo_xyz/11,4,2 141.029098511
 P _part/17/_geo_xyz/11,5,0 20.107067108
-P _part/17/_geo_xyz/11,5,1 4.586766720
+P _part/17/_geo_xyz/11,5,1 4.586766243
 P _part/17/_geo_xyz/11,5,2 142.452987671
 P _part/17/_geo_xyz/11,6,0 20.115180969
-P _part/17/_geo_xyz/11,6,1 4.520691872
+P _part/17/_geo_xyz/11,6,1 4.520691395
 P _part/17/_geo_xyz/11,6,2 143.266632080
 P _part/17/_geo_xyz/11,7,0 20.115180969
-P _part/17/_geo_xyz/11,7,1 4.520691872
+P _part/17/_geo_xyz/11,7,1 4.520691395
 P _part/17/_geo_xyz/11,7,2 143.266632080
 P _part/17/_geo_xyz/11,8,0 20.123294830
-P _part/17/_geo_xyz/11,8,1 4.454617023
+P _part/17/_geo_xyz/11,8,1 4.454616547
 P _part/17/_geo_xyz/11,8,2 142.452987671
 P _part/17/_geo_xyz/11,9,0 20.137491226
-P _part/17/_geo_xyz/11,9,1 4.338985443
+P _part/17/_geo_xyz/11,9,1 4.338984966
 P _part/17/_geo_xyz/11,9,2 141.029098511
 P _part/17/_geo_xyz/12,0,0 19.713937759
 P _part/17/_geo_xyz/12,0,1 4.970252991
@@ -14889,22 +14889,22 @@ P _part/17/_geo_xyz/4,9,0 8.089887619
 P _part/17/_geo_xyz/4,9,1 2.625697374
 P _part/17/_geo_xyz/4,9,2 135.592376709
 P _part/17/_geo_xyz/5,0,0 11.058246613
-P _part/17/_geo_xyz/5,0,1 3.408639908
+P _part/17/_geo_xyz/5,0,1 3.408639669
 P _part/17/_geo_xyz/5,0,2 133.378723145
 P _part/17/_geo_xyz/5,1,0 11.040829659
-P _part/17/_geo_xyz/5,1,1 3.550487995
+P _part/17/_geo_xyz/5,1,1 3.550487757
 P _part/17/_geo_xyz/5,1,2 133.616912842
 P _part/17/_geo_xyz/5,10,0 11.101788521
-P _part/17/_geo_xyz/5,10,1 3.054019690
+P _part/17/_geo_xyz/5,10,1 3.054019451
 P _part/17/_geo_xyz/5,10,2 135.363632202
 P _part/17/_geo_xyz/5,11,0 11.093080521
-P _part/17/_geo_xyz/5,11,1 3.124943733
+P _part/17/_geo_xyz/5,11,1 3.124943495
 P _part/17/_geo_xyz/5,11,2 134.172683716
 P _part/17/_geo_xyz/5,12,0 11.075663567
-P _part/17/_geo_xyz/5,12,1 3.266791821
+P _part/17/_geo_xyz/5,12,1 3.266791582
 P _part/17/_geo_xyz/5,12,2 133.616912842
 P _part/17/_geo_xyz/5,13,0 11.058246613
-P _part/17/_geo_xyz/5,13,1 3.408639908
+P _part/17/_geo_xyz/5,13,1 3.408639669
 P _part/17/_geo_xyz/5,13,2 133.378723145
 P _part/17/_geo_xyz/5,14,0 0.0
 P _part/17/_geo_xyz/5,14,1 0.0
@@ -14919,46 +14919,46 @@ P _part/17/_geo_xyz/5,17,0 0.0
 P _part/17/_geo_xyz/5,17,1 0.0
 P _part/17/_geo_xyz/5,17,2 0.0
 P _part/17/_geo_xyz/5,2,0 11.023412704
-P _part/17/_geo_xyz/5,2,1 3.692336082
+P _part/17/_geo_xyz/5,2,1 3.692335844
 P _part/17/_geo_xyz/5,2,2 134.172683716
 P _part/17/_geo_xyz/5,3,0 11.014704704
-P _part/17/_geo_xyz/5,3,1 3.763260126
+P _part/17/_geo_xyz/5,3,1 3.763259888
 P _part/17/_geo_xyz/5,3,2 135.363632202
 P _part/17/_geo_xyz/5,4,0 11.014704704
-P _part/17/_geo_xyz/5,4,1 3.763260126
+P _part/17/_geo_xyz/5,4,1 3.763259888
 P _part/17/_geo_xyz/5,4,2 136.951553345
 P _part/17/_geo_xyz/5,5,0 11.042412758
-P _part/17/_geo_xyz/5,5,1 3.537592649
+P _part/17/_geo_xyz/5,5,1 3.537592411
 P _part/17/_geo_xyz/5,5,2 139.730422974
 P _part/17/_geo_xyz/5,6,0 11.058246613
-P _part/17/_geo_xyz/5,6,1 3.408639908
+P _part/17/_geo_xyz/5,6,1 3.408639669
 P _part/17/_geo_xyz/5,6,2 141.318359375
 P _part/17/_geo_xyz/5,7,0 11.058246613
-P _part/17/_geo_xyz/5,7,1 3.408639908
+P _part/17/_geo_xyz/5,7,1 3.408639669
 P _part/17/_geo_xyz/5,7,2 141.318359375
 P _part/17/_geo_xyz/5,8,0 11.074080467
-P _part/17/_geo_xyz/5,8,1 3.279687166
+P _part/17/_geo_xyz/5,8,1 3.279686928
 P _part/17/_geo_xyz/5,8,2 139.730422974
 P _part/17/_geo_xyz/5,9,0 11.101788521
-P _part/17/_geo_xyz/5,9,1 3.054019690
+P _part/17/_geo_xyz/5,9,1 3.054019451
 P _part/17/_geo_xyz/5,9,2 136.951553345
 P _part/17/_geo_xyz/6,0,0 11.058246613
-P _part/17/_geo_xyz/6,0,1 3.408639908
+P _part/17/_geo_xyz/6,0,1 3.408639669
 P _part/17/_geo_xyz/6,0,2 133.378723145
 P _part/17/_geo_xyz/6,1,0 11.040829659
-P _part/17/_geo_xyz/6,1,1 3.550487995
+P _part/17/_geo_xyz/6,1,1 3.550487757
 P _part/17/_geo_xyz/6,1,2 133.616912842
 P _part/17/_geo_xyz/6,10,0 11.101788521
-P _part/17/_geo_xyz/6,10,1 3.054019690
+P _part/17/_geo_xyz/6,10,1 3.054019451
 P _part/17/_geo_xyz/6,10,2 135.363632202
 P _part/17/_geo_xyz/6,11,0 11.093080521
-P _part/17/_geo_xyz/6,11,1 3.124943733
+P _part/17/_geo_xyz/6,11,1 3.124943495
 P _part/17/_geo_xyz/6,11,2 134.172683716
 P _part/17/_geo_xyz/6,12,0 11.075663567
-P _part/17/_geo_xyz/6,12,1 3.266791821
+P _part/17/_geo_xyz/6,12,1 3.266791582
 P _part/17/_geo_xyz/6,12,2 133.616912842
 P _part/17/_geo_xyz/6,13,0 11.058246613
-P _part/17/_geo_xyz/6,13,1 3.408639908
+P _part/17/_geo_xyz/6,13,1 3.408639669
 P _part/17/_geo_xyz/6,13,2 133.378723145
 P _part/17/_geo_xyz/6,14,0 0.0
 P _part/17/_geo_xyz/6,14,1 0.0
@@ -14973,46 +14973,46 @@ P _part/17/_geo_xyz/6,17,0 0.0
 P _part/17/_geo_xyz/6,17,1 0.0
 P _part/17/_geo_xyz/6,17,2 0.0
 P _part/17/_geo_xyz/6,2,0 11.023412704
-P _part/17/_geo_xyz/6,2,1 3.692336082
+P _part/17/_geo_xyz/6,2,1 3.692335844
 P _part/17/_geo_xyz/6,2,2 134.172683716
 P _part/17/_geo_xyz/6,3,0 11.014704704
-P _part/17/_geo_xyz/6,3,1 3.763260126
+P _part/17/_geo_xyz/6,3,1 3.763259888
 P _part/17/_geo_xyz/6,3,2 135.363632202
 P _part/17/_geo_xyz/6,4,0 11.014704704
-P _part/17/_geo_xyz/6,4,1 3.763260126
+P _part/17/_geo_xyz/6,4,1 3.763259888
 P _part/17/_geo_xyz/6,4,2 136.951553345
 P _part/17/_geo_xyz/6,5,0 11.042412758
-P _part/17/_geo_xyz/6,5,1 3.537592649
+P _part/17/_geo_xyz/6,5,1 3.537592411
 P _part/17/_geo_xyz/6,5,2 139.730422974
 P _part/17/_geo_xyz/6,6,0 11.058246613
-P _part/17/_geo_xyz/6,6,1 3.408639908
+P _part/17/_geo_xyz/6,6,1 3.408639669
 P _part/17/_geo_xyz/6,6,2 141.318359375
 P _part/17/_geo_xyz/6,7,0 11.058246613
-P _part/17/_geo_xyz/6,7,1 3.408639908
+P _part/17/_geo_xyz/6,7,1 3.408639669
 P _part/17/_geo_xyz/6,7,2 141.318359375
 P _part/17/_geo_xyz/6,8,0 11.074080467
-P _part/17/_geo_xyz/6,8,1 3.279687166
+P _part/17/_geo_xyz/6,8,1 3.279686928
 P _part/17/_geo_xyz/6,8,2 139.730422974
 P _part/17/_geo_xyz/6,9,0 11.101788521
-P _part/17/_geo_xyz/6,9,1 3.054019690
+P _part/17/_geo_xyz/6,9,1 3.054019451
 P _part/17/_geo_xyz/6,9,2 136.951553345
 P _part/17/_geo_xyz/7,0,0 14.077225685
-P _part/17/_geo_xyz/7,0,1 3.779323816
+P _part/17/_geo_xyz/7,0,1 3.779323578
 P _part/17/_geo_xyz/7,0,2 135.318618774
 P _part/17/_geo_xyz/7,1,0 14.062640190
-P _part/17/_geo_xyz/7,1,1 3.898116827
+P _part/17/_geo_xyz/7,1,1 3.898116589
 P _part/17/_geo_xyz/7,1,2 135.518096924
 P _part/17/_geo_xyz/7,10,0 14.113690376
-P _part/17/_geo_xyz/7,10,1 3.482341528
+P _part/17/_geo_xyz/7,10,1 3.482341290
 P _part/17/_geo_xyz/7,10,2 136.980911255
 P _part/17/_geo_xyz/7,11,0 14.106397629
-P _part/17/_geo_xyz/7,11,1 3.541738033
+P _part/17/_geo_xyz/7,11,1 3.541737795
 P _part/17/_geo_xyz/7,11,2 135.983535767
 P _part/17/_geo_xyz/7,12,0 14.091811180
-P _part/17/_geo_xyz/7,12,1 3.660530806
+P _part/17/_geo_xyz/7,12,1 3.660530567
 P _part/17/_geo_xyz/7,12,2 135.518096924
 P _part/17/_geo_xyz/7,13,0 14.077225685
-P _part/17/_geo_xyz/7,13,1 3.779323816
+P _part/17/_geo_xyz/7,13,1 3.779323578
 P _part/17/_geo_xyz/7,13,2 135.318618774
 P _part/17/_geo_xyz/7,14,0 0.0
 P _part/17/_geo_xyz/7,14,1 0.0
@@ -15030,43 +15030,43 @@ P _part/17/_geo_xyz/7,2,0 14.048053741
 P _part/17/_geo_xyz/7,2,1 4.016909599
 P _part/17/_geo_xyz/7,2,2 135.983535767
 P _part/17/_geo_xyz/7,3,0 14.040760994
-P _part/17/_geo_xyz/7,3,1 4.076306343
+P _part/17/_geo_xyz/7,3,1 4.076305866
 P _part/17/_geo_xyz/7,3,2 136.980911255
 P _part/17/_geo_xyz/7,4,0 14.040760994
-P _part/17/_geo_xyz/7,4,1 4.076306343
+P _part/17/_geo_xyz/7,4,1 4.076305866
 P _part/17/_geo_xyz/7,4,2 138.310745239
 P _part/17/_geo_xyz/7,5,0 14.063965797
-P _part/17/_geo_xyz/7,5,1 3.887317419
+P _part/17/_geo_xyz/7,5,1 3.887317181
 P _part/17/_geo_xyz/7,5,2 140.637954712
 P _part/17/_geo_xyz/7,6,0 14.077225685
-P _part/17/_geo_xyz/7,6,1 3.779323816
+P _part/17/_geo_xyz/7,6,1 3.779323578
 P _part/17/_geo_xyz/7,6,2 141.967788696
 P _part/17/_geo_xyz/7,7,0 14.077225685
-P _part/17/_geo_xyz/7,7,1 3.779323816
+P _part/17/_geo_xyz/7,7,1 3.779323578
 P _part/17/_geo_xyz/7,7,2 141.967788696
 P _part/17/_geo_xyz/7,8,0 14.090485573
-P _part/17/_geo_xyz/7,8,1 3.671330214
+P _part/17/_geo_xyz/7,8,1 3.671329975
 P _part/17/_geo_xyz/7,8,2 140.637954712
 P _part/17/_geo_xyz/7,9,0 14.113690376
-P _part/17/_geo_xyz/7,9,1 3.482341528
+P _part/17/_geo_xyz/7,9,1 3.482341290
 P _part/17/_geo_xyz/7,9,2 138.310745239
 P _part/17/_geo_xyz/8,0,0 14.077225685
-P _part/17/_geo_xyz/8,0,1 3.779323816
+P _part/17/_geo_xyz/8,0,1 3.779323578
 P _part/17/_geo_xyz/8,0,2 135.318618774
 P _part/17/_geo_xyz/8,1,0 14.062640190
-P _part/17/_geo_xyz/8,1,1 3.898116827
+P _part/17/_geo_xyz/8,1,1 3.898116589
 P _part/17/_geo_xyz/8,1,2 135.518096924
 P _part/17/_geo_xyz/8,10,0 14.113690376
-P _part/17/_geo_xyz/8,10,1 3.482341528
+P _part/17/_geo_xyz/8,10,1 3.482341290
 P _part/17/_geo_xyz/8,10,2 136.980911255
 P _part/17/_geo_xyz/8,11,0 14.106397629
-P _part/17/_geo_xyz/8,11,1 3.541738033
+P _part/17/_geo_xyz/8,11,1 3.541737795
 P _part/17/_geo_xyz/8,11,2 135.983535767
 P _part/17/_geo_xyz/8,12,0 14.091811180
-P _part/17/_geo_xyz/8,12,1 3.660530806
+P _part/17/_geo_xyz/8,12,1 3.660530567
 P _part/17/_geo_xyz/8,12,2 135.518096924
 P _part/17/_geo_xyz/8,13,0 14.077225685
-P _part/17/_geo_xyz/8,13,1 3.779323816
+P _part/17/_geo_xyz/8,13,1 3.779323578
 P _part/17/_geo_xyz/8,13,2 135.318618774
 P _part/17/_geo_xyz/8,14,0 0.0
 P _part/17/_geo_xyz/8,14,1 0.0
@@ -15084,25 +15084,25 @@ P _part/17/_geo_xyz/8,2,0 14.048053741
 P _part/17/_geo_xyz/8,2,1 4.016909599
 P _part/17/_geo_xyz/8,2,2 135.983535767
 P _part/17/_geo_xyz/8,3,0 14.040760994
-P _part/17/_geo_xyz/8,3,1 4.076306343
+P _part/17/_geo_xyz/8,3,1 4.076305866
 P _part/17/_geo_xyz/8,3,2 136.980911255
 P _part/17/_geo_xyz/8,4,0 14.040760994
-P _part/17/_geo_xyz/8,4,1 4.076306343
+P _part/17/_geo_xyz/8,4,1 4.076305866
 P _part/17/_geo_xyz/8,4,2 138.310745239
 P _part/17/_geo_xyz/8,5,0 14.063965797
-P _part/17/_geo_xyz/8,5,1 3.887317419
+P _part/17/_geo_xyz/8,5,1 3.887317181
 P _part/17/_geo_xyz/8,5,2 140.637954712
 P _part/17/_geo_xyz/8,6,0 14.077225685
-P _part/17/_geo_xyz/8,6,1 3.779323816
+P _part/17/_geo_xyz/8,6,1 3.779323578
 P _part/17/_geo_xyz/8,6,2 141.967788696
 P _part/17/_geo_xyz/8,7,0 14.077225685
-P _part/17/_geo_xyz/8,7,1 3.779323816
+P _part/17/_geo_xyz/8,7,1 3.779323578
 P _part/17/_geo_xyz/8,7,2 141.967788696
 P _part/17/_geo_xyz/8,8,0 14.090485573
-P _part/17/_geo_xyz/8,8,1 3.671330214
+P _part/17/_geo_xyz/8,8,1 3.671329975
 P _part/17/_geo_xyz/8,8,2 140.637954712
 P _part/17/_geo_xyz/8,9,0 14.113690376
-P _part/17/_geo_xyz/8,9,1 3.482341528
+P _part/17/_geo_xyz/8,9,1 3.482341290
 P _part/17/_geo_xyz/8,9,2 138.310745239
 P _part/17/_geo_xyz/9,0,0 17.096202850
 P _part/17/_geo_xyz/9,0,1 4.150007725
@@ -18498,7 +18498,7 @@ P _part/21/_geo_xyz/0,10,0 -56.822471619
 P _part/21/_geo_xyz/0,10,1 1.925208092
 P _part/21/_geo_xyz/0,10,2 84.645668030
 P _part/21/_geo_xyz/0,11,0 -56.796562195
-P _part/21/_geo_xyz/0,11,1 1.966675520
+P _part/21/_geo_xyz/0,11,1 1.966675639
 P _part/21/_geo_xyz/0,11,2 83.966537476
 P _part/21/_geo_xyz/0,12,0 -56.744735718
 P _part/21/_geo_xyz/0,12,1 2.049610615
@@ -24378,7 +24378,7 @@ P _part/25/_geo_xyz/0,10,0 56.822471619
 P _part/25/_geo_xyz/0,10,1 1.925208092
 P _part/25/_geo_xyz/0,10,2 84.645668030
 P _part/25/_geo_xyz/0,11,0 56.796562195
-P _part/25/_geo_xyz/0,11,1 1.966675520
+P _part/25/_geo_xyz/0,11,1 1.966675639
 P _part/25/_geo_xyz/0,11,2 83.966537476
 P _part/25/_geo_xyz/0,12,0 56.744735718
 P _part/25/_geo_xyz/0,12,1 2.049610615
@@ -34658,22 +34658,22 @@ P _part/8/_bot_s1 0.755999982
 P _part/8/_bot_s2 0.972000003
 P _part/8/_bot_t1 0.001000000
 P _part/8/_bot_t2 0.150999993
-P _part/8/_geo_xyz/0,0,0 0.011314586
+P _part/8/_geo_xyz/0,0,0 0.011314587
 P _part/8/_geo_xyz/0,0,1 -3.088445663
 P _part/8/_geo_xyz/0,0,2 54.233726501
-P _part/8/_geo_xyz/0,1,0 0.068192132
+P _part/8/_geo_xyz/0,1,0 0.068192139
 P _part/8/_geo_xyz/0,1,1 -2.451145411
 P _part/8/_geo_xyz/0,1,2 54.921646118
-P _part/8/_geo_xyz/0,10,0 -0.145588219
+P _part/8/_geo_xyz/0,10,0 -0.145588234
 P _part/8/_geo_xyz/0,10,1 -4.846506596
 P _part/8/_geo_xyz/0,10,2 59.805351257
-P _part/8/_geo_xyz/0,11,0 -0.109681837
+P _part/8/_geo_xyz/0,11,0 -0.109681845
 P _part/8/_geo_xyz/0,11,1 -4.444183350
 P _part/8/_geo_xyz/0,11,2 56.447509766
-P _part/8/_geo_xyz/0,12,0 -0.048278458
+P _part/8/_geo_xyz/0,12,0 -0.048278462
 P _part/8/_geo_xyz/0,12,1 -3.756172419
 P _part/8/_geo_xyz/0,12,2 54.891914368
-P _part/8/_geo_xyz/0,13,0 0.011314586
+P _part/8/_geo_xyz/0,13,0 0.011314587
 P _part/8/_geo_xyz/0,13,1 -3.088445663
 P _part/8/_geo_xyz/0,13,2 54.233726501
 P _part/8/_geo_xyz/0,14,0 0.0
@@ -34688,28 +34688,28 @@ P _part/8/_geo_xyz/0,16,2 0.0
 P _part/8/_geo_xyz/0,17,0 0.0
 P _part/8/_geo_xyz/0,17,1 0.0
 P _part/8/_geo_xyz/0,17,2 0.0
-P _part/8/_geo_xyz/0,2,0 0.123259343
+P _part/8/_geo_xyz/0,2,0 0.123259351
 P _part/8/_geo_xyz/0,2,1 -1.834129572
 P _part/8/_geo_xyz/0,2,2 56.506977081
-P _part/8/_geo_xyz/0,3,0 0.145588219
+P _part/8/_geo_xyz/0,3,0 0.145588234
 P _part/8/_geo_xyz/0,3,1 -1.583939552
 P _part/8/_geo_xyz/0,3,2 59.879684448
-P _part/8/_geo_xyz/0,4,0 0.136536554
+P _part/8/_geo_xyz/0,4,0 0.136536568
 P _part/8/_geo_xyz/0,4,1 -1.685361505
 P _part/8/_geo_xyz/0,4,2 64.366714478
-P _part/8/_geo_xyz/0,5,0 0.043547288
+P _part/8/_geo_xyz/0,5,0 0.043547291
 P _part/8/_geo_xyz/0,5,1 -2.727285385
 P _part/8/_geo_xyz/0,5,2 71.076995850
-P _part/8/_geo_xyz/0,6,0 -0.033943754
+P _part/8/_geo_xyz/0,6,0 -0.033943757
 P _part/8/_geo_xyz/0,6,1 -3.595555305
 P _part/8/_geo_xyz/0,6,2 76.668891907
-P _part/8/_geo_xyz/0,7,0 -0.033943754
+P _part/8/_geo_xyz/0,7,0 -0.033943757
 P _part/8/_geo_xyz/0,7,1 -3.595555305
 P _part/8/_geo_xyz/0,7,2 76.668891907
-P _part/8/_geo_xyz/0,8,0 -0.088805631
+P _part/8/_geo_xyz/0,8,0 -0.088805638
 P _part/8/_geo_xyz/0,8,1 -4.210270405
 P _part/8/_geo_xyz/0,8,2 71.043212891
-P _part/8/_geo_xyz/0,9,0 -0.154639885
+P _part/8/_geo_xyz/0,9,0 -0.154639900
 P _part/8/_geo_xyz/0,9,1 -4.947928429
 P _part/8/_geo_xyz/0,9,2 64.292388916
 P _part/8/_geo_xyz/1,0,0 -1.513214588
@@ -34751,7 +34751,7 @@ P _part/8/_geo_xyz/1,3,2 60.470420837
 P _part/8/_geo_xyz/1,4,0 -1.394572496
 P _part/8/_geo_xyz/1,4,1 -1.613181353
 P _part/8/_geo_xyz/1,4,2 64.803024292
-P _part/8/_geo_xyz/1,5,0 -1.485874653
+P _part/8/_geo_xyz/1,5,0 -1.485874534
 P _part/8/_geo_xyz/1,5,1 -2.636201382
 P _part/8/_geo_xyz/1,5,2 71.280090332
 P _part/8/_geo_xyz/1,6,0 -1.561959743
@@ -34927,7 +34927,7 @@ P _part/8/_geo_xyz/12,8,1 -2.441272736
 P _part/8/_geo_xyz/12,8,2 80.885078430
 P _part/8/_geo_xyz/12,9,0 -22.519302368
 P _part/8/_geo_xyz/12,9,1 -2.728218079
-P _part/8/_geo_xyz/12,9,2 75.774414062
+P _part/8/_geo_xyz/12,9,2 75.774414063
 P _part/8/_geo_xyz/13,0,0 0.0
 P _part/8/_geo_xyz/13,0,1 0.0
 P _part/8/_geo_xyz/13,0,2 0.0
@@ -35345,7 +35345,7 @@ P _part/8/_geo_xyz/2,3,2 60.470420837
 P _part/8/_geo_xyz/2,4,0 -1.394572496
 P _part/8/_geo_xyz/2,4,1 -1.613181353
 P _part/8/_geo_xyz/2,4,2 64.803024292
-P _part/8/_geo_xyz/2,5,0 -1.485874653
+P _part/8/_geo_xyz/2,5,0 -1.485874534
 P _part/8/_geo_xyz/2,5,1 -2.636201382
 P _part/8/_geo_xyz/2,5,2 71.280090332
 P _part/8/_geo_xyz/2,6,0 -1.561959743
@@ -40538,22 +40538,22 @@ P _part/9/_bot_s1 0.755999982
 P _part/9/_bot_s2 0.972000003
 P _part/9/_bot_t1 0.001000000
 P _part/9/_bot_t2 0.150999993
-P _part/9/_geo_xyz/0,0,0 -0.011314586
+P _part/9/_geo_xyz/0,0,0 -0.011314587
 P _part/9/_geo_xyz/0,0,1 -3.088445663
 P _part/9/_geo_xyz/0,0,2 54.233726501
-P _part/9/_geo_xyz/0,1,0 -0.068192132
+P _part/9/_geo_xyz/0,1,0 -0.068192139
 P _part/9/_geo_xyz/0,1,1 -2.451145411
 P _part/9/_geo_xyz/0,1,2 54.921646118
-P _part/9/_geo_xyz/0,10,0 0.145588219
+P _part/9/_geo_xyz/0,10,0 0.145588234
 P _part/9/_geo_xyz/0,10,1 -4.846506596
 P _part/9/_geo_xyz/0,10,2 59.805351257
-P _part/9/_geo_xyz/0,11,0 0.109681837
+P _part/9/_geo_xyz/0,11,0 0.109681845
 P _part/9/_geo_xyz/0,11,1 -4.444183350
 P _part/9/_geo_xyz/0,11,2 56.447509766
-P _part/9/_geo_xyz/0,12,0 0.048278458
+P _part/9/_geo_xyz/0,12,0 0.048278462
 P _part/9/_geo_xyz/0,12,1 -3.756172419
 P _part/9/_geo_xyz/0,12,2 54.891914368
-P _part/9/_geo_xyz/0,13,0 -0.011314586
+P _part/9/_geo_xyz/0,13,0 -0.011314587
 P _part/9/_geo_xyz/0,13,1 -3.088445663
 P _part/9/_geo_xyz/0,13,2 54.233726501
 P _part/9/_geo_xyz/0,14,0 0.0
@@ -40568,28 +40568,28 @@ P _part/9/_geo_xyz/0,16,2 0.0
 P _part/9/_geo_xyz/0,17,0 0.0
 P _part/9/_geo_xyz/0,17,1 0.0
 P _part/9/_geo_xyz/0,17,2 0.0
-P _part/9/_geo_xyz/0,2,0 -0.123259343
+P _part/9/_geo_xyz/0,2,0 -0.123259351
 P _part/9/_geo_xyz/0,2,1 -1.834129572
 P _part/9/_geo_xyz/0,2,2 56.506977081
-P _part/9/_geo_xyz/0,3,0 -0.145588219
+P _part/9/_geo_xyz/0,3,0 -0.145588234
 P _part/9/_geo_xyz/0,3,1 -1.583939552
 P _part/9/_geo_xyz/0,3,2 59.879684448
-P _part/9/_geo_xyz/0,4,0 -0.136536554
+P _part/9/_geo_xyz/0,4,0 -0.136536568
 P _part/9/_geo_xyz/0,4,1 -1.685361505
 P _part/9/_geo_xyz/0,4,2 64.366714478
-P _part/9/_geo_xyz/0,5,0 -0.043547288
+P _part/9/_geo_xyz/0,5,0 -0.043547291
 P _part/9/_geo_xyz/0,5,1 -2.727285385
 P _part/9/_geo_xyz/0,5,2 71.076995850
-P _part/9/_geo_xyz/0,6,0 0.033943754
+P _part/9/_geo_xyz/0,6,0 0.033943757
 P _part/9/_geo_xyz/0,6,1 -3.595555305
 P _part/9/_geo_xyz/0,6,2 76.668891907
-P _part/9/_geo_xyz/0,7,0 0.033943754
+P _part/9/_geo_xyz/0,7,0 0.033943757
 P _part/9/_geo_xyz/0,7,1 -3.595555305
 P _part/9/_geo_xyz/0,7,2 76.668891907
-P _part/9/_geo_xyz/0,8,0 0.088805631
+P _part/9/_geo_xyz/0,8,0 0.088805638
 P _part/9/_geo_xyz/0,8,1 -4.210270405
 P _part/9/_geo_xyz/0,8,2 71.043212891
-P _part/9/_geo_xyz/0,9,0 0.154639885
+P _part/9/_geo_xyz/0,9,0 0.154639900
 P _part/9/_geo_xyz/0,9,1 -4.947928429
 P _part/9/_geo_xyz/0,9,2 64.292388916
 P _part/9/_geo_xyz/1,0,0 1.513214588
@@ -40631,7 +40631,7 @@ P _part/9/_geo_xyz/1,3,2 60.470420837
 P _part/9/_geo_xyz/1,4,0 1.394572496
 P _part/9/_geo_xyz/1,4,1 -1.613181353
 P _part/9/_geo_xyz/1,4,2 64.803024292
-P _part/9/_geo_xyz/1,5,0 1.485874653
+P _part/9/_geo_xyz/1,5,0 1.485874534
 P _part/9/_geo_xyz/1,5,1 -2.636201382
 P _part/9/_geo_xyz/1,5,2 71.280090332
 P _part/9/_geo_xyz/1,6,0 1.561959743
@@ -40807,7 +40807,7 @@ P _part/9/_geo_xyz/12,8,1 -2.441272736
 P _part/9/_geo_xyz/12,8,2 80.885078430
 P _part/9/_geo_xyz/12,9,0 22.519302368
 P _part/9/_geo_xyz/12,9,1 -2.728218079
-P _part/9/_geo_xyz/12,9,2 75.774414062
+P _part/9/_geo_xyz/12,9,2 75.774414063
 P _part/9/_geo_xyz/13,0,0 0.0
 P _part/9/_geo_xyz/13,0,1 0.0
 P _part/9/_geo_xyz/13,0,2 0.0
@@ -41225,7 +41225,7 @@ P _part/9/_geo_xyz/2,3,2 60.470420837
 P _part/9/_geo_xyz/2,4,0 1.394572496
 P _part/9/_geo_xyz/2,4,1 -1.613181353
 P _part/9/_geo_xyz/2,4,2 64.803024292
-P _part/9/_geo_xyz/2,5,0 1.485874653
+P _part/9/_geo_xyz/2,5,0 1.485874534
 P _part/9/_geo_xyz/2,5,1 -2.636201382
 P _part/9/_geo_xyz/2,5,2 71.280090332
 P _part/9/_geo_xyz/2,6,0 1.561959743
@@ -45077,10 +45077,10 @@ P _wing/16/_crib_y_arm/0 2.296587944
 P _wing/16/_crib_y_arm/1 2.667271852
 P _wing/16/_crib_y_arm/10 0.0
 P _wing/16/_crib_y_arm/2 3.037955761
-P _wing/16/_crib_y_arm/3 3.408639908
-P _wing/16/_crib_y_arm/4 3.779323816
+P _wing/16/_crib_y_arm/3 3.408639669
+P _wing/16/_crib_y_arm/4 3.779323578
 P _wing/16/_crib_y_arm/5 4.150007725
-P _wing/16/_crib_y_arm/6 4.520691872
+P _wing/16/_crib_y_arm/6 4.520691395
 P _wing/16/_crib_y_arm/7 0.0
 P _wing/16/_crib_y_arm/8 0.0
 P _wing/16/_crib_y_arm/9 0.0
@@ -45437,10 +45437,10 @@ P _wing/17/_crib_y_arm/0 2.296587944
 P _wing/17/_crib_y_arm/1 2.667271852
 P _wing/17/_crib_y_arm/10 0.0
 P _wing/17/_crib_y_arm/2 3.037955761
-P _wing/17/_crib_y_arm/3 3.408639908
-P _wing/17/_crib_y_arm/4 3.779323816
+P _wing/17/_crib_y_arm/3 3.408639669
+P _wing/17/_crib_y_arm/4 3.779323578
 P _wing/17/_crib_y_arm/5 4.150007725
-P _wing/17/_crib_y_arm/6 4.520691872
+P _wing/17/_crib_y_arm/6 4.520691395
 P _wing/17/_crib_y_arm/7 0.0
 P _wing/17/_crib_y_arm/8 0.0
 P _wing/17/_crib_y_arm/9 0.0
@@ -53869,10 +53869,12 @@ GROUP fcu_display
   END_GROUP
 END_GROUP
 GROUP glareshield buttons
+  LOCKED
   gen_rotary ap1 button
     POS 706.000000 1720.000000
     IMAGE glaresheild/fcu_buttons/ap1
     DATAREF abc
+    LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 2
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -53893,6 +53895,7 @@ GROUP glareshield buttons
     POS 770.000000 1720.000000
     IMAGE glaresheild/fcu_buttons/ap2
     DATAREF abc
+    LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 2
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -53913,6 +53916,7 @@ GROUP glareshield buttons
     POS 834.000000 1720.000000
     IMAGE glaresheild/fcu_buttons/athr
     DATAREF abc
+    LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 2
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -53932,6 +53936,7 @@ GROUP glareshield buttons
     POS 706.000000 1662.000000
     IMAGE glaresheild/fcu_buttons/fd
     DATAREF abc
+    LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 2
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -53952,6 +53957,7 @@ GROUP glareshield buttons
     POS 770.000000 1662.000000
     IMAGE glaresheild/fcu_buttons/fd
     DATAREF abc
+    LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 2
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -53972,6 +53978,7 @@ GROUP glareshield buttons
     POS 834.000000 1662.000000
     IMAGE glaresheild/fcu_buttons/appr
     DATAREF abc
+    LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 2
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -53992,6 +53999,7 @@ GROUP glareshield buttons
     POS 898.000000 1661.000000
     IMAGE glaresheild/fcu_buttons/exped
     DATAREF abc
+    LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 2
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -54011,6 +54019,7 @@ GROUP glareshield buttons
     POS 898.000000 1712.000000
     IMAGE glaresheild/fcu_buttons/loc
     DATAREF abc
+    LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 2
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -54030,6 +54039,7 @@ GROUP glareshield buttons
     POS 962.000000 1712.000000
     IMAGE glaresheild/fcu_buttons/ls
     DATAREF a321neo/cockpit/PFD/capt_ls_enabled
+    LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 2
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -54049,6 +54059,7 @@ GROUP glareshield buttons
     POS 1026.000000 1712.000000
     IMAGE glaresheild/fcu_buttons/cstr
     DATAREF abc
+    LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 2
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -54068,6 +54079,7 @@ GROUP glareshield buttons
     POS 1090.000000 1712.000000
     IMAGE glaresheild/fcu_buttons/wpt
     DATAREF abc
+    LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 2
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -54087,6 +54099,7 @@ GROUP glareshield buttons
     POS 1090.000000 1662.000000
     IMAGE glaresheild/fcu_buttons/vord
     DATAREF abc
+    LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 2
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -54106,6 +54119,7 @@ GROUP glareshield buttons
     POS 962.000000 1662.000000
     IMAGE glaresheild/fcu_buttons/ndb
     DATAREF abc
+    LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 2
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -54125,6 +54139,7 @@ GROUP glareshield buttons
     POS 1026.000000 1662.000000
     IMAGE glaresheild/fcu_buttons/arpt
     DATAREF abc
+    LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 2
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -54141,11 +54156,13 @@ GROUP glareshield buttons
     CLICK_DY 0
 
   GROUP FCU Green Light
+    LOCKED
     gen_rotary vord light
       POS 1090.000000 1672.000000
       IMAGE center_pedestal/ecam/green
       DATAREF 
       SIZE 0.500000
+      LOCKED
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -54166,6 +54183,7 @@ GROUP glareshield buttons
       IMAGE center_pedestal/ecam/green
       DATAREF 
       SIZE 0.500000
+      LOCKED
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -54186,6 +54204,7 @@ GROUP glareshield buttons
       IMAGE center_pedestal/ecam/green
       DATAREF 
       SIZE 0.500000
+      LOCKED
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -54206,6 +54225,7 @@ GROUP glareshield buttons
       IMAGE center_pedestal/ecam/green
       DATAREF 
       SIZE 0.500000
+      LOCKED
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -54226,6 +54246,7 @@ GROUP glareshield buttons
       IMAGE center_pedestal/ecam/green
       DATAREF 
       SIZE 0.500000
+      LOCKED
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -54246,6 +54267,7 @@ GROUP glareshield buttons
       IMAGE center_pedestal/ecam/green
       DATAREF 
       SIZE 0.500000
+      LOCKED
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -54266,6 +54288,7 @@ GROUP glareshield buttons
       IMAGE center_pedestal/ecam/green
       DATAREF 
       SIZE 0.500000
+      LOCKED
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -54286,6 +54309,7 @@ GROUP glareshield buttons
       IMAGE center_pedestal/ecam/green
       DATAREF 
       SIZE 0.500000
+      LOCKED
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -54306,6 +54330,7 @@ GROUP glareshield buttons
       IMAGE center_pedestal/ecam/green
       DATAREF 
       SIZE 0.500000
+      LOCKED
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -54326,6 +54351,7 @@ GROUP glareshield buttons
       IMAGE center_pedestal/ecam/green
       DATAREF 
       SIZE 0.500000
+      LOCKED
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -54346,6 +54372,7 @@ GROUP glareshield buttons
       IMAGE center_pedestal/ecam/green
       DATAREF 
       SIZE 0.500000
+      LOCKED
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -54366,6 +54393,7 @@ GROUP glareshield buttons
       IMAGE center_pedestal/ecam/green
       DATAREF 
       SIZE 0.500000
+      LOCKED
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -54386,6 +54414,7 @@ GROUP glareshield buttons
       IMAGE center_pedestal/ecam/green
       DATAREF 
       SIZE 0.500000
+      LOCKED
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -54406,6 +54435,7 @@ GROUP glareshield buttons
       IMAGE center_pedestal/ecam/green
       DATAREF 
       SIZE 0.500000
+      LOCKED
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -54424,12 +54454,14 @@ GROUP glareshield buttons
   END_GROUP
 END_GROUP
 GROUP Buttons and Lights
-  GROUP_OPEN
+  LOCKED
   GROUP ADIRS
+    LOCKED
     gen_rotary IR1
       POS 1426.000000 201.000000
       IMAGE Buttons/align_switch
       DATAREF a321neo/cockpit/ADIRS/buttons/light_IR1
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -54451,6 +54483,7 @@ GROUP Buttons and Lights
       POS 1554.000000 201.000000
       IMAGE Buttons/align_switch
       DATAREF a321neo/cockpit/ADIRS/buttons/light_IR3
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -54472,6 +54505,7 @@ GROUP Buttons and Lights
       POS 1682.000000 201.000000
       IMAGE Buttons/align_switch
       DATAREF a321neo/cockpit/ADIRS/buttons/light_IR2
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -54493,6 +54527,7 @@ GROUP Buttons and Lights
       POS 1426.000000 70.000000
       IMAGE Buttons/align_switch
       DATAREF a321neo/cockpit/ADIRS/buttons/light_ADR1
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -54514,6 +54549,7 @@ GROUP Buttons and Lights
       POS 1554.000000 70.000000
       IMAGE Buttons/align_switch
       DATAREF a321neo/cockpit/ADIRS/buttons/light_ADR3
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -54535,6 +54571,7 @@ GROUP Buttons and Lights
       POS 1682.000000 70.000000
       IMAGE Buttons/align_switch
       DATAREF a321neo/cockpit/ADIRS/buttons/light_ADR2
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -54554,10 +54591,12 @@ GROUP Buttons and Lights
 
   END_GROUP
   GROUP Panel Lower Left
+    LOCKED
     gen_rotary ELAC1
       POS 1998.000000 201.000000
       IMAGE Buttons/off_fault
       DATAREF a321neo/cockpit/FBW/elac_1_button_state
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -54579,6 +54618,7 @@ GROUP Buttons and Lights
       POS 2126.000000 201.000000
       IMAGE Buttons/off_fault
       DATAREF a321neo/cockpit/FBW/sec_1_button_state
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -54600,6 +54640,7 @@ GROUP Buttons and Lights
       POS 2254.000000 201.000000
       IMAGE Buttons/off_fault
       DATAREF a321neo/cockpit/FBW/fac_1_button_state
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -54621,6 +54662,7 @@ GROUP Buttons and Lights
       POS 1870.000000 70.000000
       IMAGE Buttons/smokeoff
       DATAREF a321neo/cockpit/electrical/buttons/EMER_GEN_1_LINE
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -54642,6 +54684,7 @@ GROUP Buttons and Lights
       POS 1998.000000 70.000000
       IMAGE Buttons/dot_fault
       DATAREF a321neo/cockpit/electrical/buttons/EMER_RAT_FAULT
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -54661,6 +54704,7 @@ GROUP Buttons and Lights
       POS 2126.000000 70.000000
       IMAGE Buttons/off_fault
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -54680,6 +54724,7 @@ GROUP Buttons and Lights
       POS 2254.000000 70.000000
       IMAGE Buttons/off_fault
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -54699,6 +54744,7 @@ GROUP Buttons and Lights
       POS 2382.000000 70.000000
       IMAGE Buttons/dot_off
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -54718,6 +54764,7 @@ GROUP Buttons and Lights
       POS 2510.000000 70.000000
       IMAGE Buttons/dot_off
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -54737,6 +54784,7 @@ GROUP Buttons and Lights
       POS 2638.000000 70.000000
       IMAGE Buttons/dot_off
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -54756,6 +54804,7 @@ GROUP Buttons and Lights
       POS 2382.000000 201.000000
       IMAGE Buttons/dot_on
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -54775,6 +54824,7 @@ GROUP Buttons and Lights
       POS 2510.000000 201.000000
       IMAGE Buttons/sys on
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -54794,6 +54844,7 @@ GROUP Buttons and Lights
       POS 2638.000000 201.000000
       IMAGE Buttons/elecpump
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -54814,6 +54865,7 @@ GROUP Buttons and Lights
       POS 2766.000000 201.000000
       IMAGE Buttons/call
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -54831,10 +54883,12 @@ GROUP Buttons and Lights
 
   END_GROUP
   GROUP Fire Agents
+    LOCKED
     gen_rotary Agent 1
       POS 2766.000000 70.000000
       IMAGE Buttons/fire_agent
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -54854,6 +54908,7 @@ GROUP Buttons and Lights
       POS 2894.000000 70.000000
       IMAGE Buttons/fire_agent
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -54873,6 +54928,7 @@ GROUP Buttons and Lights
       POS 3022.000000 70.000000
       IMAGE Buttons/fire_agent
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -54892,6 +54948,7 @@ GROUP Buttons and Lights
       POS 3150.000000 70.000000
       IMAGE Buttons/fire_agent
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -54911,6 +54968,7 @@ GROUP Buttons and Lights
       POS 3278.000000 70.000000
       IMAGE Buttons/fire_agent
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -54928,10 +54986,12 @@ GROUP Buttons and Lights
 
   END_GROUP
   GROUP HYD
+    LOCKED
     gen_rotary Eng 1 Pump
       POS 2894.000000 201.000000
       IMAGE Buttons/off_fault
       DATAREF a321neo/cockpit/HYD/buttons/Eng1_pump
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -54953,6 +55013,7 @@ GROUP Buttons and Lights
       POS 3022.000000 201.000000
       IMAGE Buttons/off_fault
       DATAREF a321neo/cockpit/HYD/buttons/B_Elec_pump
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -54974,6 +55035,7 @@ GROUP Buttons and Lights
       POS 3150.000000 201.000000
       IMAGE Buttons/off_fault
       DATAREF a321neo/cockpit/HYD/buttons/PTU
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -54995,6 +55057,7 @@ GROUP Buttons and Lights
       POS 3278.000000 201.000000
       IMAGE Buttons/off_fault
       DATAREF a321neo/cockpit/HYD/buttons/Eng2_pump
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -55016,6 +55079,7 @@ GROUP Buttons and Lights
       POS 3406.000000 201.000000
       IMAGE Buttons/elecpump
       DATAREF a321neo/cockpit/HYD/buttons/Y_Elec_pump
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -55035,10 +55099,12 @@ GROUP Buttons and Lights
 
   END_GROUP
   GROUP FUEL
+    LOCKED
     gen_rotary Left Tank Pump 1
       POS 3406.000000 70.000000
       IMAGE Buttons/off_fault
       DATAREF a321neo/cockpit/fuel/buttons/pumps[0]
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -55058,6 +55124,7 @@ GROUP Buttons and Lights
       POS 3534.000000 70.000000
       IMAGE Buttons/off_fault
       DATAREF a321neo/cockpit/fuel/buttons/pumps[1]
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -55077,6 +55144,7 @@ GROUP Buttons and Lights
       POS 3534.000000 201.000000
       IMAGE Buttons/off_fault
       DATAREF a321neo/cockpit/fuel/buttons/pumps[2]
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -55096,6 +55164,7 @@ GROUP Buttons and Lights
       POS 3662.000000 201.000000
       IMAGE Buttons/off_fault
       DATAREF a321neo/cockpit/fuel/buttons/pumps[3]
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -55115,6 +55184,7 @@ GROUP Buttons and Lights
       POS 3662.000000 70.000000
       IMAGE Buttons/off_fault
       DATAREF a321neo/cockpit/fuel/buttons/pumps[4]
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -55134,6 +55204,7 @@ GROUP Buttons and Lights
       POS 3918.000000 70.000000
       IMAGE Buttons/off_fault
       DATAREF a321neo/cockpit/fuel/buttons/pumps[5]
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -55153,6 +55224,7 @@ GROUP Buttons and Lights
       POS 2446.000000 2035.000000
       IMAGE Buttons/fwd
       DATAREF a321neo/cockpit/fuel/buttons/pumps[6]
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -55172,6 +55244,7 @@ GROUP Buttons and Lights
       POS 2585.000000 2035.000000
       IMAGE Buttons/fwd
       DATAREF a321neo/cockpit/fuel/buttons/pumps[7]
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -55191,6 +55264,7 @@ GROUP Buttons and Lights
       POS 3790.000000 70.000000
       IMAGE Buttons/manual_pressure
       DATAREF a321neo/cockpit/fuel/buttons/c_mode_sel[0]
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -55210,6 +55284,7 @@ GROUP Buttons and Lights
       POS 3790.000000 201.000000
       IMAGE Buttons/on_open
       DATAREF a321neo/cockpit/fuel/buttons/x_feed
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -55227,10 +55302,12 @@ GROUP Buttons and Lights
 
   END_GROUP
   GROUP ELEC
+    LOCKED
     gen_rotary Battery 1
       POS 1280.000000 201.000000
       IMAGE Buttons/off_fault
       DATAREF a321neo/cockpit/electrical/buttons/battery_1
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -55252,6 +55329,7 @@ GROUP Buttons and Lights
       POS 1152.000000 201.000000
       IMAGE Buttons/off_fault
       DATAREF a321neo/cockpit/electrical/buttons/battery_2
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -55273,6 +55351,7 @@ GROUP Buttons and Lights
       POS 1024.000000 201.000000
       IMAGE Buttons/dot_off
       DATAREF a321neo/cockpit/electrical/buttons/commercial
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -55292,6 +55371,7 @@ GROUP Buttons and Lights
       POS 896.000000 201.000000
       IMAGE Buttons/off_fault
       DATAREF a321neo/cockpit/electrical/buttons/galley
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -55313,6 +55393,7 @@ GROUP Buttons and Lights
       POS 768.000000 201.000000
       IMAGE Buttons/acessfeed
       DATAREF a321neo/cockpit/electrical/buttons/AC_ess_feed
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -55334,6 +55415,7 @@ GROUP Buttons and Lights
       POS 1280.000000 70.000000
       IMAGE Buttons/dot_fault
       DATAREF a321neo/cockpit/electrical/buttons/IDG1
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -55353,6 +55435,7 @@ GROUP Buttons and Lights
       POS 512.000000 70.000000
       IMAGE Buttons/dot_fault
       DATAREF a321neo/cockpit/electrical/buttons/IDG2
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -55372,6 +55455,7 @@ GROUP Buttons and Lights
       POS 1152.000000 70.000000
       IMAGE Buttons/off_fault
       DATAREF a321neo/cockpit/electrical/buttons/GEN1
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -55393,6 +55477,7 @@ GROUP Buttons and Lights
       POS 1024.000000 70.000000
       IMAGE Buttons/off_fault
       DATAREF a321neo/cockpit/electrical/buttons/APU_GEN
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -55414,6 +55499,7 @@ GROUP Buttons and Lights
       POS 896.000000 70.000000
       IMAGE Buttons/dot_off
       DATAREF a321neo/cockpit/electrical/buttons/BUS_tie
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -55433,6 +55519,7 @@ GROUP Buttons and Lights
       POS 768.000000 70.000000
       IMAGE Buttons/apu_start
       DATAREF a321neo/cockpit/electrical/buttons/EXT_PWR
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -55454,6 +55541,7 @@ GROUP Buttons and Lights
       POS 640.000000 70.000000
       IMAGE Buttons/off_fault
       DATAREF a321neo/cockpit/electrical/buttons/GEN2
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -55473,10 +55561,12 @@ GROUP Buttons and Lights
 
   END_GROUP
   GROUP AIR COND
+    LOCKED
     gen_rotary Pack 1
       POS 1280.000000 332.000000
       IMAGE Buttons/off_fault
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -55496,6 +55586,7 @@ GROUP Buttons and Lights
       POS 1152.000000 332.000000
       IMAGE Buttons/off_fault
       DATAREF a321neo/cockpit/packs/eng1_bleed_off
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -55515,6 +55606,7 @@ GROUP Buttons and Lights
       POS 1024.000000 332.000000
       IMAGE Buttons/elecpump
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -55535,6 +55627,7 @@ GROUP Buttons and Lights
       POS 896.000000 332.000000
       IMAGE Buttons/on_fault
       DATAREF sim/cockpit2/bleedair/actuators/apu_bleed
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -55554,6 +55647,7 @@ GROUP Buttons and Lights
       POS 768.000000 332.000000
       IMAGE Buttons/off_fault
       DATAREF a321neo/cockpit/packs/eng2_bleed_off
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -55573,6 +55667,7 @@ GROUP Buttons and Lights
       POS 640.000000 332.000000
       IMAGE Buttons/off_fault
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -55592,6 +55687,7 @@ GROUP Buttons and Lights
       POS 512.000000 332.000000
       IMAGE Buttons/off_fault
       DATAREF a321neo/cockpit/aircond/cab_hot_air
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 1.000000 0.000000 1.000000
@@ -55609,10 +55705,12 @@ GROUP Buttons and Lights
 
   END_GROUP
   GROUP Anti Ice Cab Press
+    LOCKED
     gen_rotary Wing Anti Ice
       POS 1280.000000 463.000000
       IMAGE Buttons/on_fault
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -55632,6 +55730,7 @@ GROUP Buttons and Lights
       POS 1152.000000 463.000000
       IMAGE Buttons/on_fault
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -55651,6 +55750,7 @@ GROUP Buttons and Lights
       POS 1024.000000 463.000000
       IMAGE Buttons/on_fault
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -55670,6 +55770,7 @@ GROUP Buttons and Lights
       POS 896.000000 463.000000
       IMAGE Buttons/dot_on
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -55689,6 +55790,7 @@ GROUP Buttons and Lights
       POS 768.000000 463.000000
       IMAGE Buttons/manual_pressure
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -55708,6 +55810,7 @@ GROUP Buttons and Lights
       POS 640.000000 463.000000
       IMAGE Buttons/elecpump
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -55726,10 +55829,12 @@ GROUP Buttons and Lights
 
   END_GROUP
   GROUP APU
+    LOCKED
     gen_rotary APU Master
       POS 640.000000 201.000000
       IMAGE Buttons/on_fault
       DATAREF a321neo/cockpit/engine/apu_master_button_state
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -55749,6 +55854,7 @@ GROUP Buttons and Lights
       POS 512.000000 201.000000
       IMAGE Buttons/apu_start
       DATAREF a321neo/cockpit/engine/apu_start_button_state
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -55769,6 +55875,7 @@ GROUP Buttons and Lights
     POS 512.000000 463.000000
     IMAGE Buttons/dot_off
     DATAREF abc
+    LOCKED
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -55788,6 +55895,7 @@ GROUP Buttons and Lights
     POS 2724.000000 2035.000000
     IMAGE Buttons/autoland
     DATAREF abc
+    LOCKED
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -55807,6 +55915,7 @@ GROUP Buttons and Lights
     POS 2585.000000 1899.000122
     IMAGE Buttons/capt
     DATAREF abc
+    LOCKED
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -55826,6 +55935,7 @@ GROUP Buttons and Lights
     POS 2724.000000 1899.000122
     IMAGE Buttons/fo
     DATAREF abc
+    LOCKED
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -55842,11 +55952,12 @@ GROUP Buttons and Lights
     CLICK_DY 0
 
   GROUP Flight Control R
-    GROUP_OPEN
+    LOCKED
     gen_rotary ELAC2
       POS 1280.000000 594.000000
       IMAGE Buttons/off_fault
       DATAREF a321neo/cockpit/FBW/elac_2_button_state
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -55868,6 +55979,7 @@ GROUP Buttons and Lights
       POS 1152.000000 594.000000
       IMAGE Buttons/off_fault
       DATAREF a321neo/cockpit/FBW/sec_2_button_state
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -55889,6 +56001,7 @@ GROUP Buttons and Lights
       POS 1024.000000 594.000000
       IMAGE Buttons/off_fault
       DATAREF a321neo/cockpit/FBW/sec_3_button_state
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -55910,6 +56023,7 @@ GROUP Buttons and Lights
       POS 896.000000 594.000000
       IMAGE Buttons/off_fault
       DATAREF a321neo/cockpit/FBW/fac_2_button_state
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -55929,10 +56043,13 @@ GROUP Buttons and Lights
 
   END_GROUP
   GROUP Panel Lower Right
+    LOCKED
+    GROUP_OPEN
     gen_rotary Cargo Hot Air
       POS 370.000000 605.000000
       IMAGE Buttons/off_fault
       DATAREF a321neo/cockpit/aircond/cargo_hot_air
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 1.000000 0.000000 1.000000
@@ -55952,6 +56069,7 @@ GROUP Buttons and Lights
       POS 230.000000 605.000000
       IMAGE Buttons/off_fault
       DATAREF a321neo/cockpit/aircond/aft_cargo_iso_valve
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 1.000000 0.000000 1.000000
@@ -55971,6 +56089,7 @@ GROUP Buttons and Lights
       POS 768.000000 594.000000
       IMAGE Buttons/smoke
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -55990,6 +56109,7 @@ GROUP Buttons and Lights
       POS 640.000000 594.000000
       IMAGE Buttons/smoke
       DATAREF 
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -56009,6 +56129,7 @@ GROUP Buttons and Lights
       POS 1280.000000 725.000000
       IMAGE Buttons/overide
       DATAREF a321neo/cockpit/aircond/light_blower
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -56028,6 +56149,7 @@ GROUP Buttons and Lights
       POS 1152.000000 725.000000
       IMAGE Buttons/overide
       DATAREF a321neo/cockpit/aircond/light_extract
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -56047,6 +56169,7 @@ GROUP Buttons and Lights
       POS 1024.000000 725.000000
       IMAGE Buttons/dot_off
       DATAREF abc
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -56065,7 +56188,8 @@ GROUP Buttons and Lights
     gen_rotary Man Start 1
       POS 896.000000 725.000000
       IMAGE Buttons/dot_on
-      DATAREF abc
+      DATAREF a321neo/cockpit/engine/manual_start_1
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -56084,7 +56208,8 @@ GROUP Buttons and Lights
     gen_rotary Man Start 2
       POS 768.000000 725.000000
       IMAGE Buttons/dot_on
-      DATAREF abc
+      DATAREF a321neo/cockpit/engine/manual_start_2
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -56103,7 +56228,8 @@ GROUP Buttons and Lights
     gen_rotary dual cooling
       POS 640.000000 725.000000
       IMAGE Buttons/dot_on
-      DATAREF abc
+      DATAREF a321neo/cockpit/engine/dual_cooling
+      LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -56124,6 +56250,7 @@ GROUP Buttons and Lights
     POS 512.000000 725.000000
     IMAGE Buttons/cpdlc
     DATAREF a321neo/cockpit/DCDU/new_messages
+    LOCKED
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -56143,6 +56270,7 @@ GROUP Buttons and Lights
     POS 360.000000 70.000000
     IMAGE Buttons/fire
     DATAREF abc
+    LOCKED
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -56162,6 +56290,7 @@ GROUP Buttons and Lights
     POS 232.000000 70.000000
     IMAGE Buttons/fire
     DATAREF abc
+    LOCKED
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -56181,6 +56310,7 @@ GROUP Buttons and Lights
     POS 104.000000 70.000000
     IMAGE Buttons/terrradar
     DATAREF abc
+    LOCKED
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -56200,6 +56330,7 @@ GROUP Buttons and Lights
     POS 1870.000000 201.000000
     IMAGE Buttons/master_warning
     DATAREF a321neo/failures/master_warning_blink
+    LOCKED
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -56219,6 +56350,7 @@ GROUP Buttons and Lights
     POS 3918.000000 201.000000
     IMAGE Buttons/master_caution
     DATAREF a321neo/failures/master_caution
+    LOCKED
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -56238,6 +56370,7 @@ GROUP Buttons and Lights
     POS 740.000000 1416.000000
     IMAGE Buttons/autobrake
     DATAREF a321neo/cockpit/wheel/autobrakes_lo_button_state
+    LOCKED
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -56257,6 +56390,7 @@ GROUP Buttons and Lights
     POS 885.000000 1282.000000
     IMAGE Buttons/autobrake
     DATAREF a321neo/cockpit/wheel/autobrakes_med_button_state
+    LOCKED
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -56276,6 +56410,7 @@ GROUP Buttons and Lights
     POS 740.000000 1282.000000
     IMAGE Buttons/autobrake
     DATAREF a321neo/cockpit/wheel/autobrakes_max_button_state
+    LOCKED
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -56295,6 +56430,7 @@ GROUP Buttons and Lights
     POS 885.000000 1416.000000
     IMAGE Buttons/brake_fan
     DATAREF a321neo/cockpit/wheel/brake_fan_button_state
+    LOCKED
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -56314,6 +56450,7 @@ GROUP Buttons and Lights
     POS 740.000000 1555.000000
     IMAGE Buttons/gearlight
     DATAREF sim/aircraft/parts/acf_gear_deploy[1]
+    LOCKED
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -56336,6 +56473,7 @@ GROUP Buttons and Lights
     POS 885.000000 1555.000000
     IMAGE Buttons/gearlight
     DATAREF sim/aircraft/parts/acf_gear_deploy[2]
+    LOCKED
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -56359,6 +56497,7 @@ GROUP Buttons and Lights
     POS 566.000000 1704.000000
     IMAGE Buttons/gearlight
     DATAREF sim/aircraft/parts/acf_gear_deploy[0]
+    LOCKED
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -56382,6 +56521,7 @@ GROUP Buttons and Lights
     POS 512.000000 558.000000
     IMAGE Buttons/on bat
     DATAREF a321neo/cockpit/ADIRS/on_bat
+    LOCKED
     LIGHT_MODE BACK_LIT_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -56434,9 +56574,11 @@ GROUP batteries voltage
 END_GROUP
 GROUP Cabin screens
   LOCKED
+  GROUP_OPEN
   GROUP page 0
     SHOW_EQUAL 0.000000 a321neo/cabin/screen_page
     LOCKED
+    GROUP_OPEN
     gen_rotary cabin screen pg0
       POS 3530.000000 1510.000000
       IMAGE cabin/welcome_screen
@@ -56725,6 +56867,7 @@ GROUP Cabin screens
       OFFSET 0.000000
       GROUP cabin plane lat
         LOCKED
+        GROUP_OPEN
         GROUP_ANIMATE_MODE TRANSLATE
         GROUP_WIDTH 0
         GROUP_HEIGHT 0
@@ -65823,7 +65966,7 @@ GROUP Brake Indicator
     IS_DRAGGABLE 0
     OFFSET 0.000000
 
-  gen_needle Needle 1 2
+  gen_needle Needle 2
     POS 1200.000000 1308.500000
     IMAGE MIP/brake/Needle
     DATAREF sim/cockpit2/controls/right_brake_ratio
@@ -65836,7 +65979,7 @@ GROUP Brake Indicator
     IS_DRAGGABLE 0
     OFFSET 0.000000
 
-  gen_needle Needle 1 2 2
+  gen_needle Needle 3
     POS 1112.000000 1458.500000
     IMAGE MIP/brake/Needle
     DATAREF sim/cockpit2/controls/parking_brake_ratio
@@ -66014,10 +66157,12 @@ GROUP DCDU
 
 END_GROUP
 GROUP ISIS Buttons
+  LOCKED
   gen_rotary Bright Dim 2 2 2 2
     POS 2518.000000 1720.500000
     IMAGE MIP/isis buttons/bugs
     DATAREF 
+    LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -66037,6 +66182,7 @@ GROUP ISIS Buttons
     POS 2824.000000 1807.500000
     IMAGE MIP/isis buttons/ls
     DATAREF 
+    LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -66056,6 +66202,7 @@ GROUP ISIS Buttons
     POS 2913.000000 1807.500000
     IMAGE MIP/isis buttons/reset
     DATAREF 
+    LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -66075,6 +66222,7 @@ GROUP ISIS Buttons
     POS 2619.500000 1748.000000
     IMAGE MIP/isis buttons/plus
     DATAREF 
+    LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -66094,6 +66242,7 @@ GROUP ISIS Buttons
     POS 2800.500000 1746.000000
     IMAGE MIP/isis buttons/minus
     DATAREF 
+    LOCKED
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 1
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -66174,11 +66323,13 @@ GROUP Fire PB
 
 END_GROUP
 GROUP Screen Covers
+  LOCKED
   HIDE
   gen_rotary PFD Off
     POS 1815.000000 733.000000
     IMAGE ColdAndDark/ColdAndDark
     DATAREF a321neo/dynamics/electrical/bus/ac_ess_powered
+    LOCKED
     HIDE
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 0
@@ -66199,6 +66350,7 @@ GROUP Screen Covers
     POS 2729.000000 734.500000
     IMAGE ColdAndDark/ColdAndDark
     DATAREF a321neo/dynamics/electrical/bus/ac_ess_powered
+    LOCKED
     HIDE
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 0
@@ -66219,6 +66371,7 @@ GROUP Screen Covers
     POS 3637.000000 734.000000
     IMAGE ColdAndDark/ColdAndDark
     DATAREF a321neo/dynamics/electrical/bus/ac_2_powered
+    LOCKED
     HIDE
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 0
