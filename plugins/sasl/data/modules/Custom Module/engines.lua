@@ -31,11 +31,12 @@ START_UP_PHASES_N1 = {
     {n1_set = 7.3,    n1_increase_per_sec = 0.20, fuel_flow = 180, egt=357, stop_ign=false},
     {n1_set = 7.8,    n1_increase_per_sec = 0.20, fuel_flow = 220, egt=393, stop_ign=false},
     {n1_set = 12.2,   n1_increase_per_sec = 0.60, fuel_flow = 260, egt=573, stop_ign=false},
-    {n1_set = 14.9,   n1_increase_per_sec = 0.60, fuel_flow = 280, egt=574, stop_ign=false},
+    {n1_set = 14.9,   n1_increase_per_sec = 0.60, fuel_flow = 280, egt=574, stop_ign=true},
     {n1_set = 15.4,   n1_increase_per_sec = 1.16, fuel_flow = 300, egt=580, stop_ign=true},
     {n1_set = 16.3,   n1_increase_per_sec = 1.08, fuel_flow = 320, egt=592, stop_ign=true},
     {n1_set = 17.1,   n1_increase_per_sec = 0.83, fuel_flow = 340, egt=602, stop_ign=true},
     {n1_set = 17.6,   n1_increase_per_sec = 0.79, fuel_flow = 360, egt=623, stop_ign=true},
+    {n1_set = 18.3,   n1_increase_per_sec = 0.24, fuel_flow = 380, egt=637, stop_ign=true},
     {n1_set = 18.3,   n1_increase_per_sec = 0.24, fuel_flow = 380, egt=637, stop_ign=true},
 }
 
@@ -53,6 +54,7 @@ local eng_2_manual_switch = false   -- Is engine manual start enabled?
 
 local eng_ignition_switch = globalPropertyia("sim/cockpit2/engine/actuators/ignition_key")
 local eng_igniters        = globalPropertyia("sim/cockpit2/engine/actuators/igniter_on")
+local starter_duration    = globalPropertyfa("sim/cockpit/engine/starter_duration")
 
 local eng_mixture         = globalPropertyfa("sim/cockpit2/engine/actuators/mixture_ratio")
 local eng_N1_enforce      = globalPropertyfa("sim/flightmodel/engine/ENGN_N1_")
@@ -96,15 +98,17 @@ end
 
 local function update_n1_minimum()
     local curr_altitude = get(Elevation_m) * 3.28084
-    local curr_n1 = get(Eng_1_N1)
     local comp_min_n1 = min_n1(curr_altitude)
     local always_a_minimum = 18.5
     set(Eng_N1_idle, comp_min_n1)
-    
+
+    -- Update ENG1 N1 minimum
+    local curr_n1 = get(Eng_1_N1)    
     if curr_n1 < always_a_minimum and get(Engine_1_avail) == 1 then
         set(eng_N1_enforce, always_a_minimum, 1)
     end
 
+    -- Update ENG2 N1 minimum
     curr_n1 = get(Eng_2_N1)
     if curr_n1 < always_a_minimum and get(Engine_2_avail) == 1 then
         set(eng_N1_enforce, always_a_minimum, 2)
@@ -168,6 +172,8 @@ local function update_ff()
 end
 
 local function update_avail()
+
+    -- ENG 1
     if get(Eng_1_N1) > ENG_N1_LL_IDLE and get(Engine_1_master_switch) == 1 then
         if get(Engine_1_avail) == 0 then
             set(EWD_engine_avail_ind_1_start, get(TIME))
@@ -177,6 +183,8 @@ local function update_avail()
         set(Engine_1_avail, 0)    
         set(EWD_engine_avail_ind_1_start, 0)
     end
+    
+    -- ENG 2
     if get(Eng_2_N1) > ENG_N1_LL_IDLE and get(Engine_2_master_switch) == 1 then
         if get(Engine_2_avail) == 0 then
             set(EWD_engine_avail_ind_2_start, get(TIME))
@@ -200,11 +208,11 @@ local function perform_crank_procedure(eng, wet_cranking)
     end
 
     set(eng_mixture, 0, eng)                                    -- No mixture for dry cranking
-    set(eng_ignition_switch, 4, eng)                            -- Turn on ignition (necessary for x-plane to run the engine)
+    --set(eng_ignition_switch, 4, eng)                            -- Turn on ignition (necessary for x-plane to run the engine)
                                                                 -- We are not actually igniting the engine
 
     -- Set N2 for cranking
-    eng_N2_off[eng] = Set_linear_anim_value(eng_N2_off[eng], ENG_N1_CRANK, 0, 120, 0.25)
+    eng_N2_off[eng] = Set_linear_anim_value(eng_N2_off[eng], ENG_N1_CRANK, 0, 120, 2) -- TODO 0.25
     set(eng_N2_enforce, eng_N2_off[eng], eng)
     
     -- Set WGT for cranking
@@ -222,12 +230,12 @@ end
 
 local function perform_starting_procedure_follow_n2(eng)
     set(eng_mixture, 0, eng) -- No mixture in this phase
-    set(eng_ignition_switch, 4, eng)
+    --set(eng_ignition_switch, 4, eng)
 
     for i=1,(#START_UP_PHASES_N2-1) do
         if eng_N2_off[eng] < START_UP_PHASES_N2[i+1].n2_start then
             eng_N2_off[eng] = eng_N2_off[eng] + START_UP_PHASES_N2[i].n2_increase_per_sec * get(DELTA_TIME)
-            set(eng_N2_enforce, eng_N2_off[1], eng)
+            set(eng_N2_enforce, eng_N2_off[eng], eng)
             eng_FF_off[eng] = START_UP_PHASES_N2[i].fuel_flow  / 3600
             
             perc = (eng_N2_off[eng] - START_UP_PHASES_N2[i].n2_start) / (START_UP_PHASES_N2[i+1].n2_start - START_UP_PHASES_N2[i].n2_start)
@@ -240,7 +248,7 @@ end
 
 local function perform_starting_procedure_follow_n1(eng)
     set(eng_mixture, 1, eng) -- No mixture in this phase
-    set(eng_ignition_switch, 4, eng)
+    --set(eng_ignition_switch, 4, eng)
     set(eng_igniters, 1, eng)
 
 
@@ -257,13 +265,15 @@ local function perform_starting_procedure_follow_n1(eng)
             perc = (curr_N1 - START_UP_PHASES_N1[i].n1_set) / (START_UP_PHASES_N1[i+1].n1_set - START_UP_PHASES_N1[i].n1_set)
             eng_EGT_off[eng] = Math_lerp(START_UP_PHASES_N1[i].egt, START_UP_PHASES_N1[i+1].egt, perc)
             
-            if START_UP_PHASES_N1[i].stop_ign then -- This is used to avoid a bump in the final part of the engine startup
-                set(eng_ignition_switch, 0, eng)
-                set(eng_igniters, 0, eng)
-            end
-            
             break
         end
+    end
+    
+    if eng_N1_off[eng] > 12 then
+
+        --set(eng_ignition_switch, 0, eng)
+
+        set(eng_igniters, 0, eng)
     end
 end
 
@@ -275,11 +285,14 @@ local function perform_starting_procedure(eng)
     end
     
     if eng_N2_off[eng] < START_UP_PHASES_N2[#START_UP_PHASES_N2].n2_start then
+
+        set(starter_duration, 300, eng)
+
         perform_starting_procedure_follow_n2(eng)
     elseif eng_N1_off[eng] < START_UP_PHASES_N1[#START_UP_PHASES_N1].n1_set then
         perform_starting_procedure_follow_n1(eng)
     else
-        set(eng_ignition_switch, 3, eng)
+        --set(eng_ignition_switch, 0, eng)
     end
     
 end
@@ -343,6 +356,7 @@ local function update_startup()
 end
 
 function update()
+
     update_starter_datarefs()
     update_startup()
 

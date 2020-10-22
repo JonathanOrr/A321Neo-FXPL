@@ -18,6 +18,8 @@ local eng_ignition_switch = globalPropertyia("sim/cockpit2/engine/actuators/igni
 local eng_mixture         = globalPropertyfa("sim/cockpit2/engine/actuators/mixture_ratio")
 local eng_igniters        = globalPropertyia("sim/cockpit2/engine/actuators/igniter_on")
 
+local starter_duration    = globalPropertyfa("sim/cockpit/engine/starter_duration")
+
 function draw()
 
     sasl.gl.drawText(B612MONO_regular, 120, 400, "ENGINE 1", 28, false, false, TEXT_ALIGN_CENTER, UI_WHITE)
@@ -30,6 +32,10 @@ function draw()
     sasl.gl.drawText(B612MONO_regular, 20, 460, "Engine mode: ", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
     text = get(Engine_mode_knob) == 0 and "NORMAL" or (get(Engine_mode_knob) == 1 and "IGN" or "CRANK")
     sasl.gl.drawText(B612MONO_regular, 120, 460, text, 12, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
+
+    sasl.gl.drawText(B612MONO_regular, 20, 440, "Sim Time: ", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+    sasl.gl.drawText(B612MONO_regular, 120, 440, Round(get(TIME),1), 12, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
+
 
     -- AVAIL ENG1
     text  = get(Engine_1_avail) == 1 and "AVAIL" or "NOT AVAIL"
@@ -78,10 +84,10 @@ function draw()
     
     -- Mixture
     sasl.gl.drawText(B612MONO_regular, 20, 310, "Mixture (XP): ", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
-    sasl.gl.drawText(B612MONO_regular, 170, 310, get(eng_mixture,1)*100 .. "%", 12, false, false, TEXT_ALIGN_RIGHT, UI_LIGHT_BLUE)
+    sasl.gl.drawText(B612MONO_regular, 170, 310, math.floor(get(eng_mixture,1)*100) .. "%", 12, false, false, TEXT_ALIGN_RIGHT, UI_LIGHT_BLUE)
 
     sasl.gl.drawText(B612MONO_regular, size[1]/2+20, 310, "Mixture (XP): ", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
-    sasl.gl.drawText(B612MONO_regular, size[1]/2+170, 310, get(eng_mixture,2)*100 .. "%", 12, false, false, TEXT_ALIGN_RIGHT, UI_LIGHT_BLUE)
+    sasl.gl.drawText(B612MONO_regular, size[1]/2+170, 310, math.floor(get(eng_mixture,2)*100) .. "%", 12, false, false, TEXT_ALIGN_RIGHT, UI_LIGHT_BLUE)
 
     -- Ignition key
     sasl.gl.drawText(B612MONO_regular, 20, 290, "Ignition key (XP): ", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
@@ -102,11 +108,18 @@ function draw()
     sasl.gl.drawText(B612MONO_regular, size[1]/2+100, 270, text, 12, false, false, TEXT_ALIGN_LEFT, color)
 
     -- Throttle valve
-    sasl.gl.drawText(B612MONO_regular, 20, 250, "Throttle (XP): ", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
-    sasl.gl.drawText(B612MONO_regular, 170, 250, math.floor(get(Override_eng_1_lever)*100) .. "%" , 12, false, false, TEXT_ALIGN_RIGHT, UI_LIGHT_BLUE)
+    sasl.gl.drawText(B612MONO_regular, 20, 250, "Starter duration: ", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+    sasl.gl.drawText(B612MONO_regular, 180, 250, Round(get(starter_duration,1),2) , 12, false, false, TEXT_ALIGN_RIGHT, UI_LIGHT_BLUE)
 
-    sasl.gl.drawText(B612MONO_regular, size[1]/2+20, 250, "Throttle (XP): ", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
-    sasl.gl.drawText(B612MONO_regular, size[1]/2+170, 250, math.floor(get(Override_eng_2_lever)*100) .. "%" , 12, false, false, TEXT_ALIGN_RIGHT, UI_LIGHT_BLUE)
+    sasl.gl.drawText(B612MONO_regular, size[1]/2+20, 250, "Starter duration: ", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+    sasl.gl.drawText(B612MONO_regular, size[1]/2+180, 250, Round(get(starter_duration,2),2), 12, false, false, TEXT_ALIGN_RIGHT, UI_LIGHT_BLUE)
+
+    -- Throttle valve
+    sasl.gl.drawText(B612MONO_regular, 20, 230, "Throttle (XP): ", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+    sasl.gl.drawText(B612MONO_regular, 170, 230, math.floor(get(Override_eng_1_lever)*100) .. "%" , 12, false, false, TEXT_ALIGN_RIGHT, UI_LIGHT_BLUE)
+
+    sasl.gl.drawText(B612MONO_regular, size[1]/2+20, 230, "Throttle (XP): ", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+    sasl.gl.drawText(B612MONO_regular, size[1]/2+170, 230, math.floor(get(Override_eng_2_lever)*100) .. "%" , 12, false, false, TEXT_ALIGN_RIGHT, UI_LIGHT_BLUE)
 
     
    
