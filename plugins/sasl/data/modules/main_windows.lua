@@ -106,7 +106,7 @@ ENG_debug_window = contextWindow {
   minimumSize = { 500 , 500 };
   maximumSize = { 500 , 500 };
   gravity = { 0 , 1 , 0 , 1 };
-  visible = true ;
+  visible = false ;
   components = {
     engines_debug {position = { 0 , 0 , 500 , 500 }}
   };

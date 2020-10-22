@@ -42,3 +42,14 @@ ECAM_PAGE_WHEEL = 10
 ECAM_PAGE_FCTL  = 11
 ECAM_PAGE_STS   = 12
 ECAM_PAGE_CRUISE= 13
+
+
+function is_inibithed_in(phases)
+
+    for i,p in ipairs(phases) do
+        if p == get(EWD_flight_phase) then
+            return true
+        end
+    end
+    return false
+end

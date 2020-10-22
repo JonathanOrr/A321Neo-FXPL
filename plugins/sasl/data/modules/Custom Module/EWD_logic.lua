@@ -97,6 +97,8 @@ local left_messages_list = {
     MessageGroup_ELEC_BAT_OFF,
     MessageGroup_ELEC_BAT_FAULT,
     MessageGroup_ELEC_EMER_GEN_1_LINE_OFF,
+    MessageGroup_ENG_FF_CLOG,
+    MessageGroup_ENG_OIL_CLOG,
     
     -- Warnings
     MessageGroup_CONFIG_TAKEOFF,

@@ -211,26 +211,41 @@ Fuel_pump_5 = globalProperty("sim/cockpit2/engine/actuators/fuel_pump_on[4]")
 Fuel_pump_6 = globalProperty("sim/cockpit2/engine/actuators/fuel_pump_on[5]")
 Fuel_pump_7 = globalProperty("sim/cockpit2/engine/actuators/fuel_pump_on[6]")
 Fuel_pump_8 = globalProperty("sim/cockpit2/engine/actuators/fuel_pump_on[7]")
---ENG and APU
+--ENG
 Engine_1_avail = createGlobalPropertyi("a321neo/dynamics/engines/eng_1_avail", 0, false, true, false)
 Engine_2_avail = createGlobalPropertyi("a321neo/dynamics/engines/eng_2_avail", 0, false, true, false)
 Eng_1_N1 = globalProperty("sim/flightmodel2/engines/N1_percent[0]")
 Eng_2_N1 = globalProperty("sim/flightmodel2/engines/N1_percent[1]")
+Eng_1_N2 = createGlobalPropertyf("a321neo/dynamics/engines/eng_1_n2", 0, false, true, false) -- Corrected value for N2
+Eng_2_N2 = createGlobalPropertyf("a321neo/dynamics/engines/eng_2_n2", 0, false, true, false) -- Corrected value for N2
 Eng_1_EGT_c = createGlobalPropertyf("a321neo/dynamics/engines/eng_1_EGT", 0, false, true, false)
 Eng_2_EGT_c = createGlobalPropertyf("a321neo/dynamics/engines/eng_2_EGT", 0, false, true, false)
 Eng_1_FF_kgs = createGlobalPropertyf("a321neo/dynamics/engines/eng_1_FF", 0, false, true, false)
 Eng_2_FF_kgs = createGlobalPropertyf("a321neo/dynamics/engines/eng_2_FF", 0, false, true, false)
-Apu_N1 = globalProperty("sim/cockpit2/electrical/APU_N1_percent")
-APU_EGT = globalProperty("sim/cockpit2/electrical/APU_EGT_c")
+Eng_1_OIL_qty = createGlobalPropertyf("a321neo/dynamics/engines/eng_1_oil_qty", 0, false, true, false)
+Eng_2_OIL_qty = createGlobalPropertyf("a321neo/dynamics/engines/eng_2_oil_qty", 0, false, true, false)
+Eng_1_OIL_press = createGlobalPropertyf("a321neo/dynamics/engines/eng_1_oil_press", 0, false, true, false)
+Eng_2_OIL_press = createGlobalPropertyf("a321neo/dynamics/engines/eng_2_oil_press", 0, false, true, false)
+Eng_1_OIL_temp  = createGlobalPropertyf("a321neo/dynamics/engines/eng_1_oil_temp", 0, false, true, false) -- In Celsius
+Eng_2_OIL_temp  = createGlobalPropertyf("a321neo/dynamics/engines/eng_2_oil_temp", 0, false, true, false) -- In Celsius
+Eng_1_VIB_N1  = createGlobalPropertyf("a321neo/dynamics/engines/eng_1_vib_n1", 0, false, true, false)
+Eng_2_VIB_N1  = createGlobalPropertyf("a321neo/dynamics/engines/eng_2_vib_n1", 0, false, true, false)
+Eng_1_VIB_N2  = createGlobalPropertyf("a321neo/dynamics/engines/eng_1_vib_n2", 0, false, true, false)
+Eng_2_VIB_N2  = createGlobalPropertyf("a321neo/dynamics/engines/eng_2_vib_n2", 0, false, true, false)
+
+Eng_N1_idle = createGlobalPropertyf("a321neo/dynamics/engines/n1_idle", 1, false, true, false) -- current value (depends on altitude) for the minimum N1
+
+
 Eng_1_reverser_deployment = globalProperty("sim/flightmodel2/engines/thrust_reverser_deploy_ratio[0]")
 Eng_2_reverser_deployment = globalProperty("sim/flightmodel2/engines/thrust_reverser_deploy_ratio[1]")
-
 Eng_1_Firewall_valve = createGlobalPropertyi("a321neo/dynamics/engines/eng_1_firewall_valve_1", 1, false, true, false) -- 0 open, 1 - closed, 2 : transit - firewall valve
 Eng_2_Firewall_valve = createGlobalPropertyi("a321neo/dynamics/engines/eng_2_firewall_valve_2", 1, false, true, false) -- 0 open, 1 - closed, 2 : transit - firewall valve
 
-Eng_1_N2 = createGlobalPropertyf("a321neo/dynamics/engines/eng_1_n2", 0, false, true, false) -- Corrected value for N2
-Eng_2_N2 = createGlobalPropertyf("a321neo/dynamics/engines/eng_2_n2", 0, false, true, false) -- Corrected value for N2
-Eng_N1_idle = createGlobalPropertyf("a321neo/dynamics/engines/n1_idle", 1, false, true, false) -- current value (depends on altitude) for the minimum N1
+
+-- APU
+Apu_N1 = globalProperty("sim/cockpit2/electrical/APU_N1_percent")
+APU_EGT = globalProperty("sim/cockpit2/electrical/APU_EGT_c")
+
 
 --PACKs system
 Apu_bleed_switch = globalProperty("sim/cockpit2/bleedair/actuators/apu_bleed")

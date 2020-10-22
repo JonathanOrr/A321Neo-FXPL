@@ -58,7 +58,7 @@ end
 
 --rounding - showing leading zeros
 function Round_fill(num, numDecimalPlaces)
-    return string.format("%.2f", Round(num, numDecimalPlaces)) 
+    return string.format("%."..numDecimalPlaces.."f", Round(num, numDecimalPlaces)) 
 end
 
 

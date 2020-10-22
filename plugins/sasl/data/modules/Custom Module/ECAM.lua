@@ -5,6 +5,7 @@ include('ECAM_status.lua')
 include('ECAM_automation.lua')
 include('ECAM_hyd.lua')
 include('ECAM_elec.lua')
+include('ECAM_engines.lua')
 include('ECAM_fuel.lua')
 include('constants.lua')
 
@@ -379,7 +380,7 @@ function draw()
 
 
     if get(Ecam_current_page) == 1 then --eng
-
+        draw_eng_page()
     elseif get(Ecam_current_page) == 2 then --bleed
         --engine avail--
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2-310, size[2]/2-200, "1", 28, false, false, TEXT_ALIGN_CENTER, left_eng_avail_cl)

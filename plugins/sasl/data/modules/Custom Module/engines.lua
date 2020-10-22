@@ -32,6 +32,20 @@ local ENG_N1_CRANK_EGT= 95  -- Target EGT for cranking
 local ENG_N1_LL_IDLE  = 18.3 -- Value to determine if parameters control should be given to X-Plane 
 local MAGIC_NUMBER = 100     -- This is a magic number, which value is necessary to start the engine (see later)
 
+local OIL_QTY_MAX = 17
+local OIL_QTY_MIN = 2
+local OIL_PRESS_START = 50  -- MAX On startup
+local OIL_PRESS_CONT  = 30  -- MAX Continuous
+local OIL_PRESS_MIN   = 17  -- MIN in idle
+
+local OIL_TEMP_MIN   = -25   -- MIN for start
+local OIL_TEMP_TOGA  = 38    -- MIN for toga
+local OIL_TEMP_MAX_CONT = 140-- MAX continuous
+local OIL_TEMP_MAX_TRAN = 155-- MAX for 15 min
+
+local VIB_LIMIT_MAX_N1 = 6
+local VIB_LIMIT_MAX_N2 = 4.3
+
 local START_UP_PHASES_N2 = {
     -- n2_start: start point after which the element is considered
     -- n2_increase_per_sec: N2 is increasing this value each second
@@ -72,6 +86,7 @@ local egt_eng_2_offset = math.random() * MAX_EGT_OFFSET * 2 - MAX_EGT_OFFSET    
 
 local eng_1_manual_switch = false   -- Is engine manual start enabled?
 local eng_2_manual_switch = false   -- Is engine manual start enabled?
+local dual_cooling_switch = false
 
 local eng_ignition_switch = globalPropertyia("sim/cockpit2/engine/actuators/ignition_key")
 local eng_igniters        = globalPropertyia("sim/cockpit2/engine/actuators/igniter_on")
@@ -89,6 +104,8 @@ local eng_FF_off  = {0,0}   -- FF for startup procedure
 local eng_EGT_off = {get(OTA),get(OTA)}   -- EGT for startup procedure
 
 local slow_start_time_requested = false
+
+local igniter_eng = {0,0}
 
 ----------------------------------------------------------------------------------------------------
 -- Functions - Commands
@@ -142,6 +159,9 @@ end
 ----------------------------------------------------------------------------------------------------
 sasl.registerCommandHandler (ENG_cmd_manual_start_1,     0, function(phase) if phase == SASL_COMMAND_BEGIN then eng_1_manual_switch = not eng_1_manual_switch end end )
 sasl.registerCommandHandler (ENG_cmd_manual_start_2,     0, function(phase) if phase == SASL_COMMAND_BEGIN then eng_2_manual_switch = not eng_2_manual_switch end end )
+sasl.registerCommandHandler (ENG_cmd_dual_cooling,        0, function(phase) if phase == SASL_COMMAND_BEGIN then dual_cooling_switch = not dual_cooling_switch end end )
+
+
 sasl.registerCommandHandler (ENG_cmd_mode_up,            0, function(phase) engines_mode_up(phase) end)
 sasl.registerCommandHandler (ENG_cmd_mode_down,          0, function(phase) engines_mode_down(phase) end)
 sasl.registerCommandHandler (sasl.findCommand("sim/operation/auto_start"),  1, engines_auto_slow_start )
@@ -266,6 +286,91 @@ local function update_avail()
 end
 
 ----------------------------------------------------------------------------------------------------
+-- Functions - Secondary parameters
+----------------------------------------------------------------------------------------------------
+set(Eng_1_OIL_qty, OIL_QTY_MAX/1.5 * (1 + math.random()))
+set(Eng_2_OIL_qty, OIL_QTY_MAX/1.5 * (1 + math.random()))
+set(Eng_1_OIL_temp, get(OTA))
+set(Eng_2_OIL_temp, get(OTA))
+
+local function update_oil_stuffs()
+
+    -- ENG 1 - PRESS
+    if get(Engine_1_avail) == 1 then
+        local n2_value = get(Eng_1_N2)
+        local press = Math_rescale(60, OIL_PRESS_MIN+1, 120, OIL_PRESS_CONT, n2_value) + math.random()
+        Set_dataref_linear_anim(Eng_1_OIL_press, press, 0, 100, 4)
+    else
+        -- During startup
+        local n2_value = math.max(10,get(Eng_1_N2))
+        local press = Math_rescale(10, 0, 70, OIL_PRESS_START, n2_value)
+        Set_dataref_linear_anim(Eng_1_OIL_press, press, 0, 100, 4)
+    end
+
+    -- ENG 1 - TEMP
+    if get(Engine_1_avail) == 1 then
+        local n2_value = get(Eng_1_N2)
+        local temp = Math_rescale(60, 65, 120, OIL_TEMP_MAX_TRAN, n2_value) + math.random()
+        Set_dataref_linear_anim(Eng_1_OIL_temp, temp, -50, 200, 1)
+    else
+        -- During startup
+        local n2_value = math.max(10,get(Eng_1_N2))
+        local temp = Math_rescale(10, get(OTA), 70, 75, n2_value)
+        Set_dataref_linear_anim(Eng_1_OIL_temp, temp, -50, 200, 1)
+    end
+    
+    -- ENG 2 - PRESS
+    if get(Engine_2_avail) == 1 then
+        local n2_value = get(Eng_2_N2)
+        local press = Math_rescale(60, OIL_PRESS_MIN+1, 120, OIL_PRESS_CONT, n2_value) + math.random()
+        Set_dataref_linear_anim(Eng_2_OIL_press, press, 0, 100, 4)
+    else
+        -- During startup
+        local n2_value = math.max(10,get(Eng_2_N2))
+        local press = Math_rescale(10, 0, 70, OIL_PRESS_START, n2_value)
+        Set_dataref_linear_anim(Eng_2_OIL_press, press, 0, 100, 4)
+    end
+
+    -- ENG 2 - TEMP
+    if get(Engine_2_avail) == 1 then
+        local n2_value = get(Eng_2_N2)
+        local temp = Math_rescale(60, 65, 120, OIL_TEMP_MAX_TRAN, n2_value) + math.random()
+        Set_dataref_linear_anim(Eng_2_OIL_temp, temp, -50, 200, 1)
+    else
+        -- During startup
+        local n2_value = math.max(10,get(Eng_2_N2))
+        local temp = Math_rescale(10, get(OTA), 70, 75, n2_value)
+        Set_dataref_linear_anim(Eng_2_OIL_temp, temp, -50, 200, 1)
+    end
+
+
+end
+
+function update_vibrations()
+    local n1_value = get(Eng_1_N1)
+    local vib_n1 = Math_rescale(0, 0, 120, VIB_LIMIT_MAX_N1/4, n1_value) 
+    if get(Engine_1_avail) == 1 then vib_n1 = vib_n1 + 0.1*math.random() end
+    set(Eng_1_VIB_N1, vib_n1)
+
+    local n2_value = get(Eng_1_N2)
+    local vib_n2 = Math_rescale(0, 0, 120, VIB_LIMIT_MAX_N2/4, n2_value)
+    if get(Engine_1_avail) == 1 then vib_n2 = vib_n2 + 0.1*math.random() end
+    set(Eng_1_VIB_N2, vib_n2)
+
+    local n1_value = get(Eng_2_N1)
+    local vib_n1 = Math_rescale(0, 0, 120, VIB_LIMIT_MAX_N1/4, n1_value)
+    if get(Engine_2_avail) == 1 then vib_n1 = vib_n1 + 0.1*math.random() end
+    set(Eng_2_VIB_N1, vib_n1)
+
+    local n2_value = get(Eng_2_N2)
+    local vib_n2 = Math_rescale(0, 0, 120, VIB_LIMIT_MAX_N2/4, n2_value)
+    if get(Engine_2_avail) == 1 then vib_n2 = vib_n2 + 0.1*math.random() end
+    set(Eng_2_VIB_N2, vib_n2)
+
+
+end 
+
+----------------------------------------------------------------------------------------------------
 -- Functions - Ignition stuffs
 ----------------------------------------------------------------------------------------------------
 
@@ -304,7 +409,10 @@ local function perform_starting_procedure_follow_n2(eng)
     -- This is PHASE 2
 
     set(eng_mixture, 0, eng) -- No mixture in this phase
-
+    if igniter_eng[eng] == 0 then
+        igniter_eng[eng] = math.random() > 0.5 and 1 or 2  -- For ECAM visualization only, no practical effect
+    end
+    
     for i=1,(#START_UP_PHASES_N2-1) do
         -- For each phase... 
 
@@ -364,6 +472,7 @@ local function perform_starting_procedure_follow_n1(eng)
         -- When N1 is more than 12 we can shutdown the igniters. This is necessary, otherwise the
         -- engine will go over the minimum idle
         set(eng_igniters, 0, eng)
+        igniter_eng[eng] = 0
     end
 end
 
@@ -400,6 +509,10 @@ local function update_starter_datarefs()
     set(Engine_mode_knob,Math_clamp(get(Engine_mode_knob), -1, 1))
     set(Engine_1_master_switch,Math_clamp(get(Engine_1_master_switch), 0, 1))
     set(Engine_2_master_switch,Math_clamp(get(Engine_2_master_switch), 0, 1))
+    
+    set(Ecam_eng_igniter_eng_1, igniter_eng[1])
+    set(Ecam_eng_igniter_eng_2, igniter_eng[2])
+    
 end
 
 local function update_startup()
@@ -444,6 +557,7 @@ local function update_startup()
         eng_FF_off[1] = 0
         eng_N1_off[1] = Set_linear_anim_value(eng_N1_off[1], 0, 0, 120, 2)
         set(eng_igniters, 0, 1)
+        igniter_eng[1] = 0
     end
     if get(Engine_2_avail) == 0 and require_cooldown[2] then    -- Turn off the engine
         -- Set N2 to zero
@@ -455,6 +569,7 @@ local function update_startup()
         eng_FF_off[2] = 0
         eng_N1_off[2] = Set_linear_anim_value(eng_N1_off[2], 0, 0, 120, 2)
         set(eng_igniters, 0, 2)
+        igniter_eng[2] = 0
     end
 
 end
@@ -490,8 +605,17 @@ local function update_auto_start()
 
 end
 
+local function update_buttons_datarefs()
+    set(Engine_1_man_start, eng_1_manual_switch and 1 or 0)
+    set(Engine_2_man_start, eng_2_manual_switch and 1 or 0)
+    set(Engine_dual_cooling, dual_cooling_switch and 1 or 0)
+end
+
+
+
 function update()
     update_starter_datarefs()
+    update_buttons_datarefs()
     
     if get(FLIGHT_TIME) > 0.5 then
         -- This condition is needed because otherwise the startup overrides the values set by the
@@ -506,7 +630,9 @@ function update()
     update_egt()
     update_ff()
     update_avail()
-
+    update_oil_stuffs()
+    update_vibrations()
+    
     update_auto_start()
 
 end

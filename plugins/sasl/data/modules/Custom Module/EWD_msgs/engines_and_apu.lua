@@ -171,3 +171,116 @@ MessageGroup_APU_FIRE = {
     end
 
 }
+
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: FUEL FILTER CLOG
+----------------------------------------------------------------------------------------------------
+
+MessageGroup_ENG_FF_CLOG = {
+
+    shown = false,
+
+    text  = function(self)
+                return "ENG"
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    sd_page = ECAM_PAGE_ENG,
+    
+    priority = PRIORITY_LEVEL_2,
+
+    messages = {
+        {
+            text = function(self)
+                N = ""
+                if get(FAILURE_ENG_1_FUEL_CLOG) == 1 then
+                    N = "1"
+                end
+                if get(FAILURE_ENG_2_FUEL_CLOG) == 1 then
+                    if #N > 0 then
+                        N = N .. "+"
+                    end
+                    N = N .. "2"
+                end
+                return "    " .. N .. " FUEL FILTER CLOG"
+            end,
+
+            color = function(self)
+                return COL_CAUTION
+            end,
+
+            is_active = function(self)
+              return true
+            end
+        }
+
+    },
+
+    is_active = function(self)
+        return get(FAILURE_ENG_1_FUEL_CLOG) == 1 or get(FAILURE_ENG_2_FUEL_CLOG) == 1
+    end,
+
+    is_inhibited = function(self)
+        return is_inibithed_in({PHASE_ABOVE_80_KTS, PHASE_LIFTOFF, PHASE_FINAL, PHASE_TOUCHDOWN})
+    end
+
+}
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: OIL FILTER CLOG
+----------------------------------------------------------------------------------------------------
+
+MessageGroup_ENG_OIL_CLOG = {
+
+    shown = false,
+
+    text  = function()
+                return "ENG"
+            end,
+    color = function()
+                return COL_CAUTION
+            end,
+
+    sd_page = ECAM_PAGE_ENG,
+    
+    priority = PRIORITY_LEVEL_2,
+
+    messages = {
+        {
+            text = function()
+                N = ""
+                if get(FAILURE_ENG_1_OIL_CLOG) == 1 then
+                    N = "1"
+                end
+                if get(FAILURE_ENG_2_OIL_CLOG) == 1 then
+                    if #N > 0 then
+                        N = N .. "+"
+                    end
+                    N = N .. "2"
+                end
+                return "    " .. N .. " OIL FILTER CLOG"
+            end,
+
+            color = function()
+                return COL_CAUTION
+            end,
+
+            is_active = function()
+              return true
+            end
+        }
+
+    },
+
+    is_active = function()
+        return get(FAILURE_ENG_1_OIL_CLOG) == 1 or get(FAILURE_ENG_2_OIL_CLOG) == 1
+    end,
+
+    is_inhibited = function()
+        return is_inibithed_in({PHASE_ABOVE_80_KTS, PHASE_LIFTOFF, PHASE_FINAL, PHASE_TOUCHDOWN})
+    end
+
+}
