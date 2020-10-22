@@ -243,7 +243,7 @@ end
 
 local function update_datarefs()
 
-    if ovveride_ELEC_always_on then -- For DEBUG only
+    if override_ELEC_always_on then -- For DEBUG only
         set(AC_bus_1_pwrd, 1)
         set(AC_bus_2_pwrd, 1)
         set(AC_ess_bus_pwrd, 1)

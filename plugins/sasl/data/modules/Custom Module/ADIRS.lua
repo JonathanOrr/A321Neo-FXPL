@@ -482,13 +482,19 @@ function update ()
     end
 
     -- Debug mode 
-    if ovveride_ADIRS_ok then
+    if override_ADIRS_ok then
         is_capt_adr_ok = 1
         is_fo_adr_ok = 1
         is_capt_irs_ok = 1
         is_fo_irs_ok = 2
         has_capt_att = 1
         has_fo_att = 1
+        set(Adirs_adr_is_ok[1], 1) 
+        set(Adirs_adr_is_ok[2], 1) 
+        set(Adirs_adr_is_ok[3], 1) 
+        set(Adirs_ir_is_ok[1], 1) 
+        set(Adirs_ir_is_ok[2], 1) 
+        set(Adirs_ir_is_ok[3], 1) 
     end
 
 
