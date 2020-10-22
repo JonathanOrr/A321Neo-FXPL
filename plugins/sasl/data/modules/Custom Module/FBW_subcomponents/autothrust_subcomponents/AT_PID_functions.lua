@@ -1,5 +1,4 @@
 function FADEC_N1_PID(pid_array, Set_Point, PV)
-    local correction = 0
     local last_PV = pid_array.PV
 
     if get(DELTA_TIME) ~= 0 then
@@ -17,14 +16,14 @@ function FADEC_N1_PID(pid_array, Set_Point, PV)
         pid_array.Derivative = ((last_PV - pid_array.PV) / get(DELTA_TIME)) * pid_array.D_gain
 
         --sigma
-        correction = pid_array.Proportional + pid_array.Integral + pid_array.Derivative
+        pid_array.Output = pid_array.Proportional + pid_array.Integral + pid_array.Derivative
 
 	    --limit and rescale output range--
-        correction = Math_clamp(correction, pid_array.Error_margin * pid_array.Min_out, pid_array.Error_margin * pid_array.Max_out) / pid_array.Error_margin
+        pid_array.Output = Math_clamp(pid_array.Output, pid_array.Error_margin * pid_array.Min_out, pid_array.Error_margin * pid_array.Max_out) / pid_array.Error_margin
 
     end
 
-    return correction
+    return pid_array.Output
 
 end
 

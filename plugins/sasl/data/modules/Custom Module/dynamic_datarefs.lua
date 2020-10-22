@@ -375,14 +375,11 @@ Servo_roll = globalProperty("sim/joystick/servo_roll_ratio")
 Servo_pitch = globalProperty("sim/joystick/servo_pitch_ratio")
 Servo_yaw = globalProperty("sim/joystick/servo_heading_ratio")
 Speedbrake_handle_ratio = globalProperty("sim/cockpit2/controls/speedbrake_ratio")
-Flightmodel_roll = globalProperty("sim/flightmodel/position/true_phi")
-Flightmodel_pitch = globalProperty("sim/flightmodel/position/true_theta")
 Elev_trim_ratio = globalProperty("sim/cockpit2/controls/elevator_trim")
 Rudder_trim_ratio = globalProperty("sim/cockpit2/controls/rudder_trim")
 Horizontal_stabilizer_pitch = globalProperty("sim/flightmodel2/controls/stabilizer_deflection_degrees")
 Override_artstab = globalProperty("sim/operation/override/override_artstab")
 Override_control_surfaces = globalProperty("sim/operation/override/override_control_surfaces")
-Total_vertical_g_load = globalProperty("sim/flightmodel/forces/g_nrml")
 Roll_rate = globalProperty("sim/flightmodel/position/P")
 Pitch_rate = globalProperty("sim/flightmodel/position/Q")
 Vpath = globalProperty("sim/flightmodel/position/vpath")
@@ -394,6 +391,9 @@ FBW_kill_switch = createGlobalPropertyi("a321neo/dynamics/FBW/debug/kill_switch"
 --animations
 Trim_wheel_smoothing_on = createGlobalPropertyi("a321neo/dynamics/FBW/animation/trim_wheel_smoothing_on", 1, false, true, false)--is the trim wheel is smoothed
 --flight envelope "sensors"
+Flightmodel_roll = globalProperty("sim/flightmodel/position/true_phi")
+Flightmodel_pitch = globalProperty("sim/flightmodel/position/true_theta")
+Total_vertical_g_load = globalProperty("sim/flightmodel/forces/g_nrml")
 Vpath_pitch_rate = createGlobalPropertyf("a321neo/dynamics/FBW/aerodynamics/vpath_Q", 0, false, true, false)
 True_roll_rate = createGlobalPropertyf("a321neo/dynamics/FBW/aerodynamics/true_P", 0, false, true, false)--true roll rate(in relation to the previous reference frame instead of the flight path)
 --flight computers status

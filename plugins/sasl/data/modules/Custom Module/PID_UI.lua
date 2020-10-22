@@ -74,7 +74,7 @@ function Update_PID_historys(x_pos, y_pos, width, height, PID_array)
     end
 end
 
-function Draw_PID_graph(x_pos, y_pos, width, height, P_color, I_color, D_color, Output_color)
+function Draw_PID_graph(x_pos, y_pos, width, height, P_color, I_color, D_color, Sum_color, show_P, show_I, show_D, show_Sum)
     local CENTER_X = (2 * x_pos + width) / 2
     local CENTER_Y = (2 * y_pos + height) / 2
     local END_X = x_pos + width
@@ -90,10 +90,18 @@ function Draw_PID_graph(x_pos, y_pos, width, height, P_color, I_color, D_color, 
 
         if i > 1 then
             --draw all PID array lines
-            sasl.gl.drawLine(x_pos + Graph_x_offset_sum - DELTA_TIME_array[i] / graph_time_limit * width, CENTER_Y + Sum_array[i - 1] * height / 2, x_pos + Graph_x_offset_sum, CENTER_Y + Sum_array[i] * height / 2, Output_color)
-            sasl.gl.drawLine(x_pos + Graph_x_offset_sum - DELTA_TIME_array[i] / graph_time_limit * width, CENTER_Y + D_array[i - 1] * height / 2, x_pos + Graph_x_offset_sum, CENTER_Y + D_array[i] * height / 2, D_color)
-            sasl.gl.drawLine(x_pos + Graph_x_offset_sum - DELTA_TIME_array[i] / graph_time_limit * width, CENTER_Y + I_array[i - 1] * height / 2, x_pos + Graph_x_offset_sum, CENTER_Y + I_array[i] * height / 2, I_color)
-            sasl.gl.drawLine(x_pos + Graph_x_offset_sum - DELTA_TIME_array[i] / graph_time_limit * width, CENTER_Y + P_array[i - 1] * height / 2, x_pos + Graph_x_offset_sum, CENTER_Y + P_array[i] * height / 2, P_color)
+            if show_Sum == true then
+                sasl.gl.drawLine(x_pos + Graph_x_offset_sum - DELTA_TIME_array[i] / graph_time_limit * width, CENTER_Y + Sum_array[i - 1] * height / 2, x_pos + Graph_x_offset_sum, CENTER_Y + Sum_array[i] * height / 2, Sum_color)
+            end
+            if show_D == true then
+                sasl.gl.drawLine(x_pos + Graph_x_offset_sum - DELTA_TIME_array[i] / graph_time_limit * width, CENTER_Y + D_array[i - 1] * height / 2, x_pos + Graph_x_offset_sum, CENTER_Y + D_array[i] * height / 2, D_color)
+            end
+            if show_I == true then
+                sasl.gl.drawLine(x_pos + Graph_x_offset_sum - DELTA_TIME_array[i] / graph_time_limit * width, CENTER_Y + I_array[i - 1] * height / 2, x_pos + Graph_x_offset_sum, CENTER_Y + I_array[i] * height / 2, I_color)
+            end
+            if show_P == true then
+                sasl.gl.drawLine(x_pos + Graph_x_offset_sum - DELTA_TIME_array[i] / graph_time_limit * width, CENTER_Y + P_array[i - 1] * height / 2, x_pos + Graph_x_offset_sum, CENTER_Y + P_array[i] * height / 2, P_color)
+            end
         end
     end
 end
@@ -145,6 +153,6 @@ end
 function draw()
     sasl.gl.drawRectangle(0, 0, size[1], size[2], LIGHT_GREY)
 
-    Draw_PID_graph(0 + 5, 0 + 5, 400, 250, WHITE, LIGHT_BLUE, GREEN, ORANGE)
+    Draw_PID_graph(0 + 5, 0 + 5, 400, 250, WHITE, LIGHT_BLUE, GREEN, ORANGE, true, true, true, true)
     --Draw_list_of_PID_arrays(500, 180, 80, 30, WHITE, LIGHT_BLUE)
 end

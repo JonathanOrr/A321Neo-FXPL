@@ -231,16 +231,20 @@ function SSS_PID(pid_array, error)
         --Proportional--
         pid_array.Proportional = pid_array.Current_error * pid_array.P_gain
 
-	    --integral--(clamped to stop windup)
-	    pid_array.Integral_sum = Math_clamp(pid_array.Integral_sum + (pid_array.Current_error * get(DELTA_TIME)), pid_array.Error_margin * pid_array.Min_out * pid_array.I_time, pid_array.Error_margin * pid_array.Max_out * pid_array.I_time)
-        pid_array.Integral = Math_clamp(pid_array.Integral_sum * 1 / pid_array.I_time, pid_array.Error_margin * pid_array.Min_out, pid_array.Error_margin * pid_array.Max_out)
-
         --derivative--
         if pid_array.Smooth_derivative == true then
             pid_array.Derivative = Set_anim_value(pid_array.Derivative, ((pid_array.Current_error - last_error) / get(DELTA_TIME)) * pid_array.D_gain, -1000000000000000, 1000000000000000, pid_array.Derivative_curve_spd)
         else
             pid_array.Derivative = ((pid_array.Current_error - last_error) / get(DELTA_TIME)) * pid_array.D_gain
         end
+
+        --integral--(clamped to stop windup)
+        if pid_array.derivative_in_integral == true then
+            pid_array.Integral_sum = Math_clamp(pid_array.Integral_sum + (pid_array.Current_error * get(DELTA_TIME) + pid_array.Derivative * get(DELTA_TIME) ^ 2), pid_array.Error_margin * pid_array.Min_out * pid_array.I_time, pid_array.Error_margin * pid_array.Max_out * pid_array.I_time)
+        else
+            pid_array.Integral_sum = Math_clamp(pid_array.Integral_sum + (pid_array.Current_error * get(DELTA_TIME)), pid_array.Error_margin * pid_array.Min_out * pid_array.I_time, pid_array.Error_margin * pid_array.Max_out * pid_array.I_time)
+        end
+        pid_array.Integral = Math_clamp(pid_array.Integral_sum * 1 / pid_array.I_time, pid_array.Error_margin * pid_array.Min_out, pid_array.Error_margin * pid_array.Max_out)
 
         --nil value return 0
         if pid_array.Proportional == nil then
@@ -278,16 +282,21 @@ function SSS_PID_DPV(pid_array, Set_Point, PV)
         --Proportional--
         pid_array.Proportional = (Set_Point - PV) * pid_array.P_gain
 
-	    --integral--(clamped to stop windup)
-	    pid_array.Integral_sum = Math_clamp(pid_array.Integral_sum + ((Set_Point - PV) * get(DELTA_TIME)), pid_array.Error_margin * pid_array.Min_out * pid_array.I_time, pid_array.Error_margin * pid_array.Max_out * pid_array.I_time)
-        pid_array.Integral = Math_clamp(pid_array.Integral_sum * 1 / pid_array.I_time, pid_array.Error_margin * pid_array.Min_out, pid_array.Error_margin * pid_array.Max_out)
-
         --derivative--
         if pid_array.Smooth_derivative == true then
             pid_array.Derivative = Set_anim_value(pid_array.Derivative, ((last_PV - pid_array.PV) / get(DELTA_TIME)) * pid_array.D_gain, -1000000000000000, 1000000000000000, pid_array.Derivative_curve_spd)
         else
             pid_array.Derivative = ((last_PV - pid_array.PV) / get(DELTA_TIME)) * pid_array.D_gain
         end
+
+	    --integral--(clamped to stop windup)
+        if pid_array.derivative_in_integral == true then
+            pid_array.Integral_sum = Math_clamp(pid_array.Integral_sum + ((Set_Point - PV) * get(DELTA_TIME) + pid_array.Derivative * get(DELTA_TIME) ^ 2), pid_array.Error_margin * pid_array.Min_out * pid_array.I_time, pid_array.Error_margin * pid_array.Max_out * pid_array.I_time)
+        else
+            pid_array.Integral_sum = Math_clamp(pid_array.Integral_sum + ((Set_Point - PV) * get(DELTA_TIME)), pid_array.Error_margin * pid_array.Min_out * pid_array.I_time, pid_array.Error_margin * pid_array.Max_out * pid_array.I_time)
+        end
+        pid_array.Integral = Math_clamp(pid_array.Integral_sum * 1 / pid_array.I_time, pid_array.Error_margin * pid_array.Min_out, pid_array.Error_margin * pid_array.Max_out)
+
 
         --nil value return 0
         if pid_array.Proportional == nil then
