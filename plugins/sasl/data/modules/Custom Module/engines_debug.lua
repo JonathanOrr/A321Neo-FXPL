@@ -109,10 +109,10 @@ function draw()
 
     -- Throttle valve
     sasl.gl.drawText(B612MONO_regular, 20, 250, "Starter duration: ", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
-    sasl.gl.drawText(B612MONO_regular, 180, 250, Round(get(starter_duration,1),2) , 12, false, false, TEXT_ALIGN_RIGHT, UI_LIGHT_BLUE)
+    sasl.gl.drawText(B612MONO_regular, 220, 250, Round(get(starter_duration,1),2) , 12, false, false, TEXT_ALIGN_RIGHT, UI_LIGHT_BLUE)
 
     sasl.gl.drawText(B612MONO_regular, size[1]/2+20, 250, "Starter duration: ", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
-    sasl.gl.drawText(B612MONO_regular, size[1]/2+180, 250, Round(get(starter_duration,2),2), 12, false, false, TEXT_ALIGN_RIGHT, UI_LIGHT_BLUE)
+    sasl.gl.drawText(B612MONO_regular, size[1]/2+220, 250, Round(get(starter_duration,2),2), 12, false, false, TEXT_ALIGN_RIGHT, UI_LIGHT_BLUE)
 
     -- Throttle valve
     sasl.gl.drawText(B612MONO_regular, 20, 230, "Throttle (XP): ", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)

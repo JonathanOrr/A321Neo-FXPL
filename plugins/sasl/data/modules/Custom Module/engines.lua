@@ -8,13 +8,18 @@
 ----------------------------------------------------------------------------------------------------
 include('constants.lua')
 
-MAX_EGT_OFFSET = 10  -- This is the maximum offset between one engine and the other in terms of EGT
-ENG_N1_CRANK    = 10  -- N1 used for cranking and cooling
-ENG_N1_CRANK_FF = 15  -- FF in case of wet cranking
-ENG_N1_CRANK_EGT= 95  -- Target EGT for cranking
-ENG_N1_LL_IDLE  = 18.3 -- Value to determine if parameters control should be given to X-Plane 
+local MAX_EGT_OFFSET = 10  -- This is the maximum offset between one engine and the other in terms of EGT
+local ENG_N1_CRANK    = 10  -- N1 used for cranking and cooling
+local ENG_N1_CRANK_FF = 15  -- FF in case of wet cranking
+local ENG_N1_CRANK_EGT= 95  -- Target EGT for cranking
+local ENG_N1_LL_IDLE  = 18.3 -- Value to determine if parameters control should be given to X-Plane 
+local MAGIC_NUMBER = 100     -- This is a magic number, which value is necessary to start the engine (see later)
 
-START_UP_PHASES_N2 = {
+local START_UP_PHASES_N2 = {
+    -- n2_start: start point after which the element is considered
+    -- n2_increase_per_sec: N2 is increasing this value each second
+    -- fuel_flow: the fuel flow to use in this phase (static)
+    -- egt: the value for EGT at the beginning of this phase (it will increase towards the next value)
     {n2_start = 0,    n2_increase_per_sec = 0.26, fuel_flow = 0,   egt=0},
     {n2_start = 10,   n2_increase_per_sec = 1.5, fuel_flow = 0,    egt=97},
     {n2_start = 16.2, n2_increase_per_sec = 1.5, fuel_flow = 120,  egt=97},
@@ -24,8 +29,9 @@ START_UP_PHASES_N2 = {
     {n2_start = 31.8, n2_increase_per_sec = 0.44, fuel_flow = 120, egt=173},
     {n2_start = 34.2, n2_increase_per_sec = 0.60, fuel_flow = 140, egt=229}
 }
-START_UP_PHASES_N1 = {
-    {n1_set = 2,      n1_increase_per_sec = 3, fuel_flow = 140, egt=280, stop_ign=false},
+
+local START_UP_PHASES_N1 = {
+    {n1_set = 2,      n1_increase_per_sec = 1, fuel_flow = 140, egt=280, stop_ign=false},
     {n1_set = 5,      n1_increase_per_sec = 0.60, fuel_flow = 140, egt=290, stop_ign=false},
     {n1_set = 6.6,    n1_increase_per_sec = 0.60, fuel_flow = 160, egt=303, stop_ign=false},
     {n1_set = 7.3,    n1_increase_per_sec = 0.20, fuel_flow = 180, egt=357, stop_ign=false},
@@ -44,10 +50,8 @@ START_UP_PHASES_N1 = {
 -- Global/Local variables
 ----------------------------------------------------------------------------------------------------
 
-local eng_starting_phase = {0, 0}
-local egt_eng_1_offset = math.random() * MAX_EGT_OFFSET * 2 - MAX_EGT_OFFSET
-local egt_eng_2_offset = math.random() * MAX_EGT_OFFSET * 2 - MAX_EGT_OFFSET
-local last_params_update = 0
+local egt_eng_1_offset = math.random() * MAX_EGT_OFFSET * 2 - MAX_EGT_OFFSET    -- Offset in engines to simulate realistic values
+local egt_eng_2_offset = math.random() * MAX_EGT_OFFSET * 2 - MAX_EGT_OFFSET    -- Offset in engines to simulate realistic values
 
 local eng_1_manual_switch = false   -- Is engine manual start enabled?
 local eng_2_manual_switch = false   -- Is engine manual start enabled?
@@ -67,18 +71,48 @@ local eng_N2_off  = {0,0}   -- N2 for startup procedure
 local eng_FF_off  = {0,0}   -- FF for startup procedure
 local eng_EGT_off = {get(OTA),get(OTA)}   -- EGT for startup procedure
 
+local slow_start_time_requested = false
+
+----------------------------------------------------------------------------------------------------
+-- Functions - Commands
+----------------------------------------------------------------------------------------------------
+function engines_auto_slow_start(phase)
+    -- When the user press Flight -> Start engines to running
+    if phase == SASL_COMMAND_BEGIN then
+        slow_start_time_requested = true -- Please check the function update_auto_start()
+    end
+    return 0
+end
+
+function engines_auto_quick_start(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        sasl.commandOnce(FUEL_cmd_internal_qs)
+    
+        set(Engine_1_master_switch, 1)
+        set(Engine_2_master_switch, 1)
+        set(Engine_mode_knob, 0)
+    end
+    return 1
+end
+
+function onAirportLoaded()
+    -- When the aircraft is loaded in flight, let's switch on all the pumps
+    if get(Startup_running) == 1 or get(Capt_ra_alt_ft) > 20 then
+        engines_auto_quick_start(SASL_COMMAND_BEGIN)
+    else
+        set(Engine_1_master_switch, 0)
+        set(Engine_2_master_switch, 0)
+        set(Engine_mode_knob, 0)
+    end
+end
+
 ----------------------------------------------------------------------------------------------------
 -- Commands
 ----------------------------------------------------------------------------------------------------
 sasl.registerCommandHandler (ENG_cmd_manual_start_1,     0, function(phase) if phase == SASL_COMMAND_BEGIN then eng_1_manual_switch = not eng_1_manual_switch end end )
 sasl.registerCommandHandler (ENG_cmd_manual_start_2,     0, function(phase) if phase == SASL_COMMAND_BEGIN then eng_2_manual_switch = not eng_2_manual_switch end end )
-
-
-----------------------------------------------------------------------------------------------------
--- Functions - Commands
-----------------------------------------------------------------------------------------------------
-
--- TODO
+sasl.registerCommandHandler (sasl.findCommand("sim/operation/auto_start"),  1, engines_auto_slow_start )
+sasl.registerCommandHandler (sasl.findCommand("sim/operation/quick_start"), 1, engines_auto_quick_start )
 
 ----------------------------------------------------------------------------------------------------
 -- Functions - Engine parameters
@@ -99,7 +133,7 @@ end
 local function update_n1_minimum()
     local curr_altitude = get(Elevation_m) * 3.28084
     local comp_min_n1 = min_n1(curr_altitude)
-    local always_a_minimum = 18.5
+    local always_a_minimum = ENG_N1_LL_IDLE + 0.2
     set(Eng_N1_idle, comp_min_n1)
 
     -- Update ENG1 N1 minimum
@@ -208,11 +242,9 @@ local function perform_crank_procedure(eng, wet_cranking)
     end
 
     set(eng_mixture, 0, eng)                                    -- No mixture for dry cranking
-    --set(eng_ignition_switch, 4, eng)                            -- Turn on ignition (necessary for x-plane to run the engine)
-                                                                -- We are not actually igniting the engine
 
     -- Set N2 for cranking
-    eng_N2_off[eng] = Set_linear_anim_value(eng_N2_off[eng], ENG_N1_CRANK, 0, 120, 2) -- TODO 0.25
+    eng_N2_off[eng] = Set_linear_anim_value(eng_N2_off[eng], ENG_N1_CRANK, 0, 120, 0.25)
     set(eng_N2_enforce, eng_N2_off[eng], eng)
     
     -- Set WGT for cranking
@@ -230,7 +262,6 @@ end
 
 local function perform_starting_procedure_follow_n2(eng)
     set(eng_mixture, 0, eng) -- No mixture in this phase
-    --set(eng_ignition_switch, 4, eng)
 
     for i=1,(#START_UP_PHASES_N2-1) do
         if eng_N2_off[eng] < START_UP_PHASES_N2[i+1].n2_start then
@@ -247,8 +278,7 @@ local function perform_starting_procedure_follow_n2(eng)
 end
 
 local function perform_starting_procedure_follow_n1(eng)
-    set(eng_mixture, 1, eng) -- No mixture in this phase
-    --set(eng_ignition_switch, 4, eng)
+    set(eng_mixture, 1, eng) -- Mixture in this phase
     set(eng_igniters, 1, eng)
 
 
@@ -271,8 +301,6 @@ local function perform_starting_procedure_follow_n1(eng)
     
     if eng_N1_off[eng] > 12 then
 
-        --set(eng_ignition_switch, 0, eng)
-
         set(eng_igniters, 0, eng)
     end
 end
@@ -286,13 +314,13 @@ local function perform_starting_procedure(eng)
     
     if eng_N2_off[eng] < START_UP_PHASES_N2[#START_UP_PHASES_N2].n2_start then
 
-        set(starter_duration, 300, eng)
+        set(starter_duration, MAGIC_NUMBER, eng)
 
         perform_starting_procedure_follow_n2(eng)
     elseif eng_N1_off[eng] < START_UP_PHASES_N1[#START_UP_PHASES_N1].n1_set then
         perform_starting_procedure_follow_n1(eng)
     else
-        --set(eng_ignition_switch, 0, eng)
+
     end
     
 end
@@ -355,14 +383,49 @@ local function update_startup()
 
 end
 
-function update()
+local function update_auto_start()
+    if not slow_start_time_requested then
+        return  -- auto start not requested
+    end
+ 
+    -- Turn on the batteries immediately and start the APU   
+    ELEC_sys.batteries[1].switch_status = true
+    ELEC_sys.batteries[2].switch_status = true
+    
+    set(Apu_start_position, 2)
+    set(Apu_bleed_switch, 1)
 
+    set(eng_ignition_switch, 0, 1) 
+    set(eng_ignition_switch, 0, 2) 
+
+    if get(Apu_avail) == 1 then
+        set(Engine_mode_knob,1)
+        set(Engine_2_master_switch, 1)
+    end
+
+    if get(Engine_2_avail) == 1 then
+        set(Engine_1_master_switch, 1)
+    end
+
+    if get(Engine_1_avail) == 1 and get(Engine_2_avail) == 1 then
+        set(Engine_mode_knob, 0)
+        slow_start_time_requested = false
+    end
+
+end
+
+function update()
     update_starter_datarefs()
-    update_startup()
+    if get(FLIGHT_TIME) > 0.5 then
+        update_startup()
+    end
 
     update_n1_minimum()
     update_n2()
     update_egt()
     update_ff()
     update_avail()
+
+    update_auto_start()
+
 end

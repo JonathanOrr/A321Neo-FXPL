@@ -143,7 +143,7 @@ P _door/3/_xyz/0 1.500000000
 P _door/3/_xyz/1 0.0
 P _door/3/_xyz/2 14.500000000
 P _door/3/_xyz/count 3
-P _door/4/_ang_now 47.287696838
+P _door/4/_ang_now 42.084300995
 P _door/4/_ext_ang 0.0
 P _door/4/_ret_ang 90.0
 P _door/4/_type 2
@@ -151,7 +151,7 @@ P _door/4/_xyz/0 -13.0
 P _door/4/_xyz/1 -3.599999905
 P _door/4/_xyz/2 73.500000000
 P _door/4/_xyz/count 3
-P _door/5/_ang_now -47.287696838
+P _door/5/_ang_now -42.084300995
 P _door/5/_ext_ang 0.0
 P _door/5/_ret_ang -90.0
 P _door/5/_type 2
@@ -209,10 +209,10 @@ P _gear/0/_latN 0.0
 P _gear/0/_latR 0.0
 P _gear/0/_leg_len 5.249343872
 P _gear/0/_lonE 6.0
-P _gear/0/_lonN 54.863952637
+P _gear/0/_lonN 49.487110138
 P _gear/0/_lonR 99.0
 P _gear/0/_scon 52322.308593750
-P _gear/0/_stat_def 0.378928781
+P _gear/0/_stat_def 0.378928810
 P _gear/0/_steerdeg_hispeed 5.0
 P _gear/0/_steerdeg_lospeed 75.0
 P _gear/0/_strut_comp 0.899999976
@@ -239,11 +239,11 @@ P _gear/1/_gear_x -12.303149223
 P _gear/1/_gear_y -2.788713932
 P _gear/1/_gear_z 71.194229126
 P _gear/1/_latE 0.0
-P _gear/1/_latN 43.609764099
+P _gear/1/_latN 38.811077118
 P _gear/1/_latR 83.0
 P _gear/1/_leg_len 8.202099800
 P _gear/1/_lonE -6.0
-P _gear/1/_lonN -2.847486973
+P _gear/1/_lonN -3.194380045
 P _gear/1/_lonR 0.0
 P _gear/1/_scon 83991.070312500
 P _gear/1/_stat_def 1.381937623
@@ -273,11 +273,11 @@ P _gear/2/_gear_x 12.303149223
 P _gear/2/_gear_y -2.788713932
 P _gear/2/_gear_z 71.194229126
 P _gear/2/_latE 0.0
-P _gear/2/_latN -43.609764099
+P _gear/2/_latN -38.811077118
 P _gear/2/_latR -83.0
 P _gear/2/_leg_len 8.202099800
 P _gear/2/_lonE -6.0
-P _gear/2/_lonN -2.847486973
+P _gear/2/_lonN -3.194380045
 P _gear/2/_lonR 0.0
 P _gear/2/_scon 83991.070312500
 P _gear/2/_stat_def 1.381937623
@@ -51981,7 +51981,7 @@ P acf/_fuel_2/0 0.0
 P acf/_fuel_2/1 0.0
 P acf/_fuel_2/2 0.0
 P acf/_fuel_2/count 3
-P acf/_fuel_intro_time_jet 45.0
+P acf/_fuel_intro_time_jet 1.0
 P acf/_fuel_intro_time_prop 5.0
 P acf/_gear_EQ 1
 P acf/_gear_can_ret_on_ground 0

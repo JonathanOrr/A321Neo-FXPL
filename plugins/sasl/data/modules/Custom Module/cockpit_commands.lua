@@ -205,6 +205,7 @@ FUEL_cmd_ACT_TK_XFR       = createCommand("a321neo/cockpit/fuel/ACT_TK_FWD", "Pr
 FUEL_cmd_RCT_TK_XFR       = createCommand("a321neo/cockpit/fuel/RCT_TK_FWD", "Press RCT TK FWD button in the FUEL panel")
 FUEL_cmd_C_TK_mode        = createCommand("a321neo/cockpit/fuel/C_TK_mode", "Press MODE SEL button in the FUEL panel")
 FUEL_cmd_X_FEED           = createCommand("a321neo/cockpit/fuel/X_FEED", "Press X FEED button in the FUEL panel")
+FUEL_cmd_internal_qs      = sasl.createCommand("a321neo/internals/fuel/quick_start", "Used during quick start") -- This is used only for sasl internals
 
 -- Standby instrument
 ISIS_cmd_LS          = createCommand("a321neo/cockpit/ISIS/LS", "Press LS button on ISIS")
