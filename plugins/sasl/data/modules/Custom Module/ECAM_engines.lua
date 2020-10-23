@@ -11,7 +11,7 @@ local params = {
     eng2_oil_temp = 0,
     eng1_vib_n1 = 0,
     eng1_vib_n2 = 0,
-    eng1_vib_n1 = 0,
+    eng2_vib_n1 = 0,
     eng2_vib_n2 = 0,
     last_update = 0
 }

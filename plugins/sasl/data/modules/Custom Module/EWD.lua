@@ -35,28 +35,28 @@ sasl.startTimer(time_blinking)
 
 local function update_reverse_indication()
     -- ENG1 Reverse
-    if get(Eng_1_reverser_deployment) > 0 then
+    if get(Eng_1_reverser_deployment) > 0.01 then
         if get(EWD_flight_phase) >= 5 and get(EWD_flight_phase) <= 7 then
             -- Blink
-            set(EWD_engine_1_rev_ind, (math.floor(get(TIME)*2) / 10 % 2) == 1 and 1 or 2)            
+            set(EWD_engine_1_rev_ind, (math.floor(get(TIME)*2) / 10 % 2) == 1 and 2 or 1)
         elseif get(Eng_1_reverser_deployment) > 0.98 then
             set(EWD_engine_1_rev_ind, 3)    -- Green
         else
-            set(EWD_engine_1_rev_ind, 1)    -- Amber
+            set(EWD_engine_1_rev_ind, 2)    -- Amber
         end
     else
         set(EWD_engine_1_rev_ind, 0)    -- No reverse indication
     end
 
     -- ENG2 Reverse    
-    if get(Eng_2_reverser_deployment) > 0 then
+    if get(Eng_2_reverser_deployment) > 0.01 then
         if get(EWD_flight_phase) >= 5 and get(EWD_flight_phase) <= 7 then
             -- Blink
-            set(EWD_engine_2_rev_ind, (math.floor(get(TIME)*2) % 2) == 1 and 1 or 2)            
+            set(EWD_engine_2_rev_ind, (math.floor(get(TIME)*2) % 2) == 1 and 2 or 1)
         elseif get(Eng_2_reverser_deployment) > 0.98 then
             set(EWD_engine_2_rev_ind, 3)    -- Green
         else
-            set(EWD_engine_2_rev_ind, 1)    -- Amber
+            set(EWD_engine_2_rev_ind, 2)    -- Amber
         end
     else
         set(EWD_engine_2_rev_ind, 0)    -- No reverse indication
@@ -97,6 +97,14 @@ end
 
 local function draw_engines()
 
+    -- N2 background box --
+    if get(Engine_1_master_switch) == 1 and get(Engine_1_avail) == 0 then
+          sasl.gl.drawRectangle(size[1]/2-210, size[2]/2+70, 85, 32, {0.2,0.2,0.2})
+    end
+    if get(Engine_2_master_switch) == 1 and get(Engine_2_avail) == 0 then
+          sasl.gl.drawRectangle(size[1]/2+115, size[2]/2+70, 85, 32, {0.2,0.2,0.2})
+    end
+
     --N1--    
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-115, size[2]/2+280, math.floor(params.eng1_n1) .. "." , 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-100, size[2]/2+280, math.floor((params.eng1_n1%1)*10)  , 24, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
@@ -107,10 +115,6 @@ local function draw_engines()
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-140, size[2]/2+150, params.eng1_egt, 28, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2+210, size[2]/2+150, params.eng2_egt, 28, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     --N2--
-    --if get(Engine_mode_knob) == 1 or get(Engine_mode_knob) == -1 then -- TODO
-    --    sasl.gl.drawRectangle(size[1]/2-205, size[2]/2+70, 65, 32, ECAM_GREY)
-    --    sasl.gl.drawRectangle(size[1]/2+135, size[2]/2+70, 65, 32, ECAM_GREY)
-    --end
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-145, size[2]/2+75, math.floor(params.eng1_n2) .. "." , 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-130, size[2]/2+75, math.floor((params.eng1_n2%1)*10) , 24, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
 
@@ -120,6 +124,8 @@ local function draw_engines()
     --FF--
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-130, size[2]/2+3, params.eng1_ff, 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2+195, size[2]/2+3, params.eng2_ff, 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+
+
 
     -- AVAIL box --
     if get(EWD_engine_avail_ind_1_start) ~= 0 and get(TIME) - get(EWD_engine_avail_ind_1_start) < 10 then
