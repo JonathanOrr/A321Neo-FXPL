@@ -881,6 +881,268 @@ MessageGroup_ELEC_DC_EMER_CONFIG = {
     end
 }
 
+----------------------------------------------------------------------------------------------------
+-- CAUTION: GEN 1/2 OFF
+----------------------------------------------------------------------------------------------------
 
+
+MessageGroup_ELEC_GEN_OFF = {
+
+    shown = false,
+
+    text  = function(self)
+                return "ELEC"
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_ELEC,
+    
+    messages = {
+        {
+            text = function(self)
+                x = ""
+                if ELEC_sys.generators[1].switch_status == false and get(ELEC_sys.generators[1].drs.failure) == 0 then
+                    x = x .. "1"
+                end
+                if ELEC_sys.generators[2].switch_status == false and get(ELEC_sys.generators[2].drs.failure) == 0 then
+                    if #x > 0 then
+                        x = x .. " + "
+                    end
+                    x = x .. "2"
+                end
+                return "     GEN " .. x .. " OFF"
+            end,
+            color = function(self) return COL_CAUTION end,
+            is_active = function(self) return true end
+        }
+    },
+
+    is_active = function(self)
+        return (ELEC_sys.generators[1].switch_status == false and get(ELEC_sys.generators[1].drs.failure) == 0)
+               or (ELEC_sys.generators[2].switch_status == false and get(ELEC_sys.generators[2].drs.failure) == 0)
+    end,
+
+    is_inhibited = function(self)
+        return is_active_in({PHASE_1ST_ENG_ON, PHASE_AIRBONE, PHASE_BELOW_80_KTS})
+    end
+}
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: GEN 1/2 FAULT
+----------------------------------------------------------------------------------------------------
+
+Message_ELEC_GEN_1_OFF_ON = {
+    text = function(self)
+        return " - GEN 1......OFF THEN ON"
+    end,
+
+    color = function(self)
+        return COL_ACTIONS
+    end,
+
+    already_switched_off = false,
+    already_switched_on  = false,
+
+    is_active = function()
+        if Message_ELEC_GEN_1_OFF_ON.already_switched_off == false then
+            Message_ELEC_GEN_1_OFF_ON.already_switched_off = ELEC_sys.generators[1].switch_status == false
+        end
+        if Message_ELEC_GEN_1_OFF_ON.already_switched_off == true and Message_ELEC_GEN_1_OFF_ON.already_switched_on == false then
+            Message_ELEC_GEN_1_OFF_ON.already_switched_on = ELEC_sys.generators[1].switch_status == true
+        end
+      return get(ELEC_sys.generators[1].drs.failure) == 1 and not Message_ELEC_GEN_1_OFF_ON.already_switched_on
+    end
+}
+
+Message_ELEC_GEN_2_OFF_ON = {
+    text = function(self)
+        return " - GEN 2......OFF THEN ON"
+    end,
+
+    color = function(self)
+        return COL_ACTIONS
+    end,
+
+    already_switched_off = false,
+    already_switched_on  = false,
+
+    is_active = function()
+        if Message_ELEC_GEN_2_OFF_ON.already_switched_off == false then
+            Message_ELEC_GEN_2_OFF_ON.already_switched_off = ELEC_sys.generators[2].switch_status == false
+        end
+        if Message_ELEC_GEN_2_OFF_ON.already_switched_off == true and Message_ELEC_GEN_2_OFF_ON.already_switched_on == false then
+            Message_ELEC_GEN_2_OFF_ON.already_switched_on = ELEC_sys.generators[2].switch_status == true
+        end
+      return get(ELEC_sys.generators[2].drs.failure) == 1 and not Message_ELEC_GEN_2_OFF_ON.already_switched_on
+    end
+}
+
+Message_ELEC_GEN_1_OFF = {
+    text = function() return " - GEN 1..............OFF" end,
+    color = function() return COL_ACTIONS end,
+    is_active = function() return get(ELEC_sys.generators[1].drs.failure) == 1 and ELEC_sys.generators[1].switch_status end
+}
+Message_ELEC_GEN_2_OFF = {
+    text = function() return " - GEN 2..............OFF" end,
+    color = function() return COL_ACTIONS end,
+    is_active = function() return get(ELEC_sys.generators[2].drs.failure) == 1 and ELEC_sys.generators[2].switch_status end
+}
+
+
+Message_ELEC_IF_UNSUCCESSFUL_GEN_FAULT = {
+    text = function(self)
+        return " · IF UNSUCCESSFUL:"
+    end,
+
+    color = function(self)
+        return COL_REMARKS
+    end,
+
+  is_active = function(self)
+      return Message_ELEC_GEN_1_OFF.is_active() or Message_ELEC_GEN_2_OFF.is_active()
+  end
+}
+
+
+MessageGroup_ELEC_GEN_FAULT = {
+
+    shown = false,
+
+    text  = function(self)
+                return "ELEC"
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_ELEC,
+    
+    messages = {
+        {
+            text = function(self)
+                x = ""
+                if get(ELEC_sys.generators[1].drs.failure) == 1 then
+                    x = x .. "1"
+                end
+                if get(ELEC_sys.generators[2].drs.failure) == 1 then
+                    if #x > 0 then
+                        x = x .. " + "
+                    end
+                    x = x .. "2"
+                end
+                return "     GEN " .. x .. " FAULT"
+            end,
+            color = function(self) return COL_CAUTION end,
+            is_active = function(self) return true end
+        },
+        Message_ELEC_GEN_1_OFF_ON,
+        Message_ELEC_GEN_2_OFF_ON,
+        Message_ELEC_IF_UNSUCCESSFUL_GEN_FAULT,
+        Message_ELEC_GEN_1_OFF,
+        Message_ELEC_GEN_2_OFF,
+        
+    },
+
+    is_active = function(self)
+        return (get(ELEC_sys.generators[1].drs.failure) == 1)
+               or (get(ELEC_sys.generators[2].drs.failure) == 1)
+    end,
+
+    is_inhibited = function(self)
+        return is_active_in({PHASE_1ST_ENG_ON , PHASE_1ST_ENG_TO_PWR, PHASE_AIRBONE, PHASE_BELOW_80_KTS})
+    end
+}
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: APU GEN FAULT
+----------------------------------------------------------------------------------------------------
+
+Message_ELEC_APU_GEN_OFF_ON = {
+    text = function(self)
+        return " - APU GEN....OFF THEN ON"
+    end,
+
+    color = function(self)
+        return COL_ACTIONS
+    end,
+
+    already_switched_off = false,
+    already_switched_on  = false,
+
+    is_active = function()
+        if Message_ELEC_APU_GEN_OFF_ON.already_switched_off == false then
+            Message_ELEC_APU_GEN_OFF_ON.already_switched_off = ELEC_sys.generators[3].switch_status == false
+        end
+        if Message_ELEC_APU_GEN_OFF_ON.already_switched_off == true and Message_ELEC_APU_GEN_OFF_ON.already_switched_on == false then
+            Message_ELEC_APU_GEN_OFF_ON.already_switched_on = ELEC_sys.generators[3].switch_status == true
+        end
+      return get(ELEC_sys.generators[3].drs.failure) == 1 and not Message_ELEC_APU_GEN_OFF_ON.already_switched_on
+    end
+}
+
+Message_ELEC_APU_GEN_OFF = {
+    text = function() return " - APU GEN............OFF" end,
+    color = function() return COL_ACTIONS end,
+    is_active = function() return ELEC_sys.generators[3].switch_status end
+}
+
+
+Message_ELEC_IF_UNSUCCESSFUL_APU_GEN_FAULT = {
+    text = function(self)
+        return " · IF UNSUCCESSFUL:"
+    end,
+
+    color = function(self)
+        return COL_REMARKS
+    end,
+
+  is_active = function(self)
+      return Message_ELEC_APU_GEN_OFF.is_active()
+  end
+}
+
+
+MessageGroup_ELEC_APU_GEN_FAULT = {
+
+    shown = false,
+
+    text  = function(self)
+                return "ELEC"
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_ELEC,
+    
+    messages = {
+        {
+            text = function(self)
+                return "     APU GEN FAULT"
+            end,
+            color = function(self) return COL_CAUTION end,
+            is_active = function(self) return true end
+        },
+        Message_ELEC_APU_GEN_OFF_ON,
+        Message_ELEC_IF_UNSUCCESSFUL_APU_GEN_FAULT,
+        Message_ELEC_APU_GEN_OFF
+    },
+
+    is_active = function(self)
+        return (get(ELEC_sys.generators[3].drs.failure) == 1)
+    end,
+
+    is_inhibited = function(self)
+        return is_inibithed_in({PHASE_ABOVE_80_KTS, PHASE_LIFTOFF, PHASE_FINAL, PHASE_TOUCHDOWN})
+    end
+}
 
 

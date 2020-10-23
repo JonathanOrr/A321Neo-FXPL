@@ -53,3 +53,14 @@ function is_inibithed_in(phases)
     end
     return false
 end
+
+
+function is_active_in(phases)
+
+    for i,p in ipairs(phases) do
+        if p == get(EWD_flight_phase) then
+            return false
+        end
+    end
+    return true
+end
