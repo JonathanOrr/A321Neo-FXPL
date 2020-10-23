@@ -84,7 +84,7 @@ function update()
         params.last_update = get(TIME)
     end
     
-    if params.eng1_n1 < get(Eng_N1_idle) + 1 and params.eng2_n1 < get(Eng_N1_idle) + 1 and get(Any_wheel_on_ground) == 0 then
+    if params.eng1_n1 < get(Eng_N1_idle) + 2 and params.eng2_n1 < get(Eng_N1_idle) + 2 and get(Any_wheel_on_ground) == 0 then
         if eng_idle_start == 0 then
             eng_idle_start = get(TIME)
         end
@@ -93,7 +93,17 @@ function update()
     end
     
     update_reverse_indication()
+
 end
+
+
+function draw_extra_indication()
+
+    if get(EWD_flight_phase) == PHASE_1ST_ENG_ON and (get(Pack_L) == 1 or get(Pack_R) == 1) then
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+70, size[2]-30, "PACKS", 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+    end
+end
+
 
 local function draw_engines()
 
@@ -241,5 +251,6 @@ function draw()
     draw_right_memo()
     draw_extras()
     draw_fuel_stuffs()
+    draw_extra_indication()
 end
 

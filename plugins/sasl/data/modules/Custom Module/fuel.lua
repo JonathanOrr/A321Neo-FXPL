@@ -320,11 +320,11 @@ function update_engine_fuel_status()
     eng1_fuel_status = 0
     eng2_fuel_status = 0
 
-    if tank_pump_and_xfr[L_TK_PUMP_1].status or tank_pump_and_xfr[L_TK_PUMP_2].status then
+    if tank_pump_and_xfr[L_TK_PUMP_1].pressure_ok or tank_pump_and_xfr[L_TK_PUMP_2].pressure_ok then
         eng1_fuel_status = 3    -- Normal operation, left pumps feed the left engine
     end
     
-    if tank_pump_and_xfr[R_TK_PUMP_1].status or tank_pump_and_xfr[R_TK_PUMP_2].status then
+    if tank_pump_and_xfr[R_TK_PUMP_1].pressure_ok or tank_pump_and_xfr[R_TK_PUMP_2].pressure_ok then
         eng2_fuel_status = 4    -- Normal operation, right pumps feed the right engine
     end
     
@@ -335,11 +335,11 @@ function update_engine_fuel_status()
     end
     
     -- If not, gravity feed
-    if eng1_fuel_status == 0 and get(Total_vertical_g_load) > 0 then
+    if eng1_fuel_status == 0 and get(Total_vertical_g_load) > 0 and get(Fuel_quantity[tank_LEFT]) > 0 then
         eng1_fuel_status = 1
     end
     
-    if eng2_fuel_status == 0 and get(Total_vertical_g_load) > 0 then
+    if eng2_fuel_status == 0 and get(Total_vertical_g_load) > 0 and get(Fuel_quantity[tank_RIGHT]) > 0 then
         eng2_fuel_status = 2
     end
 

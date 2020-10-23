@@ -419,17 +419,23 @@ local function perform_starting_procedure_follow_n2(eng)
         if eng_N2_off[eng] < START_UP_PHASES_N2[i+1].n2_start then
             -- We have found the correct phase
             
-            -- Let's compute the new N2
-            eng_N2_off[eng] = eng_N2_off[eng] + START_UP_PHASES_N2[i].n2_increase_per_sec * get(DELTA_TIME)
-            set(eng_N2_enforce, eng_N2_off[eng], eng)
-            
             -- Let's set the fuel flow
             eng_FF_off[eng] = START_UP_PHASES_N2[i].fuel_flow  / 3600
             
-            -- And let's compute the EGT
-            perc = (eng_N2_off[eng] - START_UP_PHASES_N2[i].n2_start) / (START_UP_PHASES_N2[i+1].n2_start - START_UP_PHASES_N2[i].n2_start)
-            eng_EGT_off[eng] = Math_lerp(START_UP_PHASES_N2[i].egt, START_UP_PHASES_N2[i+1].egt, perc)
+            local eng_has_fuel = (eng==1 and get(Fuel_tank_selector_eng_1)>0) or (eng==2 and get(Fuel_tank_selector_eng_2)>0)
             
+            if eng_FF_off[eng] == 0 or eng_has_fuel then
+            
+                -- Let's compute the new N2
+                eng_N2_off[eng] = eng_N2_off[eng] + START_UP_PHASES_N2[i].n2_increase_per_sec * get(DELTA_TIME)
+                set(eng_N2_enforce, eng_N2_off[eng], eng)
+                    
+                -- And let's compute the EGT
+                perc = (eng_N2_off[eng] - START_UP_PHASES_N2[i].n2_start) / (START_UP_PHASES_N2[i+1].n2_start - START_UP_PHASES_N2[i].n2_start)
+                eng_EGT_off[eng] = Math_lerp(START_UP_PHASES_N2[i].egt, START_UP_PHASES_N2[i+1].egt, perc)
+            else
+                eng_FF_off[eng] = 0
+            end
             break -- Don't need to check the other phases
         end
 
@@ -451,19 +457,26 @@ local function perform_starting_procedure_follow_n1(eng)
         
         if curr_N1 < START_UP_PHASES_N1[i+1].n1_set then
             -- We have found the correct phase
-            
-            -- Let's compute the new N2
-            local new_N1 = curr_N1 + START_UP_PHASES_N1[i].n1_increase_per_sec * get(DELTA_TIME)
-            eng_N1_off[eng] = new_N1
-            set(eng_N1_enforce, new_N1, eng)
 
             -- Let's set the fuel flow
             eng_FF_off[eng] = START_UP_PHASES_N1[i].fuel_flow  / 3600
             
-            -- Let's compute the EGT
-            perc = (curr_N1 - START_UP_PHASES_N1[i].n1_set) / (START_UP_PHASES_N1[i+1].n1_set - START_UP_PHASES_N1[i].n1_set)
-            eng_EGT_off[eng] = Math_lerp(START_UP_PHASES_N1[i].egt, START_UP_PHASES_N1[i+1].egt, perc)
+            local eng_has_fuel = (eng==1 and get(Fuel_tank_selector_eng_1)>0) or (eng==2 and get(Fuel_tank_selector_eng_2)>0)
             
+            if eng_FF_off[eng] == 0 or eng_has_fuel then
+            
+                -- Let's compute the new N2
+                local new_N1 = curr_N1 + START_UP_PHASES_N1[i].n1_increase_per_sec * get(DELTA_TIME)
+                eng_N1_off[eng] = new_N1
+                set(eng_N1_enforce, new_N1, eng)
+
+                
+                -- Let's compute the EGT
+                perc = (curr_N1 - START_UP_PHASES_N1[i].n1_set) / (START_UP_PHASES_N1[i+1].n1_set - START_UP_PHASES_N1[i].n1_set)
+                eng_EGT_off[eng] = Math_lerp(START_UP_PHASES_N1[i].egt, START_UP_PHASES_N1[i+1].egt, perc)
+            else
+                eng_FF_off[eng] = 0
+            end
             break -- Don't need to check the other phases
         end
     end
