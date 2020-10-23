@@ -1,48 +1,112 @@
---sim dataref
+----------------------------------------------------------------------------------------------------
+-- APU management file
+----------------------------------------------------------------------------------------------------
 
-local apu_gen = globalProperty("sim/cockpit2/electrical/APU_generator_on")
-local apu_flap_open_ratio = globalProperty("sim/cockpit2/electrical/APU_door")
+----------------------------------------------------------------------------------------------------
+-- Constants
+----------------------------------------------------------------------------------------------------
+include('constants.lua')
 
---a321neo dataref
-local apu_fuel_lo_pr = createGlobalPropertyi("a321neo/cockpit/apu/apu_fuel_lo_pr", 0, false, true, false)
+FLAP_OPEN_TIME_SEC = 20
 
---a321neo command
-local apu_gen_toggle = sasl.createCommand("a321neo/electrical/APU_gen_toggle", "toggle apu generator")
-local apu_master = sasl.createCommand("a321neo/cockpit/engine/apu_master_toggle", "toggle APU master button")
-local apu_start = sasl.createCommand("a321neo/cockpit/engine/apu_start_toggle", "toggle APU start button")
 
---a321neo command handler
-sasl.registerCommandHandler ( apu_master, 0 , function(phase)
+----------------------------------------------------------------------------------------------------
+-- Global variables
+----------------------------------------------------------------------------------------------------
+local master_switch_status  = false
+local master_switch_enabled_time = 0
+local start_requested = false
+
+local random_egt_apu = 0
+local random_egt_apu_last_update = 0
+----------------------------------------------------------------------------------------------------
+-- Init
+----------------------------------------------------------------------------------------------------
+set(Apu_bleed_switch, 0)
+set(APU_EGT, get(OTA))
+
+----------------------------------------------------------------------------------------------------
+-- Command handlers
+----------------------------------------------------------------------------------------------------
+sasl.registerCommandHandler ( APU_cmd_master, 0 , function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        if get(Apu_start_position) == 0 then
+        if master_switch_status then
+            master_switch_status = false
+        else
+            master_switch_status = true
+            master_switch_enabled_time = get(TIME)
+        end
+    end
+end)
+
+sasl.registerCommandHandler ( APU_cmd_start, 0 , function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        if master_switch_status then
+            start_requested = true
+        end
+    end
+    return 1
+end)
+
+
+function update_egt()
+
+    if get(TIME) - random_egt_apu_last_update > 2 then
+        random_egt_apu = math.random() * 6 - 3
+        random_egt_apu_last_update = get(TIME)
+    end
+
+    local apu_n1 = get(Apu_N1)
+
+    if master_switch_status then
+        if apu_n1 < 1 then
+            Set_dataref_linear_anim(APU_EGT, get(OTA), -50, 1000, 1)
+        elseif apu_n1 <= 25 then
+             local target_egt = Math_rescale(0, get(OTA), 25, 900+random_egt_apu, apu_n1)
+            Set_dataref_linear_anim(APU_EGT, target_egt, -50, 1000, 50)
+        elseif apu_n1 <= 50 then
+            local target_egt = Math_rescale(25, 900, 50,  800+random_egt_apu, apu_n1)
+            Set_dataref_linear_anim(APU_EGT, target_egt, -50, 1000, 50)
+        elseif apu_n1 > 50 then
+            local target_egt = Math_rescale(50, 800, 100, 400+random_egt_apu, apu_n1)
+            Set_dataref_linear_anim(APU_EGT, target_egt, -50, 1000, 50)
+        end
+    else
+        Set_dataref_linear_anim(APU_EGT, get(OTA), -50, 1000, 3)
+    end
+end
+
+local function update_button_datarefs()
+    -- TODO FAILURE
+    set(Apu_master_button_state, master_switch_status and 1 or 0)
+
+    set(Apu_start_button_state, (start_requested and 1 or 0) + (get(Apu_avail) == 1 and 10 or 0))
+
+end
+
+local function update_apu_flap()
+    if master_switch_status and get(TIME) - master_switch_enabled_time > FLAP_OPEN_TIME_SEC then
+        set(APU_flap, 1)
+    else
+        set(APU_flap, 0)
+    end
+end
+
+local function update_start()
+    if master_switch_status then 
+        if start_requested and get(APU_flap) == 1 and get(Apu_avail) == 0  and get(Apu_fuel_source) > 0 then
+            set(Apu_start_position, 2)
+        elseif get(Apu_avail) == 1 then
             set(Apu_start_position, 1)
-        elseif get(Apu_start_position) > 0 then
+            start_requested = false
+        else
             set(Apu_start_position, 0)
         end
+    else
+        set(Apu_start_position, 0)
+        start_requested = false
     end
-end)
-
-sasl.registerCommandHandler ( apu_start, 0 , function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if get(Apu_start_position) == 1 then
-            set(Apu_start_position, 2)
-        end
-    end
-    return 1
-end)
-
-sasl.registerCommandHandler ( apu_gen_toggle, 0 , function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        set(apu_gen, 1 - get(apu_gen))
-    end
-    return 1
-end)
-
-
---init
-set(apu_gen, 1)
-set(Apu_bleed_switch, 0)
-
+end
 
 function update()
 
@@ -52,6 +116,11 @@ function update()
     elseif get(Apu_N1) < 100 then
         set(Apu_avail, 0)
     end
+
+    update_egt()
+    update_button_datarefs()
+    update_apu_flap()
+    update_start()
 
     --apu (ecam) bleed states
     if get(Apu_avail) == 0 then
@@ -65,53 +134,4 @@ function update()
         set(Apu_bleed_state, 2)
     end
 
-    --apu (ecam) gen states
-    if get(Apu_avail) == 0 then
-        set(Apu_gen_volts, Set_anim_value(get(Apu_gen_volts), 0, 0, 115, 0.95))
-        set(Apu_gen_hz, Set_anim_value(get(Apu_gen_hz), 0, 0, 400, 0.99))
-        set(Apu_gen_state, 0)
-    elseif get(Apu_avail) == 1 and get(apu_gen) == 0 then
-        set(Apu_gen_volts, Set_anim_value(get(Apu_gen_volts), 0, 0, 115, 0.95))
-        set(Apu_gen_hz, Set_anim_value(get(Apu_gen_hz), 0, 0, 400, 0.99))
-        set(Apu_gen_state, 1)
-    elseif get(Apu_avail) == 1 and get(apu_gen) == 1 then
-        set(Apu_gen_volts, Set_anim_value(get(Apu_gen_volts), 115, 0, 115, 0.95))
-        set(Apu_gen_hz, Set_anim_value(get(Apu_gen_hz), 400, 0, 400, 0.99))
-        set(Apu_gen_state, 2)
-    end
-
-    if (get(Fuel_pump_1) == 0 and
-       get(Fuel_pump_2) == 0 and
-       get(Fuel_pump_3) == 0 and
-       get(Fuel_pump_4) == 0 and
-       get(Fuel_pump_5) == 0 and
-       get(Fuel_pump_6) == 0 and
-       get(Fuel_pump_7) == 0 and
-       get(Fuel_pump_8) == 0) and get(apu_start) ==1 then
-        set(apu_fuel_lo_pr, 1)
-    else
-        set(apu_fuel_lo_pr, 0)
-    end
-
-    --apu master button state
-    if get(Apu_start_position) == 0 then
-        set(Apu_master_button_state, 0)--blank
-    else
-        set(Apu_master_button_state, 1)--on
-    end
-
-    --apu start button state 0: off, 1: on, 2: avail
-    if get(Apu_start_position) == 0 and get(Apu_N1) < 100 then
-        set(Apu_start_button_state, 0)
-    elseif get(Apu_start_position) == 1 and get(Apu_N1) < 100 then
-        set(Apu_start_button_state, 0)
-    elseif get(Apu_start_position) == 0 and get(Apu_N1) > 95 then
-        set(Apu_start_button_state, 2)
-    elseif get(Apu_start_position) == 1 and get(Apu_N1) > 95 then
-        set(Apu_start_button_state, 2)
-    elseif get(Apu_start_position) == 2 and get(Apu_N1) < 100 then
-        set(Apu_start_button_state, 1)
-    elseif get(Apu_start_position) == 2 and get(Apu_N1) > 100 then
-        set(Apu_start_button_state, 2)
-    end
 end

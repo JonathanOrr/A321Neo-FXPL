@@ -244,8 +244,8 @@ Eng_2_Firewall_valve = createGlobalPropertyi("a321neo/dynamics/engines/eng_2_fir
 
 -- APU
 Apu_N1 = globalProperty("sim/cockpit2/electrical/APU_N1_percent")
-APU_EGT = globalProperty("sim/cockpit2/electrical/APU_EGT_c")
-
+APU_EGT = createGlobalPropertyf("a321neo/cockpit/apu/EGT", 0, false, true, false)
+APU_flap = createGlobalPropertyi("a321neo/cockpit/apu/flap_open", 0, false, true, false)
 
 --PACKs system
 Apu_bleed_switch = globalProperty("sim/cockpit2/bleedair/actuators/apu_bleed")

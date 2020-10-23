@@ -16,10 +16,6 @@ local apu_avail_timer = -1
 
 --sim datarefs
 
---a32NX datarefs
-local apu_needle_state = createGlobalPropertyi("a321neo/cockpit/apu/apu_needle_state", 0, false, true, false) --0xx, 1operational
-
-
 --colors
 local left_brake_temp_color = {1.0, 1.0, 1.0}
 local right_brake_temp_color = {1.0, 1.0, 1.0}
@@ -64,10 +60,10 @@ local function draw_ecam_lower_section()
 end
 
 function update()
-    if get(Apu_N1) < 1 then
-        set(apu_needle_state, 0)
-    elseif get(Apu_N1) > 1 then
-        set(apu_needle_state, 1)
+    if get(Apu_master_button_state) == 1 or get(Apu_N1) > 1 then
+        set(Ecam_apu_needle_state, 1)
+    else
+        set(Ecam_apu_needle_state, 0)
     end
 
     if get(Engine_1_avail) == 1 then
@@ -426,7 +422,7 @@ function draw()
             sasl.gl.drawText(Font_AirbusDUL, size[1]/2+270, size[2]/2+186, math.floor(get(Apu_bleed_psi)), 23, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
         end
         --needles--
-        if get(apu_needle_state) == 1 then
+        if get(Ecam_apu_needle_state) == 1 then
             sasl.gl.drawText(Font_AirbusDUL, size[1]/2-180, size[2]/2-60, math.floor(get(Apu_N1)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
             sasl.gl.drawText(Font_AirbusDUL, size[1]/2-180, size[2]/2-260, math.floor(get(APU_EGT)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
         end

@@ -179,10 +179,10 @@ local function update_page_normal()
 
     -- APU has a special way to handle it, and it overrides the other pages
     -- It stays visible for 10 seconds after the condition is not more valid
-    if  (get(Apu_start_position) > 0 and get(Apu_avail) == 0) or (curr_time - page_normal_apu_last_show) < 10  then
+    if  (get(Apu_master_button_state) % 2 == 1 and get(Apu_avail) == 0) or (curr_time - page_normal_apu_last_show) < 10  then
         -- APU is starting, so show the page
         Goto_ecam(ECAM_PAGE_APU)
-        if get(Apu_start_position) > 0 and get(Apu_avail) == 0 then
+        if get(Apu_master_button_state) % 2 == 1 and get(Apu_avail) == 0 then
             page_normal_apu_last_show = curr_time
         end
         return

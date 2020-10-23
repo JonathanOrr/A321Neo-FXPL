@@ -229,3 +229,8 @@ ENG_cmd_dual_cooling   = createCommand("a321neo/cockpit/engine/dual_cooling", "P
 ENG_cmd_mode_up        = sasl.createCommand("a321neo/cockpit/engine/mode_up", "engine mode selector up")
 ENG_cmd_mode_down      = sasl.createCommand("a321neo/cockpit/engine/mode_dn", "engine mode selector down")
 
+-- APU
+APU_cmd_master = sasl.createCommand("a321neo/cockpit/engine/apu_master_toggle", "toggle APU master button")
+APU_cmd_start  = sasl.createCommand("a321neo/cockpit/engine/apu_start_toggle", "toggle APU start button")
+
+

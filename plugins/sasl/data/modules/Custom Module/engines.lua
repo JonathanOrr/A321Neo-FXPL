@@ -114,6 +114,7 @@ function engines_auto_slow_start(phase)
     -- When the user press Flight -> Start engines to running
     if phase == SASL_COMMAND_BEGIN then
         slow_start_time_requested = true -- Please check the function update_auto_start()
+
     end
     return 0
 end
@@ -595,13 +596,19 @@ local function update_auto_start()
     -- Turn on the batteries immediately and start the APU   
     ELEC_sys.batteries[1].switch_status = true
     ELEC_sys.batteries[2].switch_status = true
+
     
-    set(Apu_start_position, 2)
     set(Apu_bleed_switch, 1)
 
     set(eng_ignition_switch, 0, 1) 
     set(eng_ignition_switch, 0, 2) 
 
+    if get(Apu_master_button_state) % 2 == 0 then
+        sasl.commandOnce(APU_cmd_master)
+    end
+    if get(Apu_avail) == 0 and get(Apu_start_button_state) % 2 == 0 then
+        sasl.commandOnce(APU_cmd_start)
+    end
     if get(Apu_avail) == 1 then
         set(Engine_mode_knob,1)
         set(Engine_2_master_switch, 1)
