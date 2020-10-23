@@ -216,7 +216,7 @@ local function update_dc_ess()
         return
     elseif get(TR_ESS_online) == 1 then
         buses.dc_ess_powered_by = TR_ESS
-    elseif get(TR_1_online) == 1 then
+    elseif buses.dc1_powered_by == TR_1 then
         buses.dc_ess_powered_by = TR_1
     elseif get(HOT_bus_2_pwrd) and ELEC_sys.batteries[2].switch_status == true and get(ELEC_sys.batteries[2].drs.hotbus) == 1 then
         buses.dc_ess_powered_by = BAT_2
@@ -230,9 +230,9 @@ local function update_dc_bat_bus()
 
     if get(FAILURE_ELEC_DC_BAT_bus) == 1 then
         return
-    elseif get(TR_1_online) == 1 then
+    elseif get(TR_1_online) == 1 and buses.dc1_powered_by == TR_1 then
         buses.dc_bat_bus_powered_by = TR_1
-    elseif get(TR_2_online) == 1 then
+    elseif get(TR_2_online) == 1 and buses.dc2_powered_by == TR_2 then
         buses.dc_bat_bus_powered_by = TR_2
     elseif ELEC_sys.batteries[1].is_connected_to_dc_bus then
         buses.dc_bat_bus_powered_by = BAT_1     

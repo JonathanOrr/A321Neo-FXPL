@@ -95,6 +95,8 @@ local failures_data = {
             {name="ENG2 FUEL\nFILTER CLOG", status=false, dataref=FAILURE_ENG_2_FUEL_CLOG },
             {name="ENG1 OIL\nFILTER CLOG", status=false, dataref=FAILURE_ENG_1_OIL_CLOG },
             {name="ENG2 OIL\nFILTER CLOG", status=false, dataref=FAILURE_ENG_2_OIL_CLOG },
+            
+            {name="APU\nFAILURE", status=false, dataref=FAILURE_ENG_APU_FAIL}
         }
     },
     {

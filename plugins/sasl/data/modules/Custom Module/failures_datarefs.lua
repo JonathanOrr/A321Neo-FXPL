@@ -90,4 +90,5 @@ FAILURE_ENG_1_FUEL_CLOG = createGlobalPropertyi("a321neo/failures/engines/eng_1_
 FAILURE_ENG_2_FUEL_CLOG = createGlobalPropertyi("a321neo/failures/engines/eng_2_fuel_clog", 0, false, true, false)
 FAILURE_ENG_1_OIL_CLOG = createGlobalPropertyi("a321neo/failures/engines/eng_1_oil_clog", 0, false, true, false)
 FAILURE_ENG_2_OIL_CLOG = createGlobalPropertyi("a321neo/failures/engines/eng_2_oil_clog", 0, false, true, false)
+FAILURE_ENG_APU_FAIL   = createGlobalPropertyi("a321neo/failures/engines/apu_fail", 0, false, true, false)
 

@@ -53,11 +53,11 @@ function update_consumptions()
     if get(Apu_master_button_state) == 1 then    
         ELEC_sys.add_power_consumption(ELEC_BUS_DC_BAT_BUS, 0.5, 0.5)   -- Control unit
     
-        --if get(Apu_N1) < 10 then    -- Starter motor
-        --    ELEC_sys.add_power_consumption(ELEC_BUS_DC_BAT_BUS, 70, 90) -- Like an car engine?
-        --elseif get(Apu_N1) < 90 then
-        --    ELEC_sys.add_power_consumption(ELEC_BUS_DC_BAT_BUS, 2, 2)
-        --end
+        if get(Apu_N1) >  1 and get(Apu_N1) < 10 then    -- Starter motor
+            ELEC_sys.add_power_consumption(ELEC_BUS_DC_BAT_BUS, 70, 90) -- Like an car engine?
+        elseif get(Apu_N1) < 90 then
+            ELEC_sys.add_power_consumption(ELEC_BUS_DC_BAT_BUS, 2, 2)
+        end
     end
     
     -- BLEED computers

@@ -38,25 +38,25 @@ end
 --custom fucntions
 local function draw_ecam_lower_section()
     --left section
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-215, size[2]/2-373, math.floor(get(TAT)), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-215, size[2]/2-409, math.floor(get(OTA)), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-225, size[2]/2-372, math.floor(get(TAT)), 32, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-225, size[2]/2-407, math.floor(get(OTA)), 32, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
 
     --center section
     --adding a 0 to the front of the time when single digit
     if get(ZULU_hours) < 10 then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-25, size[2]/2-408, "0" .. get(ZULU_hours), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-25, size[2]/2-406, "0" .. get(ZULU_hours), 32, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     else
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-25, size[2]/2-408, get(ZULU_hours), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-25, size[2]/2-406, get(ZULU_hours), 32, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     end
 
     if get(ZULU_mins) < 10 then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+25, size[2]/2-408, "0" .. get(ZULU_mins), 30, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+25, size[2]/2-406, "0" .. get(ZULU_mins), 30, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
     else
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+25, size[2]/2-408, get(ZULU_mins), 30, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+25, size[2]/2-406, get(ZULU_mins), 30, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
     end
 
     --right section
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+375, size[2]/2-374, math.floor(get(Gross_weight)), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+370, size[2]/2-370, math.floor(get(Gross_weight)), 32, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
 end
 
 function update()
@@ -412,10 +412,13 @@ function draw()
         draw_fuel_page()
     elseif get(Ecam_current_page) == 7 then --apu
         --apu gen section--
-        if get(Apu_gen_state) == 2 then
-            --sasl.gl.drawText(Font_AirbusDUL, size[1]/2-235, size[2]/2+257, math.floor(get(Apu_gen_load)), 23, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-            --sasl.gl.drawText(Font_AirbusDUL, size[1]/2-235, size[2]/2+224, math.floor(get(Apu_gen_volts)), 23, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-            --sasl.gl.drawText(Font_AirbusDUL, size[1]/2-235, size[2]/2+192, math.floor(get(Apu_gen_hz)), 23, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        if get(Ecam_apu_gen_state) >= 2 then
+            sasl.gl.drawText(Font_AirbusDUL, size[1]/2-235, size[2]/2+257, math.abs(math.floor(ELEC_sys.generators[3].curr_amps/261*100)), 23, false, false, TEXT_ALIGN_RIGHT, 
+                            (-ELEC_sys.generators[3].curr_amps > 261) and ECAM_AMBER or ECAM_GREEN)
+            sasl.gl.drawText(Font_AirbusDUL, size[1]/2-235, size[2]/2+224, math.floor(ELEC_sys.generators[3].curr_voltage), 23, false, false, TEXT_ALIGN_RIGHT, 
+                            (ELEC_sys.generators[3].curr_voltage < 105 or ELEC_sys.generators[3].curr_voltage > 120) and ECAM_ORANGE or ECAM_GREEN)
+            sasl.gl.drawText(Font_AirbusDUL, size[1]/2-235, size[2]/2+192, math.floor(ELEC_sys.generators[3].curr_hz), 23, false, false, TEXT_ALIGN_RIGHT, 
+                            (ELEC_sys.generators[3].curr_hz < 385 or ELEC_sys.generators[3].curr_hz > 410) and ECAM_ORANGE or ECAM_GREEN)
         end
         --apu bleed--
         if get(Apu_bleed_state) > 0 then

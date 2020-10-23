@@ -194,6 +194,7 @@ Ecam_fuel_valve_ENG_2   = createGlobalPropertyi("a321neo/cockpit/ecam/fuel/valve
 Ecam_fuel_valve_X_BLEED = createGlobalPropertyi("a321neo/cockpit/ecam/fuel/valve_X_BLEED", 0, false, true, false) -- 0: closed OK, 1: closed amber, 2: open OK, 3: open amber, 4: transition
 
 Ecam_apu_needle_state = createGlobalPropertyi("a321neo/cockpit/apu/apu_needle_state", 0, false, true, false)
+Ecam_apu_gen_state    = createGlobalPropertyi("a321neo/cockpit/apu/apu_gen_state", 0, false, true, false)   -- 0: invisible, 1: OFF, 2: online, 3: failed
 
 Ecam_eng_igniter_eng_1 = createGlobalPropertyi("a321neo/cockpit/ecam/eng/igniter_eng1", 0, false, true, false) -- 0: no, 1: A, 2: B, 3: AB
 Ecam_eng_igniter_eng_2 = createGlobalPropertyi("a321neo/cockpit/ecam/eng/igniter_eng2", 0, false, true, false) -- 0: no, 1: A, 2: B, 3: AB

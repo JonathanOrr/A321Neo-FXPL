@@ -79,7 +79,8 @@ end
 
 local function update_button_datarefs()
     -- TODO FAILURE
-    set(Apu_master_button_state, master_switch_status and 1 or 0)
+    local is_faulty = get(FAILURE_ENG_APU_FAIL) == 1 or get(DC_bat_bus_pwrd) == 0
+    set(Apu_master_button_state, get(OVHR_elec_panel_pwrd) * ((master_switch_status and 1 or 0) + (is_faulty and 10 or 0) ))
 
     set(Apu_start_button_state, (start_requested and 1 or 0) + (get(Apu_avail) == 1 and 10 or 0))
 
@@ -95,9 +96,10 @@ end
 
 local function update_start()
     if master_switch_status then 
-        if start_requested and get(APU_flap) == 1 and get(Apu_avail) == 0  and get(Apu_fuel_source) > 0 then
+
+        if start_requested and get(APU_flap) == 1 and get(Apu_avail) == 0 and get(DC_bat_bus_pwrd) == 1 and get(Apu_fuel_source) > 0 then
             set(Apu_start_position, 2)
-        elseif get(Apu_avail) == 1 then
+        elseif get(Apu_avail) == 1 and get(Apu_fuel_source) > 0 then
             set(Apu_start_position, 1)
             start_requested = false
         else
@@ -106,6 +108,21 @@ local function update_start()
     else
         set(Apu_start_position, 0)
         start_requested = false
+    end
+end
+
+local function update_gen()
+    if not master_switch_status then
+        set(Ecam_apu_gen_state, 0)
+        set(Ecam_apu_gen_state, 0)
+    else
+        if ELEC_sys.generators[3].switch_status == false then
+            set(Ecam_apu_gen_state, 1)
+        elseif ELEC_sys.generators[3].curr_voltage > 105 and ELEC_sys.generators[3].curr_hz > 385 then
+            set(Ecam_apu_gen_state, 2)
+        else
+            set(Ecam_apu_gen_state, 3)        
+        end
     end
 end
 
@@ -122,6 +139,7 @@ function update()
     update_button_datarefs()
     update_apu_flap()
     update_start()
+    update_gen()
 
     --apu (ecam) bleed states
     if get(Apu_avail) == 0 then

@@ -609,13 +609,14 @@ local function update_apu()
         set(Apu_fuel_source, 1)
     elseif eng1_fuel_status == 4 then   -- Ok crossfeed, from right side
         set(Apu_fuel_source, 2)
-    elseif eng1_fuel_status == 1 and get(FAILURE_FUEL_APU_PUMP_FAIL) == 1 then   -- Mh, only if the apu pump is ok
+    elseif eng1_fuel_status == 1 and get(FAILURE_FUEL_APU_PUMP_FAIL) == 0 then   -- Mh, only if the apu pump is ok
         set(Apu_fuel_source, 1)
         if get(AC_ess_shed_pwrd) == 1 then
             ELEC_sys.add_power_consumption(ELEC_BUS_AC_ESS_SHED, 2, 3)
         elseif get(AC_STAT_INV_pwrd) == 1 then
             ELEC_sys.add_power_consumption(ELEC_BUS_STAT_INV, 2, 3)
         else
+            set(Apu_fuel_source, 0)
             -- TODO
             --assert(false)   -- This should not happen: the APU must be flagged as failed if we are in this condition.
         end
