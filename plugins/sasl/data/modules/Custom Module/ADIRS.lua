@@ -164,21 +164,21 @@ local function update_irs_elec_pwr(i)
         if get(AC_ess_bus_pwrd) == 1 and get(TIME) - get(Adirs_irs_begin_time[i]) >= TIME_TO_ONBAT then
             ELEC_sys.add_power_consumption(ELEC_BUS_AC_ESS, 0.3, 0.33)
         elseif get(HOT_bus_2_pwrd) == 1 then
-            set(ADIRS_light_onbat, 1)
+            set(ADIRS_light_onbat, get(OVHR_elec_panel_pwrd) * 1)
             ELEC_sys.add_power_consumption(ELEC_BUS_HOT_BUS_2, 1.2, 1.39)        
         end
     elseif i == 2 then
         if get(AC_bus_2_pwrd) == 1 and get(TIME) - get(Adirs_irs_begin_time[i]) >= TIME_TO_ONBAT then
             ELEC_sys.add_power_consumption(ELEC_BUS_AC_2, 0.3, 0.33)
         elseif get(HOT_bus_2_pwrd) == 1 then
-            set(ADIRS_light_onbat, 1)
+            set(ADIRS_light_onbat, get(OVHR_elec_panel_pwrd) * 1)
             ELEC_sys.add_power_consumption(ELEC_BUS_HOT_BUS_2, 1.2, 1.39)        
         end
     else
         if get(AC_bus_1_pwrd) == 1 and get(TIME) - get(Adirs_irs_begin_time[i]) >= TIME_TO_ONBAT then
             ELEC_sys.add_power_consumption(ELEC_BUS_AC_1, 0.3, 0.33)
         elseif get(HOT_bus_1_pwrd) == 1 then
-            set(ADIRS_light_onbat, 1)
+            set(ADIRS_light_onbat, get(OVHR_elec_panel_pwrd) * 1)
             ELEC_sys.add_power_consumption(ELEC_BUS_HOT_BUS_1, 1.2, 1.39)        
         end
     end
@@ -200,9 +200,9 @@ local function update_status_adrs(i)
 
             if get(FAILURE_ADR[i]) == 1 then
                 -- Failed ADR, just switch on the button
-                set(ADIRS_light_ADR[i], LIGHT_FAILED)
+                set(ADIRS_light_ADR[i], get(OVHR_elec_panel_pwrd) * LIGHT_FAILED)
             elseif adr_time_begin[i] > 0 then
-                set(ADIRS_light_ADR[i], LIGHT_NORM)
+                set(ADIRS_light_ADR[i], get(OVHR_elec_panel_pwrd) * LIGHT_NORM)
                 if get(TIME) - adr_time_begin[i] > TIME_TO_START_ADR then
                    -- After TIME_TO_START_ADR, the ADR changes the status to ON
                    set(Adirs_adr_is_ok[i], 1)
@@ -218,17 +218,17 @@ local function update_status_adrs(i)
 
             -- ON but no aligned
             if get(FAILURE_ADR[i]) == 1 then
-                set(ADIRS_light_ADR[i], LIGHT_FAILED)
+                set(ADIRS_light_ADR[i], get(OVHR_elec_panel_pwrd) * LIGHT_FAILED)
             else
-                set(ADIRS_light_ADR[i], LIGHT_NORM)
+                set(ADIRS_light_ADR[i], get(OVHR_elec_panel_pwrd) * LIGHT_NORM)
             end
         end
     elseif get(FAILURE_ADR[i]) == 1 then
         -- ADR failed and switched OFF
-        set(ADIRS_light_ADR[i], LIGHT_FAILED_OFF)
+        set(ADIRS_light_ADR[i], get(OVHR_elec_panel_pwrd) * LIGHT_FAILED_OFF)
     else
         -- ADR switched OFF (but working)
-        set(ADIRS_light_ADR[i], LIGHT_OFF)
+        set(ADIRS_light_ADR[i], get(OVHR_elec_panel_pwrd) * LIGHT_OFF)
     end    
 end
 
@@ -251,7 +251,7 @@ local function update_status_irs(i)
             
             if get(FAILURE_IR[i]) > 0 then
                 -- Failed IRS, just switch on the button
-                set(ADIRS_light_IR[i], LIGHT_FAILED)
+                set(ADIRS_light_IR[i], get(OVHR_elec_panel_pwrd) * LIGHT_FAILED)
             elseif get(Adirs_irs_begin_time[i]) ~= 0 then
                 if get(TIME) - get(Adirs_irs_begin_time[i]) > get(Adirs_total_time_to_align) then
                     -- Align finished
@@ -263,9 +263,9 @@ local function update_status_irs(i)
                 end
                 
                 if get(TIME) - get(Adirs_irs_begin_time[i]) > 0.3 then
-                    set(ADIRS_light_IR[i], LIGHT_NORM)
+                    set(ADIRS_light_IR[i], get(OVHR_elec_panel_pwrd) * LIGHT_NORM)
                 else
-                    set(ADIRS_light_IR[i], LIGHT_FAILED)                
+                    set(ADIRS_light_IR[i], get(OVHR_elec_panel_pwrd) * LIGHT_FAILED)                
                 end
                 
             else
@@ -278,9 +278,9 @@ local function update_status_irs(i)
             -- ON but no aligned
             set(Adirs_irs_begin_time[i], 0)
             if get(FAILURE_IR[i]) > 0 then
-                set(ADIRS_light_IR[i], LIGHT_FAILED)
+                set(ADIRS_light_IR[i], get(OVHR_elec_panel_pwrd) * LIGHT_FAILED)
             else
-                set(ADIRS_light_IR[i], LIGHT_NORM)
+                set(ADIRS_light_IR[i], get(OVHR_elec_panel_pwrd) * LIGHT_NORM)
             end
         end
         
@@ -292,11 +292,11 @@ local function update_status_irs(i)
         
     elseif get(FAILURE_IR[i]) == 1 then
         -- ADR failed and switched OFF
-        set(ADIRS_light_IR[i], LIGHT_FAILED_OFF)
+        set(ADIRS_light_IR[i], get(OVHR_elec_panel_pwrd) * LIGHT_FAILED_OFF)
         set(Adirs_irs_begin_time[i], 0)
     else
         -- ADR switched OFF (but working)
-        set(ADIRS_light_IR[i], LIGHT_OFF)
+        set(ADIRS_light_IR[i], get(OVHR_elec_panel_pwrd) * LIGHT_OFF)
         set(Adirs_irs_begin_time[i], 0)
     end    
 end

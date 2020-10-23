@@ -24,6 +24,17 @@ end
 
 reset_pwr_consumption()
 
+local function set_overheadl_pwrd()
+
+    -- Any DC source can power the overhead elec panel
+    local condition = get(XP_Battery_1) == 1 or get(XP_Battery_2) == 1 
+                      or get(DC_bus_1_pwrd) == 1 or get(DC_bus_2_pwrd) == 1
+                      or get(DC_ess_bus_pwrd) == 1
+
+    set(OVHR_elec_panel_pwrd, condition and 1 or 0)    
+
+end
+
 function update()
 
     update_generators()
@@ -45,12 +56,12 @@ function update()
     
     update_consumptions()   -- Check electical_consumptions.lua
     
-    if get(XP_Battery_1) == 1 then
+    if get(XP_Battery_1) == 1 or get(XP_Battery_2) == 1 then
         set(avionics, 1)
     else
         set(avionics, 0)
     end
-
+    set_overheadl_pwrd()
 end
 
 function onAirportLoaded()

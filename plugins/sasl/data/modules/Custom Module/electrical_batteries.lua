@@ -109,7 +109,7 @@ local function update_battery_datarefs(bat)
     set(bat.drs.hotbus, (bat.curr_voltage > BAT_LOW_VOLTAGE_LIMIT and get(bat.drs.failure) == 0) and 1 or 0)
     
     set(bat.drs.voltage, bat.curr_voltage)
-    set(bat.drs.switch_light, (bat.switch_status and 0 or 1) + get(bat.drs.failure)*10 )
+    set(bat.drs.switch_light, get(OVHR_elec_panel_pwrd) * ((bat.switch_status and 0 or 1) + get(bat.drs.failure)*10) )
 end
 
 local function update_battery_load(x)

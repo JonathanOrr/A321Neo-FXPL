@@ -42,8 +42,8 @@ local function update_status()
 end
 
 local function update_datarefs()
-    set(Elec_light_Commercial, is_commercial_switch_on and 0 or 1)
-    set(Elec_light_Galley,     (is_galley_switch_on and 0 or 1) + (get(FAILURE_ELEC_GALLEY) == 1 and 10 or 0))
+    set(Elec_light_Commercial, get(OVHR_elec_panel_pwrd) * (is_commercial_switch_on and 0 or 1))
+    set(Elec_light_Galley,     get(OVHR_elec_panel_pwrd) * ((is_galley_switch_on and 0 or 1) + (get(FAILURE_ELEC_GALLEY) == 1 and 10 or 0)))
 end
 
 function update_misc()

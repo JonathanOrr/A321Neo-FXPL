@@ -568,8 +568,17 @@ end
 function update()
 
     if get(TIME) - sim_loaded_at < STARTUP_WAIT_SECS then
-
         return -- Wait some seconds before generates EWD messages
+    end
+
+    if get(AC_ess_bus_pwrd) == 1 then
+        ELEC_sys.add_power_consumption(ELEC_BUS_AC_ESS, 0.2, 0.2)
+    elseif get(AC_bus_1_pwrd) == 1 then
+        ELEC_sys.add_power_consumption(ELEC_BUS_AC_1, 0.2, 0.2)
+    elseif get(AC_bus_2_pwrd) == 1 then
+        ELEC_sys.add_power_consumption(ELEC_BUS_AC_2, 0.2, 0.2)
+    else
+        return -- No power
     end
 
     set(EWD_arrow_overflow, 0)

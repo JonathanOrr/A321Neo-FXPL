@@ -413,9 +413,9 @@ function draw()
     elseif get(Ecam_current_page) == 7 then --apu
         --apu gen section--
         if get(Apu_gen_state) == 2 then
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2-235, size[2]/2+257, math.floor(get(Apu_gen_load)), 23, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2-235, size[2]/2+224, math.floor(get(Apu_gen_volts)), 23, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2-235, size[2]/2+192, math.floor(get(Apu_gen_hz)), 23, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+            --sasl.gl.drawText(Font_AirbusDUL, size[1]/2-235, size[2]/2+257, math.floor(get(Apu_gen_load)), 23, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+            --sasl.gl.drawText(Font_AirbusDUL, size[1]/2-235, size[2]/2+224, math.floor(get(Apu_gen_volts)), 23, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+            --sasl.gl.drawText(Font_AirbusDUL, size[1]/2-235, size[2]/2+192, math.floor(get(Apu_gen_hz)), 23, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
         end
         --apu bleed--
         if get(Apu_bleed_state) > 0 then

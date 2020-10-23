@@ -57,9 +57,6 @@ R_pack_temp = createGlobalPropertyf("a321neo/dynamics/packs/r_pack_temp", 10, fa
 --apu
 Apu_start_position = globalProperty("sim/cockpit2/electrical/APU_starter_switch") --apu start button state 0: off, 1: on, 2: avail
 Apu_avail = createGlobalPropertyi("a321neo/engine/apu_avil", 0, false, true, false)
-Apu_gen_load = createGlobalPropertyf("a321neo/cockpit/apu/gen_load", 0, false, true, false)
-Apu_gen_volts = createGlobalPropertyf("a321neo/cockpit/apu/gen_volts", 0, false, true, false)
-Apu_gen_hz = createGlobalPropertyf("a321neo/cockpit/apu/gen_hz", 0, false, true, false)
 Apu_bleed_psi = createGlobalPropertyf("a321neo/cockpit/apu/bleed_psi", 0, false, true, false)
 Apu_bleed_state = createGlobalPropertyi("a321neo/apu/apu_bleed_state", 0, false, true, false)--0apu off bleed off, 1apu on bleed off, 2apu on bleed on(for ECAM!!!)
 Apu_gen_state = createGlobalPropertyi("a321neo/cockpit/apu/apu_gen_state", 0, false, true, false)--0apu off gen off, 1apu on gen off, 2apu on gen on(for ECAM!!!)
@@ -104,6 +101,7 @@ AC_bus_1_pwrd   = createGlobalPropertyi("a321neo/dynamics/electrical/bus/ac_1_po
 AC_bus_2_pwrd   = createGlobalPropertyi("a321neo/dynamics/electrical/bus/ac_2_powered", 0, false, true, false)
 AC_STAT_INV_pwrd= createGlobalPropertyi("a321neo/dynamics/electrical/bus/ac_stat_inv", 0, false, true, false) -- This is powered on ground when stat. inverter is active
 
+OVHR_elec_panel_pwrd = createGlobalPropertyi("a321neo/dynamics/electrical/ovhr_elec_panel_powered", 0, false, true, false) -- Is the elec overhead panel powered for buttons' lights?
 
 --- TRS/INV (0: not working, 1: working) - influenced by switches, faults, etc.
 TR_ESS_online = createGlobalPropertyi("a321neo/dynamics/electrical/trs/tr_ess_online", 0, false, true, false)

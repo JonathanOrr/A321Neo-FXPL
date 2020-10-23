@@ -240,7 +240,11 @@ local function update_generator_datarefs(x)
         int_value = int_value + (get(x.drs.failure)==1 and 10 or 0)    
     end
     
-    set(x.drs.switch_light, int_value)
+    if x.id == GEN_EXT then
+        set(x.drs.switch_light, int_value)    
+    else
+        set(x.drs.switch_light, get(OVHR_elec_panel_pwrd) * int_value)
+    end
     
     if x.curr_voltage >= GEN_LOW_VOLTAGE_LIMIT and x.curr_hz >= GEN_LOW_HZ_LIMIT then
         set(x.drs.pwr, 1)
@@ -250,7 +254,7 @@ local function update_generator_datarefs(x)
     
     if x.drs.idg_light ~= nil then
         if get(x.drs.idg_fail_1) + get(x.drs.idg_fail_2) > 0 then
-            set(x.drs.idg_light, 10)
+            set(x.drs.idg_light, get(OVHR_elec_panel_pwrd) * 10)
         else
             set(x.drs.idg_light, 0)
         end
