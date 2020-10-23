@@ -16,6 +16,7 @@ local params = {
     last_update = 0
 }
 
+
 local function draw_fuel_usage()
     local fuel_usage_1 = math.floor(get(Ecam_fuel_usage_1))
     local fuel_usage_2 = math.floor(get(Ecam_fuel_usage_2))
@@ -23,18 +24,6 @@ local function draw_fuel_usage()
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-187, 760, fuel_usage_1, 36, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
     
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2+187, 760, fuel_usage_2, 36, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-
-    if get(TIME) - params.last_update > PARAM_DELAY then
-        params.eng1_oil_press = math.floor(get(Eng_1_OIL_press))
-        params.eng2_oil_press = math.floor(get(Eng_2_OIL_press))
-        params.eng1_oil_temp  = math.floor(get(Eng_1_OIL_temp))
-        params.eng2_oil_temp  = math.floor(get(Eng_2_OIL_temp))
-        params.eng1_vib_n1    = get(Eng_1_VIB_N1)
-        params.eng1_vib_n2    = get(Eng_1_VIB_N2)
-        params.eng2_vib_n1    = get(Eng_2_VIB_N1)
-        params.eng2_vib_n2    = get(Eng_2_VIB_N2)
-        params.last_update = get(TIME)
-    end
 
 end
 
@@ -151,3 +140,19 @@ function draw_eng_page()
     draw_bleed()
 
 end
+
+function ecam_update_eng_page()
+
+    if get(TIME) - params.last_update > PARAM_DELAY then
+        params.eng1_oil_press = math.floor(get(Eng_1_OIL_press))
+        params.eng2_oil_press = math.floor(get(Eng_2_OIL_press))
+        params.eng1_oil_temp  = math.floor(get(Eng_1_OIL_temp))
+        params.eng2_oil_temp  = math.floor(get(Eng_2_OIL_temp))
+        params.eng1_vib_n1    = get(Eng_1_VIB_N1)
+        params.eng1_vib_n2    = get(Eng_1_VIB_N2)
+        params.eng2_vib_n1    = get(Eng_2_VIB_N1)
+        params.eng2_vib_n2    = get(Eng_2_VIB_N2)
+        params.last_update = get(TIME)
+    end
+end
+
