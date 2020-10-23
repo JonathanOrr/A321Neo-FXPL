@@ -289,8 +289,8 @@ end
 ----------------------------------------------------------------------------------------------------
 -- Functions - Secondary parameters
 ----------------------------------------------------------------------------------------------------
-set(Eng_1_OIL_qty, OIL_QTY_MAX/1.5 * (1 + math.random()))
-set(Eng_2_OIL_qty, OIL_QTY_MAX/1.5 * (1 + math.random()))
+set(Eng_1_OIL_qty, OIL_QTY_MAX*2/3 + OIL_QTY_MAX/3 * math.random())
+set(Eng_2_OIL_qty, OIL_QTY_MAX*2/3 + OIL_QTY_MAX/3 * math.random())
 set(Eng_1_OIL_temp, get(OTA))
 set(Eng_2_OIL_temp, get(OTA))
 
