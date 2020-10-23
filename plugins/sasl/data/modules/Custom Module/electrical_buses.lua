@@ -279,12 +279,10 @@ local function update_datarefs()
 end
 
 local function update_shed()
-    buses.is_ac_ess_shed_on = get(FAILURE_ELEC_AC_ESS_SHED_bus) == 0 and 
-                              (buses.ac1_powered_by > 0 or buses.ac2_powered_by > 0
-                              or buses.ac_ess_powered_by == GEN_EMER)
-    buses.is_dc_ess_shed_on = get(FAILURE_ELEC_DC_ESS_SHED_bus) == 0 and
-                              (buses.dc1_powered_by > 0 or buses.dc2_powered_by > 0 
-                              or buses.dc_ess_powered_by == TR_ESS)
+    buses.is_ac_ess_shed_on = get(FAILURE_ELEC_AC_ESS_SHED_bus) == 0 and not
+                              (buses.ac_ess_powered_by == 0 or buses.ac_ess_powered_by == GEN_EMER)
+    buses.is_dc_ess_shed_on = get(FAILURE_ELEC_DC_ESS_SHED_bus) == 0 and not
+                              (buses.dc_ess_powered_by == 0 or buses.dc_ess_powered_by == TR_ESS)
 end
 
 local function update_stat_inv()

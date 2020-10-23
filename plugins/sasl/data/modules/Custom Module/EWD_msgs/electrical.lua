@@ -258,13 +258,13 @@ Message_ELEC_FUEL_GRAVITY_PROC = {
 Message_ELEC_BLOWER_OVRD = {
     text = function(self) return " - BLOWER............OVRD" end,
     color = function(self) return COL_ACTIONS end,
-    is_active = function(self) return get(Ventilation_blower) == 1 end
+    is_active = function(self) return get(Ventilation_blower) == 0 end
 }
 
 Message_ELEC_EXTRACT_OVRD = {
     text = function(self) return " - EXTRACT...........OVRD" end,
     color = function(self) return COL_ACTIONS end,
-    is_active = function(self) return get(Ventilation_extract) == 1 end
+    is_active = function(self) return get(Ventilation_extract) == 0 end
 }
 
 Message_ELEC_FAC_1_OFF_ON = {
@@ -505,5 +505,382 @@ MessageGroup_ELEC_EMER_GEN_1_LINE_OFF = {
         return not(get(EWD_flight_phase) == PHASE_1ST_ENG_ON or get(EWD_flight_phase) == PHASE_AIRBONE)
     end
 }
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: AC ESS BUS SHED FAULT
+----------------------------------------------------------------------------------------------------
+Message_ELEC_ATC_2_USE = {
+    text = function(self) return " ATC2.................USE" end,
+    color = function(self) return COL_ACTIONS end,
+    is_active = function(self) return true end
+}
+
+MessageGroup_ELEC_AC_BUS_ESS_SHED_FAULT = {
+
+    shown = false,
+
+    text  = function(self)
+                return "ELEC"   
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_ELEC,
+    
+    messages = {
+        {
+            text = function() return "     AC ESS BUS SHED" end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        },
+        Message_ELEC_ATC_2_USE
+    },
+
+    is_active = function()
+        return get(AC_ess_shed_pwrd) == 0
+    end,
+
+    is_inhibited = function()
+        return is_inibithed_in({PHASE_ABOVE_80_KTS, PHASE_TOUCHDOWN})
+    end
+}
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: DC BUS 1 FAULT
+----------------------------------------------------------------------------------------------------
+
+MessageGroup_ELEC_DC_BUS_1_FAULT = {
+
+    shown = false,
+
+    text  = function(self)
+                return "ELEC"   
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_ELEC,
+    
+    messages = {
+        {
+            text = function() return "     DC BUS 1 FAULT" end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        },
+        Message_ELEC_BLOWER_OVRD,
+        Message_ELEC_EXTRACT_OVRD
+    },
+
+    is_active = function()
+        return get(DC_bus_1_pwrd) == 0 and get(DC_bus_2_pwrd) == 1
+    end,
+
+    is_inhibited = function()
+        return is_inibithed_in({PHASE_ABOVE_80_KTS, PHASE_TOUCHDOWN})
+    end
+}
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: DC BUS 2 FAULT
+----------------------------------------------------------------------------------------------------
+Message_ELEC_AIR_DATA_SWTG_FO = {
+    text = function(self) return " - AIR DATA SWTG......F/O" end,
+    color = function(self) return COL_ACTIONS end,
+    is_active = function(self) return get(ADIRS_source_rotary_AIRDATA) ~= 1 end
+}
+
+Message_ELEC_BARO_REF_CHECK = {
+    text = function(self) return " - BARO REF.........CHECK" end,
+    color = function(self) return COL_ACTIONS end,
+    is_active = function(self) return true end
+}
+
+MessageGroup_ELEC_DC_BUS_2_FAULT = {
+    shown = false,
+
+    text  = function(self)
+                return "ELEC"   
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_ELEC,
+    
+    messages = {
+        {
+            text = function() return "     DC BUS 2 FAULT" end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        },
+        Message_ELEC_AIR_DATA_SWTG_FO,
+        Message_ELEC_BARO_REF_CHECK
+    },
+
+    is_active = function()
+        return get(DC_bus_2_pwrd) == 0 and get(DC_bus_1_pwrd) == 1
+    end,
+
+    is_inhibited = function()
+        return is_inibithed_in({PHASE_ABOVE_80_KTS, PHASE_TOUCHDOWN})
+    end
+}
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: DC BUS 1+2 FAULT
+----------------------------------------------------------------------------------------------------
+Message_ELEC_BRK = {
+    text = function(self) return " MAX BRK PR......1000 PSI" end,
+    color = function(self) return COL_ACTIONS end,
+    is_active = function(self) return true end
+}
+MessageGroup_ELEC_DC_BUS_1_2_FAULT = {
+    shown = false,
+
+    text  = function(self)
+                return "ELEC"   
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_ELEC,
+    
+    messages = {
+        {
+            text = function() return "     DC BUS 1 + 2 FAULT" end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        },
+        Message_ELEC_BLOWER_OVRD,
+        Message_ELEC_EXTRACT_OVRD,
+        Message_ELEC_BARO_REF_CHECK,
+        Message_ELEC_BRK
+    },
+
+    is_active = function()
+        return get(DC_bus_2_pwrd) == 0 and get(DC_bus_1_pwrd) == 0
+    end,
+
+    is_inhibited = function()
+        return is_inibithed_in({PHASE_ABOVE_80_KTS, PHASE_TOUCHDOWN})
+    end
+}
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: DC ESS BUS SHED
+----------------------------------------------------------------------------------------------------
+Message_ELEC_AVOID_ICE = {
+    text = function(self) return " AVOID ICING CONDITIONS" end,
+    color = function(self) return COL_ACTIONS end,
+    is_active = function(self) return true end
+}
+MessageGroup_ELEC_DC_ESS_BUS_SHED = {
+    shown = false,
+
+    text  = function(self)
+                return "ELEC"   
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_ELEC,
+    
+    messages = {
+        {
+            text = function() return "     DC ESS BUS SHED" end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        },
+        Message_ELEC_EXTRACT_OVRD,
+        Message_ELEC_AVOID_ICE
+    },
+
+    is_active = function()
+        return get(DC_shed_ess_pwrd) == 0
+    end,
+
+    is_inhibited = function()
+        return is_inibithed_in({PHASE_ABOVE_80_KTS, PHASE_TOUCHDOWN})
+    end
+}
+
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: DC ESS BUS FAULT
+----------------------------------------------------------------------------------------------------
+Message_ELEC_VHF_2_OR_3 = {
+    text = function(self) return " - VHF 2 OR 3.........USE" end,
+    color = function(self) return COL_ACTIONS end,
+    is_active = function(self) return true end
+}
+Message_ELEC_AUDIO_SWTG_SELECT = {
+    text = function(self) return " - AUDIO SWTG......SELECT" end,
+    color = function(self) return COL_ACTIONS end,
+    is_active = function(self) return true end
+}
+MessageGroup_ELEC_DC_ESS_BUS_FAULT = {
+    shown = false,
+
+    text  = function(self)
+                return "ELEC"   
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_ELEC,
+    
+    messages = {
+        {
+            text = function() return "     DC ESS BUS FAULT" end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        },
+        Message_ELEC_VHF_2_OR_3,
+        Message_ELEC_AUDIO_SWTG_SELECT,
+        Message_ELEC_BARO_REF_CHECK
+    },
+
+    is_active = function()
+        return get(DC_ess_bus_pwrd) == 0
+    end,
+
+    is_inhibited = function()
+        return is_inibithed_in({PHASE_ABOVE_80_KTS, PHASE_TOUCHDOWN})
+    end
+}
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: AC ESS BUS FAULT
+----------------------------------------------------------------------------------------------------
+Message_ELEC_AC_ESS_ALTN = {
+    text = function(self) return " - AC ESS FEED.......ALTN" end,
+    color = function(self) return COL_ACTIONS end,
+    is_active = function(self) return ELEC_sys.buses.ac_ess_bus_pushbutton_status end
+}
+
+MessageGroup_ELEC_AC_BUS_ESS_FAULT = {
+    shown = false,
+
+    text  = function(self)
+                return "ELEC"   
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_ELEC,
+    
+    messages = {
+        {
+            text = function() return "     AC ESS BUS FAULT" end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        },
+        Message_ELEC_AC_ESS_ALTN,
+        Message_ELEC_ATC_2_USE
+    },
+
+    is_active = function()
+        return get(AC_ess_bus_pwrd) == 0
+    end,
+
+    is_inhibited = function()
+        return is_inibithed_in({PHASE_ABOVE_80_KTS, PHASE_TOUCHDOWN})
+    end
+}
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: DC BAT BUS FAULT
+----------------------------------------------------------------------------------------------------
+
+MessageGroup_ELEC_DC_BAT_BUS_FAULT = {
+    shown = false,
+
+    text  = function(self)
+                return "ELEC"   
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_ELEC,
+    
+    messages = {
+        {
+            text = function() return "     DC BAT BUS FAULT" end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        }
+    },
+
+    is_active = function()
+        return get(DC_bat_bus_pwrd) == 0
+    end,
+
+    is_inhibited = function()
+        return is_inibithed_in({PHASE_ABOVE_80_KTS, PHASE_LIFTOFF, PHASE_FINAL, PHASE_TOUCHDOWN})
+    end
+}
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: DC EMER CONFIG
+----------------------------------------------------------------------------------------------------
+
+MessageGroup_ELEC_DC_EMER_CONFIG = {
+    shown = false,
+
+    text  = function(self)
+                return "ELEC"   
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_ELEC,
+    
+    messages = {
+        {
+            text = function() return "     DC EMER CONFIG" end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        },
+        Message_ELEC_EMER_GEN_PWR
+    },
+
+    land_asap = true,
+
+    is_active = function()
+        return get(DC_ess_bus_pwrd) == 0 and get(DC_bus_2_pwrd) == 0 and get(DC_bus_1_pwrd) == 0
+    end,
+
+    is_inhibited = function()
+        return is_inibithed_in({PHASE_ABOVE_80_KTS, PHASE_TOUCHDOWN})
+    end
+}
+
+
 
 
