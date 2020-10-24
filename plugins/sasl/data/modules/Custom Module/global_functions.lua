@@ -219,6 +219,8 @@ end
 
 function SSS_PID(pid_array, error)
     local last_error = pid_array.Current_error
+    local lower_clamp = pid_array.Error_margin * pid_array.Min_out
+    local upper_clamp = pid_array.Error_margin * pid_array.Max_out
 
     if get(DELTA_TIME) ~= 0 then
 
@@ -240,11 +242,18 @@ function SSS_PID(pid_array, error)
 
         --integral--(clamped to stop windup)
         if pid_array.derivative_in_integral == true then
-            pid_array.Integral_sum = Math_clamp(pid_array.Integral_sum + (pid_array.Current_error * get(DELTA_TIME) + pid_array.Derivative * get(DELTA_TIME) ^ 2), pid_array.Error_margin * pid_array.Min_out * pid_array.I_time, pid_array.Error_margin * pid_array.Max_out * pid_array.I_time)
+            if pid_array.I_time ~= 0 then
+                pid_array.Integral = Math_clamp(pid_array.Integral + (Math_clamp(pid_array.Current_error, lower_clamp, upper_clamp) / pid_array.I_time * get(DELTA_TIME) + pid_array.Derivative * get(DELTA_TIME) ^ 2), lower_clamp, upper_clamp)
+            else
+                pid_array.Integral = Math_clamp(pid_array.Integral + 0, lower_clamp, upper_clamp)
+            end
         else
-            pid_array.Integral_sum = Math_clamp(pid_array.Integral_sum + (pid_array.Current_error * get(DELTA_TIME)), pid_array.Error_margin * pid_array.Min_out * pid_array.I_time, pid_array.Error_margin * pid_array.Max_out * pid_array.I_time)
+            if pid_array.I_time ~= 0 then
+                pid_array.Integral = Math_clamp(pid_array.Integral + Math_clamp(pid_array.Current_error, lower_clamp, upper_clamp) / pid_array.I_time * get(DELTA_TIME), lower_clamp, upper_clamp)
+            else
+                pid_array.Integral = Math_clamp(pid_array.Integral + 0, lower_clamp, upper_clamp)
+            end
         end
-        pid_array.Integral = Math_clamp(pid_array.Integral_sum * 1 / pid_array.I_time, pid_array.Error_margin * pid_array.Min_out, pid_array.Error_margin * pid_array.Max_out)
 
         --nil value return 0
         if pid_array.Proportional == nil then
@@ -261,7 +270,7 @@ function SSS_PID(pid_array, error)
         pid_array.Output = pid_array.Proportional + pid_array.Integral + pid_array.Derivative
 
 	    --limit and rescale output range--
-        pid_array.Output = Math_clamp(pid_array.Output, pid_array.Min_out * pid_array.Error_margin, pid_array.Max_out * pid_array.Error_margin) / pid_array.Error_margin
+        pid_array.Output = Math_clamp(pid_array.Output, lower_clamp, upper_clamp) / pid_array.Error_margin
 
     end
 
@@ -270,6 +279,8 @@ end
 
 function SSS_PID_DPV(pid_array, Set_Point, PV)
     local last_PV = pid_array.PV
+    local lower_clamp = pid_array.Error_margin * pid_array.Min_out
+    local upper_clamp = pid_array.Error_margin * pid_array.Max_out
 
     if get(DELTA_TIME) ~= 0 then
 
@@ -291,11 +302,18 @@ function SSS_PID_DPV(pid_array, Set_Point, PV)
 
 	    --integral--(clamped to stop windup)
         if pid_array.derivative_in_integral == true then
-            pid_array.Integral_sum = Math_clamp(pid_array.Integral_sum + ((Set_Point - PV) * get(DELTA_TIME) + pid_array.Derivative * get(DELTA_TIME) ^ 2), pid_array.Error_margin * pid_array.Min_out * pid_array.I_time, pid_array.Error_margin * pid_array.Max_out * pid_array.I_time)
+            if pid_array.I_time ~= 0 then
+                pid_array.Integral = Math_clamp(pid_array.Integral + (Math_clamp((Set_Point - PV), lower_clamp, upper_clamp) / pid_array.I_time * get(DELTA_TIME) + pid_array.Derivative * get(DELTA_TIME) ^ 2), lower_clamp, upper_clamp)
+            else
+                pid_array.Integral = Math_clamp(pid_array.Integral + 0, lower_clamp, upper_clamp)
+            end
         else
-            pid_array.Integral_sum = Math_clamp(pid_array.Integral_sum + ((Set_Point - PV) * get(DELTA_TIME)), pid_array.Error_margin * pid_array.Min_out * pid_array.I_time, pid_array.Error_margin * pid_array.Max_out * pid_array.I_time)
+            if pid_array.I_time ~= 0 then
+                pid_array.Integral = Math_clamp(pid_array.Integral + ((Set_Point - PV) / pid_array.I_time * get(DELTA_TIME)), lower_clamp, upper_clamp)
+            else
+                pid_array.Integral = Math_clamp(pid_array.Integral + 0, lower_clamp, upper_clamp)
+            end
         end
-        pid_array.Integral = Math_clamp(pid_array.Integral_sum * 1 / pid_array.I_time, pid_array.Error_margin * pid_array.Min_out, pid_array.Error_margin * pid_array.Max_out)
 
 
         --nil value return 0
@@ -313,7 +331,7 @@ function SSS_PID_DPV(pid_array, Set_Point, PV)
         pid_array.Output = pid_array.Proportional + pid_array.Integral + pid_array.Derivative
 
 	    --limit and rescale output range--
-        pid_array.Output = Math_clamp(pid_array.Output, pid_array.Min_out * pid_array.Error_margin, pid_array.Max_out * pid_array.Error_margin) / pid_array.Error_margin
+        pid_array.Output = Math_clamp(pid_array.Output, lower_clamp, upper_clamp) / pid_array.Error_margin
 
     end
 
