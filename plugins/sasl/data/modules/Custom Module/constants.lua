@@ -58,6 +58,15 @@ FUEL_C_MAX     = 8941
 FUEL_ACT_MAX   = 5031
 FUEL_RCT_MAX   = 10089
 
+-- Pumps and XFR ids
+L_TK_PUMP_1  = 1
+L_TK_PUMP_2  = 2
+R_TK_PUMP_1  = 3
+R_TK_PUMP_2  = 4
+C_TK_XFR_1   = 5
+C_TK_XFR_2   = 6
+ACT_TK_XFR = 7
+RCT_TK_XFR = 8
 -- Fonts
 Font_AirbusDUL = sasl.gl.loadFont("fonts/AirbusDULiberationMono.ttf")
 sasl.gl.setFontRenderMode(Font_AirbusDUL, TEXT_RENDER_FORCED_MONO, 0.6)

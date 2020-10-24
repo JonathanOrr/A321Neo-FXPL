@@ -259,7 +259,7 @@ local function draw_plane_icon()
     
     sasl.gl.drawText(B612MONO_regular, 582, 160, "LEFT", 14, false, false, TEXT_ALIGN_CENTER, UI_DARK_BLUE)
     sasl.gl.drawRectangle(566, 180, 30, 92/1.75, UI_LIGHT_GREY)
-    sasl.gl.drawFrame(566, 180, 30, 92/1.75, UI_DARK_BLUE)
+    Sasl_DrawWideFrame(566, 180, 30, 92/1.75, 1, 1, UI_DARK_BLUE)
     sasl.gl.drawRectangle(566, 180, 30, 92/1.75*left_perc/100, UI_DARK_BLUE)
     sasl.gl.drawText(B612MONO_regular, 598, 240, left_perc .. "%", 14, false, false, TEXT_ALIGN_RIGHT, UI_DARK_BLUE)
 
@@ -267,7 +267,7 @@ local function draw_plane_icon()
 
     sasl.gl.drawText(B612MONO_regular, 762, 160, "RIGHT", 14, false, false, TEXT_ALIGN_CENTER, UI_DARK_BLUE)
     sasl.gl.drawRectangle(746, 180, 30, 92/1.75, UI_LIGHT_GREY)
-    sasl.gl.drawFrame(746, 180, 30, 92/1.75, UI_DARK_BLUE)
+    Sasl_DrawWideFrame(746, 180, 30, 92/1.75, 1, 1, UI_DARK_BLUE)
     sasl.gl.drawRectangle(746, 180, 30, 92/1.75*right_perc/100, UI_DARK_BLUE)
     sasl.gl.drawText(B612MONO_regular, 778, 240, right_perc .. "%", 14, false, false, TEXT_ALIGN_RIGHT, UI_DARK_BLUE)
 
@@ -275,7 +275,7 @@ local function draw_plane_icon()
 
     sasl.gl.drawText(B612MONO_regular, 672, 190, "CTR", 14, false, false, TEXT_ALIGN_CENTER, UI_DARK_BLUE)
     sasl.gl.drawRectangle(656, 205, 30, 64/1.75, UI_DARK_GREY)
-    sasl.gl.drawFrame(656, 205, 30, 64/1.75, UI_DARK_BLUE)
+    Sasl_DrawWideFrame(656, 205, 30, 64/1.75, 1, 1, UI_DARK_BLUE)
     sasl.gl.drawRectangle(656, 205, 30, 64/1.75*c_perc/100, UI_DARK_BLUE)
     sasl.gl.drawText(B612MONO_regular, 688, 245, c_perc .. "%", 14, false, false, TEXT_ALIGN_RIGHT, UI_DARK_BLUE)
     
@@ -283,7 +283,7 @@ local function draw_plane_icon()
     
     sasl.gl.drawText(B612MONO_regular, 672, 275, "ACT", 14, false, false, TEXT_ALIGN_CENTER, UI_DARK_BLUE)
     sasl.gl.drawRectangle(656, 290, 30, 50/1.75, UI_LIGHT_GREY)
-    sasl.gl.drawFrame(656, 290, 30, 50/1.75, UI_DARK_BLUE)
+    Sasl_DrawWideFrame(656, 290, 30, 50/1.75, 1, 1, UI_DARK_BLUE)
     sasl.gl.drawRectangle(656, 290, 30, 50/1.75*act_perc/100, UI_DARK_BLUE)
     sasl.gl.drawText(B612MONO_regular, 688, 324, act_perc .. "%", 14, false, false, TEXT_ALIGN_RIGHT, UI_DARK_BLUE)
 
@@ -291,7 +291,7 @@ local function draw_plane_icon()
 
     sasl.gl.drawText(B612MONO_regular, 672, 85, "RCT", 14, false, false, TEXT_ALIGN_CENTER, UI_DARK_BLUE)
     sasl.gl.drawRectangle(656, 100, 30, 100/1.75, UI_LIGHT_GREY)
-    sasl.gl.drawFrame(656, 100, 30, 100/1.75, UI_DARK_BLUE)
+    Sasl_DrawWideFrame(656, 100, 30, 100/1.75, 1, 1, UI_DARK_BLUE)
     sasl.gl.drawRectangle(656, 100, 30, 100/1.75*rct_perc/100, UI_DARK_BLUE)
     sasl.gl.drawText(B612MONO_regular, 688, 163, rct_perc .. "%", 14, false, false, TEXT_ALIGN_RIGHT, UI_DARK_BLUE)
 end

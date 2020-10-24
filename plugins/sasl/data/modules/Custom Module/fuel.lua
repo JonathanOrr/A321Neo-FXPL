@@ -8,15 +8,6 @@
 ----------------------------------------------------------------------------------------------------
 include('constants.lua')
 
--- Pumps and XFR ids
-local L_TK_PUMP_1  = 1
-local L_TK_PUMP_2  = 2
-local R_TK_PUMP_1  = 3
-local R_TK_PUMP_2  = 4
-local C_TK_XFR_1   = 5
-local C_TK_XFR_2   = 6
-local ACT_TK_XFR = 7
-local RCT_TK_XFR = 8
 
 -- Tanks
 local tank_LEFT  = 1

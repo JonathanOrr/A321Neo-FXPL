@@ -75,9 +75,9 @@ local function draw_fob_qty()
 
     -- Box FOB
     if any_failure then
-        sasl.gl.drawWideLine(size[1]/2-250, size[2]/2-315, size[1]/2-120, size[2]/2-315, 3 , ECAM_ORANGE)
-        sasl.gl.drawWideLine(size[1]/2-250, size[2]/2-317, size[1]/2-250, size[2]/2-280, 3 , ECAM_ORANGE)
-        sasl.gl.drawWideLine(size[1]/2-120, size[2]/2-317, size[1]/2-120, size[2]/2-280, 3 , ECAM_ORANGE)
+        sasl.gl.drawWideLine(32, size[2]/2-315, 110, size[2]/2-315, 3 , ECAM_ORANGE)
+        sasl.gl.drawWideLine(32, size[2]/2-317, 32, size[2]/2-280, 3 , ECAM_ORANGE)
+--        sasl.gl.drawWideLine(size[1]/2-120, size[2]/2-317, size[1]/2-120, size[2]/2-280, 3 , ECAM_ORANGE)
     end
 end
 
@@ -254,7 +254,7 @@ function ecam_update_fuel_page()
         set(Ecam_fuel_valve_C_2, 0)
     elseif Fuel_sys.tank_pump_and_xfr[6].pressure_ok then
         set(Ecam_fuel_valve_C_2, 1)
-    elseif get(FAILURE_FUEL, 5) == 1 then
+    elseif get(FAILURE_FUEL, 6) == 1 then
         set(Ecam_fuel_valve_C_2, 2)
     elseif not Fuel_sys.tank_pump_and_xfr[6].auto_status then
         set(Ecam_fuel_valve_C_2, 0)
