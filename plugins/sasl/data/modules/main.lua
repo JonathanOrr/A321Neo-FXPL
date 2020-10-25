@@ -24,6 +24,7 @@ panelHeight3d = 2048
 
 components = {
   apu {},
+  fuel {}, -- Please keep this before engines
   engines {},
   FBW_main {},
   cabin_screens {},
@@ -50,7 +51,6 @@ components = {
   doors {},
   hydraulics {},
   electrical {},
-  fuel {},
   sounds {}
  }
 

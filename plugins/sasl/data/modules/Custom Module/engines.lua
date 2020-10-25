@@ -114,7 +114,7 @@ function engines_auto_slow_start(phase)
     -- When the user press Flight -> Start engines to running
     if phase == SASL_COMMAND_BEGIN then
         slow_start_time_requested = true -- Please check the function update_auto_start()
-
+        sasl.commandOnce(FUEL_cmd_internal_qs)
     end
     return 0
 end
@@ -656,3 +656,9 @@ function update()
     update_auto_start()
 
 end
+
+-- The following code is used to check if SASL has been restarted with engines running
+if get(Startup_running) == 1 and get(TIME) > 1 then
+    sasl.commandOnce(sasl.findCommand("sim/operation/quick_start"))
+end
+

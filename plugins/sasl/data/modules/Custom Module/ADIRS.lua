@@ -503,3 +503,10 @@ function update ()
     update_output_datarefs()
     
 end
+
+
+-- The following code is used to check if SASL has been restarted with engines running
+if get(Startup_running) == 1 and get(TIME) > 1 then
+    onAirportLoaded()
+end
+
