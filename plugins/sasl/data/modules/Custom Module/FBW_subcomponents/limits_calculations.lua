@@ -80,22 +80,21 @@ function update()
         if (get(Front_gear_deployment) + get(Left_gear_deployment) + get(Right_gear_deployment)) / 3 > 0 then
             set(Capt_VMAX, VMAX_speeds[3])
             set(Fo_VMAX, VMAX_speeds[3])
-            set(Capt_VMAX_prot, VMAX_speeds[3] + 6)
-            set(Fo_VMAX_prot, VMAX_speeds[3] + 6)
         end
         if get(Flaps_internal_config) > 0 then
             set(Capt_VMAX, VMAX_speeds[get(Flaps_internal_config) + 3])
             set(Fo_VMAX, VMAX_speeds[get(Flaps_internal_config) + 3])
-            set(Capt_VMAX_prot, VMAX_speeds[get(Flaps_internal_config) + 3] + 6)
-            set(Fo_VMAX_prot, VMAX_speeds[get(Flaps_internal_config) + 3] + 6)
         end
     end
+
+    set(VFE_speed, VMAX_speeds[Math_clamp_higher(get(Flaps_internal_config), 4) + 1 + 3])
 
     if get(Gear_handle) ~= 0 and (get(Front_gear_deployment) + get(Left_gear_deployment) + get(Right_gear_deployment)) / 3 > 0 then
         set(VLS, Set_anim_value(get(VLS), 1.28 * Extract_vs1g(get(Aircraft_total_weight_kgs), get(Flaps_internal_config), true), 0, 350, 0.3))
     else
         set(VLS, Set_anim_value(get(VLS), 1.28 * Extract_vs1g(get(Aircraft_total_weight_kgs), get(Flaps_internal_config), false), 0, 350, 0.3))
     end
+
     set(S_speed, 1.23 * Extract_vs1g(get(Aircraft_total_weight_kgs), 0, false))
     set(F_speed, 1.26 * Extract_vs1g(get(Aircraft_total_weight_kgs), 2, false))
     set(Capt_GD, (2 * get(Aircraft_total_weight_kgs) / 1000 + 90) + Math_clamp_lower((get(PFD_Capt_Baro_Altitude) - 20000) / 1000, 0))
@@ -119,6 +118,8 @@ function update()
     set(Fo_S_speed_delta,       get(PFD_Fo_IAS)   - get(S_speed))
     set(Capt_F_speed_delta,     get(PFD_Capt_IAS) - get(F_speed))
     set(Fo_F_speed_delta,       get(PFD_Fo_IAS)   - get(F_speed))
+    set(Capt_VFE_speed_delta,   get(PFD_Capt_IAS) - get(VFE_speed))
+    set(Fo_VFE_speed_delta,     get(PFD_Fo_IAS)   - get(VFE_speed))
     set(Capt_VLS_delta,         get(PFD_Capt_IAS) - get(VLS))
     set(Fo_VLS_delta,           get(PFD_Fo_IAS)   - get(VLS))
     set(Capt_GD_delta,          get(PFD_Capt_IAS) - get(Capt_GD))

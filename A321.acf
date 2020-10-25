@@ -102,7 +102,7 @@ P _door/0/_xyz/0 -1.0
 P _door/0/_xyz/1 0.0
 P _door/0/_xyz/2 17.600000381
 P _door/0/_xyz/count 3
-P _door/1/_ang_now 100.0
+P _door/1/_ang_now 0.0
 P _door/1/_ext_ang 0.0
 P _door/1/_ret_ang 100.0
 P _door/1/_type 3
@@ -110,7 +110,7 @@ P _door/1/_xyz/0 -1.500000000
 P _door/1/_xyz/1 0.0
 P _door/1/_xyz/2 14.500000000
 P _door/1/_xyz/count 3
-P _door/10/_ang_now 90.0
+P _door/10/_ang_now 0.0
 P _door/10/_ext_ang 0.0
 P _door/10/_ret_ang 90.0
 P _door/10/_type 3
@@ -135,7 +135,7 @@ P _door/2/_xyz/0 1.0
 P _door/2/_xyz/1 0.0
 P _door/2/_xyz/2 17.600000381
 P _door/2/_xyz/count 3
-P _door/3/_ang_now -100.0
+P _door/3/_ang_now 0.0
 P _door/3/_ext_ang 0.0
 P _door/3/_ret_ang -100.0
 P _door/3/_type 3
@@ -143,7 +143,7 @@ P _door/3/_xyz/0 1.500000000
 P _door/3/_xyz/1 0.0
 P _door/3/_xyz/2 14.500000000
 P _door/3/_xyz/count 3
-P _door/4/_ang_now 0.0
+P _door/4/_ang_now 39.313255310
 P _door/4/_ext_ang 0.0
 P _door/4/_ret_ang 90.0
 P _door/4/_type 2
@@ -151,7 +151,7 @@ P _door/4/_xyz/0 -13.0
 P _door/4/_xyz/1 -3.599999905
 P _door/4/_xyz/2 73.500000000
 P _door/4/_xyz/count 3
-P _door/5/_ang_now 0.0
+P _door/5/_ang_now -39.313255310
 P _door/5/_ext_ang 0.0
 P _door/5/_ret_ang -90.0
 P _door/5/_type 2
@@ -161,7 +161,7 @@ P _door/5/_xyz/2 73.500000000
 P _door/5/_xyz/count 3
 P _door/6/_type 0
 P _door/7/_type 0
-P _door/8/_ang_now -90.0
+P _door/8/_ang_now 0.0
 P _door/8/_ext_ang 0.0
 P _door/8/_ret_ang -90.0
 P _door/8/_type 3
@@ -209,10 +209,10 @@ P _gear/0/_latN 0.0
 P _gear/0/_latR 0.0
 P _gear/0/_leg_len 5.249343872
 P _gear/0/_lonE 6.0
-P _gear/0/_lonN 6.0
+P _gear/0/_lonN 46.623699188
 P _gear/0/_lonR 99.0
 P _gear/0/_scon 52322.308593750
-P _gear/0/_stat_def 0.378928840
+P _gear/0/_stat_def 0.378928781
 P _gear/0/_steerdeg_hispeed 5.0
 P _gear/0/_steerdeg_lospeed 75.0
 P _gear/0/_strut_comp 0.899999976
@@ -239,14 +239,14 @@ P _gear/1/_gear_x -12.303149223
 P _gear/1/_gear_y -2.788713932
 P _gear/1/_gear_z 71.194229126
 P _gear/1/_latE 0.0
-P _gear/1/_latN 0.0
+P _gear/1/_latN 36.255558014
 P _gear/1/_latR 83.0
 P _gear/1/_leg_len 8.202099800
 P _gear/1/_lonE -6.0
-P _gear/1/_lonN -6.0
+P _gear/1/_lonN -3.379116297
 P _gear/1/_lonR 0.0
 P _gear/1/_scon 83991.070312500
-P _gear/1/_stat_def 1.381937861
+P _gear/1/_stat_def 1.381937623
 P _gear/1/_steerdeg_hispeed 0.0
 P _gear/1/_steerdeg_lospeed 0.0
 P _gear/1/_strut_comp 0.400000006
@@ -273,14 +273,14 @@ P _gear/2/_gear_x 12.303149223
 P _gear/2/_gear_y -2.788713932
 P _gear/2/_gear_z 71.194229126
 P _gear/2/_latE 0.0
-P _gear/2/_latN 0.0
+P _gear/2/_latN -36.255558014
 P _gear/2/_latR -83.0
 P _gear/2/_leg_len 8.202099800
 P _gear/2/_lonE -6.0
-P _gear/2/_lonN -6.0
+P _gear/2/_lonN -3.379116297
 P _gear/2/_lonR 0.0
 P _gear/2/_scon 83991.070312500
-P _gear/2/_stat_def 1.381937861
+P _gear/2/_stat_def 1.381937623
 P _gear/2/_steerdeg_hispeed 0.0
 P _gear/2/_steerdeg_lospeed 0.0
 P _gear/2/_strut_comp 0.400000006
@@ -56902,7 +56902,6 @@ END_GROUP
 GROUP ECAM lower du
   LOCKED
   HIDE
-  GROUP_OPEN
   GROUP ECAM DOOR
     SHOW_EQUAL 9.000000 a321neo/cockpit/ecam/page_num
     LOCKED
@@ -58462,11 +58461,13 @@ GROUP ECAM lower du
   GROUP ECAM APU
     SHOW_EQUAL 7.000000 a321neo/cockpit/ecam/page_num
     LOCKED
+    HIDE
     gen_rotary apu bgd
       POS 3637.000000 733.000000
       IMAGE MIP/ecam lower du/APU/APU
       DATAREF 
       LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -58487,6 +58488,7 @@ GROUP ECAM lower du
       IMAGE MIP/ecam lower du/APU/ApuGen
       DATAREF a321neo/cockpit/ecam/electrical/apu_gen_status
       LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -58507,6 +58509,7 @@ GROUP ECAM lower du
       IMAGE MIP/ecam lower du/APU/BLEED_XX
       DATAREF a321neo/apu/apu_bleed_state
       LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -58528,6 +58531,7 @@ GROUP ECAM lower du
       IMAGE MIP/ecam lower du/APU/N_XX
       DATAREF a321neo/cockpit/apu/apu_needle_state
       LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -58548,6 +58552,7 @@ GROUP ECAM lower du
       IMAGE MIP/ecam lower du/APU/EGT_XX
       DATAREF a321neo/cockpit/apu/apu_needle_state
       LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -58569,6 +58574,7 @@ GROUP ECAM lower du
       DATAREF sim/cockpit/engine/APU_N1
       SHOW_EQUAL 1.000000 a321neo/cockpit/apu/apu_needle_state
       LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 -120.000000 1.000000
@@ -58582,6 +58588,7 @@ GROUP ECAM lower du
       DATAREF a321neo/cockpit/apu/EGT
       SHOW_EQUAL 1.000000 a321neo/cockpit/apu/apu_needle_state
       LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 -120.000000 1.000000
@@ -58594,6 +58601,7 @@ GROUP ECAM lower du
       IMAGE MIP/ecam lower du/APU/FLAP_OPEN
       DATAREF a321neo/cockpit/apu/flap_open
       LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -58614,6 +58622,7 @@ GROUP ECAM lower du
       IMAGE MIP/ecam lower du/APU/FUEL_LO_PR
       DATAREF a321neo/cockpit/apu/fuel_source
       LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -58635,6 +58644,7 @@ GROUP ECAM lower du
       IMAGE MIP/ecam lower du/APU/AVAIL
       DATAREF a321neo/engine/apu_avil
       LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -59468,13 +59478,11 @@ GROUP ECAM lower du
   GROUP ECAM FCTL
     SHOW_EQUAL 11.000000 a321neo/cockpit/ecam/page_num
     LOCKED
-    HIDE
     gen_rotary fctl_background
       POS 3637.000000 733.000000
       IMAGE MIP/ecam lower du/FCTL/FCTL
       DATAREF 
       LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -59492,13 +59500,11 @@ GROUP ECAM lower du
 
     GROUP Tracks
       LOCKED
-      HIDE
-      gen_rotary Aileron 1
+      gen_rotary lspol 1
         POS 3582.000000 1061.000000
         IMAGE MIP/ecam lower du/FCTL/Tracks/1
         DATAREF a321neo/dynamics/HYD/G_press
         LOCKED
-        HIDE
         LIGHT_MODE GLASS_AUTO
         LIGHT_RHEOSTAT 0
         KEY_FRAME 0.000000 0.000000 1.000000
@@ -59515,12 +59521,11 @@ GROUP ECAM lower du
         CLICK_DX 0
         CLICK_DY 0
 
-      gen_rotary Aileron 1 2
+      gen_rotary rspol 1
         POS 3694.000000 1061.000000
         IMAGE MIP/ecam lower du/FCTL/Tracks/1
         DATAREF a321neo/dynamics/HYD/G_press
         LOCKED
-        HIDE
         LIGHT_MODE GLASS_AUTO
         LIGHT_RHEOSTAT 0
         KEY_FRAME 0.000000 0.000000 1.000000
@@ -59537,12 +59542,11 @@ GROUP ECAM lower du
         CLICK_DX 0
         CLICK_DY 0
 
-      gen_rotary Aileron 1 2 2
+      gen_rotary lspol 2
         POS 3526.000000 1052.000000
         IMAGE MIP/ecam lower du/FCTL/Tracks/2
         DATAREF a321neo/dynamics/HYD/Y_press
         LOCKED
-        HIDE
         LIGHT_MODE GLASS_AUTO
         LIGHT_RHEOSTAT 0
         KEY_FRAME 0.000000 0.000000 1.000000
@@ -59559,12 +59563,11 @@ GROUP ECAM lower du
         CLICK_DX 0
         CLICK_DY 0
 
-      gen_rotary Aileron 1 2 2 2
+      gen_rotary rspol 2
         POS 3750.000000 1052.000000
         IMAGE MIP/ecam lower du/FCTL/Tracks/2
         DATAREF a321neo/dynamics/HYD/Y_press
         LOCKED
-        HIDE
         LIGHT_MODE GLASS_AUTO
         LIGHT_RHEOSTAT 0
         KEY_FRAME 0.000000 0.000000 1.000000
@@ -59581,12 +59584,11 @@ GROUP ECAM lower du
         CLICK_DX 0
         CLICK_DY 0
 
-      gen_rotary Aileron 1 2 2 2 2
+      gen_rotary lspol 3
         POS 3470.000000 1043.000000
         IMAGE MIP/ecam lower du/FCTL/Tracks/3
         DATAREF a321neo/dynamics/HYD/B_press
         LOCKED
-        HIDE
         LIGHT_MODE GLASS_AUTO
         LIGHT_RHEOSTAT 0
         KEY_FRAME 0.000000 0.000000 1.000000
@@ -59603,12 +59605,11 @@ GROUP ECAM lower du
         CLICK_DX 0
         CLICK_DY 0
 
-      gen_rotary Aileron 1 2 2 2 2 2
+      gen_rotary rspol 3
         POS 3807.000000 1043.000000
         IMAGE MIP/ecam lower du/FCTL/Tracks/3
         DATAREF a321neo/dynamics/HYD/B_press
         LOCKED
-        HIDE
         LIGHT_MODE GLASS_AUTO
         LIGHT_RHEOSTAT 0
         KEY_FRAME 0.000000 0.000000 1.000000
@@ -59625,12 +59626,11 @@ GROUP ECAM lower du
         CLICK_DX 0
         CLICK_DY 0
 
-      gen_rotary Aileron 1 2 2 2 2 2
+      gen_rotary lspol 4
         POS 3414.000000 1033.000000
         IMAGE MIP/ecam lower du/FCTL/Tracks/4
         DATAREF a321neo/dynamics/HYD/Y_press
         LOCKED
-        HIDE
         LIGHT_MODE GLASS_AUTO
         LIGHT_RHEOSTAT 0
         KEY_FRAME 0.000000 0.000000 1.000000
@@ -59647,12 +59647,11 @@ GROUP ECAM lower du
         CLICK_DX 0
         CLICK_DY 0
 
-      gen_rotary Aileron 1 2 2 2 2 2
+      gen_rotary rspol 4
         POS 3862.000000 1033.000000
         IMAGE MIP/ecam lower du/FCTL/Tracks/4
         DATAREF a321neo/dynamics/HYD/Y_press
         LOCKED
-        HIDE
         LIGHT_MODE GLASS_AUTO
         LIGHT_RHEOSTAT 0
         KEY_FRAME 0.000000 0.000000 1.000000
@@ -59669,12 +59668,11 @@ GROUP ECAM lower du
         CLICK_DX 0
         CLICK_DY 0
 
-      gen_rotary Aileron 1 2 2 2 2 2
+      gen_rotary lspol 5
         POS 3357.000000 1024.000000
         IMAGE MIP/ecam lower du/FCTL/Tracks/5
         DATAREF a321neo/dynamics/HYD/G_press
         LOCKED
-        HIDE
         LIGHT_MODE GLASS_AUTO
         LIGHT_RHEOSTAT 0
         KEY_FRAME 0.000000 0.000000 1.000000
@@ -59691,12 +59689,11 @@ GROUP ECAM lower du
         CLICK_DX 0
         CLICK_DY 0
 
-      gen_rotary Aileron 1 2 2 2 2 2
+      gen_rotary rspol 5
         POS 3918.000000 1024.000000
         IMAGE MIP/ecam lower du/FCTL/Tracks/5
         DATAREF a321neo/dynamics/HYD/G_press
         LOCKED
-        HIDE
         LIGHT_MODE GLASS_AUTO
         LIGHT_RHEOSTAT 0
         KEY_FRAME 0.000000 0.000000 1.000000
@@ -59718,7 +59715,6 @@ GROUP ECAM lower du
         IMAGE MIP/ecam lower du/FCTL/Tracks/ailerons
         DATAREF a321neo/cockpit/ecam/fctl_is_aileron_ok
         LOCKED
-        HIDE
         LIGHT_MODE GLASS_AUTO
         LIGHT_RHEOSTAT 0
         KEY_FRAME 0.000000 0.000000 1.000000
@@ -59739,7 +59735,6 @@ GROUP ECAM lower du
         IMAGE MIP/ecam lower du/FCTL/Tracks/ailerons
         DATAREF a321neo/cockpit/ecam/fctl_is_aileron_ok
         LOCKED
-        HIDE
         LIGHT_MODE GLASS_AUTO
         LIGHT_RHEOSTAT 0
         KEY_FRAME 0.000000 0.000000 1.000000
@@ -59760,7 +59755,6 @@ GROUP ECAM lower du
         IMAGE MIP/ecam lower du/FCTL/Tracks/elevator
         DATAREF a321neo/cockpit/ecam/fctl_is_elevator_L_ok
         LOCKED
-        HIDE
         LIGHT_MODE GLASS_AUTO
         LIGHT_RHEOSTAT 0
         KEY_FRAME 0.000000 0.000000 1.000000
@@ -59776,12 +59770,11 @@ GROUP ECAM lower du
         CLICK_DX 0
         CLICK_DY 0
 
-      gen_rotary Left Elevator 2
+      gen_rotary right Elevator 
         POS 3832.000000 612.500000
         IMAGE MIP/ecam lower du/FCTL/Tracks/elevator
         DATAREF a321neo/cockpit/ecam/fctl_is_elevator_R_ok
         LOCKED
-        HIDE
         LIGHT_MODE GLASS_AUTO
         LIGHT_RHEOSTAT 0
         KEY_FRAME 0.000000 0.000000 1.000000
@@ -59802,7 +59795,6 @@ GROUP ECAM lower du
         IMAGE MIP/ecam lower du/FCTL/Tracks/rudder
         DATAREF a321neo/cockpit/ecam/fctl_is_rudder_ok
         LOCKED
-        HIDE
         LIGHT_MODE GLASS_AUTO
         LIGHT_RHEOSTAT 0
         KEY_FRAME 0.000000 0.000000 1.000000
@@ -59822,10 +59814,9 @@ GROUP ECAM lower du
     gen_pointer aileron_left
       POS 3339.000000 856.000000
       IMAGE MIP/ecam lower du/FCTL/ArrowLeft
-      DATAREF sim/flightmodel/controls/wing2l_ail1def
+      DATAREF sim/flightmodel/controls/wing4l_ail1def
       SHOW_EQUAL 1.000000 a321neo/cockpit/ecam/fctl_is_aileron_ok
       LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 25.000000 -90.000000 1.000000
@@ -59839,10 +59830,9 @@ GROUP ECAM lower du
     gen_pointer aileron_left_amber
       POS 3339.000000 856.000000
       IMAGE MIP/ecam lower du/FCTL/ArrowLeftAmber
-      DATAREF sim/flightmodel/controls/wing2l_ail1def
+      DATAREF sim/flightmodel/controls/wing4l_ail1def
       SHOW_EQUAL 0.000000 a321neo/cockpit/ecam/fctl_is_aileron_ok
       LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 25.000000 -90.000000 1.000000
@@ -59856,10 +59846,9 @@ GROUP ECAM lower du
     gen_pointer aileron_right
       POS 3936.000000 856.000000
       IMAGE MIP/ecam lower du/FCTL/ArrowRight
-      DATAREF sim/flightmodel/controls/wing2r_ail1def
+      DATAREF sim/flightmodel/controls/wing4r_ail1def
       SHOW_EQUAL 1.000000 a321neo/cockpit/ecam/fctl_is_aileron_ok
       LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 25.000000 -90.000000 1.000000
@@ -59870,13 +59859,12 @@ GROUP ECAM lower du
       IS_VERTICAL 1
       OFFSET 0.000000
 
-    gen_pointer aileron_right 2
+    gen_pointer aileron_right amber
       POS 3936.000000 856.000000
       IMAGE MIP/ecam lower du/FCTL/ArrowRightAmber
-      DATAREF sim/flightmodel/controls/wing2r_ail1def
+      DATAREF sim/flightmodel/controls/wing4r_ail1def
       SHOW_EQUAL 0.000000 a321neo/cockpit/ecam/fctl_is_aileron_ok
       LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 25.000000 -90.000000 1.000000
@@ -59887,13 +59875,12 @@ GROUP ECAM lower du
       IS_VERTICAL 1
       OFFSET 0.000000
 
-    gen_pointer elevator
+    gen_pointer lelev
       POS 3458.000000 589.000000
       IMAGE MIP/ecam lower du/FCTL/ArrowLeft
       DATAREF sim/flightmodel/controls/hstab1_elv1def[0]
       SHOW_EQUAL 1.000000 a321neo/cockpit/ecam/fctl_is_elevator_L_ok
       LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 17.000000 -55.000000 1.000000
@@ -59903,13 +59890,12 @@ GROUP ECAM lower du
       IS_VERTICAL 1
       OFFSET 0.000000
 
-    gen_pointer elevator 2
+    gen_pointer lelev amber
       POS 3458.000000 589.000000
       IMAGE MIP/ecam lower du/FCTL/ArrowLeftAmber
       DATAREF sim/flightmodel/controls/hstab1_elv1def[0]
       SHOW_EQUAL 0.000000 a321neo/cockpit/ecam/fctl_is_elevator_L_ok
       LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 17.000000 -55.000000 1.000000
@@ -59919,13 +59905,12 @@ GROUP ECAM lower du
       IS_VERTICAL 1
       OFFSET 0.000000
 
-    gen_pointer elevator 2
+    gen_pointer relev
       POS 3821.000000 589.000000
       IMAGE MIP/ecam lower du/FCTL/ArrowRight
       DATAREF sim/flightmodel/controls/hstab2_elv1def[0]
       SHOW_EQUAL 1.000000 a321neo/cockpit/ecam/fctl_is_elevator_R_ok
       LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 17.000000 -55.000000 1.000000
@@ -59935,13 +59920,12 @@ GROUP ECAM lower du
       IS_VERTICAL 1
       OFFSET 0.000000
 
-    gen_pointer elevator 2 2
+    gen_pointer relev amber
       POS 3821.000000 589.000000
       IMAGE MIP/ecam lower du/FCTL/ArrowRightAmber
       DATAREF sim/flightmodel/controls/hstab2_elv1def[0]
       SHOW_EQUAL 0.000000 a321neo/cockpit/ecam/fctl_is_elevator_R_ok
       LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 17.000000 -55.000000 1.000000
@@ -59951,13 +59935,12 @@ GROUP ECAM lower du
       IS_VERTICAL 1
       OFFSET 0.000000
 
-    gen_needle rudder_needle
+    gen_needle rudder
       POS 3637.500000 599.000000
       IMAGE MIP/ecam lower du/FCTL/RudderGreen
       DATAREF sim/flightmodel/controls/vstab1_rud1def[0]
       SHOW_EQUAL 1.000000 a321neo/cockpit/ecam/fctl_is_rudder_ok
       LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 30.000000 -28.000000 1.000000
@@ -59968,13 +59951,12 @@ GROUP ECAM lower du
       IS_DRAGGABLE 0
       OFFSET 0.000000
 
-    gen_needle rudder_needle 2
+    gen_needle rudder amber
       POS 3637.500000 599.000000
       IMAGE MIP/ecam lower du/FCTL/RudderAmber
       DATAREF sim/flightmodel/controls/vstab1_rud1def[0]
       SHOW_EQUAL 0.000000 a321neo/cockpit/ecam/fctl_is_rudder_ok
       LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 30.000000 -28.000000 1.000000
@@ -59988,10 +59970,9 @@ GROUP ECAM lower du
     gen_rotary l_spoiler1
       POS 3582.000000 1074.000000
       IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
-      DATAREF sim/flightmodel/controls/wing1l_spo1def
-      SHOW_GREATER 0.010000 sim/flightmodel2/wing/speedbrake2_deg[0]
+      DATAREF sim/flightmodel/controls/wing2l_spo1def
+      SHOW_GREATER 0.010000 [0]
       LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 -1.000000 1.000000
@@ -60011,10 +59992,9 @@ GROUP ECAM lower du
     gen_rotary l_spoiler2
       POS 3526.000000 1065.000000
       IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
-      DATAREF sim/flightmodel/controls/wing2l_spo1def
-      SHOW_GREATER 0.010000 sim/flightmodel/controls/wing2l_spo2def[0]
+      DATAREF sim/flightmodel2/wing/speedbrake1_deg[4]
+      SHOW_GREATER 0.010000 [0]
       LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 -1.000000 1.000000
@@ -60034,10 +60014,9 @@ GROUP ECAM lower du
     gen_rotary l_spoiler3
       POS 3470.000000 1056.000000
       IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
-      DATAREF sim/flightmodel/controls/wing2l_spo2def
-      SHOW_GREATER 0.010000 sim/flightmodel/controls/wing2l_spo2def[0]
+      DATAREF sim/flightmodel2/wing/speedbrake2_deg[4]
+      SHOW_GREATER 0.010000 [0]
       LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 -1.000000 1.000000
@@ -60057,10 +60036,9 @@ GROUP ECAM lower du
     gen_rotary l_spoiler4
       POS 3414.000000 1046.000000
       IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
-      DATAREF sim/flightmodel/controls/wing2l_spo2def
-      SHOW_GREATER 0.010000 sim/flightmodel/controls/wing2l_spo2def[0]
+      DATAREF sim/flightmodel/controls/wing3l_spo1def
+      SHOW_GREATER 0.010000 [0]
       LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 -1.000000 1.000000
@@ -60080,10 +60058,9 @@ GROUP ECAM lower du
     gen_rotary l_spoiler5
       POS 3357.000000 1037.000000
       IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
-      DATAREF sim/flightmodel/controls/wing2l_spo2def
-      SHOW_GREATER 0.010000 sim/flightmodel/controls/wing2l_spo2def[0]
+      DATAREF sim/flightmodel/controls/wing3l_spo2def
+      SHOW_GREATER 0.010000 [0]
       LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 -1.000000 1.000000
@@ -60103,10 +60080,9 @@ GROUP ECAM lower du
     gen_rotary r_spoiler1
       POS 3694.000000 1074.000000
       IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
-      DATAREF sim/flightmodel/controls/wing1r_spo1def
-      SHOW_GREATER 0.010000 sim/flightmodel2/wing/speedbrake1_deg[0]
+      DATAREF sim/flightmodel/controls/wing2r_spo1def
+      SHOW_GREATER 0.010000 [0]
       LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 -1.000000 1.000000
@@ -60126,10 +60102,9 @@ GROUP ECAM lower du
     gen_rotary r_spoiler2
       POS 3750.000000 1065.000000
       IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
-      DATAREF sim/flightmodel/controls/wing2r_spo1def
-      SHOW_GREATER 0.010000 sim/flightmodel/controls/wing2r_spo2def[0]
+      DATAREF sim/flightmodel2/wing/speedbrake1_deg[5]
+      SHOW_GREATER 0.010000 [0]
       LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 -1.000000 1.000000
@@ -60149,10 +60124,9 @@ GROUP ECAM lower du
     gen_rotary r_spoiler3
       POS 3807.000000 1056.000000
       IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
-      DATAREF sim/flightmodel/controls/wing2r_spo2def
-      SHOW_GREATER 0.010000 sim/flightmodel/controls/wing2r_spo2def[0]
+      DATAREF sim/flightmodel2/wing/speedbrake2_deg[5]
+      SHOW_GREATER 0.010000 [0]
       LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 -1.000000 1.000000
@@ -60172,10 +60146,9 @@ GROUP ECAM lower du
     gen_rotary r_spoiler4
       POS 3862.000000 1046.000000
       IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
-      DATAREF sim/flightmodel/controls/wing2r_spo2def
-      SHOW_GREATER 0.010000 sim/flightmodel/controls/wing2r_spo2def[0]
+      DATAREF sim/flightmodel/controls/wing3r_spo1def
+      SHOW_GREATER 0.010000 [0]
       LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 -1.000000 1.000000
@@ -60195,10 +60168,9 @@ GROUP ECAM lower du
     gen_rotary r_spoiler5
       POS 3919.000000 1037.000000
       IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
-      DATAREF sim/flightmodel/controls/wing2r_spo2def
-      SHOW_GREATER 0.010000 sim/flightmodel/controls/wing2r_spo2def[0]
+      DATAREF sim/flightmodel/controls/wing3r_spo2def
+      SHOW_GREATER 0.010000 [0]
       LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 -1.000000 1.000000
@@ -60220,7 +60192,6 @@ GROUP ECAM lower du
       IMAGE MIP/ecam lower du/FCTL/LeftLimiter
       DATAREF a321neo/dynamics/FBW/yaw_lim
       LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -60234,7 +60205,6 @@ GROUP ECAM lower du
       IMAGE MIP/ecam lower du/FCTL/RightLimiter
       DATAREF a321neo/dynamics/FBW/yaw_lim
       LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -60248,7 +60218,6 @@ GROUP ECAM lower du
       IMAGE MIP/ecam lower du/FCTL/elac1
       DATAREF a321neo/dynamics/FBW/flight_computers/elac_1_status
       LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 1.000000 1.000000
@@ -60269,7 +60238,6 @@ GROUP ECAM lower du
       IMAGE MIP/ecam lower du/FCTL/elac2
       DATAREF a321neo/dynamics/FBW/flight_computers/elac_2_status
       LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 1.000000 1.000000
@@ -60290,7 +60258,6 @@ GROUP ECAM lower du
       IMAGE MIP/ecam lower du/FCTL/sec1
       DATAREF a321neo/dynamics/FBW/flight_computers/sec_1_status
       LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 1.000000 1.000000
@@ -60311,7 +60278,6 @@ GROUP ECAM lower du
       IMAGE MIP/ecam lower du/FCTL/sec2
       DATAREF a321neo/dynamics/FBW/flight_computers/sec_2_status
       LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 1.000000 1.000000
@@ -60332,7 +60298,6 @@ GROUP ECAM lower du
       IMAGE MIP/ecam lower du/FCTL/sec3
       DATAREF a321neo/dynamics/FBW/flight_computers/sec_3_status
       LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 1.000000 1.000000
@@ -60777,6 +60742,7 @@ GROUP EWD
 END_GROUP
 GROUP PFD
   LOCKED
+  GROUP_OPEN
   gen_needle Horizon
     POS 1758.500000 724.500000
     IMAGE MIP/pfd/ADI
@@ -61098,6 +61064,7 @@ GROUP PFD
   END_GROUP
   GROUP Speed Tape
     LOCKED
+    GROUP_OPEN
     gen_pointer Speed Tape
       POS 1441.000000 733.000000
       IMAGE MIP/pfd/spd tape
@@ -61535,6 +61502,7 @@ GROUP PFD
     DATAREF 
     SHOW_GREATER 460.000000 sim/cockpit2/gauges/indicators/airspeed_kts_pilot
     LOCKED
+    HIDE
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -61573,13 +61541,14 @@ GROUP PFD
   gen_pointer Flap Speed
     POS 1465.500000 727.500000
     IMAGE MIP/pfd/Flap Speed
-    DATAREF def
+    DATAREF a321neo/dynamics/FBW/limit_speeds/delta/capt_vfe
+    SHOW_LESS 4.000000 a321neo/dynamics/surfaces/flaps_internal_config
     LOCKED
     CLIP
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 243.000000 1.000000
-    KEY_FRAME 1.000000 -243.000000
+    KEY_FRAME 0.000000 0.000000 1.000000
+    KEY_FRAME -20.000000 110.000000
     IS_DRAGGABLE 0
     IS_VERTICAL 1
     OFFSET 0.000000

@@ -79,10 +79,7 @@ end)
 
 sasl.registerCommandHandler ( Toggle_cab_hotair, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(Cab_hot_air, 1-  get(Cab_hot_air))
-    end
-    if phase == SASL_COMMAND_CONTINUE then
-        set(Aft_cargo_temp_dial, get(Aft_cargo_temp_dial) - 0.5 * get(DELTA_TIME))
+        set(Cab_hot_air, 1 - get(Cab_hot_air))
     end
 end)
 
@@ -178,7 +175,7 @@ function update()
         cab_cond_off()
         cargo_cond_off()
     end
-    
+
     update_avio_ventilation()
-    
+
 end
