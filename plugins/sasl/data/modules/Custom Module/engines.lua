@@ -529,13 +529,28 @@ local function update_starter_datarefs()
     
 end
 
+-- Returns true if the FADEC has electrical power
+local function fadec_has_elec_power(eng)
+    if get(DC_ess_bus_pwrd) == 1 then
+        return true
+    end
+    
+    if eng == 1 and ((get(Gen_1_pwr) == 1) or get(DC_bat_bus_pwrd) == 1) then
+        return true
+    end
+    
+    if eng == 2 and ((get(Gen_2_pwr) == 1) or get(DC_bus_2_pwrd) == 1) then
+        return true
+    end
+end
+
 local function update_startup()
 
     -- An array we need later to see if the engine requires cooldown (=shutdown) or not
     local require_cooldown = {true, true}
 
-    local does_engine_1_can_start_or_crank = get(Engine_1_avail) == 0 and get(L_bleed_press) > 10
-    local does_engine_2_can_start_or_crank = get(Engine_2_avail) == 0 and get(R_bleed_press) > 10
+    local does_engine_1_can_start_or_crank = get(Engine_1_avail) == 0 and get(L_bleed_press) > 10 and fadec_has_elec_power(1)
+    local does_engine_2_can_start_or_crank = get(Engine_2_avail) == 0 and get(R_bleed_press) > 10 and fadec_has_elec_power(2)
 
     -- CASE 1: IGNITION
     if get(Engine_mode_knob) == 1 then
@@ -630,7 +645,6 @@ local function update_buttons_datarefs()
     set(Engine_2_man_start, eng_2_manual_switch and 1 or 0)
     set(Engine_dual_cooling, dual_cooling_switch and 1 or 0)
 end
-
 
 
 function update()

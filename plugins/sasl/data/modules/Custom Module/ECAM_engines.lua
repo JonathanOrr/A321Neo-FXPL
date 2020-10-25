@@ -141,6 +141,88 @@ function draw_eng_page()
 
 end
 
+-- Returns true if the FADEC has electrical power
+local function fadec_has_elec_power(eng)
+    if get(DC_ess_bus_pwrd) == 1 then
+        return true
+    end
+    
+    if eng == 1 and ((get(Gen_1_pwr) == 1) or get(DC_bat_bus_pwrd) == 1) then
+        return true
+    end
+    
+    if eng == 2 and ((get(Gen_2_pwr) == 1) or get(DC_bus_2_pwrd) == 1) then
+        return true
+    end
+end
+
+local start_elec_fadec = {0,0}
+local start_shut_fadec = {0,0}
+local xx_statuses = {false,false}
+
+local function update_XX_dr_eng(eng)
+    -- This logic is insanely complex
+    
+    if fadec_has_elec_power(eng) then
+        if start_elec_fadec[eng] == 0 then
+            start_elec_fadec[eng] = get(TIME)
+        end
+    else
+        start_elec_fadec[eng] = 0
+    end
+    
+    if (eng == 1 and get(Engine_1_master_switch) == 0) or (eng == 2 and get(Engine_2_master_switch) == 0) then
+        if start_shut_fadec[eng] == 0 then
+            start_shut_fadec[eng] = get(TIME)
+        end
+    else
+        start_shut_fadec[eng] = 0
+    end
+
+    if (eng == 1 and get(Eng_1_N2) > 10) or (eng == 2 and get(Eng_2_N2) > 10) then
+        xx_statuses[eng] = true
+        return
+    end
+
+    local fire_pb_cond = (get(Fire_pb_ENG1_status) == 1 and eng == 1) or (get(Fire_pb_ENG2_status) == 1 and eng == 2)
+
+    if fire_pb_cond or not fadec_has_elec_power(eng) then
+        xx_statuses[eng] = false
+        return
+    end
+
+    if get(TIME) - start_elec_fadec[eng] < 5 * 60 then
+        xx_statuses[eng] = true
+        return
+    end
+    
+    if get(Engine_mode_knob) ~= 0 then
+        xx_statuses[eng] = true
+        return
+    end
+
+    if get(TIME) - start_shut_fadec[eng] < 5 * 60 then
+        xx_statuses[eng] = true
+        return
+    end
+    
+    if get(Any_wheel_on_ground) == 0 then
+        xx_statuses[eng] = true
+        return
+    end
+    
+    xx_statuses[eng] = false
+end
+
+local function update_XX_dr()
+
+    update_XX_dr_eng(1)
+    update_XX_dr_eng(2)
+
+    set(EWD_engine_1_XX, xx_statuses[1] and 0 or 1)
+    set(EWD_engine_2_XX, xx_statuses[2] and 0 or 1)
+end
+
 function ecam_update_eng_page()
 
     if get(TIME) - params.last_update > PARAM_DELAY then
@@ -154,5 +236,8 @@ function ecam_update_eng_page()
         params.eng2_vib_n2    = get(Eng_2_VIB_N2)
         params.last_update = get(TIME)
     end
+    
+    update_XX_dr()
+    
 end
 
