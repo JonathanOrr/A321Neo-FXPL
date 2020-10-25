@@ -136,7 +136,7 @@ function elec_gen_toggle(phase, id)
     
     if id == GEN_EMER then
         -- Extract the RAT
-        sasl.commandOnce(HYD_cmd_RAT_man_on)        -- TODO Automatically extract the rat if power is loses
+        sasl.commandOnce(HYD_cmd_RAT_man_on)
         generators[id].switch_status = true
     else
         generators[id].switch_status = not generators[id].switch_status    
@@ -200,6 +200,12 @@ end
 
 local function update_rat_gen(x)
 
+    if get(Adirs_adr_is_ok[1]) == 1 and get(Capt_IAS) > 100 and get(FLIGHT_TIME) > 5 then
+        if get(AC_bus_1_pwrd) == 0 and get(AC_bus_2_pwrd) == 0 and not generators[GEN_EMER].switch_status then
+            elec_gen_toggle(SASL_COMMAND_BEGIN, GEN_EMER)
+        end
+    end
+    
     x.source_status = get(Hydraulic_B_press) > 1400 and get(is_RAT_out) == 1
 
     if x.switch_status and x.source_status and get(x.drs.failure) == 0 then
