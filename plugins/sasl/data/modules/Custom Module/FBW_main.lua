@@ -129,7 +129,7 @@ function update()
             vmax_prot_activation_ratio = Math_clamp((get(PFD_Capt_IAS) - get(Capt_VMAX)) / (get(Capt_VMAX_prot) - get(Capt_VMAX)), 0, 1)
             vmax_prot_output = Math_lerp(-1, SSS_PID(FBW_PID_arrays.SSS_FBW_vmax_prot_pitch, (get(PFD_Capt_IAS) + get(PFD_Fo_IAS)) / 2 - (get(Capt_VMAX_prot) + get(Fo_VMAX_prot)) / 2), vmax_prot_activation_ratio)
             FBW_PID_arrays.SSS_FBW_G_load_pitch.Min_out = Math_clamp_lower(vmax_prot_output, SSS_PID(FBW_PID_arrays.SSS_FBW_pitch_down_limit, -15 - get(Flightmodel_pitch)))
-            FBW_PID_arrays.SSS_FBW_G_load_pitch.Max_out = Math_clamp_higher(SSS_PID(FBW_PID_arrays.SSS_FBW_stall_prot_pitch, 100 - get(Alpha)), SSS_PID(FBW_PID_arrays.SSS_FBW_pitch_up_limit, 30 - get(Flightmodel_pitch)))
+            FBW_PID_arrays.SSS_FBW_G_load_pitch.Max_out = Math_clamp_higher(SSS_PID_DPV(FBW_PID_arrays.SSS_FBW_stall_prot_pitch, 1000, get(Alpha)), SSS_PID(FBW_PID_arrays.SSS_FBW_pitch_up_limit, 30 - get(Flightmodel_pitch)))
             --pitch rate stability[used to temperarily guard the G load before overshoot stops]
             G_output = SSS_PID_DPV(FBW_PID_arrays.SSS_FBW_G_load_pitch, G_input, get(Total_vertical_g_load)) * 10
 
@@ -143,7 +143,6 @@ function update()
                 pitch_rate_correction = SSS_PID_DPV(FBW_PID_arrays.SSS_FBW_pitch_rate, Math_lerp(0, G_output, v_stability_wait_timer / wait_for_v_stability) - Math_lerp(0, get(Vpath_pitch_rate), v_stability_wait_timer / wait_for_v_stability), get(True_pitch_rate))
             end
 
-
             FBW_PID_arrays.SSS_FBW_roll_rate.Min_out = SSS_PID(FBW_PID_arrays.SSS_FBW_roll_left_limit, -roll_limits - get(Flightmodel_roll))
             FBW_PID_arrays.SSS_FBW_roll_rate.Max_out = SSS_PID(FBW_PID_arrays.SSS_FBW_roll_right_limit, roll_limits - get(Flightmodel_roll))
             Roll_rate_output = SSS_PID_DPV(FBW_PID_arrays.SSS_FBW_roll_rate, Roll_rate_input, get(True_roll_rate))
@@ -155,7 +154,7 @@ function update()
 
             if get(Any_wheel_on_ground) ~= 1 then
                 if stick_moving_vertically == true then
-                    set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), SSS_PID_DPV(FBW_PID_arrays.SSS_FBW_CWS_trim, 0, -get(Pitch_artstab)), -1, 1, 0.1))
+                    set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), SSS_PID_DPV(FBW_PID_arrays.SSS_FBW_CWS_trim, G_output, get(True_pitch_rate)), -1, 1, 0.1))
                 else
                     set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), SSS_PID_DPV(FBW_PID_arrays.SSS_FBW_CWS_trim, G_output - get(Vpath_pitch_rate), get(True_pitch_rate)), -1, 1, 0.1))
                 end

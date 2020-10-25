@@ -243,15 +243,23 @@ function SSS_PID(pid_array, error)
         --integral--(clamped to stop windup)
         if pid_array.derivative_in_integral == true then
             if pid_array.I_time ~= 0 then
-                pid_array.Integral = Math_clamp(pid_array.Integral + (Math_clamp(pid_array.Current_error, lower_clamp, upper_clamp) / pid_array.I_time * get(DELTA_TIME) + pid_array.Derivative * get(DELTA_TIME) ^ 2), lower_clamp, upper_clamp)
+                if pid_array.Iimit_integration_spd == true then
+                    pid_array.Integral = Math_clamp_higher(Math_clamp_lower(pid_array.Integral + (Math_clamp(pid_array.Current_error, -pid_array.Error_margin, pid_array.Error_margin) / pid_array.I_time * get(DELTA_TIME) + pid_array.Derivative * get(DELTA_TIME) ^ 2), lower_clamp), upper_clamp)
+                else
+                    pid_array.Integral = Math_clamp_higher(Math_clamp_lower(pid_array.Integral + (pid_array.Current_error / pid_array.I_time * get(DELTA_TIME) + pid_array.Derivative * get(DELTA_TIME) ^ 2), lower_clamp), upper_clamp)
+                end
             else
-                pid_array.Integral = Math_clamp(pid_array.Integral + 0, lower_clamp, upper_clamp)
+                pid_array.Integral = Math_clamp_higher(Math_clamp_lower(pid_array.Integral + 0, lower_clamp), upper_clamp)
             end
         else
             if pid_array.I_time ~= 0 then
-                pid_array.Integral = Math_clamp(pid_array.Integral + Math_clamp(pid_array.Current_error, lower_clamp, upper_clamp) / pid_array.I_time * get(DELTA_TIME), lower_clamp, upper_clamp)
+                if pid_array.Iimit_integration_spd == true then
+                    pid_array.Integral = Math_clamp_higher(Math_clamp_lower(pid_array.Integral + Math_clamp(pid_array.Current_error, -pid_array.Error_margin, pid_array.Error_margin) / pid_array.I_time * get(DELTA_TIME), lower_clamp), upper_clamp)
+                else
+                    pid_array.Integral = Math_clamp_higher(Math_clamp_lower(pid_array.Integral + pid_array.Current_error / pid_array.I_time * get(DELTA_TIME), lower_clamp), upper_clamp)
+                end
             else
-                pid_array.Integral = Math_clamp(pid_array.Integral + 0, lower_clamp, upper_clamp)
+                pid_array.Integral = Math_clamp_higher(Math_clamp_lower(pid_array.Integral + 0, lower_clamp), upper_clamp)
             end
         end
 
@@ -303,18 +311,25 @@ function SSS_PID_DPV(pid_array, Set_Point, PV)
 	    --integral--(clamped to stop windup)
         if pid_array.derivative_in_integral == true then
             if pid_array.I_time ~= 0 then
-                pid_array.Integral = Math_clamp(pid_array.Integral + (Math_clamp((Set_Point - PV), lower_clamp, upper_clamp) / pid_array.I_time * get(DELTA_TIME) + pid_array.Derivative * get(DELTA_TIME) ^ 2), lower_clamp, upper_clamp)
+                if pid_array.Iimit_integration_spd == true then
+                    pid_array.Integral = Math_clamp_higher(Math_clamp_lower(pid_array.Integral + (Math_clamp((Set_Point - PV), -pid_array.Error_margin, pid_array.Error_margin) / pid_array.I_time * get(DELTA_TIME) + pid_array.Derivative * get(DELTA_TIME) ^ 2), lower_clamp), upper_clamp)
+                else
+                    pid_array.Integral = Math_clamp_higher(Math_clamp_lower(pid_array.Integral + ((Set_Point - PV) / pid_array.I_time * get(DELTA_TIME) + pid_array.Derivative * get(DELTA_TIME) ^ 2), lower_clamp), upper_clamp)
+                end
             else
-                pid_array.Integral = Math_clamp(pid_array.Integral + 0, lower_clamp, upper_clamp)
+                pid_array.Integral = Math_clamp_higher(Math_clamp_lower(pid_array.Integral + 0, lower_clamp), upper_clamp)
             end
         else
             if pid_array.I_time ~= 0 then
-                pid_array.Integral = Math_clamp(pid_array.Integral + ((Set_Point - PV) / pid_array.I_time * get(DELTA_TIME)), lower_clamp, upper_clamp)
+                if pid_array.Iimit_integration_spd == true then
+                    pid_array.Integral = Math_clamp_higher(Math_clamp_lower(pid_array.Integral + (Math_clamp((Set_Point - PV), -pid_array.Error_margin, pid_array.Error_margin) / pid_array.I_time * get(DELTA_TIME)), lower_clamp), upper_clamp)
+                else
+                    pid_array.Integral = Math_clamp_higher(Math_clamp_lower(pid_array.Integral + ((Set_Point - PV) / pid_array.I_time * get(DELTA_TIME)), lower_clamp), upper_clamp)
+                end
             else
-                pid_array.Integral = Math_clamp(pid_array.Integral + 0, lower_clamp, upper_clamp)
+                pid_array.Integral = Math_clamp_higher(Math_clamp_lower(pid_array.Integral + 0, lower_clamp), upper_clamp)
             end
         end
-
 
         --nil value return 0
         if pid_array.Proportional == nil then

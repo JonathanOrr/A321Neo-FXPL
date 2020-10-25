@@ -144,7 +144,7 @@ function update()
         sasl.setMenuItemState(Menu_main, ShowHidePIDUI, MENU_UNCHECKED)
     end
 
-    Update_PID_historys(0 + 5, 0 + 5, 400, 250, FBW_PID_arrays.SSS_FBW_roll_rate)
+    Update_PID_historys(0 + 5, 0 + 5, 400, 250, FBW_PID_arrays.SSS_FBW_stall_prot_pitch)
 
     --print("P: " .. FBW_PID_arrays.SSS_FBW_roll_rate.Proportional)
     --print("D: " .. FBW_PID_arrays.SSS_FBW_roll_rate.Derivative)
