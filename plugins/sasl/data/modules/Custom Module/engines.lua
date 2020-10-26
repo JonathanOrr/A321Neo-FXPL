@@ -107,6 +107,8 @@ local slow_start_time_requested = false
 
 local igniter_eng = {0,0}
 
+local windmill_min_speed = {250 + math.random()*30, 250 + math.random()*30}
+
 ----------------------------------------------------------------------------------------------------
 -- Functions - Commands
 ----------------------------------------------------------------------------------------------------
@@ -205,17 +207,17 @@ end
 
 local function update_n2()
     local eng_1_n1 = get(Eng_1_N1)
-    if eng_1_n1 > 5 then
-        set(Eng_1_N2, n1_to_n2(eng_1_n1))
+    if eng_1_n1 > 5 and get(Engine_1_master_switch) == 1  then
+        Set_dataref_linear_anim(Eng_1_N2, n1_to_n2(eng_1_n1), 0, 130, 10)
     else
-        set(Eng_1_N2, eng_N2_off[1])
+        Set_dataref_linear_anim(Eng_1_N2, eng_N2_off[1], 0, 130, 10)
     end
 
     local eng_2_n1 = get(Eng_2_N1)
-    if eng_2_n1 > 5 then
-        set(Eng_2_N2, n1_to_n2(eng_2_n1))
+    if eng_2_n1 > 5 and get(Engine_2_master_switch) == 1  then
+        Set_dataref_linear_anim(Eng_2_N2, n1_to_n2(eng_2_n1), 0, 130, 10)
     else
-        set(Eng_2_N2, eng_N2_off[2])
+        Set_dataref_linear_anim(Eng_2_N2, eng_N2_off[2], 0, 130, 10)
     end
 
 end
@@ -549,8 +551,11 @@ local function update_startup()
     -- An array we need later to see if the engine requires cooldown (=shutdown) or not
     local require_cooldown = {true, true}
 
-    local does_engine_1_can_start_or_crank = get(Engine_1_avail) == 0 and get(L_bleed_press) > 10 and fadec_has_elec_power(1)
-    local does_engine_2_can_start_or_crank = get(Engine_2_avail) == 0 and get(R_bleed_press) > 10 and fadec_has_elec_power(2)
+    local windmill_condition_1 = get(IAS) > windmill_min_speed[1]
+    local windmill_condition_2 = get(IAS) > windmill_min_speed[2]
+
+    local does_engine_1_can_start_or_crank = get(Engine_1_avail) == 0 and (get(L_bleed_press) > 10 or windmill_condition_1) and fadec_has_elec_power(1)
+    local does_engine_2_can_start_or_crank = get(Engine_2_avail) == 0 and (get(R_bleed_press) > 10 or windmill_condition_2) and fadec_has_elec_power(2)
 
     -- CASE 1: IGNITION
     if get(Engine_mode_knob) == 1 then
@@ -561,6 +566,12 @@ local function update_startup()
         if get(Engine_2_master_switch) == 1 and does_engine_2_can_start_or_crank then
             perform_starting_procedure(2)
             require_cooldown[2] = false
+        end
+        
+        if get(Any_wheel_on_ground) == 0 then
+            -- If you are in flight, keep the igniters on for in-flight restart
+            set(eng_igniters, 1, 1)
+            set(eng_igniters, 1, 2)
         end
         
     -- CASE 2: CRANK
