@@ -574,8 +574,8 @@ end
 local function needs_coling(eng)
     if time_last_shutdown[eng] <= 0 then return false end
     
-    if cooling_left_time[eng] == -1 and not cooling_has_cooled then
-        time_req = cooling_time(time_last_shutdown[eng])
+    if cooling_left_time[eng] == -1 and not cooling_has_cooled[eng] then
+        time_req = cooling_time(get(TIME) - time_last_shutdown[eng])
         if time_req == 0 then
             return false
         end
@@ -592,8 +592,10 @@ local function perform_cooling(eng)
     end
     
     perform_crank_procedure(eng, false)
-    cooling_left_time[eng] = math.max(0, cooling_left_time[eng] - get(DELTA_TIME))
-
+    
+    if (eng_N2_off[eng] > 9.8) then
+        cooling_left_time[eng] = math.max(0, cooling_left_time[eng] - get(DELTA_TIME))
+    end
     set(EWD_engine_cooling_time, cooling_left_time[eng], eng)
     
 end
