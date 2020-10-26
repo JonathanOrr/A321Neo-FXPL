@@ -114,6 +114,8 @@ function fuel_quick_start(phase)
         tank_pump_and_xfr[RCT_TK_XFR].switch = false
         C_tank_mode   = false
         X_feed_mode   = false
+        eng_1_fw_valve_position = 1
+        eng_2_fw_valve_position = 1
     end
 end
 
@@ -684,6 +686,8 @@ function update()
     update_temps()
     update_fuel_usage()
     update_apu()
+    
+    
     update_eng_1_valve()
     update_eng_2_valve()
 

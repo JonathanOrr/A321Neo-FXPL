@@ -651,6 +651,8 @@ function update()
     update_starter_datarefs()
     update_buttons_datarefs()
     
+    update_avail()
+    
     if get(FLIGHT_TIME) > 0.5 then
         -- This condition is needed because otherwise the startup overrides the values set by the
         -- engines_auto_quick_start() function when the simulation is started in flight. So, let's
@@ -659,11 +661,11 @@ function update()
         update_startup()
     end
 
+
     update_n1_minimum()
     update_n2()
     update_egt()
     update_ff()
-    update_avail()
     update_oil_stuffs()
     update_vibrations()
     
@@ -673,6 +675,6 @@ end
 
 -- The following code is used to check if SASL has been restarted with engines running
 if get(Startup_running) == 1 and get(TIME) > 1 then
-    sasl.commandOnce(sasl.findCommand("sim/operation/quick_start"))
+    engines_auto_quick_start(SASL_COMMAND_BEGIN)
 end
 

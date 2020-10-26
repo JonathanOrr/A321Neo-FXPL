@@ -84,9 +84,9 @@ function onAirportLoaded()
 	    adr_time_begin[2] = get(TIME) - TIME_TO_START_ADR - 2
 	    adr_time_begin[3] = get(TIME) - TIME_TO_START_ADR - 2
 
-        set(Adirs_irs_begin_time[1], get(TIME) - TIME_TO_GET_ATTITUDE)
-        set(Adirs_irs_begin_time[2], get(TIME) - TIME_TO_GET_ATTITUDE)
-        set(Adirs_irs_begin_time[3], get(TIME) - TIME_TO_GET_ATTITUDE)
+        set(Adirs_irs_begin_time[1], get(TIME) - 1000)
+        set(Adirs_irs_begin_time[2], get(TIME) - 1000)
+        set(Adirs_irs_begin_time[3], get(TIME) - 1000)
         set(Adirs_total_time_to_align, 1)
     end
 end
