@@ -9,13 +9,6 @@
 include('constants.lua')
 
 
--- Tanks
-local tank_LEFT  = 1
-local tank_RIGHT = 2
-local tank_CENTER= 0
-local tank_ACT   = 3
-local tank_RCT   = 4
-
 local FUEL_XFR_SPEED = 10
 local FUEL_LEAK_SPEED = 1
 

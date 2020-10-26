@@ -67,6 +67,16 @@ C_TK_XFR_1   = 5
 C_TK_XFR_2   = 6
 ACT_TK_XFR = 7
 RCT_TK_XFR = 8
+
+-- Tanks
+tank_LEFT  = 1
+tank_RIGHT = 2
+tank_CENTER= 0
+tank_ACT   = 3
+tank_RCT   = 4
+
+
+
 -- Fonts
 Font_AirbusDUL = sasl.gl.loadFont("fonts/AirbusDULiberationMono.ttf")
 sasl.gl.setFontRenderMode(Font_AirbusDUL, TEXT_RENDER_FORCED_MONO, 0.6)

@@ -318,3 +318,148 @@ MessageGroup_FUEL_C_TK_XFR_LO_PR_DOUBLE = {
     end
 }
 
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: L/R WING TK LO LVL
+----------------------------------------------------------------------------------------------------
+Message_FUEL_DO_NOT_APPLY_F_LEAK = {
+    text = function(self) return " . IF NO FUEL LEAK AND" end,
+    color = function(self) return COL_REMARKS end,
+    is_active = function(self) return true end
+}
+Message_FUEL_DO_NOT_APPLY_F_LEAK_2 = {
+    text = function(self) return "   FUEL IMBALANCE" end,
+    color = function(self) return COL_REMARKS end,
+    is_active = function(self) return true end
+}
+
+Message_FUEL_X_FEED = {
+    text = function(self) return " - FUEL X FEED.........ON" end,
+    color = function(self) return COL_ACTIONS end,
+    is_active = function(self) return get(Fuel_light_x_feed)==0 end
+}
+Message_FUEL_LO_LVL_L_TK_PUMP_1_OFF = {
+    text = function(self) return " - L TK PUMP 1........OFF" end,
+    color = function(self) return COL_ACTIONS end,
+    is_active = function(self) return get(Fuel_quantity[tank_LEFT]) < 750 end
+}
+Message_FUEL_LO_LVL_L_TK_PUMP_2_OFF = {
+    text = function(self) return " - L TK PUMP 2........OFF" end,
+    color = function(self) return COL_ACTIONS end,
+    is_active = function(self) return get(Fuel_quantity[tank_LEFT]) < 750 end
+}
+Message_FUEL_LO_LVL_R_TK_PUMP_1_OFF = {
+    text = function(self) return " - R TK PUMP 1........OFF" end,
+    color = function(self) return COL_ACTIONS end,
+    is_active = function(self) return get(Fuel_quantity[tank_RIGHT]) < 750 end
+}
+Message_FUEL_LO_LVL_R_TK_PUMP_2_OFF = {
+    text = function(self) return " - R TK PUMP 2........OFF" end,
+    color = function(self) return COL_ACTIONS end,
+    is_active = function(self) return get(Fuel_quantity[tank_RIGHT]) < 750 end
+}
+
+MessageGroup_FUEL_WING_LO_LVL_SINGLE = {
+
+    shown = false,
+
+    text  = function(self)
+                return "FUEL"
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_FUEL,
+    
+    messages = {
+        {
+            text = function(self)
+                x = ""
+                if get(Fuel_quantity[tank_LEFT]) < 750 then
+                    x = "L"
+                end
+                if get(Fuel_quantity[tank_RIGHT]) < 750 then
+                    x = "R"
+                end
+                return "     " .. x .. " WING TK LO LVL"
+            end,
+            color = function(self) return COL_CAUTION end,
+            is_active = function(self) return true end
+        },
+        Message_FUEL_DO_NOT_APPLY_F_LEAK,
+        Message_FUEL_DO_NOT_APPLY_F_LEAK_2,
+        Message_FUEL_X_FEED,
+        Message_FUEL_LO_LVL_L_TK_PUMP_1_OFF,
+        Message_FUEL_LO_LVL_L_TK_PUMP_2_OFF,
+        Message_FUEL_LO_LVL_R_TK_PUMP_1_OFF,
+        Message_FUEL_LO_LVL_R_TK_PUMP_2_OFF
+    },
+
+    is_active = function(self)
+        return (get(Fuel_quantity[tank_LEFT]) < 750 or get(Fuel_quantity[tank_RIGHT]) < 750) and
+                not (get(Fuel_quantity[tank_LEFT]) < 750 and get(Fuel_quantity[tank_RIGHT]) < 750)
+    end,
+
+    is_inhibited = function(self)
+        return is_active_in({PHASE_1ST_ENG_ON, PHASE_AIRBONE, PHASE_2ND_ENG_OFF})
+    end
+}
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: L + R WING TK LO LVL
+----------------------------------------------------------------------------------------------------
+
+Message_FUEL_LO_LVL_FUEL_MODE = {
+    text = function(self) return " - FUEL MODE SEL......MAN" end,
+    color = function(self) return COL_ACTIONS end,
+    is_active = function(self) return get(Fuel_light_mode_sel) == 0 end
+}
+Message_FUEL_LO_LVL_ALL_ON = {
+    text = function(self) return " - ALL TK PUMPS........ON" end,
+    color = function(self) return COL_ACTIONS end,
+    is_active = function(self) return true end
+}
+
+
+MessageGroup_FUEL_WING_LO_LVL_DOUBLE = {
+
+    shown = false,
+
+    text  = function(self)
+                return "FUEL"
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_FUEL,
+    
+    land_asap = true,
+    
+    messages = {
+        {
+            text = function(self)
+                return "     L + R WING TK LO LVL"
+            end,
+            color = function(self) return COL_CAUTION end,
+            is_active = function(self) return true end
+        },
+        Message_FUEL_LO_LVL_FUEL_MODE,
+        Message_FUEL_LO_LVL_ALL_ON,
+        Message_FUEL_X_FEED
+    },
+
+    is_active = function(self)
+        return (get(Fuel_quantity[tank_LEFT]) < 750) and (get(Fuel_quantity[tank_RIGHT]) < 750)
+    end,
+
+    is_inhibited = function(self)
+        return is_active_in({PHASE_1ST_ENG_ON, PHASE_AIRBONE, PHASE_2ND_ENG_OFF})
+    end
+}
+
