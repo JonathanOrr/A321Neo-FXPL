@@ -84,8 +84,7 @@ local START_UP_PHASES_N1 = {
 local egt_eng_1_offset = math.random() * MAX_EGT_OFFSET * 2 - MAX_EGT_OFFSET    -- Offset in engines to simulate realistic values
 local egt_eng_2_offset = math.random() * MAX_EGT_OFFSET * 2 - MAX_EGT_OFFSET    -- Offset in engines to simulate realistic values
 
-local eng_1_manual_switch = false   -- Is engine manual start enabled?
-local eng_2_manual_switch = false   -- Is engine manual start enabled?
+local eng_manual_switch = {false,false}   -- Is engine manual start enabled?
 local dual_cooling_switch = false
 
 local eng_ignition_switch = globalPropertyia("sim/cockpit2/engine/actuators/ignition_key")
@@ -163,8 +162,8 @@ end
 ----------------------------------------------------------------------------------------------------
 -- Commands
 ----------------------------------------------------------------------------------------------------
-sasl.registerCommandHandler (ENG_cmd_manual_start_1,     0, function(phase) if phase == SASL_COMMAND_BEGIN then eng_1_manual_switch = not eng_1_manual_switch end end )
-sasl.registerCommandHandler (ENG_cmd_manual_start_2,     0, function(phase) if phase == SASL_COMMAND_BEGIN then eng_2_manual_switch = not eng_2_manual_switch end end )
+sasl.registerCommandHandler (ENG_cmd_manual_start_1,     0, function(phase) if phase == SASL_COMMAND_BEGIN then eng_manual_switch[1] = not eng_manual_switch[1] end end )
+sasl.registerCommandHandler (ENG_cmd_manual_start_2,     0, function(phase) if phase == SASL_COMMAND_BEGIN then eng_manual_switch[2] = not eng_manual_switch[2] end end )
 sasl.registerCommandHandler (ENG_cmd_dual_cooling,        0, function(phase) if phase == SASL_COMMAND_BEGIN then dual_cooling_switch = not dual_cooling_switch end end )
 
 
@@ -436,8 +435,10 @@ local function perform_starting_procedure_follow_n2(eng)
     -- This is PHASE 2
 
     set(eng_mixture, 0, eng) -- No mixture in this phase
-    if igniter_eng[eng] == 0 then
+    if igniter_eng[eng] == 0 and not eng_manual_switch[eng] then
         igniter_eng[eng] = math.random() > 0.5 and 1 or 2  -- For ECAM visualization only, no practical effect
+    elseif eng_manual_switch[eng] then
+        igniter_eng[eng] = 3  -- Manual start uses both igniters
     end
     
     for i=1,(#START_UP_PHASES_N2-1) do
@@ -451,8 +452,15 @@ local function perform_starting_procedure_follow_n2(eng)
             
             local eng_has_fuel = (eng==1 and get(Fuel_tank_selector_eng_1)>0) or (eng==2 and get(Fuel_tank_selector_eng_2)>0)
             
-            if eng_FF_off[eng] == 0 or eng_has_fuel then
-            
+            -- If we are on manua start, the master switch  may not be on. In this case case let's check
+            -- it before injecting fuel
+            local eng_manual_start_continue = ((eng == 1 and get(Engine_1_master_switch) == 1) or (eng == 2 and get(Engine_2_master_switch) == 1))
+
+            if eng_FF_off[eng] == 0 or (eng_has_fuel and eng_manual_start_continue)  then
+
+                -- We continue the starting procedure if: the FF is still 0, so we are spinning up with bleed
+                -- OR the FF > 0 and there is fuel and the engine master switch has been moved to ON
+
                 -- Let's compute the new N2
                 eng_N2_off[eng] = eng_N2_off[eng] + START_UP_PHASES_N2[i].n2_increase_per_sec * get(DELTA_TIME)
                 set(eng_N2_enforce, eng_N2_off[eng], eng)
@@ -619,7 +627,7 @@ local function update_startup()
     if get(Engine_mode_knob) == 1 then
 
         -- ENG 1
-        if get(Engine_1_master_switch) == 1 and does_engine_1_can_start_or_crank then
+        if (eng_manual_switch[1] or get(Engine_1_master_switch) == 1) and does_engine_1_can_start_or_crank then
         
             -- Is cooling required before ignition?
             if get(Any_wheel_on_ground) == 1 and needs_coling(1) then
@@ -639,7 +647,7 @@ local function update_startup()
         end
 
         -- ENG 2
-        if get(Engine_2_master_switch) == 1 and does_engine_2_can_start_or_crank then
+        if (eng_manual_switch[2] or get(Engine_2_master_switch) == 1) and does_engine_2_can_start_or_crank then
 
             -- Is cooling required before ignition?
             if get(Any_wheel_on_ground) == 1 and needs_coling(2) then
@@ -666,11 +674,11 @@ local function update_startup()
         
     -- CASE 2: CRANK
     elseif get(Engine_mode_knob) == -1 then -- Crank
-        if eng_1_manual_switch and does_engine_1_can_start_or_crank then
+        if eng_manual_switch[1] and does_engine_1_can_start_or_crank then
             perform_crank_procedure(1, get(Engine_1_master_switch) == 1)
             require_cooldown[1] = false
         end
-        if eng_2_manual_switch and does_engine_2_can_start_or_crank then
+        if eng_manual_switch[2] and does_engine_2_can_start_or_crank then
             perform_crank_procedure(2, get(Engine_2_master_switch) == 1)
             require_cooldown[2] = false
         end
@@ -683,7 +691,7 @@ local function update_startup()
         set(eng_N2_enforce, eng_N2_off[1], 1)
         
         -- Set EGT and FF to zero
-        eng_EGT_off[1] = Set_linear_anim_value(eng_EGT_off[1], get(OTA), -50, 1500, 5)
+        eng_EGT_off[1] = Set_linear_anim_value(eng_EGT_off[1], get(OTA), -50, 1500, eng_EGT_off[1] > 100 and 10 or 3)
         eng_FF_off[1] = 0
         eng_N1_off[1] = Set_linear_anim_value(eng_N1_off[1], 0, 0, 120, 2)
         set(eng_igniters, 0, 1)
@@ -695,7 +703,7 @@ local function update_startup()
         set(eng_N2_enforce, eng_N2_off[2], 2)
         
         -- Set EGT and FF to zero
-        eng_EGT_off[2] = Set_linear_anim_value(eng_EGT_off[2], get(OTA), -50, 1500, 5)
+        eng_EGT_off[2] = Set_linear_anim_value(eng_EGT_off[2], get(OTA), -50, 1500, eng_EGT_off[2] > 100 and 10 or 3)
         eng_FF_off[2] = 0
         eng_N1_off[2] = Set_linear_anim_value(eng_N1_off[2], 0, 0, 120, 2)
         set(eng_igniters, 0, 2)
@@ -742,8 +750,8 @@ local function update_auto_start()
 end
 
 local function update_buttons_datarefs()
-    set(Engine_1_man_start, get(OVHR_elec_panel_pwrd) * (eng_1_manual_switch and 1 or 0))
-    set(Engine_2_man_start, get(OVHR_elec_panel_pwrd) * (eng_2_manual_switch and 1 or 0))
+    set(Engine_1_man_start, get(OVHR_elec_panel_pwrd) * (eng_manual_switch[1] and 1 or 0))
+    set(Engine_2_man_start, get(OVHR_elec_panel_pwrd) * (eng_manual_switch[2] and 1 or 0))
     set(Engine_dual_cooling_light, get(OVHR_elec_panel_pwrd) * (dual_cooling_switch and 1 or 0))
     set(Eng_Dual_Cooling, dual_cooling_switch and 1 or 0)
 end
