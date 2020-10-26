@@ -85,6 +85,29 @@ function Math_rescale(in1, out1, in2, out2, x)
 
 end
 
+function Math_rescale_lim_lower(in1, out1, in2, out2, x)
+
+    if x < in1 then return out1 end
+    if in2 - in1 == 0 then return out1 + (out2 - out1) * (x - in1) end
+    return out1 + (out2 - out1) * (x - in1) / (in2 - in1)
+
+end
+
+function Math_rescale_lim_upper(in1, out1, in2, out2, x)
+
+    if x > in2 then return out2 end
+    if in2 - in1 == 0 then return out1 + (out2 - out1) * (x - in1) end
+    return out1 + (out2 - out1) * (x - in1) / (in2 - in1)
+
+end
+
+function Math_rescale_no_lim(in1, out1, in2, out2, x)
+
+    if in2 - in1 == 0 then return out1 + (out2 - out1) * (x - in1) end
+    return out1 + (out2 - out1) * (x - in1) / (in2 - in1)
+
+end
+
 --used to animate a value with a linear delay USE ONLY WITH FLOAT VALUES
 function Set_linear_anim_value(current_value, target, min, max, speed)
     if get(DELTA_TIME) ~= 0 and speed ~= 0 then
@@ -465,6 +488,17 @@ function Sasl_DrawWideFrame(x, y, width, height, line_width, align_center_in_out
     end
 end
 
+function SASL_draw_needle(x, y, radius, angle, thickness, color)
+    sasl.gl.drawWideLine(x, y, x + radius * math.cos(math.rad(angle)), y + radius * math.sin(math.rad(angle)), thickness, color)
+end
+
+function Get_rotated_point_x_pos(x, y, radius, angle)
+    return x + radius * math.cos(math.rad(angle))
+end
+
+function Get_rotated_point_y_pos(x, y, radius, angle)
+    return y + radius * math.sin(math.rad(angle))
+end
 
 ELEC_sys = {}
 Fuel_sys = {}

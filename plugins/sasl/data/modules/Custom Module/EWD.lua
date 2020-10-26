@@ -73,17 +73,17 @@ function update()
         params.eng2_n2 = get(Eng_2_N2)
         if params.eng1_n1 < 5 then params.eng1_n1 = 0 end
         if params.eng2_n1 < 5 then params.eng2_n1 = 0 end
-        
+
         params.eng1_egt = math.floor(get(Eng_1_EGT_c))
         params.eng2_egt = math.floor(get(Eng_2_EGT_c))
 
         params.eng1_ff = math.floor(get(Eng_1_FF_kgs)*360)*10
-        params.eng2_ff = math.floor(get(Eng_2_FF_kgs)*360)*10 
+        params.eng2_ff = math.floor(get(Eng_2_FF_kgs)*360)*10
 
-        
+
         params.last_update = get(TIME)
     end
-    
+
     if params.eng1_n1 < get(Eng_N1_idle) + 2 and params.eng2_n1 < get(Eng_N1_idle) + 2 and get(Any_wheel_on_ground) == 0 then
         if eng_idle_start == 0 then
             eng_idle_start = get(TIME)
@@ -91,7 +91,7 @@ function update()
     else
         eng_idle_start = 0
     end
-    
+
     update_reverse_indication()
 
 end
@@ -115,10 +115,89 @@ local function draw_engines()
           sasl.gl.drawRectangle(size[1]/2+115, size[2]/2+70, 85, 32, {0.2,0.2,0.2})
     end
 
-    --N1--    
+    -----------TODO-----------
+    --[[amber blicking of the N1 needle when N1 exceeds amber limit
+    show trends only when AT is engaged]]
+
+    --define a few properties that showed frequently
+    local eng_1_needle_x = size[1]/2 - 175
+    local eng_1_needle_y = size[2]/2 + 333
+    local eng_1_needle_cl = ECAM_GREEN
+    local eng_2_needle_x = size[1]/2 + 175
+    local eng_2_needle_y = size[2]/2 + 333
+    local eng_2_needle_cl = ECAM_GREEN
+
+    --draw trends and needles
+    --eng 2 N1
+    SASL_draw_needle(eng_1_needle_x, eng_1_needle_y, 88, Math_rescale_lim_lower(20, 222, 100, 48, get(Eng_1_N1)), 4, eng_1_needle_cl)
+    if get(L_throttle_blue_dot) - get(Eng_1_N1) <= -4 or get(L_throttle_blue_dot) - get(Eng_1_N1) >= 4 then
+        SASL_draw_needle(eng_1_needle_x, eng_1_needle_y, 64, Math_rescale_lim_lower(20, 222, 100, 48, get(L_throttle_blue_dot)), 3, eng_1_needle_cl)
+        sasl.gl.drawArc(eng_1_needle_x, eng_1_needle_y, 62, 65, Math_rescale_lim_lower(20, 222, 100, 48, get(Eng_1_N1)), Math_rescale_lim_lower(20, 222, 100, 48, get(L_throttle_blue_dot)) - Math_rescale_lim_lower(20, 222, 100, 48, get(Eng_1_N1)), eng_1_needle_cl)
+        sasl.gl.drawArc(eng_1_needle_x, eng_1_needle_y, 47, 50, Math_rescale_lim_lower(20, 222, 100, 48, get(Eng_1_N1)), Math_rescale_lim_lower(20, 222, 100, 48, get(L_throttle_blue_dot)) - Math_rescale_lim_lower(20, 222, 100, 48, get(Eng_1_N1)), eng_1_needle_cl)
+        sasl.gl.drawArc(eng_1_needle_x, eng_1_needle_y, 32, 35, Math_rescale_lim_lower(20, 222, 100, 48, get(Eng_1_N1)), Math_rescale_lim_lower(20, 222, 100, 48, get(L_throttle_blue_dot)) - Math_rescale_lim_lower(20, 222, 100, 48, get(Eng_1_N1)), eng_1_needle_cl)
+        sasl.gl.drawArc(eng_1_needle_x, eng_1_needle_y, 17, 20, Math_rescale_lim_lower(20, 222, 100, 48, get(Eng_1_N1)), Math_rescale_lim_lower(20, 222, 100, 48, get(L_throttle_blue_dot)) - Math_rescale_lim_lower(20, 222, 100, 48, get(Eng_1_N1)), eng_1_needle_cl)
+    end
+    if get(L_throttle_blue_dot) - get(Eng_1_N1) <= -4 then
+        SASL_draw_needle(eng_1_needle_x, eng_1_needle_y, 48 / math.cos(math.rad(20)), Math_rescale_lim_lower(20, 222, 100, 48, get(L_throttle_blue_dot)) + 20, 3, eng_1_needle_cl)
+        sasl.gl.drawWideLine(
+            Get_rotated_point_x_pos(eng_1_needle_x, eng_1_needle_y, 48 / math.cos(math.rad(20)), Math_rescale_lim_lower(20, 222, 100, 48, get(L_throttle_blue_dot)) + 20),
+            Get_rotated_point_y_pos(eng_1_needle_x, eng_1_needle_y, 48 / math.cos(math.rad(20)), Math_rescale_lim_lower(20, 222, 100, 48, get(L_throttle_blue_dot)) + 20),
+            Get_rotated_point_x_pos(eng_1_needle_x, eng_1_needle_y, 48, Math_rescale_lim_lower(20, 222, 100, 48, get(L_throttle_blue_dot))),
+            Get_rotated_point_y_pos(eng_1_needle_x, eng_1_needle_y, 48, Math_rescale_lim_lower(20, 222, 100, 48, get(L_throttle_blue_dot))),
+            3,
+            eng_1_needle_cl
+        )
+    elseif get(L_throttle_blue_dot) - get(Eng_1_N1) >= 4 then
+        SASL_draw_needle(eng_1_needle_x, eng_1_needle_y, 48 / math.cos(math.rad(20)), Math_rescale_lim_lower(20, 222, 100, 48, get(L_throttle_blue_dot)) - 20, 3, eng_1_needle_cl)
+        sasl.gl.drawWideLine(
+            Get_rotated_point_x_pos(eng_1_needle_x, eng_1_needle_y, 48, Math_rescale_lim_lower(20, 222, 100, 48, get(L_throttle_blue_dot))),
+            Get_rotated_point_y_pos(eng_1_needle_x, eng_1_needle_y, 48, Math_rescale_lim_lower(20, 222, 100, 48, get(L_throttle_blue_dot))),
+            Get_rotated_point_x_pos(eng_1_needle_x, eng_1_needle_y, 48 / math.cos(math.rad(20)), Math_rescale_lim_lower(20, 222, 100, 48, get(L_throttle_blue_dot)) - 20),
+            Get_rotated_point_y_pos(eng_1_needle_x, eng_1_needle_y, 48 / math.cos(math.rad(20)), Math_rescale_lim_lower(20, 222, 100, 48, get(L_throttle_blue_dot)) - 20),
+            3,
+            eng_1_needle_cl
+        )
+    end
+
+    --eng 2 N1
+    SASL_draw_needle(eng_2_needle_x, eng_2_needle_y, 88, Math_rescale_lim_lower(20, 222, 100, 48, get(Eng_2_N1)), 4, eng_2_needle_cl)
+    if get(R_throttle_blue_dot) - get(Eng_2_N1) <= -4  or get(R_throttle_blue_dot) - get(Eng_2_N1) >= 4 then
+        SASL_draw_needle(eng_2_needle_x, eng_2_needle_y, 64, Math_rescale_lim_lower(20, 222, 100, 48, get(R_throttle_blue_dot)), 3, eng_2_needle_cl)
+        sasl.gl.drawArc(eng_2_needle_x, eng_2_needle_y, 62, 65, Math_rescale_lim_lower(20, 222, 100, 48, get(Eng_2_N1)), Math_rescale_lim_lower(20, 222, 100, 48, get(R_throttle_blue_dot)) - Math_rescale_lim_lower(20, 222, 100, 48, get(Eng_2_N1)), eng_2_needle_cl)
+        sasl.gl.drawArc(eng_2_needle_x, eng_2_needle_y, 47, 50, Math_rescale_lim_lower(20, 222, 100, 48, get(Eng_2_N1)), Math_rescale_lim_lower(20, 222, 100, 48, get(R_throttle_blue_dot)) - Math_rescale_lim_lower(20, 222, 100, 48, get(Eng_2_N1)), eng_2_needle_cl)
+        sasl.gl.drawArc(eng_2_needle_x, eng_2_needle_y, 32, 35, Math_rescale_lim_lower(20, 222, 100, 48, get(Eng_2_N1)), Math_rescale_lim_lower(20, 222, 100, 48, get(R_throttle_blue_dot)) - Math_rescale_lim_lower(20, 222, 100, 48, get(Eng_2_N1)), eng_2_needle_cl)
+        sasl.gl.drawArc(eng_2_needle_x, eng_2_needle_y, 17, 20, Math_rescale_lim_lower(20, 222, 100, 48, get(Eng_2_N1)), Math_rescale_lim_lower(20, 222, 100, 48, get(R_throttle_blue_dot)) - Math_rescale_lim_lower(20, 222, 100, 48, get(Eng_2_N1)), eng_2_needle_cl)
+    end
+    if get(R_throttle_blue_dot) - get(Eng_2_N1) <= -4 then
+        SASL_draw_needle(eng_2_needle_x, eng_2_needle_y, 48 / math.cos(math.rad(20)), Math_rescale_lim_lower(20, 222, 100, 48, get(R_throttle_blue_dot)) + 20, 3, eng_2_needle_cl)
+        sasl.gl.drawWideLine(
+            Get_rotated_point_x_pos(eng_2_needle_x, eng_2_needle_y, 48 / math.cos(math.rad(20)), Math_rescale_lim_lower(20, 222, 100, 48, get(R_throttle_blue_dot)) + 20),
+            Get_rotated_point_y_pos(eng_2_needle_x, eng_2_needle_y, 48 / math.cos(math.rad(20)), Math_rescale_lim_lower(20, 222, 100, 48, get(R_throttle_blue_dot)) + 20),
+            Get_rotated_point_x_pos(eng_2_needle_x, eng_2_needle_y, 48, Math_rescale_lim_lower(20, 222, 100, 48, get(R_throttle_blue_dot))),
+            Get_rotated_point_y_pos(eng_2_needle_x, eng_2_needle_y, 48, Math_rescale_lim_lower(20, 222, 100, 48, get(R_throttle_blue_dot))),
+            3,
+            eng_1_needle_cl
+        )
+    elseif get(R_throttle_blue_dot) - get(Eng_2_N1) >= 4 then
+        SASL_draw_needle(eng_2_needle_x, eng_2_needle_y, 48 / math.cos(math.rad(20)), Math_rescale_lim_lower(20, 222, 100, 48, get(R_throttle_blue_dot)) - 20, 3, eng_2_needle_cl)
+        sasl.gl.drawWideLine(
+            Get_rotated_point_x_pos(eng_2_needle_x, eng_2_needle_y, 48, Math_rescale_lim_lower(20, 222, 100, 48, get(R_throttle_blue_dot))),
+            Get_rotated_point_y_pos(eng_2_needle_x, eng_2_needle_y, 48, Math_rescale_lim_lower(20, 222, 100, 48, get(R_throttle_blue_dot))),
+            Get_rotated_point_x_pos(eng_2_needle_x, eng_2_needle_y, 48 / math.cos(math.rad(20)), Math_rescale_lim_lower(20, 222, 100, 48, get(R_throttle_blue_dot)) - 20),
+            Get_rotated_point_y_pos(eng_2_needle_x, eng_2_needle_y, 48 / math.cos(math.rad(20)), Math_rescale_lim_lower(20, 222, 100, 48, get(R_throttle_blue_dot)) - 20),
+            3,
+            eng_1_needle_cl
+        )
+    end
+
+    --N1--
+    sasl.gl.drawRectangle(size[1]/2 - 195, size[2]/2 + 275, 100, 35, ECAM_BLACK)
+    Sasl_DrawWideFrame(size[1]/2 - 195, size[2]/2 + 275, 100, 35, 2, 0, ECAM_WHITE)
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-115, size[2]/2+280, math.floor(params.eng1_n1) .. "." , 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-100, size[2]/2+280, math.floor((params.eng1_n1%1)*10)  , 24, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    
+
+    sasl.gl.drawRectangle(size[1]/2 + 155, size[2]/2 + 275, 100, 35, ECAM_BLACK)
+    Sasl_DrawWideFrame(size[1]/2 + 155, size[2]/2 + 275, 100, 35, 2, 0, ECAM_WHITE)
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2+235, size[2]/2+280, math.floor(params.eng2_n1) .. "." , 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2+250, size[2]/2+280, math.floor((params.eng2_n1%1)*10)  , 24, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     --EGT--
@@ -130,26 +209,24 @@ local function draw_engines()
 
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2+180, size[2]/2+75, math.floor(params.eng2_n2) .. "." , 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2+195, size[2]/2+75, math.floor((params.eng2_n2%1)*10) , 24, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    
+
     --FF--
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-130, size[2]/2+3, params.eng1_ff, 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2+195, size[2]/2+3, params.eng2_ff, 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
 
-
-
     -- AVAIL box --
     if get(EWD_engine_avail_ind_1_start) ~= 0 and get(TIME) - get(EWD_engine_avail_ind_1_start) < 10 then
-        set(EWD_engine_avail_ind_1, 1)
-    else
-        set(EWD_engine_avail_ind_1, 0)
+        sasl.gl.drawRectangle(size[1]/2 - 195, size[2]/2 + 310, 100, 35, ECAM_BLACK)
+        Sasl_DrawWideFrame(size[1]/2 - 195, size[2]/2 + 310, 100, 35, 2, 0, ECAM_WHITE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2 - 142, size[2]/2 + 315, "AVAIL", 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
     end
 
     if get(EWD_engine_avail_ind_2_start) ~= 0 and get(TIME) - get(EWD_engine_avail_ind_2_start) < 10 then
-        set(EWD_engine_avail_ind_2, 1)
-    else
-        set(EWD_engine_avail_ind_2, 0)
+        sasl.gl.drawRectangle(size[1]/2 + 155, size[2]/2 + 310, 100, 35, ECAM_BLACK)
+        Sasl_DrawWideFrame(size[1]/2 + 155, size[2]/2 + 310, 100, 35, 2, 0, ECAM_WHITE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2 + 208, size[2]/2 + 315, "AVAIL", 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
     end
-    
+
     -- IDLE indication
     if eng_idle_start ~= 0 then
         color = ECAM_GREEN
