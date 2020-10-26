@@ -111,6 +111,8 @@ local time_last_shutdown = {-1,-1}    -- The last time point you shutdown the en
 local cooling_left_time  = {0, 0}
 local cooling_has_cooled = {false, false}
 
+local already_back_to_norm = false -- This is used to check continuous ignition
+
 ----------------------------------------------------------------------------------------------------
 -- Functions - Commands
 ----------------------------------------------------------------------------------------------------
@@ -780,6 +782,25 @@ local function update_time_since_shutdown()
 
 end
 
+local function update_continuous_ignition()
+    -- Continuous ignition occurs in two cases:
+    -- - Engine flameout
+    -- - Manually move the mode selection to IGN but after start!
+
+    local cond_1 = (get(Engine_1_master_switch) == 1 and get(FAILURE_ENG_1_FAILURE) == 1)
+                or (get(Engine_2_master_switch) == 1 and get(FAILURE_ENG_2_FAILURE) == 1)
+    
+    local cond_2 = get(Engine_1_avail) == 1 and get(Engine_2_avail) == 1 and get(Engine_mode_knob) == 1 and already_back_to_norm
+
+    if get(Engine_1_avail) == 1 and get(Engine_2_avail) == 1 and get(Engine_mode_knob) == 0 then
+        already_back_to_norm = true
+    elseif get(Engine_1_avail) == 0 or get(Engine_2_avail) == 0 then
+        already_back_to_norm = false
+    end
+    
+    set(Eng_Continuous_Ignition, (cond_1 or cond_2) and 1 or 0)
+end
+
 function update()
     update_starter_datarefs()
     update_buttons_datarefs()
@@ -804,6 +825,7 @@ function update()
     
     update_auto_start()
     update_time_since_shutdown()
+    update_continuous_ignition()
 
 end
 

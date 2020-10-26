@@ -282,7 +282,7 @@ local function update_right_list()
         end
     end
 
-    if get(Engine_mode_knob) == 1 then
+    if get(Eng_Continuous_Ignition) == 1 then
         list_right:put(COL_INDICATION, "IGNITION")
     end
     
