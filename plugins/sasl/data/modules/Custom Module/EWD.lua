@@ -239,6 +239,29 @@ local function draw_engines()
     end
 end
 
+
+local function draw_coolings()
+    if get(EWD_engine_cooling, 1) == 1 then
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-410, size[2]/2+75, "COOLING" , 30, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+        local min = math.floor(get(EWD_engine_cooling_time, 1) / 60)
+        local sec = math.floor(get(EWD_engine_cooling_time, 1) % 60)
+        if min < 10 then min = "0" .. min end
+        if sec < 10 then sec = "0" .. sec end
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-410, size[2]/2+40, min .. "'".. sec.. "\"" , 30, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+    end
+    
+    if get(EWD_engine_cooling, 2) == 1 then
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+410, size[2]/2+75, "COOLING" , 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        local min = math.floor(get(EWD_engine_cooling_time, 2) / 60)
+        local sec = math.floor(get(EWD_engine_cooling_time, 2) % 60)
+        if min < 10 then min = "0" .. min end
+        if sec < 10 then sec = "0" .. sec end
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+410, size[2]/2+40, min .. "'".. sec.. "\"" , 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    end
+
+end
+
+
 local function draw_left_memo()
     local distance = 38
 
@@ -329,5 +352,6 @@ function draw()
     draw_extras()
     draw_fuel_stuffs()
     draw_extra_indication()
+    draw_coolings()
 end
 

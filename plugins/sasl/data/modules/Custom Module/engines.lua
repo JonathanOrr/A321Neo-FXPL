@@ -74,7 +74,7 @@ local START_UP_PHASES_N1 = {
     {n1_set = 17.1,   n1_increase_per_sec = 0.83, fuel_flow = 340, egt=602},
     {n1_set = 17.6,   n1_increase_per_sec = 0.79, fuel_flow = 360, egt=623},
     {n1_set = 18.3,   n1_increase_per_sec = 0.24, fuel_flow = 380, egt=637},
-    {n1_set = 18.3,   n1_increase_per_sec = 0.24, fuel_flow = 380, egt=637},
+    {n1_set = 18.5,   n1_increase_per_sec = 0.24, fuel_flow = 380, egt=637},
 }
 
 ----------------------------------------------------------------------------------------------------
@@ -104,10 +104,13 @@ local eng_FF_off  = {0,0}   -- FF for startup procedure
 local eng_EGT_off = {get(OTA),get(OTA)}   -- EGT for startup procedure
 
 local slow_start_time_requested = false
-
 local igniter_eng = {0,0}
-
 local windmill_min_speed = {250 + math.random()*30, 250 + math.random()*30}
+
+-- Engine startup cooling stuffs
+local time_last_shutdown = {-1,-1}    -- The last time point you shutdown the engines (-1 or 0 = invalid data)
+local cooling_left_time  = {0, 0}
+local cooling_has_cooled = {false, false}
 
 ----------------------------------------------------------------------------------------------------
 -- Functions - Commands
@@ -173,6 +176,27 @@ sasl.registerCommandHandler (sasl.findCommand("sim/operation/quick_start"), 1, e
 ----------------------------------------------------------------------------------------------------
 -- Functions - Engine parameters
 ----------------------------------------------------------------------------------------------------
+
+-- Compute the cooling time required given the time interval the engine is off (check Discord image)
+local function cooling_time(time_since_last_shutdown)
+    if time_since_last_shutdown <= 0 then
+        return 0
+    end
+    
+    local time_cool = 0
+    
+    if time_since_last_shutdown <= 60 * 60 then
+        -- Less than 1 hour
+        time_cool = Math_rescale(0,0,60*60,90, time_since_last_shutdown)
+    elseif time_since_last_shutdown <= 2 * 60 * 60 then
+        -- Less than 2 hour
+        time_cool = Math_rescale(60*60,90,2*60*90, 0, time_since_last_shutdown)
+    else
+        return 0
+    end
+
+    return Math_clamp(time_cool, 10, 90)
+end
 
 local function n1_to_n2(n1)
     return 50 * math.log10(n1) + (n1+50)^3/220000 + 0.64
@@ -546,6 +570,35 @@ local function fadec_has_elec_power(eng)
     end
 end
 
+
+local function needs_coling(eng)
+    if time_last_shutdown[eng] <= 0 then return false end
+    
+    if cooling_left_time[eng] == -1 and not cooling_has_cooled then
+        time_req = cooling_time(time_last_shutdown[eng])
+        if time_req == 0 then
+            return false
+        end
+        cooling_left_time[eng] = time_req
+        return true
+    end    
+    return not cooling_has_cooled[eng]
+end
+
+local function perform_cooling(eng)
+    if cooling_left_time[eng] == 0 then
+        cooling_has_cooled[eng] = true
+        return
+    end
+    
+    perform_crank_procedure(eng, false)
+    cooling_left_time[eng] = math.max(0, cooling_left_time[eng] - get(DELTA_TIME))
+
+    set(EWD_engine_cooling_time, cooling_left_time[eng], eng)
+    
+end
+
+
 local function update_startup()
 
     -- An array we need later to see if the engine requires cooldown (=shutdown) or not
@@ -557,14 +610,27 @@ local function update_startup()
     local does_engine_1_can_start_or_crank = get(Engine_1_avail) == 0 and (get(L_bleed_press) > 10 or windmill_condition_1) and fadec_has_elec_power(1)
     local does_engine_2_can_start_or_crank = get(Engine_2_avail) == 0 and (get(R_bleed_press) > 10 or windmill_condition_2) and fadec_has_elec_power(2)
 
+    set(EWD_engine_cooling, 0, 1)
+    set(EWD_engine_cooling, 0, 2)
+
     -- CASE 1: IGNITION
     if get(Engine_mode_knob) == 1 then
         if get(Engine_1_master_switch) == 1 and does_engine_1_can_start_or_crank then
-            perform_starting_procedure(1)
+            if get(Any_wheel_on_ground) == 1 and needs_coling(1) then
+                set(EWD_engine_cooling, 1, 1)
+                perform_cooling(1)
+            else
+                perform_starting_procedure(1)
+            end
             require_cooldown[1] = false
         end
         if get(Engine_2_master_switch) == 1 and does_engine_2_can_start_or_crank then
-            perform_starting_procedure(2)
+            if get(Any_wheel_on_ground) == 1 and needs_coling(2) then
+                set(EWD_engine_cooling, 1, 2)
+                perform_cooling(2)
+            else
+                perform_starting_procedure(2)
+            end
             require_cooldown[2] = false
         end
         
@@ -657,6 +723,29 @@ local function update_buttons_datarefs()
     set(Engine_dual_cooling, dual_cooling_switch and 1 or 0)
 end
 
+local function update_time_since_shutdown()
+    if get(Eng_1_EGT_c) < 100 then
+        if time_last_shutdown[1] == 0 then
+            time_last_shutdown[1] = get(TIME)
+        end
+    else
+        cooling_has_cooled[1] = false
+        cooling_left_time[1] = -1
+        time_last_shutdown[1] = 0
+    end 
+
+    if get(Eng_2_EGT_c) < 100 then
+        if time_last_shutdown[2] == 0 then
+            time_last_shutdown[2] = get(TIME)
+        end
+    else
+        cooling_has_cooled[2] = false
+        cooling_left_time[2] = -1
+        time_last_shutdown[2] = 0
+    end 
+
+
+end
 
 function update()
     update_starter_datarefs()
@@ -681,6 +770,7 @@ function update()
     update_vibrations()
     
     update_auto_start()
+    update_time_since_shutdown()
 
 end
 
