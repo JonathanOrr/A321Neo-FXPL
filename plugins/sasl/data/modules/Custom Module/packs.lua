@@ -66,6 +66,17 @@ function onAirportLoaded()
     set(Right_pack_iso_valve, 0)
 end
 
+local function update_override()
+    if override_BLEED_always_ok then
+        set(L_HP_valve, 1)
+        set(R_HP_valve, 1)
+        set(L_bleed_state, 2)
+        set(R_bleed_state, 2)
+        set(L_bleed_press, 20)
+        set(R_bleed_press, 20)
+    end
+end
+
 function update()
     --create the A321 pack system--
     set(Left_pack_iso_valve, 1)--keeping the left iso closed which creates a single iso system
@@ -299,4 +310,5 @@ function update()
         set(R_bleed_temp, Set_anim_value(get(R_bleed_temp), get(OTA), -100, 200, 0.35))--no bleed with outside temp
     end
 
+    update_override()
 end
