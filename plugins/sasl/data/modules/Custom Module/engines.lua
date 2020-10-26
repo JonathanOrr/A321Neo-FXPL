@@ -617,19 +617,41 @@ local function update_startup()
 
     -- CASE 1: IGNITION
     if get(Engine_mode_knob) == 1 then
+
+        -- ENG 1
         if get(Engine_1_master_switch) == 1 and does_engine_1_can_start_or_crank then
+        
+            -- Is cooling required before ignition?
             if get(Any_wheel_on_ground) == 1 and needs_coling(1) then
                 set(EWD_engine_cooling, 1, 1)
                 perform_cooling(1)
+                
+                -- Dual cooling
+                if dual_cooling_switch and needs_coling(2) and get(Engine_2_master_switch) == 0 then
+                    perform_cooling(2)
+                    require_cooldown[2] = false
+                    set(EWD_engine_cooling, 1, 2)
+                end
             else
                 perform_starting_procedure(1)
             end
             require_cooldown[1] = false
         end
+
+        -- ENG 2
         if get(Engine_2_master_switch) == 1 and does_engine_2_can_start_or_crank then
+
+            -- Is cooling required before ignition?
             if get(Any_wheel_on_ground) == 1 and needs_coling(2) then
                 set(EWD_engine_cooling, 1, 2)
                 perform_cooling(2)
+                
+                -- Dual cooling
+                if dual_cooling_switch and needs_coling(1) and get(Engine_1_master_switch) == 0 then
+                    set(EWD_engine_cooling, 1, 1)
+                    perform_cooling(1)
+                    require_cooldown[1] = false
+                end
             else
                 perform_starting_procedure(2)
             end
@@ -661,7 +683,7 @@ local function update_startup()
         set(eng_N2_enforce, eng_N2_off[1], 1)
         
         -- Set EGT and FF to zero
-        eng_EGT_off[1] = Set_linear_anim_value(eng_EGT_off[1], get(OTA), -50, 1500, 10)
+        eng_EGT_off[1] = Set_linear_anim_value(eng_EGT_off[1], get(OTA), -50, 1500, 5)
         eng_FF_off[1] = 0
         eng_N1_off[1] = Set_linear_anim_value(eng_N1_off[1], 0, 0, 120, 2)
         set(eng_igniters, 0, 1)
@@ -673,7 +695,7 @@ local function update_startup()
         set(eng_N2_enforce, eng_N2_off[2], 2)
         
         -- Set EGT and FF to zero
-        eng_EGT_off[2] = Set_linear_anim_value(eng_EGT_off[2], get(OTA), -50, 1500, 10)
+        eng_EGT_off[2] = Set_linear_anim_value(eng_EGT_off[2], get(OTA), -50, 1500, 5)
         eng_FF_off[2] = 0
         eng_N1_off[2] = Set_linear_anim_value(eng_N1_off[2], 0, 0, 120, 2)
         set(eng_igniters, 0, 2)
@@ -720,9 +742,10 @@ local function update_auto_start()
 end
 
 local function update_buttons_datarefs()
-    set(Engine_1_man_start, eng_1_manual_switch and 1 or 0)
-    set(Engine_2_man_start, eng_2_manual_switch and 1 or 0)
-    set(Engine_dual_cooling, dual_cooling_switch and 1 or 0)
+    set(Engine_1_man_start, get(OVHR_elec_panel_pwrd) * (eng_1_manual_switch and 1 or 0))
+    set(Engine_2_man_start, get(OVHR_elec_panel_pwrd) * (eng_2_manual_switch and 1 or 0))
+    set(Engine_dual_cooling_light, get(OVHR_elec_panel_pwrd) * (dual_cooling_switch and 1 or 0))
+    set(Eng_Dual_Cooling, dual_cooling_switch and 1 or 0)
 end
 
 local function update_time_since_shutdown()

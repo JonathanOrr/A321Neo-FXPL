@@ -341,6 +341,10 @@ local function update_right_list()
         list_right:put(COL_INDICATION, "RCT TK XFRD")
     end
     
+    if get(Eng_Dual_Cooling) == 1 then
+        list_right:put(COL_INDICATION, "DUAL COOLING")
+    end
+    
     -- TODO Audio: AUDIO 3 XFRD displayed green if audio switching selector not in NORM
     -- TODO Acars: ACARS CALL (pulsing green) if received an ACARS message requesting voice conversation
 
