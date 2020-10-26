@@ -463,3 +463,50 @@ MessageGroup_FUEL_WING_LO_LVL_DOUBLE = {
     end
 }
 
+----------------------------------------------------------------------------------------------------
+-- CAUTION: FOB DISAGREE
+----------------------------------------------------------------------------------------------------
+
+Message_FUEL_FUEL_LEAK_PROC = {
+    text = function(self) return " - FUEL LEAK PROC...APPLY" end,
+    color = function(self) return COL_ACTIONS end,
+    is_active = function(self) return true end
+}
+
+
+MessageGroup_FUEL_FUSED_FOB_DISAGREE = {
+
+    shown = false,
+
+    text  = function(self)
+                return "FUEL"
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_FUEL,
+    
+    messages = {
+        {
+            text = function(self)
+                return "     F.USED/FOB DISAGREE"
+            end,
+            color = function(self) return COL_CAUTION end,
+            is_active = function(self) return true end
+        },
+        Message_FUEL_FUEL_LEAK_PROC
+    },
+
+    is_active = function(self)
+        return get(Fuel_on_takeoff) ~= 0 and (get(Fuel_on_takeoff) - (get(FOB) + get(Ecam_fuel_usage_1) + get(Ecam_fuel_usage_2)) > 50)
+    end,
+
+    is_inhibited = function(self)
+        return is_active_in({PHASE_AIRBONE})
+    end
+}
+
+

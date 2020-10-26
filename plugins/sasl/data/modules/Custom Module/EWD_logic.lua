@@ -120,6 +120,7 @@ local left_messages_list = {
     MessageGroup_FUEL_C_TK_XFR_LO_PR_SINGLE,
     MessageGroup_FUEL_L_TK_PUMP_OFF,
     MessageGroup_FUEL_R_TK_PUMP_OFF,
+    MessageGroup_FUEL_FUSED_FOB_DISAGREE,
     MessageGroup_DOORS_CABIN,
     MessageGroup_DOORS_CARGO,
     MessageGroup_DOORS_EMER_EXIT,

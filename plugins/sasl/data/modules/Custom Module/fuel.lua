@@ -117,6 +117,7 @@ function onAirportLoaded()
     if get(Startup_running) == 1 or get(Capt_ra_alt_ft) > 20 then
         fuel_quick_start(SASL_COMMAND_BEGIN)
     end
+    set(Fuel_on_takeoff, 0)
 end
 
 
@@ -653,6 +654,19 @@ local function update_fuel_leaks()
 
 end
 
+local function update_fot()
+    if get(EWD_flight_phase) == PHASE_LIFTOFF and get(Fuel_on_takeoff) == 0 then
+        set(Fuel_on_takeoff, get(FOB))
+    elseif get(EWD_flight_phase) == PHASE_2ND_ENG_OFF or get(EWD_flight_phase) == PHASE_1ST_ENG_ON or get(EWD_flight_phase) == PHASE_ELEC_PWR then
+        set(Fuel_on_takeoff, 0)
+    end
+    
+    if get(FOB) > get(Fuel_on_takeoff) then
+        -- This has no sense, probably the use refilled mid-air or with engines running
+        set(Fuel_on_takeoff, 0)
+    end
+end
+
 ----------------------------------------------------------------------------------------------------
 -- Functions - Main
 ----------------------------------------------------------------------------------------------------
@@ -686,5 +700,6 @@ function update()
 
     -- Step 5 : bad things
     update_fuel_leaks()
+    update_fot()
 end
 
