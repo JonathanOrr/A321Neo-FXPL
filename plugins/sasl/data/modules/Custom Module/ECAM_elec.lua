@@ -173,7 +173,7 @@ local function draw_ess_tr()
                      TEXT_ALIGN_RIGHT,
                      ELEC_sys.trs[3].curr_out_amps <= 5 and ECAM_ORANGE or ECAM_GREEN)
     
-    sasl.gl.drawWideLine(400, size[2]/2+82, 400, size[2]/2+26, 3, ECAM_GREEN)
+    sasl.gl.drawWideLine(400, size[2]/2+82, 400, size[2]/2+38, 3, ECAM_GREEN)
     
 end
 

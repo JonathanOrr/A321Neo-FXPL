@@ -1145,4 +1145,237 @@ MessageGroup_ELEC_APU_GEN_FAULT = {
     end
 }
 
+----------------------------------------------------------------------------------------------------
+-- CAUTION: STATIC INV FAULT
+----------------------------------------------------------------------------------------------------
+MessageGroup_ELEC_STATIC_INV_FAULT = {
+    shown = false,
+
+    text  = function(self)
+                return "ELEC"   
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_1,
+    
+    sd_page = ECAM_PAGE_ELEC,
+    
+    messages = {
+        {
+            text = function() return "     STATIC INV FAULT" end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        }
+    },
+
+    is_active = function()
+        return get(FAILURE_ELEC_STATIC_INV) == 1
+    end,
+
+    is_inhibited = function()
+        return is_inibithed_in({PHASE_1ST_ENG_TO_PWR, PHASE_ABOVE_80_KTS, PHASE_LIFTOFF, PHASE_FINAL, PHASE_TOUCHDOWN})
+    end
+}
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: TR 1/2 FAULT
+----------------------------------------------------------------------------------------------------
+MessageGroup_ELEC_TR_1_2_FAULT = {
+    shown = false,
+
+    text  = function(self)
+                return "ELEC"   
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_1,
+    
+    sd_page = ECAM_PAGE_ELEC,
+    
+    messages = {
+        {
+            text = function(self)
+                x = ""
+                if get(FAILURE_ELEC_TR_1) == 1 then
+                    x = x .. "1"
+                end
+                if get(FAILURE_ELEC_TR_2) == 1 then
+                    if #x > 0 then
+                        x = x .. " + "
+                    end
+                    x = x .. "2"
+                end
+                return "     TR " .. x .. " FAULT"
+            end,
+            color = function(self) return COL_CAUTION end,
+            is_active = function(self) return true end
+        }
+    },
+
+
+    is_active = function()
+        return get(FAILURE_ELEC_TR_1) == 1 or get(FAILURE_ELEC_TR_2) == 1
+    end,
+
+    is_inhibited = function()
+        return is_inibithed_in({PHASE_1ST_ENG_TO_PWR, PHASE_ABOVE_80_KTS, PHASE_LIFTOFF, PHASE_FINAL, PHASE_TOUCHDOWN})
+    end
+}
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: TR ESS FAULT
+----------------------------------------------------------------------------------------------------
+MessageGroup_ELEC_TR_ESS_FAULT = {
+    shown = false,
+
+    text  = function(self)
+                return "ELEC"   
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_1,
+    
+    sd_page = ECAM_PAGE_ELEC,
+    
+    messages = {
+        {
+            text = function() return "     TR ESS FAULT" end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        }
+    },
+
+    is_active = function()
+        return get(FAILURE_ELEC_TR_ESS) == 1
+    end,
+
+    is_inhibited = function()
+        return is_inibithed_in({PHASE_1ST_ENG_TO_PWR, PHASE_ABOVE_80_KTS, PHASE_LIFTOFF, PHASE_FINAL, PHASE_TOUCHDOWN})
+    end
+}
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: IDG LO PR
+----------------------------------------------------------------------------------------------------
+Message_ELEC_IDG_1_OFF_LOPR = {
+    text = function(self) return " IDG1.................OFF" end,
+    color = function(self) return COL_ACTIONS end,
+    is_active = function(self) return (get(FAILURE_ELEC_IDG1_oil) == 1 and ELEC_sys.generators[1].idg_status) end
+}
+Message_ELEC_IDG_2_OFF_LOPR = {
+    text = function(self) return " IDG2.................OFF" end,
+    color = function(self) return COL_ACTIONS end,
+    is_active = function(self) return (get(FAILURE_ELEC_IDG2_oil) == 1 and ELEC_sys.generators[2].idg_status) end
+}
+
+MessageGroup_ELEC_IDG_LO_PR = {
+
+    shown = false,
+
+    text  = function(self)
+                return "ELEC"   
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_ELEC,
+    
+    messages = {
+        {
+            text = function(self)
+                x = ""
+                if get(FAILURE_ELEC_IDG1_oil) == 1 then
+                    x = x .. "1"
+                end
+                if get(FAILURE_ELEC_IDG2_oil) == 1 then
+                    if #x > 0 then
+                        x = x .. " + "
+                    end
+                    x = x .. "2"
+                end
+                return "     IDG " .. x .. " OIL LO PR"
+            end,
+            color = function(self) return COL_CAUTION end,
+            is_active = function(self) return true end
+        },
+        Message_ELEC_IDG_1_OFF_LOPR,
+        Message_ELEC_IDG_2_OFF_LOPR
+    },
+
+    is_active = function()
+        return get(FAILURE_ELEC_IDG1_oil) == 1 or get(FAILURE_ELEC_IDG2_oil) == 1
+    end,
+
+    is_inhibited = function()
+        return is_inibithed_in({PHASE_ELEC_PWR, PHASE_ABOVE_80_KTS, PHASE_TOUCHDOWN, PHASE_FINAL, PHASE_TOUCHDOWN, PHASE_2ND_ENG_OFF})
+    end
+}
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: IDG OVHT
+----------------------------------------------------------------------------------------------------
+Message_ELEC_IDG_1_OFF_OVHT = {
+    text = function(self) return " IDG1.................OFF" end,
+    color = function(self) return COL_ACTIONS end,
+    is_active = function(self) return (get(ELEC_sys.generators[1].drs.idg_temp)>185 and ELEC_sys.generators[1].idg_status) end
+}
+Message_ELEC_IDG_2_OFF_OVHT = {
+    text = function(self) return " IDG2.................OFF" end,
+    color = function(self) return COL_ACTIONS end,
+    is_active = function(self) return (get(ELEC_sys.generators[2].drs.idg_temp)>185 and ELEC_sys.generators[2].idg_status) end
+}
+MessageGroup_ELEC_IDG_OVHT = {
+
+    shown = false,
+
+    text  = function(self)
+                return "ELEC"   
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_ELEC,
+    
+    messages = {
+        {
+            text = function(self)
+                x = ""
+                if get(ELEC_sys.generators[1].drs.idg_temp)>185 then
+                    x = x .. "1"
+                end
+                if get(ELEC_sys.generators[2].drs.idg_temp)>185 then
+                    if #x > 0 then
+                        x = x .. " + "
+                    end
+                    x = x .. "2"
+                end
+                return "     IDG " .. x .. " OIL OVHT"
+            end,
+            color = function(self) return COL_CAUTION end,
+            is_active = function(self) return true end
+        },
+        Message_ELEC_IDG_1_OFF_OVHT,
+        Message_ELEC_IDG_2_OFF_OVHT
+    },
+
+    is_active = function()
+        return get(ELEC_sys.generators[1].drs.idg_temp)>185 or get(ELEC_sys.generators[2].drs.idg_temp)>185
+    end,
+
+    is_inhibited = function()
+        return is_inibithed_in({PHASE_ELEC_PWR, PHASE_ABOVE_80_KTS, PHASE_TOUCHDOWN, PHASE_FINAL, PHASE_TOUCHDOWN, PHASE_2ND_ENG_OFF})
+    end
+}
 
