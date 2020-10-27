@@ -49,6 +49,8 @@ Fuel_sys.tank_pump_and_xfr = tank_pump_and_xfr
 local eng_1_fw_valve_position = 0   -- Firewall valve position (used internally, use the dataref for external use)
 local eng_2_fw_valve_position = 0   -- Firewall valve position (used internally, use the dataref for external use)
 
+local requested_apu_fuel_off = 0  -- A time point when APU fuel pump has been requested off. The APU fuel pump switch off after 1 sec
+
 -- Initially, the temperature of the fuel corresponds to the external one
 set(Fuel_wing_L_temp, get(TAT))
 set(Fuel_wing_R_temp, get(TAT))
@@ -594,21 +596,30 @@ local function update_apu()
 
     if eng1_fuel_status == 3 then   -- Ok normal, left side
         set(Apu_fuel_source, 1)
+        requested_apu_fuel_off = 0
     elseif eng1_fuel_status == 4 then   -- Ok crossfeed, from right side
         set(Apu_fuel_source, 2)
+        requested_apu_fuel_off = 0
     elseif eng1_fuel_status == 1 and get(FAILURE_FUEL_APU_PUMP_FAIL) == 0 then   -- Mh, only if the apu pump is ok
         set(Apu_fuel_source, 1)
         if get(AC_ess_shed_pwrd) == 1 then
             ELEC_sys.add_power_consumption(ELEC_BUS_AC_ESS_SHED, 2, 3)
+            requested_apu_fuel_off = 0
         elseif get(AC_STAT_INV_pwrd) == 1 then
             ELEC_sys.add_power_consumption(ELEC_BUS_STAT_INV, 2, 3)
+            requested_apu_fuel_off = 0
         else
-            set(Apu_fuel_source, 0)
-            -- TODO
-            --assert(false)   -- This should not happen: the APU must be flagged as failed if we are in this condition.
+            -- Ok shutdown the APU, but wait 1 second (if we are switching bus, we don't want to kill the apu)
+            if requested_apu_fuel_off == 0 then
+                requested_apu_fuel_off = get(TIME)
+            end
         end
     end
     
+    if requested_apu_fuel_off ~= 0 and get(TIME) - requested_apu_fuel_off > 1 then
+        set(Apu_fuel_source, 0)
+        requested_apu_fuel_off = 0
+    end
 
 end
 
