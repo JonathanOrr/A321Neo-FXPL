@@ -1,54 +1,45 @@
---sim datarefs
+----------------------------------------------------------------------------------------------------
+-- BLEED & PACKS systems
+----------------------------------------------------------------------------------------------------
 
---a32nx datarefs
+----------------------------------------------------------------------------------------------------
+-- Constants
+----------------------------------------------------------------------------------------------------
+include('constants.lua')
 
---initialisation--
+ENG_NOMINAL_MAX_PRESS = 56
+ENG_NOMINAL_MIN_PRESS = 38
+
+----------------------------------------------------------------------------------------------------
+-- Global variables
+----------------------------------------------------------------------------------------------------
+local eng_bleed_switch    = {true, true}
+local eng_bleed_valve_pos = {false, false}
+
+local apu_bleed_switch    = false
+local apu_bleed_valve_pos = false
+
+local eng_lp_pressure     = {0,0}
+
+----------------------------------------------------------------------------------------------------
+-- Initialisation
+----------------------------------------------------------------------------------------------------
 set(Pack_L, 1)
-set(Pack_M, 0)
 set(Pack_R, 1)
 set(Left_pack_iso_valve, 1)
 set(Right_pack_iso_valve, 0)
 
---register commands--
-sasl.registerCommandHandler ( Pack_flow_dial_up, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        set(A321_Pack_Flow_dial, get(A321_Pack_Flow_dial) + 1)
-        set(A321_Pack_Flow_dial, Math_clamp(get(A321_Pack_Flow_dial), 0, 2))
-    end
-end)
+----------------------------------------------------------------------------------------------------
+-- Commands
+----------------------------------------------------------------------------------------------------
+sasl.registerCommandHandler(Pack_flow_dial_up, 0, function(phase) Knob_handler_up_int(phase, A321_Pack_Flow_dial, 0, 2) end)
+sasl.registerCommandHandler(Pack_flow_dial_dn, 0, function(phase) Knob_handler_down_int(phase, A321_Pack_Flow_dial, 0, 2) end)
+sasl.registerCommandHandler(X_bleed_dial_up, 0, function(phase) Knob_handler_up_int(phase, X_bleed_dial, 0, 2) end)
+sasl.registerCommandHandler(X_bleed_dial_dn, 0, function(phase) Knob_handler_down_int(phase, X_bleed_dial, 0, 2) end)
 
-sasl.registerCommandHandler ( Pack_flow_dial_dn, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        set(A321_Pack_Flow_dial, get(A321_Pack_Flow_dial) - 1)
-        set(A321_Pack_Flow_dial, Math_clamp(get(A321_Pack_Flow_dial), 0, 2))
-    end
-end)
-
-sasl.registerCommandHandler ( X_bleed_dial_up, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        set(X_bleed_dial, get(X_bleed_dial) + 1)
-        set(X_bleed_dial, Math_clamp(get(X_bleed_dial), 0, 2))
-    end
-end)
-
-sasl.registerCommandHandler ( X_bleed_dial_dn, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        set(X_bleed_dial, get(X_bleed_dial) - 1)
-        set(X_bleed_dial, Math_clamp(get(X_bleed_dial), 0, 2))
-    end
-end)
-
-sasl.registerCommandHandler ( Toggle_eng1_bleed, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        set(Eng1_bleed_off_button, 1 - get(Eng1_bleed_off_button))
-    end
-end)
-
-sasl.registerCommandHandler ( Toggle_eng2_bleed, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        set(Eng2_bleed_off_button, 1 - get(Eng2_bleed_off_button))
-    end
-end)
+sasl.registerCommandHandler (Toggle_apu_bleed, 0,  function(phase) if phase == SASL_COMMAND_BEGIN then apu_bleed_switch = not apu_bleed_switch end end)
+sasl.registerCommandHandler (Toggle_eng1_bleed, 0, function(phase) if phase == SASL_COMMAND_BEGIN then eng_bleed_switch[1] = not eng_bleed_switch[1] end end)
+sasl.registerCommandHandler (Toggle_eng2_bleed, 0, function(phase) if phase == SASL_COMMAND_BEGIN then eng_bleed_switch[2] = not eng_bleed_switch[2] end end)
 
 function onPlaneLoaded()
     set(Pack_L, 1)
@@ -68,32 +59,85 @@ end
 
 local function update_override()
     if override_BLEED_always_ok then
-        set(L_HP_valve, 1)
-        set(R_HP_valve, 1)
-        set(L_bleed_state, 2)
-        set(R_bleed_state, 2)
-        set(L_bleed_press, 20)
-        set(R_bleed_press, 20)
+        -- TODO
     end
+end
+
+local function update_hp_valves()
+
+    -- HP valve keep pressure in the range 32-40
+    if get(Engine_1_avail) == 1 and eng_bleed_on[1] and get(L_bleed_press) <= 32 then
+        set(L_HP_valve, 1)
+    elseif get(Engine_1_avail) == 0 or (not eng_bleed_on[1]) or get(L_bleed_press) > 40 then
+        set(L_HP_valve, 0)
+    end
+
+    if get(Engine_2_avail) == 1 and eng_bleed_on[2] and get(R_bleed_press) <= 32 then
+        set(R_HP_valve, 1)
+    elseif get(Engine_2_avail) == 0 or (not eng_bleed_on[2]) or get(R_bleed_press) > 40 then
+        set(R_HP_valve, 0)
+    end
+
+end
+
+local function update_bleed_valves()
+
+    -- TODO Failures
+
+    apu_bleed_valve_pos = get(Apu_N1) > 95 and apu_bleed_switch
+
+    eng_bleed_valve_pos[1] = eng_bleed_switch[1] and (eng_lp_pressure[1] >= 8) 
+                             and (get(Fire_pb_ENG1_status) == 0) and not apu_bleed_valve_pos
+                             
+    eng_bleed_valve_pos[2] = eng_bleed_switch[2] and (eng_lp_pressure[2] >= 8) 
+                             and (get(Fire_pb_ENG2_status) == 0) and not apu_bleed_valve_pos   
+                             
+end
+
+local function update_eng_pressures()
+    if get(Engine_1_avail) == 0 then
+        eng_lp_pressure[1] = Set_linear_anim_value(eng_lp_pressure[1], 0, 0, 100, 1)
+    else
+        local target = Math_rescale(18, ENG_NOMINAL_MIN_PRESS, 101, ENG_NOMINAL_MAX_PRESS, get(Eng_1_N1)) + math.random()
+        eng_lp_pressure[1] = Set_linear_anim_value(eng_lp_pressure[1], target, 0, 100, 1)
+    end
+    
+    if get(Engine_2_avail) == 0 then
+        eng_lp_pressure[2] = Set_linear_anim_value(eng_lp_pressure[2], 0, 0, 100, 1)
+    else
+        local target = Math_rescale(18, ENG_NOMINAL_MIN_PRESS, 101, ENG_NOMINAL_MAX_PRESS, get(Eng_2_N1)) + math.random()
+        eng_lp_pressure[2] = Set_linear_anim_value(eng_lp_pressure[2], target, 0, 100, 1)
+    end
+
+end
+
+local function update_datarefs()
+
+    -- XP System
+    set(ENG_1_bleed_switch, eng_bleed_valve_pos[1] and 1 or 0)
+    set(ENG_2_bleed_switch, eng_bleed_valve_pos[2] and 1 or 0)
+    set(Apu_bleed_switch, apu_bleed_valve_pos and 1 or 0)
+    set(Left_pack_iso_valve, 1) -- In X-Plane system APU always connected to ENG1
+    set(Pack_M, 0)--turning the center pack off as A320 doesn't have one
+
+    -- ECAM stuffs
+    set(L_bleed_state, get(Engine_1_avail) * (eng_bleed_switch[1] and 2 or 1))
+    set(R_bleed_state, get(Engine_2_avail) * (eng_bleed_switch[2] and 2 or 1))
+
+    -- Buttons
+    set(Eng1_bleed_off_button, get(OVHR_elec_panel_pwrd) * (eng_bleed_switch[1] and 0 or 1))
+    set(Eng2_bleed_off_button, get(OVHR_elec_panel_pwrd) * (eng_bleed_switch[2] and 0 or 1))
+    set(APU_bleed_on_button,   get(OVHR_elec_panel_pwrd) * (apu_bleed_switch and 1 or 0))
 end
 
 function update()
     --create the A321 pack system--
-    set(Left_pack_iso_valve, 1)--keeping the left iso closed which creates a single iso system
-    set(Pack_M, 0)--turning the center pack off as A320 doesn't have one
 
-    --HP valve logic--
-    if get(Engine_1_avail) == 1 or get(Engine_mode_knob) == 1 or get(Engine_mode_knob) == -1 then--if eng 1 is running or engine mode is crank or ign
-        set(L_HP_valve, 0)
-    else--if eng 1 is not and engine mode is norm
-        set(L_HP_valve, 1)
-    end
+    update_bleed_valves()
+    update_hp_valves()
+    update_eng_pressures()
+    update_datarefs()
 
-    if get(Engine_2_avail) == 1 or get(Engine_mode_knob) == 1 or get(Engine_mode_knob) == -1 then--if eng 2 is running or engine mode is crank or ign
-        set(R_HP_valve, 0)
-    else--if eng 2 is not and engine mode is norm
-        set(R_HP_valve, 1)
-    end
 
     --X bleed valve logic--
     if get(X_bleed_dial) == 0 then--closed
@@ -127,32 +171,32 @@ function update()
 
     --bleed logic--
     if get(Engine_1_avail) == 1 then--engine 1 is running
-        set(ENG_1_bleed_switch, 1)--l bleed on
+        --set(ENG_1_bleed_switch, 1)--l bleed on
         set(L_bleed_state, 2)
         if get(Eng1_bleed_off_button) == 1 then--l bleed manually switched off
-            set(ENG_1_bleed_switch, 0)--l bleed off
+        --    set(ENG_1_bleed_switch, 0)--l bleed off
             set(L_bleed_state, 1)
         end
     else--engine 1 is not running
-        set(ENG_1_bleed_switch, 0)--l bleed off
+        --set(ENG_1_bleed_switch, 0)--l bleed off
         set(L_bleed_state, 0)
     end
 
     if get(Engine_2_avail) == 1 then--engine 2 is running
-        set(ENG_2_bleed_switch, 1)--r bleed on
+        --set(ENG_2_bleed_switch, 1)--r bleed on
         set(R_bleed_state, 2)
         if get(Eng2_bleed_off_button) == 1 then--l bleed manually switched off
-            set(ENG_2_bleed_switch, 0)--r bleed off
+            --set(ENG_2_bleed_switch, 0)--r bleed off
             set(L_bleed_state, 1)
         end
     else--engine 2 is not running
-        set(ENG_2_bleed_switch, 0)--r bleed off
+        --set(ENG_2_bleed_switch, 0)--r bleed off
         set(R_bleed_state, 0)
     end
 
     if get(Apu_bleed_switch) == 1 and get(Apu_avail) == 1 then--apu is on and apu bleed is on
-        set(ENG_1_bleed_switch, 0)--l bleed off
-        set(ENG_2_bleed_switch, 0)--r bleed off
+        --set(ENG_1_bleed_switch, 0)--l bleed off
+        --set(ENG_2_bleed_switch, 0)--r bleed off
     end
 
     --PACKs logic--
