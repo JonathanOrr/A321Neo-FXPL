@@ -108,6 +108,7 @@ Aft_cab_temp_dial_up = createCommand("a321neo/cockpit/aircond/aft_cab_temp_dial_
 Aft_cab_temp_dial_dn = createCommand("a321neo/cockpit/aircond/aft_cab_temp_dial_dn", "Aft cab temp dial down")
 Aft_cargo_temp_dial_up = createCommand("a321neo/cockpit/aircond/aft_cargo_temp_dial_up", "Aft cargo temp dial up")
 Aft_cargo_temp_dial_dn = createCommand("a321neo/cockpit/aircond/aft_cargo_temp_dial_dn", "Aft cargo temp dial down")
+Toggle_cab_fan = createCommand("a321neo/cockpit/aircond/cab_fan", "Toggle CAN FANS button")
 
 --packs & bleed
 Toggle_eng1_bleed = createCommand("a321neo/cockpit/bleed/toggle_eng1_bleed", "Toggle ENG 1 bleed")
@@ -116,6 +117,18 @@ Pack_flow_dial_up = createCommand("a321neo/cockpit/packs/pack_flow_dial_up", "Pa
 Pack_flow_dial_dn = createCommand("a321neo/cockpit/packs/pack_flow_dial_dn", "Pack flow dial down")
 X_bleed_dial_up = createCommand("a321neo/cockpit/packs/x_bleed_dial_up", "x bleed dial up")
 X_bleed_dial_dn = createCommand("a321neo/cockpit/packs/x_bleed_dial_dn", "x bleed dial down")
+Toggle_pack1 = createCommand("a321neo/cockpit/packs/toggle_pack1", "Toggle PACK 1")
+Toggle_pack2 = createCommand("a321neo/cockpit/packs/toggle_pack2", "Toggle PACK 2")
+Toggle_ram_air = createCommand("a321neo/cockpit/bleed/ram_air", "Toggle RAM AIR")
+
+
+-- Press
+Press_mode_sel = createCommand("a321neo/cockpit/pressurization/mode_sel", "Press mode sel button")
+Press_ditching = createCommand("a321neo/cockpit/pressurization/ditching", "Press DITCHING button")
+Press_ldg_elev_dial_dn = createCommand("a321neo/cockpit/pressurization/ldg_elev_dn", "LDG ELEV dial down")
+Press_ldg_elev_dial_up = createCommand("a321neo/cockpit/pressurization/ldg_elev_up", "LDG ELEV dial up")
+Press_manual_control_dn = createCommand("a321neo/cockpit/pressurization/manual_control_dn", "MAN V/S CTL down")
+Press_manual_control_up = createCommand("a321neo/cockpit/pressurization/manual_control_up", "MAN V/S CTL up")
 
 -- DCDU
 DCDU_cmd_msg_plus = createCommand("a321neo/cockpit/DCDU/msg_plus", "Next Message")
@@ -232,5 +245,11 @@ ENG_cmd_mode_down      = sasl.createCommand("a321neo/cockpit/engine/mode_dn", "e
 -- APU
 APU_cmd_master = sasl.createCommand("a321neo/cockpit/engine/apu_master_toggle", "toggle APU master button")
 APU_cmd_start  = sasl.createCommand("a321neo/cockpit/engine/apu_start_toggle", "toggle APU start button")
+
+-- Anti-ICE
+AA_cmd_probe_window_heat = sasl.createCommand("a321neo/cockpit/anti_ice/probe_wind_heat", "Toggle PROBE WINDOW HEAT button")
+AA_cmd_eng_1             = sasl.createCommand("a321neo/cockpit/anti_ice/toggle_eng_1", "Toggle ANTI-ICE ENG 1 button")
+AA_cmd_eng_2             = sasl.createCommand("a321neo/cockpit/anti_ice/toggle_eng_2", "Toggle ANTI-ICE ENG 2 button")
+AA_cmd_wings             = sasl.createCommand("a321neo/cockpit/anti_ice/toggle_wings", "Toggle ANTI-ICE WING button")
 
 
