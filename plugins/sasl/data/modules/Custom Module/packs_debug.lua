@@ -113,10 +113,10 @@ function update()
     end
 end
 
-function draw()
-    sasl.gl.drawRectangle(0, 0, size[1], size[2], BLACK)
+local function draw_xplane_part()
+
     --x plane pack system diagram--
-    sasl.gl.drawText(B612MONO_regular, size[1]/2 - size[1]/4, size[2]/2+200, "X-PLANE PACKS", 15,false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    sasl.gl.drawText(B612MONO_regular, size[1]/2 - size[1]/4, 520, "X-PLANE PACKS", 15,false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
     --direct bleed feeds--
     sasl.gl.drawText(B612MONO_regular, size[1]/2 - size[1]/4 - 100, size[2]/2-150, "ENG 1 BLEED", 10,false, false, TEXT_ALIGN_CENTER, eng_1_bleed_cl)
     sasl.gl.drawText(B612MONO_regular, size[1]/2 - size[1]/4      , size[2]/2-150, "APU/GPU BLEED", 10,false, false, TEXT_ALIGN_CENTER, apugpu_bleed_cl)
@@ -142,7 +142,251 @@ function draw()
     sasl.gl.drawText(B612MONO_regular, size[1]/2 - size[1]/4 - 100, size[2]/2+120, "L PACK", 10,false, false, TEXT_ALIGN_CENTER, left_pack_cl)
     sasl.gl.drawText(B612MONO_regular, size[1]/2 - size[1]/4      , size[2]/2+120, "M PACK", 10,false, false, TEXT_ALIGN_CENTER, mid_pack_cl)
     sasl.gl.drawText(B612MONO_regular, size[1]/2 - size[1]/4 + 100, size[2]/2+120, "R PACK", 10,false, false, TEXT_ALIGN_CENTER, right_pack_cl)
+end
 
+local function draw_valve_v(x,y,status)
+    sasl.gl.drawArc(x, y, 9, 10, 0, 360, status and ECAM_GREEN or ECAM_ORANGE)
+    if status then
+        sasl.gl.drawLine(x, y-10, x, y+10, ECAM_GREEN)
+    else
+        sasl.gl.drawLine(x-10, y, x+10, y, ECAM_ORANGE)    
+    end
+end
+
+local function draw_valve_h(x,y,status)
+    sasl.gl.drawArc(x, y, 9, 10, 0, 360, status and ECAM_GREEN or ECAM_ORANGE)
+    if status then
+        sasl.gl.drawLine(x-10, y, x+10, y, ECAM_GREEN)    
+    else
+        sasl.gl.drawLine(x, y-10, x, y+10, ECAM_ORANGE)
+    end
+end
+
+local function flow_to_text(dr) 
+    if get(dr) == 0 then return "LOW" end
+    if get(dr) == 1 then return "NORM" end
+    if get(dr) == 2 then return "HIGH" end
+end
+
+local function draw_a32nx_part()
+    width_start = size[1]/2
+    width_end   = size[1]
     --a320 pack system diagram--
-    sasl.gl.drawText(B612MONO_regular, size[1]/2 + size[1]/4, size[2]/2+200, "A321NEO PACKS", 15,false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    sasl.gl.drawText(B612MONO_regular, size[1]/2 + size[1]/4, 520, "A32NX PACKS", 15,false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    
+    -- Lower part - engines bleed
+    
+    sasl.gl.drawFrame(width_start+25 , 10, 50, 30, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, width_start+50 , 20, "ENG 1", 10,false, false, TEXT_ALIGN_CENTER, get(Engine_1_avail) == 1 and ECAM_GREEN or ECAM_ORANGE)
+    sasl.gl.drawText(B612MONO_regular, width_start+60 , 45, "IP", 8, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawLine(width_start+50, 40, width_start+50, 100, ECAM_WHITE)
+    sasl.gl.drawLine(width_start+75, 25, width_start+100, 25, ECAM_WHITE)
+    sasl.gl.drawLine(width_start+100, 25, width_start+100, 55, ECAM_WHITE)
+    sasl.gl.drawLine(width_start+100, 75, width_start+100, 90, ECAM_WHITE)
+    sasl.gl.drawLine(width_start+100, 90, width_start+50, 90, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, width_start+90 , 30, "HP", 8, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawLine(width_start+100, 40, width_start+130, 40, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, width_start+135, 40, "HYD\nRSVR", 8, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    
+    draw_valve_v(width_start+50, 110, get(ENG_1_bleed_switch) == 1)
+    draw_valve_v(width_start+100, 65, get(L_HP_valve) == 1)
+        
+    sasl.gl.drawFrame(width_end-75 , 10, 50, 30, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, width_end-50 , 20, "ENG 2", 10,false, false, TEXT_ALIGN_CENTER, get(Engine_2_avail) == 1 and ECAM_GREEN or ECAM_ORANGE)
+    sasl.gl.drawText(B612MONO_regular, width_end-60 , 45, "IP", 8, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawLine(width_end-50, 40, width_end-50, 100, ECAM_WHITE)
+    sasl.gl.drawLine(width_end-75, 25, width_end-100, 25, ECAM_WHITE)
+    sasl.gl.drawLine(width_end-100, 25, width_end-100, 55, ECAM_WHITE)
+    sasl.gl.drawLine(width_end-100, 75, width_end-100, 90, ECAM_WHITE)
+    sasl.gl.drawLine(width_end-100, 90, width_end-50, 90, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, width_end-90 , 30, "HP", 8, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    
+    draw_valve_v(width_end-50, 110, get(ENG_2_bleed_switch) == 1)
+    draw_valve_v(width_end-100, 65, get(R_HP_valve) == 1)
+
+    sasl.gl.drawLine(width_start+50, 120, width_start+50, 200, ECAM_WHITE)    
+    sasl.gl.drawLine(width_end-50, 120, width_end-50, 200, ECAM_WHITE)
+    sasl.gl.drawLine(width_start+50, 130, width_start+40, 130, ECAM_WHITE)    
+    sasl.gl.drawLine(width_end-50, 130, width_end-40, 130, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, width_end-40, 130, "ENG2\nSTARTER", 8, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, width_start+40, 130, "ENG1\nSTARTER", 8, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+
+    -- BLEED L/R status
+    sasl.gl.drawText(B612MONO_regular, width_start+10, 290, "BLEED L", 10, false, false, TEXT_ALIGN_LEFT, UI_DARK_BLUE)
+    sasl.gl.drawFrame(width_start+10, 235, 50, 50, UI_DARK_BLUE)
+    sasl.gl.drawLine(width_start+50, 200, width_start+50, 235, UI_DARK_BLUE)
+    sasl.gl.drawText(B612MONO_regular, width_start+15, 275, "TEMP", 9, false, false, TEXT_ALIGN_LEFT, UI_DARK_BLUE)
+    sasl.gl.drawText(B612MONO_regular, width_start+15, 265, math.ceil(get(L_bleed_temp)) .. " C", 9, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, width_start+15, 250, "PRESS", 9, false, false, TEXT_ALIGN_LEFT, UI_DARK_BLUE)
+    sasl.gl.drawText(B612MONO_regular, width_start+15, 240, math.ceil(get(L_bleed_press)) .. " PSI", 9, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+
+    sasl.gl.drawText(B612MONO_regular, width_end-60, 290, "BLEED R", 10, false, false, TEXT_ALIGN_LEFT, UI_DARK_BLUE)
+    sasl.gl.drawFrame(width_end-60, 235, 50, 50, UI_DARK_BLUE)
+    sasl.gl.drawLine(width_end-50, 200, width_end-50, 235, UI_DARK_BLUE)
+    sasl.gl.drawText(B612MONO_regular, width_end-55, 275, "TEMP", 9, false, false, TEXT_ALIGN_LEFT, UI_DARK_BLUE)
+    sasl.gl.drawText(B612MONO_regular, width_end-55, 265, math.ceil(get(R_bleed_temp)) .. " C", 9, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, width_end-55, 250, "PRESS", 9, false, false, TEXT_ALIGN_LEFT, UI_DARK_BLUE)
+    sasl.gl.drawText(B612MONO_regular, width_end-55, 240, math.ceil(get(R_bleed_press)) .. " PSI", 9, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+
+    -- main bleed lined
+    sasl.gl.drawText(B612MONO_regular, (width_end+width_start)/2, 180, "X BLEED", 8, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    draw_valve_h((width_end+width_start)/2, 200, get(X_bleed_valve) == 1)
+    sasl.gl.drawLine((width_end+width_start)/2+10, 200, width_end-50, 200, ECAM_WHITE)
+    sasl.gl.drawLine((width_end+width_start)/2-10, 200, width_start+50, 200, ECAM_WHITE)
+    
+    -- APU
+    sasl.gl.drawLine(width_start+150, 200, width_start+150, 150, ECAM_WHITE)
+    draw_valve_v(width_start+150, 140, get(Apu_bleed_switch) == 1)
+    sasl.gl.drawLine(width_start+150, 130, width_start+150, 90, ECAM_WHITE)
+    sasl.gl.drawLine(width_start+150, 90, width_start+145, 85, ECAM_WHITE)
+    sasl.gl.drawLine(width_start+150, 90, width_start+155, 85, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, width_start+150, 75, "APU", 10, false, false, TEXT_ALIGN_CENTER, get(Apu_avail) == 0 and ECAM_ORANGE or ECAM_GREEN)
+    
+    -- GAS
+    sasl.gl.drawLine(width_start+100, 200, width_start+100, 150, ECAM_WHITE)
+    sasl.gl.drawLine(width_start+100, 150, width_start+105, 145, ECAM_WHITE)
+    sasl.gl.drawLine(width_start+100, 150, width_start+95, 145, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, width_start+100, 135, "GND\nAIR", 10, false, false, TEXT_ALIGN_CENTER, get(GAS_bleed_avail) == 0 and ECAM_ORANGE or ECAM_GREEN)
+
+    -- APU BLEED
+    sasl.gl.drawText(B612MONO_regular, width_start+175, 135, "APU BLEED", 10, false, false, TEXT_ALIGN_LEFT, UI_DARK_BLUE)
+    sasl.gl.drawFrame(width_start+180, 105, 50, 25, UI_DARK_BLUE)
+    sasl.gl.drawLine(width_start+150, 110, width_start+180, 110, UI_DARK_BLUE)
+    sasl.gl.drawText(B612MONO_regular, width_start+185, 120, "PRESS", 9, false, false, TEXT_ALIGN_LEFT, UI_DARK_BLUE)
+    sasl.gl.drawText(B612MONO_regular, width_start+185, 110, math.ceil(get(Apu_bleed_psi)) .. " PSI", 9, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)    
+
+    -- top lines
+    sasl.gl.drawLine(width_start+80, 200, width_start+80, 220,ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, width_start+80, 235, " WING\nA. ICE", 8, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawLine(width_start+140, 200, width_start+140, 220, ECAM_WHITE)
+    sasl.gl.drawFrame(width_start+126, 221, 30, 18, ECAM_MAGENTA)
+    sasl.gl.drawText(B612MONO_regular, width_start+140, 227, "CARGO", 8, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawLine(width_end-80, 200, width_end-80, 220,ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, width_end-80, 235, " WING\nA. ICE", 8, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+
+    -- bridge xbleed
+    sasl.gl.drawLine(width_start+165, 200, width_start+165, 230, ECAM_WHITE)
+    sasl.gl.drawLine(width_end-165, 200, width_end-165, 230, ECAM_WHITE)
+    sasl.gl.drawLine(width_start+165, 230, width_end-165, 230, ECAM_WHITE)
+    sasl.gl.drawLine(width_start+175, 230, width_start+175, 240, ECAM_WHITE)
+    sasl.gl.drawLine(width_end-175, 230, width_end-175, 240, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, width_start+170, 255, "HYD\nRSVR", 8, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, width_end-170, 255, "WATER\nTANKS", 8, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    
+    -- PACKS
+    draw_valve_v(width_start+120, 260, get(Pack_L) == 1)
+    sasl.gl.drawText(B612MONO_regular, width_start+95, 270, "PACK 1", 8, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawLine(width_start+120, 200, width_start+120, 250, ECAM_WHITE)
+    draw_valve_v(width_end-120, 260, get(Pack_R) == 1)
+    sasl.gl.drawText(B612MONO_regular, width_end-95, 270, "PACK 2", 8, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawLine(width_end-120, 200, width_end-120, 250, ECAM_WHITE)
+ 
+    -- Mixer
+    sasl.gl.drawFrame((width_end+width_start)/2-100, 350, 200, 20, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, (width_end+width_start)/2, 355, "MIXER", 12, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawLine(width_end-120, 270, width_end-120, 350, ECAM_WHITE)
+    sasl.gl.drawLine(width_start+120, 270, width_start+120, 350, ECAM_WHITE)
+    sasl.gl.drawLine(width_end-130, 370, width_end-130, 400, ECAM_WHITE)
+    sasl.gl.drawLine(width_start+150, 335, width_start+150, 350, ECAM_WHITE)
+    draw_valve_v(width_start+150, 325, get(Emer_ram_air) == 1)
+    sasl.gl.drawLine(width_start+150, 315, width_start+150, 305, ECAM_WHITE)
+    sasl.gl.drawLine(width_start+150, 305, width_start+145, 300, ECAM_WHITE)
+    sasl.gl.drawLine(width_start+150, 305, width_start+155, 300, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular,width_start+170, 325, "RAM\nAIR", 8, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    
+    sasl.gl.drawLine((width_end+width_start)/2, 370, (width_end+width_start)/2, 400, ECAM_WHITE)
+    sasl.gl.drawLine(width_start+130, 370, width_start+130, 400, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, width_start+130, 405, "CKPT", 8, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, (width_end+width_start)/2, 405, "FWD", 8, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, width_end-130, 405, "AFT", 8, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    
+    -- Hot air
+    draw_valve_v(width_end-160, 315, get(Cab_hot_air) == 1)
+    sasl.gl.drawLine(width_end-120, 290, width_end-160, 290, ECAM_WHITE)
+    sasl.gl.drawLine(width_end-160, 305, width_end-160, 290, ECAM_WHITE)
+    sasl.gl.drawLine(width_start+120, 290, width_end-160, 290, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, width_end-138, 315, "HOT\nAIR", 8, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawLine(width_end-160, 325,width_end-160, 340, UI_LIGHT_RED)
+    sasl.gl.drawLine(width_end-160, 340, width_end-80, 340, UI_LIGHT_RED)
+    sasl.gl.drawLine(width_end-80, 340, width_end-80, 395, UI_LIGHT_RED)
+    sasl.gl.drawLine(width_end-130, 395, width_end-80, 395, UI_LIGHT_RED)
+    sasl.gl.drawLine((width_end+width_start)/2, 387, width_end-80, 387, UI_LIGHT_RED)
+    sasl.gl.drawLine(width_start+130, 379, width_end-80, 379, UI_LIGHT_RED)
+    
+    -- Pack temp & airflow
+    sasl.gl.drawText(B612MONO_regular, width_start+10, 400, "PACK 1", 10, false, false, TEXT_ALIGN_LEFT, UI_DARK_BLUE)
+    sasl.gl.drawFrame(width_start+10, 320, 55, 75, UI_DARK_BLUE)
+    sasl.gl.drawText(B612MONO_regular, width_start+15, 385, "OUT TEMP", 9, false, false, TEXT_ALIGN_LEFT, UI_DARK_BLUE)
+    sasl.gl.drawText(B612MONO_regular, width_start+15, 375, math.ceil(get(L_pack_temp)) .. " C", 9, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, width_start+15, 360, "FLOW", 9, false, false, TEXT_ALIGN_LEFT, UI_DARK_BLUE)
+    sasl.gl.drawText(B612MONO_regular, width_start+15, 350, flow_to_text(L_pack_Flow), 9, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, width_start+15, 335, "CMP TEMP", 9, false, false, TEXT_ALIGN_LEFT, UI_DARK_BLUE)
+    sasl.gl.drawText(B612MONO_regular, width_start+15, 325, math.ceil(get(L_compressor_temp)) .. " C", 9, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawLine(width_start+65, 330, width_start+120, 330, UI_DARK_BLUE)
+    
+    -- Pack temp & airflow
+    sasl.gl.drawText(B612MONO_regular, width_end-60, 400, "PACK 2", 10, false, false, TEXT_ALIGN_LEFT, UI_DARK_BLUE)
+    sasl.gl.drawFrame(width_end-60, 320, 55, 75, UI_DARK_BLUE)
+    sasl.gl.drawText(B612MONO_regular, width_end-55, 385, "OUT TEMP", 9, false, false, TEXT_ALIGN_LEFT, UI_DARK_BLUE)
+    sasl.gl.drawText(B612MONO_regular, width_end-55, 375, math.ceil(get(R_pack_temp)) .. " C", 9, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, width_end-55, 360, "FLOW", 9, false, false, TEXT_ALIGN_LEFT, UI_DARK_BLUE)
+    sasl.gl.drawText(B612MONO_regular, width_end-55, 350, flow_to_text(L_pack_Flow), 9, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, width_end-55, 335, "CMP TEMP", 9, false, false, TEXT_ALIGN_LEFT, UI_DARK_BLUE)
+    sasl.gl.drawText(B612MONO_regular, width_end-55, 325, math.ceil(get(R_compressor_temp)) .. "C", 9, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawLine(width_end-60, 330, width_end-120, 330, UI_DARK_BLUE)
+    
+    -- Cargo
+    sasl.gl.drawFrame(width_start+30, 440, 100, 60, ECAM_MAGENTA)
+    sasl.gl.drawText(B612MONO_regular, width_start+100, 505, "CARGO", 12, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawLine(width_start+75, 445, width_start+75, 430, ECAM_WHITE)
+    draw_valve_v(width_start+75, 455, get(Cargo_hot_air) == 1)
+    sasl.gl.drawLine(width_start+75, 465, width_start+75, 475, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, width_start+105, 455, "C.HOT\nAIR", 9, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    draw_valve_h(width_start+45, 485, get(Cargo_isol_in_valve) == 1)
+    draw_valve_h(width_start+115, 485, get(Cargo_isol_out_valve) == 1)
+    sasl.gl.drawLine(width_start+20, 485, width_start+35, 485, ECAM_WHITE)
+    sasl.gl.drawLine(width_start+15, 490, width_start+20, 485, ECAM_WHITE)
+    sasl.gl.drawLine(width_start+15, 480, width_start+20, 485, ECAM_WHITE)
+    sasl.gl.drawLine(width_start+125, 485, width_start+140, 485, ECAM_WHITE)
+    sasl.gl.drawLine(width_start+135, 490, width_start+140, 485, ECAM_WHITE)
+    sasl.gl.drawLine(width_start+135, 480, width_start+140, 485, ECAM_WHITE)
+    sasl.gl.drawFrame(width_start+68, 475, 25, 18, ECAM_WHITE)
+    sasl.gl.drawLine(width_start+55, 485, width_start+68, 485, ECAM_WHITE)
+    sasl.gl.drawLine(width_start+92, 485, width_start+105, 485, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, width_start+80, 480, "MIX", 9, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, width_start+15, 495, "INLET", 9, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, width_start+150, 495, "OUTLET", 9, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+
+    -- Temperature table
+    sasl.gl.drawText(B612MONO_regular, width_end-150, 485, "CKPT", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, width_end-150, 470, "FWD", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, width_end-150, 455, "AFT", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, width_end-150, 430, "CARGO", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, width_end-80, 500, "SET-POINT", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, width_end-30, 500, "ACTUAL", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+
+    sasl.gl.drawText(B612MONO_regular, width_end-80, 485, math.floor(get(Cockpit_temp)) .. " C", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(B612MONO_regular, width_end-30, 485, math.floor(get(Cockpit_temp_req)) .. " C", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+
+    sasl.gl.drawText(B612MONO_regular, width_end-80, 470, math.floor(get(Front_cab_temp)) .. " C", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(B612MONO_regular, width_end-30, 470, math.floor(get(Front_cab_temp_req)) .. " C", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+
+    sasl.gl.drawText(B612MONO_regular, width_end-80, 455, math.floor(get(Aft_cab_temp)) .. " C", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(B612MONO_regular, width_end-30, 455, math.floor(get(Aft_cab_temp_req)) .. " C", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+
+    sasl.gl.drawText(B612MONO_regular, width_end-80, 430, math.floor(get(Aft_cargo_temp)) .. " C", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(B612MONO_regular, width_end-30, 430, math.floor(get(Aft_cargo_temp_req)) .. " C", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+
+
+end
+
+
+function draw()
+    sasl.gl.drawRectangle(0, 0, size[1], size[2], BLACK)
+    sasl.gl.drawLine(size[1]/2-5, 0, size[1]/2-5, size[2], ECAM_BLUE)
+    sasl.gl.drawLine(size[1]/2+20, 420, size[1]-20, 420, UI_LIGHT_GREY)
+    sasl.gl.drawLine(size[1]/2+175, 430, size[1]/2+175, 510, UI_LIGHT_GREY)
+    
+    draw_xplane_part()
+    draw_a32nx_part()
 end
