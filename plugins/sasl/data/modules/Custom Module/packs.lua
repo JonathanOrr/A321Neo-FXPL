@@ -111,10 +111,10 @@ local function update_bleed_valves()
     apu_bleed_valve_pos = get(Apu_N1) > 95 and apu_bleed_switch
 
     eng_bleed_valve_pos[1] = eng_bleed_switch[1] and (eng_lp_pressure[1] >= 8) 
-                             and (get(Fire_pb_ENG1_status) == 0) and not apu_bleed_valve_pos and not get(GAS_bleed_avail) == 1
+                             and (get(Fire_pb_ENG1_status) == 0) and not apu_bleed_valve_pos and get(GAS_bleed_avail) == 0
                              
     eng_bleed_valve_pos[2] = eng_bleed_switch[2] and (eng_lp_pressure[2] >= 8) 
-                             and (get(Fire_pb_ENG2_status) == 0) and not apu_bleed_valve_pos and not get(GAS_bleed_avail) == 1
+                             and (get(Fire_pb_ENG2_status) == 0) and not apu_bleed_valve_pos and get(GAS_bleed_avail) == 0
 
 
     --X bleed valve logic--
@@ -290,24 +290,24 @@ end
 
 local function update_bleed_temperatures()
     --bleed temp--
-    if bleed_pressure[1] > 0.1 then--left side has bleed air
+    if bleed_pressure[1] > 5 then--left side has bleed air
         if not apu_bleed_valve_pos then
-            set(L_bleed_temp, Set_anim_value(get(L_bleed_temp), 190 + math.random()*3, -100, 200, 0.35))--eng bleed with 190C
+            set(L_bleed_temp, Set_anim_value(get(L_bleed_temp), 180 + bleed_pressure[1]/2 + math.random()*3, -100, 250, 0.2))--eng bleed with 190C
         else--apu bleed
-            set(L_bleed_temp, Set_anim_value(get(L_bleed_temp), 150 + math.random()*3, -100, 200, 0.35))--apu bleed with 150C
+            set(L_bleed_temp, Set_anim_value(get(L_bleed_temp), 150 + bleed_pressure[1]/2 + math.random()*3, -100, 250, 0.2))--apu bleed with 150C
         end
     else
-        set(L_bleed_temp, Set_anim_value(get(L_bleed_temp), get(OTA), -100, 200, 0.35))--no bleed with outside temp
+        set(L_bleed_temp, Set_anim_value(get(L_bleed_temp), get(OTA), -100, 200, 0.15))--no bleed with outside temp
     end
 
-    if bleed_pressure[2] > 0.1 then--right side has bleed air
+    if bleed_pressure[2] > 5 then--right side has bleed air
         if not apu_bleed_valve_pos then
-            set(R_bleed_temp, Set_anim_value(get(R_bleed_temp), 190, -100, 200, 0.35))--eng bleed with 190C
+            set(R_bleed_temp, Set_anim_value(get(R_bleed_temp), 180 + bleed_pressure[2]/2 + math.random()*3, -100, 250, 0.2))--eng bleed with 190C
         else--apu bleed
-            set(R_bleed_temp, Set_anim_value(get(R_bleed_temp), 150, -100, 200, 0.35))--apu bleed with 150C
+            set(R_bleed_temp, Set_anim_value(get(R_bleed_temp), 150 + bleed_pressure[2]/2 + math.random()*3, -100, 250, 0.2))--apu bleed with 150C
         end
     else
-        set(R_bleed_temp, Set_anim_value(get(R_bleed_temp), get(OTA), -100, 200, 0.35))--no bleed with outside temp
+        set(R_bleed_temp, Set_anim_value(get(R_bleed_temp), get(OTA), -100, 200, 0.15))--no bleed with outside temp
     end
 end
 
@@ -349,11 +349,10 @@ local function update_pack_temperatures()
         local max_temp = get(L_bleed_temp)
         local temp_corrected_flow = max_temp - 20 * (3-get(L_pack_Flow))
         set(L_compressor_temp, Set_anim_value(get(L_compressor_temp), temp_corrected_flow, -100, 250, 0.1))
-        
-        set(L_pack_temp, Set_anim_value(get(L_pack_temp), 19 + math.random()*2, -100, 100, 0.3))
+        set(L_pack_temp, Set_anim_value(get(L_pack_temp), 19 + math.random()*2, -100, 100, 0.1))
     else --left bleed not avail
-        set(L_compressor_temp, Set_anim_value(get(L_compressor_temp), get(OTA), -100, 200, 0.2))
-        set(L_pack_temp, Set_anim_value(get(L_pack_temp), get(OTA), -100, 100, 0.3))
+        set(L_compressor_temp, Set_anim_value(get(L_compressor_temp), get(OTA), -100, 200, 0.05))
+        set(L_pack_temp, Set_anim_value(get(L_pack_temp), get(OTA), -100, 100, 0.05))
     end
 
     if get(Pack_R) == 1 and get(R_pack_Flow) > 0 then
@@ -362,10 +361,10 @@ local function update_pack_temperatures()
         local temp_corrected_flow = max_temp - 20 * (3-get(R_pack_Flow))
         set(R_compressor_temp, Set_anim_value(get(R_compressor_temp), temp_corrected_flow, -100, 250, 0.1))
         
-        set(R_pack_temp, Set_anim_value(get(R_pack_temp), 19 + math.random()*2, -100, 100, 0.3))
+        set(R_pack_temp, Set_anim_value(get(R_pack_temp), 19 + math.random()*2, -100, 100, 0.1))
     else --left bleed not avail
-        set(R_compressor_temp, Set_anim_value(get(R_compressor_temp), get(OTA), -100, 200, 0.2))
-        set(R_pack_temp, Set_anim_value(get(R_pack_temp), get(OTA), -100, 100, 0.3))
+        set(R_compressor_temp, Set_anim_value(get(R_compressor_temp), get(OTA), -100, 200, 0.05))
+        set(R_pack_temp, Set_anim_value(get(R_pack_temp), get(OTA), -100, 100, 0.05))
     end
 
 end
