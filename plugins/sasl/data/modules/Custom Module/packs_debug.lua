@@ -118,8 +118,11 @@ local function draw_xplane_part()
     --x plane pack system diagram--
     sasl.gl.drawText(B612MONO_regular, size[1]/2 - size[1]/4, 520, "X-PLANE PACKS", 15,false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
     --direct bleed feeds--
+
+
     sasl.gl.drawText(B612MONO_regular, size[1]/2 - size[1]/4 - 100, size[2]/2-150, "ENG 1 BLEED", 10,false, false, TEXT_ALIGN_CENTER, eng_1_bleed_cl)
-    sasl.gl.drawText(B612MONO_regular, size[1]/2 - size[1]/4      , size[2]/2-150, "APU/GPU BLEED", 10,false, false, TEXT_ALIGN_CENTER, apugpu_bleed_cl)
+    sasl.gl.drawText(B612MONO_regular, size[1]/2 - size[1]/4      , size[2]/2-150, "APU BLEED", 10,false, false, TEXT_ALIGN_CENTER, apugpu_bleed_cl)
+    sasl.gl.drawText(B612MONO_regular, size[1]/2 - size[1]/4      , size[2]/2-170, "GPU BLEED", 10,false, false, TEXT_ALIGN_CENTER, get(Gpu_bleed_switch) == 1 and ECAM_GREEN or ECAM_ORANGE)
     sasl.gl.drawText(B612MONO_regular, size[1]/2 - size[1]/4 + 100, size[2]/2-150, "ENG 2 BLEED", 10,false, false, TEXT_ALIGN_CENTER, eng_2_bleed_cl)
     sasl.gl.drawWideLine(size[1]/2 - size[1]/4 - 100, size[2]/2-140, size[1]/2 - size[1]/4 - 100, size[2]/2+80, 2, left_bleed_cl)
     sasl.gl.drawWideLine(size[1]/2 - size[1]/4      , size[2]/2-140, size[1]/2 - size[1]/4      , size[2]/2+80, 2, mid_bleed_cl)
@@ -163,9 +166,10 @@ local function draw_valve_h(x,y,status)
 end
 
 local function flow_to_text(dr) 
-    if get(dr) == 0 then return "LOW" end
-    if get(dr) == 1 then return "NORM" end
-    if get(dr) == 2 then return "HIGH" end
+    if get(dr) == 0 then return "OFF" end
+    if get(dr) == 1 then return "LOW" end
+    if get(dr) == 2 then return "NORM" end
+    if get(dr) == 3 then return "HIGH" end
 end
 
 local function draw_a32nx_part()
@@ -208,8 +212,8 @@ local function draw_a32nx_part()
     sasl.gl.drawLine(width_end-50, 120, width_end-50, 200, ECAM_WHITE)
     sasl.gl.drawLine(width_start+50, 130, width_start+40, 130, ECAM_WHITE)    
     sasl.gl.drawLine(width_end-50, 130, width_end-40, 130, ECAM_WHITE)
-    sasl.gl.drawText(B612MONO_regular, width_end-40, 130, "ENG2\nSTARTER", 8, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
-    sasl.gl.drawText(B612MONO_regular, width_start+40, 130, "ENG1\nSTARTER", 8, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, width_end-40, 130, "ENG2\nSTARTER", 8, false, false, TEXT_ALIGN_LEFT, get(Eng_is_spooling_up, 2) == 1 and ECAM_GREEN or ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, width_start+40, 130, "ENG1\nSTARTER", 8, false, false, TEXT_ALIGN_RIGHT, get(Eng_is_spooling_up, 1) == 1 and ECAM_GREEN or ECAM_WHITE)
 
     -- BLEED L/R status
     sasl.gl.drawText(B612MONO_regular, width_start+10, 290, "BLEED L", 10, false, false, TEXT_ALIGN_LEFT, UI_DARK_BLUE)
@@ -257,12 +261,12 @@ local function draw_a32nx_part()
 
     -- top lines
     sasl.gl.drawLine(width_start+80, 200, width_start+80, 220,ECAM_WHITE)
-    sasl.gl.drawText(B612MONO_regular, width_start+80, 235, " WING\nA. ICE", 8, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, width_start+80, 235, " WING\nA. ICE", 8, false, false, TEXT_ALIGN_CENTER, get(AI_wing_L_operating) == 1 and ECAM_GREEN or ECAM_WHITE)
     sasl.gl.drawLine(width_start+140, 200, width_start+140, 220, ECAM_WHITE)
     sasl.gl.drawFrame(width_start+126, 221, 30, 18, ECAM_MAGENTA)
     sasl.gl.drawText(B612MONO_regular, width_start+140, 227, "CARGO", 8, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
     sasl.gl.drawLine(width_end-80, 200, width_end-80, 220,ECAM_WHITE)
-    sasl.gl.drawText(B612MONO_regular, width_end-80, 235, " WING\nA. ICE", 8, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, width_end-80, 235, " WING\nA. ICE", 8, false, false, TEXT_ALIGN_CENTER, get(AI_wing_R_operating) == 1 and ECAM_GREEN or ECAM_WHITE)
 
     -- bridge xbleed
     sasl.gl.drawLine(width_start+165, 200, width_start+165, 230, ECAM_WHITE)
@@ -330,7 +334,7 @@ local function draw_a32nx_part()
     sasl.gl.drawText(B612MONO_regular, width_end-55, 385, "OUT TEMP", 9, false, false, TEXT_ALIGN_LEFT, UI_DARK_BLUE)
     sasl.gl.drawText(B612MONO_regular, width_end-55, 375, math.ceil(get(R_pack_temp)) .. " C", 9, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
     sasl.gl.drawText(B612MONO_regular, width_end-55, 360, "FLOW", 9, false, false, TEXT_ALIGN_LEFT, UI_DARK_BLUE)
-    sasl.gl.drawText(B612MONO_regular, width_end-55, 350, flow_to_text(L_pack_Flow), 9, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, width_end-55, 350, flow_to_text(R_pack_Flow), 9, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
     sasl.gl.drawText(B612MONO_regular, width_end-55, 335, "CMP TEMP", 9, false, false, TEXT_ALIGN_LEFT, UI_DARK_BLUE)
     sasl.gl.drawText(B612MONO_regular, width_end-55, 325, math.ceil(get(R_compressor_temp)) .. "C", 9, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
     sasl.gl.drawLine(width_end-60, 330, width_end-120, 330, UI_DARK_BLUE)
@@ -365,17 +369,17 @@ local function draw_a32nx_part()
     sasl.gl.drawText(B612MONO_regular, width_end-80, 500, "SET-POINT", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
     sasl.gl.drawText(B612MONO_regular, width_end-30, 500, "ACTUAL", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
 
-    sasl.gl.drawText(B612MONO_regular, width_end-80, 485, math.floor(get(Cockpit_temp)) .. " C", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    sasl.gl.drawText(B612MONO_regular, width_end-30, 485, math.floor(get(Cockpit_temp_req)) .. " C", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(B612MONO_regular, width_end-80, 485, math.floor(get(Cockpit_temp_req)) .. " C", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(B612MONO_regular, width_end-30, 485, math.floor(get(Cockpit_temp)) .. " C", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
 
-    sasl.gl.drawText(B612MONO_regular, width_end-80, 470, math.floor(get(Front_cab_temp)) .. " C", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    sasl.gl.drawText(B612MONO_regular, width_end-30, 470, math.floor(get(Front_cab_temp_req)) .. " C", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(B612MONO_regular, width_end-80, 470, math.floor(get(Front_cab_temp_req)) .. " C", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(B612MONO_regular, width_end-30, 470, math.floor(get(Front_cab_temp)) .. " C", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
 
-    sasl.gl.drawText(B612MONO_regular, width_end-80, 455, math.floor(get(Aft_cab_temp)) .. " C", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    sasl.gl.drawText(B612MONO_regular, width_end-30, 455, math.floor(get(Aft_cab_temp_req)) .. " C", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(B612MONO_regular, width_end-80, 455, math.floor(get(Aft_cab_temp_req)) .. " C", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(B612MONO_regular, width_end-30, 455, math.floor(get(Aft_cab_temp)) .. " C", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
 
-    sasl.gl.drawText(B612MONO_regular, width_end-80, 430, math.floor(get(Aft_cargo_temp)) .. " C", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    sasl.gl.drawText(B612MONO_regular, width_end-30, 430, math.floor(get(Aft_cargo_temp_req)) .. " C", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(B612MONO_regular, width_end-80, 430, math.floor(get(Aft_cargo_temp_req)) .. " C", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(B612MONO_regular, width_end-30, 430, math.floor(get(Aft_cargo_temp)) .. " C", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
 
 
 end

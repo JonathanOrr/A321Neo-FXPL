@@ -237,7 +237,7 @@ Ventilation_light_extract = createGlobalPropertyi("a321neo/cockpit/aircond/light
 
 --packs
 X_bleed_dial = createGlobalPropertyi("a321neo/cockpit/packs/x_bleed_dial", 1, false, true, false) --0closed, 1auto, 2open
-A321_Pack_Flow_dial = createGlobalPropertyi("a321neo/cockpit/packs/pack_flow_dial", 1, false, true, false) --the pack flow dial 0low, 1norm, 2high
+Pack_Flow_dial = createGlobalPropertyi("a321neo/cockpit/packs/pack_flow_dial", 1, false, true, false) --the pack flow dial 0low, 1norm, 2high
 
 --misc
 Capt_ra_alt_m = createGlobalPropertyf("a321neo/cockpit/indicators/capt_ra_alt_m", 0, false, true, false)

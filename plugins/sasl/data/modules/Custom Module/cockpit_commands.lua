@@ -114,14 +114,12 @@ Toggle_cab_fan = createCommand("a321neo/cockpit/aircond/cab_fan", "Toggle CAN FA
 Toggle_eng1_bleed = createCommand("a321neo/cockpit/bleed/toggle_eng1_bleed", "Toggle ENG 1 bleed")
 Toggle_eng2_bleed = createCommand("a321neo/cockpit/bleed/toggle_eng2_bleed", "Toggle ENG 2 bleed")
 Toggle_apu_bleed = createCommand("a321neo/cockpit/bleed/toggle_apu_bleed", "Toggle APU bleed")
-Pack_flow_dial_up = createCommand("a321neo/cockpit/packs/pack_flow_dial_up", "Pack flow dial up")
-Pack_flow_dial_dn = createCommand("a321neo/cockpit/packs/pack_flow_dial_dn", "Pack flow dial down")
 X_bleed_dial_up = createCommand("a321neo/cockpit/packs/x_bleed_dial_up", "x bleed dial up")
 X_bleed_dial_dn = createCommand("a321neo/cockpit/packs/x_bleed_dial_dn", "x bleed dial down")
 Toggle_pack1 = createCommand("a321neo/cockpit/packs/toggle_pack1", "Toggle PACK 1")
 Toggle_pack2 = createCommand("a321neo/cockpit/packs/toggle_pack2", "Toggle PACK 2")
 Toggle_ram_air = createCommand("a321neo/cockpit/bleed/ram_air", "Toggle RAM AIR")
-
+Toggle_ECON_flow = createCommand("a321neo/cockpit/packs/toggle_ECON_flow", "Toggle ECON flow pb")
 
 -- Press
 Press_mode_sel = createCommand("a321neo/cockpit/pressurization/mode_sel", "Press mode sel button")
