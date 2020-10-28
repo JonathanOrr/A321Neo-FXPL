@@ -244,6 +244,7 @@ Eng_2_reverser_deployment = globalProperty("sim/flightmodel2/engines/thrust_reve
 Eng_1_Firewall_valve = createGlobalPropertyi("a321neo/dynamics/engines/eng_1_firewall_valve_1", 1, false, true, false) -- 0 open, 1 - closed, 2 : transit - firewall valve
 Eng_2_Firewall_valve = createGlobalPropertyi("a321neo/dynamics/engines/eng_2_firewall_valve_2", 1, false, true, false) -- 0 open, 1 - closed, 2 : transit - firewall valve
 
+Eng_is_spooling_up  = createGlobalPropertyia("a321neo/dynamics/engines/is_spooling_up", 2)  
 
 -- APU
 Apu_N1 = globalProperty("sim/cockpit2/electrical/APU_N1_percent")
@@ -484,4 +485,8 @@ Fuel_wing_L_temp = createGlobalPropertyf("a321neo/dynamics/fuel/fuel_temp_L", 0,
 Fuel_wing_R_temp = createGlobalPropertyf("a321neo/dynamics/fuel/fuel_temp_R", 0, false, true, false) -- Temperature of the fuel RIGHT wing
 
 Fuel_on_takeoff = createGlobalPropertyf("a321neo/dynamics/fuel/fot", 0, false, true, false) -- Fuel on takeoff for EWD messages
+
+-- Anti-ICE
+AI_wing_L_operating = createGlobalPropertyf("a321neo/dynamics/anti_ice/wing_L_operating", 0, false, true, false) -- 0: pause, 1: working
+AI_wing_R_operating = createGlobalPropertyf("a321neo/dynamics/anti_ice/wing_R_operating", 0, false, true, false) -- 0: pause, 1: working
 

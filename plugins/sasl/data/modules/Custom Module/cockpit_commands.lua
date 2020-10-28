@@ -248,9 +248,9 @@ APU_cmd_master = sasl.createCommand("a321neo/cockpit/engine/apu_master_toggle", 
 APU_cmd_start  = sasl.createCommand("a321neo/cockpit/engine/apu_start_toggle", "toggle APU start button")
 
 -- Anti-ICE
-AA_cmd_probe_window_heat = sasl.createCommand("a321neo/cockpit/anti_ice/probe_wind_heat", "Toggle PROBE WINDOW HEAT button")
-AA_cmd_eng_1             = sasl.createCommand("a321neo/cockpit/anti_ice/toggle_eng_1", "Toggle ANTI-ICE ENG 1 button")
-AA_cmd_eng_2             = sasl.createCommand("a321neo/cockpit/anti_ice/toggle_eng_2", "Toggle ANTI-ICE ENG 2 button")
-AA_cmd_wings             = sasl.createCommand("a321neo/cockpit/anti_ice/toggle_wings", "Toggle ANTI-ICE WING button")
+AI_cmd_probe_window_heat = sasl.createCommand("a321neo/cockpit/anti_ice/probe_wind_heat", "Toggle PROBE WINDOW HEAT button")
+AI_cmd_eng_1             = sasl.createCommand("a321neo/cockpit/anti_ice/toggle_eng_1", "Toggle ANTI-ICE ENG 1 button")
+AI_cmd_eng_2             = sasl.createCommand("a321neo/cockpit/anti_ice/toggle_eng_2", "Toggle ANTI-ICE ENG 2 button")
+AI_cmd_wings             = sasl.createCommand("a321neo/cockpit/anti_ice/toggle_wings", "Toggle ANTI-ICE WING button")
 
 

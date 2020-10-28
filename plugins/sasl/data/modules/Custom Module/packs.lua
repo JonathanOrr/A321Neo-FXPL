@@ -9,6 +9,21 @@ include('constants.lua')
 
 ENG_NOMINAL_MAX_PRESS = 56
 ENG_NOMINAL_MIN_PRESS = 38
+APU_NOMINAL_PRESS = 42
+
+GAS_PRESSURE = 39
+
+BLEED_UP_TARGET = 40
+BLEED_LO_TARGET = 34
+
+LOSS_PSI_HYD           = 0.5
+LOSS_PSI_WATER_TANK    = 0.5
+LOSS_PSI_CARGO_HEAT    = 1
+LOSS_PSI_WING_ANTICE_L = 3
+LOSS_PSI_WING_ANTICE_R = 3
+LOSS_PSI_PACK_L        = 3
+LOSS_PSI_PACK_R        = 3
+LOSS_PSI_ENG_CRANK     = 6
 
 ----------------------------------------------------------------------------------------------------
 -- Global variables
@@ -19,15 +34,18 @@ local eng_bleed_valve_pos = {false, false}
 local apu_bleed_switch    = false
 local apu_bleed_valve_pos = false
 
+local gas_is_providing_air = false
+
+local x_bleed_status = false
+
 local eng_lp_pressure     = {0,0}
+local apu_pressure        = 0
+local bleed_consumption   = {0,0}
+local bleed_pressure      = {0,0}
 
 ----------------------------------------------------------------------------------------------------
 -- Initialisation
 ----------------------------------------------------------------------------------------------------
-set(Pack_L, 1)
-set(Pack_R, 1)
-set(Left_pack_iso_valve, 1)
-set(Right_pack_iso_valve, 0)
 
 ----------------------------------------------------------------------------------------------------
 -- Commands
@@ -66,15 +84,15 @@ end
 local function update_hp_valves()
 
     -- HP valve keep pressure in the range 32-40
-    if get(Engine_1_avail) == 1 and eng_bleed_on[1] and get(L_bleed_press) <= 32 then
+    if get(Engine_1_avail) == 1 and eng_bleed_switch[1] and get(L_bleed_press) <= BLEED_LO_TARGET then
         set(L_HP_valve, 1)
-    elseif get(Engine_1_avail) == 0 or (not eng_bleed_on[1]) or get(L_bleed_press) > 40 then
+    elseif get(Engine_1_avail) == 0 or (not eng_bleed_switch[1]) or get(L_bleed_press) > BLEED_UP_TARGET then
         set(L_HP_valve, 0)
     end
 
-    if get(Engine_2_avail) == 1 and eng_bleed_on[2] and get(R_bleed_press) <= 32 then
+    if get(Engine_2_avail) == 1 and eng_bleed_switch[2] and get(R_bleed_press) <= BLEED_LO_TARGET then
         set(R_HP_valve, 1)
-    elseif get(Engine_2_avail) == 0 or (not eng_bleed_on[2]) or get(R_bleed_press) > 40 then
+    elseif get(Engine_2_avail) == 0 or (not eng_bleed_switch[2]) or get(R_bleed_press) > BLEED_UP_TARGET then
         set(R_HP_valve, 0)
     end
 
@@ -91,7 +109,17 @@ local function update_bleed_valves()
                              
     eng_bleed_valve_pos[2] = eng_bleed_switch[2] and (eng_lp_pressure[2] >= 8) 
                              and (get(Fire_pb_ENG2_status) == 0) and not apu_bleed_valve_pos   
-                             
+
+
+    --X bleed valve logic--
+    if get(X_bleed_dial) == 0 then --closed
+        x_bleed_status = false
+    elseif get(X_bleed_dial) == 1 then --auto
+        x_bleed_status = apu_bleed_valve_pos
+    elseif get(X_bleed_dial) == 2 then --open
+        x_bleed_status = true
+    end
+
 end
 
 local function update_eng_pressures()
@@ -108,6 +136,71 @@ local function update_eng_pressures()
         local target = Math_rescale(18, ENG_NOMINAL_MIN_PRESS, 101, ENG_NOMINAL_MAX_PRESS, get(Eng_2_N1)) + math.random()
         eng_lp_pressure[2] = Set_linear_anim_value(eng_lp_pressure[2], target, 0, 100, 1)
     end
+end
+
+local function update_apu_pressure()
+    target = get(Apu_avail) == 1 and APU_NOMINAL_PRESS or 0
+    apu_pressure = Set_anim_value(apu_pressure, target, 0, APU_NOMINAL_PRESS, 0.85)
+end
+
+local function update_bleed_consumption()
+    -- Left side
+    bleed_consumption[1] = get(AI_wing_L_operating) * LOSS_PSI_WING_ANTICE_L
+                         + get(Cargo_hot_air) * LOSS_PSI_CARGO_HEAT
+                         + LOSS_PSI_HYD/2
+                         + LOSS_PSI_WATER_TANK/2
+                         + get(Pack_L) * LOSS_PSI_PACK_L
+                         + get(Eng_is_spooling_up, 1) * LOSS_PSI_ENG_CRANK
+    
+    -- Right side
+    bleed_consumption[2] = get(AI_wing_R_operating) * LOSS_PSI_WING_ANTICE_R
+                         + LOSS_PSI_HYD/2
+                         + LOSS_PSI_WATER_TANK/2
+                         + get(Pack_R) * LOSS_PSI_PACK_R
+                         + get(Eng_is_spooling_up, 2) * LOSS_PSI_ENG_CRANK
+
+end
+
+local function update_bleed_pressures()
+
+    local left_side_press = 0
+    if eng_bleed_valve_pos[1] then
+        left_side_press = left_side_press + eng_lp_pressure[1] + get(L_HP_valve) * 10
+    end
+    if apu_bleed_valve_pos then
+        left_side_press = left_side_press + apu_pressure
+    end
+    if gas_is_providing_air then
+        left_side_press = left_side_press + GAS_PRESSURE + math.random()
+    end
+
+    local right_side_press = 0
+    if eng_bleed_valve_pos[2] then
+        right_side_press = right_side_press + eng_lp_pressure[2] + get(R_HP_valve) * 10
+    end
+
+
+
+    if x_bleed_status then
+        if left_side_press > right_side_press then
+            left_side_press  = left_side_press - bleed_consumption[1] - bleed_consumption[2]
+            right_side_press = left_side_press 
+        else
+            right_side_press  = right_side_press - bleed_consumption[1] - bleed_consumption[2]
+            left_side_press  = right_side_press  
+        end
+        
+        
+    else
+        left_side_press  = left_side_press - bleed_consumption[1]
+        right_side_press = right_side_press - bleed_consumption[2]
+    end
+    
+    left_side_press  = math.max(0, left_side_press)
+    right_side_press = math.max(0, right_side_press)
+
+    bleed_pressure[1] = Set_anim_value(bleed_pressure[1], left_side_press, 0, 100, 0.7)
+    bleed_pressure[2] = Set_anim_value(bleed_pressure[2], right_side_press, 0, 100, 0.7)
 
 end
 
@@ -117,87 +210,49 @@ local function update_datarefs()
     set(ENG_1_bleed_switch, eng_bleed_valve_pos[1] and 1 or 0)
     set(ENG_2_bleed_switch, eng_bleed_valve_pos[2] and 1 or 0)
     set(Apu_bleed_switch, apu_bleed_valve_pos and 1 or 0)
+    set(X_bleed_valve, x_bleed_status and 1 or 0)
     set(Left_pack_iso_valve, 1) -- In X-Plane system APU always connected to ENG1
-    set(Pack_M, 0)--turning the center pack off as A320 doesn't have one
+    set(Right_pack_iso_valve, get(X_bleed_valve))
+    set(Pack_M, 0)--turning the center pack off as A320 doesn't have one        
 
-    -- ECAM stuffs
-    set(L_bleed_state, get(Engine_1_avail) * (eng_bleed_switch[1] and 2 or 1))
-    set(R_bleed_state, get(Engine_2_avail) * (eng_bleed_switch[2] and 2 or 1))
+    -- Pressures and temps
+    set(Apu_bleed_psi, apu_pressure)
+    set(L_bleed_press, bleed_pressure[1])
+    set(R_bleed_press, bleed_pressure[2])
 
     -- Buttons
     set(Eng1_bleed_off_button, get(OVHR_elec_panel_pwrd) * (eng_bleed_switch[1] and 0 or 1))
     set(Eng2_bleed_off_button, get(OVHR_elec_panel_pwrd) * (eng_bleed_switch[2] and 0 or 1))
     set(APU_bleed_on_button,   get(OVHR_elec_panel_pwrd) * (apu_bleed_switch and 1 or 0))
+    
+
+    -- ECAM stuffs
+    set(L_bleed_state, get(Engine_1_avail) * (eng_bleed_switch[1] and 2 or 1))
+    set(R_bleed_state, get(Engine_2_avail) * (eng_bleed_switch[2] and 2 or 1))
+    if apu_bleed_valve_pos and not x_bleed_status then
+        set(X_bleed_bridge_state, 1)--bridged but closed
+    else
+        set(X_bleed_bridge_state, x_bleed_status and 2 or 0)
+    end
+    
 end
 
 function update()
     --create the A321 pack system--
 
+    update_apu_pressure()
+    update_eng_pressures()
     update_bleed_valves()
     update_hp_valves()
-    update_eng_pressures()
+    update_bleed_consumption()
+    update_bleed_pressures()
+
     update_datarefs()
 
 
-    --X bleed valve logic--
-    if get(X_bleed_dial) == 0 then--closed
-        set(X_bleed_valve, 0)
-    elseif get(X_bleed_dial) == 1 then--auto
-        if get(Apu_bleed_switch) == 1 and get(Apu_avail) == 1 then
-            set(X_bleed_valve, 1)
-        else
-            set(X_bleed_valve, 0)
-        end
-    elseif get(X_bleed_dial) == 2 then--open
-        set(X_bleed_valve, 1)
-    end
 
-    if get(X_bleed_valve) == 1 then
-        set(Right_pack_iso_valve, 1)
-    else
-        set(Right_pack_iso_valve, 0)
-    end
 
-    --X bleed bridge logic
-    if get(Apu_avail) == 1 and get(X_bleed_valve) == 0 then
-        set(X_bleed_bridge_state, 1)--bridged but closed
-    else
-        if get(X_bleed_valve) == 1 then
-            set(X_bleed_bridge_state, 2)--bridged and open
-        else
-            set(X_bleed_bridge_state, 0)--not bridged and closed
-        end
-    end
 
-    --bleed logic--
-    if get(Engine_1_avail) == 1 then--engine 1 is running
-        --set(ENG_1_bleed_switch, 1)--l bleed on
-        set(L_bleed_state, 2)
-        if get(Eng1_bleed_off_button) == 1 then--l bleed manually switched off
-        --    set(ENG_1_bleed_switch, 0)--l bleed off
-            set(L_bleed_state, 1)
-        end
-    else--engine 1 is not running
-        --set(ENG_1_bleed_switch, 0)--l bleed off
-        set(L_bleed_state, 0)
-    end
-
-    if get(Engine_2_avail) == 1 then--engine 2 is running
-        --set(ENG_2_bleed_switch, 1)--r bleed on
-        set(R_bleed_state, 2)
-        if get(Eng2_bleed_off_button) == 1 then--l bleed manually switched off
-            --set(ENG_2_bleed_switch, 0)--r bleed off
-            set(L_bleed_state, 1)
-        end
-    else--engine 2 is not running
-        --set(ENG_2_bleed_switch, 0)--r bleed off
-        set(R_bleed_state, 0)
-    end
-
-    if get(Apu_bleed_switch) == 1 and get(Apu_avail) == 1 then--apu is on and apu bleed is on
-        --set(ENG_1_bleed_switch, 0)--l bleed off
-        --set(ENG_2_bleed_switch, 0)--r bleed off
-    end
 
     --PACKs logic--
     if get(Left_bleed_avil) > 0.1 then
@@ -330,27 +385,21 @@ function update()
     --bleed temp--
     if get(Left_bleed_avil) > 0.1 then--left side has bleed air and is in the apu bleed range
         if get(Left_bleed_avil) > 1.2 then--left side has bleed air and is in the eng bleed range
-            set(L_bleed_press, Set_anim_value(get(L_bleed_press), 44, 0, 50, 0.35))--eng bleed with 44PSI
             set(L_bleed_temp, Set_anim_value(get(L_bleed_temp), 190, -100, 200, 0.35))--eng bleed with 190C
         else--apu bleed
-            set(L_bleed_press, Set_anim_value(get(L_bleed_press), 39, 0, 50, 0.35))--apu bleed with 39PSI
             set(L_bleed_temp, Set_anim_value(get(L_bleed_temp), 150, -100, 200, 0.35))--apu bleed with 150C
         end
     else
-        set(L_bleed_press, Set_anim_value(get(L_bleed_press), 0, 0, 50, 0.35))--no bleed with 0PSI
         set(L_bleed_temp, Set_anim_value(get(L_bleed_temp), get(OTA), -100, 200, 0.35))--no bleed with outside temp
     end
 
     if get(Right_bleed_avil) > 0.1 then--right side has bleed air and is in the apu bleed range
         if get(Right_bleed_avil) > 1.2 then--right side has bleed air and is in the eng bleed range
-            set(R_bleed_press, Set_anim_value(get(R_bleed_press), 44, 0, 50, 0.35))--eng bleed with 44PSI
             set(R_bleed_temp, Set_anim_value(get(R_bleed_temp), 190, -100, 200, 0.35))--eng bleed with 190C
         else--apu bleed
-            set(R_bleed_press, Set_anim_value(get(R_bleed_press), 39, 0, 50, 0.35))--apu bleed with 39PSI
             set(R_bleed_temp, Set_anim_value(get(R_bleed_temp), 150, -100, 200, 0.35))--apu bleed with 150C
         end
     else
-        set(R_bleed_press, Set_anim_value(get(R_bleed_press), 0, 0, 50, 0.35))--no bleed with 0PSI
         set(R_bleed_temp, Set_anim_value(get(R_bleed_temp), get(OTA), -100, 200, 0.35))--no bleed with outside temp
     end
 

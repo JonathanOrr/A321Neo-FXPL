@@ -421,6 +421,8 @@ local function perform_crank_procedure(eng, wet_cranking)
     
     -- Set EGT for cranking
     eng_EGT_off[eng] = Set_linear_anim_value(eng_EGT_off[eng], ENG_N1_CRANK_EGT, -50, 1500, 2)
+
+    set(Eng_is_spooling_up, 1, eng) -- Need for bleed air computation, see packs.lua
     
     if wet_cranking then
         -- Wet cranking requested, let's spill a bit of fuel
@@ -442,6 +444,8 @@ local function perform_starting_procedure_follow_n2(eng)
     elseif eng_manual_switch[eng] then
         igniter_eng[eng] = 3  -- Manual start uses both igniters
     end
+
+    set(Eng_is_spooling_up, 1, eng) -- Need for bleed air computation, see packs.lua
     
     for i=1,(#START_UP_PHASES_N2-1) do
         -- For each phase... 
@@ -544,6 +548,7 @@ local function perform_starting_procedure(eng)
 
         -- Phase 2: Controlling the N2  
         perform_starting_procedure_follow_n2(eng)
+        
     elseif eng_N1_off[eng] < START_UP_PHASES_N1[#START_UP_PHASES_N1].n1_set then
         -- Phase 3: Controlling the N1
         perform_starting_procedure_follow_n1(eng)
@@ -563,6 +568,9 @@ local function update_starter_datarefs()
     set(Ecam_eng_igniter_eng_1, igniter_eng[1])
     set(Ecam_eng_igniter_eng_2, igniter_eng[2])
     
+    set(Eng_is_spooling_up, 0, 1) -- Need for bleed air computation, see packs.lua
+    set(Eng_is_spooling_up, 0, 2) -- Need for bleed air computation, see packs.lua
+ 
 end
 
 -- Returns true if the FADEC has electrical power
@@ -806,7 +814,7 @@ function update()
     update_buttons_datarefs()
     
     update_avail()
-    
+
     if get(FLIGHT_TIME) > 0.5 then
         -- This condition is needed because otherwise the startup overrides the values set by the
         -- engines_auto_quick_start() function when the simulation is started in flight. So, let's
