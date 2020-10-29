@@ -1,81 +1,22 @@
---sim datarefs
-
+----------------------------------------------------------------------------------------------------
+-- AIR_CONDITIONING systems
+----------------------------------------------------------------------------------------------------
 --a32NX datarefs
 local aft_cargo_iso_valve = createGlobalPropertyi("a321neo/cockpit/aircond/aft_cargo_iso_valve", 1, false, true, false)
 local a321DR_bleed_avail = createGlobalPropertyi("a321neo/cockpit/aircond/bleed_avail", 0, false, true, false)
 
+-- TODO Sim_pack_flow (check x plane manual for values)
+
 --register commands
-sasl.registerCommandHandler ( Cockpit_temp_dial_up, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        set(Cockpit_temp_dial, get(Cockpit_temp_dial) + 0.05)
-    end
-    if phase == SASL_COMMAND_CONTINUE then
-        set(Cockpit_temp_dial, get(Cockpit_temp_dial) + 0.5 * get(DELTA_TIME))
-    end
-end)
+sasl.registerCommandHandler ( Cockpit_temp_dial_up, 0, function(phase)  Knob_handler_up_float(phase, Cockpit_temp_dial, 0, 1, 0.05) end)
+sasl.registerCommandHandler ( Cockpit_temp_dial_dn, 0, function(phase)  Knob_handler_dn_float(phase, Cockpit_temp_dial, 0, 1, 0.05) end)
+sasl.registerCommandHandler ( Front_cab_temp_dial_up, 0, function(phase)  Knob_handler_up_float(phase, Front_cab_temp_dial, 0, 1, 0.05) end)
+sasl.registerCommandHandler ( Front_cab_temp_dial_dn, 0, function(phase)  Knob_handler_dn_float(phase, Front_cab_temp_dial, 0, 1, 0.05) end)
+sasl.registerCommandHandler ( Aft_cab_temp_dial_up, 0, function(phase)  Knob_handler_up_float(phase, Aft_cab_temp_dial, 0, 1, 0.05) end)
+sasl.registerCommandHandler ( Aft_cab_temp_dial_dn, 0, function(phase)  Knob_handler_dn_float(phase, Aft_cab_temp_dial, 0, 1, 0.05) end)
+sasl.registerCommandHandler ( Aft_cargo_temp_dial_up, 0, function(phase)  Knob_handler_up_float(phase, Aft_cargo_temp_dial, 0, 1, 0.05) end)
+sasl.registerCommandHandler ( Aft_cargo_temp_dial_dn, 0, function(phase)  Knob_handler_dn_float(phase, Aft_cargo_temp_dial, 0, 1, 0.05) end)
 
-sasl.registerCommandHandler ( Cockpit_temp_dial_dn, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        set(Cockpit_temp_dial, get(Cockpit_temp_dial) - 0.05)
-    end
-    if phase == SASL_COMMAND_CONTINUE then
-        set(Cockpit_temp_dial, get(Cockpit_temp_dial) - 0.5 * get(DELTA_TIME))
-    end
-end)
-
-sasl.registerCommandHandler ( Front_cab_temp_dial_up, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        set(Front_cab_temp_dial, get(Front_cab_temp_dial) + 0.05)
-    end
-    if phase == SASL_COMMAND_CONTINUE then
-        set(Front_cab_temp_dial, get(Front_cab_temp_dial) + 0.5 * get(DELTA_TIME))
-    end
-end)
-
-sasl.registerCommandHandler ( Front_cab_temp_dial_dn, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        set(Front_cab_temp_dial, get(Front_cab_temp_dial) - 0.05)
-    end
-    if phase == SASL_COMMAND_CONTINUE then
-        set(Front_cab_temp_dial, get(Front_cab_temp_dial) - 0.5 * get(DELTA_TIME))
-    end
-end)
-
-sasl.registerCommandHandler ( Aft_cab_temp_dial_up, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        set(Aft_cab_temp_dial, get(Aft_cab_temp_dial) + 0.05)
-    end
-    if phase == SASL_COMMAND_CONTINUE then
-        set(Aft_cab_temp_dial, get(Aft_cab_temp_dial) + 0.5 * get(DELTA_TIME))
-    end
-end)
-
-sasl.registerCommandHandler ( Aft_cab_temp_dial_dn, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        set(Aft_cab_temp_dial, get(Aft_cab_temp_dial) - 0.05)
-    end
-    if phase == SASL_COMMAND_CONTINUE then
-        set(Aft_cab_temp_dial, get(Aft_cab_temp_dial) - 0.5 * get(DELTA_TIME))
-    end
-end)
-
-sasl.registerCommandHandler ( Aft_cargo_temp_dial_up, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        set(Aft_cargo_temp_dial, get(Aft_cargo_temp_dial) + 0.05)
-    end
-    if phase == SASL_COMMAND_CONTINUE then
-        set(Aft_cargo_temp_dial, get(Aft_cargo_temp_dial) + 0.5 * get(DELTA_TIME))
-    end
-end)
-
-sasl.registerCommandHandler ( Aft_cargo_temp_dial_dn, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        set(Aft_cargo_temp_dial, get(Aft_cargo_temp_dial) - 0.05)
-    end
-    if phase == SASL_COMMAND_CONTINUE then
-        set(Aft_cargo_temp_dial, get(Aft_cargo_temp_dial) - 0.5 * get(DELTA_TIME))
-    end
-end)
 
 sasl.registerCommandHandler ( Toggle_cab_hotair, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
@@ -97,13 +38,13 @@ end)
 
 sasl.registerCommandHandler ( ELEC_vent_blower, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(Ventilation_blower, get(Ventilation_blower) == 1 and 0 or 1)
+        set(Ventilation_blower, 1 - get(Ventilation_blower))
     end
 end)
 
 sasl.registerCommandHandler ( ELEC_vent_extract, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(Ventilation_extract, get(Ventilation_extract) == 1 and 0 or 1)
+        set(Ventilation_extract, 1 - get(Ventilation_extract))
     end
 end)
 
@@ -129,6 +70,10 @@ local function cargo_cond_off()
     set(Aft_cargo_temp_req, Set_anim_value(get(Aft_cargo_temp_req), get(OTA), -100, 100, 0.5))
     --changing actual temperature to outside temperatures
     set(Aft_cargo_temp, Set_anim_value(get(Aft_cargo_temp), get(OTA), -100, 100, 0.05))
+end
+
+local function update_temp_model()
+
 end
 
 function update()

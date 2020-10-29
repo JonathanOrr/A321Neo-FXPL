@@ -94,3 +94,19 @@ FAILURE_ENG_APU_FAIL   = createGlobalPropertyi("a321neo/failures/engines/apu_fai
 
 FAILURE_ENG_1_FAILURE = createGlobalPropertyi("a321neo/failures/engines/eng_1_failure", 0, false, true, false)
 FAILURE_ENG_2_FAILURE = createGlobalPropertyi("a321neo/failures/engines/eng_2_failure", 0, false, true, false)
+
+
+FAILURE_BLEED_HP_1_VALVE_STUCK = createGlobalPropertyi("a321neo/failures/bleed/hp_valve_1_stuck", 0, false, true, false)
+FAILURE_BLEED_HP_2_VALVE_STUCK = createGlobalPropertyi("a321neo/failures/bleed/hp_valve_2_stuck", 0, false, true, false)
+FAILURE_BLEED_IP_1_VALVE_STUCK = createGlobalPropertyi("a321neo/failures/bleed/ip_valve_1_stuck", 0, false, true, false)
+FAILURE_BLEED_IP_2_VALVE_STUCK = createGlobalPropertyi("a321neo/failures/bleed/ip_valve_2_stuck", 0, false, true, false)
+
+FAILURE_BLEED_APU_VALVE_STUCK = createGlobalPropertyi("a321neo/failures/bleed/apu_valve_stuck", 0, false, true, false)
+FAILURE_BLEED_XBLEED_VALVE_STUCK = createGlobalPropertyi("a321neo/failures/bleed/xbleed_valve_stuck", 0, false, true, false)
+
+FAILURE_BLEED_PACK_1_VALVE_STUCK = createGlobalPropertyi("a321neo/failures/bleed/pack_1_stuck", 0, false, true, false)
+FAILURE_BLEED_PACK_2_VALVE_STUCK = createGlobalPropertyi("a321neo/failures/bleed/pack_2_stuck", 0, false, true, false)
+
+FAILURE_BLEED_BMC_1 = createGlobalPropertyi("a321neo/failures/bleed/bmc_1", 0, false, true, false)
+FAILURE_BLEED_BMC_2 = createGlobalPropertyi("a321neo/failures/bleed/bmc_2", 0, false, true, false)
+

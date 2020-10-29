@@ -81,12 +81,6 @@ function onAirportLoaded()
     set(Right_pack_iso_valve, 0)
 end
 
-local function update_override()
-    if override_BLEED_always_ok then
-        -- TODO
-    end
-end
-
 local function update_hp_valves()
 
     -- HP valve keep pressure in the range 32-40
@@ -142,6 +136,10 @@ local function update_eng_pressures()
         local target = Math_rescale(18, ENG_NOMINAL_MIN_PRESS, 101, ENG_NOMINAL_MAX_PRESS, get(Eng_2_N1)) + math.random()
         eng_lp_pressure[2] = Set_linear_anim_value(eng_lp_pressure[2], target, 0, 100, 1)
     end
+    
+    set(L_Eng_LP_press, eng_lp_pressure[1])
+    set(R_Eng_LP_press, eng_lp_pressure[2])
+    
 end
 
 local function update_apu_pressure()
@@ -232,13 +230,11 @@ local function update_datarefs()
     -- Buttons
     set(Eng1_bleed_off_button, get(OVHR_elec_panel_pwrd) * (eng_bleed_switch[1] and 0 or 1))
     set(Eng2_bleed_off_button, get(OVHR_elec_panel_pwrd) * (eng_bleed_switch[2] and 0 or 1))
-    print(apu_bleed_switch)
+
     set(APU_bleed_on_button,   get(OVHR_elec_panel_pwrd) * (apu_bleed_switch and 1 or 0))
     set(Cab_hot_air,           get(OVHR_elec_panel_pwrd) * get(Hot_air_valve_pos))
 
     -- ECAM stuffs
-    set(L_bleed_state, get(Engine_1_avail) * (eng_bleed_switch[1] and 2 or 1))
-    set(R_bleed_state, get(Engine_2_avail) * (eng_bleed_switch[2] and 2 or 1))
     if apu_bleed_valve_pos and not x_bleed_status then
         set(X_bleed_bridge_state, 1)--bridged but closed
     else
@@ -266,7 +262,7 @@ local function update_pack(n)
     local both_eng_avail = get(Engine_1_avail) == 1 and get(Engine_2_avail) == 1
     
     if  pack_valve_switch[n] 
-    and bleed_pressure[n] > 5 
+    and bleed_pressure[n] > 4 
     and (not fire_push_button_status) 
     and (get(Engine_mode_knob) == 0 or ((not x_bleed_status) and (eng_n2 >= 50)) or both_eng_avail)
     and (not ditching_switch)
@@ -290,7 +286,7 @@ end
 
 local function update_bleed_temperatures()
     --bleed temp--
-    if bleed_pressure[1] > 5 then--left side has bleed air
+    if bleed_pressure[1] > 4 then--left side has bleed air
         if not apu_bleed_valve_pos then
             set(L_bleed_temp, Set_anim_value(get(L_bleed_temp), 180 + bleed_pressure[1]/2 + math.random()*3, -100, 250, 0.2))--eng bleed with 190C
         else--apu bleed
@@ -300,7 +296,7 @@ local function update_bleed_temperatures()
         set(L_bleed_temp, Set_anim_value(get(L_bleed_temp), get(OTA), -100, 200, 0.15))--no bleed with outside temp
     end
 
-    if bleed_pressure[2] > 5 then--right side has bleed air
+    if bleed_pressure[2] > 4 then--right side has bleed air
         if not apu_bleed_valve_pos then
             set(R_bleed_temp, Set_anim_value(get(R_bleed_temp), 180 + bleed_pressure[2]/2 + math.random()*3, -100, 250, 0.2))--eng bleed with 190C
         else--apu bleed
@@ -325,7 +321,7 @@ local function update_pack_flow()
     local single_pack_operation = (get(Pack_L) == 0 and get(Pack_R) == 1) or (get(Pack_L) == 1 and get(Pack_R) == 0)
     
     -- If in single pack operation or APU providing bleed, then manual settings doesn't matter, go for HI
-    if single_pack_operation or apu_bleed_valve_pos then
+    if single_pack_operation or apu_bleed_valve_pos or get(GAS_bleed_avail) == 1 then
         set(L_pack_Flow, get(Pack_L) == 1 and 3 or 0)
         set(R_pack_Flow, get(Pack_R) == 1 and 3 or 0)
         return
@@ -349,7 +345,9 @@ local function update_pack_temperatures()
         local max_temp = get(L_bleed_temp)
         local temp_corrected_flow = max_temp - 20 * (3-get(L_pack_Flow))
         set(L_compressor_temp, Set_anim_value(get(L_compressor_temp), temp_corrected_flow, -100, 250, 0.1))
-        set(L_pack_temp, Set_anim_value(get(L_pack_temp), 19 + math.random()*2, -100, 100, 0.1))
+        
+        base_temp = get(OTA) * 0.1 + 20 - (get(L_pack_Flow)-1) * 3
+        set(L_pack_temp, Set_anim_value(get(L_pack_temp), base_temp + math.random()*2, -100, 100, 0.1))
     else --left bleed not avail
         set(L_compressor_temp, Set_anim_value(get(L_compressor_temp), get(OTA), -100, 200, 0.05))
         set(L_pack_temp, Set_anim_value(get(L_pack_temp), get(OTA), -100, 100, 0.05))
@@ -361,7 +359,8 @@ local function update_pack_temperatures()
         local temp_corrected_flow = max_temp - 20 * (3-get(R_pack_Flow))
         set(R_compressor_temp, Set_anim_value(get(R_compressor_temp), temp_corrected_flow, -100, 250, 0.1))
         
-        set(R_pack_temp, Set_anim_value(get(R_pack_temp), 19 + math.random()*2, -100, 100, 0.1))
+        base_temp = get(OTA) * 0.1 + 20 - (get(L_pack_Flow)-1) * 3
+        set(R_pack_temp, Set_anim_value(get(R_pack_temp), base_temp + math.random()*2, -100, 100, 0.1))
     else --left bleed not avail
         set(R_compressor_temp, Set_anim_value(get(R_compressor_temp), get(OTA), -100, 200, 0.05))
         set(R_pack_temp, Set_anim_value(get(R_pack_temp), get(OTA), -100, 100, 0.05))
@@ -393,7 +392,4 @@ function update()
         set(GAS_bleed_avail, 0)
      end
 
-
-
-    update_override()
 end
