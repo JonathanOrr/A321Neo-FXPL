@@ -54,7 +54,7 @@ local pack_time_open_valve = {0,0}
 ----------------------------------------------------------------------------------------------------
 -- Commands
 ----------------------------------------------------------------------------------------------------
-sasl.registerCommandHandler(Toggle_ECON_flow, 0, function(phase) econ_flow_switch = not econ_flow_switch end)
+sasl.registerCommandHandler(Toggle_ECON_flow, 0, function(phase) if phase == SASL_COMMAND_BEGIN then econ_flow_switch = not econ_flow_switch end end)
 sasl.registerCommandHandler(X_bleed_dial_up, 0, function(phase) Knob_handler_up_int(phase, X_bleed_dial, 0, 2) end)
 sasl.registerCommandHandler(X_bleed_dial_dn, 0, function(phase) Knob_handler_down_int(phase, X_bleed_dial, 0, 2) end)
 

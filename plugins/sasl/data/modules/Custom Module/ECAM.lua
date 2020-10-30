@@ -386,8 +386,10 @@ function draw()
                             (ELEC_sys.generators[3].curr_hz < 385 or ELEC_sys.generators[3].curr_hz > 410) and ECAM_ORANGE or ECAM_GREEN)
         end
         --apu bleed--
-        if get(Apu_bleed_state) > 0 then
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2+270, size[2]/2+186, math.floor(get(Apu_bleed_psi)), 23, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        if get(Adirs_adr_is_ok[1]) == 0 or get(Adirs_adr_is_ok[2]) == 0 or (get(FAILURE_BLEED_BMC_1) == 1 and get(FAILURE_BLEED_BMC_2) == 1) then
+            sasl.gl.drawText(Font_AirbusDUL, size[1]/2+265, size[2]/2+187, "XX", 26, false, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
+        else
+            sasl.gl.drawText(Font_AirbusDUL, size[1]/2+265, size[2]/2+187, math.floor(get(Apu_bleed_psi)), 26, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
         end
         --needles--
         if get(Ecam_apu_needle_state) == 1 then

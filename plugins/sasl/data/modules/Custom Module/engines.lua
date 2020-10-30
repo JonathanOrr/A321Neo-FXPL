@@ -731,9 +731,6 @@ local function update_auto_start()
     ELEC_sys.batteries[1].switch_status = true
     ELEC_sys.batteries[2].switch_status = true
 
-    
-    set(Apu_bleed_switch, 1)
-
     set(eng_ignition_switch, 0, 1) 
     set(eng_ignition_switch, 0, 2) 
 
@@ -744,6 +741,10 @@ local function update_auto_start()
         sasl.commandOnce(APU_cmd_start)
     end
     if get(Apu_avail) == 1 then
+        if get(Apu_bleed_switch) == 0 then
+            sasl.commandOnce(Toggle_apu_bleed)
+        end
+
         set(Engine_mode_knob,1)
         set(Engine_2_master_switch, 1)
     end

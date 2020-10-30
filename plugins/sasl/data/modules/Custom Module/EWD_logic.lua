@@ -247,7 +247,7 @@ local function update_right_list()
     end
 
     -- APU
-    if get(Apu_bleed_state) == 2 then
+    if get(Apu_bleed_switch) == 1 then
         list_right:put(COL_INDICATION, "APU BLEED")
     elseif get(Apu_avail) == 1 then
         list_right:put(COL_INDICATION, "APU AVAIL")
