@@ -25,6 +25,8 @@ LOSS_PSI_PACK_L        = 3
 LOSS_PSI_PACK_R        = 3
 LOSS_PSI_ENG_CRANK     = 6
 
+PACK_KG_PER_SEC_NOM    = 1
+
 ----------------------------------------------------------------------------------------------------
 -- Global variables
 ----------------------------------------------------------------------------------------------------
@@ -47,6 +49,10 @@ local bleed_consumption    = {0,0}
 local bleed_pressure       = {0,0}
 local pack_time_open_valve = {0,0}
 
+local cabin_hot_air    = true
+local cargo_hot_air    = true
+local cargo_isol_valve = false
+
 ----------------------------------------------------------------------------------------------------
 -- Initialisation
 ----------------------------------------------------------------------------------------------------
@@ -64,6 +70,11 @@ sasl.registerCommandHandler (Toggle_eng2_bleed, 0, function(phase) if phase == S
 sasl.registerCommandHandler (Toggle_pack1, 0, function(phase) if phase == SASL_COMMAND_BEGIN then pack_valve_switch[1] = not pack_valve_switch[1] end end)
 sasl.registerCommandHandler (Toggle_pack2, 0, function(phase) if phase == SASL_COMMAND_BEGIN then pack_valve_switch[2] = not pack_valve_switch[2] end end)
 sasl.registerCommandHandler (Press_ditching, 0, function(phase) if phase == SASL_COMMAND_BEGIN then ditching_switch = not ditching_switch end end)
+
+sasl.registerCommandHandler (Toggle_cab_hotair,          0, function(phase) if phase == SASL_COMMAND_BEGIN then cabin_hot_air    = not cabin_hot_air end end)
+sasl.registerCommandHandler (Toggle_cargo_hotair,        0, function(phase) if phase == SASL_COMMAND_BEGIN then cargo_hot_air    = not cargo_hot_air end end)
+sasl.registerCommandHandler (Toggle_aft_cargo_iso_valve, 0, function(phase) if phase == SASL_COMMAND_BEGIN then cargo_isol_valve = not cargo_isol_valve end end)
+
 
 function onPlaneLoaded()
     set(Pack_L, 1)
@@ -150,7 +161,7 @@ end
 local function update_bleed_consumption()
     -- Left side
     bleed_consumption[1] = get(AI_wing_L_operating) * LOSS_PSI_WING_ANTICE_L
-                         + get(Cargo_hot_air) * LOSS_PSI_CARGO_HEAT
+                         + get(Hot_air_valve_pos_cargo) * LOSS_PSI_CARGO_HEAT
                          + LOSS_PSI_HYD/2
                          + LOSS_PSI_WATER_TANK/2
                          + get(Pack_L) * LOSS_PSI_PACK_L
@@ -232,8 +243,10 @@ local function update_datarefs()
     set(Eng2_bleed_off_button, get(OVHR_elec_panel_pwrd) * (eng_bleed_switch[2] and 0 or 1))
 
     set(APU_bleed_on_button,   get(OVHR_elec_panel_pwrd) * (apu_bleed_switch and 1 or 0))
-    set(Cab_hot_air,           get(OVHR_elec_panel_pwrd) * get(Hot_air_valve_pos))
-
+    set(Cab_hot_air,           get(OVHR_elec_panel_pwrd) * (cabin_hot_air and 0 or 1))
+    set(Cargo_hot_air,         get(OVHR_elec_panel_pwrd) * (cargo_hot_air and 0 or 1))
+    set(Cargo_isolation_status,get(OVHR_elec_panel_pwrd) * (cargo_isol_valve and 1 or 0))
+    
     -- ECAM stuffs
     if apu_bleed_valve_pos and not x_bleed_status then
         set(X_bleed_bridge_state, 1)--bridged but closed
@@ -309,31 +322,62 @@ end
 
 local function update_hot_air()
     -- TODO Failures
+    
     if get(L_pack_Flow) + get(R_pack_Flow) > 0 then
-        set(Hot_air_valve_pos, 1)
+        set(Hot_air_valve_pos, cabin_hot_air and 1 or 0)
     else
-        set(Hot_air_valve_pos, 0)    
+        set(Hot_air_valve_pos, 0)
     end
+    
+    if cargo_isol_valve then
+        set(Cargo_isol_in_valve, 0)
+        set(Cargo_isol_out_valve, 0)
+        set(Hot_air_valve_pos_cargo, 0)
+    else
+        set(Cargo_isol_in_valve, 1)
+        set(Cargo_isol_out_valve, 1)
+        set(Hot_air_valve_pos_cargo, (get(L_pack_Flow) + get(R_pack_Flow) > 0 and cargo_hot_air) and 1 or 0)
+    end
+
 end
 
 local function update_pack_flow()
 
     local single_pack_operation = (get(Pack_L) == 0 and get(Pack_R) == 1) or (get(Pack_L) == 1 and get(Pack_R) == 0)
     
-    -- If in single pack operation or APU providing bleed, then manual settings doesn't matter, go for HI
-    if single_pack_operation or apu_bleed_valve_pos or get(GAS_bleed_avail) == 1 then
-        set(L_pack_Flow, get(Pack_L) == 1 and 3 or 0)
-        set(R_pack_Flow, get(Pack_R) == 1 and 3 or 0)
+    -- If in single pack operation or APU providing bleed or GAS or require strong cooling, then manual settings doesn't matter, go for HI
+    if single_pack_operation or apu_bleed_valve_pos or get(GAS_bleed_avail) == 1 or get(L_pack_byp_valve) < 0.1 or get(R_pack_byp_valve) < 0.1 then
+        if get(Pack_L) == 1 then
+            set(L_pack_Flow, 3)
+            Set_dataref_linear_anim(L_pack_Flow_value, 1.2*PACK_KG_PER_SEC_NOM+math.random()*0.01, 0, 2000, 100)
+        else
+            set(L_pack_Flow, 0)
+            Set_dataref_linear_anim(L_pack_Flow_value, 0, 0, 2000, 1)
+        end
+        
+        if get(Pack_R) == 1 then
+            set(R_pack_Flow, 3)
+            Set_dataref_linear_anim(R_pack_Flow_value, 1.2*PACK_KG_PER_SEC_NOM+math.random()*0.01, 0, 2000, 100)
+        else
+            set(R_pack_Flow, 0)
+            Set_dataref_linear_anim(R_pack_Flow_value, 0, 0, 2000, 1)
+        end
         return
     end
 
+    local mult_L = get(Pack_L) == 1 and 1 or 0
+    local mult_R = get(Pack_R) == 1 and 1 or 0
 
     if econ_flow_switch then    -- LO flow
-        set(L_pack_Flow, get(Pack_L) == 1 and 1 or 0)
-        set(R_pack_Flow, get(Pack_R) == 1 and 1 or 0)
+        set(L_pack_Flow, mult_L * 1)
+        set(R_pack_Flow, mult_R * 1)
+        Set_dataref_linear_anim(L_pack_Flow_value, mult_L*0.8*PACK_KG_PER_SEC_NOM+mult_L*math.random()*0.01, 0, 2000, 1)
+        Set_dataref_linear_anim(R_pack_Flow_value, mult_R*0.8*PACK_KG_PER_SEC_NOM+mult_R*math.random()*0.01, 0, 2000, 1)
     else                        -- NORM flow
-        set(L_pack_Flow, get(Pack_L) == 1 and 2 or 0)
-        set(R_pack_Flow, get(Pack_R) == 1 and 2 or 0)
+        set(L_pack_Flow, mult_L * 2)
+        set(R_pack_Flow, mult_R * 2)
+        Set_dataref_linear_anim(L_pack_Flow_value, mult_L*PACK_KG_PER_SEC_NOM+mult_L*math.random()*0.01, 0, 2000, 1)
+        Set_dataref_linear_anim(R_pack_Flow_value, mult_R*PACK_KG_PER_SEC_NOM+mult_R*math.random()*0.01, 0, 2000, 1)
     end
 
 end
@@ -346,8 +390,8 @@ local function update_pack_temperatures()
         local temp_corrected_flow = max_temp - 20 * (3-get(L_pack_Flow))
         set(L_compressor_temp, Set_anim_value(get(L_compressor_temp), temp_corrected_flow, -100, 250, 0.1))
         
-        base_temp = get(OTA) * 0.1 + 20 - (get(L_pack_Flow)-1) * 3
-        set(L_pack_temp, Set_anim_value(get(L_pack_temp), base_temp + math.random()*2, -100, 100, 0.1))
+        base_temp = 5 + 25 * get(L_pack_byp_valve)
+        set(L_pack_temp, Set_anim_value(get(L_pack_temp), base_temp + math.random()*1, -100, 100, 0.1))
     else --left bleed not avail
         set(L_compressor_temp, Set_anim_value(get(L_compressor_temp), get(OTA), -100, 200, 0.05))
         set(L_pack_temp, Set_anim_value(get(L_pack_temp), get(OTA), -100, 100, 0.05))
@@ -359,7 +403,7 @@ local function update_pack_temperatures()
         local temp_corrected_flow = max_temp - 20 * (3-get(R_pack_Flow))
         set(R_compressor_temp, Set_anim_value(get(R_compressor_temp), temp_corrected_flow, -100, 250, 0.1))
         
-        base_temp = get(OTA) * 0.1 + 20 - (get(L_pack_Flow)-1) * 3
+        base_temp = 5 + 25 * get(R_pack_byp_valve)
         set(R_pack_temp, Set_anim_value(get(R_pack_temp), base_temp + math.random()*2, -100, 100, 0.1))
     else --left bleed not avail
         set(R_compressor_temp, Set_anim_value(get(R_compressor_temp), get(OTA), -100, 200, 0.05))
@@ -367,6 +411,7 @@ local function update_pack_temperatures()
     end
 
 end
+
 
 function update()
     --create the A321 pack system--

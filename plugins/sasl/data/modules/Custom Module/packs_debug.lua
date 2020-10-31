@@ -288,6 +288,10 @@ local function draw_a32nx_part()
     -- Mixer
     sasl.gl.drawFrame((width_end+width_start)/2-100, 350, 200, 20, ECAM_WHITE)
     sasl.gl.drawText(B612MONO_regular, (width_end+width_start)/2, 355, "MIXER", 12, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, (width_end+width_start)/2+75, 357, math.floor(get(Aircond_mixer_temp)) .. " C", 8, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+    
+    
+    
     sasl.gl.drawLine(width_end-120, 270, width_end-120, 350, ECAM_WHITE)
     sasl.gl.drawLine(width_start+120, 270, width_start+120, 350, ECAM_WHITE)
     sasl.gl.drawLine(width_end-130, 370, width_end-130, 400, ECAM_WHITE)
@@ -305,11 +309,12 @@ local function draw_a32nx_part()
     sasl.gl.drawText(B612MONO_regular, width_end-130, 405, "AFT", 8, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
     
     -- Hot air
-    draw_valve_v(width_end-160, 315, get(Cab_hot_air) == 1)
+    draw_valve_v(width_end-160, 315, get(Hot_air_valve_pos) == 1)
     sasl.gl.drawLine(width_end-120, 290, width_end-160, 290, ECAM_WHITE)
     sasl.gl.drawLine(width_end-160, 305, width_end-160, 290, ECAM_WHITE)
     sasl.gl.drawLine(width_start+120, 290, width_end-160, 290, ECAM_WHITE)
     sasl.gl.drawText(B612MONO_regular, width_end-138, 315, "HOT\nAIR", 8, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, width_end-130, 330, math.floor(get(Hot_air_temp)).. " C", 8, false, false, TEXT_ALIGN_RIGHT, UI_LIGHT_RED)
     sasl.gl.drawLine(width_end-160, 325,width_end-160, 340, UI_LIGHT_RED)
     sasl.gl.drawLine(width_end-160, 340, width_end-80, 340, UI_LIGHT_RED)
     sasl.gl.drawLine(width_end-80, 340, width_end-80, 395, UI_LIGHT_RED)
@@ -336,16 +341,17 @@ local function draw_a32nx_part()
     sasl.gl.drawText(B612MONO_regular, width_end-55, 360, "FLOW", 9, false, false, TEXT_ALIGN_LEFT, UI_DARK_BLUE)
     sasl.gl.drawText(B612MONO_regular, width_end-55, 350, flow_to_text(R_pack_Flow), 9, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
     sasl.gl.drawText(B612MONO_regular, width_end-55, 335, "CMP TEMP", 9, false, false, TEXT_ALIGN_LEFT, UI_DARK_BLUE)
-    sasl.gl.drawText(B612MONO_regular, width_end-55, 325, math.ceil(get(R_compressor_temp)) .. "C", 9, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, width_end-55, 325, math.ceil(get(R_compressor_temp)) .. " C", 9, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
     sasl.gl.drawLine(width_end-60, 330, width_end-120, 330, UI_DARK_BLUE)
     
     -- Cargo
     sasl.gl.drawFrame(width_start+30, 440, 100, 60, ECAM_MAGENTA)
     sasl.gl.drawText(B612MONO_regular, width_start+100, 505, "CARGO", 12, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
     sasl.gl.drawLine(width_start+75, 445, width_start+75, 430, ECAM_WHITE)
-    draw_valve_v(width_start+75, 455, get(Cargo_hot_air) == 1)
+    draw_valve_v(width_start+75, 455, get(Hot_air_valve_pos_cargo) == 1)
     sasl.gl.drawLine(width_start+75, 465, width_start+75, 475, ECAM_WHITE)
     sasl.gl.drawText(B612MONO_regular, width_start+105, 455, "C.HOT\nAIR", 9, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, width_start+70, 465, math.floor(get(Hot_air_temp_cargo)).. " C", 8, false, false, TEXT_ALIGN_RIGHT, UI_LIGHT_RED)
     draw_valve_h(width_start+45, 485, get(Cargo_isol_in_valve) == 1)
     draw_valve_h(width_start+115, 485, get(Cargo_isol_out_valve) == 1)
     sasl.gl.drawLine(width_start+20, 485, width_start+35, 485, ECAM_WHITE)
@@ -362,25 +368,29 @@ local function draw_a32nx_part()
     sasl.gl.drawText(B612MONO_regular, width_start+150, 495, "OUTLET", 9, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
 
     -- Temperature table
-    sasl.gl.drawText(B612MONO_regular, width_end-150, 485, "CKPT", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
-    sasl.gl.drawText(B612MONO_regular, width_end-150, 470, "FWD", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
-    sasl.gl.drawText(B612MONO_regular, width_end-150, 455, "AFT", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
-    sasl.gl.drawText(B612MONO_regular, width_end-150, 430, "CARGO", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
-    sasl.gl.drawText(B612MONO_regular, width_end-80, 500, "SET-POINT", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
-    sasl.gl.drawText(B612MONO_regular, width_end-30, 500, "ACTUAL", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
-
-    sasl.gl.drawText(B612MONO_regular, width_end-80, 485, math.floor(get(Cockpit_temp_req)) .. " C", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    sasl.gl.drawText(B612MONO_regular, width_end-30, 485, math.floor(get(Cockpit_temp)) .. " C", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-
-    sasl.gl.drawText(B612MONO_regular, width_end-80, 470, math.floor(get(Front_cab_temp_req)) .. " C", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    sasl.gl.drawText(B612MONO_regular, width_end-30, 470, math.floor(get(Front_cab_temp)) .. " C", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-
-    sasl.gl.drawText(B612MONO_regular, width_end-80, 455, math.floor(get(Aft_cab_temp_req)) .. " C", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    sasl.gl.drawText(B612MONO_regular, width_end-30, 455, math.floor(get(Aft_cab_temp)) .. " C", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-
-    sasl.gl.drawText(B612MONO_regular, width_end-80, 430, math.floor(get(Aft_cargo_temp_req)) .. " C", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    sasl.gl.drawText(B612MONO_regular, width_end-30, 430, math.floor(get(Aft_cargo_temp)) .. " C", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-
+    sasl.gl.drawText(B612MONO_regular, width_end-165, 485, "CKPT", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, width_end-165, 470, "FWD", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, width_end-165, 455, "AFT", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, width_end-165, 430, "CARGO", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, width_end-120, 500, "SP", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, width_end-75, 500, "ACTUAL", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, width_end-30, 500, "INFLOW", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+    
+    sasl.gl.drawText(B612MONO_regular, width_end-120, 485, math.floor(get(Cockpit_temp_req)) .. " C", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(B612MONO_regular, width_end-75, 485, math.floor(get(Cockpit_temp)) .. " C", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(B612MONO_regular, width_end-30, 485, math.floor(get(Aircond_injected_flow_temp,1)) .. " C", 9, false, false, TEXT_ALIGN_RIGHT, {1,1,0})
+    
+    sasl.gl.drawText(B612MONO_regular, width_end-120, 470, math.floor(get(Front_cab_temp_req)) .. " C", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(B612MONO_regular, width_end-75, 470, math.floor(get(Front_cab_temp)) .. " C", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(B612MONO_regular, width_end-30, 470, math.floor(get(Aircond_injected_flow_temp,2)) .. " C", 9, false, false, TEXT_ALIGN_RIGHT, {1,1,0})
+    
+    sasl.gl.drawText(B612MONO_regular, width_end-120, 455, math.floor(get(Aft_cab_temp_req)) .. " C", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(B612MONO_regular, width_end-75, 455, math.floor(get(Aft_cab_temp)) .. " C", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(B612MONO_regular, width_end-30, 455, math.floor(get(Aircond_injected_flow_temp,3)) .. " C", 9, false, false, TEXT_ALIGN_RIGHT, {1,1,0})
+    
+    sasl.gl.drawText(B612MONO_regular, width_end-120, 430, math.floor(get(Aft_cargo_temp_req)) .. " C", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(B612MONO_regular, width_end-75, 430, math.floor(get(Aft_cargo_temp)) .. " C", 9, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(B612MONO_regular, width_end-30, 430, math.floor(get(Aircond_injected_flow_temp,4)) .. " C", 9, false, false, TEXT_ALIGN_RIGHT, {1,1,0})
 
 end
 

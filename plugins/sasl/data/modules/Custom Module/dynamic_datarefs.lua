@@ -32,6 +32,9 @@ Cockpit_temp = createGlobalPropertyf("a321neo/dynamics/aircond/cockpit_temp", 15
 Front_cab_temp = createGlobalPropertyf("a321neo/dynamics/aircond/front_cab_temp", 15, false, true, false) --actual front cabin temperature
 Aft_cab_temp = createGlobalPropertyf("a321neo/dynamics/aircond/aft_cab_temp", 15, false, true, false) --actual aft cabin temperature
 Aft_cargo_temp = createGlobalPropertyf("a321neo/dynamics/aircond/aft_cargo_temp", 17, false, true, false) ---requested aft cargo temperature
+Aircond_injected_flow_temp = createGlobalPropertyfa("a321neo/dynamics/aircond/injected_flow_temp", 4)
+Aircond_trim_valve = createGlobalPropertyfa("a321neo/dynamics/aircond/trim_valve", 4)
+Aircond_mixer_temp = createGlobalPropertyf("a321neo/dynamics/aircond/mixer_temp", 0, false, true, false)
 
 Ventilation_blower  = createGlobalPropertyi("a321neo/dynamics/aircond/vent_blower", 0, false, true, false)  -- 0 normal, 1 override
 Ventilation_extract = createGlobalPropertyi("a321neo/dynamics/aircond/vent_extract", 0, false, true, false) -- 0 normal, 1 override
@@ -42,6 +45,8 @@ R_Eng_LP_press = createGlobalPropertyi("a321neo/dynamics/packs/r_eng_press", 0, 
 
 L_pack_Flow = createGlobalPropertyi("a321neo/dynamics/packs/l_pack_flow", 0, false, true, false) --0 no flow, 1 low, 2norm, 3high
 R_pack_Flow = createGlobalPropertyi("a321neo/dynamics/packs/r_pack_flow", 0, false, true, false) --0 no flow, 1 low, 2norm, 3high
+L_pack_Flow_value = createGlobalPropertyf("a321neo/dynamics/packs/l_pack_flow_value", 0, false, true, false) -- In kg/s
+R_pack_Flow_value = createGlobalPropertyf("a321neo/dynamics/packs/r_pack_flow_value", 0, false, true, false) -- In kg/s
 L_HP_valve = createGlobalPropertyi("a321neo/dynamics/packs/l_hp_valve", 0, false, true, false)
 R_HP_valve = createGlobalPropertyi("a321neo/dynamics/packs/r_hp_valve", 0, false, true, false)
 X_bleed_valve = createGlobalPropertyi("a321neo/dynamics/packs/x_bleed_valve", 0, false, true, false) --0closed, 1open
@@ -54,11 +59,17 @@ L_compressor_temp = createGlobalPropertyf("a321neo/dynamics/packs/l_compressor_t
 R_compressor_temp = createGlobalPropertyf("a321neo/dynamics/packs/r_compressor_temp", 10, false, true, false)
 L_pack_temp = createGlobalPropertyf("a321neo/dynamics/packs/l_pack_temp", 10, false, true, false)
 R_pack_temp = createGlobalPropertyf("a321neo/dynamics/packs/r_pack_temp", 10, false, true, false)
+L_pack_byp_valve = createGlobalPropertyf("a321neo/dynamics/packs/l_pack_byp_valve", 0.5, false, true, false) -- Bypass valve to control temperature
+R_pack_byp_valve = createGlobalPropertyf("a321neo/dynamics/packs/r_pack_byp_valve", 0.5, false, true, false) -- Bypass valve to control temperature
 GAS_bleed_avail = createGlobalPropertyf("a321neo/dynamics/packs/ground_air_supply", 0, false, true, false)
 Emer_ram_air = createGlobalPropertyf("a321neo/dynamics/packs/emer_ram_air", 0, false, true, false)
-Cargo_isol_in_valve = createGlobalPropertyf("a321neo/dynamics/packs/cargo_isol_in_valve", 0, false, true, false)
-Cargo_isol_out_valve = createGlobalPropertyf("a321neo/dynamics/packs/cargo_isol_out_valve", 0, false, true, false)
-Hot_air_valve_pos = createGlobalPropertyf("a321neo/dynamics/packs/cabin_hot_air_pos", 0, false, true, false)    -- 0: closed, 1: open
+Cargo_isol_in_valve = createGlobalPropertyi("a321neo/dynamics/packs/cargo_isol_in_valve", 0, false, true, false)
+Cargo_isol_out_valve = createGlobalPropertyi("a321neo/dynamics/packs/cargo_isol_out_valve", 0, false, true, false)
+Hot_air_valve_pos = createGlobalPropertyi("a321neo/dynamics/packs/cabin_hot_air_pos", 0, false, true, false)    -- 0: closed, 1: open
+Hot_air_valve_pos_cargo = createGlobalPropertyi("a321neo/dynamics/packs/cargo_hot_air_pos", 0, false, true, false)    -- 0: closed, 1: open
+Hot_air_temp       = createGlobalPropertyf("a321neo/dynamics/packs/cabin_hot_air_temp", 0, false, true, false)
+Hot_air_temp_cargo = createGlobalPropertyf("a321neo/dynamics/packs/cargo_hot_air_temp", 0, false, true, false)
+
 
 --apu
 Apu_start_position = globalProperty("sim/cockpit2/electrical/APU_starter_switch") --apu start button state 0: off, 1: on, 2: avail

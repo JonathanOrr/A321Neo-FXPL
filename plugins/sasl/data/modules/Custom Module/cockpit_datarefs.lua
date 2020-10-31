@@ -244,6 +244,7 @@ Front_cab_temp_dial = createGlobalPropertyf("a321neo/cockpit/aircond/front_cab_t
 Aft_cab_temp_dial = createGlobalPropertyf("a321neo/cockpit/aircond/aft_cab_temp_dial", 0.5, false, true, false) --aft cabin temperature dial position
 Aft_cargo_temp_dial = createGlobalPropertyf("a321neo/cockpit/aircond/aft_cargo_temp_dial", 0.5, false, true, false) --aft cargo temperature dial position
 
+Cargo_isolation_status = createGlobalPropertyi("a321neo/cockpit/aircond/light_cargo_isol", 0, false, true, false)     --00: No lights, 01: [ON], 10: FAULT, 11 [ON] + FAULT
 Ventilation_light_blower = createGlobalPropertyi("a321neo/cockpit/aircond/light_blower", 0, false, true, false)     --00: No lights, 01: [OVRD], 10: FAULT, 11 [OVRD] + FAULT
 Ventilation_light_extract = createGlobalPropertyi("a321neo/cockpit/aircond/light_extract", 0, false, true, false)     --00: No lights, 01: [OVRD], 10: FAULT, 11 [OVRD] + FAULT
 
