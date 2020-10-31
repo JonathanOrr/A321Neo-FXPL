@@ -212,6 +212,11 @@ Ecam_bleed_pack_valve_R  = createGlobalPropertyi("a321neo/cockpit/ecam/bleed/pac
 Ecam_bleed_ram_air       = createGlobalPropertyi("a321neo/cockpit/ecam/bleed/ram_air", 0, false, true, false)
 Ecam_bleed_top_mix_line  = createGlobalPropertyi("a321neo/cockpit/ecam/bleed/top_mix_line", 0, false, true, false) -- 0: amber, 1: green
 
+Ecam_cond_valve_hot_air        = createGlobalPropertyi("a321neo/cockpit/ecam/aircond/valve_hot_air", 0, false, true, false)  -- 0: closed green, 1: closed amber, 2: open green, 3: open amber, 4: transition
+Ecam_cond_valve_hot_air_cargo  = createGlobalPropertyi("a321neo/cockpit/ecam/aircond/valve_hot_air_cargo", 0, false, true, false)  -- 0: closed green, 1: closed amber, 2: open green, 3: open amber, 4: transition
+Ecam_cond_valve_isol_cargo_in  = createGlobalPropertyi("a321neo/cockpit/ecam/aircond/valve_isol_cargo_in", 0, false, true, false)  -- 0: closed green, 1: closed amber, 2: open green, 3: open amber, 4: transition
+Ecam_cond_valve_isol_cargo_out = createGlobalPropertyi("a321neo/cockpit/ecam/aircond/valve_isol_cargo_out", 0, false, true, false)  -- 0: closed green, 1: closed amber, 2: open green, 3: open amber, 4: transition
+
 -- ECAM button lights
 Ecam_btn_light_ENG   = createGlobalPropertyi("a321neo/cockpit/ecam/buttons/light_eng", 0, false, true, false)   --0: OFF, 1: ON
 Ecam_btn_light_BLEED = createGlobalPropertyi("a321neo/cockpit/ecam/buttons/light_bleed", 0, false, true, false) --0: OFF, 1: ON

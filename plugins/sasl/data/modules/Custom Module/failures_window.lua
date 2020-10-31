@@ -161,9 +161,28 @@ local failures_data = {
         }
     },
     {
-        group="PACKS",
+        group="BLEED/AIR",
         failures={
-        }
+            -- Bleed
+            {name="ENG 1 HP VLV\nSTUCK", status=false, dataref=FAILURE_BLEED_HP_1_VALVE_STUCK },
+            {name="ENG 2 HP VLV\nSTUCK", status=false, dataref=FAILURE_BLEED_HP_2_VALVE_STUCK },
+            {name="ENG 1 IP VLV\nSTUCK", status=false, dataref=FAILURE_BLEED_IP_1_VALVE_STUCK },
+            {name="ENG 2 IP VLV\nSTUCK", status=false, dataref=FAILURE_BLEED_IP_2_VALVE_STUCK },
+            {name="APU VLV\nSTUCK", status=false, dataref=FAILURE_BLEED_APU_VALVE_STUCK },
+            {name="X BLEED VLV\nSTUCK", status=false, dataref=FAILURE_BLEED_XBLEED_VALVE_STUCK },
+            {name="PACK 1 VLV\nSTUCK", status=false, dataref=FAILURE_BLEED_PACK_1_VALVE_STUCK },
+            {name="PACK 2 VLV\nSTUCK", status=false, dataref=FAILURE_BLEED_PACK_2_VALVE_STUCK },
+            {name="BMC 1\nFAIL", status=false, dataref=FAILURE_BLEED_BMC_1 },
+            {name="BMC 2\nFAIL", status=false, dataref=FAILURE_BLEED_BMC_2 },
+            
+            -- Aircond
+            {name="CAB FAN 1\nFAIL", status=false, dataref=FAILURE_AIRCOND_FAN_FWD },
+            {name="CAB FAN 2\nFAIL", status=false, dataref=FAILURE_AIRCOND_FAN_AFT },
+            {name="CABIN HOTAIR\nVLV STUCK", status=false, dataref=FAILURE_AIRCOND_HOT_AIR_STUCK },
+            {name="CARGO HOTAIR\nVLV STUCK", status=false, dataref=FAILURE_AIRCOND_HOT_AIR_CARGO_STUCK },
+            {name="CARGO IN\nVLV STUCK", status=false, dataref=FAILURE_AIRCOND_ISOL_CARGO_IN_STUCK },
+            {name="CARGO OUT\nVLV STUCK", status=false, dataref=FAILURE_AIRCOND_ISOL_CARGO_OUT_STUCK },
+    }
     },
     {
         group="RADIOS",

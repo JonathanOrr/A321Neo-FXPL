@@ -2,6 +2,7 @@ position= {3187,539,900,900}
 size = {900, 900}
 
 include('ECAM_automation.lua')
+include('ECAM_cond.lua')
 include('ECAM_cruise.lua')
 include('ECAM_bleed.lua')
 include('ECAM_hyd.lua')
@@ -100,7 +101,10 @@ function update()
 	
 	if get(Ecam_current_page) == 2 then
         ecam_update_bleed_page()
+    elseif get(Ecam_current_page) == 8 then
+        ecam_update_cond_page()    
     end
+    
 end 
 
 local function draw_sts_page_left(messages)
@@ -397,21 +401,7 @@ function draw()
             sasl.gl.drawText(Font_AirbusDUL, size[1]/2-180, size[2]/2-260, math.floor(get(APU_EGT)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
         end
     elseif get(Ecam_current_page) == 8 then --cond
-        --cabin--
-        --actual temperature
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-212, size[2]/2+210, math.floor(get(Cockpit_temp)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-13, size[2]/2+210, math.floor(get(Front_cab_temp)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+172, size[2]/2+210, math.floor(get(Aft_cab_temp)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-        --requested temperatures
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-212, size[2]/2+170, math.floor(get(Cockpit_temp_req)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-13, size[2]/2+170, math.floor(get(Front_cab_temp_req)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+172, size[2]/2+170, math.floor(get(Aft_cab_temp_req)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-
-        --cargo--
-        --actual temperature
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+168, size[2]/2-59, math.floor(get(Aft_cargo_temp)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-        --requested temperatures
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+168, size[2]/2-92, math.floor(get(Aft_cargo_temp_req)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        draw_cond_page()
     elseif get(Ecam_current_page) == 9 then --door
 
     elseif get(Ecam_current_page) == 10 then --wheel

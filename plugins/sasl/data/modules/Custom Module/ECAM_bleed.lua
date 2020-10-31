@@ -3,9 +3,9 @@ include('constants.lua')
 local function draw_engines()
 
     -- Numbers
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-330, size[2]/2-200, "1", 40, false, false, 
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-350, size[2]/2-200, "1", 50, false, false, 
                      TEXT_ALIGN_CENTER, get(Engine_1_avail) == 1 and ECAM_WHITE or ECAM_ORANGE)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+330, size[2]/2-200, "2", 40, false, false,
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+350, size[2]/2-200, "2", 50, false, false,
                      TEXT_ALIGN_CENTER, get(Engine_2_avail) == 1 and ECAM_WHITE or ECAM_ORANGE)
 
     eng1_bleed_ok = get(L_Eng_LP_press) > 4
@@ -155,8 +155,8 @@ end
 local function draw_ram_air()
     if get(Emer_ram_air) == 1 then
         sasl.gl.drawWideLine(size[1]/2, size[2]/2+343, size[1]/2, size[2]/2+375, 3, ECAM_GREEN)
-        sasl.gl.drawWideLine(size[1]/2, size[2]/2+290, size[1]/2, size[2]/2+250, 3, ECAM_GREEN)
     end
+    sasl.gl.drawWideLine(size[1]/2, size[2]/2+290, size[1]/2, size[2]/2+250, 3, ECAM_GREEN)
 end 
 
 local function draw_ai()

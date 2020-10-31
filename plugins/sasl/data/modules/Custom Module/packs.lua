@@ -245,7 +245,7 @@ local function update_datarefs()
     set(APU_bleed_on_button,   get(OVHR_elec_panel_pwrd) * (apu_bleed_switch and 1 or 0))
     set(Cab_hot_air,           get(OVHR_elec_panel_pwrd) * (cabin_hot_air and 0 or 1))
     set(Cargo_hot_air,         get(OVHR_elec_panel_pwrd) * (cargo_hot_air and 0 or 1))
-    set(Cargo_isolation_status,get(OVHR_elec_panel_pwrd) * (cargo_isol_valve and 1 or 0))
+    set(Cargo_isolation_status,get(OVHR_elec_panel_pwrd) * (cargo_isol_valve and 0 or 1))
     
     -- ECAM stuffs
     if apu_bleed_valve_pos and not x_bleed_status then

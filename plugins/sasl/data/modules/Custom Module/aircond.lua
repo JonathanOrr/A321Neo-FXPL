@@ -69,9 +69,9 @@ local function update_temp_from_valves()
     
     if get(Hot_air_valve_pos) == 0 then
         set(Hot_air_temp, 0)
-        set(Aircond_injected_flow_temp, Set_linear_anim_value(get(Aircond_injected_flow_temp, CKPT), mixer_temp, -10, 200, 5), CKPT)
-        set(Aircond_injected_flow_temp, Set_linear_anim_value(get(Aircond_injected_flow_temp, CABIN_FWD), mixer_temp, -10, 200, 5), CABIN_FWD)
-        set(Aircond_injected_flow_temp, Set_linear_anim_value(get(Aircond_injected_flow_temp, CABIN_AFT), mixer_temp, -10, 200, 5), CABIN_AFT)
+        set(Aircond_injected_flow_temp, Set_linear_anim_value(get(Aircond_injected_flow_temp, CKPT), mixer_temp, -30, 200, 5), CKPT)
+        set(Aircond_injected_flow_temp, Set_linear_anim_value(get(Aircond_injected_flow_temp, CABIN_FWD), mixer_temp, -30, 200, 5), CABIN_FWD)
+        set(Aircond_injected_flow_temp, Set_linear_anim_value(get(Aircond_injected_flow_temp, CABIN_AFT), mixer_temp, -30, 200, 5), CABIN_AFT)
     else
         local hot_air_temp = math.max(get(L_bleed_temp), get(R_bleed_temp))
         set(Hot_air_temp, hot_air_temp)
@@ -80,9 +80,9 @@ local function update_temp_from_valves()
         temp_duct_c_fwd = Math_lerp(mixer_temp, hot_air_temp, 0.2 * get(Aircond_trim_valve, CABIN_FWD))
         temp_duct_c_aft = Math_lerp(mixer_temp, hot_air_temp, 0.2 * get(Aircond_trim_valve, CABIN_AFT))
     
-        set(Aircond_injected_flow_temp, Set_linear_anim_value(get(Aircond_injected_flow_temp, CKPT), temp_duct_ckpt, -10, 200, 5), CKPT)
-        set(Aircond_injected_flow_temp, Set_linear_anim_value(get(Aircond_injected_flow_temp, CABIN_FWD), temp_duct_c_fwd, -10, 200, 5), CABIN_FWD)
-        set(Aircond_injected_flow_temp, Set_linear_anim_value(get(Aircond_injected_flow_temp, CABIN_AFT), temp_duct_c_aft, -10, 200, 5), CABIN_AFT)
+        set(Aircond_injected_flow_temp, Set_linear_anim_value(get(Aircond_injected_flow_temp, CKPT), temp_duct_ckpt, -30, 200, 5), CKPT)
+        set(Aircond_injected_flow_temp, Set_linear_anim_value(get(Aircond_injected_flow_temp, CABIN_FWD), temp_duct_c_fwd, -30, 200, 5), CABIN_FWD)
+        set(Aircond_injected_flow_temp, Set_linear_anim_value(get(Aircond_injected_flow_temp, CABIN_AFT), temp_duct_c_aft, -30, 200, 5), CABIN_AFT)
     end
     
 
@@ -97,7 +97,6 @@ local function update_temp_from_valves()
         local hot_air_temp = math.max(get(L_bleed_temp), get(R_bleed_temp))
         set(Hot_air_temp_cargo, hot_air_temp)
         temp_duct_cargo  = Math_lerp(cargo_flow_temp, hot_air_temp, 0.2 * get(Aircond_trim_valve, CARGO_AFT))
-        print(temp_duct_cargo)
         set(Aircond_injected_flow_temp, Set_linear_anim_value(get(Aircond_injected_flow_temp, CARGO_AFT), temp_duct_cargo, -30, 100, 5), CARGO_AFT)
     end
 end
@@ -122,6 +121,22 @@ end
 
 local function run_pids()
 
+    -- Cockpit
+    -- ERROR: get(Cockpit_temp_req) - get(Cockpit_temp))
+    -- CONTROL VARIABLE [0;1]: set(Aircond_trim_valve, trim, CKPT)
+
+    -- Cabin FWD
+    -- ERROR: get(Front_cab_temp_req) - get(Front_cab_temp)
+    -- CONTROL VARIABLE [0;1]: set(Aircond_trim_valve, trim, CABIN_FWD)
+
+    -- Cabin AFT
+    -- ERROR: get(Aft_cab_temp_req) - get(Aft_cab_temp)
+    -- CONTROL VARIABLE [0;1]: set(Aircond_trim_valve, trim, CABIN_AFT)
+
+    -- Cargo AFT
+    -- ERROR: get(Aft_cargo_temp_req) - get(Aft_cargo_temp)
+    -- CONTROL VARIABLE [0;1]: set(Aircond_trim_valve, trim, CARGO_AFT)
+    
 end
 
 function onAirportLoaded()
