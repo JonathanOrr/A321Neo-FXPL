@@ -40,13 +40,23 @@ local function draw_tank_qty()
     local act_pump_fail = get(FAILURE_FUEL, 7) == 1
     local rct_pump_fail = get(FAILURE_FUEL, 8) == 1
 
-    -- Quantities per tank
-    sasl.gl.drawText(Font_AirbusDUL, size[2]/2, size[2]/2, fuel_C, 36, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-    sasl.gl.drawText(Font_AirbusDUL, size[2]/2-300, size[2]/2, fuel_L, 36, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-    sasl.gl.drawText(Font_AirbusDUL, size[2]/2+300, size[2]/2, fuel_R, 36, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+    local color_qty = ECAM_GREEN
+    if get(FAILURE_FUEL_FQI_1_FAULT) == 1 and get(FAILURE_FUEL_FQI_2_FAULT) == 1 then
+        fuel_C  = "XX"
+        fuel_L  = "XX"
+        fuel_R  = "XX"
+        fuel_ACT= "XX"
+        fuel_RCT= "XX"
+        color_qty = ECAM_ORANGE
+    end
 
-    sasl.gl.drawText(Font_AirbusDUL, size[2]/2-100, size[2]/2-152, fuel_ACT, 36, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-    sasl.gl.drawText(Font_AirbusDUL, size[2]/2+100, size[2]/2-152, fuel_RCT, 36, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+    -- Quantities per tank
+    sasl.gl.drawText(Font_AirbusDUL, size[2]/2, size[2]/2, fuel_C, 36, false, false, TEXT_ALIGN_CENTER, color_qty)
+    sasl.gl.drawText(Font_AirbusDUL, size[2]/2-300, size[2]/2, fuel_L, 36, false, false, TEXT_ALIGN_CENTER, color_qty)
+    sasl.gl.drawText(Font_AirbusDUL, size[2]/2+300, size[2]/2, fuel_R, 36, false, false, TEXT_ALIGN_CENTER, color_qty)
+
+    sasl.gl.drawText(Font_AirbusDUL, size[2]/2-100, size[2]/2-152, fuel_ACT, 36, false, false, TEXT_ALIGN_CENTER, color_qty)
+    sasl.gl.drawText(Font_AirbusDUL, size[2]/2+100, size[2]/2-152, fuel_RCT, 36, false, false, TEXT_ALIGN_CENTER, color_qty)
 
     sasl.gl.drawText(Font_AirbusDUL, size[2]/2-100, size[2]/2-188, "ACT", 32, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
     draw_wide_frame(size[2]/2-40, size[2]/2-160, size[2]/2-160, size[2]/2-120, 3, act_pump_fail and ECAM_ORANGE or ECAM_WHITE)
@@ -71,7 +81,13 @@ local function draw_fob_qty()
 
     local fob = math.floor(get(FOB))
     -- FOB
-    sasl.gl.drawText(Font_AirbusDUL, size[2]/2-130, size[2]/2-310, fob, 36, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+
+    local color_qty = ECAM_GREEN
+    if get(FAILURE_FUEL_FQI_1_FAULT) == 1 and get(FAILURE_FUEL_FQI_2_FAULT) == 1 then
+        fob = "XX"
+        color_qty = ECAM_ORANGE
+    end
+    sasl.gl.drawText(Font_AirbusDUL, size[2]/2-130, size[2]/2-310, fob, 36, false, false, TEXT_ALIGN_RIGHT, color_qty)
 
     -- Box FOB
     if any_failure then

@@ -64,3 +64,9 @@ function is_active_in(phases)
     end
     return true
 end
+
+
+function xor(a, b)
+    return (a or b) and (not (a and b))
+end
+

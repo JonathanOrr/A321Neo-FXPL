@@ -120,9 +120,8 @@ local failures_data = {
             {name="TANK R\nLEAK", status=false, dataref=FAILURE_FUEL_LEAK, nr=3},
             {name="TANK ACT\nLEAK", status=false, dataref=FAILURE_FUEL_LEAK, nr=4},
             {name="TANK RCT\nLEAK", status=false, dataref=FAILURE_FUEL_LEAK, nr=5},
-            
-            
-            
+            {name="FQI 1\nFAILURE", status=false, dataref=FAILURE_FUEL_FQI_1_FAULT},
+            {name="FQI 2\nFAILURE", status=false, dataref=FAILURE_FUEL_FQI_2_FAULT}            
         }
     },
     {

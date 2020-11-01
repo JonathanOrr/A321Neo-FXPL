@@ -108,7 +108,7 @@ Aft_cab_temp_dial_up = createCommand("a321neo/cockpit/aircond/aft_cab_temp_dial_
 Aft_cab_temp_dial_dn = createCommand("a321neo/cockpit/aircond/aft_cab_temp_dial_dn", "Aft cab temp dial down")
 Aft_cargo_temp_dial_up = createCommand("a321neo/cockpit/aircond/aft_cargo_temp_dial_up", "Aft cargo temp dial up")
 Aft_cargo_temp_dial_dn = createCommand("a321neo/cockpit/aircond/aft_cargo_temp_dial_dn", "Aft cargo temp dial down")
-Toggle_cab_fan = createCommand("a321neo/cockpit/aircond/cab_fan", "Toggle CAN FANS button")
+Toggle_cab_fan = createCommand("a321neo/cockpit/aircond/cab_fan", "Toggle CAB FANS button")
 
 --packs & bleed
 Toggle_eng1_bleed = createCommand("a321neo/cockpit/bleed/toggle_eng1_bleed", "Toggle ENG 1 bleed")

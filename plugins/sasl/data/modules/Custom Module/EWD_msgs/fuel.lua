@@ -300,7 +300,7 @@ MessageGroup_FUEL_C_TK_XFR_LO_PR_DOUBLE = {
     
     messages = {
         {
-            text = function() return "     CTR TK XFR 1+2 LO PR" end,
+            text = function() return "     CTR TK XFR 1 + 2 LO PR" end,
             color = function(self) return COL_CAUTION end,
             is_active = function(self) return true end
         },
@@ -341,22 +341,22 @@ Message_FUEL_X_FEED = {
 Message_FUEL_LO_LVL_L_TK_PUMP_1_OFF = {
     text = function(self) return " - L TK PUMP 1........OFF" end,
     color = function(self) return COL_ACTIONS end,
-    is_active = function(self) return get(Fuel_quantity[tank_LEFT]) < 750 end
+    is_active = function(self) return get(Fuel_quantity[tank_LEFT]) < 750 and Fuel_sys.tank_pump_and_xfr[L_TK_PUMP_1].switch == true end
 }
 Message_FUEL_LO_LVL_L_TK_PUMP_2_OFF = {
     text = function(self) return " - L TK PUMP 2........OFF" end,
     color = function(self) return COL_ACTIONS end,
-    is_active = function(self) return get(Fuel_quantity[tank_LEFT]) < 750 end
+    is_active = function(self) return get(Fuel_quantity[tank_LEFT]) < 750 and Fuel_sys.tank_pump_and_xfr[L_TK_PUMP_2].switch == true end
 }
 Message_FUEL_LO_LVL_R_TK_PUMP_1_OFF = {
     text = function(self) return " - R TK PUMP 1........OFF" end,
     color = function(self) return COL_ACTIONS end,
-    is_active = function(self) return get(Fuel_quantity[tank_RIGHT]) < 750 end
+    is_active = function(self) return get(Fuel_quantity[tank_RIGHT]) < 750 and Fuel_sys.tank_pump_and_xfr[R_TK_PUMP_1].switch == true end
 }
 Message_FUEL_LO_LVL_R_TK_PUMP_2_OFF = {
     text = function(self) return " - R TK PUMP 2........OFF" end,
     color = function(self) return COL_ACTIONS end,
-    is_active = function(self) return get(Fuel_quantity[tank_RIGHT]) < 750 end
+    is_active = function(self) return get(Fuel_quantity[tank_RIGHT]) < 750 and Fuel_sys.tank_pump_and_xfr[R_TK_PUMP_2].switch == false end
 }
 
 MessageGroup_FUEL_WING_LO_LVL_SINGLE = {
@@ -509,4 +509,717 @@ MessageGroup_FUEL_FUSED_FOB_DISAGREE = {
     end
 }
 
+
+
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: R TK PUMP 1(2) FAULT
+----------------------------------------------------------------------------------------------------
+Message_FUEL_LO_LVL_R_TK_PUMP_1_OFF_FAIL = {
+    text = function(self) return " - R TK PUMP 1........OFF" end,
+    color = function(self) return COL_ACTIONS end,
+    is_active = function(self) return get(FAILURE_FUEL, R_TK_PUMP_1) == 1 and Fuel_sys.tank_pump_and_xfr[R_TK_PUMP_1].switch == true end
+}
+Message_FUEL_LO_LVL_R_TK_PUMP_2_OFF_FAIL = {
+    text = function(self) return " - R TK PUMP 2........OFF" end,
+    color = function(self) return COL_ACTIONS end,
+    is_active = function(self) return get(FAILURE_FUEL, R_TK_PUMP_2) == 1 and Fuel_sys.tank_pump_and_xfr[R_TK_PUMP_2].switch == true end
+}
+
+
+MessageGroup_FUEL_R_TK_1_OR_2_PUMP_FAULT = {
+
+    shown = false,
+
+    text  = function(self)
+                return "FUEL"
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_FUEL,
+    
+    messages = {
+        {
+            text = function(self)
+                x = ""
+                if get(FAILURE_FUEL, R_TK_PUMP_1) == 1 then
+                    x = "1"
+                elseif  get(FAILURE_FUEL, R_TK_PUMP_2) == 1  then
+                    x = "2"
+                end
+                return "     R TK PUMP " .. x .. " LO PR"
+            end,
+            color = function(self) return COL_CAUTION end,
+            is_active = function(self) return true end
+        },
+        Message_FUEL_LO_LVL_R_TK_PUMP_1_OFF_FAIL,
+        Message_FUEL_LO_LVL_R_TK_PUMP_2_OFF_FAIL
+    },
+
+    is_active = function(self)
+        return xor(get(FAILURE_FUEL, R_TK_PUMP_1) == 1, get(FAILURE_FUEL, R_TK_PUMP_2) == 1)
+    end,
+
+    is_inhibited = function(self)
+        return is_active_in({PHASE_1ST_ENG_ON, PHASE_AIRBONE, PHASE_BELOW_80_KTS})
+    end
+}
+
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: L TK PUMP 1(2) LO PR
+----------------------------------------------------------------------------------------------------
+Message_FUEL_LO_LVL_L_TK_PUMP_1_OFF_FAIL = {
+    text = function(self) return " - L TK PUMP 1........OFF" end,
+    color = function(self) return COL_ACTIONS end,
+    is_active = function(self) return get(FAILURE_FUEL, L_TK_PUMP_1) == 1 and Fuel_sys.tank_pump_and_xfr[L_TK_PUMP_1].switch == true end
+}
+Message_FUEL_LO_LVL_L_TK_PUMP_2_OFF_FAIL = {
+    text = function(self) return " - L TK PUMP 2........OFF" end,
+    color = function(self) return COL_ACTIONS end,
+    is_active = function(self) return get(FAILURE_FUEL, L_TK_PUMP_2) == 1 and Fuel_sys.tank_pump_and_xfr[L_TK_PUMP_2].switch == true end
+}
+
+
+MessageGroup_FUEL_L_TK_1_OR_2_PUMP_FAULT = {
+
+    shown = false,
+
+    text  = function(self)
+                return "FUEL"
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_FUEL,
+    
+    messages = {
+        {
+            text = function(self)
+                x = ""
+                if get(FAILURE_FUEL, L_TK_PUMP_1) == 1 then
+                    x = "1"
+                elseif  get(FAILURE_FUEL, L_TK_PUMP_2) == 1  then
+                    x = "2"
+                end
+                return "     L TK PUMP " .. x .. " LO PR"
+            end,
+            color = function(self) return COL_CAUTION end,
+            is_active = function(self) return true end
+        },
+        Message_FUEL_LO_LVL_L_TK_PUMP_1_OFF_FAIL,
+        Message_FUEL_LO_LVL_L_TK_PUMP_2_OFF_FAIL
+    },
+
+    is_active = function(self)
+        return xor(get(FAILURE_FUEL, L_TK_PUMP_1) == 1, get(FAILURE_FUEL, L_TK_PUMP_2) == 1)
+    end,
+
+    is_inhibited = function(self)
+        return is_active_in({PHASE_1ST_ENG_ON, PHASE_AIRBONE, PHASE_BELOW_80_KTS})
+    end
+}
+
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: L TK PUMP 1 + 2 LO PR
+----------------------------------------------------------------------------------------------------
+
+Message_FUEL_DO_NOT_APPLY_F_LEAK_DP_FAULT = {
+    text = function() return " . IF NO FUEL LEAK" end,
+    color = function() return COL_REMARKS end,
+    is_active = function() return get(Capt_Baro_Alt) > 15000 and get(Fuel_light_x_feed) < 10 end
+}
+Message_FUEL_X_FEED_ON_DP_FAULT = {
+    text = function() return "   - FUEL X FEED.......ON" end,
+    color = function() return COL_ACTIONS end,
+    is_active = function() return get(Capt_Baro_Alt) > 15000 and get(Fuel_light_x_feed) < 10 end
+}
+Message_FUEL_ENG_MODE_SEL_IGN = {
+    text = function() return " - ENG MODE SEL.......IGN" end,
+    color = function() return COL_ACTIONS end,
+    is_active = function() return get(Engine_mode_knob) ~= 1 end
+}
+
+
+MessageGroup_FUEL_L_TK_1_AND_2_PUMP_FAULT = {
+
+    shown = false,
+
+    text  = function()
+                return "FUEL"
+            end,
+    color = function()
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_FUEL,
+    
+    messages = {
+        {
+            text = function()
+                return "     L TK PUMP 1 + 2 LO PR"
+            end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        },
+        Message_FUEL_DO_NOT_APPLY_F_LEAK_DP_FAULT,
+        Message_FUEL_X_FEED_ON_DP_FAULT,
+        Message_FUEL_ENG_MODE_SEL_IGN,
+        Message_FUEL_LO_LVL_L_TK_PUMP_1_OFF_FAIL,
+        Message_FUEL_LO_LVL_L_TK_PUMP_2_OFF_FAIL
+    },
+
+    is_active = function()
+        return get(FAILURE_FUEL, L_TK_PUMP_1) == 1 and get(FAILURE_FUEL, L_TK_PUMP_2) == 1
+    end,
+
+    is_inhibited = function()
+        return is_active_in({PHASE_1ST_ENG_ON, PHASE_AIRBONE, PHASE_BELOW_80_KTS})
+    end
+}
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: R TK PUMP 1 + 2 LO PR
+----------------------------------------------------------------------------------------------------
+
+Message_FUEL_DO_NOT_APPLY_F_LEAK_DP_FAULT = {
+    text = function() return " . IF NO FUEL LEAK" end,
+    color = function() return COL_REMARKS end,
+    is_active = function() return get(Capt_Baro_Alt) > 15000 and get(Fuel_light_x_feed) < 10 end
+}
+Message_FUEL_X_FEED_ON_DP_FAULT = {
+    text = function() return "   - FUEL X FEED.......ON" end,
+    color = function() return COL_ACTIONS end,
+    is_active = function() return get(Capt_Baro_Alt) > 15000 and get(Fuel_light_x_feed) < 10 end
+}
+Message_FUEL_ENG_MODE_SEL_IGN = {
+    text = function() return " - ENG MODE SEL.......IGN" end,
+    color = function() return COL_ACTIONS end,
+    is_active = function() return get(Engine_mode_knob) ~= 1 end
+}
+
+
+MessageGroup_FUEL_R_TK_1_AND_2_PUMP_FAULT = {
+
+    shown = false,
+
+    text  = function(self)
+                return "FUEL"
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_FUEL,
+    
+    messages = {
+        {
+            text = function()
+                return "     R TK PUMP 1 + 2 LO PR"
+            end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        },
+        Message_FUEL_DO_NOT_APPLY_F_LEAK_DP_FAULT,
+        Message_FUEL_X_FEED_ON_DP_FAULT,
+        Message_FUEL_ENG_MODE_SEL_IGN,
+        Message_FUEL_LO_LVL_R_TK_PUMP_1_OFF_FAIL,
+        Message_FUEL_LO_LVL_R_TK_PUMP_2_OFF_FAIL
+    },
+
+    is_active = function()
+        return get(FAILURE_FUEL, R_TK_PUMP_1) == 1 and get(FAILURE_FUEL, R_TK_PUMP_2) == 1
+    end,
+
+    is_inhibited = function()
+        return is_active_in({PHASE_1ST_ENG_ON, PHASE_AIRBONE, PHASE_BELOW_80_KTS})
+    end
+}
+
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: AUTO FEED FAULT
+----------------------------------------------------------------------------------------------------
+Message_FUEL_CTR_TK_1_ON = {
+    text = function() return " - CTR TK XFR 1........ON" end,
+    color = function() return COL_ACTIONS end,
+    is_active = function() return not Fuel_sys.tank_pump_and_xfr[C_TK_XFR_1].switch and get(Fuel_quantity[tank_LEFT]) < 5000 end
+}
+
+Message_FUEL_CTR_TK_2_ON = {
+    text = function() return " - CTR TK XFR 2........ON" end,
+    color = function() return COL_ACTIONS end,
+    is_active = function() return not Fuel_sys.tank_pump_and_xfr[C_TK_XFR_2].switch and get(Fuel_quantity[tank_RIGHT]) < 5000 end
+}
+
+
+MessageGroup_FUEL_AUTO_FEED_FAULT = {
+
+    shown = false,
+
+    text  = function()
+                return "FUEL"
+            end,
+    color = function()
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_FUEL,
+    
+    messages = {
+        {
+            text = function()
+                return "     AUTO FEED FAULT"
+            end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        },
+        Message_FUEL_LO_LVL_FUEL_MODE,
+        Message_FUEL_CTR_TK_1_ON,
+        Message_FUEL_CTR_TK_2_ON
+    },
+
+    is_active = function()
+        return get(Fuel_light_mode_sel) == 0 and get(Fuel_quantity[tank_CENTER]) > 250 and (get(Fuel_quantity[tank_RIGHT]) < 5000 or get(Fuel_quantity[tank_LEFT]) < 5000)
+    end,
+
+    is_inhibited = function()
+        return is_active_in({PHASE_1ST_ENG_ON, PHASE_LIFTOFF, PHASE_AIRBONE, PHASE_FINAL, PHASE_BELOW_80_KTS})
+    end
+}
+
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: L/R WING HI TEMP
+----------------------------------------------------------------------------------------------------
+
+Message_FUEL_AFT_TWO_MIN = {
+    text = function() return " . AFTER 2 MIN:" end,
+    color = function() return COL_REMARKS end,
+    is_active = function() return Message_FUEL_GEN_1_OFF.is_active() or Message_FUEL_GEN_2_OFF.is_active() end
+}
+Message_FUEL_GEN_1_OFF = {
+    text = function() return "   - GEN 1............OFF" end,
+    color = function() return COL_ACTIONS end,
+    is_active = function() return ELEC_sys.generators[1].switch_status and get(Fuel_wing_L_temp) > 57 end
+}
+Message_FUEL_GEN_2_OFF = {
+    text = function() return "   - GEN 2............OFF" end,
+    color = function() return COL_ACTIONS end,
+    is_active = function() return ELEC_sys.generators[2].switch_status and get(Fuel_wing_R_temp) > 57 end
+}
+
+Message_FUEL_HI_TEMP_DELAY_TO = {
+    text = function() return " - DELAY T.O." end,
+    color = function() return COL_ACTIONS end,
+    is_active = function() return get(All_on_ground) == 1 end
+}
+
+Message_FUEL_HI_TEMP_ENG_MASTER_1 = {
+    text = function() return " - ENG MASTER 1.......OFF" end,
+    color = function() return COL_ACTIONS end,
+    is_active = function() return get(All_on_ground) == 1 and get(Fuel_wing_L_temp) > 57 and get(Engine_1_master_switch) == 1 end
+}
+
+Message_FUEL_HI_TEMP_ENG_MASTER_2 = {
+    text = function() return " - ENG MASTER 2.......OFF" end,
+    color = function() return COL_ACTIONS end,
+    is_active = function() return get(All_on_ground) == 1 and get(Fuel_wing_R_temp) > 57 and get(Engine_2_master_switch) == 1 end
+}
+
+Message_FUEL_HI_TEMP_ENG_1_FF = {
+    text = function() return " - ENG 1 F.FLOW..INCREASE" end,
+    color = function() return COL_ACTIONS end,
+    is_active = function() return get(All_on_ground) == 0 and get(Fuel_wing_L_temp) > 57 end
+}
+
+Message_FUEL_HI_TEMP_ENG_2_FF = {
+    text = function() return " - ENG 2 F.FLOW..INCREASE" end,
+    color = function() return COL_ACTIONS end,
+    is_active = function() return get(All_on_ground) == 0 and get(Fuel_wing_R_temp) > 57  end
+}
+
+Message_FUEL_HI_TEMP_STILL = {
+    text = function() return " . IF TEMP STILL > 57 C:" end,
+    color = function() return COL_REMARKS end,
+    is_active = function() return get(All_on_ground) == 0 end
+}
+
+Message_FUEL_HI_TEMP_APU_AS_RQRD = {
+    text = function() return "   - APU..........AS RQRD" end,
+    color = function() return COL_ACTIONS end,
+    is_active = function() return get(All_on_ground) == 0 end
+}
+
+Message_FUEL_HI_TEMP_IDG_OFF_1 = {
+    text = function() return "   - IDG 1............OFF" end,
+    color = function() return COL_ACTIONS end,
+    is_active = function() return get(All_on_ground) == 0 and get(Gen_2_pwr) == 1 and ELEC_sys.generators[1].idg_status end
+}
+
+Message_FUEL_HI_TEMP_IDG_OFF_2 = {
+    text = function() return "   - IDG 2............OFF" end,
+    color = function() return COL_ACTIONS end,
+    is_active = function() return get(All_on_ground) == 0 and get(Gen_1_pwr) == 1 and ELEC_sys.generators[2].idg_status end
+}
+
+
+MessageGroup_FUEL_LR_HI_TEMP = {
+
+    shown = false,
+
+    text  = function(self)
+                return "FUEL"
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_FUEL,
+    
+    messages = {
+        {
+            text = function()
+                x = ""
+                if get(Fuel_wing_L_temp) > 57 then
+                    x = x .. "L"
+                end
+                if get(Fuel_wing_R_temp) > 57  then
+                    if #x > 0 then
+                        x = x .. " + "
+                    end
+                    x = x .. "R"
+                end
+                return "     " .. x .. " TK HI TEMP"
+            end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        },
+        Message_FUEL_AFT_TWO_MIN,
+        Message_FUEL_GEN_1_OFF,
+        Message_FUEL_GEN_2_OFF,
+        Message_FUEL_HI_TEMP_DELAY_TO,      -- on ground only
+        Message_FUEL_HI_TEMP_ENG_MASTER_1,  -- on ground only
+        Message_FUEL_HI_TEMP_ENG_MASTER_2,  -- on ground only
+        Message_FUEL_HI_TEMP_ENG_1_FF,      -- in flight only
+        Message_FUEL_HI_TEMP_ENG_2_FF,      -- in flight only
+        Message_FUEL_HI_TEMP_STILL,         -- in flight only
+        Message_FUEL_HI_TEMP_APU_AS_RQRD,   -- in flight only
+        Message_FUEL_HI_TEMP_IDG_OFF_1,     -- in flight only
+        Message_FUEL_HI_TEMP_IDG_OFF_2      -- in flight only
+        
+        
+    },
+
+    is_active = function()
+        return get(Fuel_wing_L_temp) > 57 or get(Fuel_wing_R_temp) > 57
+    end,
+
+    is_inhibited = function()
+        return is_active_in({PHASE_ELEC_PWR, PHASE_1ST_ENG_ON, PHASE_AIRBONE, PHASE_BELOW_80_KTS, PHASE_2ND_ENG_OFF})
+    end
+}
+
+
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: L/R WING LO TEMP
+----------------------------------------------------------------------------------------------------
+
+MessageGroup_FUEL_LR_LO_TEMP = {
+
+    shown = false,
+
+    text  = function(self)
+                return "FUEL"
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_FUEL,
+    
+    messages = {
+        {
+            text = function()
+                x = ""
+                if get(Fuel_wing_L_temp) < -43 then
+                    x = x .. "L"
+                end
+                if get(Fuel_wing_R_temp) < -43 then
+                    if #x > 0 then
+                        x = x .. " + "
+                    end
+                    x = x .. "R"
+                end
+                return "     " .. x .. " TK LO TEMP"
+            end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        },
+        Message_FUEL_HI_TEMP_DELAY_TO      -- on ground only
+
+    },
+
+    is_active = function()
+        return get(Fuel_wing_L_temp) < -43 or get(Fuel_wing_R_temp) < -43
+    end,
+
+    is_inhibited = function()
+        return is_active_in({PHASE_ELEC_PWR, PHASE_1ST_ENG_ON, PHASE_AIRBONE, PHASE_BELOW_80_KTS, PHASE_2ND_ENG_OFF})
+    end
+}
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: APU LP VALVE FAULT
+----------------------------------------------------------------------------------------------------
+
+MessageGroup_FUEL_APU_VALVE_FAULT = {
+
+    shown = false,
+
+    text  = function(self)
+                return "FUEL"
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_3,
+    
+    sd_page = ECAM_PAGE_FUEL,
+    
+    messages = {
+        {
+            text = function()
+                return "     APU LP VALVE FAULT"
+            end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        }
+    },
+
+    is_active = function()
+        return get(FAILURE_FUEL_APU_VALVE_STUCK) == 1
+    end,
+
+    is_inhibited = function()
+        return is_active_in({PHASE_ELEC_PWR, PHASE_1ST_ENG_ON, PHASE_AIRBONE, PHASE_BELOW_80_KTS, PHASE_2ND_ENG_OFF})
+    end
+}
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: ENG 1/2 VALVE FAULT
+----------------------------------------------------------------------------------------------------
+
+MessageGroup_FUEL_ENG_1_2_VALVE_FAULT = {
+
+    shown = false,
+
+    text  = function(self)
+                return "FUEL"
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_3,
+    
+    sd_page = ECAM_PAGE_FUEL,
+    
+    messages = {
+        {
+            text = function()
+                x = ""
+                if get(FAILURE_FUEL_ENG1_VALVE_STUCK) == 1 then
+                    x = x .. "1"
+                end
+                if get(FAILURE_FUEL_ENG2_VALVE_STUCK) == 1 then
+                    if #x > 0 then
+                        x = x .. " + "
+                    end
+                    x = x .. "2"
+                end
+                return "     ENG " .. x .. " LP VALVE FAULT"
+            end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        }
+    },
+
+    is_active = function()
+        return get(FAILURE_FUEL_ENG1_VALVE_STUCK) == 1 or get(FAILURE_FUEL_ENG2_VALVE_STUCK) == 1
+    end,
+
+    is_inhibited = function()
+        return is_active_in({PHASE_ELEC_PWR, PHASE_1ST_ENG_ON, PHASE_AIRBONE, PHASE_BELOW_80_KTS, PHASE_2ND_ENG_OFF})
+    end
+}
+----------------------------------------------------------------------------------------------------
+-- CAUTION: X FEED VALVE FAULT
+----------------------------------------------------------------------------------------------------
+
+MessageGroup_FUEL_X_FEED_VALVE_FAULT = {
+
+    shown = false,
+
+    text  = function(self)
+                return "FUEL"
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_3,
+    
+    sd_page = ECAM_PAGE_FUEL,
+    
+    messages = {
+        {
+            text = function()
+                return "     X FEED VALVE FAULT"
+            end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        }
+    },
+
+    is_active = function()
+        return get(FAILURE_FUEL_X_FEED) == 1
+    end,
+
+    is_inhibited = function()
+        return is_active_in({PHASE_ELEC_PWR, PHASE_1ST_ENG_ON, PHASE_AIRBONE, PHASE_BELOW_80_KTS, PHASE_2ND_ENG_OFF})
+    end
+}
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: L/R WING OVERFLOW
+----------------------------------------------------------------------------------------------------
+
+Message_FUEL_CTR_TK_1_OFF_OVFW = {
+    text = function() return " - CTR TK XFR 1.......OFF" end,
+    color = function() return COL_ACTIONS end,
+    is_active = function() return get(Fuel_wing_L_overflow) == 1 and Fuel_sys.tank_pump_and_xfr[C_TK_XFR_1].switch end
+}
+
+Message_FUEL_CTR_TK_2_OFF_OVFW = {
+    text = function() return " - CTR TK XFR 2.......OFF" end,
+    color = function() return COL_ACTIONS end,
+    is_active = function() return get(Fuel_wing_R_overflow) == 1 and Fuel_sys.tank_pump_and_xfr[C_TK_XFR_2].switch end
+}
+
+MessageGroup_FUEL_LR_OVERFLOW = {
+
+    shown = false,
+
+    text  = function(self)
+                return "FUEL"
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_FUEL,
+    
+    messages = {
+        {
+            text = function()
+                x = ""
+                if get(Fuel_wing_L_overflow) == 1 then
+                    x = x .. "L"
+                end
+                if get(Fuel_wing_R_overflow) == 1 then
+                    if #x > 0 then
+                        x = x .. " + "
+                    end
+                    x = x .. "R"
+                end
+                return "     " .. x .. " TK OVERFLOW"
+            end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        },
+        Message_FUEL_CTR_TK_1_OFF_OVFW,
+        Message_FUEL_CTR_TK_2_OFF_OVFW
+
+    },
+
+    is_active = function()
+        return get(Fuel_wing_L_overflow) == 1 or get(Fuel_wing_R_overflow) == 1
+    end,
+
+    is_inhibited = function()
+        return is_inibithed_in({PHASE_ABOVE_80_KTS, PHASE_FINAL, PHASE_TOUCHDOWN})
+    end
+}
+
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: FQI 1+2 FAULT
+----------------------------------------------------------------------------------------------------
+
+MessageGroup_FUEL_FQI_1_2_FAULT = {
+
+    shown = false,
+
+    text  = function()
+                return "FUEL"
+            end,
+    color = function()
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_3,
+    
+    sd_page = ECAM_PAGE_FUEL,
+    
+    messages = {
+        {
+            text = function()
+                x = ""
+                if get(FAILURE_FUEL_FQI_1_FAULT) == 1 then
+                    x = x .. "1"
+                end
+                if get(FAILURE_FUEL_FQI_2_FAULT) == 1 then
+                    if #x > 0 then
+                        x = x .. " + "
+                    end
+                    x = x .. "2"
+                end
+                return "     FQI CH " .. x .. " FAULT"
+            end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        }
+    },
+
+    is_active = function()
+        return get(FAILURE_FUEL_FQI_1_FAULT) == 1 or get(FAILURE_FUEL_FQI_2_FAULT) == 1
+    end,
+
+    is_inhibited = function()
+        return is_active_in({PHASE_ELEC_PWR, PHASE_1ST_ENG_ON, PHASE_AIRBONE, PHASE_BELOW_80_KTS, PHASE_2ND_ENG_OFF})
+    end
+}
 

@@ -500,6 +500,10 @@ Fuel_wing_R_temp = createGlobalPropertyf("a321neo/dynamics/fuel/fuel_temp_R", 0,
 
 Fuel_on_takeoff = createGlobalPropertyf("a321neo/dynamics/fuel/fot", 0, false, true, false) -- Fuel on takeoff for EWD messages
 
+Fuel_wing_L_overflow = createGlobalPropertyi("a321neo/dynamics/fuel/fuel_overflow_L", 0, false, true, false) -- 1: overflow, 0:normal
+Fuel_wing_R_overflow = createGlobalPropertyi("a321neo/dynamics/fuel/fuel_overflow_R", 0, false, true, false) -- 1: overflow, 0:normal
+
+
 -- Anti-ICE
 AI_wing_L_operating = createGlobalPropertyf("a321neo/dynamics/anti_ice/wing_L_operating", 0, false, true, false) -- 0: pause, 1: working
 AI_wing_R_operating = createGlobalPropertyf("a321neo/dynamics/anti_ice/wing_R_operating", 0, false, true, false) -- 0: pause, 1: working

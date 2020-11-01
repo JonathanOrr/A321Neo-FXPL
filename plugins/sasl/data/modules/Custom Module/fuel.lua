@@ -52,8 +52,8 @@ local eng_2_fw_valve_position = 0   -- Firewall valve position (used internally,
 local requested_apu_fuel_off = 0  -- A time point when APU fuel pump has been requested off. The APU fuel pump switch off after 1 sec
 
 -- Initially, the temperature of the fuel corresponds to the external one
-set(Fuel_wing_L_temp, get(TAT))
-set(Fuel_wing_R_temp, get(TAT))
+set(Fuel_wing_L_temp, get(OTA))
+set(Fuel_wing_R_temp, get(OTA))
 ----------------------------------------------------------------------------------------------------
 -- Commands
 ----------------------------------------------------------------------------------------------------
@@ -480,12 +480,18 @@ end
 
 local function update_transfer_fuel()
 
+    set(Fuel_wing_L_overflow, 0)
+    set(Fuel_wing_R_overflow, 0)
+
     if tank_pump_and_xfr[C_TK_XFR_1].pressure_ok then
         local C_tank = get(Fuel_quantity[tank_CENTER])
         local W_tank = get(Fuel_quantity[tank_LEFT])
         
         local unit_transfer = math.min(get(DELTA_TIME) * FUEL_XFR_SPEED, C_tank)
         C_tank = C_tank - unit_transfer
+        if W_tank + unit_transfer > FUEL_LR_MAX then
+            set(Fuel_wing_L_overflow, 1)
+        end
         W_tank = math.min(W_tank + unit_transfer, FUEL_LR_MAX)  -- Overflow protection
         set(Fuel_quantity[tank_CENTER], C_tank)
         set(Fuel_quantity[tank_LEFT], W_tank)
@@ -499,6 +505,9 @@ local function update_transfer_fuel()
         
         local unit_transfer = math.min(get(DELTA_TIME) * FUEL_XFR_SPEED, C_tank)
         C_tank = C_tank - unit_transfer
+        if W_tank + unit_transfer > FUEL_LR_MAX then
+            set(Fuel_wing_R_overflow, 1)
+        end
         W_tank = math.min(W_tank + unit_transfer, FUEL_LR_MAX)  -- Overflow protection
         set(Fuel_quantity[tank_CENTER], C_tank)
         set(Fuel_quantity[tank_RIGHT], W_tank)
@@ -511,11 +520,13 @@ local function update_transfer_fuel()
         local C_tank = get(Fuel_quantity[tank_CENTER])
         
         local unit_transfer = math.min(get(DELTA_TIME) * FUEL_XFR_SPEED, ACT_tank)
-        ACT_tank = ACT_tank - unit_transfer
-        C_tank = math.min(C_tank + unit_transfer, FUEL_C_MAX)  -- Overflow protection
-        set(Fuel_quantity[tank_ACT], ACT_tank)
-        set(Fuel_quantity[tank_CENTER], C_tank)
-
+        -- ACT and RCT cannot overflow
+        if C_tank + unit_transfer < FUEL_C_MAX then
+            ACT_tank = ACT_tank - unit_transfer
+            C_tank = C_tank + unit_transfer
+            set(Fuel_quantity[tank_ACT], ACT_tank)
+            set(Fuel_quantity[tank_CENTER], C_tank)
+        end
         if get(L_bleed_press) < 1 then
             ELEC_sys.add_power_consumption(ELEC_BUS_AC_1, 5, 6)
         end
@@ -526,11 +537,13 @@ local function update_transfer_fuel()
         local C_tank = get(Fuel_quantity[tank_CENTER])
         
         local unit_transfer = math.min(get(DELTA_TIME) * FUEL_XFR_SPEED, RCT_tank)
-        RCT_tank = RCT_tank - unit_transfer
-        C_tank = math.min(C_tank + unit_transfer, FUEL_C_MAX)  -- Overflow protection
-        set(Fuel_quantity[tank_RCT], RCT_tank)
-        set(Fuel_quantity[tank_CENTER], C_tank)
-
+        -- ACT and RCT cannot overflow
+        if C_tank + unit_transfer < FUEL_C_MAX then
+            RCT_tank = RCT_tank - unit_transfer
+            C_tank = C_tank + unit_transfer
+            set(Fuel_quantity[tank_RCT], RCT_tank)
+            set(Fuel_quantity[tank_CENTER], C_tank)
+        end
         if get(R_bleed_press) < 1 then
             ELEC_sys.add_power_consumption(ELEC_BUS_AC_2, 5, 6)
         end
@@ -548,8 +561,8 @@ local function update_temps()
 
     local speed_increase_L = (1.0 - get(Fuel_quantity[tank_LEFT])/FUEL_LR_MAX)*0.25
     local speed_increase_R = (1.0 - get(Fuel_quantity[tank_RIGHT])/FUEL_LR_MAX)*0.25
-    Set_dataref_linear_anim(Fuel_wing_L_temp, get(TAT), -50, 50, 0.1 + speed_increase_L )
-    Set_dataref_linear_anim(Fuel_wing_R_temp, get(TAT), -50, 50, 0.1 + speed_increase_R )
+    Set_dataref_linear_anim(Fuel_wing_L_temp, get(TAT), -50, 100, 0.1 + speed_increase_L )
+    Set_dataref_linear_anim(Fuel_wing_R_temp, get(TAT), -50, 100, 0.1 + speed_increase_R )
 end
 
 -- Update fuel usage datarefs for using in ECAM

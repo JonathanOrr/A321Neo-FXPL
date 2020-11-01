@@ -330,8 +330,14 @@ local function draw_fuel_stuffs()
                                     and (not Fuel_sys.tank_pump_and_xfr[5].status)
                                     and (not Fuel_sys.tank_pump_and_xfr[5].status) ) 
                                         or (get(FAILURE_FUEL, 7) == 1) or (get(FAILURE_FUEL, 8) == 1)
-                                        
-    sasl.gl.drawText(Font_AirbusDUL, 240, size[2]/2-120, fuel_on_board, 36, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+
+    color = ECAM_GREEN
+    if get(FAILURE_FUEL_FQI_1_FAULT) == 1 and get(FAILURE_FUEL_FQI_2_FAULT) == 1  then
+        fuel_on_board = "XX"
+        color = ECAM_ORANGE
+    end
+
+    sasl.gl.drawText(Font_AirbusDUL, 240, size[2]/2-120, fuel_on_board, 36, false, false, TEXT_ALIGN_RIGHT, color)
     if not_all_fuel_available then
         sasl.gl.drawWideLine(120, size[2]/2-125, 250, size[2]/2-125, 3 , ECAM_ORANGE)
         sasl.gl.drawWideLine(120, size[2]/2-125, 120, size[2]/2-100, 3 , ECAM_ORANGE)
