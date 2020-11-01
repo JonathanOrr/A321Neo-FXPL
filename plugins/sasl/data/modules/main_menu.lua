@@ -90,6 +90,16 @@ function Reset_IDG()
     end
 end
 
+function Toggle_Ground_Air_Supply()
+    if get(All_on_ground) == 0 then
+        sasl.messageWindow (500 , 500 , 300 , 150 , " This is a ground-only operation " , 
+                "In order to connect the Ground Air Supply you need to be on ground.",
+                1 , " Ok " , function() end)
+    else
+        set(GAS_bleed_avail, 1 - get(GAS_bleed_avail))
+    end
+end
+
 -- create top level menu in plugins menu
 Menu_master	= sasl.appendMenuItem (PLUGINS_MENU_ID, "A321NEO" )
 -- add a submenu
@@ -104,7 +114,7 @@ ShowHideFuel        = sasl.appendMenuItem(Menu_main, "Show/Hide Fuel Panel", Sho
 sasl.appendMenuSeparator(Menu_main)
 
 ADIRSAlign        = sasl.appendMenuItem(Menu_main, "Instantaneous align IRs", IRs_instaneous_align)
-
+ADIRSAlign        = sasl.appendMenuItem(Menu_main, "Toggle Ground Air Supply", Toggle_Ground_Air_Supply)
 -- Maintenance submenu
 Maintenance_item  = sasl.appendMenuItem (Menu_main, "Maintenance")
 Maintenance_menu  = sasl.createMenu ("", Menu_main, Maintenance_item)

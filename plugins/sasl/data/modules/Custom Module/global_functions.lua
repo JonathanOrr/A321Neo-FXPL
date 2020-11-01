@@ -435,7 +435,7 @@ end
 function Knob_handler_up_float(phase, dataref, min, max, step)
     step = step or 0.5  -- Defualt value
     if phase == SASL_COMMAND_BEGIN then
-        set(dataref, Math_clamp(get(dataref) + step, min, max))
+        set(dataref, Math_clamp(get(dataref) + step * get(DELTA_TIME), min, max))
     elseif phase == SASL_COMMAND_CONTINUE then
         set(dataref, Math_clamp(get(dataref) + step * get(DELTA_TIME), min, max))
     end
@@ -446,7 +446,7 @@ end
 function Knob_handler_down_float(phase, dataref, min, max, step) 
     step = step or 0.5  -- Defualt value
     if phase == SASL_COMMAND_BEGIN then
-        set(dataref, Math_clamp(get(dataref) - step, min, max))
+        set(dataref, Math_clamp(get(dataref) - step * get(DELTA_TIME), min, max))
     elseif phase == SASL_COMMAND_CONTINUE then
         set(dataref, Math_clamp(get(dataref) - step * get(DELTA_TIME), min, max))
     end

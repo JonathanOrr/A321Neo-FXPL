@@ -32,20 +32,25 @@ Cockpit_temp = createGlobalPropertyf("a321neo/dynamics/aircond/cockpit_temp", 15
 Front_cab_temp = createGlobalPropertyf("a321neo/dynamics/aircond/front_cab_temp", 15, false, true, false) --actual front cabin temperature
 Aft_cab_temp = createGlobalPropertyf("a321neo/dynamics/aircond/aft_cab_temp", 15, false, true, false) --actual aft cabin temperature
 Aft_cargo_temp = createGlobalPropertyf("a321neo/dynamics/aircond/aft_cargo_temp", 17, false, true, false) ---requested aft cargo temperature
+Aircond_injected_flow_temp = createGlobalPropertyfa("a321neo/dynamics/aircond/injected_flow_temp", 4)
+Aircond_trim_valve = createGlobalPropertyfa("a321neo/dynamics/aircond/trim_valve", 4)
+Aircond_mixer_temp = createGlobalPropertyf("a321neo/dynamics/aircond/mixer_temp", 0, false, true, false)
 
 Ventilation_blower  = createGlobalPropertyi("a321neo/dynamics/aircond/vent_blower", 0, false, true, false)  -- 0 normal, 1 override
 Ventilation_extract = createGlobalPropertyi("a321neo/dynamics/aircond/vent_extract", 0, false, true, false) -- 0 normal, 1 override
 
 --PACKS
-L_pack_Flow = createGlobalPropertyi("a321neo/dynamics/packs/l_pack_flow", 0, false, true, false) --0low, 1norm, 2high
-R_pack_Flow = createGlobalPropertyi("a321neo/dynamics/packs/r_pack_flow", 0, false, true, false) --0low, 1norm, 2high
+L_Eng_LP_press = createGlobalPropertyi("a321neo/dynamics/packs/l_eng_press", 0, false, true, false)
+R_Eng_LP_press = createGlobalPropertyi("a321neo/dynamics/packs/r_eng_press", 0, false, true, false)
+
+L_pack_Flow = createGlobalPropertyi("a321neo/dynamics/packs/l_pack_flow", 0, false, true, false) --0 no flow, 1 low, 2norm, 3high
+R_pack_Flow = createGlobalPropertyi("a321neo/dynamics/packs/r_pack_flow", 0, false, true, false) --0 no flow, 1 low, 2norm, 3high
+L_pack_Flow_value = createGlobalPropertyf("a321neo/dynamics/packs/l_pack_flow_value", 0, false, true, false) -- In kg/s
+R_pack_Flow_value = createGlobalPropertyf("a321neo/dynamics/packs/r_pack_flow_value", 0, false, true, false) -- In kg/s
 L_HP_valve = createGlobalPropertyi("a321neo/dynamics/packs/l_hp_valve", 0, false, true, false)
 R_HP_valve = createGlobalPropertyi("a321neo/dynamics/packs/r_hp_valve", 0, false, true, false)
 X_bleed_valve = createGlobalPropertyi("a321neo/dynamics/packs/x_bleed_valve", 0, false, true, false) --0closed, 1open
 X_bleed_bridge_state = createGlobalPropertyi("a321neo/dynamics/packs/x_bleed_bridge_state", 0, false, true, false) --0closed, 1bridged clsoed, 2bridged open
-Packs_avail = createGlobalPropertyi("a321neo/dynamics/packs/packs_avail", 0, false, true, false)--if the pack actually has air going through it
-L_bleed_state = createGlobalPropertyi("a321neo/dynamics/packs/l_bleed_state", 0, false, true, false)--0engine 1 not running bleed off, 1engine 1 running bleed off, 2engine 1 running bleed on
-R_bleed_state = createGlobalPropertyi("a321neo/dynamics/packs/r_bleed_state", 0, false, true, false)--0engine 2 not running bleed off, 1engine 2 running bleed off, 2engine 2 running bleed on
 L_bleed_press = createGlobalPropertyf("a321neo/dynamics/packs/l_bleed_press_psi", 0, false, true, false)
 R_bleed_press = createGlobalPropertyf("a321neo/dynamics/packs/r_bleed_press_psi", 0, false, true, false)
 L_bleed_temp = createGlobalPropertyf("a321neo/dynamics/packs/l_bleed_temp", 10, false, true, false)
@@ -54,11 +59,22 @@ L_compressor_temp = createGlobalPropertyf("a321neo/dynamics/packs/l_compressor_t
 R_compressor_temp = createGlobalPropertyf("a321neo/dynamics/packs/r_compressor_temp", 10, false, true, false)
 L_pack_temp = createGlobalPropertyf("a321neo/dynamics/packs/l_pack_temp", 10, false, true, false)
 R_pack_temp = createGlobalPropertyf("a321neo/dynamics/packs/r_pack_temp", 10, false, true, false)
+L_pack_byp_valve = createGlobalPropertyf("a321neo/dynamics/packs/l_pack_byp_valve", 0.5, false, true, false) -- Bypass valve to control temperature
+R_pack_byp_valve = createGlobalPropertyf("a321neo/dynamics/packs/r_pack_byp_valve", 0.5, false, true, false) -- Bypass valve to control temperature
+GAS_bleed_avail = createGlobalPropertyf("a321neo/dynamics/packs/ground_air_supply", 0, false, true, false)
+Emer_ram_air = createGlobalPropertyf("a321neo/dynamics/packs/emer_ram_air", 0, false, true, false)
+Cargo_isol_in_valve = createGlobalPropertyi("a321neo/dynamics/packs/cargo_isol_in_valve", 0, false, true, false)
+Cargo_isol_out_valve = createGlobalPropertyi("a321neo/dynamics/packs/cargo_isol_out_valve", 0, false, true, false)
+Hot_air_valve_pos = createGlobalPropertyi("a321neo/dynamics/packs/cabin_hot_air_pos", 0, false, true, false)    -- 0: closed, 1: open
+Hot_air_valve_pos_cargo = createGlobalPropertyi("a321neo/dynamics/packs/cargo_hot_air_pos", 0, false, true, false)    -- 0: closed, 1: open
+Hot_air_temp       = createGlobalPropertyf("a321neo/dynamics/packs/cabin_hot_air_temp", 0, false, true, false)
+Hot_air_temp_cargo = createGlobalPropertyf("a321neo/dynamics/packs/cargo_hot_air_temp", 0, false, true, false)
+
+
 --apu
 Apu_start_position = globalProperty("sim/cockpit2/electrical/APU_starter_switch") --apu start button state 0: off, 1: on, 2: avail
 Apu_avail = createGlobalPropertyi("a321neo/engine/apu_avil", 0, false, true, false)
 Apu_bleed_psi = createGlobalPropertyf("a321neo/cockpit/apu/bleed_psi", 0, false, true, false)
-Apu_bleed_state = createGlobalPropertyi("a321neo/apu/apu_bleed_state", 0, false, true, false)--0apu off bleed off, 1apu on bleed off, 2apu on bleed on(for ECAM!!!)
 Apu_fuel_valve  = createGlobalPropertyi("a321neo/cockpit/apu/fuel_valve", 0, false, true, false) -- 0 closed, 1 open
 Apu_fuel_source = createGlobalPropertyi("a321neo/cockpit/apu/fuel_source", 0, false, true, false) -- 0 none, 1 left side, 2 right side (x feed)
 
@@ -232,12 +248,14 @@ Eng_2_VIB_N2  = createGlobalPropertyf("a321neo/dynamics/engines/eng_2_vib_n2", 0
 
 Eng_N1_idle = createGlobalPropertyf("a321neo/dynamics/engines/n1_idle", 1, false, true, false) -- current value (depends on altitude) for the minimum N1
 Eng_Dual_Cooling = createGlobalPropertyf("a321neo/dynamics/engines/dual_cooling", 0, false, true, false) -- Is dual cooling on?
+Eng_Continuous_Ignition = createGlobalPropertyf("a321neo/dynamics/engines/continuous_ignition", 0, false, true, false) -- Is continuous ignition active?
 
 Eng_1_reverser_deployment = globalProperty("sim/flightmodel2/engines/thrust_reverser_deploy_ratio[0]")
 Eng_2_reverser_deployment = globalProperty("sim/flightmodel2/engines/thrust_reverser_deploy_ratio[1]")
 Eng_1_Firewall_valve = createGlobalPropertyi("a321neo/dynamics/engines/eng_1_firewall_valve_1", 1, false, true, false) -- 0 open, 1 - closed, 2 : transit - firewall valve
 Eng_2_Firewall_valve = createGlobalPropertyi("a321neo/dynamics/engines/eng_2_firewall_valve_2", 1, false, true, false) -- 0 open, 1 - closed, 2 : transit - firewall valve
 
+Eng_is_spooling_up  = createGlobalPropertyia("a321neo/dynamics/engines/is_spooling_up", 2)  
 
 -- APU
 Apu_N1 = globalProperty("sim/cockpit2/electrical/APU_N1_percent")
@@ -246,6 +264,7 @@ APU_flap = createGlobalPropertyi("a321neo/cockpit/apu/flap_open", 0, false, true
 
 --PACKs system
 Apu_bleed_switch = globalProperty("sim/cockpit2/bleedair/actuators/apu_bleed")
+Gpu_bleed_switch = globalProperty("sim/cockpit2/bleedair/actuators/gpu_bleed")
 ENG_1_bleed_switch = globalProperty("sim/cockpit2/bleedair/actuators/engine_bleed_sov[0]")
 ENG_2_bleed_switch = globalProperty("sim/cockpit2/bleedair/actuators/engine_bleed_sov[1]")
 Left_bleed_avil = globalProperty("sim/cockpit2/bleedair/indicators/bleed_available_left")
@@ -263,6 +282,8 @@ Cabin_alt_ft = globalProperty("sim/cockpit2/pressurization/indicators/cabin_alti
 Set_cabin_vs = globalProperty("sim/cockpit2/pressurization/actuators/cabin_vvi_fpm")
 Cabin_vs = globalProperty("sim/cockpit2/pressurization/indicators/cabin_vvi_fpm")
 Out_flow_valve_ratio = globalProperty("sim/cockpit2/pressurization/indicators/outflow_valve")
+
+
 --instruments
 VVI = globalProperty("sim/cockpit2/gauges/indicators/vvi_fpm_pilot")
 OTA = globalProperty("sim/cockpit2/temperature/outside_air_temp_degc")
@@ -476,4 +497,10 @@ Fuel_tank_selector_eng_2 = globalProperty("sim/cockpit2/fuel/fuel_tank_selector_
 
 Fuel_wing_L_temp = createGlobalPropertyf("a321neo/dynamics/fuel/fuel_temp_L", 0, false, true, false) -- Temperature of the fuel LEFT wing
 Fuel_wing_R_temp = createGlobalPropertyf("a321neo/dynamics/fuel/fuel_temp_R", 0, false, true, false) -- Temperature of the fuel RIGHT wing
+
+Fuel_on_takeoff = createGlobalPropertyf("a321neo/dynamics/fuel/fot", 0, false, true, false) -- Fuel on takeoff for EWD messages
+
+-- Anti-ICE
+AI_wing_L_operating = createGlobalPropertyf("a321neo/dynamics/anti_ice/wing_L_operating", 0, false, true, false) -- 0: pause, 1: working
+AI_wing_R_operating = createGlobalPropertyf("a321neo/dynamics/anti_ice/wing_R_operating", 0, false, true, false) -- 0: pause, 1: working
 

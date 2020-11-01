@@ -16,7 +16,3 @@ override_ELEC_always_on = false
 -- no effects on adirs alignment
 override_ADIRS_ok = false
 
--- If you set this variable to true, both BLEED are always available. Button switches and engine/apu
--- status have  no effects on adirs alignment
-override_BLEED_always_ok = false
-

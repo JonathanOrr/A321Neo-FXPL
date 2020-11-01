@@ -111,6 +111,8 @@ local time_last_shutdown = {-1,-1}    -- The last time point you shutdown the en
 local cooling_left_time  = {0, 0}
 local cooling_has_cooled = {false, false}
 
+local already_back_to_norm = false -- This is used to check continuous ignition
+
 ----------------------------------------------------------------------------------------------------
 -- Functions - Commands
 ----------------------------------------------------------------------------------------------------
@@ -419,6 +421,8 @@ local function perform_crank_procedure(eng, wet_cranking)
     
     -- Set EGT for cranking
     eng_EGT_off[eng] = Set_linear_anim_value(eng_EGT_off[eng], ENG_N1_CRANK_EGT, -50, 1500, 2)
+
+    set(Eng_is_spooling_up, 1, eng) -- Need for bleed air computation, see packs.lua
     
     if wet_cranking then
         -- Wet cranking requested, let's spill a bit of fuel
@@ -440,6 +444,8 @@ local function perform_starting_procedure_follow_n2(eng)
     elseif eng_manual_switch[eng] then
         igniter_eng[eng] = 3  -- Manual start uses both igniters
     end
+
+    set(Eng_is_spooling_up, 1, eng) -- Need for bleed air computation, see packs.lua
     
     for i=1,(#START_UP_PHASES_N2-1) do
         -- For each phase... 
@@ -542,6 +548,7 @@ local function perform_starting_procedure(eng)
 
         -- Phase 2: Controlling the N2  
         perform_starting_procedure_follow_n2(eng)
+        
     elseif eng_N1_off[eng] < START_UP_PHASES_N1[#START_UP_PHASES_N1].n1_set then
         -- Phase 3: Controlling the N1
         perform_starting_procedure_follow_n1(eng)
@@ -561,6 +568,9 @@ local function update_starter_datarefs()
     set(Ecam_eng_igniter_eng_1, igniter_eng[1])
     set(Ecam_eng_igniter_eng_2, igniter_eng[2])
     
+    set(Eng_is_spooling_up, 0, 1) -- Need for bleed air computation, see packs.lua
+    set(Eng_is_spooling_up, 0, 2) -- Need for bleed air computation, see packs.lua
+ 
 end
 
 -- Returns true if the FADEC has electrical power
@@ -721,9 +731,6 @@ local function update_auto_start()
     ELEC_sys.batteries[1].switch_status = true
     ELEC_sys.batteries[2].switch_status = true
 
-    
-    set(Apu_bleed_switch, 1)
-
     set(eng_ignition_switch, 0, 1) 
     set(eng_ignition_switch, 0, 2) 
 
@@ -734,6 +741,10 @@ local function update_auto_start()
         sasl.commandOnce(APU_cmd_start)
     end
     if get(Apu_avail) == 1 then
+        if get(Apu_bleed_switch) == 0 then
+            sasl.commandOnce(Toggle_apu_bleed)
+        end
+
         set(Engine_mode_knob,1)
         set(Engine_2_master_switch, 1)
     end
@@ -780,12 +791,31 @@ local function update_time_since_shutdown()
 
 end
 
+local function update_continuous_ignition()
+    -- Continuous ignition occurs in two cases:
+    -- - Engine flameout
+    -- - Manually move the mode selection to IGN but after start!
+
+    local cond_1 = (get(Engine_1_master_switch) == 1 and get(FAILURE_ENG_1_FAILURE) == 1)
+                or (get(Engine_2_master_switch) == 1 and get(FAILURE_ENG_2_FAILURE) == 1)
+    
+    local cond_2 = get(Engine_1_avail) == 1 and get(Engine_2_avail) == 1 and get(Engine_mode_knob) == 1 and already_back_to_norm
+
+    if get(Engine_1_avail) == 1 and get(Engine_2_avail) == 1 and get(Engine_mode_knob) == 0 then
+        already_back_to_norm = true
+    elseif get(Engine_1_avail) == 0 or get(Engine_2_avail) == 0 then
+        already_back_to_norm = false
+    end
+    
+    set(Eng_Continuous_Ignition, (cond_1 or cond_2) and 1 or 0)
+end
+
 function update()
     update_starter_datarefs()
     update_buttons_datarefs()
     
     update_avail()
-    
+
     if get(FLIGHT_TIME) > 0.5 then
         -- This condition is needed because otherwise the startup overrides the values set by the
         -- engines_auto_quick_start() function when the simulation is started in flight. So, let's
@@ -804,6 +834,7 @@ function update()
     
     update_auto_start()
     update_time_since_shutdown()
+    update_continuous_ignition()
 
 end
 

@@ -51,7 +51,8 @@ components = {
   doors {},
   hydraulics {},
   electrical {},
-  sounds {}
+  sounds {},
+  graphics {}
  }
 
 include(moduleDirectory .. "/main_windows.lua")

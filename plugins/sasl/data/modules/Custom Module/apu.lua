@@ -141,16 +141,4 @@ function update()
     update_start()
     update_gen()
 
-    --apu (ecam) bleed states
-    if get(Apu_avail) == 0 then
-        set(Apu_bleed_psi, Set_anim_value(get(Apu_bleed_psi), 0, 0, 39, 0.85))
-        set(Apu_bleed_state, 0)
-    elseif get(Apu_avail) == 1 and get(Apu_bleed_switch) == 0 then
-        set(Apu_bleed_psi, Set_anim_value(get(Apu_bleed_psi), 0, 0, 39, 0.85))
-        set(Apu_bleed_state, 1)
-    elseif get(Apu_avail) == 1 and get(Apu_bleed_switch) == 1 then
-        set(Apu_bleed_psi, Set_anim_value(get(Apu_bleed_psi), 39, 0, 39, 0.85))
-        set(Apu_bleed_state, 2)
-    end
-
 end

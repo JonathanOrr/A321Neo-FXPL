@@ -120,6 +120,7 @@ local left_messages_list = {
     MessageGroup_FUEL_C_TK_XFR_LO_PR_SINGLE,
     MessageGroup_FUEL_L_TK_PUMP_OFF,
     MessageGroup_FUEL_R_TK_PUMP_OFF,
+    MessageGroup_FUEL_FUSED_FOB_DISAGREE,
     MessageGroup_DOORS_CABIN,
     MessageGroup_DOORS_CARGO,
     MessageGroup_DOORS_EMER_EXIT,
@@ -246,11 +247,10 @@ local function update_right_list()
     end
 
     -- APU
-    if get(Apu_avail) == 1 then
-        list_right:put(COL_INDICATION, "APU AVAIL")
-    end 
-    if get(Apu_bleed_state) == 2 then
+    if get(Apu_bleed_switch) == 1 then
         list_right:put(COL_INDICATION, "APU BLEED")
+    elseif get(Apu_avail) == 1 then
+        list_right:put(COL_INDICATION, "APU AVAIL")
     end 
 
     -- Brakes
@@ -281,7 +281,7 @@ local function update_right_list()
         end
     end
 
-    if get(Engine_mode_knob) == 1 then
+    if get(Eng_Continuous_Ignition) == 1 then
         list_right:put(COL_INDICATION, "IGNITION")
     end
     

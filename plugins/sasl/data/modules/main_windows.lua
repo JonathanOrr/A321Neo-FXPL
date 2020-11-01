@@ -30,15 +30,15 @@ Vnav_debug_window = contextWindow {
 
 Packs_debug_window = contextWindow {
   name = "PACKS DEBUG";
-  position = { 100 , 100 , 750 , 450 };
+  position = { 100 , 100 , 750 , 550 };
   noBackground = true ;
   proportional = false ;
-  minimumSize = { 750 , 450 };
-  maximumSize = { 1125 , 675 };
+  minimumSize = { 750 , 550 };
+  maximumSize = { 750 , 550 };
   gravity = { 0 , 1 , 0 , 1 };
   visible = false ;
   components = {
-    packs_debug {position = { 0 , 0 , 750 , 450 }}
+    packs_debug {position = { 0 , 0 , 750 , 550 }}
   };
 }
 
