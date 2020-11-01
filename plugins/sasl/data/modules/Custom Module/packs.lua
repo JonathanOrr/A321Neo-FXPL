@@ -349,7 +349,7 @@ local function update_pack_flow()
     if single_pack_operation or apu_bleed_valve_pos or get(GAS_bleed_avail) == 1 or get(L_pack_byp_valve) < 0.1 or get(R_pack_byp_valve) < 0.1 then
         if get(Pack_L) == 1 then
             set(L_pack_Flow, 3)
-            Set_dataref_linear_anim(L_pack_Flow_value, 1.2*PACK_KG_PER_SEC_NOM+math.random()*0.01, 0, 2000, 100)
+            Set_dataref_linear_anim(L_pack_Flow_value, 1.2*PACK_KG_PER_SEC_NOM+math.random()*0.01, 0, 2000, 1)
         else
             set(L_pack_Flow, 0)
             Set_dataref_linear_anim(L_pack_Flow_value, 0, 0, 2000, 1)
@@ -357,7 +357,7 @@ local function update_pack_flow()
         
         if get(Pack_R) == 1 then
             set(R_pack_Flow, 3)
-            Set_dataref_linear_anim(R_pack_Flow_value, 1.2*PACK_KG_PER_SEC_NOM+math.random()*0.01, 0, 2000, 100)
+            Set_dataref_linear_anim(R_pack_Flow_value, 1.2*PACK_KG_PER_SEC_NOM+math.random()*0.01, 0, 2000, 1)
         else
             set(R_pack_Flow, 0)
             Set_dataref_linear_anim(R_pack_Flow_value, 0, 0, 2000, 1)

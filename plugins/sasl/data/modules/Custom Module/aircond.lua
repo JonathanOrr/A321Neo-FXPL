@@ -103,18 +103,37 @@ end
 
 local function update_pack_valves()
 
-    if get(TIME) - pack_valves_last_update < 10 then -- Update the pack valves every 10 sec
+    if get(Pack_L) == 0 then
+        Set_dataref_linear_anim(L_pack_byp_valve, 0, 0, 1, 0.1)
+    end
+    if get(Pack_R) == 0 then
+        Set_dataref_linear_anim(R_pack_byp_valve, 0, 0, 1, 0.1)
+    end
+
+    if get(TIME) - pack_valves_last_update < 1 then -- Update the pack valves every 1 sec
         return
     end
     pack_valves_last_update = get(TIME)
 
-    if math.max(get(Aircond_trim_valve, CKPT), get(Aircond_trim_valve, CABIN_FWD), get(Aircond_trim_valve, CABIN_AFT)) > 0.9 then
+    local condition_please_go_up = math.max(get(Aircond_trim_valve, CKPT), get(Aircond_trim_valve, CABIN_FWD), get(Aircond_trim_valve, CABIN_AFT)) > 0.9
+    local condition_please_go_dw = math.min(get(Aircond_trim_valve, CKPT), get(Aircond_trim_valve, CABIN_FWD), get(Aircond_trim_valve, CABIN_AFT)) < 0.1
+
+    if condition_please_go_up then
         -- Too much hot hair, let's increase the bypass valve
-        set(L_pack_byp_valve, math.min(1, get(L_pack_byp_valve) + 0.1))
-        set(R_pack_byp_valve, math.min(1, get(R_pack_byp_valve) + 0.1))
-    elseif math.min(get(Aircond_trim_valve, CKPT), get(Aircond_trim_valve, CABIN_FWD), get(Aircond_trim_valve, CABIN_AFT)) < 0.1 then
-        set(L_pack_byp_valve, math.max(0, get(L_pack_byp_valve) - 0.1))     
-        set(R_pack_byp_valve, math.max(0, get(R_pack_byp_valve) - 0.1))
+        if get(Pack_L) == 1 then
+            set(L_pack_byp_valve, math.min(1, get(L_pack_byp_valve) + 0.01))
+        end
+        if get(Pack_R) == 1 then
+            set(R_pack_byp_valve, math.min(1, get(R_pack_byp_valve) + 0.01) * get(Pack_R))
+        end
+    elseif condition_please_go_dw then
+        -- Too few hot hair, let's decrease the bypass valve
+        if get(Pack_L) == 1 then
+            set(L_pack_byp_valve, math.max(0, get(L_pack_byp_valve) - 0.01) * get(Pack_L))
+        end
+        if get(Pack_R) == 1 then
+            set(R_pack_byp_valve, math.max(0, get(R_pack_byp_valve) - 0.01) * get(Pack_R))
+        end
     end
 
 end
