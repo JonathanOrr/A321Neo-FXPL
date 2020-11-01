@@ -16,7 +16,10 @@ local guards = {
     {name = "ENG_MAN_START_2"},
     {name = "CALLS_EMER"},
     {name = "EVAC_COMMAND"},
-    {name = "HYD_RAT_MAN_ON"}
+    {name = "HYD_RAT_MAN_ON"},
+    {name = "HYD_BLUE_PUMP"},
+    {name = "HIGH_ALT_LANDING"},
+    {name = "EMER"}
 }
 
 ----------------------------------------------------------------------------------------------------
