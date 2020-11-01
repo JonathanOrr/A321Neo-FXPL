@@ -37,12 +37,43 @@ local function drawUnderlineText(font, x, y, text, size, bold, italic, align, co
     sasl.gl.drawWideLine(x + 3, y - 5, x + width + 3, y - 5, 4, color)
 end
 
+local function draw_ecam_lower_section_fixed()
+    sasl.gl.drawText(Font_AirbusDUL, 100, size[2]/2-372, "TAT", 32, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+    sasl.gl.drawText(Font_AirbusDUL, 100, size[2]/2-407, "SAT", 32, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+    sasl.gl.drawText(Font_AirbusDUL, 260, size[2]/2-372, "°C", 32, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
+    sasl.gl.drawText(Font_AirbusDUL, 260, size[2]/2-407, "°C", 32, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
+
+    sasl.gl.drawText(Font_AirbusDUL, size[1]-230, size[2]/2-372, "GW", 32, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]-15, size[2]/2-375, "KG", 32, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2-407, "H", 30, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    
+    local isa_displayed = get(Capt_Baro) > 29.91 and get(Capt_Baro) < 29.93
+    
+    if isa_displayed then
+        sasl.gl.drawText(Font_AirbusDUL, 100, size[2]/2-442, "ISA", 32, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+        sasl.gl.drawText(Font_AirbusDUL, 260, size[2]/2-442, "°C", 32, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
+    end
+end
+
+local function get_isa()
+    -- Source: http://fisicaatmo.at.fcen.uba.ar/practicas/ISAweb.pdf
+    local alt_meter = get(Capt_Baro_Alt) * 0.3048
+    return math.max(-56.5, 15 - 6.5 * alt_meter/1000)
+end
+
 --custom fucntions
 local function draw_ecam_lower_section()
-    --left section
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-225, size[2]/2-372, math.floor(get(TAT)), 32, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-225, size[2]/2-407, math.floor(get(OTA)), 32, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
 
+    draw_ecam_lower_section_fixed()
+
+    --left section
+    sasl.gl.drawText(Font_AirbusDUL, 190, size[2]/2-372, math.floor(get(TAT)), 32, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, 190, size[2]/2-407, math.floor(get(OTA)), 32, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    
+    local isa_displayed = get(Capt_Baro) > 29.91 and get(Capt_Baro) < 29.93
+    if isa_displayed then
+        sasl.gl.drawText(Font_AirbusDUL, 190, size[2]/2-442, Round(get_isa(), 0), 32, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    end
     --center section
     --adding a 0 to the front of the time when single digit
     if get(ZULU_hours) < 10 then

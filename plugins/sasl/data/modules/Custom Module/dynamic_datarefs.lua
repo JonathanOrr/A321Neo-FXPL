@@ -304,6 +304,8 @@ Capt_VVI     = globalProperty("sim/cockpit2/gauges/indicators/vvi_fpm_pilot")   
 Fo_VVI       = globalProperty("sim/cockpit2/gauges/indicators/vvi_fpm_copilot")      -- Consider to use PFD_Fo_VS instead (check cockpit_datarefs.lua)
 Capt_Mach    = globalProperty("sim/cockpit2/gauges/indicators/mach_pilot")
 Fo_Mach      = globalProperty("sim/cockpit2/gauges/indicators/mach_copilot")
+Capt_Baro    = globalProperty("sim/cockpit2/gauges/actuators/barometer_setting_in_hg_pilot") -- Baro settings for Pilot
+Fo_Baro      = globalProperty("sim/cockpit2/gauges/actuators/barometer_setting_in_hg_copilot") -- Baro settings for F/O
 
 Stby_Alt     = globalProperty("sim/cockpit2/gauges/indicators/altitude_ft_stby")     -- Altitude in the stdby instrument
 Stby_IAS     = globalProperty("sim/cockpit2/gauges/indicators/airspeed_kts_stby")    -- IAS in the stdby instrument
