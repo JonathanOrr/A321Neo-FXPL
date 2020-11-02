@@ -27,7 +27,7 @@ local guards = {
 ----------------------------------------------------------------------------------------------------
 function guard_click_handler(phase, object)
     if phase == SASL_COMMAND_BEGIN then
-        set(object.dataref, 1 - get(object.dataref))
+        set(object.state_dataref, 1 - get(object.state_dataref))
     end
 end
 
@@ -35,7 +35,8 @@ end
 -- Initialization function
 ----------------------------------------------------------------------------------------------------
 local function create_drs(object)
-    object.dataref = createGlobalPropertyi("a321neo/cockpit/overhead/guards/" .. object.name, 0, false, true, false)
+    object.dataref = createGlobalPropertyf("a321neo/cockpit/overhead/guards/" .. object.name, 0, false, true, false)
+    object.state_dataref = createGlobalPropertyi("a321neo/cockpit/overhead/guards/state/" .. object.name, 0, false, true, false)
     object.command = createCommand("a321neo/cockpit/overhead/guards/" .. object.name, "GUARD - " .. object.name .. " pushbutton")
     sasl.registerCommandHandler (object.command, 0,  function(phase) guard_click_handler(phase, object); return 1 end )
 end
@@ -48,4 +49,8 @@ end
 
 init_drs(guards)
 
-
+function update()
+    for i = 1, #guards do
+        set(guards[i].dataref, Set_anim_value(get(guards[i].dataref), get(guards[i].state_dataref), 0, 1, 6))
+    end
+end
