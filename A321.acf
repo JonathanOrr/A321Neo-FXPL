@@ -212,7 +212,7 @@ P _gear/0/_lonE 6.0
 P _gear/0/_lonN 6.0
 P _gear/0/_lonR 99.0
 P _gear/0/_scon 52322.308593750
-P _gear/0/_stat_def 0.378928840
+P _gear/0/_stat_def 0.378928751
 P _gear/0/_steerdeg_hispeed 5.0
 P _gear/0/_steerdeg_lospeed 75.0
 P _gear/0/_strut_comp 0.899999976
@@ -246,7 +246,7 @@ P _gear/1/_lonE -6.0
 P _gear/1/_lonN -6.0
 P _gear/1/_lonR 0.0
 P _gear/1/_scon 83991.070312500
-P _gear/1/_stat_def 1.381937861
+P _gear/1/_stat_def 1.381937742
 P _gear/1/_steerdeg_hispeed 0.0
 P _gear/1/_steerdeg_lospeed 0.0
 P _gear/1/_strut_comp 0.400000006
@@ -280,7 +280,7 @@ P _gear/2/_lonE -6.0
 P _gear/2/_lonN -6.0
 P _gear/2/_lonR 0.0
 P _gear/2/_scon 83991.070312500
-P _gear/2/_stat_def 1.381937861
+P _gear/2/_stat_def 1.381937742
 P _gear/2/_steerdeg_hispeed 0.0
 P _gear/2/_steerdeg_lospeed 0.0
 P _gear/2/_strut_comp 0.400000006
@@ -409,7 +409,7 @@ P _lite/5/_width 30.0
 P _lite/count 6
 P _lite_equip/_land_lite_off_on_retract_EQ 0
 P _lite_equip/_taxi_lite_off_on_retract_EQ 1
-P _obja/0/_obj_flags 25
+P _obja/0/_obj_flags 29
 P _obja/0/_v10_att_file_stl cockpit back walls.obj
 P _obja/0/_v10_att_part -1
 P _obja/0/_v10_att_phi_ref 0.0
@@ -417,7 +417,7 @@ P _obja/0/_v10_att_psi_ref 0.0
 P _obja/0/_v10_att_the_ref 0.0
 P _obja/0/_v10_att_x_acf_prt_ref 0.0
 P _obja/0/_v10_att_y_acf_prt_ref 0.0
-P _obja/0/_v10_att_z_acf_prt_ref 72.998687744
+P _obja/0/_v10_att_z_acf_prt_ref 73.0
 P _obja/0/_v10_is_internal 731197194
 P _obja/0/_v10_steers_with_gear 0
 P _obja/1/_obj_flags 25
@@ -428,7 +428,7 @@ P _obja/1/_v10_att_psi_ref 0.0
 P _obja/1/_v10_att_the_ref 0.0
 P _obja/1/_v10_att_x_acf_prt_ref 0.0
 P _obja/1/_v10_att_y_acf_prt_ref 0.0
-P _obja/1/_v10_att_z_acf_prt_ref 72.998687744
+P _obja/1/_v10_att_z_acf_prt_ref 73.0
 P _obja/1/_v10_is_internal 731197194
 P _obja/1/_v10_steers_with_gear 0
 P _obja/10/_obj_flags 25
@@ -439,10 +439,10 @@ P _obja/10/_v10_att_psi_ref 0.0
 P _obja/10/_v10_att_the_ref 0.0
 P _obja/10/_v10_att_x_acf_prt_ref 0.0
 P _obja/10/_v10_att_y_acf_prt_ref 0.0
-P _obja/10/_v10_att_z_acf_prt_ref 72.998687744
+P _obja/10/_v10_att_z_acf_prt_ref 73.0
 P _obja/10/_v10_is_internal -1267978486
 P _obja/10/_v10_steers_with_gear 0
-P _obja/11/_obj_flags 25
+P _obja/11/_obj_flags 29
 P _obja/11/_v10_att_file_stl glareshield bases.obj
 P _obja/11/_v10_att_part -1
 P _obja/11/_v10_att_phi_ref 0.0
@@ -450,7 +450,7 @@ P _obja/11/_v10_att_psi_ref 0.0
 P _obja/11/_v10_att_the_ref 0.0
 P _obja/11/_v10_att_x_acf_prt_ref 0.0
 P _obja/11/_v10_att_y_acf_prt_ref 0.0
-P _obja/11/_v10_att_z_acf_prt_ref 72.998687744
+P _obja/11/_v10_att_z_acf_prt_ref 73.0
 P _obja/11/_v10_is_internal -1267978486
 P _obja/11/_v10_steers_with_gear 0
 P _obja/12/_obj_flags 25
@@ -461,10 +461,10 @@ P _obja/12/_v10_att_psi_ref 0.0
 P _obja/12/_v10_att_the_ref 0.0
 P _obja/12/_v10_att_x_acf_prt_ref 0.0
 P _obja/12/_v10_att_y_acf_prt_ref 0.0
-P _obja/12/_v10_att_z_acf_prt_ref 72.998687744
+P _obja/12/_v10_att_z_acf_prt_ref 73.0
 P _obja/12/_v10_is_internal -1267978486
 P _obja/12/_v10_steers_with_gear 0
-P _obja/13/_obj_flags 25
+P _obja/13/_obj_flags 29
 P _obja/13/_v10_att_file_stl flight_control.obj
 P _obja/13/_v10_att_part -1
 P _obja/13/_v10_att_phi_ref 0.0
@@ -472,10 +472,10 @@ P _obja/13/_v10_att_psi_ref 0.0
 P _obja/13/_v10_att_the_ref 0.0
 P _obja/13/_v10_att_x_acf_prt_ref 0.0
 P _obja/13/_v10_att_y_acf_prt_ref 0.0
-P _obja/13/_v10_att_z_acf_prt_ref 72.998687744
+P _obja/13/_v10_att_z_acf_prt_ref 73.0
 P _obja/13/_v10_is_internal -1727123702
 P _obja/13/_v10_steers_with_gear 0
-P _obja/14/_obj_flags 6169
+P _obja/14/_obj_flags 6173
 P _obja/14/_v10_att_file_stl cockpit_obj/cockpit_3d.obj
 P _obja/14/_v10_att_part -1
 P _obja/14/_v10_att_phi_ref 0.0
@@ -483,10 +483,10 @@ P _obja/14/_v10_att_psi_ref 0.0
 P _obja/14/_v10_att_the_ref 0.0
 P _obja/14/_v10_att_x_acf_prt_ref 0.0
 P _obja/14/_v10_att_y_acf_prt_ref 0.0
-P _obja/14/_v10_att_z_acf_prt_ref 72.998687744
+P _obja/14/_v10_att_z_acf_prt_ref 73.0
 P _obja/14/_v10_is_internal -1150472438
 P _obja/14/_v10_steers_with_gear 0
-P _obja/15/_obj_flags 25
+P _obja/15/_obj_flags 29
 P _obja/15/_v10_att_file_stl cockpit_obj/object switches.obj
 P _obja/15/_v10_att_part -1
 P _obja/15/_v10_att_phi_ref 0.0
@@ -494,10 +494,10 @@ P _obja/15/_v10_att_psi_ref 0.0
 P _obja/15/_v10_att_the_ref 0.0
 P _obja/15/_v10_att_x_acf_prt_ref 0.0
 P _obja/15/_v10_att_y_acf_prt_ref 0.0
-P _obja/15/_v10_att_z_acf_prt_ref 72.998687744
+P _obja/15/_v10_att_z_acf_prt_ref 73.0
 P _obja/15/_v10_is_internal -1150472438
 P _obja/15/_v10_steers_with_gear 0
-P _obja/16/_obj_flags 25
+P _obja/16/_obj_flags 29
 P _obja/16/_v10_att_file_stl cockpit_obj/throttle quadrant.obj
 P _obja/16/_v10_att_part -1
 P _obja/16/_v10_att_phi_ref 0.0
@@ -505,10 +505,10 @@ P _obja/16/_v10_att_psi_ref 0.0
 P _obja/16/_v10_att_the_ref 0.0
 P _obja/16/_v10_att_x_acf_prt_ref 0.0
 P _obja/16/_v10_att_y_acf_prt_ref 0.0
-P _obja/16/_v10_att_z_acf_prt_ref 72.998687744
+P _obja/16/_v10_att_z_acf_prt_ref 73.0
 P _obja/16/_v10_is_internal -1150472438
 P _obja/16/_v10_steers_with_gear 0
-P _obja/17/_obj_flags 25
+P _obja/17/_obj_flags 29
 P _obja/17/_v10_att_file_stl cockpit_obj/aft center pedestal panel.obj
 P _obja/17/_v10_att_part -1
 P _obja/17/_v10_att_phi_ref 0.0
@@ -516,10 +516,10 @@ P _obja/17/_v10_att_psi_ref 0.0
 P _obja/17/_v10_att_the_ref 0.0
 P _obja/17/_v10_att_x_acf_prt_ref 0.0
 P _obja/17/_v10_att_y_acf_prt_ref 0.0
-P _obja/17/_v10_att_z_acf_prt_ref 72.998687744
+P _obja/17/_v10_att_z_acf_prt_ref 73.0
 P _obja/17/_v10_is_internal -1150472438
 P _obja/17/_v10_steers_with_gear 0
-P _obja/18/_obj_flags 25
+P _obja/18/_obj_flags 29
 P _obja/18/_v10_att_file_stl cockpit_obj/aft overhead panel.obj
 P _obja/18/_v10_att_part -1
 P _obja/18/_v10_att_phi_ref 0.0
@@ -527,10 +527,10 @@ P _obja/18/_v10_att_psi_ref 0.0
 P _obja/18/_v10_att_the_ref 0.0
 P _obja/18/_v10_att_x_acf_prt_ref 0.0
 P _obja/18/_v10_att_y_acf_prt_ref 0.0
-P _obja/18/_v10_att_z_acf_prt_ref 72.998687744
+P _obja/18/_v10_att_z_acf_prt_ref 73.0
 P _obja/18/_v10_is_internal 441134858
 P _obja/18/_v10_steers_with_gear 0
-P _obja/19/_obj_flags 25
+P _obja/19/_obj_flags 29
 P _obja/19/_v10_att_file_stl cockpit_obj/front center pedestal panel.obj
 P _obja/19/_v10_att_part -1
 P _obja/19/_v10_att_phi_ref 0.0
@@ -538,7 +538,7 @@ P _obja/19/_v10_att_psi_ref 0.0
 P _obja/19/_v10_att_the_ref 0.0
 P _obja/19/_v10_att_x_acf_prt_ref 0.0
 P _obja/19/_v10_att_y_acf_prt_ref 0.0
-P _obja/19/_v10_att_z_acf_prt_ref 72.998687744
+P _obja/19/_v10_att_z_acf_prt_ref 73.0
 P _obja/19/_v10_is_internal 441134858
 P _obja/19/_v10_steers_with_gear 0
 P _obja/2/_obj_flags 25
@@ -549,10 +549,10 @@ P _obja/2/_v10_att_psi_ref 0.0
 P _obja/2/_v10_att_the_ref 0.0
 P _obja/2/_v10_att_x_acf_prt_ref 0.0
 P _obja/2/_v10_att_y_acf_prt_ref 0.0
-P _obja/2/_v10_att_z_acf_prt_ref 72.998687744
+P _obja/2/_v10_att_z_acf_prt_ref 73.0
 P _obja/2/_v10_is_internal 731197194
 P _obja/2/_v10_steers_with_gear 0
-P _obja/20/_obj_flags 25
+P _obja/20/_obj_flags 29
 P _obja/20/_v10_att_file_stl cockpit_obj/front overhead panel.obj
 P _obja/20/_v10_att_part -1
 P _obja/20/_v10_att_phi_ref 0.0
@@ -560,10 +560,10 @@ P _obja/20/_v10_att_psi_ref 0.0
 P _obja/20/_v10_att_the_ref 0.0
 P _obja/20/_v10_att_x_acf_prt_ref 0.0
 P _obja/20/_v10_att_y_acf_prt_ref 0.0
-P _obja/20/_v10_att_z_acf_prt_ref 72.998687744
+P _obja/20/_v10_att_z_acf_prt_ref 73.0
 P _obja/20/_v10_is_internal 441134858
 P _obja/20/_v10_steers_with_gear 0
-P _obja/21/_obj_flags 25
+P _obja/21/_obj_flags 29
 P _obja/21/_v10_att_file_stl cockpit_obj/glareshield panel.obj
 P _obja/21/_v10_att_part -1
 P _obja/21/_v10_att_phi_ref 0.0
@@ -571,7 +571,7 @@ P _obja/21/_v10_att_psi_ref 0.0
 P _obja/21/_v10_att_the_ref 0.0
 P _obja/21/_v10_att_x_acf_prt_ref 0.0
 P _obja/21/_v10_att_y_acf_prt_ref 0.0
-P _obja/21/_v10_att_z_acf_prt_ref 72.998687744
+P _obja/21/_v10_att_z_acf_prt_ref 73.0
 P _obja/21/_v10_is_internal 441134858
 P _obja/21/_v10_steers_with_gear 0
 P _obja/22/_obj_flags 29
@@ -582,7 +582,7 @@ P _obja/22/_v10_att_psi_ref 0.0
 P _obja/22/_v10_att_the_ref 0.0
 P _obja/22/_v10_att_x_acf_prt_ref 0.0
 P _obja/22/_v10_att_y_acf_prt_ref 0.0
-P _obja/22/_v10_att_z_acf_prt_ref 72.998687744
+P _obja/22/_v10_att_z_acf_prt_ref 73.0
 P _obja/22/_v10_is_internal 441134858
 P _obja/22/_v10_steers_with_gear 0
 P _obja/23/_obj_flags 25
@@ -593,7 +593,7 @@ P _obja/23/_v10_att_psi_ref 0.0
 P _obja/23/_v10_att_the_ref 0.0
 P _obja/23/_v10_att_x_acf_prt_ref 0.0
 P _obja/23/_v10_att_y_acf_prt_ref 0.0
-P _obja/23/_v10_att_z_acf_prt_ref 72.998687744
+P _obja/23/_v10_att_z_acf_prt_ref 73.0
 P _obja/23/_v10_is_internal 1411119952
 P _obja/23/_v10_steers_with_gear 0
 P _obja/24/_obj_flags 24
@@ -605,7 +605,7 @@ P _obja/24/_v10_att_psi_ref 0.0
 P _obja/24/_v10_att_the_ref 0.0
 P _obja/24/_v10_att_x_acf_prt_ref 0.0
 P _obja/24/_v10_att_y_acf_prt_ref 0.0
-P _obja/24/_v10_att_z_acf_prt_ref 72.998687744
+P _obja/24/_v10_att_z_acf_prt_ref 73.0
 P _obja/24/_v10_is_internal 731197194
 P _obja/24/_v10_steers_with_gear 0
 P _obja/25/_obj_flags 24
@@ -617,7 +617,7 @@ P _obja/25/_v10_att_psi_ref 0.0
 P _obja/25/_v10_att_the_ref 0.0
 P _obja/25/_v10_att_x_acf_prt_ref 0.0
 P _obja/25/_v10_att_y_acf_prt_ref 0.0
-P _obja/25/_v10_att_z_acf_prt_ref 72.998687744
+P _obja/25/_v10_att_z_acf_prt_ref 73.0
 P _obja/25/_v10_is_internal 731197194
 P _obja/25/_v10_steers_with_gear 0
 P _obja/26/_obj_flags 24
@@ -629,7 +629,7 @@ P _obja/26/_v10_att_psi_ref 0.0
 P _obja/26/_v10_att_the_ref 0.0
 P _obja/26/_v10_att_x_acf_prt_ref 0.0
 P _obja/26/_v10_att_y_acf_prt_ref 0.0
-P _obja/26/_v10_att_z_acf_prt_ref 72.998687744
+P _obja/26/_v10_att_z_acf_prt_ref 73.0
 P _obja/26/_v10_is_internal -1150931984
 P _obja/26/_v10_steers_with_gear 0
 P _obja/27/_obj_flags 24
@@ -641,7 +641,7 @@ P _obja/27/_v10_att_psi_ref 0.0
 P _obja/27/_v10_att_the_ref 0.0
 P _obja/27/_v10_att_x_acf_prt_ref 0.0
 P _obja/27/_v10_att_y_acf_prt_ref 0.0
-P _obja/27/_v10_att_z_acf_prt_ref 72.998687744
+P _obja/27/_v10_att_z_acf_prt_ref 73.0
 P _obja/27/_v10_is_internal -735548528
 P _obja/27/_v10_steers_with_gear 0
 P _obja/28/_obj_flags 24
@@ -652,7 +652,7 @@ P _obja/28/_v10_att_psi_ref 0.0
 P _obja/28/_v10_att_the_ref 0.0
 P _obja/28/_v10_att_x_acf_prt_ref 0.0
 P _obja/28/_v10_att_y_acf_prt_ref 0.0
-P _obja/28/_v10_att_z_acf_prt_ref 72.998687744
+P _obja/28/_v10_att_z_acf_prt_ref 73.0
 P _obja/28/_v10_is_internal -301700368
 P _obja/28/_v10_steers_with_gear 0
 P _obja/29/_obj_flags 25
@@ -663,7 +663,7 @@ P _obja/29/_v10_att_psi_ref 0.0
 P _obja/29/_v10_att_the_ref 0.0
 P _obja/29/_v10_att_x_acf_prt_ref 0.0
 P _obja/29/_v10_att_y_acf_prt_ref 0.0
-P _obja/29/_v10_att_z_acf_prt_ref 72.998687744
+P _obja/29/_v10_att_z_acf_prt_ref 73.0
 P _obja/29/_v10_is_internal 60355536
 P _obja/29/_v10_steers_with_gear 0
 P _obja/3/_obj_flags 25
@@ -674,10 +674,10 @@ P _obja/3/_v10_att_psi_ref 0.0
 P _obja/3/_v10_att_the_ref 0.0
 P _obja/3/_v10_att_x_acf_prt_ref 0.0
 P _obja/3/_v10_att_y_acf_prt_ref 0.0
-P _obja/3/_v10_att_z_acf_prt_ref 72.998687744
+P _obja/3/_v10_att_z_acf_prt_ref 73.0
 P _obja/3/_v10_is_internal 731197194
 P _obja/3/_v10_steers_with_gear 0
-P _obja/30/_obj_flags 25
+P _obja/30/_obj_flags 29
 P _obja/30/_v10_att_file_stl cockpit interior.obj
 P _obja/30/_v10_att_part -1
 P _obja/30/_v10_att_phi_ref 0.0
@@ -685,10 +685,10 @@ P _obja/30/_v10_att_psi_ref 0.0
 P _obja/30/_v10_att_the_ref 0.0
 P _obja/30/_v10_att_x_acf_prt_ref 0.0
 P _obja/30/_v10_att_y_acf_prt_ref 0.0
-P _obja/30/_v10_att_z_acf_prt_ref 72.998687744
+P _obja/30/_v10_att_z_acf_prt_ref 73.0
 P _obja/30/_v10_is_internal 1583187456
 P _obja/30/_v10_steers_with_gear 0
-P _obja/31/_obj_flags 25
+P _obja/31/_obj_flags 29
 P _obja/31/_v10_att_file_stl cockpit window frames.obj
 P _obja/31/_v10_att_part -1
 P _obja/31/_v10_att_phi_ref 0.0
@@ -696,7 +696,7 @@ P _obja/31/_v10_att_psi_ref 0.0
 P _obja/31/_v10_att_the_ref 0.0
 P _obja/31/_v10_att_x_acf_prt_ref 0.0
 P _obja/31/_v10_att_y_acf_prt_ref 0.0
-P _obja/31/_v10_att_z_acf_prt_ref 72.998687744
+P _obja/31/_v10_att_z_acf_prt_ref 73.0
 P _obja/31/_v10_is_internal 1583187456
 P _obja/31/_v10_steers_with_gear 0
 P _obja/32/_obj_flags 25
@@ -707,7 +707,7 @@ P _obja/32/_v10_att_psi_ref 0.0
 P _obja/32/_v10_att_the_ref 0.0
 P _obja/32/_v10_att_x_acf_prt_ref 0.0
 P _obja/32/_v10_att_y_acf_prt_ref 0.0
-P _obja/32/_v10_att_z_acf_prt_ref 72.998687744
+P _obja/32/_v10_att_z_acf_prt_ref 73.0
 P _obja/32/_v10_is_internal 693863936
 P _obja/32/_v10_steers_with_gear 0
 P _obja/33/_obj_flags 25
@@ -718,7 +718,7 @@ P _obja/33/_v10_att_psi_ref 0.0
 P _obja/33/_v10_att_the_ref 0.0
 P _obja/33/_v10_att_x_acf_prt_ref 0.0
 P _obja/33/_v10_att_y_acf_prt_ref 0.0
-P _obja/33/_v10_att_z_acf_prt_ref 72.998687744
+P _obja/33/_v10_att_z_acf_prt_ref 73.0
 P _obja/33/_v10_is_internal 693863936
 P _obja/33/_v10_steers_with_gear 0
 P _obja/34/_obj_flags 0
@@ -729,7 +729,7 @@ P _obja/34/_v10_att_psi_ref 0.0
 P _obja/34/_v10_att_the_ref 0.0
 P _obja/34/_v10_att_x_acf_prt_ref 0.0
 P _obja/34/_v10_att_y_acf_prt_ref 0.0
-P _obja/34/_v10_att_z_acf_prt_ref 72.998687744
+P _obja/34/_v10_att_z_acf_prt_ref 73.0
 P _obja/34/_v10_is_internal 99255808
 P _obja/34/_v10_steers_with_gear 0
 P _obja/35/_obj_flags 3
@@ -740,7 +740,7 @@ P _obja/35/_v10_att_psi_ref 0.0
 P _obja/35/_v10_att_the_ref 0.0
 P _obja/35/_v10_att_x_acf_prt_ref 0.0
 P _obja/35/_v10_att_y_acf_prt_ref 0.0
-P _obja/35/_v10_att_z_acf_prt_ref 72.998687744
+P _obja/35/_v10_att_z_acf_prt_ref 73.0
 P _obja/35/_v10_is_internal -1283942880
 P _obja/35/_v10_steers_with_gear 0
 P _obja/36/_obj_flags 24
@@ -751,10 +751,10 @@ P _obja/36/_v10_att_psi_ref 0.0
 P _obja/36/_v10_att_the_ref 0.0
 P _obja/36/_v10_att_x_acf_prt_ref 0.0
 P _obja/36/_v10_att_y_acf_prt_ref 0.0
-P _obja/36/_v10_att_z_acf_prt_ref 72.998687744
+P _obja/36/_v10_att_z_acf_prt_ref 73.0
 P _obja/36/_v10_is_internal 1781831200
 P _obja/36/_v10_steers_with_gear 0
-P _obja/37/_obj_flags 0
+P _obja/37/_obj_flags 4
 P _obja/37/_v10_att_file_stl ext lights.obj
 P _obja/37/_v10_att_part -1
 P _obja/37/_v10_att_phi_ref 0.0
@@ -762,7 +762,7 @@ P _obja/37/_v10_att_psi_ref 0.0
 P _obja/37/_v10_att_the_ref 0.0
 P _obja/37/_v10_att_x_acf_prt_ref 0.0
 P _obja/37/_v10_att_y_acf_prt_ref 0.0
-P _obja/37/_v10_att_z_acf_prt_ref 72.998687744
+P _obja/37/_v10_att_z_acf_prt_ref 73.0
 P _obja/37/_v10_is_internal -2102684128
 P _obja/37/_v10_steers_with_gear 0
 P _obja/38/_obj_flags 24
@@ -773,7 +773,7 @@ P _obja/38/_v10_att_psi_ref 0.0
 P _obja/38/_v10_att_the_ref 0.0
 P _obja/38/_v10_att_x_acf_prt_ref 0.0
 P _obja/38/_v10_att_y_acf_prt_ref 0.0
-P _obja/38/_v10_att_z_acf_prt_ref 72.998687744
+P _obja/38/_v10_att_z_acf_prt_ref 73.0
 P _obja/38/_v10_is_internal 1183815200
 P _obja/38/_v10_steers_with_gear 0
 P _obja/4/_obj_flags 25
@@ -784,7 +784,7 @@ P _obja/4/_v10_att_psi_ref 0.0
 P _obja/4/_v10_att_the_ref 0.0
 P _obja/4/_v10_att_x_acf_prt_ref 0.0
 P _obja/4/_v10_att_y_acf_prt_ref 0.0
-P _obja/4/_v10_att_z_acf_prt_ref 72.998687744
+P _obja/4/_v10_att_z_acf_prt_ref 73.0
 P _obja/4/_v10_is_internal 731197194
 P _obja/4/_v10_steers_with_gear 0
 P _obja/5/_obj_flags 24
@@ -795,7 +795,7 @@ P _obja/5/_v10_att_psi_ref 0.0
 P _obja/5/_v10_att_the_ref 0.0
 P _obja/5/_v10_att_x_acf_prt_ref 0.0
 P _obja/5/_v10_att_y_acf_prt_ref 0.0
-P _obja/5/_v10_att_z_acf_prt_ref 72.998687744
+P _obja/5/_v10_att_z_acf_prt_ref 73.0
 P _obja/5/_v10_is_internal 731197194
 P _obja/5/_v10_steers_with_gear 0
 P _obja/6/_obj_flags 24
@@ -806,7 +806,7 @@ P _obja/6/_v10_att_psi_ref 0.0
 P _obja/6/_v10_att_the_ref 0.0
 P _obja/6/_v10_att_x_acf_prt_ref 0.0
 P _obja/6/_v10_att_y_acf_prt_ref 0.0
-P _obja/6/_v10_att_z_acf_prt_ref 72.998687744
+P _obja/6/_v10_att_z_acf_prt_ref 73.0
 P _obja/6/_v10_is_internal 731197194
 P _obja/6/_v10_steers_with_gear 0
 P _obja/7/_obj_flags 24
@@ -817,7 +817,7 @@ P _obja/7/_v10_att_psi_ref 0.0
 P _obja/7/_v10_att_the_ref 0.0
 P _obja/7/_v10_att_x_acf_prt_ref 0.0
 P _obja/7/_v10_att_y_acf_prt_ref 0.0
-P _obja/7/_v10_att_z_acf_prt_ref 72.998687744
+P _obja/7/_v10_att_z_acf_prt_ref 73.0
 P _obja/7/_v10_is_internal 731197194
 P _obja/7/_v10_steers_with_gear 0
 P _obja/8/_obj_flags 24
@@ -828,7 +828,7 @@ P _obja/8/_v10_att_psi_ref 0.0
 P _obja/8/_v10_att_the_ref 0.0
 P _obja/8/_v10_att_x_acf_prt_ref 0.0
 P _obja/8/_v10_att_y_acf_prt_ref 0.0
-P _obja/8/_v10_att_z_acf_prt_ref 72.998687744
+P _obja/8/_v10_att_z_acf_prt_ref 73.0
 P _obja/8/_v10_is_internal 731197194
 P _obja/8/_v10_steers_with_gear 0
 P _obja/9/_obj_flags 25
@@ -839,7 +839,7 @@ P _obja/9/_v10_att_psi_ref 0.0
 P _obja/9/_v10_att_the_ref 0.0
 P _obja/9/_v10_att_x_acf_prt_ref 0.0
 P _obja/9/_v10_att_y_acf_prt_ref 0.0
-P _obja/9/_v10_att_z_acf_prt_ref 72.998687744
+P _obja/9/_v10_att_z_acf_prt_ref 73.0
 P _obja/9/_v10_is_internal -1267978486
 P _obja/9/_v10_steers_with_gear 0
 P _obja/count 39
@@ -54455,6 +54455,7 @@ GROUP glareshield buttons
 END_GROUP
 GROUP Buttons and Lights
   LOCKED
+  GROUP_OPEN
   GROUP ADIRS
     LOCKED
     gen_rotary IR1
@@ -55562,15 +55563,18 @@ GROUP Buttons and Lights
   END_GROUP
   GROUP AIR COND
     LOCKED
+    GROUP_OPEN
     gen_rotary Pack 1
       POS 1280.000000 332.000000
       IMAGE Buttons/off_fault
-      DATAREF abc
+      DATAREF a321neo/cockpit/packs/pack1_off
       LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 3.000000 3.000000
+      KEY_FRAME 1.000000 1.000000 1.000000
+      KEY_FRAME 10.000000 2.000000 1.000000
+      KEY_FRAME 11.000000 3.000000
       DIGITS 4
       ROTARY_TYPE NO_CLICK
       CLICK_RADIUS 20.000000
@@ -55605,7 +55609,7 @@ GROUP Buttons and Lights
     gen_rotary Ram Air
       POS 1024.000000 332.000000
       IMAGE Buttons/elecpump
-      DATAREF abc
+      DATAREF a321neo/cockpit/packs/ram_air_on
       LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
@@ -55666,12 +55670,14 @@ GROUP Buttons and Lights
     gen_rotary Pack 2
       POS 640.000000 332.000000
       IMAGE Buttons/off_fault
-      DATAREF abc
+      DATAREF a321neo/cockpit/packs/pack2_off
       LOCKED
       LIGHT_MODE BACK_LIT_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 3.000000 3.000000
+      KEY_FRAME 1.000000 1.000000 1.000000
+      KEY_FRAME 10.000000 2.000000 1.000000
+      KEY_FRAME 11.000000 3.000000
       DIGITS 4
       ROTARY_TYPE NO_CLICK
       CLICK_RADIUS 20.000000
@@ -56901,7 +56907,6 @@ END_GROUP
 GROUP ECAM lower du
   LOCKED
   HIDE
-  GROUP_OPEN
   GROUP ECAM DOOR
     SHOW_EQUAL 9.000000 a321neo/cockpit/ecam/page_num
     LOCKED
@@ -58663,11 +58668,14 @@ GROUP ECAM lower du
   END_GROUP
   GROUP ECAM BLEED
     SHOW_EQUAL 2.000000 a321neo/cockpit/ecam/page_num
-    GROUP_OPEN
+    LOCKED
+    HIDE
     gen_rotary bleed bgd
       POS 3637.000000 733.000000
       IMAGE MIP/ecam lower du/BLEED/Background
       DATAREF 
+      LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -58687,6 +58695,8 @@ GROUP ECAM lower du
       POS 3637.714111 690.714294
       IMAGE MIP/ecam lower du/BLEED/Frame
       DATAREF 
+      LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -58706,6 +58716,8 @@ GROUP ECAM lower du
       POS 3388.000000 539.000000
       IMAGE MIP/ecam lower du/BLEED/Valve
       DATAREF a321neo/cockpit/ecam/bleed/ip_valve_L[0]
+      LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -58728,6 +58740,8 @@ GROUP ECAM lower du
       POS 3889.000000 539.000000
       IMAGE MIP/ecam lower du/BLEED/Valve
       DATAREF a321neo/cockpit/ecam/bleed/ip_valve_R[1]
+      LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -58750,6 +58764,8 @@ GROUP ECAM lower du
       POS 3460.000000 478.000000
       IMAGE MIP/ecam lower du/BLEED/Valve
       DATAREF a321neo/cockpit/ecam/bleed/hp_valve_L
+      LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 2.000000 1.000000
@@ -58772,6 +58788,8 @@ GROUP ECAM lower du
       POS 3817.000000 479.000000
       IMAGE MIP/ecam lower du/BLEED/Valve
       DATAREF a321neo/cockpit/ecam/bleed/hp_valve_R
+      LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 2.000000 1.000000
@@ -58794,6 +58812,8 @@ GROUP ECAM lower du
       POS 3719.000000 776.000000
       IMAGE MIP/ecam lower du/BLEED/Valve
       DATAREF a321neo/cockpit/ecam/bleed/xbleed_valve
+      LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 2.000000 1.000000
@@ -58816,6 +58836,8 @@ GROUP ECAM lower du
       POS 3389.000000 849.000000
       IMAGE MIP/ecam lower du/BLEED/Valve
       DATAREF a321neo/cockpit/ecam/bleed/pack_valve_L
+      LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -58838,6 +58860,8 @@ GROUP ECAM lower du
       POS 3890.000000 851.000000
       IMAGE MIP/ecam lower du/BLEED/Valve
       DATAREF a321neo/cockpit/ecam/bleed/pack_valve_R
+      LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -58860,6 +58884,8 @@ GROUP ECAM lower du
       POS 3641.143066 1116.142700
       IMAGE MIP/ecam lower du/BLEED/Top Mix Bleed
       DATAREF a321neo/cockpit/ecam/bleed/top_mix_line
+      LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -58879,6 +58905,8 @@ GROUP ECAM lower du
       POS 3638.428711 1049.714111
       IMAGE MIP/ecam lower du/BLEED/Valve
       DATAREF a321neo/cockpit/ecam/bleed/ram_air
+      LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -58901,6 +58929,8 @@ GROUP ECAM lower du
       POS 3387.000000 958.857178
       IMAGE MIP/ecam lower du/BLEED/Temperature Needle
       DATAREF a321neo/dynamics/packs/l_pack_byp_valve
+      LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 -60.000000 1.000000
@@ -58912,6 +58942,8 @@ GROUP ECAM lower du
       POS 3889.000000 959.000000
       IMAGE MIP/ecam lower du/BLEED/Temperature Needle
       DATAREF a321neo/dynamics/packs/r_pack_byp_valve
+      LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 -60.000000 1.000000
@@ -58924,6 +58956,8 @@ GROUP ECAM lower du
       IMAGE MIP/ecam lower du/BLEED/Flow Needle Green
       DATAREF a321neo/dynamics/packs/l_pack_flow_value
       SHOW_GREATER 0.010000 a321neo/dynamics/packs/l_pack_flow_value
+      LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 -55.000000 1.000000
@@ -58936,6 +58970,8 @@ GROUP ECAM lower du
       IMAGE MIP/ecam lower du/BLEED/Flow Needle Amber
       DATAREF a321neo/dynamics/packs/l_pack_flow_value
       SHOW_LESS 0.010000 a321neo/dynamics/packs/l_pack_flow_value
+      LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 -55.000000 1.000000
@@ -58948,6 +58984,8 @@ GROUP ECAM lower du
       IMAGE MIP/ecam lower du/BLEED/Flow Needle Green
       DATAREF a321neo/dynamics/packs/r_pack_flow_value
       SHOW_GREATER 0.010000 a321neo/dynamics/packs/r_pack_flow_value
+      LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 -55.000000 1.000000
@@ -58960,6 +58998,8 @@ GROUP ECAM lower du
       IMAGE MIP/ecam lower du/BLEED/Flow Needle Amber
       DATAREF a321neo/dynamics/packs/r_pack_flow_value
       SHOW_LESS 0.010000 a321neo/dynamics/packs/r_pack_flow_value
+      LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 -55.000000 1.000000
@@ -58971,6 +59011,8 @@ GROUP ECAM lower du
       POS 3640.857178 657.571411
       IMAGE MIP/ecam lower du/BLEED/Valve
       DATAREF a321neo/cockpit/ecam/bleed/apu_valve
+      LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME -1.000000 -1.000000 1.000000
@@ -59202,13 +59244,11 @@ GROUP ECAM lower du
   GROUP ECAM COND
     SHOW_EQUAL 8.000000 a321neo/cockpit/ecam/page_num
     LOCKED
-    HIDE
     gen_rotary cond bacground
       POS 3637.000000 733.000000
       IMAGE MIP/ecam lower du/COND/COND
       DATAREF 
       LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -59227,18 +59267,17 @@ GROUP ECAM lower du
     GROUP yellow valves
       SHOW_EQUAL 0.000000 a321neo/cockpit/aircond/bleed_avail
       LOCKED
-      HIDE
-      gen_rotary Y v iso
-        POS 3804.000000 567.000000
-        IMAGE MIP/ecam lower du/COND/yellowValve
-        DATAREF a321neo/cockpit/aircond/aft_cargo_iso_valve
+      GROUP_OPEN
+      gen_rotary Y cab hot air
+        POS 3943.000000 792.000000
+        IMAGE MIP/ecam lower du/BLEED/Valve
+        DATAREF a321neo/cockpit/ecam/aircond/valve_hot_air
         LOCKED
-        HIDE
         LIGHT_MODE GLASS_AUTO
         LIGHT_RHEOSTAT 0
         KEY_FRAME 0.000000 0.000000 1.000000
-        KEY_FRAME 1.000000 1.000000
-        DIGITS 2
+        KEY_FRAME 4.000000 4.000000
+        DIGITS 5
         ROTARY_TYPE NO_CLICK
         CLICK_RADIUS 10.000000
         CLICK_RADIUS_DY 0.000000
@@ -59251,15 +59290,14 @@ GROUP ECAM lower du
 
       gen_rotary Y h iso
         POS 3900.000000 687.000000
-        IMAGE MIP/ecam lower du/COND/yellowValve
-        DATAREF a321neo/cockpit/aircond/aft_cargo_iso_valve
+        IMAGE MIP/ecam lower du/BLEED/Valveh
+        DATAREF a321neo/cockpit/ecam/aircond/valve_isol_cargo_out
         LOCKED
-        HIDE
         LIGHT_MODE GLASS_AUTO
         LIGHT_RHEOSTAT 0
-        KEY_FRAME 0.000000 1.000000 1.000000
-        KEY_FRAME 1.000000 0.000000
-        DIGITS 2
+        KEY_FRAME 0.000000 0.000000 1.000000
+        KEY_FRAME 4.000000 4.000000
+        DIGITS 5
         ROTARY_TYPE NO_CLICK
         CLICK_RADIUS 10.000000
         CLICK_RADIUS_DY 0.000000
@@ -59270,17 +59308,16 @@ GROUP ECAM lower du
         CLICK_DX 0
         CLICK_DY 0
 
-      gen_rotary Y cab hot air
-        POS 3943.000000 792.000000
-        IMAGE MIP/ecam lower du/COND/yellowValve
-        DATAREF a321neo/cockpit/aircond/cab_hot_air
+      gen_rotary Y v iso
+        POS 3803.000000 567.000000
+        IMAGE MIP/ecam lower du/BLEED/Valveh
+        DATAREF a321neo/cockpit/ecam/aircond/valve_isol_cargo_in
         LOCKED
-        HIDE
         LIGHT_MODE GLASS_AUTO
         LIGHT_RHEOSTAT 0
-        KEY_FRAME 0.000000 1.000000 1.000000
-        KEY_FRAME 1.000000 0.000000
-        DIGITS 2
+        KEY_FRAME 0.000000 0.000000 1.000000
+        KEY_FRAME 4.000000 4.000000
+        DIGITS 5
         ROTARY_TYPE NO_CLICK
         CLICK_RADIUS 10.000000
         CLICK_RADIUS_DY 0.000000
@@ -59293,104 +59330,14 @@ GROUP ECAM lower du
 
       gen_rotary Y car hot air
         POS 3944.000000 451.000000
-        IMAGE MIP/ecam lower du/COND/yellowValve
-        DATAREF a321neo/cockpit/aircond/cargo_hot_air
+        IMAGE MIP/ecam lower du/BLEED/Valve
+        DATAREF a321neo/cockpit/ecam/aircond/valve_hot_air_cargo
         LOCKED
-        HIDE
-        LIGHT_MODE GLASS_AUTO
-        LIGHT_RHEOSTAT 0
-        KEY_FRAME 0.000000 1.000000 1.000000
-        KEY_FRAME 1.000000 0.000000
-        DIGITS 2
-        ROTARY_TYPE NO_CLICK
-        CLICK_RADIUS 10.000000
-        CLICK_RADIUS_DY 0.000000
-        OFFSET 0.000000
-        STEP1 1.000000
-        STEP2 1.000000
-        CURSOR DEFAULT
-        CLICK_DX 0
-        CLICK_DY 0
-
-    END_GROUP
-    GROUP green valves
-      SHOW_EQUAL 1.000000 a321neo/cockpit/aircond/bleed_avail
-      LOCKED
-      HIDE
-      gen_rotary G v iso
-        POS 3804.000000 567.000000
-        IMAGE MIP/ecam lower du/COND/greenValve
-        DATAREF a321neo/cockpit/aircond/aft_cargo_iso_valve
-        LOCKED
-        HIDE
         LIGHT_MODE GLASS_AUTO
         LIGHT_RHEOSTAT 0
         KEY_FRAME 0.000000 0.000000 1.000000
-        KEY_FRAME 1.000000 1.000000
-        DIGITS 2
-        ROTARY_TYPE NO_CLICK
-        CLICK_RADIUS 10.000000
-        CLICK_RADIUS_DY 0.000000
-        OFFSET 0.000000
-        STEP1 1.000000
-        STEP2 1.000000
-        CURSOR DEFAULT
-        CLICK_DX 0
-        CLICK_DY 0
-
-      gen_rotary G h iso
-        POS 3900.000000 687.000000
-        IMAGE MIP/ecam lower du/COND/greenValve
-        DATAREF a321neo/cockpit/aircond/aft_cargo_iso_valve
-        LOCKED
-        HIDE
-        LIGHT_MODE GLASS_AUTO
-        LIGHT_RHEOSTAT 0
-        KEY_FRAME 0.000000 1.000000 1.000000
-        KEY_FRAME 1.000000 0.000000
-        DIGITS 2
-        ROTARY_TYPE NO_CLICK
-        CLICK_RADIUS 10.000000
-        CLICK_RADIUS_DY 0.000000
-        OFFSET 0.000000
-        STEP1 1.000000
-        STEP2 1.000000
-        CURSOR DEFAULT
-        CLICK_DX 0
-        CLICK_DY 0
-
-      gen_rotary G cab hot air
-        POS 3943.000000 792.000000
-        IMAGE MIP/ecam lower du/COND/greenValve
-        DATAREF a321neo/cockpit/aircond/cab_hot_air
-        LOCKED
-        HIDE
-        LIGHT_MODE GLASS_AUTO
-        LIGHT_RHEOSTAT 0
-        KEY_FRAME 0.000000 1.000000 1.000000
-        KEY_FRAME 1.000000 0.000000
-        DIGITS 2
-        ROTARY_TYPE NO_CLICK
-        CLICK_RADIUS 10.000000
-        CLICK_RADIUS_DY 0.000000
-        OFFSET 0.000000
-        STEP1 1.000000
-        STEP2 1.000000
-        CURSOR DEFAULT
-        CLICK_DX 0
-        CLICK_DY 0
-
-      gen_rotary G car hot air
-        POS 3944.000000 451.000000
-        IMAGE MIP/ecam lower du/COND/greenValve
-        DATAREF a321neo/cockpit/aircond/cargo_hot_air
-        LOCKED
-        HIDE
-        LIGHT_MODE GLASS_AUTO
-        LIGHT_RHEOSTAT 0
-        KEY_FRAME 0.000000 1.000000 1.000000
-        KEY_FRAME 1.000000 0.000000
-        DIGITS 2
+        KEY_FRAME 4.000000 4.000000
+        DIGITS 5
         ROTARY_TYPE NO_CLICK
         CLICK_RADIUS 10.000000
         CLICK_RADIUS_DY 0.000000
@@ -59405,60 +59352,48 @@ GROUP ECAM lower du
     gen_needle cockpit req
       POS 3424.000000 839.857178
       IMAGE MIP/ecam lower du/COND/Temp_Arrow
-      DATAREF a321neo/dynamics/aircond/cockpit_temp_req
+      DATAREF a321neo/dynamics/aircond/trim_valve
       LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
-      KEY_FRAME 11.000000 -40.000000 1.000000
-      KEY_FRAME 12.000000 -40.000000 1.000000
-      KEY_FRAME 30.000000 40.000000 1.000000
-      KEY_FRAME 31.000000 40.000000
+      KEY_FRAME 0.000000 -40.000000 1.000000
+      KEY_FRAME 1.000000 40.000000
       IS_DRAGGABLE 0
       OFFSET 0.000000
 
     gen_needle front cab req
       POS 3622.000000 839.000000
       IMAGE MIP/ecam lower du/COND/Temp_Arrow
-      DATAREF a321neo/dynamics/aircond/front_cab_temp_req
+      DATAREF a321neo/dynamics/aircond/trim_valve
       LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 11.000000 -40.000000 1.000000
-      KEY_FRAME 12.000000 -40.000000 1.000000
-      KEY_FRAME 30.000000 40.000000 1.000000
-      KEY_FRAME 31.000000 40.000000
+      LIGHT_RHEOSTAT 1
+      KEY_FRAME 0.000000 -40.000000 1.000000
+      KEY_FRAME 1.000000 40.000000
       IS_DRAGGABLE 0
       OFFSET 0.000000
 
     gen_needle aft cab req
       POS 3809.000000 839.857178
       IMAGE MIP/ecam lower du/COND/Temp_Arrow
-      DATAREF a321neo/dynamics/aircond/aft_cab_temp_req
+      DATAREF a321neo/dynamics/aircond/trim_valve
       LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 11.000000 -40.000000 1.000000
-      KEY_FRAME 12.000000 -40.000000 1.000000
-      KEY_FRAME 30.000000 40.000000 1.000000
-      KEY_FRAME 31.000000 40.000000
+      LIGHT_RHEOSTAT 2
+      KEY_FRAME 0.000000 -40.000000 1.000000
+      KEY_FRAME 1.000000 40.000000
       IS_DRAGGABLE 0
       OFFSET 0.000000
 
     gen_needle aft cargo req
       POS 3804.285889 479.857178
       IMAGE MIP/ecam lower du/COND/Temp_Arrow
-      DATAREF a321neo/dynamics/aircond/aft_cargo_temp_req
+      DATAREF a321neo/dynamics/aircond/trim_valve
       LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 3.000000 -40.000000 1.000000
-      KEY_FRAME 4.000000 -40.000000 1.000000
-      KEY_FRAME 30.000000 40.000000 1.000000
-      KEY_FRAME 31.000000 40.000000
+      LIGHT_RHEOSTAT 3
+      KEY_FRAME 0.000000 -40.000000 1.000000
+      KEY_FRAME 1.000000 40.000000
       IS_DRAGGABLE 0
       OFFSET 0.000000
 
