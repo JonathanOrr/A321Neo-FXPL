@@ -21,7 +21,13 @@ SEC_3_button_state = createGlobalPropertyi("a321neo/cockpit/FBW/sec_3_button_sta
 --BUTTON COMMANDED POSTION-- e.g. button commanding on, off but lights on the button can show otherwise(fault on, fault off....)
 Eng1_bleed_off_button = createGlobalPropertyi("a321neo/cockpit/packs/eng1_bleed_off", 0, false, true, false) --0 is on 1 if off, 10 fault, 11 off+fault
 Eng2_bleed_off_button = createGlobalPropertyi("a321neo/cockpit/packs/eng2_bleed_off", 0, false, true, false) --0 is on 1 if off, 10 fault, 11 off+fault
-APU_bleed_on_button   = createGlobalPropertyi("a321neo/cockpit/packs/apu_bleed_on", 0, false, true, false) --0 is off 1 if on, 10 fault, 11 off+fault
+APU_bleed_on_button   = createGlobalPropertyi("a321neo/cockpit/packs/apu_bleed_on", 0, false, true, false) --0 is off 1 if on, 10 fault, 11 on+fault
+RAM_air_button   = createGlobalPropertyi("a321neo/cockpit/packs/ram_air_on", 0, false, true, false) --0 is [nothing] 1 if on, 10 fault, 11 on+fault
+X_bleed_dial = createGlobalPropertyi("a321neo/cockpit/packs/x_bleed_dial", 1, false, true, false) --0closed, 1auto, 2open
+Pack1_off_button = createGlobalPropertyi("a321neo/cockpit/packs/pack1_off", 0, false, true, false) --0 is nothing 1 if off, 10 fault, 11 off+fault
+Pack2_off_button = createGlobalPropertyi("a321neo/cockpit/packs/pack2_off", 0, false, true, false) --0 is nothing 1 if off, 10 fault, 11 off+fault
+Econ_flow_button = createGlobalPropertyi("a321neo/cockpit/packs/econ_flow", 0, false, true, false) --0 is nothing 1 if on, 10 fault, 11 on+fault
+Ditching_button  = createGlobalPropertyi("a321neo/cockpit/pressurization/ditching", 0, false, true, false) --0 is nothing 1 is on
 
 --FBW
 ELAC_1_off_button = createGlobalPropertyi("a321neo/cockpit/FBW/elac_1_off", 0, false, true, false) --0 is on 1 if off
@@ -252,10 +258,6 @@ Aft_cargo_temp_dial = createGlobalPropertyf("a321neo/cockpit/aircond/aft_cargo_t
 Cargo_isolation_status = createGlobalPropertyi("a321neo/cockpit/aircond/light_cargo_isol", 0, false, true, false)     --00: No lights, 01: [ON], 10: FAULT, 11 [ON] + FAULT
 Ventilation_light_blower = createGlobalPropertyi("a321neo/cockpit/aircond/light_blower", 0, false, true, false)     --00: No lights, 01: [OVRD], 10: FAULT, 11 [OVRD] + FAULT
 Ventilation_light_extract = createGlobalPropertyi("a321neo/cockpit/aircond/light_extract", 0, false, true, false)     --00: No lights, 01: [OVRD], 10: FAULT, 11 [OVRD] + FAULT
-
---packs
-X_bleed_dial = createGlobalPropertyi("a321neo/cockpit/packs/x_bleed_dial", 1, false, true, false) --0closed, 1auto, 2open
-Pack_Flow_dial = createGlobalPropertyi("a321neo/cockpit/packs/pack_flow_dial", 1, false, true, false) --the pack flow dial 0low, 1norm, 2high
 
 --misc
 Capt_ra_alt_m = createGlobalPropertyf("a321neo/cockpit/indicators/capt_ra_alt_m", 0, false, true, false)

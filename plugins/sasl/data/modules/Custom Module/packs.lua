@@ -75,6 +75,7 @@ sasl.registerCommandHandler (Toggle_cab_hotair,          0, function(phase) if p
 sasl.registerCommandHandler (Toggle_cargo_hotair,        0, function(phase) if phase == SASL_COMMAND_BEGIN then cargo_hot_air    = not cargo_hot_air end end)
 sasl.registerCommandHandler (Toggle_aft_cargo_iso_valve, 0, function(phase) if phase == SASL_COMMAND_BEGIN then cargo_isol_valve = not cargo_isol_valve end end)
 
+sasl.registerCommandHandler (Toggle_ram_air, 0, function(phase) if phase == SASL_COMMAND_BEGIN then set(Emer_ram_air, 1 - get(Emer_ram_air)) end end)
 
 function onPlaneLoaded()
     set(Pack_L, 1)
@@ -219,6 +220,10 @@ local function update_bleed_pressures()
 
 end
 
+local function set_overhead_dr(dataref, condition_btm_light, condition_fault)
+    set(dataref, get(OVHR_elec_panel_pwrd) * ((condition_btm_light and 1 or 0) + (condition_fault and 10 or 0)))
+end
+
 local function update_datarefs()
 
     -- XP System
@@ -239,13 +244,21 @@ local function update_datarefs()
     set(R_bleed_press, bleed_pressure[2])
 
     -- Buttons
-    set(Eng1_bleed_off_button, get(OVHR_elec_panel_pwrd) * (eng_bleed_switch[1] and 0 or 1))
-    set(Eng2_bleed_off_button, get(OVHR_elec_panel_pwrd) * (eng_bleed_switch[2] and 0 or 1))
+    -- TODO FAULTS
+    local cond_eng1_bleed_fail = get(FAILURE_BLEED_HP_1_VALVE_STUCK) + get(FAILURE_BLEED_IP_1_VALVE_STUCK) > 0  -- TODO other conditions
+    local cond_eng2_bleed_fail = get(FAILURE_BLEED_HP_2_VALVE_STUCK) + get(FAILURE_BLEED_IP_2_VALVE_STUCK) > 0  -- TODO other conditions
+    set_overhead_dr(Eng1_bleed_off_button, not eng_bleed_switch[1], cond_eng1_bleed_fail)
+    set_overhead_dr(Eng2_bleed_off_button, not eng_bleed_switch[2], cond_eng2_bleed_fail)
 
     set(APU_bleed_on_button,   get(OVHR_elec_panel_pwrd) * (apu_bleed_switch and 1 or 0))
     set(Cab_hot_air,           get(OVHR_elec_panel_pwrd) * (cabin_hot_air and 0 or 1))
     set(Cargo_hot_air,         get(OVHR_elec_panel_pwrd) * (cargo_hot_air and 0 or 1))
-    set(Cargo_isolation_status,get(OVHR_elec_panel_pwrd) * (cargo_isol_valve and 0 or 1))
+    set(Cargo_isolation_status,get(OVHR_elec_panel_pwrd) * (cargo_isol_valve and 1 or 0))
+    set(RAM_air_button,        get(OVHR_elec_panel_pwrd) * get(Emer_ram_air))
+    set(Pack1_off_button,      get(OVHR_elec_panel_pwrd) * (pack_valve_pos[1] and 0 or 1))
+    set(Pack2_off_button,      get(OVHR_elec_panel_pwrd) * (pack_valve_pos[2] and 0 or 1))
+    set(Econ_flow_button,      get(OVHR_elec_panel_pwrd) * (econ_flow_switch and 1 or 0))
+    set_overhead_dr(Ditching_button, ditching_switch, false)
     
     -- ECAM stuffs
     if apu_bleed_valve_pos and not x_bleed_status then
