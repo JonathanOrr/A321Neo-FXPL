@@ -8,11 +8,20 @@ local is_galley_switch_on = false
 -- Commands
 ----------------------------------------------------------------------------------------------------
 sasl.registerCommandHandler (ELEC_cmd_Galley,  0, function(phase) elec_galley_toggle(phase) end )
+sasl.registerCommandHandler (ELEC_cmd_EMER_GEN_TEST, 0, function(phase) elec_gen_test_press(phase) end)
+
 
 ----------------------------------------------------------------------------------------------------
 -- Functions
 ----------------------------------------------------------------------------------------------------
 
+function elec_gen_test_press(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        set(Gen_TEST_pressed, 1)
+    elseif phase == SASL_COMMAND_END then
+        set(Gen_TEST_pressed, 0)    
+    end
+end
 
 function elec_galley_toggle(phase)
     if phase ~= SASL_COMMAND_BEGIN then

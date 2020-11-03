@@ -165,10 +165,10 @@ local function update_ac_ess()
         buses.ac_ess_powered_by = buses.ac1_powered_by ~= 0 and AC_BUS_1 or 0
     end
     
-    if buses.ac_ess_powered_by == 0 then
+    if buses.ac_ess_powered_by == 0 or get(Gen_TEST_pressed) == 1 then
         if get(Gen_EMER_pwr) == 1 then
             buses.ac_ess_powered_by = GEN_EMER
-        elseif get(INV_online) == 1 and get(Ground_speed_ms) > 50 then
+        elseif get(INV_online) == 1 and (get(Ground_speed_ms) > 50 or get(Gen_TEST_pressed) == 1) then
             buses.ac_ess_powered_by = STATIC_INVERTER
         end
     end

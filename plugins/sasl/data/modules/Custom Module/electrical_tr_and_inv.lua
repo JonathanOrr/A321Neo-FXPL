@@ -101,21 +101,26 @@ local function update_static_inv()
                 stat_inv.status = get(HOT_bus_1_pwrd) == 1
             end
         end
-   end
+    end
    
-   if stat_inv.status and get(stat_inv.drs.failure)==0 then
+    -- OR if GEN TEST is pressed and no AC buses are powered
+    if get(Gen_TEST_pressed) == 1 and get(AC_bus_1_pwrd) == 0 and get(AC_bus_2_pwrd) == 0 then
+        stat_inv.status = get(HOT_bus_1_pwrd) == 1
+    end  
+   
+    if stat_inv.status and get(stat_inv.drs.failure)==0 then
         if time_start_stinv == 0 then
             time_start_stinv = get(TIME)
-        elseif get(TIME) - time_start_stinv > WAIT_TIME_STINV then
+        end
+        if get(Gen_TEST_pressed) == 1  or (get(TIME) - time_start_stinv > WAIT_TIME_STINV) then
             stat_inv.curr_voltage = AC_VOLTAGE_NOM
             stat_inv.curr_hz      = AC_HZ_NOM
         end
-   else
+    else
         time_start_stinv = 0
         stat_inv.curr_voltage = 0
         stat_inv.curr_hz      = 0   
-   end
-   
+    end
 end
 
 local function update_tr(x)

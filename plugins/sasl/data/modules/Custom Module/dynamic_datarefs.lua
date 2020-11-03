@@ -131,6 +131,8 @@ Gen_EXT_pwr = createGlobalPropertyi("a321neo/dynamics/electrical/sources/gen_EXT
 Gen_EMER_pwr = createGlobalPropertyi("a321neo/dynamics/electrical/sources/gen_EMER_pwr", 0, false, true, false)
 Gen_1_line_active = createGlobalPropertyi("a321neo/dynamics/electrical/gen_1_line_active", 0, false, true, false)   -- GEN 1 Line has been pressed, 0 normal 
 
+Gen_TEST_pressed= createGlobalPropertyi("a321neo/dynamics/electrical/gen_test_pressed", 0, false, true, false)
+
 IDG_1_temp = createGlobalPropertyf("a321neo/dynamics/electrical/IDG_1_temp", 0, false, true, false)
 IDG_2_temp = createGlobalPropertyf("a321neo/dynamics/electrical/IDG_2_temp", 0, false, true, false)
 
