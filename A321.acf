@@ -246,7 +246,7 @@ P _gear/1/_lonE -6.0
 P _gear/1/_lonN -6.0
 P _gear/1/_lonR 0.0
 P _gear/1/_scon 83991.070312500
-P _gear/1/_stat_def 1.381937742
+P _gear/1/_stat_def 1.381937861
 P _gear/1/_steerdeg_hispeed 0.0
 P _gear/1/_steerdeg_lospeed 0.0
 P _gear/1/_strut_comp 0.400000006
@@ -280,7 +280,7 @@ P _gear/2/_lonE -6.0
 P _gear/2/_lonN -6.0
 P _gear/2/_lonR 0.0
 P _gear/2/_scon 83991.070312500
-P _gear/2/_stat_def 1.381937742
+P _gear/2/_stat_def 1.381937861
 P _gear/2/_steerdeg_hispeed 0.0
 P _gear/2/_steerdeg_lospeed 0.0
 P _gear/2/_strut_comp 0.400000006
@@ -54455,7 +54455,6 @@ GROUP glareshield buttons
 END_GROUP
 GROUP Buttons and Lights
   LOCKED
-  GROUP_OPEN
   GROUP ADIRS
     LOCKED
     gen_rotary IR1
@@ -55563,7 +55562,6 @@ GROUP Buttons and Lights
   END_GROUP
   GROUP AIR COND
     LOCKED
-    GROUP_OPEN
     gen_rotary Pack 1
       POS 1280.000000 332.000000
       IMAGE Buttons/off_fault
@@ -56907,6 +56905,7 @@ END_GROUP
 GROUP ECAM lower du
   LOCKED
   HIDE
+  GROUP_OPEN
   GROUP ECAM DOOR
     SHOW_EQUAL 9.000000 a321neo/cockpit/ecam/page_num
     LOCKED
@@ -59244,6 +59243,7 @@ GROUP ECAM lower du
   GROUP ECAM COND
     SHOW_EQUAL 8.000000 a321neo/cockpit/ecam/page_num
     LOCKED
+    GROUP_OPEN
     gen_rotary cond bacground
       POS 3637.000000 733.000000
       IMAGE MIP/ecam lower du/COND/COND
@@ -59264,13 +59264,12 @@ GROUP ECAM lower du
       CLICK_DX 0
       CLICK_DY 0
 
-    GROUP yellow valves
-      SHOW_EQUAL 0.000000 a321neo/cockpit/aircond/bleed_avail
+    GROUP valves
       LOCKED
       GROUP_OPEN
       gen_rotary Y cab hot air
         POS 3943.000000 792.000000
-        IMAGE MIP/ecam lower du/BLEED/Valve
+        IMAGE MIP/ecam lower du/BLEED/Valveh
         DATAREF a321neo/cockpit/ecam/aircond/valve_hot_air
         LOCKED
         LIGHT_MODE GLASS_AUTO
@@ -59290,7 +59289,7 @@ GROUP ECAM lower du
 
       gen_rotary Y h iso
         POS 3900.000000 687.000000
-        IMAGE MIP/ecam lower du/BLEED/Valveh
+        IMAGE MIP/ecam lower du/BLEED/Valve
         DATAREF a321neo/cockpit/ecam/aircond/valve_isol_cargo_out
         LOCKED
         LIGHT_MODE GLASS_AUTO
@@ -59310,7 +59309,7 @@ GROUP ECAM lower du
 
       gen_rotary Y v iso
         POS 3803.000000 567.000000
-        IMAGE MIP/ecam lower du/BLEED/Valveh
+        IMAGE MIP/ecam lower du/BLEED/Valve
         DATAREF a321neo/cockpit/ecam/aircond/valve_isol_cargo_in
         LOCKED
         LIGHT_MODE GLASS_AUTO
@@ -59330,7 +59329,7 @@ GROUP ECAM lower du
 
       gen_rotary Y car hot air
         POS 3944.000000 451.000000
-        IMAGE MIP/ecam lower du/BLEED/Valve
+        IMAGE MIP/ecam lower du/BLEED/Valveh
         DATAREF a321neo/cockpit/ecam/aircond/valve_hot_air_cargo
         LOCKED
         LIGHT_MODE GLASS_AUTO
