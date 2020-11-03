@@ -51,6 +51,7 @@ components = {
   doors {},
   hydraulics {},
   electrical {},
+  pressurization {},
   sounds {},
   graphics {}
  }
