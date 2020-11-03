@@ -57,7 +57,7 @@ local function update_draw_datarefs()
         set(Ecam_elec_apu_gen_status, 3)    
     end
 
-   if ELEC_sys.generators[5].switch_status == false then
+   if ELEC_sys.generators[5].switch_status == false and get(Gen_TEST_pressed) == 0 then
         set(Ecam_elec_rat_status, 0)
     elseif ELEC_sys.generators[5].curr_voltage > 105 and ELEC_sys.generators[5].curr_hz > 385 then
         set(Ecam_elec_rat_status, 1)
@@ -297,7 +297,7 @@ local function draw_stat_inv()
 end
 
 local function draw_emer_gen()
-    if not ELEC_sys.generators[5].switch_status then
+    if not ELEC_sys.generators[5].switch_status and get(Gen_TEST_pressed) == 0 then
         return  -- Nothing to do
     end
     
@@ -360,8 +360,8 @@ local function draw_ess_bus_lines()
         sasl.gl.drawWideLine(560, size[2]/2+24, 688, size[2]/2+24, 3, ECAM_GREEN)
     end
     if ELEC_sys.buses.ac_ess_powered_by == GEN_EMER then
-        draw_open_arrow_down(540, size[2]/2+27, ECAM_GREEN)
-        sasl.gl.drawWideLine(540, size[2]/2+42, 540, size[2]/2+82, 3, ECAM_GREEN)
+        draw_open_arrow_down(540, size[2]/2+37, ECAM_GREEN)
+        sasl.gl.drawWideLine(540, size[2]/2+52, 540, size[2]/2+82, 3, ECAM_GREEN)
     end
     if ELEC_sys.buses.ac_ess_powered_by == STATIC_INVERTER then
         draw_open_arrow_up(550,size[2]/2-1,ECAM_GREEN)

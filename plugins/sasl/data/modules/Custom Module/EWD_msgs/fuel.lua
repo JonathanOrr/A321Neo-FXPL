@@ -1223,3 +1223,212 @@ MessageGroup_FUEL_FQI_1_2_FAULT = {
     end
 }
 
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: ACT AUTO XFR FAULT
+----------------------------------------------------------------------------------------------------
+Message_FUEL_ACT_PROC_APPLY = {
+    text = function() return " - ACT FAULT PROC...APPLY" end,
+    color = function() return COL_ACTIONS end,
+    is_active = function() return true end
+}
+
+Message_FUEL_MONITOR_CG_LIMITS = {
+    text = function() return " MONITOR CG LIMITS" end,
+    color = function() return COL_ACTIONS end,
+    is_active = function() return true end
+}
+
+
+MessageGroup_FUEL_ACT_AUTO_XFR_FAULT = {
+
+    shown = false,
+
+    text  = function()
+                return "FUEL"
+            end,
+    color = function()
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_FUEL,
+    
+    messages = {
+        {
+            text = function()
+                return "     ACT AUTO XFR FAULT"
+            end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        },
+        Message_FUEL_ACT_PROC_APPLY,
+        Message_FUEL_MONITOR_CG_LIMITS
+    },
+
+    is_active = function()
+        local transfer_conditions = get(Flaps_internal_config) ==0
+        
+        return get(Fuel_quantity[tank_CENTER]) < 3000 and get(Fuel_quantity[tank_ACT]) > 100
+    end,
+
+    is_inhibited = function()
+        return is_active_in({PHASE_AIRBONE, PHASE_BELOW_80_KTS})
+    end
+}
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: RCT AUTO XFR FAULT
+----------------------------------------------------------------------------------------------------
+Message_FUEL_RCT_PROC_APPLY = {
+    text = function() return " - RCT FAULT PROC...APPLY" end,
+    color = function() return COL_ACTIONS end,
+    is_active = function() return true end
+}
+
+MessageGroup_FUEL_RCT_AUTO_XFR_FAULT = {
+
+    shown = false,
+
+    text  = function()
+                return "FUEL"
+            end,
+    color = function()
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_FUEL,
+    
+    messages = {
+        {
+            text = function()
+                return "     RCT AUTO XFR FAULT"
+            end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        },
+        Message_FUEL_RCT_PROC_APPLY,
+        Message_FUEL_MONITOR_CG_LIMITS
+    },
+
+    is_active = function()
+        local transfer_conditions = get(Flaps_internal_config) ==0
+        
+        return get(Fuel_quantity[tank_CENTER]) < 3000 and get(Fuel_quantity[tank_RCT]) > 100
+    end,
+
+    is_inhibited = function()
+        return is_active_in({PHASE_AIRBONE, PHASE_BELOW_80_KTS})
+    end
+}
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: ACT TK XFR
+----------------------------------------------------------------------------------------------------
+Message_FUEL_IF_NO_PACKS_AVAIL = {
+    text = function() return " . IF NO PACKS AVAIL:" end,
+    color = function() return COL_REMARKS end,
+    is_active = function() return true end
+}
+
+Message_FUEL_ACT_USABLE= {
+    text = function() return "   - ACT TK UNUSABLE" end,
+    color = function() return COL_ACTIONS end,
+    is_active = function() return true end
+}
+
+Message_FUEL_MONITOR_CG_2_LEVEL= {
+    text = function() return "   - MONITOR CG LIMITS" end,
+    color = function() return COL_ACTIONS end,
+    is_active = function() return true end
+}
+
+
+MessageGroup_FUEL_ACT_LO_PR_XFR_FAULT = {
+
+    shown = false,
+
+    text  = function()
+                return "FUEL"
+            end,
+    color = function()
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_FUEL,
+    
+    messages = {
+        {
+            text = function()
+                return "     ACT TK XFR LO PR"
+            end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        },
+        Message_FUEL_IF_NO_PACKS_AVAIL,
+        Message_FUEL_ACT_USABLE,
+        Message_FUEL_MONITOR_CG_2_LEVEL
+    },
+
+    is_active = function()
+        return get(FAILURE_FUEL, 7) == 1
+    end,
+
+    is_inhibited = function()
+        return is_active_in({PHASE_ELEC_PWR, PHASE_1ST_ENG_ON, PHASE_AIRBONE, PHASE_BELOW_80_KTS, PHASE_2ND_ENG_OFF})
+    end
+}
+
+
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: RCT TK XFR
+----------------------------------------------------------------------------------------------------
+Message_FUEL_RCT_USABLE= {
+    text = function() return "   - RCT TK UNUSABLE" end,
+    color = function() return COL_ACTIONS end,
+    is_active = function() return true end
+}
+
+MessageGroup_FUEL_RCT_LO_PR_XFR_FAULT = {
+
+    shown = false,
+
+    text  = function()
+                return "FUEL"
+            end,
+    color = function()
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_FUEL,
+    
+    messages = {
+        {
+            text = function()
+                return "     RCT TK XFR LO PR"
+            end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        },
+        Message_FUEL_IF_NO_PACKS_AVAIL,
+        Message_FUEL_RCT_USABLE,
+        Message_FUEL_MONITOR_CG_2_LEVEL
+    },
+
+    is_active = function()
+        return get(FAILURE_FUEL, 8) == 1
+    end,
+
+    is_inhibited = function()
+        return is_active_in({PHASE_ELEC_PWR, PHASE_1ST_ENG_ON, PHASE_AIRBONE, PHASE_BELOW_80_KTS, PHASE_2ND_ENG_OFF})
+    end
+}
+
