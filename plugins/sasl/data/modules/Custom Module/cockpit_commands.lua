@@ -188,7 +188,6 @@ HYD_cmd_RAT_man_on = createCommand("a321neo/cockpit/HYD/RAT_manual", "Force RAT 
 HYD_reset_systems  = createCommand("a321neo/internals/HYD/reset_systems", "Reset HYD quantity systems")
 
 -- ELEC
-ELEC_cmd_Commercial   = createCommand("a321neo/cockpit/electrical/commercial", "Toggle commercial power")
 ELEC_cmd_Galley       = createCommand("a321neo/cockpit/electrical/galley", "Toggle galley")
 ELEC_cmd_AC_ess_feed  = createCommand("a321neo/cockpit/electrical/AC_ESS_FEED", "Press AC ESS FEED button")
 ELEC_cmd_BUS_tie      = createCommand("a321neo/cockpit/electrical/BUS_tie", "Press BUS TIE button")

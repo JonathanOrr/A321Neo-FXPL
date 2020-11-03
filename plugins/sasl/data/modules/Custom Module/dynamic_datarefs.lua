@@ -101,7 +101,6 @@ Abs_vpath_pitch_rate = createGlobalPropertyf("a321neo/dynamics/FBW/abs_vpath_Q",
 
 -- Electrical system
 --- BUSES (0: not providing elec power, 1: providing elec power) - influenced by switches, faults, engine status etc.
-Commercial_pwrd = createGlobalPropertyi("a321neo/dynamics/electrical/bus/commercial_powered", 0, false, true, false)
 Gally_pwrd      = createGlobalPropertyi("a321neo/dynamics/electrical/bus/galley_powered", 0, false, true, false)
 HOT_bus_1_pwrd  = createGlobalPropertyi("a321neo/dynamics/electrical/bus/hot_1_powered", 0, false, true, false)
 HOT_bus_2_pwrd  = createGlobalPropertyi("a321neo/dynamics/electrical/bus/hot_2_powered", 0, false, true, false)
