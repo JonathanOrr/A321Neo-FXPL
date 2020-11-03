@@ -92,6 +92,9 @@ past_messages   = {}
 -- A boolean to avoid to re-draw everything every update call.
 change_occured = true
 
+-- Used to keep track of the last time we updated the CTR list
+local last_CTR_update = 0
+
 ----------------------------------------------------------------------------------------------------
 -- Functions
 ----------------------------------------------------------------------------------------------------
@@ -540,7 +543,8 @@ function update()
 
 
     -- Update connection status and CTR every 5 seconds and 60 seconds
-    if math.ceil(get(TIME)) % 5 == 0 then  -- Update connection status every 5 sec
+    if get(TIME) - last_CTR_update > 5 then  -- Update connection status every 5 sec
+        last_CTR_update = get(TIME)
         if not updated_connection then     -- This is to avoid multiple calls
            updated_connection = true
            update_satcom_vhf_connection()
