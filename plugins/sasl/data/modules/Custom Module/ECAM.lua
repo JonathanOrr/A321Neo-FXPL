@@ -47,7 +47,7 @@ local function draw_ecam_lower_section_fixed()
     sasl.gl.drawText(Font_AirbusDUL, size[1]-15, size[2]/2-375, "KG", 32, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2-407, "H", 30, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
     
-    local isa_displayed = get(Capt_Baro) > 29.91 and get(Capt_Baro) < 29.93
+    local isa_displayed = get(Capt_Baro) > 29.91 and get(Capt_Baro) < 29.93 and get(Adirs_capt_has_ADR) == 1
     
     if isa_displayed then
         sasl.gl.drawText(Font_AirbusDUL, 100, size[2]/2-442, "ISA", 32, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
@@ -67,12 +67,28 @@ local function draw_ecam_lower_section()
     draw_ecam_lower_section_fixed()
 
     --left section
-    sasl.gl.drawText(Font_AirbusDUL, 190, size[2]/2-372, math.floor(get(TAT)), 32, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    sasl.gl.drawText(Font_AirbusDUL, 190, size[2]/2-407, math.floor(get(OTA)), 32, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    local tat = "XX"
+    local ota = "XX"
+    if get(Adirs_capt_has_ADR) == 1 then
+        ota = Round(get(OTA), 0)
+        if ota > 0 then
+            ota = "+" .. ota
+        end
+        tat = Round(get(TAT), 0)
+        if tat > 0 then
+            tat = "+" .. tat
+        end
+    end
+    sasl.gl.drawText(Font_AirbusDUL, 190, size[2]/2-372, tat, 32, false, false, TEXT_ALIGN_RIGHT, tat == "XX" and ECAM_ORANGE or ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, 190, size[2]/2-407, ota, 32, false, false, TEXT_ALIGN_RIGHT, ota == "XX" and ECAM_ORANGE or ECAM_GREEN)
     
-    local isa_displayed = get(Capt_Baro) > 29.91 and get(Capt_Baro) < 29.93
+    local isa_displayed = get(Capt_Baro) > 29.91 and get(Capt_Baro) < 29.93 and get(Adirs_capt_has_ADR) == 1
     if isa_displayed then
-        sasl.gl.drawText(Font_AirbusDUL, 190, size[2]/2-442, Round(get_isa(), 0), 32, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        local delta_isa = Round(get(TAT) - get_isa(), 0)
+        if delta_isa > 0 then
+            delta_isa = "+" .. delta_isa
+        end
+        sasl.gl.drawText(Font_AirbusDUL, 190, size[2]/2-442, delta_isa, 32, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     end
     --center section
     --adding a 0 to the front of the time when single digit
