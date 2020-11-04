@@ -367,11 +367,11 @@ local function update_no_messages(double_conn)
     display_top[5].color = ECAM_GREEN
     
     if get(Acars_status) == 1 then
-        display_top[5].text = "                     SATCOM"
+        display_top[5].text = "                       SATCOM"
     elseif get(Acars_status) == 2 then
-        display_top[5].text = "                        VHF"
+        display_top[5].text = "                          VHF"
     elseif get(Acars_status) == 3 then
-        display_top[5].text = "               SATCOM + VHF"
+        display_top[5].text = "                 SATCOM + VHF"
     end
     display_btm_right[3].text = "RECALL *"
     display_btm_right[3].color = ECAM_BLUE
@@ -387,7 +387,7 @@ local function update_no_recall_messages()
     display_btm_right[3].text = "CLOSE *"
     display_btm_right[3].color = ECAM_BLUE    
     
-    display_top[3].text  = "        NO MESSAGES"
+    display_top[3].text  = "         NO MESSAGES"
     display_top[3].color = ECAM_GREEN
     
     display_title.text = "RECALL MODE"
