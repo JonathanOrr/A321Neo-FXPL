@@ -109,6 +109,7 @@ FAILURE_BLEED_PACK_1_VALVE_STUCK = createGlobalPropertyi("a321neo/failures/bleed
 FAILURE_BLEED_PACK_2_VALVE_STUCK = createGlobalPropertyi("a321neo/failures/bleed/pack_2_stuck", 0, false, true, false)
 FAILURE_BLEED_BMC_1 = createGlobalPropertyi("a321neo/failures/bleed/bmc_1", 0, false, true, false)
 FAILURE_BLEED_BMC_2 = createGlobalPropertyi("a321neo/failures/bleed/bmc_2", 0, false, true, false)
+FAILURE_BLEED_RAM_AIR_STUCK = createGlobalPropertyi("a321neo/failures/bleed/ram_air_stuck", 0, false, true, false)
 
 FAILURE_AIRCOND_FAN_FWD = createGlobalPropertyi("a321neo/failures/aircond/fan_fwd", 0, false, true, false)
 FAILURE_AIRCOND_FAN_AFT = createGlobalPropertyi("a321neo/failures/aircond/fan_aft", 0, false, true, false)

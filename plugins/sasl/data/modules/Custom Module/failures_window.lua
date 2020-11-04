@@ -121,7 +121,7 @@ local failures_data = {
             {name="TANK ACT\nLEAK", status=false, dataref=FAILURE_FUEL_LEAK, nr=4},
             {name="TANK RCT\nLEAK", status=false, dataref=FAILURE_FUEL_LEAK, nr=5},
             {name="FQI 1\nFAILURE", status=false, dataref=FAILURE_FUEL_FQI_1_FAULT},
-            {name="FQI 2\nFAILURE", status=false, dataref=FAILURE_FUEL_FQI_2_FAULT}            
+            {name="FQI 2\nFAILURE", status=false, dataref=FAILURE_FUEL_FQI_2_FAULT}
         }
     },
     {
@@ -181,6 +181,7 @@ local failures_data = {
             {name="CARGO HOTAIR\nVLV STUCK", status=false, dataref=FAILURE_AIRCOND_HOT_AIR_CARGO_STUCK },
             {name="CARGO IN\nVLV STUCK", status=false, dataref=FAILURE_AIRCOND_ISOL_CARGO_IN_STUCK },
             {name="CARGO OUT\nVLV STUCK", status=false, dataref=FAILURE_AIRCOND_ISOL_CARGO_OUT_STUCK },
+            {name="RAM AIR\nVLV STUCK", status=false, dataref=FAILURE_BLEED_RAM_AIR_STUCK } 
     }
     },
     {

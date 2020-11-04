@@ -52,6 +52,7 @@ local pack_time_open_valve = {0,0}
 local cabin_hot_air    = true
 local cargo_hot_air    = true
 local cargo_isol_valve = false
+local ram_air_status   = false
 
 ----------------------------------------------------------------------------------------------------
 -- Initialisation
@@ -75,7 +76,7 @@ sasl.registerCommandHandler (Toggle_cab_hotair,          0, function(phase) if p
 sasl.registerCommandHandler (Toggle_cargo_hotair,        0, function(phase) if phase == SASL_COMMAND_BEGIN then cargo_hot_air    = not cargo_hot_air end end)
 sasl.registerCommandHandler (Toggle_aft_cargo_iso_valve, 0, function(phase) if phase == SASL_COMMAND_BEGIN then cargo_isol_valve = not cargo_isol_valve end end)
 
-sasl.registerCommandHandler (Toggle_ram_air, 0, function(phase) if phase == SASL_COMMAND_BEGIN then set(Emer_ram_air, 1 - get(Emer_ram_air)) end end)
+sasl.registerCommandHandler (Toggle_ram_air, 0, function(phase) if phase == SASL_COMMAND_BEGIN then ram_air_status = not ram_air_status end end)
 
 function onPlaneLoaded()
     set(Pack_L, 1)
@@ -250,11 +251,12 @@ local function update_datarefs()
     set_overhead_dr(Eng1_bleed_off_button, not eng_bleed_switch[1], cond_eng1_bleed_fail)
     set_overhead_dr(Eng2_bleed_off_button, not eng_bleed_switch[2], cond_eng2_bleed_fail)
 
+
+    set_overhead_dr(RAM_air_button, get(Emer_ram_air) == 1, false)  -- RAM air button does not have fault
     set(APU_bleed_on_button,   get(OVHR_elec_panel_pwrd) * (apu_bleed_switch and 1 or 0))
     set(Cab_hot_air,           get(OVHR_elec_panel_pwrd) * (cabin_hot_air and 0 or 1))
     set(Cargo_hot_air,         get(OVHR_elec_panel_pwrd) * (cargo_hot_air and 0 or 1))
     set(Cargo_isolation_status,get(OVHR_elec_panel_pwrd) * (cargo_isol_valve and 1 or 0))
-    set(RAM_air_button,        get(OVHR_elec_panel_pwrd) * get(Emer_ram_air))
     set(Pack1_off_button,      get(OVHR_elec_panel_pwrd) * (pack_valve_pos[1] and 0 or 1))
     set(Pack2_off_button,      get(OVHR_elec_panel_pwrd) * (pack_valve_pos[2] and 0 or 1))
     set(Econ_flow_button,      get(OVHR_elec_panel_pwrd) * (econ_flow_switch and 1 or 0))
@@ -266,7 +268,7 @@ local function update_datarefs()
     else
         set(X_bleed_bridge_state, x_bleed_status and 2 or 0)
     end
-    
+
 end
 
 local function update_pack(n)
@@ -425,6 +427,9 @@ local function update_pack_temperatures()
 
 end
 
+local function update_ram_air()
+    set(Emer_ram_air, (ram_air_status and not ditching_switch) and 1 or 0)
+end
 
 function update()
     --create the A321 pack system--
@@ -441,6 +446,7 @@ function update()
     update_hot_air()
     update_pack_flow()
     update_pack_temperatures()
+    update_ram_air()
     
     update_datarefs()
 

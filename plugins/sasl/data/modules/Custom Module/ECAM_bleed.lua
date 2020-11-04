@@ -123,14 +123,17 @@ local function update_valves_dr()
     set(Ecam_bleed_pack_valve_R, get(Pack_R) * 2 + get(FAILURE_BLEED_PACK_2_VALVE_STUCK))
 
     -- RAM AIR
-    if get(Emer_ram_air) == 0 then
-        set(Ecam_bleed_ram_air, 0)
-    elseif get(All_on_ground) == 1 then
-        set(Ecam_bleed_ram_air, 3)
+    if get(FAILURE_BLEED_RAM_AIR_STUCK) == 0 then
+        if get(Emer_ram_air) == 0 then
+            set(Ecam_bleed_ram_air, 0)
+        elseif get(All_on_ground) == 1 then
+            set(Ecam_bleed_ram_air, 3)
+        else
+            set(Ecam_bleed_ram_air, 2)    
+        end
     else
-        set(Ecam_bleed_ram_air, 2)    
+        set(Ecam_bleed_ram_air, 1 + 2*get(Emer_ram_air))
     end
-    
     -- TOP Line
     set(Ecam_bleed_top_mix_line, (get(Emer_ram_air) == 0 and get(Pack_L) == 0 and get(Pack_R) == 0) and 0 or 1)
     
