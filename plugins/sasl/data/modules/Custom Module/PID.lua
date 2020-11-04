@@ -194,6 +194,7 @@ function SSS_PID_DPV(pid_array, Set_Point, PV)
 end
 
 -- A standard PID with backpropagation as anti-windup
+-- You **must** set the pid_array.Actual_output outside of this PID
 function SSS_PID_BP(pid_array, error)
 
     if get(DELTA_TIME) == 0 then
@@ -222,6 +223,13 @@ function SSS_PID_BP(pid_array, error)
     return pid_array.Desired_output
 end
 
+-- A standard PID with backpropagation as anti-windup and output limit (Actual_output is automatically updated)
+function SSS_PID_BP_LIM(pid_array, error)
+    local desired_u = SSS_PID_BP(pid_array, error)
+    local actual_u  = Math_clamp(desired_u, pid_array.Min_out, pid_array.Max_out)
+    pid_array.Actual_output = actual_u
+    return actual_u
+end
 
 function FBW_PID_no_lim(pid_array, error)
     local last_error = pid_array.Current_error
