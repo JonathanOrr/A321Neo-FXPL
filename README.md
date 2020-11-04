@@ -1,6 +1,12 @@
 # A321Neo for X-Plane 11
 A freeware and open source aircraft for X-Plane 11.
 
+
+## Status
+### THE AIRCRAFT IS UNDER DEVELOPMENT: MANY FEATURES AND TEXTURES ARE STILL MISSING.
+Please don't complain to the developers for the missing features and check the #progress channel on our discord server. We are working to provide a **free** aircraft to the community, and your patience is really appreciated.
+
+
 ## License
 Different components of this aircraft addon are licensed under different licenses:
 * The main repository structure, all the lua files, the cockpit images, and all other files not otherwise specified are distributed according to the **GNU General Public License V3.0**. Please refer to the main [LICENSE](LICENSE) file. The copyright owners are all the developers contributing to the project.
@@ -10,9 +16,6 @@ Different components of this aircraft addon are licensed under different license
 
 ## Install
 Just git clone repo to the Aircraft X-Plane directory. Once the development reaches a stable stage, zip files of stable releases will be provided. 
-
-## What works?
-**Nothing really works at the moment**, please check the progress channel on our discord server.
 
 ## Developers
 You can check the [Github developer page](https://github.com/JonathanOrr/A321Neo-FXPL/graphs/contributors). The main contributors are:
