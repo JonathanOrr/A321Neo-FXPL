@@ -144,7 +144,7 @@ function update_cabin_model()
     set(Cockpit_temp, internal_air_temp[CKPT])
     set(Front_cab_temp, internal_air_temp[CABIN_FWD])
     set(Aft_cab_temp, internal_air_temp[CABIN_AFT])
-    set(Aft_cargo_temp, internal_air_temp[CABIN_AFT])
+    set(Aft_cargo_temp, internal_air_temp[CARGO_AFT])
 
 end
 

@@ -1,4 +1,5 @@
 include('aircond_cabinmodel.lua')
+include('PID.lua')
 
 ----------------------------------------------------------------------------------------------------
 -- AIR_CONDITIONING systems
@@ -115,8 +116,8 @@ local function update_pack_valves()
     end
     pack_valves_last_update = get(TIME)
 
-    local condition_please_go_up = math.max(get(Aircond_trim_valve, CKPT), get(Aircond_trim_valve, CABIN_FWD), get(Aircond_trim_valve, CABIN_AFT)) > 0.9
-    local condition_please_go_dw = math.min(get(Aircond_trim_valve, CKPT), get(Aircond_trim_valve, CABIN_FWD), get(Aircond_trim_valve, CABIN_AFT)) < 0.1
+    local condition_please_go_up = false and math.max(get(Aircond_trim_valve, CKPT), get(Aircond_trim_valve, CABIN_FWD), get(Aircond_trim_valve, CABIN_AFT)) > 0.9
+    local condition_please_go_dw = false and math.min(get(Aircond_trim_valve, CKPT), get(Aircond_trim_valve, CABIN_FWD), get(Aircond_trim_valve, CABIN_AFT)) < 0.1
 
     if condition_please_go_up then
         -- Too much hot hair, let's increase the bypass valve
@@ -138,23 +139,90 @@ local function update_pack_valves()
 
 end
 
+local pid_arrays = {
+    [CKPT] = {
+        P_gain = 0.075,
+        I_gain = 0.001,
+        D_gain = 0,
+        B_gain = 1,
+        Actual_output = 0,
+        Desired_output = 0,
+        Integral_sum = 0,
+        Current_error = 0
+    },
+    [CABIN_FWD] = {
+        P_gain = 0.07,
+        I_gain = 0.00075,
+        D_gain = 0,
+        B_gain = 1,
+        Actual_output = 0,
+        Desired_output = 0,
+        Integral_sum = 0,
+        Current_error = 0
+    },
+    [CABIN_AFT] = {
+        P_gain = 0.07,
+        I_gain = 0.00075,
+        D_gain = 0,
+        B_gain = 1,
+        Actual_output = 0,
+        Desired_output = 0,
+        Integral_sum = 0,
+        Current_error = 0
+    },
+    [CARGO_AFT] = {
+        P_gain = 0.025,
+        I_gain = 0.0001,
+        D_gain = 0,
+        B_gain = 1,
+        Actual_output = 0,
+        Desired_output = 0,
+        Integral_sum = 0,
+        Current_error = 0
+    }
+}
+
 local function run_pids()
 
     -- Cockpit
     -- ERROR: get(Cockpit_temp_req) - get(Cockpit_temp))
     -- CONTROL VARIABLE [0;1]: set(Aircond_trim_valve, trim, CKPT)
+    
+    local curr_err  = get(Cockpit_temp_req) - get(Cockpit_temp)
+    local desired_u = SSS_PID_BP(pid_arrays[CKPT], curr_err)
+    local actual_u  = Math_clamp(desired_u, 0, 1)
+    pid_arrays[CKPT].Actual_output = actual_u
+    set(Aircond_trim_valve, actual_u, CKPT)
 
     -- Cabin FWD
     -- ERROR: get(Front_cab_temp_req) - get(Front_cab_temp)
     -- CONTROL VARIABLE [0;1]: set(Aircond_trim_valve, trim, CABIN_FWD)
 
+    local curr_err  = get(Front_cab_temp_req) - get(Front_cab_temp)
+    local desired_u = SSS_PID_BP(pid_arrays[CABIN_FWD], curr_err)
+    local actual_u  = Math_clamp(desired_u, 0, 1)
+    pid_arrays[CABIN_FWD].Actual_output = actual_u
+    set(Aircond_trim_valve, actual_u, CABIN_FWD)
+
     -- Cabin AFT
     -- ERROR: get(Aft_cab_temp_req) - get(Aft_cab_temp)
     -- CONTROL VARIABLE [0;1]: set(Aircond_trim_valve, trim, CABIN_AFT)
 
+    local curr_err  = get(Aft_cab_temp_req) - get(Aft_cab_temp)
+    local desired_u = SSS_PID_BP(pid_arrays[CABIN_AFT], curr_err)
+    local actual_u  = Math_clamp(desired_u, 0, 1)
+    pid_arrays[CABIN_AFT].Actual_output = actual_u
+    set(Aircond_trim_valve, actual_u, CABIN_AFT)
+
     -- Cargo AFT
     -- ERROR: get(Aft_cargo_temp_req) - get(Aft_cargo_temp)
     -- CONTROL VARIABLE [0;1]: set(Aircond_trim_valve, trim, CARGO_AFT)
+    
+    local curr_err  = get(Aft_cargo_temp_req) - get(Aft_cargo_temp)
+    local desired_u = SSS_PID_BP(pid_arrays[CARGO_AFT], curr_err)
+    local actual_u  = Math_clamp(desired_u, 0, 1)
+    pid_arrays[CARGO_AFT].Actual_output = actual_u
+    set(Aircond_trim_valve, actual_u, CARGO_AFT)
     
 end
 

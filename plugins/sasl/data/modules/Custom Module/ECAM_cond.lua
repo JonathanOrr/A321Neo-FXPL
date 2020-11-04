@@ -12,13 +12,13 @@ end
 function draw_cond_page()
     --cabin--
     --actual temperature
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-212, size[2]/2+210, math.floor(get(Cockpit_temp)), 32, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-13, size[2]/2+210, math.floor(get(Front_cab_temp)), 32, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+172, size[2]/2+210, math.floor(get(Aft_cab_temp)), 32, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-212, size[2]/2+210, Round(get(Cockpit_temp),0), 32, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-13, size[2]/2+210, Round(get(Front_cab_temp),0), 32, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+172, size[2]/2+210, Round(get(Aft_cab_temp),0), 32, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
     --duct temperatures
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-212, size[2]/2+170, math.floor(get(Aircond_injected_flow_temp,1)), 32, false, false, TEXT_ALIGN_CENTER, get(Aircond_injected_flow_temp,1) > 80 and ECAM_ORANGE or ECAM_GREEN)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-13, size[2]/2+170, math.floor(get(Aircond_injected_flow_temp,2)), 32, false, false, TEXT_ALIGN_CENTER, get(Aircond_injected_flow_temp,2) > 80 and ECAM_ORANGE or ECAM_GREEN)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+172, size[2]/2+170, math.floor(get(Aircond_injected_flow_temp,3)), 32, false, false, TEXT_ALIGN_CENTER, get(Aircond_injected_flow_temp,3) > 80 and ECAM_ORANGE or ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-212, size[2]/2+170, Round(get(Aircond_injected_flow_temp,1),0), 32, false, false, TEXT_ALIGN_CENTER, get(Aircond_injected_flow_temp,1) > 80 and ECAM_ORANGE or ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-13, size[2]/2+170, Round(get(Aircond_injected_flow_temp,2),0), 32, false, false, TEXT_ALIGN_CENTER, get(Aircond_injected_flow_temp,2) > 80 and ECAM_ORANGE or ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+172, size[2]/2+170, Round(get(Aircond_injected_flow_temp,3),0), 32, false, false, TEXT_ALIGN_CENTER, get(Aircond_injected_flow_temp,3) > 80 and ECAM_ORANGE or ECAM_GREEN)
 
     -- fan failure
     if get(FAILURE_AIRCOND_FAN_FWD) == 1 then
@@ -29,8 +29,8 @@ function draw_cond_page()
     end
     --cargo--
     --actual temperature
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+168, size[2]/2-59, math.floor(get(Aft_cargo_temp)), 32, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+168, size[2]/2-59, Round(get(Aft_cargo_temp),0), 32, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
     --duct temperatures
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+168, size[2]/2-92, math.floor(get(Aircond_injected_flow_temp,4)), 32, false, false, TEXT_ALIGN_CENTER, get(Aircond_injected_flow_temp,4) > 80 and ECAM_ORANGE or ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+168, size[2]/2-92, Round(get(Aircond_injected_flow_temp,4),0), 32, false, false, TEXT_ALIGN_CENTER, get(Aircond_injected_flow_temp,4) > 80 and ECAM_ORANGE or ECAM_GREEN)
 
 end

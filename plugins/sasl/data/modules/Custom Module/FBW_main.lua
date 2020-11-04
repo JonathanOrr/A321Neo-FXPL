@@ -1,4 +1,5 @@
 --include("FBW_subcomponents/limits_calculations.lua")
+include("PID.lua")
 include("FBW_subcomponents/fbw_system_subcomponents/flt_computers.lua")
 addSearchPath(moduleDirectory .. "/Custom Module/FBW_subcomponents/")
 
