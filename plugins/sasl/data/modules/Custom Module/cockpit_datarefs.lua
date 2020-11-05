@@ -400,3 +400,11 @@ L_sim_throttle = globalProperty("sim/cockpit2/engine/actuators/throttle_jet_rev_
 R_sim_throttle = globalProperty("sim/cockpit2/engine/actuators/throttle_jet_rev_ratio[1]")
 L_throttle_blue_dot = createGlobalPropertyf("a321neo/cockpit/engine/l_lever_blue_dot", 0, false, true, false)
 R_throttle_blue_dot = createGlobalPropertyf("a321neo/cockpit/engine/r_lever_blue_dot", 0, false, true, false)
+
+-- AI
+AI_Eng_1_button_light = createGlobalPropertyi("a321neo/cockpit/anti_ice/ai_eng_1", 0, false, true, false) --00: No lights, 01: [ON],  10: FAULT, 11 [ON] + FAULT
+AI_Eng_2_button_light = createGlobalPropertyi("a321neo/cockpit/anti_ice/ai_eng_2", 0, false, true, false) --00: No lights, 01: [ON],  10: FAULT, 11 [ON] + FAULT
+AI_Wing_button_light  = createGlobalPropertyi("a321neo/cockpit/anti_ice/ai_wing", 0, false, true, false)  --00: No lights, 01: [ON],  10: FAULT, 11 [ON] + FAULT
+AI_probe_window_heat  = createGlobalPropertyi("a321neo/cockpit/anti_ice/probe_window", 0, false, true, false)  --00: No lights, 01: [ON],  10: FAULT, 11 [ON] + FAULT
+
+
