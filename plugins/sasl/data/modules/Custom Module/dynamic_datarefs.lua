@@ -476,8 +476,8 @@ Flaps_in_transit = 	   createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_fla
 Flaps_deployed_angle = createGlobalPropertyf("a321neo/dynamics/FBW/slats_and_flaps/flaps_deployed_angle", 0, false, true, false)--0, 0, 10, 15, 20, 40
 --stabilizers
 Horizontal_stabilizer_deflection = globalProperty("sim/flightmodel2/controls/stabilizer_deflection_degrees")
-Elevators_hstab_1 = globalProperty("sim/flightmodel/controls/hstab1_elv1def") --elevators -17 deg down 30 deg up
-Elevators_hstab_2 = globalProperty("sim/flightmodel/controls/hstab2_elv1def") --elevators -17 deg down 30 deg up
+Elevators_hstab_1 = globalProperty("sim/flightmodel/controls/hstab1_elv1def") --elevators 17 deg down -30 deg up
+Elevators_hstab_2 = globalProperty("sim/flightmodel/controls/hstab2_elv1def") --elevators 17 deg down -30 deg up
 Rudder = globalProperty("sim/flightmodel/controls/vstab1_rud1def") --rudder 30 deg left -30 deg right
 Yaw_lim = createGlobalPropertyf("a321neo/dynamics/FBW/yaw_lim", 30, false, true, false)
 
