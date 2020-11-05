@@ -1,5 +1,6 @@
 include("FBW_subcomponents/flight_ctl_subcomponents/slat_flaps_control.lua")
 include("FBW_subcomponents/flight_ctl_subcomponents/lateral_ctl.lua")
+include("FBW_subcomponents/flight_ctl_subcomponents/vertical_ctl.lua")
 
 --variables--
 local total_roll = 0
@@ -76,16 +77,8 @@ function update()
         if get(DELTA_TIME) ~= 0 then
             Ailerons_control(total_roll, false, 0)
             Spoilers_control(total_roll, get(Speedbrake_handle_ratio), 0, false, Spoilers_var_table)
+            Elevator_control(total_pitch)
             Slats_flaps_calc_and_control()
-
-            --Pitch inputs
-            if total_pitch >= 0 then
-                Set_dataref_linear_anim(Elevators_hstab_1, -30 * (total_pitch), -30, 17, 150)
-                Set_dataref_linear_anim(Elevators_hstab_2, -30 * (total_pitch), -30, 17, 150)
-            else
-                Set_dataref_linear_anim(Elevators_hstab_1, -17 * (total_pitch), -30, 17, 150)
-                Set_dataref_linear_anim(Elevators_hstab_2, -17 * (total_pitch), -30, 17, 150)
-            end
 
             --Rudder
             --Set_dataref_linear_anim(Rudder, get(Yaw_lim) * (total_yaw), -30, 30, 25)
