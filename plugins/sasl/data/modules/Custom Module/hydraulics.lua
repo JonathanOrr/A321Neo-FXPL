@@ -18,7 +18,7 @@ local PSI_AVG_RAT_PUMP    = 2500    -- Average PSI when RAT pump is active and s
 local PSI_VAR_RAT_PUMP    = 100     -- +/- variation PSI when RAT pump is active and speed is good
 local PSI_RAT_MIN_SPD     = 140     -- Minimum speed such that RAT is provided good hyd
 
-local PSI_STEP            = 50      -- Average incremental step for reaching target pressure
+local PSI_SPEED           = 350     -- Rate of pressure change (B hyd is 0.7 times this value)
 
 ----------------------------------------------------------------------------------------------------
 -- Global/Local variables
@@ -27,7 +27,7 @@ local g_sys = nil
 local b_sys = nil
 local y_sys = nil
 
-local last_press_update = 0
+local last_qty_update = 0
 local last_press_target_update = 0
 
 local last_PTU_change_status = 0    -- To save the last time we changed the status of PTU
@@ -197,20 +197,10 @@ function HydSystem:update_curr_press()
         return
     end
     
-    local var = (self.press_target - self.press_curr) / 10
-    if var > 0 and var > PSI_STEP then
-        if self.id == B then
-            var = PSI_STEP * 0.7 -- Blue is a little slower
-        else
-            var = PSI_STEP
-        end
-        var = var + math.random(-5,5)
-    elseif var < 0 and var < -PSI_STEP then
-        var = -PSI_STEP
-        var = var + math.random(-5,5)
-    end
+    speed = self.id == B and 0.7*PSI_SPEED or PSI_SPEED  -- Blue is a little slower
     
-    self.press_curr = self.press_curr + var
+    self.press_curr = Set_linear_anim_value(self.press_curr, self.press_target, 0, 3500, speed)
+    print(self.press_curr, self.press_target)
 
 end
 
@@ -361,12 +351,13 @@ function update()
         y_sys:update_press()
     end
 
-    if curr_time - last_press_update > 100 then -- Update the pressure and qty every 100ms
-        last_press_update = curr_time
         
-        g_sys:update_curr_press()
-        b_sys:update_curr_press()
-        y_sys:update_curr_press()
+    g_sys:update_curr_press()
+    b_sys:update_curr_press()
+    y_sys:update_curr_press()
+
+    if curr_time - last_qty_update > 100 then -- Update the pressure and qty every 100ms
+        last_qty_update = curr_time
         
         g_sys:update_qty()
         b_sys:update_qty()
