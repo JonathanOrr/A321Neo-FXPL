@@ -200,7 +200,6 @@ function HydSystem:update_curr_press()
     speed = self.id == B and 0.7*PSI_SPEED or PSI_SPEED  -- Blue is a little slower
     
     self.press_curr = Set_linear_anim_value(self.press_curr, self.press_target, 0, 3500, speed)
-    print(self.press_curr, self.press_target)
 
 end
 
