@@ -31,7 +31,7 @@ Ditching_button  = createGlobalPropertyi("a321neo/cockpit/pressurization/ditchin
 
 Press_manual_control_lever_pos = createGlobalPropertyi("a321neo/cockpit/pressurization/manual_control_sw_pos", 0, false, true, false) -- 0 neutral, -1 down, 1 up
 Press_ldg_elev_knob_pos = createGlobalPropertyf("a321neo/cockpit/pressurization/ldg_elev_knob_pos", 0, false, true, false) -- -3 is auto, then from -2 to 14 is the knob position
-
+Press_mode_sel_button = createGlobalPropertyi("a321neo/cockpit/pressurization/mode_sel", 0, false, true, false) -- 0 - nothing, 1 - [MAN], 10 - Fault, 11 - [MAN] + Fault   
 
 --FBW
 ELAC_1_off_button = createGlobalPropertyi("a321neo/cockpit/FBW/elac_1_off", 0, false, true, false) --0 is on 1 if off
