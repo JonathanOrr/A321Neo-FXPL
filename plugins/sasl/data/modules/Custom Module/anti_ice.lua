@@ -36,6 +36,7 @@ local ai_btn_status = { -- switch position status
 
 local ai_time_flash = {0,0,0,0} -- Used to timing the flash of fault
 local wait_for_ice_detected = 0
+local start_time_ground_test_wings = 0
 
 ----------------------------------------------------------------------------------------------------
 -- Commands
@@ -167,10 +168,27 @@ local function get_engine_light_value(x)
 
 end
 
+local function get_wings_light_value() 
+    if ai_btn_status[WINGS] then
+        if ai_time_flash[WINGS] == 0 then
+            ai_time_flash[WINGS] = get(TIME)
+        end
+    else
+        ai_time_flash[WINGS] = 0
+    end
+    local is_transit = get(TIME) - ai_time_flash[WINGS] <= FLASH_TIME
+    local is_actually_faulty = ai_btn_status[WINGS] and (get(AI_wing_R_operating) == 0 or get(AI_wing_L_operating) == 0)
+    local is_faulty = is_actually_faulty or is_transit 
+    return (ai_btn_status[WINGS] and 1 or 0) + (is_faulty and 10 or 0)
+
+end
+
 local function update_light_datarefs()
 
     set(AI_Eng_1_button_light, get_engine_light_value(ENG_1))
     set(AI_Eng_2_button_light, get_engine_light_value(ENG_2))
+    set(AI_Wing_button_light,  get_wings_light_value())
+    
     
 end
 
@@ -178,6 +196,21 @@ local function update_logic()
     ai_sys_commanded_status[ENG_1] = ai_btn_status[ENG_1]
     ai_sys_commanded_status[ENG_2] = ai_btn_status[ENG_2]
     
+    if ai_btn_status[WINGS]  then
+        if get(Any_wheel_on_ground) == 0 then
+            ai_sys_commanded_status[WINGS] = true
+            start_time_ground_test_wings = 0
+        else
+            if start_time_ground_test_wings == 0 then
+                start_time_ground_test_wings = get(TIME)
+            else
+                ai_sys_commanded_status[WINGS] = get(TIME) - start_time_ground_test_wings < 30
+            end
+        end
+    else
+        ai_sys_commanded_status[WINGS] = false
+        start_time_ground_test_wings = 0
+    end
 
     -- This is to update the "NO ICE DETECT" message of the EWD: the message is displayed if no
     -- ice is detected for a continuous period of 190 seconds and ENG1 or ENG2 or WING is pressed.    
@@ -191,7 +224,10 @@ local function update_logic()
         wait_for_ice_detected = 0
     end
 
-
+    local AI_wing_L_is_ok =  get(L_bleed_press) > 5 and ai_xp_components[ANTIICE_WING_L].valve_status
+    set(AI_wing_L_operating, AI_wing_L_is_ok and 1 or 0)
+    local AI_wing_R_is_ok =  get(R_bleed_press) > 5 and ai_xp_components[ANTIICE_WING_R].valve_status
+    set(AI_wing_R_operating, AI_wing_R_is_ok and 1 or 0)
     
 end
 
