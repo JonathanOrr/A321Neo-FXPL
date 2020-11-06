@@ -363,6 +363,19 @@ local function update_right_list()
         list_right:put(COL_INDICATION, "DUAL COOLING")
     end
     
+    -- ANTI-ICE (it is correct that they use the button status and not the actual anti-ice status)
+    if get(AI_Eng_1_button_light) % 2 == 1 or get(AI_Eng_2_button_light) % 2 == 1 then
+        list_right:put(COL_INDICATION, "ENG A. ICE")
+    end
+
+    if get(AI_Wing_button_light) % 2 == 1 then
+        list_right:put(COL_INDICATION, "WING A. ICE")
+    end
+    
+    if get(No_ice_detected) == 1 then
+        list_right:put(COL_INDICATION, "ICE NOT DET")
+    end
+    
     -- TODO Audio: AUDIO 3 XFRD displayed green if audio switching selector not in NORM
     -- TODO Acars: ACARS CALL (pulsing green) if received an ACARS message requesting voice conversation
 
@@ -373,12 +386,7 @@ local function update_right_list()
 
     -- TODO Steer: NW STRG DISC when the nose wheel steering selector is in the towing position
     --             GREEN: if no engine is running, AMBER: is at least one engine is running
-    
-    -- TODO Anti-ice: WING A. ICE, green, if WING ANTI ICE is ON
-    -- TODO Anti-ice: ICE NOT DET, green, if ice no longer detected after 190 secs of pressing WING ANTI ICE
-    -- TODO Anti-ice: ENG A. ICE, green, if one or both of ENG ANTI ICE is ON
-    -- TODO Anti-ice: ICE NOT DET, green, if ice no longer detected after 190 secs of pressing ENG ANTI ICE
-    
+       
     -- TODO windshear: PRED W/S OFF if windshear (weather panel) is selected OFF
     --                  green in phases 1,2,6,10
     --                  amber in phases 3,4,5,7,8,9
