@@ -120,13 +120,20 @@ FAILURE_AIRCOND_ISOL_CARGO_OUT_STUCK = createGlobalPropertyi("a321neo/failures/a
 
 FAILURE_AI_PITOT_CAPT = createGlobalPropertyi("a321neo/failures/anti_ice/capt_pitot", 0, false, true, false)
 FAILURE_AI_PITOT_FO   = createGlobalPropertyi("a321neo/failures/anti_ice/fo_pitot", 0, false, true, false)
+FAILURE_AI_PITOT_STDBY= createGlobalPropertyi("a321neo/failures/anti_ice/stdby_pitot", 0, false, true, false)
 FAILURE_AI_SP_CAPT    = createGlobalPropertyi("a321neo/failures/anti_ice/capt_sp", 0, false, true, false)
 FAILURE_AI_SP_FO      = createGlobalPropertyi("a321neo/failures/anti_ice/fo_sp", 0, false, true, false)
+FAILURE_AI_SP_STDBY   = createGlobalPropertyi("a321neo/failures/anti_ice/stdby_ap", 0, false, true, false)
 FAILURE_AI_AOA_CAPT   = createGlobalPropertyi("a321neo/failures/anti_ice/capt_aoa", 0, false, true, false)
 FAILURE_AI_AOA_FO     = createGlobalPropertyi("a321neo/failures/anti_ice/fo_aoa", 0, false, true, false)
+FAILURE_AI_AOA_STDBY  = createGlobalPropertyi("a321neo/failures/anti_ice/stdby_aoa", 0, false, true, false)
+FAILURE_AI_TAT_CAPT   = createGlobalPropertyi("a321neo/failures/anti_ice/capt_tat", 0, false, true, false)
+FAILURE_AI_TAT_FO     = createGlobalPropertyi("a321neo/failures/anti_ice/fo_tat", 0, false, true, false)
 
 FAILURE_AI_Eng1_valve_stuck = createGlobalPropertyi("a321neo/failures/anti_ice/eng_1_valve", 0, false, true, false)
 FAILURE_AI_Eng2_valve_stuck = createGlobalPropertyi("a321neo/failures/anti_ice/eng_2_valve", 0, false, true, false)
 FAILURE_AI_Wing_L_valve_stuck = createGlobalPropertyi("a321neo/failures/anti_ice/wing_r_valve", 0, false, true, false)
 FAILURE_AI_Wing_R_valve_stuck = createGlobalPropertyi("a321neo/failures/anti_ice/wing_l_valve", 0, false, true, false)
+FAILURE_AI_Window_Heat_L = createGlobalPropertyi("a321neo/failures/anti_ice/window_heat_l", 0, false, true, false)
+FAILURE_AI_Window_Heat_R = createGlobalPropertyi("a321neo/failures/anti_ice/window_heat_r", 0, false, true, false)
 

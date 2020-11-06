@@ -58,24 +58,73 @@ end
 -- We do not need to put these datarefs inside dynamic_datarefs.lua, because they are used to
 -- interact with X-Plane system. Any other system should interact via our custom datarefs.
 
-local AI_XP_window_heat   = globalPropertyi(DR_COMMON_ROOT .. "ice_window_heat_on")
-local AI_XP_pitot_capt_heat = globalPropertyi(DR_COMMON_ROOT .. "ice_pitot_heat_on_pilot")
-local AI_XP_pitot_fo_heat   = globalPropertyi(DR_COMMON_ROOT .. "ice_pitot_heat_on_copilot")
-local AI_XP_AOA_capt_heat   = globalPropertyi(DR_COMMON_ROOT .. "ice_AOA_heat_on")
-local AI_XP_AOA_fo_heat     = globalPropertyi(DR_COMMON_ROOT .. "ice_AOA_heat_on_copilot")
-local AI_XP_static_port_capt_heat = globalPropertyi(DR_COMMON_ROOT .. "ice_static_heat_on_pilot")
-local AI_XP_static_port_fo_heat   = globalPropertyi(DR_COMMON_ROOT .. "ice_static_heat_on_copilot")
-	
 local AI_XP_auto_ignite  = globalPropertyi(DR_COMMON_ROOT .. "ice_auto_ignite_on")
 local AI_XP_ice_detector = globalPropertyi(DR_COMMON_ROOT .. "ice_detect_on")
 local AI_XP_ice_detected = globalPropertyi("sim/cockpit2/annunciators/ice", 0, false, true, false) -- 0: non detected, 1: detected
 -- AI_ice_detected
 
 ai_xp_components = {
-   [ANTIICE_ENG_1]  = {dr_name="cowling_thermal_anti_ice_per_engine[0]", valve_elec=DC_bus_1_pwrd, valve_status=false, valve_elec_fail_status=true, failure=FAILURE_AI_Eng1_valve_stuck, parent=ENG_1},
-   [ANTIICE_ENG_2]  = {dr_name="cowling_thermal_anti_ice_per_engine[1]", valve_elec=DC_bus_2_pwrd, valve_status=false, valve_elec_fail_status=true, failure=FAILURE_AI_Eng2_valve_stuck, parent=ENG_2},
-   [ANTIICE_WING_L] = {dr_name="ice_surface_hot_bleed_air_left_on", valve_elec=DC_shed_ess_pwrd, valve_status=false, valve_elec_fail_status=false, failure=FAILURE_AI_Wing_L_valve_stuck, parent=WINGS},
-   [ANTIICE_WING_R] = {dr_name="ice_surface_hot_bleed_air_right_on", valve_elec=DC_shed_ess_pwrd, valve_status=false, valve_elec_fail_status=false, failure=FAILURE_AI_Wing_R_valve_stuck, parent=WINGS}
+   [ANTIICE_ENG_1]  = {dr_name="cowling_thermal_anti_ice_per_engine[0]", valve_elec=DC_bus_1_pwrd,
+                       valve_status=false, valve_elec_fail_status=true, failure=FAILURE_AI_Eng1_valve_stuck,
+                       parent=ENG_1},
+   [ANTIICE_ENG_2]  = {dr_name="cowling_thermal_anti_ice_per_engine[1]", valve_elec=DC_bus_2_pwrd,
+                       valve_status=false, valve_elec_fail_status=true, failure=FAILURE_AI_Eng2_valve_stuck,
+                       parent=ENG_2},
+   [ANTIICE_WING_L] = {dr_name="ice_surface_hot_bleed_air_left_on", valve_elec=DC_shed_ess_pwrd,
+                       valve_status=false, valve_elec_fail_status=false, failure=FAILURE_AI_Wing_L_valve_stuck,
+                       parent=WINGS},
+   [ANTIICE_WING_R] = {dr_name="ice_surface_hot_bleed_air_right_on", valve_elec=DC_shed_ess_pwrd,
+                       valve_status=false, valve_elec_fail_status=false, failure=FAILURE_AI_Wing_R_valve_stuck,
+                       parent=WINGS},
+   
+   -- Widshield amps from here: https://www.astronics.com/docs/default-source/aes-docs/windshieldheatwhitepaper.pdf?sfvrsn=2b2aa158_4
+   [ANTIICE_WINDOW_HEAT_L] = {dr_name="ice_window_heat_on", source_elec=AC_bus_1_pwrd,
+                              elec_load_source=ELEC_BUS_AC_1, elec_amps_ground=10.5, elec_amps_flight=30.5, status=false,
+                              failure=FAILURE_AI_Window_Heat_L, parent=PROBES},
+   [ANTIICE_WINDOW_HEAT_R] = {dr_name=nil, source_elec=AC_bus_2_pwrd,
+                              elec_load_source=ELEC_BUS_AC_2, elec_amps_ground=10.5, elec_amps_flight=30.5, status=false,
+                              failure=FAILURE_AI_Window_Heat_R, parent=PROBES},
+                              
+   -- Following amps are good estimation (~230W in flight)
+   [ANTIICE_PITOT_CAPT] = {dr_name="ice_pitot_heat_on_pilot", source_elec=AC_ess_bus_pwrd,
+                              elec_load_source=ELEC_BUS_AC_ESS, elec_amps_ground=1, elec_amps_flight=2, status=false,
+                              failure=FAILURE_AI_PITOT_CAPT, parent=PROBES},
+   [ANTIICE_PITOT_FO]   = {dr_name="ice_pitot_heat_on_copilot", source_elec=AC_bus_2_pwrd,
+                              elec_load_source=ELEC_BUS_AC_2, elec_amps_ground=1, elec_amps_flight=2, status=false,
+                              failure=FAILURE_AI_PITOT_FO, parent=PROBES},
+   [ANTIICE_PITOT_STDBY]= {dr_name=nil, source_elec=AC_bus_1_pwrd,
+                              elec_load_source=ELEC_BUS_AC_1, elec_amps_ground=1, elec_amps_flight=2, status=false,
+                              failure=FAILURE_AI_PITOT_STDBY, parent=PROBES},
+                              
+   -- Following amps are very rough estimation
+   [ANTIICE_STATIC_CAPT]= {dr_name="ice_static_heat_on_pilot", source_elec=DC_bus_1_pwrd,
+                              elec_load_source=ELEC_BUS_DC_1, elec_amps_ground=1, elec_amps_flight=1, status=false,
+                              failure=FAILURE_AI_SP_CAPT, parent=PROBES},
+   [ANTIICE_STATIC_FO]  = {dr_name="ice_static_heat_on_copilot", source_elec=DC_bus_2_pwrd,
+                              elec_load_source=ELEC_BUS_DC_2, elec_amps_ground=1, elec_amps_flight=1, status=false,
+                              failure=FAILURE_AI_SP_FO, parent=PROBES},
+   [ANTIICE_STATIC_CAPT]= {dr_name=nil, source_elec=DC_bus_1_pwrd,
+                              elec_load_source=ELEC_BUS_DC_1, elec_amps_ground=1, elec_amps_flight=1, status=false,
+                              failure=FAILURE_AI_SP_STDBY, parent=PROBES},
+
+   -- Following amps are very rough estimation
+   [ANTIICE_AOA_CAPT] = {dr_name="ice_AOA_heat_on", source_elec=AC_ess_shed_pwrd,
+                              elec_load_source=ELEC_BUS_AC_ESS_SHED, elec_amps_ground=1, elec_amps_flight=1, status=false,
+                              failure=FAILURE_AI_PITOT_CAPT, parent=PROBES},
+   [ANTIICE_AOA_FO]   = {dr_name="ice_AOA_heat_on_copilot", source_elec=AC_bus_2_pwrd,
+                              elec_load_source=ELEC_BUS_AC_2, elec_amps_ground=1, elec_amps_flight=1, status=false,
+                              failure=FAILURE_AI_PITOT_FO, parent=PROBES},
+   [ANTIICE_AOA_STDBY]= {dr_name=nil, source_elec=AC_bus_1_pwrd,
+                              elec_load_source=ELEC_BUS_AC_1, elec_amps_ground=1, elec_amps_flight=1, status=false,
+                              failure=FAILURE_AI_PITOT_STDBY, parent=PROBES},
+   -- Following amps are very rough estimation
+   [ANTIICE_TAT_CAPT] = {dr_name=nil, source_elec=AC_bus_1_pwrd,
+                              elec_load_source=ELEC_BUS_AC_1, elec_amps_ground=0, elec_amps_flight=1, status=false,
+                              failure=FAILURE_AI_TAT_CAPT, parent=PROBES},
+   [ANTIICE_TAT_FO]   = {dr_name=nil, source_elec=AC_bus_2_pwrd,
+                              elec_load_source=ELEC_BUS_AC_2, elec_amps_ground=0, elec_amps_flight=1, status=false,
+                              failure=FAILURE_AI_TAT_FO, parent=PROBES},
+
 
 }
 
@@ -120,17 +169,29 @@ local function update_xp_datarefs_single_elec(c)
     -- - There is electrical source
     -- - There is no failure
     -- - Th system is commanded ON
-    if get(c.source_elec) == 1 and get(c.failure) == 0 and ai_sys_commanded_status[c.parent] then
-        set(c.dr, 1)
-    else
-        set(c.dr, 0)
+    local is_on = get(c.source_elec) == 1 and get(c.failure) == 0 and ai_sys_commanded_status[c.parent] 
+    
+
+    if c.dr_name ~= nil then
+        if is_on then
+            set(c.dr, 1)
+        else
+            set(c.dr, 0)
+        end
     end
     
+    if is_on then
+        if get(Any_wheel_on_ground) == 1 then
+            ELEC_sys.add_power_consumption(c.elec_load_source, c.elec_amps_ground, c.elec_amps_ground)
+        else
+            ELEC_sys.add_power_consumption(c.elec_load_source, c.elec_amps_flight, c.elec_amps_flight)
+        end
+    end
 end
 
 local function update_xp_datarefs_single(component)
 
-    if component.dr == nil then
+    if component.dr == nil and component.dr_name ~= nil then
         component.dr = globalProperty(DR_COMMON_ROOT .. component.dr_name)
         assert(component.dr ~= nil)
     end
@@ -210,6 +271,12 @@ local function update_logic()
     else
         ai_sys_commanded_status[WINGS] = false
         start_time_ground_test_wings = 0
+    end
+    
+    if get(Any_wheel_on_ground) == 1 then
+        ai_sys_commanded_status[PROBES] = ai_btn_status[PROBES] or get(Engine_1_avail) == 1 or get(Engine_2_avail) == 1
+    else
+        ai_sys_commanded_status[PROBES] = true -- Always on in flight
     end
 
     -- This is to update the "NO ICE DETECT" message of the EWD: the message is displayed if no
