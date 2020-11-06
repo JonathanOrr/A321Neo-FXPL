@@ -29,6 +29,7 @@ Pack2_off_button = createGlobalPropertyi("a321neo/cockpit/packs/pack2_off", 0, f
 Econ_flow_button = createGlobalPropertyi("a321neo/cockpit/packs/econ_flow", 0, false, true, false) --0 is nothing 1 if on, 10 fault, 11 on+fault
 Ditching_button  = createGlobalPropertyi("a321neo/cockpit/pressurization/ditching", 0, false, true, false) --0 is nothing 1 is on
 
+
 Press_manual_control_lever_pos = createGlobalPropertyi("a321neo/cockpit/pressurization/manual_control_sw_pos", 0, false, true, false) -- 0 neutral, -1 down, 1 up
 Press_ldg_elev_knob_pos = createGlobalPropertyf("a321neo/cockpit/pressurization/ldg_elev_knob_pos", 0, false, true, false) -- -3 is auto, then from -2 to 14 is the knob position
 Press_mode_sel_button = createGlobalPropertyi("a321neo/cockpit/pressurization/mode_sel", 0, false, true, false) -- 0 - nothing, 1 - [MAN], 10 - Fault, 11 - [MAN] + Fault   
@@ -262,6 +263,8 @@ Aft_cargo_temp_dial = createGlobalPropertyf("a321neo/cockpit/aircond/aft_cargo_t
 Cargo_isolation_status = createGlobalPropertyi("a321neo/cockpit/aircond/light_cargo_isol", 0, false, true, false)     --00: No lights, 01: [ON], 10: FAULT, 11 [ON] + FAULT
 Ventilation_light_blower = createGlobalPropertyi("a321neo/cockpit/aircond/light_blower", 0, false, true, false)     --00: No lights, 01: [OVRD], 10: FAULT, 11 [OVRD] + FAULT
 Ventilation_light_extract = createGlobalPropertyi("a321neo/cockpit/aircond/light_extract", 0, false, true, false)     --00: No lights, 01: [OVRD], 10: FAULT, 11 [OVRD] + FAULT
+
+Cabin_fan_button  = createGlobalPropertyi("a321neo/cockpit/aircond/cabin_fan", 0, false, true, false) -- 0 blank, 1 : [OFF]
 
 --misc
 Capt_ra_alt_m = createGlobalPropertyf("a321neo/cockpit/indicators/capt_ra_alt_m", 0, false, true, false)

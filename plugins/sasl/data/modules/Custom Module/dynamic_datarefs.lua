@@ -69,7 +69,8 @@ Hot_air_valve_pos = createGlobalPropertyi("a321neo/dynamics/packs/cabin_hot_air_
 Hot_air_valve_pos_cargo = createGlobalPropertyi("a321neo/dynamics/packs/cargo_hot_air_pos", 0, false, true, false)    -- 0: closed, 1: open
 Hot_air_temp       = createGlobalPropertyf("a321neo/dynamics/packs/cabin_hot_air_temp", 0, false, true, false)
 Hot_air_temp_cargo = createGlobalPropertyf("a321neo/dynamics/packs/cargo_hot_air_temp", 0, false, true, false)
-
+Cab_fan_fwd_running= createGlobalPropertyi("a321neo/dynamics/packs/cabin_fan_fwd", 0, false, true, false)   -- 1 running, 0 not running
+Cab_fan_aft_running= createGlobalPropertyi("a321neo/dynamics/packs/cabin_fan_aft", 0, false, true, false)    -- 1 running, 0 not running
 
 --apu
 Apu_start_position = globalProperty("sim/cockpit2/electrical/APU_starter_switch") --apu start button state 0: off, 1: on, 2: avail
