@@ -19,10 +19,8 @@ function Ailerons_control(lateral_input, has_florence_kit, ground_spoilers_mode)
 
     --SURFACE SPEED LOGIC--
     --hydralics power detection
-    if get(Hydraulic_B_press) <= 1450 and get(Hydraulic_G_press) <= 1450 then--Both HYD not fully/ not working
-        l_aileron_actual_speed = Math_rescale(0, no_hyd_spd, 1450, ailerons_speed, (get(Hydraulic_B_press) + get(Hydraulic_G_press)) / 2)
-        r_aileron_actual_speed = Math_rescale(0, no_hyd_spd, 1450, ailerons_speed, (get(Hydraulic_B_press) + get(Hydraulic_G_press)) / 2)
-    end
+    l_aileron_actual_speed = Math_rescale(0, no_hyd_spd, 1450, ailerons_speed, get(Hydraulic_B_press) + get(Hydraulic_G_press))
+    r_aileron_actual_speed = Math_rescale(0, no_hyd_spd, 1450, ailerons_speed, get(Hydraulic_B_press) + get(Hydraulic_G_press))
 
     --detect surface failures
     if get(FAILURE_FCTL_LAIL) == 1 then
@@ -47,11 +45,9 @@ function Ailerons_control(lateral_input, has_florence_kit, ground_spoilers_mode)
         r_aileron_travel_target = 0
     end
 
-    --hydralics power detection
-    if get(Hydraulic_B_press) <= 1450 and get(Hydraulic_G_press) <= 1450 then--Both HYD not fully/ not working
-        l_aileron_travel_target = Math_rescale(0, Math_rescale(0, ailerons_max_def, 1450, l_aileron_travel_target, (get(Hydraulic_B_press) + get(Hydraulic_G_press)) / 2), no_hyd_recenter_ias, 0, get(IAS))
-        r_aileron_travel_target = Math_rescale(0, Math_rescale(0, ailerons_max_def, 1450, r_aileron_travel_target, (get(Hydraulic_B_press) + get(Hydraulic_G_press)) / 2), no_hyd_recenter_ias, 0, get(IAS))
-    end
+    --hydralics power detection-Both HYD not fully/ not working
+    l_aileron_travel_target = Math_rescale(0, Math_rescale(0, ailerons_max_def, no_hyd_recenter_ias, -get(Alpha), get(IAS)), 1450, l_aileron_travel_target, get(Hydraulic_B_press) + get(Hydraulic_G_press))
+    r_aileron_travel_target = Math_rescale(0, Math_rescale(0, ailerons_max_def, no_hyd_recenter_ias, -get(Alpha), get(IAS)), 1450, r_aileron_travel_target, get(Hydraulic_B_press) + get(Hydraulic_G_press))
 
     --output to the surfaces
     set(Left_aileron,  Set_linear_anim_value(get(Left_aileron),  l_aileron_travel_target, -ailerons_max_def, ailerons_max_def, l_aileron_actual_speed))
