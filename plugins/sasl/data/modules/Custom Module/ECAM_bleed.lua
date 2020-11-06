@@ -1,5 +1,7 @@
 include('constants.lua')
 
+local ground_open_start = 0
+
 local function draw_engines()
 
     -- Numbers
@@ -162,8 +164,46 @@ local function draw_ram_air()
     sasl.gl.drawWideLine(size[1]/2, size[2]/2+290, size[1]/2, size[2]/2+250, 3, ECAM_GREEN)
 end 
 
+local function draw_triangle_left(x,y,color)
+    sasl.gl.drawWidePolyLine( {x, y, x+25, y+15, x+25, y-15, x, y }, 3, color)
+end
+
+local function draw_triangle_right(x,y,color)
+    sasl.gl.drawWidePolyLine( {x, y, x-25, y+15, x-25, y-15, x, y }, 3, color)
+end
+
+
 local function draw_ai()
-    -- TODO
+
+    if get(AI_Wing_button_light) % 2 == 1 then
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-340, size[2]/2+50, "ANTI\nICE", 32, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+345, size[2]/2+50, "ANTI\n ICE", 32, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)   -- The extra space on the second line is correct!
+    end
+
+    if get(AI_Wing_button_light) % 2 == 1 and get(Any_wheel_on_ground) == 1 then
+        if ground_open_start == 0 then
+            ground_open_start = get(TIME)
+        end
+    else
+        ground_open_start = 0
+    end
+    
+    if AI_sys.comp[ANTIICE_WING_L].valve_status then
+        if get(AI_wing_L_operating) == 1 and (get(Any_wheel_on_ground) == 0 or (get(TIME) - ground_open_start < 10)) then
+            draw_triangle_left(size[1]/2-285, size[2]/2+40, ECAM_GREEN)
+        else
+            draw_triangle_left(size[1]/2-285, size[2]/2+40, ECAM_ORANGE)
+        end
+    end
+
+    if AI_sys.comp[ANTIICE_WING_R].valve_status then
+        if get(AI_wing_R_operating) == 1 and (get(Any_wheel_on_ground) == 0 or (get(TIME) - ground_open_start < 10)) then
+            draw_triangle_right(size[1]/2+290, size[2]/2+40, ECAM_GREEN)
+        else
+            draw_triangle_right(size[1]/2+290, size[2]/2+40, ECAM_ORANGE)
+        end
+    end
+    
 end
 
 function draw_bleed_page()
