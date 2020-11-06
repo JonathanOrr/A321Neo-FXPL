@@ -30,6 +30,7 @@ local ENG_N1_CRANK    = 10  -- N1 used for cranking and cooling
 local ENG_N1_CRANK_FF = 15  -- FF in case of wet cranking
 local ENG_N1_CRANK_EGT= 95  -- Target EGT for cranking
 local ENG_N1_LL_IDLE  = 18.3 -- Value to determine if parameters control should be given to X-Plane 
+local N1_INC_AI_ENG   = 1.5  -- Increase of minimum N1 if at least one ENG Anti-ice is activated
 local MAGIC_NUMBER = 100     -- This is a magic number, which value is necessary to start the engine (see later)
 
 local OIL_QTY_MAX = 17
@@ -213,9 +214,13 @@ end
 
 local function update_n1_minimum()
     local curr_altitude = get(Elevation_m) * 3.28084
-    local comp_min_n1 = min_n1(curr_altitude)
-    local always_a_minimum = ENG_N1_LL_IDLE + 0.2
+    local comp_min_n1 = min_n1(curr_altitude) 
+                      + ((AI_sys.comp[ANTIICE_ENG_1].valve_status
+                          or AI_sys.comp[ANTIICE_ENG_2].valve_status) and N1_INC_AI_ENG or 0)
+    
     set(Eng_N1_idle, comp_min_n1)
+
+    local always_a_minimum = ENG_N1_LL_IDLE + 0.2
 
     -- Update ENG1 N1 minimum
     local curr_n1 = get(Eng_1_N1)    

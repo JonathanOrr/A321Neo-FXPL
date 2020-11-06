@@ -31,7 +31,7 @@ Ditching_button  = createGlobalPropertyi("a321neo/cockpit/pressurization/ditchin
 
 Press_manual_control_lever_pos = createGlobalPropertyi("a321neo/cockpit/pressurization/manual_control_sw_pos", 0, false, true, false) -- 0 neutral, -1 down, 1 up
 Press_ldg_elev_knob_pos = createGlobalPropertyf("a321neo/cockpit/pressurization/ldg_elev_knob_pos", 0, false, true, false) -- -3 is auto, then from -2 to 14 is the knob position
-
+Press_mode_sel_button = createGlobalPropertyi("a321neo/cockpit/pressurization/mode_sel", 0, false, true, false) -- 0 - nothing, 1 - [MAN], 10 - Fault, 11 - [MAN] + Fault   
 
 --FBW
 ELAC_1_off_button = createGlobalPropertyi("a321neo/cockpit/FBW/elac_1_off", 0, false, true, false) --0 is on 1 if off
@@ -400,3 +400,11 @@ L_sim_throttle = globalProperty("sim/cockpit2/engine/actuators/throttle_jet_rev_
 R_sim_throttle = globalProperty("sim/cockpit2/engine/actuators/throttle_jet_rev_ratio[1]")
 L_throttle_blue_dot = createGlobalPropertyf("a321neo/cockpit/engine/l_lever_blue_dot", 0, false, true, false)
 R_throttle_blue_dot = createGlobalPropertyf("a321neo/cockpit/engine/r_lever_blue_dot", 0, false, true, false)
+
+-- AI
+AI_Eng_1_button_light = createGlobalPropertyi("a321neo/cockpit/anti_ice/ai_eng_1", 0, false, true, false) --00: No lights, 01: [ON],  10: FAULT, 11 [ON] + FAULT
+AI_Eng_2_button_light = createGlobalPropertyi("a321neo/cockpit/anti_ice/ai_eng_2", 0, false, true, false) --00: No lights, 01: [ON],  10: FAULT, 11 [ON] + FAULT
+AI_Wing_button_light  = createGlobalPropertyi("a321neo/cockpit/anti_ice/ai_wing", 0, false, true, false)  --00: No lights, 01: [ON],  10: FAULT, 11 [ON] + FAULT
+AI_probe_window_heat  = createGlobalPropertyi("a321neo/cockpit/anti_ice/probe_window", 0, false, true, false)  --00: No lights, 01: [ON],  10: FAULT, 11 [ON] + FAULT
+No_ice_detected       = createGlobalPropertyi("a321neo/cockpit/anti_ice/no_ice_detected", 0, false, true, false) --0: ice detected or system off, 1: no ice detected and system ON
+

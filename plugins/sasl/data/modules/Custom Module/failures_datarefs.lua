@@ -118,4 +118,15 @@ FAILURE_AIRCOND_HOT_AIR_CARGO_STUCK = createGlobalPropertyi("a321neo/failures/ai
 FAILURE_AIRCOND_ISOL_CARGO_IN_STUCK = createGlobalPropertyi("a321neo/failures/aircond/hot_air_cargo_stuck_in", 0, false, true, false)
 FAILURE_AIRCOND_ISOL_CARGO_OUT_STUCK = createGlobalPropertyi("a321neo/failures/aircond/hot_air_cargo_stuck_out", 0, false, true, false)
 
+FAILURE_AI_PITOT_CAPT = createGlobalPropertyi("a321neo/failures/anti_ice/capt_pitot", 0, false, true, false)
+FAILURE_AI_PITOT_FO   = createGlobalPropertyi("a321neo/failures/anti_ice/fo_pitot", 0, false, true, false)
+FAILURE_AI_SP_CAPT    = createGlobalPropertyi("a321neo/failures/anti_ice/capt_sp", 0, false, true, false)
+FAILURE_AI_SP_FO      = createGlobalPropertyi("a321neo/failures/anti_ice/fo_sp", 0, false, true, false)
+FAILURE_AI_AOA_CAPT   = createGlobalPropertyi("a321neo/failures/anti_ice/capt_aoa", 0, false, true, false)
+FAILURE_AI_AOA_FO     = createGlobalPropertyi("a321neo/failures/anti_ice/fo_aoa", 0, false, true, false)
+
+FAILURE_AI_Eng1_valve_stuck = createGlobalPropertyi("a321neo/failures/anti_ice/eng_1_valve", 0, false, true, false)
+FAILURE_AI_Eng2_valve_stuck = createGlobalPropertyi("a321neo/failures/anti_ice/eng_2_valve", 0, false, true, false)
+FAILURE_AI_Wing_L_valve_stuck = createGlobalPropertyi("a321neo/failures/anti_ice/wing_r_valve", 0, false, true, false)
+FAILURE_AI_Wing_R_valve_stuck = createGlobalPropertyi("a321neo/failures/anti_ice/wing_l_valve", 0, false, true, false)
 

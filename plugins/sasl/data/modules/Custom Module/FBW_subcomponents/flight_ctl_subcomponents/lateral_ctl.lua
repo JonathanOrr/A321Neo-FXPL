@@ -1,5 +1,5 @@
 --AILERONS--
-function Ailerons_control(lateral_input ,has_florence_kit, ground_spoilers_mode)
+function Ailerons_control(lateral_input, has_florence_kit, ground_spoilers_mode)
     --hyd source B or G (1450PSI)
     --reversion of flight computers: ELAC 1 --> 2
     --surface range -25 up +25 down, 5 degrees droop with flaps(calculated by ELAC 1/2)
@@ -14,38 +14,30 @@ function Ailerons_control(lateral_input ,has_florence_kit, ground_spoilers_mode)
     local l_aileron_actual_speed = 38.5
     local r_aileron_actual_speed = 38.5
 
-    local l_aileron_travel_target = Math_clamp(ailerons_max_def *  lateral_input + 5 * get(Flaps_deployed_angle) / 40, -25, 25)
-    local r_aileron_travel_target = Math_clamp(ailerons_max_def * -lateral_input + 5 * get(Flaps_deployed_angle) / 40, -25, 25)
+    local l_aileron_travel_target = Math_clamp(ailerons_max_def *  lateral_input + 5 * get(Flaps_deployed_angle) / 40, -ailerons_max_def, ailerons_max_def)
+    local r_aileron_travel_target = Math_clamp(ailerons_max_def * -lateral_input + 5 * get(Flaps_deployed_angle) / 40, -ailerons_max_def, ailerons_max_def)
 
+    --SURFACE SPEED LOGIC--
     --hydralics power detection
-    if get(Hydraulic_B_press) >= 1450 or get(Hydraulic_G_press) >= 1450 then--both hyds working
-        l_aileron_actual_speed = ailerons_speed
-        r_aileron_actual_speed = ailerons_speed
-    elseif get(Hydraulic_B_press) < 1450 and get(Hydraulic_G_press) >= 1450 then--B HYD working
-        l_aileron_actual_speed = ailerons_speed
-        r_aileron_actual_speed = ailerons_speed
-    elseif get(Hydraulic_B_press) >= 1450 and get(Hydraulic_G_press) < 1450 then--G HYD working
-        l_aileron_actual_speed = ailerons_speed
-        r_aileron_actual_speed = ailerons_speed
-    elseif get(Hydraulic_B_press) < 1450 and get(Hydraulic_G_press) < 1450 then--Both HYD not fully/ not working
-        if get(Hydraulic_B_press) > get(Hydraulic_G_press) then-- B HYD is more powerful
-            l_aileron_actual_speed = Math_lerp(no_hyd_spd, ailerons_speed, Math_clamp(get(Hydraulic_B_press), 0, 1450) / 1450)
-            r_aileron_actual_speed = Math_lerp(no_hyd_spd, ailerons_speed, Math_clamp(get(Hydraulic_B_press), 0, 1450) / 1450)
+    if get(Hydraulic_B_press) <= 1450 and get(Hydraulic_G_press) <= 1450 then--Both HYD not fully/ not working
+        l_aileron_actual_speed = Math_rescale(0, no_hyd_spd, 1450, ailerons_speed, (get(Hydraulic_B_press) + get(Hydraulic_G_press)) / 2)
+        r_aileron_actual_speed = Math_rescale(0, no_hyd_spd, 1450, ailerons_speed, (get(Hydraulic_B_press) + get(Hydraulic_G_press)) / 2)
+    end
 
-            l_aileron_travel_target = Math_lerp(Math_lerp(25 , l_aileron_travel_target, Math_clamp(get(Hydraulic_B_press), 0, 1450) / 1450), 0, Math_clamp(get(IAS) / no_hyd_recenter_ias, 0, 1))
-            r_aileron_travel_target = Math_lerp(Math_lerp(25 , r_aileron_travel_target, Math_clamp(get(Hydraulic_B_press), 0, 1450) / 1450), 0, Math_clamp(get(IAS) / no_hyd_recenter_ias, 0, 1))
-        elseif get(Hydraulic_B_press) < get(Hydraulic_G_press) then-- G HYD is more powerful
-            l_aileron_actual_speed = Math_lerp(no_hyd_spd, ailerons_speed, Math_clamp(get(Hydraulic_G_press), 0, 1450) / 1450)
-            r_aileron_actual_speed = Math_lerp(no_hyd_spd, ailerons_speed, Math_clamp(get(Hydraulic_G_press), 0, 1450) / 1450)
+    --detect surface failures
+    if get(FAILURE_FCTL_LAIL) == 1 then
+        l_aileron_actual_speed = 0
+    end
+    if get(FAILURE_FCTL_RAIL) == 1 then
+        r_aileron_actual_speed = 0
+    end
 
-            l_aileron_travel_target = Math_lerp(Math_lerp(25 , l_aileron_travel_target, Math_clamp(get(Hydraulic_G_press), 0, 1450) / 1450), 0, Math_clamp(get(IAS) / no_hyd_recenter_ias, 0, 1))
-            r_aileron_travel_target = Math_lerp(Math_lerp(25 , r_aileron_travel_target, Math_clamp(get(Hydraulic_G_press), 0, 1450) / 1450), 0, Math_clamp(get(IAS) / no_hyd_recenter_ias, 0, 1))
-        else--any other situation(both 0 or the same as each other)
-            l_aileron_actual_speed = Math_lerp(no_hyd_spd, ailerons_speed, Math_clamp((get(Hydraulic_B_press) + get(Hydraulic_G_press)) / 2, 0, 1450) / 1450)
-            r_aileron_actual_speed = Math_lerp(no_hyd_spd, ailerons_speed, Math_clamp((get(Hydraulic_B_press) + get(Hydraulic_G_press)) / 2, 0, 1450) / 1450)
-
-            l_aileron_travel_target = Math_lerp(Math_lerp(25 , l_aileron_travel_target, Math_clamp((get(Hydraulic_B_press) + get(Hydraulic_G_press)) / 2, 0, 1450) / 1450), 0, Math_clamp(get(IAS) / no_hyd_recenter_ias, 0, 1))
-            r_aileron_travel_target = Math_lerp(Math_lerp(25 , r_aileron_travel_target, Math_clamp((get(Hydraulic_B_press) + get(Hydraulic_G_press)) / 2, 0, 1450) / 1450), 0, Math_clamp(get(IAS) / no_hyd_recenter_ias, 0, 1))
+    --TRAVEL TARGETS CALTULATION
+    --ground spoilers
+    if ground_spoilers_mode == 2 then
+        if has_florence_kit == true then
+            l_aileron_travel_target = -ailerons_max_def
+            r_aileron_travel_target = -ailerons_max_def
         end
     end
 
@@ -55,24 +47,15 @@ function Ailerons_control(lateral_input ,has_florence_kit, ground_spoilers_mode)
         r_aileron_travel_target = 0
     end
 
-    --detect HYD failures
-    if get(FAILURE_FCTL_LAIL) == 1 then
-        l_aileron_actual_speed = 0
-    end
-    if get(FAILURE_FCTL_RAIL) == 1 then
-        r_aileron_actual_speed = 0
-    end
-
-    if ground_spoilers_mode == 2 then
-        if has_florence_kit == true then
-            l_aileron_travel_target = -25
-            r_aileron_travel_target = -25
-        end
+    --hydralics power detection
+    if get(Hydraulic_B_press) <= 1450 and get(Hydraulic_G_press) <= 1450 then--Both HYD not fully/ not working
+        l_aileron_travel_target = Math_rescale(0, Math_rescale(0, ailerons_max_def, 1450, l_aileron_travel_target, (get(Hydraulic_B_press) + get(Hydraulic_G_press)) / 2), no_hyd_recenter_ias, 0, get(IAS))
+        r_aileron_travel_target = Math_rescale(0, Math_rescale(0, ailerons_max_def, 1450, r_aileron_travel_target, (get(Hydraulic_B_press) + get(Hydraulic_G_press)) / 2), no_hyd_recenter_ias, 0, get(IAS))
     end
 
     --output to the surfaces
-    set(Left_aileron, Set_linear_anim_value(get(Left_aileron),   l_aileron_travel_target, -25, 25, l_aileron_actual_speed))
-    set(Right_aileron, Set_linear_anim_value(get(Right_aileron), r_aileron_travel_target, -25, 25, r_aileron_actual_speed))
+    set(Left_aileron,  Set_linear_anim_value(get(Left_aileron),  l_aileron_travel_target, -ailerons_max_def, ailerons_max_def, l_aileron_actual_speed))
+    set(Right_aileron, Set_linear_anim_value(get(Right_aileron), r_aileron_travel_target, -ailerons_max_def, ailerons_max_def, r_aileron_actual_speed))
 end
 
 --permanent variables

@@ -257,8 +257,8 @@ local function update_datarefs()
     set(Cab_hot_air,           get(OVHR_elec_panel_pwrd) * (cabin_hot_air and 0 or 1))
     set(Cargo_hot_air,         get(OVHR_elec_panel_pwrd) * (cargo_hot_air and 0 or 1))
     set(Cargo_isolation_status,get(OVHR_elec_panel_pwrd) * (cargo_isol_valve and 1 or 0))
-    set(Pack1_off_button,      get(OVHR_elec_panel_pwrd) * (pack_valve_pos[1] and 0 or 1))
-    set(Pack2_off_button,      get(OVHR_elec_panel_pwrd) * (pack_valve_pos[2] and 0 or 1))
+    set(Pack1_off_button,      get(OVHR_elec_panel_pwrd) * (pack_valve_switch[1] and 0 or 1))
+    set(Pack2_off_button,      get(OVHR_elec_panel_pwrd) * (pack_valve_switch[2] and 0 or 1))
     set(Econ_flow_button,      get(OVHR_elec_panel_pwrd) * (econ_flow_switch and 1 or 0))
     set_overhead_dr(Ditching_button, ditching_switch, false)
     
@@ -364,7 +364,7 @@ local function update_pack_flow()
     if single_pack_operation or apu_bleed_valve_pos or get(GAS_bleed_avail) == 1 or get(L_pack_byp_valve) < 0.1 or get(R_pack_byp_valve) < 0.1 then
         if get(Pack_L) == 1 then
             set(L_pack_Flow, 3)
-            Set_dataref_linear_anim(L_pack_Flow_value, 1.2*PACK_KG_PER_SEC_NOM+math.random()*0.01, 0, 2000, 1)
+            Set_dataref_linear_anim(L_pack_Flow_value, 1.2*PACK_KG_PER_SEC_NOM, 0, 2000, 1)
         else
             set(L_pack_Flow, 0)
             Set_dataref_linear_anim(L_pack_Flow_value, 0, 0, 2000, 1)
@@ -372,7 +372,7 @@ local function update_pack_flow()
         
         if get(Pack_R) == 1 then
             set(R_pack_Flow, 3)
-            Set_dataref_linear_anim(R_pack_Flow_value, 1.2*PACK_KG_PER_SEC_NOM+math.random()*0.01, 0, 2000, 1)
+            Set_dataref_linear_anim(R_pack_Flow_value, 1.2*PACK_KG_PER_SEC_NOM, 0, 2000, 1)
         else
             set(R_pack_Flow, 0)
             Set_dataref_linear_anim(R_pack_Flow_value, 0, 0, 2000, 1)
@@ -386,13 +386,13 @@ local function update_pack_flow()
     if econ_flow_switch then    -- LO flow
         set(L_pack_Flow, mult_L * 1)
         set(R_pack_Flow, mult_R * 1)
-        Set_dataref_linear_anim(L_pack_Flow_value, mult_L*0.8*PACK_KG_PER_SEC_NOM+mult_L*math.random()*0.01, 0, 2000, 1)
-        Set_dataref_linear_anim(R_pack_Flow_value, mult_R*0.8*PACK_KG_PER_SEC_NOM+mult_R*math.random()*0.01, 0, 2000, 1)
+        Set_dataref_linear_anim(L_pack_Flow_value, mult_L*0.8*PACK_KG_PER_SEC_NOM+mult_L, 0, 2000, 1)
+        Set_dataref_linear_anim(R_pack_Flow_value, mult_R*0.8*PACK_KG_PER_SEC_NOM+mult_R, 0, 2000, 1)
     else                        -- NORM flow
         set(L_pack_Flow, mult_L * 2)
         set(R_pack_Flow, mult_R * 2)
-        Set_dataref_linear_anim(L_pack_Flow_value, mult_L*PACK_KG_PER_SEC_NOM+mult_L*math.random()*0.01, 0, 2000, 1)
-        Set_dataref_linear_anim(R_pack_Flow_value, mult_R*PACK_KG_PER_SEC_NOM+mult_R*math.random()*0.01, 0, 2000, 1)
+        Set_dataref_linear_anim(L_pack_Flow_value, mult_L*PACK_KG_PER_SEC_NOM+mult_L, 0, 2000, 1)
+        Set_dataref_linear_anim(R_pack_Flow_value, mult_R*PACK_KG_PER_SEC_NOM+mult_R, 0, 2000, 1)
     end
 
 end

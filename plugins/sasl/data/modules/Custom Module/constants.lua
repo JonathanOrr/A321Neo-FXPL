@@ -75,7 +75,11 @@ tank_CENTER= 0
 tank_ACT   = 3
 tank_RCT   = 4
 
-
+-- Anti-ice
+ANTIICE_ENG_1 = 1
+ANTIICE_ENG_2 = 2
+ANTIICE_WING_L = 3
+ANTIICE_WING_R = 4
 
 -- Fonts
 Font_AirbusDUL = sasl.gl.loadFont("fonts/AirbusDULiberationMono.ttf")

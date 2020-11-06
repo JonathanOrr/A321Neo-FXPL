@@ -52,6 +52,7 @@ components = {
   hydraulics {},
   electrical {},
   pressurization {},
+  anti_ice {},
   sounds {},
   graphics {}
  }
