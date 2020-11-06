@@ -98,14 +98,26 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
 
     --during a touch and go one of the thrust levers has to be advanced beyond 20 degrees to disarm the spoilers
 
-    --spoiler config 1 2 3 4 5
+    --spoiler        1 2 3 4 5
     --HYDs           G Y B Y G
     --SECs           3 3 1 1 2
+
+    --DATAREFS FOR SURFACES
+    local l_spoilers_datarefs = {Left_spoiler_1, Left_spoiler_1, Left_spoiler_1, Left_spoiler_1, Left_spoiler_1}
+    local r_spoilers_datarefs = {Right_spoiler_1, Right_spoiler_1, Right_spoiler_1, Right_spoiler_1, Right_spoiler_1}
+
+    local l_spoilers_hyd_sys_dataref = {Hydraulic_G_press, Hydraulic_Y_press, Hydraulic_B_press, Hydraulic_Y_press, Hydraulic_G_press}
+    local r_spoilers_hyd_sys_dataref = {Hydraulic_G_press, Hydraulic_Y_press, Hydraulic_B_press, Hydraulic_Y_press, Hydraulic_G_press}
+
+    local l_spoilers_flt_computer_dataref = {SEC_3_status, SEC_3_status, SEC_1_status, SEC_1_status, SEC_2_status}
+    local r_spoilers_flt_computer_dataref = {SEC_3_status, SEC_3_status, SEC_1_status, SEC_1_status, SEC_2_status}
 
     --limit input range
     spdbrk_input = Math_clamp(spdbrk_input, 0, 1)
 
     --properties
+    local num_of_spoils_per_wing = 5
+
     local roll_spoilers_threshold = {0.1, 0.1, 0.3, 0.1, 0.1}--amount of sidestick deflection needed to trigger the roll spoilers
 
     local l_spoilers_total_max_def = {40, 40, 40, 40, 40}
@@ -147,31 +159,13 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
     end
 
     --detect if hydraulics power is avail to the surfaces then accordingly slow down the speed
-    if get(Hydraulic_G_press) < 1450 then
-        l_spoilers_spdbrk_spd[1] = Math_lerp(0, 8, get(Hydraulic_G_press) / 1450)
-        l_spoilers_spdbrk_spd[5] = Math_lerp(0, 8, get(Hydraulic_G_press) / 1450)
-        r_spoilers_spdbrk_spd[1] = Math_lerp(0, 8, get(Hydraulic_G_press) / 1450)
-        r_spoilers_spdbrk_spd[5] = Math_lerp(0, 8, get(Hydraulic_G_press) / 1450)
-        l_spoilers_roll_spd[1] = Math_lerp(0, 40, get(Hydraulic_G_press) / 1450)
-        l_spoilers_roll_spd[5] = Math_lerp(0, 40, get(Hydraulic_G_press) / 1450)
-        r_spoilers_roll_spd[1] = Math_lerp(0, 40, get(Hydraulic_G_press) / 1450)
-        r_spoilers_roll_spd[5] = Math_lerp(0, 40, get(Hydraulic_G_press) / 1450)
-    end
-    if get(Hydraulic_B_press) < 1450 then
-        l_spoilers_spdbrk_spd[3] = Math_lerp(0, 8, get(Hydraulic_B_press) / 1450)
-        r_spoilers_spdbrk_spd[3] = Math_lerp(0, 8, get(Hydraulic_B_press) / 1450)
-        l_spoilers_roll_spd[3] = Math_lerp(0, 40, get(Hydraulic_B_press) / 1450)
-        r_spoilers_roll_spd[3] = Math_lerp(0, 40, get(Hydraulic_B_press) / 1450)
-    end
-    if get(Hydraulic_Y_press) < 1450 then
-        l_spoilers_spdbrk_spd[2] = Math_lerp(0, 8, get(Hydraulic_Y_press) / 1450)
-        l_spoilers_spdbrk_spd[4] = Math_lerp(0, 8, get(Hydraulic_Y_press) / 1450)
-        r_spoilers_spdbrk_spd[2] = Math_lerp(0, 8, get(Hydraulic_Y_press) / 1450)
-        r_spoilers_spdbrk_spd[4] = Math_lerp(0, 8, get(Hydraulic_Y_press) / 1450)
-        l_spoilers_roll_spd[2] = Math_lerp(0, 40, get(Hydraulic_Y_press) / 1450)
-        l_spoilers_roll_spd[4] = Math_lerp(0, 40, get(Hydraulic_Y_press) / 1450)
-        r_spoilers_roll_spd[2] = Math_lerp(0, 40, get(Hydraulic_Y_press) / 1450)
-        r_spoilers_roll_spd[4] = Math_lerp(0, 40, get(Hydraulic_Y_press) / 1450)
+    for i = 1, num_of_spoils_per_wing do
+        --speedbrkaes
+        l_spoilers_spdbrk_spd[i] = Math_rescale(0, 0, 1450, l_spoilers_spdbrk_spd[i], get(l_spoilers_hyd_sys_dataref[i]))
+        r_spoilers_spdbrk_spd[i] = Math_rescale(0, 0, 1450, r_spoilers_spdbrk_spd[i], get(r_spoilers_hyd_sys_dataref[i]))
+        --roll spoilers
+        l_spoilers_roll_spd[i] = Math_rescale(0, 0, 1450, l_spoilers_roll_spd[i], get(l_spoilers_hyd_sys_dataref[i]))
+        r_spoilers_roll_spd[i] = Math_rescale(0, 0, 1450, r_spoilers_roll_spd[i], get(r_spoilers_hyd_sys_dataref[i]))
     end
 
     --conditions
@@ -181,39 +175,15 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
     local l_spoilers_roll_targets = {0, 0, 0, 0, 0}
     local r_spoilers_roll_targets = {0, 0, 0, 0, 0}
 
-    --left speedbrakes input translation
-    l_spoilers_spdbrk_targets = {
-        l_spoilers_spdbrk_max_def[1] * spdbrk_input,
-        l_spoilers_spdbrk_max_def[2] * spdbrk_input,
-        l_spoilers_spdbrk_max_def[3] * spdbrk_input,
-        l_spoilers_spdbrk_max_def[4] * spdbrk_input,
-        l_spoilers_spdbrk_max_def[5] * spdbrk_input,
-    }
-    --right speedbrakes input translation
-    r_spoilers_spdbrk_targets = {
-        r_spoilers_spdbrk_max_def[1] * spdbrk_input,
-        r_spoilers_spdbrk_max_def[2] * spdbrk_input,
-        r_spoilers_spdbrk_max_def[3] * spdbrk_input,
-        r_spoilers_spdbrk_max_def[4] * spdbrk_input,
-        r_spoilers_spdbrk_max_def[5] * spdbrk_input,
-    }
-
-    --left roll spoilers input translation
-    l_spoilers_roll_targets = {
-        l_spoilers_roll_max_def[1] * Math_rescale(roll_spoilers_threshold[1], 0, 1, 1, math.abs(Math_clamp(lateral_input, -1, 0))),
-        l_spoilers_roll_max_def[2] * Math_rescale(roll_spoilers_threshold[2], 0, 1, 1, math.abs(Math_clamp(lateral_input, -1, 0))),
-        l_spoilers_roll_max_def[3] * Math_rescale(roll_spoilers_threshold[3], 0, 1, 1, math.abs(Math_clamp(lateral_input, -1, 0))),
-        l_spoilers_roll_max_def[4] * Math_rescale(roll_spoilers_threshold[4], 0, 1, 1, math.abs(Math_clamp(lateral_input, -1, 0))),
-        l_spoilers_roll_max_def[5] * Math_rescale(roll_spoilers_threshold[5], 0, 1, 1, math.abs(Math_clamp(lateral_input, -1, 0))),
-    }
-    --right roll spoilers input translation
-    r_spoilers_roll_targets = {
-        r_spoilers_roll_max_def[1] * Math_rescale(roll_spoilers_threshold[1], 0, 1, 1, math.abs(Math_clamp(lateral_input, 0, 1))),
-        r_spoilers_roll_max_def[2] * Math_rescale(roll_spoilers_threshold[2], 0, 1, 1, math.abs(Math_clamp(lateral_input, 0, 1))),
-        r_spoilers_roll_max_def[3] * Math_rescale(roll_spoilers_threshold[3], 0, 1, 1, math.abs(Math_clamp(lateral_input, 0, 1))),
-        r_spoilers_roll_max_def[4] * Math_rescale(roll_spoilers_threshold[4], 0, 1, 1, math.abs(Math_clamp(lateral_input, 0, 1))),
-        r_spoilers_roll_max_def[5] * Math_rescale(roll_spoilers_threshold[5], 0, 1, 1, math.abs(Math_clamp(lateral_input, 0, 1))),
-    }
+    --DEFLECTION TARGET CALCULATION--
+    for i = 1, num_of_spoils_per_wing do
+        --speedbrakes
+        l_spoilers_spdbrk_targets[i] = l_spoilers_spdbrk_max_def[i] * spdbrk_input
+        r_spoilers_spdbrk_targets[i] = r_spoilers_spdbrk_max_def[i] * spdbrk_input
+        --roll spoilers
+        l_spoilers_roll_targets[i] = Math_rescale(roll_spoilers_threshold[i], 0, -1, l_spoilers_roll_max_def[i], lateral_input)
+        r_spoilers_roll_targets[i] = Math_rescale(roll_spoilers_threshold[i], 0,  1, r_spoilers_roll_max_def[i], lateral_input)
+    end
 
     --GROUND SPOILERS MODE--
     --0 = NOT EXTENDED
@@ -227,34 +197,6 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
         r_spoilers_spdbrk_targets = {40, 40, 40, 40, 40}
     end
 
-    --SECs position reset--
-    if get(SEC_1_status) == 0 then--disable and reset spoiler 3 & 4 position
-        l_spoilers_spdbrk_targets[3] = 0
-        l_spoilers_spdbrk_targets[4] = 0
-        r_spoilers_spdbrk_targets[3] = 0
-        r_spoilers_spdbrk_targets[4] = 0
-        l_spoilers_roll_targets[3] = 0
-        l_spoilers_roll_targets[4] = 0
-        r_spoilers_roll_targets[3] = 0
-        r_spoilers_roll_targets[4] = 0
-    end
-    if get(SEC_2_status) == 0 then--disable and reset spoiler 5 position
-        l_spoilers_spdbrk_targets[5] = 0
-        r_spoilers_spdbrk_targets[5] = 0
-        l_spoilers_roll_targets[5] = 0
-        r_spoilers_roll_targets[5] = 0
-    end
-    if get(SEC_3_status) == 0 then--disable and reset spoiler 1 & 2 position
-        l_spoilers_spdbrk_targets[1] = 0
-        l_spoilers_spdbrk_targets[2] = 0
-        r_spoilers_spdbrk_targets[1] = 0
-        r_spoilers_spdbrk_targets[2] = 0
-        l_spoilers_roll_targets[1] = 0
-        l_spoilers_roll_targets[2] = 0
-        r_spoilers_roll_targets[1] = 0
-        r_spoilers_roll_targets[2] = 0
-    end
-
     --SPEEDBRAKES INHIBITION--
     if get(SEC_1_status) == 0 and get(SEC_3_status) == 0 then
         l_spoilers_spdbrk_targets = {0, 0, 0, 0, 0}
@@ -265,53 +207,29 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
     --lacking above MCT/ ELEV fail(inhibites 3, 4)/ alpha protection/ upon a.prot toga
     end
 
-    --left speedbrakes extention
-    var_table.l_spoilers_spdbrk_extention = {
-        Set_linear_anim_value(var_table.l_spoilers_spdbrk_extention[1], l_spoilers_spdbrk_targets[1], 0, 40, l_spoilers_spdbrk_spd[1]),
-        Set_linear_anim_value(var_table.l_spoilers_spdbrk_extention[2], l_spoilers_spdbrk_targets[2], 0, 40, l_spoilers_spdbrk_spd[2]),
-        Set_linear_anim_value(var_table.l_spoilers_spdbrk_extention[3], l_spoilers_spdbrk_targets[3], 0, 40, l_spoilers_spdbrk_spd[3]),
-        Set_linear_anim_value(var_table.l_spoilers_spdbrk_extention[4], l_spoilers_spdbrk_targets[4], 0, 40, l_spoilers_spdbrk_spd[4]),
-        Set_linear_anim_value(var_table.l_spoilers_spdbrk_extention[5], l_spoilers_spdbrk_targets[5], 0, 40, l_spoilers_spdbrk_spd[5]),
-    }
-    --right speedbrakes extention
-    var_table.r_spoilers_spdbrk_extention = {
-        Set_linear_anim_value(var_table.r_spoilers_spdbrk_extention[1], r_spoilers_spdbrk_targets[1], 0, 40, r_spoilers_spdbrk_spd[1]),
-        Set_linear_anim_value(var_table.r_spoilers_spdbrk_extention[2], r_spoilers_spdbrk_targets[2], 0, 40, r_spoilers_spdbrk_spd[2]),
-        Set_linear_anim_value(var_table.r_spoilers_spdbrk_extention[3], r_spoilers_spdbrk_targets[3], 0, 40, r_spoilers_spdbrk_spd[3]),
-        Set_linear_anim_value(var_table.r_spoilers_spdbrk_extention[4], r_spoilers_spdbrk_targets[4], 0, 40, r_spoilers_spdbrk_spd[4]),
-        Set_linear_anim_value(var_table.r_spoilers_spdbrk_extention[5], r_spoilers_spdbrk_targets[5], 0, 40, r_spoilers_spdbrk_spd[5]),
-    }
+    --SECs position reset--
+    for i = 1, num_of_spoils_per_wing do
+        --speedbrakes position reset
+        l_spoilers_spdbrk_targets[i] = l_spoilers_spdbrk_targets[i] * get(l_spoilers_flt_computer_dataref[i])
+        r_spoilers_spdbrk_targets[i] = r_spoilers_spdbrk_targets[i] * get(r_spoilers_flt_computer_dataref[i])
+        --roll spoilers position reset
+        l_spoilers_roll_targets[i] = l_spoilers_roll_targets[i] * get(l_spoilers_flt_computer_dataref[i])
+        r_spoilers_roll_targets[i] = r_spoilers_roll_targets[i] * get(r_spoilers_flt_computer_dataref[i])
+    end
 
-    --left roll spoilers extention
-    var_table.l_spoilers_roll_extention = {
-        Set_linear_anim_value(var_table.l_spoilers_roll_extention[1], l_spoilers_roll_targets[1], 0, 40, l_spoilers_roll_spd[1]),
-        Set_linear_anim_value(var_table.l_spoilers_roll_extention[2], l_spoilers_roll_targets[2], 0, 40, l_spoilers_roll_spd[2]),
-        Set_linear_anim_value(var_table.l_spoilers_roll_extention[3], l_spoilers_roll_targets[3], 0, 40, l_spoilers_roll_spd[3]),
-        Set_linear_anim_value(var_table.l_spoilers_roll_extention[4], l_spoilers_roll_targets[4], 0, 40, l_spoilers_roll_spd[4]),
-        Set_linear_anim_value(var_table.l_spoilers_roll_extention[5], l_spoilers_roll_targets[5], 0, 40, l_spoilers_roll_spd[5]),
-    }
-    --right roll spoilers extention
-    var_table.r_spoilers_roll_extention = {
-        Set_linear_anim_value(var_table.r_spoilers_roll_extention[1], r_spoilers_roll_targets[1], 0, 40, r_spoilers_roll_spd[1]),
-        Set_linear_anim_value(var_table.r_spoilers_roll_extention[2], r_spoilers_roll_targets[2], 0, 40, r_spoilers_roll_spd[2]),
-        Set_linear_anim_value(var_table.r_spoilers_roll_extention[3], r_spoilers_roll_targets[3], 0, 40, r_spoilers_roll_spd[3]),
-        Set_linear_anim_value(var_table.r_spoilers_roll_extention[4], r_spoilers_roll_targets[4], 0, 40, r_spoilers_roll_spd[4]),
-        Set_linear_anim_value(var_table.r_spoilers_roll_extention[5], r_spoilers_roll_targets[5], 0, 40, r_spoilers_roll_spd[5]),
-    }
+    --PRE-EXTENTION DEFECTION VALUE CALCULATION --> OUTPUT OF CALCULATED VALUE TO THE SURFACES--
+    set(Speedbrakes_ratio, math.abs(lateral_input) + spdbrk_input)
+    for i = 1, num_of_spoils_per_wing do
+        --speedbrakes
+        var_table.l_spoilers_spdbrk_extention[i] = Set_linear_anim_value(var_table.l_spoilers_spdbrk_extention[i], l_spoilers_spdbrk_targets[i], 0, l_spoilers_total_max_def[i], l_spoilers_spdbrk_spd[i])
+        var_table.r_spoilers_spdbrk_extention[i] = Set_linear_anim_value(var_table.r_spoilers_spdbrk_extention[i], r_spoilers_spdbrk_targets[i], 0, r_spoilers_total_max_def[i], r_spoilers_spdbrk_spd[i])
+        --roll spoilers
+        var_table.l_spoilers_roll_extention[i] = Set_linear_anim_value(var_table.l_spoilers_roll_extention[i], l_spoilers_roll_targets[i], 0, l_spoilers_total_max_def[i], l_spoilers_roll_spd[i])
+        var_table.r_spoilers_roll_extention[i] = Set_linear_anim_value(var_table.r_spoilers_roll_extention[i], l_spoilers_roll_targets[i], 0, r_spoilers_total_max_def[i], r_spoilers_roll_spd[i])
 
-    --TOTAL SPOILERS OUTPUT TO THE SURFACES--
-    --if any surface exceeds the max deflection limit the othere side would reduce deflection by the exceeded amount
-    set(Speedbrakes_ratio, math.abs(lateral_input) + Math_clamp_lower(spdbrk_input, 0))
-    --left spoilers output
-    set(Left_spoiler_1, Math_clamp_higher(var_table.l_spoilers_spdbrk_extention[1] + var_table.l_spoilers_roll_extention[1], l_spoilers_total_max_def[1]) - Math_clamp_lower(var_table.r_spoilers_spdbrk_extention[1] + var_table.r_spoilers_roll_extention[1] - r_spoilers_total_max_def[1], 0))
-    set(Left_spoiler_2, Math_clamp_higher(var_table.l_spoilers_spdbrk_extention[2] + var_table.l_spoilers_roll_extention[2], l_spoilers_total_max_def[2]) - Math_clamp_lower(var_table.r_spoilers_spdbrk_extention[2] + var_table.r_spoilers_roll_extention[2] - r_spoilers_total_max_def[2], 0))
-    set(Left_spoiler_3, Math_clamp_higher(var_table.l_spoilers_spdbrk_extention[3] + var_table.l_spoilers_roll_extention[3], l_spoilers_total_max_def[3]) - Math_clamp_lower(var_table.r_spoilers_spdbrk_extention[3] + var_table.r_spoilers_roll_extention[3] - r_spoilers_total_max_def[3], 0))
-    set(Left_spoiler_4, Math_clamp_higher(var_table.l_spoilers_spdbrk_extention[4] + var_table.l_spoilers_roll_extention[4], l_spoilers_total_max_def[4]) - Math_clamp_lower(var_table.r_spoilers_spdbrk_extention[4] + var_table.r_spoilers_roll_extention[4] - r_spoilers_total_max_def[4], 0))
-    set(Left_spoiler_5, Math_clamp_higher(var_table.l_spoilers_spdbrk_extention[5] + var_table.l_spoilers_roll_extention[5], l_spoilers_total_max_def[5]) - Math_clamp_lower(var_table.r_spoilers_spdbrk_extention[5] + var_table.r_spoilers_roll_extention[5] - r_spoilers_total_max_def[5], 0))
-    --right spoilers output
-    set(Right_spoiler_1, Math_clamp_higher(var_table.r_spoilers_spdbrk_extention[1] + var_table.r_spoilers_roll_extention[1], r_spoilers_total_max_def[1]) - Math_clamp_lower(var_table.l_spoilers_spdbrk_extention[1] + var_table.l_spoilers_roll_extention[1] - l_spoilers_total_max_def[1], 0))
-    set(Right_spoiler_2, Math_clamp_higher(var_table.r_spoilers_spdbrk_extention[2] + var_table.r_spoilers_roll_extention[2], r_spoilers_total_max_def[2]) - Math_clamp_lower(var_table.l_spoilers_spdbrk_extention[2] + var_table.l_spoilers_roll_extention[2] - l_spoilers_total_max_def[2], 0))
-    set(Right_spoiler_3, Math_clamp_higher(var_table.r_spoilers_spdbrk_extention[3] + var_table.r_spoilers_roll_extention[3], r_spoilers_total_max_def[3]) - Math_clamp_lower(var_table.l_spoilers_spdbrk_extention[3] + var_table.l_spoilers_roll_extention[3] - l_spoilers_total_max_def[3], 0))
-    set(Right_spoiler_4, Math_clamp_higher(var_table.r_spoilers_spdbrk_extention[4] + var_table.r_spoilers_roll_extention[4], r_spoilers_total_max_def[4]) - Math_clamp_lower(var_table.l_spoilers_spdbrk_extention[4] + var_table.l_spoilers_roll_extention[4] - l_spoilers_total_max_def[4], 0))
-    set(Right_spoiler_5, Math_clamp_higher(var_table.r_spoilers_spdbrk_extention[5] + var_table.r_spoilers_roll_extention[5], r_spoilers_total_max_def[5]) - Math_clamp_lower(var_table.l_spoilers_spdbrk_extention[5] + var_table.l_spoilers_roll_extention[5] - l_spoilers_total_max_def[5], 0))
+        --TOTAL SPOILERS OUTPUT TO THE SURFACES--
+        --if any surface exceeds the max deflection limit the othere side would reduce deflection by the exceeded amount
+        set(l_spoilers_datarefs[i], Math_clamp_higher(var_table.l_spoilers_spdbrk_extention[i] + var_table.l_spoilers_roll_extention[i], l_spoilers_total_max_def[i]) - Math_clamp_lower(var_table.r_spoilers_spdbrk_extention[i] + var_table.r_spoilers_roll_extention[i] - r_spoilers_total_max_def[i], 0))
+        set(r_spoilers_datarefs[i], Math_clamp_higher(var_table.r_spoilers_spdbrk_extention[i] + var_table.r_spoilers_roll_extention[i], r_spoilers_total_max_def[i]) - Math_clamp_lower(var_table.l_spoilers_spdbrk_extention[i] + var_table.l_spoilers_roll_extention[i] - l_spoilers_total_max_def[i], 0))
+    end
 end
