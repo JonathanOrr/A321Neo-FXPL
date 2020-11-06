@@ -510,5 +510,5 @@ Fuel_wing_R_overflow = createGlobalPropertyi("a321neo/dynamics/fuel/fuel_overflo
 -- Anti-ICE
 AI_wing_L_operating = createGlobalPropertyi("a321neo/dynamics/anti_ice/wing_L_operating", 0, false, true, false) -- 0: pause, 1: working
 AI_wing_R_operating = createGlobalPropertyi("a321neo/dynamics/anti_ice/wing_R_operating", 0, false, true, false) -- 0: pause, 1: working
-AI_ice_detected     = globalPropertyi("sim/cockpit2/annunciators/ice", 0, false, true, false) -- 0: non detected, 1: detected
+
 

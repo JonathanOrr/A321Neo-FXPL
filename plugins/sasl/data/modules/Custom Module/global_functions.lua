@@ -286,6 +286,7 @@ end
 
 ELEC_sys = {}
 Fuel_sys = {}
+AI_sys   = {}
 Mcdu_popup = {}
 
 function MCDU_get_popup(id) return Mcdu_popup[id] end
