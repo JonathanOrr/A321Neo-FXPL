@@ -40,12 +40,9 @@ function Elevator_control(vertical_input)
         r_elev_target = 0
     end
 
-    if get(Hydraulic_G_press) <= 1450 and get(Hydraulic_B_press) <= 1450 then
-        l_elev_target = Math_rescale(0, Math_rescale(0, max_dn_deflection, 1450, l_elev_target, (get(Hydraulic_G_press) + get(Hydraulic_B_press)) / 2), no_hyd_recenter_ias, 0, get(IAS))
-    end
-    if get(Hydraulic_Y_press) <= 1450 and get(Hydraulic_B_press) <= 1450 then
-        r_elev_target = Math_rescale(0, Math_rescale(0, max_dn_deflection, 1450, r_elev_target, (get(Hydraulic_Y_press) + get(Hydraulic_B_press)) / 2), no_hyd_recenter_ias, 0, get(IAS))
-    end
+    --surface droop
+    l_elev_target = Math_rescale(0, Math_rescale(0, max_dn_deflection, 1450, l_elev_target, get(Hydraulic_G_press) + get(Hydraulic_B_press)), no_hyd_recenter_ias, 0, get(IAS))
+    r_elev_target = Math_rescale(0, Math_rescale(0, max_dn_deflection, 1450, r_elev_target, get(Hydraulic_Y_press) + get(Hydraulic_B_press)), no_hyd_recenter_ias, 0, get(IAS))
 
     set(Elevators_hstab_1, Set_linear_anim_value(get(Elevators_hstab_1), l_elev_target, max_up_deflection, max_dn_deflection, l_elev_spd))
     set(Elevators_hstab_2, Set_linear_anim_value(get(Elevators_hstab_2), r_elev_target, max_up_deflection, max_dn_deflection, r_elev_spd))
