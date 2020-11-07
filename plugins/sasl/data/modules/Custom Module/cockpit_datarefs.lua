@@ -2,7 +2,8 @@
 --PUSH BUTTON STATES-- e.g the lights on the buttons(blank, on, fault, fault on) these datarefs should follow the 00, 01, 10, 11 principle
 --apu
 Apu_start_button_state = createGlobalPropertyi("a321neo/cockpit/apu/start_button_state", 0, false, true, false)--follow 00, 01, 10, 11 for the buttons(black, on, fault, fault on)
-Apu_master_button_state = createGlobalPropertyi("a321neo/cockpit/apu/master_button_state", 0, false, true, false)--follow 00, 01, 10, 11 for the buttons
+Apu_master_button_light = createGlobalPropertyi("a321neo/cockpit/apu/master_button_state", 0, false, true, false)--follow 00, 01, 10, 11 for the buttons
+
 --wheel
 Brake_fan_button_state = createGlobalPropertyi("a321neo/cockpit/wheel/brake_fan_button_state", 0, false, true, false)--blank, on, hot, hot on
 Autobrakes_lo_button_state = createGlobalPropertyi("a321neo/cockpit/wheel/autobrakes_lo_button_state", 0, false, true, false)--blank, on, decel(should not happen), decel on

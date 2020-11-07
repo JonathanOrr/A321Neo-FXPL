@@ -73,6 +73,7 @@ Cab_fan_fwd_running= createGlobalPropertyi("a321neo/dynamics/packs/cabin_fan_fwd
 Cab_fan_aft_running= createGlobalPropertyi("a321neo/dynamics/packs/cabin_fan_aft", 0, false, true, false)    -- 1 running, 0 not running
 
 --apu
+Apu_master_button_state = createGlobalPropertyi("a321neo/dynamics/engines/apu/state", 0, false, true, false)-- master off 0, master on 1 (do not use for button light)
 Apu_start_position = globalProperty("sim/cockpit2/electrical/APU_starter_switch") --apu start button state 0: off, 1: on, 2: avail
 Apu_avail = createGlobalPropertyi("a321neo/engine/apu_avil", 0, false, true, false)
 Apu_bleed_psi = createGlobalPropertyf("a321neo/cockpit/apu/bleed_psi", 0, false, true, false)

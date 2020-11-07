@@ -14,6 +14,7 @@ FLAP_OPEN_TIME_SEC = 20
 -- Global variables
 ----------------------------------------------------------------------------------------------------
 local master_switch_status  = false
+local master_switch_disabled_time = 0
 local master_switch_enabled_time = 0
 local start_requested = false
 
@@ -32,10 +33,16 @@ end
 sasl.registerCommandHandler ( APU_cmd_master, 0 , function(phase)
     if phase == SASL_COMMAND_BEGIN then
         if master_switch_status then
-            master_switch_status = false
+            if master_switch_disabled_time ~= 0 then 
+                master_switch_disabled_time = 0
+            else
+                master_switch_disabled_time = get(TIME)
+            end
         else
             master_switch_status = true
-            master_switch_enabled_time = get(TIME)
+            if master_switch_disabled_time == 0 then
+                master_switch_enabled_time = get(TIME)
+            end
         end
     end
 end)
@@ -80,7 +87,9 @@ end
 local function update_button_datarefs()
     -- TODO FAILURE
     local is_faulty = get(FAILURE_ENG_APU_FAIL) == 1 or get(DC_bat_bus_pwrd) == 0
-    set(Apu_master_button_state, get(OVHR_elec_panel_pwrd) * ((master_switch_status and 1 or 0) + (is_faulty and 10 or 0) ))
+
+    set(Apu_master_button_state,(master_switch_status and 1 or 0))
+    set(Apu_master_button_light, get(OVHR_elec_panel_pwrd) * ((master_switch_status and 1 or 0)*(master_switch_disabled_time~=0 and 0 or 1) + (is_faulty and 10 or 0) ))
 
     set(Apu_start_button_state, (start_requested and 1 or 0) + (get(Apu_avail) == 1 and 10 or 0))
 
@@ -126,6 +135,17 @@ local function update_gen()
     end
 end
 
+local function update_off_status()
+
+    if master_switch_disabled_time ~= 0 then
+        if get(TIME) - master_switch_disabled_time > 60 or get(APU_bleed_on_button) % 2 == 0 then
+            master_switch_status = false
+            master_switch_disabled_time = 0
+        end
+    end
+
+end
+
 function update()
 
     --apu availability
@@ -135,6 +155,7 @@ function update()
         set(Apu_avail, 0)
     end
 
+    update_off_status()
     update_egt()
     update_button_datarefs()
     update_apu_flap()
