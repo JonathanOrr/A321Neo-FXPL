@@ -1,9 +1,19 @@
-include('aircond_cabinmodel.lua')
-include('PID.lua')
-
 ----------------------------------------------------------------------------------------------------
 -- AIR_CONDITIONING systems
 ----------------------------------------------------------------------------------------------------
+
+include('aircond_cabinmodel.lua')
+include('constants.lua')
+include('PID.lua')
+
+-- Constants for the ventilation of the avionics bay
+local AVIO_CLOSED   = 0
+local AVIO_OPEN     = 1
+local AVIO_INTERM   = 2
+local AVIO_ISOLATED = 3
+local AVIO_SMOKE    = 4
+
+
 --PID arrays
 local PID_PACK_FLOW = 100   -- Just a random id
 
@@ -44,25 +54,59 @@ sasl.registerCommandHandler ( Aft_cargo_temp_dial_dn, 0, function(phase)  Knob_h
 
 
 local pack_valves_last_update = 0
+local time_started_blower = 0
+local time_started_extract = 0
 
+local avio_skin_temperature = get(OTA)
+local avio_configuration    = AVIO_CLOSED
 
 sasl.registerCommandHandler ( ELEC_vent_blower, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(Ventilation_blower, 1 - get(Ventilation_blower))
+        set(Ventilation_blower_override, 1 - get(Ventilation_blower_override))
     end
 end)
 
 sasl.registerCommandHandler ( ELEC_vent_extract, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(Ventilation_extract, 1 - get(Ventilation_extract))
+        set(Ventilation_extract_override, 1 - get(Ventilation_extract_override))
     end
 end)
 
+
 --custom functions
 local function update_avio_ventilation()
-    set(Ventilation_light_blower, get(Ventilation_blower))      -- TODO Faults
-    set(Ventilation_light_extract, get(Ventilation_extract))    -- TODO Faults
+    set(Ventilation_light_blower, get(Ventilation_blower_override) + ((get(FAILURE_AIRCOND_VENT_BLOWER) == 1 or get(FAILURE_AVIONICS_SMOKE) == 1) and 10 or 0))
+    set(Ventilation_light_extract, get(Ventilation_extract_override)+ ((get(FAILURE_AIRCOND_VENT_EXTRACT) == 1 or get(FAILURE_AVIONICS_SMOKE) == 1) and 10 or 0))
+    
+
+    if get(AC_bus_1_pwrd) == 1 and get(FAILURE_AIRCOND_VENT_BLOWER) == 0 and get(Ventilation_blower_override) == 0 then
+        if time_started_blower == 0 then time_started_blower = get(TIME) end
+    else
+        time_started_blower = 0
+    end
+    
+    if time_started_blower ~= 0 and get(TIME) - time_started_blower > 5 then
+        set(Ventilation_blower_running, 1)
+        ELEC_sys.add_power_consumption(ELEC_BUS_AC_1, 0.05, 0.05)
+    else
+        set(Ventilation_blower_running, 0)
+    end
+    
+    if get(AC_bus_2_pwrd) == 1 and get(FAILURE_AIRCOND_VENT_EXTRACT) == 0 then
+        if time_started_extract == 0 then time_started_extract = get(TIME) end
+    else
+        time_started_extract = 0
+    end
+    
+    if time_started_extract ~= 0 and get(TIME) - time_started_extract > 5 then
+        set(Ventilation_extract_running, 1)
+        ELEC_sys.add_power_consumption(ELEC_BUS_AC_2, 0.05, 0.05)
+    else
+        set(Ventilation_extract_running, 0)
+    end
+    
 end
+
 
 
 local function update_knobs()
@@ -189,6 +233,63 @@ local function run_pids()
     
 end
 
+function udpate_avio_temps()
+
+    local temp_target_avio = (200 + get(TAT)) / 3
+    local avio_heating = get(OVHR_elec_panel_pwrd) == 0 -- I'm using this value to know if some avionics is powered or not
+
+    if avio_configuration == AVIO_SMOKE or avio_configuration == AVIO_OPEN or avio_heating then
+        -- Temperature in such configurations is decreasing in the skin heat exchanger
+        avio_skin_temperature = Set_linear_anim_value(avio_skin_temperature, get(TAT), -100, 150, 0.1)
+    elseif avio_configuration == AVIO_CLOSED then
+        avio_skin_temperature = Set_linear_anim_value(avio_skin_temperature, temp_target_avio*0.8, -100, 150, 0.4)    
+    elseif avio_configuration == AVIO_INTERM then
+        avio_skin_temperature = Set_linear_anim_value(avio_skin_temperature, temp_target_avio*0.6, -100, 150, 0.2)
+    elseif avio_configuration == AVIO_ISOLATED then
+        avio_skin_temperature = Set_linear_anim_value(avio_skin_temperature, temp_target_avio, -100, 150, 0.5)
+    end
+
+end
+
+function udpate_avio_config()
+
+    if get(Any_wheel_on_ground) == 1 and get(EWD_flight_phase) ~= PHASE_1ST_ENG_TO_PWR and get(EWD_flight_phase) ~= PHASE_ABOVE_80_KTS then
+        -- If on ground and no takeoff power
+    
+        -- Reset the configuration to a valid ground configuration
+        if avio_configuration ~= AVIO_CLOSED and avio_configuration ~= AVIO_OPEN then
+            avio_configuration = AVIO_CLOSED
+        end
+    
+        -- Threshold based when THR not in takeoff power
+        if avio_configuration == AVIO_CLOSED and avio_skin_temperature > 12 then
+            avio_configuration = AVIO_OPEN
+        elseif avio_configuration == AVIO_OPEN and avio_skin_temperature < 9 then
+            avio_configuration = AVIO_CLOSED        
+        end
+        
+    else
+
+        -- Reset the configuration to a valid flight configuration
+        if avio_configuration ~= AVIO_CLOSED and avio_configuration ~= AVIO_INTERM then
+            avio_configuration = AVIO_CLOSED
+        end
+
+        -- Threshold based when THR not in takeoff power
+        if avio_configuration == AVIO_CLOSED and avio_skin_temperature > 12 then
+            avio_configuration = AVIO_INTERM
+        elseif avio_configuration == AVIO_OPEN and avio_skin_temperature < 9 then
+            avio_configuration = AVIO_CLOSED        
+        end
+    end
+
+    if get(FAILURE_AVIONICS_SMOKE) == 1 then
+        avio_configuration = AVIO_SMOKE
+    elseif get(Ventilation_blower_override) == 1 or get(Ventilation_extract_override) == 1 then
+        avio_configuration = AVIO_ISOLATED
+    end
+end
+
 function onAirportLoaded()
     reset_cabin_model()
 end
@@ -197,6 +298,8 @@ function update()
 
     update_knobs()
     update_avio_ventilation()
+    udpate_avio_temps()
+    udpate_avio_config()
     update_cabin_model()
     update_pack_valves()
     update_temp_from_valves()

@@ -36,8 +36,12 @@ Aircond_injected_flow_temp = createGlobalPropertyfa("a321neo/dynamics/aircond/in
 Aircond_trim_valve = createGlobalPropertyfa("a321neo/dynamics/aircond/trim_valve", 4)
 Aircond_mixer_temp = createGlobalPropertyf("a321neo/dynamics/aircond/mixer_temp", 0, false, true, false)
 
-Ventilation_blower  = createGlobalPropertyi("a321neo/dynamics/aircond/vent_blower", 0, false, true, false)  -- 0 normal, 1 override
-Ventilation_extract = createGlobalPropertyi("a321neo/dynamics/aircond/vent_extract", 0, false, true, false) -- 0 normal, 1 override
+Ventilation_blower_override  = createGlobalPropertyi("a321neo/dynamics/aircond/vent_blower_override", 0, false, true, false)  -- 0 normal, 1 override
+Ventilation_extract_override = createGlobalPropertyi("a321neo/dynamics/aircond/vent_extract_override", 0, false, true, false) -- 0 normal, 1 override
+Ventilation_blower_running  = createGlobalPropertyi("a321neo/dynamics/aircond/vent_blower_running", 0, false, true, false)  -- 0 OFF, 1 ON
+Ventilation_extract_running = createGlobalPropertyi("a321neo/dynamics/aircond/vent_extract_running", 0, false, true, false) -- 0 OFF, 1 ON
+Ventilation_avio_inlet_valve = createGlobalPropertyf("a321neo/dynamics/aircond/avio_inlet_valve", 1, false, true, false)
+Ventilation_avio_outlet_valve = createGlobalPropertyf("a321neo/dynamics/aircond/avio_outlet_valve", 0, false, true, false)
 
 --PACKS
 L_Eng_LP_press = createGlobalPropertyi("a321neo/dynamics/packs/l_eng_press", 0, false, true, false)

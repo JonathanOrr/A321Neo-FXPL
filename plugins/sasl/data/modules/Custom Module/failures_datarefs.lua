@@ -113,12 +113,14 @@ FAILURE_BLEED_BMC_1 = createGlobalPropertyi("a321neo/failures/bleed/bmc_1", 0, f
 FAILURE_BLEED_BMC_2 = createGlobalPropertyi("a321neo/failures/bleed/bmc_2", 0, false, true, false)
 FAILURE_BLEED_RAM_AIR_STUCK = createGlobalPropertyi("a321neo/failures/bleed/ram_air_stuck", 0, false, true, false)
 
-FAILURE_AIRCOND_FAN_FWD = createGlobalPropertyi("a321neo/failures/aircond/fan_fwd", 0, false, true, false)
-FAILURE_AIRCOND_FAN_AFT = createGlobalPropertyi("a321neo/failures/aircond/fan_aft", 0, false, true, false)
+FAILURE_AIRCOND_FAN_FWD = createGlobalPropertyi("a321neo/failures/aircond/vent/cab_fan_fwd", 0, false, true, false)
+FAILURE_AIRCOND_FAN_AFT = createGlobalPropertyi("a321neo/failures/aircond/vent/cab_fan_aft", 0, false, true, false)
 FAILURE_AIRCOND_HOT_AIR_STUCK = createGlobalPropertyi("a321neo/failures/aircond/hot_air_stuck", 0, false, true, false)
 FAILURE_AIRCOND_HOT_AIR_CARGO_STUCK = createGlobalPropertyi("a321neo/failures/aircond/hot_air_cargo_stuck", 0, false, true, false)
 FAILURE_AIRCOND_ISOL_CARGO_IN_STUCK = createGlobalPropertyi("a321neo/failures/aircond/hot_air_cargo_stuck_in", 0, false, true, false)
 FAILURE_AIRCOND_ISOL_CARGO_OUT_STUCK = createGlobalPropertyi("a321neo/failures/aircond/hot_air_cargo_stuck_out", 0, false, true, false)
+FAILURE_AIRCOND_VENT_BLOWER = createGlobalPropertyi("a321neo/failures/aircond/vent/avionics_blower", 0, false, true, false)
+FAILURE_AIRCOND_VENT_EXTRACT = createGlobalPropertyi("a321neo/failures/aircond/vent/avionics_extract", 0, false, true, false)
 
 FAILURE_AI_PITOT_CAPT = createGlobalPropertyi("a321neo/failures/anti_ice/capt_pitot", 0, false, true, false)
 FAILURE_AI_PITOT_FO   = createGlobalPropertyi("a321neo/failures/anti_ice/fo_pitot", 0, false, true, false)
@@ -139,3 +141,5 @@ FAILURE_AI_Wing_R_valve_stuck = createGlobalPropertyi("a321neo/failures/anti_ice
 FAILURE_AI_Window_Heat_L = createGlobalPropertyi("a321neo/failures/anti_ice/window_heat_l", 0, false, true, false)
 FAILURE_AI_Window_Heat_R = createGlobalPropertyi("a321neo/failures/anti_ice/window_heat_r", 0, false, true, false)
 
+
+FAILURE_AVIONICS_SMOKE = createGlobalPropertyi("a321neo/failures/misc/avionics_smoke", 0, false, true, false)

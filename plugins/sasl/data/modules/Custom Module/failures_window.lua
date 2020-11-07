@@ -175,6 +175,9 @@ local failures_data = {
     {
         group="MISC",
         failures={
+            {name="VENT.BLOWER\nFAULT", status=false, dataref=FAILURE_AIRCOND_VENT_BLOWER },
+            {name="VENT.EXTRACT\nFAULT", status=false, dataref=FAILURE_AIRCOND_VENT_EXTRACT },
+            {name="AVIONICS\nSMOKE", status=false, dataref=FAILURE_AVIONICS_SMOKE }            
         }
     },
     {
