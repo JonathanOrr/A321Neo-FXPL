@@ -54,6 +54,8 @@ local cargo_hot_air    = true
 local cargo_isol_valve = false
 local ram_air_status   = false
 
+local cabin_fan_switch = true
+
 ----------------------------------------------------------------------------------------------------
 -- Initialisation
 ----------------------------------------------------------------------------------------------------
@@ -77,6 +79,8 @@ sasl.registerCommandHandler (Toggle_cargo_hotair,        0, function(phase) if p
 sasl.registerCommandHandler (Toggle_aft_cargo_iso_valve, 0, function(phase) if phase == SASL_COMMAND_BEGIN then cargo_isol_valve = not cargo_isol_valve end end)
 
 sasl.registerCommandHandler (Toggle_ram_air, 0, function(phase) if phase == SASL_COMMAND_BEGIN then ram_air_status = not ram_air_status end end)
+sasl.registerCommandHandler (Toggle_cab_fan, 0, function(phase) if phase == SASL_COMMAND_BEGIN then cabin_fan_switch = not cabin_fan_switch end end)
+
 
 function onPlaneLoaded()
     set(Pack_L, 1)
@@ -344,7 +348,7 @@ local function update_hot_air()
         set(Hot_air_valve_pos, 0)
     end
     
-    if cargo_isol_valve then
+    if cargo_isol_valve or ditching_switch then
         set(Cargo_isol_in_valve, 0)
         set(Cargo_isol_out_valve, 0)
         set(Hot_air_valve_pos_cargo, 0)
@@ -386,13 +390,13 @@ local function update_pack_flow()
     if econ_flow_switch then    -- LO flow
         set(L_pack_Flow, mult_L * 1)
         set(R_pack_Flow, mult_R * 1)
-        Set_dataref_linear_anim(L_pack_Flow_value, mult_L*0.8*PACK_KG_PER_SEC_NOM+mult_L, 0, 2000, 1)
-        Set_dataref_linear_anim(R_pack_Flow_value, mult_R*0.8*PACK_KG_PER_SEC_NOM+mult_R, 0, 2000, 1)
+        Set_dataref_linear_anim(L_pack_Flow_value, mult_L*0.8*PACK_KG_PER_SEC_NOM, 0, 2000, 1)
+        Set_dataref_linear_anim(R_pack_Flow_value, mult_R*0.8*PACK_KG_PER_SEC_NOM, 0, 2000, 1)
     else                        -- NORM flow
         set(L_pack_Flow, mult_L * 2)
         set(R_pack_Flow, mult_R * 2)
-        Set_dataref_linear_anim(L_pack_Flow_value, mult_L*PACK_KG_PER_SEC_NOM+mult_L, 0, 2000, 1)
-        Set_dataref_linear_anim(R_pack_Flow_value, mult_R*PACK_KG_PER_SEC_NOM+mult_R, 0, 2000, 1)
+        Set_dataref_linear_anim(L_pack_Flow_value, mult_L*PACK_KG_PER_SEC_NOM, 0, 2000, 1)
+        Set_dataref_linear_anim(R_pack_Flow_value, mult_R*PACK_KG_PER_SEC_NOM, 0, 2000, 1)
     end
 
 end
@@ -431,6 +435,29 @@ local function update_ram_air()
     set(Emer_ram_air, (ram_air_status and not ditching_switch) and 1 or 0)
 end
 
+local function update_fans()
+    if cabin_fan_switch and not ditching_switch then
+        local can_fwd_running = get(AC_bus_1_pwrd) == 1 and get(DC_bus_1_pwrd) == 1 and get(FAILURE_AIRCOND_FAN_FWD) == 0
+        set(Cab_fan_fwd_running, can_fwd_running and 1 or 0)
+
+        local can_aft_running = get(AC_bus_2_pwrd) == 1 and get(DC_bus_2_pwrd) == 1 and get(FAILURE_AIRCOND_FAN_AFT) == 0
+        set(Cab_fan_aft_running, can_aft_running and 1 or 0)
+    else
+        set(Cab_fan_fwd_running, 0)
+        set(Cab_fan_aft_running, 0)
+    end
+    
+    if get(Cab_fan_fwd_running) == 1 then
+        ELEC_sys.add_power_consumption(ELEC_BUS_AC_1, 0.75, 0.75)
+    end
+
+    if get(Cab_fan_aft_running) == 1 then
+        ELEC_sys.add_power_consumption(ELEC_BUS_AC_2, 0.75, 0.75)
+    end
+    
+    set(Cabin_fan_button, cabin_fan_switch and 0 or 1)
+end
+
 function update()
     --create the A321 pack system--
 
@@ -449,7 +476,7 @@ function update()
     update_ram_air()
     
     update_datarefs()
-
+    update_fans()
 
     -- Fix GAS if moving
      if get(Ground_speed_ms) > 0.1 or get(Actual_brake_ratio) < 0.9 or get(All_on_ground) ~= 1 then

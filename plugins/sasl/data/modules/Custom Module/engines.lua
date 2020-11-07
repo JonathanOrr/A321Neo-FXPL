@@ -30,7 +30,8 @@ local ENG_N1_CRANK    = 10  -- N1 used for cranking and cooling
 local ENG_N1_CRANK_FF = 15  -- FF in case of wet cranking
 local ENG_N1_CRANK_EGT= 95  -- Target EGT for cranking
 local ENG_N1_LL_IDLE  = 18.3 -- Value to determine if parameters control should be given to X-Plane 
-local N1_INC_AI_ENG   = 1.5  -- Increase of minimum N1 if at least one ENG Anti-ice is activated
+local N1_INC_AI_ENG   = 1    -- Increase of minimum N1 if at least one ENG Anti-ice is activated
+local N1_INC_AI_WING  = 1.5  -- Increase of minimum N1 if at least one WING Anti-ice is activated
 local MAGIC_NUMBER = 100     -- This is a magic number, which value is necessary to start the engine (see later)
 
 local OIL_QTY_MAX = 17

@@ -363,6 +363,10 @@ local function update_right_list()
         list_right:put(COL_INDICATION, "DUAL COOLING")
     end
     
+    if get(Emer_ram_air) == 1 then
+        list_right:put(COL_INDICATION, "RAM AIR ON")
+    end
+    
     -- ANTI-ICE (it is correct that they use the button status and not the actual anti-ice status)
     if get(AI_Eng_1_button_light) % 2 == 1 or get(AI_Eng_2_button_light) % 2 == 1 then
         list_right:put(COL_INDICATION, "ENG A. ICE")
@@ -381,7 +385,6 @@ local function update_right_list()
 
     -- TODO Autobrake fail: AUTO BRK OFF (any flight phase, amber)
 
-    -- TODO RAM Air: RAM AIR ON green if related pushbutton switch is ON
     -- TODO Pressurization: MAN LDG ELEV green if LDG ELEV switch is not in AUTO
 
     -- TODO Steer: NW STRG DISC when the nose wheel steering selector is in the towing position

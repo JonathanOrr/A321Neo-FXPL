@@ -2,6 +2,7 @@ position= {3187,539,900,900}
 size = {900, 900}
 
 include('ECAM_automation.lua')
+include('ECAM_apu.lua')
 include('ECAM_cond.lua')
 include('ECAM_cruise.lua')
 include('ECAM_bleed.lua')
@@ -116,11 +117,7 @@ local function draw_ecam_lower_section()
 end
 
 function update()
-    if get(Apu_master_button_state) == 1 or get(Apu_N1) > 1 then
-        set(Ecam_apu_needle_state, 1)
-    else
-        set(Ecam_apu_needle_state, 0)
-    end
+
 
     --wheels indications--
     if get(Left_brakes_temp) > 400 then
@@ -155,8 +152,10 @@ function update()
 	
 	if get(Ecam_current_page) == 2 then
         ecam_update_bleed_page()
+    elseif get(Ecam_current_page) == 7 then
+        ecam_update_apu_page()
     elseif get(Ecam_current_page) == 8 then
-        ecam_update_cond_page()    
+        ecam_update_cond_page()
     end
     
 end 
@@ -434,26 +433,7 @@ function draw()
     elseif get(Ecam_current_page) == 6 then --fuel
         draw_fuel_page()
     elseif get(Ecam_current_page) == 7 then --apu
-        --apu gen section--
-        if get(Ecam_apu_gen_state) >= 2 then
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2-235, size[2]/2+257, math.abs(math.floor(ELEC_sys.generators[3].curr_amps/261*100)), 23, false, false, TEXT_ALIGN_RIGHT, 
-                            (-ELEC_sys.generators[3].curr_amps > 261) and ECAM_AMBER or ECAM_GREEN)
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2-235, size[2]/2+224, math.floor(ELEC_sys.generators[3].curr_voltage), 23, false, false, TEXT_ALIGN_RIGHT, 
-                            (ELEC_sys.generators[3].curr_voltage < 105 or ELEC_sys.generators[3].curr_voltage > 120) and ECAM_ORANGE or ECAM_GREEN)
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2-235, size[2]/2+192, math.floor(ELEC_sys.generators[3].curr_hz), 23, false, false, TEXT_ALIGN_RIGHT, 
-                            (ELEC_sys.generators[3].curr_hz < 385 or ELEC_sys.generators[3].curr_hz > 410) and ECAM_ORANGE or ECAM_GREEN)
-        end
-        --apu bleed--
-        if get(Adirs_adr_is_ok[1]) == 0 or get(Adirs_adr_is_ok[2]) == 0 or (get(FAILURE_BLEED_BMC_1) == 1 and get(FAILURE_BLEED_BMC_2) == 1) then
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2+265, size[2]/2+187, "XX", 26, false, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
-        else
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2+265, size[2]/2+187, math.floor(get(Apu_bleed_psi)), 26, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-        end
-        --needles--
-        if get(Ecam_apu_needle_state) == 1 then
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2-180, size[2]/2-60, math.floor(get(Apu_N1)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2-180, size[2]/2-260, math.floor(get(APU_EGT)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-        end
+        draw_apu_page()
     elseif get(Ecam_current_page) == 8 then --cond
         draw_cond_page()
     elseif get(Ecam_current_page) == 9 then --door

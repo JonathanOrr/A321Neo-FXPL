@@ -42,6 +42,23 @@ local failures_data = {
     {
         group="ANTI-ICE",
         failures={
+            {name="PITOT CAPT\nHEAT FAIL", status=false, dataref=FAILURE_AI_PITOT_CAPT },
+            {name="PITOT F/O\nHEAT FAIL", status=false, dataref=FAILURE_AI_PITOT_FO },
+            {name="PITOT STDBY\nHEAT FAIL", status=false, dataref=FAILURE_AI_PITOT_STDBY },
+            {name="STPORT CAPT\nHEAT FAIL", status=false, dataref=FAILURE_AI_SP_CAPT },
+            {name="STPORT F/O\nHEAT FAIL", status=false, dataref=FAILURE_AI_SP_FO },
+            {name="STPORT STDB\nHEAT FAIL", status=false, dataref=FAILURE_AI_SP_STDBY },
+            {name="AOA CAPT\nHEAT FAIL", status=false, dataref=FAILURE_AI_AOA_FO },
+            {name="AOA F/O\nHEAT FAIL", status=false, dataref=FAILURE_AI_PITOT_FO },
+            {name="AOA STDBY\nHEAT FAIL", status=false, dataref=FAILURE_AI_AOA_STDBY },
+            {name="TAT CAPT\nHEAT FAIL", status=false, dataref=FAILURE_AI_TAT_CAPT },
+            {name="TAT F/O\nHEAT FAIL", status=false, dataref=FAILURE_AI_TAT_FO },
+            {name="ENG 1\nVALVE STUCK", status=false, dataref=FAILURE_AI_Eng1_valve_stuck },
+            {name="ENG 2\nVALVE STUCK", status=false, dataref=FAILURE_AI_Eng2_valve_stuck },
+            {name="WING L\nVALVE STUCK", status=false, dataref=FAILURE_AI_Wing_L_valve_stuck },
+            {name="WING R\nVALVE STUCK", status=false, dataref=FAILURE_AI_Wing_R_valve_stuck },
+            {name="WINDOW L\nHEAT FAIL", status=false, dataref=FAILURE_AI_Window_Heat_L },
+            {name="WINDOW R\nHEAT FAIL", status=false, dataref=FAILURE_AI_Window_Heat_R }
         }
     },
     {
@@ -96,7 +113,8 @@ local failures_data = {
             {name="ENG1 OIL\nFILTER CLOG", status=false, dataref=FAILURE_ENG_1_OIL_CLOG },
             {name="ENG2 OIL\nFILTER CLOG", status=false, dataref=FAILURE_ENG_2_OIL_CLOG },
             
-            {name="APU\nFAILURE", status=false, dataref=FAILURE_ENG_APU_FAIL}
+            {name="APU\nFAILURE", status=false, dataref=FAILURE_ENG_APU_FAIL},
+            {name="APU OIL\nLOW PRESS", status=false, dataref=FAILURE_ENG_APU_LOW_OIL_P}
         }
     },
     {
