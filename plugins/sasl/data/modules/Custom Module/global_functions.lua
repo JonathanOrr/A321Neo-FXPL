@@ -61,6 +61,9 @@ function Round_fill(num, numDecimalPlaces)
     return string.format("%."..numDecimalPlaces.."f", Round(num, numDecimalPlaces)) 
 end
 
+function BoolToNum(value)
+    return value and 1 or 0
+end
 
 --used to animate a value with a curve USE ONLY WITH FLOAT VALUES
 function Set_anim_value(current_value, target, min, max, speed)

@@ -82,8 +82,8 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
     --SECs           3 3 1 1 2
 
     --DATAREFS FOR SURFACES
-    local l_spoilers_datarefs = {Left_spoiler_1, Left_spoiler_1, Left_spoiler_1, Left_spoiler_1, Left_spoiler_1}
-    local r_spoilers_datarefs = {Right_spoiler_1, Right_spoiler_1, Right_spoiler_1, Right_spoiler_1, Right_spoiler_1}
+    local l_spoilers_datarefs = {Left_spoiler_1, Left_spoiler_2, Left_spoiler_3, Left_spoiler_4, Left_spoiler_5}
+    local r_spoilers_datarefs = {Right_spoiler_1, Right_spoiler_2, Right_spoiler_3, Right_spoiler_4, Right_spoiler_5}
 
     local l_spoilers_hyd_sys_dataref = {Hydraulic_G_press, Hydraulic_Y_press, Hydraulic_B_press, Hydraulic_Y_press, Hydraulic_G_press}
     local r_spoilers_hyd_sys_dataref = {Hydraulic_G_press, Hydraulic_Y_press, Hydraulic_B_press, Hydraulic_Y_press, Hydraulic_G_press}
@@ -160,8 +160,8 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
         l_spoilers_spdbrk_targets[i] = l_spoilers_spdbrk_max_def[i] * spdbrk_input
         r_spoilers_spdbrk_targets[i] = r_spoilers_spdbrk_max_def[i] * spdbrk_input
         --roll spoilers
-        l_spoilers_roll_targets[i] = Math_rescale(roll_spoilers_threshold[i], 0, -1, l_spoilers_roll_max_def[i], lateral_input)
-        r_spoilers_roll_targets[i] = Math_rescale(roll_spoilers_threshold[i], 0,  1, r_spoilers_roll_max_def[i], lateral_input)
+        l_spoilers_roll_targets[i] = Math_rescale(-1, l_spoilers_roll_max_def[i], -roll_spoilers_threshold[i], 0, lateral_input)
+        r_spoilers_roll_targets[i] = Math_rescale( roll_spoilers_threshold[i], 0,  1, r_spoilers_roll_max_def[i], lateral_input)
     end
 
     --GROUND SPOILERS MODE--
@@ -204,7 +204,7 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
         var_table.r_spoilers_spdbrk_extention[i] = Set_linear_anim_value(var_table.r_spoilers_spdbrk_extention[i], r_spoilers_spdbrk_targets[i], 0, r_spoilers_total_max_def[i], r_spoilers_spdbrk_spd[i])
         --roll spoilers
         var_table.l_spoilers_roll_extention[i] = Set_linear_anim_value(var_table.l_spoilers_roll_extention[i], l_spoilers_roll_targets[i], 0, l_spoilers_total_max_def[i], l_spoilers_roll_spd[i])
-        var_table.r_spoilers_roll_extention[i] = Set_linear_anim_value(var_table.r_spoilers_roll_extention[i], l_spoilers_roll_targets[i], 0, r_spoilers_total_max_def[i], r_spoilers_roll_spd[i])
+        var_table.r_spoilers_roll_extention[i] = Set_linear_anim_value(var_table.r_spoilers_roll_extention[i], r_spoilers_roll_targets[i], 0, r_spoilers_total_max_def[i], r_spoilers_roll_spd[i])
 
         --TOTAL SPOILERS OUTPUT TO THE SURFACES--
         --if any surface exceeds the max deflection limit the othere side would reduce deflection by the exceeded amount

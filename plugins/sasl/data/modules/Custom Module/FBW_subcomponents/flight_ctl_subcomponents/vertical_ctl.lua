@@ -41,9 +41,71 @@ function Elevator_control(vertical_input)
     end
 
     --surface droop
-    l_elev_target = Math_rescale(0, Math_rescale(0, max_dn_deflection, 1450, l_elev_target, get(Hydraulic_G_press) + get(Hydraulic_B_press)), no_hyd_recenter_ias, 0, get(IAS))
-    r_elev_target = Math_rescale(0, Math_rescale(0, max_dn_deflection, 1450, r_elev_target, get(Hydraulic_Y_press) + get(Hydraulic_B_press)), no_hyd_recenter_ias, 0, get(IAS))
+    l_elev_target = Math_rescale(0, Math_rescale(0, max_dn_deflection, no_hyd_recenter_ias, get(Alpha), get(IAS)), 1450, l_elev_target, get(Hydraulic_G_press) + get(Hydraulic_B_press))
+    r_elev_target = Math_rescale(0, Math_rescale(0, max_dn_deflection, no_hyd_recenter_ias, get(Alpha), get(IAS)), 1450, r_elev_target, get(Hydraulic_Y_press) + get(Hydraulic_B_press))
 
     set(Elevators_hstab_1, Set_linear_anim_value(get(Elevators_hstab_1), l_elev_target, max_up_deflection, max_dn_deflection, l_elev_spd))
     set(Elevators_hstab_2, Set_linear_anim_value(get(Elevators_hstab_2), r_elev_target, max_up_deflection, max_dn_deflection, r_elev_spd))
+end
+
+function XP_trim_up(phase)
+    if phase == SASL_COMMAND_BEGIN or phase == SASL_COMMAND_CONTINUE then
+        set(Human_pitch_trim, 1)
+    end
+
+    return 0--inhibites the x-plane original command
+end
+
+function XP_trim_dn(phase)
+    if phase == SASL_COMMAND_BEGIN or phase == SASL_COMMAND_CONTINUE then
+        set(Human_pitch_trim, -1)
+    end
+
+    return 0--inhibites the x-plane original command
+end
+
+function THS_control(THS_input_dataref, human_input)
+    --hydraulics system
+    --G <--> Y
+    --flt computer reversion
+    --ELAC 2 --> ELAC 1 --> SEC 2 --> SEC 1
+    --flight computer THS motor relation
+    --MOTOR 1 <--> MOTOR 2 <--> MOTOR 3
+    --ELECTRICAL --> MECHANICAL
+
+    --input processing--
+    local input = Math_clamp(get(THS_input_dataref), -1, 1)
+
+    --properties--
+    local THS_pitch_rate = 0.2
+    local Human_trim_wheel_pitch_rate = 0.2
+    local max_ths_up = get(Max_THS_up)
+    local max_ths_dn = -get(Max_THS_dn)
+
+    --calulated speeds
+    local caculated_trim_speed = 0
+    local caculated_human_trim_speed = 0
+
+    if get(Elev_trim_ratio) >= 0 then
+        caculated_trim_speed = THS_pitch_rate / max_ths_up
+        caculated_human_trim_speed = Human_trim_wheel_pitch_rate / max_ths_up
+    else
+        caculated_trim_speed = THS_pitch_rate / -max_ths_dn
+        caculated_human_trim_speed = Human_trim_wheel_pitch_rate / -max_ths_dn
+    end
+
+    --logics
+    local THS_target = input
+
+    --Trim speed logic--
+    caculated_trim_speed = Math_rescale(0, 0, 1450, caculated_trim_speed, get(Hydraulic_G_press) + get(Hydraulic_Y_press))
+    caculated_trim_speed = caculated_trim_speed * BoolToNum(get(ELAC_2_status) == 1 or get(ELAC_1_status) == 1 or get(SEC_2_status) == 1 or get(SEC_1_status) == 1)
+
+    if human_input ~= 0 then
+        set(Elev_trim_ratio, Math_clamp(get(Elev_trim_ratio) + human_input * caculated_human_trim_speed * get(DELTA_TIME), -1, 1))
+        set(THS_input_dataref, get(Elev_trim_ratio))
+        set(Human_pitch_trim, 0)
+    else
+        set(Elev_trim_ratio, Set_linear_anim_value(get(Elev_trim_ratio), THS_target, -1, 1, caculated_trim_speed))
+    end
 end

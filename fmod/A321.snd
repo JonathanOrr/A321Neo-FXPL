@@ -160,6 +160,9 @@ END_SOUND_ATTACHMENT
 BEGIN_SOUND_ATTACHMENT
 	EVENT_NAME /Cockpit/Switch/McpSA
 	VEH_XYZ 0 1.2 -15.7
+	EVENT_START_COND DELTA=a321neo/cockpit/autothrust/lever_in_toga
+	EVENT_START_COND DELTA=a321neo/cockpit/autothrust/lever_in_flex_mct
+	EVENT_START_COND DELTA=a321neo/cockpit/autothrust/lever_in_cl
 	EVENT_START_COND DELTA=sim/cockpit2/radios/actuators/HSI_source_select_pilot
 	EVENT_START_COND DELTA=sim/cockpit2/EFIS/map_mode
 	EVENT_START_COND DELTA=sim/cockpit2/EFIS/map_range

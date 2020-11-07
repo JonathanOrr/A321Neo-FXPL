@@ -77,6 +77,7 @@ FAILURE_FCTL_SFCC_1 = createGlobalPropertyi("a321neo/failures/fctl/sfcc_1", 0, f
 FAILURE_FCTL_SFCC_2 = createGlobalPropertyi("a321neo/failures/fctl/sfcc_2", 0, false, true, false)--slats flaps computer 1 failure
 FAILURE_FCTL_LAIL = createGlobalPropertyi("a321neo/failures/fctl/left_aileron", 0, false, true, false)--jam l aileron
 FAILURE_FCTL_RAIL = createGlobalPropertyi("a321neo/failures/fctl/right_aileron", 0, false, true, false)--jam r aileron
+--TODO: remember to implement UP SHIT CREEKS MODE
 
 FAILURE_FUEL = createGlobalPropertyia("a321neo/failures/fuel/pumps", 8)
 FAILURE_FUEL_X_FEED = createGlobalPropertyi("a321neo/failures/fuel/x_feed_valve", 0, false, true, false)--x feed valve

@@ -233,6 +233,11 @@ Toggle_SEC_1 = sasl.createCommand("a321neo/cockpit/FBW/toggle_sec_1", "toggle SE
 Toggle_SEC_2 = sasl.createCommand("a321neo/cockpit/FBW/toggle_sec_2", "toggle SEC 2")
 Toggle_SEC_3 = sasl.createCommand("a321neo/cockpit/FBW/toggle_sec_3", "toggle SEC 3")
 
+Trim_up = sasl.findCommand("sim/flight_controls/pitch_trim_up")
+Trim_dn = sasl.findCommand("sim/flight_controls/pitch_trim_down")
+Trim_up_mechanical = sasl.findCommand("sim/flight_controls/pitch_trim_up_mech")
+Trim_dn_mechanical = sasl.findCommand("sim/flight_controls/pitch_trim_down_mech")
+
 -- ENG
 ENG_cmd_manual_start_1 = createCommand("a321neo/cockpit/engine/manual_start_1", "Press Manual Start ENG1 pushbutton")
 ENG_cmd_manual_start_2 = createCommand("a321neo/cockpit/engine/manual_start_2", "Press Manual Start ENG1 pushbutton")

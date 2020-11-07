@@ -155,9 +155,9 @@ function update()
 
             if get(Any_wheel_on_ground) ~= 1 then
                 if stick_moving_vertically == true then
-                    set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), SSS_PID_DPV(FBW_PID_arrays.SSS_FBW_CWS_trim, G_output, get(True_pitch_rate)), -1, 1, 0.1))
+                    set(Augmented_pitch_trim_ratio, Set_anim_value(get(Augmented_pitch_trim_ratio), SSS_PID_DPV(FBW_PID_arrays.SSS_FBW_CWS_trim, G_output, get(True_pitch_rate)), -1, 1, 0.1))
                 else
-                    set(Elev_trim_ratio, Set_anim_value(get(Elev_trim_ratio), SSS_PID_DPV(FBW_PID_arrays.SSS_FBW_CWS_trim, G_output - get(Vpath_pitch_rate), get(True_pitch_rate)), -1, 1, 0.1))
+                    set(Augmented_pitch_trim_ratio, Set_anim_value(get(Augmented_pitch_trim_ratio), SSS_PID_DPV(FBW_PID_arrays.SSS_FBW_CWS_trim, G_output - get(Vpath_pitch_rate), get(True_pitch_rate)), -1, 1, 0.1))
                 end
             end
         end

@@ -1,6 +1,7 @@
 include("FBW_subcomponents/flight_ctl_subcomponents/slat_flaps_control.lua")
 include("FBW_subcomponents/flight_ctl_subcomponents/lateral_ctl.lua")
 include("FBW_subcomponents/flight_ctl_subcomponents/vertical_ctl.lua")
+include("FBW_subcomponents/flight_ctl_subcomponents/check_surface_avil.lua")
 
 --variables--
 local total_roll = 0
@@ -17,18 +18,20 @@ local roll_artstab = globalProperty("sim/joystick/artstab_roll_ratio")
 local pitch_artstab = globalProperty("sim/joystick/artstab_pitch_ratio")
 local yaw_artstab = globalProperty("sim/joystick/artstab_heading_ratio")
 
-local elev_trim_ratio = globalProperty("sim/cockpit2/controls/elevator_trim")
-local max_elev_trim_up = globalProperty("sim/aircraft/controls/acf_hstb_trim_up")
-local max_elev_trim_dn = globalProperty("sim/aircraft/controls/acf_hstb_trim_dn")
-
 local horizontal_stabilizer_deflection = globalProperty("sim/flightmodel2/controls/stabilizer_deflection_degrees")
+
+--modify xplane functions
+sasl.registerCommandHandler(Trim_up, 1, XP_trim_up)
+sasl.registerCommandHandler(Trim_dn, 1, XP_trim_dn)
+sasl.registerCommandHandler(Trim_up_mechanical, 1, XP_trim_up)
+sasl.registerCommandHandler(Trim_dn_mechanical, 1, XP_trim_dn)
 
 --custom functions
 local function get_elev_trim_degrees()
-    if get(elev_trim_ratio) >= 0 then
-        return get(elev_trim_ratio) * get(max_elev_trim_up)
-    elseif get(elev_trim_ratio) < 0 then
-        return get(elev_trim_ratio) * get(max_elev_trim_dn)
+    if get(Elev_trim_ratio) >= 0 then
+        return get(Elev_trim_ratio) * get(Max_THS_up)
+    else
+        return get(Elev_trim_ratio) * get(Max_THS_dn)
     end
 end
 
@@ -57,7 +60,7 @@ end
 function update()
     --sync and identify the elevator trim degrees
     if get(Trim_wheel_smoothing_on) == 1 then
-        set(Elev_trim_degrees, Set_anim_value(get(Elev_trim_degrees), get_elev_trim_degrees(), -3.5, 11, 5))
+        set(Elev_trim_degrees, Set_anim_value(get(Elev_trim_degrees), get_elev_trim_degrees(), -get(Max_THS_dn), get(Max_THS_up), 5))
     else
         set(Elev_trim_degrees, get_elev_trim_degrees())
     end
@@ -75,14 +78,15 @@ function update()
 
     if get(Override_control_surfaces) == 1 then
         if get(DELTA_TIME) ~= 0 then
+            Check_surface_avail()
             Ailerons_control(total_roll, false, 0)
             Spoilers_control(total_roll, get(Speedbrake_handle_ratio), 0, false, Spoilers_var_table)
             Elevator_control(total_pitch)
             Slats_flaps_calc_and_control()
+            THS_control(Augmented_pitch_trim_ratio, get(Human_pitch_trim))
 
             --Rudder
             --Set_dataref_linear_anim(Rudder, get(Yaw_lim) * (total_yaw), -30, 30, 25)
-
         end
     end
 end
