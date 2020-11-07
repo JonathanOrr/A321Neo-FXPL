@@ -39,6 +39,7 @@ local OIL_QTY_MIN = 2
 local OIL_PRESS_START = 50  -- MAX On startup
 local OIL_PRESS_CONT  = 30  -- MAX Continuous
 local OIL_PRESS_MIN   = 17  -- MIN in idle
+local OIL_CONSUMPTION_PER_HOUR = 0.1
 
 local OIL_TEMP_MIN   = -25   -- MIN for start
 local OIL_TEMP_TOGA  = 38    -- MIN for toga
@@ -322,8 +323,8 @@ end
 ----------------------------------------------------------------------------------------------------
 -- Functions - Secondary parameters
 ----------------------------------------------------------------------------------------------------
-set(Eng_1_OIL_qty, OIL_QTY_MAX*2/3 + OIL_QTY_MAX/3 * math.random())
-set(Eng_2_OIL_qty, OIL_QTY_MAX*2/3 + OIL_QTY_MAX/3 * math.random())
+set(Eng_1_OIL_qty, OIL_QTY_MAX*3/4 + OIL_QTY_MAX/4 * math.random())
+set(Eng_2_OIL_qty, OIL_QTY_MAX*3/4 + OIL_QTY_MAX/4 * math.random())
 set(Eng_1_OIL_temp, get(OTA))
 set(Eng_2_OIL_temp, get(OTA))
 
@@ -816,6 +817,19 @@ local function update_continuous_ignition()
     set(Eng_Continuous_Ignition, (cond_1 or cond_2) and 1 or 0)
 end
 
+local function update_oil_qty()
+    -- each engine consumes ~0.1 oil quantity each running hour
+    local curr_oil = get(Eng_1_OIL_qty)
+    curr_oil = curr_oil - OIL_CONSUMPTION_PER_HOUR / 60 / 60 * get(DELTA_TIME) * get(Engine_1_avail)
+    set(Eng_1_OIL_qty, curr_oil)
+
+    local curr_oil = get(Eng_2_OIL_qty)
+    curr_oil = curr_oil - OIL_CONSUMPTION_PER_HOUR / 60 / 60 * get(DELTA_TIME) * get(Engine_2_avail)
+    set(Eng_2_OIL_qty, curr_oil)
+
+end
+
+
 function update()
     update_starter_datarefs()
     update_buttons_datarefs()
@@ -842,6 +856,7 @@ function update()
     update_time_since_shutdown()
     update_continuous_ignition()
 
+    update_oil_qty()
 end
 
 -- The following code is used to check if SASL has been restarted with engines running
