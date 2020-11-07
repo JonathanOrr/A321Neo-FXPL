@@ -1,3 +1,5 @@
+include('EWD_msgs/common.lua')
+
 --------------------------------------------------------------------------------
 -- NORMAL: SEAT BELTS
 --------------------------------------------------------------------------------
@@ -206,3 +208,49 @@ MessageGroup_IRS_ALIGN = {
     end
 
 }
+
+--------------------------------------------------------------------------------
+-- CAUTION: AVIONICS SMOKE
+--------------------------------------------------------------------------------
+
+MessageGroup_AVIONICS_SMOKE= {
+
+    shown = false,
+
+    text  = function()
+                return "AVIONICS SMOKE"
+            end,
+    color = function()
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_ELEC,
+    
+    messages = {
+        {
+            text = function() return "" end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        },
+        {
+            text = function() return " AVNCS SMOKE PROC...APPLY" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return true end
+        }
+
+    },
+
+    land_asap = true,
+
+    is_active = function()
+        return get(FAILURE_AVIONICS_SMOKE) == 1
+    end,
+
+    is_inhibited = function()
+        return is_inibithed_in({PHASE_ABOVE_80_KTS, PHASE_LIFTOFF, PHASE_FINAL, PHASE_TOUCHDOWN})
+    end
+}
+
+

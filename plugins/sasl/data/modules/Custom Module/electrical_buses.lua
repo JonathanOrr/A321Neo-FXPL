@@ -275,7 +275,7 @@ local function update_datarefs()
     
     set(Elec_light_BUS_tie, get(OVHR_elec_panel_pwrd) * (buses.bus_tie_pushbutton_status and 0 or 1))
     set(Elec_light_AC_ess_feed, get(OVHR_elec_panel_pwrd) * ((buses.ac_ess_bus_pushbutton_status and 1 or 0) + (buses.ac_ess_powered_by>0 and 0 or 10)))
-    set(Elec_light_EMER_GEN1_LINE, get(OVHR_elec_panel_pwrd) * (get(Gen_1_line_active)== 1 and 1 or 0))   -- TODO Add SMOKE indication
+    set(Elec_light_EMER_GEN1_LINE, get(OVHR_elec_panel_pwrd) * ((get(Gen_1_line_active)== 1 and 1 or 0) + (get(FAILURE_AVIONICS_SMOKE) == 1 and 10 or 0)))
 end
 
 local function update_shed()

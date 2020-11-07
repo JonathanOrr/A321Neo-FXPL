@@ -59,6 +59,7 @@ local left_messages_list = {
 
     -- Cautions
     MessageGroup_FBW_ALTN_DIRECT_LAW,
+    MessageGroup_AVIONICS_SMOKE,
     MessageGroup_BRAKES_HOT,
     MessageGroup_ADKIS_NWS,
     MessageGroup_APU_SHUTDOWN,

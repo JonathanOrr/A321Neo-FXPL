@@ -258,13 +258,13 @@ Message_ELEC_FUEL_GRAVITY_PROC = {
 Message_ELEC_BLOWER_OVRD = {
     text = function(self) return " - BLOWER............OVRD" end,
     color = function(self) return COL_ACTIONS end,
-    is_active = function(self) return get(Ventilation_blower) == 0 end
+    is_active = function(self) return get(Ventilation_blower_override) == 0 end
 }
 
 Message_ELEC_EXTRACT_OVRD = {
     text = function(self) return " - EXTRACT...........OVRD" end,
     color = function(self) return COL_ACTIONS end,
-    is_active = function(self) return get(Ventilation_extract) == 0 end
+    is_active = function(self) return get(Ventilation_extract_override) == 0 end
 }
 
 Message_ELEC_FAC_1_OFF_ON = {
@@ -341,7 +341,7 @@ MessageGroup_ELEC_EMER_CONFIG = {
     land_asap = true,
 
     is_active = function(self)
-        local condition =  (get(Gen_1_pwr) == 0 and get(Gen_2_pwr) ==0 and get(Gen_APU_pwr) == 0 and get(Gen_EXT_pwr) == 0) and not override_ELEC_always_on
+        local condition =  ((get(Gen_1_pwr) == 0 or get(Gen_1_line_active) == 1) and get(Gen_2_pwr) ==0 and get(Gen_APU_pwr) == 0 and get(Gen_EXT_pwr) == 0) and not override_ELEC_always_on
 
         return condition
     end,
