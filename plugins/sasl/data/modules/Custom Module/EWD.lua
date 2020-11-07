@@ -102,19 +102,23 @@ function draw_extra_indication()
     if get(EWD_flight_phase) == PHASE_1ST_ENG_ON and (get(Pack_L) == 1 or get(Pack_R) == 1) then
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2+70, size[2]-30, "PACKS", 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
     end
+    
+    -- A FLOOR
+    if true then    -- TODO Jon please add here a condition
+        sasl.gl.drawText(Font_AirbusDUL, 30, size[2]-40, "A FLOOR", 32, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
+    end
+    
+    -- Thrust rating -- TODO
+    sasl.gl.drawText(Font_AirbusDUL, size[1]-80, size[2]-30, "TOGA", 32, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]-65, size[2]-55, "101.", 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]-50, size[2]-55, "0", 24, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]-35, size[2]-55, "%", 24, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+
+    sasl.gl.drawText(Font_AirbusDUL, size[1]-80, size[2]-80, "00°C", 24, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    
 end
 
-
-local function draw_engines()
-
-    -- N2 background box --
-    if get(Engine_1_master_switch) == 1 and get(Engine_1_avail) == 0 then
-          sasl.gl.drawRectangle(size[1]/2-210, size[2]/2+70, 85, 32, {0.2,0.2,0.2})
-    end
-    if get(Engine_2_master_switch) == 1 and get(Engine_2_avail) == 0 then
-          sasl.gl.drawRectangle(size[1]/2+115, size[2]/2+70, 85, 32, {0.2,0.2,0.2})
-    end
-
+local function draw_engines_needles()
     -----------TODO-----------
     --[[amber blicking of the N1 needle when N1 exceeds amber limit
     show trends only when AT is engaged]]
@@ -190,7 +194,21 @@ local function draw_engines()
         )
     end
 
-    --N1--
+end
+
+local function draw_engines()
+
+    -- N2 background box --
+    if get(Engine_1_master_switch) == 1 and get(Engine_1_avail) == 0 then
+          sasl.gl.drawRectangle(size[1]/2-210, size[2]/2+70, 85, 32, {0.2,0.2,0.2})
+    end
+    if get(Engine_2_master_switch) == 1 and get(Engine_2_avail) == 0 then
+          sasl.gl.drawRectangle(size[1]/2+115, size[2]/2+70, 85, 32, {0.2,0.2,0.2})
+    end
+
+    draw_engines_needles()
+
+    --N1-- -- TODO COLORS
     sasl.gl.drawRectangle(size[1]/2 - 195, size[2]/2 + 275, 100, 35, ECAM_BLACK)
     Sasl_DrawWideFrame(size[1]/2 - 195, size[2]/2 + 275, 100, 35, 2, 0, ECAM_WHITE)
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-115, size[2]/2+280, math.floor(params.eng1_n1) .. "." , 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
@@ -201,14 +219,18 @@ local function draw_engines()
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2+235, size[2]/2+280, math.floor(params.eng2_n1) .. "." , 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2+250, size[2]/2+280, math.floor((params.eng2_n1%1)*10)  , 24, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     --EGT--
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-140, size[2]/2+150, params.eng1_egt, 28, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+210, size[2]/2+150, params.eng2_egt, 28, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    local egt_color_1 = params.eng1_egt > 1050 and ECAM_RED or (params.eng1_egt > 1000 and ECAM_ORANGE or ECAM_GREEN)
+    local egt_color_2 = params.eng2_egt > 1050 and ECAM_RED or (params.eng2_egt > 1000 and ECAM_ORANGE or ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-140, size[2]/2+150, params.eng1_egt, 28, false, false, TEXT_ALIGN_RIGHT, egt_color_1)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+210, size[2]/2+150, params.eng2_egt, 28, false, false, TEXT_ALIGN_RIGHT, egt_color_2)
     --N2--
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-145, size[2]/2+75, math.floor(params.eng1_n2) .. "." , 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-130, size[2]/2+75, math.floor((params.eng1_n2%1)*10) , 24, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    local n2_color_1 = params.eng1_n2 > 116.5 and ECAM_RED or ECAM_GREEN
+    local n2_color_2 = params.eng2_n2 > 116.5 and ECAM_RED or ECAM_GREEN
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-145, size[2]/2+75, math.floor(params.eng1_n2) .. "." , 30, false, false, TEXT_ALIGN_RIGHT, n2_color_1)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-130, size[2]/2+75, math.floor((params.eng1_n2%1)*10) , 24, false, false, TEXT_ALIGN_RIGHT, n2_color_1)
 
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+180, size[2]/2+75, math.floor(params.eng2_n2) .. "." , 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+195, size[2]/2+75, math.floor((params.eng2_n2%1)*10) , 24, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+180, size[2]/2+75, math.floor(params.eng2_n2) .. "." , 30, false, false, TEXT_ALIGN_RIGHT, n2_color_2)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+195, size[2]/2+75, math.floor((params.eng2_n2%1)*10) , 24, false, false, TEXT_ALIGN_RIGHT, n2_color_2)
 
     --FF--
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-130, size[2]/2+3, params.eng1_ff, 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
