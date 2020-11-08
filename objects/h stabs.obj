@@ -3116,7 +3116,7 @@ IDX10	2290	2287	1734	2292	2290	2288	2287	2292	2290	2287
 		ANIM_end
 		ANIM_begin
 		ANIM_trans	2.19962	0.21345	1.2127399	2.19962	0.21345	1.2127399
-		ANIM_rotate_begin	0	1	-0	sim/flightmodel/controls/hstab1_elv1def
+		ANIM_rotate_begin	0	1	-0	sim/flightmodel/controls/hstab2_elv1def
 		ANIM_rotate_key	0	0
 		ANIM_rotate_key	8.5	0.72765639
 		ANIM_rotate_key	17	1.0267404
@@ -3131,7 +3131,7 @@ IDX10	2290	2287	1734	2292	2290	2288	2287	2292	2290	2287
 		ANIM_rotate_key	-7.5	-0.98949815
 		ANIM_rotate_key	0	0
 		ANIM_rotate_end
-		ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/hstab1_elv1def
+		ANIM_rotate_begin	0	0	-1	sim/flightmodel/controls/hstab2_elv1def
 		ANIM_rotate_key	0	0
 		ANIM_rotate_key	8.5	-3.0939722
 		ANIM_rotate_key	17	-6.2589911
@@ -3146,7 +3146,7 @@ IDX10	2290	2287	1734	2292	2290	2288	2287	2292	2290	2287
 		ANIM_rotate_key	-7.5	2.6247196
 		ANIM_rotate_key	0	0
 		ANIM_rotate_end
-		ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/hstab1_elv1def
+		ANIM_rotate_begin	1	0	-0	sim/flightmodel/controls/hstab2_elv1def
 		ANIM_rotate_key	0	0
 		ANIM_rotate_key	8.5	7.864419
 		ANIM_rotate_key	17	15.724827
