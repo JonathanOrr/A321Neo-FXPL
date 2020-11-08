@@ -381,12 +381,14 @@ local function update_right_list()
         list_right:put(COL_INDICATION, "ICE NOT DET")
     end
     
+    if get(Press_ldg_elev_knob_pos) >= -2 then
+        list_right:put(COL_INDICATION, "MAN LDG ELEV")
+    end
+    
     -- TODO Audio: AUDIO 3 XFRD displayed green if audio switching selector not in NORM
     -- TODO Acars: ACARS CALL (pulsing green) if received an ACARS message requesting voice conversation
 
     -- TODO Autobrake fail: AUTO BRK OFF (any flight phase, amber)
-
-    -- TODO Pressurization: MAN LDG ELEV green if LDG ELEV switch is not in AUTO
 
     -- TODO Steer: NW STRG DISC when the nose wheel steering selector is in the towing position
     --             GREEN: if no engine is running, AMBER: is at least one engine is running

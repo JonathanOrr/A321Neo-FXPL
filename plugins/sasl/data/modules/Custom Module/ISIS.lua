@@ -7,8 +7,8 @@ local TIME_TO_ALIGN_SEC = 90
 
 -- Toggle LS
 sasl.registerCommandHandler (ISIS_cmd_LS, 0, function(phase) if phase == SASL_COMMAND_BEGIN then set(ISIS_landing_system_enabled, get(ISIS_landing_system_enabled) == 1 and 0 or 1) end end)
-sasl.registerCommandHandler (ISIS_cmd_Knob_c, 0,  function(phase) Knob_handler_up_float(phase, Stby_Baro, 28, 31, 0.01) end) 
-sasl.registerCommandHandler (ISIS_cmd_Knob_cc, 0,  function(phase) Knob_handler_down_float(phase, Stby_Baro, 28, 31, 0.01) end) 
+sasl.registerCommandHandler (ISIS_cmd_Knob_c, 0,  function(phase) Knob_handler_up_float(phase, Stby_Baro, 28, 31, 0.05) end) 
+sasl.registerCommandHandler (ISIS_cmd_Knob_cc, 0,  function(phase) Knob_handler_down_float(phase, Stby_Baro, 28, 31, 0.05) end) 
 
 
 local isis_start_time = 0

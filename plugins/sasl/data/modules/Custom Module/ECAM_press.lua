@@ -58,6 +58,23 @@ local function draw_valves_text()
     end
 end
 
+local function draw_ldg_elev()
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-100, size[2]-50, "LDG ELEV", 34, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+
+    if get(Press_ldg_elev_knob_pos) >= -2 then
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+80, size[2]-50, "MAN", 34, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+    else
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+80, size[2]-50, "AUTO", 34, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+    end
+    
+    if true then    -- TODO Hide when MODE SEL NOT AUTO
+        local selected = get(Press_ldg_elev_knob_pos) >= -2 and get(Press_ldg_elev_knob_pos)*1000 or 0 -- TODO ADD COMPUTED FROM MCDU HERE
+        selected = selected - selected%50
+        sasl.gl.drawText(Font_AirbusDUL, size[1]-130, size[2]-50, "FT", 28, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]-150, size[2]-50, selected, 34, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    end
+end
+
 function draw_press_page()
 
     draw_press_info()
@@ -66,6 +83,7 @@ function draw_press_page()
     draw_valve_outlet(get(Ventilation_avio_outlet_valve), get(FAILURE_AVIONICS_OUTLET) == 1)
 
     draw_pack_indications()
+    draw_ldg_elev()
 end
 
 function ecam_update_press_page()

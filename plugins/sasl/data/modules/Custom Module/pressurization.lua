@@ -13,8 +13,20 @@ include('constants.lua')
 sasl.registerCommandHandler (Press_manual_control_dn, 0, function(phase) manual_control_handler(phase, -1) end)
 sasl.registerCommandHandler (Press_manual_control_up, 0, function(phase) manual_control_handler(phase, 1) end)
 
-sasl.registerCommandHandler (Press_ldg_elev_dial_dn, 0, function(phase) Knob_handler_down_float(phase, Press_ldg_elev_knob_pos, -3, 14, 1) end)
-sasl.registerCommandHandler (Press_ldg_elev_dial_up, 0, function(phase) Knob_handler_up_float(phase, Press_ldg_elev_knob_pos, -3, 14, 1) end)
+sasl.registerCommandHandler (Press_ldg_elev_dial_dn, 0, function(phase) 
+    if get(Press_ldg_elev_knob_pos) < -2 then
+        set(Press_ldg_elev_knob_pos, -3)
+    else
+        Knob_handler_down_float(phase, Press_ldg_elev_knob_pos, -3, 14, 2)
+    end
+end)
+sasl.registerCommandHandler (Press_ldg_elev_dial_up, 0, function(phase)
+    if get(Press_ldg_elev_knob_pos) < -2 then
+        set(Press_ldg_elev_knob_pos, -2)
+    else
+        Knob_handler_up_float(phase, Press_ldg_elev_knob_pos, -3, 14, 2)
+    end
+end)
 
 
 ----------------------------------------------------------------------------------------------------
