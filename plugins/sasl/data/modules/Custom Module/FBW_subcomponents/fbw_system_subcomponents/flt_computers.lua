@@ -1,6 +1,5 @@
 --variable tables
 Fctl_computers_var_table = {
-    restart_wait = 1.2,
     ELAC_1_restart_timer = 1.2,
     ELAC_2_restart_timer = 1.2,
     FAC_1_restart_timer = 1.2,
@@ -126,90 +125,66 @@ function Compute_fctl_button_states()
 end
 
 function Fctl_computuers_status_computation(var_table)
+    --properties--
+    local restart_wait = 1.2
+
     --ELAC 1--
-    if get(ELAC_1_off_button) == 0 then
-        if var_table.ELAC_1_restart_timer >= var_table.restart_wait then
-            set(ELAC_1_status, 1)
-        else
-            set(ELAC_1_status, 0)
-            var_table.ELAC_1_restart_timer = var_table.ELAC_1_restart_timer + 1 * get(DELTA_TIME)
-        end
-    else
-        var_table.ELAC_1_restart_timer = 0
-        set(ELAC_1_status, 0)
-    end
+    set(ELAC_1_status, 1 * (1 - get(ELAC_1_off_button)) * BoolToNum(var_table.ELAC_1_restart_timer >= restart_wait))
+    var_table.ELAC_1_restart_timer = Math_clamp_higher((var_table.ELAC_1_restart_timer + 1 * get(DELTA_TIME)) * (1 - get(ELAC_1_off_button)), restart_wait)
     --ELAC 2--
-    if get(ELAC_2_off_button) == 0 then
-        if var_table.ELAC_2_restart_timer >= var_table.restart_wait then
-            set(ELAC_2_status, 1)
-        else
-            set(ELAC_2_status, 0)
-            var_table.ELAC_2_restart_timer = var_table.ELAC_2_restart_timer + 1 * get(DELTA_TIME)
-        end
-    else
-        var_table.ELAC_2_restart_timer = 0
-        set(ELAC_2_status, 0)
-    end
+    set(ELAC_2_status, 1 * (1 - get(ELAC_2_off_button)) * BoolToNum(var_table.ELAC_2_restart_timer >= restart_wait))
+    var_table.ELAC_2_restart_timer = Math_clamp_higher((var_table.ELAC_2_restart_timer + 1 * get(DELTA_TIME)) * (1 - get(ELAC_2_off_button)), restart_wait)
 
     --FAC 1--
-    if get(FAC_1_off_button) == 0 then
-        if var_table.FAC_1_restart_timer >= var_table.restart_wait then
-            set(FAC_1_status, 1)
-        else
-            set(FAC_1_status, 0)
-            var_table.FAC_1_restart_timer = var_table.FAC_1_restart_timer + 1 * get(DELTA_TIME)
-        end
-    else
-        var_table.FAC_1_restart_timer = 0
-        set(FAC_1_status, 0)
-    end
+    set(FAC_1_status, 1 * (1 - get(FAC_1_off_button)) * BoolToNum(var_table.FAC_1_restart_timer >= restart_wait))
+    var_table.FAC_1_restart_timer = Math_clamp_higher((var_table.FAC_1_restart_timer + 1 * get(DELTA_TIME)) * (1 - get(FAC_1_off_button)), restart_wait)
     --FAC 2--
-    if get(FAC_2_off_button) == 0 then
-        if var_table.FAC_2_restart_timer >= var_table.restart_wait then
-            set(FAC_2_status, 1)
-        else
-            set(FAC_2_status, 0)
-            var_table.FAC_2_restart_timer = var_table.FAC_2_restart_timer + 1 * get(DELTA_TIME)
-        end
-    else
-        var_table.FAC_2_restart_timer = 0
-        set(FAC_2_status, 0)
-    end
+    set(FAC_2_status, 1 * (1 - get(FAC_2_off_button)) * BoolToNum(var_table.FAC_2_restart_timer >= restart_wait))
+    var_table.FAC_2_restart_timer = Math_clamp_higher((var_table.FAC_2_restart_timer + 1 * get(DELTA_TIME)) * (1 - get(FAC_2_off_button)), restart_wait)
 
     --SEC 1--
-    if get(SEC_1_off_button) == 0 then
-        if var_table.SEC_1_restart_timer >= var_table.restart_wait then
-            set(SEC_1_status, 1)
-        else
-            set(SEC_1_status, 0)
-            var_table.SEC_1_restart_timer = var_table.SEC_1_restart_timer + 1 * get(DELTA_TIME)
-        end
-    else
-        var_table.SEC_1_restart_timer = 0
-        set(SEC_1_status, 0)
-    end
+    set(SEC_1_status, 1 * (1 - get(SEC_1_off_button)) * BoolToNum(var_table.SEC_1_restart_timer >= restart_wait))
+    var_table.SEC_1_restart_timer = Math_clamp_higher((var_table.SEC_1_restart_timer + 1 * get(DELTA_TIME)) * (1 - get(SEC_1_off_button)), restart_wait)
     --SEC 2--
-    if get(SEC_2_off_button) == 0 then
-        if var_table.SEC_2_restart_timer >= var_table.restart_wait then
-            set(SEC_2_status, 1)
-        else
-            set(SEC_2_status, 0)
-            var_table.SEC_2_restart_timer = var_table.SEC_2_restart_timer + 1 * get(DELTA_TIME)
-        end
-    else
-        var_table.SEC_2_restart_timer = 0
-        set(SEC_2_status, 0)
-    end
+    set(SEC_2_status, 1 * (1 - get(SEC_2_off_button)) * BoolToNum(var_table.SEC_2_restart_timer >= restart_wait))
+    var_table.SEC_2_restart_timer = Math_clamp_higher((var_table.SEC_2_restart_timer + 1 * get(DELTA_TIME)) * (1 - get(SEC_2_off_button)), restart_wait)
     --SEC 3--
-    if get(SEC_3_off_button) == 0 then
-        if var_table.SEC_3_restart_timer >= var_table.restart_wait then
-            set(SEC_3_status, 1)
-        else
-            set(SEC_3_status, 0)
-            var_table.SEC_3_restart_timer = var_table.SEC_3_restart_timer + 1 * get(DELTA_TIME)
-        end
-    else
-        var_table.SEC_3_restart_timer = 0
-        set(SEC_3_status, 0)
+    set(SEC_3_status, 1 * (1 - get(SEC_3_off_button)) * BoolToNum(var_table.SEC_3_restart_timer >= restart_wait))
+    var_table.SEC_3_restart_timer = Math_clamp_higher((var_table.SEC_3_restart_timer + 1 * get(DELTA_TIME)) * (1 - get(SEC_3_off_button)), restart_wait)
+
+    --TODO electrical config
+
+
+    --FAILURE MANAGER--
+    local flight_computers = {
+        ELAC_1_status,
+        ELAC_2_status,
+        FAC_1_status,
+        FAC_2_status,
+        SEC_1_status,
+        SEC_2_status,
+        SEC_3_status,
+    }
+
+    local flight_computer_failure_datarefs = {
+        FAILURE_FCTL_ELAC_1,
+        FAILURE_FCTL_ELAC_2,
+        FAILURE_FCTL_FAC_1,
+        FAILURE_FCTL_FAC_2,
+        FAILURE_FCTL_SEC_1,
+        FAILURE_FCTL_SEC_2,
+        FAILURE_FCTL_SEC_3,
+    }
+
+    for i = 1, #flight_computers do
+        set(flight_computers[i], get(flight_computers[i]) * (1 - get(flight_computer_failure_datarefs[i])))
     end
+
+    var_table.ELAC_1_restart_timer = var_table.ELAC_1_restart_timer * (1 - get(flight_computer_failure_datarefs[1]))
+    var_table.ELAC_2_restart_timer = var_table.ELAC_2_restart_timer * (1 - get(flight_computer_failure_datarefs[2]))
+    var_table.FAC_1_restart_timer = var_table.FAC_1_restart_timer * (1 - get(flight_computer_failure_datarefs[3]))
+    var_table.FAC_2_restart_timer = var_table.FAC_2_restart_timer * (1 - get(flight_computer_failure_datarefs[4]))
+    var_table.SEC_1_restart_timer = var_table.SEC_1_restart_timer * (1 - get(flight_computer_failure_datarefs[5]))
+    var_table.SEC_2_restart_timer = var_table.SEC_2_restart_timer * (1 - get(flight_computer_failure_datarefs[6]))
+    var_table.SEC_3_restart_timer = var_table.SEC_3_restart_timer * (1 - get(flight_computer_failure_datarefs[7]))
 end

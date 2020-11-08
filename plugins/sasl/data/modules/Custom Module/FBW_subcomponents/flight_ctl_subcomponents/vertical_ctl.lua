@@ -29,6 +29,9 @@ function Elevator_control(vertical_input)
     l_elev_spd = Math_rescale(0, elev_no_hyd_spd, 1450, elevators_speed, get(Hydraulic_G_press) + get(Hydraulic_B_press))
     r_elev_spd = Math_rescale(0, elev_no_hyd_spd, 1450, elevators_speed, get(Hydraulic_Y_press) + get(Hydraulic_B_press))
 
+    l_elev_spd = l_elev_spd * (1 - get(FAILURE_FCTL_LELEV))
+    r_elev_spd = r_elev_spd * (1 - get(FAILURE_FCTL_RELEV))
+
     --TARGET DEFECTION LOGIC--
     l_elev_target = Math_rescale(-1, max_dn_deflection, 0, 0, vertical_input) + Math_rescale(0, 0, 1, max_up_deflection, vertical_input)
     r_elev_target = Math_rescale(-1, max_dn_deflection, 0, 0, vertical_input) + Math_rescale(0, 0, 1, max_up_deflection, vertical_input)
@@ -100,9 +103,10 @@ function THS_control(THS_input_dataref, human_input)
     --Trim speed logic--
     caculated_trim_speed = Math_rescale(0, 0, 1450, caculated_trim_speed, get(Hydraulic_G_press) + get(Hydraulic_Y_press))
     caculated_trim_speed = caculated_trim_speed * BoolToNum(get(ELAC_2_status) == 1 or get(ELAC_1_status) == 1 or get(SEC_2_status) == 1 or get(SEC_1_status) == 1)
+    caculated_trim_speed = caculated_trim_speed * (1 - get(FAILURE_FCTL_THS))
 
     if human_input ~= 0 then
-        set(Elev_trim_ratio, Math_clamp(get(Elev_trim_ratio) + human_input * caculated_human_trim_speed * get(DELTA_TIME), -1, 1))
+        set(Elev_trim_ratio, Math_clamp(get(Elev_trim_ratio) + human_input * caculated_human_trim_speed * get(DELTA_TIME) * (1 - get(FAILURE_FCTL_THS_MECH)), -1, 1))
         set(THS_input_dataref, get(Elev_trim_ratio))
         set(Human_pitch_trim, 0)
     else

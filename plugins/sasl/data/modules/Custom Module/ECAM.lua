@@ -473,58 +473,64 @@ function draw()
         sasl.gl.drawArc(size[1]/2 + 360, size[2]/2 - 110, 76, 80, 240, 60, right_tire_psi_color)
 
     elseif get(Ecam_current_page) == 11 then    -- F/CTL
-    
-        local is_G_ok = get(Hydraulic_G_press) >= 1450 
-        local is_B_ok = get(Hydraulic_B_press) >= 1450 
-        local is_Y_ok = get(Hydraulic_Y_press) >= 1450 
-        set(Ecam_fctl_is_rudder_ok, (is_G_ok or is_Y_ok or is_B_ok) and 1 or 0) 
-        set(Ecam_fctl_is_aileron_ok, (is_G_ok or is_B_ok) and 1 or 0) 
+        local is_G_ok = get(Hydraulic_G_press) >= 1450
+        local is_B_ok = get(Hydraulic_B_press) >= 1450
+        local is_Y_ok = get(Hydraulic_Y_press) >= 1450
+        set(Ecam_fctl_is_rudder_ok, (is_G_ok or is_Y_ok or is_B_ok) and 1 or 0)
+        set(Ecam_fctl_is_aileron_ok, (is_G_ok or is_B_ok) and 1 or 0)
         set(Ecam_fctl_is_elevator_R_ok, (is_Y_ok or is_B_ok) and 1 or 0)
-        set(Ecam_fctl_is_elevator_L_ok, (is_G_ok or is_B_ok) and 1 or 0) 
-        set(Ecam_fctl_is_pitch_trim_ok, (is_G_ok or is_Y_ok) and 1 or 0) 
+        set(Ecam_fctl_is_elevator_L_ok, (is_G_ok or is_B_ok) and 1 or 0)
+        set(Ecam_fctl_is_pitch_trim_ok, (is_G_ok or is_Y_ok) and 1 or 0)
 
         -- rudder
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-29, size[2]/2-165, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+2, size[2]/2-165, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+31, size[2]/2-165, "Y", 30, false, false, TEXT_ALIGN_CENTER, is_Y_ok and ECAM_GREEN or ECAM_ORANGE)
+        Sasl_DrawWideFrame(410, size[2]/2-168, 25, 29, 2, 0, is_G_ok and {0,0,0,0} or ECAM_ORANGE)
+        Sasl_DrawWideFrame(438, size[2]/2-168, 25, 29, 2, 0, is_B_ok and {0,0,0,0} or ECAM_ORANGE)
+        Sasl_DrawWideFrame(466, size[2]/2-168, 25, 29, 2, 0, is_Y_ok and {0,0,0,0} or ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-26, size[2]/2-164, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+2, size[2]/2-164, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+29, size[2]/2-164, "Y", 30, false, false, TEXT_ALIGN_CENTER, is_Y_ok and ECAM_GREEN or ECAM_ORANGE)
 
         -- spdbrk
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-29, size[2]-47, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+2, size[2]-47, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+31, size[2]-47, "Y", 30, false, false, TEXT_ALIGN_CENTER, is_Y_ok and ECAM_GREEN or ECAM_ORANGE)
+        Sasl_DrawWideFrame(410, size[2]/2+401, 25, 29, 2, 0, is_G_ok and {0,0,0,0} or ECAM_ORANGE)
+        Sasl_DrawWideFrame(438, size[2]/2+401, 25, 29, 2, 0, is_B_ok and {0,0,0,0} or ECAM_ORANGE)
+        Sasl_DrawWideFrame(466, size[2]/2+401, 25, 29, 2, 0, is_Y_ok and {0,0,0,0} or ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-26, size[2]/2+405, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+2, size[2]/2+405, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+29, size[2]/2+405, "Y", 30, false, false, TEXT_ALIGN_CENTER, is_Y_ok and ECAM_GREEN or ECAM_ORANGE)
 
-        -- elevators        
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-265, size[2]/2-190, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-234, size[2]/2-190, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
+        -- elevators
+        Sasl_DrawWideFrame(174, size[2]/2-193, 25, 29, 2, 0, is_B_ok and {0,0,0,0} or ECAM_ORANGE)
+        Sasl_DrawWideFrame(203, size[2]/2-193, 25, 29, 2, 0, is_G_ok and {0,0,0,0} or ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-263, size[2]/2-189, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-233, size[2]/2-189, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
 
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+237, size[2]/2-190, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+268, size[2]/2-190, "Y", 30, false, false, TEXT_ALIGN_CENTER, is_Y_ok and ECAM_GREEN or ECAM_ORANGE)
+        Sasl_DrawWideFrame(673, size[2]/2-193, 25, 29, 2, 0, is_Y_ok and {0,0,0,0} or ECAM_ORANGE)
+        Sasl_DrawWideFrame(702, size[2]/2-193, 25, 29, 2, 0, is_B_ok and {0,0,0,0} or ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+237, size[2]/2-189, "Y", 30, false, false, TEXT_ALIGN_CENTER, is_Y_ok and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+267, size[2]/2-189, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
 
         -- pitch trim
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+98, size[2]/2-10, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+126, size[2]/2-10, "Y", 30, false, false, TEXT_ALIGN_CENTER, is_Y_ok and ECAM_GREEN or ECAM_ORANGE)
+        Sasl_DrawWideFrame(535, size[2]/2-12, 25, 29, 2, 0, is_G_ok and {0,0,0,0} or ECAM_ORANGE)
+        Sasl_DrawWideFrame(563, size[2]/2-12, 25, 29, 2, 0, is_Y_ok and {0,0,0,0} or ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+98, size[2]/2-8, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+125, size[2]/2-8, "Y", 30, false, false, TEXT_ALIGN_CENTER, is_Y_ok and ECAM_GREEN or ECAM_ORANGE)
 
-        -- ailerons        
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-265, size[2]/2+45, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-234, size[2]/2+45, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
+        -- ailerons
+        Sasl_DrawWideFrame(174, size[2]/2+42, 25, 29, 2, 0, is_B_ok and {0,0,0,0} or ECAM_ORANGE)
+        Sasl_DrawWideFrame(203, size[2]/2+42, 25, 29, 2, 0, is_G_ok and {0,0,0,0} or ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-263, size[2]/2+46, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-233, size[2]/2+46, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
 
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+237, size[2]/2+45, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+268, size[2]/2+45, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
+        Sasl_DrawWideFrame(673, size[2]/2+42, 25, 29, 2, 0, is_G_ok and {0,0,0,0} or ECAM_ORANGE)
+        Sasl_DrawWideFrame(702, size[2]/2+42, 25, 29, 2, 0, is_B_ok and {0,0,0,0} or ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+237, size[2]/2+46, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+267, size[2]/2+46, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
 
-        if get(THS_avail) == 1 then
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2-25, size[2]/2-50, tostring(math.floor(math.abs(get(Elev_trim_degrees)))) .. "." ..  tostring(math.floor((math.abs(get(Elev_trim_degrees)) - math.floor(math.abs(get(Elev_trim_degrees)))) * 10)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-            if get(Elev_trim_degrees) >= 0 then
-                sasl.gl.drawText(Font_AirbusDUL, size[1]/2+45, size[2]/2-50, "UP", 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-            else
-                sasl.gl.drawText(Font_AirbusDUL, size[1]/2+45, size[2]/2-50, "DN", 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-            end
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-25, size[2]/2-50, tostring(math.floor(math.abs(get(Elev_trim_degrees)))) .. "." ..  tostring(math.floor((math.abs(get(Elev_trim_degrees)) - math.floor(math.abs(get(Elev_trim_degrees)))) * 10)), 30, false, false, TEXT_ALIGN_CENTER, get(THS_avail) == 1 and ECAM_GREEN or ECAM_ORANGE)
+        if get(Elev_trim_degrees) >= 0 then
+            sasl.gl.drawText(Font_AirbusDUL, size[1]/2+45, size[2]/2-50, "UP", 30, false, false, TEXT_ALIGN_CENTER, get(THS_avail) == 1 and ECAM_GREEN or ECAM_ORANGE)
         else
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2-25, size[2]/2-50, tostring(math.floor(math.abs(get(Elev_trim_degrees)))) .. "." ..  tostring(math.floor((math.abs(get(Elev_trim_degrees)) - math.floor(math.abs(get(Elev_trim_degrees)))) * 10)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
-            if get(Elev_trim_degrees) >= 0 then
-                sasl.gl.drawText(Font_AirbusDUL, size[1]/2+45, size[2]/2-50, "UP", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
-            else
-                sasl.gl.drawText(Font_AirbusDUL, size[1]/2+45, size[2]/2-50, "DN", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
-            end
+            sasl.gl.drawText(Font_AirbusDUL, size[1]/2+45, size[2]/2-50, "DN", 30, false, false, TEXT_ALIGN_CENTER, get(THS_avail) == 1 and ECAM_GREEN or ECAM_ORANGE)
         end
     elseif get(Ecam_current_page) == 12 then --STS
         draw_sts_page()
@@ -533,7 +539,7 @@ function draw()
     end
 
     draw_ecam_lower_section()
-    
+
     -- Update STS box
     set(EWD_box_sts, 0)
     if (not ecam_sts:is_normal()) or (not ecam_sts:is_normal_maintenance() and get(EWD_flight_phase) == 10 ) then
