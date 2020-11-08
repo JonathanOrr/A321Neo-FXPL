@@ -43,11 +43,27 @@ local function draw_pack_indications()
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2+330, 140, "PACK 2", 36, false, false, TEXT_ALIGN_CENTER, get(Ecam_press_pack_2_triangle) == 1 and ECAM_WHITE or ECAM_ORANGE)
 end
 
+local function draw_valves_text()
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-205, 270, "INLET", 34, false, false, TEXT_ALIGN_CENTER, get(FAILURE_AVIONICS_INLET) == 1 and ECAM_ORANGE or ECAM_WHITE)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-10, 270, "OUTLET", 34, false, false, TEXT_ALIGN_CENTER, get(FAILURE_AVIONICS_OUTLET) == 1 and ECAM_ORANGE or ECAM_WHITE)
+
+    local faulty_blower_or_extract = get(FAILURE_AIRCOND_VENT_BLOWER) == 1 or get(FAILURE_AIRCOND_VENT_EXTRACT) == 1
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-115, 330, "VENT", 34, false, false, TEXT_ALIGN_CENTER, faulty_blower_or_extract and ECAM_ORANGE or ECAM_WHITE)
+
+    if get(FAILURE_AIRCOND_VENT_BLOWER) == 1 then
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-240, 330, "BLOWER", 34, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+    end
+    if get(FAILURE_AIRCOND_VENT_EXTRACT) == 1 then
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+20, 330, "EXTRACT", 34, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+    end
+end
+
 function draw_press_page()
 
     draw_press_info()
-    draw_valve_inlet(get(Ventilation_avio_inlet_valve), false)  -- TODO Add failure
-    draw_valve_outlet(get(Ventilation_avio_outlet_valve), false)  -- TODO Add failure
+    draw_valves_text()
+    draw_valve_inlet(get(Ventilation_avio_inlet_valve), get(FAILURE_AVIONICS_INLET) == 1)
+    draw_valve_outlet(get(Ventilation_avio_outlet_valve), get(FAILURE_AVIONICS_OUTLET) == 1)
 
     draw_pack_indications()
 end

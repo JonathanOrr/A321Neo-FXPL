@@ -164,3 +164,7 @@ FAILURE_AI_Window_Heat_R = createGlobalPropertyi("a321neo/failures/anti_ice/wind
 
 
 FAILURE_AVIONICS_SMOKE = createGlobalPropertyi("a321neo/failures/misc/avionics_smoke", 0, false, true, false)
+FAILURE_AVIONICS_INLET = createGlobalPropertyi("a321neo/failures/misc/avionics_inlet", 0, false, true, false)
+FAILURE_AVIONICS_OUTLET = createGlobalPropertyi("a321neo/failures/misc/avionics_outlet", 0, false, true, false)
+
+

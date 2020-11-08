@@ -278,7 +278,7 @@ function udpate_avio_config()
         -- Threshold based when THR not in takeoff power
         if avio_configuration == AVIO_CLOSED and avio_skin_temperature > 12 then
             avio_configuration = AVIO_INTERM
-        elseif avio_configuration == AVIO_OPEN and avio_skin_temperature < 9 then
+        elseif avio_configuration == AVIO_INTERM and avio_skin_temperature < 9 then
             avio_configuration = AVIO_CLOSED        
         end
     end
@@ -291,18 +291,25 @@ function udpate_avio_config()
 end
 
 function update_avio_valves()
-    if avio_configuration == AVIO_OPEN then
-        Set_dataref_linear_anim(Ventilation_avio_inlet_valve, 10, 0, 10, 1+math.random())
-    else
-        Set_dataref_linear_anim(Ventilation_avio_inlet_valve, 0, 0, 10, 1+math.random())
-    end
 
-    if avio_configuration == AVIO_OPEN then
-        Set_dataref_linear_anim(Ventilation_avio_outlet_valve, 10, 0, 10, 1+math.random())
-    elseif avio_configuration == AVIO_SMOKE or avio_configuration == AVIO_INTERM  then
-        Set_dataref_linear_anim(Ventilation_avio_outlet_valve, 5, 0, 10, 1+math.random())
-    else
-        Set_dataref_linear_anim(Ventilation_avio_outlet_valve, 0, 0, 10, 1+math.random())
+    -- If a valve is not failed ...
+    if get(FAILURE_AVIONICS_INLET) == 0 then
+        if avio_configuration == AVIO_OPEN then
+            Set_dataref_linear_anim(Ventilation_avio_inlet_valve, 10, 0, 10, 1+math.random())
+        else
+            Set_dataref_linear_anim(Ventilation_avio_inlet_valve, 0, 0, 10, 1+math.random())
+        end
+    end
+    
+    -- If a valve is not failed ...
+    if get(FAILURE_AVIONICS_OUTLET) == 0 then
+        if avio_configuration == AVIO_OPEN then
+            Set_dataref_linear_anim(Ventilation_avio_outlet_valve, 10, 0, 10, 1+math.random())
+        elseif avio_configuration == AVIO_SMOKE or avio_configuration == AVIO_INTERM  then
+            Set_dataref_linear_anim(Ventilation_avio_outlet_valve, 5, 0, 10, 1+math.random())
+        else
+            Set_dataref_linear_anim(Ventilation_avio_outlet_valve, 0, 0, 10, 1+math.random())
+        end
     end
 end
 
@@ -311,6 +318,8 @@ function onAirportLoaded()
 end
 
 function update()
+
+    print(avio_skin_temperature)
 
     update_knobs()
     update_avio_ventilation()

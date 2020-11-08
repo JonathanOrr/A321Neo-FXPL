@@ -224,8 +224,8 @@ local function draw_engines()
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-140, size[2]/2+150, params.eng1_egt, 28, false, false, TEXT_ALIGN_RIGHT, egt_color_1)
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2+210, size[2]/2+150, params.eng2_egt, 28, false, false, TEXT_ALIGN_RIGHT, egt_color_2)
     --N2--
-    local n2_color_1 = params.eng1_n2 > 116.5 and ECAM_RED or ECAM_GREEN
-    local n2_color_2 = params.eng2_n2 > 116.5 and ECAM_RED or ECAM_GREEN
+    local n2_color_1 = params.eng1_n2 > 117 and ECAM_RED or ECAM_GREEN
+    local n2_color_2 = params.eng2_n2 > 117 and ECAM_RED or ECAM_GREEN
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-145, size[2]/2+75, math.floor(params.eng1_n2) .. "." , 30, false, false, TEXT_ALIGN_RIGHT, n2_color_1)
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-130, size[2]/2+75, math.floor((params.eng1_n2%1)*10) , 24, false, false, TEXT_ALIGN_RIGHT, n2_color_1)
 
