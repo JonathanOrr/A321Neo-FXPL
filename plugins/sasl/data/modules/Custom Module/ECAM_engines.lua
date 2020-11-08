@@ -27,65 +27,97 @@ local function draw_fuel_usage()
 
 end
 
+local function pulse_green(condition)
+    if condition then
+        if get(TIME) % 1 > 0.5 then
+            return ECAM_GREEN
+        else
+            return ECAM_HIGH_GREEN
+        end
+    else
+        return ECAM_GREEN    
+    end
+end
+
 local function draw_oil_qt_press_temp()
+
+    local eng_1_oil_color = pulse_green(get(Eng_1_OIL_qty) < 2)
+    local eng_2_oil_color = pulse_green(get(Eng_2_OIL_qty) < 2)
+
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-153, 625, math.floor(get(Eng_1_OIL_qty)) .. "." , 36,
-                     false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+                     false, false, TEXT_ALIGN_RIGHT, eng_1_oil_color)
 
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-136, 625, math.floor((get(Eng_1_OIL_qty)%1)*10), 28,
-                    false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+                    false, false, TEXT_ALIGN_RIGHT, eng_1_oil_color)
 
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2+223, 625, math.floor(get(Eng_2_OIL_qty)) .. "." , 36,
-                    false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+                    false, false, TEXT_ALIGN_RIGHT, eng_2_oil_color)
 
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2+240, 625, math.floor((get(Eng_2_OIL_qty)%1)*10) , 28,
-                    false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+                    false, false, TEXT_ALIGN_RIGHT, eng_2_oil_color)
+
+    local eng_1_oil_color = pulse_green(get(Eng_1_OIL_press) > 90 or get(Eng_1_OIL_press) < 13)
+    local eng_2_oil_color = pulse_green(get(Eng_2_OIL_press) > 90 or get(Eng_2_OIL_press) < 13)
+    if get(Eng_1_OIL_press) < 13 then eng_1_oil_color = ECAM_RED end
+    if get(Eng_2_OIL_press) < 13 then eng_2_oil_color = ECAM_RED end
 
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-165, 525, params.eng1_oil_press, 36,
-                     false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+                     false, false, TEXT_ALIGN_RIGHT, eng_1_oil_color)
 
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2+213, 525, params.eng2_oil_press ,36,
-                    false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+                    false, false, TEXT_ALIGN_RIGHT, eng_2_oil_color)
 
+    local eng_1_oil_color = pulse_green(get(Eng_1_OIL_temp) > 140)
+    local eng_2_oil_color = pulse_green(get(Eng_2_OIL_temp) > 140)
+    if get(Eng_1_OIL_temp) > 155 then eng_1_oil_color = ECAM_AMBER end
+    if get(Eng_2_OIL_temp) > 155 then eng_2_oil_color = ECAM_AMBER end
+    
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-187, 455, params.eng1_oil_temp ,36,
-                     false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+                     false, false, TEXT_ALIGN_CENTER, eng_1_oil_color)
 
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2+187, 455, params.eng2_oil_temp ,36,
-                    false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+                    false, false, TEXT_ALIGN_CENTER, eng_2_oil_color)
 
                     
 end
 
 local function draw_vibrations()
-                    
+
+    local eng1_vib1_color = pulse_green(params.eng1_vib_n1 > 6)
+    local eng1_vib2_color = pulse_green(params.eng1_vib_n2 > 4.3)
+    local eng2_vib1_color = pulse_green(params.eng2_vib_n1 > 6)
+    local eng2_vib2_color = pulse_green(params.eng2_vib_n2 > 4.3)
+
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-175, 385, math.floor(params.eng1_vib_n1) .. "." , 36,
-                     false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+                     false, false, TEXT_ALIGN_RIGHT, eng1_vib1_color)
 
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-155, 385, math.floor((params.eng1_vib_n1%1)*10), 28,
-                    false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+                    false, false, TEXT_ALIGN_RIGHT, eng1_vib1_color)
                     
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2+200, 385, math.floor(params.eng2_vib_n1) .. "." , 36,
-                    false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+                    false, false, TEXT_ALIGN_RIGHT, eng2_vib1_color)
 
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2+220, 385, math.floor((params.eng2_vib_n1%1)*10) , 28,
-                    false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+                    false, false, TEXT_ALIGN_RIGHT, eng2_vib1_color)
                     
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-175, 350, math.floor(params.eng1_vib_n2) .. "." , 36,
-                     false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+                     false, false, TEXT_ALIGN_RIGHT, eng1_vib2_color)
 
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-155, 350, math.floor((params.eng1_vib_n2%1)*10), 28,
-                    false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+                    false, false, TEXT_ALIGN_RIGHT, eng1_vib2_color)
                     
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2+200, 350, math.floor(params.eng2_vib_n2) .. "." , 36,
-                    false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+                    false, false, TEXT_ALIGN_RIGHT, eng2_vib2_color)
 
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2+220, 350, math.floor((params.eng2_vib_n2%1)*10) , 28,
-                    false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+                    false, false, TEXT_ALIGN_RIGHT, eng2_vib2_color)
 end
 
 local function draw_bleed()
-
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-188, 136, math.floor(get(L_bleed_press)), 36, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+192, 136, math.floor(get(R_bleed_press)), 36, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+    local bleed_1_press_color = get(L_bleed_press) < 21 and ECAM_ORANGE or ECAM_GREEN
+    local bleed_2_press_color = get(L_bleed_press) < 21 and ECAM_ORANGE or ECAM_GREEN
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-188, 136, math.floor(get(L_bleed_press)), 36, false, false, TEXT_ALIGN_CENTER, bleed_1_press_color)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+192, 136, math.floor(get(R_bleed_press)), 36, false, false, TEXT_ALIGN_CENTER, bleed_2_press_color)
 end
 
 local function draw_special()
