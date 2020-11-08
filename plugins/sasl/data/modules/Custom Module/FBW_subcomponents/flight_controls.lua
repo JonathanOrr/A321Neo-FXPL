@@ -1,13 +1,13 @@
 include("FBW_subcomponents/flight_ctl_subcomponents/slat_flaps_control.lua")
 include("FBW_subcomponents/flight_ctl_subcomponents/lateral_ctl.lua")
 include("FBW_subcomponents/flight_ctl_subcomponents/vertical_ctl.lua")
-include("FBW_subcomponents/flight_ctl_subcomponents/check_surface_avil.lua")
+include("FBW_subcomponents/flight_ctl_subcomponents/check_avil_and_failure.lua")
 
 --variables--
 local total_roll = 0
 local total_pitch = 0
 local total_yaw = 0
-
+local last_total_failure = 0--last value of the up shit creek dataref
 --sim datarefs
 
 local servo_roll = globalProperty("sim/joystick/servo_roll_ratio")
@@ -84,7 +84,8 @@ function update()
             Elevator_control(total_pitch)
             Slats_flaps_calc_and_control()
             THS_control(Augmented_pitch_trim_ratio, get(Human_pitch_trim))
-
+            Up_shit_creek(last_total_failure)
+            last_total_failure = get(FAILURE_FCTL_UP_SHIT_CREEK)
             --Rudder
             --Set_dataref_linear_anim(Rudder, get(Yaw_lim) * (total_yaw), -30, 30, 25)
         end

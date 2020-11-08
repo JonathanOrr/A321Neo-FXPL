@@ -23,12 +23,8 @@ function Ailerons_control(lateral_input, has_florence_kit, ground_spoilers_mode)
     r_aileron_actual_speed = Math_rescale(0, no_hyd_spd, 1450, ailerons_speed, get(Hydraulic_B_press) + get(Hydraulic_G_press))
 
     --detect surface failures
-    if get(FAILURE_FCTL_LAIL) == 1 then
-        l_aileron_actual_speed = 0
-    end
-    if get(FAILURE_FCTL_RAIL) == 1 then
-        r_aileron_actual_speed = 0
-    end
+    l_aileron_actual_speed = l_aileron_actual_speed * (1 - get(FAILURE_FCTL_LAIL))
+    r_aileron_actual_speed = r_aileron_actual_speed * (1 - get(FAILURE_FCTL_RAIL))
 
     --TRAVEL TARGETS CALTULATION
     --ground spoilers
@@ -91,6 +87,9 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
     local l_spoilers_flt_computer_dataref = {SEC_3_status, SEC_3_status, SEC_1_status, SEC_1_status, SEC_2_status}
     local r_spoilers_flt_computer_dataref = {SEC_3_status, SEC_3_status, SEC_1_status, SEC_1_status, SEC_2_status}
 
+    local l_spoilers_failure_dataref = {FAILURE_FCTL_LSPOIL_1, FAILURE_FCTL_LSPOIL_2, FAILURE_FCTL_LSPOIL_3, FAILURE_FCTL_LSPOIL_4, FAILURE_FCTL_LSPOIL_5}
+    local r_spoilers_failure_dataref = {FAILURE_FCTL_RSPOIL_1, FAILURE_FCTL_RSPOIL_2, FAILURE_FCTL_RSPOIL_3, FAILURE_FCTL_RSPOIL_4, FAILURE_FCTL_RSPOIL_5}
+
     --limit input range
     spdbrk_input = Math_clamp(spdbrk_input, 0, 1)
 
@@ -101,40 +100,52 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
 
     local l_spoilers_total_max_def = {40, 40, 40, 40, 40}
     local r_spoilers_total_max_def = {40, 40, 40, 40, 40}
-
     local l_spoilers_spdbrk_max_def = {6, 20, 40, 40, 0}
     local r_spoilers_spdbrk_max_def = {6, 20, 40, 40, 0}
-
     local l_spoilers_roll_max_def = {0, 35, 7, 35, 35}
     local r_spoilers_roll_max_def = {0, 35, 7, 35, 35}
+
+    local l_spoilers_spdbrk_max_ground_def = {6, 20, 40, 40, 0}
+    local r_spoilers_spdbrk_max_ground_def = {6, 20, 40, 40, 0}
+    local l_spoilers_spdbrk_max_manual_flight_def = {0, 20, 40, 40, 0}
+    local r_spoilers_spdbrk_max_manual_flight_def = {0, 20, 40, 40, 0}
+    local l_spoilers_spdbrk_max_auto_flight_def = {0, 12.5, 25, 25, 0}
+    local r_spoilers_spdbrk_max_auto_flight_def = {0, 12.5, 25, 25, 0}
+    local l_spoilers_roll_max_ground_def = {0, 35, 7, 35, 35}
+    local r_spoilers_roll_max_ground_def = {0, 35, 7, 35, 35}
+    local l_spoilers_roll_max_air_def = {0, 25, 7, 25, 25}
+    local r_spoilers_roll_max_air_def = {0, 25, 7, 25, 25}
 
     local l_spoilers_spdbrk_spd = {8, 8, 8, 8, 8}
     local r_spoilers_spdbrk_spd = {8, 8, 8, 8, 8}
     local l_spoilers_roll_spd = {0, 40, 40, 40, 40}
     local r_spoilers_roll_spd = {0, 40, 40, 40, 40}
 
+    local l_spoilers_spdbrk_ground_spd = {20, 20, 20, 20, 20}
+    local r_spoilers_spdbrk_ground_spd = {20, 20, 20, 20, 20}
+
     if in_auto_flight == true then
-        l_spoilers_spdbrk_max_def = {0, 12.5, 25, 25, 0}
-        r_spoilers_spdbrk_max_def = {0, 12.5, 25, 25, 0}
+        l_spoilers_spdbrk_max_def = l_spoilers_spdbrk_max_auto_flight_def
+        r_spoilers_spdbrk_max_def = r_spoilers_spdbrk_max_auto_flight_def
     else
-        l_spoilers_spdbrk_max_def = {0, 20, 40, 40, 0}
-        r_spoilers_spdbrk_max_def = {0, 20, 40, 40, 0}
+        l_spoilers_spdbrk_max_def = l_spoilers_spdbrk_max_manual_flight_def
+        r_spoilers_spdbrk_max_def = r_spoilers_spdbrk_max_manual_flight_def
     end
 
     if get(Aft_wheel_on_ground) == 1 then
-        l_spoilers_roll_max_def = {0, 35, 7, 35, 35}
-        r_spoilers_roll_max_def = {0, 35, 7, 35, 35}
+        l_spoilers_roll_max_def = l_spoilers_roll_max_ground_def
+        r_spoilers_roll_max_def = r_spoilers_roll_max_ground_def
 
         --speed up ground spoilers deflection
-        l_spoilers_spdbrk_spd = {20, 20, 20, 20, 20}
-        r_spoilers_spdbrk_spd = {20, 20, 20, 20, 20}
+        l_spoilers_spdbrk_spd = l_spoilers_spdbrk_ground_spd
+        r_spoilers_spdbrk_spd = r_spoilers_spdbrk_ground_spd
 
         --on ground and slightly open spoiler 1 with speedbrake handle
-        l_spoilers_spdbrk_max_def = {6, 20, 40, 40, 0}
-        r_spoilers_spdbrk_max_def = {6, 20, 40, 40, 0}
+        l_spoilers_spdbrk_max_def = l_spoilers_spdbrk_max_ground_def
+        r_spoilers_spdbrk_max_def = r_spoilers_spdbrk_max_ground_def
     else
-        l_spoilers_roll_max_def = {0, 25, 7, 25, 25}
-        r_spoilers_roll_max_def = {0, 25, 7, 25, 25}
+        l_spoilers_roll_max_def = l_spoilers_roll_max_air_def
+        r_spoilers_roll_max_def = r_spoilers_roll_max_air_def
     end
 
     --detect if hydraulics power is avail to the surfaces then accordingly slow down the speed
@@ -145,6 +156,14 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
         --roll spoilers
         l_spoilers_roll_spd[i] = Math_rescale(0, 0, 1450, l_spoilers_roll_spd[i], get(l_spoilers_hyd_sys_dataref[i]))
         r_spoilers_roll_spd[i] = Math_rescale(0, 0, 1450, r_spoilers_roll_spd[i], get(r_spoilers_hyd_sys_dataref[i]))
+    end
+
+    --FAILURE MANAGER--
+    for i = 1, num_of_spoils_per_wing do
+        l_spoilers_spdbrk_spd[i] = l_spoilers_spdbrk_spd[i] * (1 - get(l_spoilers_failure_dataref[i])) * (1 - get(r_spoilers_failure_dataref[i]))
+        r_spoilers_spdbrk_spd[i] = r_spoilers_spdbrk_spd[i] * (1 - get(l_spoilers_failure_dataref[i])) * (1 - get(r_spoilers_failure_dataref[i]))
+        l_spoilers_roll_spd[i] = l_spoilers_roll_spd[i] * (1 - get(l_spoilers_failure_dataref[i])) * (1 - get(r_spoilers_failure_dataref[i]))
+        r_spoilers_roll_spd[i] = r_spoilers_roll_spd[i] * (1 - get(l_spoilers_failure_dataref[i])) * (1 - get(r_spoilers_failure_dataref[i]))
     end
 
     --conditions
