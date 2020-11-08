@@ -242,11 +242,11 @@ function udpate_avio_temps()
         -- Temperature in such configurations is decreasing in the skin heat exchanger
         avio_skin_temperature = Set_linear_anim_value(avio_skin_temperature, get(TAT), -100, 150, 0.1)
     elseif avio_configuration == AVIO_CLOSED then
-        avio_skin_temperature = Set_linear_anim_value(avio_skin_temperature, temp_target_avio*0.8, -100, 150, 0.4)    
+        avio_skin_temperature = Set_linear_anim_value(avio_skin_temperature, temp_target_avio*0.8, -100, 150, 0.2)    
     elseif avio_configuration == AVIO_INTERM then
-        avio_skin_temperature = Set_linear_anim_value(avio_skin_temperature, temp_target_avio*0.6, -100, 150, 0.2)
+        avio_skin_temperature = Set_linear_anim_value(avio_skin_temperature, temp_target_avio*0.6, -100, 150, 0.1)
     elseif avio_configuration == AVIO_ISOLATED then
-        avio_skin_temperature = Set_linear_anim_value(avio_skin_temperature, temp_target_avio, -100, 150, 0.5)
+        avio_skin_temperature = Set_linear_anim_value(avio_skin_temperature, temp_target_avio, -100, 150, 0.3)
     end
 
 end
@@ -290,6 +290,22 @@ function udpate_avio_config()
     end
 end
 
+function update_avio_valves()
+    if avio_configuration == AVIO_OPEN then
+        Set_dataref_linear_anim(Ventilation_avio_inlet_valve, 10, 0, 10, 1+math.random())
+    else
+        Set_dataref_linear_anim(Ventilation_avio_inlet_valve, 0, 0, 10, 1+math.random())
+    end
+
+    if avio_configuration == AVIO_OPEN then
+        Set_dataref_linear_anim(Ventilation_avio_outlet_valve, 10, 0, 10, 1+math.random())
+    elseif avio_configuration == AVIO_SMOKE or avio_configuration == AVIO_INTERM  then
+        Set_dataref_linear_anim(Ventilation_avio_outlet_valve, 5, 0, 10, 1+math.random())
+    else
+        Set_dataref_linear_anim(Ventilation_avio_outlet_valve, 0, 0, 10, 1+math.random())
+    end
+end
+
 function onAirportLoaded()
     reset_cabin_model()
 end
@@ -300,6 +316,7 @@ function update()
     update_avio_ventilation()
     udpate_avio_temps()
     udpate_avio_config()
+    update_avio_valves()
     update_cabin_model()
     update_pack_valves()
     update_temp_from_valves()

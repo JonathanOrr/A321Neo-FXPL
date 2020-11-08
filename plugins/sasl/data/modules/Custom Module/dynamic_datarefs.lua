@@ -40,8 +40,8 @@ Ventilation_blower_override  = createGlobalPropertyi("a321neo/dynamics/aircond/v
 Ventilation_extract_override = createGlobalPropertyi("a321neo/dynamics/aircond/vent_extract_override", 0, false, true, false) -- 0 normal, 1 override
 Ventilation_blower_running  = createGlobalPropertyi("a321neo/dynamics/aircond/vent_blower_running", 0, false, true, false)  -- 0 OFF, 1 ON
 Ventilation_extract_running = createGlobalPropertyi("a321neo/dynamics/aircond/vent_extract_running", 0, false, true, false) -- 0 OFF, 1 ON
-Ventilation_avio_inlet_valve = createGlobalPropertyf("a321neo/dynamics/aircond/avio_inlet_valve", 1, false, true, false)
-Ventilation_avio_outlet_valve = createGlobalPropertyf("a321neo/dynamics/aircond/avio_outlet_valve", 0, false, true, false)
+Ventilation_avio_inlet_valve = createGlobalPropertyf("a321neo/dynamics/aircond/avio_inlet_valve", 1, false, true, false)    -- 0 closed, 10 full open
+Ventilation_avio_outlet_valve = createGlobalPropertyf("a321neo/dynamics/aircond/avio_outlet_valve", 0, false, true, false)  -- 0 closed, 10 full open
 
 --PACKS
 L_Eng_LP_press = createGlobalPropertyi("a321neo/dynamics/packs/l_eng_press", 0, false, true, false)

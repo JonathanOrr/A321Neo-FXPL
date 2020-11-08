@@ -11,6 +11,7 @@ include('ECAM_elec.lua')
 include('ECAM_engines.lua')
 include('ECAM_fuel.lua')
 include('ECAM_status.lua')
+include('ECAM_press.lua')
 
 include('constants.lua')
 
@@ -152,6 +153,8 @@ function update()
 	
 	if get(Ecam_current_page) == 2 then
         ecam_update_bleed_page()
+    elseif get(Ecam_current_page) == 3 then
+        ecam_update_press_page()
     elseif get(Ecam_current_page) == 7 then
         ecam_update_apu_page()
     elseif get(Ecam_current_page) == 8 then
@@ -422,10 +425,7 @@ function draw()
     elseif get(Ecam_current_page) == 2 then --bleed
         draw_bleed_page()
     elseif get(Ecam_current_page) == 3 then --press
-        --pressure info
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-225, size[2]/2+150, math.floor(get(Cabin_delta_psi)), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+30, size[2]/2+180, math.floor(get(Cabin_vs)), 30, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+290, size[2]/2+150, math.floor(get(Cabin_alt_ft)), 30, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+        draw_press_page()
     elseif get(Ecam_current_page) == 4 then --elec
         draw_elec_page()
     elseif get(Ecam_current_page) == 5 then --hyd
