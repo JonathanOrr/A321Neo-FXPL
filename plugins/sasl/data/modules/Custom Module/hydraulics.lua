@@ -258,7 +258,7 @@ local function update_sys_status()
 
     g_sys.is_engine_pump_on = status_buttons.eng1pump and get(Engine_1_avail) == 1 and get(FAILURE_HYD_G_pump) == 0 and get(Hydraulic_G_qty) > 0
     y_sys.is_engine_pump_on = status_buttons.eng2pump and get(Engine_2_avail) == 1 and get(FAILURE_HYD_Y_pump) == 0 and get(Hydraulic_Y_qty) > 0
-    b_sys.is_elec_pump_on = status_buttons.elecBpump and (get(Engine_1_avail) == 1 or  get(Engine_2_avail) == 1) and get(FAILURE_HYD_B_pump) == 0 and get(Hydraulic_B_qty) > 0 and get(AC_bus_1_pwrd) == 1
+    b_sys.is_elec_pump_on = status_buttons.elecBpump and (get(Engine_1_avail) == 1 or  get(Engine_2_avail) == 1) and get(FAILURE_HYD_B_pump) == 0 and get(AC_bus_1_pwrd) == 1  and get(Hydraulic_B_qty) > 0
     y_sys.is_elec_pump_on = status_buttons.elecYpump and get(FAILURE_HYD_Y_E_pump) == 0 and get(Hydraulic_Y_qty) > 0 and get(AC_bus_2_pwrd) == 1
 
 
@@ -292,9 +292,9 @@ local function update_sys_status()
 
     
     if get(is_RAT_out) == 1 then
-        b_sys.is_rat_pump_on = get(FAILURE_HYD_RAT)  == 0
+        b_sys.is_rat_pump_on = get(FAILURE_HYD_RAT) == 0 and get(Hydraulic_B_qty) > 0
     
-        if get(FAILURE_HYD_RAT) == 1 then
+        if get(FAILURE_HYD_RAT) == 1 or get(Hydraulic_B_qty) == 0 then
             set(Hydraulic_RAT_status, 2)
         elseif get(IAS) < 140 then
             set(Hydraulic_RAT_status, 2)
