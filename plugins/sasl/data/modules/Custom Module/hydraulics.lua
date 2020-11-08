@@ -302,6 +302,7 @@ local function update_sys_status()
             set(Hydraulic_RAT_status, 1)
         end
     else
+        b_sys.is_rat_pump_on = false
         set(Hydraulic_RAT_status, 0)
     end
 

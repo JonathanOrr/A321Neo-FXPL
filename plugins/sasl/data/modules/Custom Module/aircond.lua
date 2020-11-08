@@ -319,8 +319,6 @@ end
 
 function update()
 
-    print(avio_skin_temperature)
-
     update_knobs()
     update_avio_ventilation()
     udpate_avio_temps()
