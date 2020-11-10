@@ -13,7 +13,7 @@ Message_APU_AUTO_SHUT_DOWN = {
     end,
 
     is_active = function(self)
-      return get(FAILURE_Apu) == 6
+      return get(FAILURE_ENG_APU_FAIL) == 1
     end
 }
 
@@ -68,7 +68,7 @@ MessageGroup_APU_SHUTDOWN = {
 
     -- Method to check if this message group is active
     is_active = function(self)
-        return get(FAILURE_Apu) == 6 or get(FAILURE_Apu_fire) == 6
+        return get(FAILURE_ENG_APU_FAIL) == 1 or get(FAILURE_Apu_fire) == 6
     end,
 
     -- Method to check if this message is currently inhibithed

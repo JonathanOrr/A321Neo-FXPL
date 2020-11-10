@@ -6,7 +6,6 @@ ReqMasterWarning      = createGlobalPropertyi("a321neo/failures/req_master_warni
 FAILURE_radioalt_cap = createGlobalPropertyi("a321neo/failures/pfd/capt_radioalt", 0, false, true, false) -- 0: OK, 1: FAILED
 
 -- Systems
-FAILURE_Apu = globalProperty("sim/operation/failures/rel_apu")
 FAILURE_Apu_fire = globalProperty("sim/operation/failures/rel_apu_fire")
 FAILURE_TCAS = globalProperty("sim/operation/failures/rel_xpndr")
 
