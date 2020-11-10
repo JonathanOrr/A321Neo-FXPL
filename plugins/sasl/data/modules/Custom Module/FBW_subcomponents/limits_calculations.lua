@@ -132,16 +132,4 @@ function update()
     set(Fo_Vtoga_prot_delta,    get(PFD_Fo_IAS)   - get(Fo_Vtoga_prot))
     set(Capt_Valpha_MAX_delta,  get(PFD_Capt_IAS) - get(Capt_Valpha_MAX))
     set(Fo_Valpha_MAX_delta,    get(PFD_Fo_IAS)   - get(Fo_Valpha_MAX))
-
-    if get(FBW_status) == 2 then
-        yaw_limit_clamping_upper_limit = Set_anim_value(yaw_limit_clamping_upper_limit, 25, 25, 30, 31 * get(DELTA_TIME))
-    else
-        yaw_limit_clamping_upper_limit = Set_anim_value(yaw_limit_clamping_upper_limit, 30, 25, 30, 31 * get(DELTA_TIME))
-    end
-
-    if get(IAS) <= 140 then
-        set(Yaw_lim, Math_clamp(30, 3.4, yaw_limit_clamping_upper_limit))
-    else
-        set(Yaw_lim, Math_clamp(-26.6 * math.sqrt(1 - ((Math_clamp(get(IAS), 140, 380) - 380)^2) / 57600) + 30, 3.4, yaw_limit_clamping_upper_limit))
-    end
 end
