@@ -20,8 +20,8 @@ AIRCRAFT_SURFACE = {    -- Veeery approximate
 
 AIRCRAFT_VOLUME = {    -- Veeery approximate
     [CKPT] =  50,
-    [CABIN_FWD] = 215,
-    [CABIN_AFT] = 215,
+    [CABIN_FWD] = 200,
+    [CABIN_AFT] = 200,
     [CARGO_AFT] = 25
 }
 
@@ -111,7 +111,7 @@ local function compute_balance(n)
    
     total_heat = total_heat * get(DELTA_TIME)
 
-    local cabin_pressure   = 29.92*3386.39 - get(Set_cabin_alt_ft)*3.378431
+    local cabin_pressure   = 29.92*3386.39 - get(Cabin_alt_ft)*3.378431
     local flow_air_density = cabin_pressure/(DRY_AIR_CONSTANT*(get(Aircond_injected_flow_temp, n)+273.15))
 
     local mass_air = flow_air_density * AIRCRAFT_VOLUME[n]

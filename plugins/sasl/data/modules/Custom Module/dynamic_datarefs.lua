@@ -289,7 +289,9 @@ Cabin_alt_ft = globalProperty("sim/cockpit2/pressurization/indicators/cabin_alti
 Set_cabin_vs = globalProperty("sim/cockpit2/pressurization/actuators/cabin_vvi_fpm")
 Cabin_vs = globalProperty("sim/cockpit2/pressurization/indicators/cabin_vvi_fpm")
 Out_flow_valve_ratio = globalProperty("sim/cockpit2/pressurization/indicators/outflow_valve")
-
+Weather_curr_press_sea_level = globalProperty("sim/weather/barometer_sealevel_inhg")
+Weather_curr_press_flight_level = globalProperty("sim/weather/barometer_current_inhg")
+Override_pressurization = globalProperty("sim/operation/override/override_pressurization")
 
 --instruments
 VVI = globalProperty("sim/cockpit2/gauges/indicators/vvi_fpm_pilot")

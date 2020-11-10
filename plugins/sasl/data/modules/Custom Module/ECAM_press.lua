@@ -24,7 +24,7 @@ local function draw_valve_outlet(pos, failed)
     elseif math.ceil(pos) == 5 then
         sasl.gl.drawWideLine(size[1]/2-35, size[2]/2-219, size[1]/2-35+length*math.sin(3.14/4), size[2]/2-219-length*math.sin(3.14/4), 3, failed and ECAM_ORANGE or ECAM_GREEN)
     elseif math.ceil(pos) == 10 then
-        sasl.gl.drawWideLine(size[1]/2-38, size[2]/2-220, size[1]/2-38, size[2]/2-220-length, 3, failed and ECAM_ORANGE or ECAM_GREEN)
+        sasl.gl.drawWideLine(size[1]/2-38, size[2]/2-219, size[1]/2-38, size[2]/2-219-length, 3, failed and ECAM_ORANGE or ECAM_GREEN)
     else
         sasl.gl.drawWideLine(size[1]/2-35, size[2]/2-219, size[1]/2-35+length*math.sin(3.14/4), size[2]/2-219-length*math.sin(3.14/4), 3, ECAM_ORANGE)
     end
