@@ -16,6 +16,9 @@ function Check_surface_avail()
     set(L_elevator_avail, 1)
     set(R_elevator_avail, 1)
     set(THS_avail, 1)
+    set(Yaw_damper_avail, 1)
+    set(Rudder_avail, 1)
+    set(Rudder_trim_avail, 1)
 
     --computer failures--
     --single failure
@@ -42,7 +45,8 @@ function Check_surface_avail()
         set(R_aileron_avail, 0)
     end
     if get(FAC_1_status) == 0 and get(FAC_2_status) == 0 then
-
+        set(Yaw_damper_avail, 0)
+        set(Rudder_trim_avail, 0)
     end
 
     --tripple failure
@@ -80,6 +84,7 @@ function Check_surface_avail()
     end
     if get(Hydraulic_G_press) < 1450 and get(Hydraulic_Y_press) < 1450 then
         set(THS_avail, 0)
+        set(Yaw_damper_avail, 0)
     end
     if get(Hydraulic_B_press) < 1450 and get(Hydraulic_Y_press) < 1450 then
         set(R_elevator_avail, 0)
@@ -87,7 +92,7 @@ function Check_surface_avail()
 
     --tripple system failure
     if get(Hydraulic_G_press) < 1450 and get(Hydraulic_B_press) < 1450 and get(Hydraulic_Y_press) < 1450 then
-
+        set(Rudder_avail, 0)
     end
 
     --FAILURE MANAGER--

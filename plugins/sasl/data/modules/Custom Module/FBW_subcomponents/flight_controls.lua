@@ -2,6 +2,7 @@ include("FBW_subcomponents/flight_ctl_subcomponents/slat_flaps_control.lua")
 include("FBW_subcomponents/flight_ctl_subcomponents/lateral_ctl.lua")
 include("FBW_subcomponents/flight_ctl_subcomponents/vertical_ctl.lua")
 include("FBW_subcomponents/flight_ctl_subcomponents/check_avil_and_failure.lua")
+include("FBW_subcomponents/flight_ctl_subcomponents/yaw_control.lua")
 
 --variables--
 local total_roll = 0
@@ -86,8 +87,7 @@ function update()
             THS_control(Augmented_pitch_trim_ratio, get(Human_pitch_trim))
             Up_shit_creek(last_total_failure)
             last_total_failure = get(FAILURE_FCTL_UP_SHIT_CREEK)
-            --Rudder
-            --Set_dataref_linear_anim(Rudder, get(Yaw_lim) * (total_yaw), -30, 30, 25)
+            Rudder_control(total_yaw, true, false, 0)
         end
     end
 end

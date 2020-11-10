@@ -47,7 +47,7 @@ function Draw_flight_control_module_480x160(x_pos, y_pos)
     sasl.gl.drawWideLine(CENTER_X + 45, y_pos + 160 - 158 + 49 + 17, CENTER_X + 45, y_pos + 160 - 158 + 49 + 17 - get(Elevators_hstab_1), 5, LIGHT_BLUE)
 
     --rudder
-    sasl.gl.drawWideLine(CENTER_X, y_pos + 160 - 158 + 130, CENTER_X - get(Yaw_lim), y_pos + 160 - 158 + 130, 5, LIGHT_GREY)
-    sasl.gl.drawWideLine(CENTER_X, y_pos + 160 - 158 + 130, CENTER_X + get(Yaw_lim), y_pos + 160 - 158 + 130, 5, LIGHT_GREY)
+    sasl.gl.drawWideLine(CENTER_X, y_pos + 160 - 158 + 130, CENTER_X - get(Rudder_travel_lim), y_pos + 160 - 158 + 130, 5, LIGHT_GREY)
+    sasl.gl.drawWideLine(CENTER_X, y_pos + 160 - 158 + 130, CENTER_X + get(Rudder_travel_lim), y_pos + 160 - 158 + 130, 5, LIGHT_GREY)
     sasl.gl.drawWideLine(CENTER_X, y_pos + 160 - 158 + 130, CENTER_X + get(Rudder), y_pos + 160 - 158 + 130, 5, LIGHT_BLUE)
 end

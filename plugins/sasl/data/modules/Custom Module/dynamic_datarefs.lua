@@ -421,7 +421,6 @@ Servo_roll = globalProperty("sim/joystick/servo_roll_ratio")
 Servo_pitch = globalProperty("sim/joystick/servo_pitch_ratio")
 Servo_yaw = globalProperty("sim/joystick/servo_heading_ratio")
 Speedbrake_handle_ratio = globalProperty("sim/cockpit2/controls/speedbrake_ratio")
-Rudder_trim_ratio = globalProperty("sim/cockpit2/controls/rudder_trim")
 Horizontal_stabilizer_pitch = globalProperty("sim/flightmodel2/controls/stabilizer_deflection_degrees")
 Override_artstab = globalProperty("sim/operation/override/override_artstab")
 Override_control_surfaces = globalProperty("sim/operation/override/override_control_surfaces")
@@ -430,7 +429,7 @@ Pitch_rate = globalProperty("sim/flightmodel/position/Q")
 Vpath = globalProperty("sim/flightmodel/position/vpath")
 Alpha = globalProperty("sim/flightmodel/position/alpha")
 
---surfaces
+--Surfaces / FBW / flight controls--
 --dev & debuging
 FBW_kill_switch = createGlobalPropertyi("a321neo/dynamics/FBW/debug/kill_switch", 1, false, true, false)
 --animations
@@ -469,18 +468,18 @@ Right_spoiler_5 = globalProperty("sim/flightmodel/controls/wing3r_spo2def")
 Flaps_handle_ratio = 	globalProperty("sim/cockpit2/controls/flap_ratio")
 Flaps_handle_position = createGlobalPropertyf("a321neo/dynamics/surfaces/flaps_handle_position", 0, false, true, false)--0, 1, 2, 3, full
 Flaps_internal_config = createGlobalPropertyf("a321neo/dynamics/surfaces/flaps_internal_config", 0, false, true, false)--0 = clean, 1 = 1, 2 = 1+f, 3 = 2, 4 = 3, 5 = full
-Slats =                globalProperty("sim/flightmodel2/controls/slat1_deploy_ratio") --deploys with flaps 0 = 0, 1 = 0.7, 2 = 0.8, 3 = 0.8, 4 = 1
-Left_outboard_flaps =  globalProperty("sim/flightmodel/controls/wing3l_fla2def") -- flap detents 0 = 0, 1 = 10, 2 = 15, 3 = 20, 4 = 40
-Left_inboard_flaps =   globalProperty("sim/flightmodel/controls/wing2l_fla1def")
-Right_inboard_flaps =  globalProperty("sim/flightmodel/controls/wing2r_fla1def")
-Right_outboard_flaps = globalProperty("sim/flightmodel/controls/wing3r_fla2def")
-SFCC_1_status = 	   createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/sfcc_1_status", 1, false, true, false)--slats flaps control computer 1
-SFCC_2_status = 	   createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/sfcc_2_status", 1, false, true, false)--slats flaps control computer 2
-Slats_ecam_amber = 	   createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/slats_ecam_amber", 0, false, true, false)--slats indication on the ecam is amber
-Slats_in_transit = 	   createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/slats_in_transit", 0, false, true, false)--slats moving
-Flaps_ecam_amber = 	   createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/flaps_ecam_amber", 0, false, true, false)--flaps indication on the ecam is amber
-Flaps_in_transit = 	   createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/flaps_in_transit", 0, false, true, false)--flaps moving
-Flaps_deployed_angle = createGlobalPropertyf("a321neo/dynamics/FBW/slats_and_flaps/flaps_deployed_angle", 0, false, true, false)--0, 0, 10, 15, 20, 40
+Slats =                 globalProperty("sim/flightmodel2/controls/slat1_deploy_ratio") --deploys with flaps 0 = 0, 1 = 0.7, 2 = 0.8, 3 = 0.8, 4 = 1
+Left_outboard_flaps =   globalProperty("sim/flightmodel/controls/wing3l_fla2def") -- flap detents 0 = 0, 1 = 10, 2 = 15, 3 = 20, 4 = 40
+Left_inboard_flaps =    globalProperty("sim/flightmodel/controls/wing2l_fla1def")
+Right_inboard_flaps =   globalProperty("sim/flightmodel/controls/wing2r_fla1def")
+Right_outboard_flaps =  globalProperty("sim/flightmodel/controls/wing3r_fla2def")
+SFCC_1_status = 	    createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/sfcc_1_status", 1, false, true, false)--slats flaps control computer 1
+SFCC_2_status = 	    createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/sfcc_2_status", 1, false, true, false)--slats flaps control computer 2
+Slats_ecam_amber = 	    createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/slats_ecam_amber", 0, false, true, false)--slats indication on the ecam is amber
+Slats_in_transit = 	    createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/slats_in_transit", 0, false, true, false)--slats moving
+Flaps_ecam_amber = 	    createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/flaps_ecam_amber", 0, false, true, false)--flaps indication on the ecam is amber
+Flaps_in_transit = 	    createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/flaps_in_transit", 0, false, true, false)--flaps moving
+Flaps_deployed_angle =  createGlobalPropertyf("a321neo/dynamics/FBW/slats_and_flaps/flaps_deployed_angle", 0, false, true, false)--0, 0, 10, 15, 20, 40
 --hstabs
 Human_pitch_trim = createGlobalPropertyi("a321neo/dynamics/FBW/controls/human_pitch_trim", 0, false, true, false)-- 1 trim up, 0 no action, -1 trim down
 Augmented_pitch_trim_ratio = createGlobalPropertyf("a321neo/dynamics/FBW/controls/augmented_pitch_trim_ratio", 0, false, true, false)
@@ -491,8 +490,9 @@ Max_THS_dn = globalProperty("sim/aircraft/controls/acf_hstb_trim_dn")--3.5 degre
 Elevators_hstab_1 = globalProperty("sim/flightmodel/controls/hstab1_elv1def") --elevators 17 deg down -30 deg up
 Elevators_hstab_2 = globalProperty("sim/flightmodel/controls/hstab2_elv1def") --elevators 17 deg down -30 deg up
 --vstabs
+Rudder_trim_ratio = globalProperty("sim/cockpit2/controls/rudder_trim")
 Rudder = globalProperty("sim/flightmodel/controls/vstab1_rud1def") --rudder 30 deg left -30 deg right
-Yaw_lim = createGlobalPropertyf("a321neo/dynamics/FBW/yaw_lim", 30, false, true, false)
+Rudder_travel_lim = createGlobalPropertyf("a321neo/dynamics/FBW/control_limitations/rudder_travel_limit", 25, false, true, false)--25 degrees in augmented mode, 30 degrees in mechanical mode
 --surface availablility
 L_aileron_avail =   createGlobalPropertyi("a321neo/dynamics/FBW/surface_availability/l_aileron_avail", 1, false, true, false)
 R_aileron_avail =   createGlobalPropertyi("a321neo/dynamics/FBW/surface_availability/r_aileron_avail", 1, false, true, false)
@@ -509,6 +509,9 @@ R_spoiler_5_avail = createGlobalPropertyi("a321neo/dynamics/FBW/surface_availabi
 L_elevator_avail =  createGlobalPropertyi("a321neo/dynamics/FBW/surface_availability/l_elevator_avail", 1, false, true, false)
 R_elevator_avail =  createGlobalPropertyi("a321neo/dynamics/FBW/surface_availability/r_elevator_avail", 1, false, true, false)
 THS_avail = 		createGlobalPropertyi("a321neo/dynamics/FBW/surface_availability/ths_avail", 1, false, true, false)
+Yaw_damper_avail =  createGlobalPropertyi("a321neo/dynamics/FBW/surface_availability/yaw_damper_avail", 1, false, true, false)
+Rudder_avail =  	createGlobalPropertyi("a321neo/dynamics/FBW/surface_availability/rudder_avail", 1, false, true, false)
+Rudder_trim_avail = createGlobalPropertyi("a321neo/dynamics/FBW/surface_availability/rudder_trim_avail", 1, false, true, false)
 
 
 -- Fuel
