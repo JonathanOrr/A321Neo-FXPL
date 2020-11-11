@@ -161,9 +161,10 @@ FAILURE_AI_Wing_R_valve_stuck = createGlobalPropertyi("a321neo/failures/anti_ice
 FAILURE_AI_Window_Heat_L = createGlobalPropertyi("a321neo/failures/anti_ice/window_heat_l", 0, false, true, false)
 FAILURE_AI_Window_Heat_R = createGlobalPropertyi("a321neo/failures/anti_ice/window_heat_r", 0, false, true, false)
 
-
 FAILURE_AVIONICS_SMOKE = createGlobalPropertyi("a321neo/failures/misc/avionics_smoke", 0, false, true, false)
 FAILURE_AVIONICS_INLET = createGlobalPropertyi("a321neo/failures/misc/avionics_inlet", 0, false, true, false)
 FAILURE_AVIONICS_OUTLET = createGlobalPropertyi("a321neo/failures/misc/avionics_outlet", 0, false, true, false)
+
+FAILURE_PRESS_SAFETY_OPEN = createGlobalPropertyi("a321neo/failures/pressurization/safety_valve_open", 0, false, true, false)
 
 

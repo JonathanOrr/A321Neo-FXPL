@@ -33,9 +33,9 @@ end
 
 local function draw_press_info()
     --pressure info
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-225, size[2]/2+150, math.floor(get(Cabin_delta_psi)), 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+30, size[2]/2+180, math.floor(get(Cabin_vs)), 30, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+290, size[2]/2+150, math.floor(get(Cabin_alt_ft)), 30, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-170, size[2]/2+150, Round_fill(get(Cabin_delta_psi), 1), 40, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+140, size[2]/2+177, math.floor(get(Cabin_vs)), 40, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]-50, size[2]/2+150, math.floor(get(Cabin_alt_ft)),40, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
 end
 
 local function draw_pack_indications()
@@ -75,13 +75,27 @@ local function draw_ldg_elev()
     end
 end
 
+local function draw_safety_valve()
+    local is_open = get(Press_safety_valve_pos) == 1
+    
+    sasl.gl.drawText(Font_AirbusDUL, size[1]-175, size[2]/2-15, "SAFETY", 34, false, false, TEXT_ALIGN_LEFT, is_open and ECAM_ORANGE or ECAM_WHITE)
+
+    local length=58
+    if is_open then
+        sasl.gl.drawWideLine(size[1]-84, size[2]/2-30, size[1]-84+length, size[2]/2-30, 3, ECAM_ORANGE)
+    else
+        sasl.gl.drawWideLine(size[1]-89, size[2]/2-36, size[1]-89, size[2]/2-36-length, 3, ECAM_WHITE)
+    end
+end
+
 function draw_press_page()
 
     draw_press_info()
     draw_valves_text()
     draw_valve_inlet(get(Ventilation_avio_inlet_valve), get(FAILURE_AVIONICS_INLET) == 1)
     draw_valve_outlet(get(Ventilation_avio_outlet_valve), get(FAILURE_AVIONICS_OUTLET) == 1)
-
+    draw_safety_valve()
+    
     draw_pack_indications()
     draw_ldg_elev()
 end

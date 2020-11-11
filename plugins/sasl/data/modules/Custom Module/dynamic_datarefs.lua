@@ -283,15 +283,14 @@ Pack_R = globalProperty("sim/cockpit2/bleedair/actuators/pack_right")
 Sim_pack_flow = globalProperty("sim/cockpit2/pressurization/actuators/fan_setting") --Electric fan (vent blower) setting, consuming 0.1 of rel_HVAVC amps when running. 0 = Auto (Runs whenever air_cond_on or heater_on is on), 1 = Low, 2 = High
 Left_pack_iso_valve = globalProperty("sim/cockpit2/bleedair/actuators/isol_valve_left") --Isolation Valve for left duct, close or open. This separates all engines on the left side of the plane, the left wing, and the left pack from the rest of the system
 Right_pack_iso_valve = globalProperty("sim/cockpit2/bleedair/actuators/isol_valve_right") --Isolation Valve for right duct, close or open. This separates all engines on the right side of the plane, the right wing, and the right pack from the rest of the system
-Cabin_delta_psi = globalProperty("sim/cockpit2/pressurization/indicators/pressure_diffential_psi")
-Set_cabin_alt_ft = globalProperty("sim/cockpit2/pressurization/actuators/cabin_altitude_ft")
-Cabin_alt_ft = globalProperty("sim/cockpit2/pressurization/indicators/cabin_altitude_ft")
-Set_cabin_vs = globalProperty("sim/cockpit2/pressurization/actuators/cabin_vvi_fpm")
-Cabin_vs = globalProperty("sim/cockpit2/pressurization/indicators/cabin_vvi_fpm")
+Cabin_delta_psi = createGlobalPropertyf("a321neo/dynamics/pressurization/delta_psi", 0, false, true, false)
+Cabin_alt_ft = globalProperty("sim/cockpit2/pressurization/actuators/cabin_altitude_ft")
+Cabin_vs = globalProperty("sim/cockpit2/pressurization/actuators/cabin_vvi_fpm")
 Out_flow_valve_ratio = globalProperty("sim/cockpit2/pressurization/indicators/outflow_valve")
 Weather_curr_press_sea_level = globalProperty("sim/weather/barometer_sealevel_inhg")
 Weather_curr_press_flight_level = globalProperty("sim/weather/barometer_current_inhg")
 Override_pressurization = globalProperty("sim/operation/override/override_pressurization")
+Press_safety_valve_pos = createGlobalPropertyi("a321neo/dynamics/pressurization/safety_valve_pos", 0, false, true, false) -- 0 closed, 1 open
 
 --instruments
 VVI = globalProperty("sim/cockpit2/gauges/indicators/vvi_fpm_pilot")
