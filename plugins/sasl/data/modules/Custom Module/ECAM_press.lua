@@ -34,8 +34,8 @@ end
 local function draw_press_info()
     --pressure info
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-170, size[2]/2+150, Round_fill(get(Cabin_delta_psi), 1), 40, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+140, size[2]/2+177, math.floor(get(Cabin_vs)), 40, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]-50, size[2]/2+150, math.floor(get(Cabin_alt_ft)),40, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+140, size[2]/2+177, math.floor(get(Cabin_vs)-(get(Cabin_vs)%50)), 40, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]-50, size[2]/2+150, math.floor(get(Cabin_alt_ft)-(get(Cabin_alt_ft)%50)),40, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
 end
 
 local function draw_pack_indications()

@@ -6,20 +6,54 @@
 -- Constants
 ----------------------------------------------------------------------------------------------------
 include('constants.lua')
+include('PID.lua')
 
 local DRY_AIR_CONSTANT=287.058
-local TOTAL_VOLUME=50+200+200+25 -- in m3
+local TOTAL_VOLUME=50+200+200    -- in m3
 local OUTFLOW_VALVE_AREA=0.034   -- in m2
-local AIRCRAFT_LEAKAGE  = 0.01    -- m3/s
+local AIRCRAFT_LEAKAGE  = 0.01   -- m3/s
+local SPD_MANUAL_OUTFLOW = 0.025
 
 ----------------------------------------------------------------------------------------------------
 -- Variables
 ----------------------------------------------------------------------------------------------------
+local mode_sel_manual = false   -- false: auto, true: manual
+local manual_mode_lever_req = 0 -- 0 stay, 1 go up, -1 go down
+
 local current_cabin_pressure_in_pa = 0
 local current_cabin_altitude = 0
 local prev_cabin_altitude    = 0  -- Pressure at the previous frame (to compute V/S)
 
 local last_update_safety_valve = 0 -- To introduce some delay for safety valve closing
+local touchdown_time = 0
+
+local setpoint_cabin_vs = 500
+
+local pid_array_outflow =
+{
+        P_gain = 0.0001,
+        I_gain = 0.0001,
+        D_gain = 0,
+        B_gain = 1,
+        Actual_output = 0,
+        Desired_output = 0,
+        Integral_sum = 0,
+        Current_error = 0
+}
+
+
+local pid_array_cab_alt =
+{
+        P_gain = 1,
+        I_gain = 0.01,
+        D_gain = 0.0001,
+        B_gain = 1,
+        Actual_output = 0,
+        Desired_output = 0,
+        Integral_sum = 0,
+        Current_error = 0
+}
+
 ----------------------------------------------------------------------------------------------------
 -- Initialization
 ----------------------------------------------------------------------------------------------------
@@ -32,6 +66,8 @@ current_cabin_pressure_in_pa = get(Weather_curr_press_sea_level) * 3386.39
 ----------------------------------------------------------------------------------------------------
 sasl.registerCommandHandler (Press_manual_control_dn, 0, function(phase) manual_control_handler(phase, -1) end)
 sasl.registerCommandHandler (Press_manual_control_up, 0, function(phase) manual_control_handler(phase, 1) end)
+sasl.registerCommandHandler (Press_mode_sel, 0, function(phase) if phase == SASL_COMMAND_BEGIN then mode_sel_manual = not mode_sel_manual end end)
+
 
 sasl.registerCommandHandler (Press_ldg_elev_dial_dn, 0, function(phase) 
     if get(Press_ldg_elev_knob_pos) < -2 then
@@ -56,8 +92,11 @@ function manual_control_handler(phase, direction)
 
     if phase == SASL_COMMAND_BEGIN then
         set(Press_manual_control_lever_pos, direction)
+        manual_mode_lever_req = direction
+    elseif phase == SASL_COMMAND_CONTINUE then
+        manual_mode_lever_req = direction
     elseif phase == SASL_COMMAND_END then
-        set(Press_manual_control_lever_pos, 0)    
+        set(Press_manual_control_lever_pos, 0)
     end
 end
 
@@ -84,6 +123,8 @@ local function update_cabin_pressure()
 
     local input_delta_pressure = current_cabin_pressure_in_pa * (input_airflow_pack_1+input_airflow_pack_2) / TOTAL_VOLUME -- Pa
     
+    -- Ok, I don't know why, put the pack pressure looks like 1/3 than it should be...
+    input_delta_pressure = input_delta_pressure * 4
     
     local outflow_valve_actual_area = get(Out_flow_valve_ratio) * OUTFLOW_VALVE_AREA -- Let's assume is linare (m2)
     
@@ -95,10 +136,12 @@ local function update_cabin_pressure()
     local outside_pressure = get(Weather_curr_press_flight_level) * 3386.39 -- Pa
     
     local output_airflow     = 0
-    if current_cabin_pressure_in_pa-outside_pressure > 0 then
-        output_airflow = 0.840 * outflow_valve_actual_area * math.sqrt(current_cabin_pressure_in_pa-outside_pressure) -- m3/s
+    if current_cabin_pressure_in_pa > outside_pressure then
+        output_airflow = 0.840 * outflow_valve_actual_area * math.sqrt(math.abs(current_cabin_pressure_in_pa-outside_pressure)) -- m3/s
+    elseif current_cabin_pressure_in_pa < outside_pressure then
+        output_airflow = 0.840 * outflow_valve_actual_area * (-math.sqrt(math.abs(outside_pressure-current_cabin_pressure_in_pa))) -- m3/s    
     end
-    
+
     output_airflow = output_airflow + AIRCRAFT_LEAKAGE
     
     local output_delta_pressure = current_cabin_pressure_in_pa * (output_airflow) / TOTAL_VOLUME -- Pa
@@ -136,17 +179,92 @@ local function update_safety_valve()
     end
 end
 
-function update()
+local function set_outflow(x)
+    x = Math_clamp(x, 0, 1)
+    Set_dataref_linear_anim(Out_flow_valve_ratio, x, 0, 1, 0.25)
+end
 
-    update_cabin_pressure()
-    update_safety_valve()
+local function controller_outflow_valve()
 
+    local curr_err  = setpoint_cabin_vs - get(Cabin_vs)
+    local u = SSS_PID_BP(pid_array_outflow, curr_err)
+    set_outflow(u)
+ 
+end
+
+local function set_cabin_vs_target()
+
+    if get(All_on_ground) == 1 and get(EWD_flight_phase) > PHASE_FINAL then
+        -- After 55s this branch is not taken
+        setpoint_cabin_vs = 500
+    elseif get(EWD_flight_phase) == PHASE_1ST_ENG_TO_PWR then
+        if get(Cabin_delta_psi) < 0.1 then
+            setpoint_cabin_vs = -400
+        else
+            setpoint_cabin_vs = 0
+        end
+    else
+        -- Controller
+        setpoint_cabin_vs = 0
+    end
+    
+    
+end
+
+local function auto_manage_pressurization()
+
+    -- If on ground but before T/O power or 55s after landing, outflow valve is fully open
+    local touchdown_condition = touchdown_time > 0 and (get(TIME) - touchdown_time > 50)
+    local ground_condition = touchdown_condition
+                           or (get(EWD_flight_phase) <= PHASE_1ST_ENG_ON)
+    
+    if get(All_on_ground) == 0 then
+        -- When landing, the last time we update touchdown_time corresponds to the touchdown time 
+        touchdown_time = get(TIME)
+    end
+    
+    if get(All_on_ground) == 1 and ground_condition then
+        set_outflow(1) -- Full open
+    else
+        set_cabin_vs_target()
+        controller_outflow_valve()
+    end
+end
+
+local function update_datarefs()
     set(Cabin_delta_psi, get_delta_in_psi())
     set(Cabin_alt_ft, current_cabin_altitude)
     if get(DELTA_TIME) > 0 then
         set(Cabin_vs, (current_cabin_altitude-prev_cabin_altitude) / get(DELTA_TIME) * 60)
     end
     prev_cabin_altitude = current_cabin_altitude
+end
+
+local function update_outputs()
+
+    if not mode_sel_manual then
+        auto_manage_pressurization()
+    else
+        if manual_mode_lever_req ~= 0 then
+            local new_value = get(Out_flow_valve_ratio) + manual_mode_lever_req * get(DELTA_TIME) * SPD_MANUAL_OUTFLOW
+            set(Out_flow_valve_ratio, new_value)
+            manual_mode_lever_req = 0            
+        end
+    end
+    
+
+    -- Let's backpropagate the PID now
+    pid_array_outflow.Actual_output = get(Out_flow_valve_ratio)
+
+end
+
+function update()
+
+    update_cabin_pressure()
+    update_safety_valve()
+
+    update_datarefs()
+    update_outputs()
 
 end
 
