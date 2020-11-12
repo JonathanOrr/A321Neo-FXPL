@@ -36,6 +36,10 @@ function Show_hide_ENG_debug()
   ENG_debug_window:setIsVisible(not ENG_debug_window:isVisible())
 end
 
+function Show_hide_PRESS_debug()
+    PRESS_debug_window:setIsVisible(not PRESS_debug_window:isVisible())
+end
+
 function Show_hide_DCDU()
   DCDU_window:setIsVisible(not DCDU_window:isVisible())
 end
@@ -135,6 +139,7 @@ ShowHideECAMDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide ECAM Debug", Show
 ShowHideDMCDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide DMC Debug", Show_hide_DMC_debug)
 ShowHideELECDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide ELEC Debug", Show_hide_ELEC_debug)
 ShowHideENGDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide ENG Debug", Show_hide_ENG_debug)
+ShowHidePressDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide PRESS Debug", Show_hide_PRESS_debug)
 DeActivateELECover	= sasl.appendMenuItem(Menu_debug, "(De)activate override ELEC always ON", function() ovveride_ELEC_always_on = not ovveride_ELEC_always_on end)
 
 

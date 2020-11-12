@@ -31,9 +31,9 @@ local setpoint_cabin_vs = 500
 
 local pid_array_outflow =
 {
-        P_gain = 0.0001,
+        P_gain = 0.00001,
         I_gain = 0.0001,
-        D_gain = 0,
+        D_gain = 0.00000001,
         B_gain = 1,
         Actual_output = 0,
         Desired_output = 0,
@@ -45,8 +45,8 @@ local pid_array_outflow =
 local pid_array_cab_alt =
 {
         P_gain = 1,
-        I_gain = 0.01,
-        D_gain = 0.0001,
+        I_gain = 0.02,
+        D_gain = 0.00001,
         B_gain = 1,
         Actual_output = 0,
         Desired_output = 0,
@@ -142,6 +142,9 @@ local function update_cabin_pressure()
         output_airflow = 0.840 * outflow_valve_actual_area * (-math.sqrt(math.abs(outside_pressure-current_cabin_pressure_in_pa))) -- m3/s    
     end
 
+    set(Press_outflow_valve_flow, output_airflow)
+    set(Press_outflow_valve_press, current_cabin_pressure_in_pa * (output_airflow) / TOTAL_VOLUME / 3386.39)
+
     output_airflow = output_airflow + AIRCRAFT_LEAKAGE
     
     local output_delta_pressure = current_cabin_pressure_in_pa * (output_airflow) / TOTAL_VOLUME -- Pa
@@ -181,15 +184,37 @@ end
 
 local function set_outflow(x)
     x = Math_clamp(x, 0, 1)
+    pid_array_outflow.Actual_output = x
     Set_dataref_linear_anim(Out_flow_valve_ratio, x, 0, 1, 0.25)
 end
 
 local function controller_outflow_valve()
+    set(Press_controller_sp_ovf, setpoint_cabin_vs)   -- For debug window only
+    set(Press_controller_last_ovf, get(TIME))
 
     local curr_err  = setpoint_cabin_vs - get(Cabin_vs)
     local u = SSS_PID_BP(pid_array_outflow, curr_err)
     set_outflow(u)
  
+end
+
+local function get_target_cabin_altitude()
+    local current_alt = get(Capt_Baro_Alt)
+    
+    local to_ret =  Math_rescale(0, 0, 39000, 8000, current_alt) 
+    
+    return math.max(to_ret, 0) -- TODO LDG ELEV
+    
+end
+
+local function pid_keep_cabin_altitude()
+    local target = get_target_cabin_altitude()
+    set(Press_controller_sp_vs, target)    -- For debug window only
+    set(Press_controller_last_vs, get(TIME))
+
+    local curr_err  = target - current_cabin_altitude
+    local u = SSS_PID_BP(pid_array_cab_alt, curr_err)
+    return Math_clamp(u, -750, 750)
 end
 
 local function set_cabin_vs_target()
@@ -205,7 +230,7 @@ local function set_cabin_vs_target()
         end
     else
         -- Controller
-        setpoint_cabin_vs = 0
+        setpoint_cabin_vs = pid_keep_cabin_altitude()
     end
     
     
@@ -254,7 +279,10 @@ local function update_outputs()
     
 
     -- Let's backpropagate the PID now
-    pid_array_outflow.Actual_output = get(Out_flow_valve_ratio)
+    pid_array_cab_alt.Actual_output = setpoint_cabin_vs
+
+    set(Press_controller_output_vs, pid_array_cab_alt.Desired_output)    -- For debug window only
+    set(Press_controller_output_ovf, pid_array_outflow.Desired_output)   -- For debug window only
 
 end
 
@@ -265,6 +293,8 @@ function update()
 
     update_datarefs()
     update_outputs()
+    
+--    print(get(Out_flow_valve_ratio), pid_array_outflow.Proportional, pid_array_outflow.Current_error, pid_array_outflow.Integral, pid_array_outflow.Derivative)
 
 end
 

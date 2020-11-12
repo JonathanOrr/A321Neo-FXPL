@@ -291,6 +291,16 @@ Weather_curr_press_sea_level = globalProperty("sim/weather/barometer_sealevel_in
 Weather_curr_press_flight_level = globalProperty("sim/weather/barometer_current_inhg")
 Override_pressurization = globalProperty("sim/operation/override/override_pressurization")
 Press_safety_valve_pos = createGlobalPropertyi("a321neo/dynamics/pressurization/safety_valve_pos", 0, false, true, false) -- 0 closed, 1 open
+Press_outflow_valve_flow = createGlobalPropertyf("a321neo/dynamics/pressurization/outflow_valve_flow", 0, false, true, false)
+Press_outflow_valve_press = createGlobalPropertyf("a321neo/dynamics/pressurization/outflow_valve_press", 0, false, true, false)
+
+-- The folloing datarefs are used for debug only
+Press_controller_output_vs  = createGlobalPropertyf("a321neo/dynamics/pressurization/cabin_vs_ctr", 0, false, true, false)
+Press_controller_output_ovf = createGlobalPropertyf("a321neo/dynamics/pressurization/outflow_valve_ctr", 0, false, true, false)
+Press_controller_sp_vs      = createGlobalPropertyf("a321neo/dynamics/pressurization/cabin_vs_sp", 0, false, true, false)
+Press_controller_sp_ovf     = createGlobalPropertyf("a321neo/dynamics/pressurization/outflow_valve_sp", 0, false, true, false)
+Press_controller_last_vs      = createGlobalPropertyf("a321neo/dynamics/pressurization/cabin_vs_last_update", 0, false, true, false)
+Press_controller_last_ovf     = createGlobalPropertyf("a321neo/dynamics/pressurization/outflow_valve_last_update", 0, false, true, false)
 
 --instruments
 VVI = globalProperty("sim/cockpit2/gauges/indicators/vvi_fpm_pilot")

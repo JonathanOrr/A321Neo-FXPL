@@ -112,6 +112,20 @@ ENG_debug_window = contextWindow {
   };
 }
 
+PRESS_debug_window = contextWindow {
+  name = "Pressurization Debug";
+  position = { 150 , 150 , 500 , 300 };
+  noBackground = true ;
+  proportional = false ;
+  minimumSize = { 500 , 300 };
+  maximumSize = { 500 , 300 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = false ;
+  components = {
+    pressurization_debug {position = { 0 , 0 , 500 , 300 }}
+  };
+}
+
 DCDU_window = contextWindow {
   name = "DCDU Management";
   position = { 150 , 150 , 463 , 683 };
@@ -181,3 +195,4 @@ PID_UI_window = contextWindow {
     PID_UI {position = { 0 , 0 , 600 , 260 }}
   };
 }
+
