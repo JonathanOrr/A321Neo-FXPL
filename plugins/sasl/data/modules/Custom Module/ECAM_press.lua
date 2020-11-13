@@ -94,7 +94,7 @@ local function draw_ldg_elev()
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2+80, size[2]-50, "AUTO", 34, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
     end
     
-    if true then    -- TODO Hide when MODE SEL NOT AUTO
+    if get(Press_mode_sel_is_man) == 0 then    -- Hide when MODE SEL NOT AUTO
         local selected = get(Press_ldg_elev_knob_pos) >= -2 and get(Press_ldg_elev_knob_pos)*1000 or 0 -- TODO ADD COMPUTED FROM MCDU HERE
         selected = selected - selected%50
         sasl.gl.drawText(Font_AirbusDUL, size[1]-130, size[2]-50, "FT", 28, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)

@@ -299,8 +299,9 @@ Press_controller_output_vs  = createGlobalPropertyf("a321neo/dynamics/pressuriza
 Press_controller_output_ovf = createGlobalPropertyf("a321neo/dynamics/pressurization/outflow_valve_ctr", 0, false, true, false)
 Press_controller_sp_vs      = createGlobalPropertyf("a321neo/dynamics/pressurization/cabin_vs_sp", 0, false, true, false)
 Press_controller_sp_ovf     = createGlobalPropertyf("a321neo/dynamics/pressurization/outflow_valve_sp", 0, false, true, false)
-Press_controller_last_vs      = createGlobalPropertyf("a321neo/dynamics/pressurization/cabin_vs_last_update", 0, false, true, false)
-Press_controller_last_ovf     = createGlobalPropertyf("a321neo/dynamics/pressurization/outflow_valve_last_update", 0, false, true, false)
+Press_controller_last_vs    = createGlobalPropertyf("a321neo/dynamics/pressurization/cabin_vs_last_update", 0, false, true, false)
+Press_controller_last_ovf   = createGlobalPropertyf("a321neo/dynamics/pressurization/outflow_valve_last_update", 0, false, true, false)
+Press_mode_sel_is_man       = createGlobalPropertyf("a321neo/dynamics/pressurization/mode_sel_is_man", 0, false, true, false) -- 1: MAN 0 : AUTO
 
 --instruments
 VVI = globalProperty("sim/cockpit2/gauges/indicators/vvi_fpm_pilot")

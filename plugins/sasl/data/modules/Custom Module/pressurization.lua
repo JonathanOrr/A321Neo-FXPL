@@ -60,6 +60,7 @@ local pid_array_cab_alt =
 
 set(Override_pressurization, 1)
 current_cabin_pressure_in_pa = get(Weather_curr_press_sea_level) * 3386.39
+current_cabin_altitude = math.min(7000, get(Capt_baro_alt_ft))
 
 ----------------------------------------------------------------------------------------------------
 -- Commands
@@ -283,6 +284,8 @@ local function update_outputs()
 
     set(Press_controller_output_vs, pid_array_cab_alt.Desired_output)    -- For debug window only
     set(Press_controller_output_ovf, pid_array_outflow.Desired_output)   -- For debug window only
+
+    set(Press_mode_sel_is_man, mode_sel_manual and 1 or 0)
 
 end
 
