@@ -231,6 +231,12 @@ Ecam_cond_valve_isol_cargo_out = createGlobalPropertyi("a321neo/cockpit/ecam/air
 
 Ecam_press_pack_1_triangle = createGlobalPropertyi("a321neo/cockpit/ecam/press/pack_1", 0, false, true, false)  -- 0: amber, 1: green
 Ecam_press_pack_2_triangle = createGlobalPropertyi("a321neo/cockpit/ecam/press/pack_2", 0, false, true, false)  -- 0: amber, 1: green
+Ecam_press_ovf_valve_color = createGlobalPropertyi("a321neo/cockpit/ecam/press/ovf_valve_color", 0, false, true, false)  -- 0: amber, 1: green
+Ecam_press_cabin_alt_limit = createGlobalPropertyf("a321neo/cockpit/ecam/press/cabin_alt_limited", 0, false, true, false)  -- -500 - 10500
+Ecam_press_cabin_alt_color = createGlobalPropertyi("a321neo/cockpit/ecam/press/cabin_alt_color", 0, false, true, false)  -- 0: red, 1: green
+Ecam_press_cabin_vs_limit  = createGlobalPropertyf("a321neo/cockpit/ecam/press/cabin_vs_limited", 0, false, true, false)  -- -2100 - 2100
+Ecam_press_delta_p_limit   = createGlobalPropertyf("a321neo/cockpit/ecam/press/delta_p_limited", 0, false, true, false)  -- -1 - 9
+Ecam_press_delta_p_color   = createGlobalPropertyf("a321neo/cockpit/ecam/press/delta_p_color", 0, false, true, false)  -- 0: amber, 1: green
 
 -- ECAM button lights
 Ecam_btn_light_ENG   = createGlobalPropertyi("a321neo/cockpit/ecam/buttons/light_eng", 0, false, true, false)   --0: OFF, 1: ON

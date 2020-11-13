@@ -31,11 +31,38 @@ local function draw_valve_outlet(pos, failed)
 
 end
 
+local function get_color_green_blinking()
+    if math.floor(get(TIME)) % 2 == 0 then
+        return ECAM_GREEN
+    else
+        return ECAM_HIGH_GREEN
+    end
+end
+
 local function draw_press_info()
     --pressure info
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-170, size[2]/2+150, Round_fill(get(Cabin_delta_psi), 1), 40, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+140, size[2]/2+177, math.floor(get(Cabin_vs)-(get(Cabin_vs)%50)), 40, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]-50, size[2]/2+150, math.floor(get(Cabin_alt_ft)-(get(Cabin_alt_ft)%50)),40, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    local color_psi = ECAM_GREEN
+    if get(Cabin_delta_psi) < -0.4 or get(Cabin_delta_psi) > 8.5 then
+        color_psi = ECAM_ORANGE
+    elseif get(Cabin_delta_psi) > 1.5 and get(EWD_flight_phase) == PHASE_FINAL then
+        color_psi = get_color_green_blinking()
+    end
+
+    local color_vs = ECAM_GREEN
+    if get(Cabin_vs) > 1750 then
+        color_vs = get_color_green_blinking()
+    end
+ 
+    local color_alt = ECAM_GREEN
+    if get(Cabin_alt_ft) > 9950 then
+        color_alt = ECAM_RED
+    elseif get(Cabin_alt_ft) > 8800 then
+        color_alt = get_color_green_blinking()
+    end
+    
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-170, size[2]/2+150, Round_fill(get(Cabin_delta_psi), 1), 40, false, false, TEXT_ALIGN_RIGHT, color_psi)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+140, size[2]/2+177, math.floor(get(Cabin_vs)-(get(Cabin_vs)%50)), 40, false, false, TEXT_ALIGN_RIGHT, color_vs)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]-50, size[2]/2+150, math.floor(get(Cabin_alt_ft)-(get(Cabin_alt_ft)%50)),40, false, false, TEXT_ALIGN_RIGHT, color_alt)
 end
 
 local function draw_pack_indications()
@@ -100,6 +127,34 @@ function draw_press_page()
     draw_ldg_elev()
 end
 
+local function update_drs()
+   
+    if get(Out_flow_valve_ratio) > 0.95 and get(All_on_ground) == 0 then
+        set(Ecam_press_ovf_valve_color, 0)
+    else
+        set(Ecam_press_ovf_valve_color, 1)
+    end
+    
+    set(Ecam_press_cabin_alt_limit, Math_clamp(get(Cabin_alt_ft), -500, 10500))
+
+    if get(Cabin_alt_ft) > 9550 then
+        set(Ecam_press_cabin_alt_color, 0)
+    else
+        set(Ecam_press_cabin_alt_color, 1)    
+    end
+    
+    set(Ecam_press_cabin_vs_limit, Math_clamp(get(Cabin_vs), -2100, 2100))
+
+    set(Ecam_press_delta_p_limit, Math_clamp(get(Cabin_delta_psi), -1, 9))
+
+    if get(Cabin_delta_psi) < -0.4 or get(Cabin_delta_psi) > 8.5 then
+        set(Ecam_press_delta_p_color, 0)
+    else
+        set(Ecam_press_delta_p_color, 1)    
+    end
+
+end
+
 function ecam_update_press_page()
 
     -- Pack indication is amber when pack not available and associated engine running
@@ -115,5 +170,6 @@ function ecam_update_press_page()
         set(Ecam_press_pack_2_triangle, 1)
     end
 
+    update_drs()
 
 end
