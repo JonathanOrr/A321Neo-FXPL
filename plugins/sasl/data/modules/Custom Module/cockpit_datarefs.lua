@@ -439,3 +439,7 @@ AI_Wing_button_light  = createGlobalPropertyi("a321neo/cockpit/anti_ice/ai_wing"
 AI_probe_window_heat  = createGlobalPropertyi("a321neo/cockpit/anti_ice/probe_window", 0, false, true, false)  --00: No lights, 01: [ON],  10: FAULT, 11 [ON] + FAULT
 No_ice_detected       = createGlobalPropertyi("a321neo/cockpit/anti_ice/no_ice_detected", 0, false, true, false) --0: ice detected or system off, 1: no ice detected and system ON
 
+-- DMC
+DMC_position_dmc_eis = createGlobalPropertyi("a321neo/cockpit/dmc/dmc_eis_sel_position", 0, false, true, false) -- usual -1, 0, 1
+DMC_position_ecam_nd = createGlobalPropertyi("a321neo/cockpit/dmc/ecan_nd_xfr_position", 0, false, true, false) -- usual -1, 0, 1
+

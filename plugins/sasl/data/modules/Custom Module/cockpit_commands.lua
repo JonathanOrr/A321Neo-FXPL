@@ -39,6 +39,15 @@ Ecam_btn_cmd_EMERC = createCommand("a321neo/cockpit/ecam/buttons/cmd_emercanc", 
 Ecam_btn_cmd_ALL   = createCommand("a321neo/cockpit/ecam/buttons/cmd_all", "ALL pushbutton")
 Ecam_btn_cmd_RCL   = createCommand("a321neo/cockpit/ecam/buttons/cmd_rcl", "RCL pushbutton")
 
+-- DMC
+DMC_PFD_ND_xfr_capt = createCommand("a321neo/cockpit/dmc/pdf_nd_xfr_capt", "Captain's side PFD/ND xfr")
+DMC_PFD_ND_xfr_fo   = createCommand("a321neo/cockpit/dmc/pdf_nd_xfr_fo", "FO's side PFD/ND xfr")
+DMC_EIS_selector_up = createCommand("a321neo/cockpit/dmc/dmc_eis_sel_up", "EIS DMC knob")
+DMC_EIS_selector_dn = createCommand("a321neo/cockpit/dmc/dmc_eis_sel_dn", "EIS DMC knob")
+DMC_ECAM_ND_xfr_up  = createCommand("a321neo/cockpit/dmc/ecam_nd_xfr_up", "EIS DMC knob")
+DMC_ECAM_ND_xfr_dn  = createCommand("a321neo/cockpit/dmc/ecam_nd_xfr_dn", "EIS DMC knob")
+
+
 --wheels
 Toggle_brake_fan = createCommand("a321neo/cockpit/wheel/toggle_brake_fan", "Toggle brake fan")
 Toggle_lo_autobrake = createCommand("a321neo/cockpit/wheel/toggle_lo_autobrake", "Toggle LO autobrake")
@@ -273,4 +282,8 @@ AI_cmd_eng_1             = sasl.createCommand("a321neo/cockpit/anti_ice/toggle_e
 AI_cmd_eng_2             = sasl.createCommand("a321neo/cockpit/anti_ice/toggle_eng_2", "Toggle ANTI-ICE ENG 2 button")
 AI_cmd_wings             = sasl.createCommand("a321neo/cockpit/anti_ice/toggle_wings", "Toggle ANTI-ICE WING button")
 
+-- Oxygen
+Oxygen_toggle_crew = createCommand("a321neo/cockpit/oxygen/crew_supply_toggle", "CREW SUPPLY pb")
+Oxygen_man_mask_on = createCommand("a321neo/cockpit/oxygen/man_mask_on", "MAN MASK ON pb")
+Oxygen_toggle_high_alt_ldg= createCommand("a321neo/cockpit/oxygen/high_alt_ldg_toggle", "HIGH ALT LDG pb")
 
