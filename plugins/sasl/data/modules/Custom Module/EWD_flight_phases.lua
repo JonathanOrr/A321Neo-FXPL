@@ -217,5 +217,5 @@ function update()
     
 
     set(EWD_flight_phase, PHASE_UNKNOWN) -- This should never happen
-    
+  
 end

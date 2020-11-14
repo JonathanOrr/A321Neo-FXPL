@@ -354,6 +354,7 @@ local function update_datarefs()
 end
 
 function update()
+    perf_measure_start("hydraulics:update()")
 
     local curr_time = get(TIME) * 1000
 
@@ -386,6 +387,7 @@ function update()
     b_sys:update_elec()
     y_sys:update_elec()
 
+    perf_measure_stop("hydraulics:update()")
 end
 
 

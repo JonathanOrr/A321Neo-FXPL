@@ -849,6 +849,7 @@ end
 
 
 function update()
+    perf_measure_start("engines:update()")
     update_starter_datarefs()
     update_buttons_datarefs()
     
@@ -875,6 +876,7 @@ function update()
     update_continuous_ignition()
 
     update_oil_qty()
+    perf_measure_stop("engines:update()")
 end
 
 -- The following code is used to check if SASL has been restarted with engines running

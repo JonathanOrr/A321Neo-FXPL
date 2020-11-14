@@ -337,6 +337,8 @@ end
 
 function update()
 
+    perf_measure_start("aircond:update()")
+
     update_knobs()
     update_avio_ventilation()
     udpate_avio_temps()
@@ -348,4 +350,5 @@ function update()
 
     run_pids()
 
+    perf_measure_stop("aircond:update()")
 end

@@ -317,8 +317,13 @@ local function update_logic()
 end
 
 function update()
+
+    perf_measure_start("anti_ice:update()")
+
     update_logic()
     update_xp_datarefs()
     update_light_datarefs()
+    
+    perf_measure_stop("anti_ice:update()")
 
 end

@@ -213,3 +213,18 @@ PID_UI_window = contextWindow {
   };
 }
 
+Performance_debug_window = contextWindow {
+  name = "PERFORMANCE DEBUG";
+  position = { 150 , 150 , 400, 600 };
+  noBackground = true ;
+  proportional = false ;
+  minimumSize = { 400, 600 };
+  maximumSize = { 400, 600 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = debug_performance_measure;
+  components = {
+    performance_debug {position = { 0 , 0 , 400 , 600 }}
+  };
+}
+
+

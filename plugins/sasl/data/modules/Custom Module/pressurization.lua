@@ -304,14 +304,15 @@ local function update_outputs()
 end
 
 function update()
-
+    perf_measure_start("pressurization:update()")
+    
     update_cabin_pressure()
     update_safety_valve()
 
     update_datarefs()
     update_outputs()
-    
---    print(get(Out_flow_valve_ratio), pid_array_outflow.Proportional, pid_array_outflow.Current_error, pid_array_outflow.Integral, pid_array_outflow.Derivative)
+
+    perf_measure_stop("pressurization:update()")
 
 end
 

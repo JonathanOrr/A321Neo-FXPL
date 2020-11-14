@@ -56,6 +56,7 @@ local function set_overheadl_pwrd()
 end
 
 function update()
+    perf_measure_start("electrical:update()")
 
     update_generators()
     update_buses()
@@ -82,6 +83,9 @@ function update()
         set(avionics, 0)
     end
     set_overheadl_pwrd()
+    
+    perf_measure_stop("electrical:update()")
+
 end
 
 function onAirportLoaded()

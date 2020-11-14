@@ -137,6 +137,7 @@ local function draw_ecam_lower_section()
 end
 
 function update()
+    perf_measure_start("ECAM:update()")
 
 
     --wheels indications--
@@ -179,7 +180,9 @@ function update()
     elseif get(Ecam_current_page) == 8 then
         ecam_update_cond_page()
     end
-    
+
+    perf_measure_stop("ECAM:update()")
+
 end 
 
 local function draw_sts_page_left(messages)
@@ -433,6 +436,8 @@ end
 --drawing the ECAM
 function draw()
 
+    perf_measure_start("ECAM:draw()")
+
     if get(AC_bus_2_pwrd) == 0 and get(EWD_displaying_status) ~= 4 then
         return -- Bus is not powered on, this component cannot work
     end
@@ -566,4 +571,7 @@ function draw()
             set(EWD_box_sts, 1)
         end
     end
+    
+    perf_measure_stop("ECAM:draw()")
+
 end

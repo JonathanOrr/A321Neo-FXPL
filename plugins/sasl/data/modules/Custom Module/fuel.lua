@@ -710,6 +710,7 @@ end
 ----------------------------------------------------------------------------------------------------
 
 function update()
+    perf_measure_start("fuel:update()")
 
     -- Step 1 : update the pump statuses
     update_pumps_elec()
@@ -739,5 +740,7 @@ function update()
     -- Step 5 : bad things
     update_fuel_leaks()
     update_fot()
+
+    perf_measure_stop("fuel:update()")
 end
 

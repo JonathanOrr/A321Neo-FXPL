@@ -166,6 +166,8 @@ end
 
 function update()
 
+    perf_measure_start("apu:update()")
+
     --apu availability
     if get(Apu_N1) > 95 then
         set(Apu_avail, 1)
@@ -180,4 +182,5 @@ function update()
     update_start()
     update_gen()
 
+    perf_measure_stop("apu:update()")
 end

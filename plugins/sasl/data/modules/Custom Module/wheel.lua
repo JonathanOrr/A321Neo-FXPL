@@ -209,6 +209,7 @@ local function update_wheel_psi()
 end
 
 function update()
+    perf_measure_start("wheel:update()")
     update_gear_status()
     update_pb_lights()
 
@@ -219,5 +220,5 @@ function update()
 
     update_brake_temps()
     update_wheel_psi()
-
+    perf_measure_stop("wheel:update()")
 end

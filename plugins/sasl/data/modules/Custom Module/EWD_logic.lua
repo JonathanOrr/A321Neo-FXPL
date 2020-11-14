@@ -635,6 +635,8 @@ end
 
 function update()
 
+    perf_measure_start("EWD_logic:update()")
+
     if get(TIME) - sim_loaded_at < STARTUP_WAIT_SECS then
         return -- Wait some seconds before generates EWD messages
     end
@@ -657,6 +659,9 @@ function update()
     
     check_cleared_list()
     check_reset()
+
+    perf_measure_stop("EWD_logic:update()")
+
 end
 
 function ewd_clear_button_handler(phase)

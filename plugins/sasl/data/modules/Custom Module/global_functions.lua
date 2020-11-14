@@ -307,6 +307,32 @@ function Get_rotated_point_y_pos(x, y, radius, angle)
     return y + radius * math.sin(math.rad(angle))
 end
 
+Perf_array = {}
+
+function perf_measure_start(name)
+    if not debug_performance_measure then
+        return 
+    end
+    if Perf_array[name] == nil then 
+        Perf_array[name] = {}
+        Perf_array[name].timer = sasl.createPerformanceTimer()
+        Perf_array[name].peak = 0
+    end
+
+    sasl.startTimer(Perf_array[name].timer)
+end
+
+function perf_measure_stop(name)
+    if not debug_performance_measure then
+        return
+    end
+    Perf_array[name].last_delta = sasl.getElapsedSeconds(Perf_array[name].timer)
+    if Perf_array[name].last_delta > Perf_array[name].peak then
+        Perf_array[name].peak = Perf_array[name].last_delta
+    end 
+    sasl.pauseTimer(Perf_array[name].timer)
+end
+
 ELEC_sys = {}
 Fuel_sys = {}
 AI_sys   = {}

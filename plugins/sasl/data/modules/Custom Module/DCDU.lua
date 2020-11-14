@@ -555,7 +555,7 @@ function update_new_message_light()
 end
 
 function update()
-
+    perf_measure_start("DCDU:update()")
     check_new_messages()
     update_new_message_light()
 
@@ -610,10 +610,12 @@ function update()
         was_connected = true
     end
 
+    perf_measure_stop("DCDU:update()")
 end
 
 -- The draw fuction. No logic here, just graphic
 function draw()
+    perf_measure_start("DCDU:draw()")
 
     if get(AC_bus_1_pwrd) == 0 then
         return -- Bus is not powered on, this component cannot work
@@ -653,5 +655,6 @@ function draw()
     sasl.gl.drawText (Font_AirbusDUL, 10, size[2]-128, display_top[3].text, 25, false, false, TEXT_ALIGN_LEFT, display_top[3].color )
     sasl.gl.drawText (Font_AirbusDUL, 10, size[2]-164, display_top[4].text, 25, false, false, TEXT_ALIGN_LEFT, display_top[4].color )
     sasl.gl.drawText (Font_AirbusDUL, 10, size[2]-200, display_top[5].text, 25, false, false, TEXT_ALIGN_LEFT, display_top[5].color )
-    
+
+    perf_measure_stop("DCDU:draw()")   
 end

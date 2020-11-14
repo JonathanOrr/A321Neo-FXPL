@@ -584,6 +584,7 @@ end
 
 --drawing the MCDU display
 function draw()
+    perf_measure_start("MCDU:draw()")
 
     if get(AC_ess_bus_pwrd) == 0 then   -- TODO MCDU2 is on AC2
         return -- Bus is not powered on, this component cannot work
@@ -610,6 +611,8 @@ function draw()
         --draw scratchpad
         sasl.gl.drawText(B612MONO_regular, draw_get_x(1), draw_get_y(12), mcdu_entry, MCDU_DISP_TEXT_SIZE["l"], false, false, MCDU_DISP_TEXT_ALIGN["L"], MCDU_DISP_COLOR["white"])
     end
+
+    perf_measure_stop("MCDU:draw()")
 end
 
 --[[
@@ -725,6 +728,8 @@ mcdu_entry = ""
 
 --update
 function update()
+    perf_measure_start("MCDU:update()")
+
     if get(mcdu_page) == 0 then --on start
        mcdu_open_page(505) --open 505 A/C status
     end
@@ -744,6 +749,8 @@ function update()
 
     -- check and execute next XP FMC instruction
     mcdu_ctrl_exe_inst()
+
+    perf_measure_stop("MCDU:update()")
 end
 
 --[[

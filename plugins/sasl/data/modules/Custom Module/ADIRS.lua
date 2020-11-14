@@ -455,6 +455,8 @@ end
 
 function update ()
     
+    perf_measure_start("ADIRS:update()")
+    
     update_adrs()
     
     -- Check if Captain and FO ADRs are ok. It depends also on the pedestal switch
@@ -519,6 +521,8 @@ function update ()
     update_status_datarefs(is_capt_adr_ok, is_fo_adr_ok, is_capt_irs_ok, is_fo_irs_ok, has_capt_att, has_fo_att)
 
     update_output_datarefs()
+    
+    perf_measure_stop("ADIRS:update()")
     
 end
 

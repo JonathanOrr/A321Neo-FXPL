@@ -474,6 +474,7 @@ local function update_fans()
 end
 
 function update()
+    perf_measure_start("packs:update()")
     --create the A321 pack system--
 
     update_apu_pressure()
@@ -497,5 +498,6 @@ function update()
      if get(Ground_speed_ms) > 0.1 or get(Actual_brake_ratio) < 0.9 or get(All_on_ground) ~= 1 then
         set(GAS_bleed_avail, 0)
      end
+    perf_measure_stop("packs:update()")
 
 end

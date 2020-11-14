@@ -1304,6 +1304,7 @@ local function update_navaids()
 end
 
 function update()
+    perf_measure_start("DRAIMS:update()")
     --deactivate easter eggs when there are entry in the scratchpad
     if #DRAIMS_entry > 0 then
         set(DRAIMS_easter_egg, 0)
@@ -1455,9 +1456,12 @@ function update()
         crs_suggest_box_timer = 0
         crs_suggest_box_cl[4] = Set_anim_value(crs_suggest_box_cl[4], 0, 0, 1, 2.5)
     end
+    perf_measure_stop("DRAIMS:update()")
+
 end
 
 function draw()
+    perf_measure_start("DRAIMS:draw()")
 
     if get(DC_ess_bus_pwrd) == 0 then
         return -- Bus is not powered on, this component cannot work
@@ -1853,4 +1857,5 @@ function draw()
         --draw the ident alert box
         draw_ident_alert_box()
     end
+    perf_measure_stop("DRAIMS:draw()")
 end
