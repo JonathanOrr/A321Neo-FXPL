@@ -21,9 +21,10 @@ size = {900, 900}
 
 include('ECAM_automation.lua')
 include('ECAM_apu.lua')
+include('ECAM_bleed.lua')
 include('ECAM_cond.lua')
 include('ECAM_cruise.lua')
-include('ECAM_bleed.lua')
+include('ECAM_door.lua')
 include('ECAM_hyd.lua')
 include('ECAM_elec.lua')
 include('ECAM_engines.lua')
@@ -455,7 +456,7 @@ function draw()
     elseif get(Ecam_current_page) == 8 then --cond
         draw_cond_page()
     elseif get(Ecam_current_page) == 9 then --door
-
+        draw_door_page()
     elseif get(Ecam_current_page) == 10 then --wheel
         --brakes temps--
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2-360, size[2]/2-75, math.floor(get(Left_brakes_temp)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)

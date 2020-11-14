@@ -423,6 +423,7 @@ local function update_right_list()
     -- TODO Lights: LDG LT
     -- TODO Lights: STROBE LT OFF (green) - in flight only
     
+    -- TODO OXT: HI ALT SET
 
 end
 

@@ -570,4 +570,7 @@ Fuel_wing_R_overflow = createGlobalPropertyi("a321neo/dynamics/fuel/fuel_overflo
 AI_wing_L_operating = createGlobalPropertyi("a321neo/dynamics/anti_ice/wing_L_operating", 0, false, true, false) -- 0: pause, 1: working
 AI_wing_R_operating = createGlobalPropertyi("a321neo/dynamics/anti_ice/wing_R_operating", 0, false, true, false) -- 0: pause, 1: working
 
+-- Oxygen
+Oxygen_ckpt_psi  = globalProperty("sim/cockpit2/oxygen/indicators/o2_bottle_pressure_psi")
+
 

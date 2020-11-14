@@ -219,7 +219,8 @@ local failures_data = {
             {name="VENT.EXTRACT\nFAULT", status=false, dataref=FAILURE_AIRCOND_VENT_EXTRACT },
             {name="AVIONICS\nSMOKE", status=false, dataref=FAILURE_AVIONICS_SMOKE },
             {name="AV. INLET\nFAULT", status=false, dataref=FAILURE_AVIONICS_INLET },
-            {name="AV. OUTLET\nFAULT", status=false, dataref=FAILURE_AVIONICS_OUTLET }            
+            {name="AV. OUTLET\nFAULT", status=false, dataref=FAILURE_AVIONICS_OUTLET },                 
+            {name="OXYGEN REG\nFAULT", status=false, dataref=FAILURE_OXY_REGUL_FAIL },
         }
     },
     {
