@@ -19,6 +19,8 @@
 position = {1852, 1449, 600, 400}
 size = {600, 400}
 
+local UPDATE_FREQUENCY_SEC = 1
+
 include('constants.lua')
 
 --variables
@@ -30,6 +32,8 @@ local crs_suggest_box_timer = 0--used to fade alpha
 
 local cursor_Mhz_swap_buffer = 0
 local cursor_khz_swap_buffer = 0
+
+local last_updated_navaid = -1
 
 --navaid infos
 local finding_navaid_id = {} --1 ils, 2 nav1, 3 nav2, 4 adf1, 5 adf2
@@ -1282,25 +1286,34 @@ sasl.registerCommandHandler (Draims_VHF3_monitor_toggle, 0, function(phase)
     end
 end)
 
-function update()
-    --deactivate easter eggs when there are entry in the scratchpad
-    if #DRAIMS_entry > 0 then
-        set(DRAIMS_easter_egg, 0)
-    end
-
+local function update_navaids()
     --search and store all navaid info for information and suggestion display
     finding_navaid_id[1] = sasl.findNavAid ( nil , nil , get(Aircraft_lat) , get(Aircraft_long) , get(globalProperty("sim/cockpit2/radios/actuators/nav1_frequency_hz")), NAV_ILS)
     finding_navaid_id[2] = sasl.findNavAid ( nil , nil , get(Aircraft_lat) , get(Aircraft_long) , get(globalProperty("sim/cockpit2/radios/actuators/nav1_frequency_hz")), NAV_VOR)
     finding_navaid_id[3] = sasl.findNavAid ( nil , nil , get(Aircraft_lat) , get(Aircraft_long) , get(globalProperty("sim/cockpit2/radios/actuators/nav2_frequency_hz")), NAV_VOR)
     finding_navaid_id[4] = sasl.findNavAid ( nil , nil , get(Aircraft_lat) , get(Aircraft_long) , get(globalProperty("sim/cockpit2/radios/actuators/adf1_frequency_hz")), NAV_NDB)
     finding_navaid_id[5] = sasl.findNavAid ( nil , nil , get(Aircraft_lat) , get(Aircraft_long) , get(globalProperty("sim/cockpit2/radios/actuators/adf2_frequency_hz")), NAV_NDB)
+    
     --aquire navaid info
     NAVs_type[1], NAVs_latitude[1], NAVs_longitude[1], NAVs_height[1], NAVs_frequency[1], NAVs_heading[1], NAVs_id[1], NAVs_name[1], NAVs_isInsideLoadedDSFs[1] = sasl.getNavAidInfo(finding_navaid_id[1])
     NAVs_type[2], NAVs_latitude[2], NAVs_longitude[2], NAVs_height[2], NAVs_frequency[2], NAVs_heading[2], NAVs_id[2], NAVs_name[2], NAVs_isInsideLoadedDSFs[2] = sasl.getNavAidInfo(finding_navaid_id[2])
     NAVs_type[1], NAVs_latitude[3], NAVs_longitude[3], NAVs_height[3], NAVs_frequency[3], NAVs_heading[3], NAVs_id[3], NAVs_name[3], NAVs_isInsideLoadedDSFs[3] = sasl.getNavAidInfo(finding_navaid_id[3])
     NAVs_type[1], NAVs_latitude[4], NAVs_longitude[4], NAVs_height[4], NAVs_frequency[4], NAVs_heading[4], NAVs_id[4], NAVs_name[4], NAVs_isInsideLoadedDSFs[4] = sasl.getNavAidInfo(finding_navaid_id[4])
     NAVs_type[1], NAVs_latitude[5], NAVs_longitude[5], NAVs_height[5], NAVs_frequency[5], NAVs_heading[5], NAVs_id[5], NAVs_name[5], NAVs_isInsideLoadedDSFs[5] = sasl.getNavAidInfo(finding_navaid_id[5])
+    
+end
 
+function update()
+    --deactivate easter eggs when there are entry in the scratchpad
+    if #DRAIMS_entry > 0 then
+        set(DRAIMS_easter_egg, 0)
+    end
+    
+    if get(TIME) - last_updated_navaid > UPDATE_FREQUENCY_SEC then
+        update_navaids()
+        last_updated_navaid = get(TIME)
+    end
+    
     --scrolling through the names of the navaid if longer than 10 characters
     --vor 1
     if #NAVs_name[2] - 8 > 11 then
