@@ -1,3 +1,21 @@
+-------------------------------------------------------------------------------
+-- A32NX Freeware Project
+-- Copyright (C) 2020
+-------------------------------------------------------------------------------
+-- LICENSE: GNU General Public License v3.0
+--
+--    This program is free software: you can redistribute it and/or modify
+--    it under the terms of the GNU General Public License as published by
+--    the Free Software Foundation, either version 3 of the License, or
+--    (at your option) any later version.
+--
+--    Please check the LICENSE file in the root of the repository for further
+--    details or check <https://www.gnu.org/licenses/>
+-------------------------------------------------------------------------------
+-- File: FBW_main.lua
+-- Short description: Fly-by-wire main file
+-------------------------------------------------------------------------------
+
 --include("FBW_subcomponents/limits_calculations.lua")
 include("PID.lua")
 include("FBW_subcomponents/fbw_system_subcomponents/flt_computers.lua")

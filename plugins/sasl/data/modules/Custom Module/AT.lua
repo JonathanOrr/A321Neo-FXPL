@@ -1,3 +1,21 @@
+-------------------------------------------------------------------------------
+-- A32NX Freeware Project
+-- Copyright (C) 2020
+-------------------------------------------------------------------------------
+-- LICENSE: GNU General Public License v3.0
+--
+--    This program is free software: you can redistribute it and/or modify
+--    it under the terms of the GNU General Public License as published by
+--    the Free Software Foundation, either version 3 of the License, or
+--    (at your option) any later version.
+--
+--    Please check the LICENSE file in the root of the repository for further
+--    details or check <https://www.gnu.org/licenses/>
+-------------------------------------------------------------------------------
+-- File: AT.lua 
+-- Short description: 
+-------------------------------------------------------------------------------
+
 local simDR_aircraft_ias = globalProperty("sim/cockpit2/gauges/indicators/airspeed_kts_pilot")
 local simDR_aircraft_acceleration = globalProperty("sim/cockpit2/gauges/indicators/airspeed_acceleration_kts_sec_pilot") --kts per second
 local simDR_manual_set_thro_1 = globalProperty("sim/flightmodel/engine/ENGN_thro_use[0]")

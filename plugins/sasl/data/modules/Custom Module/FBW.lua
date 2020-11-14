@@ -1,3 +1,21 @@
+-------------------------------------------------------------------------------
+-- A32NX Freeware Project
+-- Copyright (C) 2020
+-------------------------------------------------------------------------------
+-- LICENSE: GNU General Public License v3.0
+--
+--    This program is free software: you can redistribute it and/or modify
+--    it under the terms of the GNU General Public License as published by
+--    the Free Software Foundation, either version 3 of the License, or
+--    (at your option) any later version.
+--
+--    Please check the LICENSE file in the root of the repository for further
+--    details or check <https://www.gnu.org/licenses/>
+-------------------------------------------------------------------------------
+-- File: FBW.lua
+-- Short description: Fly-by-wire main file
+-------------------------------------------------------------------------------
+
 --PID and PD array
 local A32nx_FBW_roll_left =  {P_gain = 1, D_gain = 75, Current_error = 0, Min_error = -2.5, Max_error = 2.5, Error_offset = 0}
 local A32nx_FBW_roll_right = {P_gain = 1, D_gain = 75, Current_error = 0, Min_error = -2.5, Max_error = 2.5, Error_offset = 0}

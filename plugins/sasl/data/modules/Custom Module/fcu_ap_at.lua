@@ -1,3 +1,21 @@
+-------------------------------------------------------------------------------
+-- A32NX Freeware Project
+-- Copyright (C) 2020
+-------------------------------------------------------------------------------
+-- LICENSE: GNU General Public License v3.0
+--
+--    This program is free software: you can redistribute it and/or modify
+--    it under the terms of the GNU General Public License as published by
+--    the Free Software Foundation, either version 3 of the License, or
+--    (at your option) any later version.
+--
+--    Please check the LICENSE file in the root of the repository for further
+--    details or check <https://www.gnu.org/licenses/>
+-------------------------------------------------------------------------------
+-- File: fcu_ap_at.lua
+-- Short description: Autoflight
+-------------------------------------------------------------------------------
+
 --sim datarefs
 local efis_map_mode = globalProperty("sim/cockpit2/EFIS/map_mode") --0=approach,1=vor,2=map,3=nav,4=plan
 local efis_is_HSI = globalProperty("sim/cockpit2/EFIS/map_mode_is_HSI")

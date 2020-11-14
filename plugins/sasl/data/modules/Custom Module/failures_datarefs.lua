@@ -1,3 +1,21 @@
+-------------------------------------------------------------------------------
+-- A32NX Freeware Project
+-- Copyright (C) 2020
+-------------------------------------------------------------------------------
+-- LICENSE: GNU General Public License v3.0
+--
+--    This program is free software: you can redistribute it and/or modify
+--    it under the terms of the GNU General Public License as published by
+--    the Free Software Foundation, either version 3 of the License, or
+--    (at your option) any later version.
+--
+--    Please check the LICENSE file in the root of the repository for further
+--    details or check <https://www.gnu.org/licenses/>
+-------------------------------------------------------------------------------
+-- File: failures_datarefs.lua
+-- Short description: It contains the datarefs used for failures
+-------------------------------------------------------------------------------
+
 -- General
 ReqMasterCaution      = createGlobalPropertyi("a321neo/failures/req_master_caution", 0, false, true, false) -- When a component (typically EWD) wants to trigger a caution put this to 1
 ReqMasterWarning      = createGlobalPropertyi("a321neo/failures/req_master_warning", 0, false, true, false) -- When a component (typically EWD) wants to trigger a warning put this to 1
@@ -6,11 +24,12 @@ ReqMasterWarning      = createGlobalPropertyi("a321neo/failures/req_master_warni
 FAILURE_radioalt_cap = createGlobalPropertyi("a321neo/failures/pfd/capt_radioalt", 0, false, true, false) -- 0: OK, 1: FAILED
 
 -- Systems
-FAILURE_Apu_fire = globalProperty("sim/operation/failures/rel_apu_fire")
-FAILURE_TCAS = globalProperty("sim/operation/failures/rel_xpndr")
+FAILURE_Apu_fire = globalProperty("sim/operation/failures/rel_apu_fire")     -- TODO This should be replaced/removed
+FAILURE_TCAS = globalProperty("sim/operation/failures/rel_xpndr")            -- TODO This should be replaced/removed
 
 
 FAILURE_gear = createGlobalPropertyi("a321neo/failures/gear_failure", 0, false, true, false) -- 0: OK, 1: NOT UPLOCKED, 2: NOT DOWNLOCKED (internal use only, do not set manually)
+                                                                                             -- TODO 0/1 logic should be fixed
 
 FAILURE_ADR = {}
 FAILURE_ADR[1] = createGlobalPropertyi("a321neo/failures/adirs/adr_1", 0, false, true, false) -- 0: OK, 1: FAILED

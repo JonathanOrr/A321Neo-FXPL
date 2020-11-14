@@ -1,3 +1,21 @@
+-------------------------------------------------------------------------------
+-- A32NX Freeware Project
+-- Copyright (C) 2020
+-------------------------------------------------------------------------------
+-- LICENSE: GNU General Public License v3.0
+--
+--    This program is free software: you can redistribute it and/or modify
+--    it under the terms of the GNU General Public License as published by
+--    the Free Software Foundation, either version 3 of the License, or
+--    (at your option) any later version.
+--
+--    Please check the LICENSE file in the root of the repository for further
+--    details or check <https://www.gnu.org/licenses/>
+-------------------------------------------------------------------------------
+-- File: cabin_screens.lua 
+-- Short description: 
+-------------------------------------------------------------------------------
+
 --a321neo datarefs
 local cabin_screen_page = createGlobalPropertyi("a321neo/cabin/screen_page", 0, false, true, false)
 local cabin_screen_unit = createGlobalPropertyi("a321neo/cabin/sreen_unit", 0, false, true, false)

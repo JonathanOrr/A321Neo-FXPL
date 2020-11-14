@@ -1,19 +1,25 @@
+-------------------------------------------------------------------------------
+-- A32NX Freeware Project
+-- Copyright (C) 2020
+-------------------------------------------------------------------------------
+-- LICENSE: GNU General Public License v3.0
+--
+--    This program is free software: you can redistribute it and/or modify
+--    it under the terms of the GNU General Public License as published by
+--    the Free Software Foundation, either version 3 of the License, or
+--    (at your option) any later version.
+--
+--    Please check the LICENSE file in the root of the repository for further
+--    details or check <https://www.gnu.org/licenses/>
+-------------------------------------------------------------------------------
+-- File: EWD_flight_phases.lua
+-- Short description: Flight phase computation file
+-------------------------------------------------------------------------------
 
--- Flight phases according to FCOM
-PHASE_UNKNOWN        = 0
-PHASE_ELEC_PWR       = 1
-PHASE_1ST_ENG_ON     = 2
-PHASE_1ST_ENG_TO_PWR = 3
-PHASE_ABOVE_80_KTS   = 4
-PHASE_LIFTOFF        = 5
-PHASE_AIRBONE        = 6 
-PHASE_FINAL          = 7        
-PHASE_TOUCHDOWN      = 8
-PHASE_BELOW_80_KTS   = 9 
-PHASE_2ND_ENG_OFF    = 10
+include('constants.lua')
 
+-- Initialization
 set(EWD_flight_phase, PHASE_UNKNOWN)
-
 
 local already_took_off = false
 local was_above_80_kts = false
