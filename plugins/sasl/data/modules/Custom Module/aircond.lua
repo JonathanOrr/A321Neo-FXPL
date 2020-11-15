@@ -222,7 +222,7 @@ local function run_pids()
     -- CONTROL VARIABLE [0;1]: set(Aircond_trim_valve, trim, CKPT)
     
     local curr_err  = get(Cockpit_temp_req) - get(Cockpit_temp)
-    local u = SSS_PID_BP_LIM(pid_arrays[CKPT], curr_err)
+    local u = SSS_PID_BP_LIM(pid_arrays[CKPT], curr_err) or 0
     set(Aircond_trim_valve, u, CKPT)
 
     -- Cabin FWD
@@ -230,7 +230,7 @@ local function run_pids()
     -- CONTROL VARIABLE [0;1]: set(Aircond_trim_valve, trim, CABIN_FWD)
 
     local curr_err  = get(Front_cab_temp_req) - get(Front_cab_temp)
-    local u = SSS_PID_BP_LIM(pid_arrays[CABIN_FWD], curr_err)
+    local u = SSS_PID_BP_LIM(pid_arrays[CABIN_FWD], curr_err) or 0
     set(Aircond_trim_valve, u, CABIN_FWD)
 
     -- Cabin AFT
@@ -238,7 +238,7 @@ local function run_pids()
     -- CONTROL VARIABLE [0;1]: set(Aircond_trim_valve, trim, CABIN_AFT)
 
     local curr_err  = get(Aft_cab_temp_req) - get(Aft_cab_temp)
-    local u = SSS_PID_BP_LIM(pid_arrays[CABIN_AFT], curr_err)
+    local u = SSS_PID_BP_LIM(pid_arrays[CABIN_AFT], curr_err) or 0
     set(Aircond_trim_valve, u, CABIN_AFT)
 
     -- Cargo AFT
@@ -246,7 +246,7 @@ local function run_pids()
     -- CONTROL VARIABLE [0;1]: set(Aircond_trim_valve, trim, CARGO_AFT)
     
     local curr_err  = get(Aft_cargo_temp_req) - get(Aft_cargo_temp)
-    local u = SSS_PID_BP_LIM(pid_arrays[CARGO_AFT], curr_err)
+    local u = SSS_PID_BP_LIM(pid_arrays[CARGO_AFT], curr_err) or 0
     set(Aircond_trim_valve, u, CARGO_AFT)
     
 end

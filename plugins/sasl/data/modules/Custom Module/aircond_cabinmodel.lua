@@ -133,8 +133,9 @@ local function compute_balance(n)
     local flow_air_density = cabin_pressure/(DRY_AIR_CONSTANT*(get(Aircond_injected_flow_temp, n)+273.15))
 
     local mass_air = flow_air_density * AIRCRAFT_VOLUME[n]
-
-    internal_air_temp[n] = internal_air_temp[n] + total_heat / (1005 * mass_air)
+    if mass_air > 0 then
+        internal_air_temp[n] = internal_air_temp[n] + total_heat / (1005 * mass_air)
+    end
 end
 
 function reset_cabin_model()
