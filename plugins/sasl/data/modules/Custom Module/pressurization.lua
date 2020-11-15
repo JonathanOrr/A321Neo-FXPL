@@ -23,9 +23,9 @@ include('constants.lua')
 include('PID.lua')
 
 local DRY_AIR_CONSTANT=287.058
-local TOTAL_VOLUME=50+200+200    -- in m3
+local TOTAL_VOLUME=50+200+200+50    -- in m3
 local OUTFLOW_VALVE_AREA=0.034   -- in m2
-local AIRCRAFT_LEAKAGE  = 0.01   -- m3/s
+local AIRCRAFT_LEAKAGE  = 0.02   -- m3/s
 local SPD_MANUAL_OUTFLOW = 0.025
 
 ----------------------------------------------------------------------------------------------------
@@ -120,13 +120,18 @@ local function compute_pressure_diff(curr_press, volume, volume_increase)
 end
 
 local function get_air_density(pressure, temperature)
-    return pressure / (DRY_AIR_CONSTANT * temperature) 
+    return pressure / (DRY_AIR_CONSTANT * (temperature+273.15)) 
 end
 
 local function airmass_to_airflow(airmass, temp)
     return airmass / get_air_density(current_cabin_pressure_in_pa, temp)
 end
 
+local function compute_leakage(area_leakage, delta_P, air_density, flow_coeff)
+
+    return flow_coeff * area_leakage * math.sqrt(2*delta_P/air_density)
+
+end
 
 local function update_cabin_pressure()
 
@@ -134,14 +139,11 @@ local function update_cabin_pressure()
     local input_airmass_pack_2 = get(R_pack_Flow_value) -- kg/s
 
     local input_airflow_pack_1 = airmass_to_airflow(input_airmass_pack_1, get(L_pack_temp)) -- m3/s
-    local input_airflow_pack_2 = airmass_to_airflow(input_airmass_pack_2, get(R_pack_temp)) -- m3/s     
+    local input_airflow_pack_2 = airmass_to_airflow(input_airmass_pack_2, get(R_pack_temp)) -- m3/s
 
     local input_delta_pressure = current_cabin_pressure_in_pa * (input_airflow_pack_1+input_airflow_pack_2) / TOTAL_VOLUME -- Pa
-    
-    -- Ok, I don't know why, put the pack pressure looks like 1/3 than it should be...
-    input_delta_pressure = input_delta_pressure * 4
-    
-    local outflow_valve_actual_area = get(Out_flow_valve_ratio) * OUTFLOW_VALVE_AREA -- Let's assume is linare (m2)
+   
+    local outflow_valve_actual_area = get(Out_flow_valve_ratio) * OUTFLOW_VALVE_AREA -- Let's assume is linear (m2)
     
     if get(Press_safety_valve_pos) == 1 then
         -- if the safety valve is open, we assume like we have another outflow valve open
@@ -151,11 +153,15 @@ local function update_cabin_pressure()
     local outside_pressure = get(Weather_curr_press_flight_level) * 3386.39 -- Pa
     
     local output_airflow     = 0
+    local cabin_air_density  = get_air_density(current_cabin_pressure_in_pa, get(Aft_cab_temp))
     if current_cabin_pressure_in_pa > outside_pressure then
-        output_airflow = 0.840 * outflow_valve_actual_area * math.sqrt(math.abs(current_cabin_pressure_in_pa-outside_pressure)) -- m3/s
+        output_airflow = compute_leakage(outflow_valve_actual_area, current_cabin_pressure_in_pa-outside_pressure, cabin_air_density, 2.5) -- m3/s
     elseif current_cabin_pressure_in_pa < outside_pressure then
-        output_airflow = 0.840 * outflow_valve_actual_area * (-math.sqrt(math.abs(outside_pressure-current_cabin_pressure_in_pa))) -- m3/s    
+        output_airflow =  -compute_leakage(outflow_valve_actual_area, outside_pressure-current_cabin_pressure_in_pa, cabin_air_density, 2.5) -- m3/s
     end
+
+    print(input_airflow_pack_1+input_airflow_pack_2, output_airflow)
+
 
     set(Press_outflow_valve_flow, output_airflow)
     set(Press_outflow_valve_press, current_cabin_pressure_in_pa * (output_airflow) / TOTAL_VOLUME / 3386.39)

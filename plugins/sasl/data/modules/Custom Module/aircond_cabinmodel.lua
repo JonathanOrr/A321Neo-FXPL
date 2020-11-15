@@ -130,10 +130,17 @@ local function compute_balance(n)
     total_heat = total_heat * get(DELTA_TIME)
 
     local cabin_pressure   = 29.92*3386.39 - get(Cabin_alt_ft)*3.378431
-    local flow_air_density = cabin_pressure/(DRY_AIR_CONSTANT*(get(Aircond_injected_flow_temp, n)+273.15))
+    
+    local temp = get(Aircond_injected_flow_temp, n)+273.15
+    if temp ~= temp or temp == 0 then
+        -- Sometimes a spurious nan occurs
+        temp = 273.15
+    end
+    
+    local flow_air_density = cabin_pressure/(DRY_AIR_CONSTANT*temp)
 
     local mass_air = flow_air_density * AIRCRAFT_VOLUME[n]
-    if mass_air > 0 then
+    if mass_air == mass_air and total_heat == total_heat then -- not nan
         internal_air_temp[n] = internal_air_temp[n] + total_heat / (1005 * mass_air)
     end
 end
