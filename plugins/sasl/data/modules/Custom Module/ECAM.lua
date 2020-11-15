@@ -168,7 +168,7 @@ function update()
 	ecam_update_page()
 	ecam_update_leds()
 	ecam_update_fuel_page()
-	ecam_update_eng_page()
+	ecam_update_eng_page()  -- This must be called even if the page is not showed to update some stuffs for EWD
 	ecam_update_cruise_page()
 	
 	if get(Ecam_current_page) == 2 then
