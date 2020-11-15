@@ -223,7 +223,7 @@ function HydSystem:update_qty()
 
     if self.qty_initialized == false then
         self.qty_initialized = true
-        self.qty_curr = math.random()*(self.qty_high_limit - self.qty_norm_limit) + self.qty_norm_limit
+        self.qty_curr = math.random()*(self.qty_high_limit - self.qty_norm_limit - 0.1) + self.qty_norm_limit +0.1
     end
     
     if self.qty_curr > 0 then   -- LEAK failures

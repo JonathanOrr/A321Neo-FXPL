@@ -160,9 +160,6 @@ local function update_cabin_pressure()
         output_airflow =  -compute_leakage(outflow_valve_actual_area, outside_pressure-current_cabin_pressure_in_pa, cabin_air_density, 2.5) -- m3/s
     end
 
-    print(input_airflow_pack_1+input_airflow_pack_2, output_airflow)
-
-
     set(Press_outflow_valve_flow, output_airflow)
     set(Press_outflow_valve_press, current_cabin_pressure_in_pa * (output_airflow) / TOTAL_VOLUME / 3386.39)
 

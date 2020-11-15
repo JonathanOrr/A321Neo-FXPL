@@ -135,9 +135,9 @@ end
 function ecam_update_advisory_conditions()
     local at_least_one = false
     
-    local cond_hyd = (get(Hydraulic_G_qty) >= 0.18 and get(Hydraulic_G_qty) < 0.83) or
-                     (get(Hydraulic_B_qty) >= 0.31 and get(Hydraulic_B_qty) < 0.8) or
-                     (get(Hydraulic_Y_qty) >= 0.22 and get(Hydraulic_Y_qty) < 0.81)
+    local cond_hyd = (get(Hydraulic_G_qty) >= 0.18 and get(Hydraulic_G_qty) < 0.82) or
+                     (get(Hydraulic_B_qty) >= 0.31 and get(Hydraulic_B_qty) < 0.76) or
+                     (get(Hydraulic_Y_qty) >= 0.22 and get(Hydraulic_Y_qty) < 0.8)
     
     if cond_hyd then at_least_one = true; set(Ecam_advisory_HYD, 1) end
     
