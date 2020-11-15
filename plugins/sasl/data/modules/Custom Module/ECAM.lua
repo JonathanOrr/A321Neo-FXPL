@@ -566,6 +566,7 @@ function draw()
 
     -- Update STS box
     set(EWD_box_sts, 0)
+    set(Ecam_status_is_normal, ecam_sts:is_normal() and 1 or 0) -- Used in ECAM_automation.lua
     if (not ecam_sts:is_normal()) or (not ecam_sts:is_normal_maintenance() and get(EWD_flight_phase) == 10 ) then
         if get(Ecam_current_status) ~= ECAM_STATUS_SHOW_EWD_STS and get(Ecam_current_status) ~= ECAM_STATUS_SHOW_EWD then
             set(EWD_box_sts, 1)

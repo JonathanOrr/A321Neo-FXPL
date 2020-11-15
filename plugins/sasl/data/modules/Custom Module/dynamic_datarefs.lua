@@ -223,6 +223,19 @@ Ecam_EDW_requested_page = createGlobalPropertyi("a321neo/cockpit/ecam/edw_reques
 Ecam_current_status = createGlobalPropertyi("a321neo/cockpit/ecam/internal_status", 0, false, true, false) -- Internal status for ECAM, please check ECAM-automation.lua for values
 Ecam_sts_scroll_page = createGlobalPropertyi("a321neo/cockpit/ecam/sts_scroll_page", 0, false, true, false) --Current scroll page for STS, 0 is the first page
 Ecam_arrow_overflow = createGlobalPropertyi("a321neo/cockpit/ecam/arrow_overflow", 0, false, true, false) -- Overflow arrow: 1 displayed, 0 hidden
+Ecam_status_is_normal = createGlobalPropertyi("a321neo/cockpit/ecam/is_normal", 0, false, true, false) -- 1 if NORMAL showed (used for logic purposes)
+
+Ecam_advisory_ENG   = createGlobalPropertyi("a321neo/cockpit/ecam/adv/eng", 0, false, true, false) -- Set to 1 to trigger advisory (auto-cleared)
+Ecam_advisory_BLEED = createGlobalPropertyi("a321neo/cockpit/ecam/adv/bleed", 0, false, true, false) -- Set to 1 to trigger advisory (auto-cleared)
+Ecam_advisory_PRESS = createGlobalPropertyi("a321neo/cockpit/ecam/adv/press", 0, false, true, false) -- Set to 1 to trigger advisory (auto-cleared)
+Ecam_advisory_ELEC  = createGlobalPropertyi("a321neo/cockpit/ecam/adv/elec", 0, false, true, false) -- Set to 1 to trigger advisory (auto-cleared)
+Ecam_advisory_HYD   = createGlobalPropertyi("a321neo/cockpit/ecam/adv/hyd", 0, false, true, false) -- Set to 1 to trigger advisory (auto-cleared)
+Ecam_advisory_FUEL  = createGlobalPropertyi("a321neo/cockpit/ecam/adv/fuel", 0, false, true, false) -- Set to 1 to trigger advisory (auto-cleared)
+Ecam_advisory_APU   = createGlobalPropertyi("a321neo/cockpit/ecam/adv/apu", 0, false, true, false) -- Set to 1 to trigger advisory (auto-cleared)
+Ecam_advisory_COND  = createGlobalPropertyi("a321neo/cockpit/ecam/adv/cond", 0, false, true, false) -- Set to 1 to trigger advisory (auto-cleared)
+Ecam_advisory_DOOR  = createGlobalPropertyi("a321neo/cockpit/ecam/adv/door", 0, false, true, false) -- Set to 1 to trigger advisory (auto-cleared)
+Ecam_advisory_WHEEL = createGlobalPropertyi("a321neo/cockpit/ecam/adv/wheel", 0, false, true, false) -- Set to 1 to trigger advisory (auto-cleared)
+Ecam_advisory_FCTL  = createGlobalPropertyi("a321neo/cockpit/ecam/adv/fctl", 0, false, true, false) -- Set to 1 to trigger advisory (auto-cleared)
 
 --global dataref variable from the Sim--
 --camera

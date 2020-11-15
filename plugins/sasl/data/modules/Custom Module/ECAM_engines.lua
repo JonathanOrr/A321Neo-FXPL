@@ -76,8 +76,8 @@ local function draw_oil_qt_press_temp()
 
     local eng_1_oil_color = pulse_green(get(Eng_1_OIL_press) > 90 or get(Eng_1_OIL_press) < 13)
     local eng_2_oil_color = pulse_green(get(Eng_2_OIL_press) > 90 or get(Eng_2_OIL_press) < 13)
-    if get(Eng_1_OIL_press) < 13 then eng_1_oil_color = ECAM_RED end
-    if get(Eng_2_OIL_press) < 13 then eng_2_oil_color = ECAM_RED end
+    if get(Eng_1_OIL_press) < 7 then eng_1_oil_color = ECAM_RED end
+    if get(Eng_2_OIL_press) < 7 then eng_2_oil_color = ECAM_RED end
 
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-165, 525, params.eng1_oil_press, 36,
                      false, false, TEXT_ALIGN_RIGHT, eng_1_oil_color)

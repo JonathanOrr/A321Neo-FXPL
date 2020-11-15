@@ -132,9 +132,81 @@ function ecam_user_press_clr_status(phase)
     
 end
 
+function ecam_update_advisory_conditions()
+    local at_least_one = false
+    
+    local cond_hyd = (get(Hydraulic_G_qty) >= 0.18 and get(Hydraulic_G_qty) < 0.83) or
+                     (get(Hydraulic_B_qty) >= 0.31 and get(Hydraulic_B_qty) < 0.8) or
+                     (get(Hydraulic_Y_qty) >= 0.22 and get(Hydraulic_Y_qty) < 0.81)
+    
+    if cond_hyd then at_least_one = true; set(Ecam_advisory_HYD, 1) end
+    
+    local cond_press = (get(Cabin_delta_psi) > 1.5 and get(EWD_flight_phase) == PHASE_FINAL) or
+                       (get(Cabin_vs) > 1750) or
+                       (get(Cabin_alt_ft) > 8800 and get(Cabin_alt_ft) < 9950)
+
+    if cond_press then at_least_one = true; set(Ecam_advisory_PRESS, 1) end
+    
+    local cond_door = get(Oxygen_ckpt_psi) < 600 and get(Oxygen_ckpt_psi) >= 300
+
+    if cond_door then at_least_one = true; set(Ecam_advisory_DOOR, 1) end
+
+    local cond_engines = get(Eng_1_OIL_qty) < 2 or
+                         get(Eng_2_OIL_qty) < 2 or
+                         get(Eng_1_OIL_press) > 90 or
+                         (get(Eng_1_OIL_press) < 13 and get(Eng_1_OIL_press) >=7 ) or
+                         get(Eng_2_OIL_press) > 90 or
+                         (get(Eng_2_OIL_press) < 13 and get(Eng_2_OIL_press) >=7 ) or
+                         (get(Eng_1_OIL_temp) > 140 and get(Eng_1_OIL_temp) <= 155) or
+                         (get(Eng_2_OIL_temp) > 140 and get(Eng_2_OIL_temp) <= 155) or
+                         get(Eng_1_VIB_N1) > 6 or
+                         get(Eng_1_VIB_N2) > 4.3 or
+                         get(Eng_2_VIB_N1) > 6 or
+                         get(Eng_2_VIB_N2) > 4.3
+
+    if cond_engines then at_least_one = true; set(Ecam_advisory_ENG, 1) end       
+
+    if at_least_one then
+        set(EWD_box_adv, 1)
+    end
+    
+end
+
+function ecam_update_leds_advisory()
+    
+    if get(TIME) % 1 < 0.5 then
+        if get(Ecam_advisory_ENG) == 1   then at_least_one = true; set(Ecam_btn_light_ENG, 1)   end
+        if get(Ecam_advisory_BLEED) == 1 then at_least_one = true; set(Ecam_btn_light_BLEED, 1) end
+        if get(Ecam_advisory_PRESS) == 1 then at_least_one = true; set(Ecam_btn_light_PRESS, 1) end
+        if get(Ecam_advisory_ELEC) == 1  then at_least_one = true; set(Ecam_btn_light_ELEC, 1)  end
+        if get(Ecam_advisory_HYD) == 1   then at_least_one = true; set(Ecam_btn_light_HYD, 1)   end
+        if get(Ecam_advisory_FUEL) == 1  then at_least_one = true; set(Ecam_btn_light_FUEL, 1)  end
+        if get(Ecam_advisory_APU) == 1   then at_least_one = true; set(Ecam_btn_light_APU, 1)   end
+        if get(Ecam_advisory_COND) == 1  then at_least_one = true; set(Ecam_btn_light_COND, 1)  end
+        if get(Ecam_advisory_DOOR) == 1  then at_least_one = true; set(Ecam_btn_light_DOOR, 1)  end
+        if get(Ecam_advisory_WHEEL) == 1 then at_least_one = true; set(Ecam_btn_light_WHEEL, 1) end
+        if get(Ecam_advisory_FCTL) == 1  then at_least_one = true; set(Ecam_btn_light_FCTL, 1)  end
+    end
+    
+    set(Ecam_advisory_ENG, 0)
+    set(Ecam_advisory_BLEED, 0)
+    set(Ecam_advisory_PRESS, 0)
+    set(Ecam_advisory_ELEC, 0)
+    set(Ecam_advisory_HYD, 0)
+    set(Ecam_advisory_FUEL, 0)
+    set(Ecam_advisory_APU, 0)
+    set(Ecam_advisory_COND, 0)
+    set(Ecam_advisory_DOOR, 0)
+    set(Ecam_advisory_WHEEL, 0)
+    set(Ecam_advisory_FCTL, 0)
+
+end
+
 -- This function update the pushbutton leds status
 function ecam_update_leds()
 
+    set(EWD_box_adv, 0)
+    
     -- Let's turn off all the leds
     set(Ecam_btn_light_ENG,  0)
     set(Ecam_btn_light_BLEED,0)
@@ -149,6 +221,13 @@ function ecam_update_leds()
     set(Ecam_btn_light_FCTL, 0)
     set(Ecam_btn_light_CLR,  0)
     set(Ecam_btn_light_STS,  0)
+    
+    ecam_update_advisory_conditions()
+    
+    if get(DC_ess_bus_pwrd) == 0 then
+        -- No power for leds
+        return
+    end
 
     if get(Ecam_current_status) ~= ECAM_STATUS_NORMAL then
         -- Let's turn on the led of the current page
@@ -182,9 +261,8 @@ function ecam_update_leds()
     if get(Ecam_current_status) == ECAM_STATUS_SHOW_EWD or get(Ecam_current_status) == ECAM_STATUS_SHOW_EWD_STS or get(EWD_is_clerable) == 1 then
         set(Ecam_btn_light_CLR, 1)
     end
-    
-    -- TODO Advisory blinking leds
 
+    ecam_update_leds_advisory()
 end
 
 
@@ -290,12 +368,19 @@ function ecam_update_page()
         -- User is forcing a page, nothing to do
         return
     end
-    
+
     if get(Ecam_is_sts_clearable) == 1 then
-        -- We didn't cleared the sts page, so let's go there and change mode
+        if get(Ecam_status_is_normal) == 1  then
+            -- We dont need to clear the STS page if it is normal (this happens when a fault disappear)
+            set(Ecam_is_sts_clearable, 0)
+            set(Ecam_EDW_requested_page, 0)
+            set(Ecam_current_status, ECAM_STATUS_NORMAL)
+        else
+            -- We didn't cleared the sts page, so let's go there and change mode
             set(Ecam_current_status, ECAM_STATUS_SHOW_EWD_STS)
             Goto_ecam(ECAM_PAGE_STS)
-        return
+            return
+        end
     end
     
     if get(Ecam_EDW_requested_page) == 0 then
