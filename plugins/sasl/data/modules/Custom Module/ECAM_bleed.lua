@@ -128,13 +128,6 @@ local function update_valves_dr()
     set(Ecam_bleed_ip_valve_L, get(ENG_1_bleed_switch) * 2 + get(FAILURE_BLEED_IP_1_VALVE_STUCK))
     set(Ecam_bleed_ip_valve_R, get(ENG_2_bleed_switch) * 2 + get(FAILURE_BLEED_IP_2_VALVE_STUCK))
     
-    -- APU
-    if get(Apu_master_button_state) % 2 == 0 and get(FAILURE_BLEED_APU_VALVE_STUCK) == 0 then
-        set(Ecam_bleed_apu_valve, -1)
-    else
-        set(Ecam_bleed_apu_valve, get(Apu_bleed_switch) * 2 + get(FAILURE_BLEED_APU_VALVE_STUCK))
-    end
-    
     -- X BLEED
     set(Ecam_bleed_xbleed_valve, get(X_bleed_valve) * 2 + get(FAILURE_BLEED_XBLEED_VALVE_STUCK))
     

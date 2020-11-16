@@ -281,6 +281,9 @@ local function update_datarefs()
         set(Cabin_vs, (current_cabin_altitude-prev_cabin_altitude) / get(DELTA_TIME) * 60)
     end
     prev_cabin_altitude = current_cabin_altitude
+    
+    -- Set button light
+    set(Press_mode_sel_button, mode_sel_manual and 1 or 0) -- TODO Faults
 end
 
 local function update_outputs()
