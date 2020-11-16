@@ -16,6 +16,8 @@
 -- Short description: Display switch logic
 -------------------------------------------------------------------------------
 
+include('constants.lua')
+
 --declare states--
 local PFD = 1
 local ND = 2
@@ -24,146 +26,72 @@ local ECAM = 4
 
 --a32nx datarefs
 
-function update()
-    if get(Override_DMC) == 0 then
+function auto_update()
         set(Capt_pfd_displaying_status, 1)
         set(Capt_nd_displaying_status, 2)
         set(Fo_pfd_displaying_status, 1)
         set(Fo_nd_displaying_status, 2)
         set(EWD_displaying_status, 3)
         set(ECAM_displaying_status, 4)
+end
+
+function has_power(command) -- Still TODO
+
+    if command == ECAM_displaying_status then
+        if get(AC_bus_2_pwrd) == 0 then
+            return false
+        else
+            ELEC_sys.add_power_consumption(ELEC_BUS_AC_2, 0.43, 0.43)   -- 50W (just hypothesis)
+            return true
+        end        
     end
 
-    --capt PFD show and hide--
-    if get(Capt_pfd_displaying_status) == PFD then
-        set(Capt_pfd_show, 1, 1)
+    return true
+end
+
+function update_set(command, display)
+    
+    if get(command) == PFD then
+        set(display, 1, PFD)
     else
-        set(Capt_pfd_show, 0, 1)
+        set(display, 0, PFD)
     end
-    if get(Capt_pfd_displaying_status) == ND then
-        set(Capt_pfd_show, 1, 2)
+    
+    if get(command) == ND then
+        set(display, 1, ND)
     else
-        set(Capt_pfd_show, 0, 2)
+        set(display, 0, ND)
     end
-    if get(Capt_pfd_displaying_status) == EWD then
-        set(Capt_pfd_show, 1, 3)
+    
+    if get(command) == EWD then
+        set(display, 1, EWD)
     else
-        set(Capt_pfd_show, 0, 3)
+        set(display, 0, EWD)
     end
-    if get(Capt_pfd_displaying_status) == ECAM then
-        set(Capt_pfd_show, 1, 4)
+    
+    if get(command) == ECAM then
+        set(display, 1, ECAM)
     else
-        set(Capt_pfd_show, 0, 4)
+        set(display, 0, ECAM)
     end
 
-    --capt ND show and hide--
-    if get(Capt_nd_displaying_status) == PFD then
-        set(Capt_nd_show, 1, 1)
-    else
-        set(Capt_nd_show, 0, 1)
-    end
-    if get(Capt_nd_displaying_status) == ND then
-        set(Capt_nd_show, 1, 2)
-    else
-        set(Capt_nd_show, 0, 2)
-    end
-    if get(Capt_nd_displaying_status) == EWD then
-        set(Capt_nd_show, 1, 3)
-    else
-        set(Capt_nd_show, 0, 3)
-    end
-    if get(Capt_nd_displaying_status) == ECAM then
-        set(Capt_nd_show, 1, 4)
-    else
-        set(Capt_nd_show, 0, 4)
+
+end
+
+function update_displays()
+    update_set(Capt_pfd_displaying_status, Capt_pfd_show)
+    update_set(Capt_nd_displaying_status,  Capt_nd_show)
+    update_set(Fo_pfd_displaying_status,   Fo_pfd_show)
+    update_set(Fo_nd_displaying_status,    Fo_nd_show)
+    update_set(EWD_displaying_status,      EWD_show)
+    update_set(ECAM_displaying_status,     ECAM_show)
+end
+
+function update()
+    if get(Override_DMC) == 0 then
+        auto_update()
     end
 
-    --FO PFD show and hide--
-    if get(Fo_pfd_displaying_status) == PFD then
-        set(Fo_pfd_show, 1, 1)
-    else
-        set(Fo_pfd_show, 0, 1)
-    end
-    if get(Fo_pfd_displaying_status) == ND then
-        set(Fo_pfd_show, 1, 2)
-    else
-        set(Fo_pfd_show, 0, 2)
-    end
-    if get(Fo_pfd_displaying_status) == EWD then
-        set(Fo_pfd_show, 1, 3)
-    else
-        set(Fo_pfd_show, 0, 3)
-    end
-    if get(Fo_pfd_displaying_status) == ECAM then
-        set(Fo_pfd_show, 1, 4)
-    else
-        set(Fo_pfd_show, 0, 4)
-    end
-
-    --FO ND show and hide--
-    if get(Fo_nd_displaying_status) == PFD then
-        set(Fo_nd_show, 1, 1)
-    else
-        set(Fo_nd_show, 0, 1)
-    end
-    if get(Fo_nd_displaying_status) == ND then
-        set(Fo_nd_show, 1, 2)
-    else
-        set(Fo_nd_show, 0, 2)
-    end
-    if get(Fo_nd_displaying_status) == EWD then
-        set(Fo_nd_show, 1, 3)
-    else
-        set(Fo_nd_show, 0, 3)
-    end
-    if get(Fo_nd_displaying_status) == ECAM then
-        set(Fo_nd_show, 1, 4)
-    else
-        set(Fo_nd_show, 0, 4)
-    end
-
-    --EWD show and hide--
-    if get(EWD_displaying_status) == PFD then
-        set(EWD_show, 1, 1)
-    else
-        set(EWD_show, 0, 1)
-    end
-    if get(EWD_displaying_status) == ND then
-        set(EWD_show, 1, 2)
-    else
-        set(EWD_show, 0, 2)
-    end
-    if get(EWD_displaying_status) == EWD then
-        set(EWD_show, 1, 3)
-    else
-        set(EWD_show, 0, 3)
-    end
-    if get(EWD_displaying_status) == ECAM then
-        set(EWD_show, 1, 4)
-    else
-        set(EWD_show, 0, 4)
-    end
-
-    --ECAM show and hide--
-    if get(ECAM_displaying_status) == PFD then
-        set(ECAM_show, 1, 1)
-    else
-        set(ECAM_show, 0, 1)
-    end
-    if get(ECAM_displaying_status) == ND then
-        set(ECAM_show, 1, 2)
-    else
-        set(ECAM_show, 0, 2)
-    end
-    if get(ECAM_displaying_status) == EWD then
-        set(ECAM_show, 1, 3)
-    else
-        set(ECAM_show, 0, 3)
-    end
-    if get(ECAM_displaying_status) == ECAM then
-        set(ECAM_show, 1, 4)
-    else
-        set(ECAM_show, 0, 4)
-    end
+    update_displays()
 
 end
