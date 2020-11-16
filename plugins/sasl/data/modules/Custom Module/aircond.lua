@@ -271,6 +271,11 @@ end
 
 function udpate_avio_config()
 
+    if get(Press_ditching_enabled) == 1 then
+        avio_configuration = AVIO_CLOSED
+        return
+    end
+
     if get(Any_wheel_on_ground) == 1 and get(EWD_flight_phase) ~= PHASE_1ST_ENG_TO_PWR and get(EWD_flight_phase) ~= PHASE_ABOVE_80_KTS then
         -- If on ground and no takeoff power
     

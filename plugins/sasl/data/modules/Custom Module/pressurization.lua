@@ -201,6 +201,12 @@ local function update_safety_valve()
 end
 
 local function set_outflow(x)
+
+    if get(Press_ditching_enabled) == 1 then
+        -- If ditching pushbutton is pressed, no matter what automatic system decides, the
+        -- outflow valve closes.
+        x = 0
+    end
     x = Math_clamp(x, 0, 1)
     pid_array_outflow.Actual_output = x
     Set_dataref_linear_anim(Out_flow_valve_ratio, x, 0, 1, 0.25)
@@ -293,6 +299,7 @@ local function update_outputs()
     else
         if manual_mode_lever_req ~= 0 then
             local new_value = get(Out_flow_valve_ratio) + manual_mode_lever_req * get(DELTA_TIME) * SPD_MANUAL_OUTFLOW
+            Math_clamp(new_value, 0, 1)
             set(Out_flow_valve_ratio, new_value)
             manual_mode_lever_req = 0            
         end

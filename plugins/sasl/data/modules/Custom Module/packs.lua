@@ -281,6 +281,8 @@ local function update_datarefs()
     set(Econ_flow_button,      get(OVHR_elec_panel_pwrd) * (econ_flow_switch and 1 or 0))
     set_overhead_dr(Ditching_button, ditching_switch, false)
     
+    set(Press_ditching_enabled, ditching_switch and 1 or 0)
+    
     -- ECAM stuffs
     if apu_bleed_valve_pos and not x_bleed_status then
         set(X_bleed_bridge_state, 1)--bridged but closed
