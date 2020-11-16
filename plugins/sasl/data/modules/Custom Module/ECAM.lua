@@ -39,20 +39,6 @@ include('constants.lua')
 --local variables
 local apu_avail_timer = -1
 
---sim datarefs
-
---colors
-local left_brake_temp_color = {1.0, 1.0, 1.0}
-local right_brake_temp_color = {1.0, 1.0, 1.0}
-local left_tire_psi_color = {1.0, 1.0, 1.0}
-local right_tire_psi_color = {1.0, 1.0, 1.0}
-
-local left_bleed_color = ECAM_ORANGE
-local right_bleed_color = ECAM_ORANGE
-local left_eng_avail_cl = ECAM_ORANGE
-local right_eng_avail_cl = ECAM_ORANGE
-
--- misc
 
 local function drawUnderlineText(font, x, y, text, size, bold, italic, align, color)
     sasl.gl.drawText(font, x, y, text, size, bold, italic, align, color)
@@ -174,11 +160,6 @@ end
 function draw()
 
     perf_measure_start("ECAM:draw()")
-
-    if get(AC_bus_2_pwrd) == 0 and get(EWD_displaying_status) ~= 4 then
-        return -- Bus is not powered on, this component cannot work
-    end
-    ELEC_sys.add_power_consumption(ELEC_BUS_AC_2, 0.43, 0.43)   -- 50W (just hypothesis)
 
 
     if get(Ecam_current_page) == 1 then --eng

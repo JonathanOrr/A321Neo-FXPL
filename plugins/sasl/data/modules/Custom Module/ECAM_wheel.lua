@@ -19,7 +19,19 @@
 include('constants.lua')
 
 
-function draw_wheel_page()
+--colors
+local left_brake_temp_color = {1.0, 1.0, 1.0}
+local right_brake_temp_color = {1.0, 1.0, 1.0}
+local left_tire_psi_color = {1.0, 1.0, 1.0}
+local right_tire_psi_color = {1.0, 1.0, 1.0}
+
+local left_bleed_color = ECAM_ORANGE
+local right_bleed_color = ECAM_ORANGE
+local left_eng_avail_cl = ECAM_ORANGE
+local right_eng_avail_cl = ECAM_ORANGE
+
+
+local function draw_brakes_and_tires()
     --brakes temps--
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-360, size[2]/2-75, math.floor(get(Left_brakes_temp)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-200, size[2]/2-75, math.floor(get(Left_brakes_temp)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
@@ -55,6 +67,22 @@ function draw_wheel_page()
     sasl.gl.drawArc(size[1]/2 - 200, size[2]/2 - 110, 76, 80, 240, 60, left_tire_psi_color)
     sasl.gl.drawArc(size[1]/2 + 200, size[2]/2 - 110, 76, 80, 240, 60, right_tire_psi_color)
     sasl.gl.drawArc(size[1]/2 + 360, size[2]/2 - 110, 76, 80, 240, 60, right_tire_psi_color)
+end
+
+local function draw_nsw_steering()
+    -- TODO Fix behavior switch NS Steer
+    if get(Nosewheel_Steering_and_AS) == 0 then
+        local is_Y_ok = get(Hydraulic_Y_press) >= 1450
+        local color = is_Y_ok and ECAM_GREEN or ECAM_ORANGE
+        Sasl_DrawWideFrame(size[1]/2-152, size[2]/2+96, 25, 29, 2, 0, color)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-140, size[2]/2+100, "Y", 32, false, false, TEXT_ALIGN_CENTER, color)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2+100, "N/W STEERING", 32, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+    end
+end
+
+function draw_wheel_page()
+    draw_brakes_and_tires()
+    draw_nsw_steering()
 end
 
 
