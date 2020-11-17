@@ -40,12 +40,6 @@ include('constants.lua')
 local apu_avail_timer = -1
 
 
-local function drawUnderlineText(font, x, y, text, size, bold, italic, align, color)
-    sasl.gl.drawText(font, x, y, text, size, bold, italic, align, color)
-    width, height = sasl.gl.measureText(Font_AirbusDUL, text, size, false, false)
-    sasl.gl.drawWideLine(x + 3, y - 5, x + width + 3, y - 5, 4, color)
-end
-
 local function draw_ecam_lower_section_fixed()
     sasl.gl.drawText(Font_AirbusDUL, 100, size[2]/2-372, "TAT", 32, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
     sasl.gl.drawText(Font_AirbusDUL, 100, size[2]/2-407, "SAT", 32, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)

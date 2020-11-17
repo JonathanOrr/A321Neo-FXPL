@@ -72,6 +72,11 @@ ecam_sts = {
     
 }
 
+local function drawUnderlineText(font, x, y, text, size, bold, italic, align, color)
+    sasl.gl.drawText(font, x, y, text, size, bold, italic, align, color)
+    width, height = sasl.gl.measureText(Font_AirbusDUL, text, size, false, false)
+    sasl.gl.drawWideLine(x + 3, y - 5, x + width + 3, y - 5, 4, color)
+end
 
 function draw_sts_page_left(messages)
     local default_visible_left_offset = size[2]/2+320

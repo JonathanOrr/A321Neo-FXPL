@@ -25,9 +25,12 @@ Distance_traveled_mi = createGlobalPropertyf("a321neo/dynamics/distance_traveled
 Distance_traveled_km = createGlobalPropertyf("a321neo/dynamics/distance_traveled_km", 0, false, true, false)
 Ground_speed_kmh = createGlobalPropertyf("a321neo/dynamics/groundspeed_kmh", 0, false, true, false)
 Ground_speed_mph = createGlobalPropertyf("a321neo/dynamics/groundspeed_mph", 0, false, true, true)
-Groundspeed_kts = createGlobalPropertyf("a321neo/dynamics/groundspeed_kts", 0, false, true, false) --ground speed in kts
+Ground_speed_kts = createGlobalPropertyf("a321neo/dynamics/groundspeed_kts", 0, false, true, false) --ground speed in kts
+Ground_speed_ms = globalProperty("sim/flightmodel/position/groundspeed")
 Startup_running = globalProperty("sim/operation/prefs/startup_running") -- 1 if user asked to startup with engines running
 --wheel
+Override_wheel_steering = globalProperty("sim/operation/override/override_wheel_steer")
+Steer_ratio             = globalProperty("sim/flightmodel2/gear/tire_steer_command_deg")
 Aft_wheel_on_ground = createGlobalPropertyi("a321neo/dynamics/aft_wheels_on_ground", 0, false, true, false)
 All_on_ground = createGlobalPropertyi("a321neo/dynamics/all_wheels_on_ground", 0, false, true, false)
 Any_wheel_on_ground = createGlobalPropertyi("a321neo/dynamics/any_wheel_on_ground", 0, false, true, false)
@@ -368,7 +371,6 @@ Gear_handle = globalProperty("sim/cockpit2/controls/gear_handle_down")
 Front_gear_deployment = globalProperty("sim/flightmodel2/gear/deploy_ratio[0]")
 Left_gear_deployment = globalProperty("sim/flightmodel2/gear/deploy_ratio[1]")
 Right_gear_deployment = globalProperty("sim/flightmodel2/gear/deploy_ratio[2]")
-Ground_speed_ms = globalProperty("sim/flightmodel/position/groundspeed")
 Actual_brake_ratio = globalProperty("sim/flightmodel/controls/parkbrake")
 --position
 Aircraft_lat = globalProperty("sim/flightmodel/position/latitude")
@@ -453,6 +455,7 @@ Override_eng_1_lever = globalProperty("sim/flightmodel/engine/ENGN_thro_use[0]")
 Override_eng_2_lever = globalProperty("sim/flightmodel/engine/ENGN_thro_use[1]")
 
 --flight controls
+No_joystick_connected = globalProperty("sim/joystick/mouse_can_be_joystick")
 Roll = globalProperty("sim/joystick/yoke_roll_ratio")
 Pitch = globalProperty("sim/joystick/yoke_pitch_ratio")
 Yaw = globalProperty("sim/joystick/yoke_heading_ratio")

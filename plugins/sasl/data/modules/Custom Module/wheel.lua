@@ -27,6 +27,9 @@ local AUTOBRK_MID = 4
 ----------------------------------------------------------------------------------------------------
 -- Global variables
 ----------------------------------------------------------------------------------------------------
+local antiskid_and_ns_switch = true -- Status of the ANTI-SKID and N/S switch
+
+
 local left_brakes_temp_no_delay = 10
 local right_brakes_temp_no_delay = 10
 local left_tire_psi_no_delay = 210
@@ -96,20 +99,17 @@ local function update_pb_lights()
 			set(Brake_fan_button_state, 3)--11
 		end
 	end
-	
+
+	set(Autobrakes_lo_button_state, 0) --00
+	set(Autobrakes_med_button_state, 0)--00
+	set(Autobrakes_max_button_state, 0)--00
+	set(Autobrakes, 0)
 	
 	--update autobrake button status follwing 00, 01, 10, 11
-	if get(Autobrakes_sim) == 1 then
-		set(Autobrakes_lo_button_state, 0)--00
-		set(Autobrakes_med_button_state, 0)--00
-		set(Autobrakes_max_button_state, 0)--00
-		set(Autobrakes, 0)
-	elseif get(Autobrakes_sim) == 0 then
-		set(Autobrakes_lo_button_state, 0)--00
-		set(Autobrakes_med_button_state, 0)--00
+	if get(Autobrakes_sim) == AUTOBRK_MAX then
 		set(Autobrakes_max_button_state, 1)--01
 		set(Autobrakes, 3)
-		if get(Cockpit_parkbrake_ratio) > 0 and get(IAS) > 55 and get(Any_wheel_on_ground) == 1  then
+		if get(Cockpit_parkbrake_ratio) > 0 and get(IAS) > 55 and get(Any_wheel_on_ground) == 1 then
 			set(Autobrakes_lo_button_state, 2)--10
 			set(Autobrakes, 3)
 		end
@@ -152,8 +152,8 @@ local function update_brake_temps()
 
 	if get(Aft_wheel_on_ground) == 1 then
 		if get(Actual_brake_ratio) >  0 then
-			left_brakes_temp_no_delay = left_brakes_temp_no_delay + (get(Actual_brake_ratio) * ((0.05 * get(Groundspeed_kts)) ^ 1.975) * get(DELTA_TIME))
-			right_brakes_temp_no_delay = right_brakes_temp_no_delay + (get(Actual_brake_ratio) * ((0.05 * get(Groundspeed_kts)) ^ 1.975) * get(DELTA_TIME))
+			left_brakes_temp_no_delay = left_brakes_temp_no_delay + (get(Actual_brake_ratio) * ((0.05 * get(Ground_speed_kts)) ^ 1.975) * get(DELTA_TIME))
+			right_brakes_temp_no_delay = right_brakes_temp_no_delay + (get(Actual_brake_ratio) * ((0.05 * get(Ground_speed_kts)) ^ 1.975) * get(DELTA_TIME))
 		end
 
 		if get(Brakes_fan) == 1 then
@@ -208,6 +208,52 @@ local function update_wheel_psi()
 	set(Right_tire_psi, Set_anim_value(get(Left_tire_psi), left_tire_psi_no_delay, -100, 1000, 0.5))
 end
 
+local function update_steering()
+
+    set(Override_wheel_steering, 1)
+
+    local is_steering_completely_off = (not antiskid_and_ns_switch) or (get(FAILURE_GEAR_NWS) == 1)
+                                     or (get(Hydraulic_Y_press) <= 10)
+                                     or (get(FAILURE_GEAR_BSCU1) == 1 and get(FAILURE_GEAR_BSCU2) == 1)
+
+    if is_steering_completely_off then
+        return -- Cannot move the wheel
+    end
+    
+    if get(Any_wheel_on_ground) == 0 or (get(Engine_1_avail) == 0 and get(Engine_2_avail) == 0) then
+        return -- Inhibition condition
+    end
+    
+    -- If HYD Y > 1450 then we have full steering, otherwise let's compute a linear
+    -- degradation of steering
+    local hyd_steer_coeff = Math_clamp(Math_rescale(10, 0, 1450, 1, get(Hydraulic_Y_press)), 0, 1)
+    
+    local pedals_pos = get(Yaw)    -- TODO Add also autopilot effect on wheels
+    
+    local speed = get(Ground_speed_kts)
+    local steer_limit = 0
+    
+    if speed <= 20 then
+        steer_limit = 75
+    elseif speed <= 40 then
+        steer_limit = Math_rescale(20, 75, 40, 37.5, speed)
+    elseif speed <= 80 then
+        steer_limit = Math_rescale(40, 37.5, 80, 6, speed)
+    elseif speed <= 130 then
+        steer_limit = Math_rescale(80, 6, 130, 0, speed)
+    end
+
+    local actual_steer = pedals_pos * steer_limit * hyd_steer_coeff
+
+    if get(No_joystick_connected) == 1 then
+        -- When the use has mouse only, the rudder ratio is limited to [-0.2;0.2]
+        actual_steer = actual_steer * 5
+    end
+
+    set(Steer_ratio, actual_steer, 1)
+    print(actual_steer)
+end
+
 function update()
     perf_measure_start("wheel:update()")
     update_gear_status()
@@ -216,7 +262,9 @@ function update()
 
 
 	--convert m/s to kts
-	set(Groundspeed_kts, get(Ground_speed_ms)*1.94384)
+	set(Ground_speed_kts, get(Ground_speed_ms)*1.94384)
+
+    update_steering()
 
     update_brake_temps()
     update_wheel_psi()

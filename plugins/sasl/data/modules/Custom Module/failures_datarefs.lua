@@ -31,6 +31,10 @@ FAILURE_TCAS = globalProperty("sim/operation/failures/rel_xpndr")            -- 
 FAILURE_gear = createGlobalPropertyi("a321neo/failures/gear_failure", 0, false, true, false) -- 0: OK, 1: NOT UPLOCKED, 2: NOT DOWNLOCKED (internal use only, do not set manually)
                                                                                              -- TODO 0/1 logic should be fixed
 
+FAILURE_GEAR_NWS = createGlobalPropertyi("a321neo/failures/ns_steer", 0, false, true, false) 
+FAILURE_GEAR_BSCU1 = createGlobalPropertyi("a321neo/failures/bscu_1", 0, false, true, false) 
+FAILURE_GEAR_BSCU2 = createGlobalPropertyi("a321neo/failures/bscu_2", 0, false, true, false) 
+
 FAILURE_ADR = {}
 FAILURE_ADR[1] = createGlobalPropertyi("a321neo/failures/adirs/adr_1", 0, false, true, false) -- 0: OK, 1: FAILED
 FAILURE_ADR[2] = createGlobalPropertyi("a321neo/failures/adirs/adr_2", 0, false, true, false) -- 0: OK, 1: FAILED
