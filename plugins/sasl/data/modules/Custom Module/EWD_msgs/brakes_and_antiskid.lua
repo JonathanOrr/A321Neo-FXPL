@@ -182,7 +182,7 @@ MessageGroup_ADKIS_NWS = {
     },
 
     is_active = function(self)
-        return get(Nosewheel_Steering_and_AS) == 0
+        return get(Nosewheel_Steering_and_AS_sw) == 0
     end,
 
     is_inhibited = function(self)

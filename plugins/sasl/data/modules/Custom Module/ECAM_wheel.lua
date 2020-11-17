@@ -71,7 +71,7 @@ end
 
 local function draw_nsw_steering()
     -- TODO Fix behavior switch NS Steer
-    if get(Nosewheel_Steering_and_AS) == 0 then
+    if get(Nosewheel_Steering_working) == 0 then
         local is_Y_ok = get(Hydraulic_Y_press) >= 1450
         local color = is_Y_ok and ECAM_GREEN or ECAM_ORANGE
         Sasl_DrawWideFrame(size[1]/2-152, size[2]/2+96, 25, 29, 2, 0, color)

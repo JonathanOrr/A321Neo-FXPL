@@ -29,7 +29,6 @@ local AUTOBRK_MID = 4
 ----------------------------------------------------------------------------------------------------
 local antiskid_and_ns_switch = true -- Status of the ANTI-SKID and N/S switch
 
-
 local left_brakes_temp_no_delay = 10
 local right_brakes_temp_no_delay = 10
 local left_tire_psi_no_delay = 210
@@ -46,6 +45,12 @@ local right_gear_on_ground = globalProperty("sim/flightmodel2/gear/on_ground[2]"
 sasl.registerCommandHandler (Toggle_brake_fan, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
         set(Brakes_fan, 1 - get(Brakes_fan))
+    end
+end)
+
+sasl.registerCommandHandler (Toggle_antiskid_ns, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        antiskid_and_ns_switch = not antiskid_and_ns_switch
     end
 end)
 
@@ -211,16 +216,21 @@ end
 local function update_steering()
 
     set(Override_wheel_steering, 1)
+    set(Nosewheel_Steering_and_AS_sw, antiskid_and_ns_switch and 1 or 0)
+    set(Nosewheel_Steering_working, 0)
 
     local is_steering_completely_off = (not antiskid_and_ns_switch) or (get(FAILURE_GEAR_NWS) == 1)
                                      or (get(Hydraulic_Y_press) <= 10)
                                      or (get(FAILURE_GEAR_BSCU1) == 1 and get(FAILURE_GEAR_BSCU2) == 1)
 
-    if is_steering_completely_off then
+    if is_steering_completely_off or (get(Engine_1_avail) == 0 and get(Engine_2_avail) == 0) then
         return -- Cannot move the wheel
     end
+
+    -- Ok so nosewheel is ok
+    set(Nosewheel_Steering_working, 1)
     
-    if get(Any_wheel_on_ground) == 0 or (get(Engine_1_avail) == 0 and get(Engine_2_avail) == 0) then
+    if get(Any_wheel_on_ground) == 0 then
         return -- Inhibition condition
     end
     
@@ -251,7 +261,6 @@ local function update_steering()
     end
 
     set(Steer_ratio, actual_steer, 1)
-    print(actual_steer)
 end
 
 function update()

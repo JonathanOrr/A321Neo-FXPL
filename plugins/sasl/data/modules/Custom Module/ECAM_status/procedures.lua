@@ -13,7 +13,7 @@ function ECAM_status_get_procedures()
         appr_p_10_landing = true
     end
     
-    if get(Nosewheel_Steering_and_AS) == 0 then
+    if get(Nosewheel_Steering_working) == 0 then    -- TODO Check
         appr_p_10_landing = true
     end
     

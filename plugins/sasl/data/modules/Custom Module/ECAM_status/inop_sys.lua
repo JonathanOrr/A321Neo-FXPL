@@ -74,13 +74,17 @@ function ECAM_status_get_inop_sys()
             table.insert(messages, "TCAS")                
         end
 
-        if get(Nosewheel_Steering_and_AS) == 0 then
-            table.insert(messages, "ANTI SKID")
-            table.insert(messages, "BSCU CH 1")
-            table.insert(messages, "BSCU CH 2")
+        if get(Nosewheel_Steering_working) then
             inop_steer = true
-            inop_cat3_dual = true            
         end
+
+
+--        if get(Nosewheel_Steering_and_AS) == 0 then
+--            table.insert(messages, "ANTI SKID")
+--            table.insert(messages, "BSCU CH 1")
+--            table.insert(messages, "BSCU CH 2")
+--            inop_cat3_dual = true            
+--        end
 
         if MessageGroup_ADR_FAULT_SINGLE:is_active() then
             table.insert(messages, "ADR " .. MessageGroup_ADR_FAULT_SINGLE:get_failed())

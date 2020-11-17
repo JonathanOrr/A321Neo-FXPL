@@ -30,6 +30,7 @@ Ground_speed_ms = globalProperty("sim/flightmodel/position/groundspeed")
 Startup_running = globalProperty("sim/operation/prefs/startup_running") -- 1 if user asked to startup with engines running
 --wheel
 Override_wheel_steering = globalProperty("sim/operation/override/override_wheel_steer")
+Nosewheel_Steering_working = createGlobalPropertyi("a321neo/dynamics/wheel/steering_is_working", 0, false, true, false)  -- 0: no, 1: yes
 Steer_ratio             = globalProperty("sim/flightmodel2/gear/tire_steer_command_deg")
 Aft_wheel_on_ground = createGlobalPropertyi("a321neo/dynamics/aft_wheels_on_ground", 0, false, true, false)
 All_on_ground = createGlobalPropertyi("a321neo/dynamics/all_wheels_on_ground", 0, false, true, false)
