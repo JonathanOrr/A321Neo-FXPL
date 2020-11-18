@@ -42,9 +42,12 @@ local left_gear_on_ground = globalProperty("sim/flightmodel2/gear/on_ground[1]")
 local right_gear_on_ground = globalProperty("sim/flightmodel2/gear/on_ground[2]")
 
 -- Computer status
+local is_lgciu_1_working = false
+local is_lgciu_2_working = false
 local is_bscu_1_working = false
 local is_bscu_2_working = false
 local is_abcu_working = false
+local is_tpiu_working = false
 
 ----------------------------------------------------------------------------------------------------
 -- Command registering and handlers
@@ -311,6 +314,29 @@ local function update_computer_status_and_pwr()
         if get(HOT_bus_2_pwrd) == 1 then ELEC_sys.add_power_consumption(ELEC_BUS_HOT_BUS_2, 0.1, 0.1) end
     end
     
+    is_lgciu_1_working = get(FAILURE_GEAR_LGIU1) == 0 and (get(DC_ess_bus_pwrd) == 1 or get(DC_bus_1_pwrd) == 1)
+    is_lgciu_2_working = get(FAILURE_GEAR_LGIU2) == 0 and get(DC_bus_2_pwrd) == 1
+    if is_lgciu_1_working and get(DC_ess_bus_pwrd) == 1 then
+        ELEC_sys.add_power_consumption(ELEC_BUS_DC_ESS, 1, 1)
+    elseif is_lgciu_1_working then
+        ELEC_sys.add_power_consumption(ELEC_BUS_DC_1, 1, 1)
+    end
+
+    if is_lgciu_2_working then
+        ELEC_sys.add_power_consumption(ELEC_BUS_DC_2, 1, 1)
+    end
+
+    is_tpiu_working = get(FAILURE_GEAR_TPIU) == 0 and get(DC_bus_1_pwrd) == 1
+    if is_tpiu_working then
+        ELEC_sys.add_power_consumption(ELEC_BUS_DC_1, 0.5, 0.5)
+    end
+
+    set(Wheel_status_BSCU_1, is_bscu_1_working and 1 or 0)
+    set(Wheel_status_BSCU_2, is_bscu_2_working and 1 or 0)
+    set(Wheel_status_LGCIU_1, is_lgciu_1_working and 1 or 0)
+    set(Wheel_status_LGCIU_2, is_lgciu_2_working and 1 or 0)
+    set(Wheel_status_ABCU,   is_abcu_working and 1 or 0)
+    set(Wheel_status_TPIU,   is_tpiu_working and 1 or 0)
     
 end
 

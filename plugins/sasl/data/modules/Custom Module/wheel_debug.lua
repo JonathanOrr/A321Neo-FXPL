@@ -51,6 +51,18 @@ local function draw_steering_box()
 
 end
 
+function computer_status(y)
+
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2, y, "Computer Status", 20, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    
+    sasl.gl.drawText(Font_AirbusDUL, 10, y-25, "LGCIU 1", 14, false, false, TEXT_ALIGN_LEFT, get(Wheel_status_LGCIU_1) == 1 and ECAM_GREEN or ECAM_RED)
+    sasl.gl.drawText(Font_AirbusDUL, 100, y-25, "LGCIU 2", 14, false, false, TEXT_ALIGN_LEFT,get(Wheel_status_LGCIU_2) == 1 and ECAM_GREEN or ECAM_RED)
+    sasl.gl.drawText(Font_AirbusDUL, 190, y-25, "BSCU 1", 14, false, false, TEXT_ALIGN_LEFT,  get(Wheel_status_BSCU_1) == 1 and ECAM_GREEN or ECAM_RED)
+    sasl.gl.drawText(Font_AirbusDUL, 280, y-25, "BSCU 2", 14, false, false, TEXT_ALIGN_LEFT, get(Wheel_status_BSCU_2) == 1 and ECAM_GREEN or ECAM_RED)
+    sasl.gl.drawText(Font_AirbusDUL, 370, y-25, "ABCU", 14, false, false, TEXT_ALIGN_LEFT,   get(Wheel_status_ABCU) == 1 and ECAM_GREEN or ECAM_RED)
+    sasl.gl.drawText(Font_AirbusDUL, 450, y-25, "TPIU", 14, false, false, TEXT_ALIGN_LEFT,   get(Wheel_status_TPIU) == 1 and ECAM_GREEN or ECAM_RED)
+end
+
 function draw()
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]-15, "Steering", 20, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
     sasl.gl.drawText(Font_AirbusDUL, 10, size[2]-90, "Steering status: ", 14, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
@@ -67,5 +79,8 @@ function draw()
     sasl.gl.drawText(Font_AirbusDUL, 430, size[2]-155, "PARKING", 13, false, false, TEXT_ALIGN_LEFT, get(Brakes_mode) == 4 and ECAM_BLUE or UI_BRIGHT_GREY)
 
     sasl.gl.drawText(Font_AirbusDUL, 10, size[2]-175, "Anti-skid active: ", 14, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+
+
+    computer_status(50)
 
 end

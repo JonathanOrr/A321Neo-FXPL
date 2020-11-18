@@ -32,9 +32,13 @@ FAILURE_gear = createGlobalPropertyi("a321neo/failures/gear_failure", 0, false, 
                                                                                              -- TODO 0/1 logic should be fixed
 
 FAILURE_GEAR_NWS = createGlobalPropertyi("a321neo/failures/ns_steer", 0, false, true, false) 
+FAILURE_GEAR_LGIU1 = createGlobalPropertyi("a321neo/failures/lgiu_1", 0, false, true, false) 
+FAILURE_GEAR_LGIU2 = createGlobalPropertyi("a321neo/failures/lgiu_2", 0, false, true, false) 
 FAILURE_GEAR_BSCU1 = createGlobalPropertyi("a321neo/failures/bscu_1", 0, false, true, false) 
 FAILURE_GEAR_BSCU2 = createGlobalPropertyi("a321neo/failures/bscu_2", 0, false, true, false) 
 FAILURE_GEAR_ABCU  = createGlobalPropertyi("a321neo/failures/abcu", 0, false, true, false)
+FAILURE_GEAR_TPIU  = createGlobalPropertyi("a321neo/failures/tpiu", 0, false, true, false)
+FAILURE_GEAR_AUTOBRAKES  = createGlobalPropertyi("a321neo/failures/autobrakes", 0, false, true, false)
 
 FAILURE_ADR = {}
 FAILURE_ADR[1] = createGlobalPropertyi("a321neo/failures/adirs/adr_1", 0, false, true, false) -- 0: OK, 1: FAILED

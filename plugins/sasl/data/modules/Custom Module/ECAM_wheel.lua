@@ -39,11 +39,18 @@ local function draw_brakes_and_tires()
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2+360, size[2]/2-75, math.floor(get(Right_brakes_temp)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
     
     --tire press
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-360, size[2]/2-165, math.floor(get(Left_tire_psi)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-200, size[2]/2-165, math.floor(get(Left_tire_psi)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+200, size[2]/2-165, math.floor(get(Right_tire_psi)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+360, size[2]/2-165, math.floor(get(Right_tire_psi)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-    
+    if get(Wheel_status_TPIU) == 1 then
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-360, size[2]/2-165, math.floor(get(Left_tire_psi)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-200, size[2]/2-165, math.floor(get(Left_tire_psi)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+200, size[2]/2-165, math.floor(get(Right_tire_psi)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+360, size[2]/2-165, math.floor(get(Right_tire_psi)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+    else
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-360, size[2]/2-165, "XX", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-200, size[2]/2-165, "XX", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+200, size[2]/2-165, "XX", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+360, size[2]/2-165, "XX", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)    
+    end
+        
     --brakes indications
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-280, size[2]/2-75, "°C", 26, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-280, size[2]/2-120, "REL", 26, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
@@ -63,10 +70,12 @@ local function draw_brakes_and_tires()
     sasl.gl.drawArc(size[1]/2 + 360, size[2]/2 - 110, 76, 80, 60, 60, right_brake_temp_color)
     
     --lower arcs
-    sasl.gl.drawArc(size[1]/2 - 360, size[2]/2 - 110, 76, 80, 240, 60, left_tire_psi_color)
-    sasl.gl.drawArc(size[1]/2 - 200, size[2]/2 - 110, 76, 80, 240, 60, left_tire_psi_color)
-    sasl.gl.drawArc(size[1]/2 + 200, size[2]/2 - 110, 76, 80, 240, 60, right_tire_psi_color)
-    sasl.gl.drawArc(size[1]/2 + 360, size[2]/2 - 110, 76, 80, 240, 60, right_tire_psi_color)
+    if get(Wheel_status_TPIU) == 1 then
+        sasl.gl.drawArc(size[1]/2 - 360, size[2]/2 - 110, 76, 80, 240, 60, left_tire_psi_color)
+        sasl.gl.drawArc(size[1]/2 - 200, size[2]/2 - 110, 76, 80, 240, 60, left_tire_psi_color)
+        sasl.gl.drawArc(size[1]/2 + 200, size[2]/2 - 110, 76, 80, 240, 60, right_tire_psi_color)
+        sasl.gl.drawArc(size[1]/2 + 360, size[2]/2 - 110, 76, 80, 240, 60, right_tire_psi_color)
+    end
 end
 
 local function draw_nsw_steering()
@@ -80,9 +89,64 @@ local function draw_nsw_steering()
     end
 end
 
+local function draw_brake_modes()
+
+    if get(Brakes_mode) == 3 then
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-50, size[2]/2+30, "ANTI SKID", 36, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        if get(FAILURE_GEAR_BSCU1) == 1 then
+            sasl.gl.drawText(Font_AirbusDUL, size[1]/2+80, size[2]/2+30, "1", 36, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+            Sasl_DrawWideFrame(size[1]/2+65, size[2]/2+26, 28, 31, 2, 0, ECAM_ORANGE)
+        end
+        if get(FAILURE_GEAR_BSCU2) == 1 then        
+            sasl.gl.drawText(Font_AirbusDUL, size[1]/2+115, size[2]/2+30, "2", 36, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+            Sasl_DrawWideFrame(size[1]/2+100, size[2]/2+26, 28, 31, 2, 0, ECAM_ORANGE)
+        end
+    end
+
+    local altn_brk_display_cond = get(Wheel_status_ABCU) == 0 or get(Hydraulic_Y_press) <= 1450
+
+    if get(Brakes_mode) ~= 1 or get(FAILURE_GEAR_AUTOBRAKES) == 1 or (get(Wheel_status_BSCU_1) == 0 and get(Wheel_status_BSCU_2) == 0) or altn_brk_display_cond then
+        local hyd_color = get(Hydraulic_G_press) >= 1450 and ECAM_GREEN or ECAM_ORANGE
+        local norm_brake_color = get(Brakes_mode) == 1 and ECAM_GREEN or ECAM_ORANGE
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-110, size[2]/2-30, "G", 36, false, false, TEXT_ALIGN_CENTER, hyd_color)
+        Sasl_DrawWideFrame(size[1]/2-124, size[2]/2-34, 28, 31, 2, 0, hyd_color)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2-30, "NORM BRK", 36, false, false, TEXT_ALIGN_CENTER, norm_brake_color)
+    end
+    
+    if altn_brk_display_cond or get(Brakes_mode) == 2 or get(Brakes_mode) == 3 or get(FAILURE_GEAR_AUTOBRAKES) == 1 then
+        local hyd_color = get(Hydraulic_Y_press) >= 1450 and ECAM_GREEN or ECAM_ORANGE
+        local altn_brake_color = altn_brk_display_cond and ECAM_ORANGE or ECAM_GREEN 
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-110, size[2]/2-100, "Y", 36, false, false, TEXT_ALIGN_CENTER, hyd_color)
+        Sasl_DrawWideFrame(size[1]/2-124, size[2]/2-103, 28, 31, 2, 0, hyd_color)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2-100, "ALTN BRK", 36, false, false, TEXT_ALIGN_CENTER, altn_brake_color)
+
+        if get(Hydraulic_Y_press) >= 1450 then
+            sasl.gl.drawText(Font_AirbusDUL, size[1]/2+12, size[2]/2-140, "ACCU PRESS", 32, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+            sasl.gl.drawWideLine(size[1]/2-110, size[2]/2-103, size[1]/2-110, size[2]/2-130, 2, ECAM_GREEN)
+            sasl.gl.drawWideLine(size[1]/2-110, size[2]/2-130, size[1]/2-100, size[2]/2-130, 2, ECAM_GREEN)
+            sasl.gl.drawWidePolyLine( {size[1]/2-100, size[2]/2-120, size[1]/2-100, size[2]/2-140, size[1]/2-90, size[2]/2-130, size[1]/2-100, size[2]/2-120 }, 2, ECAM_GREEN)
+        elseif get(Wheel_accu_press) > 0.5 then
+            sasl.gl.drawText(Font_AirbusDUL, size[1]/2+30, size[2]/2-140, "ACCU ONLY", 32, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+            sasl.gl.drawWideLine(size[1]/2-60, size[2]/2-130, size[1]/2-75, size[2]/2-130, 2, ECAM_GREEN)
+            sasl.gl.drawWideLine(size[1]/2-75, size[2]/2-130, size[1]/2-75, size[2]/2-120, 2, ECAM_GREEN)
+            sasl.gl.drawWidePolyLine( {size[1]/2-67, size[2]/2-120, size[1]/2-83, size[2]/2-120, size[1]/2-75, size[2]/2-108, size[1]/2-67, size[2]/2-120 }, 2, ECAM_GREEN)
+        else
+            sasl.gl.drawText(Font_AirbusDUL, size[1]/2+12, size[2]/2-140, "ACCU PRESS", 32, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        end
+
+    end
+
+
+
+--    sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2-220, "AUTO BRK", 36, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+--    sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2-260, "MED", 36, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+
+end
+
 function draw_wheel_page()
     draw_brakes_and_tires()
     draw_nsw_steering()
+    draw_brake_modes()
 end
 
 
