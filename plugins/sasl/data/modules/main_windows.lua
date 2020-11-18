@@ -227,4 +227,18 @@ Performance_debug_window = contextWindow {
   };
 }
 
+Wheel_debug_window = contextWindow {
+  name = "WHEEL DEBUG";
+  position = { 150 , 150 , 500, 500 };
+  noBackground = true ;
+  proportional = false ;
+  minimumSize = { 500, 500 };
+  maximumSize = { 500, 500 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = true;
+  components = {
+    wheel_debug {position = { 0 , 0 , 500, 500 }}
+  };
+}
+
 

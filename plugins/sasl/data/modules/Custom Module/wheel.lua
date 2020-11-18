@@ -19,6 +19,8 @@
 ----------------------------------------------------------------------------------------------------
 -- Constants
 ----------------------------------------------------------------------------------------------------
+include('constants.lua')
+
 local AUTOBRK_MAX = 0
 local AUTOBRK_OFF = 1
 local AUTOBRK_LOW = 2
@@ -38,6 +40,11 @@ local right_tire_psi_no_delay = 210
 local front_gear_on_ground = globalProperty("sim/flightmodel2/gear/on_ground[0]")
 local left_gear_on_ground = globalProperty("sim/flightmodel2/gear/on_ground[1]")
 local right_gear_on_ground = globalProperty("sim/flightmodel2/gear/on_ground[2]")
+
+-- Computer status
+local is_bscu_1_working = false
+local is_bscu_2_working = false
+local is_abcu_working = false
 
 ----------------------------------------------------------------------------------------------------
 -- Command registering and handlers
@@ -221,7 +228,7 @@ local function update_steering()
 
     local is_steering_completely_off = (not antiskid_and_ns_switch) or (get(FAILURE_GEAR_NWS) == 1)
                                      or (get(Hydraulic_Y_press) <= 10)
-                                     or (get(FAILURE_GEAR_BSCU1) == 1 and get(FAILURE_GEAR_BSCU2) == 1)
+                                     or (not is_bscu_1_working and not is_bscu_2_working)
 
     if is_steering_completely_off or (get(Engine_1_avail) == 0 and get(Engine_2_avail) == 0) then
         return -- Cannot move the wheel
@@ -253,6 +260,8 @@ local function update_steering()
         steer_limit = Math_rescale(80, 6, 130, 0, speed)
     end
 
+    set(Nosewheel_Steering_limit, steer_limit)
+
     local actual_steer = pedals_pos * steer_limit * hyd_steer_coeff
 
     if get(No_joystick_connected) == 1 then
@@ -260,11 +269,55 @@ local function update_steering()
         actual_steer = actual_steer * 5
     end
 
-    set(Steer_ratio, actual_steer, 1)
+    set(Steer_ratio_setpoint, actual_steer) 
+    Set_dataref_linear_anim(Steer_ratio_actual, get(Steer_ratio_setpoint), -75, 75, 50)
+end
+
+local function update_brake_mode()
+
+    local at_least_one_BSCU_op = is_bscu_1_working or is_bscu_2_working
+
+    if get(Parkbrake_switch_pos) == 0 then
+        if get(Hydraulic_G_press) >= 1450 and antiskid_and_ns_switch and at_least_one_BSCU_op then
+            set(Brakes_mode, 1) -- Normal
+        elseif get(Hydraulic_Y_press) >= 1450 and antiskid_and_ns_switch and at_least_one_BSCU_op then
+            set(Brakes_mode, 2) -- ALTN with anti skid
+        else
+            set(Brakes_mode, 3) -- ALTN without anti skid
+        end
+    else
+        set(Brakes_mode, 4)
+    end
+end
+
+local function update_computer_status_and_pwr()
+    -- BSCUx: Brake and Steering Control Unit
+    is_bscu_1_working = get(FAILURE_GEAR_BSCU1) == 0 and get(DC_bus_1_pwrd) == 1 and get(AC_bus_1_pwrd) == 1
+    is_bscu_2_working = get(FAILURE_GEAR_BSCU2) == 0 and get(DC_bus_2_pwrd) == 1 and get(AC_bus_2_pwrd) == 1
+    if is_bscu_1_working then
+        ELEC_sys.add_power_consumption(ELEC_BUS_AC_1, 0.5, 0.5)
+        ELEC_sys.add_power_consumption(ELEC_BUS_DC_1, 1, 1)
+    end
+    if is_bscu_2_working then
+        ELEC_sys.add_power_consumption(ELEC_BUS_AC_2, 0.5, 0.5)
+        ELEC_sys.add_power_consumption(ELEC_BUS_DC_2, 1, 1)
+    end
+
+    -- ABCU: Alternate Braking Control Unit
+    is_abcu_working = get(FAILURE_GEAR_ABCU) == 0 and get(DC_ess_bus_pwrd) == 1 and (get(HOT_bus_1_pwrd) == 1 or get(HOT_bus_2_pwrd) == 1)
+    if is_abcu_working then
+        ELEC_sys.add_power_consumption(ELEC_BUS_DC_ESS, 0.5, 0.5)
+        if get(HOT_bus_1_pwrd) == 1 then ELEC_sys.add_power_consumption(ELEC_BUS_HOT_BUS_1, 0.1, 0.1) end
+        if get(HOT_bus_2_pwrd) == 1 then ELEC_sys.add_power_consumption(ELEC_BUS_HOT_BUS_2, 0.1, 0.1) end
+    end
+    
+    
 end
 
 function update()
     perf_measure_start("wheel:update()")
+    update_computer_status_and_pwr()
+    
     update_gear_status()
     update_pb_lights()
 
@@ -274,7 +327,8 @@ function update()
 	set(Ground_speed_kts, get(Ground_speed_ms)*1.94384)
 
     update_steering()
-
+    update_brake_mode()
+   
     update_brake_temps()
     update_wheel_psi()
     perf_measure_stop("wheel:update()")

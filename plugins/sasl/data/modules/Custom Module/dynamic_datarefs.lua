@@ -31,7 +31,9 @@ Startup_running = globalProperty("sim/operation/prefs/startup_running") -- 1 if 
 --wheel
 Override_wheel_steering = globalProperty("sim/operation/override/override_wheel_steer")
 Nosewheel_Steering_working = createGlobalPropertyi("a321neo/dynamics/wheel/steering_is_working", 0, false, true, false)  -- 0: no, 1: yes
-Steer_ratio             = globalProperty("sim/flightmodel2/gear/tire_steer_command_deg")
+Nosewheel_Steering_limit   = createGlobalPropertyi("a321neo/dynamics/wheel/steering_limit", 0, false, true, false)  -- Limit (abs value) for steering
+Steer_ratio_setpoint       = createGlobalPropertyi("a321neo/dynamics/wheel/steer_setpoint", 0, false, true, false)
+Steer_ratio_actual         = globalProperty("sim/flightmodel2/gear/tire_steer_command_deg[0]")
 Aft_wheel_on_ground = createGlobalPropertyi("a321neo/dynamics/aft_wheels_on_ground", 0, false, true, false)
 All_on_ground = createGlobalPropertyi("a321neo/dynamics/all_wheels_on_ground", 0, false, true, false)
 Any_wheel_on_ground = createGlobalPropertyi("a321neo/dynamics/any_wheel_on_ground", 0, false, true, false)
@@ -40,6 +42,9 @@ Left_brakes_temp = createGlobalPropertyf("a321neo/dynamics/wheel/left_brakes_tem
 Right_brakes_temp = createGlobalPropertyf("a321neo/dynamics/wheel/right_brakes_temp", 10, false, true, false) --right brakes temperature
 Left_tire_psi = createGlobalPropertyf("a321neo/dynamics/wheel/left_tire_psi", 210, false, true, false) --left tire psi
 Right_tire_psi = createGlobalPropertyf("a321neo/dynamics/wheel/right_tire_psi", 210, false, true, false) --right tire psi
+
+Brakes_mode = createGlobalPropertyf("a321neo/dynamics/wheel/brake_mode", 1, false, true, false) -- 0: unknown, 1: normal, 2: alternate with antiskid, 3: alternate without antiskid, 4: parking
+
 --engines
 Engine_option = createGlobalPropertyi("a321neo/customization/engine_option", 0, false, true, false) --0 CFM LEAP, 1 PW1000G
 PW_engine_enabled = createGlobalPropertyi("a321neo/customization/pw_engine_enabled", 0, false, true, false)

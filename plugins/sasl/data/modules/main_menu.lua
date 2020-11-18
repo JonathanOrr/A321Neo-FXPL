@@ -78,6 +78,9 @@ function Show_hide_Performance_Debug()
   Performance_debug_window:setIsVisible(not Performance_debug_window:isVisible())
 end
 
+function Show_hide_Wheel_Debug()
+  Wheel_debug_window:setIsVisible(not Wheel_debug_window:isVisible())
+end
 
 function IRs_instaneous_align()
     ADIRS_cmd_instantaneous_align = sasl.findCommand("a321neo/cockpit/ADIRS/instantaneous_align")
@@ -164,5 +167,6 @@ ShowHideELECDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide ELEC Debug", Show
 ShowHideENGDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide ENG Debug", Show_hide_ENG_debug)
 ShowHidePressDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide PRESS Debug", Show_hide_PRESS_debug)
 ShowHidePerfDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide PERF Debug", Show_hide_Performance_Debug)
+ShowHideWheelDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide WHEEL Debug", Show_hide_Wheel_Debug)
 DeActivateELECover	= sasl.appendMenuItem(Menu_debug, "(De)activate override ELEC always ON", function() ovveride_ELEC_always_on = not ovveride_ELEC_always_on end)
 
