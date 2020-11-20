@@ -276,11 +276,13 @@ Elev_trim_degrees = createGlobalPropertyf("a321neo/cockpit/controls/elevator_tri
 
 
 --wheel
-Cockpit_parkbrake_ratio = globalProperty("sim/cockpit2/controls/parking_brake_ratio")
+XPlane_parkbrake_ratio = globalProperty("sim/cockpit2/controls/parking_brake_ratio")
 Autobrakes = createGlobalPropertyi("a321neo/cockpit/wheel/autobrakes", 0, false, true, false) -- 0: off, 1: low, 2:med, 3:max
 Nosewheel_Steering_and_AS_sw = createGlobalPropertyi("a321neo/cockpit/wheel/antiskid_steering", 0, false, true, false)  -- 0: off, 1: on
 Parkbrake_switch_pos = createGlobalPropertyi("a321neo/cockpit/wheel/park_brake_pos", 0, false, true, false)  -- 0: off, 1: on
-
+Brakes_press_ind_L = createGlobalPropertyf("a321neo/cockpit/wheel/brake_indicator_press_L", 0, false, true, false) -- [0;3000]
+Brakes_press_ind_R = createGlobalPropertyf("a321neo/cockpit/wheel/brake_indicator_press_R", 0, false, true, false) -- [0;3000]
+Brakes_accumulator = createGlobalPropertyf("a321neo/cockpit/wheel/accumulator_indicator", 0, false, true, false) -- [0;4]
 
 --aircond
 Cab_hot_air = createGlobalPropertyi("a321neo/cockpit/aircond/cab_hot_air", 1, false, true, false)

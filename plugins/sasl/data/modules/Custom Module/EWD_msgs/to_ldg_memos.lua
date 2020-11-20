@@ -320,7 +320,7 @@ Message_CONFIG_TAKEOFF_BRAKES = {
                     return COL_WARNING
             end,
             is_active = function(self)
-              return get(Actual_brake_ratio) > 0
+              return get(Parkbrake_switch_pos) > 0
             end
 }
 

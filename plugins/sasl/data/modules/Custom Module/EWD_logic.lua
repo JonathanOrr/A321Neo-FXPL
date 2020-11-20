@@ -293,7 +293,7 @@ local function update_right_list()
         list_right:put(COL_INDICATION, "BRK FAN")
     end
 
-    if get(Actual_brake_ratio) > 0 then
+    if get(Parkbrake_switch_pos) > 0 then
         if get(EWD_flight_phase) < PHASE_1ST_ENG_TO_PWR or get(EWD_flight_phase) > PHASE_TOUCHDOWN
         then
             list_right:put(COL_INDICATION, "PARK BRK")
@@ -423,7 +423,7 @@ local function update_right_list()
     -- TODO Lights: LDG LT
     -- TODO Lights: STROBE LT OFF (green) - in flight only
     
-    -- TODO OXT: HI ALT SET
+    -- TODO OXY: HI ALT SET
 
 end
 

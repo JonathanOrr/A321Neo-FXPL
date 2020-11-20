@@ -64,6 +64,12 @@ sasl.registerCommandHandler (Toggle_antiskid_ns, 0, function(phase)
     end
 end)
 
+sasl.registerCommandHandler (Toggle_park_brake, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        set(Parkbrake_switch_pos, 1-get(Parkbrake_switch_pos))
+    end
+end)
+
 sasl.registerCommandHandler (Toggle_lo_autobrake, 0, function(phase) Toggle_autobrake(phase, AUTOBRK_MIN)  end)
 
 sasl.registerCommandHandler (Toggle_med_autobrake, 0, function(phase) Toggle_autobrake(phase, AUTOBRK_MED) end)
@@ -79,9 +85,22 @@ function Toggle_autobrake(phase, value)
 		else
 			set(Autobrakes_sim, 1)
 			if get(IAS) > 55 then
-				set(Cockpit_parkbrake_ratio, 0)
+				set(Parkbrake_switch_pos, 0)
 			end
 		end
+    end
+end
+
+----------------------------------------------------------------------------------------------------
+-- Initialization
+----------------------------------------------------------------------------------------------------
+
+function onAirportLoaded()
+    -- When the aircraft is loaded in flight no park brake, otherwise, put on the park brakes :)
+    if get(Capt_ra_alt_ft) > 20 then
+        set(Parkbrake_switch_pos, 0)
+    else
+        set(Parkbrake_switch_pos, 1)
     end
 end
 
@@ -124,7 +143,7 @@ local function update_pb_lights()
 	if get(Autobrakes_sim) == AUTOBRK_MAX then
 		set(Autobrakes_max_button_state, 1)--01
 		set(Autobrakes, 3)
-		if get(Cockpit_parkbrake_ratio) > 0 and get(IAS) > 55 and get(Any_wheel_on_ground) == 1 then
+		if get(Parkbrake_switch_pos) > 0 and get(IAS) > 55 and get(Any_wheel_on_ground) == 1 then
 			set(Autobrakes_lo_button_state, 2)--10
 			set(Autobrakes, 3)
 		end
@@ -135,7 +154,7 @@ local function update_pb_lights()
 			if get(Autobrakes_sim) == 2 then
 				set(Autobrakes_lo_button_state, 1)--01
 				set(Autobrakes, 1)
-				if get(Cockpit_parkbrake_ratio) > 0 and get(IAS) > 55 and get(Any_wheel_on_ground) == 1 then
+				if get(Parkbrake_switch_pos) > 0 and get(IAS) > 55 and get(Any_wheel_on_ground) == 1 then
 					set(Autobrakes_lo_button_state, 2)--10
 					set(Autobrakes, 1)
 				end
@@ -147,7 +166,7 @@ local function update_pb_lights()
 			if get(Autobrakes_sim) == 4 then
 				set(Autobrakes_med_button_state, 1)--01
 				set(Autobrakes, 2)
-				if get(Cockpit_parkbrake_ratio) > 0 and get(IAS) > 55 and get(Any_wheel_on_ground) == 1 then
+				if get(Parkbrake_switch_pos) > 0 and get(IAS) > 55 and get(Any_wheel_on_ground) == 1 then
 					set(Autobrakes_med_button_state, 2)--10
 					set(Autobrakes, 2)
 				end
@@ -267,7 +286,7 @@ local function update_steering()
 
     local actual_steer = pedals_pos * steer_limit * hyd_steer_coeff
 
-    if get(No_joystick_connected) == 1 then
+    if get(Joystick_connected) == 0 then
         -- When the use has mouse only, the rudder ratio is limited to [-0.2;0.2]
         actual_steer = actual_steer * 5
     end
@@ -340,6 +359,112 @@ local function update_computer_status_and_pwr()
     
 end
 
+local function update_skidding_values()
+
+    -- X-Plane skid ratio looks wrong, let's compute it
+
+    local skid_ratio_C = get(Wheel_skid_speed_C) / get(Ground_speed_ms)
+    local skid_ratio_L = get(Wheel_skid_speed_L) / get(Ground_speed_ms)
+    local skid_ratio_R = get(Wheel_skid_speed_R) / get(Ground_speed_ms)
+
+    set(Wheel_skidding_C, skid_ratio_C)
+    set(Wheel_skidding_L, skid_ratio_L)
+    set(Wheel_skidding_R, skid_ratio_R)
+ 
+end
+
+local function run_anti_skid(brake_value_L, brake_value_R)
+
+    if get(Wheel_skidding_L) > 0.11 then
+        Set_dataref_linear_anim(Wheel_brake_L, 0, 0, 1, 1)
+    else
+        Set_dataref_linear_anim(Wheel_brake_L, brake_value_L, 0, 1, 0.5)
+    end
+    
+    if get(Wheel_skidding_R) > 0.11 then
+        Set_dataref_linear_anim(Wheel_brake_R, 0, 0, 1, 1)
+    else
+        Set_dataref_linear_anim(Wheel_brake_R, brake_value_R, 0, 1, 0.5)
+    end
+end
+
+local function brake_with_accumulator(L,R)
+
+    local prev_brakes = get(Wheel_brake_L) + get(Wheel_brake_R)
+    Set_dataref_linear_anim(Wheel_brake_L, L, 0, 1, 0.5)
+    Set_dataref_linear_anim(Wheel_brake_R, R, 0, 1, 0.5)
+    
+    -- We need to reduce the accumulator when brake changes
+    local diff = (get(Wheel_brake_L) + get(Wheel_brake_R)) - prev_brakes
+    -- So a full brake leds diff = 1, and we have around 14 full brakes (per part) when accumulator 1 < x < 3,
+    -- then:
+    if diff > 0 then
+        diff = diff / 14 * 2
+        set(Brakes_accumulator, get(Brakes_accumulator) - diff)
+    end
+end
+
+local function brake_altn()
+    if get(Hydraulic_Y_press) >= 1450 then
+        -- Ok in this case let's brake, no pressure limit, no antiskid
+        Set_dataref_linear_anim(Wheel_brake_L, get(Joystick_toe_brakes_L), 0, 1, 0.5)
+        Set_dataref_linear_anim(Wheel_brake_R, get(Joystick_toe_brakes_R), 0, 1, 0.5)
+    elseif get(Brakes_accumulator) > 1 then
+        -- If we don't have hydraulic, we need to use the accumulator (if any)
+        brake_with_accumulator(get(Joystick_toe_brakes_L), get(Joystick_toe_brakes_R))
+    else
+        -- Oh no, no hyd pressure to brake
+        Set_dataref_linear_anim(Wheel_brake_L, 0, 0, 1, 0.5)
+        Set_dataref_linear_anim(Wheel_brake_R, 0, 0, 1, 0.5)
+        set(Brakes_accumulator, math.max(0,get(Brakes_accumulator) - 0.01))
+    end
+end
+
+local function update_brakes()
+    set(XPlane_parkbrake_ratio, 0) -- X-Plane park brake is not used
+    set(Override_wheel_gear_and_brk, 1)
+
+    local up_limit = Math_rescale(0, 0, 2500, 1.4, 1000) -- 1000 PSI upper limit
+
+    if get(Brakes_mode) == 1 or get(Brakes_mode) == 2 then
+        -- Normal or alternate with antiskid
+    
+    
+        local L_brake_set = Math_clamp(get(Joystick_toe_brakes_L), 0, up_limit)
+        local R_brake_set = Math_clamp(get(Joystick_toe_brakes_R), 0, up_limit)
+        
+        run_anti_skid(L_brake_set, R_brake_set)
+        
+    elseif get(Brakes_mode) == 3 then
+        -- Alternate brake no antiskid
+        
+        brake_altn()
+        
+    elseif get(Brakes_mode) == 4 then
+        -- Parking brake
+
+        if get(Hydraulic_Y_press) >= 1450 or get(Hydraulic_G_press) >= 1450 then
+            Set_dataref_linear_anim(Wheel_brake_L, 1, 0, 1, 1)
+            Set_dataref_linear_anim(Wheel_brake_R, 1, 0, 1, 1)
+        elseif get(Brakes_accumulator) > 1 then
+            brake_with_accumulator(1,1)     
+        else
+            Set_dataref_linear_anim(Wheel_brake_L, 0, 0, 1, 1)
+            Set_dataref_linear_anim(Wheel_brake_R, 0, 0, 1, 1)        
+        end
+    end
+
+    if get(Brakes_mode) ~= 1 then
+        set(Brakes_press_ind_L, Math_rescale(0, 0, 1, 2500, get(Wheel_brake_L)))
+        set(Brakes_press_ind_R, Math_rescale(0, 0, 1, 2500, get(Wheel_brake_R)))
+    end
+
+    if get(Hydraulic_Y_press) >= 1450 then
+        Set_dataref_linear_anim(Brakes_accumulator, 3, 0, 4, 0.5)
+    end
+
+end
+
 function update()
     perf_measure_start("wheel:update()")
     update_computer_status_and_pwr()
@@ -347,13 +472,13 @@ function update()
     update_gear_status()
     update_pb_lights()
 
-
-
 	--convert m/s to kts
 	set(Ground_speed_kts, get(Ground_speed_ms)*1.94384)
 
+    update_skidding_values()
     update_steering()
     update_brake_mode()
+    update_brakes()
    
     update_brake_temps()
     update_wheel_psi()

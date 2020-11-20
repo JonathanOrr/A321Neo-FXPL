@@ -63,6 +63,45 @@ function computer_status(y)
     sasl.gl.drawText(Font_AirbusDUL, 450, y-25, "TPIU", 14, false, false, TEXT_ALIGN_LEFT,   get(Wheel_status_TPIU) == 1 and ECAM_GREEN or ECAM_RED)
 end
 
+function draw_brakes()
+    sasl.gl.drawArc(size[1]/2, size[2]/2 + 20, 30, 32, 60, 60, ECAM_WHITE)
+    sasl.gl.drawArc(size[1]/2, size[2]/2 + 20, 30, 32, 240, 60, ECAM_WHITE)
+
+    sasl.gl.drawArc(size[1]/2-150, size[2]/2-20, 30, 32, 60, 60, ECAM_WHITE)
+    sasl.gl.drawArc(size[1]/2-150, size[2]/2-20, 30, 32, 240, 60, ECAM_WHITE)
+
+    sasl.gl.drawArc(size[1]/2+150, size[2]/2-20, 30, 32, 60, 60, ECAM_WHITE)
+    sasl.gl.drawArc(size[1]/2+150, size[2]/2-20, 30, 32, 240, 60, ECAM_WHITE)
+    
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-250, size[2]/2-10, "Request: ", 12, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-250, size[2]/2-25, "Braking: ", 12, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-250, size[2]/2-40, "Skidding: ", 12, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-135, size[2]/2-10, Round_fill(get(Joystick_toe_brakes_L), 2), 12, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-135, size[2]/2-25, Round_fill(get(Wheel_brake_L), 2), 12, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-135, size[2]/2-40, Round_fill(get(Wheel_skidding_L), 2), 12, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
+    
+    
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+60, size[2]/2-10, "Request: ", 12, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+60, size[2]/2-25, "Braking: ", 12, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+60, size[2]/2-40, "Skidding: ", 12, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+165, size[2]/2-10, Round_fill(get(Joystick_toe_brakes_R), 2), 12, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+165, size[2]/2-25, Round_fill(get(Wheel_brake_R), 2), 12, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+165, size[2]/2-40, Round_fill(get(Wheel_skidding_R), 2), 12, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
+
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-95, size[2]/2+5, "Skidding: ", 12, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+15, size[2]/2+5, Round_fill(get(Wheel_skidding_C), 2), 12, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
+
+
+
+end
+
+local function draw_accumulator()
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+220, size[2]/2+30, "Accum.", 12, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+230, size[2]/2-70, Round_fill(get(Brakes_accumulator), 2), 12, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    Sasl_DrawWideFrame(size[1]/2+220, size[2]/2-50, 20, 70, 1, 1, ECAM_WHITE)
+    sasl.gl.drawRectangle (size[1]/2+220, size[2]/2-50, 20, 70 * get(Brakes_accumulator) / 4, get(Brakes_accumulator) > 2 and UI_GREEN or ECAM_ORANGE)    
+end
+
 function draw()
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]-15, "Steering", 20, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
     sasl.gl.drawText(Font_AirbusDUL, 10, size[2]-90, "Steering status: ", 14, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
@@ -80,6 +119,8 @@ function draw()
 
     sasl.gl.drawText(Font_AirbusDUL, 10, size[2]-175, "Anti-skid active: ", 14, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
 
+    draw_brakes()
+    draw_accumulator()
 
     computer_status(50)
 

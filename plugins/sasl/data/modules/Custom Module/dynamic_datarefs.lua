@@ -30,6 +30,7 @@ Ground_speed_ms = globalProperty("sim/flightmodel/position/groundspeed")
 Startup_running = globalProperty("sim/operation/prefs/startup_running") -- 1 if user asked to startup with engines running
 --wheel
 Override_wheel_steering = globalProperty("sim/operation/override/override_wheel_steer")
+Override_wheel_gear_and_brk = globalProperty("sim/operation/override/override_gearbrake")
 Nosewheel_Steering_working = createGlobalPropertyi("a321neo/dynamics/wheel/steering_is_working", 0, false, true, false)  -- 0: no, 1: yes
 Nosewheel_Steering_limit   = createGlobalPropertyi("a321neo/dynamics/wheel/steering_limit", 0, false, true, false)  -- Limit (abs value) for steering
 Steer_ratio_setpoint       = createGlobalPropertyi("a321neo/dynamics/wheel/steer_setpoint", 0, false, true, false)
@@ -51,6 +52,15 @@ Wheel_status_BSCU_2 = createGlobalPropertyi("a321neo/dynamics/wheel/computers/bs
 Wheel_status_ABCU   = createGlobalPropertyi("a321neo/dynamics/wheel/computers/abcu_status", 0, false, true, false)
 Wheel_status_TPIU   = createGlobalPropertyi("a321neo/dynamics/wheel/computers/tpiu_status", 0, false, true, false)
 Wheel_accu_press    = createGlobalPropertyf("a321neo/dynamics/wheel/accu_press", 3, false, true, false)
+Wheel_brake_L       = globalProperty("sim/cockpit2/controls/left_brake_ratio")
+Wheel_brake_R       = globalProperty("sim/cockpit2/controls/right_brake_ratio")
+Wheel_skidding_C    = createGlobalPropertyf("a321neo/dynamics/wheel/tire_skid_C", 0, false, true, false)
+Wheel_skidding_L    = createGlobalPropertyf("a321neo/dynamics/wheel/tire_skid_L", 0, false, true, false)
+Wheel_skidding_R    = createGlobalPropertyf("a321neo/dynamics/wheel/tire_skid_R", 0, false, true, false)
+
+Wheel_skid_speed_C  = globalProperty("sim/flightmodel2/gear/tire_skid_speed_mtr_sec[0]")
+Wheel_skid_speed_L  = globalProperty("sim/flightmodel2/gear/tire_skid_speed_mtr_sec[1]")
+Wheel_skid_speed_R  = globalProperty("sim/flightmodel2/gear/tire_skid_speed_mtr_sec[2]")
 
 --engines
 Engine_option = createGlobalPropertyi("a321neo/customization/engine_option", 0, false, true, false) --0 CFM LEAP, 1 PW1000G
@@ -468,7 +478,7 @@ Override_eng_1_lever = globalProperty("sim/flightmodel/engine/ENGN_thro_use[0]")
 Override_eng_2_lever = globalProperty("sim/flightmodel/engine/ENGN_thro_use[1]")
 
 --flight controls
-No_joystick_connected = globalProperty("sim/joystick/mouse_can_be_joystick")
+Joystick_connected = globalProperty("sim/joystick/has_joystick")
 Roll = globalProperty("sim/joystick/yoke_roll_ratio")
 Pitch = globalProperty("sim/joystick/yoke_pitch_ratio")
 Yaw = globalProperty("sim/joystick/yoke_heading_ratio")
@@ -486,6 +496,8 @@ Roll_rate = globalProperty("sim/flightmodel/position/P")
 Pitch_rate = globalProperty("sim/flightmodel/position/Q")
 Vpath = globalProperty("sim/flightmodel/position/vpath")
 Alpha = globalProperty("sim/flightmodel/position/alpha")
+Joystick_toe_brakes_L = globalProperty("sim/joystick/joy_mapped_axis_value[6]")
+Joystick_toe_brakes_R = globalProperty("sim/joystick/joy_mapped_axis_value[7]")
 
 --Surfaces / FBW / flight controls--
 --dev & debuging
