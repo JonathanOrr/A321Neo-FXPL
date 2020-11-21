@@ -12,7 +12,7 @@
 --    Please check the LICENSE file in the root of the repository for further
 --    details or check <https://www.gnu.org/licenses/>
 -------------------------------------------------------------------------------
--- File: source_switching.lua 
+-- File: source_switching.lua
 -- Short description: Display switch logic
 -------------------------------------------------------------------------------
 
@@ -24,15 +24,90 @@ local ND = 2
 local EWD = 3
 local ECAM = 4
 
---a32nx datarefs
+-- status
+local pfd_nd_xfr_capt = false
+local pfd_nd_xfr_fo   = false
+local ecam_nd_xfr     = 0 -- -1, 0, 1
 
+----------------------------------------------------------------------------------------------------
+-- Commands
+----------------------------------------------------------------------------------------------------
+
+sasl.registerCommandHandler (DMC_PFD_ND_xfr_capt, 0, function(phase) if phase == SASL_COMMAND_BEGIN then pfd_nd_xfr_capt = not pfd_nd_xfr_capt end end)
+sasl.registerCommandHandler (DMC_PFD_ND_xfr_fo,   0, function(phase) if phase == SASL_COMMAND_BEGIN then pfd_nd_xfr_fo = not pfd_nd_xfr_fo end end)
+
+sasl.registerCommandHandler (DMC_ECAM_ND_xfr_dn, 0, function(phase) if phase == SASL_COMMAND_BEGIN then ecam_nd_xfr = math.max(-1, ecam_nd_xfr - 1) end end)
+sasl.registerCommandHandler (DMC_ECAM_ND_xfr_up, 0, function(phase) if phase == SASL_COMMAND_BEGIN then ecam_nd_xfr = math.min(1, ecam_nd_xfr + 1) end end)
+
+
+
+----------------------------------------------------------------------------------------------------
+-- Functions
+----------------------------------------------------------------------------------------------------
 function auto_update()
-        set(Capt_pfd_displaying_status, 1)
-        set(Capt_nd_displaying_status, 2)
-        set(Fo_pfd_displaying_status, 1)
-        set(Fo_nd_displaying_status, 2)
-        set(EWD_displaying_status, 3)
-        set(ECAM_displaying_status, 4)
+    set(Capt_pfd_displaying_status, 1)
+    set(Capt_nd_displaying_status, 2)
+    set(Fo_pfd_displaying_status, 1)
+    set(Fo_nd_displaying_status, 2)
+    set(EWD_displaying_status, 3)
+    set(ECAM_displaying_status, 4)
+
+    -- Automatic transfers
+    if get(EWD_brightness) < 0.01 then
+        set(ECAM_displaying_status, EWD)
+    end
+
+    if get(Capt_PFD_brightness) < 0.01 then
+        set(Capt_nd_displaying_status, PFD)
+    end
+
+    if get(Fo_PFD_brightness) < 0.01 then
+        set(Fo_nd_displaying_status, PFD)
+    end
+
+    -- Manual transfers
+    if pfd_nd_xfr_capt and ecam_nd_xfr ~= -1 then
+        if get(Capt_nd_displaying_status) == PFD then
+            set(Capt_nd_displaying_status, ND)
+            set(Capt_pfd_displaying_status, PFD)
+        else
+            set(Capt_nd_displaying_status, PFD)
+            set(Capt_pfd_displaying_status, ND)                    
+        end
+    end
+
+    if pfd_nd_xfr_fo and ecam_nd_xfr ~= 1 then
+        if get(Fo_nd_displaying_status) == PFD then
+            set(Fo_nd_displaying_status, ND)
+            set(Fo_pfd_displaying_status, PFD)
+        else
+            set(Fo_nd_displaying_status, PFD)
+            set(Fo_pfd_displaying_status, ND)                    
+        end
+    end
+ 
+    -- From ECAM press button
+    if get(DMC_requiring_ECAM_EWD_swap) == 1 then
+        if get(EWD_brightness) < 0.01 then
+            set(ECAM_displaying_status, ECAM)
+        end
+        if get(ECAM_brightness) < 0.01 then
+            set(EWD_displaying_status, ECAM)
+        end
+    end
+    
+    
+    -- Rotary knob 
+    if ecam_nd_xfr == -1 then
+        set(Capt_nd_displaying_status, get(ECAM_displaying_status))
+        set(ECAM_displaying_status, ND)
+    elseif ecam_nd_xfr == 1 then
+        set(Fo_nd_displaying_status, get(ECAM_displaying_status))
+        set(ECAM_displaying_status, ND)
+    else
+    
+    end
+ 
 end
 
 function has_power(command) -- Still TODO
@@ -93,5 +168,7 @@ function update()
     end
 
     update_displays()
+
+    set(DMC_position_ecam_nd, ecam_nd_xfr)
 
 end

@@ -94,16 +94,14 @@ function ecam_user_press_page_button(phase, which_page)
             Goto_ecam(which_page)
         end
         press_start_time = get(TIME)
-    elseif phase == SASL_COMMAND_CONTINUE and get(AC_bus_2_pwrd) == 0 then  -- Fail of ecam
+    elseif phase == SASL_COMMAND_CONTINUE then  -- Fail of ecam
         if get(TIME) - press_start_time > 0.5 then            
             -- Ok, Transfer displays
-                
-            set(Override_DMC, 1)
-            set(EWD_displaying_status, 4)
+            set(DMC_requiring_ECAM_EWD_swap, 1)
         end
     elseif phase == SASL_COMMAND_END then
         press_start_time = 0
-        set(Override_DMC, 0)
+        set(DMC_requiring_ECAM_EWD_swap, 0)
     end
 end
 

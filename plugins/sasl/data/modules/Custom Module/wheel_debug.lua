@@ -91,15 +91,13 @@ function draw_brakes()
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-95, size[2]/2+5, "Skidding: ", 12, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2+15, size[2]/2+5, Round_fill(get(Wheel_skidding_C), 2), 12, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
 
-
-
 end
 
 local function draw_accumulator()
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+220, size[2]/2+30, "Accum.", 12, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+230, size[2]/2-70, Round_fill(get(Brakes_accumulator), 2), 12, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
-    Sasl_DrawWideFrame(size[1]/2+220, size[2]/2-50, 20, 70, 1, 1, ECAM_WHITE)
-    sasl.gl.drawRectangle (size[1]/2+220, size[2]/2-50, 20, 70 * get(Brakes_accumulator) / 4, get(Brakes_accumulator) > 2 and UI_GREEN or ECAM_ORANGE)    
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+220, size[2]/2+50, "Accum.", 12, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+230, size[2]/2-50, Round_fill(get(Brakes_accumulator), 2), 12, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    Sasl_DrawWideFrame(size[1]/2+220, size[2]/2-30, 20, 70, 1, 1, ECAM_WHITE)
+    sasl.gl.drawRectangle (size[1]/2+220, size[2]/2-30, 20, 70 * get(Brakes_accumulator) / 4, get(Brakes_accumulator) > 2 and UI_GREEN or ECAM_ORANGE)    
 end
 
 function draw()
