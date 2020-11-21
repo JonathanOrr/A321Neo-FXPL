@@ -56,6 +56,10 @@ Toggle_max_autobrake = createCommand("a321neo/cockpit/wheel/toggle_max_autobrake
 Toggle_antiskid_ns   = createCommand("a321neo/cockpit/wheel/toggle_antiskid_ns", "Toggle A/SKID and N/W STRG")
 Toggle_park_brake    = createCommand("a321neo/cockpit/wheel/toggle_park_brake", "Toggle Park Brake")
 
+Toggle_park_brake_XP    = findCommand("sim/flight_controls/brakes_toggle_max")
+Push_brake_regular_XP = findCommand("sim/flight_controls/brakes_regular")
+Toggle_brake_regular_XP = findCommand("sim/flight_controls/brakes_toggle_regular")
+
 --brightness control
 Capt_PFD_brightness_up = createCommand("a321neo/cockpit/brightness/capt_pfd_brightness_up", "Captain PFD brightness up")
 Capt_PFD_brightness_dn = createCommand("a321neo/cockpit/brightness/capt_pfd_brightness_dn", "Captain PFD brightness down")

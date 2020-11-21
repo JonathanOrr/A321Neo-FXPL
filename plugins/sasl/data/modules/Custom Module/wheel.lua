@@ -31,8 +31,8 @@ local AUTOBRK_MID = 4
 ----------------------------------------------------------------------------------------------------
 local antiskid_and_ns_switch = true -- Status of the ANTI-SKID and N/S switch
 
-local left_brakes_temp_no_delay = 10
-local right_brakes_temp_no_delay = 10
+local left_brakes_temp_no_delay = get(OTA)
+local right_brakes_temp_no_delay = get(OTA)
 local left_tire_psi_no_delay = 210
 local right_tire_psi_no_delay = 210
 
@@ -49,6 +49,10 @@ local is_bscu_2_working = false
 local is_abcu_working = false
 local is_tpiu_working = false
 
+-- No joystick variables (commanded with keys)
+local brake_req_right = 0
+local brake_req_left  = 0
+
 ----------------------------------------------------------------------------------------------------
 -- Command registering and handlers
 ----------------------------------------------------------------------------------------------------
@@ -64,17 +68,38 @@ sasl.registerCommandHandler (Toggle_antiskid_ns, 0, function(phase)
     end
 end)
 
-sasl.registerCommandHandler (Toggle_park_brake, 0, function(phase)
+sasl.registerCommandHandler (Toggle_park_brake, 0, function(phase) Toggle_parkbrake(phase) end)
+sasl.registerCommandHandler (Toggle_park_brake_XP, 0, function(phase) Toggle_parkbrake(phase) end)
+sasl.registerCommandHandler (Toggle_brake_regular_XP, 0, function(phase) Toggle_regular(phase) end)
+sasl.registerCommandHandler (Push_brake_regular_XP, 0, function(phase) Braking_regular(phase) end)
+
+
+sasl.registerCommandHandler (Toggle_lo_autobrake, 0, function(phase) Toggle_autobrake(phase, AUTOBRK_MIN)  end)
+sasl.registerCommandHandler (Toggle_med_autobrake, 0, function(phase) Toggle_autobrake(phase, AUTOBRK_MED) end)
+sasl.registerCommandHandler (Toggle_max_autobrake, 0, function(phase) Toggle_autobrake(phase, AUTOBRK_MAX) end)
+
+function Toggle_parkbrake(phase)
     if phase == SASL_COMMAND_BEGIN then
         set(Parkbrake_switch_pos, 1-get(Parkbrake_switch_pos))
     end
-end)
+end
 
-sasl.registerCommandHandler (Toggle_lo_autobrake, 0, function(phase) Toggle_autobrake(phase, AUTOBRK_MIN)  end)
+function Toggle_regular(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        brake_req_right = 1 - brake_req_right
+        brake_req_left  = 1 - brake_req_left
+    end
+end
 
-sasl.registerCommandHandler (Toggle_med_autobrake, 0, function(phase) Toggle_autobrake(phase, AUTOBRK_MED) end)
-
-sasl.registerCommandHandler (Toggle_max_autobrake, 0, function(phase) Toggle_autobrake(phase, AUTOBRK_MAX) end)
+function Braking_regular(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        brake_req_right = 1
+        brake_req_left = 1
+    elseif phase == SASL_COMMAND_END then
+        brake_req_right = 0
+        brake_req_left = 0
+    end
+end
 
 function Toggle_autobrake(phase, value)
 	if phase == SASL_COMMAND_BEGIN then
@@ -184,44 +209,48 @@ end
 
 local function update_brake_temps()
 
-	if get(Aft_wheel_on_ground) == 1 then
-		if get(Actual_brake_ratio) >  0 then
-			left_brakes_temp_no_delay = left_brakes_temp_no_delay + (get(Actual_brake_ratio) * ((0.05 * get(Ground_speed_kts)) ^ 1.975) * get(DELTA_TIME))
-			right_brakes_temp_no_delay = right_brakes_temp_no_delay + (get(Actual_brake_ratio) * ((0.05 * get(Ground_speed_kts)) ^ 1.975) * get(DELTA_TIME))
-		end
+    local brake_fan = get(Brakes_fan)
 
-		if get(Brakes_fan) == 1 then
-			--fan cooled
-			left_brakes_temp_no_delay = Set_anim_value(left_brakes_temp_no_delay, 10, -100, 1000, 0.00125)
-			right_brakes_temp_no_delay = Set_anim_value(right_brakes_temp_no_delay, 10, -100, 1000, 0.00125)
-		else
-			--natural cool down
-			left_brakes_temp_no_delay = Set_anim_value(left_brakes_temp_no_delay, 10, -100, 1000, 0.00075)
-			right_brakes_temp_no_delay = Set_anim_value(right_brakes_temp_no_delay, 10, -100, 1000, 0.00075)
+	if get(Aft_wheel_on_ground) == 1 then
+
+		if get(Wheel_brake_L) > 0 then
+			left_brakes_temp_no_delay = left_brakes_temp_no_delay + (get(Wheel_brake_L) * ((0.10 * get(Ground_speed_kts)) ^ 1.975) * get(DELTA_TIME))
+        else
+            left_brakes_temp_no_delay = Set_anim_value(left_brakes_temp_no_delay, get(OTA), -100, 1000, 0.00075 + brake_fan * 0.00075)
+        end
+
+        if get(Wheel_brake_R) > 0 then
+			right_brakes_temp_no_delay = right_brakes_temp_no_delay + (get(Wheel_brake_R) * ((0.10 * get(Ground_speed_kts)) ^ 1.975) * get(DELTA_TIME))
+        else
+			right_brakes_temp_no_delay = Set_anim_value(right_brakes_temp_no_delay, get(OTA), -100, 1000, 0.00075 + brake_fan * 0.00075)
 		end
 	else
 		if (get(Left_gear_deployment) + get(Right_gear_deployment)) / 2 > 0.2 then
-			if get(Brakes_fan) == 1 then
+			if brake_fan == 1 then
 				--fan cooled
-				left_brakes_temp_no_delay = Set_anim_value(left_brakes_temp_no_delay, 10, -100, 1000, Math_clamp(((39/160000) * get(IAS)) + 0.00125, 0.00125, 0.05))
-				right_brakes_temp_no_delay = Set_anim_value(right_brakes_temp_no_delay, 10, -100, 1000, Math_clamp(((39/160000) * get(IAS)) + 0.00125, 0.00125, 0.05))
+				left_brakes_temp_no_delay = Set_anim_value(left_brakes_temp_no_delay, get(OTA), -100, 1000, Math_clamp(((39/160000) * get(IAS)) + 0.00125, 0.00125, 0.05))
+				right_brakes_temp_no_delay = Set_anim_value(right_brakes_temp_no_delay, get(OTA), -100, 1000, Math_clamp(((39/160000) * get(IAS)) + 0.00125, 0.00125, 0.05))
 			else
 				--natural cool down
-				left_brakes_temp_no_delay = Set_anim_value(left_brakes_temp_no_delay, 10, -100, 1000, Math_clamp(((197/800000) * get(IAS)) + 0.00075, 0.00125, 0.05))
-				right_brakes_temp_no_delay = Set_anim_value(right_brakes_temp_no_delay, 10, -100, 1000, Math_clamp(((197/800000) * get(IAS)) + 0.00075, 0.00125, 0.05))
+				left_brakes_temp_no_delay = Set_anim_value(left_brakes_temp_no_delay, get(OTA), -100, 1000, Math_clamp(((197/800000) * get(IAS)) + 0.00075, 0.00125, 0.05))
+				right_brakes_temp_no_delay = Set_anim_value(right_brakes_temp_no_delay, get(OTA), -100, 1000, Math_clamp(((197/800000) * get(IAS)) + 0.00075, 0.00125, 0.05))
 			end
 		else
-			if get(Brakes_fan) == 1 then
+			if brake_fan == 1 then
 				--fan cooled
-				left_brakes_temp_no_delay = Set_anim_value(left_brakes_temp_no_delay, 10, -100, 1000, 0.00125)
-				right_brakes_temp_no_delay = Set_anim_value(right_brakes_temp_no_delay, 10, -100, 1000, 0.00125)
+				left_brakes_temp_no_delay = Set_anim_value(left_brakes_temp_no_delay, get(OTA), -100, 1000, 0.00125)
+				right_brakes_temp_no_delay = Set_anim_value(right_brakes_temp_no_delay, get(OTA), -100, 1000, 0.00125)
 			else
 				--natural cool down
-				left_brakes_temp_no_delay = Set_anim_value(left_brakes_temp_no_delay, 10, -100, 1000, 0.00075)
-				right_brakes_temp_no_delay = Set_anim_value(right_brakes_temp_no_delay, 10, -100, 1000, 0.00075)
+				left_brakes_temp_no_delay = Set_anim_value(left_brakes_temp_no_delay, get(OTA), -100, 1000, 0.00075)
+				right_brakes_temp_no_delay = Set_anim_value(right_brakes_temp_no_delay, get(OTA), -100, 1000, 0.00075)
 			end
 		end
 	end
+	
+    set(Left_brakes_temp, Set_anim_value(get(Left_brakes_temp), left_brakes_temp_no_delay, -100, 1000, 0.5))
+	set(Right_brakes_temp, Set_anim_value(get(Right_brakes_temp), right_brakes_temp_no_delay, -100, 1000, 0.5))
+
 end
 
 local function update_wheel_psi()
@@ -229,17 +258,8 @@ local function update_wheel_psi()
 	left_tire_psi_no_delay = 5/39 * (left_brakes_temp_no_delay - 10) + 210
 	right_tire_psi_no_delay = 5/39 * (right_brakes_temp_no_delay - 10) + 210
 
-	--set(Left_brakes_temp, left_brakes_temp_no_delay)
-	--set(Right_brakes_temp, right_brakes_temp_no_delay)
-
-	--set(Left_tire_psi,  left_tire_psi_no_delay)
-	--set(Right_tire_psi, left_tire_psi_no_delay)
-
-	set(Left_brakes_temp, Set_anim_value(get(Left_brakes_temp), left_brakes_temp_no_delay, -100, 1000, 0.5))
-	set(Right_brakes_temp, Set_anim_value(get(Left_brakes_temp), right_brakes_temp_no_delay, -100, 1000, 0.5))
-
 	set(Left_tire_psi,  Set_anim_value(get(Left_tire_psi), left_tire_psi_no_delay, -100, 1000, 0.5))
-	set(Right_tire_psi, Set_anim_value(get(Left_tire_psi), left_tire_psi_no_delay, -100, 1000, 0.5))
+	set(Right_tire_psi, Set_anim_value(get(Right_tire_psi), left_tire_psi_no_delay, -100, 1000, 0.5))
 end
 
 local function update_steering()
@@ -392,11 +412,11 @@ local function run_anti_skid(brake_value_L, brake_value_R)
     end
 end
 
-local function brake_with_accumulator(L,R)
+local function brake_with_accumulator(L,R, L_temp_degradation, R_temp_degradation)
 
     local prev_brakes = get(Wheel_brake_L) + get(Wheel_brake_R)
-    Set_dataref_linear_anim(Wheel_brake_L, L, 0, 1, 0.5)
-    Set_dataref_linear_anim(Wheel_brake_R, R, 0, 1, 0.5)
+    Set_dataref_linear_anim(Wheel_brake_L, L * L_temp_degradation, 0, 1, 0.5)
+    Set_dataref_linear_anim(Wheel_brake_R, R * R_temp_degradation, 0, 1, 0.5)
     
     -- We need to reduce the accumulator when brake changes
     local diff = (get(Wheel_brake_L) + get(Wheel_brake_R)) - prev_brakes
@@ -408,14 +428,14 @@ local function brake_with_accumulator(L,R)
     end
 end
 
-local function brake_altn()
+local function brake_altn(L_temp_degradation, R_temp_degradation)
     if get(Hydraulic_Y_press) >= 1450 then
         -- Ok in this case let's brake, no pressure limit, no antiskid
-        Set_dataref_linear_anim(Wheel_brake_L, get(Joystick_toe_brakes_L), 0, 1, 0.5)
-        Set_dataref_linear_anim(Wheel_brake_R, get(Joystick_toe_brakes_R), 0, 1, 0.5)
+        Set_dataref_linear_anim(Wheel_brake_L, (get(Joystick_toe_brakes_L)+brake_req_left)*L_temp_degradation, 0, 1, 0.5)
+        Set_dataref_linear_anim(Wheel_brake_R, (get(Joystick_toe_brakes_R)+brake_req_right)*R_temp_degradation, 0, 1, 0.5)
     elseif get(Brakes_accumulator) > 1 then
         -- If we don't have hydraulic, we need to use the accumulator (if any)
-        brake_with_accumulator(get(Joystick_toe_brakes_L), get(Joystick_toe_brakes_R))
+        brake_with_accumulator(get(Joystick_toe_brakes_L)+brake_req_left, get(Joystick_toe_brakes_R)+brake_req_right, L_temp_degradation, R_temp_degradation)
     else
         -- Oh no, no hyd pressure to brake
         Set_dataref_linear_anim(Wheel_brake_L, 0, 0, 1, 0.5)
@@ -428,30 +448,32 @@ local function update_brakes()
     set(XPlane_parkbrake_ratio, 0) -- X-Plane park brake is not used
     set(Override_wheel_gear_and_brk, 1)
 
+    local L_temp_degradation = get(Left_brakes_temp) < 550 and 1 or Math_clamp((1-(get(Left_brakes_temp) - 550) / 550), 0, 1)
+    local R_temp_degradation = get(Right_brakes_temp) < 550 and 1 or Math_clamp((1-(get(Left_brakes_temp) - 550) / 550), 0, 1)
+
     local up_limit = Math_rescale(0, 0, 2500, 1.4, 1000) -- 1000 PSI upper limit
+
 
     if get(Brakes_mode) == 1 or get(Brakes_mode) == 2 then
         -- Normal or alternate with antiskid
-    
-    
-        local L_brake_set = Math_clamp(get(Joystick_toe_brakes_L), 0, up_limit)
-        local R_brake_set = Math_clamp(get(Joystick_toe_brakes_R), 0, up_limit)
+        local L_brake_set = Math_clamp(get(Joystick_toe_brakes_L)+brake_req_left, 0, up_limit) * L_temp_degradation
+        local R_brake_set = Math_clamp(get(Joystick_toe_brakes_R)+brake_req_right, 0, up_limit) * R_temp_degradation
         
         run_anti_skid(L_brake_set, R_brake_set)
         
     elseif get(Brakes_mode) == 3 then
         -- Alternate brake no antiskid
         
-        brake_altn()
+        brake_altn(L_temp_degradation, R_temp_degradation)
         
     elseif get(Brakes_mode) == 4 then
         -- Parking brake
 
         if get(Hydraulic_Y_press) >= 1450 or get(Hydraulic_G_press) >= 1450 then
-            Set_dataref_linear_anim(Wheel_brake_L, 1, 0, 1, 1)
-            Set_dataref_linear_anim(Wheel_brake_R, 1, 0, 1, 1)
+            Set_dataref_linear_anim(Wheel_brake_L, 1 * L_temp_degradation, 0, 1, 1)
+            Set_dataref_linear_anim(Wheel_brake_R, 1 * R_temp_degradation, 0, 1, 1)
         elseif get(Brakes_accumulator) > 1 then
-            brake_with_accumulator(1,1)     
+            brake_with_accumulator(1,1, L_temp_degradation, R_temp_degradation)     
         else
             Set_dataref_linear_anim(Wheel_brake_L, 0, 0, 1, 1)
             Set_dataref_linear_anim(Wheel_brake_R, 0, 0, 1, 1)        
