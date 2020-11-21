@@ -376,14 +376,18 @@ end
 local function run_anti_skid(brake_value_L, brake_value_R)
 
     if get(Wheel_skidding_L) > 0.11 then
+        set(Ecam_wheel_release_R, 1)
         Set_dataref_linear_anim(Wheel_brake_L, 0, 0, 1, 1)
     else
+        set(Ecam_wheel_release_L, 0)
         Set_dataref_linear_anim(Wheel_brake_L, brake_value_L, 0, 1, 0.5)
     end
     
     if get(Wheel_skidding_R) > 0.11 then
+        set(Ecam_wheel_release_R, 1)
         Set_dataref_linear_anim(Wheel_brake_R, 0, 0, 1, 1)
     else
+        set(Ecam_wheel_release_R, 0)
         Set_dataref_linear_anim(Wheel_brake_R, brake_value_R, 0, 1, 0.5)
     end
 end

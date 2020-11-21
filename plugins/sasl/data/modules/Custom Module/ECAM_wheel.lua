@@ -105,7 +105,7 @@ local function draw_brake_modes()
 
     local altn_brk_display_cond = get(Wheel_status_ABCU) == 0 or get(Hydraulic_Y_press) <= 1450
 
-    if get(Brakes_mode) ~= 1 or get(FAILURE_GEAR_AUTOBRAKES) == 1 or (get(Wheel_status_BSCU_1) == 0 and get(Wheel_status_BSCU_2) == 0) or altn_brk_display_cond then
+    if (get(Brakes_mode) == 2 or get(Brakes_mode) == 3) or get(FAILURE_GEAR_AUTOBRAKES) == 1 or (get(Wheel_status_BSCU_1) == 0 and get(Wheel_status_BSCU_2) == 0) or altn_brk_display_cond then
         local hyd_color = get(Hydraulic_G_press) >= 1450 and ECAM_GREEN or ECAM_ORANGE
         local norm_brake_color = get(Brakes_mode) == 1 and ECAM_GREEN or ECAM_ORANGE
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2-110, size[2]/2-30, "G", 36, false, false, TEXT_ALIGN_CENTER, hyd_color)
@@ -143,8 +143,32 @@ local function draw_brake_modes()
 
 end
 
+local function draw_single_release_indicator(x)
+    sasl.gl.drawWideLine(size[1]/2+x, size[2]/2-105, size[1]/2+x+20, size[2]/2-105, 2, ECAM_GREEN)
+    sasl.gl.drawWideLine(size[1]/2+x, size[2]/2-112, size[1]/2+x+20, size[2]/2-112, 2, ECAM_GREEN)
+    sasl.gl.drawWideLine(size[1]/2+x, size[2]/2-119, size[1]/2+x+20, size[2]/2-119, 2, ECAM_GREEN)
+end
+
+local function draw_release_indicators()
+
+    if get(Ecam_wheel_release_L) == 1 then
+        draw_single_release_indicator(-391)
+        draw_single_release_indicator(-351)
+        draw_single_release_indicator(-231)
+        draw_single_release_indicator(-191)
+    end
+    
+    if get(Ecam_wheel_release_R) == 1 then
+        draw_single_release_indicator(371)
+        draw_single_release_indicator(331)
+        draw_single_release_indicator(211)
+        draw_single_release_indicator(171)
+    end
+end
+
 function draw_wheel_page()
     draw_brakes_and_tires()
+    draw_release_indicators()
     draw_nsw_steering()
     draw_brake_modes()
 end

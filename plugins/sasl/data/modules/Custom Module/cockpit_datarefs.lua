@@ -256,6 +256,10 @@ Ecam_press_cabin_vs_limit  = createGlobalPropertyf("a321neo/cockpit/ecam/press/c
 Ecam_press_delta_p_limit   = createGlobalPropertyf("a321neo/cockpit/ecam/press/delta_p_limited", 0, false, true, false)  -- -1 - 9
 Ecam_press_delta_p_color   = createGlobalPropertyf("a321neo/cockpit/ecam/press/delta_p_color", 0, false, true, false)  -- 0: amber, 1: green
 
+Ecam_wheel_release_L = createGlobalPropertyi("a321neo/cockpit/ecam/wheel/release_L", 0, false, true, false)
+Ecam_wheel_release_R = createGlobalPropertyi("a321neo/cockpit/ecam/wheel/release_R", 0, false, true, false)
+
+
 -- ECAM button lights
 Ecam_btn_light_ENG   = createGlobalPropertyi("a321neo/cockpit/ecam/buttons/light_eng", 0, false, true, false)   --0: OFF, 1: ON
 Ecam_btn_light_BLEED = createGlobalPropertyi("a321neo/cockpit/ecam/buttons/light_bleed", 0, false, true, false) --0: OFF, 1: ON
