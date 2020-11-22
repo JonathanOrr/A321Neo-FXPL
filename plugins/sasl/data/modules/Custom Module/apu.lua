@@ -84,7 +84,7 @@ function update_egt()
 
     local apu_n1 = get(Apu_N1)
 
-    if master_switch_status then
+    if master_switch_status and get(FAILURE_ENG_APU_FAIL) == 0 then
         if apu_n1 < 1 then
             Set_dataref_linear_anim(APU_EGT, get(OTA), -50, 1000, 1)
         elseif apu_n1 <= 25 then
@@ -103,7 +103,7 @@ function update_egt()
 end
 
 local function update_button_datarefs()
-    -- TODO FAILURE
+
     local is_faulty = get(FAILURE_ENG_APU_FAIL) == 1 or get(DC_bat_bus_pwrd) == 0
 
     set(Apu_master_button_state,(master_switch_status and 1 or 0))
@@ -122,7 +122,7 @@ local function update_apu_flap()
 end
 
 local function update_start()
-    if master_switch_status then 
+    if master_switch_status and get(FAILURE_ENG_APU_FAIL) == 0 then 
 
         if start_requested and get(APU_flap) == 1 and get(Apu_avail) == 0 and get(DC_bat_bus_pwrd) == 1 and get(Apu_fuel_source) > 0 then
             set(Apu_start_position, 2)
@@ -139,7 +139,7 @@ local function update_start()
 end
 
 local function update_gen()
-    if not master_switch_status then
+    if not master_switch_status or get(FAILURE_ENG_APU_FAIL) == 1 then
         set(Ecam_apu_gen_state, 0)
         set(Ecam_apu_gen_state, 0)
     else
