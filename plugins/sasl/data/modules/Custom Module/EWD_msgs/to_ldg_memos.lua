@@ -12,7 +12,7 @@ timer_2nd_engine_on_started = false
 
 Message_TO_AUTOBRK = {
     text = function(self)
-        if (get(Autobrakes) == 3) then
+        if (get(Wheel_autobrake_status) == 3) then
             return "    AUTO BRK MAX"
         else
             return "    AUTO BRK..........MAX"
@@ -20,7 +20,7 @@ Message_TO_AUTOBRK = {
     end,
 
     color = function(self)
-        if (get(Autobrakes) == 3) then
+        if (get(Wheel_autobrake_status) == 3) then
             return COL_INDICATION
         else
             return COL_ACTIONS

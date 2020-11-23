@@ -141,9 +141,11 @@ local function draw_brake_modes()
     end
 
 
-
---    sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2-220, "AUTO BRK", 36, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
---    sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2-260, "MED", 36, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+    if get(Wheel_autobrake_status) ~= 0 then    -- TODO Flashing and Fault
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2-220, "AUTO BRK", 36, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        local text = get(Wheel_autobrake_status) == 1 and "LO" or (get(Wheel_autobrake_status) == 2 and "MED" or "MAX")
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2-260, text, 36, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+    end
 
 end
 

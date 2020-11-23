@@ -16,15 +16,13 @@
 -- Short description: Wheels and brakes management
 -------------------------------------------------------------------------------
 
+include('wheel_autobrake.lua')
+
 ----------------------------------------------------------------------------------------------------
 -- Constants
 ----------------------------------------------------------------------------------------------------
 include('constants.lua')
 
-local AUTOBRK_MAX = 0
-local AUTOBRK_OFF = 1
-local AUTOBRK_LOW = 2
-local AUTOBRK_MID = 4
 
 ----------------------------------------------------------------------------------------------------
 -- Global variables
@@ -74,10 +72,6 @@ sasl.registerCommandHandler (Toggle_brake_regular_XP, 0, function(phase) Toggle_
 sasl.registerCommandHandler (Push_brake_regular_XP, 0, function(phase) Braking_regular(phase) end)
 
 
-sasl.registerCommandHandler (Toggle_lo_autobrake, 0, function(phase) Toggle_autobrake(phase, AUTOBRK_MIN)  end)
-sasl.registerCommandHandler (Toggle_med_autobrake, 0, function(phase) Toggle_autobrake(phase, AUTOBRK_MED) end)
-sasl.registerCommandHandler (Toggle_max_autobrake, 0, function(phase) Toggle_autobrake(phase, AUTOBRK_MAX) end)
-
 function Toggle_parkbrake(phase)
     if phase == SASL_COMMAND_BEGIN then
         set(Parkbrake_switch_pos, 1-get(Parkbrake_switch_pos))
@@ -98,21 +92,6 @@ function Braking_regular(phase)
     elseif phase == SASL_COMMAND_END then
         brake_req_right = 0
         brake_req_left = 0
-    end
-end
-
-function Toggle_autobrake(phase, value)
-	if phase == SASL_COMMAND_BEGIN then
-		if get(Autobrakes_sim) ~= value then
-		    if value ~= AUTOBRK_MAX or get(All_on_ground) == 1 then -- MAX can be set only on ground
-    			set(Autobrakes_sim, value)
-            end
-		else
-			set(Autobrakes_sim, 1)
-			if get(IAS) > 55 then
-				set(Parkbrake_switch_pos, 0)
-			end
-		end
     end
 end
 
@@ -156,52 +135,6 @@ local function update_pb_lights()
 			set(Brake_fan_button_state, 1)--01
 		else
 			set(Brake_fan_button_state, 3)--11
-		end
-	end
-
-	set(Autobrakes_lo_button_state, 0) --00
-	set(Autobrakes_med_button_state, 0)--00
-	set(Autobrakes_max_button_state, 0)--00
-	set(Autobrakes, 0)
-	
-	--update autobrake button status follwing 00, 01, 10, 11
-	if get(Autobrakes_sim) == AUTOBRK_MAX then
-		set(Autobrakes_max_button_state, 1)--01
-		set(Autobrakes, 3)
-		if get(Parkbrake_switch_pos) > 0 and get(IAS) > 55 and get(Any_wheel_on_ground) == 1 then
-			set(Autobrakes_lo_button_state, 2)--10
-			set(Autobrakes, 3)
-		end
-	else
-		if get(Autobrakes_sim) > 1 then
-			set(Autobrakes_max_button_state, 0)--00
-			--lo autobrake states
-			if get(Autobrakes_sim) == 2 then
-				set(Autobrakes_lo_button_state, 1)--01
-				set(Autobrakes, 1)
-				if get(Parkbrake_switch_pos) > 0 and get(IAS) > 55 and get(Any_wheel_on_ground) == 1 then
-					set(Autobrakes_lo_button_state, 2)--10
-					set(Autobrakes, 1)
-				end
-			else
-				set(Autobrakes_lo_button_state, 0)--00
-				set(Autobrakes, 0)
-			end
-			--med autobrake states
-			if get(Autobrakes_sim) == 4 then
-				set(Autobrakes_med_button_state, 1)--01
-				set(Autobrakes, 2)
-				if get(Parkbrake_switch_pos) > 0 and get(IAS) > 55 and get(Any_wheel_on_ground) == 1 then
-					set(Autobrakes_med_button_state, 2)--10
-					set(Autobrakes, 2)
-				end
-			else
-				set(Autobrakes_med_button_state, 0)--00
-				set(Autobrakes, 0)
-			end
-		else
-			set(Autobrakes_lo_button_state, 0)--00
-			set(Autobrakes_med_button_state, 0)--00
 		end
 	end
 	
@@ -508,5 +441,8 @@ function update()
    
     update_brake_temps()
     update_wheel_psi()
+    
+    update_autobrake()
+    
     perf_measure_stop("wheel:update()")
 end

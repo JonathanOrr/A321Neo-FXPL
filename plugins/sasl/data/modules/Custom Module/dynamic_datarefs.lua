@@ -63,6 +63,8 @@ Wheel_skid_speed_C  = globalProperty("sim/flightmodel2/gear/tire_skid_speed_mtr_
 Wheel_skid_speed_L  = globalProperty("sim/flightmodel2/gear/tire_skid_speed_mtr_sec[1]")
 Wheel_skid_speed_R  = globalProperty("sim/flightmodel2/gear/tire_skid_speed_mtr_sec[2]")
 
+Wheel_autobrake_status= createGlobalPropertyf("a321neo/dynamics/wheel/autobrake_status", 0, false, true, false)   -- 0: OFF, 1: LOW, 2: MID, 3: MAX
+
 --engines
 Engine_option = createGlobalPropertyi("a321neo/customization/engine_option", 0, false, true, false) --0 CFM LEAP, 1 PW1000G
 PW_engine_enabled = createGlobalPropertyi("a321neo/customization/pw_engine_enabled", 0, false, true, false)
