@@ -221,6 +221,20 @@ local failures_data = {
             {name="AV. INLET\nFAULT", status=false, dataref=FAILURE_AVIONICS_INLET },
             {name="AV. OUTLET\nFAULT", status=false, dataref=FAILURE_AVIONICS_OUTLET },                 
             {name="OXYGEN REG\nFAULT", status=false, dataref=FAILURE_OXY_REGUL_FAIL },
+            
+            {name="CAPT PFD\nFAULT", status=false, dataref=FAILURE_DISPLAY_CAPT_PFD },
+            {name="CAPT ND\nFAULT", status=false, dataref=FAILURE_DISPLAY_CAPT_ND },
+            {name="F/O PFD\nFAULT", status=false, dataref=FAILURE_DISPLAY_FO_PFD },
+            {name="F/O ND\nFAULT", status=false, dataref=FAILURE_DISPLAY_FO_ND },
+            {name="EWD DISP.\nFAULT", status=false, dataref=FAILURE_DISPLAY_EWD },
+            {name="ECAM DISP.\nFAULT", status=false, dataref=FAILURE_DISPLAY_ECAM },
+            {name="CAPT DCDU\nFAULT", status=false, dataref=FAILURE_DISPLAY_DCDU_1 },
+            {name="F/O DCDU\nFAULT", status=false, dataref=FAILURE_DISPLAY_DCDU_2 },
+            {name="CAPT MCDU\nFAULT", status=false, dataref=FAILURE_DISPLAY_MCDU_1 },
+            {name="F/O MCDU\nFAULT", status=false, dataref=FAILURE_DISPLAY_MCDU_2 },
+            {name="CAPT DRAIMS\nFAULT", status=false, dataref=FAILURE_DISPLAY_DRAIMS_1 },
+            {name="F/O DRAIMS\nFAULT", status=false, dataref=FAILURE_DISPLAY_DRAIMS_2 },
+            {name="ISIS\nFAULT", status=false, dataref=FAILURE_DISPLAY_ISIS }
         }
     },
     {

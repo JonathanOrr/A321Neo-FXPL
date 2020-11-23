@@ -289,38 +289,69 @@ sasl.registerCommandHandler ( ISIS_brightness_dn, 0, function(phase)
     end
 end)
 
-function update()
-    set(Total_element_brightness, 1)
+function change_brightness()
 
     --calculate brightness lut
-    Capt_PFD_lut_alpha[4] = Math_clamp(get(Capt_PFD_brightness) / 0.4, 0, 1) * Math_clamp((1 - get(Sun_pitch) / 1.5), 0, 1)
-    Capt_ND_lut_alpha[4] = Math_clamp(get(Capt_ND_brightness) / 0.4, 0, 1) * Math_clamp((1 - get(Sun_pitch) / 1.5), 0, 1)
-    EWD_lut_alpha[4] =  Math_clamp(get(EWD_brightness) / 0.4, 0, 1) * Math_clamp((1 - get(Sun_pitch) / 1.5), 0, 1)
-    FO_ND_lut_alpha[4] = Math_clamp(get(Fo_ND_brightness) / 0.4, 0, 1) * Math_clamp((1 - get(Sun_pitch) / 1.5), 0, 1)
-    FO_PFD_lut_alpha[4] = Math_clamp(get(Fo_PFD_brightness) / 0.4, 0, 1) * Math_clamp((1 - get(Sun_pitch) / 1.5), 0, 1)
-    ECAM_lut_alpha[4] = Math_clamp(get(ECAM_brightness) / 0.4, 0, 1) * Math_clamp((1 - get(Sun_pitch) / 1.5), 0, 1)
-    DCDU_1_lut_alpha[4] = Math_clamp(get(DCDU_1_brightness) / 0.4, 0, 1) * Math_clamp((1 - get(Sun_pitch) / 1.5), 0, 1)
-    DCDU_2_lut_alpha[4] = Math_clamp(get(DCDU_2_brightness) / 0.4, 0, 1) * Math_clamp((1 - get(Sun_pitch) / 1.5), 0, 1)
-    MCDU_1_lut_alpha[4] = Math_clamp(get(MCDU_1_brightness) / 0.4, 0, 1) * Math_clamp((1 - get(Sun_pitch) / 1.5), 0, 1)
-    MCDU_2_lut_alpha[4] = Math_clamp(get(MCDU_2_brightness) / 0.4, 0, 1) * Math_clamp((1 - get(Sun_pitch) / 1.5), 0, 1)
-    DRAIMS_1_lut_alpha[4] = Math_clamp(get(DRAIMS_1_brightness) / 0.4, 0, 1) * Math_clamp((1 - get(Sun_pitch) / 1.5), 0, 1)
-    DRAIMS_2_lut_alpha[4] = Math_clamp(get(DRAIMS_2_brightness) / 0.4, 0, 1) * Math_clamp((1 - get(Sun_pitch) / 1.5), 0, 1)
-    ISIS_lut_alpha[4] = Math_clamp(get(ISIS_brightness) / 0.4, 0, 1) * Math_clamp((1 - get(Sun_pitch) / 1.5), 0, 1)
+    Capt_PFD_lut_alpha[4] = Math_clamp(get(Capt_PFD_brightness_act) / 0.4, 0, 1) * Math_clamp((1 - get(Sun_pitch) / 1.5), 0, 1)
+    Capt_ND_lut_alpha[4] = Math_clamp(get(Capt_ND_brightness_act) / 0.4, 0, 1) * Math_clamp((1 - get(Sun_pitch) / 1.5), 0, 1)
+    EWD_lut_alpha[4] =  Math_clamp(get(EWD_brightness_act) / 0.4, 0, 1) * Math_clamp((1 - get(Sun_pitch) / 1.5), 0, 1)
+    FO_ND_lut_alpha[4] = Math_clamp(get(Fo_ND_brightness_act) / 0.4, 0, 1) * Math_clamp((1 - get(Sun_pitch) / 1.5), 0, 1)
+    FO_PFD_lut_alpha[4] = Math_clamp(get(Fo_PFD_brightness_act) / 0.4, 0, 1) * Math_clamp((1 - get(Sun_pitch) / 1.5), 0, 1)
+    ECAM_lut_alpha[4] = Math_clamp(get(ECAM_brightness_act) / 0.4, 0, 1) * Math_clamp((1 - get(Sun_pitch) / 1.5), 0, 1)
+    DCDU_1_lut_alpha[4] = Math_clamp(get(DCDU_1_brightness_act) / 0.4, 0, 1) * Math_clamp((1 - get(Sun_pitch) / 1.5), 0, 1)
+    DCDU_2_lut_alpha[4] = Math_clamp(get(DCDU_2_brightness_act) / 0.4, 0, 1) * Math_clamp((1 - get(Sun_pitch) / 1.5), 0, 1)
+    MCDU_1_lut_alpha[4] = Math_clamp(get(MCDU_1_brightness_act) / 0.4, 0, 1) * Math_clamp((1 - get(Sun_pitch) / 1.5), 0, 1)
+    MCDU_2_lut_alpha[4] = Math_clamp(get(MCDU_2_brightness_act) / 0.4, 0, 1) * Math_clamp((1 - get(Sun_pitch) / 1.5), 0, 1)
+    DRAIMS_1_lut_alpha[4] = Math_clamp(get(DRAIMS_1_brightness_act) / 0.4, 0, 1) * Math_clamp((1 - get(Sun_pitch) / 1.5), 0, 1)
+    DRAIMS_2_lut_alpha[4] = Math_clamp(get(DRAIMS_2_brightness_act) / 0.4, 0, 1) * Math_clamp((1 - get(Sun_pitch) / 1.5), 0, 1)
+    ISIS_lut_alpha[4] = Math_clamp(get(ISIS_brightness_act) / 0.4, 0, 1) * Math_clamp((1 - get(Sun_pitch) / 1.5), 0, 1)
 
     --calculate brightness darkness
-    Capt_PFD_brightness_alpha[4] = 1 - get(Capt_PFD_brightness)
-    Capt_ND_brightness_alpha[4] = 1 - get(Capt_ND_brightness)
-    EWD_brightness_alpha[4] = 1 - get(EWD_brightness)
-    FO_ND_brightness_alpha[4] = 1 - get(Fo_ND_brightness)
-    FO_PFD_brightness_alpha[4] = 1 - get(Fo_PFD_brightness)
-    ECAM_brightness_alpha[4] = 1 - get(ECAM_brightness)
-    DCDU_1_brightness_alpha[4] = 1 - get(DCDU_1_brightness)
-    DCDU_2_brightness_alpha[4] = 1 - get(DCDU_2_brightness)
-    MCDU_1_brightness_alpha[4] = 1 - get(MCDU_1_brightness)
-    MCDU_2_brightness_alpha[4] = 1 - get(MCDU_2_brightness)
-    DRAIMS_1_brightness_alpha[4] = 1 - get(DRAIMS_1_brightness)
-    DRAIMS_2_brightness_alpha[4] = 1 - get(DRAIMS_2_brightness)
-    ISIS_brightness_alpha[4] = 1 - get(ISIS_brightness)
+    Capt_PFD_brightness_alpha[4] = 1 - get(Capt_PFD_brightness_act)
+    Capt_ND_brightness_alpha[4] = 1 - get(Capt_ND_brightness_act)
+    EWD_brightness_alpha[4] = 1 - get(EWD_brightness_act)
+    FO_ND_brightness_alpha[4] = 1 - get(Fo_ND_brightness_act)
+    FO_PFD_brightness_alpha[4] = 1 - get(Fo_PFD_brightness_act)
+    ECAM_brightness_alpha[4] = 1 - get(ECAM_brightness_act)
+    DCDU_1_brightness_alpha[4] = 1 - get(DCDU_1_brightness_act)
+    DCDU_2_brightness_alpha[4] = 1 - get(DCDU_2_brightness_act)
+    MCDU_1_brightness_alpha[4] = 1 - get(MCDU_1_brightness_act)
+    MCDU_2_brightness_alpha[4] = 1 - get(MCDU_2_brightness_act)
+    DRAIMS_1_brightness_alpha[4] = 1 - get(DRAIMS_1_brightness_act)
+    DRAIMS_2_brightness_alpha[4] = 1 - get(DRAIMS_2_brightness_act)
+    ISIS_brightness_alpha[4] = 1 - get(ISIS_brightness_act)
+end
+
+function update_actual_values()
+    set(Capt_PFD_brightness_act, get(Capt_PFD_brightness) * (1 - get(FAILURE_DISPLAY_CAPT_PFD)) * get(AC_ess_bus_pwrd))
+    set(Capt_ND_brightness_act,  get(Capt_ND_brightness)  * (1 - get(FAILURE_DISPLAY_CAPT_ND)) * get(AC_ess_shed_pwrd))
+    set(Fo_PFD_brightness_act,   get(Fo_PFD_brightness) * (1 - get(FAILURE_DISPLAY_FO_PFD)) * get(AC_bus_2_pwrd))
+    set(Fo_ND_brightness_act,    get(Fo_ND_brightness)  * (1 - get(FAILURE_DISPLAY_FO_ND)) * get(AC_bus_2_pwrd))
+    
+    set(EWD_brightness_act,      get(EWD_brightness)   * (1 - get(FAILURE_DISPLAY_EWD)) * get(AC_ess_bus_pwrd))
+    set(ECAM_brightness_act,     get(ECAM_brightness)  * (1 - get(FAILURE_DISPLAY_ECAM)) * get(AC_bus_2_pwrd))
+
+
+    set(MCDU_1_brightness_act,   get(MCDU_1_brightness) * (1 - get(FAILURE_DISPLAY_MCDU_1)) * get(AC_ess_shed_pwrd))
+    set(MCDU_2_brightness_act,   get(MCDU_2_brightness) * (1 - get(FAILURE_DISPLAY_MCDU_2)) * get(AC_bus_2_pwrd))
+    
+    set(DRAIMS_1_brightness_act,   get(DRAIMS_1_brightness) * (1 - get(FAILURE_DISPLAY_DRAIMS_1)) * get(DC_ess_bus_pwrd))
+    set(DRAIMS_2_brightness_act,   get(DRAIMS_2_brightness) * (1 - get(FAILURE_DISPLAY_DRAIMS_2)) * get(DC_bus_2_pwrd))
+
+    set(DCDU_1_brightness_act,   get(DCDU_1_brightness) * (1 - get(FAILURE_DISPLAY_DCDU_1)) * get(AC_bus_1_pwrd))
+    set(DCDU_2_brightness_act,   get(DCDU_2_brightness) * (1 - get(FAILURE_DISPLAY_DCDU_2)) * get(AC_bus_1_pwrd))
+
+    set(ISIS_brightness_act,   get(ISIS_brightness) * (1 - get(FAILURE_DISPLAY_ISIS)) * get(DC_ess_bus_pwrd))
+    
+end
+
+function update()
+    set(Total_element_brightness, 1)
+    
+    update_actual_values()
+    
+    change_brightness()
+    
 end
 
 function draw()

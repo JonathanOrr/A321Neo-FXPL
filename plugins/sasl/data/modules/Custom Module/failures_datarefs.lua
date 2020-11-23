@@ -196,3 +196,17 @@ FAILURE_AVIONICS_OUTLET = createGlobalPropertyi("a321neo/failures/misc/avionics_
 FAILURE_PRESS_SAFETY_OPEN = createGlobalPropertyi("a321neo/failures/pressurization/safety_valve_open", 0, false, true, false)
 FAILURE_OXY_REGUL_FAIL = createGlobalPropertyi("a321neo/failures/misc/oxy_reg_fault", 0, false, true, false)
 
+FAILURE_DISPLAY_CAPT_PFD= createGlobalPropertyi("a321neo/failures/displays/capt_pfd", 0, false, true, false)
+FAILURE_DISPLAY_CAPT_ND = createGlobalPropertyi("a321neo/failures/displays/capt_nd", 0, false, true, false)
+FAILURE_DISPLAY_FO_PFD  = createGlobalPropertyi("a321neo/failures/displays/fo_pfd", 0, false, true, false)
+FAILURE_DISPLAY_FO_ND   = createGlobalPropertyi("a321neo/failures/displays/fo_nd", 0, false, true, false)
+FAILURE_DISPLAY_EWD     = createGlobalPropertyi("a321neo/failures/displays/ewd", 0, false, true, false)
+FAILURE_DISPLAY_ECAM    = createGlobalPropertyi("a321neo/failures/displays/ecam", 0, false, true, false)
+FAILURE_DISPLAY_DCDU_1  = createGlobalPropertyi("a321neo/failures/displays/dcdu_1", 0, false, true, false)
+FAILURE_DISPLAY_DCDU_2  = createGlobalPropertyi("a321neo/failures/displays/dcdu_2", 0, false, true, false)
+FAILURE_DISPLAY_MCDU_1  = createGlobalPropertyi("a321neo/failures/displays/mcdu_1", 0, false, true, false)
+FAILURE_DISPLAY_MCDU_2  = createGlobalPropertyi("a321neo/failures/displays/mcdu_2", 0, false, true, false)
+FAILURE_DISPLAY_DRAIMS_1= createGlobalPropertyi("a321neo/failures/displays/draims_1", 0, false, true, false)
+FAILURE_DISPLAY_DRAIMS_2= createGlobalPropertyi("a321neo/failures/displays/draims_2", 0, false, true, false)
+FAILURE_DISPLAY_ISIS    = createGlobalPropertyi("a321neo/failures/displays/isis", 0, false, true, false)
+

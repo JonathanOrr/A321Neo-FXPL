@@ -53,15 +53,15 @@ function auto_update()
     set(ECAM_displaying_status, 4)
 
     -- Automatic transfers
-    if get(EWD_brightness) < 0.01 then
+    if get(EWD_brightness_act) < 0.01 then
         set(ECAM_displaying_status, EWD)
     end
 
-    if get(Capt_PFD_brightness) < 0.01 then
+    if get(Capt_PFD_brightness_act) < 0.01 then
         set(Capt_nd_displaying_status, PFD)
     end
 
-    if get(Fo_PFD_brightness) < 0.01 then
+    if get(Fo_PFD_brightness_act) < 0.01 then
         set(Fo_nd_displaying_status, PFD)
     end
 
@@ -88,10 +88,10 @@ function auto_update()
  
     -- From ECAM press button
     if get(DMC_requiring_ECAM_EWD_swap) == 1 then
-        if get(EWD_brightness) < 0.01 then
+        if get(EWD_brightness_act) < 0.01 then
             set(ECAM_displaying_status, ECAM)
         end
-        if get(ECAM_brightness) < 0.01 then
+        if get(ECAM_brightness_act) < 0.01 then
             set(EWD_displaying_status, ECAM)
         end
     end

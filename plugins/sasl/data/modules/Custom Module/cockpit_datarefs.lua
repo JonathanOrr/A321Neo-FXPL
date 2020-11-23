@@ -65,6 +65,7 @@ SEC_3_off_button = createGlobalPropertyi("a321neo/cockpit/FBW/sec_3_off", 0, fal
 --display brightness
 Total_element_brightness = globalProperty("sim/cockpit/electrical/instrument_brightness")
 
+-- The following are the **requested** brightness linked to knobs
 Capt_PFD_brightness = createGlobalPropertyf("a321neo/cockpit/brightness/capt_pfd_brightness", 1, false, true, false)
 Capt_ND_brightness = createGlobalPropertyf("a321neo/cockpit/brightness/capt_nd_brightness", 1, false, true, false)
 Fo_PFD_brightness = createGlobalPropertyf("a321neo/cockpit/brightness/fo_pfd_brightness", 1, false, true, false)
@@ -78,6 +79,22 @@ MCDU_2_brightness = createGlobalPropertyf("a321neo/cockpit/brightness/mcdu_2_bri
 DRAIMS_1_brightness = createGlobalPropertyf("a321neo/cockpit/brightness/draims_1_brightness", 1, false, true, false)
 DRAIMS_2_brightness = createGlobalPropertyf("a321neo/cockpit/brightness/draims_2_brightness", 1, false, true, false)
 ISIS_brightness = createGlobalPropertyf("a321neo/cockpit/brightness/isis_brightness", 1, false, true, false)
+
+-- The following are the **actual** brightness linked to the requested ones, electrical power status, and failures
+Capt_PFD_brightness_act = createGlobalPropertyf("a321neo/cockpit/brightness/capt_pfd_brightness_act", 1, false, true, false)
+Capt_ND_brightness_act = createGlobalPropertyf("a321neo/cockpit/brightness/capt_nd_brightness_act", 1, false, true, false)
+Fo_PFD_brightness_act = createGlobalPropertyf("a321neo/cockpit/brightness/fo_pfd_brightness_act", 1, false, true, false)
+Fo_ND_brightness_act = createGlobalPropertyf("a321neo/cockpit/brightness/fo_nd_brightness_act", 1, false, true, false)
+EWD_brightness_act = createGlobalPropertyf("a321neo/cockpit/brightness/ewd_brightness_act", 1, false, true, false)
+ECAM_brightness_act = createGlobalPropertyf("a321neo/cockpit/brightness/ecam_brightness_act", 1, false, true, false)
+DCDU_1_brightness_act = createGlobalPropertyf("a321neo/cockpit/brightness/dcdu_1_brightness_act", 1, false, true, false)
+DCDU_2_brightness_act = createGlobalPropertyf("a321neo/cockpit/brightness/dcdu_2_brightness_act", 1, false, true, false)
+MCDU_1_brightness_act = createGlobalPropertyf("a321neo/cockpit/brightness/mcdu_1_brightness_act", 1, false, true, false)
+MCDU_2_brightness_act = createGlobalPropertyf("a321neo/cockpit/brightness/mcdu_2_brightness_act", 1, false, true, false)
+DRAIMS_1_brightness_act = createGlobalPropertyf("a321neo/cockpit/brightness/draims_1_brightness_act", 1, false, true, false)
+DRAIMS_2_brightness_act = createGlobalPropertyf("a321neo/cockpit/brightness/draims_2_brightness_act", 1, false, true, false)
+ISIS_brightness_act = createGlobalPropertyf("a321neo/cockpit/brightness/isis_brightness_act", 1, false, true, false)
+
 
 --draims--
 DRAIMS_current_page = createGlobalPropertyi("a321neo/cockpit/draims/current_page", 1, false, true, false)--the page the draims unit is currently displaying 1VHF, 2HFs, 3TEL, 4ATC, 5MENU, 6NAV, 7ILS, 8VOR, 9ADF
