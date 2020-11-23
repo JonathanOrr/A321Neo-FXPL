@@ -2,6 +2,7 @@ I
 800
 OBJ
 
+GLOBAL_cockpit_lit
 TEXTURE	panel_textures/front_overhead.png
 TEXTURE_LIT	panel_textures/front_overhead_LIT.png
 POINT_COUNTS	32127	0	0	89703
@@ -41279,4 +41280,4 @@ IDX	32118
 		TRIS	77619 318
 		TRIS	77937 318
 
-# Build with Blender 2.90.1 (build b'3e85bb34d0d7'). Exported with XPlane2Blender 4.0.0-beta.3+89.20200830022522
+# Build with Blender 2.90.1 (build b'3e85bb34d0d7'). Exported with XPlane2Blender 4.1.0-beta.1+101.20201117225215

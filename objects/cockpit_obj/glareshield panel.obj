@@ -2,6 +2,7 @@ I
 800
 OBJ
 
+GLOBAL_cockpit_lit
 TEXTURE	panel_textures/glareshield.png
 TEXTURE_LIT	panel_textures/glareshield_LIT.png
 POINT_COUNTS	4682	0	0	14574
@@ -6171,4 +6172,4 @@ IDX	4618
 		TRIS	13281 1293
 		TRIS	10878 246
 
-# Build with Blender 2.90.1 (build b'3e85bb34d0d7'). Exported with XPlane2Blender 4.0.0-beta.3+89.20200830022522
+# Build with Blender 2.90.1 (build b'3e85bb34d0d7'). Exported with XPlane2Blender 4.1.0-beta.1+101.20201117225215

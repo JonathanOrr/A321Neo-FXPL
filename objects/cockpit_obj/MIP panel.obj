@@ -2,6 +2,7 @@ I
 800
 OBJ
 
+GLOBAL_cockpit_lit
 TEXTURE	panel_textures/MIP.png
 TEXTURE_LIT	panel_textures/MIP_LIT.png
 POINT_COUNTS	12446	0	0	37662
@@ -16310,4 +16311,4 @@ IDX	12385
 		TRIS	36987 489
 		TRIS	37476 186
 
-# Build with Blender 2.90.1 (build b'3e85bb34d0d7'). Exported with XPlane2Blender 4.0.0-beta.3+89.20200830022522
+# Build with Blender 2.90.1 (build b'3e85bb34d0d7'). Exported with XPlane2Blender 4.1.0-beta.1+101.20201117225215
