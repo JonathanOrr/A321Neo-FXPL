@@ -2,6 +2,7 @@ I
 800
 OBJ
 
+GLOBAL_cockpit_lit
 TEXTURE	panel_textures/checklist_arrows.png
 TEXTURE_LIT	panel_textures/checklist_arrows_LIT.png
 BLEND_GLASS
@@ -254,6 +255,7 @@ IDX	174
 							ANIM_hide	0	0.80000001	a321neo/cockpit/checklist/show_large_arrow
 							ATTR_light_level	0.000000 1.000000 a321neo/cockpit/checklist/large_arrow_lit
 							ATTR_shiny_rat	0.5
+							ATTR_light_level_reset
 							TRIS	0 72
 							ANIM_end
 						ANIM_end
@@ -303,6 +305,7 @@ IDX	174
 							ANIM_begin
 							ANIM_hide	0	0.80000001	a321neo/cockpit/checklist/show_norm_arrow
 							ATTR_light_level	0.000000 1.000000 a321neo/cockpit/checklist/norm_arrow_lit
+							ATTR_light_level_reset
 							TRIS	72 72
 							ANIM_end
 						ANIM_end
@@ -352,6 +355,7 @@ IDX	174
 							ANIM_begin
 							ANIM_hide	0	0.80000001	a321neo/cockpit/checklist/show_small_arrow
 							ATTR_light_level	0.000000 1.000000 a321neo/cockpit/checklist/small_arrow_lit
+							ATTR_light_level_reset
 							TRIS	144 72
 							ANIM_end
 						ANIM_end
@@ -361,4 +365,4 @@ IDX	174
 		ANIM_end
 	ANIM_end
 
-# Build with Blender 2.90.1 (build b'3e85bb34d0d7'). Exported with XPlane2Blender 4.0.0-beta.3+89.20200830022522
+# Build with Blender 2.90.1 (build b'3e85bb34d0d7'). Exported with XPlane2Blender 4.1.0-beta.1+101.20201117225215

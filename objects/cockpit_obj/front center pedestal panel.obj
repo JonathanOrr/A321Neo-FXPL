@@ -2,6 +2,7 @@ I
 800
 OBJ
 
+GLOBAL_cockpit_lit
 TEXTURE	panel_textures/front_center_pedestal.png
 TEXTURE_LIT	panel_textures/front_center_pedestal_LIT.png
 POINT_COUNTS	35550	0	0	73866
@@ -43027,4 +43028,4 @@ IDX	35429
 		TRIS	72054 318
 		TRIS	72372 1494
 
-# Build with Blender 2.90.1 (build b'3e85bb34d0d7'). Exported with XPlane2Blender 4.0.0-beta.3+89.20200830022522
+# Build with Blender 2.90.1 (build b'3e85bb34d0d7'). Exported with XPlane2Blender 4.1.0-beta.1+101.20201117225215
