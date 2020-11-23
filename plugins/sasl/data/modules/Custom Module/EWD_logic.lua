@@ -160,6 +160,9 @@ local left_messages_list = {
     MessageGroup_DOORS_CARGO,
     MessageGroup_DOORS_EMER_EXIT,
     
+    MessageGroup_AIR_X_BLEED_FAULT,
+    
+    
     -- Warnings
     MessageGroup_CONFIG_TAKEOFF,
     MessageGroup_APU_FIRE,
