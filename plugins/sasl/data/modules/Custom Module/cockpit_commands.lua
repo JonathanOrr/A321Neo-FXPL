@@ -293,3 +293,18 @@ Oxygen_toggle_crew = createCommand("a321neo/cockpit/oxygen/crew_supply_toggle", 
 Oxygen_man_mask_on = createCommand("a321neo/cockpit/oxygen/man_mask_on", "MAN MASK ON pb")
 Oxygen_toggle_high_alt_ldg= createCommand("a321neo/cockpit/oxygen/high_alt_ldg_toggle", "HIGH ALT LDG pb")
 
+-- Cockpit Lights
+Cockpit_light_integral_cmd_up = createCommand("a321neo/cockpit/lights/integral_lt_up", "INTEG LT knob UP")
+Cockpit_light_integral_cmd_dn = createCommand("a321neo/cockpit/lights/integral_lt_dn", "INTEG LT knob DOWN")
+Cockpit_light_flood_main_cmd_up = createCommand("a321neo/cockpit/lights/flood_lt_main_up", "FLOOD LT MAIN PNL knob UP")
+Cockpit_light_flood_main_cmd_dn = createCommand("a321neo/cockpit/lights/flood_lt_main_dn", "FLOOD LT MAIN PNL knob DOWN")
+Cockpit_light_flood_ped_cmd_up = createCommand("a321neo/cockpit/lights/flood_lt_ped_up", "FLOOD LT PED knob UP")
+Cockpit_light_flood_ped_cmd_dn = createCommand("a321neo/cockpit/lights/flood_lt_ped_dn", "FLOOD LT PED knob DOWN")
+Cockpit_light_ovhd_cmd_up = createCommand("a321neo/cockpit/lights/ovhd_lt_up", "OVHD knob UP")
+Cockpit_light_ovhd_cmd_dn = createCommand("a321neo/cockpit/lights/ovhd_lt_dn", "OVHD knob DOWN")
+
+Cockpit_light_Capt_console_floor_cmd_up = createCommand("a321neo/cockpit/lights/capt_console_floor_lt_up", "Capt CONSOLE FLOOR switch UP")
+Cockpit_light_Capt_console_floor_cmd_dn = createCommand("a321neo/cockpit/lights/capt_console_floor_lt_dn", "Capt CONSOLE FLOOR switch DOWN")
+Cockpit_light_Fo_console_floor_cmd_up = createCommand("a321neo/cockpit/lights/fo_console_floor_lt_up", "F/O CONSOLE FLOOR switch UP")
+Cockpit_light_Fo_console_floor_cmd_dn = createCommand("a321neo/cockpit/lights/fo_console_floor_lt_dn", "F/O CONSOLE FLOOR switch DOWN")
+

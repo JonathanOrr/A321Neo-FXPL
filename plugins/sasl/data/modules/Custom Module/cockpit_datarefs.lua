@@ -467,3 +467,12 @@ No_ice_detected       = createGlobalPropertyi("a321neo/cockpit/anti_ice/no_ice_d
 DMC_position_dmc_eis = createGlobalPropertyi("a321neo/cockpit/dmc/dmc_eis_sel_position", 0, false, true, false) -- usual -1, 0, 1
 DMC_position_ecam_nd = createGlobalPropertyi("a321neo/cockpit/dmc/ecan_nd_xfr_position", 0, false, true, false) -- usual -1, 0, 1
 
+-- Cockpit lights
+Cockpit_light_integral  = createGlobalPropertyf("a321neo/cockpit/lights/integral_pos", 0, false, true, false)
+Cockpit_light_flood_main= createGlobalPropertyf("a321neo/cockpit/lights/flood_main_pos", 0, false, true, false)
+Cockpit_light_flood_ped = createGlobalPropertyf("a321neo/cockpit/lights/flood_ped_pos", 0, false, true, false)
+Cockpit_light_ovhd      = createGlobalPropertyf("a321neo/cockpit/lights/ovhd_pos", 0, false, true, false)
+
+Cockpit_light_Capt_console_floor = createGlobalPropertyi("a321neo/cockpit/lights/capt_console_floor_pos", 0, false, true, false) -- 0:OFF, 1:DIM, 2:BRT
+Cockpit_light_Fo_console_floor   = createGlobalPropertyi("a321neo/cockpit/lights/fo_console_floor_pos", 0, false, true, false) -- 0:OFF, 1:DIM, 2:BRT
+

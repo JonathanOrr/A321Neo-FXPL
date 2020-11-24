@@ -45,6 +45,30 @@ function guard_click_handler(phase, object)
     end
 end
 
+function knob_light_handler(phase, direction, dr)
+
+end
+
+sasl.registerCommandHandler (Cockpit_light_integral_cmd_up, 0,  function(phase) Knob_handler_up_float(phase, Cockpit_light_integral, 0, 1, 0.05) end)
+sasl.registerCommandHandler (Cockpit_light_integral_cmd_dn, 0,  function(phase) Knob_handler_down_float(phase, Cockpit_light_integral, 0, 1, 0.05) end)
+sasl.registerCommandHandler (Cockpit_light_flood_main_cmd_up, 0,  function(phase) Knob_handler_up_float(phase, Cockpit_light_flood_main, 0, 1, 0.05) end)
+sasl.registerCommandHandler (Cockpit_light_flood_main_cmd_dn, 0,  function(phase) Knob_handler_down_float(phase, Cockpit_light_flood_main, 0, 1, 0.05) end)
+sasl.registerCommandHandler (Cockpit_light_flood_ped_cmd_up, 0,  function(phase) Knob_handler_up_float(phase, Cockpit_light_flood_ped, 0, 1, 0.05) end)
+sasl.registerCommandHandler (Cockpit_light_flood_ped_cmd_dn, 0,  function(phase) Knob_handler_down_float(phase, Cockpit_light_flood_ped, 0, 1, 0.05) end)
+sasl.registerCommandHandler (Cockpit_light_ovhd_cmd_up, 0,  function(phase) Knob_handler_up_float(phase, Cockpit_light_ovhd, 0, 1, 0.05) end)
+sasl.registerCommandHandler (Cockpit_light_ovhd_cmd_dn, 0,  function(phase) Knob_handler_down_float(phase, Cockpit_light_ovhd, 0, 1, 0.05) end)
+
+function change_switch(phase, dr, direction)
+     if phase == SASL_COMMAND_BEGIN then
+        set(dr, Math_clamp(get(dr) + direction, 0, 2))
+     end
+end 
+
+sasl.registerCommandHandler (Cockpit_light_Capt_console_floor_cmd_up, 0,  function(phase) change_switch(phase, Cockpit_light_Capt_console_floor, 1) end)
+sasl.registerCommandHandler (Cockpit_light_Capt_console_floor_cmd_dn, 0,  function(phase) change_switch(phase, Cockpit_light_Capt_console_floor, -1) end)
+sasl.registerCommandHandler (Cockpit_light_Fo_console_floor_cmd_up, 0,    function(phase) change_switch(phase, Cockpit_light_Fo_console_floor, 1) end)
+sasl.registerCommandHandler (Cockpit_light_Fo_console_floor_cmd_dn, 0,    function(phase) change_switch(phase, Cockpit_light_Fo_console_floor, -1) end)
+
 ----------------------------------------------------------------------------------------------------
 -- Initialization function
 ----------------------------------------------------------------------------------------------------
