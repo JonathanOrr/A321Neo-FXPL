@@ -121,7 +121,7 @@ local function draw_arrows_act_rct()
     local is_rct_transfer_active = Fuel_sys.tank_pump_and_xfr[8].pressure_ok
 
     if is_act_transfer_active then
-        if get(Fuel_light_pumps, 7) == 1 then
+        if PB.ovhd.fuel_ACT.status_bottom then
             draw_fill_arrow_up(size[2]/2-70, size[2]/2-50, ECAM_GREEN)
         else
             draw_open_arrow_up(size[2]/2-70, size[2]/2-50, ECAM_GREEN)
@@ -135,7 +135,7 @@ local function draw_arrows_act_rct()
     end
     if is_rct_transfer_active then
 
-        if get(Fuel_light_pumps, 8) == 1 then
+        if PB.ovhd.fuel_RCT.status_bottom then
             draw_fill_arrow_up(size[2]/2+70, size[2]/2-50, ECAM_GREEN)
         else
             draw_open_arrow_up(size[2]/2+70, size[2]/2-50, ECAM_GREEN)

@@ -390,11 +390,11 @@ local function update_right_list()
     end
     
     -- ANTI-ICE (it is correct that they use the button status and not the actual anti-ice status)
-    if get(AI_Eng_1_button_light) % 2 == 1 or get(AI_Eng_2_button_light) % 2 == 1 then
+    if PB.ovhd.antiice_eng_1.status_bottom or PB.ovhd.antiice_eng_2.status_bottom then
         list_right:put(COL_INDICATION, "ENG A. ICE")
     end
 
-    if get(AI_Wing_button_light) % 2 == 1 then
+    if PB.ovhd.antiice_wings.status_bottom then
         list_right:put(COL_INDICATION, "WING A. ICE")
     end
     

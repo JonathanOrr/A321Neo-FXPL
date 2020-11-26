@@ -289,7 +289,7 @@ local function update_datarefs()
     prev_cabin_altitude = current_cabin_altitude
     
     -- Set button light
-    set(Press_mode_sel_button, mode_sel_manual and 1 or 0) -- TODO Faults
+    pb_set(PB.ovhd.press_mode_sel, mode_sel_manual, false) -- TODO Faults
 end
 
 local function update_outputs()

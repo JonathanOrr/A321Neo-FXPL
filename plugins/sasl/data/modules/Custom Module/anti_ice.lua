@@ -264,10 +264,10 @@ end
 
 local function update_light_datarefs()
 
-    set(AI_Eng_1_button_light, get_engine_light_value(ENG_1))
-    set(AI_Eng_2_button_light, get_engine_light_value(ENG_2))
-    set(AI_Wing_button_light,  get_wings_light_value())
-    set(AI_probe_window_heat, ai_btn_status[PROBES] and 1 or 0)
+    pb_set(PB.ovhd.antiice_wings, get_wings_light_value() % 2 == 1, get_wings_light_value() >= 10)
+    pb_set(PB.ovhd.antiice_eng_1, get_engine_light_value(ENG_1) % 2 == 1, get_engine_light_value(ENG_1) >= 10)
+    pb_set(PB.ovhd.antiice_eng_2, get_engine_light_value(ENG_2) % 2 == 1, get_engine_light_value(ENG_2) >= 10)
+    pb_set(PB.ovhd.antiice_probes, ai_btn_status[PROBES], false)
     
 end
 

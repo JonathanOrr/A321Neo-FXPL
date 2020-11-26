@@ -60,7 +60,7 @@ local function draw_rectangles(g_psi, b_psi, y_psi)
     
     -- Draw the internal of the rectangle
     local color_rectangle = ECAM_ORANGE
-    if get(Hyd_light_Eng1Pump) % 10 == 1 then
+    if PB.ovhd.hyd_eng1.status_bottom then
         sasl.gl.drawWideLine (160-rect_size/2, y_psi_pos-290+rect_size/2 , 160+rect_size/2, y_psi_pos-290+rect_size/2, 4, ECAM_ORANGE)
     elseif g_psi >= 1450 then
         color_rectangle = ECAM_GREEN
@@ -75,7 +75,7 @@ local function draw_rectangles(g_psi, b_psi, y_psi)
     -- BLUE Rectangle   --
     ----------------------
     color_rectangle = ECAM_ORANGE
-    if get(Hyd_light_B_ElecPump) % 10 == 1 then
+    if PB.ovhd.hyd_elec_B.status_bottom then
         sasl.gl.drawWideLine (453-rect_size/2, y_psi_pos-335+rect_size/2, 453+rect_size/2, y_psi_pos-335+rect_size/2, 4, ECAM_ORANGE)
     elseif b_psi >= 1450 then
         color_rectangle = ECAM_GREEN
@@ -90,7 +90,7 @@ local function draw_rectangles(g_psi, b_psi, y_psi)
     -- YELLOW Rectangle --
     ----------------------
     color_rectangle = ECAM_ORANGE
-    if get(Hyd_light_Eng2Pump) % 10 == 1 then
+    if PB.ovhd.hyd_eng2.status_bottom then
         sasl.gl.drawWideLine (745-rect_size/2, y_psi_pos-290+rect_size/2 , 745+rect_size/2, y_psi_pos-290+rect_size/2, 4, ECAM_ORANGE)
     elseif y_psi >= 1450 then
         color_rectangle = ECAM_GREEN
@@ -179,9 +179,9 @@ end
 local function draw_extra_pumps()
 
     -- Yellow ELEC arrow and messages
-    if get(Hyd_light_Y_ElecPump) == 11 then
+    if PB.ovhd.hyd_elec_Y.status_bottom and PB.ovhd.hyd_elec_Y.status_top then
         sasl.gl.drawTriangle (770 , size[2]/2+95 , 795 , size[2]/2+110 , 795 , size[2]/2+80 , ECAM_ORANGE)
-    elseif get(Hyd_light_Y_ElecPump) == 1 then
+    elseif PB.ovhd.hyd_elec_Y.status_bottom then
         sasl.gl.drawWideLine ( 747, size[2]/2+95 , 772, size[2]/2+95, 4 , ECAM_GREEN)
         sasl.gl.drawTriangle ( 770 , size[2]/2+95 , 795 , size[2]/2+110 , 795 , size[2]/2+80 , ECAM_GREEN )
     else

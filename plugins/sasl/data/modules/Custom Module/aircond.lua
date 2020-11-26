@@ -93,8 +93,9 @@ end)
 
 --custom functions
 local function update_avio_ventilation()
-    set(Ventilation_light_blower, get(Ventilation_blower_override) + ((get(FAILURE_AIRCOND_VENT_BLOWER) == 1 or get(FAILURE_AVIONICS_SMOKE) == 1) and 10 or 0))
-    set(Ventilation_light_extract, get(Ventilation_extract_override)+ ((get(FAILURE_AIRCOND_VENT_EXTRACT) == 1 or get(FAILURE_AVIONICS_SMOKE) == 1) and 10 or 0))
+    pb_set(PB.ovhd.vent_blower, get(Ventilation_blower_override) == 1, get(FAILURE_AIRCOND_VENT_BLOWER) == 1 or get(FAILURE_AVIONICS_SMOKE) == 1)
+
+    pb_set(PB.ovhd.vent_extract, get(Ventilation_extract_override) == 1, get(FAILURE_AIRCOND_VENT_EXTRACT) == 1 or get(FAILURE_AVIONICS_SMOKE) == 1)
     
 
     if get(AC_bus_1_pwrd) == 1 and get(FAILURE_AIRCOND_VENT_BLOWER) == 0 and get(Ventilation_blower_override) == 0 then

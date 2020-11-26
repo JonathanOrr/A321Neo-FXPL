@@ -334,23 +334,12 @@ local function update_datarefs()
     set(Hydraulic_B_qty, b_sys.qty_curr / b_sys.qty_high_limit)
     set(Hydraulic_Y_qty, y_sys.qty_curr / y_sys.qty_high_limit)
     
-    local light_eng_1_pump = (status_buttons.eng1pump and 0 or 1) + get(FAILURE_HYD_G_pump) * 10  
-    set(Hyd_light_Eng1Pump, light_eng_1_pump)
+    pb_set(PB.ovhd.hyd_eng1, not status_buttons.eng1pump, get(FAILURE_HYD_G_pump) == 1)
+    pb_set(PB.ovhd.hyd_eng2, not status_buttons.eng2pump, get(FAILURE_HYD_Y_pump) == 1)
+    pb_set(PB.ovhd.hyd_PTU,  not status_buttons.PTU, get(FAILURE_HYD_PTU) == 1)
+    pb_set(PB.ovhd.hyd_elec_B, not status_buttons.elecBpump, get(FAILURE_HYD_B_pump) == 1)
+    pb_set(PB.ovhd.hyd_elec_Y, not is_any_cargo_door_operating() and status_buttons.elecYpump, get(FAILURE_HYD_Y_E_pump) == 1)
 
-    local light_eng_2_pump = (status_buttons.eng2pump and 0 or 1) + get(FAILURE_HYD_Y_pump) * 10  
-    set(Hyd_light_Eng2Pump, light_eng_2_pump)
-
-    local light_ptu = (status_buttons.PTU and 0 or 1) + get(FAILURE_HYD_PTU) * 10  
-    set(Hyd_light_PTU, light_ptu)
-    
-    local light_b_pump =  (status_buttons.elecBpump and 0 or 1) + get(FAILURE_HYD_B_pump) * 10  
-    set(Hyd_light_B_ElecPump,light_b_pump)
-    
-    local light_y_elec_pump = get(FAILURE_HYD_Y_E_pump) * 10 
-    if (not is_any_cargo_door_operating()) and status_buttons.elecYpump then
-        light_y_elec_pump = light_y_elec_pump + 1
-    end
-    set(Hyd_light_Y_ElecPump, light_y_elec_pump)
 end
 
 function update()

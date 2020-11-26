@@ -52,9 +52,9 @@ Message_ADR_FAULT_OFF = {
     end,
 
     is_active = function(self)
-      return   (MessageGroup_ADR_FAULT_SINGLE:get_failed() == 1 and get(ADIRS_light_ADR[1]) % 2 ~= 1)
-            or (MessageGroup_ADR_FAULT_SINGLE:get_failed() == 2 and get(ADIRS_light_ADR[2]) % 2 ~= 1)
-            or (MessageGroup_ADR_FAULT_SINGLE:get_failed() == 3 and get(ADIRS_light_ADR[3]) % 2 ~= 1)
+      return   (MessageGroup_ADR_FAULT_SINGLE:get_failed() == 1 and not PB.ovhd.adr_1.status_bottom)
+            or (MessageGroup_ADR_FAULT_SINGLE:get_failed() == 2 and not PB.ovhd.adr_2.status_bottom)
+            or (MessageGroup_ADR_FAULT_SINGLE:get_failed() == 3 and not PB.ovhd.adr_3.status_bottom)
     end
 
 }
@@ -174,8 +174,10 @@ Message_ADR_FAULT_OFF_DOUBLE = {
 
     is_active = function(self)
         a,b = MessageGroup_ADR_FAULT_DOUBLE:get_failed()
-        return get(ADIRS_light_ADR[a]) % 2 ~= 1 or get(ADIRS_light_ADR[b]) % 2 ~= 1
-    end
+        return (get(Adirs_adr_is_ok[1]) == 1 and (PB.ovhd.adr_2.status_bottom == false or PB.ovhd.adr_3.status_bottom == false))
+        or (get(Adirs_adr_is_ok[2]) == 1 and (PB.ovhd.adr_1.status_bottom == false or PB.ovhd.adr_3.status_bottom == false))
+        or (get(Adirs_adr_is_ok[3]) == 1 and (PB.ovhd.adr_2.status_bottom == false or PB.ovhd.adr_1.status_bottom == false)) 
+     end
 }
 
 MessageGroup_ADR_FAULT_DOUBLE = {
@@ -261,7 +263,7 @@ MessageGroup_ADR_FAULT_TRIPLE = {
             end,
 
             is_active = function(self)
-              return get(ADIRS_light_ADR[1]) % 2 ~= 1 or get(ADIRS_light_ADR[2]) % 2 ~= 1 or get(ADIRS_light_ADR[3]) % 2 ~= 1
+                return PB.ovhd.adr_1 == false or PB.ovhd.adr_2 == false or PB.ovhd.adr_3 == false
             end
         },
         {

@@ -26,6 +26,17 @@ include('constants.lua')
 local FUEL_XFR_SPEED = 10
 local FUEL_LEAK_SPEED = 1
 
+local Fuel_light_pumps = {
+    PB.ovhd.fuel_L_1,
+    PB.ovhd.fuel_L_2,
+    PB.ovhd.fuel_R_1,
+    PB.ovhd.fuel_R_2,
+    PB.ovhd.fuel_C_L,
+    PB.ovhd.fuel_C_R,
+    PB.ovhd.fuel_ACT,
+    PB.ovhd.fuel_RCT
+}
+
 ----------------------------------------------------------------------------------------------------
 -- Global/Local variables
 ----------------------------------------------------------------------------------------------------
@@ -145,14 +156,12 @@ end
 local function update_single_pump_LR(x)
     -- Note: FAULT + [OFF] can't occur with this button
 
-    if not tank_pump_and_xfr[x].has_elec_pwr then
-        set(Fuel_light_pumps, 0, x) -- No light
-    elseif not tank_pump_and_xfr[x].switch then
-        set(Fuel_light_pumps, 1, x) -- [OFF]
+    if not tank_pump_and_xfr[x].switch then
+        pb_set(Fuel_light_pumps[x], true, false) -- [OFF]
     elseif not tank_pump_and_xfr[x].pressure_ok then
-        set(Fuel_light_pumps, 10, x) -- Fault
+        pb_set(Fuel_light_pumps[x], false, true) -- Fault
     else
-        set(Fuel_light_pumps, 0, x) -- No light
+        pb_set(Fuel_light_pumps[x], false, false) -- No lights
     end
 end
 
@@ -160,20 +169,18 @@ end
 local function update_single_pump_C(x)
     -- Note: FAULT + [OFF] can't occur with this button
 
-    if not tank_pump_and_xfr[x].has_elec_pwr then
-        set(Fuel_light_pumps, 0, x) -- No light
-    elseif not tank_pump_and_xfr[x].switch then
-        set(Fuel_light_pumps, 1, x) -- [OFF]
+    if not tank_pump_and_xfr[x].switch then
+        pb_set(Fuel_light_pumps[x], true, false) -- [OFF]
     elseif not tank_pump_and_xfr[x].status then
-        set(Fuel_light_pumps, 10, x) -- Fault
+        pb_set(Fuel_light_pumps[x], false, true) -- Fault
     else
-        set(Fuel_light_pumps, 0, x)  -- No light
+        pb_set(Fuel_light_pumps[x], false, false) -- No lights
     end
 end
 
 -- This function updates the button lights related to ACT and RCT pumps
 local function update_single_extra(x)
-    set(Fuel_light_pumps, (tank_pump_and_xfr[x].switch and 1 or 0) + (tank_pump_and_xfr[x].pressure_ok and 0 or 10), x)
+    pb_set(Fuel_light_pumps[x], tank_pump_and_xfr[x].switch, not tank_pump_and_xfr[x].pressure_ok)
 end
 
 local function update_lights()

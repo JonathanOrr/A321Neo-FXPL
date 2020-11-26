@@ -20,7 +20,7 @@ Message_HYD_TURN_OFF_B = {
     end,
 
   is_active = function(self)
-      return get(Hyd_light_B_ElecPump) % 2 == 0
+      return not PB.ovhd.hyd_elec_B.status_bottom
   end
 }
 
@@ -288,7 +288,7 @@ Message_HYD_TURN_OFF_PTU = {
     end,
 
   is_active = function(self)
-      return get(Hyd_light_PTU) % 2 == 0
+      return not PB.ovhd.hyd_PTU.status_bottom
   end
 }
 
@@ -303,7 +303,7 @@ Message_HYD_TURN_OFF_G = {
     end,
 
   is_active = function(self)
-      return get(Hyd_light_Eng1Pump) % 2 == 0
+      return not PB.ovhd.hyd_eng1.status_bottom
   end
 }
 
@@ -545,7 +545,7 @@ Message_HYD_TURN_OFF_ENG2_Y = {
     end,
 
   is_active = function(self)
-      return get(Hyd_light_Eng2Pump) % 2 == 0
+      return not PB.ovhd.hyd_eng2.status_bottom
   end
 }
 
@@ -559,7 +559,7 @@ Message_HYD_TURN_OFF_ELEC_Y = {
     end,
 
   is_active = function(self)
-      return get(Hyd_light_Y_ElecPump) % 2 == 1
+      return PB.ovhd.hyd_elec_B.status_bottom
   end
 }
 
@@ -948,7 +948,7 @@ Message_HYD_TURN_OFF_ELEC_Y_IF_ENG_FAIL = {
     end,
 
   is_active = function(self)
-      return MessageGroup_HYD_Y_ENG2_PUMP_LO_PR:is_active() and get(Hyd_light_Y_ElecPump) % 2 == 0
+      return MessageGroup_HYD_Y_ENG2_PUMP_LO_PR:is_active() and not PB.ovhd.hyd_elec_Y.status_bottom
   end
 }
 

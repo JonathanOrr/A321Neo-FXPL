@@ -57,7 +57,7 @@ local function update_status()
 end
 
 local function update_datarefs()
-    set(Elec_light_Galley,     get(OVHR_elec_panel_pwrd) * ((is_galley_switch_on and 0 or 1) + (get(FAILURE_ELEC_GALLEY) == 1 and 10 or 0)))
+    pb_set(PB.ovhd.elec_galley, not is_galley_switch_on, get(FAILURE_ELEC_GALLEY) == 1)
 end
 
 function update_misc()

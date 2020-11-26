@@ -107,9 +107,9 @@ local function update_button_datarefs()
     local is_faulty = get(FAILURE_ENG_APU_FAIL) == 1 or get(DC_bat_bus_pwrd) == 0
 
     set(Apu_master_button_state,(master_switch_status and 1 or 0))
-    set(Apu_master_button_light, get(OVHR_elec_panel_pwrd) * ((master_switch_status and 1 or 0)*(master_switch_disabled_time~=0 and 0 or 1) + (is_faulty and 10 or 0) ))
 
-    set(Apu_start_button_state, (start_requested and 1 or 0) + (get(Apu_avail) == 1 and 10 or 0))
+    pb_set(PB.ovhd.apu_master, master_switch_status and master_switch_disabled_time == 0, is_faulty)
+    pb_set(PB.ovhd.apu_start, start_requested, get(Apu_avail) == 1)
 
 end
 

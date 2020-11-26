@@ -67,8 +67,8 @@ generators = {
         drs = {
             pwr          = Gen_1_pwr,
             failure      = FAILURE_ELEC_GEN_1,
-            switch_light = Elec_light_GEN1,
-            idg_light    = Elec_light_IDG1,
+            switch_light = PB.ovhd.elec_gen1,
+            idg_light    = PB.ovhd.elec_idg1,
             idg_temp     = IDG_1_temp,
             idg_fail_1   = FAILURE_ELEC_IDG1_temp,
             idg_fail_2   = FAILURE_ELEC_IDG1_oil,
@@ -85,8 +85,8 @@ generators = {
         drs = {
             pwr          = Gen_2_pwr,
             failure      = FAILURE_ELEC_GEN_2,
-            switch_light = Elec_light_GEN2,
-            idg_light    = Elec_light_IDG2,
+            switch_light = PB.ovhd.elec_gen1,
+            idg_light    = PB.ovhd.elec_idg2,
             idg_temp     = IDG_2_temp,
             idg_fail_1   = FAILURE_ELEC_IDG2_temp,
             idg_fail_2   = FAILURE_ELEC_IDG2_oil,
@@ -102,7 +102,7 @@ generators = {
         drs = {
             pwr          = Gen_APU_pwr,
             failure      = FAILURE_ELEC_GEN_APU,
-            switch_light = Elec_light_APU_GEN
+            switch_light = PB.ovhd.elec_apu_gen
         }
     },
     {   -- GEN_EXT
@@ -115,7 +115,7 @@ generators = {
         drs = {
             pwr          = Gen_EXT_pwr,
             failure      = FAILURE_ELEC_GEN_EXT,
-            switch_light = Elec_light_EXT_PWR
+            switch_light = PB.ovhd.elec_ext_pwr
         }
     },
     {   -- GEN_EMER (RAT)
@@ -128,7 +128,7 @@ generators = {
         drs = {
             pwr          = Gen_EMER_pwr,
             failure      = FAILURE_ELEC_GEN_EMER,
-            switch_light = Elec_light_RAT_FAULT
+            switch_light = PB.ovhd.elec_rat_fault
         }
     }
 }
@@ -255,23 +255,23 @@ local function update_generator_value(x)
 end
 
 local function update_generator_datarefs(x)
-    int_value = x.switch_status and 0 or 1
+
+    local top    = false
+    local bottom = not x.switch_status
     
     if x.id == GEN_EMER then
-        int_value = get(x.drs.failure)==1 and 10 or 0 -- Switch status not showed
+        top    = false
+        bottom = get(x.drs.failure) == 1 -- Switch status not showed and top bottom swapped
     elseif x.id == GEN_EXT then
-        int_value = (1-int_value) + (x.source_status and 10 or 0)
+        top = x.source_status
+        bottom = not bottom
     elseif x.drs.idg_light ~= nil then
-        int_value = int_value + ((get(x.drs.failure)==1 or not x.idg_status) and 10 or 0)
+        top = (get(x.drs.failure)==1 or not x.idg_status)
     else
-        int_value = int_value + (get(x.drs.failure)==1 and 10 or 0)    
+        top = (get(x.drs.failure)==1)
     end
     
-    if x.id == GEN_EXT then
-        set(x.drs.switch_light, int_value)    
-    else
-        set(x.drs.switch_light, get(OVHR_elec_panel_pwrd) * int_value)
-    end
+    pb_set(x.drs.switch_light, bottom, top)
     
     if x.curr_voltage >= GEN_LOW_VOLTAGE_LIMIT and x.curr_hz >= GEN_LOW_HZ_LIMIT then
         set(x.drs.pwr, 1)
@@ -281,9 +281,9 @@ local function update_generator_datarefs(x)
     
     if x.drs.idg_light ~= nil then
         if get(x.drs.idg_fail_1) + get(x.drs.idg_fail_2) > 0 then
-            set(x.drs.idg_light, get(OVHR_elec_panel_pwrd) * 10)
+            pb_set(x.drs.idg_light, false, true)
         else
-            set(x.drs.idg_light, 0)
+            pb_set(x.drs.idg_light, false, false)
         end
     end
     
@@ -315,7 +315,7 @@ local function update_generator_load(x)
             if ELEC_sys.buses.ac_ess_powered_by == 11 then
                 x.curr_amps = x.curr_amps-ELEC_sys.buses.pwr_consumption[ELEC_BUS_AC_ESS]
                 if ELEC_sys.buses.is_ac_ess_shed_on then
-                    x.curr_amps = x.curr_amps-ELEC_sys.buses.pwr_consumption[ELEC_BUS_AC_ESS_SHED]            
+                    x.curr_amps = x.curr_amps-ELEC_sys.buses.pwr_consumption[ELEC_BUS_AC_ESS_SHED]
                 end
             end
         end

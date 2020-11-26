@@ -267,19 +267,21 @@ local function update_datarefs()
     -- TODO FAULTS
     local cond_eng1_bleed_fail = get(FAILURE_BLEED_HP_1_VALVE_STUCK) + get(FAILURE_BLEED_IP_1_VALVE_STUCK) > 0  -- TODO other conditions
     local cond_eng2_bleed_fail = get(FAILURE_BLEED_HP_2_VALVE_STUCK) + get(FAILURE_BLEED_IP_2_VALVE_STUCK) > 0  -- TODO other conditions
-    set_overhead_dr(Eng1_bleed_off_button, not eng_bleed_switch[1], cond_eng1_bleed_fail)
-    set_overhead_dr(Eng2_bleed_off_button, not eng_bleed_switch[2], cond_eng2_bleed_fail)
 
+    pb_set(PB.ovhd.ac_bleed_1, not eng_bleed_switch[1], cond_eng1_bleed_fail)
+    pb_set(PB.ovhd.ac_bleed_2, not eng_bleed_switch[2], cond_eng2_bleed_fail)
+    pb_set(PB.ovhd.ac_bleed_apu, apu_bleed_switch, false) -- TODO FAILURE
+    pb_set(PB.ovhd.ac_hot_air,  not cabin_hot_air, false) -- TODO FAILURE
+    pb_set(PB.ovhd.ac_pack_1, not pack_valve_switch[1], false) -- TODO FAILURE
+    pb_set(PB.ovhd.ac_pack_2, not pack_valve_switch[2], false) -- TODO FAILURE
 
-    set_overhead_dr(RAM_air_button, get(Emer_ram_air) == 1, false)  -- RAM air button does not have fault
-    set(APU_bleed_on_button,   get(OVHR_elec_panel_pwrd) * (apu_bleed_switch and 1 or 0))
-    set(Cab_hot_air,           get(OVHR_elec_panel_pwrd) * (cabin_hot_air and 0 or 1))
-    set(Cargo_hot_air,         get(OVHR_elec_panel_pwrd) * (cargo_hot_air and 0 or 1))
-    set(Cargo_isolation_status,get(OVHR_elec_panel_pwrd) * (cargo_isol_valve and 1 or 0))
-    set(Pack1_off_button,      get(OVHR_elec_panel_pwrd) * (pack_valve_switch[1] and 0 or 1))
-    set(Pack2_off_button,      get(OVHR_elec_panel_pwrd) * (pack_valve_switch[2] and 0 or 1))
-    set(Econ_flow_button,      get(OVHR_elec_panel_pwrd) * (econ_flow_switch and 1 or 0))
-    set_overhead_dr(Ditching_button, ditching_switch, false)
+    pb_set(PB.ovhd.ac_ram_air, get(Emer_ram_air) == 1, false) -- RAM air button does not have fault
+    pb_set(PB.ovhd.ac_econ_flow, econ_flow_switch, false) -- ECON FLOW air button does not have fault
+
+    pb_set(PB.ovhd.cargo_hot_air, not cargo_hot_air, false) -- TODO FAILURE
+    pb_set(PB.ovhd.cargo_aft_isol, cargo_isol_valve, false) -- TODO FAILURE
+
+    pb_set(PB.ovhd.press_ditching, ditching_switch, false)
     
     set(Press_ditching_enabled, ditching_switch and 1 or 0)
     
@@ -472,7 +474,7 @@ local function update_fans()
         ELEC_sys.add_power_consumption(ELEC_BUS_AC_2, 0.75, 0.75)
     end
     
-    set(Cabin_fan_button, cabin_fan_switch and 0 or 1)
+    pb_set(PB.ovhd.vent_cab_fans, not cabin_fan_switch, false)
 end
 
 function update()

@@ -42,6 +42,9 @@ local is_irs_att_mode = {false, false, false}
 local has_irs_att = {false, false, false} -- Has IRs aligned at least the attitude?
 local ir_switch_status = {true,true,true}
 
+local ADIRS_light_IR = { PB.ovhd.ir_1, PB.ovhd.ir_2, PB.ovhd.ir_3 }
+local ADIRS_light_ADR = { PB.ovhd.adr_1, PB.ovhd.adr_2, PB.ovhd.adr_3 }
+
 local ias_3_offset = math.random() * 2 - 1   -- Max offset IAS between ADR1/2 and ADR3: +1/-1
 local alt_3_offset = math.random() * 20 - 10 -- Max offset Altitude between ADR1/2 and ADR3: +10/-10
 
@@ -218,9 +221,9 @@ local function update_status_adrs(i)
 
             if get(FAILURE_ADR[i]) == 1 then
                 -- Failed ADR, just switch on the button
-                set(ADIRS_light_ADR[i], get(OVHR_elec_panel_pwrd) * LIGHT_FAILED)
+                pb_set(ADIRS_light_ADR[i], false, true)
             elseif adr_time_begin[i] > 0 then
-                set(ADIRS_light_ADR[i], get(OVHR_elec_panel_pwrd) * LIGHT_NORM)
+                pb_set(ADIRS_light_ADR[i], false, false)
                 if get(TIME) - adr_time_begin[i] > TIME_TO_START_ADR then
                    -- After TIME_TO_START_ADR, the ADR changes the status to ON
                    set(Adirs_adr_is_ok[i], 1)
@@ -236,17 +239,17 @@ local function update_status_adrs(i)
 
             -- ON but no aligned
             if get(FAILURE_ADR[i]) == 1 then
-                set(ADIRS_light_ADR[i], get(OVHR_elec_panel_pwrd) * LIGHT_FAILED)
+                pb_set(ADIRS_light_ADR[i], false, true)
             else
-                set(ADIRS_light_ADR[i], get(OVHR_elec_panel_pwrd) * LIGHT_NORM)
+                pb_set(ADIRS_light_ADR[i], false, false)
             end
         end
     elseif get(FAILURE_ADR[i]) == 1 then
         -- ADR failed and switched OFF
-        set(ADIRS_light_ADR[i], get(OVHR_elec_panel_pwrd) * LIGHT_FAILED_OFF)
+        pb_set(ADIRS_light_ADR[i], true, true)
     else
         -- ADR switched OFF (but working)
-        set(ADIRS_light_ADR[i], get(OVHR_elec_panel_pwrd) * LIGHT_OFF)
+        pb_set(ADIRS_light_ADR[i], true, false)
     end    
 end
 
@@ -269,7 +272,7 @@ local function update_status_irs(i)
             
             if get(FAILURE_IR[i]) > 0 then
                 -- Failed IRS, just switch on the button
-                set(ADIRS_light_IR[i], get(OVHR_elec_panel_pwrd) * LIGHT_FAILED)
+                pb_set(ADIRS_light_IR[i], false, true)
             elseif get(Adirs_irs_begin_time[i]) ~= 0 then
                 if get(TIME) - get(Adirs_irs_begin_time[i]) > get(Adirs_total_time_to_align) then
                     -- Align finished
@@ -281,9 +284,9 @@ local function update_status_irs(i)
                 end
                 
                 if get(TIME) - get(Adirs_irs_begin_time[i]) > 0.3 then
-                    set(ADIRS_light_IR[i], get(OVHR_elec_panel_pwrd) * LIGHT_NORM)
+                    pb_set(ADIRS_light_IR[i], false, false)
                 else
-                    set(ADIRS_light_IR[i], get(OVHR_elec_panel_pwrd) * LIGHT_FAILED)                
+                    pb_set(ADIRS_light_IR[i], false, true)
                 end
                 
             else
@@ -296,9 +299,9 @@ local function update_status_irs(i)
             -- ON but no aligned
             set(Adirs_irs_begin_time[i], 0)
             if get(FAILURE_IR[i]) > 0 then
-                set(ADIRS_light_IR[i], get(OVHR_elec_panel_pwrd) * LIGHT_FAILED)
+                pb_set(ADIRS_light_IR[i], false, true)
             else
-                set(ADIRS_light_IR[i], get(OVHR_elec_panel_pwrd) * LIGHT_NORM)
+                pb_set(ADIRS_light_IR[i], false, false)
             end
         end
         
@@ -310,11 +313,11 @@ local function update_status_irs(i)
         
     elseif get(FAILURE_IR[i]) == 1 then
         -- ADR failed and switched OFF
-        set(ADIRS_light_IR[i], get(OVHR_elec_panel_pwrd) * LIGHT_FAILED_OFF)
+        pb_set(ADIRS_light_IR[i], true, true)
         set(Adirs_irs_begin_time[i], 0)
     else
         -- ADR switched OFF (but working)
-        set(ADIRS_light_IR[i], get(OVHR_elec_panel_pwrd) * LIGHT_OFF)
+        pb_set(ADIRS_light_IR[i], true, false)
         set(Adirs_irs_begin_time[i], 0)
     end    
 end

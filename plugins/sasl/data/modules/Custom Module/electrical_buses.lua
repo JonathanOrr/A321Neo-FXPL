@@ -292,9 +292,9 @@ local function update_datarefs()
         set(AC_STAT_INV_pwrd, buses.is_stat_inv_bus_on and 1 or 0)
     end
     
-    set(Elec_light_BUS_tie, get(OVHR_elec_panel_pwrd) * (buses.bus_tie_pushbutton_status and 0 or 1))
-    set(Elec_light_AC_ess_feed, get(OVHR_elec_panel_pwrd) * ((buses.ac_ess_bus_pushbutton_status and 1 or 0) + (buses.ac_ess_powered_by>0 and 0 or 10)))
-    set(Elec_light_EMER_GEN1_LINE, get(OVHR_elec_panel_pwrd) * ((get(Gen_1_line_active)== 1 and 1 or 0) + (get(FAILURE_AVIONICS_SMOKE) == 1 and 10 or 0)))
+    pb_set(PB.ovhd.elec_ac_ess, buses.ac_ess_bus_pushbutton_status, buses.ac_ess_powered_by <= 0) 
+    pb_set(PB.ovhd.elec_bus_tie, not buses.bus_tie_pushbutton_status, false)
+    pb_set(PB.ovhd.elec_gen1_line, get(Gen_1_line_active)== 1, get(FAILURE_AVIONICS_SMOKE) == 1)
 end
 
 local function update_shed()

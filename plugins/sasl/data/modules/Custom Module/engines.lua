@@ -786,9 +786,10 @@ local function update_auto_start()
 end
 
 local function update_buttons_datarefs()
-    set(Engine_1_man_start, get(OVHR_elec_panel_pwrd) * (eng_manual_switch[1] and 1 or 0))
-    set(Engine_2_man_start, get(OVHR_elec_panel_pwrd) * (eng_manual_switch[2] and 1 or 0))
-    set(Engine_dual_cooling_light, get(OVHR_elec_panel_pwrd) * (dual_cooling_switch and 1 or 0))
+    pb_set(PB.ovhd.eng_main_start_1, eng_manual_switch[1])
+    pb_set(PB.ovhd.eng_main_start_2, eng_manual_switch[2])
+    pb_set(PB.ovhd.eng_dual_cooling, dual_cooling_switch)
+
     set(Eng_Dual_Cooling, dual_cooling_switch and 1 or 0)
 end
 

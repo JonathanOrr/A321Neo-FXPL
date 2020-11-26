@@ -186,12 +186,12 @@ end
 
 local function draw_ai()
 
-    if get(AI_Wing_button_light) % 2 == 1 then
+    if PB.ovhd.antiice_wings.status_bottom then
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2-340, size[2]/2+50, "ANTI\nICE", 32, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2+345, size[2]/2+50, "ANTI\n ICE", 32, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)   -- The extra space on the second line is correct!
     end
 
-    if get(AI_Wing_button_light) % 2 == 1 and get(Any_wheel_on_ground) == 1 then
+    if PB.ovhd.antiice_wings.status_bottom and get(Any_wheel_on_ground) == 1 then
         if ground_open_start == 0 then
             ground_open_start = get(TIME)
         end
