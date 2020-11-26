@@ -45,7 +45,7 @@ batteries = {
             hotbus       = HOT_bus_1_pwrd,
             failure      = FAILURE_ELEC_battery_1,
             voltage      = Elec_bat_1_V, 
-            switch_light = Elec_light_battery_1
+            switch_light = PB.ovhd.elec_battery_1
         }
     },
     {
@@ -61,7 +61,7 @@ batteries = {
             hotbus = HOT_bus_2_pwrd,
             failure = FAILURE_ELEC_battery_2,
             voltage = Elec_bat_2_V,
-            switch_light = Elec_light_battery_2
+            switch_light = PB.ovhd.elec_battery_2
         }
     }
 }
@@ -127,7 +127,8 @@ local function update_battery_datarefs(bat)
     set(bat.drs.hotbus, (bat.curr_voltage > BAT_LOW_VOLTAGE_LIMIT and get(bat.drs.failure) == 0) and 1 or 0)
     
     set(bat.drs.voltage, bat.curr_voltage)
-    set(bat.drs.switch_light, get(OVHR_elec_panel_pwrd) * ((bat.switch_status and 0 or 1) + get(bat.drs.failure)*10) )
+    
+    pb_set(bat.drs.switch_light, not bat.switch_status, get(bat.drs.failure) == 1)
 end
 
 local function update_battery_load(x)
