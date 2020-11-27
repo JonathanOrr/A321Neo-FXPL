@@ -110,7 +110,10 @@ end
 init_drs(guards)
 
 local function anim_light_switches()
-    Set_dataref_linear_anim(Cockpit_ann_ovhd_switch, ann_lt_pos, -1, 1, 1)
+    Set_dataref_linear_anim(Cockpit_ann_ovhd_switch, ann_lt_pos, -1, 1, 5)
+
+    Set_dataref_linear_anim(Engine_mode_knob_pos, get(Engine_mode_knob), -1, 1, 5)
+
 end
 
 function update()
