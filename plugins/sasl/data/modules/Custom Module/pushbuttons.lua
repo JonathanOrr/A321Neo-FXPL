@@ -28,9 +28,12 @@ local DR_PATH_PREFIX_OVH = "overhead"
 local DR_PATH_SUFFIX_TOP = "_top"
 local DR_PATH_SUFFIX_BTM = "_bottom"
 
+local BRIGHTNESS_HALF = 0.5
+local BRIGHTNESS_FULL = 1
+
 local ELEC_ALWAYS_ON = 0 -- The button has always power or it has special behaviour (like ext pwr)
-local LIGHT_BUS_DC    = 1 -- Button is powered when any DC bus is available
-local LIGHT_BUS_AC    = 2 -- Button is powered when any AC bus is available
+local LIGHT_BUS_DC   = 1 -- Button is powered when any DC bus is available
+local LIGHT_BUS_AC   = 2 -- Button is powered when any AC bus is available
 
 PB = {
 
@@ -227,11 +230,15 @@ function pb_set(pb, cond_bottom, cond_top)
         pb.status_bottom = false
     end
 
-    -- TODO: Test
-    local brightness = 1 -- TODO
+
+    local brightness = get(Cockpit_ann_ovhd_switch) < -0.5 and BRIGHTNESS_HALF or BRIGHTNESS_FULL
     local target_top = (pb.status_top and 1 or 0) * brightness
     local target_bottom = (pb.status_bottom and 1 or 0) * brightness
-    
+    if get(Cockpit_annnunciators_test) == 1 then
+        target_top = true
+        target_bottom = true
+    end
+        
     set(pb.dr_top, target_top)
     set(pb.dr_bottom, target_bottom)
 
