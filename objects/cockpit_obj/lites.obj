@@ -2666,47 +2666,76 @@ IDX	2294
 		TRIS	144 6
 		TRIS	150 6
 		TRIS	156 6
-		ATTR_light_level 0.000000 1.000000	
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/mip/gpws_capt_top
 		TRIS	234 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/mip/gpws_capt_bottom
 		TRIS	240 6
-		ATTR_light_level 0.000000 1.000000	a321neo/failures/master_warning_blink
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/mip/gpws_fo_top
 		TRIS	246 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/mip/gpws_fo_bottom
 		TRIS	252 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/mip/autobrake_MAX_top
 		TRIS	258 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/mip/autobrake_MAX_bottom
 		TRIS	264 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/mip/autobrake_MED_top
 		TRIS	270 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/mip/autobrake_MED_bottom
 		TRIS	276 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/mip/autobrake_LO_top
 		TRIS	282 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/mip/autobrake_LO_bottom
 		TRIS	288 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/mip/brk_fan_top
 		TRIS	294 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/mip/brk_fan_bottom
 		TRIS	300 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/mip/ldg_gear_C_top
 		TRIS	318 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/mip/ldg_gear_C_bottom
 		TRIS	324 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/mip/ldg_gear_R_top
 		TRIS	330 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/mip/ldg_gear_R_bottom
 		TRIS	336 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/mip/ldg_gear_L
 		TRIS	342 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/mip/ldg_gear_L_top_bottom
 		TRIS	348 6
-		ATTR_light_level 0.000000 1.000000	
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/mip/terr_nd_capt_bottom
 		TRIS	1206 6
 		TRIS	1560 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/mip/terr_nd_fo_bottom
 		TRIS	1566 6
 		TRIS	1572 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/mip/ldg_gear_red_light
 		TRIS	1578 6
+		ATTR_light_level 0.000000 1.000000	
 		TRIS	1584 18
 		TRIS	1602 18
-		ATTR_light_level 0.000000 1.000000	a321neo/failures/master_caution
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/glareshield/master_caution_top
 		TRIS	162 6
-		ATTR_light_level 0.000000 1.000000	a321neo/failures/master_warning_blink
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/glareshield/master_warning_top
 		TRIS	168 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/glareshield/atc_msg_top
 		TRIS	174 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/glareshield/autoland_top
 		TRIS	180 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/glareshield/priority_capt_top
 		TRIS	186 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/glareshield/priority_capt_bottom
 		TRIS	192 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/glareshield/master_warning_top
 		TRIS	198 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/glareshield/master_caution_top
 		TRIS	204 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/glareshield/autoland_top
 		TRIS	210 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/glareshield/atc_msg_top
 		TRIS	216 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/glareshield/priority_fo_top
 		TRIS	222 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/glareshield/priority_fo_bottom
 		TRIS	228 6
 			ATTR_light_level 0.000000 1.000000	a321neo/cockpit/overhead/calls_emer_top
 			TRIS	306 6
@@ -3067,10 +3096,13 @@ IDX	2294
 		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/overhead/misc_fuel_control_bottom
 		TRIS	1410 6
 		TRIS	1416 6
-		ATTR_light_level 0.000000 1.000000	a321neo/failures/master_warning_blink
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/pedestal/eng_1_fire_fault_top
 		TRIS	1314 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/pedestal/eng_1_fire_fault_bottom
 		TRIS	1320 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/pedestal/eng_2_fire_fault_top
 		TRIS	1326 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/pedestal/eng_2_fire_fault_bottom
 		TRIS	1332 6
 		TRIS	1620 6
 		TRIS	1626 6
@@ -3386,8 +3418,9 @@ IDX	2294
 		TRIS	3258 6
 		TRIS	3264 6
 		TRIS	3270 6
-		ATTR_light_level 0.000000 1.000000	a321neo/failures/master_warning_blink
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/pedestal/ckpt_door_light_top
 		TRIS	1344 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/pedestal/ckpt_door_light_bottom
 		TRIS	1350 6
 
 # Build with Blender 2.90.1 (build b'3e85bb34d0d7'). Exported with XPlane2Blender 4.1.0-beta.1+101.20201117225215

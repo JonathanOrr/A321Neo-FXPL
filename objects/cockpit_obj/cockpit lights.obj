@@ -1,0 +1,10 @@
+I
+800
+OBJ
+
+GLOBAL_cockpit_lit
+POINT_COUNTS	0	0	0	0
+
+	LIGHT_SPILL_CUSTOM 0 1.3117307 -19.361788 1 1 1 1 1 0 -0.90630776 -0.42261827 0.95371695 a321neo/cockpit/lights/array_floor_ped
+
+# Build with Blender 2.90.1 (build b'3e85bb34d0d7'). Exported with XPlane2Blender 4.1.0-beta.1+101.20201117225215
