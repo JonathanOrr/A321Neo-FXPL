@@ -229,8 +229,11 @@ function SSS_PID_BP(pid_array, error)
     pid_array.Integral = pid_array.Integral_sum
 
     --derivative--
-    pid_array.Derivative = ((pid_array.Current_error - last_error) / get(DELTA_TIME)) * pid_array.D_gain
-
+    if get(DELTA_TIME) > 0 then
+        pid_array.Derivative = ((pid_array.Current_error - last_error) / get(DELTA_TIME)) * pid_array.D_gain
+    else
+        pid_array.Derivative = 0
+    end
     -- This is the output the controller wants to enforce, but it is not necessarily the real one
     pid_array.Desired_output = pid_array.Proportional + pid_array.Integral + pid_array.Derivative
 

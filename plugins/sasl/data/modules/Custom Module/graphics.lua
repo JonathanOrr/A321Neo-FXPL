@@ -57,14 +57,18 @@ function knob_light_handler(phase, direction, dr)
 
 end
 
-sasl.registerCommandHandler (Cockpit_light_integral_cmd_up, 0,  function(phase) Knob_handler_up_float(phase, Cockpit_light_integral, 0, 1, 0.05) end)
-sasl.registerCommandHandler (Cockpit_light_integral_cmd_dn, 0,  function(phase) Knob_handler_down_float(phase, Cockpit_light_integral, 0, 1, 0.05) end)
-sasl.registerCommandHandler (Cockpit_light_flood_main_cmd_up, 0,  function(phase) Knob_handler_up_float(phase, Cockpit_light_flood_main, 0, 1, 0.05) end)
-sasl.registerCommandHandler (Cockpit_light_flood_main_cmd_dn, 0,  function(phase) Knob_handler_down_float(phase, Cockpit_light_flood_main, 0, 1, 0.05) end)
-sasl.registerCommandHandler (Cockpit_light_flood_ped_cmd_up, 0,  function(phase) Knob_handler_up_float(phase, Cockpit_light_flood_ped, 0, 1, 0.05) end)
-sasl.registerCommandHandler (Cockpit_light_flood_ped_cmd_dn, 0,  function(phase) Knob_handler_down_float(phase, Cockpit_light_flood_ped, 0, 1, 0.05) end)
-sasl.registerCommandHandler (Cockpit_light_ovhd_cmd_up, 0,  function(phase) Knob_handler_up_float(phase, Cockpit_light_ovhd, 0, 1, 0.05) end)
-sasl.registerCommandHandler (Cockpit_light_ovhd_cmd_dn, 0,  function(phase) Knob_handler_down_float(phase, Cockpit_light_ovhd, 0, 1, 0.05) end)
+sasl.registerCommandHandler (Cockpit_light_integral_cmd_up, 0,  function(phase) Knob_handler_up_float(phase, Cockpit_light_integral_pos, 0, 1, 0.2) end)
+sasl.registerCommandHandler (Cockpit_light_integral_cmd_dn, 0,  function(phase) Knob_handler_down_float(phase, Cockpit_light_integral_pos, 0, 1, 0.2) end)
+sasl.registerCommandHandler (Cockpit_light_flood_main_cmd_up, 0,  function(phase) Knob_handler_up_float(phase, Cockpit_light_flood_main_pos, 0, 1, 0.2) end)
+sasl.registerCommandHandler (Cockpit_light_flood_main_cmd_dn, 0,  function(phase) Knob_handler_down_float(phase, Cockpit_light_flood_main_pos, 0, 1, 0.2) end)
+sasl.registerCommandHandler (Cockpit_light_flood_ped_cmd_up, 0,  function(phase) Knob_handler_up_float(phase, Cockpit_light_flood_ped_pos, 0, 1, 0.2) end)
+sasl.registerCommandHandler (Cockpit_light_flood_ped_cmd_dn, 0,  function(phase) Knob_handler_down_float(phase, Cockpit_light_flood_ped_pos, 0, 1, 0.2) end)
+sasl.registerCommandHandler (Cockpit_light_ovhd_cmd_up, 0,  function(phase) Knob_handler_up_float(phase, Cockpit_light_ovhd_pos, 0, 1, 0.2) end)
+sasl.registerCommandHandler (Cockpit_light_ovhd_cmd_dn, 0,  function(phase) Knob_handler_down_float(phase, Cockpit_light_ovhd_pos, 0, 1, 0.2) end)
+sasl.registerCommandHandler (Cockpit_dome_cmd_up, 0,  function(phase) Knob_handler_down_float(phase, Cockpit_light_dome_pos, 0, 1, 0.2) end)
+sasl.registerCommandHandler (Cockpit_dome_cmd_dn, 0,  function(phase) Knob_handler_down_float(phase, Cockpit_light_dome_pos, 0, 1, 0.2) end)
+
+
 
 function change_switch(phase, dr, direction)
      if phase == SASL_COMMAND_BEGIN then
@@ -72,10 +76,10 @@ function change_switch(phase, dr, direction)
      end
 end 
 
-sasl.registerCommandHandler (Cockpit_light_Capt_console_floor_cmd_up, 0,  function(phase) change_switch(phase, Cockpit_light_Capt_console_floor, 1) end)
-sasl.registerCommandHandler (Cockpit_light_Capt_console_floor_cmd_dn, 0,  function(phase) change_switch(phase, Cockpit_light_Capt_console_floor, -1) end)
-sasl.registerCommandHandler (Cockpit_light_Fo_console_floor_cmd_up, 0,    function(phase) change_switch(phase, Cockpit_light_Fo_console_floor, 1) end)
-sasl.registerCommandHandler (Cockpit_light_Fo_console_floor_cmd_dn, 0,    function(phase) change_switch(phase, Cockpit_light_Fo_console_floor, -1) end)
+sasl.registerCommandHandler (Cockpit_light_Capt_console_floor_cmd_up, 0,  function(phase) change_switch(phase, Cockpit_light_Capt_console_floor_pos, 1) end)
+sasl.registerCommandHandler (Cockpit_light_Capt_console_floor_cmd_dn, 0,  function(phase) change_switch(phase, Cockpit_light_Capt_console_floor_pos, -1) end)
+sasl.registerCommandHandler (Cockpit_light_Fo_console_floor_cmd_up, 0,    function(phase) change_switch(phase, Cockpit_light_Fo_console_floor_pos, 1) end)
+sasl.registerCommandHandler (Cockpit_light_Fo_console_floor_cmd_dn, 0,    function(phase) change_switch(phase, Cockpit_light_Fo_console_floor_pos, -1) end)
 
 
 
@@ -143,6 +147,15 @@ end
 
 local function update_lights()
     pb_set(PB.ovhd.signs_emer_exit_lt, get(Lights_emer_exit) == 0, false)
+    
+    set(Cockpit_light_integral, get(Cockpit_light_integral_pos) * get(AC_bus_1_pwrd))
+    set(Cockpit_light_ovhd,     get(Cockpit_light_ovhd_pos) * get(AC_bus_1_pwrd))
+    
+    set(Cockpit_light_flood_main, get(Cockpit_light_flood_main_pos) * get(DC_ess_bus_pwrd))
+    set(Cockpit_light_flood_ped,  get(Cockpit_light_flood_ped_pos)  * get(DC_bus_1_pwrd))
+    set(Cockpit_light_Capt_console_floor, get(Cockpit_light_Capt_console_floor_pos) * get(DC_bus_1_pwrd))
+    set(Cockpit_light_Fo_console_floor, get(Cockpit_light_Fo_console_floor_pos) * get(DC_bus_2_pwrd))
+    set(Cockpit_light_dome, get(Cockpit_light_dome_pos) * get(DC_ess_bus_pwrd))
 end
 
 function update()

@@ -306,11 +306,12 @@ Cockpit_light_flood_ped_cmd_up = createCommand("a321neo/cockpit/lights/flood_lt_
 Cockpit_light_flood_ped_cmd_dn = createCommand("a321neo/cockpit/lights/flood_lt_ped_dn", "FLOOD LT PED knob DOWN")
 Cockpit_light_ovhd_cmd_up = createCommand("a321neo/cockpit/lights/ovhd_lt_up", "OVHD knob UP")
 Cockpit_light_ovhd_cmd_dn = createCommand("a321neo/cockpit/lights/ovhd_lt_dn", "OVHD knob DOWN")
+Cockpit_dome_cmd_up = createCommand("a321neo/cockpit/lights/dome_lt_up", "OVHD DOME UP")
+Cockpit_dome_cmd_dn = createCommand("a321neo/cockpit/lights/dome_lt_down", "OVHD DOME DOWN")
 
 Cockpit_ann_ovhd_cmd_up = createCommand("a321neo/cockpit/lights/ovhd_ann_lt_up", "OVHD ANN LT UP")
 Cockpit_ann_ovhd_cmd_dn = createCommand("a321neo/cockpit/lights/ovhd_ann_lt_down", "OVHD ANN LT DOWN")
-Cockpit_dome_cmd_up = createCommand("a321neo/cockpit/lights/dome_lt_up", "OVHD DOME UP")
-Cockpit_dome_cmd_dn = createCommand("a321neo/cockpit/lights/dome_lt_down", "OVHD DOME DOWN")
+
 
 Cockpit_light_Capt_console_floor_cmd_up = createCommand("a321neo/cockpit/lights/capt_console_floor_lt_up", "Capt CONSOLE FLOOR switch UP")
 Cockpit_light_Capt_console_floor_cmd_dn = createCommand("a321neo/cockpit/lights/capt_console_floor_lt_dn", "Capt CONSOLE FLOOR switch DOWN")
@@ -328,6 +329,7 @@ GPWS_cmd_SYS        = sasl.createCommand("a321neo/cockpit/gpws/sys", "Toggle GPW
 GPWS_cmd_GS_MODE    = sasl.createCommand("a321neo/cockpit/gpws/gs_mode", "Toggle GPWS GS MODE button")
 GPWS_cmd_FLAP_MODE  = sasl.createCommand("a321neo/cockpit/gpws/flap_mode", "Toggle GPWS FLAP MODE button")
 GPWS_cmd_LDG_FLAP_3 = sasl.createCommand("a321neo/cockpit/gpws/ldg_flap_3", "Toggle GPWS LDG FLAP 3 button")
+GPWS_cmd_silence    = sasl.createCommand("a321neo/cockpit/gpws/silence", "Toggle the silence button on MIP")
 
 -- RCDR
 RCDR_cmd_GND_CTL   = sasl.createCommand("a321neo/cockpit/rcdr/gnd_ctl",  "Toggle RCDR GND CTL button")
