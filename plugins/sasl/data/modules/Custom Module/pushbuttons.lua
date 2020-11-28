@@ -25,6 +25,9 @@
 
 local DR_PATH_PREFIX = "a321neo/cockpit"
 local DR_PATH_PREFIX_OVH = "overhead"
+local DR_PATH_PREFIX_PEDESTAL = "pedestal"
+local DR_PATH_PREFIX_MIP = "mip"
+local DR_PATH_PREFIX_GLARESHIELD = "glareshield"
 local DR_PATH_SUFFIX_TOP = "_top"
 local DR_PATH_SUFFIX_BTM = "_bottom"
 
@@ -185,23 +188,69 @@ PB = {
         mntn_svce_int      = {bus = LIGHT_BUS_DC}, -- TODO CHECK BUS
         mntn_avio_light    = {bus = LIGHT_BUS_AC},
 
-    }
+    },
 
+    -- Pedestal
+    ped = {
+        -- a321neo/cockpit/pedestal/...
+        ckpt_door_light = {bus = LIGHT_BUS_DC},
+        eng_1_fire_fault= {bus = LIGHT_BUS_DC},
+        eng_2_fire_fault= {bus = LIGHT_BUS_DC},
+    },
+    
+    -- MIP
+    mip = {
+        -- a321neo/cockpit/mip/...
+        gpws_capt = {bus = LIGHT_BUS_AC},
+        gpws_fo   = {bus = LIGHT_BUS_AC},
+        terr_nd_capt = {bus = LIGHT_BUS_AC},
+        terr_nd_fo   = {bus = LIGHT_BUS_AC},
+        
+        brk_fan    = {bus = LIGHT_BUS_AC},
+        ldg_gear_L = {bus = LIGHT_BUS_DC},
+        ldg_gear_C = {bus = LIGHT_BUS_DC},
+        ldg_gear_R = {bus = LIGHT_BUS_DC},
+
+        autobrake_LO  = {bus = LIGHT_BUS_DC},
+        autobrake_MED = {bus = LIGHT_BUS_DC},
+        autobrake_MAX = {bus = LIGHT_BUS_DC},
+        
+        ldg_gear_red_light = {bus = LIGHT_BUS_DC}
+    },
+    
+    -- Glareshield (AP, etc.)
+    glare = {
+        -- a321neo/cockpit/glareshield/...
+        atc_msg  = {bus = LIGHT_BUS_AC},
+        autoland = {bus = LIGHT_BUS_AC},
+        master_warning = {bus = LIGHT_BUS_AC},
+        master_caution = {bus = LIGHT_BUS_AC},
+        priority_capt  = {bus = LIGHT_BUS_AC},
+        priority_fo    = {bus = LIGHT_BUS_AC}
+    }
 }
 
 ----------------------------------------------------------------------------------------------------
 -- Initialization function
 ----------------------------------------------------------------------------------------------------
-local function initialization()
-
-    for dr_name,x in pairs(PB.ovhd) do
+local function init_group(group_set, prefix)
+    for dr_name,x in pairs(group_set) do
         x.status_top    = false
         x.status_bottom = false
-        local base_string = DR_PATH_PREFIX .. "/" .. DR_PATH_PREFIX_OVH .. "/" .. dr_name 
+        local base_string = DR_PATH_PREFIX .. "/" .. prefix .. "/" .. dr_name 
         x.dr_top    = createGlobalPropertyf(base_string .. DR_PATH_SUFFIX_TOP , 0, false, true, false)
         x.dr_bottom = createGlobalPropertyf(base_string .. DR_PATH_SUFFIX_BTM , 0, false, true, false)
     end
-    
+
+end
+
+local function initialization()
+
+    init_group(PB.ovhd, DR_PATH_PREFIX_OVH)
+    init_group(PB.ped,  DR_PATH_PREFIX_PEDESTAL)
+    init_group(PB.mip,  DR_PATH_PREFIX_MIP)
+    init_group(PB.glare,  DR_PATH_PREFIX_GLARESHIELD)
+
 end
 
 initialization()

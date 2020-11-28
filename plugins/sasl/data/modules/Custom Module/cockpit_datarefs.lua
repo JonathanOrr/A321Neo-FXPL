@@ -49,6 +49,9 @@ FAC_2_off_button = createGlobalPropertyi("a321neo/cockpit/FBW/fac_2_off", 0, fal
 SEC_1_off_button = createGlobalPropertyi("a321neo/cockpit/FBW/sec_1_off", 0, false, true, false) --0 is on 1 if off
 SEC_2_off_button = createGlobalPropertyi("a321neo/cockpit/FBW/sec_2_off", 0, false, true, false) --0 is on 1 if off
 SEC_3_off_button = createGlobalPropertyi("a321neo/cockpit/FBW/sec_3_off", 0, false, true, false) --0 is on 1 if off
+
+Rudd_trim_knob_pos = createGlobalPropertyf("a321neo/cockpit/FBW/rudder_trim_pos", 0, false, true, false) -- -1, 0, 1
+
 ---------------------------------------------------------------------------------------------------------------------------------------
 --display brightness
 Total_element_brightness = globalProperty("sim/cockpit/electrical/instrument_brightness")
@@ -441,4 +444,8 @@ Lights_compass_lever = createGlobalPropertyf("a321neo/cockpit/lights/buttons/rwy
 Lights_emer_exit_lever = createGlobalPropertyf("a321neo/cockpit/lights/buttons/emer_exit_pos", 0, false, true, false)
 Lights_seatbelts_lever = createGlobalPropertyf("a321neo/cockpit/misc/buttons/seatbelts_pos", 0, false, true, false)
 Lights_noped_lever = createGlobalPropertyf("a321neo/cockpit/misc/buttons/noped_pos", 0, false, true, false)
+
+-- Chrono
+Chrono_state_button = createGlobalPropertyf("a321neo/cockpit/misc/chrono_state", 0, false, true, false)
+Chrono_source_button = createGlobalPropertyf("a321neo/cockpit/misc/chrono_source", 2, false, true, false)
 

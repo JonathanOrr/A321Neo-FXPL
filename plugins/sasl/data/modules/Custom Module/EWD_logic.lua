@@ -406,6 +406,9 @@ local function update_right_list()
         list_right:put(COL_INDICATION, "MAN LDG ELEV")
     end
     
+    -- TODO: SWITCHING PNL: - if PFD/ND XFR pressed *AND* ECAM/ND not on NORM
+    --                      - ATT HDG or AIR DATA or EIS DMC not in normal
+    
     -- TODO Audio: AUDIO 3 XFRD displayed green if audio switching selector not in NORM
     -- TODO Acars: ACARS CALL (pulsing green) if received an ACARS message requesting voice conversation
 
