@@ -228,7 +228,7 @@ Message_FUEL_IF_NO_FUEL_LEAK_CTR_LO_PR = {
 Message_FUEL_X_FEED_ON = {
     text = function() return "   - FUEL X FEED.......ON" end,
     color = function() return COL_ACTIONS end,
-    is_active = function() return get(Fuel_light_x_feed) < 10 end
+    is_active = function() return not PB.ovhd.fuel_XFEED.status_top end
 }
 
 
@@ -336,7 +336,7 @@ Message_FUEL_DO_NOT_APPLY_F_LEAK_2 = {
 Message_FUEL_X_FEED = {
     text = function(self) return " - FUEL X FEED.........ON" end,
     color = function(self) return COL_ACTIONS end,
-    is_active = function(self) return get(Fuel_light_x_feed)==0 end
+    is_active = function(self) return not PB.ovhd.fuel_XFEED.status_top end
 }
 Message_FUEL_LO_LVL_L_TK_PUMP_1_OFF = {
     text = function(self) return " - L TK PUMP 1........OFF" end,
@@ -415,7 +415,7 @@ MessageGroup_FUEL_WING_LO_LVL_SINGLE = {
 Message_FUEL_LO_LVL_FUEL_MODE = {
     text = function(self) return " - FUEL MODE SEL......MAN" end,
     color = function(self) return COL_ACTIONS end,
-    is_active = function(self) return get(Fuel_light_mode_sel) == 0 end
+    is_active = function(self) return not PB.ovhd.fuel_XFEED.status_top end
 }
 Message_FUEL_LO_LVL_ALL_ON = {
     text = function(self) return " - ALL TK PUMPS........ON" end,
@@ -635,12 +635,12 @@ MessageGroup_FUEL_L_TK_1_OR_2_PUMP_FAULT = {
 Message_FUEL_DO_NOT_APPLY_F_LEAK_DP_FAULT = {
     text = function() return " . IF NO FUEL LEAK" end,
     color = function() return COL_REMARKS end,
-    is_active = function() return get(Capt_Baro_Alt) > 15000 and get(Fuel_light_x_feed) < 10 end
+    is_active = function() return get(Capt_Baro_Alt) > 15000 and not PB.ovhd.fuel_XFEED.status_top end
 }
 Message_FUEL_X_FEED_ON_DP_FAULT = {
     text = function() return "   - FUEL X FEED.......ON" end,
     color = function() return COL_ACTIONS end,
-    is_active = function() return get(Capt_Baro_Alt) > 15000 and get(Fuel_light_x_feed) < 10 end
+    is_active = function() return get(Capt_Baro_Alt) > 15000 and not PB.ovhd.fuel_XFEED.status_top end
 }
 Message_FUEL_ENG_MODE_SEL_IGN = {
     text = function() return " - ENG MODE SEL.......IGN" end,
@@ -695,12 +695,12 @@ MessageGroup_FUEL_L_TK_1_AND_2_PUMP_FAULT = {
 Message_FUEL_DO_NOT_APPLY_F_LEAK_DP_FAULT = {
     text = function() return " . IF NO FUEL LEAK" end,
     color = function() return COL_REMARKS end,
-    is_active = function() return get(Capt_Baro_Alt) > 15000 and get(Fuel_light_x_feed) < 10 end
+    is_active = function() return get(Capt_Baro_Alt) > 15000 and not PB.ovhd.fuel_XFEED.status_top end
 }
 Message_FUEL_X_FEED_ON_DP_FAULT = {
     text = function() return "   - FUEL X FEED.......ON" end,
     color = function() return COL_ACTIONS end,
-    is_active = function() return get(Capt_Baro_Alt) > 15000 and get(Fuel_light_x_feed) < 10 end
+    is_active = function() return get(Capt_Baro_Alt) > 15000 and not PB.ovhd.fuel_XFEED.status_top end
 }
 Message_FUEL_ENG_MODE_SEL_IGN = {
     text = function() return " - ENG MODE SEL.......IGN" end,
@@ -794,7 +794,7 @@ MessageGroup_FUEL_AUTO_FEED_FAULT = {
     },
 
     is_active = function()
-        return get(Fuel_light_mode_sel) == 0 and get(Fuel_quantity[tank_CENTER]) > 250 and (get(Fuel_quantity[tank_RIGHT]) < 5000 or get(Fuel_quantity[tank_LEFT]) < 5000)
+        return not PB.ovhd.fuel_MODE_SEL.status_top and get(Fuel_quantity[tank_CENTER]) > 250 and (get(Fuel_quantity[tank_RIGHT]) < 5000 or get(Fuel_quantity[tank_LEFT]) < 5000)
     end,
 
     is_inhibited = function()

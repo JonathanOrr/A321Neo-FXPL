@@ -141,6 +141,8 @@ local function anim_light_switches()
     Set_dataref_linear_anim(Cockpit_ann_ovhd_switch, ann_lt_pos, -1, 1, 5)
     Set_dataref_linear_anim(Lights_emer_exit_lever, get(Lights_emer_exit), 0, 2, 5)
 
+    set(Cockpit_annnunciators_test, get(Cockpit_ann_ovhd_switch) > 0.5 and 1 or 0)
+
     -- Pedestal
     Set_dataref_linear_anim(Engine_mode_knob_pos, get(Engine_mode_knob), -1, 1, 5)
 end

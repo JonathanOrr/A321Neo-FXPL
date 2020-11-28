@@ -124,19 +124,8 @@ end
 
 local function update_pb_lights()
 	--update Brake fan button states follwing 00, 01, 10, 11
-	if get(Brakes_fan) == 0 then
-		if (get(Left_brakes_temp) + get(Right_brakes_temp)) / 2 < 400 then
-			set(Brake_fan_button_state, 0)--00
-		else
-			set(Brake_fan_button_state, 2)--10
-		end
-	else
-		if (get(Left_brakes_temp) + get(Right_brakes_temp)) / 2 < 400 then
-			set(Brake_fan_button_state, 1)--01
-		else
-			set(Brake_fan_button_state, 3)--11
-		end
-	end
+	
+	pb_set(PB.mip.brk_fan, get(Brakes_fan) == 1, get(Left_brakes_temp) > 400 or get(Right_brakes_temp) > 400)
 	
 end
 

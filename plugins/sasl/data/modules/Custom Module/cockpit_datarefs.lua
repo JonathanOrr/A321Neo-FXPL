@@ -375,15 +375,12 @@ ISIS_powered = createGlobalPropertyi("a321neo/cockpit/ISIS/isis_is_powered", 0, 
 ISIS_ready   = createGlobalPropertyi("a321neo/cockpit/ISIS/isis_is_ready", 0, false, true, false)-- ISIS is ready to use: 0-off, 1-on
 
 -- Fuel
-                                                                            -- 00: no lights, 01: OFF (FWD for ACT and RCT), 10: FAULT, 11: FAULT+OFF (FWD for ACT and RCT)
-Fuel_light_mode_sel = createGlobalPropertyi("a321neo/cockpit/fuel/buttons/c_mode_sel", 0, false, true, false)      --00: No lights, 01: [MAN], 10: FAULT, 11 [MAN] + FAULT
-Fuel_light_x_feed   = createGlobalPropertyi("a321neo/cockpit/fuel/buttons/x_feed", 0, false, true, false)      --00: No lights, 01: [ON], 10: OPEN, 11 [ON] + OPEN
 Fuel_is_refuelG     = createGlobalPropertyi("a321neo/cockpit/fuel/refuelg", 0, false, true, false) -- Refuel panel is active (1: yes, 0 : no)
 
 -- Fire
-Fire_pb_APU_status = createGlobalPropertyi("a321neo/cockpit/fire/buttons/APU_pb", 0, false, true, false) 
-Fire_pb_ENG1_status = createGlobalPropertyi("a321neo/cockpit/fire/buttons/ENG1_pb", 0, false, true, false) 
-Fire_pb_ENG2_status = createGlobalPropertyi("a321neo/cockpit/fire/buttons/ENG2_pb", 0, false, true, false) 
+Fire_pb_APU_status = createGlobalPropertyi("a321neo/cockpit/fire/buttons/APU_pb", 0, false, true, false)
+Fire_pb_ENG1_status = createGlobalPropertyi("a321neo/cockpit/fire/buttons/ENG1_pb", 0, false, true, false)
+Fire_pb_ENG2_status = createGlobalPropertyi("a321neo/cockpit/fire/buttons/ENG2_pb", 0, false, true, false)
 
 -- EWD
 EWD_engine_avail_ind_1_start = createGlobalPropertyi("a321neo/cockpit/ewd/ENG1_avail_indicator_start", 0, false, true, false) -- Time point when the engine is avail

@@ -93,8 +93,8 @@ PB = {
         fuel_C_R   = {bus = LIGHT_BUS_AC},
         fuel_ACT   = {bus = LIGHT_BUS_AC},
         fuel_RCT   = {bus = LIGHT_BUS_AC},
-        fuel_XFEED    = {bus = LIGHT_BUS_AC},
-        fuel_MODE_SEL = {bus = LIGHT_BUS_AC},
+        fuel_XFEED    = {bus = LIGHT_BUS_DC},
+        fuel_MODE_SEL = {bus = LIGHT_BUS_DC},
 
         -- Aircond
         ac_econ_flow = {bus = LIGHT_BUS_DC},
@@ -283,9 +283,9 @@ function pb_set(pb, cond_bottom, cond_top)
     local brightness = get(Cockpit_ann_ovhd_switch) < -0.5 and BRIGHTNESS_HALF or BRIGHTNESS_FULL
     local target_top = (pb.status_top and 1 or 0) * brightness
     local target_bottom = (pb.status_bottom and 1 or 0) * brightness
-    if get(Cockpit_annnunciators_test) == 1 then
-        target_top = true
-        target_bottom = true
+    if get(Cockpit_annnunciators_test) == 1 and has_elec_pwr(pb) then
+        target_top = 1
+        target_bottom = 1
     end
         
     set(pb.dr_top, target_top)

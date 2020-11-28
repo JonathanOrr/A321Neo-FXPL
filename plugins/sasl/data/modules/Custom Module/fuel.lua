@@ -180,7 +180,7 @@ end
 
 -- This function updates the button lights related to ACT and RCT pumps
 local function update_single_extra(x)
-    pb_set(Fuel_light_pumps[x], tank_pump_and_xfr[x].switch, not tank_pump_and_xfr[x].pressure_ok)
+    pb_set(Fuel_light_pumps[x], tank_pump_and_xfr[x].switch, (tank_pump_and_xfr[x].switch or tank_pump_and_xfr[x].auto_status) and not tank_pump_and_xfr[x].pressure_ok)
 end
 
 local function update_lights()
@@ -200,14 +200,10 @@ local function update_lights()
     update_single_extra(RCT_TK_XFR)
 
     -- X_feed and mode sel
-    if get(DC_ess_bus_pwrd) == 1 then
-        -- The lights are on only if DC ESS is on
-        set(Fuel_light_mode_sel, (C_tank_mode and 1 or 0) + (C_tank_fault and 10 or 0))
-        set(Fuel_light_x_feed,   (X_feed_mode and 1 or 0) + (X_feed_status and 10 or 0))
-    else
-        set(Fuel_light_mode_sel, 0)
-        set(Fuel_light_x_feed,   0)    
-    end
+        
+    pb_set(PB.ovhd.fuel_XFEED, X_feed_mode, X_feed_status)
+    pb_set(PB.ovhd.fuel_MODE_SEL, C_tank_mode, C_tank_fault)
+
 end
 
 ----------------------------------------------------------------------------------------------------
