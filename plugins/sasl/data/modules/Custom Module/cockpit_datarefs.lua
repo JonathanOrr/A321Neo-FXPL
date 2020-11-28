@@ -453,6 +453,8 @@ Lights_emer_exit_lever = createGlobalPropertyf("a321neo/cockpit/lights/buttons/e
 Lights_seatbelts_lever = createGlobalPropertyf("a321neo/cockpit/misc/buttons/seatbelts_pos", 0, false, true, false)
 Lights_noped_lever = createGlobalPropertyf("a321neo/cockpit/misc/buttons/noped_pos", 0, false, true, false)
 
+Lights_int_flood_pedestal_array = createGlobalPropertyfa("a321neo/cockpit/lights/array_floor_ped", 9, false, true, false)
+
 -- Chrono
 Chrono_state_button = createGlobalPropertyf("a321neo/cockpit/misc/chrono_state", 0, false, true, false)
 Chrono_source_button = createGlobalPropertyf("a321neo/cockpit/misc/chrono_source", 2, false, true, false)
