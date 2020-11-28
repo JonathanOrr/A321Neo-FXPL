@@ -302,6 +302,7 @@ Capt_baro_alt_m = createGlobalPropertyf("a321neo/cockpit/indicators/capt_baro_al
 Seatbelts = globalProperty("sim/cockpit2/annunciators/fasten_seatbelt")
 NoSmoking = globalProperty("sim/cockpit2/annunciators/no_smoking")
 CabinIsReady = createGlobalPropertyi("a321neo/cockpit/cabin_ready", 0, false, true, false)  -- 0 cabin is not ready, 1 cabin is ready
+Lights_emer_exit = createGlobalPropertyi("a321neo/cockpit/lights/emer_exit_switch", 0, false, true, false)
 
 --MCDU
 Mcdu_enabled = createGlobalPropertyi("a321neo/debug/mcdu/mcdu_enabled", 1, false, true, false)

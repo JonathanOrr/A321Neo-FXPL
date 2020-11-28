@@ -385,7 +385,8 @@ LIGHTS_cmd_nose_up = sasl.createCommand("a321neo/cockpit/lights/nose_up","Move u
 LIGHTS_cmd_nose_dn = sasl.createCommand("a321neo/cockpit/lights/nose_dn","Move down nose lever")
 LIGHTS_cmd_beacon_toggle = sasl.createCommand("a321neo/cockpit/lights/beacon_toggle","Toggle BEACON LIGHT")
 LIGHTS_cmd_wing_toggle = sasl.createCommand("a321neo/cockpit/lights/wing_toggle","Toggle WING LIGHT")
-LIGHTS_cmd_navlogo_toggle = sasl.createCommand("a321neo/cockpit/lights/navlogo_toggle","Toggle NAV and LOGO LIGHT")
+LIGHTS_cmd_navlogo_up = sasl.createCommand("a321neo/cockpit/lights/navlogo_up","Move up NAV and LOGO LIGHT")
+LIGHTS_cmd_navlogo_dn = sasl.createCommand("a321neo/cockpit/lights/navlogo_dn","Move up NAV and LOGO LIGHT")
 LIGHTS_cmd_rwy_turnoff_toggle = sasl.createCommand("a321neo/cockpit/lights/rwy_turnoff_toggle","Toggle RWY TURN OFF LIGHT")
 
 LIGHTS_cmd_compass_toggle = sasl.createCommand("a321neo/cockpit/lights/compass_toggle","Toggle COMPASS LIGHT")

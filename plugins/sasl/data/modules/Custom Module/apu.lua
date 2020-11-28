@@ -156,7 +156,7 @@ end
 local function update_off_status()
 
     if master_switch_disabled_time ~= 0 then
-        if get(TIME) - master_switch_disabled_time > 60 or get(APU_bleed_on_button) % 2 == 0 then
+        if get(TIME) - master_switch_disabled_time > 60 or not PB.ovhd.ac_bleed_apu then
             master_switch_status = false
             master_switch_disabled_time = 0
         end

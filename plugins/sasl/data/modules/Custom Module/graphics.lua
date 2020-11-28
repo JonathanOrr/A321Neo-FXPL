@@ -77,6 +77,8 @@ sasl.registerCommandHandler (Cockpit_light_Capt_console_floor_cmd_dn, 0,  functi
 sasl.registerCommandHandler (Cockpit_light_Fo_console_floor_cmd_up, 0,    function(phase) change_switch(phase, Cockpit_light_Fo_console_floor, 1) end)
 sasl.registerCommandHandler (Cockpit_light_Fo_console_floor_cmd_dn, 0,    function(phase) change_switch(phase, Cockpit_light_Fo_console_floor, -1) end)
 
+
+
 ----------------------------------------------------------------------------------------------------
 -- Lights
 ----------------------------------------------------------------------------------------------------
@@ -90,6 +92,18 @@ sasl.registerCommandHandler (Cockpit_ann_ovhd_cmd_dn, 0,  function(phase)
         ann_lt_pos = math.max(ann_lt_pos - 1, -1)
     end
  end)
+
+function Switch_handler(phase, dataref, min, max, direction)
+    if phase == SASL_COMMAND_BEGIN then
+        local new_value = Math_clamp(get(dataref) + direction, min, max)
+        set(dataref, new_value)
+    end
+end
+
+-- EMER exit
+sasl.registerCommandHandler (LIGHTS_cmd_emer_exit_up, 0,  function(phase) Switch_handler(phase, Lights_emer_exit, 0, 2, 1)  end)
+sasl.registerCommandHandler (LIGHTS_cmd_emer_exit_dn, 0,  function(phase) Switch_handler(phase, Lights_emer_exit, 0, 2, -1)  end)
+
 
 ----------------------------------------------------------------------------------------------------
 -- Initialization function
@@ -109,20 +123,33 @@ end
 
 init_drs(guards)
 
+----------------------------------------------------------------------------------------------------
+-- Functions
+----------------------------------------------------------------------------------------------------
+local function update_guards()
+    for i = 1, #guards do
+        set(guards[i].dataref, Set_anim_value(get(guards[i].dataref), get(guards[i].state_dataref), 0, 1, 6))
+    end
+end
+
 local function anim_light_switches()
+    -- OVH switches
     Set_dataref_linear_anim(Cockpit_ann_ovhd_switch, ann_lt_pos, -1, 1, 5)
+    Set_dataref_linear_anim(Lights_emer_exit_lever, get(Lights_emer_exit), 0, 2, 5)
 
+    -- Pedestal
     Set_dataref_linear_anim(Engine_mode_knob_pos, get(Engine_mode_knob), -1, 1, 5)
+end
 
+local function update_lights()
+    pb_set(PB.ovhd.signs_emer_exit_lt, get(Lights_emer_exit) == 0, false)
 end
 
 function update()
     perf_measure_start("graphics:update()")
 
-    for i = 1, #guards do
-        set(guards[i].dataref, Set_anim_value(get(guards[i].dataref), get(guards[i].state_dataref), 0, 1, 6))
-    end
-    
+    update_guards()
+    update_lights()
     anim_light_switches()
     
     perf_measure_stop("graphics:update()")
