@@ -499,7 +499,7 @@ function update()
     update_fans()
 
     -- Fix GAS if moving
-     if get(Ground_speed_ms) > 0.1 or get(Actual_brake_ratio) < 0.9 or get(All_on_ground) ~= 1 then
+     if get(Ground_speed_ms) > 0.1 or get(Parkbrake_switch_pos) < 1 or get(All_on_ground) ~= 1 then
         set(GAS_bleed_avail, 0)
      end
     perf_measure_stop("packs:update()")

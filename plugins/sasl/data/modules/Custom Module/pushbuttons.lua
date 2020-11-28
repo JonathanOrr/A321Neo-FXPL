@@ -28,9 +28,12 @@ local DR_PATH_PREFIX_OVH = "overhead"
 local DR_PATH_SUFFIX_TOP = "_top"
 local DR_PATH_SUFFIX_BTM = "_bottom"
 
+local BRIGHTNESS_HALF = 0.5
+local BRIGHTNESS_FULL = 1
+
 local ELEC_ALWAYS_ON = 0 -- The button has always power or it has special behaviour (like ext pwr)
-local LIGHT_BUS_DC    = 1 -- Button is powered when any DC bus is available
-local LIGHT_BUS_AC    = 2 -- Button is powered when any AC bus is available
+local LIGHT_BUS_DC   = 1 -- Button is powered when any DC bus is available
+local LIGHT_BUS_AC   = 2 -- Button is powered when any AC bus is available
 
 PB = {
 
@@ -66,8 +69,8 @@ PB = {
         -- HYD
         hyd_eng1      = {bus = LIGHT_BUS_DC},
         hyd_eng2      = {bus = LIGHT_BUS_DC},
-        hyd_elec_Y    = {bus = LIGHT_BUS_DC},
-        hyd_elec_B    = {bus = LIGHT_BUS_DC},
+        hyd_elec_Y    = {bus = LIGHT_BUS_AC},
+        hyd_elec_B    = {bus = LIGHT_BUS_AC},
         hyd_PTU       = {bus = LIGHT_BUS_DC},
 
         -- ADIRS
@@ -109,55 +112,55 @@ PB = {
         apu_start  = {bus = LIGHT_BUS_DC}, 
 
         -- SIGNS
-        signs_emer_exit_lt = {bus = LIGHT_BUS_DC}, -- TODO CHECK BUS
+        signs_emer_exit_lt = {bus = LIGHT_BUS_DC},
         
         -- FIRE
-        fire_eng_1_ag_1 = {bus = LIGHT_BUS_DC}, -- TODO CHECK BUS
-        fire_eng_1_ag_2 = {bus = LIGHT_BUS_DC}, -- TODO CHECK BUS
-        fire_eng_2_ag_1 = {bus = LIGHT_BUS_DC}, -- TODO CHECK BUS
-        fire_eng_2_ag_2 = {bus = LIGHT_BUS_DC}, -- TODO CHECK BUS
-        fire_apu_ag     = {bus = LIGHT_BUS_DC}, -- TODO CHECK BUS
+        fire_eng_1_ag_1 = {bus = LIGHT_BUS_DC},
+        fire_eng_1_ag_2 = {bus = LIGHT_BUS_DC},
+        fire_eng_2_ag_1 = {bus = LIGHT_BUS_DC},
+        fire_eng_2_ag_2 = {bus = LIGHT_BUS_DC},
+        fire_apu_ag     = {bus = LIGHT_BUS_DC},
 
         -- FLT CTL
-        flt_ctl_elac_1 = {bus = LIGHT_BUS_DC}, -- TODO CHECK BUS
-        flt_ctl_sec_1  = {bus = LIGHT_BUS_DC}, -- TODO CHECK BUS
-        flt_ctl_fac_1  = {bus = LIGHT_BUS_DC}, -- TODO CHECK BUS
-        flt_ctl_elac_2 = {bus = LIGHT_BUS_DC}, -- TODO CHECK BUS
-        flt_ctl_sec_2  = {bus = LIGHT_BUS_DC}, -- TODO CHECK BUS
-        flt_ctl_fac_2  = {bus = LIGHT_BUS_DC}, -- TODO CHECK BUS
-        flt_ctl_sec_3  = {bus = LIGHT_BUS_DC}, -- TODO CHECK BUS
+        flt_ctl_elac_1 = {bus = LIGHT_BUS_DC},
+        flt_ctl_sec_1  = {bus = LIGHT_BUS_DC},
+        flt_ctl_fac_1  = {bus = LIGHT_BUS_DC},
+        flt_ctl_elac_2 = {bus = LIGHT_BUS_AC},-- This is actually on DC but powered when we have AC
+        flt_ctl_sec_2  = {bus = LIGHT_BUS_AC},-- This is actually on DC but powered when we have AC
+        flt_ctl_fac_2  = {bus = LIGHT_BUS_AC},-- This is actually on DC but powered when we have AC
+        flt_ctl_sec_3  = {bus = LIGHT_BUS_AC},-- This is actually on DC but powered when we have AC
         
         -- EVAC
-        evac_cmd       = {bus = LIGHT_BUS_DC}, -- TODO CHECK BUS
+        evac_cmd       = {bus = LIGHT_BUS_DC},
 
         -- GPWS
-        gpws_terr       = {bus = LIGHT_BUS_DC}, -- TODO CHECK BUS
-        gpws_sys        = {bus = LIGHT_BUS_DC}, -- TODO CHECK BUS
-        gpws_gs_mode    = {bus = LIGHT_BUS_DC}, -- TODO CHECK BUS
-        gpws_flap_mode  = {bus = LIGHT_BUS_DC}, -- TODO CHECK BUS
-        gpws_ldg_flap_3 = {bus = LIGHT_BUS_DC}, -- TODO CHECK BUS
+        gpws_terr       = {bus = LIGHT_BUS_AC},
+        gpws_sys        = {bus = LIGHT_BUS_AC},
+        gpws_gs_mode    = {bus = LIGHT_BUS_AC},
+        gpws_flap_mode  = {bus = LIGHT_BUS_AC},
+        gpws_ldg_flap_3 = {bus = LIGHT_BUS_AC},
         
         -- RCDR
-        rcdr_gnd_ctl    = {bus = LIGHT_BUS_DC}, -- TODO CHECK BUS
+        rcdr_gnd_ctl    = {bus = LIGHT_BUS_AC},
         
         -- OXY
-        oxy_high_alt_land= {bus = LIGHT_BUS_DC}, -- TODO CHECK BUS
-        oxy_passengers   = {bus = LIGHT_BUS_DC}, -- TODO CHECK BUS
-        oxy_crew_supply  = {bus = LIGHT_BUS_DC}, -- TODO CHECK BUS
+        oxy_high_alt_land= {bus = LIGHT_BUS_AC},
+        oxy_passengers   = {bus = LIGHT_BUS_AC},
+        oxy_crew_supply  = {bus = LIGHT_BUS_DC},
 
         -- CALLS
-        calls_emer  = {bus = LIGHT_BUS_DC}, -- TODO CHECK BUS
+        calls_emer  = {bus = LIGHT_BUS_DC},
 
         -- CARGO HEAT & SMOKE
         cargo_hot_air  = {bus = LIGHT_BUS_DC},
         cargo_aft_isol = {bus = LIGHT_BUS_DC},
-        cargo_smoke_fwd= {bus = LIGHT_BUS_DC}, -- TODO CHECK BUS
-        cargo_smoke_aft= {bus = LIGHT_BUS_DC}, -- TODO CHECK BUS
+        cargo_smoke_fwd= {bus = LIGHT_BUS_DC},
+        cargo_smoke_aft= {bus = LIGHT_BUS_DC},
         
         -- VENTILATION
         vent_blower  = {bus = LIGHT_BUS_DC},
-        vent_extract = {bus = LIGHT_BUS_DC},
-        vent_cab_fans= {bus = LIGHT_BUS_DC},
+        vent_extract = {bus = LIGHT_BUS_AC},
+        vent_cab_fans= {bus = LIGHT_BUS_AC},
         
         -- ENG
         eng_man_start_1 = {bus = LIGHT_BUS_DC},
@@ -165,22 +168,22 @@ PB = {
         eng_dual_cooling = {bus = LIGHT_BUS_DC},
         
         -- Upper level
-        misc_cockpit_video = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
+        misc_cockpit_video = {bus = LIGHT_BUS_DC},
         misc_fuel_control  = {bus = LIGHT_BUS_DC},
         misc_fuel_power    = {bus = LIGHT_BUS_DC},
         misc_toilet        = {bus = LIGHT_BUS_DC}, -- TODO CHECK BUS
 
         -- Maintainence
-        mntn_apu_test      = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
-        mntn_fadec_1_pwr   = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
-        mntn_fadec_2_pwr   = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
-        mntn_hyd_blue_on   = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
-        mntn_hyd_v_G       = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
-        mntn_hyd_v_B       = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
-        mntn_hyd_v_Y       = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
-        mntn_oxy_tmr_reset = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
-        mntn_svce_int      = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
-        mntn_avio_light    = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
+        mntn_apu_test      = {bus = LIGHT_BUS_DC},
+        mntn_fadec_1_pwr   = {bus = LIGHT_BUS_DC},
+        mntn_fadec_2_pwr   = {bus = LIGHT_BUS_DC},
+        mntn_hyd_blue_on   = {bus = LIGHT_BUS_AC},
+        mntn_hyd_v_G       = {bus = LIGHT_BUS_DC},
+        mntn_hyd_v_B       = {bus = LIGHT_BUS_DC},
+        mntn_hyd_v_Y       = {bus = LIGHT_BUS_DC},
+        mntn_oxy_tmr_reset = {bus = LIGHT_BUS_DC},
+        mntn_svce_int      = {bus = LIGHT_BUS_DC}, -- TODO CHECK BUS
+        mntn_avio_light    = {bus = LIGHT_BUS_AC},
 
     }
 
@@ -227,11 +230,15 @@ function pb_set(pb, cond_bottom, cond_top)
         pb.status_bottom = false
     end
 
-    -- TODO: Test
-    local brightness = 1 -- TODO
+
+    local brightness = get(Cockpit_ann_ovhd_switch) < -0.5 and BRIGHTNESS_HALF or BRIGHTNESS_FULL
     local target_top = (pb.status_top and 1 or 0) * brightness
     local target_bottom = (pb.status_bottom and 1 or 0) * brightness
-    
+    if get(Cockpit_annnunciators_test) == 1 then
+        target_top = true
+        target_bottom = true
+    end
+        
     set(pb.dr_top, target_top)
     set(pb.dr_bottom, target_bottom)
 

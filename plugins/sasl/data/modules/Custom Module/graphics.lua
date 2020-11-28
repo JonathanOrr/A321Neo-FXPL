@@ -33,8 +33,16 @@ local guards = {
     {name = "HYD_RAT_MAN_ON"},
     {name = "HYD_BLUE_PUMP"},
     {name = "HIGH_ALT_LANDING"},
-    {name = "EMER"}
+    {name = "EMER"},
+    {name = "MNTN_BLUE_PUMP"},
+    {name = "MNTN_HYD_G"},
+    {name = "MNTN_HYD_B"},
+    {name = "MNTN_HYD_Y"},
+    {name = "MNTN_FADEC_1"},
+    {name = "MNTN_FADEC_2"}
 }
+
+local ann_lt_pos = 0
 
 ----------------------------------------------------------------------------------------------------
 -- Command function
@@ -70,6 +78,20 @@ sasl.registerCommandHandler (Cockpit_light_Fo_console_floor_cmd_up, 0,    functi
 sasl.registerCommandHandler (Cockpit_light_Fo_console_floor_cmd_dn, 0,    function(phase) change_switch(phase, Cockpit_light_Fo_console_floor, -1) end)
 
 ----------------------------------------------------------------------------------------------------
+-- Lights
+----------------------------------------------------------------------------------------------------
+sasl.registerCommandHandler (Cockpit_ann_ovhd_cmd_up, 0,  function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        ann_lt_pos = math.min(ann_lt_pos + 1, 1)
+    end
+ end)
+sasl.registerCommandHandler (Cockpit_ann_ovhd_cmd_dn, 0,  function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        ann_lt_pos = math.max(ann_lt_pos - 1, -1)
+    end
+ end)
+
+----------------------------------------------------------------------------------------------------
 -- Initialization function
 ----------------------------------------------------------------------------------------------------
 local function create_drs(object)
@@ -87,8 +109,21 @@ end
 
 init_drs(guards)
 
+local function anim_light_switches()
+    Set_dataref_linear_anim(Cockpit_ann_ovhd_switch, ann_lt_pos, -1, 1, 5)
+
+    Set_dataref_linear_anim(Engine_mode_knob_pos, get(Engine_mode_knob), -1, 1, 5)
+
+end
+
 function update()
+    perf_measure_start("graphics:update()")
+
     for i = 1, #guards do
         set(guards[i].dataref, Set_anim_value(get(guards[i].dataref), get(guards[i].state_dataref), 0, 1, 6))
     end
+    
+    anim_light_switches()
+    
+    perf_measure_stop("graphics:update()")
 end

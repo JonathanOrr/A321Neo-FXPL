@@ -303,8 +303,98 @@ Cockpit_light_flood_ped_cmd_dn = createCommand("a321neo/cockpit/lights/flood_lt_
 Cockpit_light_ovhd_cmd_up = createCommand("a321neo/cockpit/lights/ovhd_lt_up", "OVHD knob UP")
 Cockpit_light_ovhd_cmd_dn = createCommand("a321neo/cockpit/lights/ovhd_lt_dn", "OVHD knob DOWN")
 
+Cockpit_ann_ovhd_cmd_up = createCommand("a321neo/cockpit/lights/ovhd_ann_lt_up", "OVHD ANN LT UP")
+Cockpit_ann_ovhd_cmd_dn = createCommand("a321neo/cockpit/lights/ovhd_ann_lt_down", "OVHD ANN LT DOWN")
+Cockpit_dome_cmd_up = createCommand("a321neo/cockpit/lights/dome_lt_up", "OVHD DOME UP")
+Cockpit_dome_cmd_dn = createCommand("a321neo/cockpit/lights/dome_lt_down", "OVHD DOME DOWN")
+
 Cockpit_light_Capt_console_floor_cmd_up = createCommand("a321neo/cockpit/lights/capt_console_floor_lt_up", "Capt CONSOLE FLOOR switch UP")
 Cockpit_light_Capt_console_floor_cmd_dn = createCommand("a321neo/cockpit/lights/capt_console_floor_lt_dn", "Capt CONSOLE FLOOR switch DOWN")
 Cockpit_light_Fo_console_floor_cmd_up = createCommand("a321neo/cockpit/lights/fo_console_floor_lt_up", "F/O CONSOLE FLOOR switch UP")
 Cockpit_light_Fo_console_floor_cmd_dn = createCommand("a321neo/cockpit/lights/fo_console_floor_lt_dn", "F/O CONSOLE FLOOR switch DOWN")
+
+-- EVAC
+EVAC_cmd_command = sasl.createCommand("a321neo/cockpit/evac/command", "Toggle EVAC button")
+EVAC_cmd_horn_off= sasl.createCommand("a321neo/cockpit/evac/horn_off", "Press HORN SHUTOFF button")
+EVAC_cmd_capt_purs_toggle = sasl.createCommand("a321neo/cockpit/evac/capt_purs_toggle", "Toggle CAPT and PURS")
+
+-- GPWS
+GPWS_cmd_TER        = sasl.createCommand("a321neo/cockpit/gpws/ter", "Toggle GPWS TER button")
+GPWS_cmd_SYS        = sasl.createCommand("a321neo/cockpit/gpws/sys", "Toggle GPWS SYS button")
+GPWS_cmd_GS_MODE    = sasl.createCommand("a321neo/cockpit/gpws/gs_mode", "Toggle GPWS GS MODE button")
+GPWS_cmd_FLAP_MODE  = sasl.createCommand("a321neo/cockpit/gpws/flap_mode", "Toggle GPWS FLAP MODE button")
+GPWS_cmd_LDG_FLAP_3 = sasl.createCommand("a321neo/cockpit/gpws/ldg_flap_3", "Toggle GPWS LDG FLAP 3 button")
+
+-- RCDR
+RCDR_cmd_GND_CTL   = sasl.createCommand("a321neo/cockpit/rcdr/gnd_ctl",  "Toggle RCDR GND CTL button")
+RCDR_cmd_CVR_ERASE = sasl.createCommand("a321neo/cockpit/rcdr/cvr_erase","Press CVR ERASE button")
+RCDR_cmd_CVR_TEST  = sasl.createCommand("a321neo/cockpit/rcdr/cvr_test", "Press CVR TEST button")
+
+-- CALLS
+CALLS_cmd_FWD   = sasl.createCommand("a321neo/cockpit/calls/fwd","Press CALLS FWD button")
+CALLS_cmd_MID   = sasl.createCommand("a321neo/cockpit/calls/mid","Press CALLS MID button")
+CALLS_cmd_EXIT  = sasl.createCommand("a321neo/cockpit/calls/exit","Press CALLS EXIT button")
+CALLS_cmd_MECH  = sasl.createCommand("a321neo/cockpit/calls/mech","Press CALLS MECH button")
+CALLS_cmd_ALL   = sasl.createCommand("a321neo/cockpit/calls/all","Press CALLS ALL button")
+CALLS_cmd_AFT   = sasl.createCommand("a321neo/cockpit/calls/aft","Press CALLS AFT button")
+CALLS_cmd_EMER  = sasl.createCommand("a321neo/cockpit/calls/emer","Press CALLS EMER button")
+
+-- RR / WIPERS
+RAIN_cmd_repellent_L = sasl.createCommand("a321neo/cockpit/rain/repellent_L","Press Rain Repellent L button")
+RAIN_cmd_repellent_R = sasl.createCommand("a321neo/cockpit/rain/repellent_R","Press Rain Repellent R button")
+RAIN_cmd_wiper_L_up = sasl.createCommand("a321neo/cockpit/rain/wiper_L_up_cc","Knob Wiper L CC")
+RAIN_cmd_wiper_L_dn = sasl.createCommand("a321neo/cockpit/rain/wiper_L_dn_c","Knob Wiper L C")
+RAIN_cmd_wiper_R_up = sasl.createCommand("a321neo/cockpit/rain/wiper_R_up_cc","Knob Wiper R CC")
+RAIN_cmd_wiper_R_dn = sasl.createCommand("a321neo/cockpit/rain/wiper_R_dn_c","Knob Wiper R C")
+
+
+-- VIDEO
+VIDEO_cmd_toggle = sasl.createCommand("a321neo/cockpit/misc/toggle_door_video","Press VIDEO DOOR")
+
+-- FIRE PROTECTION
+FIRE_cmd_ENG_1_A_1 = sasl.createCommand("a321neo/cockpit/fire/eng_1_agent_1","Press ENG 1 AGENT 1")
+FIRE_cmd_ENG_1_A_2 = sasl.createCommand("a321neo/cockpit/fire/eng_1_agent_2","Press ENG 1 AGENT 2")
+FIRE_cmd_ENG_2_A_1 = sasl.createCommand("a321neo/cockpit/fire/eng_2_agent_1","Press ENG 2 AGENT 1")
+FIRE_cmd_ENG_2_A_2 = sasl.createCommand("a321neo/cockpit/fire/eng_2_agent_2","Press ENG 2 AGENT 2")
+FIRE_cmd_APU_A     = sasl.createCommand("a321neo/cockpit/fire/apu_agent","Press ENG 2 AGENT 2")
+FIRE_cmd_push_ENG_1= sasl.createCommand("a321neo/cockpit/fire/eng_1_push","Press ENG 1 big red button")
+FIRE_cmd_push_ENG_2= sasl.createCommand("a321neo/cockpit/fire/eng_2_push","Press ENG 2 big red button")
+FIRE_cmd_push_APU  = sasl.createCommand("a321neo/cockpit/fire/apu_push","Press APU big red button")
+
+-- MAINTENANCE Panel
+MNTN_OXY_RESET   = sasl.createCommand("a321neo/cockpit/mntn/oxy_tmr_reset","Press OXY TMR RESET")
+MNTN_SVCE_INT    = sasl.createCommand("a321neo/cockpit/mntn/svce_int","Press SVCE INT")
+MNTN_AVIO_LIGHT  = sasl.createCommand("a321neo/cockpit/mntn/avionics_light","Press AVIONICS LIGHT")
+MNTN_HYD_BLUE_override= sasl.createCommand("a321neo/cockpit/mntn/hyd_B_override","Press HYD B override")
+MNTN_HYD_G_valve = sasl.createCommand("a321neo/cockpit/mntn/hyd_g_valve","Press HYD G MEAS VALVE")
+MNTN_HYD_B_valve = sasl.createCommand("a321neo/cockpit/mntn/hyd_b_valve","Press HYD B MEAS VALVE")
+MNTN_HYD_Y_valve = sasl.createCommand("a321neo/cockpit/mntn/hyd_y_valve","Press HYD Y MEAS VALVE")
+MNTN_APU_test    = sasl.createCommand("a321neo/cockpit/mntn/apu_test","Press APU test")
+MNTN_APU_reset   = sasl.createCommand("a321neo/cockpit/mntn/apu_reset","Press APU reset")
+MNTN_FADEC_1_on  = sasl.createCommand("a321neo/cockpit/mntn/fadec_1_on","Press FADEC 1 GND PWR")
+MNTN_FADEC_2_on  = sasl.createCommand("a321neo/cockpit/mntn/fadec_2_on","Press FADEC 2 GND PWR")
+
+-- LIGHTS
+LIGHTS_cmd_strobe_up = sasl.createCommand("a321neo/cockpit/lights/strobe_up","Move up strobe lever")
+LIGHTS_cmd_strobe_dn = sasl.createCommand("a321neo/cockpit/lights/strobe_dn","Move down strobe lever")
+LIGHTS_cmd_land_L_up = sasl.createCommand("a321neo/cockpit/lights/land_L_up","Move up land L lever")
+LIGHTS_cmd_land_L_dn = sasl.createCommand("a321neo/cockpit/lights/land_L_dn","Move down land L lever")
+LIGHTS_cmd_land_R_up = sasl.createCommand("a321neo/cockpit/lights/land_R_up","Move up land R lever")
+LIGHTS_cmd_land_R_dn = sasl.createCommand("a321neo/cockpit/lights/land_R_dn","Move down land R lever")
+LIGHTS_cmd_nose_up = sasl.createCommand("a321neo/cockpit/lights/nose_up","Move up nose lever")
+LIGHTS_cmd_nose_dn = sasl.createCommand("a321neo/cockpit/lights/nose_dn","Move down nose lever")
+LIGHTS_cmd_beacon_toggle = sasl.createCommand("a321neo/cockpit/lights/beacon_toggle","Toggle BEACON LIGHT")
+LIGHTS_cmd_wing_toggle = sasl.createCommand("a321neo/cockpit/lights/wing_toggle","Toggle WING LIGHT")
+LIGHTS_cmd_navlogo_toggle = sasl.createCommand("a321neo/cockpit/lights/navlogo_toggle","Toggle NAV and LOGO LIGHT")
+LIGHTS_cmd_rwy_turnoff_toggle = sasl.createCommand("a321neo/cockpit/lights/rwy_turnoff_toggle","Toggle RWY TURN OFF LIGHT")
+
+LIGHTS_cmd_compass_toggle = sasl.createCommand("a321neo/cockpit/lights/compass_toggle","Toggle COMPASS LIGHT")
+LIGHTS_cmd_emer_exit_up = sasl.createCommand("a321neo/cockpit/lights/emer_exit_up","Move up emer_exit lever")
+LIGHTS_cmd_emer_exit_dn = sasl.createCommand("a321neo/cockpit/lights/emer_exit_dn","Move down emer_exit lever")
+
+-- SIGNS
+MISC_cmd_seatbelts_up = sasl.createCommand("a321neo/cockpit/misc/seatbelts_up","")
+MISC_cmd_seatbelts_dn = sasl.createCommand("a321neo/cockpit/misc/seatbelts_dn","")
+MISC_cmd_noped_up = sasl.createCommand("a321neo/cockpit/misc/noped_up","")
+MISC_cmd_noped_dn = sasl.createCommand("a321neo/cockpit/misc/noped_dn","")
 
