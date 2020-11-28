@@ -326,10 +326,23 @@ function perf_measure_stop(name)
     if not debug_performance_measure then
         return
     end
+
     Perf_array[name].last_delta = sasl.getElapsedSeconds(Perf_array[name].timer)
+
     if Perf_array[name].last_delta > Perf_array[name].peak then
         Perf_array[name].peak = Perf_array[name].last_delta
     end 
+
+    if Perf_array[name].mov_avg_n == nil or Perf_array[name].mov_avg_n == 50 then
+        Perf_array[name].mov_avg = Perf_array[name].mov_avg_temp or 0
+        Perf_array[name].mov_avg_temp = 0
+        Perf_array[name].mov_avg_n = 0
+    end
+
+    Perf_array[name].mov_avg_temp = Perf_array[name].mov_avg_temp + Perf_array[name].last_delta
+    Perf_array[name].mov_avg_n = Perf_array[name].mov_avg_n + 1
+
+
     sasl.pauseTimer(Perf_array[name].timer)
 end
 

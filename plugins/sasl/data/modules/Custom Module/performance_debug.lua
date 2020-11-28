@@ -22,6 +22,7 @@ include('constants.lua')
 
 local last_update = 0
 local UPDATE_FREQ_SEC = 0.5
+local delta_time = 0
 
 function draw()
 
@@ -40,15 +41,19 @@ function draw()
     sasl.gl.drawText(Font_AirbusDUL, 250, size[2]-80, "COST(ms)", 14, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)            
     sasl.gl.drawText(Font_AirbusDUL, 330, size[2]-80, "PEAK(ms)", 14, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)            
     
+    if delta_time == 0 or get(TIME) - last_update > 1 then
+        delta_time = get(DELTA_TIME)
+        last_update = get(TIME)
+    end
    
     for label,x in pairs(Perf_array) do
         local y = size[2]-110-num*15
         sasl.gl.drawText(Font_AirbusDUL, 10, y, label, 12, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
         
         if x.last_delta ~= nil then 
-            local sec = x.last_delta
+            local sec = x.mov_avg / 50
             local ms = Round_fill(sec*1000, 2)
-            local frames_num = 1/(get(DELTA_TIME) - sec) - 1/get(DELTA_TIME)
+            local frames_num = 1/(delta_time - sec) - (1/delta_time)
             local frames = Round_fill(frames_num, 1)
             local ms_peak = Round_fill(x.peak*1000, 2)
 
