@@ -160,8 +160,8 @@ PB = {
         vent_cab_fans= {bus = LIGHT_BUS_DC},
         
         -- ENG
-        eng_main_start_1 = {bus = LIGHT_BUS_DC},
-        eng_main_start_2 = {bus = LIGHT_BUS_DC},
+        eng_man_start_1 = {bus = LIGHT_BUS_DC},
+        eng_man_start_2 = {bus = LIGHT_BUS_DC},
         eng_dual_cooling = {bus = LIGHT_BUS_DC},
         
         -- Upper level

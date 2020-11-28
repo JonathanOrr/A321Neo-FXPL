@@ -786,8 +786,8 @@ local function update_auto_start()
 end
 
 local function update_buttons_datarefs()
-    pb_set(PB.ovhd.eng_main_start_1, eng_manual_switch[1])
-    pb_set(PB.ovhd.eng_main_start_2, eng_manual_switch[2])
+    pb_set(PB.ovhd.eng_man_start_1, eng_manual_switch[1])
+    pb_set(PB.ovhd.eng_man_start_2, eng_manual_switch[2])
     pb_set(PB.ovhd.eng_dual_cooling, dual_cooling_switch)
 
     set(Eng_Dual_Cooling, dual_cooling_switch and 1 or 0)
