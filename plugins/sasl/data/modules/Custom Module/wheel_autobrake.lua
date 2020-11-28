@@ -54,9 +54,9 @@ end
 
 local function update_ab_datarefs()
     
-	set(Autobrakes_lo_button_state,  get(Wheel_autobrake_status) == AUTOBRK_LOW and 1 or 0) --00
-	set(Autobrakes_med_button_state, get(Wheel_autobrake_status) == AUTOBRK_MED and 1 or 0)--00
-	set(Autobrakes_max_button_state, get(Wheel_autobrake_status) == AUTOBRK_MAX and 1 or 0)--00
+    pb_set(PB.mip.autobrake_LO,  get(Wheel_autobrake_status) == AUTOBRK_LOW, false)
+    pb_set(PB.mip.autobrake_MED, get(Wheel_autobrake_status) == AUTOBRK_MED, false)
+    pb_set(PB.mip.autobrake_MAX, get(Wheel_autobrake_status) == AUTOBRK_MAX, false)
 
 end
 

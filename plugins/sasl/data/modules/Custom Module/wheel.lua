@@ -126,6 +126,16 @@ local function update_pb_lights()
 	--update Brake fan button states follwing 00, 01, 10, 11
 	
 	pb_set(PB.mip.brk_fan, get(Brakes_fan) == 1, get(Left_brakes_temp) > 400 or get(Right_brakes_temp) > 400)
+
+	if is_lgciu_1_working then
+	    pb_set(PB.mip.ldg_gear_C, get(Front_gear_deployment) == 1, get(Front_gear_deployment) ~= get(Gear_handle))
+	    pb_set(PB.mip.ldg_gear_L, get(Left_gear_deployment) == 1, get(Left_gear_deployment) ~= get(Gear_handle))
+	    pb_set(PB.mip.ldg_gear_R, get(Right_gear_deployment) == 1, get(Right_gear_deployment) ~= get(Gear_handle))
+	else
+	    pb_set(PB.mip.ldg_gear_C, false, false)
+	    pb_set(PB.mip.ldg_gear_L, false, false)
+	    pb_set(PB.mip.ldg_gear_R, false, false)
+    end
 	
 end
 

@@ -324,11 +324,11 @@ local function update_right_list()
     end
     
 
-    if get(Autobrakes_sim) == 2 then
+    if get(Wheel_autobrake_status) == 1 then
         list_right:put(COL_INDICATION, "AUTO BRK LO")
-    elseif get(Autobrakes_sim) == 4 then
+    elseif get(Wheel_autobrake_status) == 2 then
         list_right:put(COL_INDICATION, "AUTO BRK MED")
-    elseif get(Autobrakes_sim) == 0 then
+    elseif get(Wheel_autobrake_status) == 3 then
         list_right:put(COL_INDICATION, "AUTO BRK MAX")
     end
 

@@ -351,9 +351,11 @@ Out_flow_valve_ratio = globalProperty("sim/cockpit2/pressurization/indicators/ou
 Weather_curr_press_sea_level = globalProperty("sim/weather/barometer_sealevel_inhg")
 Weather_curr_press_flight_level = globalProperty("sim/weather/barometer_current_inhg")
 Override_pressurization = globalProperty("sim/operation/override/override_pressurization")
+Override_oxygen = globalProperty("sim/operation/override/override_oxygen_system")
 Press_safety_valve_pos = createGlobalPropertyi("a321neo/dynamics/pressurization/safety_valve_pos", 0, false, true, false) -- 0 closed, 1 open
 Press_outflow_valve_flow = createGlobalPropertyf("a321neo/dynamics/pressurization/outflow_valve_flow", 0, false, true, false)
 Press_outflow_valve_press = createGlobalPropertyf("a321neo/dynamics/pressurization/outflow_valve_press", 0, false, true, false)
+Oxygen_pilot_feeling = globalProperty("sim/cockpit2/oxygen/indicators/pilot_felt_altitude_ft")
 
 -- The folloing datarefs are used for debug only
 Press_controller_output_vs  = createGlobalPropertyf("a321neo/dynamics/pressurization/cabin_vs_ctr", 0, false, true, false)
@@ -394,7 +396,6 @@ Stby_IAS     = globalProperty("sim/cockpit2/gauges/indicators/airspeed_kts_stby"
 Stby_Baro    = globalProperty("sim/cockpit2/gauges/actuators/barometer_setting_in_hg_stby") -- Baro settings for STBY
 
 --gear
-Autobrakes_sim = globalProperty("sim/cockpit2/switches/auto_brake_level")--0RTO, 1off, 2, 3, 4, 5
 Gear_handle = globalProperty("sim/cockpit2/controls/gear_handle_down")
 Front_gear_deployment = globalProperty("sim/flightmodel2/gear/deploy_ratio[0]")
 Left_gear_deployment = globalProperty("sim/flightmodel2/gear/deploy_ratio[1]")

@@ -369,7 +369,7 @@ FIRE_cmd_push_ENG_2= sasl.createCommand("a321neo/cockpit/fire/eng_2_push","Press
 FIRE_cmd_push_APU  = sasl.createCommand("a321neo/cockpit/fire/apu_push","Press APU big red button")
 
 -- MAINTENANCE Panel
-MNTN_OXY_RESET   = sasl.createCommand("a321neo/cockpit/mntn/oxy_tmr_reset","Press OXY TMR RESET")
+MNTN_OXY_reset   = sasl.createCommand("a321neo/cockpit/mntn/oxy_tmr_reset","Press OXY TMR RESET")
 MNTN_SVCE_INT    = sasl.createCommand("a321neo/cockpit/mntn/svce_int","Press SVCE INT")
 MNTN_AVIO_LIGHT  = sasl.createCommand("a321neo/cockpit/mntn/avionics_light","Press AVIONICS LIGHT")
 MNTN_HYD_BLUE_override= sasl.createCommand("a321neo/cockpit/mntn/hyd_B_override","Press HYD B override")

@@ -19,12 +19,6 @@
 --ALL DATAREFS USED IN THE COCKPIT, e.g DIALS, KNOBS, BUTTONS--
 --PUSH BUTTON STATES-- e.g the lights on the buttons(blank, on, fault, fault on) these datarefs should follow the 00, 01, 10, 11 principle
 
---wheel
-Brake_fan_button_state = createGlobalPropertyi("a321neo/cockpit/wheel/brake_fan_button_state", 0, false, true, false)--blank, on, hot, hot on
-Autobrakes_lo_button_state = createGlobalPropertyi("a321neo/cockpit/wheel/autobrakes_lo_button_state", 0, false, true, false)--blank, on, decel(should not happen), decel on
-Autobrakes_med_button_state = createGlobalPropertyi("a321neo/cockpit/wheel/autobrakes_med_button_state", 0, false, true, false)--blank, on, decel(should not happen), decel on
-Autobrakes_max_button_state = createGlobalPropertyi("a321neo/cockpit/wheel/autobrakes_max_button_state", 0, false, true, false)--blank, on, decel(should not happen), decel on
-
 --FBW
 ELAC_1_button_state = createGlobalPropertyi("a321neo/cockpit/FBW/elac_1_button_state", 0, false, true, false) --00: No lights, 01: [OFF], 10: FAULT, 11 [OFF] + FAULT
 ELAC_2_button_state = createGlobalPropertyi("a321neo/cockpit/FBW/elac_2_button_state", 0, false, true, false) --00: No lights, 01: [OFF], 10: FAULT, 11 [OFF] + FAULT
