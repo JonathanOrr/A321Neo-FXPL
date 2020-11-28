@@ -246,7 +246,7 @@ P _gear/1/_lonE -6.0
 P _gear/1/_lonN -6.0
 P _gear/1/_lonR 0.0
 P _gear/1/_scon 83991.070312500
-P _gear/1/_stat_def 1.381937623
+P _gear/1/_stat_def 1.381937742
 P _gear/1/_steerdeg_hispeed 0.0
 P _gear/1/_steerdeg_lospeed 0.0
 P _gear/1/_strut_comp 0.400000006
@@ -280,7 +280,7 @@ P _gear/2/_lonE -6.0
 P _gear/2/_lonN -6.0
 P _gear/2/_lonR 0.0
 P _gear/2/_scon 83991.070312500
-P _gear/2/_stat_def 1.381937623
+P _gear/2/_stat_def 1.381937742
 P _gear/2/_steerdeg_hispeed 0.0
 P _gear/2/_steerdeg_lospeed 0.0
 P _gear/2/_strut_comp 0.400000006
@@ -54867,12 +54867,13 @@ GROUP ECAM lower du
   GROUP ECAM DOOR
     SHOW_EQUAL 9.000000 a321neo/cockpit/ecam/page_num
     LOCKED
-    GROUP_OPEN
+    HIDE
     gen_rotary door bgd
       POS 3637.000000 734.000000
       IMAGE MIP/ecam lower du/DOOR/Background
       DATAREF 
       LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -54893,6 +54894,7 @@ GROUP ECAM lower du
       IMAGE MIP/ecam lower du/DOOR/static doors
       DATAREF 
       LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -54913,6 +54915,7 @@ GROUP ECAM lower du
       IMAGE MIP/ecam lower du/DOOR/cabin left
       DATAREF a321neo/dynamics/door/door_1_l_rat
       LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 1.000000 0.000000 1.000000
@@ -54934,6 +54937,7 @@ GROUP ECAM lower du
       IMAGE MIP/ecam lower du/DOOR/cabin left
       DATAREF a321neo/dynamics/door/door_3_l_rat
       LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 1.000000 0.000000 1.000000
@@ -54955,6 +54959,7 @@ GROUP ECAM lower du
       IMAGE MIP/ecam lower du/DOOR/cabin right
       DATAREF a321neo/dynamics/door/door_1_r_rat
       LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 1.000000 0.000000 1.000000
@@ -54976,6 +54981,7 @@ GROUP ECAM lower du
       IMAGE MIP/ecam lower du/DOOR/cabin right
       DATAREF a321neo/dynamics/door/door_3_r_rat
       LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 1.000000 0.000000 1.000000
@@ -54997,6 +55003,7 @@ GROUP ECAM lower du
       IMAGE MIP/ecam lower du/DOOR/cargo
       DATAREF a321neo/dynamics/door/cargo_1_rat
       LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 1.000000 0.000000 1.000000
@@ -55018,6 +55025,7 @@ GROUP ECAM lower du
       IMAGE MIP/ecam lower du/DOOR/cargo
       DATAREF a321neo/dynamics/door/cargo_2_rat
       LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 1.000000 0.000000 1.000000
@@ -55039,6 +55047,7 @@ GROUP ECAM lower du
       IMAGE MIP/ecam lower du/DOOR/Arrow
       DATAREF sim/cockpit2/pressurization/actuators/cabin_vvi_fpm
       SIZE 0.900000
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 99999.000000 0.000000 1.000000
@@ -55858,13 +55867,12 @@ GROUP ECAM lower du
   GROUP ECAM WHEEL
     SHOW_EQUAL 10.000000 a321neo/cockpit/ecam/page_num
     LOCKED
-    HIDE
+    GROUP_OPEN
     gen_rotary wheel bgd
       POS 3637.000000 733.000000
       IMAGE MIP/ecam lower du/WHEEL/WHEEL
       DATAREF 
       LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -55885,7 +55893,6 @@ GROUP ECAM lower du
       IMAGE MIP/ecam lower du/WHEEL/leftnosegeardoor
       DATAREF sim/aircraft/parts/acf_gear_deploy[0]
       LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 1.000000 1.000000
@@ -55908,7 +55915,6 @@ GROUP ECAM lower du
       IMAGE MIP/ecam lower du/WHEEL/nosegeardoor
       DATAREF sim/aircraft/parts/acf_gear_deploy[0]
       LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -55931,7 +55937,6 @@ GROUP ECAM lower du
       IMAGE MIP/ecam lower du/WHEEL/geardoor
       DATAREF sim/aircraft/parts/acf_gear_deploy[1]
       LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 2.000000 1.000000
@@ -55954,7 +55959,6 @@ GROUP ECAM lower du
       IMAGE MIP/ecam lower du/WHEEL/rightgeardoor
       DATAREF sim/aircraft/parts/acf_gear_deploy[2]
       LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 2.000000 1.000000
@@ -55977,7 +55981,6 @@ GROUP ECAM lower du
       IMAGE MIP/ecam lower du/WHEEL/gear
       DATAREF sim/aircraft/parts/acf_gear_deploy[0]
       LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -56000,7 +56003,6 @@ GROUP ECAM lower du
       IMAGE MIP/ecam lower du/WHEEL/gear
       DATAREF sim/aircraft/parts/acf_gear_deploy[1]
       LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -56023,7 +56025,6 @@ GROUP ECAM lower du
       IMAGE MIP/ecam lower du/WHEEL/gear
       DATAREF sim/aircraft/parts/acf_gear_deploy[2]
       LOCKED
-      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -56042,14 +56043,11 @@ GROUP ECAM lower du
       CLICK_DY 0
 
     GROUP Spoilers
-      LOCKED
-      HIDE
+      GROUP_OPEN
       gen_rotary lspol 1 2
-        POS 3582.000000 1061.000000
+        POS 3582.000000 1113.000000
         IMAGE MIP/ecam lower du/FCTL/Tracks/1
         DATAREF a321neo/dynamics/FBW/surface_availability/l_spoiler_1_avail
-        LOCKED
-        HIDE
         LIGHT_MODE GLASS_AUTO
         LIGHT_RHEOSTAT 0
         KEY_FRAME -1.000000 0.000000 1.000000
@@ -56067,11 +56065,9 @@ GROUP ECAM lower du
         CLICK_DY 0
 
       gen_rotary rspol 1 2
-        POS 3694.000000 1061.000000
+        POS 3694.000000 1113.000000
         IMAGE MIP/ecam lower du/FCTL/Tracks/1
         DATAREF a321neo/dynamics/FBW/surface_availability/r_spoiler_1_avail
-        LOCKED
-        HIDE
         LIGHT_MODE GLASS_AUTO
         LIGHT_RHEOSTAT 0
         KEY_FRAME -1.000000 0.000000 1.000000
@@ -56089,11 +56085,9 @@ GROUP ECAM lower du
         CLICK_DY 0
 
       gen_rotary lspol 2 2
-        POS 3526.000000 1052.000000
+        POS 3526.000000 1104.000000
         IMAGE MIP/ecam lower du/FCTL/Tracks/2
         DATAREF a321neo/dynamics/FBW/surface_availability/l_spoiler_2_avail
-        LOCKED
-        HIDE
         LIGHT_MODE GLASS_AUTO
         LIGHT_RHEOSTAT 0
         KEY_FRAME -1.000000 0.000000 1.000000
@@ -56111,11 +56105,9 @@ GROUP ECAM lower du
         CLICK_DY 0
 
       gen_rotary rspol 2 2
-        POS 3750.000000 1052.000000
+        POS 3750.000000 1104.000000
         IMAGE MIP/ecam lower du/FCTL/Tracks/2
         DATAREF a321neo/dynamics/FBW/surface_availability/r_spoiler_2_avail
-        LOCKED
-        HIDE
         LIGHT_MODE GLASS_AUTO
         LIGHT_RHEOSTAT 0
         KEY_FRAME -1.000000 0.000000 1.000000
@@ -56133,11 +56125,9 @@ GROUP ECAM lower du
         CLICK_DY 0
 
       gen_rotary lspol 3 2
-        POS 3470.000000 1043.000000
+        POS 3470.000000 1095.000000
         IMAGE MIP/ecam lower du/FCTL/Tracks/3
         DATAREF a321neo/dynamics/FBW/surface_availability/l_spoiler_3_avail
-        LOCKED
-        HIDE
         LIGHT_MODE GLASS_AUTO
         LIGHT_RHEOSTAT 0
         KEY_FRAME -1.000000 0.000000 1.000000
@@ -56155,11 +56145,9 @@ GROUP ECAM lower du
         CLICK_DY 0
 
       gen_rotary rspol 3 2
-        POS 3807.000000 1043.000000
+        POS 3807.000000 1095.000000
         IMAGE MIP/ecam lower du/FCTL/Tracks/3
         DATAREF a321neo/dynamics/FBW/surface_availability/r_spoiler_3_avail
-        LOCKED
-        HIDE
         LIGHT_MODE GLASS_AUTO
         LIGHT_RHEOSTAT 0
         KEY_FRAME -1.000000 0.000000 1.000000
@@ -56177,11 +56165,9 @@ GROUP ECAM lower du
         CLICK_DY 0
 
       gen_rotary lspol 4 2
-        POS 3414.000000 1033.000000
+        POS 3414.000000 1085.000000
         IMAGE MIP/ecam lower du/FCTL/Tracks/4
         DATAREF a321neo/dynamics/FBW/surface_availability/l_spoiler_4_avail
-        LOCKED
-        HIDE
         LIGHT_MODE GLASS_AUTO
         LIGHT_RHEOSTAT 0
         KEY_FRAME -1.000000 0.000000 1.000000
@@ -56199,11 +56185,9 @@ GROUP ECAM lower du
         CLICK_DY 0
 
       gen_rotary rspol 4 2
-        POS 3862.000000 1033.000000
+        POS 3862.000000 1085.000000
         IMAGE MIP/ecam lower du/FCTL/Tracks/4
         DATAREF a321neo/dynamics/FBW/surface_availability/r_spoiler_4_avail
-        LOCKED
-        HIDE
         LIGHT_MODE GLASS_AUTO
         LIGHT_RHEOSTAT 0
         KEY_FRAME -1.000000 0.000000 1.000000
@@ -56221,11 +56205,9 @@ GROUP ECAM lower du
         CLICK_DY 0
 
       gen_rotary lspol 5 2
-        POS 3357.000000 1024.000000
+        POS 3357.000000 1076.000000
         IMAGE MIP/ecam lower du/FCTL/Tracks/5
         DATAREF a321neo/dynamics/FBW/surface_availability/l_spoiler_5_avail
-        LOCKED
-        HIDE
         LIGHT_MODE GLASS_AUTO
         LIGHT_RHEOSTAT 0
         KEY_FRAME -1.000000 0.000000 1.000000
@@ -56243,11 +56225,9 @@ GROUP ECAM lower du
         CLICK_DY 0
 
       gen_rotary rspol 5 2
-        POS 3918.000000 1024.000000
+        POS 3918.000000 1076.000000
         IMAGE MIP/ecam lower du/FCTL/Tracks/5
         DATAREF a321neo/dynamics/FBW/surface_availability/r_spoiler_5_avail
-        LOCKED
-        HIDE
         LIGHT_MODE GLASS_AUTO
         LIGHT_RHEOSTAT 0
         KEY_FRAME -1.000000 0.000000 1.000000
@@ -56265,12 +56245,10 @@ GROUP ECAM lower du
         CLICK_DY 0
 
       gen_rotary l_spoiler1 2
-        POS 3582.000000 1074.000000
+        POS 3582.000000 1126.000000
         IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
         DATAREF a321neo/dynamics/FBW/surface_availability/l_spoiler_1_avail
         SHOW_GREATER 2.500000 sim/flightmodel/controls/wing2l_spo1def[0]
-        LOCKED
-        HIDE
         LIGHT_MODE GLASS_AUTO
         LIGHT_RHEOSTAT 0
         KEY_FRAME -1.000000 0.000000 1.000000
@@ -56288,12 +56266,10 @@ GROUP ECAM lower du
         CLICK_DY 0
 
       gen_rotary l_spoiler2 2
-        POS 3526.000000 1065.000000
+        POS 3526.000000 1117.000000
         IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
         DATAREF a321neo/dynamics/FBW/surface_availability/l_spoiler_2_avail[4]
         SHOW_GREATER 2.500000 sim/flightmodel2/wing/speedbrake1_deg[4]
-        LOCKED
-        HIDE
         LIGHT_MODE GLASS_AUTO
         LIGHT_RHEOSTAT 0
         KEY_FRAME -1.000000 0.000000 1.000000
@@ -56311,12 +56287,10 @@ GROUP ECAM lower du
         CLICK_DY 0
 
       gen_rotary l_spoiler3 2
-        POS 3470.000000 1056.000000
+        POS 3470.000000 1108.000000
         IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
         DATAREF a321neo/dynamics/FBW/surface_availability/l_spoiler_3_avail[4]
         SHOW_GREATER 2.500000 sim/flightmodel2/wing/speedbrake2_deg[4]
-        LOCKED
-        HIDE
         LIGHT_MODE GLASS_AUTO
         LIGHT_RHEOSTAT 0
         KEY_FRAME -1.000000 0.000000 1.000000
@@ -56334,12 +56308,10 @@ GROUP ECAM lower du
         CLICK_DY 0
 
       gen_rotary l_spoiler4 2
-        POS 3414.000000 1046.000000
+        POS 3414.000000 1098.000000
         IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
         DATAREF a321neo/dynamics/FBW/surface_availability/l_spoiler_4_avail
         SHOW_GREATER 2.500000 sim/flightmodel/controls/wing3l_spo1def[0]
-        LOCKED
-        HIDE
         LIGHT_MODE GLASS_AUTO
         LIGHT_RHEOSTAT 0
         KEY_FRAME -1.000000 0.000000 1.000000
@@ -56357,12 +56329,10 @@ GROUP ECAM lower du
         CLICK_DY 0
 
       gen_rotary l_spoiler5 2
-        POS 3357.000000 1037.000000
+        POS 3357.000000 1089.000000
         IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
         DATAREF a321neo/dynamics/FBW/surface_availability/l_spoiler_5_avail
         SHOW_GREATER 2.500000 sim/flightmodel/controls/wing3l_spo2def[0]
-        LOCKED
-        HIDE
         LIGHT_MODE GLASS_AUTO
         LIGHT_RHEOSTAT 0
         KEY_FRAME -1.000000 0.000000 1.000000
@@ -56380,12 +56350,10 @@ GROUP ECAM lower du
         CLICK_DY 0
 
       gen_rotary r_spoiler1 2
-        POS 3694.000000 1074.000000
+        POS 3694.000000 1126.000000
         IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
         DATAREF a321neo/dynamics/FBW/surface_availability/r_spoiler_1_avail
         SHOW_GREATER 2.500000 sim/flightmodel/controls/wing2r_spo1def[0]
-        LOCKED
-        HIDE
         LIGHT_MODE GLASS_AUTO
         LIGHT_RHEOSTAT 0
         KEY_FRAME -1.000000 0.000000 1.000000
@@ -56403,12 +56371,10 @@ GROUP ECAM lower du
         CLICK_DY 0
 
       gen_rotary r_spoiler2 2
-        POS 3750.000000 1065.000000
+        POS 3750.000000 1117.000000
         IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
         DATAREF a321neo/dynamics/FBW/surface_availability/r_spoiler_2_avail[5]
         SHOW_GREATER 2.500000 sim/flightmodel2/wing/speedbrake1_deg[5]
-        LOCKED
-        HIDE
         LIGHT_MODE GLASS_AUTO
         LIGHT_RHEOSTAT 0
         KEY_FRAME -1.000000 0.000000 1.000000
@@ -56426,12 +56392,10 @@ GROUP ECAM lower du
         CLICK_DY 0
 
       gen_rotary r_spoiler3 2
-        POS 3807.000000 1056.000000
+        POS 3807.000000 1108.000000
         IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
         DATAREF a321neo/dynamics/FBW/surface_availability/r_spoiler_3_avail[5]
         SHOW_GREATER 2.500000 sim/flightmodel2/wing/speedbrake2_deg[5]
-        LOCKED
-        HIDE
         LIGHT_MODE GLASS_AUTO
         LIGHT_RHEOSTAT 0
         KEY_FRAME -1.000000 0.000000 1.000000
@@ -56449,12 +56413,10 @@ GROUP ECAM lower du
         CLICK_DY 0
 
       gen_rotary r_spoiler4 2
-        POS 3862.000000 1046.000000
+        POS 3862.000000 1098.000000
         IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
         DATAREF a321neo/dynamics/FBW/surface_availability/r_spoiler_4_avail
         SHOW_GREATER 2.500000 sim/flightmodel/controls/wing3r_spo1def[0]
-        LOCKED
-        HIDE
         LIGHT_MODE GLASS_AUTO
         LIGHT_RHEOSTAT 0
         KEY_FRAME -1.000000 0.000000 1.000000
@@ -56472,12 +56434,10 @@ GROUP ECAM lower du
         CLICK_DY 0
 
       gen_rotary r_spoiler5 2
-        POS 3919.000000 1037.000000
+        POS 3919.000000 1089.000000
         IMAGE MIP/ecam lower du/FCTL/SpoilerArrow
         DATAREF a321neo/dynamics/FBW/surface_availability/r_spoiler_5_avail
         SHOW_GREATER 2.500000 sim/flightmodel/controls/wing3r_spo2def[0]
-        LOCKED
-        HIDE
         LIGHT_MODE GLASS_AUTO
         LIGHT_RHEOSTAT 0
         KEY_FRAME -1.000000 0.000000 1.000000
