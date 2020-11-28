@@ -1,115 +1,12 @@
-{4d99ca87-12b8-4cf7-b458-462ac94fbd95} event:/Cockpit/Effects/Avionics
-{6e8b894c-cd81-46fb-b8c6-57fb7075d440} event:/Cockpit/Effects/AvionicsCBus
-{2a0a8299-7f44-428d-8ccf-8f31c503c5d6} event:/Cockpit/Effects/AvionicsFan
-{e89b7a5e-4d71-4ef7-a715-3691c1d06a1e} event:/Cockpit/Effects/AvionicsSBus
-{a0f3eff5-657d-467e-b1b7-589ce942c08c} event:/Cockpit/Effects/PacksCab
-{2f57ef2b-72f0-4441-ae75-74db56a21d9e} event:/Cockpit/Effects/PacksCk
-{6422fae6-1e0c-449e-81ad-f35ae57d5cfd} event:/Cockpit/Levers/FlapsLV
-{de10a30b-c72f-48c9-8104-054191d5d942} event:/Cockpit/Levers/GearLV
-{9b10e3cb-23f8-4fd8-84e3-2d49ca43d22f} event:/Cockpit/Levers/PrBrLV
-{14ba33e3-c484-429f-a70d-8876e0566275} event:/Cockpit/Switch/McpBA
-{76b50071-7d40-4c99-9149-5b590f75def8} event:/Cockpit/Switch/McpSA
-{aa7c8ca5-2428-4873-9642-cde5c9fffcc5} event:/Cockpit/Switch/McpSB
-{39d5620e-269b-4cf8-b49a-11b3963d8242} event:/Cockpit/Switch/OvhBA
-{732fb725-ca2b-4a78-afdb-bef843751693} event:/Cockpit/Switch/OvhSw
-{55525046-ad7f-40a8-9339-33bb2b9539a7} event:/Dynamics/ApuInt
-{6b24c4bc-8c87-43c0-b964-5eb09aee54b5} event:/Dynamics/ApuX
-{bcb3175a-b432-41e9-aeed-eb0a147d0839} event:/Dynamics/FlapsDp
-{2891ffa5-06bd-44f7-a210-56f6776b8553} event:/Dynamics/FlapsDpX
-{dc4087b0-15cb-4d39-aa11-a7a61d914b74} event:/Dynamics/FlapsWdL
-{b5901e94-62c6-4695-bf35-9edc685852e9} event:/Dynamics/FlapsWdR
-{6bea1f93-12b6-4a9d-b181-20579ee60e69} event:/Dynamics/GearDpL
-{a0e3148e-c6c3-42b2-a919-0612f67e9450} event:/Dynamics/GearDpR
-{8582464e-e1df-4395-a8b3-2a59b90930f7} event:/Dynamics/GearFDn
-{905ed970-c9d2-4052-8fb0-4d7699b94099} event:/Dynamics/GearFUp
-{4f4ba639-f472-4c7b-ab72-7b9d708dba35} event:/Dynamics/GearWind
-{340e2906-0285-424b-9f18-f9ff56042da4} event:/Dynamics/GRoll
-{1bd04bca-e50a-4ae7-be76-5d013b68c279} event:/Dynamics/GRollb
-{4a5ddb13-06d7-4d88-9ed6-44112b46f2f0} event:/Dynamics/TouchF
-{4c020752-9770-4069-8d7d-2b8ed79c3bcd} event:/Dynamics/TouchFX
-{b1ce2622-30cc-414e-a9b4-83492bf1d070} event:/Dynamics/TouchL
-{08e10511-3ce9-4a02-a45d-4770f8a703b6} event:/Dynamics/TouchLX
-{d88cd341-8d3e-441b-9326-d8dc30efd3dc} event:/Dynamics/TouchR
-{b2af58be-00eb-4922-9e0d-447a1ddc6e0e} event:/Dynamics/TouchRX
-{d63fd688-56dd-4539-aba4-6a5ff762a57b} event:/Engines/NEO/CombL
-{6ee0e4cf-43c3-4060-b69c-b88339cdafc5} event:/Engines/NEO/CombLX
-{1b81b26d-3a42-4c22-a463-d67257604f66} event:/Engines/NEO/CombR
-{54fb71c6-8a1e-4271-9729-2949beb0570f} event:/Engines/NEO/CombRX
-{f6d6ce7c-bbfb-4d86-8675-771c9117e529} event:/Engines/NEO/EngineBLX
-{b67ae269-6440-49b3-85d5-41da4edba731} event:/Engines/NEO/EngineBRX
-{ebd6357e-d3bc-48ac-a04c-f1b7d06e0578} event:/Engines/NEO/EngineL
-{80540733-ae0e-4bd1-9bb8-be63c6481f1f} event:/Engines/NEO/EngineLX
-{ad20f39c-2b6a-4456-b50e-5a96ce233ac2} event:/Engines/NEO/EngineR
-{543a6c61-5598-4f89-b934-6ab1c579f3a3} event:/Engines/NEO/EngineRX
-{46164db5-65be-45f9-8c49-ef5d76544701} event:/Engines/NEO/RevL
-{173100ff-5609-427e-83a8-21785d40a260} event:/Engines/NEO/RevLX
-{605cb127-7a8b-4226-a8ae-0fd3da97b19c} event:/Engines/NEO/RevR
-{a7e15e45-531f-472c-8289-bb0ccaf1a81c} event:/Engines/NEO/RevRX
-{7d231890-38ec-473c-a58a-a6ef26caa6fe} event:/Engines/NEO/ShutL
-{eeeac366-7a54-4e2a-8b01-888ce38c8605} event:/Engines/NEO/ShutLX
-{a47fed9e-5eaf-45b1-bfb3-6592b1eebbf1} event:/Engines/NEO/ShutR
-{66e9d572-9a3f-41e9-9bfc-beb35f21e3f5} event:/Engines/NEO/ShutRX
-{762851bb-79de-494a-80fa-1a8ce1617b4e} event:/Engines/NEO/StartL
-{ece630a2-fda4-46f6-ad5f-d88c2596e03d} event:/Engines/NEO/StartLX
-{30779b33-67be-4a68-b9ce-46a8d7f27ba7} event:/Engines/NEO/StartR
-{d7296969-38db-4471-9b4a-7b61aeb1ad4c} event:/Engines/NEO/StartRX
-{d52a7eff-2cfa-40d3-a45b-ecd69738136e} event:/Warning/10
-{b6d4890d-4a02-4ade-a480-a5dfc5b19c3d} event:/Warning/100
-{638fefb8-fdd8-46e1-8118-51c5cb0497b2} event:/Warning/1000
-{2e5a1189-1538-4976-9bc3-4bfc58bd579e} event:/Warning/20
-{f9034f5c-f967-48e3-bb77-f7fc36bf131b} event:/Warning/200
-{36d0363c-b2f6-4b3e-9645-047309b4700a} event:/Warning/2500
-{d12b056f-81af-446d-bb84-bb4c6bce661f} event:/Warning/30
-{11d5c3cb-ae8f-4c59-b278-6590b4abde77} event:/Warning/300
-{edc5d727-dfa8-49a2-8e65-414bd1be9bc3} event:/Warning/40
-{4e39937c-ce30-469a-ae1c-bbcab210183c} event:/Warning/400
-{a1639898-3844-43bb-9301-5b6f1b4fe1ef} event:/Warning/5
-{a2716c80-560e-4791-8489-9f00d13702fa} event:/Warning/50
-{a01427ce-f85c-4318-ad2e-f476a82127d7} event:/Warning/500
-{8d73feed-ebd5-4ba6-932f-f199ff364ebf} event:/Warning/AltWarning
-{94cb4913-6e3d-4518-9744-f859b3275459} event:/Warning/APoff
-{f810abf1-ba18-474c-b29c-520d8943a274} event:/Warning/DSink
-{3e6b5577-bc72-4db0-af76-fae96762ab4e} event:/Warning/GSlop
-{d575da1d-9835-43dc-b2d4-6bac84bdea65} event:/Warning/OSpeed
-{6ad8b3ca-03b9-442d-b8ac-ead61776f8bd} event:/Warning/Pull
-{ac9341f4-8914-47db-a0d1-26a78e08af31} event:/Warning/Retrd
-{d29c33d1-0f6f-45a3-a4df-064b997c62f1} event:/Warning/Sink
-{3f4adca1-7201-4b20-9e84-97efda106733} event:/Warning/speed
-{066dade2-8847-4560-8269-52d53f2618fa} event:/Warning/Stall
-{37f61d51-2987-4b16-8f6c-8b6a23a17805} event:/Warning/TTerr
-{5c7e168f-b2c9-4c9f-afca-bace1e2d3c56} event:/Warning/TTFlap
-{f607ed58-ae4b-4a0a-a0c4-6b9dcdf4072f} event:/Warning/TTGear
-{faed6fec-e10e-44fc-a264-1d1a479f9d67} event:/Weather/ExtRain
-{41a03b07-e7e9-4698-9911-8de47a1bdb62} event:/Weather/IntRain
-{579511b4-72d7-4188-aa8b-aa0212165aa0} event:/Weather/WindA
-{831167ae-92e1-4a3a-95e8-4157c905b31c} event:/Weather/WindAL
-{4028f185-c82b-4160-a49c-d07baebf51aa} event:/Weather/WindAR
-{c0152342-e0e2-4dd2-9431-333b33dcc16f} event:/Weather/WindB
+{5637522b-12b2-4a0f-88cd-437990804430} event:/CockpitMechanical/ThrLvrClick
 {9f08114d-36ec-44cc-b8bf-b2babda09f9e} bus:/
 {7f7c05a4-e05a-4d44-94fe-d4691147a9b7} bus:/Master
 {e3492bec-f854-4fbb-b2bc-23586269032e} bus:/Master/Copilot
-{b6c156f1-9861-405c-a622-92b2ab8010a7} bus:/Master/Environment
-{92d3de3b-787e-4e00-9555-de3501a5b68c} bus:/Master/Environment/EnvExc
-{1403c01c-010f-4edd-aaf1-3509cfd23672} bus:/Master/Environment/EnvExt
-{a3e5f6fd-15f2-423f-99e0-20cf2aaec7e9} bus:/Master/Environment/EnvInt
 {a5a85a81-afd5-4425-9dc2-6e50f7776e6a} bus:/Master/Exterior Processed
 {06db5351-0b2f-4648-b97a-a33b40a00e11} bus:/Master/Exterior Processed/Aircraft
+{b6c156f1-9861-405c-a622-92b2ab8010a7} bus:/Master/Exterior Processed/Environment
 {8dbbc9d7-a954-4ed0-b1f1-f8111b03cbd1} bus:/Master/Exterior Unprocessed
-{f9349142-13e2-4506-ad0e-d099b12f1dc3} bus:/Master/Exterior Unprocessed/LBEng
-{3cd3fe6c-062f-40ed-b5e5-3fd7eb2e3b09} bus:/Master/Exterior Unprocessed/LFEng
-{ee3b264c-45ac-499d-aeba-b6c0fc7120f6} bus:/Master/Exterior Unprocessed/RBEng
-{d1a14acd-c2a1-484c-badf-812bb46df312} bus:/Master/Exterior Unprocessed/RFEng
 {751f5066-4651-4afb-a410-4cb9db0894c9} bus:/Master/Interior
 {d8526059-b27c-4eae-9b14-a1ee1cb3dfa1} bus:/Master/Radios
 {77575f3b-b9cd-4bff-9056-637cff744a14} bus:/Master/UI
-{4e32a6b8-2474-42e1-9d4b-1e1ba8976c30} snapshot:/No ExtR
-{9c750ac4-01ff-4264-8738-ae97b788e1d6} snapshot:/No IntR
-{5cf4b926-2e5f-4952-8709-cf63ab13ce00} snapshot:/FLDr
-{f6bacc7e-c298-4792-9413-7e59c67c2ba3} snapshot:/Delay
-{adbc06f7-ec37-49a3-9aa5-f52424b51655} snapshot:/FRDr
-{48d6d0d2-9cc3-4f7f-8199-acbbc9e5fdae} snapshot:/BLDr
-{93b2cf89-a5a4-4c2f-bfe3-9c00a4fbdb9e} snapshot:/BRDr
-{8589319b-126f-4622-9a3a-9f2d3a9363b2} bank:/Dynamics
-{1b773861-da62-4c9f-b035-feca386f8d31} bank:/PWEngines
-{585a0ec7-a2fa-4693-9c00-cdf519264d0e} bank:/Weather
-{5aafc3e3-9880-4a37-84d2-3a9509ed3c17} bank:/Master Bank
+{9093ea6c-5d0d-441f-bf32-185dad4e3a17} bank:/Master Bank
