@@ -363,7 +363,7 @@ local function update_oil_stuffs()
     -- ENG 1 - TEMP
     if get(Engine_1_avail) == 1 then
         local n2_value = get(Eng_1_N2)
-        local temp = Math_rescale(60, 65, 120, OIL_TEMP_MAX_TRAN, n2_value) + math.random()
+        local temp = Math_rescale(60, 65, 120, OIL_TEMP_MAX_CONT, n2_value) + math.random() * 5
         Set_dataref_linear_anim(Eng_1_OIL_temp, temp, -50, 200, 1)
     else
         -- During startup
@@ -387,7 +387,7 @@ local function update_oil_stuffs()
     -- ENG 2 - TEMP
     if get(Engine_2_avail) == 1 then
         local n2_value = get(Eng_2_N2)
-        local temp = Math_rescale(60, 65, 120, OIL_TEMP_MAX_TRAN, n2_value) + math.random()
+        local temp = Math_rescale(60, 65, 120, OIL_TEMP_MAX_CONT, n2_value) + math.random() * 5
         Set_dataref_linear_anim(Eng_2_OIL_temp, temp, -50, 200, 1)
     else
         -- During startup

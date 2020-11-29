@@ -18,6 +18,14 @@
 
 include('constants.lua')
 
+PARAM_DELAY    = 0.15 -- Time to filter out the parameters (they are updated every PARAM_DELAY seconds)
+
+local params = {
+    cabin_vs       = 0,
+    oxygen_psi     = 0,
+    last_update    = 0
+}
+
 local function get_color_green_blinking()
     if math.floor(get(TIME)) % 2 == 0 then
         return ECAM_GREEN
@@ -27,7 +35,15 @@ local function get_color_green_blinking()
 end
 
 local function draw_cabin_vs()
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+327, size[2]-184, math.floor(get(Cabin_vs)), 36, false, false, TEXT_ALIGN_RIGHT, oxy_color)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+327, size[2]-184, math.floor(params.cabin_vs), 36, false, false, TEXT_ALIGN_RIGHT, oxy_color)
+end
+
+local function update_param()
+    if get(TIME) - params.last_update > PARAM_DELAY then
+        params.cabin_vs       = get(Cabin_vs)
+        params.oxygen_psi     = get(Oxygen_ckpt_psi)
+        params.last_update    = get(TIME)
+    end
 end
 
 local function draw_oxygen()
@@ -41,9 +57,9 @@ local function draw_oxygen()
     elseif get(Oxygen_ckpt_psi) < 600 then
         oxy_color = get_color_green_blinking()
     end
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+300, size[2]-85, math.floor(get(Oxygen_ckpt_psi)), 36, false, false, TEXT_ALIGN_RIGHT, oxy_color)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+300, size[2]-85, math.floor(params.oxygen_psi), 36, false, false, TEXT_ALIGN_RIGHT, oxy_color)
 
-    if get(Oxygen_ckpt_psi) < 1000 and get(All_on_ground) == 1 then
+    if params.oxygen_psi < 1000 and get(All_on_ground) == 1 then
         sasl.gl.drawWideLine(size[1]/2+210, size[2]-90, size[1]/2+305, size[2]-90, 3, ECAM_ORANGE)
         sasl.gl.drawWideLine(size[1]/2+305, size[2]-60, size[1]/2+305, size[2]-90, 3, ECAM_ORANGE)
     end
@@ -54,6 +70,7 @@ local function draw_oxygen()
 end
 
 function draw_door_page()
+    update_param()
     draw_oxygen()
     draw_cabin_vs()
 end

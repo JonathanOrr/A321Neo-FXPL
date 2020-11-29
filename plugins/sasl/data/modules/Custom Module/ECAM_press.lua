@@ -19,6 +19,16 @@
 size = {900, 900}
 include('constants.lua')
 
+PARAM_DELAY    = 0.15 -- Time to filter out the parameters (they are updated every PARAM_DELAY seconds)
+
+local params = {
+    delta_psi      = 0,
+    cabin_vs       = 0,
+    cabin_alt      = 0,
+    overflow_valve = 0,
+    last_update    = 0
+}
+
 local function draw_valve_inlet(pos, failed)
 
     local length = 58
@@ -60,27 +70,27 @@ end
 local function draw_press_info()
     --pressure info
     local color_psi = ECAM_GREEN
-    if get(Cabin_delta_psi) < -0.4 or get(Cabin_delta_psi) > 8.5 then
+    if params.delta_psi < -0.4 or params.delta_psi > 8.5 then
         color_psi = ECAM_ORANGE
-    elseif get(Cabin_delta_psi) > 1.5 and get(EWD_flight_phase) == PHASE_FINAL then
+    elseif params.delta_psi > 1.5 and get(EWD_flight_phase) == PHASE_FINAL then
         color_psi = get_color_green_blinking()
     end
 
     local color_vs = ECAM_GREEN
-    if get(Cabin_vs) > 1750 then
+    if params.cabin_vs > 1750 then
         color_vs = get_color_green_blinking()
     end
  
     local color_alt = ECAM_GREEN
-    if get(Cabin_alt_ft) > 9950 then
+    if params.cabin_alt > 9950 then
         color_alt = ECAM_RED
-    elseif get(Cabin_alt_ft) > 8800 then
+    elseif params.cabin_alt > 8800 then
         color_alt = get_color_green_blinking()
     end
     
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-170, size[2]/2+150, Round_fill(get(Cabin_delta_psi), 1), 40, false, false, TEXT_ALIGN_RIGHT, color_psi)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+140, size[2]/2+177, math.floor(get(Cabin_vs)-(get(Cabin_vs)%50)), 40, false, false, TEXT_ALIGN_RIGHT, color_vs)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]-50, size[2]/2+150, math.floor(get(Cabin_alt_ft)-(get(Cabin_alt_ft)%50)),40, false, false, TEXT_ALIGN_RIGHT, color_alt)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-170, size[2]/2+150, Round_fill(params.delta_psi, 1), 40, false, false, TEXT_ALIGN_RIGHT, color_psi)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+140, size[2]/2+177, math.floor(params.cabin_vs-(params.cabin_vs%50)), 40, false, false, TEXT_ALIGN_RIGHT, color_vs)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]-50, size[2]/2+150, math.floor(params.cabin_alt-(params.cabin_alt%50)),40, false, false, TEXT_ALIGN_RIGHT, color_alt)
 end
 
 local function draw_pack_indications()
@@ -147,30 +157,40 @@ end
 
 local function update_drs()
    
-    if get(Out_flow_valve_ratio) > 0.95 and get(All_on_ground) == 0 then
+    if params.overflow_valve > 0.95 and get(All_on_ground) == 0 then
         set(Ecam_press_ovf_valve_color, 0)
     else
         set(Ecam_press_ovf_valve_color, 1)
     end
     
-    set(Ecam_press_cabin_alt_limit, Math_clamp(get(Cabin_alt_ft), -500, 10500))
+    set(Ecam_press_cabin_alt_limit, Math_clamp(params.cabin_alt, -500, 10500))
 
-    if get(Cabin_alt_ft) > 9550 then
+    if params.cabin_alt > 9550 then
         set(Ecam_press_cabin_alt_color, 0)
     else
         set(Ecam_press_cabin_alt_color, 1)    
     end
     
-    set(Ecam_press_cabin_vs_limit, Math_clamp(get(Cabin_vs), -2100, 2100))
+    set(Ecam_press_cabin_vs_limit, Math_clamp(params.cabin_vs, -2100, 2100))
 
-    set(Ecam_press_delta_p_limit, Math_clamp(get(Cabin_delta_psi), -1, 9))
+    set(Ecam_press_delta_p_limit, Math_clamp(params.delta_psi, -1, 9))
 
-    if get(Cabin_delta_psi) < -0.4 or get(Cabin_delta_psi) > 8.5 then
+    if params.delta_psi < -0.4 or params.delta_psi > 8.5 then
         set(Ecam_press_delta_p_color, 0)
     else
         set(Ecam_press_delta_p_color, 1)    
     end
 
+end
+
+local function update_params()
+    if get(TIME) - params.last_update > PARAM_DELAY then
+        params.delta_psi      = get(Cabin_delta_psi)
+        params.cabin_vs       = get(Cabin_vs)
+        params.cabin_alt      = get(Cabin_alt_ft)
+        params.overflow_valve = get(Out_flow_valve_ratio)
+        params.last_update    = get(TIME)
+    end
 end
 
 function ecam_update_press_page()
@@ -188,6 +208,7 @@ function ecam_update_press_page()
         set(Ecam_press_pack_2_triangle, 1)
     end
 
+    update_params()
     update_drs()
 
 end
