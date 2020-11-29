@@ -28,7 +28,7 @@ local ECAM = 4
 local pfd_nd_xfr_capt = false
 local pfd_nd_xfr_fo   = false
 local ecam_nd_xfr     = 0 -- -1, 0, 1
-
+local eis_selector    = 0 -- -1, 0, 1
 ----------------------------------------------------------------------------------------------------
 -- Commands
 ----------------------------------------------------------------------------------------------------
@@ -36,9 +36,11 @@ local ecam_nd_xfr     = 0 -- -1, 0, 1
 sasl.registerCommandHandler (DMC_PFD_ND_xfr_capt, 0, function(phase) if phase == SASL_COMMAND_BEGIN then pfd_nd_xfr_capt = not pfd_nd_xfr_capt end end)
 sasl.registerCommandHandler (DMC_PFD_ND_xfr_fo,   0, function(phase) if phase == SASL_COMMAND_BEGIN then pfd_nd_xfr_fo = not pfd_nd_xfr_fo end end)
 
+sasl.registerCommandHandler (DMC_ECAM_ND_xfr_up, 0, function(phase) if phase == SASL_COMMAND_BEGIN then ecam_nd_xfr = math.min(1,  ecam_nd_xfr + 1) end end)
 sasl.registerCommandHandler (DMC_ECAM_ND_xfr_dn, 0, function(phase) if phase == SASL_COMMAND_BEGIN then ecam_nd_xfr = math.max(-1, ecam_nd_xfr - 1) end end)
-sasl.registerCommandHandler (DMC_ECAM_ND_xfr_up, 0, function(phase) if phase == SASL_COMMAND_BEGIN then ecam_nd_xfr = math.min(1, ecam_nd_xfr + 1) end end)
 
+sasl.registerCommandHandler (DMC_EIS_selector_up, 0, function(phase) if phase == SASL_COMMAND_BEGIN then eis_selector = math.min(1, eis_selector + 1) end end)
+sasl.registerCommandHandler (DMC_EIS_selector_dn, 0, function(phase) if phase == SASL_COMMAND_BEGIN then eis_selector = math.max(-1,  eis_selector - 1) end end)
 
 
 ----------------------------------------------------------------------------------------------------
@@ -162,13 +164,21 @@ function update_displays()
     update_set(ECAM_displaying_status,     ECAM_show)
 end
 
+function update_knobs()
+
+    Set_dataref_linear_anim(DMC_position_ecam_nd, ecam_nd_xfr, -1, 1, 5)
+    Set_dataref_linear_anim(DMC_position_dmc_eis, eis_selector, -1, 1, 5)
+
+end
+
 function update()
     if get(Override_DMC) == 0 then
         auto_update()
     end
 
     update_displays()
+    update_knobs()
+    
 
-    set(DMC_position_ecam_nd, ecam_nd_xfr)
 
 end

@@ -452,6 +452,10 @@ local function update_output_datarefs()
 
 end
 
+local function update_anim_knobs()
+    Set_dataref_linear_anim(ADIRS_source_rotary_ATHDG_anim, get(ADIRS_source_rotary_ATHDG), -1, 1, 5)
+    Set_dataref_linear_anim(ADIRS_source_rotary_AIRDATA_anim, get(ADIRS_source_rotary_AIRDATA), -1, 1, 5)  
+end
 ----------------------------------------------------------------------------------------------------
 -- update()
 ----------------------------------------------------------------------------------------------------
@@ -524,6 +528,7 @@ function update ()
     update_status_datarefs(is_capt_adr_ok, is_fo_adr_ok, is_capt_irs_ok, is_fo_irs_ok, has_capt_att, has_fo_att)
 
     update_output_datarefs()
+    update_anim_knobs()
     
     perf_measure_stop("ADIRS:update()")
     
