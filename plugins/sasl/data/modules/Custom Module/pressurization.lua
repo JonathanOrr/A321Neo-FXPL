@@ -73,7 +73,7 @@ local pid_array_cab_alt =
 ----------------------------------------------------------------------------------------------------
 
 set(Override_pressurization, 1)
-current_cabin_pressure_in_pa = get(Weather_curr_press_sea_level) * 3386.39
+current_cabin_pressure_in_pa = get(Weather_curr_press_flight_level) * 3386.39
 current_cabin_altitude = math.min(7000, get(Capt_baro_alt_ft))
 
 ----------------------------------------------------------------------------------------------------
@@ -154,16 +154,18 @@ local function update_cabin_pressure()
     
     local output_airflow     = 0
     local cabin_air_density  = get_air_density(current_cabin_pressure_in_pa, get(Aft_cab_temp))
-    if current_cabin_pressure_in_pa > outside_pressure then
-        output_airflow = compute_leakage(outflow_valve_actual_area, current_cabin_pressure_in_pa-outside_pressure, cabin_air_density, 2.5) -- m3/s
-    elseif current_cabin_pressure_in_pa < outside_pressure then
-        output_airflow =  -compute_leakage(outflow_valve_actual_area, outside_pressure-current_cabin_pressure_in_pa, cabin_air_density, 2.5) -- m3/s
+    
+    local press_diff = current_cabin_pressure_in_pa - outside_pressure
+
+    if press_diff > 1 then
+        output_airflow = compute_leakage(outflow_valve_actual_area, current_cabin_pressure_in_pa-outside_pressure, cabin_air_density, 2.5) + AIRCRAFT_LEAKAGE -- m3/s
+    elseif press_diff < -1 then
+        output_airflow =  -compute_leakage(outflow_valve_actual_area, outside_pressure-current_cabin_pressure_in_pa, cabin_air_density, 2.5) - AIRCRAFT_LEAKAGE -- m3/s
     end
+
 
     set(Press_outflow_valve_flow, output_airflow)
     set(Press_outflow_valve_press, current_cabin_pressure_in_pa * (output_airflow) / TOTAL_VOLUME / 3386.39)
-
-    output_airflow = output_airflow + AIRCRAFT_LEAKAGE
     
     local output_delta_pressure = current_cabin_pressure_in_pa * (output_airflow) / TOTAL_VOLUME -- Pa
 
@@ -318,6 +320,10 @@ end
 
 function update()
     perf_measure_start("pressurization:update()")
+    
+    if get(TIME) < 1 then   -- Wait 1 second before running pressurization
+        return
+    end
     
     update_cabin_pressure()
     update_safety_valve()
