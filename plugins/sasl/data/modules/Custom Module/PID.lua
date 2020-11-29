@@ -272,3 +272,55 @@ function FBW_PID_no_lim(pid_array, error)
 
     return correction
 end
+
+
+
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+-- FILTERS
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+--
+-- ** Instructions **
+-- Create a table with two parameters: the current x value and the cut frequency in Hz:
+--
+-- data = {
+--    x = 0,
+--    cut_frequency = 10
+-- }
+--
+-- Then, set data.x to the proper value and call the filter (e.g. y = high_pass_filter(data)) to get
+-- the filtered value (y). The next time, set again data.x and recall the filter funciton.
+--
+-- VERY IMPORTANT (1): the variable you pass to the filter function must be preserved across filter
+--                     invocations. (The filter writes stuffs inside data!)
+-- VERY IMPORTANT (2): the filter function expects data FOR EACH frame after the first invocation,
+--                     otherwise garbage will be computed.
+
+
+function high_pass_filter(data)
+    local dt = get(DELTA_TIME)
+    local RC = 1/(2*math.pi*data.cut_frequency)
+    local a = RC / (RC + dt)
+    
+    if data.prev_x_value == nil then
+        data.prev_x_value = data.x
+        data.prev_y_value = data.x
+        return data.x
+    end
+    return a * (data.prev_y_value + data.x - data.prev_x_value)
+end
+
+function low_pass_filter(data)
+    local dt = get(DELTA_TIME)
+    local RC = 1/(2*math.pi*data.cut_frequency)
+    local a = dt / (RC + dt)
+    
+    if data.prev_y_value == nil then
+        data.prev_y_value = a * data.x
+        return a * data.x
+    end
+    return a * data.x + (1-a) * data.prev_y_value
+end
+
+
