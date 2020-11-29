@@ -2,6 +2,35 @@ A
 1000
 ACF_SOUNDS
 
+###################################################################################
+BEGIN_SOUND_SPACE
+  SOUND_INDEX 0
+  BLEND_DEPTH 0
+  AABB -2.1 -0.5 -19.8 2.1 3.4 19.5
+END_SOUND_SPACE
+###################################################################################ENGINES
+
+BEGIN_SOUND_ATTACHMENT
+  SNAPSHOT_NAME /Inside
+  EVENT_ALWAYS
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Engines
+  VEH_PART engine 0
+  EVENT_START_COND sim/flightmodel2/engines/N1_percent[0] > 0
+  EVENT_END_COND sim/flightmodel2/engines/N1_percent[0] == 0
+  PARAM_DREF_IDX 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Engines
+  VEH_PART engine 1
+  EVENT_START_COND sim/flightmodel2/engines/N1_percent[1] > 0
+  EVENT_END_COND sim/flightmodel2/engines/N1_percent[1] == 0
+  PARAM_DREF_IDX 1
+END_SOUND_ATTACHMENT
+
 ##############################################################THRUST LEVERS###################################################
 
 BEGIN_SOUND_ATTACHMENT
@@ -19,7 +48,7 @@ END_SOUND_ATTACHMENT
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/Thrust Levers/ThrLvrExit
   VEH_XYZ 0 1.5 -18.4
-  EVENT_START_COND sim/cockpit2/engine/actuators/throttle_beta_rev_ratio_all < 0.675
+  EVENT_START_COND sim/cockpit2/engine/actuators/throttle_beta_rev_ratio_all < 0.63
 END_SOUND_ATTACHMENT
 
 ###########################################################################
