@@ -19,15 +19,6 @@
 --ALL DATAREFS USED IN THE COCKPIT, e.g DIALS, KNOBS, BUTTONS--
 --PUSH BUTTON STATES-- e.g the lights on the buttons(blank, on, fault, fault on) these datarefs should follow the 00, 01, 10, 11 principle
 
---FBW
-ELAC_1_button_state = createGlobalPropertyi("a321neo/cockpit/FBW/elac_1_button_state", 0, false, true, false) --00: No lights, 01: [OFF], 10: FAULT, 11 [OFF] + FAULT
-ELAC_2_button_state = createGlobalPropertyi("a321neo/cockpit/FBW/elac_2_button_state", 0, false, true, false) --00: No lights, 01: [OFF], 10: FAULT, 11 [OFF] + FAULT
-FAC_1_button_state = createGlobalPropertyi("a321neo/cockpit/FBW/fac_1_button_state", 0, false, true, false) --00: No lights, 01: [OFF], 10: FAULT, 11 [OFF] + FAULT
-FAC_2_button_state = createGlobalPropertyi("a321neo/cockpit/FBW/fac_2_button_state", 0, false, true, false) --00: No lights, 01: [OFF], 10: FAULT, 11 [OFF] + FAULT
-SEC_1_button_state = createGlobalPropertyi("a321neo/cockpit/FBW/sec_1_button_state", 0, false, true, false) --00: No lights, 01: [OFF], 10: FAULT, 11 [OFF] + FAULT
-SEC_2_button_state = createGlobalPropertyi("a321neo/cockpit/FBW/sec_2_button_state", 0, false, true, false) --00: No lights, 01: [OFF], 10: FAULT, 11 [OFF] + FAULT
-SEC_3_button_state = createGlobalPropertyi("a321neo/cockpit/FBW/sec_3_button_state", 0, false, true, false) --00: No lights, 01: [OFF], 10: FAULT, 11 [OFF] + FAULT
-
 --BUTTON COMMANDED POSTION-- e.g. button commanding on, off but lights on the button can show otherwise(fault on, fault off....)
 X_bleed_dial = createGlobalPropertyi("a321neo/cockpit/packs/x_bleed_dial", 1, false, true, false) --0closed, 1auto, 2open
 
@@ -445,6 +436,7 @@ Lights_seatbelts_lever = createGlobalPropertyf("a321neo/cockpit/misc/buttons/sea
 Lights_noped_lever = createGlobalPropertyf("a321neo/cockpit/misc/buttons/noped_pos", 0, false, true, false)
 
 Lights_int_flood_pedestal_array = createGlobalPropertyfa("a321neo/cockpit/lights/array_floor_ped", 9, false, true, false)
+Lights_int_flood_pedestal_extra = createGlobalPropertyf("a321neo/cockpit/lights/extra_floor_ped", 0, false, true, false) -- No idea ask Jon
 
 -- Chrono
 Chrono_state_button = createGlobalPropertyf("a321neo/cockpit/misc/chrono_state", 0, false, true, false)

@@ -73,6 +73,7 @@ components = {
   pressurization {},
   oxygen {},
   anti_ice {},
+  calls {},
   sounds {},
   graphics {}
  }

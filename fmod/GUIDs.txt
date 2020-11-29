@@ -1,9 +1,27 @@
-{5637522b-12b2-4a0f-88cd-437990804430} event:/CockpitMechanical/ThrLvrClick
+{15309be3-50e2-43ae-ad64-b9453e1a4b83} event:/CockpitMechanical/Flap Lever/0
+{7e7e9b47-21cf-4eee-a306-9ec8f2f19a21} event:/CockpitMechanical/Flap Lever/1
+{77d5dd5a-10a0-412b-a342-ed52bf8f5a0e} event:/CockpitMechanical/Flap Lever/2
+{8f061dcf-bce1-437f-8553-4f9e8cbd1ecc} event:/CockpitMechanical/Flap Lever/3
+{4aa4a4f7-c95f-4d98-b515-ea707d5a7a18} event:/CockpitMechanical/Flap Lever/4
+{2d285758-cb5a-4314-ac89-d3a2b5cbc04b} event:/CockpitMechanical/Thrust Levers/ThrLvrCL
+{c96b0094-28a7-4162-b5cf-135ac063d565} event:/CockpitMechanical/Thrust Levers/ThrLvrExit
+{a41422e6-cbf7-47f8-ac6b-98c7e2416b3b} event:/CockpitMechanical/Thrust Levers/ThrLvrFLX
+{5637522b-12b2-4a0f-88cd-437990804430} event:/CockpitMechanical/Thrust Levers/ThrLvrIdle
+{4f37aed1-3eb9-4a5c-b3da-7a0308da4a78} event:/CockpitMechanical/Thrust Levers/ThrLvrRev
+{014c34dd-cc81-463a-a539-2e5fc4b75ea7} event:/CockpitMechanical/Thrust Levers/ThrLvrRevFull
+{b91efb68-0853-461b-8e6a-91b68abbb0b5} event:/CockpitMechanical/Thrust Levers/ThrLvrTOGA
+{ed910ed0-bdc8-47e6-a8cb-d025b4ba55d4} event:/CockpitMechanical/Engine Master
+{0fbeb00d-829f-4359-8bbc-0f82168e554c} event:/CockpitMechanical/ADIRS Style Knobs
+{850bb3a5-fa7f-4d22-bf9d-a80868eee0e7} event:/CockpitMechanical/Big Round Button Press
+{bafd0ab7-85f5-4e8f-8898-00cef3bbf4d3} event:/CockpitMechanical/Big Round Button Release
+{19a8de53-9601-4d68-9d4f-9199ad28bdd8} event:/CockpitMechanical/MCDU Button Press
+{4f777470-38aa-4adf-bb4e-e68e13b9a7d7} event:/CockpitMechanical/Soft Button Press
 {9f08114d-36ec-44cc-b8bf-b2babda09f9e} bus:/
 {7f7c05a4-e05a-4d44-94fe-d4691147a9b7} bus:/Master
 {e3492bec-f854-4fbb-b2bc-23586269032e} bus:/Master/Copilot
 {a5a85a81-afd5-4425-9dc2-6e50f7776e6a} bus:/Master/Exterior Processed
 {06db5351-0b2f-4648-b97a-a33b40a00e11} bus:/Master/Exterior Processed/Aircraft
+{6cee8772-2b5f-4158-9399-80dbe765bd69} bus:/Master/Exterior Processed/Aircraft/Mechanical
 {b6c156f1-9861-405c-a622-92b2ab8010a7} bus:/Master/Exterior Processed/Environment
 {8dbbc9d7-a954-4ed0-b1f1-f8111b03cbd1} bus:/Master/Exterior Unprocessed
 {751f5066-4651-4afb-a410-4cb9db0894c9} bus:/Master/Interior
