@@ -520,6 +520,7 @@ end
 
 local function publish_left_list()
     local tot_messages = 0
+    local tot_non_memo_msg = 0
     local limit = false
 
     left_current_message = nil;
@@ -543,7 +544,7 @@ local function publish_left_list()
             left_current_message = msg
         end  
 
-        if tot_messages == 0 or msg.priority ~= PRIORITY_LEVEL_MEMO then  -- Ignore the MEMO if other messages are present
+        if tot_non_memo_msg == 0 or msg.priority ~= PRIORITY_LEVEL_MEMO then  -- Ignore the MEMO if other messages are present
 
             -- Set the name of the group
             set(EWD_left_memo_group[tot_messages], msg.text())
@@ -563,7 +564,11 @@ local function publish_left_list()
                     end
                 end 
             end
-        end        
+            
+            if msg.priority ~= PRIORITY_LEVEL_MEMO then
+                tot_non_memo_msg = tot_non_memo_msg + 1
+            end 
+        end
     end
     
     for i=tot_messages, 7 do

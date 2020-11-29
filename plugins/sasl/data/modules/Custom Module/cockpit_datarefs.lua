@@ -287,8 +287,8 @@ Aft_cargo_temp_dial = createGlobalPropertyf("a321neo/cockpit/aircond/aft_cargo_t
 --misc
 Capt_ra_alt_m = createGlobalPropertyf("a321neo/cockpit/indicators/capt_ra_alt_m", 0, false, true, false)
 Capt_baro_alt_m = createGlobalPropertyf("a321neo/cockpit/indicators/capt_baro_alt_m", 0, false, true, false)
-Seatbelts = globalProperty("sim/cockpit2/annunciators/fasten_seatbelt")
-NoSmoking = globalProperty("sim/cockpit2/annunciators/no_smoking")
+Seatbelts = globalProperty("sim/cockpit2/switches/fasten_seat_belts")
+NoSmoking = globalProperty("sim/cockpit2/switches/no_smoking")
 CabinIsReady = createGlobalPropertyi("a321neo/cockpit/cabin_ready", 0, false, true, false)  -- 0 cabin is not ready, 1 cabin is ready
 Lights_emer_exit = createGlobalPropertyi("a321neo/cockpit/lights/emer_exit_switch", 0, false, true, false)
 

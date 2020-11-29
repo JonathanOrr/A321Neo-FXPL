@@ -45,6 +45,8 @@ local guards = {
 local ann_lt_pos = 0
 
 local cvr_gnd_ctl = false -- Status of the pushbutton on the RCDR panel, this has no actual effect
+local signs_seat_belt = 0 -- 0,1,2
+local signs_noped     = 0 -- 0,1,2
 
 ----------------------------------------------------------------------------------------------------
 -- Command function
@@ -85,6 +87,10 @@ sasl.registerCommandHandler (Cockpit_light_Fo_console_floor_cmd_dn, 0,    functi
 
 
 sasl.registerCommandHandler (RCDR_cmd_GND_CTL, 0,  function(phase) if phase == SASL_COMMAND_BEGIN then cvr_gnd_ctl = not cvr_gnd_ctl end end)
+sasl.registerCommandHandler (MISC_cmd_seatbelts_up, 0,  function(phase) if phase == SASL_COMMAND_BEGIN then signs_seat_belt = math.min(2, signs_seat_belt + 1) end end)
+sasl.registerCommandHandler (MISC_cmd_seatbelts_dn, 0,  function(phase) if phase == SASL_COMMAND_BEGIN then signs_seat_belt = math.max(0, signs_seat_belt - 1) end end)
+sasl.registerCommandHandler (MISC_cmd_noped_up, 0,  function(phase) if phase == SASL_COMMAND_BEGIN then signs_noped = math.min(2, signs_noped + 1)  end end)
+sasl.registerCommandHandler (MISC_cmd_noped_dn, 0,  function(phase) if phase == SASL_COMMAND_BEGIN then signs_noped = math.max(0, signs_noped - 1) end end)
 
 ----------------------------------------------------------------------------------------------------
 -- Lights
@@ -148,6 +154,10 @@ local function anim_light_switches()
 
     -- Pedestal
     Set_dataref_linear_anim(Engine_mode_knob_pos, get(Engine_mode_knob), -1, 1, 5)
+
+    Set_dataref_linear_anim(Lights_seatbelts_lever, signs_seat_belt, 0, 2, 5)
+    Set_dataref_linear_anim(Lights_noped_lever, signs_noped, 0, 2, 5)
+
 end
 
 local function update_lights()
@@ -162,6 +172,25 @@ local function update_lights()
     set(Cockpit_light_Capt_console_floor, get(Cockpit_light_Capt_console_floor_pos) * get(DC_bus_1_pwrd))
     set(Cockpit_light_Fo_console_floor, get(Cockpit_light_Fo_console_floor_pos) * get(DC_bus_2_pwrd))
     set(Cockpit_light_dome, get(Cockpit_light_dome_pos) * get(DC_ess_bus_pwrd))
+
+end
+
+local function update_datarefs()
+    if signs_seat_belt == 2 
+       or (signs_seat_belt == 1 and (get(Front_gear_deployment) > 0 or get(Flaps_handle_position) > 0))
+       or (get(Cabin_alt_ft) > 11300) then
+        set(Seatbelts, 1)
+    else
+        set(Seatbelts, 0)
+    end
+
+    if signs_noped == 2 
+       or (signs_noped == 1 and (get(Front_gear_deployment) > 0 or get(Flaps_handle_position) > 0)) then
+        set(NoSmoking, 1)
+    else
+        set(NoSmoking, 0)
+    end
+
 end
 
 function update()
@@ -170,6 +199,7 @@ function update()
     update_guards()
     update_lights()
     anim_light_switches()
+    update_datarefs()
     
     perf_measure_stop("graphics:update()")
 end

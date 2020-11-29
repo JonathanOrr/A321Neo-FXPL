@@ -57,7 +57,7 @@ Message_TOLDG_SIGNS = {
 Message_TOLDG_CABIN = {
     text = function(self)
         if (get(CabinIsReady) == 1) then
-            return "    CABIN CHECK"
+            return "    CABIN READY"
         else
             return "    CABIN...........CHECK"
         end
