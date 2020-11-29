@@ -5,6 +5,13 @@ OBJ
 GLOBAL_cockpit_lit
 POINT_COUNTS	0	0	0	0
 
-	LIGHT_SPILL_CUSTOM 0 1.3117307 -19.361788 1 1 1 1 1 0 -0.90630776 -0.42261827 0.95371695 a321neo/cockpit/lights/array_floor_ped
+	ANIM_begin
+	ANIM_trans	-0.1877	0.50989002	-20.498631	-0.1877	0.50989002	-20.498631
+	ANIM_rotate_begin	1	0	-0	a321neo/cockpit/lights/extra_floor_ped
+	ANIM_rotate_key	1	0
+	ANIM_rotate_key	0	-18.099737
+	ANIM_rotate_end
+	LIGHT_SPILL_CUSTOM 0 0 -0 1 1 1 1 1 0 -1 -0 0.95371695 a321neo/cockpit/lights/array_floor_ped
+	ANIM_end
 
 # Build with Blender 2.90.1 (build b'3e85bb34d0d7'). Exported with XPlane2Blender 4.1.0-beta.1+101.20201117225215

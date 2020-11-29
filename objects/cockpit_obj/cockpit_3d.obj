@@ -10460,9 +10460,9 @@ IDX	8023
 		TRIS	8136 66
 		ATTR_manip_command	button	a321neo/cockpit/misc/chrono_chr	Chronos
 		TRIS	8202 66
-		ATTR_manip_command_knob	button	a321neo/cockpit/misc/chrono_source_up	a321neo/cockpit/misc/chrono_source_dn	Change chronos source
+		ATTR_manip_command_knob	rotate_medium	a321neo/cockpit/misc/chrono_source_up	a321neo/cockpit/misc/chrono_source_dn	Change chronos source
 		TRIS	8268 66
-		ATTR_manip_command_knob	button	a321neo/cockpit/misc/chrono_state_up	a321neo/cockpit/misc/chrono_state_dn	Change chronos state
+		ATTR_manip_command_knob	rotate_medium	a321neo/cockpit/misc/chrono_state_up	a321neo/cockpit/misc/chrono_state_dn	Change chronos state
 		TRIS	8334 66
 		ATTR_manip_command	button	a321neo/cockpit/wheel/toggle_lo_autobrake	Toggle LO autobrake
 		TRIS	8778 6
