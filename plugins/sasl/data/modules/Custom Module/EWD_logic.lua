@@ -324,11 +324,11 @@ local function update_right_list()
     end
     
 
-    if get(Autobrakes_sim) == 2 then
+    if get(Wheel_autobrake_status) == 1 then
         list_right:put(COL_INDICATION, "AUTO BRK LO")
-    elseif get(Autobrakes_sim) == 4 then
+    elseif get(Wheel_autobrake_status) == 2 then
         list_right:put(COL_INDICATION, "AUTO BRK MED")
-    elseif get(Autobrakes_sim) == 0 then
+    elseif get(Wheel_autobrake_status) == 3 then
         list_right:put(COL_INDICATION, "AUTO BRK MAX")
     end
 
@@ -405,6 +405,9 @@ local function update_right_list()
     if get(Press_ldg_elev_knob_pos) >= -2 then
         list_right:put(COL_INDICATION, "MAN LDG ELEV")
     end
+    
+    -- TODO: SWITCHING PNL: - if PFD/ND XFR pressed *AND* ECAM/ND not on NORM
+    --                      - ATT HDG or AIR DATA or EIS DMC not in normal
     
     -- TODO Audio: AUDIO 3 XFRD displayed green if audio switching selector not in NORM
     -- TODO Acars: ACARS CALL (pulsing green) if received an ACARS message requesting voice conversation

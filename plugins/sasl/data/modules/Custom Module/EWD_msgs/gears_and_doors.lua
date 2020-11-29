@@ -246,15 +246,15 @@ MessageGroup_GEAR_NOT_UPLOCKED = {
 ----------------------------------------------------------------------------------------------------
 
 Message_GEAR_NOT_DOWN_INIT = {
-    text = function(self)
+    text = function()
         return "    GEAR NOT DOWN"
     end,
 
-    color = function(self)
+    color = function()
         return COL_WARNING
     end,
 
-    is_active = function(self)
+    is_active = function()
       return true -- Always active when group is active
     end
 }
@@ -263,10 +263,10 @@ MessageGroup_GEAR_NOT_DOWN = {
 
     shown = false,
 
-    text  = function(self)
+    text  = function()
                 return "L/G"
             end,
-    color = function(self)
+    color = function()
                 return COL_WARNING
             end,
 
@@ -278,17 +278,20 @@ MessageGroup_GEAR_NOT_DOWN = {
     },
 
     -- Method to check if this message group is active
-    is_active = function(self)
+    is_active = function()
        
         if get(Gear_handle) ~= 1 then
             if get(Capt_ra_alt_ft) < 750 and get(Flaps_handle_ratio) > 0.75 then
+                pb_set(PB.mip.ldg_gear_red_light, true, true)
                 return true
             end
 
             if get(Capt_ra_alt_ft) < 750 and get(Eng_1_N1) < 75 and get(Eng_2_N1) < 75 then
+                pb_set(PB.mip.ldg_gear_red_light, true, true)
                 return true
             end
         end
+        pb_set(PB.mip.ldg_gear_red_light, false, false)
         return false
     end,
 
