@@ -12,7 +12,7 @@
 --    Please check the LICENSE file in the root of the repository for further
 --    details or check <https://www.gnu.org/licenses/>
 -------------------------------------------------------------------------------
--- File: packs.lua 
+-- File: oxygen.lua 
 -- Short description: OXYGEN systems
 -------------------------------------------------------------------------------
 local crew_supply_valve= true  -- This is the main valve not the actual supply
@@ -21,6 +21,7 @@ local high_alt_landing = false
 local tmr_reset        = false
 
 set(Override_oxygen, 1)
+set(Oxygen_ckpt_psi, 1200 + math.random() * 100)
 
 sasl.registerCommandHandler (MNTN_OXY_reset, 0, function(phase) if phase == SASL_COMMAND_BEGIN then tmr_reset = not tmr_reset end end)
 sasl.registerCommandHandler (Oxygen_toggle_crew, 0, function(phase) if phase == SASL_COMMAND_BEGIN then crew_supply_valve = not crew_supply_valve end end)

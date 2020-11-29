@@ -6,11 +6,11 @@ include('EWD_msgs/common.lua')
 local Message_BLEED_OFF = {
     text = function()
         local N = ""
-        if get(ENG_1_bleed_switch) == 0 and get(ENG_2_bleed_switch) == 0 then
+        if PB.ovhd.ac_bleed_1.status_bottom and PB.ovhd.ac_bleed_2.status_bottom then
             N = "1 + 2"
-        elseif get(ENG_1_bleed_switch) == 0 then
+        elseif PB.ovhd.ac_bleed_1.status_bottom then
             N = "1"
-        elseif get(ENG_2_bleed_switch) == 0 then
+        elseif PB.ovhd.ac_bleed_2.status_bottom then
             N = "2"
         end
         return "    BLEED " .. N .. " OFF"
@@ -46,13 +46,11 @@ MessageGroup_BLEED_OFF = {
 
     -- Method to check if this message group is active
     is_active = function()
-        -- Active if any brakes over 300 C
-        return get(ENG_1_bleed_switch) == 0 or get(ENG_2_bleed_switch) == 0
+        return PB.ovhd.ac_bleed_1.status_bottom or PB.ovhd.ac_bleed_2.status_bottom
     end,
 
     -- Method to check if this message is currently inhibithed
     is_inhibited = function()
-        -- During takeoff and landing at high speed
         return get(EWD_flight_phase) ~= PHASE_1ST_ENG_ON and get(EWD_flight_phase) ~= PHASE_AIRBONE
     end
 

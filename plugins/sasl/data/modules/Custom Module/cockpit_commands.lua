@@ -368,6 +368,10 @@ FIRE_cmd_push_ENG_1= sasl.createCommand("a321neo/cockpit/fire/eng_1_push","Press
 FIRE_cmd_push_ENG_2= sasl.createCommand("a321neo/cockpit/fire/eng_2_push","Press ENG 2 big red button")
 FIRE_cmd_push_APU  = sasl.createCommand("a321neo/cockpit/fire/apu_push","Press APU big red button")
 
+FIRE_cmd_test_ENG_1= sasl.createCommand("a321neo/cockpit/fire/eng_1_test","Press ENG 1 big red button")
+FIRE_cmd_test_ENG_2= sasl.createCommand("a321neo/cockpit/fire/eng_2_test","Press ENG 2 big red button")
+FIRE_cmd_test_APU  = sasl.createCommand("a321neo/cockpit/fire/apu_test","Press APU big red button")
+
 -- MAINTENANCE Panel
 MNTN_OXY_reset   = sasl.createCommand("a321neo/cockpit/mntn/oxy_tmr_reset","Press OXY TMR RESET")
 MNTN_SVCE_INT    = sasl.createCommand("a321neo/cockpit/mntn/svce_int","Press SVCE INT")

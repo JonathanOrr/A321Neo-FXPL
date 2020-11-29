@@ -44,6 +44,8 @@ local guards = {
 
 local ann_lt_pos = 0
 
+local cvr_gnd_ctl = false -- Status of the pushbutton on the RCDR panel, this has no actual effect
+
 ----------------------------------------------------------------------------------------------------
 -- Command function
 ----------------------------------------------------------------------------------------------------
@@ -82,6 +84,7 @@ sasl.registerCommandHandler (Cockpit_light_Fo_console_floor_cmd_up, 0,    functi
 sasl.registerCommandHandler (Cockpit_light_Fo_console_floor_cmd_dn, 0,    function(phase) change_switch(phase, Cockpit_light_Fo_console_floor_pos, -1) end)
 
 
+sasl.registerCommandHandler (RCDR_cmd_GND_CTL, 0,  function(phase) if phase == SASL_COMMAND_BEGIN then cvr_gnd_ctl = not cvr_gnd_ctl end end)
 
 ----------------------------------------------------------------------------------------------------
 -- Lights
@@ -149,6 +152,7 @@ end
 
 local function update_lights()
     pb_set(PB.ovhd.signs_emer_exit_lt, get(Lights_emer_exit) == 0, false)
+    pb_set(PB.ovhd.rcdr_gnd_ctl, cvr_gnd_ctl, false)
     
     set(Cockpit_light_integral, get(Cockpit_light_integral_pos) * get(AC_bus_1_pwrd))
     set(Cockpit_light_ovhd,     get(Cockpit_light_ovhd_pos) * get(AC_bus_1_pwrd))

@@ -51,76 +51,77 @@ end
 --compute buttons lights states
 function Compute_fctl_button_states()
     --ELAC 1 button
+    
     if get(ELAC_1_off_button) == 0 and get(ELAC_1_status) == 1 then
-        set(ELAC_1_button_state, 00)
+        pb_set(PB.ovhd.flt_ctl_elac_1, false, false)
     elseif get(ELAC_1_off_button) == 1 and get(ELAC_1_status) == 0 then
-        set(ELAC_1_button_state, 01)
+        pb_set(PB.ovhd.flt_ctl_elac_1, true, false)
     elseif get(ELAC_1_off_button) == 0 and get(ELAC_1_status) == 0 then
-        set(ELAC_1_button_state, 10)
+        pb_set(PB.ovhd.flt_ctl_elac_1, false, true)
     elseif get(ELAC_1_off_button) == 1 and get(ELAC_1_status) == 1 then--this should not happen
-        set(ELAC_1_button_state, 11)
+        pb_set(PB.ovhd.flt_ctl_elac_1, true, true)
     end
     --ELAC 2 button
     if get(ELAC_2_off_button) == 0 and get(ELAC_2_status) == 1 then
-        set(ELAC_2_button_state, 00)
+        pb_set(PB.ovhd.flt_ctl_elac_2, false, false)
     elseif get(ELAC_2_off_button) == 1 and get(ELAC_2_status) == 0 then
-        set(ELAC_2_button_state, 01)
+        pb_set(PB.ovhd.flt_ctl_elac_2, true, false)
     elseif get(ELAC_2_off_button) == 0 and get(ELAC_2_status) == 0 then
-        set(ELAC_2_button_state, 10)
+        pb_set(PB.ovhd.flt_ctl_elac_2, false, true)
     elseif get(ELAC_2_off_button) == 1 and get(ELAC_2_status) == 1 then--this should not happen
-        set(ELAC_2_button_state, 11)
+        pb_set(PB.ovhd.flt_ctl_elac_2, true, true)
     end
 
     --FAC 1 button
     if get(FAC_1_off_button) == 0 and get(FAC_1_status) == 1 then
-        set(FAC_1_button_state, 00)
+        pb_set(PB.ovhd.flt_ctl_fac_1, false, false)
     elseif get(FAC_1_off_button) == 1 and get(FAC_1_status) == 0 then
-        set(FAC_1_button_state, 01)
+        pb_set(PB.ovhd.flt_ctl_fac_1, true, false)
     elseif get(FAC_1_off_button) == 0 and get(FAC_1_status) == 0 then
-        set(FAC_1_button_state, 10)
+        pb_set(PB.ovhd.flt_ctl_fac_1, false, true)
     elseif get(FAC_1_off_button) == 1 and get(FAC_1_status) == 1 then--this should not happen
-        set(FAC_1_button_state, 11)
+        pb_set(PB.ovhd.flt_ctl_fac_1, true, true)
     end
     --FAC 2 button
     if get(FAC_2_off_button) == 0 and get(FAC_2_status) == 1 then
-        set(FAC_2_button_state, 00)
+        pb_set(PB.ovhd.flt_ctl_fac_2, false, false)
     elseif get(FAC_2_off_button) == 1 and get(FAC_2_status) == 0 then
-        set(FAC_2_button_state, 01)
+        pb_set(PB.ovhd.flt_ctl_fac_2, true, false)
     elseif get(FAC_2_off_button) == 0 and get(FAC_2_status) == 0 then
-        set(FAC_2_button_state, 10)
+        pb_set(PB.ovhd.flt_ctl_fac_2, false, true)
     elseif get(FAC_2_off_button) == 1 and get(FAC_2_status) == 1 then--this should not happen
-        set(FAC_2_button_state, 11)
+        pb_set(PB.ovhd.flt_ctl_fac_2, true, true)
     end
 
     --SEC 1 button
     if get(SEC_1_off_button) == 0 and get(SEC_1_status) == 1 then
-        set(SEC_1_button_state, 00)
+        pb_set(PB.ovhd.flt_ctl_sec_1, false, false)
     elseif get(SEC_1_off_button) == 1 and get(SEC_1_status) == 0 then
-        set(SEC_1_button_state, 01)
+        pb_set(PB.ovhd.flt_ctl_sec_1, true, false)
     elseif get(SEC_1_off_button) == 0 and get(SEC_1_status) == 0 then
-        set(SEC_1_button_state, 10)
+        pb_set(PB.ovhd.flt_ctl_sec_1, false, true)
     elseif get(SEC_1_off_button) == 1 and get(SEC_1_status) == 1 then--this should not happen
-        set(SEC_1_button_state, 11)
+        pb_set(PB.ovhd.flt_ctl_sec_1, true, true)
     end
     --SEC 2 button
     if get(SEC_2_off_button) == 0 and get(SEC_2_status) == 1 then
-        set(SEC_2_button_state, 00)
+        pb_set(PB.ovhd.flt_ctl_sec_2, false, false)
     elseif get(SEC_2_off_button) == 1 and get(SEC_2_status) == 0 then
-        set(SEC_2_button_state, 01)
+        pb_set(PB.ovhd.flt_ctl_sec_2, true, false)
     elseif get(SEC_2_off_button) == 0 and get(SEC_2_status) == 0 then
-        set(SEC_2_button_state, 10)
+        pb_set(PB.ovhd.flt_ctl_sec_2, false, true)
     elseif get(SEC_2_off_button) == 1 and get(SEC_2_status) == 1 then--this should not happen
-        set(SEC_2_button_state, 11)
+        pb_set(PB.ovhd.flt_ctl_sec_2, true, true)
     end
     --SEC 3 button
     if get(SEC_3_off_button) == 0 and get(SEC_3_status) == 1 then
-        set(SEC_3_button_state, 00)
+        pb_set(PB.ovhd.flt_ctl_sec_3, false, false)
     elseif get(SEC_3_off_button) == 1 and get(SEC_3_status) == 0 then
-        set(SEC_3_button_state, 01)
+        pb_set(PB.ovhd.flt_ctl_sec_3, true, false)
     elseif get(SEC_3_off_button) == 0 and get(SEC_3_status) == 0 then
-        set(SEC_3_button_state, 10)
+        pb_set(PB.ovhd.flt_ctl_sec_3, false, true)
     elseif get(SEC_3_off_button) == 1 and get(SEC_3_status) == 1 then--this should not happen
-        set(SEC_3_button_state, 11)
+        pb_set(PB.ovhd.flt_ctl_sec_3, true, true)
     end
 end
 
