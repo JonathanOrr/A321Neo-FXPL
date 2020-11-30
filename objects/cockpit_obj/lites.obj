@@ -2708,7 +2708,7 @@ IDX	2294
 		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/mip/terr_nd_fo_bottom
 		TRIS	1566 6
 		TRIS	1572 6
-		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/mip/ldg_gear_red_light
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/mip/ldg_gear_red_light_bottom
 		TRIS	1578 6
 		ATTR_light_level 0.000000 1.000000	
 		TRIS	1584 18
