@@ -204,6 +204,10 @@ Adirs_irs_begin_time = {}
 Adirs_irs_begin_time[1] = createGlobalPropertyf("a321neo/cockpit/ADIRS/irs_1_time_begin_align", 0, false, true, false)  -- Time from the begin of alignment of IRS1
 Adirs_irs_begin_time[2] = createGlobalPropertyf("a321neo/cockpit/ADIRS/irs_2_time_begin_align", 0, false, true, false)  -- Time from the begin of alignment of IRS2
 Adirs_irs_begin_time[3] = createGlobalPropertyf("a321neo/cockpit/ADIRS/irs_3_time_begin_align", 0, false, true, false)  -- Time from the begin of alignment of IRS3
+
+GPS_1_is_available = createGlobalPropertyi("a321neo/cockpit/ADIRS/gps_1_is_available", 0, false, true, false) 
+GPS_2_is_available = createGlobalPropertyi("a321neo/cockpit/ADIRS/gps_2_is_available", 0, false, true, false) 
+
 --doors
 Door_1_l_ratio = createGlobalPropertyf("a321neo/dynamics/door/door_1_l_rat", 0, false, true, false)
 Door_1_r_ratio = createGlobalPropertyf("a321neo/dynamics/door/door_1_r_rat", 0, false, true, false)
