@@ -124,12 +124,23 @@ local function get_air_density(pressure, temperature)
 end
 
 local function airmass_to_airflow(airmass, temp)
+    if current_cabin_pressure_in_pa <= 0 then
+        -- This happens on startup (or in space lol)
+        return 0
+    end
     return airmass / get_air_density(current_cabin_pressure_in_pa, temp)
 end
 
 local function compute_leakage(area_leakage, delta_P, air_density, flow_coeff)
 
-    return flow_coeff * area_leakage * math.sqrt(2*delta_P/air_density)
+    local computed_value = flow_coeff * area_leakage * math.sqrt(2*delta_P/air_density)
+
+    if computed_value ~= computed_value then
+        -- Sometimes it happens that this value is temporary NaN, in this case, let's return a zero
+        return 0
+    end
+    
+    return computed_value
 
 end
 
@@ -215,6 +226,7 @@ local function set_outflow(x)
 end
 
 local function controller_outflow_valve()
+
     set(Press_controller_sp_ovf, setpoint_cabin_vs)   -- For debug window only
     set(Press_controller_last_ovf, get(TIME))
 
@@ -257,6 +269,7 @@ local function set_cabin_vs_target()
     else
         -- Controller
         setpoint_cabin_vs = pid_keep_cabin_altitude()
+
     end
     
     
@@ -322,6 +335,9 @@ function update()
     perf_measure_start("pressurization:update()")
     
     if get(TIME) < 1 then   -- Wait 1 second before running pressurization
+        -- This is a bad hack, but we need it. The dataref for weather pressurization stays 0 for some
+        -- time on start...
+        current_cabin_pressure_in_pa = get(Weather_curr_press_flight_level) * 3386.39
         return
     end
     
