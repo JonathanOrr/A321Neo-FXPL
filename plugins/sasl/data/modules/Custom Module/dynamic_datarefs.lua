@@ -417,6 +417,9 @@ ZULU_hours = globalProperty("sim/cockpit2/clock_timer/zulu_time_hours")
 ZULU_mins = globalProperty("sim/cockpit2/clock_timer/zulu_time_minutes")
 ZULU_secs = globalProperty("sim/cockpit2/clock_timer/zulu_time_seconds")
 
+ZULU_day   =  globalProperty("sim/cockpit2/clock_timer/current_day")
+ZULU_month =  globalProperty("sim/cockpit2/clock_timer/current_month")
+
 -- Misc
 Sun_pitch  = globalProperty("sim/graphics/scenery/sun_pitch_degrees")
 is_RAT_out = createGlobalPropertyi("a321neo/dynamics/is_RAT_out", 0, false, true, false)-- Is Ram Air Turbine out? 0: no, 1: yes (it does NOT mean that the generator is on)
