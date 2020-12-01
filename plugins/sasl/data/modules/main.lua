@@ -65,6 +65,7 @@ components = {
   HUD {},
   DCDU {},
   DRAIMS {},
+  clock {},
   failures_manager {},
   display_brightness {},
   doors {},

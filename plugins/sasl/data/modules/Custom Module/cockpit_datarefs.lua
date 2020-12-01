@@ -441,6 +441,6 @@ Lights_int_flood_pedestal_array = createGlobalPropertyfa("a321neo/cockpit/lights
 Lights_int_flood_pedestal_extra = createGlobalPropertyf("a321neo/cockpit/lights/extra_floor_ped", 0, false, true, false) -- No idea ask Jon
 
 -- Chrono
-Chrono_state_button = createGlobalPropertyf("a321neo/cockpit/misc/chrono_state", 0, false, true, false)
-Chrono_source_button = createGlobalPropertyf("a321neo/cockpit/misc/chrono_source", 2, false, true, false)
+Chrono_state_button = createGlobalPropertyf("a321neo/cockpit/misc/chrono_state", 1, false, true, false)
+Chrono_source_button = createGlobalPropertyf("a321neo/cockpit/misc/chrono_source", 0, false, true, false)
 
