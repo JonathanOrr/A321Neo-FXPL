@@ -54,7 +54,9 @@ local failures_data = {
             {name="ADR3", status=false, dataref=FAILURE_ADR[3] },
             {name="IR1",  status=false, dataref=FAILURE_IR[1] },
             {name="IR2",  status=false, dataref=FAILURE_IR[2] },
-            {name="IR3",  status=false, dataref=FAILURE_IR[3] }
+            {name="IR3",  status=false, dataref=FAILURE_IR[3] },
+            {name="GPS 1\nFAULT",  status=false, dataref=FAILURE_GPS_1 },
+            {name="GPS 2\nFAULT",  status=false, dataref=FAILURE_GPS_2 }
         }
     },
     {

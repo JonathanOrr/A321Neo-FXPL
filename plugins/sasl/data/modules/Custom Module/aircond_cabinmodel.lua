@@ -61,7 +61,7 @@ local function get_solar_irradiance(curr_hour, declination, latitude)
   local latitude_rad    = math.rad(latitude)
 
   local incidence = - math.sin(latitude_rad) * math.sin(declination_rad)
-           / (math.cos(latitude_rad) * math.cos(declination_rad))
+           / math.max(1e-4, math.cos(latitude_rad) * math.cos(declination_rad))
 
   incidence = math.min(1, math.max(-1, incidence))
 
@@ -75,7 +75,7 @@ local function get_solar_irradiance(curr_hour, declination, latitude)
 
   cosw = math.rad(15 * (curr_hour-12))
   sun_elevation = math.asin(math.sin(declination_rad) * math.sin(latitude_rad) + math.cos(declination_rad)* math.sin(latitude_rad)*math.cos(cosw))
-  x = math.pow(0.7, 1 / (1e-4 + math.cos(math.rad(90) - sun_elevation)))
+  x = math.pow(0.7, 1 / math.max(1e-4, math.cos(math.rad(90) - sun_elevation)))
   s_tot = 1353 * math.pow(x, 0.678)
 
   return s_tot
@@ -131,9 +131,15 @@ local function compute_balance(n)
 
     local cabin_pressure   = 29.92*3386.39 - get(Cabin_alt_ft)*3.378431
     
+    if cabin_pressure ~= cabin_pressure or cabin_pressure < 1 then
+        -- Ok, no, the next formulas doesn't work if your are in the space or for some reason
+        -- cabin_pressure is nan ...
+        cabin_pressure = 29.92*3386.39
+    end
+    
     local temp = get(Aircond_injected_flow_temp, n)+273.15
-    if temp ~= temp or temp == 0 then
-        -- Sometimes a spurious nan occurs
+    if temp ~= temp or temp < 100 then
+        -- This is for sure an invalid data, sometimes spurious nan or 0 occurs
         temp = 273.15
     end
     

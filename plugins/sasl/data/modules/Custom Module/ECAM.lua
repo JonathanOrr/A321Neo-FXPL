@@ -95,18 +95,22 @@ local function draw_ecam_lower_section()
     end
     --center section
     --adding a 0 to the front of the time when single digit
-    if get(ZULU_hours) < 10 then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-25, size[2]/2-408, "0" .. get(ZULU_hours), 38, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    else
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-25, size[2]/2-408, get(ZULU_hours), 38, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    end
+    if get(GPS_1_is_available) == 1 or get(GPS_2_is_available) == 1 then
+        if get(ZULU_hours) < 10 then
+            sasl.gl.drawText(Font_AirbusDUL, size[1]/2-25, size[2]/2-408, "0" .. get(ZULU_hours), 38, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        else
+            sasl.gl.drawText(Font_AirbusDUL, size[1]/2-25, size[2]/2-408, get(ZULU_hours), 38, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        end
 
-    if get(ZULU_mins) < 10 then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+25, size[2]/2-408, "0" .. get(ZULU_mins), 34, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+        if get(ZULU_mins) < 10 then
+            sasl.gl.drawText(Font_AirbusDUL, size[1]/2+25, size[2]/2-408, "0" .. get(ZULU_mins), 34, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+        else
+            sasl.gl.drawText(Font_AirbusDUL, size[1]/2+25, size[2]/2-408, get(ZULU_mins), 34, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+        end
     else
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+25, size[2]/2-408, get(ZULU_mins), 34, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-25, size[2]/2-408, "XX", 38, false, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+25, size[2]/2-408, "XX", 34, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
     end
-
     --right section
     if get(FAILURE_FUEL_FQI_1_FAULT) == 1 and get(FAILURE_FUEL_FQI_2_FAULT) == 1 then
         GW = "-----"
