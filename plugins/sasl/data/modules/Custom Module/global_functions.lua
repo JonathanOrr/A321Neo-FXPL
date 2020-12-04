@@ -349,8 +349,12 @@ end
 ELEC_sys = {}
 Fuel_sys = {}
 AI_sys   = {}
+
 Mcdu_popup = {}
+Mcdu_popup_lut = 0
 
 function MCDU_get_popup(id) return Mcdu_popup[id] end
 function MCDU_set_popup(id, val) Mcdu_popup[id] = val end
 
+function MCDU_get_lut(val) return Mcdu_popup_lut end
+function MCDU_set_lut(val) Mcdu_popup_lut = val end
