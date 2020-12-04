@@ -283,13 +283,13 @@ function update()
 end
 
 local function draw_warning_caution()
-    if get(MasterCaution) == 1 then
+    if PB.glare.master_caution.status_top then
         sasl.gl.drawTexture(master_caution_image, 10, size[2]-110, 64, 64)
     else
         sasl.gl.drawRectangle (10, size[2]-110, 64, 64, {0,0,0})    
     end
 
-    if get(MasterWarningBlinking) == 1 then
+    if PB.glare.master_warning.status_top then
         sasl.gl.drawTexture(master_warning_image, 80, size[2]-110, 64, 64)
     else
         sasl.gl.drawRectangle (80, size[2]-110, 64, 64, {0,0,0})

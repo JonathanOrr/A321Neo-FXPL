@@ -347,10 +347,6 @@ Overwing_exit_2_r_switch = createGlobalPropertyi("a321neo/cockpit/door/overwing_
 Cargo_1_switch = createGlobalPropertyi("a321neo/cockpit/door/cargo_1_switch", 0, false, true, false)--commanded door positions
 Cargo_2_switch = createGlobalPropertyi("a321neo/cockpit/door/cargo_2_switch", 0, false, true, false)--commanded door positions
 
--- Failures
-MasterCaution         = createGlobalPropertyi("a321neo/failures/master_caution", 0, false, true, false) -- Button light dataref - 0: OFF, 1: ON
-MasterWarning         = createGlobalPropertyi("a321neo/failures/master_warning", 0, false, true, false) -- Button light dataref - 0: OFF, 1: ON
-MasterWarningBlinking = createGlobalPropertyi("a321neo/failures/master_warning_blink", 0, false, true, false) -- Button light dataref - 0: OFF, 1: ON
 
 -- ELEC
 Elec_bat_1_V  = createGlobalPropertyf("a321neo/cockpit/electrical/battery_1_voltage", 0, false, true, false)
