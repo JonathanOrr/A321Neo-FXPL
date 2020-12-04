@@ -211,7 +211,6 @@ function draw()
     sasl.gl.drawTexture(MCDU_OVERLAY, 0, 0, 877, 1365,{0,0,0,lit*lit-0.1})
     sasl.gl.drawTexture(MCDU_OVERLAY_LIT, 0, 0, 877, 1365, {1, 1, 1, lit})
     sasl.gl.drawTexture(MCDU_OVERLAY_LUT, 0, 0, 877, 1365, {1, 1, 1, lut*0.5})
-    print(lut)
     --sasl.gl.drawTexture(MCDU_OVERLAY_LIT, 0, 0, 877, 1365)
     if get(Mcdu_enabled) == 1 then
         --does enabled exist?

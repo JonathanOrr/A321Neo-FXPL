@@ -1551,11 +1551,11 @@ function (phase)
         mcdu_dat["s"]["L"][1].txt = " eng"
 
         if get(Engine_option) == 0 then
-            mcdu_dat_title.txt = "        a321-521nx"
+            mcdu_dat_title.txt = "        a321-721nx"
             mcdu_dat["l"]["L"][1] = {txt = "cfm-leap-1a", col = "green"}
         else
-            mcdu_dat_title.txt = "        a321-721nx"
-            mcdu_dat["l"]["L"][1] = {txt = "pw-1130g-jm", col = "green"}
+            --mcdu_dat_title.txt = "        a321-721nx"
+            --mcdu_dat["l"]["L"][1] = {txt = "pw-1130g-jm", col = "green"}
         end
         
         mcdu_dat["s"]["L"][2].txt = " active data base"
