@@ -204,7 +204,7 @@ local function update_bleed_pressures()
 
     local left_side_press = 0
     if eng_bleed_valve_pos[1] then
-        left_side_press = left_side_press + eng_lp_pressure[1] + get(L_HP_valve) * 10
+        left_side_press = left_side_press + eng_lp_pressure[1] + get(L_HP_valve) * 10 - get(FAILURE_BLEED_ENG_1_LEAK) * 10
     end
     if apu_bleed_valve_pos then
         left_side_press = left_side_press + apu_pressure - get(FAILURE_BLEED_APU_LEAK) * 10 
@@ -215,7 +215,7 @@ local function update_bleed_pressures()
 
     local right_side_press = 0
     if eng_bleed_valve_pos[2] then
-        right_side_press = right_side_press + eng_lp_pressure[2] + get(R_HP_valve) * 10
+        right_side_press = right_side_press + eng_lp_pressure[2] + get(R_HP_valve) * 10 - get(FAILURE_BLEED_ENG_2_LEAK) * 10
     end
 
 
@@ -267,11 +267,10 @@ local function update_datarefs()
     set(R_bleed_press, bleed_pressure[2])
 
     -- Buttons
-    -- TODO FAULTS
     local cond_eng1_bleed_fail = get(FAILURE_BLEED_HP_1_VALVE_STUCK) + get(FAILURE_BLEED_IP_1_VALVE_STUCK) > 0 
-                                 or get(L_bleed_press) > 57 or get(L_bleed_temp) > 270 -- TODO other conditions
+                                 or get(L_bleed_press) > 57 or get(L_bleed_temp) > 270 or get(FAILURE_BLEED_ENG_1_LEAK) == 1
     local cond_eng2_bleed_fail = get(FAILURE_BLEED_HP_2_VALVE_STUCK) + get(FAILURE_BLEED_IP_2_VALVE_STUCK) > 0  
-                                 or get(R_bleed_press) > 57 or get(R_bleed_temp) > 270 -- TODO other conditions
+                                 or get(R_bleed_press) > 57 or get(R_bleed_temp) > 270 or get(FAILURE_BLEED_ENG_2_LEAK) == 1
 
     pb_set(PB.ovhd.ac_bleed_1, not eng_bleed_switch[1], cond_eng1_bleed_fail)
     pb_set(PB.ovhd.ac_bleed_2, not eng_bleed_switch[2], cond_eng2_bleed_fail)

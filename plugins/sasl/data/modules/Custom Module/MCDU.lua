@@ -502,7 +502,7 @@ local MCDU_ENTRY =
 
             if val == "overfly" then
                 val = "Δ"
-            else val == "slash" then
+            elseif val == "slash" then
                 val = "/"
             elseif val == "space" then
                 val = " "

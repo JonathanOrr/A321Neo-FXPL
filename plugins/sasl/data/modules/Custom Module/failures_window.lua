@@ -265,6 +265,8 @@ local failures_data = {
             {name="LEAK\nAPU", status=false, dataref=FAILURE_BLEED_APU_LEAK },
             {name="LEAK\nENG 1", status=false, dataref=FAILURE_BLEED_ENG_1_LEAK },
             {name="LEAK\nENG 2", status=false, dataref=FAILURE_BLEED_ENG_2_LEAK },
+            {name="LEAK\nWING L", status=false, dataref=FAILURE_BLEED_WING_L_LEAK },
+            {name="LEAK\nWING R", status=false, dataref=FAILURE_BLEED_WING_R_LEAK },
             
             -- Aircond
             {name="CAB FAN 1\nFAIL", status=false, dataref=FAILURE_AIRCOND_FAN_FWD },

@@ -169,7 +169,9 @@ local left_messages_list = {
     MessageGroup_BLEED_IP_FAULT,
     MessageGroup_BLEED_APU_FAULT,
     MessageGroup_BLEED_APU_LEAK,
-    
+    MessageGroup_BLEED_ENG_LEAK,
+    MessageGroup_BLEED_WING_LEAK,
+
     -- Warnings
     MessageGroup_CONFIG_TAKEOFF,
     MessageGroup_APU_FIRE,

@@ -169,6 +169,8 @@ FAILURE_BLEED_ENG_2_hi_press = createGlobalPropertyi("a321neo/failures/bleed/eng
 FAILURE_BLEED_APU_LEAK  = createGlobalPropertyi("a321neo/failures/bleed/apu_leak", 0, false, true, false)
 FAILURE_BLEED_ENG_1_LEAK= createGlobalPropertyi("a321neo/failures/bleed/eng_1_leak", 0, false, true, false)
 FAILURE_BLEED_ENG_2_LEAK= createGlobalPropertyi("a321neo/failures/bleed/eng_2_leak", 0, false, true, false)
+FAILURE_BLEED_WING_L_LEAK = createGlobalPropertyi("a321neo/failures/bleed/wing_l_leak", 0, false, true, false)
+FAILURE_BLEED_WING_R_LEAK = createGlobalPropertyi("a321neo/failures/bleed/wing_r_leak", 0, false, true, false)
 
 FAILURE_AIRCOND_FAN_FWD = createGlobalPropertyi("a321neo/failures/aircond/vent/cab_fan_fwd", 0, false, true, false)
 FAILURE_AIRCOND_FAN_AFT = createGlobalPropertyi("a321neo/failures/aircond/vent/cab_fan_aft", 0, false, true, false)
