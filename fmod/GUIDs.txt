@@ -14,9 +14,14 @@
 {850bb3a5-fa7f-4d22-bf9d-a80868eee0e7} event:/CockpitMechanical/Big Round Button Press
 {bafd0ab7-85f5-4e8f-8898-00cef3bbf4d3} event:/CockpitMechanical/Big Round Button Release
 {ed910ed0-bdc8-47e6-a8cb-d025b4ba55d4} event:/CockpitMechanical/Engine Master
+{b7c55501-4395-4b64-8bd5-5ac794d5c763} event:/CockpitMechanical/GearDown
+{6acc591c-55ac-450c-bcb2-682e9204dfa3} event:/CockpitMechanical/GearUp
 {19a8de53-9601-4d68-9d4f-9199ad28bdd8} event:/CockpitMechanical/MCDU Button Press
 {4f777470-38aa-4adf-bb4e-e68e13b9a7d7} event:/CockpitMechanical/Soft Button Press
+{7ef835e6-cc3a-41c3-850a-6cfbe0c75a05} event:/Avionics
 {bdd3f6e0-b7ff-46ac-aadd-d8b6b9c45201} event:/Engines
+{c9cf63f7-c575-4691-823b-716d0e5e1ba9} event:/Flaps
+{5339da63-baf2-40c8-aafd-6bf6a0fe8aac} event:/Ground Roll
 {9f08114d-36ec-44cc-b8bf-b2babda09f9e} bus:/
 {7f7c05a4-e05a-4d44-94fe-d4691147a9b7} bus:/Master
 {e3492bec-f854-4fbb-b2bc-23586269032e} bus:/Master/Copilot
@@ -24,8 +29,10 @@
 {06db5351-0b2f-4648-b97a-a33b40a00e11} bus:/Master/Exterior Processed/Aircraft
 {b6c156f1-9861-405c-a622-92b2ab8010a7} bus:/Master/Exterior Processed/Environment
 {8dbbc9d7-a954-4ed0-b1f1-f8111b03cbd1} bus:/Master/Exterior Unprocessed
-{6cee8772-2b5f-4158-9399-80dbe765bd69} bus:/Master/Exterior Unprocessed/Mechanical
+{3618896d-8337-431a-95fa-33ef0b3ce7cc} bus:/Master/Exterior Unprocessed/Avionics
 {072bd7fb-5c8f-4dc1-a84e-d21ca9930c53} bus:/Master/Exterior Unprocessed/Engines
+{15a189d8-7334-4c3f-92d8-7395f3687cc7} bus:/Master/Exterior Unprocessed/GroundRoll
+{6cee8772-2b5f-4158-9399-80dbe765bd69} bus:/Master/Exterior Unprocessed/Mechanical
 {751f5066-4651-4afb-a410-4cb9db0894c9} bus:/Master/Interior
 {d8526059-b27c-4eae-9b14-a1ee1cb3dfa1} bus:/Master/Radios
 {77575f3b-b9cd-4bff-9056-637cff744a14} bus:/Master/UI

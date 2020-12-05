@@ -65,6 +65,7 @@ components = {
   HUD {},
   DCDU {},
   DRAIMS {},
+  clock {},
   failures_manager {},
   display_brightness {},
   doors {},
@@ -80,3 +81,4 @@ components = {
 
 include(moduleDirectory .. "/main_windows.lua")
 include(moduleDirectory .. "/main_menu.lua")
+

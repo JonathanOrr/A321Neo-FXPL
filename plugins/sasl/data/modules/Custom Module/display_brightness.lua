@@ -386,4 +386,7 @@ function draw()
     sasl.gl.drawRectangle(495, 0, 40, 40, DRAIMS_2_brightness_alpha)
     sasl.gl.drawRectangle(540, 0, 40, 40, ISIS_brightness_alpha)
     sasl.gl.resetBlending ()
+
+    MCDU_set_lut(MCDU_1_lut_alpha[4])
 end
+
