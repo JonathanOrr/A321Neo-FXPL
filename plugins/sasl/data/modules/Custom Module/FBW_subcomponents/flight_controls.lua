@@ -3,6 +3,7 @@ include("FBW_subcomponents/flight_ctl_subcomponents/lateral_ctl.lua")
 include("FBW_subcomponents/flight_ctl_subcomponents/vertical_ctl.lua")
 include("FBW_subcomponents/flight_ctl_subcomponents/check_avil_and_failure.lua")
 include("FBW_subcomponents/flight_ctl_subcomponents/yaw_control.lua")
+include("FBW_subcomponents/flight_ctl_subcomponents/input_projection.lua")
 
 --variables--
 local total_roll = 0
@@ -26,6 +27,9 @@ sasl.registerCommandHandler(Trim_up, 1, XP_trim_up)
 sasl.registerCommandHandler(Trim_dn, 1, XP_trim_dn)
 sasl.registerCommandHandler(Trim_up_mechanical, 1, XP_trim_up)
 sasl.registerCommandHandler(Trim_dn_mechanical, 1, XP_trim_dn)
+sasl.registerCommandHandler(Rudd_trim_L, 1, Rudder_trim_left)
+sasl.registerCommandHandler(Rudd_trim_R, 1, Rudder_trim_right)
+sasl.registerCommandHandler(Rudd_trim_reset, 1, Reset_rudder_trim)
 
 --custom functions
 local function get_elev_trim_degrees()
@@ -66,14 +70,24 @@ function update()
         set(Elev_trim_degrees, get_elev_trim_degrees())
     end
 
+    --input augmentation
+    if get(DELTA_TIME) ~= 0 then
+        if get(Project_square_input) == 1 then
+            Project_circle_to_square_inputs(get(Roll), get(Pitch))
+        else
+            set(Augmented_roll, get(Roll))
+            set(Augmented_pitch, get(Pitch))
+        end
+    end
+
     --summing the controls
     if get(FBW_kill_switch) == 0 then
         total_roll = get(roll_artstab) -- Roll rate commanding
         total_pitch = get(pitch_artstab) --G commanding
         total_yaw = get(Yaw) + get(yaw_artstab)
     else
-        total_roll = get(Roll) + get(roll_artstab)
-        total_pitch = get(Pitch) + get(pitch_artstab)
+        total_roll = get(Augmented_roll) + get(roll_artstab)
+        total_pitch = get(Augmented_pitch) + get(pitch_artstab)
         total_yaw = get(Yaw) + get(yaw_artstab)
     end
 
@@ -81,13 +95,13 @@ function update()
         if get(DELTA_TIME) ~= 0 then
             Check_surface_avail()
             Ailerons_control(total_roll, false, 0)
-            Spoilers_control(total_roll, get(Speedbrake_handle_ratio), 0, false, Spoilers_var_table)
+            Spoilers_control(total_roll, get(Speedbrake_handle_ratio), 0, false, false, Spoilers_var_table)
             Elevator_control(total_pitch)
             Slats_flaps_calc_and_control()
             THS_control(Augmented_pitch_trim_ratio, get(Human_pitch_trim))
+            Rudder_control(total_yaw, 2, false, get(Human_rudder_trim), get(Resetting_rudder_trim))
             Up_shit_creek(last_total_failure)
             last_total_failure = get(FAILURE_FCTL_UP_SHIT_CREEK)
-            Rudder_control(total_yaw, true, false, 0)
         end
     end
 end

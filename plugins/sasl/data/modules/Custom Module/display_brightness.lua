@@ -58,7 +58,7 @@ local screen_lut_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/text
 --capt pfd
 sasl.registerCommandHandler ( Capt_PFD_brightness_up, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(Capt_PFD_brightness, Math_clamp(get(Capt_PFD_brightness) + 0.05, 0, 1))
+        set(Capt_PFD_brightness, Math_clamp(get(Capt_PFD_brightness) + 0.5 * get(DELTA_TIME), 0, 1))
     end
     if phase == SASL_COMMAND_CONTINUE then
         set(Capt_PFD_brightness, Math_clamp(get(Capt_PFD_brightness) + 0.5 * get(DELTA_TIME), 0, 1))
@@ -66,7 +66,7 @@ sasl.registerCommandHandler ( Capt_PFD_brightness_up, 0, function(phase)
 end)
 sasl.registerCommandHandler ( Capt_PFD_brightness_dn, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(Capt_PFD_brightness, Math_clamp(get(Capt_PFD_brightness) - 0.05, 0, 1))
+        set(Capt_PFD_brightness, Math_clamp(get(Capt_PFD_brightness) - 0.5 * get(DELTA_TIME), 0, 1))
     end
     if phase == SASL_COMMAND_CONTINUE then
         set(Capt_PFD_brightness, Math_clamp(get(Capt_PFD_brightness) - 0.5 * get(DELTA_TIME), 0, 1))
@@ -76,7 +76,7 @@ end)
 --capt nd
 sasl.registerCommandHandler ( Capt_ND_brightness_up, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(Capt_ND_brightness, Math_clamp(get(Capt_ND_brightness) + 0.05, 0, 1))
+        set(Capt_ND_brightness, Math_clamp(get(Capt_ND_brightness) + 0.5 * get(DELTA_TIME), 0, 1))
     end
     if phase == SASL_COMMAND_CONTINUE then
         set(Capt_ND_brightness, Math_clamp(get(Capt_ND_brightness) + 0.5 * get(DELTA_TIME), 0, 1))
@@ -84,7 +84,7 @@ sasl.registerCommandHandler ( Capt_ND_brightness_up, 0, function(phase)
 end)
 sasl.registerCommandHandler ( Capt_ND_brightness_dn, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(Capt_ND_brightness, Math_clamp(get(Capt_ND_brightness) - 0.05, 0, 1))
+        set(Capt_ND_brightness, Math_clamp(get(Capt_ND_brightness) - 0.5 * get(DELTA_TIME), 0, 1))
     end
     if phase == SASL_COMMAND_CONTINUE then
         set(Capt_ND_brightness, Math_clamp(get(Capt_ND_brightness) - 0.5 * get(DELTA_TIME), 0, 1))
@@ -94,7 +94,7 @@ end)
 --fo pfd
 sasl.registerCommandHandler ( Fo_PFD_brightness_up, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(Fo_PFD_brightness, Math_clamp(get(Fo_PFD_brightness) + 0.05, 0, 1))
+        set(Fo_PFD_brightness, Math_clamp(get(Fo_PFD_brightness) + 0.5 * get(DELTA_TIME), 0, 1))
     end
     if phase == SASL_COMMAND_CONTINUE then
         set(Fo_PFD_brightness, Math_clamp(get(Fo_PFD_brightness) + 0.5 * get(DELTA_TIME), 0, 1))
@@ -102,7 +102,7 @@ sasl.registerCommandHandler ( Fo_PFD_brightness_up, 0, function(phase)
 end)
 sasl.registerCommandHandler ( Fo_PFD_brightness_dn, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(Fo_PFD_brightness, Math_clamp(get(Fo_PFD_brightness) - 0.05, 0, 1))
+        set(Fo_PFD_brightness, Math_clamp(get(Fo_PFD_brightness) - 0.5 * get(DELTA_TIME), 0, 1))
     end
     if phase == SASL_COMMAND_CONTINUE then
         set(Fo_PFD_brightness, Math_clamp(get(Fo_PFD_brightness) - 0.5 * get(DELTA_TIME), 0, 1))
@@ -112,7 +112,7 @@ end)
 --fo nd
 sasl.registerCommandHandler ( Fo_ND_brightness_up, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(Fo_ND_brightness, Math_clamp(get(Fo_ND_brightness) + 0.05, 0, 1))
+        set(Fo_ND_brightness, Math_clamp(get(Fo_ND_brightness) + 0.5 * get(DELTA_TIME), 0, 1))
     end
     if phase == SASL_COMMAND_CONTINUE then
         set(Fo_ND_brightness, Math_clamp(get(Fo_ND_brightness) + 0.5 * get(DELTA_TIME), 0, 1))
@@ -120,7 +120,7 @@ sasl.registerCommandHandler ( Fo_ND_brightness_up, 0, function(phase)
 end)
 sasl.registerCommandHandler ( Fo_ND_brightness_dn, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(Fo_ND_brightness, Math_clamp(get(Fo_ND_brightness) - 0.05, 0, 1))
+        set(Fo_ND_brightness, Math_clamp(get(Fo_ND_brightness) - 0.5 * get(DELTA_TIME), 0, 1))
     end
     if phase == SASL_COMMAND_CONTINUE then
         set(Fo_ND_brightness, Math_clamp(get(Fo_ND_brightness) - 0.5 * get(DELTA_TIME), 0, 1))
@@ -130,7 +130,7 @@ end)
 --ewd
 sasl.registerCommandHandler ( EWD_brightness_up, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(EWD_brightness, Math_clamp(get(EWD_brightness) + 0.05, 0, 1))
+        set(EWD_brightness, Math_clamp(get(EWD_brightness) + 0.5 * get(DELTA_TIME), 0, 1))
     end
     if phase == SASL_COMMAND_CONTINUE then
         set(EWD_brightness, Math_clamp(get(EWD_brightness) + 0.5 * get(DELTA_TIME), 0, 1))
@@ -138,7 +138,7 @@ sasl.registerCommandHandler ( EWD_brightness_up, 0, function(phase)
 end)
 sasl.registerCommandHandler ( EWD_brightness_dn, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(EWD_brightness, Math_clamp(get(EWD_brightness) - 0.05, 0, 1))
+        set(EWD_brightness, Math_clamp(get(EWD_brightness) - 0.5 * get(DELTA_TIME), 0, 1))
     end
     if phase == SASL_COMMAND_CONTINUE then
         set(EWD_brightness, Math_clamp(get(EWD_brightness) - 0.5 * get(DELTA_TIME), 0, 1))
@@ -148,7 +148,7 @@ end)
 --ecam
 sasl.registerCommandHandler ( ECAM_brightness_up, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(ECAM_brightness, Math_clamp(get(ECAM_brightness) + 0.05, 0, 1))
+        set(ECAM_brightness, Math_clamp(get(ECAM_brightness) + 0.5 * get(DELTA_TIME), 0, 1))
     end
     if phase == SASL_COMMAND_CONTINUE then
         set(ECAM_brightness, Math_clamp(get(ECAM_brightness) + 0.5 * get(DELTA_TIME), 0, 1))
@@ -156,7 +156,7 @@ sasl.registerCommandHandler ( ECAM_brightness_up, 0, function(phase)
 end)
 sasl.registerCommandHandler ( ECAM_brightness_dn, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(ECAM_brightness, Math_clamp(get(ECAM_brightness) - 0.05, 0, 1))
+        set(ECAM_brightness, Math_clamp(get(ECAM_brightness) - 0.5 * get(DELTA_TIME), 0, 1))
     end
     if phase == SASL_COMMAND_CONTINUE then
         set(ECAM_brightness, Math_clamp(get(ECAM_brightness) - 0.5 * get(DELTA_TIME), 0, 1))
@@ -166,7 +166,7 @@ end)
 --dcdu 1
 sasl.registerCommandHandler ( DCDU_1_brightness_up, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(DCDU_1_brightness, Math_clamp(get(DCDU_1_brightness) + 0.05, 0, 1))
+        set(DCDU_1_brightness, Math_clamp(get(DCDU_1_brightness) + 0.5 * get(DELTA_TIME), 0, 1))
     end
     if phase == SASL_COMMAND_CONTINUE then
         set(DCDU_1_brightness, Math_clamp(get(DCDU_1_brightness) + 0.5 * get(DELTA_TIME), 0, 1))
@@ -174,7 +174,7 @@ sasl.registerCommandHandler ( DCDU_1_brightness_up, 0, function(phase)
 end)
 sasl.registerCommandHandler ( DCDU_1_brightness_dn, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(DCDU_1_brightness, Math_clamp(get(DCDU_1_brightness) - 0.05, 0, 1))
+        set(DCDU_1_brightness, Math_clamp(get(DCDU_1_brightness) - 0.5 * get(DELTA_TIME), 0, 1))
     end
     if phase == SASL_COMMAND_CONTINUE then
         set(DCDU_1_brightness, Math_clamp(get(DCDU_1_brightness) - 0.5 * get(DELTA_TIME), 0, 1))
@@ -184,7 +184,7 @@ end)
 --dcdu 2
 sasl.registerCommandHandler ( DCDU_2_brightness_up, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(DCDU_2_brightness, Math_clamp(get(DCDU_2_brightness) + 0.05, 0, 1))
+        set(DCDU_2_brightness, Math_clamp(get(DCDU_2_brightness) + 0.5 * get(DELTA_TIME), 0, 1))
     end
     if phase == SASL_COMMAND_CONTINUE then
         set(DCDU_2_brightness, Math_clamp(get(DCDU_2_brightness) + 0.5 * get(DELTA_TIME), 0, 1))
@@ -192,7 +192,7 @@ sasl.registerCommandHandler ( DCDU_2_brightness_up, 0, function(phase)
 end)
 sasl.registerCommandHandler ( DCDU_2_brightness_dn, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(DCDU_2_brightness, Math_clamp(get(DCDU_2_brightness) - 0.05, 0, 1))
+        set(DCDU_2_brightness, Math_clamp(get(DCDU_2_brightness) - 0.5 * get(DELTA_TIME), 0, 1))
     end
     if phase == SASL_COMMAND_CONTINUE then
         set(DCDU_2_brightness, Math_clamp(get(DCDU_2_brightness) - 0.5 * get(DELTA_TIME), 0, 1))
@@ -202,7 +202,7 @@ end)
 --mcdu 1
 sasl.registerCommandHandler ( MCDU_1_brightness_up, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(MCDU_1_brightness, Math_clamp(get(MCDU_1_brightness) + 0.05, 0, 1))
+        set(MCDU_1_brightness, Math_clamp(get(MCDU_1_brightness) + 0.5 * get(DELTA_TIME), 0, 1))
     end
     if phase == SASL_COMMAND_CONTINUE then
         set(MCDU_1_brightness, Math_clamp(get(MCDU_1_brightness) + 0.5 * get(DELTA_TIME), 0, 1))
@@ -210,7 +210,7 @@ sasl.registerCommandHandler ( MCDU_1_brightness_up, 0, function(phase)
 end)
 sasl.registerCommandHandler ( MCDU_1_brightness_dn, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(MCDU_1_brightness, Math_clamp(get(MCDU_1_brightness) - 0.05, 0, 1))
+        set(MCDU_1_brightness, Math_clamp(get(MCDU_1_brightness) - 0.5 * get(DELTA_TIME), 0, 1))
     end
     if phase == SASL_COMMAND_CONTINUE then
         set(MCDU_1_brightness, Math_clamp(get(MCDU_1_brightness) - 0.5 * get(DELTA_TIME), 0, 1))
@@ -220,7 +220,7 @@ end)
 --mcdu 2
 sasl.registerCommandHandler ( MCDU_2_brightness_up, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(MCDU_2_brightness, Math_clamp(get(MCDU_2_brightness) + 0.05, 0, 1))
+        set(MCDU_2_brightness, Math_clamp(get(MCDU_2_brightness) + 0.5 * get(DELTA_TIME), 0, 1))
     end
     if phase == SASL_COMMAND_CONTINUE then
         set(MCDU_2_brightness, Math_clamp(get(MCDU_2_brightness) + 0.5 * get(DELTA_TIME), 0, 1))
@@ -228,7 +228,7 @@ sasl.registerCommandHandler ( MCDU_2_brightness_up, 0, function(phase)
 end)
 sasl.registerCommandHandler ( MCDU_2_brightness_dn, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(MCDU_2_brightness, Math_clamp(get(MCDU_2_brightness) - 0.05, 0, 1))
+        set(MCDU_2_brightness, Math_clamp(get(MCDU_2_brightness) - 0.5 * get(DELTA_TIME), 0, 1))
     end
     if phase == SASL_COMMAND_CONTINUE then
         set(MCDU_2_brightness, Math_clamp(get(MCDU_2_brightness) - 0.5 * get(DELTA_TIME), 0, 1))
@@ -238,7 +238,7 @@ end)
 --draims 1
 sasl.registerCommandHandler ( DRAIMS_1_brightness_up, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(DRAIMS_1_brightness, Math_clamp(get(DRAIMS_1_brightness) + 0.05, 0, 1))
+        set(DRAIMS_1_brightness, Math_clamp(get(DRAIMS_1_brightness) + 0.5 * get(DELTA_TIME), 0, 1))
     end
     if phase == SASL_COMMAND_CONTINUE then
         set(DRAIMS_1_brightness, Math_clamp(get(DRAIMS_1_brightness) + 0.5 * get(DELTA_TIME), 0, 1))
@@ -246,7 +246,7 @@ sasl.registerCommandHandler ( DRAIMS_1_brightness_up, 0, function(phase)
 end)
 sasl.registerCommandHandler ( DRAIMS_1_brightness_dn, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(DRAIMS_1_brightness, Math_clamp(get(DRAIMS_1_brightness) - 0.05, 0, 1))
+        set(DRAIMS_1_brightness, Math_clamp(get(DRAIMS_1_brightness) - 0.5 * get(DELTA_TIME), 0, 1))
     end
     if phase == SASL_COMMAND_CONTINUE then
         set(DRAIMS_1_brightness, Math_clamp(get(DRAIMS_1_brightness) - 0.5 * get(DELTA_TIME), 0, 1))
@@ -256,7 +256,7 @@ end)
 --draims 2
 sasl.registerCommandHandler ( DRAIMS_2_brightness_up, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(DRAIMS_2_brightness, Math_clamp(get(DRAIMS_2_brightness) + 0.05, 0, 1))
+        set(DRAIMS_2_brightness, Math_clamp(get(DRAIMS_2_brightness) + 0.5 * get(DELTA_TIME), 0, 1))
     end
     if phase == SASL_COMMAND_CONTINUE then
         set(DRAIMS_2_brightness, Math_clamp(get(DRAIMS_2_brightness) + 0.5 * get(DELTA_TIME), 0, 1))
@@ -264,7 +264,7 @@ sasl.registerCommandHandler ( DRAIMS_2_brightness_up, 0, function(phase)
 end)
 sasl.registerCommandHandler ( DRAIMS_2_brightness_dn, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(DRAIMS_2_brightness, Math_clamp(get(DRAIMS_2_brightness) - 0.05, 0, 1))
+        set(DRAIMS_2_brightness, Math_clamp(get(DRAIMS_2_brightness) - 0.5 * get(DELTA_TIME), 0, 1))
     end
     if phase == SASL_COMMAND_CONTINUE then
         set(DRAIMS_2_brightness, Math_clamp(get(DRAIMS_2_brightness) - 0.5 * get(DELTA_TIME), 0, 1))
@@ -274,7 +274,7 @@ end)
 --isis
 sasl.registerCommandHandler ( ISIS_brightness_up, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(ISIS_brightness, Math_clamp(get(ISIS_brightness) + 0.05, 0, 1))
+        set(ISIS_brightness, Math_clamp(get(ISIS_brightness) + 0.5 * get(DELTA_TIME), 0, 1))
     end
     if phase == SASL_COMMAND_CONTINUE then
         set(ISIS_brightness, Math_clamp(get(ISIS_brightness) + 0.5 * get(DELTA_TIME), 0, 1))
@@ -282,7 +282,7 @@ sasl.registerCommandHandler ( ISIS_brightness_up, 0, function(phase)
 end)
 sasl.registerCommandHandler ( ISIS_brightness_dn, 0, function(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(ISIS_brightness, Math_clamp(get(ISIS_brightness) - 0.05, 0, 1))
+        set(ISIS_brightness, Math_clamp(get(ISIS_brightness) - 0.5 * get(DELTA_TIME), 0, 1))
     end
     if phase == SASL_COMMAND_CONTINUE then
         set(ISIS_brightness, Math_clamp(get(ISIS_brightness) - 0.5 * get(DELTA_TIME), 0, 1))

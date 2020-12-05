@@ -265,12 +265,12 @@ Toggle_FAC_2 = sasl.createCommand("a321neo/cockpit/FBW/toggle_fac_2", "toggle FA
 Toggle_SEC_1 = sasl.createCommand("a321neo/cockpit/FBW/toggle_sec_1", "toggle SEC 1")
 Toggle_SEC_2 = sasl.createCommand("a321neo/cockpit/FBW/toggle_sec_2", "toggle SEC 2")
 Toggle_SEC_3 = sasl.createCommand("a321neo/cockpit/FBW/toggle_sec_3", "toggle SEC 3")
-
+--elevator
 Trim_up = sasl.findCommand("sim/flight_controls/pitch_trim_up")
 Trim_dn = sasl.findCommand("sim/flight_controls/pitch_trim_down")
 Trim_up_mechanical = sasl.findCommand("sim/flight_controls/pitch_trim_up_mech")
 Trim_dn_mechanical = sasl.findCommand("sim/flight_controls/pitch_trim_down_mech")
-
+--rudder--
 Rudd_trim_reset = sasl.createCommand("a321neo/cockpit/FBW/rudder_trim_reset", "Rudder Trim Reset")
 Rudd_trim_R = sasl.createCommand("a321neo/cockpit/FBW/rudder_trim_R", "Rudder Trim R")
 Rudd_trim_L = sasl.createCommand("a321neo/cockpit/FBW/rudder_trim_L", "Rudder Trim L")

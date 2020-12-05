@@ -369,7 +369,7 @@ Message_CONFIG_TAKEOFF_RUD_TRIM = {
                     return COL_WARNING
             end,
             is_active = function(self)
-              return get(Rudder_trim_ratio) ~= 0
+              return get(Rudder_trim_angle) ~= 0
             end
 }
 

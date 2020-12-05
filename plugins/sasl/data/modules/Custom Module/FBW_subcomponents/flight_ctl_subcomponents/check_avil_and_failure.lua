@@ -47,6 +47,7 @@ function Check_surface_avail()
     if get(FAC_1_status) == 0 and get(FAC_2_status) == 0 then
         set(Yaw_damper_avail, 0)
         set(Rudder_trim_avail, 0)
+        set(Rudder_avail, 0)
     end
 
     --tripple failure

@@ -49,8 +49,8 @@ function draw_fctl_page()
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-263, size[2]/2-189, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-233, size[2]/2-189, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
 
-    Sasl_DrawWideFrame(673, size[2]/2-193, 25, 29, 2, 0, is_Y_ok and {0,0,0,0} or ECAM_ORANGE)
-    Sasl_DrawWideFrame(702, size[2]/2-193, 25, 29, 2, 0, is_B_ok and {0,0,0,0} or ECAM_ORANGE)
+    Sasl_DrawWideFrame(674, size[2]/2-193, 25, 29, 2, 0, is_Y_ok and {0,0,0,0} or ECAM_ORANGE)
+    Sasl_DrawWideFrame(703, size[2]/2-193, 25, 29, 2, 0, is_B_ok and {0,0,0,0} or ECAM_ORANGE)
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2+237, size[2]/2-189, "Y", 30, false, false, TEXT_ALIGN_CENTER, is_Y_ok and ECAM_GREEN or ECAM_ORANGE)
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2+267, size[2]/2-189, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
 
@@ -66,12 +66,12 @@ function draw_fctl_page()
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-263, size[2]/2+46, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-233, size[2]/2+46, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
 
-    Sasl_DrawWideFrame(673, size[2]/2+42, 25, 29, 2, 0, is_G_ok and {0,0,0,0} or ECAM_ORANGE)
-    Sasl_DrawWideFrame(702, size[2]/2+42, 25, 29, 2, 0, is_B_ok and {0,0,0,0} or ECAM_ORANGE)
+    Sasl_DrawWideFrame(674, size[2]/2+42, 25, 29, 2, 0, is_G_ok and {0,0,0,0} or ECAM_ORANGE)
+    Sasl_DrawWideFrame(703, size[2]/2+42, 25, 29, 2, 0, is_B_ok and {0,0,0,0} or ECAM_ORANGE)
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2+237, size[2]/2+46, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2+267, size[2]/2+46, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
 
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-25, size[2]/2-50, tostring(math.floor(math.abs(get(Elev_trim_degrees)))) .. "." ..  tostring(math.floor((math.abs(get(Elev_trim_degrees)) - math.floor(math.abs(get(Elev_trim_degrees)))) * 10)), 30, false, false, TEXT_ALIGN_CENTER, get(THS_avail) == 1 and ECAM_GREEN or ECAM_ORANGE)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-25, size[2]/2-50, string.format("%.1f", tostring(math.abs(get(Elev_trim_degrees)))), 30, false, false, TEXT_ALIGN_CENTER, get(THS_avail) == 1 and ECAM_GREEN or ECAM_ORANGE)
     if get(Elev_trim_degrees) >= 0 then
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2+45, size[2]/2-50, "UP", 30, false, false, TEXT_ALIGN_CENTER, get(THS_avail) == 1 and ECAM_GREEN or ECAM_ORANGE)
     else

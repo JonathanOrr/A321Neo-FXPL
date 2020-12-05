@@ -22,6 +22,7 @@ include('FBW_subcomponents/UI_subcomponents/envelop_module.lua')
 include('FBW_subcomponents/UI_subcomponents/flaps_module.lua')
 include('FBW_subcomponents/UI_subcomponents/flight_control_module.lua')
 include('FBW_subcomponents/UI_subcomponents/speed_limit_module.lua')
+include('FBW_subcomponents/UI_subcomponents/input_output_module.lua')
 
 size = {1000, 600}
 
@@ -55,6 +56,12 @@ Limit_speeds_module = {
 local UI_scroll_y_pos_command = size[2]
 local UI_scroll_y_pos = size[2]
 
+function onMouseDown(component, x, y, button, parentX, parentY)
+    if button == MB_LEFT then
+        Mouse_detect_control_info_and_setting_110x18(5 + 480 + 5 + 180 + 5 + 180 + 5, UI_scroll_y_pos - 5 -160 - 5 - 180, x, y)
+    end
+end
+
 function onMouseWheel(component, x, y, button, parentX, parentY, value)
     --scrolling target speed
     UI_scroll_y_pos_command = Math_clamp( UI_scroll_y_pos_command - value * 40, size[2], 1000)
@@ -81,4 +88,7 @@ function draw()
     Draw_slats_flaps_module_480x180(5, UI_scroll_y_pos - 5 - 160 - 5 - 180, Slats_flaps_module)
     Draw_envelop_module_480x240(5, UI_scroll_y_pos - 5 - 160 - 5 - 180 - 5 - 240)
     Draw_limit_speeds_module_480x160(5 + 480 + 5, UI_scroll_y_pos - 5 - 160, Limit_speeds_module)
+    Draw_input_module_180x180(5 + 480 + 5, UI_scroll_y_pos - 5 -160 - 5 - 180)
+    Draw_FBW_output_180x180(5 + 480 + 5 + 180 + 5, UI_scroll_y_pos - 5 -160 - 5 - 180)
+    Draw_control_info_and_setting_110x180(5 + 480 + 5 + 180 + 5 + 180 + 5, UI_scroll_y_pos - 5 -160 - 5 - 180)
 end

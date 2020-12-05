@@ -59,9 +59,10 @@ Spoilers_var_table = {
 }
 
 --ROLL SPOILERS & SPD BRAKES--
-function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_auto_flight, var_table)
-    --spoilers 2 3 4 are speedbrakes(still rolls with ailerons, manual flight deflection is 20/ 40/ 40, autoflight is 12.5/ 25/ 25 [full deployment with half handle], [on ground spoiler 1 can be open up to 6 degreess for maintainance with the spdbrk handle])
+function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_auto_flight, roll_in_direct_law, var_table)
+    --spoilers 2 3 4 are speedbrakes(still rolls with ailerons, deflection is 25/ 25/ 25, [on ground spoiler 1 can be open up to 6 degreess for maintainance with the spdbrk handle])
     --spoilers 2 3 4 5 are roll spoilers(can roll up to 35 degrees, on ground full roll is 35/ 7/ 35/ 35, in air is 25/ 7/ 25/ 25 [although this rarely happens unless on ground])
+    --spoilers 3 4 5 are roll spoilers if in direct law(in air max deflection is 7/ 25/ 25[if spoiler 4 has failed spoiler 3 takes over the roll])
     --spoilers 1 2 3 4 5 are all ground spoilers(deploys to 40 degrees)
     --ground spoiler partially extends(10 degrees) if one of the main gear is on the ground while one of the reversers is selected and the other throttle is at or near idle(this will lead to a full extention)
     --ground spoiler is deployed(40 degrees) if during takeoff airspeed is higher than 72kts and levers are moved to idle(if armed)
@@ -98,6 +99,7 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
 
     local roll_spoilers_threshold = {0.1, 0.1, 0.3, 0.1, 0.1}--amount of sidestick deflection needed to trigger the roll spoilers
 
+    --speeds--
     local l_spoilers_total_max_def = {40, 40, 40, 40, 40}
     local r_spoilers_total_max_def = {40, 40, 40, 40, 40}
     local l_spoilers_spdbrk_max_def = {6, 20, 40, 40, 0}
@@ -107,35 +109,30 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
 
     local l_spoilers_spdbrk_max_ground_def = {6, 20, 40, 40, 0}
     local r_spoilers_spdbrk_max_ground_def = {6, 20, 40, 40, 0}
-    local l_spoilers_spdbrk_max_manual_flight_def = {0, 20, 40, 40, 0}
-    local r_spoilers_spdbrk_max_manual_flight_def = {0, 20, 40, 40, 0}
-    local l_spoilers_spdbrk_max_auto_flight_def = {0, 12.5, 25, 25, 0}
-    local r_spoilers_spdbrk_max_auto_flight_def = {0, 12.5, 25, 25, 0}
-    local l_spoilers_roll_max_ground_def = {0, 35, 7, 35, 35}
-    local r_spoilers_roll_max_ground_def = {0, 35, 7, 35, 35}
-    local l_spoilers_roll_max_air_def = {0, 25, 7, 25, 25}
-    local r_spoilers_roll_max_air_def = {0, 25, 7, 25, 25}
+    local l_spoilers_spdbrk_max_air_def = {0, 25, 25, 25, 0}
+    local r_spoilers_spdbrk_max_air_def = {0, 25, 25, 25, 0}
 
-    local l_spoilers_spdbrk_spd = {8, 8, 8, 8, 8}
-    local r_spoilers_spdbrk_spd = {8, 8, 8, 8, 8}
+    local l_spoilers_spdbrk_spd = {5, 5, 5, 5, 5}
+    local r_spoilers_spdbrk_spd = {5, 5, 5, 5, 5}
     local l_spoilers_roll_spd = {0, 40, 40, 40, 40}
     local r_spoilers_roll_spd = {0, 40, 40, 40, 40}
 
     local l_spoilers_spdbrk_ground_spd = {20, 20, 20, 20, 20}
     local r_spoilers_spdbrk_ground_spd = {20, 20, 20, 20, 20}
+    local l_spoilers_spdbrk_air_spd = {5, 5, 5, 5, 5}
+    local r_spoilers_spdbrk_air_spd = {5, 5, 5, 5, 5}
+    local l_spoilers_spdbrk_high_spd_air_spd = {1, 1, 1, 1, 1}
+    local r_spoilers_spdbrk_high_spd_air_spd = {1, 1, 1, 1, 1}
 
-    if in_auto_flight == true then
-        l_spoilers_spdbrk_max_def = l_spoilers_spdbrk_max_auto_flight_def
-        r_spoilers_spdbrk_max_def = r_spoilers_spdbrk_max_auto_flight_def
-    else
-        l_spoilers_spdbrk_max_def = l_spoilers_spdbrk_max_manual_flight_def
-        r_spoilers_spdbrk_max_def = r_spoilers_spdbrk_max_manual_flight_def
-    end
+    --targets--
+    local l_spoilers_spdbrk_targets = {0, 0, 0, 0, 0}
+    local r_spoilers_spdbrk_targets = {0, 0, 0, 0, 0}
 
+    local l_spoilers_roll_targets = {0, 0, 0, 0, 0}
+    local r_spoilers_roll_targets = {0, 0, 0, 0, 0}
+
+    --SPOILERS & SPDBRAKES SPD CALCULATION------------------------------------------------------------------------
     if get(Aft_wheel_on_ground) == 1 then
-        l_spoilers_roll_max_def = l_spoilers_roll_max_ground_def
-        r_spoilers_roll_max_def = r_spoilers_roll_max_ground_def
-
         --speed up ground spoilers deflection
         l_spoilers_spdbrk_spd = l_spoilers_spdbrk_ground_spd
         r_spoilers_spdbrk_spd = r_spoilers_spdbrk_ground_spd
@@ -144,8 +141,13 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
         l_spoilers_spdbrk_max_def = l_spoilers_spdbrk_max_ground_def
         r_spoilers_spdbrk_max_def = r_spoilers_spdbrk_max_ground_def
     else
-        l_spoilers_roll_max_def = l_spoilers_roll_max_air_def
-        r_spoilers_roll_max_def = r_spoilers_roll_max_air_def
+        --slow down the spoilers for flight
+        l_spoilers_spdbrk_spd = l_spoilers_spdbrk_air_spd
+        r_spoilers_spdbrk_spd = r_spoilers_spdbrk_air_spd
+
+        --adujust max in air deflection of the speedbrakes
+        l_spoilers_spdbrk_max_def = l_spoilers_spdbrk_max_air_def
+        r_spoilers_spdbrk_max_def = r_spoilers_spdbrk_max_air_def
     end
 
     --detect if hydraulics power is avail to the surfaces then accordingly slow down the speed
@@ -166,13 +168,7 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
         r_spoilers_roll_spd[i] = r_spoilers_roll_spd[i] * (1 - get(l_spoilers_failure_dataref[i])) * (1 - get(r_spoilers_failure_dataref[i]))
     end
 
-    --conditions
-    local l_spoilers_spdbrk_targets = {0, 0, 0, 0, 0}
-    local r_spoilers_spdbrk_targets = {0, 0, 0, 0, 0}
-
-    local l_spoilers_roll_targets = {0, 0, 0, 0, 0}
-    local r_spoilers_roll_targets = {0, 0, 0, 0, 0}
-
+    --SPOILERS & SPDBRAKES TARGET CALCULATION------------------------------------------------------------------------
     --DEFLECTION TARGET CALCULATION--
     for i = 1, num_of_spoils_per_wing do
         --speedbrakes
@@ -199,10 +195,32 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
     if get(SEC_1_status) == 0 and get(SEC_3_status) == 0 then
         l_spoilers_spdbrk_targets = {0, 0, 0, 0, 0}
         r_spoilers_spdbrk_targets = {0, 0, 0, 0, 0}
-    elseif get(Flaps_internal_config) == 5 then
+    elseif get(Flaps_internal_config) == 4 or get(Flaps_internal_config) == 5 then
         l_spoilers_spdbrk_targets = {0, 0, 0, 0, 0}
         r_spoilers_spdbrk_targets = {0, 0, 0, 0, 0}
-    --lacking above MCT/ ELEV fail(inhibites 3, 4)/ alpha protection/ upon a.prot toga
+    --lacking above MCT/ ELEV fail(inhibites 3, 4)/ alpha protection/ upon a.prot toga [and restoring speedbrake avail by reseting the lever position]
+    end
+
+    --if the aircraft is in roll direct law change the roll spoiler deflections to limit roll rate
+    if roll_in_direct_law then
+        if get(L_spoiler_4_avail) == 1 then
+            l_spoilers_roll_targets[1] = 0
+            l_spoilers_roll_targets[2] = 0
+            l_spoilers_roll_targets[3] = 0
+        else
+            l_spoilers_roll_targets[1] = 0
+            l_spoilers_roll_targets[2] = 0
+            l_spoilers_roll_targets[4] = 0
+        end
+        if get(R_spoiler_4_avail) == 1 then
+            r_spoilers_roll_targets[1] = 0
+            r_spoilers_roll_targets[2] = 0
+            r_spoilers_roll_targets[3] = 0
+        else
+            r_spoilers_roll_targets[1] = 0
+            r_spoilers_roll_targets[2] = 0
+            r_spoilers_roll_targets[4] = 0
+        end
     end
 
     --SECs position reset--
@@ -213,6 +231,19 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
         --roll spoilers position reset
         l_spoilers_roll_targets[i] = l_spoilers_roll_targets[i] * get(l_spoilers_flt_computer_dataref[i])
         r_spoilers_roll_targets[i] = r_spoilers_roll_targets[i] * get(r_spoilers_flt_computer_dataref[i])
+    end
+
+    --reduce speedbrakes retraction speeds in high speed conditions
+    if (get(PFD_Capt_IAS) >= 315 or get(PFD_Fo_IAS) >= 315 or get(Capt_Mach) >= 0.75 or get(Fo_Mach) >= 0.75) and in_auto_flight then
+        --check if any spoilers are retracting and slow down accordingly
+        for i = 1, num_of_spoils_per_wing do
+            if l_spoilers_spdbrk_targets[i] < get(l_spoilers_datarefs[i]) then
+                r_spoilers_spdbrk_spd[i] = l_spoilers_spdbrk_high_spd_air_spd[i]
+            end
+            if r_spoilers_spdbrk_targets[i] < get(r_spoilers_datarefs[i])then
+                r_spoilers_spdbrk_spd[i] = r_spoilers_spdbrk_high_spd_air_spd[i]
+            end
+        end
     end
 
     --PRE-EXTENTION DEFECTION VALUE CALCULATION --> OUTPUT OF CALCULATED VALUE TO THE SURFACES--

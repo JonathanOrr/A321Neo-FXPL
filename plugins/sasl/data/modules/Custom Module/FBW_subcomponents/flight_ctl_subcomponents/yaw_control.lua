@@ -1,5 +1,41 @@
-function Rudder_control(yaw_input, in_normal_or_alt_law, is_in_auto_flight, trim_input)
-    --[[in auto flight the rudder trim is controlled by the FMGC, otherwise the pilot can change the value by thing the knob on the center pedestal
+function Rudder_trim_left(phase)
+    if phase == SASL_COMMAND_BEGIN or phase == SASL_COMMAND_CONTINUE then
+        set(Rudder_trim_knob_pos, -1)
+
+        if get(Rudder_trim_avail) == 1 then
+            set(Human_rudder_trim, -1)
+        end
+    end
+
+    if phase == SASL_COMMAND_END then
+        set(Rudder_trim_knob_pos, 0)
+    end
+end
+
+function Rudder_trim_right(phase)
+    if phase == SASL_COMMAND_BEGIN or phase == SASL_COMMAND_CONTINUE then
+        set(Rudder_trim_knob_pos, 1)
+
+        if get(Rudder_trim_avail) == 1 then
+            set(Human_rudder_trim, 1)
+        end
+    end
+
+    if phase == SASL_COMMAND_END then
+        set(Rudder_trim_knob_pos, 0)
+    end
+end
+
+function Reset_rudder_trim(phase)
+    if phase == SASL_COMMAND_BEGIN or phase == SASL_COMMAND_CONTINUE then
+        if get(Rudder_trim_avail) == 1 then
+            set(Resetting_rudder_trim, 1)
+        end
+    end
+end
+
+function Rudder_control(yaw_input, fbw_current_law, is_in_auto_flight, trim_input, resetting_trim)
+    --[[in auto flight the rudder trim is controlled by the FMGC, otherwise the pilot can change the value by using the knob on the center pedestal
 
     reversions
     flight computers FAC 1 --> FAC 2
@@ -8,19 +44,51 @@ function Rudder_control(yaw_input, in_normal_or_alt_law, is_in_auto_flight, trim
     mech             full mechanical link
     ]]
 
+    --FBW law constants--
+    --2 = NORMAL LAW
+    --1 = ALT LAW
+    --0 = DIRECT LAW
+
     --PROPERTIES--
-    local rudder_speed = 0
-    local rudder_trim_speed = 0
-    local rudder_travel_target = set(Rudder, Math_rescale(-1, get(Rudder_travel_lim), 0, -get(Rudder_travel_lim) * get(Rudder_trim_ratio), yaw_input) + Math_rescale(0, -get(Rudder_travel_lim) * get(Rudder_trim_ratio), 1, -get(Rudder_travel_lim), yaw_input))
+    local rudder_speed = 24
+    local rudder_trim_speed = 1
+    --the proportion is the same no matter the limits, hence at higher speed you'll reach the limit with less deflection
+    local rudder_travel_target = yaw_input * 30
 
     --RUDDER LIMITS--
-    if in_normal_or_alt_law == true and (get(FAC_1_status) == 1 or get(FAC_2_status) == 1) then
-        set(Rudder_travel_lim, -22.1 * math.sqrt(1 - ( (get(PFD_Capt_IAS) + get(PFD_Fo_IAS) / 2) / 220)^2 ) + 25)
+    if (fbw_current_law == 2 or fbw_current_law == 1) and (get(FAC_1_status) == 1 or get(FAC_2_status) == 1) and (get(DC_ess_bus_pwrd) == 1 or get(DC_bus_2_pwrd) == 1) then
+        set(Rudder_travel_lim, -22.1 * math.sqrt(1 - ( (Math_clamp((get(PFD_Capt_IAS) + get(PFD_Fo_IAS)) / 2, 160, 380) - 380) / 220)^2 ) + 25)
     end
 
-    if in_normal_or_alt_law == false or get(Slats) > 0 then
+    if fbw_current_law == 0 or get(Slats) > 0 then
         set(Rudder_travel_lim, Set_anim_value(get(Rudder_travel_lim), 30, 0, 30, 0.5))
     end
 
-    --set(Rudder, rudder_travel_target)
+    if get(Force_full_rudder_limit) == 1 then
+        set(Rudder_travel_lim, 30)
+    end
+
+    --rudder trim
+    if resetting_trim == 1 then
+        if get(trim_input) ~= 0 then
+            set(Resetting_rudder_trim, 0)
+        elseif get(Rudder_trim_angle) == 0 then
+            set(Resetting_rudder_trim, 0)
+        end
+    end
+
+    --if the FACs are working and the electrical motors are working
+    if get(FAC_1_status) == 1 or get(FAC_2_status) == 1 and (get(DC_ess_bus_pwrd) == 1 or get(DC_bus_2_pwrd) == 1) and resetting_trim == 0 then
+        if resetting_trim == 0 then--apply human input
+            set(Rudder_trim_angle, Math_clamp(Math_clamp(get(Rudder_trim_angle) + trim_input * rudder_trim_speed * get(DELTA_TIME), -20, 20), -get(Rudder_travel_lim), get(Rudder_travel_lim)))
+            set(Human_rudder_trim, 0)
+        else--reset rudder trim
+            set(Rudder_trim_angle, Set_linear_anim_value(get(Rudder_trim_angle), 0, -20, 20, rudder_trim_speed))
+            set(Human_rudder_trim, 0)
+        end
+    end
+
+    --rudder position calculation--
+    set(Augmented_rudder_angle, Set_linear_anim_value(get(Augmented_rudder_angle), rudder_travel_target, -get(Rudder_travel_lim) - get(Rudder_trim_angle), get(Rudder_travel_lim) - get(Rudder_trim_angle), rudder_speed))
+    set(Rudder, Math_clamp(get(Rudder_trim_angle) + get(Augmented_rudder_angle), -get(Rudder_travel_lim), get(Rudder_travel_lim)))
 end

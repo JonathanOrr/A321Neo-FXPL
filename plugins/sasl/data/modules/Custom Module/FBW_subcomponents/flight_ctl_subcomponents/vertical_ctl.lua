@@ -80,7 +80,8 @@ function THS_control(THS_input_dataref, human_input)
     local input = Math_clamp(get(THS_input_dataref), -1, 1)
 
     --properties--
-    local THS_pitch_rate = 0.2
+    local THS_clean_pitch_rate = 0.3
+    local THS_flaps_pitch_rate = 0.7
     local Human_trim_wheel_pitch_rate = 0.2
     local max_ths_up = get(Max_THS_up)
     local max_ths_dn = -get(Max_THS_dn)
@@ -89,12 +90,23 @@ function THS_control(THS_input_dataref, human_input)
     local caculated_trim_speed = 0
     local caculated_human_trim_speed = 0
 
-    if get(Elev_trim_ratio) >= 0 then
-        caculated_trim_speed = THS_pitch_rate / max_ths_up
-        caculated_human_trim_speed = Human_trim_wheel_pitch_rate / max_ths_up
+    --THS pitch rate to trim ratio conversion
+    if get(Flaps_internal_config) > 0 then
+        if get(Elev_trim_ratio) >= 0 then
+            caculated_trim_speed = THS_flaps_pitch_rate / max_ths_up
+            caculated_human_trim_speed = Human_trim_wheel_pitch_rate / max_ths_up
+        else
+            caculated_trim_speed = THS_flaps_pitch_rate / -max_ths_dn
+            caculated_human_trim_speed = Human_trim_wheel_pitch_rate / -max_ths_dn
+        end
     else
-        caculated_trim_speed = THS_pitch_rate / -max_ths_dn
-        caculated_human_trim_speed = Human_trim_wheel_pitch_rate / -max_ths_dn
+        if get(Elev_trim_ratio) >= 0 then
+            caculated_trim_speed = THS_clean_pitch_rate / max_ths_up
+            caculated_human_trim_speed = Human_trim_wheel_pitch_rate / max_ths_up
+        else
+            caculated_trim_speed = THS_clean_pitch_rate / -max_ths_dn
+            caculated_human_trim_speed = Human_trim_wheel_pitch_rate / -max_ths_dn
+        end
     end
 
     --logics
