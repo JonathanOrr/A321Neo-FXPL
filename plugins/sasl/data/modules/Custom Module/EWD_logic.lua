@@ -83,7 +83,6 @@ local left_messages_list = {
     MessageGroup_ADKIS_NWS,
     MessageGroup_APU_SHUTDOWN,
     MessageGroup_GEAR_NOT_UPLOCKED,
-    MessageGroup_BLEED_OFF,
     MessageGroup_TCAS_FAULT,
     MessageGroup_ADR_FAULT_SINGLE,
     MessageGroup_ADR_FAULT_DOUBLE,
@@ -161,9 +160,15 @@ local left_messages_list = {
     MessageGroup_DOORS_CABIN,
     MessageGroup_DOORS_CARGO,
     MessageGroup_DOORS_EMER_EXIT,
-    
+    MessageGroup_BLEED_OFF,
     MessageGroup_AIR_X_BLEED_FAULT,
-    
+    MessageGroup_BLEED_BMC_FAULT,
+    MessageGroup_BLEED_ENG1_FAULT,
+    MessageGroup_BLEED_ENG2_FAULT,
+    MessageGroup_BLEED_HP_FAULT,
+    MessageGroup_BLEED_IP_FAULT,
+    MessageGroup_BLEED_APU_FAULT,
+    MessageGroup_BLEED_APU_LEAK,
     
     -- Warnings
     MessageGroup_CONFIG_TAKEOFF,

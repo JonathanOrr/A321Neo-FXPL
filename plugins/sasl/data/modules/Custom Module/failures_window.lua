@@ -247,6 +247,11 @@ local failures_data = {
         group="BLEED/AIR",
         failures={
             -- Bleed
+            {name="ENG 1 HI\nPRESS", status=false, dataref=FAILURE_BLEED_ENG_1_hi_press },
+            {name="ENG 1 HI\nTEMP", status=false, dataref=FAILURE_BLEED_ENG_1_hi_temp },
+            {name="ENG 2 HI\nPRESS", status=false, dataref=FAILURE_BLEED_ENG_2_hi_press },
+            {name="ENG 2 HI\nTEMP", status=false, dataref=FAILURE_BLEED_ENG_2_hi_temp },
+
             {name="ENG 1 HP VLV\nSTUCK", status=false, dataref=FAILURE_BLEED_HP_1_VALVE_STUCK },
             {name="ENG 2 HP VLV\nSTUCK", status=false, dataref=FAILURE_BLEED_HP_2_VALVE_STUCK },
             {name="ENG 1 IP VLV\nSTUCK", status=false, dataref=FAILURE_BLEED_IP_1_VALVE_STUCK },
@@ -257,6 +262,9 @@ local failures_data = {
             {name="PACK 2 VLV\nSTUCK", status=false, dataref=FAILURE_BLEED_PACK_2_VALVE_STUCK },
             {name="BMC 1\nFAIL", status=false, dataref=FAILURE_BLEED_BMC_1 },
             {name="BMC 2\nFAIL", status=false, dataref=FAILURE_BLEED_BMC_2 },
+            {name="LEAK\nAPU", status=false, dataref=FAILURE_BLEED_APU_LEAK },
+            {name="LEAK\nENG 1", status=false, dataref=FAILURE_BLEED_ENG_1_LEAK },
+            {name="LEAK\nENG 2", status=false, dataref=FAILURE_BLEED_ENG_2_LEAK },
             
             -- Aircond
             {name="CAB FAN 1\nFAIL", status=false, dataref=FAILURE_AIRCOND_FAN_FWD },
