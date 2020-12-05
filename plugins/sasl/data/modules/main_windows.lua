@@ -63,7 +63,7 @@ Packs_debug_window = contextWindow {
 
 SSS_FBW_UI = contextWindow {
   name = "SSS FBW UI";
-  position = { 50 , 250 , 1000 , 600};
+  position = { 50 , 250 , 975 , 600};
   noBackground = true ;
   proportional = false ;
   minimumSize = { 500 , 300 };

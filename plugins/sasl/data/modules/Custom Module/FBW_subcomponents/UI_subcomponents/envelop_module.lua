@@ -3,6 +3,24 @@ Upper_g_lim = 2.5
 Lower_g_lim = -1
 
 function Draw_envelop_module_480x240(x_pos, y_pos)
+    local vsw_aprot_alphas = {
+        7,
+        13,
+        13,
+        14,
+        13,
+        12
+    }
+
+    local alpha_max_alphas = {
+        11,
+        16,
+        16,
+        17,
+        16,
+        16
+    }
+
     --updates FBW G constraints
     if get(Flaps_handle_ratio) > 0.1 then 
         Upper_g_lim = Set_anim_value(Upper_g_lim, 2, -1, 2.5, 1)
@@ -58,7 +76,7 @@ function Draw_envelop_module_480x240(x_pos, y_pos)
     sasl.gl.drawArc(CENTER_X + 120, CENTER_Y, 103, 110, 180, Math_clamp(get(Flightmodel_pitch), -30, 50), ORANGE)
     sasl.gl.drawArc(CENTER_X + 120, CENTER_Y, 103, 110, 0, Math_clamp(get(Flightmodel_pitch), -15, 30), LIGHT_BLUE)
     sasl.gl.drawArc(CENTER_X + 120, CENTER_Y, 103, 110, 180, Math_clamp(get(Flightmodel_pitch), -15, 30), LIGHT_BLUE)
-    --g load indicat
+    --g load indications
     sasl.gl.drawArc(CENTER_X + 120, CENTER_Y, 94, 101, 0, 360, LIGHT_GREY)
     sasl.gl.drawArc(CENTER_X + 120, CENTER_Y, 94, 101, (Lower_g_lim) * 10, (Upper_g_lim -Lower_g_lim) * 10, WHITE)
     sasl.gl.drawArc(CENTER_X + 120, CENTER_Y, 94, 101, 180 + (Lower_g_lim ) * 10, (Upper_g_lim -Lower_g_lim) * 10, WHITE)
@@ -66,10 +84,23 @@ function Draw_envelop_module_480x240(x_pos, y_pos)
     sasl.gl.drawArc(CENTER_X + 120, CENTER_Y, 94, 101, 180, get(Total_vertical_g_load) * 10, ORANGE)
     sasl.gl.drawArc(CENTER_X + 120, CENTER_Y, 94, 101, 0, Math_clamp(get(Total_vertical_g_load) * 10, Lower_g_lim * 10, Upper_g_lim * 10), LIGHT_BLUE)
     sasl.gl.drawArc(CENTER_X + 120, CENTER_Y, 94, 101, 180, Math_clamp(get(Total_vertical_g_load) * 10, Lower_g_lim * 10, Upper_g_lim * 10), LIGHT_BLUE)
+    --alpha indication
+    sasl.gl.drawArc(CENTER_X + 120, CENTER_Y, 85, 92, 0, 360, LIGHT_GREY)
+    sasl.gl.drawArc(CENTER_X + 120, CENTER_Y, 85, 92, get(Flightmodel_pitch) + 15, - vsw_aprot_alphas[get(Flaps_internal_config) + 1] - 15, WHITE)
+    sasl.gl.drawArc(CENTER_X + 120, CENTER_Y, 85, 92, get(Flightmodel_pitch) + 15 + 180, - vsw_aprot_alphas[get(Flaps_internal_config) + 1] - 15, WHITE)
+    sasl.gl.drawArc(CENTER_X + 120, CENTER_Y, 85, 92, get(Flightmodel_pitch), - get(Alpha), RED)
+    sasl.gl.drawArc(CENTER_X + 120, CENTER_Y, 85, 92, get(Flightmodel_pitch) + 180, - get(Alpha), RED)
+    sasl.gl.drawArc(CENTER_X + 120, CENTER_Y, 85, 92, get(Flightmodel_pitch), - Math_clamp(get(Alpha), -15, alpha_max_alphas[get(Flaps_internal_config) + 1]), ORANGE)
+    sasl.gl.drawArc(CENTER_X + 120, CENTER_Y, 85, 92, get(Flightmodel_pitch) + 180, - Math_clamp(get(Alpha), -15, alpha_max_alphas[get(Flaps_internal_config) + 1]), ORANGE)
+    sasl.gl.drawArc(CENTER_X + 120, CENTER_Y, 85, 92, get(Flightmodel_pitch), - Math_clamp(get(Alpha), -15, vsw_aprot_alphas[get(Flaps_internal_config) + 1]), LIGHT_BLUE)
+    sasl.gl.drawArc(CENTER_X + 120, CENTER_Y, 85, 92, get(Flightmodel_pitch) + 180, - Math_clamp(get(Alpha), -15, vsw_aprot_alphas[get(Flaps_internal_config) + 1]), LIGHT_BLUE)
     --aircraft image
     sasl.gl.drawRotatedTextureCenter (Aircraft_side_img, -get(Flightmodel_pitch), CENTER_X + 120, CENTER_Y, CENTER_X + 120 - (160 / 2), CENTER_Y - (53 /2) + 12, 160, 53, {1,1,1})
     --text indications
-    sasl.gl.drawArc(CENTER_X + 120, CENTER_Y, 20, 92, 270- 40, 80, {LIGHT_GREY[1], LIGHT_GREY[2], LIGHT_GREY[3], 0.6})
+    sasl.gl.drawArc(CENTER_X + 120, CENTER_Y, 45, 83, 60, 60, {LIGHT_GREY[1], LIGHT_GREY[2], LIGHT_GREY[3], 0.6})
+    sasl.gl.drawText(B612_MONO_bold, CENTER_X + 120, CENTER_Y + 65, "ALPHA", 12, false, false, TEXT_ALIGN_CENTER, WHITE)
+    sasl.gl.drawText(B612_MONO_bold, CENTER_X + 120, CENTER_Y + 50, string.format("%.1f", tostring(get(Alpha))) .. "°", 12, false, false, TEXT_ALIGN_CENTER, LIGHT_BLUE)
+    sasl.gl.drawArc(CENTER_X + 120, CENTER_Y, 20, 83, 270 - 40, 80, {LIGHT_GREY[1], LIGHT_GREY[2], LIGHT_GREY[3], 0.6})
     sasl.gl.drawText(B612_MONO_bold, CENTER_X + 120, CENTER_Y - 35, "PITCH", 12, false, false, TEXT_ALIGN_CENTER, WHITE)
     sasl.gl.drawText(B612_MONO_bold, CENTER_X + 120, CENTER_Y - 50, string.format("%.2f", tostring(get(Flightmodel_pitch))) .. "°", 12, false, false, TEXT_ALIGN_CENTER, LIGHT_BLUE)
     sasl.gl.drawText(B612_MONO_bold, CENTER_X + 120, CENTER_Y - 65, "G LOAD", 12, false, false, TEXT_ALIGN_CENTER, WHITE)
