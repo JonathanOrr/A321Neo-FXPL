@@ -95,8 +95,8 @@ function update()
         set(VLS, Set_anim_value(get(VLS), 1.28 * Extract_vs1g(get(Aircraft_total_weight_kgs), get(Flaps_internal_config), false), 0, 350, 0.3))
     end
 
-    set(S_speed, 1.23 * Extract_vs1g(get(Aircraft_total_weight_kgs), 0, false))
-    set(F_speed, 1.26 * Extract_vs1g(get(Aircraft_total_weight_kgs), 2, false))
+    set(S_speed, 1.29 * Extract_vs1g(get(Aircraft_total_weight_kgs), 0, false))
+    set(F_speed, 1.23 * Extract_vs1g(get(Aircraft_total_weight_kgs), 2, false))
     set(Capt_GD, (2 * get(Aircraft_total_weight_kgs) / 1000 + 90) + Math_clamp_lower((get(PFD_Capt_Baro_Altitude) - 20000) / 1000, 0))
     set(Fo_GD,   (2 * get(Aircraft_total_weight_kgs) / 1000 + 90) + Math_clamp_lower((get(PFD_Fo_Baro_Altitude)   - 20000) / 1000, 0))
     --stall speeds(configuration dependent)

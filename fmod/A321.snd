@@ -2,6 +2,8 @@ A
 1000
 ACF_SOUNDS
 
+DISABLE_LEGACY_ALERT_SOUNDS
+
 ###################################################################################
 BEGIN_SOUND_SPACE
   SOUND_INDEX 0
@@ -29,6 +31,22 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_START_COND sim/flightmodel2/engines/N1_percent[1] > 0
   EVENT_END_COND sim/flightmodel2/engines/N1_percent[1] == 0
   PARAM_DREF_IDX 1
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Ground Roll
+  VEH_PART tire 1
+  EVENT_START_COND 	sim/flightmodel/position/groundspeed > 0
+  EVENT_END_COND 	sim/flightmodel/position/groundspeed == 0
+  PARAM_DREF_IDX 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Ground Roll
+  VEH_PART tire 2
+  EVENT_START_COND 	sim/flightmodel/position/groundspeed > 0
+  EVENT_END_COND 	sim/flightmodel/position/groundspeed == 0
+  PARAM_DREF_IDX 0
 END_SOUND_ATTACHMENT
 
 ##############################################################THRUST LEVERS###################################################
@@ -614,13 +632,13 @@ END_SOUND_ATTACHMENT
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/Soft Button Press
   VEH_XYZ 0 1.9 -18.6
-  EVENT_CMND_DOWN 
+  EVENT_CMND_DOWN a321neo/cockpit/nd/capt_terrain_toggle
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/Soft Button Press
   VEH_XYZ 0 1.9 -18.6
-  EVENT_CMND_DOWN 
+  EVENT_CMND_DOWN a321neo/cockpit/nd/fo_terrain_toggle
 END_SOUND_ATTACHMENT
 
 ##############################################################################################################################
@@ -1520,4 +1538,50 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/Engine Master
   VEH_XYZ 0 1.5 -18.4
   EVENT_START_COND a321neo/cockpit/engine/master_2 == 0
+END_SOUND_ATTACHMENT
+
+#################################################################################################
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/GearDown
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_START_COND 	sim/cockpit/switches/gear_handle_status == 1
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/GearUp
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_START_COND 	sim/cockpit/switches/gear_handle_status == 0
+END_SOUND_ATTACHMENT
+
+#################################################################################################
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/GearDown
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_START_COND 	a321neo/cockpit/mip/brk_fan_bottom == 1
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/GearUp
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_START_COND 	a321neo/cockpit/mip/brk_fan_bottom == 0
+END_SOUND_ATTACHMENT
+
+#################################################################################################FLAPS
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Flaps
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_START_COND 	a321neo/dynamics/FBW/slats_and_flaps/flaps_in_transit == 1
+  CUE_TRIGGER_COND  a321neo/dynamics/FBW/slats_and_flaps/flaps_in_transit == 0
+END_SOUND_ATTACHMENT
+
+#################################################################################################AVIONICS
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Avionics
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_START_COND 	a321neo/dynamics/electrical/bus/ac_ess_powered == 1
+  CUE_TRIGGER_COND  a321neo/dynamics/electrical/bus/ac_ess_powered == 0
 END_SOUND_ATTACHMENT

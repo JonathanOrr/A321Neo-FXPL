@@ -35,7 +35,7 @@ SEC_1_off_button = createGlobalPropertyi("a321neo/cockpit/FBW/sec_1_off", 0, fal
 SEC_2_off_button = createGlobalPropertyi("a321neo/cockpit/FBW/sec_2_off", 0, false, true, false) --0 is on 1 if off
 SEC_3_off_button = createGlobalPropertyi("a321neo/cockpit/FBW/sec_3_off", 0, false, true, false) --0 is on 1 if off
 
-Rudd_trim_knob_pos = createGlobalPropertyf("a321neo/cockpit/FBW/rudder_trim_pos", 0, false, true, false) -- -1, 0, 1
+Rudder_trim_knob_pos = createGlobalPropertyf("a321neo/cockpit/FBW/rudder_trim_pos", 0, false, true, false) -- -1, 0, 1
 
 ---------------------------------------------------------------------------------------------------------------------------------------
 --display brightness
