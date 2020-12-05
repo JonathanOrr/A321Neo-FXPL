@@ -155,6 +155,13 @@ ECAM_show = createGlobalPropertyfa("a321neo/cockpit/source_switching/ecam_show",
 
 ECAM_on_nd_dial = createGlobalPropertyi("a321neo/cockpit/source_switching/ECAM_on_nd_dial", 0, false, true, false)--used to swap the position of the ECAM with the NDs 0capt, 1norm, 2FO
 
+Capt_pfd_valid= createGlobalPropertyi("a321neo/cockpit/source_switching/capt_pfd_valid",0, false, true, false) -- 0: invalid data, 1: OK, 2: test mode, 3: waiting for data
+Capt_nd_valid = createGlobalPropertyi("a321neo/cockpit/source_switching/capt_nd_valid", 0, false, true, false) -- 0: invalid data, 1: OK, 2: test mode, 3: waiting for data
+Fo_pfd_valid  = createGlobalPropertyi("a321neo/cockpit/source_switching/fo_pfd_valid",  0, false, true, false) -- 0: invalid data, 1: OK, 2: test mode, 3: waiting for data
+Fo_nd_valid   = createGlobalPropertyi("a321neo/cockpit/source_switching/fo_nd_valid",   0, false, true, false) -- 0: invalid data, 1: OK, 2: test mode, 3: waiting for data
+EWD_valid = createGlobalPropertyi("a321neo/cockpit/source_switching/ewd_valid",     0, false, true, false) -- 0: invalid data, 1: OK, 2: test mode, 3: waiting for data
+ECAM_valid = createGlobalPropertyi("a321neo/cockpit/source_switching/ecam_valid",    0, false, true, false) -- 0: invalid data, 1: OK, 2: test mode, 3: waiting for data
+
 --engine & apu
 Engine_mode_knob = createGlobalPropertyi("a321neo/cockpit/engine/engine_mode_value", 0, false, true, false) -- -1crank, 0norm, 1ignition
 Engine_mode_knob_pos = createGlobalPropertyf("a321neo/cockpit/engine/engine_mode", 0, false, true, false) -- -1crank, 0norm, 1ignition

@@ -236,7 +236,11 @@ local failures_data = {
             {name="F/O MCDU\nFAULT", status=false, dataref=FAILURE_DISPLAY_MCDU_2 },
             {name="CAPT DRAIMS\nFAULT", status=false, dataref=FAILURE_DISPLAY_DRAIMS_1 },
             {name="F/O DRAIMS\nFAULT", status=false, dataref=FAILURE_DISPLAY_DRAIMS_2 },
-            {name="ISIS\nFAULT", status=false, dataref=FAILURE_DISPLAY_ISIS }
+            {name="ISIS\nFAULT", status=false, dataref=FAILURE_DISPLAY_ISIS },
+            
+            {name="DMC 1\nFAULT", status=false, dataref=FAILURE_DISPLAY_DMC_1 },
+            {name="DMC 2\nFAULT", status=false, dataref=FAILURE_DISPLAY_DMC_2 },
+            {name="DMC 3\nFAULT", status=false, dataref=FAILURE_DISPLAY_DMC_3 },
         }
     },
     {

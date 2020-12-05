@@ -21,6 +21,7 @@ include('EWD_flight_phases.lua')
 include('EWD_msgs/adirs.lua')
 include('EWD_msgs/bleed.lua')
 include('EWD_msgs/brakes_and_antiskid.lua')
+include('EWD_msgs/displays.lua')
 include('EWD_msgs/doors.lua')
 include('EWD_msgs/electrical.lua')
 include('EWD_msgs/engines_and_apu.lua')
@@ -88,6 +89,7 @@ local left_messages_list = {
     MessageGroup_ADR_FAULT_DOUBLE,
     MessageGroup_IR_FAULT_SINGLE,
     MessageGroup_IR_FAULT_DOUBLE,
+    MessageGroup_DMC_FAULT,
     MessageGroup_HYD_G_RSVR_LO_LVL,
     MessageGroup_HYD_B_RSVR_LO_LVL,
     MessageGroup_HYD_Y_RSVR_LO_LVL,

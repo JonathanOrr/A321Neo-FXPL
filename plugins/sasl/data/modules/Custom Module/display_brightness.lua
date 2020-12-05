@@ -19,8 +19,8 @@
 position= {0,0,4096,4096}
 size = {4096, 4096}
 
---fonts
-local B612regular = sasl.gl.loadFont("fonts/B612-Regular.ttf")
+include('constants.lua')
+
 
 --colors
 local Capt_PFD_brightness_alpha = {0.0, 0.0, 0.0, 1}
@@ -354,7 +354,7 @@ function update()
     
 end
 
-function draw()
+local function draw_lut_and_brightness()
     sasl.gl.setBlendEquation ( BLEND_EQUATION_ADD )
     sasl.gl.setBlendFunction ( BLEND_SOURCE_ALPHA, BLEND_ONE_MINUS_SOURCE_ALPHA)
     sasl.gl.drawTexture(screen_lut_img, 0, 0, 40, 40, Capt_PFD_lut_alpha)
@@ -388,5 +388,10 @@ function draw()
     sasl.gl.resetBlending ()
 
     MCDU_set_lut(MCDU_1_lut_alpha[4])
+    
+end
+
+function draw()
+    draw_lut_and_brightness()
 end
 

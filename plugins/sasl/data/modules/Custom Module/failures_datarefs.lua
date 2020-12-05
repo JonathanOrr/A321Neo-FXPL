@@ -212,3 +212,13 @@ FAILURE_DISPLAY_DRAIMS_1= createGlobalPropertyi("a321neo/failures/displays/draim
 FAILURE_DISPLAY_DRAIMS_2= createGlobalPropertyi("a321neo/failures/displays/draims_2", 0, false, true, false)
 FAILURE_DISPLAY_ISIS    = createGlobalPropertyi("a321neo/failures/displays/isis", 0, false, true, false)
 
+FAILURE_DISPLAY_DMC_1   = createGlobalPropertyi("a321neo/failures/displays/dmc_1", 0, false, true, false)
+FAILURE_DISPLAY_DMC_2   = createGlobalPropertyi("a321neo/failures/displays/dmc_2", 0, false, true, false)
+FAILURE_DISPLAY_DMC_3   = createGlobalPropertyi("a321neo/failures/displays/dmc_3", 0, false, true, false)
+FAILURE_DISPLAY_SDAC_1  = createGlobalPropertyi("a321neo/failures/displays/sdac_1", 0, false, true, false)
+FAILURE_DISPLAY_SDAC_2  = createGlobalPropertyi("a321neo/failures/displays/sdac_2", 0, false, true, false)
+FAILURE_DISPLAY_FWC_1   = createGlobalPropertyi("a321neo/failures/displays/fwc_1", 0, false, true, false)
+FAILURE_DISPLAY_FWC_2   = createGlobalPropertyi("a321neo/failures/displays/fwc_2", 0, false, true, false)
+
+
+
