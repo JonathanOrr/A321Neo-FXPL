@@ -172,6 +172,8 @@ DCDU_cmd_left_top = createCommand("a321neo/cockpit/DCDU/left_top", "Button Top-L
 DCDU_cmd_right_btm = createCommand("a321neo/cockpit/DCDU/right_btm", "Button Bottom-Right")
 DCDU_cmd_right_top = createCommand("a321neo/cockpit/DCDU/right_top", "Button Top-Right")
 
+DCDU_cmd_atc_msg_pb = createCommand("a321neo/cockpit/DCDU/atc_msg_pb", "ATC MSG pushbutton")
+
 -- ADIRS
 ADIRS_cmd_ADR1 = createCommand("a321neo/cockpit/ADIRS/ADR1_cmd", "Toggle ADR 1")
 ADIRS_cmd_ADR2 = createCommand("a321neo/cockpit/ADIRS/ADR2_cmd", "Toggle ADR 2")
@@ -376,6 +378,10 @@ FIRE_cmd_push_APU  = sasl.createCommand("a321neo/cockpit/fire/apu_push","Press A
 FIRE_cmd_test_ENG_1= sasl.createCommand("a321neo/cockpit/fire/eng_1_test","Press ENG 1 big red button")
 FIRE_cmd_test_ENG_2= sasl.createCommand("a321neo/cockpit/fire/eng_2_test","Press ENG 2 big red button")
 FIRE_cmd_test_APU  = sasl.createCommand("a321neo/cockpit/fire/apu_test","Press APU big red button")
+
+FIRE_cmd_smoke_cargo_test = sasl.createCommand("a321neo/cockpit/fire/cargo_test","Press APU big red button")
+FIRE_cmd_smoke_cargo_fwd = sasl.createCommand("a321neo/cockpit/fire/cargo_fwd_disch","Press APU big red button")
+FIRE_cmd_smoke_cargo_aft = sasl.createCommand("a321neo/cockpit/fire/cargo_aft_disch","Press APU big red button")
 
 -- MAINTENANCE Panel
 MNTN_OXY_reset   = sasl.createCommand("a321neo/cockpit/mntn/oxy_tmr_reset","Press OXY TMR RESET")

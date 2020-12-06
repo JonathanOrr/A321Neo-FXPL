@@ -188,8 +188,8 @@ function update_dmc_status()
     set(Capt_nd_valid,  1)
     set(Fo_pfd_valid,   1)
     set(Fo_nd_valid,    1)
-    set(EWD_valid,  1)
-    set(ECAM_valid,  1)
+    set(EWD_valid,      1)
+    set(ECAM_valid,     1)
     
     local dmc_1_fail = get(FAILURE_DISPLAY_DMC_1) == 1 or get(AC_ess_bus_pwrd) == 0
     local dmc_2_fail = get(FAILURE_DISPLAY_DMC_2) == 1 or get(AC_bus_2_pwrd) == 0

@@ -138,12 +138,12 @@ ADF_2_volume = globalProperty("sim/cockpit2/radios/actuators/audio_volume_adf2")
 --source switching
 Override_DMC = createGlobalPropertyi("a321neo/cockpit/source_switching/override_DMC", 0, false, true, false)--override display source control computers
 
-Capt_pfd_displaying_status = createGlobalPropertyf("a321neo/cockpit/source_switching/capt_pfd_displaying_status", 1, false, true, false)--source being displayed 1pfd, 2nd, 3ewd, 4ecam
-Capt_nd_displaying_status = createGlobalPropertyf("a321neo/cockpit/source_switching/capt_nd_displaying_status", 2, false, true, false)--source being displayed 1pfd, 2nd, 3ewd, 4ecam
-Fo_pfd_displaying_status = createGlobalPropertyf("a321neo/cockpit/source_switching/fo_pfd_displaying_status", 1, false, true, false)--source being displayed 1pfd, 2nd, 3ewd, 4ecam
-Fo_nd_displaying_status = createGlobalPropertyf("a321neo/cockpit/source_switching/fo_nd_displaying_status", 2, false, true, false)--source being displayed 1pfd, 2nd, 3ewd, 4ecam
-EWD_displaying_status = createGlobalPropertyf("a321neo/cockpit/source_switching/ewd_displaying_status", 3, false, true, false)--source being displayed 1pfd, 2nd, 3ewd, 4ecam
-ECAM_displaying_status = createGlobalPropertyf("a321neo/cockpit/source_switching/ecam_displaying_status", 4, false, true, false)--source being displayed 1pfd, 2nd, 3ewd, 4ecam
+Capt_pfd_displaying_status = createGlobalPropertyf("a321neo/cockpit/source_switching/capt_pfd_displaying_status", 1, false, true, false)--source being displayed 1pfd, 2nd, 3ewd, 4ecam, 5 fo/pfd, 6 fo/nd
+Capt_nd_displaying_status = createGlobalPropertyf("a321neo/cockpit/source_switching/capt_nd_displaying_status", 2, false, true, false)--source being displayed 1pfd, 2nd, 3ewd, 4ecam, 5 fo/pfd, 6 fo/nd
+Fo_pfd_displaying_status = createGlobalPropertyf("a321neo/cockpit/source_switching/fo_pfd_displaying_status", 1, false, true, false)--source being displayed 1pfd, 2nd, 3ewd, 4ecam, 5 fo/pfd, 6 fo/nd
+Fo_nd_displaying_status = createGlobalPropertyf("a321neo/cockpit/source_switching/fo_nd_displaying_status", 2, false, true, false)--source being displayed 1pfd, 2nd, 3ewd, 4ecam, 5 fo/pfd, 6 fo/nd
+EWD_displaying_status = createGlobalPropertyf("a321neo/cockpit/source_switching/ewd_displaying_status", 3, false, true, false)--source being displayed 1pfd, 2nd, 3ewd, 4ecam, 5 fo/pfd, 6 fo/nd
+ECAM_displaying_status = createGlobalPropertyf("a321neo/cockpit/source_switching/ecam_displaying_status", 4, false, true, false)--source being displayed 1pfd, 2nd, 3ewd, 4ecam, 5 fo/pfd, 6 fo/nd
 
 --the index follows the source proirity[0,1,2,3] pfd, nd, ewd, ecam^^^^
 Capt_pfd_show = createGlobalPropertyfa("a321neo/cockpit/source_switching/capt_pfd_show", 4, false, true, false)--used for source switching changing the positions of the screens(automated)
@@ -292,6 +292,8 @@ Seatbelts = globalProperty("sim/cockpit2/switches/fasten_seat_belts")
 NoSmoking = globalProperty("sim/cockpit2/switches/no_smoking")
 CabinIsReady = createGlobalPropertyi("a321neo/cockpit/cabin_ready", 0, false, true, false)  -- 0 cabin is not ready, 1 cabin is ready
 Lights_emer_exit = createGlobalPropertyi("a321neo/cockpit/lights/emer_exit_switch", 0, false, true, false)
+EVAC_cabin_active = createGlobalPropertyi("a321neo/cockpit/misc/evac_cabin_active", 0, false, true, false)
+EVAC_cockpit_horn = createGlobalPropertyi("a321neo/cockpit/misc/evac_cockpit_horn", 0, false, true, false)
 
 --MCDU
 Mcdu_enabled = createGlobalPropertyi("a321neo/debug/mcdu/mcdu_enabled", 1, false, true, false)
@@ -414,7 +416,7 @@ Cockpit_light_Capt_console_floor = createGlobalPropertyf("a321neo/cockpit/lights
 Cockpit_light_Fo_console_floor   = createGlobalPropertyf("a321neo/cockpit/lights/fo_console_floor_value", 0, false, true, false) -- 0:OFF, 1:DIM, 2:BRT
 
 -- Overhead panel levers position
-EVAC_capt_purs_lever = createGlobalPropertyf("a321neo/cockpit/evac/buttons/capt_purs_pos", 0, false, true, false) -- 0 CAPT, 1 CAPT+PURS
+EVAC_capt_purs_lever = createGlobalPropertyf("a321neo/cockpit/evac/buttons/capt_purs_pos", 1, false, true, false) -- 0 CAPT, 1 CAPT+PURS
 Rain_wiper_L_lever = createGlobalPropertyf("a321neo/cockpit/rain/buttons/wiper_L_pos", 0, false, true, false)
 Rain_wiper_R_lever = createGlobalPropertyf("a321neo/cockpit/rain/buttons/wiper_R_pos", 0, false, true, false)
 Fire_pb_APU_lever = createGlobalPropertyf("a321neo/cockpit/fire/buttons/APU_lever_pos", 0, false, true, false)
