@@ -144,6 +144,9 @@ local failures_data = {
             {name="R ELEVATOR\nSTUCK", status=false, dataref=FAILURE_FCTL_RELEV },
             {name="THS MOTOR\nSTUCK", status=false, dataref=FAILURE_FCTL_THS },
             {name="THS\nSTUCK", status=false, dataref=FAILURE_FCTL_THS_MECH },
+            {name="RUDDER LIMIT\nFAILURE", status=false, dataref=FAILURE_FCTL_RUDDER_LIM },
+            {name="RUDDER TRIM\nSTUCK", status=false, dataref=FAILURE_FCTL_RUDDER_TRIM },
+            {name="RUDDER MECH\nSTUCK", status=false, dataref=FAILURE_FCTL_RUDDER_MECH },
             {name="UP\nSHIT CREEK", status=false, dataref=FAILURE_FCTL_UP_SHIT_CREEK },
         }
     },
