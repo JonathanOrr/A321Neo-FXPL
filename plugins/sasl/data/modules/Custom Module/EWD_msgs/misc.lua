@@ -64,7 +64,7 @@ MessageGroup_NO_SMOKING = {
     messages = {
         {
             text = function(self)
-                    return "NO PED"
+                    return "NO PORTABLE DEVICES"
             end,
             color = function(self)
                     return COL_INDICATION

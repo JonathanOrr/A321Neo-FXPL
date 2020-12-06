@@ -347,11 +347,11 @@ end
 
 function update()
     set(Total_element_brightness, 1)
-    
+
     update_actual_values()
-    
+
     change_brightness()
-    
+
 end
 
 local function draw_lut_and_brightness()

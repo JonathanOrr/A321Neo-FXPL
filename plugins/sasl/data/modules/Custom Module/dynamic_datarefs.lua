@@ -35,6 +35,7 @@ Nosewheel_Steering_working = createGlobalPropertyi("a321neo/dynamics/wheel/steer
 Nosewheel_Steering_limit   = createGlobalPropertyi("a321neo/dynamics/wheel/steering_limit", 0, false, true, false)  -- Limit (abs value) for steering
 Steer_ratio_setpoint       = createGlobalPropertyi("a321neo/dynamics/wheel/steer_setpoint", 0, false, true, false)
 Steer_ratio_actual         = globalProperty("sim/flightmodel2/gear/tire_steer_command_deg[0]")
+Either_Aft_on_ground = createGlobalPropertyi("a321neo/dynamics/either_aft_on_ground", 0, false, true, false)
 Aft_wheel_on_ground = createGlobalPropertyi("a321neo/dynamics/aft_wheels_on_ground", 0, false, true, false)
 All_on_ground = createGlobalPropertyi("a321neo/dynamics/all_wheels_on_ground", 0, false, true, false)
 Any_wheel_on_ground = createGlobalPropertyi("a321neo/dynamics/any_wheel_on_ground", 0, false, true, false)
@@ -501,8 +502,6 @@ Yaw_artstab = globalProperty("sim/joystick/artstab_heading_ratio")
 Servo_roll = globalProperty("sim/joystick/servo_roll_ratio")
 Servo_pitch = globalProperty("sim/joystick/servo_pitch_ratio")
 Servo_yaw = globalProperty("sim/joystick/servo_heading_ratio")
-Speedbrake_handle_ratio = globalProperty("sim/cockpit2/controls/speedbrake_ratio")
-Horizontal_stabilizer_pitch = globalProperty("sim/flightmodel2/controls/stabilizer_deflection_degrees")
 Override_artstab = globalProperty("sim/operation/override/override_artstab")
 Override_control_surfaces = globalProperty("sim/operation/override/override_control_surfaces")
 Roll_rate = globalProperty("sim/flightmodel/position/P")
@@ -516,12 +515,14 @@ Joystick_toe_brakes_R = globalProperty("sim/joystick/joy_mapped_axis_value[7]")
 --dev & debuging
 FBW_kill_switch = createGlobalPropertyi("a321neo/dynamics/FBW/debug/kill_switch", 1, false, true, false)
 Force_full_rudder_limit = createGlobalPropertyi("a321neo/dynamics/FBW/debug/force_full_rudder_limit", 0, false, true, false)
+Bypass_speedbrakes_inhibition = createGlobalPropertyi("a321neo/dynamics/FBW/debug/bypass_spdbrakes_inhibition", 0, false, true, false)
 --customizations
 Project_square_input = createGlobalPropertyi("a321neo/dynamics/FBW/customizations/projected_square_input", 0, false, true, false)
 Trim_wheel_smoothing_on = createGlobalPropertyi("a321neo/dynamics/FBW/customizations/trim_wheel_smoothing_on", 1, false, true, false)--is the trim wheel is smoothed
 --inputs--
 Augmented_roll = createGlobalPropertyf("a321neo/dynamics/FBW/inputs/augmented_roll", 0, false, true, false)
 Augmented_pitch = createGlobalPropertyf("a321neo/dynamics/FBW/inputs/augmented_pitch", 0, false, true, false)
+Speedbrake_handle_ratio = globalProperty("sim/cockpit2/controls/speedbrake_ratio")
 --flight envelope "sensors"
 Flightmodel_roll = globalProperty("sim/flightmodel/position/true_phi")
 Flightmodel_pitch = globalProperty("sim/flightmodel/position/true_theta")
@@ -542,6 +543,10 @@ SEC_3_status = 	createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/sec
 Left_aileron =  globalProperty("sim/flightmodel/controls/wing4l_ail1def") -- -25 deg up 25 deg down
 Right_aileron = globalProperty("sim/flightmodel/controls/wing4r_ail1def") -- -25 deg up 25 deg down
 --spoilers
+Ground_spoilers_armed = createGlobalPropertyi("a321neo/dynamics/FBW/controls/ground_spoilers_armed", 0, false, true, false)--mostly used for animation but 0 is disarmed 1 is armed
+Ground_spoilers_mode = createGlobalPropertyi("a321neo/dynamics/FBW/controls/ground_spoilers_mode", 0, false, true, false)--0 retracted, 1 half deployed, 2 full extention
+Ground_spoilers_act_method = createGlobalPropertyi("a321neo/dynamics/FBW/controls/ground_spoilers_activation_method", 0, false, true, false)--0 no action, 1 unarmed activation, 2 armed activation
+Speedbrakes_inhibited = createGlobalPropertyi("a321neo/dynamics/FBW/control_limitations/speedbrakes_inhibited", 0, false, true, false)--if the speedbrakes are inhibited, reset the lever to restore to 0
 Speedbrakes_ratio = globalProperty("sim/flightmodel2/controls/speedbrake_ratio")--used to enable the rotation of spoiler 2 & 3 feed the sum of sidestick input & speedbrake handle in
 Left_spoiler_1 =  globalProperty("sim/flightmodel/controls/wing2l_spo1def")
 Left_spoiler_2 =  globalProperty("sim/flightmodel2/wing/speedbrake1_deg[4]")
@@ -603,6 +608,7 @@ R_elevator_avail =  createGlobalPropertyi("a321neo/dynamics/FBW/surface_availabi
 THS_avail = 		createGlobalPropertyi("a321neo/dynamics/FBW/surface_availability/ths_avail", 1, false, true, false)
 Yaw_damper_avail =  createGlobalPropertyi("a321neo/dynamics/FBW/surface_availability/yaw_damper_avail", 1, false, true, false)
 Rudder_avail =  	createGlobalPropertyi("a321neo/dynamics/FBW/surface_availability/rudder_avail", 1, false, true, false)
+Rudder_lim_avail =  createGlobalPropertyi("a321neo/dynamics/FBW/surface_availability/rudder_lim_avail", 1, false, true, false)
 Rudder_trim_avail = createGlobalPropertyi("a321neo/dynamics/FBW/surface_availability/rudder_trim_avail", 1, false, true, false)
 
 

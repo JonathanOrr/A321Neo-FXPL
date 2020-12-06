@@ -113,6 +113,7 @@ end
 ----------------------------------------------------------------------------------------------------
 
 local function update_gear_status()
+    set(Either_Aft_on_ground, BoolToNum(get(left_gear_on_ground) == 1 or get(right_gear_on_ground) == 1))
 	set(Aft_wheel_on_ground, math.floor((get(left_gear_on_ground) + get(right_gear_on_ground))/2))
     set(All_on_ground, math.floor((get(front_gear_on_ground) + get(left_gear_on_ground) + get(right_gear_on_ground))/3))
     if get(front_gear_on_ground) == 1 or get(left_gear_on_ground) == 1 or get(right_gear_on_ground) == 1 then

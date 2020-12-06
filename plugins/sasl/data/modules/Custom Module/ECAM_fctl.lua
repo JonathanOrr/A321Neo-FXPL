@@ -21,11 +21,6 @@ function draw_fctl_page()
     local is_G_ok = get(Hydraulic_G_press) >= 1450
     local is_B_ok = get(Hydraulic_B_press) >= 1450
     local is_Y_ok = get(Hydraulic_Y_press) >= 1450
-    set(Ecam_fctl_is_rudder_ok, (is_G_ok or is_Y_ok or is_B_ok) and 1 or 0)
-    set(Ecam_fctl_is_aileron_ok, (is_G_ok or is_B_ok) and 1 or 0)
-    set(Ecam_fctl_is_elevator_R_ok, (is_Y_ok or is_B_ok) and 1 or 0)
-    set(Ecam_fctl_is_elevator_L_ok, (is_G_ok or is_B_ok) and 1 or 0)
-    set(Ecam_fctl_is_pitch_trim_ok, (is_G_ok or is_Y_ok) and 1 or 0)
 
     -- rudder
     Sasl_DrawWideFrame(410, size[2]/2-168, 25, 29, 2, 0, is_G_ok and {0,0,0,0} or ECAM_ORANGE)
@@ -70,6 +65,8 @@ function draw_fctl_page()
     Sasl_DrawWideFrame(703, size[2]/2+42, 25, 29, 2, 0, is_B_ok and {0,0,0,0} or ECAM_ORANGE)
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2+237, size[2]/2+46, "G", 30, false, false, TEXT_ALIGN_CENTER, is_G_ok and ECAM_GREEN or ECAM_ORANGE)
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2+267, size[2]/2+46, "B", 30, false, false, TEXT_ALIGN_CENTER, is_B_ok and ECAM_GREEN or ECAM_ORANGE)
+
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-28, size[2]/2-8, "PITCH TRIM", 31, false, false, TEXT_ALIGN_CENTER, get(FAILURE_FCTL_THS_MECH) == 0 and ECAM_WHITE or ECAM_ORANGE)
 
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-25, size[2]/2-50, string.format("%.1f", tostring(math.abs(get(Elev_trim_degrees)))), 30, false, false, TEXT_ALIGN_CENTER, get(THS_avail) == 1 and ECAM_GREEN or ECAM_ORANGE)
     if get(Elev_trim_degrees) >= 0 then

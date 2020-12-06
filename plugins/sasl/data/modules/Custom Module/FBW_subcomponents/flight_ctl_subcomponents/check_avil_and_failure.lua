@@ -18,6 +18,7 @@ function Check_surface_avail()
     set(THS_avail, 1)
     set(Yaw_damper_avail, 1)
     set(Rudder_avail, 1)
+    set(Rudder_lim_avail, 1)
     set(Rudder_trim_avail, 1)
 
     --computer failures--
@@ -48,6 +49,7 @@ function Check_surface_avail()
         set(Yaw_damper_avail, 0)
         set(Rudder_trim_avail, 0)
         set(Rudder_avail, 0)
+        set(Rudder_lim_avail, 0)
     end
 
     --tripple failure
@@ -94,6 +96,12 @@ function Check_surface_avail()
     --tripple system failure
     if get(Hydraulic_G_press) < 1450 and get(Hydraulic_B_press) < 1450 and get(Hydraulic_Y_press) < 1450 then
         set(Rudder_avail, 0)
+    end
+
+    --rudder electrical motors failure--
+    if get(DC_ess_bus_pwrd) == 0 and get(DC_bus_2_pwrd) == 0 then
+        set(Rudder_lim_avail, 0)
+        set(Rudder_trim_avail, 0)
     end
 
     --FAILURE MANAGER--
