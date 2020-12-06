@@ -22,24 +22,29 @@ local WARNING_BLINK_HZ = 4
 
 local already_triggered_mc = false
 local already_triggered_mw = false
+local master_warning_active = false
+local master_caution_active = false
 
 sasl.registerCommandHandler (Failures_cancel_master_caution, 0,  function(phase) Failures_cancel_master_caution_handler(phase) end )
 sasl.registerCommandHandler (Failures_cancel_master_warning, 0,  function(phase) Failures_cancel_master_warning_handler(phase) end )
 
 function Failures_cancel_master_caution_handler(phase)
-    set(MasterCaution, 0)
+    if phase == SASL_COMMAND_BEGIN then
+        master_caution_active = false
+    end
 end
 
 function Failures_cancel_master_warning_handler(phase)
-    set(MasterWarning, 0)
-    set(MasterWarningBlinking, 0)
+    if phase == SASL_COMMAND_BEGIN then
+        master_warning_active = false
+    end
 end
 
-function update()
+local function update_master_wc()
     if get(ReqMasterCaution) == 1 then
         if not already_triggered_mc then
-            set(MasterCaution, 1)
-            already_triggered_mc = true
+            master_caution_active = true
+            already_triggered_mc  = true
         end
     else
         already_triggered_mc = false
@@ -47,22 +52,34 @@ function update()
 
     if get(ReqMasterWarning) == 1 then
         if not already_triggered_mw then
-            set(MasterWarning, 1)
+            master_warning_active = true
             already_triggered_mw = true
         end
     else
         already_triggered_mw = false
     end
 
-    if get(MasterWarning) == 1 then
+    if master_warning_active then
         if (math.floor(get(TIME) * WARNING_BLINK_HZ) % 2) == 0 then
-            set(MasterWarningBlinking, 1)
+            pb_set(PB.glare.master_warning, true, true)
         else
-            set(MasterWarningBlinking, 0)        
+            pb_set(PB.glare.master_warning, false, false)
         end
+    else
+        pb_set(PB.glare.master_warning, false, false)    
+    end
+
+    if master_caution_active then
+        pb_set(PB.glare.master_caution, true, true)
+    else
+        pb_set(PB.glare.master_caution, false, false)
     end
 
     set(ReqMasterCaution, 0)
     set(ReqMasterWarning, 0)
+end
+
+function update()
+    update_master_wc()
 end
 

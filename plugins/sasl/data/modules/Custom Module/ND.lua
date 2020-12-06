@@ -26,6 +26,11 @@ local fo_terrain_on_nd = false
 
 function draw()
 
+    if display_special_mode(size, Capt_nd_valid) then
+        return
+    end
+
+
     --sasl.gl.drawFrame(0, 0, 385, 380, {1,0,1})
     --sasl.gl.drawText(B612MONO_regular, 50, 50, "TEST", 10, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
 

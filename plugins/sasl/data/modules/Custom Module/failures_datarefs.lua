@@ -162,6 +162,15 @@ FAILURE_BLEED_PACK_2_VALVE_STUCK = createGlobalPropertyi("a321neo/failures/bleed
 FAILURE_BLEED_BMC_1 = createGlobalPropertyi("a321neo/failures/bleed/bmc_1", 0, false, true, false)
 FAILURE_BLEED_BMC_2 = createGlobalPropertyi("a321neo/failures/bleed/bmc_2", 0, false, true, false)
 FAILURE_BLEED_RAM_AIR_STUCK = createGlobalPropertyi("a321neo/failures/bleed/ram_air_stuck", 0, false, true, false)
+FAILURE_BLEED_ENG_1_hi_temp  = createGlobalPropertyi("a321neo/failures/bleed/eng_1_hi_temp", 0, false, true, false)
+FAILURE_BLEED_ENG_1_hi_press = createGlobalPropertyi("a321neo/failures/bleed/eng_1_hi_press", 0, false, true, false)
+FAILURE_BLEED_ENG_2_hi_temp  = createGlobalPropertyi("a321neo/failures/bleed/eng_2_hi_temp", 0, false, true, false)
+FAILURE_BLEED_ENG_2_hi_press = createGlobalPropertyi("a321neo/failures/bleed/eng_2_hi_press", 0, false, true, false)
+FAILURE_BLEED_APU_LEAK  = createGlobalPropertyi("a321neo/failures/bleed/apu_leak", 0, false, true, false)
+FAILURE_BLEED_ENG_1_LEAK= createGlobalPropertyi("a321neo/failures/bleed/eng_1_leak", 0, false, true, false)
+FAILURE_BLEED_ENG_2_LEAK= createGlobalPropertyi("a321neo/failures/bleed/eng_2_leak", 0, false, true, false)
+FAILURE_BLEED_WING_L_LEAK = createGlobalPropertyi("a321neo/failures/bleed/wing_l_leak", 0, false, true, false)
+FAILURE_BLEED_WING_R_LEAK = createGlobalPropertyi("a321neo/failures/bleed/wing_r_leak", 0, false, true, false)
 
 FAILURE_AIRCOND_FAN_FWD = createGlobalPropertyi("a321neo/failures/aircond/vent/cab_fan_fwd", 0, false, true, false)
 FAILURE_AIRCOND_FAN_AFT = createGlobalPropertyi("a321neo/failures/aircond/vent/cab_fan_aft", 0, false, true, false)
@@ -211,4 +220,14 @@ FAILURE_DISPLAY_MCDU_2  = createGlobalPropertyi("a321neo/failures/displays/mcdu_
 FAILURE_DISPLAY_DRAIMS_1= createGlobalPropertyi("a321neo/failures/displays/draims_1", 0, false, true, false)
 FAILURE_DISPLAY_DRAIMS_2= createGlobalPropertyi("a321neo/failures/displays/draims_2", 0, false, true, false)
 FAILURE_DISPLAY_ISIS    = createGlobalPropertyi("a321neo/failures/displays/isis", 0, false, true, false)
+
+FAILURE_DISPLAY_DMC_1   = createGlobalPropertyi("a321neo/failures/displays/dmc_1", 0, false, true, false)
+FAILURE_DISPLAY_DMC_2   = createGlobalPropertyi("a321neo/failures/displays/dmc_2", 0, false, true, false)
+FAILURE_DISPLAY_DMC_3   = createGlobalPropertyi("a321neo/failures/displays/dmc_3", 0, false, true, false)
+FAILURE_DISPLAY_SDAC_1  = createGlobalPropertyi("a321neo/failures/displays/sdac_1", 0, false, true, false)
+FAILURE_DISPLAY_SDAC_2  = createGlobalPropertyi("a321neo/failures/displays/sdac_2", 0, false, true, false)
+FAILURE_DISPLAY_FWC_1   = createGlobalPropertyi("a321neo/failures/displays/fwc_1", 0, false, true, false)
+FAILURE_DISPLAY_FWC_2   = createGlobalPropertyi("a321neo/failures/displays/fwc_2", 0, false, true, false)
+
+
 

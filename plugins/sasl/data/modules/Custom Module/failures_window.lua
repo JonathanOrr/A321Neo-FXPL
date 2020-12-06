@@ -236,13 +236,22 @@ local failures_data = {
             {name="F/O MCDU\nFAULT", status=false, dataref=FAILURE_DISPLAY_MCDU_2 },
             {name="CAPT DRAIMS\nFAULT", status=false, dataref=FAILURE_DISPLAY_DRAIMS_1 },
             {name="F/O DRAIMS\nFAULT", status=false, dataref=FAILURE_DISPLAY_DRAIMS_2 },
-            {name="ISIS\nFAULT", status=false, dataref=FAILURE_DISPLAY_ISIS }
+            {name="ISIS\nFAULT", status=false, dataref=FAILURE_DISPLAY_ISIS },
+            
+            {name="DMC 1\nFAULT", status=false, dataref=FAILURE_DISPLAY_DMC_1 },
+            {name="DMC 2\nFAULT", status=false, dataref=FAILURE_DISPLAY_DMC_2 },
+            {name="DMC 3\nFAULT", status=false, dataref=FAILURE_DISPLAY_DMC_3 },
         }
     },
     {
         group="BLEED/AIR",
         failures={
             -- Bleed
+            {name="ENG 1 HI\nPRESS", status=false, dataref=FAILURE_BLEED_ENG_1_hi_press },
+            {name="ENG 1 HI\nTEMP", status=false, dataref=FAILURE_BLEED_ENG_1_hi_temp },
+            {name="ENG 2 HI\nPRESS", status=false, dataref=FAILURE_BLEED_ENG_2_hi_press },
+            {name="ENG 2 HI\nTEMP", status=false, dataref=FAILURE_BLEED_ENG_2_hi_temp },
+
             {name="ENG 1 HP VLV\nSTUCK", status=false, dataref=FAILURE_BLEED_HP_1_VALVE_STUCK },
             {name="ENG 2 HP VLV\nSTUCK", status=false, dataref=FAILURE_BLEED_HP_2_VALVE_STUCK },
             {name="ENG 1 IP VLV\nSTUCK", status=false, dataref=FAILURE_BLEED_IP_1_VALVE_STUCK },
@@ -253,6 +262,11 @@ local failures_data = {
             {name="PACK 2 VLV\nSTUCK", status=false, dataref=FAILURE_BLEED_PACK_2_VALVE_STUCK },
             {name="BMC 1\nFAIL", status=false, dataref=FAILURE_BLEED_BMC_1 },
             {name="BMC 2\nFAIL", status=false, dataref=FAILURE_BLEED_BMC_2 },
+            {name="LEAK\nAPU", status=false, dataref=FAILURE_BLEED_APU_LEAK },
+            {name="LEAK\nENG 1", status=false, dataref=FAILURE_BLEED_ENG_1_LEAK },
+            {name="LEAK\nENG 2", status=false, dataref=FAILURE_BLEED_ENG_2_LEAK },
+            {name="LEAK\nWING L", status=false, dataref=FAILURE_BLEED_WING_L_LEAK },
+            {name="LEAK\nWING R", status=false, dataref=FAILURE_BLEED_WING_R_LEAK },
             
             -- Aircond
             {name="CAB FAN 1\nFAIL", status=false, dataref=FAILURE_AIRCOND_FAN_FWD },
@@ -283,13 +297,13 @@ function update()
 end
 
 local function draw_warning_caution()
-    if get(MasterCaution) == 1 then
+    if PB.glare.master_caution.status_top then
         sasl.gl.drawTexture(master_caution_image, 10, size[2]-110, 64, 64)
     else
         sasl.gl.drawRectangle (10, size[2]-110, 64, 64, {0,0,0})    
     end
 
-    if get(MasterWarningBlinking) == 1 then
+    if PB.glare.master_warning.status_top then
         sasl.gl.drawTexture(master_warning_image, 80, size[2]-110, 64, 64)
     else
         sasl.gl.drawRectangle (80, size[2]-110, 64, 64, {0,0,0})

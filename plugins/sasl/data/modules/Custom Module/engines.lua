@@ -57,7 +57,7 @@ local OIL_QTY_MIN = 2
 local OIL_PRESS_START = 50  -- MAX On startup
 local OIL_PRESS_CONT  = 30  -- MAX Continuous
 local OIL_PRESS_MIN   = 17  -- MIN in idle
-local OIL_CONSUMPTION_PER_HOUR = 0.1
+local OIL_CONSUMPTION_PER_HOUR = 0.45
 
 local OIL_TEMP_MIN   = -25   -- MIN for start
 local OIL_TEMP_TOGA  = 38    -- MIN for toga

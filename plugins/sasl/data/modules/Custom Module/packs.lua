@@ -22,7 +22,7 @@
 ----------------------------------------------------------------------------------------------------
 include('constants.lua')
 
-ENG_NOMINAL_MAX_PRESS = 56
+ENG_NOMINAL_MAX_PRESS = 55
 ENG_NOMINAL_MIN_PRESS = 38
 APU_NOMINAL_PRESS = 42
 
@@ -132,16 +132,19 @@ end
 
 local function update_bleed_valves()
 
-    -- TODO Failures
-
-    apu_bleed_valve_pos = get(Apu_N1) > 95 and apu_bleed_switch
-
-    eng_bleed_valve_pos[1] = eng_bleed_switch[1] and (eng_lp_pressure[1] >= 8) 
+    if get(FAILURE_BLEED_APU_VALVE_STUCK) == 0 then
+        apu_bleed_valve_pos = get(Apu_N1) > 95 and apu_bleed_switch and get(FAILURE_BLEED_APU_VALVE_STUCK) == 0
+    end
+    
+    if get(FAILURE_BLEED_IP_1_VALVE_STUCK) == 0 then
+        eng_bleed_valve_pos[1] = eng_bleed_switch[1] and (eng_lp_pressure[1] >= 8) 
                              and (get(Fire_pb_ENG1_status) == 0) and not apu_bleed_valve_pos and get(GAS_bleed_avail) == 0
+    end
                              
-    eng_bleed_valve_pos[2] = eng_bleed_switch[2] and (eng_lp_pressure[2] >= 8) 
+    if get(FAILURE_BLEED_IP_2_VALVE_STUCK) == 0 then
+        eng_bleed_valve_pos[2] = eng_bleed_switch[2] and (eng_lp_pressure[2] >= 8) 
                              and (get(Fire_pb_ENG2_status) == 0) and not apu_bleed_valve_pos and get(GAS_bleed_avail) == 0
-
+    end
 
     --X bleed valve logic--
     if get(X_bleed_dial) == 0 then --closed
@@ -158,14 +161,14 @@ local function update_eng_pressures()
     if get(Engine_1_avail) == 0 then
         eng_lp_pressure[1] = Set_linear_anim_value(eng_lp_pressure[1], 0, 0, 100, 1)
     else
-        local target = Math_rescale(18, ENG_NOMINAL_MIN_PRESS, 101, ENG_NOMINAL_MAX_PRESS, get(Eng_1_N1)) + math.random()
+        local target = Math_rescale(18, ENG_NOMINAL_MIN_PRESS, 101, ENG_NOMINAL_MAX_PRESS, get(Eng_1_N1)) + math.random() + get(FAILURE_BLEED_ENG_1_hi_press) * 25
         eng_lp_pressure[1] = Set_linear_anim_value(eng_lp_pressure[1], target, 0, 100, 1)
     end
     
     if get(Engine_2_avail) == 0 then
         eng_lp_pressure[2] = Set_linear_anim_value(eng_lp_pressure[2], 0, 0, 100, 1)
     else
-        local target = Math_rescale(18, ENG_NOMINAL_MIN_PRESS, 101, ENG_NOMINAL_MAX_PRESS, get(Eng_2_N1)) + math.random()
+        local target = Math_rescale(18, ENG_NOMINAL_MIN_PRESS, 101, ENG_NOMINAL_MAX_PRESS, get(Eng_2_N1)) + math.random() + get(FAILURE_BLEED_ENG_2_hi_press) * 25
         eng_lp_pressure[2] = Set_linear_anim_value(eng_lp_pressure[2], target, 0, 100, 1)
     end
     
@@ -201,10 +204,10 @@ local function update_bleed_pressures()
 
     local left_side_press = 0
     if eng_bleed_valve_pos[1] then
-        left_side_press = left_side_press + eng_lp_pressure[1] + get(L_HP_valve) * 10
+        left_side_press = left_side_press + eng_lp_pressure[1] + get(L_HP_valve) * 10 - get(FAILURE_BLEED_ENG_1_LEAK) * 10
     end
     if apu_bleed_valve_pos then
-        left_side_press = left_side_press + apu_pressure
+        left_side_press = left_side_press + apu_pressure - get(FAILURE_BLEED_APU_LEAK) * 10 
     end
     if get(GAS_bleed_avail) == 1 then
         left_side_press = left_side_press + GAS_PRESSURE + math.random()
@@ -212,7 +215,7 @@ local function update_bleed_pressures()
 
     local right_side_press = 0
     if eng_bleed_valve_pos[2] then
-        right_side_press = right_side_press + eng_lp_pressure[2] + get(R_HP_valve) * 10
+        right_side_press = right_side_press + eng_lp_pressure[2] + get(R_HP_valve) * 10 - get(FAILURE_BLEED_ENG_2_LEAK) * 10
     end
 
 
@@ -264,13 +267,14 @@ local function update_datarefs()
     set(R_bleed_press, bleed_pressure[2])
 
     -- Buttons
-    -- TODO FAULTS
-    local cond_eng1_bleed_fail = get(FAILURE_BLEED_HP_1_VALVE_STUCK) + get(FAILURE_BLEED_IP_1_VALVE_STUCK) > 0  -- TODO other conditions
-    local cond_eng2_bleed_fail = get(FAILURE_BLEED_HP_2_VALVE_STUCK) + get(FAILURE_BLEED_IP_2_VALVE_STUCK) > 0  -- TODO other conditions
+    local cond_eng1_bleed_fail = get(FAILURE_BLEED_HP_1_VALVE_STUCK) + get(FAILURE_BLEED_IP_1_VALVE_STUCK) > 0 
+                                 or get(L_bleed_press) > 57 or get(L_bleed_temp) > 270 or get(FAILURE_BLEED_ENG_1_LEAK) == 1
+    local cond_eng2_bleed_fail = get(FAILURE_BLEED_HP_2_VALVE_STUCK) + get(FAILURE_BLEED_IP_2_VALVE_STUCK) > 0  
+                                 or get(R_bleed_press) > 57 or get(R_bleed_temp) > 270 or get(FAILURE_BLEED_ENG_2_LEAK) == 1
 
     pb_set(PB.ovhd.ac_bleed_1, not eng_bleed_switch[1], cond_eng1_bleed_fail)
     pb_set(PB.ovhd.ac_bleed_2, not eng_bleed_switch[2], cond_eng2_bleed_fail)
-    pb_set(PB.ovhd.ac_bleed_apu, apu_bleed_switch, false) -- TODO FAILURE
+    pb_set(PB.ovhd.ac_bleed_apu, apu_bleed_switch, get(FAILURE_BLEED_APU_VALVE_STUCK) == 1 or (get(FAILURE_BLEED_APU_LEAK) == 1 and apu_bleed_valve_pos))
     pb_set(PB.ovhd.ac_hot_air,  not cabin_hot_air, false) -- TODO FAILURE
     pb_set(PB.ovhd.ac_pack_1, not pack_valve_switch[1], false) -- TODO FAILURE
     pb_set(PB.ovhd.ac_pack_2, not pack_valve_switch[2], false) -- TODO FAILURE
@@ -336,12 +340,16 @@ local function update_pack(n)
 end
 
 local function update_bleed_temperatures()
+    
+    local eng_1_temp_fail = get(FAILURE_BLEED_ENG_1_hi_temp) * 100
+    local eng_2_temp_fail = get(FAILURE_BLEED_ENG_2_hi_temp) * 100
+    
     --bleed temp--
     if bleed_pressure[1] > 4 then--left side has bleed air
         if not apu_bleed_valve_pos then
-            set(L_bleed_temp, Set_anim_value(get(L_bleed_temp), 180 + bleed_pressure[1]/2 + math.random()*3, -100, 250, 0.2))--eng bleed with 190C
+            set(L_bleed_temp, Set_anim_value(get(L_bleed_temp), 180 + bleed_pressure[1]/2 + math.random()*10 + eng_1_temp_fail, -100, 350, 0.2))--eng bleed with 190C
         else--apu bleed
-            set(L_bleed_temp, Set_anim_value(get(L_bleed_temp), 150 + bleed_pressure[1]/2 + math.random()*3, -100, 250, 0.2))--apu bleed with 150C
+            set(L_bleed_temp, Set_anim_value(get(L_bleed_temp), 150 + bleed_pressure[1]/2 + math.random()*3, -100, 350, 0.2))--apu bleed with 150C
         end
     else
         set(L_bleed_temp, Set_anim_value(get(L_bleed_temp), get(OTA), -100, 200, 0.15))--no bleed with outside temp
@@ -349,9 +357,9 @@ local function update_bleed_temperatures()
 
     if bleed_pressure[2] > 4 then--right side has bleed air
         if not apu_bleed_valve_pos then
-            set(R_bleed_temp, Set_anim_value(get(R_bleed_temp), 180 + bleed_pressure[2]/2 + math.random()*3, -100, 250, 0.2))--eng bleed with 190C
+            set(R_bleed_temp, Set_anim_value(get(R_bleed_temp), 180 + bleed_pressure[2]/2 + math.random()*10 + eng_2_temp_fail, -100, 350, 0.2))--eng bleed with 190C
         else--apu bleed
-            set(R_bleed_temp, Set_anim_value(get(R_bleed_temp), 150 + bleed_pressure[2]/2 + math.random()*3, -100, 250, 0.2))--apu bleed with 150C
+            set(R_bleed_temp, Set_anim_value(get(R_bleed_temp), 150 + bleed_pressure[2]/2 + math.random()*3, -100, 350, 0.2))--apu bleed with 150C
         end
     else
         set(R_bleed_temp, Set_anim_value(get(R_bleed_temp), get(OTA), -100, 200, 0.15))--no bleed with outside temp
@@ -499,7 +507,7 @@ function update()
     update_fans()
 
     -- Fix GAS if moving
-     if get(Ground_speed_ms) > 0.1 or get(Parkbrake_switch_pos) < 1 or get(All_on_ground) ~= 1 then
+     if get(Ground_speed_ms) > 1 or get(Parkbrake_switch_pos) < 1 or get(All_on_ground) ==0 then
         set(GAS_bleed_avail, 0)
      end
     perf_measure_stop("packs:update()")

@@ -500,11 +500,22 @@ local function update_transfer_fuel()
     set(Fuel_wing_L_overflow, 0)
     set(Fuel_wing_R_overflow, 0)
 
+    local half_speed_coefficient = 1
+    if tank_pump_and_xfr[C_TK_XFR_1].pressure_ok and tank_pump_and_xfr[C_TK_XFR_2].pressure_ok then
+        -- If the transfering for both wing is active, then if we are low on fuel we have to transfer
+        -- half of the fuel quantity per unit of time. This is needed to avoid unbalance, especially
+        -- when CTR is empty and ACT and/or RCT is transfering (this is an abnormal situation)
+        -- The coefficient affects only CTR -> WING
+        if get(Fuel_quantity[tank_CENTER]) < 2 * get(DELTA_TIME) * FUEL_XFR_SPEED then
+            half_speed_coefficient = 0.5
+        end
+    end
+
     if tank_pump_and_xfr[C_TK_XFR_1].pressure_ok then
         local C_tank = get(Fuel_quantity[tank_CENTER])
         local W_tank = get(Fuel_quantity[tank_LEFT])
         
-        local unit_transfer = math.min(get(DELTA_TIME) * FUEL_XFR_SPEED, C_tank)
+        local unit_transfer = math.min(get(DELTA_TIME) * FUEL_XFR_SPEED * half_speed_coefficient, C_tank)
         C_tank = C_tank - unit_transfer
         if W_tank + unit_transfer > FUEL_LR_MAX then
             set(Fuel_wing_L_overflow, 1)
@@ -520,7 +531,7 @@ local function update_transfer_fuel()
         local C_tank = get(Fuel_quantity[tank_CENTER])
         local W_tank = get(Fuel_quantity[tank_RIGHT])
         
-        local unit_transfer = math.min(get(DELTA_TIME) * FUEL_XFR_SPEED, C_tank)
+        local unit_transfer = math.min(get(DELTA_TIME) * FUEL_XFR_SPEED * half_speed_coefficient, C_tank)
         C_tank = C_tank - unit_transfer
         if W_tank + unit_transfer > FUEL_LR_MAX then
             set(Fuel_wing_R_overflow, 1)

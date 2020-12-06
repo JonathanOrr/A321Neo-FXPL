@@ -155,6 +155,13 @@ ECAM_show = createGlobalPropertyfa("a321neo/cockpit/source_switching/ecam_show",
 
 ECAM_on_nd_dial = createGlobalPropertyi("a321neo/cockpit/source_switching/ECAM_on_nd_dial", 0, false, true, false)--used to swap the position of the ECAM with the NDs 0capt, 1norm, 2FO
 
+Capt_pfd_valid= createGlobalPropertyi("a321neo/cockpit/source_switching/capt_pfd_valid",0, false, true, false) -- 0: invalid data, 1: OK, 2: test mode, 3: waiting for data
+Capt_nd_valid = createGlobalPropertyi("a321neo/cockpit/source_switching/capt_nd_valid", 0, false, true, false) -- 0: invalid data, 1: OK, 2: test mode, 3: waiting for data
+Fo_pfd_valid  = createGlobalPropertyi("a321neo/cockpit/source_switching/fo_pfd_valid",  0, false, true, false) -- 0: invalid data, 1: OK, 2: test mode, 3: waiting for data
+Fo_nd_valid   = createGlobalPropertyi("a321neo/cockpit/source_switching/fo_nd_valid",   0, false, true, false) -- 0: invalid data, 1: OK, 2: test mode, 3: waiting for data
+EWD_valid = createGlobalPropertyi("a321neo/cockpit/source_switching/ewd_valid",     0, false, true, false) -- 0: invalid data, 1: OK, 2: test mode, 3: waiting for data
+ECAM_valid = createGlobalPropertyi("a321neo/cockpit/source_switching/ecam_valid",    0, false, true, false) -- 0: invalid data, 1: OK, 2: test mode, 3: waiting for data
+
 --engine & apu
 Engine_mode_knob = createGlobalPropertyi("a321neo/cockpit/engine/engine_mode_value", 0, false, true, false) -- -1crank, 0norm, 1ignition
 Engine_mode_knob_pos = createGlobalPropertyf("a321neo/cockpit/engine/engine_mode", 0, false, true, false) -- -1crank, 0norm, 1ignition
@@ -341,10 +348,6 @@ Overwing_exit_2_r_switch = createGlobalPropertyi("a321neo/cockpit/door/overwing_
 Cargo_1_switch = createGlobalPropertyi("a321neo/cockpit/door/cargo_1_switch", 0, false, true, false)--commanded door positions
 Cargo_2_switch = createGlobalPropertyi("a321neo/cockpit/door/cargo_2_switch", 0, false, true, false)--commanded door positions
 
--- Failures
-MasterCaution         = createGlobalPropertyi("a321neo/failures/master_caution", 0, false, true, false) -- Button light dataref - 0: OFF, 1: ON
-MasterWarning         = createGlobalPropertyi("a321neo/failures/master_warning", 0, false, true, false) -- Button light dataref - 0: OFF, 1: ON
-MasterWarningBlinking = createGlobalPropertyi("a321neo/failures/master_warning_blink", 0, false, true, false) -- Button light dataref - 0: OFF, 1: ON
 
 -- ELEC
 Elec_bat_1_V  = createGlobalPropertyf("a321neo/cockpit/electrical/battery_1_voltage", 0, false, true, false)

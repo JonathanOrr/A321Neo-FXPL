@@ -21,6 +21,7 @@ include('EWD_flight_phases.lua')
 include('EWD_msgs/adirs.lua')
 include('EWD_msgs/bleed.lua')
 include('EWD_msgs/brakes_and_antiskid.lua')
+include('EWD_msgs/displays.lua')
 include('EWD_msgs/doors.lua')
 include('EWD_msgs/electrical.lua')
 include('EWD_msgs/engines_and_apu.lua')
@@ -82,12 +83,12 @@ local left_messages_list = {
     MessageGroup_ADKIS_NWS,
     MessageGroup_APU_SHUTDOWN,
     MessageGroup_GEAR_NOT_UPLOCKED,
-    MessageGroup_BLEED_OFF,
     MessageGroup_TCAS_FAULT,
     MessageGroup_ADR_FAULT_SINGLE,
     MessageGroup_ADR_FAULT_DOUBLE,
     MessageGroup_IR_FAULT_SINGLE,
     MessageGroup_IR_FAULT_DOUBLE,
+    MessageGroup_DMC_FAULT,
     MessageGroup_HYD_G_RSVR_LO_LVL,
     MessageGroup_HYD_B_RSVR_LO_LVL,
     MessageGroup_HYD_Y_RSVR_LO_LVL,
@@ -159,10 +160,18 @@ local left_messages_list = {
     MessageGroup_DOORS_CABIN,
     MessageGroup_DOORS_CARGO,
     MessageGroup_DOORS_EMER_EXIT,
-    
+    MessageGroup_BLEED_OFF,
     MessageGroup_AIR_X_BLEED_FAULT,
-    
-    
+    MessageGroup_BLEED_BMC_FAULT,
+    MessageGroup_BLEED_ENG1_FAULT,
+    MessageGroup_BLEED_ENG2_FAULT,
+    MessageGroup_BLEED_HP_FAULT,
+    MessageGroup_BLEED_IP_FAULT,
+    MessageGroup_BLEED_APU_FAULT,
+    MessageGroup_BLEED_APU_LEAK,
+    MessageGroup_BLEED_ENG_LEAK,
+    MessageGroup_BLEED_WING_LEAK,
+
     -- Warnings
     MessageGroup_CONFIG_TAKEOFF,
     MessageGroup_APU_FIRE,

@@ -76,6 +76,12 @@ function auto_update()
             set(Capt_nd_displaying_status, PFD)
             set(Capt_pfd_displaying_status, ND)                    
         end
+    elseif pfd_nd_xfr_capt then
+        if get(Capt_pfd_displaying_status) == PFD then
+            set(Capt_pfd_displaying_status, ND)
+        else
+            set(Capt_pfd_displaying_status, PFD)
+        end
     end
 
     if pfd_nd_xfr_fo and ecam_nd_xfr ~= 1 then
@@ -85,6 +91,12 @@ function auto_update()
         else
             set(Fo_nd_displaying_status, PFD)
             set(Fo_pfd_displaying_status, ND)                    
+        end
+    elseif pfd_nd_xfr_capt then
+        if get(Fo_pfd_displaying_status) == PFD then
+            set(Fo_pfd_displaying_status, ND)
+        else
+            set(Fo_pfd_displaying_status, PFD)
         end
     end
  
@@ -171,6 +183,45 @@ function update_knobs()
 
 end
 
+function update_dmc_status()
+    set(Capt_pfd_valid, 1)
+    set(Capt_nd_valid,  1)
+    set(Fo_pfd_valid,   1)
+    set(Fo_nd_valid,    1)
+    set(EWD_valid,  1)
+    set(ECAM_valid,  1)
+    
+    local dmc_1_fail = get(FAILURE_DISPLAY_DMC_1) == 1 or get(AC_ess_bus_pwrd) == 0
+    local dmc_2_fail = get(FAILURE_DISPLAY_DMC_2) == 1 or get(AC_bus_2_pwrd) == 0
+    local dmc_3_fail = get(FAILURE_DISPLAY_DMC_3) == 1 or not (get(AC_bus_1_pwrd) == 1 or (eis_selector == -1 and get(AC_ess_bus_pwrd) == 1))
+    
+    if eis_selector >= 0 and dmc_1_fail then
+        set(Capt_pfd_valid, 0)
+        set(Capt_nd_valid,  0)
+    end
+
+    if eis_selector <= 0 and dmc_2_fail then
+        set(Fo_pfd_valid, 0)
+        set(Fo_nd_valid,  0)
+    end
+    
+    if eis_selector == -1 and dmc_3_fail then
+        set(Capt_pfd_valid, 0)
+        set(Capt_nd_valid,  0)
+    end
+
+    if eis_selector == 1 and dmc_3_fail then
+        set(Fo_pfd_valid, 0)
+        set(Fo_nd_valid,  0)
+    end
+
+    if (eis_selector == 0 and dmc_1_fail and dmc_2_fail) or (eis_selector == 1 and dmc_3_fail) then
+        set(EWD_valid,  0)
+        set(ECAM_valid,  0)
+    end
+
+end
+
 function update()
     if get(Override_DMC) == 0 then
         auto_update()
@@ -178,7 +229,7 @@ function update()
 
     update_displays()
     update_knobs()
-    
+    update_dmc_status()
 
 
 end

@@ -159,6 +159,10 @@ function draw()
 
     perf_measure_start("ECAM:draw()")
 
+    if display_special_mode(size, ECAM_valid) then
+        return
+    end
+
 
     if get(Ecam_current_page) == 1 then --eng
         draw_eng_page()
