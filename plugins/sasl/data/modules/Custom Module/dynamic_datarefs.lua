@@ -66,6 +66,7 @@ Wheel_skid_speed_R  = globalProperty("sim/flightmodel2/gear/tire_skid_speed_mtr_
 
 Wheel_autobrake_status= createGlobalPropertyi("a321neo/dynamics/wheel/autobrake_status", 0, false, true, false)   -- 0: OFF, 1: LOW, 2: MID, 3: MAX
 Wheel_autobrake_braking=createGlobalPropertyf("a321neo/dynamics/wheel/autobrake_braking", 0, false, true, false)
+
 --engines
 Engine_option = createGlobalPropertyi("a321neo/customization/engine_option", 0, false, true, false) --0 CFM LEAP, 1 PW1000G
 PW_engine_enabled = createGlobalPropertyi("a321neo/customization/pw_engine_enabled", 0, false, true, false)
@@ -527,6 +528,7 @@ Speedbrake_handle_ratio = globalProperty("sim/cockpit2/controls/speedbrake_ratio
 Flightmodel_roll = globalProperty("sim/flightmodel/position/true_phi")
 Flightmodel_pitch = globalProperty("sim/flightmodel/position/true_theta")
 Total_vertical_g_load = globalProperty("sim/flightmodel/forces/g_nrml")
+Total_long_g_load = globalProperty("sim/flightmodel/forces/g_axil")
 Vpath_pitch_rate = createGlobalPropertyf("a321neo/dynamics/FBW/aerodynamics/vpath_Q", 0, false, true, false)
 True_roll_rate = createGlobalPropertyf("a321neo/dynamics/FBW/aerodynamics/true_P", 0, false, true, false)--true roll rate(in relation to the previous reference frame instead of the flight path)
 True_pitch_rate = createGlobalPropertyf("a321neo/dynamics/FBW/aerodynamics/true_Q", 0, false, true, false)--true pitch rate(in relation to the previous reference frame instead of the flight path)

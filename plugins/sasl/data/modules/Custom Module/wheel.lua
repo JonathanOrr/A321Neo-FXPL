@@ -392,6 +392,10 @@ local function update_brakes()
     local left_brake_power  = get(Joystick_toe_brakes_L)+brake_req_left+get(Wheel_autobrake_braking)
     local right_brake_power = get(Joystick_toe_brakes_R)+brake_req_right+get(Wheel_autobrake_braking)
 
+    if brake_req_left > 0 or get(Joystick_toe_brakes_L) > 0.2 or get(Joystick_toe_brakes_R) > 0.2 then 
+        set(Wheel_autobrake_status, 0)
+    end
+
     if get(Brakes_mode) == 1 or get(Brakes_mode) == 2 then
         -- Normal or alternate with antiskid
         local L_brake_set = Math_clamp(left_brake_power,  0, up_limit) * L_temp_degradation

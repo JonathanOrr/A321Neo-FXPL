@@ -20,6 +20,7 @@
 -- Constants
 ----------------------------------------------------------------------------------------------------
 include('constants.lua')
+include('PID.lua')
 
 local AUTOBRK_OFF = 0
 local AUTOBRK_LOW = 1
@@ -33,10 +34,14 @@ local MED_DELAY_SEC  = 2    -- Delay from the spoiler deploymen to the activatio
 
 local speedbrk_deployed_at = 0
 
+local avg_gload        = 0
+local avg_gload_n      = 0
+local avg_gload_stable = 0
+
 local pid_array = {
-            P_gain = 0.1,
-            I_gain = 0.01,
-            D_gain = 0,
+            P_gain = 0.01,
+            I_gain = 0.06,
+            D_gain = 0.0001,
             B_gain = 1,
             Actual_output = 0,
             Desired_output = 0,
@@ -69,9 +74,25 @@ end
 
 local function update_ab_datarefs()
     
-    pb_set(PB.mip.autobrake_LO,  get(Wheel_autobrake_status) == AUTOBRK_LOW, false)
-    pb_set(PB.mip.autobrake_MED, get(Wheel_autobrake_status) == AUTOBRK_MED, false)
-    pb_set(PB.mip.autobrake_MAX, get(Wheel_autobrake_status) == AUTOBRK_MAX, false)
+    local current_accel = get(Total_long_g_load) * 9.80665
+    avg_gload        = avg_gload + current_accel
+    avg_gload_n      = avg_gload_n + 1
+    
+    if avg_gload_n == 10 then
+        avg_gload_stable = avg_gload / avg_gload_n
+        avg_gload = 0
+        avg_gload_n = 0
+    end
+
+    
+    local lo_decel_cond = get(Wheel_autobrake_status) == AUTOBRK_LOW and get(Wheel_autobrake_braking) > 0 and avg_gload_stable > 0.8 * LO_DECEL_MSEC
+    pb_set(PB.mip.autobrake_LO,  get(Wheel_autobrake_status) == AUTOBRK_LOW, lo_decel_cond)
+
+    local med_decel_cond = get(Wheel_autobrake_status) == AUTOBRK_MED and get(Wheel_autobrake_braking) > 0 and avg_gload_stable > 0.8 * MED_DECEL_MSEC
+    pb_set(PB.mip.autobrake_MED, get(Wheel_autobrake_status) == AUTOBRK_MED, med_decel_cond)
+
+    local max_decel_cond = get(Wheel_autobrake_status) == AUTOBRK_MAX and (get(Wheel_autobrake_braking) >= 0.8*0.56)
+    pb_set(PB.mip.autobrake_MAX, get(Wheel_autobrake_status) == AUTOBRK_MAX, max_decel_cond)
 
 end
 
@@ -82,7 +103,7 @@ local function is_autobrake_braking()
     end
     
     if get(Wheel_autobrake_status) == AUTOBRK_MAX then
-        return get(All_on_ground) == 1 and get(IAS) > 40 and get(Ground_spoilers_mode) > 0
+        return get(All_on_ground) == 1 and get(Ground_speed_kts) > 40 and get(Ground_spoilers_mode) > 0
     end
     
     if get(All_on_ground) == 1 and speedbrk_deployed_at == 0 and get(Ground_spoilers_mode) > 0 then
@@ -92,11 +113,11 @@ local function is_autobrake_braking()
     end
     
     if get(Wheel_autobrake_status) == AUTOBRK_MED then
-        return get(All_on_ground) == 1 and get(IAS) > 0.1 and speedbrk_deployed_at ~=0 and get(TIME) - speedbrk_deployed_at > MED_DELAY_SEC
+        return get(All_on_ground) == 1 and get(Ground_speed_kts) > 5 and speedbrk_deployed_at ~=0 and get(TIME) - speedbrk_deployed_at > MED_DELAY_SEC
     end
 
     if get(Wheel_autobrake_status) == AUTOBRK_LOW then
-        return get(All_on_ground) == 1 and get(IAS) > 0.1 and speedbrk_deployed_at ~=0 and get(TIME) - speedbrk_deployed_at > LOW_DELAY_SEC
+        return get(All_on_ground) == 1 and get(Ground_speed_kts) > 5 and speedbrk_deployed_at ~=0 and get(TIME) - speedbrk_deployed_at > LO_DELAY_SEC
     end
     
     return false -- This should not happen
@@ -104,9 +125,16 @@ end
 
 local function brake_pid(force)
 
-    local set_point = force == AUTOBRK_MID and MED_DECEL_MSEC or LO_DECEL_MSEC
+    local set_point = force == AUTOBRK_MED and MED_DECEL_MSEC or LO_DECEL_MSEC
     
+    local current_accel = get(Total_long_g_load) * 9.80665
+    
+    local curr_err  = set_point - current_accel
+    local u = SSS_PID_BP(pid_array, curr_err)
+    pid_array.Actual_output = Math_clamp(u, 0, 0.56)
 
+    return pid_array.Actual_output
+    
 end
 
 function update_autobrake_actuator()
@@ -116,8 +144,8 @@ function update_autobrake_actuator()
     if is_autobrake_braking() then
         if get(Wheel_autobrake_status) == AUTOBRK_MAX then
             set(Wheel_autobrake_braking, 1)
-        elseif get(Wheel_autobrake_status) == AUTOBRK_MID then
-            set(Wheel_autobrake_braking, brake_pid(AUTOBRK_MID))
+        elseif get(Wheel_autobrake_status) == AUTOBRK_MED then
+            set(Wheel_autobrake_braking, brake_pid(AUTOBRK_MED))
         elseif get(Wheel_autobrake_status) == AUTOBRK_LOW then
             set(Wheel_autobrake_braking, brake_pid(AUTOBRK_LOW))
         end
