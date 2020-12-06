@@ -190,12 +190,6 @@ PFD_Capt_bird_horiz_pos = createGlobalPropertyf("a321neo/cockpit/PFD/capt_bird_h
 Ecam_previous_page  = createGlobalPropertyi("a321neo/cockpit/ecam/previous", 13, false, true, false) --1ENG, 2BLEED, 3PRESS, 4ELEC, 5HYD, 6FUEL, 7APU, 8COND, 9DOOR, 10WHEEL, 11F/CTL, 12STS
 Ecam_current_page   = createGlobalPropertyi("a321neo/cockpit/ecam/page_num", 4, false, true, false) --1ENG, 2BLEED, 3PRESS, 4ELEC, 5HYD, 6FUEL, 7APU, 8COND, 9DOOR, 10WHEEL, 11F/CTL, 12STS
 
-Ecam_fctl_is_rudder_ok     = createGlobalPropertyi("a321neo/cockpit/ecam/fctl_is_rudder_ok", 0, false, true, false) -- 1 ok, 0 not working
-Ecam_fctl_is_aileron_ok    = createGlobalPropertyi("a321neo/cockpit/ecam/fctl_is_aileron_ok", 0, false, true, false) -- 1 ok, 0 not working
-Ecam_fctl_is_elevator_R_ok   = createGlobalPropertyi("a321neo/cockpit/ecam/fctl_is_elevator_R_ok", 0, false, true, false) -- 1 ok, 0 not working
-Ecam_fctl_is_elevator_L_ok   = createGlobalPropertyi("a321neo/cockpit/ecam/fctl_is_elevator_L_ok", 0, false, true, false) -- 1 ok, 0 not working
-Ecam_fctl_is_pitch_trim_ok = createGlobalPropertyi("a321neo/cockpit/ecam/fctl_is_pitch_trim_ok", 0, false, true, false) -- 1 ok, 0 not working
-
 Ecam_elec_bat_1_status = createGlobalPropertyi("a321neo/cockpit/ecam/electrical/bat_1_status", 0, false, true, false) -- 1 on, 0 off
 Ecam_elec_bat_2_status = createGlobalPropertyi("a321neo/cockpit/ecam/electrical/bat_2_status", 0, false, true, false) -- 1 on, 0 off
 Ecam_elec_apu_gen_status = createGlobalPropertyi("a321neo/cockpit/ecam/electrical/apu_gen_status", 0, false, true, false) -- 0: apu off, 1: gen off, 2: online, 3:failed

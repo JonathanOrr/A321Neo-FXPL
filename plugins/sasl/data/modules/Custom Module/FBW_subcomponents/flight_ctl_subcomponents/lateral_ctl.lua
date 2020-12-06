@@ -179,6 +179,25 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
         r_spoilers_roll_targets[i] = Math_rescale( roll_spoilers_threshold[i], 0,  1, r_spoilers_roll_max_def[i], lateral_input)
     end
 
+    --SPEEDBRAKES INHIBITION--
+    if get(Speedbrake_handle_ratio) >= 0 and get(Speedbrake_handle_ratio) <= 0.1 then
+        set(Speedbrakes_inhibited, 0)
+    end
+
+    if get(Bypass_speedbrakes_inhibition) ~= 1 then
+        if get(SEC_1_status) == 0 and get(SEC_3_status) == 0 then
+            set(Speedbrakes_inhibited, 1)
+        elseif get(Flaps_internal_config) == 4 or get(Flaps_internal_config) == 5 then
+            set(Speedbrakes_inhibited, 1)
+            --lacking above MCT/ ELEV fail(inhibites 3, 4)/ alpha protection/ upon a.prot toga [and restoring speedbrake avail by reseting the lever position]
+        end
+    end
+
+    if get(Speedbrakes_inhibited) == 1 and get(Bypass_speedbrakes_inhibition) ~= 1 then
+        l_spoilers_spdbrk_targets = {0, 0, 0, 0, 0}
+        r_spoilers_spdbrk_targets = {0, 0, 0, 0, 0}
+    end
+
     --GROUND SPOILERS MODE--
     --0 = NOT EXTENDED
     --1 = PARCIAL EXTENTION
@@ -187,18 +206,10 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
         l_spoilers_spdbrk_targets = {10, 10, 10, 10, 10}
         r_spoilers_spdbrk_targets = {10, 10, 10, 10, 10}
     elseif ground_spoilers_mode == 2 then
+        l_spoilers_roll_targets = {0, 0, 0, 0, 0}
+        r_spoilers_roll_targets = {0, 0, 0, 0, 0}
         l_spoilers_spdbrk_targets = {40, 40, 40, 40, 40}
         r_spoilers_spdbrk_targets = {40, 40, 40, 40, 40}
-    end
-
-    --SPEEDBRAKES INHIBITION--
-    if get(SEC_1_status) == 0 and get(SEC_3_status) == 0 then
-        l_spoilers_spdbrk_targets = {0, 0, 0, 0, 0}
-        r_spoilers_spdbrk_targets = {0, 0, 0, 0, 0}
-    elseif get(Flaps_internal_config) == 4 or get(Flaps_internal_config) == 5 then
-        l_spoilers_spdbrk_targets = {0, 0, 0, 0, 0}
-        r_spoilers_spdbrk_targets = {0, 0, 0, 0, 0}
-    --lacking above MCT/ ELEV fail(inhibites 3, 4)/ alpha protection/ upon a.prot toga [and restoring speedbrake avail by reseting the lever position]
     end
 
     --if the aircraft is in roll direct law change the roll spoiler deflections to limit roll rate
