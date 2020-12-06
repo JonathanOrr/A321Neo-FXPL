@@ -15,8 +15,9 @@
 -- File: MCDU.lua 
 -- Short description: A32NX MCDU
 -------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
--- A32NX MCDU
+
+-------------------------------------------------------------------------------
+-- Table of contents for the A32NX MCDU
 --
 --
 -- CONSTS DECLARATION
@@ -24,9 +25,10 @@
 -- DATA & COMMAND REGISTRATION
 -- MCDU - XP FUNC CONTROLS
 -- MCDU PAGE SIMULATION
-----------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 
--- EMULATOR SHELL CODE
+-------------------------------------------------------------------------------
+-- EMULATOR SHELL CODE (I of II)
 --    Simulates SASL running on a lua intrepreter (or https://repl.it)
 --    instead of booting up X-Plane everytime you want to run this.
 --    
@@ -171,6 +173,19 @@ if EMULATOR then
 	sasl.gl = EmulatorGL:new()
 	sasl.test()
 end
+-- END OF EMULATOR SHELL CODE I OF II (CONTINUED AT END OF SCRIPT)
+----------------------------------------------------------------------------------------------------
+-- START OF MCDU CODE
+-- START OF MCDU CODE
+-- START OF MCDU CODE
+
+--[[
+--
+--
+--      CONSTS DECLARATION
+--
+--
+--]]
 
 position = {1282, 1449, 560, 530}
 size = {560, 530}
@@ -642,7 +657,11 @@ local function draw_dat(dat, draw_size, disp_x, disp_y, disp_text_align)
     text = ""
     for j = 1,#disp_text do
         if disp_text:sub(j,j) == "{" then
-            text = text .. "b"
+            if EMULATOR then
+                text = text .. "b"
+            else
+                text = text .. "□"
+            end
         else
             text = text .. disp_text:sub(j,j)
         end
@@ -2316,9 +2335,12 @@ function (phase)
     end
 end
 
+-- END OF MCDU CODE
+-- END OF MCDU CODE
+-- END OF MCDU CODE
 
-
--- EMULATOR SHELL CODE CONTINUED (II)
+-------------------------------------------------------------------------------
+-- EMULATOR SHELL CODE CONTINUED (II of II)
 --    Simulates SASL running on a lua intrepreter (or https://repl.it)
 --    instead of booting up X-Plane everytime you want to run this.
 
@@ -2466,3 +2488,5 @@ if EMULATOR then
 		end
 	end
 end
+-- END OF EMULATOR SHELL CODE II OF II (CONTINUED AT END OF SCRIPT)
+----------------------------------------------------------------------------------------------------

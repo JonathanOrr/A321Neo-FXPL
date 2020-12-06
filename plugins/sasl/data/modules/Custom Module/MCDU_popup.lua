@@ -345,5 +345,3 @@ function onMouseUp (component, x, y, button, parentX, parentY)
     mouse = "UP"
     return true
 end
-
---
