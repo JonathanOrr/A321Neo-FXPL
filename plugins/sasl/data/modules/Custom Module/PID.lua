@@ -222,8 +222,8 @@ function SSS_PID_BP(pid_array, error)
     pid_array.Proportional = pid_array.Current_error * pid_array.P_gain
 
     --integral--
-    local backpropagation = pid_array.B_gain * (pid_array.Actual_output - pid_array.Desired_output)
-    local integral_input = pid_array.I_gain * pid_array.Current_error + backpropagation
+    pid_array.Backpropagation = pid_array.B_gain * (pid_array.Actual_output - pid_array.Desired_output)
+    local integral_input = pid_array.I_gain * pid_array.Current_error + pid_array.Backpropagation
     
     pid_array.Integral_sum = pid_array.Integral_sum + (integral_input * get(DELTA_TIME))
     pid_array.Integral = pid_array.Integral_sum
