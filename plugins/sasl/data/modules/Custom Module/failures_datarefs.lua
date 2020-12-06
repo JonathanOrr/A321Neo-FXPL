@@ -127,6 +127,9 @@ FAILURE_FCTL_LELEV =         createGlobalPropertyi("a321neo/failures/fctl/l_elev
 FAILURE_FCTL_RELEV =         createGlobalPropertyi("a321neo/failures/fctl/r_elevator", 0, false, true, false)--jam r elevator
 FAILURE_FCTL_THS =           createGlobalPropertyi("a321neo/failures/fctl/ths_trim", 0, false, true, false)--jam eletrical ths motor
 FAILURE_FCTL_THS_MECH =      createGlobalPropertyi("a321neo/failures/fctl/ths_mechanical", 0, false, true, false)--jam mechanical ths deflection
+FAILURE_FCTL_RUDDER_LIM =    createGlobalPropertyi("a321neo/failures/fctl/rudder_limits", 0, false, true, false)--jam rudder limits
+FAILURE_FCTL_RUDDER_TRIM =   createGlobalPropertyi("a321neo/failures/fctl/rudder_trim", 0, false, true, false)--jam rudder trim
+FAILURE_FCTL_RUDDER_MECH =   createGlobalPropertyi("a321neo/failures/fctl/rudder_mechanical", 0, false, true, false)--jam mechanical rudder deflection
 FAILURE_FCTL_UP_SHIT_CREEK = createGlobalPropertyi("a321neo/failures/fctl/up_shit_creek", 0, false, true, false)--jam every single surface
 
 FAILURE_FUEL = createGlobalPropertyia("a321neo/failures/fuel/pumps", 8)

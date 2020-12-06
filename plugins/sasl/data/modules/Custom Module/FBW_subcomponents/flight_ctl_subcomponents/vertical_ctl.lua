@@ -1,4 +1,4 @@
-function Elevator_control(vertical_input)
+function Elevator_control(vertical_input, in_direct_law)
     --HYD reversion
     --left  G --> B
     --right Y --> B
@@ -15,6 +15,9 @@ function Elevator_control(vertical_input)
 
     local max_up_deflection = -30
     local max_dn_deflection = 17
+
+    local max_direct_law_up = -(3.704475 + (15.8338 - 3.703375) / (1 + (get(IAS) / 252.8894)^8.89914))
+    local max_direct_law_dn = 3.759707 + (11.8902 - 3.759707) / (1 + (get(IAS) / 321.8764)^8.21922)
 
     --surface variables--
     local l_elev_spd = 45
@@ -47,8 +50,13 @@ function Elevator_control(vertical_input)
     l_elev_target = Math_rescale(0, Math_rescale(0, max_dn_deflection, no_hyd_recenter_ias, get(Alpha), get(IAS)), 1450, l_elev_target, get(Hydraulic_G_press) + get(Hydraulic_B_press))
     r_elev_target = Math_rescale(0, Math_rescale(0, max_dn_deflection, no_hyd_recenter_ias, get(Alpha), get(IAS)), 1450, r_elev_target, get(Hydraulic_Y_press) + get(Hydraulic_B_press))
 
-    set(Elevators_hstab_1, Set_linear_anim_value(get(Elevators_hstab_1), l_elev_target, max_up_deflection, max_dn_deflection, l_elev_spd))
-    set(Elevators_hstab_2, Set_linear_anim_value(get(Elevators_hstab_2), r_elev_target, max_up_deflection, max_dn_deflection, r_elev_spd))
+    if in_direct_law == false then
+        set(Elevators_hstab_1, Set_linear_anim_value(get(Elevators_hstab_1), l_elev_target, max_up_deflection, max_dn_deflection, l_elev_spd))
+        set(Elevators_hstab_2, Set_linear_anim_value(get(Elevators_hstab_2), r_elev_target, max_up_deflection, max_dn_deflection, r_elev_spd))
+    else
+        set(Elevators_hstab_1, Set_linear_anim_value(get(Elevators_hstab_1), l_elev_target, max_direct_law_up, max_direct_law_dn, l_elev_spd))
+        set(Elevators_hstab_2, Set_linear_anim_value(get(Elevators_hstab_2), r_elev_target, max_direct_law_up, max_direct_law_dn, r_elev_spd))
+    end
 end
 
 function XP_trim_up(phase)
@@ -113,6 +121,7 @@ function THS_control(THS_input_dataref, human_input)
     local THS_target = input
 
     --Trim speed logic--
+    caculated_human_trim_speed = Math_rescale(0, 0, 1450, caculated_human_trim_speed, get(Hydraulic_G_press) + get(Hydraulic_Y_press))
     caculated_trim_speed = Math_rescale(0, 0, 1450, caculated_trim_speed, get(Hydraulic_G_press) + get(Hydraulic_Y_press))
     caculated_trim_speed = caculated_trim_speed * BoolToNum(get(ELAC_2_status) == 1 or get(ELAC_1_status) == 1 or get(SEC_2_status) == 1 or get(SEC_1_status) == 1)
     caculated_trim_speed = caculated_trim_speed * (1 - get(FAILURE_FCTL_THS))
