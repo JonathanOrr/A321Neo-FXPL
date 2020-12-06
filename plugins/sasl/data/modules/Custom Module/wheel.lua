@@ -361,13 +361,16 @@ local function brake_with_accumulator(L,R, L_temp_degradation, R_temp_degradatio
 end
 
 local function brake_altn(L_temp_degradation, R_temp_degradation)
+    local left_brake  = get(Joystick_toe_brakes_L)+brake_req_left
+    local right_brake = get(Joystick_toe_brakes_R)+brake_req_right
     if get(Hydraulic_Y_press) >= 1450 then
         -- Ok in this case let's brake, no pressure limit, no antiskid
-        Set_dataref_linear_anim(Wheel_brake_L, (get(Joystick_toe_brakes_L)+brake_req_left)*L_temp_degradation, 0, 1, 0.5)
-        Set_dataref_linear_anim(Wheel_brake_R, (get(Joystick_toe_brakes_R)+brake_req_right)*R_temp_degradation, 0, 1, 0.5)
+        
+        Set_dataref_linear_anim(Wheel_brake_L, left_brake *L_temp_degradation, 0, 1, 0.5)
+        Set_dataref_linear_anim(Wheel_brake_R, right_brake*R_temp_degradation, 0, 1, 0.5)
     elseif get(Brakes_accumulator) > 1 then
         -- If we don't have hydraulic, we need to use the accumulator (if any)
-        brake_with_accumulator(get(Joystick_toe_brakes_L)+brake_req_left, get(Joystick_toe_brakes_R)+brake_req_right, L_temp_degradation, R_temp_degradation)
+        brake_with_accumulator(left_brake, right_brake, L_temp_degradation, R_temp_degradation)
     else
         -- Oh no, no hyd pressure to brake
         Set_dataref_linear_anim(Wheel_brake_L, 0, 0, 1, 0.5)
@@ -385,11 +388,13 @@ local function update_brakes()
 
     local up_limit = Math_rescale(0, 0, 2500, 1.4, 1000) -- 1000 PSI upper limit
 
+    local left_brake_power  = get(Joystick_toe_brakes_L)+brake_req_left+get(Wheel_autobrake_braking)
+    local right_brake_power = get(Joystick_toe_brakes_R)+brake_req_right+get(Wheel_autobrake_braking)
 
     if get(Brakes_mode) == 1 or get(Brakes_mode) == 2 then
         -- Normal or alternate with antiskid
-        local L_brake_set = Math_clamp(get(Joystick_toe_brakes_L)+brake_req_left, 0, up_limit) * L_temp_degradation
-        local R_brake_set = Math_clamp(get(Joystick_toe_brakes_R)+brake_req_right, 0, up_limit) * R_temp_degradation
+        local L_brake_set = Math_clamp(left_brake_power,  0, up_limit) * L_temp_degradation
+        local R_brake_set = Math_clamp(right_brake_power, 0, up_limit) * R_temp_degradation
         
         run_anti_skid(L_brake_set, R_brake_set)
         
