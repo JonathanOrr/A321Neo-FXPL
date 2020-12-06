@@ -82,12 +82,12 @@ local function is_autobrake_braking()
     end
     
     if get(Wheel_autobrake_status) == AUTOBRK_MAX then
-        return get(All_on_ground) == 1 and get(IAS) > 40 and get(Speedbrakes_ratio) > 0.5
+        return get(All_on_ground) == 1 and get(IAS) > 40 and get(Ground_spoilers_mode) > 0
     end
     
-    if get(All_on_ground) == 1 and speedbrk_deployed_at == 0 and get(Speedbrakes_ratio) > 0.5 then
+    if get(All_on_ground) == 1 and speedbrk_deployed_at == 0 and get(Ground_spoilers_mode) > 0 then
         speedbrk_deployed_at = get(TIME)
-    elseif get(Speedbrakes_ratio) < 0.5 then
+    elseif get(Ground_spoilers_mode) == 0 then
         speedbrk_deployed_at = 0
     end
     
