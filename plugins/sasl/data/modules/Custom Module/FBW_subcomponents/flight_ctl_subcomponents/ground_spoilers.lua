@@ -59,9 +59,8 @@ function XP_min_speedbrakes(phase)
 end
 
 Ground_spoilers_var_table = {
-    Both_main_gear_on_ground_prev = 0,
+    Both_main_gear_on_ground_prev = 1,
     Thrust_levers_idled_prev = 0,
-    Both_has_touched_down = 0,
 }
 
 function Ground_spoilers_output(var_table)
@@ -94,11 +93,6 @@ function Ground_spoilers_output(var_table)
     --check if ground spoilers are armed
     set(Ground_spoilers_armed, BoolToNum(get(Speedbrake_handle_ratio) <= -0.25))
 
-    --store gear compression status-- 
-    if Both_main_gear_on_ground_delta == 1 then
-        var_table.Both_has_touched_down = 1
-    end
-
     --partial extension--
     if get(Either_Aft_on_ground) == 1 and get(Aft_wheel_on_ground) == 0 and (get(L_sim_throttle) <= -0.1 or get(R_sim_throttle) == -0.1) then
         set(Ground_spoilers_mode, 1)
@@ -114,7 +108,7 @@ function Ground_spoilers_output(var_table)
             end
         end
 
-        if var_table.Both_has_touched_down == 1 then
+        if Both_main_gear_on_ground_delta == 1 then
             set(Ground_spoilers_mode, 2)
             set(Ground_spoilers_act_method, 2)
         end
@@ -130,13 +124,13 @@ function Ground_spoilers_output(var_table)
             end
         end
 
-        if var_table.Both_has_touched_down == 1 and (get(L_sim_throttle) <= -0.1 or get(R_sim_throttle) == -0.1) then
+        if Both_main_gear_on_ground_delta == 1 and (get(L_sim_throttle) <= -0.1 or get(R_sim_throttle) == -0.1) then
             set(Ground_spoilers_mode, 2)
             set(Ground_spoilers_act_method, 1)
         end
 
         --speedbrake handle in extended position and flaps is larger and equal to config 3
-        if var_table.Both_has_touched_down == 1 and get(Speedbrake_handle_ratio) > 0.1 and get(L_sim_throttle) <= 0 and get(R_sim_throttle) <= 0 and get(Flaps_internal_config) >= 4 then
+        if Both_main_gear_on_ground_delta == 1 and get(Speedbrake_handle_ratio) > 0.1 and get(L_sim_throttle) <= 0 and get(R_sim_throttle) <= 0 and get(Flaps_internal_config) >= 4 then
             set(Ground_spoilers_mode, 2)
             set(Ground_spoilers_act_method, 2)--a special case
         end
@@ -153,13 +147,11 @@ function Ground_spoilers_output(var_table)
         if get(Speedbrake_handle_ratio) > -0.25 and get(Speedbrake_handle_ratio) <= 0.1 then
             set(Ground_spoilers_mode, 0)
             set(Ground_spoilers_act_method, 0)
-            var_table.Both_has_touched_down = 0
         end
     elseif get(Ground_spoilers_act_method) == 1 then
         if get(L_sim_throttle) == 0 and get(R_sim_throttle) == 0 then
             set(Ground_spoilers_mode, 0)
             set(Ground_spoilers_act_method, 0)
-            var_table.Both_has_touched_down = 0
         end
     end
 
@@ -167,7 +159,6 @@ function Ground_spoilers_output(var_table)
     if thrust_lever_1_fwd_def >= 20 and thrust_lever_2_fwd_def >= 20 then
         set(Ground_spoilers_mode, 0)
         set(Ground_spoilers_act_method, 0)
-        var_table.Both_has_touched_down = 0
     end
 
     return get(Ground_spoilers_mode)
