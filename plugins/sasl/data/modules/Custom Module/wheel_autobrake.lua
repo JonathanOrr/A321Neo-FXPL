@@ -38,6 +38,8 @@ local avg_gload        = 0
 local avg_gload_n      = 0
 local avg_gload_stable = 0
 
+local i_was_braking = false
+
 local pid_array = {
             P_gain = 0.01,
             I_gain = 0.06,
@@ -102,6 +104,14 @@ local function is_autobrake_braking()
         return false    -- Cannot autobrake if at least 2 sec available
     end
     
+    if get(FAILURE_GEAR_AUTOBRAKES) == 1 then
+        return false -- Cannot autobrake if failure occurred
+    end
+    
+    if get(Brakes_mode) > 1 then
+        return false
+    end
+    
     if get(Wheel_autobrake_status) == AUTOBRK_MAX then
         return get(All_on_ground) == 1 and get(Ground_speed_kts) > 40 and get(Ground_spoilers_mode) > 0
     end
@@ -119,7 +129,7 @@ local function is_autobrake_braking()
     if get(Wheel_autobrake_status) == AUTOBRK_LOW then
         return get(All_on_ground) == 1 and get(Ground_speed_kts) > 5 and speedbrk_deployed_at ~=0 and get(TIME) - speedbrk_deployed_at > LO_DELAY_SEC
     end
-    
+   
     return false -- This should not happen
 end
 
@@ -142,6 +152,7 @@ function update_autobrake_actuator()
     set(Wheel_autobrake_braking, 0)
 
     if is_autobrake_braking() then
+        i_was_braking = true
         if get(Wheel_autobrake_status) == AUTOBRK_MAX then
             set(Wheel_autobrake_braking, 1)
         elseif get(Wheel_autobrake_status) == AUTOBRK_MED then
@@ -149,6 +160,9 @@ function update_autobrake_actuator()
         elseif get(Wheel_autobrake_status) == AUTOBRK_LOW then
             set(Wheel_autobrake_braking, brake_pid(AUTOBRK_LOW))
         end
+    elseif i_was_braking then
+        set(Wheel_autobrake_status, AUTOBRK_OFF) 
+        i_was_braking = false
     end
 
 end

@@ -100,6 +100,9 @@ end
 ----------------------------------------------------------------------------------------------------
 
 function onAirportLoaded()
+    set(Left_brakes_temp, get(OTA))
+    set(Right_brakes_temp, get(OTA))
+
     -- When the aircraft is loaded in flight no park brake, otherwise, put on the park brakes :)
     if get(Capt_ra_alt_ft) > 20 then
         set(Parkbrake_switch_pos, 0)
@@ -188,8 +191,8 @@ end
 
 local function update_wheel_psi()
 
-	left_tire_psi_no_delay = 5/39 * (left_brakes_temp_no_delay - 10) + 210
-	right_tire_psi_no_delay = 5/39 * (right_brakes_temp_no_delay - 10) + 210
+	left_tire_psi_no_delay = 1/39 * (left_brakes_temp_no_delay - 10) + 210
+	right_tire_psi_no_delay = 1/39 * (right_brakes_temp_no_delay - 10) + 210
 
 	set(Left_tire_psi,  Set_anim_value(get(Left_tire_psi), left_tire_psi_no_delay, -100, 1000, 0.5))
 	set(Right_tire_psi, Set_anim_value(get(Right_tire_psi), left_tire_psi_no_delay, -100, 1000, 0.5))
@@ -253,9 +256,9 @@ local function update_brake_mode()
     local at_least_one_BSCU_op = is_bscu_1_working or is_bscu_2_working
 
     if get(Parkbrake_switch_pos) == 0 then
-        if get(Hydraulic_G_press) >= 1450 and antiskid_and_ns_switch and at_least_one_BSCU_op then
+        if get(Hydraulic_G_press) >= 1450 and antiskid_and_ns_switch and at_least_one_BSCU_op and get(FAILURE_GEAR_NWS) == 0 then
             set(Brakes_mode, 1) -- Normal
-        elseif get(Hydraulic_Y_press) >= 1450 and antiskid_and_ns_switch and at_least_one_BSCU_op then
+        elseif get(Hydraulic_Y_press) >= 1450 and antiskid_and_ns_switch and at_least_one_BSCU_op and get(FAILURE_GEAR_NWS) == 0 then
             set(Brakes_mode, 2) -- ALTN with anti skid
         else
             set(Brakes_mode, 3) -- ALTN without anti skid
@@ -425,6 +428,9 @@ local function update_brakes()
     if get(Brakes_mode) ~= 1 then
         set(Brakes_press_ind_L, Math_rescale(0, 0, 1, 2500, get(Wheel_brake_L)))
         set(Brakes_press_ind_R, Math_rescale(0, 0, 1, 2500, get(Wheel_brake_R)))
+    else
+        Set_dataref_linear_anim(Brakes_press_ind_L, 0, 0, 500, 2500)
+        Set_dataref_linear_anim(Brakes_press_ind_R, 0, 0, 2500, 2500)    
     end
 
     if get(Hydraulic_Y_press) >= 1450 then

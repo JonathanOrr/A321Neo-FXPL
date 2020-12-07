@@ -215,6 +215,14 @@ local failures_data = {
     {
         group="L/G",
         failures={
+            {name="AUTO BRAKES\nFAULT", status=false, dataref=FAILURE_GEAR_AUTOBRAKES },
+            {name="STEERING\nFAULT", status=false, dataref=FAILURE_GEAR_NWS },
+            {name="LGCIU 1\nFAULT", status=false, dataref=FAILURE_GEAR_LGIU1 },
+            {name="LGCIU 2\nFAULT", status=false, dataref=FAILURE_GEAR_LGIU2 },
+            {name="BSCU 1\nFAULT", status=false, dataref=FAILURE_GEAR_BSCU1 },
+            {name="BSCU 2\nFAULT", status=false, dataref=FAILURE_GEAR_BSCU2 },
+            {name="ABCU\nFAULT", status=false, dataref=FAILURE_GEAR_ABCU },
+            {name="TPIU\nFAULT", status=false, dataref=FAILURE_GEAR_TPIU },
         }
     },
     {
