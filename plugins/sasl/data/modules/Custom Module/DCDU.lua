@@ -37,8 +37,8 @@
 -- [facility designation] ALTIMETER [altimeter] (ROGER)
 -- RADAR CONTACT [position] (ROGER)
 
-position= {1990,1866,463,325}
-size = {463, 325}
+position= {30,1841,465,325}
+size = {465, 325}
 
 include('DCDU_handlers.lua')    -- DCDU handlers contains the button handlers
 include('constants.lua')

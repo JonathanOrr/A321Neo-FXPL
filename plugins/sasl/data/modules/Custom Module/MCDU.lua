@@ -172,7 +172,7 @@ if EMULATOR then
 	sasl.test()
 end
 
-position = {1282, 1449, 560, 530}
+position = {1020, 1666, 560, 530}
 size = {560, 530}
 
 include('constants.lua')

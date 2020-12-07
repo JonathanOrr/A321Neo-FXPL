@@ -223,6 +223,19 @@ function update_dmc_status()
 end
 
 function update()
+    set(Capt_pfd_show, 1, 5)
+    set(Capt_pfd_show, 1, 5)
+    set(Capt_pfd_show, 1, 5)
+    set(Capt_pfd_show, 1, 5)
+    set(Capt_pfd_show, 1, 5)
+    set(Capt_pfd_show, 1, 5)
+    set(Capt_pfd_show, 1, 6)
+    set(Capt_pfd_show, 1, 6)
+    set(Capt_pfd_show, 1, 6)
+    set(Capt_pfd_show, 1, 6)
+    set(Capt_pfd_show, 1, 6)
+    set(Capt_pfd_show, 1, 6)
+    
     if get(Override_DMC) == 0 then
         auto_update()
     end
@@ -230,6 +243,4 @@ function update()
     update_displays()
     update_knobs()
     update_dmc_status()
-
-
 end

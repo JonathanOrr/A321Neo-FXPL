@@ -16,7 +16,7 @@
 -- Short description: Main ECAM file 
 -------------------------------------------------------------------------------
 
-position= {3187,539,900,900}
+position= {1030,2226,900,900}
 size = {900, 900}
 
 include('ECAM_automation.lua')

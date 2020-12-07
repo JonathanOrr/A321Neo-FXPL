@@ -89,7 +89,7 @@ function Rudder_control(yaw_input, fbw_current_law, is_in_auto_flight, trim_inpu
     end
 
     --rudder failure--
-    rudder_speed = Math_rescale(0, 0, 1450, rudder_speed, get(Hydraulic_G_press) + get(Hydraulic_B_press) + get(Hydraulic_Y_press))
+    rudder_speed = Math_rescale(0, 0, 1450, rudder_speed, get(Hydraulic_G_press) + get(Hydraulic_B_press) + get(Hydraulic_Y_press)) * (1 - get(FAILURE_FCTL_RUDDER_MECH))
 
     --rudder position calculation--
     set(Augmented_rudder_angle, Set_linear_anim_value(get(Augmented_rudder_angle), rudder_travel_target, -get(Rudder_travel_lim) - get(Rudder_trim_angle), get(Rudder_travel_lim) - get(Rudder_trim_angle), rudder_speed))

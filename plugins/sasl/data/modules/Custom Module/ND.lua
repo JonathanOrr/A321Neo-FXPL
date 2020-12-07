@@ -16,7 +16,7 @@
 -- Short description: main Logic/Graphic code for ND display
 -------------------------------------------------------------------------------
 
-position = {37, 410, 900, 900}
+position = {1030, 3166, 900, 900}
 size = {900, 900}
 
 include('constants.lua')

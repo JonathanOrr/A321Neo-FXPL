@@ -16,7 +16,7 @@
 -- Short description: PFD graphical
 -------------------------------------------------------------------------------
 
-position = {1365, 539, 900, 900}
+position = {30, 3166, 900, 900}
 size = {900, 900}
 
 include('constants.lua')

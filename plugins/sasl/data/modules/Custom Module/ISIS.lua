@@ -16,7 +16,7 @@
 -- Short description: The file containing the code for the ISIS widget
 -------------------------------------------------------------------------------
 
-position= {2480,1443,500,500}
+position= {30,1311,500,500}
 size = {500, 500}
 
 include('constants.lua')

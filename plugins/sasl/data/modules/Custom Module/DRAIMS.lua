@@ -16,7 +16,7 @@
 -- Short description: Logic for the radios
 -------------------------------------------------------------------------------
 
-position = {1852, 1449, 600, 400}
+position = {2030, 2726, 600, 400}
 size = {600, 400}
 
 local UPDATE_FREQUENCY_SEC = 1

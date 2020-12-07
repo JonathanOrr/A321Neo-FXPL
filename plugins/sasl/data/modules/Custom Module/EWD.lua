@@ -16,7 +16,7 @@
 -- Short description: Graphical file for EWD - It does not contain any logic
 -------------------------------------------------------------------------------
 
-position= {2279,539,900,900}
+position= {30,2226,900,900}
 size = {900, 900}
 
 include('constants.lua')
