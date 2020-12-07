@@ -62,21 +62,21 @@ function ECAM_status_get_inop_sys()
         --end
 
         -- L/G
-        if get(FAILURE_gear) == 1 then
-            table.insert(messages, "L/G RETRACT")
-        elseif get(FAILURE_gear) == 2 then
-            inop_steer = true
-            inop_cat3_dual = true
-        end
+        --if get(FAILURE_gear) == 1 then
+        --    table.insert(messages, "L/G RETRACT")
+        --elseif get(FAILURE_gear) == 2 then
+        --    inop_steer = true
+        --    inop_cat3_dual = true
+        --end
 
 
-        if get(FAILURE_TCAS) == 6 then
-            table.insert(messages, "TCAS")                
-        end
+        --if get(FAILURE_TCAS) == 6 then
+        --    table.insert(messages, "TCAS")                
+        --end
 
-        if get(Nosewheel_Steering_working) then
-            inop_steer = true
-        end
+        --if get(Nosewheel_Steering_working) then
+        --    inop_steer = true
+        --end
 
 
 --        if get(Nosewheel_Steering_and_AS) == 0 then

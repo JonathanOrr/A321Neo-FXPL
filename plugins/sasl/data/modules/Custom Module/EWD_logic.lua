@@ -80,9 +80,15 @@ local left_messages_list = {
     MessageGroup_FBW_ALTN_DIRECT_LAW,
     MessageGroup_AVIONICS_SMOKE,
     MessageGroup_BRAKES_HOT,
-    MessageGroup_ADKIS_NWS,
     MessageGroup_APU_SHUTDOWN,
     MessageGroup_GEAR_NOT_UPLOCKED,
+    MessageGroup_BRAKE_NORM_ALTN_FAULT,
+    MessageGroup_AUTOBRAKES,
+    MessageGroup_ADKIS_NWS,
+    MessageGroup_ADKIS_NWS_FAULT,
+    MessageGroup_BRAKE_NORM_FAULT,
+    MessageGroup_BRAKE_ALTN_FAULT,
+    MessageGroup_BSCU_FAULT,
     MessageGroup_TCAS_FAULT,
     MessageGroup_ADR_FAULT_SINGLE,
     MessageGroup_ADR_FAULT_DOUBLE,
@@ -171,7 +177,8 @@ local left_messages_list = {
     MessageGroup_BLEED_APU_LEAK,
     MessageGroup_BLEED_ENG_LEAK,
     MessageGroup_BLEED_WING_LEAK,
-
+    MessageGroup_TPIU_FAULT,
+    
     -- Warnings
     MessageGroup_CONFIG_TAKEOFF,
     MessageGroup_APU_FIRE,
@@ -333,7 +340,11 @@ local function update_right_list()
     end
     
 
-    if get(Wheel_autobrake_status) == 1 then
+    
+    
+    if (get(FAILURE_GEAR_AUTOBRAKES) == 1 or get(Brakes_mode) > 1) and get(Wheel_autobrake_status) > 0 then
+        list_right:put(COL_CAUTION, "AUTO BRK OFF")
+    elseif get(Wheel_autobrake_status) == 1 then
         list_right:put(COL_INDICATION, "AUTO BRK LO")
     elseif get(Wheel_autobrake_status) == 2 then
         list_right:put(COL_INDICATION, "AUTO BRK MED")
@@ -420,8 +431,6 @@ local function update_right_list()
     
     -- TODO Audio: AUDIO 3 XFRD displayed green if audio switching selector not in NORM
     -- TODO Acars: ACARS CALL (pulsing green) if received an ACARS message requesting voice conversation
-
-    -- TODO Autobrake fail: AUTO BRK OFF (any flight phase, amber)
 
     -- TODO Steer: NW STRG DISC when the nose wheel steering selector is in the towing position
     --             GREEN: if no engine is running, AMBER: is at least one engine is running

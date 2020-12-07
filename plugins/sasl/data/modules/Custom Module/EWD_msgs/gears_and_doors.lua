@@ -1,5 +1,4 @@
 include('EWD_msgs/common.lua')
-
 local time_gear_down = 0  -- Time from when the handle is moved down
 local time_gear_up = 0  -- Time from when the handle is moved up
 
@@ -302,4 +301,44 @@ MessageGroup_GEAR_NOT_DOWN = {
     end
 
 }
+
+
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: TPIU
+----------------------------------------------------------------------------------------------------
+
+MessageGroup_TPIU_FAULT = {
+
+    shown = false,
+
+    text  = function()
+                return "WHEEL"
+            end,
+    color = function()
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_WHEEL,
+    
+    messages = {
+         { text = function() return "      TIRE P. MONIT FAULT" end,
+           color = function() return COL_CAUTION end,
+           is_active = function() return true end
+        }
+    },
+
+    is_active = function()
+        return get(FAILURE_GEAR_TPIU) == 1
+    end,
+
+    is_inhibited = function()
+        -- During takeoff and landing at high speed
+        return is_active_in({PHASE_ELEC_PWR, PHASE_1ST_ENG_ON, PHASE_AIRBONE, PHASE_BELOW_80_KTS, PHASE_2ND_ENG_OFF})
+    end
+
+}
+
 

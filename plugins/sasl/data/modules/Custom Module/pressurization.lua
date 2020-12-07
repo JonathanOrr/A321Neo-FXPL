@@ -45,9 +45,9 @@ local setpoint_cabin_vs = 500
 
 local pid_array_outflow =
 {
-        P_gain = 0.00001,
-        I_gain = 0.0001,
-        D_gain = 0.00000001,
+        P_gain = 0.001,
+        I_gain = 0.0005,
+        D_gain = 0.000001,
         B_gain = 1,
         Actual_output = 0,
         Desired_output = 0,
@@ -73,8 +73,12 @@ local pid_array_cab_alt =
 ----------------------------------------------------------------------------------------------------
 
 set(Override_pressurization, 1)
-current_cabin_pressure_in_pa = get(Weather_curr_press_flight_level) * 3386.39
-current_cabin_altitude = math.min(7000, get(Capt_baro_alt_ft))
+local current_cabin_pressure_in_pa = get(Weather_curr_press_flight_level) * 3386.39
+local data_current_cabin_pressure_in_pa = { -- Filter
+    x = current_cabin_pressure_in_pa,
+    cut_frequency = 10
+}
+local current_cabin_altitude = math.min(7000, get(Capt_baro_alt_ft))
 
 ----------------------------------------------------------------------------------------------------
 -- Commands
@@ -181,7 +185,10 @@ local function update_cabin_pressure()
     local output_delta_pressure = current_cabin_pressure_in_pa * (output_airflow) / TOTAL_VOLUME -- Pa
 
     -- If the sfety valve is closed, then the aircraft can be pressurized or not
-    current_cabin_pressure_in_pa = current_cabin_pressure_in_pa + (input_delta_pressure - output_delta_pressure) * get(DELTA_TIME)
+    local new_press = current_cabin_pressure_in_pa + (input_delta_pressure - output_delta_pressure) * get(DELTA_TIME)
+    
+    current_cabin_pressure_in_pa = Set_linear_anim_value(current_cabin_pressure_in_pa, new_press, 0, 1000000, 100)
+     
     current_cabin_altitude = (29.92*3386.39 - current_cabin_pressure_in_pa) / 3.378431
 
 end
@@ -222,7 +229,8 @@ local function set_outflow(x)
     end
     x = Math_clamp(x, 0, 1)
     pid_array_outflow.Actual_output = x
-    Set_dataref_linear_anim(Out_flow_valve_ratio, x, 0, 1, 0.25)
+        
+    Set_dataref_linear_anim(Out_flow_valve_ratio, x, 0, 1, 0.1)
 end
 
 local function controller_outflow_valve()
@@ -232,7 +240,7 @@ local function controller_outflow_valve()
 
     local curr_err  = setpoint_cabin_vs - get(Cabin_vs)
     local u = SSS_PID_BP(pid_array_outflow, curr_err)
-    set_outflow(u)
+    return u
  
 end
 
@@ -281,17 +289,20 @@ local function auto_manage_pressurization()
     local touchdown_condition = touchdown_time > 0 and (get(TIME) - touchdown_time > 50)
     local ground_condition = touchdown_condition
                            or (get(EWD_flight_phase) <= PHASE_1ST_ENG_ON)
-    
+   
     if get(All_on_ground) == 0 then
         -- When landing, the last time we update touchdown_time corresponds to the touchdown time 
         touchdown_time = get(TIME)
     end
     
+    set_cabin_vs_target()
+
+    local req_u = controller_outflow_valve()
+    
     if get(All_on_ground) == 1 and ground_condition then
         set_outflow(1) -- Full open
     else
-        set_cabin_vs_target()
-        controller_outflow_valve()
+        set_outflow(req_u)
     end
 end
 
@@ -299,7 +310,8 @@ local function update_datarefs()
     set(Cabin_delta_psi, get_delta_in_psi())
     set(Cabin_alt_ft, current_cabin_altitude)
     if get(DELTA_TIME) > 0 then
-        set(Cabin_vs, (current_cabin_altitude-prev_cabin_altitude) / get(DELTA_TIME) * 60)
+        local vs = (current_cabin_altitude-prev_cabin_altitude) / get(DELTA_TIME) * 60
+        Set_dataref_linear_anim(Cabin_vs, vs, -50000, 50000, 100)
     end
     prev_cabin_altitude = current_cabin_altitude
     

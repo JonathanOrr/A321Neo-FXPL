@@ -339,7 +339,9 @@ local function update_adrs()
     update_status_adrs(3)
     
     set(ADIRS_light_onbat, 0)
-
+    if get(Cockpit_annnunciators_test) == 1 then
+        set(ADIRS_light_onbat, get(OVHR_elec_panel_pwrd) * 1)
+    end
     
     update_status_irs(1)
     update_status_irs(2)

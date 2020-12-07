@@ -100,6 +100,51 @@ local function draw_accumulator()
     sasl.gl.drawRectangle (size[1]/2+220, size[2]/2-30, 20, 70 * get(Brakes_accumulator) / 4, get(Brakes_accumulator) > 2 and UI_GREEN or ECAM_ORANGE)    
 end
 
+local function draw_autobrakes()
+
+    local status_mode = "OK"
+    if get(SEC_1_status) + get(SEC_2_status) + get(SEC_3_status) < 2 then
+        status_mode = "SEC FAIL"
+    end
+    
+    if get(FAILURE_GEAR_AUTOBRAKES) == 1 then
+        status_mode = "AUTOBRK FAIL"
+    end
+    
+    if get(Brakes_mode) > 1 then
+        status_mode = "BRK MODE INH."
+    end
+
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]-330, "Auto-Brakes", 20, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-250, size[2]-350, "Mode: ", 12, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    local status_txt = get(Wheel_autobrake_status) == 0 and "OFF" or (get(Wheel_autobrake_status) == 1 and "LO" or (get(Wheel_autobrake_status) == 2 and "MED" or "MAX"))
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-195, size[2]-350, status_txt, 12, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-250, size[2]-370, "Failed? ", 12, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-195, size[2]-370, get(FAILURE_GEAR_AUTOBRAKES) == 1 and "YES" or "NO", 12, false, false, TEXT_ALIGN_LEFT, get(FAILURE_GEAR_AUTOBRAKES) == 1  and ECAM_RED or ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-250, size[2]-390, "Status: ", 12, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-195, size[2]-390, status_mode, 12, false, false, TEXT_ALIGN_LEFT, status_mode == "OK" and ECAM_GREEN or ECAM_ORANGE)
+
+    local target_decel = get(Wheel_autobrake_status) == 0 and "0.0" or (get(Wheel_autobrake_status) == 1 and "1.7" or (get(Wheel_autobrake_status) == 2 and "3.0" or "MAX"))
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-90, size[2]-350, "Target DECEL: ", 12, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+10, size[2]-350, target_decel, 12, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+
+    local current_accel = get(Total_long_g_load) * 9.80665
+
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-90, size[2]-380, "Actual DECEL: ", 12, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+170, size[2]-380, Round_fill(current_accel,2), 12, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+    Sasl_DrawWideFrame(size[1]/2+10, size[2]-385, 150, 20, 1, 1, ECAM_WHITE)
+    sasl.gl.drawRectangle(size[1]/2+10, size[2]-385, Math_clamp(150 * current_accel/5, 0,150), 20, ECAM_BLUE)
+    local pos_indicator_target = get(Wheel_autobrake_status) == 1 and 1.7 or (get(Wheel_autobrake_status) == 2 and 3 or 0)
+    if pos_indicator_target > 0 then
+        sasl.gl.drawWideLine (size[1]/2+10+150*pos_indicator_target/5, size[2]-390, size[1]/2+10+150*pos_indicator_target/5, size[2]-360, 2 , ECAM_GREEN)
+    end
+
+
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-90, size[2]-410, "Braking req.: ", 12, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+170, size[2]-410, Round_fill(get(Wheel_autobrake_braking),2), 12, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+    Sasl_DrawWideFrame(size[1]/2+10, size[2]-415, 150, 20, 1, 1, ECAM_WHITE)
+    sasl.gl.drawRectangle(size[1]/2+10, size[2]-415, 150 * get(Wheel_autobrake_braking), 20, ECAM_BLUE)
+end
 function draw()
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]-15, "Steering", 20, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
     sasl.gl.drawText(Font_AirbusDUL, 10, size[2]-90, "Steering status: ", 14, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
@@ -119,6 +164,8 @@ function draw()
 
     draw_brakes()
     draw_accumulator()
+
+    draw_autobrakes()
 
     computer_status(50)
 

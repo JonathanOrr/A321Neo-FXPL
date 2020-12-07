@@ -194,13 +194,13 @@ function draw()
         end
     end
     
-    if get(TIME) % 0.5 < 0.25 or chrono_source ~= CHRONO_SOURCE_SET or (what_is_changing ~= 2 and what_is_changing ~= 5) then
+    if get(TIME) % 0.75 < 0.5 or chrono_source ~= CHRONO_SOURCE_SET or (what_is_changing ~= 2 and what_is_changing ~= 5) then
         sasl.gl.drawText(SevenSegment, 36, 102, string.sub(clock_str,1,2), 46, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
     end
-    if get(TIME) % 0.5 < 0.25 or chrono_source ~= CHRONO_SOURCE_SET or (what_is_changing ~= 1 and what_is_changing ~= 4) then
+    if get(TIME) % 0.75 < 0.5 or chrono_source ~= CHRONO_SOURCE_SET or (what_is_changing ~= 1 and what_is_changing ~= 4) then
         sasl.gl.drawText(SevenSegment, 93, 102, string.sub(clock_str,3,4), 46, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
     end
-    if get(TIME) % 0.5 < 0.25 or chrono_source ~= CHRONO_SOURCE_SET or (what_is_changing ~= 3) then
+    if get(TIME) % 0.75 < 0.5 or chrono_source ~= CHRONO_SOURCE_SET or (what_is_changing ~= 3) then
         sasl.gl.drawText(SevenSegment, 147, 105, string.sub(clock_str,5,6), 36, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
     end
 end

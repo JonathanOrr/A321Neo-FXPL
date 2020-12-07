@@ -542,15 +542,15 @@ function update_new_message_light()
 
     set(DCDU_new_msgs, 0)
     
-    if #current_messages == 0 then
-        return
+    if #current_messages > 0 then
+        for i,m in ipairs(current_messages) do
+            if m.msg_status < MESSAGE_STATUS_SENDING then
+                set(DCDU_new_msgs, 1)
+            end 
+        end
     end
-    
-    for i,m in ipairs(current_messages) do
-        if m.msg_status < MESSAGE_STATUS_SENDING then
-            set(DCDU_new_msgs, 1)
-        end 
-    end
+
+    pb_set(PB.glare.atc_msg, (get(TIME)%1) < 0.5 and get(DCDU_new_msgs) > 0, (get(TIME)%1) < 0.5 and get(DCDU_new_msgs) > 0 )
 
 end
 

@@ -352,9 +352,9 @@ function display_special_mode(size, dataref)
     if get(dataref) == 0 then
         sasl.gl.drawRectangle(0, 0, size[1], size[2], {0,0,0})
         sasl.gl.drawWideLine(0,0,size[1],size[2],2,{1,1,1})
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2-20, "INVALID DATA", 40, false, false, TEXT_ALIGN_CENTER, {1, 0.66, 0.16})
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2, "INVALID DATA", 40, false, false, TEXT_ALIGN_CENTER, {1, 0.66, 0.16})
         return true
-    elseif get(Capt_pfd_valid) == 2 then
+    elseif get(dataref) == 2 then
         sasl.gl.drawRectangle(0, 2*size[2]/3, size[1]/8, size[2]/3, {1.0, 0.0, 0.0})
         sasl.gl.drawRectangle(size[1]/8, 2*size[2]/3, size[1]/8, size[2]/2, {1, 0.33, 0})
         sasl.gl.drawRectangle(2*size[1]/8, 2*size[2]/3, size[1]/8, size[2]/2, {1, 0.66, 0.16})
@@ -383,6 +383,19 @@ function display_special_mode(size, dataref)
 
         sasl.gl.drawText(Font_AirbusDUL, size[1]-20, size[2]/2+100, "SIDESTICKSIM AVIONICS", 25, false, false, TEXT_ALIGN_RIGHT,  {0,0,0})
         sasl.gl.drawText(Font_AirbusDUL, size[1]-20, size[2]/2-110, "LCDU 725", 25, false, false, TEXT_ALIGN_RIGHT,  {0,0,0})
+        return true
+    elseif get(dataref) == 3 then
+        sasl.gl.drawRectangle(0, 0, size[1], size[2], {0,0,0})
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2, "MAINTENANCE MODE", 40, false, false, TEXT_ALIGN_CENTER, {0.20, 0.98, 0.20})
+        return true
+    elseif get(dataref) == 4 then
+        sasl.gl.drawRectangle(0, 0, size[1], size[2], {0,0,0})
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2, "WAITING FOR DATA", 40, false, false, TEXT_ALIGN_CENTER, {0.20, 0.98, 0.20})
+        return true
+    elseif get(dataref) == 5 then
+        sasl.gl.drawRectangle(0, 0, size[1], size[2], {0,0,0})
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2+20, "SELF-TEST IN PROGRESS", 40, false, false, TEXT_ALIGN_CENTER, {0.20, 0.98, 0.20})
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2-20, "(MAX 30 SECONDS)", 40, false, false, TEXT_ALIGN_CENTER, {0.20, 0.98, 0.20})
         return true
     end
     return false
