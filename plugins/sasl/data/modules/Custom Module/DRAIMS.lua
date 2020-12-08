@@ -65,7 +65,7 @@ local DRAIMS_BLACK = {0,0,0}
 local DRAIMS_WHITE = {1.0, 1.0, 1.0}
 local DRAIMS_BLUE = {0.004, 1.0, 1.0}
 local DRAIMS_GREEN = {0.184, 0.733, 0.219}
-local DRAIMS_ORANGE = {1, 0.55, 0.15}
+local DRAIMS_ORANGE = {1, 0.576, 0}
 local DRAIMS_RED = {1, 0.0, 0.0}
 
 local ident_box_cl = {0.004, 1.0, 1.0, 1}

@@ -157,7 +157,18 @@ local function draw_engines_needles()
 
     --draw trends and needles
     --eng 2 N1
-    
+
+    local engine_XX_cover = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EWD/ENG_XX.png")
+
+    if get(EWD_engine_1_XX) == 1 then
+        Draw_LCD_backlight(size[1]/2 - 280, size[2]/2 - 35, 210, 480, 0.5, 1, get(EWD_brightness_act))
+        sasl.gl.drawTexture(engine_XX_cover, size[1]/2 - 280, size[2]/2 - 35, 210, 480, {1, 1, 1})
+    end
+    if get(EWD_engine_2_XX) == 1 then
+        Draw_LCD_backlight(size[1]/2 + 70, size[2]/2 - 35, 210, 480, 0.5, 1, get(EWD_brightness_act))
+        sasl.gl.drawTexture(engine_XX_cover, size[1]/2 + 70, size[2]/2 - 35, 210, 480, {1, 1, 1})
+    end
+
     if get(EWD_engine_1_XX) == 0 then
         SASL_draw_needle(eng_1_needle_x, eng_1_needle_y, 88, Math_rescale_lim_lower(20, 222, 100, 48, get(Eng_1_N1)), 4, eng_1_needle_cl)
         if get(L_throttle_blue_dot) - get(Eng_1_N1) <= -4 or get(L_throttle_blue_dot) - get(Eng_1_N1) >= 4 then

@@ -26,7 +26,10 @@ local fo_terrain_on_nd = false
 
 function draw()
 
+    Draw_LCD_backlight(0, 0, 900, 900, 0.5, 1, get(Capt_ND_brightness_act))
+
     if display_special_mode(size, Capt_nd_valid) then
+        sasl.gl.drawRectangle(0, 0, 900, 900, {0, 0, 0, 1 - get(Capt_ND_brightness_act)})
         return
     end
 
@@ -35,11 +38,12 @@ function draw()
     --sasl.gl.drawText(B612MONO_regular, 50, 50, "TEST", 10, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
 
     if get(AC_ess_shed_pwrd) == 0 then   -- TODO This should be fixed when screens move around
+        sasl.gl.drawRectangle(0, 0, 900, 900, {0, 0, 0, 1 - get(Capt_ND_brightness_act)})
         return -- Bus is not powered on, this component cannot work
     end
     ELEC_sys.add_power_consumption(ELEC_BUS_AC_ESS_SHED, 0.26, 0.26)   -- 30W (just hypothesis)
 
-
+    sasl.gl.drawRectangle(0, 0, 900, 900, {0, 0, 0, 1 - get(Capt_ND_brightness_act)})
 end
 
 
