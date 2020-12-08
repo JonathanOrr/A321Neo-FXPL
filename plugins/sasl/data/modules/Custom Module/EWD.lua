@@ -238,7 +238,7 @@ local function draw_engines()
 
     if get(EWD_engine_1_XX) == 0 then
         --N1-- -- TODO COLORS
-        sasl.gl.drawRectangle(size[1]/2 - 195, size[2]/2 + 275, 100, 35, ECAM_BLACK)
+        Draw_LCD_backlight(size[1]/2 - 195, size[2]/2 + 275, 100, 35, 0.5, 1, get(EWD_brightness_act))
         Sasl_DrawWideFrame(size[1]/2 - 195, size[2]/2 + 275, 100, 35, 2, 0, ECAM_WHITE)
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2-115, size[2]/2+280, math.floor(params.eng1_n1) .. "." , 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2-100, size[2]/2+280, math.floor((params.eng1_n1%1)*10)  , 24, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
@@ -258,7 +258,7 @@ local function draw_engines()
     
     if get(EWD_engine_2_XX) == 0 then
         --N1-- -- TODO COLORS
-        sasl.gl.drawRectangle(size[1]/2 + 155, size[2]/2 + 275, 100, 35, ECAM_BLACK)
+        Draw_LCD_backlight(size[1]/2 + 155, size[2]/2 + 275, 100, 35, 0.5, 1, get(EWD_brightness_act))
         Sasl_DrawWideFrame(size[1]/2 + 155, size[2]/2 + 275, 100, 35, 2, 0, ECAM_WHITE)
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2+235, size[2]/2+280, math.floor(params.eng2_n1) .. "." , 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2+250, size[2]/2+280, math.floor((params.eng2_n1%1)*10)  , 24, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
@@ -279,13 +279,13 @@ local function draw_engines()
 
     -- AVAIL box --
     if get(EWD_engine_avail_ind_1_start) ~= 0 and get(TIME) - get(EWD_engine_avail_ind_1_start) < 10 then
-        sasl.gl.drawRectangle(size[1]/2 - 195, size[2]/2 + 310, 100, 35, ECAM_BLACK)
+        Draw_LCD_backlight(size[1]/2 - 195, size[2]/2 + 310, 100, 35, 0.5, 1, get(EWD_brightness_act))
         Sasl_DrawWideFrame(size[1]/2 - 195, size[2]/2 + 310, 100, 35, 2, 0, ECAM_WHITE)
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2 - 142, size[2]/2 + 315, "AVAIL", 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
     end
 
     if get(EWD_engine_avail_ind_2_start) ~= 0 and get(TIME) - get(EWD_engine_avail_ind_2_start) < 10 then
-        sasl.gl.drawRectangle(size[1]/2 + 155, size[2]/2 + 310, 100, 35, ECAM_BLACK)
+        Draw_LCD_backlight(size[1]/2 + 155, size[2]/2 + 310, 100, 35, 0.5, 1, get(EWD_brightness_act))
         Sasl_DrawWideFrame(size[1]/2 + 155, size[2]/2 + 310, 100, 35, 2, 0, ECAM_WHITE)
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2 + 208, size[2]/2 + 315, "AVAIL", 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
     end
@@ -411,24 +411,19 @@ local function draw_fuel_stuffs()
 end
 
 function draw()
-
-    --draw backlights--
-    if sasl.gl.isPanelBeforeStage() then
-        Draw_LCD_backlight(0, 0, size[1], size[2], 0.5, 1, get(EWD_brightness_act))
+    if display_special_mode(size, EWD_valid) then
+        sasl.gl.drawRectangle(0, 0, 900, 900, {0,0,0, 1 - get(EWD_brightness_act)})
+        return
     end
 
-    if sasl.gl.isPanelAfterStage () then
-        if display_special_mode(size, EWD_valid) then
-            return
-        end
+    draw_engines()
+    draw_left_memo()
+    draw_right_memo()
+    draw_extras()
+    draw_fuel_stuffs()
+    draw_extra_indication()
+    draw_coolings()
 
-        draw_engines()
-        draw_left_memo()
-        draw_right_memo()
-        draw_extras()
-        draw_fuel_stuffs()
-        draw_extra_indication()
-        draw_coolings()
-    end
+    sasl.gl.drawRectangle(0, 0, 900, 900, {0,0,0, 1 - get(EWD_brightness_act)})
 end
 

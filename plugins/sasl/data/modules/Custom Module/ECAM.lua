@@ -163,7 +163,6 @@ function draw()
         return
     end
 
-
     if get(Ecam_current_page) == 1 then --eng
         draw_eng_page()
     elseif get(Ecam_current_page) == 2 then --bleed
@@ -202,7 +201,9 @@ function draw()
             set(EWD_box_sts, 1)
         end
     end
-    
+
+    sasl.gl.drawRectangle(0, 0, size[1], size[2], {0, 0, 0, 1 - get(ECAM_brightness_act)})
+
     perf_measure_stop("ECAM:draw()")
 
 end

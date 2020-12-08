@@ -37,10 +37,11 @@ math.randomseed( os.time() )
 
 include(moduleDirectory .. "/main_debug.lua")
 
-size = { 4096, 2048 }
+position = {0, 0, 4096, 4096}
+size = { 4096, 4096 }
 
 panelWidth3d = 4096
-panelHeight3d = 2048
+panelHeight3d = 4096
 
 components = {
   apu {},
@@ -81,14 +82,11 @@ components = {
   graphics {}
 }
 
-draw_before_panel = {
-  EWD {},
-  ECAM {},
-}
-
+--draw things before the panels here
 function draw()
   if sasl.gl.isPanelBeforeStage() then
-    drawAll(draw_before_panel)
+    Draw_LCD_backlight(30, 2226, 900, 900, 0.5, 1, get(EWD_brightness_act))
+    Draw_LCD_backlight(1030, 2226, 900, 900, 0.5, 1, get(ECAM_brightness_act))
   end
 
   if sasl.gl.isPanelAfterStage () then
