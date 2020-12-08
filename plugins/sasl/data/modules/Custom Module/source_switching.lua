@@ -19,10 +19,12 @@
 include('constants.lua')
 
 --declare states--
-local PFD = 1
-local ND = 2
-local EWD = 3
-local ECAM = 4
+local PFD_CAPT= 1
+local ND_CAPT = 2
+local EWD     = 3
+local ECAM    = 4
+local PFD_FO  = 5
+local ND_FO   = 6
 
 -- status
 local pfd_nd_xfr_capt = false
@@ -49,8 +51,8 @@ sasl.registerCommandHandler (DMC_EIS_selector_dn, 0, function(phase) if phase ==
 function auto_update()
     set(Capt_pfd_displaying_status, 1)
     set(Capt_nd_displaying_status, 2)
-    set(Fo_pfd_displaying_status, 1)
-    set(Fo_nd_displaying_status, 2)
+    set(Fo_pfd_displaying_status, 5)
+    set(Fo_nd_displaying_status, 6)
     set(EWD_displaying_status, 3)
     set(ECAM_displaying_status, 4)
 
@@ -60,43 +62,43 @@ function auto_update()
     end
 
     if get(Capt_PFD_brightness_act) < 0.01 then
-        set(Capt_nd_displaying_status, PFD)
+        set(Capt_nd_displaying_status, PFD_CAPT)
     end
 
     if get(Fo_PFD_brightness_act) < 0.01 then
-        set(Fo_nd_displaying_status, PFD)
+        set(Fo_nd_displaying_status, PFD_FO)
     end
 
     -- Manual transfers
     if pfd_nd_xfr_capt and ecam_nd_xfr ~= -1 then
-        if get(Capt_nd_displaying_status) == PFD then
-            set(Capt_nd_displaying_status, ND)
-            set(Capt_pfd_displaying_status, PFD)
+        if get(Capt_nd_displaying_status) == PFD_CAPT then
+            set(Capt_nd_displaying_status, ND_CAPT)
+            set(Capt_pfd_displaying_status, PFD_CAPT)
         else
-            set(Capt_nd_displaying_status, PFD)
-            set(Capt_pfd_displaying_status, ND)                    
+            set(Capt_nd_displaying_status, PFD_CAPT)
+            set(Capt_pfd_displaying_status, ND_CAPT)
         end
     elseif pfd_nd_xfr_capt then
-        if get(Capt_pfd_displaying_status) == PFD then
-            set(Capt_pfd_displaying_status, ND)
+        if get(Capt_pfd_displaying_status) == PFD_CAPT then
+            set(Capt_pfd_displaying_status, ND_CAPT)
         else
-            set(Capt_pfd_displaying_status, PFD)
+            set(Capt_pfd_displaying_status, PFD_CAPT)
         end
     end
 
     if pfd_nd_xfr_fo and ecam_nd_xfr ~= 1 then
-        if get(Fo_nd_displaying_status) == PFD then
-            set(Fo_nd_displaying_status, ND)
-            set(Fo_pfd_displaying_status, PFD)
+        if get(Fo_nd_displaying_status) == PFD_FO then
+            set(Fo_nd_displaying_status, ND_FO)
+            set(Fo_pfd_displaying_status, PFD_FO)
         else
-            set(Fo_nd_displaying_status, PFD)
-            set(Fo_pfd_displaying_status, ND)                    
+            set(Fo_nd_displaying_status, PFD_FO)
+            set(Fo_pfd_displaying_status, ND_FO)                    
         end
     elseif pfd_nd_xfr_capt then
-        if get(Fo_pfd_displaying_status) == PFD then
-            set(Fo_pfd_displaying_status, ND)
+        if get(Fo_pfd_displaying_status) == PFD_FO then
+            set(Fo_pfd_displaying_status, ND_FO)
         else
-            set(Fo_pfd_displaying_status, PFD)
+            set(Fo_pfd_displaying_status, PFD_FO)
         end
     end
  
@@ -114,10 +116,10 @@ function auto_update()
     -- Rotary knob 
     if ecam_nd_xfr == -1 then
         set(Capt_nd_displaying_status, get(ECAM_displaying_status))
-        set(ECAM_displaying_status, ND)
+        set(ECAM_displaying_status, ND_CAPT)
     elseif ecam_nd_xfr == 1 then
         set(Fo_nd_displaying_status, get(ECAM_displaying_status))
-        set(ECAM_displaying_status, ND)
+        set(ECAM_displaying_status, ND_FO)
     else
     
     end
@@ -140,16 +142,16 @@ end
 
 function update_set(command, display)
     
-    if get(command) == PFD then
-        set(display, 1, PFD)
+    if get(command) == PFD_CAPT then
+        set(display, 1, PFD_CAPT)
     else
-        set(display, 0, PFD)
+        set(display, 0, PFD_CAPT)
     end
     
-    if get(command) == ND then
-        set(display, 1, ND)
+    if get(command) == ND_CAPT then
+        set(display, 1, ND_CAPT)
     else
-        set(display, 0, ND)
+        set(display, 0, ND_CAPT)
     end
     
     if get(command) == EWD then
@@ -164,7 +166,17 @@ function update_set(command, display)
         set(display, 0, ECAM)
     end
 
-
+    if get(command) == PFD_FO then
+        set(display, 1, PFD_FO)
+    else
+        set(display, 0, PFD_FO)
+    end
+    
+    if get(command) == ND_FO then
+        set(display, 1, ND_FO)
+    else
+        set(display, 0, ND_FO)
+    end
 end
 
 function update_displays()
@@ -223,18 +235,6 @@ function update_dmc_status()
 end
 
 function update()
-    set(Capt_pfd_show, 1, 5)
-    set(Capt_pfd_show, 1, 5)
-    set(Capt_pfd_show, 1, 5)
-    set(Capt_pfd_show, 1, 5)
-    set(Capt_pfd_show, 1, 5)
-    set(Capt_pfd_show, 1, 5)
-    set(Capt_pfd_show, 1, 6)
-    set(Capt_pfd_show, 1, 6)
-    set(Capt_pfd_show, 1, 6)
-    set(Capt_pfd_show, 1, 6)
-    set(Capt_pfd_show, 1, 6)
-    set(Capt_pfd_show, 1, 6)
     
     if get(Override_DMC) == 0 then
         auto_update()

@@ -140,8 +140,8 @@ Override_DMC = createGlobalPropertyi("a321neo/cockpit/source_switching/override_
 
 Capt_pfd_displaying_status = createGlobalPropertyf("a321neo/cockpit/source_switching/capt_pfd_displaying_status", 1, false, true, false)--source being displayed 1pfd, 2nd, 3ewd, 4ecam, 5 fo/pfd, 6 fo/nd
 Capt_nd_displaying_status = createGlobalPropertyf("a321neo/cockpit/source_switching/capt_nd_displaying_status", 2, false, true, false)--source being displayed 1pfd, 2nd, 3ewd, 4ecam, 5 fo/pfd, 6 fo/nd
-Fo_pfd_displaying_status = createGlobalPropertyf("a321neo/cockpit/source_switching/fo_pfd_displaying_status", 1, false, true, false)--source being displayed 1pfd, 2nd, 3ewd, 4ecam, 5 fo/pfd, 6 fo/nd
-Fo_nd_displaying_status = createGlobalPropertyf("a321neo/cockpit/source_switching/fo_nd_displaying_status", 2, false, true, false)--source being displayed 1pfd, 2nd, 3ewd, 4ecam, 5 fo/pfd, 6 fo/nd
+Fo_pfd_displaying_status = createGlobalPropertyf("a321neo/cockpit/source_switching/fo_pfd_displaying_status", 5, false, true, false)--source being displayed 1pfd, 2nd, 3ewd, 4ecam, 5 fo/pfd, 6 fo/nd
+Fo_nd_displaying_status = createGlobalPropertyf("a321neo/cockpit/source_switching/fo_nd_displaying_status", 6, false, true, false)--source being displayed 1pfd, 2nd, 3ewd, 4ecam, 5 fo/pfd, 6 fo/nd
 EWD_displaying_status = createGlobalPropertyf("a321neo/cockpit/source_switching/ewd_displaying_status", 3, false, true, false)--source being displayed 1pfd, 2nd, 3ewd, 4ecam, 5 fo/pfd, 6 fo/nd
 ECAM_displaying_status = createGlobalPropertyf("a321neo/cockpit/source_switching/ecam_displaying_status", 4, false, true, false)--source being displayed 1pfd, 2nd, 3ewd, 4ecam, 5 fo/pfd, 6 fo/nd
 

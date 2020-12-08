@@ -180,6 +180,7 @@ end
 
 function draw()
 
+    --Draw_LCD_backlight(0, 0, 900, 900, 0.5, 1, get(Capt_PFD_brightness_act))
     if display_special_mode(size, Capt_pfd_valid) then
         return
     end
@@ -195,5 +196,7 @@ function draw()
             sasl.gl.drawText(Font_AirbusDUL, 852, vvi_left_pixel_offset - 26, vvi_number_display, 23, false, false, TEXT_ALIGN_LEFT, vvi_cl)
         end
     end
+    
+    sasl.gl.drawRectangle(0, 0, 900, 900, {0, 0, 0, 1 - get(Capt_PFD_brightness_act)})
     
 end
