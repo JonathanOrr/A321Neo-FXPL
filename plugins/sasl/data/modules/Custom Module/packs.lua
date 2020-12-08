@@ -295,6 +295,9 @@ local function update_datarefs()
     else
         set(X_bleed_bridge_state, x_bleed_status and 2 or 0)
     end
+    
+    -- Knob animation
+    Set_dataref_linear_anim(X_bleed_dial_anim, get(X_bleed_dial), 0, 2, 5)
 
 end
 

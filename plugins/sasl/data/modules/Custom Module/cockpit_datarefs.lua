@@ -20,7 +20,8 @@
 --PUSH BUTTON STATES-- e.g the lights on the buttons(blank, on, fault, fault on) these datarefs should follow the 00, 01, 10, 11 principle
 
 --BUTTON COMMANDED POSTION-- e.g. button commanding on, off but lights on the button can show otherwise(fault on, fault off....)
-X_bleed_dial = createGlobalPropertyi("a321neo/cockpit/packs/x_bleed_dial", 1, false, true, false) --0closed, 1auto, 2open
+X_bleed_dial = createGlobalPropertyi("a321neo/cockpit/packs/x_bleed_dial_status", 1, false, true, false) --0closed, 1auto, 2open
+X_bleed_dial_anim = createGlobalPropertyf("a321neo/cockpit/packs/x_bleed_dial", 1, false, true, false) --0closed, 1auto, 2open
 
 
 Press_manual_control_lever_pos = createGlobalPropertyi("a321neo/cockpit/pressurization/manual_control_sw_pos", 0, false, true, false) -- 0 neutral, -1 down, 1 up
@@ -274,7 +275,8 @@ Elev_trim_degrees = createGlobalPropertyf("a321neo/cockpit/controls/elevator_tri
 --wheel
 XPlane_parkbrake_ratio = globalProperty("sim/cockpit2/controls/parking_brake_ratio")
 Nosewheel_Steering_and_AS_sw = createGlobalPropertyi("a321neo/cockpit/wheel/antiskid_steering", 0, false, true, false)  -- 0: off, 1: on
-Parkbrake_switch_pos = createGlobalPropertyi("a321neo/cockpit/wheel/park_brake_pos", 1, false, true, false)  -- 0: off, 1: on
+Parkbrake_switch_pos      = createGlobalPropertyi("a321neo/cockpit/wheel/park_brake_pos_value", 1, false, true, false)  -- 0: off, 1: on
+Parkbrake_switch_pos_anim = createGlobalPropertyf("a321neo/cockpit/wheel/park_brake_pos", 1, false, true, false)  -- 0: off, 1: on
 Brakes_press_ind_L = createGlobalPropertyf("a321neo/cockpit/wheel/brake_indicator_press_L", 0, false, true, false) -- [0;3000]
 Brakes_press_ind_R = createGlobalPropertyf("a321neo/cockpit/wheel/brake_indicator_press_R", 0, false, true, false) -- [0;3000]
 Brakes_accumulator = createGlobalPropertyf("a321neo/cockpit/wheel/accumulator_indicator", 3, false, true, false) -- [0;4]
