@@ -210,12 +210,15 @@ function draw()
     sasl.gl.drawTexture(MCDU_OVERLAY, 0, 0, 877, 1365)
     sasl.gl.drawTexture(MCDU_OVERLAY, 0, 0, 877, 1365,{0,0,0,lit*lit-0.1})
     sasl.gl.drawTexture(MCDU_OVERLAY_LIT, 0, 0, 877, 1365, {1, 1, 1, lit})
-    sasl.gl.drawTexture(MCDU_OVERLAY_LUT, 0, 0, 877, 1365, {1, 1, 1, lut*0.5})
     --sasl.gl.drawTexture(MCDU_OVERLAY_LIT, 0, 0, 877, 1365)
     if get(Mcdu_enabled) == 1 then
         --does enabled exist?
         if MCDU_get_popup("enabled") ~= nil then
             --is enabled true?
+
+            --draw backlight--
+            Draw_LCD_backlight(144, 708, 589, 558, 0.5, 1, get(MCDU_1_brightness_act))
+
             if MCDU_get_popup("enabled") then
                 for i,line in ipairs(MCDU_get_popup("draw lines")) do
                     sasl.gl.setFontGlyphSpacingFactor(B612MONO_regular, line.disp_spacing)

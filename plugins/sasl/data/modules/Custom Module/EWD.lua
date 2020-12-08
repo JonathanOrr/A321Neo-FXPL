@@ -406,16 +406,23 @@ end
 
 function draw()
 
-    if display_special_mode(size, EWD_valid) then
-        return
+    --draw backlights--
+    if sasl.gl.isPanelBeforeStage() then
+        Draw_LCD_backlight(0, 0, size[1], size[2], 0.5, 1, get(EWD_brightness_act))
     end
 
-    draw_engines()
-    draw_left_memo()
-    draw_right_memo()
-    draw_extras()
-    draw_fuel_stuffs()
-    draw_extra_indication()
-    draw_coolings()
+    if sasl.gl.isPanelAfterStage () then
+        if display_special_mode(size, EWD_valid) then
+            return
+        end
+
+        draw_engines()
+        draw_left_memo()
+        draw_right_memo()
+        draw_extras()
+        draw_fuel_stuffs()
+        draw_extra_indication()
+        draw_coolings()
+    end
 end
 

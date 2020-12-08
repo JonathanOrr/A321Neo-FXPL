@@ -80,6 +80,16 @@ function Round_fill(num, numDecimalPlaces)
     return string.format("%."..numDecimalPlaces.."f", Round(num, numDecimalPlaces)) 
 end
 
+function Math_extract_decimal(num, decimalPlace, abs)
+    local output = math.floor( ( math.abs( num ) - math.floor( math.abs( num ) ) ) * 10 ^ decimalPlace)
+
+    if abs == true then
+        return output
+    else
+        return num >= 0 and output or -output
+    end
+end
+
 function BoolToNum(value)
     return value and 1 or 0
 end
@@ -297,6 +307,49 @@ end
 
 function SASL_draw_needle(x, y, radius, angle, thickness, color)
     sasl.gl.drawWideLine(x, y, x + radius * math.cos(math.rad(angle)), y + radius * math.sin(math.rad(angle)), thickness, color)
+end
+
+--drawing LED/LCDs
+function Draw_LCD_backlight(x, y, width, hight, min_brightness_for_backlight, max_brightness_for_backlight, brightness)
+    local LCD_backlight_cl = {10/255, 15/255, 25/255}
+
+    --calculate backlight
+    local blacklight_R = Math_rescale(min_brightness_for_backlight, 0, max_brightness_for_backlight, LCD_backlight_cl[1], brightness)
+    local blacklight_G = Math_rescale(min_brightness_for_backlight, 0, max_brightness_for_backlight, LCD_backlight_cl[2], brightness)
+    local blacklight_B = Math_rescale(min_brightness_for_backlight, 0, max_brightness_for_backlight, LCD_backlight_cl[3], brightness)
+
+    sasl.gl.drawRectangle(x, y, width, hight, {blacklight_R, blacklight_G, blacklight_B})
+end
+
+function Draw_green_LED_backlight(x, y, width, hight, min_brightness_for_backlight, max_brightness_for_backlight, brightness)
+    local green_backlight_cl = {5/255, 15/255, 10/255}
+
+    --calculate backlight
+    local blacklight_R = Math_rescale(min_brightness_for_backlight, 0, max_brightness_for_backlight, green_backlight_cl[1], brightness)
+    local blacklight_G = Math_rescale(min_brightness_for_backlight, 0, max_brightness_for_backlight, green_backlight_cl[2], brightness)
+    local blacklight_B = Math_rescale(min_brightness_for_backlight, 0, max_brightness_for_backlight, green_backlight_cl[3], brightness)
+
+    sasl.gl.drawRectangle(x, y, width, hight, {blacklight_R, blacklight_G, blacklight_B})
+end
+
+function Draw_green_LED_num_and_letter(x, y, string, max_digits, size, alignment, min_brightness_for_backlight, max_brightness_for_backlight, brightness)
+    local LED_font = sasl.gl.loadFont("fonts/digital-7.mono.ttf")
+    local LED_cl = {235/255, 200/255, 135/255, brightness}
+    local LED_backlight_cl = {15/255, 20/255, 15/255}
+
+    local backlight_string = ""
+
+    for i = 1, max_digits do
+        backlight_string = backlight_string .. 8
+    end
+
+    --calculate backlight
+    local blacklight_R = Math_rescale(min_brightness_for_backlight, 0, max_brightness_for_backlight, LED_backlight_cl[1], brightness)
+    local blacklight_G = Math_rescale(min_brightness_for_backlight, 0, max_brightness_for_backlight, LED_backlight_cl[2], brightness)
+    local blacklight_B = Math_rescale(min_brightness_for_backlight, 0, max_brightness_for_backlight, LED_backlight_cl[3], brightness)
+
+    sasl.gl.drawText(LED_font, x, y, backlight_string, size, false, false, alignment, {blacklight_R, blacklight_G, blacklight_B})
+    sasl.gl.drawText(LED_font, x, y, string, size, false, false, alignment, LED_cl)
 end
 
 function Get_rotated_point_x_pos(x, y, radius, angle)

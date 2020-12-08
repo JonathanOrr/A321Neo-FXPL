@@ -27,6 +27,7 @@ include("FBW_subcomponents/PID_arrays.lua")
 sasl.options.setAircraftPanelRendering(true)
 sasl.options.setInteractivity(true)
 sasl.options.set3DRendering(true)
+sasl.options.setPanelRenderingMode ( SASL_RENDER_PANEL_BEFORE_AND_AFTER )
 
 -- devel
 sasl.options.setLuaErrorsHandling(SASL_STOP_PROCESSING)
@@ -78,7 +79,22 @@ components = {
   calls {},
   sounds {},
   graphics {}
- }
+}
+
+draw_before_panel = {
+  EWD {},
+  ECAM {},
+}
+
+function draw()
+  if sasl.gl.isPanelBeforeStage() then
+    drawAll(draw_before_panel)
+  end
+
+  if sasl.gl.isPanelAfterStage () then
+    drawAll(components)
+  end
+end
 
 include(moduleDirectory .. "/main_windows.lua")
 include(moduleDirectory .. "/main_menu.lua")

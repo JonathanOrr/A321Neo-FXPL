@@ -37,8 +37,8 @@
 -- [facility designation] ALTIMETER [altimeter] (ROGER)
 -- RADAR CONTACT [position] (ROGER)
 
-position= {30,1841,465,325}
-size = {465, 325}
+position= {30,1841,465,355}
+size = {465, 355}
 
 include('DCDU_handlers.lua')    -- DCDU handlers contains the button handlers
 include('constants.lua')
@@ -618,9 +618,15 @@ function draw()
     perf_measure_start("DCDU:draw()")
 
     if get(AC_bus_1_pwrd) == 0 then
+        sasl.gl.drawRectangle(0, 0, size[1], size[2], {0, 0, 0})
         return -- Bus is not powered on, this component cannot work
     end
     ELEC_sys.add_power_consumption(ELEC_BUS_AC_1, 0.5, 0.5)   -- ~60W (just hypothesis, includes acars)
+
+    Draw_LCD_backlight(0, 0, size[1], size[2], 0.5, 1, get(DCDU_1_brightness_act))
+    sasl.gl.drawWideLine(0, 120, size[1], 120, 4, ECAM_WHITE)
+    sasl.gl.drawWideLine(125, 0, 125, 120, 4, ECAM_WHITE)
+    sasl.gl.drawWideLine(size[1] - 125, 0, size[1] - 125, 120, 4, ECAM_WHITE)
 
     sasl.gl.drawText (Font_AirbusDUL, 10, 20, display_btm_left[3].text, 20, false, false, TEXT_ALIGN_LEFT, display_btm_left[3].color )
     sasl.gl.drawText (Font_AirbusDUL, 10, 50, display_btm_left[2].text, 20, false, false, TEXT_ALIGN_LEFT, display_btm_left[2].color )
@@ -656,5 +662,6 @@ function draw()
     sasl.gl.drawText (Font_AirbusDUL, 10, size[2]-164, display_top[4].text, 25, false, false, TEXT_ALIGN_LEFT, display_top[4].color )
     sasl.gl.drawText (Font_AirbusDUL, 10, size[2]-200, display_top[5].text, 25, false, false, TEXT_ALIGN_LEFT, display_top[5].color )
 
+    sasl.gl.drawRectangle(0, 0, size[1], size[2], {0, 0, 0, 1 - get(DCDU_1_brightness_act)})
     perf_measure_stop("DCDU:draw()")   
 end

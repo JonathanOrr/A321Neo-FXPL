@@ -51,6 +51,8 @@
         "MENU_UNCHECKED",
         "SASL_COMMAND_END",
         "PIS",
-        "PID_UI"
+        "PID_UI",
+        "SASL_RENDER_PANEL_BEFORE_AND_AFTER",
+        "SASL_RENDER_PANEL_DEFAULT"
     ]
 }

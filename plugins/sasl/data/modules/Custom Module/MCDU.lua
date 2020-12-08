@@ -766,6 +766,9 @@ function draw()
         MCDU_set_popup("mcdu entry", mcdu_entry)
         MCDU_set_popup("enabled", true)
 
+        --draw backlight--
+        Draw_LCD_backlight(0, 0, size[1], size[2], 0.5, 1, get(MCDU_1_brightness_act))
+
         --draw all horizontal lines
         for i,line in ipairs(draw_lines) do
             sasl.gl.setFontGlyphSpacingFactor(B612MONO_regular, line.disp_spacing)
@@ -774,6 +777,9 @@ function draw()
 
         --draw scratchpad
         sasl.gl.drawText(B612MONO_regular, draw_get_x(1), draw_get_y(12), mcdu_entry, MCDU_DISP_TEXT_SIZE["l"], false, false, MCDU_DISP_TEXT_ALIGN["L"], MCDU_DISP_COLOR["white"])
+
+        --draw brightness--
+        sasl.gl.drawRectangle(0, 0, size[1], size[2], {0, 0, 0, 1 - get(MCDU_1_brightness_act)})
     end
 	perf_measure_stop("MCDU:draw()")
 end
