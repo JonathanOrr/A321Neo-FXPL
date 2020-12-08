@@ -53,7 +53,6 @@ Wheel_status_BSCU_1 = createGlobalPropertyi("a321neo/dynamics/wheel/computers/bs
 Wheel_status_BSCU_2 = createGlobalPropertyi("a321neo/dynamics/wheel/computers/bscu_2_status", 0, false, true, false)
 Wheel_status_ABCU   = createGlobalPropertyi("a321neo/dynamics/wheel/computers/abcu_status", 0, false, true, false)
 Wheel_status_TPIU   = createGlobalPropertyi("a321neo/dynamics/wheel/computers/tpiu_status", 0, false, true, false)
-Wheel_accu_press    = createGlobalPropertyf("a321neo/dynamics/wheel/accu_press", 3, false, true, false)
 Wheel_brake_L       = globalProperty("sim/cockpit2/controls/left_brake_ratio")
 Wheel_brake_R       = globalProperty("sim/cockpit2/controls/right_brake_ratio")
 Wheel_skidding_C    = createGlobalPropertyf("a321neo/dynamics/wheel/tire_skid_C", 0, false, true, false)

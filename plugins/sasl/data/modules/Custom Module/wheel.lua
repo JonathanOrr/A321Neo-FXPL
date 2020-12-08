@@ -111,6 +111,8 @@ function onAirportLoaded()
     end
 end
 
+onAirportLoaded()
+
 ----------------------------------------------------------------------------------------------------
 -- Main code
 ----------------------------------------------------------------------------------------------------
@@ -149,13 +151,13 @@ local function update_brake_temps()
 
 	if get(Aft_wheel_on_ground) == 1 then
 
-		if get(Wheel_brake_L) > 0 then
+		if get(Wheel_brake_L) > 0 and get(Ground_speed_kts) > 1 then
 			left_brakes_temp_no_delay = left_brakes_temp_no_delay + (get(Wheel_brake_L) * ((0.10 * get(Ground_speed_kts)) ^ 1.975) * get(DELTA_TIME))
         else
             left_brakes_temp_no_delay = Set_anim_value(left_brakes_temp_no_delay, get(OTA), -100, 1000, 0.00075 + brake_fan * 0.00075)
         end
 
-        if get(Wheel_brake_R) > 0 then
+        if get(Wheel_brake_R) > 0 and get(Ground_speed_kts) > 1 then
 			right_brakes_temp_no_delay = right_brakes_temp_no_delay + (get(Wheel_brake_R) * ((0.10 * get(Ground_speed_kts)) ^ 1.975) * get(DELTA_TIME))
         else
 			right_brakes_temp_no_delay = Set_anim_value(right_brakes_temp_no_delay, get(OTA), -100, 1000, 0.00075 + brake_fan * 0.00075)
@@ -395,7 +397,8 @@ local function update_brakes()
     local left_brake_power  = get(Joystick_toe_brakes_L)+brake_req_left+get(Wheel_autobrake_braking)
     local right_brake_power = get(Joystick_toe_brakes_R)+brake_req_right+get(Wheel_autobrake_braking)
 
-    if brake_req_left > 0 or get(Joystick_toe_brakes_L) > 0.2 or get(Joystick_toe_brakes_R) > 0.2 then 
+    if get(Wheel_autobrake_braking) > 0 and (brake_req_left > 0 or get(Joystick_toe_brakes_L) > 0.2 or get(Joystick_toe_brakes_R) > 0.2) then 
+        -- Disable autobrake when pilot presses pedals (and autobrake actually working)
         set(Wheel_autobrake_status, 0)
     end
 
