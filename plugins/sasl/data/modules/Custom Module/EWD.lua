@@ -126,14 +126,20 @@ function draw_extra_indication()
         sasl.gl.drawText(Font_AirbusDUL, 30, size[2]-40, "A FLOOR", 32, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
     end
     
-    -- Thrust rating -- TODO
-    sasl.gl.drawText(Font_AirbusDUL, size[1]-80, size[2]-30, "TOGA", 32, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]-65, size[2]-55, "101.", 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]-50, size[2]-55, "0", 24, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    if get(Eng_N1_mode) == 0 then
+        return
+    end
+    mode_names = {"TOGA", "MCT", "CLB", "IDLE", "MREV", "FLEX", "GA SOFT"}
+    
+    local n1_max = get(Eng_N1_max)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]-80, size[2]-30, mode_names[get(Eng_N1_mode)], 32, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]-65, size[2]-55, math.floor(n1_max) .. ".", 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]-50, size[2]-55, math.floor((n1_max%1)*10), 24, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     sasl.gl.drawText(Font_AirbusDUL, size[1]-35, size[2]-55, "%", 24, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
 
-    sasl.gl.drawText(Font_AirbusDUL, size[1]-80, size[2]-80, "00°C", 24, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
-    
+    if get(Eng_N1_mode) == 6 then
+        sasl.gl.drawText(Font_AirbusDUL, size[1]-80, size[2]-80, math.floor(get(Eng_N1_flex_temp)) .. "°C", 24, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    end    
 end
 
 local function draw_engines_needles()

@@ -42,6 +42,7 @@
 -- Constants
 ----------------------------------------------------------------------------------------------------
 include('constants.lua')
+include('engines_computations.lua')
 
 local MAX_EGT_OFFSET = 10  -- This is the maximum offset between one engine and the other in terms of EGT
 local ENG_N1_CRANK    = 10  -- N1 used for cranking and cooling
@@ -133,6 +134,8 @@ local cooling_left_time  = {0, 0}
 local cooling_has_cooled = {false, false}
 
 local already_back_to_norm = false -- This is used to check continuous ignition
+
+local last_time_toga = 0 -- Time point where thrust levers are set to TOGA
 
 ----------------------------------------------------------------------------------------------------
 -- Functions - Commands
@@ -848,6 +851,57 @@ local function update_oil_qty()
 
 end
 
+local function update_n1_mode_and_limits()
+    local ai_wing_oper = get(AI_wing_L_operating) + get(AI_wing_R_operating) > 0
+    local ai_eng_oper  = AI_sys.comp[ANTIICE_ENG_1].valve_status == true or AI_sys.comp[ANTIICE_ENG_2].valve_status == true 
+    local pack_oper    = get(Pack_L) + get(Pack_R) > 0
+    
+    -- TODO FLEX
+    
+    -- The mode is selected by the highest throttle
+    local thr_pos = math.max(get(L_sim_throttle), get(R_sim_throttle))
+
+    -- We have to compute all the values for each detent even if we are not in that mode, this is
+    -- because in AT_PID_functions we have to compute the previous detent value to make the 
+    -- throttle position monotonic and linearly increasing
+    set(Eng_N1_max_detent_toga, eng_N1_limit_takeoff(get(OTA), get(TAT), get(Capt_Baro_Alt), pack_oper, ai_eng_oper, ai_wing_oper))    
+    set(Eng_N1_max_detent_mct, eng_N1_limit_mct(get(OTA), get(TAT), get(Capt_Baro_Alt), pack_oper, ai_eng_oper, ai_wing_oper))        
+    set(Eng_N1_max_detent_clb, eng_N1_limit_clb(get(OTA), get(TAT), get(Capt_Baro_Alt), pack_oper, ai_eng_oper, ai_wing_oper))
+
+
+    if thr_pos > 0.826 then -- TOGA Region
+        if thr_pos >= 0.99 and last_time_toga == 0 then
+            -- This is needed for soft GA
+            last_time_toga = get(TIME)
+        end
+        set(Eng_N1_mode, 1) -- TOGA
+    elseif thr_pos > 0.676 then
+    
+        -- If the pilot moves the throttle from MCT to TOGA, and then from TOGA to SOFT GA in less
+        -- than 3 seconds, then SOFT GA is enabled until it's back to TOGA or CLB
+        -- Also, both engines must be available
+        -- Further details here: https://safetyfirst.airbus.com/introduction-to-the-soft-go-around-function/
+        if (get(Eng_N1_mode) == 7 or get(TIME) - last_time_toga < 3) and get(Engine_1_avail) and get(Engine_2_avail) then
+            set(Eng_N1_mode, 7) -- SOFT GA
+            
+            -- In this case we replace the MCT value
+            set(Eng_N1_max_detent_mct, eng_N1_limit_ga_soft(get(OTA), get(TAT), get(Capt_Baro_Alt), pack_oper, ai_eng_oper, ai_wing_oper))
+        else    -- otherwise is a normal MCT
+            set(Eng_N1_mode, 2) -- MCT
+        end
+        last_time_toga = 0
+    elseif thr_pos > 0 then
+        set(Eng_N1_mode, 3) -- CLB
+        last_time_toga = 0
+    elseif thr_pos == 0 then
+        set(Eng_N1_mode, 4) -- IDLE
+        last_time_toga = 0
+    elseif thr_pos < 0 then
+        set(Eng_N1_mode, 5) -- MREV
+        last_time_toga = 0
+    end
+    
+end
 
 function update()
     perf_measure_start("engines:update()")
@@ -877,6 +931,7 @@ function update()
     update_continuous_ignition()
 
     update_oil_qty()
+    update_n1_mode_and_limits()
     perf_measure_stop("engines:update()")
 end
 
