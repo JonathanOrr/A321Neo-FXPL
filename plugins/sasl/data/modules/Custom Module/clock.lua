@@ -22,8 +22,8 @@
 
 include('constants.lua')
 
-position= {470,1632,200,244}
-size = {200, 244}
+position= {2200,1951,184,245}
+size = {184, 245}
 local SevenSegment = sasl.gl.loadFont("fonts/Segment7Standard.otf")
 
 local CHRONO_STATE_RST = 2
@@ -38,6 +38,8 @@ local CHRONO_SOURCE_GPS = 0
 -------------------------------------------------------------------------------
 -- Variables
 -------------------------------------------------------------------------------
+
+local clock_brightness = 0
 
 local clock_is_showing_date = false
 local chrono_state  = CHRONO_STATE_STP
@@ -125,6 +127,7 @@ function update_chrono()
 end
 
 function update()
+    clock_brightness = Set_anim_value(clock_brightness, get(DC_ess_bus_pwrd), 0, 1, 2.5)
     update_anim()
     update_et()
     update_chrono()
@@ -164,23 +167,35 @@ end
 
 function draw()
 
-    if get(DC_ess_bus_pwrd) == 0 then
+    Draw_blue_LED_backlight(size[1]/2 - 61, size[2]/2+56, 122, 46, 0.5, 1, clock_brightness)
+    Draw_blue_LED_backlight(size[1]/2 - 82, size[2]/2-24, 164, 46, 0.5, 1, clock_brightness)
+    Draw_blue_LED_backlight(size[1]/2 - 60, size[2]/2-104, 120, 46, 0.5, 1, clock_brightness)
+
+    Draw_white_LED_num_and_letter(size[1]/2 - 28, 184, "", 2, 55, TEXT_ALIGN_CENTER, 0.2, 1, clock_brightness)
+    Draw_white_LED_num_and_letter(size[1]/2 + 28, 184, "", 2, 55, TEXT_ALIGN_CENTER, 0.2, 1, clock_brightness)
+    Draw_white_LED_num_and_letter(62, 24, "", 2, 55, TEXT_ALIGN_CENTER, 0.2, 1, clock_brightness)
+    Draw_white_LED_num_and_letter(120, 24, "", 2, 55, TEXT_ALIGN_CENTER, 0.2, 1, clock_brightness)
+    Draw_white_LED_num_and_letter(36, 102, "", 2, 55, TEXT_ALIGN_CENTER, 0.2, 1, clock_brightness)
+    Draw_white_LED_num_and_letter(93, 102, "", 2, 55, TEXT_ALIGN_CENTER, 0.2, 1, clock_brightness)
+    Draw_white_LED_num_and_letter(147, 105, "", 2, 45, TEXT_ALIGN_CENTER, 0.2, 1, clock_brightness)
+    if get(DC_ess_bus_pwrd) == 0 and clock_brightness == 0 then
         return
     end
 
     if et_time > 0 then
         local minutes = fz(math.floor(et_time / 60) % 60)
         local hours   = fz(math.floor(et_time / 3600) % 60)
-        sasl.gl.drawText(SevenSegment, 62, 24, hours, 46, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-        sasl.gl.drawText(SevenSegment, 120, 24, minutes, 46, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-        sasl.gl.drawText(Font_AirbusDUL, 91, 31, ":", 35, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+        Draw_white_LED_num_and_letter(62, 24, hours, 2, 55, TEXT_ALIGN_CENTER, 0.2, 1, clock_brightness)
+        Draw_white_LED_num_and_letter(120, 24, minutes, 2, 55, TEXT_ALIGN_CENTER, 0.2, 1, clock_brightness)
+        sasl.gl.drawText(Font_AirbusDUL, 91, 31, ":", 35, false, false, TEXT_ALIGN_CENTER, {1, 1, 1, clock_brightness})
     end
-    
+
     if chrono_cumul > 0 then
-        sasl.gl.drawText(SevenSegment, 91, 184, fz(math.floor(chrono_cumul/60)%99) .. fz(math.floor(chrono_cumul)%60), 46, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-        sasl.gl.drawText(Font_AirbusDUL, 91, 192, ":", 35, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+        Draw_white_LED_num_and_letter(size[1]/2 - 28, 184, fz(math.floor(chrono_cumul/60)%99), 2, 55, TEXT_ALIGN_CENTER, 0.2, 1, clock_brightness)
+        Draw_white_LED_num_and_letter(size[1]/2 + 28, 184, fz(math.floor(chrono_cumul)%60), 2, 55, TEXT_ALIGN_CENTER, 0.2, 1, clock_brightness)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, 192, ":", 35, false, false, TEXT_ALIGN_CENTER, {1, 1, 1, clock_brightness})
     end
-    
+
     local clock_str = ""
     if chrono_source == CHRONO_SOURCE_GPS then
         clock_str = get_gps_data()
@@ -193,14 +208,14 @@ function draw()
             clock_str = string.sub(get_int_data(),0,4)
         end
     end
-    
+
     if get(TIME) % 0.75 < 0.5 or chrono_source ~= CHRONO_SOURCE_SET or (what_is_changing ~= 2 and what_is_changing ~= 5) then
-        sasl.gl.drawText(SevenSegment, 36, 102, string.sub(clock_str,1,2), 46, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+        Draw_white_LED_num_and_letter(36, 102, string.sub(clock_str,1,2), 2, 55, TEXT_ALIGN_CENTER, 0.2, 1, clock_brightness)
     end
     if get(TIME) % 0.75 < 0.5 or chrono_source ~= CHRONO_SOURCE_SET or (what_is_changing ~= 1 and what_is_changing ~= 4) then
-        sasl.gl.drawText(SevenSegment, 93, 102, string.sub(clock_str,3,4), 46, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+        Draw_white_LED_num_and_letter(93, 102, string.sub(clock_str,3,4), 2, 55, TEXT_ALIGN_CENTER, 0.2, 1, clock_brightness)
     end
     if get(TIME) % 0.75 < 0.5 or chrono_source ~= CHRONO_SOURCE_SET or (what_is_changing ~= 3) then
-        sasl.gl.drawText(SevenSegment, 147, 105, string.sub(clock_str,5,6), 36, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+        Draw_white_LED_num_and_letter(147, 105, string.sub(clock_str,5,6), 2, 45, TEXT_ALIGN_CENTER, 0.2, 1, clock_brightness)
     end
 end

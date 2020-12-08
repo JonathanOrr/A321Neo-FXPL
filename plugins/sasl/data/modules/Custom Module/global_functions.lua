@@ -332,10 +332,41 @@ function Draw_green_LED_backlight(x, y, width, hight, min_brightness_for_backlig
     sasl.gl.drawRectangle(x, y, width, hight, {blacklight_R, blacklight_G, blacklight_B})
 end
 
+function Draw_blue_LED_backlight(x, y, width, hight, min_brightness_for_backlight, max_brightness_for_backlight, brightness)
+    local blue_backlight_cl = {4/255, 6/255, 10/255}
+
+    --calculate backlight
+    local blacklight_R = Math_rescale(min_brightness_for_backlight, 0, max_brightness_for_backlight, blue_backlight_cl[1], brightness)
+    local blacklight_G = Math_rescale(min_brightness_for_backlight, 0, max_brightness_for_backlight, blue_backlight_cl[2], brightness)
+    local blacklight_B = Math_rescale(min_brightness_for_backlight, 0, max_brightness_for_backlight, blue_backlight_cl[3], brightness)
+
+    sasl.gl.drawRectangle(x, y, width, hight, {blacklight_R, blacklight_G, blacklight_B})
+end
+
 function Draw_green_LED_num_and_letter(x, y, string, max_digits, size, alignment, min_brightness_for_backlight, max_brightness_for_backlight, brightness)
     local LED_font = sasl.gl.loadFont("fonts/digital-7.mono.ttf")
     local LED_cl = {235/255, 200/255, 135/255, brightness}
     local LED_backlight_cl = {15/255, 20/255, 15/255}
+
+    local backlight_string = ""
+
+    for i = 1, max_digits do
+        backlight_string = backlight_string .. 8
+    end
+
+    --calculate backlight
+    local blacklight_R = Math_rescale(min_brightness_for_backlight, 0, max_brightness_for_backlight, LED_backlight_cl[1], brightness)
+    local blacklight_G = Math_rescale(min_brightness_for_backlight, 0, max_brightness_for_backlight, LED_backlight_cl[2], brightness)
+    local blacklight_B = Math_rescale(min_brightness_for_backlight, 0, max_brightness_for_backlight, LED_backlight_cl[3], brightness)
+
+    sasl.gl.drawText(LED_font, x, y, backlight_string, size, false, false, alignment, {blacklight_R, blacklight_G, blacklight_B})
+    sasl.gl.drawText(LED_font, x, y, string, size, false, false, alignment, LED_cl)
+end
+
+function Draw_white_LED_num_and_letter(x, y, string, max_digits, size, alignment, min_brightness_for_backlight, max_brightness_for_backlight, brightness)
+    local LED_font = sasl.gl.loadFont("fonts/digital-7.mono.ttf")
+    local LED_cl = {255/255, 255/255, 255/255, brightness}
+    local LED_backlight_cl = {15/255, 16/255, 20/255}
 
     local backlight_string = ""
 
