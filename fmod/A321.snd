@@ -630,13 +630,13 @@ BEGIN_SOUND_ATTACHMENT
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 3
   VEH_XYZ 0 1.9 -18.6
   EVENT_CMND_DOWN a321neo/cockpit/nd/capt_terrain_toggle
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 2
   VEH_XYZ 0 1.9 -18.6
   EVENT_CMND_DOWN a321neo/cockpit/nd/fo_terrain_toggle
 END_SOUND_ATTACHMENT
@@ -1193,133 +1193,133 @@ END_SOUND_ATTACHMENT
 ##############################################################################################################################
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/ADIRS Style Knobs
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
   VEH_XYZ -0.23 2.47 -17.9
   EVENT_CMND_DOWN a321neo/cockpit/ADIRS/knob_1_down
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/ADIRS Style Knobs
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
   VEH_XYZ -0.23 2.47 -17.9
   EVENT_CMND_DOWN a321neo/cockpit/ADIRS/knob_1_up
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/ADIRS Style Knobs
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary2
   VEH_XYZ -0.23 2.47 -17.9
   EVENT_CMND_DOWN a321neo/cockpit/ADIRS/knob_2_down
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/ADIRS Style Knobs
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary2
   VEH_XYZ -0.23 2.47 -17.9
   EVENT_CMND_DOWN a321neo/cockpit/ADIRS/knob_2_up
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/ADIRS Style Knobs
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary3
   VEH_XYZ -0.23 2.47 -17.9
   EVENT_CMND_DOWN a321neo/cockpit/ADIRS/knob_3_down
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/ADIRS Style Knobs
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary3
   VEH_XYZ -0.23 2.47 -17.9
   EVENT_CMND_DOWN a321neo/cockpit/ADIRS/knob_3_up
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/ADIRS Style Knobs
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
   VEH_XYZ 0 1.4 -18.7
   EVENT_CMND_DOWN a321neo/cockpit/rain/wiper_L_dn_c
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/ADIRS Style Knobs
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
   VEH_XYZ 0 1.4 -18.7
   EVENT_CMND_DOWN a321neo/cockpit/rain/wiper_L_up_cc
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/ADIRS Style Knobs
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
   VEH_XYZ 0 1.4 -18.7
   EVENT_CMND_DOWN a321neo/cockpit/rain/wiper_R_dn_c
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/ADIRS Style Knobs
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
   VEH_XYZ 0 1.4 -18.7
   EVENT_CMND_DOWN a321neo/cockpit/rain/wiper_R_up_cc
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/ADIRS Style Knobs
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
   VEH_XYZ 0 1.4 -18.7
   EVENT_CMND_DOWN a321neo/cockpit/packs/x_bleed_dial_dn
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/ADIRS Style Knobs
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
   VEH_XYZ 0 1.4 -18.7
   EVENT_CMND_DOWN a321neo/cockpit/packs/x_bleed_dial_up
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/ADIRS Style Knobs
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
   VEH_XYZ 0 1.5 -18.4
   EVENT_CMND_DOWN a321neo/cockpit/engine/mode_dn
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/ADIRS Style Knobs
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
   VEH_XYZ 0 1.5 -18.4
   EVENT_CMND_DOWN a321neo/cockpit/engine/mode_up
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/ADIRS Style Knobs
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
   VEH_XYZ 0 1.5 -18.4
   EVENT_CMND_DOWN a321neo/cockpit/ADIRS/AIRDATA_down
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/ADIRS Style Knobs
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
   VEH_XYZ 0 1.5 -18.4
   EVENT_CMND_DOWN a321neo/cockpit/ADIRS/AIRDATA_up
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/ADIRS Style Knobs
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
   VEH_XYZ 0 1.5 -18.4
   EVENT_CMND_DOWN a321neo/cockpit/ADIRS/ATHDG_down
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/ADIRS Style Knobs
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
   VEH_XYZ 0 1.5 -18.4
   EVENT_CMND_DOWN a321neo/cockpit/ADIRS/ATHDG_up
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/ADIRS Style Knobs
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
   VEH_XYZ 0 1.5 -18.4
   EVENT_CMND_DOWN a321neo/cockpit/dmc/dmc_eis_sel_dn
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/ADIRS Style Knobs
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
   VEH_XYZ 0 1.5 -18.4
   EVENT_CMND_DOWN a321neo/cockpit/dmc/dmc_eis_sel_up
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/ADIRS Style Knobs
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
   VEH_XYZ 0 1.5 -18.4
   EVENT_CMND_DOWN a321neo/cockpit/dmc/ecam_nd_xfr_dn
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/ADIRS Style Knobs
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
   VEH_XYZ 0 1.5 -18.4
   EVENT_CMND_DOWN a321neo/cockpit/dmc/ecam_nd_xfr_up
 END_SOUND_ATTACHMENT
@@ -1585,3 +1585,82 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_START_COND 	a321neo/dynamics/electrical/bus/ac_ess_powered == 1
   CUE_TRIGGER_COND  a321neo/dynamics/electrical/bus/ac_ess_powered == 0
 END_SOUND_ATTACHMENT
+
+#################################################################################################AVIONICS
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /BatteryRelay
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_START_COND 	a321neo/cockpit/overhead/elec_battery_1_bottom == 1
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /BatteryRelay
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_START_COND 	a321neo/cockpit/overhead/elec_battery_2_bottom == 1
+END_SOUND_ATTACHMENT
+
+#################################################################################################BLOWER AND EXTRACTOR
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Blower
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_START_COND 	a321neo/dynamics/aircond/vent_blower_running == 1
+  CUE_TRIGGER_COND  a321neo/dynamics/aircond/vent_blower_running == 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Extractor
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_START_COND 	a321neo/dynamics/aircond/vent_extract_running == 1
+  CUE_TRIGGER_COND  a321neo/dynamics/aircond/vent_extract_running == 0
+END_SOUND_ATTACHMENT
+
+#################################################################################################BUSKICK
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /BusOn
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_START_COND 	a321neo/dynamics/electrical/bus/ac_ess_powered == 1
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /BusKick
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_START_COND 	a321neo/dynamics/electrical/bus/ac_ess_powered == 0
+END_SOUND_ATTACHMENT
+
+#################################################################################################PACK
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Packs
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_START_COND 	a321neo/dynamics/packs/l_pack_flow > 0
+  CUE_TRIGGER_COND  a321neo/dynamics/aircond/vent_extract_running < 0.1
+END_SOUND_ATTACHMENT
+
+#################################################################################################PTU
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /PTU
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_START_COND 	a321neo/dynamics/HYD/PTU_status >= 2
+  CUE_TRIGGER_COND  a321neo/dynamics/HYD/PTU_status <= 1
+END_SOUND_ATTACHMENT
+
+#################################################################################################Main Touch
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /TouchMain
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_START_COND 	a321neo/dynamics/either_aft_on_ground == 1
+END_SOUND_ATTACHMENT
+
+#################################################################################################Yellow Hyd Pump
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Yellow Hyd Pump
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_START_COND 	a321neo/dynamics/HYD/B_press >= 0
+  CUE_TRIGGER_COND  DELTA=a321neo/dynamics/aircond/vent_extract_running < -120
+END_SOUND_ATTACHMENT
+
+
