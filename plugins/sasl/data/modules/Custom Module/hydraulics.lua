@@ -144,6 +144,7 @@ function HydSystem:update_press()
             self.press_target = 0
             return
         end
+        set(Hydraulic_Y_elec_status, self.is_elec_pump_on and 1 or 0)
     end
 
 

@@ -18,8 +18,14 @@
 
 -- local snd_master_warning = sasl.al.loadSample("sounds/master_warning.wav")
 
-
+Sounds_elec_bus_delayed = createGlobalPropertyf("a321neo/sounds/elec_bus_delayed", 0, false, true, false)
 
 function update()
+
+    if get(AC_ess_bus_pwrd) == 1 then
+        set(Sounds_elec_bus_delayed, 1) 
+    else
+        Set_dataref_linear_anim(Sounds_elec_bus_delayed, 0, 0, 1, 0.1)
+    end
 
 end
