@@ -166,8 +166,10 @@ ECAM_valid = createGlobalPropertyi("a321neo/cockpit/source_switching/ecam_valid"
 --engine & apu
 Engine_mode_knob = createGlobalPropertyi("a321neo/cockpit/engine/engine_mode_value", 0, false, true, false) -- -1crank, 0norm, 1ignition
 Engine_mode_knob_pos = createGlobalPropertyf("a321neo/cockpit/engine/engine_mode", 0, false, true, false) -- -1crank, 0norm, 1ignition
-Engine_1_master_switch = createGlobalPropertyi("a321neo/cockpit/engine/master_1", 0, false, true, false)
-Engine_2_master_switch = createGlobalPropertyi("a321neo/cockpit/engine/master_2", 0, false, true, false)
+Engine_1_master_switch = createGlobalPropertyi("a321neo/cockpit/engine/master_1_status", 0, false, true, false)
+Engine_2_master_switch = createGlobalPropertyi("a321neo/cockpit/engine/master_2_status", 0, false, true, false)
+Engine_1_master_switch_anim = createGlobalPropertyf("a321neo/cockpit/engine/master_1", 0, false, true, false)
+Engine_2_master_switch_anim = createGlobalPropertyf("a321neo/cockpit/engine/master_2", 0, false, true, false)
 
 --pfd
 Capt_landing_system_enabled = createGlobalPropertyi("a321neo/cockpit/PFD/capt_ls_enabled", 0, false, true, false)--for the LS button on the PFD
@@ -312,9 +314,14 @@ DCDU_new_msgs    = createGlobalPropertyi("a321neo/cockpit/DCDU/new_messages" , 0
 ADIRS_light_onbat   = createGlobalPropertyi("a321neo/cockpit/ADIRS/on_bat", 0, false, true, false)   --0: OFF, 1: ON
 
 ADIRS_rotary_btn = {}
-ADIRS_rotary_btn[1]  = createGlobalPropertyi("a321neo/cockpit/ADIRS/buttons/mode_1", 0, false, true, false)   -- 0 OFF, 1 NAV, 2 ATT
-ADIRS_rotary_btn[2]  = createGlobalPropertyi("a321neo/cockpit/ADIRS/buttons/mode_2", 0, false, true, false)   -- 0 OFF, 1 NAV, 2 ATT
-ADIRS_rotary_btn[3]  = createGlobalPropertyi("a321neo/cockpit/ADIRS/buttons/mode_3", 0, false, true, false)   -- 0 OFF, 1 NAV, 2 ATT
+ADIRS_rotary_btn[1]  = createGlobalPropertyi("a321neo/cockpit/ADIRS/buttons/mode_1_status", 0, false, true, false)   -- 0 OFF, 1 NAV, 2 ATT
+ADIRS_rotary_btn[2]  = createGlobalPropertyi("a321neo/cockpit/ADIRS/buttons/mode_2_status", 0, false, true, false)   -- 0 OFF, 1 NAV, 2 ATT
+ADIRS_rotary_btn[3]  = createGlobalPropertyi("a321neo/cockpit/ADIRS/buttons/mode_3_status", 0, false, true, false)   -- 0 OFF, 1 NAV, 2 ATT
+
+ADIRS_rotary_btn_anim = {}
+ADIRS_rotary_btn_anim[1]  = createGlobalPropertyf("a321neo/cockpit/ADIRS/buttons/mode_1", 0, false, true, false)   -- 0 OFF, 1 NAV, 2 ATT
+ADIRS_rotary_btn_anim[2]  = createGlobalPropertyf("a321neo/cockpit/ADIRS/buttons/mode_2", 0, false, true, false)   -- 0 OFF, 1 NAV, 2 ATT
+ADIRS_rotary_btn_anim[3]  = createGlobalPropertyf("a321neo/cockpit/ADIRS/buttons/mode_3", 0, false, true, false)   -- 0 OFF, 1 NAV, 2 ATT
 
 ADIRS_source_rotary_ATHDG   = createGlobalPropertyi("a321neo/cockpit/ADIRS/buttons/atthdg_source_state", 0, false, true, false)    -- Pedestal switch, 0 NORM, -1 CAPT3, 1 FO3
 ADIRS_source_rotary_AIRDATA = createGlobalPropertyi("a321neo/cockpit/ADIRS/buttons/airdata_source_state", 0, false, true, false)   -- Pedestal switch, 0 NORM, -1 CAPT3, 1 FO3
