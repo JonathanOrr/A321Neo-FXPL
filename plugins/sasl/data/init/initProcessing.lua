@@ -4,6 +4,8 @@
 
 --- Draws (2D) all components.
 --- @param components Component[]
+--- @see reference
+--- : https://1-sim.com/files/SASL3Manual.pdf#drawAll
 function drawAll(components)
     for _, v in ipairs(components) do
         private.drawComponent(v)
@@ -15,6 +17,8 @@ end
 
 --- Draws 3D from components.
 --- @param components Component[]
+--- @see reference
+--- : https://1-sim.com/files/SASL3Manual.pdf#drawAll3D
 function drawAll3D(components)
     for _, v in ipairs(components) do
         private.drawComponent3D(v)
@@ -26,6 +30,8 @@ end
 
 --- Draws objects from components.
 --- @param components Component[]
+--- @see reference
+--- : https://1-sim.com/files/SASL3Manual.pdf#drawAllObjects
 function drawAllObjects(components)
     for _, v in ipairs(components) do
         private.drawObjects(v)
@@ -113,6 +119,8 @@ end
 
 --- Updates all components.
 --- @param components Component[]
+--- @see reference
+--- : https://1-sim.com/files/SASL3Manual.pdf#updateAll
 function updateAll(components)
     for _, v in ipairs(components) do
         private.updateComponent(v)
@@ -137,22 +145,24 @@ end
 --- Calls callback function for component recursively.
 --- @param name string
 --- @param component Component
-function private.callCallback(name, component)
+--- @param arg any
+function private.callCallback(name, component, arg)
     local handler = rawget(component, name)
     if handler then
-        handler()
+        handler(arg)
     end
     for i = #component.components, 1, -1 do
-        private.callCallback(name, component.components[i])
+        private.callCallback(name, component.components[i], arg)
     end
 end
 
 --- Calls callback for all components layers.
 --- @param name string
-function private.callCallbackForAllLayers(name)
-    private.callCallback(name, popups)
-    private.callCallback(name, panel)
-    private.callCallback(name, contextWindows)
+--- @param arg any
+function private.callCallbackForAllLayers(name, arg)
+    private.callCallback(name, popups, arg)
+    private.callCallback(name, panel, arg)
+    private.callCallback(name, contextWindows, arg)
 end
 
 -------------------------------------------------------------------------------
@@ -201,9 +211,10 @@ end
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 
---- Called whenever the user's plane is positioned at a new airport.
-function onAirportLoaded()
-    private.callCallbackForAllLayers("onAirportLoaded")
+--- Called whenever the user's plane is positioned at a new airport (or new flight start).
+--- @param flightNumber number
+function onAirportLoaded(flightIndex)
+    private.callCallbackForAllLayers("onAirportLoaded", flightIndex)
 end
 
 -------------------------------------------------------------------------------

@@ -2,8 +2,9 @@
 -- Setup paths for additional packages and 3-rd party libraries
 -------------------------------------------------------------------------------
 
-package.path = package.path .. ';' .. getProjectPath() .. '/3rd-modules/?.lua'
-package.path = package.path .. ';' .. getProjectPath() .. '/Custom Module/?.lua'
+local prPath = getProjectPath()
+package.path = package.path .. ';' .. prPath .. '/3rd-modules/?.lua'
+package.path = package.path .. ';' .. prPath .. '/Custom Module/?.lua'
 
 local __OS = sasl.getOS()
 local __PackExt
@@ -16,8 +17,9 @@ else
     __PackExt = "dylib"
 end
 
-package.cpath = package.cpath .. ';' .. getProjectPath() .. '/3rd-modules/?.' .. __PackExt
-package.cpath = package.cpath .. ';' .. getProjectPath() .. '/Custom Module/?.' .. __PackExt
+package.cpath = package.cpath .. ';' .. prPath .. '/3rd-modules/?.' .. __PackExt
+package.cpath = package.cpath .. ';' .. prPath .. '/Custom Module/?.' .. __PackExt
+_SLOADED = {}
 
 -------------------------------------------------------------------------------
 -- Components
@@ -174,12 +176,12 @@ local creatingComponents = {}
 
 --- Starts creation of components using current stack level.
 --- @param parent Component
-function startComponentsCreation(parent)
+function private.startComponentsCreation(parent)
     table.insert(creatingComponents, parent)
 end
 
 --- Finishes creation of components using current stack level.
-function finishComponentsCreation()
+function private.finishComponentsCreation()
     table.remove(creatingComponents)
 end
 
@@ -223,14 +225,19 @@ function loadComponent(name, source, isRoot)
 
     local constr = function(args)
         local parent = creatingComponents[#creatingComponents]
-        if parent and parent.name == "module" and parent.size then
-            parent.position = createProperty { 0, 0, parent.size[1], parent.size[2] }
+        if parent then
+            if parent.name == "module" and parent.size then
+                parent.position = createProperty { 0, 0, parent.size[1], parent.size[2] }
+            end
+        elseif args.parent then
+            parent = args.parent
         end
 
         if subdir then
             addSearchPath(subdir)
         end
         local t = private.createComponent(name, parent)
+        args.parent = nil
         t.componentFileName = fileName
 
         private.setupComponent(t, args)
@@ -248,10 +255,10 @@ function loadComponent(name, source, isRoot)
             t.position = createProperty { 0, 0, t.size[1], t.size[2] }
         end
 
-        startComponentsCreation(t)
+        private.startComponentsCreation(t)
         setfenv(f, t)
         f(t)
-        finishComponentsCreation()
+        private.finishComponentsCreation()
 
         if get(t.fpsLimit) ~= -1 then
             set(t.fbo, true)
@@ -279,8 +286,9 @@ end
 --- @param name string
 function include(component, name)
     logInfo("including", name)
+    name = appendDefaultFileExtension(name)
 
-    local f, subdir = openFile(name)
+    local f, subdir = openFile(name, true)
     if not f then
         logError("Can't include script "..name)
     else
@@ -294,6 +302,52 @@ function include(component, name)
         if subdir then
             popSearchPath(subdir)
         end
+    end
+end
+
+--- Loads and provides SASL Lua module. Mimics standard
+--- 'require' behavior, but loads only Lua scripts using current SASL project
+--- search paths and scripts naming conventions.
+--- @param name string
+--- @param forceInstance boolean
+--- @return any
+--- @see reference
+--- : https://1-sim.com/files/SASL3Manual.pdf#request
+function request(name, forceInstance)
+    logInfo("requesting", name)
+    name = appendDefaultFileExtension(name)
+    if _SLOADED[name] then
+        if _SLOADED[name] == _SGUARD then
+            logError("Loop during script request or error on previous script request")
+            return nil
+        end
+        local fInst = forceInstance or false
+        if not fInst then
+            return _SLOADED[name]
+        end
+    end
+    local oName = name
+    local f, subdir = openFile(name, true)
+    if not f then
+        logError("Can't request script "..oName)
+        return nil
+    else
+        _SLOADED[oName] = _SGUARD
+        if subdir then
+            addSearchPath(subdir)
+        end
+        local r = f()
+        if subdir then
+            popSearchPath(subdir)
+        end
+        if r then
+            _SLOADED[oName] = r
+        end
+        if _SLOADED[oName] == _SGUARD then
+            _SLOADED[oName] = true
+            return true
+        end
+        return _SLOADED[oName]
     end
 end
 
@@ -470,6 +524,7 @@ end
 
 --- Cursor state and position.
 private.cursor = nil
+private.cursorLayer = 0
 
 local function isCursorTable(c)
     return c.x ~= nil and
@@ -492,6 +547,18 @@ function private.setCursor(cursor)
     else
         sasl.gl.setCursorShape(false)
     end
+end
+
+--- Sets current cursor layer.
+--- @param layer number
+function private.setCursorLayer(layer)
+    private.cursorLayer = layer
+    sasl.gl.setCursorLayer(layer)
+end
+
+--- Gets current cursor layer.
+function private.getCursorLayer()
+    return private.cursorLayer
 end
 
 --- Checks if OS cursor should be hidden for current cursor.
@@ -594,6 +661,11 @@ function private.getFocusedComponentPath()
 end
 
 function private.clearFocusedComponentPaths()
+    for k, v in ipairs(focusedComponentPath) do
+        for _, c in ipairs(v) do
+            set(c.focused, false)
+        end
+    end
     focusedComponentPath = {}
 end
 
@@ -624,6 +696,7 @@ end
 -------------------------------------------------------------------------------
 
 --- Runs specified key event handler for currently visible focused component.
+--- @param root Component
 --- @param name string
 --- @param char number
 --- @param key number
@@ -631,25 +704,38 @@ end
 --- @param ctrlDown number
 --- @param altOptDown number
 --- @return boolean
-function private.runKeyEventFocused(name, char, key, shiftDown, ctrlDown, altOptDown)
+function private.runKeyEventFocused(root, name, char, key, shiftDown, ctrlDown, altOptDown)
     private.eventCounter = private.eventCounter + 1
     local handled = false
     local currentFocusedComponentPath = private.getFocusedComponentPath()
     if currentFocusedComponentPath then
-        local maxVisible = 0
-        for i = 1, #currentFocusedComponentPath, 1 do
-            local c = currentFocusedComponentPath[i]
-            if toboolean(get(c.visible)) then
-                maxVisible = i
-            else
-                break
+        local allowEvent = true
+        if root ~= nil then
+            local rootHasFocused = false
+            for i = 1, #currentFocusedComponentPath do
+                if currentFocusedComponentPath[i] == root then
+                    rootHasFocused = true
+                    break
+                end
             end
+            allowEvent = rootHasFocused
         end
-        for i = maxVisible, 1, -1 do
-            local c = currentFocusedComponentPath[i]
-            local res = c[name](c, char, key, shiftDown, ctrlDown, altOptDown)
-            if res then
-                handled = true
+        if allowEvent then
+            local maxVisible = 0
+            for i = 1, #currentFocusedComponentPath, 1 do
+                local c = currentFocusedComponentPath[i]
+                if toboolean(get(c.visible)) then
+                    maxVisible = i
+                else
+                    break
+                end
+            end
+            for i = maxVisible, 1, -1 do
+                local c = currentFocusedComponentPath[i]
+                local res = c[name](c, char, key, shiftDown, ctrlDown, altOptDown)
+                if res then
+                    handled = true
+                end
             end
         end
     end
@@ -658,25 +744,27 @@ function private.runKeyEventFocused(name, char, key, shiftDown, ctrlDown, altOpt
 end
 
 --- Runs key down event handler for currently visible focused component.
+--- @param root Component
 --- @param char number
 --- @param key number
 --- @param shiftDown number
 --- @param ctrlDown number
 --- @param altOptDown number
 --- @return boolean
-function processKeyDownEvent(char, key, shiftDown, ctrlDown, altOptDown)
-    return private.runKeyEventFocused("onKeyDown", char, key, shiftDown, ctrlDown, altOptDown)
+function processKeyDownEvent(root, char, key, shiftDown, ctrlDown, altOptDown)
+    return private.runKeyEventFocused(root, "onKeyDown", char, key, shiftDown, ctrlDown, altOptDown)
 end
 
 --- Runs key up event handler for currently visible focused component.
+--- @param root Component
 --- @param char number
 --- @param key number
 --- @param shiftDown number
 --- @param ctrlDown number
 --- @param altOptDown number
 --- @return boolean
-function processKeyUpEvent(char, key, shiftDown, ctrlDown, altOptDown)
-    return private.runKeyEventFocused("onKeyUp", char, key, shiftDown, ctrlDown, altOptDown)
+function processKeyUpEvent(root, char, key, shiftDown, ctrlDown, altOptDown)
+    return private.runKeyEventFocused(root, "onKeyUp", char, key, shiftDown, ctrlDown, altOptDown)
 end
 
 -------------------------------------------------------------------------------
@@ -689,7 +777,7 @@ local onInterceptingWindow = false
 --- @param isOn boolean
 function private.setOnInterceptingWindow(isOn)
     if isOn then
-        sasl.gl.setCursorLayer(0)
+        private.setCursorLayer(0)
         if onInterceptingWindow ~= isOn then
             private.setCursor(nil)
         end
@@ -833,10 +921,14 @@ end
 --- @param component Component
 --- @param x number
 --- @param y number
-function processMouseMove(component, x, y)
+--- @param keepCursor boolean
+function processMouseMove(component, x, y, keepCursor)
     private.eventCounter = private.eventCounter + 1
+    local curKeep = keepCursor or false
     local cursor = private.getComponentCursor(component, x, y)
-    private.setCursor(cursor)
+    if cursor ~= nil or not curKeep then
+        private.setCursor(cursor)
+    end
 
     local res, path = private.runMouseEvent(component, "onMouseMove", x, y, private.getPressedButton())
     local currentEnteredComponent = private.getEnteredComponent()
@@ -913,7 +1005,7 @@ end
 --- Called when button pressed.
 function onKeyDown(char, key, shiftDown, ctrlDown, altOptDown)
     private.eventCounter = 0
-    return processKeyDownEvent(char, key, shiftDown, ctrlDown, altOptDown)
+    return processKeyDownEvent(nil, char, key, shiftDown, ctrlDown, altOptDown)
 end
 
 -------------------------------------------------------------------------------
@@ -922,7 +1014,7 @@ end
 --- Called when button released.
 function onKeyUp(char, key, shiftDown, ctrlDown, altOptDown)
     private.eventCounter = 0
-    return processKeyUpEvent(char, key, shiftDown, ctrlDown, altOptDown)
+    return processKeyUpEvent(nil, char, key, shiftDown, ctrlDown, altOptDown)
 end
 
 -------------------------------------------------------------------------------
@@ -940,6 +1032,8 @@ private.searchResourcesPath = { ".", "" }
 
 --- Adds path to search paths lists.
 --- @param path string
+--- @see reference
+--- : https://1-sim.com/files/SASL3Manual.pdf#addSearchPath
 function addSearchPath(path)
     table.insert(private.searchPath, 1, path)
     table.insert(private.searchResourcesPath, 1, path)
@@ -947,6 +1041,8 @@ end
 
 --- Adds path to search resources paths list.
 --- @param path string
+--- @see reference
+--- : https://1-sim.com/files/SASL3Manual.pdf#addSearchResourcesPath
 function addSearchResourcesPath(path)
     table.insert(private.searchResourcesPath, 1, path)
 end
@@ -957,6 +1053,8 @@ end
 --- Removes path from search paths lists.
 --- @overload fun()
 --- @param path string
+--- @see reference
+--- : https://1-sim.com/files/SASL3Manual.pdf#popSearchPath
 function popSearchPath(path)
     local remover = function(path, list)
         for k, v in ipairs(list) do
@@ -978,6 +1076,8 @@ end
 --- Removes path from search resources paths list.
 --- @overload fun()
 --- @param path string
+--- @see reference
+--- : https://1-sim.com/files/SASL3Manual.pdf#popSearchResourcesPath
 function popSearchResourcesPath(path)
     if path then
         for k, v in ipairs(private.searchResourcesPath) do
@@ -1030,6 +1130,7 @@ function loadModule(fileName, panelWidth, panelHeight, popupWidth, popupHeight)
     end
     panel = c({ position = { 0, 0, panelWidth, panelHeight } })
     popups._P = panel
+    contextWindows._P = panel
     return panel
 end
 

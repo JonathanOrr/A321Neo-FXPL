@@ -2,19 +2,43 @@
 -- Context windows
 -------------------------------------------------------------------------------
 
+local cwDecoreRes = nil
+local function initDefDecoreRes(headerHeight)
+    if cwDecoreRes == nil then
+        cwDecoreRes = {
+            clT = sasl.gl.loadImage("defdecore.png", 0, 0, 64, 64),
+            outT = sasl.gl.loadImage("defdecore.png", 64, 0, 64, 64),
+            f = sasl.gl.loadFont("Roboto-Regular.ttf"),
+            fH = {},
+        }
+    end
+    if not cwDecoreRes.fH[headerHeight] then
+        local fW, fH = sasl.gl.measureText(cwDecoreRes.f, 'T', headerHeight - 4, false, false)
+        cwDecoreRes.fH[headerHeight] = fH
+    end
+end
+
 local function contextWindowHeaderDrawDef(window, w, h)
-    local elColor = { 0.8, 0.8, 0.8, 1.0 }
-    sasl.gl.drawRectangle(0, 0, w, h, { 0.28, 0.28, 0.28, 1.0 })
+    local bckColor = { 0.25, 0.25, 0.25, 1 }
+    local elColor = { 0.9, 0.9, 0.9, 1 }
+    local actRect = window.decoration.hActiveRect
 
-    sasl.gl.drawWideLine(7, 7, h - 7, h - 7, 2, elColor)
-    sasl.gl.drawWideLine(7, h - 7, h - 7, 7, 2, elColor)
-    sasl.gl.drawConvexPolygon({ h + 7, 7, h + 18, 7, h + 18, h - 7, h + 7, h - 7 }, false, 1, elColor)
-    sasl.gl.drawWidePolyLine({ h + 10, h - 7, h + 10, 10, h + 18, 10 }, 1, elColor)
+    sasl.gl.drawRectangle(0, 0, w, h, bckColor)
+    if actRect then
+        sasl.gl.drawRectangle(actRect[1], actRect[2], actRect[3], actRect[4], { 0.1, 0.1, 0.1, 1})
+    end
 
-    sasl.gl.drawWideLine(w - 7, 7, w - h + 7, h - 7, 2, elColor)
-    sasl.gl.drawWideLine(w - 7, h - 7, w - h + 7, 7, 2, elColor)
-    sasl.gl.drawConvexPolygon({ w - 2 * h + 7, 7, w - 2 * h + 18, 7, w - 2 * h + 18, h - 7, w - 2 * h + 7, h - 7 }, false, 1, elColor)
-    sasl.gl.drawWidePolyLine({ w - 2 * h + 10, h - 7, w - 2 * h + 10, 10, w - 2 * h + 18, 10 }, 1, elColor)
+    sasl.gl.drawTexture(cwDecoreRes.clT, 2, 2, h - 4, h - 4, elColor)
+    sasl.gl.drawTexture(cwDecoreRes.outT, h + 2, 2, h - 4, h - 4, elColor)
+
+    sasl.gl.drawTexture(cwDecoreRes.clT, w - h + 2, 2, h - 4, h - 4, elColor)
+    sasl.gl.drawTexture(cwDecoreRes.outT, w - 2 * h + 2, 2, h - 4, h - 4, elColor)
+
+    if #window.title > 0 then
+        sasl.gl.setClipArea(2 * h, 0, w - 4 * h, h)
+        sasl.gl.drawText(cwDecoreRes.f, w / 2, (h - cwDecoreRes.fH[h]) / 2, window.title, h - 4, false, false, TEXT_ALIGN_CENTER, elColor)
+        sasl.gl.resetClipArea()
+    end
 end
 
 local function contextWindowHeaderMDownDef(window, x, y, w, h, button)
@@ -112,11 +136,15 @@ local defaultWindowName = "cWindow"
 --- Creates modern 2D context window with attached components hierarchy.
 --- @param tbl ContextWindowParams
 --- @return ContextWindow
+--- @see reference
+--- : https://1-sim.com/files/SASL3Manual.pdf#contextWindow
 function contextWindow(tbl)
     local window = {}
+    local wTitle = ""
     local cName = defaultWindowName
     if tbl.name ~= nil then
         cName = tbl.name
+        wTitle = cName
     end
     local c = private.createComponent(cName)
     c.position = createProperty { 0, 0, 0, 0 }
@@ -144,7 +172,7 @@ function contextWindow(tbl)
     c.size = { tbl.position[3], tbl.position[4] }
     c.components = tbl.components
 
-    startComponentsCreation(tbl)
+    private.startComponentsCreation(tbl)
     if not get(tbl.noBackground) then
         if not rectangle then
             rectangle = loadComponent("rectangle")
@@ -153,7 +181,7 @@ function contextWindow(tbl)
         table.insert(c.components, 1,
            rectangle { position = { 0, 0, c.size[1], c.size[2] } } )
     end
-    finishComponentsCreation()
+    private.finishComponentsCreation()
 
     -------------------------------------------------------------------------------
 
@@ -184,7 +212,7 @@ function contextWindow(tbl)
     function onMouseMoveContextWindow(wId, x, y)
         private.eventCounter = 0
         private.setOnInterceptingWindow(false)
-        sasl.gl.setCursorLayer(wId)
+        private.setCursorLayer(wId)
 
         local resultCursor = 1
         processMouseMove(c, x, y)
@@ -236,6 +264,7 @@ function contextWindow(tbl)
         if not focusedNow and isInFront then
             private.setFocusedPath({ c })
         end
+        c.window.__focus = isInFront
     end
 
     -------------------------------------------------------------------------------
@@ -263,6 +292,7 @@ function contextWindow(tbl)
                 decor[k] = v
             end
         end
+        initDefDecoreRes(decor.headerHeight)
         sasl.windows.setContextWindowDecoration(window.id, decor.headerHeight,
             decor.draw, decor.onMouseDown, decor.onMouseUp,
             decor.onMouseHold, decor.onMouseMove, decor.onMouseWheel,
@@ -303,11 +333,16 @@ function contextWindow(tbl)
     -------------------------------------------------------------------------------
 
     window.setIsVisible = function(self, isVisible)
-        sasl.windows.setContextWindowVisible(self.id, isVisible)
-        set(self.component.visible, isVisible)
-        if not isVisible then
+        local wasVisible = self:isVisible()
+        if wasVisible ~= isVisible then
+            sasl.windows.setContextWindowVisible(self.id, isVisible)
+            set(self.component.visible, isVisible)
+        end
+        if not isVisible and wasVisible then
             private.setPressedComponentPath(nil)
-            private.setCursor(nil)
+            if self.id == private.getCursorLayer() then
+                private.setCursor(nil)
+            end
         end
     end
     window.isVisible = function(self)
@@ -338,11 +373,10 @@ function contextWindow(tbl)
     -------------------------------------------------------------------------------
 
     window.setTitle = function(self, title)
+        self.title = title
         sasl.windows.setContextWindowTitle(self.id, title)
     end
-    if get(tbl.name) then
-        window:setTitle(get(tbl.name))
-    end
+    window:setTitle(wTitle)
 
     window.setGravity = function(self, left, top, right, bottom)
         sasl.windows.setContextWindowGravity(self.id, left, top, right, bottom)
@@ -362,7 +396,9 @@ function contextWindow(tbl)
     -------------------------------------------------------------------------------
 
     window.setMode = function(self, mode, monitor)
-        private.setCursor(nil)
+        if self.id == private.getCursorLayer() then
+            private.setCursor(nil)
+        end
         sasl.windows.setContextWindowMode(self.id, mode, monitor)
     end
 
@@ -386,6 +422,11 @@ function contextWindow(tbl)
         autoVr = tbl.vrAuto
     end
     window:setVrAutoHandling(autoVr)
+
+    window.__focus = false
+    window.hasFocus = function(self)
+        return self.__focus
+    end
 
     -------------------------------------------------------------------------------
 

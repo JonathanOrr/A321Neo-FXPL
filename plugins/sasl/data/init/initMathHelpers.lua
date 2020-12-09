@@ -2,8 +2,10 @@
 -- Interpolation helpers
 -------------------------------------------------------------------------------
 
---- Creates stepwise linear N-dimensional interpolator using specified grid parameters.
+--- [DEPRECATED] Creates stepwise linear N-dimensional interpolator using specified grid parameters.
 --- @return number
+--- @see reference
+--- : https://1-sim.com/files/SASL3Manual.pdf#newInterpolator
 function newInterpolator(...)
     local arg = { ... }
     local input = {}
@@ -41,8 +43,10 @@ end
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 
---- Deletes interpolator object.
+--- [DEPRECATED] Deletes interpolator object.
 --- @param handle number
+--- @see reference
+--- : https://1-sim.com/files/SASL3Manual.pdf#deleteInterpolator
 function deleteInterpolator(handle)
     sasl.deleteCPPInterpolator(handle)
 end
@@ -50,12 +54,14 @@ end
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 
---- Interpolates N-dimensional point.
+--- [DEPRECATED] Interpolates N-dimensional point.
 --- @overload fun(x:table | number, interp:number):number
 --- @param x table | number
 --- @param interp number
 --- @param flag boolean
 --- @return number
+--- @see reference
+--- : https://1-sim.com/files/SASL3Manual.pdf#interpolate
 function interpolate(x, interp, flag)
     if type(x) == "number" then
         x = { x }
@@ -73,8 +79,10 @@ end
 --- @field interpolate fun(x:table | number, interp:number, flag:boolean):number
 --- @field interp number
 
---- Creates Interpolator object.
+--- [DEPRECATED] Creates Interpolator object.
 --- @return Interpolator
+--- @see reference
+--- : https://1-sim.com/files/SASL3Manual.pdf#selfInterpolator
 function selfInterpolator(...)
     local r = {}
     r.interp = newInterpolator(...)
@@ -100,6 +108,8 @@ end
 --- @param nmRange number
 --- @param cartesianRange number
 --- @return StereographicProjection
+--- @see reference
+--- : https://1-sim.com/files/SASL3Manual.pdf#newStereographicProjection
 function newStereographicProjection(prCLatitude, prCLongitude, nmRange, cartesianRange)
     local r = {}
     r.setProjectionCenter = function(self, lat, lon)

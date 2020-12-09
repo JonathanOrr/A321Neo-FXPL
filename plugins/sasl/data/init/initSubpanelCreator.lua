@@ -24,6 +24,8 @@
 --- [DEPRECATED] Creates simple 2D floating panel (popup) with attached components hierarchy.
 --- @param tbl SubpanelParams
 --- @return Component
+--- @see reference
+--- : https://1-sim.com/files/SASL3Manual.pdf#subpanel
 function subpanel(tbl)
     local name = tbl.name
     if name == nil then
@@ -78,7 +80,7 @@ function subpanel(tbl)
     set(c.proportionalToXWindow, tbl.proportionalToXWindow)
     c.components = tbl.components
 
-    startComponentsCreation(tbl)
+    private.startComponentsCreation(tbl)
     if not get(tbl.noBackground) then
         if not rectangle then
             rectangle = loadComponent("rectangle")
@@ -128,7 +130,7 @@ function subpanel(tbl)
         resizeButton.size = { c.resizeWidth, c.resizeHeight }
         c.component(resizeButton)
     end
-    finishComponentsCreation()
+    private.finishComponentsCreation()
 
     if get(tbl.command) then
         local command = sasl.createCommand(get(tbl.command), get(tbl.description))
