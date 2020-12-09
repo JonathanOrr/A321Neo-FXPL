@@ -140,6 +140,41 @@ function Math_rescale_no_lim(in1, out1, in2, out2, x)
 
 end
 
+function Table_interpolate(tab, x)
+    local a = 1
+    local b = #tab
+
+    -- Simple cases
+    if x <= tab[a][1] then
+        return tab[a][2]
+    end
+    if x >= tab[b][1] then
+        return tab[b][2]
+    end
+
+    local middle = 0
+
+    while b-a > 1 do
+        middle = math.floor((b+a)/2)
+        local val = tab[middle][1]
+        if val == x then
+            break
+        elseif val < x then
+            a = middle
+        else
+            b = middle
+        end
+    end
+
+    if x == tab[middle][1] then
+        -- Found a perfect value
+        return tab[middle][2]
+    else
+        -- (y-y0) / (y1-y0) = (x-x0) / (x1-x0)
+        return tab[a][2] + ((x-tab[a][1])*(tab[b][2]-tab[a][2]))/(tab[b][1]-tab[a][1])
+    end
+end
+
 --used to animate a value with a linear delay USE ONLY WITH FLOAT VALUES
 function Set_linear_anim_value(current_value, target, min, max, speed)
     target = Math_clamp(target, min, max)
@@ -307,6 +342,19 @@ end
 
 function SASL_draw_needle(x, y, radius, angle, thickness, color)
     sasl.gl.drawWideLine(x, y, x + radius * math.cos(math.rad(angle)), y + radius * math.sin(math.rad(angle)), thickness, color)
+end
+
+function SASL_draw_needle_adv(x, y, inner_radius, outter_radius, angle, thickness, color)
+    sasl.gl.drawWideLine(x + inner_radius * math.cos(math.rad(angle)), y + inner_radius * math.sin(math.rad(angle)), x + outter_radius * math.cos(math.rad(angle)), y + outter_radius * math.sin(math.rad(angle)), thickness, color)
+end
+
+--draw images
+function SASL_drawSegmentedImg(image, x, y, img_width, img_height, num_positions, position)
+    local recalculated_position = position - 1
+    local clamped_position = Math_clamp(recalculated_position, 0, num_positions)
+
+    --draw part of the image
+    sasl.gl.drawTexturePart ( image, x, y, img_width / num_positions, img_height, img_width / num_positions * clamped_position, 0, img_width / num_positions, img_height, {1, 1, 1})
 end
 
 --drawing LED/LCDs

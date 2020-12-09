@@ -60,15 +60,18 @@ set(Elev_trim_degrees, 0)
 --initialise flight controls
 set(Override_artstab, 1)
 set(Override_control_surfaces, 1)
+set(Speedbrake_handle_ratio, 0)
 
 function onPlaneLoaded()
     set(Override_artstab, 1)
     set(Override_control_surfaces, 1)
+    set(Speedbrake_handle_ratio, 0)
 end
 
 function onAirportLoaded()
     set(Override_artstab, 1)
     set(Override_control_surfaces, 1)
+    set(Speedbrake_handle_ratio, 0)
 end
 
 function onModuleShutdown()--reset things back so other planes will work

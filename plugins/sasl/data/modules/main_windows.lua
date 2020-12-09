@@ -243,4 +243,17 @@ Wheel_debug_window = contextWindow {
   };
 }
 
-
+--display popups--
+EWD_popup_window = contextWindow {
+  name = "EWD POP-UP";
+  position = { 0 , 0 , 900, 900 };
+  noBackground = true ;
+  proportional = true ;
+  minimumSize = { 500, 500 };
+  maximumSize = { 800, 800 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = false;
+  components = {
+    EWD_popup {position = { 0 , 0 , 900, 900 }}
+  };
+}

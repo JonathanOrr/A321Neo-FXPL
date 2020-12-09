@@ -18,6 +18,9 @@
 
 --ALL COMMANDS USED IN THE COCKPIT, e.g PUSHBUTTONS--
 
+--popup commands--
+Pop_out_EWD = sasl.createCommand("a321neo/cockpit/popups/pop_out_EWD", "Pop out the EWD")
+
 -- Buttons with light (check cockpit_datarefs.lua for light datarefs):
 Ecam_btn_cmd_ENG   = createCommand("a321neo/cockpit/ecam/buttons/cmd_eng", "ENG pushbutton")
 Ecam_btn_cmd_BLEED = createCommand("a321neo/cockpit/ecam/buttons/cmd_bleed", "BLEED pushbutton")

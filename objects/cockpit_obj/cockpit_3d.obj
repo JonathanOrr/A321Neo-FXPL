@@ -8290,7 +8290,9 @@ IDX	7009
 		TRIS	7512 6
 		TRIS	1134 6
 		TRIS	1092 6
+		ATTR_manip_command	button	a321neo/cockpit/popups/pop_out_EWD	Pop out EWD
 		TRIS	24 6
+		ATTR_manip_none
 		TRIS	6420 6
 		TRIS	6462 6
 		TRIS	4824 6
