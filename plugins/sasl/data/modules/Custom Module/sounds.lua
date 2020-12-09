@@ -13,19 +13,24 @@
 --    details or check <https://www.gnu.org/licenses/>
 -------------------------------------------------------------------------------
 -- File: sounds.lua 
--- Short description: TODO
+-- Short description: Sound management
 -------------------------------------------------------------------------------
 
 -- local snd_master_warning = sasl.al.loadSample("sounds/master_warning.wav")
 
 Sounds_elec_bus_delayed = createGlobalPropertyf("a321neo/sounds/elec_bus_delayed", 0, false, true, false)
+Sounds_blower_delayed   = createGlobalPropertyf("a321neo/sounds/blower_delayed", 0, false, true, false)
+Sounds_extract_delayed  = createGlobalPropertyf("a321neo/sounds/extract_delayed", 0, false, true, false)
 
 function update()
 
     if get(AC_ess_bus_pwrd) == 1 then
         set(Sounds_elec_bus_delayed, 1) 
     else
-        Set_dataref_linear_anim(Sounds_elec_bus_delayed, 0, 0, 1, 0.1)
+        Set_dataref_linear_anim(Sounds_elec_bus_delayed, 0, 0, 1, 0.5)
     end
+
+    Set_dataref_linear_anim(Sounds_blower_delayed, get(Ventilation_blower_running), 0, 1, 0.5)
+    Set_dataref_linear_anim(Sounds_extract_delayed, get(Ventilation_extract_running), 0, 1, 0.5)
 
 end
