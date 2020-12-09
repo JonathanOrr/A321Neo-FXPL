@@ -21,8 +21,6 @@
 {6acc591c-55ac-450c-bcb2-682e9204dfa3} event:/CockpitMechanical/GearUp
 {19a8de53-9601-4d68-9d4f-9199ad28bdd8} event:/CockpitMechanical/MCDU Button Press
 {4f777470-38aa-4adf-bb4e-e68e13b9a7d7} event:/CockpitMechanical/Soft Button Press
-{4bc37231-1716-4ee4-a377-d1d830c437c7} event:/CockpitMechanical/Soft Button Press 2
-{2e03b942-db09-40f3-8ec6-a41ddb223937} event:/CockpitMechanical/Soft Button Press 3
 {baf9bc41-c708-42a2-bfac-b33deb7ddbc4} event:/Avionics
 {af369460-34d3-4c6e-a56c-fbe21efb91d5} event:/BatteryRelay
 {1edd836c-b29a-4101-a732-2d2eef744bbe} event:/Blower
