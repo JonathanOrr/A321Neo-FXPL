@@ -442,6 +442,11 @@ local function update_brakes()
 
 end
 
+local function update_anim()
+
+    Set_dataref_linear_anim(Parkbrake_switch_pos_anim, get(Parkbrake_switch_pos), 0, 1, 3)
+end
+
 function update()
     perf_measure_start("wheel:update()")
     update_computer_status_and_pwr()
@@ -461,6 +466,7 @@ function update()
     update_wheel_psi()
     
     update_autobrake()
+    update_anim()
     
     perf_measure_stop("wheel:update()")
 end
