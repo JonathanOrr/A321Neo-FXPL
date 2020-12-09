@@ -94,7 +94,7 @@ P _cgpt/9/_w_now 1.0
 P _cgpt/9/_w_test 0.0
 P _cgpt/9/_z_ref 0.0
 P _cgpt/count 20
-P _door/0/_ang_now 94.968132019
+P _door/0/_ang_now 0.0
 P _door/0/_ext_ang 0.0
 P _door/0/_ret_ang 100.0
 P _door/0/_type 1
@@ -102,7 +102,7 @@ P _door/0/_xyz/0 -1.0
 P _door/0/_xyz/1 0.0
 P _door/0/_xyz/2 17.600000381
 P _door/0/_xyz/count 3
-P _door/1/_ang_now 89.936264038
+P _door/1/_ang_now 100.0
 P _door/1/_ext_ang 0.0
 P _door/1/_ret_ang 100.0
 P _door/1/_type 3
@@ -110,7 +110,7 @@ P _door/1/_xyz/0 -1.500000000
 P _door/1/_xyz/1 0.0
 P _door/1/_xyz/2 14.500000000
 P _door/1/_xyz/count 3
-P _door/10/_ang_now 80.942642212
+P _door/10/_ang_now 90.0
 P _door/10/_ext_ang 0.0
 P _door/10/_ret_ang 90.0
 P _door/10/_type 3
@@ -127,7 +127,7 @@ P _door/16/_type 0
 P _door/17/_type 0
 P _door/18/_type 0
 P _door/19/_type 0
-P _door/2/_ang_now -94.968132019
+P _door/2/_ang_now 0.0
 P _door/2/_ext_ang 0.0
 P _door/2/_ret_ang -100.0
 P _door/2/_type 1
@@ -135,7 +135,7 @@ P _door/2/_xyz/0 1.0
 P _door/2/_xyz/1 0.0
 P _door/2/_xyz/2 17.600000381
 P _door/2/_xyz/count 3
-P _door/3/_ang_now -89.936264038
+P _door/3/_ang_now -100.0
 P _door/3/_ext_ang 0.0
 P _door/3/_ret_ang -100.0
 P _door/3/_type 3
@@ -143,7 +143,7 @@ P _door/3/_xyz/0 1.500000000
 P _door/3/_xyz/1 0.0
 P _door/3/_xyz/2 14.500000000
 P _door/3/_xyz/count 3
-P _door/4/_ang_now 89.094261169
+P _door/4/_ang_now 0.0
 P _door/4/_ext_ang 0.0
 P _door/4/_ret_ang 90.0
 P _door/4/_type 2
@@ -151,7 +151,7 @@ P _door/4/_xyz/0 -13.0
 P _door/4/_xyz/1 -3.599999905
 P _door/4/_xyz/2 73.500000000
 P _door/4/_xyz/count 3
-P _door/5/_ang_now -89.094261169
+P _door/5/_ang_now 0.0
 P _door/5/_ext_ang 0.0
 P _door/5/_ret_ang -90.0
 P _door/5/_type 2
@@ -161,7 +161,7 @@ P _door/5/_xyz/2 73.500000000
 P _door/5/_xyz/count 3
 P _door/6/_type 0
 P _door/7/_type 0
-P _door/8/_ang_now -80.942642212
+P _door/8/_ang_now -90.0
 P _door/8/_ext_ang 0.0
 P _door/8/_ret_ang -90.0
 P _door/8/_type 3
@@ -209,10 +209,10 @@ P _gear/0/_latN 0.0
 P _gear/0/_latR 0.0
 P _gear/0/_leg_len 5.249343872
 P _gear/0/_lonE 6.0
-P _gear/0/_lonN 98.064071655
+P _gear/0/_lonN 6.0
 P _gear/0/_lonR 99.0
 P _gear/0/_scon 52322.308593750
-P _gear/0/_stat_def 0.378928721
+P _gear/0/_stat_def 0.378928840
 P _gear/0/_steerdeg_hispeed 5.0
 P _gear/0/_steerdeg_lospeed 75.0
 P _gear/0/_strut_comp 0.899999976
@@ -239,14 +239,14 @@ P _gear/1/_gear_x -12.303149223
 P _gear/1/_gear_y -2.788713932
 P _gear/1/_gear_z 71.194229126
 P _gear/1/_latE 0.0
-P _gear/1/_latN 82.164710999
+P _gear/1/_latN 0.0
 P _gear/1/_latR 83.0
 P _gear/1/_leg_len 8.202099800
 P _gear/1/_lonE -6.0
-P _gear/1/_lonN -0.060382411
+P _gear/1/_lonN -6.0
 P _gear/1/_lonR 0.0
 P _gear/1/_scon 83991.070312500
-P _gear/1/_stat_def 1.381937623
+P _gear/1/_stat_def 1.381937861
 P _gear/1/_steerdeg_hispeed 0.0
 P _gear/1/_steerdeg_lospeed 0.0
 P _gear/1/_strut_comp 0.400000006
@@ -273,14 +273,14 @@ P _gear/2/_gear_x 12.303149223
 P _gear/2/_gear_y -2.788713932
 P _gear/2/_gear_z 71.194229126
 P _gear/2/_latE 0.0
-P _gear/2/_latN -82.164710999
+P _gear/2/_latN 0.0
 P _gear/2/_latR -83.0
 P _gear/2/_leg_len 8.202099800
 P _gear/2/_lonE -6.0
-P _gear/2/_lonN -0.060382411
+P _gear/2/_lonN -6.0
 P _gear/2/_lonR 0.0
 P _gear/2/_scon 83991.070312500
-P _gear/2/_stat_def 1.381937623
+P _gear/2/_stat_def 1.381937861
 P _gear/2/_steerdeg_hispeed 0.0
 P _gear/2/_steerdeg_lospeed 0.0
 P _gear/2/_strut_comp 0.400000006
@@ -57383,365 +57383,7 @@ GROUP ECAM lower du
 
   END_GROUP
 END_GROUP
-GROUP EWD
-  LOCKED
-  gen_rotary ewd bgd
-    POS 480.000000 2419.500000
-    IMAGE MIP/ecam upper du/EWD/Background
-    DATAREF 
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 6.000000
-    DIGITS 1
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_needle left egt needle
-    POS 305.000000 2577.500000
-    IMAGE MIP/ecam upper du/EWD/ndl_egt
-    DATAREF sim/cockpit2/engine/indicators/EGT_deg_C[0]
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 -90.500000 1.000000
-    KEY_FRAME 1060.000000 35.000000
-    IS_DRAGGABLE 0
-    OFFSET 0.000000
-
-  gen_needle right egt needle
-    POS 653.000000 2577.500000
-    IMAGE MIP/ecam upper du/EWD/ndl_egt
-    DATAREF sim/cockpit2/engine/indicators/EGT_deg_C[1]
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 -90.500000 1.000000
-    KEY_FRAME 1060.000000 35.000000
-    IS_DRAGGABLE 0
-    OFFSET 0.000000
-
-  gen_needle left thrust req
-    POS 303.000000 2750.500000
-    IMAGE MIP/ecam upper du/EWD/ndl_trst
-    DATAREF a321neo/cockpit/engine/l_lever_blue_dot[0]
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 -132.000000 1.000000
-    KEY_FRAME 20.000000 -132.000000 1.000000
-    KEY_FRAME 50.000000 -63.000000 1.000000
-    KEY_FRAME 100.000000 42.000000
-    IS_DRAGGABLE 0
-    OFFSET 0.000000
-
-  gen_needle right thrust req
-    POS 653.000000 2750.500000
-    IMAGE MIP/ecam upper du/EWD/ndl_trst
-    DATAREF a321neo/cockpit/engine/r_lever_blue_dot[0]
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 -132.000000 1.000000
-    KEY_FRAME 20.000000 -132.000000 1.000000
-    KEY_FRAME 50.000000 -63.000000 1.000000
-    KEY_FRAME 100.000000 42.000000
-    IS_DRAGGABLE 0
-    OFFSET 0.000000
-
-  gen_rotary Blocker
-    POS 307.000000 2756.000000
-    IMAGE MIP/ecam upper du/EWD/blocker
-    DATAREF sim/flightmodel2/engines/thrust_reverser_deploy_ratio[0]
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 0.050000 1.000000 1.000000
-    KEY_FRAME 1.000000 1.000000
-    DIGITS 2
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary Reverse
-    POS 335.500000 2744.500000
-    IMAGE MIP/ecam upper du/EWD/reverse
-    DATAREF a321neo/cockpit/ewd/ENG1_rev_ind[0]
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 1.000000 1.000000
-    KEY_FRAME 2.000000 2.000000 1.000000
-    KEY_FRAME 3.000000 3.000000
-    DIGITS 4
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary Reverse 2
-    POS 685.500000 2744.500000
-    IMAGE MIP/ecam upper du/EWD/reverse
-    DATAREF a321neo/cockpit/ewd/ENG2_rev_ind[0]
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 1.000000 1.000000
-    KEY_FRAME 2.000000 2.000000 1.000000
-    KEY_FRAME 3.000000 3.000000
-    DIGITS 4
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary Blocker 2
-    POS 657.000000 2756.000000
-    IMAGE MIP/ecam upper du/EWD/blocker
-    DATAREF sim/flightmodel2/engines/thrust_reverser_deploy_ratio[0]
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 0.050000 1.000000 1.000000
-    KEY_FRAME 1.000000 1.000000
-    DIGITS 2
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary Flap Target
-    POS 681.500000 2318.500000
-    IMAGE MIP/ecam upper du/EWD/flaptogo
-    DATAREF a321neo/dynamics/surfaces/flaps_internal_config
-    SHOW_GREATER 0.100000 a321neo/dynamics/FBW/slats_and_flaps/flaps_in_transit
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 1.000000 1.000000
-    KEY_FRAME 2.000000 2.000000 1.000000
-    KEY_FRAME 3.000000 3.000000 1.000000
-    KEY_FRAME 4.000000 4.000000 1.000000
-    KEY_FRAME 5.000000 5.000000
-    DIGITS 6
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary Slat Target
-    POS 681.500000 2318.500000
-    IMAGE MIP/ecam upper du/EWD/slattogo
-    DATAREF a321neo/dynamics/surfaces/flaps_internal_config
-    SHOW_GREATER 0.100000 a321neo/dynamics/FBW/slats_and_flaps/slats_in_transit
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 1.000000 1.000000
-    KEY_FRAME 2.000000 2.000000 1.000000
-    KEY_FRAME 3.000000 3.000000 1.000000
-    KEY_FRAME 4.000000 4.000000 1.000000
-    KEY_FRAME 5.000000 5.000000
-    DIGITS 6
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary Flap Track
-    POS 682.500000 2336.500000
-    IMAGE MIP/ecam upper du/EWD/flaptrack
-    DATAREF a321neo/dynamics/FBW/slats_and_flaps/flaps_deployed_angle
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 0.000010 1.000000 1.000000
-    KEY_FRAME 1.000000 1.000000
-    DIGITS 2
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary Flap Indicator
-    POS 650.500000 2309.500000
-    IMAGE MIP/ecam upper du/EWD/FlapIndicator
-    DATAREF a321neo/dynamics/surfaces/flaps_internal_config
-    SHOW_EQUAL 0.000000 a321neo/dynamics/FBW/slats_and_flaps/flaps_in_transit
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 5.000000 5.000000
-    DIGITS 6
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary Flap Indicator Blue
-    POS 650.500000 2309.500000
-    IMAGE MIP/ecam upper du/EWD/FlapIndicatorBlue
-    DATAREF a321neo/dynamics/surfaces/flaps_internal_config
-    SHOW_EQUAL 1.000000 a321neo/dynamics/FBW/slats_and_flaps/slats_in_transit
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 5.000000 5.000000
-    DIGITS 6
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary Flap Indicator Blue
-    POS 650.500000 2309.500000
-    IMAGE MIP/ecam upper du/EWD/FlapIndicatorBlue
-    DATAREF a321neo/dynamics/surfaces/flaps_internal_config
-    SHOW_EQUAL 1.000000 a321neo/dynamics/FBW/slats_and_flaps/flaps_in_transit
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 5.000000 5.000000
-    DIGITS 6
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  GROUP Slats
-    LOCKED
-    GROUP_ANIMATE_MODE TRANSLATE
-    GROUP_WIDTH 0
-    GROUP_HEIGHT 0
-    DATAREF sim/flightmodel2/controls/slat1_deploy_ratio
-    POS 0.000000 0.000000
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 0.700000 -15.000000 1.000000
-    KEY_FRAME 0.800000 -26.000000 1.000000
-    KEY_FRAME 1.000000 -41.000000
-    IS_VERTICAL 1
-    OFFSET 0.000000
-    gen_pointer Slats
-      POS 560.000000 2374.500000
-      IMAGE MIP/ecam upper du/EWD/slat
-      DATAREF sim/flightmodel2/controls/slat1_deploy_ratio
-      LOCKED
-      CLIP
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 119.000000 1.000000
-      KEY_FRAME 0.700000 80.000000 1.000000
-      KEY_FRAME 0.800000 46.000000 1.000000
-      KEY_FRAME 1.000000 2.000000
-      IS_DRAGGABLE 0
-      IS_VERTICAL 0
-      OFFSET 0.000000
-
-  END_GROUP
-  GROUP Flaps
-    LOCKED
-    GROUP_ANIMATE_MODE TRANSLATE
-    GROUP_WIDTH 0
-    GROUP_HEIGHT 0
-    DATAREF sim/flightmodel/controls/wing2r_fla1def
-    POS 0.000000 0.000000
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 10.000000 -13.000000 1.000000
-    KEY_FRAME 15.000000 -24.000000 1.000000
-    KEY_FRAME 20.000000 -33.000000 1.000000
-    KEY_FRAME 40.000000 -43.000000
-    IS_VERTICAL 1
-    OFFSET 0.000000
-    gen_pointer Flaps
-      POS 770.500000 2376.500000
-      IMAGE MIP/ecam upper du/EWD/flap
-      DATAREF sim/flightmodel/controls/wing2r_fla1def
-      LOCKED
-      CLIP
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 -189.000000 1.000000
-      KEY_FRAME 10.000000 -134.000000 1.000000
-      KEY_FRAME 15.000000 -91.000000 1.000000
-      KEY_FRAME 20.000000 -47.000000 1.000000
-      KEY_FRAME 40.000000 -1.000000
-      IS_DRAGGABLE 0
-      IS_VERTICAL 0
-      OFFSET 0.000000
-
-  END_GROUP
-END_GROUP
 GROUP PFD
-  GROUP_OPEN
   gen_needle Horizon
     POS 423.500000 3351.500000
     IMAGE MIP/pfd/ADI
@@ -57866,7 +57508,6 @@ GROUP PFD
     END_GROUP
   END_GROUP
   GROUP Bird
-    GROUP_OPEN
     GROUP_ANIMATE_MODE TRANSLATE
     GROUP_WIDTH 0
     GROUP_HEIGHT 0
@@ -60529,22 +60170,4 @@ GROUP Fire PB
     CLICK_DY 0
 
 END_GROUP
-gen_rotary gen_rotary.png
-  POS 424.000000 3351.000000
-  DATAREF 
-  LIGHT_MODE MECHANICAL
-  LIGHT_RHEOSTAT 0
-  KEY_FRAME 0.000000 0.000000 1.000000
-  KEY_FRAME 1.000000 6.000000
-  DIGITS 7
-  ROTARY_TYPE ROTARY
-  CLICK_RADIUS 10.000000
-  CLICK_RADIUS_DY 0.000000
-  OFFSET 0.000000
-  STEP1 1.000000
-  STEP2 1.000000
-  CURSOR DEFAULT
-  CLICK_DX 0
-  CLICK_DY 0
-
 PANEL_3D_END

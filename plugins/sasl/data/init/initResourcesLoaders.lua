@@ -11,6 +11,8 @@
 --- @overload fun(fileName:string):number
 --- @overload fun(fileName:string, x:number, y:number):number
 --- @return number, number, number
+--- @see reference
+--- : https://1-sim.com/files/SASL3Manual.pdf#loadImage
 function loadImage(fileName, x, y, width, height)
     local f = findResourceFile(fileName)
     if f == nil then
@@ -45,6 +47,8 @@ end
 --- @overload fun(fileName:string, rasterWidth:number, rasterHeight:number):number
 --- @overload fun(fileName:string, rasterWidth:number, rasterHeight:number, x:number, y:number):number
 --- @return number, number, number
+--- @see reference
+--- : https://1-sim.com/files/SASL3Manual.pdf#loadVectorImage
 function loadVectorImage(fileName, rasterWidth, rasterHeight, x, y, width, height)
     local f = findResourceFile(fileName)
     if f == nil then
@@ -79,6 +83,8 @@ loadImageFromMemory = loadTextureFromMemory
 --- Loads old-style bitmap font from file.
 --- @param fileName string
 --- @return number
+--- @see reference
+--- : https://1-sim.com/files/SASL3Manual.pdf#loadBitmapFont
 function loadBitmapFont(fileName)
     return private.loadFontImpl(fileName, sasl.gl.getGLBitmapFont)
 end
@@ -91,6 +97,8 @@ sasl.gl.loadBitmapFont = loadBitmapFont
 --- Loads font from file (TTF, TTC, OTF, etc).
 --- @param fileName string
 --- @return number
+--- @see reference
+--- : https://1-sim.com/files/SASL3Manual.pdf#loadFont
 function loadFont(fileName)
     return private.loadFontImpl(fileName, sasl.gl.getGLFont)
 end
@@ -128,6 +136,8 @@ end
 --- @overload fun(fileName:string):number
 --- @overload fun(fileName:string, needToCreateTimer:boolean):number
 --- @return number
+--- @see reference
+--- : https://1-sim.com/files/SASL3Manual.pdf#loadSample
 function loadSample(fileName, needToCreateTimer, needReversed)
     if needToCreateTimer == nil then needToCreateTimer = false end
     if needReversed == nil then needReversed = false end
@@ -154,6 +164,8 @@ sasl.al.loadSample = loadSample
 --- Loads XP object from file.
 --- @param fileName string
 --- @return number
+--- @see reference
+--- : https://1-sim.com/files/SASL3Manual.pdf#loadObject
 function loadObject(fileName)
     local f = findResourceFile(fileName)
     if f == nil then
@@ -177,6 +189,8 @@ sasl.loadObject = loadObject
 --- @param fileName string
 --- @param callback fun(id:number)
 --- @return number
+--- @see reference
+--- : https://1-sim.com/files/SASL3Manual.pdf#loadObjectAsync
 function loadObjectAsync(fileName, callback)
     local f = findResourceFile(fileName)
     if f == nil then
@@ -200,6 +214,8 @@ sasl.loadObjectAsync = loadObjectAsync
 --- @param shaderID number
 --- @param fileName string
 --- @param shType ShaderTypeID
+--- @see reference
+--- : https://1-sim.com/files/SASL3Manual.pdf#loadShader
 function loadShader(shaderID, fileName, shType)
     local f = findResourceFile(fileName)
     if f == nil then

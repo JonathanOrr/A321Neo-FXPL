@@ -1,4 +1,77 @@
 ----------------------------------------------------------
+SASL 3.12.1 (XP11.25+ support)
+----------------------------------------------------------
+
+- Fixed possible broken XP menu layout after menu item deletion
+- Fixed a few bugs related to nested XP menus creation
+- Fixed artificial limit on how many XP menu items and Hot Keys may be created
+- Fixed "getElapsedMicroseconds" function behavior
+- Fixed a few possible crashes during Search usage in SASL Dev Widget
+- Fixed possible crash after fast reloading of project and 'startProcess' function usage
+- Fixed the crash in case of attempt to destroy currently active Render Target
+- Fixed possible issue with incorrect Context Windows keyboard focusing
+- Added 'hasFocus' method for Context Window object
+- Added cache usage for Lua scripts and modules loaded with 'include' and 'request' function
+- Added ability to force new instance of Lua module creation (for modules loaded with 'request')
+- Added ability to schedule full SASL project reboot as soon as possible (may be used to reload the project in reaction to specific event)
+- Added parameter for 'onAirportLoaded' callback indicating the number new flights started since SASL plugin enabling
+- Added ability to omit file extension when using 'include' or 'request'
+- Update default SASL Context Window decoration (drawing performance and title showing)
+
+----------------------------------------------------------
+SASL 3.11.0 (XP11.25+ support)
+----------------------------------------------------------
+
+- Fixed 'readConfig', 'writeConfig' functions (make them correctly save information about values types)
+- Fixed possible CTD in case of calling subprocess creation function on Mac OS
+- Fixed the bug with  broken graphics processing in case of calling SASL project command in 2D draw callback
+- Added function to save textures to files in common formats
+
+----------------------------------------------------------
+SASL 3.10.2 (XP11.25+ support)
+----------------------------------------------------------
+
+- Fixed failing 'request' function behavior in both Free and Commercial SASL
+- Fixed incorrect saving of telemetry active state between project reboots
+
+----------------------------------------------------------
+SASL 3.10.1 (XP11.25+ support)
+----------------------------------------------------------
+
+- Fixed drawing components cursors in old-style <subpanel>
+- Fixed possible crash in case of enabled telemetry in Dev Widget
+
+----------------------------------------------------------
+SASL 3.10.0 (XP11.25+ support)
+----------------------------------------------------------
+
+- Fixed lookup of multi-typed datarefs (for example, for datarefs provinding both float and double, type request is how handled correctly)
+- Fixed one of the Lua constants representing blending equation identifiers
+- Fixed starting point of vertical text drawing
+- Fixed possible crash in case of OBJ instance creation (with anim datarefs) without controlling datarefs list
+- Fixed a few buttons highlighting in SASL Dev Widget 
+- Fixed leftover input state and trees collapsing in SASL Dev Widget
+- Fixed case where we're not checking valid graphics context before clearing (<clearRenderTarget>)
+- Fixed tracking 3D mouse position in multi-monitor configurations (this time for sure)
+- Fixed a few issues related to 3D sound usage
+- Improved speed of datarefs and commands search in SASL Dev Widget
+- Added full annotations for all SASL functions (api.lua) to simplify development using IDEs, code auto-completion tools and etc.
+- Added special warnings for projects, which don't explicitly configure SASL performance related options
+- Added automatic highlighting and copy-paste support for edit fields in SASL Dev Widget
+- Added ability to execute selected command with keyboard ENTER in SASL Dev Widget 
+- Added function to export OpenGL texture ids from SASL graphics system
+- Added functional to load/save Lua tables serialized in 'ini', 'xml', 'json' formats (<readConfig>, <writeConfig>)
+- Added ability to directly specify parent component for components created outside of hierarchy ('parent' field in function arguments)
+- Added functional to run child processes in sync in async manner (<startProcessSync>, <startProcessAsync>)
+- Added correct OpenGL state restoring in case if scripts will left it wrong
+- Added ability to get raw DataRef pointers from Global Properties.
+- Added 'request' function for scripts, similar to standard 'require', but working only with SASL project hierarchy
+- Added simpler and faster additional interface for interpolation (<createLinearInterpolator>, etc)
+- Added ability to use newlines (\n) for messageWindow text
+- Updated telemetry functional  
+- Updated dependencies (C++ libraries) and toolsets
+
+----------------------------------------------------------
 SASL 3.9.0 (XP11.25+ support)
 ----------------------------------------------------------
 

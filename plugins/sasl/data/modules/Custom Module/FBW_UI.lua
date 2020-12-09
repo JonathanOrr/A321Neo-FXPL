@@ -69,9 +69,9 @@ end
 
 function update()
     if SSS_FBW_UI:isVisible() == true then
-        sasl.setMenuItemState(Menu_main, ShowHideFBWUI, MENU_CHECKED)
+        sasl.setMenuItemState(Menu_debug, ShowHideFBWUI, MENU_CHECKED)
     else
-        sasl.setMenuItemState(Menu_main, ShowHideFBWUI, MENU_UNCHECKED)
+        sasl.setMenuItemState(Menu_debug, ShowHideFBWUI, MENU_UNCHECKED)
     end
 
     UI_scroll_y_pos = Set_anim_value(UI_scroll_y_pos, UI_scroll_y_pos_command, size[2], 1000, 8)

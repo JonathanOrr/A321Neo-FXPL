@@ -44,6 +44,7 @@ panelWidth3d = 4096
 panelHeight3d = 4096
 
 components = {
+  sasl_drawing_assets {},
   apu {},
   fuel {}, -- Please keep this before engines
   engines {},
@@ -71,8 +72,8 @@ components = {
   DCDU {},
   DRAIMS {},
   clock {},
+  LED_screens {},
   failures_manager {},
-  display_brightness {},
   doors {},
   hydraulics {},
   electrical {},
@@ -81,13 +82,13 @@ components = {
   anti_ice {},
   calls {},
   sounds {},
-  graphics {}
+  graphics {},
+  display_brightness {},
 }
 
 --draw things before the panels here
 function draw()
   if sasl.gl.isPanelBeforeStage() then
-    Draw_LCD_backlight(30, 2226, 900, 900, 0.5, 1, get(EWD_brightness_act))
     Draw_LCD_backlight(1030, 2226, 900, 900, 0.5, 1, get(ECAM_brightness_act))
   end
 

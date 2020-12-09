@@ -157,9 +157,9 @@ end
 
 function update()
     if PID_UI_window:isVisible() == true then
-        sasl.setMenuItemState(Menu_main, ShowHidePIDUI, MENU_CHECKED)
+        sasl.setMenuItemState(Menu_debug, ShowHidePIDUI, MENU_CHECKED)
     else
-        sasl.setMenuItemState(Menu_main, ShowHidePIDUI, MENU_UNCHECKED)
+        sasl.setMenuItemState(Menu_debug, ShowHidePIDUI, MENU_UNCHECKED)
     end
 
     Update_PID_historys(0 + 5, 0 + 5, 400, 250, FBW_PID_arrays.SSS_FBW_roll_rate)
