@@ -63,27 +63,27 @@ function update()
     update_batteries()
     update_trs_and_inv()
     update_misc()
-    
+
     update_misc_loads()
     update_trs_loads()
     update_generators_loads()
     update_stinv_loads()
     update_battery_loads()
-    
+
     -- Let's update the power consumption vector used in drawings
     update_last_power_consumption() 
-    
+
     reset_pwr_consumption()
-    
+
     update_consumptions()   -- Check electical_consumptions.lua
-    
+
     if get(XP_Battery_1) == 1 or get(XP_Battery_2) == 1 then
         set(avionics, 1)
     else
         set(avionics, 0)
     end
     set_overheadl_pwrd()
-    
+
     perf_measure_stop("electrical:update()")
 
 end
@@ -91,5 +91,5 @@ end
 function onAirportLoaded()
     if get(Startup_running) == 1 or get(Capt_ra_alt_ft) > 20 then
         prep_misc_on_flight()
-    end    
+    end
 end

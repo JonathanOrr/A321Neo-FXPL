@@ -69,8 +69,8 @@ components = {
   DCDU {},
   DRAIMS {},
   clock {},
+  LED_screens {},
   failures_manager {},
-  display_brightness {},
   doors {},
   hydraulics {},
   electrical {},
@@ -79,7 +79,8 @@ components = {
   anti_ice {},
   calls {},
   sounds {},
-  graphics {}
+  graphics {},
+  display_brightness {},
 }
 
 --draw things before the panels here
