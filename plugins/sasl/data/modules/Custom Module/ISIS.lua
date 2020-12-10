@@ -39,7 +39,7 @@ function draw()
         -- Not ready, draw the countdown
         local remaning_time = math.ceil(TIME_TO_ALIGN_SEC - get(TIME) + isis_start_time)
         if remaning_time > 0 then
-            sasl.gl.drawText (Font_AirbusDUL, 272, 112, remaning_time, 25, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+            sasl.gl.drawText (Font_AirbusDUL, 295, 106, remaning_time, 28, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
         end
     else
         -- Ready, draw the altitude in meters

@@ -462,7 +462,12 @@ end
 
 local function update_anim_knobs()
     Set_dataref_linear_anim(ADIRS_source_rotary_ATHDG_anim, get(ADIRS_source_rotary_ATHDG), -1, 1, 5)
-    Set_dataref_linear_anim(ADIRS_source_rotary_AIRDATA_anim, get(ADIRS_source_rotary_AIRDATA), -1, 1, 5)  
+    Set_dataref_linear_anim(ADIRS_source_rotary_AIRDATA_anim, get(ADIRS_source_rotary_AIRDATA), -1, 1, 5)
+    
+    Set_dataref_linear_anim(ADIRS_rotary_btn_anim[1], get(ADIRS_rotary_btn[1]), 0, 2, 5)
+    Set_dataref_linear_anim(ADIRS_rotary_btn_anim[2], get(ADIRS_rotary_btn[2]), 0, 2, 5)
+    Set_dataref_linear_anim(ADIRS_rotary_btn_anim[3], get(ADIRS_rotary_btn[3]), 0, 2, 5)
+    
 end
 
 local function update_gps_single(nr, power_status, not_failure_status)

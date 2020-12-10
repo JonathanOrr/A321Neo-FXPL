@@ -243,6 +243,20 @@ Wheel_debug_window = contextWindow {
   };
 }
 
+GPWS_debug_window = contextWindow {
+  name = "GPWS DEBUG";
+  position = { 150 , 150 , 500, 500 };
+  noBackground = true ;
+  proportional = false ;
+  minimumSize = { 500, 500 };
+  maximumSize = { 500, 500 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = true;
+  components = {
+    GPWS_debug {position = { 0 , 0 , 500, 500 }}
+  };
+}
+
 --display popups--
 EWD_popup_window = contextWindow {
   name = "EWD POP-UP";
@@ -257,3 +271,7 @@ EWD_popup_window = contextWindow {
     EWD_popup {position = { 0 , 0 , 900, 900 }}
   };
 }
+
+
+
+

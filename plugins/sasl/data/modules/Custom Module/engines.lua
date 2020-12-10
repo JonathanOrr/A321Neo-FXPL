@@ -188,9 +188,12 @@ end
 ----------------------------------------------------------------------------------------------------
 -- Commands
 ----------------------------------------------------------------------------------------------------
-sasl.registerCommandHandler (ENG_cmd_manual_start_1,     0, function(phase) if phase == SASL_COMMAND_BEGIN then eng_manual_switch[1] = not eng_manual_switch[1] end end )
-sasl.registerCommandHandler (ENG_cmd_manual_start_2,     0, function(phase) if phase == SASL_COMMAND_BEGIN then eng_manual_switch[2] = not eng_manual_switch[2] end end )
-sasl.registerCommandHandler (ENG_cmd_dual_cooling,        0, function(phase) if phase == SASL_COMMAND_BEGIN then dual_cooling_switch = not dual_cooling_switch end end )
+sasl.registerCommandHandler (ENG_cmd_manual_start_1,  0, function(phase) if phase == SASL_COMMAND_BEGIN then eng_manual_switch[1] = not eng_manual_switch[1] end end )
+sasl.registerCommandHandler (ENG_cmd_manual_start_2,  0, function(phase) if phase == SASL_COMMAND_BEGIN then eng_manual_switch[2] = not eng_manual_switch[2] end end )
+sasl.registerCommandHandler (ENG_cmd_dual_cooling,    0, function(phase) if phase == SASL_COMMAND_BEGIN then dual_cooling_switch = not dual_cooling_switch end end )
+
+sasl.registerCommandHandler (ENG_cmd_master_toggle_1, 0, function(phase) if phase == SASL_COMMAND_BEGIN then set(Engine_1_master_switch, 1-get(Engine_1_master_switch)) end end )
+sasl.registerCommandHandler (ENG_cmd_master_toggle_2, 0, function(phase) if phase == SASL_COMMAND_BEGIN then set(Engine_2_master_switch, 1-get(Engine_2_master_switch)) end end )
 
 
 sasl.registerCommandHandler (ENG_cmd_mode_up,            0, function(phase) engines_mode_up(phase) end)
@@ -792,6 +795,9 @@ local function update_buttons_datarefs()
     pb_set(PB.ovhd.eng_man_start_1, eng_manual_switch[1])
     pb_set(PB.ovhd.eng_man_start_2, eng_manual_switch[2])
     pb_set(PB.ovhd.eng_dual_cooling, dual_cooling_switch)
+
+    Set_dataref_linear_anim(Engine_1_master_switch_anim, get(Engine_1_master_switch), 0, 1, 5)
+    Set_dataref_linear_anim(Engine_2_master_switch_anim, get(Engine_2_master_switch), 0, 1, 5)
 
     set(Eng_Dual_Cooling, dual_cooling_switch and 1 or 0)
 end

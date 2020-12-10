@@ -81,6 +81,7 @@ components = {
   oxygen {},
   anti_ice {},
   calls {},
+  GPWS {},
   sounds {},
   graphics {},
   display_brightness {},
