@@ -8651,11 +8651,9 @@ IDX	7009
 		TRIS	4962 66
 		ATTR_manip_command_knob	rotate_medium	a321neo/cockpit/lights/flood_lt_ped_up	a321neo/cockpit/lights/flood_lt_ped_dn	ECAM brightness
 		TRIS	5028 66
-		ATTR_manip_toggle	button	1	0	a321neo/cockpit/engine/master_1	Engine Master 1
-		ATTR_manip_wheel	1
+		ATTR_manip_command	button	a321neo/cockpit/engine/master_toggle_1	Toggle engine 1 master switch
 		TRIS	5742 30
-		ATTR_manip_toggle	button	1	0	a321neo/cockpit/engine/master_2	Engine Master 2
-		ATTR_manip_wheel	1
+		ATTR_manip_command	button	a321neo/cockpit/engine/master_toggle_1	Toggle engine 2 master switch
 		TRIS	5772 30
 		ATTR_manip_command_knob	rotate_medium	a321neo/cockpit/engine/mode_up	a321neo/cockpit/engine/mode_dn	Engine Mode Selecter
 		TRIS	5802 66
