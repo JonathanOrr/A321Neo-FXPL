@@ -968,7 +968,7 @@ Message_HYD_RAT_MAN_ON_IF_B_LOST = {
 
 Message_HYD_RAT_MIN_ON_IF_B_LOST = {
     text = function(self)
-        return "MIN RAT SPD........140 KT"
+        return " MIN RAT SPD.......140 KT"
     end,
 
     color = function(self)
@@ -982,7 +982,7 @@ Message_HYD_RAT_MIN_ON_IF_B_LOST = {
 
 Message_HYD_MANEUVER_WITH_CARE = {
     text = function(self)
-        return "MANEUVER WITH CARE"
+        return " MANEUVER WITH CARE"
     end,
 
     color = function(self)
