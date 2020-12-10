@@ -40,6 +40,20 @@ ECAM_APU_bgd_img =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textu
 ECAM_COND_bgd_img =   sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/COND/COND.png")
 ECAM_DOOR_bgd_img =   sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/DOOR/Background.png")
 ECAM_WHEEL_bgd_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/WHEEL/WHEEL.png")
-ECAM_FCTL_bgd_img =   sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/FCTL/FCTL.png")
+
+--FCTL--
+ECAM_FCTL_bgd_img =              sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/FCTL/FCTL.png")
+ECAM_FCTL_grey_lines_img =       sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/FCTL/FCTL_grey.png")
+ECAM_FCTL_computer_backets_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/FCTL/computer_braket.png")
+ECAM_FCTL_left_arrows_img =      sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/FCTL/ArrowLeft.png")
+ECAM_FCTL_right_arrows_img =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/FCTL/ArrowRight.png")
+ECAM_FCTL_rudder_img =           sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/FCTL/Rudder.png")
+ECAM_FCTL_rudder_track_img =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/FCTL/rudder_track.png")
+ECAM_FCTL_left_rudder_lim_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/FCTL/LeftLimiter.png")
+ECAM_FCTL_right_rudder_lim_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/FCTL/RightLimiter.png")
+ECAM_FCTL_rudder_trim_img =      sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/FCTL/rudder_trim.png")
+ECAM_FCTL_spoiler_arrow_img =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/FCTL/SpoilerArrow.png")
+
+--STS
 ECAM_STS_bgd_img =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/STS/status.png")
 ECAM_CRUISE_bgd_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/CRUISE/cruise.png")
