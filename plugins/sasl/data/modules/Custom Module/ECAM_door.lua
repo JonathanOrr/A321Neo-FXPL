@@ -71,6 +71,7 @@ end
 
 function draw_door_page()
     sasl.gl.drawTexture(ECAM_DOOR_bgd_img, 0, 0, 900, 900, {1,1,1})
+    sasl.gl.drawTexture(ECAM_DOOR_grey_lines_img, 0, 0, 900, 900, ECAM_LINE_GREY)
     update_param()
     draw_oxygen()
     draw_cabin_vs()

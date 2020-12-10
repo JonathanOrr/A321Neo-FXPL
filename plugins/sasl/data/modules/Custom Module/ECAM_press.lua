@@ -80,14 +80,14 @@ local function draw_press_info()
     if params.cabin_vs > 1750 then
         color_vs = get_color_green_blinking()
     end
- 
+
     local color_alt = ECAM_GREEN
     if params.cabin_alt > 9950 then
         color_alt = ECAM_RED
     elseif params.cabin_alt > 8800 then
         color_alt = get_color_green_blinking()
     end
-    
+
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-170, size[2]/2+150, Round_fill(params.delta_psi, 1), 40, false, false, TEXT_ALIGN_RIGHT, color_psi)
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2+140, size[2]/2+177, math.floor(params.cabin_vs-(params.cabin_vs%50)), 40, false, false, TEXT_ALIGN_RIGHT, color_vs)
     sasl.gl.drawText(Font_AirbusDUL, size[1]-50, size[2]/2+150, math.floor(params.cabin_alt-(params.cabin_alt%50)),40, false, false, TEXT_ALIGN_RIGHT, color_alt)
@@ -121,7 +121,7 @@ local function draw_ldg_elev()
     else
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2+80, size[2]-50, "AUTO", 34, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
     end
-    
+
     if get(Press_mode_sel_is_man) == 0 then    -- Hide when MODE SEL NOT AUTO
         local selected = get(Press_ldg_elev_knob_pos) >= -2 and get(Press_ldg_elev_knob_pos)*1000 or 0 -- TODO ADD COMPUTED FROM MCDU HERE
         selected = selected - selected%50
@@ -132,7 +132,7 @@ end
 
 local function draw_safety_valve()
     local is_open = get(Press_safety_valve_pos) == 1
-    
+
     sasl.gl.drawText(Font_AirbusDUL, size[1]-175, size[2]/2-15, "SAFETY", 34, false, false, TEXT_ALIGN_LEFT, is_open and ECAM_ORANGE or ECAM_WHITE)
 
     local length=58
@@ -145,32 +145,33 @@ end
 
 function draw_press_page()
     sasl.gl.drawTexture(ECAM_PRESS_bgd_img, 0, 0, 900, 900, {1,1,1})
+    sasl.gl.drawTexture(ECAM_PRESS_grey_lines_img, 0, 0, 900, 900, ECAM_LINE_GREY)
     draw_press_info()
     draw_valves_text()
     draw_valve_inlet(get(Ventilation_avio_inlet_valve), get(FAILURE_AVIONICS_INLET) == 1)
     draw_valve_outlet(get(Ventilation_avio_outlet_valve), get(FAILURE_AVIONICS_OUTLET) == 1)
     draw_safety_valve()
-    
+
     draw_pack_indications()
     draw_ldg_elev()
 end
 
 local function update_drs()
-   
+
     if params.overflow_valve > 0.95 and get(All_on_ground) == 0 then
         set(Ecam_press_ovf_valve_color, 0)
     else
         set(Ecam_press_ovf_valve_color, 1)
     end
-    
+
     set(Ecam_press_cabin_alt_limit, Math_clamp(params.cabin_alt, -500, 10500))
 
     if params.cabin_alt > 9550 then
         set(Ecam_press_cabin_alt_color, 0)
     else
-        set(Ecam_press_cabin_alt_color, 1)    
+        set(Ecam_press_cabin_alt_color, 1)
     end
-    
+
     set(Ecam_press_cabin_vs_limit, Math_clamp(params.cabin_vs, -2100, 2100))
 
     set(Ecam_press_delta_p_limit, Math_clamp(params.delta_psi, -1, 9))
@@ -178,7 +179,7 @@ local function update_drs()
     if params.delta_psi < -0.4 or params.delta_psi > 8.5 then
         set(Ecam_press_delta_p_color, 0)
     else
-        set(Ecam_press_delta_p_color, 1)    
+        set(Ecam_press_delta_p_color, 1)
     end
 
 end
