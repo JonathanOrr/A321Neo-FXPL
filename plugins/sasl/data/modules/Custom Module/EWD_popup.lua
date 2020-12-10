@@ -1,5 +1,4 @@
 include('constants.lua')
-include('sasl_drawing_assets.lua')
 include('EWD.lua')
 
 position = {0, 0, 900, 900}
@@ -12,6 +11,12 @@ function EWD_pop_out_command(phase)
 end
 
 sasl.registerCommandHandler(Pop_out_EWD, 1, EWD_pop_out_command)
+
+--set default size
+local window_x
+local window_y
+local window_width
+local window_height
 
 PARAM_DELAY    = 0.15 -- Time to filter out the parameters (they are updated every PARAM_DELAY seconds)
 local last_params_update = 0
@@ -120,6 +125,12 @@ local function popup_Draw_engines()
 end
 
 function update()
+    --proportionally resize the window
+    if EWD_popup_window:isVisible() then
+        window_x, window_y, window_width, window_height = EWD_popup_window:getPosition()
+        EWD_popup_window:setPosition ( window_x , window_y , window_width, window_width)
+    end
+
     -- Update the parameter every PARAM_DELAY seconds
     if get(TIME) - params.last_update > PARAM_DELAY then
         params.eng1_n1 = get(Eng_1_N1)
@@ -158,9 +169,9 @@ function draw()
     sasl.gl.drawTexture(EWD_background_img, 0, 0, 900, 900, {1, 1, 1})
 
     Draw_extra_indication()
+    popup_Draw_engines()
     Draw_engines_needles()
     Draw_reverse_indication()
-    popup_Draw_engines()
     Draw_left_memo()
     Draw_right_memo()
     Draw_extras()

@@ -20,7 +20,6 @@ position= {30,2226,900,900}
 size = {900, 900}
 
 include('constants.lua')
-include('sasl_drawing_assets.lua')
 
 PARAM_DELAY    = 0.15 -- Time to filter out the parameters (they are updated every PARAM_DELAY seconds)
 local last_params_update = 0
@@ -176,13 +175,12 @@ function Draw_engines_needles()
     --draw trends and needles
     --eng 2 N1
 
-
     if get(EWD_engine_1_XX) == 1 then
-        Draw_LCD_backlight(size[1]/2 - 280, size[2]/2 - 35, 210, 480, 0.5, 1, get(EWD_brightness_act))
+        Draw_LCD_backlight(size[1]/2 - 265, size[2]/2 - 35, 180, 450, 0.5, 1, get(EWD_brightness_act))
         sasl.gl.drawTexture(EWD_engine_xx_img, size[1]/2 - 280, size[2]/2 - 35, 210, 480, {1, 1, 1})
     end
     if get(EWD_engine_2_XX) == 1 then
-        Draw_LCD_backlight(size[1]/2 + 70, size[2]/2 - 35, 210, 480, 0.5, 1, get(EWD_brightness_act))
+        Draw_LCD_backlight(size[1]/2 + 85, size[2]/2 - 35, 180, 450, 0.5, 1, get(EWD_brightness_act))
         sasl.gl.drawTexture(EWD_engine_xx_img, size[1]/2 + 70, size[2]/2 - 35, 210, 480, {1, 1, 1})
     end
 
@@ -251,10 +249,14 @@ function Draw_engines_needles()
         end
     end
 
-    --eng 1 egt--
-    SASL_draw_needle_adv(eng_1_needle_x, eng_1_egt_needle_y, 48, 78, Math_rescale_lim_lower(0, 180, 1000, 55, get(Eng_1_EGT_c)), 4, eng_1_egt_needle_cl)
-    --eng 2 egt
-    SASL_draw_needle_adv(eng_2_needle_x, eng_2_egt_needle_y, 48, 78, Math_rescale_lim_lower(0, 180, 1000, 55, get(Eng_2_EGT_c)), 4, eng_2_egt_needle_cl)
+    if get(EWD_engine_1_XX) == 0 then
+        --eng 1 egt--
+        SASL_draw_needle_adv(eng_1_needle_x, eng_1_egt_needle_y, 48, 78, Math_rescale_lim_lower(0, 180, 1000, 55, get(Eng_1_EGT_c)), 4, eng_1_egt_needle_cl)
+    end
+    if get(EWD_engine_2_XX) == 0 then
+        --eng 2 egt
+        SASL_draw_needle_adv(eng_2_needle_x, eng_2_egt_needle_y, 48, 78, Math_rescale_lim_lower(0, 180, 1000, 55, get(Eng_2_EGT_c)), 4, eng_2_egt_needle_cl)
+    end
 end
 
 function Draw_engines()
@@ -484,8 +486,12 @@ function Draw_slat_flap_indications()
     local rounded_slat_ratio = Round(get(Slats), 2)
     local rounded_flap_angle = Round(get(Flaps_deployed_angle), 2)
 
-    local indication_text_cl = rounded_slat_ratio ~= slats_positions[get(Flaps_internal_config) + 1] and ECAM_BLUE or ECAM_GREEN
-    indication_text_cl = rounded_flap_angle ~= flaps_positions[get(Flaps_internal_config) + 1] and ECAM_BLUE or ECAM_GREEN
+    local indication_text_cl = ECAM_GREEN
+    if rounded_slat_ratio ~= slats_positions[get(Flaps_internal_config) + 1] or rounded_flap_angle ~= flaps_positions[get(Flaps_internal_config) + 1] then
+        indication_text_cl = ECAM_BLUE
+    else
+        indication_text_cl = ECAM_GREEN
+    end
 
     sasl.gl.drawTexture(EWD_wing_indic_img, size[1]/2 + 150, size[2]/2 - 73, 38, 21, {1, 1, 1})
     if rounded_slat_ratio > 0 then
@@ -523,16 +529,14 @@ function draw()
     sasl.gl.drawTexture(EWD_background_img, 0, 0, 900, 900, {1, 1, 1})
 
     Draw_extra_indication()
+    Draw_engines()
     Draw_engines_needles()
     Draw_reverse_indication()
-    Draw_engines()
     Draw_left_memo()
     Draw_right_memo()
     Draw_extras()
     Draw_fuel_stuffs()
     Draw_coolings()
     Draw_slat_flap_indications()
-
-    sasl.gl.drawRectangle(0, 0, 900, 900, {0,0,0, 1 - get(EWD_brightness_act)})
 end
 

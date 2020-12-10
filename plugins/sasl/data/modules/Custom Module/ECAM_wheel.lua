@@ -175,6 +175,7 @@ local function draw_release_indicators()
 end
 
 function draw_wheel_page()
+    sasl.gl.drawTexture(ECAM_WHEEL_bgd_img, 0, 0, 900, 900, {1,1,1})
     draw_brakes_and_tires()
     draw_release_indicators()
     draw_nsw_steering()

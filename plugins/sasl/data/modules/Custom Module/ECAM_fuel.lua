@@ -220,6 +220,7 @@ end
 
 function draw_fuel_page()
 
+    sasl.gl.drawTexture(ECAM_FUEL_bgd_img, 0, 0, 900, 900, {1,1,1})
     draw_tank_qty()
     draw_fob_qty()
     draw_arrows_act_rct()

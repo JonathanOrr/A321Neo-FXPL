@@ -305,6 +305,8 @@ end
 
 function draw_sts_page()
 
+    sasl.gl.drawTexture(ECAM_STS_bgd_img, 0, 0, 900, 900, {1,1,1})
+
     set(Ecam_arrow_overflow, 0)
 
     local left_messages = prepare_sts_page_left()

@@ -30,9 +30,11 @@
 {f86c05b1-253e-4508-a475-4d354dd045c6} event:/Extractor
 {c9cf63f7-c575-4691-823b-716d0e5e1ba9} event:/Flaps
 {5339da63-baf2-40c8-aafd-6bf6a0fe8aac} event:/Ground Roll
+{140fc58e-381e-4651-af6d-901ab06e4c0e} event:/Liftoff
 {d5bc7710-4cf2-4544-ba28-726b316c7f21} event:/Packs
 {0e7dff21-7b4d-4b72-9343-4928951e126a} event:/PTU
 {7797c67b-9d14-445b-8cc9-e63e0eebabf3} event:/TouchMain
+{72dd99e0-d646-42c0-8cc7-4e3f356095cc} event:/TouchNose
 {cba7ef70-43b1-4842-9d4b-51501041377c} event:/Yellow Hyd Pump
 {9f08114d-36ec-44cc-b8bf-b2babda09f9e} bus:/
 {7f7c05a4-e05a-4d44-94fe-d4691147a9b7} bus:/Master

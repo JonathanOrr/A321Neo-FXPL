@@ -218,7 +218,7 @@ local function draw_ai()
 end
 
 function draw_bleed_page()
-
+    sasl.gl.drawTexture(ECAM_BLEED_bgd_img, 0, 0, 900, 900, {1,1,1})
     draw_apu_and_gas()
     draw_engines()    
     draw_bleed_numbers()

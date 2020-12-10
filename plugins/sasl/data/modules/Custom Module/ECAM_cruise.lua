@@ -161,6 +161,7 @@ end
 
 
 function draw_cruise_page()
+    sasl.gl.drawTexture(ECAM_CRUISE_bgd_img, 0, 0, 900, 900, {1,1,1})
     draw_temps()
     draw_press()
     draw_fuel_usage()

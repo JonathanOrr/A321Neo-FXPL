@@ -180,7 +180,7 @@ local function draw_ignition()
 end
 
 function draw_eng_page()
-
+    sasl.gl.drawTexture(ECAM_ENG_bgd_img, 0, 0, 900, 900, {1,1,1})
     draw_fuel_usage()
     draw_oil_qt_press_temp()
     draw_vibrations()

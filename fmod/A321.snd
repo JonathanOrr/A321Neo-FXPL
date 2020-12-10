@@ -36,16 +36,16 @@ END_SOUND_ATTACHMENT
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /Ground Roll
   VEH_PART tire 1
-  EVENT_START_COND 	sim/flightmodel/position/groundspeed > 0
-  EVENT_END_COND 	sim/flightmodel/position/groundspeed == 0
+  EVENT_START_COND 	a321neo/dynamics/either_aft_on_ground == 1
+  EVENT_END_COND 	a321neo/dynamics/either_aft_on_ground == 0
   PARAM_DREF_IDX 0
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /Ground Roll
   VEH_PART tire 2
-  EVENT_START_COND 	sim/flightmodel/position/groundspeed > 0
-  EVENT_END_COND 	sim/flightmodel/position/groundspeed == 0
+  EVENT_START_COND 	a321neo/dynamics/either_aft_on_ground == 1
+  EVENT_END_COND 	a321neo/dynamics/either_aft_on_ground == 0
   PARAM_DREF_IDX 0
 END_SOUND_ATTACHMENT
 
@@ -1515,13 +1515,13 @@ END_SOUND_ATTACHMENT
 #################################################################################################
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/GearDown
+  EVENT_NAME /CockpitMechanical/Soft Button Press
   VEH_XYZ 0 1.4 -18.7
   EVENT_START_COND 	a321neo/cockpit/mip/brk_fan_bottom == 1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/GearUp
+  EVENT_NAME /CockpitMechanical/Soft Button Press
   VEH_XYZ 0 1.4 -18.7
   EVENT_START_COND 	a321neo/cockpit/mip/brk_fan_bottom == 0
 END_SOUND_ATTACHMENT
@@ -1583,15 +1583,15 @@ END_SOUND_ATTACHMENT
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /Blower
   VEH_XYZ 0 1.4 -18.7
-  EVENT_START_COND 	a321neo/dynamics/aircond/vent_blower_running == 1
-  CUE_TRIGGER_COND  a321neo/dynamics/aircond/vent_blower_running == 0
+  EVENT_START_COND 	a321neo/sounds/blower_delayed != 0
+  CUE_TRIGGER_COND  a321neo/sounds/blower_delayed = 0
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /Extractor
   VEH_XYZ 0 1.4 -18.7
-  EVENT_START_COND 	a321neo/dynamics/aircond/vent_extract_running == 1
-  CUE_TRIGGER_COND  a321neo/dynamics/aircond/vent_extract_running == 0
+  EVENT_START_COND 	a321neo/sounds/extract_delayed != 0
+  CUE_TRIGGER_COND  a321neo/sounds/extract_delayed = 0
 END_SOUND_ATTACHMENT
 
 #################################################################################################BUSKICK
@@ -1637,9 +1637,16 @@ END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /TouchMain
-  VEH_XYZ 0 1.4 -18.7
+  VEH_XYZ 0 0 0
   EVENT_START_COND 	a321neo/dynamics/either_aft_on_ground == 1
 END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /TouchNose
+  VEH_XYZ 0 0 0
+  EVENT_START_COND 	sim/flightmodel2/gear/on_ground[0] == 1
+END_SOUND_ATTACHMENT
+
 
 #################################################################################################Yellow Hyd Pump
 BEGIN_SOUND_ATTACHMENT
@@ -1647,6 +1654,14 @@ BEGIN_SOUND_ATTACHMENT
   VEH_XYZ 0 0 0
   EVENT_START_COND 	a321neo/dynamics/HYD/Y_ELEC_status == 1
   CUE_TRIGGER_COND  a321neo/dynamics/HYD/Y_ELEC_status == 0
+END_SOUND_ATTACHMENT
+
+#################################################################################################LIFTOFF
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Liftoff
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_START_COND 	a321neo/dynamics/either_aft_on_ground == 0
 END_SOUND_ATTACHMENT
 
 
