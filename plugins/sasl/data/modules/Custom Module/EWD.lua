@@ -486,8 +486,12 @@ function Draw_slat_flap_indications()
     local rounded_slat_ratio = Round(get(Slats), 2)
     local rounded_flap_angle = Round(get(Flaps_deployed_angle), 2)
 
-    local indication_text_cl = rounded_slat_ratio ~= slats_positions[get(Flaps_internal_config) + 1] and ECAM_BLUE or ECAM_GREEN
-    indication_text_cl = rounded_flap_angle ~= flaps_positions[get(Flaps_internal_config) + 1] and ECAM_BLUE or ECAM_GREEN
+    local indication_text_cl = ECAM_GREEN
+    if rounded_slat_ratio ~= slats_positions[get(Flaps_internal_config) + 1] or rounded_flap_angle ~= flaps_positions[get(Flaps_internal_config) + 1] then
+        indication_text_cl = ECAM_BLUE
+    else
+        indication_text_cl = ECAM_GREEN
+    end
 
     sasl.gl.drawTexture(EWD_wing_indic_img, size[1]/2 + 150, size[2]/2 - 73, 38, 21, {1, 1, 1})
     if rounded_slat_ratio > 0 then
