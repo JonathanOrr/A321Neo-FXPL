@@ -17,6 +17,7 @@
 -------------------------------------------------------------------------------
 
 function draw_fctl_page()
+    sasl.gl.drawTexture(ECAM_FCTL_bgd_img, 0, 0, 900, 900, {1,1,1})
 
     local is_G_ok = get(Hydraulic_G_press) >= 1450
     local is_B_ok = get(Hydraulic_B_press) >= 1450

@@ -26,6 +26,8 @@ local function draw_triangle(x,y)
 end
 
 function draw_apu_page()
+    sasl.gl.drawTexture(ECAM_APU_bgd_img, 0, 0, 900, 900, {1,1,1})
+
     --apu gen section--
     if get(Ecam_apu_gen_state) >= 2 then
         local color_amps = (-ELEC_sys.generators[3].curr_amps > 261) and ECAM_AMBER or ECAM_GREEN

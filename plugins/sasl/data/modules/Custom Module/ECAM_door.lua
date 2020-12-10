@@ -70,6 +70,7 @@ local function draw_oxygen()
 end
 
 function draw_door_page()
+    sasl.gl.drawTexture(ECAM_DOOR_bgd_img, 0, 0, 900, 900, {1,1,1})
     update_param()
     draw_oxygen()
     draw_cabin_vs()

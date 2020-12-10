@@ -1,5 +1,4 @@
 include('constants.lua')
-include('sasl_drawing_assets.lua')
 include('EWD.lua')
 
 position = {0, 0, 900, 900}

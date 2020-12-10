@@ -16,6 +16,8 @@
 -- Short description: This file contains the global constants 
 -------------------------------------------------------------------------------
 
+include("sasl_drawing_assets.lua")
+
 --colors
 ECAM_WHITE = {1.0, 1.0, 1.0}
 ECAM_HIGH_GREY = {0.6, 0.6, 0.6}

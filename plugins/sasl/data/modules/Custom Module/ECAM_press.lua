@@ -144,7 +144,7 @@ local function draw_safety_valve()
 end
 
 function draw_press_page()
-
+    sasl.gl.drawTexture(ECAM_PRESS_bgd_img, 0, 0, 900, 900, {1,1,1})
     draw_press_info()
     draw_valves_text()
     draw_valve_inlet(get(Ventilation_avio_inlet_valve), get(FAILURE_AVIONICS_INLET) == 1)

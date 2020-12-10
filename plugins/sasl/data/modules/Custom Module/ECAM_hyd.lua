@@ -220,10 +220,11 @@ end
 
 function draw_hydraulic_page()
 
+    sasl.gl.drawTexture(ECAM_HYD_bgd_img, 0, 0, 900, 900, {1,1,1})
     -- Compute the hyd pressures
     local g_psi = get(Hydraulic_G_press)
     g_psi = g_psi - g_psi % 50
-    
+
     local b_psi = get(Hydraulic_B_press)
     b_psi = b_psi - b_psi % 50
 
@@ -238,7 +239,7 @@ function draw_hydraulic_page()
     local qty_G = get(Hydraulic_G_qty)
     local qty_B = get(Hydraulic_B_qty)
     local qty_Y = get(Hydraulic_Y_qty)
-    
+
     draw_quantity_bars(qty_G, qty_B, qty_Y)
 
     draw_extra_pumps()  -- Draw ELEC for Y and RAT for B

@@ -461,6 +461,7 @@ end
 
 function draw_elec_page()
 
+    sasl.gl.drawTexture(ECAM_ELEC_bgd_img, 0, 0, 900, 900, {1,1,1})
     update_elec_parameters()
     update_draw_datarefs()
     

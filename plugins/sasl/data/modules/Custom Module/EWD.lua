@@ -20,7 +20,6 @@ position= {30,2226,900,900}
 size = {900, 900}
 
 include('constants.lua')
-include('sasl_drawing_assets.lua')
 
 PARAM_DELAY    = 0.15 -- Time to filter out the parameters (they are updated every PARAM_DELAY seconds)
 local last_params_update = 0
@@ -532,7 +531,5 @@ function draw()
     Draw_fuel_stuffs()
     Draw_coolings()
     Draw_slat_flap_indications()
-
-    sasl.gl.drawRectangle(0, 0, 900, 900, {0,0,0, 1 - get(EWD_brightness_act)})
 end
 

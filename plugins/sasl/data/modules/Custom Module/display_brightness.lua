@@ -357,14 +357,6 @@ end
 local function draw_lut_and_brightness()
     sasl.gl.setBlendEquation ( BLEND_EQUATION_ADD )
     sasl.gl.setBlendFunction ( BLEND_SOURCE_ALPHA, BLEND_ONE_MINUS_SOURCE_ALPHA)
-    --sasl.gl.drawTexture(screen_lut_img, 270, 0, 40, 40, DCDU_1_lut_alpha)
-    sasl.gl.drawTexture(screen_lut_img, 315, 0, 40, 40, DCDU_2_lut_alpha)
-    --sasl.gl.drawTexture(screen_lut_img, 360, 0, 40, 40, MCDU_1_lut_alpha)
-    sasl.gl.drawTexture(screen_lut_img, 405, 0, 40, 40, MCDU_2_lut_alpha)
-    sasl.gl.drawTexture(screen_lut_img, 450, 0, 40, 40, DRAIMS_1_lut_alpha)
-    sasl.gl.drawTexture(screen_lut_img, 495, 0, 40, 40, DRAIMS_2_lut_alpha)
-    sasl.gl.drawTexture(screen_lut_img, 540, 0, 40, 40, ISIS_lut_alpha)
-
     --draw the brightness lut
     --sasl.gl.drawRectangle(270, 0, 40, 40, DCDU_1_brightness_alpha)
     sasl.gl.drawRectangle(315, 0, 40, 40, DCDU_2_brightness_alpha)
@@ -376,7 +368,8 @@ local function draw_lut_and_brightness()
     sasl.gl.resetBlending ()
 
     MCDU_set_lut(MCDU_1_lut_alpha[4])
-    
+
+    sasl.gl.drawRectangle(30, 2226, 900, 900, {0,0,0, 1 - get(EWD_brightness_act)})
 end
 
 function draw()

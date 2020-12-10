@@ -27,3 +27,19 @@ EWD_slat_tract_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textur
 EWD_flap_tract_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EWD/flaps_track.png")
 EWD_wing_indic_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EWD/wing_indication.png")
 EWD_req_thrust_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EWD/ndl_trst.png")
+
+--ECAM
+--backgrounds
+ECAM_ENG_bgd_img =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/ENG/ENGINE.png")
+ECAM_BLEED_bgd_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/BLEED/Background.png")
+ECAM_PRESS_bgd_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/PRESS/cab_press.png")
+ECAM_ELEC_bgd_img =   sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/ELEC/Background.png")
+ECAM_HYD_bgd_img =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/HYD/bgd.png")
+ECAM_FUEL_bgd_img =   sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/FUEL/fuel.png")
+ECAM_APU_bgd_img =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/APU/APU.png")
+ECAM_COND_bgd_img =   sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/COND/COND.png")
+ECAM_DOOR_bgd_img =   sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/DOOR/Background.png")
+ECAM_WHEEL_bgd_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/WHEEL/WHEEL.png")
+ECAM_FCTL_bgd_img =   sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/FCTL/FCTL.png")
+ECAM_STS_bgd_img =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/STS/status.png")
+ECAM_CRUISE_bgd_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/CRUISE/cruise.png")
