@@ -175,13 +175,12 @@ function Draw_engines_needles()
     --draw trends and needles
     --eng 2 N1
 
-
     if get(EWD_engine_1_XX) == 1 then
-        Draw_LCD_backlight(size[1]/2 - 280, size[2]/2 - 35, 210, 480, 0.5, 1, get(EWD_brightness_act))
+        Draw_LCD_backlight(size[1]/2 - 265, size[2]/2 - 35, 180, 450, 0.5, 1, get(EWD_brightness_act))
         sasl.gl.drawTexture(EWD_engine_xx_img, size[1]/2 - 280, size[2]/2 - 35, 210, 480, {1, 1, 1})
     end
     if get(EWD_engine_2_XX) == 1 then
-        Draw_LCD_backlight(size[1]/2 + 70, size[2]/2 - 35, 210, 480, 0.5, 1, get(EWD_brightness_act))
+        Draw_LCD_backlight(size[1]/2 + 85, size[2]/2 - 35, 180, 450, 0.5, 1, get(EWD_brightness_act))
         sasl.gl.drawTexture(EWD_engine_xx_img, size[1]/2 + 70, size[2]/2 - 35, 210, 480, {1, 1, 1})
     end
 
@@ -250,10 +249,14 @@ function Draw_engines_needles()
         end
     end
 
-    --eng 1 egt--
-    SASL_draw_needle_adv(eng_1_needle_x, eng_1_egt_needle_y, 48, 78, Math_rescale_lim_lower(0, 180, 1000, 55, get(Eng_1_EGT_c)), 4, eng_1_egt_needle_cl)
-    --eng 2 egt
-    SASL_draw_needle_adv(eng_2_needle_x, eng_2_egt_needle_y, 48, 78, Math_rescale_lim_lower(0, 180, 1000, 55, get(Eng_2_EGT_c)), 4, eng_2_egt_needle_cl)
+    if get(EWD_engine_1_XX) == 0 then
+        --eng 1 egt--
+        SASL_draw_needle_adv(eng_1_needle_x, eng_1_egt_needle_y, 48, 78, Math_rescale_lim_lower(0, 180, 1000, 55, get(Eng_1_EGT_c)), 4, eng_1_egt_needle_cl)
+    end
+    if get(EWD_engine_2_XX) == 0 then
+        --eng 2 egt
+        SASL_draw_needle_adv(eng_2_needle_x, eng_2_egt_needle_y, 48, 78, Math_rescale_lim_lower(0, 180, 1000, 55, get(Eng_2_EGT_c)), 4, eng_2_egt_needle_cl)
+    end
 end
 
 function Draw_engines()
