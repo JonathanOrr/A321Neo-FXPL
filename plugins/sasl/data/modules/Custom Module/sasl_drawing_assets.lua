@@ -39,7 +39,15 @@ ECAM_FUEL_bgd_img =   sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textu
 ECAM_APU_bgd_img =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/APU/APU.png")
 ECAM_COND_bgd_img =   sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/COND/COND.png")
 ECAM_DOOR_bgd_img =   sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/DOOR/Background.png")
-ECAM_WHEEL_bgd_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/WHEEL/WHEEL.png")
+
+--WHEEL--
+ECAM_WHEEL_bgd_img =               sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/WHEEL/WHEEL.png")
+ECAM_WHEEL_hyd_boxes_img =         sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/WHEEL/hyd_squares.png")
+ECAM_WHEEL_l_nose_gear_door_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/WHEEL/leftnosegeardoor.png")
+ECAM_WHEEL_r_nose_gear_door_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/WHEEL/nosegeardoor.png")
+ECAM_WHEEL_l_main_gear_door_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/WHEEL/geardoor.png")
+ECAM_WHEEL_r_main_gear_door_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/WHEEL/rightgeardoor.png")
+ECAM_WHEEL_gears_img =             sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/WHEEL/gear.png")
 
 --FCTL--
 ECAM_FCTL_bgd_img =              sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/FCTL/FCTL.png")

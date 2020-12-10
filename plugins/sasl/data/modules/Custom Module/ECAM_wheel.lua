@@ -87,8 +87,8 @@ local function draw_nsw_steering()
     if get(Nosewheel_Steering_working) == 0 then
         local is_Y_ok = get(Hydraulic_Y_press) >= 1450
         local color = is_Y_ok and ECAM_GREEN or ECAM_ORANGE
-        Sasl_DrawWideFrame(size[1]/2-152, size[2]/2+96, 25, 29, 2, 0, color)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-140, size[2]/2+100, "Y", 32, false, false, TEXT_ALIGN_CENTER, color)
+        sasl.gl.drawTexture(ECAM_WHEEL_hyd_boxes_img, size[1]/2-152, size[2]/2+96, 25, 29, {1, 1, 1})
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-140, size[2]/2+100, "Y", 30, false, false, TEXT_ALIGN_CENTER, color)
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2+100, "N/W STEERING", 32, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
 end
@@ -98,12 +98,12 @@ local function draw_brake_modes()
     if get(Brakes_mode) == 3 then
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2-50, size[2]/2+30, "ANTI SKID", 36, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
         if get(FAILURE_GEAR_BSCU1) == 1 then
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2+80, size[2]/2+30, "1", 36, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
-            Sasl_DrawWideFrame(size[1]/2+65, size[2]/2+26, 28, 31, 2, 0, ECAM_ORANGE)
+            sasl.gl.drawTexture(ECAM_WHEEL_hyd_boxes_img, size[1]/2+65, size[2]/2+26, 25, 29, {1, 1, 1})
+            sasl.gl.drawText(Font_AirbusDUL, size[1]/2+79, size[2]/2+30, "1", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
         end
-        if get(FAILURE_GEAR_BSCU2) == 1 then        
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2+115, size[2]/2+30, "2", 36, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
-            Sasl_DrawWideFrame(size[1]/2+100, size[2]/2+26, 28, 31, 2, 0, ECAM_ORANGE)
+        if get(FAILURE_GEAR_BSCU2) == 1 then
+            sasl.gl.drawTexture(ECAM_WHEEL_hyd_boxes_img, size[1]/2+100, size[2]/2+26, 25, 29, {1, 1, 1})
+            sasl.gl.drawText(Font_AirbusDUL, size[1]/2+113, size[2]/2+30, "2", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
         end
     end
 
@@ -112,16 +112,16 @@ local function draw_brake_modes()
     if (get(Brakes_mode) == 2 or get(Brakes_mode) == 3) or get(FAILURE_GEAR_AUTOBRAKES) == 1 or (get(Wheel_status_BSCU_1) == 0 and get(Wheel_status_BSCU_2) == 0) or altn_brk_display_cond then
         local hyd_color = get(Hydraulic_G_press) >= 1450 and ECAM_GREEN or ECAM_ORANGE
         local norm_brake_color = get(Brakes_mode) == 1 and ECAM_GREEN or ECAM_ORANGE
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-110, size[2]/2-30, "G", 36, false, false, TEXT_ALIGN_CENTER, hyd_color)
-        Sasl_DrawWideFrame(size[1]/2-124, size[2]/2-34, 28, 31, 2, 0, hyd_color)
+        sasl.gl.drawTexture(ECAM_WHEEL_hyd_boxes_img, size[1]/2-124, size[2]/2-34, 25, 29, {1, 1, 1})
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-111, size[2]/2-29, "G", 30, false, false, TEXT_ALIGN_CENTER, hyd_color)
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2-30, "NORM BRK", 36, false, false, TEXT_ALIGN_CENTER, norm_brake_color)
     end
-    
+
     if altn_brk_display_cond or get(Brakes_mode) == 2 or get(Brakes_mode) == 3 or get(FAILURE_GEAR_AUTOBRAKES) == 1 then
         local hyd_color = get(Hydraulic_Y_press) >= 1450 and ECAM_GREEN or ECAM_ORANGE
-        local altn_brake_color = altn_brk_display_cond and ECAM_ORANGE or ECAM_GREEN 
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-110, size[2]/2-100, "Y", 36, false, false, TEXT_ALIGN_CENTER, hyd_color)
-        Sasl_DrawWideFrame(size[1]/2-124, size[2]/2-103, 28, 31, 2, 0, hyd_color)
+        local altn_brake_color = altn_brk_display_cond and ECAM_ORANGE or ECAM_GREEN
+        sasl.gl.drawTexture(ECAM_WHEEL_hyd_boxes_img, size[1]/2-124, size[2]/2-103, 25, 29, {1, 1, 1})
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-111, size[2]/2-98, "Y", 30, false, false, TEXT_ALIGN_CENTER, hyd_color)
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2-100, "ALTN BRK", 36, false, false, TEXT_ALIGN_CENTER, altn_brake_color)
 
         if get(Hydraulic_Y_press) >= 1450 then
@@ -174,14 +174,128 @@ local function draw_release_indicators()
     end
 end
 
+local function draw_wheel_page_spoilers()
+    --track indication--
+    local num_of_spoilers = 5
+    local spoiler_track_length = 22
+
+    local l_spoilers_avail_dataref = {
+        L_spoiler_1_avail,
+        L_spoiler_2_avail,
+        L_spoiler_3_avail,
+        L_spoiler_4_avail,
+        L_spoiler_5_avail,
+    }
+
+    local r_spoilers_avail_dataref = {
+        R_spoiler_1_avail,
+        R_spoiler_2_avail,
+        R_spoiler_3_avail,
+        R_spoiler_4_avail,
+        R_spoiler_5_avail,
+    }
+
+    local l_spoiler_dataref = {
+        Left_spoiler_1,
+        Left_spoiler_2,
+        Left_spoiler_3,
+        Left_spoiler_4,
+        Left_spoiler_5,
+    }
+
+    local r_spoiler_dataref = {
+        Right_spoiler_1,
+        Right_spoiler_2,
+        Right_spoiler_3,
+        Right_spoiler_4,
+        Right_spoiler_5,
+    }
+
+    local spoiler_track_x_y = {
+        {44,  819},
+        {100, 810},
+        {156, 801},
+        {212, 791},
+        {269, 782},
+    }
+
+    local spoiler_arrow_x_y = {
+        {55,  830},
+        {111, 821},
+        {167, 812},
+        {223, 802},
+        {280, 793},
+    }
+
+    local spoiler_num_x_y = {
+        {54,  824},
+        {111, 815},
+        {167, 806},
+        {223, 796},
+        {280, 787},
+    }
+
+    for i = 1, num_of_spoilers do
+        if get(l_spoiler_dataref[i]) > 2.5 then
+            SASL_draw_img_center_aligned(ECAM_FCTL_spoiler_arrow_img, size[1]/2 - spoiler_arrow_x_y[i][1], spoiler_arrow_x_y[i][2], 28, 50, get(l_spoilers_avail_dataref[i]) == 1 and ECAM_GREEN or ECAM_ORANGE)
+        else
+            if get(l_spoilers_avail_dataref[i]) == 0 then
+                sasl.gl.drawText(Font_AirbusDUL, size[1]/2 - spoiler_num_x_y[i][1], spoiler_num_x_y[i][2], i, 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+            end
+        end
+        if get(r_spoiler_dataref[i]) > 2.5 then
+            SASL_draw_img_center_aligned(ECAM_FCTL_spoiler_arrow_img, size[1]/2 + spoiler_arrow_x_y[i][1], spoiler_arrow_x_y[i][2], 28, 50, get(r_spoilers_avail_dataref[i]) == 1 and ECAM_GREEN or ECAM_ORANGE)
+        else
+            if get(r_spoilers_avail_dataref[i]) == 0 then
+                sasl.gl.drawText(Font_AirbusDUL, size[1]/2 + spoiler_num_x_y[i][1], spoiler_num_x_y[i][2], i, 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+            end
+        end
+
+        sasl.gl.drawWideLine(size[1]/2 - spoiler_track_x_y[i][1], spoiler_track_x_y[i][2], size[1]/2 - spoiler_track_x_y[i][1] - spoiler_track_length, spoiler_track_x_y[i][2], 2.5, get(l_spoilers_avail_dataref[i]) == 1 and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawWideLine(size[1]/2 + spoiler_track_x_y[i][1], spoiler_track_x_y[i][2], size[1]/2 + spoiler_track_x_y[i][1] + spoiler_track_length, spoiler_track_x_y[i][2], 2.5, get(r_spoilers_avail_dataref[i]) == 1 and ECAM_GREEN or ECAM_ORANGE)
+    end
+end
+
+local function draw_gears_and_gear_doors()
+    if get(Front_gear_deployment) > 0.1 then
+        SASL_draw_img_xcenter_aligned(ECAM_WHEEL_gears_img, size[1]/2, size[2]/2+210, 77, 49, get(Front_gear_deployment) >= 0.95 and ECAM_GREEN or ECAM_RED)
+    end
+    if get(Left_gear_deployment) > 0.1 then
+        SASL_draw_img_xcenter_aligned(ECAM_WHEEL_gears_img, size[1]/2-285, size[2]/2+60, 77, 49, get(Left_gear_deployment) >= 0.95 and ECAM_GREEN or ECAM_RED)
+    end
+    if get(Right_gear_deployment) > 0.1 then
+        SASL_draw_img_xcenter_aligned(ECAM_WHEEL_gears_img, size[1]/2+285, size[2]/2+60, 77, 49, get(Right_gear_deployment) >= 0.95 and ECAM_GREEN or ECAM_RED)
+    end
+
+    SASL_drawSegmentedImg(ECAM_WHEEL_l_nose_gear_door_img, size[1]/2-83, size[2]/2+200, 130, 70, 2, (get(Front_gear_deployment) < 0.05 or get(Front_gear_deployment) >= 0.95) and 2 or 1)
+    SASL_drawSegmentedImg(ECAM_WHEEL_r_nose_gear_door_img, size[1]/2+18, size[2]/2+200, 130, 70, 2, (get(Front_gear_deployment) < 0.05 or get(Front_gear_deployment) >= 0.95) and 1 or 2)
+
+    local l_gear_door_anim_table = {
+        {0, 3},
+        {0.25, 1},
+        {0.8, 2},
+        {1, 3},
+    }
+    local r_gear_door_anim_table = {
+        {0, 3},
+        {0.25, 1},
+        {0.8, 2},
+        {1, 3},
+    }
+
+    SASL_drawSegmentedImg(ECAM_WHEEL_l_main_gear_door_img, size[1]/2-359, size[2]/2-37, 480, 159, 3, Table_interpolate(l_gear_door_anim_table, get(Left_gear_deployment)))
+    SASL_drawSegmentedImg(ECAM_WHEEL_r_main_gear_door_img, size[1]/2+199, size[2]/2-37, 480, 159, 3, Table_interpolate(r_gear_door_anim_table, get(Right_gear_deployment)))
+end
+
 function draw_wheel_page()
     sasl.gl.drawTexture(ECAM_WHEEL_bgd_img, 0, 0, 900, 900, {1,1,1})
+    draw_gears_and_gear_doors()
+    draw_wheel_page_spoilers()
     draw_brakes_and_tires()
     draw_release_indicators()
     draw_nsw_steering()
     draw_brake_modes()
 end
-
 
 function ecam_update_wheel_page()
 
