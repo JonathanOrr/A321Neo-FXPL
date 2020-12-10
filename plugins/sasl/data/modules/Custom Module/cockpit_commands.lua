@@ -287,10 +287,12 @@ Max_speedbrakes = sasl.findCommand("sim/flight_controls/speed_brakes_down_all")
 
 -- ENG
 ENG_cmd_manual_start_1 = createCommand("a321neo/cockpit/engine/manual_start_1", "Press Manual Start ENG1 pushbutton")
-ENG_cmd_manual_start_2 = createCommand("a321neo/cockpit/engine/manual_start_2", "Press Manual Start ENG1 pushbutton")
+ENG_cmd_manual_start_2 = createCommand("a321neo/cockpit/engine/manual_start_2", "Press Manual Start ENG2 pushbutton")
 ENG_cmd_dual_cooling   = createCommand("a321neo/cockpit/engine/dual_cooling", "Press Dual Cooling pushbutton")
 ENG_cmd_mode_up        = sasl.createCommand("a321neo/cockpit/engine/mode_up", "engine mode selector up")
 ENG_cmd_mode_down      = sasl.createCommand("a321neo/cockpit/engine/mode_dn", "engine mode selector down")
+ENG_cmd_master_toggle_1= createCommand("a321neo/cockpit/engine/master_toggle_1", "Master Switch ENG1")
+ENG_cmd_master_toggle_2= createCommand("a321neo/cockpit/engine/master_toggle_2", "Master Switch ENG2")
 
 -- APU
 APU_cmd_master = sasl.createCommand("a321neo/cockpit/engine/apu_master_toggle", "toggle APU master button")

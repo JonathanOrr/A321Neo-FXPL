@@ -30,7 +30,7 @@ function update()
         Set_dataref_linear_anim(Sounds_elec_bus_delayed, 0, 0, 1, 0.5)
     end
 
-    Set_dataref_linear_anim(Sounds_blower_delayed, get(Ventilation_blower_running), 0, 1, 0.5)
-    Set_dataref_linear_anim(Sounds_extract_delayed, get(Ventilation_extract_running), 0, 1, 0.5)
+    Set_dataref_linear_anim(Sounds_blower_delayed, get(Ventilation_blower_running), 0, 1, 0.15)
+    Set_dataref_linear_anim(Sounds_extract_delayed, get(Ventilation_extract_running), 0, 1, 0.15)
 
 end
