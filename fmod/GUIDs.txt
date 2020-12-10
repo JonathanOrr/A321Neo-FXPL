@@ -21,6 +21,18 @@
 {6acc591c-55ac-450c-bcb2-682e9204dfa3} event:/CockpitMechanical/GearUp
 {19a8de53-9601-4d68-9d4f-9199ad28bdd8} event:/CockpitMechanical/MCDU Button Press
 {4f777470-38aa-4adf-bb4e-e68e13b9a7d7} event:/CockpitMechanical/Soft Button Press
+{939720f8-6bc0-4f2e-af93-d62646ed3c4e} event:/RA/20
+{aabfc8d6-5f01-4e97-8d3a-b3d489a3157a} event:/RA/30
+{ddbdce03-28f6-4700-bc31-eced44d36243} event:/RA/400
+{22f80e6a-40fc-4fd9-9f77-f0ef5077c622} event:/RA/500
+{4cb949d3-c922-442e-b80b-ff09aabdd7af} event:/RA/2000
+{76d2927d-c2d5-463c-9f01-9c8288364f49} event:/RA/50
+{407551a8-8f0f-4343-bf5a-b197143f4280} event:/RA/40
+{791ce761-c0f1-4da9-a793-dc2b4fb9d846} event:/RA/200
+{f704a4e3-ce4f-498e-a4ba-bd079bac7a0c} event:/RA/2500
+{f90a33bb-5bb2-4b81-9208-e419f99b9aab} event:/RA/100
+{e6174a5e-0e61-4a00-8404-d26a7706cabd} event:/RA/1000
+{17ccc20c-296e-4089-93c3-650270e4a4b1} event:/RA/300
 {baf9bc41-c708-42a2-bfac-b33deb7ddbc4} event:/Avionics
 {af369460-34d3-4c6e-a56c-fbe21efb91d5} event:/BatteryRelay
 {1edd836c-b29a-4101-a732-2d2eef744bbe} event:/Blower

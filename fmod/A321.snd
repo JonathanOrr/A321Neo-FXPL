@@ -802,7 +802,7 @@ END_SOUND_ATTACHMENT
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN neo/cockpit/mcdu/side/R1
+  EVENT_CMND_DOWN a321neo/cockpit/mcdu/side/R1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
@@ -1073,12 +1073,6 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
   EVENT_CMND_DOWN a321neo/cockpit/mcdu/key/I
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MCDU Button Press
-  VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN 
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
@@ -1664,4 +1658,96 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_START_COND 	a321neo/dynamics/either_aft_on_ground == 0
 END_SOUND_ATTACHMENT
 
+#################################################################################################CLLOUTS
 
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /RA/20
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot <= 21
+  CUE_TRIGGER_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot <= 7
+  EVENT_END_COND a321neo/dynamics/either_aft_on_ground == 1
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /RA/30
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot <= 31
+  EVENT_END_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot < 3
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /RA/40
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot <= 41
+  EVENT_END_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot < 3
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /RA/50
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot <= 51
+  EVENT_END_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot < 3
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /RA/100
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot <= 101
+  EVENT_END_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot < 3
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /RA/200
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot <= 201
+  EVENT_END_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot < 3
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /RA/300
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot <= 301
+  EVENT_END_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot < 3
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /RA/300
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot <= 301
+  EVENT_END_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot < 3
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /RA/400
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot <= 401
+  EVENT_END_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot < 3
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /RA/500
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot <= 501
+  EVENT_END_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot < 3
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /RA/1000
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot <= 1001
+  EVENT_END_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot < 3
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /RA/2000
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot <= 2001
+  EVENT_END_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot < 3
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /RA/2500
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot <= 2501
+  EVENT_END_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot < 3
+END_SOUND_ATTACHMENT
