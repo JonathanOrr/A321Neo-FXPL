@@ -55,8 +55,12 @@ end
 
 function draw_mode_3()
     sasl.gl.drawRectangle(size[1]/2 + 10, size[2]-65, size[2]/2-20, 75, UI_DARK_GREY)
-    sasl.gl.drawText(Font_AirbusDUL, 3*size[1]/4, size[2]-20, "MODE 3", 14, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2 +20, size[2]-50, "DON'T SINK, DON'T SINK", 14, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
+    
+    local color_mode = get(GPWS_mode_is_active, 3) == 1 and ECAM_WHITE or ECAM_HIGH_GREY
+    local color_dontsink = get(GPWS_mode_is_active, 3) == 1 and get(GPWS_mode_3_dontsink) == 1 and ECAM_ORANGE or ECAM_HIGH_GREY
+    
+    sasl.gl.drawText(Font_AirbusDUL, 3*size[1]/4, size[2]-20, "MODE 3", 14, false, false, TEXT_ALIGN_CENTER, color_mode)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2 +20, size[2]-50, "DON'T SINK, DON'T SINK", 14, false, false, TEXT_ALIGN_LEFT, color_dontsink)
 end
 
 function draw_mode_4()
