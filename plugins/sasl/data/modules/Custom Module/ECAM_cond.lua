@@ -29,6 +29,7 @@ end
 
 function draw_cond_page()
     sasl.gl.drawTexture(ECAM_COND_bgd_img, 0, 0, 900, 900, {1,1,1})
+    sasl.gl.drawTexture(ECAM_COND_grey_lines_img, 0, 0, 900, 900, ECAM_LINE_GREY)
     --cabin--
     --actual temperature
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-212, size[2]/2+210, Round(get(Cockpit_temp),0), 32, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)

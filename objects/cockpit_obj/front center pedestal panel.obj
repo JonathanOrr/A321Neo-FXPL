@@ -5,6 +5,7 @@ OBJ
 GLOBAL_cockpit_lit
 TEXTURE	panel_textures/front_center_pedestal.png
 TEXTURE_LIT	panel_textures/front_center_pedestal_LIT.png
+ATTR_light_level 0.000000 1.000000	a321neo/cockpit/lights/integral_value
 POINT_COUNTS	35550	0	0	73866
 
 VT	-0.12220949	0.056345142	-19.997711	0.060459763	-0.079109445	0.99503076	0.038420204	0.91831845
