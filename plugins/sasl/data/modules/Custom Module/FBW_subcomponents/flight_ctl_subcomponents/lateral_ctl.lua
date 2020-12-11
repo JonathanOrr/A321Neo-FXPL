@@ -8,11 +8,11 @@ function Ailerons_control(lateral_input, has_florence_kit, ground_spoilers_mode)
     local no_hyd_recenter_ias = 80
     local no_hyd_spd = 10
     local ailerons_max_def = 25
-    local ailerons_speed = 38.5
+    local ailerons_speed = 45
 
     --conditions
-    local l_aileron_actual_speed = 38.5
-    local r_aileron_actual_speed = 38.5
+    local l_aileron_actual_speed = 45
+    local r_aileron_actual_speed = 45
 
     local l_aileron_travel_target = Math_clamp(ailerons_max_def *  lateral_input + 5 * get(Flaps_deployed_angle) / 40, -ailerons_max_def, ailerons_max_def)
     local r_aileron_travel_target = Math_clamp(ailerons_max_def * -lateral_input + 5 * get(Flaps_deployed_angle) / 40, -ailerons_max_def, ailerons_max_def)
@@ -114,11 +114,11 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
 
     local l_spoilers_spdbrk_spd = {5, 5, 5, 5, 5}
     local r_spoilers_spdbrk_spd = {5, 5, 5, 5, 5}
-    local l_spoilers_roll_spd = {0, 40, 40, 40, 40}
-    local r_spoilers_roll_spd = {0, 40, 40, 40, 40}
+    local l_spoilers_roll_spd = {0, 50, 50, 50, 50}
+    local r_spoilers_roll_spd = {0, 50, 50, 50, 50}
 
-    local l_spoilers_spdbrk_ground_spd = {20, 20, 20, 20, 20}
-    local r_spoilers_spdbrk_ground_spd = {20, 20, 20, 20, 20}
+    local l_spoilers_spdbrk_ground_spd = {30, 30, 30, 30, 30}
+    local r_spoilers_spdbrk_ground_spd = {30, 30, 30, 30, 30}
     local l_spoilers_spdbrk_air_spd = {5, 5, 5, 5, 5}
     local r_spoilers_spdbrk_air_spd = {5, 5, 5, 5, 5}
     local l_spoilers_spdbrk_high_spd_air_spd = {1, 1, 1, 1, 1}

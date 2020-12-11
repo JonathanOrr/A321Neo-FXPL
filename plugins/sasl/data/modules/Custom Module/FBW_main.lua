@@ -21,6 +21,28 @@ include("PID.lua")
 include("FBW_subcomponents/fbw_system_subcomponents/flt_computers.lua")
 addSearchPath(moduleDirectory .. "/Custom Module/FBW_subcomponents/")
 
+--xplane landing gear attitude correction--
+local front_gear_length = globalProperty("sim/aircraft/parts/acf_gear_leglen[0]")
+local l_main_gear_length = globalProperty("sim/aircraft/parts/acf_gear_leglen[1]")
+local r_main_gear_length = globalProperty("sim/aircraft/parts/acf_gear_leglen[2]")
+
+--init
+set(front_gear_length, 1.9)
+set(l_main_gear_length, 2.23)
+set(r_main_gear_length, 2.23)
+
+function onPlaneLoaded()
+    set(front_gear_length, 1.9)
+    set(l_main_gear_length, 2.23)
+    set(r_main_gear_length, 2.23)
+end
+
+function onAirportLoaded()
+    set(front_gear_length, 1.9)
+    set(l_main_gear_length, 2.23)
+    set(r_main_gear_length, 2.23)
+end
+
 components = {
     autothrust {},
     limits_calculations {},
@@ -169,7 +191,7 @@ function update()
         end
 
         if get(FBW_kill_switch) == 0 then
-            set(Roll_artstab, Set_anim_value(get(Roll_artstab), Roll_rate_output, -1, 1, 1))
+            set(Roll_artstab, Set_anim_value(get(Roll_artstab), Roll_rate_output, -1, 1, 1.8))
             set(Pitch_artstab, Set_anim_value(get(Pitch_artstab), pitch_rate_correction, -1, 1, 1))
 
             if get(Any_wheel_on_ground) ~= 1 then

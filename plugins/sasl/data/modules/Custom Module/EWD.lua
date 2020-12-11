@@ -456,9 +456,9 @@ function Draw_slat_flap_indications()
         0,
         0,
         10,
-        15,
-        20,
-        40
+        14,
+        21,
+        25
     }
     local slat_flap_configs = {
         "0",
@@ -477,9 +477,9 @@ function Draw_slat_flap_indications()
     local flaps_anim_ratio = {
         {0, 0},
         {10, 0.3},
-        {15, 0.52},
-        {20, 0.76},
-        {40, 1}
+        {14, 0.52},
+        {21, 0.76},
+        {25, 1}
     }
 
     --stop approximation--
