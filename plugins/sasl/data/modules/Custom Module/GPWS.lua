@@ -21,7 +21,19 @@ include('constants.lua')
 local is_warning = false
 local is_caution = false
 local mode_3_armed = false
-local flap_3_mode = false
+
+local gpws_terrain_mode = true
+local gpws_system_mode = true
+local gpws_gs_mode = true
+local gpws_flap_mode = true
+local gpws_flap_3_mode = false
+
+
+sasl.registerCommandHandler (GPWS_cmd_TER, 0, function(phase) if phase == SASL_COMMAND_BEGIN then gpws_terrain_mode = not gpws_terrain_mode end end )
+sasl.registerCommandHandler (GPWS_cmd_SYS, 0, function(phase) if phase == SASL_COMMAND_BEGIN then gpws_system_mode = not gpws_system_mode end end )
+sasl.registerCommandHandler (GPWS_cmd_GS_MODE, 0, function(phase) if phase == SASL_COMMAND_BEGIN then gpws_gs_mode = not gpws_gs_mode end end )
+sasl.registerCommandHandler (GPWS_cmd_FLAP_MODE, 0, function(phase) if phase == SASL_COMMAND_BEGIN then gpws_flap_mode = not gpws_flap_mode end end )
+sasl.registerCommandHandler (GPWS_cmd_LDG_FLAP_3, 0, function(phase) if phase == SASL_COMMAND_BEGIN then gpws_flap_3_mode = not gpws_flap_3_mode end end )
 
 
 function update_mode_1(alt, vs)
@@ -77,7 +89,7 @@ function update_mode_3(alt, vs)
         set(GPWS_mode_is_active, 1, 3)
     end
     
-    local flap_gear_cond = get(Gear_handle) == 0 or (get(Flaps_internal_config) ~= 5 and not (get(Flaps_internal_config) == 4 and flap_3_mode))
+    local flap_gear_cond = get(Gear_handle) == 0 or (get(Flaps_internal_config) ~= 5 and not (get(Flaps_internal_config) == 4 and gpws_flap_3_mode))
     
     if mode_3_armed and -vs >= alt/10 and flap_gear_cond then
         set(GPWS_mode_3_dontsink, 1)
@@ -88,6 +100,12 @@ end
 
 function update_pbs()
     pb_set(PB.mip.gpws_capt, is_caution, is_warning)
+    
+    pb_set(PB.ovhd.gpws_sys,       not gpws_system_mode, false)
+    pb_set(PB.ovhd.gpws_terr,      not gpws_terrain_mode, false)
+    pb_set(PB.ovhd.gpws_gs_mode,   not gpws_gs_mode, false)
+    pb_set(PB.ovhd.gpws_flap_mode, not gpws_flap_mode, false)
+    pb_set(PB.ovhd.gpws_ldg_flap_3, gpws_flap_3_mode, false)
     
 end
 

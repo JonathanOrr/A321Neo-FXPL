@@ -82,6 +82,11 @@ function Show_hide_Wheel_Debug()
   Wheel_debug_window:setIsVisible(not Wheel_debug_window:isVisible())
 end
 
+function Show_hide_GPWS_Debug()
+  GPWS_debug_window:setIsVisible(not GPWS_debug_window:isVisible())
+end
+
+
 function IRs_instaneous_align()
     ADIRS_cmd_instantaneous_align = sasl.findCommand("a321neo/cockpit/ADIRS/instantaneous_align")
     sasl.messageWindow (500 , 500 , 300 , 100 , " IRs auto-align " , 
@@ -157,16 +162,17 @@ sasl.appendMenuSeparator(Menu_main)
 -- DEBUG submenu
 Menu_debug_item	= sasl.appendMenuItem (Menu_main, "Debug" )
 Menu_debug	= sasl.createMenu ("", Menu_main, Menu_debug_item)
-ShowHideVnavDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide VNAV Debug", Show_hide_vnav_debug)
-ShowHidePacksDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide PACKS Debug", Show_hide_packs_debug)
 ShowHideFBWUI	= sasl.appendMenuItem(Menu_debug, "Show/Hide FBW UI", Show_hide_FBW_UI)
 ShowHidePIDUI	= sasl.appendMenuItem(Menu_debug, "Show/Hide PID UI", Show_hide_PID_UI)
-ShowHideECAMDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide ECAM Debug", Show_hide_ECAM_debug)
 ShowHideDMCDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide DMC Debug", Show_hide_DMC_debug)
+ShowHideECAMDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide ECAM Debug", Show_hide_ECAM_debug)
 ShowHideELECDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide ELEC Debug", Show_hide_ELEC_debug)
 ShowHideENGDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide ENG Debug", Show_hide_ENG_debug)
-ShowHidePressDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide PRESS Debug", Show_hide_PRESS_debug)
+ShowHideGPWSDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide GPWS Debug", Show_hide_GPWS_Debug)
+ShowHidePacksDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide PACKS Debug", Show_hide_packs_debug)
 ShowHidePerfDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide PERF Debug", Show_hide_Performance_Debug)
+ShowHidePressDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide PRESS Debug", Show_hide_PRESS_debug)
 ShowHideWheelDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide WHEEL Debug", Show_hide_Wheel_Debug)
+ShowHideVnavDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide VNAV Debug", Show_hide_vnav_debug)
 DeActivateELECover	= sasl.appendMenuItem(Menu_debug, "(De)activate override ELEC always ON", function() ovveride_ELEC_always_on = not ovveride_ELEC_always_on end)
 
