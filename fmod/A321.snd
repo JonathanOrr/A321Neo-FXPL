@@ -1189,6 +1189,12 @@ END_SOUND_ATTACHMENT
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/Rotary/Rotary1
   VEH_XYZ -0.23 2.47 -17.9
+  EVENT_START_COND a321neo/cockpit/ADIRS/buttons/mode_1 == 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
+  VEH_XYZ -0.23 2.47 -17.9
   EVENT_START_COND a321neo/cockpit/ADIRS/buttons/mode_1 == 1
 END_SOUND_ATTACHMENT
 
@@ -1199,9 +1205,9 @@ BEGIN_SOUND_ATTACHMENT
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary3
   VEH_XYZ -0.23 2.47 -17.9
-  EVENT_START_COND a321neo/cockpit/ADIRS/buttons/mode_1 == 3
+  EVENT_START_COND a321neo/cockpit/ADIRS/buttons/mode_2 == 0
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
@@ -1217,9 +1223,9 @@ BEGIN_SOUND_ATTACHMENT
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Rotary/Rotary3
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary2
   VEH_XYZ -0.23 2.47 -17.9
-  EVENT_START_COND a321neo/cockpit/ADIRS/buttons/mode_2 == 3
+  EVENT_START_COND a321neo/cockpit/ADIRS/buttons/mode_3 == 0
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
@@ -1232,12 +1238,6 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/Rotary/Rotary2
   VEH_XYZ -0.23 2.47 -17.9
   EVENT_START_COND a321neo/cockpit/ADIRS/buttons/mode_3 == 2
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Rotary/Rotary2
-  VEH_XYZ -0.23 2.47 -17.9
-  EVENT_START_COND a321neo/cockpit/ADIRS/buttons/mode_3 == 3
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
@@ -1750,4 +1750,37 @@ BEGIN_SOUND_ATTACHMENT
   VEH_XYZ 0 1.5 -18.4
   EVENT_START_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot <= 2501
   EVENT_END_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot < 3
+END_SOUND_ATTACHMENT
+
+########################################################################################################APU
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /APU
+  VEH_XYZ 0 2.4 24
+  EVENT_START_COND DELTA=sim/cockpit/engine/APU_N1 > 0.5
+  CUE_TRIGGER_COND  DELTA=sim/cockpit/engine/APU_N1 < -0.5
+  EVENT_END_COND sim/cockpit/engine/APU_N1 == 0
+END_SOUND_ATTACHMENT
+
+########################################################################################################CABIN
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Cabin
+  VEH_XYZ 0 2.3 11
+  EVENT_START_COND 	a321neo/dynamics/electrical/bus/ac_ess_powered == 1
+  CUE_TRIGGER_COND  a321neo/dynamics/electrical/bus/ac_ess_powered == 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Cabin
+  VEH_XYZ 0 2.3 0
+  EVENT_START_COND 	a321neo/dynamics/electrical/bus/ac_ess_powered == 1
+  CUE_TRIGGER_COND  a321neo/dynamics/electrical/bus/ac_ess_powered == 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Cabin
+  VEH_XYZ 0 2.3 -11
+  EVENT_START_COND 	a321neo/dynamics/electrical/bus/ac_ess_powered == 1
+  CUE_TRIGGER_COND  a321neo/dynamics/electrical/bus/ac_ess_powered == 0
 END_SOUND_ATTACHMENT
