@@ -1,19 +1,11 @@
 function Slats_flaps_calc_and_control()
     --SFCC 1/2 status
-    if get(FAILURE_FCTL_SFCC_1) == 1 then
-        set(SFCC_1_status, 0)
-    else
-        set(SFCC_1_status, 1)
-    end
-    if get(FAILURE_FCTL_SFCC_2) == 1 then
-        set(SFCC_2_status, 0)
-    else
-        set(SFCC_2_status, 1)
-    end
+    set(SFCC_1_status, 1 * (1 - get(FAILURE_FCTL_SFCC_1)))
+    set(SFCC_2_status, 1 * (1 - get(FAILURE_FCTL_SFCC_2)))
 
     --surface speeds
-    local slats_speed = 0.0625
-    local flaps_speed = 2.5
+    local slats_speed = 0.067
+    local flaps_speed = 1.67
 
     local last_flaps_handle_pos = get(Flaps_handle_position)
     set(Flaps_handle_position, Round(get(Flaps_handle_ratio) * 4))
@@ -97,13 +89,13 @@ function Slats_flaps_calc_and_control()
         set(Flaps_deployed_angle, Set_linear_anim_value(get(Flaps_deployed_angle), 10, 0, 40, flaps_speed))
     elseif get(Flaps_internal_config) == 3 then--2
         set(Slats, Set_linear_anim_value(get(Slats), 0.8, 0, 1, slats_speed))
-        set(Flaps_deployed_angle, Set_linear_anim_value(get(Flaps_deployed_angle), 15, 0, 40, flaps_speed))
+        set(Flaps_deployed_angle, Set_linear_anim_value(get(Flaps_deployed_angle), 14, 0, 40, flaps_speed))
     elseif get(Flaps_internal_config) == 4 then--3
         set(Slats, Set_linear_anim_value(get(Slats), 0.8, 0, 1, slats_speed))
-        set(Flaps_deployed_angle, Set_linear_anim_value(get(Flaps_deployed_angle), 20, 0, 40, flaps_speed))
+        set(Flaps_deployed_angle, Set_linear_anim_value(get(Flaps_deployed_angle), 21, 0, 40, flaps_speed))
     elseif get(Flaps_internal_config) == 5 then--full
         set(Slats, Set_linear_anim_value(get(Slats), 1, 0, 1, slats_speed))
-        set(Flaps_deployed_angle, Set_linear_anim_value(get(Flaps_deployed_angle), 40, 0, 40, flaps_speed))
+        set(Flaps_deployed_angle, Set_linear_anim_value(get(Flaps_deployed_angle), 25, 0, 40, flaps_speed))
     end
 
     local new_slats_pos = get(Slats)
