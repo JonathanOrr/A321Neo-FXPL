@@ -149,7 +149,7 @@ Message_ADKIS_NWS = {
 
 Message_ADKIS_MAX_PRESS = {
     text = function(self)
-        return "MAX BRK PR.......1000 PSI"
+        return " MAX BRK PR......1000 PSI"
     end,
 
     color = function(self)
