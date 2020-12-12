@@ -20,6 +20,7 @@ position = {1030, 3166, 900, 900}
 size = {900, 900}
 
 include('constants.lua')
+include('display_common.lua')
 
 local capt_terrain_on_nd = false
 local fo_terrain_on_nd = false

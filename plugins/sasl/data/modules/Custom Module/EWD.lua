@@ -20,6 +20,7 @@ position= {30,2226,900,900}
 size = {900, 900}
 
 include('constants.lua')
+include('display_common.lua')
 
 PARAM_DELAY    = 0.15 -- Time to filter out the parameters (they are updated every PARAM_DELAY seconds)
 local last_params_update = 0
