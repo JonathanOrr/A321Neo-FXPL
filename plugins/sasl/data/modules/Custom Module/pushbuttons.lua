@@ -218,7 +218,7 @@ PB = {
         ldg_gear_red_light = {bus = LIGHT_BUS_DC}
     },
     
-    -- Glareshield (AP, etc.)
+    -- Glareshield (no FCU)
     glare = {
         -- a321neo/cockpit/glareshield/...
         atc_msg  = {bus = LIGHT_BUS_AC},
@@ -227,7 +227,38 @@ PB = {
         master_caution = {bus = LIGHT_BUS_AC},
         priority_capt  = {bus = LIGHT_BUS_AC},
         priority_fo    = {bus = LIGHT_BUS_AC}
+    },
+    
+    -- FCU
+    FCU = {
+        capt_fd = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
+        capt_ls = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
+        fo_fd   = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
+        fo_ls   = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
+
+        capt_cstr = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
+        capt_wpt  = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
+        capt_vord = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
+        capt_ndb  = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
+        capt_arpt = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
+
+        fo_cstr = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
+        fo_wpt  = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
+        fo_vord = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
+        fo_ndb  = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
+        fo_arpt = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
+
+        loc = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
+
+        ap_1 = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
+        ap_2 = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
+        athr = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
+
+        exped = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
+        appr = {bus = LIGHT_BUS_AC}  -- TODO CHECK BUS
+
     }
+    
 }
 
 ----------------------------------------------------------------------------------------------------

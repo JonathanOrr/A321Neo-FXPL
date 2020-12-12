@@ -452,3 +452,14 @@ Lights_int_flood_pedestal_extra = createGlobalPropertyf("a321neo/cockpit/lights/
 Chrono_state_button = createGlobalPropertyf("a321neo/cockpit/misc/chrono_state", 1, false, true, false)
 Chrono_source_button = createGlobalPropertyf("a321neo/cockpit/misc/chrono_source", 0, false, true, false)
 
+-- ND
+ND_Capt_mode_knob  = createGlobalPropertyf("a321neo/cockpit/nd/capt_mode_knob", 0, false, true, false) -- -2:2
+ND_Capt_range_knob = createGlobalPropertyf("a321neo/cockpit/nd/capt_range_knob", 0, false, true, false) -- -2:3
+ND_Capt_nav1_level = createGlobalPropertyf("a321neo/cockpit/nd/capt_nav1_lever", 0, false, true, false) -- -1,0,1
+ND_Capt_nav2_level = createGlobalPropertyf("a321neo/cockpit/nd/capt_nav2_lever", 0, false, true, false) -- -1,0,1
+
+ND_Fo_mode_knob  = createGlobalPropertyf("a321neo/cockpit/nd/fo_mode_knob", 0, false, true, false) -- -2:2
+ND_Fo_range_knob = createGlobalPropertyf("a321neo/cockpit/nd/fo_range_knob", 0, false, true, false) -- -2:3
+ND_Fo_nav1_level = createGlobalPropertyf("a321neo/cockpit/nd/fo_nav1_lever", 0, false, true, false) -- -1,0,1
+ND_Fo_nav2_level = createGlobalPropertyf("a321neo/cockpit/nd/fo_nav2_lever", 0, false, true, false) -- -1,0,1
+
