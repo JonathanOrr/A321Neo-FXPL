@@ -20,8 +20,6 @@ size = {500, 300}
 
 include('constants.lua')
 
-local B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
-
 function draw()
 
     Sasl_DrawWideFrame(150, 100, 200, 100, 3, 1, ECAM_WHITE)

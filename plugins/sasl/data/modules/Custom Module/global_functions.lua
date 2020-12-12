@@ -16,8 +16,22 @@
 -- Short description: A global file containing miscellaneous functions
 -------------------------------------------------------------------------------
 
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-- CAUTION: Global = bad. You have been warned. Rico's watching you.
+-------------------------------------------------------------------------------
+-- NO GLOBAL VARIABLES HERE! See `global_variables.lua`
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 
---custom functions--
+
 function Math_clamp(val, min, max)
     if min > max then 
         print("Min is larger than Max, invalid")
@@ -427,7 +441,6 @@ function Draw_blue_LED_backlight(x, y, width, hight, min_brightness_for_backligh
 end
 
 function Draw_green_LED_num_and_letter(x, y, string, max_digits, size, alignment, min_brightness_for_backlight, max_brightness_for_backlight, brightness)
-    local LED_font = sasl.gl.loadFont("fonts/digital-7.mono.ttf")
     local LED_cl = {235/255, 200/255, 135/255, brightness}
     local LED_backlight_cl = {15/255, 20/255, 15/255}
 
@@ -442,12 +455,11 @@ function Draw_green_LED_num_and_letter(x, y, string, max_digits, size, alignment
     local blacklight_G = Math_rescale(min_brightness_for_backlight, 0, max_brightness_for_backlight, LED_backlight_cl[2], brightness)
     local blacklight_B = Math_rescale(min_brightness_for_backlight, 0, max_brightness_for_backlight, LED_backlight_cl[3], brightness)
 
-    sasl.gl.drawText(LED_font, x, y, backlight_string, size, false, false, alignment, {blacklight_R, blacklight_G, blacklight_B})
-    sasl.gl.drawText(LED_font, x, y, string, size, false, false, alignment, LED_cl)
+    sasl.gl.drawText(Font_7_digits, x, y, backlight_string, size, false, false, alignment, {blacklight_R, blacklight_G, blacklight_B})
+    sasl.gl.drawText(Font_7_digits, x, y, string, size, false, false, alignment, LED_cl)
 end
 
 function Draw_white_LED_num_and_letter(x, y, string, max_digits, size, alignment, min_brightness_for_backlight, max_brightness_for_backlight, brightness)
-    local LED_font = sasl.gl.loadFont("fonts/digital-7.mono.ttf")
     local LED_cl = {255/255, 255/255, 255/255, brightness}
     local LED_backlight_cl = {15/255, 16/255, 20/255}
 
@@ -462,8 +474,8 @@ function Draw_white_LED_num_and_letter(x, y, string, max_digits, size, alignment
     local blacklight_G = Math_rescale(min_brightness_for_backlight, 0, max_brightness_for_backlight, LED_backlight_cl[2], brightness)
     local blacklight_B = Math_rescale(min_brightness_for_backlight, 0, max_brightness_for_backlight, LED_backlight_cl[3], brightness)
 
-    sasl.gl.drawText(LED_font, x, y, backlight_string, size, false, false, alignment, {blacklight_R, blacklight_G, blacklight_B})
-    sasl.gl.drawText(LED_font, x, y, string, size, false, false, alignment, LED_cl)
+    sasl.gl.drawText(Font_7_digits, x, y, backlight_string, size, false, false, alignment, {blacklight_R, blacklight_G, blacklight_B})
+    sasl.gl.drawText(Font_7_digits, x, y, string, size, false, false, alignment, LED_cl)
 end
 
 function Get_rotated_point_x_pos(x, y, radius, angle)
@@ -474,7 +486,6 @@ function Get_rotated_point_y_pos(x, y, radius, angle)
     return y + radius * math.sin(math.rad(angle))
 end
 
-Perf_array = {}
 
 function perf_measure_start(name)
     if not debug_performance_measure then
@@ -513,12 +524,6 @@ function perf_measure_stop(name)
     sasl.pauseTimer(Perf_array[name].timer)
 end
 
-ELEC_sys = {}
-Fuel_sys = {}
-AI_sys   = {}
-
-Mcdu_popup = {}
-Mcdu_popup_lut = 0
 
 function MCDU_get_popup(id) return Mcdu_popup[id] end
 function MCDU_set_popup(id, val) Mcdu_popup[id] = val end
