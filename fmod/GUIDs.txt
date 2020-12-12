@@ -43,6 +43,7 @@
 {bf628244-9f1c-4c33-97bd-8b793852fd47} event:/Cabin
 {bdd3f6e0-b7ff-46ac-aadd-d8b6b9c45201} event:/Engines
 {05aa7e46-d0ef-4817-84df-6599e3fd87f6} event:/Engines Ext
+{06a66501-2a11-4b1a-a6f7-4fe5d089bc41} event:/Ext
 {f86c05b1-253e-4508-a475-4d354dd045c6} event:/Extractor
 {c9cf63f7-c575-4691-823b-716d0e5e1ba9} event:/Flaps
 {5339da63-baf2-40c8-aafd-6bf6a0fe8aac} event:/Ground Roll
