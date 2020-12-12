@@ -660,6 +660,6 @@ Oxygen_ckpt_psi  = globalProperty("sim/cockpit2/oxygen/indicators/o2_bottle_pres
 GPWS_mode_is_active  = createGlobalPropertyia("a321neo/dynamics/gpws/mode_active", 6) -- Mode from 1 to 5, 6 is the predictive GPWS
 GPWS_mode_1_sinkrate = createGlobalPropertyi("a321neo/dynamics/gpws/mode_1/sinkrate", 0, false, true, false)
 GPWS_mode_1_pullup   = createGlobalPropertyi("a321neo/dynamics/gpws/mode_2/pullup", 0, false, true, false)
-
+GPWS_mode_3_dontsink = createGlobalPropertyi("a321neo/dynamics/gpws/mode_3/dontsink", 0, false, true, false)
 
 

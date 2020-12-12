@@ -38,10 +38,13 @@ local avg_gload        = 0
 local avg_gload_n      = 0
 local avg_gload_stable = 0
 
+local prev_speed = 0
+local curr_decel = 0
+
 local i_was_braking = false
 
 local pid_array = {
-            P_gain = 0.01,
+            P_gain = 0.005,
             I_gain = 0.06,
             D_gain = 0.0001,
             B_gain = 1,
@@ -74,10 +77,17 @@ function Toggle_autobrake(phase, value)
     end
 end
 
+local function update_deleceration()
+    if get(DELTA_TIME) == 0 then
+        return
+    end
+    curr_decel = (prev_speed - get(Ground_speed_ms)) / get(DELTA_TIME)
+    prev_speed = get(Ground_speed_ms)
+end
+
 local function update_ab_datarefs()
     
-    local current_accel = get(Total_long_g_load) * 9.80665
-    avg_gload        = avg_gload + current_accel
+    avg_gload        = avg_gload + curr_decel
     avg_gload_n      = avg_gload_n + 1
     
     if avg_gload_n == 10 then
@@ -137,9 +147,7 @@ local function brake_pid(force)
 
     local set_point = force == AUTOBRK_MED and MED_DECEL_MSEC or LO_DECEL_MSEC
     
-    local current_accel = get(Total_long_g_load) * 9.80665
-    
-    local curr_err  = set_point - current_accel
+    local curr_err  = set_point - curr_decel
     local u = SSS_PID_BP(pid_array, curr_err)
     pid_array.Actual_output = Math_clamp(u, 0, 0.56)
 
@@ -148,8 +156,6 @@ local function brake_pid(force)
 end
 
 function update_autobrake_actuator()
-
-    set(Wheel_autobrake_braking, 0)
 
     if is_autobrake_braking() then
         i_was_braking = true
@@ -163,12 +169,15 @@ function update_autobrake_actuator()
     elseif i_was_braking then
         set(Wheel_autobrake_status, AUTOBRK_OFF) 
         i_was_braking = false
+    else
+        Set_dataref_linear_anim(Wheel_autobrake_braking, 0, 0, 1, 1)
     end
 
 end
 
 function update_autobrake()
 
+    update_deleceration()
     update_ab_datarefs()
     update_autobrake_actuator()
 

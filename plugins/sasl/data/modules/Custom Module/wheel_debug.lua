@@ -100,7 +100,20 @@ local function draw_accumulator()
     sasl.gl.drawRectangle (size[1]/2+220, size[2]/2-30, 20, 70 * get(Brakes_accumulator) / 4, get(Brakes_accumulator) > 2 and UI_GREEN or ECAM_ORANGE)    
 end
 
+local prev_speed = 0
+local curr_decel = 0
+local function update_deleceration()
+    if get(DELTA_TIME) == 0 then
+        return
+    end
+    curr_decel = (prev_speed - get(Ground_speed_ms)) / get(DELTA_TIME)
+    prev_speed = get(Ground_speed_ms)
+end
+
+
 local function draw_autobrakes()
+
+    update_deleceration()
 
     local status_mode = "OK"
     if get(SEC_1_status) + get(SEC_2_status) + get(SEC_3_status) < 2 then
@@ -128,12 +141,10 @@ local function draw_autobrakes()
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-90, size[2]-350, "Target DECEL: ", 12, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2+10, size[2]-350, target_decel, 12, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
 
-    local current_accel = get(Total_long_g_load) * 9.80665
-
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-90, size[2]-380, "Actual DECEL: ", 12, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+170, size[2]-380, Round_fill(current_accel,2), 12, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+170, size[2]-380, Round_fill(curr_decel,2), 12, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
     Sasl_DrawWideFrame(size[1]/2+10, size[2]-385, 150, 20, 1, 1, ECAM_WHITE)
-    sasl.gl.drawRectangle(size[1]/2+10, size[2]-385, Math_clamp(150 * current_accel/5, 0,150), 20, ECAM_BLUE)
+    sasl.gl.drawRectangle(size[1]/2+10, size[2]-385, Math_clamp(150 * curr_decel/5, 0,150), 20, ECAM_BLUE)
     local pos_indicator_target = get(Wheel_autobrake_status) == 1 and 1.7 or (get(Wheel_autobrake_status) == 2 and 3 or 0)
     if pos_indicator_target > 0 then
         sasl.gl.drawWideLine (size[1]/2+10+150*pos_indicator_target/5, size[2]-390, size[1]/2+10+150*pos_indicator_target/5, size[2]-360, 2 , ECAM_GREEN)

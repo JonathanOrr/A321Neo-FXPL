@@ -19,6 +19,7 @@
 include('ECAM_status.lua')
 include('EWD_flight_phases.lua')
 include('EWD_msgs/adirs.lua')
+include('EWD_msgs/aircond.lua')
 include('EWD_msgs/bleed.lua')
 include('EWD_msgs/brakes_and_antiskid.lua')
 include('EWD_msgs/displays.lua')
@@ -178,6 +179,7 @@ local left_messages_list = {
     MessageGroup_BLEED_ENG_LEAK,
     MessageGroup_BLEED_WING_LEAK,
     MessageGroup_TPIU_FAULT,
+    MessageGroup_PACKS_OFF,
     
     -- Warnings
     MessageGroup_CONFIG_TAKEOFF,
@@ -667,7 +669,8 @@ function update()
     perf_measure_start("EWD_logic:update()")
 
     if get(TIME) - sim_loaded_at < STARTUP_WAIT_SECS then
-        return -- Wait some seconds before generates EWD messages
+        perf_measure_stop("EWD_logic:update()")
+        --return -- Wait some seconds before generates EWD messages
     end
 
     if get(AC_ess_bus_pwrd) == 1 then
@@ -677,7 +680,8 @@ function update()
     elseif get(AC_bus_2_pwrd) == 1 then
         ELEC_sys.add_power_consumption(ELEC_BUS_AC_2, 0.2, 0.2)
     else
-        return -- No power
+        --perf_measure_stop("EWD_logic:update()")
+        --return -- No power
     end
 
     set(EWD_arrow_overflow, 0)
