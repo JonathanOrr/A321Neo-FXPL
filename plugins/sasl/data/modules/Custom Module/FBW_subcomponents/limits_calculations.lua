@@ -6,9 +6,9 @@ local VMAX_speeds = {
     280,
     230,
     215,
-    200,
-    185,
-    177
+    215,
+    195,
+    190
 }
 
 local vsw_aprot_alphas = {
@@ -41,21 +41,21 @@ local alpha_max_alphas = {
 --custom functions
 function Extract_vs1g(gross_weight, config, gear_down)
     if config == 0 then--clean
-        return (175 - 124) / 40000 * (gross_weight - 40000) + 124
+        return 274.5826 + (79.54455 - 274.5826) / (1 + ((gross_weight / 1000) / 86.96515)^1.689565)
     elseif config == 1 then--1
-        return (142 - 102) / 40000 * (gross_weight - 40000) + 102
+        return 274.5653 + (43.15795 - 274.5653) / (1 + ((gross_weight / 1000) / 96.95092)^1.192485)
     elseif config == 2 then--1+f
-        return (130 - 93) / 40000 * (gross_weight - 40000) + 93
+        return 260.859 + (54.7645 - 260.859) / (1 + ((gross_weight / 1000) / 115.5867)^1.348778)
     elseif config == 3 then--2
-        return (126 - 89) / 40000 * (gross_weight - 40000) + 89
+        return 233.8 + (36.12623 - 233.8) / (1 + ((gross_weight / 1000) / 94.59888)^1.174251)
     elseif config == 4 then--3
         if gear_down == false then
-            return (125 - 89) / 40000 * (gross_weight - 40000) + 89
+            return 205941.1 + (0.3060642 - 205941.1) / (1 + ((gross_weight / 1000) / 295196500)^0.4922088)
         else
-            return (123 - 86) / 40000 * (gross_weight - 40000) + 86
+            return 3406261 + (31.05773 - 3406261) / (1 + ((gross_weight / 1000) / 434075700)^0.6790985)
         end
     elseif config == 5 then--full
-        return (117 - 84) / 40000 * (gross_weight - 40000) + 84
+        return 227.5873 + (39.04142 - 227.5873) / (1 + ((gross_weight / 1000) / 104.9039)^1.237619)
     end
 end
 
@@ -89,16 +89,12 @@ function update()
 
     set(VFE_speed, VMAX_speeds[Math_clamp_higher(get(Flaps_internal_config), 4) + 1 + 3])
 
-    if get(Gear_handle) ~= 0 and (get(Front_gear_deployment) + get(Left_gear_deployment) + get(Right_gear_deployment)) / 3 > 0 then
-        set(VLS, Set_anim_value(get(VLS), 1.28 * Extract_vs1g(get(Aircraft_total_weight_kgs), get(Flaps_internal_config), true), 0, 350, 0.3))
-    else
-        set(VLS, Set_anim_value(get(VLS), 1.28 * Extract_vs1g(get(Aircraft_total_weight_kgs), get(Flaps_internal_config), false), 0, 350, 0.3))
-    end
+    set(VLS, Set_anim_value(get(VLS), (get(Flaps_internal_config) == 0 and 1.28 or 1.23) * Extract_vs1g(get(Aircraft_total_weight_kgs), get(Flaps_internal_config), get(Gear_handle) ~= 0), 0, 350, 0.3))
 
-    set(S_speed, 1.29 * Extract_vs1g(get(Aircraft_total_weight_kgs), 0, false))
-    set(F_speed, 1.23 * Extract_vs1g(get(Aircraft_total_weight_kgs), 2, false))
-    set(Capt_GD, (2 * get(Aircraft_total_weight_kgs) / 1000 + 90) + Math_clamp_lower((get(PFD_Capt_Baro_Altitude) - 20000) / 1000, 0))
-    set(Fo_GD,   (2 * get(Aircraft_total_weight_kgs) / 1000 + 90) + Math_clamp_lower((get(PFD_Fo_Baro_Altitude)   - 20000) / 1000, 0))
+    set(S_speed, 1.23 * Extract_vs1g(get(Aircraft_total_weight_kgs), 0, false))
+    set(F_speed, 1.22 * Extract_vs1g(get(Aircraft_total_weight_kgs), 2, false))
+    set(Capt_GD, (1.5 * get(Aircraft_total_weight_kgs) / 1000 + 110) + Math_clamp_lower((get(PFD_Capt_Baro_Altitude) - 20000) / 1000, 0))
+    set(Fo_GD,   (1.5 * get(Aircraft_total_weight_kgs) / 1000 + 110) + Math_clamp_lower((get(PFD_Fo_Baro_Altitude)   - 20000) / 1000, 0))
     --stall speeds(configuration dependent)
     set(Capt_VSW,         Set_anim_value(get(Capt_VSW),         get(PFD_Capt_IAS) -  (get(PFD_Capt_IAS) * (1 - (get(Alpha) / vsw_aprot_alphas[get(Flaps_internal_config) + 1]))) / 2, 0, 350, 0.6))
     set(Fo_VSW,           Set_anim_value(get(Fo_VSW),           get(PFD_Fo_IAS)   -  (get(PFD_Fo_IAS)   * (1 - (get(Alpha) / vsw_aprot_alphas[get(Flaps_internal_config) + 1]))) / 2, 0, 350, 0.6))

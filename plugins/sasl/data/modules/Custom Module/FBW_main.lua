@@ -192,7 +192,7 @@ function update()
 
         if get(FBW_kill_switch) == 0 then
             set(Roll_artstab, Set_anim_value(get(Roll_artstab), Roll_rate_output, -1, 1, 1.8))
-            set(Pitch_artstab, Set_anim_value(get(Pitch_artstab), pitch_rate_correction, -1, 1, 1))
+            set(Pitch_artstab, Set_anim_value(get(Pitch_artstab), pitch_rate_correction, -1, 1, 1.15))
 
             if get(Any_wheel_on_ground) ~= 1 then
                 if stick_moving_vertically == true then
