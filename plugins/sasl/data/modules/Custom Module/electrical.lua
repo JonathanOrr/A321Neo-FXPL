@@ -21,12 +21,12 @@
 -- Electrical Logic file
 ----------------------------------------------------------------------------------------------------
 
-include('electrical_batteries.lua')
-include('electrical_buses.lua')
-include('electrical_consumptions.lua')
-include('electrical_generators.lua')
-include('electrical_tr_and_inv.lua')
-include('electrical_misc.lua')
+include('ELEC_subcomponents/electrical_batteries.lua')
+include('ELEC_subcomponents/electrical_buses.lua')
+include('ELEC_subcomponents/electrical_consumptions.lua')
+include('ELEC_subcomponents/electrical_generators.lua')
+include('ELEC_subcomponents/electrical_tr_and_inv.lua')
+include('ELEC_subcomponents/electrical_misc.lua')
 
 local avionics = globalProperty("sim/cockpit2/switches/avionics_power_on")
 
