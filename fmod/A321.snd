@@ -1594,14 +1594,14 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /Blower
   VEH_XYZ 0 1.4 -18.7
   EVENT_START_COND 	a321neo/sounds/blower_delayed != 0
-  CUE_TRIGGER_COND  a321neo/sounds/blower_delayed = 0
+  CUE_TRIGGER_COND  a321neo/sounds/blower_delayed == 0
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /Extractor
   VEH_XYZ 0 1.4 -18.7
   EVENT_START_COND 	a321neo/sounds/extract_delayed != 0
-  CUE_TRIGGER_COND  a321neo/sounds/extract_delayed = 0
+  CUE_TRIGGER_COND  a321neo/sounds/extract_delayed == 0
 END_SOUND_ATTACHMENT
 
 #################################################################################################BUSKICK
@@ -1815,4 +1815,13 @@ BEGIN_SOUND_ATTACHMENT
   VEH_PART tire 2
   EVENT_START_COND 	a321neo/dynamics/wheel/brakes_fan == 1
   CUE_TRIGGER_COND  a321neo/dynamics/wheel/brakes_fan == 0
+END_SOUND_ATTACHMENT
+
+#############################################################################################
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Ext
+  VEH_XYZ 0 0 0
+  EVENT_START_COND 	a321neo/dynamics/electrical/bus/ac_ess_powered == 1
+  CUE_TRIGGER_COND  a321neo/dynamics/electrical/bus/ac_ess_powered == 0
 END_SOUND_ATTACHMENT
