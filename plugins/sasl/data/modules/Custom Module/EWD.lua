@@ -493,12 +493,12 @@ function Draw_slat_flap_indications()
         indication_text_cl = ECAM_GREEN
     end
 
-    sasl.gl.drawTexture(EWD_wing_indic_img, size[1]/2 + 150, size[2]/2 - 73, 38, 21, {1, 1, 1})
+    sasl.gl.drawTexture(EWD_wing_indic_img, size[1]/2 + 150, size[2]/2 - 73, 38, 21, ECAM_LINE_GREY)
     if rounded_slat_ratio > 0 then
-        sasl.gl.drawTexture(EWD_slat_tract_img, size[1]/2 + 15, size[2]/2 - 115, 94, 62, {1, 1, 1})
+        sasl.gl.drawTexture(EWD_slat_tract_img, size[1]/2 + 15, size[2]/2 - 115, 94, 62, ECAM_WHITE)
     end
     if rounded_flap_angle > 0 then
-        sasl.gl.drawTexture(EWD_flap_tract_img, size[1]/2 + 248, size[2]/2 - 115, 143, 63, {1, 1, 1})
+        sasl.gl.drawTexture(EWD_flap_tract_img, size[1]/2 + 248, size[2]/2 - 115, 143, 63, ECAM_WHITE)
     end
     if rounded_slat_ratio ~= 0 or rounded_flap_angle ~= 0 then
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2+170, size[2]/2-120, slat_flap_configs[get(Flaps_internal_config) + 1], 34, false, false, TEXT_ALIGN_CENTER, indication_text_cl)
