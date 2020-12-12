@@ -34,6 +34,22 @@ BEGIN_SOUND_ATTACHMENT
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Engines Ext
+  VEH_PART engine 0
+  EVENT_START_COND sim/flightmodel2/engines/N1_percent[0] > 0
+  EVENT_END_COND sim/flightmodel2/engines/N1_percent[0] == 0
+  PARAM_DREF_IDX 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Engines Ext
+  VEH_PART engine 1
+  EVENT_START_COND sim/flightmodel2/engines/N1_percent[1] > 0
+  EVENT_END_COND sim/flightmodel2/engines/N1_percent[1] == 0
+  PARAM_DREF_IDX 1
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /Ground Roll
   VEH_PART tire 1
   EVENT_START_COND 	a321neo/dynamics/either_aft_on_ground == 1
@@ -1783,4 +1799,20 @@ BEGIN_SOUND_ATTACHMENT
   VEH_XYZ 0 2.3 -11
   EVENT_START_COND 	a321neo/dynamics/electrical/bus/ac_ess_powered == 1
   CUE_TRIGGER_COND  a321neo/dynamics/electrical/bus/ac_ess_powered == 0
+END_SOUND_ATTACHMENT
+
+#############################################################################################
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Brake Fan
+  VEH_PART tire 1
+  EVENT_START_COND 	a321neo/dynamics/wheel/brakes_fan == 1
+  CUE_TRIGGER_COND  a321neo/dynamics/wheel/brakes_fan == 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Brake Fan
+  VEH_PART tire 2
+  EVENT_START_COND 	a321neo/dynamics/wheel/brakes_fan == 1
+  CUE_TRIGGER_COND  a321neo/dynamics/wheel/brakes_fan == 0
 END_SOUND_ATTACHMENT
