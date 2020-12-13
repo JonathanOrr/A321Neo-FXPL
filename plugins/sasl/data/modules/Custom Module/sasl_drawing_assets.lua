@@ -37,6 +37,8 @@ ECAM_ENG_valve_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textu
 --BLEED--
 ECAM_BLEED_bgd_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/BLEED/Background.png")
 ECAM_BLEED_grey_lines_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/BLEED/grey_lines.png")
+ECAM_BLEED_mixer_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/BLEED/Top Mix Bleed.png")
+ECAM_BLEED_valves_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/BLEED/Valve.png")
 
 --PRESS--
 ECAM_PRESS_bgd_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/PRESS/cab_press.png")

@@ -132,13 +132,13 @@ function update()
     else
         set(Ecam_bleed_apu_valve, get(Apu_bleed_switch) * 2 + get(FAILURE_BLEED_APU_VALVE_STUCK))
     end
-	
+
 	ecam_update_page()
 	ecam_update_leds()
 	ecam_update_fuel_page()
 	ecam_update_eng_page()  -- This must be called even if the page is not showed to update some stuffs for EWD
 	ecam_update_cruise_page()
-	
+
 	if get(Ecam_current_page) == 2 then
         ecam_update_bleed_page()
     elseif get(Ecam_current_page) == 3 then
