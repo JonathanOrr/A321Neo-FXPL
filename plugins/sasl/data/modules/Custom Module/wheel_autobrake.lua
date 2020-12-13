@@ -96,6 +96,9 @@ local function update_ab_datarefs()
         avg_gload_n = 0
     end
 
+    if get(All_on_ground) == 0 then
+        set(Wheel_autobrake_status, AUTOBRK_OFF)
+    end
     
     local lo_decel_cond = get(Wheel_autobrake_status) == AUTOBRK_LOW and get(Wheel_autobrake_braking) > 0 and avg_gload_stable > 0.8 * LO_DECEL_MSEC
     pb_set(PB.mip.autobrake_LO,  get(Wheel_autobrake_status) == AUTOBRK_LOW, lo_decel_cond)
