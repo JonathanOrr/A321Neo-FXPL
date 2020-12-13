@@ -41,16 +41,17 @@ end
 
 function draw_mode_2()
     sasl.gl.drawRectangle(10, size[2]-250, size[2]/2-20, 150, UI_DARK_GREY)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/4, size[2]-130, "MODE 2", 14, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/4, size[2]-130, "MODE 2", 14, false, false, TEXT_ALIGN_CENTER, get(GPWS_mode_is_active, 2) == 1 and ECAM_WHITE or ECAM_HIGH_GREY)
 
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/4+80, size[2]-240, "2A / 2B", 14, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
 
-    sasl.gl.drawText(Font_AirbusDUL, 20, size[2]-160, "TERRAIN, TERRAIN", 14, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
-    sasl.gl.drawText(Font_AirbusDUL, 20, size[2]-185, "PULL UP", 14, false, false, TEXT_ALIGN_LEFT, ECAM_RED)
-    sasl.gl.drawText(Font_AirbusDUL, 90, size[2]-185, "+", 14, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
-    sasl.gl.drawText(Font_AirbusDUL, 105, size[2]-185, "TERRAIN (2A)", 14, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/4+65, size[2]-240, "2A", 14, false, false, TEXT_ALIGN_CENTER, get(GPWS_mode_2_mode_a) == 1 and ECAM_GREEN or ECAM_HIGH_GREY)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/4+80, size[2]-240, "/", 14, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/4+95, size[2]-240, "2B", 14, false, false, TEXT_ALIGN_CENTER, get(GPWS_mode_2_mode_b) == 1 and ECAM_GREEN or ECAM_HIGH_GREY)
 
-    sasl.gl.drawText(Font_AirbusDUL, 20, size[2]-210, "TERRAIN (2B)", 14, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
+    sasl.gl.drawText(Font_AirbusDUL, 20, size[2]-160, "TERRAIN, TERRAIN", 14, false, false, TEXT_ALIGN_LEFT, get(GPWS_mode_2_terrterr) == 1 and ECAM_ORANGE or ECAM_HIGH_GREY)
+    sasl.gl.drawText(Font_AirbusDUL, 20, size[2]-185, "PULL UP", 14, false, false, TEXT_ALIGN_LEFT, get(GPWS_mode_2_pullup) == 1 and ECAM_RED or ECAM_HIGH_GREY)
+
+    sasl.gl.drawText(Font_AirbusDUL, 20, size[2]-210, "TERRAIN", 14, false, false, TEXT_ALIGN_LEFT, get(GPWS_mode_2_terr) == 1 and ECAM_ORANGE or ECAM_HIGH_GREY)
 end
 
 function draw_mode_3()

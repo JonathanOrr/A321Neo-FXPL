@@ -212,7 +212,7 @@ P _gear/0/_lonE 7.0
 P _gear/0/_lonN 7.0
 P _gear/0/_lonR 99.0
 P _gear/0/_scon 157581.015625000
-P _gear/0/_stat_def 0.120225579
+P _gear/0/_stat_def 0.120225541
 P _gear/0/_steerdeg_hispeed 5.0
 P _gear/0/_steerdeg_lospeed 75.0
 P _gear/0/_strut_comp 0.899999976
@@ -246,7 +246,7 @@ P _gear/1/_lonE -6.0
 P _gear/1/_lonN -6.0
 P _gear/1/_lonR 2.0
 P _gear/1/_scon 157581.015625000
-P _gear/1/_stat_def 0.739415884
+P _gear/1/_stat_def 0.739415824
 P _gear/1/_steerdeg_hispeed 0.0
 P _gear/1/_steerdeg_lospeed 0.0
 P _gear/1/_strut_comp 0.699999988
@@ -280,7 +280,7 @@ P _gear/2/_lonE -6.0
 P _gear/2/_lonN -6.0
 P _gear/2/_lonR 2.0
 P _gear/2/_scon 157581.015625000
-P _gear/2/_stat_def 0.739415884
+P _gear/2/_stat_def 0.739415824
 P _gear/2/_steerdeg_hispeed 0.0
 P _gear/2/_steerdeg_lospeed 0.0
 P _gear/2/_strut_comp 0.699999988
@@ -71429,109 +71429,6 @@ GROUP ECAM lower du
   LOCKED
   HIDE
   GROUP_OPEN
-  GROUP ECAM ENGINE
-    SHOW_EQUAL 1.000000 a321neo/cockpit/ecam/page_num
-    LOCKED
-    HIDE
-    gen_needle Oil Needle Left
-      POS 1293.000000 2595.500000
-      IMAGE MIP/ecam upper du/EWD/ndl_egt
-      DATAREF a321neo/dynamics/engines/eng_1_oil_qty[1]
-      LOCKED
-      HIDE
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 -90.000000 1.000000
-      KEY_FRAME 2.000000 -67.000000 1.000000
-      KEY_FRAME 17.000000 90.000000
-      IS_DRAGGABLE 0
-      OFFSET 0.000000
-
-    gen_needle Oil Needle Right
-      POS 1671.000000 2595.500000
-      IMAGE MIP/ecam upper du/EWD/ndl_egt
-      DATAREF a321neo/dynamics/engines/eng_2_oil_qty[2]
-      LOCKED
-      HIDE
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 -90.000000 1.000000
-      KEY_FRAME 2.000000 -67.000000 1.000000
-      KEY_FRAME 17.000000 90.000000
-      IS_DRAGGABLE 0
-      OFFSET 0.000000
-
-    gen_needle PSI Left
-      POS 1291.000000 2496.500000
-      IMAGE MIP/ecam upper du/EWD/ndl_egt
-      DATAREF a321neo/dynamics/engines/eng_1_oil_press
-      LOCKED
-      HIDE
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 -90.000000 1.000000
-      KEY_FRAME 17.000000 -67.000000 1.000000
-      KEY_FRAME 100.000000 90.000000
-      IS_DRAGGABLE 0
-      OFFSET 0.000000
-
-    gen_needle PSI Right
-      POS 1669.000000 2496.500000
-      IMAGE MIP/ecam upper du/EWD/ndl_egt
-      DATAREF a321neo/dynamics/engines/eng_2_oil_press
-      LOCKED
-      HIDE
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 -90.000000 1.000000
-      KEY_FRAME 17.000000 -67.000000 1.000000
-      KEY_FRAME 100.000000 90.000000
-      IS_DRAGGABLE 0
-      OFFSET 0.000000
-
-    gen_rotary Valve L
-      POS 1290.000000 2187.000000
-      IMAGE MIP/ecam lower du/ENGINE/valve
-      DATAREF sim/cockpit2/bleedair/actuators/engine_bleed_sov[0]
-      LOCKED
-      HIDE
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 1.000000 1.000000
-      DIGITS 2
-      ROTARY_TYPE NO_CLICK
-      CLICK_RADIUS 10.000000
-      CLICK_RADIUS_DY 0.000000
-      OFFSET 0.000000
-      STEP1 1.000000
-      STEP2 1.000000
-      CURSOR DEFAULT
-      CLICK_DX 0
-      CLICK_DY 0
-
-    gen_rotary Valve L 2
-      POS 1671.000000 2187.000000
-      IMAGE MIP/ecam lower du/ENGINE/valve
-      DATAREF sim/cockpit2/bleedair/actuators/engine_bleed_sov[1]
-      LOCKED
-      HIDE
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 1.000000 1.000000
-      DIGITS 2
-      ROTARY_TYPE NO_CLICK
-      CLICK_RADIUS 10.000000
-      CLICK_RADIUS_DY 0.000000
-      OFFSET 0.000000
-      STEP1 1.000000
-      STEP2 1.000000
-      CURSOR DEFAULT
-      CLICK_DX 0
-      CLICK_DY 0
-
-  END_GROUP
   GROUP ECAM BLEED
     SHOW_EQUAL 2.000000 a321neo/cockpit/ecam/page_num
     LOCKED
@@ -73247,7 +73144,6 @@ GROUP ECAM lower du
   END_GROUP
 END_GROUP
 GROUP PFD
-  GROUP_OPEN
   gen_needle Horizon
     POS 423.500000 3351.500000
     IMAGE MIP/pfd/ADI

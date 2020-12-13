@@ -16,6 +16,8 @@
 -- Short description: The file containing the code for the windows
 -------------------------------------------------------------------------------
 
+addSearchPath(moduleDirectory .. "/Custom Module/debug_windows/")
+
  --windows
 MCDU_window = contextWindow {
   name = "Airbus MCDU";

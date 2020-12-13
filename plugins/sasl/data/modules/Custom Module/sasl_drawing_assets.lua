@@ -30,7 +30,9 @@ EWD_req_thrust_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textur
 
 --ECAM
 --backgrounds
+--ENG--
 ECAM_ENG_bgd_img =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/ENG/ENGINE.png")
+ECAM_ENG_valve_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/ENG/valve.png")
 
 --BLEED--
 ECAM_BLEED_bgd_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/BLEED/Background.png")

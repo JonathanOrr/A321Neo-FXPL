@@ -23,7 +23,7 @@ local green = {0.004, 1, 0.004}
 local blue = {0.004, 1.0, 1.0}
 local orange = {0.843, 0.49, 0}
 local red = {1, 0, 0}
-local B612_regular = sasl.gl.loadFont("fonts/B612-Regular.ttf")
+local Font_B612regular = sasl.gl.loadFont("fonts/B612-Regular.ttf")
 
 local wpt_type = {0}
 local wpt_name = {0}
@@ -104,26 +104,26 @@ function draw()
     leg_distance_sum = 0
     sasl.gl.drawRectangle(0, 0, 750 , 450, black)
     sasl.gl.drawWideLine(0, size[2]/2 - aircraft_vertical_offset, 750, size[2]/2 - aircraft_vertical_offset, 1.5, green)
-    sasl.gl.drawText(B612_regular, size[1]/2-365, size[2]/2+210, "RANGE: " .. 750 / ( 75 / 2^(get(efis_range) - 1)) .. "NM", 12, false, false, TEXT_ALIGN_LEFT, blue)
+    sasl.gl.drawText(Font_B612regular, size[1]/2-365, size[2]/2+210, "RANGE: " .. 750 / ( 75 / 2^(get(efis_range) - 1)) .. "NM", 12, false, false, TEXT_ALIGN_LEFT, blue)
     --crossover altitude
-    sasl.gl.drawText(B612_regular, size[1]/2+365, size[2]/2+210, "Climb Crossover: " .. climb_crossover_altitude .. "ft", 12, false, false, TEXT_ALIGN_RIGHT, blue)
-    sasl.gl.drawText(B612_regular, size[1]/2+365, size[2]/2+200, "Descend Crossover: " .. descend_crossover_altitude .. "ft", 12, false, false, TEXT_ALIGN_RIGHT, blue)
+    sasl.gl.drawText(Font_B612regular, size[1]/2+365, size[2]/2+210, "Climb Crossover: " .. climb_crossover_altitude .. "ft", 12, false, false, TEXT_ALIGN_RIGHT, blue)
+    sasl.gl.drawText(Font_B612regular, size[1]/2+365, size[2]/2+200, "Descend Crossover: " .. descend_crossover_altitude .. "ft", 12, false, false, TEXT_ALIGN_RIGHT, blue)
 
     --guides
     --30000ft
-    sasl.gl.drawText(B612_regular, size[1]/2-365, size[2]/2 + (30000/100 + 5) * 6 / get(efis_range) - aircraft_vertical_offset, "30000 FT", 12, false, false, TEXT_ALIGN_LEFT, orange)
+    sasl.gl.drawText(Font_B612regular, size[1]/2-365, size[2]/2 + (30000/100 + 5) * 6 / get(efis_range) - aircraft_vertical_offset, "30000 FT", 12, false, false, TEXT_ALIGN_LEFT, orange)
     sasl.gl.drawWideLine(0, size[2]/2 + 30000/100 * 6 / get(efis_range) - aircraft_vertical_offset, 750, size[2]/2 + 30000/100 * 6 / get(efis_range) - aircraft_vertical_offset, 1, orange)
     --crossover 28000ft
-    sasl.gl.drawText(B612_regular, size[1]/2-365, size[2]/2 + (28000/100 + 5) * 6 / get(efis_range) - aircraft_vertical_offset, "CROSSOVER 28000 FT", 12, false, false, TEXT_ALIGN_LEFT, red)
+    sasl.gl.drawText(Font_B612regular, size[1]/2-365, size[2]/2 + (28000/100 + 5) * 6 / get(efis_range) - aircraft_vertical_offset, "CROSSOVER 28000 FT", 12, false, false, TEXT_ALIGN_LEFT, red)
     sasl.gl.drawWideLine(0, size[2]/2 + 28000/100 * 6 / get(efis_range) - aircraft_vertical_offset, 750, size[2]/2 + 28000/100 * 6 / get(efis_range) - aircraft_vertical_offset, 1, red)
     --20000ft
-    sasl.gl.drawText(B612_regular, size[1]/2-365, size[2]/2 + (20000/100 + 5) * 6 / get(efis_range) - aircraft_vertical_offset, "20000 FT", 12, false, false, TEXT_ALIGN_LEFT, orange)
+    sasl.gl.drawText(Font_B612regular, size[1]/2-365, size[2]/2 + (20000/100 + 5) * 6 / get(efis_range) - aircraft_vertical_offset, "20000 FT", 12, false, false, TEXT_ALIGN_LEFT, orange)
     sasl.gl.drawWideLine(0, size[2]/2 + 20000/100 * 6 / get(efis_range) - aircraft_vertical_offset, 750, size[2]/2 + 20000/100 * 6 / get(efis_range) - aircraft_vertical_offset, 1, orange)
     -- accel 18000ft
-    sasl.gl.drawText(B612_regular, size[1]/2-365, size[2]/2 + (18000/100 + 5) * 6 / get(efis_range) - aircraft_vertical_offset, "ACCEL 18000 FT", 12, false, false, TEXT_ALIGN_LEFT, red)
+    sasl.gl.drawText(Font_B612regular, size[1]/2-365, size[2]/2 + (18000/100 + 5) * 6 / get(efis_range) - aircraft_vertical_offset, "ACCEL 18000 FT", 12, false, false, TEXT_ALIGN_LEFT, red)
     sasl.gl.drawWideLine(0, size[2]/2 + 18000/100 * 6 / get(efis_range) - aircraft_vertical_offset, 750, size[2]/2 + 18000/100 * 6 / get(efis_range) - aircraft_vertical_offset, 1, red)
     --10000ft
-    sasl.gl.drawText(B612_regular, size[1]/2-365, size[2]/2 + (10000/100 + 5) * 6 / get(efis_range) - aircraft_vertical_offset, "10000 FT", 12, false, false, TEXT_ALIGN_LEFT, orange)
+    sasl.gl.drawText(Font_B612regular, size[1]/2-365, size[2]/2 + (10000/100 + 5) * 6 / get(efis_range) - aircraft_vertical_offset, "10000 FT", 12, false, false, TEXT_ALIGN_LEFT, orange)
     sasl.gl.drawWideLine(0, size[2]/2 + 10000/100 * 6 / get(efis_range) - aircraft_vertical_offset, 750, size[2]/2 + 10000/100 * 6 / get(efis_range) - aircraft_vertical_offset, 1, orange)
 
 
@@ -134,7 +134,7 @@ function draw()
 
             --draw wpt texts
             sasl.gl.drawText(
-            B612_regular, 
+            Font_B612regular, 
             size[1]/2 + leg_distance_sum * 75 / 2^(get(efis_range) - 1) - aircraft_laterial_offset,
             size[2]/2 + wpt_alt[i]/100 * 6 / get(efis_range) + 10 - aircraft_vertical_offset, 
             wpt_name[i] .. " " .. math.floor(GC_distance_kt(wpt_lat[i], wpt_lon[i], wpt_lat[i-1], wpt_lon[i-1])) .. " NM" .. " " .. wpt_alt[i] .. " ft",
@@ -210,7 +210,7 @@ function draw()
         else
             --draw initial wpt
             sasl.gl.drawText(
-            B612_regular,
+            Font_B612regular,
             size[1]/2 - aircraft_laterial_offset,
             size[2]/2 + wpt_alt[i]/100 * 6 / get(efis_range) - aircraft_vertical_offset,
             wpt_name[i] .. wpt_alt[i] .. " ft",

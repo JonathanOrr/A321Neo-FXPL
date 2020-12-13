@@ -40,7 +40,7 @@ local function draw_fuel_usage()
     local fuel_usage_2 = math.floor(get(Ecam_fuel_usage_2))
 
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-187, 760, fuel_usage_1, 36, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-    
+
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2+187, 760, fuel_usage_2, 36, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
 
 end
@@ -89,14 +89,13 @@ local function draw_oil_qt_press_temp()
     local eng_2_oil_color = pulse_green(get(Eng_2_OIL_temp) > 140)
     if get(Eng_1_OIL_temp) > 155 then eng_1_oil_color = ECAM_AMBER end
     if get(Eng_2_OIL_temp) > 155 then eng_2_oil_color = ECAM_AMBER end
-    
+
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-187, 455, params.eng1_oil_temp ,36,
                      false, false, TEXT_ALIGN_CENTER, eng_1_oil_color)
 
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2+187, 455, params.eng2_oil_temp ,36,
                     false, false, TEXT_ALIGN_CENTER, eng_2_oil_color)
 
-                    
 end
 
 local function draw_vibrations()
@@ -111,19 +110,19 @@ local function draw_vibrations()
 
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-155, 385, math.floor((params.eng1_vib_n1%1)*10), 28,
                     false, false, TEXT_ALIGN_RIGHT, eng1_vib1_color)
-                    
+
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2+200, 385, math.floor(params.eng2_vib_n1) .. "." , 36,
                     false, false, TEXT_ALIGN_RIGHT, eng2_vib1_color)
 
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2+220, 385, math.floor((params.eng2_vib_n1%1)*10) , 28,
                     false, false, TEXT_ALIGN_RIGHT, eng2_vib1_color)
-                    
+
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-175, 350, math.floor(params.eng1_vib_n2) .. "." , 36,
                      false, false, TEXT_ALIGN_RIGHT, eng1_vib2_color)
 
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-155, 350, math.floor((params.eng1_vib_n2%1)*10), 28,
                     false, false, TEXT_ALIGN_RIGHT, eng1_vib2_color)
-                    
+
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2+200, 350, math.floor(params.eng2_vib_n2) .. "." , 36,
                     false, false, TEXT_ALIGN_RIGHT, eng2_vib2_color)
 
@@ -139,7 +138,7 @@ local function draw_bleed()
 end
 
 local function draw_special()
-    
+
     if get(FAILURE_ENG_1_FUEL_CLOG) == 1 then
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2-187, 720, "CLOG" , 36,
                      false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
@@ -155,7 +154,7 @@ local function draw_special()
     if get(FAILURE_ENG_2_OIL_CLOG) == 1 then
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2+187, 490, "CLOG" , 36,
                      false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
-    end    
+    end
 end
 
 local function draw_ignition()
@@ -179,6 +178,18 @@ local function draw_ignition()
       end
 end
 
+local function draw_needle_and_valves()
+    --oil quantity--
+    SASL_draw_needle_adv(size[1]/2-187, size[2]/2+176, 58, 80, Math_rescale(0, 180, 17, 0, get(Eng_1_OIL_qty)), 3.5, ECAM_GREEN)
+    SASL_draw_needle_adv(size[1]/2+187, size[2]/2+176, 58, 80, Math_rescale(0, 180, 17, 0, get(Eng_2_OIL_qty)), 3.5, ECAM_GREEN)
+    --oil press--
+    SASL_draw_needle_adv(size[1]/2-189, size[2]/2+78, 50, 80, Math_rescale(0, 180, 100, 0, get(Eng_1_OIL_press)), 3.5, ECAM_GREEN)
+    SASL_draw_needle_adv(size[1]/2+189, size[2]/2+78, 50, 80, Math_rescale(0, 180, 100, 0, get(Eng_2_OIL_press)), 3.5, ECAM_GREEN)
+
+    SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_ENG_valve_img, size[1]/2-190, size[2]/2-272, 128, 80, 2, get(ENG_1_bleed_switch) == 1 and 2 or 1, ECAM_GREEN)
+    SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_ENG_valve_img, size[1]/2+190, size[2]/2-272, 128, 80, 2, get(ENG_2_bleed_switch) == 1 and 2 or 1, ECAM_GREEN)
+end
+
 function draw_eng_page()
     sasl.gl.drawTexture(ECAM_ENG_bgd_img, 0, 0, 900, 900, {1,1,1})
     draw_fuel_usage()
@@ -186,8 +197,8 @@ function draw_eng_page()
     draw_vibrations()
     draw_special()
     draw_ignition()
-    
     draw_bleed()
+    draw_needle_and_valves()
 
 end
 
@@ -196,11 +207,11 @@ local function fadec_has_elec_power(eng)
     if get(DC_ess_bus_pwrd) == 1 then
         return true
     end
-    
+
     if eng == 1 and ((get(Gen_1_pwr) == 1) or get(DC_bat_bus_pwrd) == 1) then
         return true
     end
-    
+
     if eng == 2 and ((get(Gen_2_pwr) == 1) or get(DC_bus_2_pwrd) == 1) then
         return true
     end
@@ -212,7 +223,7 @@ local xx_statuses = {false,false}
 
 local function update_XX_dr_eng(eng)
     -- This logic is insanely complex
-    
+
     if fadec_has_elec_power(eng) then
         if start_elec_fadec[eng] == 0 then
             start_elec_fadec[eng] = get(TIME)
@@ -220,7 +231,7 @@ local function update_XX_dr_eng(eng)
     else
         start_elec_fadec[eng] = 0
     end
-    
+
     if (eng == 1 and get(Engine_1_master_switch) == 0) or (eng == 2 and get(Engine_2_master_switch) == 0) then
         if start_shut_fadec[eng] == 0 then
             start_shut_fadec[eng] = get(TIME)
@@ -245,7 +256,7 @@ local function update_XX_dr_eng(eng)
         xx_statuses[eng] = true
         return
     end
-    
+
     if get(Engine_mode_knob) ~= 0 then
         xx_statuses[eng] = true
         return
@@ -255,12 +266,12 @@ local function update_XX_dr_eng(eng)
         xx_statuses[eng] = true
         return
     end
-    
+
     if get(Any_wheel_on_ground) == 0 then
         xx_statuses[eng] = true
         return
     end
-    
+
     xx_statuses[eng] = false
 end
 
@@ -286,8 +297,8 @@ function ecam_update_eng_page()
         params.eng2_vib_n2    = get(Eng_2_VIB_N2)
         params.last_update = get(TIME)
     end
-    
+
     update_XX_dr()
-    
+
 end
 

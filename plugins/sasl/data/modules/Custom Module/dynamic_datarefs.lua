@@ -573,8 +573,9 @@ Right_spoiler_5 = globalProperty("sim/flightmodel/controls/wing3r_spo2def")
 Flaps_handle_ratio = 	globalProperty("sim/cockpit2/controls/flap_ratio")
 Flaps_handle_position = createGlobalPropertyf("a321neo/dynamics/surfaces/flaps_handle_position", 0, false, true, false)--0, 1, 2, 3, full
 Flaps_internal_config = createGlobalPropertyf("a321neo/dynamics/surfaces/flaps_internal_config", 0, false, true, false)--0 = clean, 1 = 1, 2 = 1+f, 3 = 2, 4 = 3, 5 = full
+Slats_predeploy_ratio = createGlobalPropertyf("a321neo/dynamics/surfaces/slats_pre_deploy_ratio") -- 0 --> 1
 Slats =                 globalProperty("sim/flightmodel2/controls/slat1_deploy_ratio") --deploys with flaps 0 = 0, 1 = 0.7, 2 = 0.8, 3 = 0.8, 4 = 1
-Left_outboard_flaps =   globalProperty("sim/flightmodel/controls/wing3l_fla2def") -- flap detents 0 = 0, 1 = 10, 2 = 15, 3 = 20, 4 = 40
+Left_outboard_flaps =   globalProperty("sim/flightmodel/controls/wing3l_fla2def") -- flap detents 0 = 0, 1 = 10, 2 = 14, 3 = 21, 4 = 25
 Left_inboard_flaps =    globalProperty("sim/flightmodel/controls/wing2l_fla1def")
 Right_inboard_flaps =   globalProperty("sim/flightmodel/controls/wing2r_fla1def")
 Right_outboard_flaps =  globalProperty("sim/flightmodel/controls/wing3r_fla2def")
@@ -584,7 +585,8 @@ Slats_ecam_amber = 	    createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_fl
 Slats_in_transit = 	    createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/slats_in_transit", 0, false, true, false)--slats moving
 Flaps_ecam_amber = 	    createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/flaps_ecam_amber", 0, false, true, false)--flaps indication on the ecam is amber
 Flaps_in_transit = 	    createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/flaps_in_transit", 0, false, true, false)--flaps moving
-Flaps_deployed_angle =  createGlobalPropertyf("a321neo/dynamics/FBW/slats_and_flaps/flaps_deployed_angle", 0, false, true, false)--0, 0, 10, 15, 20, 40
+Flaps_deployed_ratio =  createGlobalPropertyf("a321neo/dynamics/FBW/slats_and_flaps/flaps_deployed_ratio", 0, false, true, false)--0, 0, 10, 14, 21, 25
+Flaps_deployed_angle =  createGlobalPropertyf("a321neo/dynamics/FBW/slats_and_flaps/flaps_deployed_angle", 0, false, true, false)--0, 0, 10, 14, 21, 25
 --hstabs
 Human_pitch_trim = createGlobalPropertyi("a321neo/dynamics/FBW/controls/human_pitch_trim", 0, false, true, false)-- 1 trim up, 0 no action, -1 trim down
 Augmented_pitch_trim_ratio = createGlobalPropertyf("a321neo/dynamics/FBW/controls/augmented_pitch_trim_ratio", 0, false, true, false)
@@ -659,7 +661,13 @@ Oxygen_ckpt_psi  = globalProperty("sim/cockpit2/oxygen/indicators/o2_bottle_pres
 -- GPWS
 GPWS_mode_is_active  = createGlobalPropertyia("a321neo/dynamics/gpws/mode_active", 6) -- Mode from 1 to 5, 6 is the predictive GPWS
 GPWS_mode_1_sinkrate = createGlobalPropertyi("a321neo/dynamics/gpws/mode_1/sinkrate", 0, false, true, false)
-GPWS_mode_1_pullup   = createGlobalPropertyi("a321neo/dynamics/gpws/mode_2/pullup", 0, false, true, false)
+GPWS_mode_1_pullup   = createGlobalPropertyi("a321neo/dynamics/gpws/mode_1/pullup", 0, false, true, false)
+GPWS_mode_2_mode_a   = createGlobalPropertyi("a321neo/dynamics/gpws/mode_2/mode_a", 0, false, true, false)
+GPWS_mode_2_mode_b   = createGlobalPropertyi("a321neo/dynamics/gpws/mode_2/mode_b", 0, false, true, false)
+GPWS_mode_2_terrterr = createGlobalPropertyi("a321neo/dynamics/gpws/mode_2/terrainterrain", 0, false, true, false)
+GPWS_mode_2_pullup   = createGlobalPropertyi("a321neo/dynamics/gpws/mode_2/pullup", 0, false, true, false)
+GPWS_mode_2_terr     = createGlobalPropertyi("a321neo/dynamics/gpws/mode_2/terrain", 0, false, true, false)
+
 GPWS_mode_3_dontsink = createGlobalPropertyi("a321neo/dynamics/gpws/mode_3/dontsink", 0, false, true, false)
 
 
