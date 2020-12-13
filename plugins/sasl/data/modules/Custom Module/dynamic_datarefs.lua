@@ -670,4 +670,15 @@ GPWS_mode_2_terr     = createGlobalPropertyi("a321neo/dynamics/gpws/mode_2/terra
 
 GPWS_mode_3_dontsink = createGlobalPropertyi("a321neo/dynamics/gpws/mode_3/dontsink", 0, false, true, false)
 
+GPWS_mode_4_mode_a = createGlobalPropertyi("a321neo/dynamics/gpws/mode_3/mode_a", 0, false, true, false)
+GPWS_mode_4_mode_b = createGlobalPropertyi("a321neo/dynamics/gpws/mode_3/mode_b", 0, false, true, false)
+GPWS_mode_4_mode_c = createGlobalPropertyi("a321neo/dynamics/gpws/mode_3/mode_c", 0, false, true, false)
 
+GPWS_mode_4_a_terrain = createGlobalPropertyi("a321neo/dynamics/gpws/mode_4/terrain_a", 0, false, true, false)
+GPWS_mode_4_b_terrain = createGlobalPropertyi("a321neo/dynamics/gpws/mode_4/terrain_b", 0, false, true, false)
+GPWS_mode_4_c_terrain = createGlobalPropertyi("a321neo/dynamics/gpws/mode_4/terrain_c", 0, false, true, false)
+GPWS_mode_4_tl_flaps  = createGlobalPropertyi("a321neo/dynamics/gpws/mode_4/tl_flaps", 0, false, true, false)
+GPWS_mode_4_tl_gear   = createGlobalPropertyi("a321neo/dynamics/gpws/mode_4/tl_gear", 0, false, true, false)
+
+GPWS_mode_5_glideslope = createGlobalPropertyi("a321neo/dynamics/gpws/mode_5/glideslope", 0, false, true, false)
+GPWS_mode_5_glideslope_hard = createGlobalPropertyi("a321neo/dynamics/gpws/mode_5/glideslope_hard", 0, false, true, false)

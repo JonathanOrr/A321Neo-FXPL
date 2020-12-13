@@ -65,22 +65,27 @@ function draw_mode_3()
 end
 
 function draw_mode_4()
-    sasl.gl.drawRectangle(size[1]/2 + 10, size[2]-165, size[2]/2-20, 90, UI_DARK_GREY)
-    sasl.gl.drawText(Font_AirbusDUL, 3*size[1]/4, size[2]-100, "MODE 4", 14, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    sasl.gl.drawText(Font_AirbusDUL, 3*size[1]/4-70, size[2]-120, "A", 14, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    sasl.gl.drawText(Font_AirbusDUL, 3*size[1]/4+70, size[2]-120, "B", 14, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2 +20, size[2]-140, "TL TERRAIN", 14, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2 +20, size[2]-160, "TL GEAR", 14, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
+    local color_mode = get(GPWS_mode_is_active, 4) == 1 and ECAM_WHITE or ECAM_HIGH_GREY
+    
+    sasl.gl.drawRectangle(size[1]/2 + 10, size[2]-185, size[2]/2-20, 110, UI_DARK_GREY)
+    sasl.gl.drawText(Font_AirbusDUL, 3*size[1]/4, size[2]-95, "MODE 4", 14, false, false, TEXT_ALIGN_CENTER, color_mode)
+    sasl.gl.drawText(Font_AirbusDUL, 3*size[1]/4-70, size[2]-110, "A", 14, false, false, TEXT_ALIGN_CENTER, get(GPWS_mode_4_mode_a) == 1 and ECAM_GREEN or ECAM_HIGH_GREY)
+    sasl.gl.drawText(Font_AirbusDUL, 3*size[1]/4+70, size[2]-110, "B", 14, false, false, TEXT_ALIGN_CENTER, get(GPWS_mode_4_mode_b) == 1 and ECAM_GREEN or ECAM_HIGH_GREY)
+    sasl.gl.drawText(Font_AirbusDUL, 3*size[1]/4-40, size[2]-175, "C", 14, false, false, TEXT_ALIGN_CENTER, get(GPWS_mode_4_mode_c) == 1 and ECAM_GREEN or ECAM_HIGH_GREY)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2 +20, size[2]-130, "TL TERRAIN", 14, false, false, TEXT_ALIGN_LEFT, get(GPWS_mode_4_a_terrain) == 1 and ECAM_ORANGE or ECAM_HIGH_GREY)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2 +20, size[2]-150, "TL GEAR", 14, false, false, TEXT_ALIGN_LEFT, get(GPWS_mode_4_tl_gear) == 1 and ECAM_ORANGE or ECAM_HIGH_GREY)
 
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2 +145, size[2]-140, "TL TERRAIN", 14, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2 +145, size[2]-160, "TL FLAPS", 14, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2 +145, size[2]-130, "TL TERRAIN", 14, false, false, TEXT_ALIGN_LEFT, get(GPWS_mode_4_b_terrain) == 1 and ECAM_ORANGE or ECAM_HIGH_GREY)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2 +145, size[2]-150, "TL FLAPS", 14, false, false, TEXT_ALIGN_LEFT, get(GPWS_mode_4_tl_flaps) == 1 and ECAM_ORANGE or ECAM_HIGH_GREY)
+
+    sasl.gl.drawText(Font_AirbusDUL, 3*size[1]/4+25, size[2]-175, "TL TERRAIN", 14, false, false, TEXT_ALIGN_CENTER, get(GPWS_mode_4_c_terrain) == 1 and ECAM_ORANGE or ECAM_HIGH_GREY)
 
 end
 
 function draw_mode_5()
-    sasl.gl.drawRectangle(size[1]/2 + 10, size[2]-250, size[2]/2-20, 75, UI_DARK_GREY)
-    sasl.gl.drawText(Font_AirbusDUL, 3*size[1]/4, size[2]-205, "MODE 5", 14, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2 +20, size[2]-235, "GLIDESLOPE, GLIDESLOPE", 14, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
+    sasl.gl.drawRectangle(size[1]/2 + 10, size[2]-250, size[2]/2-20, 55, UI_DARK_GREY)
+    sasl.gl.drawText(Font_AirbusDUL, 3*size[1]/4, size[2]-215, "MODE 5", 14, false, false, TEXT_ALIGN_CENTER, get(GPWS_mode_is_active, 5) == 1 and ECAM_WHITE or ECAM_HIGH_GREY)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2 +20, size[2]-240, "GLIDESLOPE, GLIDESLOPE", 14, get(GPWS_mode_5_glideslope_hard) == 1, false, TEXT_ALIGN_LEFT, get(GPWS_mode_5_glideslope) == 1 and ECAM_ORANGE or ECAM_HIGH_GREY)
 end
 
 function draw_predictive_output()
