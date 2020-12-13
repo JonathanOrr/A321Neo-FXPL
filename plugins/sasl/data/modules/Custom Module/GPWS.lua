@@ -17,6 +17,9 @@
 -------------------------------------------------------------------------------
 
 include('constants.lua')
+include('GPWS_predictive.lua')
+
+
 local PRELIMINARY_MODE_2_TIME = 5
 local UPDATE_INTERVAL = 0.5
 
@@ -352,6 +355,10 @@ function update_mode_4(alt, ias)
     end
 end
 
+-------------------------------------------------------------------------------
+-- MODE 5
+-------------------------------------------------------------------------------
+
 function update_mode_5(alt)
 
     set(GPWS_mode_is_active, 0, 5)
@@ -448,6 +455,8 @@ function update()
     update_mode_3(data_delayed.ra_altitide, data_delayed.vvi_rate)
     update_mode_4(data_delayed.ra_altitide, data_delayed.ias)
     update_mode_5(data_delayed.ra_altitide)
+    
+    update_gpws_predictive()
     
     update_pbs()
 end

@@ -22,6 +22,7 @@ size = {500, 500}
 
 include('constants.lua')
 
+local image_plane = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/fuel_window/top-alpha.png", 0, 0, 497, 606)
 
 function draw_mode_1()
     local color_mode     = ECAM_HIGH_GREY
@@ -89,13 +90,35 @@ function draw_mode_5()
 end
 
 function draw_predictive_output()
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/5, 180, "OUTPUTS", 16, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    sasl.gl.drawText(Font_AirbusDUL, 20, 150, "TERRAIN, TERRAIN", 14, false, false, TEXT_ALIGN_LEFT, ECAM_RED)
-    sasl.gl.drawText(Font_AirbusDUL, 20, 130, "PULL UP", 14, false, false, TEXT_ALIGN_LEFT, ECAM_RED)
-    sasl.gl.drawText(Font_AirbusDUL, 20, 110, "AVOID TERRAIN", 14, false, false, TEXT_ALIGN_LEFT, ECAM_RED)
+    local is_active = get(GPWS_pred_is_active) == 1
+    sasl.gl.drawText(Font_AirbusDUL, 20, 180, "Status: ", 14, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(Font_AirbusDUL, 85, 180, is_active and "ACTIVE" or "INACTIVE", 14, false, false, TEXT_ALIGN_LEFT, is_active and ECAM_GREEN or ECAM_HIGH_GREY)
 
-    sasl.gl.drawText(Font_AirbusDUL, 20, 80, "CAUTION TERRAIN", 14, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
-    sasl.gl.drawText(Font_AirbusDUL, 20, 60, "TOO LOW TERRAIN", 14, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/5, 150, "OUTPUTS", 16, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawText(Font_AirbusDUL, 20, 120, "TERRAIN AHEAD,", 14, false, false, TEXT_ALIGN_LEFT, get(GPWS_pred_terr_pull) == 1 and ECAM_RED or ECAM_HIGH_GREY)
+    sasl.gl.drawText(Font_AirbusDUL, 20, 100, "PULL UP", 14, false, false, TEXT_ALIGN_LEFT, get(GPWS_pred_terr_pull) == 1 and ECAM_RED or ECAM_HIGH_GREY)
+    sasl.gl.drawText(Font_AirbusDUL, 20, 80, "OBSTACLE AHEAD,", 14, false, false, TEXT_ALIGN_LEFT, get(GPWS_pred_obst_pull) == 1 and ECAM_RED or ECAM_HIGH_GREY)
+    sasl.gl.drawText(Font_AirbusDUL, 20, 60,  "PULL UP", 14, false, false, TEXT_ALIGN_LEFT, get(GPWS_pred_obst_pull) == 1 and ECAM_RED or ECAM_HIGH_GREY)
+
+    sasl.gl.drawText(Font_AirbusDUL, 20, 30, "TERRAIN AHEAD", 14, false, false, TEXT_ALIGN_LEFT, get(GPWS_pred_terr) == 1 and ECAM_ORANGE or ECAM_HIGH_GREY)
+    sasl.gl.drawText(Font_AirbusDUL, 20, 10, "OBSTACLE AHEAD", 14, false, false, TEXT_ALIGN_LEFT, get(GPWS_pred_obst) == 1 and ECAM_ORANGE or ECAM_HIGH_GREY)
+
+end
+
+function draw_predictive_areas()
+    sasl.gl.drawTexture(image_plane, 250, 10, 331/10, 404/10)
+    sasl.gl.drawWideLine ( 240, 50, 240, 170, 1, ECAM_HIGH_GREY)
+    sasl.gl.drawWideLine ( 300, 50, 300, 170, 1, ECAM_HIGH_GREY)
+
+    local roll = math.max(-30, math.min(30, get(Flightmodel_roll)))
+    
+    sasl.gl.drawWideLine ( 240, 50, 240+25*math.min(0,roll/30), 170, 1, ECAM_HIGH_GREY)
+    sasl.gl.drawWideLine ( 300, 50, 300+25*math.max(0,roll/30), 170, 1, ECAM_HIGH_GREY)
+
+    sasl.gl.drawText(Font_AirbusDUL, 330, 170, "d(60s) = " .. Round_fill(get(GPWS_dist_60),2), 13, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+
+    sasl.gl.drawText(Font_AirbusDUL, 330, 90, "d(30s) = " .. Round_fill(get(GPWS_dist_30),2), 13, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    
 
 end
 
@@ -111,4 +134,5 @@ function draw()
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2, 200, "Predictive GPWS", 20, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
 
     draw_predictive_output()
+    draw_predictive_areas()
 end

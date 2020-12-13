@@ -41,7 +41,7 @@ local RCT   = 4
 local KG_PER_SEC = 15
 
 local image_background     = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/fuel_window/background.png", 0, 0, 493, 586)
-local image_plane          = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/fuel_window/top-alpha.png", 0, 0, 497, 606)
+local image_plane          = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/top-alpha.png", 0, 0, 497, 606)
 local image_end            = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/fuel_window/end-light.png", 0, 0, 31, 31)
 local image_selector = {}
 image_selector[0]     = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/fuel_window/selector-C.png", 0, 0, 66, 50)
