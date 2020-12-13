@@ -376,6 +376,14 @@ function SASL_rotated_center_img_xcenter_aligned_helper(image, x, y, width, heig
     sasl.gl.drawRotatedTextureCenter (image, get(TIME) * 40, x, y, x - width / 2 + center_x_offset, y + center_y_offset, width, height, color)
 end
 
+function SASL_drawSegmentedImg_xcenter_aligned(image, x, y, img_width, img_height, num_positions, position)
+    local recalculated_position = math.floor(position) - 1
+    local clamped_position = Math_clamp(recalculated_position, 0, num_positions)
+
+    --draw part of the image
+    sasl.gl.drawTexturePart ( image, x - img_width / num_positions / 2, y, img_width / num_positions, img_height, img_width / num_positions * clamped_position, 0, img_width / num_positions, img_height, {1, 1, 1})
+end
+
 function SASL_drawSegmentedImg(image, x, y, img_width, img_height, num_positions, position)
     local recalculated_position = math.floor(position) - 1
     local clamped_position = Math_clamp(recalculated_position, 0, num_positions)
@@ -390,6 +398,14 @@ function SASL_drawSegmentedImgColored(image, x, y, img_width, img_height, num_po
 
     --draw part of the image
     sasl.gl.drawTexturePart ( image, x, y, img_width / num_positions, img_height, img_width / num_positions * clamped_position, 0, img_width / num_positions, img_height, color)
+end
+
+function SASL_drawSegmentedImgColored_xcenter_aligned(image, x, y, img_width, img_height, num_positions, position, color)
+    local recalculated_position = math.floor(position) - 1
+    local clamped_position = Math_clamp(recalculated_position, 0, num_positions)
+
+    --draw part of the image
+    sasl.gl.drawTexturePart ( image, x - img_width / num_positions / 2, y, img_width / num_positions, img_height, img_width / num_positions * clamped_position, 0, img_width / num_positions, img_height, color)
 end
 
 --drawing LED/LCDs

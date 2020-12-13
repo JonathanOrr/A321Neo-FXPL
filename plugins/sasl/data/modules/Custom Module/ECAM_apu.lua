@@ -31,7 +31,7 @@ function draw_apu_page()
 
     --apu gen section--
     if get(Ecam_apu_gen_state) >= 2 then
-        local color_amps = (-ELEC_sys.generators[3].curr_amps > 261) and ECAM_AMBER or ECAM_GREEN
+        local color_amps = (-ELEC_sys.generators[3].curr_amps > 261) and ECAM_ORANGE or ECAM_GREEN
         local load_val = math.abs(math.floor(ELEC_sys.generators[3].curr_amps/261*100))
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2-235, size[2]/2+257, load_val, 23, false, false, TEXT_ALIGN_RIGHT, color_amps)
 

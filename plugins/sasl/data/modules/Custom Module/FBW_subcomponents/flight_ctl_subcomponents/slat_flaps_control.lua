@@ -1,7 +1,7 @@
 function Slats_flaps_calc_and_control()
     --SFCC 1/2 status
-    set(SFCC_1_status, 1 * (1 - get(FAILURE_FCTL_SFCC_1)))
-    set(SFCC_2_status, 1 * (1 - get(FAILURE_FCTL_SFCC_2)))
+    set(SFCC_1_status, 1 * (1 - get(FAILURE_FCTL_SFCC_1)) * get(DC_ess_bus_pwrd))
+    set(SFCC_2_status, 1 * (1 - get(FAILURE_FCTL_SFCC_2)) * get(DC_bus_2_pwrd))
 
     --surface speeds
     local flaps_full_deploy_time = 15
