@@ -57,11 +57,6 @@ local ecam_text = "ECAM"
 --manual switching in progress
 local manual_switching_in_progress = 0 --if the user is swiching the sources manually 1 swiching capt pfd , 2 switching capt nd, 3 switching ewd, 4 switching fo nd, 5 switching fo pfd, 6 switching ecam
 
---fonts
-local B612regular = sasl.gl.loadFont("fonts/B612-Regular.ttf")
-local B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
-local B612MONO_bold = sasl.gl.loadFont("fonts/B612Mono-Bold.ttf")
-
 --mouse functions
 function onMouseDown ( component , x , y , button , parentX , parentY )
     if button == MB_LEFT then
@@ -347,37 +342,37 @@ function draw()
     sasl.gl.drawRectangle(0, 0, 400, 200, DMC_BLACK)
     --DMC override indication
     sasl.gl.drawFrame(335, 170, 40, 20, DMC_indicator_color)
-    sasl.gl.drawText(B612MONO_regular, 354, 173, "DMC", 16, false, false, TEXT_ALIGN_CENTER, DMC_indicator_color)
+    sasl.gl.drawText(Font_B612MONO_regular, 354, 173, "DMC", 16, false, false, TEXT_ALIGN_CENTER, DMC_indicator_color)
 
     if manual_switching_in_progress == 0 then
         --Capt PFD--
         sasl.gl.drawRectangle(size[1]/2 - 175, size[2]/2 + 10, 50, 50, capt_pfd_color)
-        sasl.gl.drawText(B612MONO_bold, size[1]/2 - 150, size[2]/2 + 27, capt_pfd_text, 19.5, false, false, TEXT_ALIGN_CENTER, capt_pfd_text_color)
+        sasl.gl.drawText(Font_B612MONO_bold, size[1]/2 - 150, size[2]/2 + 27, capt_pfd_text, 19.5, false, false, TEXT_ALIGN_CENTER, capt_pfd_text_color)
         --Capt ND--
         sasl.gl.drawRectangle(size[1]/2 - 100, size[2]/2 + 10, 50, 50, capt_nd_color)
-        sasl.gl.drawText(B612MONO_bold, size[1]/2 - 75, size[2]/2 + 27, capt_nd_text, 19.5, false, false, TEXT_ALIGN_CENTER, capt_nd_text_color)
+        sasl.gl.drawText(Font_B612MONO_bold, size[1]/2 - 75, size[2]/2 + 27, capt_nd_text, 19.5, false, false, TEXT_ALIGN_CENTER, capt_nd_text_color)
         --EWD--
         sasl.gl.drawRectangle(size[1]/2 - 25, size[2]/2 + 10, 50, 50, ewd_color)
-        sasl.gl.drawText(B612MONO_bold, size[1]/2, size[2]/2 + 27, ewd_text, 19.5, false, false, TEXT_ALIGN_CENTER, ewd_text_color)
+        sasl.gl.drawText(Font_B612MONO_bold, size[1]/2, size[2]/2 + 27, ewd_text, 19.5, false, false, TEXT_ALIGN_CENTER, ewd_text_color)
         --FO ND--
         sasl.gl.drawRectangle(size[1]/2 + 50, size[2]/2 + 10, 50, 50, fo_nd_color)
-        sasl.gl.drawText(B612MONO_bold, size[1]/2 + 75, size[2]/2 + 27, fo_nd_text, 19.5, false, false, TEXT_ALIGN_CENTER, fo_nd_text_color)
+        sasl.gl.drawText(Font_B612MONO_bold, size[1]/2 + 75, size[2]/2 + 27, fo_nd_text, 19.5, false, false, TEXT_ALIGN_CENTER, fo_nd_text_color)
         --FO PFD--
         sasl.gl.drawRectangle(size[1]/2 + 125, size[2]/2 + 10, 50, 50, fo_pfd_color)
-        sasl.gl.drawText(B612MONO_bold, size[1]/2 + 150, size[2]/2 + 27, fo_pfd_text, 19.5, false, false, TEXT_ALIGN_CENTER, fo_pfd_text_color)
+        sasl.gl.drawText(Font_B612MONO_bold, size[1]/2 + 150, size[2]/2 + 27, fo_pfd_text, 19.5, false, false, TEXT_ALIGN_CENTER, fo_pfd_text_color)
         --ECAM--
         sasl.gl.drawRectangle(size[1]/2 - 25, size[2]/2 - 65, 50, 50, ecam_color)
-        sasl.gl.drawText(B612MONO_bold, size[1]/2, size[2]/2 - 48, ecam_text, 19.5, false, false, TEXT_ALIGN_CENTER, ecam_text_color)
+        sasl.gl.drawText(Font_B612MONO_bold, size[1]/2, size[2]/2 - 48, ecam_text, 19.5, false, false, TEXT_ALIGN_CENTER, ecam_text_color)
     else
-        sasl.gl.drawText(B612MONO_regular, size[1]/2, size[2]/2 + 45, "PLEASE SELECT SOURCE", 22, false, false, TEXT_ALIGN_CENTER, DMC_WHITE)
+        sasl.gl.drawText(Font_B612MONO_regular, size[1]/2, size[2]/2 + 45, "PLEASE SELECT SOURCE", 22, false, false, TEXT_ALIGN_CENTER, DMC_WHITE)
 
         sasl.gl.drawRectangle(size[1]/2 - 160, size[2]/2 - 25, 50, 50, DMC_WHITE)
-        sasl.gl.drawText(B612MONO_bold, size[1]/2 - 135, size[2]/2 - 8, "PFD", 19.5, false, false, TEXT_ALIGN_CENTER, DMC_BLACK)
+        sasl.gl.drawText(Font_B612MONO_bold, size[1]/2 - 135, size[2]/2 - 8, "PFD", 19.5, false, false, TEXT_ALIGN_CENTER, DMC_BLACK)
         sasl.gl.drawRectangle(size[1]/2 - 70, size[2]/2 - 25, 50, 50, DMC_WHITE)
-        sasl.gl.drawText(B612MONO_bold, size[1]/2 - 45, size[2]/2 - 8, "ND", 19.5, false, false, TEXT_ALIGN_CENTER, DMC_BLACK)
+        sasl.gl.drawText(Font_B612MONO_bold, size[1]/2 - 45, size[2]/2 - 8, "ND", 19.5, false, false, TEXT_ALIGN_CENTER, DMC_BLACK)
         sasl.gl.drawRectangle(size[1]/2 + 20, size[2]/2 - 25, 50, 50, DMC_WHITE)
-        sasl.gl.drawText(B612MONO_bold, size[1]/2 + 45, size[2]/2 - 8, "EWD", 19.5, false, false, TEXT_ALIGN_CENTER, DMC_BLACK)
+        sasl.gl.drawText(Font_B612MONO_bold, size[1]/2 + 45, size[2]/2 - 8, "EWD", 19.5, false, false, TEXT_ALIGN_CENTER, DMC_BLACK)
         sasl.gl.drawRectangle(size[1]/2 + 110, size[2]/2 - 25, 50, 50, DMC_WHITE)
-        sasl.gl.drawText(B612MONO_bold, size[1]/2 + 135, size[2]/2 - 8, "ECAM", 19.5, false, false, TEXT_ALIGN_CENTER, DMC_BLACK)
+        sasl.gl.drawText(Font_B612MONO_bold, size[1]/2 + 135, size[2]/2 - 8, "ECAM", 19.5, false, false, TEXT_ALIGN_CENTER, DMC_BLACK)
     end
 end

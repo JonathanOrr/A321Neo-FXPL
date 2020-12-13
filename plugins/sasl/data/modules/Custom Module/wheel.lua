@@ -80,12 +80,18 @@ end
 
 function Toggle_regular(phase)
     if phase == SASL_COMMAND_BEGIN then
+        if get(Parkbrake_switch_pos) == 1 then
+            set(Parkbrake_switch_pos, 0)
+        end
         brake_req_right = 1 - brake_req_right
         brake_req_left  = 1 - brake_req_left
     end
 end
 
 function Braking_regular(phase)
+    if get(Parkbrake_switch_pos) == 1 then
+        set(Parkbrake_switch_pos, 0)
+    end
     if phase == SASL_COMMAND_BEGIN then
         brake_req_right = 1
         brake_req_left = 1

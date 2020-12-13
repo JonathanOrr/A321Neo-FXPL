@@ -33,6 +33,7 @@ include('ECAM_hyd.lua')
 include('ECAM_press.lua')
 include('ECAM_status.lua')
 include('ECAM_wheel.lua')
+include('display_common.lua')
 
 include('constants.lua')
 

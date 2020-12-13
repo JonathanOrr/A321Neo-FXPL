@@ -16,8 +16,22 @@
 -- Short description: A global file containing miscellaneous functions
 -------------------------------------------------------------------------------
 
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-- CAUTION: Global = bad. You have been warned. Rico's watching you.
+-------------------------------------------------------------------------------
+-- NO GLOBAL VARIABLES HERE! See `global_variables.lua`
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 
---custom functions--
+
 function Math_clamp(val, min, max)
     if min > max then 
         print("Min is larger than Max, invalid")
@@ -443,7 +457,6 @@ function Draw_blue_LED_backlight(x, y, width, hight, min_brightness_for_backligh
 end
 
 function Draw_green_LED_num_and_letter(x, y, string, max_digits, size, alignment, min_brightness_for_backlight, max_brightness_for_backlight, brightness)
-    local LED_font = sasl.gl.loadFont("fonts/digital-7.mono.ttf")
     local LED_cl = {235/255, 200/255, 135/255, brightness}
     local LED_backlight_cl = {15/255, 20/255, 15/255}
 
@@ -458,12 +471,11 @@ function Draw_green_LED_num_and_letter(x, y, string, max_digits, size, alignment
     local blacklight_G = Math_rescale(min_brightness_for_backlight, 0, max_brightness_for_backlight, LED_backlight_cl[2], brightness)
     local blacklight_B = Math_rescale(min_brightness_for_backlight, 0, max_brightness_for_backlight, LED_backlight_cl[3], brightness)
 
-    sasl.gl.drawText(LED_font, x, y, backlight_string, size, false, false, alignment, {blacklight_R, blacklight_G, blacklight_B})
-    sasl.gl.drawText(LED_font, x, y, string, size, false, false, alignment, LED_cl)
+    sasl.gl.drawText(Font_7_digits, x, y, backlight_string, size, false, false, alignment, {blacklight_R, blacklight_G, blacklight_B})
+    sasl.gl.drawText(Font_7_digits, x, y, string, size, false, false, alignment, LED_cl)
 end
 
 function Draw_white_LED_num_and_letter(x, y, string, max_digits, size, alignment, min_brightness_for_backlight, max_brightness_for_backlight, brightness)
-    local LED_font = sasl.gl.loadFont("fonts/digital-7.mono.ttf")
     local LED_cl = {255/255, 255/255, 255/255, brightness}
     local LED_backlight_cl = {15/255, 16/255, 20/255}
 
@@ -478,8 +490,8 @@ function Draw_white_LED_num_and_letter(x, y, string, max_digits, size, alignment
     local blacklight_G = Math_rescale(min_brightness_for_backlight, 0, max_brightness_for_backlight, LED_backlight_cl[2], brightness)
     local blacklight_B = Math_rescale(min_brightness_for_backlight, 0, max_brightness_for_backlight, LED_backlight_cl[3], brightness)
 
-    sasl.gl.drawText(LED_font, x, y, backlight_string, size, false, false, alignment, {blacklight_R, blacklight_G, blacklight_B})
-    sasl.gl.drawText(LED_font, x, y, string, size, false, false, alignment, LED_cl)
+    sasl.gl.drawText(Font_7_digits, x, y, backlight_string, size, false, false, alignment, {blacklight_R, blacklight_G, blacklight_B})
+    sasl.gl.drawText(Font_7_digits, x, y, string, size, false, false, alignment, LED_cl)
 end
 
 function Get_rotated_point_x_pos(x, y, radius, angle)
@@ -490,7 +502,6 @@ function Get_rotated_point_y_pos(x, y, radius, angle)
     return y + radius * math.sin(math.rad(angle))
 end
 
-Perf_array = {}
 
 function perf_measure_start(name)
     if not debug_performance_measure then
@@ -529,67 +540,6 @@ function perf_measure_stop(name)
     sasl.pauseTimer(Perf_array[name].timer)
 end
 
-function display_special_mode(size, dataref)
-    Font_AirbusDUL = sasl.gl.loadFont("fonts/AirbusDULiberationMono.ttf")
-    sasl.gl.setFontRenderMode(Font_AirbusDUL, TEXT_RENDER_FORCED_MONO, 0.6)
-    if get(dataref) == 0 then
-        sasl.gl.drawRectangle(0, 0, size[1], size[2], {0,0,0})
-        sasl.gl.drawWideLine(0,0,size[1],size[2],2,{1,1,1})
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2, "INVALID DATA", 40, false, false, TEXT_ALIGN_CENTER, {1, 0.66, 0.16})
-        return true
-    elseif get(dataref) == 2 then
-        sasl.gl.drawRectangle(0, 2*size[2]/3, size[1]/8, size[2]/3, {1.0, 0.0, 0.0})
-        sasl.gl.drawRectangle(size[1]/8, 2*size[2]/3, size[1]/8, size[2]/2, {1, 0.33, 0})
-        sasl.gl.drawRectangle(2*size[1]/8, 2*size[2]/3, size[1]/8, size[2]/2, {1, 0.66, 0.16})
-        sasl.gl.drawRectangle(3*size[1]/8, 2*size[2]/3, size[1]/8, size[2]/2, {0.20, 0.98, 0.20})
-        sasl.gl.drawRectangle(4*size[1]/8, 2*size[2]/3, size[1]/8, size[2]/2, {0.004, 1.0, 1.0})
-        sasl.gl.drawRectangle(5*size[1]/8, 2*size[2]/3, size[1]/8, size[2]/2, {0, 0.4, 1.0})
-        sasl.gl.drawRectangle(6*size[1]/8, 2*size[2]/3, size[1]/8, size[2]/2, {0.1, 0.6, 1.0})
-        sasl.gl.drawRectangle(7*size[1]/8, 2*size[2]/3, size[1]/8, size[2]/2, {1.0, 0.0, 1.0})
-        
-        sasl.gl.drawRectangle(0, size[2]/3, size[1], size[2]/3, {1,1,1})
-        
-        sasl.gl.drawRectangle(0, 0, size[1]/8, size[2]/3, {0.1, 0.1, 0.1})
-        sasl.gl.drawRectangle(1*size[1]/8, 0, size[1]/8, size[2]/3, {0.2, 0.2, 0.2})
-        sasl.gl.drawRectangle(2*size[1]/8, 0, size[1]/8, size[2]/3, {0.3, 0.3, 0.3})
-        sasl.gl.drawRectangle(3*size[1]/8, 0, size[1]/8, size[2]/3, {0.4, 0.4, 0.4})
-        sasl.gl.drawRectangle(4*size[1]/8, 0, size[1]/8, size[2]/3, {0.5, 0.5, 0.5})
-        sasl.gl.drawRectangle(5*size[1]/8, 0, size[1]/8, size[2]/3, {0.6, 0.6, 0.6})
-        sasl.gl.drawRectangle(6*size[1]/8, 0, size[1]/8, size[2]/3, {0.8, 0.8, 0.8})
-        sasl.gl.drawRectangle(7*size[1]/8, 0, size[1]/8, size[2]/3, {1, 1, 1})
-        
-        sasl.gl.drawText(Font_AirbusDUL, 20, size[2]/2+100, "P/N : C483719090304", 25, false, false, TEXT_ALIGN_LEFT,  {0,0,0})
-        sasl.gl.drawText(Font_AirbusDUL, 20, size[2]/2+70, "S/N : C483719090304-2323", 25, false, false, TEXT_ALIGN_LEFT,  {0,0,0})
-        sasl.gl.drawText(Font_AirbusDUL, 20, size[2]/2-80, "EIS SW", 25, false, false, TEXT_ALIGN_LEFT,  {0,0,0})
-        sasl.gl.drawText(Font_AirbusDUL, 20, size[2]/2-110, "P/N : SXT40DXE254628440023400", 25, false, false, TEXT_ALIGN_LEFT,  {0,0,0})
-
-
-        sasl.gl.drawText(Font_AirbusDUL, size[1]-20, size[2]/2+100, "SIDESTICKSIM AVIONICS", 25, false, false, TEXT_ALIGN_RIGHT,  {0,0,0})
-        sasl.gl.drawText(Font_AirbusDUL, size[1]-20, size[2]/2-110, "LCDU 725", 25, false, false, TEXT_ALIGN_RIGHT,  {0,0,0})
-        return true
-    elseif get(dataref) == 3 then
-        sasl.gl.drawRectangle(0, 0, size[1], size[2], {0,0,0})
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2, "MAINTENANCE MODE", 40, false, false, TEXT_ALIGN_CENTER, {0.20, 0.98, 0.20})
-        return true
-    elseif get(dataref) == 4 then
-        sasl.gl.drawRectangle(0, 0, size[1], size[2], {0,0,0})
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2, "WAITING FOR DATA", 40, false, false, TEXT_ALIGN_CENTER, {0.20, 0.98, 0.20})
-        return true
-    elseif get(dataref) == 5 then
-        sasl.gl.drawRectangle(0, 0, size[1], size[2], {0,0,0})
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2+20, "SELF-TEST IN PROGRESS", 40, false, false, TEXT_ALIGN_CENTER, {0.20, 0.98, 0.20})
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2-20, "(MAX 30 SECONDS)", 40, false, false, TEXT_ALIGN_CENTER, {0.20, 0.98, 0.20})
-        return true
-    end
-    return false
-end
-
-ELEC_sys = {}
-Fuel_sys = {}
-AI_sys   = {}
-
-Mcdu_popup = {}
-Mcdu_popup_lut = 0
 
 function MCDU_get_popup(id) return Mcdu_popup[id] end
 function MCDU_set_popup(id, val) Mcdu_popup[id] = val end

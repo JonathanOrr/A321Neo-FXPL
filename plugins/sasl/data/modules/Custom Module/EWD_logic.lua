@@ -293,6 +293,11 @@ local function update_right_list()
     if land_asap and get(EWD_flight_phase) >= PHASE_ABOVE_80_KTS and get(EWD_flight_phase) <= PHASE_TOUCHDOWN then
         list_right:put(COL_WARNING, "LAND ASAP")
     end
+    
+    if land_asap and (get(EWD_flight_phase) >= PHASE_BELOW_80_KTS or get(EWD_flight_phase) < PHASE_1ST_ENG_TO_PWR) then
+        -- Reset after landing
+        land_asap = false    
+    end
 
     -- Initbition messages, these are always triggered when the related modes are actives
     if get(EWD_flight_phase) == PHASE_1ST_ENG_TO_PWR or get(EWD_flight_phase) == PHASE_ABOVE_80_KTS or get(EWD_flight_phase) == PHASE_LIFTOFF then

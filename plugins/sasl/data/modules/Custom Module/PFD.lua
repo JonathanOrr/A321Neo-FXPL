@@ -20,6 +20,7 @@ position = {30, 3166, 900, 900}
 size = {900, 900}
 
 include('constants.lua')
+include('display_common.lua')
 
 --varibles--
 local vvi_left_pixel_offset = 0

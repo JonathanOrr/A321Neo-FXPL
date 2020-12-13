@@ -1,5 +1,6 @@
 include('constants.lua')
 include('EWD.lua')
+include('display_common.lua')
 
 position = {0, 0, 900, 900}
 size = {900, 900}
