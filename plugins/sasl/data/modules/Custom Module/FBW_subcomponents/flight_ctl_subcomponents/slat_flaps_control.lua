@@ -88,6 +88,9 @@ function Slats_flaps_calc_and_control()
         else
             set(Flaps_ecam_amber, 0)
         end
+    else
+        set(Slats_ecam_amber, 0)
+        set(Flaps_ecam_amber, 0)
     end
 
     --SPEEDs logic--

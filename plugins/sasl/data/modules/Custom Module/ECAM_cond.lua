@@ -18,13 +18,22 @@
 
 include('constants.lua')
 
-function ecam_update_cond_page()
+local function draw_cond_page_valves()
+    SASL_rotated_center_img_xcenter_aligned(ECAM_COND_arrows_img, size[1]/2-213, size[2]/2+106, 10, 39, Math_rescale(0, -40, 1, 40, get(Aircond_trim_valve, 1)), 0, 0, ECAM_GREEN)
+    SASL_rotated_center_img_xcenter_aligned(ECAM_COND_arrows_img, size[1]/2-15, size[2]/2+106, 10, 39, Math_rescale(0, -40, 1, 40, get(Aircond_trim_valve, 2)), 0, 0, ECAM_GREEN)
+    SASL_rotated_center_img_xcenter_aligned(ECAM_COND_arrows_img, size[1]/2+172, size[2]/2+106, 10, 39, Math_rescale(0, -40, 1, 40, get(Aircond_trim_valve, 3)), 0, 0, ECAM_GREEN)
 
-    set(Ecam_cond_valve_hot_air, 2*get(Hot_air_valve_pos) + get(FAILURE_AIRCOND_HOT_AIR_STUCK))
-    set(Ecam_cond_valve_hot_air_cargo, 2*get(Hot_air_valve_pos_cargo) + get(FAILURE_AIRCOND_HOT_AIR_CARGO_STUCK))
-    set(Ecam_cond_valve_isol_cargo_in, 2*get(Cargo_isol_in_valve) + get(FAILURE_AIRCOND_ISOL_CARGO_IN_STUCK))
-    set(Ecam_cond_valve_isol_cargo_out, 2*get(Cargo_isol_out_valve) + get(FAILURE_AIRCOND_ISOL_CARGO_OUT_STUCK))
+    SASL_rotated_center_img_xcenter_aligned(ECAM_COND_arrows_img, size[1]/2+167, size[2]/2-254, 10, 39, Math_rescale(0, -40, 1, 40, get(Aircond_trim_valve, 4)), 0, 0, ECAM_GREEN)
 
+    --cabin hot air--
+    SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_COND_valves_img, size[1]/2+306, size[2]/2+31, 120, 58, 2, get(Hot_air_valve_pos) == 0 and 2 or 1, get(FAILURE_AIRCOND_HOT_AIR_STUCK) == 0 and ECAM_GREEN or ECAM_ORANGE)
+
+    --aft cargo valves
+    SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_COND_valves_img, size[1]/2+263, size[2]/2-75, 120, 58, 2, get(Cargo_isol_out_valve) == 0 and 2 or 1, get(FAILURE_AIRCOND_ISOL_CARGO_OUT_STUCK) == 0 and ECAM_GREEN or ECAM_ORANGE)
+    SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_COND_valves_img, size[1]/2+167, size[2]/2-194, 120, 58, 2, get(Cargo_isol_in_valve) == 0 and 1 or 2, get(FAILURE_AIRCOND_ISOL_CARGO_IN_STUCK) == 0 and ECAM_GREEN or ECAM_ORANGE)
+
+    --cargo hot air--
+    SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_COND_valves_img, size[1]/2+306, size[2]/2-311, 120, 58, 2, get(Hot_air_valve_pos_cargo) == 0 and 2 or 1, get(FAILURE_AIRCOND_HOT_AIR_CARGO_STUCK) == 0 and ECAM_GREEN or ECAM_ORANGE)
 end
 
 function draw_cond_page()
@@ -53,4 +62,5 @@ function draw_cond_page()
     --duct temperatures
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2+168, size[2]/2-92, Round(get(Aircond_injected_flow_temp,4),0), 32, false, false, TEXT_ALIGN_CENTER, get(Aircond_injected_flow_temp,4) > 80 and ECAM_ORANGE or ECAM_GREEN)
 
+    draw_cond_page_valves()
 end
