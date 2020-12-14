@@ -149,7 +149,7 @@ function update()
 
     perf_measure_stop("ECAM:update()")
 
-end 
+end
 
 --drawing the ECAM
 function draw()
