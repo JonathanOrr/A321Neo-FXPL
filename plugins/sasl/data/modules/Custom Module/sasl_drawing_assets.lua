@@ -35,10 +35,10 @@ ECAM_ENG_bgd_img =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textu
 ECAM_ENG_valve_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/ENG/valve.png")
 
 --BLEED--
-ECAM_BLEED_bgd_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/BLEED/Background.png")
-ECAM_BLEED_grey_lines_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/BLEED/grey_lines.png")
-ECAM_BLEED_mixer_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/BLEED/Top Mix Bleed.png")
-ECAM_BLEED_valves_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/BLEED/Valve.png")
+ECAM_BLEED_bgd_img =        sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/BLEED/Background.png")
+ECAM_BLEED_grey_lines_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/BLEED/grey_lines.png")
+ECAM_BLEED_mixer_img =      sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/BLEED/Top Mix Bleed.png")
+ECAM_BLEED_valves_img =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/BLEED/Valve.png")
 
 --PRESS--
 ECAM_PRESS_bgd_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/PRESS/cab_press.png")
@@ -53,12 +53,14 @@ ECAM_APU_bgd_img =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textu
 ECAM_APU_grey_lines_img =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/APU/grey_lines.png")
 
 --COND--
-ECAM_COND_bgd_img =   sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/COND/COND.png")
-ECAM_COND_grey_lines_img =   sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/COND/grey_lines.png")
+ECAM_COND_bgd_img =        sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/COND/COND.png")
+ECAM_COND_grey_lines_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/COND/grey_lines.png")
+ECAM_COND_arrows_img =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/COND/Temp_Arrow.png")
+ECAM_COND_valves_img =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/COND/Valve.png")
 
 --DOOR--
 ECAM_DOOR_bgd_img =   sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/DOOR/Background.png")
-ECAM_DOOR_grey_lines_img =   sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/DOOR/grey_lines.png")
+ECAM_DOOR_grey_lines_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/DOOR/grey_lines.png")
 
 --WHEEL--
 ECAM_WHEEL_bgd_img =               sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/WHEEL/WHEEL.png")

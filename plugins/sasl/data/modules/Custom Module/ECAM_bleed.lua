@@ -233,7 +233,3 @@ function draw_bleed_page()
     draw_ram_air()
     draw_needles_valves_and_mixer()
 end
-
-
-function ecam_update_bleed_page()
-end

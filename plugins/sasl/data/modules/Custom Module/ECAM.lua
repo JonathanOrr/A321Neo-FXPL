@@ -139,14 +139,10 @@ function update()
 	ecam_update_eng_page()  -- This must be called even if the page is not showed to update some stuffs for EWD
 	ecam_update_cruise_page()
 
-	if get(Ecam_current_page) == 2 then
-        ecam_update_bleed_page()
-    elseif get(Ecam_current_page) == 3 then
+    if get(Ecam_current_page) == 3 then
         ecam_update_press_page()
     elseif get(Ecam_current_page) == 7 then
         ecam_update_apu_page()
-    elseif get(Ecam_current_page) == 8 then
-        ecam_update_cond_page()
     elseif get(Ecam_current_page) == 10 then
         ecam_update_wheel_page()
     end
