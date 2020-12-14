@@ -1931,5 +1931,31 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /Wind
   VEH_XYZ 0 2.3 0
   EVENT_START_COND 	sim/flightmodel/position/true_airspeed >= 1
-  CUE_TRIGGER_COND  sim/flightmodel/position/true_airspeed < 1
+  EVENT_END_COND  sim/flightmodel/position/true_airspeed < 1
 END_SOUND_ATTACHMENT
+
+#############################################################################################
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Gear
+  VEH_XYZ 0 0 0
+  EVENT_START_COND 	ABS_DELTA=sim/flightmodel/movingparts/gear1def > 0
+END_SOUND_ATTACHMENT
+
+#############################################################################################
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /RevL
+  VEH_PART engine 0
+  EVENT_ALWAYS
+  PARAM_DREF_IDX 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /RevR
+  VEH_PART engine 1
+  EVENT_ALWAYS
+  PARAM_DREF_IDX 1
+END_SOUND_ATTACHMENT
+
+#############################################################################################

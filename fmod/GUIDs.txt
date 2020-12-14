@@ -46,14 +46,17 @@
 {06a66501-2a11-4b1a-a6f7-4fe5d089bc41} event:/Ext
 {f86c05b1-253e-4508-a475-4d354dd045c6} event:/Extractor
 {c9cf63f7-c575-4691-823b-716d0e5e1ba9} event:/Flaps
+{c97b703e-898e-4918-bc8c-259807c5ada1} event:/Gear
 {5339da63-baf2-40c8-aafd-6bf6a0fe8aac} event:/Ground Roll
 {140fc58e-381e-4651-af6d-901ab06e4c0e} event:/Liftoff
 {d5bc7710-4cf2-4544-ba28-726b316c7f21} event:/Packs
 {0e7dff21-7b4d-4b72-9343-4928951e126a} event:/PTU
+{ae0d038d-fec0-41da-828a-279e74f65900} event:/RevL
+{b0452156-9936-4b1e-9c0d-ec4992821fd2} event:/RevR
 {7797c67b-9d14-445b-8cc9-e63e0eebabf3} event:/TouchMain
 {72dd99e0-d646-42c0-8cc7-4e3f356095cc} event:/TouchNose
-{cba7ef70-43b1-4842-9d4b-51501041377c} event:/Yellow Hyd Pump
 {341873bc-d31e-4ee3-9cb2-1b0c79682754} event:/Wind
+{cba7ef70-43b1-4842-9d4b-51501041377c} event:/Yellow Hyd Pump
 {9f08114d-36ec-44cc-b8bf-b2babda09f9e} bus:/
 {7f7c05a4-e05a-4d44-94fe-d4691147a9b7} bus:/Master
 {e3492bec-f854-4fbb-b2bc-23586269032e} bus:/Master/Copilot
