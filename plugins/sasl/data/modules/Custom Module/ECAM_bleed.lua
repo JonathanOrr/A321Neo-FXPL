@@ -64,7 +64,7 @@ local function draw_bleed_numbers()
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2-250, size[2]/2-90, "XX", 32, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2+250, size[2]/2-55, "XX", 32, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2+250, size[2]/2-90, "XX", 32, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
-        return 
+        return
     end
 
     bleed_1_press_col = (get(L_bleed_press) > 4 and get(L_bleed_press) < 57) and ECAM_GREEN or ECAM_ORANGE
@@ -98,11 +98,11 @@ local function draw_apu_and_gas()
     end
 
     if get(Apu_bleed_switch) == 1 then
-        sasl.gl.drawWideLine(size[1]/2+3, size[2]/2-50, size[1]/2+3, size[2]/2+40, 3, ECAM_GREEN)
+        sasl.gl.drawWideLine(size[1]/2, size[2]/2-50, size[1]/2, size[2]/2+42, 3, ECAM_GREEN)
     end
-    
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+3, size[2]/2-170, "APU", 32, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    sasl.gl.drawWideLine(size[1]/2+3, size[2]/2-140, size[1]/2+3, size[2]/2-100, 3, ECAM_GREEN)
+
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2-170, "APU", 32, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawWideLine(size[1]/2, size[2]/2-140, size[1]/2, size[2]/2-100, 3, ECAM_GREEN)
 end
 
 local function draw_x_bleed()
@@ -111,45 +111,13 @@ local function draw_x_bleed()
         -- Line left displayed
         sasl.gl.drawWideLine(size[1]/2-248, size[2]/2+44, size[1]/2+55, size[2]/2+44, 3, ECAM_GREEN)
     end
-   
+
     if get(X_bleed_valve) == 1 then
         -- Line right displayed
         sasl.gl.drawWideLine(size[1]/2+109, size[2]/2+44, size[1]/2+251, size[2]/2+44, 3, ECAM_GREEN)
     end
 
 
-end
-
-local function update_valves_dr()
-
-    -- IP and HP
-    set(Ecam_bleed_hp_valve_L, get(L_HP_valve) * 2 + get(FAILURE_BLEED_HP_1_VALVE_STUCK))
-    set(Ecam_bleed_hp_valve_R, get(R_HP_valve) * 2 + get(FAILURE_BLEED_HP_2_VALVE_STUCK))
-    set(Ecam_bleed_ip_valve_L, get(ENG_1_bleed_switch) * 2 + get(FAILURE_BLEED_IP_1_VALVE_STUCK))
-    set(Ecam_bleed_ip_valve_R, get(ENG_2_bleed_switch) * 2 + get(FAILURE_BLEED_IP_2_VALVE_STUCK))
-    
-    -- X BLEED
-    set(Ecam_bleed_xbleed_valve, get(X_bleed_valve) * 2 + get(FAILURE_BLEED_XBLEED_VALVE_STUCK))
-    
-    -- Packs
-    set(Ecam_bleed_pack_valve_L, get(Pack_L) * 2 + get(FAILURE_BLEED_PACK_1_VALVE_STUCK))
-    set(Ecam_bleed_pack_valve_R, get(Pack_R) * 2 + get(FAILURE_BLEED_PACK_2_VALVE_STUCK))
-
-    -- RAM AIR
-    if get(FAILURE_BLEED_RAM_AIR_STUCK) == 0 then
-        if get(Emer_ram_air) == 0 then
-            set(Ecam_bleed_ram_air, 0)
-        elseif get(All_on_ground) == 1 then
-            set(Ecam_bleed_ram_air, 3)
-        else
-            set(Ecam_bleed_ram_air, 2)    
-        end
-    else
-        set(Ecam_bleed_ram_air, 1 + 2*get(Emer_ram_air))
-    end
-    -- TOP Line
-    set(Ecam_bleed_top_mix_line, (get(Emer_ram_air) == 0 and get(Pack_L) == 0 and get(Pack_R) == 0) and 0 or 1)
-    
 end
 
 local function draw_packs()
@@ -173,7 +141,7 @@ local function draw_ram_air()
         sasl.gl.drawWideLine(size[1]/2, size[2]/2+343, size[1]/2, size[2]/2+375, 3, ECAM_GREEN)
     end
     sasl.gl.drawWideLine(size[1]/2, size[2]/2+290, size[1]/2, size[2]/2+250, 3, ECAM_GREEN)
-end 
+end
 
 local function draw_triangle_left(x,y,color)
     sasl.gl.drawWidePolyLine( {x, y, x+25, y+15, x+25, y-15, x, y }, 3, color)
@@ -198,7 +166,7 @@ local function draw_ai()
     else
         ground_open_start = 0
     end
-    
+
     if AI_sys.comp[ANTIICE_WING_L].valve_status then
         if get(AI_wing_L_operating) == 1 and (get(Any_wheel_on_ground) == 0 or (get(TIME) - ground_open_start < 10)) then
             draw_triangle_left(size[1]/2-285, size[2]/2+40, ECAM_GREEN)
@@ -214,7 +182,43 @@ local function draw_ai()
             draw_triangle_right(size[1]/2+290, size[2]/2+40, ECAM_ORANGE)
         end
     end
-    
+
+end
+
+local function draw_needles_valves_and_mixer()
+    --pre cooler needle
+    SASL_draw_needle(size[1]/2-250, size[2]/2+226, 67, Math_rescale(0, 150, 1, 30, get(L_pack_byp_valve)), 3.8, ECAM_GREEN)
+    SASL_draw_needle(size[1]/2+251, size[2]/2+226, 67, Math_rescale(0, 150, 1, 30, get(R_pack_byp_valve)), 3.8, ECAM_GREEN)
+
+    --pack flow needle
+    SASL_draw_needle_adv(size[1]/2-250, size[2]/2+118, 26, 67, Math_rescale(0, 148, 1.2, 32, get(L_pack_Flow_value)), 2.8, get(L_pack_Flow_value) >= 0.01 and ECAM_GREEN or ECAM_ORANGE)
+    SASL_draw_needle_adv(size[1]/2+252, size[2]/2+118, 26, 67, Math_rescale(0, 148, 1.2, 32, get(R_pack_Flow_value)), 2.8, get(R_pack_Flow_value) >= 0.01 and ECAM_GREEN or ECAM_ORANGE)
+
+    --mixer line
+    SASL_draw_img_xcenter_aligned(ECAM_BLEED_mixer_img, size[1]/2+4, size[2]/2+352, 518, 62, (get(Emer_ram_air) == 0 and get(Pack_L) == 0 and get(Pack_R) == 0) and ECAM_ORANGE or ECAM_GREEN)
+
+    --ram air
+    SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_BLEED_valves_img, size[1]/2+0, size[2]/2+287, 180, 58, 3, get(Emer_ram_air) == 0 and 1 or 3, (get(FAILURE_BLEED_PACK_1_VALVE_STUCK) == 1 or (get(All_on_ground) == 1 and get(Emer_ram_air) == 1) and ECAM_ORANGE or ECAM_GREEN))
+
+    --PACK valves
+    SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_BLEED_valves_img, size[1]/2-249, size[2]/2+88, 180, 58, 3, get(Pack_L) == 0 and 1 or 3, get(FAILURE_BLEED_PACK_1_VALVE_STUCK) == 0 and ECAM_GREEN or ECAM_ORANGE)
+    SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_BLEED_valves_img, size[1]/2+253, size[2]/2+88, 180, 58, 3, get(Pack_R) == 0 and 1 or 3, get(FAILURE_BLEED_PACK_2_VALVE_STUCK) == 0 and ECAM_GREEN or ECAM_ORANGE)
+
+    --X bleeds
+    SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_BLEED_valves_img, size[1]/2+82, size[2]/2+14, 180, 58, 3, get(X_bleed_valve) == 0 and 3 or 1, get(FAILURE_BLEED_XBLEED_VALVE_STUCK) == 0 and ECAM_GREEN or ECAM_ORANGE)
+
+    --IP valves
+    SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_BLEED_valves_img, size[1]/2-249, size[2]/2-223, 180, 58, 3, get(ENG_1_bleed_switch) == 0 and 1 or 3, get(FAILURE_BLEED_IP_1_VALVE_STUCK) == 0 and ECAM_GREEN or ECAM_ORANGE)
+    SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_BLEED_valves_img, size[1]/2+252, size[2]/2-223, 180, 58, 3, get(ENG_2_bleed_switch) == 0 and 1 or 3, get(FAILURE_BLEED_IP_2_VALVE_STUCK) == 0 and ECAM_GREEN or ECAM_ORANGE)
+
+    --HP valves
+    SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_BLEED_valves_img, size[1]/2-177, size[2]/2-283, 180, 58, 3, get(L_HP_valve) == 0 and 3 or 1, get(FAILURE_BLEED_HP_1_VALVE_STUCK) == 0 and ECAM_GREEN or ECAM_ORANGE)
+    SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_BLEED_valves_img, size[1]/2+180, size[2]/2-283, 180, 58, 3, get(R_HP_valve) == 0 and 3 or 1, get(FAILURE_BLEED_HP_2_VALVE_STUCK) == 0 and ECAM_GREEN or ECAM_ORANGE)
+
+    --APU valves
+    if not (get(Apu_master_button_state) == 0 and get(FAILURE_BLEED_APU_VALVE_STUCK) == 0) then
+        SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_BLEED_valves_img, size[1]/2+0, size[2]/2-105, 180, 58, 3, get(Apu_bleed_switch) == 0 and 1 or 3, get(FAILURE_BLEED_APU_VALVE_STUCK) == 0 and ECAM_GREEN or ECAM_ORANGE)
+    end
 end
 
 function draw_bleed_page()
@@ -227,10 +231,9 @@ function draw_bleed_page()
     draw_ai()
     draw_packs()
     draw_ram_air()
-
+    draw_needles_valves_and_mixer()
 end
 
 
 function ecam_update_bleed_page()
-    update_valves_dr()
 end

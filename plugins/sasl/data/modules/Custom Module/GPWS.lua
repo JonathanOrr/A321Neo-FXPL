@@ -17,6 +17,9 @@
 -------------------------------------------------------------------------------
 
 include('constants.lua')
+include('GPWS_predictive.lua')
+
+
 local PRELIMINARY_MODE_2_TIME = 5
 local UPDATE_INTERVAL = 0.5
 
@@ -30,8 +33,12 @@ local gpws_gs_mode = true
 local gpws_flap_mode = true
 local gpws_flap_3_mode = false
 
+local gpws_terrain_is_working = false -- TODO
+
 local time_in_mode_2 = 0
 local initial_alt_in_mode_2 = 0
+
+local max_ra_gained = 0 -- For MODE 4c
 
 local prev_ra = 0   -- Previous frame radio altitude for rate computation
 local last_update = 0
@@ -48,6 +55,9 @@ sasl.registerCommandHandler (GPWS_cmd_GS_MODE, 0, function(phase) if phase == SA
 sasl.registerCommandHandler (GPWS_cmd_FLAP_MODE, 0, function(phase) if phase == SASL_COMMAND_BEGIN then gpws_flap_mode = not gpws_flap_mode end end )
 sasl.registerCommandHandler (GPWS_cmd_LDG_FLAP_3, 0, function(phase) if phase == SASL_COMMAND_BEGIN then gpws_flap_3_mode = not gpws_flap_3_mode end end )
 
+-------------------------------------------------------------------------------
+-- MODE 1
+-------------------------------------------------------------------------------
 
 function update_mode_1(alt, vs)
 
@@ -86,12 +96,13 @@ function update_mode_1(alt, vs)
 
 end
 
+-------------------------------------------------------------------------------
+-- MODE 2
+-------------------------------------------------------------------------------
+
 local function is_flap_in_landing()
     return (get(Flaps_internal_config) == 5 or (get(Flaps_internal_config) == 4 and gpws_flap_3_mode))
 end
-
-
-
 
 local function get_mode_2_submodes(alt, ias)
 
@@ -189,6 +200,11 @@ function update_mode_2(alt, vs, ias)
     
 end
 
+-------------------------------------------------------------------------------
+-- MODE 3
+-------------------------------------------------------------------------------
+
+
 function update_mode_3(alt, vs)
     set(GPWS_mode_3_dontsink, 0)
 
@@ -199,7 +215,9 @@ function update_mode_3(alt, vs)
         return
     end
 
-    if alt < 245 then   -- Takeoff or go-around is defined as the aircraft being lower than 245
+    if alt < 245 and (get(Eng_1_N1) >= 74 or get(Eng_2_N1) >= 74) then
+        -- Takeoff or go-around is defined as the aircraft being lower than 245
+        -- and takeoff power applied
         mode_3_armed = true
     elseif alt > 1500 then
         mode_3_armed = false
@@ -218,6 +236,187 @@ function update_mode_3(alt, vs)
 
 end
 
+-------------------------------------------------------------------------------
+-- MODE 4
+-------------------------------------------------------------------------------
+function update_mode_4_a(alt, ias)
+    local upper_limit =  gpws_terrain_is_working and 500 or 1000
+    
+    if alt < 30 or alt > upper_limit then
+        return
+    end
+    
+    if get(Front_gear_deployment) + get(Left_gear_deployment) + get(Right_gear_deployment) >= 3 then
+        return -- Landing gear is down
+    end
+    
+    -- Region 1: TOO LOW GEAR
+    if ias <= 190 and alt <= 500 then
+        set(GPWS_mode_4_tl_gear, 1)
+    end
+
+    -- Region 2: TOO LOW TERRAIN
+    local line_limit = Math_rescale(190, 500, 250, upper_limit, ias)
+    if ias > 190 and alt <= line_limit then
+        set(GPWS_mode_4_a_terrain, 1)
+    end
+
+    set(GPWS_mode_4_mode_a, 1)
+end
+
+function update_mode_4_b(alt, ias)
+    local upper_limit =  gpws_terrain_is_working and 500 or 1000
+    
+    if alt < 30 or alt > upper_limit then
+        return
+    end
+    
+    if is_flap_in_landing() then
+        return -- Flaps ok return
+    end
+    
+    -- Region 1: TOO LOW FLAPS
+    if ias <= 159 and alt <= 245 then
+        set(GPWS_mode_4_tl_flaps, 1)
+    end
+
+    -- Region 2: TOO LOW TERRAIN
+    local line_limit = Math_rescale(159, 245, 250, upper_limit, ias)
+    if ias > 159 and alt <= line_limit then
+        set(GPWS_mode_4_b_terrain, 1)
+    end
+
+    set(GPWS_mode_4_mode_b, 1)
+    
+end
+
+function update_mode_4_c(alt, ias)
+    if get(EWD_flight_phase) >= 9 or get(EWD_flight_phase) <= 2 then
+        max_ra_gained = 0
+    end
+    
+    if alt > max_ra_gained then
+        max_ra_gained = alt
+    end
+    
+    if max_ra_gained > 1000 then
+        return -- Already took off
+    end
+    
+    if alt < 30 or alt > Math_rescale(190, 500, 250, 1000, ias) then
+        return -- not enabled    
+    end
+
+    if is_flap_in_landing() and get(Front_gear_deployment) + get(Left_gear_deployment) + get(Right_gear_deployment) >= 3 then
+        return -- Flaps and gear ok, no trigger
+    end
+
+    set(GPWS_mode_4_mode_c, 1)
+    
+    if max_ra_gained >= 1333 and max_ra_gained <= 2400 and alt < 1000 then
+        set(GPWS_mode_4_c_terrain, 1)
+    elseif alt < Math_rescale(100, 50, 1333, 1000, max_ra_gained) then
+        set(GPWS_mode_4_c_terrain, 1)
+    end
+    
+end
+
+function update_mode_4(alt, ias)
+    -- Resets the datarefs
+    set(GPWS_mode_is_active, 0, 4)
+
+    set(GPWS_mode_4_mode_a, 0)
+    set(GPWS_mode_4_mode_b, 0)
+    set(GPWS_mode_4_mode_c, 0)
+
+    set(GPWS_mode_4_a_terrain, 0)
+    set(GPWS_mode_4_b_terrain, 0)
+    set(GPWS_mode_4_c_terrain, 0)
+    set(GPWS_mode_4_tl_flaps, 0)
+    set(GPWS_mode_4_tl_gear, 0)
+
+
+    if gpws_system_mode then
+        if get(EWD_flight_phase) == PHASE_FINAL or get(EWD_flight_phase) == PHASE_AIRBONE then
+            -- 4A - Gear
+            update_mode_4_a(alt, ias)
+            if gpws_flap_mode then
+                -- 4B - Flaps
+                update_mode_4_b(alt, ias)
+            end
+        end
+        -- 4C - After takeoff protection
+        update_mode_4_c(alt, ias)
+    end
+    
+    set(GPWS_mode_is_active, math.min(1, get(GPWS_mode_4_mode_a) + get(GPWS_mode_4_mode_b) + get(GPWS_mode_4_mode_c)), 4)
+    if get(GPWS_mode_is_active) == 1 then
+        is_caution = true
+    end
+end
+
+-------------------------------------------------------------------------------
+-- MODE 5
+-------------------------------------------------------------------------------
+
+function update_mode_5(alt)
+
+    set(GPWS_mode_is_active, 0, 5)
+
+    if not gpws_gs_mode then
+        return -- Manually disabled
+    end
+
+    if get(ILS_1_glideslope_flag) == 1 then
+        return -- No ILS signal received
+    end
+
+    if get(EWD_flight_phase) ~= PHASE_FINAL and get(EWD_flight_phase) ~= PHASE_AIRBONE then
+        return
+    end
+    
+    if alt > 1000 then
+        return -- Too high - inibith
+    end
+
+    if alt < 30 then
+        return -- Too low - inibith
+    end
+
+    set(GPWS_mode_is_active, 1, 5)
+    
+    -- Ok so, the minimum of x-plane dots is -2.5, the following rules apply:
+    -- - if > 350 RA is a "light" glideslope if dots < -1.3
+    -- if 180 < RA < 350: it's "light" if < -1.3 or "hard" if < -2
+    -- if 30 < RA < 180: we have two lines
+    
+    if alt >= 350 and get(ILS_1_glideslope_dots) <= -1.3 then
+        set(GPWS_mode_5_glideslope, 1)
+    end
+
+    if alt < 350 and alt >= 180 and get(ILS_1_glideslope_dots) <= -1.3 and get(ILS_1_glideslope_dots) > -2 then
+        set(GPWS_mode_5_glideslope, 1)
+    end
+
+    if alt < 350 and alt >= 180 and get(ILS_1_glideslope_dots) <= -2 then
+        set(GPWS_mode_5_glideslope_hard, 1)
+    end
+    
+    if alt < 180 and get(ILS_1_glideslope_dots) <= Math_rescale(30, -3.6, 180, -2, alt) then
+        set(GPWS_mode_5_glideslope_hard, 1)
+    elseif alt < 180 and  get(ILS_1_glideslope_dots) <= Math_rescale(30, -3, 180, -1, alt)  then
+        set(GPWS_mode_5_glideslope, 1)
+    end
+
+    if get(GPWS_mode_5_glideslope) + get(GPWS_mode_5_glideslope_hard) >= 1 then
+        is_caution = true
+    end
+end
+-------------------------------------------------------------------------------
+-- MISC
+-------------------------------------------------------------------------------
+
+
 local function update_pbs()
     pb_set(PB.mip.gpws_capt, is_caution, is_warning)
     
@@ -233,7 +432,7 @@ local function update_local_data()
     if get(TIME) - last_update > UPDATE_INTERVAL then
         last_update = get(TIME)
         
-        local radio_rate = get(DELTA_TIME) > 0 and (get(Capt_ra_alt_ft) - prev_ra) / get(DELTA_TIME) * 60 or 0
+        local radio_rate = get(DELTA_TIME) > 0 and ((get(Capt_ra_alt_ft) - prev_ra) / UPDATE_INTERVAL * 60) or 0
         prev_ra = get(Capt_ra_alt_ft)
         
         data_delayed.ra_altitide = get(Capt_ra_alt_ft)
@@ -254,6 +453,10 @@ function update()
     update_mode_1(data_delayed.ra_altitide, data_delayed.vvi_rate)
     update_mode_2(data_delayed.ra_altitide, data_delayed.ra_rate, data_delayed.ias)
     update_mode_3(data_delayed.ra_altitide, data_delayed.vvi_rate)
-
+    update_mode_4(data_delayed.ra_altitide, data_delayed.ias)
+    update_mode_5(data_delayed.ra_altitide)
+    
+    update_gpws_predictive()
+    
     update_pbs()
 end

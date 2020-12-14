@@ -9057,9 +9057,11 @@ IDX	7009
 			TRIS	396 66
 			ATTR_manip_command_knob	rotate_medium	a321neo/cockpit/rain/wiper_R_dn_c	a321neo/cockpit/rain/wiper_R_up_cc	Right windshield wiper mode
 			TRIS	462 66
-			ATTR_manip_command	button	a321neo/cockpit/oxygen/man_mask_on	Manual oxygen mask on
+			ATTR_manip_command	button	a321neo/cockpit/fire/cargo_test	Test cargo smoke
 			TRIS	2370 66
+			ATTR_manip_command	button	a321neo/cockpit/fire/cargo_fwd_disch	Discharge fwd cargo agent
 			TRIS	2436 66
+			ATTR_manip_command	button	a321neo/cockpit/fire/cargo_aft_disch	Discharge aft cargo agent
 			TRIS	2502 66
 			ATTR_manip_command	button	a321neo/cockpit/rain/repellent_R	Dispense rain repellent
 			TRIS	2568 66
@@ -9201,29 +9203,29 @@ IDX	7009
 		TRIS	9846 84
 		ATTR_manip_command_knob	up_down	a321neo/cockpit/lights/dome_lt_up	a321neo/cockpit/lights/dome_lt_down	Toggle dome light
 		TRIS	9930 84
-		ATTR_manip_command_knob	up_down	a321neo/cockpit/lights/emer_exit_up	a321neo/cockpit/lights/emer_exit_dn	Toggle dome light
+		ATTR_manip_command_knob	up_down	a321neo/cockpit/lights/emer_exit_up	a321neo/cockpit/lights/emer_exit_dn	Toggle emergency lights
 		TRIS	10080 84
-		ATTR_manip_command_knob	up_down	a321neo/cockpit/misc/noped_up	a321neo/cockpit/misc/noped_dn	Toggle dome light
+		ATTR_manip_command_knob	up_down	a321neo/cockpit/misc/noped_up	a321neo/cockpit/misc/noped_dn	Toggle no protable electronic devices
 		TRIS	10164 84
-		ATTR_manip_command_knob	up_down	a321neo/cockpit/misc/seatbelts_up	a321neo/cockpit/misc/seatbelts_dn	
+		ATTR_manip_command_knob	up_down	a321neo/cockpit/misc/seatbelts_up	a321neo/cockpit/misc/seatbelts_dn	Toggle seat belt signs
 		TRIS	10248 84
-		ATTR_manip_command	button	a321neo/cockpit/lights/compass_toggle	Toggle dome light
+		ATTR_manip_command	button	a321neo/cockpit/lights/compass_toggle	Toggle ice indication and standby compass light
 		TRIS	10332 84
-		ATTR_manip_command_knob	up_down	a321neo/cockpit/lights/nose_up	a321neo/cockpit/lights/nose_dn	Toggle dome light
+		ATTR_manip_command_knob	up_down	a321neo/cockpit/lights/nose_up	a321neo/cockpit/lights/nose_dn	Toggle nose light
 		TRIS	10416 84
-		ATTR_manip_command_knob	up_down	a321neo/cockpit/lights/land_R_up	a321neo/cockpit/lights/land_R_dn	Toggle dome light
+		ATTR_manip_command_knob	up_down	a321neo/cockpit/lights/land_R_up	a321neo/cockpit/lights/land_R_dn	Toggle right landing light
 		TRIS	10500 84
-		ATTR_manip_command_knob	up_down	a321neo/cockpit/lights/land_L_up	a321neo/cockpit/lights/land_L_dn	Toggle dome light
+		ATTR_manip_command_knob	up_down	a321neo/cockpit/lights/land_L_up	a321neo/cockpit/lights/land_L_dn	Toggle left landing light
 		TRIS	10584 84
-		ATTR_manip_command	button	a321neo/cockpit/lights/rwy_turnoff_toggle	Toggle dome light
+		ATTR_manip_command	button	a321neo/cockpit/lights/rwy_turnoff_toggle	Toggle runway turn off
 		TRIS	10668 84
 		ATTR_manip_command_knob	up_down	a321neo/cockpit/lights/navlogo_up	a321neo/cockpit/lights/navlogo_dn	Toggle NAV & LOGO lights
 		TRIS	10752 84
-		ATTR_manip_command	button	a321neo/cockpit/lights/wing_toggle	Toggle dome light
+		ATTR_manip_command	button	a321neo/cockpit/lights/wing_toggle	Toggle wing lights
 		TRIS	10836 84
-		ATTR_manip_command	button	a321neo/cockpit/lights/beacon_toggle	Toggle dome light
+		ATTR_manip_command	button	a321neo/cockpit/lights/beacon_toggle	Toggle beacon lights
 		TRIS	10920 84
-		ATTR_manip_command_knob	up_down	a321neo/cockpit/lights/strobe_up	a321neo/cockpit/lights/strobe_dn	Toggle dome light
+		ATTR_manip_command_knob	up_down	a321neo/cockpit/lights/strobe_up	a321neo/cockpit/lights/strobe_dn	Toggle strobe lights
 		TRIS	11004 84
 	ATTR_manip_none
 			ATTR_draw_enable
@@ -9255,12 +9257,15 @@ IDX	7009
 		TRIS	8514 6
 		ATTR_manip_none
 		TRIS	8520 6
-		ATTR_manip_command	button	a321neo/cockpit/cancel_master_warning	Accept master warning
+		ATTR_manip_command	button	a321neo/cockpit/cancel_master_caution	Accept master caution
 		TRIS	8526 6
+		ATTR_manip_command	button	a321neo/cockpit/cancel_master_warning	Accept master warning
 		TRIS	8532 6
-		ATTR_manip_command	button		
+		ATTR_manip_command	button	a321neo/cockpit/fcu/fo_ls	Toggle FO landing system
 		TRIS	8538 6
+		ATTR_manip_command	button	a321neo/cockpit/fcu/fo_fd	Toggle FO flight directors
 		TRIS	8544 6
+		ATTR_manip_command	button		
 		TRIS	8550 6
 		TRIS	8556 6
 		TRIS	8562 6
@@ -9271,13 +9276,21 @@ IDX	7009
 		TRIS	8592 6
 		TRIS	8598 6
 		TRIS	8604 6
+		ATTR_manip_command	button	a321neo/cockpit/fcu/capt_fd	Toggle CAPT flight directors
 		TRIS	8610 6
+		ATTR_manip_command	button	a321neo/cockpit/fcu/capt_ls	Toggle CAPT landing system
 		TRIS	8616 6
+		ATTR_manip_command	button	a321neo/cockpit/fcu/pb_loc	Toggle localizer mode
 		TRIS	8622 6
+		ATTR_manip_command	button	a321neo/cockpit/fcu/pb_exped	Toggle expedit mode
 		TRIS	8628 6
+		ATTR_manip_command	button	a321neo/cockpit/fcu/pb_appr	Toggle approach
 		TRIS	8634 6
+		ATTR_manip_command	button	a321neo/cockpit/fcu/pb_athr	Toggle auto thrust
 		TRIS	8640 6
+		ATTR_manip_command	button	a321neo/cockpit/fcu/pb_ap_1	Toggle autopilot 1
 		TRIS	8646 6
+		ATTR_manip_command	button	a321neo/cockpit/fcu/pb_ap_2	Toggle autopilot 2
 		TRIS	8652 6
 	ATTR_manip_none
 		ATTR_draw_enable

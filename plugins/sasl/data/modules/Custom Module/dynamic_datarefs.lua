@@ -670,4 +670,25 @@ GPWS_mode_2_terr     = createGlobalPropertyi("a321neo/dynamics/gpws/mode_2/terra
 
 GPWS_mode_3_dontsink = createGlobalPropertyi("a321neo/dynamics/gpws/mode_3/dontsink", 0, false, true, false)
 
+GPWS_mode_4_mode_a = createGlobalPropertyi("a321neo/dynamics/gpws/mode_3/mode_a", 0, false, true, false)
+GPWS_mode_4_mode_b = createGlobalPropertyi("a321neo/dynamics/gpws/mode_3/mode_b", 0, false, true, false)
+GPWS_mode_4_mode_c = createGlobalPropertyi("a321neo/dynamics/gpws/mode_3/mode_c", 0, false, true, false)
+
+GPWS_mode_4_a_terrain = createGlobalPropertyi("a321neo/dynamics/gpws/mode_4/terrain_a", 0, false, true, false)
+GPWS_mode_4_b_terrain = createGlobalPropertyi("a321neo/dynamics/gpws/mode_4/terrain_b", 0, false, true, false)
+GPWS_mode_4_c_terrain = createGlobalPropertyi("a321neo/dynamics/gpws/mode_4/terrain_c", 0, false, true, false)
+GPWS_mode_4_tl_flaps  = createGlobalPropertyi("a321neo/dynamics/gpws/mode_4/tl_flaps", 0, false, true, false)
+GPWS_mode_4_tl_gear   = createGlobalPropertyi("a321neo/dynamics/gpws/mode_4/tl_gear", 0, false, true, false)
+
+GPWS_mode_5_glideslope = createGlobalPropertyi("a321neo/dynamics/gpws/mode_5/glideslope", 0, false, true, false)
+GPWS_mode_5_glideslope_hard = createGlobalPropertyi("a321neo/dynamics/gpws/mode_5/glideslope_hard", 0, false, true, false)
+
+GPWS_pred_is_active = createGlobalPropertyi("a321neo/dynamics/gpws/pred/is_active", 0, false, true, false)
+GPWS_pred_terr      = createGlobalPropertyi("a321neo/dynamics/gpws/pred/terrain", 0, false, true, false)
+GPWS_pred_obst      = createGlobalPropertyi("a321neo/dynamics/gpws/pred/obstacle", 0, false, true, false)
+GPWS_pred_terr_pull = createGlobalPropertyi("a321neo/dynamics/gpws/pred/terrain_pull", 0, false, true, false)
+GPWS_pred_obst_pull = createGlobalPropertyi("a321neo/dynamics/gpws/pred/obstacle_pull", 0, false, true, false)
+
+GPWS_dist_60 = createGlobalPropertyf("a321neo/dynamics/gpws/pred/debug_dist_60", 0, false, true, false) -- Distance in 60 sec for debug only
+GPWS_dist_30 = createGlobalPropertyf("a321neo/dynamics/gpws/pred/debug_dist_30", 0, false, true, false) -- Distance in 30 sec for debug only
 

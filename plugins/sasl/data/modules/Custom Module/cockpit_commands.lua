@@ -384,9 +384,9 @@ FIRE_cmd_test_ENG_1= sasl.createCommand("a321neo/cockpit/fire/eng_1_test","Press
 FIRE_cmd_test_ENG_2= sasl.createCommand("a321neo/cockpit/fire/eng_2_test","Press ENG 2 big red button")
 FIRE_cmd_test_APU  = sasl.createCommand("a321neo/cockpit/fire/apu_test","Press APU big red button")
 
-FIRE_cmd_smoke_cargo_test = sasl.createCommand("a321neo/cockpit/fire/cargo_test","Press APU big red button")
-FIRE_cmd_smoke_cargo_fwd = sasl.createCommand("a321neo/cockpit/fire/cargo_fwd_disch","Press APU big red button")
-FIRE_cmd_smoke_cargo_aft = sasl.createCommand("a321neo/cockpit/fire/cargo_aft_disch","Press APU big red button")
+FIRE_cmd_smoke_cargo_test = sasl.createCommand("a321neo/cockpit/fire/cargo_test","Press test cargo smoke button")
+FIRE_cmd_smoke_cargo_fwd = sasl.createCommand("a321neo/cockpit/fire/cargo_fwd_disch","Press discharge forward cargo agent button")
+FIRE_cmd_smoke_cargo_aft = sasl.createCommand("a321neo/cockpit/fire/cargo_aft_disch","Press discharge aft cargo agent button")
 
 -- MAINTENANCE Panel
 MNTN_OXY_reset   = sasl.createCommand("a321neo/cockpit/mntn/oxy_tmr_reset","Press OXY TMR RESET")
