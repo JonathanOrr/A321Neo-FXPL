@@ -10,7 +10,7 @@ Please don't complain to the developers for the missing features and check the #
 ## License
 Different components of this aircraft addon are licensed under different licenses.
 * The main repository structure, all the lua files, the cockpit images, and all other files not otherwise specified are distributed according to the **GNU General Public License V3.0**. Please refer to the main [LICENSE](LICENSE) file. The copyright owners are all the developers contributing to the project. **If you create a derivative work you MUST share it under GPL or a GPL-compatible license!**
-* For other components (plugin engine, sounds, and graphical model) please refer to the [ACKNOWLEDGEMENTS.md](ACKNOWLEDGEMENTS.md) file.
+* For other components (plugin engine, sounds, and graphical model) please refer to the [ACKNOWLEDGMENTS.md](ACKNOWLEDGMENTS.md) file.
 
 ## Install
 Just git clone repo to the Aircraft X-Plane directory. Once the development reaches a stable stage, zip files of stable releases will be provided. 
