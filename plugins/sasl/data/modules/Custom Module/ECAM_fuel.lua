@@ -52,9 +52,9 @@ local function draw_tank_qty()
     local fuel_R  = math.floor(get(Fuel_quantity[FUEL_TANK_R]))
     local fuel_ACT= math.floor(get(Fuel_quantity[FUEL_TANK_ACT]))
     local fuel_RCT= math.floor(get(Fuel_quantity[FUEL_TANK_RCT]))
-    
+
     local c_pump_fail_or_off = fuel_C > 0 and (not Fuel_sys.tank_pump_and_xfr[5].status) and (not Fuel_sys.tank_pump_and_xfr[5].status)
-    
+
     local act_pump_fail = get(FAILURE_FUEL, 7) == 1
     local rct_pump_fail = get(FAILURE_FUEL, 8) == 1
 
@@ -80,7 +80,7 @@ local function draw_tank_qty()
     draw_wide_frame(size[2]/2-40, size[2]/2-160, size[2]/2-160, size[2]/2-120, 3, act_pump_fail and ECAM_ORANGE or ECAM_WHITE)
     sasl.gl.drawText(Font_AirbusDUL, size[2]/2+100, size[2]/2-188, "RCT", 32, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
     draw_wide_frame(size[2]/2+40, size[2]/2-160, size[2]/2+160, size[2]/2-120, 3, rct_pump_fail and ECAM_ORANGE or ECAM_WHITE)
-    
+
     -- Box center tank
     if c_pump_fail_or_off then
         sasl.gl.drawWideLine(size[1]/2-70, size[2]/2-10, size[1]/2+70, size[2]/2-10, 3 , ECAM_ORANGE)
@@ -130,7 +130,7 @@ local function draw_arrows_act_rct()
         if get(FAILURE_FUEL, 7) == 1 then
             draw_open_arrow_up(size[2]/2-70, size[2]/2-50, ECAM_ORANGE)
         else
-            draw_open_arrow_up(size[2]/2-70, size[2]/2-50, ECAM_WHITE)        
+            draw_open_arrow_up(size[2]/2-70, size[2]/2-50, ECAM_WHITE)
         end
     end
     if is_rct_transfer_active then
@@ -144,8 +144,8 @@ local function draw_arrows_act_rct()
         if get(FAILURE_FUEL, 8) == 1 then
             draw_open_arrow_up(size[2]/2+70, size[2]/2-50, ECAM_ORANGE)
         else
-            draw_open_arrow_up(size[2]/2+70, size[2]/2-50, ECAM_WHITE)        
-        end     
+            draw_open_arrow_up(size[2]/2+70, size[2]/2-50, ECAM_WHITE)
+        end
     end
 end
 
@@ -154,13 +154,13 @@ local function draw_fuel_usage_and_ff()
     local fuel_usage_1 = math.floor(get(Ecam_fuel_usage_1))
     local fuel_usage_2 = math.floor(get(Ecam_fuel_usage_2))
     local fuel_usage_tot = fuel_usage_1 + fuel_usage_2
-    
+
     local color = get(EWD_flight_phase) >= 2 and ECAM_GREEN or ECAM_WHITE
 
     sasl.gl.drawText(Font_AirbusDUL, size[2]/2-220, size[2]-110, fuel_usage_1, 36, false, false, TEXT_ALIGN_CENTER, color)
     sasl.gl.drawText(Font_AirbusDUL, size[2]/2+220, size[2]-110, fuel_usage_2, 36, false, false, TEXT_ALIGN_CENTER, color)
     sasl.gl.drawText(Font_AirbusDUL, size[2]/2, size[2]-127, fuel_usage_tot, 36, false, false, TEXT_ALIGN_CENTER, color)
-    
+
 
     if get(Engine_1_master_switch) == 0 and get(Engine_2_master_switch) == 0 then
         sasl.gl.drawText(Font_AirbusDUL, size[2]/2-120, size[2]/2-260, "xx", 36, false, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
@@ -168,8 +168,8 @@ local function draw_fuel_usage_and_ff()
         local total_ff = math.ceil(get(Eng_1_FF_kgs)*60 + get(Eng_2_FF_kgs)*60)
         sasl.gl.drawText(Font_AirbusDUL, size[2]/2-120, size[2]/2-260, total_ff, 36, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     end
-    
-    
+
+
 end
 
 local function draw_engine_nr()
@@ -183,7 +183,7 @@ local function draw_engine_nr()
 end
 
 local function draw_apu_legend()
-    
+
     local apu_text_color = ECAM_WHITE
     if get(Fire_pb_APU_status) == 1
        or (get(Apu_fuel_valve) == 1 and get(Apu_master_button_state) % 2 == 0)
@@ -191,7 +191,7 @@ local function draw_apu_legend()
         apu_text_color = ECAM_ORANGE
     end
     sasl.gl.drawText(Font_AirbusDUL, size[2]/2-320, size[2]/2+200, "APU", 36, false, false, TEXT_ALIGN_CENTER, apu_text_color)
-    
+
     if get(Apu_fuel_valve) == 0 and apu_text_color == ECAM_WHITE then
         draw_open_arrow_left(size[2]/2-280, size[2]/2+212, ECAM_WHITE)
     elseif get(Apu_fuel_valve) == 1 and apu_text_color == ECAM_WHITE  then
@@ -218,6 +218,40 @@ function draw_valve_lines()
     end
 end
 
+local function draw_fuel_valves()
+    SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_FUEL_xfeed_img, size[1]/2+2, size[2]/2+186, 415, 58, 5, get(Ecam_fuel_valve_X_BLEED) + 1, ECAM_WHITE)
+
+    --engine 1 valve
+    local is_faulty = get(Eng_1_Firewall_valve) == 2
+    or ( get(Eng_1_Firewall_valve) == 1 and get(Engine_1_master_switch) == 1 and get(Fire_pb_ENG1_status) == 0 )
+    or ( get(Eng_1_Firewall_valve) == 0 and (get(Engine_1_master_switch) == 0 or get(Fire_pb_ENG1_status) == 1))
+
+    local color = is_faulty and ECAM_ORANGE or  ECAM_GREEN
+    local position = get(Eng_1_Firewall_valve) > 0 and get(Eng_1_Firewall_valve) or 3
+
+    SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_FUEL_valves_img, size[1]/2-218, size[2]/2+265, 180, 58, 3, position, color)
+
+    --engine 2 valve
+    is_faulty = get(Eng_2_Firewall_valve) == 2
+    or ( get(Eng_2_Firewall_valve) == 1 and get(Engine_2_master_switch) == 1 and get(Fire_pb_ENG2_status) == 0 )
+    or ( get(Eng_2_Firewall_valve) == 0 and (get(Engine_2_master_switch) == 0 or get(Fire_pb_ENG2_status) == 1))
+
+    color = is_faulty and ECAM_ORANGE or  ECAM_GREEN
+    position = get(Eng_2_Firewall_valve) > 0 and get(Eng_2_Firewall_valve) or 3
+
+    SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_FUEL_valves_img, size[1]/2+222, size[2]/2+265, 180, 58, 3, position, color)
+
+
+    SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_FUEL_pumps_img, size[1]/2-219, size[2]/2+70, 228, 56, 4, get(Ecam_fuel_valve_L_1) + 1, ECAM_WHITE)
+    SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_FUEL_pumps_img, size[1]/2-158, size[2]/2+70, 228, 56, 4, get(Ecam_fuel_valve_L_2) + 1, ECAM_WHITE)
+
+    SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_FUEL_l_pump_img, size[1]/2-63, size[2]/2+40, 300, 100, 3, get(Ecam_fuel_valve_C_1) + 1, ECAM_WHITE)
+    SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_FUEL_r_pump_img, size[1]/2+65, size[2]/2+40, 300, 100, 3, get(Ecam_fuel_valve_C_2) + 1, ECAM_WHITE)
+
+    SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_FUEL_pumps_img, size[1]/2+160, size[2]/2+70, 228, 56, 4, get(Ecam_fuel_valve_R_1) + 1, ECAM_WHITE)
+    SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_FUEL_pumps_img, size[1]/2+221, size[2]/2+70, 228, 56, 4, get(Ecam_fuel_valve_R_2) + 1, ECAM_WHITE)
+end
+
 function draw_fuel_page()
 
     sasl.gl.drawTexture(ECAM_FUEL_bgd_img, 0, 0, 900, 900, {1,1,1})
@@ -229,6 +263,7 @@ function draw_fuel_page()
     draw_apu_legend()
     draw_temps()
     draw_valve_lines()
+    draw_fuel_valves()
 end
 
 
@@ -283,7 +318,6 @@ function ecam_update_fuel_page()
         set(Ecam_fuel_valve_C_1, 2)
     end
 
-
     -- C2
     if not Fuel_sys.tank_pump_and_xfr[6].switch then
         set(Ecam_fuel_valve_C_2, 0)
@@ -296,34 +330,6 @@ function ecam_update_fuel_page()
     else
         set(Ecam_fuel_valve_C_2, 2)
     end
-
-    -- ENG 1 valve
-    if get(Eng_1_Firewall_valve) == 2 then
-        set(Ecam_fuel_valve_ENG_1, 4)   -- Transition
-    elseif get(Eng_1_Firewall_valve) == 1 and ( get(Engine_1_master_switch) == 1 and get(Fire_pb_ENG1_status) == 0 ) then
-        set(Ecam_fuel_valve_ENG_1, 1) -- Closed but should not
-    elseif get(Eng_1_Firewall_valve) == 0 and ( get(Engine_1_master_switch) == 0 or get(Fire_pb_ENG1_status) == 1 ) then
-        set(Ecam_fuel_valve_ENG_1, 3) -- Open but should not
-    elseif get(Eng_1_Firewall_valve) == 1 then
-        set(Ecam_fuel_valve_ENG_1, 0) -- Closed OK
-    elseif get(Eng_1_Firewall_valve) == 0 then
-        set(Ecam_fuel_valve_ENG_1, 2) -- Open OK
-    end
-
-    -- ENG 2 valve
-    if get(Eng_2_Firewall_valve) == 2 then
-        set(Ecam_fuel_valve_ENG_2, 4)   -- Transition
-    elseif get(Eng_2_Firewall_valve) == 1 and ( get(Engine_2_master_switch) == 1 and get(Fire_pb_ENG2_status) == 0 ) then
-        set(Ecam_fuel_valve_ENG_2, 1) -- Closed but should not
-    elseif get(Eng_2_Firewall_valve) == 0 and ( get(Engine_2_master_switch) == 0 or get(Fire_pb_ENG2_status) == 1 ) then
-        set(Ecam_fuel_valve_ENG_2, 3) -- Open but should not
-    elseif get(Eng_2_Firewall_valve) == 1 then
-        set(Ecam_fuel_valve_ENG_2, 0) -- Closed OK
-    elseif get(Eng_2_Firewall_valve) == 0 then
-        set(Ecam_fuel_valve_ENG_2, 2) -- Open OK
-    end
-
-
 end
 
 

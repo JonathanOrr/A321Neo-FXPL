@@ -364,7 +364,7 @@ local function update_x_feed_valve()
     end
 
     X_feed_valve_pos = Set_linear_anim_value(X_feed_valve_pos, X_feed_mode and 1 or 0, 0, 1, 0.7)
-    
+
     if X_feed_valve_pos > 0.9 then
         X_feed_status = true
         set(Ecam_fuel_valve_X_BLEED, 0)
@@ -373,7 +373,7 @@ local function update_x_feed_valve()
         if X_feed_valve_pos < 0.1 then
             set(Ecam_fuel_valve_X_BLEED, 2)
         else
-            set(Ecam_fuel_valve_X_BLEED, 4)        
+            set(Ecam_fuel_valve_X_BLEED, 4)
         end
     end
 end

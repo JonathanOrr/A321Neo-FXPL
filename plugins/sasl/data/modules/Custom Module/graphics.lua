@@ -163,10 +163,10 @@ end
 local function update_lights()
     pb_set(PB.ovhd.signs_emer_exit_lt, get(Lights_emer_exit) == 0, false)
     pb_set(PB.ovhd.rcdr_gnd_ctl, cvr_gnd_ctl, false)
-    
+
     set(Cockpit_light_integral, get(Cockpit_light_integral_pos) * get(AC_bus_1_pwrd))
     set(Cockpit_light_ovhd,     get(Cockpit_light_ovhd_pos) * get(AC_bus_1_pwrd))
-    
+
     set(Cockpit_light_flood_main, get(Cockpit_light_flood_main_pos) * get(DC_ess_bus_pwrd))
     set(Cockpit_light_flood_ped,  get(Cockpit_light_flood_ped_pos)  * get(DC_bus_1_pwrd))
     set(Cockpit_light_Capt_console_floor, get(Cockpit_light_Capt_console_floor_pos) * get(DC_bus_1_pwrd))
@@ -200,6 +200,6 @@ function update()
     update_lights()
     anim_light_switches()
     update_datarefs()
-    
+
     perf_measure_stop("graphics:update()")
 end

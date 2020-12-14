@@ -495,10 +495,10 @@ function Draw_slat_flap_indications()
     end
 
     sasl.gl.drawTexture(EWD_wing_indic_img, size[1]/2 + 150, size[2]/2 - 73, 38, 21, ECAM_LINE_GREY)
-    if get(Flaps_internal_config) > 0 then
+    if get(Flaps_internal_config) > 0 or get(Slats) > 0 then
         sasl.gl.drawTexture(EWD_slat_tract_img, size[1]/2 + 15, size[2]/2 - 115, 94, 62, ECAM_WHITE)
     end
-    if get(Flaps_internal_config) > 1 then
+    if get(Flaps_internal_config) > 1 or get(Flaps_deployed_angle) > 0 then
         sasl.gl.drawTexture(EWD_flap_tract_img, size[1]/2 + 248, size[2]/2 - 115, 143, 63, ECAM_WHITE)
     end
     if rounded_slat_ratio ~= 0 or rounded_flap_angle ~= 0 then
