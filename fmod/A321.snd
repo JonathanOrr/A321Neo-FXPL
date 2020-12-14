@@ -237,523 +237,523 @@ END_SOUND_ATTACHMENT
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/Soft Button Press
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/packs/toggle_ECON_flow
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/packs/toggle_ECON_flow
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 2
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/ADIRS/ADR1_cmd
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/ADIRS/ADR1_cmd
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 3
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/ADIRS/ADR2_cmd
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/ADIRS/ADR2_cmd
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 4
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/ADIRS/ADR3_cmd
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/ADIRS/ADR3_cmd
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 4
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/ADIRS/IR1_cmd
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/ADIRS/IR1_cmd
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 5
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/ADIRS/IR2_cmd
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/ADIRS/IR2_cmd
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 7
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/ADIRS/IR3_cmd
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/ADIRS/IR3_cmd
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 4
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/ADIRS/ADR1_cmd
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/ADIRS/ADR1_cmd
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 7
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/electrical/EMER_GEN_1_LINE
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/electrical/EMER_GEN_1_LINE
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 3
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/FBW/toggle_elac_1
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/FBW/toggle_elac_1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 1
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/FBW/toggle_fac_1
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/FBW/toggle_fac_1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 2
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/FBW/toggle_sec_1
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/FBW/toggle_sec_1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 6
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/fire/apu_agent
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/fire/apu_agent
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 7
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/fire/eng_1_agent_1
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/fire/eng_1_agent_1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 3
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/fire/eng_1_agent_2
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/fire/eng_1_agent_2
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 2
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/fire/eng_2_agent_1
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/fire/eng_2_agent_1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 5
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/fire/eng_2_agent_2
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/fire/eng_2_agent_2
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 4
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/fuel/ACT_TK_FWD
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/fuel/ACT_TK_FWD
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 4
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/fuel/RCT_TK_FWD
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/fuel/RCT_TK_FWD
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 7
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/fuel/C_TK_mode
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/fuel/C_TK_mode
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 1
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/fuel/C_TK_XFR_1
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/fuel/C_TK_XFR_1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 5
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/fuel/C_TK_XFR_2
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/fuel/C_TK_XFR_2
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 6
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/fuel/L_TK_pump_1
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/fuel/L_TK_pump_1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 2
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/fuel/L_TK_pump_2
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/fuel/L_TK_pump_2
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
-  VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/fuel/R_TK_pump_1
+  EVENT_NAME /CockpitMechanical/Soft Button Press 5
+  VEH_XYZ 0 2.4 -18.1 
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/fuel/R_TK_pump_1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 7
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/fuel/R_TK_pump_2
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/fuel/R_TK_pump_2
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 5
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/fuel/X_FEED
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/fuel/X_FEED
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 3
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/gpws/flap_mode
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/gpws/flap_mode
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 4
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/gpws/gs_mode
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/gpws/gs_mode
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 2
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/gpws/ldg_flap_3
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/gpws/ldg_flap_3
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 2
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/gpws/sys
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/gpws/sys
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 6
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/gpws/ter
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/gpws/ter
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 5
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/HYD/toggle_elec_pump_B
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/HYD/toggle_elec_pump_B
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 1
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/HYD/toggle_elec_pump_Y
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/HYD/toggle_elec_pump_Y
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 7
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/HYD/toggle_eng_pump_1
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/HYD/toggle_eng_pump_1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 7
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/HYD/toggle_eng_pump_2
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/HYD/toggle_eng_pump_2
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 5
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/HYD/toggle_PTU
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/HYD/toggle_PTU
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 6
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/oxygen/crew_supply_toggle
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/oxygen/crew_supply_toggle
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 3
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/oxygen/high_alt_ldg_toggle
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/oxygen/high_alt_ldg_toggle
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 5
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/rcdr/gnd_ctl
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/rcdr/gnd_ctl
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 2
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/electrical/AC_ESS_FEED
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/electrical/AC_ESS_FEED
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 2
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/electrical/APU_GEN
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/electrical/APU_GEN
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 1
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/electrical/BUS_tie
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/electrical/BUS_tie
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 5
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/electrical/EXT_PWR
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/electrical/EXT_PWR
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 3
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/electrical/galley
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/electrical/galley
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 4
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/electrical/GEN_1
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/electrical/GEN_1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 4
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/electrical/GEN_2
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/electrical/GEN_2
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 7
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/electrical/IDG_1
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/electrical/IDG_1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 6
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/electrical/IDG_2
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/electrical/IDG_2
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 3
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN sim/electrical/battery_1_toggle
+  EVENT_CMND_HOLD_CUE sim/electrical/battery_1_toggle
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 6
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN sim/electrical/battery_2_toggle
+  EVENT_CMND_HOLD_CUE sim/electrical/battery_2_toggle
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 6
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/aircond/toggle_cab_hotair
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/aircond/toggle_cab_hotair
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 4
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/bleed/ram_air
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/bleed/ram_air
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 5
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/bleed/toggle_apu_bleed
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/bleed/toggle_apu_bleed
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 7
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/bleed/toggle_eng1_bleed
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/bleed/toggle_eng1_bleed
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 2
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/bleed/toggle_eng2_bleed
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/bleed/toggle_eng2_bleed
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 3
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/packs/toggle_ECON_flow
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/packs/toggle_ECON_flow
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 4
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/packs/toggle_pack1
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/packs/toggle_pack1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 3
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/packs/toggle_pack2
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/packs/toggle_pack2
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 2
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/anti_ice/probe_wind_heat
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/anti_ice/probe_wind_heat
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 1
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/anti_ice/toggle_eng_1
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/anti_ice/toggle_eng_1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 1
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/anti_ice/toggle_eng_2
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/anti_ice/toggle_eng_2
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 5
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/anti_ice/toggle_wings
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/anti_ice/toggle_wings
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 6
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/engine/apu_master_toggle
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/engine/apu_master_toggle
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 7
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/engine/apu_start_toggle
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/engine/apu_start_toggle
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 6
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/pressurization/ditching
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/pressurization/ditching
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 4
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/pressurization/mode_sel
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/pressurization/mode_sel
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 3
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/aircond/cab_fan
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/aircond/cab_fan
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 2
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/aircond/toggle_aft_cargo_iso_valve
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/aircond/toggle_aft_cargo_iso_valve
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 4
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/aircond/toggle_cargo_hotair
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/aircond/toggle_cargo_hotair
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 5
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/electrical/toggle_vent_blower
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/electrical/toggle_vent_blower
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 6
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/electrical/toggle_vent_extract
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/electrical/toggle_vent_extract
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 3
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/engine/dual_cooling
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/engine/dual_cooling
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 7
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/engine/manual_start_1
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/engine/manual_start_1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 2
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/engine/manual_start_2
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/engine/manual_start_2
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 4
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/FBW/toggle_elac_2
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/FBW/toggle_elac_2
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 6
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/FBW/toggle_fac_2
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/FBW/toggle_fac_2
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 2
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/FBW/toggle_sec_2
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/FBW/toggle_sec_2
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 1
   VEH_XYZ 0 2.4 -18.1
-  EVENT_CMND_DOWN a321neo/cockpit/FBW/toggle_sec_3
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/FBW/toggle_sec_3
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 6
   VEH_XYZ 0.18 1.7 -18.85
-  EVENT_CMND_DOWN a321neo/cockpit/wheel/toggle_brake_fan
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/wheel/toggle_brake_fan
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 4
   VEH_XYZ 0.18 1.7 -18.85
-  EVENT_CMND_DOWN a321neo/cockpit/wheel/toggle_lo_autobrake
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/wheel/toggle_lo_autobrake
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 3
   VEH_XYZ 0.18 1.7 -18.85
-  EVENT_CMND_DOWN a321neo/cockpit/wheel/toggle_max_autobrake
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/wheel/toggle_max_autobrake
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 6
   VEH_XYZ 0.18 1.7 -18.85
-  EVENT_CMND_DOWN a321neo/cockpit/wheel/toggle_med_autobrake
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/wheel/toggle_med_autobrake
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 4
   VEH_XYZ 0 1.9 -18.6
-  EVENT_CMND_DOWN a321neo/cockpit/cancel_master_caution
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/cancel_master_caution
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 6
   VEH_XYZ 0 1.9 -18.6
-  EVENT_CMND_DOWN a321neo/cockpit/cancel_master_warning
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/cancel_master_warning
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 4
   VEH_XYZ 0 1.9 -18.6
-  EVENT_CMND_DOWN a321neo/cockpit/nd/capt_terrain_toggle
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/nd/capt_terrain_toggle
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
+  EVENT_NAME /CockpitMechanical/Soft Button Press 3
   VEH_XYZ 0 1.9 -18.6
-  EVENT_CMND_DOWN a321neo/cockpit/nd/fo_terrain_toggle
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/nd/fo_terrain_toggle
 END_SOUND_ATTACHMENT
 
 ##############################################################################################################################
@@ -761,542 +761,644 @@ END_SOUND_ATTACHMENT
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/brightness/mcdu_1_brightness_dn
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/brightness/mcdu_1_brightness_dn
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MCDU Button Press
+  EVENT_NAME /CockpitMechanical/MCDU Button Press 2
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/brightness/mcdu_1_brightness_up
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/brightness/mcdu_1_brightness_up
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/key/.
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/key/.
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MCDU Button Press
+  EVENT_NAME /CockpitMechanical/MCDU Button Press 2
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/key/0
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/key/0
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/key/1
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/key/1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MCDU Button Press
+  EVENT_NAME /CockpitMechanical/MCDU Button Press 2
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/key/2
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/key/2
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/key/3
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/key/3
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MCDU Button Press
+  EVENT_NAME /CockpitMechanical/MCDU Button Press 2
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/key/4
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/key/4
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/key/5
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/key/5
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MCDU Button Press
+  EVENT_NAME /CockpitMechanical/MCDU Button Press 2
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/key/6
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/key/6
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/key/7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/key/7
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/key/8
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/key/8
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MCDU Button Press
+  EVENT_NAME /CockpitMechanical/MCDU Button Press 2
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/key/9
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/key/9
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/misc/positive_negative
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/misc/positive_negative
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/page/data
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/page/data
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MCDU Button Press
+  EVENT_NAME /CockpitMechanical/MCDU Button Press 2
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/page/dir
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/page/dir
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MCDU Button Press
+  EVENT_NAME /CockpitMechanical/MCDU Button Press 2
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/page/f-pln
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/page/f-pln
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/page/init
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/page/init
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/page/perf
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/page/perf
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MCDU Button Press
+  EVENT_NAME /CockpitMechanical/MCDU Button Press 2
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/page/prog
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/page/prog
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/side/L1
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/side/L1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/side/L2
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/side/L2
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MCDU Button Press
+  EVENT_NAME /CockpitMechanical/MCDU Button Press 2
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/side/L3
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/side/L3
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/side/L4
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/side/L4
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/side/L5
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/side/L5
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MCDU Button Press
+  EVENT_NAME /CockpitMechanical/MCDU Button Press 2
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/side/L6
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/side/L6
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/side/R1
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/side/R1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/side/R2
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/side/R2
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MCDU Button Press
+  EVENT_NAME /CockpitMechanical/MCDU Button Press 2
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/side/R3
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/side/R3
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MCDU Button Press
+  EVENT_NAME /CockpitMechanical/MCDU Button Press 2
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/side/R4
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/side/R4
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/side/R5
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/side/R5
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/side/R6
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/side/R6
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MCDU Button Press
+  EVENT_NAME /CockpitMechanical/MCDU Button Press 2
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/side/slew_down
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/side/slew_down
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/side/slew_left
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/side/slew_left
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/side/slew_right
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/side/slew_right
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MCDU Button Press
+  EVENT_NAME /CockpitMechanical/MCDU Button Press 2
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/side/slew_up
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/side/slew_up
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MCDU Button Press
+  EVENT_NAME /CockpitMechanical/MCDU Button Press 2
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/draims/draims_cursor_dn_button
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/draims/draims_cursor_dn_button
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/draims/draims_cursor_up_button
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/draims/draims_cursor_up_button
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/draims/draims_hf_button
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/draims/draims_hf_button
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MCDU Button Press
+  EVENT_NAME /CockpitMechanical/MCDU Button Press 2
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/draims/draims_l_1_button
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/draims/draims_l_1_button
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/draims/draims_l_2_button
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/draims/draims_l_2_button
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/draims/draims_l_3_button
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/draims/draims_l_3_button
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/draims/draims_l_4_button
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/draims/draims_l_4_button
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MCDU Button Press
+  EVENT_NAME /CockpitMechanical/MCDU Button Press 2
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/draims/draims_l_tcas_button
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/draims/draims_l_tcas_button
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/draims/draims_nav_button
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/draims/draims_nav_button
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/draims/draims_r_1_button
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/draims/draims_r_1_button
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MCDU Button Press
+  EVENT_NAME /CockpitMechanical/MCDU Button Press 2
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/draims/draims_r_2_button
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/draims/draims_r_2_button
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/draims/draims_r_3_button
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/draims/draims_r_3_button
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/draims/draims_r_4_button
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/draims/draims_r_4_button
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MCDU Button Press
+  EVENT_NAME /CockpitMechanical/MCDU Button Press 2
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/draims/draims_r_tcas_button
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/draims/draims_r_tcas_button
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/draims/draims_vhf_button
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/draims/draims_vhf_button
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/draims/draims_0_key
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/draims/draims_0_key
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MCDU Button Press
+  EVENT_NAME /CockpitMechanical/MCDU Button Press 2
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/draims/draims_1_key
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/draims/draims_1_key
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MCDU Button Press
+  EVENT_NAME /CockpitMechanical/MCDU Button Press 2
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/draims/draims_2_key
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/draims/draims_2_key
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/draims/draims_3_key
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/draims/draims_3_key
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/draims/draims_4_key
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/draims/draims_4_key
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MCDU Button Press
+  EVENT_NAME /CockpitMechanical/MCDU Button Press 2
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/draims/draims_5_key
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/draims/draims_5_key
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/draims/draims_6_key
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/draims/draims_6_key
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/draims/draims_7_key
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/draims/draims_7_key
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/draims/draims_8_key
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/draims/draims_8_key
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MCDU Button Press
+  EVENT_NAME /CockpitMechanical/MCDU Button Press 2
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/draims/draims_9_key
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/draims/draims_9_key
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/draims/draims_dot_key
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/draims/draims_dot_key
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/draims/draims_clr_key
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/draims/draims_clr_key
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MCDU Button Press
+  EVENT_NAME /CockpitMechanical/MCDU Button Press 2
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/key/A
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/key/A
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/key/B
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/key/B
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/key/C
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/key/C
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MCDU Button Press
+  EVENT_NAME /CockpitMechanical/MCDU Button Press 2
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/key/D
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/key/D
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/key/E
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/key/E
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/key/F
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/key/F
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MCDU Button Press
+  EVENT_NAME /CockpitMechanical/MCDU Button Press 2
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/key/G
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/key/G
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/key/H
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/key/H
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MCDU Button Press
+  EVENT_NAME /CockpitMechanical/MCDU Button Press 2
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/key/I
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MCDU Button Press 2
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/key/I
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/key/J
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/key/J
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/key/K
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/key/K
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/key/L
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/key/L
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/key/M
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/key/N
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MCDU Button Press 2
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/key/M
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/key/O
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/key/N
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/key/P
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MCDU Button Press 2
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/key/Q
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/key/O
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/key/R
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/key/S
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MCDU Button Press 2
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/key/T
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MCDU Button Press 2
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/key/P
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/key/U
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/key/V
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MCDU Button Press 2
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/key/W
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MCDU Button Press 2
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/key/Q
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/key/X
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/key/R
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/key/Y
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/key/Z
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MCDU Button Press 2
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/misc/clr
+END_SOUND_ATTACHMENT
+
+
+
+
+
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MCDU Button Press 2
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/key/S
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/ecam/buttons/cmd_all
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/ecam/buttons/cmd_apu
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MCDU Button Press 2
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/key/T
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/ecam/buttons/cmd_bleed
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/key/U
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/ecam/buttons/cmd_clr
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MCDU Button Press 2
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/ecam/buttons/cmd_cond
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/ecam/buttons/cmd_door
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MCDU Button Press 2
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/key/V
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/ecam/buttons/cmd_elec
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/ecam/buttons/cmd_eng
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MCDU Button Press 2
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/key/W
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/ecam/buttons/cmd_fctl
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/key/X
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/ecam/buttons/cmd_fuel
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MCDU Button Press 2
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/ecam/buttons/cmd_hyd
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/ecam/buttons/cmd_press
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MCDU Button Press 2
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/key/Y
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/ecam/buttons/cmd_rcl
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/ecam/buttons/cmd_sts
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MCDU Button Press 2
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/key/Z
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/ecam/buttons/cmd_toconfig
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_DOWN a321neo/cockpit/mcdu/misc/clr
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/ecam/buttons/cmd_wheel
 END_SOUND_ATTACHMENT
+
 
 
 ##############################################################################################################################
@@ -1358,7 +1460,7 @@ END_SOUND_ATTACHMENT
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/Rotary/Rotary1
   VEH_XYZ 0 1.4 -18.7
-  EVENT_START_COND ABS_DELTA=a321neo/cockpit/packs/x_bleed_dial_dn > 0
+  EVENT_START_COND ABS_DELTA=a321neo/cockpit/packs/x_bleed_dial > 0
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
@@ -1451,18 +1553,6 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/Big Round Button Release
   VEH_XYZ 0 1.5 -18.4
   EVENT_CMND_UP a321neo/cockpit/oxygen/man_mask_on
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Big Round Button Press
-  VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_DOWN a321neo/cockpit/lights/dome_lt_down
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Big Round Button Release
-  VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_UP a321neo/cockpit/lights/dome_lt_down
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
@@ -1958,4 +2048,97 @@ BEGIN_SOUND_ATTACHMENT
   PARAM_DREF_IDX 1
 END_SOUND_ATTACHMENT
 
+#############################################################################################METAL SWITCHES
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MetalOn
+  VEH_XYZ 0 2.4 -18.1
+  EVENT_START_COND a321neo/cockpit/misc/buttons/seatbelts_pos == 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MetalOff
+  VEH_XYZ 0 2.4 -18.1
+  EVENT_START_COND a321neo/cockpit/misc/buttons/seatbelts_pos == 1
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MetalOn
+  VEH_XYZ 0 2.4 -18.1
+  EVENT_START_COND a321neo/cockpit/misc/buttons/seatbelts_pos == 2
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MetalOn
+  VEH_XYZ 0 2.4 -18.1
+  EVENT_START_COND a321neo/cockpit/misc/buttons/noped_pos == 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MetalOff
+  VEH_XYZ 0 2.4 -18.1
+  EVENT_START_COND a321neo/cockpit/misc/buttons/noped_pos == 1
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MetalOn
+  VEH_XYZ 0 2.4 -18.1
+  EVENT_START_COND a321neo/cockpit/misc/buttons/noped_pos == 2
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MetalOn
+  VEH_XYZ 0 2.4 -18.1
+  EVENT_START_COND a321neo/cockpit/lights/buttons/emer_exit_pos == 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MetalOff
+  VEH_XYZ 0 2.4 -18.1
+  EVENT_START_COND a321neo/cockpit/lights/buttons/emer_exit_pos == 1
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MetalOn
+  VEH_XYZ 0 2.4 -18.1
+  EVENT_START_COND a321neo/cockpit/lights/buttons/emer_exit_pos == 2
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MetalOn
+  VEH_XYZ 0 2.4 -18.1
+  EVENT_START_COND a321neo/cockpit/lights/ovhd_ann_lt_pos == -1
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MetalOff
+  VEH_XYZ 0 2.4 -18.1
+  EVENT_START_COND a321neo/cockpit/lights/ovhd_ann_lt_pos == 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MetalOn
+  VEH_XYZ 0 2.4 -18.1
+  EVENT_START_COND a321neo/cockpit/lights/ovhd_ann_lt_pos == 1
+END_SOUND_ATTACHMENT
+
+
+
+
+
+
+
 #############################################################################################
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/ParkBrakeOn
+  VEH_XYZ 0 2.4 -18.1
+  EVENT_START_COND a321neo/cockpit/wheel/park_brake_pos == 1
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/ParkBrakeOff
+  VEH_XYZ 0 2.4 -18.1
+  EVENT_START_COND a321neo/cockpit/wheel/park_brake_pos == 0
+END_SOUND_ATTACHMENT
+
