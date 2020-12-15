@@ -67,8 +67,12 @@ ECAM_FUEL_pumps_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/text
 ECAM_FUEL_valves_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/FUEL/Valve.png")
 
 --APU--
-ECAM_APU_bgd_img =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/APU/APU.png")
-ECAM_APU_grey_lines_img =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/APU/grey_lines.png")
+ECAM_APU_bgd_img =        sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/APU/APU.png")
+ECAM_APU_grey_lines_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/APU/grey_lines.png")
+ECAM_APU_valve_img =      sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/APU/Valve.png")
+ECAM_APU_needle_img =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/APU/Needle.png")
+ECAM_APU_gen_img =        sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/APU/ApuGen.png")
+ECAM_APU_triangle_img =   sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/APU/Triangle.png")
 
 --COND--
 ECAM_COND_bgd_img =        sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/COND/COND.png")

@@ -12,8 +12,8 @@
 --    Please check the LICENSE file in the root of the repository for further
 --    details or check <https://www.gnu.org/licenses/>
 -------------------------------------------------------------------------------
--- File: ECAM_apu.lua 
--- Short description: ECAM file for the APU page 
+-- File: ECAM_apu.lua
+-- Short description: ECAM file for the APU page
 -------------------------------------------------------------------------------
 
 include('constants.lua')
@@ -22,12 +22,41 @@ local function draw_triangle(x,y)
     sasl.gl.drawWideLine(x, y, x-10, y-25, 3, ECAM_GREEN)
     sasl.gl.drawWideLine(x-10, y-25, x+10, y-25, 3, ECAM_GREEN)
     sasl.gl.drawWideLine(x+10, y-25, x, y, 3, ECAM_GREEN)
+end
 
+local function draw_apu_valve_and_needle()
+    if get(Gen_APU_pwr) == 1 then
+        SASL_draw_img_xcenter_aligned(ECAM_APU_triangle_img, size[1]/2-250, size[2]/2+325, 27, 20, ECAM_GREEN)
+    end
+
+    --APU gen box
+    SASL_drawSegmentedImg(ECAM_APU_gen_img, size[1]/2-312, size[2]/2+178, 501, 139, 4, get(Ecam_apu_gen_state) + 1)
+
+    --apu bleed valve
+    --this is incorrect logic, the valve should go amber if the button position and the valve position disagrees
+    SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_APU_valve_img, size[1]/2+261, size[2]/2+264, 120, 58, 2, get(Apu_bleed_switch) == 0 and 1 or 2, ECAM_GREEN)
 end
 
 function draw_apu_page()
     sasl.gl.drawTexture(ECAM_APU_bgd_img, 0, 0, 900, 900, {1,1,1})
     sasl.gl.drawTexture(ECAM_APU_grey_lines_img, 0, 0, 900, 900, ECAM_LINE_GREY)
+
+    draw_apu_valve_and_needle()
+
+    --avail--
+    if get(Apu_avail) == 1 then
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2+300, "AVIAL", 36, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+    end
+
+    --low pressure--
+    if get(Apu_fuel_source) == 0 then
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+200, size[2]/2-10, "FUEL LO PR", 36, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+    end
+
+    --flap open
+    if get(APU_flap) == 1 then
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+200, size[2]/2-130, "FLAP OPEN", 36, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+    end
 
     --apu gen section--
     if get(Ecam_apu_gen_state) >= 2 then
@@ -51,7 +80,7 @@ function draw_apu_page()
     end
 
     --apu bleed--
-    if get(Adirs_adr_is_ok[1]) == 0 or get(Adirs_adr_is_ok[2]) == 0 or (get(FAILURE_BLEED_BMC_1) == 1 and get(FAILURE_BLEED_BMC_2) == 1) then
+    if get(Adirs_adr_is_ok[1]) == 0 or get(Adirs_adr_is_ok[2]) == 0 or (get(FAILURE_BLEED_BMC_1) == 1 and get(FAILURE_BLEED_BMC_2) == 1) or get(Apu_bleed_switch) == 0 then
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2+265, size[2]/2+187, "XX", 26, false, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
     else
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2+265, size[2]/2+187, math.floor(get(Apu_bleed_psi)), 26, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
@@ -59,24 +88,48 @@ function draw_apu_page()
             sasl.gl.drawWideLine (size[1]/2+262, size[2]/2+318, size[1]/2+262, size[2]/2+345, 3, ECAM_GREEN )
             draw_triangle(size[1]/2+262, size[2]/2+370)
         end
-
     end
 
+    local needle_color = ECAM_GREEN
+
     --needles--
-    if get(Ecam_apu_needle_state) == 1 then
+    if get(Apu_master_button_state) == 1 or get(Apu_N1) > 1 then
+        --N1
+        if get(Apu_N1) >= 102 then
+            needle_color = ECAM_ORANGE
+        end
+        if get(Apu_N1) >= 107 then
+            needle_color = ECAM_RED
+        end
+        SASL_rotated_center_img_xcenter_aligned(ECAM_APU_needle_img, size[1]/2-200, size[2]/2-23, 4, 80, Math_rescale_lim_lower(0, -120, 100, 55, get(Apu_N1)), 0, 0, needle_color)
+
+        --EGT
+        needle_color = ECAM_GREEN
+        if get(Apu_avail) == 0 then
+            if get(APU_EGT) >= 1096 - 33 then
+                needle_color = ECAM_ORANGE
+            end
+            if get(APU_EGT) >= 1096 then
+                needle_color = ECAM_RED
+            end
+        end
+        if get(Apu_avail) == 1 then
+            if get(APU_EGT) >= 675 - 33 then
+                needle_color = ECAM_ORANGE
+            end
+            if get(APU_EGT) >= 675 then
+                needle_color = ECAM_RED
+            end
+        end
+        SASL_rotated_center_img_xcenter_aligned(ECAM_APU_needle_img, size[1]/2-200, size[2]/2-225, 4, 80, Math_rescale_lim_lower(0, -120, 1000, 40, get(APU_EGT)), 0, 0, needle_color)
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2-180, size[2]/2-60, math.floor(get(Apu_N1)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2-180, size[2]/2-260, math.floor(get(APU_EGT)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+    else
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-180, size[2]/2-60, "XX", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-180, size[2]/2-260, "XX", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
 
     if get(FAILURE_ENG_APU_LOW_OIL_P) == 1 then
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2+115, size[2]/2-200, "LOW OIL\nLEVEL", 40, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
-    end
-end
-
-function ecam_update_apu_page()
-    if get(Apu_master_button_state) == 1 or get(Apu_N1) > 1 then
-        set(Ecam_apu_needle_state, 1)
-    else
-        set(Ecam_apu_needle_state, 0)
     end
 end

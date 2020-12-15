@@ -324,6 +324,6 @@ function ecam_update_wheel_page()
 	else
 		right_tire_psi_color = ECAM_WHITE
 	end
-	
+
 end
 

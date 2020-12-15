@@ -141,14 +141,13 @@ end
 local function update_gen()
     if not master_switch_status or get(FAILURE_ENG_APU_FAIL) == 1 then
         set(Ecam_apu_gen_state, 0)
-        set(Ecam_apu_gen_state, 0)
     else
         if ELEC_sys.generators[3].switch_status == false then
             set(Ecam_apu_gen_state, 1)
         elseif ELEC_sys.generators[3].curr_voltage > 105 and ELEC_sys.generators[3].curr_hz > 385 then
             set(Ecam_apu_gen_state, 2)
         else
-            set(Ecam_apu_gen_state, 3)        
+            set(Ecam_apu_gen_state, 3)
         end
     end
 end

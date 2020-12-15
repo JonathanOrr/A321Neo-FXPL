@@ -141,8 +141,6 @@ function update()
 
     if get(Ecam_current_page) == 3 then
         ecam_update_press_page()
-    elseif get(Ecam_current_page) == 7 then
-        ecam_update_apu_page()
     elseif get(Ecam_current_page) == 10 then
         ecam_update_wheel_page()
     end

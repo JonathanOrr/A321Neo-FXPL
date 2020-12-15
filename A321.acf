@@ -246,7 +246,7 @@ P _gear/1/_lonE -6.0
 P _gear/1/_lonN -6.0
 P _gear/1/_lonR 2.0
 P _gear/1/_scon 157581.015625000
-P _gear/1/_stat_def 0.739415884
+P _gear/1/_stat_def 0.739415586
 P _gear/1/_steerdeg_hispeed 0.0
 P _gear/1/_steerdeg_lospeed 0.0
 P _gear/1/_strut_comp 0.699999988
@@ -280,7 +280,7 @@ P _gear/2/_lonE -6.0
 P _gear/2/_lonN -6.0
 P _gear/2/_lonR 2.0
 P _gear/2/_scon 157581.015625000
-P _gear/2/_stat_def 0.739415884
+P _gear/2/_stat_def 0.739415586
 P _gear/2/_steerdeg_hispeed 0.0
 P _gear/2/_steerdeg_lospeed 0.0
 P _gear/2/_strut_comp 0.699999988
@@ -56715,7 +56715,7 @@ P _part/86/_part_specs_invis 0
 P _part/86/_part_tex 0
 P _part/86/_part_the 0.0
 P _part/86/_part_x -12.303149223
-P _part/86/_part_y -10.375899315
+P _part/86/_part_y -10.375900269
 P _part/86/_part_z 71.948699951
 P _part/86/_patt_con 0
 P _part/86/_patt_prt 0
@@ -58185,7 +58185,7 @@ P _part/87/_part_specs_invis 0
 P _part/87/_part_tex 0
 P _part/87/_part_the 0.0
 P _part/87/_part_x 12.303149223
-P _part/87/_part_y -10.375899315
+P _part/87/_part_y -10.375900269
 P _part/87/_part_z 71.948699951
 P _part/87/_patt_con 0
 P _part/87/_patt_prt 0
@@ -71780,189 +71780,6 @@ GROUP ECAM lower du
       KEY_FRAME 0.000000 -1.000000 1.000000
       KEY_FRAME 1.000000 0.000000
       DIGITS 1
-      ROTARY_TYPE NO_CLICK
-      CLICK_RADIUS 10.000000
-      CLICK_RADIUS_DY 0.000000
-      OFFSET 0.000000
-      STEP1 1.000000
-      STEP2 1.000000
-      CURSOR DEFAULT
-      CLICK_DX 0
-      CLICK_DY 0
-
-  END_GROUP
-  GROUP ECAM APU
-    SHOW_EQUAL 7.000000 a321neo/cockpit/ecam/page_num
-    LOCKED
-    HIDE
-    gen_rotary apu gen
-      POS 1231.000000 2667.500000
-      IMAGE MIP/ecam lower du/APU/ApuGen
-      DATAREF a321neo/cockpit/apu/apu_gen_state
-      LOCKED
-      HIDE
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 3.000000 3.000000
-      DIGITS 4
-      ROTARY_TYPE NO_CLICK
-      CLICK_RADIUS 10.000000
-      CLICK_RADIUS_DY 0.000000
-      OFFSET 0.000000
-      STEP1 1.000000
-      STEP2 1.000000
-      CURSOR DEFAULT
-      CLICK_DX 0
-      CLICK_DY 0
-
-    gen_rotary apu bleed valve
-      POS 1741.000000 2713.500000
-      IMAGE MIP/ecam lower du/APU/BLEED_XX
-      DATAREF a321neo/cockpit/ecam/bleed/apu_valve
-      LOCKED
-      HIDE
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME -1.000000 0.000000 1.000000
-      KEY_FRAME 0.000000 1.000000 1.000000
-      KEY_FRAME 1.000000 1.000000 1.000000
-      KEY_FRAME 2.000000 2.000000
-      DIGITS 3
-      ROTARY_TYPE NO_CLICK
-      CLICK_RADIUS 10.000000
-      CLICK_RADIUS_DY 0.000000
-      OFFSET 0.000000
-      STEP1 1.000000
-      STEP2 1.000000
-      CURSOR DEFAULT
-      CLICK_DX 0
-      CLICK_DY 0
-
-    gen_rotary apu n1 bgd
-      POS 1273.000000 2411.000000
-      IMAGE MIP/ecam lower du/APU/N_XX
-      DATAREF a321neo/cockpit/apu/apu_needle_state
-      LOCKED
-      HIDE
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 1.000000 1.000000
-      DIGITS 2
-      ROTARY_TYPE NO_CLICK
-      CLICK_RADIUS 10.000000
-      CLICK_RADIUS_DY 0.000000
-      OFFSET 0.000000
-      STEP1 1.000000
-      STEP2 1.000000
-      CURSOR DEFAULT
-      CLICK_DX 0
-      CLICK_DY 0
-
-    gen_rotary apu egd bgd
-      POS 1281.000000 2211.000000
-      IMAGE MIP/ecam lower du/APU/EGT_XX
-      DATAREF a321neo/cockpit/apu/apu_needle_state
-      LOCKED
-      HIDE
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 1.000000 1.000000
-      DIGITS 2
-      ROTARY_TYPE NO_CLICK
-      CLICK_RADIUS 10.000000
-      CLICK_RADIUS_DY 0.000000
-      OFFSET 0.000000
-      STEP1 1.000000
-      STEP2 1.000000
-      CURSOR DEFAULT
-      CLICK_DX 0
-      CLICK_DY 0
-
-    gen_needle apu N1 ndl
-      POS 1273.000000 2395.000000
-      IMAGE MIP/ecam lower du/APU/Needle
-      DATAREF sim/cockpit/engine/APU_N1
-      SHOW_EQUAL 1.000000 a321neo/cockpit/apu/apu_needle_state
-      LOCKED
-      HIDE
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 -120.000000 1.000000
-      KEY_FRAME 100.000000 55.000000
-      IS_DRAGGABLE 0
-      OFFSET 0.000000
-
-    gen_needle apu egt ndl
-      POS 1280.000000 2194.000000
-      IMAGE MIP/ecam lower du/APU/Needle
-      DATAREF a321neo/cockpit/apu/EGT
-      SHOW_EQUAL 1.000000 a321neo/cockpit/apu/apu_needle_state
-      LOCKED
-      HIDE
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 -120.000000 1.000000
-      KEY_FRAME 1000.000000 40.000000
-      IS_DRAGGABLE 0
-      OFFSET 0.000000
-
-    gen_rotary flap open
-      POS 1692.500000 2304.000000
-      IMAGE MIP/ecam lower du/APU/FLAP_OPEN
-      DATAREF a321neo/cockpit/apu/flap_open
-      LOCKED
-      HIDE
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 1.000000 1.000000
-      DIGITS 2
-      ROTARY_TYPE NO_CLICK
-      CLICK_RADIUS 10.000000
-      CLICK_RADIUS_DY 0.000000
-      OFFSET 0.000000
-      STEP1 1.000000
-      STEP2 1.000000
-      CURSOR DEFAULT
-      CLICK_DX 0
-      CLICK_DY 0
-
-    gen_rotary Fuel Lo Pr
-      POS 1692.000000 2423.500000
-      IMAGE MIP/ecam lower du/APU/FUEL_LO_PR
-      DATAREF a321neo/cockpit/apu/fuel_source
-      LOCKED
-      HIDE
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 1.000000 1.000000
-      KEY_FRAME 0.001000 0.000000 1.000000
-      KEY_FRAME 1.000000 0.000000
-      DIGITS 2
-      ROTARY_TYPE NO_CLICK
-      CLICK_RADIUS 10.000000
-      CLICK_RADIUS_DY 0.000000
-      OFFSET 0.000000
-      STEP1 1.000000
-      STEP2 1.000000
-      CURSOR DEFAULT
-      CLICK_DX 0
-      CLICK_DY 0
-
-    gen_rotary apu avail
-      POS 1481.000000 2721.500000
-      IMAGE MIP/ecam lower du/APU/AVAIL
-      DATAREF a321neo/engine/apu_avil
-      LOCKED
-      HIDE
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 1.000000 1.000000
-      DIGITS 2
       ROTARY_TYPE NO_CLICK
       CLICK_RADIUS 10.000000
       CLICK_RADIUS_DY 0.000000

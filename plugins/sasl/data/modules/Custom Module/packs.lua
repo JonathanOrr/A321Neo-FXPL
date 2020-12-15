@@ -257,7 +257,7 @@ local function update_datarefs()
     set(Left_pack_iso_valve, 1) -- In X-Plane system APU always connected to ENG1
     set(Right_pack_iso_valve, get(X_bleed_valve))
     set(Pack_L, pack_valve_pos[1] and 1 or 0)
-    set(Pack_M, 0)--turning the center pack off as A320 doesn't have one        
+    set(Pack_M, 0)--turning the center pack off as A320 doesn't have one
     set(Pack_R, pack_valve_pos[2] and 1 or 0)
     set(Gpu_bleed_switch, get(GAS_bleed_avail))
 
