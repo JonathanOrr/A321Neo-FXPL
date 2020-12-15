@@ -43,7 +43,7 @@ local max_ra_gained = 0 -- For MODE 4c
 local prev_ra = 0   -- Previous frame radio altitude for rate computation
 local last_update = 0
 local data_delayed = {
-    ra_altitide = 0,
+    ra_altitude = 0,
     ra_rate     = 0,
     vvi_rate    = 0,
     ias         = 0
@@ -363,7 +363,7 @@ function update_mode_5(alt)
 
     set(GPWS_mode_is_active, 0, 5)
 
-    if not gpws_gs_mode then
+    if not gpws_gs_mode or not gpws_system_mode then
         return -- Manually disabled
     end
 
@@ -412,6 +412,36 @@ function update_mode_5(alt)
         is_caution = true
     end
 end
+
+-------------------------------------------------------------------------------
+-- MODE PITCH
+-------------------------------------------------------------------------------
+local function update_mode_pitch()
+    set(GPWS_mode_pitch, 0)
+    if get(Capt_ra_alt_ft) > 20 then
+        return -- Too high - inibith
+    end
+    
+    if not gpws_system_mode then
+        return -- Manually disabled
+    end
+
+    if get(Eng_1_N1) >= 74 or get(Eng_2_N1) >= 74 then
+        return -- Not working in T/O or G/A phase
+    end
+
+    -- TODO APs not engaged
+    
+    local THRESHOLD = 8.25
+    local pitch_now      = get(Flightmodel_pitch)
+    local pitch_in_1_sec = get(Flightmodel_pitch) + get(Pitch_rate)
+
+    if pitch_now > THRESHOLD or pitch_in_1_sec > THRESHOLD then
+        set(GPWS_mode_pitch, 1)
+        is_caution = true
+    end
+end
+
 -------------------------------------------------------------------------------
 -- MISC
 -------------------------------------------------------------------------------
@@ -438,7 +468,7 @@ local function update_local_data()
         local radio_rate = get(DELTA_TIME) > 0 and ((get(Capt_ra_alt_ft) - prev_ra) / UPDATE_INTERVAL * 60) or 0
         prev_ra = get(Capt_ra_alt_ft)
         
-        data_delayed.ra_altitide = get(Capt_ra_alt_ft)
+        data_delayed.ra_altitude = get(Capt_ra_alt_ft)
         data_delayed.ra_rate     = radio_rate
         data_delayed.vvi_rate    = get(Capt_VVI)
         data_delayed.ias         = get(IAS)
@@ -454,12 +484,12 @@ function update()
 
     update_local_data()
 
-
-    update_mode_1(data_delayed.ra_altitide, data_delayed.vvi_rate)
-    update_mode_2(data_delayed.ra_altitide, data_delayed.ra_rate, data_delayed.ias)
-    update_mode_3(data_delayed.ra_altitide, data_delayed.vvi_rate)
-    update_mode_4(data_delayed.ra_altitide, data_delayed.ias)
-    update_mode_5(data_delayed.ra_altitide)
+    update_mode_1(data_delayed.ra_altitude, data_delayed.vvi_rate)
+    update_mode_2(data_delayed.ra_altitude, data_delayed.ra_rate, data_delayed.ias)
+    update_mode_3(data_delayed.ra_altitude, data_delayed.vvi_rate)
+    update_mode_4(data_delayed.ra_altitude, data_delayed.ias)
+    update_mode_5(data_delayed.ra_altitude)
+    update_mode_pitch() -- This doesn't use delayed data
     
     if gpws_terrain_mode and get(Capt_Baro_Alt) < 18000 then   -- TODO Add failures of ADIRS, etc.
         set(GPWS_pred_is_active, 1)

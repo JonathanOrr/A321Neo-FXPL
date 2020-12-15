@@ -146,9 +146,11 @@ function draw_predictive_areas()
         if get(GPWS_pred_front_R, i) > 0 then
             sasl.gl.drawRectangle(280,  150-20*(6-i), 20, 20, terrain_int_to_color(get(GPWS_pred_front_R, i)))
         end
-
     end
+end
 
+function draw_mode_pitch()
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2, 232, "PITCH PITCH", 14, false, false, TEXT_ALIGN_CENTER, get(GPWS_mode_pitch) == 1 and ECAM_ORANGE or ECAM_HIGH_GREY)
 end
 
 function draw()
@@ -158,8 +160,8 @@ function draw()
     draw_mode_3()
     draw_mode_4()
     draw_mode_5()
-    
-    sasl.gl.drawWideLine ( 10, 230, size[1]-10, 230, 1 , ECAM_WHITE)
+    draw_mode_pitch()
+    sasl.gl.drawWideLine ( 10, 225, size[1]-10, 225, 1 , ECAM_WHITE)
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2, 200, "Predictive GPWS", 20, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
 
     draw_predictive_output()
