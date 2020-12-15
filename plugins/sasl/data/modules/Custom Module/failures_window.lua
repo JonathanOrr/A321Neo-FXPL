@@ -290,8 +290,10 @@ local failures_data = {
     }
     },
     {
-        group="RADIOS",
+        group="NAV/COMM",
         failures={
+            {name="GPWS\nFAIL", status=false, dataref=FAILURE_GPWS },
+            {name="GPWS TERR\nFAIL", status=false, dataref=FAILURE_GPWS_TERR },
         }
     }
 }

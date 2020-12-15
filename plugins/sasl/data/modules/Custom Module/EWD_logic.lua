@@ -30,6 +30,7 @@ include('EWD_msgs/FBW.lua')
 include('EWD_msgs/flight_controls.lua')
 include('EWD_msgs/fuel.lua')
 include('EWD_msgs/gears_and_doors.lua')
+include('EWD_msgs/gpws_tcas.lua')
 include('EWD_msgs/hydraulic.lua')
 include('EWD_msgs/misc.lua')
 include('EWD_msgs/nav.lua')
@@ -180,10 +181,14 @@ local left_messages_list = {
     MessageGroup_BLEED_WING_LEAK,
     MessageGroup_TPIU_FAULT,
     MessageGroup_PACKS_OFF,
+    MessageGroup_GPWS_FAULT,
+    MessageGroup_GPWS_TERR_FAULT,
     
     -- Warnings
     MessageGroup_CONFIG_TAKEOFF,
     MessageGroup_APU_FIRE,
+    MessageGroup_ELEC_EMER_CONFIG,
+    MessageGroup_ELEC_ESS_BUSES_ON_BAT,
     MessageGroup_GEAR_NOT_DOWNLOCKED,
     MessageGroup_GEAR_NOT_DOWN,
     MessageGroup_HYD_B_AND_Y_LO_PR,
@@ -191,8 +196,6 @@ local left_messages_list = {
     MessageGroup_HYD_G_AND_Y_LO_PR,
     MessageGroup_ADR_FAULT_TRIPLE,
     MessageGroup_IR_FAULT_TRIPLE,
-    MessageGroup_ELEC_EMER_CONFIG,
-    MessageGroup_ELEC_ESS_BUSES_ON_BAT,
     
     -- Misc
     MessageGroup_MEMO_TAKEOFF,
