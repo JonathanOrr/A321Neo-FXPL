@@ -227,7 +227,8 @@ function ecam_update_leds()
         return
     end
 
-    if get(Ecam_current_status) ~= ECAM_STATUS_NORMAL then
+    if get(Ecam_current_status) == ECAM_STATUS_SHOW_USER
+       or get(Ecam_current_status) == ECAM_STATUS_SHOW_ALL then
         -- Let's turn on the led of the current page
         if get(Ecam_current_page) == ECAM_PAGE_ENG then
             set(Ecam_btn_light_ENG, 1)
