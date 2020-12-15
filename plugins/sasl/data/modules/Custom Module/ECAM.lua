@@ -197,7 +197,7 @@ function draw()
         end
     end
 
-    sasl.gl.drawRectangle(0, 0, size[1], size[2], {0, 0, 0, 1 - get(ECAM_brightness_act)})
+    --sasl.gl.drawRectangle(0, 0, size[1], size[2], {0, 0, 0, 1 - get(ECAM_brightness_act)})
 
     perf_measure_stop("ECAM:draw()")
 
