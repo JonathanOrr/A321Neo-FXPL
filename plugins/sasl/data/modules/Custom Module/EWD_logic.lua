@@ -346,8 +346,18 @@ local function update_right_list()
         list_right:put(COL_INDICATION, "IGNITION")
     end
     
+    -- GPWS
+    if get(GPWS_pred_is_active) == 0 then
+        list_right:put(COL_INDICATION, "TERR STBY")
+    end
 
-    
+    if get(GPWS_mode_flap_disabled) == 1 then
+        list_right:put(COL_INDICATION, "GPWS FLAP OFF")
+    end
+
+    if get(GPWS_mode_flap_3) == 1 and get(GPWS_mode_flap_disabled) == 0 then
+        list_right:put(COL_INDICATION, "GPWS FLAP 3")
+    end
     
     if (get(FAILURE_GEAR_AUTOBRAKES) == 1 or get(Brakes_mode) > 1) and get(Wheel_autobrake_status) > 0 then
         list_right:put(COL_CAUTION, "AUTO BRK OFF")
@@ -446,10 +456,6 @@ local function update_right_list()
     --                  green in phases 1,2,6,10
     --                  amber in phases 3,4,5,7,8,9
     --                  not present in 6
-
-    -- TODO GPWS: GPWS FLAP 3 in green if related pushbutton is ON
-    -- TODO GPWS: GPWS FLAP MODE OFF in green if related pushbutton is OFF
-    -- TODO GPWS: TERR STBY in green if position is too inaccurate to show terrain on ND
 
     -- TODO Lights: LDG LT
     -- TODO Lights: STROBE LT OFF (green) - in flight only

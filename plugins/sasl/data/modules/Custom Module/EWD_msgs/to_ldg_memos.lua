@@ -145,7 +145,7 @@ Message_LDG_GEAR = {
 Message_LDG_FLAPS = {
 
     text = function(self)
-        if get(FBW_status) < 2 then -- alternate or direct law
+        if get(FBW_status) < 2 or get(GPWS_mode_flap_3) == 1 then -- alternate or direct law or p/b pressed
             if get(Flaps_internal_config) == 4 then
                 return "    FLAPS CONF 3"
             else
