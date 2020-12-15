@@ -117,34 +117,51 @@ end
 local function draw_quantity_bars(qty_G, qty_B, qty_Y)
 
     -- GREEN
-    y_top = size[2]/2-310+140 * qty_G
+    local y_top = size[2]/2-317+147 * qty_G
     local qty_color = ECAM_GREEN
     if qty_G < 0.18 then
         qty_color = ECAM_ORANGE
     elseif qty_G < 0.82 then
         qty_color = get_color_green_blinking()
     end
-    sasl.gl.drawWidePolyLine( {160, size[2]/2-308, 145, size[2]/2-308, 145, y_top, 157, y_top+10, 145, y_top+20 }, 4, qty_color)
-
+    
+    if qty_G > 0.10 then
+        sasl.gl.drawWidePolyLine( {160, size[2]/2-308, 145, size[2]/2-308, 145, y_top, 157, y_top+10, 145, y_top+20 }, 4, qty_color)
+    else
+        sasl.gl.drawWidePolyLine( {145, y_top, 157, y_top+10, 145, y_top+20 }, 4, qty_color)    
+    end
+    
     -- BLUE
-    y_top = size[2]/2-310+140 * qty_B
+    y_top = size[2]/2-317+147 * qty_B
     qty_color = ECAM_GREEN
     if qty_B < 0.31 then
         qty_color = ECAM_ORANGE
     elseif qty_B < 0.76 then
         qty_color = get_color_green_blinking()
     end
-    sasl.gl.drawWidePolyLine( {453, size[2]/2-308, 453-15, size[2]/2-308, 453-15, y_top, 453-3, y_top+10, 453-15, y_top+20 }, 4, qty_color)
+    
+
+    if qty_B > 0.10 then
+        sasl.gl.drawWidePolyLine( {453, size[2]/2-308, 453-15, size[2]/2-308, 453-15, y_top, 453-3, y_top+10, 453-15, y_top+20 }, 4, qty_color)
+    else
+        sasl.gl.drawWidePolyLine( {453-15, y_top, 453-3, y_top+10, 453-15, y_top+20 }, 4, qty_color)
+    end
+    
 
     -- YELLOW
-    y_top = size[2]/2-310+140 * qty_Y
+    y_top = size[2]/2-317+147 * qty_Y
     qty_color = ECAM_GREEN
     if qty_Y < 0.22 then
         qty_color = ECAM_ORANGE
     elseif qty_Y < 0.8 then
         qty_color = get_color_green_blinking()
     end
-    sasl.gl.drawWidePolyLine( {745, size[2]/2-308, 730, size[2]/2-308, 730, y_top, 742, y_top+10, 730, y_top+20 }, 4, qty_color)
+    
+    if qty_Y > 0.10 then
+        sasl.gl.drawWidePolyLine( {745, size[2]/2-308, 730, size[2]/2-308, 730, y_top, 742, y_top+10, 730, y_top+20 }, 4, qty_color)
+    else
+        sasl.gl.drawWidePolyLine( {730, y_top, 742, y_top+10, 730, y_top+20 }, 4, qty_color)
+    end
 
 end
 
