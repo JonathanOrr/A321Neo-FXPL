@@ -137,6 +137,22 @@ BEGIN_SOUND_ATTACHMENT
   PARAM_DREF_IDX 1
 END_SOUND_ATTACHMENT
 
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Engine Start Ext
+  VEH_PART engine 0
+  EVENT_START_COND a321neo/dynamics/engines/eng_1_n2 > 5
+  EVENT_END_COND a321neo/dynamics/engines/eng_1_n2 == 0
+  PARAM_DREF_IDX 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Engine Start Ext
+  VEH_PART engine 1
+  EVENT_START_COND a321neo/dynamics/engines/eng_2_n2 > 5
+  EVENT_END_COND a321neo/dynamics/engines/eng_2_n2 == 0
+  PARAM_DREF_IDX 1
+END_SOUND_ATTACHMENT
+
 
 
 
@@ -1436,6 +1452,66 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_CMND_HOLD_CUE a321neo/cockpit/ecam/buttons/cmd_wheel
 END_SOUND_ATTACHMENT
 
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MCDU Button Press
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/brightness/dcdu_1_brightness_up
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MCDU Button Press
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/brightness/dcdu_1_brightness_dn
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MCDU Button Press
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/DCDU/msg_minus
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MCDU Button Press
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/DCDU/msg_plus
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MCDU Button Press
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/DCDU/left_btm
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MCDU Button Press
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/DCDU/left_top
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MCDU Button Press
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/DCDU/page_minus
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MCDU Button Press
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/DCDU/page_plus
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MCDU Button Press
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/DCDU/right_btm
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MCDU Button Press
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/DCDU/right_top
+END_SOUND_ATTACHMENT
+
 
 
 ##############################################################################################################################
@@ -1676,37 +1752,90 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_CMND_UP a321neo/cockpit/calls/aft
 END_SOUND_ATTACHMENT
 
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Big Round Button Press
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/cockpit/misc/require_door_video
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Big Round Button Release
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_UP a321neo/cockpit/misc/require_door_video
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Big Round Button Press
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/cockpit/FBW/rudder_trim_reset
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Big Round Button Release
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_UP a321neo/cockpit/FBW/rudder_trim_reset
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Big Round Button Press
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_UP a321neo/cockpit/electrical/EMER_GEN_TEST
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Big Round Button Release
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_UP a321neo/cockpit/electrical/EMER_GEN_TEST
+END_SOUND_ATTACHMENT
+
+
 #################################################################################################
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Flap Lever/0
+  EVENT_NAME /FlapLeverUp
   VEH_XYZ 0 1.5 -18.4
-  EVENT_START_COND sim/cockpit2/controls/flap_ratio == 0
+  EVENT_START_COND ABS_DELTA=a321neo/dynamics/surfaces/flaps_handle_position > 0
+  EVENT_END_COND ABS_DELTA=a321neo/dynamics/surfaces/flaps_handle_position > 0.26
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Flap Lever/1
+  EVENT_NAME /FlapLever1
   VEH_XYZ 0 1.5 -18.4
-  EVENT_START_COND sim/cockpit2/controls/flap_ratio == 0.25
+  EVENT_START_COND a321neo/dynamics/surfaces/flaps_handle_position == 0
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Flap Lever/2
+  EVENT_NAME /FlapLever2
   VEH_XYZ 0 1.5 -18.4
-  EVENT_START_COND sim/cockpit2/controls/flap_ratio == 0.5
+  EVENT_START_COND a321neo/dynamics/surfaces/flaps_handle_position == 1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Flap Lever/3
+  EVENT_NAME /FlapLever3
   VEH_XYZ 0 1.5 -18.4
-  EVENT_START_COND sim/cockpit2/controls/flap_ratio == 0.75
+  EVENT_START_COND a321neo/dynamics/surfaces/flaps_handle_position == 2
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Flap Lever/4
+  EVENT_NAME /FlapLever4
   VEH_XYZ 0 1.5 -18.4
-  EVENT_START_COND sim/cockpit2/controls/flap_ratio == 1
+  EVENT_START_COND a321neo/dynamics/surfaces/flaps_handle_position == 3
 END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FlapLever1
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/dynamics/surfaces/flaps_handle_position == 4
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FlapLeverDown
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND DELTA=a321neo/dynamics/surfaces/flaps_handle_position == 0
+  EVENT_END_COND ABS_DELTA=a321neo/dynamics/surfaces/flaps_handle_position > 0
+END_SOUND_ATTACHMENT
+
+
 
 #################################################################################################
 
@@ -2170,12 +2299,330 @@ END_SOUND_ATTACHMENT
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/ParkBrakeOn
   VEH_XYZ 0 2.4 -18.1
-  EVENT_START_COND a321neo/cockpit/wheel/park_brake_pos == 1
+  EVENT_START_COND DELTA=a321neo/cockpit/wheel/park_brake_pos > 1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/ParkBrakeOff
   VEH_XYZ 0 2.4 -18.1
-  EVENT_START_COND a321neo/cockpit/wheel/park_brake_pos == 0
+  EVENT_START_COND DELTA=a321neo/cockpit/wheel/park_brake_pos < 0
 END_SOUND_ATTACHMENT
 
+#############################################################################################ANTISKID
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /ASkidOn
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/cockpit/wheel/antiskid_steering == 1
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /ASkidOff
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/cockpit/wheel/antiskid_steering == 0
+END_SOUND_ATTACHMENT
+
+#############################################################################################GUARDS
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GuardOpen
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND DELTA=a321neo/cockpit/overhead/guards/CARGO_DISCH_1 > 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GuardClose
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND DELTA=a321neo/cockpit/overhead/guards/CARGO_DISCH_1 < 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GuardOpen
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND DELTA=a321neo/cockpit/overhead/guards/CARGO_DISCH_2 > 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GuardClose
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND DELTA=a321neo/cockpit/overhead/guards/CARGO_DISCH_2 < 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GuardOpen
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND DELTA=a321neo/cockpit/overhead/guards/DICTHING > 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GuardClose
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND DELTA=a321neo/cockpit/overhead/guards/DICTHING < 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GuardOpen
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND DELTA=a321neo/cockpit/overhead/guards/ELEC_RAT_MAN_ON > 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GuardClose
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND DELTA=a321neo/cockpit/overhead/guards/ELEC_RAT_MAN_ON < 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GuardOpen
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND DELTA=a321neo/cockpit/overhead/guards/EMER > 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GuardClose
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND DELTA=a321neo/cockpit/overhead/guards/EMER < 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GuardOpen
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND DELTA=a321neo/cockpit/overhead/guards/EMER_GEN_TEST > 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GuardClose
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND DELTA=a321neo/cockpit/overhead/guards/EMER_GEN_TEST < 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GuardOpen
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND DELTA=a321neo/cockpit/overhead/guards/ENG_MAN_START_1 > 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GuardClose
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND DELTA=a321neo/cockpit/overhead/guards/ENG_MAN_START_1 < 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GuardOpen
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND DELTA=a321neo/cockpit/overhead/guards/ENG_MAN_START_2 > 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GuardClose
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND DELTA=a321neo/cockpit/overhead/guards/ENG_MAN_START_2 < 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GuardOpen
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND DELTA=a321neo/cockpit/overhead/guards/EVAC_COMMAND > 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GuardClose
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND DELTA=a321neo/cockpit/overhead/guards/EVAC_COMMAND < 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GuardOpen
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND DELTA=a321neo/cockpit/overhead/guards/HIGH_ALT_LANDING > 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GuardClose
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND DELTA=a321neo/cockpit/overhead/guards/HIGH_ALT_LANDING < 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GuardOpen
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND DELTA=a321neo/cockpit/overhead/guards/HYD_BLUE_PUMP > 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GuardClose
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND DELTA=a321neo/cockpit/overhead/guards/HYD_BLUE_PUMP < 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GuardOpen
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND DELTA=a321neo/cockpit/overhead/guards/HYD_RAT_MAN_ON > 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GuardClose
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND DELTA=a321neo/cockpit/overhead/guards/HYD_RAT_MAN_ON < 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GuardOpen
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND DELTA=a321neo/cockpit/overhead/guards/IDG1 > 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GuardClose
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND DELTA=a321neo/cockpit/overhead/guards/IDG1 < 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GuardOpen
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND DELTA=a321neo/cockpit/overhead/guards/IDG2 > 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GuardClose
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND DELTA=a321neo/cockpit/overhead/guards/IDG2 < 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GuardOpen
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND DELTA=a321neo/cockpit/overhead/guards/MASK_MAN_ON > 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GuardClose
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND DELTA=a321neo/cockpit/overhead/guards/MASK_MAN_ON < 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GuardOpen
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND DELTA=a321neo/cockpit/overhead/guards/MNTN_BLUE_PUMP > 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GuardClose
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND DELTA=a321neo/cockpit/overhead/guards/MNTN_BLUE_PUMP < 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GuardOpen
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND DELTA=a321neo/cockpit/overhead/guards/MNTN_FADEC_1 > 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GuardClose
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND DELTA=a321neo/cockpit/overhead/guards/MNTN_FADEC_1 < 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GuardOpen
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND DELTA=a321neo/cockpit/overhead/guards/MNTN_FADEC_2 > 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GuardClose
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND DELTA=a321neo/cockpit/overhead/guards/MNTN_FADEC_2 < 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GuardOpen
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND DELTA=a321neo/cockpit/overhead/guards/MNTN_HYD_B > 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GuardClose
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND DELTA=a321neo/cockpit/overhead/guards/MNTN_HYD_B < 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GuardOpen
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND DELTA=a321neo/cockpit/overhead/guards/MNTN_HYD_G > 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GuardClose
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND DELTA=a321neo/cockpit/overhead/guards/MNTN_HYD_G < 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GuardOpen
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND DELTA=a321neo/cockpit/overhead/guards/MNTN_HYD_Y > 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GuardClose
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND DELTA=a321neo/cockpit/overhead/guards/MNTN_HYD_Y < 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GuardOpen
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND DELTA=a321neo/cockpit/overhead/guards/RAM_AIR > 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GuardClose
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND DELTA=a321neo/cockpit/overhead/guards/RAM_AIR < 0
+END_SOUND_ATTACHMENT
+
+
+#############################################################################################SPEEDBRAKES LEVER
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /SpoilerStow
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND sim/flightmodel2/controls/speedbrake_ratio == 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /SpoilerFull
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND sim/flightmodel2/controls/speedbrake_ratio > 0.95
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /SpoilerArm
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/dynamics/FBW/controls/ground_spoilers_armed == 1
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /SpoilerStow
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/dynamics/FBW/controls/ground_spoilers_armed == 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /SpoilerHalf
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND sim/flightmodel2/controls/speedbrake_ratio >= 0.5
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /SpoilerHalf
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND sim/flightmodel2/controls/speedbrake_ratio <= 0.5
+END_SOUND_ATTACHMENT
