@@ -212,7 +212,7 @@ P _gear/0/_lonE 7.0
 P _gear/0/_lonN 7.0
 P _gear/0/_lonR 99.0
 P _gear/0/_scon 157581.015625000
-P _gear/0/_stat_def 0.120225549
+P _gear/0/_stat_def 0.120225556
 P _gear/0/_steerdeg_hispeed 5.0
 P _gear/0/_steerdeg_lospeed 75.0
 P _gear/0/_strut_comp 0.899999976
@@ -246,7 +246,7 @@ P _gear/1/_lonE -6.0
 P _gear/1/_lonN -6.0
 P _gear/1/_lonR 2.0
 P _gear/1/_scon 157581.015625000
-P _gear/1/_stat_def 0.739415824
+P _gear/1/_stat_def 0.739415884
 P _gear/1/_steerdeg_hispeed 0.0
 P _gear/1/_steerdeg_lospeed 0.0
 P _gear/1/_strut_comp 0.699999988
@@ -280,7 +280,7 @@ P _gear/2/_lonE -6.0
 P _gear/2/_lonN -6.0
 P _gear/2/_lonR 2.0
 P _gear/2/_scon 157581.015625000
-P _gear/2/_stat_def 0.739415824
+P _gear/2/_stat_def 0.739415884
 P _gear/2/_steerdeg_hispeed 0.0
 P _gear/2/_steerdeg_lospeed 0.0
 P _gear/2/_strut_comp 0.699999988
@@ -71429,158 +71429,6 @@ GROUP ECAM lower du
   LOCKED
   HIDE
   GROUP_OPEN
-  GROUP ECAM CAB PRESS
-    SHOW_EQUAL 3.000000 a321neo/cockpit/ecam/page_num
-    LOCKED
-    HIDE
-    gen_rotary pack 1
-      POS 1165.000000 2167.000000
-      IMAGE MIP/ecam lower du/CAB PRESS/Triangle
-      DATAREF a321neo/cockpit/ecam/press/pack_1
-      LOCKED
-      HIDE
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 1.000000 1.000000
-      DIGITS 2
-      ROTARY_TYPE NO_CLICK
-      CLICK_RADIUS 10.000000
-      CLICK_RADIUS_DY 0.000000
-      OFFSET 0.000000
-      STEP1 1.000000
-      STEP2 1.000000
-      CURSOR DEFAULT
-      CLICK_DX 0
-      CLICK_DY 0
-
-    gen_rotary pack 2
-      POS 1798.000000 2167.000000
-      IMAGE MIP/ecam lower du/CAB PRESS/Triangle
-      DATAREF a321neo/cockpit/ecam/press/pack_2
-      LOCKED
-      HIDE
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 1.000000 1.000000
-      DIGITS 2
-      ROTARY_TYPE NO_CLICK
-      CLICK_RADIUS 10.000000
-      CLICK_RADIUS_DY 0.000000
-      OFFSET 0.000000
-      STEP1 1.000000
-      STEP2 1.000000
-      CURSOR DEFAULT
-      CLICK_DX 0
-      CLICK_DY 0
-
-    gen_needle delta psi
-      POS 1208.000000 2610.000000
-      IMAGE MIP/ecam lower du/CAB PRESS/Needle
-      DATAREF a321neo/cockpit/ecam/press/delta_p_limited
-      SHOW_EQUAL 1.000000 a321neo/cockpit/ecam/press/delta_p_color
-      LOCKED
-      HIDE
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME -1.000000 -37.000000 1.000000
-      KEY_FRAME 0.000000 -37.000000 1.000000
-      KEY_FRAME 8.000000 113.000000 1.000000
-      KEY_FRAME 8.100000 113.000000
-      IS_DRAGGABLE 0
-      OFFSET 0.000000
-
-    gen_needle delta psi amber
-      POS 1208.000000 2610.000000
-      IMAGE MIP/ecam lower du/CAB PRESS/NeedleAmber
-      DATAREF a321neo/cockpit/ecam/press/delta_p_limited
-      SHOW_EQUAL 0.000000 a321neo/cockpit/ecam/press/delta_p_color
-      LOCKED
-      HIDE
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME -1.000000 -37.000000 1.000000
-      KEY_FRAME 0.000000 -37.000000 1.000000
-      KEY_FRAME 8.000000 113.000000 1.000000
-      KEY_FRAME 8.100000 113.000000
-      IS_DRAGGABLE 0
-      OFFSET 0.000000
-
-    gen_needle cab vs
-      POS 1485.000000 2610.000000
-      IMAGE MIP/ecam lower du/CAB PRESS/Needle
-      DATAREF a321neo/cockpit/ecam/press/cabin_vs_limited
-      LOCKED
-      HIDE
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME -2001.000000 -90.000000 1.000000
-      KEY_FRAME -2000.000000 -90.000000 1.000000
-      KEY_FRAME 2000.000000 90.000000 1.000000
-      KEY_FRAME 2001.000000 90.000000
-      IS_DRAGGABLE 0
-      OFFSET 0.000000
-
-    gen_needle cab alt
-      POS 1759.000000 2611.000000
-      IMAGE MIP/ecam lower du/CAB PRESS/Needle
-      DATAREF a321neo/cockpit/ecam/press/cabin_alt_limited
-      SHOW_EQUAL 1.000000 a321neo/cockpit/ecam/press/cabin_alt_color
-      LOCKED
-      HIDE
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 -50.000000 1.000000
-      KEY_FRAME 10000.000000 120.000000 1.000000
-      KEY_FRAME 10001.000000 120.000000
-      IS_DRAGGABLE 0
-      OFFSET 0.000000
-
-    gen_needle cab alt red
-      POS 1759.000000 2611.000000
-      IMAGE MIP/ecam lower du/CAB PRESS/NeedleRed
-      DATAREF a321neo/cockpit/ecam/press/cabin_alt_limited
-      SHOW_EQUAL 0.000000 a321neo/cockpit/ecam/press/cabin_alt_color
-      LOCKED
-      HIDE
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 -50.000000 1.000000
-      KEY_FRAME 10000.000000 120.000000 1.000000
-      KEY_FRAME 10001.000000 120.000000
-      IS_DRAGGABLE 0
-      OFFSET 0.000000
-
-    gen_needle Needle 3
-      POS 1724.000000 2223.000000
-      IMAGE MIP/ecam lower du/CAB PRESS/Needle_3
-      DATAREF sim/cockpit2/pressurization/indicators/outflow_valve
-      SHOW_EQUAL 1.000000 a321neo/cockpit/ecam/press/ovf_valve_color
-      LOCKED
-      HIDE
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 -90.000000 1.000000
-      KEY_FRAME 1.000000 0.000000
-      IS_DRAGGABLE 0
-      OFFSET 0.000000
-
-    gen_needle Needle 3 amber
-      POS 1724.000000 2223.000000
-      IMAGE MIP/ecam lower du/CAB PRESS/Needle_3_Amber
-      DATAREF sim/cockpit2/pressurization/indicators/outflow_valve
-      SHOW_EQUAL 0.000000 a321neo/cockpit/ecam/press/ovf_valve_color
-      LOCKED
-      HIDE
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 -90.000000 1.000000
-      KEY_FRAME 1.000000 0.000000
-      IS_DRAGGABLE 0
-      OFFSET 0.000000
-
-  END_GROUP
   GROUP ECAM ELEC
     SHOW_EQUAL 4.000000 a321neo/cockpit/ecam/page_num
     LOCKED

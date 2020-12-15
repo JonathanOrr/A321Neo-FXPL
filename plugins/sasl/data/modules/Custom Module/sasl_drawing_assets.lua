@@ -41,8 +41,11 @@ ECAM_BLEED_mixer_img =      sasl.gl.loadImage(moduleDirectory .. "/Custom Module
 ECAM_BLEED_valves_img =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/BLEED/Valve.png")
 
 --PRESS--
-ECAM_PRESS_bgd_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/PRESS/cab_press.png")
-ECAM_PRESS_grey_lines_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/PRESS/cab_press_grey_lines.png")
+ECAM_PRESS_bgd_img =            sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/PRESS/cab_press.png")
+ECAM_PRESS_grey_lines_img =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/PRESS/cab_press_grey_lines.png")
+ECAM_PRESS_needle_img =         sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/PRESS/Needle.png")
+ECAM_PRESS_outflow_needle_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/PRESS/outflow_valve.png")
+ECAM_PRESS_pack_triangle_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/PRESS/Triangle.png")
 
 --ELEC
 ECAM_ELEC_bgd_img =   sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/ELEC/Background.png")

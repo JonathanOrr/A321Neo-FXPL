@@ -94,8 +94,8 @@ local function draw_press_info()
 end
 
 local function draw_pack_indications()
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-304, 140, "PACK 1", 36, false, false, TEXT_ALIGN_CENTER, get(Ecam_press_pack_1_triangle) == 1 and ECAM_WHITE or ECAM_ORANGE)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+330, 140, "PACK 2", 36, false, false, TEXT_ALIGN_CENTER, get(Ecam_press_pack_2_triangle) == 1 and ECAM_WHITE or ECAM_ORANGE)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-304, 140, "PACK 1", 36, false, false, TEXT_ALIGN_CENTER, (get(Pack_L) == 0 and get(Engine_1_avail) == 1) and ECAM_ORANGE or ECAM_WHITE)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+330, 140, "PACK 2", 36, false, false, TEXT_ALIGN_CENTER, (get(Pack_L) == 0 and get(Engine_1_avail) == 1) and ECAM_ORANGE or ECAM_WHITE)
 end
 
 local function draw_valves_text()
@@ -143,6 +143,23 @@ local function draw_safety_valve()
     end
 end
 
+local function draw_press_textures_and_needle()
+    --delta P
+    SASL_rotated_center_img_ycenter_aligned(ECAM_PRESS_needle_img, size[1]/2-272, size[2]/2+190, 84, 4, Math_rescale(-1, -50, 9, 130, params.delta_psi), -84, 0, (params.delta_psi < -0.4 or params.delta_psi > 8.5) and ECAM_ORANGE or ECAM_GREEN)
+    --cabin V/S
+    SASL_rotated_center_img_ycenter_aligned(ECAM_PRESS_needle_img, size[1]/2+7, size[2]/2+190, 84, 4, Math_rescale_no_lim(-2000, -90, 2000, 90, Math_clamp(params.cabin_vs, -2100, 2100)), -84, 0, ECAM_GREEN)
+    --cabin ALT
+    SASL_rotated_center_img_ycenter_aligned(ECAM_PRESS_needle_img, size[1]/2+279, size[2]/2+190, 84, 4, Math_rescale_no_lim(0, -50, 10000, 120, Math_clamp(params.cabin_alt, -500, 10500)), -84, 0, params.cabin_alt > 9550 and ECAM_RED or ECAM_GREEN)
+
+    --outflow valve
+    SASL_rotated_center_img_xcenter_aligned(ECAM_PRESS_outflow_needle_img, size[1]/2+245, size[2]/2-197, 12, 101, Math_rescale(0, -90, 1, 0, params.overflow_valve), 0, 0, (params.overflow_valve > 0.95 and get(All_on_ground) == 0) and ECAM_ORANGE or ECAM_GREEN)
+
+    --L pack
+    SASL_draw_img_xcenter_aligned(ECAM_PRESS_pack_triangle_img, size[1]/2-315, size[2]/2-263, 27, 20, (get(Pack_L) == 0 and get(Engine_1_avail) == 1) and ECAM_ORANGE or ECAM_GREEN)
+    --R pack
+    SASL_draw_img_xcenter_aligned(ECAM_PRESS_pack_triangle_img, size[1]/2+315, size[2]/2-263, 27, 20, (get(Pack_R) == 0 and get(Engine_2_avail) == 1) and ECAM_ORANGE or ECAM_GREEN)
+end
+
 function draw_press_page()
     sasl.gl.drawTexture(ECAM_PRESS_bgd_img, 0, 0, 900, 900, {1,1,1})
     sasl.gl.drawTexture(ECAM_PRESS_grey_lines_img, 0, 0, 900, 900, ECAM_LINE_GREY)
@@ -154,34 +171,7 @@ function draw_press_page()
 
     draw_pack_indications()
     draw_ldg_elev()
-end
-
-local function update_drs()
-
-    if params.overflow_valve > 0.95 and get(All_on_ground) == 0 then
-        set(Ecam_press_ovf_valve_color, 0)
-    else
-        set(Ecam_press_ovf_valve_color, 1)
-    end
-
-    set(Ecam_press_cabin_alt_limit, Math_clamp(params.cabin_alt, -500, 10500))
-
-    if params.cabin_alt > 9550 then
-        set(Ecam_press_cabin_alt_color, 0)
-    else
-        set(Ecam_press_cabin_alt_color, 1)
-    end
-
-    set(Ecam_press_cabin_vs_limit, Math_clamp(params.cabin_vs, -2100, 2100))
-
-    set(Ecam_press_delta_p_limit, Math_clamp(params.delta_psi, -1, 9))
-
-    if params.delta_psi < -0.4 or params.delta_psi > 8.5 then
-        set(Ecam_press_delta_p_color, 0)
-    else
-        set(Ecam_press_delta_p_color, 1)
-    end
-
+    draw_press_textures_and_needle()
 end
 
 local function update_params()
@@ -195,21 +185,5 @@ local function update_params()
 end
 
 function ecam_update_press_page()
-
-    -- Pack indication is amber when pack not available and associated engine running
-    if get(Pack_L) == 0 and get(Engine_1_avail) == 1 then
-        set(Ecam_press_pack_1_triangle, 0)    
-    else
-        set(Ecam_press_pack_1_triangle, 1)
-    end
-
-    if get(Pack_R) == 0 and get(Engine_2_avail) == 1 then
-        set(Ecam_press_pack_2_triangle, 0)    
-    else
-        set(Ecam_press_pack_2_triangle, 1)
-    end
-
     update_params()
-    update_drs()
-
 end

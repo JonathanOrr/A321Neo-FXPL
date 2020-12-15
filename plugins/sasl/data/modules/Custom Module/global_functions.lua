@@ -377,6 +377,10 @@ function SASL_rotated_center_img_xcenter_aligned(image, x, y, width, height, ang
     sasl.gl.drawRotatedTextureCenter (image, angle, x, y, x - width / 2 + center_x_offset, y + center_y_offset, width, height, color)
 end
 
+function SASL_rotated_center_img_ycenter_aligned(image, x, y, width, height, angle, center_x_offset, center_y_offset, color)
+    sasl.gl.drawRotatedTextureCenter (image, angle, x, y, x + center_x_offset, y - height / 2 + center_y_offset, width, height, color)
+end
+
 function SASL_rotated_center_img_xcenter_aligned_helper(image, x, y, width, height, angle, center_x_offset, center_y_offset, color)
     local center_x = x + center_x_offset
     local center_y = y + center_y_offset
@@ -388,6 +392,19 @@ function SASL_rotated_center_img_xcenter_aligned_helper(image, x, y, width, heig
     sasl.gl.drawCircle(x, y, 5, true, {1, 0, 0})
     sasl.gl.drawLine(x, y, x + radius*math.cos(-math.rad(get(TIME) * 40 + 90)), y + radius*math.sin(-math.rad(get(TIME) * 40 + 90)), {1, 0, 0})
     sasl.gl.drawRotatedTextureCenter (image, get(TIME) * 40, x, y, x - width / 2 + center_x_offset, y + center_y_offset, width, height, color)
+end
+
+function SASL_rotated_center_img_ycenter_aligned_helper(image, x, y, width, height, angle, center_x_offset, center_y_offset, color)
+    local center_x = x + center_x_offset
+    local center_y = y + center_y_offset
+    local radius = math.sqrt((center_x - x)^2 + (center_y - y)^2)
+
+    sasl.gl.drawRotatedTextureCenter (image, angle, x, y, x + center_x_offset, y - height / 2 + center_y_offset, width, height, color)
+
+    sasl.gl.drawCircle(x, y, radius, true, {0, 1, 0, 0.25})
+    sasl.gl.drawCircle(x, y, 5, true, {1, 0, 0})
+    sasl.gl.drawLine(x, y, x + radius*math.cos(-math.rad(get(TIME) * 40 + 90)), y + radius*math.sin(-math.rad(get(TIME) * 40 + 90)), {1, 0, 0})
+    sasl.gl.drawRotatedTextureCenter (image, get(TIME) * 40, x, y, x + center_x_offset, y - height / 2 + center_y_offset, width, height, color)
 end
 
 function SASL_drawSegmentedImg_xcenter_aligned(image, x, y, img_width, img_height, num_positions, position)
