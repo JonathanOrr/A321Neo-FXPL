@@ -56,7 +56,12 @@ ECAM_HYD_B_status_img =   sasl.gl.loadImage(moduleDirectory .. "/Custom Module/t
 ECAM_HYD_Y_status_img =   sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/HYD/YELLOW.png")
 
 --FUEL
-ECAM_FUEL_bgd_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/FUEL/fuel.png")
+ECAM_FUEL_bgd_img =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/FUEL/fuel.png")
+ECAM_FUEL_xfeed_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/FUEL/crossfeed.png")
+ECAM_FUEL_l_pump_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/FUEL/pump_left.png")
+ECAM_FUEL_r_pump_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/FUEL/pump_right.png")
+ECAM_FUEL_pumps_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/FUEL/pumps.png")
+ECAM_FUEL_valves_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/FUEL/Valve.png")
 
 --APU--
 ECAM_APU_bgd_img =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/APU/APU.png")
@@ -69,8 +74,13 @@ ECAM_COND_arrows_img =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/
 ECAM_COND_valves_img =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/COND/Valve.png")
 
 --DOOR--
-ECAM_DOOR_bgd_img =   sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/DOOR/Background.png")
-ECAM_DOOR_grey_lines_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/DOOR/grey_lines.png")
+ECAM_DOOR_bgd_img =          sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/DOOR/Background.png")
+ECAM_DOOR_grey_lines_img =   sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/DOOR/grey_lines.png")
+ECAM_DOOR_statics_img =      sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/DOOR/static_doors.png")
+ECAM_DOOR_cargo_door_img =   sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/DOOR/cargo.png")
+ECAM_DOOR_l_cabin_door_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/DOOR/cabin_left.png")
+ECAM_DOOR_r_cabin_door_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/DOOR/cabin_right.png")
+ECAM_DOOR_vs_arrows_img =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/DOOR/Arrow.png")
 
 --WHEEL--
 ECAM_WHEEL_bgd_img =               sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/WHEEL/WHEEL.png")

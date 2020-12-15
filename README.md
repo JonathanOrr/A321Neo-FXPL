@@ -8,11 +8,9 @@ Please don't complain to the developers for the missing features and check the #
 
 
 ## License
-Different components of this aircraft addon are licensed under different licenses:
-* The main repository structure, all the lua files, the cockpit images, and all other files not otherwise specified are distributed according to the **GNU General Public License V3.0**. Please refer to the main [LICENSE](LICENSE) file. The copyright owners are all the developers contributing to the project.
-  * **If you create a derivative work you MUST share it under GPL or a GPL-compatible license!**
-* The SASL software is a proprietary and third-party software according to its own license, free to use for non-commercial applications. Please refer to the [official website](https://1-sim.com/).
-* The graphical objs files are released according to [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/). You are free to use and redistribute the objs files, provided that you give appropriate credit, you don't modify them and you don't use them for commercial purposes. The source code is not public. The copyright owner is [JonathanOrr](https://github.com/JonathanOrr).
+Different components of this aircraft addon are licensed under different licenses.
+* The main repository structure, all the lua files, the cockpit images, and all other files not otherwise specified are distributed according to the **GNU General Public License V3.0**. Please refer to the main [LICENSE](LICENSE) file. The copyright owners are all the developers contributing to the project. **If you create a derivative work you MUST share it under GPL or a GPL-compatible license!**
+* For other components (plugin engine, sounds, and graphical model) please refer to the [ACKNOWLEDGMENTS.md](ACKNOWLEDGMENTS.md) file.
 
 ## Install
 Just git clone repo to the Aircraft X-Plane directory. Once the development reaches a stable stage, zip files of stable releases will be provided. 

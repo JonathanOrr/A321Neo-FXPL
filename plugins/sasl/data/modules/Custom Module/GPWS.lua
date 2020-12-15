@@ -426,6 +426,9 @@ local function update_pbs()
     pb_set(PB.ovhd.gpws_flap_mode, not gpws_flap_mode, false)
     pb_set(PB.ovhd.gpws_ldg_flap_3, gpws_flap_3_mode, false)
     
+    set(GPWS_mode_flap_disabled, gpws_flap_mode and 0 or 1)
+    set(GPWS_mode_flap_3, gpws_flap_3_mode and 1 or 0)
+    
 end
 
 local function update_local_data()
@@ -444,6 +447,8 @@ local function update_local_data()
 end
 
 function update()
+    perf_measure_start("GPWS:update()")
+
     is_warning = false
     is_caution = false
 
@@ -456,7 +461,23 @@ function update()
     update_mode_4(data_delayed.ra_altitide, data_delayed.ias)
     update_mode_5(data_delayed.ra_altitide)
     
-    update_gpws_predictive()
+    if gpws_terrain_mode and get(Capt_Baro_Alt) < 18000 then   -- TODO Add failures of ADIRS, etc.
+        set(GPWS_pred_is_active, 1)
+        update_gpws_predictive()
+        c, w = update_gpws_predictive_cautions()
+
+        if c or w then  -- Force Terrain ON in this case
+            set(ND_Capt_Terrain, 1)
+            set(ND_Fo_Terrain, 1)
+        end
+        
+        is_caution = is_caution or c
+        is_warning = is_warning or w
+    else
+        set(GPWS_pred_is_active, 0)
+    end
     
     update_pbs()
+    
+    perf_measure_stop("GPWS:update()")
 end

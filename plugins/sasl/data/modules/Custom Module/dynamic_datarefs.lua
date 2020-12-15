@@ -536,6 +536,7 @@ Speedbrake_handle_ratio = globalProperty("sim/cockpit2/controls/speedbrake_ratio
 --flight envelope "sensors"
 Flightmodel_roll = globalProperty("sim/flightmodel/position/true_phi")
 Flightmodel_pitch = globalProperty("sim/flightmodel/position/true_theta")
+Flightmodel_heading = globalProperty("sim/flightmodel/position/true_psi")
 Total_vertical_g_load = globalProperty("sim/flightmodel/forces/g_nrml")
 Total_long_g_load = globalProperty("sim/flightmodel/forces/g_axil")
 Vpath_pitch_rate = createGlobalPropertyf("a321neo/dynamics/FBW/aerodynamics/vpath_Q", 0, false, true, false)
@@ -691,4 +692,12 @@ GPWS_pred_obst_pull = createGlobalPropertyi("a321neo/dynamics/gpws/pred/obstacle
 
 GPWS_dist_60 = createGlobalPropertyf("a321neo/dynamics/gpws/pred/debug_dist_60", 0, false, true, false) -- Distance in 60 sec for debug only
 GPWS_dist_30 = createGlobalPropertyf("a321neo/dynamics/gpws/pred/debug_dist_30", 0, false, true, false) -- Distance in 30 sec for debug only
+GPWS_dist_airport = createGlobalPropertyf("a321neo/dynamics/gpws/pred/debug_dist_airport", 0, false, true, false) -- Distance from the nearest airport
+
+GPWS_pred_front     = createGlobalPropertyia("a321neo/dynamics/gpws/pred/front_array", 6) -- 0: not visible, 1: yellow-ish, 2: yellow, 3: orange, 4: red
+GPWS_pred_front_L   = createGlobalPropertyia("a321neo/dynamics/gpws/pred/front_array_L", 6) -- 0: not visible, 1: yellow-ish, 2: yellow, 3: orange, 4: red
+GPWS_pred_front_R   = createGlobalPropertyia("a321neo/dynamics/gpws/pred/front_array_R", 6) -- 0: not visible, 1: yellow-ish, 2: yellow, 3: orange, 4: red
+
+GPWS_mode_flap_disabled = createGlobalPropertyi("a321neo/dynamics/gpws/no_flaps", 0, false, true, false)
+GPWS_mode_flap_3 = createGlobalPropertyi("a321neo/dynamics/gpws/flaps_3", 0, false, true, false)
 

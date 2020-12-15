@@ -35,7 +35,12 @@ local function get_color_green_blinking()
 end
 
 local function draw_cabin_vs()
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+327, size[2]-184, math.floor(params.cabin_vs), 36, false, false, TEXT_ALIGN_RIGHT, oxy_color)
+    if get(All_on_ground) == 0 then
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+150, size[2]-184, "V/S", 32, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+        SASL_drawSegmentedImgColored(ECAM_DOOR_vs_arrows_img, size[1]/2+182, size[2]/2+264, 56, 27, 2, params.cabin_vs >= 0 and 1 or 2, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+327, size[2]-184, math.floor(params.cabin_vs), 36, false, false, TEXT_ALIGN_RIGHT, oxy_color)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+385, size[2]-184, "FT/MIN", 32, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    end
 end
 
 local function update_param()
@@ -69,11 +74,29 @@ local function draw_oxygen()
     end
 end
 
+local function draw_door_page_textures()
+    --static doors
+    SASL_draw_img_xcenter_aligned(ECAM_DOOR_statics_img, size[1]/2+2, size[2]/2-195, 295, 520, {1, 1, 1})
+
+    --front doors
+    SASL_drawSegmentedImg(ECAM_DOOR_l_cabin_door_img, size[1]/2-292, size[2]/2+187, 522, 33, 2, get(Door_1_l_ratio) >= 0.1 and 1 or 2)
+    SASL_drawSegmentedImg(ECAM_DOOR_r_cabin_door_img, size[1]/2+38, size[2]/2+187, 522, 33, 2, get(Door_1_r_ratio) >= 0.1 and 1 or 2)
+
+    --cargo doors
+    SASL_drawSegmentedImg(ECAM_DOOR_cargo_door_img, size[1]/2+29, size[2]/2+93, 438, 33, 2, get(Cargo_1_ratio) >= 0.1 and 1 or 2)
+    SASL_drawSegmentedImg(ECAM_DOOR_cargo_door_img, size[1]/2+29, size[2]/2-146, 438, 33, 2, get(Cargo_2_ratio) >= 0.1 and 1 or 2)
+
+    --aft doors
+    SASL_drawSegmentedImg(ECAM_DOOR_l_cabin_door_img, size[1]/2-292, size[2]/2-245, 522, 33, 2, get(Door_3_l_ratio) >= 0.1 and 1 or 2)
+    SASL_drawSegmentedImg(ECAM_DOOR_r_cabin_door_img, size[1]/2+38, size[2]/2-245, 522, 33, 2, get(Door_3_r_ratio) >= 0.1 and 1 or 2)
+end
+
 function draw_door_page()
     sasl.gl.drawTexture(ECAM_DOOR_bgd_img, 0, 0, 900, 900, {1,1,1})
     sasl.gl.drawTexture(ECAM_DOOR_grey_lines_img, 0, 0, 900, 900, ECAM_LINE_GREY)
     update_param()
     draw_oxygen()
     draw_cabin_vs()
+    draw_door_page_textures()
 end
 

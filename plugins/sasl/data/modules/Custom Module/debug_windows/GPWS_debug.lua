@@ -105,8 +105,20 @@ function draw_predictive_output()
 
 end
 
+local function terrain_int_to_color(i)
+    if i == 1 then
+        return {0.5,0.5,0}
+    elseif i == 2 then
+        return {1,1,0}
+    elseif i == 3 then
+        return ECAM_ORANGE
+    elseif i == 4 then
+        return ECAM_RED
+    end
+end
+
 function draw_predictive_areas()
-    sasl.gl.drawTexture(image_plane, 250, 10, 331/10, 404/10)
+    sasl.gl.drawTexture(image_plane, 252, 5, 331/10, 404/10)
     sasl.gl.drawWideLine ( 240, 50, 240, 170, 1, ECAM_HIGH_GREY)
     sasl.gl.drawWideLine ( 300, 50, 300, 170, 1, ECAM_HIGH_GREY)
 
@@ -115,10 +127,27 @@ function draw_predictive_areas()
     sasl.gl.drawWideLine ( 240, 50, 240+25*math.min(0,roll/30), 170, 1, ECAM_HIGH_GREY)
     sasl.gl.drawWideLine ( 300, 50, 300+25*math.max(0,roll/30), 170, 1, ECAM_HIGH_GREY)
 
-    sasl.gl.drawText(Font_AirbusDUL, 330, 170, "d(60s) = " .. Round_fill(get(GPWS_dist_60),2), 13, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(Font_AirbusDUL, 330, 170, "d(60s) = " .. Round_fill(get(GPWS_dist_60),2) .. " nm", 13, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
 
-    sasl.gl.drawText(Font_AirbusDUL, 330, 90, "d(30s) = " .. Round_fill(get(GPWS_dist_30),2), 13, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(Font_AirbusDUL, 330, 90, "d(30s) = " .. Round_fill(get(GPWS_dist_30),2) .. " nm", 13, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
     
+    sasl.gl.drawText(Font_AirbusDUL, 330, 30, "d(nearest airport) = ", 13, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(Font_AirbusDUL, 400, 10, Round_fill(get(GPWS_dist_airport), 2) .. " nm", 13, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+    
+    for i=1,6 do
+        if get(GPWS_pred_front, i) > 0 then
+            sasl.gl.drawRectangle(260,  150-20*(6-i), 20, 20, terrain_int_to_color(get(GPWS_pred_front, i)))
+        end
+
+        if get(GPWS_pred_front_L, i) > 0 then
+            sasl.gl.drawRectangle(240,  150-20*(6-i), 20, 20, terrain_int_to_color(get(GPWS_pred_front_L, i)))
+        end
+
+        if get(GPWS_pred_front_R, i) > 0 then
+            sasl.gl.drawRectangle(280,  150-20*(6-i), 20, 20, terrain_int_to_color(get(GPWS_pred_front_R, i)))
+        end
+
+    end
 
 end
 
