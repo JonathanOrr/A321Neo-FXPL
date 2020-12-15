@@ -46,7 +46,10 @@
 {ddbdce03-28f6-4700-bc31-eced44d36243} event:/RA/400
 {76d2927d-c2d5-463c-9f01-9c8288364f49} event:/RA/50
 {22f80e6a-40fc-4fd9-9f77-f0ef5077c622} event:/RA/500
+{eba1c552-d477-4c98-9d5f-00c2f3378ecd} event:/APButton
 {a50ec509-2f82-4177-bf54-8821bc565bed} event:/APU
+{3f2cc16b-2f56-46a4-891c-860965e1474f} event:/ASkidOff
+{fda10398-11aa-48db-9a23-9d3a9443a422} event:/ASkidOn
 {baf9bc41-c708-42a2-bfac-b33deb7ddbc4} event:/Avionics
 {af369460-34d3-4c6e-a56c-fbe21efb91d5} event:/BatteryRelay
 {1edd836c-b29a-4101-a732-2d2eef744bbe} event:/Blower
@@ -54,6 +57,8 @@
 {fbc642bf-0e6c-4030-9901-0f1ce878cfe7} event:/BusKick
 {635b86aa-7d9b-4dad-9a71-371b15257ae8} event:/BusOn
 {bf628244-9f1c-4c33-97bd-8b793852fd47} event:/Cabin
+{c98bea57-e385-49fe-89da-f2eb79555406} event:/Engine Start
+{ced3bc6e-ec20-43f0-a5a3-6f7602aec5e9} event:/Engine Start Ext
 {bdd3f6e0-b7ff-46ac-aadd-d8b6b9c45201} event:/Engines
 {05aa7e46-d0ef-4817-84df-6599e3fd87f6} event:/Engines Ext
 {06a66501-2a11-4b1a-a6f7-4fe5d089bc41} event:/Ext
@@ -61,16 +66,27 @@
 {c9cf63f7-c575-4691-823b-716d0e5e1ba9} event:/Flaps
 {c97b703e-898e-4918-bc8c-259807c5ada1} event:/Gear
 {5339da63-baf2-40c8-aafd-6bf6a0fe8aac} event:/Ground Roll
+{13efb812-486a-4d08-a381-7678b540faf5} event:/GuardClose
+{0e01a32e-1c0c-4578-8b3c-4ab7bd070209} event:/GuardOpen
 {140fc58e-381e-4651-af6d-901ab06e4c0e} event:/Liftoff
 {d5bc7710-4cf2-4544-ba28-726b316c7f21} event:/Packs
 {0e7dff21-7b4d-4b72-9343-4928951e126a} event:/PTU
 {ae0d038d-fec0-41da-828a-279e74f65900} event:/RevL
 {b0452156-9936-4b1e-9c0d-ec4992821fd2} event:/RevR
+{e17ea26c-dd4f-4bc1-873e-8fc5e0da491d} event:/SpoilerArm
+{86179178-a201-42c4-9cbc-eb3b28b70587} event:/SpoilerFull
+{012c937b-23f7-4907-a246-004a2721c54c} event:/SpoilerHalf
+{9f3712ea-3bc4-4070-8de7-86b666c7bd15} event:/SpoilerStow
 {7797c67b-9d14-445b-8cc9-e63e0eebabf3} event:/TouchMain
 {72dd99e0-d646-42c0-8cc7-4e3f356095cc} event:/TouchNose
 {341873bc-d31e-4ee3-9cb2-1b0c79682754} event:/Wind
 {cba7ef70-43b1-4842-9d4b-51501041377c} event:/Yellow Hyd Pump
-{c98bea57-e385-49fe-89da-f2eb79555406} event:/Engine Start
+{ff956f46-ccbb-4395-a6bc-1d64dddaff41} event:/FlapLeverUp
+{19c5cfbd-9d07-4b04-847a-5e65f673ab83} event:/FlapLever1
+{25bb3f48-4eea-40a2-a61f-7cfbf098c7c2} event:/FlapLever2
+{c75c87ec-563c-4319-a7aa-786962e31e9d} event:/FlapLever3
+{dcd36bd7-bf36-4324-8019-216506094656} event:/FlapLever4
+{f7e08394-7b0f-4713-8834-554fc0fdf7b3} event:/FlapLeverDown
 {9f08114d-36ec-44cc-b8bf-b2babda09f9e} bus:/
 {7f7c05a4-e05a-4d44-94fe-d4691147a9b7} bus:/Master
 {e3492bec-f854-4fbb-b2bc-23586269032e} bus:/Master/Copilot
