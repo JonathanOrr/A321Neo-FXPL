@@ -136,13 +136,18 @@ local function draw_battery(i, x)
         sasl.gl.drawText(Font_AirbusDUL, x+65, size[2]/2+360, "V", 26, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
         sasl.gl.drawText(Font_AirbusDUL, x+65, size[2]/2+330, "A", 26, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
 
+        local amps = -math.floor(curr_amps+0.5)
+        if math.abs(amps) < 1 then
+            amps = 0
+        end
+
         sasl.gl.drawText(Font_AirbusDUL, x+60, size[2]/2+360, 
                          math.floor(ELEC_sys.batteries[i].curr_voltage+0.5), 26, false, false,
                          TEXT_ALIGN_RIGHT,
                          (ELEC_sys.batteries[i].curr_voltage < 25 or ELEC_sys.batteries[i].curr_voltage > 31)
                          and ECAM_ORANGE or ECAM_GREEN)
         sasl.gl.drawText(Font_AirbusDUL, x+60, size[2]/2+330,
-                         -math.floor(curr_amps+0.5), 26, false, false, 
+                         amps, 26, false, false, 
                          TEXT_ALIGN_RIGHT,
                          curr_amps < -5 and ECAM_ORANGE or ECAM_GREEN)
         draw_battery_contactor(i,x)

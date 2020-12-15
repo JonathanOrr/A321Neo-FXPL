@@ -98,8 +98,12 @@ function Reset_RAT()
     if get(All_on_ground) == 0 then
         sasl.messageWindow (500 , 500 , 300 , 150 , " This is a ground-only operation " , 
                 "In order to stow the RAT you must be on ground and press a switch in a panel accessible from the belly of the aircraft.",
-                2 , " Cancel " , function() end, " I'm spiderman ", function() set(is_RAT_out, 0) end)
+                2 , " Cancel " , function() end, " I'm spiderman ", function()
+                    ELEC_sys.generators[5].switch_status = false
+                    set(is_RAT_out, 0)
+                end)
     else
+        ELEC_sys.generators[5].switch_status = false
         set(is_RAT_out, 0)
     end
 end

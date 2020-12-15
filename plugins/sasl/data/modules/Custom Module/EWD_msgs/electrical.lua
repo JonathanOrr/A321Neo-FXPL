@@ -207,7 +207,7 @@ Message_ELEC_EMER_GEN_PWR = {
     end,
 
     is_active = function(self)
-      return ELEC_sys.generators[5].switch_status == false
+      return ELEC_sys.generators[5].switch_status == false or get(is_RAT_out) == 0
     end
 }
 
