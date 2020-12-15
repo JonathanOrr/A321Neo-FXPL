@@ -466,3 +466,7 @@ ND_Fo_range_knob = createGlobalPropertyf("a321neo/cockpit/nd/fo_range_knob", 0, 
 ND_Fo_nav1_level = createGlobalPropertyf("a321neo/cockpit/nd/fo_nav1_lever", 0, false, true, false) -- -1,0,1
 ND_Fo_nav2_level = createGlobalPropertyf("a321neo/cockpit/nd/fo_nav2_lever", 0, false, true, false) -- -1,0,1
 
+ND_Capt_Terrain = createGlobalPropertyi("a321neo/cockpit/nd/terrain_capt", 0, false, true, false) -- 0,1
+ND_Fo_Terrain   = createGlobalPropertyi("a321neo/cockpit/nd/terrain_fo", 0, false, true, false) -- 0,1
+
+
