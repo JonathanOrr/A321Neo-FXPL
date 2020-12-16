@@ -121,6 +121,43 @@ function Set_anim_value(current_value, target, min, max, speed)
 
 end
 
+local function Set_linear_anim_value_internal(current_value, target, min, max, speed, speed_m)
+    target = Math_clamp(target, min, max)
+    if speed_m ~= 0 and speed ~= 0 then
+        if target - current_value < (speed + (speed * 0.005)) * speed_m and target - current_value > -(speed + (speed * 0.005)) * speed_m then
+          return target
+        elseif target < current_value then
+          return current_value - (speed * speed_m)
+        elseif target > current_value then
+          return current_value + (speed * speed_m)
+        end
+    else
+        return current_value
+    end
+end
+
+--used to animate a value with a linear delay USE ONLY WITH FLOAT VALUES
+function Set_linear_anim_value(current_value, target, min, max, speed)
+    return Set_linear_anim_value_internal(current_value, target, min, max, speed, get(DELTA_TIME))
+end
+
+--used to animate a value with a linear delay USE ONLY WITH FLOAT VALUES
+function Set_linear_anim_value_nostop(current_value, target, min, max, speed)
+    return Set_linear_anim_value_internal(current_value, target, min, max, speed, get(DELTA_TIME_NO_STOP))
+end
+
+-- for giving datarefs linear delayed outputs by using set_linear_anim_value
+function Set_dataref_linear_anim(dataref, target, min, max, speed)
+    set(dataref, Set_linear_anim_value(get(dataref), target, min, max, speed))
+end
+
+
+-- for giving datarefs linear delayed outputs by using set_linear_anim_value
+function Set_dataref_linear_anim_nostop(dataref, target, min, max, speed)
+    set(dataref, Set_linear_anim_value_nostop(get(dataref), target, min, max, speed))
+end
+
+
 --rescaling a value
 function Math_rescale(in1, out1, in2, out2, x)
 
@@ -187,27 +224,6 @@ function Table_interpolate(tab, x)
         -- (y-y0) / (y1-y0) = (x-x0) / (x1-x0)
         return tab[a][2] + ((x-tab[a][1])*(tab[b][2]-tab[a][2]))/(tab[b][1]-tab[a][1])
     end
-end
-
---used to animate a value with a linear delay USE ONLY WITH FLOAT VALUES
-function Set_linear_anim_value(current_value, target, min, max, speed)
-    target = Math_clamp(target, min, max)
-    if get(DELTA_TIME) ~= 0 and speed ~= 0 then
-        if target - current_value < (speed + (speed * 0.005)) * get(DELTA_TIME) and target - current_value > -(speed + (speed * 0.005)) * get(DELTA_TIME) then
-          return target
-        elseif target < current_value then
-          return current_value - (speed * get(DELTA_TIME))
-        elseif target > current_value then
-          return current_value + (speed * get(DELTA_TIME))
-        end
-    else
-        return current_value
-    end
-end
-
--- for giving datarefs linear delayed outputs by using set_linear_anim_value
-function Set_dataref_linear_anim(dataref, target, min, max, speed)
-    set(dataref, Set_linear_anim_value(get(dataref), target, min, max, speed))
 end
 
 --string functions--
@@ -301,9 +317,9 @@ end
 function Knob_handler_up_float(phase, dataref, min, max, step)
     step = step or 0.5  -- Defualt value
     if phase == SASL_COMMAND_BEGIN then
-        set(dataref, Math_clamp(get(dataref) + step * get(DELTA_TIME), min, max))
+        set(dataref, Math_clamp(get(dataref) + step * get(DELTA_TIME_NO_STOP), min, max))
     elseif phase == SASL_COMMAND_CONTINUE then
-        set(dataref, Math_clamp(get(dataref) + step * get(DELTA_TIME), min, max))
+        set(dataref, Math_clamp(get(dataref) + step * get(DELTA_TIME_NO_STOP), min, max))
     end
 end
 
@@ -312,9 +328,9 @@ end
 function Knob_handler_down_float(phase, dataref, min, max, step) 
     step = step or 0.5  -- Defualt value
     if phase == SASL_COMMAND_BEGIN then
-        set(dataref, Math_clamp(get(dataref) - step * get(DELTA_TIME), min, max))
+        set(dataref, Math_clamp(get(dataref) - step * get(DELTA_TIME_NO_STOP), min, max))
     elseif phase == SASL_COMMAND_CONTINUE then
-        set(dataref, Math_clamp(get(dataref) - step * get(DELTA_TIME), min, max))
+        set(dataref, Math_clamp(get(dataref) - step * get(DELTA_TIME_NO_STOP), min, max))
     end
 end
 

@@ -298,7 +298,7 @@ local function update_datarefs()
     end
     
     -- Knob animation
-    Set_dataref_linear_anim(X_bleed_dial_anim, get(X_bleed_dial), 0, 2, 5)
+    Set_dataref_linear_anim_nostop(X_bleed_dial_anim, get(X_bleed_dial), 0, 2, 5)
 
 end
 

@@ -453,7 +453,7 @@ end
 
 local function update_anim()
 
-    Set_dataref_linear_anim(Parkbrake_switch_pos_anim, get(Parkbrake_switch_pos), 0, 1, 3)
+    Set_dataref_linear_anim_nostop(Parkbrake_switch_pos_anim, get(Parkbrake_switch_pos), 0, 1, 3)
 end
 
 function update()

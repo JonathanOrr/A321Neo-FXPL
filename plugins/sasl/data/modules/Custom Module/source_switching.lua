@@ -190,8 +190,8 @@ end
 
 function update_knobs()
 
-    Set_dataref_linear_anim(DMC_position_ecam_nd, ecam_nd_xfr, -1, 1, 5)
-    Set_dataref_linear_anim(DMC_position_dmc_eis, eis_selector, -1, 1, 5)
+    Set_dataref_linear_anim_nostop(DMC_position_ecam_nd, ecam_nd_xfr, -1, 1, 5)
+    Set_dataref_linear_anim_nostop(DMC_position_dmc_eis, eis_selector, -1, 1, 5)
 
 end
 

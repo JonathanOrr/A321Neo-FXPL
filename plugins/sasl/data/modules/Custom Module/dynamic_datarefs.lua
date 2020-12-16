@@ -19,6 +19,7 @@
 
 --global dataref for the A32NX project--
 DELTA_TIME = globalProperty("sim/operation/misc/frame_rate_period")
+DELTA_TIME_NO_STOP = globalProperty("sim/time/framerate_period") -- Delta time active also in pause
 TIME = globalProperty("sim/time/total_running_time_sec")
 FLIGHT_TIME = globalProperty("sim/time/total_flight_time_sec")
 Distance_traveled_mi = createGlobalPropertyf("a321neo/dynamics/distance_traveled_mi", 0, false, true, false)
