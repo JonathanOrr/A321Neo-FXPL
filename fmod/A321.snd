@@ -40,66 +40,6 @@ ACF_SOUNDS
 ##                                            @@@@@@@@@/  @@@   @@@@@@@@@   .@@@@@@@@@/ ,@@@@@@@@@      @@      @@    @@@@@@@@@  @@      @@@                                           ##
 ##                                                                                                                                                                                     ##
 #########################################################################################################################################################################################                                                                         
-##                                                                                                                                                                 ##                                                   
-##                                                                                                                                                                 ##               
-##                                                                                                                                                                 ##               
-##                                                                                                                                                                 ##               
-##                                                                                                                                                                 ##               
-##                                                                        .*&%%&(,                                                                                 ##               
-##                                                               ,########################%                                                                        ##               
-##                                                          .##################################%                                                                   ##               
-##                                                       ##################%####(##################(                                                               ##               
-##                                                   ,%#**########################################/*##%                                                            ##               
-##                                                 %%******##########.                 ##########******%#*                                                         ##     
-##                                               ###%****/###(##                            ,(###(#****%###%                                                       ##     
-##                                             ############,         .*/            ./ .         #(##########&                                                     ##     
-##                                           #########((        .*        */     *,       (.        ###########                                                    ##     
-##                                         (#&######(*      ../    (    /* */. /* //    /    ,..       #(#####&##                                                  ##     
-##                                        %##&####(       .(      /,////.    /*     //////      ,..      #####&###                                                 ##     
-##                                       %######(      .,   #(   *.   .                   /   ./   #.      *#######&                                               ##     
-##                                     *#######      ./    .(/////   ..               .    /////(    *..     ((#####%                                              ##     
-##                                    (#####(      .,      (   ,/    ./,,            . .   .*   /,     /..     (#####%                                             ##     
-##                                  &######(     .,.  /(  (      .  ..*(/..     .      ...       /  */#  ,.     ########                                           ##     
-##                               %########(     .(   //%#(#.    .  ,..*(/..    ....   ../.        ((#//.  *.      ########%                                        ##             
-##                            ,##########.     ./.../, *((,    .  ,(,*///.,  . ...*  .../.. .. ..*//.. /...%..     (#########&                                     ##             
-##                          ############     ..////// .,,* .. . ../(,#(///*. .....# ....**,, .. ,/**., ,//////.     (###########.                                  ##             
-##                       .#############     ../(,///  ,,,,.../ .,*,,,&/****,......*,...(( (.,...,.***,  *//.(/#.     (########(###&                                ##             
-##                     %#############(.    ..//       ,,,...,*.*. .*,*//****../../....(,.  (/,...,,**(.      //%.     ###########(###                              ##                                          
-##                   &################     ./*.       ,,...,.*.,,,,/,**/****...,., ,,.   **,,*(..,//,,*       **..     ###############%                            ##                                          
-##                 ,#################     .#*.        .*..*  .,                                 .,. ,,,       .,/.     (################%                          ##                                          
-##                ##################      .*        . .                                               .         *#.     ##################                         ##                                          
-##               ###############%###     .%,        , ,%%&&@&@&&&&%..                  . *&&%&&@@@&%%#*.        ,*.     ###%###############%                       ##                                          
-##              ###############%%##*     .//       ...,#...,#####%#%&(                 %(%#######...( .*.       .*(.     ##%%###############(                      ##
-##             *%#############%%&##     ..,/      ...*.    .(**/&//(                    (/*&//*/(    ,/..       .*&.     ###%%%%#############                      ##
-##                              ###     .(/(       ...,*  .  ,....,*                     *....,, .  .,....      .**.     ###                                       ##
-##                              ###     ./,,        ....,........                          ........,.,..,       %*@.     ###                                       ##
-##                              ###     ..,*         *............           ..            .........*..,        **@.     ###                                       ##
-##                              &##*     .,  .        /........                              ......*.(.        . ,..     ###                                       ##
-##                               ###     .. *.     (    (,,                                       .,*         . . .     .##%                                       ##
-##                               %##     ..(,.  .  .. *  /.. ,                                .  ./  ,  (   . ..,. (    ###                                        ##
-##                                ###  ..* .... .  ./..#  /(                                     /( ., ..  .. .#. .... .##/                                        ##
-##                                 #*.,      ,. .  .,..(, (///#                              .//// ,/ ./,  .....     *,.#*                                         ##
-##                                  %#        . ..  */..*, ////////                      #(////// .*,.(.   ..,/      .##                                           ##
-##  .                                %#       / ,.   (/,/.#.////////(((/.          .#*(((///////..  .***  ....      .##                                            ##
-##                                    /#/.     **,,  ///.  /**(  (//((#***************(((//  ((.*  .,//  .,,.      .#.                                             ##
-##                                   ../.&..   ..,,,  //,. /.. .  //(   /***(   ****   (//  /*../ /*//   ,,*.    .# /..                                            ##
-##                                 .../ ../*... .,,,,  ***.       ***,,   .          .,,/*       ,,*/.  ,,/. ...&/...*/..                                          ##
-##                               *.*  ....(.....(..,,,  ,**,                                    .**,,..,,...,%.../,...,  ..                                        ##
-##                            .*     ..,         . /,,* ..,**.                *(              *,**...**/,/.          ..,    ...                                    ##
-##                                 ...            .    **,...,.**.................#.........,..,..,,**   ..           *..                                          ##
-##                                *..#             .     *,.. .    .   .................,    ,...,*     ,              ..                                          ##
-##            ..                  ...###             .       ./.     *  ..*            .   ..*..       .            @##%...*                                       ##
-##            ..               ..  ,#######&#                     .    /.           /(... .                    /&#######% ,. ,                                     ##
-##            ...           ..,    #############%& .....              ../,,,,,,,,,,*(.,              .....#%#############,   . .                                   ##
-##            ...     *,          %##################%%/....             *,,,,,.*,(,            .,..,&%%##################           *.                            ##
-##          .....                 ########################%&%#,,.          /*,,*/,          ,,/@&%%#######################/                                        ##
-##      .........                %###########################,*#(&&#,,.     ((//      ,,*%&&#(,############################                                        ##
-##       .......                 ###########################&,,,(%###%%%%*** ** ,**/%%%###%&,,,(###########################%                                       ##
-##      ........                %###########################/,,,@%######((#######%%%#######%,*,*############################                                       ##
-##     ........                 ############################,,*,%###########@@@%#(#(######(%*,,,############################(                                      ##
-##*/*, ........                ############(###############(*,,*%(######(@@@#(#############%*,,,&###############&#############                                     ##
-################################################################################################################################################################### ##
-
 
 DISABLE_LEGACY_ALERT_SOUNDS
 
@@ -809,6 +749,14 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_CMND_HOLD_CUE a321neo/cockpit/nd/fo_terrain_toggle
 END_SOUND_ATTACHMENT
 
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Soft Button Press 3
+  VEH_XYZ 0 1.9 -18.6
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/gpws/silence
+END_SOUND_ATTACHMENT
+
+
+
 ##############################################################################################################################
 
 BEGIN_SOUND_ATTACHMENT
@@ -1512,7 +1460,17 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_CMND_HOLD_CUE a321neo/cockpit/DCDU/right_top
 END_SOUND_ATTACHMENT
 
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MCDU Button Press
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/draims/draims_transmit_vhf_1_button
+END_SOUND_ATTACHMENT
 
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MCDU Button Press
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/draims/draims_transmit_vhf_2_button
+END_SOUND_ATTACHMENT
 
 ##############################################################################################################################
 
@@ -1779,7 +1737,7 @@ END_SOUND_ATTACHMENT
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/Big Round Button Press
   VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_UP a321neo/cockpit/electrical/EMER_GEN_TEST
+  EVENT_CMND_DOWN a321neo/cockpit/electrical/EMER_GEN_TEST
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
@@ -1787,6 +1745,38 @@ BEGIN_SOUND_ATTACHMENT
   VEH_XYZ 0 1.5 -18.4
   EVENT_CMND_UP a321neo/cockpit/electrical/EMER_GEN_TEST
 END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Big Round Button Press
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/cockpit/dmc/pdf_nd_xfr_capt
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Big Round Button Release
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_UP a321neo/cockpit/dmc/pdf_nd_xfr_capt
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Big Round Button Press
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/cockpit/dmc/pdf_nd_xfr_fo
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Big Round Button Release
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_UP a321neo/cockpit/dmc/pdf_nd_xfr_fo
+END_SOUND_ATTACHMENT
+
+
+
+
+
+
+
+
 
 
 #################################################################################################
@@ -2029,98 +2019,108 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_START_COND 	a321neo/dynamics/either_aft_on_ground == 0
 END_SOUND_ATTACHMENT
 
-#################################################################################################CLLOUTS
+#################################################################################################CALLOUTS
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /RA/5
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/sounds/gpws/feet_5
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /RA/10
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/sounds/gpws/feet_10
+END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /RA/20
   VEH_XYZ 0 1.5 -18.4
-  EVENT_START_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot <= 21
-  CUE_TRIGGER_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot <= 7
-  EVENT_END_COND a321neo/dynamics/either_aft_on_ground == 1
+  EVENT_CMND_DOWN a321neo/sounds/gpws/feet_20
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /RA/30
   VEH_XYZ 0 1.5 -18.4
-  EVENT_START_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot <= 31
-  EVENT_END_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot < 3
+  EVENT_CMND_DOWN a321neo/sounds/gpws/feet_30
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /RA/40
   VEH_XYZ 0 1.5 -18.4
-  EVENT_START_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot <= 41
-  EVENT_END_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot < 3
+  EVENT_CMND_DOWN a321neo/sounds/gpws/feet_40
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /RA/50
   VEH_XYZ 0 1.5 -18.4
-  EVENT_START_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot <= 51
-  EVENT_END_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot < 3
+  EVENT_CMND_DOWN a321neo/sounds/gpws/feet_50
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /RA/100
   VEH_XYZ 0 1.5 -18.4
-  EVENT_START_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot <= 101
-  EVENT_END_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot < 3
+  EVENT_CMND_DOWN a321neo/sounds/gpws/feet_100
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /RA/200
   VEH_XYZ 0 1.5 -18.4
-  EVENT_START_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot <= 201
-  EVENT_END_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot < 3
+  EVENT_CMND_DOWN a321neo/sounds/gpws/feet_200
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /RA/300
   VEH_XYZ 0 1.5 -18.4
-  EVENT_START_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot <= 301
-  EVENT_END_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot < 3
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /RA/300
-  VEH_XYZ 0 1.5 -18.4
-  EVENT_START_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot <= 301
-  EVENT_END_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot < 3
+  EVENT_CMND_DOWN a321neo/sounds/gpws/feet_300
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /RA/400
   VEH_XYZ 0 1.5 -18.4
-  EVENT_START_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot <= 401
-  EVENT_END_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot < 3
+  EVENT_CMND_DOWN a321neo/sounds/gpws/feet_400
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /RA/500
   VEH_XYZ 0 1.5 -18.4
-  EVENT_START_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot <= 501
-  EVENT_END_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot < 3
+  EVENT_CMND_DOWN a321neo/sounds/gpws/feet_500
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /RA/1000
   VEH_XYZ 0 1.5 -18.4
-  EVENT_START_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot <= 1001
-  EVENT_END_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot < 3
+  EVENT_CMND_DOWN a321neo/sounds/gpws/feet_1000
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /RA/2000
   VEH_XYZ 0 1.5 -18.4
-  EVENT_START_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot <= 2001
-  EVENT_END_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot < 3
+  EVENT_CMND_DOWN a321neo/sounds/gpws/feet_2000
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /RA/2500
   VEH_XYZ 0 1.5 -18.4
-  EVENT_START_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot <= 2501
-  EVENT_END_COND sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot < 3
+  EVENT_CMND_DOWN a321neo/sounds/gpws/feet_2500
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /RA/retard
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/sounds/gpws/retard
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /RA/100Above
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/sounds/gpws/100Above
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /RA/Minimum
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/sounds/gpws/Minimum
 END_SOUND_ATTACHMENT
 
 ########################################################################################################APU
@@ -2625,4 +2625,108 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /SpoilerHalf
   VEH_XYZ 0 1.5 -18.4
   EVENT_START_COND sim/flightmodel2/controls/speedbrake_ratio <= 0.5
+END_SOUND_ATTACHMENT
+
+#############################################################################################GPWS
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GPWS/dontsink
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/sounds/gpws/dontsink
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GPWS/glideslope
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/sounds/gpws/glideslope
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GPWS/gpws
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/sounds/gpws/gpws
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GPWS/inop
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/sounds/gpws/inop
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GPWS/obsahead
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/sounds/gpws/obsahead
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GPWS/obsaheadpull
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/sounds/gpws/obsaheadpull
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GPWS/pullup
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/sounds/gpws/pullup
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GPWS/sinkrate
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/sounds/gpws/sinkrate
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GPWS/terr
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/sounds/gpws/terr
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GPWS/terrterr
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/sounds/gpws/terrterr
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GPWS/terrahead
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/sounds/gpws/terrahead
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GPWS/terraheadpull
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/sounds/gpws/terraheadpull
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GPWS/tlflaps
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/sounds/gpws/tlflaps
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GPWS/tlgear
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/sounds/gpws/tlgear
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GPWS/tlterr
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/sounds/gpws/tlterr
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GPWS/pitch
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/sounds/gpws/pitch
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GPWS/windshear
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/sounds/gpws/windshear
 END_SOUND_ATTACHMENT
