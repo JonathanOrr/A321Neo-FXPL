@@ -52,6 +52,10 @@ local function compute_distances()
         set(GPWS_dist_60, distances_front[6] * 0.000539957)
         
     else
+        for i=1,6 do
+            distances_front[i] = 0
+        end
+    
         set(GPWS_dist_30, 0)
         set(GPWS_dist_60, 0)
     end
@@ -71,21 +75,27 @@ local function search_terrain_altitude()
 
     for i=1,6 do
 
-        -- Front
-        lat, lon = move_along_distance(get(Aircraft_lat), get(Aircraft_long), distances_front[i], heading)
-        alt = compute_alt(lat, lon)
-        terrain_alt_front[i] = alt * 3.28084
+        if distances_front[i] == 0 then
+            -- we are not moving, no data, just a very low number value
+            terrain_alt_front[i] = -9999
+            terrain_alt_front_L[i] = -9999
+            terrain_alt_front_R[i] = -9999
+        else
+            -- Front
+            lat, lon = move_along_distance(get(Aircraft_lat), get(Aircraft_long), distances_front[i], heading)
+            alt = compute_alt(lat, lon)
+            terrain_alt_front[i] = alt * 3.28084
 
-        -- Front L
-        lat_L, lon_L = move_along_distance(lat, lon, 230, heading-90)
-        alt = compute_alt(lat_L, lon_L)
-        terrain_alt_front_L[i] = alt * 3.28084
+            -- Front L
+            lat_L, lon_L = move_along_distance(lat, lon, 230, heading-90)
+            alt = compute_alt(lat_L, lon_L)
+            terrain_alt_front_L[i] = alt * 3.28084
 
-        -- Front R
-        lat_R, lon_R = move_along_distance(lat, lon, 230, heading+90)
-        alt = compute_alt(lat_R, lon_R)
-        terrain_alt_front_R[i] = alt * 3.28084
-
+            -- Front R
+            lat_R, lon_R = move_along_distance(lat, lon, 230, heading+90)
+            alt = compute_alt(lat_R, lon_R)
+            terrain_alt_front_R[i] = alt * 3.28084
+        end
     end
 end
 
@@ -171,9 +181,6 @@ function update_gpws_predictive_cautions()
     end
 
     is_caution = is_caution and not is_warning
-
-    set(GPWS_pred_terr, is_caution and 1 or 0)
-    set(GPWS_pred_terr_pull, is_warning and 1 or 0)
 
     return is_caution, is_warning
 

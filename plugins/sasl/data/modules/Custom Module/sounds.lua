@@ -61,8 +61,12 @@ Sounds_GPWS_tlterr = sasl.createCommand("a321neo/sounds/gpws/tlterr", "")
 Sounds_GPWS_pitch = sasl.createCommand("a321neo/sounds/gpws/pitch", "")
 Sounds_GPWS_windshear = sasl.createCommand("a321neo/sounds/gpws/windshear", "")
 
+Sounds_alt_callout   = createGlobalPropertyi("a321neo/sounds/alt_callout", 0, false, true, false)
+
 local SOUND_CONTINUOUS_PAUSE    = 1
 local SOUND_SHOT_INTERVAL = 5
+
+local callouts_sound = { source=Sounds_alt_callout, command=nil, duration = -0.5, continuous = false, interval = 0.1}
 
 local gpws_sounds = {
 
@@ -86,7 +90,12 @@ local gpws_sounds = {
     { source=GPWS_pred_terr,        command=Sounds_GPWS_terrahead,     duration = 1.2, continuous = false, interval = 7 },
     { source=GPWS_pred_obst,        command=Sounds_GPWS_obsahead,      duration = 1.4, continuous = false, interval = 7 },
 
-    -- TODO Altitude call out
+    
+    -- Pitch Pitch -- The priority of this is not a big issue because it's active when all the other modes are
+    -- not active
+    { source=GPWS_mode_pitch, command=Sounds_GPWS_pitch, duration = 2, continuous = false, interval = 1 },
+    
+    callouts_sound,
     
     -- Gear/Flaps
     { source=GPWS_mode_4_tl_gear,   command=Sounds_GPWS_tlgear,        duration = 1.1, continuous = false },
@@ -101,10 +110,7 @@ local gpws_sounds = {
     -- Glideslope
     { source=GPWS_mode_5_glideslope,command=Sounds_GPWS_glideslope,    duration = 1,   continuous = false, interval = 3 },
     { source=GPWS_mode_5_glideslope_hard, command=Sounds_GPWS_glideslope_hard, duration = 1, continuous = true, interval = 3 },
-    
-    -- Pitch Pitch -- The priority of this is not a big issue because it's active when all the other modes are
-    -- not active
-    { source=GPWS_mode_pitch, command=Sounds_GPWS_pitch, duration = 2, continuous = false, interval = 1 },
+
 }
 
 local no_sound_before = 0
@@ -162,6 +168,66 @@ local function play_gpws_sounds()
 
 end
 
+local curr_climbing = 1000
+
+local radio_values = {
+    -1000,
+    5,
+    10,
+    20,
+    30,
+    40,
+    50,
+    100,
+    200,
+    300,
+    400,
+    500,
+    1000,
+    2000,
+    2500,
+    1000000000
+}
+
+local radio_values_dr = {
+    Sounds_GPWS_5_feet, -- never triggered
+    Sounds_GPWS_5_feet,
+    Sounds_GPWS_10_feet,
+    Sounds_GPWS_20_feet,
+    Sounds_GPWS_30_feet,
+    Sounds_GPWS_40_feet,
+    Sounds_GPWS_50_feet,
+    Sounds_GPWS_100_feet,
+    Sounds_GPWS_200_feet,
+    Sounds_GPWS_300_feet,
+    Sounds_GPWS_400_feet,
+    Sounds_GPWS_500_feet,
+    Sounds_GPWS_1000_feet,
+    Sounds_GPWS_2000_feet,
+    Sounds_GPWS_2500_feet,
+    Sounds_GPWS_2500_feet -- never triggered
+}
+
+local radio_values_current = 1
+
+
+local function set_alt_callouts()
+
+    if math.floor(get(Capt_ra_alt_ft)) <= radio_values[radio_values_current] then
+        callouts_sound.command = radio_values_dr[radio_values_current]
+        print("PLAY " .. radio_values[radio_values_current])
+        set(Sounds_alt_callout, 1)
+        radio_values_current = radio_values_current - 1
+    else
+        set(Sounds_alt_callout, 0)
+    end
+    
+    if math.floor(get(Capt_ra_alt_ft)) >= radio_values[radio_values_current+1]+10 then
+        radio_values_current = radio_values_current + 1
+    end
+
+end
+
 function update()
 
     if get(AC_ess_bus_pwrd) == 1 then
@@ -173,6 +239,7 @@ function update()
     Set_dataref_linear_anim(Sounds_blower_delayed, get(Ventilation_blower_running), 0, 1, 0.15)
     Set_dataref_linear_anim(Sounds_extract_delayed, get(Ventilation_extract_running), 0, 1, 0.15)
 
+    set_alt_callouts()
     play_gpws_sounds()
 
 end

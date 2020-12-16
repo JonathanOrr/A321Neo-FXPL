@@ -502,10 +502,15 @@ function update()
             set(ND_Fo_Terrain, 1)
         end
         
+        set(GPWS_pred_terr, c and 1 or 0)
+        set(GPWS_pred_terr_pull, w and 1 or 0)
+
         is_caution = is_caution or c
         is_warning = is_warning or w
     else
         set(GPWS_pred_is_active, 0)
+        set(GPWS_pred_terr, 0)
+        set(GPWS_pred_terr_pull, 0)
     end
     
     update_pbs()
