@@ -41,6 +41,9 @@ local avg_gload_stable = 0
 local prev_speed = 0
 local curr_decel = 0
 
+local after_takeoff_cond = false
+local touched_down = false
+
 local i_was_braking = false
 
 local pid_array = {
@@ -96,8 +99,18 @@ local function update_ab_datarefs()
         avg_gload_n = 0
     end
 
-    if get(All_on_ground) == 0 then
-        set(Wheel_autobrake_status, AUTOBRK_OFF)
+    if get(Any_wheel_on_ground) == 1 then
+        touched_down = true
+    end
+
+    if touched_down and get(Capt_ra_alt_ft) > 100 then
+        if not after_takeoff_cond then
+            after_takeoff_cond = true
+            set(Wheel_autobrake_status, AUTOBRK_OFF)
+        end
+        touched_down = false
+    else
+        after_takeoff_cond = false
     end
     
     local lo_decel_cond = get(Wheel_autobrake_status) == AUTOBRK_LOW and get(Wheel_autobrake_braking) > 0 and avg_gload_stable > 0.8 * LO_DECEL_MSEC
