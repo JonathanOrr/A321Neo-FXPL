@@ -242,7 +242,7 @@ local function draw_hyd_textures()
     SASL_drawSegmentedImg_xcenter_aligned(ECAM_HYD_PTU_img, size[1]/2+3, size[2]/2+160, 2360, 43, 4, get(Hydraulic_PTU_status) + 1)
 
     SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_HYD_fire_valve_img, size[1]/2-290, size[2]/2-158, 114, 133, 2, get(Eng_1_Firewall_valve) == 1 and 2 or 1, get(Eng_1_Firewall_valve) == 1 and ECAM_ORANGE or ECAM_GREEN)
-    SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_HYD_fire_valve_img, size[1]/2+295, size[2]/2-158, 114, 133, 2, get(Eng_1_Firewall_valve) == 1 and 2 or 1, get(Eng_2_Firewall_valve) == 1 and ECAM_ORANGE or ECAM_GREEN)
+    SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_HYD_fire_valve_img, size[1]/2+295, size[2]/2-158, 114, 133, 2, get(Eng_2_Firewall_valve) == 1 and 2 or 1, get(Eng_2_Firewall_valve) == 1 and ECAM_ORANGE or ECAM_GREEN)
 end
 
 function draw_hydraulic_page()

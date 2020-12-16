@@ -126,7 +126,8 @@ ECAM_FCTL_rudder_trim_img =      sasl.gl.loadImage(moduleDirectory .. "/Custom M
 ECAM_FCTL_spoiler_arrow_img =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/FCTL/SpoilerArrow.png")
 
 --STS--
-ECAM_STS_bgd_img =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/STS/status.png")
+ECAM_STS_bgd_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/STS/status.png")
 
 --CRUISE--
-ECAM_CRUISE_bgd_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/CRUISE/cruise.png")
+ECAM_CRUISE_bgd_img =      sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/CRUISE/cruise.png")
+ECAM_CRUISE_vs_arrow_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/CRUISE/Arrow.png")
