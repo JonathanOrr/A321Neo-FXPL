@@ -58,7 +58,7 @@ function update()
         eng_1_bleed_cl = ECAM_ORANGE
     end
 
-    if get(Apu_bleed_switch) == 1 then
+    if get(Apu_bleed_xplane) == 1 then
         apugpu_bleed_cl = ECAM_GREEN
     else
         apugpu_bleed_cl = ECAM_ORANGE
@@ -258,7 +258,7 @@ local function draw_a32nx_part()
     
     -- APU
     sasl.gl.drawLine(width_start+150, 200, width_start+150, 150, ECAM_WHITE)
-    draw_valve_v(width_start+150, 140, get(Apu_bleed_switch) == 1)
+    draw_valve_v(width_start+150, 140, get(Apu_bleed_xplane) == 1)
     sasl.gl.drawLine(width_start+150, 130, width_start+150, 90, ECAM_WHITE)
     sasl.gl.drawLine(width_start+150, 90, width_start+145, 85, ECAM_WHITE)
     sasl.gl.drawLine(width_start+150, 90, width_start+155, 85, ECAM_WHITE)

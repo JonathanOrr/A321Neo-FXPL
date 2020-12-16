@@ -252,7 +252,8 @@ local function update_datarefs()
     -- XP System
     set(ENG_1_bleed_switch, eng_bleed_valve_pos[1] and 1 or 0)
     set(ENG_2_bleed_switch, eng_bleed_valve_pos[2] and 1 or 0)
-    set(Apu_bleed_switch, apu_bleed_valve_pos and 1 or 0)
+    set(Apu_bleed_xplane, apu_bleed_valve_pos and 1 or 0)
+    set(APU_bleed_switch_pos, apu_bleed_switch and 1 or 0)
     set(X_bleed_valve, x_bleed_status and 1 or 0)
     set(Left_pack_iso_valve, 1) -- In X-Plane system APU always connected to ENG1
     set(Right_pack_iso_valve, get(X_bleed_valve))

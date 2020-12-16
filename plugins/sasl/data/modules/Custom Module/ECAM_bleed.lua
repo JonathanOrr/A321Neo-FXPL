@@ -93,11 +93,11 @@ local function draw_apu_and_gas()
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2-60, size[2]/2-15, "GND", 32, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
     end
 
-    if get(Apu_master_button_state) % 2 == 0 then
+    if get(Apu_master_button_state) == 0 then
         return
     end
 
-    if get(Apu_bleed_switch) == 1 then
+    if get(Apu_bleed_xplane) == 1 then
         sasl.gl.drawWideLine(size[1]/2, size[2]/2-50, size[1]/2, size[2]/2+42, 3, ECAM_GREEN)
     end
 
@@ -107,7 +107,7 @@ end
 
 local function draw_x_bleed()
 
-    if get(X_bleed_valve) == 1 or get(Apu_bleed_switch) == 1 or get(GAS_bleed_avail) == 1 then
+    if get(X_bleed_valve) == 1 or get(Apu_bleed_xplane) == 1 or get(GAS_bleed_avail) == 1 then
         -- Line left displayed
         sasl.gl.drawWideLine(size[1]/2-248, size[2]/2+44, size[1]/2+55, size[2]/2+44, 3, ECAM_GREEN)
     end
@@ -217,7 +217,7 @@ local function draw_needles_valves_and_mixer()
 
     --APU valves
     if not (get(Apu_master_button_state) == 0 and get(FAILURE_BLEED_APU_VALVE_STUCK) == 0) then
-        SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_BLEED_valves_img, size[1]/2+0, size[2]/2-105, 180, 58, 3, get(Apu_bleed_switch) == 0 and 1 or 3, get(FAILURE_BLEED_APU_VALVE_STUCK) == 0 and ECAM_GREEN or ECAM_ORANGE)
+        SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_BLEED_valves_img, size[1]/2+0, size[2]/2-105, 180, 58, 3, get(Apu_bleed_xplane) == 0 and 1 or 3, get(FAILURE_BLEED_APU_VALVE_STUCK) == 0 and ECAM_GREEN or ECAM_ORANGE)
     end
 end
 

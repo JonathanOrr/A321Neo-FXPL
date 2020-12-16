@@ -126,13 +126,6 @@ end
 function update()
     perf_measure_start("ECAM:update()")
 
-    -- APU  -- This is needed for both apu and bleed
-    if get(Apu_master_button_state) % 2 == 0 and get(FAILURE_BLEED_APU_VALVE_STUCK) == 0 then
-        set(Ecam_bleed_apu_valve, -1)
-    else
-        set(Ecam_bleed_apu_valve, get(Apu_bleed_switch) * 2 + get(FAILURE_BLEED_APU_VALVE_STUCK))
-    end
-
 	ecam_update_page()
 	ecam_update_leds()
 	ecam_update_fuel_page()

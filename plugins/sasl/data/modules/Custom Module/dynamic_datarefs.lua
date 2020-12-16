@@ -345,7 +345,7 @@ APU_EGT = createGlobalPropertyf("a321neo/cockpit/apu/EGT", 0, false, true, false
 APU_flap = createGlobalPropertyi("a321neo/cockpit/apu/flap_open", 0, false, true, false)
 
 --PACKs system
-Apu_bleed_switch = globalProperty("sim/cockpit2/bleedair/actuators/apu_bleed")
+Apu_bleed_xplane = globalProperty("sim/cockpit2/bleedair/actuators/apu_bleed")
 Gpu_bleed_switch = globalProperty("sim/cockpit2/bleedair/actuators/gpu_bleed")
 ENG_1_bleed_switch = globalProperty("sim/cockpit2/bleedair/actuators/engine_bleed_sov[0]")
 ENG_2_bleed_switch = globalProperty("sim/cockpit2/bleedair/actuators/engine_bleed_sov[1]")

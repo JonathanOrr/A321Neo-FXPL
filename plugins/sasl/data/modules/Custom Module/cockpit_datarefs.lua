@@ -174,6 +174,8 @@ Engine_2_master_switch = createGlobalPropertyi("a321neo/cockpit/engine/master_2_
 Engine_1_master_switch_anim = createGlobalPropertyf("a321neo/cockpit/engine/master_1", 0, false, true, false)
 Engine_2_master_switch_anim = createGlobalPropertyf("a321neo/cockpit/engine/master_2", 0, false, true, false)
 
+APU_bleed_switch_pos = createGlobalPropertyi("a321neo/cockpit/bleed/apu_bleed_switch_pos", 0, false, true, false) -- Commaned position (not actual!) 1: enabled, 0: disabled
+
 --pfd
 Capt_landing_system_enabled = createGlobalPropertyi("a321neo/cockpit/PFD/capt_ls_enabled", 0, false, true, false)--for the LS button on the PFD
 Fo_landing_system_enabled = createGlobalPropertyi("a321neo/cockpit/PFD/fo_ls_enabled", 0, false, true, false)--for the LS button on the PFD
@@ -234,7 +236,6 @@ Ecam_bleed_ip_valve_R    = createGlobalPropertyi("a321neo/cockpit/ecam/bleed/ip_
 Ecam_bleed_hp_valve_L    = createGlobalPropertyi("a321neo/cockpit/ecam/bleed/hp_valve_L", 0, false, true, false)
 Ecam_bleed_hp_valve_R    = createGlobalPropertyi("a321neo/cockpit/ecam/bleed/hp_valve_R", 0, false, true, false)
 Ecam_bleed_xbleed_valve  = createGlobalPropertyi("a321neo/cockpit/ecam/bleed/xbleed_valve", 0, false, true, false)
-Ecam_bleed_apu_valve     = createGlobalPropertyi("a321neo/cockpit/ecam/bleed/apu_valve", 0, false, true, false) -- This has an extra position: -1: hidden
 Ecam_bleed_pack_valve_L  = createGlobalPropertyi("a321neo/cockpit/ecam/bleed/pack_valve_L", 0, false, true, false)
 Ecam_bleed_pack_valve_R  = createGlobalPropertyi("a321neo/cockpit/ecam/bleed/pack_valve_R", 0, false, true, false)
 Ecam_bleed_ram_air       = createGlobalPropertyi("a321neo/cockpit/ecam/bleed/ram_air", 0, false, true, false)

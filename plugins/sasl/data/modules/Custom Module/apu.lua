@@ -42,7 +42,7 @@ local random_egt_apu_last_update = 0
 -- Init
 ----------------------------------------------------------------------------------------------------
 function onAirportLoaded()
-    set(Apu_bleed_switch, 0)
+    set(Apu_bleed_xplane, 0)
     set(APU_EGT, get(OTA))
 end
 ----------------------------------------------------------------------------------------------------

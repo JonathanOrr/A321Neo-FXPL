@@ -33,8 +33,11 @@ local function draw_apu_valve_and_needle()
     SASL_drawSegmentedImg(ECAM_APU_gen_img, size[1]/2-312, size[2]/2+178, 501, 139, 4, get(Ecam_apu_gen_state) + 1)
 
     --apu bleed valve
-    --this is incorrect logic, the valve should go amber if the button position and the valve position disagrees
-    SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_APU_valve_img, size[1]/2+261, size[2]/2+264, 120, 58, 2, get(Apu_bleed_switch) == 0 and 1 or 2, ECAM_GREEN)
+    --this is incorrect logic, the valve should go amber if the button position and the valve position disagrees\
+    local valve_incorrect_pos = (get(Apu_bleed_xplane) == 0 and get(APU_bleed_switch_pos) == 1) or (get(Apu_bleed_xplane) == 1 and get(APU_bleed_switch_pos) == 0)
+    local valve_color = valve_incorrect_pos and ECAM_ORANGE or ECAM_GREEN
+    local valve_position = get(Apu_bleed_xplane) == 0 and 1 or 2
+    SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_APU_valve_img, size[1]/2+261, size[2]/2+264, 120, 58, 2, valve_position, valve_color)
 end
 
 function draw_apu_page()
@@ -80,11 +83,11 @@ function draw_apu_page()
     end
 
     --apu bleed--
-    if get(Adirs_adr_is_ok[1]) == 0 or get(Adirs_adr_is_ok[2]) == 0 or (get(FAILURE_BLEED_BMC_1) == 1 and get(FAILURE_BLEED_BMC_2) == 1) or get(Apu_bleed_switch) == 0 then
+    if get(Adirs_adr_is_ok[1]) == 0 or get(Adirs_adr_is_ok[2]) == 0 or (get(FAILURE_BLEED_BMC_1) == 1 and get(FAILURE_BLEED_BMC_2) == 1) or get(Apu_bleed_xplane) == 0 then
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2+265, size[2]/2+187, "XX", 26, false, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
     else
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2+265, size[2]/2+187, math.floor(get(Apu_bleed_psi)), 26, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-        if get(Ecam_bleed_apu_valve) >= 2 then
+        if get(Apu_bleed_xplane) == 1 then
             sasl.gl.drawWideLine (size[1]/2+262, size[2]/2+318, size[1]/2+262, size[2]/2+345, 3, ECAM_GREEN )
             draw_triangle(size[1]/2+262, size[2]/2+370)
         end

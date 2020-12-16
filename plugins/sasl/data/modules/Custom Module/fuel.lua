@@ -623,7 +623,7 @@ end
 -- Update the APU valve status
 local function update_apu()
 
-    if get(Apu_master_button_state) % 2 == 0 then
+    if get(Apu_master_button_state) == 0 then
         -- APU master switch button is off
         set(Apu_fuel_source, 0)
         set_apu_fuel_valve(false)

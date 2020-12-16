@@ -186,8 +186,8 @@ local function draw_apu_legend()
 
     local apu_text_color = ECAM_WHITE
     if get(Fire_pb_APU_status) == 1
-       or (get(Apu_fuel_valve) == 1 and get(Apu_master_button_state) % 2 == 0)
-       or (get(Apu_fuel_valve) == 0 and get(Apu_master_button_state) % 2 == 1)  then
+       or (get(Apu_fuel_valve) == 1 and get(Apu_master_button_state) == 0)
+       or (get(Apu_fuel_valve) == 0 and get(Apu_master_button_state) == 1)  then
         apu_text_color = ECAM_ORANGE
     end
     sasl.gl.drawText(Font_AirbusDUL, size[2]/2-320, size[2]/2+200, "APU", 36, false, false, TEXT_ALIGN_CENTER, apu_text_color)

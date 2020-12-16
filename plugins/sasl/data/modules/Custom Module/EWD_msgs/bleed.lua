@@ -492,13 +492,13 @@ MessageGroup_BLEED_APU_LEAK = {
         {
             text = function() return " - APU BLEED..........OFF" end,
             color = function() return COL_ACTIONS end,
-            is_active = function() return get(Apu_bleed_switch) == 1 end
+            is_active = function() return get(APU_bleed_switch_pos) == 1 end
         },
     },
 
     -- Method to check if this message group is active
     is_active = function()
-        return get(FAILURE_BLEED_APU_LEAK) == 1 and get(Apu_bleed_switch) == 1
+        return get(FAILURE_BLEED_APU_LEAK) == 1 and get(Apu_bleed_xplane) == 1
     end,
 
     -- Method to check if this message is currently inhibithed
@@ -670,7 +670,7 @@ MessageGroup_BLEED_WING_LEAK = {
         {
             text = function() return " - APU BLEED..........OFF" end,
             color = function() return COL_ACTIONS end,
-            is_active = function() return get(FAILURE_BLEED_WING_L_LEAK) == 1 and get(Apu_bleed_switch) == 1 end
+            is_active = function() return get(FAILURE_BLEED_WING_L_LEAK) == 1 and get(APU_bleed_switch_pos) == 1 end
         },
         Message_BLEED_X_SHUT,
         Message_WING_ANTI_ICE_OFF_1ST_LVL,

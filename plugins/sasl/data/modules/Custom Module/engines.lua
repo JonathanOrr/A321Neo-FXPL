@@ -765,14 +765,14 @@ local function update_auto_start()
     set(eng_ignition_switch, 0, 1) 
     set(eng_ignition_switch, 0, 2) 
 
-    if get(Apu_master_button_state) % 2 == 0 then
+    if get(Apu_master_button_state) == 0 then
         sasl.commandOnce(APU_cmd_master)
     end
-    if get(Apu_avail) == 0 and get(Apu_start_button_state) % 2 == 0 then
+    if get(Apu_avail) == 0 and get(Apu_start_button_state) == 0 then
         sasl.commandOnce(APU_cmd_start)
     end
     if get(Apu_avail) == 1 then
-        if get(Apu_bleed_switch) == 0 then
+        if get(Apu_bleed_xplane) == 0 then
             sasl.commandOnce(Toggle_apu_bleed)
         end
 
