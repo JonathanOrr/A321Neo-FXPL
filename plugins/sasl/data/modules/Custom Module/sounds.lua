@@ -43,6 +43,7 @@ Sounds_GPWS_Minimum = sasl.createCommand("a321neo/sounds/gpws/Minimum", "")
 
 Sounds_GPWS_dontsink = sasl.createCommand("a321neo/sounds/gpws/dontsink", "")
 Sounds_GPWS_glideslope = sasl.createCommand("a321neo/sounds/gpws/glideslope", "")
+Sounds_GPWS_glideslope_hard = sasl.createCommand("a321neo/sounds/gpws/glideslope_hard", "")
 Sounds_GPWS_gpws = sasl.createCommand("a321neo/sounds/gpws/gpws", "")
 Sounds_GPWS_inop = sasl.createCommand("a321neo/sounds/gpws/inop", "")
 Sounds_GPWS_obsahead = sasl.createCommand("a321neo/sounds/gpws/obsahead", "")
@@ -60,6 +61,107 @@ Sounds_GPWS_tlterr = sasl.createCommand("a321neo/sounds/gpws/tlterr", "")
 Sounds_GPWS_pitch = sasl.createCommand("a321neo/sounds/gpws/pitch", "")
 Sounds_GPWS_windshear = sasl.createCommand("a321neo/sounds/gpws/windshear", "")
 
+local SOUND_CONTINUOUS_PAUSE    = 1
+local SOUND_SHOT_INTERVAL = 5
+
+local gpws_sounds = {
+
+    -- Pull-UPs
+    { source=GPWS_mode_1_pullup,    command=Sounds_GPWS_pullup,        duration = 0.9, continuous = true },
+    { source=GPWS_mode_2_pullup,    command=Sounds_GPWS_pullup,        duration = 0.9, continuous = true },
+    { source=GPWS_pred_terr_pull,   command=Sounds_GPWS_terraheadpull, duration = 2.0, continuous = true },
+    { source=GPWS_pred_obst_pull,   command=Sounds_GPWS_obsaheadpull,  duration = 2.2, continuous = true },
+    
+    -- Terrain Clearence
+    { source=GPWS_mode_2_terrterr,  command=Sounds_GPWS_terrterr,      duration = 1.2, continuous = false },
+    { source=GPWS_mode_2_terr,      command=Sounds_GPWS_terr,          duration = 0.6, continuous = true },
+
+    { source=GPWS_mode_4_a_terrain, command=Sounds_GPWS_tlterr,        duration = 1.2, continuous = false },
+    { source=GPWS_mode_4_b_terrain, command=Sounds_GPWS_tlterr,        duration = 1.2, continuous = false },
+    { source=GPWS_mode_4_c_terrain, command=Sounds_GPWS_tlterr,        duration = 1.2, continuous = false },
+
+    -- TODO Minimum
+    
+    -- Predictive terrain
+    { source=GPWS_pred_terr,        command=Sounds_GPWS_terrahead,     duration = 1.2, continuous = false, interval = 7 },
+    { source=GPWS_pred_obst,        command=Sounds_GPWS_obsahead,      duration = 1.4, continuous = false, interval = 7 },
+
+    -- TODO Altitude call out
+    
+    -- Gear/Flaps
+    { source=GPWS_mode_4_tl_gear,   command=Sounds_GPWS_tlgear,        duration = 1.1, continuous = false },
+    { source=GPWS_mode_4_tl_flaps,  command=Sounds_GPWS_tlflaps,       duration = 1.1, continuous = false },
+    
+    -- Sink Rate
+    { source=GPWS_mode_1_sinkrate,  command=Sounds_GPWS_sinkrate,      duration = 0.7,   continuous = true },
+    
+    -- Don't sink
+    { source=GPWS_mode_3_dontsink,  command=Sounds_GPWS_dontsink,      duration = 2,   continuous = false },
+    
+    -- Glideslope
+    { source=GPWS_mode_5_glideslope,command=Sounds_GPWS_glideslope,    duration = 1,   continuous = false, interval = 3 },
+    { source=GPWS_mode_5_glideslope_hard, command=Sounds_GPWS_glideslope_hard, duration = 1, continuous = true, interval = 3 },
+    
+    -- Pitch Pitch -- The priority of this is not a big issue because it's active when all the other modes are
+    -- not active
+    { source=GPWS_mode_pitch, command=Sounds_GPWS_pitch, duration = 2, continuous = false, interval = 1 },
+}
+
+local no_sound_before = 0
+
+local function play_gpws_continuous(x)
+    if get(TIME) - x.last_exec > x.duration + SOUND_CONTINUOUS_PAUSE then
+        x.last_exec = get(TIME)
+        no_sound_before = get(TIME) + x.duration + SOUND_CONTINUOUS_PAUSE
+        sasl.commandOnce(x.command)
+    end
+end
+
+local function play_gpws_shot(x)
+    local interval = x.interval == nil and SOUND_SHOT_INTERVAL or x.interval
+    
+    if get(TIME) - x.last_exec > x.duration + interval then
+        x.last_exec = get(TIME)
+        sasl.commandOnce(x.command)
+        no_sound_before = get(TIME) + x.duration + SOUND_CONTINUOUS_PAUSE
+        return true -- Start playing, stop other sounds
+    end
+
+    if get(TIME) - x.last_exec > x.duration + SOUND_CONTINUOUS_PAUSE then
+        return true -- Still playing, stop other sounds
+    end
+    return false
+end
+
+
+local function play_gpws_sounds()
+
+    if get(TIME) - no_sound_before < 0 then
+        return
+    end
+
+    for i,x in ipairs(gpws_sounds) do
+        -- For each sound...
+        if get(x.source) == 1 then
+            -- Ok, we need to play this sound
+            
+            if x.last_exec == nil then
+                x.last_exec = 0
+            end
+            
+            if x.continuous then
+                -- Continuous sounds always break the subsequent ones
+                play_gpws_continuous(x)
+                break
+            elseif play_gpws_shot(x) then
+                -- Non-Continuous sounds not necessarily block the others                    
+                break
+            end
+        end
+    end
+
+end
+
 function update()
 
     if get(AC_ess_bus_pwrd) == 1 then
@@ -70,5 +172,7 @@ function update()
 
     Set_dataref_linear_anim(Sounds_blower_delayed, get(Ventilation_blower_running), 0, 1, 0.15)
     Set_dataref_linear_anim(Sounds_extract_delayed, get(Ventilation_extract_running), 0, 1, 0.15)
+
+    play_gpws_sounds()
 
 end
