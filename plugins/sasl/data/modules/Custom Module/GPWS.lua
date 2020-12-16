@@ -291,7 +291,7 @@ function update_mode_4_b(alt, ias)
 end
 
 function update_mode_4_c(alt, ias)
-    if get(EWD_flight_phase) >= 9 or get(EWD_flight_phase) <= 2 then
+    if get(EWD_flight_phase) >= 6 or get(EWD_flight_phase) <= 2 then
         max_ra_gained = 0
     end
     
@@ -312,10 +312,10 @@ function update_mode_4_c(alt, ias)
     end
 
     set(GPWS_mode_4_mode_c, 1)
-    
+   
     if max_ra_gained >= 1333 and max_ra_gained <= 2400 and alt < 1000 then
         set(GPWS_mode_4_c_terrain, 1)
-    elseif alt < Math_rescale(100, 50, 1333, 1000, max_ra_gained) then
+    elseif alt < Math_rescale_no_lim(100, 50, 1333, 1000, max_ra_gained) then
         set(GPWS_mode_4_c_terrain, 1)
     end
     
@@ -362,6 +362,7 @@ end
 function update_mode_5(alt)
 
     set(GPWS_mode_is_active, 0, 5)
+    set(GPWS_mode_5_glideslope, 0)
 
     if not gpws_gs_mode or not gpws_system_mode or get(FAILURE_GPWS) == 1 then
         return -- Manually disabled

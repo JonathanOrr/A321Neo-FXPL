@@ -105,9 +105,9 @@ local function update_dr_pred(dr, i, diff)
     
     local lower_threshold = 700
     if get(GPWS_dist_airport) < 1 then
-        lower_threshold = 0
+        lower_threshold = -50
     elseif get(GPWS_dist_airport) < 5 then
-        lower_threshold = Math_rescale(1, 0, 5, 400, get(GPWS_dist_airport))
+        lower_threshold = Math_rescale(1, -50, 5, 400, get(GPWS_dist_airport))
     elseif get(GPWS_dist_airport) < 12 then
         lower_threshold = 400
     elseif get(GPWS_dist_airport) < 15 then
@@ -146,24 +146,28 @@ function update_gpws_predictive_cautions()
     is_caution = false
     is_warning = false
 
-    -- Collision <= 30s 
-    for i=1,3 do
-        if get(GPWS_pred_front, i) == 1 then
-            is_caution = true
-        elseif get(GPWS_pred_front, i) >= 2 then
-            is_warning = true
-            break
-        end
-    end
+    if get(Capt_ra_alt_ft) >= 20 and get(IAS) > 50 then
 
-    -- 30s < Collision <= 60s 
-    for i=4,6 do
-        if get(GPWS_pred_front, i) > 0 then
-            is_caution = true
-        elseif get(GPWS_pred_front, i) > 2 then
-            is_warning = true
-            break
+        -- Collision <= 30s 
+        for i=1,3 do
+            if get(GPWS_pred_front, i) == 1 then
+                is_caution = true
+            elseif get(GPWS_pred_front, i) >= 2 then
+                is_warning = true
+                break
+            end
         end
+
+        -- 30s < Collision <= 60s 
+        for i=4,6 do
+            if get(GPWS_pred_front, i) > 0 then
+                is_caution = true
+            elseif get(GPWS_pred_front, i) > 2 then
+                is_warning = true
+                break
+            end
+        end
+
     end
 
     is_caution = is_caution and not is_warning
