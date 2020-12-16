@@ -1,8 +1,3 @@
-{15309be3-50e2-43ae-ad64-b9453e1a4b83} event:/CockpitMechanical/Flap Lever/0
-{7e7e9b47-21cf-4eee-a306-9ec8f2f19a21} event:/CockpitMechanical/Flap Lever/1
-{77d5dd5a-10a0-412b-a342-ed52bf8f5a0e} event:/CockpitMechanical/Flap Lever/2
-{8f061dcf-bce1-437f-8553-4f9e8cbd1ecc} event:/CockpitMechanical/Flap Lever/3
-{4aa4a4f7-c95f-4d98-b515-ea707d5a7a18} event:/CockpitMechanical/Flap Lever/4
 {ba144e8c-f08f-4650-bb8f-ea1fdda166e2} event:/CockpitMechanical/Rotary/Rotary1
 {6278ba00-52a0-476a-8a87-43fb61e0a189} event:/CockpitMechanical/Rotary/Rotary2
 {4c126686-6c9f-44a1-b45a-dd4a04ef8a46} event:/CockpitMechanical/Rotary/Rotary3
@@ -34,8 +29,27 @@
 {0553e5d7-3951-4965-9d31-1ee40c08d308} event:/CockpitMechanical/Soft Button Press 6
 {fef5b8da-837b-4130-a5d9-367cfd5b0808} event:/CockpitMechanical/Soft Button Press 7
 {3f10ae93-6ce9-4498-b258-bc2577898679} event:/CockpitMechanical/SSTakeOver
+{c5925499-145f-464c-a9a5-68e8bf61c85a} event:/GPWS/dontsink
+{dee7d0b6-c5b3-4913-b44b-0b88c0cba1b3} event:/GPWS/glideslope
+{19186189-c054-4756-b367-75046f5608dc} event:/GPWS/gpws
+{ecf273ff-4056-41ab-af3e-747b3f94136d} event:/GPWS/inop
+{f9c0691e-e83b-42ab-b1c6-96bda851484a} event:/GPWS/obsahead
+{46d79029-e643-43b9-9686-06723f2f36ad} event:/GPWS/obsaheadpull
+{97a67453-00a9-4479-957f-e5f378d46b63} event:/GPWS/pitch
+{4d90ee6e-4234-4b03-9f5d-43611cd63e08} event:/GPWS/pullup
+{2d14d45d-1864-475c-94a9-637967c3b6d3} event:/GPWS/sinkrate
+{9dc45c96-d7b8-4113-9f87-d55798df5488} event:/GPWS/terr
+{4578cb21-776e-4754-9ae6-8114ddc112df} event:/GPWS/terrahead
+{ca51375b-903d-42af-86a6-7f0bee4871ff} event:/GPWS/terraheadpull
+{9bb7bc24-a0e0-4e07-80f2-672a11043fc8} event:/GPWS/terrterr
+{cdbae634-8ef4-410e-ba64-0d21cb3e0f78} event:/GPWS/tlflaps
+{c5026dad-5d9f-4216-8704-8c70dda24ccf} event:/GPWS/tlgear
+{3e6916a8-a12b-48c8-a1b3-6bb67fcfc52d} event:/GPWS/tlterr
+{a1ca98db-c1d8-4efd-812b-67caeb038088} event:/GPWS/windshear
+{8624c408-c3bf-4286-949d-6bde20e3c138} event:/RA/10
 {f90a33bb-5bb2-4b81-9208-e419f99b9aab} event:/RA/100
 {e6174a5e-0e61-4a00-8404-d26a7706cabd} event:/RA/1000
+{7bff810e-e6d5-42ef-a38c-571b4a990e92} event:/RA/100Above
 {939720f8-6bc0-4f2e-af93-d62646ed3c4e} event:/RA/20
 {791ce761-c0f1-4da9-a793-dc2b4fb9d846} event:/RA/200
 {4cb949d3-c922-442e-b80b-ff09aabdd7af} event:/RA/2000
@@ -44,30 +58,11 @@
 {17ccc20c-296e-4089-93c3-650270e4a4b1} event:/RA/300
 {407551a8-8f0f-4343-bf5a-b197143f4280} event:/RA/40
 {ddbdce03-28f6-4700-bc31-eced44d36243} event:/RA/400
+{862a4f5a-bd71-4f78-8fae-bd76c0fcaf5c} event:/RA/5
 {76d2927d-c2d5-463c-9f01-9c8288364f49} event:/RA/50
 {22f80e6a-40fc-4fd9-9f77-f0ef5077c622} event:/RA/500
-{8624c408-c3bf-4286-949d-6bde20e3c138} event:/RA/10
-{862a4f5a-bd71-4f78-8fae-bd76c0fcaf5c} event:/RA/5
-{a897e617-89e1-43d6-8d15-a52e71fda8e9} event:/RA/retard
-{7bff810e-e6d5-42ef-a38c-571b4a990e92} event:/RA/100Above
 {ceccdb65-09f6-4303-9230-4cb86b263170} event:/RA/Minimum
-{c5925499-145f-464c-a9a5-68e8bf61c85a} event:/GPWS/dontsink
-{dee7d0b6-c5b3-4913-b44b-0b88c0cba1b3} event:/GPWS/glideslope
-{19186189-c054-4756-b367-75046f5608dc} event:/GPWS/gpws
-{ecf273ff-4056-41ab-af3e-747b3f94136d} event:/GPWS/inop
-{f9c0691e-e83b-42ab-b1c6-96bda851484a} event:/GPWS/obsahead
-{46d79029-e643-43b9-9686-06723f2f36ad} event:/GPWS/obsaheadpull
-{4d90ee6e-4234-4b03-9f5d-43611cd63e08} event:/GPWS/pullup
-{2d14d45d-1864-475c-94a9-637967c3b6d3} event:/GPWS/sinkrate
-{9dc45c96-d7b8-4113-9f87-d55798df5488} event:/GPWS/terr
-{9bb7bc24-a0e0-4e07-80f2-672a11043fc8} event:/GPWS/terrterr
-{4578cb21-776e-4754-9ae6-8114ddc112df} event:/GPWS/terrahead
-{ca51375b-903d-42af-86a6-7f0bee4871ff} event:/GPWS/terraheadpull
-{cdbae634-8ef4-410e-ba64-0d21cb3e0f78} event:/GPWS/tlflaps
-{c5026dad-5d9f-4216-8704-8c70dda24ccf} event:/GPWS/tlgear
-{3e6916a8-a12b-48c8-a1b3-6bb67fcfc52d} event:/GPWS/tlterr
-{97a67453-00a9-4479-957f-e5f378d46b63} event:/GPWS/pitch
-{a1ca98db-c1d8-4efd-812b-67caeb038088} event:/GPWS/windshear
+{a897e617-89e1-43d6-8d15-a52e71fda8e9} event:/RA/retard
 {eba1c552-d477-4c98-9d5f-00c2f3378ecd} event:/APButton
 {a50ec509-2f82-4177-bf54-8821bc565bed} event:/APU
 {3f2cc16b-2f56-46a4-891c-860965e1474f} event:/ASkidOff
@@ -109,6 +104,7 @@
 {72dd99e0-d646-42c0-8cc7-4e3f356095cc} event:/TouchNose
 {341873bc-d31e-4ee3-9cb2-1b0c79682754} event:/Wind
 {cba7ef70-43b1-4842-9d4b-51501041377c} event:/Yellow Hyd Pump
+{5db7e5fc-e4e5-4189-b301-596d1f1dd3c2} event:/BrightnessClick
 {9f08114d-36ec-44cc-b8bf-b2babda09f9e} bus:/
 {7f7c05a4-e05a-4d44-94fe-d4691147a9b7} bus:/Master
 {e3492bec-f854-4fbb-b2bc-23586269032e} bus:/Master/Copilot
