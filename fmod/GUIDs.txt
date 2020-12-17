@@ -29,18 +29,33 @@
 {0553e5d7-3951-4965-9d31-1ee40c08d308} event:/CockpitMechanical/Soft Button Press 6
 {fef5b8da-837b-4130-a5d9-367cfd5b0808} event:/CockpitMechanical/Soft Button Press 7
 {3f10ae93-6ce9-4498-b258-bc2577898679} event:/CockpitMechanical/SSTakeOver
+{c98bea57-e385-49fe-89da-f2eb79555406} event:/Engines/Engine Start
+{ced3bc6e-ec20-43f0-a5a3-6f7602aec5e9} event:/Engines/Engine Start Ext
+{bdd3f6e0-b7ff-46ac-aadd-d8b6b9c45201} event:/Engines/Engines
+{05aa7e46-d0ef-4817-84df-6599e3fd87f6} event:/Engines/Engines Ext
+{19c5cfbd-9d07-4b04-847a-5e65f673ab83} event:/Flaps/FlapLever1
+{25bb3f48-4eea-40a2-a61f-7cfbf098c7c2} event:/Flaps/FlapLever2
+{c75c87ec-563c-4319-a7aa-786962e31e9d} event:/Flaps/FlapLever3
+{dcd36bd7-bf36-4324-8019-216506094656} event:/Flaps/FlapLever4
+{f7e08394-7b0f-4713-8834-554fc0fdf7b3} event:/Flaps/FlapLeverDown
+{ff956f46-ccbb-4395-a6bc-1d64dddaff41} event:/Flaps/FlapLeverUp
+{c9cf63f7-c575-4691-823b-716d0e5e1ba9} event:/Flaps/Flaps
 {c5925499-145f-464c-a9a5-68e8bf61c85a} event:/GPWS/dontsink
 {dee7d0b6-c5b3-4913-b44b-0b88c0cba1b3} event:/GPWS/glideslope
+{03a62505-77fa-4d1f-9909-235730bdae73} event:/GPWS/glideslopehard
 {19186189-c054-4756-b367-75046f5608dc} event:/GPWS/gpws
+{a25b68c6-a0d7-4324-b515-24f5cd83c14e} event:/GPWS/gpwsinop
 {ecf273ff-4056-41ab-af3e-747b3f94136d} event:/GPWS/inop
 {f9c0691e-e83b-42ab-b1c6-96bda851484a} event:/GPWS/obsahead
 {46d79029-e643-43b9-9686-06723f2f36ad} event:/GPWS/obsaheadpull
 {97a67453-00a9-4479-957f-e5f378d46b63} event:/GPWS/pitch
 {4d90ee6e-4234-4b03-9f5d-43611cd63e08} event:/GPWS/pullup
+{afea93ae-a88b-4e20-8a4f-9b0012973d90} event:/GPWS/retardretard
 {2d14d45d-1864-475c-94a9-637967c3b6d3} event:/GPWS/sinkrate
 {9dc45c96-d7b8-4113-9f87-d55798df5488} event:/GPWS/terr
 {4578cb21-776e-4754-9ae6-8114ddc112df} event:/GPWS/terrahead
 {ca51375b-903d-42af-86a6-7f0bee4871ff} event:/GPWS/terraheadpull
+{27900fc5-0eae-4eb2-9ffb-f5ebed4d7839} event:/GPWS/terrinop
 {9bb7bc24-a0e0-4e07-80f2-672a11043fc8} event:/GPWS/terrterr
 {cdbae634-8ef4-410e-ba64-0d21cb3e0f78} event:/GPWS/tlflaps
 {c5026dad-5d9f-4216-8704-8c70dda24ccf} event:/GPWS/tlgear
@@ -71,22 +86,12 @@
 {af369460-34d3-4c6e-a56c-fbe21efb91d5} event:/BatteryRelay
 {1edd836c-b29a-4101-a732-2d2eef744bbe} event:/Blower
 {89d27a8f-0f45-4230-905b-f244fdde49a4} event:/Brake Fan
+{5db7e5fc-e4e5-4189-b301-596d1f1dd3c2} event:/BrightnessClick
 {fbc642bf-0e6c-4030-9901-0f1ce878cfe7} event:/BusKick
 {635b86aa-7d9b-4dad-9a71-371b15257ae8} event:/BusOn
 {bf628244-9f1c-4c33-97bd-8b793852fd47} event:/Cabin
-{c98bea57-e385-49fe-89da-f2eb79555406} event:/Engine Start
-{ced3bc6e-ec20-43f0-a5a3-6f7602aec5e9} event:/Engine Start Ext
-{bdd3f6e0-b7ff-46ac-aadd-d8b6b9c45201} event:/Engines
-{05aa7e46-d0ef-4817-84df-6599e3fd87f6} event:/Engines Ext
 {06a66501-2a11-4b1a-a6f7-4fe5d089bc41} event:/Ext
 {f86c05b1-253e-4508-a475-4d354dd045c6} event:/Extractor
-{19c5cfbd-9d07-4b04-847a-5e65f673ab83} event:/FlapLever1
-{25bb3f48-4eea-40a2-a61f-7cfbf098c7c2} event:/FlapLever2
-{c75c87ec-563c-4319-a7aa-786962e31e9d} event:/FlapLever3
-{dcd36bd7-bf36-4324-8019-216506094656} event:/FlapLever4
-{f7e08394-7b0f-4713-8834-554fc0fdf7b3} event:/FlapLeverDown
-{ff956f46-ccbb-4395-a6bc-1d64dddaff41} event:/FlapLeverUp
-{c9cf63f7-c575-4691-823b-716d0e5e1ba9} event:/Flaps
 {c97b703e-898e-4918-bc8c-259807c5ada1} event:/Gear
 {5339da63-baf2-40c8-aafd-6bf6a0fe8aac} event:/Ground Roll
 {13efb812-486a-4d08-a381-7678b540faf5} event:/GuardClose
@@ -104,7 +109,6 @@
 {72dd99e0-d646-42c0-8cc7-4e3f356095cc} event:/TouchNose
 {341873bc-d31e-4ee3-9cb2-1b0c79682754} event:/Wind
 {cba7ef70-43b1-4842-9d4b-51501041377c} event:/Yellow Hyd Pump
-{5db7e5fc-e4e5-4189-b301-596d1f1dd3c2} event:/BrightnessClick
 {9f08114d-36ec-44cc-b8bf-b2babda09f9e} bus:/
 {7f7c05a4-e05a-4d44-94fe-d4691147a9b7} bus:/Master
 {e3492bec-f854-4fbb-b2bc-23586269032e} bus:/Master/Copilot

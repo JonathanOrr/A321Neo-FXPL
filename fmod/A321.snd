@@ -57,7 +57,7 @@ BEGIN_SOUND_ATTACHMENT
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /Engine Start
+  EVENT_NAME /Engines/Engine Start
   VEH_PART engine 0
   EVENT_START_COND a321neo/dynamics/engines/eng_1_n2 > 5
   EVENT_END_COND a321neo/dynamics/engines/eng_1_n2 == 0
@@ -65,7 +65,7 @@ BEGIN_SOUND_ATTACHMENT
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /Engine Start
+  EVENT_NAME /Engines/Engine Start
   VEH_PART engine 1
   EVENT_START_COND a321neo/dynamics/engines/eng_2_n2 > 5
   EVENT_END_COND a321neo/dynamics/engines/eng_2_n2 == 0
@@ -73,7 +73,7 @@ BEGIN_SOUND_ATTACHMENT
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /Engine Start Ext
+  EVENT_NAME /Engines/Engine Start Ext
   VEH_PART engine 0
   EVENT_START_COND a321neo/dynamics/engines/eng_1_n2 > 5
   EVENT_END_COND a321neo/dynamics/engines/eng_1_n2 == 0
@@ -81,7 +81,7 @@ BEGIN_SOUND_ATTACHMENT
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /Engine Start Ext
+  EVENT_NAME /Engines/Engine Start Ext
   VEH_PART engine 1
   EVENT_START_COND a321neo/dynamics/engines/eng_2_n2 > 5
   EVENT_END_COND a321neo/dynamics/engines/eng_2_n2 == 0
@@ -89,7 +89,7 @@ BEGIN_SOUND_ATTACHMENT
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /Engines
+  EVENT_NAME /Engines/Engines
   VEH_PART engine 0
   EVENT_START_COND sim/flightmodel2/engines/N1_percent[0] > 0
   EVENT_END_COND sim/flightmodel2/engines/N1_percent[0] == 0
@@ -97,7 +97,7 @@ BEGIN_SOUND_ATTACHMENT
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /Engines
+  EVENT_NAME /Engines/Engines
   VEH_PART engine 1
   EVENT_START_COND sim/flightmodel2/engines/N1_percent[1] > 0
   EVENT_END_COND sim/flightmodel2/engines/N1_percent[1] == 0
@@ -105,7 +105,7 @@ BEGIN_SOUND_ATTACHMENT
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /Engines Ext
+  EVENT_NAME /Engines/Engines Ext
   VEH_PART engine 0
   EVENT_START_COND sim/flightmodel2/engines/N1_percent[0] > 0
   EVENT_END_COND sim/flightmodel2/engines/N1_percent[0] == 0
@@ -113,7 +113,7 @@ BEGIN_SOUND_ATTACHMENT
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /Engines Ext
+  EVENT_NAME /Engines/Engines Ext
   VEH_PART engine 1
   EVENT_START_COND sim/flightmodel2/engines/N1_percent[1] > 0
   EVENT_END_COND sim/flightmodel2/engines/N1_percent[1] == 0
@@ -1805,44 +1805,44 @@ END_SOUND_ATTACHMENT
 #################################################################################################
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /FlapLeverUp
+  EVENT_NAME /Flaps/FlapLeverUp
   VEH_XYZ 0 1.5 -18.4
   EVENT_START_COND ABS_DELTA=a321neo/dynamics/surfaces/flaps_handle_position > 0
   EVENT_END_COND ABS_DELTA=a321neo/dynamics/surfaces/flaps_handle_position > 0.26
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /FlapLever1
+  EVENT_NAME /Flaps/FlapLever1
   VEH_XYZ 0 1.5 -18.4
   EVENT_START_COND a321neo/dynamics/surfaces/flaps_handle_position == 0
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /FlapLever2
+  EVENT_NAME /Flaps/FlapLever2
   VEH_XYZ 0 1.5 -18.4
   EVENT_START_COND a321neo/dynamics/surfaces/flaps_handle_position == 1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /FlapLever3
+  EVENT_NAME /Flaps/FlapLever3
   VEH_XYZ 0 1.5 -18.4
   EVENT_START_COND a321neo/dynamics/surfaces/flaps_handle_position == 2
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /FlapLever4
+  EVENT_NAME /Flaps/FlapLever4
   VEH_XYZ 0 1.5 -18.4
   EVENT_START_COND a321neo/dynamics/surfaces/flaps_handle_position == 3
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /FlapLever1
+  EVENT_NAME /Flaps/FlapLever1
   VEH_XYZ 0 1.5 -18.4
   EVENT_START_COND a321neo/dynamics/surfaces/flaps_handle_position == 4
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /FlapLeverDown
+  EVENT_NAME /Flaps/FlapLeverDown
   VEH_XYZ 0 1.5 -18.4
   EVENT_START_COND DELTA=a321neo/dynamics/surfaces/flaps_handle_position == 0
   EVENT_END_COND ABS_DELTA=a321neo/dynamics/surfaces/flaps_handle_position > 0
@@ -1907,28 +1907,28 @@ END_SOUND_ATTACHMENT
 #################################################################################################FLAPS
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /Flaps
+  EVENT_NAME /Flaps/Flaps
   VEH_XYZ -1.4 0 0
   EVENT_START_COND 	a321neo/dynamics/FBW/slats_and_flaps/flaps_in_transit == 1
   CUE_TRIGGER_COND  a321neo/dynamics/FBW/slats_and_flaps/flaps_in_transit == 0
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /Flaps
+  EVENT_NAME /Flaps/Flaps
   VEH_XYZ 1.4 0 0
   EVENT_START_COND 	a321neo/dynamics/FBW/slats_and_flaps/flaps_in_transit == 1
   CUE_TRIGGER_COND  a321neo/dynamics/FBW/slats_and_flaps/flaps_in_transit == 0
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /Flaps
+  EVENT_NAME /Flaps/Flaps
   VEH_XYZ -1.4 0 0
   EVENT_START_COND 	a321neo/dynamics/FBW/slats_and_flaps/slats_in_transit == 1
   CUE_TRIGGER_COND  a321neo/dynamics/FBW/slats_and_flaps/slats_in_transit == 0
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /Flaps
+  EVENT_NAME /Flaps/Flaps
   VEH_XYZ 1.4 0 0
   EVENT_START_COND 	a321neo/dynamics/FBW/slats_and_flaps/slats_in_transit == 1
   CUE_TRIGGER_COND  a321neo/dynamics/FBW/slats_and_flaps/slats_in_transit == 0
@@ -2789,6 +2789,31 @@ BEGIN_SOUND_ATTACHMENT
   VEH_XYZ 0 1.5 -18.4
   EVENT_CMND_DOWN a321neo/sounds/gpws/windshear
 END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GPWS/gpwsinop
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/sounds/gpws/gpws_inop
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GPWS/terrinop
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/sounds/gpws/terrain_inop
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GPWS/retardretard
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/sounds/gpws/retardretard
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GPWS/glideslopehard
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/sounds/gpws/glideslope_hard
+END_SOUND_ATTACHMENT
+
 
 
 
