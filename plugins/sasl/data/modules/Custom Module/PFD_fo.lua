@@ -22,10 +22,5 @@ size = {900, 900}
 include('constants.lua')
 
 function draw()
-
-    Draw_LCD_backlight(0, 0, 900, 900, 0.5, 1, get(Fo_PFD_brightness_act))
-
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2, "F/O PFD", 40, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
-    
-    sasl.gl.drawRectangle(0, 0, 900, 900, {0, 0, 0, 1 - get(Fo_PFD_brightness_act)})
 end

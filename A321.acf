@@ -212,7 +212,7 @@ P _gear/0/_lonE 7.0
 P _gear/0/_lonN 7.0
 P _gear/0/_lonR 99.0
 P _gear/0/_scon 157581.015625000
-P _gear/0/_stat_def 0.120225534
+P _gear/0/_stat_def 0.120225564
 P _gear/0/_steerdeg_hispeed 5.0
 P _gear/0/_steerdeg_lospeed 75.0
 P _gear/0/_strut_comp 0.899999976
@@ -246,7 +246,7 @@ P _gear/1/_lonE -6.0
 P _gear/1/_lonN -6.0
 P _gear/1/_lonR 2.0
 P _gear/1/_scon 157581.015625000
-P _gear/1/_stat_def 0.739415884
+P _gear/1/_stat_def 0.739415765
 P _gear/1/_steerdeg_hispeed 0.0
 P _gear/1/_steerdeg_lospeed 0.0
 P _gear/1/_strut_comp 0.699999988
@@ -280,7 +280,7 @@ P _gear/2/_lonE -6.0
 P _gear/2/_lonN -6.0
 P _gear/2/_lonR 2.0
 P _gear/2/_scon 157581.015625000
-P _gear/2/_stat_def 0.739415884
+P _gear/2/_stat_def 0.739415765
 P _gear/2/_steerdeg_hispeed 0.0
 P _gear/2/_steerdeg_lospeed 0.0
 P _gear/2/_strut_comp 0.699999988
@@ -30246,7 +30246,7 @@ P _part/56/_locked/9,9 0
 P _part/56/_locked/i_count 20
 P _part/56/_locked/j_count 18
 P _part/56/_part_area_rule 1.0
-P _part/56/_part_cd 0.0
+P _part/56/_part_cd 0.100000001
 P _part/56/_part_phi 0.0
 P _part/56/_part_psi 0.0
 P _part/56/_part_rad 6.988189220
@@ -67449,7 +67449,7 @@ P acf/_Vso_kts 100.0
 P acf/_Vy_kts 0.0
 P acf/_Vyse_kts 225.0
 P acf/_add_def_exceeds_base_def 0
-P acf/_additonal_gear_flatplate 19.0
+P acf/_additonal_gear_flatplate 22.0
 P acf/_ai_can_fly 0
 P acf/_ailn1_cratR 0.300000012
 P acf/_ailn1_cratT 0.300000012
@@ -69543,7 +69543,7 @@ P acf/_feathered_pitch 0.0
 P acf/_ff_rat_idle_JET 0.071999997
 P acf/_ff_rat_idle_PRP 0.0
 P acf/_file_writer_version 115033
-P acf/_flap1_cd 0.023000000
+P acf/_flap1_cd 0.025000000
 P acf/_flap1_cl 1.544999957
 P acf/_flap1_cm -0.165000007
 P acf/_flap1_cratR 0.109999999
@@ -69552,9 +69552,9 @@ P acf/_flap1_dn/0 0.0
 P acf/_flap1_dn/1 10.0
 P acf/_flap1_dn/10 0.0
 P acf/_flap1_dn/11 0.0
-P acf/_flap1_dn/2 15.0
-P acf/_flap1_dn/3 20.0
-P acf/_flap1_dn/4 40.0
+P acf/_flap1_dn/2 14.0
+P acf/_flap1_dn/3 21.0
+P acf/_flap1_dn/4 25.0
 P acf/_flap1_dn/5 90.0
 P acf/_flap1_dn/6 0.0
 P acf/_flap1_dn/7 0.0
@@ -69567,7 +69567,7 @@ P acf/_flap1_ptch_above_50 0
 P acf/_flap1_roll 0.0
 P acf/_flap1_roll_above_50 0
 P acf/_flap1_type 3
-P acf/_flap2_cd 0.027000001
+P acf/_flap2_cd 0.029999999
 P acf/_flap2_cl 1.544999957
 P acf/_flap2_cm -0.194999993
 P acf/_flap2_cratR 0.159999996
@@ -69576,9 +69576,9 @@ P acf/_flap2_dn/0 0.0
 P acf/_flap2_dn/1 10.0
 P acf/_flap2_dn/10 0.0
 P acf/_flap2_dn/11 0.0
-P acf/_flap2_dn/2 15.0
-P acf/_flap2_dn/3 20.0
-P acf/_flap2_dn/4 40.0
+P acf/_flap2_dn/2 14.0
+P acf/_flap2_dn/3 21.0
+P acf/_flap2_dn/4 25.0
 P acf/_flap2_dn/5 90.0
 P acf/_flap2_dn/6 0.0
 P acf/_flap2_dn/7 0.0
