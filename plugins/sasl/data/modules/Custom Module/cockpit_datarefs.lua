@@ -470,4 +470,11 @@ ND_Fo_nav2_level = createGlobalPropertyf("a321neo/cockpit/nd/fo_nav2_lever", 0, 
 ND_Capt_Terrain = createGlobalPropertyi("a321neo/cockpit/nd/terrain_capt", 0, false, true, false) -- 0,1
 ND_Fo_Terrain   = createGlobalPropertyi("a321neo/cockpit/nd/terrain_fo", 0, false, true, false) -- 0,1
 
-
+--AUTOFLT--
+AUTOFLT_SPD = createGlobalPropertyf("a321neo/cockpit/AUTOFLT/speed", 0, false, true, false)
+AUTOFLT_MACH = createGlobalPropertyf("a321neo/cockpit/AUTOFLT/mach", 0, false, true, false)
+AUTOFLT_HDG = createGlobalPropertyf("a321neo/cockpit/AUTOFLT/heading", 0, false, true, false)
+AUTOFLT_TRK = createGlobalPropertyf("a321neo/cockpit/AUTOFLT/track", 0, false, true, false)
+AUTOFLT_ALT = createGlobalPropertyf("a321neo/cockpit/AUTOFLT/altitude", 0, false, true, false)
+AUTOFLT_VS = createGlobalPropertyf("a321neo/cockpit/AUTOFLT/vertical_speed", 0, false, true, false)
+AUTOFLT_FPA = createGlobalPropertyf("a321neo/cockpit/AUTOFLT/flight_path_angle", 0, false, true, false)
