@@ -55,6 +55,15 @@ sasl.registerCommandHandler (GPWS_cmd_GS_MODE, 0, function(phase) if phase == SA
 sasl.registerCommandHandler (GPWS_cmd_FLAP_MODE, 0, function(phase) if phase == SASL_COMMAND_BEGIN then gpws_flap_mode = not gpws_flap_mode end end )
 sasl.registerCommandHandler (GPWS_cmd_LDG_FLAP_3, 0, function(phase) if phase == SASL_COMMAND_BEGIN then gpws_flap_3_mode = not gpws_flap_3_mode end end )
 
+function onAirportLoaded()
+    mode_3_armed = false
+    time_in_mode_2 = 0
+    initial_alt_in_mode_2 = 0
+    if get(Capt_ra_alt_ft) > 100 then
+        max_ra_gained = 1500 -- to disable
+    end
+end
+
 -------------------------------------------------------------------------------
 -- MODE 1
 -------------------------------------------------------------------------------
