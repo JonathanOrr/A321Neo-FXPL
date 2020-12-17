@@ -114,8 +114,8 @@ local gpws_sounds = {
     { source=GPWS_mode_3_dontsink,  command=Sounds_GPWS_dontsink,      duration = 2,   continuous = false },
     
     -- Glideslope
-    { source=GPWS_mode_5_glideslope,command=Sounds_GPWS_glideslope,    duration = 1,   continuous = false, interval = 3 },
     { source=GPWS_mode_5_glideslope_hard, command=Sounds_GPWS_glideslope_hard, duration = 1, continuous = true, interval = 3 },
+    { source=GPWS_mode_5_glideslope,command=Sounds_GPWS_glideslope,    duration = 1,   continuous = false, interval = 3 },
 
 }
 
@@ -224,7 +224,6 @@ function set_alt_callouts()
 
     if math.floor(get(Capt_ra_alt_ft)) <= radio_values[radio_values_current] then
         callouts_sound.command = radio_values_dr[radio_values_current]
-        print("PLAY " .. radio_values[radio_values_current])
         set(Sounds_alt_callout, 1)
         radio_values_current = radio_values_current - 1
     else

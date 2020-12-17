@@ -86,7 +86,7 @@ end
 function draw_mode_5()
     sasl.gl.drawRectangle(size[1]/2 + 10, size[2]-250, size[2]/2-20, 55, UI_DARK_GREY)
     sasl.gl.drawText(Font_AirbusDUL, 3*size[1]/4, size[2]-215, "MODE 5", 14, false, false, TEXT_ALIGN_CENTER, get(GPWS_mode_is_active, 5) == 1 and ECAM_WHITE or ECAM_HIGH_GREY)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2 +20, size[2]-240, "GLIDESLOPE, GLIDESLOPE", 14, get(GPWS_mode_5_glideslope_hard) == 1, false, TEXT_ALIGN_LEFT, get(GPWS_mode_5_glideslope) == 1 and ECAM_ORANGE or ECAM_HIGH_GREY)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2 +20, size[2]-240, "GLIDESLOPE, GLIDESLOPE", 14, get(GPWS_mode_5_glideslope_hard) == 1, false, TEXT_ALIGN_LEFT, get(GPWS_mode_5_glideslope) + get(GPWS_mode_5_glideslope_hard) >= 1 and ECAM_ORANGE or ECAM_HIGH_GREY)
 end
 
 function draw_predictive_output()
