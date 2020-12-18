@@ -24,11 +24,11 @@ include("global_variables.lua")
 include("global_functions.lua")
 include("pushbuttons.lua")
 include("FBW_subcomponents/PID_arrays.lua")
+include("sasl_drawing_assets.lua")
 
 sasl.options.setAircraftPanelRendering(true)
 sasl.options.setInteractivity(true)
 sasl.options.set3DRendering(true)
-sasl.options.setPanelRenderingMode ( SASL_RENDER_PANEL_BEFORE_AND_AFTER )
 
 -- devel
 sasl.options.setLuaErrorsHandling(SASL_STOP_PROCESSING)
@@ -45,7 +45,7 @@ panelWidth3d = 4096
 panelHeight3d = 4096
 
 components = {
-  sasl_drawing_assets {},
+  screen_backlights {},
   apu {},
   fuel {}, -- Please keep this before engines
   engines {},
@@ -87,17 +87,6 @@ components = {
   graphics {},
   display_brightness {},
 }
-
---draw things before the panels here
-function draw()
-  if sasl.gl.isPanelBeforeStage() then
-    Draw_LCD_backlight(1030, 2226, 900, 900, 0.5, 1, get(ECAM_brightness_act))
-  end
-
-  if sasl.gl.isPanelAfterStage () then
-    drawAll(components)
-  end
-end
 
 include(moduleDirectory .. "/main_windows.lua")
 include(moduleDirectory .. "/main_menu.lua")

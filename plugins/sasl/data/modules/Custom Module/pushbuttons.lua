@@ -42,7 +42,7 @@ PB = {
 
     -- OVERHEAD PANEL
     ovhd = {
-    
+
         -- ELECTRICAL
         elec_battery_1 = {
             -- Example - two datarefs will be created:
@@ -62,13 +62,13 @@ PB = {
         elec_apu_gen   = {bus = LIGHT_BUS_DC},
         elec_ext_pwr   = {bus = ELEC_ALWAYS_ON},
         elec_rat_fault = {bus = LIGHT_BUS_DC},
-        
+
         -- ANTI-ICE
         antiice_wings = {bus = LIGHT_BUS_DC},
         antiice_eng_1 = {bus = LIGHT_BUS_DC},
         antiice_eng_2 = {bus = LIGHT_BUS_DC},
         antiice_probes= {bus = LIGHT_BUS_DC},
-        
+
         -- HYD
         hyd_eng1      = {bus = LIGHT_BUS_DC},
         hyd_eng2      = {bus = LIGHT_BUS_DC},
@@ -83,7 +83,7 @@ PB = {
         ir_1    = {bus = LIGHT_BUS_DC},
         ir_2    = {bus = LIGHT_BUS_DC},
         ir_3    = {bus = LIGHT_BUS_DC},
-        
+
         -- FUEL
         fuel_L_1   = {bus = LIGHT_BUS_AC},
         fuel_L_2   = {bus = LIGHT_BUS_AC},
@@ -105,7 +105,7 @@ PB = {
         ac_bleed_apu = {bus = LIGHT_BUS_DC},
         ac_ram_air   = {bus = LIGHT_BUS_DC},
         ac_hot_air   = {bus = LIGHT_BUS_DC},
-        
+
         -- Pressurization
         press_mode_sel = {bus = LIGHT_BUS_DC},
         press_ditching = {bus = LIGHT_BUS_DC},
@@ -116,7 +116,7 @@ PB = {
 
         -- SIGNS
         signs_emer_exit_lt = {bus = LIGHT_BUS_DC},
-        
+
         -- FIRE
         fire_eng_1_ag_1 = {bus = LIGHT_BUS_DC},
         fire_eng_1_ag_2 = {bus = LIGHT_BUS_DC},
@@ -132,7 +132,7 @@ PB = {
         flt_ctl_sec_2  = {bus = LIGHT_BUS_AC},-- This is actually on DC but powered when we have AC
         flt_ctl_fac_2  = {bus = LIGHT_BUS_AC},-- This is actually on DC but powered when we have AC
         flt_ctl_sec_3  = {bus = LIGHT_BUS_AC},-- This is actually on DC but powered when we have AC
-        
+
         -- EVAC
         evac_cmd       = {bus = LIGHT_BUS_DC},
 
@@ -142,10 +142,10 @@ PB = {
         gpws_gs_mode    = {bus = LIGHT_BUS_AC},
         gpws_flap_mode  = {bus = LIGHT_BUS_AC},
         gpws_ldg_flap_3 = {bus = LIGHT_BUS_AC},
-        
+
         -- RCDR
         rcdr_gnd_ctl    = {bus = LIGHT_BUS_AC},
-        
+
         -- OXY
         oxy_high_alt_land= {bus = LIGHT_BUS_AC},
         oxy_passengers   = {bus = LIGHT_BUS_AC},
@@ -159,17 +159,17 @@ PB = {
         cargo_aft_isol = {bus = LIGHT_BUS_DC},
         cargo_smoke_fwd= {bus = LIGHT_BUS_DC},
         cargo_smoke_aft= {bus = LIGHT_BUS_DC},
-        
+
         -- VENTILATION
         vent_blower  = {bus = LIGHT_BUS_DC},
         vent_extract = {bus = LIGHT_BUS_AC},
         vent_cab_fans= {bus = LIGHT_BUS_AC},
-        
+
         -- ENG
         eng_man_start_1 = {bus = LIGHT_BUS_DC},
         eng_man_start_2 = {bus = LIGHT_BUS_DC},
         eng_dual_cooling = {bus = LIGHT_BUS_DC},
-        
+
         -- Upper level
         misc_cockpit_video = {bus = LIGHT_BUS_DC},
         misc_fuel_control  = {bus = LIGHT_BUS_DC},
@@ -197,7 +197,7 @@ PB = {
         eng_1_fire_fault= {bus = LIGHT_BUS_DC},
         eng_2_fire_fault= {bus = LIGHT_BUS_DC},
     },
-    
+
     -- MIP
     mip = {
         -- a321neo/cockpit/mip/...
@@ -205,7 +205,7 @@ PB = {
         gpws_fo   = {bus = LIGHT_BUS_AC},
         terr_nd_capt = {bus = LIGHT_BUS_AC},
         terr_nd_fo   = {bus = LIGHT_BUS_AC},
-        
+
         brk_fan    = {bus = LIGHT_BUS_AC},
         ldg_gear_L = {bus = LIGHT_BUS_DC},
         ldg_gear_C = {bus = LIGHT_BUS_DC},
@@ -214,10 +214,10 @@ PB = {
         autobrake_LO  = {bus = LIGHT_BUS_DC},
         autobrake_MED = {bus = LIGHT_BUS_DC},
         autobrake_MAX = {bus = LIGHT_BUS_DC},
-        
+
         ldg_gear_red_light = {bus = LIGHT_BUS_DC}
     },
-    
+
     -- Glareshield (no FCU)
     glare = {
         -- a321neo/cockpit/glareshield/...
@@ -228,7 +228,7 @@ PB = {
         priority_capt  = {bus = LIGHT_BUS_AC},
         priority_fo    = {bus = LIGHT_BUS_AC}
     },
-    
+
     -- FCU
     FCU = {
         capt_fd = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
@@ -258,7 +258,7 @@ PB = {
         appr = {bus = LIGHT_BUS_AC}  -- TODO CHECK BUS
 
     }
-    
+
 }
 
 ----------------------------------------------------------------------------------------------------
@@ -318,7 +318,7 @@ function pb_set(pb, cond_bottom, cond_top)
         target_top = 1
         target_bottom = 1
     end
-        
+
     set(pb.dr_top, target_top)
     set(pb.dr_bottom, target_bottom)
 

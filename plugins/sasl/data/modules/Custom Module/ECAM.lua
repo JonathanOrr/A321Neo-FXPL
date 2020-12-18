@@ -50,9 +50,9 @@ local function draw_ecam_lower_section_fixed()
     sasl.gl.drawText(Font_AirbusDUL, size[1]-230, size[2]/2-372, "GW", 32, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
     sasl.gl.drawText(Font_AirbusDUL, size[1]-15, size[2]/2-375, "KG", 32, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2-407, "H", 30, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
-    
+
     local isa_displayed = get(Capt_Baro) > 29.91 and get(Capt_Baro) < 29.93 and get(Adirs_capt_has_ADR) == 1
-    
+
     if isa_displayed then
         sasl.gl.drawText(Font_AirbusDUL, 100, size[2]/2-442, "ISA", 32, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
         sasl.gl.drawText(Font_AirbusDUL, 260, size[2]/2-442, "°C", 32, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
@@ -85,7 +85,7 @@ local function draw_ecam_lower_section()
     end
     sasl.gl.drawText(Font_AirbusDUL, 190, size[2]/2-372, tat, 32, false, false, TEXT_ALIGN_RIGHT, tat == "XX" and ECAM_ORANGE or ECAM_GREEN)
     sasl.gl.drawText(Font_AirbusDUL, 190, size[2]/2-407, ota, 32, false, false, TEXT_ALIGN_RIGHT, ota == "XX" and ECAM_ORANGE or ECAM_GREEN)
-    
+
     local isa_displayed = get(Capt_Baro) > 29.91 and get(Capt_Baro) < 29.93 and get(Adirs_capt_has_ADR) == 1
     if isa_displayed then
         local delta_isa = Round(get(TAT) - get_isa(), 0)
@@ -189,8 +189,6 @@ function draw()
             set(EWD_box_sts, 1)
         end
     end
-
-    --sasl.gl.drawRectangle(0, 0, size[1], size[2], {0, 0, 0, 1 - get(ECAM_brightness_act)})
 
     perf_measure_stop("ECAM:draw()")
 

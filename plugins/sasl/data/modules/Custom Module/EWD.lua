@@ -522,11 +522,9 @@ end
 
 function draw()
     if display_special_mode(size, EWD_valid) then
-        sasl.gl.drawRectangle(0, 0, 900, 900, {0,0,0, 1 - get(EWD_brightness_act)})
         return
     end
 
-    Draw_LCD_backlight(0, 0, 900, 900, 0.5, 1, get(EWD_brightness_act))
     sasl.gl.drawTexture(EWD_background_img, 0, 0, 900, 900, {1, 1, 1})
 
     Draw_extra_indication()

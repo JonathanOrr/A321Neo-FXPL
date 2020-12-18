@@ -372,6 +372,7 @@ function update_mode_5(alt)
 
     set(GPWS_mode_is_active, 0, 5)
     set(GPWS_mode_5_glideslope, 0)
+    set(GPWS_mode_5_glideslope_hard, 0)
 
     if not gpws_gs_mode or not gpws_system_mode or get(FAILURE_GPWS) == 1 then
         return -- Manually disabled

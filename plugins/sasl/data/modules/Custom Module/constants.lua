@@ -13,10 +13,8 @@
 --    details or check <https://www.gnu.org/licenses/>
 -------------------------------------------------------------------------------
 -- File: constants.lua 
--- Short description: This file contains the global constants 
+-- Short description: This file contains the global constants
 -------------------------------------------------------------------------------
-
-include("sasl_drawing_assets.lua")
 
 --colors
 ECAM_WHITE = {1.0, 1.0, 1.0}

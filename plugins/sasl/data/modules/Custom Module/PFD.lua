@@ -60,9 +60,9 @@ local max_speeds_kts = {
 
 local function update_radioalt() 
     local curr_radio_alt = math.floor(get(Capt_ra_alt_ft)) - 1
-    
+
     local color = 0
-    
+
     if get(DH_alt_ft) > 0 then  -- Decision Height is set
         if curr_radio_alt <= get(DH_alt_ft)+100 then
             color = 1
@@ -72,16 +72,16 @@ local function update_radioalt()
             color = 1
         end
     end
-    
+
     set(PFD_Capt_radioalt_col, color)
-    
+
     -- Rouding (rounding 10 feet above 50 feet, rounding 5 feet above 10 feet)
     if curr_radio_alt > 50 then
         curr_radio_alt = curr_radio_alt - curr_radio_alt % 10
     elseif curr_radio_alt > 10 then
         curr_radio_alt = curr_radio_alt - curr_radio_alt % 5
     end
-    
+
 
     set(PFD_Capt_radioalt_val, curr_radio_alt)
 
@@ -90,7 +90,7 @@ local function update_radioalt()
     elseif math.abs(get(Flightmodel_roll)) > 30 or math.abs(get(Flightmodel_pitch)) > 30 or get(FAILURE_radioalt_cap) == 1 then
         set(PFD_Capt_radioalt_status, 2)
     else
-        set(PFD_Capt_radioalt_status, 1)    
+        set(PFD_Capt_radioalt_status, 1)
     end
 
 
@@ -102,7 +102,7 @@ local function update_tailstrike_indicators()
         if get(Flightmodel_pitch) > 13 then
             set(PFD_Capt_tailstrike_ind, (math.floor(get(TIME)*2) % 2 == 1 ) and 1 or 0)
         else
-            set(PFD_Capt_tailstrike_ind, 1)    
+            set(PFD_Capt_tailstrike_ind, 1)
         end
     else
         set(PFD_Capt_tailstrike_ind, 0)
@@ -113,8 +113,7 @@ local function update_bird()
     local rad_bank_angle = math.rad(get(Flightmodel_roll))
     set(PFD_Capt_bird_vert_pos, get(Alpha) / math.cos(rad_bank_angle) - get(ground_track_delta) * math.sin(rad_bank_angle) )
     set(PFD_Capt_bird_horiz_pos, get(ground_track_delta) * math.cos(rad_bank_angle))
-    
-    
+
 end
 
 function update()
@@ -168,10 +167,10 @@ function update()
 
         vvi_number_display = Round(math.abs(math.floor(get(vvi))), -3)/100
     end
-    
+
     set(PFD_Capt_Ground_line, Math_clamp( get(Capt_ra_alt_ft)/120 + get(Flightmodel_pitch)/18, 0, 1))
     set(PFD_Fo_Ground_line, Math_clamp( get(Fo_ra_alt_ft)/120 + get(Flightmodel_pitch)/18, 0, 1))
-    
+
     update_radioalt()
     update_tailstrike_indicators()
     update_bird()
@@ -180,8 +179,6 @@ function update()
 end
 
 function draw()
-
-    --Draw_LCD_backlight(0, 0, 900, 900, 0.5, 1, get(Capt_PFD_brightness_act))
     if display_special_mode(size, Capt_pfd_valid) then
         return
     end
@@ -197,7 +194,4 @@ function draw()
             sasl.gl.drawText(Font_AirbusDUL, 852, vvi_left_pixel_offset - 26, vvi_number_display, 23, false, false, TEXT_ALIGN_LEFT, vvi_cl)
         end
     end
-    
-    sasl.gl.drawRectangle(0, 0, 900, 900, {0, 0, 0, 1 - get(Capt_PFD_brightness_act)})
-    
 end

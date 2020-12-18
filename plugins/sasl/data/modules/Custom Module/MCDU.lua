@@ -778,8 +778,6 @@ function draw()
         --draw scratchpad
         sasl.gl.drawText(B612MONO_regular, draw_get_x(1), draw_get_y(12), mcdu_entry, MCDU_DISP_TEXT_SIZE["l"], false, false, MCDU_DISP_TEXT_ALIGN["L"], MCDU_DISP_COLOR["white"])
 
-        --draw brightness--
-        sasl.gl.drawRectangle(0, 0, size[1], size[2], {0, 0, 0, 1 - get(MCDU_1_brightness_act)})
     end
 	perf_measure_stop("MCDU:draw()")
 end
