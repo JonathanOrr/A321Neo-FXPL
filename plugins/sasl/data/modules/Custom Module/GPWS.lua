@@ -33,10 +33,14 @@ local gpws_gs_mode = true
 local gpws_flap_mode = true
 local gpws_flap_3_mode = false
 
-local gpws_terrain_is_working = false -- TODO
+local gpws_terrain_is_working = false
+local gpws_terrain_was_active = false   -- Doesn't include inhibition (e.g. altitude)
+local gpws_was_active = false
 
 local time_in_mode_2 = 0
 local initial_alt_in_mode_2 = 0
+
+local mode_5_inhibited = false -- This happens when the pilot pressed the GPWS silence button
 
 local max_ra_gained = 0 -- For MODE 4c
 
@@ -375,23 +379,23 @@ function update_mode_5(alt)
     set(GPWS_mode_5_glideslope_hard, 0)
 
     if not gpws_gs_mode or not gpws_system_mode or get(FAILURE_GPWS) == 1 then
-        return -- Manually disabled
+        return false -- Manually disabled
     end
 
     if get(ILS_1_glideslope_flag) == 1 then
-        return -- No ILS signal received
+        return false -- No ILS signal received
     end
 
     if get(EWD_flight_phase) ~= PHASE_FINAL and get(EWD_flight_phase) ~= PHASE_AIRBONE then
-        return
+        return false
     end
     
     if alt > 1000 then
-        return -- Too high - inibith
+        return false -- Too high - inibith
     end
 
     if alt < 30 then
-        return -- Too low - inibith
+        return false -- Too low - inibith
     end
 
     set(GPWS_mode_is_active, 1, 5)
@@ -400,28 +404,31 @@ function update_mode_5(alt)
     -- - if > 350 RA is a "light" glideslope if dots < -1.3
     -- if 180 < RA < 350: it's "light" if < -1.3 or "hard" if < -2
     -- if 30 < RA < 180: we have two lines
+
+    if alt < 350 and alt >= 180 and get(ILS_1_glideslope_dots) <= -2 then
+        set(GPWS_mode_5_glideslope_hard, mode_5_inhibited and 0 or 1)
+        return mode_5_inhibited
+    end
+
+    if alt < 180 and get(ILS_1_glideslope_dots) <= Math_rescale(30, -3.6, 180, -2, alt) then
+        set(GPWS_mode_5_glideslope_hard, mode_5_inhibited and 0 or 1)
+        return mode_5_inhibited 
+    elseif alt < 180 and  get(ILS_1_glideslope_dots) <= Math_rescale(30, -3, 180, -1, alt)  then
+        set(GPWS_mode_5_glideslope, mode_5_inhibited and 0 or 1)
+        return mode_5_inhibited
+    end
     
     if alt >= 350 and get(ILS_1_glideslope_dots) <= -1.3 then
-        set(GPWS_mode_5_glideslope, 1)
+        set(GPWS_mode_5_glideslope, mode_5_inhibited and 0 or 1)
+        return mode_5_inhibited
     end
 
     if alt < 350 and alt >= 180 and get(ILS_1_glideslope_dots) <= -1.3 and get(ILS_1_glideslope_dots) > -2 then
-        set(GPWS_mode_5_glideslope, 1)
+        set(GPWS_mode_5_glideslope, mode_5_inhibited and 0 or 1)
+        return mode_5_inhibited
     end
 
-    if alt < 350 and alt >= 180 and get(ILS_1_glideslope_dots) <= -2 then
-        set(GPWS_mode_5_glideslope_hard, 1)
-    end
-    
-    if alt < 180 and get(ILS_1_glideslope_dots) <= Math_rescale(30, -3.6, 180, -2, alt) then
-        set(GPWS_mode_5_glideslope_hard, 1)
-    elseif alt < 180 and  get(ILS_1_glideslope_dots) <= Math_rescale(30, -3, 180, -1, alt)  then
-        set(GPWS_mode_5_glideslope, 1)
-    end
-
-    if get(GPWS_mode_5_glideslope) + get(GPWS_mode_5_glideslope_hard) >= 1 then
-        is_caution = true
-    end
+    return false
 end
 
 -------------------------------------------------------------------------------
@@ -487,22 +494,10 @@ local function update_local_data()
     end
 end
 
-function update()
-    perf_measure_start("GPWS:update()")
-
-    is_warning = false
-    is_caution = false
-
-    update_local_data()
-
-    update_mode_1(data_delayed.ra_altitude, data_delayed.vvi_rate)
-    update_mode_2(data_delayed.ra_altitude, data_delayed.ra_rate, data_delayed.ias)
-    update_mode_3(data_delayed.ra_altitude, data_delayed.vvi_rate)
-    update_mode_4(data_delayed.ra_altitude, data_delayed.ias)
-    update_mode_5(data_delayed.ra_altitude)
-    update_mode_pitch() -- This doesn't use delayed data
+local function update_gpws_terrain_mode()
+    gpws_terrain_is_working = gpws_terrain_mode and get(Capt_Baro_Alt) < 18000 and get(FAILURE_GPWS_TERR) == 0
     
-    if gpws_terrain_mode and get(Capt_Baro_Alt) < 18000 and get(FAILURE_GPWS_TERR) == 0 then
+    if gpws_terrain_is_working then
         set(GPWS_pred_is_active, 1)
         update_gpws_predictive()
         c, w = update_gpws_predictive_cautions()
@@ -522,6 +517,51 @@ function update()
         set(GPWS_pred_terr, 0)
         set(GPWS_pred_terr_pull, 0)
     end
+end
+
+
+
+local function check_inop()
+    -- For sounds only
+
+    gpws_is_active = get(FAILURE_GPWS) == 0 and gpws_system_mode
+    if gpws_was_active and not gpws_is_active then
+        set(GPWS_req_inop, 1)
+    end
+    gpws_was_active = gpws_is_active
+
+    
+    gpws_terrain_is_active = get(FAILURE_GPWS_TERR) == 0 and gpws_terrain_mode
+    if gpws_terrain_was_active and not gpws_terrain_is_active then
+        set(GPWS_req_terr_inop, 1)
+    end
+    gpws_terrain_was_active = gpws_terrain_is_active
+    
+end
+
+function update()
+    perf_measure_start("GPWS:update()")
+
+    is_warning = false
+    is_caution = false
+
+    check_inop()
+
+    update_local_data()
+
+    update_mode_1(data_delayed.ra_altitude, data_delayed.vvi_rate)
+    update_mode_2(data_delayed.ra_altitude, data_delayed.ra_rate, data_delayed.ias)
+    update_mode_3(data_delayed.ra_altitude, data_delayed.vvi_rate)
+    update_mode_4(data_delayed.ra_altitude, data_delayed.ias)
+    mode_5_inhibited = update_mode_5(data_delayed.ra_altitude)
+    
+    if get(GPWS_mode_5_glideslope) + get(GPWS_mode_5_glideslope_hard) >= 1 then
+        is_caution = true
+    end
+    
+    update_mode_pitch() -- This doesn't use delayed data
+    
+    update_gpws_terrain_mode()
     
     update_pbs()
     

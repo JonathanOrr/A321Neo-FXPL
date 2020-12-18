@@ -49,8 +49,8 @@ local Sounds_GPWS_Minimum = sasl.createCommand("a321neo/sounds/gpws/Minimum", ""
 local Sounds_GPWS_dontsink = sasl.createCommand("a321neo/sounds/gpws/dontsink", "")
 local Sounds_GPWS_glideslope = sasl.createCommand("a321neo/sounds/gpws/glideslope", "")
 local Sounds_GPWS_glideslope_hard = sasl.createCommand("a321neo/sounds/gpws/glideslope_hard", "")
-local Sounds_GPWS_gpws = sasl.createCommand("a321neo/sounds/gpws/gpws_inop", "")
-local Sounds_GPWS_inop = sasl.createCommand("a321neo/sounds/gpws/terrain_inop", "")
+local Sounds_GPWS_inop = sasl.createCommand("a321neo/sounds/gpws/gpws_inop", "")
+local Sounds_GPWS_terr_inop = sasl.createCommand("a321neo/sounds/gpws/terrain_inop", "")
 local Sounds_GPWS_obsahead = sasl.createCommand("a321neo/sounds/gpws/obsahead", "")
 local Sounds_GPWS_obsaheadpull = sasl.createCommand("a321neo/sounds/gpws/obsaheadpull", "")
 local Sounds_GPWS_pullup = sasl.createCommand("a321neo/sounds/gpws/pullup", "")
@@ -108,7 +108,7 @@ local gpws_sounds = {
     { source=GPWS_mode_4_tl_flaps,  command=Sounds_GPWS_tlflaps,       duration = 1.1, continuous = false },
     
     -- Sink Rate
-    { source=GPWS_mode_1_sinkrate,  command=Sounds_GPWS_sinkrate,      duration = 0.7,   continuous = true },
+    { source=GPWS_mode_1_sinkrate,  command=Sounds_GPWS_sinkrate,      duration = 0.9,   continuous = true },
     
     -- Don't sink
     { source=GPWS_mode_3_dontsink,  command=Sounds_GPWS_dontsink,      duration = 2,   continuous = false },
@@ -214,6 +214,18 @@ function play_gpws_sounds()
                 -- Non-Continuous sounds not necessarily block the others                    
                 break
             end
+        end
+    end
+    
+    if get(TIME) - no_sound_before >= 0 then
+        if get(GPWS_req_inop) == 1 then
+            sasl.commandOnce(Sounds_GPWS_inop)
+            no_sound_before = get(TIME) + 3
+            set(GPWS_req_inop, 0)
+        elseif get(GPWS_req_terr_inop) == 1 then
+            sasl.commandOnce(Sounds_GPWS_terr_inop)
+            no_sound_before = get(TIME) + 3
+            set(GPWS_req_terr_inop, 0)
         end
     end
 

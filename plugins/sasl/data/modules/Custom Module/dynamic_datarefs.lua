@@ -707,3 +707,6 @@ GPWS_pred_front_R   = createGlobalPropertyia("a321neo/dynamics/gpws/pred/front_a
 GPWS_mode_flap_disabled = createGlobalPropertyi("a321neo/dynamics/gpws/no_flaps", 0, false, true, false)
 GPWS_mode_flap_3 = createGlobalPropertyi("a321neo/dynamics/gpws/flaps_3", 0, false, true, false)
 
+GPWS_req_inop = createGlobalPropertyi("a321neo/dynamics/gpws/req_inop", 0, false, true, false)  -- 1 if GPWS becomes off (*for sounds only*)
+GPWS_req_terr_inop = createGlobalPropertyi("a321neo/dynamics/gpws/req_terr_inop", 0, false, true, false) -- 1 if GPWS Terrain becomes off (*for sounds only*)
+
