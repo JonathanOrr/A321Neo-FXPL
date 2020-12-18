@@ -58,6 +58,9 @@ sasl.registerCommandHandler (GPWS_cmd_SYS, 0, function(phase) if phase == SASL_C
 sasl.registerCommandHandler (GPWS_cmd_GS_MODE, 0, function(phase) if phase == SASL_COMMAND_BEGIN then gpws_gs_mode = not gpws_gs_mode end end )
 sasl.registerCommandHandler (GPWS_cmd_FLAP_MODE, 0, function(phase) if phase == SASL_COMMAND_BEGIN then gpws_flap_mode = not gpws_flap_mode end end )
 sasl.registerCommandHandler (GPWS_cmd_LDG_FLAP_3, 0, function(phase) if phase == SASL_COMMAND_BEGIN then gpws_flap_3_mode = not gpws_flap_3_mode end end )
+sasl.registerCommandHandler (GPWS_cmd_silence, 0, function(phase) if phase == SASL_COMMAND_BEGIN then mode_5_inhibited = true end end )
+
+
 
 function onAirportLoaded()
     mode_3_armed = false
@@ -510,12 +513,17 @@ local function update_gpws_terrain_mode()
         set(GPWS_pred_terr, c and 1 or 0)
         set(GPWS_pred_terr_pull, w and 1 or 0)
 
+        set(GPWS_pred_obst, 0)  -- TODO Not implemented
+        set(GPWS_pred_obst_pull, 0) -- TODO Not implemented
+
         is_caution = is_caution or c
         is_warning = is_warning or w
     else
         set(GPWS_pred_is_active, 0)
         set(GPWS_pred_terr, 0)
         set(GPWS_pred_terr_pull, 0)
+        set(GPWS_pred_obst, 0)
+        set(GPWS_pred_obst_pull, 0)
     end
 end
 

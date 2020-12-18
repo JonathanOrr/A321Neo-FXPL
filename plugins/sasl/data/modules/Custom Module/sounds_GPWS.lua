@@ -121,6 +121,9 @@ local gpws_sounds = {
 
 local no_sound_before = 0 -- No other sound can be played before this time
 
+local short_test = false
+local long_test = false
+
 -------------------------------------------------------------------------------
 -- Global variables - Altitude callouts
 -------------------------------------------------------------------------------
@@ -164,6 +167,34 @@ local radio_values_dr = {
 local radio_values_current = 1
 
 -------------------------------------------------------------------------------
+-- Commands
+-------------------------------------------------------------------------------
+
+local press_start_time = 0
+
+sasl.registerCommandHandler (GPWS_cmd_silence, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        press_start_time = get(TIME)
+    end
+
+    if phase == SASL_COMMAND_CONTINUE then
+        if get(TIME) - press_start_time > 1 and short_test == false then
+            long_test = true
+        end
+    end
+
+    if phase == SASL_COMMAND_END then
+        if get(All_on_ground) == 1 then
+            if get(TIME) - press_start_time > 1 and short_test == false then
+                long_test = true            
+            elseif long_test == false then
+                short_test = true
+            end
+        end
+    end
+end)
+
+-------------------------------------------------------------------------------
 -- Functions
 -------------------------------------------------------------------------------
 local function play_gpws_continuous(x)
@@ -190,8 +221,109 @@ local function play_gpws_shot(x)
     return false
 end
 
+local test_started_at = 0
+
+local function play_short_test()
+    local curr_time = get(TIME) - test_started_at
+    if curr_time < 0.5 then
+        set(GPWS_mode_5_glideslope_hard, 1)
+        pb_set(PB.mip.gpws_capt, true, false)
+    elseif curr_time > 1.5 and curr_time < 3.5 then
+        set(GPWS_mode_1_pullup, 1)
+        pb_set(PB.mip.gpws_capt, false, true)
+    elseif curr_time > 4 and curr_time < 6 then
+        set(GPWS_pred_terr_pull, 1)
+        pb_set(PB.mip.gpws_capt, false, true)
+    elseif curr_time > 7.5 and curr_time < 9.5 then
+        pb_set(PB.mip.gpws_capt, true, false)
+        set(GPWS_mode_pitch, 1)
+    elseif curr_time > 11 then
+        short_test = false
+    end
+end
+
+local function play_long_test()
+    local curr_time = get(TIME) - test_started_at
+    if curr_time < 1 then
+        pb_set(PB.mip.gpws_capt, true, false)
+        set(GPWS_mode_5_glideslope_hard, 1)
+    elseif curr_time > 1.5 and curr_time < 2.5 then
+        set(GPWS_req_inop, 1)
+    elseif curr_time > 2.5 and curr_time < 3 then
+        set(GPWS_req_inop, 0)    
+    elseif curr_time > 4.5 and curr_time < 6.5 then
+        pb_set(PB.mip.gpws_capt, true, false)
+        set(GPWS_mode_1_sinkrate, 1)
+    elseif curr_time > 7.5 and curr_time < 8.5 then
+        pb_set(PB.mip.gpws_capt, false, true)
+        set(GPWS_mode_1_pullup, 1)
+    elseif curr_time > 9.5 and curr_time < 11.5 then
+        pb_set(PB.mip.gpws_capt, true, false)
+        set(GPWS_mode_2_terrterr, 1)
+    elseif curr_time > 12 and curr_time < 13.5 then 
+        pb_set(PB.mip.gpws_capt, false, true)
+        set(GPWS_mode_2_pullup, 1)
+    elseif curr_time > 14 and curr_time < 16 then 
+        pb_set(PB.mip.gpws_capt, true, false)
+        set(GPWS_mode_3_dontsink, 1)
+    elseif curr_time > 16.5 and curr_time < 18 then
+        pb_set(PB.mip.gpws_capt, true, false)
+        set(GPWS_mode_4_a_terrain, 1)
+    elseif curr_time > 18.5 and curr_time < 20 then
+        pb_set(PB.mip.gpws_capt, true, false)
+        set(GPWS_mode_4_tl_flaps, 1)
+    elseif curr_time > 20.5 and curr_time < 22 then
+        pb_set(PB.mip.gpws_capt, true, false)
+        set(GPWS_mode_4_tl_gear, 1)
+    elseif curr_time > 22.5 and curr_time < 24.2 then
+        pb_set(PB.mip.gpws_capt, true, false)
+        set(GPWS_mode_5_glideslope, 1)
+    elseif curr_time > 24.5 and curr_time < 27 then
+        pb_set(PB.mip.gpws_capt, true, false)
+        set(GPWS_mode_pitch, 1)
+    elseif curr_time > 27.5 and curr_time < 29 then
+        set(GPWS_req_terr_inop, 1)
+    elseif curr_time > 29 and curr_time < 29.5 then
+        set(GPWS_req_terr_inop, 0)    
+    elseif curr_time > 31.5 and curr_time < 32.8 then
+        pb_set(PB.mip.gpws_capt, true, false)
+        set(GPWS_pred_terr, 1)
+    elseif curr_time > 33 and curr_time < 34.8 then
+        pb_set(PB.mip.gpws_capt, true, false)
+        set(GPWS_pred_obst, 1)
+    elseif curr_time > 35.5 and curr_time < 38 then
+        pb_set(PB.mip.gpws_capt, false, true)
+        set(GPWS_pred_terr_pull, 1)
+    elseif curr_time > 38.5 and curr_time < 41.5 then
+        pb_set(PB.mip.gpws_capt, false, true)
+        set(GPWS_pred_obst_pull, 1)
+    elseif curr_time > 42.5 and curr_time < 43 then
+        pb_set(PB.mip.gpws_capt, true, true)
+    elseif curr_time > 43 and curr_time < 43.5 then
+        pb_set(PB.mip.gpws_capt, false, false)
+    elseif curr_time > 43.5 and curr_time < 44 then
+        pb_set(PB.mip.gpws_capt, true, true)
+    elseif curr_time > 44 then
+        pb_set(PB.mip.gpws_capt, false, false)
+        long_test = false
+    end
+end
+
 
 function play_gpws_sounds()
+
+    if short_test or long_test then
+        if test_started_at == 0 then
+            test_started_at = get(TIME)
+        end
+        if short_test then
+            play_short_test()
+        else
+            play_long_test()
+        end
+    else
+        test_started_at = 0
+    end
 
     if get(TIME) - no_sound_before < 0 then
         return
