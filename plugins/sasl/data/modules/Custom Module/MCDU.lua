@@ -142,7 +142,11 @@ if EMULATOR then
 	-- profiler
 	function perf_measure_start(str)
 	end
-	function perf_measure_stop(Str)
+	function perf_measure_stop(str)
+	end
+
+	-- brightness
+	function Draw_LCD_backlight(a,b,c,d,e,f)
 	end
 
 	-- get set
@@ -172,6 +176,19 @@ if EMULATOR then
 	sasl = EmulatorSasl:new()
 	sasl.gl = EmulatorGL:new()
 	sasl.test()
+
+	ECAM_WHITE = {1.0, 1.0, 1.0}
+	ECAM_LINE_GREY = {62/255, 74/255, 91/255}
+	ECAM_HIGH_GREY = {0.6, 0.6, 0.6}
+	ECAM_BLUE = {0.004, 1.0, 1.0}
+	ECAM_GREEN = {0.20, 0.98, 0.20}
+	ECAM_HIGH_GREEN = {0.1, 0.6, 0.1}
+	ECAM_ORANGE = {1, 0.66, 0.16}
+	ECAM_RED = {1.0, 0.0, 0.0}
+	ECAM_MAGENTA = {1.0, 0.0, 1.0}
+	ECAM_GREY = {0.3, 0.3, 0.3}
+	ECAM_BLACK = {0, 0, 0}
+
 end
 -- END OF EMULATOR SHELL CODE I OF II (CONTINUED AT END OF SCRIPT)
 ----------------------------------------------------------------------------------------------------
@@ -206,15 +223,15 @@ local MCDU_DRAW_SPACING = {x = 520, y = -35.3} -- change in offset per line draw
 --reference table for drawing
 local MCDU_DISP_COLOR = 
 {
-    ["white"] =   {1.00, 1.00, 1.00},
-    ["cyan"] =    {0.00, 1.00, 1.00},
-    ["green"] =   {0.20, 0.98, 0.20},
-    ["amber"] =   {1.00, 0.66, 0.16},
+    ["white"] =   ECAM_WHITE,
+    ["cyan"] =    ECAM_BLUE,
+    ["green"] =   ECAM_GREEN,
+    ["amber"] =   ECAM_ORANGE,
     ["yellow"] =  {1.00, 1.00, 0.00},
-    ["magenta"] = {1.00, 0.00, 1.00},
-    ["red"] =     {1.00, 0.00, 0.00},
+    ["magenta"] = ECAM_MAGENTA,
+    ["red"] =     ECAM_RED,
 
-    ["black"] =   {0.00, 0.00, 0.00},
+    ["black"] =   ECAM_BLACK,
 }
 
 --font size
@@ -1576,18 +1593,15 @@ function (phase)
         mcdu_dat["s"]["L"][1].txt = " eng"
 
         if get(Engine_option) == 0 then
-            mcdu_dat_title.txt = "        a321-721nx"
+            mcdu_dat_title.txt = "        a321-271nx"
             mcdu_dat["l"]["L"][1] = {txt = "cfm-leap-1a", col = "green"}
         else
-            --mcdu_dat_title.txt = "        a321-721nx"
+            --mcdu_dat_title.txt = "        a321-251nx"
             --mcdu_dat["l"]["L"][1] = {txt = "pw-1130g-jm", col = "green"}
         end
         
         mcdu_dat["s"]["L"][2].txt = " active data base"
-        mcdu_ctrl_get_cycle(function(val)
-            mcdu_dat["l"]["L"][2] = {txt = val, col = "cyan"}
-            draw_update()
-        end)
+		mcdu_dat["l"]["L"][2] = {txt = "default", col = "cyan"}
         mcdu_dat["s"]["L"][3].txt = " second data base"
         mcdu_dat["l"]["L"][3] = {txt = " none", col = "cyan", size = "s"}
 
@@ -1596,6 +1610,7 @@ function (phase)
         mcdu_dat["s"]["L"][6].txt = "idle/perf"
         mcdu_dat["l"]["L"][6] = {txt = "+0.0/+0.0", col = "green"}
 
+		mcdu_dat["s"]["R"][6].txt = "software"
         mcdu_dat["l"]["R"][6].txt = "options>"
 
        
@@ -2068,7 +2083,8 @@ function (phase)
 		mcdu_dat["s"]["R"][5] = {txt = "programmer        ", col = "white"}
         mcdu_dat["l"]["R"][5] = {txt = "ricorico         ", col = "green"}
         mcdu_dat["s"]["R"][6] = {txt = "mcdu written by     ", col = "white"}
-        mcdu_dat["l"]["R"][6] = {txt = "chaidhat chaimongkol   ", col = "green"}
+        mcdu_dat["l"]["R"][6][1] = {txt = "chaidhat chaimongkol   ", col = "green"}
+        mcdu_dat["l"]["R"][6][2] = {txt = ">", col = "white"}
 
         draw_update()
     end
@@ -2246,15 +2262,15 @@ function (phase)
     if phase == "L1" then
         MCDU_DISP_COLOR = 
         {
-            ["white"] =   {1.00, 1.00, 1.00},
-            ["cyan"] =    {0.00, 1.00, 1.00},
-            ["green"] =   {0.20, 0.98, 0.20}, --32FB33
-            ["amber"] =   {1.00, 0.66, 0.16}, --FFA829
+            ["white"] =   ECAM_WHITE,
+            ["cyan"] =    ECAM_BLUE,
+            ["green"] =   ECAM_GREEN,
+            ["amber"] =   ECAM_ORANGE,
             ["yellow"] =  {1.00, 1.00, 0.00},
-            ["magenta"] = {1.00, 0.00, 1.00},
-            ["red"] =     {1.00, 0.00, 0.00},
+            ["magenta"] = ECAM_MAGENTA,
+            ["red"] =     ECAM_RED,
 
-            ["black"] =   {0.00, 0.00, 0.00},
+            ["black"] =   ECAM_BLACK,
         }
         mcdu_open_page(1103) -- open 1103 mcdu menu options colours
     end
@@ -2349,15 +2365,18 @@ end
 --    instead of booting up X-Plane everytime you want to run this.
 
 if EMULATOR then
+    -- initialize all global variables which would otherwise be done by other parts of the script
 	Mcdu_enabled = "Mcdu_enabled"
 	mcdu_page = "mcdu_page"
 	mcdu_debug_busy = "mcdu_debug_busy"
 	TIME = "time"
 	DELTA_TIME = "delta_time"
+	Engine_option = "Engine_option"
 	set(Mcdu_enabled, 1)
 	set(mcdu_page, 0)
 	set(TIME, 0)
 	set(DELTA_TIME, 5)
+	set(Engine_option, 0)
 
 	print("")
 	print(EMULATOR_HEADER .. "Initalization done!")
