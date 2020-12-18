@@ -310,6 +310,15 @@ local function update_right_list()
         list_right:put(COL_SPECIAL, "LDG INHIBIT")
     end
 
+    -- Better Pushback support
+    if get(Wheel_better_pushback_connected) == 1 then
+        local color = COL_INDICATION
+        if get(Engine_1_avail) == 1 or get(Engine_2_avail) == 1 then
+            color = COL_CAUTION
+        end
+        list_right:put(color, "NW STRG DISC")
+    end
+
     -- APU
     if get(Apu_bleed_xplane) == 1 then
         list_right:put(COL_INDICATION, "APU BLEED")
@@ -446,14 +455,13 @@ local function update_right_list()
         list_right:put(COL_INDICATION, "MAN LDG ELEV")
     end
     
+    
     -- TODO: SWITCHING PNL: - if PFD/ND XFR pressed *AND* ECAM/ND not on NORM
     --                      - ATT HDG or AIR DATA or EIS DMC not in normal
     
     -- TODO Audio: AUDIO 3 XFRD displayed green if audio switching selector not in NORM
     -- TODO Acars: ACARS CALL (pulsing green) if received an ACARS message requesting voice conversation
 
-    -- TODO Steer: NW STRG DISC when the nose wheel steering selector is in the towing position
-    --             GREEN: if no engine is running, AMBER: is at least one engine is running
        
     -- TODO windshear: PRED W/S OFF if windshear (weather panel) is selected OFF
     --                  green in phases 1,2,6,10

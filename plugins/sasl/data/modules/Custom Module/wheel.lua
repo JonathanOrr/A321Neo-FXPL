@@ -397,6 +397,7 @@ end
 local function update_brakes()
     set(XPlane_parkbrake_ratio, 0) -- X-Plane park brake is not used
     set(Override_wheel_gear_and_brk, 1)
+    set(Wheel_better_pushback, 0)
 
     local L_temp_degradation = get(Left_brakes_temp) < 550 and 1 or Math_clamp((1-(get(Left_brakes_temp) - 550) / 550), 0, 1)
     local R_temp_degradation = get(Right_brakes_temp) < 550 and 1 or Math_clamp((1-(get(Left_brakes_temp) - 550) / 550), 0, 1)
@@ -427,11 +428,16 @@ local function update_brakes()
         -- Parking brake
 
         if get(Hydraulic_Y_press) >= 1450 or get(Hydraulic_G_press) >= 1450 then
+            -- Brake with hydraulic active
             Set_dataref_linear_anim(Wheel_brake_L, 1 * L_temp_degradation, 0, 1, 1)
             Set_dataref_linear_anim(Wheel_brake_R, 1 * R_temp_degradation, 0, 1, 1)
+            set(Wheel_better_pushback, 1)
         elseif get(Brakes_accumulator) > 1 then
+            -- Brake on accumulator only
             brake_with_accumulator(1,1, L_temp_degradation, R_temp_degradation)     
+            set(Wheel_better_pushback, 1)
         else
+            -- uh oh, no hydraulic
             Set_dataref_linear_anim(Wheel_brake_L, 0, 0, 1, 1)
             Set_dataref_linear_anim(Wheel_brake_R, 0, 0, 1, 1)        
         end
