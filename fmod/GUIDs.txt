@@ -20,19 +20,13 @@
 {734b27e4-0b32-4451-b348-11dac73ae9a6} event:/CockpitMechanical/MetalOn
 {748172b8-4c79-49ad-8dc5-eb75af6c8b1f} event:/CockpitMechanical/ParkBrakeOff
 {ee845653-3288-40de-8ca1-0546b9cc36e0} event:/CockpitMechanical/ParkBrakeOn
-{9957b708-3dac-4a37-8a21-6cde9f679359} event:/CockpitMechanical/Soft Button Press
-{4f777470-38aa-4adf-bb4e-e68e13b9a7d7} event:/CockpitMechanical/Soft Button Press 1
-{ea142f29-8406-4b3c-a1f2-be273220152c} event:/CockpitMechanical/Soft Button Press 2
-{d96c79b3-1d23-488b-876d-6d3158c9885f} event:/CockpitMechanical/Soft Button Press 3
-{c1195a5a-72c5-46ea-948e-552071f7422b} event:/CockpitMechanical/Soft Button Press 4
-{46e31fff-1edb-4eb0-9156-7a54aa775f98} event:/CockpitMechanical/Soft Button Press 5
-{0553e5d7-3951-4965-9d31-1ee40c08d308} event:/CockpitMechanical/Soft Button Press 6
-{fef5b8da-837b-4130-a5d9-367cfd5b0808} event:/CockpitMechanical/Soft Button Press 7
+{46e31fff-1edb-4eb0-9156-7a54aa775f98} event:/CockpitMechanical/Soft Button Press
 {3f10ae93-6ce9-4498-b258-bc2577898679} event:/CockpitMechanical/SSTakeOver
 {c98bea57-e385-49fe-89da-f2eb79555406} event:/Engines/Engine Start
 {ced3bc6e-ec20-43f0-a5a3-6f7602aec5e9} event:/Engines/Engine Start Ext
 {bdd3f6e0-b7ff-46ac-aadd-d8b6b9c45201} event:/Engines/Engines
 {05aa7e46-d0ef-4817-84df-6599e3fd87f6} event:/Engines/Engines Ext
+{3c1896b4-b137-42d9-a178-78d93f2c0308} event:/Engines/HowlEnd
 {19c5cfbd-9d07-4b04-847a-5e65f673ab83} event:/Flaps/FlapLever1
 {25bb3f48-4eea-40a2-a61f-7cfbf098c7c2} event:/Flaps/FlapLever2
 {c75c87ec-563c-4319-a7aa-786962e31e9d} event:/Flaps/FlapLever3
@@ -127,4 +121,5 @@
 {d8526059-b27c-4eae-9b14-a1ee1cb3dfa1} bus:/Master/Radios
 {77575f3b-b9cd-4bff-9056-637cff744a14} bus:/Master/UI
 {15e9c653-fbca-41ca-8241-7cd3b3870fc8} snapshot:/Inside
+{e5b38f91-83fb-4cec-a2d2-a0170dddb70a} snapshot:/FadingBegin
 {9093ea6c-5d0d-441f-bf32-185dad4e3a17} bank:/Master Bank
