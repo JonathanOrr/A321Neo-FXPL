@@ -148,9 +148,9 @@ CLICK_RECT_ALPHABET.cmd[5][5] = "a321neo/cockpit/mcdu/key/Y"
 
 CLICK_RECT_ALPHABET.cmd[6] = {}
 CLICK_RECT_ALPHABET.cmd[6][1] = "a321neo/cockpit/mcdu/key/Z"
-CLICK_RECT_ALPHABET.cmd[6][2] = "a321neo/cockpit/mcdu/key//"
+CLICK_RECT_ALPHABET.cmd[6][2] = "a321neo/cockpit/mcdu/key/slash"
 CLICK_RECT_ALPHABET.cmd[6][3] = "a321neo/cockpit/mcdu/key/space"
-CLICK_RECT_ALPHABET.cmd[6][4] = "a321neo/cockpit/mcdu/key/wpt"
+CLICK_RECT_ALPHABET.cmd[6][4] = "a321neo/cockpit/mcdu/key/overfly"
 CLICK_RECT_ALPHABET.cmd[6][5] = "a321neo/cockpit/mcdu/misc/clr"
 
 local CLICK_RECT_NUMERIC = {start_vec = {x = 100, y = 240, w = 70, h = 65}, offset_vec = {x = 79, y = -69, w = 0, h = 0}, rpt = {x = 3, y = 4}}
@@ -281,6 +281,8 @@ function onKeyDown ( component , charCode , key , shDown , ctrlDown , altOptDown
             sasl.commandOnce(sasl.findCommand("a321neo/cockpit/mcdu/misc/clr"))
         elseif string.char(charCode) == "+" or string.char(charCode) == "-" then
             sasl.commandOnce(sasl.findCommand("a321neo/cockpit/mcdu/misc/positive_negative"))
+        elseif string.char(charCode) == "/" then
+            sasl.commandOnce(sasl.findCommand("a321neo/cockpit/mcdu/key/slash"))
         elseif charCode == SASL_KEY_UP then
             sasl.commandOnce(sasl.findCommand("a321neo/cockpit/mcdu/side/slew_up"))
         elseif charCode == SASL_KEY_DOWN then
