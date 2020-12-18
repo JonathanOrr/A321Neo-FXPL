@@ -235,8 +235,7 @@ MessageGroup_ADKIS_NWS_FAULT = {
     end,
 
     is_inhibited = function()
-        -- During takeoff and landing at high speed
-        return get(EWD_flight_phase) == PHASE_ABOVE_80_KTS or get(EWD_flight_phase) == PHASE_LIFTOFF
+        return get(EWD_flight_phase) < PHASE_1ST_ENG_ON or (get(EWD_flight_phase) == PHASE_1ST_ENG_ON and get(Engine_1_avail) + get(Engine_2_avail) < 2) or get(EWD_flight_phase) == PHASE_ABOVE_80_KTS or get(EWD_flight_phase) == PHASE_LIFTOFF
     end
 
 }

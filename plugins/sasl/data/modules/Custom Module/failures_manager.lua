@@ -79,7 +79,18 @@ local function update_master_wc()
     set(ReqMasterWarning, 0)
 end
 
+local function check_wc_voltage()
+    if get(AC_ess_bus_pwrd) == 0 and get(AC_bus_2_pwrd) == 0 then
+        -- No power for the FWC
+        master_caution_active = false
+        master_warning_active = false
+        set(ReqMasterCaution, 0)
+        set(ReqMasterWarning, 0)
+    end
+end
+
 function update()
+    check_wc_voltage()
     update_master_wc()
 end
 

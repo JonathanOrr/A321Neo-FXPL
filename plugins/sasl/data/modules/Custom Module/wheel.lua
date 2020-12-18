@@ -369,7 +369,8 @@ local function brake_with_accumulator(L,R, L_temp_degradation, R_temp_degradatio
     local diff = (get(Wheel_brake_L) + get(Wheel_brake_R)) - prev_brakes
     -- So a full brake leds diff = 1, and we have around 14 full brakes (per part) when accumulator 1 < x < 3,
     -- then:
-    if diff > 0 then
+    if diff > 0 and get(Wheel_better_pushback_connected) == 0 then  -- Disable the use of accumulator when pushback is in progress
+                                                                    -- (BP uses aircraft brakes)
         diff = diff / 14 * 2
         set(Brakes_accumulator, get(Brakes_accumulator) - diff)
     end
