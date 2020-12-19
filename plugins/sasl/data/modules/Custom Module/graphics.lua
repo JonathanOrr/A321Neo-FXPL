@@ -179,14 +179,14 @@ local function update_datarefs()
     if signs_seat_belt == 2 
        or (signs_seat_belt == 1 and (get(Front_gear_deployment) > 0 or get(Flaps_handle_position) > 0))
        or (get(Cabin_alt_ft) > 11300) then
-        set(Seatbelts, 1)
+        set(Seatbelts, get(AC_bus_1_pwrd) + get(AC_bus_2_pwrd) >= 1 and 1 or 0)
     else
         set(Seatbelts, 0)
     end
 
     if signs_noped == 2 
        or (signs_noped == 1 and (get(Front_gear_deployment) > 0 or get(Flaps_handle_position) > 0)) then
-        set(NoSmoking, 1)
+        set(NoSmoking, get(AC_bus_1_pwrd) + get(AC_bus_2_pwrd) >= 1 and 1 or 0)
     else
         set(NoSmoking, 0)
     end
