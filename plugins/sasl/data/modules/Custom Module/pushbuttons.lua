@@ -28,6 +28,7 @@ local DR_PATH_PREFIX_OVH = "overhead"
 local DR_PATH_PREFIX_PEDESTAL = "pedestal"
 local DR_PATH_PREFIX_MIP = "mip"
 local DR_PATH_PREFIX_GLARESHIELD = "glareshield"
+local DR_PATH_PREFIX_FCU = "fcu"
 local DR_PATH_SUFFIX_TOP = "_top"
 local DR_PATH_SUFFIX_BTM = "_bottom"
 
@@ -281,6 +282,7 @@ local function initialization()
     init_group(PB.ped,  DR_PATH_PREFIX_PEDESTAL)
     init_group(PB.mip,  DR_PATH_PREFIX_MIP)
     init_group(PB.glare,  DR_PATH_PREFIX_GLARESHIELD)
+    init_group(PB.FCU,  DR_PATH_PREFIX_FCU)
 
 end
 
