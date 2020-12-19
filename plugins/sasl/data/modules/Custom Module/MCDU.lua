@@ -103,9 +103,6 @@ if EMULATOR then
 		print(EMULATOR_HEADER .. "Load font " .. str)
 	end
 
-	function EmulatorGL.setFontGlyphSpacingFactor(str, str2)
-	end
-
 	function EmulatorGL.drawText(font, x, y, str, size, bool1, bool2, align, color)
 	end
 
@@ -246,13 +243,6 @@ local MCDU_DISP_TEXT_SIZE =
 {
     ["s"] = 25,
     ["l"] = 37
-}
-
---font glyph spacing
-local MCDU_DISP_TEXT_SPACING =
-{
-    ["s"] = 1.48,
-    ["l"] = 1.0,
 }
 
 --alignment
@@ -670,8 +660,6 @@ local function draw_dat(dat, draw_size, disp_x, disp_y, disp_text_align)
 
     -- text size 
     disp_text_size = MCDU_DISP_TEXT_SIZE[disp_size]
-    -- text spacing
-    disp_spacing = MCDU_DISP_TEXT_SPACING[disp_size]
 
     -- replace { with the box
     text = ""
@@ -689,7 +677,7 @@ local function draw_dat(dat, draw_size, disp_x, disp_y, disp_text_align)
     disp_text = text
 
     -- now draw it!
-    table.insert(draw_lines, {disp_x = disp_x, disp_y = disp_y, disp_text = disp_text, disp_text_size = disp_text_size, disp_text_align = disp_text_align, disp_color = disp_color, disp_spacing = disp_spacing})
+    table.insert(draw_lines, {font = disp_size, disp_x = disp_x, disp_y = disp_y, disp_text = disp_text, disp_text_size = disp_text_size, disp_text_align = disp_text_align, disp_color = disp_color})
 end
 
 local function draw_get_x(align)
@@ -791,8 +779,12 @@ function draw()
 
         --draw all horizontal lines
         for i,line in ipairs(draw_lines) do
-            sasl.gl.setFontGlyphSpacingFactor(Font_AirbusDUL, line.disp_spacing)
-            sasl.gl.drawText(Font_AirbusDUL, line.disp_x, line.disp_y, line.disp_text, line.disp_text_size, false, false, line.disp_text_align, line.disp_color)
+            if line.font == "l" then
+                font = Font_AirbusDUL
+            else
+                font = Font_AirbusDUL_small
+            end
+            sasl.gl.drawText(font, line.disp_x, line.disp_y, line.disp_text, line.disp_text_size, false, false, line.disp_text_align, line.disp_color)
         end
 
         --draw scratchpad
@@ -927,8 +919,8 @@ mcdu_entry = ""
 function update()
 	perf_measure_start("MCDU:update()")
     if get(mcdu_page) == 0 then --on start
-       mcdu_open_page(505) --open 505 A/C status
-       --mcdu_open_page(1106) --open 1106 mcdu menu options debug
+       --mcdu_open_page(505) --open 505 A/C status
+       mcdu_open_page(1106) --open 1106 mcdu menu options debug
     end
 
     -- display next message
@@ -2354,11 +2346,11 @@ end
 mcdu_sim_page[1106] =
 function (phase)
     if phase == "render" then
-        mcdu_dat_title.txt = "x x x x x x x x x x x xx"
+        mcdu_dat_title.txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
         mcdu_dat["s"]["L"][1].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
         mcdu_dat["l"]["L"][1].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
-        mcdu_dat["s"]["R"][2].txt = " x x x x x x x x x x x x"
-        mcdu_dat["l"]["R"][2].txt = " x x x x x x x x x x x x"
+        mcdu_dat["s"]["R"][2].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
+        mcdu_dat["l"]["R"][2].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
         mcdu_dat["s"]["L"][3].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
         mcdu_dat["l"]["L"][3].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
         mcdu_dat["s"]["R"][4].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"

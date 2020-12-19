@@ -225,9 +225,14 @@ function draw()
                     scale_factor = 1.07
                     scale_factor_y = 1.02
                     scale_factor_font = 1.07 * 1.01
-                    sasl.gl.setFontGlyphSpacingFactor(Font_AirbusDUL, line.disp_spacing)
-                    --sasl.gl.drawText(Font_AirbusDUL, (line.disp_x * 2) + 98, (line.disp_y * 2) + 345, line.disp_text, line.disp_text_size * 1.2, false, false, line.disp_text_align, line.disp_color)
-                    sasl.gl.drawText(Font_AirbusDUL, (line.disp_x * scale_factor) + 140, (line.disp_y * scale_factor_y) + 720, line.disp_text, line.disp_text_size * scale_factor_font, false, false, line.disp_text_align, line.disp_color)
+
+                    if line.font == "l" then
+                        font = Font_AirbusDUL
+                    else
+                        font = Font_AirbusDUL_small
+                    end
+
+                    sasl.gl.drawText(font, (line.disp_x * scale_factor) + 140, (line.disp_y * scale_factor_y) + 720, line.disp_text, line.disp_text_size * scale_factor_font, false, false, line.disp_text_align, line.disp_color)
                 end
             end
             --drawing scratchpad
