@@ -39,7 +39,8 @@ include('constants.lua')
 
 --local variables
 local apu_avail_timer = -1
-
+local gload = 1
+local last_update_gload = 0
 
 local function draw_ecam_lower_section_fixed()
     sasl.gl.drawText(Font_AirbusDUL, 100, size[2]/2-372, "TAT", 32, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
@@ -56,6 +57,14 @@ local function draw_ecam_lower_section_fixed()
     if isa_displayed then
         sasl.gl.drawText(Font_AirbusDUL, 100, size[2]/2-442, "ISA", 32, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
         sasl.gl.drawText(Font_AirbusDUL, 260, size[2]/2-442, "°C", 32, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
+    end
+
+
+    -- TODO Add ALT SEL from autpilot
+
+    if gload >= 1.4 or gload <= 0.7  then
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-115, size[2]/2-372, "G LOAD", 32, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+50, size[2]/2-372, Round_fill(gload,1), 32, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
     end
 end
 
@@ -136,6 +145,11 @@ function update()
         ecam_update_press_page()
     elseif get(Ecam_current_page) == 10 then
         ecam_update_wheel_page()
+    end
+    
+    if get(TIME) - last_update_gload > 0.1 then
+        last_update_gload = get(TIME)
+        gload = get(Total_vertical_g_load)    
     end
 
     perf_measure_stop("ECAM:update()")
