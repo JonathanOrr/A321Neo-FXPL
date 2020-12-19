@@ -17,6 +17,8 @@
 -------------------------------------------------------------------------------
 size = { 877 , 1365 }
 
+include('constants.lua')
+
 local MCDU_OVERLAY = sasl.gl.loadImage("textures/MCDU.png", 0, 0, 877, 1365)
 local MCDU_OVERLAY_LIT = sasl.gl.loadImage("textures/MCDU_LIT.png", 0, 0, 877, 1365)
 local MCDU_OVERLAY_LUT = sasl.gl.loadImage("textures/MCDU_LUT.png", 0, 0, 877, 1365)
