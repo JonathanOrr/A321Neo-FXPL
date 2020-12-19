@@ -25,8 +25,8 @@
 ----------------------------------------------------------------------------------------------------
 include('constants.lua')
 
-FLAP_OPEN_TIME_SEC = 20
-
+local FLAP_OPEN_TIME_SEC = 20
+local APU_START_WAIT_TIME = 5
 
 ----------------------------------------------------------------------------------------------------
 -- Global variables
@@ -35,6 +35,7 @@ local master_switch_status  = false
 local master_switch_disabled_time = 0
 local master_switch_enabled_time = 0
 local start_requested = false
+local start_requested_time = 0
 
 local random_egt_apu = 0
 local random_egt_apu_last_update = 0
@@ -69,6 +70,7 @@ sasl.registerCommandHandler ( APU_cmd_start, 0 , function(phase)
     if phase == SASL_COMMAND_BEGIN then
         if master_switch_status then
             start_requested = true
+            start_requested_time = get(TIME)
         end
     end
     return 1
@@ -109,7 +111,7 @@ local function update_button_datarefs()
     set(Apu_master_button_state,(master_switch_status and 1 or 0))
 
     pb_set(PB.ovhd.apu_master, master_switch_status and master_switch_disabled_time == 0, is_faulty)
-    pb_set(PB.ovhd.apu_start, start_requested, get(Apu_avail) == 1)
+    pb_set(PB.ovhd.apu_start, start_requested and (get(TIME) - start_requested_time > APU_START_WAIT_TIME) , get(Apu_avail) == 1)
 
 end
 
