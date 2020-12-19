@@ -39,7 +39,7 @@
 --    - Uses Linux OS-based system calls
 --    - Very smelly code, can fail at any time!
 
-EMULATOR = false -- SET THIS TO ENABLE/DISABLE THE EMULATOR!!!
+EMULATOR = true -- SET THIS TO ENABLE/DISABLE THE EMULATOR!!!
 
 EMULATOR_PROMPT_BEFORE_RUN = false -- Wait after initialization?
 
@@ -179,6 +179,7 @@ if EMULATOR then
 	ECAM_WHITE = {1.0, 1.0, 1.0}
 	ECAM_LINE_GREY = {62/255, 74/255, 91/255}
 	ECAM_HIGH_GREY = {0.6, 0.6, 0.6}
+	ECAM_YELLOW = {1.0, 1.0, 0}
 	ECAM_BLUE = {0.004, 1.0, 1.0}
 	ECAM_GREEN = {0.20, 0.98, 0.20}
 	ECAM_HIGH_GREEN = {0.1, 0.6, 0.1}
@@ -919,8 +920,8 @@ mcdu_entry = ""
 function update()
 	perf_measure_start("MCDU:update()")
     if get(mcdu_page) == 0 then --on start
-       --mcdu_open_page(505) --open 505 A/C status
-       mcdu_open_page(1106) --open 1106 mcdu menu options debug
+       mcdu_open_page(505) --open 505 A/C status
+       --mcdu_open_page(1106) --open 1106 mcdu menu options debug
     end
 
     -- display next message
@@ -2443,7 +2444,7 @@ if EMULATOR then
 			str = line.disp_text
 			color = line.disp_color
 
-			x = ((line.disp_x - 20) / 520) + 1
+			x = math.floor(((line.disp_x - 20) / 520) + 1.1)
 			y = math.floor(14.1 -((line.disp_y - 31.7) / 35.3))
 
 			if x == 2 then
@@ -2481,7 +2482,7 @@ if EMULATOR then
 					 j = 999
 				end
 				if string.sub(str,j,j) ~= " " then
-					chars[y] = string.sub(chars[y], 0, i) .. string.sub(str, j, j) .. string.sub(chars[y], i+1, #chars[y])
+					chars[y] = string.sub(chars[y], 1, i) .. string.sub(str, j, j) .. string.sub(chars[y], i+1, #chars[y])
 				end
 			end
         end 
@@ -2537,7 +2538,7 @@ if EMULATOR then
 		if user_command == "key" then --enter keymode
 			print("Please enter mcdu entry")
 			user_entry = io.read("*l")
-			mcdu_entry = user_entry
+			mcdu_entry = string.upper(user_entry)
 		end
 
 		found_command = false
@@ -2553,3 +2554,4 @@ end
 ----------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
+
