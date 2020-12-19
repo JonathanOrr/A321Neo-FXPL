@@ -245,14 +245,14 @@ local MCDU_DISP_COLOR =
 local MCDU_DISP_TEXT_SIZE =
 {
     ["s"] = 25,
-    ["l"] = 41,
+    ["l"] = 37
 }
 
 --font glyph spacing
 local MCDU_DISP_TEXT_SPACING =
 {
     ["s"] = 1.48,
-    ["l"] = 0.9,
+    ["l"] = 1.0,
 }
 
 --alignment
@@ -733,10 +733,10 @@ local function draw_update()
 
     --draw title line
     if mcdu_dat_title[1] == nil then
-        draw_dat(mcdu_dat_title, "l", draw_get_x(1), draw_get_y(-0.5), MCDU_DISP_TEXT_ALIGN["L"])
+        draw_dat(mcdu_dat_title, "l", draw_get_x(1), draw_get_y(-1), MCDU_DISP_TEXT_ALIGN["L"])
     else
         for l,dat in pairs(mcdu_dat_title) do
-            draw_dat(dat, "l", draw_get_x(1), draw_get_y(-0.5), MCDU_DISP_TEXT_ALIGN["L"])
+            draw_dat(dat, "l", draw_get_x(1), draw_get_y(-1), MCDU_DISP_TEXT_ALIGN["L"])
         end
     end
 end
@@ -927,8 +927,8 @@ mcdu_entry = ""
 function update()
 	perf_measure_start("MCDU:update()")
     if get(mcdu_page) == 0 then --on start
-       --mcdu_open_page(505) --open 505 A/C status
-       mcdu_open_page(1106) --open 1106 mcdu menu options debug
+       mcdu_open_page(505) --open 505 A/C status
+       --mcdu_open_page(1106) --open 1106 mcdu menu options debug
     end
 
     -- display next message
@@ -2354,11 +2354,11 @@ end
 mcdu_sim_page[1106] =
 function (phase)
     if phase == "render" then
-        mcdu_dat_title.txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
+        mcdu_dat_title.txt = "x x x x x x x x x x x xx"
         mcdu_dat["s"]["L"][1].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
         mcdu_dat["l"]["L"][1].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
-        mcdu_dat["s"]["R"][2].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
-        mcdu_dat["l"]["R"][2].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
+        mcdu_dat["s"]["R"][2].txt = " x x x x x x x x x x x x"
+        mcdu_dat["l"]["R"][2].txt = " x x x x x x x x x x x x"
         mcdu_dat["s"]["L"][3].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
         mcdu_dat["l"]["L"][3].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
         mcdu_dat["s"]["R"][4].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
