@@ -39,7 +39,7 @@
 --    - Uses Linux OS-based system calls
 --    - Very smelly code, can fail at any time!
 
-EMULATOR = true -- SET THIS TO ENABLE/DISABLE THE EMULATOR!!!
+EMULATOR = false -- SET THIS TO ENABLE/DISABLE THE EMULATOR!!!
 
 EMULATOR_PROMPT_BEFORE_RUN = false -- Wait after initialization?
 
@@ -803,74 +803,6 @@ end
 --
 --]]
 
-local mcdu_ctrl_instructions = {}
-local mcdu_ctrl_listeners = {}
-
---add a listener for when the function value changes, callback is called
---the data_listener_func is called every update cycle, it determines whether the callback has to be called or not.
---if data_listener_func returns "EXIT" as its return value, callback function is called and the listener is destroyed.
---if data_listener_func returns "CALL" as its return value, callback function is called but listener is NOT destroyed.
---this is a typical structure for listeners.
-local function mcdu_ctrl_add_listener(data_listener_func, callback)
-    table.insert(mcdu_ctrl_listeners, 1, {data_listener_func = data_listener_func, callback = callback})
-end
-
---check whether listener has changed or not
---this is called every update cycle
-local function mcdu_ctrl_exe_listener(listener)
-    if listener.data_listener_func() == "CALL" then
-        listener.callback() --call the callback
-    end
-    if listener.data_listener_func() == "EXIT" then
-        listener.callback() --call the callback, exit the loop and destroy
-        for i, listener_b in ipairs(mcdu_ctrl_listeners) do
-            if listener.data_listener_func == listener_b.data_listener_func then
-                if listener.callback == listener_b.callback then
-                    table.remove(mcdu_ctrl_listeners, i) -- destroy the callback
-                end
-            end
-        end
-    end
-end
-
---add an XP FMC instruction for the XP FMC to execute
-local function mcdu_ctrl_add_inst(inst)
-    table.insert(mcdu_ctrl_instructions, 1, inst)
-end
-
---execute the next XP FMC instruction
-local function mcdu_ctrl_exe_inst()
-    if #mcdu_ctrl_instructions == 0 then
-        set(mcdu_debug_busy, 0)
-		return
-	end
-    set(mcdu_debug_busy, 1)
-
-	inst = mcdu_ctrl_instructions[#mcdu_ctrl_instructions]
-	table.remove(mcdu_ctrl_instructions)
-    if inst.type == "CMD" then
-        sasl.commandOnce(findCommand(inst.arg))
-    end
-    if inst.type == "GET_LN" then
-        refcon = inst.refcon or 0
-        inst.callback(get(globalPropertys("sim/cockpit2/radios/indicators/fms_cdu1_text_line" .. inst.arg)), refcon)
-    end
-    if inst.type == "INPUT" then
-        if string.sub(get(globalPropertys("sim/cockpit2/radios/indicators/fms_cdu1_text_line13")), 2, 2) == " " then
-            for i = 0,#inst.arg - 1 do
-                table.insert(mcdu_ctrl_instructions, {type = "CMD", arg = "sim/FMS/key_" .. string.upper(string.sub(inst.arg, #inst.arg - i, #inst.arg - i))})
-            end
-        else
-            sasl.commandOnce(findCommand("sim/FMS/key_clear"))
-            --delete the entire scratchpad
-            table.insert(mcdu_ctrl_instructions, inst)
-        end
-    end
-    if inst.type == "NOOP" then
-        -- no operation
-    end
-end
-
 --sasl get nav aid information
 local function mcdu_ctrl_get_nav(find_nameid, find_type)
     --find by name
@@ -931,15 +863,6 @@ function update()
         mcdu_message_showing = true
         table.remove(mcdu_messages)
     end
-
-    -- check and execute all listeners
-    for i, listener in ipairs(mcdu_ctrl_listeners) do
-        mcdu_ctrl_exe_listener(listener)
-    end
-
-    -- check and execute next XP FMC instruction
-    mcdu_ctrl_exe_inst()
-	perf_measure_stop("MCDU:update()")
 end
 
 --[[
@@ -973,81 +896,6 @@ end
 --
 --
 --]]
-
-local function mcdu_ctrl_get_cycle(callback)
-    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/index"})
-    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/ls_1l"})
-    mcdu_ctrl_add_inst({type = "GET_LN", arg = "4", callback = callback})
-end
-
--- returns the result for error checking
-local function mcdu_ctrl_try_catch(callback)
-    mcdu_ctrl_add_inst({type = "NOOP"})
-    mcdu_ctrl_add_inst({type = "GET_LN", arg = "13", callback = 
-    function (val) 
-        if val:sub(1,2) ~= "[I" then -- [INVALID ENTRY]
-            callback()
-
-        else
-            mcdu_send_message("not in database")-- INVALID ENTRY
-        end
-    end})
-end
-
--- MCDU - X-PLANE FMC INTERACTION
-
-local function mcdu_ctrl_set_fpln_origin(input, try_catch)
-    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/fpln"})
-    mcdu_ctrl_add_inst({type = "INPUT", arg = input})
-    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/ls_1l"})
-    mcdu_ctrl_try_catch(try_catch)
-end
-
-local function mcdu_ctrl_set_fpln_dest(input, try_catch)
-    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/fpln"})
-    mcdu_ctrl_add_inst({type = "INPUT", arg = input})
-    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/ls_1r"})
-    mcdu_ctrl_try_catch(try_catch)
-end
-
-local function mcdu_ctrl_get_origin_latlon(origin, callback)
-    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/index"})
-    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/ls_2r"})
-    mcdu_ctrl_add_inst({type = "INPUT", arg = origin})
-    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/ls_1l"})
-    mcdu_ctrl_add_inst({type = "GET_LN", arg = "4", callback = callback})
-end
-
-local function mcdu_ctrl_get_runway_length(runway, refcon, callback)
-    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/index"})
-    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/ls_2r"})
-    mcdu_ctrl_add_inst({type = "INPUT", arg = runway})
-    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/ls_1l"})
-    mcdu_ctrl_add_inst({type = "GET_LN", arg = "6", callback = callback, refcon = refcon})
-end
-
-local function mcdu_ctrl_get_runways_origin(accessor_callback)
-    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/dep_arr"})
-    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/ls_1l"})
-    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/prev"})
-    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/prev"})
-    mcdu_ctrl_add_inst({type = "GET_LN", arg = "2", callback = accessor_callback})
-    mcdu_ctrl_add_inst({type = "GET_LN", arg = "4", callback = accessor_callback})
-    mcdu_ctrl_add_inst({type = "GET_LN", arg = "6", callback = accessor_callback})
-    mcdu_ctrl_add_inst({type = "GET_LN", arg = "8", callback = accessor_callback})
-    mcdu_ctrl_add_inst({type = "GET_LN", arg = "10", callback = accessor_callback})
-    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/next"})
-    mcdu_ctrl_add_inst({type = "GET_LN", arg = "2", callback = accessor_callback})
-    mcdu_ctrl_add_inst({type = "GET_LN", arg = "4", callback = accessor_callback})
-    mcdu_ctrl_add_inst({type = "GET_LN", arg = "6", callback = accessor_callback})
-    mcdu_ctrl_add_inst({type = "GET_LN", arg = "8", callback = accessor_callback})
-    mcdu_ctrl_add_inst({type = "GET_LN", arg = "10", callback = accessor_callback})
-end
-
-local function mcdu_ctrl_get_sids(callback)
-    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/dep_arr"})
-    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/ls_1l"})
-end
 
 -- FLIGHT PLAN
 
@@ -2520,9 +2368,11 @@ if EMULATOR then
 
 		print("List of commands:")
 		print("  a321neo/cockpit/mcdu/key <-- to enter key mode")
+		print("  a321neo/cockpit/mcdu/side/L1 <-- side keys: L1-L6, R1-R6")
 
 		for i = 1, #commands, 1 do
-			if string.sub(commands[i].name,0,24) ~= "a321neo/cockpit/mcdu/key" then
+			if string.sub(commands[i].name,0,24) ~= "a321neo/cockpit/mcdu/key" and
+			   string.sub(commands[i].name,0,25) ~= "a321neo/cockpit/mcdu/side" then
 				print("  " .. commands[i].name)
 			end
 		end
