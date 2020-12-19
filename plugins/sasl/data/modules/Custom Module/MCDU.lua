@@ -89,6 +89,14 @@ if EMULATOR then
 		print(EMULATOR_HEADER .. "Command " .. str)
 	end
 
+	function EmulatorSasl:findNavAid(name, a, b, c, d, find_type)
+		return 1
+	end
+
+	function EmulatorSasl:getNavAidInfo(id)
+		return NAV_AIRPORT, 121, 141, 300, 110.500, 70, "id", "name", true
+	end
+
 	-- SASL OpenGL Class
 	EmulatorGL = {}
 
@@ -188,6 +196,19 @@ if EMULATOR then
 	ECAM_MAGENTA = {1.0, 0.0, 1.0}
 	ECAM_GREY = {0.3, 0.3, 0.3}
 	ECAM_BLACK = {0, 0, 0}
+
+	NAV_UNKNOWN = -1
+	NAV_AIRPORT = 0
+	NAV_NDB = 1
+	NAV_VOR = 2
+	NAV_ILS = 3
+	NAV_LOCALIZER = 4
+	NAV_GLIDESLOPE = 5
+	NAV_OUTERMARKER = 6
+	NAV_MIDDLEMARKER = 7
+	NAV_INNERMARKER = 8
+	NAV_FIX = 9
+	NAV_DME = 10
 
 end
 -- END OF EMULATOR SHELL CODE I OF II (CONTINUED AT END OF SCRIPT)
@@ -407,7 +428,7 @@ local function mcdu_align_right(str, required_length)
 end
 
 --align an input to the left, given the total length
---e.g. ("ad", 4) -> "  ad"
+--e.g. ("ad", 4) -> "ad  "
 local function mcdu_align_left(str, required_length)
     while #tostring(str) < required_length do
         str = str .. " "
@@ -826,6 +847,40 @@ local function mcdu_ctrl_get_nav(find_nameid, find_type)
     return nav
 end
 
+-- converts Decimal Degrees and Axis (lat/lon) to Degrees Minute Seconds Direction
+local function mcdu_ctrl_dd_to_dmsd(dd, axis)
+    if axis == "lat" then
+        if d > 0 then
+            p = "N"
+        else
+            p = "S"
+        end
+    else
+        if d > 0 then
+            p = "E"
+        else
+            p = "W"
+        end
+    end
+
+    dd = math.abs(dd)
+    d = dd
+    m = d % 1 * 60
+    s = m % 1 * 60
+    return math.floor(d), m, s, p
+end
+
+-- converts Degrees Minute Seconds Direction to Decimal Degrees
+local function mcdu_ctrl_dmsd_to_dd(d,m,s,dir)
+    if dir == "E" or dir == "N" then
+        p = 1
+    else
+        p = -1
+    end
+    dd = (d + m*(1/60) + s*(1/3600)) * p
+    return dd
+end
+
 --[[
 --mcdu_ctrl_get_nav("ksea", NAV_ILS)
 --id = sasl.findFirstNavAidOfType(NAV_ILS)
@@ -846,14 +901,15 @@ for i = 0,10 do
 end
 --]]
 
-mcdu_entry = ""
+mcdu_entry = string.upper("ksea/kbfi")
 
 --update
 function update()
 	perf_measure_start("MCDU:update()")
     if get(mcdu_page) == 0 then --on start
-       mcdu_open_page(505) --open 505 A/C status
+       --mcdu_open_page(505) --open 505 A/C status
        --mcdu_open_page(1106) --open 1106 mcdu menu options debug
+	   mcdu_open_page(400)
     end
 
     -- display next message
@@ -1023,6 +1079,9 @@ end
 -- 400 init
 mcdu_sim_page[400] =
 function (phase)
+    if phase == "update" then
+    end
+
     if phase == "render" then
         mcdu_dat_title.txt = "          init"
 
@@ -1147,7 +1206,9 @@ function (phase)
             "!!",  -- 10 cost index
             "!"    -- 1 cost index
         })
-        fmgs_dat["cost index"] = input
+        if input ~= NIL then
+            fmgs_dat["cost index"] = input
+        end
         mcdu_open_page(400) -- reload
     end
     -- crz fl/temp
@@ -1167,57 +1228,87 @@ function (phase)
             "/-!!"  -- -40 (-40 celcius)
         })
 
-        --automatically calculate crz temp
-        if variation >= 1 and variation <= 3 then
-            if variation ~= 3 then
-                alt = input
+        if input ~= NIL then
+            --automatically calculate crz temp
+            if variation >= 1 and variation <= 3 then
+                if variation ~= 3 then
+                    alt = input
+                else
+                    alt = input:sub(3,5)
+                end
+                fmgs_dat["crz temp"] = math.floor(tonumber(alt) * -0.2 + 16)
+                fmgs_dat["crz temp alt"] = false --crz temp has not been altered
+
             else
-                alt = input:sub(3,5)
+                fmgs_dat["crz temp alt"] = true --crz temp has been manually altered
             end
-            fmgs_dat["crz temp"] = math.floor(tonumber(alt) * -0.2 + 16)
-            fmgs_dat["crz temp alt"] = false --crz temp has not been altered
 
-        else
-            fmgs_dat["crz temp alt"] = true --crz temp has been manually altered
+            --set crz FL or crz temp
+            if variation == 1 then
+                fmgs_dat["crz fl"] = input * 100
+            elseif variation == 2 then
+                fmgs_dat["crz fl"] = input * 100
+            elseif variation == 3 then
+                fmgs_dat["crz fl"] = tonumber(input:sub(3,5)) * 100
+            elseif variation == 4 then
+                fmgs_dat["crz fl"] = input:sub(3,5) * 100
+                fmgs_dat["crz temp"] = input:sub(7,7) * -1
+            elseif variation == 5 then
+                fmgs_dat["crz fl"] = input:sub(3,5) * 100
+                fmgs_dat["crz temp"] = input:sub(7,8) * -1
+            elseif variation == 6 then
+                fmgs_dat["crz fl"] = input:sub(3,5) * 100
+                fmgs_dat["crz temp"] = input:sub(7,8)
+            elseif variation == 7 then
+                fmgs_dat["crz fl"] = input:sub(3,5) * 100
+                fmgs_dat["crz temp"] = input:sub(7,9)
+            elseif variation == 8 then
+                fmgs_dat["crz temp"] = input:sub(2,2) * -1
+            elseif variation == 9 then
+                fmgs_dat["crz temp"] = input:sub(2,3) * -1
+            elseif variation == 10 then
+                fmgs_dat["crz temp"] = input:sub(2,3)
+            elseif variation == 11 then
+                fmgs_dat["crz temp"] = input:sub(2,4)
+            end
+            mcdu_open_page(400) -- reload
         end
-
-        --set crz FL or crz temp
-        if variation == 1 then
-            fmgs_dat["crz fl"] = input * 100
-        elseif variation == 2 then
-            fmgs_dat["crz fl"] = input * 100
-        elseif variation == 3 then
-            fmgs_dat["crz fl"] = tonumber(input:sub(3,5)) * 100
-        elseif variation == 4 then
-            fmgs_dat["crz fl"] = input:sub(3,5) * 100
-            fmgs_dat["crz temp"] = input:sub(7,7) * -1
-        elseif variation == 5 then
-            fmgs_dat["crz fl"] = input:sub(3,5) * 100
-            fmgs_dat["crz temp"] = input:sub(7,8) * -1
-        elseif variation == 6 then
-            fmgs_dat["crz fl"] = input:sub(3,5) * 100
-            fmgs_dat["crz temp"] = input:sub(7,8)
-        elseif variation == 7 then
-            fmgs_dat["crz fl"] = input:sub(3,5) * 100
-            fmgs_dat["crz temp"] = input:sub(7,9)
-        elseif variation == 8 then
-            fmgs_dat["crz temp"] = input:sub(2,2) * -1
-        elseif variation == 9 then
-            fmgs_dat["crz temp"] = input:sub(2,3) * -1
-        elseif variation == 10 then
-            fmgs_dat["crz temp"] = input:sub(2,3)
-        elseif variation == 11 then
-            fmgs_dat["crz temp"] = input:sub(2,4)
-        end
-        mcdu_open_page(400) -- reload
     end
 
     -- from/to
     if phase == "R1" then
         --format e.g. ksea/kbfi
         input = mcdu_get_entry("####/####")
-        --check for correct entry
         if input ~= NIL then
+
+			-- parse data
+			airp_origin_name = input:sub(1,4):lower()
+            airp_dest_name = input:sub(6,9):lower()
+
+            airp_origin = mcdu_ctrl_get_nav(airp_origin_name, NAV_AIRPORT)
+            airp_dest = mcdu_ctrl_get_nav(airp_dest_name, NAV_AIRPORT)
+
+            -- do these airports exist?
+			if airp_origin.navtype == NAV_UNKNOWN or
+			   airp_dest.navtype == NAV_UNKNOWN then
+				mcdu_send_message("NOT IN DATABASE")
+				mcdu_open_page(400) -- reload
+				return
+			end			
+
+			-- init data
+			fmgs_dat["fmgs init"] = true
+			fmgs_dat["origin"] = airp_origin.id
+			fmgs_dat["dest"] = airp_dest.id
+
+            d, m, s, dir = mcdu_ctrl_dd_to_dmsd(airp_origin.lat, "lat")
+            fmgs_dat["lat fmt"] = d .. Round(m, 1) .. dir
+            d, m, s, dir = mcdu_ctrl_dd_to_dmsd(airp_origin.lon, "lon")
+            fmgs_dat["lon fmt"] = d .. Round(m, 1) .. dir
+
+			mcdu_open_page(401) -- open 401 init routes
+
+			--[[
             --set orgin for XP FMC
             --format e.g. ksea/kbfi
             airp_origin = input:sub(1,4):lower()
@@ -1327,6 +1418,7 @@ function (phase)
             end) --end callback
 
             mcdu_open_page(400) -- reload
+			--]]
         end
     end
 
@@ -1344,7 +1436,9 @@ function (phase)
     -- tropo
     if phase == "R6" then
         input = mcdu_get_entry("!!!")
-        fmgs_dat["tropo"] = input * 100
+		if input ~= NIL then
+      	  fmgs_dat["tropo"] = input * 100
+		end
         mcdu_open_page(400) -- reload
     end
 
@@ -1388,6 +1482,22 @@ function (phase)
             fmgs_dat["lon fmt"] = fmgs_dat["lon"] .. fmgs_dat["lon_dir"]
         end
         mcdu_open_page(400) -- reload
+    end
+end
+
+-- 401 init routes
+mcdu_sim_page[401] =
+function (phase)
+    if phase == "render" then
+        mcdu_dat_title.txt = "       " ..  fmgs_dat["origin"] .. "/" .. fmgs_dat["dest"]
+
+		mcdu_dat["s"]["L"][2] = {txt = "  none", col = "green"}
+		mcdu_dat["l"]["L"][6].txt = "<return"
+
+        draw_update()
+    end
+	if phase == "L6" then
+        mcdu_open_page(400) -- open 400 init
     end
 end
 
