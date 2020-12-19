@@ -98,6 +98,9 @@ local nearest_ctr = nil
 -- Power on time
 local powered_on_at = 0
 
+-- Set to 1 when the related p/b is pressed
+local atc_msg_light_stop = false
+
 -- The time when a message switch from the status CONFIRM to the status SENDING. After 3 seconds from this time,
 -- the status switch to SENT
 time_to_send = 0    -- It must stay at zero unless a message is in the status SENDING
@@ -112,6 +115,16 @@ change_occured = true
 
 -- Used to keep track of the last time we updated the CTR list
 local last_CTR_update = 0
+----------------------------------------------------------------------------------------------------
+-- Commands
+----------------------------------------------------------------------------------------------------
+-- See also the DCDU_handlers.lua file
+
+sasl.registerCommandHandler (DCDU_cmd_atc_msg_pb, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        atc_msg_light_stop = true
+    end
+end)
 
 ----------------------------------------------------------------------------------------------------
 -- Functions
@@ -538,6 +551,7 @@ local function update_sending_message()
     end
 end
 
+
 function update_new_message_light()
 
     set(DCDU_new_msgs, 0)
@@ -549,8 +563,14 @@ function update_new_message_light()
             end 
         end
     end
+    
+    -- Pushbutton ATC MSG blinking stuffs
+    if get(DCDU_new_msgs) == 0 then
+        atc_msg_light_stop = false
+    end
 
-    pb_set(PB.glare.atc_msg, (get(TIME)%1) < 0.5 and get(DCDU_new_msgs) > 0, (get(TIME)%1) < 0.5 and get(DCDU_new_msgs) > 0 )
+    local cond_pb = (get(TIME)%1) < 0.5 and get(DCDU_new_msgs) > 0 and not atc_msg_light_stop
+    pb_set(PB.glare.atc_msg, cond_pb, cond_pb )
 
 end
 
