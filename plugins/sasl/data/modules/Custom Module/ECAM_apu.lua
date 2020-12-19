@@ -52,7 +52,7 @@ function draw_apu_page()
     end
 
     --low pressure--
-    if get(Apu_fuel_source) == 0 then
+    if get(Apu_fuel_source) == 0 and get(Apu_master_button_state) == 1  then
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2+200, size[2]/2-10, "FUEL LO PR", 36, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
 
