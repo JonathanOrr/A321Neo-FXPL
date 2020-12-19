@@ -12,8 +12,8 @@
 --    Please check the LICENSE file in the root of the repository for further
 --    details or check <https://www.gnu.org/licenses/>
 -------------------------------------------------------------------------------
--- File: FMGS.lua 
--- Short description: Flight Management Guidance System for navigation data processing
+-- File: navigation.lua 
+-- Short description: Navigation data processing
 -------------------------------------------------------------------------------
 
 function char_at(str, index)

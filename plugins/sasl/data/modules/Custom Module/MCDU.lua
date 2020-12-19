@@ -28,6 +28,8 @@
 -------------------------------------------------------------------------------
 
 -------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 -- EMULATOR SHELL CODE (I of II)
 --    Simulates SASL running on a lua intrepreter (or https://repl.it)
 --    instead of booting up X-Plane everytime you want to run this.
@@ -192,6 +194,11 @@ if EMULATOR then
 end
 -- END OF EMULATOR SHELL CODE I OF II (CONTINUED AT END OF SCRIPT)
 ----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+
+
+
 -- START OF MCDU CODE
 -- START OF MCDU CODE
 -- START OF MCDU CODE
@@ -227,7 +234,7 @@ local MCDU_DISP_COLOR =
     ["cyan"] =    ECAM_BLUE,
     ["green"] =   ECAM_GREEN,
     ["amber"] =   ECAM_ORANGE,
-    ["yellow"] =  {1.00, 1.00, 0.00},
+    ["yellow"] =  ECAM_YELLOW,
     ["magenta"] = ECAM_MAGENTA,
     ["red"] =     ECAM_RED,
 
@@ -237,15 +244,15 @@ local MCDU_DISP_COLOR =
 --font size
 local MCDU_DISP_TEXT_SIZE =
 {
-    ["s"] = 19.51,
-    ["l"] = 33.4,
+    ["s"] = 25,
+    ["l"] = 40,
 }
 
 --font glyph spacing
 local MCDU_DISP_TEXT_SPACING =
 {
-    ["s"] = 1.735,
-    ["l"] = 0.99,
+    ["s"] = 1.44,
+    ["l"] = 0.9,
 }
 
 --alignment
@@ -254,10 +261,6 @@ local MCDU_DISP_TEXT_ALIGN =
     ["L"] = TEXT_ALIGN_LEFT,
     ["R"] = TEXT_ALIGN_RIGHT,
 }
-
-
---fonts
-local B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
 
 -- alphanumeric & decimal FMC entry keys
 local MCDU_ENTRY_KEYS = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", ".", "overfly", "slash", "space"}
@@ -788,12 +791,12 @@ function draw()
 
         --draw all horizontal lines
         for i,line in ipairs(draw_lines) do
-            sasl.gl.setFontGlyphSpacingFactor(B612MONO_regular, line.disp_spacing)
-            sasl.gl.drawText(B612MONO_regular, line.disp_x, line.disp_y, line.disp_text, line.disp_text_size, false, false, line.disp_text_align, line.disp_color)
+            sasl.gl.setFontGlyphSpacingFactor(Font_AirbusDUL, line.disp_spacing)
+            sasl.gl.drawText(Font_AirbusDUL, line.disp_x, line.disp_y, line.disp_text, line.disp_text_size, false, false, line.disp_text_align, line.disp_color)
         end
 
         --draw scratchpad
-        sasl.gl.drawText(B612MONO_regular, draw_get_x(1), draw_get_y(12), mcdu_entry, MCDU_DISP_TEXT_SIZE["l"], false, false, MCDU_DISP_TEXT_ALIGN["L"], MCDU_DISP_COLOR["white"])
+        sasl.gl.drawText(Font_AirbusDUL, draw_get_x(1), draw_get_y(12), mcdu_entry, MCDU_DISP_TEXT_SIZE["l"], false, false, MCDU_DISP_TEXT_ALIGN["L"], MCDU_DISP_COLOR["white"])
 
     end
 	perf_measure_stop("MCDU:draw()")
@@ -924,7 +927,8 @@ mcdu_entry = ""
 function update()
 	perf_measure_start("MCDU:update()")
     if get(mcdu_page) == 0 then --on start
-       mcdu_open_page(505) --open 505 A/C status
+       --mcdu_open_page(505) --open 505 A/C status
+       mcdu_open_page(1106) --open 1106 mcdu menu options debug
     end
 
     -- display next message
@@ -1601,7 +1605,7 @@ function (phase)
         end
         
         mcdu_dat["s"]["L"][2].txt = " active data base"
-		mcdu_dat["l"]["L"][2] = {txt = "default", col = "cyan"}
+		mcdu_dat["l"]["L"][2] = {txt = " 28 nov-25dec ab49012001", col = "cyan"}
         mcdu_dat["s"]["L"][3].txt = " second data base"
         mcdu_dat["l"]["L"][3] = {txt = " none", col = "cyan", size = "s"}
 
@@ -1611,7 +1615,7 @@ function (phase)
         mcdu_dat["l"]["L"][6] = {txt = "+0.0/+0.0", col = "green"}
 
 		mcdu_dat["s"]["R"][6].txt = "software"
-        mcdu_dat["l"]["R"][6].txt = "options>"
+        mcdu_dat["l"]["R"][6].txt = "status/xload>"
 
        
         draw_update()
@@ -2075,6 +2079,7 @@ function (phase)
 
         mcdu_dat["l"]["L"][1].txt = "<about"
         mcdu_dat["l"]["L"][2].txt = "<colours"
+        mcdu_dat["l"]["R"][2].txt = "debug>"
 
         mcdu_dat["s"]["R"][3] = {txt = "head developer      ", col = "white"}
         mcdu_dat["l"]["R"][3] = {txt = "jonathan orr       ", col = "cyan"}
@@ -2093,6 +2098,9 @@ function (phase)
     end
     if phase == "L2" then
         mcdu_open_page(1103) -- open 1103 mcdu menu options colours
+    end
+    if phase == "R2" then
+        mcdu_open_page(1106) -- open 1106 mcdu menu options debug
     end
     if phase == "R6" then
         mcdu_open_page(1100) -- open 1100 mcdu menu
@@ -2266,7 +2274,7 @@ function (phase)
             ["cyan"] =    ECAM_BLUE,
             ["green"] =   ECAM_GREEN,
             ["amber"] =   ECAM_ORANGE,
-            ["yellow"] =  {1.00, 1.00, 0.00},
+            ["yellow"] =  ECAM_YELLOW,
             ["magenta"] = ECAM_MAGENTA,
             ["red"] =     ECAM_RED,
 
@@ -2342,6 +2350,32 @@ function (phase)
     end
 end
 
+-- 1106 mcdu menu options debug
+mcdu_sim_page[1106] =
+function (phase)
+    if phase == "render" then
+        mcdu_dat_title.txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
+        mcdu_dat["s"]["L"][1].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
+        mcdu_dat["l"]["L"][1].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
+        mcdu_dat["s"]["R"][2].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
+        mcdu_dat["l"]["R"][2].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
+        mcdu_dat["s"]["L"][3].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
+        mcdu_dat["l"]["L"][3].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
+        mcdu_dat["s"]["R"][4].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
+        mcdu_dat["l"]["R"][4].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
+        mcdu_dat["s"]["L"][5].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
+        mcdu_dat["l"]["L"][5].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
+        mcdu_dat["s"]["R"][6].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
+        mcdu_dat["l"]["R"][6].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
+
+        draw_update()
+    end
+    if phase == "R6" then
+        mcdu_open_page(1101) -- open 1101 mcdu menu options
+    end
+end
+
+
 -- 1200 air port
 mcdu_sim_page[1200] =
 function (phase)
@@ -2359,7 +2393,9 @@ end
 -- END OF MCDU CODE
 -- END OF MCDU CODE
 
--------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 -- EMULATOR SHELL CODE CONTINUED (II of II)
 --    Simulates SASL running on a lua intrepreter (or https://repl.it)
 --    instead of booting up X-Plane everytime you want to run this.
@@ -2374,8 +2410,8 @@ if EMULATOR then
 	Engine_option = "Engine_option"
 	set(Mcdu_enabled, 1)
 	set(mcdu_page, 0)
-	set(TIME, 0)
-	set(DELTA_TIME, 5)
+	set(TIME, 1)
+	set(DELTA_TIME, 0)
 	set(Engine_option, 0)
 
 	print("")
@@ -2389,6 +2425,8 @@ if EMULATOR then
 	found_command = true
 	while true do
 		os.execute("clear")
+		set(TIME, get(TIME) + 1)
+		
 		print()
 		if not found_command then
 			print(EMULATOR_HEADER .. "COMMAND NOT FOUND")
@@ -2417,7 +2455,7 @@ if EMULATOR then
 			y = math.floor(14.1 -((line.disp_y - 31.7) / 35.3))
 
 			if x == 2 then
-				x = 24 - #str
+				x = 25 - #str
 			end
 
 			if line.disp_color == MCDU_DISP_COLOR["cyan"] then
@@ -2472,6 +2510,8 @@ if EMULATOR then
 			chars[spec.y] = string.sub(chars[spec.y], 1, j-1) .. spec.word .. string.sub(chars[spec.y], j, #chars[spec.y])
 		end
 
+		chars[14] = mcdu_entry
+
 		for i = 1,14,1 do -- columns
 			if (math.fmod((i+1)*0.5,1) == 0) then
 				out_line = (i - 1) / 2
@@ -2486,7 +2526,7 @@ if EMULATOR then
 		print()
 
 		print("List of commands:")
-		print("  a321neo/cockpit/mcdu/key/N")
+		print("  a321neo/cockpit/mcdu/key <-- to enter key mode")
 
 		for i = 1, #commands, 1 do
 			if string.sub(commands[i].name,0,24) ~= "a321neo/cockpit/mcdu/key" then
@@ -2501,6 +2541,12 @@ if EMULATOR then
 		print("Please enter a command name.")
 		io.write("	a321neo/cockpit/mcdu/")
 		user_command = io.read("*l")
+		
+		if user_command == "key" then --enter keymode
+			print("Please enter mcdu entry")
+			user_entry = io.read("*l")
+			mcdu_entry = user_entry
+		end
 
 		found_command = false
 		for i = 1, #commands, 1 do
@@ -2512,4 +2558,6 @@ if EMULATOR then
 	end
 end
 -- END OF EMULATOR SHELL CODE II OF II (CONTINUED AT END OF SCRIPT)
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------

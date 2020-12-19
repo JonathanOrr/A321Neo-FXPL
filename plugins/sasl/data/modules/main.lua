@@ -55,6 +55,7 @@ components = {
   AT {},
   ADIRS {},
   MCDU {},
+  navigation {},
   packs {},
   aircond {},
   wheel {},
