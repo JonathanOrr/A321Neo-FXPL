@@ -149,18 +149,22 @@ function ecam_update_advisory_conditions()
 
     if cond_door then at_least_one = true; set(Ecam_advisory_DOOR, 1) end
 
-    local cond_engines = get(Eng_1_OIL_qty) < 2 or
-                         get(Eng_2_OIL_qty) < 2 or
-                         get(Eng_1_OIL_press) > 90 or
-                         (get(Eng_1_OIL_press) < 13 and get(Eng_1_OIL_press) >=7 ) or
-                         get(Eng_2_OIL_press) > 90 or
-                         (get(Eng_2_OIL_press) < 13 and get(Eng_2_OIL_press) >=7 ) or
-                         (get(Eng_1_OIL_temp) > 140 and get(Eng_1_OIL_temp) <= 155) or
-                         (get(Eng_2_OIL_temp) > 140 and get(Eng_2_OIL_temp) <= 155) or
-                         get(Eng_1_VIB_N1) > 6 or
-                         get(Eng_1_VIB_N2) > 4.3 or
-                         get(Eng_2_VIB_N1) > 6 or
-                         get(Eng_2_VIB_N2) > 4.3
+    local cond_eng_1 =  get(Eng_1_OIL_qty) < 2 or
+                        get(Eng_1_OIL_press) > 90 or
+                        (get(Eng_1_OIL_press) < 13 and get(Eng_1_OIL_press) >=7 ) or
+                        (get(Eng_1_OIL_temp) > 140 and get(Eng_1_OIL_temp) <= 155) or
+                        get(Eng_1_VIB_N1) > 6 or
+                        get(Eng_1_VIB_N2) > 4.3
+
+    local cond_eng_2 =  get(Eng_2_OIL_qty) < 2 or
+                        get(Eng_2_OIL_press) > 90 or
+                        (get(Eng_2_OIL_press) < 13 and get(Eng_2_OIL_press) >=7 ) or
+                        (get(Eng_2_OIL_temp) > 140 and get(Eng_2_OIL_temp) <= 155) or
+                        get(Eng_2_VIB_N1) > 6 or
+                        get(Eng_2_VIB_N2) > 4.3
+
+
+    local cond_engines = (get(Engine_1_avail) == 1 and cond_eng_1) or (get(Engine_2_avail) == 1 and cond_eng_2)
 
     if cond_engines then at_least_one = true; set(Ecam_advisory_ENG, 1) end       
 
