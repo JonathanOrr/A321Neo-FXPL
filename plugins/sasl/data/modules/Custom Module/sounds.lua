@@ -33,7 +33,9 @@ function update()
     Set_dataref_linear_anim(Sounds_blower_delayed, get(Ventilation_blower_running), 0, 1, 0.15)
     Set_dataref_linear_anim(Sounds_extract_delayed, get(Ventilation_extract_running), 0, 1, 0.15)
 
-    set_alt_callouts()
-    play_gpws_sounds()
 
+    if get(AC_bus_1_pwrd) == 1 then
+        set_alt_callouts()
+        play_gpws_sounds()
+    end
 end

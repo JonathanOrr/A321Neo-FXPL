@@ -81,7 +81,7 @@ function update_mode_1(alt, vs)
     set(GPWS_mode_1_pullup,   0)
     set(GPWS_mode_is_active, 0, 1)
 
-    if not gpws_system_mode or get(FAILURE_GPWS) == 1 then return end -- Not active
+    if not gpws_system_mode or get(FAILURE_GPWS) == 1 or get(AC_bus_1_pwrd) == 0 then return end -- Not active
 
     if alt >= 10 and alt <= 2450 then
         set(GPWS_mode_is_active, 1, 1)
@@ -175,7 +175,7 @@ function update_mode_2(alt, vs, ias)
     set(GPWS_mode_2_pullup,   0)
     set(GPWS_mode_2_terr, 0)
     
-    if not gpws_system_mode or get(FAILURE_GPWS) == 1 then return end -- Not active
+    if not gpws_system_mode or get(FAILURE_GPWS) == 1 or get(AC_bus_1_pwrd) == 0 then return end -- Not active
     
     local mode = get_mode_2_submodes(alt, ias)
 
@@ -224,7 +224,7 @@ end
 function update_mode_3(alt, vs)
     set(GPWS_mode_3_dontsink, 0)
 
-    if not gpws_system_mode or get(FAILURE_GPWS) == 1 then return end -- Not active
+    if not gpws_system_mode or get(FAILURE_GPWS) == 1 or get(AC_bus_1_pwrd) == 0 then return end -- Not active
 
     if alt < 10 or alt > 2450 then
         set(GPWS_mode_is_active, 0, 3)
@@ -352,7 +352,7 @@ function update_mode_4(alt, ias)
     set(GPWS_mode_4_tl_gear, 0)
 
 
-    if gpws_system_mode and get(FAILURE_GPWS) == 0 then
+    if gpws_system_mode and get(FAILURE_GPWS) == 0 and get(AC_bus_1_pwrd) == 1 then
         if get(EWD_flight_phase) == PHASE_FINAL or get(EWD_flight_phase) == PHASE_AIRBONE then
             -- 4A - Gear
             update_mode_4_a(alt, ias)
@@ -381,7 +381,7 @@ function update_mode_5(alt)
     set(GPWS_mode_5_glideslope, 0)
     set(GPWS_mode_5_glideslope_hard, 0)
 
-    if not gpws_gs_mode or not gpws_system_mode or get(FAILURE_GPWS) == 1 then
+    if not gpws_gs_mode or not gpws_system_mode or get(FAILURE_GPWS) == 1 or get(AC_bus_1_pwrd) == 0 then
         return false -- Manually disabled
     end
 
@@ -443,7 +443,7 @@ local function update_mode_pitch()
         return -- Too high - inibith
     end
     
-    if not gpws_system_mode or get(FAILURE_GPWS) == 1 then
+    if not gpws_system_mode or get(FAILURE_GPWS) == 1 or get(AC_bus_1_pwrd) == 0 then
         return -- Manually disabled
     end
 
@@ -470,6 +470,7 @@ end
 
 local function update_pbs()
     pb_set(PB.mip.gpws_capt, is_caution, is_warning)
+    pb_set(PB.mip.gpws_fo, is_caution, is_warning)
     
     pb_set(PB.ovhd.gpws_sys,       not gpws_system_mode, get(FAILURE_GPWS) == 1)
     pb_set(PB.ovhd.gpws_terr,      not gpws_terrain_mode, get(FAILURE_GPWS_TERR) == 1)
@@ -479,6 +480,8 @@ local function update_pbs()
     
     set(GPWS_mode_flap_disabled, gpws_flap_mode and 0 or 1)
     set(GPWS_mode_flap_3, gpws_flap_3_mode and 1 or 0)
+    
+
     
 end
 
@@ -498,7 +501,7 @@ local function update_local_data()
 end
 
 local function update_gpws_terrain_mode()
-    gpws_terrain_is_working = gpws_terrain_mode and get(Capt_Baro_Alt) < 18000 and get(FAILURE_GPWS_TERR) == 0
+    gpws_terrain_is_working = gpws_terrain_mode and get(Capt_Baro_Alt) < 18000 and get(FAILURE_GPWS_TERR) == 0 and get(AC_bus_1_pwrd) == 1 
     
     if gpws_terrain_is_working then
         set(GPWS_pred_is_active, 1)

@@ -318,8 +318,10 @@ function play_gpws_sounds()
         end
         if short_test then
             play_short_test()
+            pb_set(PB.mip.gpws_fo, PB.mip.gpws_capt.status_bottom, PB.mip.gpws_capt.status_top)
         else
             play_long_test()
+            pb_set(PB.mip.gpws_fo, PB.mip.gpws_capt.status_bottom, PB.mip.gpws_capt.status_top)
         end
     else
         test_started_at = 0
