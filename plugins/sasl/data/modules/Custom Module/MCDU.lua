@@ -224,8 +224,8 @@ local MCDU_DIV_ALIGN = {"L", "R"}
 local MCDU_DIV_ROW = {1,2,3,4,5,6}
 
 --line spacing
-local MCDU_DRAW_OFFSET = {x = 20, y = 420} -- starting offset for line drawing
-local MCDU_DRAW_SPACING = {x = 520, y = -35.3} -- change in offset per line drawn
+local MCDU_DRAW_OFFSET = {x = 15, y = 420} -- starting offset for line drawing
+local MCDU_DRAW_SPACING = {x = 530, y = -37} -- change in offset per line drawn
 
 --reference table for drawing
 local MCDU_DISP_COLOR = 
@@ -245,13 +245,13 @@ local MCDU_DISP_COLOR =
 local MCDU_DISP_TEXT_SIZE =
 {
     ["s"] = 25,
-    ["l"] = 40,
+    ["l"] = 41,
 }
 
 --font glyph spacing
 local MCDU_DISP_TEXT_SPACING =
 {
-    ["s"] = 1.44,
+    ["s"] = 1.48,
     ["l"] = 0.9,
 }
 

@@ -222,14 +222,16 @@ function draw()
 
             if MCDU_get_popup("enabled") then
                 for i,line in ipairs(MCDU_get_popup("draw lines")) do
+                    scale_factor = 1.07
+                    scale_factor_y = 1.02
+                    scale_factor_font = 1.07 * 1.02
                     sasl.gl.setFontGlyphSpacingFactor(Font_AirbusDUL, line.disp_spacing)
                     --sasl.gl.drawText(Font_AirbusDUL, (line.disp_x * 2) + 98, (line.disp_y * 2) + 345, line.disp_text, line.disp_text_size * 1.2, false, false, line.disp_text_align, line.disp_color)
-                    scale_factor = 1.07
-                    sasl.gl.drawText(Font_AirbusDUL, (line.disp_x * scale_factor) + 140, (line.disp_y * scale_factor) + 700, line.disp_text, line.disp_text_size * scale_factor, false, false, line.disp_text_align, line.disp_color)
+                    sasl.gl.drawText(Font_AirbusDUL, (line.disp_x * scale_factor) + 140, (line.disp_y * scale_factor_y) + 730, line.disp_text, line.disp_text_size * scale_factor_font, false, false, line.disp_text_align, line.disp_color)
                 end
             end
             --drawing scratchpad
-            sasl.gl.drawText(Font_AirbusDUL, 150, 730, MCDU_get_popup("mcdu entry"), 35, false, false, TEXT_ALIGN_LEFT, {1,1,1})
+            sasl.gl.drawText(Font_AirbusDUL, 150, 730, MCDU_get_popup("mcdu entry"), 40 * scale_factor_font, false, false, TEXT_ALIGN_LEFT, {1,1,1})
             for i,click_rect in ipairs(click_rect_all) do
                 --sasl.gl.drawRectangle(click_rect.x, click_rect.y, click_rect.w, click_rect.h, {1,0,0})
             end
