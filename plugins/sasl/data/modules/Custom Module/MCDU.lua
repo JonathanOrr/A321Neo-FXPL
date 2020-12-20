@@ -1253,10 +1253,8 @@ function (phase)
 			fmgs_dat["dest"] = airp_dest.id
 
             print("b5")
-            deg, min, sec, dir = mcdu_ctrl_dd_to_dmsd(airp_origin.lat, "lat")
-            fmgs_dat["lat fmt"] = tostring(deg) .. tostring(Round(min, 1)) .. tostring(dir)
-            deg, min, sec, dir = mcdu_ctrl_dd_to_dmsd(airp_origin.lon, "lon")
-            fmgs_dat["lon fmt"] = tostring(deg) .. tostring(Round(min, 1)) .. tostring(dir)
+            fmgs_dat["origin lat"] = airp_origin.lat
+            fmgs_dat["origin lon"] = airp_origin.lon
 
 			mcdu_open_page(401) -- open 401 init routes
 
@@ -1456,15 +1454,23 @@ function (phase)
         --[[ LAT / LONG --]]
 
         if fmgs_dat["fmgs init"] then
-            mcdu_dat["s"]["L"][1].txt = "lat"
+            mcdu_dat["s"]["L"][1].txt = "lat    reference"
             mcdu_dat["s"]["R"][1].txt = "long"
 
             --irs latlon change selection
             if fmgs_dat["latlon sel"] == "lat" then
-                mcdu_dat["s"]["L"][1].txt = "lat^"
+                mcdu_dat["s"]["L"][1].txt = "lat^   reference"
             elseif fmgs_dat["latlon sel"] == "lon" then
                 mcdu_dat["s"]["R"][1].txt = "^long"
             end
+
+            mcdu_dat["l"]["L"][1][1] = {txt = "          "  .. fmgs_dat["origin"], col = "green"}
+            deg, min, sec, dir = mcdu_ctrl_dd_to_dmsd(airp_origin.lat, "lat")
+            mcdu_dat["l"]["L"][1][2] = {txt = tostring(deg) .. "º    "  .. tostring(dir), col = "cyan"}
+            mcdu_dat["l"]["L"][1][3] = {txt = "   " ..tostring(Round(min, 1)), col = "cyan", size = "s"}
+            deg, min, sec, dir = mcdu_ctrl_dd_to_dmsd(airp_origin.lon, "lon")
+            mcdu_dat["l"]["R"][1][1] = {txt = tostring(deg) .. "º    "  .. tostring(dir), col = "cyan"}
+            mcdu_dat["l"]["R"][1][2] = {txt = tostring(Round(min, 1)) .. " ", col = "cyan", size = "s"}
 
         end
 
