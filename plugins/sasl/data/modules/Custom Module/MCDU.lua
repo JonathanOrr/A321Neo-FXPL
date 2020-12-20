@@ -1587,27 +1587,29 @@ function (phase)
         end
         input = mcdu_get_entry(possible_inputs)
 
-        -- is input valid?
+         -- is input valid?
         if input ~= NIL then
             i = 1
-            while string.sub(input, i, i) ~= "/" or i == string.len(input) do
+            while string.sub(input, i, i) ~= "/" and i < string.len(input) do
                 i = i + 1
             end
-
-            -- set idle and perf to input
-            fmgs_dat["idle"] = tonumber(string.sub(input, 1, i - 1))
-            fmgs_dat["perf"] = tonumber(string.sub(input, i + 1, -1))
 
             -- e.g. 1.0
             if i == string.len(input) then
                 -- set idle to input
                 fmgs_dat["idle"] = tonumber(input)
-            end
+				fmgs_dat["perf"] = fmgs_dat["perf"] or 0
             -- e.g. /1.0
-            if i == 1 then
+            elseif i == 1 then
                 -- set perf to input
+				fmgs_dat["idle"] = fmgs_dat["idle"] or 0
                 fmgs_dat["perf"] = tonumber(string.sub(input, 2, -1))
-            end
+			-- e.g. 1.0/1.0
+			else
+				-- set idle and perf to input
+				fmgs_dat["idle"] = tonumber(string.sub(input, 1, i - 1))
+				fmgs_dat["perf"] = tonumber(string.sub(input, i + 1, -1))
+			end
 
             -- output idle/perf
             fmgs_dat["idle/perf"] = ""
