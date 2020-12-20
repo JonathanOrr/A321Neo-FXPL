@@ -575,6 +575,10 @@ function update ()
         set(Adirs_ir_is_ok[3], 1) 
     end
 
+    set(PFD_Capt_Pitch, get(Flightmodel_pitch)) -- TODO
+    set(PFD_Fo_Pitch, get(Flightmodel_pitch))   -- TODO
+    set(PFD_Capt_Roll, get(Flightmodel_roll))   -- TODO
+    set(PFD_Fo_Roll, get(Flightmodel_roll))     -- TODO
 
     update_status_datarefs(is_capt_adr_ok, is_fo_adr_ok, is_capt_irs_ok, is_fo_irs_ok, has_capt_att, has_fo_att)
 

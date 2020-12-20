@@ -28,6 +28,8 @@
 -------------------------------------------------------------------------------
 
 -------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 -- EMULATOR SHELL CODE (I of II)
 --    Simulates SASL running on a lua intrepreter (or https://repl.it)
 --    instead of booting up X-Plane everytime you want to run this.
@@ -87,6 +89,14 @@ if EMULATOR then
 		print(EMULATOR_HEADER .. "Command " .. str)
 	end
 
+	function EmulatorSasl:findNavAid(name, a, b, c, d, find_type)
+		return 1
+	end
+
+	function EmulatorSasl:getNavAidInfo(id)
+		return NAV_AIRPORT, 121, 141, 300, 110.500, 70, "id", "name", true
+	end
+
 	-- SASL OpenGL Class
 	EmulatorGL = {}
 
@@ -99,9 +109,6 @@ if EMULATOR then
 
 	function EmulatorGL.loadFont(str)
 		print(EMULATOR_HEADER .. "Load font " .. str)
-	end
-
-	function EmulatorGL.setFontGlyphSpacingFactor(str, str2)
 	end
 
 	function EmulatorGL.drawText(font, x, y, str, size, bool1, bool2, align, color)
@@ -180,6 +187,7 @@ if EMULATOR then
 	ECAM_WHITE = {1.0, 1.0, 1.0}
 	ECAM_LINE_GREY = {62/255, 74/255, 91/255}
 	ECAM_HIGH_GREY = {0.6, 0.6, 0.6}
+	ECAM_YELLOW = {1.0, 1.0, 0}
 	ECAM_BLUE = {0.004, 1.0, 1.0}
 	ECAM_GREEN = {0.20, 0.98, 0.20}
 	ECAM_HIGH_GREEN = {0.1, 0.6, 0.1}
@@ -189,9 +197,27 @@ if EMULATOR then
 	ECAM_GREY = {0.3, 0.3, 0.3}
 	ECAM_BLACK = {0, 0, 0}
 
+	NAV_UNKNOWN = -1
+	NAV_AIRPORT = 0
+	NAV_NDB = 1
+	NAV_VOR = 2
+	NAV_ILS = 3
+	NAV_LOCALIZER = 4
+	NAV_GLIDESLOPE = 5
+	NAV_OUTERMARKER = 6
+	NAV_MIDDLEMARKER = 7
+	NAV_INNERMARKER = 8
+	NAV_FIX = 9
+	NAV_DME = 10
+
 end
 -- END OF EMULATOR SHELL CODE I OF II (CONTINUED AT END OF SCRIPT)
 ----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+
+
+
 -- START OF MCDU CODE
 -- START OF MCDU CODE
 -- START OF MCDU CODE
@@ -217,8 +243,8 @@ local MCDU_DIV_ALIGN = {"L", "R"}
 local MCDU_DIV_ROW = {1,2,3,4,5,6}
 
 --line spacing
-local MCDU_DRAW_OFFSET = {x = 20, y = 420} -- starting offset for line drawing
-local MCDU_DRAW_SPACING = {x = 520, y = -35.3} -- change in offset per line drawn
+local MCDU_DRAW_OFFSET = {x = 15, y = 420} -- starting offset for line drawing
+local MCDU_DRAW_SPACING = {x = 530, y = -37} -- change in offset per line drawn
 
 --reference table for drawing
 local MCDU_DISP_COLOR = 
@@ -227,7 +253,7 @@ local MCDU_DISP_COLOR =
     ["cyan"] =    ECAM_BLUE,
     ["green"] =   ECAM_GREEN,
     ["amber"] =   ECAM_ORANGE,
-    ["yellow"] =  {1.00, 1.00, 0.00},
+    ["yellow"] =  ECAM_YELLOW,
     ["magenta"] = ECAM_MAGENTA,
     ["red"] =     ECAM_RED,
 
@@ -237,15 +263,8 @@ local MCDU_DISP_COLOR =
 --font size
 local MCDU_DISP_TEXT_SIZE =
 {
-    ["s"] = 19.51,
-    ["l"] = 33.4,
-}
-
---font glyph spacing
-local MCDU_DISP_TEXT_SPACING =
-{
-    ["s"] = 1.735,
-    ["l"] = 0.99,
+    ["s"] = 25,
+    ["l"] = 37
 }
 
 --alignment
@@ -254,10 +273,6 @@ local MCDU_DISP_TEXT_ALIGN =
     ["L"] = TEXT_ALIGN_LEFT,
     ["R"] = TEXT_ALIGN_RIGHT,
 }
-
-
---fonts
-local B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
 
 -- alphanumeric & decimal FMC entry keys
 local MCDU_ENTRY_KEYS = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", ".", "overfly", "slash", "space"}
@@ -413,7 +428,7 @@ local function mcdu_align_right(str, required_length)
 end
 
 --align an input to the left, given the total length
---e.g. ("ad", 4) -> "  ad"
+--e.g. ("ad", 4) -> "ad  "
 local function mcdu_align_left(str, required_length)
     while #tostring(str) < required_length do
         str = str .. " "
@@ -667,8 +682,6 @@ local function draw_dat(dat, draw_size, disp_x, disp_y, disp_text_align)
 
     -- text size 
     disp_text_size = MCDU_DISP_TEXT_SIZE[disp_size]
-    -- text spacing
-    disp_spacing = MCDU_DISP_TEXT_SPACING[disp_size]
 
     -- replace { with the box
     text = ""
@@ -686,7 +699,7 @@ local function draw_dat(dat, draw_size, disp_x, disp_y, disp_text_align)
     disp_text = text
 
     -- now draw it!
-    table.insert(draw_lines, {disp_x = disp_x, disp_y = disp_y, disp_text = disp_text, disp_text_size = disp_text_size, disp_text_align = disp_text_align, disp_color = disp_color, disp_spacing = disp_spacing})
+    table.insert(draw_lines, {font = disp_size, disp_x = disp_x, disp_y = disp_y, disp_text = disp_text, disp_text_size = disp_text_size, disp_text_align = disp_text_align, disp_color = disp_color})
 end
 
 local function draw_get_x(align)
@@ -730,10 +743,10 @@ local function draw_update()
 
     --draw title line
     if mcdu_dat_title[1] == nil then
-        draw_dat(mcdu_dat_title, "l", draw_get_x(1), draw_get_y(-0.5), MCDU_DISP_TEXT_ALIGN["L"])
+        draw_dat(mcdu_dat_title, "l", draw_get_x(1), draw_get_y(-1), MCDU_DISP_TEXT_ALIGN["L"])
     else
         for l,dat in pairs(mcdu_dat_title) do
-            draw_dat(dat, "l", draw_get_x(1), draw_get_y(-0.5), MCDU_DISP_TEXT_ALIGN["L"])
+            draw_dat(dat, "l", draw_get_x(1), draw_get_y(-1), MCDU_DISP_TEXT_ALIGN["L"])
         end
     end
 end
@@ -788,12 +801,16 @@ function draw()
 
         --draw all horizontal lines
         for i,line in ipairs(draw_lines) do
-            sasl.gl.setFontGlyphSpacingFactor(B612MONO_regular, line.disp_spacing)
-            sasl.gl.drawText(B612MONO_regular, line.disp_x, line.disp_y, line.disp_text, line.disp_text_size, false, false, line.disp_text_align, line.disp_color)
+            if line.font == "l" then
+                font = Font_AirbusDUL
+            else
+                font = Font_AirbusDUL_small
+            end
+            sasl.gl.drawText(font, line.disp_x, line.disp_y, line.disp_text, line.disp_text_size, false, false, line.disp_text_align, line.disp_color)
         end
 
         --draw scratchpad
-        sasl.gl.drawText(B612MONO_regular, draw_get_x(1), draw_get_y(12), mcdu_entry, MCDU_DISP_TEXT_SIZE["l"], false, false, MCDU_DISP_TEXT_ALIGN["L"], MCDU_DISP_COLOR["white"])
+        sasl.gl.drawText(Font_AirbusDUL, draw_get_x(1), draw_get_y(12), mcdu_entry, MCDU_DISP_TEXT_SIZE["l"], false, false, MCDU_DISP_TEXT_ALIGN["L"], MCDU_DISP_COLOR["white"])
 
     end
 	perf_measure_stop("MCDU:draw()")
@@ -806,74 +823,6 @@ end
 --
 --
 --]]
-
-local mcdu_ctrl_instructions = {}
-local mcdu_ctrl_listeners = {}
-
---add a listener for when the function value changes, callback is called
---the data_listener_func is called every update cycle, it determines whether the callback has to be called or not.
---if data_listener_func returns "EXIT" as its return value, callback function is called and the listener is destroyed.
---if data_listener_func returns "CALL" as its return value, callback function is called but listener is NOT destroyed.
---this is a typical structure for listeners.
-local function mcdu_ctrl_add_listener(data_listener_func, callback)
-    table.insert(mcdu_ctrl_listeners, 1, {data_listener_func = data_listener_func, callback = callback})
-end
-
---check whether listener has changed or not
---this is called every update cycle
-local function mcdu_ctrl_exe_listener(listener)
-    if listener.data_listener_func() == "CALL" then
-        listener.callback() --call the callback
-    end
-    if listener.data_listener_func() == "EXIT" then
-        listener.callback() --call the callback, exit the loop and destroy
-        for i, listener_b in ipairs(mcdu_ctrl_listeners) do
-            if listener.data_listener_func == listener_b.data_listener_func then
-                if listener.callback == listener_b.callback then
-                    table.remove(mcdu_ctrl_listeners, i) -- destroy the callback
-                end
-            end
-        end
-    end
-end
-
---add an XP FMC instruction for the XP FMC to execute
-local function mcdu_ctrl_add_inst(inst)
-    table.insert(mcdu_ctrl_instructions, 1, inst)
-end
-
---execute the next XP FMC instruction
-local function mcdu_ctrl_exe_inst()
-    if #mcdu_ctrl_instructions == 0 then
-        set(mcdu_debug_busy, 0)
-		return
-	end
-    set(mcdu_debug_busy, 1)
-
-	inst = mcdu_ctrl_instructions[#mcdu_ctrl_instructions]
-	table.remove(mcdu_ctrl_instructions)
-    if inst.type == "CMD" then
-        sasl.commandOnce(findCommand(inst.arg))
-    end
-    if inst.type == "GET_LN" then
-        refcon = inst.refcon or 0
-        inst.callback(get(globalPropertys("sim/cockpit2/radios/indicators/fms_cdu1_text_line" .. inst.arg)), refcon)
-    end
-    if inst.type == "INPUT" then
-        if string.sub(get(globalPropertys("sim/cockpit2/radios/indicators/fms_cdu1_text_line13")), 2, 2) == " " then
-            for i = 0,#inst.arg - 1 do
-                table.insert(mcdu_ctrl_instructions, {type = "CMD", arg = "sim/FMS/key_" .. string.upper(string.sub(inst.arg, #inst.arg - i, #inst.arg - i))})
-            end
-        else
-            sasl.commandOnce(findCommand("sim/FMS/key_clear"))
-            --delete the entire scratchpad
-            table.insert(mcdu_ctrl_instructions, inst)
-        end
-    end
-    if inst.type == "NOOP" then
-        -- no operation
-    end
-end
 
 --sasl get nav aid information
 local function mcdu_ctrl_get_nav(find_nameid, find_type)
@@ -898,6 +847,40 @@ local function mcdu_ctrl_get_nav(find_nameid, find_type)
     return nav
 end
 
+-- converts Decimal Degrees and Axis (lat/lon) to Degrees Minute Seconds Direction
+local function mcdu_ctrl_dd_to_dmsd(dd, axis)
+    if axis == "lat" then
+        if d > 0 then
+            p = "N"
+        else
+            p = "S"
+        end
+    else
+        if d > 0 then
+            p = "E"
+        else
+            p = "W"
+        end
+    end
+
+    dd = math.abs(dd)
+    d = dd
+    m = d % 1 * 60
+    s = m % 1 * 60
+    return math.floor(d), m, s, p
+end
+
+-- converts Degrees Minute Seconds Direction to Decimal Degrees
+local function mcdu_ctrl_dmsd_to_dd(d,m,s,dir)
+    if dir == "E" or dir == "N" then
+        p = 1
+    else
+        p = -1
+    end
+    dd = (d + m*(1/60) + s*(1/3600)) * p
+    return dd
+end
+
 --[[
 --mcdu_ctrl_get_nav("ksea", NAV_ILS)
 --id = sasl.findFirstNavAidOfType(NAV_ILS)
@@ -918,13 +901,15 @@ for i = 0,10 do
 end
 --]]
 
-mcdu_entry = ""
+mcdu_entry = string.upper("ksea/kbfi")
 
 --update
 function update()
 	perf_measure_start("MCDU:update()")
     if get(mcdu_page) == 0 then --on start
-       mcdu_open_page(505) --open 505 A/C status
+       --mcdu_open_page(505) --open 505 A/C status
+       --mcdu_open_page(1106) --open 1106 mcdu menu options debug
+	   mcdu_open_page(400)
     end
 
     -- display next message
@@ -934,15 +919,6 @@ function update()
         mcdu_message_showing = true
         table.remove(mcdu_messages)
     end
-
-    -- check and execute all listeners
-    for i, listener in ipairs(mcdu_ctrl_listeners) do
-        mcdu_ctrl_exe_listener(listener)
-    end
-
-    -- check and execute next XP FMC instruction
-    mcdu_ctrl_exe_inst()
-	perf_measure_stop("MCDU:update()")
 end
 
 --[[
@@ -976,81 +952,6 @@ end
 --
 --
 --]]
-
-local function mcdu_ctrl_get_cycle(callback)
-    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/index"})
-    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/ls_1l"})
-    mcdu_ctrl_add_inst({type = "GET_LN", arg = "4", callback = callback})
-end
-
--- returns the result for error checking
-local function mcdu_ctrl_try_catch(callback)
-    mcdu_ctrl_add_inst({type = "NOOP"})
-    mcdu_ctrl_add_inst({type = "GET_LN", arg = "13", callback = 
-    function (val) 
-        if val:sub(1,2) ~= "[I" then -- [INVALID ENTRY]
-            callback()
-
-        else
-            mcdu_send_message("not in database")-- INVALID ENTRY
-        end
-    end})
-end
-
--- MCDU - X-PLANE FMC INTERACTION
-
-local function mcdu_ctrl_set_fpln_origin(input, try_catch)
-    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/fpln"})
-    mcdu_ctrl_add_inst({type = "INPUT", arg = input})
-    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/ls_1l"})
-    mcdu_ctrl_try_catch(try_catch)
-end
-
-local function mcdu_ctrl_set_fpln_dest(input, try_catch)
-    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/fpln"})
-    mcdu_ctrl_add_inst({type = "INPUT", arg = input})
-    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/ls_1r"})
-    mcdu_ctrl_try_catch(try_catch)
-end
-
-local function mcdu_ctrl_get_origin_latlon(origin, callback)
-    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/index"})
-    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/ls_2r"})
-    mcdu_ctrl_add_inst({type = "INPUT", arg = origin})
-    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/ls_1l"})
-    mcdu_ctrl_add_inst({type = "GET_LN", arg = "4", callback = callback})
-end
-
-local function mcdu_ctrl_get_runway_length(runway, refcon, callback)
-    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/index"})
-    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/ls_2r"})
-    mcdu_ctrl_add_inst({type = "INPUT", arg = runway})
-    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/ls_1l"})
-    mcdu_ctrl_add_inst({type = "GET_LN", arg = "6", callback = callback, refcon = refcon})
-end
-
-local function mcdu_ctrl_get_runways_origin(accessor_callback)
-    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/dep_arr"})
-    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/ls_1l"})
-    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/prev"})
-    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/prev"})
-    mcdu_ctrl_add_inst({type = "GET_LN", arg = "2", callback = accessor_callback})
-    mcdu_ctrl_add_inst({type = "GET_LN", arg = "4", callback = accessor_callback})
-    mcdu_ctrl_add_inst({type = "GET_LN", arg = "6", callback = accessor_callback})
-    mcdu_ctrl_add_inst({type = "GET_LN", arg = "8", callback = accessor_callback})
-    mcdu_ctrl_add_inst({type = "GET_LN", arg = "10", callback = accessor_callback})
-    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/next"})
-    mcdu_ctrl_add_inst({type = "GET_LN", arg = "2", callback = accessor_callback})
-    mcdu_ctrl_add_inst({type = "GET_LN", arg = "4", callback = accessor_callback})
-    mcdu_ctrl_add_inst({type = "GET_LN", arg = "6", callback = accessor_callback})
-    mcdu_ctrl_add_inst({type = "GET_LN", arg = "8", callback = accessor_callback})
-    mcdu_ctrl_add_inst({type = "GET_LN", arg = "10", callback = accessor_callback})
-end
-
-local function mcdu_ctrl_get_sids(callback)
-    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/dep_arr"})
-    mcdu_ctrl_add_inst({type = "CMD", arg = "sim/FMS/ls_1l"})
-end
 
 -- FLIGHT PLAN
 
@@ -1178,6 +1079,9 @@ end
 -- 400 init
 mcdu_sim_page[400] =
 function (phase)
+    if phase == "update" then
+    end
+
     if phase == "render" then
         mcdu_dat_title.txt = "          init"
 
@@ -1302,7 +1206,9 @@ function (phase)
             "!!",  -- 10 cost index
             "!"    -- 1 cost index
         })
-        fmgs_dat["cost index"] = input
+        if input ~= NIL then
+            fmgs_dat["cost index"] = input
+        end
         mcdu_open_page(400) -- reload
     end
     -- crz fl/temp
@@ -1322,57 +1228,87 @@ function (phase)
             "/-!!"  -- -40 (-40 celcius)
         })
 
-        --automatically calculate crz temp
-        if variation >= 1 and variation <= 3 then
-            if variation ~= 3 then
-                alt = input
+        if input ~= NIL then
+            --automatically calculate crz temp
+            if variation >= 1 and variation <= 3 then
+                if variation ~= 3 then
+                    alt = input
+                else
+                    alt = input:sub(3,5)
+                end
+                fmgs_dat["crz temp"] = math.floor(tonumber(alt) * -0.2 + 16)
+                fmgs_dat["crz temp alt"] = false --crz temp has not been altered
+
             else
-                alt = input:sub(3,5)
+                fmgs_dat["crz temp alt"] = true --crz temp has been manually altered
             end
-            fmgs_dat["crz temp"] = math.floor(tonumber(alt) * -0.2 + 16)
-            fmgs_dat["crz temp alt"] = false --crz temp has not been altered
 
-        else
-            fmgs_dat["crz temp alt"] = true --crz temp has been manually altered
+            --set crz FL or crz temp
+            if variation == 1 then
+                fmgs_dat["crz fl"] = input * 100
+            elseif variation == 2 then
+                fmgs_dat["crz fl"] = input * 100
+            elseif variation == 3 then
+                fmgs_dat["crz fl"] = tonumber(input:sub(3,5)) * 100
+            elseif variation == 4 then
+                fmgs_dat["crz fl"] = input:sub(3,5) * 100
+                fmgs_dat["crz temp"] = input:sub(7,7) * -1
+            elseif variation == 5 then
+                fmgs_dat["crz fl"] = input:sub(3,5) * 100
+                fmgs_dat["crz temp"] = input:sub(7,8) * -1
+            elseif variation == 6 then
+                fmgs_dat["crz fl"] = input:sub(3,5) * 100
+                fmgs_dat["crz temp"] = input:sub(7,8)
+            elseif variation == 7 then
+                fmgs_dat["crz fl"] = input:sub(3,5) * 100
+                fmgs_dat["crz temp"] = input:sub(7,9)
+            elseif variation == 8 then
+                fmgs_dat["crz temp"] = input:sub(2,2) * -1
+            elseif variation == 9 then
+                fmgs_dat["crz temp"] = input:sub(2,3) * -1
+            elseif variation == 10 then
+                fmgs_dat["crz temp"] = input:sub(2,3)
+            elseif variation == 11 then
+                fmgs_dat["crz temp"] = input:sub(2,4)
+            end
+            mcdu_open_page(400) -- reload
         end
-
-        --set crz FL or crz temp
-        if variation == 1 then
-            fmgs_dat["crz fl"] = input * 100
-        elseif variation == 2 then
-            fmgs_dat["crz fl"] = input * 100
-        elseif variation == 3 then
-            fmgs_dat["crz fl"] = tonumber(input:sub(3,5)) * 100
-        elseif variation == 4 then
-            fmgs_dat["crz fl"] = input:sub(3,5) * 100
-            fmgs_dat["crz temp"] = input:sub(7,7) * -1
-        elseif variation == 5 then
-            fmgs_dat["crz fl"] = input:sub(3,5) * 100
-            fmgs_dat["crz temp"] = input:sub(7,8) * -1
-        elseif variation == 6 then
-            fmgs_dat["crz fl"] = input:sub(3,5) * 100
-            fmgs_dat["crz temp"] = input:sub(7,8)
-        elseif variation == 7 then
-            fmgs_dat["crz fl"] = input:sub(3,5) * 100
-            fmgs_dat["crz temp"] = input:sub(7,9)
-        elseif variation == 8 then
-            fmgs_dat["crz temp"] = input:sub(2,2) * -1
-        elseif variation == 9 then
-            fmgs_dat["crz temp"] = input:sub(2,3) * -1
-        elseif variation == 10 then
-            fmgs_dat["crz temp"] = input:sub(2,3)
-        elseif variation == 11 then
-            fmgs_dat["crz temp"] = input:sub(2,4)
-        end
-        mcdu_open_page(400) -- reload
     end
 
     -- from/to
     if phase == "R1" then
         --format e.g. ksea/kbfi
         input = mcdu_get_entry("####/####")
-        --check for correct entry
         if input ~= NIL then
+
+			-- parse data
+			airp_origin_name = input:sub(1,4):lower()
+            airp_dest_name = input:sub(6,9):lower()
+
+            airp_origin = mcdu_ctrl_get_nav(airp_origin_name, NAV_AIRPORT)
+            airp_dest = mcdu_ctrl_get_nav(airp_dest_name, NAV_AIRPORT)
+
+            -- do these airports exist?
+			if airp_origin.navtype == NAV_UNKNOWN or
+			   airp_dest.navtype == NAV_UNKNOWN then
+				mcdu_send_message("NOT IN DATABASE")
+				mcdu_open_page(400) -- reload
+				return
+			end			
+
+			-- init data
+			fmgs_dat["fmgs init"] = true
+			fmgs_dat["origin"] = airp_origin.id
+			fmgs_dat["dest"] = airp_dest.id
+
+            d, m, s, dir = mcdu_ctrl_dd_to_dmsd(airp_origin.lat, "lat")
+            fmgs_dat["lat fmt"] = d .. Round(m, 1) .. dir
+            d, m, s, dir = mcdu_ctrl_dd_to_dmsd(airp_origin.lon, "lon")
+            fmgs_dat["lon fmt"] = d .. Round(m, 1) .. dir
+
+			mcdu_open_page(401) -- open 401 init routes
+
+			--[[
             --set orgin for XP FMC
             --format e.g. ksea/kbfi
             airp_origin = input:sub(1,4):lower()
@@ -1482,6 +1418,7 @@ function (phase)
             end) --end callback
 
             mcdu_open_page(400) -- reload
+			--]]
         end
     end
 
@@ -1499,7 +1436,9 @@ function (phase)
     -- tropo
     if phase == "R6" then
         input = mcdu_get_entry("!!!")
-        fmgs_dat["tropo"] = input * 100
+		if input ~= NIL then
+      	  fmgs_dat["tropo"] = input * 100
+		end
         mcdu_open_page(400) -- reload
     end
 
@@ -1543,6 +1482,22 @@ function (phase)
             fmgs_dat["lon fmt"] = fmgs_dat["lon"] .. fmgs_dat["lon_dir"]
         end
         mcdu_open_page(400) -- reload
+    end
+end
+
+-- 401 init routes
+mcdu_sim_page[401] =
+function (phase)
+    if phase == "render" then
+        mcdu_dat_title.txt = "       " ..  fmgs_dat["origin"] .. "/" .. fmgs_dat["dest"]
+
+		mcdu_dat["s"]["L"][2] = {txt = "  none", col = "green"}
+		mcdu_dat["l"]["L"][6].txt = "<return"
+
+        draw_update()
+    end
+	if phase == "L6" then
+        mcdu_open_page(400) -- open 400 init
     end
 end
 
@@ -1601,7 +1556,7 @@ function (phase)
         end
         
         mcdu_dat["s"]["L"][2].txt = " active data base"
-		mcdu_dat["l"]["L"][2] = {txt = "default", col = "cyan"}
+		mcdu_dat["l"]["L"][2] = {txt = " 28 nov-25dec ab49012001", col = "cyan"}
         mcdu_dat["s"]["L"][3].txt = " second data base"
         mcdu_dat["l"]["L"][3] = {txt = " none", col = "cyan", size = "s"}
 
@@ -1611,7 +1566,7 @@ function (phase)
         mcdu_dat["l"]["L"][6] = {txt = "+0.0/+0.0", col = "green"}
 
 		mcdu_dat["s"]["R"][6].txt = "software"
-        mcdu_dat["l"]["R"][6].txt = "options>"
+        mcdu_dat["l"]["R"][6].txt = "status/xload>"
 
        
         draw_update()
@@ -2075,6 +2030,7 @@ function (phase)
 
         mcdu_dat["l"]["L"][1].txt = "<about"
         mcdu_dat["l"]["L"][2].txt = "<colours"
+        mcdu_dat["l"]["R"][2].txt = "debug>"
 
         mcdu_dat["s"]["R"][3] = {txt = "head developer      ", col = "white"}
         mcdu_dat["l"]["R"][3] = {txt = "jonathan orr       ", col = "cyan"}
@@ -2093,6 +2049,9 @@ function (phase)
     end
     if phase == "L2" then
         mcdu_open_page(1103) -- open 1103 mcdu menu options colours
+    end
+    if phase == "R2" then
+        mcdu_open_page(1106) -- open 1106 mcdu menu options debug
     end
     if phase == "R6" then
         mcdu_open_page(1100) -- open 1100 mcdu menu
@@ -2266,7 +2225,7 @@ function (phase)
             ["cyan"] =    ECAM_BLUE,
             ["green"] =   ECAM_GREEN,
             ["amber"] =   ECAM_ORANGE,
-            ["yellow"] =  {1.00, 1.00, 0.00},
+            ["yellow"] =  ECAM_YELLOW,
             ["magenta"] = ECAM_MAGENTA,
             ["red"] =     ECAM_RED,
 
@@ -2342,6 +2301,32 @@ function (phase)
     end
 end
 
+-- 1106 mcdu menu options debug
+mcdu_sim_page[1106] =
+function (phase)
+    if phase == "render" then
+        mcdu_dat_title.txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
+        mcdu_dat["s"]["L"][1].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
+        mcdu_dat["l"]["L"][1].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
+        mcdu_dat["s"]["R"][2].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
+        mcdu_dat["l"]["R"][2].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
+        mcdu_dat["s"]["L"][3].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
+        mcdu_dat["l"]["L"][3].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
+        mcdu_dat["s"]["R"][4].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
+        mcdu_dat["l"]["R"][4].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
+        mcdu_dat["s"]["L"][5].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
+        mcdu_dat["l"]["L"][5].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
+        mcdu_dat["s"]["R"][6].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
+        mcdu_dat["l"]["R"][6].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
+
+        draw_update()
+    end
+    if phase == "R6" then
+        mcdu_open_page(1101) -- open 1101 mcdu menu options
+    end
+end
+
+
 -- 1200 air port
 mcdu_sim_page[1200] =
 function (phase)
@@ -2359,7 +2344,9 @@ end
 -- END OF MCDU CODE
 -- END OF MCDU CODE
 
--------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 -- EMULATOR SHELL CODE CONTINUED (II of II)
 --    Simulates SASL running on a lua intrepreter (or https://repl.it)
 --    instead of booting up X-Plane everytime you want to run this.
@@ -2374,8 +2361,8 @@ if EMULATOR then
 	Engine_option = "Engine_option"
 	set(Mcdu_enabled, 1)
 	set(mcdu_page, 0)
-	set(TIME, 0)
-	set(DELTA_TIME, 5)
+	set(TIME, 1)
+	set(DELTA_TIME, 0)
 	set(Engine_option, 0)
 
 	print("")
@@ -2389,6 +2376,8 @@ if EMULATOR then
 	found_command = true
 	while true do
 		os.execute("clear")
+		set(TIME, get(TIME) + 1)
+		
 		print()
 		if not found_command then
 			print(EMULATOR_HEADER .. "COMMAND NOT FOUND")
@@ -2413,11 +2402,11 @@ if EMULATOR then
 			str = line.disp_text
 			color = line.disp_color
 
-			x = ((line.disp_x - 20) / 520) + 1
+			x = math.floor(((line.disp_x - 20) / 520) + 1.1)
 			y = math.floor(14.1 -((line.disp_y - 31.7) / 35.3))
 
 			if x == 2 then
-				x = 24 - #str
+				x = 25 - #str
 			end
 
 			if line.disp_color == MCDU_DISP_COLOR["cyan"] then
@@ -2451,7 +2440,7 @@ if EMULATOR then
 					 j = 999
 				end
 				if string.sub(str,j,j) ~= " " then
-					chars[y] = string.sub(chars[y], 0, i) .. string.sub(str, j, j) .. string.sub(chars[y], i+1, #chars[y])
+					chars[y] = string.sub(chars[y], 1, i) .. string.sub(str, j, j) .. string.sub(chars[y], i+1, #chars[y])
 				end
 			end
         end 
@@ -2472,6 +2461,8 @@ if EMULATOR then
 			chars[spec.y] = string.sub(chars[spec.y], 1, j-1) .. spec.word .. string.sub(chars[spec.y], j, #chars[spec.y])
 		end
 
+		chars[14] = mcdu_entry
+
 		for i = 1,14,1 do -- columns
 			if (math.fmod((i+1)*0.5,1) == 0) then
 				out_line = (i - 1) / 2
@@ -2486,10 +2477,12 @@ if EMULATOR then
 		print()
 
 		print("List of commands:")
-		print("  a321neo/cockpit/mcdu/key/N")
+		print("  a321neo/cockpit/mcdu/key <-- to enter key mode")
+		print("  a321neo/cockpit/mcdu/side/L1 <-- side keys: L1-L6, R1-R6")
 
 		for i = 1, #commands, 1 do
-			if string.sub(commands[i].name,0,24) ~= "a321neo/cockpit/mcdu/key" then
+			if string.sub(commands[i].name,0,24) ~= "a321neo/cockpit/mcdu/key" and
+			   string.sub(commands[i].name,0,25) ~= "a321neo/cockpit/mcdu/side" then
 				print("  " .. commands[i].name)
 			end
 		end
@@ -2501,6 +2494,12 @@ if EMULATOR then
 		print("Please enter a command name.")
 		io.write("	a321neo/cockpit/mcdu/")
 		user_command = io.read("*l")
+		
+		if user_command == "key" then --enter keymode
+			print("Please enter mcdu entry")
+			user_entry = io.read("*l")
+			mcdu_entry = string.upper(user_entry)
+		end
 
 		found_command = false
 		for i = 1, #commands, 1 do
@@ -2513,3 +2512,6 @@ if EMULATOR then
 end
 -- END OF EMULATOR SHELL CODE II OF II (CONTINUED AT END OF SCRIPT)
 ----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+

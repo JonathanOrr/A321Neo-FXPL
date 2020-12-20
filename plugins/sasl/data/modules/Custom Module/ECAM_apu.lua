@@ -25,9 +25,6 @@ local function draw_triangle(x,y)
 end
 
 local function draw_apu_valve_and_needle()
-    if get(Gen_APU_pwr) == 1 then
-        SASL_draw_img_xcenter_aligned(ECAM_APU_triangle_img, size[1]/2-250, size[2]/2+325, 27, 20, ECAM_GREEN)
-    end
 
     --APU gen box
     SASL_drawSegmentedImg(ECAM_APU_gen_img, size[1]/2-312, size[2]/2+178, 501, 139, 4, get(Ecam_apu_gen_state) + 1)
@@ -48,7 +45,7 @@ function draw_apu_page()
 
     --avail--
     if get(Apu_avail) == 1 then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2+300, "AVIAL", 36, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2+300, "AVAIL", 36, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
     end
 
     --low pressure--
@@ -76,8 +73,7 @@ function draw_apu_page()
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2-235, size[2]/2+192, hz_val, 23, false, false, TEXT_ALIGN_RIGHT, color_hz)
 
         if ELEC_sys.buses.ac1_powered_by == 3 then
-            sasl.gl.drawWideLine (size[1]/2-250, size[2]/2+320, size[1]/2-250, size[2]/2+345, 3, ECAM_GREEN )
-            draw_triangle(size[1]/2-250, size[2]/2+370)
+            SASL_draw_img_xcenter_aligned(ECAM_APU_triangle_img, size[1]/2-250, size[2]/2+325, 27, 20, ECAM_GREEN)
         end
 
     end

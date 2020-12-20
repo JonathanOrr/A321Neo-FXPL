@@ -189,6 +189,11 @@ PFD_Fo_Baro_Altitude = createGlobalPropertyf("a321neo/cockpit/PFD/fo_baro_alt", 
 PFD_Capt_VS = createGlobalPropertyf("a321neo/cockpit/PFD/capt_vs", 0, false, true, false) -- Displayed V/S CAPT (affected by ADIRS)
 PFD_Fo_VS = createGlobalPropertyf("a321neo/cockpit/PFD/fo_vs", 0, false, true, false)   -- Displayed V/S F/O (affected by ADIRS)
 
+PFD_Capt_Pitch = createGlobalPropertyf("a321neo/cockpit/PFD/capt_pitch", 0, false, true, false) -- Displayed Pitch CAPT (affected by ADIRS)
+PFD_Capt_Roll = createGlobalPropertyf("a321neo/cockpit/PFD/capt_roll", 0, false, true, false) -- Displayed Roll CAPT (affected by ADIRS)
+PFD_Fo_Pitch = createGlobalPropertyf("a321neo/cockpit/PFD/fo_pitch", 0, false, true, false) -- Displayed Pitch CAPT (affected by ADIRS)
+PFD_Fo_Roll = createGlobalPropertyf("a321neo/cockpit/PFD/fo_roll", 0, false, true, false) -- Displayed Roll CAPT (affected by ADIRS)
+
 PFD_Capt_Ground_line = createGlobalPropertyf("a321neo/cockpit/PFD/capt_att_ground_line", 0, false, true, false)   -- Ground line on ATT moving during t/o or landing
 PFD_Fo_Ground_line = createGlobalPropertyf("a321neo/cockpit/PFD/fo_att_ground_line", 0, false, true, false)   -- Ground line on ATT moving during t/o or landing
 

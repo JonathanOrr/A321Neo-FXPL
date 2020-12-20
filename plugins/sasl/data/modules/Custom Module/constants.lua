@@ -24,6 +24,7 @@ ECAM_BLUE = {0.004, 1.0, 1.0}
 ECAM_GREEN = {0.20, 0.98, 0.20}
 ECAM_HIGH_GREEN = {0.1, 0.6, 0.1}
 ECAM_ORANGE = {1, 0.66, 0.16}
+ECAM_YELLOW = {1, 1, 0}
 ECAM_RED = {1.0, 0.0, 0.0}
 ECAM_MAGENTA = {1.0, 0.0, 1.0}
 ECAM_GREY = {0.3, 0.3, 0.3}
@@ -113,3 +114,7 @@ ANTIICE_TAT_FO       = 17
 -- Fonts
 Font_AirbusDUL = sasl.gl.loadFont("fonts/AirbusDULiberationMono.ttf")
 sasl.gl.setFontRenderMode(Font_AirbusDUL, TEXT_RENDER_FORCED_MONO, 0.6)
+
+Font_AirbusDUL_small = sasl.gl.loadFont("fonts/AirbusDULiberationMono.ttf")
+sasl.gl.setFontRenderMode(Font_AirbusDUL_small, TEXT_RENDER_FORCED_MONO, 0.6*1.47)
+
