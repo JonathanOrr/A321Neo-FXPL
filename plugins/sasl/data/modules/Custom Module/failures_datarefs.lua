@@ -47,9 +47,13 @@ FAILURE_ADR[3] = createGlobalPropertyi("a321neo/failures/adirs/adr_3", 0, false,
 
 
 FAILURE_IR = {}
-FAILURE_IR[1] = createGlobalPropertyi("a321neo/failures/adirs/ir_1", 0, false, true, false) -- 0: OK, 1: FAILED partial, 2: complete FAILURE    -- TODO This should be fixed
-FAILURE_IR[2] = createGlobalPropertyi("a321neo/failures/adirs/ir_2", 0, false, true, false) -- 0: OK, 1: FAILED partial, 2: complete FAILURE    -- TODO This should be fixed
-FAILURE_IR[3] = createGlobalPropertyi("a321neo/failures/adirs/ir_3", 0, false, true, false) -- 0: OK, 1: FAILED partial, 2: complete FAILURE    -- TODO This should be fixed
+FAILURE_IR[1] = createGlobalPropertyi("a321neo/failures/adirs/ir_1", 0, false, true, false) -- 0: OK, 1: FAILED (but ATT works if FAILURE_IR_ATT == 0
+FAILURE_IR[2] = createGlobalPropertyi("a321neo/failures/adirs/ir_2", 0, false, true, false) -- 0: OK, 1: FAILED (but ATT works if FAILURE_IR_ATT == 0
+FAILURE_IR[3] = createGlobalPropertyi("a321neo/failures/adirs/ir_3", 0, false, true, false) -- 0: OK, 1: FAILED (but ATT works if FAILURE_IR_ATT == 0
+FAILURE_IR_ATT[1] = createGlobalPropertyi("a321neo/failures/adirs/ir_1_att", 0, false, true, false) -- 0: OK, 1: FAILED (it has no effect if FAILURE_IR == 0)
+FAILURE_IR_ATT[2] = createGlobalPropertyi("a321neo/failures/adirs/ir_2_att", 0, false, true, false) -- 0: OK, 1: FAILED (it has no effect if FAILURE_IR == 0)
+FAILURE_IR_ATT[3] = createGlobalPropertyi("a321neo/failures/adirs/ir_3_att", 0, false, true, false) -- 0: OK, 1: FAILED (it has no effect if FAILURE_IR == 0)
+
 
 FAILURE_GPS_1 = createGlobalPropertyi("a321neo/failures/adirs/gps_1", 0, false, true, false) -- 0: OK, 1: FAILED
 FAILURE_GPS_2 = createGlobalPropertyi("a321neo/failures/adirs/gps_2", 0, false, true, false) -- 0: OK, 1: FAILED
