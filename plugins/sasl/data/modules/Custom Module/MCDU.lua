@@ -418,24 +418,6 @@ local function mcdu_pad_num(number, required_length)
     return str
 end
 
---align an input to the right, given the total length
---e.g. ("ad", 4) -> "  ad"
-local function mcdu_align_right(str, required_length)
-    while #tostring(str) < required_length do
-        str = " " .. str
-    end
-    return str
-end
-
---align an input to the left, given the total length
---e.g. ("ad", 4) -> "ad  "
-local function mcdu_align_left(str, required_length)
-    while #tostring(str) < required_length do
-        str = str .. " "
-    end
-    return str
-end
-
 
 
 --toggle obj between two strings, a and b
@@ -476,8 +458,6 @@ local function fmgs_dat_get(dat_name, dat_init, dat_init_col, dat_set_col, dat_f
 
         if type(dat_init) == "string" then
             val = tostring(dat_format_callback(tostring(val)))
-            --padding
-            val = mcdu_align_right(val, #dat_init)
         else
             val = dat_format_callback(val)
         end
@@ -504,8 +484,6 @@ local function fmgs_dat_get_txt(dat_name, dat_init, dat_format_callback)
 
         if type(dat_init) == "string" then
             val = tostring(dat_format_callback(tostring(val)))
-            --padding
-            val = mcdu_align_right(val, #dat_init)
         else
             val = dat_format_callback(val)
         end
@@ -850,23 +828,28 @@ end
 -- converts Decimal Degrees and Axis (lat/lon) to Degrees Minute Seconds Direction
 local function mcdu_ctrl_dd_to_dmsd(dd, axis)
     if axis == "lat" then
-        if d > 0 then
+        if dd > 0 then
             p = "N"
         else
             p = "S"
         end
     else
-        if d > 0 then
+        if dd > 0 then
             p = "E"
         else
             p = "W"
         end
     end
 
+    print(dd)
     dd = math.abs(dd)
+    print(dd)
     d = dd
+    print(d)
     m = d % 1 * 60
+    print(m)
     s = m % 1 * 60
+    print(s)
     return math.floor(d), m, s, p
 end
 
@@ -907,9 +890,9 @@ mcdu_entry = string.upper("ksea/kbfi")
 function update()
 	perf_measure_start("MCDU:update()")
     if get(mcdu_page) == 0 then --on start
-       --mcdu_open_page(505) --open 505 A/C status
+       mcdu_open_page(505) --open 505 A/C status
        --mcdu_open_page(1106) --open 1106 mcdu menu options debug
-	   mcdu_open_page(400)
+	   --mcdu_open_page(400)
     end
 
     -- display next message
@@ -1094,7 +1077,7 @@ function (phase)
         mcdu_dat["s"]["L"][1].txt = " co rte"
         --changes on fmgs airport init
         if fmgs_dat["fmgs init"] then
-            mcdu_dat["l"]["L"][1] = fmgs_dat_get("co rte", "[         ]", "cyan", "cyan")
+            mcdu_dat["l"]["L"][1] = fmgs_dat_get("co rte", "NONE", "cyan", "cyan")
         else
             mcdu_dat["l"]["L"][1] = fmgs_dat_get("co rte", "{{{{{{{{{{", "amber", "cyan")
         end
@@ -1107,16 +1090,14 @@ function (phase)
 
         --[[ ALTN / CO RTE --]]
         mcdu_dat["s"]["L"][2].txt = "altn/co rte"
-        mcdu_dat["l"]["L"][2].txt = "----/---------"
+        mcdu_dat["l"]["L"][2] = fmgs_dat_get("co rte", "----/---------", "white", "cyan")
 
         --[[ FLT NBR --]]
         mcdu_dat["s"]["L"][3].txt = "flt nbr"
         mcdu_dat["l"]["L"][3] = fmgs_dat_get("flt nbr", "{{{{{{{{", "amber", "cyan")
 
-        --[[ IRS ALIGN --]]
-        if fmgs_dat_get_txt("irs aligned", "hide") == "show" then
-            mcdu_dat["l"]["R"][3] = {txt = "align irs→", col = "amber"}
-        end
+        --[[ IRS INIT --]]
+        mcdu_dat["l"]["R"][3].txt = "irs init>"
 
         --[[ LAT / LONG --]]
         mcdu_dat["s"]["L"][4].txt = "lat"
@@ -1281,13 +1262,16 @@ function (phase)
         input = mcdu_get_entry("####/####")
         if input ~= NIL then
 
+            print("b1")
 			-- parse data
 			airp_origin_name = input:sub(1,4):lower()
             airp_dest_name = input:sub(6,9):lower()
 
+            print("b2")
             airp_origin = mcdu_ctrl_get_nav(airp_origin_name, NAV_AIRPORT)
             airp_dest = mcdu_ctrl_get_nav(airp_dest_name, NAV_AIRPORT)
 
+            print("b3")
             -- do these airports exist?
 			if airp_origin.navtype == NAV_UNKNOWN or
 			   airp_dest.navtype == NAV_UNKNOWN then
@@ -1296,15 +1280,17 @@ function (phase)
 				return
 			end			
 
+            print("b4")
 			-- init data
 			fmgs_dat["fmgs init"] = true
 			fmgs_dat["origin"] = airp_origin.id
 			fmgs_dat["dest"] = airp_dest.id
 
-            d, m, s, dir = mcdu_ctrl_dd_to_dmsd(airp_origin.lat, "lat")
-            fmgs_dat["lat fmt"] = d .. Round(m, 1) .. dir
-            d, m, s, dir = mcdu_ctrl_dd_to_dmsd(airp_origin.lon, "lon")
-            fmgs_dat["lon fmt"] = d .. Round(m, 1) .. dir
+            print("b5")
+            deg, min, sec, dir = mcdu_ctrl_dd_to_dmsd(airp_origin.lat, "lat")
+            fmgs_dat["lat fmt"] = tostring(deg) .. tostring(Round(min, 1)) .. tostring(dir)
+            deg, min, sec, dir = mcdu_ctrl_dd_to_dmsd(airp_origin.lon, "lon")
+            fmgs_dat["lon fmt"] = tostring(deg) .. tostring(Round(min, 1)) .. tostring(dir)
 
 			mcdu_open_page(401) -- open 401 init routes
 
@@ -1422,15 +1408,9 @@ function (phase)
         end
     end
 
-    -- align irs>
+    -- irs init>
     if phase == "R3" then
-        --is the irs not aligned?
-        if fmgs_dat["irs aligned"] == "show" then
-            fmgs_dat["irs aligned"] = "hide"    --hide align irs→
-            set(mcdu_irs_aligned, 1)
-            fmgs_dat["latlon sel"] = "nil"      --stop lat/lon selection
-        end
-        mcdu_open_page(400) -- reload
+        mcdu_open_page(402) -- open 402 init irs init
     end
 
     -- tropo
@@ -1491,7 +1471,7 @@ function (phase)
     if phase == "render" then
         mcdu_dat_title.txt = "       " ..  fmgs_dat["origin"] .. "/" .. fmgs_dat["dest"]
 
-		mcdu_dat["s"]["L"][2] = {txt = "  none", col = "green"}
+		mcdu_dat["l"]["L"][1] = {txt = " none", col = "green"}
 		mcdu_dat["l"]["L"][6].txt = "<return"
 
         draw_update()
@@ -1501,7 +1481,7 @@ function (phase)
     end
 end
 
--- 402 IRS
+-- 402 init irs init
 mcdu_sim_page[402] =
 function (phase)
     if phase == "render" then
@@ -1556,21 +1536,67 @@ function (phase)
         end
         
         mcdu_dat["s"]["L"][2].txt = " active data base"
-		mcdu_dat["l"]["L"][2] = {txt = " 28 nov-25dec ab49012001", col = "cyan"}
+		mcdu_dat["l"]["L"][2] = {txt = " 28 nov-25dec", col = "cyan"}
+		mcdu_dat["l"]["R"][2] = {txt = "ab49012001", col = "green"}
         mcdu_dat["s"]["L"][3].txt = " second data base"
         mcdu_dat["l"]["L"][3] = {txt = " none", col = "cyan", size = "s"}
 
         mcdu_dat["s"]["L"][5].txt = "chg code"
-        mcdu_dat["l"]["L"][5] = {txt = "[ ]", col = "cyan"}
+        fmgs_dat_init("chg code", "[ ]")
+        mcdu_dat["l"]["L"][5] = {txt = fmgs_dat["chg code"], col = "cyan"}
+
         mcdu_dat["s"]["L"][6].txt = "idle/perf"
-        mcdu_dat["l"]["L"][6] = {txt = "+0.0/+0.0", col = "green"}
+        fmgs_dat_init("chg code lock", true)
+        if fmgs_dat["chg code lock"] then
+            mcdu_dat["l"]["L"][6] = {txt = "+0.0/+0.0", col = "green"}
+        else
+            mcdu_dat["l"]["L"][6] = {txt = fmgs_dat_get_txt("idle/perf", "+0.0/+0.0"), col = "cyan"}
+        end
 
 		mcdu_dat["s"]["R"][6].txt = "software"
-        mcdu_dat["l"]["R"][6].txt = "status/xload>"
+        mcdu_dat["l"]["R"][6].txt = "options>"
 
        
         draw_update()
     end
+
+    -- chg code
+    if phase == "L5" then
+        input = mcdu_get_entry({"###"})
+        if input ~= NIL then
+            if input == "ARM" then
+                fmgs_dat["chg code"] = input
+                fmgs_dat["chg code lock"] = false
+                mcdu_open_page(505) -- reload
+            else
+                mcdu_send_message("invalid change code")
+            end
+        end
+    end
+
+    -- idle/perf
+    if phase == "L6" then
+        input = mcdu_get_entry({
+            "+!!/+!!",
+            "!!/+!!",
+            "+!!/!!",
+            "!!/!!",
+            "-!!/-!!",
+            "!!/-!!",
+            "-!!/!!",
+            "-!!/+!!",
+            "+!!/-!!",
+        })
+        if input ~= NIL then
+            if fmgs_dat["chg code lock"] then
+                mcdu_send_message("input change code")
+            else
+                mcdu_open_page(505) -- reload
+            end
+        end
+    end
+
+    -- options>
     if phase == "R6" then
         mcdu_open_page(1101) -- open 1101 mcdu menu options
     end
@@ -1641,7 +1667,7 @@ function (phase)
                     mcdu_dat["l"]["L"][i][2] = {txt = "        " .. fpln_wpt.efob, col = "green", size = "s"}
 
                     --[[ WIND SPD --]]
-                    mcdu_dat["l"]["R"][i][1] = {txt = mcdu_align_left(fpln_wpt.windspd, 3), col = "green", size = "s"}
+                    mcdu_dat["l"]["R"][i][1] = {txt = fpln_wpt.windspd, col = "green", size = "s"}
 
                     --[[ WIND ALT --]]
                     mcdu_dat["l"]["R"][i][2] = {txt = mcdu_pad_num(fpln_wpt.windhdg, 3) ..  "°/   ", col = "green", size = "s"}
