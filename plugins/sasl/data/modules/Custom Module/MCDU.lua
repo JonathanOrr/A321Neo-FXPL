@@ -864,26 +864,6 @@ local function mcdu_ctrl_dmsd_to_dd(d,m,s,dir)
     return dd
 end
 
---[[
---mcdu_ctrl_get_nav("ksea", NAV_ILS)
---id = sasl.findFirstNavAidOfType(NAV_ILS)
---id = sasl.findNavAid(nil, "KSEA 16C", nil, nil, nil, NAV_OUTERMARKER)
-for i = 0,10 do
-    local nav = {}
-    nav.navtype, nav.lat, nav.lon, nav.height, nav.freq, nav.hdg, nav.id, nav.name, nav.loadedDSF = sasl.getNavAidInfo(id)
-    print("nav")
-    print("type " .. nav.navtype)
-    print("lat " .. nav.lat)
-    print("lon " .. nav.lon)
-    print("height " .. nav.height)
-    print("freq " .. nav.freq)
-    print("hdg " .. nav.hdg)
-    print("id " .. nav.id)
-    print("name " .. nav.name)
-    id = sasl.getNextNavAid (id)
-end
---]]
-
 mcdu_entry = string.upper("ksea/kbfi")
 
 --update
@@ -1576,23 +1556,57 @@ function (phase)
 
     -- idle/perf
     if phase == "L6" then
-        input = mcdu_get_entry({
-            "+!!/+!!",
-            "!!/+!!",
-            "+!!/!!",
-            "!!/!!",
-            "-!!/-!!",
-            "!!/-!!",
-            "-!!/!!",
-            "-!!/+!!",
-            "+!!/-!!",
-        })
-        if input ~= NIL then
-            if fmgs_dat["chg code lock"] then
-                mcdu_send_message("input change code")
-            else
-                mcdu_open_page(505) -- reload
+        -- format possible inputs
+        possible_inputs = {}
+        possible_inputs_a = {
+            "!",
+            "!.!"
+        }
+        possible_inputs_b = {}
+        for _, i in ipairs(possible_inputs_a) do
+            table.insert(possible_inputs_b, i)
+            table.insert(possible_inputs_b, "+" .. i)
+            table.insert(possible_inputs_b, "-" .. i)
+        end
+        for _, i in ipairs(possible_inputs_b) do
+            for _, j in ipairs(possible_inputs_b) do
+                table.insert(possible_inputs, i .. "/" .. j)
             end
+        end
+        input = mcdu_get_entry(possible_inputs)
+
+        -- is input valid and change code unlocked?
+        if input ~= NIL and not fmgs_dat["chg code lock"] then
+            i = 1
+            while string.sub(input, i, i) ~= "/" do
+                i = i + 1
+            end
+            -- set idle and perf to input
+            fmgs_dat["idle"] = tonumber(string.sub(input, 1, i - 1))
+            fmgs_dat["perf"] = tonumber(string.sub(input, i + 1, -1))
+
+            -- output idle/perf
+            fmgs_dat["idle/perf"] = ""
+            idle = tostring(fmgs_dat["idle"])
+            perf = tostring(fmgs_dat["perf"])
+            if fmgs_dat["idle"] % 1 == 0 then
+                idle = idle .. ".0"
+            end
+            if fmgs_dat["perf"] % 1 == 0 then
+                perf = perf .. ".0"
+            end
+            if fmgs_dat["idle"] >= 0 then
+                fmgs_dat["idle/perf"] = "+" .. idle
+            else
+                fmgs_dat["idle/perf"] = idle
+            end
+            if fmgs_dat["perf"] >= 0 then
+                fmgs_dat["idle/perf"] = fmgs_dat["idle/perf"] .. "/+" .. perf
+            else
+                fmgs_dat["idle/perf"] = fmgs_dat["idle/perf"] .. "/" .. perf
+            end
+
+            mcdu_open_page(505) -- reload
         end
     end
 
