@@ -37,6 +37,8 @@ sasl.options.setLuaErrorsHandling(SASL_STOP_PROCESSING)
 math.randomseed( os.time() )
 
 include(moduleDirectory .. "/main_debug.lua")
+addSearchPath(moduleDirectory .. "/Custom Module/PFD/")
+addSearchPath(moduleDirectory .. "/Custom Module/PFD/PFD_subcomponents/")
 
 position = {0, 0, 4096, 4096}
 size = { 4096, 4096 }
@@ -59,8 +61,9 @@ components = {
   aircond {},
   wheel {},
   source_switching {},
-  PFD {},
-  PFD_fo {},
+  PFD_main {},
+  CAPT_PFD {},
+  FO_PFD {},
   ND {},
   ND_fo {},
   ISIS {},

@@ -408,6 +408,12 @@ Capt_Mach    = globalProperty("sim/cockpit2/gauges/indicators/mach_pilot")
 Fo_Mach      = globalProperty("sim/cockpit2/gauges/indicators/mach_copilot")
 Capt_Baro    = globalProperty("sim/cockpit2/gauges/actuators/barometer_setting_in_hg_pilot") -- Baro settings for Pilot
 Fo_Baro      = globalProperty("sim/cockpit2/gauges/actuators/barometer_setting_in_hg_copilot") -- Baro settings for F/O
+Capt_pitch   = globalProperty("sim/cockpit2/gauges/actuators/barometer_setting_in_hg_copilot")
+Fo_pitch     = globalProperty("sim/cockpit2/gauges/actuators/barometer_setting_in_hg_copilot")
+Capt_bank    = globalProperty("sim/cockpit2/gauges/actuators/barometer_setting_in_hg_copilot")
+Fo_bank      = globalProperty("sim/cockpit2/gauges/actuators/barometer_setting_in_hg_copilot")
+Capt_hdg     = globalProperty("sim/cockpit2/gauges/indicators/heading_AHARS_deg_mag_pilot")
+Fo_hdg       = globalProperty("sim/cockpit2/gauges/indicators/heading_AHARS_deg_mag_copilot")
 
 Stby_Alt     = globalProperty("sim/cockpit2/gauges/indicators/altitude_ft_stby")     -- Altitude in the stdby instrument
 Stby_IAS     = globalProperty("sim/cockpit2/gauges/indicators/airspeed_kts_stby")    -- IAS in the stdby instrument

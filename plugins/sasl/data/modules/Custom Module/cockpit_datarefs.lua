@@ -470,6 +470,16 @@ ND_Fo_nav2_level = createGlobalPropertyf("a321neo/cockpit/nd/fo_nav2_lever", 0, 
 ND_Capt_Terrain = createGlobalPropertyi("a321neo/cockpit/nd/terrain_capt", 0, false, true, false) -- 0,1
 ND_Fo_Terrain   = createGlobalPropertyi("a321neo/cockpit/nd/terrain_fo", 0, false, true, false) -- 0,1
 
+--PFD--
+Current_heading = globalProperty("sim/cockpit2/gauges/indicators/heading_AHARS_deg_mag_pilot")
+Ground_track = globalProperty("sim/cockpit2/gauges/indicators/ground_track_mag_pilot")
+VVI = globalProperty("sim/cockpit2/gauges/indicators/vvi_fpm_pilot")
+Ground_track_delta = createGlobalPropertyf("a321neo/cockpit/PFD/ground_track_delta", 0, false, true, false)
+A_floor_speed = createGlobalPropertyf("a321neo/cockpit/PFD/a_floor_speed", 0, false, true, false) -- AFLOOR at 7.5 degrees AoA
+A_floor_speed_delta = createGlobalPropertyf("a321neo/cockpit/PFD/a_floor_speed_delta", 0, false, true, false)
+Stall_speed = createGlobalPropertyf("a321neo/cockpit/PFD/stall_speed", 0, false, true, false) -- stall at 9 degrees AoA
+Stall_speed_delta = createGlobalPropertyf("a321neo/cockpit/PFD/stall_speed_delta", 0, false, true, false)
+
 --AUTOFLT--
 AUTOFLT_SPD = createGlobalPropertyf("a321neo/cockpit/AUTOFLT/speed", 0, false, true, false)
 AUTOFLT_MACH = createGlobalPropertyf("a321neo/cockpit/AUTOFLT/mach", 0, false, true, false)

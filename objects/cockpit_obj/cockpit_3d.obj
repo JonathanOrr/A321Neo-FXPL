@@ -9104,9 +9104,9 @@ IDX	7361
 		TRIS	9348 6
 		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/A	
 		TRIS	9354 6
-		ATTR_manip_command	button	a321neo/cockpit/mcdu/page/air port	
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/page/air_port	
 		TRIS	9360 6
-		ATTR_manip_command	button	a321neo/cockpit/mcdu/page/atc comm	
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/page/atc_comm	
 		TRIS	9366 6
 		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/B	
 		TRIS	9372 6
@@ -9166,11 +9166,11 @@ IDX	7361
 		TRIS	9534 6
 		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/M	
 		TRIS	9540 6
-		ATTR_manip_command	button	a321neo/cockpit/mcdu/page/mcdu menu	
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/page/mcdu_menu	
 		TRIS	9546 6
 		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/N	
 		TRIS	9552 6
-		ATTR_manip_command	button	a321neo/cockpit/mcdu/page/rad nav	
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/page/rad_nav	
 		TRIS	9558 6
 		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/O	
 		TRIS	9564 6
@@ -9202,7 +9202,7 @@ IDX	7361
 		TRIS	9642 6
 		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/S	
 		TRIS	9648 6
-		ATTR_manip_command	button	a321neo/cockpit/mcdu/page/sec f-pln	
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/page/sec_f-pln	
 		TRIS	9654 6
 		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/space	
 		TRIS	9660 6
