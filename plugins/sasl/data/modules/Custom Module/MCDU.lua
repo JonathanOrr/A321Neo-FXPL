@@ -1079,20 +1079,6 @@ function (phase)
         --[[ IRS INIT --]]
         mcdu_dat["l"]["R"][3].txt = "irs init>"
 
-        --[[ LAT / LONG --]]
-        mcdu_dat["s"]["L"][4].txt = "lat"
-        mcdu_dat["s"]["R"][4].txt = "long"
-
-        --irs latlon change selection
-        if fmgs_dat["latlon sel"] == "lat" then
-            mcdu_dat["s"]["L"][4].txt = "lat^"
-        elseif fmgs_dat["latlon sel"] == "lon" then
-            mcdu_dat["s"]["R"][4].txt = "^long"
-        end
-
-        mcdu_dat["l"]["L"][4] = fmgs_dat_get("lat fmt", "----.-", "white", "cyan")
-        mcdu_dat["l"]["R"][4] = fmgs_dat_get("lon fmt", "-----.--", "white", "cyan")
-
         --[[ COST INDEX --]]
         mcdu_dat["s"]["L"][5].txt = "cost index"
         --changes on fmgs airport init
@@ -1467,6 +1453,21 @@ function (phase)
     if phase == "render" then
         mcdu_dat_title.txt = "        irs init"
 
+        --[[ LAT / LONG --]]
+
+        if fmgs_dat["fmgs init"] then
+            mcdu_dat["s"]["L"][1].txt = "lat"
+            mcdu_dat["s"]["R"][1].txt = "long"
+
+            --irs latlon change selection
+            if fmgs_dat["latlon sel"] == "lat" then
+                mcdu_dat["s"]["L"][1].txt = "lat^"
+            elseif fmgs_dat["latlon sel"] == "lon" then
+                mcdu_dat["s"]["R"][1].txt = "^long"
+            end
+
+        end
+
 		mcdu_dat["s"]["L"][3].txt = "   irs1 off"
         mcdu_dat["l"]["L"][3].txt = "    --'--.--/---'--.--"
 		mcdu_dat["s"]["L"][4].txt = "   irs2 off"
@@ -1476,6 +1477,9 @@ function (phase)
 		mcdu_dat["l"]["L"][6].txt = "<return"
 
         draw_update()
+    end
+    if phase == "L6" then
+        mcdu_open_page(400) -- open 400 init
     end
 end
 
@@ -1556,6 +1560,10 @@ function (phase)
 
     -- idle/perf
     if phase == "L6" then
+        if fmgs_dat["chg code lock"] then
+            mcdu_send_message("enter change code")
+            return
+        end
         -- format possible inputs
         possible_inputs = {}
         possible_inputs_a = {
@@ -1573,17 +1581,33 @@ function (phase)
                 table.insert(possible_inputs, i .. "/" .. j)
             end
         end
+        for _, i in ipairs(possible_inputs_b) do
+            table.insert(possible_inputs, i)
+            table.insert(possible_inputs, "/" .. i)
+        end
         input = mcdu_get_entry(possible_inputs)
 
-        -- is input valid and change code unlocked?
-        if input ~= NIL and not fmgs_dat["chg code lock"] then
+        -- is input valid?
+        if input ~= NIL then
             i = 1
-            while string.sub(input, i, i) ~= "/" do
+            while string.sub(input, i, i) ~= "/" or i == string.len(input) do
                 i = i + 1
             end
+
             -- set idle and perf to input
             fmgs_dat["idle"] = tonumber(string.sub(input, 1, i - 1))
             fmgs_dat["perf"] = tonumber(string.sub(input, i + 1, -1))
+
+            -- e.g. 1.0
+            if i == string.len(input) then
+                -- set idle to input
+                fmgs_dat["idle"] = tonumber(input)
+            end
+            -- e.g. /1.0
+            if i == 1 then
+                -- set perf to input
+                fmgs_dat["perf"] = tonumber(string.sub(input, 2, -1))
+            end
 
             -- output idle/perf
             fmgs_dat["idle/perf"] = ""
@@ -2104,7 +2128,7 @@ function (phase)
     if phase == "render" then
         mcdu_dat_title.txt = "  version and license"
         mcdu_dat["s"]["L"][1].txt = "mcdu version"
-        mcdu_dat["l"]["L"][1].txt = "v1.0"
+        mcdu_dat["l"]["L"][1].txt = "v1.0 not finished"
         mcdu_dat["s"]["L"][2].txt = "license"
         mcdu_dat["l"]["L"][2].txt = "gpl 3.0"
         mcdu_dat["s"]["L"][3].txt = "github.com"
@@ -2277,9 +2301,9 @@ function (phase)
         MCDU_DISP_COLOR = 
         {
             ["white"] =   {1.00, 1.00, 1.00},
-            ["cyan"] =    {0.07, 0.69, 0.84}, --11AFD7
+            ["cyan"] =    {0.07, 0.79, 0.94}, --11AFD7
             ["green"] =   {0.09, 0.54, 0.17}, --178A2C
-            ["amber"] =   {0.95, 0.75, 0.00}, --F2BF2C
+            ["amber"] =   {0.95, 0.65, 0.00}, --F2BF2C
             ["yellow"] =  {0.95, 0.75, 0.00}, --F2BF2C
             ["magenta"] = {0.57, 0.29, 0.63}, --924AA1
             ["red"] =     {1.00, 0.00, 0.00},
