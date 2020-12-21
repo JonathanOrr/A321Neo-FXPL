@@ -123,6 +123,11 @@ if EMULATOR then
 		print(EMULATOR_HEADER .. "Create global property (int) " .. str)
 	end
 
+	function globalPropertyi(str)
+		print(EMULATOR_HEADER .. "Referencing global property (int) " .. str)
+        return str
+	end
+
 	function createGlobalPropertys(str)
 		print(EMULATOR_HEADER .. "Create global property (string) " .. str)
 	end
@@ -510,6 +515,9 @@ local mcdu_debug_dat = createGlobalPropertys("a321neo/debug/mcdu/mcdu_dat")
 local mcdu_debug_busy = createGlobalPropertyi("a321neo/debug/mcdu/mcdu_bug_busy")
 
 local mcdu_irs_aligned = createGlobalPropertyi("a321neo/cockpit/mcdu/mcdu_irs_aligned", 1)
+
+local gps_lat = globalPropertyf("sim/flightmodel/position/latitude")
+local gps_lon = globalPropertyf("sim/flightmodel/position/longitude")
 
 --mcdu entry inputs
 local mcdu_inp = {}
@@ -1451,9 +1459,13 @@ function (phase)
     if phase == "render" then
         mcdu_dat_title.txt = "        irs init"
 
-        --[[ LAT / LONG --]]
+        irs1_status = "align-gps"
+        irs2_status = "align-gps"
+        irs3_status = "align"
+        gps_status = "on"
 
         if fmgs_dat["fmgs init"] then
+            --[[ REFERENCE LAT / LONG --]]
             mcdu_dat["s"]["L"][1].txt = "lat    reference"
             mcdu_dat["s"]["R"][1].txt = "long"
 
@@ -1464,7 +1476,13 @@ function (phase)
                 mcdu_dat["s"]["R"][1].txt = "^long"
             end
 
-            mcdu_dat["l"]["L"][1][1] = {txt = "          "  .. fmgs_dat["origin"], col = "green"}
+            has_edit_latlon = false
+            if has_edit_latlon then
+                mcdu_dat["l"]["L"][1][1] = {txt = "          ----"}
+            else
+                mcdu_dat["l"]["L"][1][1] = {txt = "          "  .. fmgs_dat["origin"], col = "green"}
+            end
+
             deg, min, sec, dir = mcdu_ctrl_dd_to_dmsd(airp_origin.lat, "lat")
             mcdu_dat["l"]["L"][1][2] = {txt = tostring(deg) .. "º    "  .. tostring(dir), col = "cyan"}
             mcdu_dat["l"]["L"][1][3] = {txt = "   " ..tostring(Round(min, 1)), col = "cyan", size = "s"}
@@ -1472,14 +1490,42 @@ function (phase)
             mcdu_dat["l"]["R"][1][1] = {txt = tostring(deg) .. "º    "  .. tostring(dir), col = "cyan"}
             mcdu_dat["l"]["R"][1][2] = {txt = tostring(Round(min, 1)) .. " ", col = "cyan", size = "s"}
 
+            --[[ GPS POSITION LAT / LONG --]]
+            mcdu_dat["s"]["L"][2].txt = "lat   gps position"
+            mcdu_dat["s"]["R"][2].txt = "long"
+            if gps_status == "off" then
+                mcdu_dat["l"]["L"][2].txt = "--º--.--"
+                mcdu_dat["l"]["R"][2].txt = "---º--.--"
+            elseif gps_status == "on" then
+                deg, min, sec, dir = mcdu_ctrl_dd_to_dmsd(get(gps_lat), "lat")
+                mcdu_dat["l"]["L"][2][1] = {txt = tostring(deg) .. "º    "  .. tostring(dir), col = "green"}
+                mcdu_dat["l"]["L"][2][2] = {txt = "   " ..tostring(Round(min, 1)), col = "green", size = "s"}
+                deg, min, sec, dir = mcdu_ctrl_dd_to_dmsd(get(gps_lon), "lon")
+                mcdu_dat["l"]["R"][2][1] = {txt = tostring(deg) .. "º    "  .. tostring(dir), col = "green"}
+                mcdu_dat["l"]["R"][2][2] = {txt = tostring(Round(min, 1)) .. " ", col = "green", size = "s"}
+            end
         end
 
-		mcdu_dat["s"]["L"][3].txt = "   irs1 off"
-        mcdu_dat["l"]["L"][3].txt = "    --'--.--/---'--.--"
-		mcdu_dat["s"]["L"][4].txt = "   irs2 off"
-        mcdu_dat["l"]["L"][4].txt = "    --'--.--/---'--.--"
-		mcdu_dat["s"]["L"][5].txt = "   irs3 off"
-        mcdu_dat["l"]["L"][5].txt = "    --'--.--/---'--.--"
+        irs_statuses = {irs1_status, irs2_status, irs3_status}
+
+        for no, irs in ipairs(irs_statuses) do
+            if irs == "off" then
+                mcdu_dat["s"]["L"][no + 2].txt = "  irs" .. no .. " off"
+                mcdu_dat["l"]["L"][no + 2].txt = "   --º--.--/---º--.--"
+            elseif irs == "align" then
+                mcdu_dat["s"]["L"][no + 2].txt = "  irs" .. no .. " aligning on ---"
+                mcdu_dat["l"]["L"][no + 2].txt = "   --º--.--/---º--.--"
+            elseif irs == "align-gps" then
+                mcdu_dat["s"]["L"][no + 2].txt = "  irs" .. no .. " aligning on gps"
+                deg, min, sec, dir = mcdu_ctrl_dd_to_dmsd(get(gps_lat), "lat")
+                mcdu_dat["l"]["L"][no + 2][1] = {txt = "   " .. tostring(deg) .. "º    "  .. tostring(dir) .. "/", col = "green"}
+                mcdu_dat["l"]["L"][no + 2][2] = {txt = "      " ..tostring(Round(min, 1)), col = "green", size = "s"}
+                deg, min, sec, dir = mcdu_ctrl_dd_to_dmsd(get(gps_lon), "lon")
+                mcdu_dat["l"]["R"][no + 2][1] = {txt = tostring(deg) .. "º    "  .. tostring(dir) .. "   ", col = "green"}
+                mcdu_dat["l"]["R"][no + 2][2] = {txt = tostring(Round(min, 1)) .. "    ", col = "green", size = "s"}
+            elseif irs == "lock" then
+            end
+        end
 		mcdu_dat["l"]["L"][6].txt = "<return"
 
         draw_update()
@@ -1538,9 +1584,22 @@ function (phase)
         mcdu_dat["s"]["L"][6].txt = "idle/perf"
         fmgs_dat_init("chg code lock", true)
         if fmgs_dat["chg code lock"] then
-            mcdu_dat["l"]["L"][6] = {txt = "+0.0/+0.0", col = "green"}
+            mcdu_dat["l"]["L"][6][1] = {txt = "+0.0/+0.0", col = "green", size = "s"}
         else
-            mcdu_dat["l"]["L"][6] = {txt = fmgs_dat_get_txt("idle/perf", "+0.0/+0.0"), col = "cyan"}
+            idleperf = fmgs_dat_get_txt("idle/perf", "+0.0/+0.0")
+            idle = string.sub(idleperf, 1, 4)
+            perf = string.sub(idleperf, 6, 9)
+            if idle == "+0.0" then
+                mcdu_dat["l"]["L"][6][1] = {txt = idle, col = "cyan", size = "s"}
+            else
+                mcdu_dat["l"]["L"][6][1] = {txt = idle, col = "cyan"}
+            end
+            mcdu_dat["l"]["L"][6][2] = {txt = "    /", col = "cyan", size = "s"}
+            if perf == "+0.0" then
+                mcdu_dat["l"]["L"][6][3] = {txt = "     " .. perf, col = "cyan", size = "s"}
+            else
+                mcdu_dat["l"]["L"][6][3] = {txt = "     " .. perf, col = "cyan"}
+            end
         end
 
 		mcdu_dat["s"]["R"][6].txt = "software"
