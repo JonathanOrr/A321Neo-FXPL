@@ -323,7 +323,6 @@ local function mcdu_eval_entry(str, format)
     if #str ~= #format then
         pass = false
     end
-
     for i = 1,#format do
         if string.sub(format, i, i) == "!" then
             -- digit
@@ -346,43 +345,147 @@ local function mcdu_eval_entry(str, format)
     return pass
 end
 
-local function mcdu_get_entry(expected_formats)
+local function mcdu_eval_entries(entry, expected_formats)
     --[[
     -- expected_format
     --
     -- can accept multiple inputs ! for digits, @ for letters, # for anything
     -- https://www.lua.org/pil/20.2.html
     --]]
-    me = mcdu_entry
-    mcdu_entry = ""
     
     if expected_formats == nil then
-        return me
+        return entry
     end
 
     if expected_formats[1] ~= nil then
         local pass = false
-        variation = 0
         for i,format in ipairs(expected_formats) do-- expected_formats is a table
-            if mcdu_eval_entry(me, format) then
-                variation = i
-                pass = true
+            if mcdu_eval_entry(entry, format) then
+                return entry
             end
         end
-        if pass then
-            return me, variation 
-        else
-            mcdu_send_message("format error")
-            return NIL, NIL
-        end
+		return NIL
     else
-        if mcdu_eval_entry(me, expected_formats) then
-            return me
+        if mcdu_eval_entry(entry, expected_formats) then
+            return entry
         else
-            mcdu_send_message("format error")
             return NIL
         end
     end
+end
+
+local function mcdu_parse_entry(entry, expected_format)
+
+	format_type = expected_format[1]
+	if format_type == "altitude" then
+		format_type = "number"
+		expected_format = {"number", length = 3, dp = 0}
+		if string.sub(entry, 1, 2) == "FL" then
+			entry = string.sub(entry, 3, -1) -- get rid of FL
+		end
+	end
+	if format_type == "heading" then
+		format_type = "number"
+		expected_format = {"number", length = 3, dp = 0}
+	end
+	if format_type == "number" then
+		code = "!"
+	elseif format_type == "word" then
+		code = "#"
+	end
+	
+	possible_inputs_a = {code}
+
+    -- if dp isn't specified
+    if not expected_format.dp then
+        expected_format.dp = 0
+    end
+
+	-- add decimal places
+	s = code .. "."
+	for i = 1, expected_format.dp, 1 do
+		s = s .. code
+		table.insert(possible_inputs_a, s)
+	end
+
+	possible_inputs_b = {}
+
+	-- add whole number places
+	for _, j in ipairs(possible_inputs_a) do
+		s = ""
+		for i = 1, expected_format.length, 1 do
+			table.insert(possible_inputs_b, s .. j)
+			
+			s = code .. s
+		end
+	end
+
+	possible_inputs_c = {}
+	for _, i in ipairs(possible_inputs_b) do
+		table.insert(possible_inputs_c, i)
+		table.insert(possible_inputs_c, "+" .. i)
+		table.insert(possible_inputs_c, "-" .. i)
+	end
+	
+	output = mcdu_eval_entries(entry, possible_inputs_c)
+	if output == NIL then
+		return "$invalid"
+	end
+	return output
+end
+
+-- accepts mcdu entries by a specific format (list of formats)
+-- e.g. mcdu_get_entry({"altitude"}, {"number", length = 2, dp = 0})
+-- accepts in an altitude format, with a slash and a number.
+-- so 300/20 is allowed
+-- and /-20 is allowed (returns nil, -20)
+-- and 300 is allowed (returns 300, nil)
+local function mcdu_get_entry(format_a, format_b, dont_reset_entry)
+	a = NIL
+	b = NIL
+	if format_b then
+		-- e.g. /20
+		if string.sub(mcdu_entry, 1, 1) == "/" then
+			b = mcdu_parse_entry(string.sub(mcdu_entry, 2, -1), format_b)
+		else
+			i = 1
+			while string.sub(mcdu_entry, i, i) ~= "/" and i < #mcdu_entry do
+				i = i + 1
+			end
+			-- e.g. 200
+			if i == #mcdu_entry then
+				a = mcdu_parse_entry(mcdu_entry, format_a)
+			-- e.g. 200/20
+			else
+				a = mcdu_parse_entry(string.sub(mcdu_entry, 1, i-1), format_a)
+				b = mcdu_parse_entry(string.sub(mcdu_entry, i+1, -1), format_b)
+			end
+		end
+	else
+        if format_a then
+            a = mcdu_parse_entry(mcdu_entry, format_a)
+        else
+            a = mcdu_entry
+        end
+	end
+
+	if a == "$invalid" or b == "$invalid" then
+        mcdu_send_message("format error")
+        if format_b then
+            return NIL, NIL
+        end
+		return NIL
+	end
+
+    if not dont_reset_entry then
+    	mcdu_entry = ""
+    end
+    if format_b then
+        return a, b
+    else
+        return a
+    end
+
 end
 
 --clear MCDU
@@ -422,8 +525,6 @@ local function mcdu_pad_num(number, required_length)
     end
     return str
 end
-
-
 
 --toggle obj between two strings, a and b
 --e.g. ("ad", "ba", "ad") -> "ba"
@@ -1169,11 +1270,7 @@ function (phase)
     -- cost index
     if phase == "L5" then
         --format e.g. 100
-        input, variation = mcdu_get_entry({
-            "!!!", -- 100 cost index
-            "!!",  -- 10 cost index
-            "!"    -- 1 cost index
-        })
+        input, variation = mcdu_get_entry({"number", length = 3, dp = 0})
         if input ~= NIL then
             fmgs_dat["cost index"] = input
         end
@@ -1181,63 +1278,20 @@ function (phase)
     end
     -- crz fl/temp
     if phase == "L6" then
+        -- e.g. mcdu_get_entry({"altitude"}, {"number", length = 2, dp = 0})
         --format e.g. FL230
-        input, variation = mcdu_get_entry({
-            "!!",   -- 80 (8000 feet)
-            "!!!",  -- 230 (23000 feet)
-            "fl!!!",-- FL230 (23000 feet)
-            "fl!!!/!",-- FL230/7 (23000 feet, -7 celcius)
-            "fl!!!/!!",-- FL230/40 (23000 feet, -40 celcius)
-            "fl!!!/-!",-- FL230/-7 (23000 feet, -40 celcius)
-            "fl!!!/-!!",-- FL230/-40 (23000 feet, -40 celcius)
-            "/!",   -- 7 (-7 celcius)
-            "/!!",  -- 40 (-40 celcius)
-            "/-!",  -- -7 (-7 celcius)
-            "/-!!"  -- -40 (-40 celcius)
-        })
+        input_a, input_b = mcdu_get_entry({"altitude"}, {"number", length = 2, dp = 0})
 
-        if input ~= NIL then
-            --automatically calculate crz temp
-            if variation >= 1 and variation <= 3 then
-                if variation ~= 3 then
-                    alt = input
-                else
-                    alt = input:sub(3,5)
-                end
-                fmgs_dat["crz temp"] = math.floor(tonumber(alt) * -0.2 + 16)
+        if input_a ~= NIL or input_b ~= NIL then
+            if input_a ~= NIL then
+                alt = input_a * 100
+                fmgs_dat["crz fl"] = tonumber(alt)
+                fmgs_dat["crz temp"] = math.floor(tonumber(alt / 100) * -0.2 + 16)
                 fmgs_dat["crz temp alt"] = false --crz temp has not been altered
-
-            else
-                fmgs_dat["crz temp alt"] = true --crz temp has been manually altered
             end
-
-            --set crz FL or crz temp
-            if variation == 1 then
-                fmgs_dat["crz fl"] = input * 100
-            elseif variation == 2 then
-                fmgs_dat["crz fl"] = input * 100
-            elseif variation == 3 then
-                fmgs_dat["crz fl"] = tonumber(input:sub(3,5)) * 100
-            elseif variation == 4 then
-                fmgs_dat["crz fl"] = input:sub(3,5) * 100
-                fmgs_dat["crz temp"] = input:sub(7,7) * -1
-            elseif variation == 5 then
-                fmgs_dat["crz fl"] = input:sub(3,5) * 100
-                fmgs_dat["crz temp"] = input:sub(7,8) * -1
-            elseif variation == 6 then
-                fmgs_dat["crz fl"] = input:sub(3,5) * 100
-                fmgs_dat["crz temp"] = input:sub(7,8)
-            elseif variation == 7 then
-                fmgs_dat["crz fl"] = input:sub(3,5) * 100
-                fmgs_dat["crz temp"] = input:sub(7,9)
-            elseif variation == 8 then
-                fmgs_dat["crz temp"] = input:sub(2,2) * -1
-            elseif variation == 9 then
-                fmgs_dat["crz temp"] = input:sub(2,3) * -1
-            elseif variation == 10 then
-                fmgs_dat["crz temp"] = input:sub(2,3)
-            elseif variation == 11 then
-                fmgs_dat["crz temp"] = input:sub(2,4)
+            if input_b ~= NIL then
+                fmgs_dat["crz temp"] = tonumber(input_b)
+                fmgs_dat["crz temp alt"] = true --crz temp has been manually altered
             end
             mcdu_open_page(400) -- reload
         end
@@ -1246,7 +1300,7 @@ function (phase)
     -- from/to
     if phase == "R1" then
         --format e.g. ksea/kbfi
-        input = mcdu_get_entry("####/####")
+        input = mcdu_get_entry({"word", length = 4, dp = 0}, {"word", length = 4, dp = 0})
         if input ~= NIL then
 
 			-- parse data
@@ -1288,7 +1342,7 @@ function (phase)
 
     -- tropo
     if phase == "R6" then
-        input = mcdu_get_entry("!!!")
+        input = mcdu_get_entry({"number", length = 3, dp = 0})
 		if input ~= NIL then
       	  fmgs_dat["tropo"] = input * 100
 		end
@@ -1313,9 +1367,9 @@ function (phase)
 end
 
 -- TODO: REMOVE THIS
-irs1_status = "align-gps"
-irs2_status = "align-gps"
-irs3_status = "align-gps"
+irs1_status = "aligning-gps"
+irs2_status = "aligning-gps"
+irs3_status = "aligning-gps"
 
 gps_status = "on"
 
@@ -1328,6 +1382,7 @@ function (phase)
     if phase == "render" then
         fmgs_dat_init("init irs latlon sel", "nil")-- init latlon selection for irs alignment
         fmgs_dat_init("init irs latlon edited", false)-- init latlon edited?
+        fmgs_dat_init("confirm align on ref", false)-- init latlon edited?
 
         mcdu_dat_title.txt = "        irs init"
 
@@ -1380,16 +1435,34 @@ function (phase)
             lon = nil
             if irs == "off" then
                 mcdu_dat["s"]["L"][no + 2].txt = "  irs" .. no .. " off"
-            elseif irs == "align" then
+            elseif irs == "att" then
+                mcdu_dat["s"]["L"][no + 2].txt = "  irs" .. no .. " in att"
+            elseif irs == "aligning" then
                 mcdu_dat["s"]["L"][no + 2].txt = "  irs" .. no .. " aligning on ---"
-            elseif irs == "align-gps" then
-                mcdu_dat["s"]["L"][no + 2].txt = "  irs" .. no .. " aligning on gps"
+            elseif irs == "aligning-gps" then
+                mcdu_dat["s"]["l"][no + 2].txt = "  irs" .. no .. " aligning on gps"
                 lat = get(gps_lat)
                 lon = get(gps_lon)
-            elseif irs == "align-ref" then
-                mcdu_dat["s"]["L"][no + 2].txt = "  irs" .. no .. " aligning on ref"
+            elseif irs == "aligning-ref" then
+                mcdu_dat["s"]["l"][no + 2].txt = "  irs" .. no .. " aligning on ref"
                 lat = fmgs_dat["init irs lat"]
                 lon = fmgs_dat["init irs lon"]
+            elseif irs == "aligning-cdu" then
+                mcdu_dat["s"]["l"][no + 2].txt = "  irs" .. no .. " aligning on cdu"
+                lat = 0
+                lon = 0
+            elseif irs == "aligned-gps" then
+                mcdu_dat["s"]["l"][no + 2].txt = "  irs" .. no .. " aligned on gps"
+                lat = get(gps_lat)
+                lon = get(gps_lon)
+            elseif irs == "aligned-ref" then
+                mcdu_dat["s"]["l"][no + 2].txt = "  irs" .. no .. " aligned on ref"
+                lat = fmgs_dat["init irs lat"]
+                lon = fmgs_dat["init irs lon"]
+            elseif irs == "aligned-cdu" then
+                mcdu_dat["s"]["l"][no + 2].txt = "  irs" .. no .. " aligned on cdu"
+                lat = 0
+                lon = 0
             end
 
             -- if lat and lon are set
@@ -1406,7 +1479,11 @@ function (phase)
         end
 		mcdu_dat["l"]["L"][6].txt = "<return"
         if fmgs_dat["init irs latlon sel"] ~= "nil" then
-            mcdu_dat["l"]["R"][6] = {txt = "align on ref→", col = "cyan"}
+            if fmgs_dat["confirm align on ref"] then
+                mcdu_dat["l"]["R"][6] = {txt = "confirm align*", col = "amber"}
+            else
+                mcdu_dat["l"]["R"][6] = {txt = "align on ref→", col = "cyan"}
+            end
         end
 
         draw_update()
@@ -1415,10 +1492,18 @@ function (phase)
         mcdu_open_page(400) -- open 400 init
     end
     if phase == "R6" then
+        -- if not confirmed
+        if not fmgs_dat["confirm align on ref"] then
+            fmgs_dat["confirm align on ref"] = true
+            mcdu_open_page(402) -- reload
+            return
+        end
+
+        -- if confirmed
         fmgs_dat["init irs latlon sel"] = "nil" -- disable editing of latlon
         for no, irs in ipairs(irs_statuses) do
-            if irs == "align-gps" then
-                irs_statuses[no] = "align-ref"
+            if irs == "aligning-gps" then
+                irs_statuses[no] = "aligning-ref"
             end
         end
         mcdu_open_page(402) -- reload
@@ -1499,6 +1584,8 @@ function (phase)
 
         mcdu_dat["s"]["L"][6].txt = "idle/perf"
         fmgs_dat_init("chg code lock", true)
+        fmgs_dat_init("idle", 0)
+        fmgs_dat_init("perf", 0)
         if fmgs_dat["chg code lock"] then
             mcdu_dat["l"]["L"][6][1] = {txt = "+0.0/+0.0", col = "green", size = "s"}
         else
@@ -1527,7 +1614,7 @@ function (phase)
 
     -- chg code
     if phase == "L5" then
-        input = mcdu_get_entry({"###"})
+        input = mcdu_get_entry({"word", length = 3, dp = 0})
         if input ~= NIL then
             if input == "ARM" then
                 fmgs_dat["chg code"] = input
@@ -1545,57 +1632,22 @@ function (phase)
             mcdu_send_message("enter change code")
             return
         end
-        -- format possible inputs
-        possible_inputs = {}
-        possible_inputs_a = {
-            "!",
-            "!.!"
-        }
-        possible_inputs_b = {}
-        for _, i in ipairs(possible_inputs_a) do
-            table.insert(possible_inputs_b, i)
-            table.insert(possible_inputs_b, "+" .. i)
-            table.insert(possible_inputs_b, "-" .. i)
-        end
-        for _, i in ipairs(possible_inputs_b) do
-            for _, j in ipairs(possible_inputs_b) do
-                table.insert(possible_inputs, i .. "/" .. j)
-            end
-        end
-        for _, i in ipairs(possible_inputs_b) do
-            table.insert(possible_inputs, i)
-            table.insert(possible_inputs, "/" .. i)
-        end
-        input = mcdu_get_entry(possible_inputs)
+        input_a, input_b = mcdu_get_entry({"number", length = 1, dp = 1}, {"number", length = 1, dp = 1})
 
          -- is input valid?
-        if input ~= NIL then
-            i = 1
-            while string.sub(input, i, i) ~= "/" and i < string.len(input) do
-                i = i + 1
+        if input_a ~= NIL or input_b ~= NIL then
+            if input_a ~= NIL then
+                fmgs_dat["idle"] = tonumber(input_a)
             end
-
-            -- e.g. 1.0
-            if i == string.len(input) then
-                -- set idle to input
-                fmgs_dat["idle"] = tonumber(input)
-				fmgs_dat["perf"] = fmgs_dat["perf"] or 0
-            -- e.g. /1.0
-            elseif i == 1 then
-                -- set perf to input
-				fmgs_dat["idle"] = fmgs_dat["idle"] or 0
-                fmgs_dat["perf"] = tonumber(string.sub(input, 2, -1))
-			-- e.g. 1.0/1.0
-			else
-				-- set idle and perf to input
-				fmgs_dat["idle"] = tonumber(string.sub(input, 1, i - 1))
-				fmgs_dat["perf"] = tonumber(string.sub(input, i + 1, -1))
-			end
+            if input_b ~= NIL then
+                fmgs_dat["perf"] = tonumber(input_b)
+            end
 
             -- output idle/perf
             fmgs_dat["idle/perf"] = ""
             idle = tostring(fmgs_dat["idle"])
             perf = tostring(fmgs_dat["perf"])
+            print(fmgs_dat["perf"])
             if fmgs_dat["idle"] % 1 == 0 then
                 idle = idle .. ".0"
             end
