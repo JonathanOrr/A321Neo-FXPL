@@ -849,16 +849,16 @@ local function mcdu_ctrl_dd_to_dmsd(dd, axis)
         end
     end
 
-    print(dd)
     dd = math.abs(dd)
-    print(dd)
     d = dd
-    print(d)
     m = d % 1 * 60
-    print(m)
     s = m % 1 * 60
-    print(s)
-    return math.floor(d), m, s, p
+    d = math.floor(d)
+    -- if axis is longitude
+    if axis ~= "lat" then
+        d = mcdu_pad_num(d, 3)
+    end
+    return d, m, s, p
 end
 
 -- converts Degrees Minute Seconds Direction to Decimal Degrees
@@ -1057,7 +1057,6 @@ function (phase)
         mcdu_dat_title.txt = "          init"
 
         fmgs_dat_init("fmgs init", false)   -- init has the fmgs been initialised? to false
-        fmgs_dat_init("latlon sel", "nil") -- init latlon selection for irs alignment
 
         fmgs_dat_init("crz temp alt", true) --init has crz temp been changed?
 
@@ -1236,16 +1235,13 @@ function (phase)
         input = mcdu_get_entry("####/####")
         if input ~= NIL then
 
-            print("b1")
 			-- parse data
 			airp_origin_name = input:sub(1,4):lower()
             airp_dest_name = input:sub(6,9):lower()
 
-            print("b2")
             airp_origin = mcdu_ctrl_get_nav(airp_origin_name, NAV_AIRPORT)
             airp_dest = mcdu_ctrl_get_nav(airp_dest_name, NAV_AIRPORT)
 
-            print("b3")
             -- do these airports exist?
 			if airp_origin.navtype == NAV_UNKNOWN or
 			   airp_dest.navtype == NAV_UNKNOWN then
@@ -1254,15 +1250,16 @@ function (phase)
 				return
 			end			
 
-            print("b4")
 			-- init data
 			fmgs_dat["fmgs init"] = true
 			fmgs_dat["origin"] = airp_origin.id
 			fmgs_dat["dest"] = airp_dest.id
 
-            print("b5")
             fmgs_dat["origin lat"] = airp_origin.lat
             fmgs_dat["origin lon"] = airp_origin.lon
+
+            -- enable latlon sel in irs init page
+            fmgs_dat["init irs latlon sel"] = "lat"
 
 			mcdu_open_page(401) -- open 401 init routes
 
@@ -1393,48 +1390,6 @@ function (phase)
 		end
         mcdu_open_page(400) -- reload
     end
-
-    -- slew left/right (used for lat lon)
-    if phase == "slew_left" or phase == "slew_right" then
-        --toggle between lat and lon select
-        fmgs_dat["latlon sel"] = mcdu_toggle(fmgs_dat["latlon sel"], "lat", "lon")
-        mcdu_open_page(400) -- reload
-    end
-
-    -- slew up (used for lat lon)
-    if phase == "slew_up" or phase == "slew_down" then
-        if phase == "slew_up" then
-            increment = 1
-        else
-            increment = -1
-        end
-        if fmgs_dat["latlon sel"] == "lat" then
-            --change lat from 0-9000.0
-            fmgs_dat["lat"] = Math_clamp(fmgs_dat["lat"] + increment * 0.1, 0, 9000)
-            --flip
-            if fmgs_dat["lat"] == 0 or fmgs_dat["lat"] == 9000 then
-                fmgs_dat["lat"] = fmgs_dat["lat"] - increment * 0.1
-                fmgs_dat["lat_dir"] = mcdu_toggle(fmgs_dat["lat_dir"], "N", "S") --flip
-            end
-            --padding decimal
-            fmgs_dat["lat"] = mcdu_pad_dp(fmgs_dat["lat"], 1)
-            --assign
-            fmgs_dat["lat fmt"] = fmgs_dat["lat"] .. fmgs_dat["lat_dir"]
-        elseif fmgs_dat["latlon sel"] == "lon" then
-            --change lon from 0-180000.00
-            fmgs_dat["lon"] = Math_clamp(fmgs_dat["lon"] + increment * 0.01, 0, 18000)
-            --flip
-            if fmgs_dat["lon"] == 0 or fmgs_dat["lon"] == 18000 then
-                fmgs_dat["lon"] = fmgs_dat["lon"] - increment * 0.01
-                fmgs_dat["lon_dir"] = mcdu_toggle(fmgs_dat["lon_dir"], "W", "E") --flip
-            end
-            --padding decimal
-            fmgs_dat["lon"] = mcdu_pad_dp(fmgs_dat["lon"], 2)
-            --assign
-            fmgs_dat["lon fmt"] = fmgs_dat["lon"] .. fmgs_dat["lon_dir"]
-        end
-        mcdu_open_page(400) -- reload
-    end
 end
 
 -- 401 init routes
@@ -1453,40 +1408,51 @@ function (phase)
     end
 end
 
+-- TODO: REMOVE THIS
+irs1_status = "align-gps"
+irs2_status = "align-gps"
+irs3_status = "align-gps"
+
+gps_status = "on"
+
+irs_statuses = {irs1_status, irs2_status, irs3_status}
+
 -- 402 init irs init
 mcdu_sim_page[402] =
 function (phase)
+
     if phase == "render" then
+        fmgs_dat_init("init irs latlon sel", "nil")-- init latlon selection for irs alignment
+        fmgs_dat_init("init irs latlon edited", false)-- init latlon edited?
+
         mcdu_dat_title.txt = "        irs init"
 
-        irs1_status = "align-gps"
-        irs2_status = "align-gps"
-        irs3_status = "align"
-        gps_status = "on"
-
         if fmgs_dat["fmgs init"] then
+            fmgs_dat_init("init irs lat", fmgs_dat["origin lat"])
+            fmgs_dat_init("init irs lon", fmgs_dat["origin lon"])
+
             --[[ REFERENCE LAT / LONG --]]
             mcdu_dat["s"]["L"][1].txt = "lat    reference"
             mcdu_dat["s"]["R"][1].txt = "long"
 
             --irs latlon change selection
-            if fmgs_dat["latlon sel"] == "lat" then
+            if fmgs_dat["init irs latlon sel"] == "lat" then
                 mcdu_dat["s"]["L"][1].txt = "lat^   reference"
-            elseif fmgs_dat["latlon sel"] == "lon" then
+            elseif fmgs_dat["init irs latlon sel"] == "lon" then
                 mcdu_dat["s"]["R"][1].txt = "^long"
             end
 
-            has_edit_latlon = false
-            if has_edit_latlon then
-                mcdu_dat["l"]["L"][1][1] = {txt = "          ----"}
-            else
+            if fmgs_dat["init irs lat"] == fmgs_dat["origin lat"] and
+               fmgs_dat["init irs lon"] == fmgs_dat["origin lon"] then
                 mcdu_dat["l"]["L"][1][1] = {txt = "          "  .. fmgs_dat["origin"], col = "green"}
+            else
+                mcdu_dat["l"]["L"][1][1] = {txt = "          ----"}
             end
 
-            deg, min, sec, dir = mcdu_ctrl_dd_to_dmsd(airp_origin.lat, "lat")
+            deg, min, sec, dir = mcdu_ctrl_dd_to_dmsd(fmgs_dat["init irs lat"], "lat")
             mcdu_dat["l"]["L"][1][2] = {txt = tostring(deg) .. "º    "  .. tostring(dir), col = "cyan"}
             mcdu_dat["l"]["L"][1][3] = {txt = "   " ..tostring(Round(min, 1)), col = "cyan", size = "s"}
-            deg, min, sec, dir = mcdu_ctrl_dd_to_dmsd(airp_origin.lon, "lon")
+            deg, min, sec, dir = mcdu_ctrl_dd_to_dmsd(fmgs_dat["init irs lon"], "lon")
             mcdu_dat["l"]["R"][1][1] = {txt = tostring(deg) .. "º    "  .. tostring(dir), col = "cyan"}
             mcdu_dat["l"]["R"][1][2] = {txt = tostring(Round(min, 1)) .. " ", col = "cyan", size = "s"}
 
@@ -1506,32 +1472,80 @@ function (phase)
             end
         end
 
-        irs_statuses = {irs1_status, irs2_status, irs3_status}
-
         for no, irs in ipairs(irs_statuses) do
+                print(irs_statuses[no])
+            lat = nil
+            lon = nil
             if irs == "off" then
                 mcdu_dat["s"]["L"][no + 2].txt = "  irs" .. no .. " off"
-                mcdu_dat["l"]["L"][no + 2].txt = "   --º--.--/---º--.--"
             elseif irs == "align" then
                 mcdu_dat["s"]["L"][no + 2].txt = "  irs" .. no .. " aligning on ---"
-                mcdu_dat["l"]["L"][no + 2].txt = "   --º--.--/---º--.--"
             elseif irs == "align-gps" then
                 mcdu_dat["s"]["L"][no + 2].txt = "  irs" .. no .. " aligning on gps"
-                deg, min, sec, dir = mcdu_ctrl_dd_to_dmsd(get(gps_lat), "lat")
+                lat = get(gps_lat)
+                lon = get(gps_lon)
+            elseif irs == "align-ref" then
+                mcdu_dat["s"]["L"][no + 2].txt = "  irs" .. no .. " aligning on ref"
+                lat = fmgs_dat["init irs lat"]
+                lon = fmgs_dat["init irs lon"]
+            end
+
+            -- if lat and lon are set
+            if lat ~= nil and lon ~= nil then
+                deg, min, sec, dir = mcdu_ctrl_dd_to_dmsd(lat, "lat")
                 mcdu_dat["l"]["L"][no + 2][1] = {txt = "   " .. tostring(deg) .. "º    "  .. tostring(dir) .. "/", col = "green"}
                 mcdu_dat["l"]["L"][no + 2][2] = {txt = "      " ..tostring(Round(min, 1)), col = "green", size = "s"}
-                deg, min, sec, dir = mcdu_ctrl_dd_to_dmsd(get(gps_lon), "lon")
+                deg, min, sec, dir = mcdu_ctrl_dd_to_dmsd(lon, "lon")
                 mcdu_dat["l"]["R"][no + 2][1] = {txt = tostring(deg) .. "º    "  .. tostring(dir) .. "   ", col = "green"}
                 mcdu_dat["l"]["R"][no + 2][2] = {txt = tostring(Round(min, 1)) .. "    ", col = "green", size = "s"}
-            elseif irs == "lock" then
+            else
+                mcdu_dat["l"]["L"][no + 2].txt = "   --º--.--/---º--.--"
             end
         end
 		mcdu_dat["l"]["L"][6].txt = "<return"
+        if fmgs_dat["init irs latlon sel"] ~= "nil" then
+            mcdu_dat["l"]["R"][6] = {txt = "align on ref→", col = "cyan"}
+        end
 
         draw_update()
     end
     if phase == "L6" then
         mcdu_open_page(400) -- open 400 init
+    end
+    if phase == "R6" then
+        fmgs_dat["init irs latlon sel"] = "nil" -- disable editing of latlon
+        for no, irs in ipairs(irs_statuses) do
+            if irs == "align-gps" then
+                irs_statuses[no] = "align-ref"
+            end
+        end
+        mcdu_open_page(402) -- reload
+    end
+
+    -- slew left/right (used for lat lon)
+    if phase == "slew_left" or phase == "slew_right" then
+        --toggle between lat and lon select
+        fmgs_dat["init irs latlon sel"] = mcdu_toggle(fmgs_dat["init irs latlon sel"], "lat", "lon")
+        mcdu_open_page(402) -- reload
+    end
+
+    -- slew up (used for lat lon)
+    if phase == "slew_up" or phase == "slew_down" then
+        fmgs_dat["init irs latlon edited"] = true
+
+        if phase == "slew_up" then
+            increment = 1
+        else
+            increment = -1
+        end
+
+        if fmgs_dat["init irs latlon sel"] == "lat" then
+            fmgs_dat["init irs lat"] = fmgs_dat["init irs lat"] + 1/600 * increment
+
+        elseif fmgs_dat["init irs latlon sel"] == "lon" then
+            fmgs_dat["init irs lon"] = fmgs_dat["init irs lon"] + 1/600 * increment
+        end
+        mcdu_open_page(402) -- reload
     end
 end
 
