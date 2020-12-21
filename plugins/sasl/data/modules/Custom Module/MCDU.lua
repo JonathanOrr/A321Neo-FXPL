@@ -802,6 +802,23 @@ function draw()
 	perf_measure_stop("MCDU:draw()")
 end
 
+-- utlities for changing colours
+function update_global_colors()
+    ECAM_WHITE = MCDU_DISP_COLOR["white"]
+    UI_WHITE = MCDU_DISP_COLOR["white"]
+    ECAM_BLUE = MCDU_DISP_COLOR["cyan"]
+    UI_BLUE = MCDU_DISP_COLOR["blue"]
+    ECAM_GREEN = MCDU_DISP_COLOR["green"]
+    UI_GREEN = MCDU_DISP_COLOR["green"]
+    ECAM_ORANGE = MCDU_DISP_COLOR["amber"]
+    ECAM_YELLOW = MCDU_DISP_COLOR["yellow"]
+    UI_YELLOW = MCDU_DISP_COLOR["yellow"]
+    ECAM_MAGENTA = MCDU_DISP_COLOR["magenta"]
+    ECAM_RED = MCDU_DISP_COLOR["red"]
+    UI_RED = MCDU_DISP_COLOR["red"]
+    ECAM_BLACK = MCDU_DISP_COLOR["black"]
+end
+
 --[[
 --
 --
@@ -1050,9 +1067,6 @@ end
 -- 400 init
 mcdu_sim_page[400] =
 function (phase)
-    if phase == "update" then
-    end
-
     if phase == "render" then
         mcdu_dat_title.txt = "          init"
 
@@ -1257,123 +1271,13 @@ function (phase)
 
             fmgs_dat["origin lat"] = airp_origin.lat
             fmgs_dat["origin lon"] = airp_origin.lon
+            fmgs_dat["init irs lat"] = airp_origin.lat
+            fmgs_dat["init irs lon"] = airp_origin.lon
 
             -- enable latlon sel in irs init page
             fmgs_dat["init irs latlon sel"] = "lat"
 
 			mcdu_open_page(401) -- open 401 init routes
-
-			--[[
-            --set orgin for XP FMC
-            --format e.g. ksea/kbfi
-            airp_origin = input:sub(1,4):lower()
-            airp_dest = input:sub(6,9):lower()
-
-            --get origin from XP FMC
-            mcdu_ctrl_set_fpln_origin(airp_origin, function(val) --callback
-            fmgs_dat["origin"] = airp_origin
-
-            --get dest from XP FMC
-            mcdu_ctrl_set_fpln_dest(airp_dest, function(val) --callback
-            fmgs_dat["dest"] = airp_dest
-
-            --set co rte
-            fmgs_dat["fmgs init"] = true
-            mcdu_open_page(400) -- reload
-
-            --get lat lon from XP FMC
-            mcdu_ctrl_get_origin_latlon(input:sub(1,4), function(val) --callback
-            --format e.g. N12°34.56 must be convert to 1234.5N
-            fmgs_dat["lat fmt"] = val:sub(2,3) .. val:sub(6,9) .. val:sub(1,1)
-            --format e.g. W123°45.67 must be convert to 12345.67W
-            fmgs_dat["lon fmt"] = val:sub(13,15) .. val:sub(18,22) .. val:sub(12,12)
-            print("lat lon upload")
-
-            mcdu_open_page(400) -- reload
-
-            --add listener for when ADIRS are turned on
-            mcdu_ctrl_add_listener(
-                function () --data listener function
-                    if get(Adirs_capt_has_ADR) == 1 then
-                        return "EXIT" -- exit loop, execute callback
-                    end 
-                end,
-                function () --callback
-                    --IRS are in NAV or ATT but irs are not aligned
-                    if get(mcdu_irs_aligned) == 0 and get(Adirs_capt_has_ADR) == 1 then
-                        fmgs_dat["irs aligned"] = "show"
-                        fmgs_dat["latlon sel"] = "lat"
-                    end
-
-                    --set lat
-                    --format e.g. 1234.5N
-                    fmgs_dat["lat"] = tonumber(fmgs_dat["lat fmt"]:sub(1,6))
-                    fmgs_dat["lat_dir"] = fmgs_dat["lat fmt"]:sub(7,7)
-
-                    --set lon
-                    --format e.g. 12345.67W
-                    fmgs_dat["lon"] = tonumber(fmgs_dat["lon fmt"]:sub(1,8))
-                    fmgs_dat["lon_dir"] = fmgs_dat["lon fmt"]:sub(9,9)
-
-                    --if on init page, reload it
-                    if get(mcdu_page) == 400 then
-                        mcdu_open_page(400) -- reload
-                    end
-                end
-            )
-
-            --get SID
-            fmgs_dat["runways"] = {}
-            terminate = false
-            mcdu_ctrl_get_runways_origin(function (val) --accessor callback
-            --val is runway name
-            runway_name = val:sub(22,24)
-            --is there any more runways?
-            if not terminate then
-                --is this not a blank line?
-                if runway_name ~= "   " then
-
-                    --get runway length
-                    airport = fmgs_dat["origin"]:upper()
-
-                    index = 0
-                    mcdu_ctrl_get_runway_length(
-                        airport .. runway_name, --input arg
-                        runway_name, --refcon arg
-                        function (val, refcon) --callback arg
-                            --val is runway length
-                            --format e.g. from  9420FT to 9420
-                            runway_length = ""
-                            --start after space, so at i = 2 not i = 1
-                            for i = 2, string.len(val) do
-                                --has it reached f in FT?
-                                if val:sub(i,i) == "F" then
-                                    break
-                                end
-                                runway_length = val:sub(2,i)
-                            end
-                            --refcon is runway_name
-                            runway_name = refcon
-
-                            --record name and length
-                            table.insert(fmgs_dat["runways"], {index = index, name = runway_name, length = runway_length})
-
-                            index = index + 1
-                        end
-                    ) --end callback
-                else
-                    --all runways recorded. stop
-                    fmgs_dat["terminate"] = true
-                end
-            end
-
-            end) --end callback
-            end) --end callback
-            end) --end callback
-            end) --end callback
-
-            mcdu_open_page(400) -- reload
-			--]]
         end
     end
 
@@ -1428,8 +1332,6 @@ function (phase)
         mcdu_dat_title.txt = "        irs init"
 
         if fmgs_dat["fmgs init"] then
-            fmgs_dat_init("init irs lat", fmgs_dat["origin lat"])
-            fmgs_dat_init("init irs lon", fmgs_dat["origin lon"])
 
             --[[ REFERENCE LAT / LONG --]]
             mcdu_dat["s"]["L"][1].txt = "lat    reference"
@@ -2299,6 +2201,7 @@ end
 mcdu_sim_page[1104] =
 function (phase)
     if phase == "render" then
+        update_global_colors()
         colour = fmgs_dat["colour"]
         mcdu_dat_title.txt = "     change " .. colour
         mcdu_dat_title.col = colour
@@ -2366,16 +2269,17 @@ function (phase)
     if phase == "L1" then
         MCDU_DISP_COLOR = 
         {
-            ["white"] =   ECAM_WHITE,
-            ["cyan"] =    ECAM_BLUE,
-            ["green"] =   ECAM_GREEN,
-            ["amber"] =   ECAM_ORANGE,
-            ["yellow"] =  ECAM_YELLOW,
-            ["magenta"] = ECAM_MAGENTA,
-            ["red"] =     ECAM_RED,
+            ["white"] =   {1.00, 1.00, 1.00},
+            ["cyan"] =    {0.004, 1.00, 1.00},
+            ["green"] =   {0.20, 0.92, 0.20},
+            ["amber"] =   {1.00, 0.66, 0.16},
+            ["yellow"] =  {1.00, 1.00, 0.00},
+            ["magenta"] = {1.00, 0.00, 1.00},
+            ["red"] =     {1.00, 0.00, 0.00},
 
-            ["black"] =   ECAM_BLACK,
+            ["black"] =   {0.00, 0.00, 0.00},
         }
+        update_global_colors()
         mcdu_open_page(1103) -- open 1103 mcdu menu options colours
     end
     if phase == "L2" then
@@ -2391,12 +2295,13 @@ function (phase)
 
             ["black"] =   {0.00, 0.00, 0.00},
         }
+        update_global_colors()
         mcdu_open_page(1103) -- open 1103 mcdu menu options colours
     end
     if phase == "L3" then
         MCDU_DISP_COLOR = 
         {
-            ["white"] =   {0.92, 0.94, 0.93}, --EBEFEC
+            ["white"] =   {1.00, 1.00, 1.00}, --EBEFEC
             ["cyan"] =    {0.68, 0.84, 1.00}, --ADD7FF
             ["green"] =   {0.73, 1.00, 0.87}, --BBFDDD
             ["amber"] =   {1.00, 0.67, 0.70}, --FFAAB3
@@ -2406,6 +2311,7 @@ function (phase)
 
             ["black"] =   {0.00, 0.00, 0.00},
         }
+        update_global_colors()
         mcdu_open_page(1103) -- open 1103 mcdu menu options colours
     end
     --[[
@@ -2438,6 +2344,7 @@ function (phase)
 
             ["black"] =   {0.00, 0.00, 0.00},
         }
+        update_global_colors()
         mcdu_open_page(1103) -- open 1103 mcdu menu options colours
     end
 
