@@ -287,7 +287,10 @@ function onKeyDown ( component , charCode , key , shDown , ctrlDown , altOptDown
             --noop
         elseif charCode == SASL_KEY_DELETE then
             sasl.commandOnce(sasl.findCommand("a321neo/cockpit/mcdu/misc/clr"))
-        elseif string.char(charCode) == "+" or string.char(charCode) == "-" then
+        elseif string.char(charCode) == "-" then
+            sasl.commandOnce(sasl.findCommand("a321neo/cockpit/mcdu/misc/positive_negative"))
+        elseif string.char(charCode) == "+" then
+            sasl.commandOnce(sasl.findCommand("a321neo/cockpit/mcdu/misc/positive_negative"))
             sasl.commandOnce(sasl.findCommand("a321neo/cockpit/mcdu/misc/positive_negative"))
         elseif string.char(charCode) == "/" then
             sasl.commandOnce(sasl.findCommand("a321neo/cockpit/mcdu/key/slash"))
