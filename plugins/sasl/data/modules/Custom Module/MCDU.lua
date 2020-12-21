@@ -434,6 +434,19 @@ local function mcdu_parse_entry(entry, expected_format)
 	return output
 end
 
+-- the simpler way of getting mcdu entries
+local function mcdu_get_entry_simple(expected_formats)
+    output = mcdu_eval_entries(mcdu_entry, expected_formats)
+    if output == NIL then
+        mcdu_send_message("format error")
+        return NIL
+    else
+        mcdu_entry = ""
+        return output
+    end
+end
+
+
 -- accepts mcdu entries by a specific format (list of formats)
 -- e.g. mcdu_get_entry({"altitude"}, {"number", length = 2, dp = 0})
 -- accepts in an altitude format, with a slash and a number.
@@ -1264,7 +1277,9 @@ function (phase)
 	-- flt nbr
     if phase == "L3" then
         input = mcdu_get_entry()
-        fmgs_dat["flt nbr"] = input
+        if string.len(input) < 9 then
+            fmgs_dat["flt nbr"] = input
+        end
         mcdu_open_page(400) -- reload
     end
     -- cost index
@@ -1285,9 +1300,13 @@ function (phase)
         if input_a ~= NIL or input_b ~= NIL then
             if input_a ~= NIL then
                 alt = input_a * 100
-                fmgs_dat["crz fl"] = tonumber(alt)
-                fmgs_dat["crz temp"] = math.floor(tonumber(alt / 100) * -0.2 + 16)
-                fmgs_dat["crz temp alt"] = false --crz temp has not been altered
+                if alt >= 1500 then
+                    fmgs_dat["crz fl"] = tonumber(alt)
+                    fmgs_dat["crz temp"] = math.floor(tonumber(alt / 100) * -0.2 + 16)
+                    fmgs_dat["crz temp alt"] = false --crz temp has not been altered
+                else
+                    mcdu_send_message("invalid altitude")
+                end
             end
             if input_b ~= NIL then
                 fmgs_dat["crz temp"] = tonumber(input_b)
@@ -1300,7 +1319,8 @@ function (phase)
     -- from/to
     if phase == "R1" then
         --format e.g. ksea/kbfi
-        input = mcdu_get_entry({"word", length = 4, dp = 0}, {"word", length = 4, dp = 0})
+        input = mcdu_get_entry_simple({"####/####"})
+
         if input ~= NIL then
 
 			-- parse data
@@ -1440,27 +1460,27 @@ function (phase)
             elseif irs == "aligning" then
                 mcdu_dat["s"]["L"][no + 2].txt = "  irs" .. no .. " aligning on ---"
             elseif irs == "aligning-gps" then
-                mcdu_dat["s"]["l"][no + 2].txt = "  irs" .. no .. " aligning on gps"
+                mcdu_dat["s"]["L"][no + 2].txt = "  irs" .. no .. " aligning on gps"
                 lat = get(gps_lat)
                 lon = get(gps_lon)
             elseif irs == "aligning-ref" then
-                mcdu_dat["s"]["l"][no + 2].txt = "  irs" .. no .. " aligning on ref"
+                mcdu_dat["s"]["L"][no + 2].txt = "  irs" .. no .. " aligning on ref"
                 lat = fmgs_dat["init irs lat"]
                 lon = fmgs_dat["init irs lon"]
             elseif irs == "aligning-cdu" then
-                mcdu_dat["s"]["l"][no + 2].txt = "  irs" .. no .. " aligning on cdu"
+                mcdu_dat["s"]["L"][no + 2].txt = "  irs" .. no .. " aligning on cdu"
                 lat = 0
                 lon = 0
             elseif irs == "aligned-gps" then
-                mcdu_dat["s"]["l"][no + 2].txt = "  irs" .. no .. " aligned on gps"
+                mcdu_dat["s"]["L"][no + 2].txt = "  irs" .. no .. " aligned on gps"
                 lat = get(gps_lat)
                 lon = get(gps_lon)
             elseif irs == "aligned-ref" then
-                mcdu_dat["s"]["l"][no + 2].txt = "  irs" .. no .. " aligned on ref"
+                mcdu_dat["s"]["L"][no + 2].txt = "  irs" .. no .. " aligned on ref"
                 lat = fmgs_dat["init irs lat"]
                 lon = fmgs_dat["init irs lon"]
             elseif irs == "aligned-cdu" then
-                mcdu_dat["s"]["l"][no + 2].txt = "  irs" .. no .. " aligned on cdu"
+                mcdu_dat["s"]["L"][no + 2].txt = "  irs" .. no .. " aligned on cdu"
                 lat = 0
                 lon = 0
             end
@@ -2267,7 +2287,7 @@ function (phase)
         draw_update()
     end
     if phase == "L1" then
-        input, variation = mcdu_get_entry({"!", "!!", "!!!"})
+        input = mcdu_get_entry({"number", length = 3, dp = 1})
         if input ~= NIL then
             input_col = tonumber(input) / 100
             MCDU_DISP_COLOR[fmgs_dat["colour"]][1] = input_col
@@ -2278,7 +2298,7 @@ function (phase)
         end
     end
     if phase == "L2" then
-        input, variation = mcdu_get_entry({"!", "!!", "!!!"})
+        input = mcdu_get_entry({"number", length = 3, dp = 1})
         if input ~= NIL then
             input_col = tonumber(input) / 100
             MCDU_DISP_COLOR[fmgs_dat["colour"]][2] = input_col
@@ -2289,7 +2309,7 @@ function (phase)
         end
     end
     if phase == "L3" then
-        input, variation = mcdu_get_entry({"!", "!!", "!!!"})
+        input = mcdu_get_entry({"number", length = 3, dp = 1})
         if input ~= NIL then
             input_col = tonumber(input) / 100
             MCDU_DISP_COLOR[fmgs_dat["colour"]][3] = input_col
