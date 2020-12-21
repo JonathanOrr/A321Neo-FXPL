@@ -212,7 +212,7 @@ P _gear/0/_lonE 7.0
 P _gear/0/_lonN 7.0
 P _gear/0/_lonR 99.0
 P _gear/0/_scon 157581.015625000
-P _gear/0/_stat_def 0.120225564
+P _gear/0/_stat_def 0.120225571
 P _gear/0/_steerdeg_hispeed 5.0
 P _gear/0/_steerdeg_lospeed 75.0
 P _gear/0/_strut_comp 0.899999976
@@ -246,7 +246,7 @@ P _gear/1/_lonE -6.0
 P _gear/1/_lonN -6.0
 P _gear/1/_lonR 2.0
 P _gear/1/_scon 157581.015625000
-P _gear/1/_stat_def 0.739415765
+P _gear/1/_stat_def 0.739415944
 P _gear/1/_steerdeg_hispeed 0.0
 P _gear/1/_steerdeg_lospeed 0.0
 P _gear/1/_strut_comp 0.699999988
@@ -280,7 +280,7 @@ P _gear/2/_lonE -6.0
 P _gear/2/_lonN -6.0
 P _gear/2/_lonR 2.0
 P _gear/2/_scon 157581.015625000
-P _gear/2/_stat_def 0.739415765
+P _gear/2/_stat_def 0.739415944
 P _gear/2/_steerdeg_hispeed 0.0
 P _gear/2/_steerdeg_lospeed 0.0
 P _gear/2/_strut_comp 0.699999988
@@ -67410,8 +67410,8 @@ P acf/_FBW_apply_R_to_engine/count 8
 P acf/_FF_is_lbsph 0
 P acf/_Gneg 3.0
 P acf/_Gpos 5.0
-P acf/_HUD_del_x 240.0
-P acf/_HUD_del_y 120.0
+P acf/_HUD_del_x 0.0
+P acf/_HUD_del_y 0.0
 P acf/_ICAO A21N
 P acf/_ITT_is_C 1
 P acf/_Jxx_unitmass 0.0
@@ -68358,14 +68358,14 @@ P acf/_chute_z/count 3
 P acf/_click_step_otto_alt 100.0
 P acf/_click_step_otto_vvi 100.0
 P acf/_click_step_radio_alt 10.0
-P acf/_cockpit_planned_vanish_y/0 590.0
-P acf/_cockpit_planned_vanish_y/1 590.0
-P acf/_cockpit_planned_vanish_y/2 590.0
-P acf/_cockpit_planned_vanish_y/3 590.0
-P acf/_cockpit_planned_vanish_y/4 590.0
+P acf/_cockpit_planned_vanish_y/0 540.0
+P acf/_cockpit_planned_vanish_y/1 690.0
+P acf/_cockpit_planned_vanish_y/2 690.0
+P acf/_cockpit_planned_vanish_y/3 690.0
+P acf/_cockpit_planned_vanish_y/4 690.0
 P acf/_cockpit_planned_vanish_y/5 590.0
-P acf/_cockpit_planned_vanish_y/6 590.0
-P acf/_cockpit_planned_vanish_y/7 590.0
+P acf/_cockpit_planned_vanish_y/6 690.0
+P acf/_cockpit_planned_vanish_y/7 690.0
 P acf/_cockpit_planned_vanish_y/8 555.0
 P acf/_cockpit_planned_vanish_y/count 9
 P acf/_cockpit_type 1
@@ -69989,7 +69989,7 @@ P acf/_part_descrip/93 TIJERA TREN PPAL
 P acf/_part_descrip/94 Nosegear axle truck
 P acf/_part_descrip/count 95
 P acf/_pe_xyz/0 -1.541994691
-P acf/_pe_xyz/1 2.493438244
+P acf/_pe_xyz/1 2.526246548
 P acf/_pe_xyz/2 8.989500999
 P acf/_pe_xyz/count 3
 P acf/_phase_hdng_tvect_in_at_00 0
@@ -70164,7 +70164,7 @@ P acf/_sbrk2_up_grnd 40.0
 P acf/_sbrk_EQ 1
 P acf/_sbrk_on_td_EQ 0
 P acf/_scrolldef_x 0.0
-P acf/_scrolldef_y 90.0
+P acf/_scrolldef_y 0.0
 P acf/_show_ott_asi 1
 P acf/_shut_off_fuel_at_min_prop 0
 P acf/_single_axis_ap 0
@@ -70544,8 +70544,8 @@ P acf/_yawbr_rat2 1.0
 P acf/_yawbr_ud 0.0
 P acf/_yawbr_v1 0.0
 P acf/_yawbr_v2 999.0
-P acf/_yawstring_x 512.0
-P acf/_yawstring_y 431.0
+P acf/_yawstring_x 0.0
+P acf/_yawstring_y 0.0
 P acf/_yel_hi_CHT 0
 P acf/_yel_hi_EGT 0
 P acf/_yel_hi_EPR 0
@@ -72100,7 +72100,6 @@ GROUP PFD
 
   GROUP Beta Target
     LOCKED
-    GROUP_OPEN
     GROUP_ANIMATE_MODE ROTATE
     GROUP_WIDTH 0
     GROUP_HEIGHT 0
@@ -72115,7 +72114,6 @@ GROUP PFD
     ROTATE_OFFSET_Y 0.000000
     GROUP ALT
       LOCKED
-      GROUP_OPEN
       gen_pointer Beta Target
         POS 423.500000 3352.000000
         IMAGE MIP/pfd/beta target
@@ -72281,6 +72279,7 @@ GROUP PFD
       DATAREF a321neo/dynamics/FBW/limit_speeds/delta/capt_s
       SHOW_LESS 2.000000 a321neo/dynamics/surfaces/flaps_internal_config
       LOCKED
+      HIDE
       CLIP
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
@@ -72394,155 +72393,6 @@ GROUP PFD
       CLICK_DY 0
 
   END_GROUP
-  GROUP RA Display
-    SHOW_EQUAL 1.000000 a321neo/cockpit/PFD/capt_radioalt_status
-    LOCKED
-    GROUP_ANIMATE_MODE ROTATE
-    GROUP_WIDTH 0
-    GROUP_HEIGHT 0
-    DATAREF sim/cockpit2/gauges/indicators/roll_AHARS_deg_pilot
-    POS 424.000000 3351.000000
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 -1.000000
-    ROTATE_OFFSET_X 0.000000
-    ROTATE_OFFSET_Y 0.000000
-    GROUP RA Green
-      SHOW_EQUAL 0.000000 a321neo/cockpit/PFD/capt_radioalt_col
-      LOCKED
-      gen_LED RA Green 4 Dig
-        POS 406.000000 3139.000000
-        IMAGE MIP/pfd/ra display/ra green
-        DATAREF a321neo/cockpit/PFD/capt_radioalt_val
-        SHOW_LESS 2500.000000 a321neo/cockpit/PFD/capt_radioalt_val
-        SHOW_GREATER 999.000000 a321neo/cockpit/PFD/capt_radioalt_val
-        LOCKED
-        LIGHT_MODE GLASS_AUTO
-        LIGHT_RHEOSTAT 0
-        KEY_FRAME 0.000000 0.000000 1.000000
-        KEY_FRAME 3000.000000 3000.000000
-        DIGITS 6
-        DECIMALS 0
-        PERIOD_WIDTH 0
-        LED_ROWS 0
-
-      gen_LED RA Green 3 Dig
-        POS 398.000000 3139.000000
-        IMAGE MIP/pfd/ra display/ra green
-        DATAREF a321neo/cockpit/PFD/capt_radioalt_val
-        SHOW_LESS 999.000000 a321neo/cockpit/PFD/capt_radioalt_val
-        SHOW_GREATER 99.000000 a321neo/cockpit/PFD/capt_radioalt_val
-        LOCKED
-        LIGHT_MODE GLASS_AUTO
-        LIGHT_RHEOSTAT 0
-        KEY_FRAME 0.000000 0.000000 1.000000
-        KEY_FRAME 3000.000000 3000.000000
-        DIGITS 6
-        DECIMALS 0
-        PERIOD_WIDTH 0
-        LED_ROWS 0
-
-      gen_LED RA Green 2 Dig
-        POS 390.000000 3139.000000
-        IMAGE MIP/pfd/ra display/ra green
-        DATAREF a321neo/cockpit/PFD/capt_radioalt_val
-        SHOW_LESS 99.000000 a321neo/cockpit/PFD/capt_radioalt_val
-        SHOW_GREATER 9.900000 a321neo/cockpit/PFD/capt_radioalt_val
-        LOCKED
-        LIGHT_MODE GLASS_AUTO
-        LIGHT_RHEOSTAT 0
-        KEY_FRAME 0.000000 0.000000 1.000000
-        KEY_FRAME 3000.000000 3000.000000
-        DIGITS 6
-        DECIMALS 0
-        PERIOD_WIDTH 0
-        LED_ROWS 0
-
-      gen_LED RA Green 1 Dig
-        POS 381.000000 3139.000000
-        IMAGE MIP/pfd/ra display/ragreentens
-        DATAREF a321neo/cockpit/PFD/capt_radioalt_val
-        SHOW_LESS 9.900000 a321neo/cockpit/PFD/capt_radioalt_val
-        SHOW_GREATER -10.000000 a321neo/cockpit/PFD/capt_radioalt_val
-        LOCKED
-        LIGHT_MODE GLASS_AUTO
-        LIGHT_RHEOSTAT 0
-        KEY_FRAME 0.000000 0.000000 1.000000
-        KEY_FRAME 10.000000 10.000000
-        DIGITS 6
-        DECIMALS 0
-        PERIOD_WIDTH 0
-        LED_ROWS 0
-
-    END_GROUP
-    GROUP RA Amber
-      SHOW_EQUAL 1.000000 a321neo/cockpit/PFD/capt_radioalt_col
-      LOCKED
-      gen_LED RA Amber 4 Dig
-        POS 406.000000 3139.000000
-        IMAGE MIP/pfd/ra display/ra red
-        DATAREF a321neo/cockpit/PFD/capt_radioalt_val
-        SHOW_LESS 2500.000000 a321neo/cockpit/PFD/capt_radioalt_val
-        SHOW_GREATER 999.000000 a321neo/cockpit/PFD/capt_radioalt_val
-        LOCKED
-        LIGHT_MODE GLASS_AUTO
-        LIGHT_RHEOSTAT 0
-        KEY_FRAME 0.000000 0.000000 1.000000
-        KEY_FRAME 3000.000000 3000.000000
-        DIGITS 6
-        DECIMALS 0
-        PERIOD_WIDTH 0
-        LED_ROWS 0
-
-      gen_LED RA Amber 3 Dig 
-        POS 398.000000 3139.000000
-        IMAGE MIP/pfd/ra display/ra red
-        DATAREF a321neo/cockpit/PFD/capt_radioalt_val
-        SHOW_LESS 999.000000 a321neo/cockpit/PFD/capt_radioalt_val
-        SHOW_GREATER 99.000000 a321neo/cockpit/PFD/capt_radioalt_val
-        LOCKED
-        LIGHT_MODE GLASS_AUTO
-        LIGHT_RHEOSTAT 0
-        KEY_FRAME 0.000000 0.000000 1.000000
-        KEY_FRAME 3000.000000 3000.000000
-        DIGITS 6
-        DECIMALS 0
-        PERIOD_WIDTH 0
-        LED_ROWS 0
-
-      gen_LED RA Amber 2 Dig
-        POS 390.000000 3139.000000
-        IMAGE MIP/pfd/ra display/ra red
-        DATAREF a321neo/cockpit/PFD/capt_radioalt_val
-        SHOW_LESS 99.000000 a321neo/cockpit/PFD/capt_radioalt_val
-        SHOW_GREATER 9.900000 a321neo/cockpit/PFD/capt_radioalt_val
-        LOCKED
-        LIGHT_MODE GLASS_AUTO
-        LIGHT_RHEOSTAT 0
-        KEY_FRAME 0.000000 0.000000 1.000000
-        KEY_FRAME 3000.000000 3000.000000
-        DIGITS 6
-        DECIMALS 0
-        PERIOD_WIDTH 0
-        LED_ROWS 0
-
-      gen_LED RA Amber 1 Dig
-        POS 381.000000 3139.000000
-        IMAGE MIP/pfd/ra display/raambertens
-        DATAREF a321neo/cockpit/PFD/capt_radioalt_val
-        SHOW_LESS 9.900000 a321neo/cockpit/PFD/capt_radioalt_val
-        SHOW_GREATER -10.000000 a321neo/cockpit/PFD/capt_radioalt_val
-        LOCKED
-        LIGHT_MODE GLASS_AUTO
-        LIGHT_RHEOSTAT 0
-        KEY_FRAME 0.000000 0.000000 1.000000
-        KEY_FRAME 10.000000 10.000000
-        DIGITS 6
-        DECIMALS 0
-        PERIOD_WIDTH 0
-        LED_ROWS 0
-
-    END_GROUP
-  END_GROUP
   GROUP Flight Directors
     LOCKED
     gen_pointer Flight Director V
@@ -72593,179 +72443,13 @@ GROUP PFD
     CLICK_DY 0
 
 END_GROUP
-GROUP PFD Standby Covers
-  LOCKED
-  CHAINED
-  gen_rotary Attitude Stby
-    POS 429.500000 3364.500000
-    IMAGE MIP/pfd/Standby/att
-    DATAREF a321neo/cockpit/ADIRS/capt_has_ATT
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 1.000000 -1.000000 1.000000
-    KEY_FRAME 0.000000 0.000000
-    DIGITS 1
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary Speed Standby
-    POS 121.500000 3349.500000
-    IMAGE MIP/pfd/Standby/spd
-    DATAREF a321neo/cockpit/ADIRS/capt_has_ADR
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 1.000000 -1.000000 1.000000
-    KEY_FRAME 0.000000 0.000000
-    DIGITS 1
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary Altitude Standby
-    POS 779.500000 3334.000000
-    IMAGE MIP/pfd/Standby/alt
-    DATAREF a321neo/cockpit/ADIRS/capt_has_ADR
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 1.000000 -1.000000 1.000000
-    KEY_FRAME 0.000000 0.000000
-    DIGITS 1
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary Heading Standby
-    POS 425.500000 2978.000000
-    IMAGE MIP/pfd/Standby/hdg
-    DATAREF a321neo/cockpit/ADIRS/capt_has_IR
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 1.000000 -1.000000 1.000000
-    KEY_FRAME 0.000000 0.000000
-    DIGITS 1
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-END_GROUP
-GROUP PFD Standby Blink
-  SHOW_EQUAL 1.000000 a321neo/cockpit/ADIRS/capt_has_IR_blinking
-  LOCKED
-  gen_rotary Attitude Stby 2
-    POS 419.500000 3365.500000
-    IMAGE MIP/pfd/Standby/att_b
-    DATAREF a321neo/cockpit/ADIRS/capt_has_IR
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 1.000000 -1.000000 1.000000
-    KEY_FRAME 0.000000 0.000000
-    DIGITS 1
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary Speed Standby 2
-    POS 121.500000 3350.500000
-    IMAGE MIP/pfd/Standby/spd_b
-    DATAREF a321neo/cockpit/ADIRS/capt_has_ADR
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 1.000000 -1.000000 1.000000
-    KEY_FRAME 0.000000 0.000000
-    DIGITS 1
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary Altitude Standby 2
-    POS 779.500000 3335.000000
-    IMAGE MIP/pfd/Standby/alt_b
-    DATAREF a321neo/cockpit/ADIRS/capt_has_ADR
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 1.000000 -1.000000 1.000000
-    KEY_FRAME 0.000000 0.000000
-    DIGITS 1
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary Heading Standby 2
-    POS 425.500000 2979.000000
-    IMAGE MIP/pfd/Standby/hdg_b
-    DATAREF a321neo/cockpit/ADIRS/capt_has_IR
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 1.000000 -1.000000 1.000000
-    KEY_FRAME 0.000000 0.000000
-    DIGITS 1
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-END_GROUP
 GROUP LS
   SHOW_EQUAL 1.000000 a321neo/cockpit/PFD/capt_ls_enabled
   LOCKED
+  HIDE
   GROUP Diamonds
     LOCKED
+    HIDE
     GROUP_OPEN
     gen_pointer Diamond
       POS 424.000000 3078.500000
@@ -72774,6 +72458,7 @@ GROUP LS
       SHOW_LESS 1.990000 sim/cockpit2/radios/indicators/hsi_vdef_dots_pilot
       SHOW_GREATER -1.990000 sim/cockpit2/radios/indicators/hsi_vdef_dots_pilot
       LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME -1.990000 -169.000000 1.000000
@@ -72789,6 +72474,7 @@ GROUP LS
       SHOW_LESS 1.990000 sim/cockpit2/radios/indicators/hsi_vdef_dots_pilot
       SHOW_GREATER -1.990000 sim/cockpit2/radios/indicators/hsi_vdef_dots_pilot
       LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME -1.990000 169.000000 1.000000
@@ -72803,6 +72489,7 @@ GROUP LS
       DATAREF 
       SHOW_LESS -1.990000 sim/cockpit2/radios/indicators/hsi_hdef_dots_pilot
       LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -72824,6 +72511,7 @@ GROUP LS
       DATAREF 
       SHOW_GREATER 1.990000 sim/cockpit2/radios/indicators/hsi_hdef_dots_pilot
       LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -72845,6 +72533,7 @@ GROUP LS
       DATAREF 
       SHOW_LESS -1.990000 sim/cockpit2/radios/indicators/hsi_vdef_dots_pilot
       LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -72866,6 +72555,7 @@ GROUP LS
       DATAREF 
       SHOW_GREATER 1.990000 sim/cockpit2/radios/indicators/hsi_vdef_dots_pilot
       LOCKED
+      HIDE
       LIGHT_MODE GLASS_AUTO
       LIGHT_RHEOSTAT 0
       KEY_FRAME 0.000000 0.000000 1.000000
@@ -72887,6 +72577,7 @@ GROUP LS
     IMAGE MIP/pfd/ALTLS
     DATAREF 
     LOCKED
+    HIDE
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -72907,6 +72598,7 @@ GROUP LS
     IMAGE MIP/pfd/LSH
     DATAREF 
     LOCKED
+    HIDE
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
@@ -72927,6 +72619,7 @@ GROUP LS
     IMAGE MIP/pfd/LSV
     DATAREF 
     LOCKED
+    HIDE
     LIGHT_MODE GLASS_AUTO
     LIGHT_RHEOSTAT 0
     KEY_FRAME 0.000000 0.000000 1.000000
