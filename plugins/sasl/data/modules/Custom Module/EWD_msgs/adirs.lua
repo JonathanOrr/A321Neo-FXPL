@@ -459,7 +459,7 @@ MessageGroup_IR_FAULT_DOUBLE = {
     },
 
     is_active = function(self)
-        -- Two and only two IR failure
+        -- At least two IR failures
         return not (get(EWD_flight_phase) == PHASE_ELEC_PWR or get(EWD_flight_phase) == PHASE_1ST_ENG_ON or get(EWD_flight_phase) == PHASE_2ND_ENG_OFF) and 
         get(Adirs_ir_is_ok[1]) + get(Adirs_ir_is_ok[2]) + get(Adirs_ir_is_ok[3]) == 1
     end,
@@ -484,7 +484,7 @@ MessageGroup_IR_FAULT_DOUBLE = {
 ----------------------------------------------------------------------------------------------------
 -- CAUTION: IR x FAULT (triple)
 ----------------------------------------------------------------------------------------------------
-MessageGroup_IR_FAULT_TRIPLE = {
+MessageGroup_IR_FAULT_TRIPLE_1 = {
 
     shown = false,
 
@@ -492,7 +492,7 @@ MessageGroup_IR_FAULT_TRIPLE = {
                 return "NAV"
             end,
     color = function(self)
-                return COL_WARNING
+                return COL_CAUTION
             end,
 
     priority = PRIORITY_LEVEL_3,
@@ -500,11 +500,11 @@ MessageGroup_IR_FAULT_TRIPLE = {
     messages = {
         {
             text = function(self)
-                return "    IR 1 + 2 + 3 FAULT"
+                return "    IR 1 + 2 FAULT"
             end,
 
             color = function(self)
-                return COL_WARNING
+                return COL_CAUTION
             end,
 
             is_active = function(self)
@@ -523,9 +523,47 @@ MessageGroup_IR_FAULT_TRIPLE = {
     is_inhibited = function(self)
         return get(EWD_flight_phase) == PHASE_ELEC_PWR or get(EWD_flight_phase) == PHASE_2ND_ENG_OFF
     end
-    
 }
 
+MessageGroup_IR_FAULT_TRIPLE_2 = {
 
+    shown = false,
+
+    text  = function(self)
+                return "NAV"
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_3,
+
+    messages = {
+        {
+            text = function(self)
+                return "    IR 2 + 3 FAULT"
+            end,
+
+            color = function(self)
+                return COL_CAUTION
+            end,
+
+            is_active = function(self)
+              return true
+            end
+
+        },  
+        Message_IR_FAULT_ATT_PROC
+    },
+
+    is_active = function(self)
+        return not (get(EWD_flight_phase) == PHASE_ELEC_PWR or get(EWD_flight_phase) == PHASE_1ST_ENG_ON or get(EWD_flight_phase) == PHASE_2ND_ENG_OFF) and 
+        get(Adirs_ir_is_ok[1]) + get(Adirs_ir_is_ok[2]) + get(Adirs_ir_is_ok[3]) == 0
+    end,
+
+    is_inhibited = function(self)
+        return get(EWD_flight_phase) == PHASE_ELEC_PWR or get(EWD_flight_phase) == PHASE_2ND_ENG_OFF
+    end
+}
 
 

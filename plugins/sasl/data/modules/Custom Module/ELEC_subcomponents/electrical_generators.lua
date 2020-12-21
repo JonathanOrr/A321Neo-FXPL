@@ -218,7 +218,7 @@ end
 
 local function update_rat_gen(x)
 
-    if get(Adirs_adr_is_ok[1]) == 1 and get(Capt_IAS) > 100 and get(FLIGHT_TIME) > 5 then
+    if ADIRS_sys[ADIRS_1].adr_status == ADR_STATUS_ON and get(Capt_IAS) > 100 and get(FLIGHT_TIME) > 5 then
         if get(AC_bus_1_pwrd) == 0 and get(AC_bus_2_pwrd) == 0 and not generators[GEN_EMER].switch_status then
             elec_gen_toggle(SASL_COMMAND_BEGIN, GEN_EMER)
         end

@@ -45,6 +45,7 @@ Perf_array = {}
 ELEC_sys = {}
 Fuel_sys = {}
 AI_sys   = {}
+ADIRS_sys= {}
 
 Mcdu_popup = {}
 Mcdu_popup_lut = 0
