@@ -9132,7 +9132,7 @@ IDX	7361
 		TRIS	9432 6
 		ATTR_manip_command	button	a321neo/cockpit/mcdu/page/f-pln	
 		TRIS	9438 6
-		ATTR_manip_command	button	a321neo/cockpit/mcdu/page/fuel pred	
+		ATTR_manip_command	button	a321neo/cockpit/mcdu/page/fuel_pred	
 		TRIS	9444 6
 		ATTR_manip_command	button	a321neo/cockpit/mcdu/key/G	
 		TRIS	9450 6
