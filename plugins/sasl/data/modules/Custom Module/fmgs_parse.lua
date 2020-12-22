@@ -12,7 +12,7 @@
 --    Please check the LICENSE file in the root of the repository for further
 --    details or check <https://www.gnu.org/licenses/>
 -------------------------------------------------------------------------------
--- File: FMGS_parser.lua 
+-- File: FMGS_parse.lua 
 -- Short description: Read and parses FMGS data 
 --                    This is a helper file used by FMGS.lua
 -------------------------------------------------------------------------------
@@ -364,7 +364,7 @@ function ParserApt:new(filename)
 end
 
 -- gets runway length of an airport IN METRES
-function ParserApt:get_runway_length(airport, runway)
+function ParserApt:get_runway_lengths(airport)
 	-- runway length is calculated by finding the distance between the end of the runway and the opposite runway (e.g. end of 16L and 34R will get you the distance)
 	lat_rwy = 0
 	lon_rwy = 0
@@ -386,23 +386,36 @@ function ParserApt:get_runway_length(airport, runway)
 
 	-- ok, found the airport. Now find the correct runway (code 100)
 
-	-- find a code 100
+    output = {}
+	-- find a code 100, repeat until found another airport or end of apt.dat (code 99)
 	line = Line:new("", "")
-	while line:get_column(9) ~= runway and line:get_column(18) ~= runway do
+	read_line = ""
+    while string.sub(read_line, 1, 2) ~= "1 " or read_line == "99" do -- find a "1" code
 		read_line = ""
-		code = string.sub(read_line, 1, 4)
-		while string.sub(read_line, 1, 4) ~= "100 " do -- find a "1" code
+		repeat
 			read_line = file:read()
-		end
-		-- find the runway name in that line
-		line = Line:new(read_line, " ")
+        until string.sub(read_line, 1, 4) == "100 " or -- find 100 code
+              string.sub(read_line, 1, 2) == "1 " or -- a code 1
+              read_line == "99" -- a code 99
+
+        if string.sub(read_line, 1, 4) == "100 " then
+            -- find the runway name in that line
+            line = Line:new(read_line, " ")
+
+            name_rwy = line:get_column(9)
+            lat_rwy = line:get_column(10)
+            lon_rwy = line:get_column(11)
+            name_rwyopp = line:get_column(18)
+            lat_rwyopp = line:get_column(19)
+            lon_rwyopp = line:get_column(20)
+            
+            runway_length = GC_distance_kt(lat_rwy, lon_rwy, lat_rwyopp, lon_rwyopp) * 1852 -- convert nm to metres
+            output[name_rwy] = runway_length
+            print(name_rwy .. " " .. runway_length)
+            output[name_rwyopp] = runway_length
+        end
 	end
-	
-	lat_rwy = line:get_column(10)
-	lon_rwy = line:get_column(11)
-	lat_rwyopp = line:get_column(19)
-	lon_rwyopp = line:get_column(20)
-	return GC_distance_kt(lat_rwy, lon_rwy, lat_rwyopp, lon_rwyopp) * 1852 -- convert nm to metres
+    return output
 end
 
 

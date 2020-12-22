@@ -285,6 +285,9 @@ local MCDU_ENTRY_KEYS = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", 
 local MCDU_ENTRY_PAGES = {"dir", "prog", "perf", "init", "data", "f-pln", "rad_nav", "fuel_pred", "sec_f-pln", "atc_comm", "mcdu_menu", "air_port"}
 local MCDU_ENTRY_SIDES = {"L1", "L2", "L3", "L4", "L5", "L6", "R1", "R2", "R3", "R4", "R5", "R6", "slew_up", "slew_down", "slew_left", "slew_right"}
 
+local CIFP_PATH = sasl.getXPlanePath() .. "Resources/default data/CIFP/"
+local APT_PATH = sasl.getXPlanePath() .. "Resources/default scenery/default apt dat/Earth nav data/apt.dat"
+
 
 
 --[[
@@ -1549,11 +1552,7 @@ function (phase)
 
         --add flt nbr to title
         flt_nbr = fmgs_dat["flt nbr"] or ""
-        s = ""
-        for i = 1, 21 - string.len(flt_nbr) do
-            s = s .. " "
-        end
-        mcdu_dat_title[2] = {txt = s .. flt_nbr}
+        mcdu_dat_title[2] = {txt = "               " .. flt_nbr, size = "s"}
 
         --draw the f-pln
         for i = 1, math.min(#fmgs_dat["fpln fmt"], 5) do
@@ -1569,7 +1568,7 @@ function (phase)
                 --set title
                 fmgs_dat_init("wpt from", fmgs_dat["origin"])
                 if i == 1 and fpln_wpt.name:sub(1,4) == fmgs_dat["wpt from"] then
-                    mcdu_dat_title[1] = {txt = " from"}
+                    mcdu_dat_title[1] = {txt = " from", size = "s"}
                 end
 
                 --[[ VIA --]]
@@ -1822,16 +1821,27 @@ function (phase)
 
         --set airport in question
         airport = fmgs_dat["origin"]
-        for i,runway in ipairs(fmgs_dat["runways"]) do
-            print (i .. runway.name)
-        end
+
+        print(CIFP_PATH .. airport .. ".dat")
+        --get runways
+        parser = ParserCifp:new(CIFP_PATH .. airport .. ".dat") 
+        runways = parser:get_runways()
+
+        --get runway lengths
+        print("a")
+        parserApt = ParserApt:new(APT_PATH)
+        runway_lengths = parserApt:get_runway_lengths(airport)
+        print("b")
+
         for i = 1, 4 do
             line = (offset % 4) + 2
-            print (line)
-            print((fmgs_dat["fpln latrev index"] + offset) % #fmgs_dat["runways"] + 1)
+            print(line)
+            print((fmgs_dat["fpln latrev index"] + offset) % #runways + 1)
             --get ILS data
-            runway = fmgs_dat["runways"][(fmgs_dat["fpln latrev index"] + offset) % #fmgs_dat["runways"] + 1]
-            ils = fmgs_get_nav(airport .. " " .. runway.name, NAV_ILS)
+            runway = runways[(fmgs_dat["fpln latrev index"] + offset) % #runways+ 1]
+            --e.g. RW16C -> 16C
+            runway_name = string.sub(runway, 3, 5)
+            ils = fmgs_get_nav(airport .. " " .. runway_name, NAV_ILS)
 
             --get ILS freq
             --format e.g. 11170 to 111.70
@@ -1839,7 +1849,7 @@ function (phase)
             freq = ils.freq:sub(1,3) .. "." .. ils.freq:sub(4,5)
 
             --get ILS crs
-            ils.hdg = degTrueToDegMagnetic(ils.hdg)
+            ils.hdg = sasl.degTrueToDegMagnetic(ils.hdg)
             if ils.hdg > 180 then
                 --format e.g. 342 to -18
                 ils.hdg = Round(ils.hdg - 360,0)
@@ -1854,9 +1864,9 @@ function (phase)
                 ils.hdg = ils.hdg:sub(1,3)
             end
             
-            --format e.g. from RW16C to 16C
-
-            mcdu_dat["l"]["L"][line] = {txt = "<" .. runway.name .. "   " .. runway.length .. "FT", col = "cyan"}
+            print(runway_name)
+            runway_length = Round(runway_lengths[runway_name], 0)
+            mcdu_dat["l"]["L"][line] = {txt = "<" .. runway_name .. "   " .. runway_length .. "FT", col = "cyan"}
             mcdu_dat["l"]["R"][line] = {txt = "crs" .. ils.hdg .. "   ", col = "cyan", size = "s"}
             --display runway length
             mcdu_dat["s"]["L"][line + 1] = {txt = "       ILS", col = "cyan"}
@@ -1876,7 +1886,7 @@ function (phase)
 
         --find the index of which button was pressed, and -2 to make it equal to `offset` in the function above
         index = tonumber(phase:sub(2,2)) - 2
-        runway = fmgs_dat["runways"][(fmgs_dat["fpln latrev index"] + index) % #fmgs_dat["runways"] + 1]
+        runway = runways[(fmgs_dat["fpln latrev index"] + index) % #runways + 1]
     end
 
     --<return
@@ -1892,7 +1902,7 @@ function (phase)
             increment = 1
         end
         --is flight plan long enough to slew up and down?
-        if #fmgs_dat["runways"] > 4 then
+        if #runways > 4 then
             fmgs_dat["fpln latrev index"] = fmgs_dat["fpln latrev index"] + increment
             print(fmgs_dat["fpln latrev index"])
         end
