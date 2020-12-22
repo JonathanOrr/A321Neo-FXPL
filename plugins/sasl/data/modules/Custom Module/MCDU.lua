@@ -1163,6 +1163,9 @@ function (phase)
             airp_origin = fmgs_get_nav(airp_origin_name, NAV_AIRPORT)
             airp_dest = fmgs_get_nav(airp_dest_name, NAV_AIRPORT)
 
+            -- add to f-pln
+            fpln_add_airports(airp_origin, airp_dest)
+
             -- do these airports exist?
 			if airp_origin.navtype == NAV_UNKNOWN or
 			   airp_dest.navtype == NAV_UNKNOWN then
@@ -1528,15 +1531,13 @@ function (phase)
     end
 end
 
-fpln_addwpt(NAV_FIX, 1, "chins3", "humpp", nil, 2341, 14, 297, 15000, nil, nil, nil, "aubrn")
-fpln_addwpt(NAV_FIX, 1, "chins3", "humpp", nil, 2341, 14, 297, 15000, nil, nil, nil, "aubrn")
-
 -- 600 f-pln
 mcdu_sim_page[600] =
 function (phase)
     if phase == "render" then
         fmgs_dat_init("fpln index", 0)
         fmgs_dat_init("fpln page", 1)
+
         --format the fpln
         fpln_format()
         --initialize fpln page index
@@ -1547,15 +1548,25 @@ function (phase)
             fpln_index = fpln_index % #fmgs_dat["fpln fmt"] + 1
 
             fpln_wpt = fmgs_dat["fpln fmt"][fpln_index] or ""
-            --is it a simple message?
+            --is it a simple message (pseudo-waypoint)?
             if type(fpln_wpt) == "string" then
                 mcdu_dat["l"]["L"][i].txt = fpln_wpt
             --is it a waypoint?
             else
                 --set title
-                if i == 1 and fpln_wpt.name:sub(1,4) == fmgs_dat["origin"] then
-                    mcdu_dat_title.txt = " from"
+                mcdu_dat_title[1] = {txt = ""}
+                fmgs_dat_init("wpt from", fmgs_dat["origin"])
+                if i == 1 and fpln_wpt.name:sub(1,4) == fmgs_dat["wpt from"] then
+                    mcdu_dat_title[1] = {txt = " from"}
                 end
+                -- pad flt nbr to rightmost
+                fmgs_dat_init("flt nbr", "")
+                s = ""
+                for i = 1, 24 - string.len(fmgs_dat["flt nbr"]) do
+                    s = s .. " "
+                end
+                mcdu_dat_title[2] = {txt = s .. fmgs_dat["flt nbr"]}
+
                 --[[ VIA --]]
                 --is via an airway/note or heading?
                 if type(fpln_wpt.via) == "string" then
@@ -1574,9 +1585,6 @@ function (phase)
                 --[[ NAME --]]
                 mcdu_dat["l"]["L"][i][1] = {txt = fpln_wpt.name, col = "green"}
 
-                --[[ TRK --]]
-                mcdu_dat["s"]["L"][i][2] = {txt = "        " .. fpln_wpt.trk, col = "green"}
-
                 --[[ DIST --]]
                 mcdu_dat["s"]["R"][i] = {txt = fpln_wpt.dist .. "     ", col = "green", size = "s"}
 
@@ -1585,7 +1593,7 @@ function (phase)
                     mcdu_dat["l"]["L"][i][2] = {txt = "        " .. fpln_wpt.time, col = "green", size = "s"}
 
                     --[[ SPD --]]
-                    mcdu_dat["l"]["R"][i][1] = {txt = fpln_wpt.spd .. "/      ", col = "green", size = "s"}
+                    mcdu_dat["l"]["R"][i][1] = {txt = fpln_wpt.spd .. "/     ", col = "green", size = "s"}
 
                     --[[ ALT --]]
                     mcdu_dat["l"]["R"][i][2] = {txt = fpln_wpt.alt, col = "green", size = "s"}
@@ -1593,11 +1601,10 @@ function (phase)
                     --[[ EFOB --]]
                     mcdu_dat["l"]["L"][i][2] = {txt = "        " .. fpln_wpt.efob, col = "green", size = "s"}
 
+                    --[[ WIND HDG --]]
+                    mcdu_dat["l"]["R"][i][2] = {txt = mcdu_pad_num(fpln_wpt.windhdg, 3) ..  "°/   ", col = "green", size = "s"}
                     --[[ WIND SPD --]]
                     mcdu_dat["l"]["R"][i][1] = {txt = fpln_wpt.windspd, col = "green", size = "s"}
-
-                    --[[ WIND ALT --]]
-                    mcdu_dat["l"]["R"][i][2] = {txt = mcdu_pad_num(fpln_wpt.windhdg, 3) ..  "°/   ", col = "green", size = "s"}
                 end
             end
         end

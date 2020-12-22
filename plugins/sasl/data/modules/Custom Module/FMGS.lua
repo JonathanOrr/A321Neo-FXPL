@@ -18,6 +18,7 @@
 -------------------------------------------------------------------------------
 
 include('FMGS_parser.lua') -- Reads and parses FMGS data
+include('FMGS_f-pln.lua') -- Flight Management and planning implementation
 
 --[[
 --
@@ -122,63 +123,3 @@ function fmgs_dat_get_txt(dat_name, dat_init, dat_format_callback)
         return val
     end
 end
-
-
-
---[[
---
---
---      FLIGHT MANAGEMENT
---
---
---]]
-
-fmgs_dat["fpln"] = {}
-fmgs_dat["fpln fmt"] = {}
-
-function fpln_addwpt(navtype, loc, via, name, trk, time, dist, spd, alt, efob, windspd, windhdg, next)
-    wpt = {}
-    wpt.name = name or ""
-    wpt.navtype = navtype or ""
-    wpt.time = time or "----"
-    wpt.dist = dist or ""
-    wpt.spd = spd or "---"
-    wpt.alt = alt or "-----"
-    wpt.via = via or ""
-    wpt.trk = trk or ""
-    wpt.next = next
-    wpt.efob = efob or 5.5
-    wpt.windspd = windspd or 0
-    wpt.windhdg = windhdg or 0
-    table.insert(fmgs_dat["fpln"], loc, wpt)
-end
-
---formats the fpln
-function fpln_format()
-    fpln_fmt = {}
-    fpln = fmgs_dat["fpln"]
-
-    for i,wpt in ipairs(fpln) do
-        --is waypoint a blank?
-        if wpt.name ~= "" then
-            --check for flight discontinuities
-            if wpt.name == "discon" then
-                table.insert(fpln_fmt, "---f-pln discontinuity--")
-            else
-                --insert waypoint
-                table.insert(fpln_fmt, wpt)
-                --set previous waypoint
-                wpt_prev = wpt
-            end
-        end
-    end
-    table.insert(fpln_fmt, "----- end of f-pln -----")
-    table.insert(fpln_fmt, "----- no altn fpln -----")
-
-    --output
-    fmgs_dat["fpln fmt"] = fpln_fmt
-end
-
---DEMO
---fpln_addwpt(NAV_FIX, 1, "chins3", "humpp", nil, 2341, 14, 297, 15000, nil, nil, nil, "aubrn")
-

@@ -274,7 +274,7 @@ function ParserCifp:get_procedure(proc_type, proc, runway)
 
 			wpt_type = string.sub(wpt_info, 1, j - 1)
 			wpt_num = string.sub(wpt_info, j + 1, -1)
-			if wpt_type == proc_type and
+			if _wpt_type == proc_type and
 			wpt_num == "0" .. tostring(num) .. "0" and
 			pd:get_column(3) == proc and
 			pd:get_column(4) == runway
