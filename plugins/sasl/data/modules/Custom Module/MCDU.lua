@@ -21,9 +21,9 @@
 --
 --
 -- CONSTS DECLARATION
--- FMGS & MCDU DATA INITIALIZATION
+-- MCDU DATA INITIALIZATION
 -- DATA & COMMAND REGISTRATION
--- MCDU - XP FUNC CONTROLS
+-- MCDU - FORMATTING
 -- MCDU PAGE SIMULATION
 -------------------------------------------------------------------------------
 
@@ -524,71 +524,6 @@ local function mcdu_open_page(id)
     mcdu_sim_page[get(mcdu_page)]("render")
 end
 
---pad a number up to a given dp
---e.g. (2.4, 3) -> 2.400
-local function mcdu_pad_dp(number, required_dp)
-    return(string.format("%." .. required_dp .. "f", number))
-end
-
---pad a number up to a given length
---e.g. (50, 3) -> 050
-local function mcdu_pad_num(number, required_length)
-    str = tostring(number)
-    while #str < required_length do
-        str = "0" .. str
-    end
-    return str
-end
-
---toggle obj between two strings, a and b
---e.g. ("ad", "ba", "ad") -> "ba"
-local function mcdu_toggle(obj, str_a, str_b)
-    if obj == str_a then
-        return str_b
-    elseif obj == str_b then
-        return str_a
-    end
-end
-
--- converts Decimal Degrees and Axis (lat/lon) to Degrees Minute Seconds Direction
-local function mcdu_ctrl_dd_to_dmsd(dd, axis)
-    if axis == "lat" then
-        if dd > 0 then
-            p = "N"
-        else
-            p = "S"
-        end
-    else
-        if dd > 0 then
-            p = "E"
-        else
-            p = "W"
-        end
-    end
-
-    dd = math.abs(dd)
-    d = dd
-    m = d % 1 * 60
-    s = m % 1 * 60
-    d = math.floor(d)
-    -- if axis is longitude
-    if axis ~= "lat" then
-        d = mcdu_pad_num(d, 3)
-    end
-    return d, m, s, p
-end
-
--- converts Degrees Minute Seconds Direction to Decimal Degrees
-local function mcdu_ctrl_dmsd_to_dd(d,m,s,dir)
-    if dir == "E" or dir == "N" then
-        p = 1
-    else
-        p = -1
-    end
-    dd = (d + m*(1/60) + s*(1/3600)) * p
-    return dd
-end
-
 
 
 --[[
@@ -895,30 +830,74 @@ end
 --[[
 --
 --
---      MCDU - XP FUNC CONTROLS
+--      MCDU - FORMATTING
 --
 --
 --]]
 
+--pad a number up to a given dp
+--e.g. (2.4, 3) -> 2.400
+local function mcdu_pad_dp(number, required_dp)
+    return(string.format("%." .. required_dp .. "f", number))
+end
 
-mcdu_entry = string.upper("ksea/kbfi")
+--pad a number up to a given length
+--e.g. (50, 3) -> 050
+local function mcdu_pad_num(number, required_length)
+    str = tostring(number)
+    while #str < required_length do
+        str = "0" .. str
+    end
+    return str
+end
 
---update
-function update()
-	perf_measure_start("MCDU:update()")
-    if get(mcdu_page) == 0 then --on start
-       mcdu_open_page(505) --open 505 A/C status
-       --mcdu_open_page(1106) --open 1106 mcdu menu options debug
-	   --mcdu_open_page(400)
+--toggle obj between two strings, a and b
+--e.g. ("ad", "ba", "ad") -> "ba"
+local function mcdu_toggle(obj, str_a, str_b)
+    if obj == str_a then
+        return str_b
+    elseif obj == str_b then
+        return str_a
+    end
+end
+
+-- converts Decimal Degrees and Axis (lat/lon) to Degrees Minute Seconds Direction
+local function mcdu_ctrl_dd_to_dmsd(dd, axis)
+    if axis == "lat" then
+        if dd > 0 then
+            p = "N"
+        else
+            p = "S"
+        end
+    else
+        if dd > 0 then
+            p = "E"
+        else
+            p = "W"
+        end
     end
 
-    -- display next message
-    if #mcdu_messages > 0 and not mcdu_message_showing then
-        mcdu_entry_cache = mcdu_entry
-        mcdu_entry = mcdu_messages[#mcdu_messages]:upper()
-        mcdu_message_showing = true
-        table.remove(mcdu_messages)
+    dd = math.abs(dd)
+    d = dd
+    m = d % 1 * 60
+    s = m % 1 * 60
+    d = math.floor(d)
+    -- if axis is longitude
+    if axis ~= "lat" then
+        d = mcdu_pad_num(d, 3)
     end
+    return d, m, s, p
+end
+
+-- converts Degrees Minute Seconds Direction to Decimal Degrees
+local function mcdu_ctrl_dmsd_to_dd(d,m,s,dir)
+    if dir == "E" or dir == "N" then
+        p = 1
+    else
+        p = -1
+    end
+    dd = (d + m*(1/60) + s*(1/3600)) * p
+    return dd
 end
 
 
@@ -954,6 +933,26 @@ end
 --
 --
 --]]
+
+mcdu_entry = string.upper("ksea/kbfi")
+
+--update
+function update()
+	perf_measure_start("MCDU:update()")
+    if get(mcdu_page) == 0 then --on start
+       mcdu_open_page(505) --open 505 A/C status
+       --mcdu_open_page(1106) --open 1106 mcdu menu options debug
+	   --mcdu_open_page(400)
+    end
+
+    -- display next message
+    if #mcdu_messages > 0 and not mcdu_message_showing then
+        mcdu_entry_cache = mcdu_entry
+        mcdu_entry = mcdu_messages[#mcdu_messages]:upper()
+        mcdu_message_showing = true
+        table.remove(mcdu_messages)
+    end
+end
 
 -- MCDU PAGES
 
