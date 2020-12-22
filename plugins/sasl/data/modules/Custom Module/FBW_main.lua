@@ -19,6 +19,7 @@
 --include("FBW_subcomponents/limits_calculations.lua")
 include("PID.lua")
 include("FBW_subcomponents/fbw_system_subcomponents/flt_computers.lua")
+include("FBW_subcomponents/fbw_system_subcomponents/mode_transition.lua")
 addSearchPath(moduleDirectory .. "/Custom Module/FBW_subcomponents/")
 
 --xplane landing gear attitude correction--
@@ -84,6 +85,7 @@ function update()
     updateAll(components)
     Fctl_computuers_status_computation(Fctl_computers_var_table)
     Compute_fctl_button_states()
+    FBW_mode_transition(FBW_modes_var_table)
 
 
     kill_delta = get(FBW_kill_switch) - last_kill_value

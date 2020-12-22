@@ -30246,7 +30246,7 @@ P _part/56/_locked/9,9 0
 P _part/56/_locked/i_count 20
 P _part/56/_locked/j_count 18
 P _part/56/_part_area_rule 1.0
-P _part/56/_part_cd 0.100000001
+P _part/56/_part_cd 0.079999998
 P _part/56/_part_phi 0.0
 P _part/56/_part_psi 0.0
 P _part/56/_part_rad 6.988189220

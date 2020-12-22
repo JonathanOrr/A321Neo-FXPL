@@ -513,26 +513,18 @@ Override_eng_2_lever = globalProperty("sim/flightmodel/engine/ENGN_thro_use[1]")
 
 --flight controls
 Joystick_connected = globalProperty("sim/joystick/has_joystick")
-Roll = globalProperty("sim/joystick/yoke_roll_ratio")
-Pitch = globalProperty("sim/joystick/yoke_pitch_ratio")
-Yaw = globalProperty("sim/joystick/yoke_heading_ratio")
-Roll_artstab = globalProperty("sim/joystick/artstab_roll_ratio")
-Pitch_artstab = globalProperty("sim/joystick/artstab_pitch_ratio")
-Yaw_artstab = globalProperty("sim/joystick/artstab_heading_ratio")
 Servo_roll = globalProperty("sim/joystick/servo_roll_ratio")
 Servo_pitch = globalProperty("sim/joystick/servo_pitch_ratio")
 Servo_yaw = globalProperty("sim/joystick/servo_heading_ratio")
-Override_artstab = globalProperty("sim/operation/override/override_artstab")
-Override_control_surfaces = globalProperty("sim/operation/override/override_control_surfaces")
 Roll_rate = globalProperty("sim/flightmodel/position/P")
 Pitch_rate = globalProperty("sim/flightmodel/position/Q")
-Vpath = globalProperty("sim/flightmodel/position/vpath")
-Alpha = globalProperty("sim/flightmodel/position/alpha")
 Joystick_toe_brakes_L = globalProperty("sim/joystick/joy_mapped_axis_value[6]")
 Joystick_toe_brakes_R = globalProperty("sim/joystick/joy_mapped_axis_value[7]")
 
 --Surfaces / FBW / flight controls--
 --dev & debuging
+Override_artstab = globalProperty("sim/operation/override/override_artstab")
+Override_control_surfaces = globalProperty("sim/operation/override/override_control_surfaces")
 FBW_kill_switch = createGlobalPropertyi("a321neo/dynamics/FBW/debug/kill_switch", 1, false, true, false)
 Force_full_rudder_limit = createGlobalPropertyi("a321neo/dynamics/FBW/debug/force_full_rudder_limit", 0, false, true, false)
 Bypass_speedbrakes_inhibition = createGlobalPropertyi("a321neo/dynamics/FBW/debug/bypass_spdbrakes_inhibition", 0, false, true, false)
@@ -540,10 +532,19 @@ Bypass_speedbrakes_inhibition = createGlobalPropertyi("a321neo/dynamics/FBW/debu
 Project_square_input = createGlobalPropertyi("a321neo/dynamics/FBW/customizations/projected_square_input", 0, false, true, false)
 Trim_wheel_smoothing_on = createGlobalPropertyi("a321neo/dynamics/FBW/customizations/trim_wheel_smoothing_on", 1, false, true, false)--is the trim wheel is smoothed
 --inputs--
+Roll = globalProperty("sim/joystick/yoke_roll_ratio")
+Pitch = globalProperty("sim/joystick/yoke_pitch_ratio")
+Yaw = globalProperty("sim/joystick/yoke_heading_ratio")
 Augmented_roll = createGlobalPropertyf("a321neo/dynamics/FBW/inputs/augmented_roll", 0, false, true, false)
 Augmented_pitch = createGlobalPropertyf("a321neo/dynamics/FBW/inputs/augmented_pitch", 0, false, true, false)
 Speedbrake_handle_ratio = globalProperty("sim/cockpit2/controls/speedbrake_ratio")
+--outputs--
+Roll_artstab = globalProperty("sim/joystick/artstab_roll_ratio")
+Pitch_artstab = globalProperty("sim/joystick/artstab_pitch_ratio")
+Yaw_artstab = globalProperty("sim/joystick/artstab_heading_ratio")
 --flight envelope "sensors"
+Alpha = globalProperty("sim/flightmodel/position/alpha")
+Vpath = globalProperty("sim/flightmodel/position/vpath")
 Flightmodel_roll = globalProperty("sim/flightmodel/position/true_phi")
 Flightmodel_pitch = globalProperty("sim/flightmodel/position/true_theta")
 Flightmodel_heading = globalProperty("sim/flightmodel/position/true_psi")
@@ -553,6 +554,19 @@ Vpath_pitch_rate = createGlobalPropertyf("a321neo/dynamics/FBW/aerodynamics/vpat
 True_roll_rate = createGlobalPropertyf("a321neo/dynamics/FBW/aerodynamics/true_P", 0, false, true, false)--true roll rate(in relation to the previous reference frame instead of the flight path)
 True_pitch_rate = createGlobalPropertyf("a321neo/dynamics/FBW/aerodynamics/true_Q", 0, false, true, false)--true pitch rate(in relation to the previous reference frame instead of the flight path)
 Slide_slip_angle = globalProperty("sim/cockpit2/gauges/indicators/sideslip_degrees")
+--FBW system status--
+FBW_total_control_law = createGlobalPropertyi("a321neo/dynamics/FBW/system_status/total_control_law", 0, false, true, false)   -- -2 mechanical backup law, -1 abnormal law, 0 direct law, 1 alternate law, 2 alternate law(reduced prot), 3 normal law
+FBW_lateral_law =       createGlobalPropertyi("a321neo/dynamics/FBW/system_status/lateral_control_law", 0, false, true, false) -- -2 mechanical backup law,                  0 direct law,                  							   3 normal law (abnormal law / alt law doesn't exist)
+FBW_vertical_law =      createGlobalPropertyi("a321neo/dynamics/FBW/system_status/vertical_control_law", 0, false, true, false)-- -2 mechanical backup law, -1 abnormal law, 0 direct law, 1 alternate law, 2 alternate law(reduced prot), 3 normal law
+FBW_yaw_law =           createGlobalPropertyi("a321neo/dynamics/FBW/system_status/yaw_control_law", 0, false, true, false)     -- -2 mechanical backup law, -1 abnormal law, 0 direct law, 1 alternate law, 							   3 normal law
+FBW_in_flight_mode = createGlobalPropertyi("a321neo/dynamics/FBW/system_status/in_flight_mode", 0, false, true, false)--is FBW in flight mode
+FBW_in_ground_mode = createGlobalPropertyi("a321neo/dynamics/FBW/system_status/in_ground_mode", 0, false, true, false)--is FBW in ground mode
+FBW_in_flare_mode =  createGlobalPropertyi("a321neo/dynamics/FBW/system_status/in_flare_mode", 0, false, true, false) --is FBW in flare mode
+FBW_lateral_ground_mode_ratio =  createGlobalPropertyf("a321neo/dynamics/FBW/system_status/lateral_ground_mode_ratio", 1, false, true, false) --FBW lateral  ground mode transition ratio (5.0s of transition at takeoff/landing)
+FBW_vertical_ground_mode_ratio = createGlobalPropertyf("a321neo/dynamics/FBW/system_status/vertical_ground_mode_ratio", 1, false, true, false)--FBW vertical ground mode transition ratio (0.5s of transition at takeoff/landing)
+FBW_vertical_flare_mode_ratio =  createGlobalPropertyf("a321neo/dynamics/FBW/system_status/vertical_flare_mode_ratio", 0, false, true, false) --FBW vertical flare mode transition ratio  (1.0s of transition at landing)
+FBW_flare_mode_memorised_att = createGlobalPropertyf("a321neo/dynamics/FBW/system_status/flare_mode_memorised_attitude", 0, false, true, false) --FBW flare mode memorised att at 50ft RA
+FBW_flare_mode_computed_Q =    createGlobalPropertyf("a321neo/dynamics/FBW/system_status/flare_mode_computed_Q", 0, false, true, false) --FBW flare mode computed pitch rate 8 seconds from memorised ATT --> -2 degrees
 --flight computers status
 ELAC_1_status = createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/elac_1_status", 1, false, true, false)--elevator aileron computer(protection outputs)
 ELAC_2_status = createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/elac_2_status", 1, false, true, false)
