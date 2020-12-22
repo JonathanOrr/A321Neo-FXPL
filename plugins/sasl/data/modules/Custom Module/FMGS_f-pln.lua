@@ -20,19 +20,19 @@
 fmgs_dat["fpln"] = {}
 fmgs_dat["fpln fmt"] = {}
 
-local function fpln_wpt(navtype, loc, via, name, time, dist, spd, alt, efob, windspd, windhdg, nextname)
+local function fpln_wpt(navtype, loc, via, name, dist, time, spd, alt, efob, windspd, windhdg, nextname)
     wpt = {}
     wpt.name = name or ""
     wpt.navtype = navtype or ""
-    wpt.time = time or "----"
-    wpt.dist = dist or ""
-    wpt.spd = spd or "---"
-    wpt.alt = alt or "-----"
+    wpt.dist = dist or 0
+    wpt.time = time or -1
+    wpt.spd = spd or -1
+    wpt.alt = alt or -1
     wpt.via = via or ""
-    wpt.nextname = nextname or "-"
-    wpt.efob = efob or "-.-"
-    wpt.windspd = windspd or "---"
-    wpt.windhdg = windhdg or "---"
+    wpt.nextname = nextname or ""
+    wpt.efob = efob or -1
+    wpt.windspd = windspd or -1
+    wpt.windhdg = windhdg or -1
     return wpt
 end
 

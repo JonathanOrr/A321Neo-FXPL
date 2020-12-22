@@ -1591,25 +1591,56 @@ function (phase)
                 mcdu_dat["l"]["L"][i][1] = {txt = fpln_wpt.name, col = "green"}
 
                 --[[ DIST --]]
-                mcdu_dat["s"]["R"][i] = {txt = fpln_wpt.dist .. "     ", col = "green", size = "s"}
+                if i == 2 then
+                    suffix = "nm"
+                else
+                    suffix = "  "
+                end
+                mcdu_dat["s"]["R"][i] = {txt = fpln_wpt.dist .. suffix .. "   ", col = "green", size = "s"}
 
                 if fmgs_dat["fpln page"] == 1 then
                     --[[ TIME --]]
-                    mcdu_dat["l"]["L"][i][2] = {txt = "        " .. fpln_wpt.time, col = "green", size = "s"}
+                    if fpln_wpt.time ~= -1 then
+                        mcdu_dat["l"]["L"][i][2] = {txt = "        " .. fpln_wpt.time, col = "green", size = "s"}
+                    else
+                        mcdu_dat["l"]["L"][i][2] = {txt = "        ----", size = "s"}
+                    end
 
                     --[[ SPD --]]
-                    mcdu_dat["l"]["R"][i][1] = {txt = fpln_wpt.spd .. "      ", col = "green", size = "s"}
+                    if fpln_wpt.spd ~= -1 then
+                        mcdu_dat["l"]["R"][i][1] = {txt = fpln_wpt.spd .. "      ", col = "green", size = "s"}
+                    else
+                        mcdu_dat["l"]["R"][i][1] = {txt = "---      ", size = "s"}
+                    end
 
                     --[[ ALT --]]
-                    mcdu_dat["l"]["R"][i][2] = {txt = fpln_wpt.alt, col = "green", size = "s"}
+                    if fpln_wpt.alt ~= -1 then
+                        mcdu_dat["l"]["R"][i][2] = {txt = fpln_wpt.alt, col = "green", size = "s"}
+                        mcdu_dat["l"]["R"][i][3] = {txt = "/     ", col = "green", size = "s"}
+                    else
+                        mcdu_dat["l"]["R"][i][2] = {txt = "/-----", size = "s"}
+                    end
                 else
                     --[[ EFOB --]]
-                    mcdu_dat["l"]["L"][i][2] = {txt = "        " .. fpln_wpt.efob, col = "green", size = "s"}
+                    if fpln_wpt.efob ~= -1 then
+                        mcdu_dat["l"]["L"][i][2] = {txt = "        " .. fpln_wpt.efob, col = "green", size = "s"}
+                    else
+                        mcdu_dat["l"]["L"][i][2] = {txt = "        -.-", size = "s"}
+                    end
 
                     --[[ WIND HDG --]]
-                    mcdu_dat["l"]["R"][i][2] = {txt = mcdu_pad_num(fpln_wpt.windhdg, 3) ..  "°/   ", col = "green", size = "s"}
+                    if fpln_wpt.windhdg ~= -1 then
+                        mcdu_dat["l"]["R"][i][2] = {txt = mcdu_pad_num(fpln_wpt.windhdg, 3) ..  "°/   ", col = "green", size = "s"}
+                    else
+                        mcdu_dat["l"]["R"][i][2] = {txt = "---°/   ", size = "s"}
+                    end
+
                     --[[ WIND SPD --]]
-                    mcdu_dat["l"]["R"][i][1] = {txt = fpln_wpt.windspd, col = "green", size = "s"}
+                    if fpln_wpt.windspd ~= -1 then
+                        mcdu_dat["l"]["R"][i][1] = {txt = fpln_wpt.windspd, col = "green", size = "s"}
+                    else
+                        mcdu_dat["l"]["R"][i][1] = {txt = "---", size = "s"}
+                    end
                 end
             end
         end
