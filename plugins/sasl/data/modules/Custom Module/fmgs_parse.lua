@@ -12,9 +12,20 @@
 --    Please check the LICENSE file in the root of the repository for further
 --    details or check <https://www.gnu.org/licenses/>
 -------------------------------------------------------------------------------
--- File: navigation.lua 
--- Short description: Navigation data processing
+-- File: FMGS_parse.lua 
+-- Short description: Read and parses FMGS data 
+--                    This is a helper file used by FMGS.lua
 -------------------------------------------------------------------------------
+
+
+
+--[[
+--
+--
+--      FORMATTING
+--
+--
+--]]
 
 function char_at(str, index)
 	return string.sub(str, index, index)
@@ -35,8 +46,6 @@ function appr_airbus_to_xp_appr(appr)
 	return runway
 end
 
-
-
 -- converts appr airbus format to xplane rwy
 -- e.g. RNV16LZ to RW16B
 function appr_airbus_to_xp_rwy(appr)
@@ -52,6 +61,15 @@ function appr_airbus_to_xp_rwy(appr)
 	return runway
 end
 
+
+
+--[[
+--
+--
+--      LINE PARSER
+--
+--
+--]]
 
 -- Line will parse a row of data into a struct
 Line = {row = "", sep_char = ""}
@@ -91,6 +109,14 @@ function Line:get_column(col_index)
 end
 
 
+
+--[[
+--
+--
+--      PARSER - CIFP
+--
+--
+--]]
 
 -- ParserCifp will parse CIFP files for an airport
 ParserCifp = {data = "", parsed_data = {}}
@@ -248,7 +274,7 @@ function ParserCifp:get_procedure(proc_type, proc, runway)
 
 			wpt_type = string.sub(wpt_info, 1, j - 1)
 			wpt_num = string.sub(wpt_info, j + 1, -1)
-			if wpt_type == proc_type and
+			if _wpt_type == proc_type and
 			wpt_num == "0" .. tostring(num) .. "0" and
 			pd:get_column(3) == proc and
 			pd:get_column(4) == runway
@@ -289,6 +315,7 @@ function ParserCifp:get_procedure(proc_type, proc, runway)
 	return output
 end
 
+
 function ParserCifp:get_departure(rwy, proc, trans)
 	print()
 	print("SID Procedure:")
@@ -313,6 +340,14 @@ end
 
 
 
+--[[
+--
+--
+--      PARSER - AIRPORT
+--
+--
+--]]
+
 -- ParserApt will parse apt.dat for airport data
 ParserApt = {file = {}, data = "", parsed_data = {}}
 ParserApt.__index = ParserApt
@@ -329,7 +364,7 @@ function ParserApt:new(filename)
 end
 
 -- gets runway length of an airport IN METRES
-function ParserApt:get_runway_length(airport, runway)
+function ParserApt:get_runway_lengths(airport)
 	-- runway length is calculated by finding the distance between the end of the runway and the opposite runway (e.g. end of 16L and 34R will get you the distance)
 	lat_rwy = 0
 	lon_rwy = 0
@@ -351,49 +386,71 @@ function ParserApt:get_runway_length(airport, runway)
 
 	-- ok, found the airport. Now find the correct runway (code 100)
 
-	-- find a code 100
+    output = {}
+	-- find a code 100, repeat until found another airport or end of apt.dat (code 99)
 	line = Line:new("", "")
-	while line:get_column(9) ~= runway and line:get_column(18) ~= runway do
+	read_line = ""
+    while string.sub(read_line, 1, 2) ~= "1 " or read_line == "99" do -- find a "1" code
 		read_line = ""
-		code = string.sub(read_line, 1, 4)
-		while string.sub(read_line, 1, 4) ~= "100 " do -- find a "1" code
+		repeat
 			read_line = file:read()
-		end
-		-- find the runway name in that line
-		line = Line:new(read_line, " ")
+        until string.sub(read_line, 1, 4) == "100 " or -- find 100 code
+              string.sub(read_line, 1, 2) == "1 " or -- a code 1
+              read_line == "99" -- a code 99
+
+        if string.sub(read_line, 1, 4) == "100 " then
+            -- find the runway name in that line
+            line = Line:new(read_line, " ")
+
+            name_rwy = line:get_column(9)
+            lat_rwy = line:get_column(10)
+            lon_rwy = line:get_column(11)
+            name_rwyopp = line:get_column(18)
+            lat_rwyopp = line:get_column(19)
+            lon_rwyopp = line:get_column(20)
+            
+            runway_length = GC_distance_kt(lat_rwy, lon_rwy, lat_rwyopp, lon_rwyopp) * 1852 -- convert nm to metres
+            output[name_rwy] = runway_length
+            print(name_rwy .. " " .. runway_length)
+            output[name_rwyopp] = runway_length
+        end
 	end
-	
-	lat_rwy = line:get_column(10)
-	lon_rwy = line:get_column(11)
-	lat_rwyopp = line:get_column(19)
-	lon_rwyopp = line:get_column(20)
-	return GC_distance_kt(lat_rwy, lon_rwy, lat_rwyopp, lon_rwyopp) * 1852 -- convert nm to metres
+    return output
 end
 
 
 
-function question(question, ans)
-	if #ans == 0 then
-		return nil
-	end
-	print(question)
-	for i, a in ipairs(ans) do
-		print("\t" .. tostring(i) .. ". " .. a)
-	end
-	pass = false
-	while not pass do
-		user_ans = io.read("*l")
-		for i = 1, #ans, 1 do
-			if tostring(i) == user_ans then
-				pass = true
-			end
-		end
-		if not pass then
-			print("Invalid input! Please enter a number from above.")
-		end
-	end
-	return ans[tonumber(user_ans)]
+--[[
+--
+--
+--      FMGS SASL
+--
+--
+--]]
+
+--sasl get nav aid information
+function fmgs_get_nav(find_nameid, find_type)
+    --find by name
+    id = sasl.findNavAid(find_nameid:upper(), nil, nil, nil, nil, find_type)
+    --if name is not found
+    if id == -1 then
+        --find by id
+        id = sasl.findNavAid(nil, find_nameid:upper(), nil, nil, nil, find_type) 
+    end
+    local nav = {}
+    nav.navtype, nav.lat, nav.lon, nav.height, nav.freq, nav.hdg, nav.id, nav.name, nav.loadedDSF = sasl.getNavAidInfo(id)
+    print("nav")
+    print("type " .. nav.navtype)
+    print("lat " .. nav.lat)
+    print("lon " .. nav.lon)
+    print("height " .. nav.height)
+    print("freq " .. nav.freq)
+    print("hdg " .. nav.hdg)
+    print("id " .. nav.id)
+    print("name " .. nav.name)
+    return nav
 end
+
 
 
 
