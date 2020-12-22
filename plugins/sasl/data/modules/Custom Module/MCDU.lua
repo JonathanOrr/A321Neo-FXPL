@@ -1540,8 +1540,21 @@ function (phase)
 
         --format the fpln
         fpln_format()
+
         --initialize fpln page index
         fpln_index = fmgs_dat["fpln index"]
+
+        --initialize title
+        mcdu_dat_title[1] = {txt = " "}
+
+        --add flt nbr to title
+        flt_nbr = fmgs_dat["flt nbr"] or ""
+        s = ""
+        for i = 1, 21 - string.len(flt_nbr) do
+            s = s .. " "
+        end
+        mcdu_dat_title[2] = {txt = s .. flt_nbr}
+
         --draw the f-pln
         for i = 1, math.min(#fmgs_dat["fpln fmt"], 5) do
             --increment fpln index, loop around flight plan.
@@ -1554,18 +1567,10 @@ function (phase)
             --is it a waypoint?
             else
                 --set title
-                mcdu_dat_title[1] = {txt = ""}
                 fmgs_dat_init("wpt from", fmgs_dat["origin"])
                 if i == 1 and fpln_wpt.name:sub(1,4) == fmgs_dat["wpt from"] then
                     mcdu_dat_title[1] = {txt = " from"}
                 end
-                -- pad flt nbr to rightmost
-                fmgs_dat_init("flt nbr", "")
-                s = ""
-                for i = 1, 24 - string.len(fmgs_dat["flt nbr"]) do
-                    s = s .. " "
-                end
-                mcdu_dat_title[2] = {txt = s .. fmgs_dat["flt nbr"]}
 
                 --[[ VIA --]]
                 --is via an airway/note or heading?
@@ -1593,7 +1598,7 @@ function (phase)
                     mcdu_dat["l"]["L"][i][2] = {txt = "        " .. fpln_wpt.time, col = "green", size = "s"}
 
                     --[[ SPD --]]
-                    mcdu_dat["l"]["R"][i][1] = {txt = fpln_wpt.spd .. "/     ", col = "green", size = "s"}
+                    mcdu_dat["l"]["R"][i][1] = {txt = fpln_wpt.spd .. "      ", col = "green", size = "s"}
 
                     --[[ ALT --]]
                     mcdu_dat["l"]["R"][i][2] = {txt = fpln_wpt.alt, col = "green", size = "s"}
@@ -1703,7 +1708,14 @@ function (phase)
 
         --get lat lon
         nav = fmgs_get_nav(wpt.name, wpt.navtype)
-        mcdu_dat["s"]["L"][1] = {txt = "   " .. Coordinates_format_degrees(nav.lat, nav.lon, 1, 1), col = "green"}
+
+        deg, min, sec, dir = mcdu_ctrl_dd_to_dmsd(nav.lat, "lat")
+        mcdu_dat["s"]["L"][1][1] = {txt = "   " .. tostring(deg) .. "º    "  .. tostring(dir) .. "/", col = "green"}
+        mcdu_dat["s"]["L"][1][2] = {txt = "      " ..tostring(Round(min, 1)), col = "green", size = "s"}
+        deg, min, sec, dir = mcdu_ctrl_dd_to_dmsd(nav.lon, "lon")
+        mcdu_dat["s"]["R"][1][1] = {txt = tostring(deg) .. "º    "  .. tostring(dir) .. "   ", col = "green"}
+        mcdu_dat["s"]["R"][1][2] = {txt = tostring(Round(min, 1)) .. "    ", col = "green", size = "s"}
+
 
         mcdu_dat["s"]["R"][2].txt = "ll xing/incr/no"
         mcdu_dat["l"]["R"][2] = {txt = "[  ]°/[ ]°/[ ]", col = "cyan"}

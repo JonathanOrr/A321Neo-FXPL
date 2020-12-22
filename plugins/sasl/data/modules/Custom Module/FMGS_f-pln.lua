@@ -36,28 +36,11 @@ local function fpln_wpt(navtype, loc, via, name, time, dist, spd, alt, efob, win
     return wpt
 end
 
-FPLN_DISCON = fpln_wpt("discon", nil, nil, nil, nil, nil, nil, nil, nil, nil, nil)
-
 local function fpln_add_wpt(wpt, loc)
-    loc = loc or #fmgs_dat["fpln"] -- if not specified, append at the bottom
-    table.insert(fmgs_dat["fpln"], loc, wpt)
-end
-
---find flight discontinuities
-local function fpln_find_discons()
-    if #fmgs_dat["fpln"] == 0 then
-        return
-    end
-
-    print(fmgs_dat["fpln"][1])
-    wpt_prev = fmgs_dat["fpln"][1] or {nextname = ""}
-
-    for no,wpt in ipairs(fpln) do
-        if wpt_prev.nextname ~= wpt.name then
-            fpln_add_wpt(FPLN_DISCON, no)
-        end
-        --set previous waypoint
-        wpt_prev = wpt
+    if loc then
+        table.insert(fmgs_dat["fpln"], loc, wpt)
+    else
+        table.insert(fmgs_dat["fpln"], wpt)
     end
 end
 
@@ -66,18 +49,24 @@ function fpln_format()
     fpln_fmt = {}
     fpln = fmgs_dat["fpln"]
 
-    fpln_find_discons()
+    --init previous waypoint
+    wpt_prev = {}
+    if #fpln > 0 then
+        wpt_prev = {nextname = fpln[1].name}
+    end
 
     for i,wpt in ipairs(fpln) do
         --is waypoint a blank?
         if wpt.name ~= "" then
             --check for flight discontinuities
-            if wpt.navtype == FPLN_DISCON.navtype then
+            if wpt_prev.nextname ~= wpt.name then
                 table.insert(fpln_fmt, "---f-pln discontinuity--")
-            else
-                --insert waypoint
-                table.insert(fpln_fmt, wpt)
             end
+
+            --insert waypoint
+            table.insert(fpln_fmt, wpt)
+            --set previous waypoint
+            wpt_prev = wpt
         end
     end
     table.insert(fpln_fmt, "----- end of f-pln -----")
@@ -88,8 +77,8 @@ function fpln_format()
 end
 
 function fpln_add_airports(origin, destination)
-    fpln_add_wpt(fpln_wpt(NAV_AIRPORT, nil, destination.id, nil, nil, nil, nil, nil, nil, nil, nil), 1)
-    fpln_add_wpt(fpln_wpt(NAV_AIRPORT, nil, origin.id, nil, nil, nil, nil, nil, nil, nil, nil), 1)
+    fpln_add_wpt(fpln_wpt(NAV_AIRPORT, nil, nil, origin.id, nil, nil, nil, nil, nil, nil, nil))
+    fpln_add_wpt(fpln_wpt(NAV_AIRPORT, nil, nil, destination.id, nil, nil, nil, nil, nil, nil, nil))
 end
 
 
