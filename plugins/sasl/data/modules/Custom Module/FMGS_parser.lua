@@ -12,9 +12,20 @@
 --    Please check the LICENSE file in the root of the repository for further
 --    details or check <https://www.gnu.org/licenses/>
 -------------------------------------------------------------------------------
--- File: navigation.lua 
--- Short description: Navigation data processing
+-- File: FMGS_parser.lua 
+-- Short description: Read and parses FMGS data 
+--                    This is a helper file used by FMGS.lua
 -------------------------------------------------------------------------------
+
+
+
+--[[
+--
+--
+--      FORMATTING
+--
+--
+--]]
 
 function char_at(str, index)
 	return string.sub(str, index, index)
@@ -35,8 +46,6 @@ function appr_airbus_to_xp_appr(appr)
 	return runway
 end
 
-
-
 -- converts appr airbus format to xplane rwy
 -- e.g. RNV16LZ to RW16B
 function appr_airbus_to_xp_rwy(appr)
@@ -52,6 +61,15 @@ function appr_airbus_to_xp_rwy(appr)
 	return runway
 end
 
+
+
+--[[
+--
+--
+--      LINE PARSER
+--
+--
+--]]
 
 -- Line will parse a row of data into a struct
 Line = {row = "", sep_char = ""}
@@ -91,6 +109,14 @@ function Line:get_column(col_index)
 end
 
 
+
+--[[
+--
+--
+--      PARSER - CIFP
+--
+--
+--]]
 
 -- ParserCifp will parse CIFP files for an airport
 ParserCifp = {data = "", parsed_data = {}}
@@ -289,6 +315,7 @@ function ParserCifp:get_procedure(proc_type, proc, runway)
 	return output
 end
 
+
 function ParserCifp:get_departure(rwy, proc, trans)
 	print()
 	print("SID Procedure:")
@@ -312,6 +339,14 @@ function ParserCifp:get_arrival(appr, via, proc, trans)
 end
 
 
+
+--[[
+--
+--
+--      PARSER - AIRPORT
+--
+--
+--]]
 
 -- ParserApt will parse apt.dat for airport data
 ParserApt = {file = {}, data = "", parsed_data = {}}
@@ -372,28 +407,37 @@ end
 
 
 
-function question(question, ans)
-	if #ans == 0 then
-		return nil
-	end
-	print(question)
-	for i, a in ipairs(ans) do
-		print("\t" .. tostring(i) .. ". " .. a)
-	end
-	pass = false
-	while not pass do
-		user_ans = io.read("*l")
-		for i = 1, #ans, 1 do
-			if tostring(i) == user_ans then
-				pass = true
-			end
-		end
-		if not pass then
-			print("Invalid input! Please enter a number from above.")
-		end
-	end
-	return ans[tonumber(user_ans)]
+--[[
+--
+--
+--      FMGS SASL
+--
+--
+--]]
+
+--sasl get nav aid information
+function fmgs_get_nav(find_nameid, find_type)
+    --find by name
+    id = sasl.findNavAid(find_nameid:upper(), nil, nil, nil, nil, find_type)
+    --if name is not found
+    if id == -1 then
+        --find by id
+        id = sasl.findNavAid(nil, find_nameid:upper(), nil, nil, nil, find_type) 
+    end
+    local nav = {}
+    nav.navtype, nav.lat, nav.lon, nav.height, nav.freq, nav.hdg, nav.id, nav.name, nav.loadedDSF = sasl.getNavAidInfo(id)
+    print("nav")
+    print("type " .. nav.navtype)
+    print("lat " .. nav.lat)
+    print("lon " .. nav.lon)
+    print("height " .. nav.height)
+    print("freq " .. nav.freq)
+    print("hdg " .. nav.hdg)
+    print("id " .. nav.id)
+    print("name " .. nav.name)
+    return nav
 end
+
 
 
 

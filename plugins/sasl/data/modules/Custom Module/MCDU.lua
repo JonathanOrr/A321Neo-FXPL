@@ -239,6 +239,7 @@ position = {1020, 1666, 560, 530}
 size = {560, 530}
 
 include('constants.lua')
+include('FMGS.lua') -- Flight Management Guidance System implementation
 
 local NIL = 0 -- used for input return and checking
 
@@ -284,16 +285,16 @@ local MCDU_ENTRY_KEYS = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", 
 local MCDU_ENTRY_PAGES = {"dir", "prog", "perf", "init", "data", "f-pln", "rad_nav", "fuel_pred", "sec_f-pln", "atc_comm", "mcdu_menu", "air_port"}
 local MCDU_ENTRY_SIDES = {"L1", "L2", "L3", "L4", "L5", "L6", "R1", "R2", "R3", "R4", "R5", "R6", "slew_up", "slew_down", "slew_left", "slew_right"}
 
+
+
 --[[
 --
 --
---      FMGS & MCDU DATA INITIALIZATION
+--      MCDU DATA INITIALIZATION
 --
 --
 --]]
 
-local fmgs_dat = {}
-local fmgs_metadat = {}
 local mcdu_dat = {}
 local mcdu_dat_title = {}
 
@@ -549,66 +550,43 @@ local function mcdu_toggle(obj, str_a, str_b)
     end
 end
 
---init FMGS data to 2nd argument
-local function fmgs_dat_init(dat_name, dat_init)
-    --is data uninitialised?
-    if fmgs_dat[dat_name] == nil then
-        fmgs_dat[dat_name] = dat_init
+-- converts Decimal Degrees and Axis (lat/lon) to Degrees Minute Seconds Direction
+local function mcdu_ctrl_dd_to_dmsd(dd, axis)
+    if axis == "lat" then
+        if dd > 0 then
+            p = "N"
+        else
+            p = "S"
+        end
+    else
+        if dd > 0 then
+            p = "E"
+        else
+            p = "W"
+        end
     end
+
+    dd = math.abs(dd)
+    d = dd
+    m = d % 1 * 60
+    s = m % 1 * 60
+    d = math.floor(d)
+    -- if axis is longitude
+    if axis ~= "lat" then
+        d = mcdu_pad_num(d, 3)
+    end
+    return d, m, s, p
 end
 
---get FMGS data with initialisation
-local function fmgs_dat_get(dat_name, dat_init, dat_init_col, dat_set_col, dat_format_callback)
-    --[[
-    -- dat_name     name of data from fmgs_dat
-    -- dat_init     value the data starts with initially
-    -- dat_init_col colour when data hasn't been set
-    -- dat_set_col  colour when data has been set
-    -- dat_format_callback (optional) format callback when data has been set
-    --]]
-
-    if fmgs_dat[dat_name] == nil then
-        return {txt = dat_init, col = dat_init_col}
+-- converts Degrees Minute Seconds Direction to Decimal Degrees
+local function mcdu_ctrl_dmsd_to_dd(d,m,s,dir)
+    if dir == "E" or dir == "N" then
+        p = 1
     else
-        val = fmgs_dat[dat_name]
-        if dat_format_callback == nil then
-            dat_format_callback = function (val) return val end
-        end
-
-        if type(dat_init) == "string" then
-            val = tostring(dat_format_callback(tostring(val)))
-        else
-            val = dat_format_callback(val)
-        end
-
-        return {txt = val, col = dat_set_col}
+        p = -1
     end
-end
-
---get FMGS data with initialisation sans colouring. GET PURE TEXT
-local function fmgs_dat_get_txt(dat_name, dat_init, dat_format_callback)
-    --[[
-    -- dat_name     name of data from fmgs_dat
-    -- dat_init     value the data starts with initially
-    -- dat_format_callback (optional) format callback when data has been set
-    --]]
-
-    if fmgs_dat[dat_name] == nil then
-        return dat_init
-    else
-        val = fmgs_dat[dat_name]
-        if dat_format_callback == nil then
-            dat_format_callback = function (val) return val end
-        end
-
-        if type(dat_init) == "string" then
-            val = tostring(dat_format_callback(tostring(val)))
-        else
-            val = dat_format_callback(val)
-        end
-
-        return val
-    end
+    dd = (d + m*(1/60) + s*(1/3600)) * p
+    return dd
 end
 
 
@@ -620,11 +598,6 @@ end
 --
 --
 --]]
---a321neo commands
-local mcdu_debug_get = sasl.createCommand("a321neo/debug/mcdu/get_data", "retrieve FMGS data from pointer a321neo/cockpit/mdu/mcdu_debug_pointer to a321neo/cockpit/mcdu/mcdu_debug_dat")
-local mcdu_debug_set = sasl.createCommand("a321neo/debug/mcdu/set_data", "inject FMGS data from pointer a321neo/cockpit/mdu/mcdu_debug_pointer to a321neo/cockpit/mcdu/mcdu_debug_dat")
-local mcdu_debug_pointer = createGlobalPropertys("a321neo/debug/mcdu/mcdu_pointer")
-local mcdu_debug_dat = createGlobalPropertys("a321neo/debug/mcdu/mcdu_dat")
 
 local mcdu_debug_busy = createGlobalPropertyi("a321neo/debug/mcdu/mcdu_bug_busy")
 
@@ -637,6 +610,7 @@ local gps_lon = globalPropertyf("sim/flightmodel/position/longitude")
 local mcdu_inp = {}
 
 local entry_cooldown = 0
+local hokey_pokey = false --wonder what this does
 
 local MCDU_ENTRY = 
 {
@@ -735,23 +709,6 @@ for i,entry_category in ipairs(MCDU_ENTRY) do
     end
 end
 
---a321neo command handlers
---debugging
-local hokey_pokey = false --wonder what this does
-sasl.registerCommandHandler(mcdu_debug_get, 0, function (phase)
-    if phase == SASL_COMMAND_BEGIN then
-        print("MCDU DEBUG get " .. fmgs_dat[get(mcdu_debug_pointer)])
-        set(mcdu_debug_dat, fmgs_dat[get(mcdu_debug_pointer)])
-        mcdu_open_page(get(mcdu_page))
-    end
-end)
-sasl.registerCommandHandler(mcdu_debug_set, 0, function (phase)
-    if phase == SASL_COMMAND_BEGIN then
-        print("MCDU DEBUG set " .. fmgs_dat[get(mcdu_debug_pointer)])
-        fmgs_dat[get(mcdu_debug_pointer)] = get(mcdu_debug_dat)
-        mcdu_open_page(get(mcdu_page))
-    end
-end)
 
 
 --[[
@@ -933,6 +890,8 @@ function update_global_colors()
     ECAM_BLACK = MCDU_DISP_COLOR["black"]
 end
 
+
+
 --[[
 --
 --
@@ -941,67 +900,6 @@ end
 --
 --]]
 
---sasl get nav aid information
-local function mcdu_ctrl_get_nav(find_nameid, find_type)
-    --find by name
-    id = sasl.findNavAid(find_nameid:upper(), nil, nil, nil, nil, find_type)
-    --if name is not found
-    if id == -1 then
-        --find by id
-        id = sasl.findNavAid(nil, find_nameid:upper(), nil, nil, nil, find_type) 
-    end
-    local nav = {}
-    nav.navtype, nav.lat, nav.lon, nav.height, nav.freq, nav.hdg, nav.id, nav.name, nav.loadedDSF = sasl.getNavAidInfo(id)
-    print("nav")
-    print("type " .. nav.navtype)
-    print("lat " .. nav.lat)
-    print("lon " .. nav.lon)
-    print("height " .. nav.height)
-    print("freq " .. nav.freq)
-    print("hdg " .. nav.hdg)
-    print("id " .. nav.id)
-    print("name " .. nav.name)
-    return nav
-end
-
--- converts Decimal Degrees and Axis (lat/lon) to Degrees Minute Seconds Direction
-local function mcdu_ctrl_dd_to_dmsd(dd, axis)
-    if axis == "lat" then
-        if dd > 0 then
-            p = "N"
-        else
-            p = "S"
-        end
-    else
-        if dd > 0 then
-            p = "E"
-        else
-            p = "W"
-        end
-    end
-
-    dd = math.abs(dd)
-    d = dd
-    m = d % 1 * 60
-    s = m % 1 * 60
-    d = math.floor(d)
-    -- if axis is longitude
-    if axis ~= "lat" then
-        d = mcdu_pad_num(d, 3)
-    end
-    return d, m, s, p
-end
-
--- converts Degrees Minute Seconds Direction to Decimal Degrees
-local function mcdu_ctrl_dmsd_to_dd(d,m,s,dir)
-    if dir == "E" or dir == "N" then
-        p = 1
-    else
-        p = -1
-    end
-    dd = (d + m*(1/60) + s*(1/3600)) * p
-    return dd
-end
 
 mcdu_entry = string.upper("ksea/kbfi")
 
@@ -1022,6 +920,8 @@ function update()
         table.remove(mcdu_messages)
     end
 end
+
+
 
 --[[
 --
@@ -1054,72 +954,6 @@ end
 --
 --
 --]]
-
--- FLIGHT PLAN
-
-fmgs_dat["fpln"] = {}
-fmgs_dat["fpln fmt"] = {}
-
-local function fpln_addwpt(navtype, loc, via, name, trk, time, dist, spd, alt, efob, windspd, windhdg, next)
-    wpt = {}
-    wpt.name = name or ""
-    wpt.navtype = navtype or ""
-    wpt.time = time or "----"
-    wpt.dist = dist or ""
-    wpt.spd = spd or "---"
-    wpt.alt = alt or "-----"
-    wpt.via = via or ""
-    wpt.trk = trk or ""
-    wpt.next = next
-    wpt.efob = efob or 5.5
-    wpt.windspd = windspd or 0
-    wpt.windhdg = windhdg or 0
-    table.insert(fmgs_dat["fpln"], loc, wpt)
-end
-
-local function fpln_load()
-    --init local variables
-    fpln_fmt = {}
-    fmgs_dat["fpln"] = {}
-
-    --navtype loc via name trk time dist spd alt efob windspd windhdg next
-
-    --add airports
-    for i = 1, sasl.countFMSEntries() do
-        navtype, name, id, alt, lat, lon = sasl.getFMSEntryInfo(sasl.countFMSEntries() - i)
-        fpln_addwpt(navtype, 1, nil, name:lower(), nil, nil, nil, nil, alt, nil, nil, nil, "")
-        print(i .. " " .. name:lower())
-    end
-end
-
---formats the fpln
-local function fpln_format()
-    fpln_fmt = {}
-    fpln = fmgs_dat["fpln"]
-
-    for i,wpt in ipairs(fpln) do
-        --is waypoint a blank?
-        if wpt.name ~= "" then
-            --check for flight discontinuities
-            if wpt.name == "discon" then
-                table.insert(fpln_fmt, "---f-pln discontinuity--")
-            else
-                --insert waypoint
-                table.insert(fpln_fmt, wpt)
-                --set previous waypoint
-                wpt_prev = wpt
-            end
-        end
-    end
-    table.insert(fpln_fmt, "----- end of f-pln -----")
-    table.insert(fpln_fmt, "----- no altn fpln -----")
-
-    --output
-    fmgs_dat["fpln fmt"] = fpln_fmt
-end
-
---DEMO
---fpln_addwpt(NAV_FIX, 1, "chins3", "humpp", nil, 2341, 14, 297, 15000, nil, nil, nil, "aubrn")
 
 -- MCDU PAGES
 
@@ -1327,8 +1161,8 @@ function (phase)
 			airp_origin_name = input:sub(1,4):lower()
             airp_dest_name = input:sub(6,9):lower()
 
-            airp_origin = mcdu_ctrl_get_nav(airp_origin_name, NAV_AIRPORT)
-            airp_dest = mcdu_ctrl_get_nav(airp_dest_name, NAV_AIRPORT)
+            airp_origin = fmgs_get_nav(airp_origin_name, NAV_AIRPORT)
+            airp_dest = fmgs_get_nav(airp_dest_name, NAV_AIRPORT)
 
             -- do these airports exist?
 			if airp_origin.navtype == NAV_UNKNOWN or
@@ -1695,14 +1529,15 @@ function (phase)
     end
 end
 
+fpln_addwpt(NAV_FIX, 1, "chins3", "humpp", nil, 2341, 14, 297, 15000, nil, nil, nil, "aubrn")
+fpln_addwpt(NAV_FIX, 1, "chins3", "humpp", nil, 2341, 14, 297, 15000, nil, nil, nil, "aubrn")
+
 -- 600 f-pln
 mcdu_sim_page[600] =
 function (phase)
     if phase == "render" then
         fmgs_dat_init("fpln index", 0)
         fmgs_dat_init("fpln page", 1)
-        --load the fpln
-        fpln_load()
         --format the fpln
         fpln_format()
         --initialize fpln page index
@@ -1861,7 +1696,7 @@ function (phase)
         mcdu_dat_title[3] = {txt = "                " .. wpt.name, col = "green"}
 
         --get lat lon
-        nav = mcdu_ctrl_get_nav(wpt.name, wpt.navtype)
+        nav = fmgs_get_nav(wpt.name, wpt.navtype)
         mcdu_dat["s"]["L"][1] = {txt = "   " .. Coordinates_format_degrees(nav.lat, nav.lon, 1, 1), col = "green"}
 
         mcdu_dat["s"]["R"][2].txt = "ll xing/incr/no"
@@ -1947,7 +1782,7 @@ function (phase)
             print((fmgs_dat["fpln latrev index"] + offset) % #fmgs_dat["runways"] + 1)
             --get ILS data
             runway = fmgs_dat["runways"][(fmgs_dat["fpln latrev index"] + offset) % #fmgs_dat["runways"] + 1]
-            ils = mcdu_ctrl_get_nav(airport .. " " .. runway.name, NAV_ILS)
+            ils = fmgs_get_nav(airport .. " " .. runway.name, NAV_ILS)
 
             --get ILS freq
             --format e.g. 11170 to 111.70
