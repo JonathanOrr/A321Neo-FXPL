@@ -1700,9 +1700,9 @@ function (phase)
     --slew up or down
     if phase == "slew_up" or phase == "slew_down" then
         if phase == "slew_up" then
-            increment = -1
-        else
             increment = 1
+        else
+            increment = -1
         end
         --is flight plan long enough to slew up and down?
         if #fmgs_dat["fpln fmt"] > 2 then
@@ -1817,28 +1817,44 @@ function (phase)
             
         mcdu_dat["s"]["L"][2].txt = " available runways"
         fmgs_dat_init("fpln latrev index", 1)   -- init the increment/offset of runway data to 0
-        offset = 0
 
         --set airport in question
         airport = fmgs_dat["origin"]
 
-        print(CIFP_PATH .. airport .. ".dat")
-        --get runways
-        parser = ParserCifp:new(CIFP_PATH .. airport .. ".dat") 
-        runways = parser:get_runways()
+        fmgs_dat_init(airport .. " init", false)
+        if not fmgs_dat[airport .. " init"] then
+            --get runway lengths
+            parserApt = ParserApt:new(APT_PATH)
+            fmgs_dat[airport .. " runway lengths"] = parserApt:get_runway_lengths(airport)
 
-        --get runway lengths
-        print("a")
-        parserApt = ParserApt:new(APT_PATH)
-        runway_lengths = parserApt:get_runway_lengths(airport)
-        print("b")
+            --get runways
+            parser = ParserCifp:new(CIFP_PATH .. airport .. ".dat") 
+            fmgs_dat[airport .. " cifp parser"] = parser
+            fmgs_dat[airport .. " runways"] = parser:get_runways()
+
+            fmgs_dat[airport .. " init"] = true
+            
+        end
+
+        -- set the data
+        parser = fmgs_dat[airport .. " cifp parser"]
+        runways = fmgs_dat[airport .. " runways"]
+        runway_lengths = fmgs_dat[airport .. " runway lengths"]
 
         for i = 1, 4 do
-            line = (offset % 4) + 2
+            line = i + 1
+            index = fmgs_dat["fpln latrev index"] + i - 1
             print(line)
-            print((fmgs_dat["fpln latrev index"] + offset) % #runways + 1)
+            print(index)
+
+            --get runway or stop
+            if index <= #runways then
+                runway = runways[index]
+            else
+                break
+            end
+
             --get ILS data
-            runway = runways[(fmgs_dat["fpln latrev index"] + offset) % #runways+ 1]
             --e.g. RW16C -> 16C
             runway_name = string.sub(runway, 3, 5)
             ils = fmgs_get_nav(airport .. " " .. runway_name, NAV_ILS)
@@ -1864,16 +1880,12 @@ function (phase)
                 ils.hdg = ils.hdg:sub(1,3)
             end
             
-            print(runway_name)
             runway_length = Round(runway_lengths[runway_name], 0)
-            mcdu_dat["l"]["L"][line] = {txt = "<" .. runway_name .. "   " .. runway_length .. "FT", col = "cyan"}
+            mcdu_dat["l"]["L"][line] = {txt = "←" .. runway_name .. "   " .. runway_length .. "M", col = "cyan"}
             mcdu_dat["l"]["R"][line] = {txt = "crs" .. ils.hdg .. "   ", col = "cyan", size = "s"}
             --display runway length
             mcdu_dat["s"]["L"][line + 1] = {txt = "       ILS", col = "cyan"}
             mcdu_dat["s"]["R"][line + 1] = {txt = ils.id .. "/" .. freq, col = "cyan"}
-
-            --does runway length already exist for this runway?
-            offset = offset + 1
         end
 
         mcdu_dat["l"]["L"][6].txt = "<return"
@@ -1886,7 +1898,7 @@ function (phase)
 
         --find the index of which button was pressed, and -2 to make it equal to `offset` in the function above
         index = tonumber(phase:sub(2,2)) - 2
-        runway = runways[(fmgs_dat["fpln latrev index"] + index) % #runways + 1]
+        runway = runways[(fmgs_dat["fpln latrev index"] + index) + 1]
     end
 
     --<return
@@ -1897,13 +1909,15 @@ function (phase)
     --slew up or down
     if phase == "slew_up" or phase == "slew_down" then
         if phase == "slew_up" then
-            increment = -1
-        else
             increment = 1
+        else
+            increment = -1
         end
         --is flight plan long enough to slew up and down?
         if #runways > 4 then
-            fmgs_dat["fpln latrev index"] = fmgs_dat["fpln latrev index"] + increment
+            if fmgs_dat["fpln latrev index"] + increment > 0 then
+                fmgs_dat["fpln latrev index"] = fmgs_dat["fpln latrev index"] + increment
+            end
             print(fmgs_dat["fpln latrev index"])
         end
         mcdu_open_page(602)

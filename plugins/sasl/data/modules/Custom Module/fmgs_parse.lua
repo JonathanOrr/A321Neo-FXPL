@@ -359,7 +359,6 @@ function ParserApt:new(filename)
    	local o = {}             -- our new object
    	setmetatable(o, self)  -- make Account handle lookup
 	o.file = file
-   	o.data = data      -- initialize our object
 	return o
 end
 
