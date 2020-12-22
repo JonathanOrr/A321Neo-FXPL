@@ -17,8 +17,9 @@
 --                    This is a helper file, used by MCDU.lua
 -------------------------------------------------------------------------------
 
-include('FMGS_parser.lua') -- Reads and parses FMGS data
-include('FMGS_f-pln.lua') -- Flight Management and planning implementation
+-- subfiles (includes) at the bottom of the files
+
+
 
 --[[
 --
@@ -123,3 +124,16 @@ function fmgs_dat_get_txt(dat_name, dat_init, dat_format_callback)
         return val
     end
 end
+
+
+
+--[[
+--
+--
+--      INCLUDES
+--
+--
+--]]
+
+include('FMGS_parser.lua') -- Flight Management and planning implementation
+include('FMGS_f-pln.lua') -- Flight Management and planning implementation

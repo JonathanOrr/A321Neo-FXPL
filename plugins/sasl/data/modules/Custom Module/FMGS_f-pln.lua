@@ -39,12 +39,12 @@ end
 FPLN_DISCON = fpln_wpt("discon", nil, nil, nil, nil, nil, nil, nil, nil, nil, nil)
 
 local function fpln_add_wpt(wpt, loc)
-    table.insert(fmgs_dat["fpln"], wpt, loc)
+    loc = loc or #fmgs_dat["fpln"] -- if not specified, append at the bottom
+    table.insert(fmgs_dat["fpln"], loc, wpt)
 end
 
 --find flight discontinuities
 local function fpln_find_discons()
-    fpln = 
     if #fmgs_dat["fpln"] == 0 then
         return
     end
