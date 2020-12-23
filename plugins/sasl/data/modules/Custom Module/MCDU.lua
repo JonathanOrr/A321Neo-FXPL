@@ -815,23 +815,6 @@ function draw()
 	perf_measure_stop("MCDU:draw()")
 end
 
--- utlities for changing colours
-function update_global_colors()
-    ECAM_WHITE = MCDU_DISP_COLOR["white"]
-    UI_WHITE = MCDU_DISP_COLOR["white"]
-    ECAM_BLUE = MCDU_DISP_COLOR["cyan"]
-    UI_BLUE = MCDU_DISP_COLOR["blue"]
-    ECAM_GREEN = MCDU_DISP_COLOR["green"]
-    UI_GREEN = MCDU_DISP_COLOR["green"]
-    ECAM_ORANGE = MCDU_DISP_COLOR["amber"]
-    ECAM_YELLOW = MCDU_DISP_COLOR["yellow"]
-    UI_YELLOW = MCDU_DISP_COLOR["yellow"]
-    ECAM_MAGENTA = MCDU_DISP_COLOR["magenta"]
-    ECAM_RED = MCDU_DISP_COLOR["red"]
-    UI_RED = MCDU_DISP_COLOR["red"]
-    ECAM_BLACK = MCDU_DISP_COLOR["black"]
-end
-
 
 
 --[[
@@ -1832,19 +1815,19 @@ function (phase)
         -- subtitle
         mcdu_dat["s"]["L"][1].txt = " rwy      sid     trans"
         if fmgs_dat["fpln latrev dept runway"] ~= "" then
-            mcdu_dat["l"]["L"][1][1] = {txt = " " .. fmgs_dat["fpln latrev dept runway"], col = "green"}
+            mcdu_dat["l"]["L"][1][1] = {txt = " " .. fmgs_dat["fpln latrev dept runway"], col = "yellow"}
         else
             mcdu_dat["l"]["L"][1][1] = {txt = " ---", col = "white"}
         end
 
         if fmgs_dat["fpln latrev dept sid"] ~= "" then
-            mcdu_dat["l"]["L"][1][2] = {txt = "         " .. fmgs_dat["fpln latrev dept sid"], col = "green"}
+            mcdu_dat["l"]["L"][1][2] = {txt = "         " .. fmgs_dat["fpln latrev dept sid"], col = "yellow"}
         else
             mcdu_dat["l"]["L"][1][2] = {txt = "         ------", col = "white"}
         end
 
         if fmgs_dat["fpln latrev dept trans"] ~= "" then
-            mcdu_dat["l"]["L"][1][3] = {txt = "                 " .. fmgs_dat["fpln latrev dept trans"], col = "green"}
+            mcdu_dat["l"]["L"][1][3] = {txt = "                 " .. fmgs_dat["fpln latrev dept trans"], col = "yellow"}
         else
             mcdu_dat["l"]["L"][1][3] = {txt = "                 ------", col = "white"}
         end
@@ -1872,11 +1855,7 @@ function (phase)
             if sid ~= "" then
                 trans = parser:get_trans("SID", sid, "RW" .. runway) -- get trans for sid
             else
-                if #sids > 1 then
-                    trans = parser:get_trans("SID", sids[2], "RW" .. runway) -- get first sid
-                else
-                    trans = {} -- no trans avail
-                end
+                trans = {} -- no trans avail
             end
             for _, i in ipairs(sids) do
                 print(i)
@@ -1947,20 +1926,15 @@ function (phase)
                 mcdu_dat["l"]["L"][line] = {txt = "←" .. runway_name .. "   " .. runway_length .. "m", col = "cyan"}
 
             else
+                mcdu_dat["s"]["L"][2].txt = "sid   available   trans"
                 
                 --engine out sid
-                mcdu_dat["s"]["L"][6][1] = {txt = "          eosid"}
-                mcdu_dat["l"]["L"][6][1] = {txt = "          not impl"}
+                mcdu_dat["s"]["L"][6] = {txt = "          eosid"}
+                mcdu_dat["l"]["L"][6][1] = {txt = "           none", col = "yellow"}
 
-                --erase/tmpy insert
-                if fmgs_dat["fpln latrev dept mode"] == "done" then
-                    mcdu_dat["s"]["L"][6][2] = {txt = " tmpy", col = "yellow"}
-                    mcdu_dat["l"]["L"][6][2] = {txt = "<f-pln", col = "yellow"}
-                else
-                    mcdu_dat["l"]["L"][6][2] = {txt = "←erase"}
-                end
+                mcdu_dat["l"]["R"][6] = {txt = "insert*", col = "amber"}
+                mcdu_dat["l"]["L"][6][2] = {txt = "←erase", col = "amber"}
 
-                mcdu_dat["s"]["L"][2].txt = " available runways"
                 --get sids or stop
                 if index <= #sids then
                     sid = sids[index]
@@ -2047,19 +2021,24 @@ function (phase)
         end
     end
 
-    --<return
+    --<return or <erase
     if phase == "L6" then
         if fmgs_dat["fpln latrev dept mode"] == "runway" then
             mcdu_open_page(600) -- open 600 f-pln
-        elseif fmgs_dat["fpln latrev dept mode"] == "done" then
-            mcdu_open_page(600) -- open 600 f-pln
-        elseif fmgs_dat["fpln latrev dept mode"] == "trans" then
+        else
             fmgs_dat["fpln latrev dept mode"] = "runway"
             fmgs_dat["fpln latrev dept runway"] = ""
             fmgs_dat["fpln latrev dept sid"] = ""
             fmgs_dat["fpln latrev dept trans"] = ""
             fmgs_dat["fpln latrev index"] = 1
             mcdu_open_page(602) -- reload
+        end
+    end
+
+    --insert>
+    if phase == "R6" then
+        if fmgs_dat["fpln latrev dept mode"] == "done" then
+            mcdu_open_page(600) -- open 600 f-pln
         end
     end
 
@@ -2338,7 +2317,6 @@ end
 mcdu_sim_page[1104] =
 function (phase)
     if phase == "render" then
-        update_global_colors()
         colour = fmgs_dat["colour"]
         mcdu_dat_title.txt = "     change " .. colour
         mcdu_dat_title.col = colour
@@ -2416,7 +2394,6 @@ function (phase)
 
             ["black"] =   {0.00, 0.00, 0.00},
         }
-        update_global_colors()
         mcdu_open_page(1103) -- open 1103 mcdu menu options colours
     end
     if phase == "L2" then
@@ -2432,7 +2409,6 @@ function (phase)
 
             ["black"] =   {0.00, 0.00, 0.00},
         }
-        update_global_colors()
         mcdu_open_page(1103) -- open 1103 mcdu menu options colours
     end
     if phase == "L3" then
@@ -2448,7 +2424,6 @@ function (phase)
 
             ["black"] =   {0.00, 0.00, 0.00},
         }
-        update_global_colors()
         mcdu_open_page(1103) -- open 1103 mcdu menu options colours
     end
     --[[
@@ -2481,7 +2456,6 @@ function (phase)
 
             ["black"] =   {0.00, 0.00, 0.00},
         }
-        update_global_colors()
         mcdu_open_page(1103) -- open 1103 mcdu menu options colours
     end
 
