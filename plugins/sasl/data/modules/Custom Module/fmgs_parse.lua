@@ -371,7 +371,7 @@ end
 -- creates a Look Up Table (LUT) for all the airports and their positions for easier reference
 function Parser_Apt:create_airport_lut()
     line = Line:new("", "")
-    print(AIRPORT_LUT_PATH)
+    --print(AIRPORT_LUT_PATH)
     --lut_file = io.open(AIRPORT_LUT_PATH, "w")
     while true do
         -- find a code 1
