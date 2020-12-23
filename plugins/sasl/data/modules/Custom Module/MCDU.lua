@@ -1861,8 +1861,7 @@ function (phase)
 
             runways = parser:get_runways()
             runway_lengths = parser_apt:get_runway_lengths(airport)
-        elseif fmgs_dat["fpln latrev dept mode"] == "sid" or
-               fmgs_dat["fpln latrev dept mode"] == "trans" then
+        else
             runway = fmgs_dat["fpln latrev dept runway"]
 
             -- get sids
@@ -1947,16 +1946,26 @@ function (phase)
 
                 mcdu_dat["l"]["L"][line] = {txt = "←" .. runway_name .. "   " .. runway_length .. "m", col = "cyan"}
 
-            elseif fmgs_dat["fpln latrev dept mode"] == "sid" or
-                   fmgs_dat["fpln latrev dept mode"] == "trans" then
+            else
+                
+                --engine out sid
+                mcdu_dat["s"]["L"][6][1] = {txt = "          eosid"}
+                mcdu_dat["l"]["L"][6][1] = {txt = "          not impl"}
 
-                mcdu_dat["l"]["L"][6].txt = "←erase"
+                --erase/tmpy insert
+                if fmgs_dat["fpln latrev dept mode"] == "done" then
+                    mcdu_dat["s"]["L"][6][2] = {txt = " tmpy", col = "yellow"}
+                    mcdu_dat["l"]["L"][6][2] = {txt = "<f-pln", col = "yellow"}
+                else
+                    mcdu_dat["l"]["L"][6][2] = {txt = "←erase"}
+                end
 
                 mcdu_dat["s"]["L"][2].txt = " available runways"
                 --get sids or stop
                 if index <= #sids then
                     sid = sids[index]
-                    if sid == fmgs_dat["fpln latrev dept sid"] then
+                    if sid == fmgs_dat["fpln latrev dept sid"] or
+                       (sid == "no sid" and fmgs_dat["fpln latrev dept sid"] == "none") then
                         prefix = " "
                     else
                         prefix = "←"
@@ -1967,7 +1976,8 @@ function (phase)
                 --get trans or stop
                 if index <= #trans then
                     tran = trans[index]
-                    if tran == fmgs_dat["fpln latrev dept trans"] then
+                    if tran == fmgs_dat["fpln latrev dept trans"] or
+                       (tran == "no trans" and fmgs_dat["fpln latrev dept trans"] ==  "none") then
                         prefix = " "
                     else
                         prefix = "→"
@@ -1997,29 +2007,40 @@ function (phase)
                     mcdu_open_page(602) -- reload
                 end
             end
-        elseif fmgs_dat["fpln latrev dept mode"] == "sid" or
-               fmgs_dat["fpln latrev dept mode"] == "trans" then
+        else
             if phase:sub(1,1) == "L" then
                 --find the index of which button was pressed, and -2 to make it equal to `offset` in the function above
                 index = tonumber(phase:sub(2,2)) - 2
                 index = fmgs_dat["fpln latrev index"] + index
                 if index <= #sids then
                     sid = sids[index]
+                    print(sid)
                     fmgs_dat["fpln latrev dept mode"] = "trans"
                     fmgs_dat["fpln latrev dept sid"] = sid
+                    fmgs_dat["fpln latrev dept trans"] = ""
                     fmgs_dat["fpln latrev index"] = 1
+
+                    if sid == "no sid" then
+                        fmgs_dat["fpln latrev dept sid"] = "none"
+                    end
                     mcdu_open_page(602) -- reload
                 end
             elseif phase:sub(1,1) == "R" and
-                   fmgs_dat["fpln latrev dept mode"] == "trans" then
+                   fmgs_dat["fpln latrev dept mode"] == "trans" or
+                   fmgs_dat["fpln latrev dept mode"] == "done" then
                 --find the index of which button was pressed, and -2 to make it equal to `offset` in the function above
                 index = tonumber(phase:sub(2,2)) - 2
                 index = fmgs_dat["fpln latrev index"] + index
                 if index <= #trans then
                     tran = trans[index]
-                    fmgs_dat["fpln latrev dept mode"] = "trans"
+                    print(tran)
+                    fmgs_dat["fpln latrev dept mode"] = "done"
                     fmgs_dat["fpln latrev dept trans"] = tran
                     fmgs_dat["fpln latrev index"] = 1
+
+                    if tran == "no trans" then
+                        fmgs_dat["fpln latrev dept trans"] = "none"
+                    end
                     mcdu_open_page(602) -- reload
                 end
             end
@@ -2030,15 +2051,11 @@ function (phase)
     if phase == "L6" then
         if fmgs_dat["fpln latrev dept mode"] == "runway" then
             mcdu_open_page(600) -- open 600 f-pln
-        elseif fmgs_dat["fpln latrev dept mode"] == "sid" then
+        elseif fmgs_dat["fpln latrev dept mode"] == "done" then
+            mcdu_open_page(600) -- open 600 f-pln
+        elseif fmgs_dat["fpln latrev dept mode"] == "trans" then
             fmgs_dat["fpln latrev dept mode"] = "runway"
             fmgs_dat["fpln latrev dept runway"] = ""
-            fmgs_dat["fpln latrev dept sid"] = ""
-            fmgs_dat["fpln latrev dept trans"] = ""
-            fmgs_dat["fpln latrev index"] = 1
-            mcdu_open_page(602) -- reload
-        elseif fmgs_dat["fpln latrev dept mode"] == "trans" then
-            fmgs_dat["fpln latrev dept mode"] = "sid"
             fmgs_dat["fpln latrev dept sid"] = ""
             fmgs_dat["fpln latrev dept trans"] = ""
             fmgs_dat["fpln latrev index"] = 1

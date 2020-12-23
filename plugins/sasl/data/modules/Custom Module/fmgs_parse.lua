@@ -197,7 +197,7 @@ function Parser_Cifp:get_approaches()
 end
 
 function Parser_Cifp:get_sids(runway)
-	output = {"NO SID"}
+	output = {"no sid"}
 	for _, pd in ipairs(self.parsed_data) do
 		if pd:get_column(1) == "SID:010" and
 		   pd:get_column(4) == runway
@@ -210,7 +210,7 @@ end
 
 function Parser_Cifp:get_stars(appr)
 	appr = appr_airbus_to_xp_rwy(appr)
-	output = {"NO STAR"}
+	output = {"no star"}
 	for _, pd in ipairs(self.parsed_data) do
 		if pd:get_column(1) == "STAR:010" and
 		   pd:get_column(4) == runway
@@ -223,7 +223,7 @@ end
 
 function Parser_Cifp:get_vias(appr)
 	appr = appr_airbus_to_xp_appr(appr)
-	output = {"NO VIA"}
+	output = {"no via"}
 	-- convert appr from airbus to xplane format
 	for _, pd in ipairs(self.parsed_data) do
 		if pd:get_column(1) == "APPCH:010" and
@@ -237,7 +237,7 @@ function Parser_Cifp:get_vias(appr)
 end
 
 function Parser_Cifp:get_trans(proc_type, proc, runway)
-	output = {"NO TRANS"}
+	output = {"no trans"}
 	for _, pd in ipairs(self.parsed_data) do
 		if proc_type == "SID" then
 			correct_type = (
