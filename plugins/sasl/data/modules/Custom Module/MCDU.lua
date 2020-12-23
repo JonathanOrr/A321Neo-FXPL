@@ -1817,43 +1817,72 @@ end
 mcdu_sim_page[602] =
 function (phase)
     if phase == "render" then
+        -- title
         mcdu_dat_title[1] = {txt = " departure"}
         mcdu_dat_title[2] = {txt = "             from", size = "s"}
         mcdu_dat_title[3] = {txt = "                  " .. wpt.name, col = "green"}
-
-        mcdu_dat["s"]["L"][1].txt = " rwy      sid     trans"
-        mcdu_dat["l"]["L"][1].txt = " ---     ------  ------"
             
-        mcdu_dat["s"]["L"][2].txt = " available runways"
+        -- init data
         fmgs_dat_init("fpln latrev index", 1)   -- init the increment/offset of runway data to 0
+        fmgs_dat_init("fpln latrev dept mode", "runway") -- init selection mode to runways
+        fmgs_dat_init("fpln latrev dept runway", "")
+        fmgs_dat_init("fpln latrev dept sid", "")
+        fmgs_dat_init("fpln latrev dept trans", "")
+
+        -- subtitle
+        mcdu_dat["s"]["L"][1].txt = " rwy      sid     trans"
+        if fmgs_dat["fpln latrev dept runway"] ~= "" then
+            mcdu_dat["l"]["L"][1][1] = {txt = " " .. fmgs_dat["fpln latrev dept runway"], col = "green"}
+        else
+            mcdu_dat["l"]["L"][1][1] = {txt = " ---", col = "white"}
+        end
+
+        if fmgs_dat["fpln latrev dept sid"] ~= "" then
+            mcdu_dat["l"]["L"][1][2] = {txt = "         " .. fmgs_dat["fpln latrev dept sid"], col = "green"}
+        else
+            mcdu_dat["l"]["L"][1][2] = {txt = "         ------", col = "white"}
+        end
+
+        if fmgs_dat["fpln latrev dept trans"] ~= "" then
+            mcdu_dat["l"]["L"][1][3] = {txt = "                 " .. fmgs_dat["fpln latrev dept trans"], col = "green"}
+        else
+            mcdu_dat["l"]["L"][1][3] = {txt = "                 ------", col = "white"}
+        end
 
         --set airport in question
         airport = fmgs_dat["origin"]
 
-        fmgs_dat_init(airport .. " init", false)
-        if not fmgs_dat[airport .. " init"] then
-            --get runway lengths
+        -- set the data
+        parser = {}
+        parser = Parser_Cifp:new(CIFP_PATH .. airport .. ".dat") 
+
+        if fmgs_dat["fpln latrev dept mode"] == "runway" then
             parser_apt = Parser_Apt:new(APT_PATH)
-            fmgs_dat[airport .. " runway lengths"] = parser_apt:get_runway_lengths(airport)
 
-            --get runways
-            parser = {}
-            parser = Parser_Cifp:new(CIFP_PATH .. airport .. ".dat") 
-            fmgs_dat[airport .. " cifp parser"] = parser
-            fmgs_dat[airport .. " runways"] = parser:get_runways()
+            runways = parser:get_runways()
+            runway_lengths = parser_apt:get_runway_lengths(airport)
+        elseif fmgs_dat["fpln latrev dept mode"] == "sid" or
+               fmgs_dat["fpln latrev dept mode"] == "trans" then
+            runway = fmgs_dat["fpln latrev dept runway"]
 
-            for _, i in ipairs(parser:get_runways()) do
+            -- get sids
+            sids = parser:get_sids("RW" .. runway)
+            sid = fmgs_dat["fpln latrev dept sid"]
+
+            -- get trans
+            if sid ~= "" then
+                trans = parser:get_trans("SID", sid, "RW" .. runway) -- get trans for sid
+            else
+                if #sids > 1 then
+                    trans = parser:get_trans("SID", sids[2], "RW" .. runway) -- get first sid
+                else
+                    trans = {} -- no trans avail
+                end
+            end
+            for _, i in ipairs(sids) do
                 print(i)
             end
-
-            fmgs_dat[airport .. " init"] = true
-            
         end
-
-        -- set the data
-        parser = fmgs_dat[airport .. " cifp parser"]
-        runways = fmgs_dat[airport .. " runways"]
-        runway_lengths = fmgs_dat[airport .. " runway lengths"]
 
         for i = 1, 4 do
             line = i + 1
@@ -1861,75 +1890,160 @@ function (phase)
             print(line)
             print(index)
 
-            --get runway or stop
-            if index <= #runways then
-                runway = runways[index]
-            else
-                break
-            end
+            if fmgs_dat["fpln latrev dept mode"] == "runway" then
+                mcdu_dat["l"]["L"][6].txt = "<return"
 
-            --get ILS data
-            --e.g. RW16C -> 16C
-            runway_name = string.sub(runway, 3, 5)
-            ils = fmgs_get_nav(airport .. " " .. runway_name, NAV_ILS)
+                mcdu_dat["s"]["L"][2].txt = " available runways"
 
-            if ils.navtype ~= NAV_UNKNOWN then
-                --get ILS freq
-                --format e.g. 11170 to 111.70
-                ils.freq = tostring(ils.freq)
-                freq = ils.freq:sub(1,3) .. "." .. ils.freq:sub(4,5)
-
-                --get ILS crs
-                ils.hdg = sasl.degTrueToDegMagnetic(ils.hdg)
-                if ils.hdg > 180 then
-                    --format e.g. 342 to -18
-                    ils.hdg = Round(ils.hdg - 360,0)
-                end
-                --how many digits?
-                ils.hdg = tostring(ils.hdg)
-                if string.len(ils.hdg) == 1 then
-                    ils.hdg = ils.hdg:sub(1,1)
-                elseif string.len(ils.hdg) == 2 then
-                    ils.hdg = ils.hdg:sub(1,2)
+                --get runway or stop
+                if index <= #runways then
+                    runway = runways[index]
                 else
-                    ils.hdg = ils.hdg:sub(1,3)
+                    break
                 end
 
-                mcdu_dat["l"]["R"][line] = {txt = "crs" .. ils.hdg .. "   ", col = "cyan", size = "s"}
+                --get ILS data
+                --e.g. RW16C -> 16C
+                runway_name = string.sub(runway, 3, 5)
+                ils = fmgs_get_nav(airport .. " " .. runway_name, NAV_ILS)
 
-                mcdu_dat["s"]["L"][line + 1] = {txt = "       ILS", col = "cyan"}
-                mcdu_dat["s"]["R"][line + 1] = {txt = ils.id .. "/" .. freq, col = "cyan"}
-            end
-            
-            runway_length = runway_lengths[runway_name] or 0
-            if runway_length == 0 then
-                -- figure runway length based on ils lat
-                ilsopp = fmgs_get_nav(airport .. " " .. (18 + tonumber(runway_name)) % 36, NAV_ILS)
-                if ilsopp ~= NAV_UNKNOWN then
-                    runway_length = GC_distance_kt(ils.lat, ils.lon, ilsopp.lat, ilsopp.lon) * 1852 -- convert nm to metres
+                if ils.navtype ~= NAV_UNKNOWN then
+                    --get ILS freq
+                    --format e.g. 11170 to 111.70
+                    ils.freq = tostring(ils.freq)
+                    freq = ils.freq:sub(1,3) .. "." .. ils.freq:sub(4,5)
+
+                    --get ILS crs
+                    ils.hdg = sasl.degTrueToDegMagnetic(ils.hdg)
+                    if ils.hdg > 180 then
+                        --format e.g. 342 to -18
+                        ils.hdg = Round(ils.hdg - 360,0)
+                    end
+                    --how many digits?
+                    ils.hdg = tostring(ils.hdg)
+                    if string.len(ils.hdg) == 1 then
+                        ils.hdg = ils.hdg:sub(1,1)
+                    elseif string.len(ils.hdg) == 2 then
+                        ils.hdg = ils.hdg:sub(1,2)
+                    else
+                        ils.hdg = ils.hdg:sub(1,3)
+                    end
+
+                    mcdu_dat["l"]["R"][line] = {txt = "crs" .. ils.hdg .. "   ", col = "cyan", size = "s"}
+
+                    mcdu_dat["s"]["L"][line + 1] = {txt = "       ILS", col = "cyan"}
+                    mcdu_dat["s"]["R"][line + 1] = {txt = ils.id .. "/" .. freq, col = "cyan"}
+                end
+                
+                runway_length = runway_lengths[runway_name] or 0
+                if runway_length == 0 then
+                    -- estimate runway length based on ils lat
+                    ilsopp = fmgs_get_nav(airport .. " " .. (18 + tonumber(runway_name)) % 36, NAV_ILS)
+                    if ilsopp ~= NAV_UNKNOWN then
+                        runway_length = GC_distance_kt(ils.lat, ils.lon, ilsopp.lat, ilsopp.lon) * 1852 -- convert nm to metres
+                    end
+                end
+                runway_length = Round(runway_length / 5, -2) * 5
+
+                mcdu_dat["l"]["L"][line] = {txt = "←" .. runway_name .. "   " .. runway_length .. "m", col = "cyan"}
+
+            elseif fmgs_dat["fpln latrev dept mode"] == "sid" or
+                   fmgs_dat["fpln latrev dept mode"] == "trans" then
+
+                mcdu_dat["l"]["L"][6].txt = "←erase"
+
+                mcdu_dat["s"]["L"][2].txt = " available runways"
+                --get sids or stop
+                if index <= #sids then
+                    sid = sids[index]
+                    if sid == fmgs_dat["fpln latrev dept sid"] then
+                        prefix = " "
+                    else
+                        prefix = "←"
+                    end
+                    mcdu_dat["l"]["L"][line] = {txt = prefix .. sid, col = "cyan"}
+                end
+
+                --get trans or stop
+                if index <= #trans then
+                    tran = trans[index]
+                    if tran == fmgs_dat["fpln latrev dept trans"] then
+                        prefix = " "
+                    else
+                        prefix = "→"
+                    end
+                    mcdu_dat["l"]["R"][line] = {txt = tran .. prefix, col = "cyan"}
                 end
             end
-            runway_length = Round(runway_length / 5, -2) * 5
-
-            mcdu_dat["l"]["L"][line] = {txt = "←" .. runway_name .. "   " .. runway_length .. "m", col = "cyan"}
         end
 
-        mcdu_dat["l"]["L"][6].txt = "<return"
 
         draw_update()
     end
 
     --if any of the side buttons are pushed
-    if phase:sub(1,1) == "R" or phase:sub(1,1) == "L" and tonumber(phase:sub(2,2)) >= 2 and tonumber(phase:sub(2,2)) <= 5 then
+    if (phase:sub(1,1) == "L" or phase:sub(1,1) == "R") and tonumber(phase:sub(2,2)) >= 2 and tonumber(phase:sub(2,2)) <= 5 then
 
-        --find the index of which button was pressed, and -2 to make it equal to `offset` in the function above
-        index = tonumber(phase:sub(2,2)) - 2
-        runway = runways[(fmgs_dat["fpln latrev index"] + index) + 1]
+        if fmgs_dat["fpln latrev dept mode"] == "runway" then
+            if phase:sub(1,1) == "L" then
+                --find the index of which button was pressed, and -2 to make it equal to `offset` in the function above
+                index = tonumber(phase:sub(2,2)) - 2
+                index = fmgs_dat["fpln latrev index"] + index
+                if index <= #runways then
+                    runway = runways[index]
+                    fmgs_dat["fpln latrev dept mode"] = "sid"
+                    fmgs_dat["fpln latrev dept runway"] = string.sub(runway, 3, 5)
+                    fmgs_dat["fpln latrev index"] = 1
+                    mcdu_open_page(602) -- reload
+                end
+            end
+        elseif fmgs_dat["fpln latrev dept mode"] == "sid" or
+               fmgs_dat["fpln latrev dept mode"] == "trans" then
+            if phase:sub(1,1) == "L" then
+                --find the index of which button was pressed, and -2 to make it equal to `offset` in the function above
+                index = tonumber(phase:sub(2,2)) - 2
+                index = fmgs_dat["fpln latrev index"] + index
+                if index <= #sids then
+                    sid = sids[index]
+                    fmgs_dat["fpln latrev dept mode"] = "trans"
+                    fmgs_dat["fpln latrev dept sid"] = sid
+                    fmgs_dat["fpln latrev index"] = 1
+                    mcdu_open_page(602) -- reload
+                end
+            elseif phase:sub(1,1) == "R" and
+                   fmgs_dat["fpln latrev dept mode"] == "trans" then
+                --find the index of which button was pressed, and -2 to make it equal to `offset` in the function above
+                index = tonumber(phase:sub(2,2)) - 2
+                index = fmgs_dat["fpln latrev index"] + index
+                if index <= #trans then
+                    tran = trans[index]
+                    fmgs_dat["fpln latrev dept mode"] = "trans"
+                    fmgs_dat["fpln latrev dept trans"] = tran
+                    fmgs_dat["fpln latrev index"] = 1
+                    mcdu_open_page(602) -- reload
+                end
+            end
+        end
     end
 
     --<return
     if phase == "L6" then
-        mcdu_open_page(600) -- open 600 f-pln
+        if fmgs_dat["fpln latrev dept mode"] == "runway" then
+            mcdu_open_page(600) -- open 600 f-pln
+        elseif fmgs_dat["fpln latrev dept mode"] == "sid" then
+            fmgs_dat["fpln latrev dept mode"] = "runway"
+            fmgs_dat["fpln latrev dept runway"] = ""
+            fmgs_dat["fpln latrev dept sid"] = ""
+            fmgs_dat["fpln latrev dept trans"] = ""
+            fmgs_dat["fpln latrev index"] = 1
+            mcdu_open_page(602) -- reload
+        elseif fmgs_dat["fpln latrev dept mode"] == "trans" then
+            fmgs_dat["fpln latrev dept mode"] = "sid"
+            fmgs_dat["fpln latrev dept sid"] = ""
+            fmgs_dat["fpln latrev dept trans"] = ""
+            fmgs_dat["fpln latrev index"] = 1
+            mcdu_open_page(602) -- reload
+        end
     end
 
     --slew up or down

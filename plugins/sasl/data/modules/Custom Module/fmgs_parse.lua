@@ -451,7 +451,6 @@ function Parser_Apt:get_runway_lengths(airport)
             lon_rwyopp = line:get_column(20)
             
             runway_length = GC_distance_kt(lat_rwy, lon_rwy, lat_rwyopp, lon_rwyopp) * 1852 -- convert nm to metres
-            runway_length = Round(runway_length / 5, -2) * 5
             output[name_rwy] = runway_length
             print(name_rwy .. " " .. runway_length)
             output[name_rwyopp] = runway_length
