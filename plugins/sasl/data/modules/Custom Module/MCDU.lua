@@ -255,13 +255,13 @@ local MCDU_DRAW_SPACING = {x = 530, y = -37} -- change in offset per line drawn
 --reference table for drawing
 local MCDU_DISP_COLOR = 
 {
-    ["white"] =   ECAM_WHITE,
-    ["cyan"] =    ECAM_BLUE,
-    ["green"] =   ECAM_GREEN,
-    ["amber"] =   ECAM_ORANGE,
-    ["yellow"] =  ECAM_YELLOW,
-    ["magenta"] = ECAM_MAGENTA,
-    ["red"] =     ECAM_RED,
+    ["white"] =   {1.00, 1.00, 1.00},
+    ["cyan"] =    {0.20, 0.70, 1.00},
+    ["green"] =   {0.10, 1.00, 0.00},
+    ["amber"] =   {1.00, 0.75, 0.10},
+    ["yellow"] =  {1.00, 0.85, 0.00},
+    ["magenta"] = {1.00, 0.70, 1.00},
+    ["red"] =     {1.00, 0.00, 0.00},
 
     ["black"] =   ECAM_BLACK,
 }
@@ -1398,6 +1398,13 @@ function (phase)
         mcdu_dat["s"]["L"][3].txt = " gps"
         mcdu_dat["l"]["L"][3].txt = "<monitor"
         mcdu_dat["l"]["L"][4].txt = "<a/c status"
+        mcdu_dat["s"]["L"][5].txt = " closest"
+        mcdu_dat["l"]["L"][5].txt = "<airports"
+        mcdu_dat["s"]["L"][6].txt = " equitime"
+        mcdu_dat["l"]["L"][6].txt = "<point"
+
+        mcdu_dat["s"]["R"][6].txt = "acars/print "
+        mcdu_dat["l"]["R"][6].txt = "function>"
 
         draw_update()
     end
@@ -2373,8 +2380,9 @@ function (phase)
     if phase == "render" then
         mcdu_dat_title.txt = "  load colour palette"
         mcdu_dat["l"]["L"][1].txt = "←load default"
-        mcdu_dat["l"]["L"][2].txt = "←load aerofsx"
-        mcdu_dat["l"]["L"][3].txt = "←load classic"
+        mcdu_dat["l"]["L"][2].txt = "←load ecam colours"
+        mcdu_dat["l"]["L"][3].txt = "←load aerofsx"
+        mcdu_dat["l"]["L"][4].txt = "←load classic"
         mcdu_dat["l"]["L"][5].txt = "←load high contrast"
 
         mcdu_dat["l"]["R"][6].txt = "return>"
@@ -2385,11 +2393,11 @@ function (phase)
         MCDU_DISP_COLOR = 
         {
             ["white"] =   {1.00, 1.00, 1.00},
-            ["cyan"] =    {0.004, 1.00, 1.00},
-            ["green"] =   {0.20, 0.92, 0.20},
-            ["amber"] =   {1.00, 0.66, 0.16},
-            ["yellow"] =  {1.00, 1.00, 0.00},
-            ["magenta"] = {1.00, 0.00, 1.00},
+            ["cyan"] =    {0.20, 0.70, 1.00},
+            ["green"] =   {0.10, 1.00, 0.00},
+            ["amber"] =   {1.00, 0.75, 0.10},
+            ["yellow"] =  {1.00, 0.85, 0.00},
+            ["magenta"] = {1.00, 0.70, 1.00},
             ["red"] =     {1.00, 0.00, 0.00},
 
             ["black"] =   {0.00, 0.00, 0.00},
@@ -2397,6 +2405,21 @@ function (phase)
         mcdu_open_page(1103) -- open 1103 mcdu menu options colours
     end
     if phase == "L2" then
+        MCDU_DISP_COLOR = 
+        {
+            ["white"] =   ECAM_WHITE,
+            ["cyan"] =    ECAM_BLUE,
+            ["green"] =   ECAM_GREEN,
+            ["amber"] =   ECAM_ORANGE,
+            ["yellow"] =  ECAM_YELLOW,
+            ["magenta"] = ECAM_MAGENTA,
+            ["red"] =     ECAM_RED,
+
+            ["black"] =   ECAM_BLACK,
+        }
+        mcdu_open_page(1103) -- open 1103 mcdu menu options colours
+    end
+    if phase == "L3" then
         MCDU_DISP_COLOR = 
         {
             ["white"] =   {1.00, 1.00, 1.00},
@@ -2411,7 +2434,7 @@ function (phase)
         }
         mcdu_open_page(1103) -- open 1103 mcdu menu options colours
     end
-    if phase == "L3" then
+    if phase == "L4" then
         MCDU_DISP_COLOR = 
         {
             ["white"] =   {1.00, 1.00, 1.00}, --EBEFEC
