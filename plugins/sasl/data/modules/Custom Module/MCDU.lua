@@ -1784,6 +1784,7 @@ function (phase)
     if phase == "L1" then
         --is wpt the dept airport?
         if wpt.name:sub(1,4) == fmgs_dat["origin"] then
+        fmgs_dat["fpln latrev index"] = 1
             mcdu_open_page(602) -- open 602 f-pln lat rev page dept airport
         end
     end
@@ -1791,6 +1792,7 @@ function (phase)
     if phase == "R1" then
         --is wpt the dept airport?
         if wpt.name:sub(1,4) == fmgs_dat["dest"] then
+            fmgs_dat["fpln latrev index"] = 1
             mcdu_open_page(603) -- open 603 f-pln lat rev page dest airport
         else
             mcdu_send_message("not yet implemented!")
@@ -1900,7 +1902,15 @@ function (phase)
             end
             
             runway_length = runway_lengths[runway_name] or 0
-            runway_length = Round(runway_length, 0)
+            if runway_length == 0 then
+                -- figure runway length based on ils lat
+                ilsopp = fmgs_get_nav(airport .. " " .. (18 + tonumber(runway_name)) % 36, NAV_ILS)
+                if ilsopp ~= NAV_UNKNOWN then
+                    runway_length = GC_distance_kt(ils.lat, ils.lon, ilsopp.lat, ilsopp.lon) * 1852 -- convert nm to metres
+                end
+            end
+            runway_length = Round(runway_length / 5, -2) * 5
+
             mcdu_dat["l"]["L"][line] = {txt = "←" .. runway_name .. "   " .. runway_length .. "m", col = "cyan"}
         end
 
