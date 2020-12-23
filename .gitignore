@@ -1,2 +1,9 @@
+# ignore preference files
 A321.acf~
 A321_prefs.txt
+
+# ignore cached data - this should be generated on startup by plugin
+data/
+
+# ignore .swp made by Vim editor
+*.swp

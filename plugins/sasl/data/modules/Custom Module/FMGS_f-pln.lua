@@ -76,6 +76,11 @@ function fpln_format()
     fmgs_dat["fpln fmt"] = fpln_fmt
 end
 
+function fpln_clearall()
+    fmgs_dat["fpln"] = {}
+    fmgs_dat["fpln fmt"] = {}
+end
+
 function fpln_add_airports(origin, destination)
     fpln_add_wpt(fpln_wpt(NAV_AIRPORT, nil, nil, origin.id, nil, nil, nil, nil, nil, nil, nil))
     fpln_add_wpt(fpln_wpt(NAV_AIRPORT, nil, nil, destination.id, nil, nil, nil, nil, nil, nil, nil))

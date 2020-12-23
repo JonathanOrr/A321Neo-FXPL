@@ -118,18 +118,19 @@ end
 --
 --]]
 
--- ParserCifp will parse CIFP files for an airport
-ParserCifp = {data = "", parsed_data = {}}
-ParserCifp.__index = ParserCifp
+-- Parser_Cifp will parse CIFP files for an airport
+Parser_Cifp = {data = "", parsed_data = {}}
+Parser_Cifp.__index = Parser_Cifp
 
 -- parser class constructor
-function ParserCifp:new(filename)
+function Parser_Cifp:new(filename)
 	file = io.open(filename, "r")
 	data = file:read("*all")
 
   	local o = {}             -- our new object
    	setmetatable(o, self)  -- make Account handle lookup
    	o.data = data      -- initialize our object
+    o.parsed_data = {}
 
 	-- parses all columns from row of data
 	i = 1
@@ -149,7 +150,7 @@ function ParserCifp:new(filename)
 	return o
 end
 
-function ParserCifp:get_runways()
+function Parser_Cifp:get_runways()
 	output = {}
 	for _, pd in ipairs(self.parsed_data) do
 		if string.sub(pd:get_column(1), 1, 3) == "RWY" then
@@ -159,7 +160,7 @@ function ParserCifp:get_runways()
 	return output
 end
 
-function ParserCifp:get_approaches()
+function Parser_Cifp:get_approaches()
 	output = {}
 	for _, pd in ipairs(self.parsed_data) do
 		last_word = ""
@@ -195,7 +196,7 @@ function ParserCifp:get_approaches()
 	return output
 end
 
-function ParserCifp:get_sids(runway)
+function Parser_Cifp:get_sids(runway)
 	output = {"NO SID"}
 	for _, pd in ipairs(self.parsed_data) do
 		if pd:get_column(1) == "SID:010" and
@@ -207,7 +208,7 @@ function ParserCifp:get_sids(runway)
 	return output
 end
 
-function ParserCifp:get_stars(appr)
+function Parser_Cifp:get_stars(appr)
 	appr = appr_airbus_to_xp_rwy(appr)
 	output = {"NO STAR"}
 	for _, pd in ipairs(self.parsed_data) do
@@ -220,7 +221,7 @@ function ParserCifp:get_stars(appr)
 	return output
 end
 
-function ParserCifp:get_vias(appr)
+function Parser_Cifp:get_vias(appr)
 	appr = appr_airbus_to_xp_appr(appr)
 	output = {"NO VIA"}
 	-- convert appr from airbus to xplane format
@@ -235,7 +236,7 @@ function ParserCifp:get_vias(appr)
 	return output
 end
 
-function ParserCifp:get_trans(proc_type, proc, runway)
+function Parser_Cifp:get_trans(proc_type, proc, runway)
 	output = {"NO TRANS"}
 	for _, pd in ipairs(self.parsed_data) do
 		if proc_type == "SID" then
@@ -258,7 +259,7 @@ function ParserCifp:get_trans(proc_type, proc, runway)
 	return output
 end
 
-function ParserCifp:get_procedure(proc_type, proc, runway)
+function Parser_Cifp:get_procedure(proc_type, proc, runway)
 	output = {}
 	num = 1
 	
@@ -316,7 +317,7 @@ function ParserCifp:get_procedure(proc_type, proc, runway)
 end
 
 
-function ParserCifp:get_departure(rwy, proc, trans)
+function Parser_Cifp:get_departure(rwy, proc, trans)
 	print()
 	print("SID Procedure:")
 	parser:get_procedure(proc_type, proc, rwy)
@@ -324,7 +325,7 @@ function ParserCifp:get_departure(rwy, proc, trans)
 	parser:get_procedure(proc_type, proc, trans)
 end
 
-function ParserCifp:get_arrival(appr, via, proc, trans)
+function Parser_Cifp:get_arrival(appr, via, proc, trans)
 	print()
 	print("Transition Procedure:")
 	parser:get_procedure(proc_type, proc, trans)
@@ -348,12 +349,17 @@ end
 --
 --]]
 
--- ParserApt will parse apt.dat for airport data
-ParserApt = {file = {}, data = "", parsed_data = {}}
-ParserApt.__index = ParserApt
+AIRPORT_LUT_PATH = sasl.getAircraftPath() .. "/data/fmgs_airport_lut.dat"
+
+AIRPORT_LUT = {}
+init_airport_lut = false
+
+-- Parser_Apt will parse apt.dat for airport data
+Parser_Apt = {file = {}, data = "", parsed_data = {}}
+Parser_Apt.__index = Parser_Apt
 
 -- parser class constructor
-function ParserApt:new(filename)
+function Parser_Apt:new(filename)
 	file = io.open(filename, "r")
 
    	local o = {}             -- our new object
@@ -362,26 +368,62 @@ function ParserApt:new(filename)
 	return o
 end
 
+-- creates a Look Up Table (LUT) for all the airports and their positions for easier reference
+function Parser_Apt:create_airport_lut()
+    line = Line:new("", "")
+    print(AIRPORT_LUT_PATH)
+    lut_file = io.open(AIRPORT_LUT_PATH, "w")
+    while true do
+        -- find a code 1
+        read_line = ""
+        while string.sub(read_line, 1, 2) ~= "1 " and read_line ~= "99" do -- find a "1" code or "99" terminate
+            read_line = file:read()
+        end
+        if read_line == "99" then
+            break -- done
+        end
+        -- find the airport name in that line
+        line = Line:new(read_line, " ")
+        airport_name = line:get_column(5)
+        lut_file:write(airport_name .. " " .. file:seek() .. "\n")
+        AIRPORT_LUT[airport_name] = file:seek()
+    end
+    lut_file:close()
+    init_airport_lut = true
+end
+
+function Parser_Apt:load_airport_lut()
+    -- TODO: needs to be loaded again, else defeats the purpose of keeping data cached
+end
+
 -- gets runway length of an airport IN METRES
-function ParserApt:get_runway_lengths(airport)
+function Parser_Apt:get_runway_lengths(airport)
 	-- runway length is calculated by finding the distance between the end of the runway and the opposite runway (e.g. end of 16L and 34R will get you the distance)
 	lat_rwy = 0
 	lon_rwy = 0
 	lat_rwyopp = 0
 	lon_rwyopp = 0
 
-	-- find the airport (code 1)
 
-	line = Line:new("", "")
-	while line:get_column(5) ~= airport do
-		-- find a code 1
-		read_line = ""
-		while string.sub(read_line, 1, 2) ~= "1 " do -- find a "1" code
-			read_line = file:read()
-		end
-		-- find the airport name in that line
-		line = Line:new(read_line, " ")
-	end
+    -- find the airport (code 1)
+    if init_airport_lut then
+        if not AIRPORT_LUT[airport] then
+            return "NOT FOUND" -- should never be returned like this, but safer.
+        end
+
+        file:seek("set", AIRPORT_LUT[airport])
+    else
+        line = Line:new("", "")
+        while line:get_column(5) ~= airport do
+            -- find a code 1
+            read_line = ""
+            while string.sub(read_line, 1, 2) ~= "1 " do -- find a "1" code
+                read_line = file:read()
+            end
+            -- find the airport name in that line
+            line = Line:new(read_line, " ")
+        end
+    end
 
 	-- ok, found the airport. Now find the correct runway (code 100)
 
@@ -409,8 +451,8 @@ function ParserApt:get_runway_lengths(airport)
             lon_rwyopp = line:get_column(20)
             
             runway_length = GC_distance_kt(lat_rwy, lon_rwy, lat_rwyopp, lon_rwyopp) * 1852 -- convert nm to metres
+            runway_length = Round(runway_length / 5, -2) * 5
             output[name_rwy] = runway_length
-            print(name_rwy .. " " .. runway_length)
             output[name_rwyopp] = runway_length
         end
 	end
@@ -459,13 +501,13 @@ end
 --[[
 
 -- get the runway length of an airport
-parserApt = ParserApt:new("cifp-parser/apt.dat")
-print(math.floor(parserApt:get_runway_length("KSEA", "34C")))
+Parser_Apt = Parser_Apt:new("cifp-parser/apt.dat")
+print(math.floor(Parser_Apt:get_runway_length("KSEA", "34C")))
 
 
 
 -- create a new parser, input first row of data (KSEA.dat)
-parser = ParserCifp:new("cifp-parser/KSEA.dat")
+parser = Parser_Cifp:new("cifp-parser/KSEA.dat")
 
 proc_type = question("Choose a procedure type (Enter a number)", {"departure", "arrival"})
 

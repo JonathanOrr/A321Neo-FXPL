@@ -317,6 +317,10 @@ local mcdu_message_showing = false
 --mcdu page call functions
 local mcdu_sim_page = {}
 
+--create LUT for apt.dat for faster reference
+parser_apt = Parser_Apt:new(APT_PATH)
+parser_apt:create_airport_lut()
+
 --define custom functionalities
 local function mcdu_send_message(message)
     table.insert(mcdu_messages, message)
@@ -1166,6 +1170,9 @@ function (phase)
             airp_origin = fmgs_get_nav(airp_origin_name, NAV_AIRPORT)
             airp_dest = fmgs_get_nav(airp_dest_name, NAV_AIRPORT)
 
+            -- wipe f-pln
+            fpln_clearall()
+
             -- add to f-pln
             fpln_add_airports(airp_origin, airp_dest)
 
@@ -1267,10 +1274,10 @@ function (phase)
 
             deg, min, sec, dir = mcdu_ctrl_dd_to_dmsd(fmgs_dat["init irs lat"], "lat")
             mcdu_dat["l"]["L"][1][2] = {txt = tostring(deg) .. "º    "  .. tostring(dir), col = "cyan"}
-            mcdu_dat["l"]["L"][1][3] = {txt = "   " ..tostring(Round(min, 1)), col = "cyan", size = "s"}
+            mcdu_dat["l"]["L"][1][3] = {txt = "   " .. mcdu_pad_dp(tostring(Round(min, 1)), 1), col = "cyan", size = "s"}
             deg, min, sec, dir = mcdu_ctrl_dd_to_dmsd(fmgs_dat["init irs lon"], "lon")
             mcdu_dat["l"]["R"][1][1] = {txt = tostring(deg) .. "º    "  .. tostring(dir), col = "cyan"}
-            mcdu_dat["l"]["R"][1][2] = {txt = tostring(Round(min, 1)) .. " ", col = "cyan", size = "s"}
+            mcdu_dat["l"]["R"][1][2] = {txt = mcdu_pad_dp(tostring(Round(min, 1)), 1) .. " ", col = "cyan", size = "s"}
 
             --[[ GPS POSITION LAT / LONG --]]
             mcdu_dat["s"]["L"][2].txt = "lat   gps position"
@@ -1281,10 +1288,10 @@ function (phase)
             elseif gps_status == "on" then
                 deg, min, sec, dir = mcdu_ctrl_dd_to_dmsd(get(gps_lat), "lat")
                 mcdu_dat["l"]["L"][2][1] = {txt = tostring(deg) .. "º    "  .. tostring(dir), col = "green"}
-                mcdu_dat["l"]["L"][2][2] = {txt = "   " ..tostring(Round(min, 1)), col = "green", size = "s"}
+                mcdu_dat["l"]["L"][2][2] = {txt = "   " ..mcdu_pad_dp(tostring(Round(min, 1)), 1), col = "green", size = "s"}
                 deg, min, sec, dir = mcdu_ctrl_dd_to_dmsd(get(gps_lon), "lon")
                 mcdu_dat["l"]["R"][2][1] = {txt = tostring(deg) .. "º    "  .. tostring(dir), col = "green"}
-                mcdu_dat["l"]["R"][2][2] = {txt = tostring(Round(min, 1)) .. " ", col = "green", size = "s"}
+                mcdu_dat["l"]["R"][2][2] = {txt = mcdu_pad_dp(tostring(Round(min, 1)), 1) .. " ", col = "green", size = "s"}
             end
         end
 
@@ -1328,10 +1335,10 @@ function (phase)
             if lat ~= nil and lon ~= nil then
                 deg, min, sec, dir = mcdu_ctrl_dd_to_dmsd(lat, "lat")
                 mcdu_dat["l"]["L"][no + 2][1] = {txt = "   " .. tostring(deg) .. "º    "  .. tostring(dir) .. "/", col = "green"}
-                mcdu_dat["l"]["L"][no + 2][2] = {txt = "      " ..tostring(Round(min, 1)), col = "green", size = "s"}
+                mcdu_dat["l"]["L"][no + 2][2] = {txt = "      " ..mcdu_pad_dp(tostring(Round(min, 1)), 1), col = "green", size = "s"}
                 deg, min, sec, dir = mcdu_ctrl_dd_to_dmsd(lon, "lon")
                 mcdu_dat["l"]["R"][no + 2][1] = {txt = tostring(deg) .. "º    "  .. tostring(dir) .. "   ", col = "green"}
-                mcdu_dat["l"]["R"][no + 2][2] = {txt = tostring(Round(min, 1)) .. "    ", col = "green", size = "s"}
+                mcdu_dat["l"]["R"][no + 2][2] = {txt = mcdu_pad_dp(tostring(Round(min, 1)), 1) .. "    ", col = "green", size = "s"}
             else
                 mcdu_dat["l"]["L"][no + 2].txt = "   --º--.--/---º--.--"
             end
@@ -1741,10 +1748,10 @@ function (phase)
 
         deg, min, sec, dir = mcdu_ctrl_dd_to_dmsd(nav.lat, "lat")
         mcdu_dat["s"]["L"][1][1] = {txt = "   " .. tostring(deg) .. "º    "  .. tostring(dir) .. "/", col = "green"}
-        mcdu_dat["s"]["L"][1][2] = {txt = "      " ..tostring(Round(min, 1)), col = "green", size = "s"}
+        mcdu_dat["s"]["L"][1][2] = {txt = "      " ..mcdu_pad_dp(tostring(Round(min, 1)), 1), col = "green", size = "s"}
         deg, min, sec, dir = mcdu_ctrl_dd_to_dmsd(nav.lon, "lon")
         mcdu_dat["s"]["R"][1][1] = {txt = tostring(deg) .. "º    "  .. tostring(dir) .. "   ", col = "green"}
-        mcdu_dat["s"]["R"][1][2] = {txt = tostring(Round(min, 1)) .. "    ", col = "green", size = "s"}
+        mcdu_dat["s"]["R"][1][2] = {txt = mcdu_pad_dp(tostring(Round(min, 1)), 1) .. "    ", col = "green", size = "s"}
 
 
         mcdu_dat["s"]["R"][2].txt = "ll xing/incr/no"
@@ -1824,13 +1831,18 @@ function (phase)
         fmgs_dat_init(airport .. " init", false)
         if not fmgs_dat[airport .. " init"] then
             --get runway lengths
-            parserApt = ParserApt:new(APT_PATH)
-            fmgs_dat[airport .. " runway lengths"] = parserApt:get_runway_lengths(airport)
+            parser_apt = Parser_Apt:new(APT_PATH)
+            fmgs_dat[airport .. " runway lengths"] = parser_apt:get_runway_lengths(airport)
 
             --get runways
-            parser = ParserCifp:new(CIFP_PATH .. airport .. ".dat") 
+            parser = {}
+            parser = Parser_Cifp:new(CIFP_PATH .. airport .. ".dat") 
             fmgs_dat[airport .. " cifp parser"] = parser
             fmgs_dat[airport .. " runways"] = parser:get_runways()
+
+            for _, i in ipairs(parser:get_runways()) do
+                print(i)
+            end
 
             fmgs_dat[airport .. " init"] = true
             
@@ -1859,33 +1871,37 @@ function (phase)
             runway_name = string.sub(runway, 3, 5)
             ils = fmgs_get_nav(airport .. " " .. runway_name, NAV_ILS)
 
-            --get ILS freq
-            --format e.g. 11170 to 111.70
-            ils.freq = tostring(ils.freq)
-            freq = ils.freq:sub(1,3) .. "." .. ils.freq:sub(4,5)
+            if ils.navtype ~= NAV_UNKNOWN then
+                --get ILS freq
+                --format e.g. 11170 to 111.70
+                ils.freq = tostring(ils.freq)
+                freq = ils.freq:sub(1,3) .. "." .. ils.freq:sub(4,5)
 
-            --get ILS crs
-            ils.hdg = sasl.degTrueToDegMagnetic(ils.hdg)
-            if ils.hdg > 180 then
-                --format e.g. 342 to -18
-                ils.hdg = Round(ils.hdg - 360,0)
-            end
-            --how many digits?
-            ils.hdg = tostring(ils.hdg)
-            if string.len(ils.hdg) == 1 then
-                ils.hdg = ils.hdg:sub(1,1)
-            elseif string.len(ils.hdg) == 2 then
-                ils.hdg = ils.hdg:sub(1,2)
-            else
-                ils.hdg = ils.hdg:sub(1,3)
+                --get ILS crs
+                ils.hdg = sasl.degTrueToDegMagnetic(ils.hdg)
+                if ils.hdg > 180 then
+                    --format e.g. 342 to -18
+                    ils.hdg = Round(ils.hdg - 360,0)
+                end
+                --how many digits?
+                ils.hdg = tostring(ils.hdg)
+                if string.len(ils.hdg) == 1 then
+                    ils.hdg = ils.hdg:sub(1,1)
+                elseif string.len(ils.hdg) == 2 then
+                    ils.hdg = ils.hdg:sub(1,2)
+                else
+                    ils.hdg = ils.hdg:sub(1,3)
+                end
+
+                mcdu_dat["l"]["R"][line] = {txt = "crs" .. ils.hdg .. "   ", col = "cyan", size = "s"}
+
+                mcdu_dat["s"]["L"][line + 1] = {txt = "       ILS", col = "cyan"}
+                mcdu_dat["s"]["R"][line + 1] = {txt = ils.id .. "/" .. freq, col = "cyan"}
             end
             
-            runway_length = Round(runway_lengths[runway_name], 0)
-            mcdu_dat["l"]["L"][line] = {txt = "←" .. runway_name .. "   " .. runway_length .. "M", col = "cyan"}
-            mcdu_dat["l"]["R"][line] = {txt = "crs" .. ils.hdg .. "   ", col = "cyan", size = "s"}
-            --display runway length
-            mcdu_dat["s"]["L"][line + 1] = {txt = "       ILS", col = "cyan"}
-            mcdu_dat["s"]["R"][line + 1] = {txt = ils.id .. "/" .. freq, col = "cyan"}
+            runway_length = runway_lengths[runway_name] or 0
+            runway_length = Round(runway_length, 0)
+            mcdu_dat["l"]["L"][line] = {txt = "←" .. runway_name .. "   " .. runway_length .. "m", col = "cyan"}
         end
 
         mcdu_dat["l"]["L"][6].txt = "<return"
@@ -2349,7 +2365,7 @@ function (phase)
         mcdu_dat["s"]["L"][5].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
         mcdu_dat["l"]["L"][5].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
         mcdu_dat["s"]["R"][6].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
-        mcdu_dat["l"]["R"][6].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
+        mcdu_dat["l"]["R"][6].txt = "xxxxxxxxxxxxxxxxxreturn>"
 
         draw_update()
     end
