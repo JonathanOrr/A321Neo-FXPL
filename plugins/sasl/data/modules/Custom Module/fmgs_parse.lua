@@ -349,7 +349,7 @@ end
 --
 --]]
 
-AIRPORT_LUT_PATH = sasl.getAircraftPath() .. "/data/fmgs_airport_lut.dat"
+--AIRPORT_LUT_PATH = sasl.getAircraftPath() .. "/data/fmgs_airport_lut.dat"
 
 AIRPORT_LUT = {}
 init_airport_lut = false
@@ -372,7 +372,7 @@ end
 function Parser_Apt:create_airport_lut()
     line = Line:new("", "")
     print(AIRPORT_LUT_PATH)
-    lut_file = io.open(AIRPORT_LUT_PATH, "w")
+    --lut_file = io.open(AIRPORT_LUT_PATH, "w")
     while true do
         -- find a code 1
         read_line = ""
@@ -385,10 +385,10 @@ function Parser_Apt:create_airport_lut()
         -- find the airport name in that line
         line = Line:new(read_line, " ")
         airport_name = line:get_column(5)
-        lut_file:write(airport_name .. " " .. file:seek() .. "\n")
+        --lut_file:write(airport_name .. " " .. file:seek() .. "\n")
         AIRPORT_LUT[airport_name] = file:seek()
     end
-    lut_file:close()
+    --lut_file:close()
     init_airport_lut = true
 end
 
