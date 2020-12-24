@@ -18,7 +18,9 @@ function FBW_mode_transition(table)
 
     --timers--
     if get(All_on_ground) == 1 and table.On_ground_timer < 5 then
-        table.On_ground_timer = table.On_ground_timer + 1
+        table.On_ground_timer = table.On_ground_timer + 1 * get(DELTA_TIME)
+    elseif get(Any_wheel_on_ground) == 0 then
+        table.On_ground_timer = 0
     end
 
     --memorise ATT--
@@ -32,7 +34,7 @@ function FBW_mode_transition(table)
     table.Flare_mode_past_status = BoolToNum(get(FBW_vertical_flare_mode_ratio) > 0)
 
     --ground mode --> flight mode
-    if (get(All_on_ground) == 0 and get(Flightmodel_pitch) > 8) or (get(Capt_ra_alt_ft) > 50 or get(Fo_ra_alt_ft) > 50) then
+    if (get(Any_wheel_on_ground) == 0 and get(Flightmodel_pitch) > 8) or (get(Capt_ra_alt_ft) > 50 or get(Fo_ra_alt_ft) > 50) then
         set(FBW_lateral_ground_mode_ratio,  Set_linear_anim_value(get(FBW_lateral_ground_mode_ratio),  0, 0, 1, 1 / lateral_ground_mode_transition_time))
         set(FBW_vertical_ground_mode_ratio, Set_linear_anim_value(get(FBW_vertical_ground_mode_ratio), 0, 0, 1, 1 / vertical_ground_mode_transition_time))
     end
