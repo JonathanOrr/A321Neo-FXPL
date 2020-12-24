@@ -36,9 +36,11 @@ end
 -- converts appr airbus format to xplane appr
 -- e.g. RNV16LZ to R16LZ
 function appr_airbus_to_xp_appr(appr)
-	if string.sub(appr, 1, 2) == "IL" or -- ILS
-	   string.sub(appr, 1, 2) == "RN"    -- RNV
-	 then
+	if string.sub(appr, 1, 3) == "ILS" or
+	   string.sub(appr, 1, 3) == "RNV" or
+	   string.sub(appr, 1, 3) == "VOR" or
+	   string.sub(appr, 1, 3) == "NDB"
+	then
 		runway = string.sub(appr, 1, 1) .. string.sub(appr, 4, 7)
 	elseif string.sub(appr, 1, 2) == "RW" then
 		return nil
@@ -50,9 +52,11 @@ end
 -- e.g. RNV16LZ to RW16B
 function appr_airbus_to_xp_rwy(appr)
 	-- get runway numbers
-	if string.sub(appr, 1, 2) == "IL" or -- ILS
-	   string.sub(appr, 1, 2) == "RN"    -- RNV
-	 then
+	if string.sub(appr, 1, 3) == "ILS" or
+	   string.sub(appr, 1, 3) == "RNV" or
+	   string.sub(appr, 1, 3) == "VOR" or
+	   string.sub(appr, 1, 3) == "NDB"
+	then
 		runway = string.sub(appr, 4, 5)
 	elseif string.sub(appr, 1, 2) == "RW" then
 		runway = string.sub(appr, 3, 4)
@@ -173,6 +177,12 @@ function Parser_Cifp:get_approaches()
 			if string.sub(word, 1, 1) == "R" then
 				word = "RNV" .. string.sub(word, 2, -1)
 			end
+			if string.sub(word, 1, 1) == "D" then
+				word = "VOR" .. string.sub(word, 2, -1)
+			end
+			if string.sub(word, 1, 1) == "Q" then
+				word = "NDB" .. string.sub(word, 2, -1)
+			end
 
 			pass = true
 			-- don't repeatedly insert names
@@ -237,7 +247,7 @@ function Parser_Cifp:get_vias(appr)
 end
 
 function Parser_Cifp:get_trans(proc_type, proc, runway)
-	output = {"no trans"}
+	output = {"none"}
 	for _, pd in ipairs(self.parsed_data) do
 		if proc_type == "SID" then
 			correct_type = (
