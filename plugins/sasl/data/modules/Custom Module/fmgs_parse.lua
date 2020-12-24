@@ -376,11 +376,12 @@ function Parser_Apt:create_airport_lut()
     while true do
         -- find a code 1
         read_line = ""
-        while string.sub(read_line, 1, 2) ~= "1 " and read_line ~= "99" do -- find a "1" code or "99" terminate
-            read_line = file:read()
-        end
-        if read_line == "99" then
-            break -- done
+        while string.sub(read_line, 1, 2) ~= "1 " do -- find a "1" code or "99" terminate
+            read_line = file:read() or "EOF"
+            if read_line == "EOF" then -- end of file
+                init_airport_lut = true
+                return
+            end
         end
         -- find the airport name in that line
         line = Line:new(read_line, " ")
@@ -388,8 +389,6 @@ function Parser_Apt:create_airport_lut()
         --lut_file:write(airport_name .. " " .. file:seek() .. "\n")
         AIRPORT_LUT[airport_name] = file:seek()
     end
-    --lut_file:close()
-    init_airport_lut = true
 end
 
 function Parser_Apt:load_airport_lut()
@@ -404,6 +403,7 @@ function Parser_Apt:get_runway_lengths(airport)
 	lat_rwyopp = 0
 	lon_rwyopp = 0
 
+    print("runways")
 
     -- find the airport (code 1)
     if init_airport_lut then
@@ -417,8 +417,11 @@ function Parser_Apt:get_runway_lengths(airport)
         while line:get_column(5) ~= airport do
             -- find a code 1
             read_line = ""
-            while string.sub(read_line, 1, 2) ~= "1 " do -- find a "1" code
+            while string.sub(read_line, 1, 2) ~= "1 " and read_line ~= "99" do -- find a "1" code
                 read_line = file:read()
+            end
+            if read_line == "99" then
+                return "NOT FOUND"
             end
             -- find the airport name in that line
             line = Line:new(read_line, " ")
@@ -431,7 +434,7 @@ function Parser_Apt:get_runway_lengths(airport)
 	-- find a code 100, repeat until found another airport or end of apt.dat (code 99)
 	line = Line:new("", "")
 	read_line = ""
-    while string.sub(read_line, 1, 2) ~= "1 " or read_line == "99" do -- find a "1" code
+    while string.sub(read_line, 1, 2) ~= "1 " and read_line ~= "99" do -- find a "1" code
 		read_line = ""
 		repeat
 			read_line = file:read()

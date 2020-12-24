@@ -192,7 +192,6 @@ if EMULATOR then
 	ECAM_WHITE = {1.0, 1.0, 1.0}
 	ECAM_LINE_GREY = {62/255, 74/255, 91/255}
 	ECAM_HIGH_GREY = {0.6, 0.6, 0.6}
-	ECAM_YELLOW = {1.0, 1.0, 0}
 	ECAM_BLUE = {0.004, 1.0, 1.0}
 	ECAM_GREEN = {0.20, 0.98, 0.20}
 	ECAM_HIGH_GREEN = {0.1, 0.6, 0.1}
@@ -257,10 +256,10 @@ local MCDU_DISP_COLOR =
 {
     ["white"] =   {1.00, 1.00, 1.00},
     ["cyan"] =    {0.20, 0.70, 1.00},
-    ["green"] =   {0.10, 1.00, 0.00},
-    ["amber"] =   {1.00, 0.75, 0.10},
-    ["yellow"] =  {1.00, 0.85, 0.00},
-    ["magenta"] = {1.00, 0.70, 1.00},
+    ["green"] =   {0.20, 1.00, 0.20},
+    ["amber"] =   {1.00, 0.66, 0.16},
+    ["yellow"] =  {1.00, 0.66, 0.16},
+    ["magenta"] = {1.00, 0.00, 1.00},
     ["red"] =     {1.00, 0.00, 0.00},
 
     ["black"] =   ECAM_BLACK,
@@ -924,7 +923,7 @@ end
 --
 --]]
 
-mcdu_entry = string.upper("ksea/kbfi")
+mcdu_entry = string.upper("loww/ksea")
 
 --update
 function update()
@@ -1854,6 +1853,12 @@ function (phase)
         else
             runway = fmgs_dat["fpln latrev dept runway"]
 
+            -- trim runway
+            if string.sub(runway, 3, 3) == " " then
+                runway = string.sub(runway, 1, 2)
+            end
+            print(">" .. runway .. "<")
+
             -- get sids
             sids = parser:get_sids("RW" .. runway)
             sid = fmgs_dat["fpln latrev dept sid"]
@@ -1889,7 +1894,11 @@ function (phase)
 
                 --get ILS data
                 --e.g. RW16C -> 16C
-                runway_name = string.sub(runway, 3, 5)
+                runway_name = string.sub(runway, 3, -1)
+                -- remove the last letter if there is none, i.e. trim it
+                if string.sub(runway_name, 3, 3) == " " then
+                    runway_name = string.sub(runway_name, 1, 2)
+                end
                 ils = fmgs_get_nav(airport .. " " .. runway_name, NAV_ILS)
 
                 if ils.navtype ~= NAV_UNKNOWN then
@@ -1921,13 +1930,6 @@ function (phase)
                 end
                 
                 runway_length = runway_lengths[runway_name] or 0
-                if runway_length == 0 then
-                    -- estimate runway length based on ils lat
-                    ilsopp = fmgs_get_nav(airport .. " " .. (18 + tonumber(runway_name)) % 36, NAV_ILS)
-                    if ilsopp ~= NAV_UNKNOWN then
-                        runway_length = GC_distance_kt(ils.lat, ils.lon, ilsopp.lat, ilsopp.lon) * 1852 -- convert nm to metres
-                    end
-                end
                 runway_length = Round(runway_length / 5, -2) * 5
 
                 mcdu_dat["l"]["L"][line] = {txt = "←" .. runway_name .. "   " .. runway_length .. "m", col = "cyan"}
@@ -1983,7 +1985,7 @@ function (phase)
                 if index <= #runways then
                     runway = runways[index]
                     fmgs_dat["fpln latrev dept mode"] = "sid"
-                    fmgs_dat["fpln latrev dept runway"] = string.sub(runway, 3, 5)
+                    fmgs_dat["fpln latrev dept runway"] = string.sub(runway, 3, -1)
                     fmgs_dat["fpln latrev index"] = 1
                     mcdu_open_page(602) -- reload
                 end
@@ -2394,10 +2396,10 @@ function (phase)
         {
             ["white"] =   {1.00, 1.00, 1.00},
             ["cyan"] =    {0.20, 0.70, 1.00},
-            ["green"] =   {0.10, 1.00, 0.00},
-            ["amber"] =   {1.00, 0.75, 0.10},
-            ["yellow"] =  {1.00, 0.85, 0.00},
-            ["magenta"] = {1.00, 0.70, 1.00},
+            ["green"] =   {0.20, 1.00, 0.20},
+            ["amber"] =   {1.00, 0.66, 0.16},
+            ["yellow"] =  {1.00, 0.66, 0.16},
+            ["magenta"] = {1.00, 0.00, 1.00},
             ["red"] =     {1.00, 0.00, 0.00},
 
             ["black"] =   {0.00, 0.00, 0.00},
@@ -2411,7 +2413,7 @@ function (phase)
             ["cyan"] =    ECAM_BLUE,
             ["green"] =   ECAM_GREEN,
             ["amber"] =   ECAM_ORANGE,
-            ["yellow"] =  ECAM_YELLOW,
+            ["yellow"] =  {1.00, 1.00, 0.00},
             ["magenta"] = ECAM_MAGENTA,
             ["red"] =     ECAM_RED,
 
