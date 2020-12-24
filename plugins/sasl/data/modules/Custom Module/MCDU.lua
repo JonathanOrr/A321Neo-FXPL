@@ -192,7 +192,6 @@ if EMULATOR then
 	ECAM_WHITE = {1.0, 1.0, 1.0}
 	ECAM_LINE_GREY = {62/255, 74/255, 91/255}
 	ECAM_HIGH_GREY = {0.6, 0.6, 0.6}
-	ECAM_YELLOW = {1.0, 1.0, 0}
 	ECAM_BLUE = {0.004, 1.0, 1.0}
 	ECAM_GREEN = {0.20, 0.98, 0.20}
 	ECAM_HIGH_GREEN = {0.1, 0.6, 0.1}
@@ -257,10 +256,10 @@ local MCDU_DISP_COLOR =
 {
     ["white"] =   {1.00, 1.00, 1.00},
     ["cyan"] =    {0.20, 0.70, 1.00},
-    ["green"] =   {0.10, 1.00, 0.00},
-    ["amber"] =   {1.00, 0.75, 0.10},
-    ["yellow"] =  {1.00, 0.85, 0.00},
-    ["magenta"] = {1.00, 0.70, 1.00},
+    ["green"] =   {0.20, 1.00, 0.20},
+    ["amber"] =   {1.00, 0.66, 0.16},
+    ["yellow"] =  {1.00, 0.66, 0.16},
+    ["magenta"] = {1.00, 0.00, 1.00},
     ["red"] =     {1.00, 0.00, 0.00},
 
     ["black"] =   ECAM_BLACK,
@@ -2394,10 +2393,10 @@ function (phase)
         {
             ["white"] =   {1.00, 1.00, 1.00},
             ["cyan"] =    {0.20, 0.70, 1.00},
-            ["green"] =   {0.10, 1.00, 0.00},
-            ["amber"] =   {1.00, 0.75, 0.10},
-            ["yellow"] =  {1.00, 0.85, 0.00},
-            ["magenta"] = {1.00, 0.70, 1.00},
+            ["green"] =   {0.20, 1.00, 0.20},
+            ["amber"] =   {1.00, 0.66, 0.16},
+            ["yellow"] =  {1.00, 0.66, 0.16},
+            ["magenta"] = {1.00, 0.00, 1.00},
             ["red"] =     {1.00, 0.00, 0.00},
 
             ["black"] =   {0.00, 0.00, 0.00},
@@ -2411,7 +2410,7 @@ function (phase)
             ["cyan"] =    ECAM_BLUE,
             ["green"] =   ECAM_GREEN,
             ["amber"] =   ECAM_ORANGE,
-            ["yellow"] =  ECAM_YELLOW,
+            ["yellow"] =  {1.00, 1.00, 0.00},
             ["magenta"] = ECAM_MAGENTA,
             ["red"] =     ECAM_RED,
 
