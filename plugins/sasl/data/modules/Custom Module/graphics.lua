@@ -61,16 +61,16 @@ function knob_light_handler(phase, direction, dr)
 
 end
 
-sasl.registerCommandHandler (Cockpit_light_integral_cmd_up, 0,  function(phase) Knob_handler_up_float(phase, Cockpit_light_integral_pos, 0, 1, 0.2) end)
-sasl.registerCommandHandler (Cockpit_light_integral_cmd_dn, 0,  function(phase) Knob_handler_down_float(phase, Cockpit_light_integral_pos, 0, 1, 0.2) end)
-sasl.registerCommandHandler (Cockpit_light_flood_main_cmd_up, 0,  function(phase) Knob_handler_up_float(phase, Cockpit_light_flood_main_pos, 0, 1, 0.2) end)
-sasl.registerCommandHandler (Cockpit_light_flood_main_cmd_dn, 0,  function(phase) Knob_handler_down_float(phase, Cockpit_light_flood_main_pos, 0, 1, 0.2) end)
-sasl.registerCommandHandler (Cockpit_light_flood_ped_cmd_up, 0,  function(phase) Knob_handler_up_float(phase, Cockpit_light_flood_ped_pos, 0, 1, 0.2) end)
-sasl.registerCommandHandler (Cockpit_light_flood_ped_cmd_dn, 0,  function(phase) Knob_handler_down_float(phase, Cockpit_light_flood_ped_pos, 0, 1, 0.2) end)
-sasl.registerCommandHandler (Cockpit_light_ovhd_cmd_up, 0,  function(phase) Knob_handler_up_float(phase, Cockpit_light_ovhd_pos, 0, 1, 0.2) end)
-sasl.registerCommandHandler (Cockpit_light_ovhd_cmd_dn, 0,  function(phase) Knob_handler_down_float(phase, Cockpit_light_ovhd_pos, 0, 1, 0.2) end)
-sasl.registerCommandHandler (Cockpit_dome_cmd_up, 0,  function(phase) Knob_handler_down_float(phase, Cockpit_light_dome_pos, 0, 1, 0.2) end)
-sasl.registerCommandHandler (Cockpit_dome_cmd_dn, 0,  function(phase) Knob_handler_down_float(phase, Cockpit_light_dome_pos, 0, 1, 0.2) end)
+sasl.registerCommandHandler (Cockpit_light_integral_cmd_up, 0,  function(phase) Knob_handler_up_float(phase, Cockpit_light_integral_pos, 0, 1, 1) end)
+sasl.registerCommandHandler (Cockpit_light_integral_cmd_dn, 0,  function(phase) Knob_handler_down_float(phase, Cockpit_light_integral_pos, 0, 1, 1) end)
+sasl.registerCommandHandler (Cockpit_light_flood_main_cmd_up, 0,  function(phase) Knob_handler_up_float(phase, Cockpit_light_flood_main_pos, 0, 1, 1) end)
+sasl.registerCommandHandler (Cockpit_light_flood_main_cmd_dn, 0,  function(phase) Knob_handler_down_float(phase, Cockpit_light_flood_main_pos, 0, 1, 1) end)
+sasl.registerCommandHandler (Cockpit_light_flood_ped_cmd_up, 0,  function(phase) Knob_handler_up_float(phase, Cockpit_light_flood_ped_pos, 0, 1, 1) end)
+sasl.registerCommandHandler (Cockpit_light_flood_ped_cmd_dn, 0,  function(phase) Knob_handler_down_float(phase, Cockpit_light_flood_ped_pos, 0, 1, 1) end)
+sasl.registerCommandHandler (Cockpit_light_ovhd_cmd_up, 0,  function(phase) Knob_handler_up_float(phase, Cockpit_light_ovhd_pos, 0, 1, 1) end)
+sasl.registerCommandHandler (Cockpit_light_ovhd_cmd_dn, 0,  function(phase) Knob_handler_down_float(phase, Cockpit_light_ovhd_pos, 0, 1, 1) end)
+sasl.registerCommandHandler (Cockpit_dome_cmd_up, 0,  function(phase) Knob_handler_down_float(phase, Cockpit_light_dome_pos, 0, 1, 1) end)
+sasl.registerCommandHandler (Cockpit_dome_cmd_dn, 0,  function(phase) Knob_handler_down_float(phase, Cockpit_light_dome_pos, 0, 1, 1) end)
 
 
 

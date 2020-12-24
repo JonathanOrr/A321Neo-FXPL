@@ -9769,7 +9769,7 @@ IDX	7361
 			ANIM_trans_end
 			ATTR_draw_disable
 			ATTR_no_cockpit
-			ATTR_manip_drag_axis	hand	-0.2	0	0	-0.5	1	sim/cockpit2/controls/speedbrake_ratio	Speedbrakes
+			ATTR_manip_drag_axis	hand	0	0	0.2	-0.5	1	sim/cockpit2/controls/speedbrake_ratio	Speedbrakes
 			TRIS	10134 30
 			ANIM_end
 		ANIM_end
