@@ -923,7 +923,7 @@ end
 --
 --]]
 
-mcdu_entry = string.upper("ksea/kbfi")
+mcdu_entry = string.upper("loww/ksea")
 
 --update
 function update()
@@ -1853,6 +1853,12 @@ function (phase)
         else
             runway = fmgs_dat["fpln latrev dept runway"]
 
+            -- trim runway
+            if string.sub(runway, 3, 3) == " " then
+                runway = string.sub(runway, 1, 2)
+            end
+            print(">" .. runway .. "<")
+
             -- get sids
             sids = parser:get_sids("RW" .. runway)
             sid = fmgs_dat["fpln latrev dept sid"]
@@ -1888,7 +1894,11 @@ function (phase)
 
                 --get ILS data
                 --e.g. RW16C -> 16C
-                runway_name = string.sub(runway, 3, 5)
+                runway_name = string.sub(runway, 3, -1)
+                -- remove the last letter if there is none, i.e. trim it
+                if string.sub(runway_name, 3, 3) == " " then
+                    runway_name = string.sub(runway_name, 1, 2)
+                end
                 ils = fmgs_get_nav(airport .. " " .. runway_name, NAV_ILS)
 
                 if ils.navtype ~= NAV_UNKNOWN then
@@ -1920,13 +1930,6 @@ function (phase)
                 end
                 
                 runway_length = runway_lengths[runway_name] or 0
-                if runway_length == 0 then
-                    -- estimate runway length based on ils lat
-                    ilsopp = fmgs_get_nav(airport .. " " .. (18 + tonumber(runway_name)) % 36, NAV_ILS)
-                    if ilsopp ~= NAV_UNKNOWN then
-                        runway_length = GC_distance_kt(ils.lat, ils.lon, ilsopp.lat, ilsopp.lon) * 1852 -- convert nm to metres
-                    end
-                end
                 runway_length = Round(runway_length / 5, -2) * 5
 
                 mcdu_dat["l"]["L"][line] = {txt = "←" .. runway_name .. "   " .. runway_length .. "m", col = "cyan"}
@@ -1982,7 +1985,7 @@ function (phase)
                 if index <= #runways then
                     runway = runways[index]
                     fmgs_dat["fpln latrev dept mode"] = "sid"
-                    fmgs_dat["fpln latrev dept runway"] = string.sub(runway, 3, 5)
+                    fmgs_dat["fpln latrev dept runway"] = string.sub(runway, 3, -1)
                     fmgs_dat["fpln latrev index"] = 1
                     mcdu_open_page(602) -- reload
                 end
