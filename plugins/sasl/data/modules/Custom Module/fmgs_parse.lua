@@ -41,7 +41,14 @@ function appr_airbus_to_xp_appr(appr)
 	   string.sub(appr, 1, 3) == "VOR" or
 	   string.sub(appr, 1, 3) == "NDB"
 	then
-		runway = string.sub(appr, 1, 1) .. string.sub(appr, 4, 7)
+        prefix = string.sub(appr, 1, 1)
+	    if string.sub(appr, 1, 3) == "VOR" then
+            prefix = "D"
+        end
+	    if string.sub(appr, 1, 3) == "NDB" then
+           prefix = "Q"
+        end
+		runway = prefix .. string.sub(appr, 4, 7)
 	elseif string.sub(appr, 1, 2) == "RW" then
 		return nil
 	end
@@ -57,11 +64,18 @@ function appr_airbus_to_xp_rwy(appr)
 	   string.sub(appr, 1, 3) == "VOR" or
 	   string.sub(appr, 1, 3) == "NDB"
 	then
-		runway = string.sub(appr, 4, 5)
+		runway = string.sub(appr, 4, 6)
 	elseif string.sub(appr, 1, 2) == "RW" then
-		runway = string.sub(appr, 3, 4)
+		runway = string.sub(appr, 3, 5)
 	end
-	runway = "RW" .. runway .. "B"
+    print(runway)
+    if string.sub(runway, 3, 3) == "L" or
+       string.sub(runway, 3, 3) == "C" or
+       string.sub(runway, 3, 3) == "R"
+       then
+        runway = string.sub(runway, 1, 2) .. "B"
+    end
+    runway = "RW" .. runway
 	return runway
 end
 
@@ -220,6 +234,7 @@ end
 
 function Parser_Cifp:get_stars(appr)
 	appr = appr_airbus_to_xp_rwy(appr)
+    print(">" .. appr .. "<")
 	output = {"no star"}
 	for _, pd in ipairs(self.parsed_data) do
 		if pd:get_column(1) == "STAR:010" and

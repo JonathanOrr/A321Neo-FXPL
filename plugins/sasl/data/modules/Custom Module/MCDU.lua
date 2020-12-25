@@ -255,7 +255,7 @@ local MCDU_DRAW_SPACING = {x = 530, y = -37} -- change in offset per line drawn
 local MCDU_DISP_COLOR = 
 {
     ["white"] =   {1.00, 1.00, 1.00},
-    ["cyan"] =    {0.20, 0.70, 1.00},
+    ["cyan"] =    {0.10, 0.70, 1.00},
     ["green"] =   {0.20, 1.00, 0.20},
     ["amber"] =   {1.00, 0.66, 0.16},
     ["yellow"] =  {1.00, 0.66, 0.16},
@@ -1254,12 +1254,19 @@ function (phase)
                 mcdu_dat["l"]["L"][1][1] = {txt = "          ----"}
             end
 
+            -- set colour based on if latlon ref can be changed
+            if fmgs_dat["init irs latlon sel"] == "lock" then
+                col = "green"
+            else
+                col = "cyan"
+            end
+
             deg, min, sec, dir = mcdu_ctrl_dd_to_dmsd(fmgs_dat["init irs lat"], "lat")
-            mcdu_dat["l"]["L"][1][2] = {txt = tostring(deg) .. "º    "  .. tostring(dir), col = "cyan"}
-            mcdu_dat["l"]["L"][1][3] = {txt = "   " .. mcdu_pad_dp(tostring(Round(min, 1)), 1), col = "cyan", size = "s"}
+            mcdu_dat["l"]["L"][1][2] = {txt = tostring(deg) .. "º    "  .. tostring(dir), col = col}
+            mcdu_dat["l"]["L"][1][3] = {txt = "   " .. mcdu_pad_dp(tostring(Round(min, 1)), 1), col = col, size = "s"}
             deg, min, sec, dir = mcdu_ctrl_dd_to_dmsd(fmgs_dat["init irs lon"], "lon")
-            mcdu_dat["l"]["R"][1][1] = {txt = tostring(deg) .. "º    "  .. tostring(dir), col = "cyan"}
-            mcdu_dat["l"]["R"][1][2] = {txt = mcdu_pad_dp(tostring(Round(min, 1)), 1) .. " ", col = "cyan", size = "s"}
+            mcdu_dat["l"]["R"][1][1] = {txt = tostring(deg) .. "º    "  .. tostring(dir), col = col}
+            mcdu_dat["l"]["R"][1][2] = {txt = mcdu_pad_dp(tostring(Round(min, 1)), 1) .. " ", col = col, size = "s"}
 
             --[[ GPS POSITION LAT / LONG --]]
             mcdu_dat["s"]["L"][2].txt = "lat   gps position"
@@ -1326,7 +1333,7 @@ function (phase)
             end
         end
 		mcdu_dat["l"]["L"][6].txt = "<return"
-        if fmgs_dat["init irs latlon sel"] ~= "nil" then
+        if fmgs_dat["init irs latlon sel"] ~= "lock" then
             if fmgs_dat["confirm align on ref"] then
                 mcdu_dat["l"]["R"][6] = {txt = "confirm align*", col = "amber"}
             else
@@ -1348,7 +1355,7 @@ function (phase)
         end
 
         -- if confirmed
-        fmgs_dat["init irs latlon sel"] = "nil" -- disable editing of latlon
+        fmgs_dat["init irs latlon sel"] = "lock" -- disable editing of latlon
         for no, irs in ipairs(irs_statuses) do
             if irs == "aligning-gps" then
                 irs_statuses[no] = "aligning-ref"
@@ -2123,6 +2130,9 @@ function (phase)
         else
             appr = fmgs_dat["fpln latrev arr appr"]
 
+            -- get vias
+            vias = parser:get_vias(appr)
+
             -- get stars
             stars = parser:get_stars(appr)
             star = fmgs_dat["fpln latrev arr star"]
@@ -2252,7 +2262,7 @@ function (phase)
     end
 
     --if any of the side buttons are pushed
-    if (phase:sub(1,1) == "L" or phase:sub(1,1) == "R") and tonumber(phase:sub(2,2)) >= 2 and tonumber(phase:sub(2,2)) <= 5 then
+    if (phase:sub(1,1) == "L" or phase:sub(1,1) == "R") and tonumber(phase:sub(2,2)) >= 3 and tonumber(phase:sub(2,2)) <= 5 then
 
         if fmgs_dat["fpln latrev arr mode"] == "appr" then
             if phase:sub(1,1) == "L" then
@@ -2267,39 +2277,52 @@ function (phase)
                     mcdu_open_page(603) -- reload
                 end
             end
+        elseif fmgs_dat["fpln latrev arr mode"] == "vias" then
+            if phase:sub(1,1) == "L" then
+                --find the index of which button was pressed, and -2 to make it equal to `offset` in the function above
+                index = tonumber(phase:sub(2,2)) - 3
+                index = fmgs_dat["fpln latrev index"] + index
+                if index <= #vias then
+                    via = vias[index]
+                    fmgs_dat["fpln latrev arr mode"] = "trans"
+                    fmgs_dat["fpln latrev arr via"] = via
+                    fmgs_dat["fpln latrev index"] = 1
+                    mcdu_open_page(603) -- reload
+                end
+            end
         else
             if phase:sub(1,1) == "L" then
                 --find the index of which button was pressed, and -2 to make it equal to `offset` in the function above
                 index = tonumber(phase:sub(2,2)) - 3
                 index = fmgs_dat["fpln latrev index"] + index
-                if index <= #sids then
-                    sid = sids[index]
-                    print(sid)
-                    fmgs_dat["fpln latrev dept mode"] = "trans"
-                    fmgs_dat["fpln latrev dept sid"] = sid
-                    fmgs_dat["fpln latrev dept trans"] = ""
+                if index <= #stars then
+                    star = stars[index]
+                    print(star)
+                    fmgs_dat["fpln latrev arr mode"] = "vias"
+                    fmgs_dat["fpln latrev arr star"] = star
+                    fmgs_dat["fpln latrev arr trans"] = ""
                     fmgs_dat["fpln latrev index"] = 1
 
-                    if sid == "no sid" then
-                        fmgs_dat["fpln latrev dept sid"] = "none"
+                    if star == "no star" then
+                        fmgs_dat["fpln latrev arr star"] = "none"
                     end
                     mcdu_open_page(603) -- reload
                 end
             elseif phase:sub(1,1) == "R" and
-                   fmgs_dat["fpln latrev dept mode"] == "trans" or
-                   fmgs_dat["fpln latrev dept mode"] == "done" then
+                   fmgs_dat["fpln latrev arr mode"] == "trans" or
+                   fmgs_dat["fpln latrev arr mode"] == "done" then
                 --find the index of which button was pressed, and -2 to make it equal to `offset` in the function above
                 index = tonumber(phase:sub(2,2)) - 3
                 index = fmgs_dat["fpln latrev index"] + index
                 if index <= #trans then
                     tran = trans[index]
                     print(tran)
-                    fmgs_dat["fpln latrev dept mode"] = "done"
-                    fmgs_dat["fpln latrev dept trans"] = tran
+                    fmgs_dat["fpln latrev arr mode"] = "done"
+                    fmgs_dat["fpln latrev arr trans"] = tran
                     fmgs_dat["fpln latrev index"] = 1
 
                     if tran == "none" then
-                        fmgs_dat["fpln latrev dept trans"] = "none"
+                        fmgs_dat["fpln latrev arr trans"] = "none"
                     end
                     mcdu_open_page(603) -- reload
                 end
@@ -2318,6 +2341,16 @@ function (phase)
             fmgs_dat["fpln latrev arr via"] = ""
             fmgs_dat["fpln latrev arr trans"] = ""
             fmgs_dat["fpln latrev index"] = 1
+            mcdu_open_page(603) -- reload
+        end
+    end
+
+    --<vias
+    if phase == "L2" then
+        if fmgs_dat["fpln latrev arr mode"] == "star" or
+           fmgs_dat["fpln latrev arr mode"] == "trans" or
+           fmgs_dat["fpln latrev arr mode"] == "done" then
+            fmgs_dat["fpln latrev arr mode"] = "vias"
             mcdu_open_page(603) -- reload
         end
     end
@@ -2649,7 +2682,7 @@ function (phase)
         MCDU_DISP_COLOR = 
         {
             ["white"] =   {1.00, 1.00, 1.00},
-            ["cyan"] =    {0.20, 0.70, 1.00},
+            ["cyan"] =    {0.10, 0.70, 1.00},
             ["green"] =   {0.20, 1.00, 0.20},
             ["amber"] =   {1.00, 0.66, 0.16},
             ["yellow"] =  {1.00, 0.66, 0.16},
