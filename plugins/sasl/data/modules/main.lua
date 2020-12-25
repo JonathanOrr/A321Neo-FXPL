@@ -88,6 +88,7 @@ components = {
   sounds {},
   graphics {},
   display_brightness {},
+  librain{},
 }
 
 include(moduleDirectory .. "/main_windows.lua")
