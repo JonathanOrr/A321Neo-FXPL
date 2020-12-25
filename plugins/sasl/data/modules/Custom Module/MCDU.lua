@@ -1417,6 +1417,9 @@ function (phase)
 
         draw_update()
     end
+    if phase == "L1" then
+        mcdu_send_message("page not implemented")
+    end
     if phase == "L6" then
         mcdu_open_page(400) -- open 400 init
     end
