@@ -84,6 +84,12 @@ function fpln_clearall()
     fmgs_dat["fpln latrev dept runway"] = ""
     fmgs_dat["fpln latrev dept sid"] = ""
     fmgs_dat["fpln latrev dept trans"] = ""
+
+    fmgs_dat["fpln latrev arr mode"] = "appr"
+    fmgs_dat["fpln latrev arr appr"] = ""
+    fmgs_dat["fpln latrev arr star"] = ""
+    fmgs_dat["fpln latrev arr via"] = ""
+    fmgs_dat["fpln latrev arr trans"] = ""
 end
 
 function fpln_add_airports(origin, destination)

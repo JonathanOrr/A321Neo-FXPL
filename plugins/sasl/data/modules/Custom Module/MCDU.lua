@@ -255,10 +255,10 @@ local MCDU_DRAW_SPACING = {x = 530, y = -37} -- change in offset per line drawn
 local MCDU_DISP_COLOR = 
 {
     ["white"] =   {1.00, 1.00, 1.00},
-    ["cyan"] =    {0.20, 0.70, 1.00},
+    ["cyan"] =    {0.10, 0.70, 1.00},
     ["green"] =   {0.20, 1.00, 0.20},
     ["amber"] =   {1.00, 0.66, 0.16},
-    ["yellow"] =  {1.00, 0.66, 0.16},
+    ["yellow"] =  {1.00, 0.76, 0.16},
     ["magenta"] = {1.00, 0.00, 1.00},
     ["red"] =     {1.00, 0.00, 0.00},
 
@@ -1188,6 +1188,11 @@ function (phase)
         mcdu_open_page(402) -- open 402 init irs init
     end
 
+    -- wind
+    if phase == "R5" then
+        mcdu_open_page(403) -- open 403 init climb wind
+    end
+
     -- tropo
     if phase == "R6" then
         input = mcdu_get_entry({"number", length = 3, dp = 0})
@@ -1254,12 +1259,19 @@ function (phase)
                 mcdu_dat["l"]["L"][1][1] = {txt = "          ----"}
             end
 
+            -- set colour based on if latlon ref can be changed
+            if fmgs_dat["init irs latlon sel"] == "lock" then
+                col = "green"
+            else
+                col = "cyan"
+            end
+
             deg, min, sec, dir = mcdu_ctrl_dd_to_dmsd(fmgs_dat["init irs lat"], "lat")
-            mcdu_dat["l"]["L"][1][2] = {txt = tostring(deg) .. "º    "  .. tostring(dir), col = "cyan"}
-            mcdu_dat["l"]["L"][1][3] = {txt = "   " .. mcdu_pad_dp(tostring(Round(min, 1)), 1), col = "cyan", size = "s"}
+            mcdu_dat["l"]["L"][1][2] = {txt = tostring(deg) .. "º    "  .. tostring(dir), col = col}
+            mcdu_dat["l"]["L"][1][3] = {txt = "   " .. mcdu_pad_dp(tostring(Round(min, 1)), 1), col = col, size = "s"}
             deg, min, sec, dir = mcdu_ctrl_dd_to_dmsd(fmgs_dat["init irs lon"], "lon")
-            mcdu_dat["l"]["R"][1][1] = {txt = tostring(deg) .. "º    "  .. tostring(dir), col = "cyan"}
-            mcdu_dat["l"]["R"][1][2] = {txt = mcdu_pad_dp(tostring(Round(min, 1)), 1) .. " ", col = "cyan", size = "s"}
+            mcdu_dat["l"]["R"][1][1] = {txt = tostring(deg) .. "º    "  .. tostring(dir), col = col}
+            mcdu_dat["l"]["R"][1][2] = {txt = mcdu_pad_dp(tostring(Round(min, 1)), 1) .. " ", col = col, size = "s"}
 
             --[[ GPS POSITION LAT / LONG --]]
             mcdu_dat["s"]["L"][2].txt = "lat   gps position"
@@ -1326,7 +1338,7 @@ function (phase)
             end
         end
 		mcdu_dat["l"]["L"][6].txt = "<return"
-        if fmgs_dat["init irs latlon sel"] ~= "nil" then
+        if fmgs_dat["init irs latlon sel"] ~= "lock" then
             if fmgs_dat["confirm align on ref"] then
                 mcdu_dat["l"]["R"][6] = {txt = "confirm align*", col = "amber"}
             else
@@ -1348,7 +1360,7 @@ function (phase)
         end
 
         -- if confirmed
-        fmgs_dat["init irs latlon sel"] = "nil" -- disable editing of latlon
+        fmgs_dat["init irs latlon sel"] = "lock" -- disable editing of latlon
         for no, irs in ipairs(irs_statuses) do
             if irs == "aligning-gps" then
                 irs_statuses[no] = "aligning-ref"
@@ -1381,6 +1393,35 @@ function (phase)
             fmgs_dat["init irs lon"] = fmgs_dat["init irs lon"] + 1/600 * increment
         end
         mcdu_open_page(402) -- reload
+    end
+end
+
+-- 403 init climb wind
+mcdu_sim_page[403] =
+function (phase)
+    if phase == "render" then
+        mcdu_dat_title.txt = "       climb wind"
+
+        mcdu_dat["s"]["L"][1].txt = "tru wind alt"
+        mcdu_dat["l"]["L"][1] = {txt = "[ ]º/[ ]/[   ]", col = "cyan"}
+        mcdu_dat["s"]["R"][1].txt = "history "
+        mcdu_dat["l"]["R"][1].txt = "wind>"
+        mcdu_dat["s"]["R"][2] = {txt = "wind", col = "amber"}
+        mcdu_dat["l"]["R"][2] = {txt = "request*", col = "amber"}
+
+        mcdu_dat["s"]["R"][5].txt = "next "
+        mcdu_dat["l"]["R"][5].txt = "phase>"
+
+        mcdu_dat["l"]["L"][6][1] = {txt = "<return"}
+		mcdu_dat["l"]["L"][6][2] = {txt = "        inop page", col = "amber"}
+
+        draw_update()
+    end
+    if phase == "L1" then
+        mcdu_send_message("page not implemented")
+    end
+    if phase == "L6" then
+        mcdu_open_page(400) -- open 400 init
     end
 end
 
@@ -2084,6 +2125,7 @@ function (phase)
 
         -- subtitle
         mcdu_dat["s"]["L"][1].txt = " appr     via      star"
+        mcdu_dat["s"]["R"][2].txt = "trans"
         if fmgs_dat["fpln latrev arr appr"] ~= "" then
             mcdu_dat["l"]["L"][1][1] = {txt = fmgs_dat["fpln latrev arr appr"], col = "yellow"}
         else
@@ -2091,7 +2133,7 @@ function (phase)
         end
 
         if fmgs_dat["fpln latrev arr via"] ~= "" then
-            mcdu_dat["l"]["L"][1][2] = {txt = "         " .. fmgs_dat["fpln latrev arr star"], col = "yellow"}
+            mcdu_dat["l"]["L"][1][2] = {txt = "         " .. fmgs_dat["fpln latrev arr via"], col = "yellow"}
         else
             mcdu_dat["l"]["L"][1][2] = {txt = "         ------", col = "white"}
         end
@@ -2122,6 +2164,9 @@ function (phase)
             runway_lengths = parser_apt:get_runway_lengths(airport)
         else
             appr = fmgs_dat["fpln latrev arr appr"]
+
+            -- get vias
+            vias = parser:get_vias(appr)
 
             -- get stars
             stars = parser:get_stars(appr)
@@ -2213,6 +2258,24 @@ function (phase)
                 mcdu_dat["l"]["L"][line][1] = {txt = "          " .. runway_length .. "m", col = "cyan"}
                 mcdu_dat["l"]["L"][line][2] = {txt = "←" .. runway, col = "cyan"}
 
+            elseif fmgs_dat["fpln latrev arr mode"] == "vias" then
+                mcdu_dat["s"]["L"][2].txt = " appr available"
+                mcdu_dat["l"]["L"][2].txt = " vias"
+
+                mcdu_dat["l"]["R"][6] = {txt = "insert*", col = "amber"}
+                mcdu_dat["l"]["L"][6] = {txt = "←erase", col = "amber"}
+
+                --get vias or stop
+                if index <= #vias then
+                    via = vias[index]
+                    if via == fmgs_dat["fpln latrev arr via"] or
+                       (via == "no via" and fmgs_dat["fpln latrev arr via"] == "via") then
+                        prefix = " "
+                    else
+                        prefix = "←"
+                    end
+                    mcdu_dat["l"]["L"][line] = {txt = prefix .. via, col = "cyan"}
+                end
             else
                 mcdu_dat["s"]["L"][2].txt = " appr"
                 mcdu_dat["l"]["L"][2].txt = "<vias"
@@ -2236,7 +2299,7 @@ function (phase)
                 --get trans or stop
                 if index <= #trans then
                     tran = trans[index]
-                    if tran == fmgs_dat["fpln latrev dept trans"] or
+                    if tran == fmgs_dat["fpln latrev arr trans"] or
                        (tran == "none" and fmgs_dat["fpln latrev dept trans"] ==  "none") then
                         prefix = " "
                     else
@@ -2252,7 +2315,7 @@ function (phase)
     end
 
     --if any of the side buttons are pushed
-    if (phase:sub(1,1) == "L" or phase:sub(1,1) == "R") and tonumber(phase:sub(2,2)) >= 2 and tonumber(phase:sub(2,2)) <= 5 then
+    if (phase:sub(1,1) == "L" or phase:sub(1,1) == "R") and tonumber(phase:sub(2,2)) >= 3 and tonumber(phase:sub(2,2)) <= 5 then
 
         if fmgs_dat["fpln latrev arr mode"] == "appr" then
             if phase:sub(1,1) == "L" then
@@ -2267,39 +2330,52 @@ function (phase)
                     mcdu_open_page(603) -- reload
                 end
             end
+        elseif fmgs_dat["fpln latrev arr mode"] == "vias" then
+            if phase:sub(1,1) == "L" then
+                --find the index of which button was pressed, and -2 to make it equal to `offset` in the function above
+                index = tonumber(phase:sub(2,2)) - 3
+                index = fmgs_dat["fpln latrev index"] + index
+                if index <= #vias then
+                    via = vias[index]
+                    fmgs_dat["fpln latrev arr mode"] = "trans"
+                    fmgs_dat["fpln latrev arr via"] = via
+                    fmgs_dat["fpln latrev index"] = 1
+                    mcdu_open_page(603) -- reload
+                end
+            end
         else
             if phase:sub(1,1) == "L" then
                 --find the index of which button was pressed, and -2 to make it equal to `offset` in the function above
                 index = tonumber(phase:sub(2,2)) - 3
                 index = fmgs_dat["fpln latrev index"] + index
-                if index <= #sids then
-                    sid = sids[index]
-                    print(sid)
-                    fmgs_dat["fpln latrev dept mode"] = "trans"
-                    fmgs_dat["fpln latrev dept sid"] = sid
-                    fmgs_dat["fpln latrev dept trans"] = ""
+                if index <= #stars then
+                    star = stars[index]
+                    print(star)
+                    fmgs_dat["fpln latrev arr mode"] = "vias"
+                    fmgs_dat["fpln latrev arr star"] = star
+                    fmgs_dat["fpln latrev arr trans"] = ""
                     fmgs_dat["fpln latrev index"] = 1
 
-                    if sid == "no sid" then
-                        fmgs_dat["fpln latrev dept sid"] = "none"
+                    if star == "no star" then
+                        fmgs_dat["fpln latrev arr star"] = "none"
                     end
                     mcdu_open_page(603) -- reload
                 end
             elseif phase:sub(1,1) == "R" and
-                   fmgs_dat["fpln latrev dept mode"] == "trans" or
-                   fmgs_dat["fpln latrev dept mode"] == "done" then
+                   fmgs_dat["fpln latrev arr mode"] == "trans" or
+                   fmgs_dat["fpln latrev arr mode"] == "done" then
                 --find the index of which button was pressed, and -2 to make it equal to `offset` in the function above
                 index = tonumber(phase:sub(2,2)) - 3
                 index = fmgs_dat["fpln latrev index"] + index
                 if index <= #trans then
                     tran = trans[index]
                     print(tran)
-                    fmgs_dat["fpln latrev dept mode"] = "done"
-                    fmgs_dat["fpln latrev dept trans"] = tran
+                    fmgs_dat["fpln latrev arr mode"] = "done"
+                    fmgs_dat["fpln latrev arr trans"] = tran
                     fmgs_dat["fpln latrev index"] = 1
 
                     if tran == "none" then
-                        fmgs_dat["fpln latrev dept trans"] = "none"
+                        fmgs_dat["fpln latrev arr trans"] = "none"
                     end
                     mcdu_open_page(603) -- reload
                 end
@@ -2317,6 +2393,17 @@ function (phase)
             fmgs_dat["fpln latrev arr star"] = ""
             fmgs_dat["fpln latrev arr via"] = ""
             fmgs_dat["fpln latrev arr trans"] = ""
+            fmgs_dat["fpln latrev index"] = 1
+            mcdu_open_page(603) -- reload
+        end
+    end
+
+    --<vias
+    if phase == "L2" then
+        if fmgs_dat["fpln latrev arr mode"] == "star" or
+           fmgs_dat["fpln latrev arr mode"] == "trans" or
+           fmgs_dat["fpln latrev arr mode"] == "done" then
+            fmgs_dat["fpln latrev arr mode"] = "vias"
             fmgs_dat["fpln latrev index"] = 1
             mcdu_open_page(603) -- reload
         end
@@ -2385,6 +2472,7 @@ function (phase)
         mcdu_dat["l"]["R"][5][1] = {txt = "[ ] ", col = "cyan"}
         mcdu_dat["l"]["R"][5][2] = {txt = "210.0/    ", col = "cyan", size = "s"}
 
+		mcdu_dat["l"]["L"][6] = {txt = "        inop page", col = "amber"}
         draw_update()
     end
 end
@@ -2452,7 +2540,8 @@ end
 mcdu_sim_page[1101] =
 function (phase)
     if phase == "render" then
-        mcdu_dat_title.txt = "     a32nx project"
+        mcdu_dat_title.txt = "     side stick sim"
+        mcdu_dat_title.txt = "      a32nx project"
 
         mcdu_dat["l"]["L"][1].txt = "<about"
         mcdu_dat["l"]["L"][2].txt = "<colours"
@@ -2465,8 +2554,8 @@ function (phase)
 		mcdu_dat["s"]["R"][5] = {txt = "programmer        ", col = "white"}
         mcdu_dat["l"]["R"][5] = {txt = "ricorico         ", col = "green"}
         mcdu_dat["s"]["R"][6] = {txt = "mcdu written by     ", col = "white"}
-        mcdu_dat["l"]["R"][6][1] = {txt = "chaidhat chaimongkol   ", col = "green"}
-        mcdu_dat["l"]["R"][6][2] = {txt = ">", col = "white"}
+        mcdu_dat["l"]["R"][6] = {txt = "chaidhat chaimongkol  ", col = "green"}
+        mcdu_dat["l"]["L"][6] = {txt = "<", col = "white"}
 
         draw_update()
     end
@@ -2479,7 +2568,7 @@ function (phase)
     if phase == "R2" then
         mcdu_open_page(1106) -- open 1106 mcdu menu options debug
     end
-    if phase == "R6" then
+    if phase == "L6" then
         mcdu_open_page(1100) -- open 1100 mcdu menu
     end
 end
@@ -2496,7 +2585,12 @@ function (phase)
         mcdu_dat["s"]["L"][3].txt = "github.com"
         mcdu_dat["l"]["L"][3].txt = "jonathanorr/a321neo-fxpl"
 
-        mcdu_dat["l"]["L"][4] = {txt = "join our discord!", col = "cyan"}
+        mcdu_dat["s"]["L"][4] = {txt = "join our discord!", col = "cyan"}
+        mcdu_dat["l"]["L"][4] = {txt = "thank you so much for", size = "s"}
+        mcdu_dat["s"]["L"][5] = {txt = "flying our acf. we had"}
+        mcdu_dat["l"]["L"][5] = {txt = "fun making it and hope", size = "s"}
+        mcdu_dat["s"]["L"][6] = {txt = "you have fun flying it"}
+        mcdu_dat["l"]["L"][6] = {txt = "-side stick sim", size = "s"}
 
         mcdu_dat["l"]["R"][6].txt = "return>"
 
@@ -2523,7 +2617,7 @@ function (phase)
 
         mcdu_dat["l"]["R"][5].txt = "load palette>"
 
-        mcdu_dat["l"]["L"][6].txt = "←disco mode"
+        mcdu_dat["l"]["L"][6].txt = "←disco mode?"
         mcdu_dat["l"]["R"][6].txt = "return>"
         draw_update()
     end
@@ -2588,7 +2682,7 @@ function (phase)
         mcdu_dat["l"]["L"][3] = {txt = "←blue  " .. MCDU_DISP_COLOR[colour][3] * 100 .. " percent", col = colour}
 
         mcdu_dat["l"]["L"][5].txt = "format e.g. 10"
-        mcdu_dat["l"]["R"][6].txt = "return>"
+        mcdu_dat["l"]["L"][6].txt = "<return"
 
         draw_update()
     end
@@ -2625,7 +2719,7 @@ function (phase)
             mcdu_send_message("please enter value")
         end
     end
-    if phase == "R6" then
+    if phase == "L6" then
         mcdu_open_page(1103) -- open 1103 mcdu menu options colours
     end
 end
@@ -2649,10 +2743,10 @@ function (phase)
         MCDU_DISP_COLOR = 
         {
             ["white"] =   {1.00, 1.00, 1.00},
-            ["cyan"] =    {0.20, 0.70, 1.00},
+            ["cyan"] =    {0.10, 0.70, 1.00},
             ["green"] =   {0.20, 1.00, 0.20},
             ["amber"] =   {1.00, 0.66, 0.16},
-            ["yellow"] =  {1.00, 0.66, 0.16},
+            ["yellow"] =  {1.00, 0.76, 0.16},
             ["magenta"] = {1.00, 0.00, 1.00},
             ["red"] =     {1.00, 0.00, 0.00},
 
@@ -2759,11 +2853,12 @@ function (phase)
         mcdu_dat["s"]["L"][5].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
         mcdu_dat["l"]["L"][5].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
         mcdu_dat["s"]["R"][6].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
-        mcdu_dat["l"]["R"][6].txt = "xxxxxxxxxxxxxxxxxreturn>"
+        mcdu_dat["l"]["R"][6][1] = {txt = "       xxxxxxxxxxxxxxxxx"}
+        mcdu_dat["l"]["R"][6][2] = {txt = "<return                 ", col = "amber"}
 
         draw_update()
     end
-    if phase == "R6" then
+    if phase == "L6" then
         mcdu_open_page(1101) -- open 1101 mcdu menu options
     end
 end
