@@ -2091,6 +2091,7 @@ function (phase)
 
         -- subtitle
         mcdu_dat["s"]["L"][1].txt = " appr     via      star"
+        mcdu_dat["s"]["R"][2].txt = "trans"
         if fmgs_dat["fpln latrev arr appr"] ~= "" then
             mcdu_dat["l"]["L"][1][1] = {txt = fmgs_dat["fpln latrev arr appr"], col = "yellow"}
         else
@@ -2098,7 +2099,7 @@ function (phase)
         end
 
         if fmgs_dat["fpln latrev arr via"] ~= "" then
-            mcdu_dat["l"]["L"][1][2] = {txt = "         " .. fmgs_dat["fpln latrev arr star"], col = "yellow"}
+            mcdu_dat["l"]["L"][1][2] = {txt = "         " .. fmgs_dat["fpln latrev arr via"], col = "yellow"}
         else
             mcdu_dat["l"]["L"][1][2] = {txt = "         ------", col = "white"}
         end
@@ -2223,6 +2224,24 @@ function (phase)
                 mcdu_dat["l"]["L"][line][1] = {txt = "          " .. runway_length .. "m", col = "cyan"}
                 mcdu_dat["l"]["L"][line][2] = {txt = "←" .. runway, col = "cyan"}
 
+            elseif fmgs_dat["fpln latrev arr mode"] == "vias" then
+                mcdu_dat["s"]["L"][2].txt = " appr available"
+                mcdu_dat["l"]["L"][2].txt = " vias"
+
+                mcdu_dat["l"]["R"][6] = {txt = "insert*", col = "amber"}
+                mcdu_dat["l"]["L"][6] = {txt = "←erase", col = "amber"}
+
+                --get vias or stop
+                if index <= #vias then
+                    via = vias[index]
+                    if via == fmgs_dat["fpln latrev arr via"] or
+                       (via == "no via" and fmgs_dat["fpln latrev arr via"] == "via") then
+                        prefix = " "
+                    else
+                        prefix = "←"
+                    end
+                    mcdu_dat["l"]["L"][line] = {txt = prefix .. via, col = "cyan"}
+                end
             else
                 mcdu_dat["s"]["L"][2].txt = " appr"
                 mcdu_dat["l"]["L"][2].txt = "<vias"
@@ -2246,7 +2265,7 @@ function (phase)
                 --get trans or stop
                 if index <= #trans then
                     tran = trans[index]
-                    if tran == fmgs_dat["fpln latrev dept trans"] or
+                    if tran == fmgs_dat["fpln latrev arr trans"] or
                        (tran == "none" and fmgs_dat["fpln latrev dept trans"] ==  "none") then
                         prefix = " "
                     else
@@ -2351,6 +2370,7 @@ function (phase)
            fmgs_dat["fpln latrev arr mode"] == "trans" or
            fmgs_dat["fpln latrev arr mode"] == "done" then
             fmgs_dat["fpln latrev arr mode"] = "vias"
+            fmgs_dat["fpln latrev index"] = 1
             mcdu_open_page(603) -- reload
         end
     end
