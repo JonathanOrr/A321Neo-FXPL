@@ -258,7 +258,7 @@ local MCDU_DISP_COLOR =
     ["cyan"] =    {0.10, 0.70, 1.00},
     ["green"] =   {0.20, 1.00, 0.20},
     ["amber"] =   {1.00, 0.66, 0.16},
-    ["yellow"] =  {1.00, 0.66, 0.16},
+    ["yellow"] =  {1.00, 0.76, 0.16},
     ["magenta"] = {1.00, 0.00, 1.00},
     ["red"] =     {1.00, 0.00, 0.00},
 
@@ -1188,6 +1188,11 @@ function (phase)
         mcdu_open_page(402) -- open 402 init irs init
     end
 
+    -- wind
+    if phase == "R5" then
+        mcdu_open_page(403) -- open 403 init climb wind
+    end
+
     -- tropo
     if phase == "R6" then
         input = mcdu_get_entry({"number", length = 3, dp = 0})
@@ -1388,6 +1393,32 @@ function (phase)
             fmgs_dat["init irs lon"] = fmgs_dat["init irs lon"] + 1/600 * increment
         end
         mcdu_open_page(402) -- reload
+    end
+end
+
+-- 403 init climb wind
+mcdu_sim_page[403] =
+function (phase)
+    if phase == "render" then
+        mcdu_dat_title.txt = "       climb wind"
+
+        mcdu_dat["s"]["L"][1].txt = "tru wind alt"
+        mcdu_dat["l"]["L"][1] = {txt = "[ ]º/[ ]/[   ]", col = "cyan"}
+        mcdu_dat["s"]["R"][1].txt = "history "
+        mcdu_dat["l"]["R"][1].txt = "wind>"
+        mcdu_dat["s"]["R"][2] = {txt = "wind", col = "amber"}
+        mcdu_dat["l"]["R"][2] = {txt = "request*", col = "amber"}
+
+        mcdu_dat["s"]["R"][5].txt = "next "
+        mcdu_dat["l"]["R"][5].txt = "phase>"
+
+        mcdu_dat["l"]["L"][6][1] = {txt = "<return"}
+		mcdu_dat["l"]["L"][6][2] = {txt = "        inop page", col = "amber"}
+
+        draw_update()
+    end
+    if phase == "L6" then
+        mcdu_open_page(400) -- open 400 init
     end
 end
 
@@ -2438,6 +2469,7 @@ function (phase)
         mcdu_dat["l"]["R"][5][1] = {txt = "[ ] ", col = "cyan"}
         mcdu_dat["l"]["R"][5][2] = {txt = "210.0/    ", col = "cyan", size = "s"}
 
+		mcdu_dat["l"]["L"][6] = {txt = "        inop page", col = "amber"}
         draw_update()
     end
 end
@@ -2505,7 +2537,8 @@ end
 mcdu_sim_page[1101] =
 function (phase)
     if phase == "render" then
-        mcdu_dat_title.txt = "     a32nx project"
+        mcdu_dat_title.txt = "     side stick sim"
+        mcdu_dat_title.txt = "      a32nx project"
 
         mcdu_dat["l"]["L"][1].txt = "<about"
         mcdu_dat["l"]["L"][2].txt = "<colours"
@@ -2518,8 +2551,8 @@ function (phase)
 		mcdu_dat["s"]["R"][5] = {txt = "programmer        ", col = "white"}
         mcdu_dat["l"]["R"][5] = {txt = "ricorico         ", col = "green"}
         mcdu_dat["s"]["R"][6] = {txt = "mcdu written by     ", col = "white"}
-        mcdu_dat["l"]["R"][6][1] = {txt = "chaidhat chaimongkol   ", col = "green"}
-        mcdu_dat["l"]["R"][6][2] = {txt = ">", col = "white"}
+        mcdu_dat["l"]["R"][6] = {txt = "chaidhat chaimongkol  ", col = "green"}
+        mcdu_dat["l"]["L"][6] = {txt = "<", col = "white"}
 
         draw_update()
     end
@@ -2532,7 +2565,7 @@ function (phase)
     if phase == "R2" then
         mcdu_open_page(1106) -- open 1106 mcdu menu options debug
     end
-    if phase == "R6" then
+    if phase == "L6" then
         mcdu_open_page(1100) -- open 1100 mcdu menu
     end
 end
@@ -2549,7 +2582,12 @@ function (phase)
         mcdu_dat["s"]["L"][3].txt = "github.com"
         mcdu_dat["l"]["L"][3].txt = "jonathanorr/a321neo-fxpl"
 
-        mcdu_dat["l"]["L"][4] = {txt = "join our discord!", col = "cyan"}
+        mcdu_dat["s"]["L"][4] = {txt = "join our discord!", col = "cyan"}
+        mcdu_dat["l"]["L"][4] = {txt = "thank you so much for", size = "s"}
+        mcdu_dat["s"]["L"][5] = {txt = "flying our acf. we had"}
+        mcdu_dat["l"]["L"][5] = {txt = "fun making it and hope", size = "s"}
+        mcdu_dat["s"]["L"][6] = {txt = "you have fun flying it"}
+        mcdu_dat["l"]["L"][6] = {txt = "-side stick sim", size = "s"}
 
         mcdu_dat["l"]["R"][6].txt = "return>"
 
@@ -2576,7 +2614,7 @@ function (phase)
 
         mcdu_dat["l"]["R"][5].txt = "load palette>"
 
-        mcdu_dat["l"]["L"][6].txt = "←disco mode"
+        mcdu_dat["l"]["L"][6].txt = "←disco mode?"
         mcdu_dat["l"]["R"][6].txt = "return>"
         draw_update()
     end
@@ -2641,7 +2679,7 @@ function (phase)
         mcdu_dat["l"]["L"][3] = {txt = "←blue  " .. MCDU_DISP_COLOR[colour][3] * 100 .. " percent", col = colour}
 
         mcdu_dat["l"]["L"][5].txt = "format e.g. 10"
-        mcdu_dat["l"]["R"][6].txt = "return>"
+        mcdu_dat["l"]["L"][6].txt = "<return"
 
         draw_update()
     end
@@ -2678,7 +2716,7 @@ function (phase)
             mcdu_send_message("please enter value")
         end
     end
-    if phase == "R6" then
+    if phase == "L6" then
         mcdu_open_page(1103) -- open 1103 mcdu menu options colours
     end
 end
@@ -2705,7 +2743,7 @@ function (phase)
             ["cyan"] =    {0.10, 0.70, 1.00},
             ["green"] =   {0.20, 1.00, 0.20},
             ["amber"] =   {1.00, 0.66, 0.16},
-            ["yellow"] =  {1.00, 0.66, 0.16},
+            ["yellow"] =  {1.00, 0.76, 0.16},
             ["magenta"] = {1.00, 0.00, 1.00},
             ["red"] =     {1.00, 0.00, 0.00},
 
@@ -2812,11 +2850,12 @@ function (phase)
         mcdu_dat["s"]["L"][5].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
         mcdu_dat["l"]["L"][5].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
         mcdu_dat["s"]["R"][6].txt = "xxxxxxxxxxxxxxxxxxxxxxxx"
-        mcdu_dat["l"]["R"][6].txt = "xxxxxxxxxxxxxxxxxreturn>"
+        mcdu_dat["l"]["R"][6][1] = {txt = "       xxxxxxxxxxxxxxxxx"}
+        mcdu_dat["l"]["R"][6][2] = {txt = "<return                 ", col = "amber"}
 
         draw_update()
     end
-    if phase == "R6" then
+    if phase == "L6" then
         mcdu_open_page(1101) -- open 1101 mcdu menu options
     end
 end
