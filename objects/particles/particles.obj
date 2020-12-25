@@ -1,0 +1,13 @@
+A
+800
+OBJ
+
+TEXTURE particles.png
+PARTICLE_SYSTEM particles.pss
+POINT_COUNTS	0 0 0 0
+
+EMITTER 	henrickk_apu			0.0 	1.15 	22.7			0	0	0
+EMITTER 	henrickk_enginevapour		-5.85	-2.2 	-6.4
+EMITTER 	henrickk_enginevapour		5.85	-2.2 	-6.4			0	0	0
+
+#add aditional emitters below by copying line 11 and changing emitter_name and xyz.
