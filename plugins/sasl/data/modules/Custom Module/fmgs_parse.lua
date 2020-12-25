@@ -300,37 +300,49 @@ function Parser_Cifp:get_procedure(proc_type, proc, runway)
 
 			wpt_type = string.sub(wpt_info, 1, j - 1)
 			wpt_num = string.sub(wpt_info, j + 1, -1)
-			if _wpt_type == proc_type and
+			if wpt_type == proc_type and
 			wpt_num == "0" .. tostring(num) .. "0" and
 			pd:get_column(3) == proc and
 			pd:get_column(4) == runway
 				then
 				found = true
-				table.insert(output, tostring(num) .. ". " .. pd:get_column(4))
-				io.write("Step " .. tostring(num) .. ". " .. pd:get_column(5))
+                wpt_name = pd:get_column(5)
+                wpt_alt = 0
+                wpt_via = 0
+				
+				if pd:get_column(5) == " " then
+                    wpt_via = "h" .. tostring(tonumber(pd:get_column(21)) / 10) .. "º"
+					print("\tHeading " .. tonumber(pd:get_column(21)) / 10 .. "deg")
+					if pd:get_column(23) == "+" then
+                        wpt_name = "(" .. pd:get_column(24) .. ")Δ"
+						print("\tAbove alt " .. tonumber(pd:get_column(24)) .. "ft")
+					elseif pd:get_column(24) == "-" then
+                        wpt_name = "(" .. pd:get_column(24) .. ")Δ"
+						print("\tBelow alt " .. tonumber(pd:get_column(24)) .. "ft")
+					end
+				end
 				
 				if string.sub(pd:get_column(9), 2, 2) == "Y" then
-					io.write("Δ")
+                    wpt_name = wpt_name .. "Δ"
 				end
 
 				print()
 				if pd:get_column(12) == "VI" then
-					print("\tINTCPT")
+                    wpt_name = wpt_name .. "Δ"
 				end
 				if pd:get_column(12) == "VM" then
-					print("\tMANUAL")
+                    wpt_name = "MANUAL"
 				end
-				
-				if pd:get_column(5) == " " then
-					print("\tHeading " .. tonumber(pd:get_column(21)) / 10 .. "deg")
-					if pd:get_column(23) == "+" then
-						print("\tAbove alt " .. tonumber(pd:get_column(24)) .. "ft")
-					elseif pd:get_column(24) == "-" then
-						print("\tBelow alt " .. tonumber(pd:get_column(24)) .. "ft")
-					end
-				end
+
+				table.insert(output, fpln_waypoint(NAV_FIX, nil, wpt_via, wpt_name, nil, nil, nil, wpt_alt))
 				if string.sub(pd:get_column(9), 2, 2) == "E" then
 					print("end of procedure")
+                    -- remove discontinuities 
+                    for no,wpt in ipairs(output) do
+                        nextwpt = output[no + 1] or {name = ""}
+                        wpt.nextname = nextwpt.name
+                        print(wpt.name .. " " .. nextwpt.name)
+                    end
 					return output
 				end
 			end
@@ -338,30 +350,60 @@ function Parser_Cifp:get_procedure(proc_type, proc, runway)
 		end
 		num = num + 1
 	end
+    -- remove discontinuities 
+    for no,wpt in ipairs(output) do
+        nextwpt = output[no] or {name = ""}
+        wpt.nextname = nextwpt.name
+    end
 	return output
 end
 
 
 function Parser_Cifp:get_departure(rwy, proc, trans)
+    proc_type = "SID"
 	print()
 	print("SID Procedure:")
-	parser:get_procedure(proc_type, proc, rwy)
+	proc_1 = parser:get_procedure(proc_type, proc, rwy)
 	print("Transition Procedure:")
-	parser:get_procedure(proc_type, proc, trans)
+	proc_2 = parser:get_procedure(proc_type, proc, trans)
+    for no, wpt in ipairs(proc_2) do
+        if no ~= 1 then
+            table.insert(proc_1, wpt)
+        end
+    end
+    return proc_1
 end
 
 function Parser_Cifp:get_arrival(appr, via, proc, trans)
+    proc_type = "STAR"
 	print()
 	print("Transition Procedure:")
-	parser:get_procedure(proc_type, proc, trans)
+	proc_1 = parser:get_procedure(proc_type, proc, trans)
 	print("Common Route:")
-	parser:get_procedure(proc_type, proc, " ")
+	proc_2 = parser:get_procedure(proc_type, proc, " ")
+    for _,wpt in ipairs(proc_2) do
+        table.insert(proc_1, wpt)
+    end
 	print("STAR Procedure:")
-	parser:get_procedure(proc_type, proc, appr_airbus_to_xp_rwy(appr))
+	proc_3 = parser:get_procedure(proc_type, proc, appr_airbus_to_xp_rwy(appr))
+    for _,wpt in ipairs(proc_3) do
+        print(wpt.name .. " " .. wpt.nextname)
+        table.insert(proc_1, wpt)
+    end
+    for _, wpt in ipairs(proc_1) do
+        print(wpt.name .. " " .. wpt.nextname)
+    end
 	print("Via Procedure:")
-	parser:get_procedure("APPCH", appr_airbus_to_xp_appr(appr), via)
+	proc_4 = parser:get_procedure("APPCH", appr_airbus_to_xp_appr(appr), via)
+    for _,wpt in ipairs(proc_4) do
+        table.insert(proc_1, wpt)
+    end
 	print("Approach Procedure:")
-	parser:get_procedure("APPCH", appr_airbus_to_xp_appr(appr), " ")
+	proc_5 = parser:get_procedure("APPCH", appr_airbus_to_xp_appr(appr), " ")
+    for _,wpt in ipairs(proc_5) do
+        table.insert(proc_1, wpt)
+    end
+    return proc_1
 end
 
 

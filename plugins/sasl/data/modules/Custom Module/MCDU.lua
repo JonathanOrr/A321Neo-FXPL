@@ -923,7 +923,7 @@ end
 --
 --]]
 
-mcdu_entry = string.upper("loww/ksea")
+mcdu_entry = string.upper("kbfi/ksea")
 
 --update
 function update()
@@ -1406,7 +1406,7 @@ function (phase)
         mcdu_dat["l"]["L"][1] = {txt = "[ ]º/[ ]/[   ]", col = "cyan"}
         mcdu_dat["s"]["R"][1].txt = "history "
         mcdu_dat["l"]["R"][1].txt = "wind>"
-        mcdu_dat["s"]["R"][2] = {txt = "wind", col = "amber"}
+        mcdu_dat["s"]["R"][2] = {txt = "wind ", col = "amber"}
         mcdu_dat["l"]["R"][2] = {txt = "request*", col = "amber"}
 
         mcdu_dat["s"]["R"][5].txt = "next "
@@ -1691,7 +1691,7 @@ function (phase)
         else
             dest_wpt = {name = "", time = "", dist = "", efob = ""}
         end
-        mcdu_dat["l"]["L"][6][1] = {txt = dest_wpt.name}
+        mcdu_dat["l"]["L"][6][1] = {txt = fmgs_dat["dest"]}
         --formatting
         if dest_wpt.time == "" then
             mcdu_dat["l"]["L"][6][2] = {txt = "        ----"}
@@ -1972,7 +1972,8 @@ function (phase)
                 runway_length = runway_lengths[runway_name] or 0
                 runway_length = Round(runway_length / 5, -2) * 5
 
-                mcdu_dat["l"]["L"][line] = {txt = "←" .. runway_name .. "   " .. runway_length .. "m", col = "cyan"}
+                mcdu_dat["l"]["L"][line][1] = {txt = "←" .. runway_name, col = "cyan"}
+                mcdu_dat["l"]["L"][line][2] = {txt = "       " .. runway_length .. "m", col = "cyan"}
 
             else
                 mcdu_dat["s"]["L"][2].txt = "sid   available   trans"
@@ -2086,7 +2087,30 @@ function (phase)
 
     --insert>
     if phase == "R6" then
-        if fmgs_dat["fpln latrev dept mode"] == "done" then
+        if fmgs_dat["fpln latrev dept mode"] ~= "runway" then
+            rwy = fmgs_dat["fpln latrev dept runway"]
+
+            -- trim runway
+            if string.sub(rwy, 3, 3) == " " then
+                rwy = string.sub(rwy, 1, 2)
+            end
+
+            rwy = "RW" .. rwy
+            proc = fmgs_dat["fpln latrev dept sid"]
+            trans = fmgs_dat["fpln latrev dept trans"]
+            -- set the data
+            airport = fmgs_dat["origin"]
+            parser = {}
+            parser = Parser_Cifp:new(CIFP_PATH .. airport .. ".dat") 
+            wpts = parser:get_departure(rwy, proc, trans)
+
+            idx = fpln_pointto_wpt(airport)
+            fmgs_dat["fpln"][idx].name = airport .. fmgs_dat["fpln latrev dept runway"]
+            for _, wpt in ipairs(wpts) do
+                fmgs_dat["fpln"][idx].nextname = wpts[1].name
+                fpln_add_wpt(wpt)
+            end
+
             mcdu_open_page(600) -- open 600 f-pln
         end
     end
@@ -2411,7 +2435,28 @@ function (phase)
 
     --insert>
     if phase == "R6" then
-        if fmgs_dat["fpln latrev dept mode"] == "done" then
+        if fmgs_dat["fpln latrev arr mode"] ~= "appr" then
+            -- set the data
+            airport = fmgs_dat["dest"]
+            parser = {}
+            parser = Parser_Cifp:new(CIFP_PATH .. airport .. ".dat") 
+            appr = fmgs_dat["fpln latrev arr appr"]
+            via = fmgs_dat["fpln latrev arr via"]
+            proc = fmgs_dat["fpln latrev arr star"]
+            trans = fmgs_dat["fpln latrev arr trans"]
+
+            idx = fpln_pointto_wpt(airport)
+            fpln_offset_pointer(-1)
+
+            wpts = parser:get_arrival(appr, via, proc, trans)
+            for no, wpt in ipairs(wpts) do
+                if string.sub(wpt.name, 1, 2) == "RW" then
+                    wpt.name = airport .. string.sub(wpt.name, 3, -1)
+                    print("michael buble " .. fmgs_dat["fpln"][no].name)
+                    fmgs_dat["fpln"][no].nextname = wpt.name
+                end
+                fpln_add_wpt(wpt)
+            end
             mcdu_open_page(600) -- open 600 f-pln
         end
     end

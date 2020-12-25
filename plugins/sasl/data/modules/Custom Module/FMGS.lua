@@ -135,5 +135,5 @@ end
 --
 --]]
 
-include('FMGS_parse.lua') -- Flight Management and planning implementation
 include('FMGS_f-pln.lua') -- Flight Management and planning implementation
+include('FMGS_parse.lua') -- Flight Management and planning implementation

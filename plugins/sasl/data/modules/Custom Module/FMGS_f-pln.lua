@@ -20,7 +20,7 @@
 fmgs_dat["fpln"] = {}
 fmgs_dat["fpln fmt"] = {}
 
-local function fpln_wpt(navtype, loc, via, name, dist, time, spd, alt, efob, windspd, windhdg, nextname)
+function fpln_waypoint(navtype, loc, via, name, dist, time, spd, alt, efob, windspd, windhdg, nextname)
     wpt = {}
     wpt.name = name or ""
     wpt.navtype = navtype or ""
@@ -36,11 +36,33 @@ local function fpln_wpt(navtype, loc, via, name, dist, time, spd, alt, efob, win
     return wpt
 end
 
-local function fpln_add_wpt(wpt, loc)
+pointer = 1
+
+function fpln_pointto_wpt(wptname)
+    i = 1
+    while i <= #fmgs_dat["fpln"] do
+        if fmgs_dat["fpln"][i].name == wptname then
+            pointer = i + 1
+            print("pointed at " .. i)
+            return i
+        end
+        i = i + 1
+    end
+    print("NOT FOUND " .. wptname)
+    return 1
+    -- not found
+end
+
+function fpln_offset_pointer(val)
+    pointer = pointer + val
+end
+
+function fpln_add_wpt(wpt, loc)
     if loc then
         table.insert(fmgs_dat["fpln"], loc, wpt)
     else
-        table.insert(fmgs_dat["fpln"], wpt)
+        table.insert(fmgs_dat["fpln"], pointer, wpt)
+        pointer = pointer + 1
     end
 end
 
@@ -58,13 +80,22 @@ function fpln_format()
     for i,wpt in ipairs(fpln) do
         --is waypoint a blank?
         if wpt.name ~= "" then
-            --check for flight discontinuities
-            if wpt_prev.nextname ~= wpt.name then
-                table.insert(fpln_fmt, "---f-pln discontinuity--")
+            --is waypoint repeated?
+            if wpt_prev.name ~= wpt.name then
+                --check for flight discontinuities
+                if wpt_prev.nextname ~= wpt.name then
+                    print(wpt_prev.name .. " " .. wpt_prev.nextname .. " " .. wpt.name .. " " .. wpt.nextname)
+                    table.insert(fpln_fmt, "---f-pln discontinuity--")
+                end
+                --insert waypoint
+                table.insert(fpln_fmt, wpt)
+            else
+                --repeated, therefore omit it
+                --prevent discons
+                if fpln[i + 1] ~= nil then
+                    wpt.nextname = fpln[i + 1].name
+                end
             end
-
-            --insert waypoint
-            table.insert(fpln_fmt, wpt)
             --set previous waypoint
             wpt_prev = wpt
         end
@@ -80,6 +111,8 @@ function fpln_clearall()
     fmgs_dat["fpln"] = {}
     fmgs_dat["fpln fmt"] = {}
 
+    pointer = 1
+
     fmgs_dat["fpln latrev dept mode"] = "runway"
     fmgs_dat["fpln latrev dept runway"] = ""
     fmgs_dat["fpln latrev dept sid"] = ""
@@ -93,8 +126,8 @@ function fpln_clearall()
 end
 
 function fpln_add_airports(origin, destination)
-    fpln_add_wpt(fpln_wpt(NAV_AIRPORT, nil, nil, origin.id, nil, nil, nil, nil, nil, nil, nil))
-    fpln_add_wpt(fpln_wpt(NAV_AIRPORT, nil, nil, destination.id, nil, nil, nil, nil, nil, nil, nil))
+    fpln_add_wpt(fpln_waypoint(NAV_AIRPORT, nil, nil, origin.id, nil, nil, nil, nil, nil, nil, nil))
+    fpln_add_wpt(fpln_waypoint(NAV_AIRPORT, nil, nil, destination.id, nil, nil, nil, nil, nil, nil, nil))
 end
 
 
