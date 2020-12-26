@@ -453,8 +453,10 @@ function Parser_Apt:create_airport_lut()
         -- find the airport name in that line
         line = Line:new(read_line, " ")
         airport_name = line:get_column(5)
+        if airport_name ~= nil then
+            AIRPORT_LUT[airport_name] = file:seek()
+        end
         --lut_file:write(airport_name .. " " .. file:seek() .. "\n")
-        AIRPORT_LUT[airport_name] = file:seek()
     end
 end
 
