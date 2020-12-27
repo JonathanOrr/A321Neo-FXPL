@@ -317,8 +317,10 @@ local mcdu_message_showing = false
 local mcdu_sim_page = {}
 
 --create LUT for apt.dat for faster reference
-parser_apt = Parser_Apt:new(APT_PATH)
-parser_apt:create_airport_lut()
+if override_MCDU_createairportlut then
+    parser_apt = Parser_Apt:new(APT_PATH)
+    parser_apt:create_airport_lut()
+end
 
 --define custom functionalities
 local function mcdu_send_message(message)
@@ -923,7 +925,7 @@ end
 --
 --]]
 
-mcdu_entry = string.upper("kbfi/ksea")
+mcdu_entry = string.upper("")
 
 --update
 function update()
