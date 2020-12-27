@@ -11,5 +11,6 @@ EMITTER 	henrickk_enginevapour		-5.85	-2.2 	-6.4			0	0	0
 EMITTER 	henrickk_enginevapour		5.85	-2.2 	-6.4			0	0	0
 EMITTER 	henrickk_engineheatblur		-5.85	-2.2 	-3			0	0	0
 EMITTER 	henrickk_engineheatblur		5.85	-2.2 	-3			0	0	0
-
+EMITTER 	henrickk_watertrails		-5.85	-6 	2			0	0	0
+EMITTER 	henrickk_watertrails		5.85	-6 	2			0	0	0
 #add aditional emitters below by copying line 11 and changing emitter_name and xyz.
