@@ -11450,6 +11450,10 @@ SLOT 50
 INTERP_MODE LINEAR
 	20.000000	0.600000	0.600000
 	100.000000	0.700000	0.700000
+SLOT 52
+INTERP_MODE LINEAR
+	0.000000	1.000000	1.000000
+	1.000000	0.000000	0.000000
 END_KEYFRAME_TABLE
 TIME_TO_LIVE
 SLOT 0
@@ -11458,7 +11462,7 @@ INTERP_MODE CUBIC_AVG
 	80.000000	0.300000	0.300000
 END_KEYFRAME_TABLE
 END_SUB_EMITTER
-DATAREFS 51
+DATAREFS 53
 DREF 
 DREF sim/aircraft/parts/acf_gear_xnodef
 DREF sim/aircraft/parts/acf_gear_ynodef
@@ -11510,10 +11514,12 @@ DREF sim/cockpit2/gauges/indicators/altitude_ft_pilot
 DREF sim/cockpit2/gauges/indicators/airspeed_kts_pilot
 DREF sim/aircraft/engine/acf_face_jet
 DREF sim/flightmodel2/engines/N1_percent[*]
+DREF sim/cockpit2/engine/actuators/throttle_beta_rev_ratio[1]
+DREF sim/flightmodel2/engines/thrust_reverser_deploy_ratio[1]
 END_EMITTER
 EMITTER
  NAME henrickk_watertrails
- EMIT_MODE STREAM
+ EMIT_MODE BURST
 SUB_EMITTER
  PARTICLE_TYPE 43
 EMIT_RATE
@@ -11528,6 +11534,10 @@ INTERP_MODE LINEAR
 	0.000000	0.000000	0.000000
 	20.000000	10.000000	10.000000
 	80.000000	100.000000	100.000000
+SLOT 54
+INTERP_MODE LINEAR
+	0.000000	1.000000	1.000000
+	1.000000	-0.300000	-0.300000
 END_KEYFRAME_TABLE
 ROTATION_SPEED
 INTERP_MODE CUBIC_AVG
@@ -11616,7 +11626,7 @@ INTERP_MODE LINEAR
 	16.000000	1.000000	1.000000
 END_KEYFRAME_TABLE
 END_SUB_EMITTER
-DATAREFS 54
+DATAREFS 55
 DREF 
 DREF sim/aircraft/parts/acf_gear_xnodef
 DREF sim/aircraft/parts/acf_gear_ynodef
@@ -11671,6 +11681,7 @@ DREF sim/aircraft2/engine/exhaust_dirtiness_ratio
 DREF sim/flightmodel2/engines/N1_percent[*]
 DREF sim/weather/precipitation_on_aircraft_ratio
 DREF sim/flightmodel2/position/y_agl
+DREF sim/flightmodel2/engines/thrust_reverser_deploy_ratio[1]
 END_EMITTER
  TEX_CELLS_X 8
  TEX_CELLS_Y 8

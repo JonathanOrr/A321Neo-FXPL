@@ -89,6 +89,7 @@ components = {
   graphics {},
   display_brightness {},
   librain{},
+  efb{},
 }
 
 include(moduleDirectory .. "/main_windows.lua")

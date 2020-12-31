@@ -370,6 +370,17 @@ function Sasl_DrawWideFrame(x, y, width, height, line_width, align_center_in_out
     end
 end
 
+function SASL_drawRoundedFrames(x, y, width, height, line_width, round_pixels, color)
+    sasl.gl.drawWideLine(x - (line_width / 2) + round_pixels, y + height,           x + width + (line_width / 2) - round_pixels, y + height,                      line_width, color)
+    sasl.gl.drawWideLine(x,                    y + (line_width / 2) + round_pixels - 2, x,                            y + (height - (line_width / 2)) - round_pixels + 3, line_width, color)
+    sasl.gl.drawWideLine(x + width,            y + (line_width / 2) + round_pixels - 2, x + width,                    y + (height - (line_width / 2)) - round_pixels + 1, line_width, color)
+    sasl.gl.drawWideLine(x - (line_width / 2) + round_pixels, y,                    x + width + (line_width / 2) - round_pixels, y,                               line_width, color)
+    sasl.gl.drawArc ( x + width - round_pixels, y + (height - (line_width / 2)) - round_pixels + 1, round_pixels - (line_width / 2), round_pixels + (line_width / 2) ,0 , 90 ,color )
+    sasl.gl.drawArc ( x - (line_width / 2) + round_pixels + 2, y + height - round_pixels, round_pixels - (line_width / 2), round_pixels + (line_width / 2) ,90 , 90 ,color )
+    sasl.gl.drawArc ( x + round_pixels, y + round_pixels, round_pixels - (line_width / 2), round_pixels + (line_width / 2) ,180 , 90 ,color )
+    sasl.gl.drawArc ( x + width + (line_width / 2) - round_pixels - 3, y + (line_width / 2) + round_pixels - 2, round_pixels - (line_width / 2), round_pixels + (line_width / 2) ,270 , 90 ,color )
+end
+
 function SASL_draw_needle(x, y, radius, angle, thickness, color)
     sasl.gl.drawWideLine(x, y, x + radius * math.cos(math.rad(angle)), y + radius * math.sin(math.rad(angle)), thickness, color)
 end
@@ -572,6 +583,7 @@ function perf_measure_stop(name)
 
     sasl.pauseTimer(Perf_array[name].timer)
 end
+
 
 
 function MCDU_get_popup(id) return Mcdu_popup[id] end
