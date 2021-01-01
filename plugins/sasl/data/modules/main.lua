@@ -38,6 +38,7 @@ math.randomseed( os.time() )
 
 include(moduleDirectory .. "/main_debug.lua")
 addSearchPath(moduleDirectory .. "/Custom Module/PFD/")
+addSearchPath(moduleDirectory .. "/Custom Module/EFB/")
 addSearchPath(moduleDirectory .. "/Custom Module/PFD/PFD_subcomponents/")
 
 position = {0, 0, 4096, 4096}

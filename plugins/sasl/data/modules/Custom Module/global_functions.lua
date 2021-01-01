@@ -591,3 +591,34 @@ function MCDU_set_popup(id, val) Mcdu_popup[id] = val end
 
 function MCDU_get_lut(val) return Mcdu_popup_lut end
 function MCDU_set_lut(val) Mcdu_popup_lut = val end
+
+--mouse functions
+function Button_check_and_action(cursor_x, cursor_y, lower_x, lower_y, higher_x, higher_y, callback)
+    if cursor_x >= lower_x and cursor_x <= higher_x and cursor_y >= lower_y and cursor_y <= higher_y then
+        callback()
+    end
+end
+
+function Cursor_texture_to_local_pos(x, y, component_width, component_height, panel_width, panel_height)
+    local tex_x, tex_y = sasl.getCSPanelMousePos()
+
+    --mouse not on the screen
+    if tex_x == nil or tex_y == nil then
+        return nil, nil
+    end
+
+    --0 --> 1 to px
+    local px_x = Math_rescale(0, 0, 1, panel_width,  tex_x)
+    local px_y = Math_rescale(0, 0, 1, panel_height, tex_y)
+
+    if px_x < x or px_x > x + component_width or px_y < y or px_y > y + component_height then
+        return nil, nil
+    end
+
+    --px --> component
+    local component_x = Math_rescale(x, 0, x + component_width,  component_width,  px_x)
+    local component_y = Math_rescale(y, 0, y + component_height, component_height, px_y)
+
+    --output converted coordinates
+    return component_x, component_y
+end
