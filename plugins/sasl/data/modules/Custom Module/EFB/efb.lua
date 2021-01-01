@@ -17,9 +17,10 @@ include("EFB/EFB_pages/10.lua")
 position = {2943, 1248, 1143, 800}
 size = {1143, 800}
 
-local CURSOR_X = 0
-local CURSOR_Y = 0
-local EFB_PAGE = 0
+EFB_PAGE = 1
+EFB_CURSOR_X = 0
+EFB_CURSOR_Y = 0
+EFB_CURSOR_on_screen = false
 
 ---------------------------------------------------------------------------------------------------------------
 --load in the functions
@@ -65,7 +66,7 @@ local EFB_draw_pages = {
 --MOUSE CLICK LOGIC--
 function onMouseDown(component, x, y, button, parentX, parentY)
     --mouse not on the screen
-    if CURSOR_X == nil or CURSOR_Y == nil then
+    if EFB_CURSOR_on_screen == false then
         return
     end
 
@@ -82,14 +83,14 @@ local function draw_efb_bgd()
 end
 
 local function draw_cursor()------------------------------DONT U DARE REMOVE THIS LINE, IT KEEPS THE CURSOR ON TOP
-    if CURSOR_X ~= nil and CURSOR_Y ~= nil then
-        SASL_draw_img_center_aligned ( EFB_cursor,CURSOR_X, CURSOR_Y, 50, 50, ECAM_WHITE )
+    if EFB_CURSOR_on_screen == true then
+        SASL_draw_img_center_aligned ( EFB_cursor,EFB_CURSOR_X, EFB_CURSOR_Y, 50, 50, ECAM_WHITE )
     end
 end
 
 --SASL callbacks-------------------------------------------------------------------------------------------------
 function update()
-    CURSOR_X, CURSOR_Y = Cursor_texture_to_local_pos(position[1], position[2], position[3], position[4], 4096, 4096)
+    EFB_CURSOR_X, EFB_CURSOR_Y, EFB_CURSOR_on_screen = Cursor_texture_to_local_pos(position[1], position[2], position[3], position[4], 4096, 4096)
     EFB_updates_pages[EFB_PAGE]()
 end
 

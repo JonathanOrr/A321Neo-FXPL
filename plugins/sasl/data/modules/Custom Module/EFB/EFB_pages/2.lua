@@ -1,6 +1,6 @@
 --MOUSE & BUTTONS--
 function EFB_execute_page_2_buttons()
-    Button_check_and_action(CURSOR_X, CURSOR_Y, 175, 415, 210, 437, function ()
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 175, 415, 210, 437, function ()
         sasl.commandOnce(Door_1_r_toggle)
         print("Door1R Pressed")
     end)

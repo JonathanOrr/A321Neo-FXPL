@@ -604,21 +604,21 @@ function Cursor_texture_to_local_pos(x, y, component_width, component_height, pa
 
     --mouse not on the screen
     if tex_x == nil or tex_y == nil then
-        return nil, nil
+        return 0, 0, false
     end
 
     --0 --> 1 to px
     local px_x = Math_rescale(0, 0, 1, panel_width,  tex_x)
     local px_y = Math_rescale(0, 0, 1, panel_height, tex_y)
 
-    if px_x < x or px_x > x + component_width or px_y < y or px_y > y + component_height then
-        return nil, nil
-    end
-
     --px --> component
     local component_x = Math_rescale(x, 0, x + component_width,  component_width,  px_x)
     local component_y = Math_rescale(y, 0, y + component_height, component_height, px_y)
 
+    if px_x < x or px_x > x + component_width or px_y < y or px_y > y + component_height then
+        return 0, 0, false
+    end
+
     --output converted coordinates
-    return component_x, component_y
+    return component_x, component_y, true
 end
