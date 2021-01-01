@@ -134,3 +134,12 @@ ECAM_CRUISE_vs_arrow_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/
 
 --EFB--
 EFB_cursor =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/cursor.png")
+EFB_bgd =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/bgd.png")
+EFB_ICON_door =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/Door.png")
+EFB_ICON_fuel =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/Fuel.png")
+EFB_ICON_home =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/Home.png")
+EFB_ICON_info =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/Info.png")
+EFB_ICON_load =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/Load.png")
+EFB_ICON_settings =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/Settings.png")
+EFB_ICON_topcat =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/Topcat.png")
+EFB_ICON_highlight =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/Highlight.png")
