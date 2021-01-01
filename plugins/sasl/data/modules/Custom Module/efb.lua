@@ -3,28 +3,27 @@ fbo = true
 
 include('constants.lua')
 
-position = {3020, 1248, 1066, 800}
-size = {1066, 800}
+position = {2943, 1248, 1143, 800}
+size = {1143, 800}
 
 local cursor_x = 0
 local cursor_y = 0
 
 local efb_page = 0
 
-local function draw_efb_bgd()
-    sasl.gl.drawRectangle (0, 0, 1066, 800, EFB_GREY)
-    SASL_drawRoundedFrames(27 ,27 ,1012 ,660 , 5, 30, EFB_RED)
-    sasl.gl.drawTexture ( EFB_bgd, 0 , 0 , 1066 , 800 , ECAM_WHITE )
+Door1R_C = sasl.findCommand("a321neo/cockpit/door/toggle_door_1_r")
 
-    SASL_draw_img_center_aligned ( EFB_cursor,cursor_x, cursor_y, 35, 34, ECAM_WHITE )
-    
-    SASL_draw_img_center_aligned(EFB_ICON_home, 107, 745, 64, 58, ECAM_WHITE)
-    SASL_draw_img_center_aligned(EFB_ICON_door, 213, 745, 64, 64, ECAM_WHITE)
-    SASL_draw_img_center_aligned(EFB_ICON_load, 320, 745, 64, 59, ECAM_WHITE)
-    SASL_draw_img_center_aligned(EFB_ICON_fuel, 426, 745, 64, 64, ECAM_WHITE)
-    SASL_draw_img_center_aligned(EFB_ICON_topcat, 533, 745, 54, 62, ECAM_WHITE)
-    SASL_draw_img_center_aligned(EFB_ICON_info, 853, 745, 61, 61, ECAM_WHITE)
-    SASL_draw_img_center_aligned(EFB_ICON_settings, 959, 745, 63, 63, ECAM_WHITE)
+
+
+
+
+
+
+---------------------------------------------------------------------------------------------------------------
+
+local function draw_efb_bgd()
+    SASL_drawRoundedFrames(27 ,27 ,1012 ,660 , 5, 30, EFB_RED)
+    sasl.gl.drawTexture ( EFB_bgd, 0 , 0 , 1143 , 800 , ECAM_WHITE )
 end
 
 local function cursor_texture_to_local_pos(x, y, component_width, component_height, panel_width, panel_height)
@@ -32,7 +31,7 @@ local function cursor_texture_to_local_pos(x, y, component_width, component_heig
     
     --mouse not on the screen
     if tex_x == nil or tex_y == nil then
-        return 0, 0
+        return
     end
 
     --0 --> 1 to px
@@ -56,30 +55,111 @@ function onMouseDown(component, x, y, button, parentX, parentY)
     end
 
     if button == MB_LEFT then
-        if cursor_x >= 67 and cursor_x <= 147 and cursor_y >= 705 and cursor_y <= 785 then
+        if cursor_x >= 63 and cursor_x <= 143 and cursor_y >= 705 and cursor_y <= 785 then
             print("Page 1 Signal")
             efb_page = 1
-        elseif cursor_x >= 173 and cursor_x <= 253 and cursor_y >= 705 and cursor_y <= 785 then
+        elseif cursor_x >= 167 and cursor_x <= 247 and cursor_y >= 705 and cursor_y <= 785 then
             print("Page 2 Signal")
             efb_page = 2
+        elseif cursor_x >= 271 and cursor_x <= 351 and cursor_y >= 705 and cursor_y <= 785 then
+            print("Page 3 Signal")
+            efb_page = 3
+        elseif cursor_x >= 375 and cursor_x <= 455 and cursor_y >= 705 and cursor_y <= 785 then
+            print("Page 4 Signal")
+            efb_page = 4
+--        elseif cursor_x >= 480 and cursor_x <= 560 and cursor_y >= 705 and cursor_y <= 785 then
+--            print("Page 5 Signal")
+--            efb_page = 5
+--        elseif cursor_x >= 583 and cursor_x <= 663 and cursor_y >= 705 and cursor_y <= 785 then
+--            print("Page 6 Signal")
+--            efb_page = 6
+--        elseif cursor_x >= 687 and cursor_x <= 767 and cursor_y >= 705 and cursor_y <= 785 then
+--            print("Page 7 Signal")
+--            efb_page = 7
+--        elseif cursor_x >= 791 and cursor_x <= 871 and cursor_y >= 705 and cursor_y <= 785 then
+--            print("Page 8 Signal")
+--            efb_page = 8
+        elseif cursor_x >= 895 and cursor_x <= 975 and cursor_y >= 705 and cursor_y <= 785 then
+            print("Page 9 Signal")
+            efb_page = 9
+        elseif cursor_x >= 989 and cursor_x <= 1079 and cursor_y >= 705 and cursor_y <= 785 then
+            print("Page 0 Signal")
+            efb_page = 0
         end
     end
 end
 
 
 local function draw_efb_page_1()
+    sasl.gl.drawTexture ( EFB_HOME, 0 , 0 , 1143 , 800 , ECAM_WHITE )
 end
 
 local function draw_efb_page_2()
+    sasl.gl.drawTexture ( EFB_DOOR, 0 , 0 , 1143 , 800 , ECAM_WHITE )
+    if cursor_x >= 175 and cursor_x <= 210 and cursor_y >= 415 and cursor_y <= 437 then
+        sasl.commandOnce(Door1R_C)
+        print("Door1R Pressed")
+    end
 end
 
-function draw()
+local function draw_efb_page_3()
+    sasl.gl.drawTexture ( EFB_LOADING, 0 , 0 , 1143 , 800 , ECAM_WHITE )
+end
+
+local function draw_efb_page_4()
+end
+
+local function draw_efb_page_5()
+end
+
+local function draw_efb_page_6()
+end
+
+local function draw_efb_page_7()
+end
+
+local function draw_efb_page_8()
+end
+
+local function draw_efb_page_9()
+    sasl.gl.drawTexture ( EFB_CREDITS, 0 , 0 , 1143 , 800 , ECAM_WHITE )
+end
+
+local function draw_efb_page_0()
+end
+
+local function draw_cursor()------------------------------DONT U DARE REMOVE THIS LINE, IT KEEPS THE CURSOR ON TOP
+    if sasl.getCSPanelMousePos() == nil then
+  else
+  SASL_draw_img_center_aligned ( EFB_cursor,cursor_x, cursor_y, 50, 50, ECAM_WHITE )
+  end
+end
+
+
+function draw()  ------KEEP THE draw_cursor() AT THE BOTTOM YOU DUMBASS!!!!!
     draw_efb_bgd()
     if efb_page == 1 then
         draw_efb_page_1()
     elseif efb_page == 2 then
         draw_efb_page_2()
+    elseif efb_page == 3 then
+        draw_efb_page_3()
+    elseif efb_page == 4 then
+        draw_efb_page_4()
+    elseif efb_page == 5 then
+        draw_efb_page_5()
+    elseif efb_page == 6 then
+        draw_efb_page_6()
+    elseif efb_page == 7 then
+        draw_efb_page_7()
+    elseif efb_page == 8 then
+        draw_efb_page_8()
+    elseif efb_page == 9 then
+        draw_efb_page_9()
+    elseif efb_page == 0 then
+        draw_efb_page_0()
     end
+    draw_cursor()
 end
 
 function update()
