@@ -3052,43 +3052,81 @@ IDX10	2524	2525	2522	2524	2526	2527	2528	2529	2526	2528
 		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/glareshield/priority_capt_top
 		TRIS	2208 6
 		TRIS	2214 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/fcu/capt_wpt_top
 		TRIS	2220 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/glareshield/priority_capt_top
 		TRIS	2226 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/fcu/capt_vord_top
 		TRIS	2232 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/fcu/capt_cstr_top
 		TRIS	2238 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/glareshield/priority_capt_top
 		TRIS	2244 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/fcu/capt_ndb_top
 		TRIS	2250 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/glareshield/priority_capt_top
 		TRIS	2256 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/fcu/capt_arpt_top
 		TRIS	2262 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/glareshield/priority_capt_top
 		TRIS	2268 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/fcu/capt_fd_top
 		TRIS	2274 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/glareshield/priority_capt_top
 		TRIS	2280 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/fcu/capt_ls_top
 		TRIS	2286 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/glareshield/priority_capt_top
 		TRIS	2292 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/fcu/fo_ls_top
 		TRIS	2298 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/glareshield/priority_capt_top
 		TRIS	2304 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/fcu/fo_fd_top
 		TRIS	2310 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/glareshield/priority_capt_top
 		TRIS	2316 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/fcu/fo_arpt_top
 		TRIS	2322 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/glareshield/priority_capt_top
 		TRIS	2328 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/fcu/fo_ndb_top
 		TRIS	2334 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/glareshield/priority_capt_top
 		TRIS	2340 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/fcu/fo_vord_top
 		TRIS	2346 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/glareshield/priority_capt_top
 		TRIS	2352 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/fcu/fo_wpt_top
 		TRIS	2358 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/glareshield/priority_capt_top
 		TRIS	2364 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/fcu/fo_cstr_top
 		TRIS	2370 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/glareshield/priority_capt_top
 		TRIS	2376 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/fcu/athr_top
 		TRIS	2382 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/glareshield/priority_capt_top
 		TRIS	2388 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/fcu/ap_1_top
 		TRIS	2394 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/glareshield/priority_capt_top
 		TRIS	2400 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/fcu/ap_2_top
 		TRIS	2406 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/glareshield/priority_capt_top
 		TRIS	2412 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/fcu/loc_top
 		TRIS	2418 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/glareshield/priority_capt_top
 		TRIS	2424 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/fcu/exped_top
 		TRIS	2430 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/glareshield/priority_capt_top
 		TRIS	2436 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/fcu/appr_top
 		TRIS	2442 6
 		ATTR_light_level 0.000000 1.000000	
 		TRIS	2448 6
