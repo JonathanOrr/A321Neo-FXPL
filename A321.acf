@@ -212,7 +212,7 @@ P _gear/0/_lonE 7.0
 P _gear/0/_lonN 7.0
 P _gear/0/_lonR 99.0
 P _gear/0/_scon 157581.015625000
-P _gear/0/_stat_def 0.120225541
+P _gear/0/_stat_def 0.120225564
 P _gear/0/_steerdeg_hispeed 5.0
 P _gear/0/_steerdeg_lospeed 75.0
 P _gear/0/_strut_comp 0.899999976
@@ -246,7 +246,7 @@ P _gear/1/_lonE -6.0
 P _gear/1/_lonN -6.0
 P _gear/1/_lonR 2.0
 P _gear/1/_scon 157581.015625000
-P _gear/1/_stat_def 0.739415824
+P _gear/1/_stat_def 0.739415884
 P _gear/1/_steerdeg_hispeed 0.0
 P _gear/1/_steerdeg_lospeed 0.0
 P _gear/1/_strut_comp 0.699999988
@@ -280,7 +280,7 @@ P _gear/2/_lonE -6.0
 P _gear/2/_lonN -6.0
 P _gear/2/_lonR 2.0
 P _gear/2/_scon 157581.015625000
-P _gear/2/_stat_def 0.739415824
+P _gear/2/_stat_def 0.739415884
 P _gear/2/_steerdeg_hispeed 0.0
 P _gear/2/_steerdeg_lospeed 0.0
 P _gear/2/_strut_comp 0.699999988
@@ -70418,7 +70418,7 @@ P acf/_throt_max_fwd_nrm 1.009999990
 P acf/_throt_max_rev 0.500000000
 P acf/_throt_time_jet 5.500000000
 P acf/_throt_time_prop 1.0
-P acf/_thrust_max_limit 32159.0
+P acf/_thrust_max_limit 31689.0
 P acf/_thrust_rev_dep_time 1.799999952
 P acf/_tip_AOA_des 0.0
 P acf/_tip_mach_des_100 0.0
