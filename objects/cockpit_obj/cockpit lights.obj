@@ -6,12 +6,68 @@ GLOBAL_cockpit_lit
 POINT_COUNTS	0	0	0	0
 
 	ANIM_begin
+	ANIM_trans	-0.26883	1.42924	-19.16584	-0.26883	1.42924	-19.16584
+	ANIM_rotate_begin	0	0	-1	a321neo/cockpit/lights/extra
+	ANIM_rotate_key	1	0
+	ANIM_rotate_key	0	14.000224
+	ANIM_rotate_end
+	ANIM_rotate_begin	1	0	-0	a321neo/cockpit/lights/extra
+	ANIM_rotate_key	1	0
+	ANIM_rotate_key	0	41.600172
+	ANIM_rotate_end
+		LIGHT_SPILL_CUSTOM 0 0 -0 1 1 1 1 1 0 -1 -0 0.95371695 a321neo/cockpit/lights/capt_reading_array
+	ANIM_end
+	ANIM_begin
 	ANIM_trans	-0.1877	0.50989002	-20.498631	-0.1877	0.50989002	-20.498631
-	ANIM_rotate_begin	1	0	-0	a321neo/cockpit/lights/extra_floor_ped
+	ANIM_rotate_begin	1	0	-0	a321neo/cockpit/lights/extra
 	ANIM_rotate_key	1	0
 	ANIM_rotate_key	0	-18.099737
 	ANIM_rotate_end
-		LIGHT_SPILL_CUSTOM 0 0 -0 1 1 1 1 1 0 -1 -0 0.95371695 a321neo/cockpit/lights/array_floor_ped
+		LIGHT_SPILL_CUSTOM 0 0 -0 1 1 1 1 1 0 -1 -0 0.95371695 a321neo/cockpit/lights/flood_main_array
+	ANIM_end
+	ANIM_begin
+	ANIM_trans	0.1877	0.50989002	-20.498631	0.1877	0.50989002	-20.498631
+	ANIM_rotate_begin	1	0	-0	a321neo/cockpit/lights/extra
+	ANIM_rotate_key	1	0
+	ANIM_rotate_key	0	-18.099737
+	ANIM_rotate_end
+		LIGHT_SPILL_CUSTOM 0 0 -0 1 1 1 1 1 0 -1 -0 0.95371695 a321neo/cockpit/lights/flood_main_array
+	ANIM_end
+	ANIM_begin
+	ANIM_trans	-0.73040003	0.51282001	-20.468201	-0.73040003	0.51282001	-20.468201
+	ANIM_rotate_begin	1	0	-0	a321neo/cockpit/lights/extra
+	ANIM_rotate_key	1	0
+	ANIM_rotate_key	0	-18.099737
+	ANIM_rotate_end
+		LIGHT_SPILL_CUSTOM 0 0 -0 1 1 1 1 1 0 -1 -0 0.95371695 a321neo/cockpit/lights/flood_main_array
+	ANIM_end
+	ANIM_begin
+	ANIM_trans	0.73040003	0.51282001	-20.468201	0.73040003	0.51282001	-20.468201
+	ANIM_rotate_begin	1	0	-0	a321neo/cockpit/lights/extra
+	ANIM_rotate_key	1	0
+	ANIM_rotate_key	0	-18.099737
+	ANIM_rotate_end
+		LIGHT_SPILL_CUSTOM 0 0 -0 1 1 1 1 1 0 -1 -0 0.95371695 a321neo/cockpit/lights/flood_main_array
+	ANIM_end
+	ANIM_begin
+	ANIM_trans	0.22077	1.39338	-19.24823	0.22077	1.39338	-19.24823
+	ANIM_rotate_begin	0	0	-1	a321neo/cockpit/lights/extra
+	ANIM_rotate_key	1	0
+	ANIM_rotate_key	0	-16.7
+	ANIM_rotate_end
+	ANIM_rotate_begin	1	0	-0	a321neo/cockpit/lights/extra
+	ANIM_rotate_key	1	0
+	ANIM_rotate_key	0	39.700246
+	ANIM_rotate_end
+		LIGHT_SPILL_CUSTOM -0.00000001 0 -0 1 1 1 1 1 0 -1 -0 0.95371695 a321neo/cockpit/lights/fo_reading_array
+	ANIM_end
+	ANIM_begin
+	ANIM_trans	0	1.31113	-19.364111	0	1.31113	-19.364111
+	ANIM_rotate_begin	1	0	-0	a321neo/cockpit/lights/extra
+	ANIM_rotate_key	1	0
+	ANIM_rotate_key	0	24.700211
+	ANIM_rotate_end
+		LIGHT_SPILL_CUSTOM 0 0 -0 1 1 1 1 1 0 -1 -0 0.95371695 a321neo/cockpit/lights/flood_ped_array
 	ANIM_end
 
 # Build with Blender 2.90.1 (build b'3e85bb34d0d7'). Exported with XPlane2Blender 4.1.0-beta.1+101.20201117225215

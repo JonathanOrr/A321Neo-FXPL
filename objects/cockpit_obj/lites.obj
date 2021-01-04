@@ -2899,13 +2899,13 @@ IDX10	2510	2511	2512	2513	2510	2512	2514	2515	2516	2517
 IDX10	2514	2516	2518	2519	2520	2521	2518	2520	2522	2523
 IDX10	2524	2525	2522	2524	2526	2527	2528	2529	2526	2528
 
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/lights/mip_pedestal_integral_value
 		ATTR_shiny_rat	0.5
 		TRIS	0 6
 		TRIS	6 6
 		TRIS	12 6
 		TRIS	18 6
 		TRIS	24 6
-		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/lights/integral_value
 		TRIS	30 66
 		TRIS	96 66
 		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/mip/gpws_capt_top
@@ -2952,10 +2952,9 @@ IDX10	2524	2525	2522	2524	2526	2527	2528	2529	2526	2528
 		TRIS	2160 6
 		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/mip/ldg_gear_red_light_bottom
 		TRIS	2166 6
-		ATTR_light_level 0.000000 1.000000	
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/lights/mip_pedestal_integral_value
 		TRIS	2172 18
 		TRIS	2190 18
-		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/lights/integral_value
 		TRIS	162 240
 		TRIS	402 240
 		TRIS	642 108
@@ -3022,7 +3021,7 @@ IDX10	2524	2525	2522	2524	2526	2527	2528	2529	2526	2528
 		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/ecam/buttons/light_clr
 		TRIS	2724 6
 		TRIS	2730 6
-		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/lights/integral_value
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/lights/mip_pedestal_integral_value
 		TRIS	2736 432
 		TRIS	3168 432
 		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/glareshield/master_caution_top

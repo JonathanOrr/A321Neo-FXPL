@@ -5,6 +5,7 @@ OBJ
 GLOBAL_cockpit_lit
 TEXTURE	panel_textures/glareshield.png
 TEXTURE_LIT	panel_textures/glareshield_LIT.png
+ATTR_light_level 0.000000 1.000000	a321neo/cockpit/lights/glareshield_integral_value
 POINT_COUNTS	5376	0	0	16638
 
 VT	-0.13223919	0.68266273	-20.359457	0.99810636	0.058501266	-0.019007323	0.3909767	0.86060822
