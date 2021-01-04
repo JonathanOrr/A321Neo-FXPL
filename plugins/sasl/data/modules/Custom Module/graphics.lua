@@ -57,11 +57,11 @@ local integral_lights = {
 
 local flood_and_spill_lights = {
     --- Overhead panel / Pedestal
-    {name = "flood_main",  color = {1, 1, 1}, size_m = 1,   cone_r = 0.95, max_brightness = 5, is_knob = true,  bus=ELEC_BUS_DC_ESS},  -- OK
-    {name = "flood_ped",   color = {1, 1, 1}, size_m = 2.5, cone_r = 0.95, max_brightness = 2, is_knob = true,  bus=ELEC_BUS_DC_1},    -- OK
-    {name = "dome",        color = {1, 1, 1}, size_m = 1,   cone_r = 0.95, max_brightness = 5, is_knob = false, bus=ELEC_BUS_DC_ESS,}, -- OK
-    {name = "capt_reading",color = {1, 1, 1}, size_m = 2.5, cone_r = 0.98, max_brightness = 4, is_knob = true,  bus=AC_bus_1_pwrd},
-    {name = "fo_reading",  color = {1, 1, 1}, size_m = 2.5, cone_r = 0.98, max_brightness = 4, is_knob = true,  bus=AC_bus_1_pwrd},
+    {name = "flood_main",  color = {1, 1, 1}, size_m = 0.45, cone_r = 0.76, max_brightness = 6, is_knob = true,  bus=ELEC_BUS_DC_ESS},  -- OK
+    {name = "flood_ped",   color = {1, 1, 1}, size_m = 2.5,  cone_r = 0.95, max_brightness = 2, is_knob = true,  bus=ELEC_BUS_DC_1},    -- OK
+    {name = "dome",        color = {1, 1, 1}, size_m = 1,    cone_r = 0.95, max_brightness = 5, is_knob = false, bus=ELEC_BUS_DC_ESS,}, -- OK
+    {name = "capt_reading",color = {1, 1, 1}, size_m = 2.5,  cone_r = 0.98, max_brightness = 4, is_knob = true,  bus=AC_bus_1_pwrd},
+    {name = "fo_reading",  color = {1, 1, 1}, size_m = 2.5,  cone_r = 0.98, max_brightness = 4, is_knob = true,  bus=AC_bus_1_pwrd},
 
     -- CAPT/FO side
     {name = "capt_led_strip",     color = {1, 1, 1}, size_m = 1, cone_r = 0.95, max_brightness = 5, is_knob = true,  bus=AC_bus_1_pwrd},

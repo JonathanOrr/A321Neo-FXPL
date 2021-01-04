@@ -18,34 +18,34 @@ POINT_COUNTS	0	0	0	0
 		LIGHT_SPILL_CUSTOM 0 0 -0 1 1 1 1 1 0 -1 -0 0.95371695 a321neo/cockpit/lights/capt_reading_array
 	ANIM_end
 	ANIM_begin
-	ANIM_trans	-0.1877	0.50989002	-20.498631	-0.1877	0.50989002	-20.498631
+	ANIM_trans	-0.1877	0.59066999	-20.51041	-0.1877	0.59066999	-20.51041
 	ANIM_rotate_begin	1	0	-0	a321neo/cockpit/lights/extra
 	ANIM_rotate_key	1	0
-	ANIM_rotate_key	0	-18.099737
+	ANIM_rotate_key	0	-15.000035
 	ANIM_rotate_end
 		LIGHT_SPILL_CUSTOM 0 0 -0 1 1 1 1 1 0 -1 -0 0.95371695 a321neo/cockpit/lights/flood_main_array
 	ANIM_end
 	ANIM_begin
-	ANIM_trans	0.1877	0.50989002	-20.498631	0.1877	0.50989002	-20.498631
+	ANIM_trans	0.1877	0.59066999	-20.51041	0.1877	0.59066999	-20.51041
 	ANIM_rotate_begin	1	0	-0	a321neo/cockpit/lights/extra
 	ANIM_rotate_key	1	0
-	ANIM_rotate_key	0	-18.099737
+	ANIM_rotate_key	0	-15.000035
 	ANIM_rotate_end
 		LIGHT_SPILL_CUSTOM 0 0 -0 1 1 1 1 1 0 -1 -0 0.95371695 a321neo/cockpit/lights/flood_main_array
 	ANIM_end
 	ANIM_begin
-	ANIM_trans	-0.73040003	0.51282001	-20.468201	-0.73040003	0.51282001	-20.468201
+	ANIM_trans	-0.73040003	0.52384001	-20.51169	-0.73040003	0.52384001	-20.51169
 	ANIM_rotate_begin	1	0	-0	a321neo/cockpit/lights/extra
 	ANIM_rotate_key	1	0
-	ANIM_rotate_key	0	-18.099737
+	ANIM_rotate_key	0	-15.000035
 	ANIM_rotate_end
 		LIGHT_SPILL_CUSTOM 0 0 -0 1 1 1 1 1 0 -1 -0 0.95371695 a321neo/cockpit/lights/flood_main_array
 	ANIM_end
 	ANIM_begin
-	ANIM_trans	0.73040003	0.51282001	-20.468201	0.73040003	0.51282001	-20.468201
+	ANIM_trans	0.73040003	0.52384001	-20.51169	0.73040003	0.52384001	-20.51169
 	ANIM_rotate_begin	1	0	-0	a321neo/cockpit/lights/extra
 	ANIM_rotate_key	1	0
-	ANIM_rotate_key	0	-18.099737
+	ANIM_rotate_key	0	-15.000035
 	ANIM_rotate_end
 		LIGHT_SPILL_CUSTOM 0 0 -0 1 1 1 1 1 0 -1 -0 0.95371695 a321neo/cockpit/lights/flood_main_array
 	ANIM_end

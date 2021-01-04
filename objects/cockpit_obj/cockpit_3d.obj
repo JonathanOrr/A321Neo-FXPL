@@ -8916,9 +8916,9 @@ IDX	7477
 		ATTR_no_cockpit
 		ATTR_manip_command	button	a321neo/cockpit/mntn/apu_reset	Reset APU
 		TRIS	1512 66
-		ATTR_manip_command_knob	button	a321neo/cockpit/lights/capt_reading_knob_up	a321neo/cockpit/lights/capt_reading_knob_dn	Adjust captain reading light
+		ATTR_manip_command_knob	rotate_medium	a321neo/cockpit/lights/capt_reading_knob_up	a321neo/cockpit/lights/capt_reading_knob_dn	Adjust captain reading light
 		TRIS	3822 66
-		ATTR_manip_command_knob	button	a321neo/cockpit/lights/fo_reading_knob_up	a321neo/cockpit/lights/fo_reading_knob_dn	Adjust first officer reading light
+		ATTR_manip_command_knob	rotate_medium	a321neo/cockpit/lights/fo_reading_knob_up	a321neo/cockpit/lights/fo_reading_knob_dn	Adjust first officer reading light
 		TRIS	3888 66
 		ATTR_manip_command	button	a321neo/cockpit/mntn/svce_int	SVCE int
 		TRIS	8406 6
@@ -9612,7 +9612,7 @@ IDX	7477
 		TRIS	11004 84
 		ATTR_manip_command_switch_up_down	up_down	a321neo/cockpit/misc/seatbelts_up	a321neo/cockpit/misc/seatbelts_dn	Toggle seat belt signs
 		TRIS	11088 84
-		ATTR_manip_command_switch_up_down	button	a321neo/cockpit/lights/dome_lt_up	a321neo/cockpit/lights/dome_lt_down	Toggle ice indication and standby compass light
+		ATTR_manip_command_switch_up_down	up_down	a321neo/cockpit/lights/dome_lt_up	a321neo/cockpit/lights/dome_lt_down	Toggle ice indication and standby compass light
 		TRIS	11172 84
 		ATTR_manip_command_switch_up_down	up_down	a321neo/cockpit/lights/nose_up	a321neo/cockpit/lights/nose_dn	Toggle nose light
 		TRIS	11256 84
@@ -9620,13 +9620,13 @@ IDX	7477
 		TRIS	11340 84
 		ATTR_manip_command_switch_up_down	up_down	a321neo/cockpit/lights/land_L_up	a321neo/cockpit/lights/land_L_dn	Toggle left landing light
 		TRIS	11424 84
-		ATTR_manip_command_switch_up_down	button	a321neo/cockpit/lights/dome_lt_up	a321neo/cockpit/lights/dome_lt_down	Toggle runway turn off
+		ATTR_manip_command_switch_up_down	up_down	a321neo/cockpit/lights/dome_lt_up	a321neo/cockpit/lights/dome_lt_down	Toggle runway turn off
 		TRIS	11508 84
 		ATTR_manip_command_switch_up_down	up_down	a321neo/cockpit/lights/navlogo_up	a321neo/cockpit/lights/navlogo_dn	Toggle NAV & LOGO lights
 		TRIS	11592 84
-		ATTR_manip_command_switch_up_down	button	a321neo/cockpit/lights/dome_lt_up	a321neo/cockpit/lights/dome_lt_down	Toggle wing lights
+		ATTR_manip_command_switch_up_down	up_down	a321neo/cockpit/lights/dome_lt_up	a321neo/cockpit/lights/dome_lt_down	Toggle wing lights
 		TRIS	11676 84
-		ATTR_manip_command_switch_up_down	button	a321neo/cockpit/lights/dome_lt_up	a321neo/cockpit/lights/dome_lt_down	Toggle beacon lights
+		ATTR_manip_command_switch_up_down	up_down	a321neo/cockpit/lights/dome_lt_up	a321neo/cockpit/lights/dome_lt_down	Toggle beacon lights
 		TRIS	11760 84
 		ATTR_manip_command_switch_up_down	up_down	a321neo/cockpit/lights/strobe_up	a321neo/cockpit/lights/strobe_dn	Toggle strobe lights
 		TRIS	11844 84
@@ -9802,9 +9802,9 @@ IDX	7477
 		TRIS	7176 66
 		ATTR_manip_command_knob	rotate_medium	a321neo/cockpit/brightness/fo_pfd_brightness_up	a321neo/cockpit/brightness/fo_pfd_brightness_dn	First Officer PFD brightness
 		TRIS	7242 66
-		ATTR_manip_command_switch_up_down	up_down	a321neo/cockpit/lights/fo_console_floor_lt_up	a321neo/cockpit/lights/fo_console_floor_lt_dn	Toggle console floor light
+		ATTR_manip_command_switch_up_down	up_down	a321neo/cockpit/lights/fo_console_floor_knob_up	a321neo/cockpit/lights/fo_console_floor_knob_dn	Toggle console floor light
 		TRIS	7308 66
-		ATTR_manip_command_switch_up_down	up_down	a321neo/cockpit/lights/capt_console_floor_lt_up	a321neo/cockpit/lights/capt_console_floor_lt_dn	Toggle console floor light
+		ATTR_manip_command_switch_up_down	up_down	a321neo/cockpit/lights/capt_console_floor_knob_up	a321neo/cockpit/lights/capt_console_floor_knob_dn	Toggle console floor light
 		TRIS	7374 66
 		ATTR_manip_command_knob	rotate_medium	a321neo/cockpit/ISIS/Knob_C	a321neo/cockpit/ISIS/Knob_CC	ISIS Baro pressure reference
 		TRIS	7716 66

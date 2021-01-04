@@ -69521,7 +69521,7 @@ P acf/_face_rocket 0.0
 P acf/_fadec_EQ_mixture 1
 P acf/_fadec_EQ_rpm_limit 0
 P acf/_fadec_prevents_overboost 0
-P acf/_fan_rpm_for_n1_100 3856.0
+P acf/_fan_rpm_for_n1_100 3855.0
 P acf/_fbrk_on_td_EQ 1
 P acf/_fdir_needed_to_engage_servo 0
 P acf/_feather_on_engn_fail_EQ 0
@@ -69791,7 +69791,7 @@ P acf/_idle_rat/0 0.610000014
 P acf/_idle_rat/1 0.620000005
 P acf/_idle_rat/count 2
 P acf/_incidence_with_flaps 0
-P acf/_inlet_compression_efficiency 0.939999998
+P acf/_inlet_compression_efficiency 1.0
 P acf/_inverted_fuel_oil_EQ 0
 P acf/_inverter_for_elec_gyros 0
 P acf/_inverter_for_ind_trq 0
@@ -69860,7 +69860,7 @@ P acf/_max_gen_amp_per_gen/5 0.0
 P acf/_max_gen_amp_per_gen/6 0.0
 P acf/_max_gen_amp_per_gen/7 0.0
 P acf/_max_gen_amp_per_gen/count 8
-P acf/_max_mach_eff 0.899999976
+P acf/_max_mach_eff 0.980000019
 P acf/_max_oilT 120.0
 P acf/_max_press_diff 8.500000000
 P acf/_max_vac 10.0
@@ -70418,7 +70418,7 @@ P acf/_throt_max_fwd_nrm 1.009999990
 P acf/_throt_max_rev 0.500000000
 P acf/_throt_time_jet 5.500000000
 P acf/_throt_time_prop 1.0
-P acf/_thrust_max_limit 31689.0
+P acf/_thrust_max_limit 32159.0
 P acf/_thrust_rev_dep_time 1.799999952
 P acf/_tip_AOA_des 0.0
 P acf/_tip_mach_des_100 0.0
