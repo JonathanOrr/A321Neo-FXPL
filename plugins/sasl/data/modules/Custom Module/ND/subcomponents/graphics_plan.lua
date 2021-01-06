@@ -44,8 +44,8 @@ local function draw_plane(data)
         return
     end
 
-    local plane_pos_x = 300
-    local plane_pos_y = 200
+    local plane_pos_x = 450
+    local plane_pos_y = 450
     local angle = -data.inputs.heading
     
     -- Plane

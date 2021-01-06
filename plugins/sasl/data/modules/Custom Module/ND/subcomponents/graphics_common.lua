@@ -332,8 +332,10 @@ local function draw_common_messages(data)
 end
 
 local function draw_common_nav_stations(data)
-    draw_common_nav_stations_single(data, 1, 10)
-    draw_common_nav_stations_single(data, 2, 10)
+    if data.config.mode ~= ND_MODE_PLAN then
+        draw_common_nav_stations_single(data, 1, 10)
+        draw_common_nav_stations_single(data, 2, 10)
+    end
 end
 
 function draw_common(data)

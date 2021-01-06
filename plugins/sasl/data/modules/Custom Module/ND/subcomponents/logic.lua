@@ -43,10 +43,44 @@ function update_position(data)
     end
 end
 
+local function update_gps(data)
+    data.misc.gps_primary_lost = get(GPS_1_is_available) == 0 and get(GPS_2_is_available) == 0
+    -- TODO gpirs_is_on
+end
+
+local function update_tcas(data)
+    data.misc.tcas_status = ND_TCAS_OK
+end
+
+local function update_navaid_raw(data)
+
+    data.nav[1].selector = data.config.nav_1_selector
+    data.nav[2].selector = data.config.nav_2_selector
+
+    if data.nav[1].selector == ND_SEL_OFF then
+        -- TODO Auto-FMS NAV1
+    end
+
+    if data.nav[2].selector == ND_SEL_OFF then
+        -- TODO Auto-FMS NAV1
+    end
+
+    if data.nav[1].selector == ND_SEL_VOR then
+        data.nav[1].frequency = get(VHF_1_freq_khz)
+        data.nav[1].identifier = ""
+    elseif data.nav[1].selector == ND_SEL_ADF then
+        data.nav[1].frequency = get(ADF_1_freq_hz)
+        data.nav[1].identifier = ""
+    end
+
+end
+
 function update_main(data)
 
     update_speed_and_wind(data)
     update_hdg_track(data)
+    update_gps(data)
+    update_tcas(data)
     update_position(data)
-
+    update_navaid_raw(data)
 end
