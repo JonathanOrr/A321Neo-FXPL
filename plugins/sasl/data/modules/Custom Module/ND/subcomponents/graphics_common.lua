@@ -73,14 +73,19 @@ local function draw_common_chrono(data)
 
     local chrono_text = ""
     local show_upper_H = false
-    if data.chrono.elapsed_secs > 60*60 then
+    local elapsed_secs = get(TIME) - data.chrono.start_time 
+    if not data.chrono.is_running then
+        elapsed_secs = data.chrono.elapsed_time
+    end
+
+    if elapsed_secs > 60*60 then
         show_upper_H = true
-        local hours = leading_zeros_int(math.min(99, math.floor(data.chrono.elapsed_secs/(60*60))), 2)
-        local minutes = leading_zeros_int(math.floor(data.chrono.elapsed_secs/60) % 60, 2)
+        local hours = leading_zeros_int(math.min(99, math.floor(elapsed_secs/(60*60))), 2)
+        local minutes = leading_zeros_int(math.floor(elapsed_secs/60) % 60, 2)
         chrono_text = hours .. " " .. minutes .. "'" 
     else
-        local minutes = leading_zeros_int(math.floor(data.chrono.elapsed_secs/60) % 60, 2)
-        local seconds = leading_zeros_int(math.floor(data.chrono.elapsed_secs) % 60, 2)
+        local minutes = leading_zeros_int(math.floor(elapsed_secs/60) % 60, 2)
+        local seconds = leading_zeros_int(math.floor(elapsed_secs) % 60, 2)
         chrono_text = minutes .. "'" .. seconds .. "\"" 
     end
     

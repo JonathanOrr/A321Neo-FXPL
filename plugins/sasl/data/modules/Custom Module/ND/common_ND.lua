@@ -58,8 +58,10 @@ function new_dataset(input_id)
     },
 
     chrono = {
+        is_running = false,
         is_active = false,
-        elapsed_secs = 0
+        start_time = 0,
+        elapsed_time = 0
     },
     
     misc = {

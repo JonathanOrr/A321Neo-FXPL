@@ -57,7 +57,24 @@ sasl.registerCommandHandler (ND_Capt_cmd_vord, 0, function(phase) if phase == SA
 sasl.registerCommandHandler (ND_Capt_cmd_ndb, 0, function(phase) if phase == SASL_COMMAND_BEGIN then capt_nd_data.config.is_active_ndb = not capt_nd_data.config.is_active_ndb end end)
 sasl.registerCommandHandler (ND_Capt_cmd_arpt, 0, function(phase) if phase == SASL_COMMAND_BEGIN then capt_nd_data.config.is_active_arpt = not capt_nd_data.config.is_active_arpt end end)
 
+function chrono_handler(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        if capt_nd_data.chrono.is_active then
+            if capt_nd_data.chrono.is_running then
+                capt_nd_data.chrono.is_running = false
+                capt_nd_data.chrono.elapsed_time = get(TIME) - capt_nd_data.chrono.start_time
+            else
+                capt_nd_data.chrono.is_active = false
+            end
+        else
+            capt_nd_data.chrono.is_active = true
+            capt_nd_data.chrono.is_running = true
+            capt_nd_data.chrono.start_time = get(TIME)
+        end 
+    end
+end
 
+sasl.registerCommandHandler (Chrono_cmd_capt_button, 0, chrono_handler)
 
 sasl.registerCommandHandler (ND_Capt_terrain_toggle, 0, function(phase) if phase == SASL_COMMAND_BEGIN then set(ND_Capt_Terrain, 1 - get(ND_Capt_Terrain)) end end)
 sasl.registerCommandHandler (ND_Fo_terrain_toggle, 0, function(phase) if phase == SASL_COMMAND_BEGIN then set(ND_Fo_Terrain, 1 - get(ND_Fo_Terrain)) end end)
