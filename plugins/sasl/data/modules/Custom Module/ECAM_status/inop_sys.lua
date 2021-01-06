@@ -86,7 +86,7 @@ function ECAM_status_get_inop_sys()
 --            inop_cat3_dual = true            
 --        end
 
-        if MessageGroup_ADR_FAULT_SINGLE:is_active() then
+        --[[if MessageGroup_ADR_FAULT_SINGLE:is_active() then
             table.insert(messages, "ADR " .. MessageGroup_ADR_FAULT_SINGLE:get_failed())
             inop_cat3_dual = true
         end
@@ -127,7 +127,7 @@ function ECAM_status_get_inop_sys()
         --    inop_aps = true
         --    inop_atr = true
         --end
-        
+        ]]--
         -- LEAVE THESE AT THE LAST
         if inop_cat3_dual then
             table.insert(messages, "CAT 3 DUAL")        
