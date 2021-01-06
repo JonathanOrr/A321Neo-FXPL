@@ -212,14 +212,14 @@ function PFD_draw_alt_tape(PFD_table)
     --alt tape--
     if get(PFD_table.ADR_avail) == 1 then
         sasl.gl.setClipArea(size[1]/2+209, size[2]/2-244, 84, 473)
-        sasl.gl.drawTexture(PFD_alt_tap_1, size[1]/2+209, size[2]/2-244 - Math_rescale_lim_lower(-1500, 13, 3500, 2113, get(PFD_table.Baro_ALT)), 84, 2500, {1,1,1})
-        sasl.gl.drawTexture(PFD_alt_tap_2, size[1]/2+209, size[2]/2-244 - Math_rescale_no_lim(4000, -177, 9500, 2132, get(PFD_table.Baro_ALT)), 84, 2500, {1,1,1})
-        sasl.gl.drawTexture(PFD_alt_tap_3, size[1]/2+209, size[2]/2-244 - Math_rescale_no_lim(10000, -157, 15500, 2153, get(PFD_table.Baro_ALT)), 84, 2500, {1,1,1})
-        sasl.gl.drawTexture(PFD_alt_tap_4, size[1]/2+209, size[2]/2-244 - Math_rescale_no_lim(16000, -137, 21500, 2173, get(PFD_table.Baro_ALT)), 84, 2500, {1,1,1})
-        sasl.gl.drawTexture(PFD_alt_tap_5, size[1]/2+209, size[2]/2-244 - Math_rescale_no_lim(22000, -117, 27500, 2193, get(PFD_table.Baro_ALT)), 84, 2500, {1,1,1})
-        sasl.gl.drawTexture(PFD_alt_tap_6, size[1]/2+209, size[2]/2-244 - Math_rescale_no_lim(28000, -97, 35500, 2213, get(PFD_table.Baro_ALT)), 84, 2500, {1,1,1})
-        sasl.gl.drawTexture(PFD_alt_tap_7, size[1]/2+209, size[2]/2-244 - Math_rescale_no_lim(34000, -77, 39500, 2233, get(PFD_table.Baro_ALT)), 84, 2500, {1,1,1})
-        sasl.gl.drawTexture(PFD_alt_tap_8, size[1]/2+209, size[2]/2-244 - Math_rescale_lim_upper(40000, -57, 45000, 2043, get(PFD_table.Baro_ALT)), 84, 2500, {1,1,1})
+        sasl.gl.drawTexture(PFD_alt_tap_1, size[1]/2+209, size[2]/2-244 - Math_rescale_lim_lower(-1500,   13,  3500, 2113, get(PFD_table.Baro_ALT)), 84, 2500, {1,1,1})
+        sasl.gl.drawTexture(PFD_alt_tap_2, size[1]/2+209, size[2]/2-244 - Math_rescale_no_lim(    4000, -177,  9500, 2132, get(PFD_table.Baro_ALT)), 84, 2500, {1,1,1})
+        sasl.gl.drawTexture(PFD_alt_tap_3, size[1]/2+209, size[2]/2-244 - Math_rescale_no_lim(   10000, -157, 15500, 2153, get(PFD_table.Baro_ALT)), 84, 2500, {1,1,1})
+        sasl.gl.drawTexture(PFD_alt_tap_4, size[1]/2+209, size[2]/2-244 - Math_rescale_no_lim(   16000, -137, 21500, 2173, get(PFD_table.Baro_ALT)), 84, 2500, {1,1,1})
+        sasl.gl.drawTexture(PFD_alt_tap_5, size[1]/2+209, size[2]/2-244 - Math_rescale_no_lim(   22000, -117, 27500, 2193, get(PFD_table.Baro_ALT)), 84, 2500, {1,1,1})
+        sasl.gl.drawTexture(PFD_alt_tap_6, size[1]/2+209, size[2]/2-244 - Math_rescale_no_lim(   28000,  -97, 33500, 2213, get(PFD_table.Baro_ALT)), 84, 2500, {1,1,1})
+        sasl.gl.drawTexture(PFD_alt_tap_7, size[1]/2+209, size[2]/2-244 - Math_rescale_no_lim(   34000,  -77, 39500, 2233, get(PFD_table.Baro_ALT)), 84, 2500, {1,1,1})
+        sasl.gl.drawTexture(PFD_alt_tap_8, size[1]/2+209, size[2]/2-244 - Math_rescale_lim_upper(40000,  -57, 45000, 2043, get(PFD_table.Baro_ALT)), 84, 2500, {1,1,1})
         sasl.gl.resetClipArea ()
     end
 
@@ -227,6 +227,12 @@ function PFD_draw_alt_tape(PFD_table)
     sasl.gl.drawWideLine(size[1]/2+294, size[2]/2-244, size[1]/2+294, size[2]/2+229, 4, boarder_cl)
     sasl.gl.drawWideLine(size[1]/2+217, size[2]/2+231, size[1]/2+330, size[2]/2+231, 4, boarder_cl)
     sasl.gl.drawWideLine(size[1]/2+217, size[2]/2-246, size[1]/2+330, size[2]/2-246, 4, boarder_cl)
+
+    --print("ALT     " .. get(PFD_Capt_Baro_Altitude))
+    --print("ALT 10K " .. Math_extract_digit(get(PFD_Capt_Baro_Altitude), 5) + Math_rescale(9980,  0, 10000, 1, get(PFD_Capt_Baro_Altitude) % 10000))
+    --print("ALT 1K  " .. Math_extract_digit(get(PFD_Capt_Baro_Altitude), 4) + Math_rescale(980,   0, 1000,  1, get(PFD_Capt_Baro_Altitude) % 1000))
+    --print("ALT 100 " .. Math_extract_digit(get(PFD_Capt_Baro_Altitude), 3) + Math_rescale(80,    0, 100,   1, get(PFD_Capt_Baro_Altitude) % 100))
+    --print("ALT 10s " .. get(PFD_Capt_Baro_Altitude) % 100)
 
     --alt box--
     if get(PFD_table.ADR_avail) == 1 then

@@ -1,4 +1,4 @@
-local yaw_limit_clamping_upper_limit = 25--normal law 25 all other laws 30
+include("FBW_subcomponents/flight_ctl_subcomponents/lateral_ctl.lua")
 
 local VMAX_speeds = {
     0.82,
@@ -9,6 +9,15 @@ local VMAX_speeds = {
     215,
     195,
     190
+}
+
+local speedbrakes_effect = {
+    25,
+    25,
+    7,
+    10,
+    10,
+    8
 }
 
 local vsw_aprot_alphas = {
@@ -22,11 +31,11 @@ local vsw_aprot_alphas = {
 
 local toga_prot_alphas = {
     9.5,
-    15,
-    15,
+    14,
+    14,
     15,
     14,
-    13
+    12.5
 }
 
 local alpha_max_alphas = {
@@ -62,6 +71,9 @@ end
 
 --calculate flight characteristics values
 function update()
+    print(get(VLS))
+
+
     if get(PFD_Capt_Baro_Altitude) > 24600 then
         set(Capt_VMAX, get(PFD_Capt_IAS) * (VMAX_speeds[1] / get(Capt_Mach)))
         set(Capt_VMAX_prot, get(PFD_Capt_IAS) * (VMAX_speeds[1] + 0.006) / get(Capt_Mach))
@@ -89,7 +101,7 @@ function update()
 
     set(VFE_speed, VMAX_speeds[Math_clamp_higher(get(Flaps_internal_config), 4) + 1 + 3])
 
-    set(VLS, Set_anim_value(get(VLS), (get(Flaps_internal_config) == 0 and 1.28 or 1.23) * Extract_vs1g(get(Aircraft_total_weight_kgs), get(Flaps_internal_config), get(Gear_handle) ~= 0), 0, 350, 0.3))
+    set(VLS, Set_anim_value(get(VLS), (get(Flaps_internal_config) == 0 and 1.28 or 1.23) * Extract_vs1g(get(Aircraft_total_weight_kgs), get(Flaps_internal_config), get(Gear_handle) ~= 0) + Math_rescale(0, 0, Spoilers_obj.Get_cmded_spdbrk_def(1), speedbrakes_effect[get(Flaps_internal_config) + 1], Spoilers_obj.Get_curr_spdbrk_def()), 0, 350, 0.3))
 
     set(S_speed, 1.23 * Extract_vs1g(get(Aircraft_total_weight_kgs), 0, false))
     set(F_speed, 1.22 * Extract_vs1g(get(Aircraft_total_weight_kgs), 2, false))

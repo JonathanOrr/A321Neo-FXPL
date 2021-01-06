@@ -51,7 +51,49 @@ function Ailerons_control(lateral_input, has_florence_kit, ground_spoilers_mode)
 end
 
 --permanent variables
-Spoilers_var_table = {
+Spoilers_obj = {
+    num_of_spoils_per_wing = 5,
+    l_spoilers_spdbrk_max_air_def = {0, 25, 25, 25, 0},
+    r_spoilers_spdbrk_max_air_def = {0, 25, 25, 25, 0},
+    l_spoilers_spdbrk_max_ground_def = {6, 20, 40, 40, 0},
+    r_spoilers_spdbrk_max_ground_def = {6, 20, 40, 40, 0},
+    l_spoilers_datarefs = {Left_spoiler_1,  Left_spoiler_2,  Left_spoiler_3,  Left_spoiler_4,  Left_spoiler_5},
+    r_spoilers_datarefs = {Right_spoiler_1, Right_spoiler_2, Right_spoiler_3, Right_spoiler_4, Right_spoiler_5},
+
+    Get_cmded_spdbrk_def = function (spdbrk_input)
+        local l_spoilers_spdbrk_max_def = {6, 20, 40, 40, 0}
+        local r_spoilers_spdbrk_max_def = {6, 20, 40, 40, 0}
+        spdbrk_input = Math_clamp(spdbrk_input, 0, 1)
+
+        if get(Aft_wheel_on_ground) == 1 then
+            --on ground and slightly open spoiler 1 with speedbrake handle
+            l_spoilers_spdbrk_max_def = Spoilers_obj.l_spoilers_spdbrk_max_ground_def
+            r_spoilers_spdbrk_max_def = Spoilers_obj.r_spoilers_spdbrk_max_ground_def
+        else
+            --adujust max in air deflection of the speedbrakes
+            l_spoilers_spdbrk_max_def = Spoilers_obj.l_spoilers_spdbrk_max_air_def
+            r_spoilers_spdbrk_max_def = Spoilers_obj.r_spoilers_spdbrk_max_air_def
+        end
+
+        local total_cmded_def = 0
+        for i = 1, Spoilers_obj.num_of_spoils_per_wing do
+            total_cmded_def = total_cmded_def + l_spoilers_spdbrk_max_def[i] * spdbrk_input
+            total_cmded_def = total_cmded_def + r_spoilers_spdbrk_max_def[i] * spdbrk_input
+        end
+
+        return total_cmded_def
+    end,
+
+    Get_curr_spdbrk_def = function ()
+        local total_curr_def = 0
+        for i = 1, Spoilers_obj.num_of_spoils_per_wing do
+            total_curr_def = total_curr_def + get(Spoilers_obj.l_spoilers_datarefs[i])
+            total_curr_def = total_curr_def + get(Spoilers_obj.r_spoilers_datarefs[i])
+        end
+
+        return total_curr_def
+    end,
+
     l_spoilers_spdbrk_extention = {0, 0, 0, 0, 0},
     r_spoilers_spdbrk_extention = {0, 0, 0, 0, 0},
     l_spoilers_roll_extention = {0, 0, 0, 0, 0},
@@ -79,8 +121,6 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
     --SECs           3 3 1 1 2
 
     --DATAREFS FOR SURFACES
-    local l_spoilers_datarefs = {Left_spoiler_1, Left_spoiler_2, Left_spoiler_3, Left_spoiler_4, Left_spoiler_5}
-    local r_spoilers_datarefs = {Right_spoiler_1, Right_spoiler_2, Right_spoiler_3, Right_spoiler_4, Right_spoiler_5}
 
     local l_spoilers_hyd_sys_dataref = {Hydraulic_G_press, Hydraulic_Y_press, Hydraulic_B_press, Hydraulic_Y_press, Hydraulic_G_press}
     local r_spoilers_hyd_sys_dataref = {Hydraulic_G_press, Hydraulic_Y_press, Hydraulic_B_press, Hydraulic_Y_press, Hydraulic_G_press}
@@ -95,7 +135,6 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
     spdbrk_input = Math_clamp(spdbrk_input, 0, 1)
 
     --properties
-    local num_of_spoils_per_wing = 5
 
     local roll_spoilers_threshold = {0.1, 0.1, 0.3, 0.1, 0.1}--amount of sidestick deflection needed to trigger the roll spoilers
 
@@ -107,10 +146,6 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
     local l_spoilers_roll_max_def = {0, 35, 7, 35, 35}
     local r_spoilers_roll_max_def = {0, 35, 7, 35, 35}
 
-    local l_spoilers_spdbrk_max_ground_def = {6, 20, 40, 40, 0}
-    local r_spoilers_spdbrk_max_ground_def = {6, 20, 40, 40, 0}
-    local l_spoilers_spdbrk_max_air_def = {0, 25, 25, 25, 0}
-    local r_spoilers_spdbrk_max_air_def = {0, 25, 25, 25, 0}
 
     local l_spoilers_spdbrk_spd = {5, 5, 5, 5, 5}
     local r_spoilers_spdbrk_spd = {5, 5, 5, 5, 5}
@@ -138,20 +173,20 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
         r_spoilers_spdbrk_spd = r_spoilers_spdbrk_ground_spd
 
         --on ground and slightly open spoiler 1 with speedbrake handle
-        l_spoilers_spdbrk_max_def = l_spoilers_spdbrk_max_ground_def
-        r_spoilers_spdbrk_max_def = r_spoilers_spdbrk_max_ground_def
+        l_spoilers_spdbrk_max_def = var_table.l_spoilers_spdbrk_max_ground_def
+        r_spoilers_spdbrk_max_def = var_table.r_spoilers_spdbrk_max_ground_def
     else
         --slow down the spoilers for flight
         l_spoilers_spdbrk_spd = l_spoilers_spdbrk_air_spd
         r_spoilers_spdbrk_spd = r_spoilers_spdbrk_air_spd
 
         --adujust max in air deflection of the speedbrakes
-        l_spoilers_spdbrk_max_def = l_spoilers_spdbrk_max_air_def
-        r_spoilers_spdbrk_max_def = r_spoilers_spdbrk_max_air_def
+        l_spoilers_spdbrk_max_def = var_table.l_spoilers_spdbrk_max_air_def
+        r_spoilers_spdbrk_max_def = var_table.r_spoilers_spdbrk_max_air_def
     end
 
     --detect if hydraulics power is avail to the surfaces then accordingly slow down the speed
-    for i = 1, num_of_spoils_per_wing do
+    for i = 1, var_table.num_of_spoils_per_wing do
         --speedbrkaes
         l_spoilers_spdbrk_spd[i] = Math_rescale(0, 0, 1450, l_spoilers_spdbrk_spd[i], get(l_spoilers_hyd_sys_dataref[i]))
         r_spoilers_spdbrk_spd[i] = Math_rescale(0, 0, 1450, r_spoilers_spdbrk_spd[i], get(r_spoilers_hyd_sys_dataref[i]))
@@ -161,7 +196,7 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
     end
 
     --FAILURE MANAGER--
-    for i = 1, num_of_spoils_per_wing do
+    for i = 1, var_table.num_of_spoils_per_wing do
         l_spoilers_spdbrk_spd[i] = l_spoilers_spdbrk_spd[i] * (1 - get(l_spoilers_failure_dataref[i])) * (1 - get(r_spoilers_failure_dataref[i]))
         r_spoilers_spdbrk_spd[i] = r_spoilers_spdbrk_spd[i] * (1 - get(l_spoilers_failure_dataref[i])) * (1 - get(r_spoilers_failure_dataref[i]))
         l_spoilers_roll_spd[i] = l_spoilers_roll_spd[i] * (1 - get(l_spoilers_failure_dataref[i])) * (1 - get(r_spoilers_failure_dataref[i]))
@@ -170,7 +205,7 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
 
     --SPOILERS & SPDBRAKES TARGET CALCULATION------------------------------------------------------------------------
     --DEFLECTION TARGET CALCULATION--
-    for i = 1, num_of_spoils_per_wing do
+    for i = 1, var_table.num_of_spoils_per_wing do
         --speedbrakes
         l_spoilers_spdbrk_targets[i] = l_spoilers_spdbrk_max_def[i] * spdbrk_input
         r_spoilers_spdbrk_targets[i] = r_spoilers_spdbrk_max_def[i] * spdbrk_input
@@ -235,7 +270,7 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
     end
 
     --SECs position reset--
-    for i = 1, num_of_spoils_per_wing do
+    for i = 1, var_table.num_of_spoils_per_wing do
         --speedbrakes position reset
         l_spoilers_spdbrk_targets[i] = l_spoilers_spdbrk_targets[i] * get(l_spoilers_flt_computer_dataref[i])
         r_spoilers_spdbrk_targets[i] = r_spoilers_spdbrk_targets[i] * get(r_spoilers_flt_computer_dataref[i])
@@ -247,11 +282,11 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
     --reduce speedbrakes retraction speeds in high speed conditions
     if (get(PFD_Capt_IAS) >= 315 or get(PFD_Fo_IAS) >= 315 or get(Capt_Mach) >= 0.75 or get(Fo_Mach) >= 0.75) and in_auto_flight then
         --check if any spoilers are retracting and slow down accordingly
-        for i = 1, num_of_spoils_per_wing do
-            if l_spoilers_spdbrk_targets[i] < get(l_spoilers_datarefs[i]) then
+        for i = 1, var_table.num_of_spoils_per_wing do
+            if l_spoilers_spdbrk_targets[i] < get(var_table.l_spoilers_datarefs[i]) then
                 r_spoilers_spdbrk_spd[i] = l_spoilers_spdbrk_high_spd_air_spd[i]
             end
-            if r_spoilers_spdbrk_targets[i] < get(r_spoilers_datarefs[i])then
+            if r_spoilers_spdbrk_targets[i] < get(var_table.r_spoilers_datarefs[i])then
                 r_spoilers_spdbrk_spd[i] = r_spoilers_spdbrk_high_spd_air_spd[i]
             end
         end
@@ -259,7 +294,7 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
 
     --PRE-EXTENTION DEFECTION VALUE CALCULATION --> OUTPUT OF CALCULATED VALUE TO THE SURFACES--
     set(Speedbrakes_ratio, math.abs(lateral_input) + spdbrk_input)
-    for i = 1, num_of_spoils_per_wing do
+    for i = 1, var_table.num_of_spoils_per_wing do
         --speedbrakes
         var_table.l_spoilers_spdbrk_extention[i] = Set_linear_anim_value(var_table.l_spoilers_spdbrk_extention[i], l_spoilers_spdbrk_targets[i], 0, l_spoilers_total_max_def[i], l_spoilers_spdbrk_spd[i])
         var_table.r_spoilers_spdbrk_extention[i] = Set_linear_anim_value(var_table.r_spoilers_spdbrk_extention[i], r_spoilers_spdbrk_targets[i], 0, r_spoilers_total_max_def[i], r_spoilers_spdbrk_spd[i])
@@ -269,7 +304,7 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
 
         --TOTAL SPOILERS OUTPUT TO THE SURFACES--
         --if any surface exceeds the max deflection limit the othere side would reduce deflection by the exceeded amount
-        set(l_spoilers_datarefs[i], Math_clamp_higher(var_table.l_spoilers_spdbrk_extention[i] + var_table.l_spoilers_roll_extention[i], l_spoilers_total_max_def[i]) - Math_clamp_lower(var_table.r_spoilers_spdbrk_extention[i] + var_table.r_spoilers_roll_extention[i] - r_spoilers_total_max_def[i], 0))
-        set(r_spoilers_datarefs[i], Math_clamp_higher(var_table.r_spoilers_spdbrk_extention[i] + var_table.r_spoilers_roll_extention[i], r_spoilers_total_max_def[i]) - Math_clamp_lower(var_table.l_spoilers_spdbrk_extention[i] + var_table.l_spoilers_roll_extention[i] - l_spoilers_total_max_def[i], 0))
+        set(var_table.l_spoilers_datarefs[i], Math_clamp_higher(var_table.l_spoilers_spdbrk_extention[i] + var_table.l_spoilers_roll_extention[i], l_spoilers_total_max_def[i]) - Math_clamp_lower(var_table.r_spoilers_spdbrk_extention[i] + var_table.r_spoilers_roll_extention[i] - r_spoilers_total_max_def[i], 0))
+        set(var_table.r_spoilers_datarefs[i], Math_clamp_higher(var_table.r_spoilers_spdbrk_extention[i] + var_table.r_spoilers_roll_extention[i], r_spoilers_total_max_def[i]) - Math_clamp_lower(var_table.l_spoilers_spdbrk_extention[i] + var_table.l_spoilers_roll_extention[i] - l_spoilers_total_max_def[i], 0))
     end
 end
