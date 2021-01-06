@@ -71,8 +71,6 @@ end
 
 --calculate flight characteristics values
 function update()
-    print(get(VLS))
-
 
     if get(PFD_Capt_Baro_Altitude) > 24600 then
         set(Capt_VMAX, get(PFD_Capt_IAS) * (VMAX_speeds[1] / get(Capt_Mach)))

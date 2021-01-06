@@ -26,6 +26,17 @@ include('ELEC_subcomponents/include.lua')
 local TIME_TO_START_ADR       = 2 -- In seconds
 local IR_TIME_TO_GET_ATTITUDE = 20 -- In seconds
 local TIME_TO_ONBAT = 5 --five seconds before onbat light extinguishes if AC available
+
+local HOT_START_GPS  = 1    -- nr. of seconds required to get GPS fix if last time active < 1 hour
+local WARM_START_GPS = 20   -- nr. of seconds required to get GPS fix if last time active > 1 hour (we don't simulate cold start)
+
+----------------------------------------------------------------------------------------------------
+-- Global variables
+----------------------------------------------------------------------------------------------------
+
+local gps_last_time_on =  {0,0}
+local gps_start_time_point = {0,0}
+
 ----------------------------------------------------------------------------------------------------
 -- Classes
 ----------------------------------------------------------------------------------------------------
@@ -489,6 +500,46 @@ local function update_anim_knobs()
 end
 
 ----------------------------------------------------------------------------------------------------
+-- GPS
+----------------------------------------------------------------------------------------------------
+local function update_gps_single(nr, power_status, not_failure_status)
+    if power_status and not_failure_status then
+        -- GPS is online
+        if nr == 1 then
+            ELEC_sys.add_power_consumption(ELEC_BUS_AC_ESS, 0.1, 0.1)
+        else
+            ELEC_sys.add_power_consumption(ELEC_BUS_AC_2, 0.1, 0.1)        
+        end
+
+        if gps_start_time_point[nr] == 0 then
+            gps_start_time_point[nr] = get(TIME)
+        end
+        
+        if get(TIME) - gps_last_time_on[nr] > 3600 or gps_last_time_on[nr] == 0 then
+            -- We need a cold start
+            if get(TIME) - gps_start_time_point[nr] > WARM_START_GPS then
+                gps_last_time_on[nr] = get(TIME)
+                return 1
+            end
+        else
+            if get(TIME) - gps_start_time_point[nr] > HOT_START_GPS then
+                gps_last_time_on[nr] = get(TIME)
+                return 1
+            end        
+        end
+    else
+        gps_start_time_point[nr] = 0
+    end
+    return 0
+end
+
+local function update_gps()
+
+    set(GPS_1_is_available, update_gps_single(1, get(AC_ess_bus_pwrd) == 1, get(FAILURE_GPS_1) == 0))
+    set(GPS_2_is_available, update_gps_single(2, get(AC_bus_2_pwrd) == 1, get(FAILURE_GPS_2) == 0))
+end
+
+----------------------------------------------------------------------------------------------------
 -- update()
 ----------------------------------------------------------------------------------------------------
 function update ()
@@ -501,6 +552,7 @@ function update ()
 
 
     update_anim_knobs()
+    update_gps()
     
     perf_measure_stop("ADIRS:update()")
     
