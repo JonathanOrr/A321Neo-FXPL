@@ -20,7 +20,7 @@ include('constants.lua')
 
 local function which_adr(i) -- It returns the current ADR index in use by `i` (capt or fo)
     if i == PFD_CAPT then
-        return get(ADIRS_source_rotary_AIRDATA) ~= -1 and ADIRS_3 or ADIRS_1
+        return get(ADIRS_source_rotary_AIRDATA) == -1 and ADIRS_3 or ADIRS_1
     else
         return get(ADIRS_source_rotary_AIRDATA) ==  1 and ADIRS_3 or ADIRS_2    
     end
@@ -28,7 +28,7 @@ end
 
 local function which_ir(i) -- It returns the current IR index in use by `i` (capt or fo)
     if i == PFD_CAPT then
-        return get(ADIRS_source_rotary_ATHDG) ~= -1 and ADIRS_3 or ADIRS_1
+        return get(ADIRS_source_rotary_ATHDG) == -1 and ADIRS_3 or ADIRS_1
     else
         return get(ADIRS_source_rotary_ATHDG) ==  1 and ADIRS_3 or ADIRS_2    
     end
@@ -87,11 +87,11 @@ function get_vs(i)
 end
 
 function is_wind_ok(i)
-    return is_adr_working(i)
+    return is_adr_working(i) and ir_works_nav_mode(i)
 end
 
 function get_wind_spd(i)
-    return ADIRS_sys[which_adr(i)].wind_spd
+    return ADIRS_sys[which_adr(i)].wind_spd  
 end
 
 function get_wind_dir(i)

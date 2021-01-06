@@ -86,4 +86,5 @@ function update()
     update_buttons()
     update_knobs()
 
+    update_main(capt_nd_data)
 end

@@ -1,5 +1,6 @@
 include('ND/subcomponents/constants.lua')
 include('ND/subcomponents/graphics.lua')
+include('ND/subcomponents/logic.lua')
 
 
 function new_dataset(input_id)

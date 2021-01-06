@@ -39,7 +39,7 @@ function Show_hide_PID_UI()
 end
 
 function Show_hide_ADIRS_debug()
-  ECAM_debug_window:setIsVisible(not ADIRS_debug_window:isVisible())
+  ADIRS_debug_window:setIsVisible(not ADIRS_debug_window:isVisible())
 end
 
 function Show_hide_ECAM_debug()
