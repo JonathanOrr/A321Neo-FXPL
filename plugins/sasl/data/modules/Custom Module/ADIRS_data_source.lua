@@ -58,6 +58,10 @@ function get_ias(i)
     return ADIRS_sys[which_adr(i)].ias
 end
 
+function get_ias_trend(i)
+    return ADIRS_sys[which_adr(i)].ias_trend
+end
+
 function is_tas_ok(i)
     return is_adr_working(i)
 end

@@ -400,6 +400,9 @@ Fo_bank      = globalProperty("sim/cockpit2/gauges/indicators/roll_AHARS_deg_cop
 Capt_hdg     = globalProperty("sim/cockpit2/gauges/indicators/heading_AHARS_deg_mag_pilot")
 Fo_hdg       = globalProperty("sim/cockpit2/gauges/indicators/heading_AHARS_deg_mag_copilot")
 
+Capt_IAS_trend = globalProperty("sim/cockpit2/gauges/indicators/airspeed_acceleration_kts_sec_pilot")
+Fo_IAS_trend = globalProperty("sim/cockpit2/gauges/indicators/airspeed_acceleration_kts_sec_copilot")
+
 Stby_Alt     = globalProperty("sim/cockpit2/gauges/indicators/altitude_ft_stby")     -- Altitude in the stdby instrument
 Stby_IAS     = globalProperty("sim/cockpit2/gauges/indicators/airspeed_kts_stby")    -- IAS in the stdby instrument
 Stby_Baro    = globalProperty("sim/cockpit2/gauges/actuators/barometer_setting_in_hg_stby") -- Baro settings for STBY

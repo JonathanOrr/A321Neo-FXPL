@@ -70,6 +70,7 @@ local ADIRS = {
     
     -- Values - ADR
     ias = 0,
+    ias_trend = 0,
     tas = 0,
     alt = 0,
     vs  = 0,
@@ -170,6 +171,7 @@ function ADIRS:update_adr_data()
 
     if self.adr_status == ADR_STATUS_ON then
         self.ias = get(self.ias_dataref) + self.adr_ias_offset
+        self.ias_trend = get(self.ias_trend_dataref)
         self.tas = get(self.tas_dataref) + self.adr_ias_offset
         self.mach = get(self.mach_dataref)
         self.alt = get(self.baroalt_dataref) + self.adr_alt_offset
@@ -366,6 +368,7 @@ local function init_adirs()
             adr_light_dataref = PB.ovhd.adr_1,
             ir_light_dataref = PB.ovhd.ir_1,
             ias_dataref = Capt_IAS,
+            ias_trend_dataref = Capt_IAS_trend,
             tas_dataref = Capt_TAS,
             baroalt_dataref = Capt_Baro_Alt,
             vvi_dataref = Capt_VVI,
@@ -381,6 +384,7 @@ local function init_adirs()
             adr_light_dataref = PB.ovhd.adr_2,
             ir_light_dataref = PB.ovhd.ir_2,
             ias_dataref = Fo_IAS,
+            ias_trend_dataref = Fo_IAS_trend,
             tas_dataref = Fo_TAS,
             baroalt_dataref = Fo_Baro_Alt,
             vvi_dataref = Fo_VVI,
@@ -396,6 +400,7 @@ local function init_adirs()
             adr_light_dataref = PB.ovhd.adr_3,
             ir_light_dataref = PB.ovhd.ir_3,
             ias_dataref = Stby_IAS,
+            ias_trend_dataref = Fo_IAS_trend,
             tas_dataref = Fo_TAS,
             baroalt_dataref = Stby_Alt,
             vvi_dataref = Fo_VVI,
