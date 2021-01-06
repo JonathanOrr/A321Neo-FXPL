@@ -140,6 +140,8 @@ Font_AirbusDUL_small = sasl.gl.loadFont("fonts/AirbusDULiberationMono.ttf")
 sasl.gl.setFontRenderMode(Font_AirbusDUL_small, TEXT_RENDER_FORCED_MONO, 0.6*1.47)
 
 -- Screens
-PFD_CAPT = 1
-PFD_FO   = 2
+PFD_CAPT  = 1
+PFD_FO    = 2
+ND_CAPT   = 1
+ND_FO     = 2
 

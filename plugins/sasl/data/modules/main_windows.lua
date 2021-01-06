@@ -155,7 +155,7 @@ ADIRS_debug_window = contextWindow {
   minimumSize = { 700 , 500 };
   maximumSize = { 700 , 500 };
   gravity = { 0 , 1 , 0 , 1 };
-  visible = true ;
+  visible = false ;
   components = {
     adirs_debug {position = { 0 , 0 , 700 , 500 }}
   };
