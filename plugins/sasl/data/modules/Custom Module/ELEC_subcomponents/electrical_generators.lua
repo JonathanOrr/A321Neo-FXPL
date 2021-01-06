@@ -204,7 +204,7 @@ end
 
 local function update_ext_gen(x)
 
-    x.source_status = get(All_on_ground) == 1 and get(Brakes_mode) == 4 and get(Ground_speed_ms) < 0.01
+    x.source_status = get(All_on_ground) == 1 and get(Brakes_mode) == 4 and get(Ground_speed_ms) < 0.10
 
     if x.switch_status and x.source_status and get(x.drs.failure) == 0 then
         x.curr_voltage = 115
