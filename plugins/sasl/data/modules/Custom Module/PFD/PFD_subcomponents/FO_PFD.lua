@@ -4,6 +4,22 @@ include('PFD/PFD_drawing_assets.lua')
 include('PFD/PFD_main.lua')
 fbo = true
 
+local fo_PFD_table = {
+    ATT_avail = Adirs_fo_has_ATT,
+    IR_avail = Adirs_fo_has_IR,
+    ADR_avail = Adirs_fo_has_ADR,
+    ATT_blinking = Adirs_fo_has_ATT_blink,
+    IR_blinking = Adirs_fo_has_IR_blink,
+    ADR_blinking = Adirs_fo_has_ADR_blink,
+    Pitch = Flightmodel_pitch,
+    Bank = Flightmodel_roll,
+    IAS = PFD_Fo_IAS,
+    Baro_ALT = PFD_Fo_Baro_Altitude,
+    RA_ALT = Fo_ra_alt_ft,
+    HDG = Fo_hdg,
+    VS = PFD_Fo_VS,
+}
+
 function update()
 
 end
@@ -13,9 +29,9 @@ function draw()
         return
     end
 
-    PFD_draw_pitch_scale(get(Flightmodel_pitch), get(Flightmodel_roll))
-    PFD_draw_spd_tape (get(PFD_Fo_IAS), 0, 1)
-    PFD_draw_alt_tape(get(PFD_Fo_Baro_Altitude), get(Fo_ra_alt_ft), 0, 1)
-    PFD_draw_hdg_tape(get(Fo_hdg), 0, 1)
-    PFD_draw_vs_needle(get(PFD_Fo_VS), 0, 1)
+    PFD_draw_pitch_scale(fo_PFD_table)
+    PFD_draw_spd_tape(fo_PFD_table)
+    PFD_draw_alt_tape(fo_PFD_table)
+    PFD_draw_hdg_tape(fo_PFD_table)
+    PFD_draw_vs_needle(fo_PFD_table)
 end

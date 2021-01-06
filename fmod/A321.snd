@@ -2968,9 +2968,33 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_START_COND a321neo/cockpit/lights/ovhd_pos == 0
 END_SOUND_ATTACHMENT
 
+##################################################################################################################################################################################BRIGHTNESS
 
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Seatbelt
+  VEH_XYZ 0 2.3 0
+  EVENT_START_COND 	sim/cockpit2/switches/fasten_seat_belts == 1
+  EVENT_END_COND a321neo/dynamics/electrical/bus/ac_ess_powered == 0
+END_SOUND_ATTACHMENT
 
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Seatbelt
+  VEH_XYZ 0 2.3 0
+  EVENT_START_COND 	sim/cockpit2/switches/fasten_seat_belts == 0
+  EVENT_END_COND a321neo/dynamics/electrical/bus/ac_ess_powered == 0
+END_SOUND_ATTACHMENT
 
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /NoSmoke
+  VEH_XYZ 0 2.3 0
+  EVENT_START_COND 	sim/cockpit2/switches/no_smoking == 1
+  EVENT_END_COND a321neo/dynamics/electrical/bus/ac_ess_powered == 0
+END_SOUND_ATTACHMENT
 
-
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /NoSmoke
+  VEH_XYZ 0 2.3 0
+  EVENT_START_COND 	sim/cockpit2/switches/no_smoking == 0
+  EVENT_END_COND a321neo/dynamics/electrical/bus/ac_ess_powered == 0
+END_SOUND_ATTACHMENT
 

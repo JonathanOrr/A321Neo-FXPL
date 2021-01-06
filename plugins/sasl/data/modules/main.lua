@@ -38,6 +38,7 @@ math.randomseed( os.time() )
 
 include(moduleDirectory .. "/main_debug.lua")
 addSearchPath(moduleDirectory .. "/Custom Module/PFD/")
+addSearchPath(moduleDirectory .. "/Custom Module/EFB/")
 addSearchPath(moduleDirectory .. "/Custom Module/PFD/PFD_subcomponents/")
 
 position = {0, 0, 4096, 4096}
@@ -57,7 +58,6 @@ components = {
   AT {},
   ADIRS {},
   MCDU {},
-  navigation {},
   packs {},
   aircond {},
   wheel {},
@@ -89,6 +89,8 @@ components = {
   sounds {},
   graphics {},
   display_brightness {},
+  librain{},
+  efb{},
 }
 
 include(moduleDirectory .. "/main_windows.lua")

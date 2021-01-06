@@ -51,7 +51,7 @@ end
 --compute buttons lights states
 function Compute_fctl_button_states()
     --ELAC 1 button
-    
+
     if get(ELAC_1_off_button) == 0 and get(ELAC_1_status) == 1 then
         pb_set(PB.ovhd.flt_ctl_elac_1, false, false)
     elseif get(ELAC_1_off_button) == 1 and get(ELAC_1_status) == 0 then

@@ -12,6 +12,11 @@
 override_ELEC_always_on = false
 
 
+--If you set this variable to true, MCDU automatically generates a Look Up Table (LUT) for all airports.
+-- This considerably increases performance on usage of MCDU but significantly slows down load times.
+override_MCDU_createairportlut = false
+
+
 -- If you set this variable to true, all the ADIRS are ON and IRS are ALIGNED. Button switches have
 -- no effects on adirs alignment
 override_ADIRS_ok = false

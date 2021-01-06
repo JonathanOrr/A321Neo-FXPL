@@ -94,6 +94,16 @@ function Round_fill(num, numDecimalPlaces)
     return string.format("%."..numDecimalPlaces.."f", Round(num, numDecimalPlaces)) 
 end
 
+function Math_extract_all_decimal(num, abs)
+    local output = math.abs( num ) % 1
+
+    if abs == true then
+        return output
+    else
+        return num >= 0 and output or -output
+    end
+end
+
 function Math_extract_decimal(num, decimalPlace, abs)
     local output = math.floor( ( math.abs( num ) - math.floor( math.abs( num ) ) ) * 10 ^ decimalPlace)
 
@@ -102,6 +112,16 @@ function Math_extract_decimal(num, decimalPlace, abs)
     else
         return num >= 0 and output or -output
     end
+end
+
+function Math_extract_digit(num, which_digit)
+    local put_digit_into_decimal
+    if which_digit > 0 then
+        put_digit_into_decimal = num / 10 ^ which_digit
+    elseif which_digit < 0 then
+        put_digit_into_decimal = num / 10 ^ (which_digit + 1)
+    end
+    return Math_extract_decimal(put_digit_into_decimal, 1, false)
 end
 
 function BoolToNum(value)
@@ -370,6 +390,17 @@ function Sasl_DrawWideFrame(x, y, width, height, line_width, align_center_in_out
     end
 end
 
+function SASL_drawRoundedFrames(x, y, width, height, line_width, round_pixels, color)
+    sasl.gl.drawWideLine(x - (line_width / 2) + round_pixels, y + height,           x + width + (line_width / 2) - round_pixels, y + height,                      line_width, color)
+    sasl.gl.drawWideLine(x,                    y + (line_width / 2) + round_pixels - 2, x,                            y + (height - (line_width / 2)) - round_pixels + 3, line_width, color)
+    sasl.gl.drawWideLine(x + width,            y + (line_width / 2) + round_pixels - 2, x + width,                    y + (height - (line_width / 2)) - round_pixels + 1, line_width, color)
+    sasl.gl.drawWideLine(x - (line_width / 2) + round_pixels, y,                    x + width + (line_width / 2) - round_pixels, y,                               line_width, color)
+    sasl.gl.drawArc ( x + width - round_pixels, y + (height - (line_width / 2)) - round_pixels + 1, round_pixels - (line_width / 2), round_pixels + (line_width / 2) ,0 , 90 ,color )
+    sasl.gl.drawArc ( x - (line_width / 2) + round_pixels + 2, y + height - round_pixels, round_pixels - (line_width / 2), round_pixels + (line_width / 2) ,90 , 90 ,color )
+    sasl.gl.drawArc ( x + round_pixels, y + round_pixels, round_pixels - (line_width / 2), round_pixels + (line_width / 2) ,180 , 90 ,color )
+    sasl.gl.drawArc ( x + width + (line_width / 2) - round_pixels - 3, y + (line_width / 2) + round_pixels - 2, round_pixels - (line_width / 2), round_pixels + (line_width / 2) ,270 , 90 ,color )
+end
+
 function SASL_draw_needle(x, y, radius, angle, thickness, color)
     sasl.gl.drawWideLine(x, y, x + radius * math.cos(math.rad(angle)), y + radius * math.sin(math.rad(angle)), thickness, color)
 end
@@ -574,8 +605,40 @@ function perf_measure_stop(name)
 end
 
 
+
 function MCDU_get_popup(id) return Mcdu_popup[id] end
 function MCDU_set_popup(id, val) Mcdu_popup[id] = val end
 
 function MCDU_get_lut(val) return Mcdu_popup_lut end
 function MCDU_set_lut(val) Mcdu_popup_lut = val end
+
+--mouse functions
+function Button_check_and_action(cursor_x, cursor_y, lower_x, lower_y, higher_x, higher_y, callback)
+    if cursor_x >= lower_x and cursor_x <= higher_x and cursor_y >= lower_y and cursor_y <= higher_y then
+        callback()
+    end
+end
+
+function Cursor_texture_to_local_pos(x, y, component_width, component_height, panel_width, panel_height)
+    local tex_x, tex_y = sasl.getCSPanelMousePos()
+
+    --mouse not on the screen
+    if tex_x == nil or tex_y == nil then
+        return 0, 0, false
+    end
+
+    --0 --> 1 to px
+    local px_x = Math_rescale(0, 0, 1, panel_width,  tex_x)
+    local px_y = Math_rescale(0, 0, 1, panel_height, tex_y)
+
+    --px --> component
+    local component_x = Math_rescale(x, 0, x + component_width,  component_width,  px_x)
+    local component_y = Math_rescale(y, 0, y + component_height, component_height, px_y)
+
+    if px_x < x or px_x > x + component_width or px_y < y or px_y > y + component_height then
+        return 0, 0, false
+    end
+
+    --output converted coordinates
+    return component_x, component_y, true
+end

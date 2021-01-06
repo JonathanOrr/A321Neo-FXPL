@@ -1,2 +1,6 @@
+# ignore preference files
 A321.acf~
 A321_prefs.txt
+
+# ignore .swp made by Vim editor
+*.swp
