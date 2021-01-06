@@ -147,6 +147,21 @@ PRESS_debug_window = contextWindow {
   };
 }
 
+ADIRS_debug_window = contextWindow {
+  name = "ADIRS Debug";
+  position = { 150 , 150 , 700 , 500 };
+  noBackground = true ;
+  proportional = false ;
+  minimumSize = { 700 , 500 };
+  maximumSize = { 700 , 500 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = true ;
+  components = {
+    adirs_debug {position = { 0 , 0 , 700 , 500 }}
+  };
+}
+
+
 DCDU_window = contextWindow {
   name = "DCDU Management";
   position = { 150 , 150 , 463 , 683 };

@@ -408,16 +408,25 @@ Capt_Mach    = globalProperty("sim/cockpit2/gauges/indicators/mach_pilot")
 Fo_Mach      = globalProperty("sim/cockpit2/gauges/indicators/mach_copilot")
 Capt_Baro    = globalProperty("sim/cockpit2/gauges/actuators/barometer_setting_in_hg_pilot") -- Baro settings for Pilot
 Fo_Baro      = globalProperty("sim/cockpit2/gauges/actuators/barometer_setting_in_hg_copilot") -- Baro settings for F/O
-Capt_pitch   = globalProperty("sim/cockpit2/gauges/actuators/barometer_setting_in_hg_copilot")
-Fo_pitch     = globalProperty("sim/cockpit2/gauges/actuators/barometer_setting_in_hg_copilot")
-Capt_bank    = globalProperty("sim/cockpit2/gauges/actuators/barometer_setting_in_hg_copilot")
-Fo_bank      = globalProperty("sim/cockpit2/gauges/actuators/barometer_setting_in_hg_copilot")
+Capt_pitch   = globalProperty("sim/cockpit2/gauges/indicators/pitch_electric_deg_pilot")
+Fo_pitch     = globalProperty("sim/cockpit2/gauges/indicators/pitch_electric_deg_copilot")
+Capt_bank    = globalProperty("sim/cockpit2/gauges/indicators/roll_AHARS_deg_pilot")
+Fo_bank      = globalProperty("sim/cockpit2/gauges/indicators/roll_AHARS_deg_copilot")
 Capt_hdg     = globalProperty("sim/cockpit2/gauges/indicators/heading_AHARS_deg_mag_pilot")
 Fo_hdg       = globalProperty("sim/cockpit2/gauges/indicators/heading_AHARS_deg_mag_copilot")
 
 Stby_Alt     = globalProperty("sim/cockpit2/gauges/indicators/altitude_ft_stby")     -- Altitude in the stdby instrument
 Stby_IAS     = globalProperty("sim/cockpit2/gauges/indicators/airspeed_kts_stby")    -- IAS in the stdby instrument
 Stby_Baro    = globalProperty("sim/cockpit2/gauges/actuators/barometer_setting_in_hg_stby") -- Baro settings for STBY
+
+Capt_TAS     = globalProperty("sim/cockpit2/gauges/indicators/true_airspeed_kts_pilot")
+Fo_TAS       = globalProperty("sim/cockpit2/gauges/indicators/true_airspeed_kts_copilot")
+
+Capt_Track     = globalProperty("sim/cockpit2/gauges/indicators/ground_track_mag_pilot")
+Fo_Track       = globalProperty("sim/cockpit2/gauges/indicators/ground_track_mag_copilot")
+
+Wind_SPD     = globalProperty("sim/cockpit2/gauges/indicators/wind_speed_kts")
+Wind_HDG     = globalProperty("sim/cockpit2/gauges/indicators/wind_heading_deg_mag")
 
 --gear
 Gear_handle = globalProperty("sim/cockpit2/controls/gear_handle_down")
@@ -547,7 +556,8 @@ Alpha = globalProperty("sim/flightmodel/position/alpha")
 Vpath = globalProperty("sim/flightmodel/position/vpath")
 Flightmodel_roll = globalProperty("sim/flightmodel/position/true_phi")
 Flightmodel_pitch = globalProperty("sim/flightmodel/position/true_theta")
-Flightmodel_heading = globalProperty("sim/flightmodel/position/true_psi")
+Flightmodel_true_heading = globalProperty("sim/flightmodel/position/true_psi")
+Flightmodel_mag_heading = globalProperty("sim/flightmodel/position/mag_psi")
 Total_vertical_g_load = globalProperty("sim/flightmodel/forces/g_nrml")
 Total_long_g_load = globalProperty("sim/flightmodel/forces/g_axil")
 Vpath_pitch_rate = createGlobalPropertyf("a321neo/dynamics/FBW/aerodynamics/vpath_Q", 0, false, true, false)

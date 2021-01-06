@@ -71,7 +71,7 @@ end
 local function search_terrain_altitude()
 
     local roll = math.max(-30, math.min(30, get(Flightmodel_roll)))
-    local heading = get(Flightmodel_heading) + roll/10  -- +/- 3 deg roll correction
+    local heading = get(Flightmodel_mag_heading) + roll/10  -- +/- 3 deg roll correction
 
     for i=1,6 do
 

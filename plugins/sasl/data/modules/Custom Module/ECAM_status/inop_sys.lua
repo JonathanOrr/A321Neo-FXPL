@@ -98,14 +98,14 @@ function ECAM_status_get_inop_sys()
             inop_aps = true
         end
         
-        if MessageGroup_ADR_FAULT_TRIPLE:is_active() then
-            table.insert(messages, "ADR 1 + 2 + 3")
-            table.insert(messages, "RUD TRV LIM")
-            table.insert(messages, "WINDSHEAR DET")
-            inop_cat3_dual = true
-            inop_aps = true
-            inop_atr = true
-        end
+        --if MessageGroup_ADR_FAULT_TRIPLE:is_active() then
+        --    table.insert(messages, "ADR 1 + 2 + 3")
+        --    table.insert(messages, "RUD TRV LIM")
+        --    table.insert(messages, "WINDSHEAR DET")
+        --    inop_cat3_dual = true
+        --    inop_aps = true
+        --    inop_atr = true
+        --end
  
         if MessageGroup_IR_FAULT_SINGLE:is_active() then
             table.insert(messages, "IR " .. MessageGroup_IR_FAULT_SINGLE:get_failed())
@@ -120,13 +120,13 @@ function ECAM_status_get_inop_sys()
             inop_atr = true
         end
         
-        if MessageGroup_IR_FAULT_TRIPLE:is_active() then
-            table.insert(messages, "IR 1 + 2 + 3")
-            table.insert(messages, "YAW DAMPER")
-            inop_cat3_dual = true
-            inop_aps = true
-            inop_atr = true
-        end
+        --if MessageGroup_IR_FAULT_TRIPLE:is_active() then
+        --    table.insert(messages, "IR 1 + 2 + 3")
+        --    table.insert(messages, "YAW DAMPER")
+        --    inop_cat3_dual = true
+        --    inop_aps = true
+        --    inop_atr = true
+        --end
         
         -- LEAVE THESE AT THE LAST
         if inop_cat3_dual then

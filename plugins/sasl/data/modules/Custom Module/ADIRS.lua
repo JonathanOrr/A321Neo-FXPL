@@ -41,8 +41,8 @@ local ADIRS = {
     ir_switch_status = true,
     ir_light_dataref = nil,
     ir_align_start_time = 0,
-    ir_has_attitude = false,
     ir_is_waiting_hdg = false,
+    ir_is_aligning_gps = true,
     
     -- ADR
     adr_status = ADR_STATUS_OFF,
@@ -64,14 +64,16 @@ local ADIRS = {
     vs  = 0,
     wind_spd = 0,
     wind_dir = 0,
-
+    mach = 0,
+    
     -- Values - IR
     pitch = 0,
     roll = 0,
     hdg = 0,
+    true_hdg = 0,
     track = 0,
     lat = 0,
-    long = 0,
+    lon = 0,
     gs = 0
 
 }
@@ -94,7 +96,7 @@ end
 function ADIRS:update_adr_elec()
     -- 35 W ADR https://aerospace.honeywell.com/content/dam/aero/en-us/documents/learn/products/sensors/brochures/C61-0308-000-001-AirDataComputer-bro.pdf?download=true
 
-    self.is_on_bat = true
+    self.is_on_bat = self.adirs_switch_status ~= ADIRS_CONFIG_OFF
     
     -- AC BUS
     local dr_primary = elec_const_to_dr(self.elec_bus_primary)
@@ -107,7 +109,7 @@ function ADIRS:update_adr_elec()
     -- Battery BUS
     local dr_secondary = elec_const_to_dr(self.elec_bus_secondary)
     if get(dr_secondary) == 1 then
-        ELEC_sys.add_power_consumption(dr_secondary, 1.2, 1.25)
+        ELEC_sys.add_power_consumption(self.elec_bus_secondary, 1.2, 1.25)
         return true
     end
     
@@ -153,24 +155,40 @@ function ADIRS:update_adr_dr()
     pb_set(self.adr_light_dataref, not self.adr_switch_status, self.adr_status == ADR_STATUS_FAULT)
 end
 
+function ADIRS:update_adr_data()
+
+    if self.adr_status == ADR_STATUS_ON then
+        self.ias = get(self.ias_dataref) + self.adr_ias_offset
+        self.tas = get(self.tas_dataref) + self.adr_ias_offset
+        self.mach = get(self.mach_dataref)
+        self.alt = get(self.baroalt_dataref) + self.adr_alt_offset
+        self.vs  = get(self.vvi_dataref)
+        
+        if self.ir_status == IR_STATUS_ALIGNED then
+            self.wind_spd = get(Wind_SPD)
+            self.wind_dir = get(Wind_HDG)
+        end
+    end    
+end
+
 ------------------------------------------- IR
 
 function ADIRS:update_ir_elec()
     -- 39 W https://aerospace.honeywell.com/content/dam/aero/en-us/documents/learn/products/navigation-and-radios/brochures/C61-0668-000-000-ADIRS-For-Airbus-May-2007-bro.pdf?download=true
-    self.is_on_bat = true
+    self.is_on_bat = self.adirs_switch_status ~= ADIRS_CONFIG_OFF
 
     -- AC BUS
     local dr_primary = elec_const_to_dr(self.elec_bus_primary)
     if get(dr_primary) == 1 then
         ELEC_sys.add_power_consumption(self.elec_bus_primary, 0.3, 0.33)
-        self.is_on_bat = self.ir_align_start_time > 0 and get(TIME) - self.ir_align_start_time < TIME_TO_ONBAT
+        self.is_on_bat = self.ir_align_start_time ~= 0 and get(TIME) - self.ir_align_start_time < TIME_TO_ONBAT
         return true
     end
     
     -- Battery BUS
     local dr_secondary = elec_const_to_dr(self.elec_bus_secondary)
     if get(dr_secondary) == 1 then
-        ELEC_sys.add_power_consumption(dr_secondary, 1.2, 1.39) 
+        ELEC_sys.add_power_consumption(self.elec_bus_secondary, 1.2, 1.39) 
         return true
     end
     
@@ -180,7 +198,7 @@ function ADIRS:update_ir_elec()
 end
 
 function ADIRS:update_ir_nav()
-    if self.ir_align_start_time > 0 then
+    if self.ir_align_start_time ~= 0 then
         if get(TIME) - self.ir_align_start_time > get(Adirs_total_time_to_align) then
             self.ir_status = IR_STATUS_ALIGNED
         end
@@ -191,7 +209,7 @@ function ADIRS:update_ir_nav()
 end
 
 function ADIRS:update_ir_att()
-    if self.ir_align_start_time > 0 then
+    if self.ir_align_start_time ~= 0 then
         if get(TIME) - self.ir_align_start_time > IR_TIME_TO_GET_ATTITUDE then
             self.ir_status = IR_STATUS_ATT_ALIGNED
         end
@@ -240,7 +258,33 @@ end
 
 function ADIRS:update_ir_dr()
     local blink_start = get(TIME) - self.ir_align_start_time < 0.3
-    pb_set(self.ir_light_dataref, not self.ir_switch_status, self.ir_status == ADR_STATUS_FAULT or blink_start)
+    pb_set(self.ir_light_dataref, not self.ir_switch_status, self.ir_status == IR_STATUS_FAULT or blink_start)
+end
+
+function ADIRS:update_ir_data()
+
+    if self.ir_status == IR_STATUS_ALIGNED then
+        self.track = get(self.track_dataref)
+        self.lat   = get(Aircraft_lat)
+        self.lon   = get(Aircraft_long)
+        self.gs    = get(Ground_speed_kts)
+        self.hdg   = get(Flightmodel_mag_heading)
+        self.true_hdg = get(Flightmodel_true_heading)
+    end
+
+    if self.ir_status == IR_STATUS_ALIGNED or self.ir_status == IR_STATUS_ATT_ALIGNED then
+        self.pitch = get(self.pitch_dataref)
+        self.roll = get(self.roll_dataref)
+        if self.ir_status == IR_STATUS_ATT_ALIGNED and not self.ir_is_waiting_hdg then
+            self.hdg = get(Flightmodel_mag_heading)
+        end
+    end
+    
+end
+
+function ADIRS:align_instantaneously()
+    self.ir_align_start_time = -10000
+    self.adr_align_start_time = -10000
 end
 
 ----------------------------------------------------------------------------------------------------
@@ -293,7 +337,9 @@ function adirs_inst_align(phase)
         return
     end
 
-    -- TODO    
+    ADIRS_sys[1]:align_instantaneously()
+    ADIRS_sys[2]:align_instantaneously()
+    ADIRS_sys[3]:align_instantaneously()
 end
 
 ----------------------------------------------------------------------------------------------------
@@ -301,26 +347,51 @@ end
 ----------------------------------------------------------------------------------------------------
 
 local function init_adirs()
+
     ADIRS_sys[ADIRS_1] = ADIRS:create({
             id = ADIRS_1,
             elec_bus_primary=ELEC_BUS_AC_ESS,
             elec_bus_secondary=ELEC_BUS_HOT_BUS_2,
             adr_light_dataref = PB.ovhd.adr_1,
-            ir_light_dataref = PB.ovhd.ir_1
+            ir_light_dataref = PB.ovhd.ir_1,
+            ias_dataref = Capt_IAS,
+            tas_dataref = Capt_TAS,
+            baroalt_dataref = Capt_Baro_Alt,
+            vvi_dataref = Capt_VVI,
+            mach_dataref = Capt_Mach,
+            track_dataref = Capt_Track,
+            pitch_dataref = Capt_pitch,
+            roll_dataref = Capt_bank,
             })
     ADIRS_sys[ADIRS_2] = ADIRS:create({
             id = ADIRS_2,
             elec_bus_primary=ELEC_BUS_AC_2,
             elec_bus_secondary=ELEC_BUS_HOT_BUS_2,
             adr_light_dataref = PB.ovhd.adr_2,
-            ir_light_dataref = PB.ovhd.ir_2
+            ir_light_dataref = PB.ovhd.ir_2,
+            ias_dataref = Fo_IAS,
+            tas_dataref = Fo_TAS,
+            baroalt_dataref = Fo_Baro_Alt,
+            vvi_dataref = Fo_VVI,
+            mach_dataref = Fo_Mach,
+            track_dataref = Fo_Track,
+            pitch_dataref = Fo_pitch,
+            roll_dataref = Fo_bank,
             })
     ADIRS_sys[ADIRS_3] = ADIRS:create({
             id = ADIRS_3,
             elec_bus_primary=ELEC_BUS_AC_1,
             elec_bus_secondary=ELEC_BUS_HOT_BUS_1,
             adr_light_dataref = PB.ovhd.adr_3,
-            ir_light_dataref = PB.ovhd.ir_3
+            ir_light_dataref = PB.ovhd.ir_3,
+            ias_dataref = Stby_IAS,
+            tas_dataref = Fo_TAS,
+            baroalt_dataref = Stby_Alt,
+            vvi_dataref = Fo_VVI,
+            mach_dataref = Fo_Mach,
+            track_dataref = Fo_Track,
+            pitch_dataref = Fo_pitch,
+            roll_dataref = Fo_bank,
             })
     
     ADIRS_sys[ADIRS_1]:init()
@@ -334,10 +405,13 @@ init_adirs()
 local function update_adrs()
     ADIRS_sys[ADIRS_1]:update_adr()
     ADIRS_sys[ADIRS_1]:update_adr_dr()
+    ADIRS_sys[ADIRS_1]:update_adr_data()
     ADIRS_sys[ADIRS_2]:update_adr()
     ADIRS_sys[ADIRS_2]:update_adr_dr()
+    ADIRS_sys[ADIRS_2]:update_adr_data()
     ADIRS_sys[ADIRS_3]:update_adr()
     ADIRS_sys[ADIRS_3]:update_adr_dr()
+    ADIRS_sys[ADIRS_3]:update_adr_data()
 end
 
 local function update_irs()
@@ -345,10 +419,13 @@ local function update_irs()
 
     ADIRS_sys[ADIRS_1]:update_ir()
     ADIRS_sys[ADIRS_1]:update_ir_dr()
+    ADIRS_sys[ADIRS_1]:update_ir_data()
     ADIRS_sys[ADIRS_2]:update_ir()
     ADIRS_sys[ADIRS_2]:update_ir_dr()
+    ADIRS_sys[ADIRS_2]:update_ir_data()
     ADIRS_sys[ADIRS_3]:update_ir()
     ADIRS_sys[ADIRS_3]:update_ir_dr()
+    ADIRS_sys[ADIRS_3]:update_ir_data()
     
 end
 
@@ -359,7 +436,7 @@ local function update_on_bat_light()
                       or ADIRS_sys[ADIRS_3].is_on_bat
         
     if ir_condition or get(Cockpit_annnunciators_test) == 1 then
-        set(ADIRS_light_onbat, get(OVHR_elec_panel_pwrd) * 1)
+        set(ADIRS_light_onbat, 1)
     else
         set(ADIRS_light_onbat, 0)    
     end
