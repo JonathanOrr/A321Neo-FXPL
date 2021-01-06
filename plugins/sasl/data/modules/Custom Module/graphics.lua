@@ -16,6 +16,8 @@
 -- Short description: Miscellanea related to graphics
 -------------------------------------------------------------------------------
 
+include('constants.lua')
+
 local guards = {
     {name = "IDG1"},             -- This creates a command and dataref with the same name, both `a321neo/cockpit/overhead/guards/IDG1`
     {name = "IDG2"},
@@ -42,11 +44,43 @@ local guards = {
     {name = "MNTN_FADEC_2"}
 }
 
+local integral_lights = {
+    --- MIP & Pedestal
+    {name = "mip_pedestal_integral", bus=ELEC_BUS_AC_1}, -- OK
+
+    --- Overhead panel / Pedestal
+    {name = "overhead_integral",     bus=ELEC_BUS_AC_1}, -- OK
+
+    --- glareshield
+    {name = "glareshield_integral",  bus=AC_bus_1_pwrd},
+}
+
+local flood_and_spill_lights = {
+    --- Overhead panel / Pedestal
+    {name = "flood_main",  color = {1, 1, 1}, size_m = 0.45, cone_r = 0.76, max_brightness = 6, is_knob = true,  bus=ELEC_BUS_DC_ESS},  -- OK
+    {name = "flood_ped",   color = {1, 1, 1}, size_m = 2.5,  cone_r = 0.95, max_brightness = 2, is_knob = true,  bus=ELEC_BUS_DC_1},    -- OK
+    {name = "dome",        color = {1, 1, 1}, size_m = 1,    cone_r = 0.95, max_brightness = 5, is_knob = false, bus=ELEC_BUS_DC_ESS,}, -- OK
+    {name = "capt_reading",color = {1, 1, 1}, size_m = 2.5,  cone_r = 0.98, max_brightness = 4, is_knob = true,  bus=AC_bus_1_pwrd},
+    {name = "fo_reading",  color = {1, 1, 1}, size_m = 2.5,  cone_r = 0.98, max_brightness = 4, is_knob = true,  bus=AC_bus_1_pwrd},
+
+    -- CAPT/FO side
+    {name = "capt_led_strip",     color = {1, 1, 1}, size_m = 1, cone_r = 0.95, max_brightness = 5, is_knob = true,  bus=AC_bus_1_pwrd},
+    {name = "fo_led_strip",       color = {1, 1, 1}, size_m = 1, cone_r = 0.95, max_brightness = 5, is_knob = true,  bus=AC_bus_1_pwrd},
+    {name = "capt_window",        color = {1, 1, 1}, size_m = 1, cone_r = 0.95, max_brightness = 5, is_knob = true,  bus=AC_bus_1_pwrd},
+    {name = "fo_window",          color = {1, 1, 1}, size_m = 1, cone_r = 0.95, max_brightness = 5, is_knob = true,  bus=AC_bus_1_pwrd},
+    {name = "capt_console_floor", color = {1, 1, 1}, size_m = 1, cone_r = 0.95, max_brightness = 5, is_knob = false, bus=ELEC_BUS_DC_1}, -- OK
+    {name = "fo_console_floor",   color = {1, 1, 1}, size_m = 1, cone_r = 0.95, max_brightness = 5, is_knob = false, bus=ELEC_BUS_DC_2}, -- OK
+}
+
+
 local ann_lt_pos = 0
 
 local cvr_gnd_ctl = false -- Status of the pushbutton on the RCDR panel, this has no actual effect
 local signs_seat_belt = 0 -- 0,1,2
 local signs_noped     = 0 -- 0,1,2
+
+local capt_tray = false
+local fo_tray   = false
 
 ----------------------------------------------------------------------------------------------------
 -- Command function
@@ -57,33 +91,12 @@ function guard_click_handler(phase, object)
     end
 end
 
-function knob_light_handler(phase, direction, dr)
-
-end
-
-sasl.registerCommandHandler (Cockpit_light_integral_cmd_up, 0,  function(phase) Knob_handler_up_float(phase, Cockpit_light_integral_pos, 0, 1, 0.2) end)
-sasl.registerCommandHandler (Cockpit_light_integral_cmd_dn, 0,  function(phase) Knob_handler_down_float(phase, Cockpit_light_integral_pos, 0, 1, 0.2) end)
-sasl.registerCommandHandler (Cockpit_light_flood_main_cmd_up, 0,  function(phase) Knob_handler_up_float(phase, Cockpit_light_flood_main_pos, 0, 1, 0.2) end)
-sasl.registerCommandHandler (Cockpit_light_flood_main_cmd_dn, 0,  function(phase) Knob_handler_down_float(phase, Cockpit_light_flood_main_pos, 0, 1, 0.2) end)
-sasl.registerCommandHandler (Cockpit_light_flood_ped_cmd_up, 0,  function(phase) Knob_handler_up_float(phase, Cockpit_light_flood_ped_pos, 0, 1, 0.2) end)
-sasl.registerCommandHandler (Cockpit_light_flood_ped_cmd_dn, 0,  function(phase) Knob_handler_down_float(phase, Cockpit_light_flood_ped_pos, 0, 1, 0.2) end)
-sasl.registerCommandHandler (Cockpit_light_ovhd_cmd_up, 0,  function(phase) Knob_handler_up_float(phase, Cockpit_light_ovhd_pos, 0, 1, 0.2) end)
-sasl.registerCommandHandler (Cockpit_light_ovhd_cmd_dn, 0,  function(phase) Knob_handler_down_float(phase, Cockpit_light_ovhd_pos, 0, 1, 0.2) end)
-sasl.registerCommandHandler (Cockpit_dome_cmd_up, 0,  function(phase) Knob_handler_down_float(phase, Cockpit_light_dome_pos, 0, 1, 0.2) end)
-sasl.registerCommandHandler (Cockpit_dome_cmd_dn, 0,  function(phase) Knob_handler_down_float(phase, Cockpit_light_dome_pos, 0, 1, 0.2) end)
-
-
 
 function change_switch(phase, dr, direction)
      if phase == SASL_COMMAND_BEGIN then
-        set(dr, Math_clamp(get(dr) + direction, 0, 2))
+        set(dr, Math_clamp(get(dr) + direction, -1, 1))
      end
-end 
-
-sasl.registerCommandHandler (Cockpit_light_Capt_console_floor_cmd_up, 0,  function(phase) change_switch(phase, Cockpit_light_Capt_console_floor_pos, 1) end)
-sasl.registerCommandHandler (Cockpit_light_Capt_console_floor_cmd_dn, 0,  function(phase) change_switch(phase, Cockpit_light_Capt_console_floor_pos, -1) end)
-sasl.registerCommandHandler (Cockpit_light_Fo_console_floor_cmd_up, 0,    function(phase) change_switch(phase, Cockpit_light_Fo_console_floor_pos, 1) end)
-sasl.registerCommandHandler (Cockpit_light_Fo_console_floor_cmd_dn, 0,    function(phase) change_switch(phase, Cockpit_light_Fo_console_floor_pos, -1) end)
+end
 
 
 sasl.registerCommandHandler (RCDR_cmd_GND_CTL, 0,  function(phase) if phase == SASL_COMMAND_BEGIN then cvr_gnd_ctl = not cvr_gnd_ctl end end)
@@ -117,6 +130,9 @@ end
 sasl.registerCommandHandler (LIGHTS_cmd_emer_exit_up, 0,  function(phase) Switch_handler(phase, Lights_emer_exit, 0, 2, 1)  end)
 sasl.registerCommandHandler (LIGHTS_cmd_emer_exit_dn, 0,  function(phase) Switch_handler(phase, Lights_emer_exit, 0, 2, -1)  end)
 
+-- Trays
+sasl.registerCommandHandler (Cockpit_Capt_tray_toggle, 0,  function(phase) if phase == SASL_COMMAND_BEGIN then capt_tray = not capt_tray end end)
+sasl.registerCommandHandler (Cockpit_Fo_tray_toggle, 0,  function(phase) if phase == SASL_COMMAND_BEGIN then fo_tray = not fo_tray end end)
 
 ----------------------------------------------------------------------------------------------------
 -- Initialization function
@@ -134,7 +150,46 @@ local function init_drs(array)
     end
 end
 
+local function create_integral_datarefs()
+
+    for i,x in ipairs(integral_lights) do
+        x.dr_value = createGlobalPropertyf("a321neo/cockpit/lights/"  .. x.name .. "_value", 0, false, true, false)
+        x.dr_pos  = createGlobalPropertyf("a321neo/cockpit/lights/"  .. x.name .. "_pos", 0, false, true, false)
+
+        x.cmd_up   = createCommand("a321neo/cockpit/lights/" .. x.name .. "_knob_up", "Knob UP")
+        x.cmd_down = createCommand("a321neo/cockpit/lights/" .. x.name .. "_knob_dn", "Knob DOWN")
+
+        sasl.registerCommandHandler (x.cmd_up,   0, function(phase) Knob_handler_up_float(phase, x.dr_pos, 0, 1, 1) end)
+        sasl.registerCommandHandler (x.cmd_down, 0, function(phase) Knob_handler_down_float(phase, x.dr_pos, 0, 1, 1) end)
+    end
+
+end
+
+local function create_flood_and_spill_datarefs()
+
+    for i,x in ipairs(flood_and_spill_lights) do
+        x.dr_value = createGlobalPropertyf("a321neo/cockpit/lights/"  .. x.name .. "_value", 0, false, true, false)
+        x.dr_pos  = createGlobalPropertyf("a321neo/cockpit/lights/"  .. x.name .. "_pos", 0, false, true, false)
+
+        x.dr_array = createGlobalPropertyfa("a321neo/cockpit/lights/" .. x.name .. "_array", 9, false, true, false)
+
+        x.cmd_up   = createCommand("a321neo/cockpit/lights/" .. x.name .. "_knob_up", "Knob UP")
+        x.cmd_down = createCommand("a321neo/cockpit/lights/" .. x.name .. "_knob_dn", "Knob DOWN")
+        if x.is_knob then
+            sasl.registerCommandHandler (x.cmd_up,   0, function(phase) Knob_handler_up_float(phase, x.dr_pos, 0, 1, 1) end)
+            sasl.registerCommandHandler (x.cmd_down, 0, function(phase) Knob_handler_down_float(phase, x.dr_pos, 0, 1, 1) end)
+        else
+            sasl.registerCommandHandler (x.cmd_up, 0,   function(phase) change_switch(phase, x.dr_pos, 1) end)
+            sasl.registerCommandHandler (x.cmd_down, 0, function(phase) change_switch(phase, x.dr_pos, -1) end)
+        end
+    end
+
+end
+
+
 init_drs(guards)
+create_integral_datarefs()
+create_flood_and_spill_datarefs()
 
 ----------------------------------------------------------------------------------------------------
 -- Functions
@@ -142,6 +197,35 @@ init_drs(guards)
 local function update_guards()
     for i = 1, #guards do
         set(guards[i].dataref, Set_linear_anim_value_nostop(get(guards[i].dataref), get(guards[i].state_dataref), 0, 1, 3))
+    end
+end
+
+local function update_integral_datarefs()
+
+    for i,x in ipairs(integral_lights) do
+        set(x.dr_value, get(x.dr_pos))
+        -- set(x.dr_value, get(x.dr_pos) * get(elec_const_to_dr(x.bus))) -- TODO Electrical
+    end
+end
+
+local function update_flood_and_spil_datarefs()
+
+    for i,x in ipairs(flood_and_spill_lights) do
+        if x.is_knob then
+            set(x.dr_value, get(x.dr_pos))
+        else
+            set(x.dr_value, (get(x.dr_pos) + 1) / 2)
+        end
+
+        --feed the light array
+        set(x.dr_array, get(x.dr_value) * get(x.max_brightness) * x.color[1], 1)
+        set(x.dr_array, get(x.dr_value) * get(x.max_brightness) * x.color[2], 2)
+        set(x.dr_array, get(x.dr_value) * get(x.max_brightness) * x.color[3], 3)
+        set(x.dr_array, 1, 4)
+        set(x.dr_array, x.size_m, 5)
+        set(x.dr_array, x.cone_r, 6)
+        set(x.dr_array, -1, 8)
+        -- set(x.dr_value, get(x.dr_pos) * get(elec_const_to_dr(x.bus))) -- TODO Electrical
     end
 end
 
@@ -163,20 +247,10 @@ end
 local function update_lights()
     pb_set(PB.ovhd.signs_emer_exit_lt, get(Lights_emer_exit) == 0, false)
     pb_set(PB.ovhd.rcdr_gnd_ctl, cvr_gnd_ctl, false)
-
-    set(Cockpit_light_integral, get(Cockpit_light_integral_pos) * get(AC_bus_1_pwrd))
-    set(Cockpit_light_ovhd,     get(Cockpit_light_ovhd_pos) * get(AC_bus_1_pwrd))
-
-    set(Cockpit_light_flood_main, get(Cockpit_light_flood_main_pos) * get(DC_ess_bus_pwrd))
-    set(Cockpit_light_flood_ped,  get(Cockpit_light_flood_ped_pos)  * get(DC_bus_1_pwrd))
-    set(Cockpit_light_Capt_console_floor, get(Cockpit_light_Capt_console_floor_pos) * get(DC_bus_1_pwrd))
-    set(Cockpit_light_Fo_console_floor, get(Cockpit_light_Fo_console_floor_pos) * get(DC_bus_2_pwrd))
-    set(Cockpit_light_dome, get(Cockpit_light_dome_pos) * get(DC_ess_bus_pwrd))
-
 end
 
 local function update_datarefs()
-    if signs_seat_belt == 2 
+    if signs_seat_belt == 2
        or (signs_seat_belt == 1 and (get(Front_gear_deployment) > 0 or get(Flaps_handle_position) > 0))
        or (get(Cabin_alt_ft) > 11300) then
         set(Seatbelts, get(AC_bus_1_pwrd) + get(AC_bus_2_pwrd) >= 1 and 1 or 0)
@@ -184,13 +258,18 @@ local function update_datarefs()
         set(Seatbelts, 0)
     end
 
-    if signs_noped == 2 
+    if signs_noped == 2
        or (signs_noped == 1 and (get(Front_gear_deployment) > 0 or get(Flaps_handle_position) > 0)) then
         set(NoSmoking, get(AC_bus_1_pwrd) + get(AC_bus_2_pwrd) >= 1 and 1 or 0)
     else
         set(NoSmoking, 0)
     end
 
+end
+
+local function update_trays()
+    Set_dataref_linear_anim_nostop(Cockpit_Capt_tray_pos, capt_tray and 1 or 0, 0, 1, 0.5)
+    Set_dataref_linear_anim_nostop(Cockpit_Fo_tray_pos, fo_tray and 1 or 0, 0, 1, 0.5)
 end
 
 function update()
@@ -200,6 +279,9 @@ function update()
     update_lights()
     anim_light_switches()
     update_datarefs()
+    update_integral_datarefs()
+    update_flood_and_spil_datarefs()
+    update_trays()
 
     perf_measure_stop("graphics:update()")
 end

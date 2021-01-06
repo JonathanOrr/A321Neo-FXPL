@@ -1,3 +1,8 @@
+{16b64ab9-25b3-459a-8ae7-d3241e6a487e} event:/ACP/Down
+{ef23b13a-6ff4-4eba-8629-1207f2980609} event:/ACP/Up
+{0a3ca941-541b-49ea-b0a6-654bfc0ba63f} event:/Autopilot/Calvary
+{ff1b5104-6805-45d0-8716-2f0c54177361} event:/Autopilot/Cchord
+{d71b0f4f-0713-4c61-822f-eef505797a73} event:/Autopilot/Degrade
 {ba144e8c-f08f-4650-bb8f-ea1fdda166e2} event:/CockpitMechanical/Rotary/Rotary1
 {6278ba00-52a0-476a-8a87-43fb61e0a189} event:/CockpitMechanical/Rotary/Rotary2
 {4c126686-6c9f-44a1-b45a-dd4a04ef8a46} event:/CockpitMechanical/Rotary/Rotary3
@@ -22,11 +27,19 @@
 {ee845653-3288-40de-8ca1-0546b9cc36e0} event:/CockpitMechanical/ParkBrakeOn
 {46e31fff-1edb-4eb0-9156-7a54aa775f98} event:/CockpitMechanical/Soft Button Press
 {3f10ae93-6ce9-4498-b258-bc2577898679} event:/CockpitMechanical/SSTakeOver
+{f876080e-f9a4-4eb5-8ae2-d6fd1a9d1509} event:/CockpitMechanical/Tray Table Close
+{3c593132-73eb-4d34-9184-c67400174bf2} event:/CockpitMechanical/Tray Table Open
 {c98bea57-e385-49fe-89da-f2eb79555406} event:/Engines/Engine Start
 {ced3bc6e-ec20-43f0-a5a3-6f7602aec5e9} event:/Engines/Engine Start Ext
 {bdd3f6e0-b7ff-46ac-aadd-d8b6b9c45201} event:/Engines/Engines
 {05aa7e46-d0ef-4817-84df-6599e3fd87f6} event:/Engines/Engines Ext
 {3c1896b4-b137-42d9-a178-78d93f2c0308} event:/Engines/HowlEnd
+{47d7f46e-3e56-40d7-b18d-e5f5556d36df} event:/FCU/Pull
+{ba2746b5-f88d-40c3-80ba-a639a3bbc1c4} event:/FCU/Push
+{739de174-b194-4353-b998-a76f0a62c442} event:/FCU/Rotate1
+{036a758a-3b44-49a3-868b-45f9bccbeeca} event:/FCU/Rotate2
+{83b2ede9-8622-4a05-a6ef-766de551455c} event:/FCU/Rotate3
+{a3a05f51-d97c-4dfa-979a-d7d6b92147b4} event:/FCU/Rotate4
 {19c5cfbd-9d07-4b04-847a-5e65f673ab83} event:/Flaps/FlapLever1
 {25bb3f48-4eea-40a2-a61f-7cfbf098c7c2} event:/Flaps/FlapLever2
 {c75c87ec-563c-4319-a7aa-786962e31e9d} event:/Flaps/FlapLever3
@@ -72,6 +85,10 @@
 {22f80e6a-40fc-4fd9-9f77-f0ef5077c622} event:/RA/500
 {ceccdb65-09f6-4303-9230-4cb86b263170} event:/RA/Minimum
 {a897e617-89e1-43d6-8d15-a52e71fda8e9} event:/RA/retard
+{f8e6f2ed-0d4c-4785-bd01-c98bfa48605e} event:/Wipers/Bottom
+{0b09be96-18d3-4139-8da9-27db52a78f7a} event:/Wipers/Start
+{883c4ea2-ffcd-4845-939e-1f0a5dedda32} event:/Wipers/Top
+{fe71437b-4936-4842-8b50-c346ceb04145} event:/Wipers/Wiper
 {eba1c552-d477-4c98-9d5f-00c2f3378ecd} event:/APButton
 {a50ec509-2f82-4177-bf54-8821bc565bed} event:/APU
 {3f2cc16b-2f56-46a4-891c-860965e1474f} event:/ASkidOff
@@ -103,6 +120,8 @@
 {72dd99e0-d646-42c0-8cc7-4e3f356095cc} event:/TouchNose
 {341873bc-d31e-4ee3-9cb2-1b0c79682754} event:/Wind
 {cba7ef70-43b1-4842-9d4b-51501041377c} event:/Yellow Hyd Pump
+{bd64a731-4c73-4553-b22a-33505b7c3684} event:/Seatbelt
+{e7f2d612-cc52-44a5-b11f-3eadbe3cb078} event:/NoSmoke
 {9f08114d-36ec-44cc-b8bf-b2babda09f9e} bus:/
 {7f7c05a4-e05a-4d44-94fe-d4691147a9b7} bus:/Master
 {e3492bec-f854-4fbb-b2bc-23586269032e} bus:/Master/Copilot
