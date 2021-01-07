@@ -108,10 +108,12 @@
 {13efb812-486a-4d08-a381-7678b540faf5} event:/GuardClose
 {0e01a32e-1c0c-4578-8b3c-4ab7bd070209} event:/GuardOpen
 {140fc58e-381e-4651-af6d-901ab06e4c0e} event:/Liftoff
+{e7f2d612-cc52-44a5-b11f-3eadbe3cb078} event:/NoSmoke
 {d5bc7710-4cf2-4544-ba28-726b316c7f21} event:/Packs
 {0e7dff21-7b4d-4b72-9343-4928951e126a} event:/PTU
 {ae0d038d-fec0-41da-828a-279e74f65900} event:/RevL
 {b0452156-9936-4b1e-9c0d-ec4992821fd2} event:/RevR
+{bd64a731-4c73-4553-b22a-33505b7c3684} event:/Seatbelt
 {e17ea26c-dd4f-4bc1-873e-8fc5e0da491d} event:/SpoilerArm
 {86179178-a201-42c4-9cbc-eb3b28b70587} event:/SpoilerFull
 {012c937b-23f7-4907-a246-004a2721c54c} event:/SpoilerHalf
@@ -120,8 +122,6 @@
 {72dd99e0-d646-42c0-8cc7-4e3f356095cc} event:/TouchNose
 {341873bc-d31e-4ee3-9cb2-1b0c79682754} event:/Wind
 {cba7ef70-43b1-4842-9d4b-51501041377c} event:/Yellow Hyd Pump
-{bd64a731-4c73-4553-b22a-33505b7c3684} event:/Seatbelt
-{e7f2d612-cc52-44a5-b11f-3eadbe3cb078} event:/NoSmoke
 {9f08114d-36ec-44cc-b8bf-b2babda09f9e} bus:/
 {7f7c05a4-e05a-4d44-94fe-d4691147a9b7} bus:/Master
 {e3492bec-f854-4fbb-b2bc-23586269032e} bus:/Master/Copilot
