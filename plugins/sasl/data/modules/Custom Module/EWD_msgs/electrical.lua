@@ -240,7 +240,7 @@ Message_ELEC_APPR_NAVAID = {
 Message_ELEC_IR_2_3OFF = {
     text = function(self) return " - IR 2+3(IF IR1 OK)..OFF" end,
     color = function(self) return COL_ACTIONS end,
-    is_active = function(self) return get(Adirs_ir_is_ok[2]) == 1 or get(Adirs_ir_is_ok[3]) == 1 end
+    is_active = function(self) return ADIRS_sys[2].adirs_switch_status == ADIRS_CONFIG_OFF or ADIRS_sys[3].adirs_switch_status == ADIRS_CONFIG_OFF end
 }
 
 Message_ELEC_FUEL_GRAVITY_1 = {

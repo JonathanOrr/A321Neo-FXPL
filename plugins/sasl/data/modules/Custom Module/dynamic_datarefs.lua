@@ -193,22 +193,7 @@ Gen_TEST_pressed= createGlobalPropertyi("a321neo/dynamics/electrical/gen_test_pr
 IDG_1_temp = createGlobalPropertyf("a321neo/dynamics/electrical/IDG_1_temp", 0, false, true, false)
 IDG_2_temp = createGlobalPropertyf("a321neo/dynamics/electrical/IDG_2_temp", 0, false, true, false)
 
---ADIRS
-Adirs_adr_is_ok = {}
-Adirs_adr_is_ok[1] = createGlobalPropertyf("a321neo/cockpit/ADIRS/adr_1_is_ok", 0, false, true, false)  -- 0: not working (failed or off), 1: working
-Adirs_adr_is_ok[2] = createGlobalPropertyf("a321neo/cockpit/ADIRS/adr_2_is_ok", 0, false, true, false)  -- 0: not working (failed or off), 1: working
-Adirs_adr_is_ok[3] = createGlobalPropertyf("a321neo/cockpit/ADIRS/adr_3_is_ok", 0, false, true, false)  -- 0: not working (failed or off), 1: working
-
-Adirs_ir_is_ok = {}
-Adirs_ir_is_ok[1] = createGlobalPropertyf("a321neo/cockpit/ADIRS/irs_1_is_ok", 0, false, true, false)  -- 0: not working (failed or off or not aligned), 1: working
-Adirs_ir_is_ok[2] = createGlobalPropertyf("a321neo/cockpit/ADIRS/irs_2_is_ok", 0, false, true, false)  -- 0: not working (failed or off or not aligned), 1: working
-Adirs_ir_is_ok[3] = createGlobalPropertyf("a321neo/cockpit/ADIRS/irs_3_is_ok", 0, false, true, false)  -- 0: not working (failed or off or not aligned), 1: working
-
 Adirs_total_time_to_align = createGlobalPropertyf("a321neo/cockpit/ADIRS/total_time", 0, false, true, false)  -- Total time (depending on latitude, to align the IRS)
-Adirs_irs_begin_time = {}
-Adirs_irs_begin_time[1] = createGlobalPropertyf("a321neo/cockpit/ADIRS/irs_1_time_begin_align", 0, false, true, false)  -- Time from the begin of alignment of IRS1
-Adirs_irs_begin_time[2] = createGlobalPropertyf("a321neo/cockpit/ADIRS/irs_2_time_begin_align", 0, false, true, false)  -- Time from the begin of alignment of IRS2
-Adirs_irs_begin_time[3] = createGlobalPropertyf("a321neo/cockpit/ADIRS/irs_3_time_begin_align", 0, false, true, false)  -- Time from the begin of alignment of IRS3
 
 GPS_1_is_available = createGlobalPropertyi("a321neo/cockpit/ADIRS/gps_1_is_available", 0, false, true, false) 
 GPS_2_is_available = createGlobalPropertyi("a321neo/cockpit/ADIRS/gps_2_is_available", 0, false, true, false) 
@@ -408,16 +393,28 @@ Capt_Mach    = globalProperty("sim/cockpit2/gauges/indicators/mach_pilot")
 Fo_Mach      = globalProperty("sim/cockpit2/gauges/indicators/mach_copilot")
 Capt_Baro    = globalProperty("sim/cockpit2/gauges/actuators/barometer_setting_in_hg_pilot") -- Baro settings for Pilot
 Fo_Baro      = globalProperty("sim/cockpit2/gauges/actuators/barometer_setting_in_hg_copilot") -- Baro settings for F/O
-Capt_pitch   = globalProperty("sim/cockpit2/gauges/actuators/barometer_setting_in_hg_copilot")
-Fo_pitch     = globalProperty("sim/cockpit2/gauges/actuators/barometer_setting_in_hg_copilot")
-Capt_bank    = globalProperty("sim/cockpit2/gauges/actuators/barometer_setting_in_hg_copilot")
-Fo_bank      = globalProperty("sim/cockpit2/gauges/actuators/barometer_setting_in_hg_copilot")
+Capt_pitch   = globalProperty("sim/cockpit2/gauges/indicators/pitch_electric_deg_pilot")
+Fo_pitch     = globalProperty("sim/cockpit2/gauges/indicators/pitch_electric_deg_copilot")
+Capt_bank    = globalProperty("sim/cockpit2/gauges/indicators/roll_AHARS_deg_pilot")
+Fo_bank      = globalProperty("sim/cockpit2/gauges/indicators/roll_AHARS_deg_copilot")
 Capt_hdg     = globalProperty("sim/cockpit2/gauges/indicators/heading_AHARS_deg_mag_pilot")
 Fo_hdg       = globalProperty("sim/cockpit2/gauges/indicators/heading_AHARS_deg_mag_copilot")
+
+Capt_IAS_trend = globalProperty("sim/cockpit2/gauges/indicators/airspeed_acceleration_kts_sec_pilot")
+Fo_IAS_trend = globalProperty("sim/cockpit2/gauges/indicators/airspeed_acceleration_kts_sec_copilot")
 
 Stby_Alt     = globalProperty("sim/cockpit2/gauges/indicators/altitude_ft_stby")     -- Altitude in the stdby instrument
 Stby_IAS     = globalProperty("sim/cockpit2/gauges/indicators/airspeed_kts_stby")    -- IAS in the stdby instrument
 Stby_Baro    = globalProperty("sim/cockpit2/gauges/actuators/barometer_setting_in_hg_stby") -- Baro settings for STBY
+
+Capt_TAS     = globalProperty("sim/cockpit2/gauges/indicators/true_airspeed_kts_pilot")
+Fo_TAS       = globalProperty("sim/cockpit2/gauges/indicators/true_airspeed_kts_copilot")
+
+Capt_Track     = globalProperty("sim/cockpit2/gauges/indicators/ground_track_mag_pilot")
+Fo_Track       = globalProperty("sim/cockpit2/gauges/indicators/ground_track_mag_copilot")
+
+Wind_SPD     = globalProperty("sim/cockpit2/gauges/indicators/wind_speed_kts")
+Wind_HDG     = globalProperty("sim/cockpit2/gauges/indicators/wind_heading_deg_mag")
 
 --gear
 Gear_handle = globalProperty("sim/cockpit2/controls/gear_handle_down")
@@ -520,7 +517,8 @@ Alpha = globalProperty("sim/flightmodel/position/alpha")
 Vpath = globalProperty("sim/flightmodel/position/vpath")
 Flightmodel_roll = globalProperty("sim/flightmodel/position/true_phi")
 Flightmodel_pitch = globalProperty("sim/flightmodel/position/true_theta")
-Flightmodel_heading = globalProperty("sim/flightmodel/position/true_psi")
+Flightmodel_true_heading = globalProperty("sim/flightmodel/position/true_psi")
+Flightmodel_mag_heading = globalProperty("sim/flightmodel/position/mag_psi")
 Total_vertical_g_load = globalProperty("sim/flightmodel/forces/g_nrml")
 Total_long_g_load = globalProperty("sim/flightmodel/forces/g_axil")
 Vpath_pitch_rate = createGlobalPropertyf("a321neo/dynamics/FBW/aerodynamics/vpath_Q", 0, false, true, false)

@@ -96,23 +96,29 @@ MessageGroup_ADR_FAULT_SINGLE = {
 
     is_active = function(self)
         -- One and only one ADR failure
-        return not (get(EWD_flight_phase) == PHASE_ELEC_PWR or get(EWD_flight_phase) == PHASE_2ND_ENG_OFF) and 
-        get(Adirs_adr_is_ok[1]) + get(Adirs_adr_is_ok[2]) + get(Adirs_adr_is_ok[3]) == 2
+        return
+        (
+        (ADIRS_sys[ADIRS_1].adr_status == ADR_STATUS_FAULT and ADIRS_sys[ADIRS_2].adr_status ~= ADR_STATUS_FAULT
+        and ADIRS_sys[ADIRS_3].adr_status ~= ADR_STATUS_FAULT) or
+        (ADIRS_sys[ADIRS_2].adr_status == ADR_STATUS_FAULT and ADIRS_sys[ADIRS_1].adr_status ~= ADR_STATUS_FAULT
+        and ADIRS_sys[ADIRS_3].adr_status ~= ADR_STATUS_FAULT) or
+        (ADIRS_sys[ADIRS_3].adr_status == ADR_STATUS_FAULT and ADIRS_sys[ADIRS_2].adr_status ~= ADR_STATUS_FAULT
+        and ADIRS_sys[ADIRS_1].adr_status ~= ADR_STATUS_FAULT))
     end,
 
     is_inhibited = function(self)
         -- During takeoff and landing at high speed
         return get(EWD_flight_phase) == PHASE_ELEC_PWR or get(EWD_flight_phase) == PHASE_ABOVE_80_KTS or get(EWD_flight_phase) == PHASE_TOUCHDOWN or get(EWD_flight_phase) == PHASE_2ND_ENG_OFF
-               or (get(Adirs_adr_is_ok[3]) == 0 and (get(EWD_flight_phase) == PHASE_LIFTOFF or get(EWD_flight_phase) == PHASE_FINAL))
+               or (ADIRS_sys[ADIRS_3].adr_status == ADR_STATUS_FAULT and (get(EWD_flight_phase) == PHASE_LIFTOFF or get(EWD_flight_phase) == PHASE_FINAL))
     end,
     
         
     get_failed = function(self)
-        if get(Adirs_adr_is_ok[1]) == 0 then
+        if ADIRS_sys[ADIRS_1].adr_status == ADR_STATUS_FAULT then
             return 1
-        elseif get(Adirs_adr_is_ok[2]) == 0 then
+        elseif ADIRS_sys[ADIRS_2].adr_status == ADR_STATUS_FAULT then
             return 2
-        elseif get(Adirs_adr_is_ok[3]) == 0 then
+        elseif ADIRS_sys[ADIRS_3].adr_status == ADR_STATUS_FAULT then
             return 3
         end        
     end
@@ -174,9 +180,9 @@ Message_ADR_FAULT_OFF_DOUBLE = {
 
     is_active = function(self)
         a,b = MessageGroup_ADR_FAULT_DOUBLE:get_failed()
-        return (get(Adirs_adr_is_ok[1]) == 1 and (PB.ovhd.adr_2.status_bottom == false or PB.ovhd.adr_3.status_bottom == false))
-        or (get(Adirs_adr_is_ok[2]) == 1 and (PB.ovhd.adr_1.status_bottom == false or PB.ovhd.adr_3.status_bottom == false))
-        or (get(Adirs_adr_is_ok[3]) == 1 and (PB.ovhd.adr_2.status_bottom == false or PB.ovhd.adr_1.status_bottom == false)) 
+        return (ADIRS_sys[ADIRS_1].adr_status ~= ADR_STATUS_FAULT and (PB.ovhd.adr_2.status_bottom == false or PB.ovhd.adr_3.status_bottom == false))
+        or (ADIRS_sys[ADIRS_2].adr_status ~= ADR_STATUS_FAULT and (PB.ovhd.adr_1.status_bottom == false or PB.ovhd.adr_3.status_bottom == false))
+        or (ADIRS_sys[ADIRS_3].adr_status ~= ADR_STATUS_FAULT and (PB.ovhd.adr_2.status_bottom == false or PB.ovhd.adr_1.status_bottom == false)) 
      end
 }
 
@@ -201,8 +207,12 @@ MessageGroup_ADR_FAULT_DOUBLE = {
 
     is_active = function(self)
         -- Two and only two ADR failure
-        return not (get(EWD_flight_phase) == PHASE_ELEC_PWR or get(EWD_flight_phase) == PHASE_2ND_ENG_OFF) and  
-        get(Adirs_adr_is_ok[1]) + get(Adirs_adr_is_ok[2]) + get(Adirs_adr_is_ok[3]) == 1
+        return
+        (
+        (ADIRS_sys[ADIRS_1].adr_status == ADR_STATUS_FAULT and ADIRS_sys[ADIRS_2].adr_status == ADR_STATUS_FAULT and ADIRS_sys[ADIRS_3].adr_status ~= ADR_STATUS_FAULT) or
+        (ADIRS_sys[ADIRS_2].adr_status == ADR_STATUS_FAULT and ADIRS_sys[ADIRS_3].adr_status == ADR_STATUS_FAULT and ADIRS_sys[ADIRS_1].adr_status ~= ADR_STATUS_FAULT) or
+        (ADIRS_sys[ADIRS_1].adr_status == ADR_STATUS_FAULT and ADIRS_sys[ADIRS_3].adr_status == ADR_STATUS_FAULT and ADIRS_sys[ADIRS_2].adr_status ~= ADR_STATUS_FAULT)
+        )
     end,
 
     is_inhibited = function(self)
@@ -211,11 +221,11 @@ MessageGroup_ADR_FAULT_DOUBLE = {
     
         
     get_failed = function(self)
-        if get(Adirs_adr_is_ok[1]) == 1 then
+        if ADIRS_sys[ADIRS_1].adr_status ~= ADR_STATUS_FAULT then
             return 2,3
-        elseif get(Adirs_adr_is_ok[2]) == 1 then
+        elseif ADIRS_sys[ADIRS_2].adr_status ~= ADR_STATUS_FAULT then
             return 1,3
-        elseif get(Adirs_adr_is_ok[3]) == 1 then
+        elseif ADIRS_sys[ADIRS_3].adr_status ~= ADR_STATUS_FAULT then
             return 1,2
         end        
     end
@@ -282,8 +292,9 @@ MessageGroup_ADR_FAULT_TRIPLE = {
     },
 
     is_active = function(self)
-        return not (get(EWD_flight_phase) == PHASE_ELEC_PWR or get(EWD_flight_phase) == PHASE_2ND_ENG_OFF) and 
-        get(Adirs_adr_is_ok[1]) + get(Adirs_adr_is_ok[2]) + get(Adirs_adr_is_ok[3]) == 0
+        return
+        ADIRS_sys[ADIRS_1].adr_status == ADR_STATUS_FAULT and ADIRS_sys[ADIRS_2].adr_status == ADR_STATUS_FAULT and
+        ADIRS_sys[ADIRS_3].adr_status == ADR_STATUS_FAULT
     end,
 
     is_inhibited = function(self)
@@ -371,23 +382,27 @@ MessageGroup_IR_FAULT_SINGLE = {
 
     is_active = function(self)
         -- One and only one IR failure
-        return not (get(EWD_flight_phase) == PHASE_ELEC_PWR or get(EWD_flight_phase) == PHASE_1ST_ENG_ON or get(EWD_flight_phase) == PHASE_2ND_ENG_OFF) and 
-        get(Adirs_ir_is_ok[1]) + get(Adirs_ir_is_ok[2]) + get(Adirs_ir_is_ok[3]) == 2
+        return
+        (
+        (ADIRS_sys[ADIRS_1].ir_status == IR_STATUS_FAULT and ADIRS_sys[ADIRS_2].ir_status ~= IR_STATUS_FAULT and ADIRS_sys[ADIRS_3].ir_status ~= IR_STATUS_FAULT) or
+        (ADIRS_sys[ADIRS_1].ir_status ~= IR_STATUS_FAULT and ADIRS_sys[ADIRS_2].ir_status == IR_STATUS_FAULT and ADIRS_sys[ADIRS_3].ir_status ~= IR_STATUS_FAULT) or
+        (ADIRS_sys[ADIRS_1].ir_status ~= IR_STATUS_FAULT and ADIRS_sys[ADIRS_2].ir_status ~= IR_STATUS_FAULT and ADIRS_sys[ADIRS_3].ir_status == IR_STATUS_FAULT)
+        )
     end,
 
     is_inhibited = function(self)
         -- During takeoff and landing at high speed
         return get(EWD_flight_phase) == PHASE_ELEC_PWR or get(EWD_flight_phase) == PHASE_ABOVE_80_KTS or get(EWD_flight_phase) == PHASE_TOUCHDOWN or get(EWD_flight_phase) == PHASE_2ND_ENG_OFF
-               or (get(Adirs_ir_is_ok[3]) == 0 and (get(EWD_flight_phase) == PHASE_LIFTOFF or get(EWD_flight_phase) == PHASE_FINAL))
+               or (ADIRS_sys[ADIRS_3].ir_status == IR_STATUS_FAULT and (get(EWD_flight_phase) == PHASE_LIFTOFF or get(EWD_flight_phase) == PHASE_FINAL))
     end,
     
         
     get_failed = function(self)
-        if get(Adirs_ir_is_ok[1]) == 0 then
+        if ADIRS_sys[ADIRS_1].ir_status == IR_STATUS_FAULT then
             return 1
-        elseif get(Adirs_ir_is_ok[2]) == 0 then
+        elseif ADIRS_sys[ADIRS_2].ir_status == IR_STATUS_FAULT then
             return 2
-        elseif get(Adirs_ir_is_ok[3]) == 0 then
+        elseif ADIRS_sys[ADIRS_3].ir_status == IR_STATUS_FAULT then
             return 3
         end        
     end
@@ -459,9 +474,13 @@ MessageGroup_IR_FAULT_DOUBLE = {
     },
 
     is_active = function(self)
-        -- Two and only two IR failure
-        return not (get(EWD_flight_phase) == PHASE_ELEC_PWR or get(EWD_flight_phase) == PHASE_1ST_ENG_ON or get(EWD_flight_phase) == PHASE_2ND_ENG_OFF) and 
-        get(Adirs_ir_is_ok[1]) + get(Adirs_ir_is_ok[2]) + get(Adirs_ir_is_ok[3]) == 1
+        -- At least two IR failures
+        return
+        (
+        (ADIRS_sys[ADIRS_1].ir_status == IR_STATUS_FAULT and ADIRS_sys[ADIRS_2].ir_status == IR_STATUS_FAULT and ADIRS_sys[ADIRS_3].ir_status ~= IR_STATUS_FAULT) or
+        (ADIRS_sys[ADIRS_1].ir_status == IR_STATUS_FAULT and ADIRS_sys[ADIRS_2].ir_status ~= IR_STATUS_FAULT and ADIRS_sys[ADIRS_3].ir_status == IR_STATUS_FAULT) or
+        (ADIRS_sys[ADIRS_1].ir_status ~= IR_STATUS_FAULT and ADIRS_sys[ADIRS_2].ir_status == IR_STATUS_FAULT and ADIRS_sys[ADIRS_3].ir_status == IR_STATUS_FAULT)
+        )
     end,
 
     is_inhibited = function(self)
@@ -470,11 +489,11 @@ MessageGroup_IR_FAULT_DOUBLE = {
     
         
     get_failed = function(self)
-        if get(Adirs_ir_is_ok[1]) == 1 then
+        if ADIRS_sys[ADIRS_1].ir_status ~= IR_STATUS_FAULT then
             return 2,3
-        elseif get(Adirs_ir_is_ok[2]) == 1 then
+        elseif ADIRS_sys[ADIRS_2].ir_status ~= IR_STATUS_FAULT then
             return 1,3
-        elseif get(Adirs_ir_is_ok[3]) == 1 then
+        elseif ADIRS_sys[ADIRS_3].ir_status ~= IR_STATUS_FAULT then
             return 1,2
         end        
     end
@@ -484,7 +503,7 @@ MessageGroup_IR_FAULT_DOUBLE = {
 ----------------------------------------------------------------------------------------------------
 -- CAUTION: IR x FAULT (triple)
 ----------------------------------------------------------------------------------------------------
-MessageGroup_IR_FAULT_TRIPLE = {
+MessageGroup_IR_FAULT_TRIPLE_1 = {
 
     shown = false,
 
@@ -492,7 +511,7 @@ MessageGroup_IR_FAULT_TRIPLE = {
                 return "NAV"
             end,
     color = function(self)
-                return COL_WARNING
+                return COL_CAUTION
             end,
 
     priority = PRIORITY_LEVEL_3,
@@ -500,11 +519,11 @@ MessageGroup_IR_FAULT_TRIPLE = {
     messages = {
         {
             text = function(self)
-                return "    IR 1 + 2 + 3 FAULT"
+                return "    IR 1 + 2 FAULT"
             end,
 
             color = function(self)
-                return COL_WARNING
+                return COL_CAUTION
             end,
 
             is_active = function(self)
@@ -516,16 +535,54 @@ MessageGroup_IR_FAULT_TRIPLE = {
     },
 
     is_active = function(self)
-        return not (get(EWD_flight_phase) == PHASE_ELEC_PWR or get(EWD_flight_phase) == PHASE_1ST_ENG_ON or get(EWD_flight_phase) == PHASE_2ND_ENG_OFF) and 
-        get(Adirs_ir_is_ok[1]) + get(Adirs_ir_is_ok[2]) + get(Adirs_ir_is_ok[3]) == 0
+        return
+        ADIRS_sys[ADIRS_1].ir_status == IR_STATUS_FAULT and ADIRS_sys[ADIRS_2].ir_status == IR_STATUS_FAULT and ADIRS_sys[ADIRS_3].ir_status == IR_STATUS_FAULT
     end,
 
     is_inhibited = function(self)
         return get(EWD_flight_phase) == PHASE_ELEC_PWR or get(EWD_flight_phase) == PHASE_2ND_ENG_OFF
     end
-    
 }
 
+MessageGroup_IR_FAULT_TRIPLE_2 = {
 
+    shown = false,
+
+    text  = function(self)
+                return "NAV"
+            end,
+    color = function(self)
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_3,
+
+    messages = {
+        {
+            text = function(self)
+                return "    IR 2 + 3 FAULT"
+            end,
+
+            color = function(self)
+                return COL_CAUTION
+            end,
+
+            is_active = function(self)
+              return true
+            end
+
+        },  
+        Message_IR_FAULT_ATT_PROC
+    },
+
+    is_active = function(self)
+        return 
+        ADIRS_sys[ADIRS_1].ir_status == IR_STATUS_FAULT and ADIRS_sys[ADIRS_2].ir_status == IR_STATUS_FAULT and ADIRS_sys[ADIRS_3].ir_status == IR_STATUS_FAULT
+    end,
+
+    is_inhibited = function(self)
+        return get(EWD_flight_phase) == PHASE_ELEC_PWR or get(EWD_flight_phase) == PHASE_2ND_ENG_OFF
+    end
+}
 
 

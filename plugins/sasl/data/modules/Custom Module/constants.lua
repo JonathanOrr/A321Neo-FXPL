@@ -115,6 +115,26 @@ ANTIICE_AOA_STDBY    = 15
 ANTIICE_TAT_CAPT     = 16
 ANTIICE_TAT_FO       = 17
 
+-- Adirs
+ADIRS_1 = 1
+ADIRS_2 = 2
+ADIRS_3 = 3
+
+ADIRS_CONFIG_OFF     = 0
+ADIRS_CONFIG_NAV     = 1
+ADIRS_CONFIG_ATT     = 2
+
+IR_STATUS_OFF         = 0
+IR_STATUS_IN_ALIGN    = 1
+IR_STATUS_ALIGNED     = 2
+IR_STATUS_ATT_ALIGNED = 3
+IR_STATUS_FAULT       = 4
+
+ADR_STATUS_OFF      = 0
+ADR_STATUS_STARTING = 1
+ADR_STATUS_ON       = 2
+ADR_STATUS_FAULT    = 3
+
 -- Fonts
 Font_AirbusDUL = sasl.gl.loadFont("fonts/AirbusDULiberationMono.ttf")
 Font_AirbusDUL_vert = sasl.gl.loadFont("fonts/AirbusDULiberationMono.ttf")
@@ -124,4 +144,10 @@ sasl.gl.setFontDirection (Font_AirbusDUL_vert, TEXT_DIRECTION_VERTICAL)
 
 Font_AirbusDUL_small = sasl.gl.loadFont("fonts/AirbusDULiberationMono.ttf")
 sasl.gl.setFontRenderMode(Font_AirbusDUL_small, TEXT_RENDER_FORCED_MONO, 0.6*1.47)
+
+-- Screens
+PFD_CAPT  = 1
+PFD_FO    = 2
+ND_CAPT   = 1
+ND_FO     = 2
 

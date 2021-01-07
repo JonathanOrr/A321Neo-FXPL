@@ -49,12 +49,15 @@ local failures_data = {
     { 
         group="ADIRS",
         failures={
-            {name="ADR1", status=false, dataref=FAILURE_ADR[1] },
-            {name="ADR2", status=false, dataref=FAILURE_ADR[2] },
-            {name="ADR3", status=false, dataref=FAILURE_ADR[3] },
-            {name="IR1",  status=false, dataref=FAILURE_IR[1] },
-            {name="IR2",  status=false, dataref=FAILURE_IR[2] },
-            {name="IR3",  status=false, dataref=FAILURE_IR[3] },
+            {name="ADR1\nFAULT", status=false, dataref=FAILURE_ADR[1] },
+            {name="ADR2\nFAULT", status=false, dataref=FAILURE_ADR[2] },
+            {name="ADR3\nFAULT", status=false, dataref=FAILURE_ADR[3] },
+            {name="IR1\nFAULT",  status=false, dataref=FAILURE_IR[1] },
+            {name="IR2\nFAULT",  status=false, dataref=FAILURE_IR[2] },
+            {name="IR3\nFAULT",  status=false, dataref=FAILURE_IR[3] },
+            {name="IR1 ATT\nFAULT",  status=false, dataref=FAILURE_IR_ATT[1] },
+            {name="IR2 ATT\nFAULT",  status=false, dataref=FAILURE_IR_ATT[2] },
+            {name="IR3 ATT\nFAULT",  status=false, dataref=FAILURE_IR_ATT[3] },
             {name="GPS 1\nFAULT",  status=false, dataref=FAILURE_GPS_1 },
             {name="GPS 2\nFAULT",  status=false, dataref=FAILURE_GPS_2 }
         }
