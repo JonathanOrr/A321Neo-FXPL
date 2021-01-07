@@ -10340,7 +10340,7 @@ IDX10	8063	8062	8067	8065	8063	8060	8062	8062	8065	8063
 		TRIS	4218 66
 		ATTR_manip_command_switch_left_right	left_right	a321neo/cockpit/nd/fo_nav_2_right	a321neo/cockpit/nd/fo_nav_2_left	Toggle FO Nav 2 mode
 		TRIS	4284 66
-		ATTR_manip_command_switch_left_right	left_right	a321neo/cockpit/fcu/capt_qnh_up	a321neo/cockpit/nd/capt_nav_2_right	Toggle Capt Nav 2 mode
+		ATTR_manip_command_switch_left_right	left_right	a321neo/cockpit/nd/capt_nav_2_right	a321neo/cockpit/nd/capt_nav_2_left	Toggle Capt Nav 2 mode
 		TRIS	4350 66
 		ATTR_manip_command_switch_left_right	left_right	a321neo/cockpit/nd/capt_nav_1_right	a321neo/cockpit/nd/capt_nav_1_left	Toggle Capt Nav 1 mode
 		TRIS	4416 66

@@ -471,10 +471,6 @@ Current_heading = globalProperty("sim/cockpit2/gauges/indicators/heading_AHARS_d
 Ground_track = globalProperty("sim/cockpit2/gauges/indicators/ground_track_mag_pilot")
 VVI = globalProperty("sim/cockpit2/gauges/indicators/vvi_fpm_pilot")
 Ground_track_delta = createGlobalPropertyf("a321neo/cockpit/PFD/ground_track_delta", 0, false, true, false)
-A_floor_speed = createGlobalPropertyf("a321neo/cockpit/PFD/a_floor_speed", 0, false, true, false) -- AFLOOR at 7.5 degrees AoA
-A_floor_speed_delta = createGlobalPropertyf("a321neo/cockpit/PFD/a_floor_speed_delta", 0, false, true, false)
-Stall_speed = createGlobalPropertyf("a321neo/cockpit/PFD/stall_speed", 0, false, true, false) -- stall at 9 degrees AoA
-Stall_speed_delta = createGlobalPropertyf("a321neo/cockpit/PFD/stall_speed_delta", 0, false, true, false)
 
 --AUTOFLT--
 AUTOFLT_SPD = createGlobalPropertyf("a321neo/cockpit/AUTOFLT/speed", 0, false, true, false)

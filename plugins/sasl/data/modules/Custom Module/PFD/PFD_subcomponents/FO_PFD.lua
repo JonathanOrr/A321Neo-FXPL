@@ -5,25 +5,29 @@ include('PFD/PFD_main.lua')
 include('PFD/PFD_sub_functions/PFD_att.lua')
 include('PFD/PFD_sub_functions/PFD_alt_tape.lua')
 include('PFD/PFD_sub_functions/PFD_spd_tape.lua')
+include('PFD/PFD_sub_functions/PFD_hdg_tape.lua')
+include('PFD/PFD_sub_functions/PFD_vs_needle.lua')
 include('PFD/PFD_sub_functions/PFD_timers.lua')
 fbo = true
 
 local fo_PFD_table = {
+    Screen_ID = PFD_FO,
     PFD_aircraft_in_air_timer = 0,
+    ATT_blink_now = false,
+    SPD_blink_now = false,
+    ALT_blink_now = false,
+    HDG_blink_now = false,
+    VS_blink_now = false,
+    ATT_blink_timer = 0,
+    SPD_blink_timer = 0,
+    ALT_blink_timer = 0,
+    HDG_blink_timer = 0,
+    VS_blink_timer = 0,
     PFD_brightness = Fo_PFD_brightness_act,
-    ATT_avail = Adirs_fo_has_ATT,
-    IR_avail = Adirs_fo_has_IR,
-    ADR_avail = Adirs_fo_has_ADR,
     ATT_blinking = Adirs_fo_has_ATT_blink,
     IR_blinking = Adirs_fo_has_IR_blink,
     ADR_blinking = Adirs_fo_has_ADR_blink,
-    Pitch = Flightmodel_pitch,
-    Bank = Flightmodel_roll,
-    IAS = PFD_Fo_IAS,
-    IAS_accel = PFD_Fo_ias_accel,
-    Baro_ALT = PFD_Fo_Baro_Altitude,
     RA_ALT = Fo_ra_alt_ft,
-    HDG = Fo_hdg,
     VS = PFD_Fo_VS,
     Corresponding_FAC_status = FAC_2_status,
     Opposite_FAC_status = FAC_1_status,

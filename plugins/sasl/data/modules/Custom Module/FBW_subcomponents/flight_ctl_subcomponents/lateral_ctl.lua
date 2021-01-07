@@ -280,7 +280,7 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
     end
 
     --reduce speedbrakes retraction speeds in high speed conditions
-    if (get(PFD_Capt_IAS) >= 315 or get(PFD_Fo_IAS) >= 315 or get(Capt_Mach) >= 0.75 or get(Fo_Mach) >= 0.75) and in_auto_flight then
+    if (get_ias(PFD_CAPT) >= 315 or get_ias(PFD_FO) >= 315 or get(Capt_Mach) >= 0.75 or get(Fo_Mach) >= 0.75) and in_auto_flight then
         --check if any spoilers are retracting and slow down accordingly
         for i = 1, var_table.num_of_spoils_per_wing do
             if l_spoilers_spdbrk_targets[i] < get(var_table.l_spoilers_datarefs[i]) then

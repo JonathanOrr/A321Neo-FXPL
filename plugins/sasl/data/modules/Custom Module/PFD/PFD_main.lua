@@ -151,37 +151,6 @@ function update()
     PFD_update_bird()
 end
 
-function PFD_draw_hdg_tape(PFD_table)
-    local boarder_cl = ECAM_WHITE
-
-    if get(PFD_table.IR_avail) == 0 then
-        boarder_cl = get(PFD_table.IR_blinking) == 1 and {0, 0, 0, 0} or ECAM_RED
-    elseif get(PFD_table.IR_avail) == 1 or get(PFD_table.IR_avail) == 2  then
-        boarder_cl = ECAM_WHITE
-    end
-
-    --bgd
-    sasl.gl.drawRectangle(size[1]/2-260, size[2]/2-432, 407, 55, PFD_tape_grey)
-
-    --boarder lines
-    sasl.gl.drawWideLine(size[1]/2-262, size[2]/2-432, size[1]/2-262, size[2]/2-377, 4, boarder_cl)
-    sasl.gl.drawWideLine(size[1]/2-264, size[2]/2-375, size[1]/2+151, size[2]/2-375, 4, boarder_cl)
-    sasl.gl.drawWideLine(size[1]/2+149, size[2]/2-432, size[1]/2+149, size[2]/2-377, 4, boarder_cl)
-
-    if get(PFD_table.IR_avail) == 1 or get(PFD_table.IR_avail) == 2 then
-        sasl.gl.setClipArea(size[1]/2-260, size[2]/2-432, 407, 55)
-        sasl.gl.drawTexture(PFD_hdg_tape, size[1]/2-260 - Math_rescale(0, 561, 360, 3609, get(PFD_table.HDG)), size[2]/2-432, 4096, 110, ECAM_WHITE)
-        sasl.gl.resetClipArea ()
-
-        --hdg needle
-        sasl.gl.drawWideLine(size[1]/2-56, size[2]/2-388, size[1]/2-56, size[2]/2-340, 6, PFD_yellow)
-    end
-end
-
-function PFD_draw_vs_needle(PFD_table)
-    sasl.gl.drawTexture(PFD_vs_bgd, 0, 0, 900, 900, {1, 1, 1})
-end
-
 function draw()
     --show and hide the V/S indicators according to the airdata
     --[[if get(Adirs_capt_has_ADR) == 1 then

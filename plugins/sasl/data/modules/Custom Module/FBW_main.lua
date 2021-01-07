@@ -170,8 +170,8 @@ function update()
         if get(FBW_kill_switch) == 0 then
             --CASCADE: SIDESTICK --> G LOAD PID --> PITCH RATE PID --> CODED STABILITY / FILTERING --> ELEVATOR
             --slowly start to enable the pitch for vmax protection as the speed overshoots vmax and heads towards vmax prot
-            vmax_prot_activation_ratio = Math_clamp((get(PFD_Capt_IAS) - get(Capt_VMAX)) / (get(Capt_VMAX_prot) - get(Capt_VMAX)), 0, 1)
-            vmax_prot_output = Math_lerp(-1, SSS_PID(FBW_PID_arrays.SSS_FBW_vmax_prot_pitch, (get(PFD_Capt_IAS) + get(PFD_Fo_IAS)) / 2 - (get(Capt_VMAX_prot) + get(Fo_VMAX_prot)) / 2), vmax_prot_activation_ratio)
+            vmax_prot_activation_ratio = Math_clamp((get_ias(PFD_CAPT) - get(Capt_VMAX)) / (get(Capt_VMAX_prot) - get(Capt_VMAX)), 0, 1)
+            vmax_prot_output = Math_lerp(-1, SSS_PID(FBW_PID_arrays.SSS_FBW_vmax_prot_pitch, (get_ias(PFD_CAPT) + get_ias(PFD_FO)) / 2 - (get(Capt_VMAX_prot) + get(Fo_VMAX_prot)) / 2), vmax_prot_activation_ratio)
             FBW_PID_arrays.SSS_FBW_G_load_pitch.Min_out = Math_clamp_lower(vmax_prot_output, SSS_PID(FBW_PID_arrays.SSS_FBW_pitch_down_limit, -15 - get(Flightmodel_pitch)))
             FBW_PID_arrays.SSS_FBW_G_load_pitch.Max_out = Math_clamp_higher(SSS_PID_DPV(FBW_PID_arrays.SSS_FBW_stall_prot_pitch, 100000000, get(Alpha)), SSS_PID(FBW_PID_arrays.SSS_FBW_pitch_up_limit, 30 - get(Flightmodel_pitch)))
             --pitch rate stability[used to temperarily guard the G load before overshoot stops]
@@ -196,7 +196,7 @@ function update()
             set(Roll_artstab, Set_anim_value(get(Roll_artstab), Roll_rate_output, -1, 1, 1.8))
             set(Pitch_artstab, Set_anim_value(get(Pitch_artstab), pitch_rate_correction, -1, 1, 1.15))
 
-            if get(Any_wheel_on_ground) ~= 1 then
+            if get(FBW_in_flight_mode) == 1 then
                 if stick_moving_vertically == true then
                     set(Augmented_pitch_trim_ratio, Set_anim_value(get(Augmented_pitch_trim_ratio), SSS_PID_DPV(FBW_PID_arrays.SSS_FBW_CWS_trim, G_output, get(True_pitch_rate)), -1, 1, 0.1))
                 else

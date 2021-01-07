@@ -25,6 +25,8 @@ include("global_functions.lua")
 include("pushbuttons.lua")
 include("FBW_subcomponents/PID_arrays.lua")
 include("sasl_drawing_assets.lua")
+include("constants.lua")
+include("ADIRS_data_source.lua")
 
 sasl.options.setAircraftPanelRendering(true)
 sasl.options.setInteractivity(true)

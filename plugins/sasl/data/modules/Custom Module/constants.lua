@@ -40,8 +40,8 @@ UI_YELLOW = {1, 1, 0.30}
 EFB_GREY = {31/255, 31/255, 31/255}
 EFB_RED = {181/255, 255/255, 84/255}
 
-PFD_tape_grey = {69/255, 86/255, 105/255}
-PFD_yellow = {1, 1, 0}
+PFD_TAPE_GREY = {69/255, 86/255, 105/255}
+PFD_YELLOW = {1, 1, 0}
 
 -- ELEC buses
 ELEC_BUS_AC_1 = 1

@@ -1,4 +1,5 @@
 FBW_modes_var_table = {
+    Previous_trim_reset_begin = 0,
     On_ground_timer = 0,
     Flare_mode_past_status = 0
 }
@@ -54,6 +55,14 @@ function FBW_mode_transition(table)
         set(FBW_lateral_ground_mode_ratio,  Set_linear_anim_value(get(FBW_lateral_ground_mode_ratio),  1, 0, 1, 1 / lateral_ground_mode_transition_time))
         set(FBW_vertical_ground_mode_ratio, Set_linear_anim_value(get(FBW_vertical_ground_mode_ratio), 1, 0, 1, 1 / vertical_ground_mode_transition_time))
         set(FBW_vertical_flare_mode_ratio,  1 - get(FBW_vertical_ground_mode_ratio))
+    end
+
+    --trim reset--
+    local trim_reset_begin = get(FBW_lateral_ground_mode_ratio) > 0 and 1 or 0
+    local trim_reset_begin_delta = trim_reset_begin - table.Previous_trim_reset_begin
+    table.Previous_trim_reset_begin = trim_reset_begin
+    if trim_reset_begin_delta == 1 then
+        set(Augmented_pitch_trim_ratio, 0)
     end
 
     --mode detection--

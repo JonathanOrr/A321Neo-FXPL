@@ -415,7 +415,7 @@ end
 
 --draw images
 function SASL_draw_img_center_aligned(image, x, y, width, height, color)
-    sasl.gl.drawTexture(image, x - width / 2, y - width / 2, width, height, color)
+    sasl.gl.drawTexture(image, x - width / 2, y - height / 2, width, height, color)
 end
 function SASL_draw_img_xcenter_aligned(image, x, y, width, height, color)
     sasl.gl.drawTexture(image, x - width / 2, y, width, height, color)

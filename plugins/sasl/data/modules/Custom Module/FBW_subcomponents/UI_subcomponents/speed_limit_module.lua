@@ -69,42 +69,42 @@ function Update_limit_speeds_module_480x160(x_pos, y_pos, variable_table)
     end
 
     --capt ias indications
-    if get(PFD_Capt_IAS) >= get(variable_table.left_values[1]) then
+    if get_ias(PFD_CAPT) >= get(variable_table.left_values[1]) then
         variable_table.capt_ias_y_pos = boxes_y_pos[1]
         variable_table.capt_ias_color[1] = variable_table.left_colors[1][1]
         variable_table.capt_ias_color[2] = variable_table.left_colors[1][2]
         variable_table.capt_ias_color[3] = variable_table.left_colors[1][3]
-    elseif get(PFD_Capt_IAS) < get(variable_table.left_values[1]) and get(PFD_Capt_IAS) >= get(variable_table.left_values[2]) then
+    elseif get_ias(PFD_CAPT) < get(variable_table.left_values[1]) and get_ias(PFD_CAPT) >= get(variable_table.left_values[2]) then
         --lerp the differnce between the difference values
-        variable_table.capt_ias_y_pos = Math_lerp(boxes_y_pos[1], boxes_y_pos[2], (get(variable_table.left_values[1]) - get(PFD_Capt_IAS)) / (get(variable_table.left_values[1]) - get(variable_table.left_values[2])))
-        variable_table.capt_ias_color[1] = Math_lerp(variable_table.left_colors[1][1], variable_table.left_colors[2][1], (get(variable_table.left_values[1]) - get(PFD_Capt_IAS)) / (get(variable_table.left_values[1]) - get(variable_table.left_values[2])))
-        variable_table.capt_ias_color[2] = Math_lerp(variable_table.left_colors[1][2], variable_table.left_colors[2][2], (get(variable_table.left_values[1]) - get(PFD_Capt_IAS)) / (get(variable_table.left_values[1]) - get(variable_table.left_values[2])))
-        variable_table.capt_ias_color[3] = Math_lerp(variable_table.left_colors[1][3], variable_table.left_colors[2][3], (get(variable_table.left_values[1]) - get(PFD_Capt_IAS)) / (get(variable_table.left_values[1]) - get(variable_table.left_values[2])))
-    elseif get(PFD_Capt_IAS) < get(variable_table.left_values[2]) and get(PFD_Capt_IAS) >= get(variable_table.left_values[3]) then
+        variable_table.capt_ias_y_pos = Math_lerp(boxes_y_pos[1], boxes_y_pos[2], (get(variable_table.left_values[1]) - get_ias(PFD_CAPT)) / (get(variable_table.left_values[1]) - get(variable_table.left_values[2])))
+        variable_table.capt_ias_color[1] = Math_lerp(variable_table.left_colors[1][1], variable_table.left_colors[2][1], (get(variable_table.left_values[1]) - get_ias(PFD_CAPT)) / (get(variable_table.left_values[1]) - get(variable_table.left_values[2])))
+        variable_table.capt_ias_color[2] = Math_lerp(variable_table.left_colors[1][2], variable_table.left_colors[2][2], (get(variable_table.left_values[1]) - get_ias(PFD_CAPT)) / (get(variable_table.left_values[1]) - get(variable_table.left_values[2])))
+        variable_table.capt_ias_color[3] = Math_lerp(variable_table.left_colors[1][3], variable_table.left_colors[2][3], (get(variable_table.left_values[1]) - get_ias(PFD_CAPT)) / (get(variable_table.left_values[1]) - get(variable_table.left_values[2])))
+    elseif get_ias(PFD_CAPT) < get(variable_table.left_values[2]) and get_ias(PFD_CAPT) >= get(variable_table.left_values[3]) then
         --lerp the differnce between the difference values
-        variable_table.capt_ias_y_pos = Math_lerp(boxes_y_pos[2], boxes_y_pos[3], (get(variable_table.left_values[2]) - get(PFD_Capt_IAS)) / (get(variable_table.left_values[2]) - get(variable_table.left_values[3])))
-        variable_table.capt_ias_color[1] = Math_lerp(variable_table.left_colors[2][1], variable_table.left_colors[3][1], (get(variable_table.left_values[2]) - get(PFD_Capt_IAS)) / (get(variable_table.left_values[2]) - get(variable_table.left_values[3])))
-        variable_table.capt_ias_color[2] = Math_lerp(variable_table.left_colors[2][2], variable_table.left_colors[3][2], (get(variable_table.left_values[2]) - get(PFD_Capt_IAS)) / (get(variable_table.left_values[2]) - get(variable_table.left_values[3])))
-        variable_table.capt_ias_color[3] = Math_lerp(variable_table.left_colors[2][3], variable_table.left_colors[3][3], (get(variable_table.left_values[2]) - get(PFD_Capt_IAS)) / (get(variable_table.left_values[2]) - get(variable_table.left_values[3])))
-    elseif get(PFD_Capt_IAS) < get(variable_table.left_values[3]) and get(PFD_Capt_IAS) >= get(variable_table.left_values[4]) then
+        variable_table.capt_ias_y_pos = Math_lerp(boxes_y_pos[2], boxes_y_pos[3], (get(variable_table.left_values[2]) - get_ias(PFD_CAPT)) / (get(variable_table.left_values[2]) - get(variable_table.left_values[3])))
+        variable_table.capt_ias_color[1] = Math_lerp(variable_table.left_colors[2][1], variable_table.left_colors[3][1], (get(variable_table.left_values[2]) - get_ias(PFD_CAPT)) / (get(variable_table.left_values[2]) - get(variable_table.left_values[3])))
+        variable_table.capt_ias_color[2] = Math_lerp(variable_table.left_colors[2][2], variable_table.left_colors[3][2], (get(variable_table.left_values[2]) - get_ias(PFD_CAPT)) / (get(variable_table.left_values[2]) - get(variable_table.left_values[3])))
+        variable_table.capt_ias_color[3] = Math_lerp(variable_table.left_colors[2][3], variable_table.left_colors[3][3], (get(variable_table.left_values[2]) - get_ias(PFD_CAPT)) / (get(variable_table.left_values[2]) - get(variable_table.left_values[3])))
+    elseif get_ias(PFD_CAPT) < get(variable_table.left_values[3]) and get_ias(PFD_CAPT) >= get(variable_table.left_values[4]) then
         --lerp the differnce between the difference values
-        variable_table.capt_ias_y_pos = Math_lerp(boxes_y_pos[3], boxes_y_pos[4], (get(variable_table.left_values[3]) - get(PFD_Capt_IAS)) / (get(variable_table.left_values[3]) - get(variable_table.left_values[4])))
-        variable_table.capt_ias_color[1] = Math_lerp(variable_table.left_colors[3][1], variable_table.left_colors[4][1], (get(variable_table.left_values[3]) - get(PFD_Capt_IAS)) / (get(variable_table.left_values[3]) - get(variable_table.left_values[4])))
-        variable_table.capt_ias_color[2] = Math_lerp(variable_table.left_colors[3][2], variable_table.left_colors[4][2], (get(variable_table.left_values[3]) - get(PFD_Capt_IAS)) / (get(variable_table.left_values[3]) - get(variable_table.left_values[4])))
-        variable_table.capt_ias_color[3] = Math_lerp(variable_table.left_colors[3][3], variable_table.left_colors[4][3], (get(variable_table.left_values[3]) - get(PFD_Capt_IAS)) / (get(variable_table.left_values[3]) - get(variable_table.left_values[4])))
-    elseif get(PFD_Capt_IAS) < get(variable_table.left_values[4]) and get(PFD_Capt_IAS) >= get(variable_table.left_values[5]) then
+        variable_table.capt_ias_y_pos = Math_lerp(boxes_y_pos[3], boxes_y_pos[4], (get(variable_table.left_values[3]) - get_ias(PFD_CAPT)) / (get(variable_table.left_values[3]) - get(variable_table.left_values[4])))
+        variable_table.capt_ias_color[1] = Math_lerp(variable_table.left_colors[3][1], variable_table.left_colors[4][1], (get(variable_table.left_values[3]) - get_ias(PFD_CAPT)) / (get(variable_table.left_values[3]) - get(variable_table.left_values[4])))
+        variable_table.capt_ias_color[2] = Math_lerp(variable_table.left_colors[3][2], variable_table.left_colors[4][2], (get(variable_table.left_values[3]) - get_ias(PFD_CAPT)) / (get(variable_table.left_values[3]) - get(variable_table.left_values[4])))
+        variable_table.capt_ias_color[3] = Math_lerp(variable_table.left_colors[3][3], variable_table.left_colors[4][3], (get(variable_table.left_values[3]) - get_ias(PFD_CAPT)) / (get(variable_table.left_values[3]) - get(variable_table.left_values[4])))
+    elseif get_ias(PFD_CAPT) < get(variable_table.left_values[4]) and get_ias(PFD_CAPT) >= get(variable_table.left_values[5]) then
         --lerp the differnce between the difference values
-        variable_table.capt_ias_y_pos = Math_lerp(boxes_y_pos[4], boxes_y_pos[5], (get(variable_table.left_values[4]) - get(PFD_Capt_IAS)) / (get(variable_table.left_values[4]) - get(variable_table.left_values[5])))
-        variable_table.capt_ias_color[1] = Math_lerp(variable_table.left_colors[4][1], variable_table.left_colors[5][1], (get(variable_table.left_values[4]) - get(PFD_Capt_IAS)) / (get(variable_table.left_values[4]) - get(variable_table.left_values[5])))
-        variable_table.capt_ias_color[2] = Math_lerp(variable_table.left_colors[4][2], variable_table.left_colors[5][2], (get(variable_table.left_values[4]) - get(PFD_Capt_IAS)) / (get(variable_table.left_values[4]) - get(variable_table.left_values[5])))
-        variable_table.capt_ias_color[3] = Math_lerp(variable_table.left_colors[4][3], variable_table.left_colors[5][3], (get(variable_table.left_values[4]) - get(PFD_Capt_IAS)) / (get(variable_table.left_values[4]) - get(variable_table.left_values[5])))
-    elseif get(PFD_Capt_IAS) < get(variable_table.left_values[5]) and get(PFD_Capt_IAS) >= get(variable_table.left_values[6]) then
+        variable_table.capt_ias_y_pos = Math_lerp(boxes_y_pos[4], boxes_y_pos[5], (get(variable_table.left_values[4]) - get_ias(PFD_CAPT)) / (get(variable_table.left_values[4]) - get(variable_table.left_values[5])))
+        variable_table.capt_ias_color[1] = Math_lerp(variable_table.left_colors[4][1], variable_table.left_colors[5][1], (get(variable_table.left_values[4]) - get_ias(PFD_CAPT)) / (get(variable_table.left_values[4]) - get(variable_table.left_values[5])))
+        variable_table.capt_ias_color[2] = Math_lerp(variable_table.left_colors[4][2], variable_table.left_colors[5][2], (get(variable_table.left_values[4]) - get_ias(PFD_CAPT)) / (get(variable_table.left_values[4]) - get(variable_table.left_values[5])))
+        variable_table.capt_ias_color[3] = Math_lerp(variable_table.left_colors[4][3], variable_table.left_colors[5][3], (get(variable_table.left_values[4]) - get_ias(PFD_CAPT)) / (get(variable_table.left_values[4]) - get(variable_table.left_values[5])))
+    elseif get_ias(PFD_CAPT) < get(variable_table.left_values[5]) and get_ias(PFD_CAPT) >= get(variable_table.left_values[6]) then
         --lerp the differnce between the difference values
-        variable_table.capt_ias_y_pos = Math_lerp(boxes_y_pos[5], boxes_y_pos[6], (get(variable_table.left_values[5]) - get(PFD_Capt_IAS)) / (get(variable_table.left_values[5]) - get(variable_table.left_values[6])))
-        variable_table.capt_ias_color[1] = Math_lerp(variable_table.left_colors[5][1], variable_table.left_colors[6][1], (get(variable_table.left_values[5]) - get(PFD_Capt_IAS)) / (get(variable_table.left_values[5]) - get(variable_table.left_values[6])))
-        variable_table.capt_ias_color[2] = Math_lerp(variable_table.left_colors[5][2], variable_table.left_colors[6][2], (get(variable_table.left_values[5]) - get(PFD_Capt_IAS)) / (get(variable_table.left_values[5]) - get(variable_table.left_values[6])))
-        variable_table.capt_ias_color[3] = Math_lerp(variable_table.left_colors[5][3], variable_table.left_colors[6][3], (get(variable_table.left_values[5]) - get(PFD_Capt_IAS)) / (get(variable_table.left_values[5]) - get(variable_table.left_values[6])))
-    elseif get(PFD_Capt_IAS) < get(variable_table.left_values[6])then
+        variable_table.capt_ias_y_pos = Math_lerp(boxes_y_pos[5], boxes_y_pos[6], (get(variable_table.left_values[5]) - get_ias(PFD_CAPT)) / (get(variable_table.left_values[5]) - get(variable_table.left_values[6])))
+        variable_table.capt_ias_color[1] = Math_lerp(variable_table.left_colors[5][1], variable_table.left_colors[6][1], (get(variable_table.left_values[5]) - get_ias(PFD_CAPT)) / (get(variable_table.left_values[5]) - get(variable_table.left_values[6])))
+        variable_table.capt_ias_color[2] = Math_lerp(variable_table.left_colors[5][2], variable_table.left_colors[6][2], (get(variable_table.left_values[5]) - get_ias(PFD_CAPT)) / (get(variable_table.left_values[5]) - get(variable_table.left_values[6])))
+        variable_table.capt_ias_color[3] = Math_lerp(variable_table.left_colors[5][3], variable_table.left_colors[6][3], (get(variable_table.left_values[5]) - get_ias(PFD_CAPT)) / (get(variable_table.left_values[5]) - get(variable_table.left_values[6])))
+    elseif get_ias(PFD_CAPT) < get(variable_table.left_values[6])then
         variable_table.capt_ias_y_pos = boxes_y_pos[6]
         variable_table.capt_ias_color[1] = variable_table.left_colors[6][1]
         variable_table.capt_ias_color[2] = variable_table.left_colors[6][2]
@@ -112,42 +112,42 @@ function Update_limit_speeds_module_480x160(x_pos, y_pos, variable_table)
     end
 
     --capt ias indications
-    if get(PFD_Fo_IAS) >= get(variable_table.right_values[1]) then
+    if get_ias(PFD_FO) >= get(variable_table.right_values[1]) then
         variable_table.fo_ias_y_pos = boxes_y_pos[1]
         variable_table.fo_ias_color[1] = variable_table.right_colors[1][1]
         variable_table.fo_ias_color[2] = variable_table.right_colors[1][2]
         variable_table.fo_ias_color[3] = variable_table.right_colors[1][3]
-    elseif get(PFD_Fo_IAS) < get(variable_table.right_values[1]) and get(PFD_Fo_IAS) >= get(variable_table.right_values[2]) then
+    elseif get_ias(PFD_FO) < get(variable_table.right_values[1]) and get_ias(PFD_FO) >= get(variable_table.right_values[2]) then
         --lerp the differnce between the difference values
-        variable_table.fo_ias_y_pos = Math_lerp(boxes_y_pos[1], boxes_y_pos[2], (get(variable_table.right_values[1]) - get(PFD_Fo_IAS)) / (get(variable_table.right_values[1]) - get(variable_table.right_values[2])))
-        variable_table.fo_ias_color[1] = Math_lerp(variable_table.right_colors[1][1], variable_table.right_colors[2][1], (get(variable_table.right_values[1]) - get(PFD_Fo_IAS)) / (get(variable_table.right_values[1]) - get(variable_table.right_values[2])))
-        variable_table.fo_ias_color[2] = Math_lerp(variable_table.right_colors[1][2], variable_table.right_colors[2][2], (get(variable_table.right_values[1]) - get(PFD_Fo_IAS)) / (get(variable_table.right_values[1]) - get(variable_table.right_values[2])))
-        variable_table.fo_ias_color[3] = Math_lerp(variable_table.right_colors[1][3], variable_table.right_colors[2][3], (get(variable_table.right_values[1]) - get(PFD_Fo_IAS)) / (get(variable_table.right_values[1]) - get(variable_table.right_values[2])))
-    elseif get(PFD_Fo_IAS) < get(variable_table.right_values[2]) and get(PFD_Fo_IAS) >= get(variable_table.right_values[3]) then
+        variable_table.fo_ias_y_pos = Math_lerp(boxes_y_pos[1], boxes_y_pos[2], (get(variable_table.right_values[1]) - get_ias(PFD_FO)) / (get(variable_table.right_values[1]) - get(variable_table.right_values[2])))
+        variable_table.fo_ias_color[1] = Math_lerp(variable_table.right_colors[1][1], variable_table.right_colors[2][1], (get(variable_table.right_values[1]) - get_ias(PFD_FO)) / (get(variable_table.right_values[1]) - get(variable_table.right_values[2])))
+        variable_table.fo_ias_color[2] = Math_lerp(variable_table.right_colors[1][2], variable_table.right_colors[2][2], (get(variable_table.right_values[1]) - get_ias(PFD_FO)) / (get(variable_table.right_values[1]) - get(variable_table.right_values[2])))
+        variable_table.fo_ias_color[3] = Math_lerp(variable_table.right_colors[1][3], variable_table.right_colors[2][3], (get(variable_table.right_values[1]) - get_ias(PFD_FO)) / (get(variable_table.right_values[1]) - get(variable_table.right_values[2])))
+    elseif get_ias(PFD_FO) < get(variable_table.right_values[2]) and get_ias(PFD_FO) >= get(variable_table.right_values[3]) then
         --lerp the differnce between the difference values
-        variable_table.fo_ias_y_pos = Math_lerp(boxes_y_pos[2], boxes_y_pos[3], (get(variable_table.right_values[2]) - get(PFD_Fo_IAS)) / (get(variable_table.right_values[2]) - get(variable_table.right_values[3])))
-        variable_table.fo_ias_color[1] = Math_lerp(variable_table.right_colors[2][1], variable_table.right_colors[3][1], (get(variable_table.right_values[2]) - get(PFD_Fo_IAS)) / (get(variable_table.right_values[2]) - get(variable_table.right_values[3])))
-        variable_table.fo_ias_color[2] = Math_lerp(variable_table.right_colors[2][2], variable_table.right_colors[3][2], (get(variable_table.right_values[2]) - get(PFD_Fo_IAS)) / (get(variable_table.right_values[2]) - get(variable_table.right_values[3])))
-        variable_table.fo_ias_color[3] = Math_lerp(variable_table.right_colors[2][3], variable_table.right_colors[3][3], (get(variable_table.right_values[2]) - get(PFD_Fo_IAS)) / (get(variable_table.right_values[2]) - get(variable_table.right_values[3])))
-    elseif get(PFD_Fo_IAS) < get(variable_table.right_values[3]) and get(PFD_Fo_IAS) >= get(variable_table.right_values[4]) then
+        variable_table.fo_ias_y_pos = Math_lerp(boxes_y_pos[2], boxes_y_pos[3], (get(variable_table.right_values[2]) - get_ias(PFD_FO)) / (get(variable_table.right_values[2]) - get(variable_table.right_values[3])))
+        variable_table.fo_ias_color[1] = Math_lerp(variable_table.right_colors[2][1], variable_table.right_colors[3][1], (get(variable_table.right_values[2]) - get_ias(PFD_FO)) / (get(variable_table.right_values[2]) - get(variable_table.right_values[3])))
+        variable_table.fo_ias_color[2] = Math_lerp(variable_table.right_colors[2][2], variable_table.right_colors[3][2], (get(variable_table.right_values[2]) - get_ias(PFD_FO)) / (get(variable_table.right_values[2]) - get(variable_table.right_values[3])))
+        variable_table.fo_ias_color[3] = Math_lerp(variable_table.right_colors[2][3], variable_table.right_colors[3][3], (get(variable_table.right_values[2]) - get_ias(PFD_FO)) / (get(variable_table.right_values[2]) - get(variable_table.right_values[3])))
+    elseif get_ias(PFD_FO) < get(variable_table.right_values[3]) and get_ias(PFD_FO) >= get(variable_table.right_values[4]) then
         --lerp the differnce between the difference values
-        variable_table.fo_ias_y_pos = Math_lerp(boxes_y_pos[3], boxes_y_pos[4], (get(variable_table.right_values[3]) - get(PFD_Fo_IAS)) / (get(variable_table.right_values[3]) - get(variable_table.right_values[4])))
-        variable_table.fo_ias_color[1] = Math_lerp(variable_table.right_colors[3][1], variable_table.right_colors[4][1], (get(variable_table.right_values[3]) - get(PFD_Fo_IAS)) / (get(variable_table.right_values[3]) - get(variable_table.right_values[4])))
-        variable_table.fo_ias_color[2] = Math_lerp(variable_table.right_colors[3][2], variable_table.right_colors[4][2], (get(variable_table.right_values[3]) - get(PFD_Fo_IAS)) / (get(variable_table.right_values[3]) - get(variable_table.right_values[4])))
-        variable_table.fo_ias_color[3] = Math_lerp(variable_table.right_colors[3][3], variable_table.right_colors[4][3], (get(variable_table.right_values[3]) - get(PFD_Fo_IAS)) / (get(variable_table.right_values[3]) - get(variable_table.right_values[4])))
-    elseif get(PFD_Fo_IAS) < get(variable_table.right_values[4]) and get(PFD_Fo_IAS) >= get(variable_table.right_values[5]) then
+        variable_table.fo_ias_y_pos = Math_lerp(boxes_y_pos[3], boxes_y_pos[4], (get(variable_table.right_values[3]) - get_ias(PFD_FO)) / (get(variable_table.right_values[3]) - get(variable_table.right_values[4])))
+        variable_table.fo_ias_color[1] = Math_lerp(variable_table.right_colors[3][1], variable_table.right_colors[4][1], (get(variable_table.right_values[3]) - get_ias(PFD_FO)) / (get(variable_table.right_values[3]) - get(variable_table.right_values[4])))
+        variable_table.fo_ias_color[2] = Math_lerp(variable_table.right_colors[3][2], variable_table.right_colors[4][2], (get(variable_table.right_values[3]) - get_ias(PFD_FO)) / (get(variable_table.right_values[3]) - get(variable_table.right_values[4])))
+        variable_table.fo_ias_color[3] = Math_lerp(variable_table.right_colors[3][3], variable_table.right_colors[4][3], (get(variable_table.right_values[3]) - get_ias(PFD_FO)) / (get(variable_table.right_values[3]) - get(variable_table.right_values[4])))
+    elseif get_ias(PFD_FO) < get(variable_table.right_values[4]) and get_ias(PFD_FO) >= get(variable_table.right_values[5]) then
         --lerp the differnce between the difference values
-        variable_table.fo_ias_y_pos = Math_lerp(boxes_y_pos[4], boxes_y_pos[5], (get(variable_table.right_values[4]) - get(PFD_Fo_IAS)) / (get(variable_table.right_values[4]) - get(variable_table.right_values[5])))
-        variable_table.fo_ias_color[1] = Math_lerp(variable_table.right_colors[4][1], variable_table.right_colors[5][1], (get(variable_table.right_values[4]) - get(PFD_Fo_IAS)) / (get(variable_table.right_values[4]) - get(variable_table.right_values[5])))
-        variable_table.fo_ias_color[2] = Math_lerp(variable_table.right_colors[4][2], variable_table.right_colors[5][2], (get(variable_table.right_values[4]) - get(PFD_Fo_IAS)) / (get(variable_table.right_values[4]) - get(variable_table.right_values[5])))
-        variable_table.fo_ias_color[3] = Math_lerp(variable_table.right_colors[4][3], variable_table.right_colors[5][3], (get(variable_table.right_values[4]) - get(PFD_Fo_IAS)) / (get(variable_table.right_values[4]) - get(variable_table.right_values[5])))
-    elseif get(PFD_Fo_IAS) < get(variable_table.right_values[5]) and get(PFD_Fo_IAS) >= get(variable_table.right_values[6]) then
+        variable_table.fo_ias_y_pos = Math_lerp(boxes_y_pos[4], boxes_y_pos[5], (get(variable_table.right_values[4]) - get_ias(PFD_FO)) / (get(variable_table.right_values[4]) - get(variable_table.right_values[5])))
+        variable_table.fo_ias_color[1] = Math_lerp(variable_table.right_colors[4][1], variable_table.right_colors[5][1], (get(variable_table.right_values[4]) - get_ias(PFD_FO)) / (get(variable_table.right_values[4]) - get(variable_table.right_values[5])))
+        variable_table.fo_ias_color[2] = Math_lerp(variable_table.right_colors[4][2], variable_table.right_colors[5][2], (get(variable_table.right_values[4]) - get_ias(PFD_FO)) / (get(variable_table.right_values[4]) - get(variable_table.right_values[5])))
+        variable_table.fo_ias_color[3] = Math_lerp(variable_table.right_colors[4][3], variable_table.right_colors[5][3], (get(variable_table.right_values[4]) - get_ias(PFD_FO)) / (get(variable_table.right_values[4]) - get(variable_table.right_values[5])))
+    elseif get_ias(PFD_FO) < get(variable_table.right_values[5]) and get_ias(PFD_FO) >= get(variable_table.right_values[6]) then
         --lerp the differnce between the difference values
-        variable_table.fo_ias_y_pos = Math_lerp(boxes_y_pos[5], boxes_y_pos[6], (get(variable_table.right_values[5]) - get(PFD_Fo_IAS)) / (get(variable_table.right_values[5]) - get(variable_table.right_values[6])))
-        variable_table.fo_ias_color[1] = Math_lerp(variable_table.right_colors[5][1], variable_table.right_colors[6][1], (get(variable_table.right_values[5]) - get(PFD_Fo_IAS)) / (get(variable_table.right_values[5]) - get(variable_table.right_values[6])))
-        variable_table.fo_ias_color[2] = Math_lerp(variable_table.right_colors[5][2], variable_table.right_colors[6][2], (get(variable_table.right_values[5]) - get(PFD_Fo_IAS)) / (get(variable_table.right_values[5]) - get(variable_table.right_values[6])))
-        variable_table.fo_ias_color[3] = Math_lerp(variable_table.right_colors[5][3], variable_table.right_colors[6][3], (get(variable_table.right_values[5]) - get(PFD_Fo_IAS)) / (get(variable_table.right_values[5]) - get(variable_table.right_values[6])))
-    elseif get(PFD_Fo_IAS) < get(variable_table.right_values[6])then
+        variable_table.fo_ias_y_pos = Math_lerp(boxes_y_pos[5], boxes_y_pos[6], (get(variable_table.right_values[5]) - get_ias(PFD_FO)) / (get(variable_table.right_values[5]) - get(variable_table.right_values[6])))
+        variable_table.fo_ias_color[1] = Math_lerp(variable_table.right_colors[5][1], variable_table.right_colors[6][1], (get(variable_table.right_values[5]) - get_ias(PFD_FO)) / (get(variable_table.right_values[5]) - get(variable_table.right_values[6])))
+        variable_table.fo_ias_color[2] = Math_lerp(variable_table.right_colors[5][2], variable_table.right_colors[6][2], (get(variable_table.right_values[5]) - get_ias(PFD_FO)) / (get(variable_table.right_values[5]) - get(variable_table.right_values[6])))
+        variable_table.fo_ias_color[3] = Math_lerp(variable_table.right_colors[5][3], variable_table.right_colors[6][3], (get(variable_table.right_values[5]) - get_ias(PFD_FO)) / (get(variable_table.right_values[5]) - get(variable_table.right_values[6])))
+    elseif get_ias(PFD_FO) < get(variable_table.right_values[6])then
         variable_table.fo_ias_y_pos = boxes_y_pos[6]
         variable_table.fo_ias_color[1] = variable_table.right_colors[6][1]
         variable_table.fo_ias_color[2] = variable_table.right_colors[6][2]
@@ -203,7 +203,7 @@ function Draw_limit_speeds_module_480x160(x_pos, y_pos, variable_table)
     --Capt pointer
     sasl.gl.drawText(B612_MONO_bold, CENTER_X - 110, variable_table.capt_ias_y_pos - 3, "←", 40, false, false, TEXT_ALIGN_CENTER, variable_table.capt_ias_color)
     sasl.gl.drawRectangle(CENTER_X - 90, variable_table.capt_ias_y_pos, 40, 110/6, LIGHT_GREY)
-    sasl.gl.drawText(B612_MONO_bold, CENTER_X - 70, variable_table.capt_ias_y_pos + 5, math.floor(get(PFD_Capt_IAS)), 12, false, false, TEXT_ALIGN_CENTER, variable_table.capt_ias_color)
+    sasl.gl.drawText(B612_MONO_bold, CENTER_X - 70, variable_table.capt_ias_y_pos + 5, math.floor(get_ias(PFD_CAPT)), 12, false, false, TEXT_ALIGN_CENTER, variable_table.capt_ias_color)
 
     --fo_indications
     sasl.gl.drawRectangle(CENTER_X + 130, y_pos + 5 + 5 * (5 + 110/6), 100, 110/6, LIGHT_GREY)
@@ -233,7 +233,7 @@ function Draw_limit_speeds_module_480x160(x_pos, y_pos, variable_table)
     --fo pointer
     sasl.gl.drawText(B612_MONO_bold, CENTER_X + 110, variable_table.fo_ias_y_pos - 3, "→", 40, false, false, TEXT_ALIGN_CENTER, variable_table.fo_ias_color)
     sasl.gl.drawRectangle(CENTER_X + 50, variable_table.fo_ias_y_pos, 40, 110/6, LIGHT_GREY)
-    sasl.gl.drawText(B612_MONO_bold, CENTER_X + 70, variable_table.fo_ias_y_pos + 5, math.floor(get(PFD_Fo_IAS)), 12, false, false, TEXT_ALIGN_CENTER, variable_table.fo_ias_color)
+    sasl.gl.drawText(B612_MONO_bold, CENTER_X + 70, variable_table.fo_ias_y_pos + 5, math.floor(get_ias(PFD_FO)), 12, false, false, TEXT_ALIGN_CENTER, variable_table.fo_ias_color)
 
     --limit indications
     if get(Capt_IAS) > get(Capt_VMAX) or get(Fo_IAS) > get(Fo_VMAX) then

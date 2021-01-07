@@ -1,6 +1,8 @@
 include("FBW_subcomponents/flight_ctl_subcomponents/lateral_ctl.lua")
 
-local in_flight_mode_timer = 0
+local in_air_timer = 0
+local alpha_speed_update_time_s = 0.15
+local alpha_speed_update_timer = 0
 
 local VMAX_speeds = {
     0.82,
@@ -83,24 +85,22 @@ end
 --calculate flight characteristics values
 function update()
     if get(PFD_Capt_Baro_Altitude) > 24600 then
-        set(Capt_VMAX, get(PFD_Capt_IAS) * (VMAX_speeds[1] / get(Capt_Mach)))
-        set(Capt_VMAX_prot, get(PFD_Capt_IAS) * (VMAX_speeds[1] + 0.006) / get(Capt_Mach))
+        set(Capt_VMAX, get_ias(PFD_CAPT) * (VMAX_speeds[1] / get(Capt_Mach)))
+        set(Capt_VMAX_prot, get_ias(PFD_CAPT) * (VMAX_speeds[1] + 0.006) / get(Capt_Mach))
     else
         set(Capt_VMAX, VMAX_speeds[2])
         set(Capt_VMAX_prot, VMAX_speeds[2] + 6)
     end
     if get(PFD_Fo_Baro_Altitude) > 24600 then
-        set(Fo_VMAX, get(PFD_Fo_IAS) * (VMAX_speeds[1] / get(Fo_Mach)))
-        set(Fo_VMAX_prot, get(PFD_Fo_IAS) * (VMAX_speeds[1] + 0.006) / get(Fo_Mach))
+        set(Fo_VMAX, get_ias(PFD_FO) * (VMAX_speeds[1] / get(Fo_Mach)))
+        set(Fo_VMAX_prot, get_ias(PFD_FO) * (VMAX_speeds[1] + 0.006) / get(Fo_Mach))
     else
         set(Fo_VMAX, VMAX_speeds[2])
         set(Fo_VMAX_prot, VMAX_speeds[2] + 6)
     end
-    if get(Gear_handle) ~= 0 then
-        if get(Front_gear_deployment) > 0.25 or get(Left_gear_deployment) > 0.25 or get(Right_gear_deployment) > 0.25 then
-            set(Capt_VMAX, VMAX_speeds[3])
-            set(Fo_VMAX, VMAX_speeds[3])
-        end
+    if get(Front_gear_deployment) > 0.25 or get(Left_gear_deployment) > 0.25 or get(Right_gear_deployment) > 0.25 then
+        set(Capt_VMAX, VMAX_speeds[3])
+        set(Fo_VMAX, VMAX_speeds[3])
     end
     if get(Flaps_internal_config) > 0 then
         set(Capt_VMAX, VMAX_speeds[get(Flaps_internal_config) + 3])
@@ -117,22 +117,30 @@ function update()
     set(Fo_GD,   (1.5 * get(Aircraft_total_weight_kgs) / 1000 + 110) + Math_clamp_lower((get(PFD_Fo_Baro_Altitude)   - 20000) / 1000, 0))
 
     --update timer
-    if get(FBW_in_flight_mode) == 0 then
-        in_flight_mode_timer = 0
+    if get(Any_wheel_on_ground) == 1 then
+        in_air_timer = 0
     end
-    if in_flight_mode_timer < 10 and get(FBW_in_flight_mode) == 1 then
-        in_flight_mode_timer = in_flight_mode_timer + get(DELTA_TIME)
+    if in_air_timer < 10 and get(Any_wheel_on_ground) == 0 then
+        in_air_timer = in_air_timer + get(DELTA_TIME)
     end
+
+    --alpha speeds update timer(accirding to video at 25fps updates every 3 <-> 4 frames: https://www.youtube.com/watch?v=3Suxhj9wQio&ab_channel=a321trainingteam)
+    alpha_speed_update_timer = alpha_speed_update_timer + get(DELTA_TIME)
 
     --stall speeds(configuration dependent)
     --on liftoff for 5 seconds the Aprot value is the same as Amax(FCOM 1.27.20.P4 or DSC 27-20-10-20 P4/6)
-    if in_flight_mode_timer >= 5 then
-        set(Capt_Vaprot_vsw, Set_anim_value_no_lim(get(Capt_Vaprot_vsw), get(PFD_Capt_IAS) * math.sqrt(Math_clamp_lower((get(Alpha) - alpha0s[get(Flaps_internal_config) + 1]) / (vsw_aprot_alphas[get(Flaps_internal_config) + 1] - alpha0s[get(Flaps_internal_config) + 1]), 0)), 0.7))
-        set(Fo_Vaprot_vsw,   Set_anim_value_no_lim(get(Fo_Vaprot_vsw),   get(PFD_Fo_IAS) *   math.sqrt(Math_clamp_lower((get(Alpha) - alpha0s[get(Flaps_internal_config) + 1]) / (vsw_aprot_alphas[get(Flaps_internal_config) + 1] - alpha0s[get(Flaps_internal_config) + 1]), 0)), 0.7))
-    else
-        set(Capt_Vaprot_vsw, Set_anim_value_no_lim(get(Capt_Vaprot_vsw), get(PFD_Capt_IAS) * math.sqrt(Math_clamp_lower((get(Alpha) - alpha0s[get(Flaps_internal_config) + 1]) / (alpha_max_alphas[get(Flaps_internal_config) + 1] - alpha0s[get(Flaps_internal_config) + 1]), 0)), 0.7))
-        set(Fo_Vaprot_vsw,   Set_anim_value_no_lim(get(Fo_Vaprot_vsw),   get(PFD_Fo_IAS) *   math.sqrt(Math_clamp_lower((get(Alpha) - alpha0s[get(Flaps_internal_config) + 1]) / (alpha_max_alphas[get(Flaps_internal_config) + 1] - alpha0s[get(Flaps_internal_config) + 1]), 0)), 0.7))
+    if alpha_speed_update_timer >= alpha_speed_update_time_s then
+        if in_air_timer >= 5 then
+            set(Capt_Vaprot_vsw, Set_anim_value_no_lim(get(Capt_Vaprot_vsw), get_ias(PFD_CAPT) * math.sqrt(Math_clamp_lower((get(Alpha) - alpha0s[get(Flaps_internal_config) + 1]) / (vsw_aprot_alphas[get(Flaps_internal_config) + 1] - alpha0s[get(Flaps_internal_config) + 1]), 0)), 5))
+            set(Fo_Vaprot_vsw,   Set_anim_value_no_lim(get(Fo_Vaprot_vsw),   get_ias(PFD_FO)   * math.sqrt(Math_clamp_lower((get(Alpha) - alpha0s[get(Flaps_internal_config) + 1]) / (vsw_aprot_alphas[get(Flaps_internal_config) + 1] - alpha0s[get(Flaps_internal_config) + 1]), 0)), 5))
+        else
+            set(Capt_Vaprot_vsw, Set_anim_value_no_lim(get(Capt_Vaprot_vsw), get_ias(PFD_CAPT) * math.sqrt(Math_clamp_lower((get(Alpha) - alpha0s[get(Flaps_internal_config) + 1]) / (alpha_max_alphas[get(Flaps_internal_config) + 1] - alpha0s[get(Flaps_internal_config) + 1]), 0)), 5))
+            set(Fo_Vaprot_vsw,   Set_anim_value_no_lim(get(Fo_Vaprot_vsw),   get_ias(PFD_FO)   * math.sqrt(Math_clamp_lower((get(Alpha) - alpha0s[get(Flaps_internal_config) + 1]) / (alpha_max_alphas[get(Flaps_internal_config) + 1] - alpha0s[get(Flaps_internal_config) + 1]), 0)), 5))
+        end
+        set(Capt_Valpha_MAX, Set_anim_value_no_lim(get(Capt_Valpha_MAX), get_ias(PFD_CAPT) * math.sqrt(Math_clamp_lower((get(Alpha) - alpha0s[get(Flaps_internal_config) + 1]) / (alpha_max_alphas[get(Flaps_internal_config) + 1] - alpha0s[get(Flaps_internal_config) + 1]), 0)), 5))
+        set(Fo_Valpha_MAX,   Set_anim_value_no_lim(get(Fo_Valpha_MAX),   get_ias(PFD_FO)   * math.sqrt(Math_clamp_lower((get(Alpha) - alpha0s[get(Flaps_internal_config) + 1]) / (alpha_max_alphas[get(Flaps_internal_config) + 1] - alpha0s[get(Flaps_internal_config) + 1]), 0)), 5))
+
+        --reset timer
+        alpha_speed_update_timer = 0
     end
-    set(Capt_Valpha_MAX, Set_anim_value_no_lim(get(Capt_Valpha_MAX), get(PFD_Capt_IAS) * math.sqrt(Math_clamp_lower((get(Alpha) - alpha0s[get(Flaps_internal_config) + 1]) / (alpha_max_alphas[get(Flaps_internal_config) + 1] - alpha0s[get(Flaps_internal_config) + 1]), 0)), 0.7))
-    set(Fo_Valpha_MAX,   Set_anim_value_no_lim(get(Fo_Valpha_MAX),   get(PFD_Fo_IAS) *   math.sqrt(Math_clamp_lower((get(Alpha) - alpha0s[get(Flaps_internal_config) + 1]) / (alpha_max_alphas[get(Flaps_internal_config) + 1] - alpha0s[get(Flaps_internal_config) + 1]), 0)), 0.7))
 end
