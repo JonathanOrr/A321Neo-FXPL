@@ -38,7 +38,7 @@ end
 local function draw_common_wind_arrow(data)
     if data.inputs.is_wind_valid and data.inputs.wind_speed >= 2 then
         local rotation_angle = (data.inputs.wind_direction - data.inputs.true_heading)
-        sasl.gl.drawRotatedTexture(image_wind_arrow, rotation_angle, 100, size[2]-150, 44/3,112/3)    
+        sasl.gl.drawRotatedTexture(image_wind_arrow, rotation_angle, 100, size[2]-150, 44/3,112/3, {1,1,1})    
     end
 end
 
@@ -124,7 +124,7 @@ local function draw_common_nav_stations_single(data, id)
         color = ECAM_RED
     else
         -- Image
-        sasl.gl.drawTexture(sym_image, x+15*m-10, 35, 48/1.5,82/1.5)
+        sasl.gl.drawTexture(sym_image, x+15*m-10, 35, 48/1.5,82/1.5, {1,1,1})
     end
     
     sasl.gl.drawText(Font_AirbusDUL, x+40*m, 85, text, 26, false, false, id == 1 and TEXT_ALIGN_LEFT or TEXT_ALIGN_RIGHT, color)

@@ -16,20 +16,20 @@ local COLOR_YELLOW = {1,1,0}
 local function draw_backgrounds(data)
     -- Main rose background
     if data.inputs.is_heading_valid then
-        sasl.gl.drawRotatedTexture(image_bkg_arc, -data.inputs.heading, (size[1]-1330)/2,(size[2]-1330)/2-312,1330,1330)
-        sasl.gl.drawTexture(image_bkg_arc_inner, (size[1]-898)/2,(size[2]-568)/2-13,898,568)
+        sasl.gl.drawRotatedTexture(image_bkg_arc, -data.inputs.heading, (size[1]-1330)/2,(size[2]-1330)/2-312,1330,1330, {1,1,1})
+        sasl.gl.drawTexture(image_bkg_arc_inner, (size[1]-898)/2,(size[2]-568)/2-13,898,568, {1,1,1})
         
         if data.misc.tcas_ta_triggered or data.misc.tcas_ra_triggered or data.config.range == ND_RANGE_20 then
 
             -- Inner (TCAS) circle is activated only when:
             -- - Range is 10, or
             -- - TCAS RA or TA activates
-            sasl.gl.drawTexture(image_bkg_arc_tcas, (size[1]-122)/2,(size[2]-41)/2-252,122,41)
+            sasl.gl.drawTexture(image_bkg_arc_tcas, (size[1]-122)/2,(size[2]-41)/2-252,122,41, {1,1,1})
         end
         
     else
         -- Heading not available
-       sasl.gl.drawTexture(image_bkg_arc_red, (size[1]-898)/2,(size[2]-600)/2-30,898,600)
+       sasl.gl.drawTexture(image_bkg_arc_red, (size[1]-898)/2,(size[2]-600)/2-30,898,600, {1,1,1})
     end
 end
 
@@ -58,7 +58,7 @@ local function draw_track_symbol(data)
         return -- not visible, out of visible area
     end
 
-    sasl.gl.drawRotatedTexture(image_track_sym, 180+(data.inputs.track-data.inputs.heading), (size[1]-17)/2,(size[2]-1154)/2-312,17,1154)
+    sasl.gl.drawRotatedTexture(image_track_sym, 180+(data.inputs.track-data.inputs.heading), (size[1]-17)/2,(size[2]-1154)/2-312,17,1154, {1,1,1})
 end
 
 local function draw_hdgsel_symbol(data)
@@ -80,7 +80,7 @@ local function draw_hdgsel_symbol(data)
     end
 
     
-    sasl.gl.drawRotatedTexture(image_hdgsel_sym, (data.inputs.hdg_sel-data.inputs.heading), (size[1]-32)/2,(size[2]-1201)/2-312,32,1201)
+    sasl.gl.drawRotatedTexture(image_hdgsel_sym, (data.inputs.hdg_sel-data.inputs.heading), (size[1]-32)/2,(size[2]-1201)/2-312,32,1201, {1,1,1})
 end
 
 
@@ -91,7 +91,7 @@ local function draw_ls_symbol(data)
     end
     
     sasl.gl.drawRotatedTexture(data.inputs.ls_is_precise and image_ils_sym or image_ils_nonprec_sym,
-                              (data.inputs.ls_direction-data.inputs.heading+180), (size[1]-19)/2,(size[2]-1217)/2-312,19,1217)
+                              (data.inputs.ls_direction-data.inputs.heading+180), (size[1]-19)/2,(size[2]-1217)/2-312,19,1217, {1,1,1})
 end
 
 local function draw_ranges(data)

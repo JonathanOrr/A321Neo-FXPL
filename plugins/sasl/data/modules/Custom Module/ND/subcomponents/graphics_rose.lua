@@ -24,18 +24,18 @@ local COLOR_YELLOW = {1,1,0}
 local function draw_backgrounds(data)
     -- Main rose background
     if data.inputs.is_heading_valid then
-        sasl.gl.drawRotatedTexture(image_bkg_ring, -data.inputs.heading, (size[1]-750)/2,(size[2]-750)/2,750,750)
+        sasl.gl.drawRotatedTexture(image_bkg_ring, -data.inputs.heading, (size[1]-750)/2,(size[2]-750)/2,750,750, {1,1,1})
 
         if data.misc.tcas_ta_triggered or data.misc.tcas_ra_triggered or data.config.range == ND_RANGE_10 then
 
             -- Inner (TCAS) circle is activated only when:
             -- - Range is 10, or
             -- - TCAS RA or TA activates
-            sasl.gl.drawRotatedTexture(image_bkg_ring_tcas, -data.inputs.heading, (size[1]-750)/2,(size[2]-750)/2,750,750)
+            sasl.gl.drawRotatedTexture(image_bkg_ring_tcas, -data.inputs.heading, (size[1]-750)/2,(size[2]-750)/2,750,750, {1,1,1})
         end
     else
         -- Heading not available
-        sasl.gl.drawTexture(image_bkg_ring_red, (size[1]-591)/2,(size[2]-590)/2,591,590)
+        sasl.gl.drawTexture(image_bkg_ring_red, (size[1]-591)/2,(size[2]-590)/2,591,590, {1,1,1})
     end
     
 end
@@ -54,8 +54,8 @@ local function draw_fixed_symbols(data)
     -- Top heading indicator (yellow)
     sasl.gl.drawWideLine(450, 720, 450, 770, 5, COLOR_YELLOW)
 
-    sasl.gl.drawTexture(image_bkg_ring_arrows, (size[1]-750)/2,(size[2]-750)/2,750,750)
-    sasl.gl.drawTexture(image_bkg_ring_middle, (size[1]-750)/2,(size[2]-750)/2,750,750)
+    sasl.gl.drawTexture(image_bkg_ring_arrows, (size[1]-750)/2,(size[2]-750)/2,750,750, {1,1,1})
+    sasl.gl.drawTexture(image_bkg_ring_middle, (size[1]-750)/2,(size[2]-750)/2,750,750, {1,1,1})
     
 end
 
@@ -75,7 +75,7 @@ local function draw_track_symbol(data)
         return
     end
 
-    sasl.gl.drawRotatedTexture(image_track_sym, (data.inputs.track-data.inputs.heading), (size[1]-17)/2,(size[2]-594)/2,17,594)
+    sasl.gl.drawRotatedTexture(image_track_sym, (data.inputs.track-data.inputs.heading), (size[1]-17)/2,(size[2]-594)/2,17,594, {1,1,1})
     
 end
 
@@ -85,7 +85,7 @@ local function draw_hdgsel_symbol(data)
         return
     end
     
-    sasl.gl.drawRotatedTexture(image_hdgsel_sym, (data.inputs.hdg_sel-data.inputs.heading), (size[1]-32)/2,(size[2]-641)/2,32,641)
+    sasl.gl.drawRotatedTexture(image_hdgsel_sym, (data.inputs.hdg_sel-data.inputs.heading), (size[1]-32)/2,(size[2]-641)/2,32,641, {1,1,1})
 end
 
 local function draw_ls_symbol(data)
@@ -95,7 +95,7 @@ local function draw_ls_symbol(data)
     end
     
     sasl.gl.drawRotatedTexture(data.inputs.ls_is_precise and image_ils_sym or image_ils_nonprec_sym,
-                              (data.inputs.ls_direction-data.inputs.heading+180), (size[1]-19)/2,(size[2]-657)/2,19,657)
+                              (data.inputs.ls_direction-data.inputs.heading+180), (size[1]-19)/2,(size[2]-657)/2,19,657, {1,1,1})
 end
 
 
@@ -106,7 +106,7 @@ local function draw_navaid_pointer_single(data, id)
 
     local image = data.nav[id].selector == ND_SEL_ADF and image_adf or (id == 1 and image_vor_1 or image_vor_2)
 
-    sasl.gl.drawRotatedTexture(image, 180+data.nav[id].needle_angle, (size[1]-42)/2,(size[2]-586)/2,42,586)
+    sasl.gl.drawRotatedTexture(image, 180+data.nav[id].needle_angle, (size[1]-42)/2,(size[2]-586)/2,42,586, {1,1,1})
 
 end
 
@@ -149,7 +149,7 @@ local function draw_poi_array(data, poi, texture, color)
     local y = size[1]/2 + distance_px * math.sin(math.rad(bearing+data.inputs.heading))
 
     if x > 0 and x < size[1] and y > 0 and y < size[2] then
-        sasl.gl.drawTexture(texture, x-16, y-16, 32,32)
+        sasl.gl.drawTexture(texture, x-16, y-16, 32,32, {1,1,1})
         sasl.gl.drawText(Font_AirbusDUL, x+25, y-5, poi.id, 24, false, false, TEXT_ALIGN_LEFT, color)        
     end
 end
