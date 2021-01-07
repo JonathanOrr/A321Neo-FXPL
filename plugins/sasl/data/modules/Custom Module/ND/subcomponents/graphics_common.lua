@@ -139,8 +139,17 @@ local function draw_common_nav_stations_single(data, id)
     end
     
     -- Second line
-    sasl.gl.drawText(Font_AirbusDUL, x+40*m, 55, data.nav[id].identifier, 26, false, false, id == 1 and TEXT_ALIGN_LEFT or TEXT_ALIGN_RIGHT, color)
-
+    if data.nav[id].identifier ~= "" then
+        sasl.gl.drawText(Font_AirbusDUL, x+40*m, 55, data.nav[id].identifier, 26, false, false, id == 1 and TEXT_ALIGN_LEFT or TEXT_ALIGN_RIGHT, color)
+    else
+        local freq_str = ""
+        if data.nav[id].selector == ND_SEL_VOR then
+            freq_str = Round_fill(data.nav[id].frequency/100, 2)
+        else
+            freq_str = math.floor(data.nav[id].frequency)
+        end
+        sasl.gl.drawText(Font_AirbusDUL, x+40*m, 55, freq_str, 26, false, false, id == 1 and TEXT_ALIGN_LEFT or TEXT_ALIGN_RIGHT, color)    
+    end
     --- Extra symbol
     local tuned_symbol = ""
     if data.nav[id].tuning_type == ND_NAV_TUNED_M then

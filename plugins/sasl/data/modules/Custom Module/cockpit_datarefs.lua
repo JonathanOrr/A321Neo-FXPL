@@ -99,12 +99,23 @@ NAV_1_freq_Mhz = globalProperty("sim/cockpit2/radios/actuators/nav1_frequency_Mh
 NAV_1_freq_10khz = globalProperty("sim/cockpit2/radios/actuators/nav1_frequency_khz")--nav 1 freq khz xxx.>xx<, ILS range from 108.100 to 111.950 with xxx.>x<xx always being odd, VOR from 108.00 to 117.950 with 50 khz spacing and first 4 Mhz shared with ILS
 NAV_1_capt_obs = globalProperty("sim/cockpit2/radios/actuators/nav1_obs_deg_mag_pilot")--captain nav 1 obs
 NAV_1_fo_obs = globalProperty("sim/cockpit2/radios/actuators/nav1_obs_deg_mag_copilot")--first officer nav 1 obs
+
+NAV_1_is_valid = globalProperty("sim/cockpit2/radios/indicators/nav1_display_horizontal")
+
 ADF_1_freq_hz = globalProperty("sim/cockpit2/radios/actuators/adf1_frequency_hz")--adf 1 freq hz typically 190hz to 535hz
 NAV_2_freq_Mhz = globalProperty("sim/cockpit2/radios/actuators/nav2_frequency_Mhz")--nav 2 freq Mhz >xxx<.xx, ILS range from 108.100 to 111.950 with xxx.>x<xx always being odd, VOR from 108.00 to 117.950 with 50 khz spacing and first 4 Mhz shared with ILS
 NAV_2_freq_10khz = globalProperty("sim/cockpit2/radios/actuators/nav2_frequency_khz")--nav 2 freq khz xxx.>xx<, ILS range from 108.100 to 111.950 with xxx.>x<xx always being odd, VOR from 108.00 to 117.950 with 50 khz spacing and first 4 Mhz shared with ILS
 NAV_2_capt_obs = globalProperty("sim/cockpit2/radios/actuators/nav2_obs_deg_mag_pilot")--captain nav 2 obs
 NAV_2_fo_obs = globalProperty("sim/cockpit2/radios/actuators/nav2_obs_deg_mag_copilot")--first officer nav 2 obs
 ADF_2_freq_hz = globalProperty("sim/cockpit2/radios/actuators/adf2_frequency_hz")--adf 2 freq hz typically 190hz to 535hz
+
+NAV_2_is_valid = globalProperty("sim/cockpit2/radios/indicators/nav2_display_horizontal")
+
+
+NAV_1_dme_value = globalProperty("sim/cockpit2/radios/indicators/nav1_dme_distance_nm")
+NAV_2_dme_value = globalProperty("sim/cockpit2/radios/indicators/nav2_dme_distance_nm")
+NAV_1_dme_valid = globalProperty("sim/cockpit2/radios/indicators/nav1_has_dme")
+NAV_2_dme_valid = globalProperty("sim/cockpit2/radios/indicators/nav2_has_dme")
 
 ILS_1_glideslope_flag = globalProperty("sim/cockpit2/radios/indicators/nav1_flag_glideslope") -- 1: no signal received, 0: signal received
 ILS_1_glideslope_dots = globalProperty("sim/cockpit/radios/nav1_vdef_dot") -- Dot position for NAV1

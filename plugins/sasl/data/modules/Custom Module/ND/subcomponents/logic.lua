@@ -4,15 +4,15 @@ include('ADIRS_data_source.lua')
 local function update_speed_and_wind(data)
     local id = data.id
 
-    data.inputs.is_gs_valid = is_gs_ok(id)
     data.inputs.gs = get_gs(id)
+    data.inputs.is_gs_valid = is_gs_ok(id)
 
-    data.inputs.is_tas_valid = is_tas_ok(id)
     data.inputs.tas = get_tas(id)
+    data.inputs.is_tas_valid = is_tas_ok(id) and data.inputs.tas >= 65
 
-    data.inputs.is_wind_valid = is_wind_ok(id)
     data.inputs.wind_speed = get_wind_spd(id)
     data.inputs.wind_direction = get_wind_dir(id)
+    data.inputs.is_wind_valid = is_wind_ok(id) and is_tas_ok(id) and data.inputs.tas > 100
 end
 
 local function update_hdg_track(data)
@@ -59,18 +59,36 @@ local function update_navaid_raw(data)
 
     if data.nav[1].selector == ND_SEL_OFF then
         -- TODO Auto-FMS NAV1
+    else
+        data.nav[1].tuning_type = ND_NAV_TUNED_R
     end
 
     if data.nav[2].selector == ND_SEL_OFF then
         -- TODO Auto-FMS NAV1
+    else
+        data.nav[2].tuning_type = ND_NAV_TUNED_R
     end
 
     if data.nav[1].selector == ND_SEL_VOR then
-        data.nav[1].frequency = get(VHF_1_freq_khz)
+        data.nav[1].frequency = get(NAV_1_freq_Mhz)*100 + get(NAV_1_freq_10khz)
         data.nav[1].identifier = ""
+        data.nav[1].is_valid = get(NAV_1_is_valid) == 1
+        data.nav[1].dme_distance = get(NAV_1_dme_value)
+        data.nav[1].dme_computed = get(NAV_1_dme_valid) == 1
     elseif data.nav[1].selector == ND_SEL_ADF then
         data.nav[1].frequency = get(ADF_1_freq_hz)
         data.nav[1].identifier = ""
+    end
+
+    if data.nav[2].selector == ND_SEL_VOR then
+        data.nav[2].frequency = get(NAV_2_freq_Mhz)*100 + get(NAV_2_freq_10khz)
+        data.nav[2].identifier = ""
+        data.nav[2].is_valid = get(NAV_2_is_valid) == 1
+        data.nav[2].dme_distance = get(NAV_2_dme_value)
+        data.nav[2].dme_computed = get(NAV_2_dme_valid) == 1
+    elseif data.nav[2].selector == ND_SEL_ADF then
+        data.nav[2].frequency = get(ADF_2_freq_hz)
+        data.nav[2].identifier = ""
     end
 
 end
