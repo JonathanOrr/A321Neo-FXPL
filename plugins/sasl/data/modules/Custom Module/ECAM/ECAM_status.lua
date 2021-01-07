@@ -16,13 +16,11 @@
 -- Short description: ECAM file for the STATUS page 
 -------------------------------------------------------------------------------
 
-include('constants.lua')
-include('EWD_msgs/adirs.lua')
-include('ECAM_status/max_speed_fl.lua')
-include('ECAM_status/appr_procedures.lua')
-include('ECAM_status/procedures.lua')
-include('ECAM_status/information.lua')
-include('ECAM_status/inop_sys.lua')
+include('ECAM/ECAM_status/max_speed_fl.lua')
+include('ECAM/ECAM_status/appr_procedures.lua')
+include('ECAM/ECAM_status/procedures.lua')
+include('ECAM/ECAM_status/information.lua')
+include('ECAM/ECAM_status/inop_sys.lua')
 
 ecam_sts = {
     

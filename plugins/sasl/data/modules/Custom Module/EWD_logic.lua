@@ -16,7 +16,6 @@
 -- Short description: Logic management of the EWD
 -------------------------------------------------------------------------------
 
-include('ECAM_status.lua')
 include('EWD_flight_phases.lua')
 include('EWD_msgs/adirs.lua')
 include('EWD_msgs/aircond.lua')

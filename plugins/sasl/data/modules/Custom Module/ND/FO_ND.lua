@@ -55,12 +55,12 @@ local function update_buttons()
     pb_set(PB.FCU.fo_arpt, false, fo_nd_data.config.extra_data == ND_DATA_ARPT)
     
     pb_set(PB.FCU.fo_range_zoom, false, fo_nd_data.config.range <= ND_RANGE_ZOOM_2)
-    pb_set(PB.FCU.fo_range_10, false, fo_nd_data.config.range <= ND_RANGE_10)
-    pb_set(PB.FCU.fo_range_20, false, fo_nd_data.config.range <= ND_RANGE_20)
-    pb_set(PB.FCU.fo_range_40, false, fo_nd_data.config.range <= ND_RANGE_40)
-    pb_set(PB.FCU.fo_range_80, false, fo_nd_data.config.range <= ND_RANGE_80)
-    pb_set(PB.FCU.fo_range_160, false, fo_nd_data.config.range <= ND_RANGE_160)
-    pb_set(PB.FCU.fo_range_320, false, fo_nd_data.config.range <= ND_RANGE_320)
+    pb_set(PB.FCU.fo_range_10, false, fo_nd_data.config.range == ND_RANGE_10)
+    pb_set(PB.FCU.fo_range_20, false, fo_nd_data.config.range == ND_RANGE_20)
+    pb_set(PB.FCU.fo_range_40, false, fo_nd_data.config.range == ND_RANGE_40)
+    pb_set(PB.FCU.fo_range_80, false, fo_nd_data.config.range == ND_RANGE_80)
+    pb_set(PB.FCU.fo_range_160, false, fo_nd_data.config.range == ND_RANGE_160)
+    pb_set(PB.FCU.fo_range_320, false, fo_nd_data.config.range == ND_RANGE_320)
 end
 
 local function update_knobs()
