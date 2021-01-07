@@ -35,15 +35,15 @@ local function which_ir(i) -- It returns the current IR index in use by `i` (cap
 end
 
 
-local function is_adr_working(i)
+function is_adr_working(i)
     return ADIRS_sys[which_adr(i)].adr_status == ADR_STATUS_ON
 end
 
-local function ir_works_nav_mode(i)
+function ir_works_nav_mode(i)
     return ADIRS_sys[which_ir(i)].ir_status == IR_STATUS_ALIGNED
 end
 
-local function ir_works_att_mode(i)
+function ir_works_att_mode(i)
     return ADIRS_sys[which_ir(i)].ir_status == IR_STATUS_ALIGNED 
         or ADIRS_sys[which_ir(i)].ir_status == IR_STATUS_ATT_ALIGNED
 end

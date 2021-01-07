@@ -34,8 +34,7 @@ include('ECAM_press.lua')
 include('ECAM_status.lua')
 include('ECAM_wheel.lua')
 include('display_common.lua')
-
-include('constants.lua')
+include('ADIRS_data_source.lua')
 
 --local variables
 local apu_avail_timer = -1
@@ -52,7 +51,7 @@ local function draw_ecam_lower_section_fixed()
     sasl.gl.drawText(Font_AirbusDUL, size[1]-15, size[2]/2-375, "KG", 32, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2-407, "H", 30, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
 
-    local isa_displayed = get(Capt_Baro) > 29.91 and get(Capt_Baro) < 29.93 and get(Adirs_capt_has_ADR) == 1
+    local isa_displayed = get(Capt_Baro) > 29.91 and get(Capt_Baro) < 29.93 and is_adr_working(PFD_CAPT)
 
     if isa_displayed then
         sasl.gl.drawText(Font_AirbusDUL, 100, size[2]/2-442, "ISA", 32, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
@@ -82,7 +81,7 @@ local function draw_ecam_lower_section()
     --left section
     local tat = "XX"
     local ota = "XX"
-    if get(Adirs_capt_has_ADR) == 1 then
+    if is_adr_working(PFD_CAPT) then
         ota = Round(get(OTA), 0)
         if ota > 0 then
             ota = "+" .. ota
@@ -95,7 +94,7 @@ local function draw_ecam_lower_section()
     sasl.gl.drawText(Font_AirbusDUL, 190, size[2]/2-372, tat, 32, false, false, TEXT_ALIGN_RIGHT, tat == "XX" and ECAM_ORANGE or ECAM_GREEN)
     sasl.gl.drawText(Font_AirbusDUL, 190, size[2]/2-407, ota, 32, false, false, TEXT_ALIGN_RIGHT, ota == "XX" and ECAM_ORANGE or ECAM_GREEN)
 
-    local isa_displayed = get(Capt_Baro) > 29.91 and get(Capt_Baro) < 29.93 and get(Adirs_capt_has_ADR) == 1
+    local isa_displayed = get(Capt_Baro) > 29.91 and get(Capt_Baro) < 29.93 and is_adr_working(PFD_CAPT)
     if isa_displayed then
         local delta_isa = Round(get(TAT) - get_isa(), 0)
         if delta_isa > 0 then

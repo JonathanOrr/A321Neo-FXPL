@@ -20,6 +20,7 @@ position= {30,1311,500,500}
 size = {500, 500}
 
 include('constants.lua')
+include("ADIRS_data_source.lua")
 
 local TIME_TO_ALIGN_SEC = 90
 
@@ -54,9 +55,9 @@ function draw()
             sasl.gl.drawText (Font_AirbusDUL, 222, 40, "STD", 28, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
         end
 
-        if get(Adirs_capt_has_ADR) == 1 then
+        if is_mach_ok(PFD_CAPT) then
             -- Mach number, this is available only if the ADR for the Capt is ok
-            local good_mach = Round(get(Capt_Mach) * 100, 0)
+            local good_mach = Round(get_mach(PFD_CAPT) * 100, 0)
             if good_mach < 100 then
                 sasl.gl.drawText (Font_AirbusDUL, 60, 40, "." .. good_mach, 27, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
             else
