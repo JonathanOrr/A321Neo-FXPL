@@ -81,11 +81,11 @@ function draw_fctl_page()
     }
 
     local spoiler_arrow_x_y = {
-        {55, 778},
-        {111, 769},
-        {167, 760},
-        {223, 750},
-        {280, 741},
+        {55, 767},
+        {111, 758},
+        {167, 749},
+        {223, 739},
+        {280, 730},
     }
 
     local spoiler_num_x_y = {
@@ -98,14 +98,14 @@ function draw_fctl_page()
 
     for i = 1, num_of_spoilers do
         if get(l_spoiler_dataref[i]) > 2.5 then
-            SASL_draw_img_center_aligned(ECAM_FCTL_spoiler_arrow_img, size[1]/2 - spoiler_arrow_x_y[i][1], spoiler_arrow_x_y[i][2], 28, 50, get(l_spoilers_avail_dataref[i]) == 1 and ECAM_GREEN or ECAM_ORANGE)
+            SASL_draw_img_xcenter_aligned(ECAM_FCTL_spoiler_arrow_img, size[1]/2 - spoiler_arrow_x_y[i][1], spoiler_arrow_x_y[i][2], 28, 50, get(l_spoilers_avail_dataref[i]) == 1 and ECAM_GREEN or ECAM_ORANGE)
         else
             if get(l_spoilers_avail_dataref[i]) == 0 then
                 sasl.gl.drawText(Font_AirbusDUL, size[1]/2 - spoiler_num_x_y[i][1], spoiler_num_x_y[i][2], i, 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
             end
         end
         if get(r_spoiler_dataref[i]) > 2.5 then
-            SASL_draw_img_center_aligned(ECAM_FCTL_spoiler_arrow_img, size[1]/2 + spoiler_arrow_x_y[i][1], spoiler_arrow_x_y[i][2], 28, 50, get(r_spoilers_avail_dataref[i]) == 1 and ECAM_GREEN or ECAM_ORANGE)
+            SASL_draw_img_xcenter_aligned(ECAM_FCTL_spoiler_arrow_img, size[1]/2 + spoiler_arrow_x_y[i][1], spoiler_arrow_x_y[i][2], 28, 50, get(r_spoilers_avail_dataref[i]) == 1 and ECAM_GREEN or ECAM_ORANGE)
         else
             if get(r_spoilers_avail_dataref[i]) == 0 then
                 sasl.gl.drawText(Font_AirbusDUL, size[1]/2 + spoiler_num_x_y[i][1], spoiler_num_x_y[i][2], i, 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)

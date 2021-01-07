@@ -1,0 +1,152 @@
+include('ND/subcomponents/constants.lua')
+include('ND/subcomponents/graphics.lua')
+include('ND/subcomponents/logic.lua')
+
+
+function new_dataset(input_id)
+    return {
+
+    id = input_id,
+
+    config = {
+        mode = ND_MODE_NAV,
+        range = ND_RANGE_20,
+        is_active_arpt = true,
+        is_active_ndb  = false,
+        is_active_vord = false,
+        is_active_wpt  = false,
+        is_active_cstr = false,
+        
+        nav_1_selector = ND_SEL_OFF,
+        nav_2_selector = ND_SEL_OFF
+    },
+    
+    inputs = {
+        -- Speeds & Wind
+        is_gs_valid = false,
+        gs = 0,
+        is_tas_valid = false,
+        tas = 0,
+        is_wind_valid = false,
+        wind_speed = 0,
+        wind_direction = 0,
+
+        -- Heading
+        heading = 0,
+        true_heading = 0,
+        track = 0,
+        is_heading_valid = false,
+        is_track_valid = false,
+        is_true_heading_showed = false,
+        is_true_heading_boxed_showed = false,   -- When slats out
+        
+        -- Position
+        plane_coords_lat = 0, 
+        plane_coords_lon = 0,
+        
+        -- AP
+        hdg_sel = 0,
+        hdg_sel_visible = false,
+        
+        -- LS
+        ls_direction = 0,
+        ls_is_visible = false,
+        ls_is_precise = false,
+        
+        -- VOR
+        which_nav_is_active = 0,    -- 0,1, or 2
+    },
+
+    chrono = {
+        is_running = false,
+        is_active = false,
+        start_time = 0,
+        elapsed_time = 0
+    },
+    
+    misc = {
+        tcas_status  = ND_TCAS_OFF,
+        tcas_ta_triggered = false,
+        tcas_ra_triggered = false,
+        off_side_control  = false,
+        gpirs_is_on       = false,
+        gps_primary_lost  = false,
+        
+        map_partially_displayed = false,
+        map_precision_downgraded = false,
+        map_precision_upgraded = false,
+        
+        hdg_discrepancy = false,
+        ewd_discrepancy = false,
+        pfd_discrepancy = false,
+        sd_discrepancy = false,
+        nd_discrepancy = false,
+        mode_change = false,
+        range_change = false,
+        map_not_avail = false,
+        
+        windshear_warning = false,
+        windshear_caution = false,
+        windshear_pred_fail = false,
+        
+        loc_failure = false,
+        vor_failure = false,
+        gs_failure  = false,
+        
+        sid_or_app_visible = false,
+        sid_or_app_text = "RNAV33L-A"
+        
+    },
+    
+    nav = { {
+        selector     = ND_SEL_OFF,
+        is_valid     = false,
+        identifier   = "XXX",
+        frequency    = 0,
+        tuning_type  = ND_NAV_TUNED_NONE,
+        correction   = ND_NAV_CORRECTION_NONE,
+        dme_distance = 0,
+        dme_computed = false,
+        dme_invalid  = false,
+        
+        crs = 0,
+        crs_is_computed = false,
+        
+        needle_visible = false,
+        needle_angle = 0
+    }, {
+        selector     = ND_SEL_OFF,
+        is_valid     = false,
+        identifier   = "XXX",
+        frequency    = 0,
+        tuning_type  = ND_NAV_TUNED_NONE,
+        correction   = ND_NAV_CORRECTION_NONE,
+        dme_distance = 0,
+        dme_computed = false,
+        dme_invalid  = false,
+
+        crs = 0,
+        crs_is_computed = false,
+
+        needle_visible = false,
+        needle_angle = 0
+    }
+    },
+    
+    poi = { -- Point of interests
+        arpt = { --[[
+            { lat = 45.4522, lon=9.2763, id="LIML" },
+            { lat = 45.6301, lon=8.7255, id="LIMC" },
+            { lat = 45.540287, lon=9.202300, id="LIMC" },
+            { lat = 45.531059, lon=8.669050, id="LIMN" },
+            { lat = 45.672005, lon=9.706893, id="LIME" },
+            { lat = 45.720001, lon=9.593889, id="LILV" },
+            { lat = 45.769444, lon=9.161111, id="LILB" },
+            ]]--
+        }
+    }
+
+}
+
+
+end

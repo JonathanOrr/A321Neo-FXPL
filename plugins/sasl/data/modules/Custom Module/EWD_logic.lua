@@ -96,6 +96,8 @@ local left_messages_list = {
     MessageGroup_ADR_FAULT_DOUBLE,
     MessageGroup_IR_FAULT_SINGLE,
     MessageGroup_IR_FAULT_DOUBLE,
+    MessageGroup_IR_FAULT_TRIPLE_1,
+    MessageGroup_IR_FAULT_TRIPLE_2,
     MessageGroup_DMC_FAULT,
     MessageGroup_HYD_G_RSVR_LO_LVL,
     MessageGroup_HYD_B_RSVR_LO_LVL,
@@ -195,7 +197,6 @@ local left_messages_list = {
     MessageGroup_HYD_G_AND_B_LO_PR,
     MessageGroup_HYD_G_AND_Y_LO_PR,
     MessageGroup_ADR_FAULT_TRIPLE,
-    MessageGroup_IR_FAULT_TRIPLE,
     
     -- Misc
     MessageGroup_MEMO_TAKEOFF,

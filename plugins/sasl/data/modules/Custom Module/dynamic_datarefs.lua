@@ -30,22 +30,22 @@ Ground_speed_kts = createGlobalPropertyf("a321neo/dynamics/groundspeed_kts", 0, 
 Ground_speed_ms = globalProperty("sim/flightmodel/position/groundspeed")
 Startup_running = globalProperty("sim/operation/prefs/startup_running") -- 1 if user asked to startup with engines running
 --wheel
-Override_wheel_steering = globalProperty("sim/operation/override/override_wheel_steer")
+Override_wheel_steering =     globalProperty("sim/operation/override/override_wheel_steer")
 Override_wheel_gear_and_brk = globalProperty("sim/operation/override/override_gearbrake")
-Nosewheel_Steering_working = createGlobalPropertyi("a321neo/dynamics/wheel/steering_is_working", 0, false, true, false)  -- 0: no, 1: yes
-Nosewheel_Steering_limit   = createGlobalPropertyi("a321neo/dynamics/wheel/steering_limit", 0, false, true, false)  -- Limit (abs value) for steering
-Steer_ratio_setpoint       = createGlobalPropertyi("a321neo/dynamics/wheel/steer_setpoint", 0, false, true, false)
-Steer_ratio_actual         = globalProperty("sim/flightmodel2/gear/tire_steer_command_deg[0]")
-Either_Aft_on_ground = createGlobalPropertyi("a321neo/dynamics/either_aft_on_ground", 0, false, true, false)
-Aft_wheel_on_ground = createGlobalPropertyi("a321neo/dynamics/aft_wheels_on_ground", 0, false, true, false)
-All_on_ground = createGlobalPropertyi("a321neo/dynamics/all_wheels_on_ground", 0, false, true, false)
-Any_wheel_on_ground = createGlobalPropertyi("a321neo/dynamics/any_wheel_on_ground", 0, false, true, false)
-Brakes_fan = createGlobalPropertyi("a321neo/dynamics/wheel/brakes_fan", 0, false, true, false)
-Left_brakes_temp = createGlobalPropertyf("a321neo/dynamics/wheel/left_brakes_temp", 10, false, true, false) --left brakes temperature
-Right_brakes_temp = createGlobalPropertyf("a321neo/dynamics/wheel/right_brakes_temp", 10, false, true, false) --right brakes temperature
-Nose_tire_psi = createGlobalPropertyf("a321neo/dynamics/wheel/nose_tire_psi", 180, false, true, false) --left tire psi
-Left_tire_psi = createGlobalPropertyf("a321neo/dynamics/wheel/left_tire_psi", 210, false, true, false) --left tire psi
-Right_tire_psi = createGlobalPropertyf("a321neo/dynamics/wheel/right_tire_psi", 210, false, true, false) --right tire psi
+Nosewheel_Steering_working =  createGlobalPropertyi("a321neo/dynamics/wheel/steering_is_working", 0, false, true, false)  -- 0: no, 1: yes
+Nosewheel_Steering_limit   =  createGlobalPropertyi("a321neo/dynamics/wheel/steering_limit", 0, false, true, false)  -- Limit (abs value) for steering
+Steer_ratio_setpoint       =  createGlobalPropertyi("a321neo/dynamics/wheel/steer_setpoint", 0, false, true, false)
+Steer_ratio_actual         =  globalProperty("sim/flightmodel2/gear/tire_steer_command_deg[0]")
+Either_Aft_on_ground = 		  createGlobalPropertyi("a321neo/dynamics/wheel/either_aft_on_ground", 0, false, true, false)
+Aft_wheel_on_ground = 		  createGlobalPropertyi("a321neo/dynamics/wheel/aft_wheels_on_ground", 0, false, true, false)
+All_on_ground = 			  createGlobalPropertyi("a321neo/dynamics/wheel/all_wheels_on_ground", 0, false, true, false)
+Any_wheel_on_ground = 		  createGlobalPropertyi("a321neo/wheel/dynamics/any_wheel_on_ground", 0, false, true, false)
+Brakes_fan = 				  createGlobalPropertyi("a321neo/dynamics/wheel/brakes_fan", 0, false, true, false)
+Left_brakes_temp = 			  createGlobalPropertyf("a321neo/dynamics/wheel/left_brakes_temp", 10, false, true, false) --left brakes temperature
+Right_brakes_temp = 		  createGlobalPropertyf("a321neo/dynamics/wheel/right_brakes_temp", 10, false, true, false) --right brakes temperature
+Nose_tire_psi = 			  createGlobalPropertyf("a321neo/dynamics/wheel/nose_tire_psi", 180, false, true, false) --left tire psi
+Left_tire_psi = 			  createGlobalPropertyf("a321neo/dynamics/wheel/left_tire_psi", 210, false, true, false) --left tire psi
+Right_tire_psi = 			  createGlobalPropertyf("a321neo/dynamics/wheel/right_tire_psi", 210, false, true, false) --right tire psi
 
 Brakes_mode = createGlobalPropertyi("a321neo/dynamics/wheel/brake_mode", 4, false, true, false) -- 0: unknown, 1: normal, 2: alternate with antiskid, 3: alternate without antiskid, 4: parking
 Wheel_status_LGCIU_1 = createGlobalPropertyi("a321neo/dynamics/wheel/computers/lgciu_1_status", 0, false, true, false)
@@ -193,22 +193,7 @@ Gen_TEST_pressed= createGlobalPropertyi("a321neo/dynamics/electrical/gen_test_pr
 IDG_1_temp = createGlobalPropertyf("a321neo/dynamics/electrical/IDG_1_temp", 0, false, true, false)
 IDG_2_temp = createGlobalPropertyf("a321neo/dynamics/electrical/IDG_2_temp", 0, false, true, false)
 
---ADIRS
-Adirs_adr_is_ok = {}
-Adirs_adr_is_ok[1] = createGlobalPropertyf("a321neo/cockpit/ADIRS/adr_1_is_ok", 0, false, true, false)  -- 0: not working (failed or off), 1: working
-Adirs_adr_is_ok[2] = createGlobalPropertyf("a321neo/cockpit/ADIRS/adr_2_is_ok", 0, false, true, false)  -- 0: not working (failed or off), 1: working
-Adirs_adr_is_ok[3] = createGlobalPropertyf("a321neo/cockpit/ADIRS/adr_3_is_ok", 0, false, true, false)  -- 0: not working (failed or off), 1: working
-
-Adirs_ir_is_ok = {}
-Adirs_ir_is_ok[1] = createGlobalPropertyf("a321neo/cockpit/ADIRS/irs_1_is_ok", 0, false, true, false)  -- 0: not working (failed or off or not aligned), 1: working
-Adirs_ir_is_ok[2] = createGlobalPropertyf("a321neo/cockpit/ADIRS/irs_2_is_ok", 0, false, true, false)  -- 0: not working (failed or off or not aligned), 1: working
-Adirs_ir_is_ok[3] = createGlobalPropertyf("a321neo/cockpit/ADIRS/irs_3_is_ok", 0, false, true, false)  -- 0: not working (failed or off or not aligned), 1: working
-
 Adirs_total_time_to_align = createGlobalPropertyf("a321neo/cockpit/ADIRS/total_time", 0, false, true, false)  -- Total time (depending on latitude, to align the IRS)
-Adirs_irs_begin_time = {}
-Adirs_irs_begin_time[1] = createGlobalPropertyf("a321neo/cockpit/ADIRS/irs_1_time_begin_align", 0, false, true, false)  -- Time from the begin of alignment of IRS1
-Adirs_irs_begin_time[2] = createGlobalPropertyf("a321neo/cockpit/ADIRS/irs_2_time_begin_align", 0, false, true, false)  -- Time from the begin of alignment of IRS2
-Adirs_irs_begin_time[3] = createGlobalPropertyf("a321neo/cockpit/ADIRS/irs_3_time_begin_align", 0, false, true, false)  -- Time from the begin of alignment of IRS3
 
 GPS_1_is_available = createGlobalPropertyi("a321neo/cockpit/ADIRS/gps_1_is_available", 0, false, true, false) 
 GPS_2_is_available = createGlobalPropertyi("a321neo/cockpit/ADIRS/gps_2_is_available", 0, false, true, false) 
@@ -408,16 +393,28 @@ Capt_Mach    = globalProperty("sim/cockpit2/gauges/indicators/mach_pilot")
 Fo_Mach      = globalProperty("sim/cockpit2/gauges/indicators/mach_copilot")
 Capt_Baro    = globalProperty("sim/cockpit2/gauges/actuators/barometer_setting_in_hg_pilot") -- Baro settings for Pilot
 Fo_Baro      = globalProperty("sim/cockpit2/gauges/actuators/barometer_setting_in_hg_copilot") -- Baro settings for F/O
-Capt_pitch   = globalProperty("sim/cockpit2/gauges/actuators/barometer_setting_in_hg_copilot")
-Fo_pitch     = globalProperty("sim/cockpit2/gauges/actuators/barometer_setting_in_hg_copilot")
-Capt_bank    = globalProperty("sim/cockpit2/gauges/actuators/barometer_setting_in_hg_copilot")
-Fo_bank      = globalProperty("sim/cockpit2/gauges/actuators/barometer_setting_in_hg_copilot")
+Capt_pitch   = globalProperty("sim/cockpit2/gauges/indicators/pitch_electric_deg_pilot")
+Fo_pitch     = globalProperty("sim/cockpit2/gauges/indicators/pitch_electric_deg_copilot")
+Capt_bank    = globalProperty("sim/cockpit2/gauges/indicators/roll_AHARS_deg_pilot")
+Fo_bank      = globalProperty("sim/cockpit2/gauges/indicators/roll_AHARS_deg_copilot")
 Capt_hdg     = globalProperty("sim/cockpit2/gauges/indicators/heading_AHARS_deg_mag_pilot")
 Fo_hdg       = globalProperty("sim/cockpit2/gauges/indicators/heading_AHARS_deg_mag_copilot")
+
+Capt_IAS_trend = globalProperty("sim/cockpit2/gauges/indicators/airspeed_acceleration_kts_sec_pilot")
+Fo_IAS_trend = globalProperty("sim/cockpit2/gauges/indicators/airspeed_acceleration_kts_sec_copilot")
 
 Stby_Alt     = globalProperty("sim/cockpit2/gauges/indicators/altitude_ft_stby")     -- Altitude in the stdby instrument
 Stby_IAS     = globalProperty("sim/cockpit2/gauges/indicators/airspeed_kts_stby")    -- IAS in the stdby instrument
 Stby_Baro    = globalProperty("sim/cockpit2/gauges/actuators/barometer_setting_in_hg_stby") -- Baro settings for STBY
+
+Capt_TAS     = globalProperty("sim/cockpit2/gauges/indicators/true_airspeed_kts_pilot")
+Fo_TAS       = globalProperty("sim/cockpit2/gauges/indicators/true_airspeed_kts_copilot")
+
+Capt_Track     = globalProperty("sim/cockpit2/gauges/indicators/ground_track_mag_pilot")
+Fo_Track       = globalProperty("sim/cockpit2/gauges/indicators/ground_track_mag_copilot")
+
+Wind_SPD     = globalProperty("sim/cockpit2/gauges/indicators/wind_speed_kts")
+Wind_HDG     = globalProperty("sim/cockpit2/gauges/indicators/wind_heading_deg_mag")
 
 --gear
 Gear_handle = globalProperty("sim/cockpit2/controls/gear_handle_down")
@@ -472,37 +469,10 @@ VFE_speed = 	   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/vfe_spe
 VLS = 			   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/vls_speed", 0, false, true, false)
 Capt_GD =		   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/capt_green_dot_speed", 0, false, true, false)--uses different pilot's baro alt
 Fo_GD = 		   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fo_green_dot_speed", 0, false, true, false)
-Capt_VSW = 		   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/capt_stall_warning_speed", 0, false, true, false)--uses different pilot's alpha
-Fo_VSW = 		   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fo_stall_warning_speed", 0, false, true, false)
-Capt_Valpha_prot = createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/capt_alpha_prot_speed", 0, false, true, false)--uses different pilot's alpha
-Fo_Valpha_prot =   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fo_alpha_prot_speed", 0, false, true, false)
-Capt_Vtoga_prot =  createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/capt_toga_prot_speed", 0, false, true, false)--uses different pilot's alpha
-Fo_Vtoga_prot =    createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fo_toga_prot_speed", 0, false, true, false)
+Capt_Vaprot_vsw =  createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/capt_alpha_prot_speed", 0, false, true, false)--uses different pilot's alpha
+Fo_Vaprot_vsw =    createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fo_alpha_prot_speed", 0, false, true, false)
 Capt_Valpha_MAX =  createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/capt_alpha_max_speed", 0, false, true, false)--uses different pilot's alpha
 Fo_Valpha_MAX =    createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fo_alpha_max_speed", 0, false, true, false)
---value deltas
-Capt_VMAX_prot_delta =	 createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/delta/capt_vmax_prot", 0, false, true, false)--uses different pilot's mach
-Fo_VMAX_prot_delta =	 createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/delta/fo_vmax_prot", 0, false, true, false)
-Capt_VMAX_delta =		 createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/delta/capt_vmax", 0, false, true, false)--uses different pilot's mach
-Fo_VMAX_delta =		   	 createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/delta/fo_vmax", 0, false, true, false)
-Capt_S_speed_delta = 	 createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/delta/capt_s", 0, false, true, false)--uses different pilot's IAS
-Fo_S_speed_delta = 		 createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/delta/fo_s", 0, false, true, false)
-Capt_F_speed_delta = 	 createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/delta/capt_f", 0, false, true, false)--uses different pilot's IAS
-Fo_F_speed_delta = 		 createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/delta/fo_f", 0, false, true, false)
-Capt_VFE_speed_delta = 	 createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/delta/capt_vfe", 0, false, true, false)--uses different pilot's IAS
-Fo_VFE_speed_delta = 	 createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/delta/fo_vfe", 0, false, true, false)
-Capt_VLS_delta = 		 createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/delta/capt_vls", 0, false, true, false)--uses different pilot's IAS
-Fo_VLS_delta = 			 createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/delta/fo_vls", 0, false, true, false)
-Capt_GD_delta =		   	 createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/delta/capt_green_dot", 0, false, true, false)--uses different pilot's baro alt
-Fo_GD_delta = 		     createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/delta/fo_green_dot", 0, false, true, false)
-Capt_VSW_delta = 		 createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/delta/capt_stall_warning", 0, false, true, false)--uses different pilot's alpha
-Fo_VSW_delta = 		   	 createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/delta/fo_stall_warning", 0, false, true, false)
-Capt_Valpha_prot_delta = createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/delta/capt_alpha_prot", 0, false, true, false)--uses different pilot's alpha
-Fo_Valpha_prot_delta =   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/delta/fo_alpha_prot", 0, false, true, false)
-Capt_Vtoga_prot_delta =  createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/delta/capt_toga_prot", 0, false, true, false)--uses different pilot's alpha
-Fo_Vtoga_prot_delta =    createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/delta/fo_toga_prot", 0, false, true, false)
-Capt_Valpha_MAX_delta =  createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/delta/capt_alpha_max", 0, false, true, false)--uses different pilot's alpha
-Fo_Valpha_MAX_delta =    createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/delta/fo_alpha_max", 0, false, true, false)
 
 Aircraft_total_weight_kgs = globalProperty("sim/flightmodel/weight/m_total")
 
@@ -547,7 +517,8 @@ Alpha = globalProperty("sim/flightmodel/position/alpha")
 Vpath = globalProperty("sim/flightmodel/position/vpath")
 Flightmodel_roll = globalProperty("sim/flightmodel/position/true_phi")
 Flightmodel_pitch = globalProperty("sim/flightmodel/position/true_theta")
-Flightmodel_heading = globalProperty("sim/flightmodel/position/true_psi")
+Flightmodel_true_heading = globalProperty("sim/flightmodel/position/true_psi")
+Flightmodel_mag_heading = globalProperty("sim/flightmodel/position/mag_psi")
 Total_vertical_g_load = globalProperty("sim/flightmodel/forces/g_nrml")
 Total_long_g_load = globalProperty("sim/flightmodel/forces/g_axil")
 Vpath_pitch_rate = createGlobalPropertyf("a321neo/dynamics/FBW/aerodynamics/vpath_Q", 0, false, true, false)

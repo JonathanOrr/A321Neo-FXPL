@@ -22,13 +22,13 @@ function ECAM_status_get_procedures()
         table.insert(messages, {text="LDG DIST PROC..........APPLY", color=ECAM_BLUE})
     end
     
-    if MessageGroup_ADR_FAULT_TRIPLE:is_active() then
-        table.insert(messages, {text="RUD WITH CARE ABV 160 KT", color=ECAM_BLUE})
-    end
+    --if MessageGroup_ADR_FAULT_TRIPLE:is_active() then
+    --    table.insert(messages, {text="RUD WITH CARE ABV 160 KT", color=ECAM_BLUE})
+    --end
     
-    if MessageGroup_IR_FAULT_SINGLE:is_active() or MessageGroup_IR_FAULT_DOUBLE:is_active() or MessageGroup_IR_FAULT_TRIPLE:is_active() then
-        table.insert(messages, {text="IR MAY BE AVAIL IN ATT", color=ECAM_WHITE})     
-    end
+    --if MessageGroup_IR_FAULT_SINGLE:is_active() or MessageGroup_IR_FAULT_DOUBLE:is_active() or MessageGroup_IR_FAULT_TRIPLE:is_active() then
+    --    table.insert(messages, {text="IR MAY BE AVAIL IN ATT", color=ECAM_WHITE})     
+    --end
     
     
     return messages

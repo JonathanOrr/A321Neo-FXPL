@@ -212,7 +212,7 @@ P _gear/0/_lonE 7.0
 P _gear/0/_lonN 7.0
 P _gear/0/_lonR 99.0
 P _gear/0/_scon 157581.015625000
-P _gear/0/_stat_def 0.120225541
+P _gear/0/_stat_def 0.120225564
 P _gear/0/_steerdeg_hispeed 5.0
 P _gear/0/_steerdeg_lospeed 75.0
 P _gear/0/_strut_comp 0.899999976
@@ -246,7 +246,7 @@ P _gear/1/_lonE -6.0
 P _gear/1/_lonN -6.0
 P _gear/1/_lonR 2.0
 P _gear/1/_scon 157581.015625000
-P _gear/1/_stat_def 0.739415824
+P _gear/1/_stat_def 0.739415884
 P _gear/1/_steerdeg_hispeed 0.0
 P _gear/1/_steerdeg_lospeed 0.0
 P _gear/1/_strut_comp 0.699999988
@@ -280,7 +280,7 @@ P _gear/2/_lonE -6.0
 P _gear/2/_lonN -6.0
 P _gear/2/_lonR 2.0
 P _gear/2/_scon 157581.015625000
-P _gear/2/_stat_def 0.739415824
+P _gear/2/_stat_def 0.739415884
 P _gear/2/_steerdeg_hispeed 0.0
 P _gear/2/_steerdeg_lospeed 0.0
 P _gear/2/_strut_comp 0.699999988
@@ -69521,7 +69521,7 @@ P acf/_face_rocket 0.0
 P acf/_fadec_EQ_mixture 1
 P acf/_fadec_EQ_rpm_limit 0
 P acf/_fadec_prevents_overboost 0
-P acf/_fan_rpm_for_n1_100 3856.0
+P acf/_fan_rpm_for_n1_100 3855.0
 P acf/_fbrk_on_td_EQ 1
 P acf/_fdir_needed_to_engage_servo 0
 P acf/_feather_on_engn_fail_EQ 0
@@ -69791,7 +69791,7 @@ P acf/_idle_rat/0 0.610000014
 P acf/_idle_rat/1 0.620000005
 P acf/_idle_rat/count 2
 P acf/_incidence_with_flaps 0
-P acf/_inlet_compression_efficiency 0.939999998
+P acf/_inlet_compression_efficiency 1.0
 P acf/_inverted_fuel_oil_EQ 0
 P acf/_inverter_for_elec_gyros 0
 P acf/_inverter_for_ind_trq 0
@@ -69860,7 +69860,7 @@ P acf/_max_gen_amp_per_gen/5 0.0
 P acf/_max_gen_amp_per_gen/6 0.0
 P acf/_max_gen_amp_per_gen/7 0.0
 P acf/_max_gen_amp_per_gen/count 8
-P acf/_max_mach_eff 0.899999976
+P acf/_max_mach_eff 0.980000019
 P acf/_max_oilT 120.0
 P acf/_max_press_diff 8.500000000
 P acf/_max_vac 10.0

@@ -79,7 +79,7 @@ function draw_apu_page()
     end
 
     --apu bleed--
-    if get(Adirs_adr_is_ok[1]) == 0 or get(Adirs_adr_is_ok[2]) == 0 or (get(FAILURE_BLEED_BMC_1) == 1 and get(FAILURE_BLEED_BMC_2) == 1) or get(Apu_bleed_xplane) == 0 then
+    if ADIRS_sys[ADIRS_1].adr_status ~= ADR_STATUS_ON or ADIRS_sys[ADIRS_2].adr_status ~= ADR_STATUS_ON or (get(FAILURE_BLEED_BMC_1) == 1 and get(FAILURE_BLEED_BMC_2) == 1) or get(Apu_bleed_xplane) == 0 then
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2+265, size[2]/2+187, "XX", 26, false, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
     else
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2+265, size[2]/2+187, math.floor(get(Apu_bleed_psi)), 26, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)

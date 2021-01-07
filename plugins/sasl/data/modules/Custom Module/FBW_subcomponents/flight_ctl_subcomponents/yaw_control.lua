@@ -57,7 +57,7 @@ function Rudder_control(yaw_input, fbw_current_law, is_in_auto_flight, trim_inpu
 
     --RUDDER LIMITS--
     if (fbw_current_law == 2 or fbw_current_law == 1) and get(Rudder_lim_avail) == 1 then
-        set(Rudder_travel_lim, -22.1 * math.sqrt(1 - ( (Math_clamp((get(PFD_Capt_IAS) + get(PFD_Fo_IAS)) / 2, 160, 380) - 380) / 220)^2 ) + 25)
+        set(Rudder_travel_lim, -22.1 * math.sqrt(1 - ( (Math_clamp((get_ias(PFD_CAPT) + get_ias(PFD_FO)) / 2, 160, 380) - 380) / 220)^2 ) + 25)
     end
 
     if fbw_current_law == 0 or get(Slats) > 0 and get(Rudder_lim_avail) == 1 then

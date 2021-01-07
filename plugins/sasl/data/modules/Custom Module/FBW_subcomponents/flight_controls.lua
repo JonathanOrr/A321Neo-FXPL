@@ -112,7 +112,7 @@ function update()
         if get(DELTA_TIME) ~= 0 then
             Check_surface_avail()
             Ailerons_control(total_roll, true, Ground_spoilers_output(Ground_spoilers_var_table))
-            Spoilers_control(total_roll, get(Speedbrake_handle_ratio), Ground_spoilers_output(Ground_spoilers_var_table), false, false, Spoilers_var_table)
+            Spoilers_control(total_roll, get(Speedbrake_handle_ratio), Ground_spoilers_output(Ground_spoilers_var_table), false, false, Spoilers_obj)
             Elevator_control(total_pitch, false)
             Slats_flaps_calc_and_control()
             THS_control(Augmented_pitch_trim_ratio, get(Human_pitch_trim))

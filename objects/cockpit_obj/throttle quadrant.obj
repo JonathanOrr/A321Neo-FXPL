@@ -5,7 +5,7 @@ OBJ
 GLOBAL_cockpit_lit
 TEXTURE	panel_textures/throttle.png
 TEXTURE_LIT	panel_textures/throttle_LIT.png
-ATTR_light_level 0.000000 1.000000	a321neo/cockpit/lights/integral_value
+ATTR_light_level 0.000000 1.000000	a321neo/cockpit/lights/mip_pedestal_integral_value
 POINT_COUNTS	5959	0	0	23430
 
 VT	-0.010291269	0.0062597273	-0.0079524675	-0.99601519	-0.021666981	-0.086511247	0.94239861	0.41010752

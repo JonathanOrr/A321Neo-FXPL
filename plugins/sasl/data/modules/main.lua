@@ -25,6 +25,8 @@ include("global_functions.lua")
 include("pushbuttons.lua")
 include("FBW_subcomponents/PID_arrays.lua")
 include("sasl_drawing_assets.lua")
+include("constants.lua")
+include("ADIRS_data_source.lua")
 
 sasl.options.setAircraftPanelRendering(true)
 sasl.options.setInteractivity(true)
@@ -38,6 +40,7 @@ math.randomseed( os.time() )
 
 include(moduleDirectory .. "/main_debug.lua")
 addSearchPath(moduleDirectory .. "/Custom Module/PFD/")
+addSearchPath(moduleDirectory .. "/Custom Module/ND/")
 addSearchPath(moduleDirectory .. "/Custom Module/EFB/")
 addSearchPath(moduleDirectory .. "/Custom Module/PFD/PFD_subcomponents/")
 
@@ -65,8 +68,8 @@ components = {
   PFD_main {},
   CAPT_PFD {},
   FO_PFD {},
-  ND {},
-  ND_fo {},
+  CAPT_ND {},
+  FO_ND {},
   ISIS {},
   ECAM {},
   EWD {},

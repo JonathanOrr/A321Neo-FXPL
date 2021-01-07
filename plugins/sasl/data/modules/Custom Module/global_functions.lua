@@ -94,6 +94,16 @@ function Round_fill(num, numDecimalPlaces)
     return string.format("%."..numDecimalPlaces.."f", Round(num, numDecimalPlaces)) 
 end
 
+function Math_extract_all_decimal(num, abs)
+    local output = math.abs( num ) % 1
+
+    if abs == true then
+        return output
+    else
+        return num >= 0 and output or -output
+    end
+end
+
 function Math_extract_decimal(num, decimalPlace, abs)
     local output = math.floor( ( math.abs( num ) - math.floor( math.abs( num ) ) ) * 10 ^ decimalPlace)
 
@@ -102,6 +112,16 @@ function Math_extract_decimal(num, decimalPlace, abs)
     else
         return num >= 0 and output or -output
     end
+end
+
+function Math_extract_digit(num, which_digit, abs)
+    local put_digit_into_decimal
+    if which_digit > 0 then
+        put_digit_into_decimal = num / 10 ^ which_digit
+    elseif which_digit < 0 then
+        put_digit_into_decimal = num / 10 ^ (which_digit + 1)
+    end
+    return Math_extract_decimal(put_digit_into_decimal, 1, abs)
 end
 
 function BoolToNum(value)
@@ -119,6 +139,10 @@ function Set_anim_value(current_value, target, min, max, speed)
         return current_value + ((target - current_value) * (speed * get(DELTA_TIME)))
     end
 
+end
+
+function Set_anim_value_no_lim(current_value, target, speed)
+    return current_value + ((target - current_value) * (speed * get(DELTA_TIME)))
 end
 
 local function Set_linear_anim_value_internal(current_value, target, min, max, speed, speed_m)
@@ -391,7 +415,7 @@ end
 
 --draw images
 function SASL_draw_img_center_aligned(image, x, y, width, height, color)
-    sasl.gl.drawTexture(image, x - width / 2, y - width / 2, width, height, color)
+    sasl.gl.drawTexture(image, x - width / 2, y - height / 2, width, height, color)
 end
 function SASL_draw_img_xcenter_aligned(image, x, y, width, height, color)
     sasl.gl.drawTexture(image, x - width / 2, y, width, height, color)
