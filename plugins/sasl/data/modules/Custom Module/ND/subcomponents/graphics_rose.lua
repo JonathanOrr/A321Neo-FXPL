@@ -155,10 +155,9 @@ local function draw_poi_array(data, poi, texture, color)
 end
 
 local function draw_airports(data)
-    if not data.config.is_active_arpt then
+    if not data.config.extra_data ~= ND_DATA_ARPT then
         return  -- Airport button not selected
     end
-
     
     -- For each airtport visible...
     for i,airport in ipairs(data.poi.arpt) do

@@ -21,6 +21,16 @@ size = {900, 900}
 
 include('constants.lua')
 
+fo_nd_data = new_dataset(ND_FO)
+
+sasl.registerCommandHandler (ND_Fo_terrain_toggle, 0, function(phase) if phase == SASL_COMMAND_BEGIN then set(ND_Fo_Terrain, 1 - get(ND_Fo_Terrain)) end end)
+
+local function update_buttons()
+    pb_set(PB.mip.terr_nd_fo,   get(ND_Fo_Terrain) == 1, false)
+
+end
+
+
 function draw()
 
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2, "F/O ND", 40, false, false, TEXT_ALIGN_CENTER, ECAM_RED)

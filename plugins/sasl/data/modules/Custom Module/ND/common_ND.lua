@@ -9,13 +9,9 @@ function new_dataset(input_id)
     id = input_id,
 
     config = {
-        mode = ND_MODE_NAV,
+        mode = ND_MODE_ARC,
         range = ND_RANGE_20,
-        is_active_arpt = true,
-        is_active_ndb  = false,
-        is_active_vord = false,
-        is_active_wpt  = false,
-        is_active_cstr = false,
+        extra_data = ND_DATA_NONE,
         
         nav_1_selector = ND_SEL_OFF,
         nav_2_selector = ND_SEL_OFF
@@ -148,5 +144,34 @@ function new_dataset(input_id)
 
 }
 
-
 end
+
+
+function nd_chrono_handler(phase, data)
+    if phase == SASL_COMMAND_BEGIN then
+        if data.chrono.is_active then
+            if data.chrono.is_running then
+                data.chrono.is_running = false
+                data.chrono.elapsed_time = get(TIME) - data.chrono.start_time
+            else
+                data.chrono.is_active = false
+            end
+        else
+            data.chrono.is_active = true
+            data.chrono.is_running = true
+            data.chrono.start_time = get(TIME)
+        end 
+    end
+end
+
+
+function nd_pb_handler(phase, data, config)
+    if phase == SASL_COMMAND_BEGIN then
+        if data.config.extra_data == config then
+            data.config.extra_data = ND_DATA_NONE
+        else
+            data.config.extra_data = config
+        end
+    end
+end
+

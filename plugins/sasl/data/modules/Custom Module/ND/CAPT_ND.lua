@@ -51,43 +51,26 @@ sasl.registerCommandHandler (ND_Capt_nav1_cmd_right, 0, function(phase) if phase
 sasl.registerCommandHandler (ND_Capt_nav2_cmd_left, 0, function(phase) if phase == SASL_COMMAND_BEGIN then capt_nd_data.config.nav_2_selector = math.max(-1, capt_nd_data.config.nav_2_selector - 1) end end)
 sasl.registerCommandHandler (ND_Capt_nav2_cmd_right, 0, function(phase) if phase == SASL_COMMAND_BEGIN then capt_nd_data.config.nav_2_selector = math.min(1,capt_nd_data.config.nav_2_selector + 1) end end)
 
-sasl.registerCommandHandler (ND_Capt_cmd_cstr, 0, function(phase) if phase == SASL_COMMAND_BEGIN then capt_nd_data.config.is_active_cstr = not capt_nd_data.config.is_active_cstr end end)
-sasl.registerCommandHandler (ND_Capt_cmd_wpt, 0, function(phase) if phase == SASL_COMMAND_BEGIN then capt_nd_data.config.is_active_wpt = not capt_nd_data.config.is_active_wpt end end)
-sasl.registerCommandHandler (ND_Capt_cmd_vord, 0, function(phase) if phase == SASL_COMMAND_BEGIN then capt_nd_data.config.is_active_vord = not capt_nd_data.config.is_active_vord end end)
-sasl.registerCommandHandler (ND_Capt_cmd_ndb, 0, function(phase) if phase == SASL_COMMAND_BEGIN then capt_nd_data.config.is_active_ndb = not capt_nd_data.config.is_active_ndb end end)
-sasl.registerCommandHandler (ND_Capt_cmd_arpt, 0, function(phase) if phase == SASL_COMMAND_BEGIN then capt_nd_data.config.is_active_arpt = not capt_nd_data.config.is_active_arpt end end)
+sasl.registerCommandHandler (ND_Capt_cmd_cstr, 0, function(phase) nd_pb_handler(phase,capt_nd_data,ND_DATA_CSTR) end)
+sasl.registerCommandHandler (ND_Capt_cmd_wpt,  0, function(phase) nd_pb_handler(phase,capt_nd_data,ND_DATA_WPT) end)
+sasl.registerCommandHandler (ND_Capt_cmd_vord, 0, function(phase) nd_pb_handler(phase,capt_nd_data,ND_DATA_VORD) end)
+sasl.registerCommandHandler (ND_Capt_cmd_ndb,  0, function(phase) nd_pb_handler(phase,capt_nd_data,ND_DATA_NDB) end)
+sasl.registerCommandHandler (ND_Capt_cmd_arpt, 0, function(phase) nd_pb_handler(phase,capt_nd_data,ND_DATA_ARPT) end)
 
-function chrono_handler(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        if capt_nd_data.chrono.is_active then
-            if capt_nd_data.chrono.is_running then
-                capt_nd_data.chrono.is_running = false
-                capt_nd_data.chrono.elapsed_time = get(TIME) - capt_nd_data.chrono.start_time
-            else
-                capt_nd_data.chrono.is_active = false
-            end
-        else
-            capt_nd_data.chrono.is_active = true
-            capt_nd_data.chrono.is_running = true
-            capt_nd_data.chrono.start_time = get(TIME)
-        end 
-    end
-end
-
-sasl.registerCommandHandler (Chrono_cmd_capt_button, 0, chrono_handler)
+sasl.registerCommandHandler (Chrono_cmd_capt_button, 0, function(phase) nd_chrono_handler(phase, capt_nd_data) end)
 
 sasl.registerCommandHandler (ND_Capt_terrain_toggle, 0, function(phase) if phase == SASL_COMMAND_BEGIN then set(ND_Capt_Terrain, 1 - get(ND_Capt_Terrain)) end end)
-sasl.registerCommandHandler (ND_Fo_terrain_toggle, 0, function(phase) if phase == SASL_COMMAND_BEGIN then set(ND_Fo_Terrain, 1 - get(ND_Fo_Terrain)) end end)
+
 
 local function update_buttons()
     pb_set(PB.mip.terr_nd_capt, get(ND_Capt_Terrain) == 1, false)
     pb_set(PB.mip.terr_nd_fo,   get(ND_Fo_Terrain) == 1, false)
     
-    pb_set(PB.FCU.capt_cstr, false, capt_nd_data.config.is_active_cstr)
-    pb_set(PB.FCU.capt_wpt,  false, capt_nd_data.config.is_active_wpt)
-    pb_set(PB.FCU.capt_vord, false, capt_nd_data.config.is_active_vord)
-    pb_set(PB.FCU.capt_ndb,  false, capt_nd_data.config.is_active_ndb)
-    pb_set(PB.FCU.capt_arpt, false, capt_nd_data.config.is_active_arpt)
+    pb_set(PB.FCU.capt_cstr, false, capt_nd_data.config.extra_data == ND_DATA_CSTR)
+    pb_set(PB.FCU.capt_wpt,  false, capt_nd_data.config.extra_data == ND_DATA_WPT)
+    pb_set(PB.FCU.capt_vord, false, capt_nd_data.config.extra_data == ND_DATA_VORD)
+    pb_set(PB.FCU.capt_ndb,  false, capt_nd_data.config.extra_data == ND_DATA_NDB)
+    pb_set(PB.FCU.capt_arpt, false, capt_nd_data.config.extra_data == ND_DATA_ARPT)
 end
 
 local function update_knobs()
