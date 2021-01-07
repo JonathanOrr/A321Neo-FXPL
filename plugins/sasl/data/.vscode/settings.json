@@ -54,6 +54,7 @@
         "PID_UI",
         "SASL_RENDER_PANEL_BEFORE_AND_AFTER",
         "SASL_RENDER_PANEL_DEFAULT",
-        "fbo"
+        "fbo",
+        "TEXT_DIRECTION_VERTICAL"
     ]
 }

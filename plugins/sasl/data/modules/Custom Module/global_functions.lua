@@ -114,14 +114,14 @@ function Math_extract_decimal(num, decimalPlace, abs)
     end
 end
 
-function Math_extract_digit(num, which_digit)
+function Math_extract_digit(num, which_digit, abs)
     local put_digit_into_decimal
     if which_digit > 0 then
         put_digit_into_decimal = num / 10 ^ which_digit
     elseif which_digit < 0 then
         put_digit_into_decimal = num / 10 ^ (which_digit + 1)
     end
-    return Math_extract_decimal(put_digit_into_decimal, 1, false)
+    return Math_extract_decimal(put_digit_into_decimal, 1, abs)
 end
 
 function BoolToNum(value)
@@ -139,6 +139,10 @@ function Set_anim_value(current_value, target, min, max, speed)
         return current_value + ((target - current_value) * (speed * get(DELTA_TIME)))
     end
 
+end
+
+function Set_anim_value_no_lim(current_value, target, speed)
+    return current_value + ((target - current_value) * (speed * get(DELTA_TIME)))
 end
 
 local function Set_linear_anim_value_internal(current_value, target, min, max, speed, speed_m)

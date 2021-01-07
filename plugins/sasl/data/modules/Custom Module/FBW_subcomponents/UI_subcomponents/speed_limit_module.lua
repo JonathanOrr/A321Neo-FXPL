@@ -1,8 +1,8 @@
 function Update_limit_speeds_module_480x160(x_pos, y_pos, variable_table)
     variable_table.left_speeds_names = {"VMAX", "S SPD", "F SPD", "VLS", "A.PROT", "A.MAX"}
     variable_table.right_speeds_names = {"VMAX", "S SPD", "F SPD", "VLS", "A.PROT", "A.MAX"}
-    variable_table.left_values = {Capt_VMAX, S_speed, F_speed, VLS, Capt_Valpha_prot, Capt_Valpha_MAX}
-    variable_table.right_values = {Capt_VMAX, S_speed, F_speed, VLS, Capt_Valpha_prot, Capt_Valpha_MAX}
+    variable_table.left_values = {Capt_VMAX, S_speed, F_speed, VLS, Capt_Vaprot_vsw, Capt_Valpha_MAX}
+    variable_table.right_values = {Fo_VMAX, S_speed, F_speed, VLS, Fo_Vaprot_vsw, Fo_Valpha_MAX}
     variable_table.left_colors = {RED, GREEN, GREEN, ORANGE, ORANGE, RED}
     variable_table.right_colors = {RED, GREEN, GREEN, ORANGE, ORANGE, RED}
 
@@ -161,12 +161,12 @@ function Draw_limit_speeds_module_480x160(x_pos, y_pos, variable_table)
     local CENTER_Y = (2 * y_pos + 160) / 2
 
     local alpha_max_alphas = {
-        11,
-        16,
-        16,
-        17,
-        16,
-        16
+        10.5,
+        16.5,
+        16.5,
+        16.5,
+        16.0,
+        17.5
     }
 
     --background
@@ -243,13 +243,11 @@ function Draw_limit_speeds_module_480x160(x_pos, y_pos, variable_table)
         sasl.gl.drawText(B612_MONO_bold, CENTER_X, CENTER_Y-10, "FULL PROT", 12, false, false, TEXT_ALIGN_CENTER, RED)
         sasl.gl.drawText(B612_MONO_bold, CENTER_X, CENTER_Y-30, math.floor(get(Capt_VMAX_prot)) .. "KTS", 12, false, false, TEXT_ALIGN_CENTER, RED)
     end
-    
-    if (get(Capt_IAS) <= get(Capt_Valpha_prot) and get(Capt_IAS) > get(Capt_Valpha_MAX)) or (get(Fo_IAS) <= get(Fo_Valpha_prot) and get(Fo_IAS) > get(Fo_Valpha_MAX)) then
+
+    if (get(Capt_IAS) <= get(Capt_Vaprot_vsw) and get(Capt_IAS) > get(Capt_Valpha_MAX)) or (get(Fo_IAS) <= get(Fo_Vaprot_vsw) and get(Fo_IAS) > get(Fo_Valpha_MAX)) then
         sasl.gl.drawRectangle(CENTER_X - 40, CENTER_Y-35, 80, 80, LIGHT_GREY)
         sasl.gl.drawText(B612_MONO_bold, CENTER_X, CENTER_Y+30, "A.FLOOR", 12, false, false, TEXT_ALIGN_CENTER, ORANGE)
-        sasl.gl.drawText(B612_MONO_bold, CENTER_X, CENTER_Y+10, "THST PROT", 12, false, false, TEXT_ALIGN_CENTER, ORANGE)
-        sasl.gl.drawText(B612_MONO_bold, CENTER_X, CENTER_Y-10, "INIT AT", 12, false, false, TEXT_ALIGN_CENTER, ORANGE)
-        sasl.gl.drawText(B612_MONO_bold, CENTER_X, CENTER_Y-30, math.floor(get(Capt_Vtoga_prot)) .. "KTS", 12, false, false, TEXT_ALIGN_CENTER, ORANGE)
+        sasl.gl.drawText(B612_MONO_bold, CENTER_X, CENTER_Y+10, "COMING UP", 12, false, false, TEXT_ALIGN_CENTER, ORANGE)
     end
 
     if get(Capt_IAS) <= get(Capt_Valpha_MAX) or get(Fo_IAS) <= get(Fo_Valpha_MAX) then

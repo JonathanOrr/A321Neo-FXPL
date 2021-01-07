@@ -151,115 +151,31 @@ function update()
     PFD_update_bird()
 end
 
-function PFD_draw_pitch_scale(PFD_table)
-    --draw the mask
-    sasl.gl.drawMaskStart ()
-    sasl.gl.drawTexture(PFD_pitch_scale_mask, 0, 0, 900, 900, {1,1,1})
-    --draw under the mask
-    sasl.gl.drawUnderMask(true)
-    SASL_rotated_center_img_xcenter_aligned(PFD_normal_pitch_scale, size[1]/2-55, size[2]/2-7, 2870, 779, 90 - get(PFD_table.Bank), get(PFD_table.Pitch) * 10, -779/2, {1, 1, 1})
-    SASL_rotated_center_img_xcenter_aligned(PFD_static_sky, size[1]/2-55, size[2]/2-7, 1575, 779, 90 - get(PFD_table.Bank), 0, -779/2, {1, 1, 1})
-    SASL_rotated_center_img_xcenter_aligned(PFD_ground, size[1]/2-55, size[2]/2-7, 2228, 779, 90 - get(PFD_table.Bank), - 187 * (1 - Math_clamp(get(PFD_table.RA_ALT)/120 + get(PFD_table.Pitch)/18, 0, 1)), -779/2, {1, 1, 1})
-    --terminate masked drawing
-    sasl.gl.drawMaskEnd ()
-
-    SASL_draw_img_xcenter_aligned(PFD_pitch_wings, size[1]/2-56, size[2]/2-44, 402, 47, {1,1,1})
-
-    SASL_draw_img_xcenter_aligned(PFD_bank_angle, size[1]/2-56, size[2]/2+158, 366, 95, {1,1,1})
-end
-
-function PFD_draw_spd_tape(PFD_table)
-    local boarder_cl = ECAM_WHITE
-
-    if get(PFD_table.ADR_avail) == 0 then
-        boarder_cl = get(PFD_table.ADR_blinking) == 1 and {0, 0, 0, 0} or {254/255, 47/255, 41/255, 1}
-    elseif get(PFD_table.ADR_avail) == 1 then
-        boarder_cl = ECAM_WHITE
-    end
-
-    --speed tape background
-    sasl.gl.drawRectangle(size[1]/2-437, size[2]/2-244, 99, 473, {69/255, 86/255, 105/255})
-
-    --clip to draw the speed tape
-    if get(PFD_table.ADR_avail) == 1 then
-        sasl.gl.setClipArea(size[1]/2-437, size[2]/2-244, 99, 473)
-        sasl.gl.drawTexture(PFD_spd_tape, size[1]/2-437, size[2]/2-244 - Math_rescale(30, 355, 460, 2785, get(PFD_table.IAS)), 99, 4096, {1,1,1})
-        sasl.gl.resetClipArea ()
-    end
-
-    --boarder lines
-    sasl.gl.drawWideLine(size[1]/2-338, size[2]/2-244, size[1]/2-338, size[2]/2+229, 4, boarder_cl)
-    sasl.gl.drawWideLine(size[1]/2-437, size[2]/2+231, size[1]/2-310, size[2]/2+231, 4, boarder_cl)
-    sasl.gl.drawWideLine(size[1]/2-437, size[2]/2-246, size[1]/2-310, size[2]/2-246, 4, boarder_cl)
-
-    --speed needle
-    if get(PFD_table.ADR_avail) == 1 then
-        sasl.gl.drawTexture(PFD_spd_needle, size[1]/2-370, size[2]/2-18, 56, 21, {1,1,1})
-    end
-end
-
-function PFD_draw_alt_tape(PFD_table)
-    local boarder_cl = ECAM_WHITE
-
-    if get(PFD_table.ADR_avail) == 0 then
-        boarder_cl = get(PFD_table.ADR_blinking) == 1 and {0, 0, 0, 0} or {254/255, 47/255, 41/255, 1}
-    elseif get(PFD_table.ADR_avail) == 1 then
-        boarder_cl = ECAM_WHITE
-    end
-
-    sasl.gl.drawRectangle(size[1]/2+217, size[2]/2-244, 75, 473, {69/255, 86/255, 105/255})
-
-    --alt tape--
-    if get(PFD_table.ADR_avail) == 1 then
-        sasl.gl.setClipArea(size[1]/2+209, size[2]/2-244, 84, 473)
-        sasl.gl.drawTexture(PFD_alt_tap_1, size[1]/2+209, size[2]/2-244 - Math_rescale_lim_lower(-1500,   13,  3500, 2113, get(PFD_table.Baro_ALT)), 84, 2500, {1,1,1})
-        sasl.gl.drawTexture(PFD_alt_tap_2, size[1]/2+209, size[2]/2-244 - Math_rescale_no_lim(    4000, -177,  9500, 2132, get(PFD_table.Baro_ALT)), 84, 2500, {1,1,1})
-        sasl.gl.drawTexture(PFD_alt_tap_3, size[1]/2+209, size[2]/2-244 - Math_rescale_no_lim(   10000, -157, 15500, 2153, get(PFD_table.Baro_ALT)), 84, 2500, {1,1,1})
-        sasl.gl.drawTexture(PFD_alt_tap_4, size[1]/2+209, size[2]/2-244 - Math_rescale_no_lim(   16000, -137, 21500, 2173, get(PFD_table.Baro_ALT)), 84, 2500, {1,1,1})
-        sasl.gl.drawTexture(PFD_alt_tap_5, size[1]/2+209, size[2]/2-244 - Math_rescale_no_lim(   22000, -117, 27500, 2193, get(PFD_table.Baro_ALT)), 84, 2500, {1,1,1})
-        sasl.gl.drawTexture(PFD_alt_tap_6, size[1]/2+209, size[2]/2-244 - Math_rescale_no_lim(   28000,  -97, 33500, 2213, get(PFD_table.Baro_ALT)), 84, 2500, {1,1,1})
-        sasl.gl.drawTexture(PFD_alt_tap_7, size[1]/2+209, size[2]/2-244 - Math_rescale_no_lim(   34000,  -77, 39500, 2233, get(PFD_table.Baro_ALT)), 84, 2500, {1,1,1})
-        sasl.gl.drawTexture(PFD_alt_tap_8, size[1]/2+209, size[2]/2-244 - Math_rescale_lim_upper(40000,  -57, 45000, 2043, get(PFD_table.Baro_ALT)), 84, 2500, {1,1,1})
-        sasl.gl.resetClipArea ()
-    end
-
-    --boarder lines
-    sasl.gl.drawWideLine(size[1]/2+294, size[2]/2-244, size[1]/2+294, size[2]/2+229, 4, boarder_cl)
-    sasl.gl.drawWideLine(size[1]/2+217, size[2]/2+231, size[1]/2+330, size[2]/2+231, 4, boarder_cl)
-    sasl.gl.drawWideLine(size[1]/2+217, size[2]/2-246, size[1]/2+330, size[2]/2-246, 4, boarder_cl)
-
-    --print("ALT     " .. get(PFD_Capt_Baro_Altitude))
-    --print("ALT 10K " .. Math_extract_digit(get(PFD_Capt_Baro_Altitude), 5) + Math_rescale(9980,  0, 10000, 1, get(PFD_Capt_Baro_Altitude) % 10000))
-    --print("ALT 1K  " .. Math_extract_digit(get(PFD_Capt_Baro_Altitude), 4) + Math_rescale(980,   0, 1000,  1, get(PFD_Capt_Baro_Altitude) % 1000))
-    --print("ALT 100 " .. Math_extract_digit(get(PFD_Capt_Baro_Altitude), 3) + Math_rescale(80,    0, 100,   1, get(PFD_Capt_Baro_Altitude) % 100))
-    --print("ALT 10s " .. get(PFD_Capt_Baro_Altitude) % 100)
-
-    --alt box--
-    if get(PFD_table.ADR_avail) == 1 then
-        sasl.gl.drawTexture(PFD_alt_box_bgd, size[1]/2+217, size[2]/2-48, 127, 83, {1,1,1})
-
-        --draw tapes that goes though the box here(e.g RA ALT)
-        sasl.gl.drawRectangle(size[1]/2+296, size[2]/2-244, 16, Math_clamp(Math_rescale_no_lim(0, 236, 500, 26, get(PFD_table.RA_ALT)), 0, 473), ECAM_RED)
-
-        sasl.gl.drawTexture(PFD_alt_box, size[1]/2+217, size[2]/2-48, 127, 83, {1,1,1})
-
-        --alt needle
-        sasl.gl.drawWideLine(size[1]/2+153, size[2]/2-8, size[1]/2+211, size[2]/2-8, 6, {1, 1, 0})
-    end
-end
-
 function PFD_draw_hdg_tape(PFD_table)
     local boarder_cl = ECAM_WHITE
 
-    sasl.gl.drawRectangle(size[1]/2-260, size[2]/2-432, 407, 55, {69/255, 86/255, 105/255})
+    if get(PFD_table.IR_avail) == 0 then
+        boarder_cl = get(PFD_table.IR_blinking) == 1 and {0, 0, 0, 0} or ECAM_RED
+    elseif get(PFD_table.IR_avail) == 1 or get(PFD_table.IR_avail) == 2  then
+        boarder_cl = ECAM_WHITE
+    end
+
+    --bgd
+    sasl.gl.drawRectangle(size[1]/2-260, size[2]/2-432, 407, 55, PFD_tape_grey)
 
     --boarder lines
     sasl.gl.drawWideLine(size[1]/2-262, size[2]/2-432, size[1]/2-262, size[2]/2-377, 4, boarder_cl)
     sasl.gl.drawWideLine(size[1]/2-264, size[2]/2-375, size[1]/2+151, size[2]/2-375, 4, boarder_cl)
     sasl.gl.drawWideLine(size[1]/2+149, size[2]/2-432, size[1]/2+149, size[2]/2-377, 4, boarder_cl)
 
-    --hdg needle
-    sasl.gl.drawWideLine(size[1]/2-56, size[2]/2-388, size[1]/2-56, size[2]/2-340, 6, {1, 1, 0})
+    if get(PFD_table.IR_avail) == 1 or get(PFD_table.IR_avail) == 2 then
+        sasl.gl.setClipArea(size[1]/2-260, size[2]/2-432, 407, 55)
+        sasl.gl.drawTexture(PFD_hdg_tape, size[1]/2-260 - Math_rescale(0, 561, 360, 3609, get(PFD_table.HDG)), size[2]/2-432, 4096, 110, ECAM_WHITE)
+        sasl.gl.resetClipArea ()
+
+        --hdg needle
+        sasl.gl.drawWideLine(size[1]/2-56, size[2]/2-388, size[1]/2-56, size[2]/2-340, 6, PFD_yellow)
+    end
 end
 
 function PFD_draw_vs_needle(PFD_table)

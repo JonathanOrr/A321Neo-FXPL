@@ -40,6 +40,9 @@ UI_YELLOW = {1, 1, 0.30}
 EFB_GREY = {31/255, 31/255, 31/255}
 EFB_RED = {181/255, 255/255, 84/255}
 
+PFD_tape_grey = {69/255, 86/255, 105/255}
+PFD_yellow = {1, 1, 0}
+
 -- ELEC buses
 ELEC_BUS_AC_1 = 1
 ELEC_BUS_AC_2 = 2
@@ -114,7 +117,10 @@ ANTIICE_TAT_FO       = 17
 
 -- Fonts
 Font_AirbusDUL = sasl.gl.loadFont("fonts/AirbusDULiberationMono.ttf")
+Font_AirbusDUL_vert = sasl.gl.loadFont("fonts/AirbusDULiberationMono.ttf")
 sasl.gl.setFontRenderMode(Font_AirbusDUL, TEXT_RENDER_FORCED_MONO, 0.6)
+sasl.gl.setFontDirection (Font_AirbusDUL_vert, TEXT_DIRECTION_VERTICAL)
+
 
 Font_AirbusDUL_small = sasl.gl.loadFont("fonts/AirbusDULiberationMono.ttf")
 sasl.gl.setFontRenderMode(Font_AirbusDUL_small, TEXT_RENDER_FORCED_MONO, 0.6*1.47)

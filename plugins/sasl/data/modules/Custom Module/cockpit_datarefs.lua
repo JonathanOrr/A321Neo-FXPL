@@ -194,6 +194,9 @@ PFD_Capt_Roll = createGlobalPropertyf("a321neo/cockpit/PFD/capt_roll", 0, false,
 PFD_Fo_Pitch = createGlobalPropertyf("a321neo/cockpit/PFD/fo_pitch", 0, false, true, false) -- Displayed Pitch CAPT (affected by ADIRS)
 PFD_Fo_Roll = createGlobalPropertyf("a321neo/cockpit/PFD/fo_roll", 0, false, true, false) -- Displayed Roll CAPT (affected by ADIRS)
 
+PFD_Capt_ias_accel = globalProperty("sim/cockpit2/gauges/indicators/airspeed_acceleration_kts_sec_pilot")
+PFD_Fo_ias_accel = globalProperty("sim/cockpit2/gauges/indicators/airspeed_acceleration_kts_sec_copilot")
+
 PFD_Capt_Ground_line = createGlobalPropertyf("a321neo/cockpit/PFD/capt_att_ground_line", 0, false, true, false)   -- Ground line on ATT moving during t/o or landing
 PFD_Fo_Ground_line = createGlobalPropertyf("a321neo/cockpit/PFD/fo_att_ground_line", 0, false, true, false)   -- Ground line on ATT moving during t/o or landing
 
