@@ -9,7 +9,7 @@ function new_dataset(input_id)
     id = input_id,
 
     config = {
-        mode = ND_MODE_ARC,
+        mode = input_id == ND_CAPT and ND_MODE_ARC or ND_MODE_NAV,
         range = ND_RANGE_20,
         extra_data = ND_DATA_NONE,
         

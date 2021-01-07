@@ -493,8 +493,8 @@ FCU_cmd_pb_exped = sasl.createCommand("a321neo/cockpit/fcu/pb_exped","")
 FCU_cmd_pb_appr  = sasl.createCommand("a321neo/cockpit/fcu/pb_appr","")
 
 -- CHRONO
-Chrono_cmd_capt_button = sasl.createCommand("a321neo/cockpit/misc/capt_chrono_press","")
-Chrono_cmd_fo_button   = sasl.createCommand("a321neo/cockpit/misc/fo_chrono_press","")
+Chrono_cmd_Capt_button = sasl.createCommand("a321neo/cockpit/misc/capt_chrono_press","")
+Chrono_cmd_Fo_button   = sasl.createCommand("a321neo/cockpit/misc/fo_chrono_press","")
 Chrono_cmd_rst         = sasl.createCommand("a321neo/cockpit/misc/chrono_rst","")
 Chrono_cmd_date        = sasl.createCommand("a321neo/cockpit/misc/chrono_date","")
 Chrono_cmd_date_up     = sasl.createCommand("a321neo/cockpit/misc/chrono_date_up","")

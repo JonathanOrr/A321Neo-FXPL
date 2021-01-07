@@ -237,11 +237,28 @@ PB = {
         fo_fd   = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
         fo_ls   = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
 
+        capt_range_zoom = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
+        capt_range_10   = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
+        capt_range_20   = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
+        capt_range_40   = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
+        capt_range_80   = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
+        capt_range_160  = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
+        capt_range_320  = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
+
         capt_cstr = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
         capt_wpt  = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
         capt_vord = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
         capt_ndb  = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
         capt_arpt = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
+
+        fo_range_zoom = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
+        fo_range_10   = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
+        fo_range_20   = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
+        fo_range_40   = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
+        fo_range_80   = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
+        fo_range_160  = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
+        fo_range_320  = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
+
 
         fo_cstr = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
         fo_wpt  = {bus = LIGHT_BUS_AC}, -- TODO CHECK BUS
