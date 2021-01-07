@@ -52,6 +52,12 @@ local function draw_tank_qty()
     local fuel_R  = math.floor(get(Fuel_quantity[FUEL_TANK_R]))
     local fuel_ACT= math.floor(get(Fuel_quantity[FUEL_TANK_ACT]))
     local fuel_RCT= math.floor(get(Fuel_quantity[FUEL_TANK_RCT]))
+    
+    fuel_C = fuel_C - fuel_C % 10
+    fuel_L = fuel_L - fuel_L % 10
+    fuel_R = fuel_R - fuel_R % 10
+    fuel_ACT = fuel_ACT - fuel_ACT % 10
+    fuel_RCT = fuel_RCT - fuel_RCT % 10
 
     local c_pump_fail_or_off = fuel_C > 0 and (not Fuel_sys.tank_pump_and_xfr[5].status) and (not Fuel_sys.tank_pump_and_xfr[5].status)
 
@@ -97,8 +103,9 @@ local function draw_fob_qty()
                         and (not Fuel_sys.tank_pump_and_xfr[5].status) ) 
                             or (get(FAILURE_FUEL, 7) == 1) or (get(FAILURE_FUEL, 8) == 1)
 
-    local fob = math.floor(get(FOB))
     -- FOB
+    local fob = math.floor(get(FOB))
+    fob = fob - (fob % 10)
 
     local color_qty = ECAM_GREEN
     if get(FAILURE_FUEL_FQI_1_FAULT) == 1 and get(FAILURE_FUEL_FQI_2_FAULT) == 1 then
@@ -153,6 +160,8 @@ local function draw_fuel_usage_and_ff()
 
     local fuel_usage_1 = math.floor(get(Ecam_fuel_usage_1))
     local fuel_usage_2 = math.floor(get(Ecam_fuel_usage_2))
+    fuel_usage_1 = fuel_usage_1 - fuel_usage_1 % 10
+    fuel_usage_2 = fuel_usage_2 - fuel_usage_2 % 10
     local fuel_usage_tot = fuel_usage_1 + fuel_usage_2
 
     local color = get(EWD_flight_phase) >= 2 and ECAM_GREEN or ECAM_WHITE

@@ -423,6 +423,7 @@ end
 
 function Draw_fuel_stuffs()
     local fuel_on_board = math.floor(get(FOB))
+    fuel_on_board = fuel_on_board - (fuel_on_board % 10)
 
     -- Check ECAM_fuel.lua to understand the following computation
     local not_all_fuel_available = (math.floor(get(Fuel_quantity[0])) > 0

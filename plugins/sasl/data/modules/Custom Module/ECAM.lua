@@ -127,6 +127,7 @@ local function draw_ecam_lower_section()
         color = ECAM_ORANGE
     else
         GW = math.floor(get(Gross_weight))
+        GW = GW - GW%100
         color = ECAM_GREEN
     end
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2+370, size[2]/2-375, GW, 36, false, false, TEXT_ALIGN_RIGHT, color)
