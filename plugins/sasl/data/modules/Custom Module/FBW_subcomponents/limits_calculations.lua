@@ -1,4 +1,5 @@
 include("FBW_subcomponents/flight_ctl_subcomponents/lateral_ctl.lua")
+include("ADIRS_data_source.lua")
 
 local in_air_timer = 0
 local alpha_speed_update_time_s = 0.15
@@ -13,15 +14,6 @@ local VMAX_speeds = {
     215,
     195,
     190
-}
-
-local speedbrakes_effect = {
-    25,
-    25,
-    7,
-    10,
-    10,
-    8
 }
 
 local alpha0s = {
@@ -81,6 +73,42 @@ function Extract_vs1g(gross_weight, config, gear_down)
     end
 end
 
+local function update_VFE()
+    if get(Flaps_internal_config) == 0 and (get_ias(PFD_CAPT) > 100 or get_ias(PFD_FO) > 100) then
+        set(VFE_speed, VMAX_speeds[Math_clamp_higher(get(Flaps_internal_config), 4) + 1 + 3])
+    elseif get(Flaps_internal_config) == 0 and (get_ias(PFD_CAPT) <= 100 or get_ias(PFD_FO) <= 100) then
+        set(VFE_speed, VMAX_speeds[Math_clamp_higher(get(Flaps_internal_config), 4) + 2 + 3])
+    elseif get(Flaps_internal_config) == 1 then
+        set(VFE_speed, VMAX_speeds[Math_clamp_higher(get(Flaps_internal_config), 4) + 2 + 3])
+    else
+        set(VFE_speed, VMAX_speeds[Math_clamp_higher(get(Flaps_internal_config), 4) + 1 + 3])
+    end
+end
+
+local function update_VLS()
+    local VLS_flaps_spd_lerp_table = {
+        {0.0 + 0,  1.28 * Extract_vs1g(get(Aircraft_total_weight_kgs), 0, false)},
+        {0.7 + 0,  1.23 * Extract_vs1g(get(Aircraft_total_weight_kgs), 1, false)},
+        {0.7 + 10, 1.23 * Extract_vs1g(get(Aircraft_total_weight_kgs), 2, false)},
+        {0.8 + 14, 1.23 * Extract_vs1g(get(Aircraft_total_weight_kgs), 3, false)},
+        {0.8 + 21, 1.23 * Math_rescale(0, Extract_vs1g(get(Aircraft_total_weight_kgs), 4, false), 1, Extract_vs1g(get(Aircraft_total_weight_kgs), 4, true), (get(Front_gear_deployment) + get(Left_gear_deployment) + get(Right_gear_deployment)) / 3)},
+        {1.0 + 25, 1.23 * Extract_vs1g(get(Aircraft_total_weight_kgs), 5, false)},
+    }
+    local VLS_spdbrake_fx_lerp_table = {
+        {0.0 + 0,  25},
+        {0.7 + 0,  25},
+        {0.7 + 10, 7},
+        {0.8 + 14, 10},
+        {0.8 + 21, 10},
+        {1.0 + 25, 8},
+    }
+
+    set(
+        VLS,
+        Table_interpolate(VLS_flaps_spd_lerp_table, get(Slats) + get(Flaps_deployed_angle))
+        + Math_rescale(0, 0, Spoilers_obj.Get_cmded_spdbrk_def(1), Table_interpolate(VLS_spdbrake_fx_lerp_table, get(Slats) + get(Flaps_deployed_angle)), Spoilers_obj.Get_curr_spdbrk_def())
+    )
+end
 
 --calculate flight characteristics values
 function update()
@@ -107,9 +135,7 @@ function update()
         set(Fo_VMAX, VMAX_speeds[get(Flaps_internal_config) + 3])
     end
 
-    set(VFE_speed, VMAX_speeds[Math_clamp_higher(get(Flaps_internal_config), 4) + 1 + 3])
-
-    set(VLS, Set_anim_value(get(VLS), (get(Flaps_internal_config) == 0 and 1.28 or 1.23) * Extract_vs1g(get(Aircraft_total_weight_kgs), get(Flaps_internal_config), get(Gear_handle) ~= 0) + Math_rescale(0, 0, Spoilers_obj.Get_cmded_spdbrk_def(1), speedbrakes_effect[get(Flaps_internal_config) + 1], Spoilers_obj.Get_curr_spdbrk_def()), 0, 350, 0.3))
+    update_VFE()
 
     set(S_speed, 1.23 * Extract_vs1g(get(Aircraft_total_weight_kgs), 0, false))
     set(F_speed, 1.22 * Extract_vs1g(get(Aircraft_total_weight_kgs), 2, false))
@@ -124,12 +150,14 @@ function update()
         in_air_timer = in_air_timer + get(DELTA_TIME)
     end
 
-    --alpha speeds update timer(accirding to video at 25fps updates every 3 <-> 4 frames: https://www.youtube.com/watch?v=3Suxhj9wQio&ab_channel=a321trainingteam)
+    --VLS & alpha speeds update timer(accirding to video at 25fps updates every 3 <-> 4 frames: https://www.youtube.com/watch?v=3Suxhj9wQio&ab_channel=a321trainingteam)
     alpha_speed_update_timer = alpha_speed_update_timer + get(DELTA_TIME)
 
-    --stall speeds(configuration dependent)
+    --VLS & stall speeds(configuration dependent)
     --on liftoff for 5 seconds the Aprot value is the same as Amax(FCOM 1.27.20.P4 or DSC 27-20-10-20 P4/6)
     if alpha_speed_update_timer >= alpha_speed_update_time_s then
+        update_VLS()
+
         if in_air_timer >= 5 then
             set(Capt_Vaprot_vsw, Set_anim_value_no_lim(get(Capt_Vaprot_vsw), get_ias(PFD_CAPT) * math.sqrt(Math_clamp_lower((get(Alpha) - alpha0s[get(Flaps_internal_config) + 1]) / (vsw_aprot_alphas[get(Flaps_internal_config) + 1] - alpha0s[get(Flaps_internal_config) + 1]), 0)), 5))
             set(Fo_Vaprot_vsw,   Set_anim_value_no_lim(get(Fo_Vaprot_vsw),   get_ias(PFD_FO)   * math.sqrt(Math_clamp_lower((get(Alpha) - alpha0s[get(Flaps_internal_config) + 1]) / (vsw_aprot_alphas[get(Flaps_internal_config) + 1] - alpha0s[get(Flaps_internal_config) + 1]), 0)), 5))

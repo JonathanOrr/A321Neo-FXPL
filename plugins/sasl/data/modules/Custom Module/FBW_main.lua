@@ -46,8 +46,8 @@ end
 
 components = {
     autothrust {},
+    flight_controls {},
     limits_calculations {},
-    flight_controls {}
 }
 
 --register commands

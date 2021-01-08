@@ -1,3 +1,5 @@
+include("ADIRS_data_source.lua")
+
 function Slats_flaps_calc_and_control()
     --SFCC 1/2 status
     set(SFCC_1_status, 1 * (1 - get(FAILURE_FCTL_SFCC_1)) * get(DC_ess_bus_pwrd))
@@ -47,13 +49,13 @@ function Slats_flaps_calc_and_control()
 
     if flaps_handle_delta ~= 0 then
         if last_flaps_handle_pos == 0 and flaps_handle_delta == 1 then
-            if get(Capt_IAS) <= 100 then
+            if get_ias(PFD_CAPT) <= 100 or get_ias(PFD_FO) <= 100 then
                 set(Flaps_internal_config, 2)-- 1+F
             else
                 set(Flaps_internal_config, 1)-- 1
             end
         elseif last_flaps_handle_pos == 2 and flaps_handle_delta == -1 then
-            if get(Capt_IAS) <= 210 then
+            if get_ias(PFD_CAPT) <= 210 or get_ias(PFD_FO) <= 210 then
                 set(Flaps_internal_config, 2)-- 1+F
             else
                 set(Flaps_internal_config, 1)-- 1
@@ -70,7 +72,7 @@ function Slats_flaps_calc_and_control()
             end
         end
     else
-        if get(Flaps_internal_config) == 2 and get(Capt_IAS) >= 210 then--back to 1
+        if get(Flaps_internal_config) == 2 and (get_ias(PFD_CAPT) >= 210 or get_ias(PFD_FO) >= 210) then--back to 1
             set(Flaps_internal_config, 1)
         end
     end

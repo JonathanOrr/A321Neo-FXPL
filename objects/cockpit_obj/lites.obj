@@ -3090,20 +3090,33 @@ IDX10	2524	2525	2522	2524	2526	2527	2528	2529	2526	2528
 		TRIS	2322 120
 		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/fcu/appr_top
 		TRIS	2442 6
-		ATTR_light_level 0.000000 1.000000	
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/fcu/fo_range_40_top
 		TRIS	2448 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/fcu/fo_range_10_top
 		TRIS	2454 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/fcu/fo_range_20_top
 		TRIS	2460 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/fcu/fo_range_80_top
 		TRIS	2466 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/fcu/fo_range_160_top
 		TRIS	2472 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/fcu/capt_range_320_top
 		TRIS	2478 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/fcu/fo_range_zoom_top
 		TRIS	2484 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/fcu/capt_range_10_top
 		TRIS	2490 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/fcu/capt_range_20_top
 		TRIS	2496 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/fcu/capt_range_40_top
 		TRIS	2502 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/fcu/capt_range_80_top
 		TRIS	2508 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/fcu/capt_range_160_top
 		TRIS	2514 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/fcu/fo_range_320_top
 		TRIS	2520 6
+		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/fcu/capt_range_zoom_top
 		TRIS	2526 6
 			ATTR_light_level 0.000000 1.000000	a321neo/cockpit/overhead/calls_emer_top
 			TRIS	894 6
