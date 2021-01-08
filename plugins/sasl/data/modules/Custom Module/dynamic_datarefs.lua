@@ -155,6 +155,7 @@ G_output = createGlobalPropertyf("a321neo/dynamics/FBW/G_output", 0, false, true
 Vpath_output = createGlobalPropertyf("a321neo/dynamics/FBW/vpath_output", 0, false, true, false)
 Abs_pitch_rate = createGlobalPropertyf("a321neo/dynamics/FBW/abs_Q", 0, false, true, false)
 Abs_vpath_pitch_rate = createGlobalPropertyf("a321neo/dynamics/FBW/abs_vpath_Q", 0, false, true, false)
+AOA_value = globalProperty("sim/flightmodel2/misc/AoA_angle_degrees")
 
 -- Electrical system
 --- BUSES (0: not providing elec power, 1: providing elec power) - influenced by switches, faults, engine status etc.

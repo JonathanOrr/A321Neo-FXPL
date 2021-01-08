@@ -71,6 +71,7 @@ local ADIRS = {
     ias = 0,
     ias_trend = 0,
     tas = 0,
+    aoa = 0,
     alt = 0,
     vs  = 0,
     wind_spd = 0,
@@ -173,6 +174,7 @@ function ADIRS:update_adr_data()
         self.ias_trend = get(self.ias_trend_dataref)
         self.tas = get(self.tas_dataref) + self.adr_ias_offset
         self.mach = get(self.mach_dataref)
+        self.aoa = get(AOA_value)
         self.alt = get(self.baroalt_dataref) + self.adr_alt_offset
         self.vs  = get(self.vvi_dataref)
         
