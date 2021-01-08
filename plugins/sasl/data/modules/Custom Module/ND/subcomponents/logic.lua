@@ -1,5 +1,6 @@
 include('ND/subcomponents/constants.lua')
 include('ADIRS_data_source.lua')
+include('ND/subcomponents/logic_poi.lua')
 
 local function update_speed_and_wind(data)
     local id = data.id
@@ -94,11 +95,11 @@ local function update_navaid_raw(data)
 end
 
 function update_main(data)
-
     update_speed_and_wind(data)
     update_hdg_track(data)
     update_gps(data)
     update_tcas(data)
     update_position(data)
     update_navaid_raw(data)
+    update_poi(data)
 end

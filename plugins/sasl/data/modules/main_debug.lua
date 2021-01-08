@@ -32,6 +32,10 @@ local ecam_force_page = 0
 -- visualize it in the debug window
 debug_performance_measure = false
 
+-- The following flag disable the data manager, i.e., ND and MCDU do not load any point from X-Plane
+-- files. This is useful to reduce the startup time
+disable_data_manager = true
+
 --
 --
 -- Do not touch after this line

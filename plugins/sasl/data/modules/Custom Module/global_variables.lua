@@ -47,6 +47,8 @@ Fuel_sys = {}
 AI_sys   = {}
 ADIRS_sys= {}
 
+Data_manager = {}
+
 Mcdu_popup = {}
 Mcdu_popup_lut = 0
 

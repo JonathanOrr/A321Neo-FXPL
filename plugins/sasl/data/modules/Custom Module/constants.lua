@@ -135,6 +135,18 @@ ADR_STATUS_STARTING = 1
 ADR_STATUS_ON       = 2
 ADR_STATUS_FAULT    = 3
 
+-- Data manager
+NAV_ID_NDB  = 2
+NAV_ID_VOR  = 3
+NAV_ID_LOC  = 4
+NAV_ID_LOC_ALONE = 5
+NAV_ID_GS   = 6
+NAV_ID_OM   = 7
+NAV_ID_MM   = 8
+NAV_ID_IM   = 9
+NAV_ID_DME  = 12
+NAV_ID_DME_ALONE  = 13
+
 -- Fonts
 Font_AirbusDUL = sasl.gl.loadFont("fonts/AirbusDULiberationMono.ttf")
 Font_AirbusDUL_vert = sasl.gl.loadFont("fonts/AirbusDULiberationMono.ttf")

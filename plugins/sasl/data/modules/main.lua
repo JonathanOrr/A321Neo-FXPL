@@ -94,7 +94,10 @@ components = {
   display_brightness {},
   librain{},
   efb{},
+  data_manager {},
 }
+
+Data_manager.initialize()   -- Load data points (airports, waypoints, etc.)
 
 include(moduleDirectory .. "/main_windows.lua")
 include(moduleDirectory .. "/main_menu.lua")

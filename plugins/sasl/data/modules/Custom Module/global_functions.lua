@@ -34,10 +34,10 @@
 
 function Math_clamp(val, min, max)
     if min > max then 
-        print("Min is larger than Max, invalid")
-        print("Minimum was: " .. min)
-        print("Maximum was: " .. max)
-        print("Original value: " .. val .. " will be returned")
+        logWarning("Min is larger than Max, invalid")
+        logWarning("Minimum was: " .. min)
+        logWarning("Maximum was: " .. max)
+        logWarning("Original value: " .. val .. " will be returned")
         return val
     end
     if val < min then
