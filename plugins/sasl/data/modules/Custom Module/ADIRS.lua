@@ -151,7 +151,7 @@ function ADIRS:update_adr()
         return
     end
 
-    if self.adr_align_start_time > 0 then
+    if self.adr_align_start_time ~= 0 then
         if get(TIME) - self.adr_align_start_time > TIME_TO_START_ADR then
             self.adr_status = ADR_STATUS_ON
         end
@@ -354,6 +354,18 @@ function adirs_inst_align(phase)
     ADIRS_sys[3]:align_instantaneously()
 end
 
+function onAirportLoaded()
+    if get(Startup_running) == 1 or get(Capt_ra_alt_ft) > 20 then
+        set(ADIRS_rotary_btn[1], 1)
+        set(ADIRS_rotary_btn[2], 1)
+        set(ADIRS_rotary_btn[3], 1)
+        ADIRS_sys[ADIRS_1].adirs_switch_status = 1
+        ADIRS_sys[ADIRS_2].adirs_switch_status = 1
+        ADIRS_sys[ADIRS_3].adirs_switch_status = 1
+
+        adirs_inst_align(SASL_COMMAND_BEGIN)
+    end
+end
 ----------------------------------------------------------------------------------------------------
 -- Initlization
 ----------------------------------------------------------------------------------------------------
