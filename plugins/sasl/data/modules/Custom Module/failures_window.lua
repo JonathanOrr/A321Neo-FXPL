@@ -18,7 +18,6 @@
 
 size = {800, 600}
 
-include('constants.lua')
 
 -- Constants
 local X_START_MENU_RECT = 165

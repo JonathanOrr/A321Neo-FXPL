@@ -16,7 +16,6 @@
 -- Short description: GPWS system
 -------------------------------------------------------------------------------
 
-include('constants.lua')
 include('GPWS_predictive.lua')
 
 

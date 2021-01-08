@@ -21,7 +21,6 @@ size = {700 , 500}
 local TIME_TO_START_ADR       = 2 -- In seconds
 local IR_TIME_TO_GET_ATTITUDE = 20 -- In seconds
 
-include('constants.lua')
 
 local function write_common(i)
     local x_shift = i == 1 and 0 or (i == 2 and 470 or 235)

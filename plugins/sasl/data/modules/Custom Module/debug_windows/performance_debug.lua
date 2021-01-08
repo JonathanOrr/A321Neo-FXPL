@@ -18,7 +18,6 @@
 
 size = {400, 600}
 
-include('constants.lua')
 
 local last_update = 0
 local UPDATE_FREQ_SEC = 0.5

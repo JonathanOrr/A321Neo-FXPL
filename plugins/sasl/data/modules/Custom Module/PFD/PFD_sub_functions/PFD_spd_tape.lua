@@ -1,4 +1,3 @@
-include('constants.lua')
 include('ADIRS_data_source.lua')
 
 local function draw_accel_arrow(PFD_table)

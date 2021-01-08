@@ -19,7 +19,6 @@
 
 size = {840, 600}
 
-include('constants.lua')
 
 
 local B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")

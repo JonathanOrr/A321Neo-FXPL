@@ -16,7 +16,6 @@
 -- Short description: GPWS Predictive system
 -------------------------------------------------------------------------------
 
-include('constants.lua')
 
 local last_update_time = 0
 

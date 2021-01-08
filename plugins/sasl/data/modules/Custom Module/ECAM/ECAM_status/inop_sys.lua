@@ -1,4 +1,3 @@
-include('constants.lua')
 
 local function put_inop_sys_msg_2(messages, dr_1, dr_2, title)
     if get(dr_1) == 0 and get(dr_2) == 0 then

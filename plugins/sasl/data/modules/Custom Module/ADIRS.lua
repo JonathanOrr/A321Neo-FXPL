@@ -20,7 +20,6 @@
 -- Constants
 ----------------------------------------------------------------------------------------------------
 
-include('constants.lua')
 include('ELEC_subcomponents/include.lua')
 
 local TIME_TO_START_ADR       = 2 -- In seconds

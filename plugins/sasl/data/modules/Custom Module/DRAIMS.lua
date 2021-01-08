@@ -21,7 +21,6 @@ size = {600, 400}
 
 local UPDATE_FREQUENCY_SEC = 1
 
-include('constants.lua')
 
 --variables
 local DRAIMS_entry = ""

@@ -1,7 +1,6 @@
 fbo = true
 --for the cursor
 
-include('constants.lua')
 include("EFB/efb_common_buttons.lua")
 include("EFB/EFB_pages/1.lua")
 include("EFB/EFB_pages/2.lua")

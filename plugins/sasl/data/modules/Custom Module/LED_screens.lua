@@ -1,4 +1,3 @@
-include('constants.lua')
 addSearchPath(moduleDirectory .. "/Custom Module/LED_subcomponents/")
 
 components = {

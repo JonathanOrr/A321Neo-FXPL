@@ -1,4 +1,3 @@
-include('constants.lua')
 
 function ECAM_status_get_procedures()
     

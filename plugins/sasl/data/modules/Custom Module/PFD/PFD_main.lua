@@ -17,7 +17,6 @@
 -------------------------------------------------------------------------------
 
 
-include('constants.lua')
 include('display_common.lua')
 
 --varibles--

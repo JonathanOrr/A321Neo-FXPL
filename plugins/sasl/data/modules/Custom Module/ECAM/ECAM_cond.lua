@@ -16,7 +16,6 @@
 -- Short description: ECAM file for the AIRCOND page 
 -------------------------------------------------------------------------------
 
-include('constants.lua')
 
 local function draw_cond_page_valves()
     SASL_rotated_center_img_xcenter_aligned(ECAM_COND_arrows_img, size[1]/2-213, size[2]/2+106, 10, 39, Math_rescale(0, -40, 1, 40, get(Aircond_trim_valve, 1)), 0, 0, ECAM_GREEN)

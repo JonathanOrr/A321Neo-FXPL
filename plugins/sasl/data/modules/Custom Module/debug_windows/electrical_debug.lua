@@ -18,7 +18,6 @@
 
 size = {1000, 600}
 
-include('constants.lua')
 
 function round(num, numDecimalPlaces)
   local mult = 10^(numDecimalPlaces or 0)

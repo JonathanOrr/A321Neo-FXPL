@@ -16,7 +16,6 @@
 -- Short description: Various helper functions to get data and statuses for PFD 
 -------------------------------------------------------------------------------
 
-include('constants.lua')
 
 local function which_adr(i) -- It returns the current ADR index in use by `i` (capt or fo)
     if i == PFD_CAPT then

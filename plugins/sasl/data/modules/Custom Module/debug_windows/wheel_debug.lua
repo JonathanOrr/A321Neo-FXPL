@@ -22,7 +22,6 @@ local STEER_BOX_WIDTH=300
 local STEER_BOX_HEIGHT=20
 
 
-include('constants.lua')
 
 local function box_convert_coord(x)
     return size[1]/2 + (x * STEER_BOX_WIDTH / 2) / 75

@@ -1,4 +1,3 @@
-include('constants.lua')
 
 local function draw_alt_digits(PFD_table)
     local ALT_10K = Math_extract_digit(get_alt(PFD_table.Screen_ID), 5, true) + Math_rescale(9980,  0, 10000, 1, math.abs(get_alt(PFD_table.Screen_ID)) % 10000)

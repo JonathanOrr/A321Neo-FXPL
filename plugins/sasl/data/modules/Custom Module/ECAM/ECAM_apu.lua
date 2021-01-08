@@ -16,7 +16,6 @@
 -- Short description: ECAM file for the APU page
 -------------------------------------------------------------------------------
 
-include('constants.lua')
 
 local function draw_triangle(x,y)
     sasl.gl.drawWideLine(x, y, x-10, y-25, 3, ECAM_GREEN)
