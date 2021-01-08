@@ -163,3 +163,10 @@ PFD_FO    = 2
 ND_CAPT   = 1
 ND_FO     = 2
 
+--FBW LAWS
+FBW_NORMAL_LAW                 = 3
+FBW_ALTERNATE_REDUCED_PROT_LAW = 2
+FBW_ALTERNATE_NO_PROT_LAW      = 1
+FBW_DIRECT_LAW                 = 0
+FBW_ABNORMAL_LAW               = -1
+FBW_MECHANICAL_BACKUP_LAW      = -2

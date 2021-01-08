@@ -36,14 +36,24 @@ local function draw_characteristics_spd(PFD_table)
     end
 
     if PFD_table.PFD_aircraft_in_air_timer >= 10 then
+        --let Aprot cover it with the mask
+        sasl.gl.drawMaskStart ()
+        --aprot
+        sasl.gl.drawRectangle(size[1]/2-336, size[2]/2-244, 18, Math_rescale(-43, 0, 42, 473, get(PFD_table.Aprot_SPD) - get_ias(PFD_table.Screen_ID)), {1, 1, 1})
+        --VMAX
+        sasl.gl.drawRectangle(size[1]/2-336, size[2]/2+229, 19, Math_rescale(-43, -473, 42, 0, get(PFD_table.Vmax_spd) - get_ias(PFD_table.Screen_ID)), {1, 1, 1})
+        sasl.gl.drawUnderMask(true)
+
         --vls
         sasl.gl.drawTexture(PFD_vls_tape, size[1]/2-336, size[2]/2-244 + Math_rescale(-43, -883, 42, -410, get(PFD_table.VLS) - get_ias(PFD_table.Screen_ID)), 17, 883, ECAM_ORANGE)
+
+        --terminate masked drawing
+        sasl.gl.drawMaskEnd ()
     end
 
     --show alpha based speed when in fly by wire flight mode
     if PFD_table.PFD_aircraft_in_air_timer >= 0.7 then
         --aprot
-        Draw_LCD_backlight(size[1]/2-336, size[2]/2-244, 18, Math_rescale(-43, 0, 42, 473, get(PFD_table.Aprot_SPD) - get_ias(PFD_table.Screen_ID)), 0, 1, get(PFD_table.PFD_brightness))
         sasl.gl.drawTexture(
             PFD_aprot_tape,
             size[1]/2-336,
@@ -62,7 +72,6 @@ local function draw_characteristics_spd(PFD_table)
         )
 
         --vmo/mmo
-        Draw_LCD_backlight(size[1]/2-336, size[2]/2+229, 19, Math_rescale(-43, -473, 42, 0, get(PFD_table.Vmax_spd) - get_ias(PFD_table.Screen_ID)), 0, 1, get(PFD_table.PFD_brightness))
         sasl.gl.drawTexture(PFD_vmax_vsw_tape, size[1]/2-336, size[2]/2+229 + Math_rescale(-43, -473, 42, 0, get(PFD_table.Vmax_spd) - get_ias(PFD_table.Screen_ID)), 19, 1802, ECAM_RED)
 
         --VFE next

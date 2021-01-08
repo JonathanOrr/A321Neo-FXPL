@@ -159,14 +159,14 @@ function update()
         update_VLS()
 
         if in_air_timer >= 5 then
-            set(Capt_Vaprot_vsw, Set_anim_value_no_lim(get(Capt_Vaprot_vsw), get_ias(PFD_CAPT) * math.sqrt(Math_clamp_lower((get(Alpha) - alpha0s[get(Flaps_internal_config) + 1]) / (vsw_aprot_alphas[get(Flaps_internal_config) + 1] - alpha0s[get(Flaps_internal_config) + 1]), 0)), 5))
-            set(Fo_Vaprot_vsw,   Set_anim_value_no_lim(get(Fo_Vaprot_vsw),   get_ias(PFD_FO)   * math.sqrt(Math_clamp_lower((get(Alpha) - alpha0s[get(Flaps_internal_config) + 1]) / (vsw_aprot_alphas[get(Flaps_internal_config) + 1] - alpha0s[get(Flaps_internal_config) + 1]), 0)), 5))
+            set(Capt_Vaprot_vsw, Math_clamp_higher(Set_anim_value_no_lim(get(Capt_Vaprot_vsw), get_ias(PFD_CAPT) * math.sqrt(Math_clamp_lower((get(Alpha) - alpha0s[get(Flaps_internal_config) + 1]) / (vsw_aprot_alphas[get(Flaps_internal_config) + 1] - alpha0s[get(Flaps_internal_config) + 1]), 0)), 5), get(Capt_VMAX)))
+            set(Fo_Vaprot_vsw,   Math_clamp_higher(Set_anim_value_no_lim(get(Fo_Vaprot_vsw),   get_ias(PFD_FO)   * math.sqrt(Math_clamp_lower((get(Alpha) - alpha0s[get(Flaps_internal_config) + 1]) / (vsw_aprot_alphas[get(Flaps_internal_config) + 1] - alpha0s[get(Flaps_internal_config) + 1]), 0)), 5), get(Fo_VMAX)))
         else
-            set(Capt_Vaprot_vsw, Set_anim_value_no_lim(get(Capt_Vaprot_vsw), get_ias(PFD_CAPT) * math.sqrt(Math_clamp_lower((get(Alpha) - alpha0s[get(Flaps_internal_config) + 1]) / (alpha_max_alphas[get(Flaps_internal_config) + 1] - alpha0s[get(Flaps_internal_config) + 1]), 0)), 5))
-            set(Fo_Vaprot_vsw,   Set_anim_value_no_lim(get(Fo_Vaprot_vsw),   get_ias(PFD_FO)   * math.sqrt(Math_clamp_lower((get(Alpha) - alpha0s[get(Flaps_internal_config) + 1]) / (alpha_max_alphas[get(Flaps_internal_config) + 1] - alpha0s[get(Flaps_internal_config) + 1]), 0)), 5))
+            set(Capt_Vaprot_vsw, Math_clamp_higher(Set_anim_value_no_lim(get(Capt_Vaprot_vsw), get_ias(PFD_CAPT) * math.sqrt(Math_clamp_lower((get(Alpha) - alpha0s[get(Flaps_internal_config) + 1]) / (alpha_max_alphas[get(Flaps_internal_config) + 1] - alpha0s[get(Flaps_internal_config) + 1]), 0)), 5), get(Capt_VMAX)))
+            set(Fo_Vaprot_vsw,   Math_clamp_higher(Set_anim_value_no_lim(get(Fo_Vaprot_vsw),   get_ias(PFD_FO)   * math.sqrt(Math_clamp_lower((get(Alpha) - alpha0s[get(Flaps_internal_config) + 1]) / (alpha_max_alphas[get(Flaps_internal_config) + 1] - alpha0s[get(Flaps_internal_config) + 1]), 0)), 5), get(Fo_VMAX)))
         end
-        set(Capt_Valpha_MAX, Set_anim_value_no_lim(get(Capt_Valpha_MAX), get_ias(PFD_CAPT) * math.sqrt(Math_clamp_lower((get(Alpha) - alpha0s[get(Flaps_internal_config) + 1]) / (alpha_max_alphas[get(Flaps_internal_config) + 1] - alpha0s[get(Flaps_internal_config) + 1]), 0)), 5))
-        set(Fo_Valpha_MAX,   Set_anim_value_no_lim(get(Fo_Valpha_MAX),   get_ias(PFD_FO)   * math.sqrt(Math_clamp_lower((get(Alpha) - alpha0s[get(Flaps_internal_config) + 1]) / (alpha_max_alphas[get(Flaps_internal_config) + 1] - alpha0s[get(Flaps_internal_config) + 1]), 0)), 5))
+        set(Capt_Valpha_MAX, Math_clamp_higher(Set_anim_value_no_lim(get(Capt_Valpha_MAX), get_ias(PFD_CAPT) * math.sqrt(Math_clamp_lower((get(Alpha) - alpha0s[get(Flaps_internal_config) + 1]) / (alpha_max_alphas[get(Flaps_internal_config) + 1] - alpha0s[get(Flaps_internal_config) + 1]), 0)), 5), get(Capt_VMAX)))
+        set(Fo_Valpha_MAX,   Math_clamp_higher(Set_anim_value_no_lim(get(Fo_Valpha_MAX),   get_ias(PFD_FO)   * math.sqrt(Math_clamp_lower((get(Alpha) - alpha0s[get(Flaps_internal_config) + 1]) / (alpha_max_alphas[get(Flaps_internal_config) + 1] - alpha0s[get(Flaps_internal_config) + 1]), 0)), 5), get(Fo_VMAX)))
 
         --reset timer
         alpha_speed_update_timer = 0
