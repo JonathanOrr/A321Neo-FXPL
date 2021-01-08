@@ -16,8 +16,6 @@
 -- Short description: Display switch logic
 -------------------------------------------------------------------------------
 
-include('constants.lua')
-
 --declare states--
 local PFD_CAPT= 1
 local ND_CAPT = 2
@@ -49,24 +47,28 @@ sasl.registerCommandHandler (DMC_EIS_selector_dn, 0, function(phase) if phase ==
 -- Functions
 ----------------------------------------------------------------------------------------------------
 local function auto_update()
-    set(Capt_pfd_displaying_status, 1)
-    set(Capt_nd_displaying_status, 2)
-    set(Fo_pfd_displaying_status, 5)
-    set(Fo_nd_displaying_status, 6)
-    set(EWD_displaying_status, 3)
-    set(ECAM_displaying_status, 4)
 
-    -- Automatic transfers
+    -- Default modes
+    set(Capt_pfd_displaying_status, PFD_CAPT)
+    set(Capt_nd_displaying_status,  ND_CAPT)
+    set(Fo_pfd_displaying_status,   PFD_FO)
+    set(Fo_nd_displaying_status,    ND_FO)
+    set(EWD_displaying_status,      EWD)
+    set(ECAM_displaying_status,     ECAM)
+
+    -- Automatic transfers when brightness is off
     if get(EWD_brightness_act) < 0.01 then
         set(ECAM_displaying_status, EWD)
     end
 
     if get(Capt_PFD_brightness_act) < 0.01 then
-        set(Capt_nd_displaying_status, PFD_CAPT)
+        set(Capt_nd_displaying_status,  PFD_CAPT)
+        set(Capt_pfd_displaying_status, ND_CAPT)
     end
 
     if get(Fo_PFD_brightness_act) < 0.01 then
-        set(Fo_nd_displaying_status, PFD_FO)
+        set(Fo_nd_displaying_status,  PFD_FO)
+        set(Fo_pfd_displaying_status, ND_FO)
     end
 
     -- Manual transfers
@@ -81,8 +83,10 @@ local function auto_update()
     elseif pfd_nd_xfr_capt then
         if get(Capt_pfd_displaying_status) == PFD_CAPT then
             set(Capt_pfd_displaying_status, ND_CAPT)
+            set(Capt_nd_displaying_status,  PFD_CAPT)
         else
             set(Capt_pfd_displaying_status, PFD_CAPT)
+            set(Capt_nd_displaying_status,  ND_CAPT)
         end
     end
 
@@ -97,8 +101,10 @@ local function auto_update()
     elseif pfd_nd_xfr_capt then
         if get(Fo_pfd_displaying_status) == PFD_FO then
             set(Fo_pfd_displaying_status, ND_FO)
+            set(Fo_nd_displaying_status,  PFD_FO)
         else
             set(Fo_pfd_displaying_status, PFD_FO)
+            set(Fo_nd_displaying_status,  ND_FO)
         end
     end
  
@@ -106,13 +112,14 @@ local function auto_update()
     if get(DMC_requiring_ECAM_EWD_swap) == 1 then
         if get(EWD_brightness_act) < 0.01 then
             set(ECAM_displaying_status, ECAM)
+            set(EWD_displaying_status,  EWD)
         end
         if get(ECAM_brightness_act) < 0.01 then
-            set(EWD_displaying_status, ECAM)
+            set(EWD_displaying_status,  ECAM)
+            set(ECAM_displaying_status, EWD)
         end
     end
-    
-    
+
     -- Rotary knob 
     if ecam_nd_xfr == -1 then
         set(Capt_nd_displaying_status, get(ECAM_displaying_status))
@@ -120,8 +127,6 @@ local function auto_update()
     elseif ecam_nd_xfr == 1 then
         set(Fo_nd_displaying_status, get(ECAM_displaying_status))
         set(ECAM_displaying_status, ND_FO)
-    else
-    
     end
  
 end
