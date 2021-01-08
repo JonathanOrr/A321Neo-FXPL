@@ -108,8 +108,8 @@ sasl.registerCommandHandler (Chrono_cmd_date_dn,      0, function(phase) knob_ch
 -------------------------------------------------------------------------------
 
 local function update_anim()
-    Set_dataref_linear_anim(Chrono_state_button, chrono_state, 0, 2, 5)
-    Set_dataref_linear_anim(Chrono_source_button, chrono_source, 0, 2, 5)
+    Set_dataref_linear_anim_nostop(Chrono_state_button, chrono_state, 0, 2, 5)
+    Set_dataref_linear_anim_nostop(Chrono_source_button, chrono_source, 0, 2, 5)
 end
 
 function update_et()

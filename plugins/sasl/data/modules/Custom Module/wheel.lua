@@ -212,7 +212,7 @@ end
 local function update_steering()
 
     set(Override_wheel_steering, 1)
-    set(Nosewheel_Steering_and_AS_sw, antiskid_and_ns_switch and 1 or 0)
+    Set_dataref_linear_anim_nostop(Nosewheel_Steering_and_AS_sw, antiskid_and_ns_switch and 1 or 0, 0, 1, 5)
     set(Nosewheel_Steering_working, 0)
 
     local is_steering_completely_off = (not antiskid_and_ns_switch) or (get(FAILURE_GEAR_NWS) == 1)
