@@ -51,7 +51,7 @@ panelWidth3d = 4096
 panelHeight3d = 4096
 
 components = {
-  screen_backlights {},
+  display_backlights {},    -- This must stay at the top
   apu {},
   fuel {}, -- Please keep this before engines
   engines {},
@@ -64,7 +64,6 @@ components = {
   packs {},
   aircond {},
   wheel {},
-  source_switching {},
   PFD_main {},
   CAPT_PFD {},
   FO_PFD {},
@@ -91,7 +90,8 @@ components = {
   GPWS {},
   sounds {},
   graphics {},
-  display_brightness {},
+  display_switching {},
+  display_brightness {}, -- This must stay at the bottom
   librain{},
   efb{},
   data_manager {},

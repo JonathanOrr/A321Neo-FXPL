@@ -91,20 +91,6 @@ ECAM_debug_window = contextWindow {
   };
 }
 
-DMC_debug_window = contextWindow {
-  name = "DMC DEBUG";
-  position = { 200 , 200 , 400 , 200};
-  noBackground = true ;
-  proportional = false ;
-  minimumSize = { 400 , 200 };
-  maximumSize = { 400 , 200 };
-  gravity = { 0 , 1 , 0 , 1 };
-  visible = false ;
-  components = {
-    dmc_debug {position = { 0 , 0 , 400 , 200 }}
-  };
-}
-
 ELEC_debug_window = contextWindow {
   name = "ELEC DEBUG";
   position = { 200 , 200 , 1000 , 600};
