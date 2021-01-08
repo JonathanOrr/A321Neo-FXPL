@@ -19,7 +19,7 @@ override_MCDU_createairportlut = false
 
 -- If you set this variable to true, all the ADIRS are ON and IRS are ALIGNED. Button switches have
 -- no effects on adirs alignment
-override_ADIRS_ok = false
+override_ADIRS_ok = true
 
 
 -- If you set the following variable to a number different than 0, the corresponding ecam page is

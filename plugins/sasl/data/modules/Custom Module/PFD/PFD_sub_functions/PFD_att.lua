@@ -1,3 +1,5 @@
+--239 radius
+--206px width
 function PFD_draw_att(PFD_table)
     local ATT_x_center = size[1]/2-55
     local ATT_y_center = size[2]/2-7
@@ -28,6 +30,42 @@ function PFD_draw_att(PFD_table)
         -779/2,
         ECAM_WHITE
     )
+
+    --bank + beta indication
+    SASL_rotated_center_img_center_aligned(
+        PFD_bank_angle_indicator,
+        ATT_x_center,
+        ATT_y_center,
+        37,
+        26,
+        -get_roll(PFD_table.Screen_ID),
+        0,
+        (math.abs(get_roll(PFD_table.Screen_ID)) >= 60 and math.abs(get_roll(PFD_table.Screen_ID)) <= 120) and (206 / math.cos(math.rad(90 - math.abs(get_roll(PFD_table.Screen_ID)))) - 14) or 224,
+        PFD_YELLOW
+    )
+    SASL_rotated_center_img_center_aligned(
+        PFD_bank_angle_beta_angle,
+        ATT_x_center,
+        ATT_y_center,
+        65,
+        17,
+        -get_roll(PFD_table.Screen_ID),
+        Math_rescale_no_lim(0, 0, 0.2, -53, Math_clamp(get(Total_lateral_g_load), -0.3, 0.3)),
+        (math.abs(get_roll(PFD_table.Screen_ID)) >= 60 and math.abs(get_roll(PFD_table.Screen_ID)) <= 120) and (206 / math.cos(math.rad(90 - math.abs(get_roll(PFD_table.Screen_ID)))) - 37) or 201,
+        PFD_YELLOW
+    )
+
+    --RA ALT (TODO LACKING DH logic waiting for MCDU)
+    local RA_color = get(PFD_table.RA_ALT) > 400 and ECAM_GREEN or ECAM_ORANGE
+        if get(PFD_table.RA_ALT) <= 2500 then
+        if get(PFD_table.RA_ALT) > 50 then
+            SASL_drawText_rotated(Font_AirbusDUL, 0, -225, ATT_x_center, ATT_y_center,  -get_roll(PFD_table.Screen_ID), math.floor(get(PFD_table.RA_ALT) - get(PFD_table.RA_ALT) % 10), 42, false, false, TEXT_ALIGN_CENTER, RA_color)
+        elseif get(PFD_table.RA_ALT) >= 10 then
+            SASL_drawText_rotated(Font_AirbusDUL, 0, -225, ATT_x_center, ATT_y_center, -get_roll(PFD_table.Screen_ID), math.floor(get(PFD_table.RA_ALT) - get(PFD_table.RA_ALT) % 5), 42, false, false, TEXT_ALIGN_CENTER, RA_color)
+        else
+            SASL_drawText_rotated(Font_AirbusDUL, 0, -225, ATT_x_center, ATT_y_center, -get_roll(PFD_table.Screen_ID), math.floor(get(PFD_table.RA_ALT)), 42, false, false, TEXT_ALIGN_CENTER, RA_color)
+        end
+    end
     --terminate masked drawing
     sasl.gl.drawMaskEnd ()
 
