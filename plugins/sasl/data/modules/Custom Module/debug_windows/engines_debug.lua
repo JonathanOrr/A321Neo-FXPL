@@ -18,7 +18,6 @@
 
 size = {500, 500}
 
-include('constants.lua')
 
 local Font_B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
 local xp_avail_1 = globalProperty("sim/flightmodel/engine/ENGN_running[0]")

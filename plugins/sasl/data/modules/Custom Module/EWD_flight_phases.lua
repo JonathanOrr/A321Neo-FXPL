@@ -16,7 +16,6 @@
 -- Short description: Flight phase computation file
 -------------------------------------------------------------------------------
 
-include('constants.lua')
 
 -- Initialization
 set(EWD_flight_phase, PHASE_UNKNOWN)

@@ -16,7 +16,6 @@
 -- Short description: ECAM file for the WHEEL page 
 -------------------------------------------------------------------------------
 
-include('constants.lua')
 
 
 --colors

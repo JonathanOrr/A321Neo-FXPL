@@ -41,13 +41,11 @@ position= {30,1841,465,355}
 size = {465, 355}
 
 include('DCDU_handlers.lua')    -- DCDU handlers contains the button handlers
-include('constants.lua')
 
 ----------------------------------------------------------------------------------------------------
 -- Constants
 ----------------------------------------------------------------------------------------------------
 
-include('constants.lua')
 
 -- Message types
 MESSAGE_TYPE_WILCO    = 1

@@ -237,7 +237,6 @@ end
 position = {1020, 1666, 560, 530}
 size = {560, 530}
 
-include('constants.lua')
 include('FMGS.lua') -- Flight Management Guidance System implementation
 
 local NIL = 0 -- used for input return and checking
@@ -943,6 +942,7 @@ function update()
         mcdu_message_showing = true
         table.remove(mcdu_messages)
     end
+  	perf_measure_stop("MCDU:update()")
 end
 
 -- MCDU PAGES

@@ -20,7 +20,6 @@ position = {2030, 3166, 900, 900}
 size = {900, 900}
 fbo = true
 
-include('constants.lua')
 include('ND/common_ND.lua')
 
 fo_nd_data = new_dataset(ND_FO)

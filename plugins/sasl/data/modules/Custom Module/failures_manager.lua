@@ -16,7 +16,6 @@
 -- Short description: Failure cascade management and master caution/warning
 -------------------------------------------------------------------------------
 
-include('constants.lua')
 
 local WARNING_BLINK_HZ = 4
 

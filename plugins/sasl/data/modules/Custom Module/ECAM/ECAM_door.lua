@@ -16,7 +16,6 @@
 -- Short description: ECAM DOOR page 
 -------------------------------------------------------------------------------
 
-include('constants.lua')
 
 PARAM_DELAY    = 0.15 -- Time to filter out the parameters (they are updated every PARAM_DELAY seconds)
 

@@ -20,7 +20,6 @@ size = {500, 500}
 
 
 
-include('constants.lua')
 
 local image_plane = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/fuel_window/top-alpha.png", 0, 0, 497, 606)
 

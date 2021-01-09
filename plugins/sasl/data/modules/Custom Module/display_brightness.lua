@@ -19,7 +19,6 @@
 position= {0,0,4096,4096}
 size = {4096, 4096}
 
-include('constants.lua')
 
 --image textures
 local screen_lut_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/LUT.png")

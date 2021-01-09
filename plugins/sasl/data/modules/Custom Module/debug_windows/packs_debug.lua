@@ -16,7 +16,6 @@
 -- Short description: BLEED & PACKS system debug window
 -------------------------------------------------------------------------------
 
-include('constants.lua')
 
 --sim datarefs
 

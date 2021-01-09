@@ -27,6 +27,7 @@ capt_nd_data = new_dataset(ND_CAPT)
 
 function draw()
 
+
     if display_special_mode(size, Capt_nd_valid) then
         return
     end
@@ -36,8 +37,12 @@ function draw()
     end
     ELEC_sys.add_power_consumption(ELEC_BUS_AC_ESS_SHED, 0.26, 0.26)   -- 30W (just hypothesis)
 
+
+    perf_measure_start("CAPT_ND:draw()")
+
     draw_main(capt_nd_data)
 
+    perf_measure_stop("CAPT_ND:draw()")
 end
 
 sasl.registerCommandHandler (ND_Capt_mode_cmd_up, 0, function(phase) if phase == SASL_COMMAND_BEGIN then capt_nd_data.config.mode = math.min(ND_MODE_PLAN,capt_nd_data.config.mode + 1) end end)
@@ -89,8 +94,13 @@ end
 
 function update()
 
+    perf_measure_start("CAPT_ND:update()")
+
     update_buttons()
     update_knobs()
 
     update_main(capt_nd_data)
+
+    perf_measure_stop("CAPT_ND:update()")
+
 end

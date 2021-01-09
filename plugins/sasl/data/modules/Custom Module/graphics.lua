@@ -16,7 +16,6 @@
 -- Short description: Miscellanea related to graphics
 -------------------------------------------------------------------------------
 
-include('constants.lua')
 
 local guards = {
     {name = "IDG1"},             -- This creates a command and dataref with the same name, both `a321neo/cockpit/overhead/guards/IDG1`

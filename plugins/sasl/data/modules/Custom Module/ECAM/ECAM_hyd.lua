@@ -17,7 +17,6 @@
 -------------------------------------------------------------------------------
 
 size = {900, 900}
-include('constants.lua')
 
 local y_psi_pos = size[2]/2+265 -- Starting top point (the PSI numbers position)
 

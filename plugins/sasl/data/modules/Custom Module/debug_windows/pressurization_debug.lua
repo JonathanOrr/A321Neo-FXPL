@@ -18,7 +18,6 @@
 
 size = {500, 300}
 
-include('constants.lua')
 
 function draw()
 

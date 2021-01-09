@@ -20,7 +20,6 @@
 -- Constants
 ----------------------------------------------------------------------------------------------------
 
-include('constants.lua')
 include('ELEC_subcomponents/include.lua')
 
 local TIME_TO_START_ADR       = 2 -- In seconds
@@ -72,6 +71,7 @@ local ADIRS = {
     ias = 0,
     ias_trend = 0,
     tas = 0,
+    aoa = 0,
     alt = 0,
     vs  = 0,
     wind_spd = 0,
@@ -152,7 +152,7 @@ function ADIRS:update_adr()
         return
     end
 
-    if self.adr_align_start_time > 0 then
+    if self.adr_align_start_time ~= 0 then
         if get(TIME) - self.adr_align_start_time > TIME_TO_START_ADR then
             self.adr_status = ADR_STATUS_ON
         end
@@ -174,6 +174,7 @@ function ADIRS:update_adr_data()
         self.ias_trend = get(self.ias_trend_dataref)
         self.tas = get(self.tas_dataref) + self.adr_ias_offset
         self.mach = get(self.mach_dataref)
+        self.aoa = get(AOA_value)
         self.alt = get(self.baroalt_dataref) + self.adr_alt_offset
         self.vs  = get(self.vvi_dataref)
         
@@ -355,6 +356,18 @@ function adirs_inst_align(phase)
     ADIRS_sys[3]:align_instantaneously()
 end
 
+function onAirportLoaded()
+    if get(Startup_running) == 1 or get(Capt_ra_alt_ft) > 20 then
+        set(ADIRS_rotary_btn[1], 1)
+        set(ADIRS_rotary_btn[2], 1)
+        set(ADIRS_rotary_btn[3], 1)
+        ADIRS_sys[ADIRS_1].adirs_switch_status = 1
+        ADIRS_sys[ADIRS_2].adirs_switch_status = 1
+        ADIRS_sys[ADIRS_3].adirs_switch_status = 1
+
+        adirs_inst_align(SASL_COMMAND_BEGIN)
+    end
+end
 ----------------------------------------------------------------------------------------------------
 -- Initlization
 ----------------------------------------------------------------------------------------------------

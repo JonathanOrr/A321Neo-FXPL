@@ -19,7 +19,6 @@
 position= {30,1311,500,500}
 size = {500, 500}
 
-include('constants.lua')
 include("ADIRS_data_source.lua")
 
 local TIME_TO_ALIGN_SEC = 90

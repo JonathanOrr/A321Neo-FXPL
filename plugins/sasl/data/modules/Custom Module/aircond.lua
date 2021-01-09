@@ -21,7 +21,6 @@
 ----------------------------------------------------------------------------------------------------
 
 include('aircond_cabinmodel.lua')
-include('constants.lua')
 include('PID.lua')
 
 -- Constants for the ventilation of the avionics bay

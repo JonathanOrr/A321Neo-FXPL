@@ -1,4 +1,3 @@
-include('constants.lua')
 include('EWD.lua')
 include('display_common.lua')
 

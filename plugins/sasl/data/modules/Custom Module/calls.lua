@@ -15,7 +15,6 @@
 -- File: calls.lua 
 -- Short description: CALLS system
 -------------------------------------------------------------------------------
-include('constants.lua')
 local emer_call_ckpt_req = false
 
 -- EMER

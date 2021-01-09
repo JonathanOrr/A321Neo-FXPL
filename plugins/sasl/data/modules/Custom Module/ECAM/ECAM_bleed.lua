@@ -16,7 +16,6 @@
 -- Short description: ECAM file for the BLEED page 
 -------------------------------------------------------------------------------
 
-include('constants.lua')
 
 local ground_open_start = 0
 

@@ -139,7 +139,13 @@ function new_dataset(input_id)
             { lat = 45.720001, lon=9.593889, id="LILV" },
             { lat = 45.769444, lon=9.161111, id="LILB" },
             ]]--
-        }
+        },
+        vor = {
+        },
+        ndb = {
+        },        
+        wpt = {
+        },        
     }
 
 }
