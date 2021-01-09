@@ -895,13 +895,13 @@ local function update_n1_mode_and_limits()
             set(Eng_N1_mode, 2) -- MCT
         end
         last_time_toga = 0
-    elseif thr_pos > 0 then
+    elseif thr_pos >= 0.05 then
         set(Eng_N1_mode, 3) -- CLB
         last_time_toga = 0
-    elseif thr_pos == 0 then
+    elseif thr_pos > -0.05 then
         set(Eng_N1_mode, 4) -- IDLE
         last_time_toga = 0
-    elseif thr_pos < 0 then
+    elseif thr_pos <= -0.05 then
         set(Eng_N1_mode, 5) -- MREV
         last_time_toga = 0
     end

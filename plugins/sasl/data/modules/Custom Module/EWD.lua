@@ -21,7 +21,7 @@ size = {900, 900}
 
 include('display_common.lua')
 
-PARAM_DELAY    = 0.15 -- Time to filter out the parameters (they are updated every PARAM_DELAY seconds)
+local PARAM_DELAY    = 0.15 -- Time to filter out the parameters (they are updated every PARAM_DELAY seconds)
 local last_params_update = 0
 
 local params = {
@@ -51,7 +51,7 @@ match_msg_colors[7] = ECAM_GREEN -- Blinking
 local time_blinking = sasl.createTimer()
 sasl.startTimer(time_blinking)
 
-function Draw_reverse_indication()
+function draw_reverse_indication()
     -- ENG1 Reverse
     if get(Eng_1_reverser_deployment) > 0.01 then
         Draw_LCD_backlight(size[1]/2 - 195, size[2]/2 + 310, 100, 35, 0.5, 1, get(EWD_brightness_act))
@@ -112,12 +112,36 @@ function update()
 
 end
 
-
-function Draw_extra_indication()
-
-    if get(EWD_flight_phase) == PHASE_1ST_ENG_ON and (get(Pack_L) == 1 or get(Pack_R) == 1) then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+70, size[2]-30, "PACKS", 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+local function draw_packs_wai_nai()
+    -- PACKS / WAI / NAI indication
+    if get(Any_wheel_on_ground) == 1 or get(Eng_N1_mode) < 3 or get(Eng_N1_mode) > 5 then
+        local str = ""
+        if get(Pack_L) == 1 or get(Pack_R) == 1 then
+            str = "PACKS"
+        end
+        
+        if AI_sys.switches[1] or AI_sys.switches[2] then
+            if #str > 0 then
+                str = str .. " / NAI"
+            else
+                str = "NAI"
+            end    
+        end
+        
+        if AI_sys.switches[3] then
+            if #str > 0 then
+                str = str .. " / WAI"
+            else
+                str = "WAI"
+            end
+        end
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+130, size[2]-30, str, 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     end
+
+end
+
+local function draw_extra_indication()
+    draw_packs_wai_nai()
 
     -- A FLOOR
     if true then    -- TODO Jon please add here a condition
@@ -156,7 +180,7 @@ function Draw_extra_indication()
     end    
 end
 
-function Draw_engines_needles()
+local function draw_engines_needles()
     -----------TODO-----------
     --[[amber blicking of the N1 needle when N1 exceeds amber limit
     show trends only when AT is engaged]]
@@ -260,7 +284,7 @@ function Draw_engines_needles()
     end
 end
 
-function Draw_engines()
+local function draw_engines()
 
     -- N2 background box --
     if get(Engine_1_master_switch) == 1 and get(Engine_1_avail) == 0 and get(EWD_engine_1_XX) == 0 then
@@ -337,7 +361,7 @@ function Draw_engines()
 end
 
 
-function Draw_coolings()
+local function draw_coolings()
     if get(EWD_engine_cooling, 1) == 1 then
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2-410, size[2]/2+75, "COOLING" , 30, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
         local min = math.floor(get(EWD_engine_cooling_time, 1) / 60)
@@ -359,7 +383,7 @@ function Draw_coolings()
 end
 
 
-function Draw_left_memo()
+local function draw_left_memo()
     local distance = 38
 
     for i=0,6 do
@@ -380,7 +404,7 @@ function Draw_left_memo()
 
 end
 
-function Draw_right_memo()
+local function draw_right_memo()
     local distance = 38
 
     for i=0,6 do
@@ -394,7 +418,7 @@ function Draw_right_memo()
     end
 end
 
-function Draw_extras()
+local function draw_extras()
 
     -- STS BOX
     if get(EWD_box_sts) == 1 then
@@ -421,7 +445,7 @@ function Draw_extras()
     end
 end
 
-function Draw_fuel_stuffs()
+local function draw_fuel_stuffs()
     local fuel_on_board = math.floor(get(FOB))
     fuel_on_board = fuel_on_board - (fuel_on_board % 10)
 
@@ -445,7 +469,7 @@ function Draw_fuel_stuffs()
     end
 end
 
-function Draw_slat_flap_indications()
+local function draw_slat_flap_indications()
     local slats_positions = {
         0,
         0.7,
@@ -528,15 +552,15 @@ function draw()
 
     sasl.gl.drawTexture(EWD_background_img, 0, 0, 900, 900, {1, 1, 1})
 
-    Draw_extra_indication()
-    Draw_engines_needles()
-    Draw_engines()
-    Draw_reverse_indication()
-    Draw_left_memo()
-    Draw_right_memo()
-    Draw_extras()
-    Draw_fuel_stuffs()
-    Draw_coolings()
-    Draw_slat_flap_indications()
+    draw_extra_indication()
+    draw_engines_needles()
+    draw_engines()
+    draw_reverse_indication()
+    draw_left_memo()
+    draw_right_memo()
+    draw_extras()
+    draw_fuel_stuffs()
+    draw_coolings()
+    draw_slat_flap_indications()
 end
 
