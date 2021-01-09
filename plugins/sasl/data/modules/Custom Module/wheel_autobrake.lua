@@ -121,6 +121,8 @@ local function update_ab_datarefs()
     local max_decel_cond = get(Wheel_autobrake_status) == AUTOBRK_MAX and (get(Wheel_autobrake_braking) >= 0.8*0.56)
     pb_set(PB.mip.autobrake_MAX, get(Wheel_autobrake_status) == AUTOBRK_MAX, max_decel_cond)
 
+    set(Wheel_autobrake_is_in_decel, (lo_decel_cond or med_decel_cond or max_decel_cond) and 1 or 0)
+
 end
 
 local function is_autobrake_braking()

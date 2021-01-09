@@ -66,6 +66,7 @@ Wheel_skid_speed_R  = globalProperty("sim/flightmodel2/gear/tire_skid_speed_mtr_
 
 Wheel_autobrake_status= createGlobalPropertyi("a321neo/dynamics/wheel/autobrake_status", 0, false, true, false)   -- 0: OFF, 1: LOW, 2: MID, 3: MAX
 Wheel_autobrake_braking=createGlobalPropertyf("a321neo/dynamics/wheel/autobrake_braking", 0, false, true, false)
+Wheel_autobrake_is_in_decel=createGlobalPropertyi("a321neo/dynamics/wheel/autobrake_is_decel", 0, false, true, false) -- 0: NO, 1: YES
 
 Wheel_better_pushback = createGlobalPropertyi("model/controls/park_break", 0, false, true, false) -- A dataref for Better Pushback plugin
 Wheel_better_pushback_connected = createGlobalPropertyi("bp/connected", 0, false, true, true) -- A dataref for Better Pushback plugin
