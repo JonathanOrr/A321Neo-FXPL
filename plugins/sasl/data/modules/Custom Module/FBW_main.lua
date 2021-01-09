@@ -196,7 +196,7 @@ function update()
             set(Roll_artstab, Set_anim_value(get(Roll_artstab), Roll_rate_output, -1, 1, 1.8))
             set(Pitch_artstab, Set_anim_value(get(Pitch_artstab), pitch_rate_correction, -1, 1, 1.15))
 
-            if get(FBW_in_flight_mode) == 1 then
+            if get(FBW_vertical_flight_mode_ratio) == 1 then
                 if stick_moving_vertically == true then
                     set(Augmented_pitch_trim_ratio, Set_anim_value(get(Augmented_pitch_trim_ratio), SSS_PID_DPV(FBW_PID_arrays.SSS_FBW_CWS_trim, G_output, get(True_pitch_rate)), -1, 1, 0.1))
                 else

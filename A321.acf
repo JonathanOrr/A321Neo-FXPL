@@ -212,7 +212,7 @@ P _gear/0/_lonE 7.0
 P _gear/0/_lonN 7.0
 P _gear/0/_lonR 99.0
 P _gear/0/_scon 157581.015625000
-P _gear/0/_stat_def 0.120225564
+P _gear/0/_stat_def 0.120225556
 P _gear/0/_steerdeg_hispeed 5.0
 P _gear/0/_steerdeg_lospeed 75.0
 P _gear/0/_strut_comp 0.899999976
@@ -246,7 +246,7 @@ P _gear/1/_lonE -6.0
 P _gear/1/_lonN -6.0
 P _gear/1/_lonR 2.0
 P _gear/1/_scon 157581.015625000
-P _gear/1/_stat_def 0.739415884
+P _gear/1/_stat_def 0.739415765
 P _gear/1/_steerdeg_hispeed 0.0
 P _gear/1/_steerdeg_lospeed 0.0
 P _gear/1/_strut_comp 0.699999988
@@ -280,7 +280,7 @@ P _gear/2/_lonE -6.0
 P _gear/2/_lonN -6.0
 P _gear/2/_lonR 2.0
 P _gear/2/_scon 157581.015625000
-P _gear/2/_stat_def 0.739415884
+P _gear/2/_stat_def 0.739415765
 P _gear/2/_steerdeg_hispeed 0.0
 P _gear/2/_steerdeg_lospeed 0.0
 P _gear/2/_strut_comp 0.699999988
@@ -69977,7 +69977,7 @@ P acf/_part_descrip/92 Nosegear axle truck
 P acf/_part_descrip/93 TIJERA TREN PPAL
 P acf/_part_descrip/94 Nosegear axle truck
 P acf/_part_descrip/count 95
-P acf/_pe_xyz/0 -1.738844991
+P acf/_pe_xyz/0 -1.804461956
 P acf/_pe_xyz/1 2.559055090
 P acf/_pe_xyz/2 8.989500999
 P acf/_pe_xyz/count 3

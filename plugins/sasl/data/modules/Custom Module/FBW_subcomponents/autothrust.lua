@@ -43,35 +43,35 @@ function update()
 
     --throttle detents
     --TOGA
-    if get(L_sim_throttle) >= 0.95 and get(R_sim_throttle) >= 0.95 and get(L_sim_throttle) <= 1 and get(R_sim_throttle) <= 1 then
+    if get(L_sim_throttle) >= THR_TOGA_START and get(R_sim_throttle) >= THR_TOGA_START and get(L_sim_throttle) <= 1 and get(R_sim_throttle) <= 1 then
         set(Lever_in_TOGA, 1)
     else
         set(Lever_in_TOGA, 0)
     end
 
     --TOGA > MAN_thrust > FLEX_MCT
-    if get(L_sim_throttle) > 0.85 and get(R_sim_throttle) > 0.85 and get(L_sim_throttle) < 0.95 and get(R_sim_throttle) < 0.95 then
+    if get(L_sim_throttle) > THR_MCT_END and get(R_sim_throttle) > THR_MCT_END and get(L_sim_throttle) < THR_TOGA_START and get(R_sim_throttle) <THR_TOGA_START then
         set(Lever_in_MAN_thrust, 1)
     else
         set(Lever_in_MAN_thrust, 0)
     end
 
     --FLEX/MCT
-    if get(L_sim_throttle) >= 0.8 and get(R_sim_throttle) >= 0.8 and get(L_sim_throttle) <= 0.85 and get(R_sim_throttle) <= 0.85 then
+    if get(L_sim_throttle) >= THR_MCT_START and get(R_sim_throttle) >= THR_MCT_START and get(L_sim_throttle) <= THR_MCT_END and get(R_sim_throttle) <= THR_MCT_END then
         set(Lever_in_FLEX_MCT, 1)
     else
         set(Lever_in_FLEX_MCT, 0)
     end
 
     --CL
-    if get(L_sim_throttle) >= 0.65 and get(R_sim_throttle) >= 0.65 and get(L_sim_throttle) <= 0.7 and get(R_sim_throttle) <= 0.7 then
+    if get(L_sim_throttle) >= THR_CLB_START and get(R_sim_throttle) >= THR_CLB_START and get(L_sim_throttle) <= THR_CLB_END and get(R_sim_throttle) <= THR_CLB_END then
         set(Lever_in_CL, 1)
     else
         set(Lever_in_CL, 0)
     end
 
     --CL > MAN_thrust > 0
-    if get(L_sim_throttle) < 0.65 and get(R_sim_throttle) < 0.65 then
+    if get(L_sim_throttle) < THR_CLB_START and get(R_sim_throttle) < THR_CLB_START then
         set(Lever_in_MAN_thrust, 1)
     else
         set(Lever_in_MAN_thrust, 0)
