@@ -18,7 +18,34 @@ function PFD_draw_att(PFD_table)
     --draw under the mask
     sasl.gl.drawUnderMask(true)
     SASL_rotated_center_img_xcenter_aligned(PFD_normal_pitch_scale, ATT_x_center, ATT_y_center, 2870, 779, 90 - get_roll(PFD_table.Screen_ID), get_pitch(PFD_table.Screen_ID) * 10, -779/2, ECAM_WHITE)
-    SASL_rotated_center_img_xcenter_aligned(PFD_static_sky, ATT_x_center, ATT_y_center, 1575, 779, 90 - get_roll(PFD_table.Screen_ID), 0, -779/2, ECAM_WHITE)
+
+    --tailstrike arrow(TOGO GA and GS < 50)
+    if get(All_on_ground) == 0 and get(PFD_table.RA_ALT) < 400 then
+        SASL_rotated_center_img_center_aligned(
+            PFD_tailstrike_arrow,
+            ATT_x_center,
+            ATT_y_center,
+            72,
+            43,
+            -get_roll(PFD_table.Screen_ID),
+            0,
+            9.7 * 10 + 21.5 - get_pitch(PFD_table.Screen_ID) * 10,
+            ECAM_ORANGE
+        )
+    end
+
+    SASL_rotated_center_img_xcenter_aligned(
+        PFD_static_sky,
+        ATT_x_center,
+        ATT_y_center,
+        1575,
+        779,
+        90 - get_roll(PFD_table.Screen_ID),
+        0,
+        -779/2,
+        ECAM_WHITE
+    )
+
     SASL_rotated_center_img_xcenter_aligned(
         PFD_ground,
         ATT_x_center,

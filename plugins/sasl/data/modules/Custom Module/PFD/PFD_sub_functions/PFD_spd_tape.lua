@@ -90,6 +90,11 @@ local function draw_characteristics_spd(PFD_table)
                 sasl.gl.drawText(Font_AirbusDUL, size[1]/2-300, size[2]/2-22 + Math_rescale_no_lim(-43, -240, 42, 240, get(PFD_table.F_spd) - get_ias(PFD_table.Screen_ID)), "F", 42, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
             end
         end
+
+        --GD speed
+        if get(Slats) == 0 and get(Flaps_deployed_angle) == 0 then
+            sasl.gl.drawArc(size[1]/2-338, size[2]/2-7 + Math_rescale_no_lim(-43, -240, 42, 240, get(PFD_table.GD_spd) - get_ias(PFD_table.Screen_ID)), 6, 10, 0, 360, ECAM_GREEN)
+        end
     end
 end
 
@@ -114,9 +119,16 @@ function PFD_draw_spd_tape(PFD_table)
     end
 
     --boarder lines
-    sasl.gl.drawWideLine(size[1]/2-338, size[2]/2-244, size[1]/2-338, size[2]/2+229, 4, boarder_cl)
     sasl.gl.drawWideLine(size[1]/2-437, size[2]/2+231, size[1]/2-310, size[2]/2+231, 4, boarder_cl)
-    sasl.gl.drawWideLine(size[1]/2-437, size[2]/2-246, size[1]/2-310, size[2]/2-246, 4, boarder_cl)
+    if is_ias_ok(PFD_table.Screen_ID) == true then
+        sasl.gl.drawWideLine(size[1]/2-338, size[2]/2-7 + Math_clamp_lower(Math_rescale_lim_lower(30, 0, 50, -133, get_ias(PFD_table.Screen_ID)), -237), size[1]/2-338, size[2]/2+229, 4, boarder_cl)
+        if get_ias(PFD_table.Screen_ID) > 66 then
+            sasl.gl.drawWideLine(size[1]/2-437, size[2]/2-246, size[1]/2-310, size[2]/2-246, 4, boarder_cl)
+        end
+    else
+        sasl.gl.drawWideLine(size[1]/2-338, size[2]/2-244, size[1]/2-338, size[2]/2+229, 4, boarder_cl)
+        sasl.gl.drawWideLine(size[1]/2-437, size[2]/2-246, size[1]/2-310, size[2]/2-246, 4, boarder_cl)
+    end
 
     --speed needle
     if is_ias_ok(PFD_table.Screen_ID) == true then
