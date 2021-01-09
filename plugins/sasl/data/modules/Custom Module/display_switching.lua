@@ -16,13 +16,24 @@
 -- Short description: Display switch logic
 -------------------------------------------------------------------------------
 
---declare states--
-local PFD_CAPT= 1
-local ND_CAPT = 2
-local EWD     = 3
-local ECAM    = 4
-local PFD_FO  = 5
-local ND_FO   = 6
+--init display positions
+for i = 1, 4 do
+    set(Capt_pfd_position,        DMC_PFD_CAPT_POS[i], i)
+    set(Capt_nd_position,         DMC_ND_CAPT_POS[i],  i)
+    set(Fo_pfd_position,          DMC_PFD_FO_POS[i],   i)
+    set(Fo_nd_position,           DMC_ND_FO_POS[i],    i)
+    set(EWD_displaying_position,  DMC_EWD_POS[i],      i)
+    set(ECAM_displaying_position, DMC_ECAM_POS[i],     i)
+end
+
+local display_positions = {
+    DMC_PFD_CAPT_POS,
+    DMC_ND_CAPT_POS,
+    DMC_EWD_POS,
+    DMC_ECAM_POS,
+    DMC_PFD_FO_POS,
+    DMC_ND_FO_POS,
+}
 
 -- status
 local pfd_nd_xfr_capt = false
@@ -49,86 +60,97 @@ sasl.registerCommandHandler (DMC_EIS_selector_dn, 0, function(phase) if phase ==
 local function auto_update()
 
     -- Default modes
-    set(Capt_pfd_displaying_status, PFD_CAPT)
-    set(Capt_nd_displaying_status,  ND_CAPT)
-    set(Fo_pfd_displaying_status,   PFD_FO)
-    set(Fo_nd_displaying_status,    ND_FO)
-    set(EWD_displaying_status,      EWD)
-    set(ECAM_displaying_status,     ECAM)
+    set(Capt_pfd_displaying_status, DMC_PFD_CAPT)
+    set(Capt_nd_displaying_status,  DMC_ND_CAPT)
+    set(Fo_pfd_displaying_status,   DMC_PFD_FO)
+    set(Fo_nd_displaying_status,    DMC_ND_FO)
+    set(EWD_displaying_status,      DMC_EWD)
+    set(ECAM_displaying_status,     DMC_ECAM)
 
     -- Automatic transfers when brightness is off
     if get(EWD_brightness_act) < 0.01 then
-        set(ECAM_displaying_status, EWD)
+        set(ECAM_displaying_status, DMC_EWD)
     end
 
     if get(Capt_PFD_brightness_act) < 0.01 then
-        set(Capt_nd_displaying_status,  PFD_CAPT)
-        set(Capt_pfd_displaying_status, ND_CAPT)
+        set(Capt_nd_displaying_status,  DMC_PFD_CAPT)
+        set(Capt_pfd_displaying_status, DMC_ND_CAPT)
     end
 
     if get(Fo_PFD_brightness_act) < 0.01 then
-        set(Fo_nd_displaying_status,  PFD_FO)
-        set(Fo_pfd_displaying_status, ND_FO)
+        set(Fo_nd_displaying_status,  DMC_PFD_FO)
+        set(Fo_pfd_displaying_status, DMC_ND_FO)
     end
 
     -- Manual transfers
     if pfd_nd_xfr_capt and ecam_nd_xfr ~= -1 then
-        if get(Capt_nd_displaying_status) == PFD_CAPT then
-            set(Capt_nd_displaying_status, ND_CAPT)
-            set(Capt_pfd_displaying_status, PFD_CAPT)
+        if get(Capt_nd_displaying_status) == DMC_PFD_CAPT then
+            set(Capt_nd_displaying_status, DMC_ND_CAPT)
+            set(Capt_pfd_displaying_status, DMC_PFD_CAPT)
         else
-            set(Capt_nd_displaying_status, PFD_CAPT)
-            set(Capt_pfd_displaying_status, ND_CAPT)
+            set(Capt_nd_displaying_status, DMC_PFD_CAPT)
+            set(Capt_pfd_displaying_status, DMC_ND_CAPT)
         end
     elseif pfd_nd_xfr_capt then
-        if get(Capt_pfd_displaying_status) == PFD_CAPT then
-            set(Capt_pfd_displaying_status, ND_CAPT)
-            set(Capt_nd_displaying_status,  PFD_CAPT)
+        if get(Capt_pfd_displaying_status) == DMC_PFD_CAPT then
+            set(Capt_pfd_displaying_status, DMC_ND_CAPT)
+            set(Capt_nd_displaying_status,  DMC_PFD_CAPT)
         else
-            set(Capt_pfd_displaying_status, PFD_CAPT)
-            set(Capt_nd_displaying_status,  ND_CAPT)
+            set(Capt_pfd_displaying_status, DMC_PFD_CAPT)
+            set(Capt_nd_displaying_status,  DMC_ND_CAPT)
         end
     end
 
     if pfd_nd_xfr_fo and ecam_nd_xfr ~= 1 then
-        if get(Fo_nd_displaying_status) == PFD_FO then
-            set(Fo_nd_displaying_status, ND_FO)
-            set(Fo_pfd_displaying_status, PFD_FO)
+        if get(Fo_nd_displaying_status) == DMC_PFD_FO then
+            set(Fo_nd_displaying_status, DMC_ND_FO)
+            set(Fo_pfd_displaying_status, DMC_PFD_FO)
         else
-            set(Fo_nd_displaying_status, PFD_FO)
-            set(Fo_pfd_displaying_status, ND_FO)                    
+            set(Fo_nd_displaying_status, DMC_PFD_FO)
+            set(Fo_pfd_displaying_status, DMC_ND_FO)
         end
-    elseif pfd_nd_xfr_capt then
-        if get(Fo_pfd_displaying_status) == PFD_FO then
-            set(Fo_pfd_displaying_status, ND_FO)
-            set(Fo_nd_displaying_status,  PFD_FO)
+    elseif pfd_nd_xfr_fo then
+        if get(Fo_pfd_displaying_status) == DMC_PFD_FO then
+            set(Fo_pfd_displaying_status, DMC_ND_FO)
+            set(Fo_nd_displaying_status,  DMC_PFD_FO)
         else
-            set(Fo_pfd_displaying_status, PFD_FO)
-            set(Fo_nd_displaying_status,  ND_FO)
-        end
-    end
- 
-    -- From ECAM press button
-    if get(DMC_requiring_ECAM_EWD_swap) == 1 then
-        if get(EWD_brightness_act) < 0.01 then
-            set(ECAM_displaying_status, ECAM)
-            set(EWD_displaying_status,  EWD)
-        end
-        if get(ECAM_brightness_act) < 0.01 then
-            set(EWD_displaying_status,  ECAM)
-            set(ECAM_displaying_status, EWD)
+            set(Fo_pfd_displaying_status, DMC_PFD_FO)
+            set(Fo_nd_displaying_status,  DMC_ND_FO)
         end
     end
 
-    -- Rotary knob 
+    -- From DMC_ECAM press button
+    if get(DMC_requiring_ECAM_EWD_swap) == 1 then
+        if get(EWD_brightness_act) < 0.01 then
+            set(ECAM_displaying_status, DMC_ECAM)
+            set(EWD_displaying_status,  DMC_EWD)
+        end
+        if get(ECAM_brightness_act) < 0.01 then
+            set(EWD_displaying_status,  DMC_ECAM)
+            set(ECAM_displaying_status, DMC_EWD)
+        end
+    end
+
+    -- Rotary knob
     if ecam_nd_xfr == -1 then
         set(Capt_nd_displaying_status, get(ECAM_displaying_status))
-        set(ECAM_displaying_status, ND_CAPT)
+        set(ECAM_displaying_status, DMC_ND_CAPT)
     elseif ecam_nd_xfr == 1 then
         set(Fo_nd_displaying_status, get(ECAM_displaying_status))
-        set(ECAM_displaying_status, ND_FO)
+        set(ECAM_displaying_status, DMC_ND_FO)
     end
- 
+
+end
+
+local function update_display_position()
+    for i = 1, 4 do
+        set(Capt_pfd_position,        display_positions[get(Capt_pfd_displaying_status)][i], i)
+        set(Capt_nd_position,         display_positions[get(Capt_nd_displaying_status )][i], i)
+        set(Fo_pfd_position,          display_positions[get(Fo_pfd_displaying_status  )][i], i)
+        set(Fo_nd_position,           display_positions[get(Fo_nd_displaying_status   )][i], i)
+        set(EWD_displaying_position,  display_positions[get(EWD_displaying_status     )][i], i)
+        set(ECAM_displaying_position, display_positions[get(ECAM_displaying_status    )][i], i)
+    end
 end
 
 local function update_knobs()
@@ -145,11 +167,11 @@ local function update_dmc_status()
     set(Fo_nd_valid,    1)
     set(EWD_valid,      1)
     set(ECAM_valid,     1)
-    
+
     local dmc_1_fail = get(FAILURE_DISPLAY_DMC_1) == 1 or get(AC_ess_bus_pwrd) == 0
     local dmc_2_fail = get(FAILURE_DISPLAY_DMC_2) == 1 or get(AC_bus_2_pwrd) == 0
     local dmc_3_fail = get(FAILURE_DISPLAY_DMC_3) == 1 or not (get(AC_bus_1_pwrd) == 1 or (eis_selector == -1 and get(AC_ess_bus_pwrd) == 1))
-    
+
     if eis_selector >= 0 and dmc_1_fail then
         set(Capt_pfd_valid, 0)
         set(Capt_nd_valid,  0)
@@ -159,7 +181,7 @@ local function update_dmc_status()
         set(Fo_pfd_valid, 0)
         set(Fo_nd_valid,  0)
     end
-    
+
     if eis_selector == -1 and dmc_3_fail then
         set(Capt_pfd_valid, 0)
         set(Capt_nd_valid,  0)
@@ -178,9 +200,11 @@ local function update_dmc_status()
 end
 
 function update()
-    
+
     auto_update()
 
     update_knobs()
     update_dmc_status()
+
+    update_display_position()
 end

@@ -1,4 +1,4 @@
-position = {3030, 3166, 900, 900}
+position = {get(Fo_pfd_position, 1), get(Fo_pfd_position, 2), get(Fo_pfd_position, 3), get(Fo_pfd_position, 4)}
 size = {900, 900}
 include('PFD/PFD_drawing_assets.lua')
 include('PFD/PFD_main.lua')
@@ -40,6 +40,7 @@ local fo_PFD_table = {
 }
 
 function update()
+    position = {get(Fo_pfd_position, 1), get(Fo_pfd_position, 2), get(Fo_pfd_position, 3), get(Fo_pfd_position, 4)}
     PFD_update_timers(fo_PFD_table)
 end
 

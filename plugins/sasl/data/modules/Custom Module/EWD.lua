@@ -16,7 +16,7 @@
 -- Short description: Graphical file for EWD - It does not contain any logic
 -------------------------------------------------------------------------------
 
-position= {30,2226,900,900}
+position = {get(EWD_displaying_position, 1), get(EWD_displaying_position, 2), get(EWD_displaying_position, 3), get(EWD_displaying_position, 4)}
 size = {900, 900}
 
 include('display_common.lua')
@@ -81,6 +81,7 @@ function Draw_reverse_indication()
 end
 
 function update()
+    position = {get(EWD_displaying_position, 1), get(EWD_displaying_position, 2), get(EWD_displaying_position, 3), get(EWD_displaying_position, 4)}
 
     -- Update the parameter every PARAM_DELAY seconds
     if get(TIME) - params.last_update > PARAM_DELAY then

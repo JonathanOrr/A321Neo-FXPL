@@ -16,7 +16,7 @@
 -- Short description: main Logic/Graphic code for ND display
 -------------------------------------------------------------------------------
 
-position = {1030, 3166, 900, 900}
+position = {get(Capt_nd_position, 1), get(Capt_nd_position, 2), get(Capt_nd_position, 3), get(Capt_nd_position, 4)}
 size = {900, 900}
 fbo = true
 
@@ -95,6 +95,8 @@ end
 function update()
 
     perf_measure_start("CAPT_ND:update()")
+
+    position = {get(Capt_nd_position, 1), get(Capt_nd_position, 2), get(Capt_nd_position, 3), get(Capt_nd_position, 4)}
 
     update_buttons()
     update_knobs()

@@ -157,6 +157,13 @@ Fo_nd_displaying_status = createGlobalPropertyf("a321neo/cockpit/source_switchin
 EWD_displaying_status = createGlobalPropertyf("a321neo/cockpit/source_switching/ewd_displaying_status", 3, false, true, false)--source being displayed 1pfd, 2nd, 3ewd, 4ecam, 5 fo/pfd, 6 fo/nd
 ECAM_displaying_status = createGlobalPropertyf("a321neo/cockpit/source_switching/ecam_displaying_status", 4, false, true, false)--source being displayed 1pfd, 2nd, 3ewd, 4ecam, 5 fo/pfd, 6 fo/nd
 
+Capt_pfd_position =        createGlobalPropertyfa("a321neo/cockpit/source_switching/capt_pfd_position", 4, false, true, false)
+Capt_nd_position =         createGlobalPropertyfa("a321neo/cockpit/source_switching/capt_nd_position",  4, false, true, false)
+Fo_pfd_position =          createGlobalPropertyfa("a321neo/cockpit/source_switching/fo_pfd_position",   4, false, true, false)
+Fo_nd_position =           createGlobalPropertyfa("a321neo/cockpit/source_switching/fo_nd_position",    4, false, true, false)
+EWD_displaying_position =  createGlobalPropertyfa("a321neo/cockpit/source_switching/ewd_position",      4, false, true, false)
+ECAM_displaying_position = createGlobalPropertyfa("a321neo/cockpit/source_switching/ecam_position",     4, false, true, false)
+
 ECAM_on_nd_dial = createGlobalPropertyi("a321neo/cockpit/source_switching/ECAM_on_nd_dial", 0, false, true, false)--used to swap the position of the ECAM with the NDs 0capt, 1norm, 2FO
 
 Capt_pfd_valid= createGlobalPropertyi("a321neo/cockpit/source_switching/capt_pfd_valid",0, false, true, false) -- 0: invalid data, 1: OK, 2: test mode, 3: waiting for data

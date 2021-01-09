@@ -16,7 +16,7 @@
 -- Short description: Main ECAM file 
 -------------------------------------------------------------------------------
 
-position= {1030,2226,900,900}
+position = {get(ECAM_displaying_position, 1), get(ECAM_displaying_position, 2), get(ECAM_displaying_position, 3), get(ECAM_displaying_position, 4)}
 size = {900, 900}
 
 include('ECAM/ECAM_automation.lua')
@@ -135,6 +135,8 @@ end
 function update()
     perf_measure_start("ECAM:update()")
 
+    position = {get(ECAM_displaying_position, 1), get(ECAM_displaying_position, 2), get(ECAM_displaying_position, 3), get(ECAM_displaying_position, 4)}
+
 	ecam_update_page()
 	ecam_update_leds()
 	ecam_update_fuel_page()
@@ -146,10 +148,10 @@ function update()
     elseif get(Ecam_current_page) == 10 then
         ecam_update_wheel_page()
     end
-    
+
     if get(TIME) - last_update_gload > 0.1 then
         last_update_gload = get(TIME)
-        gload = get(Total_vertical_g_load)    
+        gload = get(Total_vertical_g_load)
     end
 
     perf_measure_stop("ECAM:update()")
