@@ -45,10 +45,6 @@ function update()
 end
 
 function draw()
-    if display_special_mode(size, Fo_pfd_valid) then
-        return
-    end
-
     PFD_draw_att(fo_PFD_table)
     PFD_draw_spd_tape(fo_PFD_table)
     PFD_draw_alt_tape(fo_PFD_table)

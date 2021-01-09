@@ -546,9 +546,6 @@ local function draw_slat_flap_indications()
 end
 
 function draw()
-    if display_special_mode(size, EWD_valid) then
-        return
-    end
 
     sasl.gl.drawTexture(EWD_background_img, 0, 0, 900, 900, {1, 1, 1})
 

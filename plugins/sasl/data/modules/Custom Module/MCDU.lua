@@ -532,6 +532,8 @@ local function mcdu_open_page(id)
 end
 
 
+sasl.registerCommandHandler (MCDU_refresh_page, 0, function(phase) if phase == SASL_COMMAND_BEGIN then mcdu_clearall(); mcdu_sim_page[get(mcdu_page)]("render") end end)
+
 
 --[[
 --
@@ -2572,11 +2574,15 @@ function (phase)
         mcdu_dat_title.txt = "        mcdu menu"
         mcdu_dat["l"]["L"][1].txt = "<fmgc"
 
+        mcdu_dat["l"]["L"][4].txt = "<cfds"
         mcdu_dat["l"]["R"][6].txt = "options>"
         draw_update()
     end
     if phase == "L1" then
         mcdu_open_page(505) -- open 505 data a/c status
+    end
+    if phase == "L4" then
+        mcdu_open_page(1300) -- open 1300 CDFS menu
     end
     if phase == "R6" then
         mcdu_open_page(1101) -- open 1101 mcdu menu options
@@ -2923,6 +2929,74 @@ function (phase)
         draw_update()
     end
 end
+
+-- 1300 CFDS menu (maintenance)
+mcdu_sim_page[1300] =
+function (phase)
+    if phase == "render" then
+        mcdu_dat_title.txt = "          cfds"
+
+        mcdu_dat["l"]["L"][4].txt = "<avionics status"
+        mcdu_dat["l"]["L"][5].txt = "<system report / test"
+        draw_update()
+    end
+
+    if phase == "L5" then
+        mcdu_open_page(1301) -- open 1301 system report / test
+    end
+end
+
+mcdu_sim_page[1301] =
+function (phase)
+    if phase == "render" then
+        mcdu_dat_title.txt = " system report / test"
+
+        mcdu_dat["l"]["L"][1].txt = "<dmc"
+        draw_update()
+    end
+
+    if phase == "L1" then
+        mcdu_open_page(1302) -- open 1302 DMC test
+    end
+end
+
+mcdu_sim_page[1302] =
+function (phase)
+    if phase == "render" then
+        mcdu_dat_title.txt = "       dmc test"
+
+        mcdu_dat["l"]["L"][1].txt = "<dmc 1 perform test"
+        mcdu_dat["l"]["L"][2].txt = "<dmc 2 perform test"
+        mcdu_dat["l"]["L"][3].txt = "<dmc 3 perform test"
+        draw_update()
+    end
+
+    if phase == "L1" then
+        sasl.commandOnce(MCDU_DMC_cmd_test_1)
+        mcdu_open_page(1303) -- open 1303 DMC 1 test
+    end
+    if phase == "L2" then
+        sasl.commandOnce(MCDU_DMC_cmd_test_2)
+        mcdu_open_page(1303) -- open 1304 DMC 2 test
+    end
+    if phase == "L3" then
+        sasl.commandOnce(MCDU_DMC_cmd_test_3)
+        mcdu_open_page(1303) -- open 1305 DMC 3 test
+    end
+end
+
+mcdu_sim_page[1303] =
+function (phase)
+    if phase == "render" then
+        mcdu_dat_title.txt = "       dmc test"
+
+        mcdu_dat["l"]["L"][1].txt = "dmc " .. get(DMC_which_test_in_progress)
+        mcdu_dat["l"]["L"][2] = {txt="test in progress", col="green"}
+        mcdu_dat["l"]["L"][3] = {txt="please wait", col="green"}
+        draw_update()
+    end
+end
+
 
 -- END OF MCDU CODE
 -- END OF MCDU CODE

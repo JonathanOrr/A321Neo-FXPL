@@ -40,6 +40,10 @@ local pfd_nd_xfr_capt = false
 local pfd_nd_xfr_fo   = false
 local ecam_nd_xfr     = 0 -- -1, 0, 1
 local eis_selector    = 0 -- -1, 0, 1
+
+local test_start_time = 0
+local mcdu_page = globalProperty("a321neo/cockpit/mcdu/mcdu_page")
+
 ----------------------------------------------------------------------------------------------------
 -- Commands
 ----------------------------------------------------------------------------------------------------
@@ -53,6 +57,9 @@ sasl.registerCommandHandler (DMC_ECAM_ND_xfr_dn, 0, function(phase) if phase == 
 sasl.registerCommandHandler (DMC_EIS_selector_up, 0, function(phase) if phase == SASL_COMMAND_BEGIN then eis_selector = math.min(1, eis_selector + 1) end end)
 sasl.registerCommandHandler (DMC_EIS_selector_dn, 0, function(phase) if phase == SASL_COMMAND_BEGIN then eis_selector = math.max(-1,  eis_selector - 1) end end)
 
+sasl.registerCommandHandler (MCDU_DMC_cmd_test_1, 0, function(phase) if phase == SASL_COMMAND_BEGIN then test_start_time = get(TIME); set(DMC_which_test_in_progress, 1) end end)
+sasl.registerCommandHandler (MCDU_DMC_cmd_test_2, 0, function(phase) if phase == SASL_COMMAND_BEGIN then test_start_time = get(TIME); set(DMC_which_test_in_progress, 2) end end)
+sasl.registerCommandHandler (MCDU_DMC_cmd_test_3, 0, function(phase) if phase == SASL_COMMAND_BEGIN then test_start_time = get(TIME); set(DMC_which_test_in_progress, 3) end end)
 
 ----------------------------------------------------------------------------------------------------
 -- Functions
@@ -81,9 +88,27 @@ local function auto_update()
         set(Fo_nd_displaying_status,  DMC_PFD_FO)
         set(Fo_pfd_displaying_status, DMC_ND_FO)
     end
+    
+   
+    -- From DMC_ECAM press button
+    if get(DMC_requiring_ECAM_EWD_swap) == 1 then
+        if get(EWD_brightness_act) < 0.01 then
+            set(ECAM_displaying_status, DMC_ECAM)
+            set(EWD_displaying_status,  DMC_EWD)
+        end
+        if get(ECAM_brightness_act) < 0.01 then
+            set(EWD_displaying_status,  DMC_ECAM)
+            set(ECAM_displaying_status, DMC_EWD)
+        end
+    end
+
 
     -- Manual transfers
-    if pfd_nd_xfr_capt and ecam_nd_xfr ~= -1 then
+    if pfd_nd_xfr_capt and ecam_nd_xfr == -1 then
+        set(Capt_pfd_displaying_status, DMC_ND_CAPT)
+        set(Capt_nd_displaying_status, get(ECAM_displaying_status))
+        set(ECAM_displaying_status,  DMC_PFD_CAPT)
+    elseif pfd_nd_xfr_capt then
         if get(Capt_nd_displaying_status) == DMC_PFD_CAPT then
             set(Capt_nd_displaying_status, DMC_ND_CAPT)
             set(Capt_pfd_displaying_status, DMC_PFD_CAPT)
@@ -91,14 +116,9 @@ local function auto_update()
             set(Capt_nd_displaying_status, DMC_PFD_CAPT)
             set(Capt_pfd_displaying_status, DMC_ND_CAPT)
         end
-    elseif pfd_nd_xfr_capt then
-        if get(Capt_pfd_displaying_status) == DMC_PFD_CAPT then
-            set(Capt_pfd_displaying_status, DMC_ND_CAPT)
-            set(Capt_nd_displaying_status,  DMC_PFD_CAPT)
-        else
-            set(Capt_pfd_displaying_status, DMC_PFD_CAPT)
-            set(Capt_nd_displaying_status,  DMC_ND_CAPT)
-        end
+    elseif ecam_nd_xfr == -1 then
+        set(Capt_nd_displaying_status, get(ECAM_displaying_status))
+        set(ECAM_displaying_status, DMC_ND_CAPT)
     end
 
     if pfd_nd_xfr_fo and ecam_nd_xfr ~= 1 then
@@ -117,29 +137,13 @@ local function auto_update()
             set(Fo_pfd_displaying_status, DMC_PFD_FO)
             set(Fo_nd_displaying_status,  DMC_ND_FO)
         end
-    end
-
-    -- From DMC_ECAM press button
-    if get(DMC_requiring_ECAM_EWD_swap) == 1 then
-        if get(EWD_brightness_act) < 0.01 then
-            set(ECAM_displaying_status, DMC_ECAM)
-            set(EWD_displaying_status,  DMC_EWD)
-        end
-        if get(ECAM_brightness_act) < 0.01 then
-            set(EWD_displaying_status,  DMC_ECAM)
-            set(ECAM_displaying_status, DMC_EWD)
-        end
-    end
-
-    -- Rotary knob
-    if ecam_nd_xfr == -1 then
-        set(Capt_nd_displaying_status, get(ECAM_displaying_status))
-        set(ECAM_displaying_status, DMC_ND_CAPT)
     elseif ecam_nd_xfr == 1 then
         set(Fo_nd_displaying_status, get(ECAM_displaying_status))
         set(ECAM_displaying_status, DMC_ND_FO)
     end
 
+
+    print(get(Capt_pfd_displaying_status),get(Capt_nd_displaying_status),get(EWD_displaying_status),get(ECAM_displaying_status))
 end
 
 local function update_display_position()
@@ -160,6 +164,52 @@ local function update_knobs()
 
 end
 
+local function update_dmc_status_maintain()
+
+    local mode = 2
+
+    if get(DMC_which_test_in_progress) > 0 then
+        if get(TIME) - test_start_time > 20 then
+            test_start_time = 0
+            set(DMC_which_test_in_progress, 0)
+            set(mcdu_page, 1302)
+            sasl.commandOnce(MCDU_refresh_page)
+        elseif get(TIME) - test_start_time < 3 then
+            mode = 4
+        end
+    end
+    if get(mcdu_page) == 1302 or get(mcdu_page) == 1303 then
+        set(Capt_pfd_valid, 3)
+        set(Capt_nd_valid,  3)
+        set(Fo_pfd_valid,   3)
+        set(Fo_nd_valid,    3)
+        set(EWD_valid,      3)
+        set(ECAM_valid,     3)
+    end
+    
+    if get(DMC_which_test_in_progress) == 1 and eis_selector >= 0 then
+        set(Capt_pfd_valid, mode)
+        set(Capt_nd_valid,  mode)
+        set(EWD_valid,      mode)
+        set(ECAM_valid,     mode)
+    end
+    if get(DMC_which_test_in_progress) == 2 and eis_selector <= 0 then
+        set(Fo_pfd_valid, mode)
+        set(Fo_nd_valid,  mode)
+        set(EWD_valid,    mode)
+        set(ECAM_valid,   mode)
+    end
+    if get(DMC_which_test_in_progress) == 3 and eis_selector > 0 then
+        set(Fo_pfd_valid, mode)
+        set(Fo_nd_valid,  mode)
+    end
+    if get(DMC_which_test_in_progress) == 3 and eis_selector < 0 then
+        set(Capt_pfd_valid, mode)
+        set(Capt_nd_valid,  mode)
+    end
+
+end
+
 local function update_dmc_status()
     set(Capt_pfd_valid, 1)
     set(Capt_nd_valid,  1)
@@ -167,6 +217,14 @@ local function update_dmc_status()
     set(Fo_nd_valid,    1)
     set(EWD_valid,      1)
     set(ECAM_valid,     1)
+
+    -- Show ECAM ON ND if XFR knob is not normal
+    if ecam_nd_xfr ~= 0 then
+        set(ECAM_valid,     6)
+    end
+
+    -- Maintenance mode & test
+    update_dmc_status_maintain()
 
     local dmc_1_fail = get(FAILURE_DISPLAY_DMC_1) == 1 or get(AC_ess_bus_pwrd) == 0
     local dmc_2_fail = get(FAILURE_DISPLAY_DMC_2) == 1 or get(AC_bus_2_pwrd) == 0

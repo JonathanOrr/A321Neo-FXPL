@@ -287,7 +287,95 @@ function update()
     update_actual_values()
 end
 
+local function draw_invalid(pos)
+    Draw_LCD_backlight(pos[1], pos[2], pos[3], pos[4], 0.5, 1, get(EWD_brightness_act))
+    sasl.gl.drawText(Font_AirbusDUL, pos[1]+pos[3]/2, pos[2]+pos[4]/2, "INVALID DATA", 40, false, false, TEXT_ALIGN_CENTER, {1, 0.66, 0.16})
+end
+
+local function draw_test(pos)
+    Draw_LCD_backlight(pos[1], pos[2], pos[3], pos[4], 0.5, 1, get(EWD_brightness_act))
+    
+    sasl.gl.drawRectangle(pos[1], pos[2]+2*pos[4]/3, pos[3]/8, pos[4]/3, {1.0, 0.0, 0.0})
+    sasl.gl.drawRectangle(pos[1]+pos[3]/8, pos[2]+2*pos[4]/3, pos[3]/8, pos[4]/2, {1, 0.33, 0})
+    sasl.gl.drawRectangle(pos[1]+2*pos[3]/8, pos[2]+2*pos[4]/3, pos[3]/8, pos[4]/2, {1, 0.66, 0.16})
+    sasl.gl.drawRectangle(pos[1]+3*pos[3]/8, pos[2]+2*pos[4]/3, pos[3]/8, pos[4]/2, {0.20, 0.98, 0.20})
+    sasl.gl.drawRectangle(pos[1]+4*pos[3]/8, pos[2]+2*pos[4]/3, pos[3]/8, pos[4]/2, {0.004, 1.0, 1.0})
+    sasl.gl.drawRectangle(pos[1]+5*pos[3]/8, pos[2]+2*pos[4]/3, pos[3]/8, pos[4]/2, {0, 0.4, 1.0})
+    sasl.gl.drawRectangle(pos[1]+6*pos[3]/8, pos[2]+2*pos[4]/3, pos[3]/8, pos[4]/2, {0.1, 0.6, 1.0})
+    sasl.gl.drawRectangle(pos[1]+7*pos[3]/8, pos[2]+2*pos[4]/3, pos[3]/8, pos[4]/2, {1.0, 0.0, 1.0})
+    
+    sasl.gl.drawRectangle(pos[1]+0, pos[2]+pos[4]/3, pos[3], pos[4]/3, {1,1,1})
+    
+    sasl.gl.drawRectangle(pos[1]+0, pos[2]+0, pos[3]/8, pos[4]/3, {0.1, 0.1, 0.1})
+    sasl.gl.drawRectangle(pos[1]+1*pos[3]/8, pos[2]+0, pos[3]/8, pos[4]/3, {0.2, 0.2, 0.2})
+    sasl.gl.drawRectangle(pos[1]+2*pos[3]/8, pos[2]+0, pos[3]/8, pos[4]/3, {0.3, 0.3, 0.3})
+    sasl.gl.drawRectangle(pos[1]+3*pos[3]/8, pos[2]+0, pos[3]/8, pos[4]/3, {0.4, 0.4, 0.4})
+    sasl.gl.drawRectangle(pos[1]+4*pos[3]/8, pos[2]+0, pos[3]/8, pos[4]/3, {0.5, 0.5, 0.5})
+    sasl.gl.drawRectangle(pos[1]+5*pos[3]/8, pos[2]+0, pos[3]/8, pos[4]/3, {0.6, 0.6, 0.6})
+    sasl.gl.drawRectangle(pos[1]+6*pos[3]/8, pos[2]+0, pos[3]/8, pos[4]/3, {0.8, 0.8, 0.8})
+    sasl.gl.drawRectangle(pos[1]+7*pos[3]/8, pos[2]+0, pos[3]/8, pos[4]/3, {1, 1, 1})
+    
+    sasl.gl.drawText(Font_AirbusDUL, pos[1]+20, pos[2]+pos[4]/2+100, "P/N : C483719090304", 25, false, false, TEXT_ALIGN_LEFT,  {0,0,0})
+    sasl.gl.drawText(Font_AirbusDUL, pos[1]+20, pos[2]+pos[4]/2+70, "S/N : C483719090304-2323", 25, false, false, TEXT_ALIGN_LEFT,  {0,0,0})
+    sasl.gl.drawText(Font_AirbusDUL, pos[1]+20, pos[2]+pos[4]/2-80, "EIS SW", 25, false, false, TEXT_ALIGN_LEFT,  {0,0,0})
+    sasl.gl.drawText(Font_AirbusDUL, pos[1]+20, pos[2]+pos[4]/2-110, "P/N : SXT40DXE254628440023400", 25, false, false, TEXT_ALIGN_LEFT,  {0,0,0})
+
+
+    sasl.gl.drawText(Font_AirbusDUL, pos[1]+pos[3]-20, pos[2]+pos[4]/2+100, "SIDESTICKSIM AVIONICS", 25, false, false, TEXT_ALIGN_RIGHT,  {0,0,0})
+    sasl.gl.drawText(Font_AirbusDUL, pos[1]+pos[3]-20, pos[2]+pos[4]/2-110, "LCDU 725", 25, false, false, TEXT_ALIGN_RIGHT,  {0,0,0})
+end
+
+local function draw_maintain(pos)
+    Draw_LCD_backlight(pos[1], pos[2], pos[3], pos[4], 0.5, 1, get(EWD_brightness_act))
+    sasl.gl.drawText(Font_AirbusDUL, pos[1]+pos[3]/2, pos[2]+pos[4]/2, "MAINTENANCE MODE", 40, false, false, TEXT_ALIGN_CENTER, {0.20, 0.98, 0.20})
+end
+
+local function draw_wait_for_data(pos)
+    Draw_LCD_backlight(pos[1], pos[2], pos[3], pos[4], 0.5, 1, get(EWD_brightness_act))
+    sasl.gl.drawText(Font_AirbusDUL, pos[1]+pos[3]/2, pos[2]+pos[4]/2, "WAITING FOR DATA", 40, false, false, TEXT_ALIGN_CENTER, {0.20, 0.98, 0.20})
+end
+
+local function draw_self_test(pos)
+    Draw_LCD_backlight(pos[1], pos[2], pos[3], pos[4], 0.5, 1, get(EWD_brightness_act))
+    sasl.gl.drawText(Font_AirbusDUL, pos[1]+pos[3]/2, pos[2]+pos[4]/2+20, "SELF-TEST IN PROGRESS", 40, false, false, TEXT_ALIGN_CENTER, {0.20, 0.98, 0.20})
+    sasl.gl.drawText(Font_AirbusDUL, pos[1]+pos[3]/2, pos[2]+pos[4]/2-20, "(MAX 30 SECONDS)", 40, false, false, TEXT_ALIGN_CENTER, {0.20, 0.98, 0.20})
+end
+
+local function draw_ecam_on_nd(pos)
+    Draw_LCD_backlight(pos[1], pos[2], pos[3], pos[4], 0.5, 1, get(EWD_brightness_act))
+    sasl.gl.drawText(Font_AirbusDUL, pos[1]+pos[3]/2, pos[2]+pos[4]/2, "ECAM ON ND", 40, false, false, TEXT_ALIGN_CENTER, {0.20, 0.98, 0.20})
+end
+
+local function display_special_mode(mode, pos)
+    if mode == 1 then
+        return
+    elseif mode == 0 then
+        draw_invalid(pos)
+    elseif mode == 2 then
+        draw_test(pos)
+    elseif mode == 3 then
+        draw_maintain(pos)
+    elseif mode == 4 then
+        draw_wait_for_data(pos)
+    elseif mode == 5 then
+        draw_self_test(pos)
+    elseif mode == 6 then
+        draw_ecam_on_nd(pos)
+    end
+end
+
+
+local function draw_special_modes()
+    display_special_mode(get(Capt_pfd_valid), {30,   3166, 900, 900})
+    display_special_mode(get(Capt_nd_valid), {1030, 3166, 900, 900})
+    display_special_mode(get(Fo_pfd_valid), {3030, 3166, 900, 900})
+    display_special_mode(get(Fo_nd_valid), {2030, 3166, 900, 900})
+    display_special_mode(get(EWD_valid), {30,   2226, 900, 900})
+    display_special_mode(get(ECAM_valid), {1030, 2226, 900, 900})
+end
+
 local function draw_lut_and_brightness()
+
     sasl.gl.drawRectangle(30,   3166, 900, 900, {0,0,0, 1 - get(Capt_PFD_brightness_act)})
     sasl.gl.drawRectangle(1030, 3166, 900, 900, {0,0,0, 1 - get(Capt_ND_brightness_act)})
     sasl.gl.drawRectangle(2030, 3166, 900, 900, {0,0,0, 1 - get(Fo_ND_brightness_act)})
@@ -303,6 +391,7 @@ local function draw_lut_and_brightness()
 end
 
 function draw()
+    draw_special_modes()
     draw_lut_and_brightness()
 end
 

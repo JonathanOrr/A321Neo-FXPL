@@ -46,9 +46,6 @@ end
 
 
 function draw()
-    if display_special_mode(size, Capt_pfd_valid) then
-        return
-    end
 
     PFD_draw_att(capt_PFD_table)
     PFD_draw_spd_tape(capt_PFD_table)

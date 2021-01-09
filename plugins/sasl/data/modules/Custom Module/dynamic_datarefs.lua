@@ -262,6 +262,7 @@ Ecam_advisory_WHEEL = createGlobalPropertyi("a321neo/cockpit/ecam/adv/wheel", 0,
 Ecam_advisory_FCTL  = createGlobalPropertyi("a321neo/cockpit/ecam/adv/fctl", 0, false, true, false) -- Set to 1 to trigger advisory (auto-cleared)
 
 DMC_requiring_ECAM_EWD_swap = createGlobalPropertyi("a321neo/cockpit/ecam/ewd_ecam_swap", 0, false, true, false) 
+DMC_which_test_in_progress = createGlobalPropertyi("a321neo/cockpit/dmc/test_in_progress_where", 0, false, true, false)
 
 --global dataref variable from the Sim--
 --camera

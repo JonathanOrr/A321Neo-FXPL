@@ -27,17 +27,6 @@ capt_nd_data = new_dataset(ND_CAPT)
 
 function draw()
 
-
-    if display_special_mode(size, Capt_nd_valid) then
-        return
-    end
-
-    if get(AC_ess_shed_pwrd) == 0 then   -- TODO This should be fixed when screens move around
-        return -- Bus is not powered on, this component cannot work
-    end
-    ELEC_sys.add_power_consumption(ELEC_BUS_AC_ESS_SHED, 0.26, 0.26)   -- 30W (just hypothesis)
-
-
     perf_measure_start("CAPT_ND:draw()")
 
     draw_main(capt_nd_data)
