@@ -5,6 +5,9 @@ local image_bkg_ring_arrows = sasl.gl.loadImage(moduleDirectory .. "/Custom Modu
 local image_bkg_ring_middle = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/ring-middle.png")
 
 local image_point_apt = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/point-apt.png")
+local image_point_vor = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/point-vor.png")
+local image_point_ndb = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/point-ndb.png")
+local image_point_wpt = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/point-wpt.png")
 
 local image_vor_1 = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/needle-VOR1.png")
 local image_vor_2 = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/needle-VOR2.png")
@@ -141,6 +144,11 @@ local function draw_poi_array(data, poi, texture, color)
     local px_per_nm = 588 / range_in_nm
 
     local distance = get_distance_nm(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon,poi.lat,poi.lon)
+    
+    if distance > range_in_nm * 2 then
+        return
+    end
+    
     local bearing  = get_bearing(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon,poi.lat,poi.lon)
     
     local distance_px = distance * px_per_nm
@@ -149,23 +157,72 @@ local function draw_poi_array(data, poi, texture, color)
     local y = size[1]/2 + distance_px * math.sin(math.rad(bearing+data.inputs.heading))
 
     if x > 0 and x < size[1] and y > 0 and y < size[2] then
-        sasl.gl.drawTexture(texture, x-16, y-16, 32,32, {1,1,1})
-        sasl.gl.drawText(Font_AirbusDUL, x+25, y-5, poi.id, 24, false, false, TEXT_ALIGN_LEFT, color)        
+        sasl.gl.drawTexture(texture, x-16, y-16, 32,32, color)
+        sasl.gl.drawText(Font_AirbusDUL, x+25, y-16, poi.id, 36, false, false, TEXT_ALIGN_LEFT, color)        
     end
 end
 
 local function draw_airports(data)
-    if not data.config.extra_data ~= ND_DATA_ARPT then
+    if data.config.extra_data ~= ND_DATA_ARPT then
         return  -- Airport button not selected
     end
     
     -- For each airtport visible...
     for i,airport in ipairs(data.poi.arpt) do
-    
         draw_poi_array(data, airport, image_point_apt, ECAM_MAGENTA)
+    end
+end
 
+local function draw_vors(data)
+
+    if data.config.extra_data ~= ND_DATA_VORD then
+        return  -- Vor button not selected
+    end
+
+    -- For each airtport visible...
+    for i,vor in ipairs(data.poi.vor) do
+        draw_poi_array(data, vor, image_point_vor, ECAM_MAGENTA)
     end
     
+end
+
+local function draw_ndbs(data)
+
+    if data.config.extra_data ~= ND_DATA_NDB then
+        return  -- Vor button not selected
+    end
+
+    -- For each airtport visible...
+    for i,ndb in ipairs(data.poi.ndb) do
+        draw_poi_array(data, ndb, image_point_ndb, ECAM_MAGENTA)
+    end
+    
+end
+
+local function draw_wpts(data)
+
+    if data.config.extra_data ~= ND_DATA_WPT then
+        return  -- Vor button not selected
+    end
+
+    -- For each airtport visible...
+    for i,wpt in ipairs(data.poi.wpt) do
+        draw_poi_array(data, wpt, image_point_wpt, ECAM_MAGENTA)
+    end
+    
+end
+
+local function draw_pois(data)
+
+    if data.config.range <= ND_RANGE_ZOOM_2 then
+        return  -- POIs are not drawn during the zoom mode
+    end
+
+    draw_airports(data) 
+    draw_vors(data)
+    draw_ndbs(data)
+    draw_wpts(data)
+
 end
 
 function draw_rose_unmasked(data)
@@ -179,7 +236,7 @@ end
 
 function draw_rose(data)
 
-    draw_airports(data) 
+    draw_pois(data)
     draw_navaid_pointers(data)
 
 end

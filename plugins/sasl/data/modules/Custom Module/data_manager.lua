@@ -156,8 +156,8 @@ Data_manager._reshape_nav_coords = function()
             local lat = math.floor(x.lat + 90)
             local lon = math.floor(x.lon + 180)
 
-            local lat = lat - (lat % 2)
-            local lon = lon - (lon % 2)
+            local lat = lat - (lat % 4)
+            local lon = lon - (lon % 4)
 
 
             if Data_manager._nav_by_coords[nav_type][lat] == nil then
@@ -182,8 +182,8 @@ Data_manager._reshape_fix_coords = function()
         local lat = math.floor(x.lat + 90)
         local lon = math.floor(x.lon + 180)
 
-        local lat = lat - (lat % 2)
-        local lon = lon - (lon % 2)
+        local lat = lat - (lat % 4)
+        local lon = lon - (lon % 4)
 
 
         if Data_manager._fix_by_coords[lat] == nil then
@@ -210,24 +210,54 @@ Data_manager.initialize = function()
     Data_manager._reshape_fix_coords()
 end
 
-Data_manager.get_fix_by_coords = function(lat, lon)
+Data_manager.get_fix_by_coords = function(lat, lon, more_than_180)
     if disable_data_manager then
         return {}
     end
-
-    return Data_manager._fix_by_coords[math.floor(lat)+90][math.floor(lon)+180]
+    
+    lat = math.floor(lat) + 90
+    lon = math.floor(lon) + 180
+    lat = lat - (lat % 4)
+    lon = lon - (lon % 4)
+    
+    local return_table = {}
+    table.insert(return_table, Data_manager._fix_by_coords[lat][lon])
+    
+    if more_than_180 then
+        if lon < 360 then table.insert(return_table, Data_manager._fix_by_coords[lat][lon+4]) end
+        if lat < 180 then table.insert(return_table, Data_manager._fix_by_coords[lat+4][lon]) end
+        if lon < 360 and lat < 180 then table.insert(return_table, Data_manager._fix_by_coords[lat+4][lon+4]) end
+        if lon > 0 then table.insert(return_table, Data_manager._fix_by_coords[lat][lon-4]) end
+        if lat > 0 then table.insert(return_table, Data_manager._fix_by_coords[lat-4][lon]) end
+        if lat > 0 and lon > 0 then table.insert(return_table, Data_manager._fix_by_coords[lat-4][lon-4]) end
+    end
+        
+    return return_table
 end
 
-Data_manager.get_nav_by_coords = function(navtype, lat, lon)
+Data_manager.get_nav_by_coords = function(navtype, lat, lon, more_than_180)
     if disable_data_manager then
         return {}
     end
 
     lat = math.floor(lat) + 90
     lon = math.floor(lon) + 180
-    lat = lat - (lat % 2)
-    lon = lon - (lon % 2)
-    return Data_manager._nav_by_coords[navtype][lat][lon]
+    lat = lat - (lat % 4)
+    lon = lon - (lon % 4)
+    
+    local return_table = {}
+    table.insert(return_table, Data_manager._nav_by_coords[navtype][lat][lon])
+    
+    if more_than_180 then
+        if lon < 360 then table.insert(return_table, Data_manager._nav_by_coords[navtype][lat][lon+4]) end
+        if lat < 180 then table.insert(return_table, Data_manager._nav_by_coords[navtype][lat+4][lon]) end
+        if lon < 360 and lat < 180 then table.insert(return_table, Data_manager._nav_by_coords[navtype][lat+4][lon+4]) end
+        if lon > 0 then table.insert(return_table, Data_manager._nav_by_coords[navtype][lat][lon-4]) end
+        if lat > 0 then table.insert(return_table, Data_manager._nav_by_coords[navtype][lat-4][lon]) end
+        if lat > 0 and lon > 0 then table.insert(return_table, Data_manager._nav_by_coords[navtype][lat-4][lon-4]) end
+    end
+    
+    return return_table
 end
 
 Data_manager.get_nav_by_freq = function(navtype, freq) -- In 10Khz format, e.g. 12550 = 125.5

@@ -942,6 +942,7 @@ function update()
         mcdu_message_showing = true
         table.remove(mcdu_messages)
     end
+  	perf_measure_stop("MCDU:update()")
 end
 
 -- MCDU PAGES
