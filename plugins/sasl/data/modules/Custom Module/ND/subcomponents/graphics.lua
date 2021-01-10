@@ -12,8 +12,6 @@ function draw_main(data)
 
     if data.config.mode == ND_MODE_ILS or data.config.mode == ND_MODE_VOR or data.config.mode == ND_MODE_NAV then
 
-        draw_rose_unmasked(data) -- The rose is drawn in all three cases
-
         sasl.gl.drawMaskStart()
         sasl.gl.drawTexture(image_mask_all, 0,0,900,900)
         sasl.gl.drawUnderMask(true)
@@ -27,6 +25,7 @@ function draw_main(data)
         end
         sasl.gl.drawMaskEnd()
 
+        draw_rose_unmasked(data) -- The rose is drawn in all three cases
     elseif data.config.mode == ND_MODE_ARC then
         draw_arc_unmasked(data)
         

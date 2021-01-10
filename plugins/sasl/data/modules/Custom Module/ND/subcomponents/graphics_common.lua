@@ -239,6 +239,7 @@ local function draw_common_messages_bottom_2(data)
     end
 
     if color ~= nil then
+        Draw_LCD_backlight(200, 20, size[2]-400, 35, 0.5, 1, get(Capt_ND_brightness_act))
         Sasl_DrawWideFrame(200, 20, size[2]-400, 35, 2, 0, ECAM_HIGH_GREY)
         sasl.gl.drawText(Font_AirbusDUL, 450, 26, text, 34, false, false, TEXT_ALIGN_CENTER, color)
     end

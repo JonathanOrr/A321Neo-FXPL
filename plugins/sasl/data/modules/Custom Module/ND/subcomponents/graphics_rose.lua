@@ -25,7 +25,8 @@ size = {900, 900}
 local COLOR_YELLOW = {1,1,0}
 
 local poi_position_last_update = 0
-local POI_UPDATE_RATE = 0.5
+local POI_UPDATE_RATE = 0.1
+local MAX_LIMIT_WPT = 500
 
 local function draw_backgrounds(data)
     -- Main rose background
@@ -147,7 +148,7 @@ local function draw_poi_array(data, poi, texture, color)
     -- The the per_px nm is:
     local px_per_nm = 588 / range_in_nm
 
-    if poi.distance == nil then
+    if poi.distance == nil or (get(TIME) - poi_position_last_update) > POI_UPDATE_RATE then
        poi.distance = get_distance_nm(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon,poi.lat,poi.lon)
     end
     
@@ -155,7 +156,7 @@ local function draw_poi_array(data, poi, texture, color)
         return true, poi
     end
 
-    if poi.x == nil or poi.y == nil then
+    if poi.x == nil or poi.y == nil or (get(TIME) - poi_position_last_update) > POI_UPDATE_RATE then
         modified = true
         
         local bearing  = get_bearing(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon,poi.lat,poi.lon)
@@ -227,11 +228,20 @@ local function draw_wpts(data)
         return  -- Vor button not selected
     end
 
+    local displayed_num = 0
+    data.misc.map_partially_displayed = false
+    
     -- For each waypoint visible...
     for i,wpt in ipairs(data.poi.wpt) do
+        displayed_num = displayed_num + 1
         local modified, poi = draw_poi_array(data, wpt, image_point_wpt, ECAM_MAGENTA)
         if modified then
             data.poi.wpt[i] = poi
+        end
+        
+        if displayed_num > MAX_LIMIT_WPT and data.config.range >= ND_RANGE_160 then
+            data.misc.map_partially_displayed = true
+            break
         end
     end
     
