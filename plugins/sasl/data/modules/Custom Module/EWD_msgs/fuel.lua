@@ -414,7 +414,7 @@ MessageGroup_FUEL_WING_LO_LVL_SINGLE = {
 Message_FUEL_LO_LVL_FUEL_MODE = {
     text = function(self) return " - FUEL MODE SEL......MAN" end,
     color = function(self) return COL_ACTIONS end,
-    is_active = function(self) return not PB.ovhd.fuel_XFEED.status_top end
+    is_active = function(self) return not PB.ovhd.fuel_MODE_SEL.status_top end
 }
 Message_FUEL_LO_LVL_ALL_ON = {
     text = function(self) return " - ALL TK PUMPS........ON" end,
