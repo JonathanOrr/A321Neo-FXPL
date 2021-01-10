@@ -124,6 +124,15 @@ function Math_extract_digit(num, which_digit, abs)
     return Math_extract_decimal(put_digit_into_decimal, 1, abs)
 end
 
+--approximate a value similar to a deadzone
+function Math_approx_value(num, approx_range, approx_to)
+    if num >= approx_to - approx_range and num <= approx_to + approx_range then
+        return approx_to
+    else
+        return num
+    end
+end
+
 function BoolToNum(value)
     return value and 1 or 0
 end

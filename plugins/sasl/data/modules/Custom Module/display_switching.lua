@@ -20,10 +20,10 @@
 for i = 1, 4 do
     set(Capt_pfd_position,        DMC_PFD_CAPT_POS[i], i)
     set(Capt_nd_position,         DMC_ND_CAPT_POS[i],  i)
-    set(Fo_pfd_position,          DMC_PFD_FO_POS[i],   i)
-    set(Fo_nd_position,           DMC_ND_FO_POS[i],    i)
     set(EWD_displaying_position,  DMC_EWD_POS[i],      i)
     set(ECAM_displaying_position, DMC_ECAM_POS[i],     i)
+    set(Fo_pfd_position,          DMC_PFD_FO_POS[i],   i)
+    set(Fo_nd_position,           DMC_ND_FO_POS[i],    i)
 end
 
 local display_positions = {
@@ -76,6 +76,7 @@ local function auto_update()
 
     -- Automatic transfers when brightness is off
     if get(EWD_brightness_act) < 0.01 then
+        set(EWD_displaying_status, DMC_ECAM)
         set(ECAM_displaying_status, DMC_EWD)
     end
 
@@ -88,13 +89,13 @@ local function auto_update()
         set(Fo_nd_displaying_status,  DMC_PFD_FO)
         set(Fo_pfd_displaying_status, DMC_ND_FO)
     end
-    
-   
+
+
     -- From DMC_ECAM press button
     if get(DMC_requiring_ECAM_EWD_swap) == 1 then
         if get(EWD_brightness_act) < 0.01 then
-            set(ECAM_displaying_status, DMC_ECAM)
             set(EWD_displaying_status,  DMC_EWD)
+            set(ECAM_displaying_status, DMC_ECAM)
         end
         if get(ECAM_brightness_act) < 0.01 then
             set(EWD_displaying_status,  DMC_ECAM)
@@ -150,10 +151,10 @@ local function update_display_position()
     for i = 1, 4 do
         set(Capt_pfd_position,        display_positions[get(Capt_pfd_displaying_status)][i], i)
         set(Capt_nd_position,         display_positions[get(Capt_nd_displaying_status )][i], i)
-        set(Fo_pfd_position,          display_positions[get(Fo_pfd_displaying_status  )][i], i)
-        set(Fo_nd_position,           display_positions[get(Fo_nd_displaying_status   )][i], i)
         set(EWD_displaying_position,  display_positions[get(EWD_displaying_status     )][i], i)
         set(ECAM_displaying_position, display_positions[get(ECAM_displaying_status    )][i], i)
+        set(Fo_pfd_position,          display_positions[get(Fo_pfd_displaying_status  )][i], i)
+        set(Fo_nd_position,           display_positions[get(Fo_nd_displaying_status   )][i], i)
     end
 end
 
@@ -186,7 +187,7 @@ local function update_dmc_status_maintain()
         set(EWD_valid,      3)
         set(ECAM_valid,     3)
     end
-    
+
     if get(DMC_which_test_in_progress) == 1 and eis_selector >= 0 then
         set(Capt_pfd_valid, mode)
         set(Capt_nd_valid,  mode)
