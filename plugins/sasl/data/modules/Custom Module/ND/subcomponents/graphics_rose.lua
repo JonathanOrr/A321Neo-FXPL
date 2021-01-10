@@ -24,6 +24,9 @@ size = {900, 900}
 
 local COLOR_YELLOW = {1,1,0}
 
+local poi_position_last_update = 0
+local POI_UPDATE_RATE = 0.5
+
 local function draw_backgrounds(data)
     -- Main rose background
     if data.inputs.is_heading_valid then
@@ -137,29 +140,39 @@ local function get_bearing(lat1,lon1,lat2,lon2)
 end
 
 local function draw_poi_array(data, poi, texture, color)
-    
+    local modified = false
+
     -- 588 px is the diameter of our ring, so this corresponds to the range scale selected:
     local range_in_nm = math.floor(2^(data.config.range-1) * 10)
     -- The the per_px nm is:
     local px_per_nm = 588 / range_in_nm
 
-    local distance = get_distance_nm(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon,poi.lat,poi.lon)
-    
-    if distance > range_in_nm * 2 then
-        return
+    if poi.distance == nil then
+       poi.distance = get_distance_nm(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon,poi.lat,poi.lon)
     end
     
-    local bearing  = get_bearing(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon,poi.lat,poi.lon)
-    
-    local distance_px = distance * px_per_nm
-
-    local x = size[1]/2 + distance_px * math.cos(math.rad(bearing+data.inputs.heading))
-    local y = size[1]/2 + distance_px * math.sin(math.rad(bearing+data.inputs.heading))
-
-    if x > 0 and x < size[1] and y > 0 and y < size[2] then
-        sasl.gl.drawTexture(texture, x-16, y-16, 32,32, color)
-        sasl.gl.drawText(Font_AirbusDUL, x+25, y-16, poi.id, 36, false, false, TEXT_ALIGN_LEFT, color)        
+    if poi.distance > range_in_nm * 2 then
+        return true, poi
     end
+
+    if poi.x == nil or poi.y == nil then
+        modified = true
+        
+        local bearing  = get_bearing(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon,poi.lat,poi.lon)
+        
+        local distance_px = poi.distance * px_per_nm
+
+        poi.x = size[1]/2 + distance_px * math.cos(math.rad(bearing+data.inputs.heading))
+        poi.y = size[1]/2 + distance_px * math.sin(math.rad(bearing+data.inputs.heading))
+    end
+
+
+    if poi.x > 0 and poi.x < size[1] and poi.y > 0 and poi.y < size[2] then
+        sasl.gl.drawTexture(texture, poi.x-16, poi.y-16, 32,32, color)
+        sasl.gl.drawText(Font_AirbusDUL, poi.x+25, poi.y-16, poi.id, 36, false, false, TEXT_ALIGN_LEFT, color)        
+    end
+    
+    return modified, poi
 end
 
 local function draw_airports(data)
@@ -169,7 +182,10 @@ local function draw_airports(data)
     
     -- For each airtport visible...
     for i,airport in ipairs(data.poi.arpt) do
-        draw_poi_array(data, airport, image_point_apt, ECAM_MAGENTA)
+        local modified, poi = draw_poi_array(data, arpt, image_point_wpt, ECAM_MAGENTA)
+        if modified then
+            data.poi.arpt[i] = poi
+        end
     end
 end
 
@@ -181,7 +197,10 @@ local function draw_vors(data)
 
     -- For each airtport visible...
     for i,vor in ipairs(data.poi.vor) do
-        draw_poi_array(data, vor, image_point_vor, ECAM_MAGENTA)
+        local modified, poi = draw_poi_array(data, vor, image_point_wpt, ECAM_MAGENTA)
+        if modified then
+            data.poi.vor[i] = poi
+        end
     end
     
 end
@@ -194,7 +213,10 @@ local function draw_ndbs(data)
 
     -- For each airtport visible...
     for i,ndb in ipairs(data.poi.ndb) do
-        draw_poi_array(data, ndb, image_point_ndb, ECAM_MAGENTA)
+        local modified, poi = draw_poi_array(data, ndb, image_point_wpt, ECAM_MAGENTA)
+        if modified then
+            data.poi.ndb[i] = poi
+        end
     end
     
 end
@@ -205,9 +227,12 @@ local function draw_wpts(data)
         return  -- Vor button not selected
     end
 
-    -- For each airtport visible...
+    -- For each waypoint visible...
     for i,wpt in ipairs(data.poi.wpt) do
-        draw_poi_array(data, wpt, image_point_wpt, ECAM_MAGENTA)
+        local modified, poi = draw_poi_array(data, wpt, image_point_wpt, ECAM_MAGENTA)
+        if modified then
+            data.poi.wpt[i] = poi
+        end
     end
     
 end
@@ -218,10 +243,17 @@ local function draw_pois(data)
         return  -- POIs are not drawn during the zoom mode
     end
 
+    
     draw_airports(data) 
     draw_vors(data)
     draw_ndbs(data)
     draw_wpts(data)
+
+    local need_to_update_poi = (get(TIME) - poi_position_last_update) > POI_UPDATE_RATE
+    if need_to_update_poi then
+        poi_position_last_update = get(TIME)
+    end
+
 
 end
 

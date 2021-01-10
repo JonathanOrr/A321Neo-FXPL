@@ -1,3 +1,6 @@
+local last_poi_update = 0
+local prev_range = 0
+
 local function update_airports(data)
     local airports = Data_manager.get_nav_by_coords(get_lat(data.id), get_lon(data.id))
     
@@ -47,6 +50,14 @@ function update_poi(data)
     if not is_position_ok(data.id) then
         return
     end
+
+    if prev_range == data.config.range and get(TIME) - last_poi_update < 10 then
+        return
+    end
+
+    prev_range = data.config.range
+
+    last_poi_update = get(TIME)
 
     update_vor(data)
     update_ndb(data)
