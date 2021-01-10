@@ -136,7 +136,7 @@ function get_avg_tas()
 end
 
 function is_aoa_ok(i)
-    return is_adr_working(i)
+    return ir_works_att_mode(i)
 end
 
 function get_aoa(i)
