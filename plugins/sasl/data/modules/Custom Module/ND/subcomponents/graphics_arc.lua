@@ -58,7 +58,7 @@ local function draw_track_symbol(data)
         return -- not visible, out of visible area
     end
 
-    sasl.gl.drawRotatedTexture(image_track_sym, 180+(data.inputs.track-data.inputs.heading), (size[1]-17)/2,(size[2]-1154)/2-312,17,1154, {1,1,1})
+    sasl.gl.drawRotatedTexture(image_track_sym, (data.inputs.track-data.inputs.heading), (size[1]-17)/2,(size[2]-1154)/2-312,17,1154, {1,1,1})
 end
 
 local function draw_hdgsel_symbol(data)
