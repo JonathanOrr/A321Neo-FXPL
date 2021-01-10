@@ -79,6 +79,10 @@ local data_current_cabin_pressure_in_pa = { -- Filter
 }
 local current_cabin_altitude = math.min(7000, get(Capt_baro_alt_ft))
 
+function onAirportLoaded()
+    current_cabin_altitude = math.min(7000, get(Capt_baro_alt_ft))
+end
+
 ----------------------------------------------------------------------------------------------------
 -- Commands
 ----------------------------------------------------------------------------------------------------
