@@ -320,6 +320,7 @@ EVAC_cockpit_horn = createGlobalPropertyi("a321neo/cockpit/misc/evac_cockpit_hor
 
 --MCDU
 Mcdu_enabled = createGlobalPropertyi("a321neo/debug/mcdu/mcdu_enabled", 1, false, true, false)
+mcdu_page = createGlobalPropertyi("a321neo/cockpit/mcdu/mcdu_page", 0, false, true, false)
 
 -- ACARS & DCDU
 DCDU_page_no = createGlobalPropertyi("a321neo/cockpit/DCDU/page_no", 0, false, true, false) -- Current page number, from 0

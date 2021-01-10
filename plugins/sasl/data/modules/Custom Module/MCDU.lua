@@ -522,8 +522,6 @@ local function mcdu_clearall()
     end
 end
 
-local mcdu_page = createGlobalPropertyi("a321neo/cockpit/mcdu/mcdu_page", 0, false, true, false)
-
 --load MCDU page
 local function mcdu_open_page(id)
     mcdu_clearall()

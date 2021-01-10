@@ -259,13 +259,13 @@ sasl.registerCommandHandler ( ISIS_brightness_dn, 0, function(phase)
 end)
 
 function update_actual_values()
-    set(Capt_PFD_brightness_act, get(Capt_PFD_brightness) * (1 - get(FAILURE_DISPLAY_CAPT_PFD)) * get(AC_ess_bus_pwrd))
-    set(Capt_ND_brightness_act,  get(Capt_ND_brightness)  * (1 - get(FAILURE_DISPLAY_CAPT_ND)) * get(AC_ess_shed_pwrd))
-    set(Fo_PFD_brightness_act,   get(Fo_PFD_brightness) * (1 - get(FAILURE_DISPLAY_FO_PFD)) * get(AC_bus_2_pwrd))
-    set(Fo_ND_brightness_act,    get(Fo_ND_brightness)  * (1 - get(FAILURE_DISPLAY_FO_ND)) * get(AC_bus_2_pwrd))
+    set(Capt_PFD_brightness_act, get(Capt_PFD_brightness) * get(AC_ess_bus_pwrd))
+    set(Capt_ND_brightness_act,  get(Capt_ND_brightness)  *  get(AC_ess_shed_pwrd))
+    set(Fo_PFD_brightness_act,   get(Fo_PFD_brightness) * get(AC_bus_2_pwrd))
+    set(Fo_ND_brightness_act,    get(Fo_ND_brightness)  *  get(AC_bus_2_pwrd))
 
-    set(EWD_brightness_act,      get(EWD_brightness)   * (1 - get(FAILURE_DISPLAY_EWD)) * get(AC_ess_bus_pwrd))
-    set(ECAM_brightness_act,     get(ECAM_brightness)  * (1 - get(FAILURE_DISPLAY_ECAM)) * get(AC_bus_2_pwrd))
+    set(EWD_brightness_act,      get(EWD_brightness)   *  get(AC_ess_bus_pwrd))
+    set(ECAM_brightness_act,     get(ECAM_brightness)  *  get(AC_bus_2_pwrd))
 
 
     set(MCDU_1_brightness_act,   get(MCDU_1_brightness) * (1 - get(FAILURE_DISPLAY_MCDU_1)) * get(AC_ess_shed_pwrd))
@@ -346,6 +346,11 @@ local function draw_ecam_on_nd(pos, brightness)
     sasl.gl.drawText(Font_AirbusDUL, pos[1]+pos[3]/2, pos[2]+pos[4]/2, "ECAM ON ND", 40, false, false, TEXT_ALIGN_CENTER, {0.20, 0.98, 0.20})
 end
 
+local function draw_big_f(pos, brightness)
+    Draw_LCD_backlight(pos[1], pos[2], pos[3], pos[4], 0.5, 1, brightness)
+    sasl.gl.drawText(Font_AirbusDUL, pos[1]+pos[3]/2, pos[2]+200, "F", 700, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+end
+
 local function display_special_mode(mode, pos, brightness)
     if mode == 1 then
         return
@@ -361,6 +366,8 @@ local function display_special_mode(mode, pos, brightness)
         draw_self_test(pos, brightness)
     elseif mode == 6 then
         draw_ecam_on_nd(pos, brightness)
+    elseif mode == 7 then
+        draw_big_f(pos, brightness)
     end
 end
 

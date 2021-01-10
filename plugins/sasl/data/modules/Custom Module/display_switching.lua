@@ -74,76 +74,71 @@ local function auto_update()
     set(EWD_displaying_status,      DMC_EWD)
     set(ECAM_displaying_status,     DMC_ECAM)
 
-    -- Automatic transfers when brightness is off
-    if get(EWD_brightness_act) < 0.01 then
-        set(EWD_displaying_status, DMC_ECAM)
-        set(ECAM_displaying_status, DMC_EWD)
-    end
 
-    if get(Capt_PFD_brightness_act) < 0.01 then
-        set(Capt_nd_displaying_status,  DMC_PFD_CAPT)
+    -- CAPT PFD
+    local pfd_auto_transfer_capt = get(Capt_PFD_brightness_act) < 0.01 or get(FAILURE_DISPLAY_CAPT_PFD) == 1
+    
+    if pfd_auto_transfer_capt ~= pfd_nd_xfr_capt then
         set(Capt_pfd_displaying_status, DMC_ND_CAPT)
+    else
+        set(Capt_pfd_displaying_status, DMC_PFD_CAPT)
     end
-
-    if get(Fo_PFD_brightness_act) < 0.01 then
-        set(Fo_nd_displaying_status,  DMC_PFD_FO)
-        set(Fo_pfd_displaying_status, DMC_ND_FO)
-    end
-
-
-    -- From DMC_ECAM press button
-    if get(DMC_requiring_ECAM_EWD_swap) == 1 then
-        if get(EWD_brightness_act) < 0.01 then
-            set(EWD_displaying_status,  DMC_EWD)
-            set(ECAM_displaying_status, DMC_ECAM)
-        end
-        if get(ECAM_brightness_act) < 0.01 then
-            set(EWD_displaying_status,  DMC_ECAM)
-            set(ECAM_displaying_status, DMC_EWD)
-        end
-    end
-
-
-    -- Manual transfers
-    if pfd_nd_xfr_capt and ecam_nd_xfr == -1 then
-        set(Capt_pfd_displaying_status, DMC_ND_CAPT)
-        set(Capt_nd_displaying_status, get(ECAM_displaying_status))
-        set(ECAM_displaying_status,  DMC_PFD_CAPT)
-    elseif pfd_nd_xfr_capt then
-        if get(Capt_nd_displaying_status) == DMC_PFD_CAPT then
-            set(Capt_nd_displaying_status, DMC_ND_CAPT)
-            set(Capt_pfd_displaying_status, DMC_PFD_CAPT)
-        else
+    
+    -- CAPT ND
+    if ecam_nd_xfr == -1 then 
+        set(Capt_nd_displaying_status, DMC_ECAM) -- This is actually hidden
+    else
+        if pfd_auto_transfer_capt ~= pfd_nd_xfr_capt then
             set(Capt_nd_displaying_status, DMC_PFD_CAPT)
-            set(Capt_pfd_displaying_status, DMC_ND_CAPT)
+        else
+            set(Capt_nd_displaying_status, DMC_ND_CAPT)
         end
-    elseif ecam_nd_xfr == -1 then
-        set(Capt_nd_displaying_status, get(ECAM_displaying_status))
-        set(ECAM_displaying_status, DMC_ND_CAPT)
     end
 
-    if pfd_nd_xfr_fo and ecam_nd_xfr ~= 1 then
-        if get(Fo_nd_displaying_status) == DMC_PFD_FO then
-            set(Fo_nd_displaying_status, DMC_ND_FO)
-            set(Fo_pfd_displaying_status, DMC_PFD_FO)
-        else
+    -- FO PFD
+    local pfd_auto_transfer_fo = get(Fo_PFD_brightness_act) < 0.01 or get(FAILURE_DISPLAY_FO_PFD) == 1
+    
+    if pfd_auto_transfer_fo ~= pfd_nd_xfr_fo then
+        set(Fo_pfd_displaying_status, DMC_ND_FO)
+    else
+        set(Fo_pfd_displaying_status, DMC_PFD_FO)
+    end
+    
+    -- FO ND
+    if ecam_nd_xfr == 1 then 
+        set(Fo_nd_displaying_status, DMC_ECAM) -- This is actually hidden
+    else
+        if pfd_auto_transfer_fo ~= pfd_nd_xfr_fo then
             set(Fo_nd_displaying_status, DMC_PFD_FO)
-            set(Fo_pfd_displaying_status, DMC_ND_FO)
-        end
-    elseif pfd_nd_xfr_fo then
-        if get(Fo_pfd_displaying_status) == DMC_PFD_FO then
-            set(Fo_pfd_displaying_status, DMC_ND_FO)
-            set(Fo_nd_displaying_status,  DMC_PFD_FO)
         else
-            set(Fo_pfd_displaying_status, DMC_PFD_FO)
-            set(Fo_nd_displaying_status,  DMC_ND_FO)
+            set(Fo_nd_displaying_status, DMC_ND_FO)
         end
-    elseif ecam_nd_xfr == 1 then
-        set(Fo_nd_displaying_status, get(ECAM_displaying_status))
-        set(ECAM_displaying_status, DMC_ND_FO)
     end
 
+    -- EWD
 
+    local is_EWD_replacing_ECAM = get(DMC_requiring_ECAM_EWD_swap) == 0 and get(EWD_brightness_act) < 0.01 or get(FAILURE_DISPLAY_EWD) == 1
+    if is_EWD_replacing_ECAM then
+        if ecam_nd_xfr == 0 then
+            set(EWD_displaying_status,      DMC_ECAM)
+        elseif ecam_nd_xfr == -1 then
+            set(EWD_displaying_status,      pfd_auto_transfer_capt ~= pfd_nd_xfr_capt and DMC_PFD_CAPT or DMC_ND_CAPT)
+        elseif ecam_nd_xfr == 1  then
+            set(EWD_displaying_status,      pfd_auto_transfer_fo   ~= pfd_nd_xfr_fo   and DMC_PFD_FO or DMC_ND_FO)
+        end
+    end
+
+    -- ECAM
+    if is_EWD_replacing_ECAM then
+        set(ECAM_displaying_status, DMC_EWD)
+    else
+        if ecam_nd_xfr == -1 then
+            set(ECAM_displaying_status,      pfd_auto_transfer_capt ~= pfd_nd_xfr_capt and DMC_PFD_CAPT or DMC_ND_CAPT)
+        elseif ecam_nd_xfr == 1  then
+            set(ECAM_displaying_status,      pfd_auto_transfer_fo   ~= pfd_nd_xfr_fo   and DMC_PFD_FO or DMC_ND_FO)
+        end
+    end
+    
     --print(get(Capt_pfd_displaying_status),get(Capt_nd_displaying_status),get(EWD_displaying_status),get(ECAM_displaying_status))
 end
 
@@ -251,9 +246,28 @@ local function update_dmc_status()
         set(Fo_nd_valid,  0)
     end
 
-    if (eis_selector == 0 and dmc_1_fail and dmc_2_fail) or (eis_selector == 1 and dmc_3_fail) then
+    if (eis_selector == 0 and dmc_1_fail and dmc_2_fail) or (eis_selector == 1 and dmc_3_fail and dmc_1_fail) or (eis_selector == -1 and dmc_2_fail and dmc_3_fail) then
         set(EWD_valid,  0)
         set(ECAM_valid,  0)
+    end
+
+    if get(FAILURE_DISPLAY_CAPT_PFD) == 1 then
+        set(Capt_pfd_valid, 7)
+    end
+    if get(FAILURE_DISPLAY_CAPT_ND) == 1 then
+        set(Capt_nd_valid, 7)
+    end
+    if get(FAILURE_DISPLAY_FO_PFD) == 1 then
+        set(Fo_pfd_valid, 7)
+    end
+    if get(FAILURE_DISPLAY_FO_ND) == 1 then
+        set(Fo_nd_valid, 7)
+    end
+    if get(FAILURE_DISPLAY_EWD) == 1 then
+        set(EWD_valid, 7)
+    end
+    if get(FAILURE_DISPLAY_ECAM) == 1 then
+        set(ECAM_valid, 7)
     end
 
 end
