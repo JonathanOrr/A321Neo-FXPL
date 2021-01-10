@@ -247,6 +247,13 @@ local function draw_wpts(data)
     
 end
 
+local function draw_terrain(data)
+
+--    local terrain_coords = {lat=, lon=, color=}
+
+--    sasl.gl.drawRectangle (size[1]/2 , size[2]/2, 32, 32, ECAM_RED)
+end
+
 local function draw_pois(data)
 
     if data.config.range <= ND_RANGE_ZOOM_2 then
@@ -254,7 +261,7 @@ local function draw_pois(data)
     end
 
     
-    draw_airports(data) 
+    draw_airports(data)
     draw_vors(data)
     draw_ndbs(data)
     draw_wpts(data)
@@ -278,6 +285,7 @@ end
 
 function draw_rose(data)
 
+    draw_terrain(data)
     draw_pois(data)
     draw_navaid_pointers(data)
 

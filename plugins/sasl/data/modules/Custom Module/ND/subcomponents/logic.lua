@@ -23,8 +23,8 @@ local function update_hdg_track(data)
     data.inputs.true_heading     = get_true_hdg(id)
     data.inputs.is_heading_valid = is_hdg_ok(id)
 
-    data.inputs.heading = get_track(id)
-    data.inputs.is_heading_valid = is_track_ok(id)
+    data.inputs.track = get_track(id)
+    data.inputs.is_track_valid = is_track_ok(id)
 
     if is_true_hdg_ok(id) and is_position_ok(id) and (get_lat(id) > 73 or get_lat(id) < -60) then
         data.inputs.is_true_heading_showed = true
@@ -94,6 +94,24 @@ local function update_navaid_raw(data)
 
 end
 
+local function update_navaid_bearing(data)
+    local id = data.id
+    
+    -- These are necessary for ROSE-VOR and ROSE-ILS mode even if the
+    -- VOR is not selected
+    data.nav[1].crs = get(NAV_1_capt_obs)
+    data.nav[1].crs_is_computed = is_hdg_ok(id)
+    data.nav[2].crs = get(NAV_2_fo_obs)
+    data.nav[2].crs_is_computed = is_hdg_ok(id)
+    data.inputs.which_nav_is_active = data.id == ND_CAPT and 1 or 2
+    
+    data.nav[1].deviation_is_visible = get(NAV_1_is_valid) == 1
+    data.nav[2].deviation_is_visible = get(NAV_2_is_valid) == 1
+    data.nav[1].deviation_deg = get(NAV_1_bearing_deg) - data.nav[1].crs
+    data.nav[2].deviation_deg = get(NAV_2_bearing_deg) - data.nav[2].crs
+    
+end
+
 function update_main(data)
     update_speed_and_wind(data)
     update_hdg_track(data)
@@ -101,5 +119,6 @@ function update_main(data)
     update_tcas(data)
     update_position(data)
     update_navaid_raw(data)
+    update_navaid_bearing(data)
     update_poi(data)
 end

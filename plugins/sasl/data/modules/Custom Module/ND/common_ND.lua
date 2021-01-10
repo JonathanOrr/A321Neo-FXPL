@@ -107,6 +107,8 @@ function new_dataset(input_id)
         
         crs = 0,
         crs_is_computed = false,
+        deviation_is_visible = false,
+        deviation_deg = 0,
         
         needle_visible = false,
         needle_angle = 0

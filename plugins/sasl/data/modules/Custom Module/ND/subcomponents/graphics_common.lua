@@ -163,19 +163,21 @@ local function draw_common_nav_stations_single(data, id)
         sasl.gl.drawWideLine(x+151*m, 50, x+161*m, 50, 2, ECAM_WHITE)
     end
 
-    -- Third line
-    if data.nav[id].dme_invalid then
-        sasl.gl.drawText(Font_AirbusDUL, x+40*m, 20, "DME " .. id, 26, false, false, id == 1 and TEXT_ALIGN_LEFT or TEXT_ALIGN_RIGHT, ECAM_RED)
-    else
-        local integer    = data.nav[id].dme_computed and math.floor(data.nav[id].dme_distance) or "--"
-        local fractional = data.nav[id].dme_computed and math.floor((data.nav[id].dme_distance%1)*10) or "-"
+    if data.nav[id].selector ~= ND_SEL_ADF then
 
-        sasl.gl.drawText(Font_AirbusDUL, x+90*m, 20, integer..".", 26, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)    
-        sasl.gl.drawText(Font_AirbusDUL, x+18+90*m, 20, fractional, 22, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)    
+        -- Third line
+        if data.nav[id].dme_invalid then
+            sasl.gl.drawText(Font_AirbusDUL, x+40*m, 20, "DME " .. id, 26, false, false, id == 1 and TEXT_ALIGN_LEFT or TEXT_ALIGN_RIGHT, ECAM_RED)
+        else
+            local integer    = data.nav[id].dme_computed and math.floor(data.nav[id].dme_distance) or "--"
+            local fractional = data.nav[id].dme_computed and math.floor((data.nav[id].dme_distance%1)*10) or "-"
 
-        sasl.gl.drawText(Font_AirbusDUL, x+30+90*m, 20, "NM", 22, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
-    end
-    
+            sasl.gl.drawText(Font_AirbusDUL, x+90*m, 20, integer..".", 26, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)    
+            sasl.gl.drawText(Font_AirbusDUL, x+18+90*m, 20, fractional, 22, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)    
+
+            sasl.gl.drawText(Font_AirbusDUL, x+30+90*m, 20, "NM", 22, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+        end
+    end    
 end
 
 local function draw_common_messages_bottom_1(data)

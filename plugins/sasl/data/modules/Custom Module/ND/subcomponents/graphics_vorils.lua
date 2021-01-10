@@ -60,12 +60,27 @@ local function draw_rose_vor_indication(data)
     local angle = 0
     if data.nav[curr_nav].crs_is_computed then
         angle = data.nav[curr_nav].crs
+    else
+        angle = data.inputs.heading -- Stay at zero
     end
     
-    sasl.gl.drawRotatedTexture(image_h_deviation_sym, -data.inputs.heading+angle, size[1]/2,size[2]/2,500,176, {1,1,1})
-    sasl.gl.drawRotatedTexture(image_deviation_ind, -data.inputs.heading+angle, size[1]/2,size[2]/2,75,590, {1,1,1})
+    sasl.gl.drawRotatedTexture(image_h_deviation_sym, -data.inputs.heading+angle, (size[1]-500)/2,(size[2]-176)/2,500,176, {1,1,1})
+    sasl.gl.drawRotatedTexture(image_deviation_ind, -data.inputs.heading+angle, (size[1]-75)/2,(size[2]-590)/2,75,590, {1,1,1})
 
     --image_deviation_arrow
+    if data.nav[curr_nav].deviation_is_visible then
+        print(data.nav[curr_nav].deviation_deg)
+        
+        local degrees = data.nav[curr_nav].deviation_deg
+        local degrees_clamp = Math_clamp(degrees, -11, 11)
+        if degrees_clamp ~= degrees and get(TIME) % 1 < 0.5 then
+            return
+        end
+        local degrees_px = degrees_clamp / 5 * 88
+        sasl.gl.drawRotatedTextureCenter(image_deviation_arrow, -data.inputs.heading+angle, size[1]/2, size[2]/2, (size[1]-28)/2+degrees_px,(size[2]-176)/2, 28,176, {1,1,1})
+    end
+
+
 end
 
 function draw_rose_vor(data)
