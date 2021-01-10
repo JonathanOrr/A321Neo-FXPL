@@ -500,6 +500,7 @@ Override_control_surfaces = globalProperty("sim/operation/override/override_cont
 FBW_kill_switch = createGlobalPropertyi("a321neo/dynamics/FBW/debug/kill_switch", 1, false, true, false)
 Force_full_rudder_limit = createGlobalPropertyi("a321neo/dynamics/FBW/debug/force_full_rudder_limit", 0, false, true, false)
 Bypass_speedbrakes_inhibition = createGlobalPropertyi("a321neo/dynamics/FBW/debug/bypass_spdbrakes_inhibition", 0, false, true, false)
+Override_flap_auto_retract = createGlobalPropertyi("a321neo/dynamics/FBW/debug/override_flap_auto_retract", 0, false, true, false)
 --customizations
 Project_square_input = createGlobalPropertyi("a321neo/dynamics/FBW/customizations/projected_square_input", 0, false, true, false)
 Trim_wheel_smoothing_on = createGlobalPropertyi("a321neo/dynamics/FBW/customizations/trim_wheel_smoothing_on", 1, false, true, false)--is the trim wheel is smoothed

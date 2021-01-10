@@ -72,7 +72,7 @@ function Slats_flaps_calc_and_control()
             end
         end
     else
-        if get(Flaps_internal_config) == 2 and (get_ias(PFD_CAPT) >= 210 or get_ias(PFD_FO) >= 210) then--back to 1
+        if get(Flaps_internal_config) == 2 and (get_ias(PFD_CAPT) >= 210 or get_ias(PFD_FO) >= 210) and get(Override_flap_auto_retract) == 0 then--back to 1
             set(Flaps_internal_config, 1)
         end
     end

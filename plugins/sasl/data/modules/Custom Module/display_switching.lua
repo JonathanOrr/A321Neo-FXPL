@@ -144,7 +144,7 @@ local function auto_update()
     end
 
 
-    print(get(Capt_pfd_displaying_status),get(Capt_nd_displaying_status),get(EWD_displaying_status),get(ECAM_displaying_status))
+    --print(get(Capt_pfd_displaying_status),get(Capt_nd_displaying_status),get(EWD_displaying_status),get(ECAM_displaying_status))
 end
 
 local function update_display_position()

@@ -37,6 +37,8 @@ local fo_PFD_table = {
     GD_spd = Fo_GD,
     Aprot_SPD = Fo_Vaprot_vsw,
     Amax = Fo_Valpha_MAX,
+    Show_spd_trend = true,
+    Show_mach = true,
 }
 
 function update()

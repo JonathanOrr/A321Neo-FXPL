@@ -37,6 +37,8 @@ local capt_PFD_table = {
     GD_spd = Capt_GD,
     Aprot_SPD = Capt_Vaprot_vsw,
     Amax = Capt_Valpha_MAX,
+    Show_spd_trend = true,
+    Show_mach = true,
 }
 
 function update()

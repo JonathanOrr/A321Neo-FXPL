@@ -139,7 +139,7 @@ function is_aoa_ok(i)
     return is_adr_working(i)
 end
 
-function get_apa(i)
+function get_aoa(i)
     return ADIRS_sys[which_adr(i)].aoa
 end
 
@@ -176,7 +176,7 @@ function is_wind_ok(i)
 end
 
 function get_wind_spd(i)
-    return ADIRS_sys[which_adr(i)].wind_spd  
+    return ADIRS_sys[which_adr(i)].wind_spd
 end
 
 function get_wind_dir(i)

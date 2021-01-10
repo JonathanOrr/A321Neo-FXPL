@@ -34,15 +34,15 @@ function PFD_draw_att(PFD_table)
         )
     end
 
-    SASL_rotated_center_img_xcenter_aligned(
-        PFD_static_sky,
+    SASL_rotated_center_img_center_aligned(
+        PFD_att_hdg_tape,
         ATT_x_center,
         ATT_y_center,
-        1575,
-        779,
-        90 - get_roll(PFD_table.Screen_ID),
-        0,
-        -779/2,
+        3429,
+        16,
+        -get_roll(PFD_table.Screen_ID),
+        1519 + Math_rescale_no_lim(0, 0, 10, -85, get_hdg(PFD_table.Screen_ID)),
+        -get_pitch(PFD_table.Screen_ID) * 10 - 4,
         ECAM_WHITE
     )
 
@@ -53,7 +53,35 @@ function PFD_draw_att(PFD_table)
         2870,
         779,
         90 - get_roll(PFD_table.Screen_ID),
-        Math_clamp_higher(Math_rescale_no_lim(0, -187 + get_pitch(PFD_table.Screen_ID) * 10, 120, 0 + get_pitch(PFD_table.Screen_ID) * 10, get(PFD_table.RA_ALT)), 0),
+        Math_clamp(Math_rescale_no_lim(0, -187 + get_pitch(PFD_table.Screen_ID) * 10, 120, 0 + get_pitch(PFD_table.Screen_ID) * 10, get(PFD_table.RA_ALT)), -366, 0),
+        -779/2,
+        ECAM_WHITE
+    )
+
+    if is_track_ok(PFD_table.Screen_ID) and is_aoa_ok(PFD_table.Screen_ID) then
+        SASL_rotated_center_img_center_aligned(
+            PFD_att_bird,
+            ATT_x_center,
+            ATT_y_center,
+            83,
+            43,
+            0,
+            Math_rescale_no_lim(0, 0, 10, 85, (get_track(PFD_table.Screen_ID) - get_hdg(PFD_table.Screen_ID))),
+            - get_aoa(PFD_table.Screen_ID) / math.cos(math.rad(get_roll(PFD_table.Screen_ID))) * 10,
+            ECAM_GREEN
+        )
+    else
+        sasl.gl.drawText(Font_AirbusDUL, ATT_x_center-77, ATT_y_center-36, "FPV", 35, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
+    end
+
+    SASL_rotated_center_img_xcenter_aligned(
+        PFD_static_sky,
+        ATT_x_center,
+        ATT_y_center,
+        1575,
+        779,
+        90 - get_roll(PFD_table.Screen_ID),
+        0,
         -779/2,
         ECAM_WHITE
     )

@@ -135,7 +135,7 @@ local function draw_packs_wai_nai()
                 str = "WAI"
             end
         end
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+130, size[2]-30, str, 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+150, size[2]-30, str, 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     end
 
 end

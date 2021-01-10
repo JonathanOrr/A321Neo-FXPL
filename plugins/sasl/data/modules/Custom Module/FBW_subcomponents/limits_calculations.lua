@@ -95,12 +95,12 @@ local function update_VLS()
         {1.0 + 25, 1.23 * Extract_vs1g(get(Aircraft_total_weight_kgs), 5, false)},
     }
     local VLS_spdbrake_fx_lerp_table = {
-        {0.0 + 0,  25},
-        {0.7 + 0,  25},
-        {0.7 + 10, 7},
-        {0.8 + 14, 10},
-        {0.8 + 21, 10},
-        {1.0 + 25, 8},
+        {0.0 + 0,  20},
+        {0.7 + 0,  10},
+        {0.7 + 10, 6},
+        {0.8 + 14, 6},
+        {0.8 + 21, 6},
+        {1.0 + 25, 6},
     }
 
     set(

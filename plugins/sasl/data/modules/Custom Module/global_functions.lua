@@ -91,7 +91,7 @@ end
 
 --rounding - showing leading zeros
 function Round_fill(num, numDecimalPlaces)
-    return string.format("%."..numDecimalPlaces.."f", Round(num, numDecimalPlaces)) 
+    return string.format("%."..numDecimalPlaces.."f", Round(num, numDecimalPlaces))
 end
 
 function Math_extract_all_decimal(num, abs)

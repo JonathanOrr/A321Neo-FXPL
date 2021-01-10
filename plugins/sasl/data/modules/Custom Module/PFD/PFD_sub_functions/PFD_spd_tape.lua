@@ -2,18 +2,17 @@ include('ADIRS_data_source.lua')
 
 local function draw_accel_arrow(PFD_table)
     --accel arrows
-    local show_accel_arrow = true
     if math.abs(get_ias_trend(PFD_table.Screen_ID) * 10) > 2 then
-        show_accel_arrow = true
+        PFD_table.Show_spd_trend = true
     end
-    if math.abs(get_ias_trend(PFD_table.Screen_ID) * 10) < 1 then
-        show_accel_arrow = false
+    if PFD_table.Show_spd_trend and math.abs(get_ias_trend(PFD_table.Screen_ID) * 10) < 1 then
+        PFD_table.Show_spd_trend = false
     end
     if get(PFD_table.Corresponding_FAC_status) == 0 and get(PFD_table.Opposite_FAC_status) == 0 then
-        show_accel_arrow = false
+        PFD_table.Show_spd_trend = false
     end
 
-    if show_accel_arrow == true then
+    if PFD_table.Show_spd_trend then
         sasl.gl.setClipArea(size[1]/2-437, size[2]/2-4, 140, 233)
         SASL_draw_img_xcenter_aligned(PFD_spd_trend_up, size[1]/2-354, size[2]/2-4 + Math_rescale(0, -450, 42, -218, get_ias_trend(PFD_table.Screen_ID) * 10), 18, 450, PFD_YELLOW)
         sasl.gl.resetClipArea ()
@@ -98,6 +97,28 @@ local function draw_characteristics_spd(PFD_table)
     end
 end
 
+local function draw_decel_info(PFD_table)
+    if get(Wheel_autobrake_is_in_decel) == 1 then
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-387, size[2]/2-274, "DECEL", 35, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+    end
+end
+
+local function draw_mach_info(PFD_table)
+    if is_mach_ok(PFD_table.Screen_ID) == true then
+        if get_mach(PFD_table.Screen_ID) > 0.5 then
+            PFD_table.Show_mach = true
+        end
+        if PFD_table.Show_mach and get_mach(PFD_table.Screen_ID) < 0.45 then
+            PFD_table.Show_mach = false
+        end
+        if PFD_table.Show_mach then
+            sasl.gl.drawText(Font_AirbusDUL, size[1]/2-387, size[2]/2-308, "." .. Round(get_mach(PFD_table.Screen_ID) % 1 * 1000), 35, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        end
+    else
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-387, size[2]/2-308, "MACH", 35, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
+    end
+end
+
 function PFD_draw_spd_tape(PFD_table)
     local boarder_cl = ECAM_WHITE
 
@@ -141,5 +162,9 @@ function PFD_draw_spd_tape(PFD_table)
         --draw spd needle
         sasl.gl.drawTexture(PFD_spd_needle, size[1]/2-370, size[2]/2-18, 56, 21, PFD_YELLOW)
         draw_accel_arrow(PFD_table)
+
+        --draw indications
+        draw_decel_info(PFD_table)
+        draw_mach_info(PFD_table)
     end
 end
