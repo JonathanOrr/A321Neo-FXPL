@@ -73,6 +73,40 @@ function Extract_vs1g(gross_weight, config, gear_down)
     end
 end
 
+local function update_VMAX_prot()
+    if get_alt(PFD_CAPT) > 24600 then
+        set(Capt_VMAX_prot, get_ias(PFD_CAPT) * (VMAX_speeds[1] + 0.006) / get_mach(PFD_CAPT))
+    else
+        set(Capt_VMAX_prot, VMAX_speeds[2] + 6)
+    end
+    if get_alt(PFD_FO) > 24600 then
+        set(Fo_VMAX_prot, get_ias(PFD_FO) * (VMAX_speeds[1] + 0.006) / get_mach(PFD_FO))
+    else
+        set(Fo_VMAX_prot, VMAX_speeds[2] + 6)
+    end
+end
+
+local function update_VMAX()
+    if get_alt(PFD_CAPT) > 24600 then
+        set(Capt_VMAX, get_ias(PFD_CAPT) * (VMAX_speeds[1] / get_mach(PFD_CAPT)))
+    else
+        set(Capt_VMAX, VMAX_speeds[2])
+    end
+    if get_alt(PFD_FO) > 24600 then
+        set(Fo_VMAX, get_ias(PFD_FO) * (VMAX_speeds[1] / get_mach(PFD_FO)))
+    else
+        set(Fo_VMAX, VMAX_speeds[2])
+    end
+    if get(Front_gear_deployment) > 0.25 or get(Left_gear_deployment) > 0.25 or get(Right_gear_deployment) > 0.25 then
+        set(Capt_VMAX, VMAX_speeds[3])
+        set(Fo_VMAX, VMAX_speeds[3])
+    end
+    if get(Flaps_internal_config) > 0 then
+        set(Capt_VMAX, VMAX_speeds[get(Flaps_internal_config) + 3])
+        set(Fo_VMAX, VMAX_speeds[get(Flaps_internal_config) + 3])
+    end
+end
+
 local function update_VFE()
     if get(Flaps_internal_config) == 0 and (get_ias(PFD_CAPT) > 100 or get_ias(PFD_FO) > 100) then
         set(VFE_speed, VMAX_speeds[Math_clamp_higher(get(Flaps_internal_config), 4) + 1 + 3])
@@ -112,28 +146,8 @@ end
 
 --calculate flight characteristics values
 function update()
-    if get(PFD_Capt_Baro_Altitude) > 24600 then
-        set(Capt_VMAX, get_ias(PFD_CAPT) * (VMAX_speeds[1] / get(Capt_Mach)))
-        set(Capt_VMAX_prot, get_ias(PFD_CAPT) * (VMAX_speeds[1] + 0.006) / get(Capt_Mach))
-    else
-        set(Capt_VMAX, VMAX_speeds[2])
-        set(Capt_VMAX_prot, VMAX_speeds[2] + 6)
-    end
-    if get(PFD_Fo_Baro_Altitude) > 24600 then
-        set(Fo_VMAX, get_ias(PFD_FO) * (VMAX_speeds[1] / get(Fo_Mach)))
-        set(Fo_VMAX_prot, get_ias(PFD_FO) * (VMAX_speeds[1] + 0.006) / get(Fo_Mach))
-    else
-        set(Fo_VMAX, VMAX_speeds[2])
-        set(Fo_VMAX_prot, VMAX_speeds[2] + 6)
-    end
-    if get(Front_gear_deployment) > 0.25 or get(Left_gear_deployment) > 0.25 or get(Right_gear_deployment) > 0.25 then
-        set(Capt_VMAX, VMAX_speeds[3])
-        set(Fo_VMAX, VMAX_speeds[3])
-    end
-    if get(Flaps_internal_config) > 0 then
-        set(Capt_VMAX, VMAX_speeds[get(Flaps_internal_config) + 3])
-        set(Fo_VMAX, VMAX_speeds[get(Flaps_internal_config) + 3])
-    end
+    update_VMAX_prot()
+    update_VMAX()
 
     update_VFE()
 
