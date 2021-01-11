@@ -592,14 +592,31 @@ function Draw_white_LED_num_and_letter(x, y, string, max_digits, size, alignment
     sasl.gl.drawText(Font_7_digits, x, y, string, size, false, false, alignment, LED_cl)
 end
 
-function Get_rotated_point_x_pos(x, y, radius, angle)
+--starts at right goes anti-clockwise
+function Get_rotated_point_x_pos(x, radius, angle)
     return x + radius * math.cos(math.rad(angle))
 end
 
-function Get_rotated_point_y_pos(x, y, radius, angle)
+function Get_rotated_point_y_pos(y, radius, angle)
     return y + radius * math.sin(math.rad(angle))
 end
 
+--starts at top goes clockwise
+function Get_rotated_point_x_pos_offset(x, radius, angle, x_offset)
+    local recalculated_r = math.sqrt(radius^2 + x_offset^2) * (radius >= 0 and 1 or -1)
+    local offset_a = math.deg(math.atan(x_offset / radius))
+    local recalculated_a = 90 - angle - offset_a
+
+    return x + recalculated_r * math.cos(math.rad(recalculated_a))
+end
+
+function Get_rotated_point_y_pos_offset(y, radius, angle, x_offset)
+    local recalculated_r = math.sqrt(radius^2 + x_offset^2) * (radius >= 0 and 1 or -1)
+    local offset_a = math.deg(math.atan(x_offset / radius))
+    local recalculated_a = 90 - angle - offset_a
+
+    return y + recalculated_r * math.sin(math.rad(recalculated_a))
+end
 
 function perf_measure_start(name)
     if not debug_performance_measure then

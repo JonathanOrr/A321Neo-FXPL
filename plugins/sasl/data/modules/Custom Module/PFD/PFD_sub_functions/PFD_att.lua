@@ -59,15 +59,12 @@ function PFD_draw_att(PFD_table)
     )
 
     if is_track_ok(PFD_table.Screen_ID) and is_aoa_ok(PFD_table.Screen_ID) then
-        SASL_rotated_center_img_center_aligned(
+        SASL_draw_img_center_aligned(
             PFD_att_bird,
-            ATT_x_center,
-            ATT_y_center,
+            Get_rotated_point_x_pos_offset(ATT_x_center, - math.cos(math.rad(get_roll(PFD_table.Screen_ID))) * get_aoa(PFD_table.Screen_ID) * 10, -get_roll(PFD_table.Screen_ID), Math_rescale_no_lim(0, 0, 10, 85, (get_track(PFD_table.Screen_ID) - get_hdg(PFD_table.Screen_ID)))),
+            Get_rotated_point_y_pos_offset(ATT_y_center, - math.cos(math.rad(get_roll(PFD_table.Screen_ID))) * get_aoa(PFD_table.Screen_ID) * 10, -get_roll(PFD_table.Screen_ID), Math_rescale_no_lim(0, 0, 10, 85, (get_track(PFD_table.Screen_ID) - get_hdg(PFD_table.Screen_ID)))),
             83,
             43,
-            0,
-            Math_rescale_no_lim(0, 0, 10, 85, (get_track(PFD_table.Screen_ID) - get_hdg(PFD_table.Screen_ID))),
-            - get_aoa(PFD_table.Screen_ID) / math.cos(math.rad(get_roll(PFD_table.Screen_ID))) * 10,
             ECAM_GREEN
         )
     else
@@ -123,6 +120,14 @@ function PFD_draw_att(PFD_table)
     end
     --terminate masked drawing
     sasl.gl.drawMaskEnd ()
+
+    --FBW law indication (TODO ALT LAW / DIRECT LAW)
+    SASL_draw_needle_adv(ATT_x_center, ATT_y_center+4, 224, 238, 157, 2, ECAM_GREEN)
+    SASL_draw_needle_adv(ATT_x_center, ATT_y_center-4, 224, 238, 157, 2, ECAM_GREEN)
+    SASL_draw_needle_adv(ATT_x_center, ATT_y_center+4, 224, 238, 23, 2, ECAM_GREEN)
+    SASL_draw_needle_adv(ATT_x_center, ATT_y_center-4, 224, 238, 23, 2, ECAM_GREEN)
+    --sasl.gl.drawText(Airbus_panel_font, Get_rotated_point_x_pos(ATT_x_center, 230, 157), Get_rotated_point_y_pos(ATT_y_center-10, 230, 157), "X", 26, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+    --sasl.gl.drawText(Airbus_panel_font, Get_rotated_point_x_pos(ATT_x_center, 230, 23), Get_rotated_point_y_pos(ATT_y_center-10, 230, 23), "X", 26, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
 
     --wings
     SASL_draw_img_xcenter_aligned(PFD_pitch_wings, ATT_x_center, size[2]/2-43, 402, 47, {1,1,1})

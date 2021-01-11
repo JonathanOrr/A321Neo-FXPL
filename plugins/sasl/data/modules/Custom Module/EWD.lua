@@ -221,20 +221,20 @@ local function draw_engines_needles()
         if get(L_throttle_blue_dot) - get(Eng_1_N1) <= -4 then
             SASL_draw_needle(eng_1_needle_x, eng_1_n1_needle_y, 48 / math.cos(math.rad(20)), Math_rescale_lim_lower(20, 222, 100, 48, get(L_throttle_blue_dot)) + 20, 3, eng_1_n1_needle_cl)
             sasl.gl.drawWideLine(
-                Get_rotated_point_x_pos(eng_1_needle_x, eng_1_n1_needle_y, 48 / math.cos(math.rad(20)), Math_rescale_lim_lower(20, 222, 100, 48, get(L_throttle_blue_dot)) + 20),
-                Get_rotated_point_y_pos(eng_1_needle_x, eng_1_n1_needle_y, 48 / math.cos(math.rad(20)), Math_rescale_lim_lower(20, 222, 100, 48, get(L_throttle_blue_dot)) + 20),
-                Get_rotated_point_x_pos(eng_1_needle_x, eng_1_n1_needle_y, 48, Math_rescale_lim_lower(20, 222, 100, 48, get(L_throttle_blue_dot))),
-                Get_rotated_point_y_pos(eng_1_needle_x, eng_1_n1_needle_y, 48, Math_rescale_lim_lower(20, 222, 100, 48, get(L_throttle_blue_dot))),
+                Get_rotated_point_x_pos(eng_1_needle_x, 48 / math.cos(math.rad(20)), Math_rescale_lim_lower(20, 222, 100, 48, get(L_throttle_blue_dot)) + 20),
+                Get_rotated_point_y_pos(eng_1_n1_needle_y, 48 / math.cos(math.rad(20)), Math_rescale_lim_lower(20, 222, 100, 48, get(L_throttle_blue_dot)) + 20),
+                Get_rotated_point_x_pos(eng_1_needle_x, 48, Math_rescale_lim_lower(20, 222, 100, 48, get(L_throttle_blue_dot))),
+                Get_rotated_point_y_pos(eng_1_n1_needle_y, 48, Math_rescale_lim_lower(20, 222, 100, 48, get(L_throttle_blue_dot))),
                 3,
                 eng_1_n1_needle_cl
             )
         elseif get(L_throttle_blue_dot) - get(Eng_1_N1) >= 4 then
             SASL_draw_needle(eng_1_needle_x, eng_1_n1_needle_y, 48 / math.cos(math.rad(20)), Math_rescale_lim_lower(20, 222, 100, 48, get(L_throttle_blue_dot)) - 20, 3, eng_1_n1_needle_cl)
             sasl.gl.drawWideLine(
-                Get_rotated_point_x_pos(eng_1_needle_x, eng_1_n1_needle_y, 48, Math_rescale_lim_lower(20, 222, 100, 48, get(L_throttle_blue_dot))),
-                Get_rotated_point_y_pos(eng_1_needle_x, eng_1_n1_needle_y, 48, Math_rescale_lim_lower(20, 222, 100, 48, get(L_throttle_blue_dot))),
-                Get_rotated_point_x_pos(eng_1_needle_x, eng_1_n1_needle_y, 48 / math.cos(math.rad(20)), Math_rescale_lim_lower(20, 222, 100, 48, get(L_throttle_blue_dot)) - 20),
-                Get_rotated_point_y_pos(eng_1_needle_x, eng_1_n1_needle_y, 48 / math.cos(math.rad(20)), Math_rescale_lim_lower(20, 222, 100, 48, get(L_throttle_blue_dot)) - 20),
+                Get_rotated_point_x_pos(eng_1_needle_x, 48, Math_rescale_lim_lower(20, 222, 100, 48, get(L_throttle_blue_dot))),
+                Get_rotated_point_y_pos(eng_1_n1_needle_y, 48, Math_rescale_lim_lower(20, 222, 100, 48, get(L_throttle_blue_dot))),
+                Get_rotated_point_x_pos(eng_1_needle_x, 48 / math.cos(math.rad(20)), Math_rescale_lim_lower(20, 222, 100, 48, get(L_throttle_blue_dot)) - 20),
+                Get_rotated_point_y_pos(eng_1_n1_needle_y, 48 / math.cos(math.rad(20)), Math_rescale_lim_lower(20, 222, 100, 48, get(L_throttle_blue_dot)) - 20),
                 3,
                 eng_1_n1_needle_cl
             )
@@ -254,20 +254,20 @@ local function draw_engines_needles()
         if get(R_throttle_blue_dot) - get(Eng_2_N1) <= -4 then
             SASL_draw_needle(eng_2_needle_x, eng_2_n1_needle_y, 48 / math.cos(math.rad(20)), Math_rescale_lim_lower(20, 222, 100, 48, get(R_throttle_blue_dot)) + 20, 3, eng_2_n1_needle_cl)
             sasl.gl.drawWideLine(
-                Get_rotated_point_x_pos(eng_2_needle_x, eng_2_n1_needle_y, 48 / math.cos(math.rad(20)), Math_rescale_lim_lower(20, 222, 100, 48, get(R_throttle_blue_dot)) + 20),
-                Get_rotated_point_y_pos(eng_2_needle_x, eng_2_n1_needle_y, 48 / math.cos(math.rad(20)), Math_rescale_lim_lower(20, 222, 100, 48, get(R_throttle_blue_dot)) + 20),
-                Get_rotated_point_x_pos(eng_2_needle_x, eng_2_n1_needle_y, 48, Math_rescale_lim_lower(20, 222, 100, 48, get(R_throttle_blue_dot))),
-                Get_rotated_point_y_pos(eng_2_needle_x, eng_2_n1_needle_y, 48, Math_rescale_lim_lower(20, 222, 100, 48, get(R_throttle_blue_dot))),
+                Get_rotated_point_x_pos(eng_2_needle_x, 48 / math.cos(math.rad(20)), Math_rescale_lim_lower(20, 222, 100, 48, get(R_throttle_blue_dot)) + 20),
+                Get_rotated_point_y_pos(eng_2_n1_needle_y, 48 / math.cos(math.rad(20)), Math_rescale_lim_lower(20, 222, 100, 48, get(R_throttle_blue_dot)) + 20),
+                Get_rotated_point_x_pos(eng_2_needle_x, 48, Math_rescale_lim_lower(20, 222, 100, 48, get(R_throttle_blue_dot))),
+                Get_rotated_point_y_pos(eng_2_n1_needle_y, 48, Math_rescale_lim_lower(20, 222, 100, 48, get(R_throttle_blue_dot))),
                 3,
                 eng_1_n1_needle_cl
             )
         elseif get(R_throttle_blue_dot) - get(Eng_2_N1) >= 4 then
             SASL_draw_needle(eng_2_needle_x, eng_2_n1_needle_y, 48 / math.cos(math.rad(20)), Math_rescale_lim_lower(20, 222, 100, 48, get(R_throttle_blue_dot)) - 20, 3, eng_2_n1_needle_cl)
             sasl.gl.drawWideLine(
-                Get_rotated_point_x_pos(eng_2_needle_x, eng_2_n1_needle_y, 48, Math_rescale_lim_lower(20, 222, 100, 48, get(R_throttle_blue_dot))),
-                Get_rotated_point_y_pos(eng_2_needle_x, eng_2_n1_needle_y, 48, Math_rescale_lim_lower(20, 222, 100, 48, get(R_throttle_blue_dot))),
-                Get_rotated_point_x_pos(eng_2_needle_x, eng_2_n1_needle_y, 48 / math.cos(math.rad(20)), Math_rescale_lim_lower(20, 222, 100, 48, get(R_throttle_blue_dot)) - 20),
-                Get_rotated_point_y_pos(eng_2_needle_x, eng_2_n1_needle_y, 48 / math.cos(math.rad(20)), Math_rescale_lim_lower(20, 222, 100, 48, get(R_throttle_blue_dot)) - 20),
+                Get_rotated_point_x_pos(eng_2_needle_x, 48, Math_rescale_lim_lower(20, 222, 100, 48, get(R_throttle_blue_dot))),
+                Get_rotated_point_y_pos(eng_2_n1_needle_y, 48, Math_rescale_lim_lower(20, 222, 100, 48, get(R_throttle_blue_dot))),
+                Get_rotated_point_x_pos(eng_2_needle_x, 48 / math.cos(math.rad(20)), Math_rescale_lim_lower(20, 222, 100, 48, get(R_throttle_blue_dot)) - 20),
+                Get_rotated_point_y_pos(eng_2_n1_needle_y, 48 / math.cos(math.rad(20)), Math_rescale_lim_lower(20, 222, 100, 48, get(R_throttle_blue_dot)) - 20),
                 3,
                 eng_1_n1_needle_cl
             )
