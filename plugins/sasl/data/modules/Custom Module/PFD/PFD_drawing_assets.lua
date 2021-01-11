@@ -56,3 +56,5 @@ PFD_sidestick_cross = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textu
 PFD_tailstrike_arrow = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/PFD/Tail Strike Arrow.png")
 PFD_att_hdg_tape = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/PFD/horizon_tape.png")
 PFD_att_bird = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/PFD/Bird.png")
+PFD_gs_scale = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/PFD/LSV.png")
+PFD_loc_scale = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/PFD/LSH.png")

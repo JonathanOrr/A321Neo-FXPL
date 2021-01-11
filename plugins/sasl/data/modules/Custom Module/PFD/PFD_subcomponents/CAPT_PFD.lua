@@ -2,6 +2,8 @@ position = {get(Capt_pfd_position, 1), get(Capt_pfd_position, 2), get(Capt_pfd_p
 size = {900, 900}
 include('PFD/PFD_drawing_assets.lua')
 include('PFD/PFD_main.lua')
+include('PFD/PFD_sub_functions/PFD_LS.lua')
+include('PFD/PFD_sub_functions/PFD_get_ILS_data.lua')
 include('PFD/PFD_sub_functions/PFD_att.lua')
 include('PFD/PFD_sub_functions/PFD_alt_tape.lua')
 include('PFD/PFD_sub_functions/PFD_spd_tape.lua')
@@ -12,6 +14,35 @@ fbo = true
 
 local capt_PFD_table = {
     Screen_ID = PFD_CAPT,
+    Opposite_screen_IS = PFD_FO,
+    NAV_1_hz = NAV_1_freq_hz,
+    NAV_2_hz = NAV_2_freq_hz,
+    NAVDATA_update_timer = 0,
+    ILS_data = {
+        Navaid_ID = nil,
+        NavAidType = nil,
+        latitude = nil,
+        longitude = nil,
+        height = nil,
+        frequency = nil,
+        heading = nil,
+        id = nil,
+        name = nil,
+        isInsideLoadedDSFs = nil,
+    },
+    DME_data = {
+        Navaid_ID = nil,
+        NavAidType = nil,
+        latitude = nil,
+        longitude = nil,
+        height = nil,
+        frequency = nil,
+        heading = nil,
+        id = nil,
+        name = nil,
+        isInsideLoadedDSFs = nil,
+    },
+    Distance_to_dme = 0,
     PFD_aircraft_in_air_timer = 0,
     ATT_blink_now = false,
     SPD_blink_now = false,
@@ -39,16 +70,23 @@ local capt_PFD_table = {
     Amax = Capt_Valpha_MAX,
     Show_spd_trend = true,
     Show_mach = true,
+    LS_enabled = Capt_landing_system_enabled,
 }
+
+sasl.registerCommandHandler(FCU_Capt_LS_cmd, 0, function(phase) if phase == SASL_COMMAND_BEGIN then set(Capt_landing_system_enabled, 1 - get(Capt_landing_system_enabled)) end end)
 
 function update()
     position = {get(Capt_pfd_position, 1), get(Capt_pfd_position, 2), get(Capt_pfd_position, 3), get(Capt_pfd_position, 4)}
+
+    pb_set(PB.FCU.capt_ls, false, get(Capt_landing_system_enabled) == 1)
+
+    Get_ILS_data(capt_PFD_table)
     PFD_update_timers(capt_PFD_table)
 end
 
 
 function draw()
-
+    PFD_draw_LS(capt_PFD_table)
     PFD_draw_att(capt_PFD_table)
     PFD_draw_spd_tape(capt_PFD_table)
     PFD_draw_alt_tape(capt_PFD_table)

@@ -463,6 +463,8 @@ Hydraulic_RAT_status = createGlobalPropertyi("a321neo/dynamics/HYD/RAT_status", 
 --aircraft limits
 Capt_VMAX_prot =   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/capt_vmax_prot_speed", 0, false, true, false)--uses different pilot's mach
 Fo_VMAX_prot =	   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fo_vmax_prot_speed", 0, false, true, false)
+Capt_fixed_VMAX =  createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/capt_fixed_vmax_speed", 0, false, true, false)--uses different pilot's mach
+Fo_fixed_VMAX =	   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fo_fixed_vmax_speed", 0, false, true, false)
 Capt_VMAX =		   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/capt_vmax_speed", 0, false, true, false)--uses different pilot's mach
 Fo_VMAX =		   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fo_vmax_speed", 0, false, true, false)
 S_speed = 		   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/s_speed", 0, false, true, false)
@@ -475,6 +477,11 @@ Capt_Vaprot_vsw =  createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/capt
 Fo_Vaprot_vsw =    createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fo_alpha_prot_speed", 0, false, true, false)
 Capt_Valpha_MAX =  createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/capt_alpha_max_speed", 0, false, true, false)--uses different pilot's alpha
 Fo_Valpha_MAX =    createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fo_alpha_max_speed", 0, false, true, false)
+
+--BUSS--
+BUSS_VFE_red_AoA =  createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/buss_vfe_red_aoa", 0, false, true, false)
+BUSS_VFE_norm_AoA = createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/buss_vfe_norm_aoa", 0, false, true, false)
+BUSS_VLS_AoA =      createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/buss_vls_aoa", 0, false, true, false)
 
 Aircraft_total_weight_kgs = globalProperty("sim/flightmodel/weight/m_total")
 

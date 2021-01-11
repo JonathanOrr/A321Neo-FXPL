@@ -170,7 +170,7 @@ function update()
         if get(FBW_kill_switch) == 0 then
             --CASCADE: SIDESTICK --> G LOAD PID --> PITCH RATE PID --> CODED STABILITY / FILTERING --> ELEVATOR
             --slowly start to enable the pitch for vmax protection as the speed overshoots vmax and heads towards vmax prot
-            vmax_prot_activation_ratio = Math_clamp((get_ias(PFD_CAPT) - get(Capt_VMAX)) / (get(Capt_VMAX_prot) - get(Capt_VMAX)), 0, 1)
+            vmax_prot_activation_ratio = Math_clamp((get_ias(PFD_CAPT) - get(Capt_fixed_VMAX)) / (get(Capt_VMAX_prot) - get(Capt_fixed_VMAX)), 0, 1)
             vmax_prot_output = Math_lerp(-1, SSS_PID(FBW_PID_arrays.SSS_FBW_vmax_prot_pitch, (get_ias(PFD_CAPT) + get_ias(PFD_FO)) / 2 - (get(Capt_VMAX_prot) + get(Fo_VMAX_prot)) / 2), vmax_prot_activation_ratio)
             FBW_PID_arrays.SSS_FBW_G_load_pitch.Min_out = Math_clamp_lower(vmax_prot_output, SSS_PID(FBW_PID_arrays.SSS_FBW_pitch_down_limit, -15 - get(Flightmodel_pitch)))
             FBW_PID_arrays.SSS_FBW_G_load_pitch.Max_out = Math_clamp_higher(SSS_PID_DPV(FBW_PID_arrays.SSS_FBW_stall_prot_pitch, 100000000, get(Alpha)), SSS_PID(FBW_PID_arrays.SSS_FBW_pitch_up_limit, 30 - get(Flightmodel_pitch)))
