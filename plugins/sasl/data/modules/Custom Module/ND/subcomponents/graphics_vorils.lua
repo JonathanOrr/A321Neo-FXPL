@@ -69,7 +69,6 @@ local function draw_rose_vor_indication(data)
 
     --image_deviation_arrow
     if data.nav[curr_nav].deviation_is_visible then
-        print(data.nav[curr_nav].deviation_deg)
         
         local degrees = data.nav[curr_nav].deviation_deg
         local degrees_clamp = Math_clamp(degrees, -11, 11)
