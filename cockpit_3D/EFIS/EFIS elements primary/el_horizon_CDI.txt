@@ -1,7 +1,0 @@
-A
-750 version
-t_bottom	t_top		v_min		v_max
-180		1260		-90		90	// comment: EFIS element: artificial horizon 
-
-
-Make your tapes any size you like, providing coordinates above and degrees medium range!
