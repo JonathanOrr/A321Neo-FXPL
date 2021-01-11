@@ -230,6 +230,22 @@ function ecam_update_leds()
         -- No power for leds
         return
     end
+    
+    if get(Cockpit_annnunciators_test) == 1 then
+        set(Ecam_btn_light_ENG,  1)
+        set(Ecam_btn_light_BLEED,1)
+        set(Ecam_btn_light_PRESS,1)
+        set(Ecam_btn_light_ELEC, 1)
+        set(Ecam_btn_light_HYD,  1)
+        set(Ecam_btn_light_FUEL, 1)
+        set(Ecam_btn_light_APU,  1)
+        set(Ecam_btn_light_COND, 1)
+        set(Ecam_btn_light_DOOR, 1)
+        set(Ecam_btn_light_WHEEL,1)
+        set(Ecam_btn_light_FCTL, 1)
+        set(Ecam_btn_light_CLR,  1)
+        set(Ecam_btn_light_STS,  1)
+    end
 
     if get(Ecam_current_status) == ECAM_STATUS_SHOW_USER
        or get(Ecam_current_status) == ECAM_STATUS_SHOW_ALL then
