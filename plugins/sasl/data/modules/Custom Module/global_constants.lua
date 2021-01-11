@@ -153,6 +153,7 @@ Font_AirbusDUL_vert = sasl.gl.loadFont("fonts/AirbusDULiberationMono.ttf")
 sasl.gl.setFontRenderMode(Font_AirbusDUL, TEXT_RENDER_FORCED_MONO, 0.6)
 sasl.gl.setFontDirection (Font_AirbusDUL_vert, TEXT_DIRECTION_VERTICAL)
 
+Airbus_panel_font = sasl.gl.loadFont("fonts/A320PanelFont_V0.2b.ttf")
 
 Font_AirbusDUL_small = sasl.gl.loadFont("fonts/AirbusDULiberationMono.ttf")
 sasl.gl.setFontRenderMode(Font_AirbusDUL_small, TEXT_RENDER_FORCED_MONO, 0.6*1.47)
