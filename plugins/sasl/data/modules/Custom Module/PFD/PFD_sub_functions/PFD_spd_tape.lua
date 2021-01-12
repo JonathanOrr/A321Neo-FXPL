@@ -114,7 +114,8 @@ local function draw_BUSS(PFD_table)
         PFD_table.BUSS_update_timer = 0
     end
 
-    sasl.gl.drawRectangle(size[1]/2-437, size[2]/2-244 + PFD_table.BUSS_vsw_pos + 60 + 53 + 60, 99, (size[2]/2+229) - (size[2]/2-244 + PFD_table.BUSS_vsw_pos + 60 + 53 + 60), ECAM_RED)
+    sasl.gl.setClipArea(size[1]/2-437, size[2]/2-244, 99, 473)
+    sasl.gl.drawRectangle(size[1]/2-437, size[2]/2-244 + PFD_table.BUSS_vsw_pos + 60 + 53 + 60, 99, Math_clamp_lower(150 - (PFD_table.BUSS_vsw_pos - 150), 0), ECAM_RED)
     sasl.gl.drawRectangle(size[1]/2-437, size[2]/2-244 + PFD_table.BUSS_vsw_pos + 60 + 53, 99, 60, ECAM_ORANGE)
     sasl.gl.drawTriangle (size[1]/2-437, size[2]/2-244 + PFD_table.BUSS_vsw_pos + 60 + 53 + 60, size[1]/2-338, size[2]/2-244 + PFD_table.BUSS_vsw_pos + 60 + 53 + 60, size[1]/2-387.5, size[2]/2-244 + PFD_table.BUSS_vsw_pos + 60 + 53, ECAM_RED)
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-387.5, size[2]/2-244 + PFD_table.BUSS_vsw_pos + 60 + 53 + 60, "FAST", 35, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
@@ -125,6 +126,7 @@ local function draw_BUSS(PFD_table)
     sasl.gl.drawRectangle(size[1]/2-437, size[2]/2-244 + PFD_table.BUSS_vsw_pos, 99, 60, ECAM_ORANGE)
     sasl.gl.drawTriangle (size[1]/2-437, size[2]/2-244 + PFD_table.BUSS_vsw_pos, size[1]/2-338, size[2]/2-244 + PFD_table.BUSS_vsw_pos, size[1]/2-387.5, size[2]/2-244 + PFD_table.BUSS_vsw_pos + 60, ECAM_RED)
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-387.5, size[2]/2-244 + PFD_table.BUSS_vsw_pos - 23, "SLOW", 35, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.resetClipArea ()
 end
 
 local function draw_decel_info(PFD_table)

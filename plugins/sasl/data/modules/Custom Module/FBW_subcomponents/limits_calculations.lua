@@ -177,7 +177,7 @@ local function BUSS_compute_VMAX_AoA()
         {1.0 + 25, get_aoa_upper_limit(5, get(Aircraft_total_weight_kgs))},
     }
 
-    set(BUSS_VFE_red_AoA,  Table_interpolate(BUSS_VMAX_alphas, get(Slats) + get(Flaps_deployed_angle)) - 1)
+    set(BUSS_VFE_red_AoA,  Table_interpolate(BUSS_VMAX_alphas, get(Slats) + get(Flaps_deployed_angle)) - 2)
     set(BUSS_VFE_norm_AoA, Table_interpolate(BUSS_VMAX_alphas, get(Slats) + get(Flaps_deployed_angle)))
 end
 

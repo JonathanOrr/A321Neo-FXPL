@@ -68,6 +68,11 @@ function PFD_draw_alt_tape(PFD_table)
         --draw tapes that goes though the box here(e.g RA ALT)
         sasl.gl.drawRectangle(size[1]/2+296, size[2]/2-244, 16, Math_clamp(Math_rescale_no_lim(0, 236, 500, 26, get(PFD_table.RA_ALT)), 0, 473), ECAM_RED)
         draw_alt_digits(PFD_table)
+
+        if is_gps_alt_visible(PFD_table.Screen_ID) then
+            sasl.gl.drawWideLine(size[1]/2+300, size[2]/2+0, size[1]/2+336, size[2]/2+0, 3, ECAM_ORANGE)
+            sasl.gl.drawWideLine(size[1]/2+300, size[2]/2-16, size[1]/2+336, size[2]/2-16, 3, ECAM_ORANGE)
+        end
         -------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
         sasl.gl.drawTexture(PFD_alt_box, size[1]/2+217, size[2]/2-48, 127, 83, PFD_YELLOW)
