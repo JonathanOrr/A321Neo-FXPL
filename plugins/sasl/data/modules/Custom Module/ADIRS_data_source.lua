@@ -268,3 +268,28 @@ end
 function get_gs(i)
     return ADIRS_sys[which_ir(i)].gs
 end
+
+function get_gps_alt(i)
+    if get(GPS_1_is_available) == 0 and get(GPS_1_is_available) == 0 then
+        return 0
+    end
+
+    if get(GPS_1_is_available) == 1 and get(GPS_2_is_available) == 0 then
+        return get(GPS_1_altitude)
+    end
+
+    if get(GPS_2_is_available) == 1 and get(GPS_1_is_available) == 0 then
+        return get(GPS_2_altitude)
+    end
+
+    if i == PFD_CAPT then
+        return get(GPS_1_altitude)
+    else
+        return get(ADIRS_source_rotary_AIRDATA) ==  1 and get(GPS_1_altitude) or get(GPS_2_altitude)    
+    end
+end
+
+function is_gps_alt_ok(i)
+    return ir_works_att_mode(i) and (get(GPS_1_is_available) == 1 or get(GPS_2_is_available) == 1)
+end
+

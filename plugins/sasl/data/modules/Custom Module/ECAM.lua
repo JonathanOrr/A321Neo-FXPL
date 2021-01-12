@@ -40,6 +40,15 @@ include('ADIRS_data_source.lua')
 local apu_avail_timer = -1
 local gload = 1
 local last_update_gload = 0
+local image_camera_1 = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/camera-1.png")
+local image_camera_2 = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/camera-2.png")
+local current_door_video   = 0 -- 0 not active, 1 main door, 2 side doors
+local is_door_video_active = true
+
+
+-- Handlers for the camera
+sasl.registerCommandHandler (VIDEO_cmd_toggle,  0, function(phase) if phase == SASL_COMMAND_BEGIN then is_door_video_active = not is_door_video_active end end )
+sasl.registerCommandHandler (VIDEO_cmd_require, 0, function(phase) if phase == SASL_COMMAND_BEGIN then current_door_video = (current_door_video + 1) % 3 end end )
 
 local function draw_ecam_lower_section_fixed()
     sasl.gl.drawText(Font_AirbusDUL, 100, size[2]/2-372, "TAT", 32, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
@@ -158,6 +167,19 @@ function update()
 
 end
 
+local function draw_video()
+
+    pb_set(PB.ovhd.misc_cockpit_video, not is_door_video_active, false)
+
+    if is_door_video_active and current_door_video ~= 0 then
+        if current_door_video == 1 then
+            sasl.gl.drawTexture(image_camera_1, 0,130,900,770,{1,1,1})
+        elseif current_door_video == 2 then
+            sasl.gl.drawTexture(image_camera_2, 0,130,900,770,{1,1,1})
+        end
+    end
+end
+
 --drawing the ECAM
 function draw()
 
@@ -201,6 +223,8 @@ function draw()
             set(EWD_box_sts, 1)
         end
     end
+
+    draw_video()
 
     perf_measure_stop("ECAM:draw()")
 

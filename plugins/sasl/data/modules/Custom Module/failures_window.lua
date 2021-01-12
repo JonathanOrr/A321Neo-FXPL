@@ -254,6 +254,9 @@ local failures_data = {
             {name="DMC 1\nFAULT", status=false, dataref=FAILURE_DISPLAY_DMC_1 },
             {name="DMC 2\nFAULT", status=false, dataref=FAILURE_DISPLAY_DMC_2 },
             {name="DMC 3\nFAULT", status=false, dataref=FAILURE_DISPLAY_DMC_3 },
+            
+            {name="FIRE!\nCARGO AFT", status=false, dataref=FAILURE_FIRE_CARGO_AFT},
+            {name="FIRE!\nCARGO FWD", status=false, dataref=FAILURE_FIRE_CARGO_FWD},
         }
     },
     {

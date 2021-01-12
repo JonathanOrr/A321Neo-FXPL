@@ -283,7 +283,7 @@ local function update_datarefs()
     pb_set(PB.ovhd.ac_econ_flow, econ_flow_switch, false) -- ECON FLOW air button does not have fault
 
     pb_set(PB.ovhd.cargo_hot_air, not cargo_hot_air, false) -- TODO FAILURE
-    pb_set(PB.ovhd.cargo_aft_isol, cargo_isol_valve, false) -- TODO FAILURE
+    pb_set(PB.ovhd.cargo_aft_isol, cargo_isol_valve, get(Fire_cargo_aft_smoke_detected) == 1) -- TODO FAILURE
 
     pb_set(PB.ovhd.press_ditching, ditching_switch, false)
     
@@ -378,7 +378,7 @@ local function update_hot_air()
         set(Hot_air_valve_pos, 0)
     end
     
-    if cargo_isol_valve or ditching_switch then
+    if cargo_isol_valve or ditching_switch or get(Fire_cargo_aft_smoke_detected) == 1 then
         set(Cargo_isol_in_valve, 0)
         set(Cargo_isol_out_valve, 0)
         set(Hot_air_valve_pos_cargo, 0)

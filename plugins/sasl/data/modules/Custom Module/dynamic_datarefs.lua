@@ -198,6 +198,8 @@ Adirs_total_time_to_align = createGlobalPropertyf("a321neo/cockpit/ADIRS/total_t
 
 GPS_1_is_available = createGlobalPropertyi("a321neo/cockpit/ADIRS/gps_1_is_available", 0, false, true, false) 
 GPS_2_is_available = createGlobalPropertyi("a321neo/cockpit/ADIRS/gps_2_is_available", 0, false, true, false) 
+GPS_1_altitude = createGlobalPropertyf("a321neo/cockpit/ADIRS/gps_1_alt", 0, false, true, false) 
+GPS_2_altitude = createGlobalPropertyf("a321neo/cockpit/ADIRS/gps_2_alt", 0, false, true, false) 
 
 --doors
 Door_1_l_ratio = createGlobalPropertyf("a321neo/dynamics/door/door_1_l_rat", 0, false, true, false)
@@ -717,4 +719,13 @@ GPWS_mode_flap_3 = createGlobalPropertyi("a321neo/dynamics/gpws/flaps_3", 0, fal
 
 GPWS_req_inop = createGlobalPropertyi("a321neo/dynamics/gpws/req_inop", 0, false, true, false)  -- 1 if GPWS becomes off (*for sounds only*)
 GPWS_req_terr_inop = createGlobalPropertyi("a321neo/dynamics/gpws/req_terr_inop", 0, false, true, false) -- 1 if GPWS Terrain becomes off (*for sounds only*)
+
+-- FIRE
+Fire_cargo_aft_smoke_detected = createGlobalPropertyi("a321neo/dynamics/fire/cargo_aft_smoke_det", 0, false, true, false) 
+Fire_cargo_fwd_smoke_detected = createGlobalPropertyi("a321neo/dynamics/fire/cargo_fwd_smoke_det", 0, false, true, false) 
+Fire_cargo_aft_disch_at = createGlobalPropertyd("a321neo/dynamics/fire/cargo_aft_disch_at", 0, false, true, false) -- 0 if not discharged, > 0 if discharching/discharched 
+Fire_cargo_fwd_disch_at = createGlobalPropertyd("a321neo/dynamics/fire/cargo_fwd_disch_at", 0, false, true, false) -- 0 if not discharged, > 0 if discharching/discharched
+
+
+
 

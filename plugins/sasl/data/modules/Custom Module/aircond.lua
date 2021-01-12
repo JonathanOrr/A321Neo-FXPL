@@ -94,7 +94,7 @@ end)
 local function update_avio_ventilation()
     pb_set(PB.ovhd.vent_blower, get(Ventilation_blower_override) == 1, get(FAILURE_AIRCOND_VENT_BLOWER) == 1 or get(FAILURE_AVIONICS_SMOKE) == 1)
 
-    pb_set(PB.ovhd.vent_extract, get(Ventilation_extract_override) == 1, get(FAILURE_AIRCOND_VENT_EXTRACT) == 1 or get(FAILURE_AVIONICS_SMOKE) == 1)
+    pb_set(PB.ovhd.vent_extract, get(Ventilation_extract_override) == 1, get(FAILURE_AIRCOND_VENT_EXTRACT) == 1 or get(FAILURE_AVIONICS_SMOKE) == 1 or get(Fire_cargo_fwd_smoke_detected) == 1)
     
 
     if get(AC_bus_1_pwrd) == 1 and get(FAILURE_AIRCOND_VENT_BLOWER) == 0 and get(Ventilation_blower_override) == 0 then
@@ -116,7 +116,7 @@ local function update_avio_ventilation()
         time_started_extract = 0
     end
     
-    if time_started_extract ~= 0 and get(TIME) - time_started_extract > 5 then
+    if time_started_extract ~= 0 and get(TIME) - time_started_extract > 5 and get(Fire_cargo_fwd_smoke_detected) == 0 then
         set(Ventilation_extract_running, 1)
         ELEC_sys.add_power_consumption(ELEC_BUS_AC_2, 0.05, 0.05)
     else
