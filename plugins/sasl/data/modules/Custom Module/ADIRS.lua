@@ -73,7 +73,6 @@ local ADIRS = {
     ias = 0,
     ias_trend = 0,
     tas = 0,
-    aoa = 0,
     alt = 0,
     vs  = 0,
     wind_spd = 0,
@@ -88,8 +87,11 @@ local ADIRS = {
     track = 0,
     lat = 0,
     lon = 0,
-    gs = 0
-
+    gs = 0,
+    aoa = 0,
+    g_load_vert = 0,
+    g_load_lat  = 0,
+    g_load_long = 0,
 }
 
 -- Constructor for the class
@@ -176,7 +178,6 @@ function ADIRS:update_adr_data()
         self.ias_trend = get(self.ias_trend_dataref)
         self.tas = get(self.tas_dataref) + self.adr_ias_offset
         self.mach = get(self.mach_dataref)
-        self.aoa = get(Alpha)
         self.alt = get(self.baroalt_dataref) + self.adr_alt_offset
         self.vs  = get(self.vvi_dataref)
         
@@ -286,11 +287,15 @@ function ADIRS:update_ir_data()
         self.gs    = get(Ground_speed_kts)
         self.hdg   = get(Flightmodel_mag_heading)
         self.true_hdg = get(Flightmodel_true_heading)
+        self.g_load_vert = get(Total_vertical_g_load)
+        self.g_load_lat  = get(Total_lateral_g_load)
+        self.g_load_long = get(Total_long_g_load)
     end
 
     if self.ir_status == IR_STATUS_ALIGNED or self.ir_status == IR_STATUS_ATT_ALIGNED then
         self.pitch = get(self.pitch_dataref)
         self.roll = get(self.roll_dataref)
+        self.aoa = get(Alpha)
         if self.ir_status == IR_STATUS_ATT_ALIGNED and not self.ir_is_waiting_hdg then
             self.hdg = get(Flightmodel_mag_heading)
         end
@@ -336,6 +341,9 @@ sasl.registerCommandHandler (ADIRS_cmd_source_AIRDATA_down, 0, function(phase) K
 
 sasl.registerCommandHandler (ADIRS_cmd_instantaneous_align, 0, function(phase) adirs_inst_align(phase); return 1 end )
 
+sasl.registerCommandHandler (PFD_Capt_BUSS_enable, 0, function(phase) if phase == SASL_COMMAND_BEGIN then set(BUSS_Capt_man_enabled, 1 - get(BUSS_Capt_man_enabled)) end end )
+sasl.registerCommandHandler (PFD_Fo_BUSS_enable, 0,   function(phase) if phase == SASL_COMMAND_BEGIN then set(BUSS_Fo_man_enabled, 1 - get(BUSS_Fo_man_enabled)) end end )
+
 function ADIRS_handler_toggle_ADR(phase, n)
     if phase == SASL_COMMAND_BEGIN then
         ADIRS_sys[n].adr_switch_status = not ADIRS_sys[n].adr_switch_status
@@ -370,6 +378,7 @@ function onAirportLoaded()
         adirs_inst_align(SASL_COMMAND_BEGIN)
     end
 end
+
 ----------------------------------------------------------------------------------------------------
 -- Initlization
 ----------------------------------------------------------------------------------------------------
@@ -428,6 +437,8 @@ local function init_adirs()
     ADIRS_sys[ADIRS_1]:init()
     ADIRS_sys[ADIRS_2]:init()
     ADIRS_sys[ADIRS_3]:init()
+    
+    onAirportLoaded() -- Ensure if sasl has been reboot to check the airport condition
 end
 
 init_adirs()
@@ -570,6 +581,11 @@ local function update_gps()
     
 end
 
+local function update_buss()
+    pb_set(PB.mip.capt_buss,get(BUSS_Capt_man_enabled) == 1, false)
+    pb_set(PB.mip.fo_buss,  get(BUSS_Fo_man_enabled) == 1, false)
+end
+
 ----------------------------------------------------------------------------------------------------
 -- update()
 ----------------------------------------------------------------------------------------------------
@@ -580,10 +596,9 @@ function update ()
     update_adrs()
     update_irs()
     update_on_bat_light()
-
-
     update_anim_knobs()
     update_gps()
+    update_buss()
     
     perf_measure_stop("ADIRS:update()")
     

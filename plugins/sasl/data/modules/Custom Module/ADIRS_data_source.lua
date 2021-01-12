@@ -140,11 +140,11 @@ function is_aoa_ok(i)
 end
 
 function get_aoa(i)
-    return ADIRS_sys[which_adr(i)].aoa
+    return ADIRS_sys[which_ir(i)].aoa
 end
 
 function get_avg_aoa()
-    return get_adr_data("aoa")
+    return get_ir_partial_data("aoa")
 end
 
 function is_alt_ok(i)
@@ -292,4 +292,37 @@ end
 function is_gps_alt_ok(i)
     return ir_works_att_mode(i) and (get(GPS_1_is_available) == 1 or get(GPS_2_is_available) == 1)
 end
+
+function is_gloads_ok(i)
+    return ir_works_nav_mode(i)
+end
+
+function get_gload_vert(i)
+    return ADIRS_sys[which_ir(i)].g_load_vert
+end
+
+function get_gload_lat(i)
+    return ADIRS_sys[which_ir(i)].g_load_lat
+end
+
+function get_gload_long(i)
+    return ADIRS_sys[which_ir(i)].g_load_long
+end
+
+function is_buss_visible(i)
+    if i == PFD_CAPT then
+        return (get(BUSS_Capt_man_enabled) == 1 or how_many_adrs_work() == 0) and is_aoa_ok(i)
+    else
+        return (get(BUSS_Fo_man_enabled) == 1 or how_many_adrs_work() == 0) and is_aoa_ok(i)
+    end
+end
+
+function is_gps_alt_visible(i)
+    if i == PFD_CAPT then
+        return (get(BUSS_Capt_man_enabled) == 1 or how_many_adrs_work() == 0) and is_gps_alt_ok(i)
+    else
+        return (get(BUSS_Fo_man_enabled) == 1 or how_many_adrs_work() == 0) and is_gps_alt_ok(i)
+    end
+end
+
 

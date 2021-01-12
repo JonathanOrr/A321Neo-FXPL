@@ -206,6 +206,8 @@ PB = {
         gpws_fo   = {bus = LIGHT_BUS_AC},
         terr_nd_capt = {bus = LIGHT_BUS_AC},
         terr_nd_fo   = {bus = LIGHT_BUS_AC},
+        capt_buss    = {bus = LIGHT_BUS_AC},
+        fo_buss      = {bus = LIGHT_BUS_AC},
 
         brk_fan    = {bus = LIGHT_BUS_AC},
         ldg_gear_L = {bus = LIGHT_BUS_DC},

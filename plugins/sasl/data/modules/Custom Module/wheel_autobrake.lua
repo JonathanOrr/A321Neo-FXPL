@@ -98,7 +98,7 @@ local function update_ab_datarefs()
         avg_gload_n = 0
     end
 
-    if get(Any_wheel_on_ground) == 1 then
+    if get(Either_Aft_on_ground) == 1 then
         touched_down = true
     end
 
@@ -140,21 +140,21 @@ local function is_autobrake_braking()
     end
     
     if get(Wheel_autobrake_status) == AUTOBRK_MAX then
-        return get(All_on_ground) == 1 and get(Ground_speed_kts) > 40 and get(Ground_spoilers_mode) > 0
+        return get(Either_Aft_on_ground) == 1 and get(Ground_speed_kts) > 40 and get(Ground_spoilers_mode) > 0
     end
     
-    if get(All_on_ground) == 1 and speedbrk_deployed_at == 0 and get(Ground_spoilers_mode) > 0 then
+    if get(Either_Aft_on_ground) == 1 and speedbrk_deployed_at == 0 and get(Ground_spoilers_mode) > 0 then
         speedbrk_deployed_at = get(TIME)
     elseif get(Ground_spoilers_mode) == 0 then
         speedbrk_deployed_at = 0
     end
     
     if get(Wheel_autobrake_status) == AUTOBRK_MED then
-        return get(All_on_ground) == 1 and get(Ground_speed_kts) > 5 and speedbrk_deployed_at ~=0 and get(TIME) - speedbrk_deployed_at > MED_DELAY_SEC
+        return get(Either_Aft_on_ground) == 1 and get(Ground_speed_kts) > 5 and speedbrk_deployed_at ~=0 and get(TIME) - speedbrk_deployed_at > MED_DELAY_SEC
     end
 
     if get(Wheel_autobrake_status) == AUTOBRK_LOW then
-        return get(All_on_ground) == 1 and get(Ground_speed_kts) > 5 and speedbrk_deployed_at ~=0 and get(TIME) - speedbrk_deployed_at > LO_DELAY_SEC
+        return get(Either_Aft_on_ground) == 1 and get(Ground_speed_kts) > 5 and speedbrk_deployed_at ~=0 and get(TIME) - speedbrk_deployed_at > LO_DELAY_SEC
     end
    
     return false -- This should not happen
