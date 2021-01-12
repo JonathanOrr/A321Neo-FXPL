@@ -28,6 +28,22 @@ local poi_position_last_update = 0
 local POI_UPDATE_RATE = 0.1
 local MAX_LIMIT_WPT = 500
 
+local function get_range_in_nm(data)
+    if data.config.range > ND_RANGE_ZOOM_2 then
+        return math.floor(2^(data.config.range-1) * 10)
+    elseif data.config.range == ND_RANGE_ZOOM_2 then
+        return 2
+    elseif data.config.range == ND_RANGE_ZOOM_1 then
+        return 1
+    elseif data.config.range == ND_RANGE_ZOOM_05 then
+        return 0.5
+    elseif data.config.range == ND_RANGE_ZOOM_02 then
+        return 0.2
+    end
+    assert(false) -- Should never happen
+end
+
+
 local function draw_backgrounds(data)
     -- Main rose background
     if data.inputs.is_heading_valid then
@@ -54,12 +70,12 @@ local function draw_fixed_symbols(data)
     end
 
     -- Plane
-    sasl.gl.drawWideLine(410, 450, 490, 450, 4, COLOR_YELLOW)
-    sasl.gl.drawWideLine(450, 400, 450, 475, 4, COLOR_YELLOW)
-    sasl.gl.drawWideLine(435, 415, 465, 415, 4, COLOR_YELLOW)
+    sasl.gl.drawWideLine(410, 450, 490, 450, 4, data.config.range > ND_RANGE_ZOOM_2 and COLOR_YELLOW or ECAM_MAGENTA)
+    sasl.gl.drawWideLine(450, 400, 450, 475, 4, data.config.range > ND_RANGE_ZOOM_2 and COLOR_YELLOW or ECAM_MAGENTA)
+    sasl.gl.drawWideLine(435, 415, 465, 415, 4, data.config.range > ND_RANGE_ZOOM_2 and COLOR_YELLOW or ECAM_MAGENTA)
 
     -- Top heading indicator (yellow)
-    sasl.gl.drawWideLine(450, 720, 450, 770, 5, COLOR_YELLOW)
+    sasl.gl.drawWideLine(450, 720, 450, 770, 5, data.config.range > ND_RANGE_ZOOM_2 and COLOR_YELLOW or ECAM_MAGENTA)
 
     sasl.gl.drawTexture(image_bkg_ring_arrows, (size[1]-750)/2,(size[2]-750)/2,750,750, {1,1,1})
     sasl.gl.drawTexture(image_bkg_ring_middle, (size[1]-750)/2,(size[2]-750)/2,750,750, {1,1,1})
@@ -68,12 +84,12 @@ end
 
 local function draw_ranges(data)
     -- Ranges
-    if data.config.range > 0 then
-        local ext_range = math.floor(2^(data.config.range-1) * 10)
-        local int_range = math.floor(ext_range / 2)
+    --if data.config.range > 0 then
+        local ext_range = get_range_in_nm(data)
+        local int_range = ext_range / 2
         sasl.gl.drawText(Font_AirbusDUL, 250, 250, ext_range, 20, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
         sasl.gl.drawText(Font_AirbusDUL, 350, 350, int_range, 20, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
-    end
+    --end
 
 end
 
@@ -140,11 +156,31 @@ local function get_bearing(lat1,lon1,lat2,lon2)
     return brng
 end
 
+local function get_px_per_nm(data)
+    -- 588 px is the diameter of our ring, so this corresponds to the range scale selected:
+    local range_in_nm = get_range_in_nm(data)
+    -- The the per_px nm is:
+    return 588 / range_in_nm
+end
+
+local function get_x_y(data, lat, lon)  -- Do not use this for poi
+    local px_per_nm = get_px_per_nm(data)
+    
+    local distance = get_distance_nm(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon,lat,lon)
+    local distance_px = distance * px_per_nm
+    local bearing  = get_bearing(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon,lat,lon)
+    
+    local x = size[1]/2 + distance_px * math.cos(math.rad(bearing+data.inputs.heading))
+    local y = size[1]/2 + distance_px * math.sin(math.rad(bearing+data.inputs.heading))
+    
+    return x,y
+end
+
 local function draw_poi_array(data, poi, texture, color)
     local modified = false
 
     -- 588 px is the diameter of our ring, so this corresponds to the range scale selected:
-    local range_in_nm = math.floor(2^(data.config.range-1) * 10)
+    local range_in_nm = get_range_in_nm(data)
     -- The the per_px nm is:
     local px_per_nm = 588 / range_in_nm
 
@@ -183,7 +219,7 @@ local function draw_airports(data)
     
     -- For each airtport visible...
     for i,airport in ipairs(data.poi.arpt) do
-        local modified, poi = draw_poi_array(data, arpt, image_point_wpt, ECAM_MAGENTA)
+        local modified, poi = draw_poi_array(data, airport, image_point_apt, ECAM_MAGENTA)
         if modified then
             data.poi.arpt[i] = poi
         end
@@ -198,7 +234,7 @@ local function draw_vors(data)
 
     -- For each airtport visible...
     for i,vor in ipairs(data.poi.vor) do
-        local modified, poi = draw_poi_array(data, vor, image_point_wpt, ECAM_MAGENTA)
+        local modified, poi = draw_poi_array(data, vor, image_point_vor, ECAM_MAGENTA)
         if modified then
             data.poi.vor[i] = poi
         end
@@ -214,7 +250,7 @@ local function draw_ndbs(data)
 
     -- For each airtport visible...
     for i,ndb in ipairs(data.poi.ndb) do
-        local modified, poi = draw_poi_array(data, ndb, image_point_wpt, ECAM_MAGENTA)
+        local modified, poi = draw_poi_array(data, ndb, image_point_ndb, ECAM_MAGENTA)
         if modified then
             data.poi.ndb[i] = poi
         end
@@ -274,6 +310,61 @@ local function draw_pois(data)
 
 end
 
+function draw_oans(data)
+    if data.config.range > ND_RANGE_ZOOM_2 then
+        return  -- No OANS over zoom
+    end
+
+    local nearest_airport = Data_manager.nearest_airport
+    if nearest_airport ~= nil then
+    
+        local apt = Data_manager.get_arpt_by_name(nearest_airport.id)
+        local already_seen_runways = {}
+        
+        for rwyname,rwy in pairs(apt.rwys) do
+            
+            if already_seen_runways[rwyname] == nil then
+                already_seen_runways[rwyname] = true
+                already_seen_runways[rwy.sibling] = true
+                
+                x_start,y_start = get_x_y(data, rwy.lat, rwy.lon)
+                
+                sibling_rwy = apt.rwys[rwy.sibling]
+                
+                x_end,y_end = get_x_y(data, sibling_rwy.lat, sibling_rwy.lon)
+
+                
+
+
+                local px_per_nm = get_px_per_nm(data)
+                local width_px = math.floor(rwy.width * 0.000539957 * px_per_nm)
+
+                sasl.gl.drawWideLine(x_start,y_start,x_end,y_end, width_px, {0.7,0.7,0.7})
+                --sasl.gl.setLinePattern ({5.0, -5.0 })
+                --sasl.gl.drawLinePattern (x_start,y_start,x_end ,y_end, false, ECAM_RED)
+
+
+            end            
+        end
+    end
+
+    
+    
+    
+end
+
+local function draw_oans_info(data)
+    if data.config.range > ND_RANGE_ZOOM_2 then
+        return  -- No OANS over zoom
+    end
+    
+    local nearest_airport = Data_manager.nearest_airport
+    if nearest_airport ~= nil then
+        sasl.gl.drawText(Font_AirbusDUL, size[1]-30, size[2]-40, nearest_airport.name, 32, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]-30, size[2]-75, nearest_airport.id, 32, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+    end
+end
+
 function draw_rose_unmasked(data)
     draw_backgrounds(data)
     draw_fixed_symbols(data)
@@ -281,12 +372,14 @@ function draw_rose_unmasked(data)
     draw_hdgsel_symbol(data)
     draw_ls_symbol(data)
     draw_ranges(data)
+    draw_oans_info(data)
 end
 
 function draw_rose(data)
 
     draw_terrain(data)
     draw_pois(data)
+    draw_oans(data)
     draw_navaid_pointers(data)
 
 end
