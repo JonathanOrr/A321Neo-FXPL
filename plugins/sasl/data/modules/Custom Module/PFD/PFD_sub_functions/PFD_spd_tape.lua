@@ -109,7 +109,7 @@ local function draw_BUSS(PFD_table)
     PFD_table.BUSS_update_timer = PFD_table.BUSS_update_timer + get(DELTA_TIME)
 
     if PFD_table.BUSS_update_timer >= update_time then
-        PFD_table.BUSS_vsw_pos = Table_interpolate(anim_table, get_aoa(PFD_table.Screen_ID))
+        PFD_table.BUSS_vsw_pos = Table_extrapolate(anim_table, get_aoa(PFD_table.Screen_ID))
 
         PFD_table.BUSS_update_timer = 0
     end
