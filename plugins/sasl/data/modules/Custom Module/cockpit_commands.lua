@@ -445,6 +445,10 @@ ND_Fo_cmd_vord = sasl.createCommand("a321neo/cockpit/nd/fo_pb_vord","")
 ND_Fo_cmd_ndb = sasl.createCommand("a321neo/cockpit/nd/fo_pb_ndb","")
 ND_Fo_cmd_arpt = sasl.createCommand("a321neo/cockpit/nd/fo_pb_arpt","")
 
+-- PFD
+PFD_Capt_BUSS_enable= sasl.createCommand("a321neo/cockpit/pfd/capt_buss","")
+PFD_Fo_BUSS_enable  = sasl.createCommand("a321neo/cockpit/pfd/fo_buss","")
+
 -- FCU
 FCU_Capt_FD_cmd = sasl.createCommand("a321neo/cockpit/fcu/capt_fd","")
 FCU_Capt_LS_cmd = sasl.createCommand("a321neo/cockpit/fcu/capt_ls","")

@@ -341,6 +341,9 @@ sasl.registerCommandHandler (ADIRS_cmd_source_AIRDATA_down, 0, function(phase) K
 
 sasl.registerCommandHandler (ADIRS_cmd_instantaneous_align, 0, function(phase) adirs_inst_align(phase); return 1 end )
 
+sasl.registerCommandHandler (PFD_Capt_BUSS_enable, 0, function(phase) if phase == SASL_COMMAND_BEGIN then set(BUSS_Capt_man_enabled, 1 - get(BUSS_Capt_man_enabled)) end end )
+sasl.registerCommandHandler (PFD_Fo_BUSS_enable, 0,   function(phase) if phase == SASL_COMMAND_BEGIN then set(BUSS_Fo_man_enabled, 1 - get(BUSS_Fo_man_enabled)) end end )
+
 function ADIRS_handler_toggle_ADR(phase, n)
     if phase == SASL_COMMAND_BEGIN then
         ADIRS_sys[n].adr_switch_status = not ADIRS_sys[n].adr_switch_status
@@ -578,6 +581,11 @@ local function update_gps()
     
 end
 
+local function update_buss()
+    pb_set(PB.mip.capt_buss,get(BUSS_Capt_man_enabled) == 1, false)
+    pb_set(PB.mip.fo_buss,  get(BUSS_Fo_man_enabled) == 1, false)
+end
+
 ----------------------------------------------------------------------------------------------------
 -- update()
 ----------------------------------------------------------------------------------------------------
@@ -588,10 +596,9 @@ function update ()
     update_adrs()
     update_irs()
     update_on_bat_light()
-
-
     update_anim_knobs()
     update_gps()
+    update_buss()
     
     perf_measure_stop("ADIRS:update()")
     

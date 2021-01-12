@@ -730,6 +730,8 @@ Fire_cargo_fwd_smoke_detected = createGlobalPropertyi("a321neo/dynamics/fire/car
 Fire_cargo_aft_disch_at = createGlobalPropertyd("a321neo/dynamics/fire/cargo_aft_disch_at", 0, false, true, false) -- 0 if not discharged, > 0 if discharching/discharched 
 Fire_cargo_fwd_disch_at = createGlobalPropertyd("a321neo/dynamics/fire/cargo_fwd_disch_at", 0, false, true, false) -- 0 if not discharged, > 0 if discharching/discharched
 
-
+-- BUSS
+BUSS_Capt_man_enabled = createGlobalPropertyi("a321neo/dynamics/pfd/buss_capt_man", 0, false, true, false)
+BUSS_Fo_man_enabled = createGlobalPropertyi("a321neo/dynamics/pfd/buss_fo_man", 0, false, true, false)
 
 

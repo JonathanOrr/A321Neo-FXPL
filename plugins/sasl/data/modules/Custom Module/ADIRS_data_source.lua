@@ -309,3 +309,20 @@ function get_gload_long(i)
     return ADIRS_sys[which_ir(i)].g_load_long
 end
 
+function is_buss_visible(i)
+    if i == PFD_CAPT then
+        return (get(BUSS_Capt_man_enabled) == 1 or how_many_adrs_work() == 0) and is_aoa_ok(i)
+    else
+        return (get(BUSS_Fo_man_enabled) == 1 or how_many_adrs_work() == 0) and is_aoa_ok(i)
+    end
+end
+
+function is_gps_alt_visible(i)
+    if i == PFD_CAPT then
+        return (get(BUSS_Capt_man_enabled) == 1 or how_many_adrs_work() == 0) and is_gps_alt_ok(i)
+    else
+        return (get(BUSS_Fo_man_enabled) == 1 or how_many_adrs_work() == 0) and is_gps_alt_ok(i)
+    end
+end
+
+
