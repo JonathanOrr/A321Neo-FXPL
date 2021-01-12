@@ -272,15 +272,15 @@ local function draw_common_messages_center(data)
     end
     
     if color ~= nil then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, 440, text, 36, false, false, TEXT_ALIGN_CENTER, color)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, 465, text, 36, false, false, TEXT_ALIGN_CENTER, color)
     end
     
     if data.misc.loc_failure then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, 530, "LOC", 42, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, 500, "LOC", 42, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
     end
 
     if data.misc.vor_failure then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, 350, "VOR", 42, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, 380, "VOR", 42, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
     end
 
     if data.misc.gs_failure then

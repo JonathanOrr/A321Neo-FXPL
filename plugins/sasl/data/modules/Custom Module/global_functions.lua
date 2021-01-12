@@ -227,6 +227,7 @@ end
 function Table_interpolate(tab, x)
     local a = 1
     local b = #tab
+    assert(b > 1)
 
     -- Simple cases
     if x <= tab[a][1] then
@@ -236,7 +237,7 @@ function Table_interpolate(tab, x)
         return tab[b][2]
     end
 
-    local middle = 0
+    local middle = 1
 
     while b-a > 1 do
         middle = math.floor((b+a)/2)
@@ -257,6 +258,25 @@ function Table_interpolate(tab, x)
         -- (y-y0) / (y1-y0) = (x-x0) / (x1-x0)
         return tab[a][2] + ((x-tab[a][1])*(tab[b][2]-tab[a][2]))/(tab[b][1]-tab[a][1])
     end
+end
+
+function Table_extrapolate(tab, x)  -- This works like Table_interpolate, but it estimates the values
+                                    -- even if x < minimum value of x > maximum value according to the
+                                    -- last segment available
+    assert(b > 1)
+
+    local a = 1
+    local b = #tab
+
+    if x < tab[a][1] then
+        return Math_rescale_no_lim(tab[a][1], tab[a][2], tab[a+1][1], tab[a+1][2], x) 
+    end
+    if x > tab[b][1] then
+        return Math_rescale_no_lim(tab[b][1], tab[b][2], tab[b-1][1], tab[b-1][2], x) 
+    end
+
+    return Table_interpolate(tab, x)
+
 end
 
 --string functions--
