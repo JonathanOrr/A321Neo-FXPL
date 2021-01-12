@@ -293,8 +293,7 @@ function GC_distance_kt(lat1, lon1, lat2, lon2)
     --(about 5 NM at 6000 NM), we are going to use the same.
     --Other formulas I've tested, seem to break when latitudes are in different hemisphere (west-east).
 
-    local distance = math.acos(math.cos(math.rad(90-lat1))*math.cos(math.rad(90-lat2))+
-        math.sin(math.rad(90-lat1))*math.sin(math.rad(90-lat2))*math.cos(math.rad(lon1-lon2))) * (6378000/1852)
+    local distance = math.acos(math.cos(math.rad(90-lat1))*math.cos(math.rad(90-lat2))+ math.sin(math.rad(90-lat1))*math.sin(math.rad(90-lat2))*math.cos(math.rad(lon1-lon2))) * (6378000/1852)
 
     return distance
 
