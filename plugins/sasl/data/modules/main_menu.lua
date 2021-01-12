@@ -22,9 +22,9 @@ function Show_hide_MCDU()
   MCDU_window:setIsVisible(not MCDU_window:isVisible())
 end
 
-function Show_hide_vnav_debug()
-  Vnav_debug_window:setIsVisible(not Vnav_debug_window:isVisible())
-end
+--function Show_hide_vnav_debug()
+--  Vnav_debug_window:setIsVisible(not Vnav_debug_window:isVisible())
+--end
 
 function Show_hide_packs_debug()
   Packs_debug_window:setIsVisible(not Packs_debug_window:isVisible())
@@ -177,6 +177,6 @@ ShowHidePacksDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide PACKS Debug", Sh
 ShowHidePerfDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide PERF Debug", Show_hide_Performance_Debug)
 ShowHidePressDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide PRESS Debug", Show_hide_PRESS_debug)
 ShowHideWheelDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide WHEEL Debug", Show_hide_Wheel_Debug)
-ShowHideVnavDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide VNAV Debug", Show_hide_vnav_debug)
+--ShowHideVnavDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide VNAV Debug", Show_hide_vnav_debug)
 DeActivateELECover	= sasl.appendMenuItem(Menu_debug, "(De)activate override ELEC always ON", function() ovveride_ELEC_always_on = not ovveride_ELEC_always_on end)
 

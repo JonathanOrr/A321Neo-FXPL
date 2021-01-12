@@ -97,6 +97,36 @@ local function draw_characteristics_spd(PFD_table)
     end
 end
 
+local function draw_BUSS(PFD_table)
+    local anim_table = {
+        {get(BUSS_VFE_red_AoA), 64},
+        {get(BUSS_VFE_norm_AoA), 124},
+        {get(BUSS_VLS_AoA), 177},
+        {get(BUSS_VSW_AoA), 237},
+    }
+
+    local update_time = 0.15
+    PFD_table.BUSS_update_timer = PFD_table.BUSS_update_timer + get(DELTA_TIME)
+
+    if PFD_table.BUSS_update_timer >= update_time then
+        PFD_table.BUSS_vsw_pos = Table_interpolate(anim_table, get_aoa(PFD_table.Screen_ID))
+
+        PFD_table.BUSS_update_timer = 0
+    end
+
+    sasl.gl.drawRectangle(size[1]/2-437, size[2]/2-244 + PFD_table.BUSS_vsw_pos + 60 + 53 + 60, 99, (size[2]/2+229) - (size[2]/2-244 + PFD_table.BUSS_vsw_pos + 60 + 53 + 60), ECAM_RED)
+    sasl.gl.drawRectangle(size[1]/2-437, size[2]/2-244 + PFD_table.BUSS_vsw_pos + 60 + 53, 99, 60, ECAM_ORANGE)
+    sasl.gl.drawTriangle (size[1]/2-437, size[2]/2-244 + PFD_table.BUSS_vsw_pos + 60 + 53 + 60, size[1]/2-338, size[2]/2-244 + PFD_table.BUSS_vsw_pos + 60 + 53 + 60, size[1]/2-387.5, size[2]/2-244 + PFD_table.BUSS_vsw_pos + 60 + 53, ECAM_RED)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-387.5, size[2]/2-244 + PFD_table.BUSS_vsw_pos + 60 + 53 + 60, "FAST", 35, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+
+    sasl.gl.drawRectangle(size[1]/2-437, size[2]/2-244 + PFD_table.BUSS_vsw_pos + 60, 99, 53, ECAM_GREEN)
+
+    sasl.gl.drawRectangle(size[1]/2-437, size[2]/2-244, 99, PFD_table.BUSS_vsw_pos, ECAM_RED)
+    sasl.gl.drawRectangle(size[1]/2-437, size[2]/2-244 + PFD_table.BUSS_vsw_pos, 99, 60, ECAM_ORANGE)
+    sasl.gl.drawTriangle (size[1]/2-437, size[2]/2-244 + PFD_table.BUSS_vsw_pos, size[1]/2-338, size[2]/2-244 + PFD_table.BUSS_vsw_pos, size[1]/2-387.5, size[2]/2-244 + PFD_table.BUSS_vsw_pos + 60, ECAM_RED)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-387.5, size[2]/2-244 + PFD_table.BUSS_vsw_pos - 23, "SLOW", 35, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+end
+
 local function draw_decel_info(PFD_table)
     if get(Wheel_autobrake_is_in_decel) == 1 then
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2-387, size[2]/2-274, "DECEL", 35, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
@@ -140,15 +170,17 @@ function PFD_draw_spd_tape(PFD_table)
     end
 
     --boarder lines
-    sasl.gl.drawWideLine(size[1]/2-437, size[2]/2+231, size[1]/2-310, size[2]/2+231, 4, boarder_cl)
-    if is_ias_ok(PFD_table.Screen_ID) == true then
-        sasl.gl.drawWideLine(size[1]/2-338, size[2]/2-7 + Math_clamp_lower(Math_rescale_lim_lower(30, 0, 50, -133, get_ias(PFD_table.Screen_ID)), -237), size[1]/2-338, size[2]/2+229, 4, boarder_cl)
-        if get_ias(PFD_table.Screen_ID) > 66 then
+    if is_ias_ok(PFD_table.Screen_ID) == true or (is_ias_ok(PFD_table.Screen_ID) == false and is_aoa_ok(PFD_table.Screen_ID) == false) or how_many_adrs_work() > 0 then
+        sasl.gl.drawWideLine(size[1]/2-437, size[2]/2+231, size[1]/2-310, size[2]/2+231, 4, boarder_cl)
+        if is_ias_ok(PFD_table.Screen_ID) == true then
+            sasl.gl.drawWideLine(size[1]/2-338, size[2]/2-7 + Math_clamp_lower(Math_rescale_lim_lower(30, 0, 50, -133, get_ias(PFD_table.Screen_ID)), -237), size[1]/2-338, size[2]/2+229, 4, boarder_cl)
+            if get_ias(PFD_table.Screen_ID) > 66 then
+                sasl.gl.drawWideLine(size[1]/2-437, size[2]/2-246, size[1]/2-310, size[2]/2-246, 4, boarder_cl)
+            end
+        else
+            sasl.gl.drawWideLine(size[1]/2-338, size[2]/2-244, size[1]/2-338, size[2]/2+229, 4, boarder_cl)
             sasl.gl.drawWideLine(size[1]/2-437, size[2]/2-246, size[1]/2-310, size[2]/2-246, 4, boarder_cl)
         end
-    else
-        sasl.gl.drawWideLine(size[1]/2-338, size[2]/2-244, size[1]/2-338, size[2]/2+229, 4, boarder_cl)
-        sasl.gl.drawWideLine(size[1]/2-437, size[2]/2-246, size[1]/2-310, size[2]/2-246, 4, boarder_cl)
     end
 
     --speed needle
@@ -166,5 +198,11 @@ function PFD_draw_spd_tape(PFD_table)
         --draw indications
         draw_decel_info(PFD_table)
         draw_mach_info(PFD_table)
+    end
+
+    if is_ias_ok(PFD_table.Screen_ID) == false and is_aoa_ok(PFD_table.Screen_ID) == true and how_many_adrs_work() == 0 then
+        draw_BUSS(PFD_table)
+        sasl.gl.drawTexture(PFD_spd_needle, size[1]/2-370, size[2]/2-18, 56, 21, PFD_YELLOW)
+        sasl.gl.drawRectangle(size[1]/2-450, size[2]/2-10, 18, 6, PFD_YELLOW)
     end
 end

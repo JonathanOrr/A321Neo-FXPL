@@ -194,6 +194,19 @@ local function BUSS_compute_VLS_AoA()
     set(BUSS_VLS_AoA, Table_interpolate(BUSS_VLS_alphas, get(Slats) + get(Flaps_deployed_angle)))
 end
 
+local function BUSS_compute_VSW_AoA()
+    local BUSS_VSW_alphas = {
+        {0.0 + 0,  vsw_aprot_alphas[1]},
+        {0.7 + 0,  vsw_aprot_alphas[2]},
+        {0.7 + 10, vsw_aprot_alphas[3]},
+        {0.8 + 14, vsw_aprot_alphas[4]},
+        {0.8 + 21, vsw_aprot_alphas[5]},
+        {1.0 + 25, vsw_aprot_alphas[6]},
+    }
+
+    set(BUSS_VSW_AoA, Table_interpolate(BUSS_VSW_alphas, get(Slats) + get(Flaps_deployed_angle)))
+end
+
 --calculate flight characteristics values
 function update()
     update_VMAX_prot()
@@ -208,6 +221,7 @@ function update()
 
     BUSS_compute_VMAX_AoA()
     BUSS_compute_VLS_AoA()
+    BUSS_compute_VSW_AoA()
 
     --update timer
     if get(Any_wheel_on_ground) == 1 then

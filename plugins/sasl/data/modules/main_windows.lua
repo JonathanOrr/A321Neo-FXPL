@@ -35,7 +35,7 @@ MCDU_window = contextWindow {
 }
 
 
-Vnav_debug_window = contextWindow {
+--[[Vnav_debug_window = contextWindow {
   name = "VNAV DEBUG";
   position = { 50 , 50 , 750 , 450 };
   noBackground = true ;
@@ -47,7 +47,7 @@ Vnav_debug_window = contextWindow {
   components = {
     vnav_debug {position = { 0 , 0 , 750 , 450 }}
   };
-}
+}]]
 
 Packs_debug_window = contextWindow {
   name = "PACKS DEBUG";

@@ -482,6 +482,7 @@ Fo_Valpha_MAX =    createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fo_a
 BUSS_VFE_red_AoA =  createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/buss_vfe_red_aoa", 0, false, true, false)
 BUSS_VFE_norm_AoA = createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/buss_vfe_norm_aoa", 0, false, true, false)
 BUSS_VLS_AoA =      createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/buss_vls_aoa", 0, false, true, false)
+BUSS_VSW_AoA =      createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/buss_vsw_aoa", 0, false, true, false)
 
 Aircraft_total_weight_kgs = globalProperty("sim/flightmodel/weight/m_total")
 
