@@ -87,6 +87,7 @@ components = {
   pressurization {},
   oxygen {},
   anti_ice {},
+  fire_cargo {},
   calls {},
   GPWS {},
   sounds {},

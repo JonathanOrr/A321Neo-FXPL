@@ -717,3 +717,12 @@ GPWS_mode_flap_3 = createGlobalPropertyi("a321neo/dynamics/gpws/flaps_3", 0, fal
 GPWS_req_inop = createGlobalPropertyi("a321neo/dynamics/gpws/req_inop", 0, false, true, false)  -- 1 if GPWS becomes off (*for sounds only*)
 GPWS_req_terr_inop = createGlobalPropertyi("a321neo/dynamics/gpws/req_terr_inop", 0, false, true, false) -- 1 if GPWS Terrain becomes off (*for sounds only*)
 
+-- FIRE
+Fire_cargo_aft_smoke_detected = createGlobalPropertyi("a321neo/dynamics/fire/cargo_aft_smoke_det", 0, false, true, false) 
+Fire_cargo_fwd_smoke_detected = createGlobalPropertyi("a321neo/dynamics/fire/cargo_fwd_smoke_det", 0, false, true, false) 
+Fire_cargo_aft_disch_at = createGlobalPropertyd("a321neo/dynamics/fire/cargo_aft_disch_at", 0, false, true, false) -- 0 if not discharged, > 0 if discharching/discharched 
+Fire_cargo_fwd_disch_at = createGlobalPropertyd("a321neo/dynamics/fire/cargo_fwd_disch_at", 0, false, true, false) -- 0 if not discharged, > 0 if discharching/discharched
+
+
+
+

@@ -240,3 +240,5 @@ FAILURE_DISPLAY_FWC_2   = createGlobalPropertyi("a321neo/failures/displays/fwc_2
 FAILURE_GPWS       = createGlobalPropertyi("a321neo/failures/gpws/gpws", 0, false, true, false)
 FAILURE_GPWS_TERR  = createGlobalPropertyi("a321neo/failures/gpws/gpws_terr", 0, false, true, false)
 
+FAILURE_FIRE_CARGO_FWD = createGlobalPropertyi("a321neo/failures/fire/cargo_fwd", 0, false, true, false)
+FAILURE_FIRE_CARGO_AFT = createGlobalPropertyi("a321neo/failures/fire/cargo_aft", 0, false, true, false)
