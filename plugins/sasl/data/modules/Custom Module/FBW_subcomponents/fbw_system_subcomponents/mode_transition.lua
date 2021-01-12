@@ -1,6 +1,6 @@
 FBW_modes_var_table = {
     Previous_trim_reset_begin = 0,
-    In_rotation_mode_duration = 0,
+    In_air_timer = 0,
     On_ground_timer = 0,
     Flare_mode_past_status = 0
 }
@@ -42,10 +42,10 @@ function FBW_mode_transition(table)
     elseif get(Any_wheel_on_ground) == 0 then
         table.On_ground_timer = 0
     end
-    if get(FBW_vertical_rotation_mode_ratio) == 1 and get(Any_wheel_on_ground) == 0 and table.In_rotation_mode_duration < rotation_mode_duration_s then
-        table.In_rotation_mode_duration = table.In_rotation_mode_duration + 1 * get(DELTA_TIME)
+    if get(Any_wheel_on_ground) == 0 and table.In_air_timer < rotation_mode_duration_s then
+        table.In_air_timer = table.In_air_timer + 1 * get(DELTA_TIME)
     elseif get(FBW_vertical_rotation_mode_ratio) == 0 then
-        table.In_rotation_mode_duration = 0
+        table.In_air_timer = 0
     end
 
     --memorise ATT--
@@ -82,7 +82,7 @@ function FBW_mode_transition(table)
 
     --Rotation mode --> flight mode
     if (get(Any_wheel_on_ground) == 0 and get(Flightmodel_pitch) > 8) or (get(Capt_ra_alt_ft) > 50 or get(Fo_ra_alt_ft) > 50) then
-        if table.In_rotation_mode_duration >= rotation_mode_duration_s then
+        if table.In_air_timer >= rotation_mode_duration_s then
             set(FBW_vertical_rotation_mode_ratio, Set_linear_anim_value(get(FBW_vertical_rotation_mode_ratio), 0, 0, 1, 1 / vertical_flight_mode_transition_time))
         end
     end

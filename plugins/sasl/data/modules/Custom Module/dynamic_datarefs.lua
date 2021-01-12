@@ -512,6 +512,7 @@ Force_full_rudder_limit = createGlobalPropertyi("a321neo/dynamics/FBW/debug/forc
 Bypass_speedbrakes_inhibition = createGlobalPropertyi("a321neo/dynamics/FBW/debug/bypass_spdbrakes_inhibition", 0, false, true, false)
 Override_flap_auto_retract = createGlobalPropertyi("a321neo/dynamics/FBW/debug/override_flap_auto_retract", 0, false, true, false)
 --customizations
+FBW_use_C_star = createGlobalPropertyi("a321neo/dynamics/FBW/customizations/c_star_control", 0, false, true, false)
 Project_square_input = createGlobalPropertyi("a321neo/dynamics/FBW/customizations/projected_square_input", 0, false, true, false)
 Trim_wheel_smoothing_on = createGlobalPropertyi("a321neo/dynamics/FBW/customizations/trim_wheel_smoothing_on", 1, false, true, false)--is the trim wheel is smoothed
 FBW_mode_transition_version = createGlobalPropertyi("a321neo/dynamics/FBW/customizations/mode_transition_version", 0, false, true, false)--0 slower transitions and flare mode at 100RA(default on newer aircraft), 1 faster transitions and flare mode at 50RA

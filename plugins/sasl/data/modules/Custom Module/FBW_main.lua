@@ -88,6 +88,12 @@ local cws_actual = 0
 local lvl_flt_load_constant = math.cos(math.rad(get(Flightmodel_pitch))) / math.cos(math.rad(Math_clamp(get(Flightmodel_roll), -33, 33)))
 
 function update()
+    local C_star = get(Total_vertical_g_load) + ((get_avg_ias() * 0.514444) * math.rad(get(True_pitch_rate)) / 9.8 )
+    local flaps_clean_C_star_up = Math_rescale(0, 3.6, 67, 2.5, math.abs(get(Flightmodel_roll)))
+    local flaps_clean_C_star_dn = Math_rescale(0, -2.8, 67, -1, math.abs(get(Flightmodel_roll)))
+    local flaps_C_star_up = Math_rescale(0, 2.8, 67, 2, math.abs(get(Flightmodel_roll)))
+    local flaps_C_star_dn = Math_rescale(0, -0.75, 67, 0, math.abs(get(Flightmodel_roll)))
+
     updateAll(components)
     Fctl_computuers_status_computation(Fctl_computers_var_table)
     Compute_fctl_button_states()
@@ -138,10 +144,10 @@ function update()
     lvl_flt_load_constant = math.cos(math.rad(get(Flightmodel_pitch))) / math.cos(math.rad(Math_clamp(get(Flightmodel_roll), -33, 33)))
     if get(Flaps_internal_config) == 0 then
         if get(Augmented_pitch) > 0.05 then
-            G_input = Math_rescale(0, lvl_flt_load_constant, 1, 2.5, get(Augmented_pitch))
+            G_input = Math_rescale(0, lvl_flt_load_constant, 1, get(FBW_use_C_star) == 1 and flaps_clean_C_star_up or 2.5, get(Augmented_pitch))
             stick_moving_vertically = true
         elseif get(Augmented_pitch) < -0.05 then
-            G_input = Math_rescale(-1, -1, 0, lvl_flt_load_constant, get(Augmented_pitch))
+            G_input = Math_rescale(-1, get(FBW_use_C_star) == 1 and flaps_clean_C_star_dn or -1, 0, lvl_flt_load_constant, get(Augmented_pitch))
             stick_moving_vertically = true
         else
             --command static vertical flight path [THIS IS THE DEFINITION ACCORDING FLIGHT DYNAMIC LAWS]
@@ -150,10 +156,10 @@ function update()
         end
     else
         if get(Augmented_pitch) > 0.05 then
-            G_input = Math_rescale(0, lvl_flt_load_constant, 1, 2, get(Augmented_pitch))
+            G_input = Math_rescale(0, lvl_flt_load_constant, 1, get(FBW_use_C_star) == 1 and flaps_C_star_up or 2, get(Augmented_pitch))
             stick_moving_vertically = true
         elseif get(Augmented_pitch) < -0.05 then
-            G_input = Math_rescale(-1, 0, 0, lvl_flt_load_constant, get(Augmented_pitch))
+            G_input = Math_rescale(-1, get(FBW_use_C_star) == 1 and flaps_C_star_dn or 0, 0, lvl_flt_load_constant, get(Augmented_pitch))
             stick_moving_vertically = true
         else
             --command static vertical flight path [THIS IS THE DEFINITION ACCORDING FLIGHT DYNAMIC LAWS]
@@ -187,7 +193,8 @@ function update()
             FBW_PID_arrays.SSS_FBW_G_load_pitch.Min_out = Math_clamp_lower(vmax_prot_output, SSS_PID(FBW_PID_arrays.SSS_FBW_pitch_down_limit, -15 - get(Flightmodel_pitch)))
             FBW_PID_arrays.SSS_FBW_G_load_pitch.Max_out = Math_clamp_higher(SSS_PID_DPV(FBW_PID_arrays.SSS_FBW_stall_prot_pitch, 100000000, get(Alpha)), SSS_PID(FBW_PID_arrays.SSS_FBW_pitch_up_limit, 30 - get(Flightmodel_pitch)))
             --pitch rate stability[used to temperarily guard the G load before overshoot stops]
-            G_output = SSS_PID_DPV(FBW_PID_arrays.SSS_FBW_G_load_pitch, G_input, get(Total_vertical_g_load)) * 10
+
+            G_output = SSS_PID_DPV(FBW_PID_arrays.SSS_FBW_G_load_pitch, G_input, get(FBW_use_C_star) == 1 and C_star or get(Total_vertical_g_load)) * 10
 
             --gain scheduling--
             FBW_PID_arrays.SSS_FBW_pitch_rate.P_gain = Math_rescale(245, 0.24, 310, 0.2, get(IAS))
@@ -196,7 +203,11 @@ function update()
             if stick_moving_vertically == true then
                 pitch_rate_correction = SSS_PID_DPV(FBW_PID_arrays.SSS_FBW_pitch_rate, G_output, get(True_pitch_rate))
             else
-                pitch_rate_correction = SSS_PID_DPV(FBW_PID_arrays.SSS_FBW_pitch_rate, Math_lerp(0, G_output, v_stability_wait_timer / wait_for_v_stability) - Math_lerp(0, get(Vpath_pitch_rate), v_stability_wait_timer / wait_for_v_stability) * BoolToNum(get(Flightmodel_roll) >= -33 and get(Flightmodel_roll) <= 33), get(True_pitch_rate))
+                if get(FBW_use_C_star) == 1 then
+                    pitch_rate_correction = SSS_PID_DPV(FBW_PID_arrays.SSS_FBW_pitch_rate, Math_lerp(0, G_output, v_stability_wait_timer / wait_for_v_stability), get(True_pitch_rate))
+                else
+                    pitch_rate_correction = SSS_PID_DPV(FBW_PID_arrays.SSS_FBW_pitch_rate, Math_lerp(0, G_output, v_stability_wait_timer / wait_for_v_stability) - Math_lerp(0, get(Vpath_pitch_rate), v_stability_wait_timer / wait_for_v_stability) * BoolToNum(get(Flightmodel_roll) >= -33 and get(Flightmodel_roll) <= 33), get(True_pitch_rate))
+                end
             end
 
             FBW_PID_arrays.SSS_FBW_roll_rate.Min_out = SSS_PID(FBW_PID_arrays.SSS_FBW_roll_left_limit, -roll_limits - get(Flightmodel_roll))

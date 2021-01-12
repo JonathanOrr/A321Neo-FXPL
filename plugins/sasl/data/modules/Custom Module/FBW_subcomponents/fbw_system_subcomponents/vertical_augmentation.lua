@@ -5,9 +5,9 @@ function FBW_vertical_agmentation()
 
     --table interpolation--
     local pitch_rate_table = {
-        {-1, 3.6},
+        {-1, 2.25},
         {0,  -get(FBW_flare_mode_computed_Q)},
-        {1, 3.6},
+        {1, 2.25},
     }
 
     local taget_Q_table = {
@@ -29,7 +29,6 @@ function FBW_vertical_agmentation()
     if get(Aft_wheel_on_ground) == 1 and get(FBW_vertical_rotation_mode_ratio) > 0 then
         FBW_PID_arrays.SSS_FBW_rotation_pitch_rate.Integral = Math_clamp_lower(FBW_PID_arrays.SSS_FBW_rotation_pitch_rate.Integral, -0.15)
     end
-
 
     set(
         Pitch_artstab,
