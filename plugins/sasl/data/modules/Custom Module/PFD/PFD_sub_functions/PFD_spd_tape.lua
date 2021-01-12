@@ -114,7 +114,8 @@ local function draw_BUSS(PFD_table)
         PFD_table.BUSS_update_timer = 0
     end
 
-    sasl.gl.drawRectangle(size[1]/2-437, size[2]/2-244 + PFD_table.BUSS_vsw_pos + 60 + 53 + 60, 99, (size[2]/2+229) - (size[2]/2-244 + PFD_table.BUSS_vsw_pos + 60 + 53 + 60), ECAM_RED)
+    sasl.gl.setClipArea(size[1]/2-437, size[2]/2-244, 99, 473)
+    sasl.gl.drawRectangle(size[1]/2-437, size[2]/2-244 + PFD_table.BUSS_vsw_pos + 60 + 53 + 60, 99, Math_clamp_lower(150 - (PFD_table.BUSS_vsw_pos - 150), 0), ECAM_RED)
     sasl.gl.drawRectangle(size[1]/2-437, size[2]/2-244 + PFD_table.BUSS_vsw_pos + 60 + 53, 99, 60, ECAM_ORANGE)
     sasl.gl.drawTriangle (size[1]/2-437, size[2]/2-244 + PFD_table.BUSS_vsw_pos + 60 + 53 + 60, size[1]/2-338, size[2]/2-244 + PFD_table.BUSS_vsw_pos + 60 + 53 + 60, size[1]/2-387.5, size[2]/2-244 + PFD_table.BUSS_vsw_pos + 60 + 53, ECAM_RED)
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-387.5, size[2]/2-244 + PFD_table.BUSS_vsw_pos + 60 + 53 + 60, "FAST", 35, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
@@ -125,6 +126,7 @@ local function draw_BUSS(PFD_table)
     sasl.gl.drawRectangle(size[1]/2-437, size[2]/2-244 + PFD_table.BUSS_vsw_pos, 99, 60, ECAM_ORANGE)
     sasl.gl.drawTriangle (size[1]/2-437, size[2]/2-244 + PFD_table.BUSS_vsw_pos, size[1]/2-338, size[2]/2-244 + PFD_table.BUSS_vsw_pos, size[1]/2-387.5, size[2]/2-244 + PFD_table.BUSS_vsw_pos + 60, ECAM_RED)
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-387.5, size[2]/2-244 + PFD_table.BUSS_vsw_pos - 23, "SLOW", 35, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.resetClipArea ()
 end
 
 local function draw_decel_info(PFD_table)
@@ -155,7 +157,7 @@ function PFD_draw_spd_tape(PFD_table)
     --speed tape background
     sasl.gl.drawRectangle(size[1]/2-437, size[2]/2-244, 99, 473, PFD_TAPE_GREY)
 
-    if is_ias_ok(PFD_table.Screen_ID) == false then
+    if is_ias_ok(PFD_table.Screen_ID) == false and is_buss_visible(PFD_table.Screen_ID) == false then
         boarder_cl = PFD_table.SPD_blink_now and ECAM_RED or {0, 0, 0, 0}
         if PFD_table.SPD_blink_now == true then
             sasl.gl.drawText(Font_AirbusDUL, size[1]/2-390, size[2]/2-20, "SPD", 42, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
@@ -170,7 +172,7 @@ function PFD_draw_spd_tape(PFD_table)
     end
 
     --boarder lines
-    if is_ias_ok(PFD_table.Screen_ID) == true or (is_ias_ok(PFD_table.Screen_ID) == false and is_aoa_ok(PFD_table.Screen_ID) == false) or how_many_adrs_work() > 0 then
+    if is_ias_ok(PFD_table.Screen_ID) == true or is_buss_visible(PFD_table.Screen_ID) == false then
         sasl.gl.drawWideLine(size[1]/2-437, size[2]/2+231, size[1]/2-310, size[2]/2+231, 4, boarder_cl)
         if is_ias_ok(PFD_table.Screen_ID) == true then
             sasl.gl.drawWideLine(size[1]/2-338, size[2]/2-7 + Math_clamp_lower(Math_rescale_lim_lower(30, 0, 50, -133, get_ias(PFD_table.Screen_ID)), -237), size[1]/2-338, size[2]/2+229, 4, boarder_cl)
@@ -200,7 +202,7 @@ function PFD_draw_spd_tape(PFD_table)
         draw_mach_info(PFD_table)
     end
 
-    if is_ias_ok(PFD_table.Screen_ID) == false and is_aoa_ok(PFD_table.Screen_ID) == true and how_many_adrs_work() == 0 then
+    if is_buss_visible(PFD_table.Screen_ID) then
         draw_BUSS(PFD_table)
         sasl.gl.drawTexture(PFD_spd_needle, size[1]/2-370, size[2]/2-18, 56, 21, PFD_YELLOW)
         sasl.gl.drawRectangle(size[1]/2-450, size[2]/2-10, 18, 6, PFD_YELLOW)
