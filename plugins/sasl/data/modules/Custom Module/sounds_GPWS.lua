@@ -72,6 +72,9 @@ local Sounds_alt_callout   = createGlobalPropertyi("a321neo/sounds/alt_callout",
 -- Global variables - GPWS
 -------------------------------------------------------------------------------
 
+local dr_retard = createGlobalPropertyi("a321neo/dynamics/gpws/req_retard", 0, false, true, false)
+local dr_retard_retard = createGlobalPropertyi("a321neo/dynamics/gpws/req_retardretard", 0, false, true, false)
+
 local callouts_sound = { source=Sounds_alt_callout, command=nil, duration = -0.5, continuous = false, interval = 0.1}
 
 local gpws_sounds = {
@@ -100,6 +103,9 @@ local gpws_sounds = {
     -- Pitch Pitch -- The priority of this is not a big issue because it's active when all the other modes are
     -- not active
     { source=GPWS_mode_pitch, command=Sounds_GPWS_pitch, duration = 2, continuous = false, interval = 1 },
+    
+    { source=dr_retard_retard, command=Sounds_GPWS_retard_retard, duration = 1.5, continuous = false, interval = 0.5 },
+    { source=dr_retard, command=Sounds_GPWS_retard, duration = 1, continuous = false, interval = 0.1 },
     
     callouts_sound,
     
@@ -378,6 +384,30 @@ function set_alt_callouts()
     
     if math.floor(get(Capt_ra_alt_ft)) >= radio_values[radio_values_current+1]+10 then
         radio_values_current = radio_values_current + 1
+    end
+
+end
+
+function update_retard()
+
+    if get(Aft_wheel_on_ground) == 1 and get(IAS) > 40 and (get(L_sim_throttle) > 0.05 or get(R_sim_throttle) > 0.05) and get(EWD_flight_phase) >= PHASE_FINAL then
+        set(dr_retard_retard, 1)
+    else
+        set(dr_retard_retard, 0)    
+    end
+
+    -- TODO Change to 10ft instead of 20ft when AP is on
+    if get(dr_retard) == 0 and get(dr_retard_retard) == 0 then
+        if get(Capt_ra_alt_ft) < 20 and (get(L_sim_throttle) > 0.05 or get(R_sim_throttle) > 0.05) and get(EWD_flight_phase) == PHASE_FINAL then
+            set(dr_retard, 1)
+        end
+    else
+        if get(Capt_ra_alt_ft) < 15 and (get(L_sim_throttle) > 0.05 or get(R_sim_throttle) > 0.05) and get(EWD_flight_phase) == PHASE_FINAL then
+            set(dr_retard_retard, 1)
+        else
+            set(dr_retard_retard, 0)
+            set(dr_retard, 0)
+        end
     end
 
 end

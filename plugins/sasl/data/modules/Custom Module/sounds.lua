@@ -36,6 +36,7 @@ function update()
 
     if get(AC_bus_1_pwrd) == 1 then
         set_alt_callouts()
+        update_retard()
         play_gpws_sounds()
     end
 end
