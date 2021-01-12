@@ -65,6 +65,9 @@ local function draw_needle(PFD_table)
 end
 
 function PFD_draw_vs_needle(PFD_table)
+    if is_gps_alt_visible(PFD_table.Screen_ID) then
+        return
+    end
 
     if is_vs_ok(PFD_table.Screen_ID) == false then
         sasl.gl.drawTexture(PFD_vs_mask, 0, 0, 900, 900, PFD_TAPE_GREY)
