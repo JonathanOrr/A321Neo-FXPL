@@ -221,16 +221,12 @@ function update()
 
             --test BP
             cws_desired = FBW_PID_arrays.SSS_FBW_CWS_trim.Proportional + FBW_PID_arrays.SSS_FBW_CWS_trim.Integral + FBW_PID_arrays.SSS_FBW_CWS_trim.Derivative
-            cws_actual = get(Augmented_pitch_trim_ratio) * FBW_PID_arrays.SSS_FBW_CWS_trim.Error_margin
+            cws_actual = get(Elev_trim_ratio) * FBW_PID_arrays.SSS_FBW_CWS_trim.Error_margin
             local cws_bp = cws_actual - cws_desired
             FBW_PID_arrays.SSS_FBW_CWS_trim.Integral = FBW_PID_arrays.SSS_FBW_CWS_trim.Integral + cws_bp * get(DELTA_TIME)
 
             if get(FBW_vertical_flight_mode_ratio) == 1 then
-                if stick_moving_vertically == true then
-                    set(Augmented_pitch_trim_ratio, Set_anim_value(get(Augmented_pitch_trim_ratio), SSS_PID_DPV(FBW_PID_arrays.SSS_FBW_CWS_trim, G_output, get(True_pitch_rate)), -1, 1, 0.5))
-                else
-                    set(Augmented_pitch_trim_ratio, Set_anim_value(get(Augmented_pitch_trim_ratio), SSS_PID_DPV(FBW_PID_arrays.SSS_FBW_CWS_trim, 0, - get(Pitch_artstab)), -1, 1, 0.5))
-                end
+                set(Augmented_pitch_trim_ratio, Set_anim_value(get(Augmented_pitch_trim_ratio), SSS_PID_DPV(FBW_PID_arrays.SSS_FBW_CWS_trim, 0, - get(Pitch_artstab)), -1, 1, 1))
             end
         end
 

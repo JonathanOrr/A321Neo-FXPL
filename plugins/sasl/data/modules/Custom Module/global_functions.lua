@@ -263,10 +263,11 @@ end
 function Table_extrapolate(tab, x)  -- This works like Table_interpolate, but it estimates the values
                                     -- even if x < minimum value of x > maximum value according to the
                                     -- last segment available
-    assert(b > 1)
 
     local a = 1
     local b = #tab
+
+    assert(b > 1)
 
     if x < tab[a][1] then
         return Math_rescale_no_lim(tab[a][1], tab[a][2], tab[a+1][1], tab[a+1][2], x) 
