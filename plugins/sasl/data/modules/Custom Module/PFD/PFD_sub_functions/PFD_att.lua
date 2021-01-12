@@ -135,7 +135,7 @@ function PFD_draw_att(PFD_table)
     --sidesitck position indicator
     if PFD_table.PFD_aircraft_in_air_timer <= 0.5 then
         SASL_draw_img_center_aligned(PFD_sidestick_box,   ATT_x_center, ATT_y_center, 329, 269, {1,1,1})
-        SASL_draw_img_center_aligned(PFD_sidestick_cross, ATT_x_center + Math_rescale(-1, -164, 1, 164, get(Roll)), ATT_y_center + Math_rescale(-1, -134, 1, 134, get(Pitch)), 61, 63, {1,1,1})
+        SASL_draw_img_center_aligned(PFD_sidestick_cross, ATT_x_center + Math_rescale(-1, -164, 1, 164, get(Augmented_roll)), ATT_y_center + Math_rescale(-1, -134, 1, 134, get(Augmented_pitch)), 61, 63, {1,1,1})
     end
 
     sasl.gl.drawRectangle(ATT_x_center-5, ATT_y_center-5, 10, 10, ECAM_BLACK)

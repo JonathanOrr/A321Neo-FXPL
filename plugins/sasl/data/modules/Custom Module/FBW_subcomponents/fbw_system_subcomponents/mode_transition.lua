@@ -51,7 +51,7 @@ function FBW_mode_transition(table)
     --memorise ATT--
     if BoolToNum(get(FBW_vertical_flare_mode_ratio) > 0) - table.Flare_mode_past_status == 1 then
         set(FBW_flare_mode_memorised_att, get(Flightmodel_pitch))
-        set(FBW_flare_mode_computed_Q, (-2 - get(FBW_flare_mode_memorised_att)) / 8)
+        set(FBW_flare_mode_computed_Q, (-2 - Math_clamp_lower(get(FBW_flare_mode_memorised_att), -2)) / 8)
     elseif BoolToNum(get(FBW_vertical_flare_mode_ratio) > 0) - table.Flare_mode_past_status == -1 then
         set(FBW_flare_mode_memorised_att, 0)
         set(FBW_flare_mode_computed_Q, 0)

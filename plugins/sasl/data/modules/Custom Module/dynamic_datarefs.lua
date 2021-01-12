@@ -523,9 +523,12 @@ Augmented_roll = createGlobalPropertyf("a321neo/dynamics/FBW/inputs/augmented_ro
 Augmented_pitch = createGlobalPropertyf("a321neo/dynamics/FBW/inputs/augmented_pitch", 0, false, true, false)
 Speedbrake_handle_ratio = globalProperty("sim/cockpit2/controls/speedbrake_ratio")
 --outputs--
-Roll_artstab = globalProperty("sim/joystick/artstab_roll_ratio")
-Pitch_artstab = globalProperty("sim/joystick/artstab_pitch_ratio")
-Yaw_artstab = globalProperty("sim/joystick/artstab_heading_ratio")
+FBW_augmented_Roll =  createGlobalPropertyf("a321neo/dynamics/FBW/inputs/FBW_augmented_roll", 0, false, true, false)
+FBW_augmented_Pitch = createGlobalPropertyf("a321neo/dynamics/FBW/inputs/FBW_augmented_pitch", 0, false, true, false)
+FBW_augmented_yaw =   createGlobalPropertyf("a321neo/dynamics/FBW/inputs/FBW_augmented_yaw", 0, false, true, false)
+Roll_artstab =        globalProperty("sim/joystick/artstab_roll_ratio")
+Pitch_artstab =       globalProperty("sim/joystick/artstab_pitch_ratio")
+Yaw_artstab =         globalProperty("sim/joystick/artstab_heading_ratio")
 --flight envelope "sensors"
 Alpha = globalProperty("sim/flightmodel/position/alpha")
 Vpath = globalProperty("sim/flightmodel/position/vpath")

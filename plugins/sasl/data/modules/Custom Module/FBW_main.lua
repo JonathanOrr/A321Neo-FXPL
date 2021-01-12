@@ -20,6 +20,8 @@
 include("PID.lua")
 include("FBW_subcomponents/fbw_system_subcomponents/flt_computers.lua")
 include("FBW_subcomponents/fbw_system_subcomponents/mode_transition.lua")
+include("FBW_subcomponents/fbw_system_subcomponents/lateral_augmentation.lua")
+include("FBW_subcomponents/fbw_system_subcomponents/vertical_augmentation.lua")
 addSearchPath(moduleDirectory .. "/Custom Module/FBW_subcomponents/")
 
 --xplane landing gear attitude correction--
@@ -78,6 +80,10 @@ local v_stability_wait_timer = 0--seconds
 local G_input = 0
 local G_output = 0
 local pitch_rate_correction = 0
+
+--test--
+local cws_desired = 0
+local cws_actual = 0
 
 local lvl_flt_load_constant = math.cos(math.rad(get(Flightmodel_pitch))) / math.cos(math.rad(Math_clamp(get(Flightmodel_roll), -33, 33)))
 
@@ -158,6 +164,12 @@ function update()
 
 
     if get(DELTA_TIME) ~= 0 then
+        FBW_vertical_agmentation()
+        FBW_lateral_agmentation()
+        if get(FBW_vertical_flight_mode_ratio) == 0 then
+            FBW_PID_arrays.SSS_FBW_G_load_pitch.Integral = 0
+            FBW_PID_arrays.SSS_FBW_pitch_rate.Integral = 0
+        end
 
         if stick_moving_vertically == true then
             v_stability_wait_timer = 0
@@ -193,14 +205,20 @@ function update()
         end
 
         if get(FBW_kill_switch) == 0 then
-            set(Roll_artstab, Set_anim_value(get(Roll_artstab), Roll_rate_output, -1, 1, 1.8))
-            set(Pitch_artstab, Set_anim_value(get(Pitch_artstab), pitch_rate_correction, -1, 1, 1.15))
+            set(FBW_augmented_Roll, Set_anim_value(get(FBW_augmented_Roll), Roll_rate_output, -1, 1, 1.8))
+            set(FBW_augmented_Pitch, Set_anim_value(get(FBW_augmented_Pitch), pitch_rate_correction, -1, 1, get_avg_ias() > 160 and (get_avg_ias() > 200 and 1.15 or 1.85) or 2.25))
+
+            --test BP
+            cws_desired = FBW_PID_arrays.SSS_FBW_CWS_trim.Proportional + FBW_PID_arrays.SSS_FBW_CWS_trim.Integral + FBW_PID_arrays.SSS_FBW_CWS_trim.Derivative
+            cws_actual = get(Augmented_pitch_trim_ratio) * FBW_PID_arrays.SSS_FBW_CWS_trim.Error_margin
+            local cws_bp = cws_actual - cws_desired
+            FBW_PID_arrays.SSS_FBW_CWS_trim.Integral = FBW_PID_arrays.SSS_FBW_CWS_trim.Integral + cws_bp * get(DELTA_TIME)
 
             if get(FBW_vertical_flight_mode_ratio) == 1 then
                 if stick_moving_vertically == true then
-                    set(Augmented_pitch_trim_ratio, Set_anim_value(get(Augmented_pitch_trim_ratio), SSS_PID_DPV(FBW_PID_arrays.SSS_FBW_CWS_trim, G_output, get(True_pitch_rate)), -1, 1, 0.1))
+                    set(Augmented_pitch_trim_ratio, Set_anim_value(get(Augmented_pitch_trim_ratio), SSS_PID_DPV(FBW_PID_arrays.SSS_FBW_CWS_trim, G_output, get(True_pitch_rate)), -1, 1, 0.5))
                 else
-                    set(Augmented_pitch_trim_ratio, Set_anim_value(get(Augmented_pitch_trim_ratio), SSS_PID_DPV(FBW_PID_arrays.SSS_FBW_CWS_trim, 0, - get(Pitch_artstab)), -1, 1, 0.1))
+                    set(Augmented_pitch_trim_ratio, Set_anim_value(get(Augmented_pitch_trim_ratio), SSS_PID_DPV(FBW_PID_arrays.SSS_FBW_CWS_trim, 0, - get(Pitch_artstab)), -1, 1, 0.5))
                 end
             end
         end
