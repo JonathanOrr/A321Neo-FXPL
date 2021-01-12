@@ -198,6 +198,8 @@ Adirs_total_time_to_align = createGlobalPropertyf("a321neo/cockpit/ADIRS/total_t
 
 GPS_1_is_available = createGlobalPropertyi("a321neo/cockpit/ADIRS/gps_1_is_available", 0, false, true, false) 
 GPS_2_is_available = createGlobalPropertyi("a321neo/cockpit/ADIRS/gps_2_is_available", 0, false, true, false) 
+GPS_1_altitude = createGlobalPropertyf("a321neo/cockpit/ADIRS/gps_1_alt", 0, false, true, false) 
+GPS_2_altitude = createGlobalPropertyf("a321neo/cockpit/ADIRS/gps_2_alt", 0, false, true, false) 
 
 --doors
 Door_1_l_ratio = createGlobalPropertyf("a321neo/dynamics/door/door_1_l_rat", 0, false, true, false)
