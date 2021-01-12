@@ -20,7 +20,6 @@ position = {get(Capt_nd_position, 1), get(Capt_nd_position, 2), get(Capt_nd_posi
 size = {900, 900}
 fbo = true
 
-include('display_common.lua')
 include('ND/common_ND.lua')
 
 capt_nd_data = new_dataset(ND_CAPT)

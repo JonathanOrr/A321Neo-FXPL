@@ -16,9 +16,6 @@
 -- Short description: PFD graphical
 -------------------------------------------------------------------------------
 
-
-include('display_common.lua')
-
 --varibles--
 local vvi_left_pixel_offset = 0
 local vvi_number_display = 0

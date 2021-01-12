@@ -19,8 +19,6 @@
 position = {get(EWD_displaying_position, 1), get(EWD_displaying_position, 2), get(EWD_displaying_position, 3), get(EWD_displaying_position, 4)}
 size = {900, 900}
 
-include('display_common.lua')
-
 local PARAM_DELAY    = 0.15 -- Time to filter out the parameters (they are updated every PARAM_DELAY seconds)
 local last_params_update = 0
 

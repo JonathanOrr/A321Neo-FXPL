@@ -115,9 +115,11 @@ local function auto_update()
         end
     end
 
-    -- EWD
+    set(DMC_ECAM_can_override_EWD, ((get(ECAM_brightness_act) < 0.01 or get(FAILURE_DISPLAY_ECAM) == 1) and ecam_nd_xfr == 0) and 1 or 0)
 
-    local is_EWD_replacing_ECAM = get(DMC_requiring_ECAM_EWD_swap) == 0 and get(EWD_brightness_act) < 0.01 or get(FAILURE_DISPLAY_EWD) == 1
+    -- EWD
+    local is_EWD_replacing_ECAM = (get(DMC_requiring_ECAM_EWD_swap) == 0 and (get(EWD_brightness_act) < 0.01 or get(FAILURE_DISPLAY_EWD) == 1))
+                               or (get(DMC_requiring_ECAM_EWD_swap) == 1 and get(DMC_ECAM_can_override_EWD) == 1)
     if is_EWD_replacing_ECAM then
         if ecam_nd_xfr == 0 then
             set(EWD_displaying_status,      DMC_ECAM)
@@ -139,7 +141,6 @@ local function auto_update()
         end
     end
     
-    --print(get(Capt_pfd_displaying_status),get(Capt_nd_displaying_status),get(EWD_displaying_status),get(ECAM_displaying_status))
 end
 
 local function update_display_position()
