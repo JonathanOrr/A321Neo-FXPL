@@ -3,7 +3,7 @@ A
 ACF_SOUNDS
 
 #########################################################################################################################################################################################
-##                                                                              2020 by SideStick Simulations                                                                          ##
+##                                                                              2021 by SideStick Simulations                                                                          ##
 ##                                                                               FMOD Developer: Henrick Ku                                                                            ##
 ##                                                                        https://github.com/JonathanOrr/A321Neo-FXPL                                                                  ##
 ##                                                                 For Forking, contact Discord HkK#8179 to obtain fspro                                                               ##
@@ -1484,11 +1484,6 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_CMND_HOLD_CUE a321neo/cockpit/draims/draims_transmit_vhf_2_button
 END_SOUND_ATTACHMENT
 
-
-
-
-
-
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
@@ -1505,6 +1500,126 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
   EVENT_CMND_HOLD_CUE a321neo/cockpit/ISIS/LS
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /APButton
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/fcu/capt_fd
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /APButton
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/fcu/capt_ls
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /APButton
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/nd/capt_pb_cstr
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /APButton
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/nd/capt_pb_wpt
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /APButton
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/nd/capt_pb_vord
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /APButton
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/nd/capt_pb_ndb
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /APButton
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/nd/capt_pb_arpt
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /APButton
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/fcu/fo_fd
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /APButton
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/fcu/fo_ls
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /APButton
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/nd/fo_pb_cstr
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /APButton
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/nd/fo_pb_wpt
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /APButton
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/nd/fo_pb_vord
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /APButton
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/nd/fo_pb_ndb
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /APButton
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/nd/fo_pb_arpt
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /APButton
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/fcu/pb_loc
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /APButton
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/fcu/pb_ap_1
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /APButton
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/fcu/pb_ap_2
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /APButton
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/fcu/pb_appr
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /APButton
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/fcu/pb_athr
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /APButton
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/fcu/pb_exped
 END_SOUND_ATTACHMENT
 
 ##############################################################################################################################
@@ -1598,6 +1713,107 @@ BEGIN_SOUND_ATTACHMENT
   VEH_XYZ 0 1.4 -18.7
   EVENT_START_COND ABS_DELTA=a321neo/cockpit/dmc/ecan_nd_xfr_position > 0
 END_SOUND_ATTACHMENT
+
+
+
+
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary2
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_START_COND a321neo/cockpit/nd/capt_mode_knob == -2
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary2
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_START_COND a321neo/cockpit/nd/capt_mode_knob > -2
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary2
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_START_COND a321neo/cockpit/nd/capt_mode_knob <= -1
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary2
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_START_COND a321neo/cockpit/nd/capt_mode_knob > -1
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary2
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_START_COND a321neo/cockpit/nd/capt_mode_knob <= 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary2
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_START_COND a321neo/cockpit/nd/capt_mode_knob > 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary2
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_START_COND a321neo/cockpit/nd/capt_mode_knob <= 1
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary2
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_START_COND a321neo/cockpit/nd/capt_mode_knob == 2
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary2
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_START_COND a321neo/cockpit/nd/fo_mode_knob == -2
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary2
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_START_COND a321neo/cockpit/nd/fo_mode_knob > -2
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary2
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_START_COND a321neo/cockpit/nd/fo_mode_knob <= -1
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary2
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_START_COND a321neo/cockpit/nd/fo_mode_knob > -1
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary2
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_START_COND a321neo/cockpit/nd/fo_mode_knob <= 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary2
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_START_COND a321neo/cockpit/nd/fo_mode_knob > 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary2
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_START_COND a321neo/cockpit/nd/fo_mode_knob <= 1
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary2
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_START_COND a321neo/cockpit/nd/fo_mode_knob == 2
+END_SOUND_ATTACHMENT
+
 
 ##############################################################################################################################BIG ROUND KNOB
 
@@ -1829,7 +2045,41 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_CMND_UP a321neo/cockpit/misc/capt_chrono_press
 END_SOUND_ATTACHMENT
 
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Big Round Button Press
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/cockpit/fcu/spd_mach
+END_SOUND_ATTACHMENT
 
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Big Round Button Release
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_UP a321neo/cockpit/fcu/spd_mach
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Big Round Button Press
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/cockpit/fcu/hdg_trk
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Big Round Button Release
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_UP a321neo/cockpit/fcu/hdg_trk
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Big Round Button Press
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/cockpit/fcu/metric_alt
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Big Round Button Release
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_UP a321neo/cockpit/fcu/metric_alt
+END_SOUND_ATTACHMENT
 
 #################################################################################################
 
@@ -1972,20 +2222,6 @@ BEGIN_SOUND_ATTACHMENT
   CUE_TRIGGER_COND  a321neo/dynamics/electrical/bus/ac_ess_powered == 0
 END_SOUND_ATTACHMENT
 
-#################################################################################################AVIONICS
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /BatteryRelay
-  VEH_XYZ 0 1.4 -18.7
-  EVENT_START_COND 	a321neo/cockpit/overhead/elec_battery_1_bottom == 0
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /BatteryRelay
-  VEH_XYZ 0 1.4 -18.7
-  EVENT_START_COND 	a321neo/cockpit/overhead/elec_battery_2_bottom == 0
-END_SOUND_ATTACHMENT
-
 #################################################################################################BLOWER AND EXTRACTOR
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /Blower
@@ -2004,13 +2240,13 @@ END_SOUND_ATTACHMENT
 #################################################################################################BUSKICK
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /BusOn
+  EVENT_NAME /BusOn2
   VEH_XYZ 0 1.4 -18.7
   EVENT_START_COND 	a321neo/sounds/elec_bus_delayed != 0
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /BusKick
+  EVENT_NAME /BusKick2
   VEH_XYZ 0 1.4 -18.7
   EVENT_START_COND 	a321neo/dynamics/electrical/bus/ac_ess_powered == 0
 END_SOUND_ATTACHMENT
@@ -2355,7 +2591,25 @@ END_SOUND_ATTACHMENT
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MetalOn
   VEH_XYZ 0 2.4 -18.1
-  EVENT_START_COND a321neo/cockpit/lights/capt_console_floor_pos == 2
+  EVENT_START_COND a321neo/cockpit/lights/capt_console_floor_pos == -1
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MetalOn
+  VEH_XYZ 0 2.4 -18.1
+  EVENT_START_COND a321neo/cockpit/lights/fo_console_floor_pos == 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MetalOff
+  VEH_XYZ 0 2.4 -18.1
+  EVENT_START_COND a321neo/cockpit/lights/fo_console_floor_pos == 1
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MetalOn
+  VEH_XYZ 0 2.4 -18.1
+  EVENT_START_COND a321neo/cockpit/lights/fo_console_floor_pos == -1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
@@ -2370,17 +2624,79 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_START_COND a321neo/cockpit/evac/buttons/capt_purs_pos == 1
 END_SOUND_ATTACHMENT
 
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MetalOff
+  VEH_XYZ 0 2.4 -18.1
+  EVENT_START_COND a321neo/cockpit/nd/capt_nav1_lever == -1
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MetalOff
+  VEH_XYZ 0 2.4 -18.1
+  EVENT_START_COND a321neo/cockpit/nd/capt_nav1_lever == 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MetalOff
+  VEH_XYZ 0 2.4 -18.1
+  EVENT_START_COND a321neo/cockpit/nd/capt_nav1_lever == 1
+END_SOUND_ATTACHMENT
 
 
 
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MetalOff
+  VEH_XYZ 0 2.4 -18.1
+  EVENT_START_COND a321neo/cockpit/nd/capt_nav2_lever == -1
+END_SOUND_ATTACHMENT
 
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MetalOff
+  VEH_XYZ 0 2.4 -18.1
+  EVENT_START_COND a321neo/cockpit/nd/capt_nav2_lever == 0
+END_SOUND_ATTACHMENT
 
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MetalOff
+  VEH_XYZ 0 2.4 -18.1
+  EVENT_START_COND a321neo/cockpit/nd/capt_nav2_lever == 1
+END_SOUND_ATTACHMENT
 
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MetalOff
+  VEH_XYZ 0 2.4 -18.1
+  EVENT_START_COND a321neo/cockpit/nd/fo_nav1_lever == -1
+END_SOUND_ATTACHMENT
 
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MetalOff
+  VEH_XYZ 0 2.4 -18.1
+  EVENT_START_COND a321neo/cockpit/nd/fo_nav1_lever == 0
+END_SOUND_ATTACHMENT
 
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MetalOff
+  VEH_XYZ 0 2.4 -18.1
+  EVENT_START_COND a321neo/cockpit/nd/fo_nav1_lever == 1
+END_SOUND_ATTACHMENT
 
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MetalOff
+  VEH_XYZ 0 2.4 -18.1
+  EVENT_START_COND a321neo/cockpit/nd/fo_nav2_lever == -1
+END_SOUND_ATTACHMENT
 
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MetalOff
+  VEH_XYZ 0 2.4 -18.1
+  EVENT_START_COND a321neo/cockpit/nd/fo_nav2_lever == 0
+END_SOUND_ATTACHMENT
 
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MetalOff
+  VEH_XYZ 0 2.4 -18.1
+  EVENT_START_COND a321neo/cockpit/nd/fo_nav2_lever == 1
+END_SOUND_ATTACHMENT
 
 #############################################################################################
 
@@ -2997,4 +3313,203 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_START_COND 	sim/cockpit2/switches/no_smoking == 0
   EVENT_END_COND a321neo/dynamics/electrical/bus/ac_ess_powered == 0
 END_SOUND_ATTACHMENT
+
+##################################################################################################################################################################################FCU Knobs
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FCU/Rotate1
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/cockpit/nd/capt_range_dn
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FCU/Rotate1
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/cockpit/nd/capt_range_up
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FCU/Rotate1
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/cockpit/nd/fo_range_dn
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FCU/Rotate1
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/cockpit/nd/fo_range_up
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FCU/Rotate1
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/cockpit/fcu/capt_qnh_dn
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FCU/Rotate1
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/cockpit/fcu/capt_qnh_up
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FCU/Rotate1
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/cockpit/fcu/fo_qnh_dn
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FCU/Rotate1
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/cockpit/fcu/fo_qnh_up
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FCU/Rotate1
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/cockpit/fcu/spd_knob_dn
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FCU/Rotate1
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/cockpit/fcu/spd_knob_up
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FCU/Rotate1
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/cockpit/fcu/hdg_knob_dn
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FCU/Rotate1
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/cockpit/fcu/hdg_knob_up
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FCU/Rotate1
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/cockpit/fcu/alt_knob_dn
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FCU/Rotate1
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/cockpit/fcu/alt_knob_up
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FCU/Rotate1
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/cockpit/fcu/vs_knob_dn
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FCU/Rotate1
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/cockpit/fcu/vs_knob_up
+END_SOUND_ATTACHMENT
+
+###########################################################################################################PUSHPULL
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FCU/Push
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/cockpit/fcu/spd_knob_push
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FCU/Push
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/cockpit/fcu/hdg_knob_push
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FCU/Push
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/cockpit/fcu/alt_knob_push
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FCU/Push
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/cockpit/fcu/vs_knob_push
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FCU/Pull
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/cockpit/fcu/spd_knob_pull
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FCU/Pull
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/cockpit/fcu/hdg_knob_pull
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FCU/Pull
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/cockpit/fcu/alt_knob_pull
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FCU/Pull
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/cockpit/fcu/vs_knob_pull
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FCU/Pull
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/cockpit/fcu/capt_qnh_pull
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FCU/Pull
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/cockpit/fcu/capt_qnh_push
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FCU/Pull
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/cockpit/fcu/fo_qnh_pull
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FCU/Pull
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/cockpit/fcu/fo_qnh_push
+END_SOUND_ATTACHMENT
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
