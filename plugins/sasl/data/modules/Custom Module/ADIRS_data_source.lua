@@ -84,7 +84,7 @@ function how_many_adrs_work()
     local adr1 = ADIRS_sys[1].adr_status == ADR_STATUS_ON and 1 or 0
     local adr2 = ADIRS_sys[2].adr_status == ADR_STATUS_ON and 1 or 0
     local adr3 = ADIRS_sys[3].adr_status == ADR_STATUS_ON and 1 or 0
-    
+
     return adr1+adr2+adr3
 end
 
@@ -92,7 +92,7 @@ function how_many_irs_fully_work()
     local ir1 = ADIRS_sys[1].ir_status == IR_STATUS_ALIGNED and 1 or 0
     local ir2 = ADIRS_sys[2].ir_status == IR_STATUS_ALIGNED and 1 or 0
     local ir3 = ADIRS_sys[3].ir_status == IR_STATUS_ALIGNED and 1 or 0
-    
+
     return ir1+ir2+ir3
 end
 
@@ -100,7 +100,7 @@ function how_many_irs_partially_work()
     local ir1 = (ADIRS_sys[1].ir_status == IR_STATUS_ALIGNED or ADIRS_sys[1].ir_status == IR_STATUS_ATT_ALIGNED) and 1 or 0
     local ir2 = (ADIRS_sys[2].ir_status == IR_STATUS_ALIGNED or ADIRS_sys[2].ir_status == IR_STATUS_ATT_ALIGNED) and 1 or 0
     local ir3 = (ADIRS_sys[3].ir_status == IR_STATUS_ALIGNED or ADIRS_sys[3].ir_status == IR_STATUS_ATT_ALIGNED) and 1 or 0
-    
+
     return ir1+ir2+ir3
 end
 

@@ -10,7 +10,7 @@ Message_ALTN_LAW = {
             return COL_CAUTION
     end,
     is_active = function(self)
-      return get(FBW_status) == 1
+      return get(FBW_total_control_law) == FBW_ALT_REDUCED_PROT_LAW or get(FBW_total_control_law) == FBW_ALT_NO_PROT_LAW
     end
 }
 
@@ -22,7 +22,7 @@ Message_DIRECT_LAW = {
             return COL_CAUTION
     end,
     is_active = function(self)
-      return get(FBW_status) == 0
+      return get(FBW_total_control_law) == FBW_DIRECT_LAW
     end
 }
 
@@ -46,16 +46,16 @@ Message_FBW_DO_NOT_SPD_BRK = {
             return COL_ACTIONS
     end,
     is_active = function(self)
-      return get(FBW_status) == 0
+      return get(FBW_total_control_law) == FBW_DIRECT_LAW
     end
 }
 
 Message_FBW_SPEED_LIMIT = {
     text = function(self)
-        if get(FBW_status) == 1 then
+        if get(FBW_total_control_law) == FBW_ALT_REDUCED_PROT_LAW or get(FBW_total_control_law) == FBW_ALT_NO_PROT_LAW then
             return " MAX SPEED........330/.82"
         else
-            return " MAX SPEED........305/.80"        
+            return " MAX SPEED........305/.80"
         end
     end,
     color = function(self)
@@ -74,7 +74,7 @@ Message_FBW_MAN_PITCH_TRIM = {
             return COL_ACTIONS
     end,
     is_active = function(self)
-      return get(FBW_status) == 0
+      return get(FBW_total_control_law) == FBW_DIRECT_LAW
     end
 }
 
@@ -86,7 +86,7 @@ Message_FBW_MANEUVER_WITH_CARE = {
             return COL_ACTIONS
     end,
     is_active = function(self)
-      return get(FBW_status) == 0
+      return get(FBW_total_control_law) == FBW_DIRECT_LAW
     end
 }
 
@@ -111,13 +111,13 @@ MessageGroup_FBW_ALTN_DIRECT_LAW = {
         Message_FBW_SPEED_LIMIT,
         Message_FBW_MAN_PITCH_TRIM,
         Message_FBW_MANEUVER_WITH_CARE
-        
+
     },
 
     -- Method to check if this message group is active
     is_active = function(self)
         -- Not showed when any memo is active
-        return get(FBW_status) == 1 or get(FBW_status) == 0
+        return get(FBW_total_control_law) == FBW_ALT_REDUCED_PROT_LAW or get(FBW_total_control_law) == FBW_ALT_NO_PROT_LAW or get(FBW_total_control_law) == FBW_DIRECT_LAW
     end,
 
     is_inhibited = function(self)

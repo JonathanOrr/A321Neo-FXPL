@@ -511,6 +511,7 @@ FBW_kill_switch = createGlobalPropertyi("a321neo/dynamics/FBW/debug/kill_switch"
 Force_full_rudder_limit = createGlobalPropertyi("a321neo/dynamics/FBW/debug/force_full_rudder_limit", 0, false, true, false)
 Bypass_speedbrakes_inhibition = createGlobalPropertyi("a321neo/dynamics/FBW/debug/bypass_spdbrakes_inhibition", 0, false, true, false)
 Override_flap_auto_retract = createGlobalPropertyi("a321neo/dynamics/FBW/debug/override_flap_auto_retract", 0, false, true, false)
+Debug_FBW_law_reconfig = createGlobalPropertyi("a321neo/dynamics/FBW/debug/debug_FBW_law_reconfig", 0, false, true, false)
 --customizations
 FBW_use_C_star = createGlobalPropertyi("a321neo/dynamics/FBW/customizations/c_star_control", 0, false, true, false)
 Project_square_input = createGlobalPropertyi("a321neo/dynamics/FBW/customizations/projected_square_input", 0, false, true, false)
@@ -546,7 +547,7 @@ True_pitch_rate = createGlobalPropertyf("a321neo/dynamics/FBW/aerodynamics/true_
 Slide_slip_angle = globalProperty("sim/cockpit2/gauges/indicators/sideslip_degrees")
 --FBW system status--
 FBW_total_control_law = createGlobalPropertyi("a321neo/dynamics/FBW/system_status/total_control_law", 0, false, true, false)   -- -2 mechanical backup law, -1 abnormal law, 0 direct law, 1 alternate law, 2 alternate law(reduced prot), 3 normal law
-FBW_lateral_law =       createGlobalPropertyi("a321neo/dynamics/FBW/system_status/lateral_control_law", 0, false, true, false) -- -2 mechanical backup law,                  0 direct law,                  							   3 normal law (abnormal law / alt law doesn't exist)
+FBW_lateral_law =       createGlobalPropertyi("a321neo/dynamics/FBW/system_status/lateral_control_law", 0, false, true, false) -- -2 mechanical backup law, -1 abnormal law, 0 direct law,                  							   3 normal law (abnormal law / alt law doesn't exist)
 FBW_vertical_law =      createGlobalPropertyi("a321neo/dynamics/FBW/system_status/vertical_control_law", 0, false, true, false)-- -2 mechanical backup law, -1 abnormal law, 0 direct law, 1 alternate law, 2 alternate law(reduced prot), 3 normal law
 FBW_yaw_law =           createGlobalPropertyi("a321neo/dynamics/FBW/system_status/yaw_control_law", 0, false, true, false)     -- -2 mechanical backup law, -1 abnormal law, 0 direct law, 1 alternate law, 							   3 normal law
 FBW_vertical_ground_mode_ratio =   createGlobalPropertyf("a321neo/dynamics/FBW/system_status/vertical_ground_mode_ratio", 1, false, true, false)   --FBW vertical ground   mode transition ratio

@@ -22,6 +22,7 @@ include("FBW_subcomponents/fbw_system_subcomponents/flt_computers.lua")
 include("FBW_subcomponents/fbw_system_subcomponents/mode_transition.lua")
 include("FBW_subcomponents/fbw_system_subcomponents/lateral_augmentation.lua")
 include("FBW_subcomponents/fbw_system_subcomponents/vertical_augmentation.lua")
+include("FBW_subcomponents/fbw_system_subcomponents/law_reconfiguration.lua")
 addSearchPath(moduleDirectory .. "/Custom Module/FBW_subcomponents/")
 
 --xplane landing gear attitude correction--
@@ -98,6 +99,7 @@ function update()
     Fctl_computuers_status_computation(Fctl_computers_var_table)
     Compute_fctl_button_states()
     FBW_mode_transition(FBW_modes_var_table)
+    FBW_law_reconfiguration(FBW_law_var_table)
 
 
     kill_delta = get(FBW_kill_switch) - last_kill_value
