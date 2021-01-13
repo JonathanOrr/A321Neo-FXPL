@@ -68,12 +68,20 @@ local Sounds_GPWS_windshear = sasl.createCommand("a321neo/sounds/gpws/windshear"
 
 local Sounds_alt_callout   = createGlobalPropertyi("a321neo/sounds/alt_callout", 0, false, true, false)
 
+local Sounds_GPWS_test_start = sasl.createCommand("a321neo/sounds/gpws/test_start", "")
+local Sounds_GPWS_test_pass  = sasl.createCommand("a321neo/sounds/gpws/test_pass", "")
+local Sounds_GPWS_test_end   = sasl.createCommand("a321neo/sounds/gpws/test_end", "")
+
 -------------------------------------------------------------------------------
 -- Global variables - GPWS
 -------------------------------------------------------------------------------
 
 local dr_retard = createGlobalPropertyi("a321neo/dynamics/gpws/req_retard", 0, false, true, false)
 local dr_retard_retard = createGlobalPropertyi("a321neo/dynamics/gpws/req_retardretard", 0, false, true, false)
+
+local dr_gpws_start = createGlobalPropertyi("a321neo/dynamics/gpws/req_test_start", 0, false, true, false)
+local dr_gpws_pass  = createGlobalPropertyi("a321neo/dynamics/gpws/req_test_pass", 0, false, true, false)
+local dr_gpws_end   = createGlobalPropertyi("a321neo/dynamics/gpws/req_test_end", 0, false, true, false)
 
 local callouts_sound = { source=Sounds_alt_callout, command=nil, duration = -0.5, continuous = false, interval = 0.1}
 
@@ -122,6 +130,11 @@ local gpws_sounds = {
     -- Glideslope
     { source=GPWS_mode_5_glideslope_hard, command=Sounds_GPWS_glideslope_hard, duration = 1, continuous = true, interval = 3 },
     { source=GPWS_mode_5_glideslope,command=Sounds_GPWS_glideslope,    duration = 1,   continuous = false, interval = 3 },
+
+    -- Test
+    { source=dr_gpws_start, command=Sounds_GPWS_test_start, duration=2, continuous = false },
+    { source=dr_gpws_pass,  command=Sounds_GPWS_test_pass,  duration=2, continuous = false },
+    { source=dr_gpws_end,   command=Sounds_GPWS_test_end,   duration=2, continuous = false },
 
 }
 
@@ -231,19 +244,19 @@ local test_started_at = 0
 
 local function play_short_test()
     local curr_time = get(TIME) - test_started_at
-    if curr_time < 0.5 then
-        set(GPWS_mode_5_glideslope_hard, 1)
-        pb_set(PB.mip.gpws_capt, true, false)
-    elseif curr_time > 1.5 and curr_time < 3.5 then
-        set(GPWS_mode_1_pullup, 1)
-        pb_set(PB.mip.gpws_capt, false, true)
-    elseif curr_time > 4 and curr_time < 6 then
-        set(GPWS_pred_terr_pull, 1)
-        pb_set(PB.mip.gpws_capt, false, true)
-    elseif curr_time > 7.5 and curr_time < 9.5 then
-        pb_set(PB.mip.gpws_capt, true, false)
-        set(GPWS_mode_pitch, 1)
-    elseif curr_time > 11 then
+    if curr_time < 1.5 then
+        set(dr_gpws_start, 1)
+        pb_set(PB.mip.gpws_capt, true, true)
+    elseif curr_time > 2 and curr_time < 3 then
+        pb_set(PB.mip.gpws_capt, false, false)
+    elseif curr_time >= 3 and curr_time < 7 then
+        pb_set(PB.mip.gpws_capt, true, true)
+    elseif curr_time >= 7 and curr_time < 9.5 then
+        pb_set(PB.mip.gpws_capt, false, false)
+        set(dr_gpws_pass, 1)
+    elseif curr_time >= 9.5 and curr_time < 10.5 then
+        set(dr_gpws_end, 1)
+    elseif curr_time > 13 then
         short_test = false
     end
 end
