@@ -331,6 +331,10 @@ end
 
 function play_gpws_sounds()
 
+    set(dr_gpws_start, 0)
+    set(dr_gpws_pass,  0)
+    set(dr_gpws_end,   0)
+
     if short_test or long_test then
         if test_started_at == 0 then
             test_started_at = get(TIME)
