@@ -514,3 +514,6 @@ MCDU_refresh_page   = sasl.createCommand("a321neo/cockpit/mcdu/refresh","")
 MCDU_DMC_cmd_test_1 = sasl.createCommand("a321neo/cockpit/mcdu/trigger_dmc_test_1","")
 MCDU_DMC_cmd_test_2 = sasl.createCommand("a321neo/cockpit/mcdu/trigger_dmc_test_2","")
 MCDU_DMC_cmd_test_3 = sasl.createCommand("a321neo/cockpit/mcdu/trigger_dmc_test_3","")
+
+--misc--
+Default_view = sasl.findCommand("sim/view/default_view")
