@@ -4,7 +4,10 @@
 {bff33e0f-d439-438b-b953-a54d305e4ebb} event:/Airport/Int
 {0a3ca941-541b-49ea-b0a6-654bfc0ba63f} event:/Autopilot/Calvary
 {ff1b5104-6805-45d0-8716-2f0c54177361} event:/Autopilot/Cchord
+{4cf42fdd-712b-4a41-bd0f-4cc005d8ae60} event:/Autopilot/CPDLC
 {d71b0f4f-0713-4c61-822f-eef505797a73} event:/Autopilot/Degrade
+{def75ab8-e6eb-4901-83ab-ffd6c481fbdc} event:/Autopilot/Disengage
+{534a7501-5cc0-4eea-9238-4a15e590d74c} event:/Autopilot/Engage
 {b78a17ca-4056-4443-aa61-7f22f71b2e0c} event:/BatteryRelay/1
 {2b35580e-c22e-49d8-b6e1-8079883b310e} event:/BatteryRelay/2
 {ba144e8c-f08f-4650-bb8f-ea1fdda166e2} event:/CockpitMechanical/Rotary/Rotary1
@@ -43,6 +46,7 @@
 {739de174-b194-4353-b998-a76f0a62c442} event:/FCU/Rotate1
 {036a758a-3b44-49a3-868b-45f9bccbeeca} event:/FCU/Rotate2
 {83b2ede9-8622-4a05-a6ef-766de551455c} event:/FCU/Rotate3
+{44c515d5-f610-409d-b4a1-688cab92fd3c} event:/FCU/Rotate4
 {764954de-ba36-4c00-8f4a-de6af5e22a4a} event:/FirePB/CoverOpen
 {6b7c07db-22c7-438d-ad71-59c4b8c1dabd} event:/FirePB/CoverOpen2
 {e324692d-592f-4dfb-ab39-b11bfbeb9224} event:/FirePB/Pull
@@ -94,6 +98,9 @@
 {a897e617-89e1-43d6-8d15-a52e71fda8e9} event:/RA/retard
 {f29dba50-d417-4b8c-b2f0-9a3966caf7cc} event:/SSPriority/Left
 {8fc35da0-ff79-4c98-9b39-e007109072ad} event:/SSPriority/Right
+{1ac29002-a8e7-438f-bced-dd56cb5e0ba2} event:/TA Test/End
+{bd5c0769-ed87-4f2c-a3f4-9843f0ac8e30} event:/TA Test/Pass
+{f15aa472-2df9-4ba1-91ee-30ec710d40b1} event:/TA Test/Start
 {f8e6f2ed-0d4c-4785-bd01-c98bfa48605e} event:/Wipers/Bottom
 {0b09be96-18d3-4139-8da9-27db52a78f7a} event:/Wipers/Start
 {883c4ea2-ffcd-4845-939e-1f0a5dedda32} event:/Wipers/Top
@@ -113,7 +120,6 @@
 {635b86aa-7d9b-4dad-9a71-371b15257ae8} event:/BusOn
 {6c24dc2a-1727-448b-804d-7e73885411c3} event:/BusOn2
 {bf628244-9f1c-4c33-97bd-8b793852fd47} event:/Cabin
-{4cf42fdd-712b-4a41-bd0f-4cc005d8ae60} event:/CPDLC
 {df97eb35-a18e-494e-b074-1d496aa0cda2} event:/Evac Horn
 {06a66501-2a11-4b1a-a6f7-4fe5d089bc41} event:/Ext
 {f86c05b1-253e-4508-a475-4d354dd045c6} event:/Extractor
