@@ -74,9 +74,9 @@ local function update_buttons()
 end
 
 local function update_knobs()
-    Set_dataref_linear_anim_nostop(ND_Capt_mode_knob, capt_nd_data.config.mode-3, -2, 3, 5)
-    Set_dataref_linear_anim_nostop(ND_Capt_nav1_level, capt_nd_data.config.nav_1_selector, -1, 1, 5)
-    Set_dataref_linear_anim_nostop(ND_Capt_nav2_level, capt_nd_data.config.nav_2_selector, -1, 1, 5)
+    Set_dataref_linear_anim_nostop(ND_Capt_mode_knob, capt_nd_data.config.mode-3, -2, 3, 10)
+    Set_dataref_linear_anim_nostop(ND_Capt_nav1_level, capt_nd_data.config.nav_1_selector, -1, 1, 10)
+    Set_dataref_linear_anim_nostop(ND_Capt_nav2_level, capt_nd_data.config.nav_2_selector, -1, 1, 10)
     
 end
 

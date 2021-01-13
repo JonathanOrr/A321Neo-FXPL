@@ -795,8 +795,8 @@ local function update_buttons_datarefs()
     pb_set(PB.ovhd.eng_man_start_2, eng_manual_switch[2])
     pb_set(PB.ovhd.eng_dual_cooling, dual_cooling_switch)
 
-    Set_dataref_linear_anim_nostop(Engine_1_master_switch_anim, get(Engine_1_master_switch), 0, 1, 5)
-    Set_dataref_linear_anim_nostop(Engine_2_master_switch_anim, get(Engine_2_master_switch), 0, 1, 5)
+    Set_dataref_linear_anim_nostop(Engine_1_master_switch_anim, get(Engine_1_master_switch), 0, 1, 10)
+    Set_dataref_linear_anim_nostop(Engine_2_master_switch_anim, get(Engine_2_master_switch), 0, 1, 10)
 
     set(Eng_Dual_Cooling, dual_cooling_switch and 1 or 0)
 end

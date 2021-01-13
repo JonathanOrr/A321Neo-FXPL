@@ -49,7 +49,7 @@ function update()
     pb_set(PB.ovhd.evac_cmd, evac_is_on, evac_is_on and ( (get(TIME) % 0.5) < 0.25))
     set(EVAC_cabin_active, PB.ovhd.evac_cmd.status_bottom and 1 or 0)
     set(EVAC_cockpit_horn, cockpit_horn and 1 or 0)
-    Set_dataref_linear_anim_nostop(EVAC_capt_purs_lever, capt_pursue and 1 or 0, 0, 1, 5)
+    Set_dataref_linear_anim_nostop(EVAC_capt_purs_lever, capt_pursue and 1 or 0, 0, 1, 10)
 
     if get(CabinIsReady) == 1 and (
            get(EWD_flight_phase) == PHASE_AIRBONE 
