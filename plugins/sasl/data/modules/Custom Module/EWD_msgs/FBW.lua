@@ -1,91 +1,93 @@
+include('EWD_msgs/common.lua')
+
 --------------------------------------------------------------------------------
 -- CAUTION: ALTN LAW and DIRECT LAW
 --------------------------------------------------------------------------------
 
 Message_ALTN_LAW = {
-    text = function(self)
+    text = function()
             return "      ALTN LAW"
     end,
-    color = function(self)
+    color = function()
             return COL_CAUTION
     end,
-    is_active = function(self)
+    is_active = function()
       return get(FBW_total_control_law) == FBW_ALT_REDUCED_PROT_LAW or get(FBW_total_control_law) == FBW_ALT_NO_PROT_LAW
     end
 }
 
 Message_DIRECT_LAW = {
-    text = function(self)
+    text = function()
             return "      DIRECT LAW"
     end,
-    color = function(self)
+    color = function()
             return COL_CAUTION
     end,
-    is_active = function(self)
+    is_active = function()
       return get(FBW_total_control_law) == FBW_DIRECT_LAW
     end
 }
 
 Message_PROT_LOST = {
-    text = function(self)
+    text = function()
             return "      (PROT LOST)"
     end,
-    color = function(self)
+    color = function()
             return COL_CAUTION
     end,
-    is_active = function(self)
+    is_active = function()
       return true
     end
 }
 
 Message_FBW_DO_NOT_SPD_BRK = {
-    text = function(self)
+    text = function()
             return " SPD BRK.......DO NOT USE"
     end,
-    color = function(self)
+    color = function()
             return COL_ACTIONS
     end,
-    is_active = function(self)
+    is_active = function()
       return get(FBW_total_control_law) == FBW_DIRECT_LAW
     end
 }
 
 Message_FBW_SPEED_LIMIT = {
-    text = function(self)
+    text = function()
         if get(FBW_total_control_law) == FBW_ALT_REDUCED_PROT_LAW or get(FBW_total_control_law) == FBW_ALT_NO_PROT_LAW then
             return " MAX SPEED........330/.82"
         else
             return " MAX SPEED........305/.80"
         end
     end,
-    color = function(self)
+    color = function()
             return COL_ACTIONS
     end,
-    is_active = function(self)
+    is_active = function()
       return true
     end
 }
 
 Message_FBW_MAN_PITCH_TRIM = {
-    text = function(self)
+    text = function()
             return " - MAN PITCH TRIM.....USE"
     end,
-    color = function(self)
+    color = function()
             return COL_ACTIONS
     end,
-    is_active = function(self)
+    is_active = function()
       return get(FBW_total_control_law) == FBW_DIRECT_LAW
     end
 }
 
 Message_FBW_MANEUVER_WITH_CARE = {
-    text = function(self)
+    text = function()
             return " MANEUVER WITH CARE"
     end,
-    color = function(self)
+    color = function()
             return COL_ACTIONS
     end,
-    is_active = function(self)
+    is_active = function()
       return get(FBW_total_control_law) == FBW_DIRECT_LAW
     end
 }
@@ -94,10 +96,10 @@ MessageGroup_FBW_ALTN_DIRECT_LAW = {
 
     shown = false,
 
-    text  = function(self)
+    text  = function()
                 return "F/CTL"
             end,
-    color = function(self)
+    color = function()
                 return COL_CAUTION
             end,
 
@@ -115,15 +117,14 @@ MessageGroup_FBW_ALTN_DIRECT_LAW = {
     },
 
     -- Method to check if this message group is active
-    is_active = function(self)
+    is_active = function()
         -- Not showed when any memo is active
         return get(FBW_total_control_law) == FBW_ALT_REDUCED_PROT_LAW or get(FBW_total_control_law) == FBW_ALT_NO_PROT_LAW or get(FBW_total_control_law) == FBW_DIRECT_LAW
     end,
 
-    is_inhibited = function(self)
+    is_inhibited = function()
         -- Inhibited during takeoff and landing
-        return get(EWD_flight_phase) == PHASE_ABOVE_80_KTS or get(EWD_flight_phase) == PHASE_LIFTOFF or
-               get(EWD_flight_phase) == PHASE_FINAL or get(EWD_flight_phase) == PHASE_TOUCHDOWN
+        return is_active_in({PHASE_1ST_ENG_ON, PHASE_1ST_ENG_TO_PWR, PHASE_AIRBONE, PHASE_BELOW_80_KTS})
     end
 
 }
