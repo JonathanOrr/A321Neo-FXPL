@@ -118,7 +118,7 @@ end
 --// The Load Function
 function table.load( sfile )
   local ftables,err = loadfile( sfile )
-  if err then return _,err end
+  if err then print(err); return nil,err end
   local tables = ftables()
   for idx = 1,#tables do
      local tolinki = {}

@@ -1,8 +1,15 @@
 {16b64ab9-25b3-459a-8ae7-d3241e6a487e} event:/ACP/Down
 {ef23b13a-6ff4-4eba-8629-1207f2980609} event:/ACP/Up
+{7a544849-2d24-4ae1-9bc9-3ceadda13c32} event:/Airport/Ext
+{bff33e0f-d439-438b-b953-a54d305e4ebb} event:/Airport/Int
 {0a3ca941-541b-49ea-b0a6-654bfc0ba63f} event:/Autopilot/Calvary
 {ff1b5104-6805-45d0-8716-2f0c54177361} event:/Autopilot/Cchord
+{4cf42fdd-712b-4a41-bd0f-4cc005d8ae60} event:/Autopilot/CPDLC
 {d71b0f4f-0713-4c61-822f-eef505797a73} event:/Autopilot/Degrade
+{def75ab8-e6eb-4901-83ab-ffd6c481fbdc} event:/Autopilot/Disengage
+{534a7501-5cc0-4eea-9238-4a15e590d74c} event:/Autopilot/Engage
+{b78a17ca-4056-4443-aa61-7f22f71b2e0c} event:/BatteryRelay/1
+{2b35580e-c22e-49d8-b6e1-8079883b310e} event:/BatteryRelay/2
 {ba144e8c-f08f-4650-bb8f-ea1fdda166e2} event:/CockpitMechanical/Rotary/Rotary1
 {6278ba00-52a0-476a-8a87-43fb61e0a189} event:/CockpitMechanical/Rotary/Rotary2
 {4c126686-6c9f-44a1-b45a-dd4a04ef8a46} event:/CockpitMechanical/Rotary/Rotary3
@@ -17,10 +24,10 @@
 {850bb3a5-fa7f-4d22-bf9d-a80868eee0e7} event:/CockpitMechanical/Big Round Button Press
 {bafd0ab7-85f5-4e8f-8898-00cef3bbf4d3} event:/CockpitMechanical/Big Round Button Release
 {ed910ed0-bdc8-47e6-a8cb-d025b4ba55d4} event:/CockpitMechanical/Engine Master
+{68bc716b-69d8-46e9-a663-2d8e9a05edb4} event:/CockpitMechanical/Engine Master 2
 {b7c55501-4395-4b64-8bd5-5ac794d5c763} event:/CockpitMechanical/GearDown
 {6acc591c-55ac-450c-bcb2-682e9204dfa3} event:/CockpitMechanical/GearUp
 {19a8de53-9601-4d68-9d4f-9199ad28bdd8} event:/CockpitMechanical/MCDU Button Press
-{50685717-2d1a-49a9-b4d9-72480f96054e} event:/CockpitMechanical/MCDU Button Press 2
 {591d615e-aae4-4bd2-b160-7ed57ba8e28f} event:/CockpitMechanical/MetalOff
 {734b27e4-0b32-4451-b348-11dac73ae9a6} event:/CockpitMechanical/MetalOn
 {748172b8-4c79-49ad-8dc5-eb75af6c8b1f} event:/CockpitMechanical/ParkBrakeOff
@@ -39,7 +46,11 @@
 {739de174-b194-4353-b998-a76f0a62c442} event:/FCU/Rotate1
 {036a758a-3b44-49a3-868b-45f9bccbeeca} event:/FCU/Rotate2
 {83b2ede9-8622-4a05-a6ef-766de551455c} event:/FCU/Rotate3
-{a3a05f51-d97c-4dfa-979a-d7d6b92147b4} event:/FCU/Rotate4
+{44c515d5-f610-409d-b4a1-688cab92fd3c} event:/FCU/Rotate4
+{764954de-ba36-4c00-8f4a-de6af5e22a4a} event:/FirePB/CoverOpen
+{6b7c07db-22c7-438d-ad71-59c4b8c1dabd} event:/FirePB/CoverOpen2
+{e324692d-592f-4dfb-ab39-b11bfbeb9224} event:/FirePB/Pull
+{70f0b7ad-138e-4926-9d55-a48786e41db7} event:/FirePB/Push
 {19c5cfbd-9d07-4b04-847a-5e65f673ab83} event:/Flaps/FlapLever1
 {25bb3f48-4eea-40a2-a61f-7cfbf098c7c2} event:/Flaps/FlapLever2
 {c75c87ec-563c-4319-a7aa-786962e31e9d} event:/Flaps/FlapLever3
@@ -85,6 +96,11 @@
 {22f80e6a-40fc-4fd9-9f77-f0ef5077c622} event:/RA/500
 {ceccdb65-09f6-4303-9230-4cb86b263170} event:/RA/Minimum
 {a897e617-89e1-43d6-8d15-a52e71fda8e9} event:/RA/retard
+{f29dba50-d417-4b8c-b2f0-9a3966caf7cc} event:/SSPriority/Left
+{8fc35da0-ff79-4c98-9b39-e007109072ad} event:/SSPriority/Right
+{1ac29002-a8e7-438f-bced-dd56cb5e0ba2} event:/TA Test/End
+{bd5c0769-ed87-4f2c-a3f4-9843f0ac8e30} event:/TA Test/Pass
+{f15aa472-2df9-4ba1-91ee-30ec710d40b1} event:/TA Test/Start
 {f8e6f2ed-0d4c-4785-bd01-c98bfa48605e} event:/Wipers/Bottom
 {0b09be96-18d3-4139-8da9-27db52a78f7a} event:/Wipers/Start
 {883c4ea2-ffcd-4845-939e-1f0a5dedda32} event:/Wipers/Top
@@ -94,14 +110,17 @@
 {3f2cc16b-2f56-46a4-891c-860965e1474f} event:/ASkidOff
 {fda10398-11aa-48db-9a23-9d3a9443a422} event:/ASkidOn
 {baf9bc41-c708-42a2-bfac-b33deb7ddbc4} event:/Avionics
+{356cf20a-c643-42c5-8a6d-7a00fb3d4288} event:/Battery
 {1edd836c-b29a-4101-a732-2d2eef744bbe} event:/Blower
 {89d27a8f-0f45-4230-905b-f244fdde49a4} event:/Brake Fan
+{bcf5f4f4-c194-47d2-ab7c-c7e28aeea498} event:/BrakeRelease
 {5db7e5fc-e4e5-4189-b301-596d1f1dd3c2} event:/BrightnessClick
 {fbc642bf-0e6c-4030-9901-0f1ce878cfe7} event:/BusKick
 {5c5f1485-bce5-419e-9d5c-a5ff2ec145e8} event:/BusKick2
 {635b86aa-7d9b-4dad-9a71-371b15257ae8} event:/BusOn
 {6c24dc2a-1727-448b-804d-7e73885411c3} event:/BusOn2
 {bf628244-9f1c-4c33-97bd-8b793852fd47} event:/Cabin
+{df97eb35-a18e-494e-b074-1d496aa0cda2} event:/Evac Horn
 {06a66501-2a11-4b1a-a6f7-4fe5d089bc41} event:/Ext
 {f86c05b1-253e-4508-a475-4d354dd045c6} event:/Extractor
 {c97b703e-898e-4918-bc8c-259807c5ada1} event:/Gear

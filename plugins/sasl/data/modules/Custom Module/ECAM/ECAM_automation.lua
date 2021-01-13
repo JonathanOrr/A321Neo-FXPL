@@ -102,6 +102,9 @@ function ecam_user_press_page_button(phase, which_page)
     elseif phase == SASL_COMMAND_END then
         press_start_time = 0
         set(DMC_requiring_ECAM_EWD_swap, 0)
+        if get(DMC_ECAM_can_override_EWD) == 1 and get(Ecam_current_status) == ECAM_STATUS_SHOW_USER then
+            set(Ecam_current_status,ECAM_STATUS_NORMAL)
+        end
     end
 end
 

@@ -230,16 +230,16 @@ end
 
 local function anim_light_switches()
     -- OVH switches
-    Set_dataref_linear_anim_nostop(Cockpit_ann_ovhd_switch, ann_lt_pos, -1, 1, 5)
-    Set_dataref_linear_anim_nostop(Lights_emer_exit_lever, get(Lights_emer_exit), 0, 2, 5)
+    Set_dataref_linear_anim_nostop(Cockpit_ann_ovhd_switch, ann_lt_pos, -1, 1, 10)
+    Set_dataref_linear_anim_nostop(Lights_emer_exit_lever, get(Lights_emer_exit), 0, 2, 10)
 
     set(Cockpit_annnunciators_test, get(Cockpit_ann_ovhd_switch) > 0.5 and 1 or 0)
 
     -- Pedestal
-    Set_dataref_linear_anim_nostop(Engine_mode_knob_pos, get(Engine_mode_knob), -1, 1, 5)
+    Set_dataref_linear_anim_nostop(Engine_mode_knob_pos, get(Engine_mode_knob), -1, 1, 10)
 
-    Set_dataref_linear_anim_nostop(Lights_seatbelts_lever, signs_seat_belt, 0, 2, 5)
-    Set_dataref_linear_anim_nostop(Lights_noped_lever, signs_noped, 0, 2, 5)
+    Set_dataref_linear_anim_nostop(Lights_seatbelts_lever, signs_seat_belt, 0, 2, 10)
+    Set_dataref_linear_anim_nostop(Lights_noped_lever, signs_noped, 0, 2, 10)
 
 end
 
@@ -267,8 +267,8 @@ local function update_datarefs()
 end
 
 local function update_trays()
-    Set_dataref_linear_anim_nostop(Cockpit_Capt_tray_pos, capt_tray and 1 or 0, 0, 1, 0.5)
-    Set_dataref_linear_anim_nostop(Cockpit_Fo_tray_pos, fo_tray and 1 or 0, 0, 1, 0.5)
+    Set_dataref_linear_anim_nostop(Cockpit_Capt_tray_pos, capt_tray and 1 or 0, 0, 1, 0.75)
+    Set_dataref_linear_anim_nostop(Cockpit_Fo_tray_pos, fo_tray and 1 or 0, 0, 1, 0.75)
 end
 
 function update()

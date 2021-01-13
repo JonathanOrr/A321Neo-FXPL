@@ -2,9 +2,13 @@ local last_poi_update = 0
 local prev_range = 0
 
 local function update_airports(data)
-    local airports = Data_manager.get_nav_by_coords(get_lat(data.id), get_lon(data.id))
+    local multi_airports = Data_manager.get_arpt_by_coords(get_lat(data.id), get_lon(data.id), data.config.range >= ND_RANGE_160)
     
-    print(#airports)
+    for i,airports in ipairs(multi_airports) do
+        for j,x in ipairs(airports) do
+            table.insert(data.poi.arpt, {lat=x.lat, lon=x.lon, id=x.id})
+        end
+    end
 end
 
 local function update_vor(data)
@@ -51,14 +55,15 @@ function update_poi(data)
         return
     end
 
-    if prev_range == data.config.range and get(TIME) - last_poi_update < 10 then
-        return
-    end
+    --if prev_range == data.config.range and get(TIME) - last_poi_update < 10 then
+    --    return
+    --end
 
     prev_range = data.config.range
 
     last_poi_update = get(TIME)
 
+    update_airports(data)
     update_vor(data)
     update_ndb(data)
     update_wpt(data)

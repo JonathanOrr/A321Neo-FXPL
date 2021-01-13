@@ -521,12 +521,12 @@ local function update_anim_knobs()
     ADIRS_sys[ADIRS_2].adirs_switch_status = get(ADIRS_rotary_btn[2])
     ADIRS_sys[ADIRS_3].adirs_switch_status = get(ADIRS_rotary_btn[3])
 
-    Set_dataref_linear_anim_nostop(ADIRS_source_rotary_ATHDG_anim, get(ADIRS_source_rotary_ATHDG), -1, 1, 5)
-    Set_dataref_linear_anim_nostop(ADIRS_source_rotary_AIRDATA_anim, get(ADIRS_source_rotary_AIRDATA), -1, 1, 5)
+    Set_dataref_linear_anim_nostop(ADIRS_source_rotary_ATHDG_anim, get(ADIRS_source_rotary_ATHDG), -1, 1, 10)
+    Set_dataref_linear_anim_nostop(ADIRS_source_rotary_AIRDATA_anim, get(ADIRS_source_rotary_AIRDATA), -1, 1, 10)
     
-    Set_dataref_linear_anim_nostop(ADIRS_rotary_btn_anim[1], get(ADIRS_rotary_btn[1]), 0, 2, 5)
-    Set_dataref_linear_anim_nostop(ADIRS_rotary_btn_anim[2], get(ADIRS_rotary_btn[2]), 0, 2, 5)
-    Set_dataref_linear_anim_nostop(ADIRS_rotary_btn_anim[3], get(ADIRS_rotary_btn[3]), 0, 2, 5)
+    Set_dataref_linear_anim_nostop(ADIRS_rotary_btn_anim[1], get(ADIRS_rotary_btn[1]), 0, 2, 10)
+    Set_dataref_linear_anim_nostop(ADIRS_rotary_btn_anim[2], get(ADIRS_rotary_btn[2]), 0, 2, 10)
+    Set_dataref_linear_anim_nostop(ADIRS_rotary_btn_anim[3], get(ADIRS_rotary_btn[3]), 0, 2, 10)
     
 end
 

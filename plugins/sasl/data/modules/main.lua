@@ -51,6 +51,7 @@ panelWidth3d = 4096
 panelHeight3d = 4096
 
 components = {
+  data_manager {},
   display_backlights {},    -- This must stay at the top
   display_switching {},
   apu {},
@@ -96,10 +97,7 @@ components = {
   display_brightness {}, -- This must stay at the bottom
   librain{},
   efb{},
-  data_manager {},
 }
-
-Data_manager.initialize()   -- Load data points (airports, waypoints, etc.)
 
 include(moduleDirectory .. "/main_windows.lua")
 include(moduleDirectory .. "/main_menu.lua")

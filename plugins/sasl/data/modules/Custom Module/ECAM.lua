@@ -33,7 +33,6 @@ include('ECAM/ECAM_hyd.lua')
 include('ECAM/ECAM_press.lua')
 include('ECAM/ECAM_status.lua')
 include('ECAM/ECAM_wheel.lua')
-include('display_common.lua')
 include('ADIRS_data_source.lua')
 
 --local variables

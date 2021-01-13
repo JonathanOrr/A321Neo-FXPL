@@ -63,9 +63,9 @@ local function update_buttons()
 end
 
 local function update_knobs()
-    Set_dataref_linear_anim_nostop(ND_Fo_mode_knob, fo_nd_data.config.mode-3, -2, 3, 5)
-    Set_dataref_linear_anim_nostop(ND_Fo_nav1_level, fo_nd_data.config.nav_1_selector, -1, 1, 5)
-    Set_dataref_linear_anim_nostop(ND_Fo_nav2_level, fo_nd_data.config.nav_2_selector, -1, 1, 5)
+    Set_dataref_linear_anim_nostop(ND_Fo_mode_knob, fo_nd_data.config.mode-3, -2, 3, 10)
+    Set_dataref_linear_anim_nostop(ND_Fo_nav1_level, fo_nd_data.config.nav_1_selector, -1, 1, 10)
+    Set_dataref_linear_anim_nostop(ND_Fo_nav2_level, fo_nd_data.config.nav_2_selector, -1, 1, 10)
 end
 
 function update()

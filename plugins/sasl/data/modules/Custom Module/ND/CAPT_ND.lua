@@ -20,7 +20,6 @@ position = {get(Capt_nd_position, 1), get(Capt_nd_position, 2), get(Capt_nd_posi
 size = {900, 900}
 fbo = true
 
-include('display_common.lua')
 include('ND/common_ND.lua')
 
 capt_nd_data = new_dataset(ND_CAPT)
@@ -75,9 +74,9 @@ local function update_buttons()
 end
 
 local function update_knobs()
-    Set_dataref_linear_anim_nostop(ND_Capt_mode_knob, capt_nd_data.config.mode-3, -2, 3, 5)
-    Set_dataref_linear_anim_nostop(ND_Capt_nav1_level, capt_nd_data.config.nav_1_selector, -1, 1, 5)
-    Set_dataref_linear_anim_nostop(ND_Capt_nav2_level, capt_nd_data.config.nav_2_selector, -1, 1, 5)
+    Set_dataref_linear_anim_nostop(ND_Capt_mode_knob, capt_nd_data.config.mode-3, -2, 3, 10)
+    Set_dataref_linear_anim_nostop(ND_Capt_nav1_level, capt_nd_data.config.nav_1_selector, -1, 1, 10)
+    Set_dataref_linear_anim_nostop(ND_Capt_nav2_level, capt_nd_data.config.nav_2_selector, -1, 1, 10)
     
 end
 
