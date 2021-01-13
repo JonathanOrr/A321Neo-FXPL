@@ -275,6 +275,22 @@ EWD_popup_window = contextWindow {
   };
 }
 
+-- Welcome screen --
+local x,y,screen_width, screen_height = sasl.windows.getScreenBoundsGlobal()
 
+Welcome_window = contextWindow {
+  name = "Welcome!";
+  position = { 50 , 50 , screen_width-100, screen_height-100 };
+  noBackground = true ;
+  proportional = false ;
+  minimumSize = { screen_width-100, screen_height-100 };
+  maximumSize = { screen_width-100, screen_height-100 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = false;
+  noDecore = true;
+  components = {
+    welcome_screen {position = { 50 , 50 , screen_width-100, screen_height-100 }}
+  };
+}
 
 

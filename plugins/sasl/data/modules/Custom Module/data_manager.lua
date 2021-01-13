@@ -2,6 +2,8 @@
 -- Constants
 ----------------------------------------------------------------------------------------------------
 
+include('libs/table.save.lua')
+
 local NAV_FILE_PATH  = sasl.getXPlanePath() .. "Resources/default data/earth_nav.dat"
 local FIX_FILE_PATH  = sasl.getXPlanePath() .. "Resources/default data/earth_fix.dat"
 local ARPT_FILE_PATH  = sasl.getXPlanePath() .. "Resources/default scenery/default apt dat/Earth nav data/apt.dat"
@@ -555,13 +557,12 @@ Data_manager.nearest_airport_update = 0
 
 local function update_init()
     if init_step == 0 then
-        x,y,width,height = sasl.windows.getScreenBoundsGlobal()
-    
-        sasl.messageWindow(100, 100, width-200, height-200, "Loading...", "Your aircraft is loading, please wait...", 0, 1)
+        Welcome_window:setIsVisible(true)
         init_step = 1
     elseif init_step == 1 then
         Data_manager.initialize()
         init_step = 2
+        Welcome_window:setIsVisible(false)
     end
 end
 
