@@ -9,5 +9,5 @@ end
 
 --DRAW LOOPS--
 function EFB_draw_page_3()
-    sasl.gl.drawTexture ( EFB_LOADING, 0 , 0 , 1143 , 800 , ECAM_WHITE )
+    sasl.gl.drawTexture ( EFB_LOAD_bgd, 0 , 0 , 1143 , 800 , ECAM_WHITE )
 end
