@@ -30,7 +30,7 @@ local ecam_force_page = 0
 
 -- The following flag enables the performance measuring of each component. It is possible to
 -- visualize it in the debug window
-debug_performance_measure = false
+debug_performance_measure = true
 
 -- The following flag disable the data manager, i.e., ND and MCDU do not load any point from X-Plane
 -- files. This is useful to reduce the startup time

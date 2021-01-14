@@ -77,7 +77,6 @@ end
 
 --common draw logic
 local function draw_efb_bgd()
-    SASL_drawRoundedFrames(27 ,27 ,1012 ,660 , 5, 30, EFB_RED)
     sasl.gl.drawTexture ( EFB_bgd, 0 , 0 , 1143 , 800 , ECAM_WHITE )
 end
 
@@ -94,7 +93,9 @@ function update()
 end
 
 function draw()  ------KEEP THE draw_cursor() AT THE BOTTOM YOU DUMBASS!!!!!
+    perf_measure_start("EFB:draw()")
     draw_efb_bgd()
     EFB_draw_pages[EFB_PAGE]()
     draw_cursor()
+    perf_measure_stop("EFB:draw()")
 end

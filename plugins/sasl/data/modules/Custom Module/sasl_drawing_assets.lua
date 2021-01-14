@@ -135,9 +135,27 @@ ECAM_CRUISE_vs_arrow_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/
 --EFB--
 EFB_cursor =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/cursor.png")
 EFB_bgd =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/bgd.png")
-EFB_ICON_highlight =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/Highlight.png")
 
-EFB_HOME =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/home.png")
-EFB_LOADING =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/loading.png")
-EFB_CREDITS =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/credits.png")
-EFB_DOOR =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/door.png")
+------------GROUND-------------
+
+EFB_GROUND_bgd =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/GND page/overlay.png")
+EFB_GROUND_plane =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/GND page/Plane.png")
+
+EFB_GROUND_ac    =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/GND page/Ground Vehicles/AC.png")
+EFB_GROUND_as    =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/GND page/Ground Vehicles/AS.png")
+EFB_GROUND_cat1  =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/GND page/Ground Vehicles/Cat 1.png")
+EFB_GROUND_cat2  =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/GND page/Ground Vehicles/Cat 2.png")
+EFB_GROUND_fuel  =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/GND page/Ground Vehicles/Fuel.png")
+EFB_GROUND_gpu   =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/GND page/Ground Vehicles/GPU.png")
+EFB_GROUND_ldcl1 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/GND page/Ground Vehicles/LDCL 1.png")
+EFB_GROUND_ldcl2 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/GND page/Ground Vehicles/LDCL 2.png")
+EFB_GROUND_lv    =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/GND page/Ground Vehicles/LV.png")
+EFB_GROUND_ps1   =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/GND page/Ground Vehicles/PS 1.png")
+EFB_GROUND_ps2   =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/GND page/Ground Vehicles/PS 2.png")
+EFB_GROUND_uld1  =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/GND page/Ground Vehicles/ULD1.png")
+EFB_GROUND_uld2  =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/GND page/Ground Vehicles/ULD2.png")
+EFB_GROUND_wv    =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/GND page/Ground Vehicles/WV.png")
+
+------------LOAD-------------
+
+EFB_LOAD_bgd =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/overlay.png")
