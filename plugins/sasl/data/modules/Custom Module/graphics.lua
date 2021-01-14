@@ -16,6 +16,17 @@
 -- Short description: Miscellanea related to graphics
 -------------------------------------------------------------------------------
 
+include("libs/table.save.lua")
+
+function onAirportLoaded()
+    local saved_view = {}
+    saved_view = table.load(moduleDirectory .. "/Custom Module/saved_configs/saved_view")
+
+    set(Head_x,   saved_view[1])
+    set(Head_y,   saved_view[2])
+    set(Head_z,   saved_view[3])
+    set(Head_the, saved_view[4])
+end
 
 local guards = {
     {name = "IDG1"},             -- This creates a command and dataref with the same name, both `a321neo/cockpit/overhead/guards/IDG1`
@@ -270,6 +281,22 @@ local function update_trays()
     Set_dataref_linear_anim_nostop(Cockpit_Capt_tray_pos, capt_tray and 1 or 0, 0, 1, 0.75)
     Set_dataref_linear_anim_nostop(Cockpit_Fo_tray_pos, fo_tray and 1 or 0, 0, 1, 0.75)
 end
+
+local function default_view(phase)
+    local saved_view = {}
+    saved_view = table.load(moduleDirectory .. "/Custom Module/saved_configs/saved_view")
+
+    if phase == SASL_COMMAND_BEGIN then
+        set(Head_x,   saved_view[1])
+        set(Head_y,   saved_view[2])
+        set(Head_z,   saved_view[3])
+        set(Head_the, saved_view[4])
+    end
+
+    return 0--inhibites the x-plane original command
+end
+
+sasl.registerCommandHandler (Default_view, 0, default_view)
 
 function update()
     perf_measure_start("graphics:update()")

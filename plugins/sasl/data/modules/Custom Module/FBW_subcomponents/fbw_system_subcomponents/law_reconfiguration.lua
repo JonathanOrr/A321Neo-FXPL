@@ -1,8 +1,8 @@
 FBW_law_var_table = {
+    last_RAT_status = 0,
     fac_1_reset_required = 0,
     abnormal_elac_reset_required = 0,
     abnormal_fac_reset_required = 0,
-    in_abnormal_conditions = 0,
     last_elac_1_status = 0,
     last_elac_2_status = 0,
     last_fac_1_status = 0,
@@ -44,6 +44,7 @@ function FBW_law_reconfiguration(var_table)
             {get(Hydraulic_G_press) < 1450 and get(Hydraulic_Y_press) < 1450, "HYDRAULIC G + Y FAILURE"},
             --MISSING YAW DAMPER FAILURE
             {get(Gen_EMER_pwr) == 0 and get(Gen_EXT_pwr) == 0 and get(Gen_APU_pwr) == 0 and get(Gen_2_pwr) == 0 and get(Gen_1_pwr) == 0, "EMER ELEC CONFIG (BAT ONLY)"},--can be reset to the column above by reseting FAC 1
+            {var_table.fac_1_reset_required == 1 or var_table.fac_1_reset_required == -1, "RESTORED RAT POWER AWAITING FAC 1 RESET"},
         },
 
         --DIRECT, DIRECT, MECHANICAL
@@ -58,10 +59,10 @@ function FBW_law_reconfiguration(var_table)
     }
 
     local abdnormal_condition = {
-        (get_avg_pitch() > 50 or get_avg_pitch() < -30) and (how_many_irs_partially_work() ~= 0 or how_many_irs_fully_work() ~= 0),
-        (get_avg_pitch() > 150 or get_avg_pitch() < -150) and (how_many_irs_partially_work() ~= 0 or how_many_irs_fully_work() ~= 0),
-        (get_avg_aoa() > 30 or get_avg_aoa() < -15) and how_many_irs_fully_work() ~= 0,
-        (get_avg_ias() > 440 or get_avg_ias() < 80) and how_many_adrs_work() ~= 0,
+        (get_avg_pitch() > 50 or get_avg_pitch() < -30)   and (how_many_irs_partially_work() ~= 0 or how_many_irs_fully_work() ~= 0) and get(Any_wheel_on_ground) == 0,
+        (get_avg_pitch() > 150 or get_avg_pitch() < -150) and (how_many_irs_partially_work() ~= 0 or how_many_irs_fully_work() ~= 0) and get(Any_wheel_on_ground) == 0,
+        (get_avg_aoa() > 30 or get_avg_aoa() < -15)       and how_many_irs_fully_work() ~= 0                                         and get(Any_wheel_on_ground) == 0,
+        (get_avg_ias() > 440 or get_avg_ias() < 80)       and how_many_adrs_work() ~= 0                                              and get(Any_wheel_on_ground) == 0,
     }
 
     --entered abnormal conditions
@@ -73,20 +74,34 @@ function FBW_law_reconfiguration(var_table)
     end
 
     --check deltas--
+    local RAT_status_delta = get(is_RAT_out) - var_table.last_RAT_status
     local elac_1_status_delta = get(ELAC_1_status) - var_table.last_elac_1_status
     local elac_2_status_delta = get(ELAC_2_status) - var_table.last_elac_2_status
     local fac_1_status_delta = get(FAC_1_status) - var_table.last_fac_1_status
     local fac_2_status_delta = get(FAC_2_status) - var_table.last_fac_2_status
+    var_table.last_RAT_status = get(is_RAT_out)
     var_table.last_elac_1_status = get(ELAC_1_status)
     var_table.last_elac_2_status = get(ELAC_2_status)
     var_table.last_fac_1_status = get(FAC_1_status)
     var_table.last_fac_2_status = get(FAC_2_status)
+
+    --emer battery config
+    if get(Gen_EMER_pwr) == 0 and get(Gen_EXT_pwr) == 0 and get(Gen_APU_pwr) == 0 and get(Gen_2_pwr) == 0 and get(Gen_1_pwr) == 0 and RAT_status_delta == 1 then
+        var_table.fac_1_reset_required = 1
+    end
 
     if elac_1_status_delta == 1 or elac_2_status_delta == 1 then
         var_table.abnormal_elac_reset_required = 0
     end
     if fac_1_status_delta == 1 or fac_2_status_delta == 1 then
         var_table.abnormal_fac_reset_required = 0
+    end
+
+    if fac_1_status_delta == -1 and var_table.fac_1_reset_required == 1 then
+        var_table.fac_1_reset_required = -1
+    end
+    if fac_1_status_delta == 1 and var_table.fac_1_reset_required == -1 then
+        var_table.fac_1_reset_required = 0
     end
 
     --start with normal law then degrade

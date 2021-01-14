@@ -17,6 +17,8 @@
 --                    menu 
 -------------------------------------------------------------------------------
 
+include("libs/table.save.lua")
+
 --menu item functions
 function Show_hide_MCDU()
   MCDU_window:setIsVisible(not MCDU_window:isVisible())
@@ -94,6 +96,17 @@ function IRs_instaneous_align()
                     1 , " Understood " , function() sasl.commandOnce (ADIRS_cmd_instantaneous_align) end)
 end
 
+function Save_current_view_as_default()
+    local current_view = {
+      get(Head_x),
+      get(Head_y),
+      get(Head_z),
+      get(Head_the),
+    }
+
+    table.save(current_view, moduleDirectory .. "/Custom Module/saved_configs/saved_view")
+end
+
 function Reset_RAT()
     if get(All_on_ground) == 0 then
         sasl.messageWindow (500 , 500 , 300 , 150 , " This is a ground-only operation " , 
@@ -152,6 +165,7 @@ ShowHideFuel        = sasl.appendMenuItem(Menu_main, "Show/Hide Fuel Panel", Sho
 
 sasl.appendMenuSeparator(Menu_main)
 
+SaveView          = sasl.appendMenuItem(Menu_main, "Save view as default", Save_current_view_as_default)
 ADIRSAlign        = sasl.appendMenuItem(Menu_main, "Instantaneous align IRs", IRs_instaneous_align)
 ADIRSAlign        = sasl.appendMenuItem(Menu_main, "Toggle Ground Air Supply", Toggle_Ground_Air_Supply)
 -- Maintenance submenu
