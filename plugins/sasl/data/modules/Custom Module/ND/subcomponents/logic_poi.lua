@@ -4,6 +4,8 @@ local prev_range = 0
 local function update_airports(data)
     local multi_airports = Data_manager.get_arpt_by_coords(get_lat(data.id), get_lon(data.id), data.config.range >= ND_RANGE_160)
     
+    data.poi.arpt = {}
+    
     for i,airports in ipairs(multi_airports) do
         for j,x in ipairs(airports) do
             table.insert(data.poi.arpt, {lat=x.lat, lon=x.lon, id=x.id})

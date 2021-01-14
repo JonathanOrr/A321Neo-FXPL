@@ -217,9 +217,16 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
     if get(Bypass_speedbrakes_inhibition) ~= 1 then
         if get(SEC_1_status) == 0 and get(SEC_3_status) == 0 then
             set(Speedbrakes_inhibited, 1)
-        elseif get(Flaps_internal_config) == 4 or get(Flaps_internal_config) == 5 then
+        end
+        if get(Flaps_internal_config) == 4 or get(Flaps_internal_config) == 5 then
             set(Speedbrakes_inhibited, 1)
-            --lacking above MCT/ ELEV fail(inhibites 3, 4)/ alpha protection/ upon a.prot toga [and restoring speedbrake avail by reseting the lever position]
+            --lacking alpha protection / upon a.prot toga [and restoring speedbrake avail by reseting the lever position]
+        end
+        if get(L_sim_throttle) >= THR_MCT_START or get(R_sim_throttle) >= THR_MCT_START then
+            set(Speedbrakes_inhibited, 1)
+        end
+        if get(FAILURE_FCTL_LELEV) == 1 or get(FAILURE_FCTL_RELEV) == 1 then
+            set(Speedbrakes_inhibited, 1)
         end
     end
 

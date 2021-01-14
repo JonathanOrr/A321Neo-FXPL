@@ -49,13 +49,13 @@ function Slats_flaps_calc_and_control()
 
     if flaps_handle_delta ~= 0 then
         if last_flaps_handle_pos == 0 and flaps_handle_delta == 1 then
-            if get_ias(PFD_CAPT) <= 100 or get_ias(PFD_FO) <= 100 then
+            if get_avg_ias() <= 100 then
                 set(Flaps_internal_config, 2)-- 1+F
             else
                 set(Flaps_internal_config, 1)-- 1
             end
         elseif last_flaps_handle_pos == 2 and flaps_handle_delta == -1 then
-            if get_ias(PFD_CAPT) <= 210 or get_ias(PFD_FO) <= 210 then
+            if get_avg_ias() <= 210 then
                 set(Flaps_internal_config, 2)-- 1+F
             else
                 set(Flaps_internal_config, 1)-- 1
@@ -72,7 +72,10 @@ function Slats_flaps_calc_and_control()
             end
         end
     else
-        if get(Flaps_internal_config) == 2 and (get_ias(PFD_CAPT) >= 210 or get_ias(PFD_FO) >= 210) and get(Override_flap_auto_retract) == 0 then--back to 1
+        if get(Flaps_internal_config) == 1 and get_avg_ias() <= 100 and get(Override_flap_auto_extend_and_retract) == 0 then--go to 1+F
+            set(Flaps_internal_config, 2)
+        end
+        if get(Flaps_internal_config) == 2 and get_avg_ias() >= 210 and get(Override_flap_auto_extend_and_retract) == 0 then--back to 1
             set(Flaps_internal_config, 1)
         end
     end

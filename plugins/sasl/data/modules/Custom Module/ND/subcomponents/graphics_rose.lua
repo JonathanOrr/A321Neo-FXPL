@@ -310,7 +310,61 @@ local function draw_pois(data)
 
 end
 
-function draw_oans(data)
+local function compute_angle(x1, y1, x2, y2)
+    return math.atan2(y1-y2, x1-x2)
+end 
+
+local function draw_oans_rwy(data, rwy_start, rwy_end)
+
+    local x_start,y_start = get_x_y(data, rwy_start.lat, rwy_start.lon)
+    local x_end,y_end = get_x_y(data, rwy_end.lat, rwy_end.lon)
+
+    local px_per_nm = get_px_per_nm(data)
+    local semiwidth_px = math.floor(rwy_start.width * 0.000539957 * px_per_nm / 2)
+
+    local angle = compute_angle(x_end,y_end,x_start,y_start)    -- This is the runway angle
+    local perp_angle = angle + 3.14 / 2 -- This the angle of the base of the runway
+    
+    -- Draw runway
+    
+    local x_shift = semiwidth_px * math.cos(perp_angle)
+    local y_shift = semiwidth_px * math.sin(perp_angle)
+    
+    local ll_x = x_start + x_shift
+    local ll_y = y_start + y_shift
+    local lr_x = x_start - x_shift
+    local lr_y = y_start - y_shift
+    local ul_x = x_end   + x_shift
+    local ul_y = y_end   + y_shift
+    local ur_x = x_end   - x_shift
+    local ur_y = y_end   - y_shift
+
+    sasl.gl.drawConvexPolygon ({ll_x, ll_y, lr_x, lr_y , ur_x, ur_y  , ul_x, ul_y} , true , 1 , {0.6,0.6,0.6})
+    
+    -- Draw runway marks
+    local dist_line = 7
+    local x_shift_line = (semiwidth_px-dist_line) * math.cos(perp_angle)
+    local y_shift_line = (semiwidth_px-dist_line) * math.sin(perp_angle)
+    local x_shift_inner = dist_line * math.cos(angle)
+    local y_shift_inner = dist_line * math.sin(angle)
+
+    local ll_x = x_start + x_shift_line + x_shift_inner
+    local ll_y = y_start + y_shift_line + y_shift_inner
+    local lr_x = x_start - x_shift_line + x_shift_inner
+    local lr_y = y_start - y_shift_line + y_shift_inner
+    local ul_x = x_end   + x_shift_line - x_shift_inner
+    local ul_y = y_end   + y_shift_line - y_shift_inner
+    local ur_x = x_end   - x_shift_line - x_shift_inner
+    local ur_y = y_end   - y_shift_line - y_shift_inner
+    sasl.gl.drawWidePolyLine  ({ll_x, ll_y, lr_x, lr_y , ur_x, ur_y  , ul_x, ul_y, ll_x, ll_y} , 1 - data.config.range * 2 , {1,1,1} )
+
+    -- Draw center line
+    sasl.gl.setLinePattern ({10.0, -10.0 })
+    sasl.gl.drawLinePattern (x_start,y_start,x_end,y_end, false, ECAM_WHITE)
+
+end
+
+local function draw_oans(data)
     if data.config.range > ND_RANGE_ZOOM_2 then
         return  -- No OANS over zoom
     end
@@ -327,23 +381,11 @@ function draw_oans(data)
                 already_seen_runways[rwyname] = true
                 already_seen_runways[rwy.sibling] = true
                 
-                x_start,y_start = get_x_y(data, rwy.lat, rwy.lon)
-                
-                sibling_rwy = apt.rwys[rwy.sibling]
-                
-                x_end,y_end = get_x_y(data, sibling_rwy.lat, sibling_rwy.lon)
+                local sibling_rwy = apt.rwys[rwy.sibling]
+                draw_oans_rwy(data, rwy, sibling_rwy)
 
-                
-
-
-                local px_per_nm = get_px_per_nm(data)
-                local width_px = math.floor(rwy.width * 0.000539957 * px_per_nm)
-
-                sasl.gl.drawWideLine(x_start,y_start,x_end,y_end, width_px, {0.7,0.7,0.7})
                 --sasl.gl.setLinePattern ({5.0, -5.0 })
                 --sasl.gl.drawLinePattern (x_start,y_start,x_end ,y_end, false, ECAM_RED)
-
-
             end            
         end
     end

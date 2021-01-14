@@ -55,7 +55,7 @@ function Draw_LAW_MODE_module_480x240(x_pos, y_pos)
 
     local fbw_lateral_laws_names = {
         {"MECH", true},
-        {"ABNORMAL", false},
+        {"ABNORMAL", true},
         {"DIRECT", true},
         {"ALT", false},
         {"ALT PROT", false},
@@ -80,29 +80,22 @@ function Draw_LAW_MODE_module_480x240(x_pos, y_pos)
         {"NORMAL", true},
     }
 
-    local fbw_laws = {
-        get(FBW_total_control_law),
-        get(FBW_lateral_law),
-        get(FBW_vertical_law),
-        get(FBW_yaw_law),
-    }
-
     for i = 1, 6 do
         sasl.gl.drawRectangle(CENTER_X - 235 + (74 + 5) * (i - 1), CENTER_Y - 27, 74, 26, (get(FBW_total_control_law) + 3) == i and LIGHT_BLUE or LIGHT_GREY)
         sasl.gl.drawText(Font_AirbusDUL, CENTER_X - 235 + (74 + 5) * (i - 1) + 74/2, CENTER_Y - 27 + 8, fbw_total_laws_names[i][1], 14, false, false, TEXT_ALIGN_CENTER, WHITE)
     end
 
     for i = 1, 6 do
-        if fbw_lateral_laws_names[i][2] then
-            sasl.gl.drawRectangle(CENTER_X - 235 + (74 + 5) * (i - 1), CENTER_Y - 57, 74, 26, (get(FBW_lateral_law) + 3) == i and LIGHT_BLUE or LIGHT_GREY)
-            sasl.gl.drawText(Font_AirbusDUL, CENTER_X - 235 + (74 + 5) * (i - 1) + 74/2, CENTER_Y - 57 + 8, fbw_lateral_laws_names[i][1], 14, false, false, TEXT_ALIGN_CENTER, WHITE)
+        if fbw_vertical_laws_names[i][2] then
+            sasl.gl.drawRectangle(CENTER_X - 235 + (74 + 5) * (i - 1), CENTER_Y - 57, 74, 26, (get(FBW_vertical_law) + 3) == i and LIGHT_BLUE or LIGHT_GREY)
+            sasl.gl.drawText(Font_AirbusDUL, CENTER_X - 235 + (74 + 5) * (i - 1) + 74/2, CENTER_Y - 57 + 8, fbw_vertical_laws_names[i][1], 14, false, false, TEXT_ALIGN_CENTER, WHITE)
         end
     end
 
     for i = 1, 6 do
-        if fbw_vertical_laws_names[i][2] then
-            sasl.gl.drawRectangle(CENTER_X - 235 + (74 + 5) * (i - 1), CENTER_Y - 87, 74, 26, (get(FBW_vertical_law) + 3) == i and LIGHT_BLUE or LIGHT_GREY)
-            sasl.gl.drawText(Font_AirbusDUL, CENTER_X - 235 + (74 + 5) * (i - 1) + 74/2, CENTER_Y - 87 + 8, fbw_vertical_laws_names[i][1], 14, false, false, TEXT_ALIGN_CENTER, WHITE)
+        if fbw_lateral_laws_names[i][2] then
+            sasl.gl.drawRectangle(CENTER_X - 235 + (74 + 5) * (i - 1), CENTER_Y - 87, 74, 26, (get(FBW_lateral_law) + 3) == i and LIGHT_BLUE or LIGHT_GREY)
+            sasl.gl.drawText(Font_AirbusDUL, CENTER_X - 235 + (74 + 5) * (i - 1) + 74/2, CENTER_Y - 87 + 8, fbw_lateral_laws_names[i][1], 14, false, false, TEXT_ALIGN_CENTER, WHITE)
         end
     end
 

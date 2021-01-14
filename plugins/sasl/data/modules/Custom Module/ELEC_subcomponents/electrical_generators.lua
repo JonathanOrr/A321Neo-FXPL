@@ -229,11 +229,10 @@ local function update_rat_gen(x)
     local gen_test_condition = get(Hydraulic_B_press) > 1400 and get(Gen_TEST_pressed) == 1 and get(AC_bus_1_pwrd) == 1 and get(AC_bus_2_pwrd) == 1
 
     if ((x.switch_status and x.source_status) or gen_test_condition) and get(x.drs.failure) == 0 then
-        x.curr_voltage = GEN_LOW_VOLTAGE_LIMIT + 12 * (get(Hydraulic_B_press) - 1400) / 1500
-        x.curr_hz = GEN_LOW_HZ_LIMIT + 25 * (get(Hydraulic_B_press) - 1400) / 1500
-        if x.curr_hz > 402 then
-            x.curr_hz = 402
-        end
+        local target_voltage = GEN_LOW_VOLTAGE_LIMIT + 12 * (get(Hydraulic_B_press) - 1400) / 1500
+        x.curr_voltage = Set_linear_anim_value(x.curr_voltage, target_voltage, 0, 300, 80)
+        local target_hz = GEN_LOW_HZ_LIMIT + 25 * (get(Hydraulic_B_press) - 1400) / 1500
+        x.curr_hz = Set_linear_anim_value(x.curr_hz, target_hz, 0, 402, 80)
     else
         x.curr_voltage = 0
         x.curr_hz = 0

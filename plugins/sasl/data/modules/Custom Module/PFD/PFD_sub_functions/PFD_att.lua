@@ -17,7 +17,11 @@ function PFD_draw_att(PFD_table)
     sasl.gl.drawTexture(PFD_pitch_scale_mask, 0, 0, 900, 900, {1,1,1})
     --draw under the mask
     sasl.gl.drawUnderMask(true)
-    SASL_rotated_center_img_xcenter_aligned(PFD_normal_pitch_scale, ATT_x_center, ATT_y_center, 2870, 779, 90 - get_roll(PFD_table.Screen_ID), get_pitch(PFD_table.Screen_ID) * 10, -779/2, ECAM_WHITE)
+    if get(FBW_total_control_law) == FBW_NORMAL_LAW then
+        SASL_rotated_center_img_xcenter_aligned(PFD_normal_pitch_scale, ATT_x_center, ATT_y_center, 2870, 779, 90 - get_roll(PFD_table.Screen_ID), get_pitch(PFD_table.Screen_ID) * 10, -779/2, ECAM_WHITE)
+    else
+        SASL_rotated_center_img_xcenter_aligned(PFD_abnormal_pitch_scale, ATT_x_center, ATT_y_center, 2870, 779, 90 - get_roll(PFD_table.Screen_ID), get_pitch(PFD_table.Screen_ID) * 10, -779/2, ECAM_WHITE)        
+    end
 
     --tailstrike arrow(TOGO GA and GS < 50)
     if get(All_on_ground) == 0 and get(PFD_table.RA_ALT) < 400 then
@@ -122,12 +126,15 @@ function PFD_draw_att(PFD_table)
     sasl.gl.drawMaskEnd ()
 
     --FBW law indication (TODO ALT LAW / DIRECT LAW)
-    SASL_draw_needle_adv(ATT_x_center, ATT_y_center+4, 224, 238, 157, 2, ECAM_GREEN)
-    SASL_draw_needle_adv(ATT_x_center, ATT_y_center-4, 224, 238, 157, 2, ECAM_GREEN)
-    SASL_draw_needle_adv(ATT_x_center, ATT_y_center+4, 224, 238, 23, 2, ECAM_GREEN)
-    SASL_draw_needle_adv(ATT_x_center, ATT_y_center-4, 224, 238, 23, 2, ECAM_GREEN)
-    --sasl.gl.drawText(Airbus_panel_font, Get_rotated_point_x_pos(ATT_x_center, 230, 157), Get_rotated_point_y_pos(ATT_y_center-10, 230, 157), "X", 26, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
-    --sasl.gl.drawText(Airbus_panel_font, Get_rotated_point_x_pos(ATT_x_center, 230, 23), Get_rotated_point_y_pos(ATT_y_center-10, 230, 23), "X", 26, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+    if get(FBW_total_control_law) == FBW_NORMAL_LAW then
+        SASL_draw_needle_adv(ATT_x_center, ATT_y_center+4, 224, 238, 157, 2, ECAM_GREEN)
+        SASL_draw_needle_adv(ATT_x_center, ATT_y_center-4, 224, 238, 157, 2, ECAM_GREEN)
+        SASL_draw_needle_adv(ATT_x_center, ATT_y_center+4, 224, 238, 23, 2, ECAM_GREEN)
+        SASL_draw_needle_adv(ATT_x_center, ATT_y_center-4, 224, 238, 23, 2, ECAM_GREEN)
+    else
+        sasl.gl.drawText(Airbus_panel_font, Get_rotated_point_x_pos(ATT_x_center, 230, 157), Get_rotated_point_y_pos(ATT_y_center-10, 230, 157), "X", 26, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Airbus_panel_font, Get_rotated_point_x_pos(ATT_x_center, 230, 23), Get_rotated_point_y_pos(ATT_y_center-10, 230, 23), "X", 26, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+    end
 
     --wings
     SASL_draw_img_xcenter_aligned(PFD_pitch_wings, ATT_x_center, size[2]/2-43, 402, 47, {1,1,1})
