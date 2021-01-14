@@ -148,7 +148,10 @@ function new_dataset(input_id)
         },        
         wpt = {
         },        
-    }
+    },
+    
+    plan_ctr_lat = 0,
+    plan_ctr_lon = 0
 
 }
 

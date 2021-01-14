@@ -183,6 +183,53 @@ local function draw_oans_rwys(data, apt)
     end
 end
 
+local function draw_oans_taxiways(data, apt)
+    for i,line in ipairs(apt.taxys) do
+    
+        local points = {}
+        for j,segment in ipairs(line.points) do
+            if #segment == 2 then
+                local x,y = get_x_y(data, segment[1], segment[2])
+                table.insert(points, x)
+                table.insert(points, y)
+            end
+        end
+        sasl.gl.setPolygonExtrudeMode(SHAPE_EXTRUDE_INNER)
+--        sasl.gl.setWideLineExtrudeMode(SHAPE_EXTRUDE_INNER)
+        sasl.gl.drawConvexPolygon (points, false, 2, {0.5,0.5,0.5})
+    end
+end
+
+local function draw_oans_mark_lines(data, apt)
+
+    for i,line in ipairs(apt.mark_lines) do
+        
+        if line.color == 1 or line.color == 51 or line.color == 4 or line.color == 5 or line.color == 54 
+            or line.color == 8 or line.color == 58  or line.color == 9 or line.color == 59 then
+
+            local points = {}
+            for j,segment in ipairs(line.points) do
+
+                local x,y = get_x_y(data, segment[1], segment[2])
+                table.insert(points, x)
+                table.insert(points, y)
+            end
+            
+            local color = COLOR_YELLOW
+            if line.color == 4 or line.color == 54 then
+                color = ECAM_RED
+            elseif line.color == 5 or line.color == 55 then
+                color = ECAM_WHITE
+            elseif line.color == 8 or line.color == 58 or line.color == 9 or line.color == 59 then
+                color = ECAM_WHITE
+            end
+            sasl.gl.drawWidePolyLine (points , 2 , color)
+        end        
+    end
+
+end
+
+
 local function draw_oans(data)
     if data.config.range > ND_RANGE_ZOOM_2 then
         return  -- No OANS over zoom
@@ -191,11 +238,15 @@ local function draw_oans(data)
     local nearest_airport = Data_manager.nearest_airport
     if nearest_airport ~= nil then
         local apt = Data_manager.get_arpt_by_name(nearest_airport.id)
+        
+        --print(#apt.signs)
         if data.plan_ctr_lat == 0 and data.plan_ctr_lon == 0 then
             data.plan_ctr_lat = apt.lat
             data.plan_ctr_lon = apt.lon
         end
         draw_oans_rwys(data, apt)
+        draw_oans_taxiways(data, apt)
+        draw_oans_mark_lines(data, apt)
     end
 end
 

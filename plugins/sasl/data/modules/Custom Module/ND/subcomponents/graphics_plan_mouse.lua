@@ -102,10 +102,11 @@ local function draw_menu(data)
             
                 if data.plan_mouse_menu_clicked then
                     draw_trigger_action(data, item)
-                    data.plan_mouse_menu_clicked = false
-                    data.plan_mouse_menu_visible = false
                 end
-            
+            end
+            if data.plan_mouse_menu_clicked then
+                data.plan_mouse_menu_clicked = false
+                data.plan_mouse_menu_visible = false
             end
         end
         

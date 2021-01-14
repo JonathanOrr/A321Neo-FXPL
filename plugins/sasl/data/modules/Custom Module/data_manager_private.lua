@@ -5,8 +5,8 @@
 
 local NAV_FILE_PATH  = sasl.getXPlanePath() .. "Resources/default data/earth_nav.dat"
 local FIX_FILE_PATH  = sasl.getXPlanePath() .. "Resources/default data/earth_fix.dat"
-local ARPT_FILE_PATH  = sasl.getXPlanePath() .. "Resources/default scenery/default apt dat/Earth nav data/apt.dat"
---local ARPT_FILE_PATH = "/usr/share/X-Plane 11/test.apt"
+--local ARPT_FILE_PATH  = sasl.getXPlanePath() .. "Resources/default scenery/default apt dat/Earth nav data/apt.dat"
+local ARPT_FILE_PATH = "/usr/share/X-Plane 11/test.apt"
 
 ----------------------------------------------------------------------------------------------------
 -- Global variables
@@ -312,7 +312,9 @@ end
 
 Data_manager._parse_line_arpt_node_linear_start = function(splitted)
     table.insert(current_obj, {tonumber(splitted[2]), tonumber(splitted[3])})
-    current_color = tonumber(splitted[4])
+    if splitted[4] then
+        current_color = tonumber(splitted[4])
+    end
 end
 
 Data_manager._parse_line_arpt_node_beizer_start = function(splitted)
@@ -327,18 +329,18 @@ end
 
 Data_manager._parse_line_arpt_node_linear_close = function(splitted)
     Data_manager._parse_line_arpt_node_linear_start(splitted)
-    table.insert(current_obj, current_obj[1])
+--    table.insert(current_obj, current_obj[1])
     Data_manager._save_arpt_node()
 end
 
 Data_manager._parse_line_arpt_node_beizer_end = function(splitted)
-    Data_manager._parse_line_arpt_node_beizer_start(splitted)
+--    Data_manager._parse_line_arpt_node_beizer_start(splitted)
     Data_manager._save_arpt_node()
 end
 
 Data_manager._parse_line_arpt_node_beizer_close = function(splitted)
-    Data_manager._parse_line_arpt_node_beizer_start(splitted)
-    table.insert(current_obj, current_obj[1])
+--    Data_manager._parse_line_arpt_node_beizer_start(splitted)
+--    table.insert(current_obj, current_obj[1])
     Data_manager._save_arpt_node()
 end
 
@@ -368,41 +370,61 @@ Data_manager._parse_line_arpt_generic = function(curr_seek, line)
     elseif id == "100" then
         local splitted = str_split(line)
         Data_manager._parse_line_arpt_runway(splitted)
---[[    elseif id == "110" then -- Taxyways
+    end
+end
+
+Data_manager._parse_line_arpt_detailed = function(apt, line)
+    if #line < 1 then
+        return
+    end
+    
+    local id = get_first_num(line, 1)
+
+    if id == "1" then
+        return true -- Stop
+    elseif id == "110" then -- Taxyways
         what_iam_in = ROW_TAXI
     elseif id == "120" then -- Linear feature
         what_iam_in = ROW_LINE
     elseif id == "130" then -- Linear feature
         what_iam_in = ROW_BOUND
     elseif id == "111" then
+        local splitted = str_split(line)
         Data_manager._parse_line_arpt_node_linear_start(splitted)
     elseif id == "112" then
+        local splitted = str_split(line)
         Data_manager._parse_line_arpt_node_beizer_start(splitted)
     elseif id == "113" then
+        local splitted = str_split(line)
         Data_manager._parse_line_arpt_node_linear_close(splitted)
     elseif id == "114" then
+        local splitted = str_split(line)
         Data_manager._parse_line_arpt_node_beizer_close(splitted)
     elseif id == "115" then
+        local splitted = str_split(line)
         Data_manager._parse_line_arpt_node_linear_end(splitted)
     elseif id == "116" then
+        local splitted = str_split(line)
         Data_manager._parse_line_arpt_node_beizer_end(splitted)
     elseif id == "20" then
+        local splitted = str_split(line)
         Data_manager._parse_line_arpt_sign(splitted)
-        ]]--
     end
+    
+    return false -- Continue to read
 end
 
 Data_manager._initialize_arpt = function()
     
     Data_manager._arpt = {} -- This will contain all the airports
     
-    local file = io.open(ARPT_FILE_PATH, "r")
+    local file = io.open(ARPT_FILE_PATH, "rb")  -- rb is necessary for Windows, seek is bugged otherwise
     if file == nil then
         logWarning("Unable to load the APT file")
         return
     end
 
-    local curr_seek = file:seek()    
+    local curr_seek = file:seek()
 
     for line in file:lines() do
         Data_manager._parse_line_arpt_generic(curr_seek, line)
@@ -411,6 +433,30 @@ Data_manager._initialize_arpt = function()
 
     file:close()
 end
+
+Data_manager._load_detailed_apt = function(apt)
+    local file = io.open(ARPT_FILE_PATH, "rb")  -- rb is necessary for Windows, seek is bugged otherwise
+    if file == nil then
+        logWarning("Unable to load the APT file")
+        return
+    end
+   
+    local first_encounter = false -- I need to stop at the second airport
+   
+    file:seek("set", apt.file_seek)
+    current_apt = apt.id
+    for line in file:lines() do
+        if Data_manager._parse_line_arpt_detailed(apt, line) then
+            if first_encounter then
+                break
+            end
+            first_encounter = true
+        end
+    end
+    
+end
+
+
 
 Data_manager._reshape_arpt_coords = function()
     Data_manager._arpt_by_coords = {}
