@@ -506,17 +506,17 @@ Joystick_toe_brakes_R = globalProperty("sim/joystick/joy_mapped_axis_value[7]")
 
 --Surfaces / FBW / flight controls--
 --dev & debuging
-Override_artstab = globalProperty("sim/operation/override/override_artstab")
-Override_control_surfaces = globalProperty("sim/operation/override/override_control_surfaces")
-FBW_kill_switch = createGlobalPropertyi("a321neo/dynamics/FBW/debug/kill_switch", 1, false, true, false)
-Force_full_rudder_limit = createGlobalPropertyi("a321neo/dynamics/FBW/debug/force_full_rudder_limit", 0, false, true, false)
-Bypass_speedbrakes_inhibition = createGlobalPropertyi("a321neo/dynamics/FBW/debug/bypass_spdbrakes_inhibition", 0, false, true, false)
-Override_flap_auto_retract = createGlobalPropertyi("a321neo/dynamics/FBW/debug/override_flap_auto_retract", 0, false, true, false)
-Debug_FBW_law_reconfig = createGlobalPropertyi("a321neo/dynamics/FBW/debug/debug_FBW_law_reconfig", 0, false, true, false)
+Override_artstab = 						globalProperty("sim/operation/override/override_artstab")
+Override_control_surfaces = 			globalProperty("sim/operation/override/override_control_surfaces")
+FBW_kill_switch = 						createGlobalPropertyi("a321neo/dynamics/FBW/debug/kill_switch", 1, false, true, false)
+Force_full_rudder_limit = 				createGlobalPropertyi("a321neo/dynamics/FBW/debug/force_full_rudder_limit", 0, false, true, false)
+Bypass_speedbrakes_inhibition = 		createGlobalPropertyi("a321neo/dynamics/FBW/debug/bypass_spdbrakes_inhibition", 0, false, true, false)
+Override_flap_auto_extend_and_retract = createGlobalPropertyi("a321neo/dynamics/FBW/debug/override_flap_auto_extend_and_retract", 0, false, true, false)
+Debug_FBW_law_reconfig = 				createGlobalPropertyi("a321neo/dynamics/FBW/debug/debug_FBW_law_reconfig", 0, false, true, false)
 --customizations
-FBW_use_C_star = createGlobalPropertyi("a321neo/dynamics/FBW/customizations/c_star_control", 0, false, true, false)
-Project_square_input = createGlobalPropertyi("a321neo/dynamics/FBW/customizations/projected_square_input", 0, false, true, false)
-Trim_wheel_smoothing_on = createGlobalPropertyi("a321neo/dynamics/FBW/customizations/trim_wheel_smoothing_on", 1, false, true, false)--is the trim wheel is smoothed
+FBW_use_C_star = 			  createGlobalPropertyi("a321neo/dynamics/FBW/customizations/c_star_control", 0, false, true, false)
+Project_square_input = 		  createGlobalPropertyi("a321neo/dynamics/FBW/customizations/projected_square_input", 0, false, true, false)
+Trim_wheel_smoothing_on = 	  createGlobalPropertyi("a321neo/dynamics/FBW/customizations/trim_wheel_smoothing_on", 1, false, true, false)--is the trim wheel is smoothed
 FBW_mode_transition_version = createGlobalPropertyi("a321neo/dynamics/FBW/customizations/mode_transition_version", 0, false, true, false)--0 slower transitions and flare mode at 100RA(default on newer aircraft), 1 faster transitions and flare mode at 50RA
 --inputs--
 Roll = globalProperty("sim/joystick/yoke_roll_ratio")

@@ -1,5 +1,5 @@
 FBW_law_var_table = {
-    last_RAT_status = 0,
+    in_air_timer = 0,
     fac_1_reset_required = 0,
     abnormal_elac_reset_required = 0,
     abnormal_fac_reset_required = 0,
@@ -67,26 +67,27 @@ function FBW_law_reconfiguration(var_table)
 
     --entered abnormal conditions
     for i = 1, #abdnormal_condition do
-        if abdnormal_condition[i] then
+        if abdnormal_condition[i] and var_table.in_air_timer >= 1 then
             var_table.abnormal_elac_reset_required = 1
             var_table.abnormal_fac_reset_required = 1
         end
     end
 
     --check deltas--
-    local RAT_status_delta = get(is_RAT_out) - var_table.last_RAT_status
     local elac_1_status_delta = get(ELAC_1_status) - var_table.last_elac_1_status
     local elac_2_status_delta = get(ELAC_2_status) - var_table.last_elac_2_status
-    local fac_1_status_delta = get(FAC_1_status) - var_table.last_fac_1_status
-    local fac_2_status_delta = get(FAC_2_status) - var_table.last_fac_2_status
-    var_table.last_RAT_status = get(is_RAT_out)
+    local fac_1_status_delta  = get(FAC_1_status)  - var_table.last_fac_1_status
+    local fac_2_status_delta  = get(FAC_2_status)  - var_table.last_fac_2_status
     var_table.last_elac_1_status = get(ELAC_1_status)
     var_table.last_elac_2_status = get(ELAC_2_status)
-    var_table.last_fac_1_status = get(FAC_1_status)
-    var_table.last_fac_2_status = get(FAC_2_status)
+    var_table.last_fac_1_status  = get(FAC_1_status)
+    var_table.last_fac_2_status  = get(FAC_2_status)
+
+    --in air timer--
+    var_table.in_air_timer = Math_clamp_higher((var_table.in_air_timer + get(DELTA_TIME)) * (1 - get(Any_wheel_on_ground)), 10.5)
 
     --emer battery config
-    if get(Gen_EMER_pwr) == 0 and get(Gen_EXT_pwr) == 0 and get(Gen_APU_pwr) == 0 and get(Gen_2_pwr) == 0 and get(Gen_1_pwr) == 0 and RAT_status_delta == 1 then
+    if get(DC_shed_ess_pwrd) == 0 and var_table.in_air_timer >= 10 then
         var_table.fac_1_reset_required = 1
     end
 
