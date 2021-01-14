@@ -4,16 +4,19 @@ include("ADIRS_data_source.lua")
 local in_air_timer = 0
 local alpha_speed_update_time_s = 0.15
 local alpha_speed_update_timer = 0
+local vls_reduced = 0
+local vls_reduced_ratio = 0
+local last_flap_lever_pos = 0
 
 local VMAX_speeds = {
     0.82,
     350,
     280,
-    230,
-    215,
+    243,
+    225,
     215,
     195,
-    190
+    186
 }
 
 local alpha0s = {
@@ -126,11 +129,11 @@ end
 local function update_VLS()
     local VLS_flaps_spd_lerp_table = {
         {0.0 + 0,  1.28 * Extract_vs1g(get(Aircraft_total_weight_kgs), 0, false)},
-        {0.7 + 0,  1.23 * Extract_vs1g(get(Aircraft_total_weight_kgs), 1, false)},
-        {0.7 + 10, 1.23 * Extract_vs1g(get(Aircraft_total_weight_kgs), 2, false)},
-        {0.8 + 14, 1.23 * Extract_vs1g(get(Aircraft_total_weight_kgs), 3, false)},
-        {0.8 + 21, 1.23 * Math_rescale(0, Extract_vs1g(get(Aircraft_total_weight_kgs), 4, false), 1, Extract_vs1g(get(Aircraft_total_weight_kgs), 4, true), (get(Front_gear_deployment) + get(Left_gear_deployment) + get(Right_gear_deployment)) / 3)},
-        {1.0 + 25, 1.23 * Extract_vs1g(get(Aircraft_total_weight_kgs), 5, false)},
+        {0.7 + 0,  Math_rescale(0, 1.23, 1, 1.13, vls_reduced_ratio) * Extract_vs1g(get(Aircraft_total_weight_kgs), 1, false)},
+        {0.7 + 10, Math_rescale(0, 1.23, 1, 1.13, vls_reduced_ratio) * Extract_vs1g(get(Aircraft_total_weight_kgs), 2, false)},
+        {0.8 + 14, Math_rescale(0, 1.23, 1, 1.13, vls_reduced_ratio) * Extract_vs1g(get(Aircraft_total_weight_kgs), 3, false)},
+        {0.8 + 21, Math_rescale(0, 1.23, 1, 1.13, vls_reduced_ratio) * Math_rescale(0, Extract_vs1g(get(Aircraft_total_weight_kgs), 4, false), 1, Extract_vs1g(get(Aircraft_total_weight_kgs), 4, true), (get(Front_gear_deployment) + get(Left_gear_deployment) + get(Right_gear_deployment)) / 3)},
+        {1.0 + 25, Math_rescale(0, 1.23, 1, 1.13, vls_reduced_ratio) * Extract_vs1g(get(Aircraft_total_weight_kgs), 5, false)},
     }
     local VLS_spdbrake_fx_lerp_table = {
         {0.0 + 0,  20},
@@ -140,6 +143,21 @@ local function update_VLS()
         {0.8 + 21, 6},
         {1.0 + 25, 6},
     }
+
+    --reduced VLS in TO or TAG
+    if get(Any_wheel_on_ground) == 1 and get(Flaps_internal_config) ~= 0 then
+        vls_reduced = 1
+    end
+
+    --delta lever--
+    local flap_lever_delta = get(Flaps_handle_position) - last_flap_lever_pos
+    last_flap_lever_pos = get(Flaps_handle_position)
+
+    if flap_lever_delta == -1 or get(Flaps_internal_config) == 0 then
+        vls_reduced = 0
+    end
+
+    vls_reduced_ratio = Set_linear_anim_value(vls_reduced_ratio, vls_reduced, 0, 1, 1/2.5)
 
     set(
         VLS,

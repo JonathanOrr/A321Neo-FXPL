@@ -21,7 +21,7 @@ local function which_adr(i) -- It returns the current ADR index in use by `i` (c
     if i == PFD_CAPT then
         return get(ADIRS_source_rotary_AIRDATA) == -1 and ADIRS_3 or ADIRS_1
     else
-        return get(ADIRS_source_rotary_AIRDATA) ==  1 and ADIRS_3 or ADIRS_2    
+        return get(ADIRS_source_rotary_AIRDATA) ==  1 and ADIRS_3 or ADIRS_2
     end
 end
 
@@ -29,7 +29,7 @@ local function which_ir(i) -- It returns the current IR index in use by `i` (cap
     if i == PFD_CAPT then
         return get(ADIRS_source_rotary_ATHDG) == -1 and ADIRS_3 or ADIRS_1
     else
-        return get(ADIRS_source_rotary_ATHDG) ==  1 and ADIRS_3 or ADIRS_2    
+        return get(ADIRS_source_rotary_ATHDG) ==  1 and ADIRS_3 or ADIRS_2
     end
 end
 

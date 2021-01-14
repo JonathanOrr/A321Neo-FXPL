@@ -591,6 +591,7 @@ Right_spoiler_3 = globalProperty("sim/flightmodel2/wing/speedbrake2_deg[5]")
 Right_spoiler_4 = globalProperty("sim/flightmodel/controls/wing3r_spo1def")
 Right_spoiler_5 = globalProperty("sim/flightmodel/controls/wing3r_spo2def")
 --high lift devices
+Slat_alpha_locked =     createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/slat_alpha_locked", 0, false, true, false)
 Flaps_handle_ratio = 	globalProperty("sim/cockpit2/controls/flap_ratio")
 Flaps_handle_position = createGlobalPropertyf("a321neo/dynamics/surfaces/flaps_handle_position", 0, false, true, false)--0, 1, 2, 3, full
 Flaps_internal_config = createGlobalPropertyf("a321neo/dynamics/surfaces/flaps_internal_config", 0, false, true, false)--0 = clean, 1 = 1, 2 = 1+f, 3 = 2, 4 = 3, 5 = full

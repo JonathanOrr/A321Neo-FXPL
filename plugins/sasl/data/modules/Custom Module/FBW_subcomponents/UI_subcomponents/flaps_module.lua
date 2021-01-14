@@ -52,6 +52,10 @@ function Update_slats_flaps_module_480x180(variable_table)
         variable_table.slats_half_spd = true
     end
 
+    if get(Slat_alpha_locked) == 1 then
+        variable_table.slats_cl = RED
+    end
+
     --flaps
     if get(Hydraulic_G_press) > 1450 and get(Hydraulic_Y_press) > 1450 and get(SFCC_1_status) == 1 and get(SFCC_2_status) == 1 then
         variable_table.flaps_cl = LIGHT_BLUE
@@ -78,6 +82,10 @@ function Draw_slats_flaps_module_480x180(x_pos, y_pos, variable_table)
     --draw the background
     sasl.gl.drawRectangle(x_pos, y_pos, 480, 180, DARK_GREY)
     sasl.gl.drawText(B612_MONO_bold, CENTER_X, CENTER_Y + 70, "SLATS & FLAPS", 12, false, false, TEXT_ALIGN_CENTER, WHITE)
+
+    if get(Slat_alpha_locked) == 1 then
+        sasl.gl.drawText(B612_MONO_bold, CENTER_X, CENTER_Y + 40, "A-LOCK", 12, false, false, TEXT_ALIGN_CENTER, RED)
+    end
 
     --slats flaps computers
     sasl.gl.drawRectangle(CENTER_X - 88, CENTER_Y + 46, 56, 20, LIGHT_GREY)

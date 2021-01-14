@@ -51,29 +51,41 @@ local function draw_characteristics_spd(PFD_table)
 
     --show alpha based speed when in fly by wire flight mode
     if PFD_table.PFD_aircraft_in_air_timer >= 0.7 then
-        --aprot
-        sasl.gl.drawTexture(
-            PFD_aprot_tape,
-            size[1]/2-336,
-            size[2]/2-244 + Math_rescale(-43, -898, 42, -425, get(PFD_table.Aprot_SPD) - get_ias(PFD_table.Screen_ID)),
-            18,
-            898,
-            ECAM_ORANGE
-        )
-        --amax
-        sasl.gl.drawRectangle(
-            size[1]/2-336,
-            size[2]/2-244,
-            20,
-            Math_rescale(-43, 0, 42, 473, get(PFD_table.Amax) - get_ias(PFD_table.Screen_ID)),
-            ECAM_RED
-        )
+        if get(FBW_total_control_law) == 3 then
+            --aprot
+            sasl.gl.drawTexture(
+                PFD_aprot_tape,
+                size[1]/2-336,
+                size[2]/2-244 + Math_rescale(-43, -898, 42, -425, get(PFD_table.Aprot_SPD) - get_ias(PFD_table.Screen_ID)),
+                18,
+                898,
+                ECAM_ORANGE
+            )
+            --amax
+            sasl.gl.drawRectangle(
+                size[1]/2-336,
+                size[2]/2-244,
+                20,
+                Math_rescale(-43, 0, 42, 473, get(PFD_table.Amax) - get_ias(PFD_table.Screen_ID)),
+                ECAM_RED
+            )
+        else
+            --vsw
+            sasl.gl.drawTexture(
+                PFD_vmax_vsw_tape,
+                size[1]/2-336,
+                size[2]/2-244 + Math_rescale(-43, -1802, 42, -1329, get(PFD_table.Aprot_SPD) - get_ias(PFD_table.Screen_ID)),
+                19,
+                1802,
+                ECAM_RED
+            )
+        end
 
         --vmo/mmo
         sasl.gl.drawTexture(PFD_vmax_vsw_tape, size[1]/2-336, size[2]/2+229 + Math_rescale(-43, -473, 42, 0, get(PFD_table.Vmax_spd) - get_ias(PFD_table.Screen_ID)), 19, 1802, ECAM_RED)
 
         --VFE next
-        if get_alt(PFD_table.Screen_ID) < 15000 and get(Flaps_handle_position) ~= 4 then
+        if get_alt(PFD_table.Screen_ID) < 20000 and get(Flaps_handle_position) ~= 4 then
             sasl.gl.drawRectangle(size[1]/2-363, size[2]/2-3  + Math_rescale_no_lim(-43, -240, 42, 240, get(PFD_table.VFE) - get_ias(PFD_table.Screen_ID)), 22, 3, ECAM_ORANGE)
             sasl.gl.drawRectangle(size[1]/2-363, size[2]/2-14 + Math_rescale_no_lim(-43, -240, 42, 240, get(PFD_table.VFE) - get_ias(PFD_table.Screen_ID)), 22, 3, ECAM_ORANGE)
         end
@@ -131,7 +143,7 @@ end
 
 local function draw_decel_info(PFD_table)
     if get(Wheel_autobrake_is_in_decel) == 1 then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-387, size[2]/2-274, "DECEL", 35, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-387, size[2]/2-278, "DECEL", 35, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
     end
 end
 

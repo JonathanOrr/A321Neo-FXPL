@@ -85,10 +85,10 @@ function Ground_spoilers_output(var_table)
 
     --DELTAs--
     local Both_main_gear_on_ground_delta = get(Aft_wheel_on_ground) - var_table.Both_main_gear_on_ground_prev
-    local Thrust_levers_idled_delta = BoolToNum(get(L_sim_throttle) == 0 and get(R_sim_throttle) == 0) - var_table.Thrust_levers_idled_prev
+    local Thrust_levers_idled_delta = BoolToNum(get(L_sim_throttle) >= THR_IDLE_START and get(L_sim_throttle) <= THR_IDLE_END and get(R_sim_throttle) >= THR_IDLE_START and get(R_sim_throttle) <= THR_IDLE_END) - var_table.Thrust_levers_idled_prev
 
     var_table.Both_main_gear_on_ground_prev = get(Aft_wheel_on_ground)
-    var_table.Thrust_levers_idled_prev = BoolToNum(get(L_sim_throttle) == 0 and get(R_sim_throttle) == 0)
+    var_table.Thrust_levers_idled_prev = BoolToNum(get(L_sim_throttle) >= THR_IDLE_START and get(L_sim_throttle) <= THR_IDLE_END and get(R_sim_throttle) >= THR_IDLE_START and get(R_sim_throttle) <= THR_IDLE_END)
 
     --check if ground spoilers are armed
     set(Ground_spoilers_armed, BoolToNum(get(Speedbrake_handle_ratio) <= -0.25))
@@ -130,7 +130,7 @@ function Ground_spoilers_output(var_table)
         end
 
         --speedbrake handle in extended position and flaps is larger and equal to config 3
-        if Both_main_gear_on_ground_delta == 1 and get(Speedbrake_handle_ratio) > 0.1 and get(L_sim_throttle) <= 0 and get(R_sim_throttle) <= 0 and get(Flaps_internal_config) >= 4 then
+        if Both_main_gear_on_ground_delta == 1 and get(Speedbrake_handle_ratio) > 0.1 and get(L_sim_throttle) <= THR_IDLE_END and get(R_sim_throttle) <= THR_IDLE_END and get(Flaps_internal_config) >= 4 then
             set(Ground_spoilers_mode, 2)
             set(Ground_spoilers_act_method, 2)--a special case
         end
@@ -149,7 +149,7 @@ function Ground_spoilers_output(var_table)
             set(Ground_spoilers_act_method, 0)
         end
     elseif get(Ground_spoilers_act_method) == 1 then
-        if get(L_sim_throttle) == 0 and get(R_sim_throttle) == 0 then
+        if BoolToNum(get(L_sim_throttle) >= THR_IDLE_START and get(L_sim_throttle) <= THR_IDLE_END and get(R_sim_throttle) >= THR_IDLE_START and get(R_sim_throttle) <= THR_IDLE_END) then
             set(Ground_spoilers_mode, 0)
             set(Ground_spoilers_act_method, 0)
         end

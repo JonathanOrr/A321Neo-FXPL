@@ -80,6 +80,17 @@ function Slats_flaps_calc_and_control()
         end
     end
 
+    --slat alpha/speed lock
+    if last_flaps_handle_pos == 1 and flaps_handle_delta == -1 and (get_avg_aoa() > 8 or get_avg_ias() < 165) then
+        set(Slat_alpha_locked, 1)
+    end
+    if get(Slat_alpha_locked) == 1 and (get_avg_aoa() < 7.1 or get_avg_ias() > 171) then--de-activation
+        set(Slat_alpha_locked, 0)
+    end
+    if get(Any_wheel_on_ground) == 1 and get_avg_ias() < 60 then--inhibition
+        set(Slat_alpha_locked, 0)
+    end
+
     --make ecam slats or flaps indication yellow refer to FCOM 1.27.50 P6
     if get(All_on_ground) == 0 or (get(Engine_1_avail) == 1 and get(Engine_2_avail) == 1) then
         if (get(Hydraulic_G_press) < 1450 and get(Hydraulic_B_press) < 1450) or (get(SFCC_1_status) == 0 and get(SFCC_2_status) == 0) then
@@ -101,6 +112,7 @@ function Slats_flaps_calc_and_control()
     --SPEEDs logic--
     slat_ratio_spd = slat_ratio_spd * ((get(Hydraulic_G_press) < 1450 or get(Hydraulic_B_press) < 1450) and 0.5 or 1)
     slat_ratio_spd = slat_ratio_spd * ((get(SFCC_1_status) == 0 or get(SFCC_2_status) == 0) and 0.5 or 1)
+    slat_ratio_spd = slat_ratio_spd * (1 - get(Slat_alpha_locked))
     flap_ratio_spd = flap_ratio_spd * ((get(Hydraulic_G_press) < 1450 or get(Hydraulic_Y_press) < 1450) and 0.5 or 1)
     flap_ratio_spd = flap_ratio_spd * ((get(SFCC_1_status) == 0 or get(SFCC_2_status) == 0) and 0.5 or 1)
 
