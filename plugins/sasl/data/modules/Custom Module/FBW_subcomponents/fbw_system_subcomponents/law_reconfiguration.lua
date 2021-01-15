@@ -54,7 +54,7 @@ function FBW_law_reconfiguration(var_table)
 
         --DIRECT, DIRECT, ALT
         {
-            {get(Wheel_status_LGCIU_1) == 0 and get(Wheel_status_LGCIU_2) == 0 and get(Flaps_internal_config) == 3, "LGCIU DATA DISAGREE AND FLAPS >= CONFIG 2"}
+            {(get(Wheel_status_LGCIU_1) == 0 and get(Wheel_status_LGCIU_2) == 0) or (get(SEC_1_status) == 0 and get(SEC_2_status) == 0 and get(SEC_3_status) == 0) and get(Flaps_internal_config) >= 3, "LGCIU 1 + 2 OR SEC 1 + 2 + 3 FAILURE AND FLAPS >= CONFIG 2"}
         },
     }
 

@@ -29,7 +29,7 @@ function Ailerons_control(lateral_input, has_florence_kit, ground_spoilers_mode)
     --TRAVEL TARGETS CALTULATION
     --ground spoilers
     if ground_spoilers_mode == 2 then
-        if has_florence_kit == true then
+        if has_florence_kit == true and get(FBW_total_control_law) == FBW_NORMAL_LAW then
             l_aileron_travel_target = -ailerons_max_def
             r_aileron_travel_target = -ailerons_max_def
         end
@@ -96,7 +96,7 @@ Spoilers_obj = {
 }
 
 --ROLL SPOILERS & SPD BRAKES--
-function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_auto_flight, roll_in_direct_law, var_table)
+function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_auto_flight, var_table)
     --spoilers 2 3 4 are speedbrakes(still rolls with ailerons, deflection is 25/ 25/ 25, [on ground spoiler 1 can be open up to 6 degreess for maintainance with the spdbrk handle])
     --spoilers 2 3 4 5 are roll spoilers(can roll up to 35 degrees, on ground full roll is 35/ 7/ 35/ 35, in air is 25/ 7/ 25/ 25 [although this rarely happens unless on ground])
     --spoilers 3 4 5 are roll spoilers if in direct law(in air max deflection is 7/ 25/ 25[if spoiler 4 has failed spoiler 3 takes over the roll])
@@ -250,7 +250,7 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
     end
 
     --if the aircraft is in roll direct law change the roll spoiler deflections to limit roll rate
-    if roll_in_direct_law then
+    if get(FBW_total_control_law) == FBW_DIRECT_LAW then
         if get(L_spoiler_4_avail) == 1 then
             l_spoilers_roll_targets[1] = 0
             l_spoilers_roll_targets[2] = 0

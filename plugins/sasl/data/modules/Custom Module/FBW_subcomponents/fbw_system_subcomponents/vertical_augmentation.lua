@@ -30,11 +30,13 @@ function FBW_vertical_agmentation()
         FBW_PID_arrays.SSS_FBW_rotation_pitch_rate.Integral = Math_clamp_lower(FBW_PID_arrays.SSS_FBW_rotation_pitch_rate.Integral, -0.15)
     end
 
-    set(
-        Pitch_artstab,
-        get(Augmented_pitch) * get(FBW_vertical_ground_mode_ratio)
-        + rotation_mode_output * get(FBW_vertical_rotation_mode_ratio)
-        + get(FBW_augmented_Pitch) * get(FBW_vertical_flight_mode_ratio)
-        + flare_mode_output * get(FBW_vertical_flare_mode_ratio)
-    )
+    if get(FBW_kill_switch) == 0 then
+        set(
+            Pitch_artstab,
+            get(Augmented_pitch) * get(FBW_vertical_ground_mode_ratio)
+            + rotation_mode_output * get(FBW_vertical_rotation_mode_ratio)
+            + get(FBW_augmented_Pitch) * get(FBW_vertical_flight_mode_ratio)
+            + flare_mode_output * get(FBW_vertical_flare_mode_ratio)
+        )
+    end
 end

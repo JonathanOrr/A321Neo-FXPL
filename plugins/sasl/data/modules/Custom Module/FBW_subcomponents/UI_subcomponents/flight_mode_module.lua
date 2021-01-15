@@ -54,7 +54,7 @@ function Draw_LAW_MODE_module_480x240(x_pos, y_pos)
     }
 
     local fbw_lateral_laws_names = {
-        {"MECH", true},
+        {"MECH", false},
         {"ABNORMAL", true},
         {"DIRECT", true},
         {"ALT", false},
@@ -63,7 +63,7 @@ function Draw_LAW_MODE_module_480x240(x_pos, y_pos)
     }
 
     local fbw_vertical_laws_names = {
-        {"MECH", true},
+        {"MECH", false},
         {"ABNORMAL", true},
         {"DIRECT", true},
         {"ALT", true},

@@ -3,9 +3,11 @@ function FBW_lateral_agmentation()
         FBW_PID_arrays.SSS_FBW_roll_rate.Integral = 0
     end
 
-    set(
-        Roll_artstab,
-        get(Augmented_roll) * get(FBW_lateral_ground_mode_ratio)
-        + get(FBW_augmented_Roll) * get(FBW_lateral_flight_mode_ratio)
-    )
+    if get(FBW_kill_switch) == 0 then
+        set(
+            Roll_artstab,
+            get(Augmented_roll) * get(FBW_lateral_ground_mode_ratio)
+            + get(FBW_augmented_Roll) * get(FBW_lateral_flight_mode_ratio)
+        )
+    end
 end
