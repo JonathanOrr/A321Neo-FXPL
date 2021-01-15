@@ -467,6 +467,27 @@ local function draw_fuel_stuffs()
     end
 end
 
+local function draw_slat_flap_legend()
+
+    local slat_fail = false -- TODO If hyd fail, wingtip brake on, slat fault
+    local flap_fail = false -- TODO If hyd fail, wingtip brake on, flap fault
+    local slat_misaligned = false -- TODO if misaligned (and wingip brake)
+    local flap_misaligned = false -- TODO if misaligned (and wingip brake)
+    local a_lock = get(Slat_alpha_locked) == 1
+    
+    local slat_extra_text = slat_misaligned and " LOCKED" or ""
+    local flap_extra_text = flap_misaligned and " LOCKED" or ""
+    
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+70, size[2]/2-70, "S" .. slat_extra_text, 30, false, false, TEXT_ALIGN_RIGHT, (slat_fail or slat_misaligned) and ECAM_ORANGE or ECAM_WHITE)
+
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+290, size[2]/2-70, "F" .. flap_extra_text, 30, false, false, TEXT_ALIGN_LEFT, (flap_fail or flap_misaligned) and ECAM_ORANGE or ECAM_WHITE)
+    
+    if a_lock then
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+75, size[2]/2-40, "A LOCK", 30, false, false, TEXT_ALIGN_LEFT, get(TIME) % 1 > 0.5 and ECAM_GREEN or ECAM_HIGH_GREEN)
+    end
+
+end
+
 local function draw_slat_flap_indications()
     local slats_positions = {
         0,
@@ -541,6 +562,8 @@ local function draw_slat_flap_indications()
     if rounded_flap_angle ~= flaps_positions[get(Flaps_internal_config) + 1] then
         SASL_drawSegmentedImg(EWD_flap_to_go_img, size[1]/2 + 15, size[2]/2 - 134, 2262, 63, 6, get(Flaps_internal_config) + 1)
     end
+    
+    draw_slat_flap_legend()
 end
 
 function draw()
