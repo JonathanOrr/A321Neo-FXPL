@@ -55,9 +55,13 @@ FAILURE_IR_ATT[1] = createGlobalPropertyi("a321neo/failures/adirs/ir_1_att", 0, 
 FAILURE_IR_ATT[2] = createGlobalPropertyi("a321neo/failures/adirs/ir_2_att", 0, false, true, false) -- 0: OK, 1: FAILED (it has no effect if FAILURE_IR == 0)
 FAILURE_IR_ATT[3] = createGlobalPropertyi("a321neo/failures/adirs/ir_3_att", 0, false, true, false) -- 0: OK, 1: FAILED (it has no effect if FAILURE_IR == 0)
 
-
 FAILURE_GPS_1 = createGlobalPropertyi("a321neo/failures/adirs/gps_1", 0, false, true, false) -- 0: OK, 1: FAILED
 FAILURE_GPS_2 = createGlobalPropertyi("a321neo/failures/adirs/gps_2", 0, false, true, false) -- 0: OK, 1: FAILED
+
+FAILURE_SENSOR_AOA_CAPT = createGlobalPropertyi("a321neo/failures/adirs/aoa_capt", 0, false, true, false) -- 0: OK, 1: FAILED
+FAILURE_SENSOR_AOA_FO   = createGlobalPropertyi("a321neo/failures/adirs/aoa_fo", 0, false, true, false) -- 0: OK, 1: FAILED
+FAILURE_SENSOR_AOA_STBY = createGlobalPropertyi("a321neo/failures/adirs/aoa_stby", 0, false, true, false) -- 0: OK, 1: FAILED
+
 
 FAILURE_HYD_Y_E_overheat = createGlobalPropertyi("a321neo/failures/HYD/Y_E_overheat", 0, false, true, false) -- Yellow Elec pump 0: normal 1: overheat
 FAILURE_HYD_B_E_overheat = createGlobalPropertyi("a321neo/failures/HYD/B_E_overheat", 0, false, true, false) -- Blue Elec pump 0: normal 1: overheat

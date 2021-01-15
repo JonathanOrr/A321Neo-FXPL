@@ -58,7 +58,13 @@ local failures_data = {
             {name="IR2 ATT\nFAULT",  status=false, dataref=FAILURE_IR_ATT[2] },
             {name="IR3 ATT\nFAULT",  status=false, dataref=FAILURE_IR_ATT[3] },
             {name="GPS 1\nFAULT",  status=false, dataref=FAILURE_GPS_1 },
-            {name="GPS 2\nFAULT",  status=false, dataref=FAILURE_GPS_2 }
+            {name="GPS 2\nFAULT",  status=false, dataref=FAILURE_GPS_2 },
+            
+            {name="AOA CAPT\nFAULT",  status=false, dataref=FAILURE_SENSOR_AOA_CAPT },
+            {name="AOA FO\nFAULT",  status=false, dataref=FAILURE_SENSOR_AOA_FO },
+            {name="AOA STBY\nFAULT",  status=false, dataref=FAILURE_SENSOR_AOA_STBY },
+            
+            
         }
     },
     {

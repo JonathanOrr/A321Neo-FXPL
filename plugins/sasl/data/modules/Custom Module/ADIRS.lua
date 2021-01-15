@@ -53,7 +53,7 @@ local ADIRS = {
     ir_switch_status = true,
     ir_light_dataref = nil,
     ir_align_start_time = 0,
-    ir_is_waiting_hdg = false,
+    ir_is_waiting_hdg = true,
     ir_is_aligning_gps = true,
     
     -- ADR
@@ -230,6 +230,9 @@ function ADIRS:update_ir_att()
         if get(TIME) - self.ir_align_start_time > IR_TIME_TO_GET_ATTITUDE then
             self.ir_status = IR_STATUS_ATT_ALIGNED
         end
+        if math.abs(get(Flightmodel_pitch)) > 10 or math.abs(get(Flightmodel_roll)) > 10 then
+            self.ir_align_start_time = self.ir_align_start_time + get(DELTA_TIME)
+        end
     else
         self.ir_status = IR_STATUS_IN_ALIGN
         self.ir_align_start_time = get(TIME)
@@ -295,7 +298,7 @@ function ADIRS:update_ir_data()
     if self.ir_status == IR_STATUS_ALIGNED or self.ir_status == IR_STATUS_ATT_ALIGNED then
         self.pitch = get(self.pitch_dataref)
         self.roll = get(self.roll_dataref)
-        self.aoa = get(Alpha)
+        self.aoa = get(Alpha) * (1-get(self.fail_aoa_dataref))
         if self.ir_status == IR_STATUS_ATT_ALIGNED and not self.ir_is_waiting_hdg then
             self.hdg = get(Flightmodel_mag_heading)
         end
@@ -307,6 +310,11 @@ function ADIRS:align_instantaneously()
     self.ir_align_start_time = -10000
     self.adr_align_start_time = -10000
 end
+
+function ADIRS:reset()
+    self.ir_align_start_time = 0
+end
+
 
 ----------------------------------------------------------------------------------------------------
 -- Global/Local variables
@@ -327,12 +335,12 @@ sasl.registerCommandHandler (ADIRS_cmd_IR1, 0,  function(phase) ADIRS_handler_to
 sasl.registerCommandHandler (ADIRS_cmd_IR2, 0,  function(phase) ADIRS_handler_toggle_IR(phase, ADIRS_2); return 1 end )
 sasl.registerCommandHandler (ADIRS_cmd_IR3, 0,  function(phase) ADIRS_handler_toggle_IR(phase, ADIRS_3); return 1 end )
 
-sasl.registerCommandHandler (ADIRS_cmd_knob_1_up, 0,   function(phase)  Knob_handler_up_int(phase, ADIRS_rotary_btn[1], 0, 2); return 1 end )
-sasl.registerCommandHandler (ADIRS_cmd_knob_2_up, 0,   function(phase)  Knob_handler_up_int(phase, ADIRS_rotary_btn[2], 0, 2); return 1 end )
-sasl.registerCommandHandler (ADIRS_cmd_knob_3_up, 0,   function(phase)  Knob_handler_up_int(phase, ADIRS_rotary_btn[3], 0, 2); return 1 end )
-sasl.registerCommandHandler (ADIRS_cmd_knob_1_down, 0, function(phase) Knob_handler_down_int(phase, ADIRS_rotary_btn[1], 0, 2); return 1 end )
-sasl.registerCommandHandler (ADIRS_cmd_knob_2_down, 0, function(phase) Knob_handler_down_int(phase, ADIRS_rotary_btn[2], 0, 2); return 1 end )
-sasl.registerCommandHandler (ADIRS_cmd_knob_3_down, 0, function(phase) Knob_handler_down_int(phase, ADIRS_rotary_btn[3], 0, 2); return 1 end )
+sasl.registerCommandHandler (ADIRS_cmd_knob_1_up, 0,   function(phase) ADIRS_sys[ADIRS_1]:reset();  Knob_handler_up_int(phase, ADIRS_rotary_btn[1], 0, 2); return 1 end )
+sasl.registerCommandHandler (ADIRS_cmd_knob_2_up, 0,   function(phase) ADIRS_sys[ADIRS_2]:reset(); Knob_handler_up_int(phase, ADIRS_rotary_btn[2], 0, 2); return 1 end )
+sasl.registerCommandHandler (ADIRS_cmd_knob_3_up, 0,   function(phase) ADIRS_sys[ADIRS_3]:reset(); Knob_handler_up_int(phase, ADIRS_rotary_btn[3], 0, 2); return 1 end )
+sasl.registerCommandHandler (ADIRS_cmd_knob_1_down, 0, function(phase) ADIRS_sys[ADIRS_1]:reset(); Knob_handler_down_int(phase, ADIRS_rotary_btn[1], 0, 2); return 1 end )
+sasl.registerCommandHandler (ADIRS_cmd_knob_2_down, 0, function(phase) ADIRS_sys[ADIRS_2]:reset(); Knob_handler_down_int(phase, ADIRS_rotary_btn[2], 0, 2); return 1 end )
+sasl.registerCommandHandler (ADIRS_cmd_knob_3_down, 0, function(phase) ADIRS_sys[ADIRS_3]:reset(); Knob_handler_down_int(phase, ADIRS_rotary_btn[3], 0, 2); return 1 end )
 
 sasl.registerCommandHandler (ADIRS_cmd_source_ATHDG_up, 0,     function(phase) Knob_handler_up_int(phase, ADIRS_source_rotary_ATHDG, -1, 1); return 1 end )
 sasl.registerCommandHandler (ADIRS_cmd_source_ATHDG_down, 0,   function(phase) Knob_handler_down_int(phase, ADIRS_source_rotary_ATHDG, -1, 1); return 1 end )
@@ -400,6 +408,7 @@ local function init_adirs()
             track_dataref = Capt_Track,
             pitch_dataref = Capt_pitch,
             roll_dataref = Capt_bank,
+            fail_aoa_dataref = FAILURE_SENSOR_AOA_CAPT,
             })
     ADIRS_sys[ADIRS_2] = ADIRS:create({
             id = ADIRS_2,
@@ -416,6 +425,7 @@ local function init_adirs()
             track_dataref = Fo_Track,
             pitch_dataref = Fo_pitch,
             roll_dataref = Fo_bank,
+            fail_aoa_dataref = FAILURE_SENSOR_AOA_FO,
             })
     ADIRS_sys[ADIRS_3] = ADIRS:create({
             id = ADIRS_3,
@@ -432,6 +442,7 @@ local function init_adirs()
             track_dataref = Fo_Track,
             pitch_dataref = Fo_pitch,
             roll_dataref = Fo_bank,
+            fail_aoa_dataref = FAILURE_SENSOR_AOA_STBY,
             })
     
     ADIRS_sys[ADIRS_1]:init()

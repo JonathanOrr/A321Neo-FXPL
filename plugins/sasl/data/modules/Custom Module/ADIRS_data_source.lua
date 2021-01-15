@@ -136,7 +136,7 @@ function get_avg_tas()
 end
 
 function is_aoa_ok(i)
-    return ir_works_att_mode(i)
+    return ir_works_att_mode(i) and get(ADIRS_sys[which_ir(i)].fail_aoa_dataref) == 0
 end
 
 function get_aoa(i)
@@ -144,7 +144,8 @@ function get_aoa(i)
 end
 
 function get_avg_aoa()
-    return get_ir_partial_data("aoa")
+    local how_many_failed = get(ADIRS_sys[1].fail_aoa_dataref) + get(ADIRS_sys[2].fail_aoa_dataref) + get(ADIRS_sys[3].fail_aoa_dataref)
+    return (ADIRS_sys[1].aoa + ADIRS_sys[2].aoa + ADIRS_sys[3].aoa) / (3 - how_many_failed)
 end
 
 function is_alt_ok(i)
@@ -190,6 +191,11 @@ end
 function get_mach(i)
     return ADIRS_sys[which_adr(i)].mach
 end
+
+function get_avg_mach()
+    return get_adr_data("mach")
+end
+
 
 -- IR
 
