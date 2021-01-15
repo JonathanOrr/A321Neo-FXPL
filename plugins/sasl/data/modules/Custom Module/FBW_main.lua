@@ -98,8 +98,12 @@ function update()
     updateAll(components)
     Fctl_computuers_status_computation(Fctl_computers_var_table)
     Compute_fctl_button_states()
-    FBW_mode_transition(FBW_modes_var_table)
     FBW_law_reconfiguration(FBW_law_var_table)
+    if get(FBW_total_control_law) == FBW_NORMAL_LAW then
+        FBW_normal_mode_transition(FBW_modes_var_table)
+    else
+        FBW_alternate_mode_transition(FBW_modes_var_table)
+    end
 
 
     kill_delta = get(FBW_kill_switch) - last_kill_value

@@ -2,10 +2,13 @@ FBW_modes_var_table = {
     Previous_trim_reset_begin = 0,
     In_air_timer = 0,
     On_ground_timer = 0,
-    Flare_mode_past_status = 0
+    Flare_mode_past_status = 0,
+
+    --alt law--
+    alt_flare_mode_buffer = 0,
 }
 
-function FBW_mode_transition(table)
+function FBW_normal_mode_transition(table)
     --FBW mode transfers to rotation mode(NEO only) airspeed >= 70kts and THR levers higher than CLB and aft wheels on ground takes 2 seconds
     --FBW mode transfers to flight mode if in air for more than 5 seconds with rotation mode (all wheels are off ground and att > 8) or RA > 50ft takes 5 seconds
     --FBW mode transfers to flare mode if (FBW is in flight mode and RA < 100 or 50RA(depending on settings) and desending)ATT is memorised, goes into pitch demand mode in 1 second
@@ -22,6 +25,8 @@ function FBW_mode_transition(table)
     --FBW_lateral_flight_mode_ratio
     --FBW_flare_mode_memorised_att
     --FBW_flare_mode_computed_Q
+
+    table.alt_flare_mode_buffer = 0
 
     --properties
     local lateral_ground_mode_transition_time = 0.5
@@ -44,7 +49,7 @@ function FBW_mode_transition(table)
     end
     if get(Any_wheel_on_ground) == 0 and table.In_air_timer < rotation_mode_duration_s then
         table.In_air_timer = table.In_air_timer + 1 * get(DELTA_TIME)
-    elseif get(FBW_vertical_rotation_mode_ratio) == 0 then
+    elseif get(Any_wheel_on_ground) == 1 then
         table.In_air_timer = 0
     end
 
@@ -71,7 +76,7 @@ function FBW_mode_transition(table)
 
     --VERTICAL MODES--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     --ground mode --> Rotation mode
-    if get(FBW_vertical_ground_mode_ratio) ~= 0 and (get(L_sim_throttle) >= THR_CLB_START or get(R_sim_throttle) >= THR_CLB_START) and (get_ias(PFD_CAPT) >= 70 or get_ias(PFD_FO) >= 70) and get(FBW_vertical_ground_mode_ratio) ~= 0 then
+    if get(FBW_vertical_ground_mode_ratio) ~= 0 and (get(L_sim_throttle) >= THR_CLB_START or get(R_sim_throttle) >= THR_CLB_START) and (get_ias(PFD_CAPT) >= 70 or get_ias(PFD_FO) >= 70) and get(Aft_wheel_on_ground) == 1 then
         set(FBW_vertical_rotation_mode_ratio,  Set_linear_anim_value(get(FBW_vertical_rotation_mode_ratio), 1, 0, 1, 1 / vertical_rotation_mode_transition_time))
     end
 
@@ -88,8 +93,13 @@ function FBW_mode_transition(table)
     end
 
     --flight mode --> flare mode
-    if (get(Capt_ra_alt_ft) < flare_mode_transition_RA or get(Fo_ra_alt_ft) < flare_mode_transition_RA) and (get_vs(PFD_CAPT) <= 0 or get_vs(PFD_FO) <= 0) and get(Any_wheel_on_ground) == 0 and get(FBW_vertical_rotation_mode_ratio) == 0 and get(FBW_vertical_flight_mode_ratio) ~= 0 then
+    if (get(L_sim_throttle) < THR_MCT_START and get(R_sim_throttle) < THR_MCT_START) and (get(Capt_ra_alt_ft) < flare_mode_transition_RA or get(Fo_ra_alt_ft) < flare_mode_transition_RA) and (get_vs(PFD_CAPT) <= 0 or get_vs(PFD_FO) <= 0) and get(Any_wheel_on_ground) == 0 and get(FBW_vertical_rotation_mode_ratio) == 0 and get(FBW_vertical_flight_mode_ratio) ~= 0 then
         set(FBW_vertical_flare_mode_ratio, Set_linear_anim_value(get(FBW_vertical_flare_mode_ratio), 1, 0, 1, 1 / vertical_flare_mode_transition_time))
+    end
+
+    --flare mode --> flight mode
+    if get(FBW_vertical_flare_mode_ratio) ~= 0 and (get(L_sim_throttle) >= THR_MCT_START or get(R_sim_throttle) >= THR_MCT_START) then
+        set(FBW_vertical_flare_mode_ratio, Set_linear_anim_value(get(FBW_vertical_flare_mode_ratio), 0, 0, 1, 1 / vertical_flare_mode_transition_time))
     end
 
     --flare mode --> rotation mode or flight mode
@@ -114,4 +124,60 @@ function FBW_mode_transition(table)
     set(FBW_lateral_ground_mode_ratio,  Math_approx_value(Math_clamp_lower(1 - get(FBW_lateral_flight_mode_ratio), 0), 0.001, 0))
     set(FBW_vertical_ground_mode_ratio, Math_approx_value(Math_clamp_lower(1 - get(FBW_vertical_rotation_mode_ratio) - get(FBW_lateral_flight_mode_ratio) - get(FBW_vertical_flare_mode_ratio), 0), 0.001, 0))
     set(FBW_vertical_flight_mode_ratio, Math_approx_value(Math_clamp_lower(1 - get(FBW_vertical_rotation_mode_ratio) - get(FBW_vertical_flare_mode_ratio) - get(FBW_vertical_ground_mode_ratio), 0), 0.001, 0))
+end
+
+function FBW_alternate_mode_transition(table)
+    --properties
+    local vertical_ground_mode_transition_time = 3
+    local vertical_flare_mode_transition_time = 3
+
+    --timers--
+    if get(Aft_wheel_on_ground) == 1 and table.On_ground_timer < 5 then
+        table.On_ground_timer = table.On_ground_timer + 1 * get(DELTA_TIME)
+    elseif get(Any_wheel_on_ground) == 0 then
+        table.On_ground_timer = 0
+    end
+    if get(Any_wheel_on_ground) == 0 and table.In_air_timer < 5 then
+        table.In_air_timer = table.In_air_timer + 1 * get(DELTA_TIME)
+    elseif get(Any_wheel_on_ground) == 1 then
+        table.In_air_timer = 0
+    end
+
+    --inhibit lateral flight mode--
+    set(FBW_lateral_ground_mode_ratio, 1)
+    set(FBW_lateral_flight_mode_ratio, 0)
+
+    --inhibit rotation mode(this is not confirmed yet)
+    set(FBW_vertical_rotation_mode_ratio, 0)
+
+    --VERTICAL MODES--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    --ground mode --> flight mode
+    if get(FBW_vertical_ground_mode_ratio) ~= 0 and (get(Any_wheel_on_ground) == 0 and get(Flightmodel_pitch) > 8) or (get(Capt_ra_alt_ft) > 50 or get(Fo_ra_alt_ft) > 50) then
+        set(FBW_vertical_ground_mode_ratio, Set_linear_anim_value(get(FBW_vertical_ground_mode_ratio), 0, 0, 1, 1 / vertical_ground_mode_transition_time))
+    end
+
+    --flight mode --> flare mode
+    if get(Gear_handle) == 1 then
+        table.alt_flare_mode_buffer = Set_linear_anim_value(table.alt_flare_mode_buffer, 1, 0, 1, 1 / vertical_flare_mode_transition_time)
+    end
+    --flare mode --> flight mode
+    if get(Gear_handle) == 0 then
+        table.alt_flare_mode_buffer = Set_linear_anim_value(table.alt_flare_mode_buffer, 0, 0, 1, 1 / vertical_flare_mode_transition_time)
+    end
+
+    --flare mode --> ground mode
+    if (get(All_on_ground) == 1 and table.On_ground_timer >= 5 and get(Flightmodel_pitch) < 2.5) then
+        set(FBW_vertical_ground_mode_ratio, Set_linear_anim_value(get(FBW_vertical_ground_mode_ratio), 1, 0, 1, 1 / vertical_ground_mode_transition_time))
+    end
+
+    --trim reset--
+    local trim_reset_begin = get(FBW_vertical_ground_mode_ratio) > 0 and 1 or 0
+    local trim_reset_begin_delta = trim_reset_begin - table.Previous_trim_reset_begin
+    table.Previous_trim_reset_begin = trim_reset_begin
+    if trim_reset_begin_delta == 1 then
+        set(Augmented_pitch_trim_ratio, 0)
+    end
+
+    set(FBW_vertical_flare_mode_ratio, Math_approx_value(Math_clamp_lower(table.alt_flare_mode_buffer - get(FBW_vertical_ground_mode_ratio), 0), 0.001, 0))
+    set(FBW_vertical_flight_mode_ratio, Math_approx_value(Math_clamp_lower((1 - get(FBW_vertical_flare_mode_ratio)) - get(FBW_vertical_ground_mode_ratio), 0), 0.001, 0))
 end
