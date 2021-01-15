@@ -81,6 +81,14 @@ local function draw_characteristics_spd(PFD_table)
             )
         end
 
+        --vmax protection speeds
+        if get(FBW_total_control_law) == FBW_NORMAL_LAW then
+            sasl.gl.drawRectangle(size[1]/2-363, size[2]/2-3  + Math_rescale_no_lim(-43, -240, 42, 240, get(PFD_table.Vmax_prot_spd) - get_ias(PFD_table.Screen_ID)), 22, 3, ECAM_GREEN)
+            sasl.gl.drawRectangle(size[1]/2-363, size[2]/2-14 + Math_rescale_no_lim(-43, -240, 42, 240, get(PFD_table.Vmax_prot_spd) - get_ias(PFD_table.Screen_ID)), 22, 3, ECAM_GREEN)
+        else
+            sasl.gl.drawText(Airbus_panel_font, size[1]/2-352, size[2]/2-16 + Math_rescale_no_lim(-43, -240, 42, 240, get(PFD_table.Vmax_prot_spd) - get_ias(PFD_table.Screen_ID)), "x", 34, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        end
+
         --vmo/mmo
         sasl.gl.drawTexture(PFD_vmax_vsw_tape, size[1]/2-336, size[2]/2+229 + Math_rescale(-43, -473, 42, 0, get(PFD_table.Vmax_spd) - get_ias(PFD_table.Screen_ID)), 19, 1802, ECAM_RED)
 

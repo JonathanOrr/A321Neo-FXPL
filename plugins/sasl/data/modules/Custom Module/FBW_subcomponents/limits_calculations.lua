@@ -78,14 +78,14 @@ end
 
 local function update_VMAX_prot()
     if get_alt(PFD_CAPT) > 24600 then
-        set(Capt_VMAX_prot, get_ias(PFD_CAPT) * (VMAX_speeds[1] + 0.006) / get_mach(PFD_CAPT))
+        set(Capt_VMAX_prot, get_ias(PFD_CAPT) * (VMAX_speeds[1] + 0.006) / Math_clamp_lower(get_mach(PFD_CAPT), 0.001))
         set(Capt_fixed_VMAX, get_ias(PFD_CAPT) * VMAX_speeds[1] / get_mach(PFD_CAPT))
     else
         set(Capt_VMAX_prot, VMAX_speeds[2] + 6)
         set(Capt_fixed_VMAX, VMAX_speeds[2])
     end
     if get_alt(PFD_FO) > 24600 then
-        set(Fo_VMAX_prot, get_ias(PFD_FO) * (VMAX_speeds[1] + 0.006) / get_mach(PFD_FO))
+        set(Fo_VMAX_prot, get_ias(PFD_FO) * (VMAX_speeds[1] + 0.006) / Math_clamp_lower(get_mach(PFD_FO), 0.001))
         set(Fo_fixed_VMAX, get_ias(PFD_FO) * VMAX_speeds[1] / get_mach(PFD_FO))
     else
         set(Fo_VMAX_prot, VMAX_speeds[2] + 6)
@@ -95,16 +95,26 @@ end
 
 local function update_VMAX()
     if get_alt(PFD_CAPT) > 24600 then
-        set(Capt_VMAX, get_ias(PFD_CAPT) * (VMAX_speeds[1] / get_mach(PFD_CAPT)))
+        set(Capt_VMAX, get_ias(PFD_CAPT) * (VMAX_speeds[1] / Math_clamp_lower(get_mach(PFD_CAPT), 0.001)))
     else
         set(Capt_VMAX, VMAX_speeds[2])
     end
     if get_alt(PFD_FO) > 24600 then
-        set(Fo_VMAX, get_ias(PFD_FO) * (VMAX_speeds[1] / get_mach(PFD_FO)))
+        set(Fo_VMAX, get_ias(PFD_FO) * (VMAX_speeds[1] / Math_clamp_lower(get_mach(PFD_FO), 0.001)))
     else
         set(Fo_VMAX, VMAX_speeds[2])
     end
-    if get(Front_gear_deployment) > 0.25 or get(Left_gear_deployment) > 0.25 or get(Right_gear_deployment) > 0.25 then
+    local gear_vmax = false
+    if get(Gear_handle) == 1 then
+        if get(Front_gear_deployment) > 0.2 or get(Left_gear_deployment) > 0.2 or get(Right_gear_deployment) > 0.2 then
+            gear_vmax = true
+        end
+    else
+        if get(Front_gear_deployment) < 0.8 or get(Left_gear_deployment) < 0.8 or get(Right_gear_deployment) < 0.8 then
+            gear_vmax = false
+        end
+    end
+    if gear_vmax then
         set(Capt_VMAX, VMAX_speeds[3])
         set(Fo_VMAX, VMAX_speeds[3])
     end
