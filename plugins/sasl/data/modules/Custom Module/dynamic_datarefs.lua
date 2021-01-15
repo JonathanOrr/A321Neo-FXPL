@@ -752,3 +752,12 @@ VEHICLE_ps2 = createGlobalPropertyi("a321neo/vehicles/ps2", 0, false, true, fals
 VEHICLE_uld1 = createGlobalPropertyi("a321neo/vehicles/uld1", 0, false, true, false)
 VEHICLE_uld2 = createGlobalPropertyi("a321neo/vehicles/uld2", 0, false, true, false)
 VEHICLE_wv = createGlobalPropertyi("a321neo/vehicles/wv", 0, false, true, false)
+
+--Volume Control
+
+VOLUME_ext = createGlobalPropertyf("a321neo/volume/ext", 1, false, true, false)
+VOLUME_int = createGlobalPropertyf("a321neo/volume/int", 1, false, true, false)
+VOLUME_wind = createGlobalPropertyf("a321neo/volume/wind", 1, false, true, false)
+VOLUME_cabin = createGlobalPropertyf("a321neo/volume/cabin", 1, false, true, false)
+
+--Toggle Options
