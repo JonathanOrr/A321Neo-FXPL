@@ -250,7 +250,7 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
     end
 
     --if the aircraft is in roll direct law change the roll spoiler deflections to limit roll rate
-    if get(FBW_total_control_law) == FBW_DIRECT_LAW then
+    if get(FBW_lateral_law) == FBW_DIRECT_LAW then
         if get(L_spoiler_4_avail) == 1 then
             l_spoilers_roll_targets[1] = 0
             l_spoilers_roll_targets[2] = 0

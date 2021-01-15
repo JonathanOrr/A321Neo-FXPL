@@ -54,7 +54,7 @@ function FBW_law_reconfiguration(var_table)
 
         --DIRECT, DIRECT, ALT
         {
-            {(get(Wheel_status_LGCIU_1) == 0 and get(Wheel_status_LGCIU_2) == 0) or (get(SEC_1_status) == 0 and get(SEC_2_status) == 0 and get(SEC_3_status) == 0) and get(Flaps_internal_config) >= 3, "LGCIU 1 + 2 OR SEC 1 + 2 + 3 FAILURE AND FLAPS >= CONFIG 2"}
+            {(get(Wheel_status_LGCIU_1) == 0 and get(Wheel_status_LGCIU_2) == 0) or (get(SEC_1_status) == 0 and get(SEC_2_status) == 0 and get(SEC_3_status) == 0) and get(Flaps_internal_config) >= 3, "LGCIU 1 + 2 OR SEC 1 + 2 + 3 FAILURE AND FLAPS >= CONFIG 2"},
         },
     }
 
@@ -207,9 +207,30 @@ function FBW_law_reconfiguration(var_table)
         end
     end
 
+    local gear_down_direct = false
+
+    --ALT law flare mode into direct law
+    if get(FBW_vertical_law) ~= FBW_NORMAL_LAW and get(FBW_vertical_law) ~= FBW_DIRECT_LAW and get(FBW_vertical_law) ~= FBW_MECHANICAL_BACKUP_LAW then
+        if (get(Gear_handle) == 1 and get(FBW_vertical_flare_mode_ratio) == 1) or (get(Gear_handle) == 1 and (get(Front_gear_deployment) == 1 and get(Left_gear_deployment) == 1 and get(Right_gear_deployment) == 1)) then
+            set(FBW_vertical_law, FBW_DIRECT_LAW)
+            gear_down_direct = true
+        end
+    end
+    if get(FBW_lateral_law) ~= FBW_NORMAL_LAW and get(FBW_lateral_law) ~= FBW_DIRECT_LAW and get(FBW_lateral_law) ~= FBW_MECHANICAL_BACKUP_LAW then
+        if (get(Gear_handle) == 1 and get(FBW_vertical_flare_mode_ratio) == 1) or (get(Gear_handle) == 1 and (get(Front_gear_deployment) == 1 and get(Left_gear_deployment) == 1 and get(Right_gear_deployment) == 1)) then
+            set(FBW_lateral_law, FBW_DIRECT_LAW)
+            gear_down_direct = true
+        end
+    end
+    if get(FBW_yaw_law) ~= FBW_NORMAL_LAW and get(FBW_yaw_law) ~= FBW_DIRECT_LAW and get(FBW_yaw_law) ~= FBW_MECHANICAL_BACKUP_LAW then
+        if (get(Gear_handle) == 1 and get(FBW_vertical_flare_mode_ratio) == 1) or (get(Gear_handle) == 1 and (get(Front_gear_deployment) == 1 and get(Left_gear_deployment) == 1 and get(Right_gear_deployment) == 1)) then
+            set(FBW_yaw_law, FBW_ALT_NO_PROT_LAW)
+            gear_down_direct = true
+        end
+    end
+
     --total mode
     set(FBW_total_control_law, get(FBW_vertical_law))
-
 
     --print debug msgs
     if get(Debug_FBW_law_reconfig) == 1 then
@@ -235,6 +256,9 @@ function FBW_law_reconfiguration(var_table)
             if abdnormal_condition[i] then
                 print("------------------------------AIRCRAFT IN ABNORMAL ATTITUDES------------------------------")
             end
+        end
+        if gear_down_direct == true then
+            print("----------------------------ALT LAW GEAR DOWN --> DIRECT LAW------------------------------")
         end
         print("------------------------------------------------------------------------------------------")
     end
