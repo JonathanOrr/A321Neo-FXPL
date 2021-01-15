@@ -1,3 +1,23 @@
+-------------------------------------------------------------------------------
+-- A32NX Freeware Project
+-- Copyright (C) 2020
+-------------------------------------------------------------------------------
+-- LICENSE: GNU General Public License v3.0
+--
+--    This program is free software: you can redistribute it and/or modify
+--    it under the terms of the GNU General Public License as published by
+--    the Free Software Foundation, either version 3 of the License, or
+--    (at your option) any later version.
+--
+--    Please check the LICENSE file in the root of the repository for further
+--    details or check <https://www.gnu.org/licenses/>
+-------------------------------------------------------------------------------
+-- File: graphics_rose.lua
+-- Short description: ROSE/NAV mode file
+-------------------------------------------------------------------------------
+
+include("ND/subcomponents/helpers.lua")
+
 local image_bkg_ring        = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/ring.png")
 local image_bkg_ring_red    = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/ring-red.png")
 local image_bkg_ring_tcas   = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/tcas-ring.png")
@@ -28,21 +48,12 @@ local poi_position_last_update = 0
 local POI_UPDATE_RATE = 0.1
 local MAX_LIMIT_WPT = 500
 
-local function get_range_in_nm(data)
-    if data.config.range > ND_RANGE_ZOOM_2 then
-        return math.floor(2^(data.config.range-1) * 10)
-    elseif data.config.range == ND_RANGE_ZOOM_2 then
-        return 2
-    elseif data.config.range == ND_RANGE_ZOOM_1 then
-        return 1
-    elseif data.config.range == ND_RANGE_ZOOM_05 then
-        return 0.5
-    elseif data.config.range == ND_RANGE_ZOOM_02 then
-        return 0.2
-    end
-    assert(false) -- Should never happen
+local function get_px_per_nm(data)
+    -- 588 px is the diameter of our ring, so this corresponds to the range scale selected:
+    local range_in_nm = get_range_in_nm(data)
+    -- The the per_px nm is:
+    return 588 / range_in_nm
 end
-
 
 local function draw_backgrounds(data)
     -- Main rose background
@@ -138,40 +149,22 @@ local function draw_navaid_pointers(data)
     draw_navaid_pointer_single(data, 2)
 end
 
-local function get_distance_nm(lat1,lon1,lat2,lon2)
-    return GC_distance_km(lat1, lon1, lat2, lon2) * 0.539957
-end
-
-local function get_bearing(lat1,lon1,lat2,lon2)
-    local lat1_rad = math.rad(lat1)
-    local lat2_rad = math.rad(lat2)
-    local lon1_rad = math.rad(lon1)
-    local lon2_rad = math.rad(lon2)
-
-    local x = math.sin(lon2_rad - lon1_rad) * math.cos(lat2_rad)
-    local y = math.cos(lat1_rad) * math.sin(lat2_rad) - math.sin(lat1_rad)*math.cos(lat2_rad)*math.cos(lon2_rad - lon1_rad)
-    local theta = math.atan2(y, x)
-    local brng = (theta * 180 / math.pi + 360) % 360
-
-    return brng
-end
-
-local function get_px_per_nm(data)
-    -- 588 px is the diameter of our ring, so this corresponds to the range scale selected:
-    local range_in_nm = get_range_in_nm(data)
-    -- The the per_px nm is:
-    return 588 / range_in_nm
-end
-
-local function get_x_y(data, lat, lon)  -- Do not use this for poi
+local function get_x_y(data, lat, lon, true_to_mag)  -- Do not use this for poi
     local px_per_nm = get_px_per_nm(data)
     
     local distance = get_distance_nm(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon,lat,lon)
     local distance_px = distance * px_per_nm
     local bearing  = get_bearing(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon,lat,lon)
     
-    local x = size[1]/2 + distance_px * math.cos(math.rad(bearing+data.inputs.heading))
-    local y = size[1]/2 + distance_px * math.sin(math.rad(bearing+data.inputs.heading))
+    local bear_shift = bearing+data.inputs.heading
+    if true_to_mag then
+        local dev1 = sasl.getMagneticVariation (lat,lon)
+        local dev2 = sasl.getMagneticVariation (data.inputs.plane_coords_lat,data.inputs.plane_coords_lon)
+        --print(dev1,dev2)
+        bear_shift = bear_shift - dev1
+    end
+    local x = size[1]/2 + distance_px * math.cos(math.rad(bear_shift))
+    local y = size[1]/2 + distance_px * math.sin(math.rad(bear_shift))
     
     return x,y
 end
@@ -310,14 +303,10 @@ local function draw_pois(data)
 
 end
 
-local function compute_angle(x1, y1, x2, y2)
-    return math.atan2(y1-y2, x1-x2)
-end 
-
 local function draw_oans_rwy(data, rwy_start, rwy_end)
 
-    local x_start,y_start = get_x_y(data, rwy_start.lat, rwy_start.lon)
-    local x_end,y_end = get_x_y(data, rwy_end.lat, rwy_end.lon)
+    local x_start,y_start = get_x_y(data, rwy_start.lat, rwy_start.lon, not data.inputs.is_true_heading_showed)
+    local x_end,y_end = get_x_y(data, rwy_end.lat, rwy_end.lon, not data.inputs.is_true_heading_showed)
 
     local px_per_nm = get_px_per_nm(data)
     local semiwidth_px = math.floor(rwy_start.width * 0.000539957 * px_per_nm / 2)
@@ -389,22 +378,6 @@ local function draw_oans(data)
             end            
         end
     end
-
-    
-    
-    
-end
-
-local function draw_oans_info(data)
-    if data.config.range > ND_RANGE_ZOOM_2 then
-        return  -- No OANS over zoom
-    end
-    
-    local nearest_airport = Data_manager.nearest_airport
-    if nearest_airport ~= nil then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]-30, size[2]-40, nearest_airport.name, 32, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]-30, size[2]-75, nearest_airport.id, 32, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
-    end
 end
 
 function draw_rose_unmasked(data)
@@ -414,7 +387,6 @@ function draw_rose_unmasked(data)
     draw_hdgsel_symbol(data)
     draw_ls_symbol(data)
     draw_ranges(data)
-    draw_oans_info(data)
 end
 
 function draw_rose(data)

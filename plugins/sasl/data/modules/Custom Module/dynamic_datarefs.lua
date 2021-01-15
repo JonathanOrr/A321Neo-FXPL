@@ -737,4 +737,18 @@ Fire_cargo_fwd_disch_at = createGlobalPropertyd("a321neo/dynamics/fire/cargo_fwd
 BUSS_Capt_man_enabled = createGlobalPropertyi("a321neo/dynamics/pfd/buss_capt_man", 0, false, true, false)
 BUSS_Fo_man_enabled = createGlobalPropertyi("a321neo/dynamics/pfd/buss_fo_man", 0, false, true, false)
 
-
+--Ground Vehicles
+VEHICLE_ac = createGlobalPropertyi("a321neo/vehicles/ac", 0, false, true, false)
+VEHICLE_as = createGlobalPropertyi("a321neo/vehicles/as", 0, false, true, false)
+VEHICLE_cat1 = createGlobalPropertyi("a321neo/vehicles/cat1", 0, false, true, false)
+VEHICLE_cat2 = createGlobalPropertyi("a321neo/vehicles/cat2", 0, false, true, false)
+VEHICLE_fuel = createGlobalPropertyi("a321neo/vehicles/fuel", 0, false, true, false)
+VEHICLE_gpu = createGlobalPropertyi("a321neo/vehicles/gpu", 0, false, true, false)
+VEHICLE_ldcl1 = createGlobalPropertyi("a321neo/vehicles/ldcl1", 0, false, true, false)
+VEHICLE_ldcl2 = createGlobalPropertyi("a321neo/vehicles/ldcl2", 0, false, true, false)
+VEHICLE_lv = createGlobalPropertyi("a321neo/vehicles/lv", 0, false, true, false)
+VEHICLE_ps1 = createGlobalPropertyi("a321neo/vehicles/ps1", 0, false, true, false)
+VEHICLE_ps2 = createGlobalPropertyi("a321neo/vehicles/ps2", 0, false, true, false)
+VEHICLE_uld1 = createGlobalPropertyi("a321neo/vehicles/uld1", 0, false, true, false)
+VEHICLE_uld2 = createGlobalPropertyi("a321neo/vehicles/uld2", 0, false, true, false)
+VEHICLE_wv = createGlobalPropertyi("a321neo/vehicles/wv", 0, false, true, false)

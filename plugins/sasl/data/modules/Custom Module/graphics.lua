@@ -18,14 +18,26 @@
 
 include("libs/table.save.lua")
 
-function onAirportLoaded()
-    local saved_view = {}
-    saved_view = table.load(moduleDirectory .. "/Custom Module/saved_configs/saved_view")
+local function load_save_view()
+    local saved_view = table.load(moduleDirectory .. "/Custom Module/saved_configs/saved_view")
+    if saved_view == nil then
+        saved_view = {
+            -0.54000002145767,
+            2.0099999904633,
+            -17.85000038147,
+            5.8500003814697,
+        }
+        table.save(saved_view, moduleDirectory .. "/Custom Module/saved_configs/saved_view")
+    end
 
     set(Head_x,   saved_view[1])
     set(Head_y,   saved_view[2])
     set(Head_z,   saved_view[3])
     set(Head_the, saved_view[4])
+end
+
+function onAirportLoaded()
+    load_save_view()
 end
 
 local guards = {
@@ -283,16 +295,9 @@ local function update_trays()
 end
 
 local function default_view(phase)
-    local saved_view = {}
-    saved_view = table.load(moduleDirectory .. "/Custom Module/saved_configs/saved_view")
-
     if phase == SASL_COMMAND_BEGIN then
-        set(Head_x,   saved_view[1])
-        set(Head_y,   saved_view[2])
-        set(Head_z,   saved_view[3])
-        set(Head_the, saved_view[4])
+        load_save_view()
     end
-
     return 0--inhibites the x-plane original command
 end
 

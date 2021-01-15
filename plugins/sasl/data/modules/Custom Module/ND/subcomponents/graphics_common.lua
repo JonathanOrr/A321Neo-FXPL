@@ -350,6 +350,19 @@ local function draw_common_nav_stations(data)
     end
 end
 
+
+local function draw_common_oans_info(data)
+    if data.config.range > ND_RANGE_ZOOM_2 then
+        return  -- No OANS over zoom
+    end
+    
+    local nearest_airport = Data_manager.nearest_airport
+    if nearest_airport ~= nil then
+        sasl.gl.drawText(Font_AirbusDUL, size[1]-30, size[2]-40, nearest_airport.name, 32, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]-30, size[2]-75, nearest_airport.id, 32, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+    end
+end
+
 function draw_common(data)
     draw_common_gs_and_tas(data)
     draw_common_wind(data)
@@ -357,5 +370,6 @@ function draw_common(data)
     draw_common_nav_stations(data)
     draw_common_messages(data)
     draw_common_rwy_and_true(data)
+    draw_common_oans_info(data)
 end
 

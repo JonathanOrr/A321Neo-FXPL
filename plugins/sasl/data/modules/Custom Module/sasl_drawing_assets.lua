@@ -135,6 +135,7 @@ ECAM_CRUISE_vs_arrow_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/
 --EFB--
 EFB_cursor =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/cursor.png")
 EFB_bgd =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/bgd.png")
+EFB_toggle =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Toggle.png")
 
 ------------GROUND-------------
 

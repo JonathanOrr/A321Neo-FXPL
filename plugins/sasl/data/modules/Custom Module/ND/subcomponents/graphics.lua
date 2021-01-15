@@ -10,6 +10,11 @@ local image_mask_arc = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/text
 
 function draw_main(data)
 
+    if data.config.mode ~= ND_MODE_PLAN then
+        data.plan_ctr_lat = 0
+        data.plan_ctr_lon = 0
+    end
+    
     if data.config.mode == ND_MODE_ILS or data.config.mode == ND_MODE_VOR or data.config.mode == ND_MODE_NAV then
 
         sasl.gl.drawMaskStart()
@@ -27,22 +32,21 @@ function draw_main(data)
 
         draw_rose_unmasked(data) -- The rose is drawn in all three cases
     elseif data.config.mode == ND_MODE_ARC then
-        draw_arc_unmasked(data)
-        
         sasl.gl.drawMaskStart()
         sasl.gl.drawTexture(image_mask_arc, 0,0,900,900)
         sasl.gl.drawUnderMask(true)
         draw_arc(data)
         sasl.gl.drawMaskEnd()
 
+        draw_arc_unmasked(data)
     elseif data.config.mode == ND_MODE_PLAN then
-        draw_plan_unmasked(data)
-
         sasl.gl.drawMaskStart()
         sasl.gl.drawTexture(image_mask_all, 0,0,900,900)
         sasl.gl.drawUnderMask(true)
         draw_plan(data)
         sasl.gl.drawMaskEnd()
+
+        draw_plan_unmasked(data)
     end
 
     draw_common(data)

@@ -144,6 +144,18 @@ Data_manager.get_arpt_by_name = function(name)
     return Data_manager._arpt[name]
 end
 
+Data_manager.load_detailed_apt = function(name)
+    if disable_data_manager or init_step < 2 then
+        return
+    end
+
+    if Data_manager._arpt[name].details_loaded then
+        return
+    end
+    Data_manager._load_detailed_apt(Data_manager._arpt[name])
+    Data_manager._arpt[name].details_loaded = true
+end
+
 Data_manager.nearest_airport = nil
 Data_manager.nearest_airport_update = 0
 
@@ -189,9 +201,13 @@ end
 local function update_nearest_airport()
 
     if Data_manager.nearest_airport_update == 0 or get(TIME) - Data_manager.nearest_airport_update > 30 then
-        Data_manager.nearest_airport = find_nearest_airport()
-        if Data_manager.nearest_airport ~= nil then
+        local new_apt = find_nearest_airport()
+        if new_apt ~= nil then
             Data_manager.nearest_airport_update = get(TIME)
+            if Data_manager.nearest_airport == nil or Data_manager.nearest_airport.id ~= new_apt.id then
+                Data_manager.load_detailed_apt(new_apt.id)
+            end
+            Data_manager.nearest_airport = new_apt
         end
     end
 end
@@ -205,9 +221,12 @@ function update()
         return -- Manually disabled
     end
     
+    perf_measure_start("data_manager:update()")
+    
     update_init()
     update_nearest_airport()
     
+    perf_measure_stop("data_manager:update()")
 end
 
 -- Example:
