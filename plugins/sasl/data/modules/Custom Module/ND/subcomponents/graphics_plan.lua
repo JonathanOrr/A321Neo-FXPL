@@ -194,8 +194,7 @@ local function draw_oans_taxiways(data, apt)
                 table.insert(points, y)
             end
         end
-        sasl.gl.setPolygonExtrudeMode(SHAPE_EXTRUDE_INNER)
---        sasl.gl.setWideLineExtrudeMode(SHAPE_EXTRUDE_INNER)
+
         sasl.gl.drawConvexPolygon (points, false, 2, {0.5,0.5,0.5})
     end
 end
@@ -207,14 +206,6 @@ local function draw_oans_mark_lines(data, apt)
         if line.color == 1 or line.color == 51 or line.color == 4 or line.color == 5 or line.color == 54 
             or line.color == 8 or line.color == 58  or line.color == 9 or line.color == 59 then
 
-            local points = {}
-            for j,segment in ipairs(line.points) do
-
-                local x,y = get_x_y(data, segment[1], segment[2])
-                table.insert(points, x)
-                table.insert(points, y)
-            end
-            
             local color = COLOR_YELLOW
             if line.color == 4 or line.color == 54 then
                 color = ECAM_RED
@@ -223,12 +214,34 @@ local function draw_oans_mark_lines(data, apt)
             elseif line.color == 8 or line.color == 58 or line.color == 9 or line.color == 59 then
                 color = ECAM_WHITE
             end
-            sasl.gl.drawWidePolyLine (points , 2 , color)
+
+            local last_prev_x = nil 
+            local last_prev_y = nil 
+
+            for j,segment in ipairs(line.points) do
+                local x,y = get_x_y(data, segment[1], segment[2])
+                --if #segment == 2 then
+                    if last_prev_x ~= nil and last_prev_y ~= nil then
+                        sasl.gl.drawWideLine (last_prev_x, last_prev_y, x,y, 3, color)
+                    end
+                --else
+                --    if last_prev_x ~= nil and last_prev_y ~= nil then
+                --        local c_x,c_y = get_x_y(data, segment[3], segment[4])
+                --        sasl.gl.drawWideBezierLineQAdaptive(last_prev_x,last_prev_y,c_x,c_y,x,y,3,color)
+                --    end
+                --end
+                last_prev_x = x
+                last_prev_y = y                
+            end
+            
         end        
     end
 
 end
 
+local function draw_oans_mark_signs(data, apt)
+
+end
 
 local function draw_oans(data)
     if data.config.range > ND_RANGE_ZOOM_2 then
@@ -245,8 +258,9 @@ local function draw_oans(data)
             data.plan_ctr_lon = apt.lon
         end
         draw_oans_rwys(data, apt)
-        draw_oans_taxiways(data, apt)
+        --draw_oans_taxiways(data, apt)
         draw_oans_mark_lines(data, apt)
+        draw_oans_mark_signs(data, apt)
     end
 end
 

@@ -221,9 +221,12 @@ function update()
         return -- Manually disabled
     end
     
+    perf_measure_start("data_manager:update()")
+    
     update_init()
     update_nearest_airport()
     
+    perf_measure_stop("data_manager:update()")
 end
 
 -- Example:
