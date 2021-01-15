@@ -4,11 +4,27 @@ function EFB_load_ground_objects()
     GPUobj = sasl.loadObject ( moduleDirectory .. "/Custom Module/ground_vehicles/GPU.obj" ) 
 end
 
+local loc_x = globalPropertyf("sim/flightmodel/position/local_x")
+local loc_y = globalPropertyf("sim/flightmodel/position/local_y")
+local loc_z = globalPropertyf("sim/flightmodel/position/local_z")
+
+local vehicle_drawn = false
+local gpu_instance = {}
+
 function EFB_draw_vehicles()
-    print("attempting to draw obj")
-    sasl.drawObject (GPUobj , 0 , 0 , 0 , 0 , 0  , 0 , 0 , 0 )
+    -- toggle, so doesn't need to be called every frame
+    if not vehicle_drawn then
+        vehicle_drawn = true
+        print("attempting to draw obj")
+        gpu_instance = sasl.createInstance(GPUobj, {})
+        sasl.setInstancePosition(instance, get(loc_x), get(loc_y) + 5, get(loc_z), 0, 0, 0)
+    end
 end
 
+function EFB_delete_vehicles()
+    vehicle_drawn = false
+    sasl.destroyInstance(gpu_instance)
+end
 
 function EFB_execute_page_2_buttons()
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 44, 108, 427, 130, function ()
