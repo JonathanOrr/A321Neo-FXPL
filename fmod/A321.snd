@@ -2472,6 +2472,13 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_CMND_DOWN a321neo/sounds/gpws/speed
 END_SOUND_ATTACHMENT
 
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GPWS/stall
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/dynamics/gpws/mode_stall == 1
+  CUE_TRIGGER_COND a321neo/dynamics/gpws/mode_stall == 0
+END_SOUND_ATTACHMENT
+
 ########################################################################################################APU
 
 BEGIN_SOUND_ATTACHMENT
