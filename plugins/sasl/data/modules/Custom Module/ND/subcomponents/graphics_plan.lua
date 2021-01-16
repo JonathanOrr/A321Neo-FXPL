@@ -25,6 +25,9 @@ size = {900, 900}
 local image_bkg_plan        = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/plan.png")
 local image_bkg_plan_middle = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/ring-middle.png")
 local image_black_square    = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/black-square.png")
+local image_icon_flag       = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/icon-flag.png")
+local image_icon_cross      = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/icon-cross.png")
+
 
 local COLOR_YELLOW = {1,1,0}
 
@@ -113,9 +116,19 @@ local function get_x_y(data, lat, lon)  -- Do not use this for poi
     local bearing  = get_bearing(data.plan_ctr_lat, data.plan_ctr_lon,lat,lon)
 
     local x = size[1]/2 + distance_px * math.cos(math.rad(bearing))
-    local y = size[1]/2 + distance_px * math.sin(math.rad(bearing))
+    local y = size[2]/2 + distance_px * math.sin(math.rad(bearing))
     
     return x,y
+end
+
+local function get_lat_lon(data, x, y)
+    local bearing     = 180+math.deg(math.atan2((size[1]/2 - x), (size[2]/2 -    y)))
+    
+    local px_per_nm = get_px_per_nm(data)
+    local distance_nm = math.sqrt((size[1]/2 - x)*(size[1]/2 - x) + (size[2]/2 - y)*(size[2]/2 - y)) / px_per_nm
+    print(bearing)
+    print(distance_nm)
+    return Move_along_distance(data.plan_ctr_lat, data.plan_ctr_lon, distance_nm*1852, bearing)
 end
 
 local function draw_oans_rwy(data, rwy_start, rwy_end)
@@ -186,12 +199,17 @@ local function draw_oans_rwy(data, rwy_start, rwy_end)
     local x_shift = x_start + dist_text * math.cos(angle)
     local y_shift = y_start + dist_text * math.sin(angle)
     local font_size = semiwidth_px
-    sasl.gl.drawRotatedText(Font_AirbusDUL, x_shift, y_shift, x_shift, y_shift, m_angle+90, rwy_end.sibling, font_size, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    
+    m_angle = m_angle+90
+    if m_angle+90 > 180 or m_angle+90 < 0 then
+        m_angle = m_angle+180
+    end
+    sasl.gl.drawRotatedText(Font_AirbusDUL, x_shift, y_shift, x_shift, y_shift, m_angle, rwy_end.sibling, font_size, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
 
     local x_shift = x_end - dist_text * math.cos(angle)
     local y_shift = y_end - dist_text * math.sin(angle)
     local font_size = semiwidth_px
-    sasl.gl.drawRotatedText(Font_AirbusDUL, x_shift, y_shift, x_shift, y_shift, 180+m_angle+90, rwy_start.sibling, font_size, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawRotatedText(Font_AirbusDUL, x_shift, y_shift, x_shift, y_shift, 180+m_angle, rwy_start.sibling, font_size, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
 
 end
 
@@ -261,10 +279,18 @@ end
 
 local function draw_oans_mark_lines(data, apt)
 
-    for i,line in ipairs(apt.mark_lines) do
+    local len = #apt.mark_lines  -- They must be drawn in the opposite order
+
+    for i=len, 1, -1 do
+        local line = apt.mark_lines[i] 
         
-        if line.color == 1 or line.color == 51 or line.color == 4 or line.color == 5 or line.color == 54 
-            or line.color == 8 or line.color == 58  or line.color == 9 or line.color == 59 then
+        if    line.color == 1 or line.color == 51   -- Taxiway centerlines 
+           or line.color == 4 or line.color == 54   -- Runways hold positions
+           or line.color == 5 or line.color == 55   -- Non-runway hold positions
+           or line.color == 8 or line.color == 58   -- Lanes queue
+           or line.color == 9 or line.color == 59   -- Lanes queue
+           or line.color == 22                      -- Roadway centerline
+        then
 
             local color = COLOR_YELLOW
             if line.color == 4 or line.color == 54 then
@@ -273,6 +299,8 @@ local function draw_oans_mark_lines(data, apt)
                 color = ECAM_WHITE
             elseif line.color == 8 or line.color == 58 or line.color == 9 or line.color == 59 then
                 color = ECAM_WHITE
+            elseif line.color == 22 then
+                color = {0.6, 0.6, 0}    
             end
 
             local last_prev_x = nil 
@@ -373,6 +401,43 @@ local function draw_oans_mark_taxi(data, apt)
     end
 end
 
+local function draw_oans_mark_gate(data, apt)
+    for i,line in ipairs(apt.gates) do
+    
+        if line.name ~= nil then
+            local x,y = get_x_y(data, line.lat, line.lon)
+
+            local width  = (10 + 9 * (-data.config.range)) * #line.name
+            local height = 18 + 10 * (-data.config.range)
+            local y_shift = (height-3)/2
+
+            sasl.gl.drawRectangle (x-width/2, y-y_shift-3+data.config.range, width, height-4,  {0,0,0})
+
+            sasl.gl.drawText(Font_AirbusDUL,x,y-y_shift, line.name, height-4, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+        end    
+    end
+end
+
+local function draw_oans_flags_and_crosses(data)
+    for i,flag in ipairs(data.poi.flag) do
+        if flag.x ~= nil then
+            flag.lat, flag.lon = get_lat_lon(data,flag.x,flag.y)
+            flag.x = nil
+            flag.y = nil
+        end
+        local x,y = get_x_y(data, flag.lat, flag.lon)            
+        sasl.gl.drawTexture(image_icon_flag, x-25, y-35, 50, 70, {1,1,1})
+    end
+    for i,cross in ipairs(data.poi.cross) do
+        if cross.x ~= nil then
+            cross.lat, cross.lon = get_lat_lon(data,cross.x,cross.y)
+            cross.x = nil
+            cross.y = nil
+        end
+        local x,y = get_x_y(data, cross.lat, cross.lon)            
+        sasl.gl.drawTexture(image_icon_cross, x-25, y-25, 50, 50, {1,1,1})
+    end
+end
 
 local function draw_oans(data)
     if data.config.range > ND_RANGE_ZOOM_2 then
@@ -391,10 +456,12 @@ local function draw_oans(data)
         
         draw_oans_airport_bounds(data, apt)
         draw_oans_taxiways(data, apt)
+        draw_oans_mark_lines(data, apt)
         draw_oans_rwys(data, apt)
         draw_oans_tower(data, apt)
-        draw_oans_mark_lines(data, apt)
         draw_oans_mark_taxi(data, apt)
+        draw_oans_mark_gate(data, apt)
+        draw_oans_flags_and_crosses(data)
     end
 end
 

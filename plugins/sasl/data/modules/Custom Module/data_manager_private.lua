@@ -246,7 +246,8 @@ Data_manager._parse_line_arpt_header = function(curr_seek, splitted)
         signs      = {},
         routes     = {},
         taxi_routes= {},
-        tower      = {}
+        tower      = {},
+        gates      = {}
     }
 end
 
@@ -401,6 +402,17 @@ Data_manager._parse_line_arpt_tower = function(splitted)
     Data_manager._arpt[current_apt].tower.lon = lon
 end
 
+Data_manager._parse_line_arpt_gate = function(splitted)
+    local gate_lat = tonumber(splitted[2])
+    local gate_lon = tonumber(splitted[3])
+    local gate_name = splitted[7]
+    if splitted[5] ~= "gate" then
+        return -- We are not interested in runway, we draw them by ourself
+    end
+
+    table.insert(Data_manager._arpt[current_apt].gates, {lat = gate_lat, lon = gate_lon, name=gate_name})
+end
+
 Data_manager._parse_line_arpt_detailed = function(apt, line)
     if #line < 1 then
         return
@@ -445,7 +457,10 @@ Data_manager._parse_line_arpt_detailed = function(apt, line)
         Data_manager._parse_line_arpt_route_point(splitted)    
     elseif id == "1202" then
         local splitted = str_split(line)
-        Data_manager._parse_line_arpt_route_taxi(splitted)    
+        Data_manager._parse_line_arpt_route_taxi(splitted)
+    elseif id == "1300" then
+        local splitted = str_split(line)
+        Data_manager._parse_line_arpt_gate(splitted)
     end
 
     return false -- Continue to read

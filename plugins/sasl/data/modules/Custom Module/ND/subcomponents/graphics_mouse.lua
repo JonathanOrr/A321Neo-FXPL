@@ -71,7 +71,15 @@ function onMouseHold ( component , x , y , button , parentX , parentY )
 end
 
 local function draw_trigger_action(data, item)
-    if item == 4 then
+    if item == 0 then
+        table.insert(data.poi.cross, {x=data.plan_mouse_menu_x, y=data.plan_mouse_menu_y} )
+    elseif item == 1 then
+        table.insert(data.poi.flag,  {x=data.plan_mouse_menu_x, y=data.plan_mouse_menu_y} )
+    elseif item == 2 then
+        data.poi.cross = {}
+    elseif item == 3 then
+        data.poi.flag  = {}
+    elseif item == 4 then
         data.plan_ctr_lat = data.inputs.plane_coords_lat
         data.plan_ctr_lon = data.inputs.plane_coords_lon
     end

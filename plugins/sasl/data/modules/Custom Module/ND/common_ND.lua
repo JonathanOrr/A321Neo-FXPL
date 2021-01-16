@@ -147,7 +147,11 @@ function new_dataset(input_id)
         ndb = {
         },        
         wpt = {
-        },        
+        },
+        cross = {
+        },
+        flag = {
+        }
     },
     
     plan_ctr_lat = 0,
