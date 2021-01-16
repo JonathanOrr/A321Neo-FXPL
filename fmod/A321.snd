@@ -2466,6 +2466,12 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_CMND_DOWN a321neo/sounds/gpws/test_end
 END_SOUND_ATTACHMENT
 
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GPWS/speed
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/sounds/gpws/speed
+END_SOUND_ATTACHMENT
+
 ########################################################################################################APU
 
 BEGIN_SOUND_ATTACHMENT
