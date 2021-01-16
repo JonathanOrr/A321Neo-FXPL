@@ -116,13 +116,20 @@ end
 
 function draw_mouse(data)
 
+    if data.config.range > ND_RANGE_ZOOM_2 then
+        return
+    end
+
     draw_menu(data)
 
     if data.plan_mouse_x ~= nil then
+        local cursor_size_w = 89
+        local cursor_size_h = 115
+        
         if data.id == ND_CAPT then
-            sasl.gl.drawTexture(image_cursor_capt, data.plan_mouse_x-25, data.plan_mouse_y-30, 50, 60, {1,1,1})
+            sasl.gl.drawTexture(image_cursor_capt, data.plan_mouse_x-cursor_size_w/2, data.plan_mouse_y-cursor_size_h/2, cursor_size_w, cursor_size_h, ECAM_MAGENTA)
         else
-            sasl.gl.drawTexture(image_cursor_fo, data.plan_mouse_x-30, data.plan_mouse_y-25, 60, 30, {1,1,1})
+            sasl.gl.drawTexture(image_cursor_fo, data.plan_mouse_x-cursor_size_w/2, data.plan_mouse_y-cursor_size_h/2, cursor_size_w, cursor_size_h, ECAM_MAGENTA)
         end
     end
     

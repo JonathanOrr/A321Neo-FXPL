@@ -393,7 +393,11 @@ function draw_rose(data)
 
     draw_terrain(data)
     draw_pois(data)
-    draw_oans(data)
+    
+    if data.config.mode == ND_MODE_NAV then
+        draw_oans(data)
+    end
+    
     draw_navaid_pointers(data)
 
 end
