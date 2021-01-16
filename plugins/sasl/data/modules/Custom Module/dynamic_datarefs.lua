@@ -744,6 +744,15 @@ Fire_cargo_fwd_disch_at = createGlobalPropertyd("a321neo/dynamics/fire/cargo_fwd
 BUSS_Capt_man_enabled = createGlobalPropertyi("a321neo/dynamics/pfd/buss_capt_man", 0, false, true, false)
 BUSS_Fo_man_enabled = createGlobalPropertyi("a321neo/dynamics/pfd/buss_fo_man", 0, false, true, false)
 
+---------------------------------------------------------------------BELOW THIS LINE IS EFB DATAREFS--------------------------------------------------------------------------
+
+--Toggle Options
+OPTIONS_syncqnh = createGlobalPropertyi("a321neo/options/syncqnh", 0, false, true, false)
+OPTIONS_rolltonws = createGlobalPropertyi("a321neo/options/rolltonws", 0, false, true, false)
+OPTIONS_tca = createGlobalPropertyi("a321neo/options/tca", 0, false, true, false)
+OPTIONS_pausetd = createGlobalPropertyi("a321neo/options/pausetd", 0, false, true, false)
+OPTIONS_callouts = createGlobalPropertyi("a321neo/options/callouts", 0, false, true, false)
+
 --Ground Vehicles
 VEHICLE_ac = createGlobalPropertyi("a321neo/vehicles/ac", 0, false, true, false)
 VEHICLE_as = createGlobalPropertyi("a321neo/vehicles/as", 0, false, true, false)
