@@ -139,6 +139,7 @@ function fuel_quick_start(phase)
 end
 
 function onAirportLoaded()
+
     -- When the aircraft is loaded in flight, let's switch on all the pumps
     if get(Startup_running) == 1 or get(Capt_ra_alt_ft) > 20 then
         fuel_quick_start(SASL_COMMAND_BEGIN)
@@ -718,12 +719,27 @@ local function update_fot()
     end
 end
 
+local function fix_startup_fuel()
+    -- This doesn't work onAirportLoaded, and this is an ugly hack...
+
+    if get(TIME) < 1 then
+        if get(Fuel_quantity[tank_CENTER]) < 6000 then
+            set(Fuel_quantity[tank_ACT], 0)
+            set(Fuel_quantity[tank_RCT], 0)
+        end
+    end
+end
+
 ----------------------------------------------------------------------------------------------------
 -- Functions - Main
 ----------------------------------------------------------------------------------------------------
 
 function update()
+
     perf_measure_start("fuel:update()")
+
+    -- Step 0: startup fix
+    fix_startup_fuel()
 
     -- Step 1 : update the pump statuses
     update_pumps_elec()
