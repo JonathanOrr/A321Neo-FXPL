@@ -338,6 +338,10 @@ function play_gpws_sounds()
     set(dr_gpws_start, 0)
     set(dr_gpws_pass,  0)
     set(dr_gpws_end,   0)
+    
+    if get(GPWS_mode_stall) == 1 then
+        return -- GPWS is inhibited when stall sound is played
+    end
 
     if short_test or long_test then
         if test_started_at == 0 then
