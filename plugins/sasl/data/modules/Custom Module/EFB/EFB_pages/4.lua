@@ -55,6 +55,27 @@ function EFB_execute_page_4_buttons()
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 67,162,277,194, function ()
         print("recon_idg")
     end)
+----------------------------------------------TOGGLE OPTIONS
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 620,363,659,381, function ()
+        set(OPTIONS_syncqnh, 1-get(OPTIONS_syncqnh))
+        print("toggle_options_sync")
+    end)
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 620,329,659,347, function ()
+        set(OPTIONS_rolltonws, 1-get(OPTIONS_rolltonws))
+        print("toggle_options_roll")
+    end)
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 620,295,659,313, function ()
+        set(OPTIONS_tca, 1-get(OPTIONS_tca))
+        print("toggle_options_tca")
+    end)
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 620,261,659,279, function ()
+        set(OPTIONS_pausetd, 1-get(OPTIONS_pausetd))
+        print("toggle_options_pausetd")
+    end)
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 620,227,659,245, function ()
+        set(OPTIONS_callouts, 1-get(OPTIONS_callouts))
+        print("toggle_options_callout")
+    end)
 end
 
 --UPDATE LOOPS--
@@ -91,5 +112,35 @@ function EFB_draw_page_4()
     sasl.gl.drawTexture ( EFB_CONFIG_slider, get(VOLUME_int)*333+680 , 559 , 22 , 22 , ECAM_WHITE )
     sasl.gl.drawTexture ( EFB_CONFIG_slider, get(VOLUME_wind)*333+680 , 499 , 22 , 22 , ECAM_WHITE )
     sasl.gl.drawTexture ( EFB_CONFIG_slider, get(VOLUME_cabin)*333+680 , 439 , 22 , 22 , ECAM_WHITE )
-    --sasl.gl.drawTexture ( EFB_CONFIG_slider, 1013 , 619 , 22 , 22 , ECAM_WHITE )
+
+    if get(OPTIONS_syncqnh) == 1 then
+        SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 364, 78, 18, 2, 2)
+    else
+        SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 364, 78, 18, 2, 1)
+    end
+
+    if get(OPTIONS_rolltonws) == 1 then
+        SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 330, 78, 18, 2, 2)
+    else
+        SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 330, 78, 18, 2, 1)
+    end
+
+    if get(OPTIONS_tca) == 1 then
+        SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 296, 78, 18, 2, 2)
+    else
+        SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 296, 78, 18, 2, 1)
+    end
+
+    if get(OPTIONS_pausetd) == 1 then
+        SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 262, 78, 18, 2, 2)
+    else
+        SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 262, 78, 18, 2, 1)
+    end
+
+    if get(OPTIONS_callouts) == 1 then
+        SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 228, 78, 18, 2, 2)
+    else
+        SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 228, 78, 18, 2, 1)
+    end
+    --print(EFB_CURSOR_X, EFB_CURSOR_Y)
 end

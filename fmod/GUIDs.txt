@@ -41,6 +41,11 @@
 {bdd3f6e0-b7ff-46ac-aadd-d8b6b9c45201} event:/Engines/Engines
 {05aa7e46-d0ef-4817-84df-6599e3fd87f6} event:/Engines/Engines Ext
 {3c1896b4-b137-42d9-a178-78d93f2c0308} event:/Engines/HowlEnd
+{3428542a-0973-45d3-b8f9-c0e46de082e2} event:/Engines V2/Engine Start Ext
+{956efd44-c2c5-4ab7-a510-f35c74dcd905} event:/Engines V2/Engine Start N2
+{2150216a-d9a4-462d-9a2c-711a97cc7a8f} event:/Engines V2/Engines
+{19330240-36a8-4ef9-8fc8-696aa8289a24} event:/Engines V2/Engines Ext
+{78b8fd51-ea07-41b0-8e7a-6c6325c9a885} event:/Engines V2/HowlEnd
 {47d7f46e-3e56-40d7-b18d-e5f5556d36df} event:/FCU/Pull
 {ba2746b5-f88d-40c3-80ba-a639a3bbc1c4} event:/FCU/Push
 {739de174-b194-4353-b998-a76f0a62c442} event:/FCU/Rotate1
@@ -79,6 +84,7 @@
 {c5026dad-5d9f-4216-8704-8c70dda24ccf} event:/GPWS/tlgear
 {3e6916a8-a12b-48c8-a1b3-6bb67fcfc52d} event:/GPWS/tlterr
 {a1ca98db-c1d8-4efd-812b-67caeb038088} event:/GPWS/windshear
+{cc8b46c4-cf1a-4fdb-87af-ebf43a711289} event:/GPWS/speed
 {8624c408-c3bf-4286-949d-6bde20e3c138} event:/RA/10
 {f90a33bb-5bb2-4b81-9208-e419f99b9aab} event:/RA/100
 {e6174a5e-0e61-4a00-8404-d26a7706cabd} event:/RA/1000
