@@ -42,7 +42,8 @@
 {05aa7e46-d0ef-4817-84df-6599e3fd87f6} event:/Engines/Engines Ext
 {3c1896b4-b137-42d9-a178-78d93f2c0308} event:/Engines/HowlEnd
 {3428542a-0973-45d3-b8f9-c0e46de082e2} event:/Engines V2/Engine Start Ext
-{956efd44-c2c5-4ab7-a510-f35c74dcd905} event:/Engines V2/Engine Start N2
+{956efd44-c2c5-4ab7-a510-f35c74dcd905} event:/Engines V2/Engine Start N2 L
+{e421f342-3dee-4b97-bfa8-55eccfc7bb30} event:/Engines V2/Engine Start N2 R
 {2150216a-d9a4-462d-9a2c-711a97cc7a8f} event:/Engines V2/Engines
 {19330240-36a8-4ef9-8fc8-696aa8289a24} event:/Engines V2/Engines Ext
 {78b8fd51-ea07-41b0-8e7a-6c6325c9a885} event:/Engines V2/HowlEnd
@@ -75,6 +76,7 @@
 {4d90ee6e-4234-4b03-9f5d-43611cd63e08} event:/GPWS/pullup
 {afea93ae-a88b-4e20-8a4f-9b0012973d90} event:/GPWS/retardretard
 {2d14d45d-1864-475c-94a9-637967c3b6d3} event:/GPWS/sinkrate
+{cc8b46c4-cf1a-4fdb-87af-ebf43a711289} event:/GPWS/speed
 {9dc45c96-d7b8-4113-9f87-d55798df5488} event:/GPWS/terr
 {4578cb21-776e-4754-9ae6-8114ddc112df} event:/GPWS/terrahead
 {ca51375b-903d-42af-86a6-7f0bee4871ff} event:/GPWS/terraheadpull
@@ -84,7 +86,6 @@
 {c5026dad-5d9f-4216-8704-8c70dda24ccf} event:/GPWS/tlgear
 {3e6916a8-a12b-48c8-a1b3-6bb67fcfc52d} event:/GPWS/tlterr
 {a1ca98db-c1d8-4efd-812b-67caeb038088} event:/GPWS/windshear
-{cc8b46c4-cf1a-4fdb-87af-ebf43a711289} event:/GPWS/speed
 {8624c408-c3bf-4286-949d-6bde20e3c138} event:/RA/10
 {f90a33bb-5bb2-4b81-9208-e419f99b9aab} event:/RA/100
 {e6174a5e-0e61-4a00-8404-d26a7706cabd} event:/RA/1000

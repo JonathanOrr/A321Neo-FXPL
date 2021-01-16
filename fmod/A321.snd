@@ -64,19 +64,17 @@ END_SOUND_ATTACHMENT
 ###################################################################################
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /Engines V2/Engine Start N2
+  EVENT_NAME /Engines V2/Engine Start N2 L
   VEH_PART engine 0
   EVENT_START_COND a321neo/dynamics/engines/eng_1_n2 > 0
   EVENT_END_COND a321neo/dynamics/engines/eng_1_n2 == 0
-  PARAM_DREF_IDX 0
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /Engines V2/Engine Start N2
+  EVENT_NAME /Engines V2/Engine Start N2 R
   VEH_PART engine 1
   EVENT_START_COND a321neo/dynamics/engines/eng_2_n2 > 0
   EVENT_END_COND a321neo/dynamics/engines/eng_2_n2 == 0
-  PARAM_DREF_IDX 1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
