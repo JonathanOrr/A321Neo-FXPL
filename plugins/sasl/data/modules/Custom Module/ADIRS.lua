@@ -55,6 +55,7 @@ local ADIRS = {
     ir_align_start_time = 0,
     ir_is_waiting_hdg = true,
     ir_is_aligning_gps = true,
+    manual_hdg_offset = 0,
     
     -- ADR
     adr_status = ADR_STATUS_OFF,
@@ -300,7 +301,7 @@ function ADIRS:update_ir_data()
         self.roll = get(self.roll_dataref)
         self.aoa = get(Alpha) * (1-get(self.fail_aoa_dataref))
         if self.ir_status == IR_STATUS_ATT_ALIGNED and not self.ir_is_waiting_hdg then
-            self.hdg = get(Flightmodel_mag_heading)
+            self.hdg = get(Flightmodel_mag_heading) + self.manual_hdg_offset
         end
     end
     
