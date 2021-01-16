@@ -28,8 +28,8 @@ function Ailerons_control(lateral_input, has_florence_kit, ground_spoilers_mode)
 
     --TRAVEL TARGETS CALTULATION
     --ground spoilers
-    if ground_spoilers_mode == 2 then
-        if has_florence_kit == true and get(FBW_total_control_law) == FBW_NORMAL_LAW then
+    if ground_spoilers_mode == 2 and get(FBW_total_control_law) == FBW_NORMAL_LAW then
+        if has_florence_kit == true and get(Flaps_internal_config) ~= 0 and get_avg_pitch() < 2.5 then
             l_aileron_travel_target = -ailerons_max_def
             r_aileron_travel_target = -ailerons_max_def
         end

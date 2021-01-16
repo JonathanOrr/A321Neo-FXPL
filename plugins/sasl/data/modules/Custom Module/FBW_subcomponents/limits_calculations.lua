@@ -37,7 +37,7 @@ local vsw_aprot_alphas = {
     11.5
 }
 
-local toga_prot_alphas = {
+local alpha_floor_alphas = {
     9.5,
     14,
     14,
@@ -52,7 +52,7 @@ local alpha_max_alphas = {
     16.5,
     16.5,
     16.0,
-    17.5
+    16.0
 }
 
 --custom functions
@@ -106,10 +106,12 @@ local function update_VMAX()
     end
     local gear_vmax = false
     if get(Gear_handle) == 1 then
+        gear_vmax = false
         if get(Front_gear_deployment) > 0.2 or get(Left_gear_deployment) > 0.2 or get(Right_gear_deployment) > 0.2 then
             gear_vmax = true
         end
     else
+        gear_vmax = true
         if get(Front_gear_deployment) < 0.8 or get(Left_gear_deployment) < 0.8 or get(Right_gear_deployment) < 0.8 then
             gear_vmax = false
         end
@@ -235,11 +237,71 @@ local function BUSS_compute_VSW_AoA()
     set(BUSS_VSW_AoA, Table_interpolate(BUSS_VSW_alphas, get(Slats) + get(Flaps_deployed_angle)))
 end
 
+local function compute_aprot_vsw_amax_alphas()
+    local a0_alphas = {
+        {0.0 + 0,  alpha0s[1]},
+        {0.7 + 0,  alpha0s[2]},
+        {0.7 + 10, alpha0s[3]},
+        {0.8 + 14, alpha0s[4]},
+        {0.8 + 21, alpha0s[5]},
+        {1.0 + 25, alpha0s[6]},
+    }
+    local aprot_alphas = {
+        {0.0 + 0,  vsw_aprot_alphas[1]},
+        {0.7 + 0,  vsw_aprot_alphas[2]},
+        {0.7 + 10, vsw_aprot_alphas[3]},
+        {0.8 + 14, vsw_aprot_alphas[4]},
+        {0.8 + 21, vsw_aprot_alphas[5]},
+        {1.0 + 25, vsw_aprot_alphas[6]},
+    }
+    local afloor_alphas = {
+        {0.0 + 0,  alpha_floor_alphas[1]},
+        {0.7 + 0,  alpha_floor_alphas[2]},
+        {0.7 + 10, alpha_floor_alphas[3]},
+        {0.8 + 14, alpha_floor_alphas[4]},
+        {0.8 + 21, alpha_floor_alphas[5]},
+        {1.0 + 25, alpha_floor_alphas[6]},
+    }
+    local amax_alphas = {
+        {0.0 + 0,  alpha_max_alphas[1]},
+        {0.7 + 0,  alpha_max_alphas[2]},
+        {0.7 + 10, alpha_max_alphas[3]},
+        {0.8 + 14, alpha_max_alphas[4]},
+        {0.8 + 21, alpha_max_alphas[5]},
+        {1.0 + 25, alpha_max_alphas[6]},
+    }
+
+    set(A0_AoA,     Table_interpolate(a0_alphas,     get(Slats) + get(Flaps_deployed_angle)))
+    set(Aprot_AoA,  Table_interpolate(aprot_alphas,  get(Slats) + get(Flaps_deployed_angle)))
+    set(Afloor_AoA, Table_interpolate(afloor_alphas, get(Slats) + get(Flaps_deployed_angle)))
+    set(Amax_AoA,   Table_interpolate(amax_alphas,   get(Slats) + get(Flaps_deployed_angle)))
+end
+
+local function SPEED_SPEED_SPEED()
+    set(GPWS_mode_speed, 0)
+
+    if get(FBW_total_control_law) ~= FBW_NORMAL_LAW or
+       get(Capt_ra_alt_ft) < 100 or get(Fo_ra_alt_ft) < 100 or
+       get(Capt_ra_alt_ft) > 2000 or get(Fo_ra_alt_ft) > 2000 or
+       get(L_sim_throttle) >= THR_TOGA_START or get(R_sim_throttle) >= THR_TOGA_START or
+       get_avg_ias() > get(VLS) and get_avg_ias_trend() > 0 then--missing AFLOOR
+        return
+    end
+
+    local delta_vls = 0
+
+    delta_vls = (get_avg_pitch() - get_avg_aoa()) * -6 + 26 / Math_clamp_higher(get_avg_ias_trend(), 0)
+    delta_vls = Math_clamp(delta_vls, -15, 15)
+
+    if get_avg_ias() < (get(VLS) + delta_vls) then
+        set(GPWS_mode_speed, 1)
+    end
+end
+
 --calculate flight characteristics values
 function update()
     update_VMAX_prot()
     update_VMAX()
-
     update_VFE()
 
     set(S_speed, 1.23 * Extract_vs1g(get(Aircraft_total_weight_kgs), 0, false))
@@ -250,6 +312,8 @@ function update()
     BUSS_compute_VMAX_AoA()
     BUSS_compute_VLS_AoA()
     BUSS_compute_VSW_AoA()
+    compute_aprot_vsw_amax_alphas()
+    SPEED_SPEED_SPEED()
 
     --update timer
     if get(Any_wheel_on_ground) == 1 then
@@ -264,20 +328,20 @@ function update()
 
     --VLS & stall speeds(configuration dependent)
     --on liftoff for 5 seconds the Aprot value is the same as Amax(FCOM 1.27.20.P4 or DSC 27-20-10-20 P4/6)
-    if alpha_speed_update_timer >= alpha_speed_update_time_s then
+    --if alpha_speed_update_timer >= alpha_speed_update_time_s then
         update_VLS()
 
         if in_air_timer >= 5 then
-            set(Capt_Vaprot_vsw, Math_clamp_higher(Set_anim_value_no_lim(get(Capt_Vaprot_vsw), get_ias(PFD_CAPT) * math.sqrt(Math_clamp_lower((get(Alpha) - alpha0s[get(Flaps_internal_config) + 1]) / (vsw_aprot_alphas[get(Flaps_internal_config) + 1] - alpha0s[get(Flaps_internal_config) + 1]), 0)), 5), get(Capt_VMAX)))
-            set(Fo_Vaprot_vsw,   Math_clamp_higher(Set_anim_value_no_lim(get(Fo_Vaprot_vsw),   get_ias(PFD_FO)   * math.sqrt(Math_clamp_lower((get(Alpha) - alpha0s[get(Flaps_internal_config) + 1]) / (vsw_aprot_alphas[get(Flaps_internal_config) + 1] - alpha0s[get(Flaps_internal_config) + 1]), 0)), 5), get(Fo_VMAX)))
+            set(Capt_Vaprot_vsw, Math_clamp_higher(Set_anim_value_no_lim(get(Capt_Vaprot_vsw), get_ias(PFD_CAPT) * math.sqrt(Math_clamp_lower((get(Alpha) - get(A0_AoA)) / (get(Aprot_AoA) - get(A0_AoA)), 0)), 5), get(Capt_VMAX)))
+            set(Fo_Vaprot_vsw,   Math_clamp_higher(Set_anim_value_no_lim(get(Fo_Vaprot_vsw),   get_ias(PFD_FO)   * math.sqrt(Math_clamp_lower((get(Alpha) - get(A0_AoA)) / (get(Aprot_AoA) - get(A0_AoA)), 0)), 5), get(Fo_VMAX)))
         else
-            set(Capt_Vaprot_vsw, Math_clamp_higher(Set_anim_value_no_lim(get(Capt_Vaprot_vsw), get_ias(PFD_CAPT) * math.sqrt(Math_clamp_lower((get(Alpha) - alpha0s[get(Flaps_internal_config) + 1]) / (alpha_max_alphas[get(Flaps_internal_config) + 1] - alpha0s[get(Flaps_internal_config) + 1]), 0)), 5), get(Capt_VMAX)))
-            set(Fo_Vaprot_vsw,   Math_clamp_higher(Set_anim_value_no_lim(get(Fo_Vaprot_vsw),   get_ias(PFD_FO)   * math.sqrt(Math_clamp_lower((get(Alpha) - alpha0s[get(Flaps_internal_config) + 1]) / (alpha_max_alphas[get(Flaps_internal_config) + 1] - alpha0s[get(Flaps_internal_config) + 1]), 0)), 5), get(Fo_VMAX)))
+            set(Capt_Vaprot_vsw, Math_clamp_higher(Set_anim_value_no_lim(get(Capt_Vaprot_vsw), get_ias(PFD_CAPT) * math.sqrt(Math_clamp_lower((get(Alpha) - get(A0_AoA)) / (get(Amax_AoA) - get(A0_AoA)), 0)), 5), get(Capt_VMAX)))
+            set(Fo_Vaprot_vsw,   Math_clamp_higher(Set_anim_value_no_lim(get(Fo_Vaprot_vsw),   get_ias(PFD_FO)   * math.sqrt(Math_clamp_lower((get(Alpha) - get(A0_AoA)) / (get(Amax_AoA) - get(A0_AoA)), 0)), 5), get(Fo_VMAX)))
         end
-        set(Capt_Valpha_MAX, Math_clamp_higher(Set_anim_value_no_lim(get(Capt_Valpha_MAX), get_ias(PFD_CAPT) * math.sqrt(Math_clamp_lower((get(Alpha) - alpha0s[get(Flaps_internal_config) + 1]) / (alpha_max_alphas[get(Flaps_internal_config) + 1] - alpha0s[get(Flaps_internal_config) + 1]), 0)), 5), get(Capt_VMAX)))
-        set(Fo_Valpha_MAX,   Math_clamp_higher(Set_anim_value_no_lim(get(Fo_Valpha_MAX),   get_ias(PFD_FO)   * math.sqrt(Math_clamp_lower((get(Alpha) - alpha0s[get(Flaps_internal_config) + 1]) / (alpha_max_alphas[get(Flaps_internal_config) + 1] - alpha0s[get(Flaps_internal_config) + 1]), 0)), 5), get(Fo_VMAX)))
+        set(Capt_Valpha_MAX, Math_clamp_higher(Set_anim_value_no_lim(get(Capt_Valpha_MAX), get_ias(PFD_CAPT) * math.sqrt(Math_clamp_lower((get(Alpha) - get(A0_AoA)) / (get(Amax_AoA) - get(A0_AoA)), 0)), 5), get(Capt_VMAX)))
+        set(Fo_Valpha_MAX,   Math_clamp_higher(Set_anim_value_no_lim(get(Fo_Valpha_MAX),   get_ias(PFD_FO)   * math.sqrt(Math_clamp_lower((get(Alpha) - get(A0_AoA)) / (get(Amax_AoA) - get(A0_AoA)), 0)), 5), get(Fo_VMAX)))
 
         --reset timer
         alpha_speed_update_timer = 0
-    end
+    --end
 end

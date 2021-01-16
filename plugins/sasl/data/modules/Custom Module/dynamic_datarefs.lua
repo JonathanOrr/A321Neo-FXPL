@@ -481,6 +481,11 @@ Fo_Vaprot_vsw =    createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fo_a
 Capt_Valpha_MAX =  createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/capt_alpha_max_speed", 0, false, true, false)--uses different pilot's alpha
 Fo_Valpha_MAX =    createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fo_alpha_max_speed", 0, false, true, false)
 
+A0_AoA =     createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/alpha_0_aoa", 0, false, true, false)
+Aprot_AoA =  createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/alpha_prot_aoa", 0, false, true, false)
+Afloor_AoA = createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/alpha_floor_aoa", 0, false, true, false)
+Amax_AoA =   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/alpha_max_aoa", 0, false, true, false)
+
 --BUSS--
 BUSS_VFE_red_AoA =  createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/buss_vfe_red_aoa", 0, false, true, false)
 BUSS_VFE_norm_AoA = createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/buss_vfe_norm_aoa", 0, false, true, false)
@@ -706,6 +711,8 @@ GPWS_mode_5_glideslope = createGlobalPropertyi("a321neo/dynamics/gpws/mode_5/gli
 GPWS_mode_5_glideslope_hard = createGlobalPropertyi("a321neo/dynamics/gpws/mode_5/glideslope_hard", 0, false, true, false)
 
 GPWS_mode_pitch = createGlobalPropertyi("a321neo/dynamics/gpws/mode_pitch", 0, false, true, false)
+GPWS_mode_speed = createGlobalPropertyi("a321neo/dynamics/gpws/mode_speed", 0, false, true, false)
+GPWS_mode_stall = createGlobalPropertyi("a321neo/dynamics/gpws/mode_stall", 0, false, true, false)
 
 GPWS_pred_is_active = createGlobalPropertyi("a321neo/dynamics/gpws/pred/is_active", 0, false, true, false)
 GPWS_pred_terr      = createGlobalPropertyi("a321neo/dynamics/gpws/pred/terrain", 0, false, true, false)
