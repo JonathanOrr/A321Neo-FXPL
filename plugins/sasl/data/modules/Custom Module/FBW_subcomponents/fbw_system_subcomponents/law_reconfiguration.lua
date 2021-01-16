@@ -94,8 +94,10 @@ function FBW_law_reconfiguration(var_table)
 
     if elac_1_status_delta == 1 or elac_2_status_delta == 1 then
         var_table.abnormal_elac_reset_required = 0
+        var_table.abnormal_fac_reset_required = 0
     end
     if fac_1_status_delta == 1 or fac_2_status_delta == 1 then
+        var_table.abnormal_elac_reset_required = 0
         var_table.abnormal_fac_reset_required = 0
     end
 

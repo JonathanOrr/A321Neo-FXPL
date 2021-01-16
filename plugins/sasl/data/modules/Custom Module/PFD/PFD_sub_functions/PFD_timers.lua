@@ -1,3 +1,5 @@
+include('PFD/PFD_sub_functions/PFD_spd_tape.lua')
+
 local function update_liftoff_timer(PFD_table)
     if get(Any_wheel_on_ground) == 1 then
         PFD_table.PFD_aircraft_in_air_timer = 0
@@ -14,7 +16,7 @@ local function update_blinking_timers(PFD_table)
     if is_att_ok(PFD_table.Screen_ID) == true then
         PFD_table.ATT_blink_timer = 0
     end
-    if is_ias_ok(PFD_table.Screen_ID) or is_buss_visible(PFD_table.Screen_ID) then
+    if (is_ias_ok(PFD_table.Screen_ID) or is_buss_visible(PFD_table.Screen_ID)) and not PFD_ias_invalid(PFD_table) then
         PFD_table.SPD_blink_timer = 0
     end
     if is_alt_ok(PFD_table.Screen_ID) or is_gps_alt_visible(PFD_table.Screen_ID) then
@@ -29,7 +31,7 @@ local function update_blinking_timers(PFD_table)
     if PFD_table.ATT_blink_timer < total_blink_duration_s and is_att_ok(PFD_table.Screen_ID) == false then
         PFD_table.ATT_blink_timer = PFD_table.ATT_blink_timer + get(DELTA_TIME)
     end
-    if PFD_table.SPD_blink_timer < total_blink_duration_s and is_ias_ok(PFD_table.Screen_ID) == false and is_buss_visible(PFD_table.Screen_ID) == false then
+    if PFD_table.SPD_blink_timer < total_blink_duration_s and (is_ias_ok(PFD_table.Screen_ID) == false and is_buss_visible(PFD_table.Screen_ID) == false) or PFD_ias_invalid(PFD_table) then
         PFD_table.SPD_blink_timer = PFD_table.SPD_blink_timer + get(DELTA_TIME)
     end
     if PFD_table.ALT_blink_timer < total_blink_duration_s and is_alt_ok(PFD_table.Screen_ID) == false and is_gps_alt_visible(PFD_table.Screen_ID) == false then

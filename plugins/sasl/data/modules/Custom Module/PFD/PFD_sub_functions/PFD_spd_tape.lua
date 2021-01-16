@@ -1,5 +1,15 @@
 include('ADIRS_data_source.lua')
 
+function PFD_ias_invalid(PFD_table)
+    local invalid = false
+
+    if get(Any_wheel_on_ground) == 0 and get_ias(PFD_table.Screen_ID) <= 60 then
+        invalid = true
+    end
+
+    return invalid
+end
+
 local function draw_accel_arrow(PFD_table)
     --accel arrows
     if math.abs(get_ias_trend(PFD_table.Screen_ID) * 10) > 2 then
@@ -177,7 +187,7 @@ function PFD_draw_spd_tape(PFD_table)
     --speed tape background
     sasl.gl.drawRectangle(size[1]/2-437, size[2]/2-244, 99, 473, PFD_TAPE_GREY)
 
-    if is_ias_ok(PFD_table.Screen_ID) == false and is_buss_visible(PFD_table.Screen_ID) == false then
+    if (is_ias_ok(PFD_table.Screen_ID) == false and is_buss_visible(PFD_table.Screen_ID) == false) or PFD_ias_invalid(PFD_table) then
         boarder_cl = PFD_table.SPD_blink_now and ECAM_RED or {0, 0, 0, 0}
         if PFD_table.SPD_blink_now == true then
             sasl.gl.drawText(Font_AirbusDUL, size[1]/2-390, size[2]/2-20, "SPD", 42, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
@@ -185,16 +195,16 @@ function PFD_draw_spd_tape(PFD_table)
     end
 
     --clip to draw the speed tape
-    if is_ias_ok(PFD_table.Screen_ID) == true then
+    if is_ias_ok(PFD_table.Screen_ID) == true and not PFD_ias_invalid(PFD_table) then
         sasl.gl.setClipArea(size[1]/2-437, size[2]/2-244, 99, 473)
         sasl.gl.drawTexture(PFD_spd_tape, size[1]/2-437, size[2]/2-244 - Math_rescale(30, 355, 460, 2785, get_ias(PFD_table.Screen_ID)), 99, 4096, {1,1,1})
         sasl.gl.resetClipArea ()
     end
 
     --boarder lines
-    if is_ias_ok(PFD_table.Screen_ID) == true or is_buss_visible(PFD_table.Screen_ID) == false then
+    if is_ias_ok(PFD_table.Screen_ID) == true or is_buss_visible(PFD_table.Screen_ID) == false and PFD_ias_invalid(PFD_table) then
         sasl.gl.drawWideLine(size[1]/2-437, size[2]/2+231, size[1]/2-310, size[2]/2+231, 4, boarder_cl)
-        if is_ias_ok(PFD_table.Screen_ID) == true then
+        if is_ias_ok(PFD_table.Screen_ID) == true and not PFD_ias_invalid(PFD_table) then
             sasl.gl.drawWideLine(size[1]/2-338, size[2]/2-7 + Math_clamp_lower(Math_rescale_lim_lower(30, 0, 50, -133, get_ias(PFD_table.Screen_ID)), -237), size[1]/2-338, size[2]/2+229, 4, boarder_cl)
             if get_ias(PFD_table.Screen_ID) > 66 then
                 sasl.gl.drawWideLine(size[1]/2-437, size[2]/2-246, size[1]/2-310, size[2]/2-246, 4, boarder_cl)
@@ -206,7 +216,7 @@ function PFD_draw_spd_tape(PFD_table)
     end
 
     --speed needle
-    if is_ias_ok(PFD_table.Screen_ID) == true then
+    if is_ias_ok(PFD_table.Screen_ID) == true and not PFD_ias_invalid(PFD_table) then
         sasl.gl.drawRectangle(size[1]/2-450, size[2]/2-10, 18, 6, PFD_YELLOW)
         --all spd tape lables
         sasl.gl.setClipArea(size[1]/2-437, size[2]/2-244, 185, 473)
