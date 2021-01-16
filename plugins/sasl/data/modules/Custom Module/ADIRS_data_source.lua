@@ -123,6 +123,10 @@ function get_ias_trend(i)
     return ADIRS_sys[which_adr(i)].ias_trend
 end
 
+function get_avg_ias_trend()
+    return get_adr_data("ias_trend")
+end
+
 function is_tas_ok(i)
     return is_adr_working(i)
 end

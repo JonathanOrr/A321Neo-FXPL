@@ -12,7 +12,7 @@
 --    Please check the LICENSE file in the root of the repository for further
 --    details or check <https://www.gnu.org/licenses/>
 -------------------------------------------------------------------------------
--- File: wheel_debug.lua 
+-- File: wheel_debug.lua
 -- Short description: GPWS debug window
 -------------------------------------------------------------------------------
 
@@ -30,7 +30,7 @@ function draw_mode_1()
     if get(GPWS_mode_is_active, 1) == 1 then
         color_mode = ECAM_WHITE
         color_sinkrate = get(GPWS_mode_1_sinkrate) == 1 and ECAM_ORANGE or  ECAM_HIGH_GREY
-        color_pullup   = get(GPWS_mode_1_pullup) == 1   and ECAM_RED or  ECAM_HIGH_GREY        
+        color_pullup   = get(GPWS_mode_1_pullup) == 1   and ECAM_RED or  ECAM_HIGH_GREY
     end
 
     sasl.gl.drawRectangle(10, size[2]-90, size[2]/2-20, 100, UI_DARK_GREY)
@@ -56,17 +56,17 @@ end
 
 function draw_mode_3()
     sasl.gl.drawRectangle(size[1]/2 + 10, size[2]-65, size[2]/2-20, 75, UI_DARK_GREY)
-    
+
     local color_mode = get(GPWS_mode_is_active, 3) == 1 and ECAM_WHITE or ECAM_HIGH_GREY
     local color_dontsink = get(GPWS_mode_is_active, 3) == 1 and get(GPWS_mode_3_dontsink) == 1 and ECAM_ORANGE or ECAM_HIGH_GREY
-    
+
     sasl.gl.drawText(Font_AirbusDUL, 3*size[1]/4, size[2]-20, "MODE 3", 14, false, false, TEXT_ALIGN_CENTER, color_mode)
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2 +20, size[2]-50, "DON'T SINK, DON'T SINK", 14, false, false, TEXT_ALIGN_LEFT, color_dontsink)
 end
 
 function draw_mode_4()
     local color_mode = get(GPWS_mode_is_active, 4) == 1 and ECAM_WHITE or ECAM_HIGH_GREY
-    
+
     sasl.gl.drawRectangle(size[1]/2 + 10, size[2]-185, size[2]/2-20, 110, UI_DARK_GREY)
     sasl.gl.drawText(Font_AirbusDUL, 3*size[1]/4, size[2]-95, "MODE 4", 14, false, false, TEXT_ALIGN_CENTER, color_mode)
     sasl.gl.drawText(Font_AirbusDUL, 3*size[1]/4-70, size[2]-110, "A", 14, false, false, TEXT_ALIGN_CENTER, get(GPWS_mode_4_mode_a) == 1 and ECAM_GREEN or ECAM_HIGH_GREY)
@@ -122,17 +122,17 @@ function draw_predictive_areas()
     sasl.gl.drawWideLine ( 300, 50, 300, 170, 1, ECAM_HIGH_GREY)
 
     local roll = math.max(-30, math.min(30, get(Flightmodel_roll)))
-    
+
     sasl.gl.drawWideLine ( 240, 50, 240+25*math.min(0,roll/30), 170, 1, ECAM_HIGH_GREY)
     sasl.gl.drawWideLine ( 300, 50, 300+25*math.max(0,roll/30), 170, 1, ECAM_HIGH_GREY)
 
     sasl.gl.drawText(Font_AirbusDUL, 330, 170, "d(60s) = " .. Round_fill(get(GPWS_dist_60),2) .. " nm", 13, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
 
     sasl.gl.drawText(Font_AirbusDUL, 330, 90, "d(30s) = " .. Round_fill(get(GPWS_dist_30),2) .. " nm", 13, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
-    
+
     sasl.gl.drawText(Font_AirbusDUL, 330, 30, "d(nearest airport) = ", 13, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
     sasl.gl.drawText(Font_AirbusDUL, 400, 10, Round_fill(get(GPWS_dist_airport), 2) .. " nm", 13, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
-    
+
     for i=1,6 do
         if get(GPWS_pred_front, i) > 0 then
             sasl.gl.drawRectangle(260,  150-20*(6-i), 20, 20, terrain_int_to_color(get(GPWS_pred_front, i)))

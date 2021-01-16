@@ -19,7 +19,7 @@
 -------------------------------------------------------------------------------
 -- Constants
 -------------------------------------------------------------------------------
- 
+
 local SOUND_CONTINUOUS_PAUSE    = 1
 local SOUND_SHOT_INTERVAL = 5
 
@@ -65,6 +65,9 @@ local Sounds_GPWS_tlterr = sasl.createCommand("a321neo/sounds/gpws/tlterr", "")
 
 local Sounds_GPWS_pitch = sasl.createCommand("a321neo/sounds/gpws/pitch", "")
 local Sounds_GPWS_windshear = sasl.createCommand("a321neo/sounds/gpws/windshear", "")
+local Sounds_GPWS_speed = sasl.createCommand("a321neo/sounds/gpws/speed", "")
+local Sounds_GPWS_stall = sasl.createCommand("a321neo/sounds/gpws/stall", "")
+
 
 local Sounds_alt_callout   = createGlobalPropertyi("a321neo/sounds/alt_callout", 0, false, true, false)
 
@@ -92,7 +95,7 @@ local gpws_sounds = {
     { source=GPWS_mode_2_pullup,    command=Sounds_GPWS_pullup,        duration = 0.9, continuous = true },
     { source=GPWS_pred_terr_pull,   command=Sounds_GPWS_terraheadpull, duration = 2.0, continuous = true },
     { source=GPWS_pred_obst_pull,   command=Sounds_GPWS_obsaheadpull,  duration = 2.2, continuous = true },
-    
+
     -- Terrain Clearence
     { source=GPWS_mode_2_terrterr,  command=Sounds_GPWS_terrterr,      duration = 1.2, continuous = false },
     { source=GPWS_mode_2_terr,      command=Sounds_GPWS_terr,          duration = 0.6, continuous = true },
@@ -102,31 +105,32 @@ local gpws_sounds = {
     { source=GPWS_mode_4_c_terrain, command=Sounds_GPWS_tlterr,        duration = 1.2, continuous = false },
 
     -- TODO Minimum
-    
+
     -- Predictive terrain
     { source=GPWS_pred_terr,        command=Sounds_GPWS_terrahead,     duration = 1.2, continuous = false, interval = 7 },
     { source=GPWS_pred_obst,        command=Sounds_GPWS_obsahead,      duration = 1.4, continuous = false, interval = 7 },
 
-    
+
     -- Pitch Pitch -- The priority of this is not a big issue because it's active when all the other modes are
     -- not active
     { source=GPWS_mode_pitch, command=Sounds_GPWS_pitch, duration = 2, continuous = false, interval = 1 },
-    
+    { source=GPWS_mode_speed, command=Sounds_GPWS_speed, duration = 2, continuous = false, interval = 5 },
+
     { source=dr_retard_retard, command=Sounds_GPWS_retard_retard, duration = 1.5, continuous = false, interval = 0.5 },
     { source=dr_retard, command=Sounds_GPWS_retard, duration = 1, continuous = false, interval = 0.1 },
-    
+
     callouts_sound,
-    
+
     -- Gear/Flaps
     { source=GPWS_mode_4_tl_gear,   command=Sounds_GPWS_tlgear,        duration = 1.1, continuous = false },
     { source=GPWS_mode_4_tl_flaps,  command=Sounds_GPWS_tlflaps,       duration = 1.1, continuous = false },
-    
+
     -- Sink Rate
     { source=GPWS_mode_1_sinkrate,  command=Sounds_GPWS_sinkrate,      duration = 0.9,   continuous = true },
-    
+
     -- Don't sink
     { source=GPWS_mode_3_dontsink,  command=Sounds_GPWS_dontsink,      duration = 2,   continuous = false },
-    
+
     -- Glideslope
     { source=GPWS_mode_5_glideslope_hard, command=Sounds_GPWS_glideslope_hard, duration = 1, continuous = true, interval = 3 },
     { source=GPWS_mode_5_glideslope,command=Sounds_GPWS_glideslope,    duration = 1,   continuous = false, interval = 3 },
@@ -205,7 +209,7 @@ sasl.registerCommandHandler (GPWS_cmd_silence, 0, function(phase)
     if phase == SASL_COMMAND_END then
         if get(All_on_ground) == 1 then
             if get(TIME) - press_start_time > 1 and short_test == false then
-                long_test = true            
+                long_test = true
             elseif long_test == false then
                 short_test = true
             end
@@ -226,7 +230,7 @@ end
 
 local function play_gpws_shot(x)
     local interval = x.interval == nil and SOUND_SHOT_INTERVAL or x.interval
-    
+
     if get(TIME) - x.last_exec > x.duration + interval then
         x.last_exec = get(TIME)
         sasl.commandOnce(x.command)
@@ -269,7 +273,7 @@ local function play_long_test()
     elseif curr_time > 1.5 and curr_time < 2.5 then
         set(GPWS_req_inop, 1)
     elseif curr_time > 2.5 and curr_time < 3 then
-        set(GPWS_req_inop, 0)    
+        set(GPWS_req_inop, 0)
     elseif curr_time > 4.5 and curr_time < 6.5 then
         pb_set(PB.mip.gpws_capt, true, false)
         set(GPWS_mode_1_sinkrate, 1)
@@ -279,10 +283,10 @@ local function play_long_test()
     elseif curr_time > 9.5 and curr_time < 11.5 then
         pb_set(PB.mip.gpws_capt, true, false)
         set(GPWS_mode_2_terrterr, 1)
-    elseif curr_time > 12 and curr_time < 13.5 then 
+    elseif curr_time > 12 and curr_time < 13.5 then
         pb_set(PB.mip.gpws_capt, false, true)
         set(GPWS_mode_2_pullup, 1)
-    elseif curr_time > 14 and curr_time < 16 then 
+    elseif curr_time > 14 and curr_time < 16 then
         pb_set(PB.mip.gpws_capt, true, false)
         set(GPWS_mode_3_dontsink, 1)
     elseif curr_time > 16.5 and curr_time < 18 then
@@ -303,7 +307,7 @@ local function play_long_test()
     elseif curr_time > 27.5 and curr_time < 29 then
         set(GPWS_req_terr_inop, 1)
     elseif curr_time > 29 and curr_time < 29.5 then
-        set(GPWS_req_terr_inop, 0)    
+        set(GPWS_req_terr_inop, 0)
     elseif curr_time > 31.5 and curr_time < 32.8 then
         pb_set(PB.mip.gpws_capt, true, false)
         set(GPWS_pred_terr, 1)
@@ -358,11 +362,11 @@ function play_gpws_sounds()
         -- For each sound...
         if get(x.source) == 1 then
             -- Ok, we need to play this sound
-            
+
             if x.last_exec == nil then
                 x.last_exec = 0
             end
-            
+
             if x.continuous then
                 -- Continuous sounds always break the subsequent ones
                 play_gpws_continuous(x)
@@ -373,7 +377,7 @@ function play_gpws_sounds()
             end
         end
     end
-    
+
     if get(TIME) - no_sound_before >= 0 then
         if get(GPWS_req_inop) == 1 then
             sasl.commandOnce(Sounds_GPWS_inop)
@@ -398,7 +402,7 @@ function set_alt_callouts()
     else
         set(Sounds_alt_callout, 0)
     end
-    
+
     if math.floor(get(Capt_ra_alt_ft)) >= radio_values[radio_values_current+1]+10 then
         radio_values_current = radio_values_current + 1
     end
@@ -410,7 +414,7 @@ function update_retard()
     if get(Aft_wheel_on_ground) == 1 and get(IAS) > 40 and (get(L_sim_throttle) > 0.05 or get(R_sim_throttle) > 0.05) and get(EWD_flight_phase) >= PHASE_FINAL then
         set(dr_retard_retard, 1)
     else
-        set(dr_retard_retard, 0)    
+        set(dr_retard_retard, 0)
     end
 
     -- TODO Change to 10ft instead of 20ft when AP is on
