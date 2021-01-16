@@ -315,6 +315,9 @@ function update()
     compute_aprot_vsw_amax_alphas()
     SPEED_SPEED_SPEED()
 
+    --stall warning (needls to be further comfirmed)
+    set(GPWS_mode_stall, (get_avg_aoa() > get(Aprot_AoA) + 1) and 1 or 0)
+
     --update timer
     if get(Any_wheel_on_ground) == 1 then
         in_air_timer = 0

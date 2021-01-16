@@ -63,6 +63,7 @@ function FBW_law_reconfiguration(var_table)
         (get_avg_pitch() > 150 or get_avg_pitch() < -150) and (how_many_irs_partially_work() ~= 0 or how_many_irs_fully_work() ~= 0) and get(Any_wheel_on_ground) == 0,
         (get_avg_aoa() > 30 or get_avg_aoa() < -15)       and how_many_irs_fully_work() ~= 0                                         and get(Any_wheel_on_ground) == 0,
         (get_avg_ias() > 440 or get_avg_ias() < 80)       and how_many_adrs_work() ~= 0                                              and get(Any_wheel_on_ground) == 0,
+        get_avg_mach() > 0.91                             and how_many_adrs_work() ~= 0                                              and get(Any_wheel_on_ground) == 0,
     }
 
     --entered abnormal conditions
