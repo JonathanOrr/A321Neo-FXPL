@@ -1,5 +1,23 @@
 --239 radius
 --206px width
+
+local function draw_stall_flag(PFD_table)
+    local ATT_x_center = size[1]/2-55
+    local ATT_y_center = size[2]/2-7
+
+    if get(FBW_total_control_law) == FBW_NORMAL_LAW or
+       get(Any_wheel_on_ground) == 1 or
+       is_att_ok(PFD_table.Screen_ID) == false or
+       get(FAC_1_status) == 0 and get(FAC_2_status) == 0 or
+       is_aoa_ok(PFD_table.Screen_ID) == false then
+        return
+    end
+
+    if get_avg_aoa() > get(Aprot_AoA) - 0.5 then
+        sasl.gl.drawText(Font_AirbusDUL, ATT_x_center, ATT_y_center + 50, "STALL    STALL", 42, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
+    end
+end
+
 function PFD_draw_att(PFD_table)
     local ATT_x_center = size[1]/2-55
     local ATT_y_center = size[2]/2-7
@@ -153,4 +171,6 @@ function PFD_draw_att(PFD_table)
     SASL_draw_img_center_aligned(PFD_pitch_yellow_box, ATT_x_center, ATT_y_center, 18, 18, ECAM_WHITE)
 
     SASL_draw_img_xcenter_aligned(PFD_bank_angle, size[1]/2-56, size[2]/2+158, 366, 95, {1,1,1})
+
+    draw_stall_flag(PFD_table)
 end

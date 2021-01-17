@@ -24,16 +24,6 @@ local terrain_alt_front   = {0,0,0,0,0,0}
 local terrain_alt_front_L = {0,0,0,0,0,0}
 local terrain_alt_front_R = {0,0,0,0,0,0}
 
-local function move_along_distance(origin_lat, origin_lon, distance, angle)
-    local a = math.rad(90-angle);
-
-    local lat0 = math.cos(math.pi / 180.0 * origin_lat)
-
-    local lat = origin_lat  + (180/math.pi) * (distance / 6378137) * math.sin(a)
-    local lon = origin_lon + (180/math.pi) * (distance / 6378137) / math.cos(lat0) * math.cos(a)
-    return lat,lon
-end
-
 local function compute_distances()
 
     -- We need to compute two distances:
@@ -81,17 +71,17 @@ local function search_terrain_altitude()
             terrain_alt_front_R[i] = -9999
         else
             -- Front
-            lat, lon = move_along_distance(get(Aircraft_lat), get(Aircraft_long), distances_front[i], heading)
+            lat, lon = Move_along_distance(get(Aircraft_lat), get(Aircraft_long), distances_front[i], heading)
             alt = compute_alt(lat, lon)
             terrain_alt_front[i] = alt * 3.28084
 
             -- Front L
-            lat_L, lon_L = move_along_distance(lat, lon, 230, heading-90)
+            lat_L, lon_L = Move_along_distance(lat, lon, 230, heading-90)
             alt = compute_alt(lat_L, lon_L)
             terrain_alt_front_L[i] = alt * 3.28084
 
             -- Front R
-            lat_R, lon_R = move_along_distance(lat, lon, 230, heading+90)
+            lat_R, lon_R = Move_along_distance(lat, lon, 230, heading+90)
             alt = compute_alt(lat_R, lon_R)
             terrain_alt_front_R[i] = alt * 3.28084
         end

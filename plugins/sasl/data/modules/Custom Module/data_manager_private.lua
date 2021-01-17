@@ -5,8 +5,8 @@
 
 local NAV_FILE_PATH  = sasl.getXPlanePath() .. "Resources/default data/earth_nav.dat"
 local FIX_FILE_PATH  = sasl.getXPlanePath() .. "Resources/default data/earth_fix.dat"
---local ARPT_FILE_PATH  = sasl.getXPlanePath() .. "Resources/default scenery/default apt dat/Earth nav data/apt.dat"
-local ARPT_FILE_PATH = "/usr/share/X-Plane 11/test.apt"
+local ARPT_FILE_PATH  = sasl.getXPlanePath() .. "Resources/default scenery/default apt dat/Earth nav data/apt.dat"
+--local ARPT_FILE_PATH = "/usr/share/X-Plane 11/test.apt"
 
 ----------------------------------------------------------------------------------------------------
 -- Global variables
@@ -243,7 +243,11 @@ Data_manager._parse_line_arpt_header = function(curr_seek, splitted)
         taxys      = {},
         bounds     = {},
         mark_lines = {},
-        signs      = {}
+        signs      = {},
+        routes     = {},
+        taxi_routes= {},
+        tower      = {},
+        gates      = {}
     }
 end
 
@@ -329,7 +333,6 @@ end
 
 Data_manager._parse_line_arpt_node_linear_close = function(splitted)
     Data_manager._parse_line_arpt_node_linear_start(splitted)
---    table.insert(current_obj, current_obj[1])
     Data_manager._save_arpt_node()
 end
 
@@ -340,7 +343,6 @@ end
 
 Data_manager._parse_line_arpt_node_beizer_close = function(splitted)
 --    Data_manager._parse_line_arpt_node_beizer_start(splitted)
---    table.insert(current_obj, current_obj[1])
     Data_manager._save_arpt_node()
 end
 
@@ -358,6 +360,26 @@ Data_manager._parse_line_arpt_sign = function(splitted)
 
 end
 
+Data_manager._parse_line_arpt_route_point = function(splitted)    
+    local route_lat = tonumber(splitted[2])
+    local route_lon = tonumber(splitted[3])
+    local route_id = tonumber(splitted[5])
+
+    Data_manager._arpt[current_apt].routes[route_id] = {lat = route_lat, lon = route_lon}    
+end
+
+
+Data_manager._parse_line_arpt_route_taxi = function(splitted)    
+    local route_id_1 = tonumber(splitted[2])
+    local route_id_2 = tonumber(splitted[3])
+    local route_name = splitted[6]
+    if splitted[5] == "runway" then
+        return -- We are not interested in runway, we draw them by ourself
+    end
+
+    table.insert(Data_manager._arpt[current_apt].taxi_routes, {point_1 = route_id_1, point_2 = route_id_2, name=route_name})
+end
+
 Data_manager._parse_line_arpt_generic = function(curr_seek, line)
     if #line < 1 then
         return
@@ -373,6 +395,24 @@ Data_manager._parse_line_arpt_generic = function(curr_seek, line)
     end
 end
 
+Data_manager._parse_line_arpt_tower = function(splitted)
+    local lat = tonumber(splitted[2])
+    local lon = tonumber(splitted[3])
+    Data_manager._arpt[current_apt].tower.lat = lat
+    Data_manager._arpt[current_apt].tower.lon = lon
+end
+
+Data_manager._parse_line_arpt_gate = function(splitted)
+    local gate_lat = tonumber(splitted[2])
+    local gate_lon = tonumber(splitted[3])
+    local gate_name = splitted[7]
+    if splitted[5] ~= "gate" then
+        return -- We are not interested in runway, we draw them by ourself
+    end
+
+    table.insert(Data_manager._arpt[current_apt].gates, {lat = gate_lat, lon = gate_lon, name=gate_name})
+end
+
 Data_manager._parse_line_arpt_detailed = function(apt, line)
     if #line < 1 then
         return
@@ -382,6 +422,9 @@ Data_manager._parse_line_arpt_detailed = function(apt, line)
 
     if id == "1" then
         return true -- Stop
+    elseif id == "14" then -- Taxyways
+        local splitted = str_split(line)
+        Data_manager._parse_line_arpt_tower(splitted)
     elseif id == "110" then -- Taxyways
         what_iam_in = ROW_TAXI
     elseif id == "120" then -- Linear feature
@@ -406,11 +449,20 @@ Data_manager._parse_line_arpt_detailed = function(apt, line)
     elseif id == "116" then
         local splitted = str_split(line)
         Data_manager._parse_line_arpt_node_beizer_end(splitted)
-    elseif id == "20" then
+--    elseif id == "20" then    -- This is no more needed
+--        local splitted = str_split(line)
+--        Data_manager._parse_line_arpt_sign(splitted)
+    elseif id == "1201" then
         local splitted = str_split(line)
-        Data_manager._parse_line_arpt_sign(splitted)
+        Data_manager._parse_line_arpt_route_point(splitted)    
+    elseif id == "1202" then
+        local splitted = str_split(line)
+        Data_manager._parse_line_arpt_route_taxi(splitted)
+    elseif id == "1300" then
+        local splitted = str_split(line)
+        Data_manager._parse_line_arpt_gate(splitted)
     end
-    
+
     return false -- Continue to read
 end
 

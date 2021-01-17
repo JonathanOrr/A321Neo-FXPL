@@ -4,9 +4,12 @@ include('ND/subcomponents/graphics_arc.lua')
 include('ND/subcomponents/graphics_rose.lua')
 include('ND/subcomponents/graphics_plan.lua')
 include('ND/subcomponents/graphics_vorils.lua')
+include('ND/subcomponents/graphics_mouse.lua')
 
-local image_mask_all = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/mask-all.png")
-local image_mask_arc = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/mask-all.png")
+
+local image_mask_rose = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/mask-rose.png")
+local image_mask_arc  = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/mask-arc.png")
+local image_mask_plan = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/mask-plan.png")
 
 function draw_main(data)
 
@@ -18,7 +21,7 @@ function draw_main(data)
     if data.config.mode == ND_MODE_ILS or data.config.mode == ND_MODE_VOR or data.config.mode == ND_MODE_NAV then
 
         sasl.gl.drawMaskStart()
-        sasl.gl.drawTexture(image_mask_all, 0,0,900,900)
+        sasl.gl.drawTexture(image_mask_rose, 0,0,900,900)
         sasl.gl.drawUnderMask(true)
         
         draw_rose(data) -- The rose is drawn in all three cases
@@ -41,7 +44,7 @@ function draw_main(data)
         draw_arc_unmasked(data)
     elseif data.config.mode == ND_MODE_PLAN then
         sasl.gl.drawMaskStart()
-        sasl.gl.drawTexture(image_mask_all, 0,0,900,900)
+        sasl.gl.drawTexture(image_mask_plan, 0,0,900,900)
         sasl.gl.drawUnderMask(true)
         draw_plan(data)
         sasl.gl.drawMaskEnd()
@@ -50,5 +53,6 @@ function draw_main(data)
     end
 
     draw_common(data)
+    draw_mouse(data)
 
 end

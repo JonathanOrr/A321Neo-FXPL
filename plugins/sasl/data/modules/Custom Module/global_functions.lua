@@ -336,6 +336,17 @@ function GC_distance_km(lat1, lon1, lat2, lon2)
 
 end
 
+function Move_along_distance(origin_lat, origin_lon, distance, angle)   -- Distance in M
+    local a = math.rad(90-angle);
+
+    local lat0 = math.cos(math.pi / 180.0 * origin_lat)
+
+    local lat = origin_lat  + (180/math.pi) * (distance / 6378137) * math.sin(a)
+    local lon = origin_lon + (180/math.pi) * (distance / 6378137) / math.cos(lat0) * math.cos(a)
+    return lat,lon
+end
+
+
 function Read_CSV(file)
   local result_full = {}
   local sep = ','

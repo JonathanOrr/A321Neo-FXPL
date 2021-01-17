@@ -281,20 +281,35 @@ local function SPEED_SPEED_SPEED()
     set(GPWS_mode_speed, 0)
 
     if get(FBW_total_control_law) ~= FBW_NORMAL_LAW or
+       get(Flaps_internal_config) <= 2 or
        get(Capt_ra_alt_ft) < 100 or get(Fo_ra_alt_ft) < 100 or
        get(Capt_ra_alt_ft) > 2000 or get(Fo_ra_alt_ft) > 2000 or
        get(L_sim_throttle) >= THR_TOGA_START or get(R_sim_throttle) >= THR_TOGA_START or
-       get_avg_ias() > get(VLS) and get_avg_ias_trend() > 0 then--missing AFLOOR
+       get_avg_ias() > get(VLS) and get_avg_ias_trend() >= 0 then--missing AFLOOR
         return
     end
 
     local delta_vls = 0
 
     delta_vls = (get_avg_pitch() - get_avg_aoa()) * -6 + 26 / Math_clamp_higher(get_avg_ias_trend(), 0)
-    delta_vls = Math_clamp(delta_vls, -15, 15)
+    delta_vls = Math_clamp(delta_vls, -10, 10)
 
     if get_avg_ias() < (get(VLS) + delta_vls) then
         set(GPWS_mode_speed, 1)
+    end
+end
+
+local function STALL_STALL()
+    set(GPWS_mode_stall, 0)
+    --stall warning (needls to be further comfirmed)
+    if get(FBW_total_control_law) == FBW_NORMAL_LAW or
+       get(Any_wheel_on_ground) == 1 or
+       get(FAC_1_status) == 0 and get(FAC_2_status) == 0 then
+        return
+    end
+
+    if get_avg_aoa() > get(Aprot_AoA) - 0.5 then
+        set(GPWS_mode_stall, 1)
     end
 end
 
@@ -314,9 +329,7 @@ function update()
     BUSS_compute_VSW_AoA()
     compute_aprot_vsw_amax_alphas()
     SPEED_SPEED_SPEED()
-
-    --stall warning (needls to be further comfirmed)
-    set(GPWS_mode_stall, (get_avg_aoa() > get(Aprot_AoA) + 1) and 1 or 0)
+    STALL_STALL()
 
     --update timer
     if get(Any_wheel_on_ground) == 1 then
@@ -331,7 +344,7 @@ function update()
 
     --VLS & stall speeds(configuration dependent)
     --on liftoff for 5 seconds the Aprot value is the same as Amax(FCOM 1.27.20.P4 or DSC 27-20-10-20 P4/6)
-    --if alpha_speed_update_timer >= alpha_speed_update_time_s then
+    if alpha_speed_update_timer >= alpha_speed_update_time_s then
         update_VLS()
 
         if in_air_timer >= 5 then
@@ -346,5 +359,5 @@ function update()
 
         --reset timer
         alpha_speed_update_timer = 0
-    --end
+    end
 end
