@@ -131,7 +131,7 @@ function draw_mouse(data)
     draw_menu(data)
 
     if data.plan_mouse_x ~= nil then
-        local cursor_size_w = 89
+        local cursor_size_w = 93
         local cursor_size_h = 115
         
         if data.id == ND_CAPT then
