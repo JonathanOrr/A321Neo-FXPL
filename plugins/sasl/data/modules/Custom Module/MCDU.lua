@@ -316,7 +316,7 @@ local mcdu_message_showing = false
 local mcdu_sim_page = {}
 
 --create LUT for apt.dat for faster reference
-if override_MCDU_createairportlut then
+if not override_MCDU_dontcreateairportlut then
     parser_apt = Parser_Apt:new(APT_PATH)
     parser_apt:create_airport_lut()
 end
@@ -920,6 +920,7 @@ end
 --      1000 - atc comm
 --      1100 - mcdu menu
 --      1200 - air port
+--      1300 - CFDS menu (maintenance)
 --
 --
 --]]
@@ -928,6 +929,10 @@ mcdu_entry = string.upper("")
 
 --update
 function update()
+    if get(globalPropertyf("sim/time/total_running_time_sec")) > 120 then
+        set(globalPropertyf("sim/time/total_running_time_sec"), 60)
+        set(globalPropertyf("sim/time/total_flight_time_sec"), 60)
+    end
 	perf_measure_start("MCDU:update()")
     if get(mcdu_page) == 0 then --on start
        mcdu_open_page(505) --open 505 A/C status
@@ -1450,8 +1455,91 @@ function (phase)
 
         draw_update()
     end
+    if phase == "L1" then
+        mcdu_open_page(501) -- open 501 data position monitor
+    end
+    if phase == "L2" then
+        mcdu_open_page(502) -- open 502 data irs monitor
+    end
+    if phase == "L3" then
+        mcdu_open_page(503) -- open 503 data gps monitor
+    end
     if phase == "L4" then
         mcdu_open_page(505) -- open 505 data A/C status
+    end
+end
+
+-- 501 data position monitor
+mcdu_sim_page[501] =
+function (phase)
+    if phase == "render" then
+        mcdu_dat_title.txt = "      position monitor"
+        draw_update()
+    end
+end
+
+-- 502 data irs monitor
+mcdu_sim_page[502] =
+function (phase)
+    if phase == "render" then
+        mcdu_dat_title.txt = "      irs monitor"
+        if fmgs_dat["origin"] ~= nil then
+            mcdu_dat["s"]["L"][1].txt = "      drift at " .. fmgs_dat["origin"]
+        end
+        for i = 1,3,1 do
+            mcdu_dat["l"]["L"][i].txt = "<irs" .. i
+            if ADIRS_sys[i].ir_status == IR_STATUS_ALIGNED then
+                mcdu_dat["s"]["L"][i+1] = {txt = " nav   drift   1.0nm/h", col = "green"}
+            elseif ADIRS_sys[n].ir_status == IR_STATUS_FAULT then
+                mcdu_dat["s"]["L"][i+1] = {txt = " ir fault", col = "green"}
+            elseif ADIRS_sys[n].ir_status == IR_STATUS_ATT_ALIGNED
+                   and not ADIRS_sys[i].ir_is_waiting_hdg then
+                mcdu_dat["s"]["L"][i+1] = {txt = " att", col = "green"}
+            elseif ADIRS_sys[n].ir_status == IR_STATUS_ATT_ALIGNED
+                   and ADIRS_sys[i].ir_is_waiting_hdg then
+                mcdu_dat["s"]["L"][i+1] = {txt = " enter heading", col = "green"}
+            elseif ADIRS_sys[n].ir_status == IR_STATUS_IN_ALIGN then
+                ttn = math.floor(ADIRS_sys[i].ir_align_start_time + get(Adirs_total_time_to_align) - get(TIME) / 60)
+                mcdu_dat["s"]["L"][i+1] = {txt = " align ttn " .. ttn, col = "green"}
+            end
+        end
+        draw_update()
+    end
+
+    if phase == "L1" then
+        fmgs_dat["irs monitoring"] = 1
+        mcdu_open_page(506) -- 506 data irs monitor irs
+    end
+    if phase == "L2" then
+        fmgs_dat["irs monitoring"] = 2
+        mcdu_open_page(506) -- 506 data irs monitor irs
+    end
+    if phase == "L3" then
+        fmgs_dat["irs monitoring"] = 3
+        mcdu_open_page(506) -- 506 data irs monitor irs
+    end
+end
+
+-- 506 data irs monitor irs
+mcdu_sim_page[506] =
+function (phase)
+    if phase == "render" then
+        mcdu_dat_title.txt = "         irs " .. fmgs_dat["irs monitoring"]
+        mcdu_dat["s"]["L"][1].txt = "position"
+        mcdu_dat["s"]["L"][2].txt = "ttrk"
+        mcdu_dat["s"]["L"][3].txt = "thdg"
+        mcdu_dat["s"]["L"][4].txt = "wind"
+        mcdu_dat["s"]["L"][5].txt = "aoa"
+        draw_update()
+    end
+end
+
+-- 503 data gps monitor
+mcdu_sim_page[503] =
+function (phase)
+    if phase == "render" then
+        mcdu_dat_title.txt = "      gps monitor"
+        draw_update()
     end
 end
 
@@ -2637,11 +2725,9 @@ function (phase)
         mcdu_dat["l"]["L"][3].txt = "jonathanorr/a321neo-fxpl"
 
         mcdu_dat["s"]["L"][4] = {txt = "join our discord!", col = "cyan"}
-        mcdu_dat["l"]["L"][4] = {txt = "thank you so much for", size = "s"}
-        mcdu_dat["s"]["L"][5] = {txt = "flying our acf. we had"}
-        mcdu_dat["l"]["L"][5] = {txt = "fun making it and hope", size = "s"}
-        mcdu_dat["s"]["L"][6] = {txt = "you have fun flying it"}
-        mcdu_dat["l"]["L"][6] = {txt = "-side stick sim", size = "s"}
+        mcdu_dat["s"]["L"][5].txt = "mcdu manufacturer"
+        mcdu_dat["l"]["L"][5].txt = "honeywell"
+
 
         mcdu_dat["l"]["R"][6].txt = "return>"
 
