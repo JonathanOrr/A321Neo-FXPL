@@ -7,13 +7,13 @@ local function draw_stall_flag(PFD_table)
 
     if get(FBW_total_control_law) == FBW_NORMAL_LAW or
        get(Any_wheel_on_ground) == 1 or
-       is_att_ok(PFD_table.Screen_ID) == false or
+       adirs_is_att_ok(PFD_table.Screen_ID) == false or
        get(FAC_1_status) == 0 and get(FAC_2_status) == 0 or
-       is_aoa_ok(PFD_table.Screen_ID) == false then
+       adirs_is_aoa_ok(PFD_table.Screen_ID) == false then
         return
     end
 
-    if get_avg_aoa() > get(Aprot_AoA) - 0.5 then
+    if adirs_get_avg_aoa() > get(Aprot_AoA) - 0.5 then
         sasl.gl.drawText(Font_AirbusDUL, ATT_x_center, ATT_y_center + 50, "STALL    STALL", 42, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
     end
 end
@@ -22,7 +22,7 @@ function PFD_draw_att(PFD_table)
     local ATT_x_center = size[1]/2-55
     local ATT_y_center = size[2]/2-7
 
-    if is_att_ok(PFD_table.Screen_ID) == false then
+    if adirs_is_att_ok(PFD_table.Screen_ID) == false then
         if PFD_table.ATT_blink_now == true then
             sasl.gl.drawText(Font_AirbusDUL, ATT_x_center, ATT_y_center, "ATT", 42, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
         end
@@ -36,9 +36,9 @@ function PFD_draw_att(PFD_table)
     --draw under the mask
     sasl.gl.drawUnderMask(true)
     if get(FBW_total_control_law) == FBW_NORMAL_LAW then
-        SASL_rotated_center_img_xcenter_aligned(PFD_normal_pitch_scale, ATT_x_center, ATT_y_center, 2870, 779, 90 - get_roll(PFD_table.Screen_ID), get_pitch(PFD_table.Screen_ID) * 10, -779/2, ECAM_WHITE)
+        SASL_rotated_center_img_xcenter_aligned(PFD_normal_pitch_scale, ATT_x_center, ATT_y_center, 2870, 779, 90 - adirs_get_roll(PFD_table.Screen_ID), adirs_get_pitch(PFD_table.Screen_ID) * 10, -779/2, ECAM_WHITE)
     else
-        SASL_rotated_center_img_xcenter_aligned(PFD_abnormal_pitch_scale, ATT_x_center, ATT_y_center, 2870, 779, 90 - get_roll(PFD_table.Screen_ID), get_pitch(PFD_table.Screen_ID) * 10, -779/2, ECAM_WHITE)        
+        SASL_rotated_center_img_xcenter_aligned(PFD_abnormal_pitch_scale, ATT_x_center, ATT_y_center, 2870, 779, 90 - adirs_get_roll(PFD_table.Screen_ID), adirs_get_pitch(PFD_table.Screen_ID) * 10, -779/2, ECAM_WHITE)        
     end
 
     --tailstrike arrow(TOGO GA and GS < 50)
@@ -49,9 +49,9 @@ function PFD_draw_att(PFD_table)
             ATT_y_center,
             72,
             43,
-            -get_roll(PFD_table.Screen_ID),
+            -adirs_get_roll(PFD_table.Screen_ID),
             0,
-            9.7 * 10 + 21.5 - get_pitch(PFD_table.Screen_ID) * 10,
+            9.7 * 10 + 21.5 - adirs_get_pitch(PFD_table.Screen_ID) * 10,
             ECAM_ORANGE
         )
     end
@@ -62,9 +62,9 @@ function PFD_draw_att(PFD_table)
         ATT_y_center,
         3429,
         16,
-        -get_roll(PFD_table.Screen_ID),
-        1519 + Math_rescale_no_lim(0, 0, 10, -85, get_hdg(PFD_table.Screen_ID)),
-        -get_pitch(PFD_table.Screen_ID) * 10 - 4,
+        -adirs_get_roll(PFD_table.Screen_ID),
+        1519 + Math_rescale_no_lim(0, 0, 10, -85, adirs_get_hdg(PFD_table.Screen_ID)),
+        -adirs_get_pitch(PFD_table.Screen_ID) * 10 - 4,
         ECAM_WHITE
     )
 
@@ -74,17 +74,17 @@ function PFD_draw_att(PFD_table)
         ATT_y_center,
         2870,
         779,
-        90 - get_roll(PFD_table.Screen_ID),
-        Math_clamp(Math_rescale_no_lim(0, -187 + get_pitch(PFD_table.Screen_ID) * 10, 120, 0 + get_pitch(PFD_table.Screen_ID) * 10, get(PFD_table.RA_ALT)), -366, 0),
+        90 - adirs_get_roll(PFD_table.Screen_ID),
+        Math_clamp(Math_rescale_no_lim(0, -187 + adirs_get_pitch(PFD_table.Screen_ID) * 10, 120, 0 + adirs_get_pitch(PFD_table.Screen_ID) * 10, get(PFD_table.RA_ALT)), -366, 0),
         -779/2,
         ECAM_WHITE
     )
 
-    if is_track_ok(PFD_table.Screen_ID) and is_aoa_ok(PFD_table.Screen_ID) then
+    if adirs_is_track_ok(PFD_table.Screen_ID) and adirs_is_aoa_ok(PFD_table.Screen_ID) then
         SASL_draw_img_center_aligned(
             PFD_att_bird,
-            Get_rotated_point_x_pos_offset(ATT_x_center, - math.cos(math.rad(get_roll(PFD_table.Screen_ID))) * get_aoa(PFD_table.Screen_ID) * 10, -get_roll(PFD_table.Screen_ID), Math_rescale_no_lim(0, 0, 10, 85, (get_track(PFD_table.Screen_ID) - get_hdg(PFD_table.Screen_ID)))),
-            Get_rotated_point_y_pos_offset(ATT_y_center, - math.cos(math.rad(get_roll(PFD_table.Screen_ID))) * get_aoa(PFD_table.Screen_ID) * 10, -get_roll(PFD_table.Screen_ID), Math_rescale_no_lim(0, 0, 10, 85, (get_track(PFD_table.Screen_ID) - get_hdg(PFD_table.Screen_ID)))),
+            Get_rotated_point_x_pos_offset(ATT_x_center, - math.cos(math.rad(adirs_get_roll(PFD_table.Screen_ID))) * adirs_get_aoa(PFD_table.Screen_ID) * 10, -adirs_get_roll(PFD_table.Screen_ID), Math_rescale_no_lim(0, 0, 10, 85, (adirs_get_track(PFD_table.Screen_ID) - adirs_get_hdg(PFD_table.Screen_ID)))),
+            Get_rotated_point_y_pos_offset(ATT_y_center, - math.cos(math.rad(adirs_get_roll(PFD_table.Screen_ID))) * adirs_get_aoa(PFD_table.Screen_ID) * 10, -adirs_get_roll(PFD_table.Screen_ID), Math_rescale_no_lim(0, 0, 10, 85, (adirs_get_track(PFD_table.Screen_ID) - adirs_get_hdg(PFD_table.Screen_ID)))),
             83,
             43,
             ECAM_GREEN
@@ -99,7 +99,7 @@ function PFD_draw_att(PFD_table)
         ATT_y_center,
         1575,
         779,
-        90 - get_roll(PFD_table.Screen_ID),
+        90 - adirs_get_roll(PFD_table.Screen_ID),
         0,
         -779/2,
         ECAM_WHITE
@@ -112,9 +112,9 @@ function PFD_draw_att(PFD_table)
         ATT_y_center,
         37,
         26,
-        -get_roll(PFD_table.Screen_ID),
+        -adirs_get_roll(PFD_table.Screen_ID),
         0,
-        (math.abs(get_roll(PFD_table.Screen_ID)) >= 60 and math.abs(get_roll(PFD_table.Screen_ID)) <= 120) and (206 / math.cos(math.rad(90 - math.abs(get_roll(PFD_table.Screen_ID)))) - 14) or 224,
+        (math.abs(adirs_get_roll(PFD_table.Screen_ID)) >= 60 and math.abs(adirs_get_roll(PFD_table.Screen_ID)) <= 120) and (206 / math.cos(math.rad(90 - math.abs(adirs_get_roll(PFD_table.Screen_ID)))) - 14) or 224,
         PFD_YELLOW
     )
     SASL_rotated_center_img_center_aligned(
@@ -123,9 +123,9 @@ function PFD_draw_att(PFD_table)
         ATT_y_center,
         65,
         17,
-        -get_roll(PFD_table.Screen_ID),
+        -adirs_get_roll(PFD_table.Screen_ID),
         Math_rescale_no_lim(0, 0, 0.2, -53, Math_clamp(get(Total_lateral_g_load), -0.3, 0.3)),
-        (math.abs(get_roll(PFD_table.Screen_ID)) >= 60 and math.abs(get_roll(PFD_table.Screen_ID)) <= 120) and (206 / math.cos(math.rad(90 - math.abs(get_roll(PFD_table.Screen_ID)))) - 37) or 201,
+        (math.abs(adirs_get_roll(PFD_table.Screen_ID)) >= 60 and math.abs(adirs_get_roll(PFD_table.Screen_ID)) <= 120) and (206 / math.cos(math.rad(90 - math.abs(adirs_get_roll(PFD_table.Screen_ID)))) - 37) or 201,
         PFD_YELLOW
     )
 
@@ -133,11 +133,11 @@ function PFD_draw_att(PFD_table)
     local RA_color = get(PFD_table.RA_ALT) > 400 and ECAM_GREEN or ECAM_ORANGE
         if get(PFD_table.RA_ALT) <= 2500 then
         if get(PFD_table.RA_ALT) > 50 then
-            SASL_drawText_rotated(Font_AirbusDUL, 0, -225, ATT_x_center, ATT_y_center,  -get_roll(PFD_table.Screen_ID), math.floor(get(PFD_table.RA_ALT) - get(PFD_table.RA_ALT) % 10), 42, false, false, TEXT_ALIGN_CENTER, RA_color)
+            SASL_drawText_rotated(Font_AirbusDUL, 0, -225, ATT_x_center, ATT_y_center,  -adirs_get_roll(PFD_table.Screen_ID), math.floor(get(PFD_table.RA_ALT) - get(PFD_table.RA_ALT) % 10), 42, false, false, TEXT_ALIGN_CENTER, RA_color)
         elseif get(PFD_table.RA_ALT) >= 10 then
-            SASL_drawText_rotated(Font_AirbusDUL, 0, -225, ATT_x_center, ATT_y_center, -get_roll(PFD_table.Screen_ID), math.floor(get(PFD_table.RA_ALT) - get(PFD_table.RA_ALT) % 5), 42, false, false, TEXT_ALIGN_CENTER, RA_color)
+            SASL_drawText_rotated(Font_AirbusDUL, 0, -225, ATT_x_center, ATT_y_center, -adirs_get_roll(PFD_table.Screen_ID), math.floor(get(PFD_table.RA_ALT) - get(PFD_table.RA_ALT) % 5), 42, false, false, TEXT_ALIGN_CENTER, RA_color)
         else
-            SASL_drawText_rotated(Font_AirbusDUL, 0, -225, ATT_x_center, ATT_y_center, -get_roll(PFD_table.Screen_ID), math.floor(get(PFD_table.RA_ALT)), 42, false, false, TEXT_ALIGN_CENTER, RA_color)
+            SASL_drawText_rotated(Font_AirbusDUL, 0, -225, ATT_x_center, ATT_y_center, -adirs_get_roll(PFD_table.Screen_ID), math.floor(get(PFD_table.RA_ALT)), 42, false, false, TEXT_ALIGN_CENTER, RA_color)
         end
     end
     --terminate masked drawing

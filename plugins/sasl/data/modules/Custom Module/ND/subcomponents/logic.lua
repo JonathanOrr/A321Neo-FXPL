@@ -5,28 +5,28 @@ include('ND/subcomponents/logic_poi.lua')
 local function update_speed_and_wind(data)
     local id = data.id
 
-    data.inputs.gs = get_gs(id)
-    data.inputs.is_gs_valid = is_gs_ok(id)
+    data.inputs.gs = adirs_get_gs(id)
+    data.inputs.is_gs_valid = adirs_is_gs_ok(id)
 
-    data.inputs.tas = get_tas(id)
-    data.inputs.is_tas_valid = is_tas_ok(id) and data.inputs.tas >= 65
+    data.inputs.tas = adirs_get_tas(id)
+    data.inputs.is_tas_valid = adirs_is_tas_ok(id) and data.inputs.tas >= 65
 
-    data.inputs.wind_speed = get_wind_spd(id)
-    data.inputs.wind_direction = get_wind_dir(id)
-    data.inputs.is_wind_valid = is_wind_ok(id) and is_tas_ok(id) and data.inputs.tas > 100
+    data.inputs.wind_speed = adirs_get_wind_spd(id)
+    data.inputs.wind_direction = adirs_get_wind_dir(id)
+    data.inputs.is_wind_valid = adirs_is_wind_ok(id) and adirs_is_tas_ok(id) and data.inputs.tas > 100
 end
 
 local function update_hdg_track(data)
     local id = data.id
     
-    data.inputs.heading          = get_hdg(id)
-    data.inputs.true_heading     = get_true_hdg(id)
-    data.inputs.is_heading_valid = is_hdg_ok(id)
+    data.inputs.heading          = adirs_get_hdg(id)
+    data.inputs.true_heading     = adirs_get_true_hdg(id)
+    data.inputs.is_heading_valid = adirs_is_hdg_ok(id)
 
-    data.inputs.track = get_track(id)
-    data.inputs.is_track_valid = is_track_ok(id)
+    data.inputs.track = adirs_get_track(id)
+    data.inputs.is_track_valid = adirs_is_track_ok(id)
 
-    if is_true_hdg_ok(id) and is_position_ok(id) and (get_lat(id) > 73 or get_lat(id) < -60) then
+    if adirs_is_true_hdg_ok(id) and adirs_is_position_ok(id) and (adirs_get_lat(id) > 73 or adirs_get_lat(id) < -60) then
         data.inputs.is_true_heading_showed = true
         data.inputs.is_true_heading_boxed_showed = get(Flaps_internal_config) > 0
     end
@@ -36,11 +36,11 @@ end
 function update_position(data)
     local id = data.id
 
-    data.misc.map_not_avail = not is_position_ok(id)
+    data.misc.map_not_avail = not adirs_is_position_ok(id)
 
     if not data.misc.map_not_avail then
-        data.inputs.plane_coords_lat = get_lat(id) 
-        data.inputs.plane_coords_lon = get_lon(id) 
+        data.inputs.plane_coords_lat = adirs_get_lat(id) 
+        data.inputs.plane_coords_lon = adirs_get_lon(id) 
     end
 end
 
@@ -100,9 +100,9 @@ local function update_navaid_bearing(data)
     -- These are necessary for ROSE-VOR and ROSE-ILS mode even if the
     -- VOR is not selected
     data.nav[1].crs = get(NAV_1_capt_obs)
-    data.nav[1].crs_is_computed = is_hdg_ok(id)
+    data.nav[1].crs_is_computed = adirs_is_hdg_ok(id)
     data.nav[2].crs = get(NAV_2_fo_obs)
-    data.nav[2].crs_is_computed = is_hdg_ok(id)
+    data.nav[2].crs_is_computed = adirs_is_hdg_ok(id)
     data.inputs.which_nav_is_active = data.id == ND_CAPT and 1 or 2
     
     data.nav[1].deviation_is_visible = get(NAV_1_is_valid) == 1

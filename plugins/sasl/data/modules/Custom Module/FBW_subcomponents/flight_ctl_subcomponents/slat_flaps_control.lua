@@ -49,13 +49,13 @@ function Slats_flaps_calc_and_control()
 
     if flaps_handle_delta ~= 0 then
         if last_flaps_handle_pos == 0 and flaps_handle_delta == 1 then
-            if get_avg_ias() <= 100 then
+            if adirs_get_avg_ias() <= 100 then
                 set(Flaps_internal_config, 2)-- 1+F
             else
                 set(Flaps_internal_config, 1)-- 1
             end
         elseif last_flaps_handle_pos == 2 and flaps_handle_delta == -1 then
-            if get_avg_ias() <= 210 then
+            if adirs_get_avg_ias() <= 210 then
                 set(Flaps_internal_config, 2)-- 1+F
             else
                 set(Flaps_internal_config, 1)-- 1
@@ -72,22 +72,22 @@ function Slats_flaps_calc_and_control()
             end
         end
     else
-        if get(Flaps_internal_config) == 1 and get_avg_ias() <= 100 and get(Override_flap_auto_extend_and_retract) == 0 then--go to 1+F
+        if get(Flaps_internal_config) == 1 and adirs_get_avg_ias() <= 100 and get(Override_flap_auto_extend_and_retract) == 0 then--go to 1+F
             set(Flaps_internal_config, 2)
         end
-        if get(Flaps_internal_config) == 2 and get_avg_ias() >= 210 and get(Override_flap_auto_extend_and_retract) == 0 then--back to 1
+        if get(Flaps_internal_config) == 2 and adirs_get_avg_ias() >= 210 and get(Override_flap_auto_extend_and_retract) == 0 then--back to 1
             set(Flaps_internal_config, 1)
         end
     end
 
     --slat alpha/speed lock
-    if last_flaps_handle_pos == 1 and flaps_handle_delta == -1 and (get_avg_aoa() > 8 or get_avg_ias() < 165) then
+    if last_flaps_handle_pos == 1 and flaps_handle_delta == -1 and (adirs_get_avg_aoa() > 8 or adirs_get_avg_ias() < 165) then
         set(Slat_alpha_locked, 1)
     end
-    if get(Slat_alpha_locked) == 1 and (get_avg_aoa() < 7.1 or get_avg_ias() > 171) then--de-activation
+    if get(Slat_alpha_locked) == 1 and (adirs_get_avg_aoa() < 7.1 or adirs_get_avg_ias() > 171) then--de-activation
         set(Slat_alpha_locked, 0)
     end
-    if get(Any_wheel_on_ground) == 1 and get_avg_ias() < 60 then--inhibition
+    if get(Any_wheel_on_ground) == 1 and adirs_get_avg_ias() < 60 then--inhibition
         set(Slat_alpha_locked, 0)
     end
 
