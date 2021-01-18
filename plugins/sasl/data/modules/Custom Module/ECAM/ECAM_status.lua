@@ -21,6 +21,7 @@ include('ECAM/ECAM_status/appr_procedures.lua')
 include('ECAM/ECAM_status/procedures.lua')
 include('ECAM/ECAM_status/information.lua')
 include('ECAM/ECAM_status/inop_sys.lua')
+include('ECAM/ECAM_status/maintain.lua')
 
 ecam_sts = {
     
@@ -49,9 +50,7 @@ ecam_sts = {
   
     get_inop_sys = ECAM_status_get_inop_sys,
     
-    get_maintenance = function()
-        return {  } -- TODO
-    end,
+    get_maintenance = ECAM_status_get_maintain,
     
     -- MISC --
   
@@ -325,4 +324,6 @@ function draw_sts_page()
     end 
 end
 
-
+function ecam_update_status_page()
+    ecam_update_status_page_maintain()
+end
