@@ -60,7 +60,7 @@ function FBW_law_reconfiguration(var_table)
 
     local abdnormal_condition = {
         (adirs_get_avg_pitch() > 50 or adirs_get_avg_pitch() < -30)   and (adirs_how_many_irs_partially_work() ~= 0 or adirs_how_many_irs_fully_work() ~= 0) and get(Any_wheel_on_ground) == 0,
-        (adirs_get_avg_pitch() > 150 or adirs_get_avg_pitch() < -150) and (adirs_how_many_irs_partially_work() ~= 0 or adirs_how_many_irs_fully_work() ~= 0) and get(Any_wheel_on_ground) == 0,
+        (adirs_get_avg_roll() > 125 or adirs_get_avg_roll() < -125)   and (adirs_how_many_irs_partially_work() ~= 0 or adirs_how_many_irs_fully_work() ~= 0) and get(Any_wheel_on_ground) == 0,
         (adirs_get_avg_aoa() > 30 or adirs_get_avg_aoa() < -15)       and adirs_how_many_irs_fully_work() ~= 0                                         and get(Any_wheel_on_ground) == 0,
         (adirs_get_avg_ias() > 440 or adirs_get_avg_ias() < 80)       and adirs_how_many_adrs_work() ~= 0                                              and get(Any_wheel_on_ground) == 0,
         adirs_get_avg_mach() > 0.91                             and adirs_how_many_adrs_work() ~= 0                                              and get(Any_wheel_on_ground) == 0,

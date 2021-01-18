@@ -64,7 +64,6 @@
 {f7e08394-7b0f-4713-8834-554fc0fdf7b3} event:/Flaps/FlapLeverDown
 {ff956f46-ccbb-4395-a6bc-1d64dddaff41} event:/Flaps/FlapLeverUp
 {c9cf63f7-c575-4691-823b-716d0e5e1ba9} event:/Flaps/Flaps
-{54f3f08c-e1d5-45c4-a077-b9e9848b1d6e} event:/GPWS/stall
 {c5925499-145f-464c-a9a5-68e8bf61c85a} event:/GPWS/dontsink
 {dee7d0b6-c5b3-4913-b44b-0b88c0cba1b3} event:/GPWS/glideslope
 {03a62505-77fa-4d1f-9909-235730bdae73} event:/GPWS/glideslopehard
@@ -78,6 +77,7 @@
 {afea93ae-a88b-4e20-8a4f-9b0012973d90} event:/GPWS/retardretard
 {2d14d45d-1864-475c-94a9-637967c3b6d3} event:/GPWS/sinkrate
 {cc8b46c4-cf1a-4fdb-87af-ebf43a711289} event:/GPWS/speed
+{54f3f08c-e1d5-45c4-a077-b9e9848b1d6e} event:/GPWS/stall
 {9dc45c96-d7b8-4113-9f87-d55798df5488} event:/GPWS/terr
 {4578cb21-776e-4754-9ae6-8114ddc112df} event:/GPWS/terrahead
 {ca51375b-903d-42af-86a6-7f0bee4871ff} event:/GPWS/terraheadpull
