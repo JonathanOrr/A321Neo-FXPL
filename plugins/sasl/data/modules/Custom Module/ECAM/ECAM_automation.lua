@@ -367,10 +367,19 @@ end
 
 function ecam_user_press_all(phase)
     if phase == SASL_COMMAND_BEGIN then
+        if get(Ecam_current_status) == ECAM_STATUS_SHOW_USER then
+            local next_page = (get(Ecam_current_page) % 12) + 1
+            set(Ecam_current_page, next_page)
+            set(Ecam_current_status, ECAM_STATUS_SHOW_ALL)
+            page_all_start_time = get(TIME)
+        end
+    elseif phase == SASL_COMMAND_CONTINUE and get(Ecam_current_status) ~= ECAM_STATUS_SHOW_ALL then
         set(Ecam_current_status, ECAM_STATUS_SHOW_ALL)
         page_all_start_time = get(TIME)
     elseif phase == SASL_COMMAND_END then
-        set(Ecam_current_status, ECAM_STATUS_SHOW_USER)
+        if get(Ecam_current_status) == ECAM_STATUS_SHOW_ALL then
+            set(Ecam_current_status, ECAM_STATUS_SHOW_USER)
+        end
     end
 end
 
