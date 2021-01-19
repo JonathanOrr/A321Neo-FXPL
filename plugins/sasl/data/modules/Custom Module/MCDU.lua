@@ -929,10 +929,6 @@ mcdu_entry = string.upper("")
 
 --update
 function update()
-    if get(globalPropertyf("sim/time/total_running_time_sec")) > 120 then
-        set(globalPropertyf("sim/time/total_running_time_sec"), 60)
-        set(globalPropertyf("sim/time/total_flight_time_sec"), 60)
-    end
 	perf_measure_start("MCDU:update()")
     if get(mcdu_page) == 0 then --on start
        mcdu_open_page(505) --open 505 A/C status
