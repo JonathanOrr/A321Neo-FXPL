@@ -206,15 +206,15 @@ fuel_window = contextWindow {
 
 PID_UI_window = contextWindow {
   name = "PID TUNING UI";
-  position = { 150 , 150 , 600, 260 };
+  position = { 150 , 150 , 600, 300 };
   noBackground = true ;
   proportional = false ;
-  minimumSize = { 600 , 260 };
-  maximumSize = { 600 , 260 };
+  minimumSize = { 600 , 300 };
+  maximumSize = { 600 , 300 };
   gravity = { 0 , 1 , 0 , 1 };
   visible = false ;
   components = {
-    PID_UI {position = { 0 , 0 , 600 , 260 }}
+    PID_UI {position = { 0 , 0 , 600 , 300 }}
   };
 }
 

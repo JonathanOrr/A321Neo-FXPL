@@ -13,7 +13,7 @@ function FBW_law_reconfiguration(var_table)
     local reconfiguration_conditions = {
         --ALT(NO PROTECTION), DIRECT, ALT
         {
-            --MISSING IAS/MACH DISAGREE
+            {adirs_how_many_adr_params_disagree() == 3, "AIR DATA (IAS/MACH) DISAGREE ALT LAW PROT IMPOSSIBLE"},
             {adirs_how_many_adrs_work() == 0, "TRIPLE ADR FAILURE"},
             {get(SFCC_1_status) == 0 and get(SFCC_2_status) == 0, "DOUBLE SFCC FAILURE"},
             {get(Hydraulic_G_press) < 1450 and get(Hydraulic_B_press) < 1450, "GREEN AND BLUE HYDRAULIC FAILURE"},
@@ -24,7 +24,7 @@ function FBW_law_reconfiguration(var_table)
         --ALT(REDUCED PROTECTION), DIRECT, ALT
         {
             {adirs_how_many_adrs_work() == 1, "DOUBLE SELF DETECTED ADR FAILURE"},
-            --MISSING ALPHA DISAGREE
+            {adirs_how_many_aoa_disagree() == 3 or adirs_how_many_aoa_failed() == 3, "AOA DISAGREEMENT/FAILURE NRM LAW PROT IMPOSSIBLE"},
             {get(ELAC_1_status) == 0 and get(ELAC_2_status) == 0, "DOUBLE ELAC FAILURE"},
             {get(FAILURE_FCTL_LAIL) == 1 and get(FAILURE_FCTL_RAIL) == 1, "DOUBLE AILERON FAILURE"},
             {get(FAILURE_FCTL_THS) == 1 or get(FAILURE_FCTL_THS_MECH) == 1, "THS JAMMED"},
@@ -59,11 +59,11 @@ function FBW_law_reconfiguration(var_table)
     }
 
     local abdnormal_condition = {
-        (adirs_get_avg_pitch() > 50 or adirs_get_avg_pitch() < -30)   and (adirs_how_many_irs_partially_work() ~= 0 or adirs_how_many_irs_fully_work() ~= 0) and get(Any_wheel_on_ground) == 0,
-        (adirs_get_avg_roll() > 125 or adirs_get_avg_roll() < -125)   and (adirs_how_many_irs_partially_work() ~= 0 or adirs_how_many_irs_fully_work() ~= 0) and get(Any_wheel_on_ground) == 0,
-        (adirs_get_avg_aoa() > 30 or adirs_get_avg_aoa() < -15)       and adirs_how_many_irs_fully_work() ~= 0                                         and get(Any_wheel_on_ground) == 0,
-        (adirs_get_avg_ias() > 440 or adirs_get_avg_ias() < 80)       and adirs_how_many_adrs_work() ~= 0                                              and get(Any_wheel_on_ground) == 0,
-        adirs_get_avg_mach() > 0.91                             and adirs_how_many_adrs_work() ~= 0                                              and get(Any_wheel_on_ground) == 0,
+        (adirs_get_avg_pitch() > 50 or adirs_get_avg_pitch() < -30)   and (adirs_how_many_irs_partially_work() ~= 0 or adirs_how_many_irs_fully_work() ~= 0)                                  and get(Any_wheel_on_ground) == 0,
+        (adirs_get_avg_roll() > 125 or adirs_get_avg_roll() < -125)   and (adirs_how_many_irs_partially_work() ~= 0 or adirs_how_many_irs_fully_work() ~= 0)                                  and get(Any_wheel_on_ground) == 0,
+        (adirs_get_avg_aoa() > 30 or adirs_get_avg_aoa() < -15)       and (adirs_how_many_irs_fully_work() ~= 0 and adirs_how_many_aoa_disagree() ~= 3 and  adirs_how_many_aoa_failed() ~= 3) and get(Any_wheel_on_ground) == 0,
+        (adirs_get_avg_ias() > 440 or adirs_get_avg_ias() < 80)       and adirs_how_many_adrs_work() ~= 0                                                                                     and get(Any_wheel_on_ground) == 0,
+        adirs_get_avg_mach() > 0.91                                   and adirs_how_many_adrs_work() ~= 0                                                                                     and get(Any_wheel_on_ground) == 0,
     }
 
     --entered abnormal conditions
@@ -113,6 +113,7 @@ function FBW_law_reconfiguration(var_table)
     set(FBW_lateral_law,       3)
     set(FBW_vertical_law,      3)
     set(FBW_yaw_law,           3)
+    set(FBW_alt_to_direct_law, 0)
 
     --pitch law priority order 2 --> 3 --> 1 --> 5 --> 4
     for i = 1, #reconfiguration_conditions[2] do
@@ -216,18 +217,21 @@ function FBW_law_reconfiguration(var_table)
     if get(FBW_vertical_law) ~= FBW_NORMAL_LAW and get(FBW_vertical_law) ~= FBW_DIRECT_LAW and get(FBW_vertical_law) ~= FBW_MECHANICAL_BACKUP_LAW then
         if (get(Gear_handle) == 1 and get(FBW_vertical_flare_mode_ratio) == 1) or (get(Gear_handle) == 1 and (get(Front_gear_deployment) == 1 and get(Left_gear_deployment) == 1 and get(Right_gear_deployment) == 1)) then
             set(FBW_vertical_law, FBW_DIRECT_LAW)
+            set(FBW_alt_to_direct_law, 1)
             gear_down_direct = true
         end
     end
     if get(FBW_lateral_law) ~= FBW_NORMAL_LAW and get(FBW_lateral_law) ~= FBW_DIRECT_LAW and get(FBW_lateral_law) ~= FBW_MECHANICAL_BACKUP_LAW then
         if (get(Gear_handle) == 1 and get(FBW_vertical_flare_mode_ratio) == 1) or (get(Gear_handle) == 1 and (get(Front_gear_deployment) == 1 and get(Left_gear_deployment) == 1 and get(Right_gear_deployment) == 1)) then
             set(FBW_lateral_law, FBW_DIRECT_LAW)
+            set(FBW_alt_to_direct_law, 1)
             gear_down_direct = true
         end
     end
     if get(FBW_yaw_law) ~= FBW_NORMAL_LAW and get(FBW_yaw_law) ~= FBW_DIRECT_LAW and get(FBW_yaw_law) ~= FBW_MECHANICAL_BACKUP_LAW then
         if (get(Gear_handle) == 1 and get(FBW_vertical_flare_mode_ratio) == 1) or (get(Gear_handle) == 1 and (get(Front_gear_deployment) == 1 and get(Left_gear_deployment) == 1 and get(Right_gear_deployment) == 1)) then
             set(FBW_yaw_law, FBW_ALT_NO_PROT_LAW)
+            set(FBW_alt_to_direct_law, 1)
             gear_down_direct = true
         end
     end

@@ -48,7 +48,7 @@ function ECAM_status_get_inop_sys()
         put_inop_sys_msg_2(messages, FAC_1_status, FAC_2_status, "FAC")
 
         -- FBW
-        if get(FBW_status) < 2 then
+        if get(FBW_total_control_law) < FBW_NORMAL_LAW then
             table.insert(messages, "F/CTL PROT")
         end
 

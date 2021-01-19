@@ -212,7 +212,7 @@ P _gear/0/_lonE 7.0
 P _gear/0/_lonN 7.0
 P _gear/0/_lonR 99.0
 P _gear/0/_scon 139137.109375000
-P _gear/0/_stat_def 0.120315686
+P _gear/0/_stat_def 0.120315701
 P _gear/0/_steerdeg_hispeed 5.0
 P _gear/0/_steerdeg_lospeed 75.0
 P _gear/0/_strut_comp 0.899999976
@@ -246,7 +246,7 @@ P _gear/1/_lonE -6.0
 P _gear/1/_lonN -6.0
 P _gear/1/_lonR 2.0
 P _gear/1/_scon 139137.109375000
-P _gear/1/_stat_def 0.740050554
+P _gear/1/_stat_def 0.740050673
 P _gear/1/_steerdeg_hispeed 0.0
 P _gear/1/_steerdeg_lospeed 0.0
 P _gear/1/_strut_comp 0.699999988
@@ -280,7 +280,7 @@ P _gear/2/_lonE -6.0
 P _gear/2/_lonN -6.0
 P _gear/2/_lonR 2.0
 P _gear/2/_scon 139137.109375000
-P _gear/2/_stat_def 0.740050554
+P _gear/2/_stat_def 0.740050673
 P _gear/2/_steerdeg_hispeed 0.0
 P _gear/2/_steerdeg_lospeed 0.0
 P _gear/2/_strut_comp 0.699999988
@@ -71373,7 +71373,7 @@ P acf/_feathered_pitch 0.0
 P acf/_ff_rat_idle_JET 0.071999997
 P acf/_ff_rat_idle_PRP 0.0
 P acf/_file_writer_version 115103
-P acf/_flap1_cd 0.194999993
+P acf/_flap1_cd 0.144999996
 P acf/_flap1_cl 1.544999957
 P acf/_flap1_cm -0.365000010
 P acf/_flap1_cratR 0.109999999
@@ -71397,7 +71397,7 @@ P acf/_flap1_ptch_above_50 0
 P acf/_flap1_roll 0.0
 P acf/_flap1_roll_above_50 0
 P acf/_flap1_type 3
-P acf/_flap2_cd 0.224999994
+P acf/_flap2_cd 0.165000007
 P acf/_flap2_cl 1.544999957
 P acf/_flap2_cm -0.384999990
 P acf/_flap2_cratR 0.159999996
