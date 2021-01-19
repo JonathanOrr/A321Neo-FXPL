@@ -907,7 +907,7 @@ local function update_n1_mode_and_limits()
             set(Eng_N1_flex_temp, 0) -- Reset FLEX temp to avoid G/A triggering of FLEX or other situations
         end
 
-    elseif thr_pos > -0.05 then
+    elseif thr_pos > -0.05 or get(Either_Aft_on_ground) == 0 then   -- Reverse protection
         set(Eng_N1_mode, 4) -- IDLE
         last_time_toga = 0
     elseif thr_pos <= -0.05 then
