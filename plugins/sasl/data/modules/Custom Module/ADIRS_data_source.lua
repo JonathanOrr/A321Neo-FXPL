@@ -90,7 +90,7 @@ end
 ----------------------------------------------------------------------------------------------------
 
 function adirs_is_ias_ok(i)
-    return adirs_is_adr_working(i)
+    return adirs_is_adr_working(i) and adirs_get_ias(i) > 40 and adirs_get_ias(i) < 400
 end
 
 function adirs_get_ias(i)
@@ -102,7 +102,7 @@ function adirs_get_ias_trend(i)
 end
 
 function adirs_is_tas_ok(i)
-    return adirs_is_adr_working(i)
+    return adirs_is_adr_working(i) and adirs_is_ias_ok(i) and adirs_is_alt_ok(i)
 end
 
 function adirs_get_tas(i)
@@ -118,7 +118,7 @@ function adirs_get_aoa(i)
 end
 
 function adirs_is_alt_ok(i)
-    return adirs_is_adr_working(i)
+    return adirs_is_adr_working(i) and adirs_get_alt(i) < 45000 and adirs_get_alt(i) > -2000  
 end
 
 function adirs_get_alt(i)
@@ -134,7 +134,7 @@ function adirs_get_vs(i)
 end
 
 function adirs_is_wind_ok(i)
-    return adirs_is_adr_working(i) and adirs_ir_works_nav_mode(i)
+    return adirs_is_adr_working(i) and adirs_ir_works_nav_mode(i) and adirs_is_ias_ok(i)
 end
 
 function adirs_get_wind_spd(i)
@@ -146,7 +146,7 @@ function adirs_get_wind_dir(i)
 end
 
 function adirs_is_mach_ok(i)
-    return adirs_is_adr_working(i)
+    return adirs_is_adr_working(i) and  adirs_is_tas_ok(i)
 end
 
 function adirs_get_mach(i)
