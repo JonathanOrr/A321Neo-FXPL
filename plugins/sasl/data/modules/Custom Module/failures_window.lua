@@ -63,7 +63,26 @@ local failures_data = {
             {name="AOA CAPT\nFAULT",  status=false, dataref=FAILURE_SENSOR_AOA_CAPT },
             {name="AOA FO\nFAULT",  status=false, dataref=FAILURE_SENSOR_AOA_FO },
             {name="AOA STBY\nFAULT",  status=false, dataref=FAILURE_SENSOR_AOA_STBY },
+
+            {name="AOA CAPT\nERRONEOUS",  status=false,   dataref=FAILURE_SENSOR_AOA_CAPT_ERR },
+            {name="AOA FO\nERRONEOUS",    status=false,   dataref=FAILURE_SENSOR_AOA_FO_ERR },
+            {name="AOA STBY\nERRONEOUS",  status=false,   dataref=FAILURE_SENSOR_AOA_STBY_ERR },
+            {name="PITOT CAPT\nERRONEOUS",  status=false, dataref=FAILURE_SENSOR_PITOT_CAPT_ERR },
+            {name="PITOT FO\nERRONEOUS",    status=false, dataref=FAILURE_SENSOR_PITOT_FO_ERR },
+            {name="PITOT STBY\nERRONEOUS",  status=false, dataref=FAILURE_SENSOR_PITOT_STBY_ERR },
+            {name="STAT.P. CAPT\nERRONEOUS",  status=false, dataref=FAILURE_SENSOR_STATIC_CAPT_ERR },
+            {name="STAT.P. FO\nERRONEOUS",    status=false, dataref=FAILURE_SENSOR_STATIC_FO_ERR },
+            {name="STAT.P. STBY\nERRONEOUS",  status=false, dataref=FAILURE_SENSOR_STATIC_STBY_ERR },            
             
+            {name="IR1 PITCH\nERRONEOUS",  status=false, dataref=FAILURE_IR1_ATT_PITCH_ERR },            
+            {name="IR2 PITCH\nERRONEOUS",  status=false, dataref=FAILURE_IR2_ATT_PITCH_ERR },            
+            {name="IR3 PITCH\nERRONEOUS",  status=false, dataref=FAILURE_IR3_ATT_PITCH_ERR },            
+            {name="IR1 ROLL\nERRONEOUS",  status=false, dataref=FAILURE_IR1_ATT_ROLL_ERR },            
+            {name="IR2 ROLL\nERRONEOUS",  status=false, dataref=FAILURE_IR2_ATT_ROLL_ERR },            
+            {name="IR3 ROLL\nERRONEOUS",  status=false, dataref=FAILURE_IR3_ATT_ROLL_ERR },            
+            {name="IR1 HDG\nERRONEOUS",  status=false, dataref=FAILURE_IR1_HDG_ERR },            
+            {name="IR2 HDG\nERRONEOUS",  status=false, dataref=FAILURE_IR2_HDG_ERR },            
+            {name="IR3 HDG\nERRONEOUS",  status=false, dataref=FAILURE_IR3_HDG_ERR },            
             
         }
     },

@@ -29,7 +29,7 @@ function Ailerons_control(lateral_input, has_florence_kit, ground_spoilers_mode)
     --TRAVEL TARGETS CALTULATION
     --ground spoilers
     if ground_spoilers_mode == 2 and get(FBW_total_control_law) == FBW_NORMAL_LAW then
-        if has_florence_kit == true and get(Flaps_internal_config) ~= 0 and get_avg_pitch() < 2.5 then
+        if has_florence_kit == true and get(Flaps_internal_config) ~= 0 and adirs_get_avg_pitch() < 2.5 then
             l_aileron_travel_target = -ailerons_max_def
             r_aileron_travel_target = -ailerons_max_def
         end
@@ -282,7 +282,7 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
     end
 
     --reduce speedbrakes retraction speeds in high speed conditions
-    if (get_ias(PFD_CAPT) >= 315 or get_ias(PFD_FO) >= 315 or get(Capt_Mach) >= 0.75 or get(Fo_Mach) >= 0.75) and in_auto_flight then
+    if (adirs_get_avg_ias()>= 315 or adirs_get_avg_mach() >= 0.75) and in_auto_flight then
         --check if any spoilers are retracting and slow down accordingly
         for i = 1, var_table.num_of_spoils_per_wing do
             if l_spoilers_spdbrk_targets[i] < get(var_table.l_spoilers_datarefs[i]) then

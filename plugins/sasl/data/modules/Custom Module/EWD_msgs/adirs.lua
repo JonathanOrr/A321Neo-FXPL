@@ -609,13 +609,13 @@ local speed_margin = 4
 local mach_margin = 0.006
 
 local function get_no_ldg_cond()
-    return (get_avg_ias() > 350 + speed_margin) or (get_avg_mach() > 0.82 + mach_margin)
+    return (adirs_get_avg_ias() > 350 + speed_margin) or (adirs_get_avg_mach() > 0.82 + mach_margin)
 end
 local function get_ldg_cond()
-    return ((get_avg_ias() > 280 + speed_margin) or (get_avg_mach() > 0.67 + mach_margin)) and (get(Front_gear_deployment) > 0.01 or get(Left_gear_deployment) > 0.01 or get(Right_gear_deployment) > 0.01)
+    return ((adirs_get_avg_ias() > 280 + speed_margin) or (adirs_get_avg_mach() > 0.67 + mach_margin)) and (get(Front_gear_deployment) > 0.01 or get(Left_gear_deployment) > 0.01 or get(Right_gear_deployment) > 0.01)
 end
 local function get_vfe_cond()
-    return (get_avg_ias() > get_vfe() + speed_margin) and get(Flaps_internal_config) > 0
+    return (adirs_get_avg_ias() > get_vfe() + speed_margin) and get(Flaps_internal_config) > 0
 end
 
 Message_OVERSPEED_SPEED = {
@@ -853,7 +853,7 @@ MessageGroup_HDG_DISCREPANCY = {
     },
 
     is_active = function()
-        return math.abs(get_hdg(PFD_CAPT) - get_hdg(PFD_FO)) > 5
+        return adirs_pfds_disagree_on_hdg()
     end,
 
     is_inhibited = function()
@@ -908,7 +908,7 @@ MessageGroup_ATT_DISCREPANCY = {
     },
 
     is_active = function()
-        return math.abs(get_pitch(PFD_CAPT) - get_pitch(PFD_FO)) > 5 or math.abs(get_roll(PFD_CAPT) - get_roll(PFD_FO)) > 5
+        return adirs_pfds_disagree_on_att()
     end,
 
     is_inhibited = function()
@@ -962,7 +962,7 @@ MessageGroup_ALTI_DISCREPANCY = {
     },
 
     is_active = function()
-        return math.abs(get_alt(PFD_CAPT) - get_alt(PFD_FO)) > 250
+        return adirs_pfds_disagree_on_alt()
     end,
 
     is_inhibited = function()
@@ -1076,7 +1076,7 @@ MessageGroup_IAS_DISCREPANCY = {
     },
 
     is_active = function()
-        return math.abs(get_ias(PFD_CAPT) - get_ias(PFD_FO)) > 3
+        return adirs_pfds_disagree_on_ias()
     end,
 
     is_inhibited = function()

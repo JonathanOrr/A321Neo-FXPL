@@ -16,8 +16,8 @@ function Elevator_control(vertical_input, in_direct_law)
     local max_up_deflection = -30
     local max_dn_deflection = 17
 
-    local max_direct_law_up = -(3.704475 + (15.8338 - 3.703375) / (1 + (Math_clamp_lower(get_avg_ias(), 0) / 252.8894)^8.89914))
-    local max_direct_law_dn = 3.759707 + (11.8902 - 3.759707) / (1 + (Math_clamp_lower(get_avg_ias(), 0) / 321.8764)^8.21922)
+    local max_direct_law_up = -(3.704475 + (15.8338 - 3.703375) / (1 + (Math_clamp_lower(adirs_get_avg_ias(), 0) / 252.8894)^8.89914))
+    local max_direct_law_dn = 3.759707 + (11.8902 - 3.759707) / (1 + (Math_clamp_lower(adirs_get_avg_ias(), 0) / 321.8764)^8.21922)
 
     --surface variables--
     local l_elev_spd = 45

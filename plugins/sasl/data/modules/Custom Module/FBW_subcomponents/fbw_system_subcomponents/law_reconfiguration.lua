@@ -14,7 +14,7 @@ function FBW_law_reconfiguration(var_table)
         --ALT(NO PROTECTION), DIRECT, ALT
         {
             --MISSING IAS/MACH DISAGREE
-            {how_many_adrs_work() == 0, "TRIPLE ADR FAILURE"},
+            {adirs_how_many_adrs_work() == 0, "TRIPLE ADR FAILURE"},
             {get(SFCC_1_status) == 0 and get(SFCC_2_status) == 0, "DOUBLE SFCC FAILURE"},
             {get(Hydraulic_G_press) < 1450 and get(Hydraulic_B_press) < 1450, "GREEN AND BLUE HYDRAULIC FAILURE"},
             {var_table.abnormal_elac_reset_required == 1, "ABNORMAL LAW AWAITING ELAC RESET"},--put here because of priority order (abnormal exited before reset)
@@ -23,7 +23,7 @@ function FBW_law_reconfiguration(var_table)
 
         --ALT(REDUCED PROTECTION), DIRECT, ALT
         {
-            {how_many_adrs_work() == 1, "DOUBLE SELF DETECTED ADR FAILURE"},
+            {adirs_how_many_adrs_work() == 1, "DOUBLE SELF DETECTED ADR FAILURE"},
             --MISSING ALPHA DISAGREE
             {get(ELAC_1_status) == 0 and get(ELAC_2_status) == 0, "DOUBLE ELAC FAILURE"},
             {get(FAILURE_FCTL_LAIL) == 1 and get(FAILURE_FCTL_RAIL) == 1, "DOUBLE AILERON FAILURE"},
@@ -33,7 +33,7 @@ function FBW_law_reconfiguration(var_table)
             {get(ELAC_1_status) == 0 and get(Hydraulic_Y_press) < 1450, "ELAC 1 AND YELLOW HYDRAULIC FAILURE"},
             {get(FAILURE_FCTL_LELEV) == 1 or get(FAILURE_FCTL_RELEV) == 1, "SINGLE ELEVATOR FAILURE"},
             --MSSING SIDESTICK FAILURE
-            {how_many_irs_fully_work() == 1, "DOUBLE SELF DETECTED IR FAILURE"},
+            {adirs_how_many_irs_fully_work() == 1, "DOUBLE SELF DETECTED IR FAILURE"},
             {get(FAILURE_FCTL_LSPOIL_1) == 1 and get(FAILURE_FCTL_LSPOIL_2) == 1 and get(FAILURE_FCTL_LSPOIL_3) == 1 and get(FAILURE_FCTL_LSPOIL_4) == 1 and get(FAILURE_FCTL_LSPOIL_5) == 1 and get(FAILURE_FCTL_RSPOIL_1) == 1 and get(FAILURE_FCTL_RSPOIL_2) == 1 and get(FAILURE_FCTL_RSPOIL_3) == 1 and get(FAILURE_FCTL_RSPOIL_4) == 1 and get(FAILURE_FCTL_RSPOIL_5) == 1, "ALL SPOILERS FAILURE"},
             {get(SEC_1_status) == 0 and get(SEC_2_status) == 0 and get(SEC_3_status) == 0, "TRIPLE SEC FAILURE"},
         },
@@ -49,7 +49,7 @@ function FBW_law_reconfiguration(var_table)
 
         --DIRECT, DIRECT, MECHANICAL
         {
-            {how_many_irs_fully_work() == 0, "TRIPLE IR FAILURE"}
+            {adirs_how_many_irs_fully_work() == 0, "TRIPLE IR FAILURE"}
         },
 
         --DIRECT, DIRECT, ALT
@@ -59,11 +59,11 @@ function FBW_law_reconfiguration(var_table)
     }
 
     local abdnormal_condition = {
-        (get_avg_pitch() > 50 or get_avg_pitch() < -30)   and (how_many_irs_partially_work() ~= 0 or how_many_irs_fully_work() ~= 0) and get(Any_wheel_on_ground) == 0,
-        (get_avg_pitch() > 150 or get_avg_pitch() < -150) and (how_many_irs_partially_work() ~= 0 or how_many_irs_fully_work() ~= 0) and get(Any_wheel_on_ground) == 0,
-        (get_avg_aoa() > 30 or get_avg_aoa() < -15)       and how_many_irs_fully_work() ~= 0                                         and get(Any_wheel_on_ground) == 0,
-        (get_avg_ias() > 440 or get_avg_ias() < 80)       and how_many_adrs_work() ~= 0                                              and get(Any_wheel_on_ground) == 0,
-        get_avg_mach() > 0.91                             and how_many_adrs_work() ~= 0                                              and get(Any_wheel_on_ground) == 0,
+        (adirs_get_avg_pitch() > 50 or adirs_get_avg_pitch() < -30)   and (adirs_how_many_irs_partially_work() ~= 0 or adirs_how_many_irs_fully_work() ~= 0) and get(Any_wheel_on_ground) == 0,
+        (adirs_get_avg_roll() > 125 or adirs_get_avg_roll() < -125)   and (adirs_how_many_irs_partially_work() ~= 0 or adirs_how_many_irs_fully_work() ~= 0) and get(Any_wheel_on_ground) == 0,
+        (adirs_get_avg_aoa() > 30 or adirs_get_avg_aoa() < -15)       and adirs_how_many_irs_fully_work() ~= 0                                         and get(Any_wheel_on_ground) == 0,
+        (adirs_get_avg_ias() > 440 or adirs_get_avg_ias() < 80)       and adirs_how_many_adrs_work() ~= 0                                              and get(Any_wheel_on_ground) == 0,
+        adirs_get_avg_mach() > 0.91                             and adirs_how_many_adrs_work() ~= 0                                              and get(Any_wheel_on_ground) == 0,
     }
 
     --entered abnormal conditions

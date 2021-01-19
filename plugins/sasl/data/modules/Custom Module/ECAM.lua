@@ -59,7 +59,7 @@ local function draw_ecam_lower_section_fixed()
     sasl.gl.drawText(Font_AirbusDUL, size[1]-15, size[2]/2-375, "KG", 32, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2-407, "H", 30, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
 
-    local isa_displayed = get(Capt_Baro) > 29.91 and get(Capt_Baro) < 29.93 and is_adr_working(PFD_CAPT)
+    local isa_displayed = get(Capt_Baro) > 29.91 and get(Capt_Baro) < 29.93 and adirs_is_adr_working(PFD_CAPT)
 
     if isa_displayed then
         sasl.gl.drawText(Font_AirbusDUL, 100, size[2]/2-442, "ISA", 32, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
@@ -89,7 +89,7 @@ local function draw_ecam_lower_section()
     --left section
     local tat = "XX"
     local ota = "XX"
-    if is_adr_working(PFD_CAPT) then
+    if adirs_is_adr_working(PFD_CAPT) then
         ota = Round(get(OTA), 0)
         if ota > 0 then
             ota = "+" .. ota
@@ -102,7 +102,7 @@ local function draw_ecam_lower_section()
     sasl.gl.drawText(Font_AirbusDUL, 190, size[2]/2-372, tat, 32, false, false, TEXT_ALIGN_RIGHT, tat == "XX" and ECAM_ORANGE or ECAM_GREEN)
     sasl.gl.drawText(Font_AirbusDUL, 190, size[2]/2-407, ota, 32, false, false, TEXT_ALIGN_RIGHT, ota == "XX" and ECAM_ORANGE or ECAM_GREEN)
 
-    local isa_displayed = get(Capt_Baro) > 29.91 and get(Capt_Baro) < 29.93 and is_adr_working(PFD_CAPT)
+    local isa_displayed = get(Capt_Baro) > 29.91 and get(Capt_Baro) < 29.93 and adirs_is_adr_working(PFD_CAPT)
     if isa_displayed then
         local delta_isa = Round(get(TAT) - get_isa(), 0)
         if delta_isa > 0 then
@@ -150,6 +150,7 @@ function update()
 	ecam_update_fuel_page()
 	ecam_update_eng_page()  -- This must be called even if the page is not showed to update some stuffs for EWD
 	ecam_update_cruise_page()
+    ecam_update_status_page() -- This must be called even if the page is not showed
 
     if get(Ecam_current_page) == 3 then
         ecam_update_press_page()

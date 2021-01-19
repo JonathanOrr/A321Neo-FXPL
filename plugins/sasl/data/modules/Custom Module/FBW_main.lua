@@ -89,7 +89,7 @@ local cws_actual = 0
 local lvl_flt_load_constant = math.cos(math.rad(get(Flightmodel_pitch))) / math.cos(math.rad(Math_clamp(get(Flightmodel_roll), -33, 33)))
 
 function update()
-    local C_star = get(Total_vertical_g_load) + ((get_avg_ias() * 0.514444) * math.rad(get(True_pitch_rate)) / 9.8 )
+    local C_star = get(Total_vertical_g_load) + ((adirs_get_avg_ias() * 0.514444) * math.rad(get(True_pitch_rate)) / 9.8 )
     local flaps_clean_C_star_up = Math_rescale(0, 3.6, 67, 2.5, math.abs(get(Flightmodel_roll)))
     local flaps_clean_C_star_dn = Math_rescale(0, -2.8, 67, -1, math.abs(get(Flightmodel_roll)))
     local flaps_C_star_up = Math_rescale(0, 2.8, 67, 2, math.abs(get(Flightmodel_roll)))
@@ -194,8 +194,8 @@ function update()
         if get(FBW_kill_switch) == 0 then
             --CASCADE: SIDESTICK --> G LOAD PID --> PITCH RATE PID --> CODED STABILITY / FILTERING --> ELEVATOR
             --slowly start to enable the pitch for vmax protection as the speed overshoots vmax and heads towards vmax prot
-            vmax_prot_activation_ratio = Math_clamp((get_ias(PFD_CAPT) - get(Capt_fixed_VMAX)) / (get(Capt_VMAX_prot) - get(Capt_fixed_VMAX)), 0, 1)
-            vmax_prot_output = Math_lerp(-1, SSS_PID(FBW_PID_arrays.SSS_FBW_vmax_prot_pitch, (get_ias(PFD_CAPT) + get_ias(PFD_FO)) / 2 - (get(Capt_VMAX_prot) + get(Fo_VMAX_prot)) / 2), vmax_prot_activation_ratio)
+            vmax_prot_activation_ratio = Math_clamp((adirs_get_ias(PFD_CAPT) - get(Capt_fixed_VMAX)) / (get(Capt_VMAX_prot) - get(Capt_fixed_VMAX)), 0, 1)
+            vmax_prot_output = Math_lerp(-1, SSS_PID(FBW_PID_arrays.SSS_FBW_vmax_prot_pitch, (adirs_get_ias(PFD_CAPT) + adirs_get_ias(PFD_FO)) / 2 - (get(Capt_VMAX_prot) + get(Fo_VMAX_prot)) / 2), vmax_prot_activation_ratio)
             FBW_PID_arrays.SSS_FBW_G_load_pitch.Min_out = Math_clamp_lower(vmax_prot_output, SSS_PID(FBW_PID_arrays.SSS_FBW_pitch_down_limit, -15 - get(Flightmodel_pitch)))
             FBW_PID_arrays.SSS_FBW_G_load_pitch.Max_out = Math_clamp_higher(SSS_PID_DPV(FBW_PID_arrays.SSS_FBW_stall_prot_pitch, 100000000, get(Alpha)), SSS_PID(FBW_PID_arrays.SSS_FBW_pitch_up_limit, 30 - get(Flightmodel_pitch)))
             --pitch rate stability[used to temperarily guard the G load before overshoot stops]
@@ -223,7 +223,7 @@ function update()
 
         if get(FBW_kill_switch) == 0 then
             set(FBW_augmented_Roll, Set_anim_value(get(FBW_augmented_Roll), Roll_rate_output, -1, 1, 1.8))
-            set(FBW_augmented_Pitch, Set_anim_value(get(FBW_augmented_Pitch), pitch_rate_correction, -1, 1, get_avg_ias() > 160 and (get_avg_ias() > 200 and 1.15 or 1.85) or 2.25))
+            set(FBW_augmented_Pitch, Set_anim_value(get(FBW_augmented_Pitch), pitch_rate_correction, -1, 1, adirs_get_avg_ias() > 160 and (adirs_get_avg_ias() > 200 and 1.15 or 1.85) or 2.25))
 
             --test BP
             cws_desired = FBW_PID_arrays.SSS_FBW_CWS_trim.Proportional + FBW_PID_arrays.SSS_FBW_CWS_trim.Integral + FBW_PID_arrays.SSS_FBW_CWS_trim.Derivative

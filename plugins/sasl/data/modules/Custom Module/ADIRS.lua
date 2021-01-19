@@ -38,6 +38,13 @@ local gps_start_time_point = {0,0}
 local gps_1_offset = math.random() * 200 - 100
 local gps_2_offset = math.random() * 200 - 100
 
+-- The following 3 randomized values are used for generate errors on failures
+local random_err = {}
+random_err[1] = math.random()
+random_err[2] = math.random()
+random_err[3] = math.random()
+
+
 ----------------------------------------------------------------------------------------------------
 -- Classes
 ----------------------------------------------------------------------------------------------------
@@ -173,17 +180,17 @@ function ADIRS:update_adr_dr()
 end
 
 function ADIRS:update_adr_data()
-
+    
     if self.adr_status == ADR_STATUS_ON then
-        self.ias = get(self.ias_dataref) + self.adr_ias_offset
-        self.ias_trend = get(self.ias_trend_dataref)
-        self.tas = get(self.tas_dataref) + self.adr_ias_offset
-        self.mach = get(self.mach_dataref)
-        self.alt = get(self.baroalt_dataref) + self.adr_alt_offset
-        self.vs  = get(self.vvi_dataref)
+        self.ias = get(self.ias_dataref) + self.adr_ias_offset + get(self.err_pitot_dataref) * (random_err[self.id] > 0.5 and random_err[self.id] * 50 or (random_err[self.id]-1) * 50)
+        self.ias_trend = get(self.ias_trend_dataref) + get(self.err_pitot_dataref) * (math.random()*10)
+        self.tas = get(self.tas_dataref) + self.adr_ias_offset + get(self.err_pitot_dataref) * (self.ias/10)
+        self.mach = get(self.mach_dataref) + get(self.err_pitot_dataref) * (random_err[self.id]/2)
+        self.alt = get(self.baroalt_dataref) + self.adr_alt_offset + get(self.err_static_dataref) * (-10000*(random_err[self.id]+0.1))
+        self.vs  = get(self.vvi_dataref) + get(self.err_static_dataref) * ((random_err[self.id]-0.5)*1000)
         
         if self.ir_status == IR_STATUS_ALIGNED then
-            self.wind_spd = get(Wind_SPD)
+            self.wind_spd = get(Wind_SPD) + get(self.err_pitot_dataref) * (self.ias/10)
             self.wind_dir = get(Wind_HDG)
         end
     end    
@@ -289,7 +296,7 @@ function ADIRS:update_ir_data()
         self.lat   = get(Aircraft_lat)
         self.lon   = get(Aircraft_long)
         self.gs    = get(Ground_speed_kts)
-        self.hdg   = get(Flightmodel_mag_heading)
+        self.hdg   = (get(Flightmodel_mag_heading) + get(self.err_hdg_dataref) * (random_err[self.id] > 0.5 and -1 or 1) * (random_err[self.id]+0.5) * 180) % 360
         self.true_hdg = get(Flightmodel_true_heading)
         self.g_load_vert = get(Total_vertical_g_load)
         self.g_load_lat  = get(Total_lateral_g_load)
@@ -297,11 +304,11 @@ function ADIRS:update_ir_data()
     end
 
     if self.ir_status == IR_STATUS_ALIGNED or self.ir_status == IR_STATUS_ATT_ALIGNED then
-        self.pitch = get(self.pitch_dataref)
-        self.roll = get(self.roll_dataref)
-        self.aoa = get(Alpha) * (1-get(self.fail_aoa_dataref))
+        self.pitch = get(self.pitch_dataref) + get(self.err_pitch_dataref) * (random_err[self.id] > 0.5 and -1 or 1) * (random_err[self.id]+0.5) * 20
+        self.roll = get(self.roll_dataref) + get(self.err_roll_dataref) * (random_err[self.id] > 0.5 and -1 or 1) * (random_err[self.id]+0.5) * 20
+        self.aoa = (get(Alpha) + get(self.err_aoa_dataref)*(random_err[self.id]+0.5)*10) * (1-get(self.fail_aoa_dataref))
         if self.ir_status == IR_STATUS_ATT_ALIGNED and not self.ir_is_waiting_hdg then
-            self.hdg = get(Flightmodel_mag_heading) + self.manual_hdg_offset
+            self.hdg = (get(Flightmodel_mag_heading) + self.manual_hdg_offset + get(self.err_hdg_dataref) * (random_err[self.id] > 0.5 and -1 or 1) * (random_err[self.id]+0.5) * 180) % 360
         end
     end
     
@@ -410,6 +417,13 @@ local function init_adirs()
             pitch_dataref = Capt_pitch,
             roll_dataref = Capt_bank,
             fail_aoa_dataref = FAILURE_SENSOR_AOA_CAPT,
+            err_aoa_dataref = FAILURE_SENSOR_AOA_CAPT_ERR,
+            err_pitot_dataref = FAILURE_SENSOR_PITOT_CAPT_ERR,
+            err_static_dataref = FAILURE_SENSOR_STATIC_CAPT_ERR,
+            err_pitch_dataref = FAILURE_IR1_ATT_PITCH_ERR,
+            err_roll_dataref  = FAILURE_IR1_ATT_ROLL_ERR,
+            err_hdg_dataref = FAILURE_IR1_HDG_ERR,
+
             })
     ADIRS_sys[ADIRS_2] = ADIRS:create({
             id = ADIRS_2,
@@ -427,6 +441,12 @@ local function init_adirs()
             pitch_dataref = Fo_pitch,
             roll_dataref = Fo_bank,
             fail_aoa_dataref = FAILURE_SENSOR_AOA_FO,
+            err_aoa_dataref = FAILURE_SENSOR_AOA_FO_ERR,
+            err_pitot_dataref = FAILURE_SENSOR_PITOT_FO_ERR,
+            err_static_dataref = FAILURE_SENSOR_STATIC_FO_ERR,
+            err_pitch_dataref = FAILURE_IR2_ATT_PITCH_ERR,
+            err_roll_dataref  = FAILURE_IR2_ATT_ROLL_ERR,
+            err_hdg_dataref = FAILURE_IR2_HDG_ERR,
             })
     ADIRS_sys[ADIRS_3] = ADIRS:create({
             id = ADIRS_3,
@@ -444,6 +464,13 @@ local function init_adirs()
             pitch_dataref = Fo_pitch,
             roll_dataref = Fo_bank,
             fail_aoa_dataref = FAILURE_SENSOR_AOA_STBY,
+            err_aoa_dataref = FAILURE_SENSOR_AOA_STBY_ERR,
+            err_pitot_dataref = FAILURE_SENSOR_PITOT_STBY_ERR,
+            err_static_dataref = FAILURE_SENSOR_STATIC_STBY_ERR,
+            err_pitch_dataref = FAILURE_IR3_ATT_PITCH_ERR,
+            err_roll_dataref  = FAILURE_IR3_ATT_ROLL_ERR,
+            err_hdg_dataref = FAILURE_IR3_HDG_ERR,
+
             })
     
     ADIRS_sys[ADIRS_1]:init()

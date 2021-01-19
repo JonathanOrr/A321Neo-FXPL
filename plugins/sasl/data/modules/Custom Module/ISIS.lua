@@ -54,9 +54,9 @@ function draw()
             sasl.gl.drawText (Font_AirbusDUL, 222, 40, "STD", 28, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
         end
 
-        if is_mach_ok(PFD_CAPT) then
+        if adirs_is_mach_ok(PFD_CAPT) then
             -- Mach number, this is available only if the ADR for the Capt is ok
-            local good_mach = Round(get_mach(PFD_CAPT) * 100, 0)
+            local good_mach = Round(adirs_get_mach(PFD_CAPT) * 100, 0)
             if good_mach < 100 then
                 sasl.gl.drawText (Font_AirbusDUL, 60, 40, "." .. good_mach, 27, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
             else

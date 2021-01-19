@@ -62,6 +62,27 @@ FAILURE_SENSOR_AOA_CAPT = createGlobalPropertyi("a321neo/failures/adirs/aoa_capt
 FAILURE_SENSOR_AOA_FO   = createGlobalPropertyi("a321neo/failures/adirs/aoa_fo", 0, false, true, false) -- 0: OK, 1: FAILED
 FAILURE_SENSOR_AOA_STBY = createGlobalPropertyi("a321neo/failures/adirs/aoa_stby", 0, false, true, false) -- 0: OK, 1: FAILED
 
+FAILURE_SENSOR_AOA_CAPT_ERR    = createGlobalPropertyi("a321neo/failures/adirs/aoa_capt_err", 0, false, true, false) -- 0: OK, 1: FAILED
+FAILURE_SENSOR_AOA_FO_ERR      = createGlobalPropertyi("a321neo/failures/adirs/aoa_fo_err", 0, false, true, false) -- 0: OK, 1: FAILED
+FAILURE_SENSOR_AOA_STBY_ERR    = createGlobalPropertyi("a321neo/failures/adirs/aoa_stby_err", 0, false, true, false) -- 0: OK, 1: FAILED
+FAILURE_SENSOR_PITOT_CAPT_ERR  = createGlobalPropertyi("a321neo/failures/adirs/pitot_capt_err", 0, false, true, false) -- 0: OK, 1: FAILED
+FAILURE_SENSOR_PITOT_FO_ERR    = createGlobalPropertyi("a321neo/failures/adirs/pitot_fo_err", 0, false, true, false) -- 0: OK, 1: FAILED
+FAILURE_SENSOR_PITOT_STBY_ERR  = createGlobalPropertyi("a321neo/failures/adirs/pitot_stby_err", 0, false, true, false) -- 0: OK, 1: FAILED
+FAILURE_SENSOR_STATIC_CAPT_ERR = createGlobalPropertyi("a321neo/failures/adirs/static_capt_err", 0, false, true, false) -- 0: OK, 1: FAILED
+FAILURE_SENSOR_STATIC_FO_ERR   = createGlobalPropertyi("a321neo/failures/adirs/static_fo_err", 0, false, true, false) -- 0: OK, 1: FAILED
+FAILURE_SENSOR_STATIC_STBY_ERR = createGlobalPropertyi("a321neo/failures/adirs/static_stby_err", 0, false, true, false) -- 0: OK, 1: FAILED
+
+FAILURE_IR1_ATT_PITCH_ERR = createGlobalPropertyi("a321neo/failures/adirs/ir1_pitch_err", 0, false, true, false) -- 0: OK, 1: FAILED
+FAILURE_IR2_ATT_PITCH_ERR   = createGlobalPropertyi("a321neo/failures/adirs/ir2_pitch_err", 0, false, true, false) -- 0: OK, 1: FAILED
+FAILURE_IR3_ATT_PITCH_ERR = createGlobalPropertyi("a321neo/failures/adirs/ir3_pitch_err", 0, false, true, false) -- 0: OK, 1: FAILED
+
+FAILURE_IR1_ATT_ROLL_ERR = createGlobalPropertyi("a321neo/failures/adirs/ir1_roll_err", 0, false, true, false) -- 0: OK, 1: FAILED
+FAILURE_IR2_ATT_ROLL_ERR   = createGlobalPropertyi("a321neo/failures/adirs/ir2_roll_err", 0, false, true, false) -- 0: OK, 1: FAILED
+FAILURE_IR3_ATT_ROLL_ERR = createGlobalPropertyi("a321neo/failures/adirs/ir3_roll_err", 0, false, true, false) -- 0: OK, 1: FAILED
+
+FAILURE_IR1_HDG_ERR = createGlobalPropertyi("a321neo/failures/adirs/ir1_hdg_err", 0, false, true, false) -- 0: OK, 1: FAILED
+FAILURE_IR2_HDG_ERR   = createGlobalPropertyi("a321neo/failures/adirs/ir2_hdg_err", 0, false, true, false) -- 0: OK, 1: FAILED
+FAILURE_IR3_HDG_ERR = createGlobalPropertyi("a321neo/failures/adirs/ir3_hdg_err", 0, false, true, false) -- 0: OK, 1: FAILED
 
 FAILURE_HYD_Y_E_overheat = createGlobalPropertyi("a321neo/failures/HYD/Y_E_overheat", 0, false, true, false) -- Yellow Elec pump 0: normal 1: overheat
 FAILURE_HYD_B_E_overheat = createGlobalPropertyi("a321neo/failures/HYD/B_E_overheat", 0, false, true, false) -- Blue Elec pump 0: normal 1: overheat

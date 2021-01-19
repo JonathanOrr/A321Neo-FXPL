@@ -2,7 +2,7 @@ local last_poi_update = 0
 local prev_range = 0
 
 local function update_airports(data)
-    local multi_airports = Data_manager.get_arpt_by_coords(get_lat(data.id), get_lon(data.id), data.config.range >= ND_RANGE_160)
+    local multi_airports = Data_manager.get_arpt_by_coords(adirs_get_lat(data.id), adirs_get_lon(data.id), data.config.range >= ND_RANGE_160)
     
     data.poi.arpt = {}
     
@@ -14,7 +14,7 @@ local function update_airports(data)
 end
 
 local function update_vor(data)
-    local multi_vors = Data_manager.get_nav_by_coords(NAV_ID_VOR, get_lat(data.id), get_lon(data.id), data.config.range >= ND_RANGE_160)
+    local multi_vors = Data_manager.get_nav_by_coords(NAV_ID_VOR, adirs_get_lat(data.id), adirs_get_lon(data.id), data.config.range >= ND_RANGE_160)
 
     data.poi.vor = {}
     
@@ -26,7 +26,7 @@ local function update_vor(data)
 end
 
 local function update_ndb(data)
-    local multi_ndbs = Data_manager.get_nav_by_coords(NAV_ID_NDB, get_lat(data.id), get_lon(data.id), data.config.range >= ND_RANGE_160)
+    local multi_ndbs = Data_manager.get_nav_by_coords(NAV_ID_NDB, adirs_get_lat(data.id), adirs_get_lon(data.id), data.config.range >= ND_RANGE_160)
 
     data.poi.ndb = {}
     
@@ -38,7 +38,7 @@ local function update_ndb(data)
 end
 
 local function update_wpt(data)
-    local multi_fixes = Data_manager.get_fix_by_coords(get_lat(data.id), get_lon(data.id), data.config.range >= ND_RANGE_160)
+    local multi_fixes = Data_manager.get_fix_by_coords(adirs_get_lat(data.id), adirs_get_lon(data.id), data.config.range >= ND_RANGE_160)
 
     data.poi.wpt = {}
     
@@ -53,7 +53,7 @@ end
 
 function update_poi(data)
 
-    if not is_position_ok(data.id) then
+    if not adirs_is_position_ok(data.id) then
         return
     end
 

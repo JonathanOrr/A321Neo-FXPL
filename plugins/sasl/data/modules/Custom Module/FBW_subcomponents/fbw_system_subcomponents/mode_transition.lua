@@ -70,13 +70,13 @@ function FBW_normal_mode_transition(table)
 
     --VERTICAL MODES--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     --ground mode --> Rotation mode
-    if (get(FBW_vertical_ground_mode_ratio) ~= 0 or get(Aft_wheel_on_ground) == 1) and (get(L_sim_throttle) >= THR_CLB_START or get(R_sim_throttle) >= THR_CLB_START) and (get_ias(PFD_CAPT) >= 70 or get_ias(PFD_FO) >= 70) then
+    if (get(FBW_vertical_ground_mode_ratio) ~= 0 or get(Aft_wheel_on_ground) == 1) and (get(L_sim_throttle) >= THR_CLB_START or get(R_sim_throttle) >= THR_CLB_START) and (adirs_get_ias(PFD_CAPT) >= 70 or adirs_get_ias(PFD_FO) >= 70) then
         set(FBW_vertical_rotation_mode_ratio, Set_linear_anim_value(get(FBW_vertical_rotation_mode_ratio), 1, 0, 1, 1 / vertical_rotation_mode_transition_time))
         set(FBW_vertical_ground_mode_ratio, Math_approx_value(Math_clamp_lower(1 - get(FBW_vertical_rotation_mode_ratio), 0), 0.001, 0))
     end
 
     --Rotation mode --> ground mode
-    if get(FBW_vertical_flare_mode_ratio) == 0 and get(All_on_ground) == 1 and ((get(L_sim_throttle) < THR_CLB_START or get(R_sim_throttle) < THR_CLB_START) or (get_ias(PFD_CAPT) < 70 or get_ias(PFD_FO) < 70)) then
+    if get(FBW_vertical_flare_mode_ratio) == 0 and get(All_on_ground) == 1 and ((get(L_sim_throttle) < THR_CLB_START or get(R_sim_throttle) < THR_CLB_START) or (adirs_get_ias(PFD_CAPT) < 70 or adirs_get_ias(PFD_FO) < 70)) then
         set(FBW_vertical_rotation_mode_ratio,  Set_linear_anim_value(get(FBW_vertical_rotation_mode_ratio), 0, 0, 1, 1 / vertical_rotation_mode_transition_time))
         set(FBW_vertical_ground_mode_ratio, Math_approx_value(Math_clamp_lower(1 - get(FBW_vertical_rotation_mode_ratio), 0), 0.001, 0))
     end
@@ -94,7 +94,7 @@ function FBW_normal_mode_transition(table)
     end
 
     --flight mode --> flare mode
-    if (get(L_sim_throttle) < THR_MCT_START and get(R_sim_throttle) < THR_MCT_START) and (get(Capt_ra_alt_ft) < flare_mode_transition_RA or get(Fo_ra_alt_ft) < flare_mode_transition_RA) and (get_vs(PFD_CAPT) <= 0 or get_vs(PFD_FO) <= 0) and get(Any_wheel_on_ground) == 0 and get(FBW_vertical_rotation_mode_ratio) == 0 and get(FBW_vertical_flight_mode_ratio) ~= 0 then
+    if (get(L_sim_throttle) < THR_MCT_START and get(R_sim_throttle) < THR_MCT_START) and (get(Capt_ra_alt_ft) < flare_mode_transition_RA or get(Fo_ra_alt_ft) < flare_mode_transition_RA) and (adirs_get_vs(PFD_CAPT) <= 0 or adirs_get_vs(PFD_FO) <= 0) and get(Any_wheel_on_ground) == 0 and get(FBW_vertical_rotation_mode_ratio) == 0 and get(FBW_vertical_flight_mode_ratio) ~= 0 then
         set(FBW_vertical_flare_mode_ratio, Set_linear_anim_value(get(FBW_vertical_flare_mode_ratio), 1, 0, 1, 1 / vertical_flare_mode_transition_time))
     end
 

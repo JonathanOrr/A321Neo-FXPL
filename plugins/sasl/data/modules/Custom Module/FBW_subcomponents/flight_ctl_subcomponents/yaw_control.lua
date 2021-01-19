@@ -57,7 +57,7 @@ function Rudder_control(yaw_input, fbw_current_law, is_in_auto_flight, trim_inpu
 
     --RUDDER LIMITS--
     if get(Rudder_lim_avail) == 1 and get(Slats) == 0 then
-        set(Rudder_travel_lim, Set_linear_anim_value(get(Rudder_travel_lim), -22.1 * math.sqrt(1 - ( (Math_clamp(get_avg_ias(), 160, 380) - 380) / 220)^2 ) + 25, 0, 30, rudder_trim_speed))
+        set(Rudder_travel_lim, Set_linear_anim_value(get(Rudder_travel_lim), -22.1 * math.sqrt(1 - ( (Math_clamp(adirs_get_avg_ias(), 160, 380) - 380) / 220)^2 ) + 25, 0, 30, rudder_trim_speed))
     end
 
     if get(Slats) > 0 and get(Rudder_lim_avail) == 1 then

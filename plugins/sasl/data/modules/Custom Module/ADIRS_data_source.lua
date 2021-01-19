@@ -16,6 +16,11 @@
 -- Short description: Various helper functions to get data and statuses for PFD 
 -------------------------------------------------------------------------------
 
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+-- Function for data dependent on data KNOBs. These are usually used by PFD and ND only!
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
 
 local function which_adr(i) -- It returns the current ADR index in use by `i` (capt or fo)
     if i == PFD_CAPT then
@@ -67,219 +72,148 @@ local function get_ir_partial_data(data_name)
     return get_common_data(data_name, condition_fun)
 end
 
-function is_adr_working(i)
+function adirs_is_adr_working(i)
     return ADIRS_sys[which_adr(i)].adr_status == ADR_STATUS_ON
 end
 
-function ir_works_nav_mode(i)
+function adirs_ir_works_nav_mode(i)
     return ADIRS_sys[which_ir(i)].ir_status == IR_STATUS_ALIGNED
 end
 
-function ir_works_att_mode(i)
+function adirs_ir_works_att_mode(i)
     return ADIRS_sys[which_ir(i)].ir_status == IR_STATUS_ALIGNED 
         or ADIRS_sys[which_ir(i)].ir_status == IR_STATUS_ATT_ALIGNED
 end
 
-function how_many_adrs_work()
-    local adr1 = ADIRS_sys[1].adr_status == ADR_STATUS_ON and 1 or 0
-    local adr2 = ADIRS_sys[2].adr_status == ADR_STATUS_ON and 1 or 0
-    local adr3 = ADIRS_sys[3].adr_status == ADR_STATUS_ON and 1 or 0
-
-    return adr1+adr2+adr3
-end
-
-function how_many_irs_fully_work()
-    local ir1 = ADIRS_sys[1].ir_status == IR_STATUS_ALIGNED and 1 or 0
-    local ir2 = ADIRS_sys[2].ir_status == IR_STATUS_ALIGNED and 1 or 0
-    local ir3 = ADIRS_sys[3].ir_status == IR_STATUS_ALIGNED and 1 or 0
-
-    return ir1+ir2+ir3
-end
-
-function how_many_irs_partially_work()
-    local ir1 = (ADIRS_sys[1].ir_status == IR_STATUS_ALIGNED or ADIRS_sys[1].ir_status == IR_STATUS_ATT_ALIGNED) and 1 or 0
-    local ir2 = (ADIRS_sys[2].ir_status == IR_STATUS_ALIGNED or ADIRS_sys[2].ir_status == IR_STATUS_ATT_ALIGNED) and 1 or 0
-    local ir3 = (ADIRS_sys[3].ir_status == IR_STATUS_ALIGNED or ADIRS_sys[3].ir_status == IR_STATUS_ATT_ALIGNED) and 1 or 0
-
-    return ir1+ir2+ir3
-end
-
+----------------------------------------------------------------------------------------------------
 -- ADR
+----------------------------------------------------------------------------------------------------
 
-function is_ias_ok(i)
-    return is_adr_working(i)
+function adirs_is_ias_ok(i)
+    return adirs_is_adr_working(i)
 end
 
-function get_ias(i)
+function adirs_get_ias(i)
     return ADIRS_sys[which_adr(i)].ias
 end
 
-function get_avg_ias()
-    return get_adr_data("ias")
-end
-
-
-function get_ias_trend(i)
+function adirs_get_ias_trend(i)
     return ADIRS_sys[which_adr(i)].ias_trend
 end
 
-function get_avg_ias_trend()
-    return get_adr_data("ias_trend")
+function adirs_is_tas_ok(i)
+    return adirs_is_adr_working(i)
 end
 
-function is_tas_ok(i)
-    return is_adr_working(i)
-end
-
-function get_tas(i)
+function adirs_get_tas(i)
     return ADIRS_sys[which_adr(i)].tas
 end
 
-function get_avg_tas()
-    return get_adr_data("tas")
+function adirs_is_aoa_ok(i)
+    return adirs_ir_works_att_mode(i) and get(ADIRS_sys[which_ir(i)].fail_aoa_dataref) == 0
 end
 
-function is_aoa_ok(i)
-    return ir_works_att_mode(i) and get(ADIRS_sys[which_ir(i)].fail_aoa_dataref) == 0
-end
-
-function get_aoa(i)
+function adirs_get_aoa(i)
     return ADIRS_sys[which_ir(i)].aoa
 end
 
-function get_avg_aoa()
-    local how_many_failed = get(ADIRS_sys[1].fail_aoa_dataref) + get(ADIRS_sys[2].fail_aoa_dataref) + get(ADIRS_sys[3].fail_aoa_dataref)
-    return (ADIRS_sys[1].aoa + ADIRS_sys[2].aoa + ADIRS_sys[3].aoa) / (3 - how_many_failed)
+function adirs_is_alt_ok(i)
+    return adirs_is_adr_working(i)
 end
 
-function is_alt_ok(i)
-    return is_adr_working(i)
-end
-
-function get_alt(i)
+function adirs_get_alt(i)
     return ADIRS_sys[which_adr(i)].alt
 end
 
-function get_avg_alt()
-    return get_adr_data("alt")
+function adirs_is_vs_ok(i)
+    return adirs_is_adr_working(i)
 end
 
-function is_vs_ok(i)
-    return is_adr_working(i)
-end
-
-function get_vs(i)
+function adirs_get_vs(i)
     return ADIRS_sys[which_adr(i)].vs
 end
 
-function get_avg_vs()
-    return get_adr_data("vs")
+function adirs_is_wind_ok(i)
+    return adirs_is_adr_working(i) and adirs_ir_works_nav_mode(i)
 end
 
-function is_wind_ok(i)
-    return is_adr_working(i) and ir_works_nav_mode(i)
-end
-
-function get_wind_spd(i)
+function adirs_get_wind_spd(i)
     return ADIRS_sys[which_adr(i)].wind_spd
 end
 
-function get_wind_dir(i)
+function adirs_get_wind_dir(i)
     return ADIRS_sys[which_adr(i)].wind_dir
 end
 
-function is_mach_ok(i)
-    return is_adr_working(i)
+function adirs_is_mach_ok(i)
+    return adirs_is_adr_working(i)
 end
 
-function get_mach(i)
+function adirs_get_mach(i)
     return ADIRS_sys[which_adr(i)].mach
 end
 
-function get_avg_mach()
-    return get_adr_data("mach")
-end
-
-
+----------------------------------------------------------------------------------------------------
 -- IR
+----------------------------------------------------------------------------------------------------
 
-function is_att_ok(i)
-    return ir_works_nav_mode(i) or ir_works_att_mode(i)
+function adirs_is_att_ok(i)
+    return adirs_ir_works_nav_mode(i) or adirs_ir_works_att_mode(i)
 end
 
-function get_pitch(i)
+function adirs_get_pitch(i)
     return ADIRS_sys[which_ir(i)].pitch
 end
 
-function get_roll(i)
+function adirs_get_roll(i)
     return ADIRS_sys[which_ir(i)].roll
 end
 
-function get_avg_pitch()
-    return get_ir_partial_data("pitch")
+function adirs_is_hdg_ok(i)
+    return adirs_ir_works_nav_mode(i) or (adirs_ir_works_att_mode(i) and not ADIRS_sys[which_ir(i)].ir_is_waiting_hdg)
 end
 
-function get_avg_roll()
-    return get_ir_partial_data("roll")
-end
-
-function is_hdg_ok(i)
-    return ir_works_nav_mode(i) or (ir_works_att_mode(i) and not ADIRS_sys[which_ir(i)].ir_is_waiting_hdg)
-end
-
-function get_hdg(i)
+function adirs_get_hdg(i)
     return ADIRS_sys[which_ir(i)].hdg
 end
 
-function get_avg_hdg()
-    return get_ir_partial_data("hdg")
+function adirs_is_true_hdg_ok(i)
+    return adirs_ir_works_nav_mode(i)
 end
 
-function is_true_hdg_ok(i)
-    return ir_works_nav_mode(i)
-end
-
-function get_true_hdg(i)
+function adirs_get_true_hdg(i)
     return ADIRS_sys[which_ir(i)].true_hdg
 end
 
-function get_avg_hdg()
-    return get_ir_full_data("true_hdg")
+function adirs_is_track_ok(i)
+    return adirs_ir_works_nav_mode(i)
 end
 
-function is_track_ok(i)
-    return ir_works_nav_mode(i)
-end
-
-function get_track(i)
+function adirs_get_track(i)
     return ADIRS_sys[which_ir(i)].track
 end
 
-function get_avg_track()
-    return get_ir_full_data("track")
+function adirs_is_position_ok(i)
+    return adirs_ir_works_nav_mode(i)
 end
 
-function is_position_ok(i)
-    return ir_works_nav_mode(i)
-end
-
-function get_lat(i)
+function adirs_get_lat(i)
     return ADIRS_sys[which_ir(i)].lat
 end
 
-function get_lon(i)
+function adirs_get_lon(i)
     return ADIRS_sys[which_ir(i)].lon
 end
 
-function is_gs_ok(i)
-    return ir_works_nav_mode(i)
+function adirs_is_gs_ok(i)
+    return adirs_ir_works_nav_mode(i)
 end
 
-function get_gs(i)
+function adirs_get_gs(i)
     return ADIRS_sys[which_ir(i)].gs
 end
 
-function get_gps_alt(i)
+function adirs_get_gps_alt(i)
     if get(GPS_1_is_available) == 0 and get(GPS_1_is_available) == 0 then
         return 0
     end
@@ -299,40 +233,278 @@ function get_gps_alt(i)
     end
 end
 
-function is_gps_alt_ok(i)
-    return ir_works_att_mode(i) and (get(GPS_1_is_available) == 1 or get(GPS_2_is_available) == 1)
+function adirs_is_gps_alt_ok(i)
+    return adirs_ir_works_att_mode(i) and (get(GPS_1_is_available) == 1 or get(GPS_2_is_available) == 1)
 end
 
-function is_gloads_ok(i)
-    return ir_works_nav_mode(i)
+function adirs_is_gloads_ok(i)
+    return adirs_ir_works_nav_mode(i)
 end
 
-function get_gload_vert(i)
+function adirs_get_gload_vert(i)
     return ADIRS_sys[which_ir(i)].g_load_vert
 end
 
-function get_gload_lat(i)
+function adirs_get_gload_lat(i)
     return ADIRS_sys[which_ir(i)].g_load_lat
 end
 
-function get_gload_long(i)
+function adirs_get_gload_long(i)
     return ADIRS_sys[which_ir(i)].g_load_long
 end
 
-function is_buss_visible(i)
+----------------------------------------------------------------------------------------------------
+-- PFD - Misc functions
+----------------------------------------------------------------------------------------------------
+
+
+function adirs_is_buss_visible(i)
     if i == PFD_CAPT then
-        return (get(BUSS_Capt_man_enabled) == 1 or how_many_adrs_work() == 0) and is_aoa_ok(i)
+        return (get(BUSS_Capt_man_enabled) == 1 or adirs_how_many_adrs_work() == 0) and adirs_is_aoa_ok(i)
     else
-        return (get(BUSS_Fo_man_enabled) == 1 or how_many_adrs_work() == 0) and is_aoa_ok(i)
+        return (get(BUSS_Fo_man_enabled) == 1 or adirs_how_many_adrs_work() == 0) and adirs_is_aoa_ok(i)
     end
 end
 
-function is_gps_alt_visible(i)
+function adirs_is_gps_alt_visible(i)
     if i == PFD_CAPT then
-        return (get(BUSS_Capt_man_enabled) == 1 or how_many_adrs_work() == 0) and is_gps_alt_ok(i)
+        return (get(BUSS_Capt_man_enabled) == 1 or adirs_how_many_adrs_work() == 0) and adirs_is_gps_alt_ok(i)
     else
-        return (get(BUSS_Fo_man_enabled) == 1 or how_many_adrs_work() == 0) and is_gps_alt_ok(i)
+        return (get(BUSS_Fo_man_enabled) == 1 or adirs_how_many_adrs_work() == 0) and adirs_is_gps_alt_ok(i)
     end
 end
+
+function adirs_pfds_disagree_on_ias()
+    return math.abs(adirs_get_ias(PFD_CAPT) - adirs_get_ias(PFD_FO)) > 3
+end
+
+function adirs_pfds_disagree_on_alt()
+    local diff = math.abs(adirs_get_alt(PFD_CAPT) - adirs_get_alt(PFD_FO))
+    return (get(Capt_Baro) == 29.92 or get(Capt_Baro) == 29.92)
+            and diff > 500
+            or diff > 250
+end
+
+function adirs_pfds_disagree_on_att()
+    return math.abs(adirs_get_pitch(PFD_CAPT) - adirs_get_pitch(PFD_FO)) > 5 or math.abs(adirs_get_roll(PFD_CAPT) - adirs_get_roll(PFD_FO)) > 5
+end
+
+function adirs_pfds_disagree_on_hdg()
+    return math.abs(adirs_get_hdg(PFD_CAPT) - adirs_get_hdg(PFD_FO)) > 5
+end
+
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+-- Functions for data independent from the ADIRS - Used for FBW, AP, etc. 
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+
+function adirs_how_many_adrs_work()
+    local adr1 = ADIRS_sys[1].adr_status == ADR_STATUS_ON and 1 or 0
+    local adr2 = ADIRS_sys[2].adr_status == ADR_STATUS_ON and 1 or 0
+    local adr3 = ADIRS_sys[3].adr_status == ADR_STATUS_ON and 1 or 0
+
+    return adr1+adr2+adr3
+end
+
+function adirs_how_many_irs_fully_work()
+    local ir1 = ADIRS_sys[1].ir_status == IR_STATUS_ALIGNED and 1 or 0
+    local ir2 = ADIRS_sys[2].ir_status == IR_STATUS_ALIGNED and 1 or 0
+    local ir3 = ADIRS_sys[3].ir_status == IR_STATUS_ALIGNED and 1 or 0
+
+    return ir1+ir2+ir3
+end
+
+function adirs_how_many_irs_partially_work()
+    local ir1 = (ADIRS_sys[1].ir_status == IR_STATUS_ALIGNED or ADIRS_sys[1].ir_status == IR_STATUS_ATT_ALIGNED) and 1 or 0
+    local ir2 = (ADIRS_sys[2].ir_status == IR_STATUS_ALIGNED or ADIRS_sys[2].ir_status == IR_STATUS_ATT_ALIGNED) and 1 or 0
+    local ir3 = (ADIRS_sys[3].ir_status == IR_STATUS_ALIGNED or ADIRS_sys[3].ir_status == IR_STATUS_ATT_ALIGNED) and 1 or 0
+
+    return ir1+ir2+ir3
+end
+
+local function voter(field, check_function)
+
+    local total_valid = 0
+    local total_value = 0
+    
+    for i=1,3 do
+        local x = ADIRS_sys[i][field]
+
+        if check_function(i) then
+            total_valid = total_valid + 1
+            total_value = total_value + x
+        end
+    end
+
+    if total_valid > 0 then
+        return total_value / total_valid
+    else
+        return 0    -- No agreement = No valid data = Triple failure
+    end
+end
+
+
+----------------------------------------------------------------------------------------------------
+-- AoA
+----------------------------------------------------------------------------------------------------
+local function is_aoa_valid(i)
+    if get(ADIRS_sys[i].fail_aoa_dataref) == 1 then
+        return false -- Self-detected
+    end
+    
+    if ADIRS_sys[i].ir_status == IR_STATUS_OFF or ADIRS_sys[i].ir_status == IR_STATUS_FAULT then
+        return false -- Failed or OFF IR
+    end
+
+    local margin = 0.3
+
+    local oth1 = (i) % 3 + 1
+    local oth2 = (oth1) % 3 + 1
+    local aoa1 = ADIRS_sys[i].aoa
+    local aoa2 = ADIRS_sys[oth1].aoa
+    local aoa3 = ADIRS_sys[oth2].aoa
+    
+    return math.abs(aoa1 - aoa2) < margin or math.abs(aoa1 - aoa3) < margin
+end
+
+function adirs_get_avg_aoa()
+    return voter("aoa", is_aoa_valid)
+end
+
+function adirs_how_many_aoa_disagree()
+    -- This function can return only 0, 1 or 3
+    return (is_aoa_valid(1) and 0 or 1) + (is_aoa_valid(2) and 0 or 1) + (is_aoa_valid(3) and 0 or 1)
+end
+
+function adirs_how_many_aoa_failed()
+    local aoa1 = not (ADIRS_sys[1].ir_status == IR_STATUS_OFF or ADIRS_sys[1].ir_status == IR_STATUS_FAULT) and get(FAILURE_SENSOR_AOA_CAPT) == 0
+    local aoa2 = not (ADIRS_sys[2].ir_status == IR_STATUS_OFF or ADIRS_sys[2].ir_status == IR_STATUS_FAULT) and get(FAILURE_SENSOR_AOA_FO) == 0
+    local aoa3 = not (ADIRS_sys[3].ir_status == IR_STATUS_OFF or ADIRS_sys[3].ir_status == IR_STATUS_FAULT) and get(FAILURE_SENSOR_AOA_STBY) == 0
+
+    return (aoa1 and 0 or 1) + (aoa2 and 0 or 1) + (aoa3 and 0 or 1)
+end
+
+----------------------------------------------------------------------------------------------------
+-- ADR
+----------------------------------------------------------------------------------------------------
+local function is_adr_valid(i)
+
+    if ADIRS_sys[i].adr_status == ADR_STATUS_OFF or ADIRS_sys[i].adr_status == ADR_STATUS_FAULT then
+        return false -- Failed or OFF ADR
+    end
+
+    if (i == 1 and get(FAILURE_SENSOR_STATIC_CAPT_ERR) == 1) or
+       (i == 2 and get(FAILURE_SENSOR_STATIC_FO_ERR) == 1) or
+       (i == 3 and get(FAILURE_SENSOR_STATIC_STBY_ERR) == 1) then
+        return false    -- I need to cheat here: the altitude of x-plane altimeter depends on the
+                        -- baro settings, but it's better not to run a voter on a value that depends
+                        -- on the pilot input
+    end
+    
+    local oth1 = (i) % 3 + 1
+    local oth2 = (oth1) % 3 + 1
+
+    local ias_margin = 3
+    local ias1 = ADIRS_sys[i].ias
+    local ias2 = ADIRS_sys[oth1].ias
+    local ias3 = ADIRS_sys[oth2].ias
+
+    local mach_margin = 0.05
+    local mach1 = ADIRS_sys[i].mach
+    local mach2 = ADIRS_sys[oth1].mach
+    local mach3 = ADIRS_sys[oth2].mach
+    
+    return (math.abs(mach1 - mach2) < mach_margin or math.abs(mach1 - mach3) < mach_margin) and
+           (math.abs(ias1  - ias2) < ias_margin   or math.abs(ias1  - ias3) < ias_margin)
+end
+
+
+function adirs_get_avg_ias()
+    return voter("ias", is_adr_valid)
+end
+
+function adirs_get_avg_ias_trend()
+    return voter("ias_trend", is_adr_valid)
+end
+
+function adirs_get_avg_tas()
+    return voter("tas", is_adr_valid)
+end
+
+function adirs_get_avg_alt()
+    return voter("alt", is_adr_valid)
+end
+
+function adirs_get_avg_vs()
+    return voter("vs", is_adr_valid)
+end
+
+function adirs_get_avg_mach()
+    return voter("mach", is_adr_valid)
+end
+
+function adirs_how_many_adr_params_disagree()
+    -- This function can return only 0, 1 or 3
+    return (is_adr_valid(1) and 0 or 1) + (is_adr_valid(2) and 0 or 1) + (is_adr_valid(3) and 0 or 1)
+end
+
+----------------------------------------------------------------------------------------------------
+-- IR
+----------------------------------------------------------------------------------------------------
+
+local function is_ir_valid(i)
+
+    if ADIRS_sys[i].ir_status == IR_STATUS_OFF or ADIRS_sys[i].ir_status == IR_STATUS_FAULT then
+        return false -- Failed or OFF IR
+    end
+    
+    local oth1 = (i) % 3 + 1
+    local oth2 = (oth1) % 3 + 1
+
+    local margin = 5
+    local pitch1 = ADIRS_sys[i].pitch
+    local pitch2 = ADIRS_sys[oth1].pitch
+    local pitch3 = ADIRS_sys[oth2].pitch
+
+    local roll1 = ADIRS_sys[i].roll
+    local roll2 = ADIRS_sys[oth1].roll
+    local roll3 = ADIRS_sys[oth2].roll
+    
+    local hdg1 = ADIRS_sys[i].hdg
+    local hdg2 = ADIRS_sys[oth1].hdg
+    local hdg3 = ADIRS_sys[oth2].hdg
+    
+    return (math.abs(pitch1 - pitch2) < margin or math.abs(pitch1 - pitch3) < margin) and
+           (math.abs(roll1  - roll2)  < margin or math.abs(roll1  - roll3) < margin)  and
+           (math.abs(hdg1   - hdg2)  < margin  or math.abs(hdg1   - hdg3) < margin)
+end
+
+
+function adirs_get_avg_pitch()
+    return voter("pitch", is_ir_valid)
+end
+
+function adirs_get_avg_roll()
+    return voter("roll", is_ir_valid)
+end
+
+function adirs_get_avg_hdg()
+    return voter("hdg", is_ir_valid)
+end
+function adirs_get_avg_true_hdg()
+    return voter("true_hdg", is_ir_valid)
+end
+function adirs_get_avg_track()
+    return voter("track", is_ir_valid)
+end
+
+function adirs_how_many_ir_params_disagree()
+    -- This function can return only 0, 1 or 3
+    -- It does not include AoA that is managed with a dedicated function
+
+    return (is_ir_valid(1) and 0 or 1) + (is_ir_valid(2) and 0 or 1) + (is_ir_valid(3) and 0 or 1)
+end
+
 
 
