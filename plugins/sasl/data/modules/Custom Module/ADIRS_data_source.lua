@@ -327,7 +327,7 @@ local function voter(field, check_function)
 
     local total_valid = 0
     local total_value = 0
-    
+
     for i=1,3 do
         local x = ADIRS_sys[i][field]
 
@@ -352,7 +352,7 @@ local function is_aoa_valid(i)
     if get(ADIRS_sys[i].fail_aoa_dataref) == 1 then
         return false -- Self-detected
     end
-    
+
     if ADIRS_sys[i].ir_status == IR_STATUS_OFF or ADIRS_sys[i].ir_status == IR_STATUS_FAULT then
         return false -- Failed or OFF IR
     end
@@ -364,7 +364,7 @@ local function is_aoa_valid(i)
     local aoa1 = ADIRS_sys[i].aoa
     local aoa2 = ADIRS_sys[oth1].aoa
     local aoa3 = ADIRS_sys[oth2].aoa
-    
+
     return math.abs(aoa1 - aoa2) < margin or math.abs(aoa1 - aoa3) < margin
 end
 
@@ -401,7 +401,7 @@ local function is_adr_valid(i)
                         -- baro settings, but it's better not to run a voter on a value that depends
                         -- on the pilot input
     end
-    
+
     local oth1 = (i) % 3 + 1
     local oth2 = (oth1) % 3 + 1
 
@@ -414,7 +414,7 @@ local function is_adr_valid(i)
     local mach1 = ADIRS_sys[i].mach
     local mach2 = ADIRS_sys[oth1].mach
     local mach3 = ADIRS_sys[oth2].mach
-    
+
     return (math.abs(mach1 - mach2) < mach_margin or math.abs(mach1 - mach3) < mach_margin) and
            (math.abs(ias1  - ias2) < ias_margin   or math.abs(ias1  - ias3) < ias_margin)
 end
@@ -458,7 +458,7 @@ local function is_ir_valid(i)
     if ADIRS_sys[i].ir_status == IR_STATUS_OFF or ADIRS_sys[i].ir_status == IR_STATUS_FAULT then
         return false -- Failed or OFF IR
     end
-    
+
     local oth1 = (i) % 3 + 1
     local oth2 = (oth1) % 3 + 1
 
@@ -470,11 +470,11 @@ local function is_ir_valid(i)
     local roll1 = ADIRS_sys[i].roll
     local roll2 = ADIRS_sys[oth1].roll
     local roll3 = ADIRS_sys[oth2].roll
-    
+
     local hdg1 = ADIRS_sys[i].hdg
     local hdg2 = ADIRS_sys[oth1].hdg
     local hdg3 = ADIRS_sys[oth2].hdg
-    
+
     return (math.abs(pitch1 - pitch2) < margin or math.abs(pitch1 - pitch3) < margin) and
            (math.abs(roll1  - roll2)  < margin or math.abs(roll1  - roll3) < margin)  and
            (math.abs(hdg1   - hdg2)  < margin  or math.abs(hdg1   - hdg3) < margin)

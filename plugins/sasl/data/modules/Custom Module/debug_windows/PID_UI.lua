@@ -171,6 +171,6 @@ end
 function draw()
     sasl.gl.drawRectangle(0, 0, size[1], size[2], LIGHT_GREY)
 
-    Draw_PID_graph(0 + 5, 0 + 5, 400, 250, WHITE, LIGHT_BLUE, GREEN, ORANGE, true, true, true, true)
+    Draw_PID_graph(0 + 5, 0 + 5, 590, 290, WHITE, LIGHT_BLUE, GREEN, ORANGE, true, true, true, true)
     --Draw_list_of_PID_arrays(500, 180, 80, 30, WHITE, LIGHT_BLUE)
 end

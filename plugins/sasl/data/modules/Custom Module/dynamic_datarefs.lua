@@ -136,27 +136,6 @@ Apu_bleed_psi = createGlobalPropertyf("a321neo/cockpit/apu/bleed_psi", 0, false,
 Apu_fuel_valve  = createGlobalPropertyi("a321neo/cockpit/apu/fuel_valve", 0, false, true, false) -- 0 closed, 1 open
 Apu_fuel_source = createGlobalPropertyi("a321neo/cockpit/apu/fuel_source", 0, false, true, false) -- 0 none, 1 left side, 2 right side (x feed)
 
---FBW
-FBW_status = createGlobalPropertyi("a321neo/dynamics/FBW/FBW_status", 2, false, true, false)--2=NORMAL law, 1=ALT2 law, 0==DIRECT law
-FBW_pitch_mode = createGlobalPropertyi("a321neo/dynamics/FBW/FBW_pitch_mode", 2, false, true, false)--0=holding pitch(stable), 1=holding vpath(unstable) 2=holding persec vpath(more stable) 3=holding 1G(most accurate)
-FBW_ground_mode = createGlobalPropertyi("a321neo/dynamics/FBW/in_ground_mode", 0, false, true, false)--if the aircraft is on ground and FBW is in normal law
-FBW_flare_mode = createGlobalPropertyi("a321neo/dynamics/FBW/in_flare_mode", 0, false, true, false)--if the aircraft is in flare mode
-FBW_flaring = createGlobalPropertyi("a321neo/dynamics/FBW/in_flaring", 0, false, true, false)--if the FBW is synthesising a flare
-Roll_l_lim = createGlobalPropertyf("a321neo/dynamics/FBW/roll_l_lim", 0, false, true, false)
-Roll_r_lim = createGlobalPropertyf("a321neo/dynamics/FBW/roll_r_lim", 0, false, true, false)
-Pitch_u_lim = createGlobalPropertyf("a321neo/dynamics/FBW/pitch_u_lim", 0, false, true, false)
-Pitch_d_lim = createGlobalPropertyf("a321neo/dynamics/FBW/pitch_d_lim", 0, false, true, false)
-AOA_lim = createGlobalPropertyf("a321neo/dynamics/FBW/AOA_lim", 0, false, true, false)
-MAX_spd_lim = createGlobalPropertyf("a321neo/dynamics/FBW/MAX_spd_lim", 0, false, true, false)
-Roll_rate_command = createGlobalPropertyf("a321neo/dynamics/FBW/roll_rate_command", 0, false, true, false)--15 degrees max for normal law, 30 degrees in ALT2 or DIRECT
-Roll_rate_output = createGlobalPropertyf("a321neo/dynamics/FBW/roll_rate_output", 0, false, true, false)
-G_load_command = createGlobalPropertyf("a321neo/dynamics/FBW/G_load_command", 1, false, true, false)--2.5G to -1G in normal flight, with flaps 2G to 0G
-Neutral_G_output = createGlobalPropertyf("a321neo/dynamics/FBW/1_G_output", 0, false, true, false)
-G_output = createGlobalPropertyf("a321neo/dynamics/FBW/G_output", 0, false, true, false)
-Vpath_output = createGlobalPropertyf("a321neo/dynamics/FBW/vpath_output", 0, false, true, false)
-Abs_pitch_rate = createGlobalPropertyf("a321neo/dynamics/FBW/abs_Q", 0, false, true, false)
-Abs_vpath_pitch_rate = createGlobalPropertyf("a321neo/dynamics/FBW/abs_vpath_Q", 0, false, true, false)
-
 -- Electrical system
 --- BUSES (0: not providing elec power, 1: providing elec power) - influenced by switches, faults, engine status etc.
 Gally_pwrd      = createGlobalPropertyi("a321neo/dynamics/electrical/bus/galley_powered", 0, false, true, false)
@@ -464,22 +443,16 @@ Hydraulic_PTU_status = createGlobalPropertyi("a321neo/dynamics/HYD/PTU_status", 
 Hydraulic_RAT_status = createGlobalPropertyi("a321neo/dynamics/HYD/RAT_status", 0, false, true, false) -- 0: OFF ready, 1: Running OK, 2: FAULT or low speed
 
 --aircraft limits
-Capt_VMAX_prot =   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/capt_vmax_prot_speed", 0, false, true, false)--uses different pilot's mach
-Fo_VMAX_prot =	   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fo_vmax_prot_speed", 0, false, true, false)
-Capt_fixed_VMAX =  createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/capt_fixed_vmax_speed", 0, false, true, false)--uses different pilot's mach
-Fo_fixed_VMAX =	   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fo_fixed_vmax_speed", 0, false, true, false)
-Capt_VMAX =		   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/capt_vmax_speed", 0, false, true, false)--uses different pilot's mach
-Fo_VMAX =		   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fo_vmax_speed", 0, false, true, false)
+VMAX_prot =        createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/vmax_prot_speed", 0, false, true, false)
+Fixed_VMAX =       createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fixed_vmax_speed", 0, false, true, false)
+VMAX =		       createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/vmax_speed", 0, false, true, false)
 S_speed = 		   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/s_speed", 0, false, true, false)
 F_speed = 		   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/f_speed", 0, false, true, false)
 VFE_speed = 	   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/vfe_speed", 0, false, true, false)
 VLS = 			   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/vls_speed", 0, false, true, false)
-Capt_GD =		   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/capt_green_dot_speed", 0, false, true, false)--uses different pilot's baro alt
-Fo_GD = 		   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fo_green_dot_speed", 0, false, true, false)
-Capt_Vaprot_vsw =  createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/capt_alpha_prot_speed", 0, false, true, false)--uses different pilot's alpha
-Fo_Vaprot_vsw =    createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fo_alpha_prot_speed", 0, false, true, false)
-Capt_Valpha_MAX =  createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/capt_alpha_max_speed", 0, false, true, false)--uses different pilot's alpha
-Fo_Valpha_MAX =    createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fo_alpha_max_speed", 0, false, true, false)
+GD =		       createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/green_dot_speed", 0, false, true, false)
+Vaprot_vsw =       createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/alpha_prot_speed", 0, false, true, false)
+Valpha_MAX =       createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/alpha_max_speed", 0, false, true, false)
 
 A0_AoA =     createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/alpha_0_aoa", 0, false, true, false)
 Aprot_AoA =  createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/alpha_prot_aoa", 0, false, true, false)
@@ -556,6 +529,7 @@ FBW_total_control_law = createGlobalPropertyi("a321neo/dynamics/FBW/system_statu
 FBW_lateral_law =       createGlobalPropertyi("a321neo/dynamics/FBW/system_status/lateral_control_law", 0, false, true, false) -- -2 mechanical backup law, -1 abnormal law, 0 direct law,                  							   3 normal law (abnormal law / alt law doesn't exist)
 FBW_vertical_law =      createGlobalPropertyi("a321neo/dynamics/FBW/system_status/vertical_control_law", 0, false, true, false)-- -2 mechanical backup law, -1 abnormal law, 0 direct law, 1 alternate law, 2 alternate law(reduced prot), 3 normal law
 FBW_yaw_law =           createGlobalPropertyi("a321neo/dynamics/FBW/system_status/yaw_control_law", 0, false, true, false)     -- -2 mechanical backup law, -1 abnormal law, 0 direct law, 1 alternate law, 							   3 normal law
+FBW_alt_to_direct_law = createGlobalPropertyi("a321neo/dynamics/FBW/system_status/alternate_to_direct_law", 0, false, true, false)-- if the reason for being inside direct law is because of gear down in alternate law(used for smooth transition into alt law flare mode)
 FBW_vertical_ground_mode_ratio =   createGlobalPropertyf("a321neo/dynamics/FBW/system_status/vertical_ground_mode_ratio", 1, false, true, false)   --FBW vertical ground   mode transition ratio
 FBW_vertical_rotation_mode_ratio = createGlobalPropertyf("a321neo/dynamics/FBW/system_status/vertical_rotation_mode_ratio", 0, false, true, false) --FBW vertical rotation mode transition ratio(NEO only)
 FBW_vertical_flight_mode_ratio =   createGlobalPropertyf("a321neo/dynamics/FBW/system_status/vertical_flight_mode_ratio", 0, false, true, false)   --FBW vertical flight   mode transition ratio

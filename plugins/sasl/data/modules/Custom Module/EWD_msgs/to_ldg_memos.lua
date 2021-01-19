@@ -145,7 +145,7 @@ Message_LDG_GEAR = {
 Message_LDG_FLAPS = {
 
     text = function(self)
-        if get(FBW_status) < 2 or get(GPWS_mode_flap_3) == 1 then -- alternate or direct law or p/b pressed
+        if get(FBW_total_control_law) == FBW_ALT_NO_PROT_LAW or get(FBW_total_control_law) == FBW_ALT_REDUCED_PROT_LAW or get(FBW_total_control_law) == FBW_DIRECT_LAW or get(GPWS_mode_flap_3) == 1 then -- alternate or direct law or p/b pressed
             if get(Flaps_internal_config) == 4 then
                 return "    FLAPS CONF 3"
             else
@@ -158,11 +158,11 @@ Message_LDG_FLAPS = {
                 return "    FLAPS............FULL"
             end
         end
-        
+
     end,
 
     color = function(self)
-         if get(FBW_status) < 2 then -- alternate or direct law
+         if get(FBW_total_control_law) == FBW_ALT_NO_PROT_LAW or get(FBW_total_control_law) == FBW_ALT_REDUCED_PROT_LAW or get(FBW_total_control_law) == FBW_DIRECT_LAW then -- alternate or direct law
             if get(Flaps_internal_config) == 4 then
                 return COL_INDICATION
             else
@@ -183,7 +183,7 @@ Message_LDG_FLAPS = {
 }
 
 Message_TO_CONFIG = {
-    
+
     text = function(self)
         if get(TO_Config_is_ready) == 1 then
             return "    T.O. CONFIG NORMAL"
@@ -243,12 +243,12 @@ MessageGroup_MEMO_TAKEOFF = {
                     set(EWD_is_to_memo_showed, 1)
                     return true
                 end
-            end        
-        else    
+            end
+        else
             if timer_2nd_engine_on_started then -- Someone powered off an engine here
                 sasl.stopTimer(timer_2nd_engine_on)
                 timer_2nd_engine_on_started = false
-            end        
+            end
         end
 
         -- TODO Check TO CONFIG BUTTON
@@ -294,7 +294,7 @@ MessageGroup_MEMO_LANDING = {
             return true
         else
             set(EWD_is_ldg_memo_showed, 0)
-            return false 
+            return false
         end
     end,
 
