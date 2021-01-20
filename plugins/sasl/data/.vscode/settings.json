@@ -55,6 +55,9 @@
         "SASL_RENDER_PANEL_BEFORE_AND_AFTER",
         "SASL_RENDER_PANEL_DEFAULT",
         "fbo",
-        "TEXT_DIRECTION_VERTICAL"
+        "TEXT_DIRECTION_VERTICAL",
+        "onMouseMove",
+        "MB_RIGHT",
+        "onMouseHold"
     ]
 }

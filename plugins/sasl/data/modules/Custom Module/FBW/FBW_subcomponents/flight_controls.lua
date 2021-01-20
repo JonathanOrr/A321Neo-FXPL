@@ -98,12 +98,11 @@ function update()
     end
 
     --summing the controls
+    total_roll = get(roll_artstab)--Roll rate commanding
     if get(FBW_kill_switch) == 0 then
-        total_roll = get(roll_artstab) -- Roll rate commanding
         total_pitch = get(pitch_artstab) --G commanding
         total_yaw = get(Yaw) + get(yaw_artstab)
     else
-        total_roll = get(Augmented_roll) + get(roll_artstab)
         total_pitch = get(Augmented_pitch) + get(pitch_artstab)
         total_yaw = get(Yaw) + get(yaw_artstab)
     end

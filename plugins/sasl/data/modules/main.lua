@@ -24,7 +24,7 @@ include("global_variables.lua")
 include("global_functions.lua")
 include("pushbuttons.lua")
 include("global_constants.lua")
-include("FBW_subcomponents/PID_arrays.lua")
+include("FBW/FBW_subcomponents/PID_arrays.lua")
 include("sasl_drawing_assets.lua")
 include("ADIRS_data_source.lua")
 
@@ -43,6 +43,7 @@ addSearchPath(moduleDirectory .. "/Custom Module/PFD/")
 addSearchPath(moduleDirectory .. "/Custom Module/ND/")
 addSearchPath(moduleDirectory .. "/Custom Module/EFB/")
 addSearchPath(moduleDirectory .. "/Custom Module/PFD/PFD_subcomponents/")
+addSearchPath(moduleDirectory .. "/Custom Module/FBW/")
 
 position = {0, 0, 4096, 4096}
 size = { 4096, 4096 }
@@ -57,7 +58,6 @@ components = {
   apu {},
   fuel {}, -- Please keep this before engines
   engines {},
-  FBW_main {},
   cabin_screens {},
   fcu_ap_at {},
   AT {},
@@ -89,6 +89,7 @@ components = {
   oxygen {},
   anti_ice {},
   fire_cargo {},
+  FBW_main {},
   calls {},
   GPWS {},
   sounds {},

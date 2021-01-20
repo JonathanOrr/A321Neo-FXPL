@@ -12,64 +12,9 @@
 --    Please check the LICENSE file in the root of the repository for further
 --    details or check <https://www.gnu.org/licenses/>
 -------------------------------------------------------------------------------
--- File: PID.lua 
+-- File: PID.lua
 -- Short description: This file contains several functions to manage PID controllers
 -------------------------------------------------------------------------------
-
-function FBW_P_no_lim(pd_array, error)
-    local last_error = pd_array.Current_error
-    pd_array.Current_error = error + pd_array.Error_offset
-
-    --Proportional--
-    local correction = pd_array.Current_error * pd_array.P_gain
-
-    --limit and rescale output range--
-    correction = correction / pd_array.Max_out
-
-    return correction
-end
-
-function FBW_PD(pd_array, error)
-    local last_error = pd_array.Current_error
-    pd_array.Current_error = error + pd_array.Error_offset
-
-    --Proportional--
-    local correction = pd_array.Current_error * pd_array.P_gain
-
-    --derivative--
-    correction = correction + (pd_array.Current_error - last_error) * pd_array.D_gain
-
-    --limit and rescale output range--
-    correction = Math_clamp(correction, pd_array.Min_out, pd_array.Max_out) / pd_array.Max_out
-
-    return correction
-end
-
-function SSS_PID_NO_LIM(pid_array, error)
-    local correction = 0
-    local last_error = pid_array.Current_error
-
-    if get(DELTA_TIME) ~= 0 then
-
-        pid_array.Current_error = error
-
-        --Proportional--
-        pid_array.Proportional = pid_array.Current_error * pid_array.P_gain
-
-	    --integral--(clamped to stop windup)
-	    pid_array.Integral_sum = Math_clamp(pid_array.Integral_sum + (pid_array.Current_error * get(DELTA_TIME)), pid_array.Min_out * (1 / pid_array.I_gain), pid_array.Max_out * (1 / pid_array.I_gain))
-        pid_array.Integral = Math_clamp(pid_array.Integral_sum * pid_array.I_gain, pid_array.Min_out * (1 / pid_array.I_gain), pid_array.Max_out * (1 / pid_array.I_gain))
-
-        --derivative--
-        pid_array.Derivative = ((pid_array.Current_error - last_error) / get(DELTA_TIME)) * pid_array.D_gain
-
-        --sigma
-        correction = pid_array.Proportional + pid_array.Integral + pid_array.Derivative
-
-    end
-
-    return correction
-end
 
 function SSS_PID(pid_array, error)
     local last_error = pid_array.Current_error
@@ -207,6 +152,46 @@ function SSS_PID_DPV(pid_array, Set_Point, PV)
     return pid_array.Output
 end
 
+function FBW_PID_BP(pid_array, Error, PV, Scheduling_variable)
+    --sim paused no need to control
+    if get(DELTA_TIME) == 0 then
+        return 0
+    end
+
+    --gain scheduling
+    if pid_array.Schedule_gains == true then
+        pid_array.P_gain = Table_interpolate(pid_array.Schedule_table.P, Scheduling_variable)
+        pid_array.I_gain = Table_interpolate(pid_array.Schedule_table.I, Scheduling_variable)
+        pid_array.D_gain = Table_interpolate(pid_array.Schedule_table.D, Scheduling_variable)
+    end
+
+    --Properties--
+    local last_PV = pid_array.PV
+
+    --inputs--
+    pid_array.PV = PV
+    pid_array.Error = Error
+
+    --Proportional--
+    pid_array.Proportional = pid_array.Error * pid_array.P_gain
+
+    --Back Propagation--
+    pid_array.Backpropagation = pid_array.B_gain * (pid_array.Actual_output - pid_array.Desired_output)
+
+    --Integral--
+    local intergal_to_add = pid_array.I_gain * pid_array.Error + pid_array.Backpropagation
+    pid_array.Integral = pid_array.Integral + intergal_to_add * get(DELTA_TIME)
+
+    --Derivative
+    pid_array.Derivative = ((last_PV - pid_array.PV) / get(DELTA_TIME)) * pid_array.D_gain
+
+    --Sigma
+    pid_array.Desired_output = pid_array.Proportional + pid_array.Integral + pid_array.Derivative
+
+    --Output--
+    return Math_clamp(pid_array.Desired_output, pid_array.Min_out, pid_array.Max_out)
+end
+
 -- A standard PID with backpropagation as anti-windup
 -- You **must** set the pid_array.Actual_output outside of this PID
 function SSS_PID_BP(pid_array, error)
@@ -224,7 +209,7 @@ function SSS_PID_BP(pid_array, error)
     --integral--
     pid_array.Backpropagation = pid_array.B_gain * (pid_array.Actual_output - pid_array.Desired_output)
     local integral_input = pid_array.I_gain * pid_array.Current_error + pid_array.Backpropagation
-    
+
     pid_array.Integral_sum = pid_array.Integral_sum + (integral_input * get(DELTA_TIME))
     pid_array.Integral = pid_array.Integral_sum
 
@@ -302,7 +287,7 @@ function high_pass_filter(data)
     local dt = get(DELTA_TIME)
     local RC = 1/(2*math.pi*data.cut_frequency)
     local a = RC / (RC + dt)
-    
+
     if data.prev_x_value == nil then
         data.prev_x_value = data.x
         data.prev_y_value = data.x
@@ -315,7 +300,7 @@ function low_pass_filter(data)
     local dt = get(DELTA_TIME)
     local RC = 1/(2*math.pi*data.cut_frequency)
     local a = dt / (RC + dt)
-    
+
     if data.prev_y_value == nil then
         data.prev_y_value = a * data.x
         return a * data.x

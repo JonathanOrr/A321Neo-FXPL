@@ -5,6 +5,49 @@ AT_PID_arrays = {
 }
 
 FBW_PID_arrays = {
+    FBW_test_PID_array = {
+        P_gain = 0.032,
+        I_gain = 0.1,
+        D_gain = 0.001,
+        B_gain = 1,
+        Schedule_gains = true,
+        Schedule_table = {
+            P = {
+                {130, 0.035},
+                {160, 0.035},
+                {180, 0.032},
+                {220, 0.029},
+                {280, 0.025},
+                {345, 0.02},
+            },
+            I = {
+                {130, 0.08},
+                {160, 0.05},
+                {180, 0.05},
+                {220, 0.05},
+                {280, 0.05},
+                {345, 0.05},
+            },
+            D = {
+                {130, 0.0001},
+                {160, 0.0001},
+                {180, 0.0001},
+                {220, 0.0001},
+                {280, 0.0001},
+                {345, 0.0001},
+            },
+        },
+        Min_out = -1,
+        Max_out = 1,
+        PV = 0,
+        Error = 0,
+        Proportional = 0,
+        Integral = 0,
+        Derivative = 0,
+        Backpropagation = 0,
+        Desired_output = 0,
+        Actual_output = 0,
+    },
     SSS_FBW_roll_rate = {
         Name = "ROLL RATE",
         Type = "FBW_I_time_dpv",

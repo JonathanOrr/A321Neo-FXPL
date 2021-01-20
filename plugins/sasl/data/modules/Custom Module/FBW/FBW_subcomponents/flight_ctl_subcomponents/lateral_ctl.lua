@@ -8,7 +8,7 @@ function Ailerons_control(lateral_input, has_florence_kit, ground_spoilers_mode)
     local no_hyd_recenter_ias = 80
     local no_hyd_spd = 10
     local ailerons_max_def = 25
-    local ailerons_speed = 45
+    local ailerons_speed = 38.5
 
     --conditions
     local l_aileron_actual_speed = 45
@@ -46,8 +46,8 @@ function Ailerons_control(lateral_input, has_florence_kit, ground_spoilers_mode)
     r_aileron_travel_target = Math_rescale(0, Math_rescale(0, ailerons_max_def, no_hyd_recenter_ias, -get(Alpha), get(IAS)), 1450, r_aileron_travel_target, get(Hydraulic_B_press) + get(Hydraulic_G_press))
 
     --output to the surfaces
-    set(Left_aileron,  Set_linear_anim_value(get(Left_aileron),  l_aileron_travel_target, -ailerons_max_def, ailerons_max_def, l_aileron_actual_speed))
-    set(Right_aileron, Set_linear_anim_value(get(Right_aileron), r_aileron_travel_target, -ailerons_max_def, ailerons_max_def, r_aileron_actual_speed))
+    set(Left_aileron,  Set_anim_value_linear_range(get(Left_aileron),  l_aileron_travel_target, -ailerons_max_def, ailerons_max_def, l_aileron_actual_speed, 5))
+    set(Right_aileron, Set_anim_value_linear_range(get(Right_aileron), r_aileron_travel_target, -ailerons_max_def, ailerons_max_def, r_aileron_actual_speed, 5))
 end
 
 --permanent variables
@@ -144,8 +144,8 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
 
     local l_spoilers_spdbrk_spd = {5, 5, 5, 5, 5}
     local r_spoilers_spdbrk_spd = {5, 5, 5, 5, 5}
-    local l_spoilers_roll_spd = {0, 50, 50, 50, 50}
-    local r_spoilers_roll_spd = {0, 50, 50, 50, 50}
+    local l_spoilers_roll_spd = {0, 40, 40, 40, 40}
+    local r_spoilers_roll_spd = {0, 40, 40, 40, 40}
 
     local l_spoilers_spdbrk_ground_spd = {30, 30, 30, 30, 30}
     local r_spoilers_spdbrk_ground_spd = {30, 30, 30, 30, 30}
@@ -298,11 +298,11 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
     set(Speedbrakes_ratio, math.abs(lateral_input) + spdbrk_input)
     for i = 1, var_table.num_of_spoils_per_wing do
         --speedbrakes
-        set(L_speed_brakes_extension, Set_linear_anim_value(get(L_speed_brakes_extension, i), l_spoilers_spdbrk_targets[i], 0, l_spoilers_total_max_def[i], l_spoilers_spdbrk_spd[i]), i)
-        set(R_speed_brakes_extension, Set_linear_anim_value(get(R_speed_brakes_extension, i), r_spoilers_spdbrk_targets[i], 0, r_spoilers_total_max_def[i], r_spoilers_spdbrk_spd[i]), i)
+        set(L_speed_brakes_extension, Set_anim_value_linear_range(get(L_speed_brakes_extension, i), l_spoilers_spdbrk_targets[i], 0, l_spoilers_total_max_def[i], l_spoilers_spdbrk_spd[i], 5), i)
+        set(R_speed_brakes_extension, Set_anim_value_linear_range(get(R_speed_brakes_extension, i), r_spoilers_spdbrk_targets[i], 0, r_spoilers_total_max_def[i], r_spoilers_spdbrk_spd[i], 5), i)
         --roll spoilers
-        set(L_roll_spoiler_extension, Set_linear_anim_value(get(L_roll_spoiler_extension, i), l_spoilers_roll_targets[i], 0, l_spoilers_total_max_def[i], l_spoilers_roll_spd[i]), i)
-        set(R_roll_spoiler_extension, Set_linear_anim_value(get(R_roll_spoiler_extension, i), r_spoilers_roll_targets[i], 0, r_spoilers_total_max_def[i], r_spoilers_roll_spd[i]), i)
+        set(L_roll_spoiler_extension, Set_anim_value_linear_range(get(L_roll_spoiler_extension, i), l_spoilers_roll_targets[i], 0, l_spoilers_total_max_def[i], l_spoilers_roll_spd[i], 5), i)
+        set(R_roll_spoiler_extension, Set_anim_value_linear_range(get(R_roll_spoiler_extension, i), r_spoilers_roll_targets[i], 0, r_spoilers_total_max_def[i], r_spoilers_roll_spd[i], 5), i)
 
         --TOTAL SPOILERS OUTPUT TO THE SURFACES--
         --if any surface exceeds the max deflection limit the othere side would reduce deflection by the exceeded amount

@@ -46,17 +46,17 @@ function Elevator_control(vertical_input, in_direct_law)
         r_elev_target = 0
     end
 
+    if get(FBW_vertical_law) == FBW_DIRECT_LAW then
+        l_elev_target = Math_clamp(l_elev_target, max_direct_law_up, max_direct_law_dn)
+        r_elev_target = Math_clamp(r_elev_target, max_direct_law_up, max_direct_law_dn)
+    end
+
     --surface droop
     l_elev_target = Math_rescale(0, Math_rescale(0, max_dn_deflection, no_hyd_recenter_ias, -get(Alpha) - get(Horizontal_stabilizer_deflection), get(IAS)), 1450, l_elev_target, get(Hydraulic_G_press) + get(Hydraulic_B_press))
     r_elev_target = Math_rescale(0, Math_rescale(0, max_dn_deflection, no_hyd_recenter_ias, -get(Alpha) - get(Horizontal_stabilizer_deflection), get(IAS)), 1450, r_elev_target, get(Hydraulic_Y_press) + get(Hydraulic_B_press))
 
-    if get(FBW_vertical_law) ~= FBW_DIRECT_LAW then
-        set(Elevators_hstab_1, Set_linear_anim_value(get(Elevators_hstab_1), l_elev_target, max_up_deflection, max_dn_deflection, l_elev_spd))
-        set(Elevators_hstab_2, Set_linear_anim_value(get(Elevators_hstab_2), r_elev_target, max_up_deflection, max_dn_deflection, r_elev_spd))
-    else
-        set(Elevators_hstab_1, Set_linear_anim_value(get(Elevators_hstab_1), l_elev_target, max_direct_law_up, max_direct_law_dn, l_elev_spd))
-        set(Elevators_hstab_2, Set_linear_anim_value(get(Elevators_hstab_2), r_elev_target, max_direct_law_up, max_direct_law_dn, r_elev_spd))
-    end
+    set(Elevators_hstab_1, Set_linear_anim_value(get(Elevators_hstab_1), l_elev_target, max_up_deflection, max_dn_deflection, l_elev_spd))
+    set(Elevators_hstab_2, Set_linear_anim_value(get(Elevators_hstab_2), r_elev_target, max_up_deflection, max_dn_deflection, r_elev_spd))
 end
 
 function XP_trim_up(phase)
