@@ -61,6 +61,15 @@ local EFB_draw_pages = {
     EFB_draw_page_9,
     EFB_draw_page_10,
 }
+
+EFB_preferences = {
+    syncqnh = 0,
+    rolltonws = 0,
+    tca = 0,
+    pausetd = 0,
+    copilot = 0,
+    flarelaw = 0
+  }
 ---------------------------------------------------------------------------------------------------------------
 --MOUSE CLICK LOGIC--
 function onMouseDown(component, x, y, button, parentX, parentY)

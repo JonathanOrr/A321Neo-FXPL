@@ -76,6 +76,10 @@ function EFB_execute_page_4_buttons()
         set(OPTIONS_callouts, 1-get(OPTIONS_callouts))
         print("toggle_options_callout")
     end)
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 620,193,659,211, function ()
+        set(FBW_mode_transition_version, 1-get(FBW_mode_transition_version))
+        print("toggle_flarelaw_mode")
+    end)
 end
 
 --UPDATE LOOPS--
@@ -115,32 +119,50 @@ function EFB_draw_page_4()
 
     if get(OPTIONS_syncqnh) == 1 then
         SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 364, 78, 18, 2, 2)
+        EFB_preferences.syncqnh = 1
     else
         SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 364, 78, 18, 2, 1)
+        EFB_preferences.syncqnh = 0
     end
 
     if get(OPTIONS_rolltonws) == 1 then
         SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 330, 78, 18, 2, 2)
+        EFB_preferences.rolltonws = 1
     else
         SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 330, 78, 18, 2, 1)
+        EFB_preferences.rolltonws = 0
     end
 
     if get(OPTIONS_tca) == 1 then
         SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 296, 78, 18, 2, 2)
+        EFB_preferences.tca = 1
     else
         SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 296, 78, 18, 2, 1)
+        EFB_preferences.tca = 0
     end
 
     if get(OPTIONS_pausetd) == 1 then
         SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 262, 78, 18, 2, 2)
+        EFB_preferences.pausetd = 1
     else
         SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 262, 78, 18, 2, 1)
+        EFB_preferences.pausetd = 0
     end
 
     if get(OPTIONS_callouts) == 1 then
         SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 228, 78, 18, 2, 2)
+        EFB_preferences.copilot = 1
     else
         SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 228, 78, 18, 2, 1)
+        EFB_preferences.copilot = 0
+    end
+
+    if get(FBW_mode_transition_version) == 1 then
+        SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 194, 78, 18, 2, 2)
+        EFB_preferences.flarelaw = 1
+    else
+        SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 194, 78, 18, 2, 1)
+        EFB_preferences.flarelaw = 0
     end
     --print(EFB_CURSOR_X, EFB_CURSOR_Y)
 end

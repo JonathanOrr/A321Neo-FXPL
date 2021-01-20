@@ -165,3 +165,7 @@ EFB_LOAD_bgd =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/
 
 EFB_CONFIG_bgd =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/CONFIG page/overlay.png")
 EFB_CONFIG_slider =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/CONFIG page/slider_ball.png")
+
+-----------INFO------------
+
+EFB_INFO_bgd =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/overlay.png")
