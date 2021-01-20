@@ -560,16 +560,21 @@ local function perform_starting_procedure_follow_n1(eng)
     end
 end
 
-local function perform_starting_procedure(eng)
-    if eng_N2_off[eng] < 9.5 then
+local function perform_starting_procedure(eng, inflight_restart)
+    if eng_N2_off[eng] < 9.5 and not inflight_restart then
         -- Phase 1: Ok let's start by cranking the engine to start rotation
         perform_crank_procedure(eng, false)
         return
     end
     
-    -- If the N2 is larger than 10, then we can start the real startup procedure
+    if inflight_restart and eng_N2_off[eng] < START_UP_PHASES_N2[#START_UP_PHASES_N2].n2_start then
+        -- v is different, let's skip the first phase
+        eng_N2_off[eng] = START_UP_PHASES_N2[#START_UP_PHASES_N2].n2_start
+        eng_N1_off[eng] = eng == 1 and get(Eng_1_N1) or get(Eng_2_N1)
+    end
     
-    if eng_N2_off[eng] < START_UP_PHASES_N2[#START_UP_PHASES_N2].n2_start then  -- 1st phase
+    -- If the N2 is larger than 10, then we can start the real startup procedure
+    if eng_N2_off[eng] < START_UP_PHASES_N2[#START_UP_PHASES_N2].n2_start and not inflight_restart then  -- 1st phase, but not inflight_restart
 
         -- Oh yes, this is a funny thing. You need to set this dataref to 100 to cheat X-Plane
         -- to convince it that the engine has been ignited (but it's not! We don't want X-Plane to
@@ -681,7 +686,7 @@ local function update_startup()
                     set(EWD_engine_cooling, 1, 2)
                 end
             else
-                perform_starting_procedure(1)
+                perform_starting_procedure(1, get(All_on_ground) == 0)
             end
             require_cooldown[1] = false
         end
@@ -701,7 +706,7 @@ local function update_startup()
                     require_cooldown[1] = false
                 end
             else
-                perform_starting_procedure(2)
+                perform_starting_procedure(2, get(All_on_ground) == 0)
             end
             require_cooldown[2] = false
         end
@@ -727,7 +732,8 @@ local function update_startup()
     -- CASE 3: No ignition, no crank, engine is off of shutting down
     if get(Engine_1_avail) == 0  and require_cooldown[1] then    -- Turn off the engine
         -- Set N2 to zero
-        eng_N2_off[1] = Set_linear_anim_value(eng_N2_off[1], 0, 0, 120, 1)
+        local n2_target = get(IAS) > 50 and 10 + get(IAS)/10 + math.random()*2 or 0 -- In in-flight it rotates
+        eng_N2_off[1] = Set_linear_anim_value(eng_N2_off[1], n2_target, 0, 120, 1)
         set(eng_N2_enforce, eng_N2_off[1], 1)
         
         -- Set EGT and FF to zero
@@ -739,7 +745,8 @@ local function update_startup()
     end
     if get(Engine_2_avail) == 0 and require_cooldown[2] then    -- Turn off the engine
         -- Set N2 to zero
-        eng_N2_off[2] = Set_linear_anim_value(eng_N2_off[2], 0, 0, 120, 1)
+        local n2_target = get(IAS) > 50 and 10 + get(IAS)/10 + math.random()*2 or 0 -- In in-flight it rotates
+        eng_N2_off[2] = Set_linear_anim_value(eng_N2_off[2], n2_target or 0 , 0, 120, 1)
         set(eng_N2_enforce, eng_N2_off[2], 2)
         
         -- Set EGT and FF to zero

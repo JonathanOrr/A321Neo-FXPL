@@ -29,7 +29,7 @@ local function lateral_controlling(var_table, filter_table)
     filter_table.IAS_filter_table.x = adirs_get_avg_ias()
     var_table.filtered_ias = low_pass_filter(filter_table.IAS_filter_table)
 
-    print(var_table.filtered_ias)
+    --print(var_table.filtered_ias)
 
     --augment the controls and outputs and BP
     var_table.controller_output = FBW_PID_BP(FBW_PID_arrays.FBW_test_PID_array, var_table.filtered_error, var_table.filtered_P, var_table.filtered_ias)
