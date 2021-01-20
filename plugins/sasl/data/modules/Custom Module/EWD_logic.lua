@@ -192,6 +192,7 @@ local left_messages_list = {
     MessageGroup_AOA_CAPT_FAULT,
     MessageGroup_AOA_FO_FAULT,
     MessageGroup_AOA_STBY_FAULT,
+    MessageGroup_ENG_FADEC_FAULT,
     
     -- Warnings
     MessageGroup_OVERSPEED,

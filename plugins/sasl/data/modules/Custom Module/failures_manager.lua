@@ -89,6 +89,9 @@ local function check_wc_voltage()
 end
 
 function update()
+    set(XPlane_Auto_Failure, 0) -- Enforce the X-Plane failures to off: bad things happen if you don't
+                                -- use our failure manager.
+
     check_wc_voltage()
     update_master_wc()
 end

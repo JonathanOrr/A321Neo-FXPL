@@ -20,6 +20,8 @@
 ReqMasterCaution      = createGlobalPropertyi("a321neo/failures/req_master_caution", 0, false, true, false) -- When a component (typically EWD) wants to trigger a caution put this to 1
 ReqMasterWarning      = createGlobalPropertyi("a321neo/failures/req_master_warning", 0, false, true, false) -- When a component (typically EWD) wants to trigger a warning put this to 1
 
+XPlane_Auto_Failure   = globalProperty("sim/operation/failures/enable_random_failures")
+
 -- Instruments
 FAILURE_radioalt_cap = createGlobalPropertyi("a321neo/failures/pfd/capt_radioalt", 0, false, true, false) -- 0: OK, 1: FAILED
 
@@ -177,6 +179,12 @@ FAILURE_ENG_1_FUEL_CLOG = createGlobalPropertyi("a321neo/failures/engines/eng_1_
 FAILURE_ENG_2_FUEL_CLOG = createGlobalPropertyi("a321neo/failures/engines/eng_2_fuel_clog", 0, false, true, false)
 FAILURE_ENG_1_OIL_CLOG = createGlobalPropertyi("a321neo/failures/engines/eng_1_oil_clog", 0, false, true, false)
 FAILURE_ENG_2_OIL_CLOG = createGlobalPropertyi("a321neo/failures/engines/eng_2_oil_clog", 0, false, true, false)
+
+FAILURE_ENG_FADEC_CH1 = createGlobalPropertyia("a321neo/failures/engines/fadec_ch1", 2)
+FAILURE_ENG_FADEC_CH2 = createGlobalPropertyia("a321neo/failures/engines/fadec_ch2", 2)
+
+
+
 FAILURE_ENG_APU_FAIL   = createGlobalPropertyi("a321neo/failures/engines/apu_fail", 0, false, true, false)
 FAILURE_ENG_APU_LOW_OIL_P = createGlobalPropertyi("a321neo/failures/engines/apu_low_oil_press", 0, false, true, false) -- 0: OK, 1: FAILED
 
@@ -267,3 +275,4 @@ FAILURE_GPWS_TERR  = createGlobalPropertyi("a321neo/failures/gpws/gpws_terr", 0,
 
 FAILURE_FIRE_CARGO_FWD = createGlobalPropertyi("a321neo/failures/fire/cargo_fwd", 0, false, true, false)
 FAILURE_FIRE_CARGO_AFT = createGlobalPropertyi("a321neo/failures/fire/cargo_aft", 0, false, true, false)
+
