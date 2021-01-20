@@ -241,7 +241,9 @@ local function controller_outflow_valve()
     set(Press_controller_sp_ovf, setpoint_cabin_vs)   -- For debug window only
     set(Press_controller_last_ovf, get(TIME))
 
-    local curr_err  = setpoint_cabin_vs - get(Cabin_vs)
+    local curr_err  = setpoint_cabin_vs - get(Cabin_vs) + get(Press_safety_valve_pos) * 1000 -- This is a trick to volutarily confuse the controller
+                                                                                             -- otherwise, the controller keeps the outflow valve closed
+                                                                                             -- if the safety valve is open, this trick avoids this.
     local u = SSS_PID_BP(pid_array_outflow, curr_err)
     return u
  

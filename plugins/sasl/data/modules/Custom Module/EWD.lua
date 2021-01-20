@@ -111,6 +111,10 @@ function update()
 end
 
 local function draw_packs_wai_nai()
+    if get(Engine_1_avail) == 0 and get(Engine_2_avail) == 0 then
+        return
+    end
+
     -- PACKS / WAI / NAI indication
     if get(Any_wheel_on_ground) == 1 or get(Eng_N1_mode) < 3 or get(Eng_N1_mode) > 5 then
         local str = ""
@@ -138,20 +142,8 @@ local function draw_packs_wai_nai()
 
 end
 
-local function draw_extra_indication()
-    draw_packs_wai_nai()
+local function draw_n1_limits()
 
-    -- A FLOOR
-    if true then    -- TODO Jon please add here a condition
-        sasl.gl.drawText(Font_AirbusDUL, 30, size[2]-40, "A FLOOR", 32, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
-    end
-
-    if get(Eng_N1_mode) == 0 then
-        return
-    end
-    mode_names = {"TOGA", "MCT", "CLB", "IDLE", "MREV", "FLEX", "GA SOFT"}
-
-    local n1_max = get(Eng_N1_max)
     --draw needle limits--
     if get(L_sim_throttle) < 0 then
         SASL_draw_needle_adv(size[1]/2 - 175, size[2]/2 + 333, 68, 85, Math_rescale_lim_lower(20, 222, 100, 48, get(Eng_N1_max_detent_toga) * 0.7), 6, ECAM_ORANGE)
@@ -167,8 +159,40 @@ local function draw_extra_indication()
     --draw blue dots
     sasl.gl.drawRotatedTextureCenter ( EWD_req_thrust_img, Math_rescale_lim_lower(20, -132, 100, 42, get(L_throttle_blue_dot)), size[1]/2 - 175, size[2]/2 + 333, size[1]/2 - 184, size[2]/2 + 331, 18, 97, {1, 1, 1})
     sasl.gl.drawRotatedTextureCenter ( EWD_req_thrust_img, Math_rescale_lim_lower(20, -132, 100, 42, get(R_throttle_blue_dot)), size[1]/2 + 175, size[2]/2 + 333, size[1]/2 + 166, size[2]/2 + 331, 18, 97, {1, 1, 1})
+end
 
-    sasl.gl.drawText(Font_AirbusDUL, size[1]-80, size[2]-30, mode_names[get(Eng_N1_mode)], 32, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+local function draw_extra_indication()
+    draw_packs_wai_nai()
+
+    -- A FLOOR
+    if true then    -- TODO Jon please add here a condition
+        sasl.gl.drawText(Font_AirbusDUL, 30, size[2]-40, "A FLOOR", 32, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
+    end
+
+    if get(Eng_N1_mode) == 0 then
+        return
+    end
+    
+    displayed_mode = get(Eng_N1_mode)
+
+    local n1_max = get(Eng_N1_max)
+    
+    if get(All_on_ground) == 1 and get(Eng_N1_mode) ~= 1 then
+        if get(Engine_1_avail) == 0 and get(Engine_1_avail) == 0 then
+            displayed_mode = 3 -- When engines OFF, the mode is CLB
+            n1_max = get(Eng_N1_max_detent_clb)
+        elseif get(Eng_N1_flex_temp) ~= 0 then
+            displayed_mode = 6
+            n1_max = get(Eng_N1_max_detent_flex)
+        else
+            displayed_mode = 1
+            n1_max = get(Eng_N1_max_detent_toga)
+        end
+    end
+    
+    mode_names = {"TOGA", "MCT", "CLB", "IDLE", "MREV", "FLEX", "GA SOFT"}
+
+    sasl.gl.drawText(Font_AirbusDUL, size[1]-80, size[2]-30, mode_names[displayed_mode], 32, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
     sasl.gl.drawText(Font_AirbusDUL, size[1]-65, size[2]-55, math.floor(n1_max) .. ".", 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     sasl.gl.drawText(Font_AirbusDUL, size[1]-50, size[2]-55, math.floor((n1_max%1)*10), 24, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     sasl.gl.drawText(Font_AirbusDUL, size[1]-35, size[2]-55, "%", 24, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)

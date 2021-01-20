@@ -872,9 +872,10 @@ local function update_n1_mode_and_limits()
     set(Eng_N1_max_detent_toga, eng_N1_limit_takeoff(get(OTA), get(TAT), get(Capt_Baro_Alt), pack_oper, ai_eng_oper, ai_wing_oper))    
     set(Eng_N1_max_detent_mct, eng_N1_limit_mct(get(OTA), get(TAT), get(Capt_Baro_Alt), pack_oper, ai_eng_oper, ai_wing_oper))        
     set(Eng_N1_max_detent_clb, eng_N1_limit_clb(get(OTA), get(TAT), get(Capt_Baro_Alt), pack_oper, ai_eng_oper, ai_wing_oper))
-
-
+    set(Eng_N1_max_detent_flex, 80)        
+    
     if thr_pos > 0.826 then -- TOGA Region
+    
         if thr_pos >= 0.99 and last_time_toga == 0 then
             -- This is needed for soft GA
             last_time_toga = get(TIME)
@@ -882,11 +883,14 @@ local function update_n1_mode_and_limits()
         set(Eng_N1_mode, 1) -- TOGA
     elseif thr_pos > 0.676 then
     
+        if get(Eng_N1_flex_temp) ~= 0 and get(EWD_flight_phase) >= PHASE_1ST_ENG_TO_PWR and get(EWD_flight_phase) <= PHASE_LIFTOFF then
+            set(Eng_N1_mode, 6) -- FLEX
+    
         -- If the pilot moves the throttle from MCT to TOGA, and then from TOGA to SOFT GA in less
         -- than 3 seconds, then SOFT GA is enabled until it's back to TOGA or CLB
         -- Also, both engines must be available
         -- Further details here: https://safetyfirst.airbus.com/introduction-to-the-soft-go-around-function/
-        if (get(Eng_N1_mode) == 7 or get(TIME) - last_time_toga < 3) and get(Engine_1_avail) and get(Engine_2_avail) then
+        elseif (get(Eng_N1_mode) == 7 or get(TIME) - last_time_toga < 3) and get(Engine_1_avail) == 1 and get(Engine_2_avail) == 1 then
             set(Eng_N1_mode, 7) -- SOFT GA
             
             -- In this case we replace the MCT value
@@ -898,7 +902,12 @@ local function update_n1_mode_and_limits()
     elseif thr_pos >= 0.05 then
         set(Eng_N1_mode, 3) -- CLB
         last_time_toga = 0
-    elseif thr_pos > -0.05 then
+
+        if get(All_on_ground) == 0 then
+            set(Eng_N1_flex_temp, 0) -- Reset FLEX temp to avoid G/A triggering of FLEX or other situations
+        end
+
+    elseif thr_pos > -0.05 or get(Either_Aft_on_ground) == 0 then   -- Reverse protection
         set(Eng_N1_mode, 4) -- IDLE
         last_time_toga = 0
     elseif thr_pos <= -0.05 then

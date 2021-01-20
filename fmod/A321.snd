@@ -2318,12 +2318,14 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /TouchMain
   VEH_XYZ 0 0 0
   EVENT_START_COND 	a321neo/dynamics/wheel/either_aft_on_ground == 1
+  EVENT_END_COND 	a321neo/dynamics/wheel/either_aft_on_ground == 0
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /TouchNose
   VEH_XYZ 0 0 0
   EVENT_START_COND 	sim/flightmodel2/gear/on_ground[0] == 1
+  EVENT_END_COND 	sim/flightmodel2/gear/on_ground[0] == 0
 END_SOUND_ATTACHMENT
 
 
@@ -2543,7 +2545,7 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /Wind
   VEH_XYZ 0 2.3 0
   EVENT_START_COND 	sim/flightmodel/position/true_airspeed >= 1
-  EVENT_END_COND  sim/flightmodel/position/true_airspeed < 1
+  EVENT_END_COND 	a321neo/dynamics/wheel/either_aft_on_ground == 1
 END_SOUND_ATTACHMENT
 
 #############################################################################################

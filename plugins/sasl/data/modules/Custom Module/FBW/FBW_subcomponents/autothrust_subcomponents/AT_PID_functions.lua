@@ -45,8 +45,12 @@ local function get_N1_target()
         curr_max = get(Eng_N1_max_detent_toga)
         prev_max = get(Eng_N1_max_detent_mct)
         N1_target =  Math_rescale(0.825, prev_max, 1, curr_max, thr)
-    elseif get(Eng_N1_mode) == 2 or get(Eng_N1_mode) == 6 or get(Eng_N1_mode) == 7 then -- MCT or FLEX or SOFT GA
+    elseif get(Eng_N1_mode) == 2 or get(Eng_N1_mode) == 7 then -- MCT or SOFT GA
         curr_max = get(Eng_N1_max_detent_mct)
+        prev_max = get(Eng_N1_max_detent_clb)
+        N1_target =  Math_rescale(0.675, prev_max, 0.825, curr_max, thr)
+    elseif get(Eng_N1_mode) == 6 then -- FLEX
+        curr_max = get(Eng_N1_max_detent_flex)
         prev_max = get(Eng_N1_max_detent_clb)
         N1_target =  Math_rescale(0.675, prev_max, 0.825, curr_max, thr)
     elseif get(Eng_N1_mode) == 3 then -- CLB
