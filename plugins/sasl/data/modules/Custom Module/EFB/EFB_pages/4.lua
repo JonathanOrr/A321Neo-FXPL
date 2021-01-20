@@ -55,6 +55,11 @@ function EFB_execute_page_4_buttons()
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 67,162,277,194, function ()
         print("recon_idg")
     end)
+
+
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 751,150,972,174, function ()
+        print("save_optn")
+    end)
 ----------------------------------------------TOGGLE OPTIONS
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 620,363,659,381, function ()
         set(OPTIONS_syncqnh, 1-get(OPTIONS_syncqnh))

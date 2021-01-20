@@ -727,6 +727,8 @@ OPTIONS_tca = createGlobalPropertyi("a321neo/options/tca", 0, false, true, false
 OPTIONS_pausetd = createGlobalPropertyi("a321neo/options/pausetd", 0, false, true, false)
 OPTIONS_callouts = createGlobalPropertyi("a321neo/options/callouts", 0, false, true, false)
 
+OPTIONS_sybpage_no = createGlobalPropertyi("a321neo/options/subpage_number", 0, false, true, false)
+
 --Ground Vehicles
 VEHICLE_ac = createGlobalPropertyi("a321neo/vehicles/ac", 0, false, true, false)
 VEHICLE_as = createGlobalPropertyi("a321neo/vehicles/as", 0, false, true, false)
