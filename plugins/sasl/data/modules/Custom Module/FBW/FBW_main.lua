@@ -53,6 +53,7 @@ components = {
     flight_controls {},
     limits_calculations {},
     lateral_augmentation {},
+    yaw_augmentation {},
 }
 
 --register commands

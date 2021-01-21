@@ -6,8 +6,8 @@ AT_PID_arrays = {
 
 FBW_PID_arrays = {
     FBW_ROLL_RATE_PID_array = {
-        P_gain = 0.035,
-        I_gain = 0.06,
+        P_gain = 0.032,
+        I_gain = 0.055,
         D_gain = 0.0001,
         B_gain = 1,
         Schedule_gains = true,
@@ -198,6 +198,41 @@ FBW_PID_arrays = {
         PV_curve_spd = nil,
         Smooth_derivative = false,
         Derivative_curve_spd = nil,
+    },
+
+    FBW_YAW_DAMPER_PID_array = {
+        P_gain = 0.013,
+        I_gain = 0.17,
+        D_gain = 0.008,
+        B_gain = 1,
+        Schedule_gains = false,
+        Schedule_table = {
+            P = {
+                {0.0 , 0.013},
+                {0.5 , 0.013},
+                {1.0 , 0.013},
+            },
+            I = {
+                {0.0, 0.17},
+                {0.5, 0.17},
+                {1.0, 0.17},
+            },
+            D = {
+                {0.0, 0.008},
+                {0.5, 0.008},
+                {1.0, 0.008},
+            },
+        },
+        Min_out = -1,
+        Max_out = 1,
+        PV = 0,
+        Error = 0,
+        Proportional = 0,
+        Integral = 0,
+        Derivative = 0,
+        Backpropagation = 0,
+        Desired_output = 0,
+        Actual_output = 0,
     },
 
     SSS_FBW_CWS_trim = {

@@ -22,15 +22,6 @@ local total_roll = 0
 local total_pitch = 0
 local total_yaw = 0
 local last_total_failure = 0--last value of the up shit creek dataref
---sim datarefs
-
-local servo_roll = globalProperty("sim/joystick/servo_roll_ratio")
-local servo_pitch = globalProperty("sim/joystick/servo_pitch_ratio")
-local servo_yaw = globalProperty("sim/joystick/servo_heading_ratio")
-
-local roll_artstab = globalProperty("sim/joystick/artstab_roll_ratio")
-local pitch_artstab = globalProperty("sim/joystick/artstab_pitch_ratio")
-local yaw_artstab = globalProperty("sim/joystick/artstab_heading_ratio")
 
 --modify xplane functions
 sasl.registerCommandHandler(Min_speedbrakes, 1, XP_min_speedbrakes)
@@ -98,13 +89,13 @@ function update()
     end
 
     --summing the controls
-    total_roll = get(roll_artstab)--Roll rate commanding
+    total_roll = get(Roll_artstab)--Roll rate commanding
+    total_yaw = get(Yaw_artstab)
     if get(FBW_kill_switch) == 0 then
-        total_pitch = get(pitch_artstab) --G commanding
-        total_yaw = get(Yaw) + get(yaw_artstab)
+        total_pitch = get(Pitch_artstab) --G commanding
     else
-        total_pitch = get(Augmented_pitch) + get(pitch_artstab)
-        total_yaw = get(Yaw) + get(yaw_artstab)
+        total_pitch = get(Augmented_pitch) + get(Pitch_artstab)
+        total_yaw = get(Yaw)
     end
 
     if get(Override_control_surfaces) == 1 then

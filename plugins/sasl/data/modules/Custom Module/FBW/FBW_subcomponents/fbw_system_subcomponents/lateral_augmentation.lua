@@ -44,14 +44,14 @@ local function limit_input(x, bank, neutral_bank, max_bank)
     --rescale input--
     local l_limit_table = {
         {0, x},
-        {1, 0},
+        {1, math.max(0, x)},
         {2, max_return_rate / max_roll_rate},
     }
     local x_limited = Table_interpolate(l_limit_table, l_limitation)
 
     local r_limit_table = {
         {0, x_limited},
-        {1, 0},
+        {1, math.min(x, 0)},
         {2, -max_return_rate / max_roll_rate},
     }
     x_limited = Table_interpolate(r_limit_table, r_limitation)

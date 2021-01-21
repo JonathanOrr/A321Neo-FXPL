@@ -49,6 +49,13 @@ DELTA_TIME_array = {}
 DELTA_TIME_sum = 0
 Graph_x_offset_sum = 0
 
+Og_value_array = {}
+Value_DELTA_TIME_array = {}
+Value_DELTA_TIME_sum = 0
+Value_x_offset_sum = 0
+
+local graph_max_value = 20
+
 function Clear_PID_history()
     for i = 1, #P_array do
         P_array[i] = P_array[i + 1]
@@ -137,6 +144,49 @@ function Draw_PID_graph(x_pos, y_pos, width, height, P_color, I_color, D_color, 
     end
 end
 
+function Update_value_historys(value)
+
+    if get(DELTA_TIME) ~= 0 then
+
+        Value_DELTA_TIME_sum = 0
+
+        for i = 1, #Value_DELTA_TIME_array do
+            Value_DELTA_TIME_sum = Value_DELTA_TIME_sum + Value_DELTA_TIME_array[i]
+        end
+
+        if DELTA_TIME_sum < graph_time_limit then
+            Og_value_array[#Og_value_array + 1] = value / graph_max_value
+            Value_DELTA_TIME_array[#Value_DELTA_TIME_array + 1] = get(DELTA_TIME)
+        end
+
+        --larger than graph time limit clearing out all extra array items
+        if DELTA_TIME_sum >= graph_time_limit then
+            for i = 1, #Value_DELTA_TIME_array do
+                Og_value_array[i] = Og_value_array[i + 1]
+                Value_DELTA_TIME_array[i] = Value_DELTA_TIME_array[i + 1]
+            end
+        end
+
+    end
+end
+
+function Draw_value_graph(x_pos, y_pos, width, height, value_color)
+    local CENTER_X = (2 * x_pos + width) / 2
+    local CENTER_Y = (2 * y_pos + height) / 2
+    local END_X = x_pos + width
+    local END_Y = y_pos + height
+
+    Value_x_offset_sum = 0
+
+    for i = 1 ,#Value_DELTA_TIME_array do
+        Value_x_offset_sum = Value_x_offset_sum + Value_DELTA_TIME_array[i] / graph_time_limit * width
+
+        if i > 1 then
+            sasl.gl.drawLine(x_pos + Value_x_offset_sum - Value_DELTA_TIME_array[i] / graph_time_limit * width, CENTER_Y + Og_value_array[i - 1] * height / 2, x_pos + Value_x_offset_sum, CENTER_Y + Og_value_array[i] * height / 2, value_color)
+        end
+    end
+end
+
 local function init_tuning_PID(PID_array)
     set(live_tunning_P, PID_array.P_gain)
     set(live_tunning_I, PID_array.I_gain)
@@ -166,7 +216,7 @@ local function draw_gain_values(PID_array, x_pos, y_pos, width, height, P_color,
     sasl.gl.drawText(Font_AirbusDUL, CENTER_X + 290, CENTER_Y + 100, "D GAIN: " .. Round_fill(PID_array.D_gain, 4), 12, false, false, TEXT_ALIGN_RIGHT, D_color)
 end
 
---init_tuning_PID(FBW_PID_arrays.FBW_ROLL_RATE_PID_array)
+init_tuning_PID(FBW_PID_arrays.FBW_YAW_DAMPER_PID_array)
 
 function update()
     if PID_UI_window:isVisible() == true then
@@ -175,12 +225,18 @@ function update()
         sasl.setMenuItemState(Menu_debug, ShowHidePIDUI, MENU_UNCHECKED)
     end
 
-    Update_PID_historys(0 + 5, 0 + 5, 400, 250, FBW_PID_arrays.FBW_ROLL_RATE_PID_array)
-    --live_tune_PID(FBW_PID_arrays.FBW_ROLL_RATE_PID_array)
+    Update_PID_historys(0 + 5, 0 + 5, 400, 250, FBW_PID_arrays.FBW_YAW_DAMPER_PID_array)
+    live_tune_PID(FBW_PID_arrays.FBW_YAW_DAMPER_PID_array)
+
+    --update anything
+    --Update_value_historys(get(Slide_slip_angle) -(-get(Yaw) * 20) )
 end
 
 function draw()
     sasl.gl.drawRectangle(0, 0, size[1], size[2], LIGHT_GREY)
-    Draw_PID_graph(0 + 5, 0 + 5, 590, 290, WHITE, LIGHT_BLUE, GREEN, ORANGE, true, true, true, true, false)
-    draw_gain_values(FBW_PID_arrays.FBW_ROLL_RATE_PID_array, 0 + 5, 0 + 5, 590, 290, WHITE, LIGHT_BLUE, GREEN)
+    Draw_PID_graph(0 + 5, 0 + 5, 590, 290, WHITE, LIGHT_BLUE, GREEN, ORANGE, true, true, true, true, true)
+    draw_gain_values(FBW_PID_arrays.FBW_YAW_DAMPER_PID_array, 0 + 5, 0 + 5, 590, 290, WHITE, LIGHT_BLUE, GREEN)
+
+    --draw anything
+    --Draw_value_graph(0 + 5, 0 + 5, 590, 290, PFD_YELLOW)
 end

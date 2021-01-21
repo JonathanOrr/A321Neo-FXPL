@@ -56,12 +56,13 @@ function Rudder_control(yaw_input, fbw_current_law, is_in_auto_flight, trim_inpu
     local rudder_travel_target = yaw_input * 30
 
     --RUDDER LIMITS--
-    if get(Rudder_lim_avail) == 1 and get(Slats) == 0 then
-        set(Rudder_travel_lim, Set_linear_anim_value(get(Rudder_travel_lim), -22.1 * math.sqrt(1 - ( (Math_clamp(adirs_get_avg_ias(), 160, 380) - 380) / 220)^2 ) + 25, 0, 30, rudder_trim_speed))
-    end
-
-    if get(Slats) > 0 and get(Rudder_lim_avail) == 1 then
-        set(Rudder_travel_lim, Set_linear_anim_value(get(Rudder_travel_lim), 25, 0, 30, rudder_trim_speed))
+    if get(Force_full_rudder_limit) ~= 1 then
+        if get(Rudder_lim_avail) == 1 and get(Slats) == 0 then
+            set(Rudder_travel_lim, Set_linear_anim_value(get(Rudder_travel_lim), -22.1 * math.sqrt(1 - ( (Math_clamp(adirs_get_avg_ias(), 160, 380) - 380) / 220)^2 ) + 25, 0, 30, rudder_trim_speed))
+        end
+        if get(Slats) > 0 and get(Rudder_lim_avail) == 1 then
+            set(Rudder_travel_lim, Set_linear_anim_value(get(Rudder_travel_lim), 25, 0, 30, rudder_trim_speed))
+        end
     end
 
     if get(Force_full_rudder_limit) == 1 then
@@ -91,7 +92,10 @@ function Rudder_control(yaw_input, fbw_current_law, is_in_auto_flight, trim_inpu
     --rudder failure--
     rudder_speed = Math_rescale(0, 0, 1450, rudder_speed, get(Hydraulic_G_press) + get(Hydraulic_B_press) + get(Hydraulic_Y_press)) * (1 - get(FAILURE_FCTL_RUDDER_MECH))
 
+    --limit rudder travel target--
+    rudder_travel_target = Math_clamp(rudder_travel_target, -get(Rudder_travel_lim) - get(Rudder_trim_angle), get(Rudder_travel_lim) - get(Rudder_trim_angle))
+
     --rudder position calculation--
-    set(Augmented_rudder_angle, Set_linear_anim_value(get(Augmented_rudder_angle), rudder_travel_target, -get(Rudder_travel_lim) - get(Rudder_trim_angle), get(Rudder_travel_lim) - get(Rudder_trim_angle), rudder_speed))
+    set(Augmented_rudder_angle, Set_anim_value_linear_range(get(Augmented_rudder_angle), rudder_travel_target, -30, 30, rudder_speed, 5))
     set(Rudder, Math_clamp(get(Rudder_trim_angle) + get(Augmented_rudder_angle), -get(Rudder_travel_lim), get(Rudder_travel_lim)))
 end
