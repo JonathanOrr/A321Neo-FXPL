@@ -162,6 +162,7 @@ EFB_GROUND_wv    =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textu
 
 EFB_LOAD_bgd =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/overlay.png")
 EFB_LOAD_cgball =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/cg_ball.png")
+EFB_LOAD_cross =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/cross.png")
 
 -----------CONFIG------------
 
