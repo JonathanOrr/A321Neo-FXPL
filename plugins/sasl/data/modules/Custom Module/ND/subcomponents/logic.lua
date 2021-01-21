@@ -36,7 +36,7 @@ end
 function update_position(data)
     local id = data.id
 
-    data.misc.map_not_avail = not adirs_is_position_ok(id)
+    data.misc.map_not_avail = not adirs_is_position_ok(id) or (Data_manager.nearest_airport == nil and data.config.range <= ND_RANGE_ZOOM_2)
 
     if not data.misc.map_not_avail then
         data.inputs.plane_coords_lat = adirs_get_lat(id) 
