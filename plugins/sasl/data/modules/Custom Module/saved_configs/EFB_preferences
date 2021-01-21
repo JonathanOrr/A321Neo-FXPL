@@ -3,9 +3,9 @@ return {
 {
    ["tca"]=0,
    ["copilot"]=0,
-   ["rolltonws"]=1,
-   ["flarelaw"]=1,
-   ["syncqnh"]=1,
-   ["pausetd"]=1,
+   ["rolltonws"]=0,
+   ["flarelaw"]=0,
+   ["syncqnh"]=0,
+   ["pausetd"]=0,
 },
 }
