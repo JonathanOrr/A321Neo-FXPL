@@ -166,7 +166,7 @@ local function draw_gain_values(PID_array, x_pos, y_pos, width, height, P_color,
     sasl.gl.drawText(Font_AirbusDUL, CENTER_X + 290, CENTER_Y + 100, "D GAIN: " .. Round_fill(PID_array.D_gain, 4), 12, false, false, TEXT_ALIGN_RIGHT, D_color)
 end
 
-init_tuning_PID(FBW_PID_arrays.FBW_test_PID_array)
+--init_tuning_PID(FBW_PID_arrays.FBW_ROLL_RATE_PID_array)
 
 function update()
     if PID_UI_window:isVisible() == true then
@@ -175,12 +175,12 @@ function update()
         sasl.setMenuItemState(Menu_debug, ShowHidePIDUI, MENU_UNCHECKED)
     end
 
-    Update_PID_historys(0 + 5, 0 + 5, 400, 250, FBW_PID_arrays.FBW_test_PID_array)
-    live_tune_PID(FBW_PID_arrays.FBW_test_PID_array)
+    Update_PID_historys(0 + 5, 0 + 5, 400, 250, FBW_PID_arrays.FBW_ROLL_RATE_PID_array)
+    --live_tune_PID(FBW_PID_arrays.FBW_ROLL_RATE_PID_array)
 end
 
 function draw()
     sasl.gl.drawRectangle(0, 0, size[1], size[2], LIGHT_GREY)
-    Draw_PID_graph(0 + 5, 0 + 5, 590, 290, WHITE, LIGHT_BLUE, GREEN, ORANGE, true, true, true, true, true)
-    draw_gain_values(FBW_PID_arrays.FBW_test_PID_array, 0 + 5, 0 + 5, 590, 290, WHITE, LIGHT_BLUE, GREEN)
+    Draw_PID_graph(0 + 5, 0 + 5, 590, 290, WHITE, LIGHT_BLUE, GREEN, ORANGE, true, true, true, true, false)
+    draw_gain_values(FBW_PID_arrays.FBW_ROLL_RATE_PID_array, 0 + 5, 0 + 5, 590, 290, WHITE, LIGHT_BLUE, GREEN)
 end
