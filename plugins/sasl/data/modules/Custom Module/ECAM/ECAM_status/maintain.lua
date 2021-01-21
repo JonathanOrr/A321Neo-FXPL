@@ -29,6 +29,15 @@ function ECAM_status_get_maintain()
         table.insert(messages, "CAB FAN AFT")
     end
 
+    if get(FAILURE_ENG_FADEC_CH1, 1) == 1 or get(FAILURE_ENG_FADEC_CH2, 1) == 1 then
+        table.insert(messages, "ENG 1 FADEC")
+    end
+
+    if get(FAILURE_ENG_FADEC_CH1, 2) == 1 or get(FAILURE_ENG_FADEC_CH2, 2) == 1 then
+        table.insert(messages, "ENG 2 FADEC")
+    end
+
+
     return messages
 end
 

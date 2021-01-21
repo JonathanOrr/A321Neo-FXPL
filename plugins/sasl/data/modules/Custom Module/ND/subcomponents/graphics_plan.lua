@@ -126,8 +126,7 @@ local function get_lat_lon(data, x, y)
     
     local px_per_nm = get_px_per_nm(data)
     local distance_nm = math.sqrt((size[1]/2 - x)*(size[1]/2 - x) + (size[2]/2 - y)*(size[2]/2 - y)) / px_per_nm
-    print(bearing)
-    print(distance_nm)
+
     return Move_along_distance(data.plan_ctr_lat, data.plan_ctr_lon, distance_nm*1852, bearing)
 end
 
@@ -195,20 +194,31 @@ local function draw_oans_rwy(data, rwy_start, rwy_end)
     sasl.gl.drawRotatedText(Font_AirbusDUL, m_x , m_y-height/2 , m_x, m_y, m_angle, text_rwy, font_size, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
     
     -- Runway sign start/end
-    local dist_text = - 10 + data.config.range * 15 + ((data.config.range == -3) and -25 or 0)
+    m_angle = m_angle+90
+    
+    local direction = tonumber(string.sub(rwy_end.sibling,1,2))
+    if direction ~= nil then
+        if direction >= 9 and direction < 27 then
+            if  m_angle < 90 or m_angle > 270 then
+                m_angle = m_angle + 180
+            end
+        else
+            if m_angle >= 90 and m_angle <= 270 then
+                m_angle = m_angle + 180
+            end        
+        end
+    end
+    
+    local dist_text = -70
     local x_shift = x_start + dist_text * math.cos(angle)
     local y_shift = y_start + dist_text * math.sin(angle)
-    local font_size = semiwidth_px
-    
-    m_angle = m_angle+90
-    if m_angle+90 > 180 or m_angle+90 < 0 then
-        m_angle = m_angle+180
-    end
+    local font_size = 60
+    local width = 30 * #rwy_end.sibling
+
     sasl.gl.drawRotatedText(Font_AirbusDUL, x_shift, y_shift, x_shift, y_shift, m_angle, rwy_end.sibling, font_size, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
 
     local x_shift = x_end - dist_text * math.cos(angle)
     local y_shift = y_end - dist_text * math.sin(angle)
-    local font_size = semiwidth_px
     sasl.gl.drawRotatedText(Font_AirbusDUL, x_shift, y_shift, x_shift, y_shift, 180+m_angle, rwy_start.sibling, font_size, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
 
 end
@@ -245,7 +255,11 @@ local function draw_oans_taxiways(data, apt)
         if #triangles > 0 then
             for j,v in ipairs(triangles) do
                 if #v == 3 then
-                    sasl.gl.drawConvexPolygon ({ v[1][1], v[1][2], v[2][1], v[2][2], v[3][1], v[3][2] }, true, 0, {0.5,0.5,0.5}) 
+                    local color = {0.5,0.5,0.5}
+                    if data.config.range == ND_RANGE_ZOOM_2 then
+                        color = {0.2,0.2,0.2}
+                    end
+                    sasl.gl.drawConvexPolygon ({ v[1][1], v[1][2], v[2][1], v[2][2], v[3][1], v[3][2] }, true, 0, color) 
                 end
             end
         end
@@ -331,8 +345,8 @@ local function draw_oans_tower(data, apt)
     if apt.tower.lat ~= nil then
         local x,y = get_x_y(data, apt.tower.lat, apt.tower.lon)
         
-        local width  = (10 + 30 * (-data.config.range))
-        local height =  18 + 10 * (-data.config.range)
+        local width  = 40
+        local height =  36
         local y_shift = (height-3)/2
 
         sasl.gl.drawRectangle (x-width/2, y-y_shift-3+data.config.range, width, height-4,  {0,0,0})
@@ -342,40 +356,6 @@ local function draw_oans_tower(data, apt)
     
     end
 end
---[[
-local function draw_oans_mark_signs_single_position(data, text, lat, lon)
-    local x,y = get_x_y(data, lat, lon)
-    
-     local width  = (10 + 10 * (-data.config.range)) * #text
-     local height = 18 + 10 * (-data.config.range)
-    sasl.gl.drawRectangle (x-width/2, y-3+data.config.range, width, height-4,  {0,0,0})
-    sasl.gl.drawText(Font_AirbusDUL, x,y, text, height-5, false, false, TEXT_ALIGN_CENTER, COLOR_YELLOW)
-end
-
-local function draw_oans_mark_signs(data, apt)
-    for i,line in ipairs(apt.signs) do
-    
-        local pos = string.find(line.text, "{@L}")
-        if pos ~= nil then
-            local stop = string.find(line.text, "{", pos+4)
-            if stop == nil then stop = pos+6 end
-            
-            local taxi_name = string.sub(line.text,pos+4,stop-1)
-            draw_oans_mark_signs_single_position(data, taxi_name, line.lat, line.lon)
-        end
-
-        if string.sub(line.text,1,14) == "{@R}{no-entry}" then
-            local x,y = get_x_y(data, line.lat, line.lon)
-
-            local width  = 60 + 50 * (-data.config.range)
-            local height = 18 + 10 * (-data.config.range)
-            
-            sasl.gl.drawRectangle (x-width/2, y-3+data.config.range, width, height-4,ECAM_RED )
-            sasl.gl.drawText(Font_AirbusDUL, x,y, "NO ENTRY", height-5, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-        end
-    end
-end
-]]--
 
 local function draw_oans_mark_taxi(data, apt)
     for i,line in ipairs(apt.taxi_routes) do
@@ -390,8 +370,8 @@ local function draw_oans_mark_taxi(data, apt)
             local x = (x1+x2)/2
             local y = (y1+y2)/2
 
-            local width  = (10 + 10 * (-data.config.range)) * #line.name
-            local height = 18 + 10 * (-data.config.range)
+            local width  = 20 * #line.name
+            local height = 36
             local y_shift = (height-3)/2
 
             sasl.gl.drawRectangle (x-width/2, y-y_shift-3+data.config.range, width, height-4,  {0,0,0})
@@ -407,8 +387,8 @@ local function draw_oans_mark_gate(data, apt)
         if line.name ~= nil then
             local x,y = get_x_y(data, line.lat, line.lon)
 
-            local width  = (10 + 9 * (-data.config.range)) * #line.name
-            local height = 18 + 10 * (-data.config.range)
+            local width  = 20 * #line.name
+            local height = 36
             local y_shift = (height-3)/2
 
             sasl.gl.drawRectangle (x-width/2, y-y_shift-3+data.config.range, width, height-4,  {0,0,0})
@@ -448,7 +428,6 @@ local function draw_oans(data)
     if nearest_airport ~= nil then
         local apt = Data_manager.get_arpt_by_name(nearest_airport.id)
         
-        --print(#apt.signs)
         if data.plan_ctr_lat == 0 and data.plan_ctr_lon == 0 then
             data.plan_ctr_lat = apt.lat
             data.plan_ctr_lon = apt.lon
@@ -456,12 +435,22 @@ local function draw_oans(data)
         
         draw_oans_airport_bounds(data, apt)
         draw_oans_taxiways(data, apt)
-        draw_oans_mark_lines(data, apt)
+        if data.config.range <= ND_RANGE_ZOOM_1 then
+            draw_oans_mark_lines(data, apt)
+        end
         draw_oans_rwys(data, apt)
-        draw_oans_tower(data, apt)
-        draw_oans_mark_taxi(data, apt)
-        draw_oans_mark_gate(data, apt)
-        draw_oans_flags_and_crosses(data)
+        
+        if data.config.range <= ND_RANGE_ZOOM_05 then
+            draw_oans_tower(data, apt)
+            draw_oans_mark_taxi(data, apt)
+        end        
+        if data.config.range <= ND_RANGE_ZOOM_02 then
+            draw_oans_mark_gate(data, apt)
+        end
+        
+        if data.config.range <= ND_RANGE_ZOOM_1 then
+            draw_oans_flags_and_crosses(data)
+        end
     end
 end
 

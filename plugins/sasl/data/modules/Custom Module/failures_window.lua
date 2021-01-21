@@ -184,6 +184,10 @@ local failures_data = {
             {name="ENG2 FUEL\nFILTER CLOG", status=false, dataref=FAILURE_ENG_2_FUEL_CLOG },
             {name="ENG1 OIL\nFILTER CLOG", status=false, dataref=FAILURE_ENG_1_OIL_CLOG },
             {name="ENG2 OIL\nFILTER CLOG", status=false, dataref=FAILURE_ENG_2_OIL_CLOG },
+            {name="ENG1 FADEC\nCH1 FAIL", status=false, dataref=FAILURE_ENG_FADEC_CH1, nr=1 },
+            {name="ENG2 FADEC\nCH1 FAIL", status=false, dataref=FAILURE_ENG_FADEC_CH1, nr=2 },
+            {name="ENG1 FADEC\nCH2 FAIL", status=false, dataref=FAILURE_ENG_FADEC_CH2, nr=1 },
+            {name="ENG2 FADEC\nCH2 FAIL", status=false, dataref=FAILURE_ENG_FADEC_CH2, nr=2 },
             
             {name="APU\nFAILURE", status=false, dataref=FAILURE_ENG_APU_FAIL},
             {name="APU OIL\nLOW PRESS", status=false, dataref=FAILURE_ENG_APU_LOW_OIL_P}
