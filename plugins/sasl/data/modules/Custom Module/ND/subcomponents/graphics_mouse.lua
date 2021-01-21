@@ -32,7 +32,7 @@ function onMouseMove(component, x, y,button, parentX, parentY)
     component.nd_data.plan_mouse_x = x
     component.nd_data.plan_mouse_y = y
 
-    if component.nd_data.plan_holding then
+    if component.nd_data.plan_holding and component.nd_data.config.mode == ND_MODE_PLAN then
         local speed =  20000 / 2^(component.nd_data.config.range-1)
         component.nd_data.plan_ctr_lat = component.nd_data.plan_ctr_lat + diff_y/speed
         component.nd_data.plan_ctr_lon = component.nd_data.plan_ctr_lon + diff_x/speed
@@ -71,15 +71,15 @@ function onMouseHold ( component , x , y , button , parentX , parentY )
 end
 
 local function draw_trigger_action(data, item)
-    if item == 0 then
+    if item == 0 and data.config.range < ND_RANGE_ZOOM_2 then
         table.insert(data.poi.cross, {x=data.plan_mouse_menu_x, y=data.plan_mouse_menu_y} )
-    elseif item == 1 then
+    elseif item == 1 and data.config.range < ND_RANGE_ZOOM_2 then
         table.insert(data.poi.flag,  {x=data.plan_mouse_menu_x, y=data.plan_mouse_menu_y} )
-    elseif item == 2 then
+    elseif item == 2 and data.config.range < ND_RANGE_ZOOM_2 then
         data.poi.cross = {}
-    elseif item == 3 then
+    elseif item == 3 and data.config.range < ND_RANGE_ZOOM_2 then
         data.poi.flag  = {}
-    elseif item == 4 then
+    elseif item == 4 and nd_data.config.mode == ND_MODE_PLAN then
         data.plan_ctr_lat = data.inputs.plane_coords_lat
         data.plan_ctr_lon = data.inputs.plane_coords_lon
     end
@@ -93,13 +93,24 @@ local function draw_menu(data)
         local y = data.plan_mouse_menu_y
         sasl.gl.drawRectangle (x, y-215, 300, 210, UI_DARK_GREY)
         Sasl_DrawWideFrame (x+1, y-214, 298, 208, 2, 1, ECAM_WHITE)
-        sasl.gl.drawText(Font_AirbusDUL, x+10, y-40, "ADD CROSS", 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
-        sasl.gl.drawText(Font_AirbusDUL, x+10, y-80, "ADD FLAG", 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
-        sasl.gl.drawText(Font_AirbusDUL, x+10, y-120, "ERASE ALL CROSSES", 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
-        sasl.gl.drawText(Font_AirbusDUL, x+10, y-160, "ERASE ALL FLAGS", 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
-
-        sasl.gl.drawText(Font_AirbusDUL, x+10, y-200, "CENTER ON ACFT", 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
-
+        
+        local color = ECAM_WHITE
+        if data.config.range >= ND_RANGE_ZOOM_2 then
+            color = {0.6,0.6,0.6}
+        end
+        
+        sasl.gl.drawText(Font_AirbusDUL, x+10, y-40, "ADD CROSS", 28, false, false, TEXT_ALIGN_LEFT, color)
+        sasl.gl.drawText(Font_AirbusDUL, x+10, y-80, "ADD FLAG", 28, false, false, TEXT_ALIGN_LEFT, color)
+        sasl.gl.drawText(Font_AirbusDUL, x+10, y-120, "ERASE ALL CROSSES", 28, false, false, TEXT_ALIGN_LEFT, color)
+        sasl.gl.drawText(Font_AirbusDUL, x+10, y-160, "ERASE ALL FLAGS", 28, false, false, TEXT_ALIGN_LEFT, color)
+    
+        local color = ECAM_WHITE
+        if nd_data.config.mode ~= ND_MODE_PLAN then
+            color = {0.6,0.6,0.6}
+        end
+        
+        sasl.gl.drawText(Font_AirbusDUL, x+10, y-200, "CENTER ON ACFT", 28, false, false, TEXT_ALIGN_LEFT, color)
+        
         if data.plan_mouse_x ~= nil then
             if data.plan_mouse_x > x and data.plan_mouse_x < x + 300 and 
                data.plan_mouse_y < y-5 and data.plan_mouse_y > y-200 then
