@@ -63,13 +63,22 @@ local EFB_draw_pages = {
 }
 
 EFB_preferences = {
-    syncqnh = 0,
-    rolltonws = 0,
-    tca = 0,
-    pausetd = 0,
-    copilot = 0,
-    flarelaw = 0
-  }
+    ["syncqnh"] = 0,
+    ["rolltonws"] = 0,
+    ["tca"] = 0,
+    ["pausetd"] = 0,
+    ["copilot"] = 0,
+    ["flarelaw"] = 0
+}
+
+--load EFB preferences--
+local table_load_buffer = table.load(moduleDirectory .. "/Custom Module/saved_configs/EFB_preferences")
+if table_load_buffer ~= nil then
+    EFB_preferences = table_load_buffer
+
+    --init FBW flare law(special case)
+    set(FBW_mode_transition_version, EFB_preferences["flarelaw"])
+end
 ---------------------------------------------------------------------------------------------------------------
 --MOUSE CLICK LOGIC--
 function onMouseDown(component, x, y, button, parentX, parentY)

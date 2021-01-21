@@ -1,3 +1,5 @@
+include("libs/table.save.lua")
+
 --MOUSE & BUTTONS--
 function EFB_execute_page_4_buttons()
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 642,618,673,745, function ()
@@ -58,31 +60,33 @@ function EFB_execute_page_4_buttons()
 
 
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 751,150,972,174, function ()
+        table.save(EFB_preferences, moduleDirectory .. "/Custom Module/saved_configs/EFB_preferences")
         print("save_optn")
     end)
 ----------------------------------------------TOGGLE OPTIONS
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 620,363,659,381, function ()
-        set(OPTIONS_syncqnh, 1-get(OPTIONS_syncqnh))
+        EFB_preferences["syncqnh"] = 1 - EFB_preferences["syncqnh"]
         print("toggle_options_sync")
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 620,329,659,347, function ()
-        set(OPTIONS_rolltonws, 1-get(OPTIONS_rolltonws))
+        EFB_preferences["rolltonws"] = 1 - EFB_preferences["rolltonws"]
         print("toggle_options_roll")
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 620,295,659,313, function ()
-        set(OPTIONS_tca, 1-get(OPTIONS_tca))
+        EFB_preferences["tca"] = 1 - EFB_preferences["tca"]
         print("toggle_options_tca")
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 620,261,659,279, function ()
-        set(OPTIONS_pausetd, 1-get(OPTIONS_pausetd))
+        EFB_preferences["pausetd"] = 1 - EFB_preferences["pausetd"]
         print("toggle_options_pausetd")
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 620,227,659,245, function ()
-        set(OPTIONS_callouts, 1-get(OPTIONS_callouts))
+        EFB_preferences["copilot"] = 1 - EFB_preferences["copilot"]
         print("toggle_options_callout")
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 620,193,659,211, function ()
-        set(FBW_mode_transition_version, 1-get(FBW_mode_transition_version))
+        set(FBW_mode_transition_version, 1 - get(FBW_mode_transition_version))
+        EFB_preferences["flarelaw"] = get(FBW_mode_transition_version)
         print("toggle_flarelaw_mode")
     end)
 end
@@ -122,52 +126,11 @@ function EFB_draw_page_4()
     sasl.gl.drawTexture ( EFB_CONFIG_slider, get(VOLUME_wind)*333+680 , 499 , 22 , 22 , ECAM_WHITE )
     sasl.gl.drawTexture ( EFB_CONFIG_slider, get(VOLUME_cabin)*333+680 , 439 , 22 , 22 , ECAM_WHITE )
 
-    if get(OPTIONS_syncqnh) == 1 then
-        SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 364, 78, 18, 2, 2)
-        EFB_preferences.syncqnh = 1
-    else
-        SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 364, 78, 18, 2, 1)
-        EFB_preferences.syncqnh = 0
-    end
-
-    if get(OPTIONS_rolltonws) == 1 then
-        SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 330, 78, 18, 2, 2)
-        EFB_preferences.rolltonws = 1
-    else
-        SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 330, 78, 18, 2, 1)
-        EFB_preferences.rolltonws = 0
-    end
-
-    if get(OPTIONS_tca) == 1 then
-        SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 296, 78, 18, 2, 2)
-        EFB_preferences.tca = 1
-    else
-        SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 296, 78, 18, 2, 1)
-        EFB_preferences.tca = 0
-    end
-
-    if get(OPTIONS_pausetd) == 1 then
-        SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 262, 78, 18, 2, 2)
-        EFB_preferences.pausetd = 1
-    else
-        SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 262, 78, 18, 2, 1)
-        EFB_preferences.pausetd = 0
-    end
-
-    if get(OPTIONS_callouts) == 1 then
-        SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 228, 78, 18, 2, 2)
-        EFB_preferences.copilot = 1
-    else
-        SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 228, 78, 18, 2, 1)
-        EFB_preferences.copilot = 0
-    end
-
-    if get(FBW_mode_transition_version) == 1 then
-        SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 194, 78, 18, 2, 2)
-        EFB_preferences.flarelaw = 1
-    else
-        SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 194, 78, 18, 2, 1)
-        EFB_preferences.flarelaw = 0
-    end
+    SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 364, 78, 18, 2, EFB_preferences["syncqnh"] == 1 and 2 or 1)
+    SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 330, 78, 18, 2, EFB_preferences["rolltonws"] == 1 and 2 or 1)
+    SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 296, 78, 18, 2, EFB_preferences["tca"] == 1 and 2 or 1)
+    SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 262, 78, 18, 2, EFB_preferences["pausetd"] == 1 and 2 or 1)
+    SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 228, 78, 18, 2, EFB_preferences["copilot"] == 1 and 2 or 1)
+    SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 194, 78, 18, 2, EFB_preferences["flarelaw"] == 1 and 2 or 1)
     --print(EFB_CURSOR_X, EFB_CURSOR_Y)
 end

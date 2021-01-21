@@ -1,0 +1,11 @@
+return {
+-- Table: {1}
+{
+   ["tca"]=0,
+   ["copilot"]=0,
+   ["rolltonws"]=1,
+   ["flarelaw"]=1,
+   ["syncqnh"]=1,
+   ["pausetd"]=1,
+},
+}

@@ -721,12 +721,6 @@ BUSS_Fo_man_enabled = createGlobalPropertyi("a321neo/dynamics/pfd/buss_fo_man", 
 ---------------------------------------------------------------------BELOW THIS LINE IS EFB DATAREFS--------------------------------------------------------------------------
 
 --Toggle Options
-OPTIONS_syncqnh = createGlobalPropertyi("a321neo/options/syncqnh", 0, false, true, false)
-OPTIONS_rolltonws = createGlobalPropertyi("a321neo/options/rolltonws", 0, false, true, false)
-OPTIONS_tca = createGlobalPropertyi("a321neo/options/tca", 0, false, true, false)
-OPTIONS_pausetd = createGlobalPropertyi("a321neo/options/pausetd", 0, false, true, false)
-OPTIONS_callouts = createGlobalPropertyi("a321neo/options/callouts", 0, false, true, false)
-
 OPTIONS_sybpage_no = createGlobalPropertyi("a321neo/options/subpage_number", 0, false, true, false)
 
 --Ground Vehicles

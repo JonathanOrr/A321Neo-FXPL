@@ -53,6 +53,7 @@ panelHeight3d = 4096
 
 components = {
   data_manager {},
+  efb{},
   display_backlights {},    -- This must stay at the top
   display_switching {},
   apu {},
@@ -97,7 +98,6 @@ components = {
 
   display_brightness {}, -- This must stay at the bottom
   librain{},
-  efb{},
 }
 
 include(moduleDirectory .. "/main_windows.lua")
