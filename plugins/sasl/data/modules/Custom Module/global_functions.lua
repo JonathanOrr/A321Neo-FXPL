@@ -741,3 +741,8 @@ function Cursor_texture_to_local_pos(x, y, component_width, component_height, pa
     --output converted coordinates
     return component_x, component_y, true
 end
+
+function Local_magnetic_deviation()
+    return get(Flightmodel_mag_heading) - get(Flightmodel_true_heading)
+end
+

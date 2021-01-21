@@ -17,6 +17,7 @@
 -------------------------------------------------------------------------------
 
 include("ND/subcomponents/helpers.lua")
+include("ND/subcomponents/graphics_oans.lua")
 
 local image_bkg_ring        = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/ring.png")
 local image_bkg_ring_red    = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/ring-red.png")
@@ -48,7 +49,7 @@ local poi_position_last_update = 0
 local POI_UPDATE_RATE = 0.1
 local MAX_LIMIT_WPT = 500
 
-local function get_px_per_nm(data)
+local function rose_get_px_per_nm(data)
     -- 588 px is the diameter of our ring, so this corresponds to the range scale selected:
     local range_in_nm = get_range_in_nm(data)
     -- The the per_px nm is:
@@ -149,20 +150,15 @@ local function draw_navaid_pointers(data)
     draw_navaid_pointer_single(data, 2)
 end
 
-local function get_x_y(data, lat, lon, true_to_mag)  -- Do not use this for poi
-    local px_per_nm = get_px_per_nm(data)
+local function rose_get_x_y(data, lat, lon)  -- Do not use this for poi
+    local px_per_nm = rose_get_px_per_nm(data)
     
     local distance = get_distance_nm(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon,lat,lon)
     local distance_px = distance * px_per_nm
     local bearing  = get_bearing(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon,lat,lon)
     
     local bear_shift = bearing+data.inputs.heading
-    if true_to_mag then
-        local dev1 = sasl.getMagneticVariation (lat,lon)
-        local dev2 = sasl.getMagneticVariation (data.inputs.plane_coords_lat,data.inputs.plane_coords_lon)
-        --print(dev1,dev2)
-        bear_shift = bear_shift - dev1
-    end
+    bear_shift = bear_shift - Local_magnetic_deviation()
     local x = size[1]/2 + distance_px * math.cos(math.rad(bear_shift))
     local y = size[1]/2 + distance_px * math.sin(math.rad(bear_shift))
     
@@ -303,10 +299,11 @@ local function draw_pois(data)
 
 end
 
+--[[
 local function draw_oans_rwy(data, rwy_start, rwy_end)
 
-    local x_start,y_start = get_x_y(data, rwy_start.lat, rwy_start.lon, not data.inputs.is_true_heading_showed)
-    local x_end,y_end = get_x_y(data, rwy_end.lat, rwy_end.lon, not data.inputs.is_true_heading_showed)
+    local x_start,y_start = rose_get_x_y(data, rwy_start.lat, rwy_start.lon, not data.inputs.is_true_heading_showed)
+    local x_end,y_end = rose_get_x_y(data, rwy_end.lat, rwy_end.lon, not data.inputs.is_true_heading_showed)
 
     local px_per_nm = get_px_per_nm(data)
     local semiwidth_px = math.floor(rwy_start.width * 0.000539957 * px_per_nm / 2)
@@ -352,33 +349,28 @@ local function draw_oans_rwy(data, rwy_start, rwy_end)
     sasl.gl.drawLinePattern (x_start,y_start,x_end,y_end, false, ECAM_WHITE)
 
 end
+]]--
 
-local function draw_oans(data)
-    if data.config.range > ND_RANGE_ZOOM_2 then
-        return  -- No OANS over zoom
-    end
+local function rose_get_lat_lon(data, x, y)
 
-    local nearest_airport = Data_manager.nearest_airport
-    if nearest_airport ~= nil then
+    -- TODO TODO TODO TODO TODO TODO
+
+    local bearing     = 180+math.deg(math.atan2((size[1]/2 - x), (size[2]/2 -    y))) + Local_magnetic_deviation()
     
-        local apt = Data_manager.get_arpt_by_name(nearest_airport.id)
-        local already_seen_runways = {}
-        
-        for rwyname,rwy in pairs(apt.rwys) do
-            
-            if already_seen_runways[rwyname] == nil then
-                already_seen_runways[rwyname] = true
-                already_seen_runways[rwy.sibling] = true
-                
-                local sibling_rwy = apt.rwys[rwy.sibling]
-                draw_oans_rwy(data, rwy, sibling_rwy)
+    local px_per_nm = rose_get_px_per_nm(data)
+    local distance_nm = math.sqrt((size[1]/2 - x)*(size[1]/2 - x) + (size[2]/2 - y)*(size[2]/2 - y)) / px_per_nm
 
-                --sasl.gl.setLinePattern ({5.0, -5.0 })
-                --sasl.gl.drawLinePattern (x_start,y_start,x_end ,y_end, false, ECAM_RED)
-            end            
-        end
-    end
+    return Move_along_distance(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon, distance_nm*1852, bearing)
 end
+
+local functions_for_oans = {
+    get_lat_lon = rose_get_lat_lon,
+    get_x_y = rose_get_x_y,
+    get_px_per_nm = rose_get_px_per_nm
+}
+
+
+
 
 function draw_rose_unmasked(data)
     draw_backgrounds(data)
@@ -395,7 +387,7 @@ function draw_rose(data)
     draw_pois(data)
     
     if data.config.mode == ND_MODE_NAV then
-        draw_oans(data)
+        draw_oans(data, functions_for_oans)
     end
     
     draw_navaid_pointers(data)
