@@ -724,20 +724,20 @@ BUSS_Fo_man_enabled = createGlobalPropertyi("a321neo/dynamics/pfd/buss_fo_man", 
 OPTIONS_sybpage_no = createGlobalPropertyi("a321neo/options/subpage_number", 0, false, true, false)
 
 --Ground Vehicles
-VEHICLE_ac = createGlobalPropertyi("a321neo/vehicles/ac", 0, false, true, false)
-VEHICLE_as = createGlobalPropertyi("a321neo/vehicles/as", 0, false, true, false)
-VEHICLE_cat1 = createGlobalPropertyi("a321neo/vehicles/cat1", 0, false, true, false)
-VEHICLE_cat2 = createGlobalPropertyi("a321neo/vehicles/cat2", 0, false, true, false)
-VEHICLE_fuel = createGlobalPropertyi("a321neo/vehicles/fuel", 0, false, true, false)
-VEHICLE_gpu = createGlobalPropertyi("a321neo/vehicles/gpu", 0, false, true, false)
-VEHICLE_ldcl1 = createGlobalPropertyi("a321neo/vehicles/ldcl1", 0, false, true, false)
-VEHICLE_ldcl2 = createGlobalPropertyi("a321neo/vehicles/ldcl2", 0, false, true, false)
-VEHICLE_lv = createGlobalPropertyi("a321neo/vehicles/lv", 0, false, true, false)
-VEHICLE_ps1 = createGlobalPropertyi("a321neo/vehicles/ps1", 0, false, true, false)
-VEHICLE_ps2 = createGlobalPropertyi("a321neo/vehicles/ps2", 0, false, true, false)
-VEHICLE_uld1 = createGlobalPropertyi("a321neo/vehicles/uld1", 0, false, true, false)
-VEHICLE_uld2 = createGlobalPropertyi("a321neo/vehicles/uld2", 0, false, true, false)
-VEHICLE_wv = createGlobalPropertyi("a321neo/vehicles/wv", 0, false, true, false)
+VEHICLE_ac = createGlobalPropertyi("a321neo/efb/vehicles/ac", 0, false, true, false)
+VEHICLE_as = createGlobalPropertyi("a321neo/efb/vehicles/as", 0, false, true, false)
+VEHICLE_cat1 = createGlobalPropertyi("a321neo/efb/vehicles/cat1", 0, false, true, false)
+VEHICLE_cat2 = createGlobalPropertyi("a321neo/efb/vehicles/cat2", 0, false, true, false)
+VEHICLE_fuel = createGlobalPropertyi("a321neo/efb/vehicles/fuel", 0, false, true, false)
+VEHICLE_gpu = createGlobalPropertyi("a321neo/efb/vehicles/gpu", 0, false, true, false)
+VEHICLE_ldcl1 = createGlobalPropertyi("a321neo/efb/vehicles/ldcl1", 0, false, true, false)
+VEHICLE_ldcl2 = createGlobalPropertyi("a321neo/efb/vehicles/ldcl2", 0, false, true, false)
+VEHICLE_lv = createGlobalPropertyi("a321neo/efb/vehicles/lv", 0, false, true, false)
+VEHICLE_ps1 = createGlobalPropertyi("a321neo/efb/vehicles/ps1", 0, false, true, false)
+VEHICLE_ps2 = createGlobalPropertyi("a321neo/efb/vehicles/ps2", 0, false, true, false)
+VEHICLE_uld1 = createGlobalPropertyi("a321neo/efb/vehicles/uld1", 0, false, true, false)
+VEHICLE_uld2 = createGlobalPropertyi("a321neo/efb/vehicles/uld2", 0, false, true, false)
+VEHICLE_wv = createGlobalPropertyi("a321neo/efb/vehicles/wv", 0, false, true, false)
 
 --Volume Control
 
@@ -746,4 +746,6 @@ VOLUME_int = createGlobalPropertyf("a321neo/volume/int", 1, false, true, false)
 VOLUME_wind = createGlobalPropertyf("a321neo/volume/wind", 1, false, true, false)
 VOLUME_cabin = createGlobalPropertyf("a321neo/volume/cabin", 1, false, true, false)
 
---Toggle Options
+--LOAD VALUES
+LOAD_flapssetting = createGlobalPropertyi("a321neo/efb/load", 1, false, true, false) --1 is 1+F, 2 is 2, 3 is 3
+LOAD_runwaycond = createGlobalPropertyi("a321neo/efb/runwaycond", 0, false, true, false) --0 is dry 1 is wet

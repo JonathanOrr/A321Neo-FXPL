@@ -1,11 +1,11 @@
 return {
 -- Table: {1}
 {
-   ["tca"]=0,
-   ["copilot"]=0,
-   ["rolltonws"]=0,
-   ["flarelaw"]=0,
-   ["syncqnh"]=0,
    ["pausetd"]=0,
+   ["tca"]=0,
+   ["rolltonws"]=0,
+   ["flarelaw"]=1,
+   ["syncqnh"]=1,
+   ["copilot"]=0,
 },
 }
