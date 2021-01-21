@@ -77,14 +77,16 @@ local function draw_oans_rwy(data, rwy_start, rwy_end, functions)
     if m_angle > 180 then m_angle = m_angle - 180 end
     if m_angle < 0 then m_angle = m_angle + 180 end
     
-    local font_size = semiwidth_px*2
-    local text_rwy = rwy_start.sibling .. "-" .. rwy_end.sibling
     
-    local width, height = sasl.gl.measureText (Font_AirbusDUL, text_rwy, font_size, false, false)
-    
-    sasl.gl.drawRotatedTexturePart(image_black_square, m_angle, m_x-width/2-2 , m_y-height/2, width+4, height, 0, 0, width+4, height, {0,0,0})    
-    sasl.gl.drawRotatedText(Font_AirbusDUL, m_x , m_y-height/2 , m_x, m_y, m_angle, text_rwy, font_size, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    
+    if semiwidth_px*2 >= 40 then
+        local font_size = 50
+        local text_rwy = rwy_start.sibling .. "-" .. rwy_end.sibling
+        
+        local width, height = sasl.gl.measureText (Font_AirbusDUL, text_rwy, font_size, false, false)
+        
+        sasl.gl.drawRotatedTexturePart(image_black_square, m_angle, m_x-width/2-2 , m_y-height/2, width+4, height, 0, 0, width+4, height, {0,0,0})    
+        sasl.gl.drawRotatedText(Font_AirbusDUL, m_x , m_y-height/2 , m_x, m_y, m_angle, text_rwy, font_size, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    end
     -- Runway sign start/end
     m_angle = m_angle+90
     
