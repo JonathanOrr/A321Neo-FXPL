@@ -908,8 +908,16 @@ end
 --      200 - prog
 --      300 - perf
 --      400 - init
+--        401 - init routes
+--        402 - init irs init
+--        403 - init climb wind
 --      500 - data
+--        501 - data position monitor
+--        502 - data irs monitor
+--        503 - data gps monitor
+--        504 - RESERVED
 --        505 - data A/C status
+--        506 - data irs monitor irs
 --      600 - f-pln
 --        601 - f-pln lat rev
 --        602 - f-pln lat rev dept airport
@@ -1516,20 +1524,6 @@ function (phase)
     end
 end
 
--- 506 data irs monitor irs
-mcdu_sim_page[506] =
-function (phase)
-    if phase == "render" then
-        mcdu_dat_title.txt = "         irs " .. fmgs_dat["irs monitoring"]
-        mcdu_dat["s"]["L"][1].txt = "position"
-        mcdu_dat["s"]["L"][2].txt = "ttrk"
-        mcdu_dat["s"]["L"][3].txt = "thdg"
-        mcdu_dat["s"]["L"][4].txt = "wind"
-        mcdu_dat["s"]["L"][5].txt = "aoa"
-        draw_update()
-    end
-end
-
 -- 503 data gps monitor
 mcdu_sim_page[503] =
 function (phase)
@@ -1654,6 +1648,20 @@ function (phase)
     -- options>
     if phase == "R6" then
         mcdu_open_page(1101) -- open 1101 mcdu menu options
+    end
+end
+
+-- 506 data irs monitor irs
+mcdu_sim_page[506] =
+function (phase)
+    if phase == "render" then
+        mcdu_dat_title.txt = "         irs " .. fmgs_dat["irs monitoring"]
+        mcdu_dat["s"]["L"][1].txt = "position"
+        mcdu_dat["s"]["L"][2].txt = "ttrk"
+        mcdu_dat["s"]["L"][3].txt = "thdg"
+        mcdu_dat["s"]["L"][4].txt = "wind"
+        mcdu_dat["s"]["L"][5].txt = "aoa"
+        draw_update()
     end
 end
 
