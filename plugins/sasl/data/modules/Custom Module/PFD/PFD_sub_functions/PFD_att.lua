@@ -117,6 +117,15 @@ function PFD_draw_att(PFD_table)
         (math.abs(adirs_get_roll(PFD_table.Screen_ID)) >= 60 and math.abs(adirs_get_roll(PFD_table.Screen_ID)) <= 120) and (206 / math.cos(math.rad(90 - math.abs(adirs_get_roll(PFD_table.Screen_ID)))) - 14) or 224,
         PFD_YELLOW
     )
+
+    --trapizoid color--
+    local beta_color = PFD_YELLOW
+    if get(Flaps_internal_config) > 0 and get(Flaps_internal_config) < 5 and
+       ((get(Eng_1_N1) > 80 or get(Eng_2_N1) > 80) or (get(L_sim_throttle) >= THR_MCT_START or get(R_sim_throttle) >= THR_MCT_START)) and
+       math.abs(get(Eng_1_N1) - get(Eng_2_N1)) > 35 then
+        beta_color = ECAM_BLUE
+    end
+
     SASL_rotated_center_img_center_aligned(
         PFD_bank_angle_beta_angle,
         ATT_x_center,
@@ -126,7 +135,7 @@ function PFD_draw_att(PFD_table)
         -adirs_get_roll(PFD_table.Screen_ID),
         Math_rescale_no_lim(0, 0, 0.2, -53, Math_clamp(get(Total_lateral_g_load), -0.3, 0.3)),
         (math.abs(adirs_get_roll(PFD_table.Screen_ID)) >= 60 and math.abs(adirs_get_roll(PFD_table.Screen_ID)) <= 120) and (206 / math.cos(math.rad(90 - math.abs(adirs_get_roll(PFD_table.Screen_ID)))) - 37) or 201,
-        PFD_YELLOW
+        beta_color
     )
 
     --RA ALT (TODO LACKING DH logic waiting for MCDU)

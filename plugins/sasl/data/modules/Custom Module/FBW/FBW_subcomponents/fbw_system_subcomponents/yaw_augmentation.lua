@@ -32,9 +32,10 @@ local function get_curr_turbolence()  -- returns [0;1] range
 end
 
 local function yaw_input(x, var_table)
+    local max_rudder_deflection = 30
     local max_sideslip = 20
 
-    var_table.sideslip_input = -x * max_sideslip
+    var_table.sideslip_input = -x * max_sideslip + (-get(Rudder_trim_angle) / max_rudder_deflection) * max_sideslip
 end
 
 local function yaw_controlling(var_table)
@@ -57,6 +58,7 @@ local function yaw_controlling(var_table)
         FBW_PID_arrays.FBW_NRM_YAW_PID_array.Integral = 0
     else
         FBW_PID_arrays.FBW_NRM_YAW_PID_array.Schedule_gains = true
+        FBW_PID_arrays.FBW_NRM_YAW_PID_array.Integral = Math_rescale(0, 0, 1, FBW_PID_arrays.FBW_NRM_YAW_PID_array.Integral, get(FBW_lateral_flight_mode_ratio))--on ground switch to PD
         FBW_PID_arrays.FBW_NRM_YAW_PID_array.B_gain = 1
     end
 
@@ -68,8 +70,8 @@ end
 local function FBW_yaw_mode_blending(var_table)
     set(
         Yaw_artstab,
-        (get(Yaw) + var_table.ALT_controller_output)                        * get(FBW_lateral_ground_mode_ratio) +
-        (var_table.NRM_controller_output + var_table.ALT_controller_output) * get(FBW_lateral_flight_mode_ratio)
+        (get(Yaw) + var_table.NRM_controller_output + var_table.ALT_controller_output) * get(FBW_lateral_ground_mode_ratio) +
+        (var_table.NRM_controller_output + var_table.ALT_controller_output)            * get(FBW_lateral_flight_mode_ratio)
     )
 end
 
