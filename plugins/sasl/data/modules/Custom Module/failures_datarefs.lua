@@ -221,6 +221,10 @@ FAILURE_AIRCOND_ISOL_CARGO_IN_STUCK = createGlobalPropertyi("a321neo/failures/ai
 FAILURE_AIRCOND_ISOL_CARGO_OUT_STUCK = createGlobalPropertyi("a321neo/failures/aircond/hot_air_cargo_stuck_out", 0, false, true, false)
 FAILURE_AIRCOND_VENT_BLOWER = createGlobalPropertyi("a321neo/failures/aircond/vent/avionics_blower", 0, false, true, false)
 FAILURE_AIRCOND_VENT_EXTRACT = createGlobalPropertyi("a321neo/failures/aircond/vent/avionics_extract", 0, false, true, false)
+FAILURE_AIRCOND_TRIM_CKPT = createGlobalPropertyi("a321neo/failures/aircond/vent/trim_ckpt", 0, false, true, false)
+FAILURE_AIRCOND_TRIM_CAB_FWD = createGlobalPropertyi("a321neo/failures/aircond/vent/trim_cab_fwd", 0, false, true, false)
+FAILURE_AIRCOND_TRIM_CAB_AFT = createGlobalPropertyi("a321neo/failures/aircond/vent/trim_cab_aft", 0, false, true, false)
+FAILURE_AIRCOND_TRIM_CARGO_AFT = createGlobalPropertyi("a321neo/failures/aircond/vent/trim_cargo_aft", 0, false, true, false)
 
 FAILURE_AI_PITOT_CAPT = createGlobalPropertyi("a321neo/failures/anti_ice/capt_pitot", 0, false, true, false)
 FAILURE_AI_PITOT_FO   = createGlobalPropertyi("a321neo/failures/anti_ice/fo_pitot", 0, false, true, false)

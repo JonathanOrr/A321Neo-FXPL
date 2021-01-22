@@ -320,7 +320,12 @@ local failures_data = {
             {name="CARGO HOTAIR\nVLV STUCK", status=false, dataref=FAILURE_AIRCOND_HOT_AIR_CARGO_STUCK },
             {name="CARGO IN\nVLV STUCK", status=false, dataref=FAILURE_AIRCOND_ISOL_CARGO_IN_STUCK },
             {name="CARGO OUT\nVLV STUCK", status=false, dataref=FAILURE_AIRCOND_ISOL_CARGO_OUT_STUCK },
-            {name="RAM AIR\nVLV STUCK", status=false, dataref=FAILURE_BLEED_RAM_AIR_STUCK } 
+            {name="RAM AIR\nVLV STUCK", status=false, dataref=FAILURE_BLEED_RAM_AIR_STUCK },
+            {name="TRIM CKPT\nVLV STUCK", status=false, dataref=FAILURE_AIRCOND_TRIM_CKPT },
+            {name="TRIM CAB.F\nVLV STUCK", status=false, dataref=FAILURE_AIRCOND_TRIM_CAB_FWD },
+            {name="TRIM CAB.A\nVLV STUCK", status=false, dataref=FAILURE_AIRCOND_TRIM_CAB_AFT },
+            {name="TRIM CARGO\nVLV STUCK", status=false, dataref=FAILURE_AIRCOND_TRIM_CARGO_AFT },
+
     }
     },
     {
