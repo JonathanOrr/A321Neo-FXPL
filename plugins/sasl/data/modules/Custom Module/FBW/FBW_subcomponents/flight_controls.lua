@@ -95,7 +95,6 @@ function update()
         total_pitch = get(Pitch_artstab) --G commanding
     else
         total_pitch = get(Augmented_pitch) + get(Pitch_artstab)
-        total_yaw = get(Yaw)
     end
 
     if get(Override_control_surfaces) == 1 then
