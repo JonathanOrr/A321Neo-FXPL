@@ -124,7 +124,10 @@ PB = {
         fire_eng_2_ag_1 = {bus = LIGHT_BUS_DC},
         fire_eng_2_ag_2 = {bus = LIGHT_BUS_DC},
         fire_apu_ag     = {bus = LIGHT_BUS_DC},
-
+        fire_apu_block  = {bus = LIGHT_BUS_DC},
+        fire_eng1_block = {bus = LIGHT_BUS_DC},
+        fire_eng2_block = {bus = LIGHT_BUS_DC},
+        
         -- FLT CTL
         flt_ctl_elac_1 = {bus = LIGHT_BUS_DC},
         flt_ctl_sec_1  = {bus = LIGHT_BUS_DC},

@@ -63,7 +63,10 @@ local guards = {
     {name = "MNTN_HYD_B"},
     {name = "MNTN_HYD_Y"},
     {name = "MNTN_FADEC_1"},
-    {name = "MNTN_FADEC_2"}
+    {name = "MNTN_FADEC_2"},
+    {name = "FIRE_APU"},
+    {name = "FIRE_ENG1"},
+    {name = "FIRE_ENG2"},
 }
 
 local integral_lights = {

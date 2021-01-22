@@ -398,6 +398,8 @@ EWD_engine_cooling      = createGlobalPropertyia("a321neo/cockpit/EWD/ENG_coolin
 EWD_engine_cooling_time = createGlobalPropertyia("a321neo/cockpit/EWD/ENG_cooling_time", 2) -- time left
 
 --ENG
+Cockpit_throttle_lever_L = createGlobalPropertyf("a321neo/cockpit/engine/throttle_lever_L", 0, false, true, false)  -- From -1 to 1
+Cockpit_throttle_lever_R = createGlobalPropertyf("a321neo/cockpit/engine/throttle_lever_R", 0, false, true, false)  -- From -1 to 1
 L_sim_throttle = globalProperty("sim/cockpit2/engine/actuators/throttle_jet_rev_ratio[0]")
 R_sim_throttle = globalProperty("sim/cockpit2/engine/actuators/throttle_jet_rev_ratio[1]")
 L_throttle_blue_dot = createGlobalPropertyf("a321neo/cockpit/engine/l_lever_blue_dot", 0, false, true, false)
