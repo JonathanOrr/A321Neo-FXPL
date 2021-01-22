@@ -94,7 +94,7 @@ local function lateral_controlling(var_table, filter_table)
     var_table.filtered_ias = low_pass_filter(filter_table.IAS_filter_table)
 
     --ensure bumpless transfer--
-    if get(FBW_lateral_flight_mode_ratio) == 0 or get(FBW_total_control_law) ~= FBW_NORMAL_LAW then
+    if get(FBW_lateral_flight_mode_ratio) == 0 or get(FBW_lateral_law) ~= FBW_NORMAL_LAW then
         FBW_PID_arrays.FBW_ROLL_RATE_PID_array.Schedule_gains = false
         FBW_PID_arrays.FBW_ROLL_RATE_PID_array.I_gain = 0
         FBW_PID_arrays.FBW_ROLL_RATE_PID_array.B_gain = 0

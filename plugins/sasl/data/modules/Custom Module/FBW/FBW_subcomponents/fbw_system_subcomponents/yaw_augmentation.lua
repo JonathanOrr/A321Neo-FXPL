@@ -1,7 +1,8 @@
 local yaw_control_var_table = {
     sideslip_input = 0,
 
-    controller_output = 0,
+    NRM_controller_output = 0,
+    ALT_controller_output = 0,
 }
 
 local function get_curr_turbolence()  -- returns [0;1] range
@@ -37,16 +38,38 @@ local function yaw_input(x, var_table)
 end
 
 local function yaw_controlling(var_table)
-    var_table.controller_output = FBW_PID_BP(FBW_PID_arrays.FBW_YAW_DAMPER_PID_array, get(Slide_slip_angle) - var_table.sideslip_input, -get(Slide_slip_angle), get_curr_turbolence())
-    var_table.controller_output = Math_clamp(var_table.controller_output, -get(Rudder_travel_lim) / 30, get(Rudder_travel_lim) / 30)
-    FBW_PID_arrays.FBW_YAW_DAMPER_PID_array.Actual_output = get(Yaw_artstab)
+    --ALTERNATE LAW-----------------------------------------------------------------------------------------
+    if get(FBW_yaw_law) == FBW_ALT_NO_PROT_LAW then
+        var_table.ALT_controller_output = FBW_PID_BP(FBW_PID_arrays.FBW_ALT_YAW_PID_array, get(Slide_slip_angle), -get(Slide_slip_angle), get_curr_turbolence())
+        var_table.ALT_controller_output = Math_clamp(var_table.ALT_controller_output, -5/30, 5/30)--limit travel ability to 5 degrees of rudder
+        FBW_PID_arrays.FBW_NRM_YAW_PID_array.Actual_output = get(Yaw_artstab)
+    else
+        var_table.ALT_controller_output = 0
+        FBW_PID_arrays.FBW_NRM_YAW_PID_array.Actual_output = get(Yaw_artstab)
+    end
+
+    --NORMAL LAW-----------------------------------------------------------------------------------------
+    --ensure bumpless transfer
+    if get(FBW_lateral_flight_mode_ratio) == 0 or get(FBW_yaw_law) ~= FBW_NORMAL_LAW then
+        FBW_PID_arrays.FBW_NRM_YAW_PID_array.Schedule_gains = false
+        FBW_PID_arrays.FBW_NRM_YAW_PID_array.I_gain = 0
+        FBW_PID_arrays.FBW_NRM_YAW_PID_array.B_gain = 0
+        FBW_PID_arrays.FBW_NRM_YAW_PID_array.Integral = 0
+    else
+        FBW_PID_arrays.FBW_NRM_YAW_PID_array.Schedule_gains = true
+        FBW_PID_arrays.FBW_NRM_YAW_PID_array.B_gain = 1
+    end
+
+    var_table.NRM_controller_output = FBW_PID_BP(FBW_PID_arrays.FBW_NRM_YAW_PID_array, get(Slide_slip_angle) - var_table.sideslip_input, -get(Slide_slip_angle), get_curr_turbolence())
+    var_table.NRM_controller_output = Math_clamp(var_table.NRM_controller_output, -get(Rudder_travel_lim) / 30, get(Rudder_travel_lim) / 30)
+    FBW_PID_arrays.FBW_NRM_YAW_PID_array.Actual_output = get(Yaw_artstab)
 end
 
 local function FBW_yaw_mode_blending(var_table)
     set(
         Yaw_artstab,
-        get(Yaw)                    * get(FBW_lateral_ground_mode_ratio) +
-        var_table.controller_output * get(FBW_lateral_flight_mode_ratio)
+        (get(Yaw) + var_table.ALT_controller_output)                        * get(FBW_lateral_ground_mode_ratio) +
+        (var_table.NRM_controller_output + var_table.ALT_controller_output) * get(FBW_lateral_flight_mode_ratio)
     )
 end
 
