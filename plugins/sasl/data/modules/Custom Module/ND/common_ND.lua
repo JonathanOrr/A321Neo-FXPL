@@ -9,8 +9,8 @@ function new_dataset(input_id)
     id = input_id,
 
     config = {
-        mode = input_id == ND_CAPT and ND_MODE_NAV or ND_MODE_NAV,
-        range = ND_RANGE_ZOOM_2,
+        mode = input_id == ND_CAPT and ND_MODE_ARC or ND_MODE_NAV,
+        range = ND_RANGE_10,
         extra_data = ND_DATA_NONE,
         
         nav_1_selector = ND_SEL_OFF,
