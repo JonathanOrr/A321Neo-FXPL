@@ -292,8 +292,11 @@ function high_pass_filter(data)
         data.prev_x_value = data.x
         data.prev_y_value = data.x
         return data.x
+    else
+        data.prev_y_value = a * (data.prev_y_value + data.x - data.prev_x_value)
     end
-    return a * (data.prev_y_value + data.x - data.prev_x_value)
+
+    return data.prev_y_value
 end
 
 function low_pass_filter(data)
@@ -303,9 +306,11 @@ function low_pass_filter(data)
 
     if data.prev_y_value == nil then
         data.prev_y_value = a * data.x
-        return a * data.x
+    else
+        data.prev_y_value = a * data.x + (1-a) * data.prev_y_value
     end
-    return a * data.x + (1-a) * data.prev_y_value
+
+    return data.prev_y_value
 end
 
 

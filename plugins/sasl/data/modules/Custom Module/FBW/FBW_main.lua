@@ -71,6 +71,7 @@ local last_kill_value = 0--used to put the controls to nuetural when killing the
 local kill_delta = 0--used to put the controls to nuetural when killing the FBW
 local last_roll = 0
 local last_pitch = 0
+local last_hdg = 0
 local last_vpath = 0
 
 local function FBW_kill_switch_logic()
@@ -103,10 +104,13 @@ function update()
         set(True_roll_rate, (get(Flightmodel_roll) - last_roll) / get(DELTA_TIME))
         --calculate true pitch rate
         set(True_pitch_rate, (get(Flightmodel_pitch) - last_pitch) / get(DELTA_TIME))
+        --calculate true yaw rate
+        set(True_yaw_rate, (get(Flightmodel_true_heading) - last_hdg) / get(DELTA_TIME))
         --calculate Vpath pitch rate
         set(Vpath_pitch_rate, (get(Vpath) - last_vpath) / get(DELTA_TIME))
     end
     last_roll = get(Flightmodel_roll)
     last_pitch = get(Flightmodel_pitch)
+    last_hdg = get(Flightmodel_true_heading)
     last_vpath = get(Vpath)
 end
