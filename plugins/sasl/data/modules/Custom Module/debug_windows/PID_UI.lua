@@ -229,7 +229,7 @@ function update()
     live_tune_PID(FBW_PID_arrays.FBW_NRM_YAW_PID_array)
 
     --update anything
-    --Update_value_historys(get(Slide_slip_angle) -(-get(Yaw) * 20) )
+    --Update_value_historys(get(Slide_slip_angle) - ((-get(Yaw) * 15) + (-get(Rudder_trim_angle) / 30) * 15))
 end
 
 function draw()

@@ -13,15 +13,15 @@ local Lateral_control_var_table = {
 local lateral_control_filter_table = {
     P_rate_pv_filter_table = {
         x = get(True_roll_rate),
-        cut_frequency = 20,
+        cut_frequency = 10,
     },
     P_err_filter_table = {
         x = get(Augmented_roll) * 15 - get(True_roll_rate),
-        cut_frequency = 20,
+        cut_frequency = 10,
     },
     IAS_filter_table = {
         x = adirs_get_avg_ias(),
-        cut_frequency = 500,
+        cut_frequency = 2,
     }
 }
 
