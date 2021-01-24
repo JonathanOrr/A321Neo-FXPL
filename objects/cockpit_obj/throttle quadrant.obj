@@ -8330,7 +8330,7 @@ IDX10	5958	5905	5907	5958	5905	5958	5932	5906	5905	5932
 				TRIS	984 4725
 					ANIM_begin
 					ANIM_trans	-0.02101	0.026520001	0.15468	-0.02101	0.026520001	0.15468
-					ANIM_rotate_begin	1	0	-0	sim/cockpit2/engine/actuators/throttle_jet_rev_ratio[0]
+					ANIM_rotate_begin	1	0	-0	a321neo/cockpit/engine/throttle_lever_L
 					ANIM_rotate_key	-1	90.000207
 					ANIM_rotate_key	-0.001	90.000207
 					ANIM_rotate_key	0	0
@@ -8357,7 +8357,7 @@ IDX10	5958	5905	5907	5958	5905	5958	5932	5906	5905	5932
 				TRIS	11337 4725
 					ANIM_begin
 					ANIM_trans	0.02101	0.026520001	0.15468	0.02101	0.026520001	0.15468
-					ANIM_rotate_begin	1	0	-0	sim/cockpit2/engine/actuators/throttle_jet_rev_ratio[1]
+					ANIM_rotate_begin	1	0	-0	a321neo/cockpit/engine/throttle_lever_R
 					ANIM_rotate_key	-1	90.000207
 					ANIM_rotate_key	-0.001	90.000207
 					ANIM_rotate_key	0	0

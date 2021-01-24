@@ -186,8 +186,6 @@ function FBW_vertical_agmentation(var_table)
 end
 
 local function FBW_vertical_mode_blending(var_table)
-    print(compute_C_star(get(Total_vertical_g_load), get(True_pitch_rate), adirs_get_avg_ias()))
-
     set(
         Pitch_artstab,
         get(Augmented_pitch)                        * get(FBW_vertical_ground_mode_ratio)
