@@ -116,6 +116,8 @@ MessageGroup_FBW_ALTN_DIRECT_LAW = {
 
     },
 
+    sd_page = ECAM_PAGE_FCTL,
+
     -- Method to check if this message group is active
     is_active = function()
         -- Not showed when any memo is active
