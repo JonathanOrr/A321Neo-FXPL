@@ -177,6 +177,7 @@ end
 
 local prev_joy_L = 0
 local prev_joy_R = 0
+local max_alt_rev = 0
 
 function update_levers()
     if prev_joy_L ~= get(L_sim_throttle) then
@@ -188,7 +189,20 @@ function update_levers()
         set(Cockpit_throttle_lever_R, prev_joy_R)
     end
     
-    if thrust_in_reverse and get(Either_Aft_on_ground) == 1 then
+    -- Ok here we need a de-bouncing behavior: if the aircraft bounces a little bit,
+    -- let's keep the reversers open. This is not the real behavior, but it would surprise
+    -- a pilot using the manual button. This doesn't apply before bounce or above 10 ft AGL
+    if get(Either_Aft_on_ground) == 1 then
+        max_alt_rev = 0
+    end
+    if get(Capt_ra_alt_ft) > max_alt_rev then
+        max_alt_rev = get(Capt_ra_alt_ft)
+    end
+
+    local rev_can_open = get(Either_Aft_on_ground) == 1 or max_alt_rev < 10
+    
+    if thrust_in_reverse and rev_can_open then
+        -- TODO FAILURES
         set(Override_eng_1_prop_mode, 3)
         set(Override_eng_2_prop_mode, 3)
     else
