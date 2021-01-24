@@ -44,6 +44,7 @@ Perf_array = {}
 
 ELEC_sys = {}
 Fuel_sys = {}
+FIRE_sys = {}
 AI_sys   = {}
 ADIRS_sys= {}
 

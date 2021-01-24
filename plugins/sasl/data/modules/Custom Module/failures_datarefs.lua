@@ -26,7 +26,6 @@ XPlane_Auto_Failure   = globalProperty("sim/operation/failures/enable_random_fai
 FAILURE_radioalt_cap = createGlobalPropertyi("a321neo/failures/pfd/capt_radioalt", 0, false, true, false) -- 0: OK, 1: FAILED
 
 -- Systems
-FAILURE_Apu_fire = globalProperty("sim/operation/failures/rel_apu_fire")     -- TODO This should be replaced/removed
 FAILURE_TCAS = globalProperty("sim/operation/failures/rel_xpndr")            -- TODO This should be replaced/removed
 
 
@@ -279,4 +278,8 @@ FAILURE_GPWS_TERR  = createGlobalPropertyi("a321neo/failures/gpws/gpws_terr", 0,
 
 FAILURE_FIRE_CARGO_FWD = createGlobalPropertyi("a321neo/failures/fire/cargo_fwd", 0, false, true, false)
 FAILURE_FIRE_CARGO_AFT = createGlobalPropertyi("a321neo/failures/fire/cargo_aft", 0, false, true, false)
+
+FAILURE_FIRE_APU = createGlobalPropertyi("a321neo/failures/fire/apu", 0, false, true, false)
+
+
 

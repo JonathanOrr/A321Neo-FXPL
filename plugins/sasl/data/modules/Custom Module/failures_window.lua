@@ -190,6 +190,7 @@ local failures_data = {
             {name="ENG2 FADEC\nCH2 FAIL", status=false, dataref=FAILURE_ENG_FADEC_CH2, nr=2 },
             
             {name="APU\nFAILURE", status=false, dataref=FAILURE_ENG_APU_FAIL},
+            {name="APU\nFIRE!", status=false, dataref=FAILURE_FIRE_APU},
             {name="APU OIL\nLOW PRESS", status=false, dataref=FAILURE_ENG_APU_LOW_OIL_P}
         }
     },

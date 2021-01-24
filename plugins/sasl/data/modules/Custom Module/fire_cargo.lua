@@ -135,6 +135,8 @@ end
 
 function update()
 
+    perf_measure_start("fire_cargo:update()")
+
     if test_starts_at > 0 then
         update_pbs_test()
     else
@@ -143,5 +145,7 @@ function update()
 
     update_fire_time()
     update_disch()
+
+    perf_measure_stop("fire_cargo:update()")
 
 end

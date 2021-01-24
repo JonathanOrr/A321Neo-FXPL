@@ -162,6 +162,11 @@ local function update_off_status()
         end
     end
 
+    -- Emergency shutdown
+    if get(FAILURE_FIRE_APU) == 1 then
+        master_switch_status = false
+    end
+
 end
 
 function update()
