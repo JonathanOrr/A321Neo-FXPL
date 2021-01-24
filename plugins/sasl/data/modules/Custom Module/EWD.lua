@@ -145,12 +145,12 @@ end
 local function draw_n1_limits()
 
     --draw needle limits--
-    if get(L_sim_throttle) < 0 then
+    if get(Cockpit_throttle_lever_L) < 0 then
         SASL_draw_needle_adv(size[1]/2 - 175, size[2]/2 + 333, 68, 85, Math_rescale_lim_lower(20, 222, 100, 48, get(Eng_N1_max_detent_toga) * 0.7), 6, ECAM_ORANGE)
     else
         SASL_draw_needle_adv(size[1]/2 - 175, size[2]/2 + 333, 68, 85, Math_rescale_lim_lower(20, 222, 100, 48, get(Eng_N1_max_detent_toga)), 6, ECAM_ORANGE)
     end
-    if get(R_sim_throttle) < 0 then
+    if get(Cockpit_throttle_lever_R) < 0 then
         SASL_draw_needle_adv(size[1]/2 + 175, size[2]/2 + 333, 68, 85, Math_rescale_lim_lower(20, 222, 100, 48, get(Eng_N1_max_detent_toga) * 0.7), 6, ECAM_ORANGE)
     else
         SASL_draw_needle_adv(size[1]/2 + 175, size[2]/2 + 333, 68, 85, Math_rescale_lim_lower(20, 222, 100, 48, get(Eng_N1_max_detent_toga)), 6, ECAM_ORANGE)

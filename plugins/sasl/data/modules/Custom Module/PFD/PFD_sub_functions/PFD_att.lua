@@ -121,7 +121,7 @@ function PFD_draw_att(PFD_table)
     --trapizoid color--
     local beta_color = PFD_YELLOW
     if get(Flaps_internal_config) > 0 and get(Flaps_internal_config) < 5 and
-       ((get(Eng_1_N1) > 80 or get(Eng_2_N1) > 80) or (get(L_sim_throttle) >= THR_MCT_START or get(R_sim_throttle) >= THR_MCT_START)) and
+       ((get(Eng_1_N1) > 80 or get(Eng_2_N1) > 80) or (get(Cockpit_throttle_lever_L) >= THR_MCT_START or get(Cockpit_throttle_lever_R) >= THR_MCT_START)) and
        math.abs(get(Eng_1_N1) - get(Eng_2_N1)) > 35 then
         beta_color = ECAM_BLUE
     end

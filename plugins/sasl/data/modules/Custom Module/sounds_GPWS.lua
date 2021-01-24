@@ -415,7 +415,7 @@ end
 
 function update_retard()
 
-    if get(Aft_wheel_on_ground) == 1 and get(IAS) > 40 and (get(L_sim_throttle) > 0.05 or get(R_sim_throttle) > 0.05) and get(EWD_flight_phase) >= PHASE_FINAL then
+    if get(Aft_wheel_on_ground) == 1 and get(IAS) > 40 and (get(Cockpit_throttle_lever_L) > 0.05 or get(Cockpit_throttle_lever_R) > 0.05) and get(EWD_flight_phase) >= PHASE_FINAL then
         set(dr_retard_retard, 1)
     else
         set(dr_retard_retard, 0)
@@ -423,11 +423,11 @@ function update_retard()
 
     -- TODO Change to 10ft instead of 20ft when AP is on
     if get(dr_retard) == 0 and get(dr_retard_retard) == 0 then
-        if get(Capt_ra_alt_ft) < 20 and (get(L_sim_throttle) > 0.05 or get(R_sim_throttle) > 0.05) and get(EWD_flight_phase) == PHASE_FINAL then
+        if get(Capt_ra_alt_ft) < 20 and (get(Cockpit_throttle_lever_L) > 0.05 or get(Cockpit_throttle_lever_R) > 0.05) and get(EWD_flight_phase) == PHASE_FINAL then
             set(dr_retard, 1)
         end
     else
-        if get(Capt_ra_alt_ft) < 15 and (get(L_sim_throttle) > 0.05 or get(R_sim_throttle) > 0.05) and get(EWD_flight_phase) == PHASE_FINAL then
+        if get(Capt_ra_alt_ft) < 15 and (get(Cockpit_throttle_lever_L) > 0.05 or get(Cockpit_throttle_lever_R) > 0.05) and get(EWD_flight_phase) == PHASE_FINAL then
             set(dr_retard_retard, 1)
         else
             set(dr_retard_retard, 0)

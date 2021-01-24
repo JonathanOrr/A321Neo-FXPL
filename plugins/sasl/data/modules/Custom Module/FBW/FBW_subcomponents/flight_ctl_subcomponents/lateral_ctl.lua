@@ -222,7 +222,7 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
             set(Speedbrakes_inhibited, 1)
             --lacking alpha protection / upon a.prot toga [and restoring speedbrake avail by reseting the lever position]
         end
-        if get(L_sim_throttle) >= THR_MCT_START or get(R_sim_throttle) >= THR_MCT_START then
+        if get(Cockpit_throttle_lever_L) >= THR_MCT_START or get(Cockpit_throttle_lever_R) >= THR_MCT_START then
             set(Speedbrakes_inhibited, 1)
         end
         if get(FAILURE_FCTL_LELEV) == 1 or get(FAILURE_FCTL_RELEV) == 1 then
