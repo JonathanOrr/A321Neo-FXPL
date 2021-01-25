@@ -716,7 +716,7 @@ function MCDU_get_data(reference)
     return Mcdu_data[reference] 
 end
 function MCDU_set_data(reference, val) 
-    Mcdu_data[reference] == val 
+    Mcdu_data[reference] = val 
 end
 
 --mouse functions
