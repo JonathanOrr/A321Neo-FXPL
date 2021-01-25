@@ -1035,10 +1035,13 @@ function (phase)
             mcdu_dat_title = {txt = "       take off", col = "white"}
         end
 
-        mcdu_dat["s"]["L"][1].txt = " v1  flp retr"
-        mcdu_dat["l"]["L"][1][1] = {txt = "{{{", col = "amber"}
-        mcdu_dat["l"]["L"][1][2] = {txt = "       f="}
         fmgs_dat_init("perf take off fspd", 0) 
+        fmgs_dat_init("perf take off sspd", 0) 
+        fmgs_dat_init("perf take off ospd", 0) 
+
+        mcdu_dat["s"]["L"][1].txt = " v1  flp retr"
+        mcdu_dat["l"]["L"][1][1] = fmgs_dat_get("perf v1", "{{{", "amber", "cyan")
+        mcdu_dat["l"]["L"][1][2] = {txt = "       f="}
         if fmgs_dat["perf take off fspd"] == 0 then
             mcdu_dat["l"]["L"][1][3] = {txt = "         ---"}
         else
@@ -1046,9 +1049,8 @@ function (phase)
         end
 
         mcdu_dat["s"]["L"][2].txt = " vr  slt retr"
-        mcdu_dat["l"]["L"][2][1] = {txt = "{{{", col = "amber"}
+        mcdu_dat["l"]["L"][2][1] = fmgs_dat_get("perf vr", "{{{", "amber", "cyan")
         mcdu_dat["l"]["L"][2][2] = {txt = "       s="}
-        fmgs_dat_init("perf take off sspd", 0) 
         if fmgs_dat["perf take off sspd"] == 0 then
             mcdu_dat["l"]["L"][2][3] = {txt = "         ---"}
         else
@@ -1060,9 +1062,8 @@ function (phase)
         mcdu_dat["l"]["R"][2][2] = {txt = "[  ]*", col = "cyan"}
 
         mcdu_dat["s"]["L"][3].txt = " v2     clean"
-        mcdu_dat["l"]["L"][3][1] = {txt = "{{{", col = "amber"}
+        mcdu_dat["l"]["L"][3][1] = fmgs_dat_get("perf v2", "{{{", "amber", "cyan")
         mcdu_dat["l"]["L"][3][2] = {txt = "       o="}
-        fmgs_dat_init("perf take off ospd", 0) 
         if fmgs_dat["perf take off ospd"] == 0 then
             mcdu_dat["l"]["L"][3][3] = {txt = "         ---"}
         else
@@ -1096,15 +1097,61 @@ function (phase)
     
     -- enter v1
     if phase == "L1" then
-        input, variation = mcdu_get_entry_simple({"UP%.%%", "DN%.%%"})
+        --input, variation = mcdu_get_entry_simple({"UP%.%%", "DN%.%%"})
+        input, variation = mcdu_get_entry({"number", length = 3, dp = 0})
         if input ~= NIL then
+            v1 = tonumber(input)
+            vr = tonumber(fmgs_dat["perf vr"]) or 200 
+            v2 = tonumber(fmgs_dat["perf v2"]) or 200
+
+            if v1 <= vr and vr <= v2 then
+                fmgs_dat["perf v1"] = v1
+            else
+                mcdu_send_message("v1/vr/v2 disagree")
+            end
         end
-        mcdu_open_page(302) -- reload
+        mcdu_open_page(301) -- reload
+    end
+    
+    -- enter vr
+    if phase == "L2" then
+        --input, variation = mcdu_get_entry_simple({"UP%.%%", "DN%.%%"})
+        input, variation = mcdu_get_entry({"number", length = 3, dp = 0})
+        if input ~= NIL then
+            v1 = tonumber(fmgs_dat["perf v1"]) or 0
+            vr = tonumber(input)
+            v2 = tonumber(fmgs_dat["perf v2"]) or 200
+
+            if v1 <= vr and vr <= v2 then
+                fmgs_dat["perf vr"] = vr
+            else
+                mcdu_send_message("v1/vr/v2 disagree")
+            end
+        end
+        mcdu_open_page(301) -- reload
+    end
+    
+    -- enter v2
+    if phase == "L3" then
+        --input, variation = mcdu_get_entry_simple({"UP%.%%", "DN%.%%"})
+        input, variation = mcdu_get_entry({"number", length = 3, dp = 0})
+        if input ~= NIL then
+            v1 = tonumber(fmgs_dat["perf v1"]) or 0
+            vr = tonumber(fmgs_dat["perf vr"]) or 0 
+            v2 = tonumber(input)
+
+            if v1 <= vr and vr <= v2 then
+                fmgs_dat["perf v2"] = v2
+            else
+                mcdu_send_message("v1/vr/v2 disagree")
+            end
+        end
+        mcdu_open_page(301) -- reload
     end
 
     -- uplink to data
     if phase == "L6" then
-        mcdu_open_page(302) -- reload
+        mcdu_open_page(301) -- reload
     end
 
     -- next phase
@@ -2305,6 +2352,9 @@ function (phase)
 
         if fmgs_dat["fpln latrev dept mode"] == "runway" then
             parser_apt = Parser_Apt:new(APT_PATH)
+            if not init_airport_lut then
+                parser_apt:create_airport_lut()
+            end
 
             runways = parser:get_runways()
             runway_lengths = parser_apt:get_runway_lengths(airport)
@@ -2600,6 +2650,9 @@ function (phase)
 
         if fmgs_dat["fpln latrev arr mode"] == "appr" then
             parser_apt = Parser_Apt:new(APT_PATH)
+            if not init_airport_lut then
+                parser_apt:create_airport_lut()
+            end
 
             runways = parser:get_approaches()
             runway_lengths = parser_apt:get_runway_lengths(airport)
@@ -3006,8 +3059,7 @@ end
 mcdu_sim_page[1101] =
 function (phase)
     if phase == "render" then
-        mcdu_dat_title.txt = "     side stick sim"
-        mcdu_dat_title.txt = "      a32nx project"
+        mcdu_dat_title.txt = "   c star simulations"
 
         mcdu_dat["l"]["L"][1].txt = "<about"
         mcdu_dat["l"]["L"][2].txt = "<colours"
