@@ -117,7 +117,7 @@ local gpws_sounds = {
     { source=GPWS_mode_speed, command=Sounds_GPWS_speed, duration = 2, continuous = false, interval = 5 },
 
     { source=dr_retard_retard, command=Sounds_GPWS_retard_retard, duration = 1.5, continuous = false, interval = 0.5 },
-    { source=dr_retard, command=Sounds_GPWS_retard, duration = 1, continuous = false, interval = 0.1 },
+    { source=dr_retard, command=Sounds_GPWS_retard, duration = 1    , continuous = false, interval = 0.1 },
 
     callouts_sound,
 
@@ -415,25 +415,27 @@ end
 
 function update_retard()
 
-    if get(Aft_wheel_on_ground) == 1 and get(IAS) > 40 and (get(Cockpit_throttle_lever_L) > 0.05 or get(Cockpit_throttle_lever_R) > 0.05) and get(EWD_flight_phase) >= PHASE_FINAL then
-        set(dr_retard_retard, 1)
-    else
-        set(dr_retard_retard, 0)
-    end
-
-    -- TODO Change to 10ft instead of 20ft when AP is on
-    if get(dr_retard) == 0 and get(dr_retard_retard) == 0 then
-        if get(Capt_ra_alt_ft) < 20 and (get(Cockpit_throttle_lever_L) > 0.05 or get(Cockpit_throttle_lever_R) > 0.05) and get(EWD_flight_phase) == PHASE_FINAL then
-            set(dr_retard, 1)
-        end
-    else
-        if get(Capt_ra_alt_ft) < 15 and (get(Cockpit_throttle_lever_L) > 0.05 or get(Cockpit_throttle_lever_R) > 0.05) and get(EWD_flight_phase) == PHASE_FINAL then
+    if get(Aft_wheel_on_ground) == 1 then
+        if get(IAS) > 40 and (get(Cockpit_throttle_lever_L) > 0.05 or get(Cockpit_throttle_lever_R) > 0.05) and get(EWD_flight_phase) >= PHASE_FINAL then
             set(dr_retard_retard, 1)
         else
             set(dr_retard_retard, 0)
-            set(dr_retard, 0)
+        end
+    else
+
+        -- TODO Change to 10ft instead of 20ft when AP is on
+        if get(dr_retard) == 0 and get(dr_retard_retard) == 0 then
+            if get(Capt_ra_alt_ft) < 20 and (get(Cockpit_throttle_lever_L) > 0.05 or get(Cockpit_throttle_lever_R) > 0.05) and get(EWD_flight_phase) == PHASE_FINAL then
+                set(dr_retard_retard, 1)
+            end 
+        else
+            if get(Capt_ra_alt_ft) < 15 and (get(Cockpit_throttle_lever_L) > 0.05 or get(Cockpit_throttle_lever_R) > 0.05) and get(EWD_flight_phase) == PHASE_FINAL then
+                set(dr_retard, 1)
+            else
+                set(dr_retard, 0)
+                set(dr_retard_retard, 0)
+            end
         end
     end
-
 end
 
