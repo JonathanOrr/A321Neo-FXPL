@@ -2,18 +2,15 @@
 {ef23b13a-6ff4-4eba-8629-1207f2980609} event:/ACP/Up
 {7a544849-2d24-4ae1-9bc9-3ceadda13c32} event:/Airport/Ext
 {bff33e0f-d439-438b-b953-a54d305e4ebb} event:/Airport/Int
-{0a3ca941-541b-49ea-b0a6-654bfc0ba63f} event:/Autopilot/Calvary
-{ff1b5104-6805-45d0-8716-2f0c54177361} event:/Autopilot/Cchord
-{4cf42fdd-712b-4a41-bd0f-4cc005d8ae60} event:/Autopilot/CPDLC
-{d71b0f4f-0713-4c61-822f-eef505797a73} event:/Autopilot/Degrade
-{def75ab8-e6eb-4901-83ab-ffd6c481fbdc} event:/Autopilot/Disengage
-{534a7501-5cc0-4eea-9238-4a15e590d74c} event:/Autopilot/Engage
 {b78a17ca-4056-4443-aa61-7f22f71b2e0c} event:/BatteryRelay/1
 {2b35580e-c22e-49d8-b6e1-8079883b310e} event:/BatteryRelay/2
 {ba144e8c-f08f-4650-bb8f-ea1fdda166e2} event:/CockpitMechanical/Rotary/Rotary1
 {6278ba00-52a0-476a-8a87-43fb61e0a189} event:/CockpitMechanical/Rotary/Rotary2
 {4c126686-6c9f-44a1-b45a-dd4a04ef8a46} event:/CockpitMechanical/Rotary/Rotary3
 {5573431a-a5bd-40cc-8c97-e4237e3a8940} event:/CockpitMechanical/Rotary/Rotary4
+{44912abb-344e-4cac-99bf-78146e19282c} event:/CockpitMechanical/RudderTrim/Left
+{bcd830bd-e1c3-4db9-a64e-8bec3ccf5e11} event:/CockpitMechanical/RudderTrim/Neutral
+{9ac79502-0add-42e5-88bb-da471001cdcc} event:/CockpitMechanical/RudderTrim/Right
 {2d285758-cb5a-4314-ac89-d3a2b5cbc04b} event:/CockpitMechanical/Thrust Levers/ThrLvrCL
 {c96b0094-28a7-4162-b5cf-135ac063d565} event:/CockpitMechanical/Thrust Levers/ThrLvrExit
 {a41422e6-cbf7-47f8-ac6b-98c7e2416b3b} event:/CockpitMechanical/Thrust Levers/ThrLvrFLX
@@ -36,6 +33,10 @@
 {3f10ae93-6ce9-4498-b258-bc2577898679} event:/CockpitMechanical/SSTakeOver
 {f876080e-f9a4-4eb5-8ae2-d6fd1a9d1509} event:/CockpitMechanical/Tray Table Close
 {3c593132-73eb-4d34-9184-c67400174bf2} event:/CockpitMechanical/Tray Table Open
+{498a6973-0776-4cb2-897d-5a634f715111} event:/Door/Cabin/Close
+{d97dbc83-53bc-4e08-9f95-69ac17ec8a41} event:/Door/Cabin/Fully Open
+{02a94314-2b65-472e-bb80-3b0ee065f737} event:/Door/Cabin/FullyClose
+{0bf135d1-3c07-4b76-8a95-bc7d99232dcd} event:/Door/Cabin/Open
 {c98bea57-e385-49fe-89da-f2eb79555406} event:/Engines/Engine Start
 {ced3bc6e-ec20-43f0-a5a3-6f7602aec5e9} event:/Engines/Engine Start Ext
 {bdd3f6e0-b7ff-46ac-aadd-d8b6b9c45201} event:/Engines/Engines
@@ -48,6 +49,10 @@
 {2150216a-d9a4-462d-9a2c-711a97cc7a8f} event:/Engines V2/Engines
 {19330240-36a8-4ef9-8fc8-696aa8289a24} event:/Engines V2/Engines Ext
 {78b8fd51-ea07-41b0-8e7a-6c6325c9a885} event:/Engines V2/HowlEnd
+{60390ec1-f659-43b4-a63d-0618b686e0fe} event:/FCU/Selectors/1
+{9bcca77b-d316-4192-bb92-d796b32e9bd3} event:/FCU/Selectors/2
+{863d7dc0-0956-4ed3-8336-5ee2bf0b4213} event:/FCU/Selectors/3
+{9bdf25fc-2002-41ec-8dc9-a1b8aa2141b4} event:/FCU/Selectors/4
 {47d7f46e-3e56-40d7-b18d-e5f5556d36df} event:/FCU/Pull
 {ba2746b5-f88d-40c3-80ba-a639a3bbc1c4} event:/FCU/Push
 {739de174-b194-4353-b998-a76f0a62c442} event:/FCU/Rotate1
@@ -111,6 +116,14 @@
 {1ac29002-a8e7-438f-bced-dd56cb5e0ba2} event:/TA Test/End
 {bd5c0769-ed87-4f2c-a3f4-9843f0ac8e30} event:/TA Test/Pass
 {f15aa472-2df9-4ba1-91ee-30ec710d40b1} event:/TA Test/Start
+{0a3ca941-541b-49ea-b0a6-654bfc0ba63f} event:/Warnings/Calvary
+{c46115eb-d151-4e54-ae83-4175129cabdb} event:/Warnings/Caution
+{ff1b5104-6805-45d0-8716-2f0c54177361} event:/Warnings/Cchord
+{4cf42fdd-712b-4a41-bd0f-4cc005d8ae60} event:/Warnings/CPDLC
+{d71b0f4f-0713-4c61-822f-eef505797a73} event:/Warnings/Degrade
+{def75ab8-e6eb-4901-83ab-ffd6c481fbdc} event:/Warnings/Disengage
+{534a7501-5cc0-4eea-9238-4a15e590d74c} event:/Warnings/Engage
+{1ca5d948-e765-4f6a-96e8-e66fe6ac7430} event:/Warnings/Warning
 {f8e6f2ed-0d4c-4785-bd01-c98bfa48605e} event:/Wipers/Bottom
 {0b09be96-18d3-4139-8da9-27db52a78f7a} event:/Wipers/Start
 {883c4ea2-ffcd-4845-939e-1f0a5dedda32} event:/Wipers/Top
@@ -123,7 +136,6 @@
 {356cf20a-c643-42c5-8a6d-7a00fb3d4288} event:/Battery
 {1edd836c-b29a-4101-a732-2d2eef744bbe} event:/Blower
 {89d27a8f-0f45-4230-905b-f244fdde49a4} event:/Brake Fan
-{bcf5f4f4-c194-47d2-ab7c-c7e28aeea498} event:/BrakeRelease
 {5db7e5fc-e4e5-4189-b301-596d1f1dd3c2} event:/BrightnessClick
 {fbc642bf-0e6c-4030-9901-0f1ce878cfe7} event:/BusKick
 {5c5f1485-bce5-419e-9d5c-a5ff2ec145e8} event:/BusKick2
@@ -134,6 +146,7 @@
 {06a66501-2a11-4b1a-a6f7-4fe5d089bc41} event:/Ext
 {f86c05b1-253e-4508-a475-4d354dd045c6} event:/Extractor
 {c97b703e-898e-4918-bc8c-259807c5ada1} event:/Gear
+{ea49942b-ab02-4afc-808b-ef17fbd68ef0} event:/GearDrag
 {5339da63-baf2-40c8-aafd-6bf6a0fe8aac} event:/Ground Roll
 {13efb812-486a-4d08-a381-7678b540faf5} event:/GuardClose
 {0e01a32e-1c0c-4578-8b3c-4ab7bd070209} event:/GuardOpen
@@ -161,15 +174,15 @@
 {b6c156f1-9861-405c-a622-92b2ab8010a7} bus:/Master/Exterior Processed/Environment
 {8dbbc9d7-a954-4ed0-b1f1-f8111b03cbd1} bus:/Master/Exterior Unprocessed
 {3618896d-8337-431a-95fa-33ef0b3ce7cc} bus:/Master/Exterior Unprocessed/Avionics
+{751f5066-4651-4afb-a410-4cb9db0894c9} bus:/Master/Exterior Unprocessed/Avionics/Interior
+{d8526059-b27c-4eae-9b14-a1ee1cb3dfa1} bus:/Master/Exterior Unprocessed/Avionics/Radios
+{77575f3b-b9cd-4bff-9056-637cff744a14} bus:/Master/Exterior Unprocessed/Avionics/UI
 {2b5380ad-4d25-42b1-a518-444155ff5014} bus:/Master/Exterior Unprocessed/Cabin
 {072bd7fb-5c8f-4dc1-a84e-d21ca9930c53} bus:/Master/Exterior Unprocessed/Engines
 {7a0b49ba-aead-4c30-af12-561f455d9c0b} bus:/Master/Exterior Unprocessed/ExteriorNI
 {10525979-1fa1-4401-8583-bec00053b160} bus:/Master/Exterior Unprocessed/ExteriorWI
 {15a189d8-7334-4c3f-92d8-7395f3687cc7} bus:/Master/Exterior Unprocessed/GroundRoll
 {6cee8772-2b5f-4158-9399-80dbe765bd69} bus:/Master/Exterior Unprocessed/Mechanical
-{751f5066-4651-4afb-a410-4cb9db0894c9} bus:/Master/Interior
-{d8526059-b27c-4eae-9b14-a1ee1cb3dfa1} bus:/Master/Radios
-{77575f3b-b9cd-4bff-9056-637cff744a14} bus:/Master/UI
 {15e9c653-fbca-41ca-8241-7cd3b3870fc8} snapshot:/Inside
 {e5b38f91-83fb-4cec-a2d2-a0170dddb70a} snapshot:/FadingBegin
 {9093ea6c-5d0d-441f-bf32-185dad4e3a17} bank:/Master Bank

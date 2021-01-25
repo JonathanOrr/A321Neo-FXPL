@@ -9,4 +9,7 @@ end
 
 --DRAW LOOPS--
 function EFB_draw_page_5()
+    --print(EFB_CURSOR_X, EFB_CURSOR_Y)
 end
+
+

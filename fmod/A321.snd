@@ -180,13 +180,13 @@ END_SOUND_ATTACHMENT
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/Thrust Levers/ThrLvrIdle
   VEH_XYZ 0 1.5 -18.4
-  EVENT_START_COND sim/cockpit2/engine/actuators/throttle_beta_rev_ratio_all == 0
+  EVENT_START_COND a321neo/cockpit/engine/throttle_lever_L == 0
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/Thrust Levers/ThrLvrExit
   VEH_XYZ 0 1.5 -18.4
-  EVENT_START_COND sim/cockpit2/engine/actuators/throttle_beta_rev_ratio_all > 0
+  EVENT_START_COND a321neo/cockpit/engine/throttle_lever_L > 0
 END_SOUND_ATTACHMENT
 
 ###########################################################################
@@ -236,7 +236,7 @@ END_SOUND_ATTACHMENT
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/Thrust Levers/ThrLvrRev
   VEH_XYZ 0 1.5 -18.4
-  EVENT_START_COND sim/cockpit2/engine/actuators/throttle_beta_rev_ratio_all < -1
+  EVENT_START_COND a321neo/cockpit/engine/throttle_lever_L < 0
 END_SOUND_ATTACHMENT
 
 sim/cockpit2/engine/actuators/throttle_jet_rev_ratio
@@ -244,7 +244,7 @@ sim/cockpit2/engine/actuators/throttle_jet_rev_ratio
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/Thrust Levers/ThrLvrRevFull
   VEH_XYZ 0 1.5 -18.4
-  EVENT_START_COND sim/cockpit2/engine/actuators/throttle_beta_rev_ratio_all == -2
+  EVENT_START_COND a321neo/cockpit/engine/throttle_lever_L == -1
 END_SOUND_ATTACHMENT
 
 ##############################################################################################################################################################################################################################
@@ -2570,7 +2570,7 @@ END_SOUND_ATTACHMENT
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /Gear
   VEH_XYZ 0 0 0
-  EVENT_START_COND 	ABS_DELTA=sim/flightmodel/movingparts/gear1def > 0
+  EVENT_START_COND 	ABS_DELTA=sim/flightmodel/movingparts/gear1def > 0.01
 END_SOUND_ATTACHMENT
 
 #############################################################################################
