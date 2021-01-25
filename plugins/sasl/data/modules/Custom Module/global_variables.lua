@@ -53,6 +53,7 @@ EFB_preferences = {}
 Data_manager = {}
 
 Mcdu_popup = {}
+Mcdu_data = {}
 Mcdu_popup_lut = 0
 
 

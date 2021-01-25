@@ -1070,7 +1070,8 @@ function (phase)
         end
 
         mcdu_dat["s"]["R"][3].txt = "flaps/ths"
-        mcdu_dat["l"]["R"][3] = {txt = "[]/[   ]", col = "cyan"}
+        mcdu_dat["l"]["R"][3][1] = {txt = "[   ]", col = "cyan"}
+        mcdu_dat["l"]["R"][3][2] = {txt = "[ ]/     ", col = "white"}
 
         mcdu_dat["s"]["L"][4].txt = "trans alt"
         mcdu_dat["l"]["L"][4] = {txt = "4800", col = "cyan"}
@@ -1092,11 +1093,18 @@ function (phase)
 
         draw_update()
     end
+    
+    -- enter v1
+    if phase == "L1" then
+        input, variation = mcdu_get_entry_simple({"UP%.%%", "DN%.%%"})
+        if input ~= NIL then
+        end
+        mcdu_open_page(302) -- reload
+    end
 
-    -- prev phase
+    -- uplink to data
     if phase == "L6" then
-        fmgs_dat["perf page"] = fmgs_dat["perf page"] - 1
-        mcdu_open_page(300) -- open 300 perf
+        mcdu_open_page(302) -- reload
     end
 
     -- next phase
