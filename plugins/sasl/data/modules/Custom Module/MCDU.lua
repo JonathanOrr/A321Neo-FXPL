@@ -1012,6 +1012,14 @@ function (phase)
             mcdu_open_page(301) -- open 301 perf take off
         elseif fmgs_dat["perf page"] == 2 then
             mcdu_open_page(302) -- open 302 perf clb
+        elseif fmgs_dat["perf page"] == 3 then
+            mcdu_open_page(303) -- open 303 perf crz
+        elseif fmgs_dat["perf page"] == 4 then
+            mcdu_open_page(304) -- open 304 perf des
+        elseif fmgs_dat["perf page"] == 5 then
+            mcdu_open_page(305) -- open 305 perf appr
+        elseif fmgs_dat["perf page"] == 6 then
+            mcdu_open_page(306) -- open 306 perf go around
         end
     end
 end
@@ -1029,11 +1037,23 @@ function (phase)
 
         mcdu_dat["s"]["L"][1].txt = " v1  flp retr"
         mcdu_dat["l"]["L"][1][1] = {txt = "{{{", col = "amber"}
-        mcdu_dat["l"]["L"][1][2] = {txt = "       f=---"}
+        mcdu_dat["l"]["L"][1][2] = {txt = "       f="}
+        fmgs_dat_init("perf take off fspd", 0) 
+        if fmgs_dat["perf take off fspd"] == 0 then
+            mcdu_dat["l"]["L"][1][3] = {txt = "         ---"}
+        else
+            mcdu_dat["l"]["L"][1][3] = {txt = "         " .. fmgs_dat["perf take off fspd"], col = "green"}
+        end
 
         mcdu_dat["s"]["L"][2].txt = " vr  slt retr"
         mcdu_dat["l"]["L"][2][1] = {txt = "{{{", col = "amber"}
-        mcdu_dat["l"]["L"][2][2] = {txt = "       s=---"}
+        mcdu_dat["l"]["L"][2][2] = {txt = "       s="}
+        fmgs_dat_init("perf take off sspd", 0) 
+        if fmgs_dat["perf take off sspd"] == 0 then
+            mcdu_dat["l"]["L"][2][3] = {txt = "         ---"}
+        else
+            mcdu_dat["l"]["L"][2][3] = {txt = "         " .. fmgs_dat["perf take off sspd"], col = "green"}
+        end
 
         mcdu_dat["s"]["R"][2].txt = "to shift "
         mcdu_dat["l"]["R"][2][1] = {txt = "[m]     ", size = "s"}
@@ -1041,20 +1061,31 @@ function (phase)
 
         mcdu_dat["s"]["L"][3].txt = " v2     clean"
         mcdu_dat["l"]["L"][3][1] = {txt = "{{{", col = "amber"}
-        mcdu_dat["l"]["L"][3][2] = {txt = "       o=---"}
+        mcdu_dat["l"]["L"][3][2] = {txt = "       o="}
+        fmgs_dat_init("perf take off ospd", 0) 
+        if fmgs_dat["perf take off ospd"] == 0 then
+            mcdu_dat["l"]["L"][3][3] = {txt = "         ---"}
+        else
+            mcdu_dat["l"]["L"][3][3] = {txt = "         " .. fmgs_dat["perf take off ospd"], col = "green"}
+        end
 
         mcdu_dat["s"]["R"][3].txt = "flaps/ths"
         mcdu_dat["l"]["R"][3] = {txt = "[]/[   ]", col = "cyan"}
 
         mcdu_dat["s"]["L"][4].txt = "trans alt"
+        mcdu_dat["l"]["L"][4] = {txt = "4800", col = "cyan"}
         mcdu_dat["s"]["R"][4].txt = "flex to temp"
+        mcdu_dat["l"]["R"][4] = {txt = "[  ]º", col = "cyan"}
 
         mcdu_dat["s"]["L"][5].txt = "thr red/acc"
+        mcdu_dat["l"]["L"][5][1] = {txt = "2000", col = "cyan"}
+        mcdu_dat["l"]["L"][5][2] = {txt = "    /3000", col = "cyan", size = "s"}
         mcdu_dat["s"]["R"][5].txt = "eng out acc"
+        mcdu_dat["l"]["L"][5] = {txt = "2865", col = "cyan", size = "s"}
 
         mcdu_dat["s"]["L"][6].txt = " uplink"
         mcdu_dat["l"]["L"][6].txt = "<to data"
-        mcdu_dat["s"]["R"][6].txt = "next"
+        mcdu_dat["s"]["R"][6].txt = "next "
         mcdu_dat["l"]["R"][6].txt = "phase>"
 
 		--mcdu_dat["l"]["L"][6] = {txt = "        inop page", col = "amber"}
@@ -1086,20 +1117,198 @@ function (phase)
         end
 
         mcdu_dat["s"]["L"][1].txt = "act mode"
-        mcdu_dat["l"]["L"][1] = {txt = "managed", col = "cyan"}
+        mcdu_dat["l"]["L"][1] = {txt = "managed", col = "green"}
 
         mcdu_dat["s"]["L"][2].txt = " ci"
-        mcdu_dat["l"]["L"][2] = {txt = "managed", col = "cyan"}
+        mcdu_dat["l"]["L"][2] = {txt = " 40", col = "cyan", size = "s"}
+
+        mcdu_dat["l"]["R"][2][2] = {txt = "pred to      ", size = "s"}
+        mcdu_dat["l"]["R"][2][1] = {txt = "fl250", col = "cyan"}
 
         mcdu_dat["s"]["L"][3].txt = " managed  utc"
-        mcdu_dat["l"]["L"][3] = {txt = "managed", col = "cyan"}
+        mcdu_dat["l"]["L"][3] = {txt = " 250     1014", col = "cyan"}
 
         mcdu_dat["s"]["R"][3].txt = "dist"
+        mcdu_dat["l"]["R"][3] = {txt = "66", col = "cyan"}
 
         mcdu_dat["s"]["L"][4].txt = "  presel"
-        mcdu_dat["l"]["L"][4] = {txt = "managed", col = "cyan"}
+        mcdu_dat["l"]["L"][4] = {txt = "*[]", col = "cyan"}
 
-		mcdu_dat["l"]["L"][6] = {txt = "        inop page", col = "amber"}
+        mcdu_dat["s"]["L"][6].txt = " prev"
+        mcdu_dat["l"]["L"][6].txt = "<phase"
+        mcdu_dat["s"]["R"][6].txt = "next "
+        mcdu_dat["l"]["R"][6].txt = "phase>"
+
+        draw_update()
+    end
+
+    -- prev phase
+    if phase == "L6" then
+        fmgs_dat["perf page"] = fmgs_dat["perf page"] - 1
+        mcdu_open_page(300) -- open 300 perf
+    end
+
+    -- next phase
+    if phase == "R6" then
+        fmgs_dat["perf page"] = fmgs_dat["perf page"] + 1
+        mcdu_open_page(300) -- open 300 perf
+    end
+end
+
+-- 303 perf crz
+mcdu_sim_page[303] =
+function (phase)
+    if phase == "render" then
+        if fmgs_dat["perf phase"] == 2 then
+            mcdu_dat_title[1] = {txt = "          crz", col = "green"}
+        else
+            mcdu_dat_title[1] = {txt = "          crz", col = "white"}
+        end
+
+        mcdu_dat["s"]["L"][1].txt = "act mode  utc dest"
+        mcdu_dat["l"]["L"][1] = {txt = "managed 1220", col = "green"}
+
+        mcdu_dat["l"]["R"][1] = {txt = "efob", col = "green"}
+        mcdu_dat["l"]["R"][1] = {txt = "8.4", col = "green"}
+
+        mcdu_dat["s"]["L"][2].txt = " ci"
+        mcdu_dat["l"]["L"][2] = {txt = "540", col = "cyan", size = "s"}
+
+        mcdu_dat["s"]["L"][3].txt = " managed  utc"
+        mcdu_dat["l"]["L"][3] = {txt = " 250     1014", col = "cyan"}
+
+        mcdu_dat["s"]["R"][3].txt = "dist"
+        mcdu_dat["l"]["R"][3] = {txt = "66", col = "cyan"}
+
+        mcdu_dat["s"]["L"][4].txt = "  presel"
+        mcdu_dat["l"]["L"][4] = {txt = "*[]", col = "cyan"}
+
+        mcdu_dat["s"]["R"][4].txt = "des cabin rate"
+        mcdu_dat["l"]["R"][4][1] = {txt = "-350     ", col = "cyan"}
+        mcdu_dat["l"]["R"][4][2] = {txt = "ft/mn", col = "cyan"}
+
+        mcdu_dat["l"]["R"][5].txt = "step alts>"
+
+        mcdu_dat["s"]["L"][6].txt = " prev"
+        mcdu_dat["l"]["L"][6].txt = "<phase"
+        mcdu_dat["s"]["R"][6].txt = "next "
+        mcdu_dat["l"]["R"][6].txt = "phase>"
+
+        draw_update()
+    end
+
+    -- prev phase
+    if phase == "L6" then
+        fmgs_dat["perf page"] = fmgs_dat["perf page"] - 1
+        mcdu_open_page(300) -- open 300 perf
+    end
+
+    -- next phase
+    if phase == "R6" then
+        fmgs_dat["perf page"] = fmgs_dat["perf page"] + 1
+        mcdu_open_page(300) -- open 300 perf
+    end
+end
+
+-- 304 perf des
+mcdu_sim_page[304] =
+function (phase)
+    if phase == "render" then
+        if fmgs_dat["perf phase"] == 2 then
+            mcdu_dat_title[1] = {txt = "          des", col = "green"}
+        else
+            mcdu_dat_title[1] = {txt = "          des", col = "white"}
+        end
+
+        mcdu_dat["s"]["L"][1].txt = "act mode  utc dest"
+        mcdu_dat["l"]["L"][1] = {txt = "managed 1220", col = "green"}
+
+        mcdu_dat["l"]["R"][1] = {txt = "efob", col = "green"}
+        mcdu_dat["l"]["R"][1] = {txt = "8.4", col = "green"}
+
+        mcdu_dat["s"]["L"][2].txt = " ci"
+        mcdu_dat["l"]["L"][2] = {txt = "540", col = "cyan", size = "s"}
+
+        mcdu_dat["s"]["L"][3].txt = " managed  utc"
+        mcdu_dat["l"]["L"][3] = {txt = " 250     1014", col = "cyan"}
+
+        mcdu_dat["s"]["R"][3].txt = "dist"
+        mcdu_dat["l"]["R"][3] = {txt = "66", col = "cyan"}
+
+        mcdu_dat["s"]["L"][4].txt = "  presel"
+        mcdu_dat["l"]["L"][4] = {txt = "*[]", col = "cyan"}
+
+        mcdu_dat["s"]["R"][4].txt = "des cabin rate"
+        mcdu_dat["l"]["R"][4][1] = {txt = "-350     ", col = "cyan"}
+        mcdu_dat["l"]["R"][4][2] = {txt = "ft/mn", col = "cyan"}
+
+        mcdu_dat["l"]["R"][5].txt = "step alts>"
+
+        mcdu_dat["s"]["L"][6].txt = " prev"
+        mcdu_dat["l"]["L"][6].txt = "<phase"
+        mcdu_dat["s"]["R"][6].txt = "next "
+        mcdu_dat["l"]["R"][6].txt = "phase>"
+
+        draw_update()
+    end
+
+    -- prev phase
+    if phase == "L6" then
+        fmgs_dat["perf page"] = fmgs_dat["perf page"] - 1
+        mcdu_open_page(300) -- open 300 perf
+    end
+
+    -- next phase
+    if phase == "R6" then
+        fmgs_dat["perf page"] = fmgs_dat["perf page"] + 1
+        mcdu_open_page(300) -- open 300 perf
+    end
+end
+
+-- 305 perf appr
+mcdu_sim_page[305] =
+function (phase)
+    if phase == "render" then
+        if fmgs_dat["perf phase"] == 1 then
+            mcdu_dat_title[1] = {txt = "    take off rwy", col = "white"}
+            mcdu_dat_title[2] = {txt = "                 33r", col = "green"}
+        else
+            mcdu_dat_title = {txt = "       take off", col = "white"}
+        end
+
+        mcdu_dat["s"]["L"][1].txt = " qnh   flp retr"
+        mcdu_dat["l"]["L"][1][1] = {txt = "{{{", col = "amber"}
+        mcdu_dat["l"]["L"][1][2] = {txt = "       f=---"}
+
+        mcdu_dat["s"]["R"][1].txt = "final "
+        mcdu_dat["l"]["R"][1] = {txt = "ils 33r", col = "green"}
+
+        mcdu_dat["s"]["L"][2].txt = " temp  slt retr"
+        mcdu_dat["l"]["L"][2][1] = {txt = "{{{", col = "amber"}
+        mcdu_dat["l"]["L"][2][2] = {txt = "       s=---"}
+
+        mcdu_dat["s"]["R"][2].txt = "baro "
+        mcdu_dat["l"]["R"][2] = {txt = "[  ]", col = "cyan"}
+
+        mcdu_dat["s"]["L"][3].txt = " v2     clean"
+        mcdu_dat["l"]["L"][3][1] = {txt = "{{{", col = "amber"}
+        mcdu_dat["l"]["L"][3][2] = {txt = "       o=---"}
+
+        mcdu_dat["s"]["R"][3].txt = "flaps/ths"
+        mcdu_dat["l"]["R"][3] = {txt = "[]/[   ]", col = "cyan"}
+
+        mcdu_dat["s"]["L"][4].txt = "trans alt"
+        mcdu_dat["s"]["R"][4].txt = "flex to temp"
+
+        mcdu_dat["s"]["L"][5].txt = "thr red/acc"
+        mcdu_dat["s"]["R"][5].txt = "eng out acc"
+
+        mcdu_dat["s"]["L"][6].txt = " uplink"
+        mcdu_dat["l"]["L"][6].txt = "<to data"
+        mcdu_dat["s"]["R"][6].txt = "next "
+        mcdu_dat["l"]["R"][6].txt = "phase>"
+
+		--mcdu_dat["l"]["L"][6] = {txt = "        inop page", col = "amber"}
 
         draw_update()
     end
