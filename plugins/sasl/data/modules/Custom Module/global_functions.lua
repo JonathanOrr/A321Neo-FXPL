@@ -709,6 +709,16 @@ function MCDU_set_popup(id, val) Mcdu_popup[id] = val end
 function MCDU_get_lut(val) return Mcdu_popup_lut end
 function MCDU_set_lut(val) Mcdu_popup_lut = val end
 
+function MCDU_get_data(reference) 
+    if Mcdu_data[reference] == nil then
+        return 0
+    end
+    return Mcdu_data[reference] 
+end
+function MCDU_set_data(reference, val) 
+    Mcdu_data[reference] = val 
+end
+
 --mouse functions
 function Button_check_and_action(cursor_x, cursor_y, lower_x, lower_y, higher_x, higher_y, callback)
     if cursor_x >= lower_x and cursor_x <= higher_x and cursor_y >= lower_y and cursor_y <= higher_y then

@@ -871,7 +871,7 @@ local function update_n1_mode_and_limits()
     -- TODO FLEX
     
     -- The mode is selected by the highest throttle
-    local thr_pos = math.max(get(L_sim_throttle), get(R_sim_throttle))
+    local thr_pos = math.max(get(Cockpit_throttle_lever_L), get(Cockpit_throttle_lever_R))
 
     -- We have to compute all the values for each detent even if we are not in that mode, this is
     -- because in AT_PID_functions we have to compute the previous detent value to make the 

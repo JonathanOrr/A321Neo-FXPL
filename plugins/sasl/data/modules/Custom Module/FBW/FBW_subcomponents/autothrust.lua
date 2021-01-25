@@ -43,38 +43,40 @@ function update()
 
     --throttle detents
     --TOGA
-    if get(L_sim_throttle) >= THR_TOGA_START and get(R_sim_throttle) >= THR_TOGA_START and get(L_sim_throttle) <= 1 and get(R_sim_throttle) <= 1 then
+    if get(Cockpit_throttle_lever_L) >= THR_TOGA_START and get(Cockpit_throttle_lever_R) >= THR_TOGA_START and get(Cockpit_throttle_lever_L) <= 1 and get(Cockpit_throttle_lever_R) <= 1 then
         set(Lever_in_TOGA, 1)
     else
         set(Lever_in_TOGA, 0)
     end
 
     --TOGA > MAN_thrust > FLEX_MCT
-    if get(L_sim_throttle) > THR_MCT_END and get(R_sim_throttle) > THR_MCT_END and get(L_sim_throttle) < THR_TOGA_START and get(R_sim_throttle) <THR_TOGA_START then
+    if get(Cockpit_throttle_lever_L) > THR_MCT_END and get(Cockpit_throttle_lever_R) > THR_MCT_END and get(Cockpit_throttle_lever_L) < THR_TOGA_START and get(Cockpit_throttle_lever_R) <THR_TOGA_START then
         set(Lever_in_MAN_thrust, 1)
     else
         set(Lever_in_MAN_thrust, 0)
     end
 
     --FLEX/MCT
-    if get(L_sim_throttle) >= THR_MCT_START and get(R_sim_throttle) >= THR_MCT_START and get(L_sim_throttle) <= THR_MCT_END and get(R_sim_throttle) <= THR_MCT_END then
+    if get(Cockpit_throttle_lever_L) >= THR_MCT_START and get(Cockpit_throttle_lever_R) >= THR_MCT_START and get(Cockpit_throttle_lever_L) <= THR_MCT_END and get(Cockpit_throttle_lever_R) <= THR_MCT_END then
         set(Lever_in_FLEX_MCT, 1)
     else
         set(Lever_in_FLEX_MCT, 0)
     end
 
     --CL
-    if get(L_sim_throttle) >= THR_CLB_START and get(R_sim_throttle) >= THR_CLB_START and get(L_sim_throttle) <= THR_CLB_END and get(R_sim_throttle) <= THR_CLB_END then
+    if get(Cockpit_throttle_lever_L) >= THR_CLB_START and get(Cockpit_throttle_lever_R) >= THR_CLB_START and get(Cockpit_throttle_lever_L) <= THR_CLB_END and get(Cockpit_throttle_lever_R) <= THR_CLB_END then
         set(Lever_in_CL, 1)
     else
         set(Lever_in_CL, 0)
     end
 
     --CL > MAN_thrust > 0
-    if get(L_sim_throttle) < THR_CLB_START and get(R_sim_throttle) < THR_CLB_START then
+    if get(Cockpit_throttle_lever_L) < THR_CLB_START and get(Cockpit_throttle_lever_R) < THR_CLB_START then
         set(Lever_in_MAN_thrust, 1)
     else
         set(Lever_in_MAN_thrust, 0)
     end
 
+
+    update_levers()
 end

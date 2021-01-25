@@ -270,7 +270,7 @@ local function SPEED_SPEED_SPEED()
        get(Flaps_internal_config) <= 2 or
        get(Capt_ra_alt_ft) < 100 or get(Fo_ra_alt_ft) < 100 or
        get(Capt_ra_alt_ft) > 2000 or get(Fo_ra_alt_ft) > 2000 or
-       get(L_sim_throttle) >= THR_TOGA_START or get(R_sim_throttle) >= THR_TOGA_START or
+       get(Cockpit_throttle_lever_L) >= THR_TOGA_START or get(Cockpit_throttle_lever_R) >= THR_TOGA_START or
        adirs_get_avg_ias() > get(VLS) and adirs_get_avg_ias_trend() >= 0 then--missing AFLOOR
         return
     end

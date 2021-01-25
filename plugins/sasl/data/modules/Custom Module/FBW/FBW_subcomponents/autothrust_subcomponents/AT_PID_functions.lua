@@ -27,13 +27,13 @@ function FADEC_N1_PID(pid_array, Set_Point, PV)
 
 end
 
-local function get_N1_target()
+local function get_N1_target(thr_position)
 
     local REVERSE_PERFORMANCE = 0.7
 
     local curr_max  = 0
     local prev_max = 0
-    local thr = math.abs(get(L_sim_throttle))
+    local thr = math.abs(thr_position)
     local N1_target = 0
     
     -- So, the throttle is linear but in each region has a different coefficient:
@@ -73,7 +73,7 @@ end
 
 function N1_control(L_PID_array, R_PID_array, reversers)
 
-    N1_target = get_N1_target()
+    local N1_target = get_N1_target(get(Cockpit_throttle_lever_L))
 
     if get(Engine_1_avail) == 1 then
         set(Override_eng_1_lever, FADEC_N1_PID(L_PID_array, N1_target, get(Eng_1_N1)))
@@ -81,6 +81,7 @@ function N1_control(L_PID_array, R_PID_array, reversers)
         set(Override_eng_1_lever, 0)
     end
 
+    local N1_target = get_N1_target(get(Cockpit_throttle_lever_R))
     if get(Engine_2_avail) == 1 then
         set(Override_eng_2_lever, FADEC_N1_PID(R_PID_array, N1_target, get(Eng_2_N1)))
     else

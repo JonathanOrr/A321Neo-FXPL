@@ -89,6 +89,7 @@ components = {
   pressurization {},
   oxygen {},
   anti_ice {},
+  fire_eng_apu {},
   fire_cargo {},
   FBW_main {},
   calls {},

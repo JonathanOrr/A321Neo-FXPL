@@ -44,6 +44,7 @@ Perf_array = {}
 
 ELEC_sys = {}
 Fuel_sys = {}
+FIRE_sys = {}
 AI_sys   = {}
 ADIRS_sys= {}
 
@@ -52,6 +53,7 @@ EFB_preferences = {}
 Data_manager = {}
 
 Mcdu_popup = {}
+Mcdu_data = {}
 Mcdu_popup_lut = 0
 
 

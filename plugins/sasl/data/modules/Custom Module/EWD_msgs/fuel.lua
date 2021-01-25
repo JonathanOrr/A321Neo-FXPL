@@ -194,8 +194,8 @@ MessageGroup_FUEL_C_TK_XFR_OFF = {
     },
 
     is_active = function(self)
-        return (Fuel_sys.tank_pump_and_xfr[C_TK_XFR_1].switch == false and get(FAILURE_FUEL, C_TK_XFR_1) == 0) 
-            or (Fuel_sys.tank_pump_and_xfr[C_TK_XFR_2].switch == false and get(FAILURE_FUEL, C_TK_XFR_2) == 0)
+        return not PB.ovhd.fuel_MODE_SEL.status_bottom and ((Fuel_sys.tank_pump_and_xfr[C_TK_XFR_1].switch == false and get(FAILURE_FUEL, C_TK_XFR_1) == 0) 
+            or (Fuel_sys.tank_pump_and_xfr[C_TK_XFR_2].switch == false and get(FAILURE_FUEL, C_TK_XFR_2) == 0))
     end,
 
     is_inhibited = function(self)
@@ -793,7 +793,7 @@ MessageGroup_FUEL_AUTO_FEED_FAULT = {
     },
 
     is_active = function()
-        return not PB.ovhd.fuel_MODE_SEL.status_top and get(Fuel_quantity[tank_CENTER]) > 250 and (get(Fuel_quantity[tank_RIGHT]) < 5000 or get(Fuel_quantity[tank_LEFT]) < 5000)
+        return not PB.ovhd.fuel_MODE_SEL.status_top and not PB.ovhd.fuel_MODE_SEL.status_bottom and get(Fuel_quantity[tank_CENTER]) > 250 and (get(Fuel_quantity[tank_RIGHT]) < 5000 or get(Fuel_quantity[tank_LEFT]) < 5000)
     end,
 
     is_inhibited = function()

@@ -43,7 +43,8 @@ local image_camera_1 = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/text
 local image_camera_2 = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/camera-2.png")
 local current_door_video   = 0 -- 0 not active, 1 main door, 2 side doors
 local is_door_video_active = true
-
+local time_g_load_visible = -10
+local time_g_load_catch = 0
 
 -- Handlers for the camera
 sasl.registerCommandHandler (VIDEO_cmd_toggle,  0, function(phase) if phase == SASL_COMMAND_BEGIN then is_door_video_active = not is_door_video_active end end )
@@ -69,7 +70,21 @@ local function draw_ecam_lower_section_fixed()
 
     -- TODO Add ALT SEL from autpilot
 
-    if gload >= 1.4 or gload <= 0.7  then
+    if (gload >= 1.4 or gload <= 0.7) then
+        if time_g_load_catch == 0 then
+            time_g_load_catch = get(TIME)
+        end
+    else
+        time_g_load_catch = 0
+    end
+    
+    local trigger_in_condition  = time_g_load_catch ~= 0 and (get(TIME) - time_g_load_catch > 2) 
+    local trigger_out_condition = (get(TIME) - time_g_load_visible < 5) 
+    
+    if (trigger_in_condition or trigger_out_condition) then
+        if trigger_in_condition then
+            time_g_load_visible = get(TIME)
+        end
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2-115, size[2]/2-372, "G LOAD", 32, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2+50, size[2]/2-372, Round_fill(gload,1), 32, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
     end

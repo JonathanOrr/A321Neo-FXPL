@@ -53,7 +53,6 @@ local ai_btn_status = { -- switch position status
 
 local ai_time_flash = {0,0,0,0} -- Used to timing the flash of fault
 local wait_for_ice_detected = 0
-local start_time_ground_test_wings = 0
 
 ----------------------------------------------------------------------------------------------------
 -- Commands
@@ -274,22 +273,8 @@ local function update_logic()
     ai_sys_commanded_status[ENG_1] = ai_btn_status[ENG_1]
     ai_sys_commanded_status[ENG_2] = ai_btn_status[ENG_2]
     
-    if ai_btn_status[WINGS]  then
-        if get(Any_wheel_on_ground) == 0 then
-            ai_sys_commanded_status[WINGS] = true
-            start_time_ground_test_wings = 0
-        else
-            if start_time_ground_test_wings == 0 then
-                start_time_ground_test_wings = get(TIME)
-            else
-                ai_sys_commanded_status[WINGS] = get(TIME) - start_time_ground_test_wings < 30
-            end
-        end
-    else
-        ai_sys_commanded_status[WINGS] = false
-        start_time_ground_test_wings = 0
-    end
-    
+    ai_sys_commanded_status[WINGS] = ai_btn_status[WINGS] 
+        
     if get(Any_wheel_on_ground) == 1 then
         ai_sys_commanded_status[PROBES] = ai_btn_status[PROBES] or get(Engine_1_avail) == 1 or get(Engine_2_avail) == 1
     else

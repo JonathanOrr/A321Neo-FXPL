@@ -18,6 +18,7 @@
 
 include('EWD_flight_phases.lua')
 include('EWD_msgs/adirs.lua')
+include('EWD_msgs/anti_ice.lua')
 include('EWD_msgs/aircond.lua')
 include('EWD_msgs/bleed.lua')
 include('EWD_msgs/brakes_and_antiskid.lua')
@@ -193,6 +194,11 @@ local left_messages_list = {
     MessageGroup_AOA_FO_FAULT,
     MessageGroup_AOA_STBY_FAULT,
     MessageGroup_ENG_FADEC_FAULT,
+    
+    MessageGroup_WAI_OPEN_ON_GND,
+    MessageGroup_WAI_SYS_FAULT_1,
+    MessageGroup_WAI_SYS_FAULT_2,
+    MessageGroup_WAI_L_R_OPEN,
     
     -- Warnings
     MessageGroup_OVERSPEED,

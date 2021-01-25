@@ -18,12 +18,26 @@
 
 
 local function draw_cond_page_valves()
-    SASL_rotated_center_img_xcenter_aligned(ECAM_COND_arrows_img, size[1]/2-213, size[2]/2+106, 10, 39, Math_rescale(0, -40, 1, 40, get(Aircond_trim_valve, 1)), 0, 0, ECAM_GREEN)
-    SASL_rotated_center_img_xcenter_aligned(ECAM_COND_arrows_img, size[1]/2-15, size[2]/2+106, 10, 39, Math_rescale(0, -40, 1, 40, get(Aircond_trim_valve, 2)), 0, 0, ECAM_GREEN)
-    SASL_rotated_center_img_xcenter_aligned(ECAM_COND_arrows_img, size[1]/2+172, size[2]/2+106, 10, 39, Math_rescale(0, -40, 1, 40, get(Aircond_trim_valve, 3)), 0, 0, ECAM_GREEN)
-
-    SASL_rotated_center_img_xcenter_aligned(ECAM_COND_arrows_img, size[1]/2+167, size[2]/2-254, 10, 39, Math_rescale(0, -40, 1, 40, get(Aircond_trim_valve, 4)), 0, 0, ECAM_GREEN)
-
+    if get(FAILURE_AIRCOND_TRIM_CKPT) == 0 then
+        SASL_rotated_center_img_xcenter_aligned(ECAM_COND_arrows_img, size[1]/2-213, size[2]/2+106, 10, 39, Math_rescale(0, -40, 1, 40, get(Aircond_trim_valve, 1)), 0, 0, ECAM_GREEN)
+    else
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-213, size[2]/2+106, "XX", 32, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+    end
+    if get(FAILURE_AIRCOND_TRIM_CAB_FWD) == 0 then
+        SASL_rotated_center_img_xcenter_aligned(ECAM_COND_arrows_img, size[1]/2-15, size[2]/2+106, 10, 39, Math_rescale(0, -40, 1, 40, get(Aircond_trim_valve, 2)), 0, 0, ECAM_GREEN)
+    else
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-15, size[2]/2+106, "XX", 32, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+    end
+    if get(FAILURE_AIRCOND_TRIM_CAB_AFT) == 0 then
+        SASL_rotated_center_img_xcenter_aligned(ECAM_COND_arrows_img, size[1]/2+172, size[2]/2+106, 10, 39, Math_rescale(0, -40, 1, 40, get(Aircond_trim_valve, 3)), 0, 0, ECAM_GREEN)
+    else
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+172, size[2]/2+106, "XX", 32, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+    end
+    if get(FAILURE_AIRCOND_TRIM_CARGO_AFT) == 0 then
+        SASL_rotated_center_img_xcenter_aligned(ECAM_COND_arrows_img, size[1]/2+167, size[2]/2-254, 10, 39, Math_rescale(0, -40, 1, 40, get(Aircond_trim_valve, 4)), 0, 0, ECAM_GREEN)
+    else
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+167, size[2]/2-254, "XX", 32, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+    end
     --cabin hot air--
     SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_COND_valves_img, size[1]/2+306, size[2]/2+31, 120, 58, 2, get(Hot_air_valve_pos) == 0 and 2 or 1, get(FAILURE_AIRCOND_HOT_AIR_STUCK) == 0 and ECAM_GREEN or ECAM_ORANGE)
 

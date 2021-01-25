@@ -26,7 +26,6 @@ XPlane_Auto_Failure   = globalProperty("sim/operation/failures/enable_random_fai
 FAILURE_radioalt_cap = createGlobalPropertyi("a321neo/failures/pfd/capt_radioalt", 0, false, true, false) -- 0: OK, 1: FAILED
 
 -- Systems
-FAILURE_Apu_fire = globalProperty("sim/operation/failures/rel_apu_fire")     -- TODO This should be replaced/removed
 FAILURE_TCAS = globalProperty("sim/operation/failures/rel_xpndr")            -- TODO This should be replaced/removed
 
 
@@ -221,6 +220,10 @@ FAILURE_AIRCOND_ISOL_CARGO_IN_STUCK = createGlobalPropertyi("a321neo/failures/ai
 FAILURE_AIRCOND_ISOL_CARGO_OUT_STUCK = createGlobalPropertyi("a321neo/failures/aircond/hot_air_cargo_stuck_out", 0, false, true, false)
 FAILURE_AIRCOND_VENT_BLOWER = createGlobalPropertyi("a321neo/failures/aircond/vent/avionics_blower", 0, false, true, false)
 FAILURE_AIRCOND_VENT_EXTRACT = createGlobalPropertyi("a321neo/failures/aircond/vent/avionics_extract", 0, false, true, false)
+FAILURE_AIRCOND_TRIM_CKPT = createGlobalPropertyi("a321neo/failures/aircond/vent/trim_ckpt", 0, false, true, false)
+FAILURE_AIRCOND_TRIM_CAB_FWD = createGlobalPropertyi("a321neo/failures/aircond/vent/trim_cab_fwd", 0, false, true, false)
+FAILURE_AIRCOND_TRIM_CAB_AFT = createGlobalPropertyi("a321neo/failures/aircond/vent/trim_cab_aft", 0, false, true, false)
+FAILURE_AIRCOND_TRIM_CARGO_AFT = createGlobalPropertyi("a321neo/failures/aircond/vent/trim_cargo_aft", 0, false, true, false)
 
 FAILURE_AI_PITOT_CAPT = createGlobalPropertyi("a321neo/failures/anti_ice/capt_pitot", 0, false, true, false)
 FAILURE_AI_PITOT_FO   = createGlobalPropertyi("a321neo/failures/anti_ice/fo_pitot", 0, false, true, false)
@@ -275,4 +278,8 @@ FAILURE_GPWS_TERR  = createGlobalPropertyi("a321neo/failures/gpws/gpws_terr", 0,
 
 FAILURE_FIRE_CARGO_FWD = createGlobalPropertyi("a321neo/failures/fire/cargo_fwd", 0, false, true, false)
 FAILURE_FIRE_CARGO_AFT = createGlobalPropertyi("a321neo/failures/fire/cargo_aft", 0, false, true, false)
+
+FAILURE_FIRE_APU = createGlobalPropertyi("a321neo/failures/fire/apu", 0, false, true, false)
+
+
 

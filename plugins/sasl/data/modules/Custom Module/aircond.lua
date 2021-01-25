@@ -152,6 +152,10 @@ local function update_temp_from_valves()
         mixer_temp = (get(L_pack_temp) + get(R_pack_temp)) / 2 
     end
     
+    if get(Emer_ram_air) == 1 then
+        mixer_temp = 0.9 * mixer_temp + get(OTA) * 0.1
+    end
+    
     set(Aircond_mixer_temp, mixer_temp)
     
     if get(Hot_air_valve_pos) == 0 then
@@ -223,32 +227,39 @@ local function run_pids()
     
     local curr_err  = get(Cockpit_temp_req) - get(Cockpit_temp)
     local u = SSS_PID_BP_LIM(pid_arrays[CKPT], curr_err) or 0
-    set(Aircond_trim_valve, u, CKPT)
-
+    
+    if get(FAILURE_AIRCOND_TRIM_CKPT) == 0 then
+        set(Aircond_trim_valve, u, CKPT)
+    end
+    
     -- Cabin FWD
     -- ERROR: get(Front_cab_temp_req) - get(Front_cab_temp)
     -- CONTROL VARIABLE [0;1]: set(Aircond_trim_valve, trim, CABIN_FWD)
 
     local curr_err  = get(Front_cab_temp_req) - get(Front_cab_temp)
     local u = SSS_PID_BP_LIM(pid_arrays[CABIN_FWD], curr_err) or 0
-    set(Aircond_trim_valve, u, CABIN_FWD)
-
+    if get(FAILURE_AIRCOND_TRIM_CAB_FWD) == 0 then
+        set(Aircond_trim_valve, u, CABIN_FWD)
+    end
+    
     -- Cabin AFT
     -- ERROR: get(Aft_cab_temp_req) - get(Aft_cab_temp)
     -- CONTROL VARIABLE [0;1]: set(Aircond_trim_valve, trim, CABIN_AFT)
 
     local curr_err  = get(Aft_cab_temp_req) - get(Aft_cab_temp)
     local u = SSS_PID_BP_LIM(pid_arrays[CABIN_AFT], curr_err) or 0
-    set(Aircond_trim_valve, u, CABIN_AFT)
-
+    if get(FAILURE_AIRCOND_TRIM_CAB_AFT) == 0 then
+        set(Aircond_trim_valve, u, CABIN_AFT)
+    end
     -- Cargo AFT
     -- ERROR: get(Aft_cargo_temp_req) - get(Aft_cargo_temp)
     -- CONTROL VARIABLE [0;1]: set(Aircond_trim_valve, trim, CARGO_AFT)
     
     local curr_err  = get(Aft_cargo_temp_req) - get(Aft_cargo_temp)
     local u = SSS_PID_BP_LIM(pid_arrays[CARGO_AFT], curr_err) or 0
-    set(Aircond_trim_valve, u, CARGO_AFT)
-    
+    if get(FAILURE_AIRCOND_TRIM_CARGO_AFT) == 0 then
+        set(Aircond_trim_valve, u, CARGO_AFT)
+    end
 end
 
 function udpate_avio_temps()

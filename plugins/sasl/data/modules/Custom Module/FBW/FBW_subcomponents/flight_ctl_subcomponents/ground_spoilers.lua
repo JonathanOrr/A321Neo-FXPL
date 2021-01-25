@@ -80,21 +80,21 @@ function Ground_spoilers_output(var_table)
     --Ground_spoilers_act_method 0 = no action, 1 = unarmed activation, 2 armed activation
 
     --properties--
-    local thrust_lever_1_fwd_def = Math_clamp_lower(get(L_sim_throttle) * 40, 0)
-    local thrust_lever_2_fwd_def = Math_clamp_lower(get(R_sim_throttle) * 40, 0)
+    local thrust_lever_1_fwd_def = Math_clamp_lower(get(Cockpit_throttle_lever_L) * 40, 0)
+    local thrust_lever_2_fwd_def = Math_clamp_lower(get(Cockpit_throttle_lever_R) * 40, 0)
 
     --DELTAs--
     local Both_main_gear_on_ground_delta = get(Aft_wheel_on_ground) - var_table.Both_main_gear_on_ground_prev
-    local Thrust_levers_idled_delta = BoolToNum(get(L_sim_throttle) >= THR_IDLE_START and get(L_sim_throttle) <= THR_IDLE_END and get(R_sim_throttle) >= THR_IDLE_START and get(R_sim_throttle) <= THR_IDLE_END) - var_table.Thrust_levers_idled_prev
+    local Thrust_levers_idled_delta = BoolToNum(get(Cockpit_throttle_lever_L) >= THR_IDLE_START and get(Cockpit_throttle_lever_L) <= THR_IDLE_END and get(Cockpit_throttle_lever_R) >= THR_IDLE_START and get(Cockpit_throttle_lever_R) <= THR_IDLE_END) - var_table.Thrust_levers_idled_prev
 
     var_table.Both_main_gear_on_ground_prev = get(Aft_wheel_on_ground)
-    var_table.Thrust_levers_idled_prev = BoolToNum(get(L_sim_throttle) >= THR_IDLE_START and get(L_sim_throttle) <= THR_IDLE_END and get(R_sim_throttle) >= THR_IDLE_START and get(R_sim_throttle) <= THR_IDLE_END)
+    var_table.Thrust_levers_idled_prev = BoolToNum(get(Cockpit_throttle_lever_L) >= THR_IDLE_START and get(Cockpit_throttle_lever_L) <= THR_IDLE_END and get(Cockpit_throttle_lever_R) >= THR_IDLE_START and get(Cockpit_throttle_lever_R) <= THR_IDLE_END)
 
     --check if ground spoilers are armed
     set(Ground_spoilers_armed, BoolToNum(get(Speedbrake_handle_ratio) <= -0.25))
 
     --partial extension--
-    if get(Either_Aft_on_ground) == 1 and get(Aft_wheel_on_ground) == 0 and (get(L_sim_throttle) <= -0.1 or get(R_sim_throttle) == -0.1) then
+    if get(Either_Aft_on_ground) == 1 and get(Aft_wheel_on_ground) == 0 and (get(Cockpit_throttle_lever_L) <= -0.1 or get(Cockpit_throttle_lever_R) == -0.1) then
         set(Ground_spoilers_mode, 1)
     end
 
@@ -118,19 +118,19 @@ function Ground_spoilers_output(var_table)
     if get(Ground_spoilers_armed) == 0 then
         if get(All_on_ground) == 1 and get(IAS) >= 72 then
             --or or more reverse selected(rejected takoff)
-            if get(L_sim_throttle) <= -0.1 or get(R_sim_throttle) == -0.1 then
+            if get(Cockpit_throttle_lever_L) <= -0.1 or get(Cockpit_throttle_lever_R) == -0.1 then
                 set(Ground_spoilers_mode, 2)
                 set(Ground_spoilers_act_method, 1)
             end
         end
 
-        if Both_main_gear_on_ground_delta == 1 and (get(L_sim_throttle) <= -0.1 or get(R_sim_throttle) == -0.1) then
+        if Both_main_gear_on_ground_delta == 1 and (get(Cockpit_throttle_lever_L) <= -0.1 or get(Cockpit_throttle_lever_R) == -0.1) then
             set(Ground_spoilers_mode, 2)
             set(Ground_spoilers_act_method, 1)
         end
 
         --speedbrake handle in extended position and flaps is larger and equal to config 3
-        if Both_main_gear_on_ground_delta == 1 and get(Speedbrake_handle_ratio) > 0.1 and get(L_sim_throttle) <= THR_IDLE_END and get(R_sim_throttle) <= THR_IDLE_END and get(Flaps_internal_config) >= 4 then
+        if Both_main_gear_on_ground_delta == 1 and get(Speedbrake_handle_ratio) > 0.1 and get(Cockpit_throttle_lever_L) <= THR_IDLE_END and get(Cockpit_throttle_lever_R) <= THR_IDLE_END and get(Flaps_internal_config) >= 4 then
             set(Ground_spoilers_mode, 2)
             set(Ground_spoilers_act_method, 2)--a special case
         end
@@ -138,7 +138,7 @@ function Ground_spoilers_output(var_table)
 
     --RETRACTION--
     if get(Ground_spoilers_mode) == 1 then
-        if get(Either_Aft_on_ground) == 0 or (get(L_sim_throttle) > -0.1 and get(R_sim_throttle) > -0.1) then
+        if get(Either_Aft_on_ground) == 0 or (get(Cockpit_throttle_lever_L) > -0.1 and get(Cockpit_throttle_lever_R) > -0.1) then
             set(Ground_spoilers_mode, 0)
         end
     end
@@ -149,7 +149,7 @@ function Ground_spoilers_output(var_table)
             set(Ground_spoilers_act_method, 0)
         end
     elseif get(Ground_spoilers_act_method) == 1 then
-        if BoolToNum(get(L_sim_throttle) >= THR_IDLE_START and get(L_sim_throttle) <= THR_IDLE_END and get(R_sim_throttle) >= THR_IDLE_START and get(R_sim_throttle) <= THR_IDLE_END) then
+        if BoolToNum(get(Cockpit_throttle_lever_L) >= THR_IDLE_START and get(Cockpit_throttle_lever_L) <= THR_IDLE_END and get(Cockpit_throttle_lever_R) >= THR_IDLE_START and get(Cockpit_throttle_lever_R) <= THR_IDLE_END) then
             set(Ground_spoilers_mode, 0)
             set(Ground_spoilers_act_method, 0)
         end

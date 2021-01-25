@@ -21,22 +21,24 @@ CABIN_FWD = 2
 CABIN_AFT = 3
 CARGO_AFT = 4
 
-FUSELAGE_THERMAL_RESISTANCE = 0.75
-NR_PEOPLE_CABIN=150
-WATT_PER_PEOPLE=100
+local EXCHANGE_AFT_FWD_RATIO = 0.01  -- How much natural air mix we have from aft to fwd cabin
 
-SOLAR_GAIN = 0.1
+local FUSELAGE_THERMAL_RESISTANCE = 0.75
+local NR_PEOPLE_CABIN=150   -- TODO This should come from EFB
+local WATT_PER_PEOPLE=100
 
-DRY_AIR_CONSTANT=287.058
+local SOLAR_GAIN = 0.1
 
-AIRCRAFT_SURFACE = {    -- Veeery approximate
+local DRY_AIR_CONSTANT=287.058
+
+local AIRCRAFT_SURFACE = {    -- Veeery approximate
     [CKPT] =  100,
     [CABIN_FWD] = 213.6283,
     [CABIN_AFT] = 213.6283,
     [CARGO_AFT] = 40
 }
 
-AIRCRAFT_VOLUME = {    -- Veeery approximate
+local AIRCRAFT_VOLUME = {    -- Veeery approximate
     [CKPT] =  50,
     [CABIN_FWD] = 200,
     [CABIN_AFT] = 200,
@@ -168,10 +170,17 @@ function update_cabin_model()
     update_heat_from_packs(CARGO_AFT)
     update_people_heat()
     
+    -- Air mix between CAB AFT and CAB FWD
+    inject_heat[CABIN_FWD] = (1-EXCHANGE_AFT_FWD_RATIO) * inject_heat[CABIN_FWD] + EXCHANGE_AFT_FWD_RATIO * inject_heat[CABIN_AFT]
+    inject_heat[CABIN_AFT] = (1-EXCHANGE_AFT_FWD_RATIO) * inject_heat[CABIN_AFT] + EXCHANGE_AFT_FWD_RATIO * inject_heat[CABIN_FWD]
+    
     compute_balance(CKPT)
     compute_balance(CABIN_FWD)
     compute_balance(CABIN_AFT)
     compute_balance(CARGO_AFT)
+
+
+
 
     set(Cockpit_temp, internal_air_temp[CKPT])
     set(Front_cab_temp, internal_air_temp[CABIN_FWD])

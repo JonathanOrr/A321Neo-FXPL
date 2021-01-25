@@ -370,22 +370,33 @@ local function update_bleed_temperatures()
 end
 
 local function update_hot_air()
-    -- TODO Failures
     
-    if get(L_pack_Flow) + get(R_pack_Flow) > 0 then
-        set(Hot_air_valve_pos, cabin_hot_air and 1 or 0)
-    else
-        set(Hot_air_valve_pos, 0)
+    if get(FAILURE_AIRCOND_HOT_AIR_STUCK) == 0 then
+        if get(L_pack_Flow) + get(R_pack_Flow) > 0 then
+            set(Hot_air_valve_pos, cabin_hot_air and 1 or 0)
+        else
+            set(Hot_air_valve_pos, 0)
+        end
     end
     
+    local cargo_isol_in  = 1
+    local cargo_isol_out = 1
+    local cargo_hot_air  = (get(L_pack_Flow) + get(R_pack_Flow) > 0 and cargo_hot_air) and 1 or 0
+        
     if cargo_isol_valve or ditching_switch or get(Fire_cargo_aft_smoke_detected) == 1 then
-        set(Cargo_isol_in_valve, 0)
-        set(Cargo_isol_out_valve, 0)
-        set(Hot_air_valve_pos_cargo, 0)
-    else
-        set(Cargo_isol_in_valve, 1)
-        set(Cargo_isol_out_valve, 1)
-        set(Hot_air_valve_pos_cargo, (get(L_pack_Flow) + get(R_pack_Flow) > 0 and cargo_hot_air) and 1 or 0)
+        cargo_isol_in  = 0
+        cargo_isol_out = 0
+        cargo_hot_air  = 0
+    end
+
+    if get(FAILURE_AIRCOND_ISOL_CARGO_IN_STUCK) == 0 then
+        set(Cargo_isol_in_valve,     cargo_isol_in)
+    end
+    if get(FAILURE_AIRCOND_ISOL_CARGO_OUT_STUCK) == 0 then
+        set(Cargo_isol_out_valve,    cargo_isol_out)
+    end
+    if get(FAILURE_AIRCOND_HOT_AIR_CARGO_STUCK) == 0 then
+        set(Hot_air_valve_pos_cargo, cargo_hot_air)
     end
 
 end

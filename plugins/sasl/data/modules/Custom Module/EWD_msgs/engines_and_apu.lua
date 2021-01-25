@@ -27,7 +27,7 @@ Message_APU_EMER_SHUT_DOWN = {
     end,
 
     is_active = function()
-      return get(FAILURE_Apu_fire) == 6
+      return get(FAILURE_FIRE_APU) == 1
     end
 }
 
@@ -68,7 +68,7 @@ MessageGroup_APU_SHUTDOWN = {
 
     -- Method to check if this message group is active
     is_active = function()
-        return get(FAILURE_ENG_APU_FAIL) == 1 or get(FAILURE_Apu_fire) == 6
+        return get(FAILURE_ENG_APU_FAIL) == 1 or get(FAILURE_FIRE_APU) == 1
     end,
 
     -- Method to check if this message is currently inhibithed
@@ -106,7 +106,7 @@ Message_APU_FIRE_PB = {
     end,
 
     is_active = function()
-      return true   -- TODO Datarefs
+      return get(Fire_pb_APU_lever) < 0.5 or FIRE_sys.apu_on_test
     end
 }
 
@@ -120,13 +120,13 @@ Message_APU_AFTER_10_S = {
     end,
 
     is_active = function()
-      return true   -- TODO Datarefs
+      return not FIRE_sys.apu_squib_discharged or FIRE_sys.apu_on_test
     end
 }
 
 Message_APU_AGENT = {
     text = function()
-        return " - AGENT............DISCH"
+        return "   - AGENT..........DISCH"
     end,
 
     color = function()
@@ -134,7 +134,7 @@ Message_APU_AGENT = {
     end,
 
     is_active = function()
-      return true   -- TODO Datarefs
+      return not FIRE_sys.apu_squib_discharged or FIRE_sys.apu_on_test
     end
 }
 
@@ -163,7 +163,7 @@ MessageGroup_APU_FIRE = {
     },
 
     is_active = function()
-        return get(FAILURE_Apu_fire) == 6
+        return get(FAILURE_FIRE_APU) == 1 or FIRE_sys.apu_on_test
     end,
 
     is_inhibited = function()
