@@ -107,6 +107,8 @@ local signs_noped     = 0 -- 0,1,2
 local capt_tray = false
 local fo_tray   = false
 
+local last_toilette_time = 0
+
 ----------------------------------------------------------------------------------------------------
 -- Command function
 ----------------------------------------------------------------------------------------------------
@@ -306,6 +308,16 @@ end
 
 sasl.registerCommandHandler (Default_view, 0, default_view)
 
+function update_toilette()
+    if math.random() < 0.00005 then -- ~8% of probability every minute, 99% probability every hour
+        last_toilette_time = get(TIME)
+    end
+
+    is_toilette_busy = last_toilette_time ~= 0 and get(TIME) - last_toilette_time < 60
+
+    pb_set(PB.ovhd.misc_toilet, false, is_toilette_busy)
+end
+
 function update()
     perf_measure_start("graphics:update()")
 
@@ -316,6 +328,7 @@ function update()
     update_integral_datarefs()
     update_flood_and_spil_datarefs()
     update_trays()
+    update_toilette()
 
     perf_measure_stop("graphics:update()")
 end
