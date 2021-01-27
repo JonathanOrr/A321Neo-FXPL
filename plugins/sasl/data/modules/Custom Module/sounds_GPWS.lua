@@ -201,7 +201,7 @@ sasl.registerCommandHandler (GPWS_cmd_silence, 0, function(phase)
     end
 
     if phase == SASL_COMMAND_CONTINUE then
-        if get(TIME) - press_start_time > 1 and short_test == false then
+        if get(All_on_ground) == 1 and get(TIME) - press_start_time > 1 and short_test == false then
             long_test = true
         end
     end
