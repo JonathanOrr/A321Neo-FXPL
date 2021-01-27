@@ -233,6 +233,10 @@ local function update_pump_dr()
         set(Fuel_tank_selector_eng_1, 0)    -- Ops, no fuel
     end
 
+    if eng_1_fw_valve_position == 0 then
+        set(Fuel_tank_selector_eng_1, 0)    -- Emergency cutoff fuel    
+    end
+
     -- ENG2 - RIGHT
     set(Fuel_pump_on[tank_RIGHT], 0)
     if eng2_fuel_status == 4 or eng2_fuel_status == 2 then
@@ -245,7 +249,11 @@ local function update_pump_dr()
     else
         set(Fuel_tank_selector_eng_2, 0)
     end
-    
+
+    if eng_2_fw_valve_position == 0 then
+        set(Fuel_tank_selector_eng_2, 0)    -- Emergency cutoff fuel    
+    end
+
 end
 
 ----------------------------------------------------------------------------------------------------

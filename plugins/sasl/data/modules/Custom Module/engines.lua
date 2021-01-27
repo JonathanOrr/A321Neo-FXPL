@@ -116,6 +116,9 @@ local eng_mixture         = globalPropertyfa("sim/cockpit2/engine/actuators/mixt
 local eng_N1_enforce      = globalPropertyfa("sim/flightmodel/engine/ENGN_N1_")
 local eng_N2_enforce      = globalPropertyfa("sim/flightmodel/engine/ENGN_N2_")
 
+local xp_avail_1 = globalProperty("sim/flightmodel/engine/ENGN_running[0]")
+local xp_avail_2 = globalProperty("sim/flightmodel/engine/ENGN_running[1]")
+
 local eng_FF_kgs          = globalPropertyfa("sim/cockpit2/engine/indicators/fuel_flow_kg_sec")
 
 local eng_N1_off  = {0,0}   -- N1 for startup procedure
@@ -318,8 +321,11 @@ end
 
 local function update_avail()
 
+    
+    local eng_has_fuel = get(Fuel_tank_selector_eng_1) > 0
+
     -- ENG 1
-    if get(Eng_1_N1) > ENG_N1_LL_IDLE and get(Engine_1_master_switch) == 1 then
+    if get(Eng_1_N1) > ENG_N1_LL_IDLE and get(Engine_1_master_switch) == 1 and eng_has_fuel and get(xp_avail_1) == 1 then
         if get(Engine_1_avail) == 0 then
             set(EWD_engine_avail_ind_1_start, get(TIME))
             set(Engine_1_avail, 1)
@@ -328,9 +334,11 @@ local function update_avail()
         set(Engine_1_avail, 0)    
         set(EWD_engine_avail_ind_1_start, 0)
     end
+
+    local eng_has_fuel = get(Fuel_tank_selector_eng_2) > 0
     
     -- ENG 2
-    if get(Eng_2_N1) > ENG_N1_LL_IDLE and get(Engine_2_master_switch) == 1 then
+    if get(Eng_2_N1) > ENG_N1_LL_IDLE and get(Engine_2_master_switch) == 1 and eng_has_fuel and get(xp_avail_2) == 1 then
         if get(Engine_2_avail) == 0 then
             set(EWD_engine_avail_ind_2_start, get(TIME))
             set(Engine_2_avail, 1)
@@ -610,6 +618,11 @@ end
 
 -- Returns true if the FADEC has electrical power
 local function fadec_has_elec_power(eng)
+
+    if FIRE_sys.eng[eng].block_position then
+        return false -- The fire pushbutton kills the power supply
+    end
+
     if get(DC_ess_bus_pwrd) == 1 then
         return true
     end
