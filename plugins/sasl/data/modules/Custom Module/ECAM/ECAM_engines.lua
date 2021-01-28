@@ -232,7 +232,11 @@ function draw_eng_page()
 end
 
 -- Returns true if the FADEC has electrical power
-local function fadec_has_elec_power(eng)
+local function fadec_has_elec_power(eng)    
+    if FIRE_sys.eng[eng].block_position then
+        return false -- The fire pushbutton kills the power supply
+    end
+
     if get(DC_ess_bus_pwrd) == 1 then
         return true
     end
@@ -303,9 +307,9 @@ end
 local function update_XX_dr()
 
     update_XX_dr_eng(1)
-    xx_statuses[1] = xx_statuses[1] and (get(FAILURE_ENG_FADEC_CH1, 1) == 0 or get(FAILURE_ENG_FADEC_CH2, 1) == 0)
+    xx_statuses[1] = xx_statuses[1] and (get(FAILURE_ENG_FADEC_CH1, 1) == 0 or get(FAILURE_ENG_FADEC_CH2, 1) == 0) and (get(Fire_pb_ENG1_status) == 0)
     update_XX_dr_eng(2)
-    xx_statuses[2] = xx_statuses[2] and (get(FAILURE_ENG_FADEC_CH1, 2) == 0 or get(FAILURE_ENG_FADEC_CH2, 2) == 0)
+    xx_statuses[2] = xx_statuses[2] and (get(FAILURE_ENG_FADEC_CH1, 2) == 0 or get(FAILURE_ENG_FADEC_CH2, 2) == 0) and (get(Fire_pb_ENG2_status) == 0)
 
     set(EWD_engine_1_XX, xx_statuses[1] and 0 or 1)
     set(EWD_engine_2_XX, xx_statuses[2] and 0 or 1)

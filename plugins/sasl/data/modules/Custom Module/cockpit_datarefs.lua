@@ -425,8 +425,8 @@ EVAC_capt_purs_lever = createGlobalPropertyf("a321neo/cockpit/evac/buttons/capt_
 Rain_wiper_L_lever = createGlobalPropertyf("a321neo/cockpit/rain/buttons/wiper_L_pos", 0, false, true, false)
 Rain_wiper_R_lever = createGlobalPropertyf("a321neo/cockpit/rain/buttons/wiper_R_pos", 0, false, true, false)
 Fire_pb_APU_lever = createGlobalPropertyf("a321neo/cockpit/fire/buttons/APU_lever_pos", 0, false, true, false)
-Fire_pb_ENG1_lever = createGlobalPropertyf("a321neo/cockpit/fire/buttons/ENG1_lever_pos", 0, false, true, false)
-Fire_pb_ENG2_lever = createGlobalPropertyf("a321neo/cockpit/fire/buttons/ENG2_lever_pos", 0, false, true, false)
+Fire_pb_ENG_1_lever = createGlobalPropertyf("a321neo/cockpit/fire/buttons/ENG1_lever_pos", 0, false, true, false)
+Fire_pb_ENG_2_lever = createGlobalPropertyf("a321neo/cockpit/fire/buttons/ENG2_lever_pos", 0, false, true, false)
 
 Lights_strobe_lever = createGlobalPropertyf("a321neo/cockpit/lights/buttons/strobe_lever_pos", 0, false, true, false)
 Lights_land_L_lever = createGlobalPropertyf("a321neo/cockpit/lights/buttons/land_L_pos", 0, false, true, false)
