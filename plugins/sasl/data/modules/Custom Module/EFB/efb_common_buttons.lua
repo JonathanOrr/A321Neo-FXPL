@@ -35,8 +35,8 @@ function EFB_common_buttons()
     --    print("Page 9 Signal")
     --    EFB_PAGE = 9
     --end)
-    --Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 5, 732, 110, 772, function ()
-    --    print("Page 10 Signal")
-    --    EFB_PAGE = 10
-    --end)
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 1033, 732, 1138, 772, function ()
+        print("Page 10 Signal")
+        EFB_PAGE = 10
+    end)
 end
