@@ -23,5 +23,5 @@ end
 function EFB_draw_page_10()
     sasl.gl.drawRectangle ( 0 , 0 , 1143 , 800 , EFB_BLACK )
     --print("EFB Page 10")
-    print(i)
+    --print(i)
 end
