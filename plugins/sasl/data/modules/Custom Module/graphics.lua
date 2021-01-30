@@ -106,7 +106,8 @@ local signs_noped     = 0 -- 0,1,2
 
 local capt_tray = false
 local fo_tray   = false
-
+local avionics_light_status  = false -- Status of the light for the avionics bay (it doesn't really work lol)
+local service_int_ovr_status = false -- Status of the service interphone (it doesn't do actually anything)
 local last_toilette_time = 0
 
 ----------------------------------------------------------------------------------------------------
@@ -131,6 +132,9 @@ sasl.registerCommandHandler (MISC_cmd_seatbelts_up, 0,  function(phase) if phase
 sasl.registerCommandHandler (MISC_cmd_seatbelts_dn, 0,  function(phase) if phase == SASL_COMMAND_BEGIN then signs_seat_belt = math.max(0, signs_seat_belt - 1) end end)
 sasl.registerCommandHandler (MISC_cmd_noped_up, 0,  function(phase) if phase == SASL_COMMAND_BEGIN then signs_noped = math.min(2, signs_noped + 1)  end end)
 sasl.registerCommandHandler (MISC_cmd_noped_dn, 0,  function(phase) if phase == SASL_COMMAND_BEGIN then signs_noped = math.max(0, signs_noped - 1) end end)
+sasl.registerCommandHandler (MNTN_AVIO_LIGHT, 0,  function(phase) if phase == SASL_COMMAND_BEGIN then avionics_light_status = not avionics_light_status end end)
+sasl.registerCommandHandler (MNTN_SVCE_INT, 0,    function(phase) if phase == SASL_COMMAND_BEGIN then service_int_ovr_status = not service_int_ovr_status end end)
+
 
 ----------------------------------------------------------------------------------------------------
 -- Lights
@@ -274,6 +278,8 @@ end
 local function update_lights()
     pb_set(PB.ovhd.signs_emer_exit_lt, get(Lights_emer_exit) == 0, false)
     pb_set(PB.ovhd.rcdr_gnd_ctl, cvr_gnd_ctl, false)
+    pb_set(PB.ovhd.mntn_avio_light, avionics_light_status, false)
+    pb_set(PB.ovhd.mntn_svce_int, service_int_ovr_status, false)
 end
 
 local function update_datarefs()

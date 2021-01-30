@@ -189,7 +189,7 @@ PB = {
         mntn_hyd_v_B       = {bus = LIGHT_BUS_DC},
         mntn_hyd_v_Y       = {bus = LIGHT_BUS_DC},
         mntn_oxy_tmr_reset = {bus = LIGHT_BUS_DC},
-        mntn_svce_int      = {bus = LIGHT_BUS_DC}, -- TODO CHECK BUS
+        mntn_svce_int      = {bus = LIGHT_BUS_DC},
         mntn_avio_light    = {bus = LIGHT_BUS_AC},
 
     },
