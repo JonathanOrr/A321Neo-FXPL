@@ -37,7 +37,11 @@ local params = {
 local start_elec_fadec = {0,0}
 local start_shut_fadec = {0,0}
 local xx_statuses = {false,false}
+local manual_fadeec_on = {false, false}
 
+
+sasl.registerCommandHandler (MNTN_FADEC_1_on,  0, function(phase) if phase == SASL_COMMAND_BEGIN then manual_fadeec_on[1] = not manual_fadeec_on[1] end end )
+sasl.registerCommandHandler (MNTN_FADEC_2_on,  0, function(phase) if phase == SASL_COMMAND_BEGIN then manual_fadeec_on[2] = not manual_fadeec_on[2] end end )
 
 local function draw_fuel_usage()
     local fuel_usage_1 = math.floor(get(Ecam_fuel_usage_1))
@@ -257,6 +261,10 @@ local function update_XX_dr_eng(eng)
         if start_elec_fadec[eng] == 0 then
             start_elec_fadec[eng] = get(TIME)
         end
+        if manual_fadeec_on[eng] then
+            xx_statuses[eng] = true
+            return
+        end
     else
         start_elec_fadec[eng] = 0
     end
@@ -315,6 +323,11 @@ local function update_XX_dr()
     set(EWD_engine_2_XX, xx_statuses[2] and 0 or 1)
 end
 
+local function update_pbs() 
+    pb_set(PB.ovhd.mntn_fadec_1_pwr, manual_fadeec_on[1], false)
+    pb_set(PB.ovhd.mntn_fadec_2_pwr, manual_fadeec_on[2], false)
+end
+
 function ecam_update_eng_page()
 
     if get(TIME) - params.last_update > PARAM_DELAY then
@@ -330,6 +343,6 @@ function ecam_update_eng_page()
     end
 
     update_XX_dr()
-
+    update_pbs()
 end
 
