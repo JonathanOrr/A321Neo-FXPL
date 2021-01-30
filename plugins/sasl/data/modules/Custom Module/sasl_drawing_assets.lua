@@ -138,6 +138,8 @@ EFB_bgd =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/b
 EFB_toggle =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Toggle.png")
 EFB_highlighter =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/highlighter.png")
 
+EFB_CSS_logo = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/OFF page/CSS.png")
+
 ------------GROUND-------------
 
 EFB_GROUND_bgd =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/GND page/overlay.png")
