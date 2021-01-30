@@ -17,6 +17,7 @@ position = {2943, 1248, 1143, 800}
 size = {1143, 800}
 
 EFB_PAGE = 1
+EFB_PREV_PAGE = 1
 EFB_CURSOR_X = 0
 EFB_CURSOR_Y = 0
 EFB_CURSOR_on_screen = false
