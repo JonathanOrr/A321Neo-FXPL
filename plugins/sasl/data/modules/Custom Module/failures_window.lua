@@ -36,9 +36,6 @@ local Y_START_FAIL_TEXT = size[2]-180
 
 local B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
 
-local master_caution_image = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/master_caution.png", 0, 0, 128, 128)
-local master_warning_image = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/master_warning.png", 0, 0, 128, 128)
-
 -- Variables
 local group_selected = 0
 local fail_tot_lines = 0
@@ -286,7 +283,9 @@ local failures_data = {
             {name="DMC 1\nFAULT", status=false, dataref=FAILURE_DISPLAY_DMC_1 },
             {name="DMC 2\nFAULT", status=false, dataref=FAILURE_DISPLAY_DMC_2 },
             {name="DMC 3\nFAULT", status=false, dataref=FAILURE_DISPLAY_DMC_3 },
-            
+            {name="FWC 1\nFAULT", status=false, dataref=FAILURE_DISPLAY_FWC_1 },
+            {name="FWC 2\nFAULT", status=false, dataref=FAILURE_DISPLAY_FWC_2 },
+
             {name="FIRE!\nCARGO AFT", status=false, dataref=FAILURE_FIRE_CARGO_AFT},
             {name="FIRE!\nCARGO FWD", status=false, dataref=FAILURE_FIRE_CARGO_FWD},
         }
@@ -352,17 +351,43 @@ function update()
 end
 
 local function draw_warning_caution()
-    if PB.glare.master_caution.status_top then
-        sasl.gl.drawTexture(master_caution_image, 10, size[2]-110, 64, 64)
-    else
-        sasl.gl.drawRectangle (10, size[2]-110, 64, 64, {0,0,0})    
+
+    -- WARNING
+
+    sasl.gl.drawRectangle (10, size[2]-110, 64, 64, {0,0,0})
+    if PB.glare.master_warning_capt.status_top then
+        sasl.gl.drawText(B612MONO_regular, 42, size[2]-70, "MASTER", 14, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
+    end
+    if PB.glare.master_warning_capt.status_bottom then
+        sasl.gl.drawText(B612MONO_regular, 42, size[2]-100, "WARN", 14, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
     end
 
-    if PB.glare.master_warning.status_top then
-        sasl.gl.drawTexture(master_warning_image, 80, size[2]-110, 64, 64)
-    else
-        sasl.gl.drawRectangle (80, size[2]-110, 64, 64, {0,0,0})
+    sasl.gl.drawRectangle (90, size[2]-110, 64, 64, {0,0,0})
+    if PB.glare.master_warning_fo.status_top then
+        sasl.gl.drawText(B612MONO_regular, 122, size[2]-70, "MASTER", 14, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
     end
+    if PB.glare.master_warning_fo.status_bottom then
+        sasl.gl.drawText(B612MONO_regular, 122, size[2]-100, "WARN", 14, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
+    end
+
+    -- CAUTION
+
+    sasl.gl.drawRectangle (10, size[2]-180, 64, 64, {0,0,0})
+    if PB.glare.master_caution_capt.status_top then
+        sasl.gl.drawText(B612MONO_regular, 42, size[2]-140, "MASTER", 14, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+    end
+    if PB.glare.master_caution_capt.status_bottom then
+        sasl.gl.drawText(B612MONO_regular, 42, size[2]-170, "CAUT", 14, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+    end
+
+    sasl.gl.drawRectangle (90, size[2]-180, 64, 64, {0,0,0})
+    if PB.glare.master_caution_fo.status_top then
+        sasl.gl.drawText(B612MONO_regular, 122, size[2]-140, "MASTER", 14, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+    end
+    if PB.glare.master_caution_fo.status_bottom then
+        sasl.gl.drawText(B612MONO_regular, 122, size[2]-170, "CAUT", 14, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+    end
+
 
 end
 
@@ -396,7 +421,7 @@ end
 
 function draw_active_failures()
 
-    pos = size[2]-150
+    pos = size[2]-220
 
     for i, x in ipairs(failures_data) do
         for j, M in ipairs(x.failures) do
@@ -416,7 +441,7 @@ function draw()
     -- Fixed elements
     sasl.gl.drawText(B612MONO_regular, 10, size[2]-40, "Failures Manager", 30, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
     sasl.gl.drawLine(160,10,160,550, ECAM_WHITE)
-    sasl.gl.drawText(B612MONO_regular, 10, size[2]-130, "Active Failures", 12, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(B612MONO_regular, 10, size[2]-200, "Active Failures", 12, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
     sasl.gl.drawText(B612MONO_regular, 340, size[2]-20, "DO NOT USE X-PLANE FAILURES MENU! It doesn't work with\nthis airplane and strange things may happen. Please use\nONLY this menu to simulate random or intentional failures.", 12, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
 
     draw_warning_caution()

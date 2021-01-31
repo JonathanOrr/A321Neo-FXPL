@@ -229,8 +229,10 @@ PB = {
         -- a321neo/cockpit/glareshield/...
         atc_msg  = {bus = LIGHT_BUS_AC},
         autoland = {bus = LIGHT_BUS_AC},
-        master_warning = {bus = LIGHT_BUS_AC},
-        master_caution = {bus = LIGHT_BUS_AC},
+        master_warning_capt = {bus = LIGHT_BUS_AC},
+        master_caution_capt = {bus = LIGHT_BUS_AC},
+        master_warning_fo   = {bus = LIGHT_BUS_AC},
+        master_caution_fo   = {bus = LIGHT_BUS_AC},
         priority_capt  = {bus = LIGHT_BUS_AC},
         priority_fo    = {bus = LIGHT_BUS_AC}
     },

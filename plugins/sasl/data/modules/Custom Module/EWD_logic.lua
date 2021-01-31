@@ -200,6 +200,8 @@ local left_messages_list = {
     MessageGroup_WAI_SYS_FAULT_2,
     MessageGroup_WAI_L_R_OPEN,
     
+    MessageGroup_FWC_FAULT,
+    
     -- Warnings
     MessageGroup_OVERSPEED,
     MessageGroup_CONFIG_TAKEOFF,
