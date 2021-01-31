@@ -29,6 +29,7 @@ function EFB_draw_page_10()
   
     if click_time == 0 then	-- Screen is off
         sasl.gl.drawRectangle ( 0 , 0 , size[1] , size[2] , EFB_BLACK )
+        EFB_OFF = true
     elseif get(TIME) - click_time < TIME_LOGO then	-- Screen is showing logo
         sasl.gl.drawRectangle ( 0 , 0 , size[1] , size[2] , EFB_WHITE )
     	draw_logo()
@@ -36,6 +37,7 @@ function EFB_draw_page_10()
         EFB_PAGE = EFB_PREV_PAGE
         click_time = 0 -- Let's reset it for the future
         delay_flag = false
+        EFB_OFF = false
     end
 end
 

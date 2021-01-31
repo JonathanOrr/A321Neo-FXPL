@@ -1,6 +1,12 @@
 function EFB_common_buttons()
     if EFB_PAGE ~= 10 then
+        
         EFB_PREV_PAGE = EFB_PAGE
+
+        if AVITAB_INSTALLED == true then
+            set(Avitab_Enabled, 0)
+        end
+
         Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 5, 732, 110, 772, function ()
             EFB_PAGE = 1
         end)

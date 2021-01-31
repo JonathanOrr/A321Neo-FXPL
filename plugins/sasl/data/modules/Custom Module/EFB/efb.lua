@@ -22,6 +22,19 @@ EFB_CURSOR_X = 0
 EFB_CURSOR_Y = 0
 EFB_CURSOR_on_screen = false
 
+AVITAB_INSTALLED = false
+
+EFB_OFF = false
+
+if findPluginBySignature("org.solhost.folko.avitab") ~= NO_PLUGIN_ID then
+    Avitab_Enabled = globalProperty("avitab/panel_enabled")
+    AVITAB_INSTALLED = true
+    set(Avitab_Enabled, 0)
+else
+    AVITAB_INSTALLED = false
+end
+
+
 ---------------------------------------------------------------------------------------------------------------
 --load in the functions
 local EFB_pages_buttons = {
@@ -115,6 +128,8 @@ function draw()  ------KEEP THE draw_cursor() AT THE BOTTOM YOU DUMBASS!!!!!
     perf_measure_start("EFB:draw()")
     draw_efb_bgd()
     EFB_draw_pages[EFB_PAGE]()
-    draw_cursor()
+    if EFB_OFF == false then
+        draw_cursor()
+    end
     perf_measure_stop("EFB:draw()")
 end
