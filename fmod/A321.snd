@@ -2127,6 +2127,42 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_CMND_UP a321neo/cockpit/fcu/metric_alt
 END_SOUND_ATTACHMENT
 
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Big Round Button Press
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/cockpit/fire/eng_1_test
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Big Round Button Release
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_UP a321neo/cockpit/fire/eng_1_test
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Big Round Button Press
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/cockpit/fire/eng_2_test
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Big Round Button Release
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_UP a321neo/cockpit/fire/eng_2_test
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Big Round Button Press
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/cockpit/fire/apu_test
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Big Round Button Release
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_UP a321neo/cockpit/fire/apu_test
+END_SOUND_ATTACHMENT
+
 #################################################################################################
 
 #BEGIN_SOUND_ATTACHMENT
@@ -3624,6 +3660,87 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_START_COND a321neo/cockpit/misc/evac_cockpit_horn == 1
   CUE_TRIGGER_COND a321neo/cockpit/misc/evac_cockpit_horn == 0
 END_SOUND_ATTACHMENT
+
+###########################################################################################################FIRE PB
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FirePB/CoverOpen
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/cockpit/overhead/guards/FIRE_ENG1 > 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FirePB/CoverOpen2
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/cockpit/overhead/guards/FIRE_ENG1 < 1
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FirePB/Pull
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/cockpit/fire/buttons/ENG1_lever_pos > 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FirePB/Push
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/cockpit/fire/buttons/ENG1_lever_pos < 1
+END_SOUND_ATTACHMENT
+
+
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FirePB/CoverOpen
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/cockpit/overhead/guards/FIRE_ENG2 > 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FirePB/CoverOpen2
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/cockpit/overhead/guards/FIRE_ENG2 < 1
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FirePB/Pull
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/cockpit/fire/buttons/ENG2_lever_pos > 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FirePB/Push
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/cockpit/fire/buttons/ENG2_lever_pos < 1
+END_SOUND_ATTACHMENT
+
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FirePB/CoverOpen
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/cockpit/overhead/guards/FIRE_APU > 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FirePB/CoverOpen2
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/cockpit/overhead/guards/FIRE_APU < 1
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FirePB/Pull
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/cockpit/fire/buttons/APU_lever_pos > 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FirePB/Push
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/cockpit/fire/buttons/APU_lever_pos < 1
+END_SOUND_ATTACHMENT
+
+
+
+
 
 
 

@@ -171,6 +171,26 @@ EFB_LOAD_cross =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/texture
 EFB_CONFIG_bgd =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/CONFIG page/overlay.png")
 EFB_CONFIG_slider =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/CONFIG page/slider_ball.png")
 
+-----------HOME------------
+
+EFB_HOME_bgd =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/HOME page/overlay.png")
+
 -----------INFO------------
 
-EFB_INFO_bgd =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/overlay.png")
+EFB_INFO_page_1 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/1.png")
+EFB_INFO_page_2 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/2.png")
+EFB_INFO_page_3 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/3.png")
+EFB_INFO_page_4 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/4.png")
+EFB_INFO_page_5 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/5.png")
+EFB_INFO_page_6 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/6.png")
+EFB_INFO_page_7 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/7.png")
+EFB_INFO_page_8 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/8.png")
+EFB_INFO_page_9 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/9.png")
+EFB_INFO_page_10 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/10.png")
+EFB_INFO_selector =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/page_selector.png")
+
+
+
+
+
+
