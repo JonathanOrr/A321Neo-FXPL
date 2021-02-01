@@ -754,3 +754,4 @@ function Local_magnetic_deviation()
     return get(Flightmodel_mag_heading) - get(Flightmodel_true_heading)
 end
 
+
