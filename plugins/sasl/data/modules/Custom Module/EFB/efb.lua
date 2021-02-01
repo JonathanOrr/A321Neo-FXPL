@@ -17,10 +17,16 @@ position = {2943, 1248, 1143, 800}
 size = {1143, 800}
 
 EFB_PAGE = 1
+EFB_DELAYED_PAGE = 1
+EFB_DELAYED_TRANSIT_FACTOR = 7
 EFB_PREV_PAGE = 1
 EFB_CURSOR_X = 0
 EFB_CURSOR_Y = 0
 EFB_CURSOR_on_screen = false
+
+EFB_UNDERLINE_POS = 1
+
+EFB_selector_transit_start = 0
 
 AVITAB_INSTALLED = false
 
@@ -93,6 +99,16 @@ if table_load_buffer ~= nil then
     --init FBW flare law(special case)
     set(FBW_mode_transition_version, EFB_preferences["flarelaw"])
 end
+
+---------------------------------------------------------------------------------------------------------------
+--TOP BAR SELECTOR LOGIC--
+
+
+
+
+
+
+
 ---------------------------------------------------------------------------------------------------------------
 --MOUSE CLICK LOGIC--
 function onMouseDown(component, x, y, button, parentX, parentY)
@@ -122,14 +138,25 @@ end
 function update()
     EFB_CURSOR_X, EFB_CURSOR_Y, EFB_CURSOR_on_screen = Cursor_texture_to_local_pos(position[1], position[2], position[3], position[4], 4096, 4096)
     EFB_updates_pages[EFB_PAGE]()
+    EFB_DELAYED_PAGE = Set_anim_value(EFB_DELAYED_PAGE, EFB_PAGE, 0, 10, EFB_DELAYED_TRANSIT_FACTOR)
+    EFB_UNDERLINE_POS =   (27548.06 + (-53.64934 - 27548.06)/(1 +((EFB_DELAYED_PAGE/215.6605)^1.026289))  )
 end
 
 function draw()  ------KEEP THE draw_cursor() AT THE BOTTOM YOU DUMBASS!!!!!
     perf_measure_start("EFB:draw()")
     draw_efb_bgd()
     EFB_draw_pages[EFB_PAGE]()
+
+    if EFB_PAGE ~= 10 then
+        draw_horizontal_line_with_certain_width_centered(EFB_UNDERLINE_POS, 738, 1, (171 - 197.3*EFB_DELAYED_PAGE + 105.9167*EFB_DELAYED_PAGE^2 - 25.54167*EFB_DELAYED_PAGE^3 + 3.083333*EFB_DELAYED_PAGE^4 - 0.1583333*EFB_DELAYED_PAGE^5),EFB_WHITE) --DRAWS THE UNDERLINE OF THE PAGE TITLE
+    end
+
     if EFB_OFF == false then
         draw_cursor()
     end
     perf_measure_stop("EFB:draw()")
 end
+
+
+
+
