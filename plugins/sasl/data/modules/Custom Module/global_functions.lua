@@ -754,7 +754,4 @@ function Local_magnetic_deviation()
     return get(Flightmodel_mag_heading) - get(Flightmodel_true_heading)
 end
 
-function draw_horizontal_line_with_certain_width_centered(x,y,thickness, width,color)
-    sasl.gl.drawLine ( x-width/2 , y , x+width/2 , y , color )
-end
 

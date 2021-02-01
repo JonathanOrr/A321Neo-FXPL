@@ -32,6 +32,15 @@ AVITAB_INSTALLED = false
 
 EFB_OFF = false
 
+local line_width_table = {
+    {1, 57},
+    {2, 40},
+    {3, 54},
+    {4, 69},
+    {5, 72},
+    {6, 48},
+  }
+
 if findPluginBySignature("org.solhost.folko.avitab") ~= NO_PLUGIN_ID then
     Avitab_Enabled = globalProperty("avitab/panel_enabled")
     AVITAB_INSTALLED = true
@@ -103,11 +112,9 @@ end
 ---------------------------------------------------------------------------------------------------------------
 --TOP BAR SELECTOR LOGIC--
 
-
-
-
-
-
+local function jon_told_me_not_to_create_super_long_names_for_functions_but_this_function_draw_horizontal_line_with_certain_width_centered(x,y,thickness, width,color)
+    sasl.gl.drawLine ( x-width/2 , y , x+width/2 , y , color )
+end
 
 ---------------------------------------------------------------------------------------------------------------
 --MOUSE CLICK LOGIC--
@@ -140,6 +147,7 @@ function update()
     EFB_updates_pages[EFB_PAGE]()
     EFB_DELAYED_PAGE = Set_anim_value(EFB_DELAYED_PAGE, EFB_PAGE, 0, 10, EFB_DELAYED_TRANSIT_FACTOR)
     EFB_UNDERLINE_POS =   (27548.06 + (-53.64934 - 27548.06)/(1 +((EFB_DELAYED_PAGE/215.6605)^1.026289))  )
+    EFB_UNDERLINE_WIDTH = Table_interpolate(line_width_table, EFB_DELAYED_PAGE)
 end
 
 function draw()  ------KEEP THE draw_cursor() AT THE BOTTOM YOU DUMBASS!!!!!
@@ -148,7 +156,7 @@ function draw()  ------KEEP THE draw_cursor() AT THE BOTTOM YOU DUMBASS!!!!!
     EFB_draw_pages[EFB_PAGE]()
 
     if EFB_PAGE ~= 10 then
-        draw_horizontal_line_with_certain_width_centered(EFB_UNDERLINE_POS, 738, 1, (171 - 197.3*EFB_DELAYED_PAGE + 105.9167*EFB_DELAYED_PAGE^2 - 25.54167*EFB_DELAYED_PAGE^3 + 3.083333*EFB_DELAYED_PAGE^4 - 0.1583333*EFB_DELAYED_PAGE^5),EFB_WHITE) --DRAWS THE UNDERLINE OF THE PAGE TITLE
+        jon_told_me_not_to_create_super_long_names_for_functions_but_this_function_draw_horizontal_line_with_certain_width_centered(EFB_UNDERLINE_POS, 738, 2,EFB_UNDERLINE_WIDTH ,EFB_WHITE) --DRAWS THE UNDERLINE OF THE PAGE TITLE
     end
 
     if EFB_OFF == false then
@@ -158,5 +166,8 @@ function draw()  ------KEEP THE draw_cursor() AT THE BOTTOM YOU DUMBASS!!!!!
 end
 
 
+
+
+  
 
 
