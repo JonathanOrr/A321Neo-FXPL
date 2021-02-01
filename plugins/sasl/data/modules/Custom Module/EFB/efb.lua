@@ -172,7 +172,7 @@ function update()
 
     Ac_ess_delta = get(AC_ess_bus_pwrd) - Ac_ess_past_value
     Ac_ess_past_value = get(AC_ess_bus_pwrd)
-    if get(Ac_ess_delta) > 0 then
+    if Ac_ess_delta > 0 then
         CHARGE_START_TIME = get(TIME)
     end
 
