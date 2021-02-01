@@ -31,6 +31,7 @@ PFD_bank_angle = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/P
 PFD_bank_angle_indicator = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/PFD/Beta Target Upper.png")
 PFD_bank_angle_beta_angle = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/PFD/beta target.png")
 PFD_spd_needle = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/PFD/spd_needle.png")
+PFD_spd_target = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/PFD/spd_selected_bug.png")
 PFD_spd_tape = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/PFD/spd_tape.png")
 PFD_spd_trend_up = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/PFD/Accel Arrow.png")
 PFD_spd_trend_dn = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/PFD/Decel Arrow.png")

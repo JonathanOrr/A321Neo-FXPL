@@ -72,7 +72,8 @@ local fo_PFD_table = {
     Show_mach = true,
     LS_enabled = Fo_landing_system_enabled,
     BUSS_update_timer = 0,
-    BUSS_vsw_pos = 150,
+    BUSS_vsw_pos = 64,
+    BUSS_target_pos = 64,
 }
 
 sasl.registerCommandHandler(FCU_Fo_LS_cmd, 0, function(phase) if phase == SASL_COMMAND_BEGIN then set(Fo_landing_system_enabled, 1 - get(Fo_landing_system_enabled)) end end)

@@ -1,15 +1,5 @@
 include('ADIRS_data_source.lua')
 
-function PFD_ias_invalid(PFD_table)
-    local invalid = false
-
-    if get(Any_wheel_on_ground) == 0 and adirs_get_ias(PFD_table.Screen_ID) <= 60 then
-        invalid = true
-    end
-
-    return invalid
-end
-
 local function draw_accel_arrow(PFD_table)
     --accel arrows
     if math.abs(adirs_get_ias_trend(PFD_table.Screen_ID) * 10) > 2 then
@@ -128,35 +118,48 @@ local function draw_characteristics_spd(PFD_table)
 end
 
 local function draw_BUSS(PFD_table)
-    local anim_table = {
-        {get(BUSS_VFE_red_AoA), 64},
+    local AoA_anim_table = {
+        {get(BUSS_VFE_red_AoA),  64},
         {get(BUSS_VFE_norm_AoA), 124},
-        {get(BUSS_VLS_AoA), 177},
-        {get(BUSS_VSW_AoA), 237},
+        {get(BUSS_VLS_AoA),      177},
+        {get(BUSS_VSW_AoA),      237},
     }
+
 
     local update_time = 0.15
     PFD_table.BUSS_update_timer = PFD_table.BUSS_update_timer + get(DELTA_TIME)
 
     if PFD_table.BUSS_update_timer >= update_time then
-        PFD_table.BUSS_vsw_pos = Table_extrapolate(anim_table, adirs_get_aoa(PFD_table.Screen_ID))
+        PFD_table.BUSS_vsw_pos = Table_extrapolate(AoA_anim_table, adirs_get_aoa(PFD_table.Screen_ID))
+
+        local taget_anim_table = {
+            {get(BUSS_VFE_norm_AoA), size[2]/2-129 + PFD_table.BUSS_vsw_pos},
+            {get(BUSS_VLS_AoA),      size[2]/2-189 + PFD_table.BUSS_vsw_pos},
+        }
+        PFD_table.BUSS_target_pos = Table_extrapolate(taget_anim_table, 4.5)
 
         PFD_table.BUSS_update_timer = 0
     end
 
-    sasl.gl.setClipArea(size[1]/2-437, size[2]/2-244, 99, 473)
-    sasl.gl.drawRectangle(size[1]/2-437, size[2]/2-244 + PFD_table.BUSS_vsw_pos + 60 + 53 + 60, 99, Math_clamp_lower(150 - (PFD_table.BUSS_vsw_pos - 150), 0), ECAM_RED)
-    sasl.gl.drawRectangle(size[1]/2-437, size[2]/2-244 + PFD_table.BUSS_vsw_pos + 60 + 53, 99, 60, ECAM_ORANGE)
-    sasl.gl.drawTriangle (size[1]/2-437, size[2]/2-244 + PFD_table.BUSS_vsw_pos + 60 + 53 + 60, size[1]/2-338, size[2]/2-244 + PFD_table.BUSS_vsw_pos + 60 + 53 + 60, size[1]/2-387.5, size[2]/2-244 + PFD_table.BUSS_vsw_pos + 60 + 53, ECAM_RED)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-387.5, size[2]/2-244 + PFD_table.BUSS_vsw_pos + 60 + 53 + 60, "FAST", 35, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.setClipArea(size[1]/2-390, size[2]/2-244, 75, 473)
+    sasl.gl.drawRectangle(size[1]/2-390, size[2]/2-244 + PFD_table.BUSS_vsw_pos + 60 + 53 + 60, 75, Math_clamp_lower(150 - (PFD_table.BUSS_vsw_pos - 150), 0), ECAM_RED)
+    sasl.gl.drawRectangle(size[1]/2-390, size[2]/2-244 + PFD_table.BUSS_vsw_pos + 60 + 53, 75, 60, ECAM_ORANGE)
+    sasl.gl.drawTriangle (size[1]/2-390, size[2]/2-244 + PFD_table.BUSS_vsw_pos + 60 + 53 + 60, size[1]/2-315, size[2]/2-244 + PFD_table.BUSS_vsw_pos + 60 + 53 + 60, size[1]/2-352.5, size[2]/2-244 + PFD_table.BUSS_vsw_pos + 60 + 53, ECAM_RED)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-352.5, size[2]/2-244 + PFD_table.BUSS_vsw_pos + 60 + 53 + 60 + 30, "FAST", 28, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
 
-    sasl.gl.drawRectangle(size[1]/2-437, size[2]/2-244 + PFD_table.BUSS_vsw_pos + 60, 99, 53, ECAM_GREEN)
+    sasl.gl.drawRectangle(size[1]/2-390, size[2]/2-244 + PFD_table.BUSS_vsw_pos + 60, 75, 53, ECAM_GREEN)
 
-    sasl.gl.drawRectangle(size[1]/2-437, size[2]/2-244, 99, PFD_table.BUSS_vsw_pos, ECAM_RED)
-    sasl.gl.drawRectangle(size[1]/2-437, size[2]/2-244 + PFD_table.BUSS_vsw_pos, 99, 60, ECAM_ORANGE)
-    sasl.gl.drawTriangle (size[1]/2-437, size[2]/2-244 + PFD_table.BUSS_vsw_pos, size[1]/2-338, size[2]/2-244 + PFD_table.BUSS_vsw_pos, size[1]/2-387.5, size[2]/2-244 + PFD_table.BUSS_vsw_pos + 60, ECAM_RED)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-387.5, size[2]/2-244 + PFD_table.BUSS_vsw_pos - 23, "SLOW", 35, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawRectangle(size[1]/2-390, size[2]/2-244, 75, PFD_table.BUSS_vsw_pos, ECAM_RED)
+    sasl.gl.drawRectangle(size[1]/2-390, size[2]/2-244 + PFD_table.BUSS_vsw_pos, 75, 60, ECAM_ORANGE)
+    sasl.gl.drawTriangle (size[1]/2-390, size[2]/2-244 + PFD_table.BUSS_vsw_pos, size[1]/2-315, size[2]/2-244 + PFD_table.BUSS_vsw_pos, size[1]/2-352.5, size[2]/2-244 + PFD_table.BUSS_vsw_pos + 60, ECAM_RED)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-352.5, size[2]/2-244 + PFD_table.BUSS_vsw_pos - 20 - 30, "SLOW", 28, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
     sasl.gl.resetClipArea ()
+
+    --needle
+    sasl.gl.drawRectangle(size[1]/2-400, size[2]/2-10, 55, 6, PFD_YELLOW)
+    sasl.gl.drawTexture(PFD_spd_needle, size[1]/2-345, size[2]/2-18, 56, 21, PFD_YELLOW)
+
+    SASL_draw_img_ycenter_aligned(PFD_spd_target, size[1]/2-315, PFD_table.BUSS_target_pos, 33, 42, ECAM_GREEN)
 end
 
 local function draw_decel_info(PFD_table)
@@ -185,9 +188,11 @@ function PFD_draw_spd_tape(PFD_table)
     local boarder_cl = ECAM_WHITE
 
     --speed tape background
-    sasl.gl.drawRectangle(size[1]/2-437, size[2]/2-244, 99, 473, PFD_TAPE_GREY)
+    if not adirs_is_buss_visible(PFD_table.Screen_ID) then
+        sasl.gl.drawRectangle(size[1]/2-437, size[2]/2-244, 99, 473, PFD_TAPE_GREY)
+    end
 
-    if (adirs_is_ias_ok(PFD_table.Screen_ID) == false and adirs_is_buss_visible(PFD_table.Screen_ID) == false) or PFD_ias_invalid(PFD_table) then
+    if adirs_is_ias_ok(PFD_table.Screen_ID) == false and not adirs_is_buss_visible(PFD_table.Screen_ID) then
         boarder_cl = PFD_table.SPD_blink_now and ECAM_RED or {0, 0, 0, 0}
         if PFD_table.SPD_blink_now == true then
             sasl.gl.drawText(Font_AirbusDUL, size[1]/2-390, size[2]/2-20, "SPD", 42, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
@@ -195,16 +200,16 @@ function PFD_draw_spd_tape(PFD_table)
     end
 
     --clip to draw the speed tape
-    if adirs_is_ias_ok(PFD_table.Screen_ID) == true and not PFD_ias_invalid(PFD_table) then
+    if adirs_is_ias_ok(PFD_table.Screen_ID) == true and not adirs_is_buss_visible(PFD_table.Screen_ID) then
         sasl.gl.setClipArea(size[1]/2-437, size[2]/2-244, 99, 473)
         sasl.gl.drawTexture(PFD_spd_tape, size[1]/2-437, size[2]/2-244 - Math_rescale(30, 355, 460, 2785, adirs_get_ias(PFD_table.Screen_ID)), 99, 4096, {1,1,1})
         sasl.gl.resetClipArea ()
     end
 
     --boarder lines
-    if adirs_is_ias_ok(PFD_table.Screen_ID) == true or adirs_is_buss_visible(PFD_table.Screen_ID) == false and PFD_ias_invalid(PFD_table) then
+    if adirs_is_ias_ok(PFD_table.Screen_ID) == true and not adirs_is_buss_visible(PFD_table.Screen_ID) then
         sasl.gl.drawWideLine(size[1]/2-437, size[2]/2+231, size[1]/2-310, size[2]/2+231, 4, boarder_cl)
-        if adirs_is_ias_ok(PFD_table.Screen_ID) == true and not PFD_ias_invalid(PFD_table) then
+        if adirs_is_ias_ok(PFD_table.Screen_ID) == true then
             sasl.gl.drawWideLine(size[1]/2-338, size[2]/2-7 + Math_clamp_lower(Math_rescale_lim_lower(30, 0, 50, -133, adirs_get_ias(PFD_table.Screen_ID)), -237), size[1]/2-338, size[2]/2+229, 4, boarder_cl)
             if adirs_get_ias(PFD_table.Screen_ID) > 66 then
                 sasl.gl.drawWideLine(size[1]/2-437, size[2]/2-246, size[1]/2-310, size[2]/2-246, 4, boarder_cl)
@@ -216,7 +221,7 @@ function PFD_draw_spd_tape(PFD_table)
     end
 
     --speed needle
-    if adirs_is_ias_ok(PFD_table.Screen_ID) == true and not PFD_ias_invalid(PFD_table) then
+    if adirs_is_ias_ok(PFD_table.Screen_ID) == true and not adirs_is_buss_visible(PFD_table.Screen_ID) then
         sasl.gl.drawRectangle(size[1]/2-450, size[2]/2-10, 18, 6, PFD_YELLOW)
         --all spd tape lables
         sasl.gl.setClipArea(size[1]/2-437, size[2]/2-244, 185, 473)
@@ -230,11 +235,15 @@ function PFD_draw_spd_tape(PFD_table)
         --draw indications
         draw_decel_info(PFD_table)
         draw_mach_info(PFD_table)
-    end
 
-    if adirs_is_buss_visible(PFD_table.Screen_ID) then
-        draw_BUSS(PFD_table)
+        --needle
         sasl.gl.drawTexture(PFD_spd_needle, size[1]/2-370, size[2]/2-18, 56, 21, PFD_YELLOW)
         sasl.gl.drawRectangle(size[1]/2-450, size[2]/2-10, 18, 6, PFD_YELLOW)
     end
+
+
+    if adirs_is_buss_visible(PFD_table.Screen_ID) then
+        draw_BUSS(PFD_table)
+    end
+
 end
