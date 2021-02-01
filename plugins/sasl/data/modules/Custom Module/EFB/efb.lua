@@ -1,6 +1,12 @@
 fbo = true
 --for the cursor
 
+----------CONTROLLABLE STUFF---------
+local EFB_DELAYED_TRANSIT_FACTOR = 7 --THE SPEED OF THE UNDERLINE MOVING WHEN CHANGINE PAGE, THE LARGER THE FASTER
+local CHARGE_SCREEN_TIME = 5
+local EFB_UNDERLINE_THICKNESS = 2
+-------------------------------------
+
 include("EFB/efb_common_buttons.lua")
 include("EFB/EFB_pages/1.lua")
 include("EFB/EFB_pages/2.lua")
@@ -17,28 +23,43 @@ position = {2943, 1248, 1143, 800}
 size = {1143, 800}
 
 EFB_PAGE = 1
-EFB_DELAYED_PAGE = 1
-EFB_DELAYED_TRANSIT_FACTOR = 7
+EFB_DELAYED_PAGE = 1 --FLOAD AND CONTROLLED BY NON-LINEAR CONTROLLER, FOLLOWS EFB PAGE, USED FOR UNDERLINE
 EFB_PREV_PAGE = 1
 EFB_CURSOR_X = 0
 EFB_CURSOR_Y = 0
 EFB_CURSOR_on_screen = false
 
-EFB_UNDERLINE_POS = 1
-
-EFB_selector_transit_start = 0
+EFB_OFF = false
 
 AVITAB_INSTALLED = false
 
-EFB_OFF = false
+---CHARGING
+local CHARGE_START_TIME = 0
+local CHARGE_TIME_LEFT = 0
+local Ac_ess_past_value = 0
+local Ac_ess_delta = 0
+local Charging_alpha_controller = {1,1,1,1}
+
+--UNDERLINE
+local EFB_UNDERLINE_POS = 1 --THE POSITION OF THE UNDERLINE
+local EFB_selector_transit_start = 0 --THE START TIME OF THE TRANSIT, FOR CONTROLLERS
+
+
 
 local line_width_table = {
     {1, 57},
-    {2, 40},
+    {2, 42},
     {3, 54},
     {4, 69},
     {5, 72},
     {6, 48},
+  }
+
+local charge_fade_table = {
+    {0, 0},
+    {0.1, 1},
+    {CHARGE_SCREEN_TIME-0.3, 1},
+    {CHARGE_SCREEN_TIME, 0},
   }
 
 if findPluginBySignature("org.solhost.folko.avitab") ~= NO_PLUGIN_ID then
@@ -113,7 +134,7 @@ end
 --TOP BAR SELECTOR LOGIC--
 
 local function jon_told_me_not_to_create_super_long_names_for_functions_but_this_function_draw_horizontal_line_with_certain_width_centered(x,y,thickness, width,color)
-    sasl.gl.drawLine ( x-width/2 , y , x+width/2 , y , color )
+    sasl.gl.drawWideLine ( x-width/2 , y , x+width/2 , y , thickness, color )
 end
 
 ---------------------------------------------------------------------------------------------------------------
@@ -148,6 +169,18 @@ function update()
     EFB_DELAYED_PAGE = Set_anim_value(EFB_DELAYED_PAGE, EFB_PAGE, 0, 10, EFB_DELAYED_TRANSIT_FACTOR)
     EFB_UNDERLINE_POS =   (27548.06 + (-53.64934 - 27548.06)/(1 +((EFB_DELAYED_PAGE/215.6605)^1.026289))  )
     EFB_UNDERLINE_WIDTH = Table_interpolate(line_width_table, EFB_DELAYED_PAGE)
+
+    Ac_ess_delta = get(AC_ess_bus_pwrd) - Ac_ess_past_value
+    Ac_ess_past_value = get(AC_ess_bus_pwrd)
+    if get(Ac_ess_delta) > 0 then
+        CHARGE_START_TIME = get(TIME)
+    end
+
+    CHARGE_TIME_LEFT = get(TIME) - CHARGE_START_TIME
+
+    Charging_alpha_controller = {1,1,1,Table_interpolate(charge_fade_table, CHARGE_TIME_LEFT)}
+
+
 end
 
 function draw()  ------KEEP THE draw_cursor() AT THE BOTTOM YOU DUMBASS!!!!!
@@ -156,12 +189,25 @@ function draw()  ------KEEP THE draw_cursor() AT THE BOTTOM YOU DUMBASS!!!!!
     EFB_draw_pages[EFB_PAGE]()
 
     if EFB_PAGE ~= 10 then
-        jon_told_me_not_to_create_super_long_names_for_functions_but_this_function_draw_horizontal_line_with_certain_width_centered(EFB_UNDERLINE_POS, 738, 2,EFB_UNDERLINE_WIDTH ,EFB_WHITE) --DRAWS THE UNDERLINE OF THE PAGE TITLE
+        jon_told_me_not_to_create_super_long_names_for_functions_but_this_function_draw_horizontal_line_with_certain_width_centered(EFB_UNDERLINE_POS, 738,EFB_UNDERLINE_THICKNESS ,EFB_UNDERLINE_WIDTH ,EFB_WHITE) --DRAWS THE UNDERLINE OF THE PAGE TITLE
+    end
+
+    if CHARGE_START_TIME == 0 then
+        --do sth
+    elseif CHARGE_TIME_LEFT < CHARGE_SCREEN_TIME then	-- Screen is showing charge icon
+        sasl.gl.drawTexture (EFB_Charging, 0 , 0 , 1143 , 800 , Charging_alpha_controller )
+    else
+        CHARGE_START_TIME = 0 -- Let's reset it for the future
     end
 
     if EFB_OFF == false then
         draw_cursor()
     end
+
+    if get(AC_ess_bus_pwrd) == 1 and EFB_OFF == false then
+        sasl.gl.drawTexture (EFB_Charging_Overlay, 0 , 0 , 1143 , 800 , EFB_WHITE )
+    end
+
     perf_measure_stop("EFB:draw()")
 end
 
