@@ -207,7 +207,7 @@ function PFD_draw_spd_tape(PFD_table)
     end
 
     --boarder lines
-    if adirs_is_ias_ok(PFD_table.Screen_ID) == true and not adirs_is_buss_visible(PFD_table.Screen_ID) then
+    if not adirs_is_buss_visible(PFD_table.Screen_ID) then
         sasl.gl.drawWideLine(size[1]/2-437, size[2]/2+231, size[1]/2-310, size[2]/2+231, 4, boarder_cl)
         if adirs_is_ias_ok(PFD_table.Screen_ID) == true then
             sasl.gl.drawWideLine(size[1]/2-338, size[2]/2-7 + Math_clamp_lower(Math_rescale_lim_lower(30, 0, 50, -133, adirs_get_ias(PFD_table.Screen_ID)), -237), size[1]/2-338, size[2]/2+229, 4, boarder_cl)

@@ -34,9 +34,9 @@ local left_tire_psi_no_delay = 210
 local right_tire_psi_no_delay = 210
 
 --sim dataref
-local front_gear_on_ground = globalProperty("sim/flightmodel2/gear/on_ground[0]")
-local left_gear_on_ground = globalProperty("sim/flightmodel2/gear/on_ground[1]")
-local right_gear_on_ground = globalProperty("sim/flightmodel2/gear/on_ground[2]")
+local Front_gear_on_ground = globalProperty("sim/flightmodel2/gear/on_ground[0]")
+local Left_gear_on_ground = globalProperty("sim/flightmodel2/gear/on_ground[1]")
+local Right_gear_on_ground = globalProperty("sim/flightmodel2/gear/on_ground[2]")
 
 -- Computer status
 local is_lgciu_1_working = false
@@ -126,10 +126,10 @@ onAirportLoaded()
 ----------------------------------------------------------------------------------------------------
 
 local function update_gear_status()
-    set(Either_Aft_on_ground, BoolToNum(get(left_gear_on_ground) == 1 or get(right_gear_on_ground) == 1))
-	set(Aft_wheel_on_ground, math.floor((get(left_gear_on_ground) + get(right_gear_on_ground))/2))
-    set(All_on_ground, math.floor((get(front_gear_on_ground) + get(left_gear_on_ground) + get(right_gear_on_ground))/3))
-    if get(front_gear_on_ground) == 1 or get(left_gear_on_ground) == 1 or get(right_gear_on_ground) == 1 then
+    set(Either_Aft_on_ground, BoolToNum(get(Left_gear_on_ground) == 1 or get(Right_gear_on_ground) == 1))
+	set(Aft_wheel_on_ground, math.floor((get(Left_gear_on_ground) + get(Right_gear_on_ground))/2))
+    set(All_on_ground, math.floor((get(Front_gear_on_ground) + get(Left_gear_on_ground) + get(Right_gear_on_ground))/3))
+    if get(Front_gear_on_ground) == 1 or get(Left_gear_on_ground) == 1 or get(Right_gear_on_ground) == 1 then
         set(Any_wheel_on_ground, 1)
     else
         set(Any_wheel_on_ground, 0)

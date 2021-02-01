@@ -8,7 +8,7 @@ function Ailerons_control(lateral_input, has_florence_kit, ground_spoilers_mode)
     local no_hyd_recenter_ias = 80
     local no_hyd_spd = 10
     local ailerons_max_def = 25
-    local ailerons_speed = 38
+    local ailerons_speed = 38.5
 
     --conditions
     local l_aileron_actual_speed = ailerons_speed

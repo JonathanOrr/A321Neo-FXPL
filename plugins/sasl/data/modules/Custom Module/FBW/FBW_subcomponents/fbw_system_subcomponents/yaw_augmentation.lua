@@ -90,7 +90,7 @@ end
 
 local function yaw_input(x, var_table)
     local max_rudder_deflection = 30
-    local max_sideslip = 15
+    local max_sideslip = 20
 
     var_table.sideslip_input = -x * max_sideslip + (-get(Rudder_trim_angle) / max_rudder_deflection) * max_sideslip
 end

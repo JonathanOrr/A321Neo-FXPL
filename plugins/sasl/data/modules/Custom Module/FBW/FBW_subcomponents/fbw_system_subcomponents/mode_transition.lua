@@ -183,3 +183,14 @@ function FBW_alternate_mode_transition(table)
 
     set(FBW_vertical_flight_mode_ratio, Math_approx_value(Math_clamp_lower((1 - get(FBW_vertical_flare_mode_ratio)) - get(FBW_vertical_ground_mode_ratio), 0), 0.001, 0))
 end
+
+function FBW_direct_mode_transition()
+    --LATERAL MODES--
+    set(FBW_lateral_ground_mode_ratio, 1)
+    set(FBW_lateral_flight_mode_ratio, 0)
+    --VERTICAL MODES--
+    set(FBW_vertical_ground_mode_ratio,   1)
+    set(FBW_vertical_rotation_mode_ratio, 0)
+    set(FBW_vertical_flight_mode_ratio,   0)
+    set(FBW_vertical_flare_mode_ratio,    0)
+end

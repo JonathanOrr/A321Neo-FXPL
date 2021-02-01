@@ -46,8 +46,12 @@ local input_limitations = {
         local pitch = adirs_get_avg_pitch()
         local max_pitch = 30
         local min_pitch = -15
-        local degrade_margin = 10
+        local degrade_margin = 8
         local max_return_rate = 2
+
+        --tail strike protection
+        local tailstrike_pitch = get(Either_Aft_on_ground) == 1 and 9.7 or 11.2
+        max_pitch = Math_rescale(0, Math_rescale(3/4, tailstrike_pitch, 1, 30, get(Augmented_pitch)), 20, 30, get(Capt_ra_alt_ft))
 
         --check for pitch exceedence
         local d_limitation = Math_rescale(min_pitch - degrade_margin, 2, min_pitch + degrade_margin, 0, pitch)
@@ -103,7 +107,7 @@ local input_limitations = {
 local get_vertical_input = {
     Rotation = function (x)
         --rescale input--
-        local output_Q = 4 * x
+        local output_Q = 6 * x
 
         --pitch protection--
         output_Q = input_limitations.Pitch(output_Q)
