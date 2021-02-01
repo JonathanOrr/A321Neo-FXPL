@@ -3,7 +3,14 @@ local wait_for_detent = 0.8
 local wait_for_reverse_toggle = 0
 local FLEX_MCT_interval = {0.85, 0.8}
 local CL_interval = {0.7, 0.65}
-local thrust_in_reverse = false
+
+local thrust_in_reverse = false -- Switch
+local manual_reverse_L = false  -- Manual hw throttle reverse
+local manual_reverse_R = false  -- Manual hw throttle reverse
+
+local prev_joy_L = 0    -- Throttle joystick previous value
+local prev_joy_R = 0    -- Throttle joystick previous value
+local max_alt_rev = 0
 
 local L_sim_throttle = globalProperty("sim/cockpit2/engine/actuators/throttle_jet_rev_ratio[0]")  -- DO NOT USE if you need to know the throttle position see Cockpit_throttle_lever_L
 local R_sim_throttle = globalProperty("sim/cockpit2/engine/actuators/throttle_jet_rev_ratio[1]")  -- DO NOT USE if you need to know the throttle position see Cockpit_throttle_lever_R
@@ -172,22 +179,10 @@ function Toggle_reverse(phase)
         end
     end
 
-    return 0--inhibites the x-plane original command
+    return 1--inhibites the x-plane original command
 end
 
-local prev_joy_L = 0
-local prev_joy_R = 0
-local max_alt_rev = 0
-
-function update_levers()
-    if prev_joy_L ~= get(L_sim_throttle) then
-        prev_joy_L = get(L_sim_throttle)
-        set(Cockpit_throttle_lever_L, prev_joy_L)
-    end
-    if prev_joy_R ~= get(R_sim_throttle) then
-        prev_joy_R = get(R_sim_throttle)
-        set(Cockpit_throttle_lever_R, prev_joy_R)
-    end
+local function can_reverse_open(eng)
     
     -- Ok here we need a de-bouncing behavior: if the aircraft bounces a little bit,
     -- let's keep the reversers open. This is not the real behavior, but it would surprise
@@ -199,14 +194,62 @@ function update_levers()
         max_alt_rev = get(Capt_ra_alt_ft)
     end
 
-    local rev_can_open = get(Either_Aft_on_ground) == 1 or max_alt_rev < 10
-    
-    if thrust_in_reverse and rev_can_open then
-        -- TODO FAILURES
+    -- TODO FAILURES
+
+    return get(Either_Aft_on_ground) == 1 or max_alt_rev < 10
+end
+
+local function update_prop_mode(manual_reverse_L, manual_reverse_R)
+    if (manual_reverse_L or thrust_in_reverse) and can_reverse_open(1) then
         set(Override_eng_1_prop_mode, 3)
-        set(Override_eng_2_prop_mode, 3)
     else
         set(Override_eng_1_prop_mode, 1)
-        set(Override_eng_2_prop_mode, 1)    
+        if manual_reverse_L then
+            prev_joy_L = 0
+            set(L_sim_throttle, 0)
+        end
     end
+
+    if (manual_reverse_R or thrust_in_reverse) and can_reverse_open(2) then
+        set(Override_eng_2_prop_mode, 3)
+    else
+        set(Override_eng_2_prop_mode, 1)
+        if manual_reverse_R then
+            prev_joy_R = 0
+            set(R_sim_throttle, 0)
+        end
+    end
+end
+
+local function update_reverse_datarefs()
+    Set_dataref_linear_anim(Eng_1_reverser_deployment, get(Override_eng_1_prop_mode) == 3 and 1 or 0, 0, 1, 0.5)
+    Set_dataref_linear_anim(Eng_2_reverser_deployment, get(Override_eng_2_prop_mode) == 3 and 1 or 0, 0, 1, 0.5)
+end
+
+function update_levers()
+
+    local L_hw_throttle_curr = get(L_sim_throttle) * (thrust_in_reverse and -1 or 1)
+    local R_hw_throttle_curr = get(R_sim_throttle) * (thrust_in_reverse and -1 or 1)
+
+    if prev_joy_L ~= L_hw_throttle_curr then
+        prev_joy_L = L_hw_throttle_curr
+        set(Cockpit_throttle_lever_L, prev_joy_L )
+        if prev_joy_L < 0 then
+            manual_reverse_L = true
+        else
+            manual_reverse_L = false
+        end
+    end
+    if prev_joy_R ~= R_hw_throttle_curr then
+        prev_joy_R = R_hw_throttle_curr
+        set(Cockpit_throttle_lever_R, prev_joy_R)
+        if prev_joy_R < 0 then
+            manual_reverse_R = true
+        else
+            manual_reverse_R = false
+        end
+    end
+
+    update_prop_mode(manual_reverse_L, manual_reverse_R)
+    update_reverse_datarefs()
 end

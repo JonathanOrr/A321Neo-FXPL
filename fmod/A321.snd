@@ -78,6 +78,18 @@ BEGIN_SOUND_ATTACHMENT
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Engines V2/Boom
+  VEH_PART engine 0
+  EVENT_START_COND a321neo/dynamics/engines/eng_1_n2 > 36
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Engines V2/Boom
+  VEH_PART engine 1
+  EVENT_START_COND a321neo/dynamics/engines/eng_2_n2 > 36
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /Engines/Engine Start Ext
   VEH_PART engine 0
   EVENT_START_COND a321neo/dynamics/engines/eng_1_n2 > 11
@@ -168,13 +180,7 @@ END_SOUND_ATTACHMENT
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/Thrust Levers/ThrLvrIdle
   VEH_XYZ 0 1.5 -18.4
-  EVENT_START_COND sim/cockpit2/engine/actuators/throttle_beta_rev_ratio_all == 0
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Thrust Levers/ThrLvrExit
-  VEH_XYZ 0 1.5 -18.4
-  EVENT_START_COND sim/cockpit2/engine/actuators/throttle_beta_rev_ratio_all > 0
+  EVENT_START_COND a321neo/cockpit/engine/throttle_lever_L == 0
 END_SOUND_ATTACHMENT
 
 ###########################################################################
@@ -182,13 +188,13 @@ END_SOUND_ATTACHMENT
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/Thrust Levers/ThrLvrCL
   VEH_XYZ 0 1.5 -18.4
-  EVENT_START_COND a321neo/cockpit/autothrust/lever_in_cl == 1
+  EVENT_START_COND a321neo/cockpit/engine/throttle_lever_L > 0.65
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Thrust Levers/ThrLvrExit
+  EVENT_NAME /CockpitMechanical/Thrust Levers/ThrLvrCL
   VEH_XYZ 0 1.5 -18.4
-  EVENT_START_COND a321neo/cockpit/autothrust/lever_in_cl == 0
+  EVENT_START_COND a321neo/cockpit/engine/throttle_lever_L < 0.75
 END_SOUND_ATTACHMENT
 
 ##########################################################################
@@ -196,13 +202,13 @@ END_SOUND_ATTACHMENT
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/Thrust Levers/ThrLvrFLX
   VEH_XYZ 0 1.5 -18.4
-  EVENT_START_COND a321neo/cockpit/autothrust/lever_in_flex_mct == 1
+  EVENT_START_COND a321neo/cockpit/engine/throttle_lever_L > 0.75
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Thrust Levers/ThrLvrExit
+  EVENT_NAME /CockpitMechanical/Thrust Levers/ThrLvrFLX
   VEH_XYZ 0 1.5 -18.4
-  EVENT_START_COND a321neo/cockpit/autothrust/lever_in_flex_mct == 0
+  EVENT_START_COND a321neo/cockpit/engine/throttle_lever_L < 0.85
 END_SOUND_ATTACHMENT
 
 ##########################################################################
@@ -210,13 +216,7 @@ END_SOUND_ATTACHMENT
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/Thrust Levers/ThrLvrTOGA
   VEH_XYZ 0 1.5 -18.4
-  EVENT_START_COND a321neo/cockpit/autothrust/lever_in_toga == 1
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Thrust Levers/ThrLvrExit
-  VEH_XYZ 0 1.5 -18.4
-  EVENT_START_COND a321neo/cockpit/autothrust/lever_in_toga == 0
+  EVENT_START_COND a321neo/cockpit/engine/throttle_lever_L > 0.95
 END_SOUND_ATTACHMENT
 
 ##########################################################################REV
@@ -224,7 +224,7 @@ END_SOUND_ATTACHMENT
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/Thrust Levers/ThrLvrRev
   VEH_XYZ 0 1.5 -18.4
-  EVENT_START_COND sim/cockpit2/engine/actuators/throttle_beta_rev_ratio_all < -1
+  EVENT_START_COND a321neo/cockpit/engine/throttle_lever_L < 0
 END_SOUND_ATTACHMENT
 
 sim/cockpit2/engine/actuators/throttle_jet_rev_ratio
@@ -232,7 +232,7 @@ sim/cockpit2/engine/actuators/throttle_jet_rev_ratio
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/Thrust Levers/ThrLvrRevFull
   VEH_XYZ 0 1.5 -18.4
-  EVENT_START_COND sim/cockpit2/engine/actuators/throttle_beta_rev_ratio_all == -2
+  EVENT_START_COND a321neo/cockpit/engine/throttle_lever_L == -1
 END_SOUND_ATTACHMENT
 
 ##############################################################################################################################################################################################################################
@@ -2127,52 +2127,93 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_CMND_UP a321neo/cockpit/fcu/metric_alt
 END_SOUND_ATTACHMENT
 
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Big Round Button Press
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/cockpit/fire/eng_1_test
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Big Round Button Release
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_UP a321neo/cockpit/fire/eng_1_test
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Big Round Button Press
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/cockpit/fire/eng_2_test
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Big Round Button Release
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_UP a321neo/cockpit/fire/eng_2_test
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Big Round Button Press
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/cockpit/fire/apu_test
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Big Round Button Release
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_UP a321neo/cockpit/fire/apu_test
+END_SOUND_ATTACHMENT
+
 #################################################################################################
 
+#BEGIN_SOUND_ATTACHMENT
+#  EVENT_NAME /Flaps/FlapLeverUp
+#  VEH_XYZ 0 1.5 -18.4
+#  EVENT_START_COND ABS_DELTA=a321neo/dynamics/surfaces/flaps_handle_position > 0
+#  EVENT_END_COND ABS_DELTA=a321neo/dynamics/surfaces/flaps_handle_position > 0.26
+#END_SOUND_ATTACHMENT
+#
+#BEGIN_SOUND_ATTACHMENT
+#  EVENT_NAME /Flaps/FlapLever1
+#  VEH_XYZ 0 1.5 -18.4
+#  EVENT_START_COND a321neo/dynamics/surfaces/flaps_handle_position == 0
+#END_SOUND_ATTACHMENT
+#
+#BEGIN_SOUND_ATTACHMENT
+#  EVENT_NAME /Flaps/FlapLever2
+#  VEH_XYZ 0 1.5 -18.4
+#  EVENT_START_COND a321neo/dynamics/surfaces/flaps_handle_position == 1
+#END_SOUND_ATTACHMENT
+#
+#BEGIN_SOUND_ATTACHMENT
+#  EVENT_NAME /Flaps/FlapLever3
+#  VEH_XYZ 0 1.5 -18.4
+#  EVENT_START_COND a321neo/dynamics/surfaces/flaps_handle_position == 2
+#END_SOUND_ATTACHMENT
+#
+#BEGIN_SOUND_ATTACHMENT
+#  EVENT_NAME /Flaps/FlapLever4
+#  VEH_XYZ 0 1.5 -18.4
+#  EVENT_START_COND a321neo/dynamics/surfaces/flaps_handle_position == 3
+#END_SOUND_ATTACHMENT
+#
+#BEGIN_SOUND_ATTACHMENT
+#  EVENT_NAME /Flaps/FlapLever1
+#  VEH_XYZ 0 1.5 -18.4
+#  EVENT_START_COND a321neo/dynamics/surfaces/flaps_handle_position == 4
+#END_SOUND_ATTACHMENT
+#
+#BEGIN_SOUND_ATTACHMENT
+#  EVENT_NAME /Flaps/FlapLeverDown
+#  VEH_XYZ 0 1.5 -18.4
+#  EVENT_START_COND DELTA=a321neo/dynamics/surfaces/flaps_handle_position == 0
+#  EVENT_END_COND ABS_DELTA=a321neo/dynamics/surfaces/flaps_handle_position > 0
+#END_SOUND_ATTACHMENT
+
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /Flaps/FlapLeverUp
+  EVENT_NAME /Flaps/FlapsLeverFinal
   VEH_XYZ 0 1.5 -18.4
   EVENT_START_COND ABS_DELTA=a321neo/dynamics/surfaces/flaps_handle_position > 0
-  EVENT_END_COND ABS_DELTA=a321neo/dynamics/surfaces/flaps_handle_position > 0.26
 END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /Flaps/FlapLever1
-  VEH_XYZ 0 1.5 -18.4
-  EVENT_START_COND a321neo/dynamics/surfaces/flaps_handle_position == 0
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /Flaps/FlapLever2
-  VEH_XYZ 0 1.5 -18.4
-  EVENT_START_COND a321neo/dynamics/surfaces/flaps_handle_position == 1
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /Flaps/FlapLever3
-  VEH_XYZ 0 1.5 -18.4
-  EVENT_START_COND a321neo/dynamics/surfaces/flaps_handle_position == 2
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /Flaps/FlapLever4
-  VEH_XYZ 0 1.5 -18.4
-  EVENT_START_COND a321neo/dynamics/surfaces/flaps_handle_position == 3
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /Flaps/FlapLever1
-  VEH_XYZ 0 1.5 -18.4
-  EVENT_START_COND a321neo/dynamics/surfaces/flaps_handle_position == 4
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /Flaps/FlapLeverDown
-  VEH_XYZ 0 1.5 -18.4
-  EVENT_START_COND DELTA=a321neo/dynamics/surfaces/flaps_handle_position == 0
-  EVENT_END_COND ABS_DELTA=a321neo/dynamics/surfaces/flaps_handle_position > 0
-END_SOUND_ATTACHMENT
-
 
 
 #################################################################################################
@@ -2279,6 +2320,7 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /BusOn2
   VEH_XYZ 0 1.4 -18.7
   EVENT_START_COND 	a321neo/sounds/elec_bus_delayed != 0
+  EVENT_END_COND 	a321neo/sounds/elec_bus_delayed == 0
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
@@ -2553,7 +2595,14 @@ END_SOUND_ATTACHMENT
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /Gear
   VEH_XYZ 0 0 0
-  EVENT_START_COND 	ABS_DELTA=sim/flightmodel/movingparts/gear1def > 0
+  EVENT_START_COND 	ABS_DELTA=sim/flightmodel/movingparts/gear1def > 0.01
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /GearDrag
+  VEH_XYZ 0 0 0
+  EVENT_START_COND 	sim/flightmodel/position/true_airspeed >= 1
+  EVENT_END_COND 	a321neo/dynamics/wheel/either_aft_on_ground == 1
 END_SOUND_ATTACHMENT
 
 #############################################################################################
@@ -3611,6 +3660,87 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_START_COND a321neo/cockpit/misc/evac_cockpit_horn == 1
   CUE_TRIGGER_COND a321neo/cockpit/misc/evac_cockpit_horn == 0
 END_SOUND_ATTACHMENT
+
+###########################################################################################################FIRE PB
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FirePB/CoverOpen
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/cockpit/overhead/guards/FIRE_ENG1 > 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FirePB/CoverOpen2
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/cockpit/overhead/guards/FIRE_ENG1 < 1
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FirePB/Pull
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/cockpit/fire/buttons/ENG1_lever_pos > 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FirePB/Push
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/cockpit/fire/buttons/ENG1_lever_pos < 1
+END_SOUND_ATTACHMENT
+
+
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FirePB/CoverOpen
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/cockpit/overhead/guards/FIRE_ENG2 > 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FirePB/CoverOpen2
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/cockpit/overhead/guards/FIRE_ENG2 < 1
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FirePB/Pull
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/cockpit/fire/buttons/ENG2_lever_pos > 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FirePB/Push
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/cockpit/fire/buttons/ENG2_lever_pos < 1
+END_SOUND_ATTACHMENT
+
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FirePB/CoverOpen
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/cockpit/overhead/guards/FIRE_APU > 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FirePB/CoverOpen2
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/cockpit/overhead/guards/FIRE_APU < 1
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FirePB/Pull
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/cockpit/fire/buttons/APU_lever_pos > 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FirePB/Push
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/cockpit/fire/buttons/APU_lever_pos < 1
+END_SOUND_ATTACHMENT
+
+
+
+
 
 
 

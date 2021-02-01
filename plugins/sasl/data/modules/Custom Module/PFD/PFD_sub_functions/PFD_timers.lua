@@ -16,7 +16,7 @@ local function update_blinking_timers(PFD_table)
     if adirs_is_att_ok(PFD_table.Screen_ID) == true then
         PFD_table.ATT_blink_timer = 0
     end
-    if (adirs_is_ias_ok(PFD_table.Screen_ID) or adirs_is_buss_visible(PFD_table.Screen_ID)) and not PFD_ias_invalid(PFD_table) then
+    if (adirs_is_ias_ok(PFD_table.Screen_ID) or adirs_is_buss_visible(PFD_table.Screen_ID)) then
         PFD_table.SPD_blink_timer = 0
     end
     if adirs_is_alt_ok(PFD_table.Screen_ID) or adirs_is_gps_alt_visible(PFD_table.Screen_ID) then
@@ -31,7 +31,7 @@ local function update_blinking_timers(PFD_table)
     if PFD_table.ATT_blink_timer < total_blink_duration_s and adirs_is_att_ok(PFD_table.Screen_ID) == false then
         PFD_table.ATT_blink_timer = PFD_table.ATT_blink_timer + get(DELTA_TIME)
     end
-    if PFD_table.SPD_blink_timer < total_blink_duration_s and (adirs_is_ias_ok(PFD_table.Screen_ID) == false and adirs_is_buss_visible(PFD_table.Screen_ID) == false) or PFD_ias_invalid(PFD_table) then
+    if PFD_table.SPD_blink_timer < total_blink_duration_s and adirs_is_ias_ok(PFD_table.Screen_ID) == false and adirs_is_buss_visible(PFD_table.Screen_ID) == false then
         PFD_table.SPD_blink_timer = PFD_table.SPD_blink_timer + get(DELTA_TIME)
     end
     if PFD_table.ALT_blink_timer < total_blink_duration_s and adirs_is_alt_ok(PFD_table.Screen_ID) == false and adirs_is_gps_alt_visible(PFD_table.Screen_ID) == false then

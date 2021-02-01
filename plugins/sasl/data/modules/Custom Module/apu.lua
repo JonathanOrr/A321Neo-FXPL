@@ -26,6 +26,7 @@
 
 local FLAP_OPEN_TIME_SEC = 20
 local APU_START_WAIT_TIME = 5
+local APU_TEST_TIME = 20
 
 ----------------------------------------------------------------------------------------------------
 -- Global variables
@@ -35,6 +36,8 @@ local master_switch_disabled_time = 0
 local master_switch_enabled_time = 0
 local start_requested = false
 local master_is_on_time = 0
+local test_in_progress = false
+local test_is_ok       = false
 
 local random_egt_apu = 0
 local random_egt_apu_last_update = 0
@@ -75,6 +78,24 @@ sasl.registerCommandHandler ( APU_cmd_start, 0 , function(phase)
     return 1
 end)
 
+sasl.registerCommandHandler ( MNTN_APU_test, 0 , function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        test_in_progress = not test_in_progress
+    end
+    return 1
+end)
+
+sasl.registerCommandHandler ( MNTN_APU_reset, 0 , function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        test_in_progress = false
+        test_is_ok = false
+    end
+    return 1
+end)
+
+----------------------------------------------------------------------------------------------------
+-- Various functions
+----------------------------------------------------------------------------------------------------
 
 function update_egt()
 
@@ -123,7 +144,7 @@ local function update_apu_flap()
 end
 
 local function update_start()
-    if master_switch_status and get(FAILURE_ENG_APU_FAIL) == 0 then 
+    if master_switch_status and get(FAILURE_ENG_APU_FAIL) == 0 and not test_in_progress then 
 
         if start_requested and get(APU_flap) == 1 and get(Apu_avail) == 0 and get(DC_bat_bus_pwrd) == 1 and get(Apu_fuel_source) > 0 then
             set(Apu_start_position, 2)
@@ -169,6 +190,26 @@ local function update_off_status()
 
 end
 
+function update_maintainence()
+
+    if test_in_progress and master_switch_status then
+        if test_start_time == 0 then
+            test_start_time = get(TIME)
+        end
+        if get(TIME) - test_start_time > APU_TEST_TIME then
+            test_is_ok = true
+        end
+    else
+        test_start_time = 0
+    end
+
+    pb_set(PB.ovhd.mntn_apu_test, test_in_progress, test_is_ok)
+end
+
+
+----------------------------------------------------------------------------------------------------
+-- update()
+----------------------------------------------------------------------------------------------------
 function update()
 
     perf_measure_start("apu:update()")
@@ -186,6 +227,7 @@ function update()
     update_apu_flap()
     update_start()
     update_gen()
-
+    update_maintainence()
+    
     perf_measure_stop("apu:update()")
 end

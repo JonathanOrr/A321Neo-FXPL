@@ -305,8 +305,8 @@ Eng_N1_max_detent_mct   = createGlobalPropertyf("a321neo/dynamics/engines/n1_max
 Eng_N1_max_detent_clb   = createGlobalPropertyf("a321neo/dynamics/engines/n1_max_clb", 0, false, true, false)  -- CLB
 Eng_N1_max_detent_flex  = createGlobalPropertyf("a321neo/dynamics/engines/n1_max_flex", 0, false, true, false) -- FLEX
 
-Eng_1_reverser_deployment = globalProperty("sim/flightmodel2/engines/thrust_reverser_deploy_ratio[0]")
-Eng_2_reverser_deployment = globalProperty("sim/flightmodel2/engines/thrust_reverser_deploy_ratio[1]")
+Eng_1_reverser_deployment = createGlobalPropertyf("a321neo/dynamics/engines/reverser_deployment_1", 0, false, true, false)
+Eng_2_reverser_deployment = createGlobalPropertyf("a321neo/dynamics/engines/reverser_deployment_2", 0, false, true, false)
 Eng_1_Firewall_valve = createGlobalPropertyi("a321neo/dynamics/engines/eng_1_firewall_valve_1", 1, false, true, false) -- 0 open, 1 - closed, 2 : transit - firewall valve
 Eng_2_Firewall_valve = createGlobalPropertyi("a321neo/dynamics/engines/eng_2_firewall_valve_2", 1, false, true, false) -- 0 open, 1 - closed, 2 : transit - firewall valve
 

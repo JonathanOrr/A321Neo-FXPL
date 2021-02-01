@@ -37,7 +37,11 @@ local params = {
 local start_elec_fadec = {0,0}
 local start_shut_fadec = {0,0}
 local xx_statuses = {false,false}
+local manual_fadeec_on = {false, false}
 
+
+sasl.registerCommandHandler (MNTN_FADEC_1_on,  0, function(phase) if phase == SASL_COMMAND_BEGIN then manual_fadeec_on[1] = not manual_fadeec_on[1] end end )
+sasl.registerCommandHandler (MNTN_FADEC_2_on,  0, function(phase) if phase == SASL_COMMAND_BEGIN then manual_fadeec_on[2] = not manual_fadeec_on[2] end end )
 
 local function draw_fuel_usage()
     local fuel_usage_1 = math.floor(get(Ecam_fuel_usage_1))
@@ -232,7 +236,11 @@ function draw_eng_page()
 end
 
 -- Returns true if the FADEC has electrical power
-local function fadec_has_elec_power(eng)
+local function fadec_has_elec_power(eng)    
+    if FIRE_sys.eng[eng].block_position then
+        return false -- The fire pushbutton kills the power supply
+    end
+
     if get(DC_ess_bus_pwrd) == 1 then
         return true
     end
@@ -252,6 +260,10 @@ local function update_XX_dr_eng(eng)
     if fadec_has_elec_power(eng) then
         if start_elec_fadec[eng] == 0 then
             start_elec_fadec[eng] = get(TIME)
+        end
+        if manual_fadeec_on[eng] then
+            xx_statuses[eng] = true
+            return
         end
     else
         start_elec_fadec[eng] = 0
@@ -303,12 +315,17 @@ end
 local function update_XX_dr()
 
     update_XX_dr_eng(1)
-    xx_statuses[1] = xx_statuses[1] and (get(FAILURE_ENG_FADEC_CH1, 1) == 0 or get(FAILURE_ENG_FADEC_CH2, 1) == 0)
+    xx_statuses[1] = xx_statuses[1] and (get(FAILURE_ENG_FADEC_CH1, 1) == 0 or get(FAILURE_ENG_FADEC_CH2, 1) == 0) and (get(Fire_pb_ENG1_status) == 0)
     update_XX_dr_eng(2)
-    xx_statuses[2] = xx_statuses[2] and (get(FAILURE_ENG_FADEC_CH1, 2) == 0 or get(FAILURE_ENG_FADEC_CH2, 2) == 0)
+    xx_statuses[2] = xx_statuses[2] and (get(FAILURE_ENG_FADEC_CH1, 2) == 0 or get(FAILURE_ENG_FADEC_CH2, 2) == 0) and (get(Fire_pb_ENG2_status) == 0)
 
     set(EWD_engine_1_XX, xx_statuses[1] and 0 or 1)
     set(EWD_engine_2_XX, xx_statuses[2] and 0 or 1)
+end
+
+local function update_pbs() 
+    pb_set(PB.ovhd.mntn_fadec_1_pwr, manual_fadeec_on[1], false)
+    pb_set(PB.ovhd.mntn_fadec_2_pwr, manual_fadeec_on[2], false)
 end
 
 function ecam_update_eng_page()
@@ -326,6 +343,6 @@ function ecam_update_eng_page()
     end
 
     update_XX_dr()
-
+    update_pbs()
 end
 

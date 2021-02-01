@@ -52,7 +52,8 @@ local status_buttons = {
     eng2pump  = true,
     elecBpump = true,
     elecYpump = false,
-    PTU       = true
+    PTU       = true,
+    overrideBpump = false
 }
 
 ----------------------------------------------------------------------------------------------------
@@ -66,6 +67,10 @@ sasl.registerCommandHandler (HYD_cmd_PTU,          0, function(phase) hyd_toggle
 sasl.registerCommandHandler (HYD_cmd_RAT_man_on,   0, function(phase) if phase == SASL_COMMAND_BEGIN and get(HOT_bus_2_pwrd) == 1 then set(is_RAT_out, 1) end end )
 
 sasl.registerCommandHandler (HYD_reset_systems,    0, function(phase) hyd_reset_systems(phase) end )
+sasl.registerCommandHandler (MNTN_HYD_BLUE_override, 0, function(phase) hyd_toggle_button(phase, 6) end )
+sasl.registerCommandHandler (MNTN_HYD_G_valve,   0, function(phase) if phase == SASL_COMMAND_BEGIN then g_sys.is_valve_on_test = not g_sys.is_valve_on_test end end )
+sasl.registerCommandHandler (MNTN_HYD_B_valve,   0, function(phase) if phase == SASL_COMMAND_BEGIN then b_sys.is_valve_on_test = not b_sys.is_valve_on_test end end )
+sasl.registerCommandHandler (MNTN_HYD_Y_valve,   0, function(phase) if phase == SASL_COMMAND_BEGIN then y_sys.is_valve_on_test = not y_sys.is_valve_on_test end end )
 
 function hyd_reset_systems(phase)
     if phase == SASL_COMMAND_BEGIN then
@@ -93,6 +98,8 @@ function hyd_toggle_button(phase, id)
         status_buttons.elecYpump = not status_buttons.elecYpump
     elseif id == 5 then
         status_buttons.PTU = not status_buttons.PTU
+    elseif id == 6 then
+        status_buttons.overrideBpump = not status_buttons.overrideBpump
     end
 end
 
@@ -114,6 +121,8 @@ HydSystem = {
     is_ptu_on         = false,  -- *Incoming* PTU
     is_rat_pump_on    = false,  -- Is RAT pump providing pressure?
 
+    is_valve_on_test  = false,  -- Valve is closed because someone pressed the related button in the mntn panel
+
     press_curr        = 0,
     press_max         = 0,      -- Maximum allowed pressure (used in computation only)
     press_target      = 0,      -- Target pressure, press_curr will reach this pressure at some point in time
@@ -124,7 +133,7 @@ HydSystem = {
     qty_curr          = 0,
     
     ptu_is_increasing = true,   -- Internal use, to check if ptu pressure is increasing or descrising, do not set manually
-    qty_initialized   = false   -- Internal use, to check if qty has been already initialized
+    qty_initialized   = false  -- Internal use, to check if qty has been already initialized
 }
 
 -- Constructor for the class
@@ -146,8 +155,9 @@ function HydSystem:update_press()
         set(Hydraulic_Y_elec_status, self.is_elec_pump_on and 1 or 0)
     end
 
-
-    if self.is_engine_pump_on then
+    if self.is_valve_on_test then
+        self.press_target = 0
+    elseif self.is_engine_pump_on then
         -- Ok engine pump is ON, this is the best, no matter about the others pumps
         self.press_target = math.random(PSI_AVG_ENGINE_PUMP - PSI_VAR_EE_PUMP, PSI_AVG_ENGINE_PUMP + PSI_VAR_EE_PUMP)           
     elseif self.is_elec_pump_on then
@@ -274,7 +284,8 @@ local function update_sys_status()
 
     g_sys.is_engine_pump_on = status_buttons.eng1pump and get(Engine_1_avail) == 1 and get(FAILURE_HYD_G_pump) == 0 and get(Hydraulic_G_qty) > 0
     y_sys.is_engine_pump_on = status_buttons.eng2pump and get(Engine_2_avail) == 1 and get(FAILURE_HYD_Y_pump) == 0 and get(Hydraulic_Y_qty) > 0
-    b_sys.is_elec_pump_on = status_buttons.elecBpump and (get(Engine_1_avail) == 1 or  get(Engine_2_avail) == 1) and get(FAILURE_HYD_B_pump) == 0 and get(AC_bus_1_pwrd) == 1  and get(Hydraulic_B_qty) > 0
+    b_sys.is_elec_pump_on = status_buttons.elecBpump and (get(Engine_1_avail) == 1 or  get(Engine_2_avail) == 1) and get(FAILURE_HYD_B_pump) == 0 and get(AC_bus_1_pwrd) == 1 and get(Hydraulic_B_qty) > 0
+    b_sys.is_elec_pump_on = b_sys.is_elec_pump_on or (get(AC_bus_1_pwrd) == 1 and status_buttons.overrideBpump and get(Hydraulic_B_qty) > 0)
     y_sys.is_elec_pump_on = status_buttons.elecYpump and get(FAILURE_HYD_Y_E_pump) == 0 and get(Hydraulic_Y_qty) > 0 and get(AC_bus_2_pwrd) == 1
 
 
@@ -339,7 +350,10 @@ local function update_datarefs()
     pb_set(PB.ovhd.hyd_PTU,  not status_buttons.PTU, get(FAILURE_HYD_PTU) == 1)
     pb_set(PB.ovhd.hyd_elec_B, not status_buttons.elecBpump, get(FAILURE_HYD_B_pump) == 1)
     pb_set(PB.ovhd.hyd_elec_Y, not is_any_cargo_door_operating() and status_buttons.elecYpump, get(FAILURE_HYD_Y_E_pump) == 1)
-
+    pb_set(PB.ovhd.mntn_hyd_blue_on, status_buttons.overrideBpump, false)
+    pb_set(PB.ovhd.mntn_hyd_v_G, g_sys.is_valve_on_test, false)
+    pb_set(PB.ovhd.mntn_hyd_v_B, b_sys.is_valve_on_test, false)
+    pb_set(PB.ovhd.mntn_hyd_v_Y, y_sys.is_valve_on_test, false)
 end
 
 function update()
