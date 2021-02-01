@@ -90,12 +90,8 @@ function update()
 
     --summing the controls
     total_roll = get(Roll_artstab)--Roll rate commanding
+    total_pitch = get(Pitch_artstab)
     total_yaw = get(Yaw_artstab)
-    if get(FBW_kill_switch) == 0 then
-        total_pitch = get(Pitch_artstab) --G commanding
-    else
-        total_pitch = get(Augmented_pitch) + get(Pitch_artstab)
-    end
 
     if get(Override_control_surfaces) == 1 then
         if get(DELTA_TIME) ~= 0 then

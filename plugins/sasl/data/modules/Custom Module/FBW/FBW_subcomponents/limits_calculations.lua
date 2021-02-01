@@ -333,11 +333,11 @@ function update()
         update_VLS()
 
         if in_air_timer >= 5 then
-            set(Vaprot_vsw, Math_clamp_higher(Set_anim_value_no_lim(get(Vaprot_vsw), adirs_get_avg_ias() * math.sqrt(Math_clamp_lower((get(Alpha) - get(A0_AoA)) / (get(Aprot_AoA) - get(A0_AoA)), 0)), 5), get(VMAX)))
+            set(Vaprot_vsw, Math_clamp_higher(adirs_get_avg_ias() * math.sqrt(Math_clamp_lower((get(Alpha) - get(A0_AoA)) / (get(Aprot_AoA) - get(A0_AoA)), 0)), get(VMAX)))
         else
-            set(Vaprot_vsw, Math_clamp_higher(Set_anim_value_no_lim(get(Vaprot_vsw), adirs_get_avg_ias() * math.sqrt(Math_clamp_lower((get(Alpha) - get(A0_AoA)) / (get(Amax_AoA) - get(A0_AoA)), 0)), 5), get(VMAX)))
+            set(Vaprot_vsw, Math_clamp_higher(adirs_get_avg_ias() * math.sqrt(Math_clamp_lower((get(Alpha) - get(A0_AoA)) / (get(Amax_AoA) - get(A0_AoA)), 0)), get(VMAX)))
         end
-        set(Valpha_MAX, Math_clamp_higher(Set_anim_value_no_lim(get(Valpha_MAX), adirs_get_avg_ias() * math.sqrt(Math_clamp_lower((get(Alpha) - get(A0_AoA)) / (get(Amax_AoA) - get(A0_AoA)), 0)), 5), get(VMAX)))
+        set(Valpha_MAX, Math_clamp_higher(adirs_get_avg_ias() * math.sqrt(Math_clamp_lower((get(Alpha) - get(A0_AoA)) / (get(Amax_AoA) - get(A0_AoA)), 0)), get(VMAX)))
 
         --reset timer
         alpha_speed_update_timer = 0
