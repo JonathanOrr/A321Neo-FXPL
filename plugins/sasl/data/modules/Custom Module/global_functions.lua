@@ -647,6 +647,14 @@ function Get_rotated_point_y_pos(y, radius, angle)
     return y + radius * math.sin(math.rad(angle))
 end
 
+function Get_rotated_point_x_CC_pos(x, radius, angle)
+    return x + radius * math.cos(math.rad(90 - angle))
+end
+
+function Get_rotated_point_y_CC_pos(y, radius, angle)
+    return y + radius * math.sin(math.rad(90 - angle))
+end
+
 --starts at top goes clockwise
 function Get_rotated_point_x_pos_offset(x, radius, angle, x_offset)
     local recalculated_r = math.sqrt(radius^2 + x_offset^2) * (radius >= 0 and 1 or -1)
@@ -753,4 +761,5 @@ end
 function Local_magnetic_deviation()
     return get(Flightmodel_mag_heading) - get(Flightmodel_true_heading)
 end
+
 

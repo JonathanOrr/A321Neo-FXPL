@@ -36,6 +36,9 @@ Nosewheel_Steering_working =  createGlobalPropertyi("a321neo/dynamics/wheel/stee
 Nosewheel_Steering_limit   =  createGlobalPropertyi("a321neo/dynamics/wheel/steering_limit", 0, false, true, false)  -- Limit (abs value) for steering
 Steer_ratio_setpoint       =  createGlobalPropertyi("a321neo/dynamics/wheel/steer_setpoint", 0, false, true, false)
 Steer_ratio_actual         =  globalProperty("sim/flightmodel2/gear/tire_steer_command_deg[0]")
+Front_gear_on_ground = 		  globalProperty("sim/flightmodel2/gear/on_ground[0]")
+Left_gear_on_ground = 		  globalProperty("sim/flightmodel2/gear/on_ground[1]")
+Right_gear_on_ground = 		  globalProperty("sim/flightmodel2/gear/on_ground[2]")
 Either_Aft_on_ground = 		  createGlobalPropertyi("a321neo/dynamics/wheel/either_aft_on_ground", 0, false, true, false)
 Aft_wheel_on_ground = 		  createGlobalPropertyi("a321neo/dynamics/wheel/aft_wheels_on_ground", 0, false, true, false)
 All_on_ground = 			  createGlobalPropertyi("a321neo/dynamics/wheel/all_wheels_on_ground", 0, false, true, false)
@@ -443,16 +446,16 @@ Hydraulic_PTU_status = createGlobalPropertyi("a321neo/dynamics/HYD/PTU_status", 
 Hydraulic_RAT_status = createGlobalPropertyi("a321neo/dynamics/HYD/RAT_status", 0, false, true, false) -- 0: OFF ready, 1: Running OK, 2: FAULT or low speed
 
 --aircraft limits
-VMAX_prot =        createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/vmax_prot_speed", 0, false, true, false)
-Fixed_VMAX =       createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fixed_vmax_speed", 0, false, true, false)
-VMAX =		       createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/vmax_speed", 0, false, true, false)
-S_speed = 		   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/s_speed", 0, false, true, false)
-F_speed = 		   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/f_speed", 0, false, true, false)
-VFE_speed = 	   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/vfe_speed", 0, false, true, false)
-VLS = 			   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/vls_speed", 0, false, true, false)
-GD =		       createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/green_dot_speed", 0, false, true, false)
-Vaprot_vsw =       createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/alpha_prot_speed", 0, false, true, false)
-Valpha_MAX =       createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/alpha_max_speed", 0, false, true, false)
+VMAX_prot =  createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/vmax_prot_speed", 0, false, true, false)
+Fixed_VMAX = createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fixed_vmax_speed", 0, false, true, false)
+VMAX =		 createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/vmax_speed", 0, false, true, false)
+S_speed = 	 createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/s_speed", 0, false, true, false)
+F_speed = 	 createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/f_speed", 0, false, true, false)
+VFE_speed =  createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/vfe_speed", 0, false, true, false)
+VLS = 		 createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/vls_speed", 0, false, true, false)
+GD =		 createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/green_dot_speed", 0, false, true, false)
+Vaprot_vsw = createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/alpha_prot_speed", 0, false, true, false)
+Valpha_MAX = createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/alpha_max_speed", 0, false, true, false)
 
 A0_AoA =     createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/alpha_0_aoa", 0, false, true, false)
 Aprot_AoA =  createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/alpha_prot_aoa", 0, false, true, false)
@@ -763,4 +766,4 @@ VOLUME_cabin = createGlobalPropertyf("a321neo/volume/cabin", 1, false, true, fal
 --LOAD VALUES
 LOAD_flapssetting = createGlobalPropertyi("a321neo/efb/load", 1, false, true, false) --1 is 1+F, 2 is 2, 3 is 3
 LOAD_runwaycond = createGlobalPropertyi("a321neo/efb/runwaycond", 0, false, true, false) --0 is dry 1 is wet
-LOAD_CG_pos = createGlobalPropertyf("a321neo/efb/cgpos", 0.5, false, true, false) --1 is fwd, 0 is aft
+LOAD_thrustto = createGlobalPropertyi("a321neo/efb/thrustto", 0, false, true, false) --0 is dry 1 is wet

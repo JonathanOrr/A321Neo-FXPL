@@ -72,7 +72,8 @@ local capt_PFD_table = {
     Show_mach = true,
     LS_enabled = Capt_landing_system_enabled,
     BUSS_update_timer = 0,
-    BUSS_vsw_pos = 150,
+    BUSS_vsw_pos = 85,
+    BUSS_target_pos = 85,
 }
 
 sasl.registerCommandHandler(FCU_Capt_LS_cmd, 0, function(phase) if phase == SASL_COMMAND_BEGIN then set(Capt_landing_system_enabled, 1 - get(Capt_landing_system_enabled)) end end)

@@ -139,6 +139,8 @@ EFB_toggle =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EF
 EFB_highlighter =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/highlighter.png")
 
 EFB_CSS_logo = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/OFF page/CSS.png")
+EFB_Charging = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/charging_cover.png")
+EFB_Charging_Overlay = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/charging_overlay.png")
 
 ------------GROUND-------------
 
@@ -163,8 +165,8 @@ EFB_GROUND_wv    =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textu
 ------------LOAD-------------
 
 EFB_LOAD_bgd =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/overlay.png")
-EFB_LOAD_cgball =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/cg_ball.png")
-EFB_LOAD_cross =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/cross.png")
+EFB_LOAD_refuel_button =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/refuel_button.png")
+EFB_LOAD_coumpute_button =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/compute_button.png")
 
 -----------CONFIG------------
 

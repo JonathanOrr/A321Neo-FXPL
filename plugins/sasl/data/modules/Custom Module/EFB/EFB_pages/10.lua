@@ -38,6 +38,7 @@ function EFB_draw_page_10()
         click_time = 0 -- Let's reset it for the future
         delay_flag = false
         EFB_OFF = false
+        EFB_DELAYED_PAGE = EFB_PAGE --this is to aviod the underline from moving after the standby screen, remove this line and turn on the screen then you'll see what I mean.
     end
 end
 

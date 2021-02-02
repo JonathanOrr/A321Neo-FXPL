@@ -11,13 +11,21 @@ function Ailerons_control(lateral_input, has_florence_kit, ground_spoilers_mode)
     local ailerons_speed = 38.5
 
     --conditions
-    local l_aileron_actual_speed = 45
-    local r_aileron_actual_speed = 45
+    local l_aileron_actual_speed = ailerons_speed
+    local r_aileron_actual_speed = ailerons_speed
 
     local l_aileron_travel_target = Math_clamp(ailerons_max_def *  lateral_input + 5 * get(Flaps_deployed_angle) / 40, -ailerons_max_def, ailerons_max_def)
     local r_aileron_travel_target = Math_clamp(ailerons_max_def * -lateral_input + 5 * get(Flaps_deployed_angle) / 40, -ailerons_max_def, ailerons_max_def)
 
     --SURFACE SPEED LOGIC--
+    --aileron anti droop--
+    if ground_spoilers_mode == 2 and get(FBW_total_control_law) == FBW_NORMAL_LAW then
+        if has_florence_kit == true and get(Flaps_internal_config) ~= 0 and adirs_get_avg_pitch() < 2.5 then
+            l_aileron_actual_speed = 25
+            r_aileron_actual_speed = 25
+        end
+    end
+
     --hydralics power detection
     l_aileron_actual_speed = Math_rescale(0, no_hyd_spd, 1450, ailerons_speed, get(Hydraulic_B_press) + get(Hydraulic_G_press))
     r_aileron_actual_speed = Math_rescale(0, no_hyd_spd, 1450, ailerons_speed, get(Hydraulic_B_press) + get(Hydraulic_G_press))
@@ -147,8 +155,8 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
     local l_spoilers_roll_spd = {0, 40, 40, 40, 40}
     local r_spoilers_roll_spd = {0, 40, 40, 40, 40}
 
-    local l_spoilers_spdbrk_ground_spd = {30, 30, 30, 30, 30}
-    local r_spoilers_spdbrk_ground_spd = {30, 30, 30, 30, 30}
+    local l_spoilers_spdbrk_ground_spd = {15, 15, 15, 15, 15}
+    local r_spoilers_spdbrk_ground_spd = {15, 15, 15, 15, 15}
     local l_spoilers_spdbrk_air_spd = {5, 5, 5, 5, 5}
     local r_spoilers_spdbrk_air_spd = {5, 5, 5, 5, 5}
     local l_spoilers_spdbrk_high_spd_air_spd = {1, 1, 1, 1, 1}

@@ -1,7 +1,3 @@
-
-AVITAB_LMB = sasl.findCommand ( "AviTab/click_left" )
-
-
 --MOUSE & BUTTONS--
 function EFB_execute_page_5_buttons()
 

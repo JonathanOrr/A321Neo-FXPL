@@ -18,6 +18,40 @@ local function draw_stall_flag(PFD_table)
     end
 end
 
+local function draw_SI_trapezoid(PFD_table)
+    local ATT_x_center = size[1]/2-55
+    local ATT_y_center = size[2]/2-7
+
+    if not adirs_is_gloads_ok(PFD_table.Screen_ID) then
+        --draw SI flag
+        local SI_flag_x = Get_rotated_point_x_CC_pos(ATT_x_center, (math.abs(adirs_get_roll(PFD_table.Screen_ID)) >= 60 and math.abs(adirs_get_roll(PFD_table.Screen_ID)) <= 120) and (206 / math.cos(math.rad(90 - math.abs(adirs_get_roll(PFD_table.Screen_ID)))) - 50) or 188, -adirs_get_roll(PFD_table.Screen_ID))
+        local SI_flag_y = Get_rotated_point_y_CC_pos(ATT_y_center, (math.abs(adirs_get_roll(PFD_table.Screen_ID)) >= 60 and math.abs(adirs_get_roll(PFD_table.Screen_ID)) <= 120) and (206 / math.cos(math.rad(90 - math.abs(adirs_get_roll(PFD_table.Screen_ID)))) - 50) or 188, -adirs_get_roll(PFD_table.Screen_ID))
+        sasl.gl.drawText(Font_AirbusDUL, SI_flag_x, SI_flag_y, "SI", 30, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
+
+        return
+    end
+
+    --trapizoid color--
+    local beta_color = PFD_YELLOW
+    if get(Flaps_internal_config) > 0 and get(Flaps_internal_config) < 5 and
+       ((get(Eng_1_N1) > 80 or get(Eng_2_N1) > 80) or (get(Cockpit_throttle_lever_L) >= THR_MCT_START or get(Cockpit_throttle_lever_R) >= THR_MCT_START)) and
+       math.abs(get(Eng_1_N1) - get(Eng_2_N1)) > 35 then
+        beta_color = ECAM_BLUE
+    end
+
+    SASL_rotated_center_img_center_aligned(
+        PFD_bank_angle_beta_angle,
+        ATT_x_center,
+        ATT_y_center,
+        65,
+        17,
+        -adirs_get_roll(PFD_table.Screen_ID),
+        Math_rescale_no_lim(0, 0, 0.2, -53, Math_clamp(get(Total_lateral_g_load), -0.3, 0.3)),
+        (math.abs(adirs_get_roll(PFD_table.Screen_ID)) >= 60 and math.abs(adirs_get_roll(PFD_table.Screen_ID)) <= 120) and (206 / math.cos(math.rad(90 - math.abs(adirs_get_roll(PFD_table.Screen_ID)))) - 37) or 201,
+        beta_color
+    )
+end
+
 function PFD_draw_att(PFD_table)
     local ATT_x_center = size[1]/2-55
     local ATT_y_center = size[2]/2-7
@@ -42,7 +76,7 @@ function PFD_draw_att(PFD_table)
     end
 
     --tailstrike arrow(TOGO GA and GS < 50)
-    if get(All_on_ground) == 0 and get(PFD_table.RA_ALT) < 400 then
+    if get(All_on_ground) == 0 and get(PFD_table.RA_ALT) < 400 and (get(Cockpit_throttle_lever_L) < THR_MCT_START and get(Cockpit_throttle_lever_R) < THR_MCT_START) then
         SASL_rotated_center_img_center_aligned(
             PFD_tailstrike_arrow,
             ATT_x_center,
@@ -118,25 +152,7 @@ function PFD_draw_att(PFD_table)
         PFD_YELLOW
     )
 
-    --trapizoid color--
-    local beta_color = PFD_YELLOW
-    if get(Flaps_internal_config) > 0 and get(Flaps_internal_config) < 5 and
-       ((get(Eng_1_N1) > 80 or get(Eng_2_N1) > 80) or (get(Cockpit_throttle_lever_L) >= THR_MCT_START or get(Cockpit_throttle_lever_R) >= THR_MCT_START)) and
-       math.abs(get(Eng_1_N1) - get(Eng_2_N1)) > 35 then
-        beta_color = ECAM_BLUE
-    end
-
-    SASL_rotated_center_img_center_aligned(
-        PFD_bank_angle_beta_angle,
-        ATT_x_center,
-        ATT_y_center,
-        65,
-        17,
-        -adirs_get_roll(PFD_table.Screen_ID),
-        Math_rescale_no_lim(0, 0, 0.2, -53, Math_clamp(get(Total_lateral_g_load), -0.3, 0.3)),
-        (math.abs(adirs_get_roll(PFD_table.Screen_ID)) >= 60 and math.abs(adirs_get_roll(PFD_table.Screen_ID)) <= 120) and (206 / math.cos(math.rad(90 - math.abs(adirs_get_roll(PFD_table.Screen_ID)))) - 37) or 201,
-        beta_color
-    )
+    draw_SI_trapezoid(PFD_table)
 
     --RA ALT (TODO LACKING DH logic waiting for MCDU)
     local RA_color = get(PFD_table.RA_ALT) > 400 and ECAM_GREEN or ECAM_ORANGE

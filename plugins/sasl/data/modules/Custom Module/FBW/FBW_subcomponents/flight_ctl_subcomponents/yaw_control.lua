@@ -50,7 +50,7 @@ function Rudder_control(yaw_input, fbw_current_law, is_in_auto_flight, trim_inpu
     --0 = DIRECT LAW
 
     --PROPERTIES--
-    local rudder_speed = 24
+    local rudder_speed = 21.5
     local rudder_trim_speed = 1
     --the proportion is the same no matter the limits, hence at higher speed you'll reach the limit with less deflection
     local rudder_travel_target = yaw_input * 30

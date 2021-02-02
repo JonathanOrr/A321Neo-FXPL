@@ -11,7 +11,7 @@ function Elevator_control(vertical_input, in_direct_law)
 
     local no_hyd_recenter_ias = 80
     local elev_no_hyd_spd = 10
-    local elevators_speed = 45 --degrees per second
+    local elevators_speed = 24 --degrees per second
 
     local max_up_deflection = -30
     local max_dn_deflection = 17
@@ -20,8 +20,8 @@ function Elevator_control(vertical_input, in_direct_law)
     local max_direct_law_dn = 3.759707 + (11.8902 - 3.759707) / (1 + (Math_clamp_lower(adirs_get_avg_ias(), 0) / 321.8764)^8.21922)
 
     --surface variables--
-    local l_elev_spd = 45
-    local r_elev_spd = 45
+    local l_elev_spd = 24
+    local r_elev_spd = 24
 
     local l_elev_target = 0
     local r_elev_target = 0

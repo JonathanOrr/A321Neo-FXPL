@@ -1,6 +1,8 @@
 local Lateral_control_var_table = {
     P_input = 0,
 
+    AoA_bank_angle_mode = false,
+
     neutral_bank_angle = 0,
     maximum_bank_angle = 0,
 
@@ -51,7 +53,7 @@ local function limit_input(x, bank, neutral_bank, max_bank)
 
     local r_limit_table = {
         {0, x_limited},
-        {1, math.min(x, 0)},
+        {1, math.min(x_limited, 0)},
         {2, -max_return_rate / max_roll_rate},
     }
     x_limited = Table_interpolate(r_limit_table, r_limitation)
@@ -63,7 +65,14 @@ local function lateral_input_and_protection(var_table)
     --properties
     local bank_angle_speed = 8
 
-    if adirs_get_avg_aoa() > get(Aprot_AoA) then--alpha protection bank angle protection
+    --check AoA bank angle--
+    if adirs_get_avg_aoa() > get(Aprot_AoA) then
+        var_table.AoA_bank_angle_mode = true
+    elseif var_table.AoA_bank_angle_mode == true and adirs_get_avg_aoa() < get(Aprot_AoA) - 1 then
+        var_table.AoA_bank_angle_mode = false
+    end
+
+    if var_table.AoA_bank_angle_mode == true then--alpha protection bank angle protection
         var_table.neutral_bank_angle = Set_linear_anim_value(var_table.neutral_bank_angle, 33, 0, 67, bank_angle_speed)
         var_table.maximum_bank_angle = Set_linear_anim_value(var_table.maximum_bank_angle, 45, 0, 67, bank_angle_speed)
     elseif adirs_get_avg_ias() > get(Fixed_VMAX) then--high speed bank angle protection
@@ -81,7 +90,7 @@ local function lateral_input_and_protection(var_table)
     var_table.P_input = Math_rescale(-1, -15, 1, 15, limited_input)
 end
 
-local function lateral_controlling(var_table, filter_table)
+local function filter_values(var_table, filter_table)
     --FILTERING--
     --filter the PV
     filter_table.P_rate_pv_filter_table.x = get(True_roll_rate)
@@ -92,7 +101,9 @@ local function lateral_controlling(var_table, filter_table)
     --filter the scheduling variable
     filter_table.IAS_filter_table.x = adirs_get_avg_ias()
     var_table.filtered_ias = low_pass_filter(filter_table.IAS_filter_table)
+end
 
+local function lateral_controlling(var_table)
     --ensure bumpless transfer--
     if get(FBW_lateral_flight_mode_ratio) == 0 or get(FBW_lateral_law) ~= FBW_NORMAL_LAW then
         FBW_PID_arrays.FBW_ROLL_RATE_PID_array.Schedule_gains = false
@@ -119,6 +130,7 @@ end
 
 function update()
     lateral_input_and_protection(Lateral_control_var_table)
-    lateral_controlling(Lateral_control_var_table, lateral_control_filter_table)
+    filter_values(Lateral_control_var_table, lateral_control_filter_table)
+    lateral_controlling(Lateral_control_var_table)
     FBW_lateral_mode_blending(Lateral_control_var_table)
 end

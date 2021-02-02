@@ -78,23 +78,27 @@ local function FBW_kill_switch_logic()
     kill_delta = get(FBW_kill_switch) - last_kill_value
     last_kill_value = get(FBW_kill_switch)
     if kill_delta == 1 then
-        set(Roll_artstab, 0)
+        set(Roll_artstab,  0)
         set(Pitch_artstab, 0)
+        set(Yaw_artstab,   0)
         print("FBW killed reseting controls")
     end
 end
 
 function update()
     FBW_kill_switch_logic()
-
     updateAll(components)
 
     --system subcomponents
     Fctl_computuers_status_computation(Fctl_computers_var_table)
     Compute_fctl_button_states()
     FBW_law_reconfiguration(FBW_law_var_table)
+
+    --Flight mode blending
     if get(FBW_total_control_law) == FBW_NORMAL_LAW then
         FBW_normal_mode_transition(FBW_modes_var_table)
+    elseif get(FBW_total_control_law) == FBW_DIRECT_LAW and get(FBW_alt_to_direct_law) == 0 then
+        FBW_direct_mode_transition()
     else
         FBW_alternate_mode_transition(FBW_modes_var_table)
     end
