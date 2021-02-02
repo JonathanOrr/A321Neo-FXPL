@@ -1,32 +1,3 @@
-function FADEC_N1_PID(pid_array, Set_Point, PV)
-    local last_PV = pid_array.PV
-
-    if get(DELTA_TIME) ~= 0 then
-
-        pid_array.PV = PV
-
-        --Proportional--
-        pid_array.Proportional = (Set_Point - PV) * pid_array.P_gain
-
-	    --integral--(clamped to stop windup)
-	    pid_array.Integral_sum = Math_clamp(pid_array.Integral_sum + ((Set_Point - PV) * get(DELTA_TIME)), pid_array.Error_margin * pid_array.Min_out * pid_array.I_time, pid_array.Error_margin * pid_array.Max_out * pid_array.I_time)
-        pid_array.Integral = Math_clamp(pid_array.Integral_sum * 1 / pid_array.I_time, pid_array.Error_margin * pid_array.Min_out, pid_array.Error_margin * pid_array.Max_out)
-
-        --derivative--
-        pid_array.Derivative = ((last_PV - pid_array.PV) / get(DELTA_TIME)) * pid_array.D_gain
-
-        --sigma
-        pid_array.Output = pid_array.Proportional + pid_array.Integral + pid_array.Derivative
-
-	    --limit and rescale output range--
-        pid_array.Output = Math_clamp(pid_array.Output, pid_array.Error_margin * pid_array.Min_out, pid_array.Error_margin * pid_array.Max_out) / pid_array.Error_margin
-
-    end
-
-    return pid_array.Output
-
-end
-
 local function get_N1_target(thr_position)
 
     local REVERSE_PERFORMANCE = 0.7
@@ -73,22 +44,31 @@ end
 
 function N1_control(L_PID_array, R_PID_array, reversers)
 
-    local N1_target = get_N1_target(get(Cockpit_throttle_lever_L))
+    -- Compute the target based on the throttle position
+    local N1_target_L = get_N1_target(get(Cockpit_throttle_lever_L))
+    local N1_target_R = get_N1_target(get(Cockpit_throttle_lever_R))
 
+    local L_error = (N1_target_L - get(Eng_1_N1)) * (get(Weather_Sigma) ^ 0.3)
+    local controlled_T_L = SSS_PID_BP_LIM(L_PID_array, L_error)
+    
     if get(Engine_1_avail) == 1 then
-        set(Override_eng_1_lever, FADEC_N1_PID(L_PID_array, N1_target, get(Eng_1_N1)))
+        set(Override_eng_1_lever, controlled_T_L)
     else
+        L_PID_array.Actual_output = 0
         set(Override_eng_1_lever, 0)
     end
 
-    local N1_target = get_N1_target(get(Cockpit_throttle_lever_R))
+    local R_error = (N1_target_R - get(Eng_2_N1)) * (get(Weather_Sigma) ^ 0.3)
+    local controlled_T_R = SSS_PID_BP_LIM(R_PID_array, R_error)
+    
     if get(Engine_2_avail) == 1 then
-        set(Override_eng_2_lever, FADEC_N1_PID(R_PID_array, N1_target, get(Eng_2_N1)))
+        set(Override_eng_2_lever, controlled_T_R)
     else
+        R_PID_array.Actual_output = 0
         set(Override_eng_2_lever, 0)
     end
 
     -- TODO: Blue dot is autopilot position not the manual throttle
-    set(L_throttle_blue_dot, N1_target)
-    set(R_throttle_blue_dot, N1_target)
+    set(L_throttle_blue_dot, N1_target_L)
+    set(R_throttle_blue_dot, N1_target_R)
 end
