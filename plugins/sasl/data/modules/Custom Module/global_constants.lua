@@ -16,6 +16,10 @@
 -- Short description: This file contains the global constants
 -------------------------------------------------------------------------------
 
+--TIME
+
+YEAR = 2021
+
 --colors
 ECAM_WHITE =  {1.0, 1.0, 1.0}
 ECAM_LINE_GREY = {62/255, 74/255, 91/255}
