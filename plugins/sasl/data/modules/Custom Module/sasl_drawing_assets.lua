@@ -166,7 +166,8 @@ EFB_GROUND_wv    =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textu
 
 EFB_LOAD_bgd =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/overlay.png")
 EFB_LOAD_refuel_button =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/refuel_button.png")
-EFB_LOAD_coumpute_button =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/compute_button.png")
+EFB_LOAD_compute_button =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/compute_button.png")
+EFB_LOAD_load_button =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/load_button.png")
 
 -----------CONFIG------------
 
