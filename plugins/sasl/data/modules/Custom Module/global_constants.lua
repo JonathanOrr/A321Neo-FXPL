@@ -16,8 +16,12 @@
 -- Short description: This file contains the global constants
 -------------------------------------------------------------------------------
 
+--TIME
+
+YEAR = 2021
+
 --colors
-ECAM_WHITE = {1.0, 1.0, 1.0}
+ECAM_WHITE =  {1.0, 1.0, 1.0}
 ECAM_LINE_GREY = {62/255, 74/255, 91/255}
 ECAM_HIGH_GREY = {0.6, 0.6, 0.6}
 ECAM_BLUE = {0.004, 1.0, 1.0}
@@ -38,6 +42,7 @@ UI_BRIGHT_GREY = {0.5, 0.5, 0.5}
 UI_GREEN = {0.10, 1, 0.30}
 UI_YELLOW = {1, 1, 0.30}
 
+EFB_BACKGROUND_COLOUR = {17/255, 24/255, 39/255}
 EFB_WHITE = {1.0, 1.0, 1.0}
 EFB_BLACK = {0.0, 0.0, 0.0}
 EFB_FULL_RED = {1.0, 0, 0}
