@@ -48,7 +48,15 @@ function N1_control(L_PID_array, R_PID_array, reversers)
     local N1_target_L = get_N1_target(get(Cockpit_throttle_lever_L))
     local N1_target_R = get_N1_target(get(Cockpit_throttle_lever_R))
 
-    local L_error = (N1_target_L - get(Eng_1_N1)) * (get(Weather_Sigma) ^ 0.3)
+    local sigma = get(Weather_Sigma)
+    local air_density_coeff = 1
+    if sigma > 1 then
+        air_density_coeff = (sigma-1) ^ 2.9 + 1
+    else
+        air_density_coeff = -(-sigma+1) ^ 2.9 + 1
+    end
+
+    local L_error = (N1_target_L - get(Eng_1_N1)) * air_density_coeff
     local controlled_T_L = SSS_PID_BP_LIM(L_PID_array, L_error)
     
     if get(Engine_1_avail) == 1 then
@@ -58,7 +66,7 @@ function N1_control(L_PID_array, R_PID_array, reversers)
         set(Override_eng_1_lever, 0)
     end
 
-    local R_error = (N1_target_R - get(Eng_2_N1)) * (get(Weather_Sigma) ^ 0.3)
+    local R_error = (N1_target_R - get(Eng_2_N1)) * air_density_coeff
     local controlled_T_R = SSS_PID_BP_LIM(R_PID_array, R_error)
     
     if get(Engine_2_avail) == 1 then

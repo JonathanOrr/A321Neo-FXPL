@@ -313,6 +313,7 @@ Eng_2_reverser_deployment = createGlobalPropertyf("a321neo/dynamics/engines/reve
 Eng_1_Firewall_valve = createGlobalPropertyi("a321neo/dynamics/engines/eng_1_firewall_valve_1", 1, false, true, false) -- 0 open, 1 - closed, 2 : transit - firewall valve
 Eng_2_Firewall_valve = createGlobalPropertyi("a321neo/dynamics/engines/eng_2_firewall_valve_2", 1, false, true, false) -- 0 open, 1 - closed, 2 : transit - firewall valve
 
+Eng_spool_time = globalProperty("sim/aircraft/engine/acf_spooltime_turbine")
 Eng_is_spooling_up  = createGlobalPropertyia("a321neo/dynamics/engines/is_spooling_up", 2)
 
 -- APU

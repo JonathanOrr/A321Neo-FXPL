@@ -233,7 +233,7 @@ function update_levers()
 
     if prev_joy_L ~= L_hw_throttle_curr then
         prev_joy_L = L_hw_throttle_curr
-        set(Cockpit_throttle_lever_L, prev_joy_L )
+        set(Cockpit_throttle_lever_L, prev_joy_L*(thrust_in_reverse and -1 or 1) )
         if prev_joy_L < 0 then
             manual_reverse_L = true
         else
@@ -242,7 +242,7 @@ function update_levers()
     end
     if prev_joy_R ~= R_hw_throttle_curr then
         prev_joy_R = R_hw_throttle_curr
-        set(Cockpit_throttle_lever_R, prev_joy_R)
+        set(Cockpit_throttle_lever_R, prev_joy_R *(thrust_in_reverse and -1 or 1))
         if prev_joy_R < 0 then
             manual_reverse_R = true
         else

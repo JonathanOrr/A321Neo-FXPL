@@ -937,6 +937,10 @@ local function update_n1_mode_and_limits()
     
 end
 
+function update_spooling()
+    set(Eng_spool_time, Math_rescale(19, 6, 101, 1.5, (get(Eng_1_N1)+get(Eng_2_N1))/2))
+end
+
 function update()
     perf_measure_start("engines:update()")
     update_starter_datarefs()
@@ -955,6 +959,7 @@ function update()
 
     update_n1_minimum()
     update_n2()
+    update_spooling()
     update_egt()
     update_ff()
     update_oil_stuffs()
