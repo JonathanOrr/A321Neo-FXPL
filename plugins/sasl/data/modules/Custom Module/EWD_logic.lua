@@ -201,6 +201,8 @@ local left_messages_list = {
     MessageGroup_WAI_L_R_OPEN,
     
     MessageGroup_FWC_FAULT,
+    MessageGroup_BUSS_SPD_ALT_SINGLE,
+    MessageGroup_BUSS_SPD_ALT_DOUBLE,
     
     -- Warnings
     MessageGroup_OVERSPEED,

@@ -1084,3 +1084,122 @@ MessageGroup_IAS_DISCREPANCY = {
     end
 }
 
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: BKUP SPD/ALT ON CAPT(F/O) PFD
+----------------------------------------------------------------------------------------------------
+
+MessageGroup_BUSS_SPD_ALT_SINGLE = {
+
+    shown = false,
+
+    text  = function()
+                return "NAV"
+            end,
+    color = function()
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_1,
+
+    get_failed_n = function()
+        return get(BUSS_Capt_man_enabled) == 1 and "1" or "2"
+    end,
+
+    messages = {
+        {
+            text = function()
+                local x = ""
+                if get(BUSS_Capt_man_enabled) == 1 then
+                    x = "CAPT"
+                else
+                    x = "F/O"
+                end
+                return "    BKUP SPD/ALT ON " .. x .. " PFD"
+            end,
+
+            color = function()
+                return COL_CAUTION
+            end,
+
+            is_active = function()
+              return true
+            end
+
+        },
+        {
+            text = function() return " AP ".. MessageGroup_BUSS_SPD_ALT_SINGLE.get_failed_n() .. "..........DO NOT USE" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return true end
+        },
+        {
+            text = function() return " FD ".. MessageGroup_BUSS_SPD_ALT_SINGLE.get_failed_n() .. "..........DO NOT USE" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return true end
+        }
+
+    },
+
+    is_active = function()
+        return get(BUSS_Capt_man_enabled) + get(BUSS_Fo_man_enabled) == 1
+    end,
+
+    is_inhibited = function()
+        return is_inibithed_in({PHASE_1ST_ENG_TO_PWR, PHASE_ABOVE_80_KTS, PHASE_LIFTOFF, PHASE_TOUCHDOWN})
+    end
+}
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: BKUP SPD/ALT ON CAPT+F/O PFD
+----------------------------------------------------------------------------------------------------
+
+MessageGroup_BUSS_SPD_ALT_DOUBLE = {
+
+    shown = false,
+
+    text  = function()
+                return "NAV"
+            end,
+    color = function()
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_1,
+
+    messages = {
+        {
+            text = function() return "    BKUP SPD/ALT ON CAPT+F/O" end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        },
+        {
+            text = function() return " . IF ALL IAS UNRELIABLE:" end,
+            color = function() return COL_REMARKS end,
+            is_active = function() return true end
+        },
+        {
+            text = function() return "   ADR CHECK PROC...APPLY" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return true end
+        },
+        {
+            text = function() return " . IF >= ONE IAS RELIABLE:" end,
+            color = function() return COL_REMARKS end,
+            is_active = function() return true end
+        },
+        {
+            text = function() return "   RELIABLE AIR DATA..USE" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return true end
+        }
+
+    },
+
+    is_active = function()
+        return get(BUSS_Capt_man_enabled) == 1 and get(BUSS_Fo_man_enabled) == 1
+    end,
+
+    is_inhibited = function()
+        return is_inibithed_in({PHASE_1ST_ENG_TO_PWR, PHASE_ABOVE_80_KTS, PHASE_LIFTOFF, PHASE_TOUCHDOWN})
+    end
+}
