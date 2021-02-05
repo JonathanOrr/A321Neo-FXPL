@@ -41,6 +41,11 @@ function onMouseMove(component, x, y,button, parentX, parentY)
 end
 
 function onMouseDown ( component , x , y , button , parentX , parentY )
+
+    if component.nd_data.config.range > ND_RANGE_ZOOM_2 then
+        return false
+    end
+
     if button == MB_RIGHT then
         if not component.nd_data.plan_mouse_menu_visible then
             component.nd_data.plan_mouse_menu_visible = true
