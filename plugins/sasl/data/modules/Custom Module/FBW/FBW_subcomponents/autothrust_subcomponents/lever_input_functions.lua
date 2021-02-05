@@ -183,7 +183,23 @@ function Toggle_reverse(phase)
 end
 
 local function can_reverse_open(eng)
-    
+
+    -- We need fadec elec power to open the reverser
+    if (eng == 1 and get(Eng_1_FADEC_powered) == 0) or (eng == 2 and get(Eng_2_FADEC_powered) == 0) then
+        return false
+    end
+
+    -- And the fadec must not be completely failed
+    if get(FAILURE_ENG_FADEC_CH1, eng) == 1 and get(FAILURE_ENG_FADEC_CH2, eng) == 1 then
+        return false
+    end
+
+    if (eng == 1 and get(Hydraulic_G_press) < 1000) or (eng == 2 and get(Hydraulic_Y_press) < 1000) then
+        return false
+    end
+
+    -- TODO Reverser failures
+
     -- Ok here we need a de-bouncing behavior: if the aircraft bounces a little bit,
     -- let's keep the reversers open. This is not the real behavior, but it would surprise
     -- a pilot using the manual button. This doesn't apply before bounce or above 10 ft AGL
@@ -193,8 +209,6 @@ local function can_reverse_open(eng)
     if get(Capt_ra_alt_ft) > max_alt_rev then
         max_alt_rev = get(Capt_ra_alt_ft)
     end
-
-    -- TODO FAILURES
 
     return get(Either_Aft_on_ground) == 1 or max_alt_rev < 10
 end

@@ -675,8 +675,17 @@ local function update_startup()
     local windmill_condition_1 = get(IAS) > windmill_min_speed[1]
     local windmill_condition_2 = get(IAS) > windmill_min_speed[2]
 
-    local does_engine_1_can_start_or_crank = get(Engine_1_avail) == 0 and (get(L_bleed_press) > 10 or windmill_condition_1) and fadec_has_elec_power(1)
-    local does_engine_2_can_start_or_crank = get(Engine_2_avail) == 0 and (get(R_bleed_press) > 10 or windmill_condition_2) and fadec_has_elec_power(2)
+    local does_engine_1_can_start_or_crank = get(Engine_1_avail) == 0 and (get(L_bleed_press) > 10 or windmill_condition_1) and get(Eng_1_FADEC_powered) == 1
+    local does_engine_2_can_start_or_crank = get(Engine_2_avail) == 0 and (get(R_bleed_press) > 10 or windmill_condition_2) and get(Eng_2_FADEC_powered) == 1
+
+    if get(FAILURE_ENG_FADEC_CH1, 1) == 0 and get(FAILURE_ENG_FADEC_CH2, 1) == 0 then
+        does_engine_1_can_start_or_crank = false -- No fadec? No start
+    end
+
+    if get(FAILURE_ENG_FADEC_CH1, 2) == 0 and get(FAILURE_ENG_FADEC_CH2, 2) == 0 then
+        does_engine_2_can_start_or_crank = false -- No fadec? No start
+    end
+
 
     set(EWD_engine_cooling, 0, 1)
     set(EWD_engine_cooling, 0, 2)
@@ -691,7 +700,7 @@ local function update_startup()
             if get(Any_wheel_on_ground) == 1 and needs_coling(1) then
                 set(EWD_engine_cooling, 1, 1)
                 perform_cooling(1)
-                
+
                 -- Dual cooling
                 if dual_cooling_switch and needs_coling(2) and get(Engine_2_master_switch) == 0 then
                     perform_cooling(2)
@@ -937,6 +946,11 @@ local function update_n1_mode_and_limits()
     
 end
 
+function update_fadec_status()
+    set(Eng_1_FADEC_powered, fadec_has_elec_power(1) and 1 or 0)
+    set(Eng_2_FADEC_powered, fadec_has_elec_power(2) and 1 or 0)
+end
+
 function update_spooling()
     set(Eng_spool_time, Math_rescale(19, 6, 101, 1.5, (get(Eng_1_N1)+get(Eng_2_N1))/2))
 end
@@ -947,6 +961,8 @@ function update()
     update_buttons_datarefs()
     
     update_avail()
+
+    update_fadec_status()
 
     if get(FLIGHT_TIME) > 0.5 then
         -- This condition is needed because otherwise the startup overrides the values set by the

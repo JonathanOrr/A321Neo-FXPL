@@ -295,6 +295,9 @@ Eng_2_VIB_N1  = createGlobalPropertyf("a321neo/dynamics/engines/eng_2_vib_n1", 0
 Eng_1_VIB_N2  = createGlobalPropertyf("a321neo/dynamics/engines/eng_1_vib_n2", 0, false, true, false)
 Eng_2_VIB_N2  = createGlobalPropertyf("a321neo/dynamics/engines/eng_2_vib_n2", 0, false, true, false)
 
+Eng_1_FADEC_powered = createGlobalPropertyi("a321neo/dynamics/engines/eng_1_fadec_powered", 0, false, true, false) -- do not consider fadec failures
+Eng_2_FADEC_powered = createGlobalPropertyi("a321neo/dynamics/engines/eng_2_fadec_powered", 0, false, true, false) -- do not consider fadec failures
+
 Eng_N1_idle = createGlobalPropertyf("a321neo/dynamics/engines/n1_idle", 1, false, true, false) -- current value (depends on altitude) for the minimum N1
 Eng_Dual_Cooling = createGlobalPropertyf("a321neo/dynamics/engines/dual_cooling", 0, false, true, false) -- Is dual cooling on?
 Eng_Continuous_Ignition = createGlobalPropertyf("a321neo/dynamics/engines/continuous_ignition", 0, false, true, false) -- Is continuous ignition active?
