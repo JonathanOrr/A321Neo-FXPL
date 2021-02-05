@@ -144,7 +144,7 @@ local function update_apu_flap()
 end
 
 local function update_start()
-    if master_switch_status and get(FAILURE_ENG_APU_FAIL) == 0 and not test_in_progress then 
+    if master_switch_status and get(FAILURE_ENG_APU_FAIL) == 0 and not test_in_progress and get(Fire_pb_APU_status) == 0 then 
 
         if start_requested and get(APU_flap) == 1 and get(Apu_avail) == 0 and get(DC_bat_bus_pwrd) == 1 and get(Apu_fuel_source) > 0 then
             set(Apu_start_position, 2)
