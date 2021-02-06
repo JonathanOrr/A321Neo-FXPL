@@ -295,6 +295,9 @@ Eng_2_VIB_N1  = createGlobalPropertyf("a321neo/dynamics/engines/eng_2_vib_n1", 0
 Eng_1_VIB_N2  = createGlobalPropertyf("a321neo/dynamics/engines/eng_1_vib_n2", 0, false, true, false)
 Eng_2_VIB_N2  = createGlobalPropertyf("a321neo/dynamics/engines/eng_2_vib_n2", 0, false, true, false)
 
+Eng_1_FADEC_powered = createGlobalPropertyi("a321neo/dynamics/engines/eng_1_fadec_powered", 0, false, true, false) -- do not consider fadec failures
+Eng_2_FADEC_powered = createGlobalPropertyi("a321neo/dynamics/engines/eng_2_fadec_powered", 0, false, true, false) -- do not consider fadec failures
+
 Eng_N1_idle = createGlobalPropertyf("a321neo/dynamics/engines/n1_idle", 1, false, true, false) -- current value (depends on altitude) for the minimum N1
 Eng_Dual_Cooling = createGlobalPropertyf("a321neo/dynamics/engines/dual_cooling", 0, false, true, false) -- Is dual cooling on?
 Eng_Continuous_Ignition = createGlobalPropertyf("a321neo/dynamics/engines/continuous_ignition", 0, false, true, false) -- Is continuous ignition active?
@@ -313,6 +316,7 @@ Eng_2_reverser_deployment = createGlobalPropertyf("a321neo/dynamics/engines/reve
 Eng_1_Firewall_valve = createGlobalPropertyi("a321neo/dynamics/engines/eng_1_firewall_valve_1", 1, false, true, false) -- 0 open, 1 - closed, 2 : transit - firewall valve
 Eng_2_Firewall_valve = createGlobalPropertyi("a321neo/dynamics/engines/eng_2_firewall_valve_2", 1, false, true, false) -- 0 open, 1 - closed, 2 : transit - firewall valve
 
+Eng_spool_time = globalProperty("sim/aircraft/engine/acf_spooltime_turbine")
 Eng_is_spooling_up  = createGlobalPropertyia("a321neo/dynamics/engines/is_spooling_up", 2)
 
 -- APU
@@ -526,6 +530,7 @@ Wind_layer_3_turbulence = globalProperty("sim/weather/turbulence[2]")
 Wind_layer_1_windshear = globalProperty("sim/weather/shear_speed_kt[0]")
 Wind_layer_2_windshear = globalProperty("sim/weather/shear_speed_kt[1]")
 Wind_layer_3_windshear = globalProperty("sim/weather/shear_speed_kt[2]")
+Weather_Sigma = globalProperty("sim/weather/sigma")
 Alpha = globalProperty("sim/flightmodel/position/alpha")
 Vpath = globalProperty("sim/flightmodel/position/vpath")
 Flightmodel_roll = globalProperty("sim/flightmodel/position/true_phi")
@@ -765,4 +770,4 @@ VOLUME_cabin = createGlobalPropertyf("a321neo/volume/cabin", 1, false, true, fal
 --LOAD VALUES
 LOAD_flapssetting = createGlobalPropertyi("a321neo/efb/load", 1, false, true, false) --1 is 1+F, 2 is 2, 3 is 3
 LOAD_runwaycond = createGlobalPropertyi("a321neo/efb/runwaycond", 0, false, true, false) --0 is dry 1 is wet
-LOAD_CG_pos = createGlobalPropertyf("a321neo/efb/cgpos", 0.5, false, true, false) --1 is fwd, 0 is aft
+LOAD_thrustto = createGlobalPropertyi("a321neo/efb/thrustto", 0, false, true, false) --0 is dry 1 is wet

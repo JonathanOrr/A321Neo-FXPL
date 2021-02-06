@@ -1,7 +1,29 @@
 --example_array = {P_gain, I_time, D_gain, Proportional, Integral_sum, Integral, Derivative, Current_error, Min_error, Max_error}
 AT_PID_arrays = {
-    SSS_L_N1 = {Name = "FADEC L N1", Type = "AT_I_TIME", P_gain = 1.8, I_time = 1.45, D_gain = 0.65, Proportional = 0, Integral_sum = 0, Integral = 0, Derivative = 0, PV = 0, Output = 0, Min_out = 0, Max_out = 1.1, Error_margin = 100},
-    SSS_R_N1 = {Name = "FADEC R N1", Type = "AT_I_TIME", P_gain = 1.8, I_time = 1.45, D_gain = 0.65, Proportional = 0, Integral_sum = 0, Integral = 0, Derivative = 0, PV = 0, Output = 0, Min_out = 0, Max_out = 1.1, Error_margin = 100},
+    SSS_L_N1 = {
+        P_gain = 0.001,
+        I_gain = 0.00425,
+        D_gain = 0.0001,
+        B_gain = 1,
+        Actual_output = 0,
+        Desired_output = 0,
+        Integral_sum = 0,
+        Current_error = 0,
+        Min_out = 0.095,
+        Max_out = 1
+    },
+    SSS_R_N1 = {
+        P_gain = 0.001,
+        I_gain = 0.00425,
+        D_gain = 0.0001,
+        B_gain = 1,
+        Actual_output = 0,
+        Desired_output = 0,
+        Integral_sum = 0,
+        Current_error = 0,
+        Min_out = 0.095,
+        Max_out = 1
+    },
 }
 
 FBW_PID_arrays = {

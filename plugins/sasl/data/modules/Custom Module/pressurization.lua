@@ -72,12 +72,15 @@ local pid_array_cab_alt =
 ----------------------------------------------------------------------------------------------------
 
 set(Override_pressurization, 1)
-local current_cabin_pressure_in_pa = get(Weather_curr_press_flight_level) * 3386.39
+
+-- the starting pressure is the outside pressure (unless cabin altitude over 15k feet)
+current_cabin_pressure_in_pa = math.max(57200, get(Weather_curr_press_flight_level) * 3386.39)
 local data_current_cabin_pressure_in_pa = { -- Filter
     x = current_cabin_pressure_in_pa,
     cut_frequency = 10
 }
-local current_cabin_altitude = math.min(7000, get(Capt_baro_alt_ft))
+
+current_cabin_altitude = math.min(7000, get(Capt_baro_alt_ft))
 
 function onAirportLoaded()
     current_cabin_altitude = math.min(7000, get(Capt_baro_alt_ft))

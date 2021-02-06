@@ -126,7 +126,7 @@ function update_chrono()
 end
 
 function update()
-    clock_brightness = Set_anim_value(clock_brightness, get(DC_ess_bus_pwrd), 0, 1, 2.5)
+    clock_brightness = Set_anim_value(clock_brightness, get(DC_ess_bus_pwrd), 0, 1, 10)
     update_anim()
     update_et()
     update_chrono()
@@ -164,37 +164,25 @@ local function get_gps_data()
     end
 end
 
-function draw()
+local function draw_backlight()
+    Draw_blue_LED_backlight(size[1]/2 - 80, size[2]/2+26, 130, 46, 0.5, 1, clock_brightness)
+    Draw_blue_LED_backlight(size[1]/2 - 80, size[2]/2-24, 170, 46, 0.5, 1, clock_brightness)
+    Draw_blue_LED_backlight(size[1]/2 - 80, size[2]/2-80, 130, 46, 0.5, 1, clock_brightness)
+end
 
-    Draw_blue_LED_backlight(size[1]/2 - 61, size[2]/2+56, 122, 46, 0.5, 1, clock_brightness)
-    Draw_blue_LED_backlight(size[1]/2 - 82, size[2]/2-24, 164, 46, 0.5, 1, clock_brightness)
-    Draw_blue_LED_backlight(size[1]/2 - 60, size[2]/2-104, 120, 46, 0.5, 1, clock_brightness)
+local function draw_chr(is_visible, min, sec)
+    Draw_white_LED_num_and_letter(size[1]/2 - 46, size[2]/2+32, is_visible and min or "", 2, 55, TEXT_ALIGN_CENTER, 0.2, 1, clock_brightness)
+    Draw_white_LED_num_and_letter(size[1]/2 + 12, size[2]/2+32, is_visible and sec or "", 2, 55, TEXT_ALIGN_CENTER, 0.2, 1, clock_brightness)
+    Draw_white_LED_num_and_letter(size[1]/2 - 16, size[2]/2+32, is_visible and ":" or "", 0, 55, TEXT_ALIGN_CENTER, 0.2, 1, clock_brightness)
+end
 
-    Draw_white_LED_num_and_letter(size[1]/2 - 28, 184, "", 2, 55, TEXT_ALIGN_CENTER, 0.2, 1, clock_brightness)
-    Draw_white_LED_num_and_letter(size[1]/2 + 28, 184, "", 2, 55, TEXT_ALIGN_CENTER, 0.2, 1, clock_brightness)
-    Draw_white_LED_num_and_letter(62, 24, "", 2, 55, TEXT_ALIGN_CENTER, 0.2, 1, clock_brightness)
-    Draw_white_LED_num_and_letter(120, 24, "", 2, 55, TEXT_ALIGN_CENTER, 0.2, 1, clock_brightness)
-    Draw_white_LED_num_and_letter(36, 102, "", 2, 55, TEXT_ALIGN_CENTER, 0.2, 1, clock_brightness)
-    Draw_white_LED_num_and_letter(93, 102, "", 2, 55, TEXT_ALIGN_CENTER, 0.2, 1, clock_brightness)
-    Draw_white_LED_num_and_letter(147, 105, "", 2, 45, TEXT_ALIGN_CENTER, 0.2, 1, clock_brightness)
-    if get(DC_ess_bus_pwrd) == 0 and clock_brightness == 0 then
-        return
-    end
+local function draw_et(is_visible, hr, min)
+    Draw_white_LED_num_and_letter(size[1]/2 - 46, size[2]/2-73, is_visible and hr or "", 2, 55, TEXT_ALIGN_CENTER, 0.2, 1, clock_brightness)
+    Draw_white_LED_num_and_letter(size[1]/2 + 12, size[2]/2-73, is_visible and min or "", 2, 55, TEXT_ALIGN_CENTER, 0.2, 1, clock_brightness)
+    Draw_white_LED_num_and_letter(size[1]/2 - 16, size[2]/2-73, is_visible and ":" or "", 0, 55, TEXT_ALIGN_CENTER, 0.2, 1, clock_brightness)
+end
 
-    if et_time > 0 then
-        local minutes = fz(math.floor(et_time / 60) % 60)
-        local hours   = fz(math.floor(et_time / 3600) % 60)
-        Draw_white_LED_num_and_letter(62, 24, hours, 2, 55, TEXT_ALIGN_CENTER, 0.2, 1, clock_brightness)
-        Draw_white_LED_num_and_letter(120, 24, minutes, 2, 55, TEXT_ALIGN_CENTER, 0.2, 1, clock_brightness)
-        sasl.gl.drawText(Font_AirbusDUL, 91, 31, ":", 35, false, false, TEXT_ALIGN_CENTER, {1, 1, 1, clock_brightness})
-    end
-
-    if chrono_cumul > 0 then
-        Draw_white_LED_num_and_letter(size[1]/2 - 28, 184, fz(math.floor(chrono_cumul/60)%99), 2, 55, TEXT_ALIGN_CENTER, 0.2, 1, clock_brightness)
-        Draw_white_LED_num_and_letter(size[1]/2 + 28, 184, fz(math.floor(chrono_cumul)%60), 2, 55, TEXT_ALIGN_CENTER, 0.2, 1, clock_brightness)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, 192, ":", 35, false, false, TEXT_ALIGN_CENTER, {1, 1, 1, clock_brightness})
-    end
-
+local function draw_clock()
     local clock_str = ""
     if chrono_source == CHRONO_SOURCE_GPS then
         clock_str = get_gps_data()
@@ -208,13 +196,34 @@ function draw()
         end
     end
 
+    local is_colon_visible =  not clock_is_showing_date and clock_str ~= "------" 
+    Draw_white_LED_num_and_letter(69, 102, is_colon_visible and ":" or "", 0, 55, TEXT_ALIGN_CENTER, 0.2, 1, clock_brightness)
+
     if get(TIME) % 0.75 < 0.5 or chrono_source ~= CHRONO_SOURCE_SET or (what_is_changing ~= 2 and what_is_changing ~= 5) then
-        Draw_white_LED_num_and_letter(36, 102, string.sub(clock_str,1,2), 2, 55, TEXT_ALIGN_CENTER, 0.2, 1, clock_brightness)
+        Draw_white_LED_num_and_letter(40, 102, string.sub(clock_str,1,2), 2, 55, TEXT_ALIGN_CENTER, 0.2, 1, clock_brightness)
     end
     if get(TIME) % 0.75 < 0.5 or chrono_source ~= CHRONO_SOURCE_SET or (what_is_changing ~= 1 and what_is_changing ~= 4) then
-        Draw_white_LED_num_and_letter(93, 102, string.sub(clock_str,3,4), 2, 55, TEXT_ALIGN_CENTER, 0.2, 1, clock_brightness)
+        Draw_white_LED_num_and_letter(97, 102, string.sub(clock_str,3,4), 2, 55, TEXT_ALIGN_CENTER, 0.2, 1, clock_brightness)
     end
     if get(TIME) % 0.75 < 0.5 or chrono_source ~= CHRONO_SOURCE_SET or (what_is_changing ~= 3) then
-        Draw_white_LED_num_and_letter(147, 105, string.sub(clock_str,5,6), 2, 45, TEXT_ALIGN_CENTER, 0.2, 1, clock_brightness)
+        Draw_white_LED_num_and_letter(151, 105, string.sub(clock_str,5,6), 2, 45, TEXT_ALIGN_CENTER, 0.2, 1, clock_brightness)
     end
+end
+
+function draw()
+
+    draw_backlight()
+
+    -- ET
+    local min = fz(math.floor(et_time / 60) % 60)
+    local hr  = fz(math.floor(et_time / 3600) % 60)
+    draw_et(et_time > 0, hr, min)
+
+    -- CHRONO
+    local min = fz(math.floor(chrono_cumul/60)%99)
+    local sec = fz(math.floor(chrono_cumul)%60)
+    draw_chr(chrono_cumul > 0, min, sec)
+
+    -- CLOCK
+    draw_clock()
 end
