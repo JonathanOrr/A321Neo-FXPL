@@ -1,9 +1,11 @@
 local vertical_control_var_table = {
     Q_input = 0,
+    C_star_input = 0,
 
     Filtered_Q = 0,
     Filtered_Q_err = 0,
     Filtered_ias = 0,
+    Filtered_AoA = 0,
 
     AoA_SP = 0,
 
@@ -27,6 +29,10 @@ local lateral_control_filter_table = {
     IAS_filter_table = {
         x = adirs_get_avg_ias(),
         cut_frequency = 2,
+    },
+    AoA_filter_table = {
+        x = 0,
+        cut_frequency = 1,
     }
 }
 
@@ -46,12 +52,12 @@ local input_limitations = {
         local pitch = adirs_get_avg_pitch()
         local max_pitch = 30
         local min_pitch = -15
-        local degrade_margin = 8
+        local degrade_margin = get(Any_wheel_on_ground) == 1 and 2.5 or 8
         local max_return_rate = 2
 
         --tail strike protection
-        local tailstrike_pitch = get(Either_Aft_on_ground) == 1 and 9.7 or 11.2
-        max_pitch = Math_rescale(0, Math_rescale(3/4, tailstrike_pitch, 1, 30, get(Augmented_pitch)), 20, 30, get(Capt_ra_alt_ft))
+        local tailstrike_pitch = 9.7
+        max_pitch = Math_rescale(0, Math_rescale(3/4, tailstrike_pitch, 1, 30, get(Augmented_pitch)), 15, 30, get(Capt_ra_alt_ft))
 
         --check for pitch exceedence
         local d_limitation = Math_rescale(min_pitch - degrade_margin, 2, min_pitch + degrade_margin, 0, pitch)
@@ -61,14 +67,14 @@ local input_limitations = {
         local d_limit_table = {
             {0, Q},
             {1, math.max(0, Q)},
-            {2, max_return_rate},
+            {2, math.max(Q, max_return_rate)},
         }
         local Q_limited = Table_interpolate(d_limit_table, d_limitation)
 
         local u_limit_table = {
             {0, Q_limited},
             {1, math.min(Q_limited, 0)},
-            {2, -max_return_rate},
+            {2, math.min(Q_limited, -max_return_rate)},
         }
         Q_limited = Table_interpolate(u_limit_table, u_limitation)
 
@@ -76,11 +82,18 @@ local input_limitations = {
     end,
 
     AoA = function (x, Q, var_table)
+        --exit if any gears on ground--
+        if get(Any_wheel_on_ground) == 1 then
+            return Q
+        end
+
         --properties
+        local clamping_margin = 5--starts to degrade Q limit
         local entry_margin = 1
-        local time_to_move_demand = 2.5
+        local time_to_move_demand = 3.5
+        local max_rotation_Q = 6 * math.abs(math.cos(math.rad(adirs_get_avg_roll())))
         local max_Q = 3
-        local degrade_margin = 0.8
+        local degrade_margin = 2
 
         --set alpha demand target
         local target_aoa = Math_rescale(0, get(Aprot_AoA), 1, get(Amax_AoA), x)
@@ -88,14 +101,19 @@ local input_limitations = {
         var_table.AoA_SP = Math_clamp(var_table.AoA_SP, get(Aprot_AoA), get(Amax_AoA))
 
         --demand Q to reach Alpha--
-        local alpha_demand_Q = Math_rescale(-degrade_margin, -max_Q, degrade_margin, max_Q, var_table.AoA_SP - adirs_get_avg_aoa())
+        local alpha_demand_Q = Math_rescale(-degrade_margin, -max_Q, degrade_margin, max_Q, var_table.AoA_SP - var_table.Filtered_AoA)
 
         --blend ratio between the inputed Q and the alpha demand Q--
-        local blend_ratio = Math_rescale(get(Aprot_AoA) - entry_margin, 0, get(Aprot_AoA), 1, adirs_get_avg_aoa())
+        local blend_ratio = Math_rescale(get(Aprot_AoA) - entry_margin, 0, get(Aprot_AoA), 1, var_table.Filtered_AoA)
         blend_ratio = Math_rescale(-0.5, 0, 0, blend_ratio, x)
 
+        --adjust upper clamp limit
+        local upper_Q_clamp = Math_rescale(0, max_Q, clamping_margin, max_rotation_Q, var_table.AoA_SP - var_table.Filtered_AoA)
+        --clamped entered Q--
+        local clamped_Q = Math_clamp_higher(Q, upper_Q_clamp)
+
         --rescale into into Q and output--
-        return Math_rescale(0, Q, 1, alpha_demand_Q, blend_ratio)
+        return Math_rescale(0, clamped_Q, 1, alpha_demand_Q, blend_ratio)
     end,
 
     Vmax = function (x)
@@ -105,9 +123,12 @@ local input_limitations = {
 
 --INPUT INTERPRETATION--------------------------------------------------------------------------------------
 local get_vertical_input = {
-    Rotation = function (x)
+    Rotation = function (x, var_table)
         --rescale input--
-        local output_Q = 6 * x
+        local output_Q = 6 * math.abs(math.cos(math.rad(adirs_get_avg_roll()))) * x
+
+        --AoA demand
+        output_Q = input_limitations.AoA(x, output_Q, var_table)
 
         --pitch protection--
         output_Q = input_limitations.Pitch(output_Q)
@@ -181,22 +202,25 @@ local get_vertical_input = {
 }
 
 --input swapping--------------------------------------------------------------------------------------------
-local function input_swapping(var_table)
-    var_table.Q_input = get_vertical_input.Rotation(get(Augmented_pitch))
+local function input_handling(var_table)
+    var_table.Q_input = get_vertical_input.Rotation(get(Augmented_pitch), var_table) * get(FBW_vertical_rotation_mode_ratio) + get_vertical_input.Rotation(get(Augmented_pitch), var_table) * get(FBW_vertical_flight_mode_ratio) + get_vertical_input.Flare(get(Augmented_pitch)) * get(FBW_vertical_flare_mode_ratio)
 end
 
 --FILTERING-------------------------------------------------------------------------------------------------
 local function filter_values(var_table, filter_table)
     --FILTERING--
-    --filter the PV
+    --filter the Q PV
     filter_table.Q_pv_filter_table.x = get(True_pitch_rate)
     var_table.Filtered_Q = low_pass_filter(filter_table.Q_pv_filter_table)
-    --filter the error
+    --filter the Q error
     filter_table.Q_err_filter_table.x = var_table.Q_input - get(True_pitch_rate)
     var_table.Filtered_Q_err = low_pass_filter(filter_table.Q_err_filter_table)
     --filter the scheduling variable
     filter_table.IAS_filter_table.x = adirs_get_avg_ias()
     var_table.Filtered_ias = low_pass_filter(filter_table.IAS_filter_table)
+    --filter the AoA
+    filter_table.AoA_filter_table.x = adirs_get_avg_aoa()
+    var_table.Filtered_AoA = low_pass_filter(filter_table.AoA_filter_table)
 end
 
 --MODE AUGMENTATIONS----------------------------------------------------------------------------------------
@@ -207,8 +231,12 @@ local vertical_augmentation = {
             return
         end
 
+        --Rotation mode on ground with limited integration--
+        if get(Front_gear_on_ground) == 1 then
+            FBW_PID_arrays.FBW_PITCH_RATE_PID_array.Integral = Math_clamp(FBW_PID_arrays.FBW_PITCH_RATE_PID_array.Integral, 0, 0.25)
+        end
+
         var_table.rotation_mode_controller_output = FBW_PID_BP(FBW_PID_arrays.FBW_PITCH_RATE_PID_array, var_table.Filtered_Q_err, var_table.Filtered_Q, var_table.Filtered_ias)
-        FBW_PID_arrays.FBW_PITCH_RATE_PID_array.Actual_output = get(Pitch_artstab) * (1 - BoolToNum(get(L_elevator_avail) + get(R_elevator_avail) == 0))
     end,
     Flight_mode = function (var_table)
         if get(FBW_vertical_flight_mode_ratio) == 0 then
@@ -217,24 +245,35 @@ local vertical_augmentation = {
         end
 
         var_table.flight_mode_controller_output = FBW_PID_BP(FBW_PID_arrays.FBW_PITCH_RATE_PID_array, var_table.Filtered_Q_err, var_table.Filtered_Q, var_table.Filtered_ias)
-        FBW_PID_arrays.FBW_PITCH_RATE_PID_array.Actual_output = get(Pitch_artstab) * (1 - BoolToNum(get(L_elevator_avail) + get(R_elevator_avail) == 0))
     end,
     Flare_mode = function (var_table)
+        --not in flare mode or not in normal law
         if get(FBW_vertical_flare_mode_ratio) == 0 then
             var_table.flare_mode_controller_output = 0
             return
         end
+        if get(FBW_vertical_law) == FBW_DIRECT_LAW then
+            var_table.flare_mode_controller_output = get(Augmented_pitch)
+            return
+        end
 
         var_table.flare_mode_controller_output = FBW_PID_BP(FBW_PID_arrays.FBW_PITCH_RATE_PID_array, var_table.Filtered_Q_err, var_table.Filtered_Q, var_table.Filtered_ias)
-        FBW_PID_arrays.FBW_PITCH_RATE_PID_array.Actual_output = get(Pitch_artstab) * (1 - BoolToNum(get(L_elevator_avail) + get(R_elevator_avail) == 0))
     end,
 }
 
-local function FBW_vertical_mode_blending(var_table)
-    if get(FBW_vertical_rotation_mode_ratio) == 0 and get(FBW_vertical_flight_mode_ratio) == 0 and get(FBW_vertical_flare_mode_ratio) == 0 then
+local function enforce_bumpless_transfers()
+    --Q controller--
+    if get(FBW_vertical_law) == FBW_DIRECT_LAW then
         FBW_PID_arrays.FBW_PITCH_RATE_PID_array.Integral = 0
+        return
     end
+    if get(FBW_vertical_rotation_mode_ratio) == 0 and get(FBW_vertical_flight_mode_ratio) == 0 and get(FBW_vertical_flare_mode_ratio) == 0  then
+        FBW_PID_arrays.FBW_PITCH_RATE_PID_array.Integral = 0
+        return
+    end
+end
 
+local function FBW_vertical_mode_blending(var_table)
     set(
         Pitch_artstab,
         Math_clamp(
@@ -244,13 +283,19 @@ local function FBW_vertical_mode_blending(var_table)
             + var_table.flare_mode_controller_output    * get(FBW_vertical_flare_mode_ratio)
         , -1, 1)
     )
+
+    --BP Q controller--
+    FBW_PID_arrays.FBW_PITCH_RATE_PID_array.Actual_output = get(Pitch_artstab)
 end
 
 function update()
-    input_swapping(vertical_control_var_table)
+    input_handling(vertical_control_var_table)
     filter_values(vertical_control_var_table, lateral_control_filter_table)
+
     vertical_augmentation.Rotation_mode(vertical_control_var_table)
     vertical_augmentation.Flight_mode(vertical_control_var_table)
     vertical_augmentation.Flare_mode(vertical_control_var_table)
+
+    enforce_bumpless_transfers()
     FBW_vertical_mode_blending(vertical_control_var_table)
 end

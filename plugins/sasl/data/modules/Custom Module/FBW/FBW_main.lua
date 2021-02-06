@@ -49,6 +49,7 @@ function onAirportLoaded()
 end
 
 components = {
+    law_reconfiguration {},
     autothrust {},
     flight_controls {},
     limits_calculations {},
@@ -92,7 +93,6 @@ function update()
     --system subcomponents
     Fctl_computuers_status_computation(Fctl_computers_var_table)
     Compute_fctl_button_states()
-    FBW_law_reconfiguration(FBW_law_var_table)
 
     --Flight mode blending
     if get(FBW_total_control_law) == FBW_NORMAL_LAW then

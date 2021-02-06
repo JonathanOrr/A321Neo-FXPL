@@ -30,7 +30,7 @@ local lateral_control_filter_table = {
 local function limit_input(x, bank, neutral_bank, max_bank)
     --properties
     local degrade_margin = 15
-    local max_return_rate = 10
+    local max_return_rate = 7.5
     local max_roll_rate = 15
 
     --inputs
@@ -47,14 +47,14 @@ local function limit_input(x, bank, neutral_bank, max_bank)
     local l_limit_table = {
         {0, x},
         {1, math.max(0, x)},
-        {2, max_return_rate / max_roll_rate},
+        {2, math.max(max_return_rate / max_roll_rate, x)},
     }
     local x_limited = Table_interpolate(l_limit_table, l_limitation)
 
     local r_limit_table = {
         {0, x_limited},
         {1, math.min(x_limited, 0)},
-        {2, -max_return_rate / max_roll_rate},
+        {2, math.min(x_limited, -max_return_rate / max_roll_rate)},
     }
     x_limited = Table_interpolate(r_limit_table, r_limitation)
 
@@ -63,7 +63,7 @@ end
 
 local function lateral_input_and_protection(var_table)
     --properties
-    local bank_angle_speed = 8
+    local bank_angle_speed = 7.5
 
     --check AoA bank angle--
     if adirs_get_avg_aoa() > get(Aprot_AoA) then
@@ -123,8 +123,10 @@ end
 local function FBW_lateral_mode_blending(var_table)
     set(
         Roll_artstab,
-        get(Augmented_roll)         * get(FBW_lateral_ground_mode_ratio) +
-        var_table.controller_output * get(FBW_lateral_flight_mode_ratio)
+        Math_clamp(
+            get(Augmented_roll)         * get(FBW_lateral_ground_mode_ratio) +
+            var_table.controller_output * get(FBW_lateral_flight_mode_ratio),
+        -1, 1)
     )
 end
 

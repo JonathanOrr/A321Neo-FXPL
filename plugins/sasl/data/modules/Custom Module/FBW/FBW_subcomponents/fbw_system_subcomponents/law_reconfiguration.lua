@@ -270,3 +270,22 @@ function FBW_law_reconfiguration(var_table)
         print("------------------------------------------------------------------------------------------")
     end
 end
+
+--load up resets-- [so the aircraft does go into degraded laws when you don't want it to]
+function onPlaneLoaded()
+    FBW_law_var_table.in_air_timer = 0
+    FBW_law_var_table.fac_1_reset_required = 0
+    FBW_law_var_table.abnormal_elac_reset_required = 0
+    FBW_law_var_table.abnormal_fac_reset_required = 0
+end
+function onAirportLoaded()
+    FBW_law_var_table.in_air_timer = 0
+    FBW_law_var_table.fac_1_reset_required = 0
+    FBW_law_var_table.abnormal_elac_reset_required = 0
+    FBW_law_var_table.abnormal_fac_reset_required = 0
+end
+
+--run functions--
+function update()
+    FBW_law_reconfiguration(FBW_law_var_table)
+end
