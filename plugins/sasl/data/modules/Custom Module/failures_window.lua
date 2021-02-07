@@ -92,8 +92,8 @@ local failures_data = {
             {name="STPORT CAPT\nHEAT FAIL", status=false, dataref=FAILURE_AI_SP_CAPT },
             {name="STPORT F/O\nHEAT FAIL", status=false, dataref=FAILURE_AI_SP_FO },
             {name="STPORT STDB\nHEAT FAIL", status=false, dataref=FAILURE_AI_SP_STDBY },
-            {name="AOA CAPT\nHEAT FAIL", status=false, dataref=FAILURE_AI_AOA_FO },
-            {name="AOA F/O\nHEAT FAIL", status=false, dataref=FAILURE_AI_PITOT_FO },
+            {name="AOA CAPT\nHEAT FAIL", status=false, dataref=FAILURE_AI_AOA_CAPT },
+            {name="AOA F/O\nHEAT FAIL", status=false, dataref=FAILURE_AI_AOA_FO },
             {name="AOA STDBY\nHEAT FAIL", status=false, dataref=FAILURE_AI_AOA_STDBY },
             {name="TAT CAPT\nHEAT FAIL", status=false, dataref=FAILURE_AI_TAT_CAPT },
             {name="TAT F/O\nHEAT FAIL", status=false, dataref=FAILURE_AI_TAT_FO },
@@ -101,8 +101,8 @@ local failures_data = {
             {name="ENG 2\nVALVE STUCK", status=false, dataref=FAILURE_AI_Eng2_valve_stuck },
             {name="WING L\nVALVE STUCK", status=false, dataref=FAILURE_AI_Wing_L_valve_stuck },
             {name="WING R\nVALVE STUCK", status=false, dataref=FAILURE_AI_Wing_R_valve_stuck },
-            {name="WINDOW L\nHEAT FAIL", status=false, dataref=FAILURE_AI_Window_Heat_L },
-            {name="WINDOW R\nHEAT FAIL", status=false, dataref=FAILURE_AI_Window_Heat_R }
+            {name="WINDSHIELD L\nHEAT FAIL", status=false, dataref=FAILURE_AI_Window_Heat_L },
+            {name="WINDSHIELD R\nHEAT FAIL", status=false, dataref=FAILURE_AI_Window_Heat_R }
         }
     },
     {
