@@ -32,7 +32,7 @@ local lateral_control_filter_table = {
     },
     AoA_filter_table = {
         x = 0,
-        cut_frequency = 1,
+        cut_frequency = 0.25,
     }
 }
 

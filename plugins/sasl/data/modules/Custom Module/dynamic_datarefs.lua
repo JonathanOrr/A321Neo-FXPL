@@ -540,6 +540,9 @@ Flightmodel_mag_heading = globalProperty("sim/flightmodel/position/mag_psi")
 Total_vertical_g_load = globalProperty("sim/flightmodel/forces/g_nrml")
 Total_lateral_g_load = globalProperty("sim/flightmodel/forces/g_side")
 Total_long_g_load = globalProperty("sim/flightmodel/forces/g_axil")
+Filtered_avg_AoA =  createGlobalPropertyf("a321neo/dynamics/FBW/aerodynamics/filtered_avg_aoa", 0, false, true, false)
+Filtered_capt_AoA = createGlobalPropertyf("a321neo/dynamics/FBW/aerodynamics/filtered_capt_AoA", 0, false, true, false)
+Filtered_fo_AoA = 	createGlobalPropertyf("a321neo/dynamics/FBW/aerodynamics/filtered_fo_AoA", 0, false, true, false)
 Vpath_pitch_rate = createGlobalPropertyf("a321neo/dynamics/FBW/aerodynamics/vpath_Q", 0, false, true, false)
 True_roll_rate = createGlobalPropertyf("a321neo/dynamics/FBW/aerodynamics/true_P", 0, false, true, false)--true roll rate(in relation to the previous reference frame instead of the flight path)
 True_pitch_rate = createGlobalPropertyf("a321neo/dynamics/FBW/aerodynamics/true_Q", 0, false, true, false)--true pitch rate(in relation to the previous reference frame instead of the flight path)
@@ -625,6 +628,7 @@ Resetting_rudder_trim = createGlobalPropertyi("a321neo/dynamics/FBW/controls/res
 Augmented_rudder_angle = createGlobalPropertyf("a321neo/dynamics/FBW/controls/augmented_rudder_angle", 0, false, true, false)--the angle of deviation from the position of the rudder trim angle
 Rudder = globalProperty("sim/flightmodel/controls/vstab1_rud1def")--rudder 30 deg left -30 deg right
 Rudder_travel_lim = createGlobalPropertyf("a321neo/dynamics/FBW/control_limitations/rudder_travel_limit", 25, false, true, false)--25 degrees in augmented mode, 30 degrees in mechanical mode
+Max_SI_demand_lim = createGlobalPropertyf("a321neo/dynamics/FBW/control_limitations/max_SI_demand_lim", 25, false, true, false)--from 15 degrees to 2 degrees
 --surface availablility
 L_aileron_avail =   createGlobalPropertyi("a321neo/dynamics/FBW/surface_availability/l_aileron_avail", 1, false, true, false)
 R_aileron_avail =   createGlobalPropertyi("a321neo/dynamics/FBW/surface_availability/r_aileron_avail", 1, false, true, false)

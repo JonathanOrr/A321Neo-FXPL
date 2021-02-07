@@ -130,13 +130,13 @@ local function draw_BUSS(PFD_table)
     PFD_table.BUSS_update_timer = PFD_table.BUSS_update_timer + get(DELTA_TIME)
 
     if PFD_table.BUSS_update_timer >= update_time then
-        PFD_table.BUSS_vsw_pos = Table_extrapolate(AoA_anim_table, adirs_get_aoa(PFD_table.Screen_ID))
+        PFD_table.BUSS_vsw_pos = Table_extrapolate(AoA_anim_table, get(PFD_table.AoA))
 
         local taget_anim_table = {
             {get(BUSS_VFE_norm_AoA), size[2]/2-129 + PFD_table.BUSS_vsw_pos},
             {get(BUSS_VLS_AoA),      size[2]/2-189 + PFD_table.BUSS_vsw_pos},
         }
-        PFD_table.BUSS_target_pos = Table_extrapolate(taget_anim_table, 4.5)
+        PFD_table.BUSS_target_pos = Math_clamp(Table_extrapolate(taget_anim_table, 4.5), size[2]/2-244, size[2]/2+229)
 
         PFD_table.BUSS_update_timer = 0
     end
@@ -155,11 +155,12 @@ local function draw_BUSS(PFD_table)
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-352.5, size[2]/2-244 + PFD_table.BUSS_vsw_pos - 20 - 30, "SLOW", 28, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
     sasl.gl.resetClipArea ()
 
+    --green AoA target
+    SASL_draw_img_ycenter_aligned(PFD_spd_target, size[1]/2-315, PFD_table.BUSS_target_pos, 33, 42, ECAM_GREEN)
+
     --needle
     sasl.gl.drawRectangle(size[1]/2-400, size[2]/2-10, 55, 6, PFD_YELLOW)
     sasl.gl.drawTexture(PFD_spd_needle, size[1]/2-345, size[2]/2-18, 56, 21, PFD_YELLOW)
-
-    SASL_draw_img_ycenter_aligned(PFD_spd_target, size[1]/2-315, PFD_table.BUSS_target_pos, 33, 42, ECAM_GREEN)
 end
 
 local function draw_decel_info(PFD_table)

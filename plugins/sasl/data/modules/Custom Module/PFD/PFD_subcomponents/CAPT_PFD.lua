@@ -14,7 +14,7 @@ fbo = true
 
 local capt_PFD_table = {
     Screen_ID = PFD_CAPT,
-    Opposite_screen_IS = PFD_FO,
+    Opposite_screen_ID = PFD_FO,
     NAV_1_hz = NAV_1_freq_hz,
     NAV_2_hz = NAV_2_freq_hz,
     NAVDATA_update_timer = 0,
@@ -57,6 +57,7 @@ local capt_PFD_table = {
     PFD_brightness = Capt_PFD_brightness_act,
     RA_ALT = Capt_ra_alt_ft,
     VS = PFD_Capt_VS,
+    AoA = Filtered_capt_AoA,
     Corresponding_FAC_status = FAC_1_status,
     Opposite_FAC_status = FAC_2_status,
     Vmax_prot_spd = VMAX_prot,

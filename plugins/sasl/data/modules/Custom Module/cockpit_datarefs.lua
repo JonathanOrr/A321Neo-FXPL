@@ -465,7 +465,6 @@ ND_Fo_Terrain   = createGlobalPropertyi("a321neo/cockpit/nd/terrain_fo", 0, fals
 Current_heading = globalProperty("sim/cockpit2/gauges/indicators/heading_AHARS_deg_mag_pilot")
 Ground_track = globalProperty("sim/cockpit2/gauges/indicators/ground_track_mag_pilot")
 VVI = globalProperty("sim/cockpit2/gauges/indicators/vvi_fpm_pilot")
-Ground_track_delta = createGlobalPropertyf("a321neo/cockpit/PFD/ground_track_delta", 0, false, true, false)
 
 --AUTOFLT--
 AUTOFLT_SPD = createGlobalPropertyf("a321neo/cockpit/AUTOFLT/speed", 0, false, true, false)

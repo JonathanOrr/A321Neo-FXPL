@@ -1,6 +1,21 @@
 include("FBW_subcomponents/flight_ctl_subcomponents/lateral_ctl.lua")
 include("ADIRS_data_source.lua")
 
+local aoa_filtering_table = {
+    avg_aoa = {
+    x = 0,
+    cut_frequency = 0.1,
+    },
+    capt_aoa = {
+        x = 0,
+        cut_frequency = 0.1,
+    },
+    fo_aoa = {
+        x = 0,
+        cut_frequency = 0.1,
+    },
+}
+
 local in_air_timer = 0
 local alpha_speed_update_time_s = 0.15
 local alpha_speed_update_timer = 0
@@ -47,12 +62,12 @@ local alpha_floor_alphas = {
 }
 
 local alpha_max_alphas = {
-    10.5,
-    16.5,
-    16.5,
-    16.5,
-    16.0,
-    16.0
+    10,
+    16,
+    16,
+    16,
+    15,
+    15
 }
 
 --custom functions
@@ -299,8 +314,22 @@ local function STALL_STALL()
     end
 end
 
+local function filter_AoA()--to smooth out the AoA so that the info is usable
+    --filter the AoA
+    aoa_filtering_table.avg_aoa.x = adirs_get_avg_aoa()
+    set(Filtered_avg_AoA, low_pass_filter(aoa_filtering_table.avg_aoa))
+
+    --filter display AoA for readable purposes
+    aoa_filtering_table.capt_aoa.x = adirs_get_aoa(PFD_CAPT)
+    set(Filtered_capt_AoA, low_pass_filter(aoa_filtering_table.capt_aoa))
+    aoa_filtering_table.fo_aoa.x = adirs_get_aoa(PFD_FO)
+    set(Filtered_fo_AoA, low_pass_filter(aoa_filtering_table.fo_aoa))
+end
+
 --calculate flight characteristics values
 function update()
+    filter_AoA()
+
     update_VMAX_prot()
     update_VMAX()
     update_VFE()
@@ -333,11 +362,11 @@ function update()
         update_VLS()
 
         if in_air_timer >= 5 then
-            set(Vaprot_vsw, Math_clamp_higher(adirs_get_avg_ias() * math.sqrt(Math_clamp_lower((get(Alpha) - get(A0_AoA)) / (get(Aprot_AoA) - get(A0_AoA)), 0)), get(VMAX)))
+            set(Vaprot_vsw, Math_clamp_higher(adirs_get_avg_ias() * math.sqrt(Math_clamp_lower((get(Filtered_avg_AoA) - get(A0_AoA)) / (get(Aprot_AoA) - get(A0_AoA)), 0)), get(VMAX)))
         else
-            set(Vaprot_vsw, Math_clamp_higher(adirs_get_avg_ias() * math.sqrt(Math_clamp_lower((get(Alpha) - get(A0_AoA)) / (get(Amax_AoA) - get(A0_AoA)), 0)), get(VMAX)))
+            set(Vaprot_vsw, Math_clamp_higher(adirs_get_avg_ias() * math.sqrt(Math_clamp_lower((get(Filtered_avg_AoA) - get(A0_AoA)) / (get(Amax_AoA) - get(A0_AoA)), 0)), get(VMAX)))
         end
-        set(Valpha_MAX, Math_clamp_higher(adirs_get_avg_ias() * math.sqrt(Math_clamp_lower((get(Alpha) - get(A0_AoA)) / (get(Amax_AoA) - get(A0_AoA)), 0)), get(VMAX)))
+        set(Valpha_MAX, Math_clamp_higher(adirs_get_avg_ias() * math.sqrt(Math_clamp_lower((get(Filtered_avg_AoA) - get(A0_AoA)) / (get(Amax_AoA) - get(A0_AoA)), 0)), get(VMAX)))
 
         --reset timer
         alpha_speed_update_timer = 0

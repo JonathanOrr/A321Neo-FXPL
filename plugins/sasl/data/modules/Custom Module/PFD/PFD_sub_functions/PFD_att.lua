@@ -13,7 +13,7 @@ local function draw_stall_flag(PFD_table)
         return
     end
 
-    if adirs_get_avg_aoa() > get(Aprot_AoA) - 0.5 then
+    if get(PFD_table.AoA) > get(Aprot_AoA) - 0.5 then
         sasl.gl.drawText(Font_AirbusDUL, ATT_x_center, ATT_y_center + 50, "STALL    STALL", 42, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
     end
 end
@@ -76,7 +76,7 @@ function PFD_draw_att(PFD_table)
     end
 
     --tailstrike arrow(TOGO GA and GS < 50)
-    if get(All_on_ground) == 0 and get(PFD_table.RA_ALT) < 400 and (get(Cockpit_throttle_lever_L) < THR_MCT_START and get(Cockpit_throttle_lever_R) < THR_MCT_START) then
+    if get(All_on_ground) == 0 and get(PFD_table.RA_ALT) < 400 and get(EWD_flight_phase) == PHASE_FINAL then
         SASL_rotated_center_img_center_aligned(
             PFD_tailstrike_arrow,
             ATT_x_center,
@@ -117,8 +117,8 @@ function PFD_draw_att(PFD_table)
     if adirs_is_track_ok(PFD_table.Screen_ID) and adirs_is_aoa_ok(PFD_table.Screen_ID) then
         SASL_draw_img_center_aligned(
             PFD_att_bird,
-            Get_rotated_point_x_pos_offset(ATT_x_center, - math.cos(math.rad(adirs_get_roll(PFD_table.Screen_ID))) * adirs_get_aoa(PFD_table.Screen_ID) * 10, -adirs_get_roll(PFD_table.Screen_ID), Math_rescale_no_lim(0, 0, 10, 85, (adirs_get_track(PFD_table.Screen_ID) - adirs_get_hdg(PFD_table.Screen_ID)))),
-            Get_rotated_point_y_pos_offset(ATT_y_center, - math.cos(math.rad(adirs_get_roll(PFD_table.Screen_ID))) * adirs_get_aoa(PFD_table.Screen_ID) * 10, -adirs_get_roll(PFD_table.Screen_ID), Math_rescale_no_lim(0, 0, 10, 85, (adirs_get_track(PFD_table.Screen_ID) - adirs_get_hdg(PFD_table.Screen_ID)))),
+            Get_rotated_point_x_pos_offset(ATT_x_center, - math.cos(math.rad(adirs_get_roll(PFD_table.Screen_ID))) * get(PFD_table.AoA) * 10, -adirs_get_roll(PFD_table.Screen_ID), Math_rescale_no_lim(0, 0, 10, 85, (adirs_get_track(PFD_table.Screen_ID) - adirs_get_hdg(PFD_table.Screen_ID)))),
+            Get_rotated_point_y_pos_offset(ATT_y_center, - math.cos(math.rad(adirs_get_roll(PFD_table.Screen_ID))) * get(PFD_table.AoA) * 10, -adirs_get_roll(PFD_table.Screen_ID), Math_rescale_no_lim(0, 0, 10, 85, (adirs_get_track(PFD_table.Screen_ID) - adirs_get_hdg(PFD_table.Screen_ID)))),
             83,
             43,
             ECAM_GREEN

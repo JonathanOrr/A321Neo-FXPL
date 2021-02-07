@@ -7,6 +7,8 @@ local yaw_control_var_table = {
     filtered_sideslip = 0,
     filtered_sideslip_err = 0,
 
+    Filtered_ias = 0,
+
     NRM_controller_output = 0,
     Yaw_damper_controller_output = 0,
 }
@@ -90,9 +92,13 @@ end
 
 local function yaw_input(x, var_table)
     local max_rudder_deflection = 30
-    local max_sideslip = 20
 
-    var_table.sideslip_input = -x * max_sideslip + (-get(Rudder_trim_angle) / max_rudder_deflection) * max_sideslip
+    --blend max SI according to speed of the aircraft and the A350 FCOM
+    --15 degrees of SI at 160kts to 2 degrees at VMO
+    --linear interpolation is used to avoid significant change in value during circular falloff
+    set(Max_SI_demand_lim, Math_rescale(160, 15, get(Fixed_VMAX), 2, var_table.Filtered_ias))
+
+    var_table.sideslip_input = -x * get(Max_SI_demand_lim) + (-get(Rudder_trim_angle) / max_rudder_deflection) * get(Max_SI_demand_lim)
 end
 
 local function filter_values(var_table, filter_table)
@@ -107,10 +113,14 @@ local function filter_values(var_table, filter_table)
     var_table.filtered_sideslip = low_pass_filter(filter_table.sideslip_pv_filter_table)
     filter_table.sideslip_err_filter_table.x = get(Slide_slip_angle) - var_table.sideslip_input
     var_table.filtered_sideslip_err = low_pass_filter(filter_table.sideslip_err_filter_table)
+
+    --filter the IAS
+    filter_table.IAS_filter_table.x = adirs_get_avg_ias()
+    var_table.Filtered_ias = low_pass_filter(filter_table.IAS_filter_table)
 end
 
 local function yaw_controlling(var_table)
-    --Yaw damper control0
+    --Yaw damper control
     var_table.Yaw_damper_controller_output = FBW_PID_BP(FBW_PID_arrays.FBW_YAW_DAMPER_PID_array, var_table.filtered_R_err, var_table.filtered_R)
     --law reconfiguration
     if get(FBW_yaw_law) == FBW_ALT_NO_PROT_LAW then
