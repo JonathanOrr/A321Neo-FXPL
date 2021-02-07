@@ -4,15 +4,15 @@ include("ADIRS_data_source.lua")
 local aoa_filtering_table = {
     avg_aoa = {
     x = 0,
-    cut_frequency = 0.1,
+    cut_frequency = 0.2,
     },
     capt_aoa = {
         x = 0,
-        cut_frequency = 0.1,
+        cut_frequency = 0.2,
     },
     fo_aoa = {
         x = 0,
-        cut_frequency = 0.1,
+        cut_frequency = 0.2,
     },
 }
 

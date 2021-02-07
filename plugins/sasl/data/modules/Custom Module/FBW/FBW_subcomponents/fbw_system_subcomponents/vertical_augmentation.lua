@@ -252,7 +252,8 @@ local vertical_augmentation = {
             var_table.flare_mode_controller_output = 0
             return
         end
-        if get(FBW_vertical_law) == FBW_DIRECT_LAW then
+        if get(FBW_vertical_law) == FBW_DIRECT_LAW or
+           (get(FBW_vertical_law) ~= FBW_NORMAL_LAW or get(FBW_vertical_law) ~= FBW_DIRECT_LAW and get(FBW_vertical_flare_mode_ratio) > 0) then--alt law --> direct law
             var_table.flare_mode_controller_output = get(Augmented_pitch)
             return
         end
@@ -285,7 +286,7 @@ local function FBW_vertical_mode_blending(var_table)
     )
 
     --BP Q controller--
-    FBW_PID_arrays.FBW_PITCH_RATE_PID_array.Actual_output = get(Pitch_artstab)
+    FBW_PID_arrays.FBW_PITCH_RATE_PID_array.Actual_output = get(Pitch_artstab) * (1 - BoolToNum(get(L_elevator_avail) + get(R_elevator_avail) == 0))
 end
 
 function update()

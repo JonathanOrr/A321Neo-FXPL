@@ -13,7 +13,7 @@ local function draw_stall_flag(PFD_table)
         return
     end
 
-    if get(PFD_table.AoA) > get(Aprot_AoA) - 0.5 then
+    if adirs_get_aoa(PFD_table.Screen_ID) > get(Aprot_AoA) - 0.5 then
         sasl.gl.drawText(Font_AirbusDUL, ATT_x_center, ATT_y_center + 50, "STALL    STALL", 42, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
     end
 end
