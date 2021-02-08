@@ -41,8 +41,40 @@ local function neutral_flight_G(pitch, bank)
     return math.cos(math.rad(pitch)) / math.cos(math.rad(bank))
 end
 
-local function compute_C_star(Nz, Q, ias)
-    return Nz + (ias * 0.514444 * math.rad(Q)) / 9.8
+local function compute_C_star(Nz, Q)
+    --we define that 210kts as the crossoever V
+    return Nz + (210 * 0.514444 * math.rad(Q)) / 9.8
+end
+
+local function Max_C_STAR()
+    local max_G = get(Flaps_internal_config) ~= 0 and 2 or 2.5
+
+    local rad_pitch = math.rad(adirs_get_avg_pitch())
+    local rad_bank  = math.rad(adirs_get_avg_roll())
+
+    local nz_trim = math.cos(rad_pitch) * math.cos(rad_bank)
+    local delta_nz_turn = math.cos(rad_pitch) * (math.sin(math.rad(33))^2 / math.cos(math.rad(33)))
+
+    local U_offset = (2 * (max_G - math.cos(rad_pitch) * math.cos(math.rad(67))) - delta_nz_turn) - (-2 * (max_G - math.cos(rad_pitch)) - delta_nz_turn)
+
+    local upper_C_star_lim = -(1 - 1 + 2) * (max_G - nz_trim) - delta_nz_turn + U_offset --TODO cross over speed
+
+    return upper_C_star_lim
+end
+
+local function Min_C_STAR()
+    local min_G = get(Flaps_internal_config) ~= 0 and 0 or -1
+
+    local rad_pitch = math.rad(adirs_get_avg_pitch())
+    local rad_bank  = math.rad(adirs_get_avg_roll())
+
+    local nz_trim = math.cos(rad_pitch) * math.cos(rad_bank)
+
+    local U_offset = (2 * (min_G - math.cos(rad_pitch) * math.cos(math.rad(67)))) - (-2 * (min_G - math.cos(rad_pitch)))
+
+    local lower_C_star_lim = -(1 - 1 + 2) * (min_G - nz_trim) + U_offset --TODO cross over speed
+
+    return lower_C_star_lim
 end
 
 --INPUT INTERPRETATION--------------------------------------------------------------------------------------
@@ -123,6 +155,40 @@ local input_limitations = {
 
 --INPUT INTERPRETATION--------------------------------------------------------------------------------------
 local get_vertical_input = {
+    X_to_G = function (x)
+        local max_G = get(Flaps_internal_config) ~= 0 and 2 or 2.5
+        local min_G = get(Flaps_internal_config) ~= 0 and 0 or -1
+
+        local pitch = adirs_get_avg_pitch()
+        local bank  = adirs_get_avg_roll()
+
+        local G_load_input_table = {
+            {-1, min_G},
+            {0,  neutral_flight_G(pitch, Math_clamp(bank, -33, 33))},
+            {1,  max_G},
+        }
+
+        return Table_interpolate(G_load_input_table, x)
+    end,
+
+    G_to_Cstar = function (G)
+        local max_G = get(Flaps_internal_config) ~= 0 and 2 or 2.5
+        local min_G = get(Flaps_internal_config) ~= 0 and 0 or -1
+
+        local pitch = adirs_get_avg_pitch()
+        local bank  = adirs_get_avg_roll()
+
+        local neutral_nz = neutral_flight_G(pitch, Math_clamp(bank, -33, 33))
+
+        local C_star_input_table = {
+            {min_G, Min_C_STAR()},
+            {neutral_nz, neutral_nz},
+            {max_G, Max_C_STAR()},
+        }
+
+        return Table_interpolate(C_star_input_table, G)
+    end,
+
     Rotation = function (x, var_table)
         --rescale input--
         local output_Q = 6 * math.abs(math.cos(math.rad(adirs_get_avg_roll()))) * x
@@ -134,39 +200,6 @@ local get_vertical_input = {
         output_Q = input_limitations.Pitch(output_Q)
 
         return output_Q
-    end,
-
-    C_star = function (x, pitch, bank)
-        local clean_max_G_c_star = -606791 + (3.582054 - (-606791)) / (1 + (Math_clamp(math.abs(bank), 0, 67) / 142496.9)^1.728056)
-        local clean_min_G_c_star = -1.954915 + (-2.8 - (-1.954915)) / (1 + (Math_clamp(math.abs(bank), 0, 67) / 40.50731)^1.237363)
-        local flaps_max_G_c_star = Math_rescale(0,   2.8, 67, 2.0, math.abs(bank))
-        local flaps_min_G_c_star = Math_rescale(0, -0.75, 67, 0.0, math.abs(bank))
-
-        local clean_C_star_table = {
-            {-1, clean_min_G_c_star},
-            {0,  neutral_flight_G(pitch, Math_clamp(bank, -33, 33))},
-            {1,  clean_max_G_c_star},
-        }
-        local flaps_C_star_table = {
-            {-1, flaps_min_G_c_star},
-            {0,  neutral_flight_G(pitch, Math_clamp(bank, -33, 33))},
-            {1,  flaps_max_G_c_star},
-        }
-        return get(Flaps_internal_config) ~= 0 and Table_interpolate(flaps_C_star_table, x) or Table_interpolate(clean_C_star_table, x)
-    end,
-
-    G_load = function (x, pitch, bank)
-        local clean_G_table = {
-            {-1, -1},
-            {0,  neutral_flight_G(pitch, Math_clamp(bank, -33, 33))},
-            {1,  2.5},
-        }
-        local flaps_G_table = {
-            {-1, 0},
-            {0,  neutral_flight_G(pitch, Math_clamp(bank, -33, 33))},
-            {1,  2},
-        }
-        return get(Flaps_internal_config) ~= 0 and Table_interpolate(flaps_G_table, x) or Table_interpolate(clean_G_table, x)
     end,
 
     Flare = function (x)
@@ -253,7 +286,7 @@ local vertical_augmentation = {
             return
         end
         if get(FBW_vertical_law) == FBW_DIRECT_LAW or
-           (get(FBW_vertical_law) ~= FBW_NORMAL_LAW or get(FBW_vertical_law) ~= FBW_DIRECT_LAW and get(FBW_vertical_flare_mode_ratio) > 0) then--alt law --> direct law
+           (get(FBW_vertical_law) ~= FBW_NORMAL_LAW and get(FBW_vertical_law) ~= FBW_DIRECT_LAW and get(FBW_vertical_flare_mode_ratio) > 0) then--alt law --> direct law
             var_table.flare_mode_controller_output = get(Augmented_pitch)
             return
         end
