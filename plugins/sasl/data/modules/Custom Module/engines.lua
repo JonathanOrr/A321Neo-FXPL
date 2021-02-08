@@ -678,11 +678,11 @@ local function update_startup()
     local does_engine_1_can_start_or_crank = get(Engine_1_avail) == 0 and (get(L_bleed_press) > 10 or windmill_condition_1) and get(Eng_1_FADEC_powered) == 1
     local does_engine_2_can_start_or_crank = get(Engine_2_avail) == 0 and (get(R_bleed_press) > 10 or windmill_condition_2) and get(Eng_2_FADEC_powered) == 1
 
-    if get(FAILURE_ENG_FADEC_CH1, 1) == 0 and get(FAILURE_ENG_FADEC_CH2, 1) == 0 then
+    if get(FAILURE_ENG_FADEC_CH1, 1) == 1 and get(FAILURE_ENG_FADEC_CH2, 1) == 1 then
         does_engine_1_can_start_or_crank = false -- No fadec? No start
     end
 
-    if get(FAILURE_ENG_FADEC_CH1, 2) == 0 and get(FAILURE_ENG_FADEC_CH2, 2) == 0 then
+    if get(FAILURE_ENG_FADEC_CH1, 2) == 1 and get(FAILURE_ENG_FADEC_CH2, 2) == 1 then
         does_engine_2_can_start_or_crank = false -- No fadec? No start
     end
 
