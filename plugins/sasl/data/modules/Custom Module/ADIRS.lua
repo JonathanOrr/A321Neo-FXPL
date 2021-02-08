@@ -44,7 +44,6 @@ random_err[1] = math.random()
 random_err[2] = math.random()
 random_err[3] = math.random()
 
-
 ----------------------------------------------------------------------------------------------------
 -- Classes
 ----------------------------------------------------------------------------------------------------
@@ -304,8 +303,8 @@ function ADIRS:update_ir_data()
     end
 
     if self.ir_status == IR_STATUS_ALIGNED or self.ir_status == IR_STATUS_ATT_ALIGNED then
-        self.pitch = get(self.pitch_dataref) + get(self.err_pitch_dataref) * (random_err[self.id] > 0.5 and -1 or 1) * (random_err[self.id]+0.5) * 20
-        self.roll = get(self.roll_dataref) + get(self.err_roll_dataref) * (random_err[self.id] > 0.5 and -1 or 1) * (random_err[self.id]+0.5) * 20
+        self.pitch = get(self.pitch_dataref) + get(self.err_pitch_dataref) * (random_err[self.id] > 0.5 and -1 or 1) * (random_err[self.id]+0.5) * 50
+        self.roll = get(self.roll_dataref) + get(self.err_roll_dataref) * (random_err[self.id] > 0.5 and -1 or 1) * (random_err[self.id]+0.5) * 50
         self.aoa = (get(Alpha) + get(self.err_aoa_dataref)*(random_err[self.id]+0.5)*10) * (1-get(self.fail_aoa_dataref))
         if self.ir_status == IR_STATUS_ATT_ALIGNED and not self.ir_is_waiting_hdg then
             self.hdg = (get(Flightmodel_mag_heading) + self.manual_hdg_offset + get(self.err_hdg_dataref) * (random_err[self.id] > 0.5 and -1 or 1) * (random_err[self.id]+0.5) * 180) % 360

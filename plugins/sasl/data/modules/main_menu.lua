@@ -192,5 +192,4 @@ ShowHidePerfDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide PERF Debug", Show
 ShowHidePressDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide PRESS Debug", Show_hide_PRESS_debug)
 ShowHideWheelDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide WHEEL Debug", Show_hide_Wheel_Debug)
 --ShowHideVnavDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide VNAV Debug", Show_hide_vnav_debug)
-DeActivateELECover	= sasl.appendMenuItem(Menu_debug, "(De)activate override ELEC always ON", function() ovveride_ELEC_always_on = not ovveride_ELEC_always_on end)
 
