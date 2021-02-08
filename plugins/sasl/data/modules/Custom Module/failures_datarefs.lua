@@ -248,6 +248,8 @@ FAILURE_AVIONICS_SMOKE = createGlobalPropertyi("a321neo/failures/misc/avionics_s
 FAILURE_AVIONICS_INLET = createGlobalPropertyi("a321neo/failures/misc/avionics_inlet", 0, false, true, false)
 FAILURE_AVIONICS_OUTLET = createGlobalPropertyi("a321neo/failures/misc/avionics_outlet", 0, false, true, false)
 
+FAILURE_PRESS_SYS_1 = createGlobalPropertyi("a321neo/failures/pressurization/sys_1", 0, false, true, false)
+FAILURE_PRESS_SYS_2 = createGlobalPropertyi("a321neo/failures/pressurization/sys_2", 0, false, true, false)
 FAILURE_PRESS_SAFETY_OPEN = createGlobalPropertyi("a321neo/failures/pressurization/safety_valve_open", 0, false, true, false)
 FAILURE_OXY_REGUL_FAIL = createGlobalPropertyi("a321neo/failures/misc/oxy_reg_fault", 0, false, true, false)
 

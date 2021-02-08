@@ -328,6 +328,11 @@ local failures_data = {
             {name="TRIM CAB.A\nVLV STUCK", status=false, dataref=FAILURE_AIRCOND_TRIM_CAB_AFT },
             {name="TRIM CARGO\nVLV STUCK", status=false, dataref=FAILURE_AIRCOND_TRIM_CARGO_AFT },
 
+            -- Pressurization
+            {name="PRESS SYS 1\nFAIL", status=false, dataref=FAILURE_PRESS_SYS_1 },
+            {name="PRESS SYS 2\nFAIL", status=false, dataref=FAILURE_PRESS_SYS_2 },
+            {name="SAFETY VLV\nOPEN!", status=false, dataref=FAILURE_PRESS_SAFETY_OPEN },
+            
     }
     },
     {

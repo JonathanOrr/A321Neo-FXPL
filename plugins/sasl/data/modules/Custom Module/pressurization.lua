@@ -32,6 +32,7 @@ local SPD_MANUAL_OUTFLOW = 0.025
 ----------------------------------------------------------------------------------------------------
 local mode_sel_manual = false   -- false: auto, true: manual
 local manual_mode_lever_req = 0 -- 0 stay, 1 go up, -1 go down
+local current_system = math.random() < 0.5 and 1 or 2
 
 local current_cabin_pressure_in_pa = 0
 local current_cabin_altitude = 0
@@ -330,7 +331,9 @@ end
 local function update_outputs()
 
     if not mode_sel_manual then
-        auto_manage_pressurization()
+        if get(Press_sys_in_use) > 0 then
+            auto_manage_pressurization()
+        end
     else
         if manual_mode_lever_req ~= 0 then
             local new_value = get(Out_flow_valve_ratio) + manual_mode_lever_req * get(DELTA_TIME) * SPD_MANUAL_OUTFLOW
@@ -347,8 +350,21 @@ local function update_outputs()
     set(Press_controller_output_vs, pid_array_cab_alt.Desired_output)    -- For debug window only
     set(Press_controller_output_ovf, pid_array_outflow.Desired_output)   -- For debug window only
 
-    set(Press_mode_sel_is_man, mode_sel_manual and 1 or 0)
 
+    set(Press_mode_sel_is_man, mode_sel_manual and 1 or 0)
+end
+
+local function update_system()
+    if get(FAILURE_PRESS_SYS_1) + get(FAILURE_PRESS_SYS_2) == 2 or get(Press_mode_sel_is_man) == 1 then
+        -- Both system failed
+        set(Press_sys_in_use, 0)
+    elseif get(FAILURE_PRESS_SYS_1) == 0 and get(FAILURE_PRESS_SYS_2) == 0 then
+        set(Press_sys_in_use, current_system)
+    elseif get(FAILURE_PRESS_SYS_1) == 1 then
+        set(Press_sys_in_use, 2)
+    elseif get(FAILURE_PRESS_SYS_2) == 1 then
+        set(Press_sys_in_use, 1)
+    end
 end
 
 function update()
@@ -360,7 +376,9 @@ function update()
         current_cabin_pressure_in_pa = get(Weather_curr_press_flight_level) * 3386.39
         return
     end
-    
+
+    update_system()
+
     update_cabin_pressure()
     update_safety_valve()
 

@@ -129,6 +129,19 @@ local function draw_ldg_elev()
     end
 end
 
+local function draw_sys_on()
+
+    if get(Press_mode_sel_is_man) == 1 then
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+160, 380, "MAN", 34, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+    end
+    if get(Press_sys_in_use) == 1 or get(FAILURE_PRESS_SYS_1) == 1 then
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-100, 450, "SYS 1", 34, false, false, TEXT_ALIGN_CENTER, get(FAILURE_PRESS_SYS_1) == 1 and ECAM_ORANGE or ECAM_GREEN)
+    end
+    if get(Press_sys_in_use) == 2 or get(FAILURE_PRESS_SYS_2) == 1 then
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+100, 450, "SYS 2", 34, false, false, TEXT_ALIGN_CENTER, get(FAILURE_PRESS_SYS_2) == 1 and ECAM_ORANGE or ECAM_GREEN)
+    end
+end
+
 local function draw_safety_valve()
     local is_open = get(Press_safety_valve_pos) == 1
 
@@ -171,6 +184,7 @@ function draw_press_page()
     draw_pack_indications()
     draw_ldg_elev()
     draw_press_textures_and_needle()
+    draw_sys_on()
 end
 
 local function update_params()
