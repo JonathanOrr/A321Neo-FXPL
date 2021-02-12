@@ -74,13 +74,13 @@ end
 
 local TOGA_t = {-54, -38, -22, -6, 10, 26, 42}
 local TOGA_a = {-1000, 3000, 11000, 14500, 35000}
-local TOGA_N = { {77.2,  83.3, 89.2, 89.5, 92},
-                 {79.8,  86.1, 91.1, 92.5, 93.9},
-                 {82.4,  88.7, 93.9, 95.3, 96.4},
-                 {84.8,  91.3, 97.6, 98.0, 94.5},
-                 {87.2,  93.8, 100.2,95.8, 92.3},
-                 {89.5,  96.3, 96.9, 94.1, 89.1},
-                 {91.8,  95.6, 94.8, 93.2, 88.1}
+local TOGA_N = { {76.2,  82.3, 88.2, 88.5, 92},
+                 {78.8,  85.1, 91.1, 91.5, 93},
+                 {81.4,  87.7, 93.9, 94.3, 95.5},
+                 {83.8,  90.3, 96.6, 97.0, 94},
+                 {86.2,  92.8, 99.2, 98.8, 91.2},
+                 {89.5, 95.3, 94.9, 94.8, 88.1},
+                 {90.8,  95.6, 94.8, 93.2, 87.1}
               }
 
 
@@ -96,7 +96,7 @@ function eng_N1_limit_takeoff(OAT, TAT, altitude, is_packs_on, is_eng_ai_on, is_
         EXTRA = EXTRA + ((is_eng_ai_on and -1.6 or 0) + (is_wing_ai_on and -0.8 or 0)) * Math_clamp(OAT - temp_corner_point, 0, 1)
     end
     
-    return Math_clamp(comp + EXTRA, 73.8, 101)
+    return Math_clamp(comp + EXTRA + 1, 73.8, 101)
 end
 
 -------------------------------------------------------------------------------
@@ -123,13 +123,13 @@ local MCT_N = {  {76.5,  78.6, 82.1,  88,  91,  89.0},
               }
 
 function eng_N1_limit_mct(OAT, TAT, altitude, is_packs_on, is_eng_ai_on, is_wing_ai_on)
-    local stdandard =  interpolate_2d(MCT_t, MCT_a, MCT_N, TAT, altitude) - (is_packs_on and 0.9 or 0) 
+    local standard =  interpolate_2d(MCT_t, MCT_a, MCT_N, TAT, altitude) - (is_packs_on and 0.9 or 0) 
     
     if OAT > 25 then
-        stdandard = stdandard - ((is_eng_ai_on and -1.4 or 0) + (is_wing_ai_on and -1.8 or 0)) * Math_clamp(OAT - 25, 0, 1)
+        standard = standard - ((is_eng_ai_on and -1.4 or 0) + (is_wing_ai_on and -1.8 or 0)) * Math_clamp(OAT - 25, 0, 1)
     end
     
-    return stdandard
+    return standard
 end
 
 -------------------------------------------------------------------------------
@@ -148,14 +148,31 @@ local CLB_N = {  {74.5,  76.4, 78.8, 81.7, 89.1, 89.0},
               }
 
 function eng_N1_limit_clb(OAT, TAT, altitude, is_packs_on, is_eng_ai_on, is_wing_ai_on)
-    local stdandard =  interpolate_2d(CLB_t, CLB_a, CLB_N, TAT, altitude) - (is_packs_on and 0.8 or 0) 
+    local standard =  interpolate_2d(CLB_t, CLB_a, CLB_N, TAT, altitude) - (is_packs_on and 0.8 or 0) 
     
     if OAT > 25 then
-        stdandard = stdandard - ((is_eng_ai_on and -1.3 or 0) + (is_wing_ai_on and -1.1 or 0)) * Math_clamp(OAT - 25, 0, 1)
+        standard = standard - ((is_eng_ai_on and -1.3 or 0) + (is_wing_ai_on and -1.1 or 0)) * Math_clamp(OAT - 25, 0, 1)
     end
     
-    return stdandard
+    return standard
 end
 
+-------------------------------------------------------------------------------
+-- FLEX mode
+-------------------------------------------------------------------------------
+
+function eng_N1_limit_flex(FLEX_temp, OAT, altitude, is_packs_on)
+
+    local y_lim  = -0.2769231*FLEX_temp + 20.76923
+    
+    local x = altitude
+    local y_base = 6.921356 + 0.0008471222*x + 8.470689e-8 * x^2 + 4.83583e-11 * x^3 - 9.577161e-15 * x^4 + 4.0369989999999994e-19 * x^5
+
+    local y = math.min(y_lim, y_base)
+    
+    local n1 = 80 + y + OAT/7.5 - (is_packs_on and 0.7 or 0)
+
+    return n1
+end
 
 

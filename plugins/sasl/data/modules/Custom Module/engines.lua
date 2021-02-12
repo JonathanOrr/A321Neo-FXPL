@@ -55,7 +55,7 @@ local MAGIC_NUMBER = 100     -- This is a magic number, which value is necessary
 local OIL_QTY_MAX = 17
 local OIL_QTY_MIN = 2
 local OIL_PRESS_START = 50  -- MAX On startup
-local OIL_PRESS_CONT  = 30  -- MAX Continuous
+local OIL_PRESS_CONT  = 40  -- MAX Continuous
 local OIL_PRESS_MIN   = 17  -- MIN in idle
 local OIL_CONSUMPTION_PER_HOUR = 0.45
 
@@ -889,19 +889,17 @@ local function update_n1_mode_and_limits()
     local ai_wing_oper = get(AI_wing_L_operating) + get(AI_wing_R_operating) > 0
     local ai_eng_oper  = AI_sys.comp[ANTIICE_ENG_1].valve_status == true or AI_sys.comp[ANTIICE_ENG_2].valve_status == true 
     local pack_oper    = get(Pack_L) + get(Pack_R) > 0
-    
-    -- TODO FLEX
-    
+
     -- The mode is selected by the highest throttle
     local thr_pos = math.max(get(Cockpit_throttle_lever_L), get(Cockpit_throttle_lever_R))
 
     -- We have to compute all the values for each detent even if we are not in that mode, this is
     -- because in AT_PID_functions we have to compute the previous detent value to make the 
     -- throttle position monotonic and linearly increasing
-    set(Eng_N1_max_detent_toga, eng_N1_limit_takeoff(get(OTA), get(TAT), get(Capt_Baro_Alt), pack_oper, ai_eng_oper, ai_wing_oper))    
-    set(Eng_N1_max_detent_mct, eng_N1_limit_mct(get(OTA), get(TAT), get(Capt_Baro_Alt), pack_oper, ai_eng_oper, ai_wing_oper))        
+    set(Eng_N1_max_detent_toga, eng_N1_limit_takeoff(get(OTA), get(TAT), get(Capt_Baro_Alt), pack_oper, ai_eng_oper, ai_wing_oper))
+    set(Eng_N1_max_detent_mct, eng_N1_limit_mct(get(OTA), get(TAT), get(Capt_Baro_Alt), pack_oper, ai_eng_oper, ai_wing_oper))
     set(Eng_N1_max_detent_clb, eng_N1_limit_clb(get(OTA), get(TAT), get(Capt_Baro_Alt), pack_oper, ai_eng_oper, ai_wing_oper))
-    set(Eng_N1_max_detent_flex, 80)        
+    set(Eng_N1_max_detent_flex, eng_N1_limit_flex(get(Eng_N1_flex_temp), get(OTA), get(Capt_Baro_Alt), pack_oper))
     
     if thr_pos > 0.826 then -- TOGA Region
     
