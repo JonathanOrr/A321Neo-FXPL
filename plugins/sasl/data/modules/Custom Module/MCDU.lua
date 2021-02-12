@@ -401,7 +401,7 @@ local function mcdu_parse_entry(entry, expected_format)
 	elseif format_type == "word" then
 		code = "#"
 	end
-	
+
 	possible_inputs_a = {code}
 
     -- if dp isn't specified
@@ -423,7 +423,7 @@ local function mcdu_parse_entry(entry, expected_format)
 		s = ""
 		for i = 1, expected_format.length, 1 do
 			table.insert(possible_inputs_b, s .. j)
-			
+
 			s = code .. s
 		end
 	end
@@ -434,7 +434,7 @@ local function mcdu_parse_entry(entry, expected_format)
 		table.insert(possible_inputs_c, "+" .. i)
 		table.insert(possible_inputs_c, "-" .. i)
 	end
-	
+
 	output = mcdu_eval_entries(entry, possible_inputs_c)
 	if output == NIL then
 		return "$invalid"
@@ -1077,7 +1077,9 @@ function (phase)
         mcdu_dat["s"]["L"][4].txt = "trans alt"
         mcdu_dat["l"]["L"][4] = {txt = "4800", col = "cyan"}
         mcdu_dat["s"]["R"][4].txt = "flex to temp"
-        mcdu_dat["l"]["R"][4] = {txt = "[  ]º", col = "cyan"}
+
+        local flex_temp_str = get(Eng_N1_flex_temp) ~= 0 and math.floor(get(Eng_N1_flex_temp)) or "  "
+        mcdu_dat["l"]["R"][4] = {txt = "["..flex_temp_str.."]°", col = "cyan"}
 
         mcdu_dat["s"]["L"][5].txt = "thr red/acc"
         mcdu_dat["l"]["L"][5][1] = {txt = "2000", col = "cyan"}
@@ -1152,6 +1154,22 @@ function (phase)
     -- uplink to data
     if phase == "L6" then
         mcdu_open_page(301) -- reload
+    end
+
+    -- flex temp
+    if phase == "R4" then
+        if get(EWD_flight_phase) >= PHASE_1ST_ENG_TO_PWR then
+            mcdu_send_message("avail only in preflight")
+            return
+        end
+        input, variation = mcdu_get_entry({"number", length = 2, dp = 0})
+        input = tonumber(input)
+        if input > 0 and input <= 75 then
+            set(Eng_N1_flex_temp, input)
+        else
+            mcdu_send_message("temperature out of range")
+        end
+        mcdu_open_page(301)
     end
 
     -- next phase
