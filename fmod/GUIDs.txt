@@ -113,6 +113,8 @@
 {a897e617-89e1-43d6-8d15-a52e71fda8e9} event:/RA/retard
 {f29dba50-d417-4b8c-b2f0-9a3966caf7cc} event:/SSPriority/Left
 {8fc35da0-ff79-4c98-9b39-e007109072ad} event:/SSPriority/Right
+{af369460-34d3-4c6e-a56c-fbe21efb91d5} event:/StickLock/StickLock
+{58a4e386-a3b3-4a0f-946e-6d836beb34f2} event:/StickLock/StickUnlock
 {1ac29002-a8e7-438f-bced-dd56cb5e0ba2} event:/TA Test/End
 {bd5c0769-ed87-4f2c-a3f4-9843f0ac8e30} event:/TA Test/Pass
 {f15aa472-2df9-4ba1-91ee-30ec710d40b1} event:/TA Test/Start
@@ -135,7 +137,6 @@
 {baf9bc41-c708-42a2-bfac-b33deb7ddbc4} event:/Avionics
 {356cf20a-c643-42c5-8a6d-7a00fb3d4288} event:/Battery
 {1edd836c-b29a-4101-a732-2d2eef744bbe} event:/Blower
-{fef25c38-9ae1-4175-9bc9-f9a5b28dd7cc} event:/BlowerStart
 {89d27a8f-0f45-4230-905b-f244fdde49a4} event:/Brake Fan
 {5db7e5fc-e4e5-4189-b301-596d1f1dd3c2} event:/BrightnessClick
 {fbc642bf-0e6c-4030-9901-0f1ce878cfe7} event:/BusKick
@@ -162,7 +163,6 @@
 {86179178-a201-42c4-9cbc-eb3b28b70587} event:/SpoilerFull
 {012c937b-23f7-4907-a246-004a2721c54c} event:/SpoilerHalf
 {9f3712ea-3bc4-4070-8de7-86b666c7bd15} event:/SpoilerStow
-{af369460-34d3-4c6e-a56c-fbe21efb91d5} event:/StickLock
 {7797c67b-9d14-445b-8cc9-e63e0eebabf3} event:/TouchMain
 {72dd99e0-d646-42c0-8cc7-4e3f356095cc} event:/TouchNose
 {341873bc-d31e-4ee3-9cb2-1b0c79682754} event:/Wind

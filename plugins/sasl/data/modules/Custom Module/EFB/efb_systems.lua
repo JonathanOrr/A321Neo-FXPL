@@ -21,9 +21,7 @@ function set_fuel(total_fuel)
         set(Fuel_quantity[tank_CENTER], FUEL_C_MAX)
 
         local remaining_fuel = total_fuel - 2*FUEL_LR_MAX - FUEL_C_MAX
-
-        print(remaining_fuel)
-
+        
         if remaining_fuel <= 0.75*FUEL_RCT_MAX then -- <= 75% RCT 0% ACT
             set(Fuel_quantity[tank_RCT], remaining_fuel)
         elseif remaining_fuel <= 0.75*FUEL_RCT_MAX+0.5*FUEL_ACT_MAX then -- 75% RCT <= 50% ACT
