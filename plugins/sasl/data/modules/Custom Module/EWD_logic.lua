@@ -34,6 +34,7 @@ include('EWD_msgs/gpws_tcas.lua')
 include('EWD_msgs/hydraulic.lua')
 include('EWD_msgs/misc.lua')
 include('EWD_msgs/nav.lua')
+include('EWD_msgs/pressurization.lua')
 include('EWD_msgs/to_ldg_memos.lua')
 
 sasl.registerCommandHandler (Ecam_btn_cmd_CLR,   0 , function(phase) ewd_clear_button_handler(phase) end )
@@ -211,6 +212,9 @@ local left_messages_list = {
     MessageGroup_AI_CAPT_TAT,
     MessageGroup_AI_FO_TAT,
     
+    MessageGroup_PRESS_SAFETY_VALVE_OPEN,
+    MessageGroup_PRESS_SYS_12_FAULT,
+    
     MessageGroup_WAI_OPEN_ON_GND,
     MessageGroup_WAI_SYS_FAULT_1,
     MessageGroup_WAI_SYS_FAULT_2,
@@ -226,6 +230,7 @@ local left_messages_list = {
     -- Warnings
     MessageGroup_OVERSPEED,
     MessageGroup_CONFIG_TAKEOFF,
+    MessageGroup_CAB_PRESS_EXCESS_ALT,
     MessageGroup_APU_FIRE,
     MessageGroup_ELEC_EMER_CONFIG,
     MessageGroup_ELEC_ESS_BUSES_ON_BAT,
