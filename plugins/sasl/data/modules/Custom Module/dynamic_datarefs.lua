@@ -685,6 +685,7 @@ AI_wing_R_operating = createGlobalPropertyi("a321neo/dynamics/anti_ice/wing_R_op
 
 -- Oxygen
 Oxygen_ckpt_psi  = globalProperty("sim/cockpit2/oxygen/indicators/o2_bottle_pressure_psi")
+Oxygen_pilot_on  = createGlobalPropertyi("a321neo/dynamics/pressurization/pilot_is_on_oxygen")
 
 -- GPWS
 GPWS_mode_is_active  = createGlobalPropertyia("a321neo/dynamics/gpws/mode_active", 6) -- Mode from 1 to 5, 6 is the predictive GPWS
