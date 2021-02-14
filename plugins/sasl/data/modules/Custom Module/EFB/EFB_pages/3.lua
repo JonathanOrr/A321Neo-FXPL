@@ -33,31 +33,24 @@ local aft_cargo_target = 0
 function EFB_execute_page_3_buttons()
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 808,605,879,636, function ()
         set(LOAD_flapssetting, 1)
-        --print("flaps_sel_1")
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 886,605,954,636, function ()
         set(LOAD_flapssetting, 2)
-        --print("flaps_sel_2")
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 963,605,1031,636, function ()
         set(LOAD_flapssetting, 3)
-        --print("flaps_sel_3")
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 808,539,879,572, function ()
         set(LOAD_runwaycond, 0)
-        --print("rwy_sel_dry")
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 886,539,954,572, function ()
         set(LOAD_runwaycond, 1)
-        --print("rwy_sel_wet")
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 808,473,879,503, function ()
         set(LOAD_thrustto, 0)
-        --print("thr_sel_toga")
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 886,473,954,503, function ()
         set(LOAD_thrustto, 1)
-        --print("thr_sel_flex")
     end)
 
 
@@ -147,7 +140,7 @@ end
 
 --UPDATE LOOPS--
 function EFB_update_page_3()
-
+    set(Nr_people_onboard, pax_target_amount)
 end
 
 
@@ -250,6 +243,7 @@ local function EFB_draw_fuel_tanks()
 end
   
 local function EFB_draw_loadsheet_text()
+    local YEAR = tonumber(os.date("%y"))
     sasl.gl.drawText ( Airbus_panel_font, 104 , 377 , "Aircraft: A321-271NX" , 15, false , false , TEXT_ALIGN_LEFT , EFB_BLACK )
     sasl.gl.drawText ( Airbus_panel_font, 346 , 377 , get(day_in_month)..month_in_text[get(month_in_numbers)]..(YEAR-2000) , 15, false , false , TEXT_ALIGN_RIGHT , EFB_BLACK )
     sasl.gl.drawText ( Airbus_panel_font, 225 , 337 , "LOADSHEET" , 15, false , false , TEXT_ALIGN_CENTER , EFB_BLACK )
@@ -281,5 +275,5 @@ function EFB_draw_page_3()
     EFB_draw_fuel_tanks()
     EFB_draw_loadsheet_text()
     EFB_draw_target_values()
-  	print(EFB_CURSOR_X, EFB_CURSOR_Y)
+
 end
