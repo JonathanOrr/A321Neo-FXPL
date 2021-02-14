@@ -16,10 +16,6 @@ local ir_force_button_begin = 0
 local day_in_month = globalProperty("sim/cockpit2/clock_timer/current_day")
 
 
-local command_irs_align = sasl.findCommand ("a321neo/cockpit/ADIRS/instantaneous_align")
-
-
-
 local month_in_numbers = globalProperty("sim/cockpit2/clock_timer/current_month")
 local month_in_text = {"JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"}
 
@@ -74,6 +70,7 @@ function EFB_execute_page_3_buttons()
 
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 421,91,741,121, function () -- force align ir
         ir_force_button_begin = get(TIME)
+        local command_irs_align = sasl.findCommand ("a321neo/cockpit/ADIRS/instantaneous_align")
         sasl.commandOnce (command_irs_align)
     end)
 
