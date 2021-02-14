@@ -406,7 +406,7 @@ local function update_right_list()
             if get(Eng_1_N1) > 50 or get(Eng_2_N1) > 50 then
                 list_right:put(COL_CAUTION, "SPEED BRK")
             else
-                list_right:put(COL_INDICATION, "SPEED BRK")        
+                list_right:put(COL_INDICATION, "SPEED BRK")
             end
         end
     end
@@ -512,23 +512,22 @@ local function update_right_list()
         list_right:put(COL_INDICATION, "MAN LDG ELEV")
     end
     
-    
-    -- TODO: SWITCHING PNL: - if PFD/ND XFR pressed *AND* ECAM/ND not on NORM
-    --                      - ATT HDG or AIR DATA or EIS DMC not in normal
-    
-    -- TODO Audio: AUDIO 3 XFRD displayed green if audio switching selector not in NORM
-    -- TODO Acars: ACARS CALL (pulsing green) if received an ACARS message requesting voice conversation
+    if get(DMC_position_dmc_eis) ~= 0 or get(ADIRS_source_rotary_ATHDG) ~= 0 or get(ADIRS_source_rotary_AIRDATA) ~= 0 then
+        list_right:put(COL_INDICATION, "SWITCHING PNL")
+    end
 
-       
     -- TODO windshear: PRED W/S OFF if windshear (weather panel) is selected OFF
     --                  green in phases 1,2,6,10
     --                  amber in phases 3,4,5,7,8,9
     --                  not present in 6
 
-    -- TODO Lights: LDG LT
+    -- TODO Lights: LDG LT -- if at least 1 extended
     -- TODO Lights: STROBE LT OFF (green) - in flight only
-    
-    -- TODO OXY: HI ALT SET
+
+    if PB.ovhd.oxy_high_alt_land.status_bottom then
+        list_right:put(COL_INDICATION, "HI ALT SET")
+    end
+
 
 end
 
