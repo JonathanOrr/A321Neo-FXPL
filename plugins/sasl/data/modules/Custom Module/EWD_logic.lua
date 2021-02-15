@@ -34,6 +34,7 @@ include('EWD_msgs/gpws_tcas.lua')
 include('EWD_msgs/hydraulic.lua')
 include('EWD_msgs/misc.lua')
 include('EWD_msgs/nav.lua')
+include('EWD_msgs/pressurization.lua')
 include('EWD_msgs/to_ldg_memos.lua')
 
 sasl.registerCommandHandler (Ecam_btn_cmd_CLR,   0 , function(phase) ewd_clear_button_handler(phase) end )
@@ -211,6 +212,9 @@ local left_messages_list = {
     MessageGroup_AI_CAPT_TAT,
     MessageGroup_AI_FO_TAT,
     
+    MessageGroup_PRESS_SAFETY_VALVE_OPEN,
+    MessageGroup_PRESS_SYS_12_FAULT,
+    
     MessageGroup_WAI_OPEN_ON_GND,
     MessageGroup_WAI_SYS_FAULT_1,
     MessageGroup_WAI_SYS_FAULT_2,
@@ -226,6 +230,7 @@ local left_messages_list = {
     -- Warnings
     MessageGroup_OVERSPEED,
     MessageGroup_CONFIG_TAKEOFF,
+    MessageGroup_CAB_PRESS_EXCESS_ALT,
     MessageGroup_APU_FIRE,
     MessageGroup_ELEC_EMER_CONFIG,
     MessageGroup_ELEC_ESS_BUSES_ON_BAT,
@@ -253,6 +258,9 @@ _G.ewd_left_messages_list_cancelled = {  -- List of message cancelled with EMER 
 
 }
 
+local right_secondary_failures = {
+
+}
 
 local left_current_message = nil;   -- It contains (if exists) the first message group *clearable*
 local left_was_clearing = false     -- True when a warning/caution message exists and status page not yet displayed
@@ -349,6 +357,16 @@ local function update_right_list()
         list_right:put(COL_SPECIAL, "LDG INHIBIT")
     end
 
+    local at_least_one = false
+    for key,v in pairs(right_secondary_failures) do
+        list_right:put(COL_CAUTION, "* " .. key)
+        at_least_one = true
+    end
+    
+    if at_least_one then
+        return
+    end
+
     -- Better Pushback support
     if get(Wheel_better_pushback_connected) == 1 then
         local color = COL_INDICATION
@@ -388,7 +406,7 @@ local function update_right_list()
             if get(Eng_1_N1) > 50 or get(Eng_2_N1) > 50 then
                 list_right:put(COL_CAUTION, "SPEED BRK")
             else
-                list_right:put(COL_INDICATION, "SPEED BRK")        
+                list_right:put(COL_INDICATION, "SPEED BRK")
             end
         end
     end
@@ -494,23 +512,22 @@ local function update_right_list()
         list_right:put(COL_INDICATION, "MAN LDG ELEV")
     end
     
-    
-    -- TODO: SWITCHING PNL: - if PFD/ND XFR pressed *AND* ECAM/ND not on NORM
-    --                      - ATT HDG or AIR DATA or EIS DMC not in normal
-    
-    -- TODO Audio: AUDIO 3 XFRD displayed green if audio switching selector not in NORM
-    -- TODO Acars: ACARS CALL (pulsing green) if received an ACARS message requesting voice conversation
+    if get(DMC_position_dmc_eis) ~= 0 or get(ADIRS_source_rotary_ATHDG) ~= 0 or get(ADIRS_source_rotary_AIRDATA) ~= 0 then
+        list_right:put(COL_INDICATION, "SWITCHING PNL")
+    end
 
-       
     -- TODO windshear: PRED W/S OFF if windshear (weather panel) is selected OFF
     --                  green in phases 1,2,6,10
     --                  amber in phases 3,4,5,7,8,9
     --                  not present in 6
 
-    -- TODO Lights: LDG LT
+    -- TODO Lights: LDG LT -- if at least 1 extended
     -- TODO Lights: STROBE LT OFF (green) - in flight only
-    
-    -- TODO OXY: HI ALT SET
+
+    if PB.ovhd.oxy_high_alt_land.status_bottom then
+        list_right:put(COL_INDICATION, "HI ALT SET")
+    end
+
 
 end
 
@@ -604,6 +621,8 @@ local function publish_left_list()
     local tot_non_memo_msg = 0
     local limit = false
 
+    right_secondary_failures = {}   -- Reset secondary failures
+
     left_current_message = nil;
     set(Ecam_EDW_requested_page, 0)
 
@@ -616,7 +635,11 @@ local function publish_left_list()
     for prio, msg in list_left.pop, list_left do
         if limit then                   -- Extra message not shown
             set(EWD_arrow_overflow, 1)  -- Let's display the overflow arrow
-            break
+
+            if right_secondary_failures[msg.text()] == nil then
+                right_secondary_failures[msg.text()] = true
+            end
+            
         end
         
         if left_current_message == nil and (msg.color() == COL_WARNING or msg.color() == COL_CAUTION) then
@@ -625,7 +648,8 @@ local function publish_left_list()
             left_current_message = msg
         end  
 
-        if tot_non_memo_msg == 0 or msg.priority ~= PRIORITY_LEVEL_MEMO then  -- Ignore the MEMO if other messages are present
+        -- Ignore the MEMO if other messages are present and ignore when overflow
+        if not limit and (tot_non_memo_msg == 0 or msg.priority ~= PRIORITY_LEVEL_MEMO) then
 
             -- Set the name of the group
             set(EWD_left_memo_group[tot_messages], msg.text())

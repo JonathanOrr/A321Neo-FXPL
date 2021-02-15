@@ -105,9 +105,11 @@ local function update_external_exchange(n)
 end
 
 local function update_people_heat()
+    local nr_people = get(Nr_people_onboard)
+
     people_heat[CKPT]      = 2 * WATT_PER_PEOPLE
-    people_heat[CABIN_FWD] = NR_PEOPLE_CABIN/2 * WATT_PER_PEOPLE
-    people_heat[CABIN_AFT] = NR_PEOPLE_CABIN/2 * WATT_PER_PEOPLE
+    people_heat[CABIN_FWD] = nr_people/2 * WATT_PER_PEOPLE
+    people_heat[CABIN_AFT] = nr_people/2 * WATT_PER_PEOPLE
     people_heat[CARGO_AFT] = 0
 end
 

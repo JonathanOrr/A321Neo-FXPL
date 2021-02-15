@@ -194,7 +194,7 @@ local function update_cabin_pressure()
     -- If the sfety valve is closed, then the aircraft can be pressurized or not
     local new_press = current_cabin_pressure_in_pa + (input_delta_pressure - output_delta_pressure) * get(DELTA_TIME)
     
-    current_cabin_pressure_in_pa = Set_linear_anim_value(current_cabin_pressure_in_pa, new_press, 0, 1000000, 100)
+    current_cabin_pressure_in_pa = Set_linear_anim_value(current_cabin_pressure_in_pa, new_press, 0, 1000000, 250)
      
     current_cabin_altitude = (29.92*3386.39 - current_cabin_pressure_in_pa) / 3.378431
 

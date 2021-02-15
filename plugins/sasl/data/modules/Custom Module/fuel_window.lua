@@ -194,7 +194,7 @@ function update_refuel()
     if valve_switch_status[RIGHT] then
         local fuel_curr = get(Fuel_quantity[RIGHT])
         local fuel_next = Math_clamp(fuel_curr + add, 0, FUEL_LR_MAX)
-        set(Fuel_quantity[RIGHT], fuel_next)     
+        set(Fuel_quantity[RIGHT], fuel_next)
     end
     if valve_switch_status[CENTER] then
         local fuel_curr = get(Fuel_quantity[CENTER])

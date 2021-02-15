@@ -6,11 +6,11 @@ include('EWD_msgs/common.lua')
 local Message_PACKS_OFF = {
     text = function()
         local N = ""
-        if PB.ovhd.ac_bleed_1.status_bottom and PB.ovhd.ac_bleed_2.status_bottom then
+        if PB.ovhd.ac_pack_1.status_bottom and PB.ovhd.ac_pack_2.status_bottom then
             N = "1 + 2"
-        elseif PB.ovhd.ac_bleed_1.status_bottom then
+        elseif PB.ovhd.ac_pack_1.status_bottom then
             N = "1"
-        elseif PB.ovhd.ac_bleed_2.status_bottom then
+        elseif PB.ovhd.ac_pack_2.status_bottom then
             N = "2"
         end
         return "    PACK " .. N .. " OFF"

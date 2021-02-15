@@ -229,8 +229,6 @@ end
 local function draw_fuel_valves()
     SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_FUEL_xfeed_img, size[1]/2+2, size[2]/2+186, 415, 58, 5, get(Ecam_fuel_valve_X_BLEED) + 1, ECAM_WHITE)
 
-
-    print(get(Eng_1_Firewall_valve), get(Eng_2_Firewall_valve))
     --engine 1 valve
     local is_faulty = get(Eng_1_Firewall_valve) == 2
     or ( get(Eng_1_Firewall_valve) == 1 and get(Engine_1_master_switch) == 1 and get(Fire_pb_ENG1_status) == 0 )

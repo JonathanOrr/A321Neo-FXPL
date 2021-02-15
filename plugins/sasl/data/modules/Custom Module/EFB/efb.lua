@@ -162,29 +162,39 @@ local function draw_cursor()------------------------------DONT U DARE REMOVE THI
     end
 end
 
---SASL callbacks-------------------------------------------------------------------------------------------------
-function update()
-    EFB_CURSOR_X, EFB_CURSOR_Y, EFB_CURSOR_on_screen = Cursor_texture_to_local_pos(position[1], position[2], position[3], position[4], 4096, 4096)
-    EFB_updates_pages[EFB_PAGE]()
-    EFB_DELAYED_PAGE = Set_anim_value(EFB_DELAYED_PAGE, EFB_PAGE, 0, 10, EFB_DELAYED_TRANSIT_FACTOR)
-    EFB_UNDERLINE_POS =   (27548.06 + (-53.64934 - 27548.06)/(1 +((EFB_DELAYED_PAGE/215.6605)^1.026289))  )
-    EFB_UNDERLINE_WIDTH = Table_interpolate(line_width_table, EFB_DELAYED_PAGE)
-
+local function update_battery()
+    CHARGE_TIME_LEFT = get(TIME) - CHARGE_START_TIME
+    Charging_alpha_controller = {1,1,1,Table_interpolate(charge_fade_table, CHARGE_TIME_LEFT)}
     Ac_ess_delta = get(AC_ess_bus_pwrd) - Ac_ess_past_value
     Ac_ess_past_value = get(AC_ess_bus_pwrd)
     if Ac_ess_delta > 0 then
         CHARGE_START_TIME = get(TIME)
-    end
+    end  
+end
 
-    CHARGE_TIME_LEFT = get(TIME) - CHARGE_START_TIME
+--SASL callbacks-------------------------------------------------------------------------------------------------
+function update()
+    perf_measure_start("EFB:update()")
+  
+    EFB_CURSOR_X, EFB_CURSOR_Y, EFB_CURSOR_on_screen = Cursor_texture_to_local_pos(position[1], position[2], position[3], position[4], 4096, 4096)
+    EFB_updates_pages[EFB_PAGE]()
+    update_battery()
 
-    Charging_alpha_controller = {1,1,1,Table_interpolate(charge_fade_table, CHARGE_TIME_LEFT)}
-
-
+    perf_measure_stop("EFB:update()")
 end
 
 function draw()  ------KEEP THE draw_cursor() AT THE BOTTOM YOU DUMBASS!!!!!
+  
     perf_measure_start("EFB:draw()")
+  
+    EFB_DELAYED_PAGE = Set_anim_value(EFB_DELAYED_PAGE, EFB_PAGE, 0, 10, EFB_DELAYED_TRANSIT_FACTOR)
+  
+    local EFB_UNDERLINE_POS =   (27548.06 + (-53.64934 - 27548.06)/(1 +((EFB_DELAYED_PAGE/215.6605)^1.026289))  )
+    local EFB_UNDERLINE_WIDTH = Table_interpolate(line_width_table, EFB_DELAYED_PAGE)
+
+  ----------------------------------------------------------------------------------------------------
+  
+
     draw_efb_bgd()
     EFB_draw_pages[EFB_PAGE]()
 
@@ -210,10 +220,5 @@ function draw()  ------KEEP THE draw_cursor() AT THE BOTTOM YOU DUMBASS!!!!!
 
     perf_measure_stop("EFB:draw()")
 end
-
-
-
-
-  
 
 

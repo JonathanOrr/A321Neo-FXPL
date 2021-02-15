@@ -42,7 +42,7 @@ Right_gear_on_ground = 		  globalProperty("sim/flightmodel2/gear/on_ground[2]")
 Either_Aft_on_ground = 		  createGlobalPropertyi("a321neo/dynamics/wheel/either_aft_on_ground", 0, false, true, false)
 Aft_wheel_on_ground = 		  createGlobalPropertyi("a321neo/dynamics/wheel/aft_wheels_on_ground", 0, false, true, false)
 All_on_ground = 			  createGlobalPropertyi("a321neo/dynamics/wheel/all_wheels_on_ground", 0, false, true, false)
-Any_wheel_on_ground = 		  createGlobalPropertyi("a321neo/wheel/dynamics/any_wheel_on_ground", 0, false, true, false)
+Any_wheel_on_ground = 		  createGlobalPropertyi("a321neo/dynamics/wheel/any_wheel_on_ground", 0, false, true, false)
 Brakes_fan = 				  createGlobalPropertyi("a321neo/dynamics/wheel/brakes_fan", 0, false, true, false)
 Left_brakes_temp = 			  createGlobalPropertyf("a321neo/dynamics/wheel/left_brakes_temp", 10, false, true, false) --left brakes temperature
 Right_brakes_temp = 		  createGlobalPropertyf("a321neo/dynamics/wheel/right_brakes_temp", 10, false, true, false) --right brakes temperature
@@ -130,6 +130,7 @@ Hot_air_temp       = createGlobalPropertyf("a321neo/dynamics/packs/cabin_hot_air
 Hot_air_temp_cargo = createGlobalPropertyf("a321neo/dynamics/packs/cargo_hot_air_temp", 0, false, true, false)
 Cab_fan_fwd_running= createGlobalPropertyi("a321neo/dynamics/packs/cabin_fan_fwd", 0, false, true, false)   -- 1 running, 0 not running
 Cab_fan_aft_running= createGlobalPropertyi("a321neo/dynamics/packs/cabin_fan_aft", 0, false, true, false)    -- 1 running, 0 not running
+Nr_people_onboard = createGlobalPropertyi("a321neo/efb/nr_people_onboard", 0, false, true, false)
 
 --apu
 Apu_master_button_state = createGlobalPropertyi("a321neo/dynamics/engines/apu/state", 0, false, true, false)-- master off 0, master on 1 (do not use for button light)
@@ -687,6 +688,7 @@ AI_wing_R_operating = createGlobalPropertyi("a321neo/dynamics/anti_ice/wing_R_op
 
 -- Oxygen
 Oxygen_ckpt_psi  = globalProperty("sim/cockpit2/oxygen/indicators/o2_bottle_pressure_psi")
+Oxygen_pilot_on  = createGlobalPropertyi("a321neo/dynamics/pressurization/pilot_is_on_oxygen")
 
 -- GPWS
 GPWS_mode_is_active  = createGlobalPropertyia("a321neo/dynamics/gpws/mode_active", 6) -- Mode from 1 to 5, 6 is the predictive GPWS
