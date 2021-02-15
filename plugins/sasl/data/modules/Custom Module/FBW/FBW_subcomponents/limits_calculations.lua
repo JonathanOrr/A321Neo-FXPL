@@ -4,15 +4,15 @@ include("ADIRS_data_source.lua")
 local aoa_filtering_table = {
     avg_aoa = {
     x = 0,
-    cut_frequency = 0.2,
+    cut_frequency = 0.25,
     },
     capt_aoa = {
         x = 0,
-        cut_frequency = 0.2,
+        cut_frequency = 0.25,
     },
     fo_aoa = {
         x = 0,
-        cut_frequency = 0.2,
+        cut_frequency = 0.25,
     },
 }
 
@@ -353,6 +353,14 @@ function update()
         in_air_timer = in_air_timer + get(DELTA_TIME)
     end
 
+    --update smooth values of alpha speeds
+    if in_air_timer >= 5 then
+        set(Vaprot_vsw_smooth, Math_clamp_higher(adirs_get_avg_ias() * math.sqrt(Math_clamp_lower((get(Filtered_avg_AoA) - get(A0_AoA)) / (get(Aprot_AoA) - get(A0_AoA)), 0)), get(VMAX)))
+    else
+        set(Vaprot_vsw_smooth, Math_clamp_higher(adirs_get_avg_ias() * math.sqrt(Math_clamp_lower((get(Filtered_avg_AoA) - get(A0_AoA)) / (get(Amax_AoA) - get(A0_AoA)), 0)), get(VMAX)))
+    end
+    set(Valpha_MAX_smooth, Math_clamp_higher(adirs_get_avg_ias() * math.sqrt(Math_clamp_lower((get(Filtered_avg_AoA) - get(A0_AoA)) / (get(Amax_AoA) - get(A0_AoA)), 0)), get(VMAX)))
+
     --VLS & alpha speeds update timer(accirding to video at 25fps updates every 3 <-> 4 frames: https://www.youtube.com/watch?v=3Suxhj9wQio&ab_channel=a321trainingteam)
     alpha_speed_update_timer = alpha_speed_update_timer + get(DELTA_TIME)
 
@@ -361,12 +369,9 @@ function update()
     if alpha_speed_update_timer >= alpha_speed_update_time_s then
         update_VLS()
 
-        if in_air_timer >= 5 then
-            set(Vaprot_vsw, Math_clamp_higher(adirs_get_avg_ias() * math.sqrt(Math_clamp_lower((get(Filtered_avg_AoA) - get(A0_AoA)) / (get(Aprot_AoA) - get(A0_AoA)), 0)), get(VMAX)))
-        else
-            set(Vaprot_vsw, Math_clamp_higher(adirs_get_avg_ias() * math.sqrt(Math_clamp_lower((get(Filtered_avg_AoA) - get(A0_AoA)) / (get(Amax_AoA) - get(A0_AoA)), 0)), get(VMAX)))
-        end
-        set(Valpha_MAX, Math_clamp_higher(adirs_get_avg_ias() * math.sqrt(Math_clamp_lower((get(Filtered_avg_AoA) - get(A0_AoA)) / (get(Amax_AoA) - get(A0_AoA)), 0)), get(VMAX)))
+        --update the delayed speeds
+        set(Vaprot_vsw, get(Vaprot_vsw_smooth))
+        set(Valpha_MAX, get(Valpha_MAX_smooth))
 
         --reset timer
         alpha_speed_update_timer = 0

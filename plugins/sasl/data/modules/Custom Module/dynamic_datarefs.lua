@@ -452,16 +452,18 @@ Hydraulic_PTU_status = createGlobalPropertyi("a321neo/dynamics/HYD/PTU_status", 
 Hydraulic_RAT_status = createGlobalPropertyi("a321neo/dynamics/HYD/RAT_status", 0, false, true, false) -- 0: OFF ready, 1: Running OK, 2: FAULT or low speed
 
 --aircraft limits
-VMAX_prot =  createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/vmax_prot_speed", 0, false, true, false)
-Fixed_VMAX = createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fixed_vmax_speed", 0, false, true, false)
-VMAX =		 createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/vmax_speed", 0, false, true, false)
-S_speed = 	 createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/s_speed", 0, false, true, false)
-F_speed = 	 createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/f_speed", 0, false, true, false)
-VFE_speed =  createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/vfe_speed", 0, false, true, false)
-VLS = 		 createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/vls_speed", 0, false, true, false)
-GD =		 createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/green_dot_speed", 0, false, true, false)
-Vaprot_vsw = createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/alpha_prot_speed", 0, false, true, false)
-Valpha_MAX = createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/alpha_max_speed", 0, false, true, false)
+VMAX_prot =         createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/vmax_prot_speed", 0, false, true, false)
+Fixed_VMAX =        createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fixed_vmax_speed", 0, false, true, false)
+VMAX =		        createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/vmax_speed", 0, false, true, false)
+S_speed = 	        createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/s_speed", 0, false, true, false)
+F_speed = 	        createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/f_speed", 0, false, true, false)
+VFE_speed =         createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/vfe_speed", 0, false, true, false)
+VLS = 		        createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/vls_speed", 0, false, true, false)
+GD =		        createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/green_dot_speed", 0, false, true, false)
+Vaprot_vsw =        createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/alpha_prot_speed", 0, false, true, false)
+Valpha_MAX =        createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/alpha_max_speed", 0, false, true, false)
+Vaprot_vsw_smooth = createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/smooth_alpha_prot_speed", 0, false, true, false)
+Valpha_MAX_smooth = createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/smooth_alpha_max_speed", 0, false, true, false)
 
 A0_AoA =     createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/alpha_0_aoa", 0, false, true, false)
 Aprot_AoA =  createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/alpha_prot_aoa", 0, false, true, false)

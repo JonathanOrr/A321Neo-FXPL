@@ -99,9 +99,9 @@ FBW_PID_arrays = {
         Derivative_curve_spd = 4,
     },
 
-    FBW_Q_APROT_PID_array = {
-        P_gain = 1.200,
-        I_gain = 0.000,
+    FBW_ROTATION_APROT_PID_array = {
+        P_gain = 1.100,
+        I_gain = 0.450,
         D_gain = 0.000,
         B_gain = 1,
         Schedule_gains = false,
@@ -130,6 +130,38 @@ FBW_PID_arrays = {
         Desired_output = 0,
         Actual_output = 0,
     },
+    FBW_FLARE_APROT_PID_array = {
+        P_gain = 1.100,
+        I_gain = 0.450,
+        D_gain = 0.000,
+        B_gain = 1,
+        Schedule_gains = false,
+        Schedule_table = {
+            P = {
+                {000, 0.000},
+            },
+            I = {
+                {000, 0.000},
+            },
+            D = {
+                {000, 0.000},
+            },
+        },
+        Limited_integral = true,
+        min_integral = -4,
+        max_integral = 4,
+        Min_out = -4,
+        Max_out = 4,
+        PV = 0,
+        Error = 0,
+        Proportional = 0,
+        Integral = 0,
+        Derivative = 0,
+        Backpropagation = 0,
+        Desired_output = 0,
+        Actual_output = 0,
+    },
+
     FBW_PITCH_RATE_PID_array = {
         P_gain = 0.055,
         I_gain = 0.150,

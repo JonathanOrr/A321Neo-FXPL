@@ -26,15 +26,15 @@ function FBW_law_reconfiguration(var_table)
             {adirs_how_many_adrs_work() == 1, "DOUBLE SELF DETECTED ADR FAILURE"},
             {adirs_how_many_aoa_disagree() == 3 or adirs_how_many_aoa_failed() == 3, "AOA DISAGREEMENT/FAILURE NRM LAW PROT IMPOSSIBLE"},
             {get(ELAC_1_status) == 0 and get(ELAC_2_status) == 0, "DOUBLE ELAC FAILURE"},
-            {get(FAILURE_FCTL_LAIL) == 1 and get(FAILURE_FCTL_RAIL) == 1, "DOUBLE AILERON FAILURE"},
-            {get(FAILURE_FCTL_THS) == 1 or get(FAILURE_FCTL_THS_MECH) == 1, "THS JAMMED"},
+            {get(L_aileron_avail) + get(R_aileron_avail) ~= 2, "DOUBLE AILERON FAILURE"},
+            {get(THS_avail) == 0, "THS JAMMED"},
             {get(ELAC_2_status) == 0 and get(Hydraulic_B_press) < 1450, "ELAC 2 AND BLUE HYDRAULIC FAILURE"},
             {get(ELAC_1_status) == 0 and get(Hydraulic_G_press) < 1450, "ELAC 1 AND GREEN HYDRAULIC FAILURE"},
             {get(ELAC_1_status) == 0 and get(Hydraulic_Y_press) < 1450, "ELAC 1 AND YELLOW HYDRAULIC FAILURE"},
-            {get(FAILURE_FCTL_LELEV) == 1 or get(FAILURE_FCTL_RELEV) == 1, "SINGLE ELEVATOR FAILURE"},
+            {get(L_elevator_avail) + get(R_elevator_avail) ~= 2, "SINGLE ELEVATOR FAILURE"},
             --MSSING SIDESTICK FAILURE
             {adirs_how_many_irs_fully_work() == 1, "DOUBLE SELF DETECTED IR FAILURE"},
-            {get(FAILURE_FCTL_LSPOIL_1) == 1 and get(FAILURE_FCTL_LSPOIL_2) == 1 and get(FAILURE_FCTL_LSPOIL_3) == 1 and get(FAILURE_FCTL_LSPOIL_4) == 1 and get(FAILURE_FCTL_LSPOIL_5) == 1 and get(FAILURE_FCTL_RSPOIL_1) == 1 and get(FAILURE_FCTL_RSPOIL_2) == 1 and get(FAILURE_FCTL_RSPOIL_3) == 1 and get(FAILURE_FCTL_RSPOIL_4) == 1 and get(FAILURE_FCTL_RSPOIL_5) == 1, "ALL SPOILERS FAILURE"},
+            {get(L_spoiler_1_avail) + get(L_spoiler_2_avail) + get(L_spoiler_3_avail) + get(L_spoiler_4_avail) + get(L_spoiler_5_avail) + get(R_spoiler_1_avail) + get(R_spoiler_2_avail) + get(R_spoiler_3_avail) + get(R_spoiler_4_avail) + get(R_spoiler_5_avail) == 0, "ALL SPOILERS FAILURE"},
             {get(SEC_1_status) == 0 and get(SEC_2_status) == 0 and get(SEC_3_status) == 0, "TRIPLE SEC FAILURE"},
         },
 
@@ -42,7 +42,7 @@ function FBW_law_reconfiguration(var_table)
         {
             {get(FAC_1_status) == 0 and get(FAC_2_status) == 0, "DOUBLE FAC FAILURE"},
             {get(Hydraulic_G_press) < 1450 and get(Hydraulic_Y_press) < 1450, "HYDRAULIC G + Y FAILURE"},
-            --MISSING YAW DAMPER FAILURE
+            {get(Yaw_damper_avail) == 0, "YAW DAMPER FAILURE"},
             {get(Gen_EMER_pwr) == 0 and get(Gen_EXT_pwr) == 0 and get(Gen_APU_pwr) == 0 and get(Gen_2_pwr) == 0 and get(Gen_1_pwr) == 0, "EMER ELEC CONFIG (BAT ONLY)"},--can be reset to the column above by reseting FAC 1
             {var_table.fac_1_reset_required == 1 or var_table.fac_1_reset_required == -1, "RESTORED RAT POWER AWAITING FAC 1 RESET"},
         },

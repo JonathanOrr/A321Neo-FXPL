@@ -87,10 +87,10 @@ function Update_PID_historys(x_pos, y_pos, width, height, PID_array)
 
         if DELTA_TIME_sum < graph_time_limit then
             Err_array[#Err_array + 1] = PID_array.Error / graph_max_error
-            P_array[#P_array + 1] = PID_array.Proportional
-            I_array[#I_array + 1] = PID_array.Integral
-            D_array[#D_array + 1] = PID_array.Derivative
-            Sum_array[#Sum_array + 1] = PID_array.Desired_output
+            P_array[#P_array + 1] = PID_array.Proportional / PID_array.Max_out
+            I_array[#I_array + 1] = PID_array.Integral / PID_array.Max_out
+            D_array[#D_array + 1] = PID_array.Derivative / PID_array.Max_out
+            Sum_array[#Sum_array + 1] = PID_array.Desired_output / PID_array.Max_out
             DELTA_TIME_array[#DELTA_TIME_array + 1] = get(DELTA_TIME)
         end
 
@@ -236,6 +236,7 @@ function draw()
     sasl.gl.drawRectangle(0, 0, size[1], size[2], LIGHT_GREY)
     Draw_PID_graph(0 + 5, 0 + 5, 590, 290, WHITE, LIGHT_BLUE, GREEN, ORANGE, true, true, true, true, true)
     draw_gain_values(FBW_PID_arrays.FBW_PITCH_RATE_PID_array, 0 + 5, 0 + 5, 590, 290, WHITE, LIGHT_BLUE, GREEN)
+
 
     --draw anything
     --Draw_value_graph(0 + 5, 0 + 5, 590, 290, PFD_YELLOW)
