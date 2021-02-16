@@ -91,6 +91,19 @@ function Extract_vs1g(gross_weight, config, gear_down)
     end
 end
 
+local function update_VMAX_demand()
+    local min_VMO = VMAX_speeds[2] + 6
+    local max_VMO = VMAX_speeds[2] + 16
+    local min_MMO = adirs_get_avg_ias() * (VMAX_speeds[1] + 0.006) / Math_clamp_lower(adirs_get_avg_mach(), 0.001)
+    local max_MMO = adirs_get_avg_ias() * (VMAX_speeds[1] + 0.040) / Math_clamp_lower(adirs_get_avg_mach(), 0.001)
+
+    if adirs_get_avg_alt() > 24600 then
+        set(VMAX_demand, Math_rescale(-1, max_MMO, 0, min_MMO, get(Augmented_pitch)))
+    else
+        set(VMAX_demand, Math_rescale(-1, max_VMO, 0, min_VMO, get(Augmented_pitch)))
+    end
+end
+
 local function update_VMAX_prot()
     if adirs_get_avg_alt() > 24600 then
         set(VMAX_prot, adirs_get_avg_ias() * (VMAX_speeds[1] + 0.006) / Math_clamp_lower(adirs_get_avg_mach(), 0.001))
@@ -330,6 +343,7 @@ end
 function update()
     filter_AoA()
 
+    update_VMAX_demand()
     update_VMAX_prot()
     update_VMAX()
     update_VFE()

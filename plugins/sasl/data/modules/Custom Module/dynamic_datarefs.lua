@@ -453,6 +453,7 @@ Hydraulic_PTU_status = createGlobalPropertyi("a321neo/dynamics/HYD/PTU_status", 
 Hydraulic_RAT_status = createGlobalPropertyi("a321neo/dynamics/HYD/RAT_status", 0, false, true, false) -- 0: OFF ready, 1: Running OK, 2: FAULT or low speed
 
 --aircraft limits
+VMAX_demand =       createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/vmax_demand_speed", 0, false, true, false)
 VMAX_prot =         createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/vmax_prot_speed", 0, false, true, false)
 Fixed_VMAX =        createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fixed_vmax_speed", 0, false, true, false)
 VMAX =		        createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/vmax_speed", 0, false, true, false)

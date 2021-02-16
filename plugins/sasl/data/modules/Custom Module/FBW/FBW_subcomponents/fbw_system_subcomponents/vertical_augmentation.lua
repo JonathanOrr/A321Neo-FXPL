@@ -158,6 +158,37 @@ local input_limitations = {
         return Q_limited
     end,
 
+    G_Pitch = function (G, var_table)
+        --properties
+        local pitch = adirs_get_avg_pitch()
+        local max_pitch = get(Flaps_internal_config) == 5 and (var_table.Filtered_ias <= get(VLS) and 20 or 25) or (var_table.Filtered_ias <= get(VLS) and 25 or 30)
+        local min_pitch = -15
+        local degrade_margin = 8
+        local upwards_return_G = 2.5
+        local downwards_return_G = 0
+
+        --check for pitch exceedence
+        local d_limitation = Math_rescale(min_pitch - degrade_margin, 2, min_pitch + degrade_margin, 0, pitch)
+        local u_limitation = Math_rescale(max_pitch - degrade_margin, 0, max_pitch + degrade_margin, 2, pitch)
+
+        --rescale input--
+        local d_limit_table = {
+            {0, G},
+            {1, math.max(neutral_flight_G(adirs_get_avg_roll()), G)},
+            {2, math.max(G, upwards_return_G)},
+        }
+        local G_limited = Table_interpolate(d_limit_table, d_limitation)
+
+        local u_limit_table = {
+            {0, G_limited},
+            {1, math.min(G_limited, neutral_flight_G(adirs_get_avg_roll()))},
+            {2, math.min(G_limited, downwards_return_G)},
+        }
+        G_limited = Table_interpolate(u_limit_table, u_limitation)
+
+        return G_limited
+    end,
+
     Q_AoA = function (x, Q, clamping_margin, min_Q, max_Q, var_table, pid_array)
         --exit if any gears on ground--
         if get(Any_wheel_on_ground) == 1 then
@@ -212,8 +243,12 @@ local input_limitations = {
         return Math_rescale(0, clamped_C_STAR, 1, alpha_demand_C_STAR, blend_ratio)
     end,
 
-    Vmax = function (x)
-        
+    Vmax = function (G, var_table)
+        local upwards_return_G = 2.5
+
+        local high_speed_prot_G = Math_rescale(get(VMAX), G, get(VMAX_demand) + 10, upwards_return_G, var_table.Filtered_ias)
+
+        return high_speed_prot_G
     end,
 }
 
@@ -231,8 +266,16 @@ local get_vertical_input = {
         var_table.AoA_SP =   Math_clamp(var_table.AoA_SP, get(Aprot_AoA), get(Amax_AoA))
     end,
 
-    Flight = function (x)
-        return G_to_Cstar(X_to_G(x))
+    Flight = function (x, var_table)
+        local input_G = X_to_G(x)
+
+        --protections--
+        if get(FBW_vertical_law) == FBW_NORMAL_LAW then
+            input_G = input_limitations.Vmax(input_G, var_table)
+            input_G = input_limitations.G_Pitch(input_G, var_table)
+        end
+
+        return G_to_Cstar(input_G)
     end,
 
     Rotation = function (x, var_table)
