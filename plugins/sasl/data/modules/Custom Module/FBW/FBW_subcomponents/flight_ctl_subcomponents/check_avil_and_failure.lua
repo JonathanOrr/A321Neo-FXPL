@@ -117,6 +117,7 @@ function Check_surface_avail()
     set(Rudder_lim_avail, get(Rudder_lim_avail) * (1 - get(FAILURE_FCTL_RUDDER_LIM)) * (1 - get(FAILURE_FCTL_RUDDER_MECH)))
     set(Rudder_trim_avail, get(Rudder_trim_avail) * (1 - get(FAILURE_FCTL_RUDDER_TRIM)) * (1 - get(FAILURE_FCTL_RUDDER_MECH)))
     set(Rudder_avail, get(Rudder_avail) * (1 - get(FAILURE_FCTL_RUDDER_MECH)))
+    set(Yaw_damper_avail, get(Yaw_damper_avail) * (1 - get(FAILURE_FCTL_YAW_DAMPER)))
 
     --if spoilers is faulty and more than 2.5 degrees of extention then go amber
     for i = 1, num_of_spoilers do
@@ -159,7 +160,8 @@ function Up_shit_creek(last_dataref_value)
         FAILURE_FCTL_THS_MECH,
         FAILURE_FCTL_RUDDER_LIM,
         FAILURE_FCTL_RUDDER_TRIM,
-        FAILURE_FCTL_RUDDER_MECH
+        FAILURE_FCTL_RUDDER_MECH,
+        FAILURE_FCTL_YAW_DAMPER
     }
 
     if get(FAILURE_FCTL_UP_SHIT_CREEK) == 1 then

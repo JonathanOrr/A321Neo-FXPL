@@ -443,7 +443,7 @@ end
 local function draw_extras()
 
     -- STS BOX
-    if get(EWD_box_sts) == 1 then
+    if get(EWD_box_sts) == 1 and get(EWD_arrow_overflow) == 0 then
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2+88, size[2]/2-440, "STS", 30, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)    
         sasl.gl.drawFrame ( size[1]/2+87, size[2]/2-442, 62, 28 , ECAM_WHITE)
     end 
@@ -460,8 +460,8 @@ local function draw_extras()
         sasl.gl.drawFrame ( size[1]/2+87, size[2]/2-167, 62, 28 , color)
     end
 
-    -- overflow arrow (this is not visible if STS box is visible)
-    if get(EWD_box_sts) == 0 and get(EWD_arrow_overflow) == 1 then
+    -- overflow arrow
+    if get(EWD_arrow_overflow) == 1 then
         sasl.gl.drawWideLine ( size[1]/2+118, size[2]/2-410 , size[1]/2+118 , size[2]/2-425 , 5 , ECAM_GREEN )
         sasl.gl.drawTriangle ( size[1]/2+106, size[2]/2-425 , size[1]/2+119 , size[2]/2-446 , size[1]/2+130, size[2]/2-425 , ECAM_GREEN )
     end

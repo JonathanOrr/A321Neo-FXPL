@@ -171,6 +171,7 @@ local failures_data = {
             {name="RUDDER LIMIT\nFAILURE", status=false, dataref=FAILURE_FCTL_RUDDER_LIM },
             {name="RUDDER TRIM\nSTUCK", status=false, dataref=FAILURE_FCTL_RUDDER_TRIM },
             {name="RUDDER MECH\nSTUCK", status=false, dataref=FAILURE_FCTL_RUDDER_MECH },
+            {name="YAW DAMPER\nFAILURE", status=false, dataref=FAILURE_FCTL_YAW_DAMPER },
             {name="UP\nSHIT CREEK", status=false, dataref=FAILURE_FCTL_UP_SHIT_CREEK },
         }
     },

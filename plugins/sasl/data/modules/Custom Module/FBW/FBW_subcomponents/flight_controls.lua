@@ -83,15 +83,15 @@ function update()
         if get(Project_square_input) == 1 then
             Project_circle_to_square_inputs(get(Roll), get(Pitch))
         else
-            set(Augmented_roll, get(Roll))
+            set(Augmented_roll,  get(Roll))
             set(Augmented_pitch, get(Pitch))
         end
     end
 
     --summing the controls
-    total_roll = get(Roll_artstab)--Roll rate commanding
+    total_roll  = get(Roll_artstab)
     total_pitch = get(Pitch_artstab)
-    total_yaw = get(Yaw_artstab)
+    total_yaw   = get(Yaw_artstab)
 
     if get(Override_control_surfaces) == 1 then
         if get(DELTA_TIME) ~= 0 then

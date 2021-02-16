@@ -125,9 +125,8 @@ local function yaw_controlling(var_table)
     --law reconfiguration
     if get(FBW_yaw_law) == FBW_ALT_NO_PROT_LAW then
         var_table.Yaw_damper_controller_output = Math_clamp(var_table.Yaw_damper_controller_output, -5/30, 5/30)--limit travel ability to 5 degrees of rudder
-        FBW_PID_arrays.FBW_YAW_DAMPER_PID_array.Actual_output = get(Yaw_artstab)
     end
-    if get(FBW_yaw_law) == FBW_MECHANICAL_BACKUP_LAW then
+    if get(FBW_yaw_law) == FBW_MECHANICAL_BACKUP_LAW or get(Yaw_damper_avail) == 0 then
         var_table.Yaw_damper_controller_output = 0
     end
 

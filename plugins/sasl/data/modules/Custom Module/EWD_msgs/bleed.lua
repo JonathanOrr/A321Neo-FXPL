@@ -297,7 +297,7 @@ MessageGroup_BLEED_ENG2_FAULT = {
         {
             text = function() return "   - PACK 2...........OFF" end,
             color = function() return COL_ACTIONS end,
-            is_active = function() return get(Pack_L) == 1 end
+            is_active = function() return get(Pack_R) == 1 end
         },
         Message_BLEED_X_OPEN
     },
