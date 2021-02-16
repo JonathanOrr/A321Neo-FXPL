@@ -30,6 +30,9 @@
 {748172b8-4c79-49ad-8dc5-eb75af6c8b1f} event:/CockpitMechanical/ParkBrakeOff
 {ee845653-3288-40de-8ca1-0546b9cc36e0} event:/CockpitMechanical/ParkBrakeOn
 {46e31fff-1edb-4eb0-9156-7a54aa775f98} event:/CockpitMechanical/Soft Button Press
+{e753ad2e-0852-49fc-8818-34856eda464a} event:/CockpitMechanical/Soft Button Press 2
+{8022fd30-2578-44f1-87c5-35c925912677} event:/CockpitMechanical/Soft Button Press 3
+{99e4d748-2281-4049-a26e-f32512cb17b6} event:/CockpitMechanical/Soft Button Press 4
 {3f10ae93-6ce9-4498-b258-bc2577898679} event:/CockpitMechanical/SSTakeOver
 {f876080e-f9a4-4eb5-8ae2-d6fd1a9d1509} event:/CockpitMechanical/Tray Table Close
 {3c593132-73eb-4d34-9184-c67400174bf2} event:/CockpitMechanical/Tray Table Open

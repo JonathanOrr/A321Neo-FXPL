@@ -2384,8 +2384,8 @@ END_SOUND_ATTACHMENT
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /Liftoff
   VEH_XYZ 0 1.4 -18.7
-  EVENT_START_COND 	a321neo/dynamics/wheel/either_aft_on_ground == 0
-  EVENT_END_COND a321neo/dynamics/wheel/either_aft_on_ground == 1
+  EVENT_START_COND 	sim/flightmodel2/gear/on_ground[0] == 0
+  EVENT_END_COND sim/flightmodel2/gear/on_ground[0] == 1
 END_SOUND_ATTACHMENT
 
 #################################################################################################CALLOUTS
