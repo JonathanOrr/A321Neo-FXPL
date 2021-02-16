@@ -123,18 +123,9 @@ local input_limitations = {
 
         --properties
         local entry_margin = 1
-        local time_to_move_demand = 3.5
-
-        --set alpha/V demand target
-        local target_V =     Math_rescale(0, get(Vaprot_vsw_smooth), 1, get(Valpha_MAX_smooth), x)
-        local target_aoa =   Math_rescale(0, get(Aprot_AoA), 1, get(Amax_AoA), x)
-        var_table.AoA_V_SP = Set_linear_anim_value(var_table.AoA_V_SP, target_V, 0, 1000, 1 / time_to_move_demand)
-        var_table.AoA_V_SP = Math_clamp(var_table.AoA_V_SP, get(Valpha_MAX_smooth), get(Vaprot_vsw_smooth))
-        var_table.AoA_SP =   Set_linear_anim_value(var_table.AoA_SP, target_aoa, 0, 100, 1 / time_to_move_demand)
-        var_table.AoA_SP =   Math_clamp(var_table.AoA_SP, get(Aprot_AoA), get(Amax_AoA))
 
         --demand Q to reach Alpha--
-        local V_demand_Q = Math_rescale(0, 0, 25, -4, var_table.AoA_V_SP - var_table.Filtered_ias)
+        local V_demand_Q = Math_rescale(0, 0, 30, -4, var_table.AoA_V_SP - var_table.Filtered_ias)
         local alpha_demand_Q = FBW_PID_BP(pid_array, var_table.AoA_SP - var_table.Filtered_AoA, var_table.Filtered_AoA) + V_demand_Q
         alpha_demand_Q = Math_clamp(alpha_demand_Q, -4, 4)
 
@@ -158,6 +149,18 @@ local input_limitations = {
 
 --INPUT INTERPRETATION--------------------------------------------------------------------------------------
 local get_vertical_input = {
+    AoA = function (x, var_table)
+        local time_to_move_demand = 3
+
+        --set alpha/V demand target
+        local target_V =     Math_rescale(0, get(Vaprot_vsw_smooth), 1, get(Valpha_MAX_smooth), x)
+        local target_aoa =   Math_rescale(0, get(Aprot_AoA), 1, get(Amax_AoA), x)
+        var_table.AoA_V_SP = Set_linear_anim_value(var_table.AoA_V_SP, target_V, 0, 1000, 1 / time_to_move_demand)
+        var_table.AoA_V_SP = Math_clamp(var_table.AoA_V_SP, get(Valpha_MAX_smooth), get(Vaprot_vsw_smooth))
+        var_table.AoA_SP =   Set_linear_anim_value(var_table.AoA_SP, target_aoa, 0, 100, 1 / time_to_move_demand)
+        var_table.AoA_SP =   Math_clamp(var_table.AoA_SP, get(Aprot_AoA), get(Amax_AoA))
+    end,
+
     X_to_G = function (x)
         local max_G = get(Flaps_internal_config) ~= 0 and 2 or 2.5
         local min_G = get(Flaps_internal_config) ~= 0 and 0 or -1
@@ -203,7 +206,7 @@ local get_vertical_input = {
         output_Q = input_limitations.Pitch(output_Q)
 
         --BP the AoA demand PID
-        FBW_PID_arrays.FBW_ROTATION_APROT_PID_array.Actual_output = var_table.Q_input
+        FBW_PID_arrays.FBW_ROTATION_APROT_PID_array.Actual_output = get(True_pitch_rate)
 
         return output_Q
     end,
@@ -240,7 +243,7 @@ local get_vertical_input = {
         output_Q = input_limitations.Q_AoA(x, output_Q, 3, 1.5, 3, var_table, FBW_PID_arrays.FBW_FLARE_APROT_PID_array)
 
         --BP the AoA demand PID
-        FBW_PID_arrays.FBW_FLARE_APROT_PID_array.Actual_output = var_table.Q_input
+        FBW_PID_arrays.FBW_FLARE_APROT_PID_array.Actual_output = get(True_pitch_rate)
 
         return output_Q
     end,
@@ -248,6 +251,9 @@ local get_vertical_input = {
 
 --input swapping--------------------------------------------------------------------------------------------
 local function input_handling(var_table)
+    --calculate AoA input
+    get_vertical_input.AoA(get(Augmented_pitch), var_table)
+
     local rotation_mode_input = get_vertical_input.Rotation(get(Augmented_pitch), var_table)
     local flare_mode_input = get_vertical_input.Flare(get(Augmented_pitch), var_table)
 
@@ -323,7 +329,7 @@ local function enforce_bumpless_transfers()
     if get(FBW_vertical_rotation_mode_ratio) == 0 and get(FBW_vertical_flight_mode_ratio) == 0 then
         FBW_PID_arrays.FBW_ROTATION_APROT_PID_array.Integral = 0
     end
-    if get(FBW_vertical_flare_mode_ratio) == 0  then
+    if get(FBW_vertical_flare_mode_ratio) == 0 then
         FBW_PID_arrays.FBW_FLARE_APROT_PID_array.Integral = 0
     end
 end
