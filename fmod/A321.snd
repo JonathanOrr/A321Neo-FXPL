@@ -106,7 +106,7 @@ BEGIN_SOUND_ATTACHMENT
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /Engines V2/Engines
+  EVENT_NAME /Engines V2/EnginesL
   VEH_PART engine 0
   EVENT_START_COND sim/flightmodel2/engines/N1_percent[0] > 0
   EVENT_END_COND sim/flightmodel2/engines/N1_percent[0] == 0
@@ -114,7 +114,7 @@ BEGIN_SOUND_ATTACHMENT
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /Engines V2/Engines
+  EVENT_NAME /Engines V2/EnginesR
   VEH_PART engine 1
   EVENT_START_COND sim/flightmodel2/engines/N1_percent[1] > 0
   EVENT_END_COND sim/flightmodel2/engines/N1_percent[1] == 0

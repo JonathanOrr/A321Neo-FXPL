@@ -49,8 +49,9 @@
 {3428542a-0973-45d3-b8f9-c0e46de082e2} event:/Engines V2/Engine Start Ext
 {956efd44-c2c5-4ab7-a510-f35c74dcd905} event:/Engines V2/Engine Start N2 L
 {e50538c3-8b0c-4e10-9c6a-5b75951c3162} event:/Engines V2/Engine Start N2 R
-{2150216a-d9a4-462d-9a2c-711a97cc7a8f} event:/Engines V2/Engines
 {19330240-36a8-4ef9-8fc8-696aa8289a24} event:/Engines V2/Engines Ext
+{2150216a-d9a4-462d-9a2c-711a97cc7a8f} event:/Engines V2/EnginesL
+{ef45060b-6f2e-4d49-bd25-d992e901b35a} event:/Engines V2/EnginesR
 {78b8fd51-ea07-41b0-8e7a-6c6325c9a885} event:/Engines V2/HowlEnd
 {60390ec1-f659-43b4-a63d-0618b686e0fe} event:/FCU/Selectors/1
 {9bcca77b-d316-4192-bb92-d796b32e9bd3} event:/FCU/Selectors/2
