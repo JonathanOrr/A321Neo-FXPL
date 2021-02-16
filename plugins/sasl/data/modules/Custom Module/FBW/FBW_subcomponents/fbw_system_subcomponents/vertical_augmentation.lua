@@ -4,6 +4,10 @@ local vertical_control_var_table = {
 
     Filtered_Q = 0,
     Filtered_Q_err = 0,
+
+    Filtered_C_STAR = 0,
+    Filtered_C_STAR_err = 0,
+
     Filtered_ias = 0,
     Filtered_AoA = 0,
 
@@ -20,12 +24,20 @@ local vertical_control_var_table = {
 
 local lateral_control_filter_table = {
     Q_pv_filter_table = {
-        x = get(True_pitch_rate),
+        x = 0,
         cut_frequency = 6,
     },
     Q_err_filter_table = {
         x = 0,
         cut_frequency = 6,
+    },
+    C_STAR_pv_filter_table = {
+        x = 0,
+        cut_frequency = 15,
+    },
+    C_STAR_err_filter_table = {
+        x = 0,
+        cut_frequency = 15,
     },
     IAS_filter_table = {
         x = adirs_get_avg_ias(),
@@ -34,12 +46,12 @@ local lateral_control_filter_table = {
     AoA_filter_table = {
         x = 0,
         cut_frequency = 0.25,
-    }
+    },
 }
 
 --FLIGHT CHARACTERISTICS------------------------------------------------------------------------------------
-local function neutral_flight_G(pitch, bank)
-    return math.cos(math.rad(pitch)) / math.cos(math.rad(bank))
+local function neutral_flight_G(bank)
+    return math.cos(math.rad(get(Vpath))) / math.cos(math.rad(bank))
 end
 
 local function compute_C_star(Nz, Q)
@@ -50,13 +62,13 @@ end
 local function Max_C_STAR()
     local max_G = get(Flaps_internal_config) ~= 0 and 2 or 2.5
 
-    local rad_pitch = math.rad(adirs_get_avg_pitch())
+    local rad_vpath = math.rad(get(Vpath))
     local rad_bank  = math.rad(adirs_get_avg_roll())
 
-    local nz_trim = math.cos(rad_pitch) * math.cos(rad_bank)
-    local delta_nz_turn = math.cos(rad_pitch) * (math.sin(math.rad(33))^2 / math.cos(math.rad(33)))
+    local nz_trim = math.cos(rad_vpath) * math.cos(rad_bank)
+    local delta_nz_turn = math.cos(rad_vpath) * (math.sin(math.rad(33))^2 / math.cos(math.rad(33)))
 
-    local U_offset = (2 * (max_G - math.cos(rad_pitch) * math.cos(math.rad(67))) - delta_nz_turn) - (-2 * (max_G - math.cos(rad_pitch)) - delta_nz_turn)
+    local U_offset = (2 * (max_G - math.cos(rad_vpath) * math.cos(math.rad(67))) - delta_nz_turn) - (-2 * (max_G - math.cos(rad_vpath)) - delta_nz_turn)
 
     local upper_C_star_lim = -(1 - 1 + 2) * (max_G - nz_trim) - delta_nz_turn + U_offset --TODO cross over speed
 
@@ -66,16 +78,48 @@ end
 local function Min_C_STAR()
     local min_G = get(Flaps_internal_config) ~= 0 and 0 or -1
 
-    local rad_pitch = math.rad(adirs_get_avg_pitch())
+    local rad_vpath = math.rad(get(Vpath))
     local rad_bank  = math.rad(adirs_get_avg_roll())
 
-    local nz_trim = math.cos(rad_pitch) * math.cos(rad_bank)
+    local nz_trim = math.cos(rad_vpath) * math.cos(rad_bank)
 
-    local U_offset = (2 * (min_G - math.cos(rad_pitch) * math.cos(math.rad(67)))) - (-2 * (min_G - math.cos(rad_pitch)))
+    local U_offset = (2 * (min_G - math.cos(rad_vpath) * math.cos(math.rad(67)))) - (-2 * (min_G - math.cos(rad_vpath)))
 
     local lower_C_star_lim = -(1 - 1 + 2) * (min_G - nz_trim) + U_offset --TODO cross over speed
 
     return lower_C_star_lim
+end
+
+local function X_to_G(x)
+    local max_G = get(Flaps_internal_config) ~= 0 and 2 or 2.5
+    local min_G = get(Flaps_internal_config) ~= 0 and 0 or -1
+
+    local bank  = adirs_get_avg_roll()
+
+    local G_load_input_table = {
+        {-1, min_G},
+        {0,  neutral_flight_G(Math_clamp(bank, -33, 33))},
+        {1,  max_G},
+    }
+
+    return Table_interpolate(G_load_input_table, x)
+end
+
+local function G_to_Cstar(G)
+    local max_G = get(Flaps_internal_config) ~= 0 and 2 or 2.5
+    local min_G = get(Flaps_internal_config) ~= 0 and 0 or -1
+
+    local bank  = adirs_get_avg_roll()
+
+    local neutral_nz = neutral_flight_G(Math_clamp(bank, -33, 33))
+
+    local C_star_input_table = {
+        {min_G, Min_C_STAR()},
+        {neutral_nz, neutral_nz},
+        {max_G, Max_C_STAR()},
+    }
+
+    return Table_interpolate(C_star_input_table, G)
 end
 
 --INPUT INTERPRETATION--------------------------------------------------------------------------------------
@@ -114,7 +158,6 @@ local input_limitations = {
         return Q_limited
     end,
 
-
     Q_AoA = function (x, Q, clamping_margin, min_Q, max_Q, var_table, pid_array)
         --exit if any gears on ground--
         if get(Any_wheel_on_ground) == 1 then
@@ -142,6 +185,33 @@ local input_limitations = {
         return Math_rescale(0, clamped_Q, 1, alpha_demand_Q, blend_ratio)
     end,
 
+    C_STAR_AoA = function (x, C_STAR, clamping_margin, min_C_STAR, max_C_STAR, var_table, pid_array)
+        --exit if any gears on ground--
+        if get(Any_wheel_on_ground) == 1 then
+            return C_STAR
+        end
+
+        --properties
+        local entry_margin = 1
+
+        --demand C* to reach Alpha--
+        local V_demand_C_STAR = Math_rescale(0, 0, 30, Min_C_STAR(), var_table.AoA_V_SP - var_table.Filtered_ias)
+        local alpha_demand_C_STAR = FBW_PID_BP(pid_array, var_table.AoA_SP - var_table.Filtered_AoA, var_table.Filtered_AoA) + V_demand_C_STAR
+        alpha_demand_C_STAR = Math_clamp(alpha_demand_C_STAR, Min_C_STAR(), Max_C_STAR())
+
+        --blend ratio between the inputed C* and the alpha demand C*--
+        local blend_ratio = Math_rescale(get(Aprot_AoA) - entry_margin, 0, get(Aprot_AoA), 1, var_table.Filtered_AoA)
+        blend_ratio = Math_rescale(-0.5, 0, 0, blend_ratio, x)
+
+        --adjust upper clamp limit
+        local upper_C_STAR_clamp = Math_rescale(0, min_C_STAR, clamping_margin, max_C_STAR, var_table.AoA_SP - var_table.Filtered_AoA)
+        --clamped entered C*--
+        local clamped_C_STAR = Math_clamp_higher(C_STAR, upper_C_STAR_clamp)
+
+        --rescale into into C* and output--
+        return Math_rescale(0, clamped_C_STAR, 1, alpha_demand_C_STAR, blend_ratio)
+    end,
+
     Vmax = function (x)
         
     end,
@@ -161,38 +231,8 @@ local get_vertical_input = {
         var_table.AoA_SP =   Math_clamp(var_table.AoA_SP, get(Aprot_AoA), get(Amax_AoA))
     end,
 
-    X_to_G = function (x)
-        local max_G = get(Flaps_internal_config) ~= 0 and 2 or 2.5
-        local min_G = get(Flaps_internal_config) ~= 0 and 0 or -1
-
-        local pitch = adirs_get_avg_pitch()
-        local bank  = adirs_get_avg_roll()
-
-        local G_load_input_table = {
-            {-1, min_G},
-            {0,  neutral_flight_G(pitch, Math_clamp(bank, -33, 33))},
-            {1,  max_G},
-        }
-
-        return Table_interpolate(G_load_input_table, x)
-    end,
-
-    G_to_Cstar = function (G)
-        local max_G = get(Flaps_internal_config) ~= 0 and 2 or 2.5
-        local min_G = get(Flaps_internal_config) ~= 0 and 0 or -1
-
-        local pitch = adirs_get_avg_pitch()
-        local bank  = adirs_get_avg_roll()
-
-        local neutral_nz = neutral_flight_G(pitch, Math_clamp(bank, -33, 33))
-
-        local C_star_input_table = {
-            {min_G, Min_C_STAR()},
-            {neutral_nz, neutral_nz},
-            {max_G, Max_C_STAR()},
-        }
-
-        return Table_interpolate(C_star_input_table, G)
+    Flight = function (x)
+        return G_to_Cstar(X_to_G(x))
     end,
 
     Rotation = function (x, var_table)
@@ -255,23 +295,37 @@ local function input_handling(var_table)
     get_vertical_input.AoA(get(Augmented_pitch), var_table)
 
     local rotation_mode_input = get_vertical_input.Rotation(get(Augmented_pitch), var_table)
-    local flare_mode_input = get_vertical_input.Flare(get(Augmented_pitch), var_table)
+    local flight_mode_input =   get_vertical_input.Flight(get(Augmented_pitch), var_table)
+    local flare_mode_input =    get_vertical_input.Flare(get(Augmented_pitch), var_table)
 
-    var_table.Q_input = rotation_mode_input * get(FBW_vertical_rotation_mode_ratio) + rotation_mode_input * get(FBW_vertical_flight_mode_ratio) + flare_mode_input * get(FBW_vertical_flare_mode_ratio)
+    var_table.Q_input = rotation_mode_input * get(FBW_vertical_rotation_mode_ratio) + flare_mode_input * get(FBW_vertical_flare_mode_ratio)
+    var_table.C_star_input = flight_mode_input
 end
 
 --FILTERING-------------------------------------------------------------------------------------------------
 local function filter_values(var_table, filter_table)
     --FILTERING--
+
+    --Q--
     --filter the Q PV
     filter_table.Q_pv_filter_table.x = get(True_pitch_rate)
     var_table.Filtered_Q = low_pass_filter(filter_table.Q_pv_filter_table)
     --filter the Q error
     filter_table.Q_err_filter_table.x = var_table.Q_input - get(True_pitch_rate)
     var_table.Filtered_Q_err = low_pass_filter(filter_table.Q_err_filter_table)
+
+    --C*--
+    --filter the C* PV
+    filter_table.C_STAR_pv_filter_table.x = compute_C_star(get(Total_vertical_g_load), get(True_pitch_rate))
+    var_table.Filtered_C_STAR = low_pass_filter(filter_table.C_STAR_pv_filter_table)
+    --filter the C* error
+    filter_table.C_STAR_err_filter_table.x = var_table.C_star_input - compute_C_star(get(Total_vertical_g_load), get(True_pitch_rate))
+    var_table.Filtered_C_STAR_err = low_pass_filter(filter_table.C_STAR_err_filter_table)
+
     --filter the scheduling variable
     filter_table.IAS_filter_table.x = adirs_get_avg_ias()
     var_table.Filtered_ias = low_pass_filter(filter_table.IAS_filter_table)
+
     --filter the AoA
     filter_table.AoA_filter_table.x = adirs_get_avg_aoa()
     var_table.Filtered_AoA = low_pass_filter(filter_table.AoA_filter_table)
@@ -299,7 +353,7 @@ local vertical_augmentation = {
             return
         end
 
-        var_table.flight_mode_controller_output = FBW_PID_BP(FBW_PID_arrays.FBW_PITCH_RATE_PID_array, var_table.Filtered_Q_err, var_table.Filtered_Q, var_table.Filtered_ias)
+        var_table.flight_mode_controller_output = FBW_PID_BP(FBW_PID_arrays.FBW_CSTAR_PID_array, var_table.Filtered_C_STAR_err, var_table.Filtered_C_STAR, var_table.Filtered_ias)
     end,
 
     Flare_mode = function (var_table)
@@ -322,11 +376,15 @@ local function enforce_bumpless_transfers()
     --Q controller--
     if get(FBW_vertical_law) == FBW_DIRECT_LAW then
         FBW_PID_arrays.FBW_PITCH_RATE_PID_array.Integral = 0
+        FBW_PID_arrays.FBW_CSTAR_PID_array.Integral = 0
     end
-    if get(FBW_vertical_rotation_mode_ratio) == 0 and get(FBW_vertical_flight_mode_ratio) == 0 and get(FBW_vertical_flare_mode_ratio) == 0  then
+    if get(FBW_vertical_rotation_mode_ratio) == 0 and get(FBW_vertical_flare_mode_ratio) == 0 then
         FBW_PID_arrays.FBW_PITCH_RATE_PID_array.Integral = 0
     end
-    if get(FBW_vertical_rotation_mode_ratio) == 0 and get(FBW_vertical_flight_mode_ratio) == 0 then
+    if get(FBW_vertical_flight_mode_ratio) == 0 then
+        FBW_PID_arrays.FBW_CSTAR_PID_array.Integral = 0
+    end
+    if get(FBW_vertical_rotation_mode_ratio) == 0 then
         FBW_PID_arrays.FBW_ROTATION_APROT_PID_array.Integral = 0
     end
     if get(FBW_vertical_flare_mode_ratio) == 0 then
@@ -349,17 +407,32 @@ local function BP_elevator_position()
             Table_interpolate(elevator_ratio_table, get(Elevators_hstab_1)) +
             Table_interpolate(elevator_ratio_table, get(Elevators_hstab_2))
         ) / 2
+
+        --BP C* controller--
+        FBW_PID_arrays.FBW_CSTAR_PID_array.Actual_output = (
+            Table_interpolate(elevator_ratio_table, get(Elevators_hstab_1)) +
+            Table_interpolate(elevator_ratio_table, get(Elevators_hstab_2))
+        ) / 2
     elseif num_of_elev_avail == 1 then
         if get(L_elevator_avail) == 1 and get(R_elevator_avail) == 0 then
             --BP Q controller--
             FBW_PID_arrays.FBW_PITCH_RATE_PID_array.Actual_output = Table_interpolate(elevator_ratio_table, get(Elevators_hstab_1))
+
+            --BP C* controller--
+            FBW_PID_arrays.FBW_CSTAR_PID_array.Actual_output = Table_interpolate(elevator_ratio_table, get(Elevators_hstab_1))
         elseif get(L_elevator_avail) == 0 and get(R_elevator_avail) == 1 then
             --BP Q controller--
             FBW_PID_arrays.FBW_PITCH_RATE_PID_array.Actual_output = Table_interpolate(elevator_ratio_table, get(Elevators_hstab_2))
+
+            --BP C* controller--
+            FBW_PID_arrays.FBW_CSTAR_PID_array.Actual_output = Table_interpolate(elevator_ratio_table, get(Elevators_hstab_2))
         end
     else
         --BP Q controller--
         FBW_PID_arrays.FBW_PITCH_RATE_PID_array.Actual_output = 0
+
+        --BP C* controller--
+        FBW_PID_arrays.FBW_CSTAR_PID_array.Actual_output = 0
     end
 end
 
