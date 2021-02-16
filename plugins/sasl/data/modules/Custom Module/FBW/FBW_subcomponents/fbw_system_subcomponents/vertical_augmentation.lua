@@ -33,11 +33,11 @@ local lateral_control_filter_table = {
     },
     C_STAR_pv_filter_table = {
         x = 0,
-        cut_frequency = 15,
+        cut_frequency = 16,
     },
     C_STAR_err_filter_table = {
         x = 0,
-        cut_frequency = 15,
+        cut_frequency = 16,
     },
     IAS_filter_table = {
         x = adirs_get_avg_ias(),
