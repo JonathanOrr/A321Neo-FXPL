@@ -53,6 +53,8 @@
 {2150216a-d9a4-462d-9a2c-711a97cc7a8f} event:/Engines V2/EnginesL
 {ef45060b-6f2e-4d49-bd25-d992e901b35a} event:/Engines V2/EnginesR
 {78b8fd51-ea07-41b0-8e7a-6c6325c9a885} event:/Engines V2/HowlEnd
+{202a02c2-878b-40e8-ad75-a500bd51d2bb} event:/Engines V2/HowlLogic
+{e6a2abbe-7c23-46e2-9a42-26283e21c906} event:/Engines V2/HowlLogicR
 {60390ec1-f659-43b4-a63d-0618b686e0fe} event:/FCU/Selectors/1
 {9bcca77b-d316-4192-bb92-d796b32e9bd3} event:/FCU/Selectors/2
 {863d7dc0-0956-4ed3-8336-5ee2bf0b4213} event:/FCU/Selectors/3
