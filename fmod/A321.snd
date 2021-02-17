@@ -737,25 +737,25 @@ END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/Soft Button Press
-  VEH_XYZ 0 1.9 -18.6
+  VEH_XYZ -0.414413 1.9 -18.6
   EVENT_CMND_HOLD_CUE a321neo/cockpit/cancel_master_caution
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/Soft Button Press
-  VEH_XYZ 0 1.9 -18.6
+  VEH_XYZ -0.414413 1.9 -18.6
   EVENT_CMND_HOLD_CUE a321neo/cockpit/cancel_master_warning
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/Soft Button Press
-  VEH_XYZ 0 1.9 -18.6
+  VEH_XYZ -0.683567 1.9 -18.6
   EVENT_CMND_HOLD_CUE a321neo/cockpit/nd/capt_terrain_toggle
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/Soft Button Press
-  VEH_XYZ 0 1.9 -18.6
+  VEH_XYZ 0.683567 1.9 -18.6
   EVENT_CMND_HOLD_CUE a321neo/cockpit/nd/fo_terrain_toggle
 END_SOUND_ATTACHMENT
 
@@ -765,7 +765,23 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_CMND_HOLD_CUE a321neo/cockpit/gpws/silence
 END_SOUND_ATTACHMENT
 
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Soft Button Press
+  VEH_XYZ -0.683567 1.9 -18.6
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/pfd/capt_buss
+END_SOUND_ATTACHMENT
 
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Soft Button Press
+  VEH_XYZ 0.683567 1.9 -18.6
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/pfd/fo_buss
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Soft Button Press
+  VEH_XYZ -0.683567 1.9 -18.6
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/DCDU/atc_msg_pb
+END_SOUND_ATTACHMENT
 
 ##############################################################################################################################
 
@@ -2318,14 +2334,14 @@ END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /BusOn2
-  VEH_XYZ 0 1.5 -18.4
+  VEH_XYZ 0 1.5 -16
   EVENT_START_COND 	a321neo/sounds/elec_bus_delayed != 0
   EVENT_END_COND 	a321neo/sounds/elec_bus_delayed == 0
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /BusKick2
-  VEH_XYZ 0 1.5 -18.4
+  VEH_XYZ 0 1.5 -16
   EVENT_START_COND 	a321neo/dynamics/electrical/bus/ac_ess_powered == 0
 END_SOUND_ATTACHMENT
 
@@ -3635,19 +3651,19 @@ END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /BatteryRelay/1
-  VEH_XYZ 0 1.5 -18.4
+  VEH_XYZ 0 1.5 -16
   EVENT_START_COND sim/cockpit2/electrical/battery_on[0] == 1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /BatteryRelay/2
-  VEH_XYZ 0 1.5 -18.4
+  VEH_XYZ 0 1.5 -16
   EVENT_START_COND sim/cockpit2/electrical/battery_on[1] == 1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /Battery
-  VEH_XYZ 0 1.5 -18.4
+  VEH_XYZ 0 1.5 -16
   EVENT_START_COND a321neo/dynamics/electrical/bus/ac_stat_inv == 1
   CUE_TRIGGER_COND a321neo/dynamics/electrical/bus/ac_stat_inv == 0
 END_SOUND_ATTACHMENT
