@@ -1,6 +1,7 @@
 local Lateral_control_var_table = {
     P_input = 0,
 
+    HSP_bank_angle_mode = false,
     AoA_bank_angle_mode = false,
 
     neutral_bank_angle = 0,
@@ -71,11 +72,17 @@ local function lateral_input_and_protection(var_table)
     elseif var_table.AoA_bank_angle_mode == true and adirs_get_avg_aoa() < get(Aprot_AoA) - 1 then
         var_table.AoA_bank_angle_mode = false
     end
+    --check HSP bank angle--
+    if adirs_get_avg_ias() >= get(VMAX_prot) then
+        var_table.HSP_bank_angle_mode = true
+    elseif var_table.HSP_bank_angle_mode == true and adirs_get_avg_ias() < get(VMAX) then
+        var_table.HSP_bank_angle_mode = false
+    end
 
     if var_table.AoA_bank_angle_mode == true then--alpha protection bank angle protection
         var_table.neutral_bank_angle = Set_linear_anim_value(var_table.neutral_bank_angle, 33, 0, 67, bank_angle_speed)
         var_table.maximum_bank_angle = Set_linear_anim_value(var_table.maximum_bank_angle, 45, 0, 67, bank_angle_speed)
-    elseif adirs_get_avg_ias() > get(Fixed_VMAX) then--high speed bank angle protection
+    elseif var_table.HSP_bank_angle_mode == true then--high speed bank angle protection
         var_table.neutral_bank_angle = Set_linear_anim_value(var_table.neutral_bank_angle, 0, 0, 67, bank_angle_speed)
         var_table.maximum_bank_angle = Set_linear_anim_value(var_table.maximum_bank_angle, 40, 0, 67, bank_angle_speed)
     else

@@ -60,7 +60,7 @@ local function compute_C_star(Nz, Q)
 end
 
 local function Max_C_STAR()
-    local max_G = get(Flaps_internal_config) ~= 0 and 2 or 2.5
+    local max_G = get(Flaps_internal_config) ~= 0 and 2 or 2.4565
 
     local rad_vpath = math.rad(get(Vpath))
     local rad_bank  = math.rad(adirs_get_avg_roll())
@@ -244,9 +244,9 @@ local input_limitations = {
     end,
 
     Vmax = function (G, var_table)
-        local upwards_return_G = 2.5
+        local upwards_return_G = 2
 
-        local high_speed_prot_G = Math_rescale(get(VMAX), G, get(VMAX_demand) + 10, upwards_return_G, var_table.Filtered_ias)
+        local high_speed_prot_G = Math_rescale(get(Fixed_VMAX), G, get(VMAX_demand) + 10, upwards_return_G, var_table.Filtered_ias)
 
         return high_speed_prot_G
     end,
