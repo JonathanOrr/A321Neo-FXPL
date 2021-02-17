@@ -2318,14 +2318,14 @@ END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /BusOn2
-  VEH_XYZ 0 1.4 -18.7
+  VEH_XYZ 0 1.5 -18.4
   EVENT_START_COND 	a321neo/sounds/elec_bus_delayed != 0
   EVENT_END_COND 	a321neo/sounds/elec_bus_delayed == 0
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /BusKick2
-  VEH_XYZ 0 1.4 -18.7
+  VEH_XYZ 0 1.5 -18.4
   EVENT_START_COND 	a321neo/dynamics/electrical/bus/ac_ess_powered == 0
 END_SOUND_ATTACHMENT
 
