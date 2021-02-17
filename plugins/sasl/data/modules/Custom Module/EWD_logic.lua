@@ -359,8 +359,10 @@ local function update_right_list()
 
     local at_least_one = false
     for key,v in pairs(right_secondary_failures) do
-        list_right:put(COL_CAUTION, "* " .. key)
-        at_least_one = true
+        if #key > 0 then
+            list_right:put(COL_CAUTION, "* " .. key)
+            at_least_one = true
+        end
     end
     
     if at_least_one then
