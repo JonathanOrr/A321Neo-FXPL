@@ -3,6 +3,7 @@ local BUTTON_PRESS_TIME = 0.5
 
 --------------------INTERESTING STUFF
 include("EFB/efb_systems.lua")
+include("EFB/efb_topcat.lua")
 
 
 
@@ -263,6 +264,11 @@ local function EFB_draw_target_values()
     sasl.gl.drawText ( Airbus_panel_font, 223 , 492 , aft_cargo_target , 20, false , false , TEXT_ALIGN_CENTER , EFB_WHITE )
 end
 
+local function draw_takeoff_speeds()
+    sasl.gl.drawText ( Airbus_panel_font, 1027 , 321 , get(TOPCAT_v1) , 20, false , false , TEXT_ALIGN_RIGHT , EFB_WHITE )
+    sasl.gl.drawText ( Airbus_panel_font, 1027 , 282 , get(TOPCAT_vr) , 20, false , false , TEXT_ALIGN_RIGHT , EFB_WHITE )
+    sasl.gl.drawText ( Airbus_panel_font, 1027 , 243 , get(TOPCAT_v2) , 20, false , false , TEXT_ALIGN_RIGHT , EFB_WHITE )
+end
 
 --DRAW LOOPS--
 function EFB_draw_page_3()
@@ -272,5 +278,6 @@ function EFB_draw_page_3()
     EFB_draw_fuel_tanks()
     EFB_draw_loadsheet_text()
     EFB_draw_target_values()
-
+    draw_takeoff_speeds()
+    --print(EFB_CURSOR_X, EFB_CURSOR_Y)
 end

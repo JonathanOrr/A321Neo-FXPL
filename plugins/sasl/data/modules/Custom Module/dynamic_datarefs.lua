@@ -375,6 +375,7 @@ Fo_ra_alt_ft = globalProperty("sim/cockpit2/gauges/indicators/radio_altimeter_he
 Capt_baro_alt_ft = globalProperty("sim/cockpit2/gauges/indicators/altitude_ft_pilot")
 IAS = globalProperty("sim/flightmodel/position/indicated_airspeed")
 DH_alt_ft = globalProperty("sim/cockpit/misc/radio_altimeter_minimum")
+acf_msl = globalProperty("sim/flightmodel/position/elevation")
 
 
 Capt_IAS     = globalProperty("sim/cockpit2/gauges/indicators/airspeed_kts_pilot")   -- Consider to use PFD_Capt_IAS instead (check cockpit_datarefs.lua)
@@ -787,3 +788,11 @@ LOAD_thrustto = createGlobalPropertyi("a321neo/efb/thrustto", 0, false, true, fa
 
 SOUND_rush_L = createGlobalPropertyi("a321neo/sounds/rush_L", 0, false, true, false) --0-1, difference of the target and actual thrust
 SOUND_rush_R = createGlobalPropertyi("a321neo/sounds/rush_R", 0, false, true, false) --0-1, difference of the target and actual thrust
+
+--computing v speeds and takeoff data
+
+TOPCAT_v1 = createGlobalPropertyi("a321neo/efb/topcat/v1", 0, false, true, false)
+TOPCAT_vr = createGlobalPropertyi("a321neo/efb/topcat/vr", 0, false, true, false)
+TOPCAT_v2 = createGlobalPropertyi("a321neo/efb/topcat/v2", 0, false, true, false)
+TOPCAT_flex = createGlobalPropertyi("a321neo/efb/topcat/flex", 0, false, true, false)
+
