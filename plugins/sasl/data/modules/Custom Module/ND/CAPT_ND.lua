@@ -94,3 +94,9 @@ function update()
     perf_measure_stop("CAPT_ND:update()")
 
 end
+
+
+
+function onSceneryLoaded()
+    update_terrain_altitudes()
+end
