@@ -44,10 +44,11 @@ local image_ils_nonprec_sym = sasl.gl.loadImage(moduleDirectory .. "/Custom Modu
 
 local image_terrain_red         = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/terrain-red.png")
 local image_terrain_blue        = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/terrain-blue.png")
+local image_terrain_magenta     = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/terrain-magenta.png")
 local image_terrain_yellow_high = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/terrain-high-yellow.png")
 local image_terrain_yellow_low  = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/terrain-low-yellow.png")
 local image_terrain_green_high  = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/terrain-high-green.png")
-local image_terrain_green_low   = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/terrain-high-green.png")
+local image_terrain_green_low   = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/terrain-low-green.png")
 
 local terrain_texture = sasl.gl.createTexture(size[1], size[2])
 
@@ -304,6 +305,7 @@ local TERRAIN_NOTFOUND = -99999
 local function compute_alt_feet(lat, lon)
     x,y,z = sasl.worldToLocal(lat, lon, -100)
     result,locationX,locationY,locationZ,normalX,normalY,normalZ,velocityX,velocityY,velocityZ,isWet = sasl.probeTerrain(x,y, z)
+
     if result ~= PROBE_HIT_TERRAIN then
         return TERRAIN_NOTFOUND
     end
@@ -316,9 +318,15 @@ end
 
 local function get_texture(terrain_alt)
     local curr_alt = get(Capt_Baro_Alt)
+    local curr_vs = get(Capt_VVI)
+    if curr_vs < -1000 then
+        curr_alt = curr_alt - curr_vs / 2 -- if descending more than 1 000 ft/min, the altitude expected in 30 s
+    end
     
-    if terrain_alt == -9999 then
+    if terrain_alt == TERRAIN_WET then
         return image_terrain_blue
+    elseif terrain_alt == TERRAIN_NOTFOUND then
+        return image_terrain_magenta
     elseif terrain_alt > curr_alt + 2000 then
         return image_terrain_red
     elseif  terrain_alt > curr_alt + 1000 then
@@ -369,19 +377,19 @@ function update_terrain_altitudes(data)
     
     local resolution_nm = 0.54
     local max_direction = 1818
-    local start_lat = Round(get(Aircraft_lat), 2) - 1
-    local start_lon = Round(get(Aircraft_long), 2) - 1
+    local start_lat = Round(get(Aircraft_lat), 2) - 2
+    local start_lon = Round(get(Aircraft_long), 2) - 2
     
     terrain_altitudes_start = {start_lat, start_lon}
     
-    for i=1,200 do
+    for i=1,800 do
         terrain_altitudes[i] = {}
         curr_lon = start_lon
-        for j=1,200 do
+        for j=1,400 do
             terrain_altitudes[i][j] = compute_alt_feet(start_lat, curr_lon)
             curr_lon = curr_lon + 0.01
         end
-        start_lat = start_lat + 0.01
+        start_lat = start_lat + 0.005
     end
 
 end
@@ -401,36 +409,41 @@ local function update_terrain(data)
     
     local x1, y1 = rose_get_x_y_heading(data, rounded_lat, rounded_lon, 0)
     local x2, y2 = rose_get_x_y_heading(data, rounded_lat, rounded_lon+0.01, 0)
-    local x3, y3 = rose_get_x_y_heading(data, rounded_lat+0.01, rounded_lon, 0)
+    local x3, y3 = rose_get_x_y_heading(data, rounded_lat+0.005, rounded_lon, 0)
     
-    local multiplier = 0.01
+    local multiplier_x = 0.005
+    local multiplier_y = 0.01
     local size_x = x2-x1
     local size_y = y3-y1
     
     local orig_size_x = size_x
     local orig_size_y = size_y
 
-    while size_x < img_size or size_y < img_size do
+    while size_x < img_size do
         size_x = size_x + orig_size_x
-        size_y = size_y + orig_size_y
-        multiplier = multiplier + 0.01
+        multiplier_x = multiplier_x + 0.005
     end
+    while size_y < img_size do
+        size_y = size_y + orig_size_y
+        multiplier_y = multiplier_y + 0.01
+    end
+
     
     sasl.gl.setRenderTarget(terrain_texture, true)
     for i=0,900/size_x do
         for j=0,900/size_y do
-            lat = rounded_lat + multiplier*j - terrain_altitudes_start[1]
-            lon = rounded_lon + multiplier*i - terrain_altitudes_start[2]
-            local lat = math.floor(lat * 100)
+            lat = rounded_lat + multiplier_x*j - terrain_altitudes_start[1]
+            lon = rounded_lon + multiplier_y*i - terrain_altitudes_start[2]
+            local lat = math.floor(lat * 200)
             local lon = math.floor(lon * 100)
 
-            if lat > 0 and lat <= 200 and lon > 0 and lon <= 200 then -- Valid point
+            if lat > 0 and lat <= 800 and lon > 0 and lon <= 400 then -- Valid point
                 local terrain_alt = terrain_altitudes[lat][lon]
-                local color = get_color(terrain_alt)
-                if color then
+                local texture = get_texture(terrain_alt)
+                if texture then
                     local x = (i*size_x)-size_x/2
                     local y = (j*size_y)-size_y/2
-                    sasl.gl.drawRectangle(x, y,size_x, size_y, color)
+                    sasl.gl.drawTexturePart(texture, x, y, size_x, size_y, (x+y)%50, (x)%30, size_x, size_y, {1,1,1})
                 end
             else
                 sasl.gl.drawRectangle(x, y,size_x, size_y, {1., 0., 1.})
@@ -486,7 +499,7 @@ local function draw_terrain(data)
     end
 
 
-    if get(TIME) - terrain_last_update > 1 or data.config.prev_range ~= data.config.range then
+    if get(TIME) - terrain_last_update > 3 or data.config.prev_range ~= data.config.range then
         update_terrain(data)
         terrain_last_update = get(TIME)
     end
