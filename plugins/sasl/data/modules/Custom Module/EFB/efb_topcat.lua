@@ -31,6 +31,10 @@ computed_v2 = 0
 press_alt = 0
 qnh = 0
 
+static_load = 0
+max_load = 0
+cg_mac = 0
+
 
 
 
@@ -41,7 +45,6 @@ end
 
 
 local function flex_calculation()
-    if get(LOAD_thrustto) ~= 0 then
         flex_temp_computed = Round(-0.02434027806956361259*(get(acf_msl)/100)^3 + 0.36824311548836550021*(get(acf_msl)/100)^2 - 2.95963831628837229790*(get(acf_msl)/100) + 54.96994092387330948740, 0)
 
         if 1013-qnh < 0 then --if qnh > 1013
@@ -51,9 +54,6 @@ local function flex_calculation()
         end
 
         flex_temp = flex_temp_computed + flex_temp_correction
-    else
-        flex_temp = "No Flex"
-    end
 end
 
 local function v2_calculation()
@@ -170,7 +170,14 @@ local function other_spd_calculation()
     set(TOPCAT_v1, computed_v1)
     set(TOPCAT_vr, computed_vr)
     set(TOPCAT_v2, computed_v2)
+    set(TOPCAT_flex, flex_temp)
         
+end
+
+local function cg_calculation()
+
+    
+
 end
 
 function update()
