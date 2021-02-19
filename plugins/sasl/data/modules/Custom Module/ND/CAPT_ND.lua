@@ -21,6 +21,7 @@ size = {900, 900}
 fbo = true
 
 include('ND/common_ND.lua')
+include('ND/subcomponents/terrain.lua')
 
 nd_data = new_dataset(ND_CAPT)
 

@@ -20,6 +20,7 @@ size = {900, 900}
 
 include("ND/subcomponents/helpers.lua")
 include("ND/subcomponents/graphics_oans.lua")
+include('ND/subcomponents/terrain.lua')
 
 local image_bkg_ring        = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/ring.png")
 local image_bkg_ring_red    = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/ring-red.png")
@@ -42,21 +43,15 @@ local image_hdgsel_sym = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/te
 local image_ils_sym = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/sym-ils-ring.png")
 local image_ils_nonprec_sym = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/sym-ils-nonprec-ring.png")
 
-local image_terrain_red         = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/terrain-red.png")
-local image_terrain_blue        = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/terrain-blue.png")
-local image_terrain_magenta     = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/terrain-magenta.png")
-local image_terrain_yellow_high = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/terrain-high-yellow.png")
-local image_terrain_yellow_low  = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/terrain-low-yellow.png")
-local image_terrain_green_high  = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/terrain-high-green.png")
-local image_terrain_green_low   = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/terrain-low-green.png")
-
-local terrain_texture = sasl.gl.createTexture(size[1], size[2])
-
 local COLOR_YELLOW = {1,1,0}
 
 local poi_position_last_update = 0
 local POI_UPDATE_RATE = 0.1
 local MAX_LIMIT_WPT = 500
+
+-------------------------------------------------------------------------------
+-- Helpers functions
+-------------------------------------------------------------------------------
 
 local function rose_get_px_per_nm(data)
     -- 588 px is the diameter of our ring, so this corresponds to the range scale selected:
@@ -65,6 +60,43 @@ local function rose_get_px_per_nm(data)
     return 588 / range_in_nm
 end
 
+
+local function rose_get_x_y_heading(data, lat, lon, heading)  -- Do not use this for poi
+    local px_per_nm = rose_get_px_per_nm(data)
+    
+    local distance = get_distance_nm(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon,lat,lon)
+    local distance_px = distance * px_per_nm
+    local bearing  = get_bearing(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon,lat,lon)
+    
+    local bear_shift = bearing+heading
+    bear_shift = bear_shift - Local_magnetic_deviation()
+    local x = size[1]/2 + distance_px * math.cos(math.rad(bear_shift))
+    local y = size[2]/2 + distance_px * math.sin(math.rad(bear_shift))
+    
+    return x,y
+end
+
+
+local function rose_get_lat_lon_with_heading(data, x, y, heading)
+    local bearing     = 180+math.deg(math.atan2((size[1]/2 - x), (size[2]/2 -    y))) + heading
+    local px_per_nm = rose_get_px_per_nm(data)
+    local distance_nm = math.sqrt((size[1]/2 - x)*(size[1]/2 - x) + (size[2]/2 - y)*(size[2]/2 - y)) / px_per_nm
+
+    return Move_along_distance(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon, distance_nm*1852, bearing)
+end
+
+local function rose_get_lat_lon(data, x, y)
+    return rose_get_lat_lon_with_heading(data, x, y, Local_magnetic_deviation() + data.inputs.heading)
+end
+
+local function rose_get_x_y(data, lat, lon)  -- Do not use this for poi
+    return rose_get_x_y_heading(data, lat, lon, data.inputs.heading)
+end
+
+
+-------------------------------------------------------------------------------
+-- draw_* functions
+-------------------------------------------------------------------------------
 local function draw_backgrounds(data)
     -- Main rose background
     if data.inputs.is_heading_valid then
@@ -159,26 +191,6 @@ local function draw_navaid_pointers(data)
     draw_navaid_pointer_single(data, 2)
 end
 
-local function rose_get_x_y_heading(data, lat, lon, heading)  -- Do not use this for poi
-    local px_per_nm = rose_get_px_per_nm(data)
-    
-    local distance = get_distance_nm(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon,lat,lon)
-    local distance_px = distance * px_per_nm
-    local bearing  = get_bearing(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon,lat,lon)
-    
-    local bear_shift = bearing+heading
-    bear_shift = bear_shift - Local_magnetic_deviation()
-    local x = size[1]/2 + distance_px * math.cos(math.rad(bear_shift))
-    local y = size[1]/2 + distance_px * math.sin(math.rad(bear_shift))
-    
-    return x,y
-end
-
-
-local function rose_get_x_y(data, lat, lon)  -- Do not use this for poi
-    return rose_get_x_y_heading(data, lat, lon, data.inputs.heading)
-end
-
 local function draw_poi_array(data, poi, texture, color)
     local modified = false
 
@@ -209,7 +221,7 @@ local function draw_poi_array(data, poi, texture, color)
 
     if poi.x > 0 and poi.x < size[1] and poi.y > 0 and poi.y < size[2] then
         sasl.gl.drawTexture(texture, poi.x-16, poi.y-16, 32,32, color)
-        sasl.gl.drawText(Font_AirbusDUL, poi.x+25, poi.y-16, poi.id, 36, false, false, TEXT_ALIGN_LEFT, color)        
+        sasl.gl.drawText(Font_AirbusDUL, poi.x+25, poi.y-16, poi.id, 36, false, false, TEXT_ALIGN_LEFT, color)
     end
     
     return modified, poi
@@ -286,230 +298,42 @@ local function draw_wpts(data)
     
 end
 
-local function rose_get_lat_lon_with_heading(data, x, y, heading)
-    local bearing     = 180+math.deg(math.atan2((size[1]/2 - x), (size[2]/2 -    y))) + heading
-    local px_per_nm = rose_get_px_per_nm(data)
-    local distance_nm = math.sqrt((size[1]/2 - x)*(size[1]/2 - x) + (size[2]/2 - y)*(size[2]/2 - y)) / px_per_nm
-
-    return Move_along_distance(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon, distance_nm*1852, bearing)
-end
-
-local function rose_get_lat_lon(data, x, y)
-    
-    return rose_get_lat_lon_with_heading(data, x, y, Local_magnetic_deviation() + data.inputs.heading)
-end
-
-local TERRAIN_WET      = -9999
-local TERRAIN_NOTFOUND = -99999
-
-local function compute_alt_feet(lat, lon)
-    x,y,z = sasl.worldToLocal(lat, lon, -100)
-    result,locationX,locationY,locationZ,normalX,normalY,normalZ,velocityX,velocityY,velocityZ,isWet = sasl.probeTerrain(x,y, z)
-
-    if result ~= PROBE_HIT_TERRAIN then
-        return TERRAIN_NOTFOUND
-    end
-    if isWet == 1 then
-        return TERRAIN_WET
-    end
-    lat, long, alt = sasl.localToWorld(locationX,locationY,locationZ)
-    return alt * 3.28084
-end
-
-local function get_texture(terrain_alt)
-    local curr_alt = get(Capt_Baro_Alt)
-    local curr_vs = get(Capt_VVI)
-    if curr_vs < -1000 then
-        curr_alt = curr_alt - curr_vs / 2 -- if descending more than 1 000 ft/min, the altitude expected in 30 s
-    end
-    
-    if terrain_alt == TERRAIN_WET then
-        return image_terrain_blue
-    elseif terrain_alt == TERRAIN_NOTFOUND then
-        return image_terrain_magenta
-    elseif terrain_alt > curr_alt + 2000 then
-        return image_terrain_red
-    elseif  terrain_alt > curr_alt + 1000 then
-        return image_terrain_yellow_high
-    elseif  terrain_alt > curr_alt - 500 and get(Gear_handle) == 0 then
-        return image_terrain_yellow_low
-    elseif  terrain_alt > curr_alt - 250 and get(Gear_handle) == 1 then
-        return image_terrain_yellow_low
-    elseif  terrain_alt > curr_alt - 1000 then
-        return image_terrain_green_high
-    elseif  terrain_alt > curr_alt - 2000 then
-        return image_terrain_green_low
-    else
-        return nil
-    end
-end
-
-local function get_color(terrain_alt)
-    local curr_alt = get(Capt_Baro_Alt)
-
-    if terrain_alt == TERRAIN_WET then
-        return {0., 0., 1.}
-    elseif terrain_alt > curr_alt + 2000 then
-        return {1., 0., 0.}
-    elseif  terrain_alt > curr_alt + 1000 then
-        return {1., 0.5, 0.}
-    elseif  terrain_alt > curr_alt - 500 and get(Gear_handle) == 0 then
-        return {0.5, 0.5, 0.}
-    elseif  terrain_alt > curr_alt - 250 and get(Gear_handle) == 1 then
-        return {0.5, 0.5, 0.}
-    elseif  terrain_alt > curr_alt - 1000 then
-        return {0., 1., 0.}
-    elseif  terrain_alt > curr_alt - 2000 then
-        return {0., 0.5, 0.}
-    else
-        return nil
-    end
-end
-
-local terrain_center = {0,0}
-local terrain_last_update = 0
-local terrain_altitudes = {}
-local terrain_altitudes_start = {}
-
-function update_terrain_altitudes(data)
-    logWarning("SCENERY LOAD")
-    terrain_altitudes = {}
-    
-    local resolution_nm = 0.54
-    local max_direction = 1818
-    local start_lat = Round(get(Aircraft_lat), 2) - 2
-    local start_lon = Round(get(Aircraft_long), 2) - 2
-    
-    terrain_altitudes_start = {start_lat, start_lon}
-    
-    for i=1,800 do
-        terrain_altitudes[i] = {}
-        curr_lon = start_lon
-        for j=1,400 do
-            terrain_altitudes[i][j] = compute_alt_feet(start_lat, curr_lon)
-            curr_lon = curr_lon + 0.01
-        end
-        start_lat = start_lat + 0.005
-    end
-
-end
-
-local function update_terrain(data)
-
-    terrain_center[1], terrain_center[2] = rose_get_lat_lon_with_heading(data, 450, 450, 0)
-
-    local img_size = 32 / 2^(math.min(5, data.config.range)-1)
-    
-    local lat, lon = rose_get_lat_lon_with_heading(data, 0, 0, 0)
-    local rounded_lat = Round(lat, 2)
-    local rounded_lon = Round(lon, 2)
-    
-    terrain_center[1] = terrain_center[1] - (lat-rounded_lat)
-    terrain_center[2] = terrain_center[2] - (lon-rounded_lon)
-    
-    local x1, y1 = rose_get_x_y_heading(data, rounded_lat, rounded_lon, 0)
-    local x2, y2 = rose_get_x_y_heading(data, rounded_lat, rounded_lon+0.01, 0)
-    local x3, y3 = rose_get_x_y_heading(data, rounded_lat+0.005, rounded_lon, 0)
-    
-    local multiplier_x = 0.005
-    local multiplier_y = 0.01
-    local size_x = x2-x1
-    local size_y = y3-y1
-    
-    local orig_size_x = size_x
-    local orig_size_y = size_y
-
-    while size_x < img_size do
-        size_x = size_x + orig_size_x
-        multiplier_x = multiplier_x + 0.005
-    end
-    while size_y < img_size do
-        size_y = size_y + orig_size_y
-        multiplier_y = multiplier_y + 0.01
-    end
-
-    
-    sasl.gl.setRenderTarget(terrain_texture, true)
-    for i=0,900/size_x do
-        for j=0,900/size_y do
-            lat = rounded_lat + multiplier_x*j - terrain_altitudes_start[1]
-            lon = rounded_lon + multiplier_y*i - terrain_altitudes_start[2]
-            local lat = math.floor(lat * 200)
-            local lon = math.floor(lon * 100)
-
-            if lat > 0 and lat <= 800 and lon > 0 and lon <= 400 then -- Valid point
-                local terrain_alt = terrain_altitudes[lat][lon]
-                local texture = get_texture(terrain_alt)
-                if texture then
-                    local x = (i*size_x)-size_x/2
-                    local y = (j*size_y)-size_y/2
-                    sasl.gl.drawTexturePart(texture, x, y, size_x, size_y, (x+y)%50, (x)%30, size_x, size_y, {1,1,1})
-                end
-            else
-                sasl.gl.drawRectangle(x, y,size_x, size_y, {1., 0., 1.})
-            end
-        end
-    end
-
-    sasl.gl.restoreRenderTarget()
-
-end
-
---[[
 local function draw_terrain(data)
+    if (data.id == ND_CAPT and get(ND_Capt_Terrain) == 0) or
+       (data.id == ND_FO and get(ND_Fo_Terrain) == 0) then
+        -- Terrain disabled
+        return
+    end
+
     if data.config.range <= ND_RANGE_ZOOM_2 then
         -- No terrain on oans
         return
     end
 
-    if get(TIME) - terrain_last_update > 5 then
-        update_terrain(data)
-        terrain_last_update = get(TIME)
-    end
-    
-    local img_size = 32 / 2^(math.min(3, data.config.range)-1)
-
-    local diff_x, diff_y = rose_get_x_y(data, terrain_center[1], terrain_center[2])
-    diff_y = 450-diff_y
-
-    for i=0,900/img_size do
-        for j=0,900/img_size do
-            local x = (i*img_size)-img_size/2
-            local y = (j*img_size)-img_size/2
-            if terrain_matrix[i] and terrain_matrix[i][j] then
-                local texture = get_texture(terrain_matrix[i][j])
-                if texture then
-                    sasl.gl.drawRotatedTexture(texture, -data.inputs.heading, x, y-diff_y,img_size,img_size, {1,1,1})
-                end
-            end
-        end
-    end
-    
-end
-]]--
-
-local function draw_terrain(data)
-    if data.config.range <= ND_RANGE_ZOOM_2 then
-        -- No terrain on oans
-        return
-    end
-
-    if #terrain_altitudes == 0 then
+    if not ND_terrain.is_ready then
+        -- This may happen on sasl reboot
         update_terrain_altitudes(data)
     end
 
 
-    if get(TIME) - terrain_last_update > 3 or data.config.prev_range ~= data.config.range then
-        update_terrain(data)
-        terrain_last_update = get(TIME)
+    if get(TIME) - data.terrain_last_update > 3 or data.config.prev_range ~= data.config.range then
+        local functions_for_terrain = {
+            get_lat_lon_heading = rose_get_lat_lon_with_heading,
+            get_x_y_heading = rose_get_x_y_heading
+        }
+        update_terrain(data, functions_for_terrain)
+        data.terrain_last_update = get(TIME)
     end
     data.config.prev_range = data.config.range
 
-    local diff_x, diff_y = rose_get_x_y(data, terrain_center[1], terrain_center[2])
-    diff_x = 450-diff_x
-    diff_y = 450-diff_y
+    if data.terrain_texture then
+        local diff_x, diff_y = rose_get_x_y(data, data.terrain_center[1], data.terrain_center[2])
+        diff_x = 450-diff_x
+        diff_y = 450-diff_y
+        sasl.gl.drawRotatedTexture(data.terrain_texture, -data.inputs.heading, -diff_x-70, -diff_y-70, 900+140,900+140, {1,1,1})
+--    sasl.gl.drawWideLine(435, 415, 465, 415, 4, ECAM_MAGENTA)
 
-    sasl.gl.drawRotatedTexture(terrain_texture, -data.inputs.heading, -diff_x, -diff_y, 900,900, {1,1,1})
+    end
 end
 
 local function draw_pois(data)
@@ -529,15 +353,12 @@ local function draw_pois(data)
         poi_position_last_update = get(TIME)
     end
 
-
+    sasl.gl.drawWideLine(435, 415, 465, 415, 4, ECAM_MAGENTA)
 end
 
-local functions_for_oans = {
-    get_lat_lon = rose_get_lat_lon,
-    get_x_y = rose_get_x_y,
-    get_px_per_nm = rose_get_px_per_nm
-}
-
+-------------------------------------------------------------------------------
+-- Main draw_* functions
+-------------------------------------------------------------------------------
 
 function draw_rose_unmasked(data)
     draw_backgrounds(data)
@@ -554,6 +375,12 @@ function draw_rose(data)
     draw_pois(data)
     
     if data.config.mode == ND_MODE_NAV then
+        local functions_for_oans = {
+            get_lat_lon = rose_get_lat_lon,
+            get_x_y = rose_get_x_y,
+            get_px_per_nm = rose_get_px_per_nm
+        }
+
         draw_oans(data, functions_for_oans)
     end
     

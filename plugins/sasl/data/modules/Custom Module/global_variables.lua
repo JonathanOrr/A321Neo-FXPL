@@ -47,6 +47,7 @@ Fuel_sys = {}
 FIRE_sys = {}
 AI_sys   = {}
 ADIRS_sys= {}
+ND_terrain = {}
 
 EFB_preferences = {}
 

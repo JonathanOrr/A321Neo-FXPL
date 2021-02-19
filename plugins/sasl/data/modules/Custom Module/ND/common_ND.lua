@@ -51,6 +51,10 @@ function new_dataset(input_id)
         
         -- VOR
         which_nav_is_active = 0,    -- 0,1, or 2
+        
+        -- Alitudes -- Needed for Terrain
+        altitude = 0,
+        vs = 0
     },
 
     chrono = {
@@ -155,7 +159,11 @@ function new_dataset(input_id)
     },
     
     plan_ctr_lat = 0,
-    plan_ctr_lon = 0
+    plan_ctr_lon = 0,
+    
+    terrain_center = {},
+    terrain_last_update = 0,
+    terrain_texture = nil,
 
 }
 
