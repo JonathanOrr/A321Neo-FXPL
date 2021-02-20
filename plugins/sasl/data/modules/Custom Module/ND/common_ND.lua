@@ -161,10 +161,13 @@ function new_dataset(input_id)
     plan_ctr_lat = 0,
     plan_ctr_lon = 0,
     
-    terrain_center = {},
-    terrain_last_update = 0,
-    terrain_texture = nil,
-
+    terrain = {
+        center = {},      -- LAT/LON of the center of the texture (it may not correspond to the plane position!)
+        bl_lat = nil, bl_lon = nil,  -- Last used bottom left coordinates (for internal use only)
+        tr_lat = nil, tr_lon = nil,  -- Last used top right coordinates (for internal use only)
+        last_update = 0,
+        texture = nil,
+    }
 }
 
 end

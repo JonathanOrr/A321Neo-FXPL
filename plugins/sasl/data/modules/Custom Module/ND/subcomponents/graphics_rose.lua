@@ -18,6 +18,8 @@
 
 size = {900, 900}
 
+local DEBUG_terrain_center = true
+
 include("ND/subcomponents/helpers.lua")
 include("ND/subcomponents/graphics_oans.lua")
 include('ND/subcomponents/terrain.lua')
@@ -78,7 +80,7 @@ end
 
 
 local function rose_get_lat_lon_with_heading(data, x, y, heading)
-    local bearing     = 180+math.deg(math.atan2((size[1]/2 - x), (size[2]/2 -    y))) + heading
+    local bearing     = 180+math.deg(math.atan2((size[1]/2 - x), (size[2]/2 - y))) + heading
     local px_per_nm = rose_get_px_per_nm(data)
     local distance_nm = math.sqrt((size[1]/2 - x)*(size[1]/2 - x) + (size[2]/2 - y)*(size[2]/2 - y)) / px_per_nm
 
@@ -316,24 +318,44 @@ local function draw_terrain(data)
     end
 
 
-    if get(TIME) - data.terrain_last_update > 3 or data.config.prev_range ~= data.config.range then
+    
+
+    if get(TIME) - data.terrain.last_update > 3 or data.config.prev_range ~= data.config.range then
         local functions_for_terrain = {
             get_lat_lon_heading = rose_get_lat_lon_with_heading,
             get_x_y_heading = rose_get_x_y_heading
         }
         update_terrain(data, functions_for_terrain)
-        data.terrain_last_update = get(TIME)
+        data.terrain.last_update = get(TIME)
     end
+    
+    if data.config.prev_range ~= data.config.range
+       or math.abs(data.terrain.center[1] - data.inputs.plane_coords_lat) > 0.1
+       or math.abs(data.terrain.center[2] - data.inputs.plane_coords_lon) > 0.1 then
+         -- if the zoom changes or we are too far from the reference point,
+         -- we ask to recompute all the coordinates
+        data.bl_lat = nil
+        data.bl_lon = nil
+        data.tr_lat = nil
+        data.tr_lon = nil
+    end
+    
     data.config.prev_range = data.config.range
 
-    if data.terrain_texture then
-        local diff_x, diff_y = rose_get_x_y_heading(data, data.terrain_center[1], data.terrain_center[2], Local_magnetic_deviation() + data.inputs.heading)
+    if data.terrain.texture then
+        local diff_x, diff_y = rose_get_x_y_heading(data, data.terrain.center[1], data.terrain.center[2], data.inputs.heading)
         local shift_x = 450-diff_x
         local shift_y = 450-diff_y
-        sasl.gl.drawRotatedTexture(data.terrain_texture, -data.inputs.heading + Local_magnetic_deviation(), -shift_x-70, -shift_y-70, 900+140,900+140, {1,1,1})
-        sasl.gl.drawWideLine(diff_x-10, diff_y-10, diff_x+10, diff_y+10, 4, ECAM_MAGENTA)
-        sasl.gl.drawWideLine(diff_x-10, diff_y+10, diff_x+10, diff_y-10, 4, ECAM_MAGENTA)
 
+
+
+        sasl.gl.drawRotatedTexture(data.terrain.texture, -data.inputs.heading, -shift_x-70, -shift_y-70, 900+140,900+140, {1,1,1})
+
+        if DEBUG_terrain_center then
+            -- Draw an X where the terrain center is located
+            sasl.gl.drawWideLine(diff_x-10, diff_y-10, diff_x+10, diff_y+10, 4, ECAM_MAGENTA)
+            sasl.gl.drawWideLine(diff_x-10, diff_y+10, diff_x+10, diff_y-10, 4, ECAM_MAGENTA)
+        end
     end
 end
 

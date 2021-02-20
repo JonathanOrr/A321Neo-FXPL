@@ -1,5 +1,7 @@
 size = {900, 900}
 
+include("ND/subcomponents/terrain.lua")
+
 local function leading_zeros_int(num, num_total)
     return string.format("%0" .. num_total .. "d", num) 
 end
@@ -363,6 +365,10 @@ local function draw_common_oans_info(data)
     end
 end
 
+function draw_test_gpws()
+    draw_terrain_test_gpws()
+end
+
 function draw_common(data)
     draw_common_gs_and_tas(data)
     draw_common_wind(data)
@@ -371,5 +377,6 @@ function draw_common(data)
     draw_common_messages(data)
     draw_common_rwy_and_true(data)
     draw_common_oans_info(data)
+    --draw_test_gpws()
 end
 

@@ -125,31 +125,42 @@ function update_terrain_altitudes(data)
     ND_terrain.is_ready = true
 end
 
+local function small_prng(lat, lon)
+    local state = lat * 1231 + lon
+    return (state*1664525 + 1013904223)
+end
+
+local function draw_single_tile(data, orig_lat, orig_lon, x, y, tile_size)
+    -- Converting coordates to the format of array
+    local lat = orig_lat - math.fmod(orig_lat, RESOLUTION_LAT) - ND_terrain.altitudes_start[1]
+    local lon = orig_lon - math.fmod(orig_lon, RESOLUTION_LON) - ND_terrain.altitudes_start[2]
+    lat = math.floor(lat * INV_RESOLUTION_LAT)
+    lon = math.floor(lon * INV_RESOLUTION_LON)
+
+    -- Select a random area for our tile:
+    local x_start = small_prng(orig_lat,orig_lon)%200
+    local y_start = small_prng(orig_lon,orig_lat)%100
+
+    if lat >= 0 and lat <= NR_TILE_LAT and lon >= 0 and lon <= NR_TILE_LON then -- Valid point
+        local terrain_alt = ND_terrain.altitudes[lat][lon]
+        local texture = terrain_get_texture(data, terrain_alt)
+        if texture then
+            sasl.gl.drawTexturePart(texture, x, y, tile_size, tile_size, x_start, y_start, tile_size, tile_size, {1,1,1})
+        end
+    else
+
+        -- Outside the loaded region
+        sasl.gl.drawTexturePart(image_terrain_magenta, x, y, tile_size, tile_size, x_start, y_start, tile_size, tile_size, {1,1,1})
+    end
+
+end
+
 function update_terrain(data, functions)
     local mag_dev = Local_magnetic_deviation()
 
     local extra_size = 140 -- This is necessary because when the texture is rotated of 45° we need extra pixels over 900 weidth/height
-    
-    -- Lat, lon in the left bottom corner
-    local lat, lon = functions.get_lat_lon_heading(data, -extra_size/2, -extra_size/2, mag_dev)
-    local rounded_lat = lat - math.fmod(lat, RESOLUTION_LAT)
-    local rounded_lon = lon - math.fmod(lon, RESOLUTION_LON)
-
-    data.terrain_center[1] = data.inputs.plane_coords_lat - math.fmod(data.inputs.plane_coords_lat, RESOLUTION_LAT)
-    data.terrain_center[2] = data.inputs.plane_coords_lon - math.fmod(data.inputs.plane_coords_lon, RESOLUTION_LON)
-
-    local x1, y1 = functions.get_x_y_heading(data, rounded_lat, rounded_lon, 0)
-    local x2, y2 = functions.get_x_y_heading(data, rounded_lat, rounded_lon+RESOLUTION_LON, 0)
-    local x3, y3 = functions.get_x_y_heading(data, rounded_lat+RESOLUTION_LAT, rounded_lon, 0)
-    
-    local multiplier_x = RESOLUTION_LON
-    local multiplier_y = RESOLUTION_LAT
-    local size_x = math.ceil(x2-x1)
-    local size_y = math.ceil(y3-y1)
-    assert(size_x > 0 and size_y > 0)
-    
-    local orig_size_x = size_x
-    local orig_size_y = size_y
+    local w = size[1]+extra_size    -- Texture width
+    local h = size[2]+extra_size    -- Texture height
 
     -- The minimun image size (for each time) is computed as follows:
     -- - 32 for zoom 10
@@ -158,48 +169,49 @@ function update_terrain(data, functions)
     -- - 4  for zoom 80 and above
     local img_size = 32 / 2^(math.min(4, data.config.range)-1)
 
-    while size_x < img_size do
-        size_x = size_x + orig_size_x
-        multiplier_x = multiplier_x + RESOLUTION_LON
-    end
-    while size_y < img_size do
-        size_y = size_y + orig_size_y
-        multiplier_y = multiplier_y + RESOLUTION_LAT
-    end
+    local nr_tile_x = math.ceil(w / img_size)
+    local nr_tile_y = math.ceil(h / img_size)
+
+    -- Lat, lon in the left bottom corner
+    local bl_px_x = -extra_size/2+img_size/2
+    local bl_px_y = -extra_size/2+img_size/2
     
-    local w = size[1]+extra_size
-    local h = size[2]+extra_size
+    if not data.bl_lat then
+        data.bl_lat, data.bl_lon = functions.get_lat_lon_heading(data, bl_px_x, bl_px_y, mag_dev)
+    end
+    local bl_lat, bl_lon = data.bl_lat, data.bl_lon
     
-    if not data.terrain_texture then
-        data.terrain_texture = sasl.gl.createTexture(w,h)
+    -- Lat, lon in the top right corner (corrected for tile size)
+    local tr_px_x = bl_px_x + img_size * nr_tile_x
+    local tr_px_y = bl_px_y + img_size * nr_tile_y
+
+    if not data.tr_lat then
+        data.tr_lat, data.tr_lon =  functions.get_lat_lon_heading(data, tr_px_x, tr_px_y, mag_dev)
+    end
+    local tr_lat, tr_lon = data.tr_lat, data.tr_lon
+
+    local multiplier_lat = (tr_lat - bl_lat) / nr_tile_y
+    local multiplier_lon = (tr_lon - bl_lon) / nr_tile_x
+
+    data.terrain.center[1] = bl_lat + multiplier_lat*(nr_tile_y/2-1)
+    data.terrain.center[2] = bl_lon + multiplier_lon*nr_tile_x/2
+
+    if not data.terrain.texture then
+        data.terrain.texture = sasl.gl.createTexture(w,h)
     end
 
-    sasl.gl.setRenderTarget(data.terrain_texture, true) -- Automatically clear the texture
-    
-    print("size_x=" .. size_x, "size_y=" .. size_y, "multiplier_x=" .. multiplier_x, "multiplier_y=" .. multiplier_y)
-    
-    for i=0,w/size_x do
-        for j=0,h/size_y do
-            if i == 1 then
-                print("i=" .. i, "j=" .. j, "latitude=" .. (rounded_lat + multiplier_y*j), "longitude=" .. (rounded_lon + multiplier_x*i))
-            end
+    sasl.gl.setRenderTarget(data.terrain.texture, true) -- Automatically clear the texture
 
-            local lat = rounded_lat + multiplier_y*j - ND_terrain.altitudes_start[1]
-            local lon = rounded_lon + multiplier_x*i - ND_terrain.altitudes_start[2]
-            lat = math.floor(lat * INV_RESOLUTION_LAT)
-            lon = math.floor(lon * INV_RESOLUTION_LON)
+    for i=0,nr_tile_x do
+        for j=0,nr_tile_y do
 
-            if lat >= 0 and lat <= NR_TILE_LAT and lon >= 0 and lon <= NR_TILE_LON then -- Valid point
-                local terrain_alt = ND_terrain.altitudes[lat][lon]
-                local texture = terrain_get_texture(data, terrain_alt)
-                if texture then
-                    local x = (i*size_x)
-                    local y = (j*size_y)
-                    sasl.gl.drawTexturePart(texture, x, y, size_x, size_y, (lat+lon)%50, (lat)%30, size_x, size_y, {1,1,1})
-                end
-            else
-                sasl.gl.drawRectangle(x, y,size_x, size_y, {1., 0., 1.})
-            end
+            local lat = bl_lat + multiplier_lat*j
+            local lon = bl_lon + multiplier_lon*i
+
+            local x = -img_size/2 + i*img_size
+            local y = -img_size/2 + j*img_size
+            draw_single_tile(data, lat, lon, x, y, img_size)
+
         end
     end
 
@@ -207,4 +219,17 @@ function update_terrain(data, functions)
 
 end
 
+function draw_terrain_test_gpws()
+
+    sasl.gl.drawTexture(image_terrain_magenta, 75, 100+300, 250, 150, {1,1,1})
+    sasl.gl.drawTexture(image_terrain_red, 75+250, 100+300, 250, 150, {1,1,1})
+    sasl.gl.drawTexture(image_terrain_blue, 75+500, 100+300, 250, 150, {1,1,1})
+
+    sasl.gl.drawTexture(image_terrain_yellow_high, 75+250, 100+150, 250, 150, {1,1,1})
+
+    sasl.gl.drawTexture(image_terrain_green_high, 75, 100, 250, 150, {1,1,1})
+    sasl.gl.drawTexture(image_terrain_yellow_low, 75+250, 100, 250, 150, {1,1,1})
+    sasl.gl.drawTexture(image_terrain_green_low, 75+500, 100, 250, 150, {1,1,1})
+
+end
 
