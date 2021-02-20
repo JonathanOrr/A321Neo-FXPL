@@ -1,4 +1,30 @@
+-------------------------------------------------------------------------------
+-- A32NX Freeware Project
+-- Copyright (C) 2020
+-------------------------------------------------------------------------------
+-- LICENSE: GNU General Public License v3.0
+--
+--    This program is free software: you can redistribute it and/or modify
+--    it under the terms of the GNU General Public License as published by
+--    the Free Software Foundation, either version 3 of the License, or
+--    (at your option) any later version.
+--
+--    Please check the LICENSE file in the root of the repository for further
+--    details or check <https://www.gnu.org/licenses/>
+-------------------------------------------------------------------------------
+-- File: graphics_arc.lua
+-- Short description: ARC mode file
+-------------------------------------------------------------------------------
+
 size = {900, 900}
+
+include("ND/subcomponents/helpers.lua")
+include("ND/subcomponents/graphics_oans.lua")
+include('ND/subcomponents/terrain.lua')
+
+-------------------------------------------------------------------------------
+-- Textures
+-------------------------------------------------------------------------------
 
 local image_bkg_arc        = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/arc.png")
 local image_bkg_arc_red    = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/arc-red.png")
@@ -12,6 +38,14 @@ local image_ils_sym = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textu
 local image_ils_nonprec_sym = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/sym-ils-nonprec-arc.png")
 
 local COLOR_YELLOW = {1,1,0}
+
+-------------------------------------------------------------------------------
+-- Helpers functions
+-------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------
+-- draw_* functions
+-------------------------------------------------------------------------------
 
 local function draw_backgrounds(data)
     -- Main rose background
@@ -110,6 +144,10 @@ local function draw_ranges(data)
     end    
     
 end
+
+-------------------------------------------------------------------------------
+-- Main draw_* functions
+-------------------------------------------------------------------------------
 
 function draw_arc_unmasked(data)
     draw_backgrounds(data)

@@ -18,7 +18,7 @@
 
 size = {900, 900}
 
-local DEBUG_terrain_center = true
+local DEBUG_terrain_center = false
 
 include("ND/subcomponents/helpers.lua")
 include("ND/subcomponents/graphics_oans.lua")
@@ -319,16 +319,6 @@ local function draw_terrain(data)
 
 
     
-
-    if get(TIME) - data.terrain.last_update > 3 or data.config.prev_range ~= data.config.range then
-        local functions_for_terrain = {
-            get_lat_lon_heading = rose_get_lat_lon_with_heading,
-            get_x_y_heading = rose_get_x_y_heading
-        }
-        update_terrain(data, functions_for_terrain)
-        data.terrain.last_update = get(TIME)
-    end
-    
     if data.config.prev_range ~= data.config.range
        or math.abs(data.terrain.center[1] - data.inputs.plane_coords_lat) > 0.1
        or math.abs(data.terrain.center[2] - data.inputs.plane_coords_lon) > 0.1 then
@@ -340,6 +330,15 @@ local function draw_terrain(data)
         data.tr_lon = nil
     end
     
+    if get(TIME) - data.terrain.last_update > 3 or data.config.prev_range ~= data.config.range then
+        local functions_for_terrain = {
+            get_lat_lon_heading = rose_get_lat_lon_with_heading,
+            get_x_y_heading = rose_get_x_y_heading
+        }
+        update_terrain(data, functions_for_terrain)
+        data.terrain.last_update = get(TIME)
+    end
+
     data.config.prev_range = data.config.range
 
     if data.terrain.texture then

@@ -209,9 +209,8 @@ local function draw_single_tile(data, orig_lat, orig_lon, x, y, tile_size)
         -- When the aicraft is near an airport, we have a 400ft of vertical space before showing
         -- the terrain tiles.  See here for further details:
         -- https://skybrary.aero/bookshelf/books/3364.pdf
-        if get(Capt_ra_alt_ft) < 2000 and get(GPWS_dist_airport) < 1 
-                                      and math.abs(orig_lat-data.inputs.plane_coords_lat) < 0.05 
-                                      and math.abs(orig_lon-data.inputs.plane_coords_lon) < 0.05  then
+        if get(Capt_ra_alt_ft) < 2000 and get(GPWS_dist_airport) < 3 
+                                      and data.config.range < 3  then
             if terrain_alt > -1000 and terrain_alt < data.inputs.altitude+400  then
                 terrain_alt = -3000 -- -3000 is just a random value to show a black square
             end

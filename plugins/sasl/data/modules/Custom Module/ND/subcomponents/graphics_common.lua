@@ -265,6 +265,12 @@ local function draw_common_messages_center(data)
     elseif (data.misc.windshear_warning or data.misc.windshear_caution) and data.config.range > ND_RANGE_10 then
         text = "W/S SET RNG 10 NM"
         color = data.misc.windshear_warning and ECAM_RED or ECAM_ORANGE
+    elseif (get(GPWS_pred_terr) == 1 or get(GPWS_pred_terr_pull) == 1) and data.config.mode == ND_MODE_PLAN then
+        text = "TERR CHANGE MODE"
+        color = get(GPWS_pred_terr_pull) == 1 and ECAM_RED or ECAM_ORANGE
+    elseif (get(GPWS_pred_terr) == 1 or get(GPWS_pred_terr_pull) == 1) and data.config.range > ND_RANGE_80 then
+        text = "TERR REDUCE CHANGE"
+        color = get(GPWS_pred_terr_pull) == 1 and ECAM_RED or ECAM_ORANGE
     elseif data.misc.mode_change then
         text = "MODE CHANGE"
         color = ECAM_GREEN    
@@ -366,14 +372,16 @@ local function draw_common_oans_info(data)
 end
 
 local function draw_common_terrain_numbers(data)
-    if    data.id == ND_CAPT and get(ND_Capt_Terrain) == 1
+    if data.config.mode ~= ND_MODE_PLAN and
+          data.id == ND_CAPT and get(ND_Capt_Terrain) == 1
        or data.id == ND_FO   and get(ND_Fo_Terrain) == 1 then
        
         local max_alt = Fwd_string_fill(""..math.ceil(data.terrain.max_altitude_tile/100), "0", 3)
         if data.terrain.max_altitude_tile < -90000 then
             max_alt = "000"
         end
-        local min_alt = Fwd_string_fill(""..math.ceil(data.terrain.min_altitude_tile/100), "0", 3)
+        
+        local min_alt = Fwd_string_fill(""..math.ceil(math.max(0,data.terrain.min_altitude_tile/100)), "0", 3)
         if data.terrain.min_altitude_tile > 90000 then
             min_alt = "000"
         end
