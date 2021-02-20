@@ -345,5 +345,37 @@ FBW_PID_arrays = {
         Desired_output = 0,
         Actual_output = 0,
     },
+
+    FBW_AUTOTRIM_PID_array = {
+        P_gain = 0.250,
+        I_gain = 0.160,
+        D_gain = 0.000,
+        B_gain = 1,
+        Schedule_gains = false,
+        Schedule_table = {
+            P = {
+                {000, 0.000},
+            },
+            I = {
+                {000, 0.000},
+            },
+            D = {
+                {000, 0.000},
+            },
+        },
+        Limited_integral = true,
+        min_integral = -1,
+        max_integral = 1,
+        Min_out = -1,
+        Max_out = 1,
+        PV = 0,
+        Error = 0,
+        Proportional = 0,
+        Integral = 0,
+        Derivative = 0,
+        Backpropagation = 0,
+        Desired_output = 0,
+        Actual_output = 0,
+    },
 }
 

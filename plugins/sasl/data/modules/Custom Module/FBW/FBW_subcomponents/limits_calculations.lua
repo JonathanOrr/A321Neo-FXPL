@@ -107,18 +107,35 @@ end
 local function update_VMAX_prot()
     if adirs_get_avg_alt() > 24600 then
         set(VMAX_prot, adirs_get_avg_ias() * (VMAX_speeds[1] + 0.006) / Math_clamp_lower(adirs_get_avg_mach(), 0.001))
-        set(Fixed_VMAX, adirs_get_avg_ias() * VMAX_speeds[1] / adirs_get_avg_mach())
+        set(Fixed_VMAX, adirs_get_avg_ias() * VMAX_speeds[1] / Math_clamp_lower(adirs_get_avg_mach(), 0.001))
+        --direct law
+        if get(FBW_total_control_law) ~= FBW_NORMAL_LAW and get(FBW_total_control_law) ~= FBW_DIRECT_LAW then
+            set(Fixed_VMAX, adirs_get_avg_ias() * (0.77 / Math_clamp_lower(adirs_get_avg_mach(), 0.001)))
+        end
     else
         set(VMAX_prot, VMAX_speeds[2] + 6)
         set(Fixed_VMAX, VMAX_speeds[2])
+        --alt law or direct law
+        if get(FBW_total_control_law) ~= FBW_NORMAL_LAW then
+            set(Fixed_VMAX, 320)
+        end
     end
 end
 
 local function update_VMAX()
     if adirs_get_avg_alt() > 24600 then
         set(VMAX, adirs_get_avg_ias() * (VMAX_speeds[1] / Math_clamp_lower(adirs_get_avg_mach(), 0.001)))
+        --direct law
+        if get(FBW_total_control_law) ~= FBW_NORMAL_LAW and get(FBW_total_control_law) ~= FBW_DIRECT_LAW then
+            set(VMAX, adirs_get_avg_ias() * (0.77 / Math_clamp_lower(adirs_get_avg_mach(), 0.001)))
+        end
     else
+        --normal law
         set(VMAX, VMAX_speeds[2])
+        --alt law or direct law
+        if get(FBW_total_control_law) ~= FBW_NORMAL_LAW then
+            set(VMAX, 320)
+        end
     end
     local gear_vmax = false
     if get(Gear_handle) == 1 then

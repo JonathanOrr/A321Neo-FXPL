@@ -61,7 +61,11 @@ end
 
 function XP_trim_up(phase)
     if phase == SASL_COMMAND_BEGIN or phase == SASL_COMMAND_CONTINUE then
-        set(Human_pitch_trim, 1)
+        if get(THS_trim_range_limited) == 1 and get(Elev_trim_ratio) >= get(THS_trim_limit_ratio) then
+            set(Human_pitch_trim, 0)
+        else
+            set(Human_pitch_trim, 1)
+        end
     end
 
     return 0--inhibites the x-plane original command
@@ -119,6 +123,7 @@ function THS_control(THS_input_dataref, human_input)
 
     --logics
     local THS_target = input
+    local max_upwards_trim_ratio = get(THS_trim_range_limited) == 1 and get(THS_trim_limit_ratio) or 1
 
     --Trim speed logic--
     caculated_human_trim_speed = Math_rescale(0, 0, 1450, caculated_human_trim_speed, get(Hydraulic_G_press) + get(Hydraulic_Y_press))
@@ -131,6 +136,6 @@ function THS_control(THS_input_dataref, human_input)
         set(THS_input_dataref, get(Elev_trim_ratio))
         set(Human_pitch_trim, 0)
     else
-        set(Elev_trim_ratio, Set_linear_anim_value(get(Elev_trim_ratio), THS_target, -1, 1, caculated_trim_speed))
+        set(Elev_trim_ratio, Set_linear_anim_value(get(Elev_trim_ratio), THS_target, -1, max_upwards_trim_ratio, caculated_trim_speed))
     end
 end

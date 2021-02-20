@@ -14,6 +14,9 @@ local vertical_control_var_table = {
     AoA_V_SP = 0,
     AoA_SP = 0,
 
+    Autotrim_high_G_inhibition = 0,
+    Autotrim_alpha_inhibition = 0,
+
     rotation_mode_controller_output = 0,
     flight_mode_controller_output = 0,
     flare_mode_controller_output = 0,
@@ -22,7 +25,7 @@ local vertical_control_var_table = {
     stability_wait_timer = 0,--seconds
 }
 
-local lateral_control_filter_table = {
+local vertical_control_filtering_table = {
     Q_pv_filter_table = {
         x = 0,
         cut_frequency = 6,
@@ -385,14 +388,14 @@ local function input_handling(var_table)
     local flight_mode_G_input = get_vertical_input.Flight_G(get(Augmented_pitch), var_table)
     local flare_mode_input =    get_vertical_input.Flare(get(Augmented_pitch), var_table)
 
-    var_table.Q_input = rotation_mode_input * get(FBW_vertical_rotation_mode_ratio) + flight_mode_Q_input * get(FBW_vertical_flight_mode_ratio) + flare_mode_input * get(FBW_vertical_flare_mode_ratio)
+    var_table.Q_input = rotation_mode_input * get(FBW_vertical_rotation_mode_ratio) +
+                        flight_mode_Q_input * get(FBW_vertical_flight_mode_ratio) +
+                        flare_mode_input * get(FBW_vertical_flare_mode_ratio)
     var_table.C_star_input = flight_mode_G_input
 end
 
 --FILTERING-------------------------------------------------------------------------------------------------
 local function filter_values(var_table, filter_table)
-    --FILTERING--
-
     --Q--
     --filter the Q PV
     filter_table.Q_pv_filter_table.x = get(True_pitch_rate)
@@ -462,6 +465,40 @@ local vertical_augmentation = {
         end
 
         var_table.flare_mode_controller_output = FBW_PID_BP(FBW_PID_arrays.FBW_PITCH_RATE_PID_array, var_table.Filtered_Q_err, var_table.Filtered_Q, var_table.Filtered_ias)
+    end,
+
+    AUTOTRIM = function (var_table)
+        if math.abs(adirs_get_avg_roll()) > 33 or
+           get(Human_pitch_trim) ~= 0 or
+           get(FBW_vertical_flight_mode_ratio) ~= 1 or
+           var_table.Filtered_ias > get(Fixed_VMAX) or
+           get(Total_vertical_g_load) < 0.5 or
+           get(FBW_vertical_law) == FBW_ALT_REDUCED_PROT_LAW and var_table.Filtered_ias < get(VLS) then
+            return
+        end
+
+        --enter limited trim range modes
+        local previous_Autotrim_limitation = get(THS_trim_range_limited)
+        if get(FBW_vertical_law) == FBW_NORMAL_LAW then
+            if var_table.Filtered_AoA > get(Aprot_AoA) - 0.5 then
+                set(THS_trim_range_limited, 1)
+            elseif get(Total_vertical_g_load) > 1.25 then
+                set(THS_trim_range_limited, 1)
+            else
+                set(THS_trim_range_limited, 0)
+            end
+        else
+            set(THS_trim_range_limited, 0)
+        end
+
+        --memorise entry position
+        if get(THS_trim_range_limited) - previous_Autotrim_limitation == 1 then
+            set(THS_trim_limit_ratio, get(Elev_trim_ratio))
+        end
+
+        --PID controls
+        set(Augmented_pitch_trim_ratio, FBW_PID_BP(FBW_PID_arrays.FBW_AUTOTRIM_PID_array, get(Pitch_artstab), -get(Pitch_artstab)))
+        FBW_PID_arrays.FBW_AUTOTRIM_PID_array.Actual_output = get(Elev_trim_ratio)
     end,
 }
 
@@ -543,11 +580,12 @@ end
 
 function update()
     input_handling(vertical_control_var_table)
-    filter_values(vertical_control_var_table, lateral_control_filter_table)
+    filter_values(vertical_control_var_table, vertical_control_filtering_table)
 
     vertical_augmentation.Rotation_mode(vertical_control_var_table)
     vertical_augmentation.Flight_mode(vertical_control_var_table)
     vertical_augmentation.Flare_mode(vertical_control_var_table)
+    vertical_augmentation.AUTOTRIM(vertical_control_var_table)
 
     enforce_bumpless_transfers()
     FBW_vertical_mode_blending(vertical_control_var_table)
