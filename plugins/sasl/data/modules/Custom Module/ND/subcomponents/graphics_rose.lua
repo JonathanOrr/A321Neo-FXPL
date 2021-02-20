@@ -310,7 +310,7 @@ local function draw_terrain(data)
         return
     end
 
-    if not ND_terrain.is_ready then
+    if ND_terrain.is_ready == nil then
         -- This may happen on sasl reboot
         update_terrain_altitudes(data)
     end
@@ -327,11 +327,12 @@ local function draw_terrain(data)
     data.config.prev_range = data.config.range
 
     if data.terrain_texture then
-        local diff_x, diff_y = rose_get_x_y(data, data.terrain_center[1], data.terrain_center[2])
-        diff_x = 450-diff_x
-        diff_y = 450-diff_y
-        sasl.gl.drawRotatedTexture(data.terrain_texture, -data.inputs.heading, -diff_x-70, -diff_y-70, 900+140,900+140, {1,1,1})
---    sasl.gl.drawWideLine(435, 415, 465, 415, 4, ECAM_MAGENTA)
+        local diff_x, diff_y = rose_get_x_y_heading(data, data.terrain_center[1], data.terrain_center[2], Local_magnetic_deviation() + data.inputs.heading)
+        local shift_x = 450-diff_x
+        local shift_y = 450-diff_y
+        sasl.gl.drawRotatedTexture(data.terrain_texture, -data.inputs.heading + Local_magnetic_deviation(), -shift_x-70, -shift_y-70, 900+140,900+140, {1,1,1})
+        sasl.gl.drawWideLine(diff_x-10, diff_y-10, diff_x+10, diff_y+10, 4, ECAM_MAGENTA)
+        sasl.gl.drawWideLine(diff_x-10, diff_y+10, diff_x+10, diff_y-10, 4, ECAM_MAGENTA)
 
     end
 end

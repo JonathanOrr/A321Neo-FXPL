@@ -22,7 +22,7 @@
 local TERRAIN_WET      = -9999  -- Just a magic number
 local TERRAIN_NOTFOUND = -99999 -- Just a magic number
 
-local RESOLUTION_LAT   = 0.005 -- In deg
+local RESOLUTION_LAT   = 0.01 -- In deg
 local RESOLUTION_LON   = 0.01  -- In deg
 local MAX_LAT          = 2     -- Number of degrees to load
 local MAX_LON          = 2     -- Number of degrees to load
@@ -30,8 +30,8 @@ local MAX_LON          = 2     -- Number of degrees to load
 
 local INV_RESOLUTION_LAT = math.floor(1/RESOLUTION_LAT)
 local INV_RESOLUTION_LON = math.floor(1/RESOLUTION_LON)
-local NR_TILE_LAT = math.floor(MAX_LAT / RESOLUTION_LAT)
-local NR_TILE_LON = math.floor(MAX_LON / RESOLUTION_LON)
+local NR_TILE_LAT = math.ceil(MAX_LAT / RESOLUTION_LAT)
+local NR_TILE_LON = math.ceil(MAX_LON / RESOLUTION_LON)
 
 
 -------------------------------------------------------------------------------
@@ -69,7 +69,7 @@ local function terrain_get_texture(data, terrain_alt)
     local curr_alt = data.inputs.altitude
     local curr_vs  = data.inputs.vs
     if curr_vs < -1000 then
-        curr_alt = curr_alt - curr_vs / 2 -- if descending more than 1 000 ft/min, the altitude expected in 30 s
+        curr_alt = curr_alt + curr_vs / 2 -- if descending more than 1 000 ft/min, the altitude expected in 30 s
     end
 
     if terrain_alt == TERRAIN_WET then
@@ -99,23 +99,23 @@ function update_terrain_altitudes(data)
     -- This is quite expensive but it is called only whe there is a scenery 
     -- load (on startup and when you cross the boundary)
 
-    if get(ND_Capt_Terrain) == 1 and data.id == ND_FO then
+    if ND_terrain.is_ready and get(ND_Capt_Terrain) == 1 and data.id == ND_FO then
         return  -- FO/ND should not update the terrain altitudes if the capt ND is active
     end
 
     ND_terrain.is_ready = false
     ND_terrain.altitudes = {}
 
-    local start_lat = Round(get(Aircraft_lat),  2) - MAX_LAT/2
-    local start_lon = Round(get(Aircraft_long), 2) - MAX_LON/2
+    local start_lat = get(Aircraft_lat)  - math.fmod(get(Aircraft_lat), RESOLUTION_LAT) - MAX_LAT/2
+    local start_lon = get(Aircraft_long) - math.fmod(get(Aircraft_long), RESOLUTION_LON) - MAX_LON/2
 
 
     ND_terrain.altitudes_start = {start_lat, start_lon}
 
-    for i=1,NR_TILE_LAT do
+    for i=0,NR_TILE_LAT do
         ND_terrain.altitudes[i] = {}
         curr_lon = start_lon
-        for j=1,NR_TILE_LON do
+        for j=0,NR_TILE_LON do
             ND_terrain.altitudes[i][j] = compute_alt_feet(start_lat, curr_lon)
             curr_lon = curr_lon + RESOLUTION_LON
         end
@@ -126,27 +126,27 @@ function update_terrain_altitudes(data)
 end
 
 function update_terrain(data, functions)
-    -- Set the reference to the center of the image (this is the current aircraft position)
-    data.terrain_center[1], data.terrain_center[2] = functions.get_lat_lon_heading(data, 450, 450, 0)
+    local mag_dev = Local_magnetic_deviation()
 
     local extra_size = 140 -- This is necessary because when the texture is rotated of 45° we need extra pixels over 900 weidth/height
     
     -- Lat, lon in the left bottom corner
-    local lat, lon = functions.get_lat_lon_heading(data, -extra_size/2, -extra_size/2, 0)
+    local lat, lon = functions.get_lat_lon_heading(data, -extra_size/2, -extra_size/2, mag_dev)
     local rounded_lat = lat - math.fmod(lat, RESOLUTION_LAT)
     local rounded_lon = lon - math.fmod(lon, RESOLUTION_LON)
-    
-    data.terrain_center[1] = data.terrain_center[1] - (lat-rounded_lat)
-    data.terrain_center[2] = data.terrain_center[2] - (lon-rounded_lon)
-    
+
+    data.terrain_center[1] = data.inputs.plane_coords_lat - math.fmod(data.inputs.plane_coords_lat, RESOLUTION_LAT)
+    data.terrain_center[2] = data.inputs.plane_coords_lon - math.fmod(data.inputs.plane_coords_lon, RESOLUTION_LON)
+
     local x1, y1 = functions.get_x_y_heading(data, rounded_lat, rounded_lon, 0)
     local x2, y2 = functions.get_x_y_heading(data, rounded_lat, rounded_lon+RESOLUTION_LON, 0)
     local x3, y3 = functions.get_x_y_heading(data, rounded_lat+RESOLUTION_LAT, rounded_lon, 0)
     
     local multiplier_x = RESOLUTION_LON
     local multiplier_y = RESOLUTION_LAT
-    local size_x = x2-x1
-    local size_y = y3-y1
+    local size_x = math.ceil(x2-x1)
+    local size_y = math.ceil(y3-y1)
+    assert(size_x > 0 and size_y > 0)
     
     local orig_size_x = size_x
     local orig_size_y = size_y
@@ -166,7 +166,7 @@ function update_terrain(data, functions)
         size_y = size_y + orig_size_y
         multiplier_y = multiplier_y + RESOLUTION_LAT
     end
-
+    
     local w = size[1]+extra_size
     local h = size[2]+extra_size
     
@@ -176,20 +176,26 @@ function update_terrain(data, functions)
 
     sasl.gl.setRenderTarget(data.terrain_texture, true) -- Automatically clear the texture
     
-    for i=0,h/size_x do
-        for j=0,w/size_y do
+    print("size_x=" .. size_x, "size_y=" .. size_y, "multiplier_x=" .. multiplier_x, "multiplier_y=" .. multiplier_y)
+    
+    for i=0,w/size_x do
+        for j=0,h/size_y do
+            if i == 1 then
+                print("i=" .. i, "j=" .. j, "latitude=" .. (rounded_lat + multiplier_y*j), "longitude=" .. (rounded_lon + multiplier_x*i))
+            end
+
             local lat = rounded_lat + multiplier_y*j - ND_terrain.altitudes_start[1]
             local lon = rounded_lon + multiplier_x*i - ND_terrain.altitudes_start[2]
             lat = math.floor(lat * INV_RESOLUTION_LAT)
             lon = math.floor(lon * INV_RESOLUTION_LON)
 
-            if lat >= 1 and lat <= NR_TILE_LAT and lon >= 1 and lon <= NR_TILE_LON then -- Valid point
+            if lat >= 0 and lat <= NR_TILE_LAT and lon >= 0 and lon <= NR_TILE_LON then -- Valid point
                 local terrain_alt = ND_terrain.altitudes[lat][lon]
                 local texture = terrain_get_texture(data, terrain_alt)
                 if texture then
-                    local x = (i*size_x)-size_x/2
-                    local y = (j*size_y)-size_y/2
-                    sasl.gl.drawTexturePart(texture, x, y, size_x, size_y, (x+y)%50, (x)%30, size_x, size_y, {1,1,1})
+                    local x = (i*size_x)
+                    local y = (j*size_y)
+                    sasl.gl.drawTexturePart(texture, x, y, size_x, size_y, (lat+lon)%50, (lat)%30, size_x, size_y, {1,1,1})
                 end
             else
                 sasl.gl.drawRectangle(x, y,size_x, size_y, {1., 0., 1.})

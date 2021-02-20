@@ -33,6 +33,15 @@ local function update_hdg_track(data)
 
 end
 
+local function update_altitude(data)
+    local id = data.id
+    
+    data.inputs.altitude    = adirs_get_alt(id)
+    data.inputs.vs          = adirs_get_vs(id)
+
+end
+
+
 function update_position(data)
     local id = data.id
 
@@ -121,4 +130,5 @@ function update_main(data)
     update_navaid_raw(data)
     update_navaid_bearing(data)
     update_poi(data)
+    update_altitude(data)
 end

@@ -99,5 +99,5 @@ end
 
 
 function onSceneryLoaded()
-    update_terrain_altitudes()
+    update_terrain_altitudes(nd_data)
 end
