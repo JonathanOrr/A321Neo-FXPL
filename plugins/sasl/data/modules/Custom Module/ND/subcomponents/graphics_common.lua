@@ -365,6 +365,37 @@ local function draw_common_oans_info(data)
     end
 end
 
+local function draw_common_terrain_numbers(data)
+    if    data.id == ND_CAPT and get(ND_Capt_Terrain) == 1
+       or data.id == ND_FO   and get(ND_Fo_Terrain) == 1 then
+       
+        local max_alt = Fwd_string_fill(""..math.ceil(data.terrain.max_altitude_tile/100), "0", 3)
+        if data.terrain.max_altitude_tile < -90000 then
+            max_alt = "000"
+        end
+        local min_alt = Fwd_string_fill(""..math.ceil(data.terrain.min_altitude_tile/100), "0", 3)
+        if data.terrain.min_altitude_tile > 90000 then
+            min_alt = "000"
+        end
+
+        if get(GPWS_pred_terr_pull) == 1 then
+            sasl.gl.drawText(Font_AirbusDUL, size[1]-55, 190, "TERR", 28, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
+            sasl.gl.drawText(Font_AirbusDUL, size[1]-55, 165, "AHEAD", 28, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
+        elseif get(GPWS_pred_terr) == 1 then
+            sasl.gl.drawText(Font_AirbusDUL, size[1]-55, 190, "TERR", 28, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+            sasl.gl.drawText(Font_AirbusDUL, size[1]-55, 165, "AHEAD", 28, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        else
+            sasl.gl.drawText(Font_AirbusDUL, size[1]-55, 165, "TERR", 28, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+        end
+        sasl.gl.drawText(Font_AirbusDUL, size[1]-40, 140, max_alt, 24, false, false, TEXT_ALIGN_CENTER, data.terrain.max_altitude_tile_color)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]-40, 115, min_alt, 24, false, false, TEXT_ALIGN_CENTER, data.terrain.min_altitude_tile_color)
+
+        Sasl_DrawWideFrame(size[1]-65, 137, 50, 23, 2, 0, {1., 1., 0})
+        Sasl_DrawWideFrame(size[1]-65, 112, 50, 23, 2, 0, {1., 1., 0})
+       
+    end
+end
+
 function draw_test_gpws()
     draw_terrain_test_gpws()
 end
@@ -377,6 +408,7 @@ function draw_common(data)
     draw_common_messages(data)
     draw_common_rwy_and_true(data)
     draw_common_oans_info(data)
+    draw_common_terrain_numbers(data)
     --draw_test_gpws()
 end
 
