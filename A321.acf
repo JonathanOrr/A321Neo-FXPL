@@ -212,7 +212,7 @@ P _gear/0/_lonE 7.0
 P _gear/0/_lonN 7.0
 P _gear/0/_lonR 99.0
 P _gear/0/_scon 139137.109375000
-P _gear/0/_stat_def 0.120315664
+P _gear/0/_stat_def 0.120315656
 P _gear/0/_steerdeg_hispeed 5.0
 P _gear/0/_steerdeg_lospeed 75.0
 P _gear/0/_strut_comp 0.899999976
@@ -71372,7 +71372,7 @@ P acf/_feather_prop_with_oilp 0
 P acf/_feathered_pitch 0.0
 P acf/_ff_rat_idle_JET 0.071999997
 P acf/_ff_rat_idle_PRP 0.0
-P acf/_file_writer_version 115103
+P acf/_file_writer_version 115200
 P acf/_flap1_cd 0.079999998
 P acf/_flap1_cl 1.544999957
 P acf/_flap1_cm -0.365000010
@@ -72989,60 +72989,6 @@ GROUP PFD
       OFFSET 0.000000
 
   END_GROUP
-  GROUP Heading Tape
-    LOCKED
-    gen_pointer Course Heading
-      POS 424.000000 2951.500000
-      IMAGE MIP/pfd/Course Heading
-      DATAREF abc
-      LOCKED
-      CLIP
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME -20.000000 170.000000 1.000000
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 20.000000 -170.000000
-      IS_DRAGGABLE 0
-      IS_VERTICAL 0
-      OFFSET 0.000000
-
-  END_GROUP
-  GROUP Speed Tape
-    LOCKED
-    gen_pointer Speed Tape
-      POS 106.000000 3360.000000
-      IMAGE MIP/pfd/spd tape
-      DATAREF sim/cockpit2/gauges/indicators/airspeed_kts_pilot
-      LOCKED
-      CLIP
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 1389.000000 1.000000
-      KEY_FRAME 40.000000 1389.000000 1.000000
-      KEY_FRAME 460.000000 -981.000000 1.000000
-      KEY_FRAME 461.000000 -981.000000
-      IS_DRAGGABLE 0
-      IS_VERTICAL 1
-      OFFSET 0.000000
-
-  END_GROUP
-  gen_pointer Alt Arrows
-    POS 691.500000 3352.000000
-    IMAGE MIP/pfd/alt tape/altarrows
-    DATAREF sim/cockpit2/gauges/indicators/altitude_ft_pilot
-    SHOW_LESS 45000.000000 sim/cockpit2/gauges/indicators/altitude_ft_pilot
-    LOCKED
-    KF_WRAP_BOTTOM
-    KF_WRAP_TOP
-    CLIP
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 213.000000 1.000000
-    KEY_FRAME 1000.000000 -211.000000
-    IS_DRAGGABLE 0
-    IS_VERTICAL 1
-    OFFSET 0.000000
-
   gen_pointer alt target
     POS 710.500000 3352.500000
     IMAGE MIP/pfd/target alt
@@ -73056,291 +73002,6 @@ GROUP PFD
     IS_DRAGGABLE 0
     IS_VERTICAL 1
     OFFSET 0.000000
-
-  GROUP Bugs
-    LOCKED
-    gen_pointer Speed Bug Selected
-      POS 158.500000 3352.500000
-      IMAGE MIP/pfd/spd_selected_bug
-      DATAREF abc
-      LOCKED
-      CLIP
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME -40.000000 227.000000 1.000000
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 40.000000 -227.000000
-      IS_DRAGGABLE 0
-      IS_VERTICAL 1
-      OFFSET 0.000000
-
-    gen_pointer Speed Bug Managed
-      POS 158.500000 3352.500000
-      IMAGE MIP/pfd/spd_managed_bug
-      DATAREF abc
-      LOCKED
-      CLIP
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME -40.000000 227.000000 1.000000
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 40.000000 -227.000000
-      IS_DRAGGABLE 0
-      IS_VERTICAL 1
-      OFFSET 0.000000
-
-    gen_pointer Heading Bug Select
-      POS 424.000000 3003.500000
-      IMAGE MIP/pfd/hdg_selected_bug
-      DATAREF abc
-      LOCKED
-      CLIP
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME -20.000000 170.000000 1.000000
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 20.000000 -170.000000
-      IS_DRAGGABLE 0
-      IS_VERTICAL 0
-      OFFSET 0.000000
-
-    gen_pointer Heading Bug Managed
-      POS 424.000000 3003.500000
-      IMAGE MIP/pfd/hdg_managed_bug
-      DATAREF abc
-      LOCKED
-      CLIP
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME -20.000000 170.000000 1.000000
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 20.000000 -170.000000
-      IS_DRAGGABLE 0
-      IS_VERTICAL 0
-      OFFSET 0.000000
-
-    gen_rotary Heading Sel Box L
-      POS 204.000000 2947.500000
-      IMAGE MIP/pfd/Hdg Target Box
-      DATAREF 
-      LOCKED
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 1.000000 6.000000
-      DIGITS 1
-      ROTARY_TYPE NO_CLICK
-      CLICK_RADIUS 10.000000
-      CLICK_RADIUS_DY 0.000000
-      OFFSET 0.000000
-      STEP1 1.000000
-      STEP2 1.000000
-      CURSOR DEFAULT
-      CLICK_DX 0
-      CLICK_DY 0
-
-    gen_rotary Heading Sel Box R
-      POS 642.000000 2947.500000
-      IMAGE MIP/pfd/Hdg Target Box
-      DATAREF 
-      LOCKED
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 1.000000 6.000000
-      DIGITS 1
-      ROTARY_TYPE NO_CLICK
-      CLICK_RADIUS 10.000000
-      CLICK_RADIUS_DY 0.000000
-      OFFSET 0.000000
-      STEP1 1.000000
-      STEP2 1.000000
-      CURSOR DEFAULT
-      CLICK_DX 0
-      CLICK_DY 0
-
-  END_GROUP
-END_GROUP
-GROUP LS
-  SHOW_EQUAL 1.000000 a321neo/cockpit/PFD/capt_ls_enabled
-  LOCKED
-  GROUP Diamonds
-    LOCKED
-    GROUP_OPEN
-    gen_pointer Diamond
-      POS 424.000000 3078.500000
-      IMAGE MIP/pfd/Diamond
-      DATAREF sim/cockpit2/radios/indicators/hsi_hdef_dots_pilot
-      SHOW_LESS 1.990000 sim/cockpit2/radios/indicators/hsi_vdef_dots_pilot
-      SHOW_GREATER -1.990000 sim/cockpit2/radios/indicators/hsi_vdef_dots_pilot
-      LOCKED
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME -1.990000 -169.000000 1.000000
-      KEY_FRAME 1.990000 169.000000
-      IS_DRAGGABLE 0
-      IS_VERTICAL 0
-      OFFSET 0.000000
-
-    gen_pointer VDiamond
-      POS 657.500000 3353.000000
-      IMAGE MIP/pfd/VDiamond
-      DATAREF sim/cockpit2/radios/indicators/hsi_vdef_dots_pilot
-      SHOW_LESS 1.990000 sim/cockpit2/radios/indicators/hsi_vdef_dots_pilot
-      SHOW_GREATER -1.990000 sim/cockpit2/radios/indicators/hsi_vdef_dots_pilot
-      LOCKED
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME -1.990000 169.000000 1.000000
-      KEY_FRAME 1.990000 -169.000000
-      IS_DRAGGABLE 0
-      IS_VERTICAL 1
-      OFFSET 0.000000
-
-    gen_rotary Diamond Left
-      POS 244.000000 3078.000000
-      IMAGE MIP/pfd/Diamond Left
-      DATAREF 
-      SHOW_LESS -1.990000 sim/cockpit2/radios/indicators/hsi_hdef_dots_pilot
-      LOCKED
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 1.000000 6.000000
-      DIGITS 1
-      ROTARY_TYPE NO_CLICK
-      CLICK_RADIUS 10.000000
-      CLICK_RADIUS_DY 0.000000
-      OFFSET 0.000000
-      STEP1 1.000000
-      STEP2 1.000000
-      CURSOR DEFAULT
-      CLICK_DX 0
-      CLICK_DY 0
-
-    gen_rotary Diaoond Right
-      POS 605.000000 3079.000000
-      IMAGE MIP/pfd/Diamond Right
-      DATAREF 
-      SHOW_GREATER 1.990000 sim/cockpit2/radios/indicators/hsi_hdef_dots_pilot
-      LOCKED
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 1.000000 6.000000
-      DIGITS 1
-      ROTARY_TYPE NO_CLICK
-      CLICK_RADIUS 10.000000
-      CLICK_RADIUS_DY 0.000000
-      OFFSET 0.000000
-      STEP1 1.000000
-      STEP2 1.000000
-      CURSOR DEFAULT
-      CLICK_DX 0
-      CLICK_DY 0
-
-    gen_rotary Diamond Up
-      POS 657.000000 3533.000000
-      IMAGE MIP/pfd/Diamond Up
-      DATAREF 
-      SHOW_LESS -1.990000 sim/cockpit2/radios/indicators/hsi_vdef_dots_pilot
-      LOCKED
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 1.000000 6.000000
-      DIGITS 1
-      ROTARY_TYPE NO_CLICK
-      CLICK_RADIUS 10.000000
-      CLICK_RADIUS_DY 0.000000
-      OFFSET 0.000000
-      STEP1 1.000000
-      STEP2 1.000000
-      CURSOR DEFAULT
-      CLICK_DX 0
-      CLICK_DY 0
-
-    gen_rotary Diamond Down
-      POS 657.000000 3173.000000
-      IMAGE MIP/pfd/Diamond Down
-      DATAREF 
-      SHOW_GREATER 1.990000 sim/cockpit2/radios/indicators/hsi_vdef_dots_pilot
-      LOCKED
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 1.000000 6.000000
-      DIGITS 1
-      ROTARY_TYPE NO_CLICK
-      CLICK_RADIUS 10.000000
-      CLICK_RADIUS_DY 0.000000
-      OFFSET 0.000000
-      STEP1 1.000000
-      STEP2 1.000000
-      CURSOR DEFAULT
-      CLICK_DX 0
-      CLICK_DY 0
-
-  END_GROUP
-  gen_rotary ALTLS 2
-    POS 662.000000 3352.000000
-    IMAGE MIP/pfd/ALTLS
-    DATAREF 
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 6.000000
-    DIGITS 1
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary LSH
-    POS 424.000000 3078.000000
-    IMAGE MIP/pfd/LSH
-    DATAREF 
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 0.000000
-    DIGITS 1
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_rotary LSV
-    POS 662.000000 3352.000000
-    IMAGE MIP/pfd/LSV
-    DATAREF 
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 0.000000
-    DIGITS 1
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
 
 END_GROUP
 GROUP Isis
@@ -74647,6 +74308,7 @@ gen_rotary Crash
   POS 480.000000 3360.000000
   IMAGE codecrash
   DATAREF 
+  HIDE
   LIGHT_MODE GLASS_AUTO
   LIGHT_RHEOSTAT 0
   KEY_FRAME 0.000000 0.000000 1.000000

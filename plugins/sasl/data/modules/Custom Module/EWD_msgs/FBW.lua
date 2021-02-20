@@ -55,9 +55,9 @@ Message_FBW_DO_NOT_SPD_BRK = {
 Message_FBW_SPEED_LIMIT = {
     text = function()
         if get(FBW_total_control_law) == FBW_ALT_REDUCED_PROT_LAW or get(FBW_total_control_law) == FBW_ALT_NO_PROT_LAW then
-            return " MAX SPEED........330/.82"
+            return " MAX SPEED........320/.82"
         else
-            return " MAX SPEED........305/.80"
+            return " MAX SPEED........320/.77"
         end
     end,
     color = function()

@@ -79,6 +79,12 @@ local function lateral_input_and_protection(var_table)
         var_table.HSP_bank_angle_mode = false
     end
 
+    --avoid strange reconfigurations--
+    if get(FBW_lateral_law) ~= FBW_NORMAL_LAW then
+        var_table.AoA_bank_angle_mode = false
+        var_table.HSP_bank_angle_mode = false
+    end
+
     if var_table.AoA_bank_angle_mode == true then--alpha protection bank angle protection
         var_table.neutral_bank_angle = Set_linear_anim_value(var_table.neutral_bank_angle, 33, 0, 67, bank_angle_speed)
         var_table.maximum_bank_angle = Set_linear_anim_value(var_table.maximum_bank_angle, 45, 0, 67, bank_angle_speed)

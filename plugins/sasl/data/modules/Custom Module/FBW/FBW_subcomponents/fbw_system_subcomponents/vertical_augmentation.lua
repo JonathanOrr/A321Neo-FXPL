@@ -10,12 +10,10 @@ local vertical_control_var_table = {
 
     Filtered_ias = 0,
     Filtered_AoA = 0,
+    Filtered_artstab = 0,
 
     AoA_V_SP = 0,
     AoA_SP = 0,
-
-    Autotrim_high_G_inhibition = 0,
-    Autotrim_alpha_inhibition = 0,
 
     rotation_mode_controller_output = 0,
     flight_mode_controller_output = 0,
@@ -49,6 +47,10 @@ local vertical_control_filtering_table = {
     AoA_filter_table = {
         x = 0,
         cut_frequency = 0.25,
+    },
+    artstab_filter_table = {
+        x = 0,
+        cut_frequency = 1,
     },
 }
 
@@ -281,6 +283,21 @@ local input_limitations = {
 
         return high_speed_prot_G
     end,
+
+    ALT_vmax = function (x, var_table)
+        local upwards_ratio = Math_rescale(-0.2, x, 0, 0.15, x)
+
+        local vmax_prot_x = Math_rescale(get(Fixed_VMAX), x, get(VMAX_demand) + 15, upwards_ratio, var_table.Filtered_ias)
+
+        return vmax_prot_x
+    end,
+    ALT_vls = function (x, var_table)
+        local downwards_ratio = Math_rescale(0, -0.15, 0.2, x, x)
+
+        local vls_prot_x = Math_rescale(get(VLS) - 15, downwards_ratio, get(VLS), x, var_table.Filtered_ias)
+
+        return vls_prot_x
+    end,
 }
 
 --INPUT INTERPRETATION--------------------------------------------------------------------------------------
@@ -312,7 +329,15 @@ local get_vertical_input = {
         return output_Q
     end,
     Flight_G = function (x, var_table)
-        local input_G = X_to_G(x)
+        local input_x = x
+
+        --reduced protections--
+        if get(FBW_vertical_law) == FBW_ALT_REDUCED_PROT_LAW then
+            input_x = input_limitations.ALT_vmax(input_x, var_table)
+            input_x = input_limitations.ALT_vls(input_x, var_table)
+        end
+
+        local input_G = X_to_G(input_x)
 
         --protections--
         if get(FBW_vertical_law) == FBW_NORMAL_LAW then
@@ -419,6 +444,9 @@ local function filter_values(var_table, filter_table)
     --filter the AoA
     filter_table.AoA_filter_table.x = adirs_get_avg_aoa()
     var_table.Filtered_AoA = low_pass_filter(filter_table.AoA_filter_table)
+
+    filter_table.artstab_filter_table.x = get(Pitch_artstab)
+    var_table.Filtered_artstab = low_pass_filter(filter_table.artstab_filter_table)
 end
 
 --MODE AUGMENTATIONS----------------------------------------------------------------------------------------
@@ -497,7 +525,7 @@ local vertical_augmentation = {
         end
 
         --PID controls
-        set(Augmented_pitch_trim_ratio, FBW_PID_BP(FBW_PID_arrays.FBW_AUTOTRIM_PID_array, get(Pitch_artstab), -get(Pitch_artstab)))
+        set(Augmented_pitch_trim_ratio, FBW_PID_BP(FBW_PID_arrays.FBW_AUTOTRIM_PID_array, var_table.Filtered_artstab, -var_table.Filtered_artstab))
         FBW_PID_arrays.FBW_AUTOTRIM_PID_array.Actual_output = get(Elev_trim_ratio)
     end,
 }
