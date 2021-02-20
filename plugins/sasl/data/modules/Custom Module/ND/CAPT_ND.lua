@@ -96,8 +96,14 @@ function update()
 
 end
 
-
+function onAirportLoaded()
+    -- These must be performed *ONLY* on captain side
+    load_altitudes_from_file()          -- Load world (low res) file
+    update_terrain_altitudes(nd_data)
+end
 
 function onSceneryLoaded()
-    update_terrain_altitudes(nd_data)
+    -- These must be performed *ONLY* on captain side
+    update_terrain_altitudes(nd_data)   -- Load local region from X-Plane
+
 end

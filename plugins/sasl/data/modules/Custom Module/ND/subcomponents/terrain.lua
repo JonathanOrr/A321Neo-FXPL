@@ -50,6 +50,37 @@ local image_terrain_green_low   = sasl.gl.loadImage(moduleDirectory .. "/Custom 
 -- Functions
 -------------------------------------------------------------------------------
 
+function load_altitudes_from_file()
+
+    local filename = moduleDirectory .. "/Custom Module/data/altitudes.csv"
+    
+    if ND_terrain.world_altitudes then
+        return  -- We don't want to reload them
+    end
+    
+    ND_terrain.world_altitudes = {}
+    
+    for line in io.lines(filename) do
+        local c = string.sub(line,1,1)
+        if (c ~= "") then   -- Row is not empty
+            local startp,endp = string.find(line,',',1) -- Search the first comma
+            local startp2,endp2 = string.find(line,',',endp+1) -- Search the second comma
+
+            local lat = tonumber(string.sub(line,1,startp-1))
+            local lon = tonumber(string.sub(line,endp+1,startp2-1))
+            local alt = tonumber(string.sub(line,endp2+1))
+            lat = math.floor(lat)
+            lon = math.floor(lon)
+
+            if ND_terrain.world_altitudes[lat] == nil then
+                ND_terrain.world_altitudes[lat] = {}
+            end
+            ND_terrain.world_altitudes[lat][lon] = alt
+        end
+    end
+
+end
+
 
 local function compute_alt_feet(lat, lon)
     x,y,z = sasl.worldToLocal(lat, lon, -100)
@@ -130,6 +161,33 @@ local function small_prng(lat, lon)
     return (state*1664525 + 1013904223)
 end
 
+local function reset_min_max_value(data)
+    data.terrain.min_altitude_tile = 99999
+    data.terrain.max_altitude_tile = -99999
+end
+
+local function update_min_max_value(data, texture, altitude)
+    if texture == image_terrain_blue or texture == image_terrain_magenta then
+        return -- Don't compute it from sea level
+    end
+    
+    local color =    (texture == image_terrain_red and ECAM_RED)
+                  or (texture == image_terrain_yellow_high and ECAM_ORANGE)
+                  or (texture == image_terrain_yellow_low  and ECAM_ORANGE)
+                  or (texture == image_terrain_green_high  and ECAM_GREEN)
+                  or (texture == image_terrain_green_low   and ECAM_GREEN)
+                  or ECAM_MAGENTA -- This should not happen
+
+    if altitude > data.terrain.max_altitude_tile then
+        data.terrain.max_altitude_tile = altitude
+        data.terrain.max_altitude_tile_color = color
+    end
+    if altitude < data.terrain.min_altitude_tile then
+        data.terrain.min_altitude_tile = altitude
+        data.terrain.min_altitude_tile_color = color
+    end
+end
+
 local function draw_single_tile(data, orig_lat, orig_lon, x, y, tile_size)
     -- Converting coordates to the format of array
     local lat = orig_lat - math.fmod(orig_lat, RESOLUTION_LAT) - ND_terrain.altitudes_start[1]
@@ -141,21 +199,63 @@ local function draw_single_tile(data, orig_lat, orig_lon, x, y, tile_size)
     local x_start = small_prng(orig_lat,orig_lon)%200
     local y_start = small_prng(orig_lon,orig_lat)%100
 
+    local texture = nil
+    
     if lat >= 0 and lat <= NR_TILE_LAT and lon >= 0 and lon <= NR_TILE_LON then -- Valid point
+        -- Case 1: high resolution terrain
+
         local terrain_alt = ND_terrain.altitudes[lat][lon]
-        local texture = terrain_get_texture(data, terrain_alt)
+
+        -- When the aicraft is near an airport, we have a 400ft of vertical space before showing
+        -- the terrain tiles.  See here for further details:
+        -- https://skybrary.aero/bookshelf/books/3364.pdf
+        if get(Capt_ra_alt_ft) < 2000 and get(GPWS_dist_airport) < 1 
+                                      and math.abs(orig_lat-data.inputs.plane_coords_lat) < 0.05 
+                                      and math.abs(orig_lon-data.inputs.plane_coords_lon) < 0.05  then
+            if terrain_alt > -1000 and terrain_alt < data.inputs.altitude+400  then
+                terrain_alt = -3000 -- -3000 is just a random value to show a black square
+            end
+        end
+
+        texture = terrain_get_texture(data, terrain_alt)
+
         if texture then
-            sasl.gl.drawTexturePart(texture, x, y, tile_size, tile_size, x_start, y_start, tile_size, tile_size, {1,1,1})
+            -- If I'm displayig a valid tile and it's not the sea, then update the numbers
+            update_min_max_value(data, texture, terrain_alt)
+        end
+    elseif ND_terrain.world_altitudes ~= nil and math.abs(orig_lat) < 80 then
+        -- Case 2: low resolution terrain for large ranges
+        local low_res_lat = math.floor(orig_lat * 10)
+        local low_res_lon = math.floor(orig_lon * 10)
+
+        local terrain_alt = nil
+        if ND_terrain.world_altitudes[low_res_lat] then
+            terrain_alt = ND_terrain.world_altitudes[low_res_lat][low_res_lon]
+        end
+        if terrain_alt then
+            texture = terrain_get_texture(data, terrain_alt)
+        else
+            texture = image_terrain_blue
+        end
+        if texture and texture ~= image_terrain_blue then
+            update_min_max_value(data, texture, terrain_alt)
         end
     else
+        -- Case 3: No data
+        texture = image_terrain_magenta
+    end
 
-        -- Outside the loaded region
-        sasl.gl.drawTexturePart(image_terrain_magenta, x, y, tile_size, tile_size, x_start, y_start, tile_size, tile_size, {1,1,1})
+
+    if texture then
+        sasl.gl.drawTexturePart(texture, x, y, tile_size, tile_size, x_start, y_start, tile_size, tile_size, {1,1,1})
     end
 
 end
 
 function update_terrain(data, functions)
+
+    reset_min_max_value(data)   -- Reset numbers
+
     local mag_dev = Local_magnetic_deviation()
 
     local extra_size = 140 -- This is necessary because when the texture is rotated of 45° we need extra pixels over 900 weidth/height
@@ -167,7 +267,7 @@ function update_terrain(data, functions)
     -- - 16 for zoom 20
     -- - 8  for zoom 40
     -- - 4  for zoom 80 and above
-    local img_size = 32 / 2^(math.min(4, data.config.range)-1)
+    local img_size = 32 / 2^(math.min(3, data.config.range)-1)
 
     local nr_tile_x = math.ceil(w / img_size)
     local nr_tile_y = math.ceil(h / img_size)

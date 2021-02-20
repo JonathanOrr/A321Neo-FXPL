@@ -167,6 +167,10 @@ function new_dataset(input_id)
         tr_lat = nil, tr_lon = nil,  -- Last used top right coordinates (for internal use only)
         last_update = 0,
         texture = nil,
+        min_altitude_tile = 0,
+        max_altitude_tile = 0,
+        min_altitude_tile_color = ECAM_GREEN,
+        max_altitude_tile_color = ECAM_GREEN,
     }
 }
 
