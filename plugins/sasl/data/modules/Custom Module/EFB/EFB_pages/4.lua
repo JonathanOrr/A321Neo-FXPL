@@ -35,34 +35,12 @@ function EFB_execute_page_4_buttons()
         --print("cabin_up")
     end)
 
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 67,636,277,661, function ()
-        --print("irs_align")
-    end)
------ minus 79 vertical
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 67,557,277,582, function ()
-        --print("checklist")
-    end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 67,478,277,503, function ()
-        --print("failure")
-    end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 67,399,277,431, function ()
-        --print("fuel")
-    end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 67,320,277,352, function ()
-        --print("stow_rat")
-    end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 67,241,277,273, function ()
-        --print("refill_hyd")
-    end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 67,162,277,194, function ()
-        --print("recon_idg")
-    end)
 
 
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 751,150,972,174, function ()
-        table.save(EFB_preferences, moduleDirectory .. "/Custom Module/saved_configs/EFB_preferences")
-        --print("save_optn")
-    end)
+    --Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 751,150,972,174, function ()
+    --    table.save(EFB_preferences, moduleDirectory .. "/Custom Module/saved_configs/EFB_preferences")
+    --end)
+    
 ----------------------------------------------TOGGLE OPTIONS
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 620,363,659,381, function ()
         EFB_preferences["syncqnh"] = 1 - EFB_preferences["syncqnh"]

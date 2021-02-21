@@ -173,6 +173,9 @@ EFB_LOAD_load_button =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/t
 
 EFB_CONFIG_bgd =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/CONFIG page/overlay.png")
 EFB_CONFIG_slider =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/CONFIG page/slider_ball.png")
+EFB_CONFIG_save =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/CONFIG page/save_button.png")
+EFB_CONFIG_hud =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/CONFIG page/hud.png")
+
 
 -----------HOME------------
 
