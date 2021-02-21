@@ -1,6 +1,26 @@
 --239 radius
 --206px width
 
+local function draw_trim_flag(PFD_table)
+    local ATT_x_center = size[1]/2-55
+    local ATT_y_center = size[2]/2-7
+
+    if PFD_table.PFD_aircraft_in_air_timer < 3 then
+        return
+    end
+
+    if (get(All_spoilers_failed) == 1 and get(L_aileron_avail) == 0 and get(R_aileron_avail) == 0) or
+       (get(L_elevator_avail) == 0 and get(R_elevator_avail) == 0) then
+        sasl.gl.drawText(Font_AirbusDUL, ATT_x_center, ATT_y_center + 275, "MAN PITCH TRIM ONLY", 34, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
+        return
+    end
+
+    if get(FBW_total_control_law) == FBW_DIRECT_LAW then
+        sasl.gl.drawText(Font_AirbusDUL, ATT_x_center, ATT_y_center + 275, "USE MAN PITCH TRIM", 34, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        return
+    end
+end
+
 local function draw_stall_flag(PFD_table)
     local ATT_x_center = size[1]/2-55
     local ATT_y_center = size[2]/2-7
@@ -55,6 +75,8 @@ end
 function PFD_draw_att(PFD_table)
     local ATT_x_center = size[1]/2-55
     local ATT_y_center = size[2]/2-7
+
+    draw_trim_flag(PFD_table)--this flag can show no matter what
 
     if adirs_is_att_ok(PFD_table.Screen_ID) == false then
         if PFD_table.ATT_blink_now == true then

@@ -7,6 +7,7 @@ function Check_surface_avail()
     local l_spoilers_failure_dataref = {FAILURE_FCTL_LSPOIL_1, FAILURE_FCTL_LSPOIL_2, FAILURE_FCTL_LSPOIL_3, FAILURE_FCTL_LSPOIL_4, FAILURE_FCTL_LSPOIL_5}
     local r_spoilers_failure_dataref = {FAILURE_FCTL_RSPOIL_1, FAILURE_FCTL_RSPOIL_2, FAILURE_FCTL_RSPOIL_3, FAILURE_FCTL_RSPOIL_4, FAILURE_FCTL_RSPOIL_5}
 
+    set(All_spoilers_failed, 0)
     for i = 1, num_of_spoilers do
         set(l_spoilers_avail_dataref[i], 1)
         set(r_spoilers_avail_dataref[i], 1)
@@ -105,10 +106,19 @@ function Check_surface_avail()
     end
 
     --FAILURE MANAGER--
+    local number_of_spoilers_avail = 0
     for i = 1, num_of_spoilers do
         set(l_spoilers_avail_dataref[i], get(l_spoilers_avail_dataref[i]) * (1 - get(l_spoilers_failure_dataref[i])) * (1 - get(r_spoilers_failure_dataref[i])))
         set(r_spoilers_avail_dataref[i], get(r_spoilers_avail_dataref[i]) * (1 - get(l_spoilers_failure_dataref[i])) * (1 - get(r_spoilers_failure_dataref[i])))
+
+        number_of_spoilers_avail = number_of_spoilers_avail + get(l_spoilers_avail_dataref[i])
+        number_of_spoilers_avail = number_of_spoilers_avail + get(r_spoilers_avail_dataref[i])
     end
+
+    if number_of_spoilers_avail == 0 then
+        set(All_spoilers_failed, 1)
+    end
+
     set(L_aileron_avail, get(L_aileron_avail) * (1 - get(FAILURE_FCTL_LAIL)))
     set(R_aileron_avail, get(R_aileron_avail) * (1 - get(FAILURE_FCTL_RAIL)))
     set(L_elevator_avail, get(L_elevator_avail) * (1 - get(FAILURE_FCTL_LELEV)))
@@ -128,7 +138,6 @@ function Check_surface_avail()
             set(r_spoilers_avail_dataref[i], -1)
         end
     end
-
 end
 
 function Up_shit_creek(last_dataref_value)

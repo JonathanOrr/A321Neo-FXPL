@@ -1,12 +1,19 @@
 ------------------------STUFF YOU CAN MESS WITH
 local BUTTON_PRESS_TIME = 0.5
+local weight_per_passenger = 110 --kg
 
 --------------------INTERESTING STUFF
 include("EFB/efb_systems.lua")
+include("EFB/efb_topcat.lua")
 
 
 
 ------------------------------LOCAL STUFF
+local zfw_counter = 0
+
+
+
+
 local compute_vspeeds = 0
 local refuel_button_begin = 0
 local refuel_panel_button_begin = 0
@@ -23,6 +30,23 @@ local fuel_target_amount = 0
 local pax_target_amount = 0
 local fwd_cargo_target = 0
 local aft_cargo_target = 0
+
+local cargo_weight_total = 0
+local total_load = 0
+local max_load = 0
+
+local equilibrium_cargo_weight = 0
+
+local loadsheet_pax_weight = 0
+local loadsheet_cargo_weight = 0
+local loadsheet_block_fuel = 0
+local loadsheet_zfw = 0
+local loadsheet_cg = 0
+
+
+
+
+
 
 
 --MOUSE & BUTTONS--
@@ -52,16 +76,29 @@ function EFB_execute_page_3_buttons()
 
 
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 424,244,737,274, function () --force refuel
+
         refuel_button_begin = get(TIME)
         set_fuel(fuel_target_amount)
+        loadsheet_block_fuel = Round(fuel_target_amount,0) -- to sync the loadsheet
+        set(Payload_weight, total_load)   
+        loadsheet_pax_weight = Round(passenger_weight,0)
+        loadsheet_cargo_weight = Round(cargo_weight_total,0)
+        equilibrium_cargo_weight = fwd_cargo_target - aft_cargo_target
+        --print(get(FOB))
+
+        zfw_counter = 3 -- see the update function for why I did this
+
     end)
+    
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 424,200,737,230, function () --open fuel panel
         refuel_panel_button_begin = get(TIME)
         fuel_window:setIsVisible(true)
     end)
 
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 88,426,353,458, function () --load aircraft
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 88,426,353,458, function () --load aircraft       
+  
         load_button_begin = get(TIME)
+
     end)
 
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 810,414,1080,440, function () --compute vspeeds
@@ -112,10 +149,10 @@ function EFB_execute_page_3_buttons()
         fwd_cargo_target = math.max(0, fwd_cargo_target - 100)
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 277,554,306,577, function () -- 
-        fwd_cargo_target = math.min(10000, fwd_cargo_target + 100)
+        fwd_cargo_target = math.min(5700, fwd_cargo_target + 100)
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 312,554,341,577, function () -- 
-        fwd_cargo_target = math.min(10000, fwd_cargo_target + 1000)
+        fwd_cargo_target = math.min(5700, fwd_cargo_target + 1000)
     end)
 
 
@@ -126,10 +163,10 @@ function EFB_execute_page_3_buttons()
         aft_cargo_target = math.max(0, aft_cargo_target - 100)
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 277,487,306,512, function () -- 
-        aft_cargo_target = math.min(10000, aft_cargo_target + 100)
+        aft_cargo_target = math.min(5700, aft_cargo_target + 100)
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 312,487,341,512, function () -- 
-        aft_cargo_target = math.min(10000, aft_cargo_target + 1000)
+        aft_cargo_target = math.min(5700, aft_cargo_target + 1000)
     end)
 end
 
@@ -220,12 +257,12 @@ local function EFB_draw_overlay_text()  ---THIS IS THE OVERLAY IMAGE------------
 
     sasl.gl.drawText ( Airbus_panel_font , 535 , 531, math.floor(get(FOB)).."KG" , 20 ,false , false , TEXT_ALIGN_LEFT , EFB_WHITE )
 
-    sasl.gl.drawText ( Airbus_panel_font , 581 ,253 , "FORCE REFUEL" , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
+    sasl.gl.drawText ( Airbus_panel_font , 581 ,253 , "LOAD AND COMPUTE" , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
 
-    sasl.gl.drawText ( Airbus_panel_font , 581 ,204 , "REALISTIC REFUEL PANEL" , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
+    sasl.gl.drawText ( Airbus_panel_font , 582 ,204 , "REALISTIC REFUEL PANEL" , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
 
 
-    sasl.gl.drawText ( Airbus_panel_font , 226 ,436 , "LOAD PAYLOAD" , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
+    sasl.gl.drawText ( Airbus_panel_font , 226 ,436 , "THIS BUTTON DOESN'T WORK" , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
     sasl.gl.drawText ( Airbus_panel_font , 942 ,421 , "COMPUTE" , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
     sasl.gl.drawText ( Airbus_panel_font , 580 ,99 , "IRS FORCE ALIGN" , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
 end
@@ -242,7 +279,7 @@ end
 local function EFB_draw_loadsheet_text()
     local YEAR = tonumber(os.date("%y"))
     sasl.gl.drawText ( Airbus_panel_font, 104 , 377 , "Aircraft: A321-271NX" , 15, false , false , TEXT_ALIGN_LEFT , EFB_BLACK )
-    sasl.gl.drawText ( Airbus_panel_font, 346 , 377 , get(day_in_month)..month_in_text[get(month_in_numbers)]..(YEAR-2000) , 15, false , false , TEXT_ALIGN_RIGHT , EFB_BLACK )
+    sasl.gl.drawText ( Airbus_panel_font, 346 , 377 , get(day_in_month)..month_in_text[get(month_in_numbers)]..(YEAR) , 15, false , false , TEXT_ALIGN_RIGHT , EFB_BLACK )
     sasl.gl.drawText ( Airbus_panel_font, 225 , 337 , "LOADSHEET" , 15, false , false , TEXT_ALIGN_CENTER , EFB_BLACK )
     sasl.gl.drawText ( Airbus_panel_font, 225 , 317 , "------------------------------" , 15, false , false , TEXT_ALIGN_CENTER , EFB_BLACK )
     sasl.gl.drawText ( Airbus_panel_font, 104 , 297 , "Passengers Weight", 15, false , false , TEXT_ALIGN_LEFT , EFB_BLACK )
@@ -253,6 +290,14 @@ local function EFB_draw_loadsheet_text()
     sasl.gl.drawText ( Airbus_panel_font, 104 , 197 , "------------------------------" , 15, false , false , TEXT_ALIGN_LEFT , EFB_BLACK )
     sasl.gl.drawText ( Airbus_panel_font, 104 , 177 , "Takeoff Weight:" , 15, false , false , TEXT_ALIGN_LEFT , EFB_BLACK )
     sasl.gl.drawText ( Airbus_panel_font, 225 , 137 , "END OF REPORT" , 15, false , false , TEXT_ALIGN_CENTER , EFB_BLACK )
+    --------------------------------BELOW IS THE CHANGING VALUES
+    sasl.gl.drawText ( Airbus_panel_font, 344 , 297 , loadsheet_pax_weight, 15, false , false , TEXT_ALIGN_RIGHT , EFB_BLACK )
+    sasl.gl.drawText ( Airbus_panel_font, 344 , 277 , loadsheet_cargo_weight, 15, false , false , TEXT_ALIGN_RIGHT , EFB_BLACK )
+    sasl.gl.drawText ( Airbus_panel_font, 344 , 257 , loadsheet_block_fuel , 15, false , false , TEXT_ALIGN_RIGHT , EFB_BLACK )
+    sasl.gl.drawText ( Airbus_panel_font, 344 , 237 , loadsheet_zfw , 15, false , false , TEXT_ALIGN_RIGHT , EFB_BLACK )
+    sasl.gl.drawText ( Airbus_panel_font, 344 , 217 , loadsheet_cg.."%" , 15, false , false , TEXT_ALIGN_RIGHT , EFB_BLACK )
+    sasl.gl.drawText ( Airbus_panel_font, 344 , 177 , loadsheet_zfw + loadsheet_block_fuel , 15, false , false , TEXT_ALIGN_RIGHT , EFB_BLACK )
+    
 end
 
 
@@ -263,6 +308,39 @@ local function EFB_draw_target_values()
     sasl.gl.drawText ( Airbus_panel_font, 223 , 492 , aft_cargo_target , 20, false , false , TEXT_ALIGN_CENTER , EFB_WHITE )
 end
 
+local function draw_takeoff_speeds_and_values()
+    sasl.gl.drawText ( Airbus_panel_font, 1027 , 321 , get(TOPCAT_v1) , 20, false , false , TEXT_ALIGN_RIGHT , EFB_WHITE )
+    sasl.gl.drawText ( Airbus_panel_font, 1027 , 282 , get(TOPCAT_vr) , 20, false , false , TEXT_ALIGN_RIGHT , EFB_WHITE )
+    sasl.gl.drawText ( Airbus_panel_font, 1027 , 243 , get(TOPCAT_v2) , 20, false , false , TEXT_ALIGN_RIGHT , EFB_WHITE )
+    sasl.gl.drawText ( Airbus_panel_font, 1027 , 204 , get(TOPCAT_flex) , 20, false , false , TEXT_ALIGN_RIGHT , EFB_WHITE )
+
+    
+end
+
+local function calculate_loading_weight()
+    passenger_weight = weight_per_passenger * pax_target_amount
+    cargo_weight_total = fwd_cargo_target + aft_cargo_target
+    total_load = passenger_weight + cargo_weight_total
+end
+
+local function overweight_warning()
+
+    if get(Payload_weight) > 25490 or get(Gross_weight) > 101000 then --drawing the background rectangle to cover up the v speeds
+        sasl.gl.drawRectangle ( 796, 149 , 312 , 243 , EFB_BACKGROUND_COLOUR ) 
+    end
+
+    if get(Payload_weight) > 25490 then
+        sasl.gl.drawText ( Airbus_panel_font, 954 , 290 , "PAYLOAD OVERWEIGHT >25.5T" , 20, false , false , TEXT_ALIGN_CENTER , EFB_FULL_RED )
+    end
+
+    if get(Gross_weight) > 101000 then
+        sasl.gl.drawText ( Airbus_panel_font, 954 , 255 , "TAKEOFF OVERWEIGHT >101T" , 20, false , false , TEXT_ALIGN_CENTER , EFB_FULL_RED )
+    end
+end
+
+local function cg_mac_calculation()
+    loadsheet_cg = Round(0.00037435208293206263*equilibrium_cargo_weight + 20.73440199656745001188,0)
+end
 
 --DRAW LOOPS--
 function EFB_draw_page_3()
@@ -272,5 +350,16 @@ function EFB_draw_page_3()
     EFB_draw_fuel_tanks()
     EFB_draw_loadsheet_text()
     EFB_draw_target_values()
+    draw_takeoff_speeds_and_values()
+    calculate_loading_weight()
+    overweight_warning()
+    cg_mac_calculation()
+    --print(EFB_CURSOR_X, EFB_CURSOR_Y)
+
+    if zfw_counter > 0 then
+        loadsheet_zfw = Round(get(Gross_weight) - fuel_target_amount,0)
+        zfw_counter = zfw_counter -1
+        print(zfw_counter)
+    end
 
 end

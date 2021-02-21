@@ -18,6 +18,7 @@ include("EFB/EFB_pages/7.lua")
 include("EFB/EFB_pages/8.lua")
 include("EFB/EFB_pages/9.lua")
 include("EFB/EFB_pages/10.lua")
+include("EFB/efb_topcat.lua")
 
 position = {2943, 1248, 1143, 800}
 size = {1143, 800}
