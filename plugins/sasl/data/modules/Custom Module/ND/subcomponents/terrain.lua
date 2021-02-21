@@ -45,6 +45,7 @@ local image_terrain_yellow_low  = sasl.gl.loadImage(moduleDirectory .. "/Custom 
 local image_terrain_green_high  = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/terrain-high-green.png")
 local image_terrain_green_low   = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/terrain-low-green.png")
 
+local image_terrain_mask        = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/terrain-mask.png")
 
 -------------------------------------------------------------------------------
 -- Functions
@@ -68,7 +69,7 @@ function load_altitudes_from_file()
 
             local lat = tonumber(string.sub(line,1,startp-1))
             local lon = tonumber(string.sub(line,endp+1,startp2-1))
-            local alt = tonumber(string.sub(line,endp2+1))
+            local alt = tonumber(string.sub(line,endp2+1)) * 3.28084 -- From meters to feet
             lat = math.floor(lat)
             lon = math.floor(lon)
 
@@ -209,7 +210,7 @@ local function draw_single_tile(data, orig_lat, orig_lon, x, y, tile_size)
         -- When the aicraft is near an airport, we have a 400ft of vertical space before showing
         -- the terrain tiles.  See here for further details:
         -- https://skybrary.aero/bookshelf/books/3364.pdf
-        if get(Capt_ra_alt_ft) < 2000 and get(GPWS_dist_airport) < 3 
+        if get(Capt_ra_alt_ft) < 2000 and get(GPWS_dist_airport) < 3
                                       and data.config.range < 3  then
             if terrain_alt > -1000 and terrain_alt < data.inputs.altitude+400  then
                 terrain_alt = -3000 -- -3000 is just a random value to show a black square
@@ -292,15 +293,16 @@ function update_terrain(data, functions)
     local multiplier_lat = (tr_lat - bl_lat) / nr_tile_y
     local multiplier_lon = (tr_lon - bl_lon) / nr_tile_x
 
-    data.terrain.center[1] = bl_lat + multiplier_lat*(nr_tile_y/2-1)
-    data.terrain.center[2] = bl_lon + multiplier_lon*nr_tile_x/2
+    data.terrain.center[data.terrain.texture_in_use][1] = bl_lat + multiplier_lat*(nr_tile_y/2-1)
+    data.terrain.center[data.terrain.texture_in_use][2] = bl_lon + multiplier_lon*nr_tile_x/2
 
-    if not data.terrain.texture then
-        data.terrain.texture = sasl.gl.createTexture(w,h)
+    if not data.terrain.texture[data.terrain.texture_in_use] then
+        data.terrain.texture[data.terrain.texture_in_use] = sasl.gl.createTexture(w,h)
     end
 
-    sasl.gl.setRenderTarget(data.terrain.texture, true) -- Automatically clear the texture
-
+    sasl.gl.setRenderTarget(data.terrain.texture[data.terrain.texture_in_use], true) -- Automatically clear the texture
+    Draw_LCD_backlight(0, 0, w, h, 0.2, 1, get(Capt_ND_brightness_act))
+        
     for i=0,nr_tile_x do
         for j=0,nr_tile_y do
 
@@ -316,6 +318,25 @@ function update_terrain(data, functions)
 
     sasl.gl.restoreRenderTarget()
 
+end
+
+function draw_terrain_mask(data, normal_mask_texture)
+    sasl.gl.drawMaskEnd()
+    sasl.gl.drawMaskStart()
+    sasl.gl.drawTexture(normal_mask_texture, 0,0,900,900)
+    local time_ratio = (get(TIME)-data.terrain.last_update)/3   --from 0 (new texture) to 1 (old texture)
+
+    sasl.gl.drawRotatedTextureCenter(image_terrain_mask, 360-90*time_ratio, 450, 0, 0, 0, 450, 900)
+    sasl.gl.drawRotatedTextureCenter(image_terrain_mask, 90*time_ratio, 450, 0, 450, 0, 450, 900)
+
+    sasl.gl.drawUnderMask(true)
+end
+
+function reset_terrain_mask(data, normal_mask_texture)
+    sasl.gl.drawMaskEnd()
+    sasl.gl.drawMaskStart()
+    sasl.gl.drawTexture(normal_mask_texture, 0,0,900,900)
+    sasl.gl.drawUnderMask(true)
 end
 
 function draw_terrain_test_gpws()

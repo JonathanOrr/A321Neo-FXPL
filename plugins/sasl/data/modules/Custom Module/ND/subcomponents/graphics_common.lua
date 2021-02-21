@@ -405,7 +405,9 @@ local function draw_common_terrain_numbers(data)
 end
 
 function draw_test_gpws()
-    draw_terrain_test_gpws()
+    if get(GPWS_long_test_in_progress) == 1 then
+        draw_terrain_test_gpws()
+    end
 end
 
 function draw_common(data)
@@ -417,6 +419,6 @@ function draw_common(data)
     draw_common_rwy_and_true(data)
     draw_common_oans_info(data)
     draw_common_terrain_numbers(data)
-    --draw_test_gpws()
+    draw_test_gpws()
 end
 
