@@ -104,9 +104,9 @@ local function update_dr_pred(dr, i, diff)
     
     local lower_threshold = 700
     if get(GPWS_dist_airport) < 1 then
-        lower_threshold = -50
+        lower_threshold = -100
     elseif get(GPWS_dist_airport) < 5 then
-        lower_threshold = Math_rescale(1, -50, 5, 400, get(GPWS_dist_airport))
+        lower_threshold = Math_rescale(1, -100, 5, 400, get(GPWS_dist_airport))
     elseif get(GPWS_dist_airport) < 12 then
         lower_threshold = 400
     elseif get(GPWS_dist_airport) < 15 then
