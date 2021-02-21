@@ -261,8 +261,8 @@ local function update_generator_datarefs(x)
         top    = false
         bottom = get(x.drs.failure) == 1 -- Switch status not showed and top bottom swapped
     elseif x.id == GEN_EXT then
-        top = x.source_status
-        bottom = not bottom
+        top = x.source_status and bottom
+        bottom = x.source_status and not bottom
     elseif x.drs.idg_light ~= nil then
         top = (get(x.drs.failure)==1 or not x.idg_status)
     else
