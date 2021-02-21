@@ -73,7 +73,7 @@ function Rudder_control(yaw_input, fbw_current_law, is_in_auto_flight, trim_inpu
     if resetting_trim == 1 then
         if get(trim_input) ~= 0 then
             set(Resetting_rudder_trim, 0)
-        elseif get(Rudder_trim_angle) == 0 then
+        elseif get(Rudder_trim_target_angle) == 0 then
             set(Resetting_rudder_trim, 0)
         end
     end
@@ -81,11 +81,18 @@ function Rudder_control(yaw_input, fbw_current_law, is_in_auto_flight, trim_inpu
     --if the FACs are working and the electrical motors are working
     if get(Rudder_trim_avail) == 1 then
         if resetting_trim == 0 then--apply human input
-            set(Rudder_trim_angle, Math_clamp(Math_clamp(get(Rudder_trim_angle) + trim_input * rudder_trim_speed * get(DELTA_TIME), -20, 20), -get(Rudder_travel_lim), get(Rudder_travel_lim)))
+            set(Rudder_trim_target_angle, Math_clamp(Math_clamp(get(Rudder_trim_target_angle) + trim_input * rudder_trim_speed * get(DELTA_TIME), -20, 20), -get(Rudder_travel_lim), get(Rudder_travel_lim)))
             set(Human_rudder_trim, 0)
         else--reset rudder trim
-            set(Rudder_trim_angle, Set_linear_anim_value(get(Rudder_trim_angle), 0, -20, 20, rudder_trim_speed))
+            set(Rudder_trim_target_angle, Set_linear_anim_value(get(Rudder_trim_target_angle), 0, -20, 20, rudder_trim_speed))
             set(Human_rudder_trim, 0)
+        end
+
+        --as normal law uses SI demand, it is needed to always center the trim, and let the controller determine the postition of the rudder
+        if get(FBW_yaw_law) ~= FBW_NORMAL_LAW or get(All_on_ground) == 1 then
+            set(Rudder_trim_actual_angle, Set_linear_anim_value(get(Rudder_trim_actual_angle), get(Rudder_trim_target_angle), -20, 20, rudder_trim_speed))
+        else
+            set(Rudder_trim_actual_angle, Set_linear_anim_value(get(Rudder_trim_actual_angle), 0, -20, 20, rudder_trim_speed))
         end
     end
 
@@ -93,9 +100,9 @@ function Rudder_control(yaw_input, fbw_current_law, is_in_auto_flight, trim_inpu
     rudder_speed = Math_rescale(0, 0, 1450, rudder_speed, get(Hydraulic_G_press) + get(Hydraulic_B_press) + get(Hydraulic_Y_press)) * (1 - get(FAILURE_FCTL_RUDDER_MECH))
 
     --limit rudder travel target--
-    rudder_travel_target = Math_clamp(rudder_travel_target, -get(Rudder_travel_lim) - get(Rudder_trim_angle), get(Rudder_travel_lim) - get(Rudder_trim_angle))
+    rudder_travel_target = Math_clamp(rudder_travel_target, -get(Rudder_travel_lim) - get(Rudder_trim_actual_angle), get(Rudder_travel_lim) - get(Rudder_trim_actual_angle))
 
     --rudder position calculation--
     set(Augmented_rudder_angle, Set_anim_value_linear_range(get(Augmented_rudder_angle), rudder_travel_target, -30, 30, rudder_speed, 5))
-    set(Rudder, Math_clamp(get(Rudder_trim_angle) + get(Augmented_rudder_angle), -get(Rudder_travel_lim), get(Rudder_travel_lim)))
+    set(Rudder, Math_clamp(get(Rudder_trim_actual_angle) + get(Augmented_rudder_angle), -get(Rudder_travel_lim), get(Rudder_travel_lim)))
 end

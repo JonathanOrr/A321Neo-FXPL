@@ -178,7 +178,7 @@ function draw_fctl_page()
     SASL_rotated_center_img_xcenter_aligned( ECAM_FCTL_rudder_img,           size[1]/2+1, size[2]/2 - 135, 43, 155, Table_interpolate(rudder_anim, params.rudder), 0, -155, get(Rudder_avail) == 1 and ECAM_GREEN or ECAM_ORANGE)
     SASL_rotated_center_img_xcenter_aligned( ECAM_FCTL_left_rudder_lim_img,  size[1]/2+1, size[2]/2 - 150, 43, 155, Table_interpolate(rudder_lim_anim, -get(Rudder_travel_lim)),  4, -160, get(Rudder_lim_avail) == 1 and ECAM_GREEN or ECAM_ORANGE)
     SASL_rotated_center_img_xcenter_aligned( ECAM_FCTL_right_rudder_lim_img, size[1]/2+1, size[2]/2 - 150, 43, 155, Table_interpolate(rudder_lim_anim, get(Rudder_travel_lim)), -4, -160, get(Rudder_lim_avail) == 1 and ECAM_GREEN or ECAM_ORANGE)
-    SASL_rotated_center_img_xcenter_aligned( ECAM_FCTL_rudder_trim_img,      size[1]/2+1, size[2]/2 - 150, 43, 155, Table_interpolate(rudder_lim_anim, get(Rudder_trim_angle)),  0, -160, get(Rudder_trim_avail) == 1 and ECAM_BLUE or ECAM_ORANGE)
+    SASL_rotated_center_img_xcenter_aligned( ECAM_FCTL_rudder_trim_img,      size[1]/2+1, size[2]/2 - 150, 43, 155, Table_interpolate(rudder_lim_anim, get(Rudder_trim_target_angle)),  0, -160, get(Rudder_trim_avail) == 1 and ECAM_BLUE or ECAM_ORANGE)
 
     local is_G_ok = get(Hydraulic_G_press) >= 1450
     local is_B_ok = get(Hydraulic_B_press) >= 1450

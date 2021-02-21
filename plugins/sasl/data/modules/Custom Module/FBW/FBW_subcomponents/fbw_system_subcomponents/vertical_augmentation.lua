@@ -262,7 +262,7 @@ local input_limitations = {
     end,
     G_AoA_input_clamping = function (G, clamping_margin, min_G, max_G, var_table)
         --adjust upper clamp limit
-        local upper_G_clamp = Math_rescale(0.5, min_G, clamping_margin, max_G, var_table.AoA_SP - var_table.Filtered_AoA)
+        local upper_G_clamp = Math_rescale(-0.5, min_G, clamping_margin, max_G, var_table.AoA_SP - var_table.Filtered_AoA)
         local clamped_G = Math_clamp_higher(G, upper_G_clamp)
 
         return clamped_G

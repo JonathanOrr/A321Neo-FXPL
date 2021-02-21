@@ -633,7 +633,8 @@ Elevators_hstab_1 = globalProperty("sim/flightmodel/controls/hstab1_elv1def") --
 Elevators_hstab_2 = globalProperty("sim/flightmodel/controls/hstab2_elv1def") --elevators 17 deg down -30 deg up
 --vstabs
 Human_rudder_trim = createGlobalPropertyi("a321neo/dynamics/FBW/controls/human_rudder_trim", 0, false, true, false)-- -1 trim left, 0 no action, 1 trim right
-Rudder_trim_angle = createGlobalPropertyf("a321neo/dynamics/FBW/controls/rudder_trim_angle", 0, false, true, false)-- left -20 degrees, right 20 degrees
+Rudder_trim_target_angle = createGlobalPropertyf("a321neo/dynamics/FBW/controls/rudder_trim_target_angle", 0, false, true, false)-- left -20 degrees, right 20 degrees
+Rudder_trim_actual_angle = createGlobalPropertyf("a321neo/dynamics/FBW/controls/rudder_trim_actual_angle", 0, false, true, false)-- left -20 degrees, right 20 degrees
 Resetting_rudder_trim = createGlobalPropertyi("a321neo/dynamics/FBW/controls/resetting_rudder_trim", 0, false, true, false)-- 0 no action, 1 resetting
 Augmented_rudder_angle = createGlobalPropertyf("a321neo/dynamics/FBW/controls/augmented_rudder_angle", 0, false, true, false)--the angle of deviation from the position of the rudder trim angle
 Rudder = globalProperty("sim/flightmodel/controls/vstab1_rud1def")--rudder 30 deg left -30 deg right

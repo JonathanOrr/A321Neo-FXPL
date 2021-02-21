@@ -98,7 +98,7 @@ local function yaw_input(x, var_table)
     --linear interpolation is used to avoid significant change in value during circular falloff
     set(Max_SI_demand_lim, Math_rescale(160, 15, get(Fixed_VMAX), 2, var_table.Filtered_ias))
 
-    var_table.sideslip_input = -x * get(Max_SI_demand_lim) + (-get(Rudder_trim_angle) / max_rudder_deflection) * get(Max_SI_demand_lim)
+    var_table.sideslip_input = -x * get(Max_SI_demand_lim) + (-get(Rudder_trim_target_angle) / max_rudder_deflection) * get(Max_SI_demand_lim)
 end
 
 local function filter_values(var_table, filter_table)
@@ -133,13 +133,7 @@ local function yaw_controlling(var_table)
     --NORMAL LAW-----------------------------------------------------------------------------------------
     --ensure bumpless transfer
     if get(FBW_lateral_flight_mode_ratio) == 0 or get(FBW_yaw_law) ~= FBW_NORMAL_LAW then
-        FBW_PID_arrays.FBW_NRM_YAW_PID_array.Schedule_gains = false
-        FBW_PID_arrays.FBW_NRM_YAW_PID_array.I_gain = 0
-        FBW_PID_arrays.FBW_NRM_YAW_PID_array.B_gain = 0
         FBW_PID_arrays.FBW_NRM_YAW_PID_array.Integral = 0
-    else
-        FBW_PID_arrays.FBW_NRM_YAW_PID_array.Schedule_gains = true
-        FBW_PID_arrays.FBW_NRM_YAW_PID_array.B_gain = 1
     end
 
     var_table.NRM_controller_output = FBW_PID_BP(FBW_PID_arrays.FBW_NRM_YAW_PID_array, var_table.filtered_sideslip_err, var_table.filtered_sideslip, math.max(get_curr_turbolence(), get_curr_windshear()))
