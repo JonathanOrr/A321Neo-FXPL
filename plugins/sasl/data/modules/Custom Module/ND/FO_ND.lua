@@ -80,6 +80,10 @@ end
 
 function draw()
 
+    sasl.gl.setRenderTarget(FO_ND_popup_texture, true)
     draw_main(nd_data)
+    sasl.gl.restoreRenderTarget()
+
+    sasl.gl.drawTexture(FO_ND_popup_texture, 0, 0, 900, 900, {1,1,1})
 
 end

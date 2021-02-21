@@ -166,10 +166,17 @@ local input_limitations = {
     Q_Pitch = function (Q, var_table)
         --properties
         local pitch = adirs_get_avg_pitch()
-        local max_pitch = get(Flaps_internal_config) == 5 and (var_table.Filtered_ias <= get(VLS) and 20 or 25) or (var_table.Filtered_ias <= get(VLS) and 25 or 30)
+        local max_pitch = 30
         local min_pitch = -15
         local degrade_margin = 8
         local max_return_rate = 2
+
+        if get(Flaps_internal_config) < 5 then
+            max_pitch = Math_rescale(0, 30, 20, 25, get(VLS) - var_table.Filtered_ias)
+        end
+        if get(Flaps_internal_config) == 5 then
+            max_pitch = Math_rescale(0, 25, 20, 20, get(VLS) - var_table.Filtered_ias)
+        end
 
         --check for pitch exceedence
         local d_limitation = Math_rescale(min_pitch - degrade_margin, 2, min_pitch + degrade_margin, 0, pitch)

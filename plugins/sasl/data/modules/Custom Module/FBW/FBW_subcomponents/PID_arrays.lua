@@ -304,7 +304,7 @@ FBW_PID_arrays = {
         I_gain = 0.013,
         D_gain = 0.0010,
         B_gain = 1,
-        Schedule_gains = false,
+        Schedule_gains = true,
         Schedule_table = {
             P = {
                 {0.00, 0.012},

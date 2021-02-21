@@ -196,11 +196,7 @@ local function draw_video()
     end
 end
 
---drawing the ECAM
-function draw()
-
-    perf_measure_start("ECAM:draw()")
-
+local function draw_ecam_pages()
     if get(Ecam_current_page) == 1 then --eng
         draw_eng_page()
     elseif get(Ecam_current_page) == 2 then --bleed
@@ -228,8 +224,20 @@ function draw()
     elseif get(Ecam_current_page) == 13 then --CRUISE
         draw_cruise_page()
     end
+end
 
+--drawing the ECAM
+function draw()
+
+    perf_measure_start("ECAM:draw()")
+
+    sasl.gl.setRenderTarget(ECAM_popup_texture, true)
+    draw_ecam_pages()
     draw_ecam_lower_section()
+    draw_video()
+    sasl.gl.restoreRenderTarget()
+
+    sasl.gl.drawTexture(ECAM_popup_texture, 0, 0, 900, 900, {1,1,1})
 
     -- Update STS box
     set(EWD_box_sts, 0)
@@ -239,8 +247,6 @@ function draw()
             set(EWD_box_sts, 1)
         end
     end
-
-    draw_video()
 
     perf_measure_stop("ECAM:draw()")
 

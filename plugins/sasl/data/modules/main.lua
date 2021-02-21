@@ -44,6 +44,7 @@ addSearchPath(moduleDirectory .. "/Custom Module/ND/")
 addSearchPath(moduleDirectory .. "/Custom Module/EFB/")
 addSearchPath(moduleDirectory .. "/Custom Module/PFD/PFD_subcomponents/")
 addSearchPath(moduleDirectory .. "/Custom Module/FBW/")
+addSearchPath(moduleDirectory .. "/Custom Module/display_pop-ups/")
 
 position = {0, 0, 4096, 4096}
 size = { 4096, 4096 }
@@ -68,7 +69,6 @@ components = {
   packs {},
   aircond {},
   wheel {},
-  PFD_main {},
   CAPT_PFD {},
   FO_PFD {},
   CAPT_ND {},
@@ -99,6 +99,9 @@ components = {
   graphics {},
 
   display_brightness {}, -- This must stay at the bottom
+
+  main_popup {},
+
   librain{},
 }
 

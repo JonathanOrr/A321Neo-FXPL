@@ -1,7 +1,6 @@
 position = {get(Capt_pfd_position, 1), get(Capt_pfd_position, 2), get(Capt_pfd_position, 3), get(Capt_pfd_position, 4)}
 size = {900, 900}
 include('PFD/PFD_drawing_assets.lua')
-include('PFD/PFD_main.lua')
 include('PFD/PFD_sub_functions/PFD_LS.lua')
 include('PFD/PFD_sub_functions/PFD_get_ILS_data.lua')
 include('PFD/PFD_sub_functions/PFD_att.lua')
@@ -90,10 +89,15 @@ end
 
 
 function draw()
+    --render into the popup texure
+    sasl.gl.setRenderTarget(CAPT_PFD_popup_texture, true)
     PFD_draw_LS(capt_PFD_table)
     PFD_draw_att(capt_PFD_table)
     PFD_draw_spd_tape(capt_PFD_table)
     PFD_draw_alt_tape(capt_PFD_table)
     PFD_draw_hdg_tape(capt_PFD_table)
     PFD_draw_vs_needle(capt_PFD_table)
+    sasl.gl.restoreRenderTarget()
+
+    sasl.gl.drawTexture(CAPT_PFD_popup_texture, 0, 0, 900, 900, {1,1,1})
 end
