@@ -746,6 +746,8 @@ GPWS_mode_flap_3 = createGlobalPropertyi("a321neo/dynamics/gpws/flaps_3", 0, fal
 GPWS_req_inop = createGlobalPropertyi("a321neo/dynamics/gpws/req_inop", 0, false, true, false)  -- 1 if GPWS becomes off (*for sounds only*)
 GPWS_req_terr_inop = createGlobalPropertyi("a321neo/dynamics/gpws/req_terr_inop", 0, false, true, false) -- 1 if GPWS Terrain becomes off (*for sounds only*)
 
+GPWS_long_test_in_progress = createGlobalPropertyi("a321neo/dynamics/gpws/long_test_in_progress", 0, false, true, false)  -- 1 if the long test is in progress
+
 -- FIRE
 Fire_cargo_aft_smoke_detected = createGlobalPropertyi("a321neo/dynamics/fire/cargo_aft_smoke_det", 0, false, true, false) 
 Fire_cargo_fwd_smoke_detected = createGlobalPropertyi("a321neo/dynamics/fire/cargo_fwd_smoke_det", 0, false, true, false) 

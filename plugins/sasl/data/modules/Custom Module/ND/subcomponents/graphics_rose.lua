@@ -24,6 +24,7 @@ include("ND/subcomponents/helpers.lua")
 include("ND/subcomponents/graphics_oans.lua")
 include('ND/subcomponents/terrain.lua')
 
+local image_mask_rose = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/mask-rose.png")
 local image_bkg_ring        = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/ring.png")
 local image_bkg_ring_red    = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/ring-red.png")
 local image_bkg_ring_tcas   = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/tcas-ring.png")
@@ -300,9 +301,42 @@ local function draw_wpts(data)
     
 end
 
+local function refresh_terrain_texture(data)
+    -- if the zoom changes or we are too far from the reference point,
+    -- we ask to recompute all the coordinates
+    local refresh_condition = data.config.prev_range ~= data.config.range
+       or math.abs(data.terrain.center[data.terrain.texture_in_use][1] - data.inputs.plane_coords_lat) > 0.1
+       or math.abs(data.terrain.center[data.terrain.texture_in_use][2] - data.inputs.plane_coords_lon) > 0.1
+    
+    if refresh_condition then
+        data.bl_lat = nil
+        data.bl_lon = nil
+        data.tr_lat = nil
+        data.tr_lon = nil
+    end
+    
+    if data.config.prev_range ~= data.config.range then
+        data.terrain.texture[1] = nil
+        data.terrain.texture[2] = nil
+    end
+    
+    if get(TIME) - data.terrain.last_update > 3 or refresh_condition then
+        local functions_for_terrain = {
+            get_lat_lon_heading = rose_get_lat_lon_with_heading,
+            get_x_y_heading = rose_get_x_y_heading
+        }
+        data.terrain.texture_in_use = data.terrain.texture_in_use == 1 and 2 or 1
+        update_terrain(data, functions_for_terrain)
+        data.terrain.last_update = get(TIME)
+    end
+
+    data.config.prev_range = data.config.range
+end
+
 local function draw_terrain(data)
-    if (data.id == ND_CAPT and get(ND_Capt_Terrain) == 0) or
-       (data.id == ND_FO and get(ND_Fo_Terrain) == 0) then
+    if    (data.id == ND_CAPT and get(ND_Capt_Terrain) == 0)
+       or (data.id == ND_FO and get(ND_Fo_Terrain) == 0)
+       or get(GPWS_long_test_in_progress) == 1 then
         -- Terrain disabled
         return
     end
@@ -317,44 +351,32 @@ local function draw_terrain(data)
         update_terrain_altitudes(data)
     end
 
+    refresh_terrain_texture(data)
 
+    local incoming_texture = data.terrain.texture_in_use == 1 and 2 or 1
+    local outgoing_texture = data.terrain.texture_in_use
     
-    if data.config.prev_range ~= data.config.range
-       or math.abs(data.terrain.center[1] - data.inputs.plane_coords_lat) > 0.1
-       or math.abs(data.terrain.center[2] - data.inputs.plane_coords_lon) > 0.1 then
-         -- if the zoom changes or we are too far from the reference point,
-         -- we ask to recompute all the coordinates
-        data.bl_lat = nil
-        data.bl_lon = nil
-        data.tr_lat = nil
-        data.tr_lon = nil
-    end
-    
-    if get(TIME) - data.terrain.last_update > 3 or data.config.prev_range ~= data.config.range then
-        local functions_for_terrain = {
-            get_lat_lon_heading = rose_get_lat_lon_with_heading,
-            get_x_y_heading = rose_get_x_y_heading
-        }
-        update_terrain(data, functions_for_terrain)
-        data.terrain.last_update = get(TIME)
-    end
-
-    data.config.prev_range = data.config.range
-
-    if data.terrain.texture then
-        local diff_x, diff_y = rose_get_x_y_heading(data, data.terrain.center[1], data.terrain.center[2], data.inputs.heading)
+    if data.terrain.texture[incoming_texture] then
+        local diff_x, diff_y = rose_get_x_y_heading(data, data.terrain.center[incoming_texture][1], data.terrain.center[incoming_texture][2], data.inputs.heading)
         local shift_x = 450-diff_x
         local shift_y = 450-diff_y
-
-
-
-        sasl.gl.drawRotatedTexture(data.terrain.texture, -data.inputs.heading, -shift_x-70, -shift_y-70, 900+140,900+140, {1,1,1})
-
+        sasl.gl.drawRotatedTexture(data.terrain.texture[incoming_texture], -data.inputs.heading, -shift_x-70, -shift_y-70, 900+140,900+140, {1,1,1})
         if DEBUG_terrain_center then
             -- Draw an X where the terrain center is located
             sasl.gl.drawWideLine(diff_x-10, diff_y-10, diff_x+10, diff_y+10, 4, ECAM_MAGENTA)
             sasl.gl.drawWideLine(diff_x-10, diff_y+10, diff_x+10, diff_y-10, 4, ECAM_MAGENTA)
         end
+    end
+    
+    if data.terrain.texture[outgoing_texture] then
+        local diff_x, diff_y = rose_get_x_y_heading(data, data.terrain.center[outgoing_texture][1], data.terrain.center[outgoing_texture][2], data.inputs.heading)
+        local shift_x = 450-diff_x
+        local shift_y = 450-diff_y
+
+        draw_terrain_mask(data, image_mask_rose)
+        sasl.gl.drawRotatedTexture(data.terrain.texture[outgoing_texture], -data.inputs.heading, -shift_x-70, -shift_y-70, 900+140,900+140, {1,1,1})
+        reset_terrain_mask(data, image_mask_rose)
+
     end
 end
 
