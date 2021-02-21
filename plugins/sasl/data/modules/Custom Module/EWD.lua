@@ -114,9 +114,10 @@ local function draw_packs_wai_nai()
     if get(Engine_1_avail) == 0 and get(Engine_2_avail) == 0 then
         return
     end
-
+    local max_eng_n1_mode = math.max(get(Eng_N1_mode, 1), get(Eng_N1_mode, 2)) 
+    
     -- PACKS / WAI / NAI indication
-    if get(Any_wheel_on_ground) == 1 or get(Eng_N1_mode) < 3 or get(Eng_N1_mode) > 5 then
+    if get(Any_wheel_on_ground) == 1 or max_eng_n1_mode < 3 or max_eng_n1_mode > 5 then
         local str = ""
         if get(Pack_L) == 1 or get(Pack_R) == 1 then
             str = "PACKS"
@@ -169,15 +170,17 @@ local function draw_extra_indication()
         sasl.gl.drawText(Font_AirbusDUL, 30, size[2]-40, "A FLOOR", 32, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
     end
 
-    if get(Eng_N1_mode) == 0 then
+    local max_eng_n1_mode = math.max(get(Eng_N1_mode, 1), get(Eng_N1_mode, 2)) 
+
+    if max_eng_n1_mode == 0 then
         return
     end
     
-    displayed_mode = get(Eng_N1_mode)
+    displayed_mode = max_eng_n1_mode
 
     local n1_max = get(Eng_N1_max)
     
-    if get(All_on_ground) == 1 and get(Eng_N1_mode) ~= 1 then
+    if get(All_on_ground) == 1 and max_eng_n1_mode ~= 1 then
         if get(Engine_1_avail) == 0 and get(Engine_1_avail) == 0 then
             displayed_mode = 3 -- When engines OFF, the mode is CLB
             n1_max = get(Eng_N1_max_detent_clb)
@@ -197,7 +200,7 @@ local function draw_extra_indication()
     sasl.gl.drawText(Font_AirbusDUL, size[1]-50, size[2]-55, math.floor((n1_max%1)*10), 24, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     sasl.gl.drawText(Font_AirbusDUL, size[1]-35, size[2]-55, "%", 24, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
 
-    if get(Eng_N1_mode) == 6 then
+    if max_eng_n1_mode == 6 then
         sasl.gl.drawText(Font_AirbusDUL, size[1]-80, size[2]-80, math.floor(get(Eng_N1_flex_temp)) .. "°C", 24, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
     end    
 end

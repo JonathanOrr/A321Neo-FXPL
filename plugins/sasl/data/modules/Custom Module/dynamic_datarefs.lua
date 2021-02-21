@@ -303,7 +303,7 @@ Eng_N1_idle = createGlobalPropertyf("a321neo/dynamics/engines/n1_idle", 1, false
 Eng_Dual_Cooling = createGlobalPropertyf("a321neo/dynamics/engines/dual_cooling", 0, false, true, false) -- Is dual cooling on?
 Eng_Continuous_Ignition = createGlobalPropertyf("a321neo/dynamics/engines/continuous_ignition", 0, false, true, false) -- Is continuous ignition active?
 
-Eng_N1_mode = createGlobalPropertyi("a321neo/dynamics/engines/n1_mode", 0, false, true, false) -- 0: not visible, 1: TOGA, 2:MCT, 3:CLB, 4: IDLE, 5: MREV, 6: FLEX, 7: SOFT GA
+Eng_N1_mode = createGlobalPropertyia("a321neo/dynamics/engines/n1_mode", 2) -- 0: not visible, 1: TOGA, 2:MCT, 3:CLB, 4: IDLE, 5: MREV, 6: FLEX, 7: SOFT GA
 Eng_N1_flex_temp = createGlobalPropertyf("a321neo/dynamics/engines/n1_flex_temp", 0, false, true, false)    -- 0 means NO FLEX TAKEOFF
 
 Eng_N1_max              = createGlobalPropertyf("a321neo/dynamics/engines/n1_max", 0, false, true, false) -- Current max
@@ -319,6 +319,11 @@ Eng_2_Firewall_valve = createGlobalPropertyi("a321neo/dynamics/engines/eng_2_fir
 
 Eng_spool_time = globalProperty("sim/aircraft/engine/acf_spooltime_turbine")
 Eng_is_spooling_up  = createGlobalPropertyia("a321neo/dynamics/engines/is_spooling_up", 2)
+
+-- ATHR
+ATHR_desired_N1     = createGlobalPropertyfa("a321neo/dynamics/engines/athr_input_n1", 2)
+ATHR_is_controlling = createGlobalPropertyi("a321neo/dynamics/engines/athr_is_controlling", 0, false, true, false)
+ATHR_is_overriding = createGlobalPropertyi("a321neo/dynamics/engines/athr_is_overriding", 0, false, true, false)
 
 -- APU
 Apu_N1 = globalProperty("sim/cockpit2/electrical/APU_N1_percent")
