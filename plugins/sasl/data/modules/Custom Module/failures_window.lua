@@ -341,6 +341,8 @@ local failures_data = {
         failures={
             {name="GPWS\nFAIL", status=false, dataref=FAILURE_GPWS },
             {name="GPWS TERR\nFAIL", status=false, dataref=FAILURE_GPWS_TERR },
+            {name="VHF 1\nFAIL", status=false, dataref=FAILURE_RADIO_VHF_1 },
+            {name="VHF 2\nFAIL", status=false, dataref=FAILURE_RADIO_VHF_2 },
         }
     }
 }

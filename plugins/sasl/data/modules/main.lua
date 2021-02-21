@@ -80,7 +80,8 @@ components = {
   EWD_flight_phases {},
   HUD {},
   DCDU {},
-  DRAIMS {},
+--  DRAIMS {},
+  DRAIMSv2 {},
   clock {},
   LED_screens {},
   failures_manager {},
@@ -97,6 +98,7 @@ components = {
   GPWS {},
   sounds {},
   graphics {},
+  radio_logic {},
 
   display_brightness {}, -- This must stay at the bottom
 
