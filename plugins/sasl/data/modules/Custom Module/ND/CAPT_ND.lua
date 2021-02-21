@@ -29,7 +29,11 @@ function draw()
 
     perf_measure_start("CAPT_ND:draw()")
 
+    sasl.gl.setRenderTarget(CAPT_ND_popup_texture, true)
     draw_main(nd_data)
+    sasl.gl.restoreRenderTarget()
+
+    sasl.gl.drawTexture(CAPT_ND_popup_texture, 0, 0, 900, 900, {1,1,1})
 
     perf_measure_stop("CAPT_ND:draw()")
 end

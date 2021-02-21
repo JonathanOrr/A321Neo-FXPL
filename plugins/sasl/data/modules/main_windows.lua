@@ -17,6 +17,7 @@
 -------------------------------------------------------------------------------
 
 addSearchPath(moduleDirectory .. "/Custom Module/debug_windows/")
+addSearchPath(moduleDirectory .. "/Custom Module/display_pop-ups/")
 
  --windows
 MCDU_window = contextWindow {
@@ -260,9 +261,10 @@ GPWS_debug_window = contextWindow {
   };
 }
 
---display popups--
-EWD_popup_window = contextWindow {
-  name = "EWD POP-UP";
+
+--popups--
+CAPT_PFD_window = contextWindow {
+  name = "CAPT PFD";
   position = { 0 , 0 , 900, 900 };
   noBackground = true ;
   proportional = true ;
@@ -271,7 +273,76 @@ EWD_popup_window = contextWindow {
   gravity = { 0 , 1 , 0 , 1 };
   visible = false;
   components = {
-    EWD_popup {position = { 0 , 0 , 900, 900 }}
+      CAPT_PFD_pop_up {}
   };
 }
 
+FO_PFD_window = contextWindow {
+  name = "FO PFD";
+  position = { 0 , 0 , 900, 900 };
+  noBackground = true ;
+  proportional = true ;
+  minimumSize = { 400, 400 };
+  maximumSize = { 900, 900 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = false;
+  components = {
+      FO_PFD_pop_up {}
+  };
+}
+
+CAPT_ND_window = contextWindow {
+  name = "CAPT ND";
+  position = { 0 , 0 , 900, 900 };
+  noBackground = true ;
+  proportional = true ;
+  minimumSize = { 400, 400 };
+  maximumSize = { 900, 900 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = false;
+  components = {
+      CAPT_ND_pop_up {}
+  };
+}
+
+FO_ND_window = contextWindow {
+  name = "FO ND";
+  position = { 0 , 0 , 900, 900 };
+  noBackground = true ;
+  proportional = true ;
+  minimumSize = { 400, 400 };
+  maximumSize = { 900, 900 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = false;
+  components = {
+      FO_ND_pop_up {}
+  };
+}
+
+EWD_window = contextWindow {
+  name = "EWD";
+  position = { 0 , 0 , 900, 900 };
+  noBackground = true ;
+  proportional = true ;
+  minimumSize = { 400, 400 };
+  maximumSize = { 900, 900 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = false;
+  components = {
+      EWD_pop_up {}
+  };
+}
+
+ECAM_window = contextWindow {
+  name = "ECAM";
+  position = { 0 , 0 , 900, 900 };
+  noBackground = true ;
+  proportional = true ;
+  minimumSize = { 400, 400 };
+  maximumSize = { 900, 900 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = false;
+  components = {
+      ECAM_pop_up {}
+  };
+}

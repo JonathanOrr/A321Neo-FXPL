@@ -597,10 +597,8 @@ local function draw_slat_flap_indications()
     draw_slat_flap_legend()
 end
 
-function draw()
-
+local function draw_ewd()
     sasl.gl.drawTexture(EWD_background_img, 0, 0, 900, 900, {1, 1, 1})
-
     draw_extra_indication()
     draw_engines_needles()
     draw_engines()
@@ -611,5 +609,13 @@ function draw()
     draw_fuel_stuffs()
     draw_coolings()
     draw_slat_flap_indications()
+end
+
+function draw()
+    sasl.gl.setRenderTarget(EWD_popup_texture, true)
+    draw_ewd()
+    sasl.gl.restoreRenderTarget()
+
+    sasl.gl.drawTexture(EWD_popup_texture, 0, 0, 900, 900, {1,1,1})
 end
 

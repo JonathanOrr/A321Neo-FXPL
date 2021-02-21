@@ -9734,15 +9734,23 @@ IDX	8391
 
 		ATTR_cockpit
 		TRIS	978 54
+		ATTR_manip_command	button	a321neo/cockpit/popups/Pop_out_capt_nd	
 		TRIS	1032 6
+		ATTR_manip_command	button	a321neo/cockpit/popups/pop_out_capt_pfd	
 		TRIS	1038 6
+		ATTR_manip_none
 		TRIS	1176 18
 		TRIS	5016 6
 		TRIS	5022 6
+		ATTR_manip_command	button	a321neo/cockpit/popups/Pop_out_ecam	
 		TRIS	6672 6
+		ATTR_manip_command	button	a321neo/cockpit/popups/pop_out_ewd	
 		TRIS	12 6
+		ATTR_manip_command	button	a321neo/cockpit/popups/Pop_out_fo_nd	
 		TRIS	7932 6
+		ATTR_manip_command	button	a321neo/cockpit/popups/Pop_out_fo_pfd	
 		TRIS	7938 6
+		ATTR_manip_none
 		TRIS	9144 6
 			ANIM_begin
 			ANIM_trans	0.29405001	1.12858	-19.855129	0.29405001	1.12858	-19.855129
