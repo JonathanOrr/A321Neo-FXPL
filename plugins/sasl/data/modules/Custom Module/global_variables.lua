@@ -51,6 +51,7 @@ ND_terrain = {}
 
 EFB_preferences = {}
 
+XPFiles = {}
 Data_manager = {}
 
 Mcdu_popup = {}
