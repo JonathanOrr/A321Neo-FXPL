@@ -20,19 +20,19 @@ local function load_xpfiles()
     if os_name == "Linux" then
         path = sasl.getAircraftPath() .. "/plugins/xpfiles/libxpfiles.so"
     elseif os_name == "Windows" then
-        path = sasl.getAircraftPath() .. "/plugins/xpfiles/libxpfiles.dylib"
-    elseif os_name == "Max" then
         path = sasl.getAircraftPath() .. "/plugins/xpfiles/xpfiles.dll"
+    elseif os_name == "Mac" then
+        path = sasl.getAircraftPath() .. "/plugins/xpfiles/libxpfiles.dylib"
     else
         assert(false) -- This should never happen
     end
-
-    XPFiles.c = ffi.load(path)
 
     ffi.cdef[[
         bool initialize(void);
         const char* get_error(void);
     ]]
+
+    XPFiles.c = ffi.load(path)
     
     if XPFiles.c.initialize() then
         initialized = true
