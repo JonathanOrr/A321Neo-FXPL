@@ -103,6 +103,7 @@ components = {
   main_popup {},
 
   librain{},
+
 }
 
 include(moduleDirectory .. "/main_windows.lua")

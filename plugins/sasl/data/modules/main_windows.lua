@@ -346,3 +346,17 @@ ECAM_window = contextWindow {
       ECAM_pop_up {}
   };
 }
+
+MAGIC_window = contextWindow {
+  name = "Magic";
+  position = { 0 , 0 , 300, 100 };
+  noBackground = true ;
+  proportional = true ;
+  minimumSize = { 300, 100 };
+  maximumSize = { 300, 100 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = false;
+  components = {
+      magic {}
+  };
+}

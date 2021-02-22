@@ -88,6 +88,10 @@ function Show_hide_GPWS_Debug()
   GPWS_debug_window:setIsVisible(not GPWS_debug_window:isVisible())
 end
 
+function Show_hide_MAGIC_Debug()
+  MAGIC_window:setIsVisible(not MAGIC_window:isVisible())
+end
+
 
 function IRs_instaneous_align()
     ADIRS_cmd_instantaneous_align = sasl.findCommand("a321neo/cockpit/ADIRS/instantaneous_align")
@@ -192,4 +196,5 @@ ShowHidePerfDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide PERF Debug", Show
 ShowHidePressDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide PRESS Debug", Show_hide_PRESS_debug)
 ShowHideWheelDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide WHEEL Debug", Show_hide_Wheel_Debug)
 --ShowHideVnavDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide VNAV Debug", Show_hide_vnav_debug)
+ShowHideGPWSDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide MAGIC Debug", Show_hide_MAGIC_Debug)
 
