@@ -139,7 +139,7 @@ local input_limitations = {
 
         --tail strike protection
         local tailstrike_pitch = 9.7
-        max_pitch = Math_rescale(0, Math_rescale(3/4, tailstrike_pitch, 1, 30, get(Augmented_pitch)), 15, 30, get(Capt_ra_alt_ft))
+        max_pitch = Math_rescale(0, Math_rescale(3/4, tailstrike_pitch, 1, 30, get(Total_input_pitch)), 15, 30, get(Capt_ra_alt_ft))
 
         --check for pitch exceedence
         local d_limitation = Math_rescale(min_pitch - degrade_margin, 2, min_pitch + degrade_margin, 0, pitch)
@@ -413,12 +413,12 @@ local get_vertical_input = {
 --input swapping--------------------------------------------------------------------------------------------
 local function input_handling(var_table)
     --calculate AoA input
-    get_vertical_input.AoA(get(Augmented_pitch), var_table)
+    get_vertical_input.AoA(get(Total_input_pitch), var_table)
 
-    local rotation_mode_input = get_vertical_input.Rotation(get(Augmented_pitch), var_table)
+    local rotation_mode_input = get_vertical_input.Rotation(get(Total_input_pitch), var_table)
     local flight_mode_Q_input = get_vertical_input.Flight_Q(var_table, FBW_PID_arrays.FBW_FLIGHT_APROT_PID_array)
-    local flight_mode_G_input = get_vertical_input.Flight_G(get(Augmented_pitch), var_table)
-    local flare_mode_input =    get_vertical_input.Flare(get(Augmented_pitch), var_table)
+    local flight_mode_G_input = get_vertical_input.Flight_G(get(Total_input_pitch), var_table)
+    local flare_mode_input =    get_vertical_input.Flare(get(Total_input_pitch), var_table)
 
     var_table.Q_input = rotation_mode_input * get(FBW_vertical_rotation_mode_ratio) +
                         flight_mode_Q_input * get(FBW_vertical_flight_mode_ratio) +
@@ -452,7 +452,7 @@ local function filter_values(var_table, filter_table)
     filter_table.AoA_filter_table.x = adirs_get_avg_aoa()
     var_table.Filtered_AoA = low_pass_filter(filter_table.AoA_filter_table)
 
-    filter_table.artstab_filter_table.x = get(Pitch_artstab)
+    filter_table.artstab_filter_table.x = get(FBW_pitch_output)
     var_table.Filtered_artstab = low_pass_filter(filter_table.artstab_filter_table)
 end
 
@@ -482,7 +482,7 @@ local vertical_augmentation = {
         local C_STAR_PID_output = FBW_PID_BP(FBW_PID_arrays.FBW_CSTAR_PID_array, var_table.Filtered_C_STAR_err, var_table.Filtered_C_STAR, var_table.Filtered_ias)
 
         if get(FBW_vertical_law) == FBW_NORMAL_LAW then
-            var_table.flight_mode_controller_output = Math_rescale(0, C_STAR_PID_output, 1, Q_PID_output, input_limitations.G_AoA_input_blending(get(Augmented_pitch), var_table))
+            var_table.flight_mode_controller_output = Math_rescale(0, C_STAR_PID_output, 1, Q_PID_output, input_limitations.G_AoA_input_blending(get(Total_input_pitch), var_table))
         else
             var_table.flight_mode_controller_output = C_STAR_PID_output
         end
@@ -495,7 +495,7 @@ local vertical_augmentation = {
             return
         end
         if get(FBW_vertical_law) ~= FBW_NORMAL_LAW then--alt law <-> direct law
-            var_table.flare_mode_controller_output = get(Augmented_pitch)
+            var_table.flare_mode_controller_output = get(Total_input_pitch)
             return
         end
 
@@ -603,9 +603,9 @@ end
 
 local function FBW_vertical_mode_blending(var_table)
     set(
-        Pitch_artstab,
+        FBW_pitch_output,
         Math_clamp(
-            get(Augmented_pitch)                        * get(FBW_vertical_ground_mode_ratio)
+            get(Total_input_pitch)                  * get(FBW_vertical_ground_mode_ratio)
             + var_table.rotation_mode_controller_output * get(FBW_vertical_rotation_mode_ratio)
             + var_table.flight_mode_controller_output   * get(FBW_vertical_flight_mode_ratio)
             + var_table.flare_mode_controller_output    * get(FBW_vertical_flare_mode_ratio)

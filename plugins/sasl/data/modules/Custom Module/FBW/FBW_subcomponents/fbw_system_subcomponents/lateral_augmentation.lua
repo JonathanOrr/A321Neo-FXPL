@@ -19,7 +19,7 @@ local lateral_control_filter_table = {
         cut_frequency = 10,
     },
     P_err_filter_table = {
-        x = get(Augmented_roll) * 15 - get(True_roll_rate),
+        x = get(Total_input_roll) * 15 - get(True_roll_rate),
         cut_frequency = 10,
     },
     IAS_filter_table = {
@@ -97,7 +97,7 @@ local function lateral_input_and_protection(var_table)
     end
 
     --take the sidestick position
-    local limited_input = limit_input(get(Augmented_roll), adirs_get_avg_roll(), var_table.neutral_bank_angle, var_table.maximum_bank_angle)
+    local limited_input = limit_input(get(Total_input_roll), adirs_get_avg_roll(), var_table.neutral_bank_angle, var_table.maximum_bank_angle)
 
     --convert input into roll rate
     var_table.P_input = Math_rescale(-1, -15, 1, 15, limited_input)
@@ -130,14 +130,14 @@ local function lateral_controlling(var_table)
 
     --OUTPUT--
     var_table.controller_output = FBW_PID_BP(FBW_PID_arrays.FBW_ROLL_RATE_PID_array, var_table.filtered_error, var_table.filtered_P, var_table.filtered_ias)
-    FBW_PID_arrays.FBW_ROLL_RATE_PID_array.Actual_output = get(Roll_artstab)
+    FBW_PID_arrays.FBW_ROLL_RATE_PID_array.Actual_output = get(FBW_roll_output)
 end
 
 local function FBW_lateral_mode_blending(var_table)
     set(
-        Roll_artstab,
+        FBW_roll_output,
         Math_clamp(
-            get(Augmented_roll)         * get(FBW_lateral_ground_mode_ratio) +
+            get(Total_input_roll)   * get(FBW_lateral_ground_mode_ratio) +
             var_table.controller_output * get(FBW_lateral_flight_mode_ratio),
         -1, 1)
     )
