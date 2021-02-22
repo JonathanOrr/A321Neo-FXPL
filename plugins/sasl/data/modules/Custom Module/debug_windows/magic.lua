@@ -1,6 +1,7 @@
 local pitch  = 	        globalProperty("sim/flightmodel/position/true_theta")
 local roll  = 	        globalProperty("sim/flightmodel/position/true_phi")
 local airspeed =        globalProperty("sim/flightmodel/position/indicated_airspeed2")
+local altitude =        globalProperty("sim/flightmodel/misc/h_ind2")
 local weight   =        globalProperty ("sim/flightmodel/weight/m_total")
 local thrust = 0
 
@@ -11,7 +12,7 @@ local magic_happening = false
 
 local function save_to_file()
     file = io.open("jon_dont_open.csv", "a")
-    file:write(get(pitch)..","..get(roll)..","..get(airspeed)..","..get(weight)..","..thrust.."\n")
+    file:write(get(pitch)..","..get(roll)..","..get(airspeed)..","..get(altitude)..","..get(weight)..","..thrust..","..get(vs).."\n")
     file:flush()
     file:close()
 end
