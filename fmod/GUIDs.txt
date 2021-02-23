@@ -117,6 +117,7 @@
 {22f80e6a-40fc-4fd9-9f77-f0ef5077c622} event:/RA/500
 {ceccdb65-09f6-4303-9230-4cb86b263170} event:/RA/Minimum
 {a897e617-89e1-43d6-8d15-a52e71fda8e9} event:/RA/retard
+{e455cdef-a81f-498e-b21d-793aa0ebd2dc} event:/SSPriority/Dual Input
 {f29dba50-d417-4b8c-b2f0-9a3966caf7cc} event:/SSPriority/Left
 {8fc35da0-ff79-4c98-9b39-e007109072ad} event:/SSPriority/Right
 {af369460-34d3-4c6e-a56c-fbe21efb91d5} event:/StickLock/StickLock
