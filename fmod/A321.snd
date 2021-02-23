@@ -2561,7 +2561,7 @@ END_SOUND_ATTACHMENT
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /SSPriority/Right
   VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_DOWN right
+  EVENT_CMND_DOWN a321neo/sounds/gpws/priority_right
 END_SOUND_ATTACHMENT
 
 ########################################################################################################APU

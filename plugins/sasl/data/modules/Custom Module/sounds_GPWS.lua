@@ -113,8 +113,8 @@ local gpws_sounds = {
     { source=GPWS_pred_obst,        command=Sounds_GPWS_obsahead,      duration = 1.4, continuous = false, interval = 7 },
 
     { source=GPWS_mode_dual_input,     command=Sounds_GPWS_dual_input,     duration = 1, continuous = false, interval = 5},
-    { source=GPWS_mode_priority_left,  command=Sounds_GPWS_priority_left,  duration = 2, continuous = false},
-    { source=GPWS_mode_priority_right, command=Sounds_GPWS_priority_right, duration = 2, continuous = false},
+    { source=GPWS_mode_priority_left,  command=Sounds_GPWS_priority_left,  duration = 2, continuous = true},
+    { source=GPWS_mode_priority_right, command=Sounds_GPWS_priority_right, duration = 2, continuous = true},
 
     -- Pitch Pitch -- The priority of this is not a big issue because it's active when all the other modes are
     -- not active
