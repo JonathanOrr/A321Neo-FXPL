@@ -268,6 +268,8 @@ ISIS_cmd_Knob_cc     = createCommand("a321neo/cockpit/ISIS/Knob_CC", "Rotate ISI
 
 
 --FBW
+Capt_sidestick_pb = sasl.createCommand("a321neo/cockpit/FBW/capt_sidestick_pb", "Captain sidestick pushbutton")
+Fo_sidestick_pb =   sasl.createCommand("a321neo/cockpit/FBW/fo_sidestick_pb", "First officer sidestick pushbutton")
 Toggle_ELAC_1 = sasl.createCommand("a321neo/cockpit/FBW/toggle_elac_1", "toggle ELAC 1")
 Toggle_ELAC_2 = sasl.createCommand("a321neo/cockpit/FBW/toggle_elac_2", "toggle ELAC 2")
 Toggle_FAC_1 = sasl.createCommand("a321neo/cockpit/FBW/toggle_fac_1", "toggle FAC 1")

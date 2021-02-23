@@ -517,8 +517,16 @@ Project_square_input = 		  createGlobalPropertyi("a321neo/dynamics/FBW/customiza
 Trim_wheel_smoothing_on = 	  createGlobalPropertyi("a321neo/dynamics/FBW/customizations/trim_wheel_smoothing_on", 1, false, true, false)--is the trim wheel is smoothed
 FBW_mode_transition_version = createGlobalPropertyi("a321neo/dynamics/FBW/customizations/mode_transition_version", 0, false, true, false)--0 slower transitions and flare mode at 100RA(default on newer aircraft), 1 faster transitions and flare mode at 50RA
 --inputs--
-Roll =  globalProperty("sim/joystick/yoke_roll_ratio")
-Pitch = globalProperty("sim/joystick/yoke_pitch_ratio")
+Sidesitck_dual_input = createGlobalPropertyi("a321neo/dynamics/FBW/inputs_priority/sidesitck_dual_input", 0, false, true, false)
+Last_one_to_takover =  createGlobalPropertyi("a321neo/dynamics/FBW/inputs_priority/last_one_to_takover", 0, false, true, false)
+Priority_left =  createGlobalPropertyi("a321neo/dynamics/FBW/inputs_priority/priority_left", 0, false, true, false)
+Priority_right = createGlobalPropertyi("a321neo/dynamics/FBW/inputs_priority/priority_right", 0, false, true, false)
+Capt_sidestick_disabled = createGlobalPropertyi("a321neo/dynamics/FBW/inputs_priority/capt_sidestick_disabled", 0, false, true, false)
+Fo_sidestick_disabled =   createGlobalPropertyi("a321neo/dynamics/FBW/inputs_priority/fo_sidestick_disabled", 0, false, true, false)
+Capt_Roll =  globalProperty("sim/joystick/yoke_roll_ratio")
+Capt_Pitch = globalProperty("sim/joystick/yoke_pitch_ratio")
+Fo_Roll =  globalProperty("sim/cockpit2/weapons/gun_offset_heading_ratio")
+Fo_Pitch = globalProperty("sim/cockpit2/weapons/gun_offset_pitch_ratio")
 Yaw =   globalProperty("sim/joystick/yoke_heading_ratio")
 AUTOFLT_roll =  createGlobalPropertyf("a321neo/dynamics/FBW/inputs/autoflight_roll", 0, false, true, false)
 AUTOFLT_pitch = createGlobalPropertyf("a321neo/dynamics/FBW/inputs/autoflight_pitch", 0, false, true, false)
@@ -735,6 +743,10 @@ GPWS_mode_5_glideslope_hard = createGlobalPropertyi("a321neo/dynamics/gpws/mode_
 GPWS_mode_pitch = createGlobalPropertyi("a321neo/dynamics/gpws/mode_pitch", 0, false, true, false)
 GPWS_mode_speed = createGlobalPropertyi("a321neo/dynamics/gpws/mode_speed", 0, false, true, false)
 GPWS_mode_stall = createGlobalPropertyi("a321neo/dynamics/gpws/mode_stall", 0, false, true, false)
+
+GPWS_mode_dual_input     = createGlobalPropertyi("a321neo/dynamics/gpws/mode_dual_input", 0, false, true, false)
+GPWS_mode_priority_left  = createGlobalPropertyi("a321neo/dynamics/gpws/mode_priority_left", 0, false, true, false)
+GPWS_mode_priority_right = createGlobalPropertyi("a321neo/dynamics/gpws/mode_priority_right", 0, false, true, false)
 
 GPWS_pred_is_active = createGlobalPropertyi("a321neo/dynamics/gpws/pred/is_active", 0, false, true, false)
 GPWS_pred_terr      = createGlobalPropertyi("a321neo/dynamics/gpws/pred/terrain", 0, false, true, false)
