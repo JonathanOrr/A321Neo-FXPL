@@ -203,11 +203,18 @@ local input_limitations = {
     G_Pitch = function (G, var_table)
         --properties
         local pitch = adirs_get_avg_pitch()
-        local max_pitch = get(Flaps_internal_config) == 5 and (var_table.Filtered_ias <= get(VLS) and 20 or 25) or (var_table.Filtered_ias <= get(VLS) and 25 or 30)
+        local max_pitch = 30
         local min_pitch = -15
         local degrade_margin = 8
         local upwards_return_G = 2.5
         local downwards_return_G = 0
+
+        if get(Flaps_internal_config) < 5 then
+            max_pitch = Math_rescale(0, 30, 20, 25, get(VLS) - var_table.Filtered_ias)
+        end
+        if get(Flaps_internal_config) == 5 then
+            max_pitch = Math_rescale(0, 25, 20, 20, get(VLS) - var_table.Filtered_ias)
+        end
 
         --check for pitch exceedence
         local d_limitation = Math_rescale(min_pitch - degrade_margin, 2, min_pitch + degrade_margin, 0, pitch)
@@ -515,7 +522,7 @@ local vertical_augmentation = {
         --enter limited trim range modes
         local previous_Autotrim_limitation = get(THS_trim_range_limited)
         if get(FBW_vertical_law) == FBW_NORMAL_LAW then
-            if var_table.Filtered_AoA > get(Aprot_AoA) - 0.5 then
+            if adirs_get_avg_aoa() > get(Aprot_AoA) - 1 then
                 set(THS_trim_range_limited, 1)
             elseif get(Total_vertical_g_load) > 1.25 then
                 set(THS_trim_range_limited, 1)
@@ -533,7 +540,6 @@ local vertical_augmentation = {
 
         --PID controls
         set(Augmented_pitch_trim_ratio, FBW_PID_BP(FBW_PID_arrays.FBW_AUTOTRIM_PID_array, var_table.Filtered_artstab, -var_table.Filtered_artstab))
-        FBW_PID_arrays.FBW_AUTOTRIM_PID_array.Actual_output = get(Elev_trim_ratio)
     end,
 }
 
@@ -557,7 +563,7 @@ local function enforce_bumpless_transfers()
     end
 end
 
-local function BP_elevator_position()
+local function BP_elevator_THS_position()
     local elevator_ratio_table = {
         {-30, 1},
         {0,   0},
@@ -599,6 +605,9 @@ local function BP_elevator_position()
         --BP C* controller--
         FBW_PID_arrays.FBW_CSTAR_PID_array.Actual_output = 0
     end
+
+    --BP THS position to the controller--
+    FBW_PID_arrays.FBW_AUTOTRIM_PID_array.Actual_output = get(Elev_trim_ratio)
 end
 
 local function FBW_vertical_mode_blending(var_table)
@@ -624,5 +633,5 @@ function update()
 
     enforce_bumpless_transfers()
     FBW_vertical_mode_blending(vertical_control_var_table)
-    BP_elevator_position()
+    BP_elevator_THS_position()
 end

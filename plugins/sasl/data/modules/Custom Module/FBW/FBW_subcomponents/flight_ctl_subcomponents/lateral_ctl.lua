@@ -14,8 +14,19 @@ function Ailerons_control(lateral_input, has_florence_kit, ground_spoilers_mode)
     local l_aileron_actual_speed = ailerons_speed
     local r_aileron_actual_speed = ailerons_speed
 
-    local l_aileron_travel_target = Math_clamp(ailerons_max_def *  lateral_input + 5 * get(Flaps_deployed_angle) / 40, -ailerons_max_def, ailerons_max_def)
-    local r_aileron_travel_target = Math_clamp(ailerons_max_def * -lateral_input + 5 * get(Flaps_deployed_angle) / 40, -ailerons_max_def, ailerons_max_def)
+    local l_aileron_def_table = {
+        {-1, -ailerons_max_def},
+        {0,   10 * get(Flaps_deployed_angle) / 25},
+        {1,   ailerons_max_def},
+    }
+    local r_aileron_def_table = {
+        {-1,  ailerons_max_def},
+        {0,   10 * get(Flaps_deployed_angle) / 25},
+        {1,  -ailerons_max_def},
+    }
+
+    local l_aileron_travel_target = Table_interpolate(l_aileron_def_table, lateral_input)
+    local r_aileron_travel_target = Table_interpolate(r_aileron_def_table, lateral_input)
 
     --SURFACE SPEED LOGIC--
     --aileron anti droop--
@@ -222,18 +233,21 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
         set(Speedbrakes_inhibited, 0)
     end
 
+    --lacking upon a.prot toga [and restoring speedbrake avail by reseting the lever position]
     if get(Bypass_speedbrakes_inhibition) ~= 1 then
         if get(SEC_1_status) == 0 and get(SEC_3_status) == 0 then
             set(Speedbrakes_inhibited, 1)
         end
-        if get(Flaps_internal_config) == 4 or get(Flaps_internal_config) == 5 then
+        if get(L_elevator_avail) == 0 or get(R_elevator_avail) == 0 then
             set(Speedbrakes_inhibited, 1)
-            --lacking alpha protection / upon a.prot toga [and restoring speedbrake avail by reseting the lever position]
+        end
+        if get(FBW_lateral_law) == FBW_NORMAL_LAW and adirs_get_avg_aoa() > get(Aprot_AoA) - 1 then
+            set(Speedbrakes_inhibited, 1)
+        end
+        if get(Flaps_internal_config) >= 4 then
+            set(Speedbrakes_inhibited, 1)
         end
         if get(Cockpit_throttle_lever_L) >= THR_MCT_START or get(Cockpit_throttle_lever_R) >= THR_MCT_START then
-            set(Speedbrakes_inhibited, 1)
-        end
-        if get(FAILURE_FCTL_LELEV) == 1 or get(FAILURE_FCTL_RELEV) == 1 then
             set(Speedbrakes_inhibited, 1)
         end
     end

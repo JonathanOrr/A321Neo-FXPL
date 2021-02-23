@@ -205,7 +205,7 @@ function PFD_draw_att(PFD_table)
     SASL_draw_img_xcenter_aligned(PFD_pitch_wings, ATT_x_center, size[2]/2-43, 402, 47, {1,1,1})
 
     --sidesitck position indicator
-    if PFD_table.PFD_aircraft_in_air_timer <= 0.5 then
+    if PFD_table.PFD_aircraft_in_air_timer <= 0.5 and get(EWD_flight_phase) >= PHASE_1ST_ENG_ON then
         SASL_draw_img_center_aligned(PFD_sidestick_box,   ATT_x_center, ATT_y_center, 329, 269, {1,1,1})
         SASL_draw_img_center_aligned(PFD_sidestick_cross, ATT_x_center + Math_rescale(-1, -164, 1, 164, get(Total_input_roll)), ATT_y_center + Math_rescale(-1, -134, 1, 134, get(Total_input_pitch)), 61, 63, {1,1,1})
     end

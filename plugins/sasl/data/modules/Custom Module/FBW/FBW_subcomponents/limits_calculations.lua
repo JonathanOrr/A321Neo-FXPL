@@ -332,7 +332,7 @@ end
 
 local function STALL_STALL()
     set(GPWS_mode_stall, 0)
-    --stall warning (needls to be further comfirmed)
+    --stall warning (needs to be further comfirmed)
     if get(FBW_total_control_law) == FBW_NORMAL_LAW or
        get(Any_wheel_on_ground) == 1 or
        get(FAC_1_status) == 0 and get(FAC_2_status) == 0 then
