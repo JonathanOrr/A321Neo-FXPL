@@ -306,7 +306,7 @@ local input_limitations = {
         return vmax_prot_x
     end,
     ALT_vls = function (x, var_table)
-        local downwards_ratio = Math_rescale(0, -0.15, 0.2, x, x)
+        local downwards_ratio = Math_rescale(0, -0.1, 0.2, x, x)
 
         local vls_prot_x = Math_rescale(get(VLS) - 15, downwards_ratio, get(VLS), x, var_table.Filtered_ias)
 
@@ -515,7 +515,7 @@ local vertical_augmentation = {
            get(FBW_vertical_flight_mode_ratio) ~= 1 or
            var_table.Filtered_ias > get(Fixed_VMAX) or
            get(Total_vertical_g_load) < 0.5 or
-           get(FBW_vertical_law) == FBW_ALT_REDUCED_PROT_LAW and var_table.Filtered_ias < get(VLS) then
+           get(FBW_vertical_law) ~= FBW_NORMAL_LAW and var_table.Filtered_ias < get(VLS) then
             return
         end
 

@@ -53,6 +53,8 @@ EFB_YELLOW = {168/255, 200/255, 91/255}
 PFD_TAPE_GREY = {69/255, 86/255, 105/255}
 PFD_YELLOW = {1, 1, 0}
 
+LED_TEXT_CL = {235/255, 200/255, 135/255}
+
 -- ELEC buses
 ELEC_BUS_AC_1 = 1
 ELEC_BUS_AC_2 = 2
@@ -162,6 +164,8 @@ Font_AirbusDUL = sasl.gl.loadFont("fonts/AirbusDULiberationMono.ttf")
 Font_AirbusDUL_vert = sasl.gl.loadFont("fonts/AirbusDULiberationMono.ttf")
 sasl.gl.setFontRenderMode(Font_AirbusDUL, TEXT_RENDER_FORCED_MONO, 0.6)
 sasl.gl.setFontDirection (Font_AirbusDUL_vert, TEXT_DIRECTION_VERTICAL)
+
+Font_7segment_led = sasl.gl.loadFont("fonts/Segment7Standard.otf")
 
 Airbus_panel_font = sasl.gl.loadFont("fonts/A320PanelFont_V0.2b.ttf")
 
