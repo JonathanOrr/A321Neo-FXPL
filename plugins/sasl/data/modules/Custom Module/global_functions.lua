@@ -295,6 +295,54 @@ function Table_extrapolate(tab, x)  -- This works like Table_interpolate, but it
 
 end
 
+function Table_interpolate_2d(x,y,z,value_x, value_y)
+
+    local i = 1
+    while i <= #x do
+        if x[i] >= value_x then
+            break
+        end
+        i = i + 1
+    end
+
+    local j = 1
+    while j <= #y do
+        if y[j] >= value_y then
+            break
+        end
+        j = j +1
+    end
+
+
+    local temp_j = j
+    if temp_j > #y then
+        temp_j = #y
+    end
+    
+    local x_comp = 0
+    if i == 1 then
+        x_comp = z[i][temp_j]
+    elseif i > #x then
+        x_comp = z[#x][temp_j]
+        i = #x
+    else
+
+        x_comp = Math_rescale(x[i-1], z[i-1][temp_j], x[i], z[i][temp_j], value_x) 
+    end
+
+    local y_comp = 0
+    if j == 1 then
+        y_comp = z[i][j]
+    elseif j > #y then
+        y_comp = z[i][#y]
+    else
+        y_comp = Math_rescale(y[j-1], z[i][j-1], y[j], z[i][j], value_y) 
+    end
+
+    return (x_comp + y_comp) / 2
+end
+
+
 --string functions--
 --append string_to_fill_it_with to the front of a string to achive the length of to_what_length
 function Fwd_string_fill(string_to_fill, string_to_fill_it_with, to_what_length)
