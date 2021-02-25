@@ -15,14 +15,18 @@ local function draw_alt_value()
     local CENTER_X = size[1] / 2
     local CENTER_Y = size[2] / 2
 
-    Draw_green_LED_num_and_letter(CENTER_X + 235, CENTER_Y - 36, "88888", 5, 74, TEXT_ALIGN_CENTER, 0.2, 1, 1)
+    local alt_value = get(Cockpit_annnunciators_test) == 1 and "88888" or "00000"
+
+    Draw_green_LED_num_and_letter(CENTER_X + 235, CENTER_Y - 36, alt_value, 5, 74, TEXT_ALIGN_CENTER, 0.2, 1, 1)
 end
 
 local function draw_managed_dot()
     local CENTER_X = size[1] / 2
     local CENTER_Y = size[2] / 2
 
-    sasl.gl.drawCircle(CENTER_X + 342, CENTER_Y - 10, 10, true, LED_TEXT_CL)
+    if get(Cockpit_annnunciators_test) == 1 then
+        sasl.gl.drawCircle(CENTER_X + 342, CENTER_Y - 10, 10, true, LED_TEXT_CL)
+    end
 end
 
 
