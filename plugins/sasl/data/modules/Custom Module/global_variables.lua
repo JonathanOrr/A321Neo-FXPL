@@ -53,7 +53,7 @@ ADIRS_sys= {}
 ND_terrain = {}
 
 -- Engine data dependig on the user choice
-ENG_data = nil
+ENG = { data_is_loaded = false }
 
 EFB_preferences = {} -- Should not be here
 Data_manager = {}    -- Will be removed soon

@@ -33,6 +33,7 @@ local params = {
     last_update = 0
 }
 
+local BLEED_MIN_LIMIT = 21
 
 local start_elec_fadec = {0,0}
 local start_shut_fadec = {0,0}
@@ -65,49 +66,98 @@ local function pulse_green(condition)
     end
 end
 
-local function draw_oil_qt_press_temp()
+local function draw_oil_qt_press_temp_eng_1()
 
     if xx_statuses[1] then
-        local eng_1_oil_color = pulse_green(get(Eng_1_OIL_qty) < 2)
 
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-153, 625, math.floor(get(Eng_1_OIL_qty)) .. "." , 36,
+        ------------------------------------------------------------------------------------
+        -- ENG 1 OIL QTY
+        ------------------------------------------------------------------------------------
+        local oil_qty_1 = get(Eng_1_OIL_qty) 
+        local eng_1_oil_color = pulse_green(oil_qty_1 < ENG.data.display.oil_qty_advisory)
+
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-153, 625, math.floor(oil_qty_1) .. "." , 36,
                          false, false, TEXT_ALIGN_RIGHT, eng_1_oil_color)
 
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-136, 625, math.floor((get(Eng_1_OIL_qty)%1)*10), 28,
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-136, 625, math.floor((oil_qty_1%1)*10), 28,
                         false, false, TEXT_ALIGN_RIGHT, eng_1_oil_color)
-                        
-        local eng_1_oil_color = pulse_green(get(Eng_1_OIL_press) > 90 or get(Eng_1_OIL_press) < 13)
-        if get(Eng_1_OIL_press) < 7 then eng_1_oil_color = ECAM_RED end
+
+        ------------------------------------------------------------------------------------
+        -- ENG 1 OIL PRESS
+        ------------------------------------------------------------------------------------
+        local eng_1_oil_color = pulse_green(
+              params.eng1_oil_press > ENG.data.display.oil_press_high_adv or 
+              params.eng1_oil_press < ENG.data.display.oil_press_low_adv
+              )
+
+        local press_red_limit = ENG.data.display.oil_press_low_red[1] + ENG.data.display.oil_press_low_red[2] * get(Eng_1_N2)
+        local press_amber_limit = ENG.data.display.oil_press_low_amber[1] + ENG.data.display.oil_press_low_amber[2] * get(Eng_1_N2)
+
+        if params.eng1_oil_press < press_red_limit then
+            eng_1_oil_color = ECAM_RED
+        elseif params.eng1_oil_press < press_amber_limit then
+            eng_1_oil_color = ECAM_ORANGE
+        end
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2-165, 525, params.eng1_oil_press, 36,
                      false, false, TEXT_ALIGN_RIGHT, eng_1_oil_color)
-                     
-        local eng_1_oil_color = pulse_green(get(Eng_1_OIL_temp) > 140)
-        if get(Eng_1_OIL_temp) > 155 then eng_1_oil_color = ECAM_AMBER end
+
+        ------------------------------------------------------------------------------------
+        -- ENG 1 OIL TEMP
+        ------------------------------------------------------------------------------------
+        local eng_1_oil_color = pulse_green(params.eng1_oil_temp > ENG.data.display.oil_temp_high_adv)
+        if params.eng1_oil_temp > ENG.data.display.oil_temp_high_amber then
+            eng_1_oil_color = ECAM_AMBER
+        end
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2-187, 455, params.eng1_oil_temp ,36,
                      false, false, TEXT_ALIGN_CENTER, eng_1_oil_color)
-        
+
     else
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2-153, 625, "XX" , 36, false, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2-165, 525, "XX" , 36, false, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2-187, 455, "XX" , 36, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
+end
 
+local function draw_oil_qt_press_temp_eng_2()
     if xx_statuses[2] then
-        local eng_2_oil_color = pulse_green(get(Eng_2_OIL_qty) < 2)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+223, 625, math.floor(get(Eng_2_OIL_qty)) .. "." , 36,
+        ------------------------------------------------------------------------------------
+        -- ENG 2 OIL QTY
+        ------------------------------------------------------------------------------------
+        local oil_qty_2 = get(Eng_2_OIL_qty) 
+        local eng_2_oil_color = pulse_green(oil_qty_2 < ENG.data.display.oil_qty_advisory)
+
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+223, 625, math.floor(oil_qty_2) .. "." , 36,
                         false, false, TEXT_ALIGN_RIGHT, eng_2_oil_color)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+240, 625, math.floor((get(Eng_2_OIL_qty)%1)*10) , 28,
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+240, 625, math.floor((oil_qty_2%1)*10), 28,
                         false, false, TEXT_ALIGN_RIGHT, eng_2_oil_color)
 
+        ------------------------------------------------------------------------------------
+        -- ENG 2 OIL PRESS
+        ------------------------------------------------------------------------------------
+        local eng_2_oil_color = pulse_green(
+              params.eng2_oil_press > ENG.data.display.oil_press_high_adv or 
+              params.eng2_oil_press < ENG.data.display.oil_press_low_adv
+              )
 
-        local eng_2_oil_color = pulse_green(get(Eng_2_OIL_press) > 90 or get(Eng_2_OIL_press) < 13)
-        if get(Eng_2_OIL_press) < 7 then eng_2_oil_color = ECAM_RED end
+        local press_red_limit = ENG.data.display.oil_press_low_red[1] + ENG.data.display.oil_press_low_red[2] * get(Eng_2_N2)
+        local press_amber_limit = ENG.data.display.oil_press_low_amber[1] + ENG.data.display.oil_press_low_amber[2] * get(Eng_2_N2)
+
+        if params.eng2_oil_press < press_red_limit then
+            eng_2_oil_color = ECAM_RED
+        elseif params.eng2_oil_press < press_amber_limit then
+            eng_2_oil_color = ECAM_ORANGE
+        end
+
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2+213, 525, params.eng2_oil_press ,36,
                         false, false, TEXT_ALIGN_RIGHT, eng_2_oil_color)
 
-
-        local eng_2_oil_color = pulse_green(get(Eng_2_OIL_temp) > 140)
-        if get(Eng_2_OIL_temp) > 155 then eng_2_oil_color = ECAM_AMBER end
+        ------------------------------------------------------------------------------------
+        -- ENG 2 OIL TEMP
+        ------------------------------------------------------------------------------------
+        local eng_2_oil_color = pulse_green(params.eng2_oil_temp > ENG.data.display.oil_temp_high_adv)
+        if params.eng2_oil_temp > ENG.data.display.oil_temp_high_amber then
+            eng_2_oil_color = ECAM_AMBER
+        end
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2+187, 455, params.eng2_oil_temp ,36,
                         false, false, TEXT_ALIGN_CENTER, eng_2_oil_color)
     else
@@ -117,12 +167,20 @@ local function draw_oil_qt_press_temp()
     end
 end
 
+
+local function draw_oil_qt_press_temp()
+    if ENG.data then    -- In the first frame this value is not yet initialized
+        draw_oil_qt_press_temp_eng_1()
+        draw_oil_qt_press_temp_eng_2()
+    end
+end
+
 local function draw_vibrations()
 
 
     if xx_statuses[1] then
-        local eng1_vib1_color = pulse_green(params.eng1_vib_n1 > 6)
-        local eng1_vib2_color = pulse_green(params.eng1_vib_n2 > 4.3)
+        local eng1_vib1_color = pulse_green(params.eng1_vib_n1 > ENG.data.max_n1_nominal)
+        local eng1_vib2_color = pulse_green(params.eng1_vib_n2 > ENG.data.max_n2_nominal)
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2-175, 385, math.floor(params.eng1_vib_n1) .. "." , 36,
                      false, false, TEXT_ALIGN_RIGHT, eng1_vib1_color)
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2-155, 385, math.floor((params.eng1_vib_n1%1)*10), 28,
@@ -139,8 +197,8 @@ local function draw_vibrations()
     end
 
     if xx_statuses[2] then
-        local eng2_vib1_color = pulse_green(params.eng2_vib_n1 > 6)
-        local eng2_vib2_color = pulse_green(params.eng2_vib_n2 > 4.3)
+        local eng2_vib1_color = pulse_green(params.eng2_vib_n1 > ENG.data.max_n1_nominal)
+        local eng2_vib2_color = pulse_green(params.eng2_vib_n2 > ENG.data.max_n2_nominal)
 
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2+200, 385, math.floor(params.eng2_vib_n1) .. "." , 36,
                         false, false, TEXT_ALIGN_RIGHT, eng2_vib1_color)
@@ -159,8 +217,8 @@ local function draw_vibrations()
 end
 
 local function draw_bleed()
-    local bleed_1_press_color = get(L_bleed_press) < 21 and ECAM_ORANGE or ECAM_GREEN
-    local bleed_2_press_color = get(L_bleed_press) < 21 and ECAM_ORANGE or ECAM_GREEN
+    local bleed_1_press_color = get(L_bleed_press) < BLEED_MIN_LIMIT and ECAM_ORANGE or ECAM_GREEN
+    local bleed_2_press_color = get(L_bleed_press) < BLEED_MIN_LIMIT and ECAM_ORANGE or ECAM_GREEN
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-188, 136, math.floor(get(L_bleed_press)), 36, false, false, TEXT_ALIGN_CENTER, bleed_1_press_color)
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2+192, 136, math.floor(get(R_bleed_press)), 36, false, false, TEXT_ALIGN_CENTER, bleed_2_press_color)
 end

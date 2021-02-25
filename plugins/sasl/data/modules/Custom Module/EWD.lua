@@ -327,7 +327,7 @@ local function draw_engines()
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2-100, size[2]/2+280, math.floor((params.eng1_n1%1)*10)  , 24, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
 
         --EGT--
-        local egt_color_1 = params.eng1_egt > 1050 and ECAM_RED or (params.eng1_egt > 1000 and ECAM_ORANGE or ECAM_GREEN)
+        local egt_color_1 = params.eng1_egt > ENG.data.display.egt_red_limit and ECAM_RED or (params.eng1_egt > 1000 and ECAM_ORANGE or ECAM_GREEN)
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2-140, size[2]/2+150, params.eng1_egt, 28, false, false, TEXT_ALIGN_RIGHT, egt_color_1)
 
         --N2--
@@ -347,7 +347,7 @@ local function draw_engines()
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2+250, size[2]/2+280, math.floor((params.eng2_n1%1)*10)  , 24, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
 
         --EGT--
-        local egt_color_2 = params.eng2_egt > 1050 and ECAM_RED or (params.eng2_egt > 1000 and ECAM_ORANGE or ECAM_GREEN)
+        local egt_color_2 = params.eng2_egt > ENG.data.display.egt_red_limit and ECAM_RED or (params.eng2_egt > 1000 and ECAM_ORANGE or ECAM_GREEN)
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2+210, size[2]/2+150, params.eng2_egt, 28, false, false, TEXT_ALIGN_RIGHT, egt_color_2)
 
         --N2--
@@ -600,9 +600,12 @@ end
 local function draw_ewd()
     sasl.gl.drawTexture(EWD_background_img, 0, 0, 900, 900, {1, 1, 1})
     draw_extra_indication()
-    draw_engines_needles()
-    draw_engines()
-    draw_reverse_indication()
+    if ENG.data.data_is_loaded then
+        draw_engines_needles()
+        draw_engines()
+        draw_reverse_indication()
+    end
+
     draw_left_memo()
     draw_right_memo()
     draw_extras()

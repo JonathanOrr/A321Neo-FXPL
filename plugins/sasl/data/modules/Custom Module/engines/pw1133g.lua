@@ -18,10 +18,18 @@
 
 function configure_pw1133g()
 
-    ENG_data = {
 
+    ENG.data = {
+
+        display = {
+            egt_scale = 1200,                -- [°C]
+            egt_red_limit = 1083,            -- [°C]
+            egt_amber_limit = 1043,          -- [°C]
+            egt_amber_limit_on_start = nil,  -- [°C] Can be nil if not showed
+        }
 
     }
+
 
 end
 

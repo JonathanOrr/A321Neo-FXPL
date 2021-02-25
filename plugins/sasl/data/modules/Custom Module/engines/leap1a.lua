@@ -18,7 +18,7 @@
 
 function configure_leap_1a()
 
-    ENG_data = {
+    ENG.data = {
         has_cooling = true,     -- Does this engine have the (dual) cooling feature?
     
         max_thrust = 31689.0,   -- [lbs]
@@ -27,9 +27,9 @@ function configure_leap_1a()
         bypass_ratio = 11.0,    -- [-]
 
         oil = {
-            qty_max = 17,               -- [L]
-            qty_min = 2,                -- [L]
-            qty_consumption = 0.45,      -- [L/hour]
+            qty_max = 17,               -- [QT]
+            qty_min = 2,                -- [QT]
+            qty_consumption = 0.45,     -- [QT/hour]
             
             pressure_max_toga =  50,    -- [PSI]
             pressure_max_mct  =  40,    -- [PSI]
@@ -76,6 +76,26 @@ function configure_leap_1a()
                 {n1_set = 18.3,   n1_increase_per_sec = 0.24, fuel_flow = 380, egt=637},
                 {n1_set = 18.5,   n1_increase_per_sec = 0.24, fuel_flow = 380, egt=637},
             }
+        },
+        
+        display = {
+            egt_scale = 1200,               -- [°C]
+            egt_red_limit = 1050,           -- [°C]
+            egt_amber_limit = 950,          -- [°C]
+            egt_amber_limit_on_start = 725, -- [°C] Can be nil if not showed
+
+            oil_qty_scale     = 17,
+            oil_qty_advisory  =  2,
+
+            oil_press_scale    = 100,       -- Scale of the ECAM object [PSI]
+            oil_press_low_red  = {7, 0},    -- 1st order polynomial terms as function of N2
+            oil_press_low_amber= {-1, 0},   -- 1st order polynomial terms as function of N2 (use {-1, 0} if not used)
+            oil_press_low_adv  = 13,
+            oil_press_high_adv = 90,
+
+            oil_temp_high_adv  = 140,
+            oil_temp_high_amber= 155,
+
         }
 
     }

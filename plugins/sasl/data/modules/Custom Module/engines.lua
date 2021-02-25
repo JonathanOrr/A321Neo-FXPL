@@ -32,9 +32,9 @@
 -- Our procedure is divided in 3 phases:
 -- - Phase 1:  N2 from 0 to 10: cranking the engine using perform_crank_procedure()
 -- - Phase 2:  N2 from 10 to 34.2: it manually controls the N2 according to the
---             perform_starting_procedure_follow_n2(eng), and the array ENG_data.startup.n2
+--             perform_starting_procedure_follow_n2(eng), and the array ENG.data.startup.n2
 -- - Phase 3:  N1 from 0ish to 18.3: it manually controls the N1 according to the
---             perform_starting_procedure_follow_n1(eng), and the array ENG_data.startup.n1
+--             perform_starting_procedure_follow_n1(eng), and the array ENG.data.startup.n1
 
 
 
@@ -324,19 +324,19 @@ local function update_oil_stuffs()
     -- ENG 1 - PRESS
     if get(Engine_1_avail) == 1 then
         local n2_value = get(Eng_1_N2)
-        local press = Math_rescale(60, ENG_data.oil.pressure_min_idle+1, 120, ENG_data.oil.pressure_max_mct, n2_value) + math.random()
+        local press = Math_rescale(60, ENG.data.oil.pressure_min_idle+1, 120, ENG.data.oil.pressure_max_mct, n2_value) + math.random()
         Set_dataref_linear_anim(Eng_1_OIL_press, press, 0, 100, 4)
     else
         -- During startup
         local n2_value = math.max(10,get(Eng_1_N2))
-        local press = Math_rescale(10, 0, 70, ENG_data.oil.pressure_max_toga, n2_value)
+        local press = Math_rescale(10, 0, 70, ENG.data.oil.pressure_max_toga, n2_value)
         Set_dataref_linear_anim(Eng_1_OIL_press, press, 0, 100, 4)
     end
 
     -- ENG 1 - TEMP
     if get(Engine_1_avail) == 1 then
         local n2_value = get(Eng_1_N2)
-        local temp = Math_rescale(60, 65, 120, ENG_data.oil.temp_max_mct, n2_value) + math.random() * 5
+        local temp = Math_rescale(60, 65, 120, ENG.data.oil.temp_max_mct, n2_value) + math.random() * 5
         Set_dataref_linear_anim(Eng_1_OIL_temp, temp, -50, 200, 1)
     else
         -- During startup
@@ -348,19 +348,19 @@ local function update_oil_stuffs()
     -- ENG 2 - PRESS
     if get(Engine_2_avail) == 1 then
         local n2_value = get(Eng_2_N2)
-        local press = Math_rescale(60, ENG_data.oil.pressure_min_idle+1, 120, ENG_data.oil.pressure_max_mct, n2_value) + math.random()
+        local press = Math_rescale(60, ENG.data.oil.pressure_min_idle+1, 120, ENG.data.oil.pressure_max_mct, n2_value) + math.random()
         Set_dataref_linear_anim(Eng_2_OIL_press, press, 0, 100, 4)
     else
         -- During startup
         local n2_value = math.max(10,get(Eng_2_N2))
-        local press = Math_rescale(10, 0, 70, ENG_data.oil.pressure_max_toga, n2_value)
+        local press = Math_rescale(10, 0, 70, ENG.data.oil.pressure_max_toga, n2_value)
         Set_dataref_linear_anim(Eng_2_OIL_press, press, 0, 100, 4)
     end
 
     -- ENG 2 - TEMP
     if get(Engine_2_avail) == 1 then
         local n2_value = get(Eng_2_N2)
-        local temp = Math_rescale(60, 65, 120, ENG_data.oil.temp_max_mct, n2_value) + math.random() * 5
+        local temp = Math_rescale(60, 65, 120, ENG.data.oil.temp_max_mct, n2_value) + math.random() * 5
         Set_dataref_linear_anim(Eng_2_OIL_temp, temp, -50, 200, 1)
     else
         -- During startup
@@ -374,22 +374,22 @@ end
 
 function update_vibrations()
     local n1_value = get(Eng_1_N1)
-    local vib_n1 = Math_rescale(0, 0, 120, ENG_data.vibrations.max_n1_nominal/4, n1_value) 
+    local vib_n1 = Math_rescale(0, 0, 120, ENG.data.vibrations.max_n1_nominal/4, n1_value) 
     if get(Engine_1_avail) == 1 then vib_n1 = vib_n1 + 0.1*math.random() end
     set(Eng_1_VIB_N1, vib_n1)
 
     local n2_value = get(Eng_1_N2)
-    local vib_n2 = Math_rescale(0, 0, 120, ENG_data.vibrations.max_n2_nominal/4, n2_value)
+    local vib_n2 = Math_rescale(0, 0, 120, ENG.data.vibrations.max_n2_nominal/4, n2_value)
     if get(Engine_1_avail) == 1 then vib_n2 = vib_n2 + 0.1*math.random() end
     set(Eng_1_VIB_N2, vib_n2)
 
     local n1_value = get(Eng_2_N1)
-    local vib_n1 = Math_rescale(0, 0, 120, ENG_data.vibrations.max_n1_nominal/4, n1_value)
+    local vib_n1 = Math_rescale(0, 0, 120, ENG.data.vibrations.max_n1_nominal/4, n1_value)
     if get(Engine_2_avail) == 1 then vib_n1 = vib_n1 + 0.1*math.random() end
     set(Eng_2_VIB_N1, vib_n1)
 
     local n2_value = get(Eng_2_N2)
-    local vib_n2 = Math_rescale(0, 0, 120, ENG_data.vibrations.max_n2_nominal/4, n2_value)
+    local vib_n2 = Math_rescale(0, 0, 120, ENG.data.vibrations.max_n2_nominal/4, n2_value)
     if get(Engine_2_avail) == 1 then vib_n2 = vib_n2 + 0.1*math.random() end
     set(Eng_2_VIB_N2, vib_n2)
 
@@ -445,14 +445,14 @@ local function perform_starting_procedure_follow_n2(eng)
 
     set(Eng_is_spooling_up, 1, eng) -- Need for bleed air computation, see packs.lua
     
-    for i=1,(#ENG_data.startup.n2-1) do
+    for i=1,(#ENG.data.startup.n2-1) do
         -- For each phase... 
 
-        if eng_N2_off[eng] < ENG_data.startup.n2[i+1].n2_start then
+        if eng_N2_off[eng] < ENG.data.startup.n2[i+1].n2_start then
             -- We have found the correct phase
             
             -- Let's set the fuel flow
-            eng_FF_off[eng] = ENG_data.startup.n2[i].fuel_flow  / 3600
+            eng_FF_off[eng] = ENG.data.startup.n2[i].fuel_flow  / 3600
             
             local eng_has_fuel = (eng==1 and get(Fuel_tank_selector_eng_1)>0) or (eng==2 and get(Fuel_tank_selector_eng_2)>0)
             
@@ -466,12 +466,12 @@ local function perform_starting_procedure_follow_n2(eng)
                 -- OR the FF > 0 and there is fuel and the engine master switch has been moved to ON
 
                 -- Let's compute the new N2
-                eng_N2_off[eng] = eng_N2_off[eng] + ENG_data.startup.n2[i].n2_increase_per_sec * get(DELTA_TIME)
+                eng_N2_off[eng] = eng_N2_off[eng] + ENG.data.startup.n2[i].n2_increase_per_sec * get(DELTA_TIME)
                 set(eng_N2_enforce, eng_N2_off[eng], eng)
                     
                 -- And let's compute the EGT
-                perc = (eng_N2_off[eng] - ENG_data.startup.n2[i].n2_start) / (ENG_data.startup.n2[i+1].n2_start - ENG_data.startup.n2[i].n2_start)
-                eng_EGT_off[eng] = Math_lerp(ENG_data.startup.n2[i].egt, ENG_data.startup.n2[i+1].egt, perc)
+                perc = (eng_N2_off[eng] - ENG.data.startup.n2[i].n2_start) / (ENG.data.startup.n2[i+1].n2_start - ENG.data.startup.n2[i].n2_start)
+                eng_EGT_off[eng] = Math_lerp(ENG.data.startup.n2[i].egt, ENG.data.startup.n2[i+1].egt, perc)
             else
                 eng_FF_off[eng] = 0
             end
@@ -488,31 +488,31 @@ local function perform_starting_procedure_follow_n1(eng)
     set(eng_igniters, 1, eng) -- and igniters as well
 
 
-    for i=1,(#ENG_data.startup.n1-1) do
+    for i=1,(#ENG.data.startup.n1-1) do
         -- For each phase...
         
         -- Get the current N1, but it can't be zero 
         local curr_N1 = math.max(eng_N1_off[eng],2)
         
-        if curr_N1 < ENG_data.startup.n1[i+1].n1_set then
+        if curr_N1 < ENG.data.startup.n1[i+1].n1_set then
             -- We have found the correct phase
 
             -- Let's set the fuel flow
-            eng_FF_off[eng] = ENG_data.startup.n1[i].fuel_flow  / 3600
+            eng_FF_off[eng] = ENG.data.startup.n1[i].fuel_flow  / 3600
             
             local eng_has_fuel = (eng==1 and get(Fuel_tank_selector_eng_1)>0) or (eng==2 and get(Fuel_tank_selector_eng_2)>0)
             
             if eng_FF_off[eng] == 0 or eng_has_fuel then
             
                 -- Let's compute the new N2
-                local new_N1 = curr_N1 + ENG_data.startup.n1[i].n1_increase_per_sec * get(DELTA_TIME)
+                local new_N1 = curr_N1 + ENG.data.startup.n1[i].n1_increase_per_sec * get(DELTA_TIME)
                 eng_N1_off[eng] = new_N1
                 set(eng_N1_enforce, new_N1, eng)
 
                 
                 -- Let's compute the EGT
-                perc = (curr_N1 - ENG_data.startup.n1[i].n1_set) / (ENG_data.startup.n1[i+1].n1_set - ENG_data.startup.n1[i].n1_set)
-                eng_EGT_off[eng] = Math_lerp(ENG_data.startup.n1[i].egt, ENG_data.startup.n1[i+1].egt, perc)
+                perc = (curr_N1 - ENG.data.startup.n1[i].n1_set) / (ENG.data.startup.n1[i+1].n1_set - ENG.data.startup.n1[i].n1_set)
+                eng_EGT_off[eng] = Math_lerp(ENG.data.startup.n1[i].egt, ENG.data.startup.n1[i+1].egt, perc)
             else
                 eng_FF_off[eng] = 0
             end
@@ -535,14 +535,14 @@ local function perform_starting_procedure(eng, inflight_restart)
         return
     end
     
-    if inflight_restart and eng_N2_off[eng] < ENG_data.startup.n2[#ENG_data.startup.n2].n2_start then
+    if inflight_restart and eng_N2_off[eng] < ENG.data.startup.n2[#ENG.data.startup.n2].n2_start then
         -- v is different, let's skip the first phase
-        eng_N2_off[eng] = ENG_data.startup.n2[#ENG_data.startup.n2].n2_start
+        eng_N2_off[eng] = ENG.data.startup.n2[#ENG.data.startup.n2].n2_start
         eng_N1_off[eng] = eng == 1 and get(Eng_1_N1) or get(Eng_2_N1)
     end
     
     -- If the N2 is larger than 10, then we can start the real startup procedure
-    if eng_N2_off[eng] < ENG_data.startup.n2[#ENG_data.startup.n2].n2_start and not inflight_restart then  -- 1st phase, but not inflight_restart
+    if eng_N2_off[eng] < ENG.data.startup.n2[#ENG.data.startup.n2].n2_start and not inflight_restart then  -- 1st phase, but not inflight_restart
 
         -- Oh yes, this is a funny thing. You need to set this dataref to 100 to cheat X-Plane
         -- to convince it that the engine has been ignited (but it's not! We don't want X-Plane to
@@ -552,7 +552,7 @@ local function perform_starting_procedure(eng, inflight_restart)
         -- Phase 2: Controlling the N2  
         perform_starting_procedure_follow_n2(eng)
         
-    elseif eng_N1_off[eng] < ENG_data.startup.n1[#ENG_data.startup.n1].n1_set then
+    elseif eng_N1_off[eng] < ENG.data.startup.n1[#ENG.data.startup.n1].n1_set then
         -- Phase 3: Controlling the N1
         perform_starting_procedure_follow_n1(eng)
     else
@@ -598,7 +598,7 @@ end
 
 
 local function needs_coling(eng)
-    if not ENG_data.has_cooling then return false end
+    if not ENG.data.has_cooling then return false end
 
     if time_last_shutdown[eng] <= 0 then return false end
     
@@ -838,11 +838,11 @@ end
 local function update_oil_qty()
     -- each engine consumes ~0.1 oil quantity each running hour
     local curr_oil = get(Eng_1_OIL_qty)
-    curr_oil = curr_oil - ENG_data.oil.qty_consumption / 60 / 60 * get(DELTA_TIME) * get(Engine_1_avail)
+    curr_oil = curr_oil - ENG.data.oil.qty_consumption / 60 / 60 * get(DELTA_TIME) * get(Engine_1_avail)
     set(Eng_1_OIL_qty, curr_oil)
 
     local curr_oil = get(Eng_2_OIL_qty)
-    curr_oil = curr_oil - ENG_data.oil.qty_consumption / 60 / 60 * get(DELTA_TIME) * get(Engine_2_avail)
+    curr_oil = curr_oil - ENG.data.oil.qty_consumption / 60 / 60 * get(DELTA_TIME) * get(Engine_2_avail)
     set(Eng_2_OIL_qty, curr_oil)
 
 end
@@ -934,11 +934,11 @@ local function update_engine_type()
         else
             assert(false) -- Unknown engine?!
         end
-        
-        assert(ENG_data)    -- The engine should be correctly loaded now
-        
-        set(Eng_1_OIL_qty, ENG_data.oil.qty_max*3/4 + ENG_data.oil.qty_max/4 * math.random())
-        set(Eng_2_OIL_qty, ENG_data.oil.qty_max*3/4 + ENG_data.oil.qty_max/4 * math.random())
+        assert(ENG.data)    -- The engine should be correctly loaded now
+        ENG.data_is_loaded = true
+
+        set(Eng_1_OIL_qty, ENG.data.oil.qty_max*3/4 + ENG.data.oil.qty_max/4 * math.random())
+        set(Eng_2_OIL_qty, ENG.data.oil.qty_max*3/4 + ENG.data.oil.qty_max/4 * math.random())
 
         
     end
