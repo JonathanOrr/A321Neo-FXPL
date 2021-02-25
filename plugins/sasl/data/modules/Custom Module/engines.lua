@@ -99,6 +99,9 @@ local eng_N2_enforce      = globalPropertyfa("sim/flightmodel/engine/ENGN_N2_")
 local xp_avail_1 = globalProperty("sim/flightmodel/engine/ENGN_running[0]")
 local xp_avail_2 = globalProperty("sim/flightmodel/engine/ENGN_running[1]")
 
+local config_max_thrust = globalProperty("sim/aircraft/engine/acf_tmax")     -- [kN]
+local config_face_size = globalProperty("sim/aircraft/engine/acf_face_jet")  -- [m^2]
+
 local eng_FF_kgs          = globalPropertyfa("sim/cockpit2/engine/indicators/fuel_flow_kg_sec")
 
 ----------------------------------------------------------------------------------------------------
@@ -980,6 +983,8 @@ function update()
 
     update_oil_qty()
     update_n1_mode_and_limits()
+
+    
     perf_measure_stop("engines:update()")
 end
 

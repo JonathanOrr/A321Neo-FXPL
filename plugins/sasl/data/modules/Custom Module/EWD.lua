@@ -600,7 +600,7 @@ end
 local function draw_ewd()
     sasl.gl.drawTexture(EWD_background_img, 0, 0, 900, 900, {1, 1, 1})
     draw_extra_indication()
-    if ENG.data.data_is_loaded then
+    if ENG.data_is_loaded then
         draw_engines_needles()
         draw_engines()
         draw_reverse_indication()

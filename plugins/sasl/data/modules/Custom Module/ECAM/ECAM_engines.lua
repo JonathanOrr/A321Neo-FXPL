@@ -179,8 +179,8 @@ local function draw_vibrations()
 
 
     if xx_statuses[1] then
-        local eng1_vib1_color = pulse_green(params.eng1_vib_n1 > ENG.data.max_n1_nominal)
-        local eng1_vib2_color = pulse_green(params.eng1_vib_n2 > ENG.data.max_n2_nominal)
+        local eng1_vib1_color = pulse_green(params.eng1_vib_n1 > ENG.data.vibrations.max_n1_nominal)
+        local eng1_vib2_color = pulse_green(params.eng1_vib_n2 > ENG.data.vibrations.max_n2_nominal)
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2-175, 385, math.floor(params.eng1_vib_n1) .. "." , 36,
                      false, false, TEXT_ALIGN_RIGHT, eng1_vib1_color)
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2-155, 385, math.floor((params.eng1_vib_n1%1)*10), 28,
@@ -197,8 +197,8 @@ local function draw_vibrations()
     end
 
     if xx_statuses[2] then
-        local eng2_vib1_color = pulse_green(params.eng2_vib_n1 > ENG.data.max_n1_nominal)
-        local eng2_vib2_color = pulse_green(params.eng2_vib_n2 > ENG.data.max_n2_nominal)
+        local eng2_vib1_color = pulse_green(params.eng2_vib_n1 > ENG.data.vibrations.max_n1_nominal)
+        local eng2_vib2_color = pulse_green(params.eng2_vib_n2 > ENG.data.vibrations.max_n2_nominal)
 
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2+200, 385, math.floor(params.eng2_vib_n1) .. "." , 36,
                         false, false, TEXT_ALIGN_RIGHT, eng2_vib1_color)

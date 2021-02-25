@@ -19,11 +19,12 @@
 function configure_leap_1a()
 
     ENG.data = {
-        has_cooling = true,     -- Does this engine have the (dual) cooling feature?
+        has_cooling = false,     -- Does this engine have the (dual) cooling feature?
     
+        max_n1     = 101,
         max_thrust = 31689.0,   -- [lbs]
         fan_size   = 33.12,     -- [feet^2]
-        fan_rpm_max= 3281.0,    -- [RPM] at 100% N1
+        fan_rpm_max= 3855.0,    -- [RPM] at 100% N1
         bypass_ratio = 11.0,    -- [-]
 
         oil = {
@@ -101,5 +102,37 @@ function configure_leap_1a()
     }
 
 end
+
+--[[
+
+TOGA:
+
+local TOGA_t = {-54, -38, -22, -6, 10, 26, 42}
+local TOGA_a = {-1000, 3000, 11000, 14500, 35000}
+local TOGA_N = { {76.2,  82.3, 88.2, 88.5, 92},
+                 {78.8,  85.1, 91.1, 91.5, 93},
+                 {81.4,  87.7, 93.9, 94.3, 95.5},
+                 {83.8,  90.3, 96.6, 97.0, 94},
+                 {86.2,  92.8, 99.2, 98.8, 91.2},
+                 {89.5, 95.3, 94.9, 94.8, 88.1},
+                 {90.8,  95.6, 94.8, 93.2, 87.1}
+              }
+function eng_N1_limit_takeoff(OAT, TAT, altitude, is_packs_on, is_eng_ai_on, is_wing_ai_on)
+
+    local comp  = interpolate_2d(TOGA_t, TOGA_a, TOGA_N, TAT, altitude)
+    
+    local EXTRA = (is_packs_on and -0.7 or 0)
+    
+    local temp_corner_point = -2*altitude/825 + 1358/33
+    
+    if OAT >= temp_corner_point then
+        EXTRA = EXTRA + ((is_eng_ai_on and -1.6 or 0) + (is_wing_ai_on and -0.8 or 0)) * Math_clamp(OAT - temp_corner_point, 0, 1)
+    end
+    
+    return Math_clamp(comp + EXTRA + 1, 73.8, 101)
+end
+
+
+]]--
 
 

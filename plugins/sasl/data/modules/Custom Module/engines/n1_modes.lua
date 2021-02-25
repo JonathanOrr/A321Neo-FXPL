@@ -67,36 +67,46 @@ local function interpolate_2d(x,y,z,value_x, value_y)
     return (x_comp + y_comp) / 2
 end
 
+local function poly_2nd_order(coeff, x, y)
+    return coeff[1][1] + coeff[2][1] * x + coeff[3][1] * x^2 + coeff[1][2] * y + coeff[1][3] * y^2 +
+           coeff[2][2] * x * y + coeff[2][3] * x * y^2 +  coeff[3][2] * x^2 * y +  coeff[3][3] * x^2 * y^2
+end
+
 -------------------------------------------------------------------------------
 -- TOGA mode
 -------------------------------------------------------------------------------
 
-
-local TOGA_t = {-54, -38, -22, -6, 10, 26, 42}
-local TOGA_a = {-1000, 3000, 11000, 14500, 35000}
-local TOGA_N = { {76.2,  82.3, 88.2, 88.5, 92},
-                 {78.8,  85.1, 91.1, 91.5, 93},
-                 {81.4,  87.7, 93.9, 94.3, 95.5},
-                 {83.8,  90.3, 96.6, 97.0, 94},
-                 {86.2,  92.8, 99.2, 98.8, 91.2},
-                 {89.5, 95.3, 94.9, 94.8, 88.1},
-                 {90.8,  95.6, 94.8, 93.2, 87.1}
-              }
-
-
 function eng_N1_limit_takeoff(OAT, TAT, altitude, is_packs_on, is_eng_ai_on, is_wing_ai_on)
 
-    local comp  = interpolate_2d(TOGA_t, TOGA_a, TOGA_N, TAT, altitude)
-    
-    local EXTRA = (is_packs_on and -0.7 or 0)
-    
-    local temp_corner_point = -2*altitude/825 + 1358/33
+    local comp  = poly_2nd_order(ENG.data.modes.toga, OAT, altitude)
+
+    local temp_corner_point = ENG.data.modes.toga_penalties.temp_function(altitude)
+
+    local EXTRA = 0
     
     if OAT >= temp_corner_point then
-        EXTRA = EXTRA + ((is_eng_ai_on and -1.6 or 0) + (is_wing_ai_on and -0.8 or 0)) * Math_clamp(OAT - temp_corner_point, 0, 1)
+        if is_packs_on then
+            EXTRA = EXTRA + ENG.data.modes.toga_penalties.packs_up_temp;
+        end
+        if is_eng_ai_on then
+            EXTRA = EXTRA + ENG.data.modes.toga_penalties.nai_up_temp;
+        end
+        if is_wing_ai_on then
+            EXTRA = EXTRA + ENG.data.modes.toga_penalties.wai_dn_temp;
+        end
+    else
+        if is_packs_on then
+            EXTRA = EXTRA + ENG.data.modes.toga_penalties.packs_dn_temp;
+        end
+        if is_eng_ai_on then
+            EXTRA = EXTRA + ENG.data.modes.toga_penalties.nai_dn_temp;
+        end
+        if is_wing_ai_on then
+            EXTRA = EXTRA + ENG.data.modes.toga_penalties.wai_up_temp;
+        end
     end
     
-    return Math_clamp(comp + EXTRA + 1, 73.8, 101)
+    return comp + EXTRA -- Math_clamp(comp + EXTRA, 50, ENG.data.max_n1)
 end
 
 -------------------------------------------------------------------------------

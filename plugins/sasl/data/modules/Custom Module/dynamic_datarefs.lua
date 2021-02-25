@@ -75,7 +75,7 @@ Wheel_better_pushback = createGlobalPropertyi("model/controls/park_break", 0, fa
 Wheel_better_pushback_connected = createGlobalPropertyi("bp/connected", 0, false, true, true) -- A dataref for Better Pushback plugin
 
 --engines
-Engine_option = createGlobalPropertyi("a321neo/customization/engine_option", 1, false, true, false) -- 0: reserved value do not use, 1: LEAP-1A, 2: PW1133G
+Engine_option = createGlobalPropertyi("a321neo/customization/engine_option", 2, false, true, false) -- 0: reserved value do not use, 1: LEAP-1A, 2: PW1133G
 
 --aircond
 Cockpit_temp_req = createGlobalPropertyf("a321neo/dynamics/aircond/cockpit_temp_req", 21, false, true, false) --requested cockpit temperature
