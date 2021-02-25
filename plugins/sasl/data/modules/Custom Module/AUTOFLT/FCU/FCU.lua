@@ -1,6 +1,10 @@
 position = {1177, 1539, 1137, 86}
 size = {1137, 86}
 
+include("AUTOFLT/FCU/FCU_commands/FCU_ALT_CMDs.lua")
+include("AUTOFLT/FCU/FCU_commands/FCU_HDG_TRK_CMDs.lua")
+include("AUTOFLT/FCU/FCU_commands/FCU_SPD_MACH_CMDs.lua")
+include("AUTOFLT/FCU/FCU_commands/FCU_VS_FPA_CMDs.lua")
 include("AUTOFLT/FCU/FCU_drawing_functions/FCU_ALT.lua")
 include("AUTOFLT/FCU/FCU_drawing_functions/FCU_HDG_TRK.lua")
 include("AUTOFLT/FCU/FCU_drawing_functions/FCU_SPD_MACH.lua")
