@@ -15,7 +15,8 @@ local function draw_alt_value()
     local CENTER_X = size[1] / 2
     local CENTER_Y = size[2] / 2
 
-    local alt_value = get(Cockpit_annnunciators_test) == 1 and "88888" or "00000"
+    local alt_value = Fwd_string_fill(tostring(get(AUTOFLT_FCU_ALT)), "0", 5)
+    alt_value = get(Cockpit_annnunciators_test) == 1 and "88888" or alt_value
 
     Draw_green_LED_num_and_letter(CENTER_X + 235, CENTER_Y - 36, alt_value, 5, 74, TEXT_ALIGN_CENTER, 0.2, 1, 1)
 end
