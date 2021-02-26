@@ -35,16 +35,16 @@ function configure_pw1133g()
             
             pressure_max_toga =  200,    -- [PSI]
             pressure_max_mct  =  190,    -- [PSI]
-            pressure_min_idle =  65,    -- [PSI]
+            pressure_min_idle =  65,     -- [PSI]
             
-            temp_min_start = -40,   -- [°C]
+            temp_min_start = -40,     -- [°C]
             temp_min_toga  = 51.7,    -- [°C]
-            temp_max_toga  = 120,   -- [°C]
-            temp_max_mct   = 100,   -- [°C]
+            temp_max_toga  = 120,     -- [°C]
+            temp_max_mct   = 100,     -- [°C]
         },
         
         vibrations = {
-            max_n1_nominal = 6,     -- [-]
+            max_n1_nominal = 6,      -- [-]
             max_n2_nominal = 4.3,    -- [-]
         },
         
@@ -54,17 +54,17 @@ function configure_pw1133g()
             egt_amber_limit = 1043,          -- [°C]
             egt_amber_limit_on_start = nil,  -- [°C] Can be nil if not showed
 
-            oil_qty_scale     = 35,
-            oil_qty_advisory  =  1.45,
+            oil_qty_scale     = 35,          -- [QT]
+            oil_qty_advisory  =  1.45,       -- [QT]
 
             oil_press_scale    = 450,       -- Scale of the ECAM object [PSI]
             oil_press_low_red  = {-108.62, 2.846},    -- 1st order polynomial terms as function of N2
             oil_press_low_amber= {-98.615, 2.846},   -- 1st order polynomial terms as function of N2 (use {-1, 0} if not used)
             oil_press_low_adv  = -1,         -- No present
-            oil_press_high_adv = 259,
+            oil_press_high_adv = 259,        -- [PSI]
 
-            oil_temp_high_adv  = 135,
-            oil_temp_high_amber= 152,
+            oil_temp_high_adv  = 135,        -- [°C]
+            oil_temp_high_amber= 152,        -- [°C]
 
         },
 
@@ -95,6 +95,31 @@ function configure_pw1133g()
                 wai_dn_temp = 0.2,
                 wai_up_temp = -3.0,
             },
+            clb = {  { 8.45891154e+01, 5.99049610e-04, -8.66883834e-09},        -- + 2.5
+                     { 1.31937461e-01, -3.22712476e-06, -5.12397002e-11},
+                     {-4.90067904e-04, -1.16452281e-07,  1.49889194e-12}
+            },
+            clb_penalties = {
+                temp_function = function(altitude) return 34 - (altitude+2000)/700 end,
+                packs_dn_temp = -1.3,
+                packs_up_temp = -1.5,
+                nai_dn_temp = 0.5,
+                nai_up_temp = -0.3,
+                wai_dn_temp = 0.5,
+                wai_up_temp = -1.2,
+            },
+            flex = {
+                right = {
+                    { 2.12393386e+01,  8.92878354e-04, -1.99370130e-08},
+                    { 1.31597922e-01,  8.34865809e-06, -2.06686148e-09},
+                    {-5.08554113e-03, -5.60800867e-07,  3.78138529e-11}
+                },
+                left = {
+                    m = 2/3,
+                    q = 206/3 + 3,      -- + 3
+                    oat_off = 0.1
+                }
+            }
 
 
         }

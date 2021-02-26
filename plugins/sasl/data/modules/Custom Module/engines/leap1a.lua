@@ -153,6 +153,43 @@ function eng_N1_limit_mct(OAT, TAT, altitude, is_packs_on, is_eng_ai_on, is_wing
     return standard
 end
 
+local CLB_t = {-54, -38, -22, -6, 10, 26}
+local CLB_a = {-1000, 3000, 11000, 23000, 35000, 41000}
+local CLB_N = {  {74.5,  76.4, 78.8, 81.7, 89.1, 89.0},
+                 {77.1,  79.1, 81.5, 84.5, 92.0, 91.9},
+                 {79.6,  81.6, 84.0, 87.1, 94.8, 94.7},
+                 {82.0,  84.0, 86.5, 89.7, 93.5, 92.4},
+                 {84.3,  86.4, 88.9, 90.8, 91.3, 90.3},
+                 {86.5,  88.7, 89.9, 89.5, 88.1, 87.5}
+              }
+
+function eng_N1_limit_clb(OAT, TAT, altitude, is_packs_on, is_eng_ai_on, is_wing_ai_on)
+    local standard =  interpolate_2d(CLB_t, CLB_a, CLB_N, TAT, altitude) - (is_packs_on and 0.8 or 0) 
+    
+    if OAT > 25 then
+        standard = standard - ((is_eng_ai_on and -1.3 or 0) + (is_wing_ai_on and -1.1 or 0)) * Math_clamp(OAT - 25, 0, 1)
+    end
+    
+    return standard
+end
+
+
+
+function eng_N1_limit_flex(FLEX_temp, OAT, altitude, is_packs_on)
+
+    local y_lim  = -0.2769231*FLEX_temp + 20.76923
+    
+    local x = altitude
+    local y_base = 6.921356 + 0.0008471222*x + 8.470689e-8 * x^2 + 4.83583e-11 * x^3 - 9.577161e-15 * x^4 + 4.0369989999999994e-19 * x^5
+
+    local y = math.min(y_lim, y_base)
+    
+    local n1 = 80 + y + OAT/7.5 - (is_packs_on and 0.7 or 0)
+
+    return n1
+end
+
+
 ]]--
 
 
