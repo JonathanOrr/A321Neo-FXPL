@@ -133,6 +133,26 @@ function eng_N1_limit_takeoff(OAT, TAT, altitude, is_packs_on, is_eng_ai_on, is_
 end
 
 
+local MCT_t = {-54, -38, -22, -6, 10, 26}
+local MCT_a = {-1000, 3000, 11000, 23000, 35000, 41000}
+local MCT_N = {  {76.5,  78.6, 82.1,  88,  91,  89.0},
+                 {79.2,  81.3, 84.9, 91.9, 92.9, 91.9},
+                 {81.7,  83.8, 87.6, 94.7, 95.4, 94.5},
+                 {84.1,  86.3, 90.1, 97.3, 93.5, 92.4},
+                 {86.5,  88.8, 92.6, 94.8, 91.3, 90.3},
+                 {88.8,  91.1, 91.5, 92.5, 88.1, 87.5}
+              }
+
+function eng_N1_limit_mct(OAT, TAT, altitude, is_packs_on, is_eng_ai_on, is_wing_ai_on)
+    local standard =  interpolate_2d(MCT_t, MCT_a, MCT_N, TAT, altitude) - (is_packs_on and 0.9 or 0) 
+    
+    if OAT > 25 then
+        standard = standard - ((is_eng_ai_on and -1.4 or 0) + (is_wing_ai_on and -1.8 or 0)) * Math_clamp(OAT - 25, 0, 1)
+    end
+    
+    return standard
+end
+
 ]]--
 
 

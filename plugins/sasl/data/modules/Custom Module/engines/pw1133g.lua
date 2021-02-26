@@ -69,10 +69,10 @@ function configure_pw1133g()
         },
 
         modes = {
-            toga = { { 9.09537996e+01,  8.24769700e-04, -1.96960266e-08},
+            toga = { { 9.09537996e+01,  8.24769700e-04, -1.96960266e-08},       -- + 5
                      { 1.45243960e-01, -6.53689814e-06, -1.70959299e-10},
                      {-4.80580173e-04, -2.17676880e-07,  4.76961949e-12}
-                   },
+            },
             toga_penalties = {
                 temp_function = function(altitude) return 34 - (altitude+2000)/500 end,
                 packs_dn_temp = -1.2,
@@ -81,7 +81,21 @@ function configure_pw1133g()
                 nai_up_temp = -0.3,
                 wai_dn_temp = 0,
                 wai_up_temp = -1.4,
-            }
+            },
+            mct = {  { 8.86876385e+01,  5.00892548e-04, -9.41982308e-09},        -- + 3
+                     { 1.43874177e-01, -7.44232815e-06,  5.47076769e-11},
+                     {-4.88562399e-04, -1.52254937e-07,  2.74045662e-12}
+            },
+            mct_penalties = {
+                temp_function = function(altitude) return 34 - (altitude+2000)/700 end,
+                packs_dn_temp = -1.5,
+                packs_up_temp = -1.6,
+                nai_dn_temp = 0.2,
+                nai_up_temp = -0.3,
+                wai_dn_temp = 0.2,
+                wai_up_temp = -3.0,
+            },
+
 
         }
 

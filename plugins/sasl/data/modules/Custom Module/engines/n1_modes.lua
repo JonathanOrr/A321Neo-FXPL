@@ -72,6 +72,33 @@ local function poly_2nd_order(coeff, x, y)
            coeff[2][2] * x * y + coeff[2][3] * x * y^2 +  coeff[3][2] * x^2 * y +  coeff[3][3] * x^2 * y^2
 end
 
+local function compute_penalties(penalty_table, OAT_condition_triggered, is_packs_on, is_eng_ai_on, is_wing_ai_on)
+    local EXTRA = 0
+    
+    if OAT_condition_triggered then
+        if is_packs_on then
+            EXTRA = EXTRA + penalty_table.packs_up_temp;
+        end
+        if is_eng_ai_on then
+            EXTRA = EXTRA + penalty_table.nai_up_temp;
+        end
+        if is_wing_ai_on then
+            EXTRA = EXTRA + penalty_table.wai_dn_temp;
+        end
+    else
+        if is_packs_on then
+            EXTRA = EXTRA + penalty_table.packs_dn_temp;
+        end
+        if is_eng_ai_on then
+            EXTRA = EXTRA + penalty_table.nai_dn_temp;
+        end
+        if is_wing_ai_on then
+            EXTRA = EXTRA + penalty_table.wai_up_temp;
+        end
+    end
+    return EXTRA
+end
+
 -------------------------------------------------------------------------------
 -- TOGA mode
 -------------------------------------------------------------------------------
@@ -82,31 +109,9 @@ function eng_N1_limit_takeoff(OAT, TAT, altitude, is_packs_on, is_eng_ai_on, is_
 
     local temp_corner_point = ENG.data.modes.toga_penalties.temp_function(altitude)
 
-    local EXTRA = 0
-    
-    if OAT >= temp_corner_point then
-        if is_packs_on then
-            EXTRA = EXTRA + ENG.data.modes.toga_penalties.packs_up_temp;
-        end
-        if is_eng_ai_on then
-            EXTRA = EXTRA + ENG.data.modes.toga_penalties.nai_up_temp;
-        end
-        if is_wing_ai_on then
-            EXTRA = EXTRA + ENG.data.modes.toga_penalties.wai_dn_temp;
-        end
-    else
-        if is_packs_on then
-            EXTRA = EXTRA + ENG.data.modes.toga_penalties.packs_dn_temp;
-        end
-        if is_eng_ai_on then
-            EXTRA = EXTRA + ENG.data.modes.toga_penalties.nai_dn_temp;
-        end
-        if is_wing_ai_on then
-            EXTRA = EXTRA + ENG.data.modes.toga_penalties.wai_up_temp;
-        end
-    end
-    
-    return comp + EXTRA -- Math_clamp(comp + EXTRA, 50, ENG.data.max_n1)
+    local EXTRA = compute_penalties(ENG.data.modes.toga_penalties, OAT >= temp_corner_point, is_packs_on, is_eng_ai_on, is_wing_ai_on)
+
+    return Math_clamp(comp + EXTRA, 50, ENG.data.max_n1)
 end
 
 -------------------------------------------------------------------------------
@@ -121,25 +126,14 @@ end
 -- MCT mode
 -------------------------------------------------------------------------------
 
-
-local MCT_t = {-54, -38, -22, -6, 10, 26}
-local MCT_a = {-1000, 3000, 11000, 23000, 35000, 41000}
-local MCT_N = {  {76.5,  78.6, 82.1,  88,  91,  89.0},
-                 {79.2,  81.3, 84.9, 91.9, 92.9, 91.9},
-                 {81.7,  83.8, 87.6, 94.7, 95.4, 94.5},
-                 {84.1,  86.3, 90.1, 97.3, 93.5, 92.4},
-                 {86.5,  88.8, 92.6, 94.8, 91.3, 90.3},
-                 {88.8,  91.1, 91.5, 92.5, 88.1, 87.5}
-              }
-
 function eng_N1_limit_mct(OAT, TAT, altitude, is_packs_on, is_eng_ai_on, is_wing_ai_on)
-    local standard =  interpolate_2d(MCT_t, MCT_a, MCT_N, TAT, altitude) - (is_packs_on and 0.9 or 0) 
-    
-    if OAT > 25 then
-        standard = standard - ((is_eng_ai_on and -1.4 or 0) + (is_wing_ai_on and -1.8 or 0)) * Math_clamp(OAT - 25, 0, 1)
-    end
-    
-    return standard
+    local comp  = poly_2nd_order(ENG.data.modes.mct, OAT, altitude)
+
+    local temp_corner_point = ENG.data.modes.mct_penalties.temp_function(altitude)
+
+    local EXTRA = compute_penalties(ENG.data.modes.mct_penalties, OAT >= temp_corner_point, is_packs_on, is_eng_ai_on, is_wing_ai_on)
+
+    return Math_clamp(comp + EXTRA, 50, ENG.data.max_n1)
 end
 
 -------------------------------------------------------------------------------
