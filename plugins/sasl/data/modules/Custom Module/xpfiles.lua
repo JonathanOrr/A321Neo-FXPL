@@ -20,7 +20,7 @@ local function load_xpfiles()
     if os_name == "Linux" then
         path = sasl.getAircraftPath() .. "/plugins/xpfiles/libxpfiles.so"
     elseif os_name == "Windows" then
-        path = sasl.getAircraftPath() .. "/plugins/xpfiles/xpfiles.dll"
+        path = sasl.getAircraftPath() .. "/plugins/xpfiles/libxpfiles.dll"
     elseif os_name == "Mac" then
         path = sasl.getAircraftPath() .. "/plugins/xpfiles/libxpfiles.dylib"
     else
