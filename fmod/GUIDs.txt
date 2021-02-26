@@ -59,6 +59,12 @@
 {9bcca77b-d316-4192-bb92-d796b32e9bd3} event:/FCU/Selectors/2
 {863d7dc0-0956-4ed3-8336-5ee2bf0b4213} event:/FCU/Selectors/3
 {9bdf25fc-2002-41ec-8dc9-a1b8aa2141b4} event:/FCU/Selectors/4
+{89169dcb-7fdd-4d30-965a-1e968c8cdd8c} event:/FCU/Cont1
+{24c09701-ccde-4cfe-9a10-9c6a575bd1c9} event:/FCU/Cont2
+{24f42a48-6b93-40b1-a727-0c2c496b0965} event:/FCU/Cont3
+{86a2fa60-112a-4c4f-b505-3c8c27632728} event:/FCU/Cont4
+{79916f03-6bd0-4c8b-aba5-c6a9e2b103a3} event:/FCU/Cont5
+{373b7202-ded1-4e95-9ea3-59b9fb4f6b4d} event:/FCU/Cont6
 {47d7f46e-3e56-40d7-b18d-e5f5556d36df} event:/FCU/Pull
 {ba2746b5-f88d-40c3-80ba-a639a3bbc1c4} event:/FCU/Push
 {739de174-b194-4353-b998-a76f0a62c442} event:/FCU/Rotate1

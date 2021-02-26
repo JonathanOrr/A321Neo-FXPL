@@ -50,6 +50,8 @@ local function Capt_sidestick_bp_callback(phase)
         Capt_priority_timer = 0
         set(Priority_left, 0)
     end
+
+    return 0--inhibites the x-plane original command
 end
 local function Fo_sidestick_bp_callback(phase)
     if phase == SASL_COMMAND_BEGIN then
@@ -91,8 +93,9 @@ local function Fo_sidestick_bp_callback(phase)
 end
 
 --register commands
-sasl.registerCommandHandler(Capt_sidestick_pb, 1, Capt_sidestick_bp_callback)
-sasl.registerCommandHandler(Fo_sidestick_pb,   1, Fo_sidestick_bp_callback)
+sasl.registerCommandHandler(XP_Capt_sidestick_pb, 1, Capt_sidestick_bp_callback)
+sasl.registerCommandHandler(Capt_sidestick_pb,    1, Capt_sidestick_bp_callback)
+sasl.registerCommandHandler(Fo_sidestick_pb,      1, Fo_sidestick_bp_callback)
 
 local function priority_indications()
     set(Sidesitck_dual_input, BoolToNum(get(Priority_left) + get(Priority_right) == 0 and get(Capt_sidestick_roll) + get(Capt_sidestick_pitch) ~= 0 and get(Fo_sidestick_roll) + get(Fo_sidestick_pitch) ~= 0))
