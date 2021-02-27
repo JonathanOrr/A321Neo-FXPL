@@ -23,19 +23,28 @@ function configure_pw1133g()
         has_cooling = true,     -- Does this engine have the (dual) cooling feature?
     
         max_n1     = 105,
+        max_n2     = 105,
         max_thrust = 33110.0,   -- [lbs]
         fan_size   = 35.76,     -- [feet^2]
         fan_rpm_max= 3281.0,    -- [RPM] at 100% N1
         bypass_ratio = 12.5,    -- [-]
+
+        n1_to_n2_fun = function(n1)
+            return -2.6492 + 22.1036*math.log(n1)
+        end,
+        
+        n1_to_egt_fun = function(n1, oat)
+            return 1067.597 + (525.8561 - 1067.597)/(1 + (n1/76.42303)^4.611082) + (oat-6) *2
+        end,
 
         oil = {
             qty_max = 35,               -- [QT]
             qty_min = 14,               -- [QT]
             qty_consumption = 0.45,     -- [QT/hour]
             
-            pressure_max_toga =  200,    -- [PSI]
-            pressure_max_mct  =  190,    -- [PSI]
-            pressure_min_idle =  65,     -- [PSI]
+            pressure_max_toga =  240,    -- [PSI]
+            pressure_max_mct  =  220,    -- [PSI]
+            pressure_min_idle =  100,     -- [PSI]
             
             temp_min_start = -40,     -- [°C]
             temp_min_toga  = 51.7,    -- [°C]
@@ -47,7 +56,39 @@ function configure_pw1133g()
             max_n1_nominal = 6,      -- [-]
             max_n2_nominal = 4.3,    -- [-]
         },
-        
+
+        startup = {
+            n2 = {
+                -- n2_start: start point after which the element is considered
+                -- n2_increase_per_sec: N2 is increasing this value each second
+                -- fuel_flow: the fuel flow to use in this phase (static)
+                -- egt: the value for EGT at the beginning of this phase (it will increase towards the next value)
+                {n2_start = 0,    n2_increase_per_sec = 0.26, fuel_flow = 0,   egt=0},
+                {n2_start = 10,   n2_increase_per_sec = 1.5, fuel_flow = 0,    egt=97},
+                {n2_start = 16.2, n2_increase_per_sec = 1.5, fuel_flow = 120,  egt=97},
+                {n2_start = 16.7, n2_increase_per_sec = 1.8, fuel_flow = 180,  egt=97},
+                {n2_start = 24,   n2_increase_per_sec = 1.25, fuel_flow = 100, egt=162},
+                {n2_start = 26.8, n2_increase_per_sec = 1.25, fuel_flow = 100, egt=263},
+                {n2_start = 31.8, n2_increase_per_sec = 0.44, fuel_flow = 120, egt=173},
+                {n2_start = 34.2, n2_increase_per_sec = 0.60, fuel_flow = 140, egt=229}
+            },
+            n1 = {
+                {n1_set = 2,      n1_increase_per_sec = 1, fuel_flow = 140, egt=230},
+                {n1_set = 5,      n1_increase_per_sec = 0.60, fuel_flow = 140, egt=290},
+                {n1_set = 6.6,    n1_increase_per_sec = 0.60, fuel_flow = 160, egt=303},
+                {n1_set = 7.3,    n1_increase_per_sec = 0.20, fuel_flow = 180, egt=357},
+                {n1_set = 7.8,    n1_increase_per_sec = 0.20, fuel_flow = 220, egt=393},
+                {n1_set = 12.2,   n1_increase_per_sec = 0.60, fuel_flow = 260, egt=573},
+                {n1_set = 14.9,   n1_increase_per_sec = 0.60, fuel_flow = 280, egt=574},
+                {n1_set = 15.4,   n1_increase_per_sec = 1.16, fuel_flow = 300, egt=580},
+                {n1_set = 16.3,   n1_increase_per_sec = 1.08, fuel_flow = 320, egt=592},
+                {n1_set = 17.1,   n1_increase_per_sec = 0.83, fuel_flow = 340, egt=602},
+                {n1_set = 17.6,   n1_increase_per_sec = 0.79, fuel_flow = 360, egt=623},
+                {n1_set = 18.3,   n1_increase_per_sec = 0.24, fuel_flow = 380, egt=637},
+                {n1_set = 18.5,   n1_increase_per_sec = 0.24, fuel_flow = 380, egt=637},
+            }
+        },
+
         display = {
             egt_scale = 1200,                -- [°C]
             egt_red_limit = 1083,            -- [°C]

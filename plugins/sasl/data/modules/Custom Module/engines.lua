@@ -193,17 +193,10 @@ local function cooling_time(time_since_last_shutdown)
     return Math_clamp(time_cool, 10, 90)
 end
 
-local function n1_to_n2(n1)
-    return 50 * math.log10(n1) + (n1+50)^3/220000 + 0.64
-end
-
 local function min_n1(altitude)
     return 5.577955*math.log(0.03338352*altitude+23.66644)+1.724586
 end
 
-local function n1_to_egt(n1, outside_temperature)
-    return 1067.597 + (525.8561 - 1067.597)/(1 + (n1/76.42303)^4.611082) + (outside_temperature-6) *2
-end
 
 local function update_n1_minimum()
     local curr_altitude = get(Elevation_m) * 3.28084
@@ -231,14 +224,14 @@ end
 local function update_n2()
     local eng_1_n1 = get(Eng_1_N1)
     if eng_1_n1 > 5 and get(Engine_1_master_switch) == 1  then
-        Set_dataref_linear_anim(Eng_1_N2, n1_to_n2(eng_1_n1), 0, 130, 10)
+        Set_dataref_linear_anim(Eng_1_N2, ENG.data.n1_to_n2_fun(eng_1_n1), 0, 130, 10)
     else
         Set_dataref_linear_anim(Eng_1_N2, eng_N2_off[1], 0, 130, 10)
     end
 
     local eng_2_n1 = get(Eng_2_N1)
     if eng_2_n1 > 5 and get(Engine_2_master_switch) == 1  then
-        Set_dataref_linear_anim(Eng_2_N2, n1_to_n2(eng_2_n1), 0, 130, 10)
+        Set_dataref_linear_anim(Eng_2_N2, ENG.data.n1_to_n2_fun(eng_2_n1), 0, 130, 10)
     else
         Set_dataref_linear_anim(Eng_2_N2, eng_N2_off[2], 0, 130, 10)
     end
@@ -249,7 +242,7 @@ end
 local function update_egt()
     local eng_1_n1 = get(Eng_1_N1)
     if eng_1_n1 > ENG_N1_LL_IDLE then
-        local computed_egt = n1_to_egt(eng_1_n1, get(OTA))
+        local computed_egt = ENG.data.n1_to_egt_fun(eng_1_n1, get(OTA))
         computed_egt = computed_egt + egt_eng_1_offset + math.random()*2 -- Let's add a bit of randomness
         Set_dataref_linear_anim(Eng_1_EGT_c, computed_egt, -50, 1500, 70)
     else
@@ -258,7 +251,7 @@ local function update_egt()
 
     local eng_2_n1 = get(Eng_2_N1)
     if eng_2_n1 > ENG_N1_LL_IDLE then
-        local computed_egt = n1_to_egt(eng_2_n1, get(OTA))
+        local computed_egt = ENG.data.n1_to_egt_fun(eng_2_n1, get(OTA))
         computed_egt = computed_egt + egt_eng_2_offset + math.random()*2 -- Let's add a bit of randomness
         Set_dataref_linear_anim(Eng_2_EGT_c, computed_egt, -50, 1500, 70)
     else
@@ -327,49 +320,49 @@ local function update_oil_stuffs()
     -- ENG 1 - PRESS
     if get(Engine_1_avail) == 1 then
         local n2_value = get(Eng_1_N2)
-        local press = Math_rescale(60, ENG.data.oil.pressure_min_idle+1, 120, ENG.data.oil.pressure_max_mct, n2_value) + math.random()
-        Set_dataref_linear_anim(Eng_1_OIL_press, press, 0, 100, 4)
+        local press = Math_rescale(60, ENG.data.oil.pressure_min_idle+1, ENG.data.max_n2-10, ENG.data.oil.pressure_max_mct, n2_value)
+        Set_dataref_linear_anim(Eng_1_OIL_press, press, 0, 500, 28 + math.random() * 4)
     else
         -- During startup
         local n2_value = math.max(10,get(Eng_1_N2))
         local press = Math_rescale(10, 0, 70, ENG.data.oil.pressure_max_toga, n2_value)
-        Set_dataref_linear_anim(Eng_1_OIL_press, press, 0, 100, 4)
+        Set_dataref_linear_anim(Eng_1_OIL_press, press, 0, 500, 28 + math.random() * 4)
     end
 
     -- ENG 1 - TEMP
     if get(Engine_1_avail) == 1 then
         local n2_value = get(Eng_1_N2)
-        local temp = Math_rescale(60, 65, 120, ENG.data.oil.temp_max_mct, n2_value) + math.random() * 5
-        Set_dataref_linear_anim(Eng_1_OIL_temp, temp, -50, 200, 1)
+        local temp = Math_rescale(60, 65, ENG.data.max_n2, ENG.data.oil.temp_max_mct, n2_value) + math.random() * 5
+        Set_dataref_linear_anim(Eng_1_OIL_temp, temp, -50, 250, 1)
     else
         -- During startup
         local n2_value = math.max(10,get(Eng_1_N2))
         local temp = Math_rescale(10, get(OTA), 70, 75, n2_value)
-        Set_dataref_linear_anim(Eng_1_OIL_temp, temp, -50, 200, 1)
+        Set_dataref_linear_anim(Eng_1_OIL_temp, temp, -50, 250, 1)
     end
     
     -- ENG 2 - PRESS
     if get(Engine_2_avail) == 1 then
         local n2_value = get(Eng_2_N2)
-        local press = Math_rescale(60, ENG.data.oil.pressure_min_idle+1, 120, ENG.data.oil.pressure_max_mct, n2_value) + math.random()
-        Set_dataref_linear_anim(Eng_2_OIL_press, press, 0, 100, 4)
+        local press = Math_rescale(60, ENG.data.oil.pressure_min_idle+1, ENG.data.max_n2-10, ENG.data.oil.pressure_max_mct, n2_value)
+        Set_dataref_linear_anim(Eng_2_OIL_press, press, 0, 500, 28 + math.random() * 4)
     else
         -- During startup
         local n2_value = math.max(10,get(Eng_2_N2))
         local press = Math_rescale(10, 0, 70, ENG.data.oil.pressure_max_toga, n2_value)
-        Set_dataref_linear_anim(Eng_2_OIL_press, press, 0, 100, 4)
+        Set_dataref_linear_anim(Eng_2_OIL_press, press, 0, 500, 28 + math.random() * 4)
     end
 
     -- ENG 2 - TEMP
     if get(Engine_2_avail) == 1 then
         local n2_value = get(Eng_2_N2)
-        local temp = Math_rescale(60, 65, 120, ENG.data.oil.temp_max_mct, n2_value) + math.random() * 5
-        Set_dataref_linear_anim(Eng_2_OIL_temp, temp, -50, 200, 1)
+        local temp = Math_rescale(60, 65, ENG.data.max_n2, ENG.data.oil.temp_max_mct, n2_value) + math.random() * 5
+        Set_dataref_linear_anim(Eng_2_OIL_temp, temp, -50, 250, 1)
     else
         -- During startup
         local n2_value = math.max(10,get(Eng_2_N2))
         local temp = Math_rescale(10, get(OTA), 70, 75, n2_value)
-        Set_dataref_linear_anim(Eng_2_OIL_temp, temp, -50, 200, 1)
+        Set_dataref_linear_anim(Eng_2_OIL_temp, temp, -50, 250, 1)
     end
 
 
@@ -377,22 +370,22 @@ end
 
 function update_vibrations()
     local n1_value = get(Eng_1_N1)
-    local vib_n1 = Math_rescale(0, 0, 120, ENG.data.vibrations.max_n1_nominal/4, n1_value) 
+    local vib_n1 = Math_rescale(0, 0, ENG.data.max_n2, ENG.data.vibrations.max_n1_nominal/4, n1_value) 
     if get(Engine_1_avail) == 1 then vib_n1 = vib_n1 + 0.1*math.random() end
     set(Eng_1_VIB_N1, vib_n1)
 
     local n2_value = get(Eng_1_N2)
-    local vib_n2 = Math_rescale(0, 0, 120, ENG.data.vibrations.max_n2_nominal/4, n2_value)
+    local vib_n2 = Math_rescale(0, 0, ENG.data.max_n2, ENG.data.vibrations.max_n2_nominal/4, n2_value)
     if get(Engine_1_avail) == 1 then vib_n2 = vib_n2 + 0.1*math.random() end
     set(Eng_1_VIB_N2, vib_n2)
 
     local n1_value = get(Eng_2_N1)
-    local vib_n1 = Math_rescale(0, 0, 120, ENG.data.vibrations.max_n1_nominal/4, n1_value)
+    local vib_n1 = Math_rescale(0, 0, ENG.data.max_n2, ENG.data.vibrations.max_n1_nominal/4, n1_value)
     if get(Engine_2_avail) == 1 then vib_n1 = vib_n1 + 0.1*math.random() end
     set(Eng_2_VIB_N1, vib_n1)
 
     local n2_value = get(Eng_2_N2)
-    local vib_n2 = Math_rescale(0, 0, 120, ENG.data.vibrations.max_n2_nominal/4, n2_value)
+    local vib_n2 = Math_rescale(0, 0, ENG.data.max_n2, ENG.data.vibrations.max_n2_nominal/4, n2_value)
     if get(Engine_2_avail) == 1 then vib_n2 = vib_n2 + 0.1*math.random() end
     set(Eng_2_VIB_N2, vib_n2)
 
@@ -417,7 +410,7 @@ local function perform_crank_procedure(eng, wet_cranking)
     set(eng_mixture, 0, eng) -- No mixture for dry cranking
 
     -- Set N2 for cranking
-    eng_N2_off[eng] = Set_linear_anim_value(eng_N2_off[eng], ENG_N1_CRANK, 0, 120, 0.25)
+    eng_N2_off[eng] = Set_linear_anim_value(eng_N2_off[eng], ENG_N1_CRANK, 0, ENG.data.max_n2, 0.25)
     set(eng_N2_enforce, eng_N2_off[eng], eng)
     
     -- Set EGT for cranking
@@ -720,26 +713,26 @@ local function update_startup()
     if get(Engine_1_avail) == 0  and require_cooldown[1] then    -- Turn off the engine
         -- Set N2 to zero
         local n2_target = get(IAS) > 50 and 10 + get(IAS)/10 + math.random()*2 or 0 -- In in-flight it rotates
-        eng_N2_off[1] = Set_linear_anim_value(eng_N2_off[1], n2_target, 0, 120, 1)
+        eng_N2_off[1] = Set_linear_anim_value(eng_N2_off[1], n2_target, 0, ENG.data.max_n2, 1)
         set(eng_N2_enforce, eng_N2_off[1], 1)
         
         -- Set EGT and FF to zero
         eng_EGT_off[1] = Set_linear_anim_value(eng_EGT_off[1], get(OTA), -50, 1500, eng_EGT_off[1] > 100 and 10 or 3)
         eng_FF_off[1] = 0
-        eng_N1_off[1] = Set_linear_anim_value(eng_N1_off[1], 0, 0, 120, 2)
+        eng_N1_off[1] = Set_linear_anim_value(eng_N1_off[1], 0, 0, ENG.data.max_n2, 2)
         set(eng_igniters, 0, 1)
         igniter_eng[1] = 0
     end
     if get(Engine_2_avail) == 0 and require_cooldown[2] then    -- Turn off the engine
         -- Set N2 to zero
         local n2_target = get(IAS) > 50 and 10 + get(IAS)/10 + math.random()*2 or 0 -- In in-flight it rotates
-        eng_N2_off[2] = Set_linear_anim_value(eng_N2_off[2], n2_target or 0 , 0, 120, 1)
+        eng_N2_off[2] = Set_linear_anim_value(eng_N2_off[2], n2_target or 0 , 0, ENG.data.max_n2, 1)
         set(eng_N2_enforce, eng_N2_off[2], 2)
         
         -- Set EGT and FF to zero
         eng_EGT_off[2] = Set_linear_anim_value(eng_EGT_off[2], get(OTA), -50, 1500, eng_EGT_off[2] > 100 and 10 or 3)
         eng_FF_off[2] = 0
-        eng_N1_off[2] = Set_linear_anim_value(eng_N1_off[2], 0, 0, 120, 2)
+        eng_N1_off[2] = Set_linear_anim_value(eng_N1_off[2], 0, 0, ENG.data.max_n2, 2)
         set(eng_igniters, 0, 2)
         igniter_eng[2] = 0
     end

@@ -66,6 +66,14 @@ local function pulse_green(condition)
     end
 end
 
+local function get_press_red_limit(n2)
+    return ENG.data.display.oil_press_low_red[1] + ENG.data.display.oil_press_low_red[2] * n2
+end
+
+local function get_press_amber_limit(n2)
+    return ENG.data.display.oil_press_low_amber[1] + ENG.data.display.oil_press_low_amber[2] * n2
+end
+
 local function draw_oil_qt_press_temp_eng_1()
 
     if xx_statuses[1] then
@@ -90,8 +98,8 @@ local function draw_oil_qt_press_temp_eng_1()
               params.eng1_oil_press < ENG.data.display.oil_press_low_adv
               )
 
-        local press_red_limit = ENG.data.display.oil_press_low_red[1] + ENG.data.display.oil_press_low_red[2] * get(Eng_1_N2)
-        local press_amber_limit = ENG.data.display.oil_press_low_amber[1] + ENG.data.display.oil_press_low_amber[2] * get(Eng_1_N2)
+        local press_red_limit = get_press_red_limit(get(Eng_1_N2))
+        local press_amber_limit = get_press_amber_limit(get(Eng_1_N2))
 
         if params.eng1_oil_press < press_red_limit then
             eng_1_oil_color = ECAM_RED
@@ -139,8 +147,8 @@ local function draw_oil_qt_press_temp_eng_2()
               params.eng2_oil_press < ENG.data.display.oil_press_low_adv
               )
 
-        local press_red_limit = ENG.data.display.oil_press_low_red[1] + ENG.data.display.oil_press_low_red[2] * get(Eng_2_N2)
-        local press_amber_limit = ENG.data.display.oil_press_low_amber[1] + ENG.data.display.oil_press_low_amber[2] * get(Eng_2_N2)
+        local press_red_limit = get_press_red_limit(get(Eng_2_N2))
+        local press_amber_limit = get_press_amber_limit(get(Eng_1_N2))
 
         if params.eng2_oil_press < press_red_limit then
             eng_2_oil_color = ECAM_RED
@@ -267,16 +275,73 @@ local function draw_ignition()
     end
 end
 
+local function draw_arcs_limits(x, y, red_angle, yellow_angle, current_angle, left_bottom_marker)
+
+        -- Arc and other fixed stuffs
+        sasl.gl.drawArc(x, y, 69, 72, 0, red_angle and red_angle or 180, ECAM_WHITE)
+        if left_bottom_marker then
+            sasl.gl.drawWideLine(x-59, y, x-72, y, 2, ECAM_WHITE)
+        end
+        sasl.gl.drawWideLine(x+59, y, x+72, y, 2, ECAM_WHITE)
+        sasl.gl.drawWideLine(x, y+60, x, y+70, 2, ECAM_WHITE)
+
+        -- Limits
+        if red_angle and red_angle < 180 then
+            sasl.gl.drawArc(x, y, 69, 72, red_angle, 180-red_angle, ECAM_RED)
+        end
+
+        if yellow_angle and yellow_angle < 180 then
+            SASL_draw_needle_adv(x, y, 65, 74, yellow_angle, 4, ECAM_ORANGE)
+            SASL_draw_needle_adv(x, y, 73, 82, yellow_angle+2, 10, ECAM_ORANGE)
+        end
+
+        -- Draw the needle
+        local needle_color = ECAM_GREEN
+        if red_angle and red_angle <= current_angle then
+            needle_color = ECAM_RED
+        elseif yellow_angle and yellow_angle <= current_angle then
+            needle_color = ECAM_ORANGE
+        end
+
+        SASL_draw_needle_adv(x, y, 58, 80, current_angle, 3.5, needle_color)
+end
+
 local function draw_needle_and_valves()
+    local oil_qty_max = ENG.data.display.oil_qty_scale
+    local oil_qty_adv = ENG.data.display.oil_qty_advisory
+    local oil_press_max = ENG.data.display.oil_press_scale
+
     if xx_statuses[1] then
-        SASL_draw_needle_adv(size[1]/2-187, size[2]/2+176, 58, 80, Math_rescale(0, 180, 17, 0, get(Eng_1_OIL_qty)), 3.5, ECAM_GREEN)
-        SASL_draw_needle_adv(size[1]/2-189, size[2]/2+78, 50, 80, Math_rescale(0, 180, 100, 0, get(Eng_1_OIL_press)), 3.5, ECAM_GREEN)
+        -- OIL QTY
+        local oil_angle = Math_rescale(0, 180, oil_qty_max, 0, get(Eng_1_OIL_qty))
+        local oil_angle_adv = Math_rescale(0, 180, oil_qty_max, 0, oil_qty_adv)
+        draw_arcs_limits(size[1]/2-187, size[2]/2+176, nil, oil_angle_adv, oil_angle, true)
+        
+        local oil_angle = Math_rescale(0, 180, oil_press_max, 0, get(Eng_1_OIL_press))
+        local oil_red_limit = math.max(0, get_press_red_limit(get(Eng_1_N2)))
+        local oil_angle_red = Math_rescale(0, 180, oil_press_max, 0, oil_red_limit)
+        local oil_amber_limit = math.max(0, get_press_amber_limit(get(Eng_1_N2)))
+        local oil_angle_amber = Math_rescale(0, 180, oil_press_max, 0, oil_amber_limit)
+
+        draw_arcs_limits(size[1]/2-189, size[2]/2+78, oil_angle_red, oil_angle_amber, oil_angle, false)
+
         SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_ENG_valve_img, size[1]/2-190, size[2]/2-272, 128, 80, 2, get(ENG_1_bleed_switch) == 1 and 2 or 1, ECAM_GREEN)
     end
     
     if xx_statuses[2] then
-        SASL_draw_needle_adv(size[1]/2+187, size[2]/2+176, 58, 80, Math_rescale(0, 180, 17, 0, get(Eng_2_OIL_qty)), 3.5, ECAM_GREEN)
-        SASL_draw_needle_adv(size[1]/2+189, size[2]/2+78, 50, 80, Math_rescale(0, 180, 100, 0, get(Eng_2_OIL_press)), 3.5, ECAM_GREEN)
+        -- OIL QTY
+        local oil_angle = Math_rescale(0, 180, oil_qty_max, 0, get(Eng_2_OIL_qty))
+        local oil_angle_adv = Math_rescale(0, 180, oil_qty_max, 0, oil_qty_adv)
+        draw_arcs_limits(size[1]/2+187, size[2]/2+176, nil, oil_angle_adv, oil_angle, true)
+
+        local oil_angle = Math_rescale(0, 180, oil_press_max, 0, get(Eng_2_OIL_press))
+        local oil_red_limit = math.max(0, get_press_red_limit(get(Eng_2_N2)))
+        local oil_angle_red = Math_rescale(0, 180, oil_press_max, 0, oil_red_limit)
+        local oil_amber_limit = math.max(0, get_press_amber_limit(get(Eng_2_N2)))
+        local oil_angle_amber = Math_rescale(0, 180, oil_press_max, 0, oil_amber_limit)
+
+        draw_arcs_limits(size[1]/2+189, size[2]/2+78, oil_angle_red, oil_angle_amber, oil_angle, false)
+
         SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_ENG_valve_img, size[1]/2+190, size[2]/2-272, 128, 80, 2, get(ENG_2_bleed_switch) == 1 and 2 or 1, ECAM_GREEN)
     end
 end

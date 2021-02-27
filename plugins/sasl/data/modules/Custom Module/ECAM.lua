@@ -240,12 +240,20 @@ local function draw_ecam_pages()
     end
 end
 
+local skip_1st_frame_AA = true
+
 --drawing the ECAM
 function draw()
 
     perf_measure_start("ECAM:draw()")
 
-    sasl.gl.setRenderTarget(ECAM_popup_texture, true)
+    if not skip_1st_frame_AA then
+        sasl.gl.setRenderTarget(ECAM_popup_texture, true, 16)
+    else
+        sasl.gl.setRenderTarget(ECAM_popup_texture, true)
+    end
+    skip_1st_frame_AA = false
+    
     draw_ecam_pages()
     draw_ecam_lower_section()
     draw_video()

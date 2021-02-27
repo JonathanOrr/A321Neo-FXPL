@@ -22,10 +22,20 @@ function configure_leap_1a()
         has_cooling = false,     -- Does this engine have the (dual) cooling feature?
     
         max_n1     = 101,
+        max_n2     = 120,
         max_thrust = 31689.0,   -- [lbs]
         fan_size   = 33.12,     -- [feet^2]
         fan_rpm_max= 3855.0,    -- [RPM] at 100% N1
         bypass_ratio = 11.0,    -- [-]
+
+        n1_to_n2_fun = function(n1)
+            return 50 * math.log10(n1) + (n1+50)^3/220000 + 0.64
+        end,
+
+        n1_to_egt_fun = function(n1, oat)
+            return 1067.597 + (525.8561 - 1067.597)/(1 + (n1/76.42303)^4.611082) + (oat-6) *2
+        end,
+
 
         oil = {
             qty_max = 17,               -- [QT]
@@ -47,7 +57,7 @@ function configure_leap_1a()
             max_n2_nominal = 4.3,    -- [-]
         },
 
-        startup = {
+        startup = { -- TODO: These values are for PW
             n2 = {
                 -- n2_start: start point after which the element is considered
                 -- n2_increase_per_sec: N2 is increasing this value each second

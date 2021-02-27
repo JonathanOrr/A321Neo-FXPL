@@ -196,6 +196,7 @@ end
 
 -- for giving datarefs linear delayed outputs by using set_linear_anim_value
 function Set_dataref_linear_anim(dataref, target, min, max, speed)
+    target = target or 0
     set(dataref, Set_linear_anim_value(get(dataref), target, min, max, speed))
 end
 
