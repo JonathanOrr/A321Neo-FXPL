@@ -170,7 +170,7 @@ local function draw_extra_indication()
         sasl.gl.drawText(Font_AirbusDUL, 30, size[2]-40, "A FLOOR", 32, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
     end
 
-    local max_eng_n1_mode = math.max(get(Eng_N1_mode, 1), get(Eng_N1_mode, 2)) 
+    local max_eng_n1_mode = math.min(get(Eng_N1_mode, 1), get(Eng_N1_mode, 2)) 
 
     if max_eng_n1_mode == 0 then
         return

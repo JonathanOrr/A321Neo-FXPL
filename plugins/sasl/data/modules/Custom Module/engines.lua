@@ -849,14 +849,14 @@ local function update_n1_mode_and_limits_per_engine(thr_pos, engine)
     local ai_eng_oper  = AI_sys.comp[ANTIICE_ENG_1].valve_status == true or AI_sys.comp[ANTIICE_ENG_2].valve_status == true 
     local pack_oper    = get(Pack_L) + get(Pack_R) > 0
 
-    if thr_pos > 0.826  or get(ATHR_is_overriding) == 1 then -- TOGA Region
+    if thr_pos > THR_TOGA_THRESHOLD + 0.001 or get(ATHR_is_overriding) == 1 then -- TOGA Region
     
         if thr_pos >= 0.99 and last_time_toga[engine] == 0 then
             -- This is needed for soft GA
             last_time_toga[engine] = get(TIME)
         end
         set(Eng_N1_mode, 1, engine) -- TOGA
-    elseif thr_pos > 0.676 then
+    elseif thr_pos > THR_MCT_THRESHOLD + 0.001 then
     
         if get(Eng_N1_flex_temp) ~= 0 and get(EWD_flight_phase) >= PHASE_1ST_ENG_TO_PWR and get(EWD_flight_phase) <= PHASE_LIFTOFF then
             set(Eng_N1_mode, 6, engine) -- FLEX
@@ -874,7 +874,7 @@ local function update_n1_mode_and_limits_per_engine(thr_pos, engine)
             set(Eng_N1_mode, engine, 2) -- MCT
         end
         last_time_toga[engine] = 0
-    elseif thr_pos >= 0.05 then
+    elseif thr_pos >= THR_CLB_THRESHOLD then
         set(Eng_N1_mode, 3, engine) -- CLB
         last_time_toga[engine] = 0
 
@@ -882,10 +882,10 @@ local function update_n1_mode_and_limits_per_engine(thr_pos, engine)
             set(Eng_N1_flex_temp, 0) -- Reset FLEX temp to avoid G/A triggering of FLEX or other situations
         end
 
-    elseif thr_pos > -0.05 or get(Either_Aft_on_ground) == 0 then   -- Reverse protection
+    elseif thr_pos > -THR_CLB_THRESHOLD or get(Either_Aft_on_ground) == 0 then   -- Reverse protection
         set(Eng_N1_mode, 4, engine) -- IDLE
         last_time_toga[engine] = 0
-    elseif thr_pos <= -0.05 then
+    elseif thr_pos <= -THR_CLB_THRESHOLD then
         set(Eng_N1_mode, 5, engine) -- MREV
         last_time_toga[engine] = 0
     end
