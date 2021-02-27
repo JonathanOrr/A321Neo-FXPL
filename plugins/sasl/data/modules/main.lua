@@ -63,8 +63,6 @@ components = {
   fuel {}, -- Please keep this before engines
   engines {},
   cabin_screens {},
-  fcu_ap_at {},
-  AT {},
   ADIRS {},
   MCDU {},
   packs {},
