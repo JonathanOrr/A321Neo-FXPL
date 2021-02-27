@@ -871,7 +871,7 @@ local function update_n1_mode_and_limits_per_engine(thr_pos, engine)
             -- In this case we replace the MCT value
             set(Eng_N1_max_detent_mct, eng_N1_limit_ga_soft(get(OTA), get(TAT), get(Capt_Baro_Alt), pack_oper, ai_eng_oper, ai_wing_oper))
         else    -- otherwise is a normal MCT
-            set(Eng_N1_mode, engine, 2) -- MCT
+            set(Eng_N1_mode, 2, engine) -- MCT
         end
         last_time_toga[engine] = 0
     elseif thr_pos >= THR_CLB_THRESHOLD then
@@ -889,6 +889,7 @@ local function update_n1_mode_and_limits_per_engine(thr_pos, engine)
         set(Eng_N1_mode, 5, engine) -- MREV
         last_time_toga[engine] = 0
     end
+    
 end
 
 local function update_n1_mode_and_limits()
