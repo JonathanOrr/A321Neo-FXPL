@@ -152,19 +152,21 @@ function ecam_update_advisory_conditions()
 
     if cond_door then at_least_one = true; set(Ecam_advisory_DOOR, 1) end
 
-    local cond_eng_1 =  get(Eng_1_OIL_qty) < 2 or
-                        get(Eng_1_OIL_press) > 90 or
-                        (get(Eng_1_OIL_press) < 13 and get(Eng_1_OIL_press) >=7 ) or
-                        (get(Eng_1_OIL_temp) > 140 and get(Eng_1_OIL_temp) <= 155) or
-                        get(Eng_1_VIB_N1) > 6 or
-                        get(Eng_1_VIB_N2) > 4.3
+    local adv_1 = ENG.data.display.oil_press_low_amber[1] + ENG.data.display.oil_press_low_amber[2] * get(Eng_1_N2)
+    local adv_2 = ENG.data.display.oil_press_low_amber[1] + ENG.data.display.oil_press_low_amber[2] * get(Eng_2_N2)
 
-    local cond_eng_2 =  get(Eng_2_OIL_qty) < 2 or
-                        get(Eng_2_OIL_press) > 90 or
-                        (get(Eng_2_OIL_press) < 13 and get(Eng_2_OIL_press) >=7 ) or
-                        (get(Eng_2_OIL_temp) > 140 and get(Eng_2_OIL_temp) <= 155) or
-                        get(Eng_2_VIB_N1) > 6 or
-                        get(Eng_2_VIB_N2) > 4.3
+    local cond_eng_1 =  get(Eng_1_OIL_qty) < ENG.data.display.oil_qty_advisory or
+                        get(Eng_1_OIL_press) > ENG.data.display.oil_press_high_adv or
+                        get(Eng_1_OIL_press) < adv_1 or
+                        get(Eng_1_OIL_temp) > ENG.data.display.oil_temp_high_adv or
+                        get(Eng_1_VIB_N1) > ENG.data.vibrations.max_n1_nominal or
+                        get(Eng_1_VIB_N2) > ENG.data.vibrations.max_n2_nominal
+
+    local cond_eng_2 =  get(Eng_2_OIL_qty) < ENG.data.display.oil_qty_advisory or
+                        get(Eng_2_OIL_press) > ENG.data.display.oil_press_high_adv or
+                        get(Eng_2_OIL_press) < adv_2 or
+                        get(Eng_2_VIB_N1) > ENG.data.vibrations.max_n1_nominal or
+                        get(Eng_2_VIB_N2) > ENG.data.vibrations.max_n2_nominal
 
 
     local cond_engines = (get(Engine_1_avail) == 1 and cond_eng_1) or (get(Engine_2_avail) == 1 and cond_eng_2)

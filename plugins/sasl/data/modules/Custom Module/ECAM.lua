@@ -67,9 +67,6 @@ local function draw_ecam_lower_section_fixed()
         sasl.gl.drawText(Font_AirbusDUL, 260, size[2]/2-442, "°C", 32, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
     end
 
-
-    -- TODO Add ALT SEL from autpilot
-
     if (gload >= 1.4 or gload <= 0.7) then
         if time_g_load_catch == 0 then
             time_g_load_catch = get(TIME)
