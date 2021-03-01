@@ -1,5 +1,5 @@
 
-NUMBER_OF_PAGES = 10
+NUMBER_OF_PAGES = 5
 PAGE_NUM = 1
 
 --MOUSE & BUTTONS--
@@ -15,7 +15,7 @@ end
 --UPDATE LOOPS--
 function EFB_update_page_6()
     if PAGE_NUM > NUMBER_OF_PAGES then
-        PAGE_NUM = 10
+        PAGE_NUM = NUMBER_OF_PAGES
     elseif PAGE_NUM < 1 then
         PAGE_NUM = 1
     end

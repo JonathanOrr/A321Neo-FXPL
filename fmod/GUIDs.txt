@@ -67,10 +67,17 @@
 {373b7202-ded1-4e95-9ea3-59b9fb4f6b4d} event:/FCU/Cont6
 {47d7f46e-3e56-40d7-b18d-e5f5556d36df} event:/FCU/Pull
 {ba2746b5-f88d-40c3-80ba-a639a3bbc1c4} event:/FCU/Push
+{32235045-3beb-4eb9-890d-70dea8eb10f5} event:/FCU/Pushbutton1
+{d5ee7410-0da5-473b-b782-1cb2043aab0e} event:/FCU/Pushbutton2
+{7fa0d45c-67d2-48bb-9849-0571368a3639} event:/FCU/Pushbutton3
+{32a8af6d-bbff-4d38-b462-1996f7a3aa00} event:/FCU/Pushbutton4
+{aa276387-9dd5-4b99-8243-6eab93e64710} event:/FCU/Pushbutton5
 {739de174-b194-4353-b998-a76f0a62c442} event:/FCU/Rotate1
 {036a758a-3b44-49a3-868b-45f9bccbeeca} event:/FCU/Rotate2
 {83b2ede9-8622-4a05-a6ef-766de551455c} event:/FCU/Rotate3
 {44c515d5-f610-409d-b4a1-688cab92fd3c} event:/FCU/Rotate4
+{07429f5f-b9dc-43b8-bbcc-083abaa4b3a4} event:/FCU/Round Button Press
+{29658333-9768-4d3d-b2f1-882646c85b98} event:/FCU/Round Button Release
 {764954de-ba36-4c00-8f4a-de6af5e22a4a} event:/FirePB/CoverOpen
 {6b7c07db-22c7-438d-ad71-59c4b8c1dabd} event:/FirePB/CoverOpen2
 {e324692d-592f-4dfb-ab39-b11bfbeb9224} event:/FirePB/Pull
