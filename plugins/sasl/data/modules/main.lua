@@ -53,7 +53,7 @@ panelWidth3d = 4096
 panelHeight3d = 4096
 
 components = {
-  xpfiles {},
+  avionics_bay {},
   data_manager {},
   efb{},
   efb_topcat{},

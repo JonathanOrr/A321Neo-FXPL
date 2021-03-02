@@ -51,7 +51,7 @@ ND_terrain = {}
 
 EFB_preferences = {}
 
-XPFiles = {}
+AvionicsBay = {}
 Data_manager = {}
 
 Mcdu_popup = {}
