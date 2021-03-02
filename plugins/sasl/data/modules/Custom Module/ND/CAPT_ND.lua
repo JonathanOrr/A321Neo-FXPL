@@ -29,13 +29,6 @@ function draw()
 
     perf_measure_start("CAPT_ND:draw()")
 
-    if XPFiles.is_initialized() then
-        sasl.gl.drawText(Font_AirbusDUL, 450, 400, "YES IT WORKS", 60, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-    else
-        sasl.gl.drawText(Font_AirbusDUL, 450, 400, "NO IT DOESN'T WORK", 60, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
-        print(tostring(XPFiles.c.get_error()))
-    end
-
     sasl.gl.setRenderTarget(CAPT_ND_popup_texture, true)
     draw_main(nd_data)
     sasl.gl.restoreRenderTarget()
