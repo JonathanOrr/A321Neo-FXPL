@@ -1,6 +1,29 @@
 local initialized = false;
 local ffi = require("ffi")
-    
+
+local function convert_navaid_array(rawdata, nav_array)
+    if rawdata then
+        return {
+            navaids = nav_array.navaids,
+            len = nav_array.len
+        }
+    else
+        to_return = {}
+        for i=1,nav_array.len do
+            table.insert(to_return, {
+                id   = ffi.string(nav_array.navaids[i-1].id,  nav_array.navaids[i-1].id_len),
+                name = ffi.string(nav_array.navaids[i-1].full_name, nav_array.navaids[i-1].full_name_len),
+                type = nav_array.navaids[i-1].type,
+                lat  = nav_array.navaids[i-1].coords.lat,
+                lon  = nav_array.navaids[i-1].coords.lon,
+                alt  = nav_array.navaids[i-1].altitude,
+                freq = nav_array.navaids[i-1].frequency
+            })
+        end
+        return to_return
+    end
+end
+
 local function expose_functions()
 
     AvionicsBay.is_initialized = function()
@@ -20,28 +43,22 @@ local function expose_functions()
         assert(initialized, "You must initialize avionicsbay before use")
         assert(type(nav_type) == "number", "nav_type must be a number")
         assert(type(name) == "string", "name must be a string")
+        rawdata = rawdata or false
+        
         nav_array = AvionicsBay.c.get_navaid_by_name(nav_type, name);
+        return convert_navaid_array(rawdata, nav_array)
+    end
+    
+    AvionicsBay.navaids.get_by_coords = function(nav_type, lat, lon, over_180, rawdata)
+        assert(initialized, "You must initialize avionicsbay before use")
+        assert(type(nav_type) == "number", "nav_type must be a number")
+        assert(type(lat) == "number", "lat must be a string")
+        assert(type(lon) == "number", "lon must be a string")
+        assert(type(over_180) == "boolean", "over_180 must be a string")
+        rawdata = rawdata or false
 
-        if rawdata then
-            return {
-                navaids = nav_array.navaids,
-                len = nav_array.len
-            }
-        else
-            to_return = {}
-            print(nav_array.len)
-            for i=1,nav_array.len do
-                table.insert(to_return, {
-                    id        = nav_array.navaids[i-1].id,
-                    full_name = ffi.string(nav_array.navaids[i-1].full_name, nav_array.navaids[i-1].full_name_len),
-                    type      = nav_array.navaids[i-1].type,
-                    coords    = { lat = nav_array.navaids[i-1].coords.lat, lon = nav_array.navaids[i-1].coords.lon },
-                    altitude  = nav_array.navaids[i-1].altitude,
-                    frequency = nav_array.navaids[i-1].frequency
-                })
-            end
-            return to_return
-        end
+        nav_array = AvionicsBay.c.get_navaid_by_coords(nav_type, lat, lon, over_180);
+        return convert_navaid_array(rawdata, nav_array)
     end
     
 end
