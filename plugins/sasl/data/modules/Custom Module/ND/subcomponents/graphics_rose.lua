@@ -50,7 +50,7 @@ local COLOR_YELLOW = {1,1,0}
 
 local poi_position_last_update = 0
 local POI_UPDATE_RATE = 0.1
-local MAX_LIMIT_WPT = 500
+local MAX_LIMIT_WPT = 750
 
 -------------------------------------------------------------------------------
 -- Helpers functions
@@ -283,20 +283,22 @@ local function draw_wpts(data)
     end
 
     local displayed_num = 0
-    data.misc.map_partially_displayed = false
+    data.misc.not_displaying_all_data = false
     
     -- For each waypoint visible...
-    for i,wpt in ipairs(data.poi.wpt) do
-        displayed_num = displayed_num + 1
-        local modified, poi = draw_poi_array(data, wpt, image_point_wpt, ECAM_MAGENTA)
-        if modified then
-            data.poi.wpt[i] = poi
-        end
-        
-        if displayed_num > MAX_LIMIT_WPT and data.config.range >= ND_RANGE_160 then
-            data.misc.map_partially_displayed = true
-            break
-        end
+    local nr_wpts = #data.poi.wpt
+    if nr_wpts > MAX_LIMIT_WPT and data.config.range >= ND_RANGE_160 then
+        data.misc.not_displaying_all_data = true
+    end
+    
+    for i=1,nr_wpts do
+        local wpt = data.poi.wpt[i]
+        if nr_wpts <= MAX_LIMIT_WPT or i % math.ceil(nr_wpts/MAX_LIMIT_WPT) == 0 or data.config.range < ND_RANGE_160 then
+            local modified, poi = draw_poi_array(data, wpt, image_point_wpt, ECAM_MAGENTA)
+            if modified then
+                data.poi.wpt[i] = poi
+            end
+       end
     end
     
 end

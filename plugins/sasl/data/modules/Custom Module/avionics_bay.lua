@@ -24,6 +24,25 @@ local function convert_navaid_array(rawdata, nav_array)
     end
 end
 
+local function convert_fixes_array(rawdata, fix_array)
+    if rawdata then
+        return {
+            fixes = fix_array.fixes,
+            len   = fix_array.len
+        }
+    else
+        to_return = {}
+        for i=1,fix_array.len do
+            table.insert(to_return, {
+                id   = ffi.string(fix_array.fixes[i-1].id,  fix_array.fixes[i-1].id_len),
+                lat  = fix_array.fixes[i-1].coords.lat,
+                lon  = fix_array.fixes[i-1].coords.lon
+            })
+        end
+        return to_return
+    end
+end
+
 local function expose_functions()
 
     AvionicsBay.is_initialized = function()
@@ -49,16 +68,46 @@ local function expose_functions()
         return convert_navaid_array(rawdata, nav_array)
     end
     
-    AvionicsBay.navaids.get_by_coords = function(nav_type, lat, lon, over_180, rawdata)
+    AvionicsBay.navaids.get_by_freq = function(nav_type, freq, rawdata)
+        assert(initialized, "You must initialize avionicsbay before use")
+        assert(type(nav_type) == "number", "nav_type must be a number")
+        assert(type(freq) == "number", "name must be a number")
+        rawdata = rawdata or false
+        
+        nav_array = AvionicsBay.c.get_navaid_by_freq(nav_type, math.floor(freq));
+        return convert_navaid_array(rawdata, nav_array)
+    end
+    
+    AvionicsBay.navaids.get_by_coords = function(nav_type, lat, lon, rawdata)
         assert(initialized, "You must initialize avionicsbay before use")
         assert(type(nav_type) == "number", "nav_type must be a number")
         assert(type(lat) == "number", "lat must be a string")
         assert(type(lon) == "number", "lon must be a string")
-        assert(type(over_180) == "boolean", "over_180 must be a string")
         rawdata = rawdata or false
 
-        nav_array = AvionicsBay.c.get_navaid_by_coords(nav_type, lat, lon, over_180);
+        nav_array = AvionicsBay.c.get_navaid_by_coords(nav_type, lat, lon);
         return convert_navaid_array(rawdata, nav_array)
+    end
+    
+    
+    AvionicsBay.fixes = {}
+    AvionicsBay.fixes.get_by_name = function(name, rawdata)
+        assert(initialized, "You must initialize avionicsbay before use")
+        assert(type(name) == "string", "name must be a string")
+        rawdata = rawdata or false
+        
+        fix_array = AvionicsBay.c.get_fixes_by_name(name);
+        return convert_fixes_array(rawdata, fix_array)
+    end
+    
+    AvionicsBay.fixes.get_by_coords = function(lat, lon, rawdata)
+        assert(initialized, "You must initialize avionicsbay before use")
+        assert(type(lat) == "number", "lat must be a string")
+        assert(type(lon) == "number", "lon must be a string")
+        rawdata = rawdata or false
+
+        fix_array = AvionicsBay.c.get_fixes_by_coords(lat, lon);
+        return convert_fixes_array(rawdata, fix_array)
     end
     
 end
@@ -100,11 +149,25 @@ local function load_avionicsbay()
             int len;
         } xpdata_navaid_array_t;
 
+
+        typedef struct xpdata_fix_t {
+            const char *id;         // e.g., ROMEO
+            int id_len;
+            xpdata_coords_t coords;
+        } xpdata_fix_t;
+
+        typedef struct xpdata_fix_array_t {
+            const struct xpdata_fix_t * const * fixes;
+            int len;
+        } xpdata_fix_array_t;
+
         bool initialize(const char*);
         const char* get_error(void);
         xpdata_navaid_array_t get_navaid_by_name(xpdata_navaid_type_t type, const char* name);
         xpdata_navaid_array_t get_navaid_by_freq  (xpdata_navaid_type_t, unsigned int);
-        xpdata_navaid_array_t get_navaid_by_coords(xpdata_navaid_type_t, double, double, bool);
+        xpdata_navaid_array_t get_navaid_by_coords(xpdata_navaid_type_t, double, double);
+        xpdata_fix_array_t get_fixes_by_name  (const char*);
+        xpdata_fix_array_t get_fixes_by_coords(double, double);
         bool xpdata_is_ready(void);
     ]]
 
