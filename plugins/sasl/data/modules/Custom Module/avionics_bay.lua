@@ -43,6 +43,44 @@ local function convert_fixes_array(rawdata, fix_array)
     end
 end
 
+local function convert_apts_array(rawdata, fix_array)
+    if rawdata then
+        return {
+            apts  = apt_array.apts,
+            len   = apt_array.len
+        }
+    else
+        to_return = {}
+        for i=1,apt_array.len do
+            local new_apt = {
+                id   = ffi.string(apt_array.apts[i-1].id,  apt_array.apts[i-1].id_len),
+                name = ffi.string(apt_array.apts[i-1].full_name, apt_array.apts[i-1].full_name_len),
+                alt  = apt_array.apts[i-1].altitude,
+                lat  = apt_array.apts[i-1].apt_center.lat,
+                lon  = apt_array.apts[i-1].apt_center.lon,
+                rwys = {}
+            };
+            
+            for j=1,apt_array.apts[i-1].rwys_len do
+                table.insert(new_apt.rwys, {
+                    name = ffi.string(apt_array.apts[i-1].rwys[j-1].name),
+                    sibl_name = ffi.string(apt_array.apts[i-1].rwys[j-1].sibl_name),
+                    lat  = apt_array.apts[i-1].rwys[j-1].coords.lat,
+                    lon  = apt_array.apts[i-1].rwys[j-1].coords.lon,
+                    s_lat  = apt_array.apts[i-1].rwys[j-1].sibl_coords.lat,
+                    s_lon  = apt_array.apts[i-1].rwys[j-1].sibl_coords.lon,
+                    width = apt_array.apts[i-1].rwys[j-1].width,
+                    surf_type = apt_array.apts[i-1].rwys[j-1].surface_type,
+                    has_ctr_lights = apt_array.apts[i-1].rwys[j-1].has_ctr_lights
+                })
+            end
+            
+            table.insert(to_return, new_apt)
+        end
+        return to_return
+    end
+end
+
 local function expose_functions()
 
     AvionicsBay.is_initialized = function()
@@ -109,7 +147,27 @@ local function expose_functions()
         fix_array = AvionicsBay.c.get_fixes_by_coords(lat, lon);
         return convert_fixes_array(rawdata, fix_array)
     end
+
+    AvionicsBay.apts = {}
+    AvionicsBay.apts.get_by_name = function(name, rawdata)
+        assert(initialized, "You must initialize avionicsbay before use")
+        assert(type(name) == "string", "name must be a string")
+        rawdata = rawdata or false
+        
+        apt_array = AvionicsBay.c.get_apts_by_name(name);
+        return convert_apts_array(rawdata, apt_array)
+    end
     
+    AvionicsBay.apts.get_by_coords = function(lat, lon, rawdata)
+        assert(initialized, "You must initialize avionicsbay before use")
+        assert(type(lat) == "number", "lat must be a string")
+        assert(type(lon) == "number", "lon must be a string")
+        rawdata = rawdata or false
+
+        apt_array = AvionicsBay.c.get_apts_by_coords(lat, lon);
+        return convert_apts_array(rawdata, apt_array)
+    end
+
 end
 
 local function load_avionicsbay()
@@ -161,6 +219,43 @@ local function load_avionicsbay()
             int len;
         } xpdata_fix_array_t;
 
+
+        typedef struct xpdata_apt_rwy_t {
+            char name[4];
+            char sibl_name[4];              // On the other head of the runway
+
+            xpdata_coords_t coords;
+            xpdata_coords_t sibl_coords;    // On the other head of the runway
+            
+            double width;
+            int surface_type;
+            bool has_ctr_lights;
+            
+        } xpdata_apt_rwy_t;
+
+        typedef struct xpdata_apt_t {
+            const char *id;         // e.g., LIRF
+            int id_len;
+            
+            const char *full_name;  // e.g., Roma Fiumicino
+            int full_name_len;
+            
+            int altitude;
+
+            const xpdata_apt_rwy_t *rwys;
+            int rwys_len;
+            
+            xpdata_coords_t apt_center;
+            
+            long pos_seek;   // For internal use only, do not modify this value
+            
+        } xpdata_apt_t;
+
+        typedef struct xpdata_apt_array_t {
+            const struct xpdata_apt_t * const * apts;
+            int len;
+        } xpdata_apt_array_t;
+
         bool initialize(const char*);
         const char* get_error(void);
         xpdata_navaid_array_t get_navaid_by_name(xpdata_navaid_type_t type, const char* name);
@@ -168,6 +263,8 @@ local function load_avionicsbay()
         xpdata_navaid_array_t get_navaid_by_coords(xpdata_navaid_type_t, double, double);
         xpdata_fix_array_t get_fixes_by_name  (const char*);
         xpdata_fix_array_t get_fixes_by_coords(double, double);
+        xpdata_apt_array_t get_apts_by_name  (const char*);
+        xpdata_apt_array_t get_apts_by_coords(double, double);
         bool xpdata_is_ready(void);
     ]]
 
