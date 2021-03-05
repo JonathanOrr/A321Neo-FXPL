@@ -1,3 +1,10 @@
+local hud_colour = "light"
+local efb_up_button_begin = 0
+local efb_down_button_begin = 0
+local efb_save_buttn_begin = 0
+--------------------------------------------------------------
+
+
 include("libs/table.save.lua")
 
 --MOUSE & BUTTONS--
@@ -35,7 +42,22 @@ function EFB_execute_page_4_buttons()
         --print("cabin_up")
     end)
 
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 69,594,136,623, function ()
+        hud_colour = "light"
+    end)
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 154,594,221,623, function ()
+        hud_colour = "dark"
+    end)
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 110,537,179,567, function ()
+        efb_up_button_begin = get(TIME)
+    end)
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 110,495,179,526, function ()
+        efb_down_button_begin = get(TIME)
+    end)
 
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 414,46,738,90, function ()
+        efb_save_buttn_begin = get(TIME)
+    end)
 
     --Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 751,150,972,174, function ()
     --    table.save(EFB_preferences, moduleDirectory .. "/Custom Module/saved_configs/EFB_preferences")
@@ -98,6 +120,40 @@ end
 
 --DRAW LOOPS--
 function EFB_draw_page_4()
+
+
+    if hud_colour == "light" then
+        SASL_drawSegmentedImg_xcenter_aligned (EFB_highlighter, 102,580,192,58,2,1)
+        SASL_drawSegmentedImg_xcenter_aligned (EFB_highlighter, 188,580,192,58,2,2)
+        sasl.gl.drawTexture ( EFB_CONFIG_hud, 0 , 0 , 1143 , 800 , 0,255/255,0 )
+    else
+        SASL_drawSegmentedImg_xcenter_aligned (EFB_highlighter, 102,580,192,58,2,2)
+        SASL_drawSegmentedImg_xcenter_aligned (EFB_highlighter, 188,580,192,58,2,1)
+        sasl.gl.drawTexture ( EFB_CONFIG_hud, 0 , 0 , 1143 , 800 , 0,170/255,0 )
+    end
+
+
+    if get(TIME) - efb_up_button_begin < 0.5 then
+    SASL_drawSegmentedImg_xcenter_aligned (EFB_highlighter, 144,524,192,58,2,2)
+    else
+    SASL_drawSegmentedImg_xcenter_aligned (EFB_highlighter, 144,524,192,58,2,1)
+    end
+
+
+    if get(TIME) - efb_down_button_begin < 0.5 then
+    SASL_drawSegmentedImg_xcenter_aligned (EFB_highlighter, 144,482,192,58,2,2)
+    else
+    SASL_drawSegmentedImg_xcenter_aligned (EFB_highlighter, 144,482,192,58,2,1)
+    end
+
+
+    if get(TIME) - efb_save_buttn_begin < 0.5 then
+    SASL_drawSegmentedImg_xcenter_aligned (EFB_CONFIG_save, 577,54,634,32,2,2)
+    else
+    SASL_drawSegmentedImg_xcenter_aligned (EFB_CONFIG_save, 577,54,634,32,2,1)
+    end
+
+
     sasl.gl.drawTexture ( EFB_CONFIG_bgd, 0 , 0 , 1143 , 800 , ECAM_WHITE )
     sasl.gl.drawTexture ( EFB_CONFIG_slider, get(VOLUME_ext)*333+680 , 619 , 22 , 22 , ECAM_WHITE )
     sasl.gl.drawTexture ( EFB_CONFIG_slider, get(VOLUME_int)*333+680 , 559 , 22 , 22 , ECAM_WHITE )
@@ -110,5 +166,7 @@ function EFB_draw_page_4()
     SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 262, 78, 18, 2, EFB_preferences["pausetd"] == 1 and 2 or 1)
     SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 228, 78, 18, 2, EFB_preferences["copilot"] == 1 and 2 or 1)
     SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 194, 78, 18, 2, EFB_preferences["flarelaw"] == 1 and 2 or 1)
-    ----print(EFB_CURSOR_X, EFB_CURSOR_Y)
+    --print(EFB_CURSOR_X, EFB_CURSOR_Y)
+
+
 end

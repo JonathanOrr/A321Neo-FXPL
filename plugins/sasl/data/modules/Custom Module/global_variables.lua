@@ -35,13 +35,16 @@
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 
+-- Fonts
 Font_7_digits         = sasl.gl.loadFont("fonts/digital-7.mono.ttf")
 Font_B612regular      = sasl.gl.loadFont("fonts/B612-Regular.ttf")
 Font_B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
 Font_B612MONO_bold    = sasl.gl.loadFont("fonts/B612Mono-Bold.ttf")
 
+-- Performance array (used only when debug_performance_measure in main_debug.lua is `true`)
 Perf_array = {}
 
+-- Systems
 ELEC_sys = {}
 Fuel_sys = {}
 FIRE_sys = {}
@@ -49,11 +52,13 @@ AI_sys   = {}
 ADIRS_sys= {}
 ND_terrain = {}
 
-EFB_preferences = {}
+-- Engine data dependig on the user choice
+ENG = { data_is_loaded = false }
 
 AvionicsBay = {}
-Data_manager = {}
+EFB_preferences = {} -- Should not be here
 
+-- MCDU
 Mcdu_popup = {}
 Mcdu_data = {}
 Mcdu_popup_lut = 0

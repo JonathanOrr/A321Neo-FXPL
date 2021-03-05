@@ -44,6 +44,7 @@ addSearchPath(moduleDirectory .. "/Custom Module/ND/")
 addSearchPath(moduleDirectory .. "/Custom Module/EFB/")
 addSearchPath(moduleDirectory .. "/Custom Module/PFD/PFD_subcomponents/")
 addSearchPath(moduleDirectory .. "/Custom Module/FBW/")
+addSearchPath(moduleDirectory .. "/Custom Module/AUTOFLT/")
 addSearchPath(moduleDirectory .. "/Custom Module/display_pop-ups/")
 
 position = {0, 0, 4096, 4096}
@@ -63,8 +64,6 @@ components = {
   fuel {}, -- Please keep this before engines
   engines {},
   cabin_screens {},
-  fcu_ap_at {},
-  AT {},
   ADIRS {},
   MCDU {},
   packs {},
@@ -94,6 +93,7 @@ components = {
   fire_eng_apu {},
   fire_cargo {},
   FBW_main {},
+  AUTOFLT_main {},
   calls {},
   GPWS {},
   sounds {},
@@ -104,6 +104,7 @@ components = {
   main_popup {},
 
   librain{},
+
 }
 
 include(moduleDirectory .. "/main_windows.lua")

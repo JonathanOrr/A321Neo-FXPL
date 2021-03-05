@@ -86,7 +86,7 @@ function EFB_execute_page_3_buttons()
         equilibrium_cargo_weight = fwd_cargo_target - aft_cargo_target
         --print(get(FOB))
 
-        zfw_counter = 3 -- see the update function for why I did this
+        zfw_counter = 6 -- see the update function for why I did this
 
     end)
     
@@ -356,7 +356,7 @@ function EFB_draw_page_3()
     cg_mac_calculation()
     --print(EFB_CURSOR_X, EFB_CURSOR_Y)
 
-    if zfw_counter > 0 then
+    if zfw_counter > 0 then --This basically loops the loading for a few times, to prevent the loadsheet values for not updating. Loadsheet are separate values, and requires at least 2 loading cycles.
         loadsheet_zfw = Round(get(Gross_weight) - fuel_target_amount,0)
         zfw_counter = zfw_counter -1
         print(zfw_counter)

@@ -66,8 +66,10 @@ local Sounds_GPWS_tlterr = sasl.createCommand("a321neo/sounds/gpws/tlterr", "")
 local Sounds_GPWS_pitch = sasl.createCommand("a321neo/sounds/gpws/pitch", "")
 local Sounds_GPWS_windshear = sasl.createCommand("a321neo/sounds/gpws/windshear", "")
 local Sounds_GPWS_speed = sasl.createCommand("a321neo/sounds/gpws/speed", "")
-local Sounds_GPWS_stall = sasl.createCommand("a321neo/sounds/gpws/stall", "")
 
+local Sounds_GPWS_dual_input = sasl.createCommand("a321neo/sounds/gpws/dual_input", "")
+local Sounds_GPWS_priority_left = sasl.createCommand("a321neo/sounds/gpws/priority_left", "")
+local Sounds_GPWS_priority_right = sasl.createCommand("a321neo/sounds/gpws/priority_right", "")
 
 local Sounds_alt_callout   = createGlobalPropertyi("a321neo/sounds/alt_callout", 0, false, true, false)
 
@@ -110,6 +112,9 @@ local gpws_sounds = {
     { source=GPWS_pred_terr,        command=Sounds_GPWS_terrahead,     duration = 1.2, continuous = false, interval = 7 },
     { source=GPWS_pred_obst,        command=Sounds_GPWS_obsahead,      duration = 1.4, continuous = false, interval = 7 },
 
+    { source=GPWS_mode_dual_input,     command=Sounds_GPWS_dual_input,     duration = 1, continuous = false, interval = 5},
+    { source=GPWS_mode_priority_left,  command=Sounds_GPWS_priority_left,  duration = 2, continuous = true},
+    { source=GPWS_mode_priority_right, command=Sounds_GPWS_priority_right, duration = 2, continuous = true},
 
     -- Pitch Pitch -- The priority of this is not a big issue because it's active when all the other modes are
     -- not active

@@ -165,6 +165,11 @@ function adirs_get_pitch(i)
     return ADIRS_sys[which_ir(i)].pitch
 end
 
+function adirs_get_vpath(i)
+    return ADIRS_sys[which_ir(i)].pitch - ADIRS_sys[which_ir(i)].aoa
+end
+
+
 function adirs_get_roll(i)
     return ADIRS_sys[which_ir(i)].roll
 end
@@ -480,7 +485,6 @@ local function is_ir_valid(i)
            (math.abs(hdg1   - hdg2)  < margin  or math.abs(hdg1   - hdg3) < margin)
 end
 
-
 function adirs_get_avg_pitch()
     return voter("pitch", is_ir_valid)
 end
@@ -498,6 +502,11 @@ end
 function adirs_get_avg_track()
     return voter("track", is_ir_valid)
 end
+
+function adirs_get_avg_vpath()
+    return adirs_get_avg_pitch() - adirs_get_avg_aoa()
+end
+
 
 function adirs_how_many_ir_params_disagree()
     -- This function can return only 0, 1 or 3

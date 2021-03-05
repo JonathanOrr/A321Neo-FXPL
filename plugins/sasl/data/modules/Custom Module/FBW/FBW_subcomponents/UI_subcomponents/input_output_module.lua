@@ -15,19 +15,19 @@ function Draw_input_module_180x180(x_pos, y_pos)
 
     --input variables
     local input_quadrant = 1
-    if get(Pitch) > 0 and get(Roll) > 0 then
+    if get(Total_input_pitch) > 0 and get(Total_input_roll) > 0 then
         input_quadrant = 1
-    elseif get(Pitch) > 0 and get(Roll) < 0 then
+    elseif get(Total_input_pitch) > 0 and get(Total_input_roll) < 0 then
         input_quadrant = 2
-    elseif get(Pitch) < 0 and get(Roll) < 0 then
+    elseif get(Total_input_pitch) < 0 and get(Total_input_roll) < 0 then
         input_quadrant = 3
-    elseif get(Pitch) < 0 and get(Roll) > 0 then
+    elseif get(Total_input_pitch) < 0 and get(Total_input_roll) > 0 then
         input_quadrant = 4
     end
 
-    local input_radius = Math_clamp_higher(math.sqrt(get(Pitch)^2 + get(Roll)^2), 1)
-    local input_angle_rad = math.atan(get(Pitch) / get(Roll))
-    local input_angle_deg = math.deg(math.atan(get(Pitch) / get(Roll)))
+    local input_radius = Math_clamp_higher(math.sqrt(get(Total_input_pitch)^2 + get(Total_input_roll)^2), 1)
+    local input_angle_rad = math.atan(get(Total_input_pitch) / get(Total_input_roll))
+    local input_angle_deg = math.deg(math.atan(get(Total_input_pitch) / get(Total_input_roll)))
     local input_gradient = math.tan(input_angle_rad)
     local augmented_roll = 0
     local augmented_pitch = 0
@@ -80,7 +80,7 @@ function Draw_input_module_180x180(x_pos, y_pos)
     end
 
     --draw raw human input
-    sasl.gl.drawCircle(CENTER_X + 85 * get(Roll), CENTER_Y - 85 * get(Pitch), 5, true, LIGHT_BLUE)
+    sasl.gl.drawCircle(CENTER_X + 85 * get(Total_input_roll), CENTER_Y - 85 * get(Total_input_pitch), 5, true, LIGHT_BLUE)
 
 end
 
@@ -94,7 +94,7 @@ function Draw_FBW_output_180x180(x_pos, y_pos)
     sasl.gl.drawRectangle(CENTER_X - 85, CENTER_Y - 85, 170, 170, LIGHT_GREY)
 
     --draw FBW output
-    sasl.gl.drawCircle(CENTER_X + 85 * get(Roll_artstab), CENTER_Y - 85 * get(Pitch_artstab), 5, true, GREEN)
+    sasl.gl.drawCircle(CENTER_X + 85 * get(FBW_roll_output), CENTER_Y - 85 * get(FBW_pitch_output), 5, true, GREEN)
 end
 
 function Draw_control_info_and_setting_110x180(x_pos, y_pos)
@@ -117,21 +117,21 @@ function Draw_control_info_and_setting_110x180(x_pos, y_pos)
     --draw deflection angles
     sasl.gl.drawText(B612_MONO_bold, CENTER_X, CENTER_Y + 55 + 10, "SQUARE INPUT", 12, false, false, TEXT_ALIGN_CENTER, WHITE)
     sasl.gl.drawText(B612_MONO_bold, CENTER_X, CENTER_Y + 20 + 10, "ROLL", 12, false, false, TEXT_ALIGN_CENTER, WHITE)
-    sasl.gl.drawText(B612_MONO_bold, CENTER_X, CENTER_Y - 15 + 17, string.format("%.1f", tostring(get(Augmented_roll) * 20)) .. "°", 12, false, false, TEXT_ALIGN_CENTER, WHITE)
-    sasl.gl.drawText(B612_MONO_bold, CENTER_X, CENTER_Y - 15 + 3, string.format("%.1f", tostring(get(Augmented_roll) * 15)) .. "°/S", 12, false, false, TEXT_ALIGN_CENTER, WHITE)
+    sasl.gl.drawText(B612_MONO_bold, CENTER_X, CENTER_Y - 15 + 17, string.format("%.1f", tostring(get(Total_input_roll) * 20)) .. "°", 12, false, false, TEXT_ALIGN_CENTER, WHITE)
+    sasl.gl.drawText(B612_MONO_bold, CENTER_X, CENTER_Y - 15 + 3, string.format("%.1f", tostring(get(Total_input_roll) * 15)) .. "°/S", 12, false, false, TEXT_ALIGN_CENTER, WHITE)
     sasl.gl.drawText(B612_MONO_bold, CENTER_X, CENTER_Y - 50 + 10, "PITCH", 12, false, false, TEXT_ALIGN_CENTER, WHITE)
-    sasl.gl.drawText(B612_MONO_bold, CENTER_X, CENTER_Y - 85 + 17, string.format("%.1f", tostring(get(Augmented_pitch) * 16)) .. "°", 12, false, false, TEXT_ALIGN_CENTER, WHITE)
+    sasl.gl.drawText(B612_MONO_bold, CENTER_X, CENTER_Y - 85 + 17, string.format("%.1f", tostring(get(Total_input_pitch) * 16)) .. "°", 12, false, false, TEXT_ALIGN_CENTER, WHITE)
     if get(Flaps_internal_config) == 0 then
-        if get(Augmented_pitch) >= 0 then
-            sasl.gl.drawText(B612_MONO_bold, CENTER_X, CENTER_Y - 85 + 3, string.format("%.1f", tostring(Math_rescale(0, lvl_flt_load_constant, 1, 2.5, get(Augmented_pitch)))) .. "G", 12, false, false, TEXT_ALIGN_CENTER, WHITE)
+        if get(Total_input_pitch) >= 0 then
+            sasl.gl.drawText(B612_MONO_bold, CENTER_X, CENTER_Y - 85 + 3, string.format("%.1f", tostring(Math_rescale(0, lvl_flt_load_constant, 1, 2.5, get(Total_input_pitch)))) .. "G", 12, false, false, TEXT_ALIGN_CENTER, WHITE)
         else
-            sasl.gl.drawText(B612_MONO_bold, CENTER_X, CENTER_Y - 85 + 3, string.format("%.1f", tostring(Math_rescale(-1, -1, 0, lvl_flt_load_constant, get(Augmented_pitch)))) .. "G", 12, false, false, TEXT_ALIGN_CENTER, WHITE)
+            sasl.gl.drawText(B612_MONO_bold, CENTER_X, CENTER_Y - 85 + 3, string.format("%.1f", tostring(Math_rescale(-1, -1, 0, lvl_flt_load_constant, get(Total_input_pitch)))) .. "G", 12, false, false, TEXT_ALIGN_CENTER, WHITE)
         end
     else
-        if get(Augmented_pitch) >= 0 then
-            sasl.gl.drawText(B612_MONO_bold, CENTER_X, CENTER_Y - 85 + 3, string.format("%.1f", tostring(Math_rescale(0, lvl_flt_load_constant, 1, 2, get(Augmented_pitch)))) .. "G", 12, false, false, TEXT_ALIGN_CENTER, WHITE)
+        if get(Total_input_pitch) >= 0 then
+            sasl.gl.drawText(B612_MONO_bold, CENTER_X, CENTER_Y - 85 + 3, string.format("%.1f", tostring(Math_rescale(0, lvl_flt_load_constant, 1, 2, get(Total_input_pitch)))) .. "G", 12, false, false, TEXT_ALIGN_CENTER, WHITE)
         else
-            sasl.gl.drawText(B612_MONO_bold, CENTER_X, CENTER_Y - 85 + 3, string.format("%.1f", tostring(Math_rescale(0, -1, 0, lvl_flt_load_constant, get(Augmented_pitch)))) .. "G", 12, false, false, TEXT_ALIGN_CENTER, WHITE)
+            sasl.gl.drawText(B612_MONO_bold, CENTER_X, CENTER_Y - 85 + 3, string.format("%.1f", tostring(Math_rescale(0, -1, 0, lvl_flt_load_constant, get(Total_input_pitch)))) .. "G", 12, false, false, TEXT_ALIGN_CENTER, WHITE)
         end
     end
 end

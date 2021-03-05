@@ -137,16 +137,17 @@ function draw_fctl_page()
         sasl.gl.drawWideLine(size[1]/2 + spoiler_track_x_y[i][1], spoiler_track_x_y[i][2], size[1]/2 + spoiler_track_x_y[i][1] + spoiler_track_length, spoiler_track_x_y[i][2], 2.5, get(r_spoilers_avail_dataref[i]) == 1 and ECAM_GREEN or ECAM_ORANGE)
     end
 
-    sasl.gl.drawWideLine(size[1]/2 - 308, 485, size[1]/2 - 308, 663, 2.5, get(L_aileron_avail) == 1 and ECAM_WHITE or ECAM_ORANGE)
-    sasl.gl.drawWideLine(size[1]/2 + 308, 485, size[1]/2 + 308, 663, 2.5, get(R_aileron_avail) == 1 and ECAM_WHITE or ECAM_ORANGE)
-    sasl.gl.drawWideLine(size[1]/2 - 190, 244, size[1]/2 - 190, 414, 2.5, get(L_elevator_avail) == 1 and ECAM_WHITE or ECAM_ORANGE)
-    sasl.gl.drawWideLine(size[1]/2 + 190, 244, size[1]/2 + 190, 414, 2.5, get(R_elevator_avail) == 1 and ECAM_WHITE or ECAM_ORANGE)
-    sasl.gl.drawTexture(ECAM_FCTL_rudder_track_img, 382, 164, 139, 21, get(Rudder_avail) == 1 and ECAM_WHITE or ECAM_ORANGE)
+    sasl.gl.drawWideLine(size[1]/2 - 308, 485, size[1]/2 - 308, 663, 2.5, ECAM_WHITE)
+    sasl.gl.drawWideLine(size[1]/2 + 308, 485, size[1]/2 + 308, 663, 2.5, ECAM_WHITE)
+    sasl.gl.drawWideLine(size[1]/2 - 190, 244, size[1]/2 - 190, 414, 2.5, ECAM_WHITE)
+    sasl.gl.drawWideLine(size[1]/2 + 190, 244, size[1]/2 + 190, 414, 2.5, ECAM_WHITE)
+    sasl.gl.drawTexture(ECAM_FCTL_rudder_track_img, 382, 164, 139, 21, ECAM_WHITE)
 
     --surface index animations--
     local aileron_anim = {
         {-25, 648},
         {0, 558},
+        {10, 541},
         {25, 468},
     }
     local elevator_anim = {

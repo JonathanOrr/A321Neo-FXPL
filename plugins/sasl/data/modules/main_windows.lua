@@ -346,3 +346,33 @@ ECAM_window = contextWindow {
       ECAM_pop_up {}
   };
 }
+
+MAGIC_window = contextWindow {
+  name = "Magic";
+  position = { 0 , 0 , 300, 100 };
+  noBackground = true ;
+  proportional = true ;
+  minimumSize = { 300, 100 };
+  maximumSize = { 300, 100 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = false;
+  components = {
+      magic {}
+  };
+}
+
+Loadsheet_window = contextWindow {
+  name = "Loadsheet";
+  position = { 0 , 0 , 1700, 900 };
+  noBackground = true ;
+  proportional = true ;
+  minimumSize = { 567, 300 };
+  maximumSize = { 1700, 900 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = false;
+  components = {
+    loadsheet{}
+  };
+}
+
+  

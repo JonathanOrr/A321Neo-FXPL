@@ -1,6 +1,8 @@
 position = {get(Fo_pfd_position, 1), get(Fo_pfd_position, 2), get(Fo_pfd_position, 3), get(Fo_pfd_position, 4)}
 size = {900, 900}
 include('PFD/PFD_drawing_assets.lua')
+include('PFD/PFD_sub_functions/PFD_FMA_subcomponents/all_fmas.lua')
+include('PFD/PFD_sub_functions/PFD_FMA.lua')
 include('PFD/PFD_sub_functions/PFD_LS.lua')
 include('PFD/PFD_sub_functions/PFD_get_ILS_data.lua')
 include('PFD/PFD_sub_functions/PFD_att.lua')
@@ -90,6 +92,7 @@ end
 function draw()
     --render into the popup texure
     sasl.gl.setRenderTarget(FO_PFD_popup_texture, true)
+    PFD_draw_FMA(PFD_ALL_FMA)
     PFD_draw_LS(fo_PFD_table)
     PFD_draw_att(fo_PFD_table)
     PFD_draw_spd_tape(fo_PFD_table)

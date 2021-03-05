@@ -67,9 +67,6 @@ local function draw_ecam_lower_section_fixed()
         sasl.gl.drawText(Font_AirbusDUL, 260, size[2]/2-442, "°C", 32, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
     end
 
-
-    -- TODO Add ALT SEL from autpilot
-
     if (gload >= 1.4 or gload <= 0.7) then
         if time_g_load_catch == 0 then
             time_g_load_catch = get(TIME)
@@ -87,6 +84,20 @@ local function draw_ecam_lower_section_fixed()
         end
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2-115, size[2]/2-372, "G LOAD", 32, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2+50, size[2]/2-372, Round_fill(gload,1), 32, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
+    else
+    
+        if get(AUTOFLT_FCU_M_ALT) == 1 then
+            sasl.gl.drawText(Font_AirbusDUL, size[1]/2-130, size[2]/2-372, "ALT SEL", 32, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+
+            local altitude_m = math.floor(get(AUTOFLT_FCU_ALT) * 0.3048)
+
+            sasl.gl.drawText(Font_AirbusDUL, size[1]/2+110, size[2]/2-372, altitude_m, 32, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+
+
+            sasl.gl.drawText(Font_AirbusDUL, size[1]/2+120, size[2]/2-372, "M", 24, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+
+        end
+    
     end
 end
 
@@ -226,12 +237,20 @@ local function draw_ecam_pages()
     end
 end
 
+local skip_1st_frame_AA = true
+
 --drawing the ECAM
 function draw()
 
     perf_measure_start("ECAM:draw()")
 
-    sasl.gl.setRenderTarget(ECAM_popup_texture, true)
+    if not skip_1st_frame_AA then
+        sasl.gl.setRenderTarget(ECAM_popup_texture, true, 16)
+    else
+        sasl.gl.setRenderTarget(ECAM_popup_texture, true)
+    end
+    skip_1st_frame_AA = false
+    
     draw_ecam_pages()
     draw_ecam_lower_section()
     draw_video()

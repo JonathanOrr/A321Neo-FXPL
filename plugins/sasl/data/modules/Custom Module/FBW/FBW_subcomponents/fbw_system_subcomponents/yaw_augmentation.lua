@@ -145,16 +145,16 @@ end
 
 local function FBW_yaw_mode_blending(var_table)
     set(
-        Yaw_artstab,
+        FBW_yaw_output,
         Math_clamp(
-            (get(Yaw) + var_table.Yaw_damper_controller_output)                        * get(FBW_lateral_ground_mode_ratio) +
+            (get(Total_input_yaw) + var_table.Yaw_damper_controller_output)                        * get(FBW_lateral_ground_mode_ratio) +
             (var_table.NRM_controller_output + var_table.Yaw_damper_controller_output) * get(FBW_lateral_flight_mode_ratio)
         , -get(Rudder_travel_lim) / 30, get(Rudder_travel_lim) / 30)
     )
 end
 
 function update()
-    yaw_input(get(Yaw), yaw_control_var_table)
+    yaw_input(get(Total_input_yaw), yaw_control_var_table)
     filter_values(yaw_control_var_table, lateral_control_filter_table)
     yaw_controlling(yaw_control_var_table)
     FBW_yaw_mode_blending(yaw_control_var_table)

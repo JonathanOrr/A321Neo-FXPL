@@ -286,4 +286,5 @@ FAILURE_FIRE_APU = createGlobalPropertyi("a321neo/failures/fire/apu", 0, false, 
 FAILURE_FIRE_ENG_1 = createGlobalPropertyi("a321neo/failures/fire/eng_1", 0, false, true, false)
 FAILURE_FIRE_ENG_2 = createGlobalPropertyi("a321neo/failures/fire/eng_2", 0, false, true, false)
 
+FAILURE_AP = createGlobalPropertyia("a321neo/failures/ap/ap", 2)
 

@@ -98,9 +98,9 @@ local function update_VMAX_demand()
     local max_MMO = adirs_get_avg_ias() * (VMAX_speeds[1] + 0.040) / Math_clamp_lower(adirs_get_avg_mach(), 0.001)
 
     if adirs_get_avg_alt() > 24600 then
-        set(VMAX_demand, Math_rescale(-1, max_MMO, 0, min_MMO, get(Augmented_pitch)))
+        set(VMAX_demand, Math_rescale(-1, max_MMO, 0, min_MMO, get(Total_input_pitch)))
     else
-        set(VMAX_demand, Math_rescale(-1, max_VMO, 0, min_VMO, get(Augmented_pitch)))
+        set(VMAX_demand, Math_rescale(-1, max_VMO, 0, min_VMO, get(Total_input_pitch)))
     end
 end
 
@@ -332,7 +332,7 @@ end
 
 local function STALL_STALL()
     set(GPWS_mode_stall, 0)
-    --stall warning (needls to be further comfirmed)
+    --stall warning (needs to be further comfirmed)
     if get(FBW_total_control_law) == FBW_NORMAL_LAW or
        get(Any_wheel_on_ground) == 1 or
        get(FAC_1_status) == 0 and get(FAC_2_status) == 0 then

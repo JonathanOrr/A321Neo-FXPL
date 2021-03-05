@@ -53,6 +53,8 @@ EFB_YELLOW = {168/255, 200/255, 91/255}
 PFD_TAPE_GREY = {69/255, 86/255, 105/255}
 PFD_YELLOW = {1, 1, 0}
 
+LED_TEXT_CL = {235/255, 200/255, 135/255}
+
 -- ELEC buses
 ELEC_BUS_AC_1 = 1
 ELEC_BUS_AC_2 = 2
@@ -163,6 +165,8 @@ Font_AirbusDUL_vert = sasl.gl.loadFont("fonts/AirbusDULiberationMono.ttf")
 sasl.gl.setFontRenderMode(Font_AirbusDUL, TEXT_RENDER_FORCED_MONO, 0.6)
 sasl.gl.setFontDirection (Font_AirbusDUL_vert, TEXT_DIRECTION_VERTICAL)
 
+Font_7segment_led = sasl.gl.loadFont("fonts/Segment7Standard.otf")
+
 Airbus_panel_font = sasl.gl.loadFont("fonts/A320PanelFont_V0.2b.ttf")
 
 Font_AirbusDUL_small = sasl.gl.loadFont("fonts/AirbusDULiberationMono.ttf")
@@ -197,6 +201,9 @@ FBW_DIRECT_LAW            = 0
 FBW_ABNORMAL_LAW          = -1
 FBW_MECHANICAL_BACKUP_LAW = -2
 
+CAPT_SIDESTICK = 1
+FO_SIDESTICK = 2
+
 THR_TOGA_START = 0.95
 THR_MCT_END =    0.85
 THR_MCT_START =  0.80
@@ -204,3 +211,9 @@ THR_CLB_END =    0.70
 THR_CLB_START =  0.65
 THR_IDLE_END =   0.05
 THR_IDLE_START = 0.00
+
+THR_TOGA_THRESHOLD = (THR_MCT_END+THR_MCT_START)  / 2
+THR_MCT_THRESHOLD  = (THR_CLB_END+THR_CLB_START)  / 2
+THR_CLB_THRESHOLD =  (THR_IDLE_END+THR_IDLE_START)/ 2
+
+
