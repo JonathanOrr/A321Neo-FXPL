@@ -32,6 +32,17 @@ local function update_vor(data)
     end
 end
 
+local function update_dme(data)
+    data.poi.dme =  AvionicsBay.navaids.get_by_coords(NAV_ID_DME_ALONE, adirs_get_lat(data.id), adirs_get_lon(data.id), false)
+    if data.config.range >= ND_RANGE_160 then
+        data.poi.dme = table_concat(data.poi.dme, AvionicsBay.navaids.get_by_coords(NAV_ID_DME_ALONE, adirs_get_lat(data.id)+4, adirs_get_lon(data.id), false))
+        data.poi.dme = table_concat(data.poi.dme, AvionicsBay.navaids.get_by_coords(NAV_ID_DME_ALONE, adirs_get_lat(data.id),   adirs_get_lon(data.id)+4, false))
+        data.poi.dme = table_concat(data.poi.dme, AvionicsBay.navaids.get_by_coords(NAV_ID_DME_ALONE, adirs_get_lat(data.id)-4, adirs_get_lon(data.id), false))
+        data.poi.dme = table_concat(data.poi.dme, AvionicsBay.navaids.get_by_coords(NAV_ID_DME_ALONE, adirs_get_lat(data.id),   adirs_get_lon(data.id)-4, false))
+    end
+end
+
+
 local function update_ndb(data)
     data.poi.ndb =  AvionicsBay.navaids.get_by_coords(NAV_ID_NDB, adirs_get_lat(data.id), adirs_get_lon(data.id), false)
     if data.config.range >= ND_RANGE_160 then
@@ -71,6 +82,7 @@ function update_poi(data)
     if AvionicsBay.is_initialized() and AvionicsBay.is_ready() then
         update_airports(data)
         update_vor(data)
+        update_dme(data)
         update_ndb(data)
         update_wpt(data)
     end

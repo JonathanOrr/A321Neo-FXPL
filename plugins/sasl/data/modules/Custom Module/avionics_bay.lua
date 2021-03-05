@@ -17,7 +17,8 @@ local function convert_navaid_array(rawdata, nav_array)
                 lat  = nav_array.navaids[i-1].coords.lat,
                 lon  = nav_array.navaids[i-1].coords.lon,
                 alt  = nav_array.navaids[i-1].altitude,
-                freq = nav_array.navaids[i-1].frequency
+                freq = nav_array.navaids[i-1].frequency,
+                is_coupled_dme = nav_array.navaids[i-1].is_coupled_dme
             })
         end
         return to_return
@@ -200,6 +201,7 @@ local function load_avionicsbay()
             xpdata_coords_t coords;
             int altitude;
             unsigned int frequency;
+            bool is_coupled_dme;    // True if the vor is coupled with DME
         } xpdata_navaid_t;
 
         typedef struct xpdata_navaid_array_t {
