@@ -56,7 +56,6 @@ ND_terrain = {}
 ENG = { data_is_loaded = false }
 
 AvionicsBay = {}
-EFB_preferences = {} -- Should not be here
 
 -- MCDU
 Mcdu_popup = {}
