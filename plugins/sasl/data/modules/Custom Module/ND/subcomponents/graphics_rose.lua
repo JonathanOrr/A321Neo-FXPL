@@ -447,7 +447,7 @@ function draw_rose(data)
             get_px_per_nm = rose_get_px_per_nm
         }
 
-        draw_oans(data, functions_for_oans)
+        --draw_oans(data, functions_for_oans)
     end
     
     draw_navaid_pointers(data)

@@ -71,7 +71,9 @@ function update_poi(data)
         return
     end
 
-    if prev_range == data.config.range and get(TIME) - last_poi_update < 10 then
+    local is_avionics_bay_ok = AvionicsBay.is_initialized() and AvionicsBay.is_ready()
+
+    if prev_range == data.config.range and get(TIME) - last_poi_update < 10 and is_avionics_bay_ok then
         return
     end
 
@@ -79,7 +81,7 @@ function update_poi(data)
 
     last_poi_update = get(TIME)
 
-    if AvionicsBay.is_initialized() and AvionicsBay.is_ready() then
+    if is_avionics_bay_ok then
         update_airports(data)
         update_vor(data)
         update_dme(data)
