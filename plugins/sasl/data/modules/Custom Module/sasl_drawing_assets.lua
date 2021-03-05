@@ -214,3 +214,7 @@ CAPT_ND_popup_texture =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/te
 FO_ND_popup_texture =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/popups/fo_nd.png")
 EWD_popup_texture =      sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/popups/ewd.png")
 ECAM_popup_texture =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/popups/ecam.png")
+
+--LOADSHEET 
+LOADSHEET_bgd =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/loadsheet/loadsheet.png")
+LOADSHEET_compute =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/loadsheet/compute_button.png")

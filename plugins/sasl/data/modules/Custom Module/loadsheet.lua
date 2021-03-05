@@ -50,10 +50,13 @@ local tank_index_rct = {
     {FUEL_RCT_MAX , 22},
 }
 
-
 --Index formula: I = ( (CG% - 25) * Weight * 0.000042 ) + K
 --See FCOM page 6814 Onwards
 
 function update()
     calculation_weight = get(Gross_weight)
+end
+
+function draw()
+    sasl.gl.drawTexture (LOADSHEET_bgd, 0 , 0 , 1700 , 900 , EFB_WHITE )
 end

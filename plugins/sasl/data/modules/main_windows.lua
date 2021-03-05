@@ -360,3 +360,19 @@ MAGIC_window = contextWindow {
       magic {}
   };
 }
+
+Loadsheet_window = contextWindow {
+  name = "Loadsheet";
+  position = { 0 , 0 , 1700, 900 };
+  noBackground = true ;
+  proportional = true ;
+  minimumSize = { 567, 300 };
+  maximumSize = { 1700, 900 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = false;
+  components = {
+    loadsheet{}
+  };
+}
+
+  
