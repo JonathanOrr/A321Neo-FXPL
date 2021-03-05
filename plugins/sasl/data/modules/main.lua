@@ -97,6 +97,7 @@ components = {
   GPWS {},
   sounds {},
   graphics {},
+  weightnbalance{},
 
   display_brightness {}, -- This must stay at the bottom
 
