@@ -11,16 +11,7 @@ end
 
 
 local function update_airports(data)
-    local multi_airports = Data_manager.get_arpt_by_coords(adirs_get_lat(data.id), adirs_get_lon(data.id), data.config.range >= ND_RANGE_160)
-    
-    data.poi.arpt = {}
-    
-    for i,airports in ipairs(multi_airports) do
-        for j,x in ipairs(airports) do
-            table.insert(data.poi.arpt, {lat=x.lat, lon=x.lon, id=x.id})
-        end
-    end
-    
+
     data.poi.arpt =  AvionicsBay.apts.get_by_coords(adirs_get_lat(data.id), adirs_get_lon(data.id), false)
     if data.config.range >= ND_RANGE_160 then
         data.poi.arpt = table_concat(data.poi.arpt, AvionicsBay.apts.get_by_coords(adirs_get_lat(data.id)+4, adirs_get_lon(data.id), false))

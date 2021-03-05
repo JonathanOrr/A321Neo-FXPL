@@ -45,7 +45,9 @@ end
 function update_position(data)
     local id = data.id
 
-    data.misc.map_not_avail = (not adirs_is_position_ok(id) or (Data_manager.nearest_airport == nil and data.config.range <= ND_RANGE_ZOOM_2)) or not AvionicsBay.is_initialized()
+    -- true -> Data_manager.nearest_airport == nil
+
+    data.misc.map_not_avail = (not adirs_is_position_ok(id) or (true and data.config.range <= ND_RANGE_ZOOM_2)) or not AvionicsBay.is_initialized()
     data.misc.map_partially_displayed = (AvionicsBay.is_initialized() and not AvionicsBay.is_ready()) or data.misc.not_displaying_all_data
 
     data.misc.not_displaying_all_data = false -- reset it

@@ -55,7 +55,6 @@ panelHeight3d = 4096
 
 components = {
   avionics_bay {},
-  data_manager {},
   efb{},
   efb_topcat{},
   display_backlights {},    -- This must stay at the top
