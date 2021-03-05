@@ -55,7 +55,6 @@ ND_terrain = {}
 -- Engine data dependig on the user choice
 ENG = { data_is_loaded = false }
 
-EFB_preferences = {} -- Should not be here
 Data_manager = {}    -- Will be removed soon
 
 -- MCDU
