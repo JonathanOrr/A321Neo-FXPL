@@ -88,10 +88,6 @@ function Show_hide_GPWS_Debug()
   GPWS_debug_window:setIsVisible(not GPWS_debug_window:isVisible())
 end
 
-function Show_hide_loadsheet()
-  Loadsheet_window:setIsVisible(not Loadsheet_window:isVisible())
-end
-
 function Show_hide_MAGIC_Debug()
   MAGIC_window:setIsVisible(not MAGIC_window:isVisible())
 end
@@ -171,7 +167,6 @@ ShowHideMCDU        = sasl.appendMenuItem(Menu_main, "Show/Hide MCDU", Show_hide
 ShowHideDCDU        = sasl.appendMenuItem(Menu_main, "Show/Hide DCDU Manager", Show_hide_DCDU)
 ShowHideFailures    = sasl.appendMenuItem(Menu_main, "Show/Hide Failures Manager", Show_hide_Failures)
 ShowHideFuel        = sasl.appendMenuItem(Menu_main, "Show/Hide Fuel Panel", Show_hide_Fuel)
-ShowHideLoadsheet	= sasl.appendMenuItem(Menu_main, "Show/Hide Loadsheet", Show_hide_loadsheet)
 
 sasl.appendMenuSeparator(Menu_main)
 
