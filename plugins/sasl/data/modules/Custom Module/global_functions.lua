@@ -815,4 +815,8 @@ function Local_magnetic_deviation()
     return get(Flightmodel_mag_heading) - get(Flightmodel_true_heading)
 end
 
+-------------------EFB
 
+function drawTextCentered(font, x, y, string, size, isbold, isitalic, alignment, colour)
+    sasl.gl.drawText (font, x, y - (size/3),string, size, isbold, isitalic, alignment, colour)
+end
