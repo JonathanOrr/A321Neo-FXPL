@@ -55,6 +55,9 @@ PFD_YELLOW = {1, 1, 0}
 
 LED_TEXT_CL = {235/255, 200/255, 135/255}
 
+-- Misc graphics
+GRAPHICS_AA_SCREEN_LEVEL = 4
+
 -- ELEC buses
 ELEC_BUS_AC_1 = 1
 ELEC_BUS_AC_2 = 2

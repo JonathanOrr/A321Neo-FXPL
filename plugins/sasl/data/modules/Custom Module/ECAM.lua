@@ -245,7 +245,7 @@ function draw()
     perf_measure_start("ECAM:draw()")
 
     if not skip_1st_frame_AA then
-        sasl.gl.setRenderTarget(ECAM_popup_texture, true, 16)
+        sasl.gl.setRenderTarget(ECAM_popup_texture, true, GRAPHICS_AA_SCREEN_LEVEL)
     else
         sasl.gl.setRenderTarget(ECAM_popup_texture, true)
     end
