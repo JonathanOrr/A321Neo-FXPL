@@ -364,7 +364,7 @@ local function draw_common_oans_info(data)
         return  -- No OANS over zoom
     end
     
-    local nearest_airport = Data_manager.nearest_airport
+    local nearest_airport = AvionicsBay.apts.get_nearest_apt(false)
     if nearest_airport ~= nil then
         sasl.gl.drawText(Font_AirbusDUL, size[1]-30, size[2]-40, nearest_airport.name, 32, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
         sasl.gl.drawText(Font_AirbusDUL, size[1]-30, size[2]-75, nearest_airport.id, 32, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)

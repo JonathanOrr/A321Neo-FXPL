@@ -44,6 +44,32 @@ local function convert_fixes_array(rawdata, fix_array)
     end
 end
 
+local function convert_single_apt(apt, load_rwys)
+    local new_apt = {
+        id   = ffi.string(apt.id,  apt.id_len),
+        name = ffi.string(apt.full_name, apt.full_name_len),
+        alt  = apt.altitude,
+        lat  = apt.apt_center.lat,
+        lon  = apt.apt_center.lon,
+        rwys = {}
+    };
+
+    for j=1,apt.rwys_len do
+        table.insert(new_apt.rwys, {
+            name = ffi.string(apt.rwys[j-1].name),
+            sibl_name = ffi.string(apt.rwys[j-1].sibl_name),
+            lat  = apt.rwys[j-1].coords.lat,
+            lon  = apt.rwys[j-1].coords.lon,
+            s_lat  = apt.rwys[j-1].sibl_coords.lat,
+            s_lon  = apt.rwys[j-1].sibl_coords.lon,
+            width = apt.rwys[j-1].width,
+            surf_type = apt.rwys[j-1].surface_type,
+            has_ctr_lights = apt.rwys[j-1].has_ctr_lights
+        })
+    end
+    return new_apt
+end
+
 local function convert_apts_array(rawdata, fix_array)
     if rawdata then
         return {
@@ -53,28 +79,7 @@ local function convert_apts_array(rawdata, fix_array)
     else
         to_return = {}
         for i=1,apt_array.len do
-            local new_apt = {
-                id   = ffi.string(apt_array.apts[i-1].id,  apt_array.apts[i-1].id_len),
-                name = ffi.string(apt_array.apts[i-1].full_name, apt_array.apts[i-1].full_name_len),
-                alt  = apt_array.apts[i-1].altitude,
-                lat  = apt_array.apts[i-1].apt_center.lat,
-                lon  = apt_array.apts[i-1].apt_center.lon,
-                rwys = {}
-            };
-            
-            for j=1,apt_array.apts[i-1].rwys_len do
-                table.insert(new_apt.rwys, {
-                    name = ffi.string(apt_array.apts[i-1].rwys[j-1].name),
-                    sibl_name = ffi.string(apt_array.apts[i-1].rwys[j-1].sibl_name),
-                    lat  = apt_array.apts[i-1].rwys[j-1].coords.lat,
-                    lon  = apt_array.apts[i-1].rwys[j-1].coords.lon,
-                    s_lat  = apt_array.apts[i-1].rwys[j-1].sibl_coords.lat,
-                    s_lon  = apt_array.apts[i-1].rwys[j-1].sibl_coords.lon,
-                    width = apt_array.apts[i-1].rwys[j-1].width,
-                    surf_type = apt_array.apts[i-1].rwys[j-1].surface_type,
-                    has_ctr_lights = apt_array.apts[i-1].rwys[j-1].has_ctr_lights
-                })
-            end
+            local new_apt = convert_single_apt(apt_array.apts[i-1], true)
             
             table.insert(to_return, new_apt)
         end
@@ -167,6 +172,19 @@ local function expose_functions()
 
         apt_array = AvionicsBay.c.get_apts_by_coords(lat, lon);
         return convert_apts_array(rawdata, apt_array)
+    end
+
+    AvionicsBay.apts.is_nearest_apt_computed = function()
+        return AvionicsBay.c.get_nearest_apt() ~= nil
+    end
+
+    AvionicsBay.apts.get_nearest_apt = function(load_rwys)
+        local apt = AvionicsBay.c.get_nearest_apt()
+        if apt == nil then
+            return nil
+        else
+            return convert_single_apt(apt, load_rwys)
+        end
     end
 
 end
@@ -267,6 +285,8 @@ local function load_avionicsbay()
         xpdata_fix_array_t get_fixes_by_coords(double, double);
         xpdata_apt_array_t get_apts_by_name  (const char*);
         xpdata_apt_array_t get_apts_by_coords(double, double);
+        const xpdata_apt_t* get_nearest_apt();
+        void set_acf_coords(double lat, double lon);
         bool xpdata_is_ready(void);
     ]]
 
@@ -274,10 +294,9 @@ local function load_avionicsbay()
     
     if AvionicsBay.c.initialize(sasl.getXPlanePath ()) then
         initialized = true
-        print("Initialized")
     else
         initialized = false
-        print("not Initialized")
+        logWarning("Avionics Bay NOT initialized.")
     end
     
     expose_functions()
@@ -287,3 +306,8 @@ end
 
 
 load_avionicsbay()
+
+function update()
+    AvionicsBay.c.set_acf_coords(get(Aircraft_lat), get(Aircraft_long));
+end
+
