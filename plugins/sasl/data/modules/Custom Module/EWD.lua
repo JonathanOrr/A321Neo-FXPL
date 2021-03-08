@@ -200,7 +200,7 @@ local function draw_extra_indication()
     sasl.gl.drawText(Font_AirbusDUL, size[1]-50, size[2]-55, math.floor((n1_max%1)*10), 24, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     sasl.gl.drawText(Font_AirbusDUL, size[1]-35, size[2]-55, "%", 24, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
 
-    if max_eng_n1_mode == 6 then
+    if displayed_mode == 6 then
         sasl.gl.drawText(Font_AirbusDUL, size[1]-80, size[2]-80, math.floor(get(Eng_N1_flex_temp)) .. "°C", 24, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
     end    
 end
