@@ -72,6 +72,10 @@ DRAIMS_1_brightness_act = createGlobalPropertyf("a321neo/cockpit/brightness/drai
 DRAIMS_2_brightness_act = createGlobalPropertyf("a321neo/cockpit/brightness/draims_2_brightness_act", 1, false, true, false)
 ISIS_brightness_act = createGlobalPropertyf("a321neo/cockpit/brightness/isis_brightness_act", 1, false, true, false)
 
+Capt_PFD_disable_click = createGlobalPropertyi("a321neo/cockpit/brightness/capt_pfd_disable_click", 0, false, true, false)
+Capt_ND_disable_click  = createGlobalPropertyi("a321neo/cockpit/brightness/capt_nd_disable_click", 0, false, true, false)
+Fo_PFD_disable_click   = createGlobalPropertyi("a321neo/cockpit/brightness/fo_pfd_disable_click", 0, false, true, false)
+Fo_ND_disable_click    = createGlobalPropertyi("a321neo/cockpit/brightness/fo_nd_disable_click", 0, false, true, false)
 
 --draims--
 DRAIMS_current_page = createGlobalPropertyi("a321neo/cockpit/draims/current_page", 1, false, true, false)--the page the draims unit is currently displaying 1VHF, 2HFs, 3TEL, 4ATC, 5MENU, 6NAV, 7ILS, 8VOR, 9ADF

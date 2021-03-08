@@ -79,9 +79,10 @@ function update_poi(data)
 
     prev_range = data.config.range
 
-    last_poi_update = get(TIME)
 
     if is_avionics_bay_ok then
+        last_poi_update = get(TIME)
+
         update_airports(data)
         update_vor(data)
         update_dme(data)

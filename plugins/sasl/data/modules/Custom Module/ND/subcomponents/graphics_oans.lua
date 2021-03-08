@@ -18,14 +18,16 @@
 include("ND/subcomponents/helpers.lua")
 include("ND/libs/polygon.lua")
 
+local ffi = require("ffi")
+
 local image_black_square    = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/black-square.png")
 local image_icon_flag       = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/icon-flag.png")
 local image_icon_cross      = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/icon-cross.png")
 
-local function draw_oans_rwy(data, rwy_start, rwy_end, functions)
+local function draw_oans_rwy(data, rwy_start, functions)
 
     local x_start,y_start = functions.get_x_y(data, rwy_start.lat, rwy_start.lon)
-    local x_end,y_end = functions.get_x_y(data, rwy_end.lat, rwy_end.lon)
+    local x_end,y_end = functions.get_x_y(data, rwy_start.s_lat, rwy_start.s_lon)
 
     local px_per_nm = functions.get_px_per_nm(data)
     local semiwidth_px = math.floor(rwy_start.width * 0.000539957 * px_per_nm / 2)
@@ -80,7 +82,7 @@ local function draw_oans_rwy(data, rwy_start, rwy_end, functions)
     
     if semiwidth_px*2 >= 40 then
         local font_size = 50
-        local text_rwy = rwy_start.sibling .. "-" .. rwy_end.sibling
+        local text_rwy = rwy_start.sibl_name .. "-" .. rwy_start.name
         
         local width, height = sasl.gl.measureText (Font_AirbusDUL, text_rwy, font_size, false, false)
         
@@ -90,7 +92,7 @@ local function draw_oans_rwy(data, rwy_start, rwy_end, functions)
     -- Runway sign start/end
     m_angle = m_angle+90
     
-    local direction = tonumber(string.sub(rwy_end.sibling,1,2))
+    local direction = tonumber(string.sub(rwy_start.name,1,2))
     if direction ~= nil then
         if direction >= 9 and direction < 27 then
             if  m_angle < 90 or m_angle > 270 then
@@ -107,90 +109,84 @@ local function draw_oans_rwy(data, rwy_start, rwy_end, functions)
     local x_shift = x_start + dist_text * math.cos(angle)
     local y_shift = y_start + dist_text * math.sin(angle)
     local font_size = 60
-    local width = 30 * #rwy_end.sibling
+    local width = 30 * #rwy_start.name
 
-    sasl.gl.drawRotatedText(Font_AirbusDUL, x_shift, y_shift, x_shift, y_shift, m_angle, rwy_end.sibling, font_size, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawRotatedText(Font_AirbusDUL, x_shift, y_shift, x_shift, y_shift, m_angle, rwy_start.name, font_size, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
 
     local x_shift = x_end - dist_text * math.cos(angle)
     local y_shift = y_end - dist_text * math.sin(angle)
-    sasl.gl.drawRotatedText(Font_AirbusDUL, x_shift, y_shift, x_shift, y_shift, 180+m_angle, rwy_start.sibling, font_size, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawRotatedText(Font_AirbusDUL, x_shift, y_shift, x_shift, y_shift, 180+m_angle, rwy_start.sibl_name, font_size, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
 
 end
 
 local function draw_oans_rwys(data, functions, apt)
 
-    local already_seen_runways = {}
-
     for rwyname,rwy in pairs(apt.rwys) do
+        draw_oans_rwy(data, rwy, functions)
+    end
+end
+
+local function draw_oans_taxiways(data, functions, apt, apt_details)
+
+    for i=0,apt_details.pavements_len-1 do
+        local bound_array = apt_details.pavements[i]
+        local triangles = AvionicsBay.graphics.triangulate_apt_node(bound_array)
         
-        if already_seen_runways[rwyname] == nil then
-            already_seen_runways[rwyname] = true
-            already_seen_runways[rwy.sibling] = true
+        local curr_points = {}
+        local curr_nr_points = 0
+        for j=0,triangles.points_len-1 do
+            local x,y = functions.get_x_y(data, triangles.points[j].lat, triangles.points[j].lon)
+            table.insert(curr_points, x)
+            table.insert(curr_points, y)
             
-            local sibling_rwy = apt.rwys[rwy.sibling]
-            draw_oans_rwy(data, rwy, sibling_rwy, functions)
-        end            
-    end
-end
-
-local function draw_oans_taxiways(data, functions, apt)
-    for i,line in ipairs(apt.taxys) do
-    
-        local points = {}
-        for j,segment in ipairs(line.points) do
-            if #segment == 2 then
-                local x,y = functions.get_x_y(data, segment[1], segment[2])
-                table.insert(points, {x,y})
-            end
-        end
-
-        triangles = polygon_triangulation(points)
-        
-        if #triangles > 0 then
-            for j,v in ipairs(triangles) do
-                if #v == 3 then
-                    local color = {0.5,0.5,0.5}
-                    if data.config.range == ND_RANGE_ZOOM_2 then
-                        color = {0.2,0.2,0.2}
-                    end
-                    sasl.gl.drawConvexPolygon ({ v[1][1], v[1][2], v[2][1], v[2][2], v[3][1], v[3][2] }, true, 0, color) 
+            curr_nr_points = curr_nr_points + 1
+            if curr_nr_points == 3 then
+                local color = {0.5,0.5,0.5}
+                if data.config.range == ND_RANGE_ZOOM_2 then
+                    color = {0.2,0.2,0.2}
                 end
+                sasl.gl.drawConvexPolygon (curr_points, true, 0, color)
+                curr_points = {}
+                curr_nr_points = 0
             end
+            
         end
-
     end
+
 end
 
-local function draw_oans_airport_bounds(data, functions, apt)
-    for i,line in ipairs(apt.bounds) do
-    
-        local points = {}
-        for j,segment in ipairs(line.points) do
-            if #segment == 2 then
-                local x,y = functions.get_x_y(data, segment[1], segment[2])
-                table.insert(points, {x,y})
-            end
-        end
+local function draw_oans_airport_bounds(data, functions, apt, apt_details)
 
-        triangles = polygon_triangulation(points)
+
+    for i=0,apt_details.boundaries_len-1 do
+        local bound_array = apt_details.boundaries[i]
+        local triangles = AvionicsBay.graphics.triangulate_apt_node(bound_array)
         
-        if #triangles > 0 then
-            for j,v in ipairs(triangles) do
-                if #v == 3 then
-                    sasl.gl.drawConvexPolygon ({ v[1][1], v[1][2], v[2][1], v[2][2], v[3][1], v[3][2] }, true, 0, {0.1,0.1,0.1})
-                end
+        local curr_points = {}
+        local curr_nr_points = 0
+        for j=0,triangles.points_len-1 do
+            local x,y = functions.get_x_y(data, triangles.points[j].lat, triangles.points[j].lon)
+            table.insert(curr_points, x)
+            table.insert(curr_points, y)
+            
+            curr_nr_points = curr_nr_points + 1
+            if curr_nr_points == 3 then
+                sasl.gl.drawConvexPolygon (curr_points, true, 0, {0.1,0.1,0.1})
+                curr_points = {}
+                curr_nr_points = 0
             end
+            
         end
-
+        
     end
 end
 
-local function draw_oans_mark_lines(data, functions, apt)
+local function draw_oans_mark_lines(data, functions, apt, apt_details)
 
-    local len = #apt.mark_lines  -- They must be drawn in the opposite order
+    local len = apt_details.linear_features_len  -- They must be drawn in the opposite order
 
-    for i=len, 1, -1 do
-        local line = apt.mark_lines[i] 
+    for i=len-1, 0, -1 do
+        local line = apt_details.linear_features[i] 
         
         if    line.color == 1 or line.color == 51   -- Taxiway centerlines 
            or line.color == 4 or line.color == 54   -- Runways hold positions
@@ -214,30 +210,22 @@ local function draw_oans_mark_lines(data, functions, apt)
             local last_prev_x = nil 
             local last_prev_y = nil 
 
-            for j,segment in ipairs(line.points) do
-                local x,y = functions.get_x_y(data, segment[1], segment[2])
-                --if #segment == 2 then
-                    if last_prev_x ~= nil and last_prev_y ~= nil then
-                        sasl.gl.drawWideLine (last_prev_x, last_prev_y, x,y, 3, color)
-                    end
-                --else
-                --    if last_prev_x ~= nil and last_prev_y ~= nil then
-                --        local c_x,c_y = get_x_y(data, segment[3], segment[4])
-                --        sasl.gl.drawWideBezierLineQAdaptive(last_prev_x,last_prev_y,c_x,c_y,x,y,3,color)
-                --    end
-                --end
+            for j=0,line.nodes_len-1 do
+                local x,y = functions.get_x_y(data, line.nodes[j].coords.lat, line.nodes[j].coords.lon)
+                if last_prev_x ~= nil and last_prev_y ~= nil then
+                    sasl.gl.drawWideLine(last_prev_x, last_prev_y, x,y, 3, color)
+                end
                 last_prev_x = x
-                last_prev_y = y                
+                last_prev_y = y
             end
-            
-        end        
+        end
     end
 
 end
 
-local function draw_oans_tower(data, functions, apt)
-    if apt.tower.lat ~= nil then
-        local x,y = functions.get_x_y(data, apt.tower.lat, apt.tower.lon)
+local function draw_oans_tower(data, functions, apt, apt_details)
+    if apt_details.tower_pos.lat ~= 0. then
+        local x,y = functions.get_x_y(data, apt_details.tower_pos.lat, apt_details.tower_pos.lon)
         
         local width  = 40
         local height =  36
@@ -251,45 +239,48 @@ local function draw_oans_tower(data, functions, apt)
     end
 end
 
-local function draw_oans_mark_taxi(data, functions, apt)
-    for i,line in ipairs(apt.taxi_routes) do
-    
-        if line.name ~= nil then
-            local point_1 = apt.routes[line.point_1]
-            local point_2 = apt.routes[line.point_2]
-        
+local function draw_oans_mark_taxi(data, functions, apt, apt_details)
+    for i=0,apt_details.routes_len-1 do
+        local route = apt_details.routes[i]
+        if route.name_len > 0 then
+            local point_1 = AvionicsBay.apts.get_route(apt.ref_orig, route.route_node_1)
+            local point_2 = AvionicsBay.apts.get_route(apt.ref_orig, route.route_node_2)
             local x1,y1 = functions.get_x_y(data, point_1.lat, point_1.lon)
             local x2,y2 = functions.get_x_y(data, point_2.lat, point_2.lon)
-
+            
             local x = (x1+x2)/2
             local y = (y1+y2)/2
 
-            local width  = 20 * #line.name
+            local name = ffi.string(route.name, route.name_len);
+
+            local width  = 20 * #name
             local height = 36
             local y_shift = (height-3)/2
 
             sasl.gl.drawRectangle (x-width/2, y-y_shift-3+data.config.range, width, height-4,  {0,0,0})
 
-            sasl.gl.drawText(Font_AirbusDUL,x,y-y_shift, line.name, height-4, false, false, TEXT_ALIGN_CENTER, COLOR_YELLOW)
-        end    
+            sasl.gl.drawText(Font_AirbusDUL,x,y-y_shift, name, height-4, false, false, TEXT_ALIGN_CENTER, COLOR_YELLOW)
+        end
     end
 end
 
-local function draw_oans_mark_gate(data, functions, apt)
-    for i,line in ipairs(apt.gates) do
-    
-        if line.name ~= nil then
-            local x,y = functions.get_x_y(data, line.lat, line.lon)
+local function draw_oans_mark_gate(data, functions, apt, apt_details)
 
-            local width  = 20 * #line.name
-            local height = 36
-            local y_shift = (height-3)/2
+    for i=0,apt_details.gates_len-1 do
+        local gate = apt_details.gates[i]
+        local name = ffi.string(gate.name, gate.name_len);
 
-            sasl.gl.drawRectangle (x-width/2, y-y_shift-3+data.config.range, width, height-4,  {0,0,0})
+        local x,y = functions.get_x_y(data, gate.coords.lat, gate.coords.lon)
 
-            sasl.gl.drawText(Font_AirbusDUL,x,y-y_shift, line.name, height-4, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
-        end    
+        local width  = 20 * #name
+        local height = 36
+        local y_shift = (height-3)/2
+
+        sasl.gl.drawRectangle (x-width/2, y-y_shift-3+data.config.range, width, height-4,  {0,0,0})
+
+        sasl.gl.drawText(Font_AirbusDUL,x,y-y_shift, name, height-4, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
     end
+
 end
 
 local function draw_oans_flags_and_crosses(data,functions)
@@ -318,33 +309,46 @@ function draw_oans(data, functions)
         return  -- No OANS over zoom
     end
 
-    local nearest_airport = Data_manager.nearest_airport
-    if nearest_airport ~= nil then
-        local apt = Data_manager.get_arpt_by_name(nearest_airport.id)
+    local nearest_airport = AvionicsBay.apts.get_nearest_apt(true)
+    
+    local apt = nearest_airport -- TODO: Change depending on MCDU ecc.
+    if apt ~= nil then
+        AvionicsBay.apts.request_details(apt.id)
+        
+        if not AvionicsBay.apts.details_available(apt.id) then
+            return -- Still loading the details
+        end
+
+        local apt_details = AvionicsBay.apts.get_details(apt.id)
+    
         
         if data.plan_ctr_lat == 0 and data.plan_ctr_lon == 0 then
             data.plan_ctr_lat = apt.lat
             data.plan_ctr_lon = apt.lon
         end
         
-        draw_oans_airport_bounds(data, functions, apt)
-        draw_oans_taxiways(data, functions, apt)
-        if data.config.range <= ND_RANGE_ZOOM_1 then
-            draw_oans_mark_lines(data, functions, apt)
-        end
-        draw_oans_rwys(data, functions, apt)
         
+        draw_oans_airport_bounds(data, functions, apt, apt_details)
+        draw_oans_taxiways(data, functions, apt, apt_details)
+        if data.config.range <= ND_RANGE_ZOOM_1 then
+            draw_oans_mark_lines(data, functions, apt, apt_details)
+        end
+
+        draw_oans_rwys(data, functions, apt)
+
         if data.config.range <= ND_RANGE_ZOOM_05 then
-            draw_oans_tower(data, functions, apt)
-            draw_oans_mark_taxi(data, functions, apt)
-        end        
+            draw_oans_tower(data, functions, apt, apt_details)
+            draw_oans_mark_taxi(data, functions, apt, apt_details)
+        end
+
         if data.config.range <= ND_RANGE_ZOOM_02 then
-            draw_oans_mark_gate(data, functions, apt)
+            draw_oans_mark_gate(data, functions, apt, apt_details)
         end
         
         if data.config.range <= ND_RANGE_ZOOM_1 then
             draw_oans_flags_and_crosses(data,functions)
         end
+
     end
 end
 

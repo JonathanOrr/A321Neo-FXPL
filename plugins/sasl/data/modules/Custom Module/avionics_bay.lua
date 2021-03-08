@@ -46,6 +46,7 @@ end
 
 local function convert_single_apt(apt, load_rwys)
     local new_apt = {
+        ref_orig = apt,
         id   = ffi.string(apt.id,  apt.id_len),
         name = ffi.string(apt.full_name, apt.full_name_len),
         alt  = apt.altitude,
@@ -186,6 +187,30 @@ local function expose_functions()
             return convert_single_apt(apt, load_rwys)
         end
     end
+    
+    AvionicsBay.apts.request_details = function(apt_name)
+        assert(type(apt_name) == "string", "name must be a string")
+        AvionicsBay.c.request_apts_details(apt_name);
+    end
+    
+    AvionicsBay.apts.details_available = function(apt_name)
+        assert(type(apt_name) == "string", "name must be a string")
+        return AvionicsBay.c.get_apts_by_name(apt_name).apts[0].is_loaded_details
+    end
+
+    AvionicsBay.apts.get_details = function(apt_name)
+        assert(type(apt_name) == "string", "name must be a string")
+        return AvionicsBay.c.get_apts_by_name(apt_name).apts[0].details
+    end
+    
+    AvionicsBay.apts.get_route = function(apt_raw, route_id) 
+        return AvionicsBay.c.get_route_pos(apt_raw, route_id)
+    end
+
+    AvionicsBay.graphics = {}
+    AvionicsBay.graphics.triangulate_apt_node = function(array)
+        return AvionicsBay.c.triangulate(array);
+    end
 
 end
 
@@ -204,12 +229,15 @@ local function load_avionicsbay()
     end
 
     ffi.cdef[[
+
         typedef int xpdata_navaid_type_t;
 
         typedef struct xpdata_coords_t {
             double lat;
             double lon;
         } xpdata_coords_t;
+
+        /******************************* NAVAIDS *******************************/
         typedef struct xpdata_navaid_t {
             const char *id;         // e.g., SRN
             int id_len;
@@ -227,7 +255,7 @@ local function load_avionicsbay()
             int len;
         } xpdata_navaid_array_t;
 
-
+        /******************************* FIXES *******************************/
         typedef struct xpdata_fix_t {
             const char *id;         // e.g., ROMEO
             int id_len;
@@ -239,6 +267,7 @@ local function load_avionicsbay()
             int len;
         } xpdata_fix_array_t;
 
+        /******************************* ARPT *******************************/
 
         typedef struct xpdata_apt_rwy_t {
             char name[4];
@@ -252,6 +281,56 @@ local function load_avionicsbay()
             bool has_ctr_lights;
             
         } xpdata_apt_rwy_t;
+
+        typedef struct xpdata_apt_node_t {
+
+            xpdata_coords_t coords;
+            bool is_bez;
+            xpdata_coords_t bez_cp;
+
+        } xpdata_apt_node_t;
+
+        typedef struct xpdata_apt_node_array_t {
+            int color;
+            
+            xpdata_apt_node_t *nodes;
+            int nodes_len;
+            
+            struct xpdata_apt_node_array_t *hole; // For linear feature this value is nullptr
+        } xpdata_apt_node_array_t;
+
+        typedef struct xpdata_apt_route_t {
+            const char *name;
+            int name_len;
+            int route_node_1;   // Identifiers for the route nodes, to be used with get_route_node()
+            int route_node_2;   // Identifiers for the route nodes, to be used with get_route_node()
+        } xpdata_apt_route_t;
+
+        typedef struct xpdata_apt_gate_t {
+            const char *name;
+            int name_len;
+            xpdata_coords_t coords;
+        } xpdata_apt_gate_t;
+
+        typedef struct xpdata_apt_details_t {
+            xpdata_coords_t tower_pos; 
+
+            xpdata_apt_node_array_t *pavements;
+            int pavements_len;
+            
+            xpdata_apt_node_array_t *linear_features;
+            int linear_features_len;
+
+            xpdata_apt_node_array_t *boundaries;
+            int boundaries_len;
+
+            xpdata_apt_route_t *routes;
+            int routes_len;
+
+            xpdata_apt_gate_t  *gates;
+            int gates_len;
+
+        } xpdata_apt_details_t;
 
         typedef struct xpdata_apt_t {
             const char *id;         // e.g., LIRF
@@ -269,24 +348,40 @@ local function load_avionicsbay()
             
             long pos_seek;   // For internal use only, do not modify this value
             
+            bool is_loaded_details;
+            xpdata_apt_details_t *details;
+            
         } xpdata_apt_t;
 
         typedef struct xpdata_apt_array_t {
             const struct xpdata_apt_t * const * apts;
             int len;
         } xpdata_apt_array_t;
+        
 
-        bool initialize(const char*);
+        typedef struct xpdata_triangulation_t {
+            const xpdata_coords_t* points;
+            int points_len;
+        } xpdata_triangulation_t;
+
+        bool initialize(const char* xplane_path);
         const char* get_error(void);
-        xpdata_navaid_array_t get_navaid_by_name(xpdata_navaid_type_t type, const char* name);
+        void terminate(void);
+        xpdata_navaid_array_t get_navaid_by_name  (xpdata_navaid_type_t, const char*);
         xpdata_navaid_array_t get_navaid_by_freq  (xpdata_navaid_type_t, unsigned int);
         xpdata_navaid_array_t get_navaid_by_coords(xpdata_navaid_type_t, double, double);
+
         xpdata_fix_array_t get_fixes_by_name  (const char*);
         xpdata_fix_array_t get_fixes_by_coords(double, double);
+
         xpdata_apt_array_t get_apts_by_name  (const char*);
         xpdata_apt_array_t get_apts_by_coords(double, double);
+
         const xpdata_apt_t* get_nearest_apt();
         void set_acf_coords(double lat, double lon);
+        void request_apts_details(const char* arpt_id);
+        xpdata_coords_t get_route_pos(const xpdata_apt_t *apt, int route_id);
+        xpdata_triangulation_t triangulate(const xpdata_apt_node_array_t* array);
         bool xpdata_is_ready(void);
     ]]
 
@@ -311,3 +406,7 @@ function update()
     AvionicsBay.c.set_acf_coords(get(Aircraft_lat), get(Aircraft_long));
 end
 
+function onModuleShutdown()
+    print("Cleaning...")
+    AvionicsBay.c.terminate()
+end
