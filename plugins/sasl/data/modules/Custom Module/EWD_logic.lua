@@ -149,6 +149,7 @@ local left_messages_list = {
     MessageGroup_ELEC_TR_ESS_FAULT,
     MessageGroup_ENG_FF_CLOG,
     MessageGroup_ENG_OIL_CLOG,
+    MessageGroup_SAT_ABOVE_FLEX,
     MessageGroup_FUEL_WING_LO_LVL_DOUBLE,
     MessageGroup_FUEL_WING_LO_LVL_SINGLE,
     MessageGroup_FUEL_FUSED_FOB_DISAGREE,
