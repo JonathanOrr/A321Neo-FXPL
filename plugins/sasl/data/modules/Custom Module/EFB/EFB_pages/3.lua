@@ -1,18 +1,94 @@
 ------------------------STUFF YOU CAN MESS WITH
 local BUTTON_PRESS_TIME = 0.5
 local weight_per_passenger = 90 --kg
+local dry_operating_weight = 47777
 
 local max_fwd_cargo = 5700
 local max_aft_cargo = 7000
 
-local max_values = {8, 80, 100, 5700, 7000, }
+local max_values = {8, 80, 100, 5700, 7000, 40000 }
 
 local default_cg = 25
+local final_cg = 0
+
+local percent_cg_to_coordinates = {{-9999,471}, {14, 471}, {22, 676}, {30,882}, {38.2,1092}, {9999,1085}}
+local tow_to_coordinates = {{-9999,78}, {45,78}, {95,396}, {9999,396}}
 
 ------------------------STUFF YOU CANNOT MESS WITH
 
+local looper_1 = 0
+
+local load_button_begin = 0
+
 local load_target = {0,0,0,0,0,0}
-local load_actual = {0,0,0,0,0,0}
+local load_actual = {0,0,0,0,0,0} -- not a live value! does not change in flight!!!!!!!
+local total_load_target = 0
+
+local tank_index_center = {
+    {500,   -1},
+    {1000 , -1},
+    {1500 , -2},
+    {2000 , -3},
+    {2500 , -4},
+    {3000 , -4},
+    {3500 , -5},
+    {4000 , -6},
+    {4500 , -7},
+    {5000 , -7},
+    {5500 , -8},
+    {6000 , -9},
+    {FUEL_C_MAX , -10},
+}
+
+local tank_index_wing = {
+    {500,   -1},
+    {1000 , -1},
+    {1500 , -2},
+    {2000 , -2},
+    {2500 , -2},
+    {3000 , -3},
+    {3500 , -3},
+    {4000 , -3},
+    {4500 , -3},
+    {5000 , -3},
+    {5500 , -2},
+    {6000 , -2},
+    {FUEL_LR_MAX, -1},
+}
+
+local tank_index_act = {
+    {0,     0},
+    {2450 , -16},
+    {FUEL_RCT_MAX , -17},
+}
+
+local tank_index_rct = {
+    {0,     0},
+    {2450 , 22},
+    {FUEL_RCT_MAX , 22},
+}
+
+local passenger_index_front = {
+    {0, 0},
+    {10200, -23}
+}
+
+local passenger_index_aft = {
+    {0, 0},
+    {10200, 24}
+}
+
+local cargo_index_front = {
+    {0, 0},
+    {5700, -15.7}
+}
+
+local cargo_index_aft = {
+    {0, 0},
+    {7000, 12.5}
+}
+
+
 
 --------------------INTERESTING STUFF
 include("EFB/efb_systems.lua")
@@ -22,16 +98,50 @@ local efb_subpage_number = 1
 
 
 local function performance_data()
-
 end
 
 --------------------------------------------------------------------------------------------------------------------------------SUBPAGE 1
+
+local function sum_weights_up()
+    total_load_target = ((load_target[1]+load_target[2]+load_target[3]) * weight_per_passenger) -- passenger weight
+    + (load_target[4] + load_target[1]) --cargo weight
+    + load_target[6] --fuel weight
+    + dry_operating_weight -- aircraft base weight
+    --print(total_load_target)
+end
+
+local function calculate_cg()
+    final_cg = default_cg
+    + Table_extrapolate(tank_index_center, get(Fuel_quantity[tank_CENTER])) --coefficient of the center tank
+    + Table_extrapolate(tank_index_wing, get(Fuel_quantity[tank_LEFT])) --coefficient of the left tank
+    + Table_extrapolate(tank_index_wing, get(Fuel_quantity[tank_RIGHT])) --coefficient of the right tank
+    + Table_extrapolate(tank_index_act, get(Fuel_quantity[tank_ACT])) --coefficient of the act
+    + Table_extrapolate(tank_index_rct, get(Fuel_quantity[tank_RCT])) --coefficient of the rct
+    + Table_extrapolate(passenger_index_front, (load_actual[1] + load_actual[2]) * weight_per_passenger) --coefficient of the zone a and b passenger
+    + Table_extrapolate(passenger_index_aft, load_actual[3] * weight_per_passenger) --coefficient of the zone c passenger
+    + Table_extrapolate(cargo_index_front, load_actual[4]) --coefficient of the forward cargo hold
+    + Table_extrapolate(cargo_index_aft, load_actual[5]) --coefficient of the after cargo hold
+
+    print(final_cg)
+end
+
+local function EFB_update_page_3_subpage_1()
+    if looper_1 > 0 then
+        looper_1 = looper_1 - 1
+        calculate_cg()
+        load_button_begin = get(TIME) --the button animation
+        load_actual = load_target -- set the load actual array for the next line
+        set(Payload_weight, load_actual[1] + load_actual[2] + load_actual[3] + load_actual[4] + load_actual[5])
+        set_fuel(load_actual[6])
+        sum_weights_up()
+    end
+end
 
 local function EFB_draw_page_3_subpage_1()
     sasl.gl.drawTexture (EFB_LOAD_bgd, 0 , 0 , 1143 , 800 , EFB_WHITE )
     sasl.gl.drawTexture (EFB_LOAD_bound_takeoff, 0 , 0 , 1143 , 800 , EFB_WHITE )
     sasl.gl.drawTexture (EFB_LOAD_chart, 0 , 0 , 1143 , 800 , EFB_WHITE )
-    sasl.gl.drawText ( Airbus_panel_font , 97 , 582, "47777" , 17 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
+    sasl.gl.drawText ( Airbus_panel_font , 97 , 582, dry_operating_weight , 17 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
 
     drawTextCentered( Airbus_panel_font , 263 , 397, load_target[1] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
     drawTextCentered( Airbus_panel_font , 263 , 358, load_target[2] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
@@ -41,12 +151,114 @@ local function EFB_draw_page_3_subpage_1()
     drawTextCentered( Airbus_panel_font , 263 , 203, load_target[5] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
 
     drawTextCentered( Airbus_panel_font , 263 , 124, load_target[6] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
+
+--------------------------------------------------------------------------
+
+
+    sasl.gl.drawWideLine ( 470 , Table_extrapolate(tow_to_coordinates, get(Gross_weight)/1000) , 1093 , Table_extrapolate(tow_to_coordinates, get(Gross_weight)/1000) , 3, EFB_FULL_RED )
+    sasl.gl.drawWideLine ( Table_extrapolate(percent_cg_to_coordinates, final_cg ) ,77, Table_extrapolate(percent_cg_to_coordinates, final_cg ),440, 3, EFB_FULL_RED )
+
+--------------------------------------------------------------------------
+
+    if get(TIME) -  load_button_begin > BUTTON_PRESS_TIME then
+        SASL_drawSegmentedImg_xcenter_aligned (EFB_LOAD_compute_button, 244,48,544,32,2,1)
+    else
+        SASL_drawSegmentedImg_xcenter_aligned (EFB_LOAD_compute_button, 244,48,544,32,2,2)
+    end
 end
 
-local function EFB_update_page_3_subpage_1()
+local function Subpage_1_buttons()
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 348, 386, 378, 409,  function () -- OA SELECTOR
+        load_target[1] = math.min(max_values[1], load_target[1] + 10)
+        print("xd")
+    end)
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 313, 385, 344, 409, function ()
+        load_target[1] = math.min(max_values[1], load_target[1] + 1)
+    end)
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 182, 385, 212, 409,function ()
+        load_target[1] = math.max(0, load_target[1] - 1)
+    end)
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 147, 385, 177, 409,function ()
+        load_target[1] = math.max(0, load_target[1] - 10)
+    end)
+
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 348, 346, 378, 370,  function () -- OB SELECTOR
+        load_target[2] = math.min(max_values[2], load_target[2] + 10)
+        print("xd")
+    end)
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 313, 346, 344, 370, function ()
+        load_target[2] = math.min(max_values[2], load_target[2] + 1)
+    end)
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 182, 346, 212, 370,function ()
+        load_target[2] = math.max(0, load_target[2] - 1)
+    end)
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 147, 346, 177, 370,function ()
+        load_target[2] = math.max(0, load_target[2] - 10)
+    end)
+
+
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 348, 307, 378, 332,  function () -- OC SELECTOR
+        load_target[3] = math.min(max_values[3], load_target[3] + 10)
+        print("xd")
+    end)
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 313, 307, 344, 332, function ()
+        load_target[3] = math.min(max_values[3], load_target[3] + 1)
+    end)
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 182, 307, 212, 332,function ()
+        load_target[3] = math.max(0, load_target[3] - 1)
+    end)
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 147, 307, 177, 332,function ()
+        load_target[3] = math.max(0, load_target[3] - 10)
+    end)
+    
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 348, 229, 378, 254,  function () -- Cargo 1-2 SELECTOR
+        load_target[4] = math.min(max_values[4], load_target[4] + 1000)
+        print("xd")
+    end)
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 313, 229, 344, 254, function ()
+        load_target[4] = math.min(max_values[4], load_target[4] + 100)
+    end)
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 182, 229, 212, 254,function ()
+        load_target[4] = math.max(0, load_target[4] - 100)
+    end)
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 147, 229, 177, 254,function ()
+        load_target[4] = math.max(0, load_target[4] - 1000)
+    end)
+
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 348, 190, 378, 214,  function () -- Cargo 3-5 SELECTOR
+        load_target[5] = math.min(max_values[5], load_target[5] + 1000)
+        print("xd")
+    end)
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 313, 190, 344, 214, function ()
+        load_target[5] = math.min(max_values[5], load_target[5] + 100)
+    end)
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 182, 190, 212, 214,function ()
+        load_target[5] = math.max(0, load_target[5] - 100)
+    end)
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 147, 190, 177, 214,function ()
+        load_target[5] = math.max(0, load_target[5] - 1000)
+    end)
+
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 348, 112, 378, 136,  function () -- Fuel SELECTOR
+        load_target[6] = math.min(max_values[6], load_target[6] + 1000)
+        print("xd")
+    end)
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 313, 112, 344, 136, function ()
+        load_target[6] = math.min(max_values[6], load_target[6] + 100)
+    end)
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 182, 112, 212, 136,function ()
+        load_target[6] = math.max(0, load_target[6] - 100)
+    end)
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 147, 112, 177, 136,function ()
+        load_target[6] = math.max(0, load_target[6] - 1000)
+    end)
+--------------------------------------------------------------------------------------------------------
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 108, 50, 378, 80,function ()
+        looper_1 = 5
+    end)
 end
 
---------------------------------------------------------------------------------------------------------------------------------SUBPAGE 2
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------SUBPAGE 2
 
 local function EFB_draw_page_3_subpage_2()
 end
@@ -60,23 +272,12 @@ end
 --------------------------------------------------------------------------------------------------------------------------------
 
 function EFB_execute_page_3_buttons()
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 379, 385, 349, 409,  function ()
-        load_target[1] = math.min(8, load_target[1] + 10)
-        print(xd)
-    end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 379, 385, 313, 409, function ()
-        load_target[1] = math.min(8, load_target[1] + 1)
-    end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 212, 385, 182, 409,function ()
-        load_target[1] = math.max(0, load_target[1] - 1)
-    end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 178, 385, 147, 409,function ()
-        load_target[1] = math.max(0, load_target[1] - 10)
-    end)
+    Subpage_1_buttons()
 end
 
 --UPDATE LOOPS--
 function EFB_update_page_3()
+
     if efb_subpage_number == 1 then
         EFB_update_page_3_subpage_1()
     elseif efb_subpage_number == 2 then
@@ -90,7 +291,7 @@ function EFB_draw_page_3()
     if efb_subpage_number == 1 then
         EFB_draw_page_3_subpage_1()
     elseif efb_subpage_number == 2 then
-        EFB_draw_page_3_subpage_1()
+        EFB_draw_page_3_subpage_2()
     end
 end
 
