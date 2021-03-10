@@ -12,3 +12,6 @@ The graphical objs files (everything under `objects/`) are released according to
 
 ## Sound-Package
 The sound package (everything under `fmod/`) is released with [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/). It contains contributions from [A32NX MSFS Project](https://github.com/flybywiresim/a32nx), which are released under the same license.
+
+## Font
+The font (plugins\sasl\data\modules\Custom Module\fonts\ECAMFontRegular.ttf) is released with [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/). It contains contributions from [A32NX MSFS Project](https://github.com/flybywiresim/a32nx), which are released under the same license.
