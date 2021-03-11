@@ -11,6 +11,8 @@ local max_values = {8, 80, 100, 5700, 7000, 40000 }
 local default_cg = 25
 local final_cg = 0
 
+local taxi_fuel = 500
+
 local percent_cg_to_coordinates = {{-9999,471}, {14, 471}, {22, 676}, {30,882}, {38.2,1092}, {9999,1085}}
 local tow_to_coordinates = {{-9999,78}, {45,78}, {95,396}, {9999,396}}
 
@@ -25,47 +27,45 @@ local load_actual = {0,0,0,0,0,0} -- not a live value! does not change in flight
 local total_load_target = 0
 
 local tank_index_center = {
-    {500,   -1},
-    {1000 , -1},
-    {1500 , -2},
-    {2000 , -3},
-    {2500 , -4},
-    {3000 , -4},
-    {3500 , -5},
-    {4000 , -6},
-    {4500 , -7},
-    {5000 , -7},
-    {5500 , -8},
-    {6000 , -9},
+    {5000,   -1},
+    {10000 , -1},
+    {15000 , -2},
+    {20000 , -3},
+    {25000 , -4},
+    {30000 , -4},
+    {35000 , -5},
+    {40000 , -6},
+    {45000 , -7},
+    {50000 , -7},
+    {55000 , -8},
+    {60000 , -9},
     {FUEL_C_MAX , -10},
 }
 
 local tank_index_wing = {
-    {500,   -1},
-    {1000 , -1},
-    {1500 , -2},
-    {2000 , -2},
-    {2500 , -2},
-    {3000 , -3},
-    {3500 , -3},
-    {4000 , -3},
-    {4500 , -3},
-    {5000 , -3},
-    {5500 , -2},
-    {6000 , -2},
+    {5000,   -1},
+    {10000 , -1},
+    {15000 , -2},
+    {20000 , -2},
+    {25000 , -2},
+    {30000 , -3},
+    {35000 , -3},
+    {40000 , -3},
+    {45000 , -3},
+    {50000 , -3},
+    {55000 , -2},
+    {60000 , -2},
     {FUEL_LR_MAX, -1},
 }
 
 local tank_index_act = {
     {0,     0},
-    {2450 , -16},
-    {FUEL_RCT_MAX , -17},
+    {24500 , 0},
 }
 
 local tank_index_rct = {
     {0,     0},
-    {2450 , 22},
-    {FUEL_RCT_MAX , 22},
+    {24500 , 0},
 }
 
 local passenger_index_front = {
@@ -112,17 +112,19 @@ end
 
 local function calculate_cg()
     final_cg = default_cg
-    + Table_extrapolate(tank_index_center, get(Fuel_quantity[tank_CENTER])) --coefficient of the center tank
-    + Table_extrapolate(tank_index_wing, get(Fuel_quantity[tank_LEFT])) --coefficient of the left tank
-    + Table_extrapolate(tank_index_wing, get(Fuel_quantity[tank_RIGHT])) --coefficient of the right tank
-    + Table_extrapolate(tank_index_act, get(Fuel_quantity[tank_ACT])) --coefficient of the act
-    + Table_extrapolate(tank_index_rct, get(Fuel_quantity[tank_RCT])) --coefficient of the rct
+    -- + Table_extrapolate(tank_index_center, get(Fuel_quantity[tank_CENTER])) --coefficient of the center tank
+    -- + Table_extrapolate(tank_index_wing, get(Fuel_quantity[tank_LEFT])) --coefficient of the left tank
+    -- + Table_extrapolate(tank_index_wing, get(Fuel_quantity[tank_RIGHT])) --coefficient of the right tank
+    -- + Table_extrapolate(tank_index_act, get(Fuel_quantity[tank_ACT])) --coefficient of the act
+    -- + Table_extrapolate(tank_index_rct, get(Fuel_quantity[tank_RCT])) --coefficient of the rct
     + Table_extrapolate(passenger_index_front, (load_actual[1] + load_actual[2]) * weight_per_passenger) --coefficient of the zone a and b passenger
     + Table_extrapolate(passenger_index_aft, load_actual[3] * weight_per_passenger) --coefficient of the zone c passenger
     + Table_extrapolate(cargo_index_front, load_actual[4]) --coefficient of the forward cargo hold
     + Table_extrapolate(cargo_index_aft, load_actual[5]) --coefficient of the after cargo hold
 
-    print(final_cg)
+    --print(Table_interpolate(tank_index_act, get(Fuel_quantity[tank_ACT])))
+
+    --print(final_cg)
 end
 
 local function EFB_update_page_3_subpage_1()
@@ -165,12 +167,33 @@ local function EFB_draw_page_3_subpage_1()
     else
         SASL_drawSegmentedImg_xcenter_aligned (EFB_LOAD_compute_button, 244,48,544,32,2,2)
     end
+--------------------------------------------------------------------------
+
+    drawTextCentered( Airbus_panel_font , 1038 , 682, dry_operating_weight      , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
+    drawTextCentered( Airbus_panel_font , 1038 , 660, 0                         , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
+    drawTextCentered( Airbus_panel_font , 1038 , 637, dry_operating_weight      , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
+    drawTextCentered( Airbus_panel_font , 1038 , 615, load_actual[4] + load_actual[5]      , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
+    drawTextCentered( Airbus_panel_font , 1038 , 593, ((load_actual[1]+load_actual[2]+load_actual[3]) * weight_per_passenger)      , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
+    drawTextCentered( Airbus_panel_font , 1038 , 571, ((load_actual[1]+load_actual[2]+load_actual[3]) * weight_per_passenger) + load_actual[4] + load_actual[5]     , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
+    drawTextCentered( Airbus_panel_font , 1038 , 551, load_actual[6]     , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
+    drawTextCentered( Airbus_panel_font , 1038 , 528, taxi_fuel     , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
+    drawTextCentered( Airbus_panel_font , 1038 , 506, ((load_actual[1]+load_actual[2]+load_actual[3]) * weight_per_passenger) + load_actual[4] + load_actual[5] + load_actual[6] - taxi_fuel + dry_operating_weight   , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
+
+
+
+
+
+
+
+
+
+
+
 end
 
 local function Subpage_1_buttons()
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 348, 386, 378, 409,  function () -- OA SELECTOR
         load_target[1] = math.min(max_values[1], load_target[1] + 10)
-        print("xd")
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 313, 385, 344, 409, function ()
         load_target[1] = math.min(max_values[1], load_target[1] + 1)
@@ -184,7 +207,6 @@ local function Subpage_1_buttons()
 
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 348, 346, 378, 370,  function () -- OB SELECTOR
         load_target[2] = math.min(max_values[2], load_target[2] + 10)
-        print("xd")
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 313, 346, 344, 370, function ()
         load_target[2] = math.min(max_values[2], load_target[2] + 1)
@@ -199,7 +221,6 @@ local function Subpage_1_buttons()
 
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 348, 307, 378, 332,  function () -- OC SELECTOR
         load_target[3] = math.min(max_values[3], load_target[3] + 10)
-        print("xd")
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 313, 307, 344, 332, function ()
         load_target[3] = math.min(max_values[3], load_target[3] + 1)
@@ -213,7 +234,6 @@ local function Subpage_1_buttons()
     
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 348, 229, 378, 254,  function () -- Cargo 1-2 SELECTOR
         load_target[4] = math.min(max_values[4], load_target[4] + 1000)
-        print("xd")
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 313, 229, 344, 254, function ()
         load_target[4] = math.min(max_values[4], load_target[4] + 100)
@@ -227,7 +247,6 @@ local function Subpage_1_buttons()
 
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 348, 190, 378, 214,  function () -- Cargo 3-5 SELECTOR
         load_target[5] = math.min(max_values[5], load_target[5] + 1000)
-        print("xd")
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 313, 190, 344, 214, function ()
         load_target[5] = math.min(max_values[5], load_target[5] + 100)
@@ -241,7 +260,6 @@ local function Subpage_1_buttons()
 
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 348, 112, 378, 136,  function () -- Fuel SELECTOR
         load_target[6] = math.min(max_values[6], load_target[6] + 1000)
-        print("xd")
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 313, 112, 344, 136, function ()
         load_target[6] = math.min(max_values[6], load_target[6] + 100)
