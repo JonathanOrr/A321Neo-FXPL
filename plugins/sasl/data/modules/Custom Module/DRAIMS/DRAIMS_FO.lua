@@ -16,13 +16,16 @@
 -- Short description: Radio panel (v2)
 -------------------------------------------------------------------------------
 
-position = {2030, 2726, 600, 400}
+position = {2030, 2298, 600, 400}
 size = {600, 400}
 
+include("DRAIMS/DRAIMS_handlers.lua")
 
+draims_init_handlers(DRAIMS_ID_FO)
 
 function draw()
-    perf_measure_start("DRAIMSv2:draw()")
+    perf_measure_start("DRAIMS_FO:draw()")
+
     
-    perf_measure_stop("DRAIMSv2:draw()")
+    perf_measure_stop("DRAIMS_FO:draw()")
 end
