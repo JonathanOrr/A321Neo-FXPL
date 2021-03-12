@@ -165,7 +165,7 @@ NAV_ID_DME_ALONE  = 13
 -- Fonts
 Font_AirbusDUL = sasl.gl.loadFont("fonts/ECAMFontRegular.ttf")
 Font_AirbusDUL_vert = sasl.gl.loadFont("fonts/AirbusDULiberationMono.ttf")
---sasl.gl.setFontRenderMode(Font_AirbusDUL, TEXT_RENDER_FORCED_MONO, 0.6)
+sasl.gl.setFontRenderMode(Font_AirbusDUL, TEXT_RENDER_FORCED_MONO, 0.6)
 sasl.gl.setFontDirection (Font_AirbusDUL_vert, TEXT_DIRECTION_VERTICAL)
 
 --Font_ECAMfont = sasl.gl.loadFont("fonts/ECAMFontRegular.ttf")
