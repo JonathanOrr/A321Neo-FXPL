@@ -1,6 +1,7 @@
 # ignore preference files
 A321.acf~
 A321_prefs.txt
+avionics-bay-internal.log
 
 # ignore .swp made by Vim editor
 *.swp
