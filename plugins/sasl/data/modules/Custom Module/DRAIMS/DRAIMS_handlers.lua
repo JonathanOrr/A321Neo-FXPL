@@ -33,7 +33,10 @@ local BTN_R3 = 7
 local BTN_R4 = 8
 
 local BTN_TCAS_L = 1
-local BTN_TCAS_R = 1
+local BTN_TCAS_R = 2
+
+local BTN_ARROW_UP = 1
+local BTN_ARROW_DN = 2
 
 local BTN_DOT = 10
 local BTN_CLR = 11
@@ -60,6 +63,10 @@ local function handler_tcas_button(which_draims, which_btn)
 end
 
 local function handler_num_button(which_draims, which_btn)
+
+end
+
+local function handler_arrows(which_draims, which_btn)
 
 end
 
@@ -91,6 +98,11 @@ local command_list = {
     ["tcas_l"] = function(which_draims) handler_tcas_button(which_draims, BTN_TCAS_L) end,
     ["tcas_r"] = function(which_draims) handler_tcas_button(which_draims, BTN_TCAS_R) end,
 
+    -- Arrows
+    ["arrow_up"]  = function(which_draims) handler_arrows(which_draims, BTN_ARROW_UP) end,
+    ["arrow_dn"]  = function(which_draims) handler_arrows(which_draims, BTN_ARROW_DN) end,
+
+    -- Numbers
     ["num_0"] = function(which_draims) handler_num_button(which_draims, 0) end,
     ["num_1"] = function(which_draims) handler_num_button(which_draims, 1) end,
     ["num_2"] = function(which_draims) handler_num_button(which_draims, 2) end,
@@ -122,7 +134,6 @@ function draims_init_handlers(which_draims)
     for k,v in pairs(command_list) do
         local cmd_name = "a321neo/cockpit/draims/" .. prefix .. k
         local cmd = sasl.createCommand(cmd_name,"")
-        print(v)
         sasl.registerCommandHandler(cmd, 0, function() v(which_draims) end)
     end
 

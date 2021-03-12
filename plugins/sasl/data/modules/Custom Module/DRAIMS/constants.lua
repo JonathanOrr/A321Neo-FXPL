@@ -12,27 +12,18 @@
 --    Please check the LICENSE file in the root of the repository for further
 --    details or check <https://www.gnu.org/licenses/>
 -------------------------------------------------------------------------------
--- File: DRAIMSv2.lua 
--- Short description: Radio panel (v2)
+-- File: constants.lua 
+-- Short description: Various constants for DRAIMS
 -------------------------------------------------------------------------------
 
-position = {2030, 2298, 600, 400}
-size = {600, 400}
+PAGE_VHF  = 1
+PAGE_HF   = 2
+PAGE_TEL  = 3
+PAGE_ATC  = 4
+PAGE_MENU = 5
+PAGE_NAV  = 6
 
-include("DRAIMS/DRAIMS_handlers.lua")
-include("DRAIMS/pages.lua")
-include("DRAIMS/constants.lua")
 
-draims_init_handlers(DRAIMS_ID_FO)
 
-local fo_data = {
-    current_page = PAGE_VHF,
-}
 
-function draw()
-    perf_measure_start("DRAIMS_FO:draw()")
 
-    draw_page_static(fo_data)
-    
-    perf_measure_stop("DRAIMS_FO:draw()")
-end

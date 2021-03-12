@@ -12,27 +12,24 @@
 --    Please check the LICENSE file in the root of the repository for further
 --    details or check <https://www.gnu.org/licenses/>
 -------------------------------------------------------------------------------
--- File: DRAIMSv2.lua 
--- Short description: Radio panel (v2)
+-- File: pages.lua 
+-- Short description: Draw pages background and fixed elements
 -------------------------------------------------------------------------------
 
-position = {2030, 2298, 600, 400}
 size = {600, 400}
 
-include("DRAIMS/DRAIMS_handlers.lua")
-include("DRAIMS/pages.lua")
-include("DRAIMS/constants.lua")
-
-draims_init_handlers(DRAIMS_ID_FO)
-
-local fo_data = {
-    current_page = PAGE_VHF,
-}
-
-function draw()
-    perf_measure_start("DRAIMS_FO:draw()")
-
-    draw_page_static(fo_data)
+local function draw_line_bottom_area(is_right_complete)
+    sasl.gl.drawWideLine(0, 100, size[1], 100, 4, ECAM_WHITE)
+    sasl.gl.drawWideLine(150, 100, 150, 0, 4, ECAM_WHITE)
     
-    perf_measure_stop("DRAIMS_FO:draw()")
+    
+    if is_right_complete then
+    
+    end
+end
+
+function draw_page_static()
+
+    draw_line_bottom_area(true)
+
 end
