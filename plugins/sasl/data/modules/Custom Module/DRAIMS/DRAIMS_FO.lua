@@ -23,11 +23,13 @@ include("DRAIMS/DRAIMS_handlers.lua")
 include("DRAIMS/pages.lua")
 include("DRAIMS/constants.lua")
 
-draims_init_handlers(DRAIMS_ID_FO)
 
 local fo_data = {
+    id = DRAIMS_ID_FO,
     current_page = PAGE_VHF,
 }
+
+draims_init_handlers(fo_data)
 
 function draw()
     perf_measure_start("DRAIMS_FO:draw()")

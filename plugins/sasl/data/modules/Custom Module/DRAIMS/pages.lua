@@ -20,16 +20,26 @@ size = {600, 400}
 
 local function draw_line_bottom_area(is_right_complete)
     sasl.gl.drawWideLine(0, 100, size[1], 100, 4, ECAM_WHITE)
-    sasl.gl.drawWideLine(150, 100, 150, 0, 4, ECAM_WHITE)
-    
-    
+    sasl.gl.drawWideLine(140, 100, 140, 0, 4, ECAM_WHITE)
+
     if is_right_complete then
-    
+        sasl.gl.drawWideLine(320, 100, 320, 0, 4, ECAM_WHITE)
+        sasl.gl.drawWideLine(420, 100, 420, 0, 4, ECAM_WHITE)
     end
 end
 
-function draw_page_static()
+local function draw_top_lines()
+    sasl.gl.drawWideLine(0, 200, size[1], 200, 4, ECAM_WHITE)
+    sasl.gl.drawWideLine(0, 300, size[1], 300, 4, ECAM_WHITE)
+end
 
-    draw_line_bottom_area(true)
+function draw_page_static(data)
 
+    if data.current_page ~= PAGE_MENU then
+        draw_line_bottom_area(data.current_page ~= PAGE_NAV)
+    end
+
+    if data.current_page ~= PAGE_MENU and data.current_page ~= PAGE_NAV then
+        draw_top_lines()
+    end
 end
