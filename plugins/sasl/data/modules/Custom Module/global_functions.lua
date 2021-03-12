@@ -363,11 +363,6 @@ function Aft_string_fill(string_to_fill, string_to_fill_it_with, to_what_length)
     return string_to_fill
 end
 
---used for ecam automation
-function Goto_ecam(page_num)
-    set(Ecam_previous_page, get(Ecam_current_page))
-    set(Ecam_current_page, page_num)
-end
 
 function GC_distance_kt(lat1, lon1, lat2, lon2)
 
@@ -410,35 +405,6 @@ function Move_along_distance(origin_lat, origin_lon, distance, angle)   -- Dista
     return lat,lon
 end
 
-
-function Read_CSV(file)
-  local result_full = {}
-  local sep = ','
-
-    for line in io.lines(file) do 
-        local result = {}
-        local pos = 1
-        continue = true
-        while continue do 
-            local c = string.sub(line,pos,pos)
-            if (c ~= "") then
-                local startp,endp = string.find(line,sep,pos)
-                if (startp) then 
-                    table.insert(result,string.sub(line,pos,startp-1))
-                    pos = endp + 1
-                else
-                    table.insert(result,string.sub(line,pos))
-                    continue = false
-                end 
-            else
-                continue = false 
-            end
-        end
-        table.insert(result_full,result)
-    end
-
-    return result_full
-end
 
 -- Generic handler for a float knob
 -- Usage example: sasl.registerCommandHandler(Knob_dataref, 0, function(phase) Knob_handler_up_float(phase, value_dataref, 0, 3) end)
@@ -815,8 +781,49 @@ function Local_magnetic_deviation()
     return get(Flightmodel_mag_heading) - get(Flightmodel_true_heading)
 end
 
--------------------EFB
 
-function drawTextCentered(font, x, y, string, size, isbold, isitalic, alignment, colour)
-    sasl.gl.drawText (font, x, y - (size/3),string, size, isbold, isitalic, alignment, colour)
-end
+--                             .xm*f""??T?@hc.
+--                          z@"` '~((!!!!!!!?*m.
+--                        z$$$K   ~~(/!!!!!!!!!Mh
+--                      .f` "#$k'`~~\!!!!!!!!!!!MMc
+--                     :"     f*! ~:~(!!!!!!!!!!XHMk
+--                     f      " %n:~(!!!!!!!!!!!HMMM.
+--                    d          X~!~(!!!!!!!X!X!SMMR
+--                    M :   x::  :~~!>!!!!!!MNWXMMM@R
+-- n                  E ' *  .......(!!X........RHMMM>                :.
+-- E%                 E  8 ........$K!!$........M$RMM>               :"5
+--z  %                3  $ 4.......$!~!*........!$MM$               :" `
+--K   ":              ?> # '#.....#~!!!!TR....$R?@MME              z   R
+--?     %.             5     ^"""~~~:XW!!!!T?T!XSMMM~            :^    J
+-- ".    ^s             ?.       ~~d$X$NX!!!!!!M!MM             f     :~
+--  '+.    #L            *c:.    .~"?!??!!!!!XX@M@~           z"    .*
+--    '+     %L           #c`"!+~~~!/!!!!!!@*TM8M           z"    .~
+--      ":    '%.         'C*X  .!~!~!!!!!X!!!@RF         .#     +
+--        ":    ^%.        9-MX!X!!X~H!!M!N!X$MM        .#`    +"
+--          #:    "n       'L'!~M~)H!M!XX!$!XMXF      .+`   .z"
+--            #:    ":      R *H$@@$H$*@$@$@$%M~     z`    +"
+--              %:   `*L    'k' M!~M~X!!$!@H!tF    z"    z"
+--                *:   ^*L   "k ~~~!~!!!!!M!X*   z*   .+"
+--                  "s   ^*L  '%:.~~~:!!!!XH"  z#   .*"
+--                    #s   ^%L  ^"#4@UU@##"  z#   .*"
+--                      #s   ^%L           z#   .r"
+--                        #s   ^%.       u#   .r"
+--                          #i   '%.   u#   .@"
+--                            #s   ^%u#   .@"
+--                              #s x#   .*"
+--                               x#`  .@%.
+--                             x#`  .d"  "%.
+--                           xf~  .r" #s   "%.
+--                     u   x*`  .r"     #s   "%.  x.
+--                     %Mu*`  x*"         #m.  "%zX"
+--                     :R(h x*              "h..*dN.
+--                   u@NM5e#>                 7?dMRMh.
+--                 z$@M@$#"#"                 *""*@MM$hL
+--               u@@MM8*                          "*$M@Mh.
+--             z$RRM8F"                             "N8@M$bL
+--            5`RM$#                                  'R88f)R
+--            'h.$"                                     #$x*
+--
+--
+-- STOP ADDING FUNCTIONS TO THIS FILE
+--

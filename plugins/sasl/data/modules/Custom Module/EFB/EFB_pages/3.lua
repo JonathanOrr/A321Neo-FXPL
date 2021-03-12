@@ -97,6 +97,13 @@ include("EFB/efb_topcat.lua")
 local efb_subpage_number = 1
 
 
+
+-------------------EFB
+
+local function drawTextCentered(font, x, y, string, size, isbold, isitalic, alignment, colour)
+    sasl.gl.drawText (font, x, y - (size/3),string, size, isbold, isitalic, alignment, colour)
+end
+
 local function performance_data()
 end
 
@@ -107,7 +114,6 @@ local function sum_weights_up()
     + (load_target[4] + load_target[1]) --cargo weight
     + load_target[6] --fuel weight
     + dry_operating_weight -- aircraft base weight
-    --print(total_load_target)
 end
 
 local function calculate_cg()
@@ -122,9 +128,6 @@ local function calculate_cg()
     + Table_extrapolate(cargo_index_front, load_actual[4]) --coefficient of the forward cargo hold
     + Table_extrapolate(cargo_index_aft, load_actual[5]) --coefficient of the after cargo hold
 
-    --print(Table_interpolate(tank_index_act, get(Fuel_quantity[tank_ACT])))
-
-    --print(final_cg)
 end
 
 local function EFB_update_page_3_subpage_1()
@@ -143,16 +146,16 @@ local function EFB_draw_page_3_subpage_1()
     sasl.gl.drawTexture (EFB_LOAD_bgd, 0 , 0 , 1143 , 800 , EFB_WHITE )
     sasl.gl.drawTexture (EFB_LOAD_bound_takeoff, 0 , 0 , 1143 , 800 , EFB_WHITE )
     sasl.gl.drawTexture (EFB_LOAD_chart, 0 , 0 , 1143 , 800 , EFB_WHITE )
-    sasl.gl.drawText ( Airbus_panel_font , 97 , 582, dry_operating_weight , 17 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
+    sasl.gl.drawText ( Font_Airbus_panel , 97 , 582, dry_operating_weight , 17 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
 
-    drawTextCentered( Airbus_panel_font , 263 , 397, load_target[1] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
-    drawTextCentered( Airbus_panel_font , 263 , 358, load_target[2] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
-    drawTextCentered( Airbus_panel_font , 263 , 319, load_target[3] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
+    drawTextCentered( Font_Airbus_panel , 263 , 397, load_target[1] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
+    drawTextCentered( Font_Airbus_panel , 263 , 358, load_target[2] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
+    drawTextCentered( Font_Airbus_panel , 263 , 319, load_target[3] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
 
-    drawTextCentered( Airbus_panel_font , 263 , 242, load_target[4] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
-    drawTextCentered( Airbus_panel_font , 263 , 203, load_target[5] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
+    drawTextCentered( Font_Airbus_panel , 263 , 242, load_target[4] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
+    drawTextCentered( Font_Airbus_panel , 263 , 203, load_target[5] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
 
-    drawTextCentered( Airbus_panel_font , 263 , 124, load_target[6] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
+    drawTextCentered( Font_Airbus_panel , 263 , 124, load_target[6] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
 
 --------------------------------------------------------------------------
 
@@ -169,15 +172,15 @@ local function EFB_draw_page_3_subpage_1()
     end
 --------------------------------------------------------------------------
 
-    drawTextCentered( Airbus_panel_font , 1038 , 682, dry_operating_weight      , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
-    drawTextCentered( Airbus_panel_font , 1038 , 660, 0                         , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
-    drawTextCentered( Airbus_panel_font , 1038 , 637, dry_operating_weight      , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
-    drawTextCentered( Airbus_panel_font , 1038 , 615, load_actual[4] + load_actual[5]      , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
-    drawTextCentered( Airbus_panel_font , 1038 , 593, ((load_actual[1]+load_actual[2]+load_actual[3]) * weight_per_passenger)      , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
-    drawTextCentered( Airbus_panel_font , 1038 , 571, ((load_actual[1]+load_actual[2]+load_actual[3]) * weight_per_passenger) + load_actual[4] + load_actual[5]     , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
-    drawTextCentered( Airbus_panel_font , 1038 , 551, load_actual[6]     , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
-    drawTextCentered( Airbus_panel_font , 1038 , 528, taxi_fuel     , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
-    drawTextCentered( Airbus_panel_font , 1038 , 506, ((load_actual[1]+load_actual[2]+load_actual[3]) * weight_per_passenger) + load_actual[4] + load_actual[5] + load_actual[6] - taxi_fuel + dry_operating_weight   , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
+    drawTextCentered( Font_Airbus_panel , 1038 , 682, dry_operating_weight      , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
+    drawTextCentered( Font_Airbus_panel , 1038 , 660, 0                         , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
+    drawTextCentered( Font_Airbus_panel , 1038 , 637, dry_operating_weight      , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
+    drawTextCentered( Font_Airbus_panel , 1038 , 615, load_actual[4] + load_actual[5]      , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
+    drawTextCentered( Font_Airbus_panel , 1038 , 593, ((load_actual[1]+load_actual[2]+load_actual[3]) * weight_per_passenger)      , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
+    drawTextCentered( Font_Airbus_panel , 1038 , 571, ((load_actual[1]+load_actual[2]+load_actual[3]) * weight_per_passenger) + load_actual[4] + load_actual[5]     , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
+    drawTextCentered( Font_Airbus_panel , 1038 , 551, load_actual[6]     , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
+    drawTextCentered( Font_Airbus_panel , 1038 , 528, taxi_fuel     , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
+    drawTextCentered( Font_Airbus_panel , 1038 , 506, ((load_actual[1]+load_actual[2]+load_actual[3]) * weight_per_passenger) + load_actual[4] + load_actual[5] + load_actual[6] - taxi_fuel + dry_operating_weight   , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
 
 
 
@@ -562,16 +565,16 @@ end
 --local function EFB_draw_overlay_text()  ---THIS IS THE OVERLAY IMAGE-----------------------------
 --  	sasl.gl.drawTexture ( EFB_LOAD_bgd, 0 , 0 , 1143 , 800 , ECAM_WHITE )
 --
---    sasl.gl.drawText ( Airbus_panel_font , 535 , 531, math.floor(get(FOB)).."KG" , 20 ,false , false , TEXT_ALIGN_LEFT , EFB_WHITE )
+--    sasl.gl.drawText ( Font_Airbus_panel , 535 , 531, math.floor(get(FOB)).."KG" , 20 ,false , false , TEXT_ALIGN_LEFT , EFB_WHITE )
 --
---    sasl.gl.drawText ( Airbus_panel_font , 581 ,253 , "LOAD AND COMPUTE" , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
+--    sasl.gl.drawText ( Font_Airbus_panel , 581 ,253 , "LOAD AND COMPUTE" , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
 --
---    sasl.gl.drawText ( Airbus_panel_font , 582 ,204 , "REALISTIC REFUEL PANEL" , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
+--    sasl.gl.drawText ( Font_Airbus_panel , 582 ,204 , "REALISTIC REFUEL PANEL" , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
 --
 --
---    sasl.gl.drawText ( Airbus_panel_font , 226 ,436 , "THIS BUTTON DOESN'T WORK" , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
---    sasl.gl.drawText ( Airbus_panel_font , 942 ,421 , "COMPUTE" , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
---    sasl.gl.drawText ( Airbus_panel_font , 580 ,99 , "IRS FORCE ALIGN" , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
+--    sasl.gl.drawText ( Font_Airbus_panel , 226 ,436 , "THIS BUTTON DOESN'T WORK" , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
+--    sasl.gl.drawText ( Font_Airbus_panel , 942 ,421 , "COMPUTE" , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
+--    sasl.gl.drawText ( Font_Airbus_panel , 580 ,99 , "IRS FORCE ALIGN" , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
 --end
 --
 --
@@ -585,41 +588,41 @@ end
 --  
 --local function EFB_draw_loadsheet_text()
 --    local YEAR = tonumber(os.date("%y"))
---    sasl.gl.drawText ( Airbus_panel_font, 104 , 377 , "Aircraft: A321-271NX" , 15, false , false , TEXT_ALIGN_LEFT , EFB_BLACK )
---    sasl.gl.drawText ( Airbus_panel_font, 346 , 377 , get(day_in_month)..month_in_text[get(month_in_numbers)]..(YEAR) , 15, false , false , TEXT_ALIGN_RIGHT , EFB_BLACK )
---    sasl.gl.drawText ( Airbus_panel_font, 225 , 337 , "LOADSHEET" , 15, false , false , TEXT_ALIGN_CENTER , EFB_BLACK )
---    sasl.gl.drawText ( Airbus_panel_font, 225 , 317 , "------------------------------" , 15, false , false , TEXT_ALIGN_CENTER , EFB_BLACK )
---    sasl.gl.drawText ( Airbus_panel_font, 104 , 297 , "Passengers Weight", 15, false , false , TEXT_ALIGN_LEFT , EFB_BLACK )
---    sasl.gl.drawText ( Airbus_panel_font, 104 , 277 , "Cargo Containers", 15, false , false , TEXT_ALIGN_LEFT , EFB_BLACK )
---    sasl.gl.drawText ( Airbus_panel_font, 104 , 257 , "Block Fuel:" , 15, false , false , TEXT_ALIGN_LEFT , EFB_BLACK )
---    sasl.gl.drawText ( Airbus_panel_font, 104 , 237 , "Zero Fuel Weight:" , 15, false , false , TEXT_ALIGN_LEFT , EFB_BLACK )
---    sasl.gl.drawText ( Airbus_panel_font, 104 , 217 , "ZFW Center of Gravity:" , 15, false , false , TEXT_ALIGN_LEFT , EFB_BLACK )
---    sasl.gl.drawText ( Airbus_panel_font, 104 , 197 , "------------------------------" , 15, false , false , TEXT_ALIGN_LEFT , EFB_BLACK )
---    sasl.gl.drawText ( Airbus_panel_font, 104 , 177 , "Takeoff Weight:" , 15, false , false , TEXT_ALIGN_LEFT , EFB_BLACK )
---    sasl.gl.drawText ( Airbus_panel_font, 225 , 137 , "END OF REPORT" , 15, false , false , TEXT_ALIGN_CENTER , EFB_BLACK )
+--    sasl.gl.drawText ( Font_Airbus_panel, 104 , 377 , "Aircraft: A321-271NX" , 15, false , false , TEXT_ALIGN_LEFT , EFB_BLACK )
+--    sasl.gl.drawText ( Font_Airbus_panel, 346 , 377 , get(day_in_month)..month_in_text[get(month_in_numbers)]..(YEAR) , 15, false , false , TEXT_ALIGN_RIGHT , EFB_BLACK )
+--    sasl.gl.drawText ( Font_Airbus_panel, 225 , 337 , "LOADSHEET" , 15, false , false , TEXT_ALIGN_CENTER , EFB_BLACK )
+--    sasl.gl.drawText ( Font_Airbus_panel, 225 , 317 , "------------------------------" , 15, false , false , TEXT_ALIGN_CENTER , EFB_BLACK )
+--    sasl.gl.drawText ( Font_Airbus_panel, 104 , 297 , "Passengers Weight", 15, false , false , TEXT_ALIGN_LEFT , EFB_BLACK )
+--    sasl.gl.drawText ( Font_Airbus_panel, 104 , 277 , "Cargo Containers", 15, false , false , TEXT_ALIGN_LEFT , EFB_BLACK )
+--    sasl.gl.drawText ( Font_Airbus_panel, 104 , 257 , "Block Fuel:" , 15, false , false , TEXT_ALIGN_LEFT , EFB_BLACK )
+--    sasl.gl.drawText ( Font_Airbus_panel, 104 , 237 , "Zero Fuel Weight:" , 15, false , false , TEXT_ALIGN_LEFT , EFB_BLACK )
+--    sasl.gl.drawText ( Font_Airbus_panel, 104 , 217 , "ZFW Center of Gravity:" , 15, false , false , TEXT_ALIGN_LEFT , EFB_BLACK )
+--    sasl.gl.drawText ( Font_Airbus_panel, 104 , 197 , "------------------------------" , 15, false , false , TEXT_ALIGN_LEFT , EFB_BLACK )
+--    sasl.gl.drawText ( Font_Airbus_panel, 104 , 177 , "Takeoff Weight:" , 15, false , false , TEXT_ALIGN_LEFT , EFB_BLACK )
+--    sasl.gl.drawText ( Font_Airbus_panel, 225 , 137 , "END OF REPORT" , 15, false , false , TEXT_ALIGN_CENTER , EFB_BLACK )
 --    --------------------------------BELOW IS THE CHANGING VALUES
---    sasl.gl.drawText ( Airbus_panel_font, 344 , 297 , loadsheet_pax_weight, 15, false , false , TEXT_ALIGN_RIGHT , EFB_BLACK )
---    sasl.gl.drawText ( Airbus_panel_font, 344 , 277 , loadsheet_cargo_weight, 15, false , false , TEXT_ALIGN_RIGHT , EFB_BLACK )
---    sasl.gl.drawText ( Airbus_panel_font, 344 , 257 , loadsheet_block_fuel , 15, false , false , TEXT_ALIGN_RIGHT , EFB_BLACK )
---    sasl.gl.drawText ( Airbus_panel_font, 344 , 237 , loadsheet_zfw , 15, false , false , TEXT_ALIGN_RIGHT , EFB_BLACK )
---    sasl.gl.drawText ( Airbus_panel_font, 344 , 217 , loadsheet_cg.."%" , 15, false , false , TEXT_ALIGN_RIGHT , EFB_BLACK )
---    sasl.gl.drawText ( Airbus_panel_font, 344 , 177 , loadsheet_zfw + loadsheet_block_fuel , 15, false , false , TEXT_ALIGN_RIGHT , EFB_BLACK )
+--    sasl.gl.drawText ( Font_Airbus_panel, 344 , 297 , loadsheet_pax_weight, 15, false , false , TEXT_ALIGN_RIGHT , EFB_BLACK )
+--    sasl.gl.drawText ( Font_Airbus_panel, 344 , 277 , loadsheet_cargo_weight, 15, false , false , TEXT_ALIGN_RIGHT , EFB_BLACK )
+--    sasl.gl.drawText ( Font_Airbus_panel, 344 , 257 , loadsheet_block_fuel , 15, false , false , TEXT_ALIGN_RIGHT , EFB_BLACK )
+--    sasl.gl.drawText ( Font_Airbus_panel, 344 , 237 , loadsheet_zfw , 15, false , false , TEXT_ALIGN_RIGHT , EFB_BLACK )
+--    sasl.gl.drawText ( Font_Airbus_panel, 344 , 217 , loadsheet_cg.."%" , 15, false , false , TEXT_ALIGN_RIGHT , EFB_BLACK )
+--    sasl.gl.drawText ( Font_Airbus_panel, 344 , 177 , loadsheet_zfw + loadsheet_block_fuel , 15, false , false , TEXT_ALIGN_RIGHT , EFB_BLACK )
 --    
 --end
 --
 --
 --local function EFB_draw_target_values()
---    sasl.gl.drawText ( Airbus_panel_font, 545 , 623 , fuel_target_amount , 20, false , false , TEXT_ALIGN_CENTER , EFB_WHITE )
---    sasl.gl.drawText ( Airbus_panel_font, 223 , 623 , pax_target_amount , 20, false , false , TEXT_ALIGN_CENTER , EFB_WHITE )
---    sasl.gl.drawText ( Airbus_panel_font, 223 , 557 , fwd_cargo_target , 20, false , false , TEXT_ALIGN_CENTER , EFB_WHITE )
---    sasl.gl.drawText ( Airbus_panel_font, 223 , 492 , aft_cargo_target , 20, false , false , TEXT_ALIGN_CENTER , EFB_WHITE )
+--    sasl.gl.drawText ( Font_Airbus_panel, 545 , 623 , fuel_target_amount , 20, false , false , TEXT_ALIGN_CENTER , EFB_WHITE )
+--    sasl.gl.drawText ( Font_Airbus_panel, 223 , 623 , pax_target_amount , 20, false , false , TEXT_ALIGN_CENTER , EFB_WHITE )
+--    sasl.gl.drawText ( Font_Airbus_panel, 223 , 557 , fwd_cargo_target , 20, false , false , TEXT_ALIGN_CENTER , EFB_WHITE )
+--    sasl.gl.drawText ( Font_Airbus_panel, 223 , 492 , aft_cargo_target , 20, false , false , TEXT_ALIGN_CENTER , EFB_WHITE )
 --end
 --
 --local function draw_takeoff_speeds_and_values()
---    sasl.gl.drawText ( Airbus_panel_font, 1027 , 321 , get(TOPCAT_v1) , 20, false , false , TEXT_ALIGN_RIGHT , EFB_WHITE )
---    sasl.gl.drawText ( Airbus_panel_font, 1027 , 282 , get(TOPCAT_vr) , 20, false , false , TEXT_ALIGN_RIGHT , EFB_WHITE )
---    sasl.gl.drawText ( Airbus_panel_font, 1027 , 243 , get(TOPCAT_v2) , 20, false , false , TEXT_ALIGN_RIGHT , EFB_WHITE )
---    sasl.gl.drawText ( Airbus_panel_font, 1027 , 204 , get(TOPCAT_flex) , 20, false , false , TEXT_ALIGN_RIGHT , EFB_WHITE )
+--    sasl.gl.drawText ( Font_Airbus_panel, 1027 , 321 , get(TOPCAT_v1) , 20, false , false , TEXT_ALIGN_RIGHT , EFB_WHITE )
+--    sasl.gl.drawText ( Font_Airbus_panel, 1027 , 282 , get(TOPCAT_vr) , 20, false , false , TEXT_ALIGN_RIGHT , EFB_WHITE )
+--    sasl.gl.drawText ( Font_Airbus_panel, 1027 , 243 , get(TOPCAT_v2) , 20, false , false , TEXT_ALIGN_RIGHT , EFB_WHITE )
+--    sasl.gl.drawText ( Font_Airbus_panel, 1027 , 204 , get(TOPCAT_flex) , 20, false , false , TEXT_ALIGN_RIGHT , EFB_WHITE )
 --
 --    
 --end
@@ -637,11 +640,11 @@ end
 --    end
 --
 --    if get(Payload_weight) > 25490 then
---        sasl.gl.drawText ( Airbus_panel_font, 954 , 290 , "PAYLOAD OVERWEIGHT >25.5T" , 20, false , false , TEXT_ALIGN_CENTER , EFB_FULL_RED )
+--        sasl.gl.drawText ( Font_Airbus_panel, 954 , 290 , "PAYLOAD OVERWEIGHT >25.5T" , 20, false , false , TEXT_ALIGN_CENTER , EFB_FULL_RED )
 --    end
 --
 --    if get(Gross_weight) > 101000 then
---        sasl.gl.drawText ( Airbus_panel_font, 954 , 255 , "TAKEOFF OVERWEIGHT >101T" , 20, false , false , TEXT_ALIGN_CENTER , EFB_FULL_RED )
+--        sasl.gl.drawText ( Font_Airbus_panel, 954 , 255 , "TAKEOFF OVERWEIGHT >101T" , 20, false , false , TEXT_ALIGN_CENTER , EFB_FULL_RED )
 --    end
 --end
 --
