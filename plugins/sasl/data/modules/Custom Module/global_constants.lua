@@ -163,16 +163,19 @@ NAV_ID_DME  = 12
 NAV_ID_DME_ALONE  = 13
 
 -- Fonts
-Font_AirbusDUL = sasl.gl.loadFont("fonts/AirbusDULiberationMono.ttf")
-Font_AirbusDUL_vert = sasl.gl.loadFont("fonts/AirbusDULiberationMono.ttf")
+Font_AirbusDUL       = sasl.gl.loadFont("fonts/AirbusDULiberationMono.ttf")
+Font_AirbusDUL_vert  = sasl.gl.loadFont("fonts/AirbusDULiberationMono.ttf")
+Font_AirbusDUL_small = sasl.gl.loadFont("fonts/AirbusDULiberationMono.ttf")
+Font_Airbus_panel    = sasl.gl.loadFont("fonts/A320PanelFont_V0.2b.ttf")
+Font_7_digits        = sasl.gl.loadFont("fonts/digital-7.mono.ttf")
+Font_B612regular     = sasl.gl.loadFont("fonts/B612-Regular.ttf")
+Font_B612MONO_regular= sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
+Font_B612MONO_bold   = sasl.gl.loadFont("fonts/B612Mono-Bold.ttf")
+Font_ECAMfont        = sasl.gl.loadFont("fonts/ECAMFontRegular.ttf")
+Font_7segment_led    = sasl.gl.loadFont("fonts/Segment7Standard.otf")
+
 sasl.gl.setFontRenderMode(Font_AirbusDUL, TEXT_RENDER_FORCED_MONO, 0.6)
 sasl.gl.setFontDirection (Font_AirbusDUL_vert, TEXT_DIRECTION_VERTICAL)
-
-Font_7segment_led = sasl.gl.loadFont("fonts/Segment7Standard.otf")
-
-Airbus_panel_font = sasl.gl.loadFont("fonts/A320PanelFont_V0.2b.ttf")
-
-Font_AirbusDUL_small = sasl.gl.loadFont("fonts/AirbusDULiberationMono.ttf")
 sasl.gl.setFontRenderMode(Font_AirbusDUL_small, TEXT_RENDER_FORCED_MONO, 0.6*1.47)
 
 -- Screens

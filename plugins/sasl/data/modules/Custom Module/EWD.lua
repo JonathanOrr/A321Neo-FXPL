@@ -409,35 +409,35 @@ end
 
 
 local function draw_left_memo()
-    local distance = 38
+    local distance = 34
 
     for i=0,6 do
         if get(EWD_left_memo_group_colors[i]) > 0 then
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2-430, size[2]/2-200-distance*i, get(EWD_left_memo_group[i]), 30, false, false, TEXT_ALIGN_LEFT, match_msg_colors[get(EWD_left_memo_group_colors[i])])
+            sasl.gl.drawText(Font_AirbusDUL, size[1]/2-422, size[2]/2-191-distance*i, get(EWD_left_memo_group[i]), 26, false, false, TEXT_ALIGN_LEFT, match_msg_colors[get(EWD_left_memo_group_colors[i])])
 
             -- Print the underline
-            width, height = sasl.gl.measureText(Font_AirbusDUL, get(EWD_left_memo_group[i]), 30, false, false)
+            width, height = sasl.gl.measureText(Font_AirbusDUL, get(EWD_left_memo_group[i]), 26, false, false)
             if width > 0 then
-                sasl.gl.drawWideLine(size[1]/2-430 + 1, size[2]/2-200-distance*i - 5, size[1]/2-430 + width + 2, size[2]/2-200-distance*i - 5, 3, match_msg_colors[get(EWD_left_memo_group_colors[i])])
+                sasl.gl.drawWideLine(size[1]/2-422 + 1, size[2]/2-191-distance*i - 5, size[1]/2-422 + width + 2, size[2]/2-191-distance*i - 5, 3, match_msg_colors[get(EWD_left_memo_group_colors[i])])
             end
         end
 
         if get(EWD_left_memo_colors[i]) > 0 then
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2-430, size[2]/2-200-distance*i, get(EWD_left_memo[i]), 30, false, false, TEXT_ALIGN_LEFT, match_msg_colors[get(EWD_left_memo_colors[i])])
+            sasl.gl.drawText(Font_AirbusDUL, size[1]/2-422, size[2]/2-191-distance*i, get(EWD_left_memo[i]), 26, false, false, TEXT_ALIGN_LEFT, match_msg_colors[get(EWD_left_memo_colors[i])])
         end
     end
 
 end
 
 local function draw_right_memo()
-    local distance = 38
+    local distance = 34
 
     for i=0,6 do
         if get(EWD_right_memo_colors[i]) > 0 then
             if get(EWD_right_memo_colors[i]) ~= 7 or get(TIME) % 2 > 1 then -- If color is COL_INDICATION_BLINKING we blink for 1 second every 2 seconds.
-                sasl.gl.drawText(Font_AirbusDUL, size[1]/2+160, size[2]/2-200-distance*i, get(EWD_right_memo[i]), 30, false, false, TEXT_ALIGN_LEFT, match_msg_colors[get(EWD_right_memo_colors[i])])
+                sasl.gl.drawText(Font_AirbusDUL, size[1]/2+160, size[2]/2-191-distance*i, get(EWD_right_memo[i]), 26, false, false, TEXT_ALIGN_LEFT, match_msg_colors[get(EWD_right_memo_colors[i])])
             else
-                sasl.gl.drawText(Font_AirbusDUL, size[1]/2+160, size[2]/2-200-distance*i, get(EWD_right_memo[i]), 30, false, false, TEXT_ALIGN_LEFT, ECAM_HIGH_GREEN)            
+                sasl.gl.drawText(Font_AirbusDUL, size[1]/2+160, size[2]/2-191-distance*i, get(EWD_right_memo[i]), 26, false, false, TEXT_ALIGN_LEFT, ECAM_HIGH_GREEN)            
             end
         end
     end

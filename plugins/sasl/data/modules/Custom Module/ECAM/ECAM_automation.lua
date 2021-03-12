@@ -75,6 +75,13 @@ local press_start_time = 0
 -------------------------------------------------------------------------------
 -- Functions
 -------------------------------------------------------------------------------
+
+--used for ecam automation
+local function Goto_ecam(page_num)
+    set(Ecam_previous_page, get(Ecam_current_page))
+    set(Ecam_current_page, page_num)
+end
+
 function ecam_user_press_page_button(phase, which_page)
     if phase == SASL_COMMAND_BEGIN then
         if get(Ecam_current_status) == ECAM_STATUS_SHOW_USER then
@@ -179,7 +186,7 @@ function ecam_update_advisory_conditions()
     
 end
 
-function ecam_update_leds_advisory()
+local function ecam_update_leds_advisory()
     
     if get(TIME) % 1 < 0.5 then
         if get(Ecam_advisory_ENG) == 1   then at_least_one = true; set(Ecam_btn_light_ENG, 1)   end
