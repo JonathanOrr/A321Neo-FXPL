@@ -68,26 +68,12 @@ sasl.registerCommandHandler (Toggle_SEC_2, 0, Toggle_sec_2_callback)
 sasl.registerCommandHandler (Toggle_SEC_3, 0, Toggle_sec_3_callback)
 
 --previous values
-local last_kill_value = 0--used to put the controls to nuetural when killing the FBW
-local kill_delta = 0--used to put the controls to nuetural when killing the FBW
 local last_roll = 0
 local last_pitch = 0
 local last_hdg = 0
 local last_vpath = 0
 
-local function FBW_kill_switch_logic()
-    kill_delta = get(FBW_kill_switch) - last_kill_value
-    last_kill_value = get(FBW_kill_switch)
-    if kill_delta == 1 then
-        set(Roll_artstab,  0)
-        set(Pitch_artstab, 0)
-        set(Yaw_artstab,   0)
-        print("FBW killed reseting controls")
-    end
-end
-
 function update()
-    FBW_kill_switch_logic()
     updateAll(components)
 
     --system subcomponents

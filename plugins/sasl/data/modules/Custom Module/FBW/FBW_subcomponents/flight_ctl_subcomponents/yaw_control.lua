@@ -52,6 +52,7 @@ function Rudder_control(yaw_input, fbw_current_law, is_in_auto_flight, trim_inpu
     --PROPERTIES--
     local rudder_speed = 21.5
     local rudder_trim_speed = 1
+    local rudder_trim_reset_speed = 1.5
     --the proportion is the same no matter the limits, hence at higher speed you'll reach the limit with less deflection
     local rudder_travel_target = yaw_input * 30
 
@@ -84,15 +85,15 @@ function Rudder_control(yaw_input, fbw_current_law, is_in_auto_flight, trim_inpu
             set(Rudder_trim_target_angle, Math_clamp(Math_clamp(get(Rudder_trim_target_angle) + trim_input * rudder_trim_speed * get(DELTA_TIME), -20, 20), -get(Rudder_travel_lim), get(Rudder_travel_lim)))
             set(Human_rudder_trim, 0)
         else--reset rudder trim
-            set(Rudder_trim_target_angle, Set_linear_anim_value(get(Rudder_trim_target_angle), 0, -20, 20, rudder_trim_speed))
+            set(Rudder_trim_target_angle, Set_linear_anim_value(get(Rudder_trim_target_angle), 0, -20, 20, rudder_trim_reset_speed))
             set(Human_rudder_trim, 0)
         end
 
         --as normal law uses SI demand, it is needed to always center the trim, and let the controller determine the postition of the rudder
         if get(FBW_yaw_law) ~= FBW_NORMAL_LAW or get(All_on_ground) == 1 then
-            set(Rudder_trim_actual_angle, Set_linear_anim_value(get(Rudder_trim_actual_angle), get(Rudder_trim_target_angle), -20, 20, rudder_trim_speed))
+            set(Rudder_trim_actual_angle, Set_linear_anim_value(get(Rudder_trim_actual_angle), get(Rudder_trim_target_angle), -20, 20, rudder_trim_reset_speed))
         else
-            set(Rudder_trim_actual_angle, Set_linear_anim_value(get(Rudder_trim_actual_angle), 0, -20, 20, rudder_trim_speed))
+            set(Rudder_trim_actual_angle, Set_linear_anim_value(get(Rudder_trim_actual_angle), 0, -20, 20, rudder_trim_reset_speed))
         end
     end
 

@@ -1164,7 +1164,7 @@ function (phase)
         end
         input, variation = mcdu_get_entry({"number", length = 2, dp = 0})
         input = tonumber(input)
-        if input > 0 and input <= 75 then
+        if input > 0 and input <= 80 then
             set(Eng_N1_flex_temp, input)
         else
             mcdu_send_message("temperature out of range")

@@ -3,24 +3,17 @@ include("FBW_subcomponents/flight_ctl_subcomponents/lateral_ctl.lua")
 include("FBW_subcomponents/flight_ctl_subcomponents/vertical_ctl.lua")
 include("FBW_subcomponents/flight_ctl_subcomponents/check_avil_and_failure.lua")
 include("FBW_subcomponents/flight_ctl_subcomponents/yaw_control.lua")
-include("FBW_subcomponents/flight_ctl_subcomponents/input_projection.lua")
 include("FBW_subcomponents/flight_ctl_subcomponents/ground_spoilers.lua")
+include("FBW_subcomponents/flight_ctl_subcomponents/input_handling.lua")
 
 --draw properties
 position = {1914, 1405, 147, 57}
 size = {147, 57}
 
-local LCD_backlight_cl = {10/255, 15/255, 25/255}
-
 local LED_font = sasl.gl.loadFont("fonts/digital-7.mono.ttf")
 local LED_text_cl = {235/255, 200/255, 135/255}
-local LED_backlight_text_cl = {15/255, 20/255, 15/255}
-local LED_backlight_cl = {5/255, 15/255, 10/255}
 
 --variables--
-local total_roll = 0
-local total_pitch = 0
-local total_yaw = 0
 local last_total_failure = 0--last value of the up shit creek dataref
 
 --modify xplane functions
@@ -49,28 +42,26 @@ end
 set(Elev_trim_degrees, 0)
 
 --initialise flight controls
-set(Override_artstab, 1)
 set(Override_control_surfaces, 1)
 set(Speedbrake_handle_ratio, 0)
 
 function onPlaneLoaded()
-    set(Override_artstab, 1)
     set(Override_control_surfaces, 1)
     set(Speedbrake_handle_ratio, 0)
 end
 
 function onAirportLoaded()
-    set(Override_artstab, 1)
     set(Override_control_surfaces, 1)
     set(Speedbrake_handle_ratio, 0)
 end
 
 function onModuleShutdown()--reset things back so other planes will work
-    set(Override_artstab, 0)
     set(Override_control_surfaces, 0)
 end
 
 function update()
+    FBW_input_handling()
+
     --sync and identify the elevator trim degrees
     if get(Trim_wheel_smoothing_on) == 1 then
         set(Elev_trim_degrees, Set_anim_value(get(Elev_trim_degrees), get_elev_trim_degrees(), -get(Max_THS_dn), get(Max_THS_up), 5))
@@ -78,30 +69,15 @@ function update()
         set(Elev_trim_degrees, get_elev_trim_degrees())
     end
 
-    --input augmentation
-    if get(DELTA_TIME) ~= 0 then
-        if get(Project_square_input) == 1 then
-            Project_circle_to_square_inputs(get(Roll), get(Pitch))
-        else
-            set(Augmented_roll,  get(Roll))
-            set(Augmented_pitch, get(Pitch))
-        end
-    end
-
-    --summing the controls
-    total_roll  = get(Roll_artstab)
-    total_pitch = get(Pitch_artstab)
-    total_yaw   = get(Yaw_artstab)
-
     if get(Override_control_surfaces) == 1 then
         if get(DELTA_TIME) ~= 0 then
             Check_surface_avail()
-            Ailerons_control(total_roll, true, Ground_spoilers_output(Ground_spoilers_var_table))
-            Spoilers_control(total_roll, get(Speedbrake_handle_ratio), Ground_spoilers_output(Ground_spoilers_var_table), false, Spoilers_obj)
-            Elevator_control(total_pitch, false)
+            Ailerons_control(get(FBW_roll_output), true, Ground_spoilers_output(Ground_spoilers_var_table))
+            Spoilers_control(get(FBW_roll_output), get(Speedbrake_handle_ratio), Ground_spoilers_output(Ground_spoilers_var_table), false, Spoilers_obj)
+            Elevator_control(get(FBW_pitch_output), false)
             Slats_flaps_calc_and_control()
             THS_control(Augmented_pitch_trim_ratio, get(Human_pitch_trim))
-            Rudder_control(total_yaw, 2, false, get(Human_rudder_trim), get(Resetting_rudder_trim))
+            Rudder_control(get(FBW_yaw_output), 2, false, get(Human_rudder_trim), get(Resetting_rudder_trim))
             Up_shit_creek(last_total_failure)
             last_total_failure = get(FAILURE_FCTL_UP_SHIT_CREEK)
         end

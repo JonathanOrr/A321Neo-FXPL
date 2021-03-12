@@ -68,6 +68,69 @@ Override_control_surfaces = globalProperty("sim/operation/override/override_cont
 
 
 --global pid array
+Bank_angle_PID_array = {
+    P_gain = 1.250,
+    I_gain = 0.000,
+    D_gain = 0.002,
+    B_gain = 0,
+    Schedule_gains = false,
+    Schedule_table = {
+        P = {
+            {000, 0.000},
+        },
+        I = {
+            {000, 0.000},
+        },
+        D = {
+            {000, 0.000},
+        },
+    },
+    Limited_integral = true,
+    min_integral = -25,
+    max_integral = 25,
+    Min_out = -25,
+    Max_out = 25,
+    PV = 0,
+    Error = 0,
+    Proportional = 0,
+    Integral = 0,
+    Derivative = 0,
+    Backpropagation = 0,
+    Desired_output = 0,
+    Actual_output = 0,
+}
+Pitch_PID_array = {
+    P_gain = 0.0018,
+    I_gain = 0.0020,
+    D_gain = 0.0001,
+    B_gain = 1,
+    Schedule_gains = false,
+    Schedule_table = {
+        P = {
+            {000, 0.000},
+        },
+        I = {
+            {000, 0.000},
+        },
+        D = {
+            {000, 0.000},
+        },
+    },
+    Limited_integral = true,
+    min_integral = -25,
+    max_integral = 25,
+    Min_out = -25,
+    Max_out = 25,
+    PV = 0,
+    Error = 0,
+    Proportional = 0,
+    Integral = 0,
+    Derivative = 0,
+    Backpropagation = 0,
+    Desired_output = 0,
+    Actual_output = 0,
+}
+
 A32nx_auto_thrust = {P_gain = 1.6, I_time = 5, D_gain = 4.5, Proportional = 0, Integral_sum = 0, Integral = 0, Derivative = 0, PV = 0, Min_out = 0, Max_out = 1, Error_margin = 15}
 A32nx_FD_roll = {P_gain = 1, I_gain = 0, D_gain = 0.32, Proportional = 0, Integral_sum = 0, Integral = 0, Derivative = 0, Current_error = 0, Min_error = -15, Max_error = 15}
 A32nx_FD_pitch = {P_gain = 1, I_gain = 1/3, D_gain = 0.35, Proportional = 0, Integral_sum = 0, Integral = 0, Derivative = 0, Current_error = 0, Min_error = -12000, Max_error = 12000}
@@ -87,6 +150,33 @@ end
 function Round(num, numDecimalPlaces)
     local mult = 10^(numDecimalPlaces or 0)
     return math.floor(num * mult + 0.5) / mult
+end
+
+function Math_clamp(val, min, max)
+    if min > max then LogWarning("Min is larger than Max invalid") end
+    if val < min then
+        return min
+    elseif val > max then
+        return max
+    elseif val <= max and val >= min then
+        return val
+    end
+end
+
+function Math_clamp_lower(val, min)
+    if val < min then
+        return min
+    elseif val >= min then
+        return val
+    end
+end
+
+function Math_clamp_higer(val, max)
+    if val > max then
+        return max
+    elseif val <= max then
+        return val
+    end
 end
 
 --string functions--
@@ -110,6 +200,42 @@ end
 
 function Set_dataref_linear_anim(dataref, target, min, max, speed)
     set(dataref, Set_linear_anim_value(get(dataref), target, min, max, speed))
+end
+
+function Table_interpolate(tab, x)
+    local a = 1
+    local b = #tab
+    assert(b > 1)
+
+    -- Simple cases
+    if x <= tab[a][1] then
+        return tab[a][2]
+    end
+    if x >= tab[b][1] then
+        return tab[b][2]
+    end
+
+    local middle = 1
+
+    while b-a > 1 do
+        middle = math.floor((b+a)/2)
+        local val = tab[middle][1]
+        if val == x then
+            break
+        elseif val < x then
+            a = middle
+        else
+            b = middle
+        end
+    end
+
+    if x == tab[middle][1] then
+        -- Found a perfect value
+        return tab[middle][2]
+    else
+        -- (y-y0) / (y1-y0) = (x-x0) / (x1-x0)
+        return tab[a][2] + ((x-tab[a][1])*(tab[b][2]-tab[a][2]))/(tab[b][1]-tab[a][1])
+    end
 end
 
 --global functions
@@ -231,6 +357,50 @@ function A32nx_PID_new_neg_avail(pid_array, error)
 
 end
 
+function FBW_PID_BP(pid_array, Error, PV, Scheduling_variable)
+    --sim paused no need to control
+    if get(DELTA_TIME) == 0 then
+        return 0
+    end
+
+    --gain scheduling
+    if pid_array.Schedule_gains == true then
+        pid_array.P_gain = Table_interpolate(pid_array.Schedule_table.P, Scheduling_variable)
+        pid_array.I_gain = Table_interpolate(pid_array.Schedule_table.I, Scheduling_variable)
+        pid_array.D_gain = Table_interpolate(pid_array.Schedule_table.D, Scheduling_variable)
+    end
+
+    --Properties--
+    local last_PV = pid_array.PV
+
+    --inputs--
+    pid_array.PV = PV
+    pid_array.Error = Error
+
+    --Proportional--
+    pid_array.Proportional = pid_array.Error * pid_array.P_gain
+
+    --Back Propagation--
+    pid_array.Backpropagation = pid_array.B_gain * (pid_array.Actual_output - pid_array.Desired_output)
+
+    --Integral--
+    local intergal_to_add = pid_array.I_gain * pid_array.Error + pid_array.Backpropagation
+    pid_array.Integral = pid_array.Integral + intergal_to_add * get(DELTA_TIME)
+
+    if pid_array.Limited_integral then
+        pid_array.Integral = Math_clamp(pid_array.Integral, pid_array.min_integral, pid_array.max_integral)
+    end
+
+    --Derivative
+    pid_array.Derivative = ((last_PV - pid_array.PV) / get(DELTA_TIME)) * pid_array.D_gain
+
+    --Sigma
+    pid_array.Desired_output = pid_array.Proportional + pid_array.Integral + pid_array.Derivative
+
+    --Output--
+    return Math_clamp(pid_array.Desired_output, pid_array.Min_out, pid_array.Max_out)
+end
+
 function Set_anim_value(current_value, target, min, max, speed)
 
     if target >= (max - 0.001) and current_value >= (max - 0.01) then
@@ -250,33 +420,6 @@ function Rescale(in1, out1, in2, out2, x)
     if in2 - in1 == 0 then return out1 + (out2 - out1) * (x - in1) end
     return out1 + (out2 - out1) * (x - in1) / (in2 - in1)
 
-end
-
-function Math_clamp(val, min, max)
-    if min > max then LogWarning("Min is larger than Max invalid") end
-    if val < min then
-        return min
-    elseif val > max then
-        return max
-    elseif val <= max and val >= min then
-        return val
-    end
-end
-
-function Math_clamp_lower(val, min)
-    if val < min then
-        return min
-    elseif val >= min then
-        return val
-    end
-end
-
-function Math_clamp_higer(val, max)
-    if val > max then
-        return max
-    elseif val <= max then
-        return val
-    end
 end
 
 function Set_linear_anim_value(current_value, target, min, max, speed)

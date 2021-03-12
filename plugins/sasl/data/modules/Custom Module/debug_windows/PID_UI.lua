@@ -229,7 +229,7 @@ function update()
     live_tune_PID(FBW_PID_arrays.FBW_NRM_YAW_PID_array)
 
     --update anything
-    --Update_value_historys(get(Augmented_pitch) * 6 - get(True_pitch_rate))
+    --Update_value_historys(get(Total_input_pitch) * 6 - get(True_pitch_rate))
 end
 
 function draw()

@@ -164,10 +164,15 @@ EFB_GROUND_wv    =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textu
 
 ------------LOAD-------------
 
-EFB_LOAD_bgd =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/overlay.png")
-EFB_LOAD_refuel_button =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/refuel_button.png")
-EFB_LOAD_compute_button =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/compute_button.png")
-EFB_LOAD_load_button =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/load_button.png")
+EFB_LOAD_bgd =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/bgd.png")
+EFB_LOAD_bound_takeoff =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/bound_takeoff.png")
+EFB_LOAD_chart =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/chart.png")
+
+
+--EFB_LOAD_bgd =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/overlay.png")
+--EFB_LOAD_refuel_button =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/refuel_button.png")
+--EFB_LOAD_compute_button =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/compute_button.png")
+--EFB_LOAD_load_button =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/load_button.png")
 
 -----------CONFIG------------
 
@@ -182,17 +187,29 @@ EFB_CONFIG_hud =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/texture
 EFB_HOME_bgd =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/HOME page/overlay.png")
 
 -----------INFO------------
+EFB_INFO_page = {} --I'll be the first once to add sth non-image related here, Yay!
 
-EFB_INFO_page_1 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/1.png")
-EFB_INFO_page_2 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/2.png")
-EFB_INFO_page_3 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/3.png")
-EFB_INFO_page_4 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/4.png")
-EFB_INFO_page_5 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/5.png")
-EFB_INFO_page_6 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/6.png")
-EFB_INFO_page_7 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/7.png")
-EFB_INFO_page_8 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/8.png")
-EFB_INFO_page_9 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/9.png")
-EFB_INFO_page_10 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/10.png")
+EFB_INFO_page[1] =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/1.png")
+EFB_INFO_page[2] =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/2.png")
+EFB_INFO_page[3]=    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/3.png")
+EFB_INFO_page[4]=    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/4.png")
+EFB_INFO_page[5]=    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/5.png")
+EFB_INFO_page[6]=    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/6.png")
+EFB_INFO_page[7]=    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/7.png")
+EFB_INFO_page[8]=    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/8.png")
+EFB_INFO_page[9]=    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/9.png")
+EFB_INFO_page[10] =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/10.png")
+--EFB_INFO_page[11] =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/11.png")
+--EFB_INFO_page[12] =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/12.png")
+--EFB_INFO_page[13] =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/13.png")
+--EFB_INFO_page[14] =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/14.png")
+--EFB_INFO_page[15] =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/15.png")
+--EFB_INFO_page[16] =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/16.png")
+--EFB_INFO_page[17] =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/17.png")
+--EFB_INFO_page[18] =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/18.png")
+--EFB_INFO_page[19] =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/19.png")
+--EFB_INFO_page[20] =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/20.png")
+
 EFB_INFO_selector =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/page_selector.png")
 
 --temp textures for popup windows rendering--
@@ -202,3 +219,7 @@ CAPT_ND_popup_texture =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/te
 FO_ND_popup_texture =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/popups/fo_nd.png")
 EWD_popup_texture =      sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/popups/ewd.png")
 ECAM_popup_texture =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/popups/ecam.png")
+
+--LOADSHEET 
+LOADSHEET_bgd =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/loadsheet/loadsheet.png")
+LOADSHEET_compute =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/loadsheet/compute_button.png")

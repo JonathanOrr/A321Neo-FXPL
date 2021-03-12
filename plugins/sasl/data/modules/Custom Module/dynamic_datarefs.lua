@@ -75,9 +75,8 @@ Wheel_better_pushback = createGlobalPropertyi("model/controls/park_break", 0, fa
 Wheel_better_pushback_connected = createGlobalPropertyi("bp/connected", 0, false, true, true) -- A dataref for Better Pushback plugin
 
 --engines
-Engine_option = createGlobalPropertyi("a321neo/customization/engine_option", 0, false, true, false) --0 CFM LEAP, 1 PW1000G
-PW_engine_enabled = createGlobalPropertyi("a321neo/customization/pw_engine_enabled", 0, false, true, false)
-Leap_engien_option = createGlobalPropertyi("a321neo/customization/leap_engine_enabled", 0, false, true, false)
+Engine_option = createGlobalPropertyi("a321neo/customization/engine_option", 2, false, true, false) -- 0: reserved value do not use, 1: LEAP-1A, 2: PW1133G
+
 --aircond
 Cockpit_temp_req = createGlobalPropertyf("a321neo/dynamics/aircond/cockpit_temp_req", 21, false, true, false) --requested cockpit temperature
 Front_cab_temp_req = createGlobalPropertyf("a321neo/dynamics/aircond/front_cab_temp_req", 21, false, true, false) --requested front cabin temperature
@@ -508,30 +507,43 @@ Joystick_toe_brakes_R = globalProperty("sim/joystick/joy_mapped_axis_value[7]")
 --dev & debuging
 Override_artstab = 						globalProperty("sim/operation/override/override_artstab")
 Override_control_surfaces = 			globalProperty("sim/operation/override/override_control_surfaces")
-FBW_kill_switch = 						createGlobalPropertyi("a321neo/dynamics/FBW/debug/kill_switch", 1, false, true, false)
 Force_full_rudder_limit = 				createGlobalPropertyi("a321neo/dynamics/FBW/debug/force_full_rudder_limit", 0, false, true, false)
 Bypass_speedbrakes_inhibition = 		createGlobalPropertyi("a321neo/dynamics/FBW/debug/bypass_spdbrakes_inhibition", 0, false, true, false)
 Override_flap_auto_extend_and_retract = createGlobalPropertyi("a321neo/dynamics/FBW/debug/override_flap_auto_extend_and_retract", 0, false, true, false)
 Debug_FBW_law_reconfig = 				createGlobalPropertyi("a321neo/dynamics/FBW/debug/debug_FBW_law_reconfig", 0, false, true, false)
 --customizations
-FBW_use_C_star = 			  createGlobalPropertyi("a321neo/dynamics/FBW/customizations/c_star_control", 0, false, true, false)
 Project_square_input = 		  createGlobalPropertyi("a321neo/dynamics/FBW/customizations/projected_square_input", 0, false, true, false)
 Trim_wheel_smoothing_on = 	  createGlobalPropertyi("a321neo/dynamics/FBW/customizations/trim_wheel_smoothing_on", 1, false, true, false)--is the trim wheel is smoothed
 FBW_mode_transition_version = createGlobalPropertyi("a321neo/dynamics/FBW/customizations/mode_transition_version", 0, false, true, false)--0 slower transitions and flare mode at 100RA(default on newer aircraft), 1 faster transitions and flare mode at 50RA
 --inputs--
-Roll = globalProperty("sim/joystick/yoke_roll_ratio")
-Pitch = globalProperty("sim/joystick/yoke_pitch_ratio")
-Yaw = globalProperty("sim/joystick/yoke_heading_ratio")
-Augmented_roll = createGlobalPropertyf("a321neo/dynamics/FBW/inputs/augmented_roll", 0, false, true, false)
-Augmented_pitch = createGlobalPropertyf("a321neo/dynamics/FBW/inputs/augmented_pitch", 0, false, true, false)
+Sidesitck_dual_input = createGlobalPropertyi("a321neo/dynamics/FBW/inputs_priority/sidesitck_dual_input", 0, false, true, false)
+Last_one_to_takover =  createGlobalPropertyi("a321neo/dynamics/FBW/inputs_priority/last_one_to_takover", 0, false, true, false)
+Priority_left =  createGlobalPropertyi("a321neo/dynamics/FBW/inputs_priority/priority_left", 0, false, true, false)
+Priority_right = createGlobalPropertyi("a321neo/dynamics/FBW/inputs_priority/priority_right", 0, false, true, false)
+Capt_sidestick_disabled = createGlobalPropertyi("a321neo/dynamics/FBW/inputs_priority/capt_sidestick_disabled", 0, false, true, false)
+Fo_sidestick_disabled =   createGlobalPropertyi("a321neo/dynamics/FBW/inputs_priority/fo_sidestick_disabled", 0, false, true, false)
+Capt_Roll =  globalProperty("sim/joystick/yoke_roll_ratio")
+Capt_Pitch = globalProperty("sim/joystick/yoke_pitch_ratio")
+Fo_Roll =  globalProperty("sim/cockpit2/weapons/gun_offset_heading_ratio")
+Fo_Pitch = globalProperty("sim/cockpit2/weapons/gun_offset_pitch_ratio")
+Yaw =   globalProperty("sim/joystick/yoke_heading_ratio")
+AUTOFLT_roll =  createGlobalPropertyf("a321neo/dynamics/FBW/inputs/autoflight_roll", 0, false, true, false)
+AUTOFLT_pitch = createGlobalPropertyf("a321neo/dynamics/FBW/inputs/autoflight_pitch", 0, false, true, false)
+AUTOFLT_yaw =   createGlobalPropertyf("a321neo/dynamics/FBW/inputs/autoflight_yaw", 0, false, true, false)
+Capt_sidestick_roll =   createGlobalPropertyf("a321neo/dynamics/FBW/inputs/capt_sidestick_roll", 0, false, true, false)
+Capt_sidestick_pitch =  createGlobalPropertyf("a321neo/dynamics/FBW/inputs/capt_sidestick_pitch", 0, false, true, false)
+Fo_sidestick_roll =     createGlobalPropertyf("a321neo/dynamics/FBW/inputs/fo_sidestick_roll", 0, false, true, false)
+Fo_sidestick_pitch =    createGlobalPropertyf("a321neo/dynamics/FBW/inputs/fo_sidestick_pitch", 0, false, true, false)
+Total_sidestick_roll =  createGlobalPropertyf("a321neo/dynamics/FBW/inputs/total_sidestick_roll", 0, false, true, false)
+Total_sidestick_pitch = createGlobalPropertyf("a321neo/dynamics/FBW/inputs/total_sidestick_pitch", 0, false, true, false)
+Total_input_roll =  createGlobalPropertyf("a321neo/dynamics/FBW/inputs/total_input_roll", 0, false, true, false)
+Total_input_pitch = createGlobalPropertyf("a321neo/dynamics/FBW/inputs/total_input_pitch", 0, false, true, false)
+Total_input_yaw =   createGlobalPropertyf("a321neo/dynamics/FBW/inputs/total_input_yaw", 0, false, true, false)
 Speedbrake_handle_ratio = globalProperty("sim/cockpit2/controls/speedbrake_ratio")
 --outputs--
-FBW_augmented_Roll =  createGlobalPropertyf("a321neo/dynamics/FBW/inputs/FBW_augmented_roll", 0, false, true, false)
-FBW_augmented_Pitch = createGlobalPropertyf("a321neo/dynamics/FBW/inputs/FBW_augmented_pitch", 0, false, true, false)
-FBW_augmented_yaw =   createGlobalPropertyf("a321neo/dynamics/FBW/inputs/FBW_augmented_yaw", 0, false, true, false)
-Roll_artstab =        globalProperty("sim/joystick/artstab_roll_ratio")
-Pitch_artstab =       globalProperty("sim/joystick/artstab_pitch_ratio")
-Yaw_artstab =         globalProperty("sim/joystick/artstab_heading_ratio")
+FBW_roll_output =  createGlobalPropertyf("a321neo/dynamics/FBW/outputs/fbw_roll_output", 0, false, true, false)
+FBW_pitch_output = createGlobalPropertyf("a321neo/dynamics/FBW/outputs/fbw_pitch_output", 0, false, true, false)
+FBW_yaw_output =   createGlobalPropertyf("a321neo/dynamics/FBW/outputs/fbw_yaw_output", 0, false, true, false)
 --flight envelope "sensors"
 Turbulence_ratio = globalProperty("sim/weather/wind_turbulence_percent")
 Wind_layer_1_alt = globalProperty("sim/weather/wind_altitude_msl_m[0]")
@@ -567,12 +579,12 @@ FBW_lateral_law =       createGlobalPropertyi("a321neo/dynamics/FBW/system_statu
 FBW_vertical_law =      createGlobalPropertyi("a321neo/dynamics/FBW/system_status/vertical_control_law", 0, false, true, false)-- -2 mechanical backup law, -1 abnormal law, 0 direct law, 1 alternate law, 2 alternate law(reduced prot), 3 normal law
 FBW_yaw_law =           createGlobalPropertyi("a321neo/dynamics/FBW/system_status/yaw_control_law", 0, false, true, false)     -- -2 mechanical backup law, -1 abnormal law, 0 direct law, 1 alternate law, 							   3 normal law
 FBW_alt_to_direct_law = createGlobalPropertyi("a321neo/dynamics/FBW/system_status/alternate_to_direct_law", 0, false, true, false)-- if the reason for being inside direct law is because of gear down in alternate law(used for smooth transition into alt law flare mode)
-FBW_vertical_ground_mode_ratio =   createGlobalPropertyf("a321neo/dynamics/FBW/system_status/vertical_ground_mode_ratio", 1, false, true, false)   --FBW vertical ground   mode transition ratio
-FBW_vertical_rotation_mode_ratio = createGlobalPropertyf("a321neo/dynamics/FBW/system_status/vertical_rotation_mode_ratio", 0, false, true, false) --FBW vertical rotation mode transition ratio(NEO only)
-FBW_vertical_flight_mode_ratio =   createGlobalPropertyf("a321neo/dynamics/FBW/system_status/vertical_flight_mode_ratio", 0, false, true, false)   --FBW vertical flight   mode transition ratio
-FBW_vertical_flare_mode_ratio =    createGlobalPropertyf("a321neo/dynamics/FBW/system_status/vertical_flare_mode_ratio", 0, false, true, false)    --FBW vertical flare    mode transition ratio
-FBW_lateral_ground_mode_ratio =    createGlobalPropertyf("a321neo/dynamics/FBW/system_status/lateral_ground_mode_ratio", 1, false, true, false)    --FBW lateral  ground   mode transition ratio
-FBW_lateral_flight_mode_ratio =    createGlobalPropertyf("a321neo/dynamics/FBW/system_status/lateral_flight_mode_ratio", 0, false, true, false)    --FBW lateral  flight   mode transition ratio
+FBW_vertical_ground_mode_ratio =   createGlobalPropertyf("a321neo/dynamics/FBW/system_status/vertical_ground_mode_ratio", 1, false, true, false)  --FBW vertical ground   mode transition ratio
+FBW_vertical_rotation_mode_ratio = createGlobalPropertyf("a321neo/dynamics/FBW/system_status/vertical_rotation_mode_ratio", 0, false, true, false)--FBW vertical rotation mode transition ratio(NEO only)
+FBW_vertical_flight_mode_ratio =   createGlobalPropertyf("a321neo/dynamics/FBW/system_status/vertical_flight_mode_ratio", 0, false, true, false)  --FBW vertical flight   mode transition ratio
+FBW_vertical_flare_mode_ratio =    createGlobalPropertyf("a321neo/dynamics/FBW/system_status/vertical_flare_mode_ratio", 0, false, true, false)   --FBW vertical flare    mode transition ratio
+FBW_lateral_ground_mode_ratio =    createGlobalPropertyf("a321neo/dynamics/FBW/system_status/lateral_ground_mode_ratio", 1, false, true, false)   --FBW lateral  ground   mode transition ratio
+FBW_lateral_flight_mode_ratio =    createGlobalPropertyf("a321neo/dynamics/FBW/system_status/lateral_flight_mode_ratio", 0, false, true, false)   --FBW lateral  flight   mode transition ratio
 FBW_flare_mode_memorised_att = createGlobalPropertyf("a321neo/dynamics/FBW/system_status/flare_mode_memorised_attitude", 0, false, true, false)--FBW flare mode memorised att at 50ft RA or 100ft RA
 FBW_flare_mode_computed_Q =    createGlobalPropertyf("a321neo/dynamics/FBW/system_status/flare_mode_computed_Q", 0, false, true, false)--FBW flare mode computed pitch rate 8 seconds from memorised ATT --> -2 degrees
 --flight computers status
@@ -730,6 +742,10 @@ GPWS_mode_5_glideslope_hard = createGlobalPropertyi("a321neo/dynamics/gpws/mode_
 GPWS_mode_pitch = createGlobalPropertyi("a321neo/dynamics/gpws/mode_pitch", 0, false, true, false)
 GPWS_mode_speed = createGlobalPropertyi("a321neo/dynamics/gpws/mode_speed", 0, false, true, false)
 GPWS_mode_stall = createGlobalPropertyi("a321neo/dynamics/gpws/mode_stall", 0, false, true, false)
+
+GPWS_mode_dual_input     = createGlobalPropertyi("a321neo/dynamics/gpws/mode_dual_input", 0, false, true, false)
+GPWS_mode_priority_left  = createGlobalPropertyi("a321neo/dynamics/gpws/mode_priority_left", 0, false, true, false)
+GPWS_mode_priority_right = createGlobalPropertyi("a321neo/dynamics/gpws/mode_priority_right", 0, false, true, false)
 
 GPWS_pred_is_active = createGlobalPropertyi("a321neo/dynamics/gpws/pred/is_active", 0, false, true, false)
 GPWS_pred_terr      = createGlobalPropertyi("a321neo/dynamics/gpws/pred/terrain", 0, false, true, false)

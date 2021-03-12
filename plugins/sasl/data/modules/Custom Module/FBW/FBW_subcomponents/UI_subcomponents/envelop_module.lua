@@ -56,14 +56,22 @@ function Draw_envelop_module_480x240(x_pos, y_pos)
     sasl.gl.drawArc(CENTER_X - 120, CENTER_Y, 94, 101, 180, -get(Roll_rate), ORANGE)
     sasl.gl.drawArc(CENTER_X - 120, CENTER_Y, 94, 101, 0, Math_clamp(-get(Roll_rate), -15, 15), LIGHT_BLUE)
     sasl.gl.drawArc(CENTER_X - 120, CENTER_Y, 94, 101, 180, Math_clamp(-get(Roll_rate), -15, 15), LIGHT_BLUE)
+    --side slip indications
+    sasl.gl.drawArc(CENTER_X - 120, CENTER_Y, 85, 92, 0, 360, LIGHT_GREY)
+    sasl.gl.drawArc(CENTER_X - 120, CENTER_Y, 85, 92, -get(Flightmodel_roll) + 90 + 7.5, -15, WHITE)
+    sasl.gl.drawArc(CENTER_X - 120, CENTER_Y, 85, 92, -get(Flightmodel_roll) + 90, get(Slide_slip_angle), ORANGE)
+    sasl.gl.drawArc(CENTER_X - 120, CENTER_Y, 85, 92, -get(Flightmodel_roll) + 90, Math_clamp(get(Slide_slip_angle), -15, 15), LIGHT_BLUE)
     --aircraft image
     sasl.gl.drawRotatedTextureCenter (Aircraft_behind_img, get(Flightmodel_roll), CENTER_X - 120, CENTER_Y, CENTER_X - 120 - (160 / 2), CENTER_Y - (53 /2) + 6, 160, 53, {1,1,1})
     --text indications
-    sasl.gl.drawArc(CENTER_X - 120, CENTER_Y, 20, 92, 270- 40, 80, {LIGHT_GREY[1], LIGHT_GREY[2], LIGHT_GREY[3], 0.6})
+    sasl.gl.drawArc(CENTER_X - 120, CENTER_Y, 45, 83, 60, 60, {LIGHT_GREY[1], LIGHT_GREY[2], LIGHT_GREY[3], 0.6})
+    sasl.gl.drawText(B612_MONO_bold, CENTER_X - 120, CENTER_Y + 65, "SIDESLIP", 12, false, false, TEXT_ALIGN_CENTER, WHITE)
+    sasl.gl.drawText(B612_MONO_bold, CENTER_X - 120, CENTER_Y + 50, string.format("%.1f", tostring(get(Slide_slip_angle))) .. "°", 12, false, false, TEXT_ALIGN_CENTER, LIGHT_BLUE)
+    sasl.gl.drawArc(CENTER_X - 120, CENTER_Y, 20, 83, 270- 40, 80, {LIGHT_GREY[1], LIGHT_GREY[2], LIGHT_GREY[3], 0.6})
     sasl.gl.drawText(B612_MONO_bold, CENTER_X - 120, CENTER_Y - 35, "ROLL", 12, false, false, TEXT_ALIGN_CENTER, WHITE)
     sasl.gl.drawText(B612_MONO_bold, CENTER_X - 120, CENTER_Y - 50, string.format("%.2f", tostring(get(Flightmodel_roll))) .. "°", 12, false, false, TEXT_ALIGN_CENTER, LIGHT_BLUE)
     sasl.gl.drawText(B612_MONO_bold, CENTER_X - 120, CENTER_Y - 65, "ROLL RATE", 12, false, false, TEXT_ALIGN_CENTER, WHITE)
-    sasl.gl.drawText(B612_MONO_bold, CENTER_X - 120, CENTER_Y - 80, string.format("%.1f", tostring(get(Roll_rate))) .. "°/S", 12, false, false, TEXT_ALIGN_CENTER, LIGHT_BLUE)
+    sasl.gl.drawText(B612_MONO_bold, CENTER_X - 120, CENTER_Y - 80, string.format("%.0f", tostring(get(Roll_rate))) .. "°/S", 12, false, false, TEXT_ALIGN_CENTER, LIGHT_BLUE)
 
     --draw G load control ring
     --pitch indications

@@ -96,17 +96,17 @@ local function update_dr_pred(dr, i, diff)
     -- - 3/4: Definetely a warning, pull up 
     
     -- The threshold depends on the nearest airport distance:
-    -- If distance <= 1 then lower threshold: 0
-    -- If 1 < distance <= 5 nm, the threshold goes from 0 to 400 
+    -- If distance <= 2.5 then lower threshold: 0
+    -- If 2.5 < distance <= 5 nm, the threshold goes from 0 to 400 
     -- If 5 < distance <= 12 nm, the threshold stays 400 
     -- If 12 < distance <= 15 nm, the threshold goes from 400 to 700
     -- If distance > 15 then the threshold is 700.
     
     local lower_threshold = 700
-    if get(GPWS_dist_airport) < 1 then
+    if get(GPWS_dist_airport) < 2.5 then
         lower_threshold = -100
     elseif get(GPWS_dist_airport) < 5 then
-        lower_threshold = Math_rescale(1, -100, 5, 400, get(GPWS_dist_airport))
+        lower_threshold = Math_rescale(2.5, -100, 5, 400, get(GPWS_dist_airport))
     elseif get(GPWS_dist_airport) < 12 then
         lower_threshold = 400
     elseif get(GPWS_dist_airport) < 15 then

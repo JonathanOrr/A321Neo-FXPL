@@ -398,3 +398,47 @@ MessageGroup_ENG_FADEC_FAULT = {
     end
 
 }
+
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: SAT ABOVE FLEX TEMP
+----------------------------------------------------------------------------------------------------
+
+MessageGroup_SAT_ABOVE_FLEX = {
+
+    shown = false,
+
+    text  = function()
+                return "ENG"
+            end,
+    color = function()
+                return COL_CAUTION
+            end,
+
+    sd_page = nil,
+    
+    priority = PRIORITY_LEVEL_2,
+
+    messages = {
+        {
+            text = function() return "    SAT ABOVE FLEX TEMP" end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        },
+        {
+            text = function() return " - T.O DATA.........CHECK" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return true end
+        }
+
+    },
+
+    is_active = function()
+        return get(Eng_N1_flex_temp) > 0 and get(OTA) > get(Eng_N1_flex_temp)
+    end,
+
+    is_inhibited = function()
+        return is_active_in({PHASE_1ST_ENG_ON})
+    end
+
+}

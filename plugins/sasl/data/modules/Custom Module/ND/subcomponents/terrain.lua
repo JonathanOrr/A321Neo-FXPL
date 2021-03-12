@@ -51,6 +51,30 @@ local image_terrain_mask        = sasl.gl.loadImage(moduleDirectory .. "/Custom 
 -- Functions
 -------------------------------------------------------------------------------
 
+local function is_inside_rect_vector(p1, p2)
+    return {
+            (p2[1] - p1[1]),
+            (p2[2] - p1[2])
+    }
+end
+
+local function is_inside_rect_dot(u, v)
+    return u[1] * v[1] + u[2] * v[2]; 
+end
+
+
+local function is_inside_rect(A, B, C, P)   -- Check wheter P is inside the rectangle with points A-B B-C
+    local AB = is_inside_rect_vector(A, B);
+    local AM = is_inside_rect_vector(A, P);
+    local BC = is_inside_rect_vector(B, C);
+    local BM = is_inside_rect_vector(B, P);
+    local dotABAM = is_inside_rect_dot(AB, AM);
+    local dotABAB = is_inside_rect_dot(AB, AB);
+    local dotBCBM = is_inside_rect_dot(BC, BM);
+    local dotBCBC = is_inside_rect_dot(BC, BC);
+    return 0 <= dotABAM and dotABAM <= dotABAB and 0 <= dotBCBM and dotBCBM <= dotBCBC
+end
+
 function load_altitudes_from_file()
 
     local filename = moduleDirectory .. "/Custom Module/data/altitudes.csv"
@@ -167,9 +191,13 @@ local function reset_min_max_value(data)
     data.terrain.max_altitude_tile = -99999
 end
 
-local function update_min_max_value(data, texture, altitude)
+local function update_min_max_value(data, texture, altitude, orig_lat, orig_lon, geo_rectangle)
     if texture == image_terrain_blue or texture == image_terrain_magenta then
         return -- Don't compute it from sea level
+    end
+
+    if not is_inside_rect(geo_rectangle.A, geo_rectangle.B, geo_rectangle.C, {orig_lat, orig_lon}) then
+        return
     end
     
     local color =    (texture == image_terrain_red and ECAM_RED)
@@ -189,7 +217,7 @@ local function update_min_max_value(data, texture, altitude)
     end
 end
 
-local function draw_single_tile(data, orig_lat, orig_lon, x, y, tile_size)
+local function draw_single_tile(data, orig_lat, orig_lon, x, y, tile_size, geo_rectangle)
     -- Converting coordates to the format of array
     local lat = orig_lat - math.fmod(orig_lat, RESOLUTION_LAT) - ND_terrain.altitudes_start[1]
     local lon = orig_lon - math.fmod(orig_lon, RESOLUTION_LON) - ND_terrain.altitudes_start[2]
@@ -221,7 +249,7 @@ local function draw_single_tile(data, orig_lat, orig_lon, x, y, tile_size)
 
         if texture then
             -- If I'm displayig a valid tile and it's not the sea, then update the numbers
-            update_min_max_value(data, texture, terrain_alt)
+            update_min_max_value(data, texture, terrain_alt, orig_lat, orig_lon, geo_rectangle)
         end
     elseif ND_terrain.world_altitudes ~= nil and math.abs(orig_lat) < 80 then
         -- Case 2: low resolution terrain for large ranges
@@ -238,7 +266,7 @@ local function draw_single_tile(data, orig_lat, orig_lon, x, y, tile_size)
             texture = image_terrain_blue
         end
         if texture and texture ~= image_terrain_blue then
-            update_min_max_value(data, texture, terrain_alt)
+            update_min_max_value(data, texture, terrain_alt, orig_lat, orig_lon, geo_rectangle)
         end
     else
         -- Case 3: No data
@@ -252,7 +280,7 @@ local function draw_single_tile(data, orig_lat, orig_lon, x, y, tile_size)
 
 end
 
-function update_terrain(data, functions)
+function update_terrain(data, functions, geo_rectangle)
 
     reset_min_max_value(data)   -- Reset numbers
 
@@ -311,7 +339,7 @@ function update_terrain(data, functions)
 
             local x = -img_size/2 + i*img_size
             local y = -img_size/2 + j*img_size
-            draw_single_tile(data, lat, lon, x, y, img_size)
+            draw_single_tile(data, lat, lon, x, y, img_size, geo_rectangle)
 
         end
     end
@@ -326,8 +354,8 @@ function draw_terrain_mask(data, normal_mask_texture)
     sasl.gl.drawTexture(normal_mask_texture, 0,0,900,900)
     local time_ratio = (get(TIME)-data.terrain.last_update)/3   --from 0 (new texture) to 1 (old texture)
 
-    sasl.gl.drawRotatedTextureCenter(image_terrain_mask, 360-90*time_ratio, 450, 0, 0, 0, 450, 900)
-    sasl.gl.drawRotatedTextureCenter(image_terrain_mask, 90*time_ratio, 450, 0, 450, 0, 450, 900)
+    sasl.gl.drawRotatedTextureCenter(image_terrain_mask, 360-90*time_ratio, 450, 450, 0, 450, 450, 900)
+    sasl.gl.drawRotatedTextureCenter(image_terrain_mask, 90*time_ratio, 450, 450, 450, 450, 450, 900)
 
     sasl.gl.drawUnderMask(true)
 end
