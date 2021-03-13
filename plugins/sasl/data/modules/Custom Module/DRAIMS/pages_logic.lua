@@ -72,6 +72,7 @@ function save_scratchpad(data, new_sel)
             freq_to_set = freq_to_set - (freq_to_set % 0.005)
             radio_vhf_set_freq(old_sel, true, freq_to_set)
             DRAIMS_common.scratchpad[old_sel] = ""
+            return true
         end
     else    -- Revert
         if #DRAIMS_common.scratchpad[old_sel] > 0 then
@@ -81,6 +82,8 @@ function save_scratchpad(data, new_sel)
             DRAIMS_common.scratchpad[old_sel] = ""
         end
     end
+    
+    return false
 
 end
 
@@ -89,3 +92,16 @@ function clear_info_message(data)
     data.info_message[2] = ""
     data.info_message[3] = ""
 end
+
+function vhf_swap_freq(data, i)
+
+    if #DRAIMS_common.scratchpad[i] > 0 then
+        if not save_scratchpad(data, i) then
+            return
+        end
+    end
+    radio_vhf_swap_freq(i)
+    DRAIMS_common.vhf_animate_which = i
+    DRAIMS_common.vhf_animate = VHF_ANIMATE_SPEED
+end
+

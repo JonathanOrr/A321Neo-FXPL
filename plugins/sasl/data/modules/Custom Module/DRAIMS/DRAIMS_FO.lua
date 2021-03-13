@@ -29,7 +29,7 @@ include("DRAIMS/constants.lua")
 local fo_data = {
     id = DRAIMS_ID_FO,
     current_page = PAGE_MENU_SATCOM,
-    vhf_selected_line = 1,
+    vhf_selected_line = 3,
     scratchpad_input = -1,
     info_message = {"", "", ""}
 }

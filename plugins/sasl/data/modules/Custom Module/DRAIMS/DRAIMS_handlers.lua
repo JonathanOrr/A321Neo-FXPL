@@ -61,9 +61,9 @@ local page_routes = {   -- This tells you which page you go when you press a lat
         [BTN_R3] = function(data) save_scratchpad(data, 3); data.vhf_selected_line = 3 end,
         [BTN_R4] = function(data) clear_info_message(data) end,
 
-        [BTN_L1] = function(data) radio_vhf_swap_freq(1); DRAIMS_common.vhf_animate_which = 1; DRAIMS_common.vhf_animate = VHF_ANIMATE_SPEED end,
-        [BTN_L2] = function(data) radio_vhf_swap_freq(2); DRAIMS_common.vhf_animate_which = 2; DRAIMS_common.vhf_animate = VHF_ANIMATE_SPEED end,
-        [BTN_L3] = function(data) radio_vhf_swap_freq(3); DRAIMS_common.vhf_animate_which = 3; DRAIMS_common.vhf_animate = VHF_ANIMATE_SPEED end,
+        [BTN_L1] = function(data) vhf_swap_freq(data, 1) end,
+        [BTN_L2] = function(data) vhf_swap_freq(data, 2) end,
+        [BTN_L3] = function(data) vhf_swap_freq(data, 3) end,
         
 
     },
@@ -110,7 +110,21 @@ local function handler_num_button(data, which_btn)
 end
 
 local function handler_arrows(data, which_btn)
-
+    if data.current_page == PAGE_VHF and data.vhf_selected_line == 3 then
+        if which_btn == BTN_ARROW_UP then
+            if radio_vhf_get_freq(3, true) == 121.500 then
+                radio_vhf_set_freq(3, true, -1)
+            elseif radio_vhf_get_freq(3, true) < 0 then
+                radio_vhf_set_freq(3, true, 118.000)
+            end
+        else
+            if radio_vhf_get_freq(3, true) == -1 then
+                radio_vhf_set_freq(3, true, 121.500)
+            elseif radio_vhf_get_freq(3, true) ~= 121.500 then
+                radio_vhf_set_freq(3, true, -1)
+            end
+        end
+    end
 end
 
 local function handler_trans_recv(data, which_btn)

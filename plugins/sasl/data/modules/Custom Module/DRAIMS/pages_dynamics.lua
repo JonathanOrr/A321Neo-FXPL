@@ -19,6 +19,32 @@
 include("DRAIMS/radio_logic.lua")
 include("DRAIMS/constants.lua")
 
+-------------------------------------------------------------------------------
+-- Helpers
+-------------------------------------------------------------------------------
+local function draw_arrow_up(x,y)
+    local ARROW_SIZE = 7
+    local ARROW_LENGTH = 25
+    sasl.gl.drawConvexPolygon ({x-ARROW_SIZE, y+ARROW_LENGTH,
+                                x+ARROW_SIZE, y+ARROW_LENGTH,
+                                x, y+ARROW_LENGTH+ARROW_SIZE}, true, 0, ECAM_WHITE)
+    sasl.gl.drawWideLine(x, y+5, x, y+ARROW_LENGTH, 5, ECAM_WHITE)
+end
+
+local function draw_arrow_dn(x,y)
+    local ARROW_SIZE = 7
+    local ARROW_LENGTH = 25
+    sasl.gl.drawConvexPolygon ({x-ARROW_SIZE, y-ARROW_LENGTH,
+                                x, y-ARROW_LENGTH-ARROW_SIZE,
+                                x+ARROW_SIZE, y-ARROW_LENGTH,}, true, 0, ECAM_WHITE)
+    sasl.gl.drawWideLine(x, y-5, x, y-ARROW_LENGTH, 5, ECAM_WHITE)
+end
+
+
+-------------------------------------------------------------------------------
+-- VHF
+-------------------------------------------------------------------------------
+
 local function draw_page_vhf_dynamic_freq(data)
     local vhf1_freq = Round_fill(radio_vhf_get_freq(1, false), 3)
     local vhf2_freq = Round_fill(radio_vhf_get_freq(2, false), 3)
@@ -86,9 +112,9 @@ end
 
 local function draw_page_vhf_dynamic_freq_stby_numbers(data, freq, i)
     if freq < 0 then
-        freq = "DATA"
+        freq_str = "DATA"
     else
-        freq = Round_fill(freq, 3)
+        freq_str = Round_fill(freq, 3)
     end
 
     if DRAIMS_common.vhf_animate_which == i and DRAIMS_common.vhf_animate > 0 then
@@ -101,15 +127,19 @@ local function draw_page_vhf_dynamic_freq_stby_numbers(data, freq, i)
 
         local perc = DRAIMS_common.vhf_animate/VHF_ANIMATE_SPEED
 
-        draw_page_vhf_dynamic_freq_animate(perc, freq, freq_curr, i, data.vhf_selected_line == i)
+        draw_page_vhf_dynamic_freq_animate(perc, freq_str, freq_curr, i, data.vhf_selected_line == i)
     else
         if #DRAIMS_common.scratchpad[i] > 0 then
             draw_page_vhf_dynamic_freq_stby_scratchpad(data, i, data.vhf_selected_line == i)
         else
-            sasl.gl.drawText(Font_B612regular, size[1]-100,size[2]-55-100*(i-1), freq, 35, false, false, TEXT_ALIGN_CENTER, data.vhf_selected_line == i and ECAM_BLUE or ECAM_WHITE)
+            sasl.gl.drawText(Font_B612regular, size[1]-100,size[2]-55-100*(i-1), freq_str, 35, false, false, TEXT_ALIGN_CENTER, data.vhf_selected_line == i and ECAM_BLUE or ECAM_WHITE)
             
             if data.vhf_selected_line == i then
-                sasl.gl.drawText(Font_B612regular, size[1]-100,size[2]+15-100*data.vhf_selected_line, "STBY", 23, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+                if freq == 121.500 then
+                    sasl.gl.drawText(Font_B612regular, size[1]-100,size[2]+15-100*data.vhf_selected_line, "EMER", 23, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+                elseif freq > 0 then
+                    sasl.gl.drawText(Font_B612regular, size[1]-100,size[2]+15-100*data.vhf_selected_line, "STBY", 23, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+                end
             end
         end
     end
@@ -127,7 +157,16 @@ local function draw_page_vhf_dynamic_freq_stby(data)
 
     -- Rectangle currently selected freq
     Sasl_DrawWideFrame(size[1]-190, size[2]+5-100*data.vhf_selected_line, 180, 80, 2, 1, ECAM_BLUE)
-
+    if data.vhf_selected_line == 3 then
+        local arrow_up = vhf3_freq < 0 or vhf3_freq == 121.500
+        local arrow_dn = vhf3_freq < 0 or not arrow_up
+        if arrow_up then
+            draw_arrow_up(size[1]-180,size[2]-255)
+        end
+        if arrow_dn then
+            draw_arrow_dn(size[1]-180,size[2]-255)
+        end
+    end
 end
 
 
@@ -142,6 +181,11 @@ local function draw_page_vhf_dynamic(data)
     end
     
 end
+
+-------------------------------------------------------------------------------
+-- Generic
+-------------------------------------------------------------------------------
+
 
 local function draw_info_messages(data)
     sasl.gl.drawText(Font_B612regular, 430, 70, data.info_message[1], 24, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
