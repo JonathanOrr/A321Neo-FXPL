@@ -69,6 +69,11 @@ local function handler_trans_recv(data, which_btn)
 
 end
 
+local function handler_volume(data, direction, which_btn)
+
+end
+
+
 local command_list = {
 
     -- Page buttons
@@ -112,13 +117,21 @@ local command_list = {
     ["num_CLR"] = function(data) handler_num_button(data, BTN_CLR) end,
 
     ["vhf1_recv"]    = function(data) handler_trans_recv(data, BTN_VHF_1_RECV) end,
-    ["vhf1_transmit"]= function(data) handler_trans_recv(data, BTN_VHF_1_TRANS) end,
+    ["vhf1_transmit"]= function(data) handler_trans_recv(data, BTN_VHF_1_TRANS)end,
     ["vhf2_recv"]    = function(data) handler_trans_recv(data, BTN_VHF_2_RECV) end,
-    ["vhf2_transmit"]= function(data) handler_trans_recv(data, BTN_VHF_2_TRANS) end,
+    ["vhf2_transmit"]= function(data) handler_trans_recv(data, BTN_VHF_2_TRANS)end,
     ["vhf3_recv"]    = function(data) handler_trans_recv(data, BTN_VHF_3_RECV) end,
-    ["vhf3_transmit"]= function(data) handler_trans_recv(data, BTN_VHF_3_TRANS) end,
-    ["nav_recv"]     = function(data) handler_trans_recv(data, BTN_NAV_RECV) end
+    ["vhf3_transmit"]= function(data) handler_trans_recv(data, BTN_VHF_3_TRANS)end,
+    ["nav_recv"]     = function(data) handler_trans_recv(data, BTN_NAV_RECV)   end,
 
+    ["vhf1_vol_up"] = function(data) handler_volume(data, 1, BTN_VHF_1_RECV) end,
+    ["vhf1_vol_dn"] = function(data) handler_volume(data, -1, BTN_VHF_1_RECV)end,
+    ["vhf2_vol_up"] = function(data) handler_volume(data, 1, BTN_VHF_2_RECV) end,
+    ["vhf2_vol_dn"] = function(data) handler_volume(data, -1, BTN_VHF_2_RECV)end,
+    ["vhf3_vol_up"] = function(data) handler_volume(data, 1, BTN_VHF_3_RECV) end,
+    ["vhf3_vol_dn"] = function(data) handler_volume(data, -1, BTN_VHF_3_RECV)end,
+    ["nav_vol_up"]  = function(data) handler_volume(data, 1, BTN_NAV_RECV)   end,
+    ["nav_vol_dn"]  = function(data) handler_volume(data, -1, BTN_NAV_RECV)  end,
 
 }
 
