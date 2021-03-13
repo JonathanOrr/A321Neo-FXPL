@@ -10108,7 +10108,7 @@ IDX	8371
 		TRIS	5658 66
 		ATTR_manip_command	button	a321neo/cockpit/draims/capt_vhf2_recv	DRAIMS 1 toggle VHF 2 recieve
 		TRIS	5724 66
-		ATTR_manip_command	button	a321neo/cockpit/draims/fo_vhf3_recv	DRAIMS 2 toggle VHF 2 recieve
+		ATTR_manip_command	button	a321neo/cockpit/draims/fo_vhf2_recv	DRAIMS 2 toggle VHF 2 recieve
 		TRIS	5790 66
 		ATTR_manip_command_knob	rotate_medium	a321neo/cockpit/draims/capt_vhf2_vol_up	a321neo/cockpit/draims/capt_vhf2_vol_dn	Adjust DRAIMS 1 VHF 2 volume
 		TRIS	5856 66
@@ -10120,7 +10120,7 @@ IDX	8371
 		TRIS	6054 66
 		ATTR_manip_command	button	a321neo/cockpit/draims/capt_vhf3_recv	DRAIMS 1 toggle VHF 3 recieve
 		TRIS	6120 66
-		ATTR_manip_command	button	a321neo/cockpit/draims/capt_vhf3_recv	DRAIMS 2 toggle VHF 3 recieve
+		ATTR_manip_command	button	a321neo/cockpit/draims/fo_vhf3_recv	DRAIMS 2 toggle VHF 3 recieve
 		TRIS	6186 66
 		ATTR_manip_command_knob	rotate_medium	a321neo/cockpit/brightness/draims_1_brightness_up	a321neo/cockpit/brightness/draims_1_brightness_dn	Adjust DRAIMS 1 brightness
 		TRIS	6252 66
