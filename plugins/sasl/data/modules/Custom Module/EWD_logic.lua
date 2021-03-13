@@ -578,6 +578,9 @@ local function update_left_list()
         return
     end
 
+    set(AtLeastOneMasterWarning, 0)
+    set(AtLeastOneMasterCaution, 0)
+
     list_left  = PriorityQueue()
     list_left:setmax(PRIORITY_LEVEL_MEMO)
 
@@ -614,6 +617,13 @@ local function update_left_list()
             if m.land_asap ~= nil and m.land_asap == true then
                 land_asap = true
             end
+
+            if m.color() == COL_WARNING then
+                set(AtLeastOneMasterWarning, 1)
+            end
+            if m.color() == COL_CAUTION then
+                set(AtLeastOneMasterCaution, 1)
+            end 
         end
     end
 

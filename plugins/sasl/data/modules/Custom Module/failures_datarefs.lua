@@ -19,6 +19,9 @@
 -- General
 ReqMasterCaution      = createGlobalPropertyi("a321neo/failures/req_master_caution", 0, false, true, false) -- When a component (typically EWD) wants to trigger a caution put this to 1
 ReqMasterWarning      = createGlobalPropertyi("a321neo/failures/req_master_warning", 0, false, true, false) -- When a component (typically EWD) wants to trigger a warning put this to 1
+AtLeastOneMasterCaution      = createGlobalPropertyi("a321neo/failures/at_least_master_caution", 0, false, true, false)
+AtLeastOneMasterWarning      = createGlobalPropertyi("a321neo/failures/at_least_master_warning", 0, false, true, false)
+
 
 XPlane_Auto_Failure   = globalProperty("sim/operation/failures/enable_random_failures")
 
