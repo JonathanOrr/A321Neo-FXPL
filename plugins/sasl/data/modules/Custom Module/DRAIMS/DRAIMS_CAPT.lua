@@ -47,4 +47,6 @@ end
 
 function update()
     update_scratchpad(capt_data)
+    update_lights()
+    update_vhf_data()
 end

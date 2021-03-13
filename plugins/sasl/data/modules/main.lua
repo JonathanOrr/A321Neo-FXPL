@@ -79,8 +79,6 @@ components = {
   EWD_flight_phases {},
   HUD {},
   DCDU {},
-  DRAIMS_CAPT {},
-  DRAIMS_FO {},
   clock {},
   LED_screens {},
   failures_manager {},
@@ -99,7 +97,9 @@ components = {
   sounds {},
   graphics {},
   radio_logic {},
-
+  DRAIMS_CAPT {},
+  DRAIMS_FO {},
+  
   display_brightness {}, -- This must stay at the bottom
 
   main_popup {},

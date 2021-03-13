@@ -111,3 +111,19 @@ function vhf_swap_freq(data, i)
     DRAIMS_common.vhf_animate = VHF_ANIMATE_SPEED
 end
 
+
+function update_lights()
+    local bright_dr = globalPropertyf("a321neo/cockpit/lights/mip_pedestal_integral_value")
+    set(DRAIMS_1_keys_brightness, get(bright_dr) * (get(DRAIMS_1_brightness_act) > 0 and 1 or 0) );
+    set(DRAIMS_2_keys_brightness, get(bright_dr) * (get(DRAIMS_2_brightness_act) > 0 and 1 or 0) );
+end
+
+function update_vhf_data()
+    set(VHF_transmit_dest, get(Capt_VHF_1_transmit_selected) * 6 + get(Capt_VHF_2_transmit_selected) * 7)
+    set(VHF_transmit_dest_manual, get(Capt_VHF_1_transmit_selected) * 6 + get(Capt_VHF_2_transmit_selected) * 7)
+
+    set(VHF_1_audio_selected, get(Capt_VHF_recv_selected, 1))
+    set(VHF_2_audio_selected, get(Capt_VHF_recv_selected, 2))
+end
+
+
