@@ -26,7 +26,7 @@ include("DRAIMS/constants.lua")
 
 local capt_data = {
     id = DRAIMS_ID_CAPT,
-    current_page = PAGE_MENU_SATCOM,
+    current_page = PAGE_ATC,
 }
 
 draims_init_handlers(capt_data)

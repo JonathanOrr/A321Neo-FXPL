@@ -50,8 +50,14 @@ local BTN_NAV_RECV    = 7
 
 local page_routes = {   -- This tells you which page you go when you press a lateral button in a 
                         -- specific page
-    [PAGE_MENU_SATCOM] = {
+    -- [current_page] = { [button_clicked] = destination_page }
+
+    [PAGE_MENU] = {
         [BTN_R2] = PAGE_MENU_SATCOM
+    },
+    
+    [PAGE_MENU_SATCOM] = {
+        [BTN_L4] = PAGE_MENU
     }
 }
 
@@ -64,7 +70,9 @@ local function handler_page_button(data, which_btn)
 end
 
 local function handler_lat_button(data, which_btn)
-    print("Lateral button")
+    if page_routes[data.current_page] ~= nil and page_routes[data.current_page][which_btn] ~= nil then
+        data.current_page = page_routes[data.current_page][which_btn]
+    end
 end
 
 local function handler_tcas_button(data, which_btn)

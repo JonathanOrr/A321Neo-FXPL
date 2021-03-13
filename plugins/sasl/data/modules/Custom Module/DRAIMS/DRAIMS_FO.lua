@@ -35,6 +35,7 @@ function draw()
     perf_measure_start("DRAIMS_FO:draw()")
 
     draw_page_static(fo_data)
-    
+    draw_page_dynamic(fo_data)
+
     perf_measure_stop("DRAIMS_FO:draw()")
 end
