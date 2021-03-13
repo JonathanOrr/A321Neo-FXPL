@@ -45,8 +45,6 @@ local Charging_alpha_controller = {1,1,1,1}
 local EFB_UNDERLINE_POS = 1 --THE POSITION OF THE UNDERLINE
 local EFB_selector_transit_start = 0 --THE START TIME OF THE TRANSIT, FOR CONTROLLERS
 
-
-
 local line_width_table = {
     {1, 57},
     {2, 42},
@@ -71,6 +69,11 @@ else
     AVITAB_INSTALLED = false
 end
 
+function onKeyDown(component, char, key, shiftDown, ctrlDown, altOptDown)
+    if EFB_PAGE == 3 then
+        return EFB_onKeyDown_page3(component, char, key, shiftDown, ctrlDown, altOptDown)
+    end
+end
 
 ---------------------------------------------------------------------------------------------------------------
 --load in the functions

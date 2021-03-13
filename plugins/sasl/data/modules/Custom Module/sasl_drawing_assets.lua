@@ -167,6 +167,15 @@ EFB_GROUND_wv    =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textu
 EFB_LOAD_bgd =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/bgd.png")
 EFB_LOAD_bound_takeoff =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/bound_takeoff.png")
 EFB_LOAD_chart =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/chart.png")
+EFB_LOAD_selected_oa =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/selected_oa.png")
+EFB_LOAD_selected_ob =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/selected_ob.png")
+EFB_LOAD_selected_oc =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/selected_oc.png")
+EFB_LOAD_selected_cf =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/selected_cf.png")
+EFB_LOAD_selected_ca =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/selected_ca.png")
+EFB_LOAD_selected_fuel =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/selected_fuel.png")
+
+--EFB_LOAD_bgd =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/overlay.png")
+--EFB_LOAD_refuel_button =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/refuel_button.png")
 EFB_LOAD_compute_button =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/compute_button.png")
 
 -----------CONFIG------------
