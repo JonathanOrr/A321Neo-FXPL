@@ -21,6 +21,8 @@
 -------------------------------------------------------------------------------
 
 include("DRAIMS/constants.lua")
+include("DRAIMS/radio_logic.lua")
+include("DRAIMS/pages_logic.lua")
 
 local BTN_L1 = 1
 local BTN_L2 = 2
@@ -50,8 +52,23 @@ local BTN_NAV_RECV    = 7
 
 local page_routes = {   -- This tells you which page you go when you press a lateral button in a 
                         -- specific page
-    -- [current_page] = { [button_clicked] = destination_page }
+    -- [current_page] = { [button_clicked] = destination_page } or
+    -- [current_page] = { [button_clicked] = function }
 
+    [PAGE_VHF] = {
+        [BTN_R1] = function(data) save_scratchpad(data, 1); data.vhf_selected_line = 1 end,
+        [BTN_R2] = function(data) save_scratchpad(data, 2); data.vhf_selected_line = 2 end,
+        [BTN_R3] = function(data) save_scratchpad(data, 3); data.vhf_selected_line = 3 end,
+        [BTN_R4] = function(data) clear_info_message(data) end,
+
+        [BTN_L1] = function(data) radio_vhf_swap_freq(1); DRAIMS_common.vhf_animate_which = 1; DRAIMS_common.vhf_animate = VHF_ANIMATE_SPEED end,
+        [BTN_L2] = function(data) radio_vhf_swap_freq(2); DRAIMS_common.vhf_animate_which = 2; DRAIMS_common.vhf_animate = VHF_ANIMATE_SPEED end,
+        [BTN_L3] = function(data) radio_vhf_swap_freq(3); DRAIMS_common.vhf_animate_which = 3; DRAIMS_common.vhf_animate = VHF_ANIMATE_SPEED end,
+        
+
+    },
+
+    
     [PAGE_MENU] = {
         [BTN_R2] = PAGE_MENU_SATCOM
     },
@@ -61,17 +78,26 @@ local page_routes = {   -- This tells you which page you go when you press a lat
     }
 }
 
+
 -------------------------------------------------------------------------------
--- Functions
+-- Handlers
 -------------------------------------------------------------------------------
+
 
 local function handler_page_button(data, which_btn)
     data.current_page = which_btn
 end
 
 local function handler_lat_button(data, which_btn)
-    if page_routes[data.current_page] ~= nil and page_routes[data.current_page][which_btn] ~= nil then
+    if page_routes[data.current_page] == nil or page_routes[data.current_page][which_btn] == nil then
+        return
+    end
+    
+    local action = page_routes[data.current_page][which_btn]
+    if type(action) == "number" then
         data.current_page = page_routes[data.current_page][which_btn]
+    else
+        action(data)
     end
 end
 
@@ -80,7 +106,7 @@ local function handler_tcas_button(data, which_btn)
 end
 
 local function handler_num_button(data, which_btn)
-
+    data.scratchpad_input = which_btn
 end
 
 local function handler_arrows(data, which_btn)
@@ -158,6 +184,10 @@ local command_list = {
 }
 
 function draims_init_handlers(data)
+
+    DRAIMS_common.vhf_animate_which = 0
+    DRAIMS_common.vhf_animate = 0
+    DRAIMS_common.scratchpad = {"", "", ""}
 
     local prefix = data.id == DRAIMS_ID_CAPT and "capt_" or "fo_"
 

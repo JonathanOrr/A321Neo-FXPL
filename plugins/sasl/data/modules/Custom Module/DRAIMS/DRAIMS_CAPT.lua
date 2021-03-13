@@ -21,12 +21,17 @@ size = {600, 400}
 
 include("DRAIMS/DRAIMS_handlers.lua")
 include("DRAIMS/pages.lua")
+include("DRAIMS/pages_dynamics.lua")
+include("DRAIMS/pages_logic.lua")
 include("DRAIMS/constants.lua")
 
 
 local capt_data = {
     id = DRAIMS_ID_CAPT,
-    current_page = PAGE_ATC,
+    current_page = PAGE_VHF,
+    vhf_selected_line = 1,
+    scratchpad_input = -1,
+    info_message = {"", "", ""}
 }
 
 draims_init_handlers(capt_data)
@@ -35,6 +40,11 @@ function draw()
     perf_measure_start("DRAIMS_CAPT:draw()")
 
     draw_page_static(capt_data)
+    draw_page_dynamic(capt_data)
     
     perf_measure_stop("DRAIMS_CAPT:draw()")
+end
+
+function update()
+    update_scratchpad(capt_data)
 end

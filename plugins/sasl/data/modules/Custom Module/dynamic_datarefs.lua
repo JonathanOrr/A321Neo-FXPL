@@ -779,6 +779,13 @@ Fire_cargo_fwd_disch_at = createGlobalPropertyd("a321neo/dynamics/fire/cargo_fwd
 BUSS_Capt_man_enabled = createGlobalPropertyi("a321neo/dynamics/pfd/buss_capt_man", 0, false, true, false)
 BUSS_Fo_man_enabled = createGlobalPropertyi("a321neo/dynamics/pfd/buss_fo_man", 0, false, true, false)
 
+
+DRAIMS_vhf3_swap = createGlobalPropertyi("a321neo/cockpit/draims/legacy/actuators/com3_right_is_selected", 0, false, true, false)
+DRAIMS_vhf3_curr_freq_Mhz = createGlobalPropertyi("a321neo/cockpit/draims/legacy/actuators/com3_frequency_Mhz", -1, false, true, false)
+DRAIMS_vhf3_curr_freq_khz = createGlobalPropertyi("a321neo/cockpit/draims/legacy/actuators/com3_frequency_khz", 0, false, true, false)
+DRAIMS_vhf3_stby_freq_Mhz = createGlobalPropertyi("a321neo/cockpit/draims/legacy/actuators/com3_standby_frequency_Mhz", 122, false, true, false)
+DRAIMS_vhf3_stby_freq_khz = createGlobalPropertyi("a321neo/cockpit/draims/legacy/com3_standby_frequency_khz", 800, false, true, false)
+
 ---------------------------------------------------------------------BELOW THIS LINE IS EFB DATAREFS--------------------------------------------------------------------------
 
 --Toggle Options

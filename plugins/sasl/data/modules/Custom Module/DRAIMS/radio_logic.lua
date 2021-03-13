@@ -30,7 +30,15 @@ local vhf_datarefs = {
         curr_freq_khz = globalProperty("sim/cockpit2/radios/actuators/com2_frequency_khz"),
         stby_freq_Mhz = globalProperty("sim/cockpit2/radios/actuators/com2_standby_frequency_Mhz"),
         stby_freq_khz = globalProperty("sim/cockpit2/radios/actuators/com2_standby_frequency_khz")
+    },
+    {
+        swap = DRAIMS_vhf3_swap,
+        curr_freq_Mhz = DRAIMS_vhf3_curr_freq_Mhz,
+        curr_freq_khz = DRAIMS_vhf3_curr_freq_khz,
+        stby_freq_Mhz = DRAIMS_vhf3_stby_freq_Mhz,
+        stby_freq_khz = DRAIMS_vhf3_stby_freq_khz
     }
+
 
 }
 
@@ -59,6 +67,18 @@ function radio_vhf_set_freq(which_one, stby, freq)
     else
         set(vhf_datarefs[which_one].curr_freq_Mhz, Mhz)
         set(vhf_datarefs[which_one].curr_freq_khz, khz)
+    end
+end
+
+function radio_vhf_swap_freq(which_one)
+    set(vhf_datarefs[which_one].swap, 1-get(vhf_datarefs[which_one].swap))
+    if which_one == 3 then
+        local temp_Mhz = get(vhf_datarefs[3].curr_freq_Mhz)
+        local temp_khz = get(vhf_datarefs[3].curr_freq_khz)
+        set(vhf_datarefs[3].curr_freq_Mhz, get(vhf_datarefs[3].stby_freq_Mhz))
+        set(vhf_datarefs[3].curr_freq_khz, get(vhf_datarefs[3].stby_freq_khz))
+        set(vhf_datarefs[3].stby_freq_Mhz, temp_Mhz)
+        set(vhf_datarefs[3].stby_freq_khz, temp_khz)
     end
 end
 

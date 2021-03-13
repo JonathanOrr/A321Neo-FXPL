@@ -74,12 +74,6 @@ DRAIMS_1_brightness_act = createGlobalPropertyf("a321neo/cockpit/brightness/drai
 DRAIMS_2_brightness_act = createGlobalPropertyf("a321neo/cockpit/brightness/draims_2_brightness_act", 1, false, true, false)
 ISIS_brightness_act = createGlobalPropertyf("a321neo/cockpit/brightness/isis_brightness_act", 1, false, true, false)
 
-
---draims--
-DRAIMS_current_page = createGlobalPropertyi("a321neo/cockpit/draims/current_page", 1, false, true, false)--the page the draims unit is currently displaying 1VHF, 2HFs, 3TEL, 4ATC, 5MENU, 6NAV, 7ILS, 8VOR, 9ADF
-DRAIMS_format_error = createGlobalPropertyi("a321neo/cockpit/draims/format_error", 0, false, true, false)--if the format error message is shown ---> 1 invalid freqency format, 2 VHF out of range, 3 ILS out of range, 4 ILS freq spacing error(not odd), 5 VOR out of range, 6 VOR freq spacing error, 7 ADF out of range, 8 sqwk out of range, 9 sqwk integer only, 10 cursor in use, 11 more than 1 decimal point, 12 only decimal points, 13 cursor and VHF is identical, 14 green cursor use only, 15 crs integer only, 16 crs out of range, 17 ADF int only, 18 ils xxx.x>x< not 0 or 5, 19 sqwk 0 to 7 per digit
-DRAIMS_easter_egg = createGlobalPropertyi("a321neo/cockpit/draims/easter_egg", 0, false, true, false)--if the user clicks the empty scratchpad
-
 VHF_1_freq_swapped = globalProperty("sim/cockpit2/radios/actuators/com1_right_is_selected")--if the left and the right side vhf 1 freqencies are swapped very useful
 VHF_1_freq_Mhz = globalProperty("sim/cockpit2/radios/actuators/com1_frequency_Mhz")--vhf 1 freq Mhz >xxx<.xx, range from 118.000 to 137.000
 VHF_1_freq_khz = globalProperty("sim/cockpit2/radios/actuators/com1_frequency_khz")--vhf 1 freq khz xxx.>xx<, range from 118.000 to 137.000
@@ -90,11 +84,6 @@ VHF_2_freq_Mhz = globalProperty("sim/cockpit2/radios/actuators/com2_frequency_Mh
 VHF_2_freq_khz = globalProperty("sim/cockpit2/radios/actuators/com2_frequency_khz")--vhf 2 freq khz xxx.>xx<, range from 118.000 to 137.000
 VHF_2_stby_freq_Mhz = globalProperty("sim/cockpit2/radios/actuators/com2_standby_frequency_Mhz")--vhf 2 stby freq Mhz >xxx<.xx, range from 118.000 to 137.000
 VHF_2_stby_freq_khz = globalProperty("sim/cockpit2/radios/actuators/com2_standby_frequency_khz")--vhf 2 stby freq khz xxx.>xx<, range from 118.000 to 137.000
-
-DRAIMS_VHF_cursor_pos = createGlobalPropertyi("a321neo/cockpit/draims/vhf_cursor_position", 3, false, true, false)--DRAIMS VHF blue cursor position
-DRAIMS_cursor_freq_Mhz = createGlobalPropertyi("a321neo/cockpit/draims/cursor_frequency_Mhz", 121, false, true, false)--vhf 3 guard freq khz xxx.>xx<, when touched should be 121.500
-DRAIMS_cursor_freq_khz = createGlobalPropertyi("a321neo/cockpit/draims/cursor_guard_frequency_khz", 500, false, true, false)--vhf 3 guard freq khz xxx.>xx<, when touched should be 121.500
-DRAIMS_NAV_cursor_pos = createGlobalPropertyi("a321neo/cockpit/draims/nav_cursor_position", 3, false, true, false)--DRAIMS NAV green cursor position
 
 Audio_nav_selection = globalProperty("sim/cockpit2/radios/actuators/audio_nav_selection")--0=nav1, 1=nav2, 2=adf1, 3=adf2, 9=none
 NAV_1_freq_hz = globalProperty("sim/cockpit2/radios/actuators/nav1_frequency_hz")

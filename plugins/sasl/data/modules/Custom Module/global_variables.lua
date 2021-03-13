@@ -45,6 +45,7 @@ FIRE_sys = {}
 AI_sys   = {}
 ADIRS_sys= {}
 ND_terrain = {}
+DRAIMS_common = {}
 
 -- Engine data depending on the user choice
 ENG = { data_is_loaded = false }

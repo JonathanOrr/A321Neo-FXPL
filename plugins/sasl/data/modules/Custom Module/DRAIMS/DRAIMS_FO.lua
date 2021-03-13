@@ -21,12 +21,17 @@ size = {600, 400}
 
 include("DRAIMS/DRAIMS_handlers.lua")
 include("DRAIMS/pages.lua")
+include("DRAIMS/pages_dynamics.lua")
+include("DRAIMS/pages_logic.lua")
 include("DRAIMS/constants.lua")
 
 
 local fo_data = {
     id = DRAIMS_ID_FO,
     current_page = PAGE_MENU_SATCOM,
+    vhf_selected_line = 1,
+    scratchpad_input = -1,
+    info_message = {"", "", ""}
 }
 
 draims_init_handlers(fo_data)
@@ -38,4 +43,8 @@ function draw()
     draw_page_dynamic(fo_data)
 
     perf_measure_stop("DRAIMS_FO:draw()")
+end
+
+function update()
+    update_scratchpad(fo_data)
 end
