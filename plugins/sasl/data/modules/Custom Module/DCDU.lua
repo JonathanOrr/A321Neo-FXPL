@@ -42,6 +42,7 @@ size = {465, 355}
 
 include('libs/read.csv.lua')
 include('DCDU_handlers.lua')    -- DCDU handlers contains the button handlers
+include('DRAIMS/radio_logic.lua')
 
 ----------------------------------------------------------------------------------------------------
 -- Constants
@@ -473,7 +474,7 @@ local function update_satcom_vhf_connection()
         is_vhf_connected = 0
     end
 
-    if get(VHF_3_monitor_selected) == 1 then
+    if radio_vhf_get_freq(3, false) > 0 then
         is_vhf_connected = 0
     end
 

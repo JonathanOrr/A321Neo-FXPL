@@ -105,7 +105,7 @@ local function draw_page_vhf_dynamic_freq_stby_scratchpad(data, i, selected)
     sasl.gl.drawText(Font_B612regular, size[1]-100,size[2]-55-100*(i-1), num, 35, false, false, TEXT_ALIGN_CENTER, valid and (selected and ECAM_BLUE or ECAM_WHITE) or ECAM_ORANGE)
 
     if not valid then
-                sasl.gl.drawText(Font_B612regular, size[1]-100,size[2]+15-100*data.vhf_selected_line, "NOT VALID", 23, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+                sasl.gl.drawText(Font_B612regular, size[1]-100,size[2]+15-100*(i), "NOT VALID", 23, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
 
 end

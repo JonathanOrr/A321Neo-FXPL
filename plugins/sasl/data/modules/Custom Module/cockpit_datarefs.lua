@@ -74,17 +74,6 @@ DRAIMS_1_brightness_act = createGlobalPropertyf("a321neo/cockpit/brightness/drai
 DRAIMS_2_brightness_act = createGlobalPropertyf("a321neo/cockpit/brightness/draims_2_brightness_act", 1, false, true, false)
 ISIS_brightness_act = createGlobalPropertyf("a321neo/cockpit/brightness/isis_brightness_act", 1, false, true, false)
 
-VHF_1_freq_swapped = globalProperty("sim/cockpit2/radios/actuators/com1_right_is_selected")--if the left and the right side vhf 1 freqencies are swapped very useful
-VHF_1_freq_Mhz = globalProperty("sim/cockpit2/radios/actuators/com1_frequency_Mhz")--vhf 1 freq Mhz >xxx<.xx, range from 118.000 to 137.000
-VHF_1_freq_khz = globalProperty("sim/cockpit2/radios/actuators/com1_frequency_khz")--vhf 1 freq khz xxx.>xx<, range from 118.000 to 137.000
-VHF_1_stby_freq_Mhz = globalProperty("sim/cockpit2/radios/actuators/com1_standby_frequency_Mhz")--vhf 1 stby freq Mhz >xxx<.xx, range from 118.000 to 137.000
-VHF_1_stby_freq_khz = globalProperty("sim/cockpit2/radios/actuators/com1_standby_frequency_khz")--vhf 1 stby freq khz xxx.>xx<, range from 118.000 to 137.000
-VHF_2_freq_swapped = globalProperty("sim/cockpit2/radios/actuators/com2_right_is_selected")--if the left and the right side vhf 2 freqencies are swapped very useful
-VHF_2_freq_Mhz = globalProperty("sim/cockpit2/radios/actuators/com2_frequency_Mhz")--vhf 2 freq Mhz >xxx<.xx, range from 118.000 to 137.000
-VHF_2_freq_khz = globalProperty("sim/cockpit2/radios/actuators/com2_frequency_khz")--vhf 2 freq khz xxx.>xx<, range from 118.000 to 137.000
-VHF_2_stby_freq_Mhz = globalProperty("sim/cockpit2/radios/actuators/com2_standby_frequency_Mhz")--vhf 2 stby freq Mhz >xxx<.xx, range from 118.000 to 137.000
-VHF_2_stby_freq_khz = globalProperty("sim/cockpit2/radios/actuators/com2_standby_frequency_khz")--vhf 2 stby freq khz xxx.>xx<, range from 118.000 to 137.000
-
 Audio_nav_selection = globalProperty("sim/cockpit2/radios/actuators/audio_nav_selection")--0=nav1, 1=nav2, 2=adf1, 3=adf2, 9=none
 NAV_1_freq_hz = globalProperty("sim/cockpit2/radios/actuators/nav1_frequency_hz")
 NAV_1_freq_Mhz = globalProperty("sim/cockpit2/radios/actuators/nav1_frequency_Mhz")--nav 1 freq Mhz >xxx<.xx, ILS range from 108.100 to 111.950 with xxx.>x<xx always being odd, VOR from 108.000 to 117.950 with 50 khz spacing and first 4 Mhz shared with ILS
@@ -128,12 +117,16 @@ Fo_VHF_1_transmit_selected = createGlobalPropertyi("a321neo/cockpit/draims/fo_vh
 Fo_VHF_2_transmit_selected = createGlobalPropertyi("a321neo/cockpit/draims/fo_vhf_2_transmit_selected", 0, false, true, false)--0off, 1selected
 Fo_VHF_3_transmit_selected = createGlobalPropertyi("a321neo/cockpit/draims/fo_vhf_3_transmit_selected", 0, false, true, false)--0off, 1selected
 
+Capt_VHF_recv_selected = createGlobalPropertyia("a321neo/cockpit/draims/capt_vhf_recv_selected", 3)
+Fo_VHF_recv_selected = createGlobalPropertyia("a321neo/cockpit/draims/fo_vhf_recv_selected", 3)
+Capt_NAV_recv_selected = createGlobalPropertyi("a321neo/cockpit/draims/capt_nav_recv_selected", 0)
+Fo_NAV_recv_selected = createGlobalPropertyi("a321neo/cockpit/draims/fo_nav_recv_selected", 0)
+
 DRAIMS_dynamic_NAV_audio_selected = createGlobalPropertyi("a321neo/cockpit/draims/dynamic_nav_audio_selected", 0, false, true, false)--0off, 1selected
 DRAIMS_dynamic_NAV_volume = createGlobalPropertyf("a321neo/cockpit/draims/dynamic_nav_volume", 1, false, true, false)--volume of dynamic navigation audio
 
 VHF_1_audio_selected = globalProperty("sim/cockpit2/radios/actuators/audio_selection_com1")
 VHF_2_audio_selected = globalProperty("sim/cockpit2/radios/actuators/audio_selection_com2")
-VHF_3_monitor_selected = createGlobalPropertyi("a321neo/cockpit/draims/vhf_3_monitor_selected", 0, false, true, false)--0off, 1selected(USE FOR DCDU DATALINK)
 NAV_1_audio_selected = globalProperty("sim/cockpit2/radios/actuators/audio_selection_nav1")
 NAV_2_audio_selected = globalProperty("sim/cockpit2/radios/actuators/audio_selection_nav2")
 ADF_1_audio_selected = globalProperty("sim/cockpit2/radios/actuators/audio_selection_adf1")

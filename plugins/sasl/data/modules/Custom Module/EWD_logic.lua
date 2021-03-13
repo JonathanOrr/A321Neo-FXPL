@@ -37,6 +37,9 @@ include('EWD_msgs/nav.lua')
 include('EWD_msgs/pressurization.lua')
 include('EWD_msgs/to_ldg_memos.lua')
 
+include('DRAIMS/radio_logic.lua')
+
+
 sasl.registerCommandHandler (Ecam_btn_cmd_CLR,   0 , function(phase) ewd_clear_button_handler(phase) end )
 sasl.registerCommandHandler (Ecam_btn_cmd_RCL,   0 , function(phase) ewd_recall_button_handler(phase) end )
 sasl.registerCommandHandler (Ecam_btn_cmd_EMERC, 0 , function(phase) ewd_emercanc_button_handler(phase) end )
@@ -465,11 +468,11 @@ local function update_right_list()
     end
     
     if get(DCDU_new_msgs) ~= 0 then
-        list_right:put(COL_INDICATION_BLINKING, "ACARS MSG")    
+        list_right:put(COL_INDICATION_BLINKING, "ACARS MSG")
     end
     
-    if get(VHF_3_monitor_selected) == 1 then
-        list_right:put(COL_INDICATION_BLINKING, "VHF 3 VOICE")    
+    if radio_vhf_get_freq(3, false) > 0 then
+        list_right:put(COL_INDICATION_BLINKING, "VHF 3 VOICE")
     end
     
     if get(Ecam_fuel_valve_X_BLEED) < 2 or get(Ecam_fuel_valve_X_BLEED) == 4 then

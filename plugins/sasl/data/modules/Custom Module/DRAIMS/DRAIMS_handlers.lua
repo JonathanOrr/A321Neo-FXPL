@@ -43,12 +43,12 @@ local BTN_DOT = 10
 local BTN_CLR = 11
 
 local BTN_VHF_1_RECV  = 1
-local BTN_VHF_1_TRANS = 2
-local BTN_VHF_2_RECV  = 3
-local BTN_VHF_2_TRANS = 4
-local BTN_VHF_3_RECV  = 5
-local BTN_VHF_3_TRANS = 6
-local BTN_NAV_RECV    = 7
+local BTN_VHF_2_RECV  = 2
+local BTN_VHF_3_RECV  = 3
+local BTN_NAV_RECV    = 4
+local BTN_VHF_1_TRANS = 5
+local BTN_VHF_2_TRANS = 6
+local BTN_VHF_3_TRANS = 7
 
 local page_routes = {   -- This tells you which page you go when you press a lateral button in a 
                         -- specific page
@@ -128,7 +128,33 @@ local function handler_arrows(data, which_btn)
 end
 
 local function handler_trans_recv(data, which_btn)
+    local vhf_capt_t = {0,0,0}
+    local vhf_fo_t = {0,0,0}
 
+    vhf_capt_t[1] = which_btn == BTN_VHF_1_TRANS and data.id == DRAIMS_ID_CAPT and 1 or 0
+    vhf_capt_t[2] = which_btn == BTN_VHF_2_TRANS and data.id == DRAIMS_ID_CAPT and 1 or 0
+    vhf_capt_t[3] = which_btn == BTN_VHF_3_TRANS and data.id == DRAIMS_ID_CAPT and 1 or 0
+
+    vhf_fo_t[1] = which_btn == BTN_VHF_1_TRANS and data.id == DRAIMS_ID_FO and 1 or 0
+    vhf_fo_t[2] = which_btn == BTN_VHF_2_TRANS and data.id == DRAIMS_ID_FO and 1 or 0
+    vhf_fo_t[3] = which_btn == BTN_VHF_3_TRANS and data.id == DRAIMS_ID_FO and 1 or 0
+
+    
+    if vhf_capt_t[1] + vhf_capt_t[2] + vhf_capt_t[3] > 0 then
+        set(Capt_VHF_1_transmit_selected, (1 - get(Capt_VHF_1_transmit_selected))*vhf_capt_t[1])
+        set(Capt_VHF_2_transmit_selected, (1 - get(Capt_VHF_2_transmit_selected))*vhf_capt_t[2])
+        set(Capt_VHF_3_transmit_selected, (1 - get(Capt_VHF_3_transmit_selected))*vhf_capt_t[3])
+    end
+
+    if vhf_fo_t[1] + vhf_fo_t[2] + vhf_fo_t[3] > 0 then
+        set(Fo_VHF_1_transmit_selected, (1 - get(Fo_VHF_1_transmit_selected))*vhf_fo_t[1])
+        set(Fo_VHF_2_transmit_selected, (1 - get(Fo_VHF_2_transmit_selected))*vhf_fo_t[2])
+        set(Fo_VHF_3_transmit_selected, (1 - get(Fo_VHF_3_transmit_selected))*vhf_fo_t[3])
+    end
+
+    if which_btn < 4 and data.id == DRAIMS_ID_CAPT then
+        set(Capt_VHF_recv_selected, 1 - get(Capt_VHF_recv_selected, which_btn), which_btn)
+    end
 end
 
 local function handler_volume(data, direction, which_btn)

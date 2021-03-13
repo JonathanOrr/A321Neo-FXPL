@@ -18,6 +18,9 @@
 
 size = {600, 400}
 
+local DRAIMS_speaker = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/speaker.png")
+local DRAIMS_speaker_cross = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/speaker-crossed.png")
+
 local COLOR_DISABLED = {0.4, 0.4, 0.4}
 
 local function draw_line_bottom_area(is_right_complete)
@@ -108,15 +111,64 @@ local function draw_tcas_fixed_indication()
 
 end
 
+local function get_speaker_texture(is_capt, capt_vhf_trans, fo_vhf_trans, i)
+    return (is_capt and
+            (get(capt_vhf_trans) == 1 
+            and (get(Capt_VHF_recv_selected, i) == 1 and DRAIMS_speaker or DRAIMS_speaker_cross) 
+            or (get(Capt_VHF_recv_selected, i) == 1 and DRAIMS_speaker or nil)))
+        or
+        (not is_capt and
+            (get(fo_vhf_trans) == 1 
+            and (get(Fo_VHF_recv_selected, i) == 1 and DRAIMS_speaker or DRAIMS_speaker_cross) 
+            or (get(Fo_VHF_recv_selected, i) == 1 and DRAIMS_speaker or nil)))
+
+end
+
+local function draw_vhf_labels(data)
+    if (get(Capt_VHF_1_transmit_selected) == 1 and data.id==DRAIMS_ID_CAPT) or
+       (get(Fo_VHF_1_transmit_selected) == 1 and data.id==DRAIMS_ID_FO) then
+        draw_inverted_text(size[1]/2+20,size[2]-55, "VHF1", 38, TEXT_ALIGN_CENTER, ECAM_GREEN)
+    else
+        sasl.gl.drawText(Font_B612regular, size[1]/2+20,size[2]-55, "VHF1", 38, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    end
+    if (get(Capt_VHF_2_transmit_selected) == 1 and data.id==DRAIMS_ID_CAPT) or
+       (get(Fo_VHF_2_transmit_selected) == 1 and data.id==DRAIMS_ID_FO) then
+        draw_inverted_text(size[1]/2+20,size[2]-155, "VHF2", 38, TEXT_ALIGN_CENTER, ECAM_GREEN)
+    else
+        sasl.gl.drawText(Font_B612regular, size[1]/2+20,size[2]-155, "VHF2", 38, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    end
+    if (get(Capt_VHF_3_transmit_selected) == 1 and data.id==DRAIMS_ID_CAPT) or
+       (get(Fo_VHF_3_transmit_selected) == 1 and data.id==DRAIMS_ID_FO) then
+        draw_inverted_text(size[1]/2+20,size[2]-255, "VHF3", 38, TEXT_ALIGN_CENTER, ECAM_GREEN)
+    else
+        sasl.gl.drawText(Font_B612regular, size[1]/2+20,size[2]-255, "VHF3", 38, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    end
+
+
+    local texture_speaker_1 = get_speaker_texture(data.id == DRAIMS_ID_CAPT, Capt_VHF_1_transmit_selected, Fo_VHF_1_transmit_selected, 1)
+
+    local texture_speaker_2 = get_speaker_texture(data.id == DRAIMS_ID_CAPT, Capt_VHF_2_transmit_selected, Fo_VHF_2_transmit_selected, 2)
+
+    local texture_speaker_3 = get_speaker_texture(data.id == DRAIMS_ID_CAPT, Capt_VHF_3_transmit_selected, Fo_VHF_3_transmit_selected, 3)
+
+
+    if texture_speaker_1 then
+        sasl.gl.drawTexture(texture_speaker_1, size[1]/2+10, size[2]-88,20,24, {1,1,1})
+    end
+    if texture_speaker_2 then
+        sasl.gl.drawTexture(texture_speaker_2, size[1]/2+10, size[2]-188,20,24, {1,1,1})
+    end
+    if texture_speaker_3 then
+        sasl.gl.drawTexture(texture_speaker_3, size[1]/2+10, size[2]-288,20,24, {1,1,1})
+    end
+end
+
 local function draw_page_vhf(data)
     draw_line_bottom_area(true)
     draw_top_lines()
     draw_tcas_fixed_indication()
-    
-    sasl.gl.drawText(Font_B612regular, size[1]/2+20,size[2]-55, "VHF1", 38, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    sasl.gl.drawText(Font_B612regular, size[1]/2+20,size[2]-155, "VHF2", 38, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    sasl.gl.drawText(Font_B612regular, size[1]/2+20,size[2]-255, "VHF3", 38, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    
+    draw_vhf_labels(data)
+
 end
 
 local function draw_page_hf(data)
@@ -124,8 +176,8 @@ local function draw_page_hf(data)
     draw_top_lines()
     draw_tcas_fixed_indication()
     
-    sasl.gl.drawText(Font_B612regular, size[1]/2+40,size[2]-55, "HF1", 45, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    sasl.gl.drawText(Font_B612regular, size[1]/2+40,size[2]-155, "HF2", 45, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawText(Font_B612regular, size[1]/2+40,size[2]-55, "HF1", 38, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawText(Font_B612regular, size[1]/2+40,size[2]-155, "HF2", 38, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
 end
 
 local function draw_page_tel(data)
