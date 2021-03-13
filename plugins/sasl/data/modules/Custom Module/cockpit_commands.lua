@@ -331,6 +331,9 @@ RAIN_cmd_wiper_R_dn = sasl.createCommand("a321neo/cockpit/rain/wiper_R_dn_c","Kn
 -- Cockpit DOOR and related
 VIDEO_cmd_toggle = sasl.createCommand("a321neo/cockpit/misc/toggle_door_video","Press VIDEO DOOR")
 VIDEO_cmd_require = sasl.createCommand("a321neo/cockpit/misc/require_door_video","Press VIDEO in the pedestal")
+CKPT_DOOR_cmd_unlock = sasl.createCommand("a321neo/cockpit/misc/ckpt_door_unlock","Press VIDEO in the pedestal")
+CKPT_DOOR_cmd_lock = sasl.createCommand("a321neo/cockpit/misc/ckpt_door_lock","Press VIDEO in the pedestal")
+
 
 -- FIRE PROTECTION
 FIRE_cmd_ENG_1_A_1 = sasl.createCommand("a321neo/cockpit/fire/eng_1_agent_1","Press ENG 1 AGENT 1")
