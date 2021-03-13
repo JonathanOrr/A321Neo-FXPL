@@ -55,6 +55,8 @@ MCDU_1_brightness = createGlobalPropertyf("a321neo/cockpit/brightness/mcdu_1_bri
 MCDU_2_brightness = createGlobalPropertyf("a321neo/cockpit/brightness/mcdu_2_brightness", 1, false, true, false)
 DRAIMS_1_brightness = createGlobalPropertyf("a321neo/cockpit/brightness/draims_1_brightness", 1, false, true, false)
 DRAIMS_2_brightness = createGlobalPropertyf("a321neo/cockpit/brightness/draims_2_brightness", 1, false, true, false)
+DRAIMS_1_keys_brightness = createGlobalPropertyf("a321neo/cockpit/brightness/draims_1_keys_brightness", 1, false, true, false)
+DRAIMS_2_keys_brightness = createGlobalPropertyf("a321neo/cockpit/brightness/draims_2_keys_brightness", 1, false, true, false)
 ISIS_brightness = createGlobalPropertyf("a321neo/cockpit/brightness/isis_brightness", 1, false, true, false)
 
 -- The following are the **actual** brightness linked to the requested ones, electrical power status, and failures

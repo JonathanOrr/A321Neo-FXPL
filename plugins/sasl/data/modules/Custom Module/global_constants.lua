@@ -184,6 +184,10 @@ PFD_FO    = 2
 ND_CAPT   = 1
 ND_FO     = 2
 
+-- Draims
+DRAIMS_ID_CAPT = 1
+DRAIMS_ID_FO   = 2
+
 --DMC
 DMC_PFD_CAPT = 1
 DMC_ND_CAPT  = 2
