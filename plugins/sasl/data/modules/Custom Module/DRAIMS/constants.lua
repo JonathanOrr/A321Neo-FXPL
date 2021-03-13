@@ -23,7 +23,7 @@ PAGE_ATC  = 4
 PAGE_MENU = 5
 PAGE_NAV  = 6
 
-
+PAGE_MENU_SATCOM = 51
 
 
 

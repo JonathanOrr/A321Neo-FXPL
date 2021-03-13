@@ -26,7 +26,7 @@ include("DRAIMS/constants.lua")
 
 local fo_data = {
     id = DRAIMS_ID_FO,
-    current_page = PAGE_VHF,
+    current_page = PAGE_MENU_SATCOM,
 }
 
 draims_init_handlers(fo_data)
