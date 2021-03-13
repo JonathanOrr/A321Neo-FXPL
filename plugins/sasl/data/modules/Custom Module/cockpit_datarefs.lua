@@ -132,8 +132,12 @@ DRAIMS_Sqwk_mode = createGlobalPropertyi("a321neo/cockpit/draims/transponder_mod
 
 VHF_transmit_dest = globalProperty("sim/cockpit2/radios/actuators/audio_com_selection")--6=com1,7=com2
 VHF_transmit_dest_manual = globalProperty("sim/cockpit2/radios/actuators/audio_com_selection_man")--6=com1,7=com2, manual without auto switching monitor source
-VHF_1_transmit_selected = createGlobalPropertyi("a321neo/cockpit/draims/vhf_1_transmit_selected", 0, false, true, false)--0off, 1selected
-VHF_2_transmit_selected = createGlobalPropertyi("a321neo/cockpit/draims/vhf_2_transmit_selected", 0, false, true, false)--0off, 1selected
+Capt_VHF_1_transmit_selected = createGlobalPropertyi("a321neo/cockpit/draims/capt_vhf_1_transmit_selected", 0, false, true, false)--0off, 1selected
+Capt_VHF_2_transmit_selected = createGlobalPropertyi("a321neo/cockpit/draims/capt_vhf_2_transmit_selected", 0, false, true, false)--0off, 1selected
+Capt_VHF_3_transmit_selected = createGlobalPropertyi("a321neo/cockpit/draims/capt_vhf_3_transmit_selected", 0, false, true, false)--0off, 1selected
+Fo_VHF_1_transmit_selected = createGlobalPropertyi("a321neo/cockpit/draims/fo_vhf_1_transmit_selected", 0, false, true, false)--0off, 1selected
+Fo_VHF_2_transmit_selected = createGlobalPropertyi("a321neo/cockpit/draims/fo_vhf_2_transmit_selected", 0, false, true, false)--0off, 1selected
+Fo_VHF_3_transmit_selected = createGlobalPropertyi("a321neo/cockpit/draims/fo_vhf_3_transmit_selected", 0, false, true, false)--0off, 1selected
 
 DRAIMS_dynamic_NAV_audio_selected = createGlobalPropertyi("a321neo/cockpit/draims/dynamic_nav_audio_selected", 0, false, true, false)--0off, 1selected
 DRAIMS_dynamic_NAV_volume = createGlobalPropertyf("a321neo/cockpit/draims/dynamic_nav_volume", 1, false, true, false)--volume of dynamic navigation audio
@@ -418,6 +422,7 @@ Cockpit_ann_ovhd_switch    = createGlobalPropertyf("a321neo/cockpit/lights/ovhd_
 
 Cockpit_Capt_tray_pos = createGlobalPropertyf("a321neo/cockpit/misc/capt_tray_pos", 0, false, true, false)
 Cockpit_Fo_tray_pos   = createGlobalPropertyf("a321neo/cockpit/misc/fo_tray_pos", 0, false, true, false)
+Cockpit_door_lever_pos = createGlobalPropertyf("a321neo/cockpit/misc/ckpt_door_lever_pos", 0, false, true, false) -- -1, 0, 1
 
 -- Cockpit lights - Extra datarefs for positioning the lights
 Lights_extra = createGlobalPropertyf("a321neo/cockpit/lights/extra", 0, false, true, false) -- This is used for internals for lights, ask Jon
