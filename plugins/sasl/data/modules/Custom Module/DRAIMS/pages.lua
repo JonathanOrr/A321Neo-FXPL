@@ -175,9 +175,24 @@ local function draw_page_hf(data)
     draw_line_bottom_area(true)
     draw_top_lines()
     draw_tcas_fixed_indication()
-    
+        
     sasl.gl.drawText(Font_B612regular, size[1]/2+40,size[2]-55, "HF1", 38, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
     sasl.gl.drawText(Font_B612regular, size[1]/2+40,size[2]-155, "HF2", 38, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+
+
+    sasl.gl.drawText(Font_B612regular, 130,size[2]-55, "-.---", 55, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+    sasl.gl.drawText(Font_B612regular, 130,size[2]-155, "-.---", 55, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+
+    sasl.gl.drawText(Font_B612regular, size[1]-100,size[2]-55, "-.---", 35, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+    sasl.gl.drawText(Font_B612regular, size[1]-100,size[2]-155, "-.---", 35, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+    
+    sasl.gl.drawText(Font_B612regular, size[1]-20,size[2]-240, "HF2 AM MODE", 26, false, false, TEXT_ALIGN_RIGHT, COLOR_DISABLED)
+
+    draw_inverted_text(size[1]-80,size[2]-275, "ON", 24, TEXT_ALIGN_RIGHT, COLOR_DISABLED)
+    sasl.gl.drawText(Font_B612regular, size[1]-20,size[2]-275, "OFF", 24, false, false, TEXT_ALIGN_RIGHT, COLOR_DISABLED)
+
+
+    
 end
 
 local function draw_page_tel(data)

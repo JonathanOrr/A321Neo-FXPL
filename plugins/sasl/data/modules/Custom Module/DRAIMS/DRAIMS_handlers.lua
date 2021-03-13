@@ -64,10 +64,17 @@ local page_routes = {   -- This tells you which page you go when you press a lat
         [BTN_L1] = function(data) vhf_swap_freq(data, 1) end,
         [BTN_L2] = function(data) vhf_swap_freq(data, 2) end,
         [BTN_L3] = function(data) vhf_swap_freq(data, 3) end,
-        
-
     },
+    
+    [PAGE_HF] = {
+        [BTN_R1] = function(data) info_hf_inop(data, 1) end,
+        [BTN_R2] = function(data) info_hf_inop(data, 2) end,
+        [BTN_R3] = function(data) info_hf_inop(data, 2) end,
+        [BTN_R4] = function(data) clear_info_message(data) end,
 
+        [BTN_L1] = function(data) info_hf_inop(data, 1) end,
+        [BTN_L2] = function(data) info_hf_inop(data, 2) end,
+    },
     
     [PAGE_MENU] = {
         [BTN_R2] = PAGE_MENU_SATCOM

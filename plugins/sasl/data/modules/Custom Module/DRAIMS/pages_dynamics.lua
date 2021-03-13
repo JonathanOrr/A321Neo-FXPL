@@ -197,5 +197,7 @@ function draw_page_dynamic(data)
     if data.current_page == PAGE_VHF then
         draw_page_vhf_dynamic(data)
         draw_info_messages(data)
+    elseif data.current_page == PAGE_HF then
+        draw_info_messages(data)
     end
 end

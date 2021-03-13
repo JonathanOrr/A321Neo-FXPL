@@ -93,6 +93,12 @@ function clear_info_message(data)
     data.info_message[3] = ""
 end
 
+function info_hf_inop(data, i)
+    data.info_message[1] = "HF" .. i
+    data.info_message[2] = "INOPERATIVE"
+    data.info_message[3] = ""
+end
+
 function vhf_swap_freq(data, i)
 
     if #DRAIMS_common.scratchpad[i] > 0 then
