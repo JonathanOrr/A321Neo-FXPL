@@ -16,6 +16,10 @@
 -- Short description: Radio panel command handlers
 -------------------------------------------------------------------------------
 
+-------------------------------------------------------------------------------
+-- Constants
+-------------------------------------------------------------------------------
+
 include("DRAIMS/constants.lua")
 
 local BTN_L1 = 1
@@ -44,13 +48,23 @@ local BTN_VHF_3_RECV  = 5
 local BTN_VHF_3_TRANS = 6
 local BTN_NAV_RECV    = 7
 
+local page_routes = {   -- This tells you which page you go when you press a lateral button in a 
+                        -- specific page
+    [PAGE_MENU_SATCOM] = {
+        [BTN_R2] = PAGE_MENU_SATCOM
+    }
+}
+
+-------------------------------------------------------------------------------
+-- Functions
+-------------------------------------------------------------------------------
 
 local function handler_page_button(data, which_btn)
     data.current_page = which_btn
 end
 
 local function handler_lat_button(data, which_btn)
-
+    print("Lateral button")
 end
 
 local function handler_tcas_button(data, which_btn)

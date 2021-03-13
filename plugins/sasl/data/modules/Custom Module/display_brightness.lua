@@ -19,244 +19,63 @@
 position= {0,0,4096,4096}
 size = {4096, 4096}
 
+local BRIGHTNESS_KNOB_SPEED = 0.1
 
 --image textures
 local screen_lut_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/LUT.png")
 
 --register commands
 --capt pfd
-sasl.registerCommandHandler ( Capt_PFD_brightness_up, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        set(Capt_PFD_brightness, Math_clamp(get(Capt_PFD_brightness) + 1 * get(DELTA_TIME), 0, 1))
-    end
-    if phase == SASL_COMMAND_CONTINUE then
-        set(Capt_PFD_brightness, Math_clamp(get(Capt_PFD_brightness) + 1 * get(DELTA_TIME), 0, 1))
-    end
-end)
-sasl.registerCommandHandler ( Capt_PFD_brightness_dn, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        set(Capt_PFD_brightness, Math_clamp(get(Capt_PFD_brightness) - 1 * get(DELTA_TIME), 0, 1))
-    end
-    if phase == SASL_COMMAND_CONTINUE then
-        set(Capt_PFD_brightness, Math_clamp(get(Capt_PFD_brightness) - 1 * get(DELTA_TIME), 0, 1))
-    end
-end)
+sasl.registerCommandHandler ( Capt_PFD_brightness_up, 0, function(phase) Knob_handler_up_float(phase, Capt_PFD_brightness, 0, 1, BRIGHTNESS_KNOB_SPEED) end)
+sasl.registerCommandHandler ( Capt_PFD_brightness_dn, 0, function(phase) Knob_handler_down_float(phase, Capt_PFD_brightness, 0, 1, BRIGHTNESS_KNOB_SPEED) end)
 
 --capt nd
-sasl.registerCommandHandler ( Capt_ND_brightness_up, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        set(Capt_ND_brightness, Math_clamp(get(Capt_ND_brightness) + 1 * get(DELTA_TIME), 0, 1))
-    end
-    if phase == SASL_COMMAND_CONTINUE then
-        set(Capt_ND_brightness, Math_clamp(get(Capt_ND_brightness) + 1 * get(DELTA_TIME), 0, 1))
-    end
-end)
-sasl.registerCommandHandler ( Capt_ND_brightness_dn, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        set(Capt_ND_brightness, Math_clamp(get(Capt_ND_brightness) - 1 * get(DELTA_TIME), 0, 1))
-    end
-    if phase == SASL_COMMAND_CONTINUE then
-        set(Capt_ND_brightness, Math_clamp(get(Capt_ND_brightness) - 1 * get(DELTA_TIME), 0, 1))
-    end
-end)
+sasl.registerCommandHandler ( Capt_ND_brightness_up, 0, function(phase) Knob_handler_up_float(phase, Capt_ND_brightness, 0, 1, BRIGHTNESS_KNOB_SPEED) end)
+sasl.registerCommandHandler ( Capt_ND_brightness_dn, 0, function(phase) Knob_handler_down_float(phase, Capt_ND_brightness, 0, 1, BRIGHTNESS_KNOB_SPEED) end)
 
 --fo pfd
-sasl.registerCommandHandler ( Fo_PFD_brightness_up, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        set(Fo_PFD_brightness, Math_clamp(get(Fo_PFD_brightness) + 1 * get(DELTA_TIME), 0, 1))
-    end
-    if phase == SASL_COMMAND_CONTINUE then
-        set(Fo_PFD_brightness, Math_clamp(get(Fo_PFD_brightness) + 1 * get(DELTA_TIME), 0, 1))
-    end
-end)
-sasl.registerCommandHandler ( Fo_PFD_brightness_dn, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        set(Fo_PFD_brightness, Math_clamp(get(Fo_PFD_brightness) - 1 * get(DELTA_TIME), 0, 1))
-    end
-    if phase == SASL_COMMAND_CONTINUE then
-        set(Fo_PFD_brightness, Math_clamp(get(Fo_PFD_brightness) - 1 * get(DELTA_TIME), 0, 1))
-    end
-end)
+sasl.registerCommandHandler ( Fo_PFD_brightness_up, 0, function(phase) Knob_handler_up_float(phase, Fo_PFD_brightness, 0, 1, BRIGHTNESS_KNOB_SPEED) end)
+sasl.registerCommandHandler ( Fo_PFD_brightness_dn, 0, function(phase) Knob_handler_down_float(phase, Fo_PFD_brightness, 0, 1, BRIGHTNESS_KNOB_SPEED) end)
 
 --fo nd
-sasl.registerCommandHandler ( Fo_ND_brightness_up, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        set(Fo_ND_brightness, Math_clamp(get(Fo_ND_brightness) + 1 * get(DELTA_TIME), 0, 1))
-    end
-    if phase == SASL_COMMAND_CONTINUE then
-        set(Fo_ND_brightness, Math_clamp(get(Fo_ND_brightness) + 1 * get(DELTA_TIME), 0, 1))
-    end
-end)
-sasl.registerCommandHandler ( Fo_ND_brightness_dn, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        set(Fo_ND_brightness, Math_clamp(get(Fo_ND_brightness) - 1 * get(DELTA_TIME), 0, 1))
-    end
-    if phase == SASL_COMMAND_CONTINUE then
-        set(Fo_ND_brightness, Math_clamp(get(Fo_ND_brightness) - 1 * get(DELTA_TIME), 0, 1))
-    end
-end)
+sasl.registerCommandHandler ( Fo_ND_brightness_up, 0, function(phase) Knob_handler_up_float(phase, Fo_ND_brightness, 0, 1, BRIGHTNESS_KNOB_SPEED) end)
+sasl.registerCommandHandler ( Fo_ND_brightness_dn, 0, function(phase) Knob_handler_down_float(phase, Fo_ND_brightness, 0, 1, BRIGHTNESS_KNOB_SPEED) end)
 
 --ewd
-sasl.registerCommandHandler ( EWD_brightness_up, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        set(EWD_brightness, Math_clamp(get(EWD_brightness) + 1 * get(DELTA_TIME), 0, 1))
-    end
-    if phase == SASL_COMMAND_CONTINUE then
-        set(EWD_brightness, Math_clamp(get(EWD_brightness) + 1 * get(DELTA_TIME), 0, 1))
-    end
-end)
-sasl.registerCommandHandler ( EWD_brightness_dn, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        set(EWD_brightness, Math_clamp(get(EWD_brightness) - 1 * get(DELTA_TIME), 0, 1))
-    end
-    if phase == SASL_COMMAND_CONTINUE then
-        set(EWD_brightness, Math_clamp(get(EWD_brightness) - 1 * get(DELTA_TIME), 0, 1))
-    end
-end)
+sasl.registerCommandHandler ( EWD_brightness_up, 0, function(phase) Knob_handler_up_float(phase, EWD_brightness, 0, 1, BRIGHTNESS_KNOB_SPEED) end)
+sasl.registerCommandHandler ( EWD_brightness_dn, 0, function(phase) Knob_handler_down_float(phase, EWD_brightness, 0, 1, BRIGHTNESS_KNOB_SPEED) end)
 
 --ecam
-sasl.registerCommandHandler ( ECAM_brightness_up, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        set(ECAM_brightness, Math_clamp(get(ECAM_brightness) + 1 * get(DELTA_TIME), 0, 1))
-    end
-    if phase == SASL_COMMAND_CONTINUE then
-        set(ECAM_brightness, Math_clamp(get(ECAM_brightness) + 1 * get(DELTA_TIME), 0, 1))
-    end
-end)
-sasl.registerCommandHandler ( ECAM_brightness_dn, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        set(ECAM_brightness, Math_clamp(get(ECAM_brightness) - 1 * get(DELTA_TIME), 0, 1))
-    end
-    if phase == SASL_COMMAND_CONTINUE then
-        set(ECAM_brightness, Math_clamp(get(ECAM_brightness) - 1 * get(DELTA_TIME), 0, 1))
-    end
-end)
+sasl.registerCommandHandler ( ECAM_brightness_up, 0, function(phase) Knob_handler_up_float(phase, ECAM_brightness, 0, 1, BRIGHTNESS_KNOB_SPEED) end)
+sasl.registerCommandHandler ( ECAM_brightness_dn, 0, function(phase) Knob_handler_down_float(phase, ECAM_brightness, 0, 1, BRIGHTNESS_KNOB_SPEED) end)
 
 --dcdu 1
-sasl.registerCommandHandler ( DCDU_1_brightness_up, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        set(DCDU_1_brightness, Math_clamp(get(DCDU_1_brightness) + 1 * get(DELTA_TIME), 0, 1))
-    end
-    if phase == SASL_COMMAND_CONTINUE then
-        set(DCDU_1_brightness, Math_clamp(get(DCDU_1_brightness) + 1 * get(DELTA_TIME), 0, 1))
-    end
-end)
-sasl.registerCommandHandler ( DCDU_1_brightness_dn, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        set(DCDU_1_brightness, Math_clamp(get(DCDU_1_brightness) - 1 * get(DELTA_TIME), 0, 1))
-    end
-    if phase == SASL_COMMAND_CONTINUE then
-        set(DCDU_1_brightness, Math_clamp(get(DCDU_1_brightness) - 1 * get(DELTA_TIME), 0, 1))
-    end
-end)
+sasl.registerCommandHandler ( DCDU_1_brightness_up, 0, function(phase) Knob_handler_up_float(phase, DCDU_1_brightness, 0, 1, BRIGHTNESS_KNOB_SPEED) end)
+sasl.registerCommandHandler ( DCDU_1_brightness_dn, 0, function(phase) Knob_handler_down_float(phase, DCDU_1_brightness, 0, 1, BRIGHTNESS_KNOB_SPEED) end)
 
 --dcdu 2
-sasl.registerCommandHandler ( DCDU_2_brightness_up, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        set(DCDU_2_brightness, Math_clamp(get(DCDU_2_brightness) + 1 * get(DELTA_TIME), 0, 1))
-    end
-    if phase == SASL_COMMAND_CONTINUE then
-        set(DCDU_2_brightness, Math_clamp(get(DCDU_2_brightness) + 1 * get(DELTA_TIME), 0, 1))
-    end
-end)
-sasl.registerCommandHandler ( DCDU_2_brightness_dn, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        set(DCDU_2_brightness, Math_clamp(get(DCDU_2_brightness) - 1 * get(DELTA_TIME), 0, 1))
-    end
-    if phase == SASL_COMMAND_CONTINUE then
-        set(DCDU_2_brightness, Math_clamp(get(DCDU_2_brightness) - 1 * get(DELTA_TIME), 0, 1))
-    end
-end)
+sasl.registerCommandHandler ( DCDU_2_brightness_up, 0, function(phase) Knob_handler_up_float(phase, DCDU_2_brightness, 0, 1, BRIGHTNESS_KNOB_SPEED) end)
+sasl.registerCommandHandler ( DCDU_2_brightness_dn, 0, function(phase) Knob_handler_down_float(phase, DCDU_2_brightness, 0, 1, BRIGHTNESS_KNOB_SPEED) end)
 
 --mcdu 1
-sasl.registerCommandHandler ( MCDU_1_brightness_up, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        set(MCDU_1_brightness, Math_clamp(get(MCDU_1_brightness) + 1 * get(DELTA_TIME), 0, 1))
-    end
-    if phase == SASL_COMMAND_CONTINUE then
-        set(MCDU_1_brightness, Math_clamp(get(MCDU_1_brightness) + 1 * get(DELTA_TIME), 0, 1))
-    end
-end)
-sasl.registerCommandHandler ( MCDU_1_brightness_dn, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        set(MCDU_1_brightness, Math_clamp(get(MCDU_1_brightness) - 1 * get(DELTA_TIME), 0, 1))
-    end
-    if phase == SASL_COMMAND_CONTINUE then
-        set(MCDU_1_brightness, Math_clamp(get(MCDU_1_brightness) - 1 * get(DELTA_TIME), 0, 1))
-    end
-end)
+sasl.registerCommandHandler ( MCDU_1_brightness_up, 0, function(phase) Knob_handler_up_float(phase, MCDU_1_brightness, 0, 1, BRIGHTNESS_KNOB_SPEED) end)
+sasl.registerCommandHandler ( MCDU_1_brightness_dn, 0, function(phase) Knob_handler_down_float(phase, MCDU_1_brightness, 0, 1, BRIGHTNESS_KNOB_SPEED) end)
 
 --mcdu 2
-sasl.registerCommandHandler ( MCDU_2_brightness_up, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        set(MCDU_2_brightness, Math_clamp(get(MCDU_2_brightness) + 1 * get(DELTA_TIME), 0, 1))
-    end
-    if phase == SASL_COMMAND_CONTINUE then
-        set(MCDU_2_brightness, Math_clamp(get(MCDU_2_brightness) + 1 * get(DELTA_TIME), 0, 1))
-    end
-end)
-sasl.registerCommandHandler ( MCDU_2_brightness_dn, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        set(MCDU_2_brightness, Math_clamp(get(MCDU_2_brightness) - 1 * get(DELTA_TIME), 0, 1))
-    end
-    if phase == SASL_COMMAND_CONTINUE then
-        set(MCDU_2_brightness, Math_clamp(get(MCDU_2_brightness) - 1 * get(DELTA_TIME), 0, 1))
-    end
-end)
+sasl.registerCommandHandler ( MCDU_2_brightness_up, 0, function(phase) Knob_handler_up_float(phase, MCDU_2_brightness, 0, 1, BRIGHTNESS_KNOB_SPEED) end)
+sasl.registerCommandHandler ( MCDU_2_brightness_dn, 0, function(phase) Knob_handler_down_float(phase, MCDU_2_brightness, 0, 1, BRIGHTNESS_KNOB_SPEED) end)
 
 --draims 1
-sasl.registerCommandHandler ( DRAIMS_1_brightness_up, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        set(DRAIMS_1_brightness, Math_clamp(get(DRAIMS_1_brightness) + 1 * get(DELTA_TIME), 0, 1))
-    end
-    if phase == SASL_COMMAND_CONTINUE then
-        set(DRAIMS_1_brightness, Math_clamp(get(DRAIMS_1_brightness) + 1 * get(DELTA_TIME), 0, 1))
-    end
-end)
-sasl.registerCommandHandler ( DRAIMS_1_brightness_dn, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        set(DRAIMS_1_brightness, Math_clamp(get(DRAIMS_1_brightness) - 1 * get(DELTA_TIME), 0, 1))
-    end
-    if phase == SASL_COMMAND_CONTINUE then
-        set(DRAIMS_1_brightness, Math_clamp(get(DRAIMS_1_brightness) - 1 * get(DELTA_TIME), 0, 1))
-    end
-end)
+sasl.registerCommandHandler ( DRAIMS_1_brightness_up, 0, function(phase) Knob_handler_up_float(phase, DRAIMS_1_brightness, 0, 1, BRIGHTNESS_KNOB_SPEED) end)
+sasl.registerCommandHandler ( DRAIMS_1_brightness_dn, 0, function(phase) Knob_handler_down_float(phase, DRAIMS_1_brightness, 0, 1, BRIGHTNESS_KNOB_SPEED) end)
 
 --draims 2
-sasl.registerCommandHandler ( DRAIMS_2_brightness_up, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        set(DRAIMS_2_brightness, Math_clamp(get(DRAIMS_2_brightness) + 1 * get(DELTA_TIME), 0, 1))
-    end
-    if phase == SASL_COMMAND_CONTINUE then
-        set(DRAIMS_2_brightness, Math_clamp(get(DRAIMS_2_brightness) + 1 * get(DELTA_TIME), 0, 1))
-    end
-end)
-sasl.registerCommandHandler ( DRAIMS_2_brightness_dn, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        set(DRAIMS_2_brightness, Math_clamp(get(DRAIMS_2_brightness) - 1 * get(DELTA_TIME), 0, 1))
-    end
-    if phase == SASL_COMMAND_CONTINUE then
-        set(DRAIMS_2_brightness, Math_clamp(get(DRAIMS_2_brightness) - 1 * get(DELTA_TIME), 0, 1))
-    end
-end)
+sasl.registerCommandHandler ( DRAIMS_2_brightness_up, 0, function(phase) Knob_handler_up_float(phase, DRAIMS_2_brightness, 0, 1, BRIGHTNESS_KNOB_SPEED) end)
+sasl.registerCommandHandler ( DRAIMS_2_brightness_dn, 0, function(phase) Knob_handler_down_float(phase, DRAIMS_2_brightness, 0, 1, BRIGHTNESS_KNOB_SPEED) end)
 
 --isis
-sasl.registerCommandHandler ( ISIS_brightness_up, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        set(ISIS_brightness, Math_clamp(get(ISIS_brightness) + 1 * get(DELTA_TIME), 0, 1))
-    end
-    if phase == SASL_COMMAND_CONTINUE then
-        set(ISIS_brightness, Math_clamp(get(ISIS_brightness) + 1 * get(DELTA_TIME), 0, 1))
-    end
-end)
-sasl.registerCommandHandler ( ISIS_brightness_dn, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then
-        set(ISIS_brightness, Math_clamp(get(ISIS_brightness) - 1 * get(DELTA_TIME), 0, 1))
-    end
-    if phase == SASL_COMMAND_CONTINUE then
-        set(ISIS_brightness, Math_clamp(get(ISIS_brightness) - 1 * get(DELTA_TIME), 0, 1))
-    end
-end)
+sasl.registerCommandHandler ( ISIS_brightness_up, 0, function(phase) Knob_handler_up_float(phase, ISIS_brightness, 0, 1, BRIGHTNESS_KNOB_SPEED) end)
+sasl.registerCommandHandler ( ISIS_brightness_dn, 0, function(phase) Knob_handler_down_float(phase, ISIS_brightness, 0, 1, BRIGHTNESS_KNOB_SPEED) end)
 
 function update_actual_values()
     set(Capt_PFD_brightness_act, get(Capt_PFD_brightness) * get(AC_ess_bus_pwrd))
@@ -395,6 +214,7 @@ local function draw_lut_and_brightness()
     sasl.gl.drawRectangle(1020, 1666, 560, 530, {0,0,0, 1 - get(MCDU_1_brightness_act)})
 
     sasl.gl.drawRectangle(2030, 2726, 600, 400, {0,0,0, 1 - get(DRAIMS_1_brightness_act)})
+    sasl.gl.drawRectangle(2030, 2298, 600, 400, {0,0,0, 1 - get(DRAIMS_2_brightness_act)})
 end
 
 function draw()

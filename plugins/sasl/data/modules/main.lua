@@ -79,6 +79,7 @@ components = {
   EWD_flight_phases {},
   HUD {},
   DCDU {},
+  DRAIMS_CAPT {},
   DRAIMS_FO {},
   clock {},
   LED_screens {},

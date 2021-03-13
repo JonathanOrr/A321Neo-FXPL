@@ -12,11 +12,11 @@
 --    Please check the LICENSE file in the root of the repository for further
 --    details or check <https://www.gnu.org/licenses/>
 -------------------------------------------------------------------------------
--- File: DRAIMS_FO.lua 
--- Short description: Radio panel (v2) for f/o
+-- File: DRAIMS_CAPT.lua 
+-- Short description: Radio panel (v2) for captain
 -------------------------------------------------------------------------------
 
-position = {2030, 2298, 600, 400}
+position = {2030, 2726, 600, 400}
 size = {600, 400}
 
 include("DRAIMS/DRAIMS_handlers.lua")
@@ -24,17 +24,17 @@ include("DRAIMS/pages.lua")
 include("DRAIMS/constants.lua")
 
 
-local fo_data = {
-    id = DRAIMS_ID_FO,
+local capt_data = {
+    id = DRAIMS_ID_CAPT,
     current_page = PAGE_MENU_SATCOM,
 }
 
-draims_init_handlers(fo_data)
+draims_init_handlers(capt_data)
 
 function draw()
-    perf_measure_start("DRAIMS_FO:draw()")
+    perf_measure_start("DRAIMS_CAPT:draw()")
 
-    draw_page_static(fo_data)
+    draw_page_static(capt_data)
     
-    perf_measure_stop("DRAIMS_FO:draw()")
+    perf_measure_stop("DRAIMS_CAPT:draw()")
 end
