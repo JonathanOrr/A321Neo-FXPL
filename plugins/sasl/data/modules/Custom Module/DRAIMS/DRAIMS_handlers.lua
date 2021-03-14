@@ -76,6 +76,28 @@ local page_routes = {   -- This tells you which page you go when you press a lat
         [BTN_L2] = function(data) info_hf_inop(data, 2) end,
     },
     
+    [PAGE_TEL] = {
+        [BTN_R1] = function(data) info_tel_inop(data, 1) end,
+        [BTN_R2] = function(data) info_tel_inop(data, 2) end,
+        [BTN_R3] = PAGE_TEL_DIRECTORY,
+        [BTN_R4] = function(data) clear_info_message(data) end,
+
+        [BTN_L1] = function(data) info_tel_inop(data, 1) end,
+        [BTN_L2] = function(data) info_tel_inop(data, 2) end,
+        [BTN_L3] = function(data) info_no_conf(data) end,
+    },
+
+    [PAGE_ATC] = {
+        [BTN_L1] = function(data) set(TCAS_atc_sel, get(TCAS_atc_sel) == 1 and 2 or 1) end,
+        [BTN_L2] = function(data) set(TCAS_master, 1 - get(TCAS_master)) end,
+        [BTN_L3] = function(data)  tcas_ident() end,
+        [BTN_R1] = function(data) set(TCAS_mode, get(TCAS_mode) ~= 0 and get(TCAS_mode) - 1 or 2) end,
+        [BTN_R2] = function(data) set(TCAS_disp_mode, get(TCAS_disp_mode) ~= 3 and get(TCAS_disp_mode) + 1 or 0) end,
+        [BTN_R3] = function(data) set(TCAS_alt_rptg, 1 - get(TCAS_alt_rptg)) end,
+        
+        
+    },
+
     [PAGE_MENU] = {
         [BTN_R2] = PAGE_MENU_SATCOM
     },

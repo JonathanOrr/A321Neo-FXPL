@@ -17,6 +17,7 @@
 -------------------------------------------------------------------------------
 
 include("DRAIMS/radio_logic.lua")
+include("DRAIMS/misc_drawings.lua")
 include("DRAIMS/constants.lua")
 
 -------------------------------------------------------------------------------
@@ -182,6 +183,98 @@ local function draw_page_vhf_dynamic(data)
     
 end
 
+
+-------------------------------------------------------------------------------
+-- ATC
+-------------------------------------------------------------------------------
+
+local function draw_page_atc_tcas_lbl(text, x, y, which_type)
+    if which_type == 1 then
+        draw_inverted_text(x, y, text, 25, TEXT_ALIGN_RIGHT, ECAM_BLUE)
+    elseif which_type == 2 then
+        local w,h = sasl.gl.measureText(Font_B612regular, text, 25, false, false)
+        Sasl_DrawWideFrame(x-w, y-3, w, 26, 2, 1, ECAM_BLUE)
+        sasl.gl.drawText(Font_B612regular, x, y, text, 25, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+    elseif which_type == 3 then
+        sasl.gl.drawText(Font_B612regular, x, y, text, 25, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+    end
+end
+
+local function draw_page_atc_tcas_mode(data)
+    local y = size[2]-75
+    if get(TCAS_mode) == 0 then
+        draw_page_atc_tcas_lbl("STBY", size[1] - 160, y, get(TCAS_master) == 1 and 1 or 2)
+        draw_page_atc_tcas_lbl("TA/RA", size[1] - 65, y, 3)
+        draw_page_atc_tcas_lbl("TA", size[1] - 20, y, 3)
+    elseif get(TCAS_mode) == 1 then
+        draw_page_atc_tcas_lbl("STBY", size[1] - 160, y, 3)
+        draw_page_atc_tcas_lbl("TA/RA", size[1] - 65, y, 3)
+        draw_page_atc_tcas_lbl("TA", size[1] - 20, y, get(TCAS_master) == 1 and 1 or 2)
+    else
+        draw_page_atc_tcas_lbl("STBY", size[1] - 160, y, 3)
+        draw_page_atc_tcas_lbl("TA/RA", size[1] - 65, y, get(TCAS_master) == 1 and 1 or 2)
+        draw_page_atc_tcas_lbl("TA", size[1] - 20, y, 3)
+    end
+end
+
+local function draw_page_atc_tcas_disp_mode(data)
+    local y = size[2]-175
+    if get(TCAS_disp_mode) == 0 then
+        draw_page_atc_tcas_lbl("NORM", size[1] - 220, y, get(TCAS_master) == 1 and 1 or 2)
+        draw_page_atc_tcas_lbl("ABV", size[1] - 160, y, 3)
+        draw_page_atc_tcas_lbl("BLW", size[1] - 95, y, 3)
+        draw_page_atc_tcas_lbl("THTR", size[1] - 20, y, 3)
+    elseif get(TCAS_disp_mode) == 1 then
+        draw_page_atc_tcas_lbl("NORM", size[1] - 220, y, 3)
+        draw_page_atc_tcas_lbl("ABV", size[1] - 160, y, get(TCAS_master) == 1 and 1 or 2)
+        draw_page_atc_tcas_lbl("BLW", size[1] - 95, y, 3)
+        draw_page_atc_tcas_lbl("THTR", size[1] - 20, y, 3)
+    elseif get(TCAS_disp_mode) == 2 then
+        draw_page_atc_tcas_lbl("NORM", size[1] - 220, y, 3)
+        draw_page_atc_tcas_lbl("ABV", size[1] - 160, y, 3)
+        draw_page_atc_tcas_lbl("BLW", size[1] - 95, y, get(TCAS_master) == 1 and 1 or 2)
+        draw_page_atc_tcas_lbl("THTR", size[1] - 20, y, 3)
+    else
+        draw_page_atc_tcas_lbl("NORM", size[1] - 220, y, 3)
+        draw_page_atc_tcas_lbl("ABV", size[1] - 160, y, 3)
+        draw_page_atc_tcas_lbl("BLW", size[1] - 95, y, 3)
+        draw_page_atc_tcas_lbl("THTR", size[1] - 20, y, get(TCAS_master) == 1 and 1 or 2)
+    end
+end
+
+local function draw_page_atc_tcas_alt_rptg(data)
+    local y = size[2]-275
+    if get(TCAS_alt_rptg) == 0 then
+        draw_page_atc_tcas_lbl("OFF", size[1] - 70, y, get(TCAS_master) == 1 and 1 or 2)
+        draw_page_atc_tcas_lbl("ON", size[1] - 20, y, 3)
+    else
+        draw_page_atc_tcas_lbl("OFF", size[1] - 70, y, 3)
+        draw_page_atc_tcas_lbl("ON", size[1] - 20, y, get(TCAS_master) == 1 and 1 or 2)
+    end
+end
+
+local function draw_page_atc_dynamic(data)
+
+    if get(TCAS_atc_sel) == 1 then
+        draw_inverted_text(20,size[2]-75, "XPDR1", 25, TEXT_ALIGN_LEFT, ECAM_BLUE)
+        sasl.gl.drawText(Font_B612regular, 110, size[2]-75, "XPDR2", 25, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    else
+        sasl.gl.drawText(Font_B612regular, 20, size[2]-75, "XPDR1", 25, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+        draw_inverted_text(110,size[2]-75, "XPDR2", 25, TEXT_ALIGN_LEFT, ECAM_BLUE)
+    end
+
+    if get(TCAS_master) == 0 then
+        draw_inverted_text(20,size[2]-175, "STBY", 25, TEXT_ALIGN_LEFT, ECAM_BLUE)
+        sasl.gl.drawText(Font_B612regular, 90, size[2]-175, "AUTO", 25, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    else
+        sasl.gl.drawText(Font_B612regular, 20, size[2]-175, "STBY", 25, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+        draw_inverted_text(90, size[2]-175, "AUTO", 25, TEXT_ALIGN_LEFT, ECAM_BLUE)
+    end
+
+    draw_page_atc_tcas_mode(data)
+    draw_page_atc_tcas_disp_mode(data)
+    draw_page_atc_tcas_alt_rptg(data)
+end
 -------------------------------------------------------------------------------
 -- Generic
 -------------------------------------------------------------------------------
@@ -197,7 +290,10 @@ function draw_page_dynamic(data)
     if data.current_page == PAGE_VHF then
         draw_page_vhf_dynamic(data)
         draw_info_messages(data)
-    elseif data.current_page == PAGE_HF then
+    elseif data.current_page == PAGE_HF or data.current_page == PAGE_TEL then
+        draw_info_messages(data)
+    elseif data.current_page == PAGE_ATC then
+        draw_page_atc_dynamic(data)
         draw_info_messages(data)
     end
 end

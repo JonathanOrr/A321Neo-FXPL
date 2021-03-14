@@ -786,6 +786,17 @@ DRAIMS_vhf3_curr_freq_khz = createGlobalPropertyi("a321neo/cockpit/draims/legacy
 DRAIMS_vhf3_stby_freq_Mhz = createGlobalPropertyi("a321neo/cockpit/draims/legacy/actuators/com3_standby_frequency_Mhz", 122, false, true, false)
 DRAIMS_vhf3_stby_freq_khz = createGlobalPropertyi("a321neo/cockpit/draims/legacy/com3_standby_frequency_khz", 800, false, true, false)
 
+-- TCAS
+TCAS_atc_sel = createGlobalPropertyi("a321neo/dynamics/tcas/sel", 1, false, true, false) -- ATC 1 or 2?
+TCAS_master = createGlobalPropertyi("a321neo/dynamics/tcas/tcas_master", 1, false, true, false)--0 STBY, 1 AUTO
+TCAS_mode = createGlobalPropertyi("a321neo/dynamics/tcas/tcas_mode", 2, false, true, false)--0off, 1 TA, 2 TA/RA
+TCAS_disp_mode = createGlobalPropertyi("a321neo/dynamics/tcas/tcas_disp_mode", 0, false, true, false)--0 norm, 1 abv, 2 blw, 3 thtr
+
+TCAS_alt_rptg = createGlobalPropertyi("a321neo/dynamics/tcas/tcas_alt_rptg", 1, false, true, false)--0 off, 1 on
+
+TCAS_ident = globalProperty("sim/cockpit2/radios/indicators/transponder_id")--if the transponder is identifiying right now
+TCAS_code = globalProperty("sim/cockpit2/radios/actuators/transponder_code")--sqwk code range 0000 to 7777
+TCAS_xplane_mode = globalProperty("sim/cockpit2/radios/actuators/transponder_mode") --Transponder mode (off=0,stdby=1,on=2,test=3) --> a321 0off, 1stby, 2TA, 2RA
 ---------------------------------------------------------------------BELOW THIS LINE IS EFB DATAREFS--------------------------------------------------------------------------
 
 --Toggle Options

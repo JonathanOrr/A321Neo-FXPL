@@ -103,11 +103,6 @@ NAV_2_dme_valid = globalProperty("sim/cockpit2/radios/indicators/nav2_has_dme")
 ILS_1_glideslope_flag = globalProperty("sim/cockpit2/radios/indicators/nav1_flag_glideslope") -- 1: no signal received, 0: signal received
 ILS_1_glideslope_dots = globalProperty("sim/cockpit/radios/nav1_vdef_dot") -- Dot position for NAV1
 
-Sqwk_identifying = globalProperty("sim/cockpit2/radios/indicators/transponder_id")--if the transponder is identifiying right now
-Sqwk_code = globalProperty("sim/cockpit2/radios/actuators/transponder_code")--sqwk code range 0000 to 7777
-Sqwk_mode = globalProperty("sim/cockpit2/radios/actuators/transponder_mode") --Transponder mode (off=0,stdby=1,on=2,test=3) --> a321 0off, 1stby, 2TA, 2RA
-DRAIMS_Sqwk_mode = createGlobalPropertyi("a321neo/cockpit/draims/transponder_mode", 0, false, true, false)--0off, 1stby, 2TA, 3RA
-
 VHF_transmit_dest = globalProperty("sim/cockpit2/radios/actuators/audio_com_selection")--6=com1,7=com2
 VHF_transmit_dest_manual = globalProperty("sim/cockpit2/radios/actuators/audio_com_selection_man")--6=com1,7=com2, manual without auto switching monitor source
 Capt_VHF_1_transmit_selected = createGlobalPropertyi("a321neo/cockpit/draims/capt_vhf_1_transmit_selected", 0, false, true, false)--0off, 1selected

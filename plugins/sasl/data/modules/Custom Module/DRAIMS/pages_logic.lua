@@ -99,6 +99,21 @@ function info_hf_inop(data, i)
     data.info_message[3] = ""
 end
 
+function info_tel_inop(data, i)
+    data.info_message[1] = "TEL" .. i
+    data.info_message[2] = "INOPERATIVE"
+    data.info_message[3] = ""
+end
+
+function info_no_conf(data)
+    data.info_message[1] = "NO ONGOING"
+    data.info_message[2] = "CALL"
+    data.info_message[3] = ""
+end
+
+function tcas_ident()
+    sasl.commandOnce(sasl.findCommand("sim/transponder/transponder_ident"))
+end
 function vhf_swap_freq(data, i)
 
     if #DRAIMS_common.scratchpad[i] > 0 then

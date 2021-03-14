@@ -12,22 +12,22 @@
 --    Please check the LICENSE file in the root of the repository for further
 --    details or check <https://www.gnu.org/licenses/>
 -------------------------------------------------------------------------------
--- File: constants.lua 
--- Short description: Various constants for DRAIMS
+-- File: misc_drawings.lua 
+-- Short description: Helper functions for radio-related stuffs
 -------------------------------------------------------------------------------
 
-PAGE_VHF  = 1
-PAGE_HF   = 2
-PAGE_TEL  = 3
-PAGE_ATC  = 4
-PAGE_MENU = 5
-PAGE_NAV  = 6
+function draw_inverted_text(x, y, text, size, align, color)
 
-PAGE_TEL_DIRECTORY = 31
-PAGE_MENU_SATCOM = 51
+    local w,h = sasl.gl.measureText(Font_B612regular, text, size, false, false)
 
-
-VHF_ANIMATE_SPEED = 0.25
-
-
+    if align == TEXT_ALIGN_LEFT then
+        sasl.gl.drawRectangle(x-2,y-2, w+4, h+3, color)
+    elseif align == TEXT_ALIGN_CENTER then
+        sasl.gl.drawRectangle(x-w/2-2,y-2, w+4, h+3, color)
+    elseif align == TEXT_ALIGN_RIGHT then
+        sasl.gl.drawRectangle(x-w-2,y-2, w+4, h+3, color)
+    end
+    sasl.gl.drawText(Font_B612regular, x, y, text, size, false, false, align, ECAM_BLACK)
+    
+end
 

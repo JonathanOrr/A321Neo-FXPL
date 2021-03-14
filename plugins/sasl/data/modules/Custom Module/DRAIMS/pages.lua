@@ -15,6 +15,7 @@
 -- File: pages.lua 
 -- Short description: Draw pages background and fixed elements
 -------------------------------------------------------------------------------
+include("DRAIMS/misc_drawings.lua")
 
 size = {600, 400}
 
@@ -68,21 +69,6 @@ local function draw_page_menu(data)
 
     draw_menu_item_right(2, "SATCOM SETTING")
 
-end
-
-local function draw_inverted_text(x, y, text, size, align, color)
-
-    local w,h = sasl.gl.measureText(Font_B612regular, text, size, false, false)
-
-    if align == TEXT_ALIGN_LEFT then
-        sasl.gl.drawRectangle(x-2,y-2, w+4, h+3, color)
-    elseif align == TEXT_ALIGN_CENTER then
-        sasl.gl.drawRectangle(x-w/2-2,y-2, w+4, h+3, color)
-    elseif align == TEXT_ALIGN_RIGHT then
-        sasl.gl.drawRectangle(x-w-2,y-2, w+4, h+3, color)
-    end
-    sasl.gl.drawText(Font_B612regular, x, y, text, size, false, false, align, ECAM_BLACK)
-    
 end
 
 local function draw_page_menu_satcom(data)
@@ -208,6 +194,13 @@ local function draw_page_tel(data)
     sasl.gl.drawText(Font_B612regular, 20,size[2]-45, "DIAL", 25, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
     sasl.gl.drawText(Font_B612regular, 20,size[2]-145, "DIAL", 25, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
 
+    sasl.gl.drawText(Font_B612regular, size[1]-150,size[2]-45, "-------------------", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+    sasl.gl.drawText(Font_B612regular, size[1]-150,size[2]-70, "DIALING NOT AVAIL", 25, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+
+    sasl.gl.drawText(Font_B612regular, size[1]-150,size[2]-145, "-------------------", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+    sasl.gl.drawText(Font_B612regular, size[1]-150,size[2]-170, "DIALING NOT AVAIL", 25, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+
+
     draw_menu_item_left(3, "CONFERENCE MODE", COLOR_DISABLED)
     draw_menu_item_right(3, "DIRECTORY")
 end
@@ -216,13 +209,13 @@ local function draw_page_atc(data)
     draw_line_bottom_area(true)
     draw_top_lines()
 
-    sasl.gl.drawText(Font_B612regular, 20,size[2]-35, "ATC", 25, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
-    sasl.gl.drawText(Font_B612regular, 20,size[2]-135, "ATC MODE", 25, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
-    sasl.gl.drawText(Font_B612regular, 20,size[2]-265, "IDENT", 40, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+    sasl.gl.drawText(Font_B612regular, 20,size[2]-35, "ATC", 26, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(Font_B612regular, 20,size[2]-135, "ATC MODE", 26, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(Font_B612regular, 20,size[2]-265, "IDENT", 40, false, false, TEXT_ALIGN_LEFT, get(TCAS_master) == 0 and COLOR_DISABLED or ( get(TCAS_ident) == 1 and ECAM_GREEN or ECAM_BLUE))
 
-    sasl.gl.drawText(Font_B612regular, size[1]-20,size[2]-35, "TCAS MODE", 25, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
-    sasl.gl.drawText(Font_B612regular, size[1]-20,size[2]-135, "TCAS DISPLAY MODE", 25, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
-    sasl.gl.drawText(Font_B612regular, size[1]-20,size[2]-235, "ALT RPTG", 25, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+    sasl.gl.drawText(Font_B612regular, size[1]-20,size[2]-35, "TCAS MODE", 26, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+    sasl.gl.drawText(Font_B612regular, size[1]-20,size[2]-135, "TCAS DISPLAY MODE", 26, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+    sasl.gl.drawText(Font_B612regular, size[1]-20,size[2]-235, "ALT RPTG", 26, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
 
 end
 

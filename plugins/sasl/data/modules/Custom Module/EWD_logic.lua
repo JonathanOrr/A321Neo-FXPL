@@ -456,9 +456,9 @@ local function update_right_list()
     end
 
     -- TCAS
-    if get(DRAIMS_Sqwk_mode) < 2 then
+    if get(TCAS_master) == 0 or get(TCAS_mode) == 0 then
         list_right:put(COL_INDICATION, "TCAS STBY")
-    elseif get(DRAIMS_Sqwk_mode) == 2 then
+    elseif get(TCAS_mode) == 1 then
         list_right:put(COL_INDICATION, "TCAS TA ONLY")
     end
     
