@@ -56,14 +56,15 @@ local page_routes = {   -- This tells you which page you go when you press a lat
     -- [current_page] = { [button_clicked] = function }
 
     [PAGE_VHF] = {
-        [BTN_R1] = function(data) save_scratchpad(data, 1); data.vhf_selected_line = 1 end,
-        [BTN_R2] = function(data) save_scratchpad(data, 2); data.vhf_selected_line = 2 end,
-        [BTN_R3] = function(data) save_scratchpad(data, 3); data.vhf_selected_line = 3 end,
+        [BTN_R1] = function(data) vhf_sel_line(data, 1) end,
+        [BTN_R2] = function(data) vhf_sel_line(data, 2) end,
+        [BTN_R3] = function(data) vhf_sel_line(data, 3) end,
         [BTN_R4] = function(data) clear_info_message(data) end,
 
         [BTN_L1] = function(data) vhf_swap_freq(data, 1) end,
         [BTN_L2] = function(data) vhf_swap_freq(data, 2) end,
         [BTN_L3] = function(data) vhf_swap_freq(data, 3) end,
+        [BTN_L4] = function(data) tcas_sqwk_num(data) end
     },
     
     [PAGE_HF] = {
@@ -74,6 +75,7 @@ local page_routes = {   -- This tells you which page you go when you press a lat
 
         [BTN_L1] = function(data) info_hf_inop(data, 1) end,
         [BTN_L2] = function(data) info_hf_inop(data, 2) end,
+        [BTN_L4] = function(data) tcas_sqwk_num(data) end
     },
     
     [PAGE_TEL] = {
@@ -85,12 +87,15 @@ local page_routes = {   -- This tells you which page you go when you press a lat
         [BTN_L1] = function(data) info_tel_inop(data, 1) end,
         [BTN_L2] = function(data) info_tel_inop(data, 2) end,
         [BTN_L3] = function(data) info_no_conf(data) end,
+        [BTN_L4] = function(data) tcas_sqwk_num(data) end
     },
 
     [PAGE_ATC] = {
         [BTN_L1] = function(data) set(TCAS_atc_sel, get(TCAS_atc_sel) == 1 and 2 or 1) end,
         [BTN_L2] = function(data) set(TCAS_master, 1 - get(TCAS_master)) end,
-        [BTN_L3] = function(data)  tcas_ident() end,
+        [BTN_L3] = function(data) tcas_ident() end,
+        [BTN_L4] = function(data) tcas_sqwk_num(data) end,
+        
         [BTN_R1] = function(data) set(TCAS_mode, get(TCAS_mode) ~= 0 and get(TCAS_mode) - 1 or 2) end,
         [BTN_R2] = function(data) set(TCAS_disp_mode, get(TCAS_disp_mode) ~= 3 and get(TCAS_disp_mode) + 1 or 0) end,
         [BTN_R3] = function(data) set(TCAS_alt_rptg, 1 - get(TCAS_alt_rptg)) end,
@@ -131,7 +136,11 @@ local function handler_lat_button(data, which_btn)
 end
 
 local function handler_tcas_button(data, which_btn)
-
+    if which_btn == BTN_TCAS_L then
+        set(TCAS_disp_mode, get(TCAS_disp_mode) ~= 3 and get(TCAS_disp_mode) + 1 or 0)
+    else
+        set(TCAS_mode, get(TCAS_mode) ~= 0 and get(TCAS_mode) - 1 or 2)
+    end
 end
 
 local function handler_num_button(data, which_btn)

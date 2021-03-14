@@ -47,8 +47,9 @@ end
 function save_scratchpad(data, new_sel)
     local old_sel = data.vhf_selected_line
 
-    if old_sel == new_sel then   -- Save
+    if old_sel == new_sel and #DRAIMS_common.scratchpad[old_sel] > 0 then   -- Save
         local num = tonumber(DRAIMS_common.scratchpad[old_sel])
+
         local freq_to_set = 0
         if num/1000 >= 118.000 and num/1000 <= 136.975 then
             freq_to_set = num/1000
@@ -114,6 +115,7 @@ end
 function tcas_ident()
     sasl.commandOnce(sasl.findCommand("sim/transponder/transponder_ident"))
 end
+
 function vhf_swap_freq(data, i)
 
     if #DRAIMS_common.scratchpad[i] > 0 then
@@ -126,6 +128,18 @@ function vhf_swap_freq(data, i)
     DRAIMS_common.vhf_animate = VHF_ANIMATE_SPEED
 end
 
+function vhf_sel_line(data, i)
+    save_scratchpad(data, i)
+    data.vhf_selected_line = i
+    data.sqwk_select = false
+end
+
+function tcas_sqwk_num(data)
+    if #DRAIMS_common.scratchpad[data.vhf_selected_line] > 0 then
+        save_scratchpad(data, -1)
+    end
+    data.sqwk_select = not data.sqwk_select
+end
 
 function update_lights()
     local bright_dr = globalPropertyf("a321neo/cockpit/lights/mip_pedestal_integral_value")

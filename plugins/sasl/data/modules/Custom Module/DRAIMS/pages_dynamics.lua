@@ -41,7 +41,6 @@ local function draw_arrow_dn(x,y)
     sasl.gl.drawWideLine(x, y-5, x, y-ARROW_LENGTH, 5, ECAM_WHITE)
 end
 
-
 -------------------------------------------------------------------------------
 -- VHF
 -------------------------------------------------------------------------------
@@ -128,14 +127,14 @@ local function draw_page_vhf_dynamic_freq_stby_numbers(data, freq, i)
 
         local perc = DRAIMS_common.vhf_animate/VHF_ANIMATE_SPEED
 
-        draw_page_vhf_dynamic_freq_animate(perc, freq_str, freq_curr, i, data.vhf_selected_line == i)
+        draw_page_vhf_dynamic_freq_animate(perc, freq_str, freq_curr, i, data.vhf_selected_line == i and not data.sqwk_select)
     else
         if #DRAIMS_common.scratchpad[i] > 0 then
-            draw_page_vhf_dynamic_freq_stby_scratchpad(data, i, data.vhf_selected_line == i)
+            draw_page_vhf_dynamic_freq_stby_scratchpad(data, i, data.vhf_selected_line == i and not data.sqwk_select)
         else
-            sasl.gl.drawText(Font_B612regular, size[1]-100,size[2]-55-100*(i-1), freq_str, 35, false, false, TEXT_ALIGN_CENTER, data.vhf_selected_line == i and ECAM_BLUE or ECAM_WHITE)
+            sasl.gl.drawText(Font_B612regular, size[1]-100,size[2]-55-100*(i-1), freq_str, 35, false, false, TEXT_ALIGN_CENTER, data.vhf_selected_line == i and not data.sqwk_select and ECAM_BLUE or ECAM_WHITE)
             
-            if data.vhf_selected_line == i then
+            if data.vhf_selected_line == i and not data.sqwk_select then
                 if freq == 121.500 then
                     sasl.gl.drawText(Font_B612regular, size[1]-100,size[2]+15-100*data.vhf_selected_line, "EMER", 23, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
                 elseif freq > 0 then
@@ -157,8 +156,10 @@ local function draw_page_vhf_dynamic_freq_stby(data)
     draw_page_vhf_dynamic_freq_stby_numbers(data, vhf3_freq, 3)
 
     -- Rectangle currently selected freq
-    Sasl_DrawWideFrame(size[1]-190, size[2]+5-100*data.vhf_selected_line, 180, 80, 2, 1, ECAM_BLUE)
-    if data.vhf_selected_line == 3 then
+    if not data.sqwk_select then
+        Sasl_DrawWideFrame(size[1]-190, size[2]+5-100*data.vhf_selected_line, 180, 80, 2, 1, ECAM_BLUE)
+    end
+    if data.vhf_selected_line == 3 and not data.sqwk_select then
         local arrow_up = vhf3_freq < 0 or vhf3_freq == 121.500
         local arrow_dn = vhf3_freq < 0 or not arrow_up
         if arrow_up then
@@ -223,22 +224,22 @@ local function draw_page_atc_tcas_disp_mode(data)
         draw_page_atc_tcas_lbl("NORM", size[1] - 220, y, get(TCAS_master) == 1 and 1 or 2)
         draw_page_atc_tcas_lbl("ABV", size[1] - 160, y, 3)
         draw_page_atc_tcas_lbl("BLW", size[1] - 95, y, 3)
-        draw_page_atc_tcas_lbl("THTR", size[1] - 20, y, 3)
+        draw_page_atc_tcas_lbl("THRT", size[1] - 20, y, 3)
     elseif get(TCAS_disp_mode) == 1 then
         draw_page_atc_tcas_lbl("NORM", size[1] - 220, y, 3)
         draw_page_atc_tcas_lbl("ABV", size[1] - 160, y, get(TCAS_master) == 1 and 1 or 2)
         draw_page_atc_tcas_lbl("BLW", size[1] - 95, y, 3)
-        draw_page_atc_tcas_lbl("THTR", size[1] - 20, y, 3)
+        draw_page_atc_tcas_lbl("THRT", size[1] - 20, y, 3)
     elseif get(TCAS_disp_mode) == 2 then
         draw_page_atc_tcas_lbl("NORM", size[1] - 220, y, 3)
         draw_page_atc_tcas_lbl("ABV", size[1] - 160, y, 3)
         draw_page_atc_tcas_lbl("BLW", size[1] - 95, y, get(TCAS_master) == 1 and 1 or 2)
-        draw_page_atc_tcas_lbl("THTR", size[1] - 20, y, 3)
+        draw_page_atc_tcas_lbl("THRT", size[1] - 20, y, 3)
     else
         draw_page_atc_tcas_lbl("NORM", size[1] - 220, y, 3)
         draw_page_atc_tcas_lbl("ABV", size[1] - 160, y, 3)
         draw_page_atc_tcas_lbl("BLW", size[1] - 95, y, 3)
-        draw_page_atc_tcas_lbl("THTR", size[1] - 20, y, get(TCAS_master) == 1 and 1 or 2)
+        draw_page_atc_tcas_lbl("THRT", size[1] - 20, y, get(TCAS_master) == 1 and 1 or 2)
     end
 end
 
@@ -275,6 +276,51 @@ local function draw_page_atc_dynamic(data)
     draw_page_atc_tcas_disp_mode(data)
     draw_page_atc_tcas_alt_rptg(data)
 end
+
+
+local function draw_tcas_shortcuts(data)
+    local text  = "NORM"
+    local color = ECAM_GREEN
+
+    if get(TCAS_disp_mode) == 1 then
+        text = "ABV"
+        color = ECAM_WHITE
+    elseif get(TCAS_disp_mode) == 2 then
+        text = "BLW"
+        color = ECAM_WHITE
+    elseif get(TCAS_disp_mode) == 3 then
+        text = "THRT"
+        color = ECAM_WHITE
+    end
+    
+    sasl.gl.drawText(Font_B612regular, 185, 20, text, 24, false, false, TEXT_ALIGN_CENTER, color)
+
+    if get(TCAS_mode) == 0 then
+        text = "STBY"
+        color = ECAM_ORANGE
+    elseif get(TCAS_mode) == 1 then
+        text = "TA"
+        color = ECAM_WHITE
+    elseif get(TCAS_mode) == 2 then
+        text = "TA/RA"
+        color = ECAM_GREEN
+    end
+
+    sasl.gl.drawText(Font_B612regular, 275, 20, text, 24, false, false, TEXT_ALIGN_CENTER, color)
+end
+
+
+local function draw_tcas_sqwk(data)
+
+    sasl.gl.drawText(Font_B612regular, 65, 70, "SQWK" .. get(TCAS_atc_sel), 24, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawText(Font_B612regular, 65, 25, get(TCAS_code), 38, false, false, TEXT_ALIGN_CENTER, data.sqwk_select and ECAM_BLUE or ECAM_GREEN)
+
+    if data.sqwk_select then
+        Sasl_DrawWideFrame(10, 20, 115, 74, 2, 1, ECAM_BLUE)
+    end
+end
+
+
 -------------------------------------------------------------------------------
 -- Generic
 -------------------------------------------------------------------------------
@@ -290,10 +336,15 @@ function draw_page_dynamic(data)
     if data.current_page == PAGE_VHF then
         draw_page_vhf_dynamic(data)
         draw_info_messages(data)
+        draw_tcas_shortcuts(data)
+        draw_tcas_sqwk(data)
     elseif data.current_page == PAGE_HF or data.current_page == PAGE_TEL then
         draw_info_messages(data)
+        draw_tcas_shortcuts(data)
+        draw_tcas_sqwk(data)
     elseif data.current_page == PAGE_ATC then
         draw_page_atc_dynamic(data)
         draw_info_messages(data)
+        draw_tcas_sqwk(data)
     end
 end

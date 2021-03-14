@@ -31,7 +31,8 @@ local capt_data = {
     current_page = PAGE_VHF,
     vhf_selected_line = 3,
     scratchpad_input = -1,
-    info_message = {"", "", ""}
+    info_message = {"", "", ""},
+    sqwk_select = false
 }
 
 draims_init_handlers(capt_data)
