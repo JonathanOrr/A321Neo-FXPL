@@ -57,13 +57,13 @@ local function draw_page_vhf_dynamic_freq(data)
     end
 
     if not(DRAIMS_common.vhf_animate_which == 1 and DRAIMS_common.vhf_animate > 0) then
-        sasl.gl.drawText(Font_B612regular, 130,size[2]-55, vhf1_freq, 55, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+        sasl.gl.drawText(Font_Roboto, 130,size[2]-55, vhf1_freq, 55, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
     end
     if not(DRAIMS_common.vhf_animate_which == 2 and DRAIMS_common.vhf_animate > 0) then
-        sasl.gl.drawText(Font_B612regular, 130,size[2]-155, vhf2_freq, 55, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+        sasl.gl.drawText(Font_Roboto, 130,size[2]-155, vhf2_freq, 55, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
     end
     if not(DRAIMS_common.vhf_animate_which == 3 and DRAIMS_common.vhf_animate > 0) then
-        sasl.gl.drawText(Font_B612regular, 130,size[2]-255, vhf3_freq, 55, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+        sasl.gl.drawText(Font_Roboto, 130,size[2]-255, vhf3_freq, 55, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
     end
 end
 
@@ -72,9 +72,9 @@ local function draw_page_vhf_dynamic_freq_animate(perc, freq_prev, freq_curr, i,
     local color_prev = selected and perc > VHF_ANIMATE_SPEED/2 and ECAM_BLUE or ECAM_WHITE
     local color_curr = selected and perc <= VHF_ANIMATE_SPEED/2 and ECAM_BLUE or ECAM_WHITE
 
-    sasl.gl.drawText(Font_B612regular, 100+perc*400,size[2]-40-100*(i-1), freq_curr, 30, false, false, TEXT_ALIGN_CENTER, color_prev)
+    sasl.gl.drawText(Font_Roboto, 100+perc*400,size[2]-40-100*(i-1), freq_curr, 30, false, false, TEXT_ALIGN_CENTER, color_prev)
 
-    sasl.gl.drawText(Font_B612regular, size[1]-100-perc*400,size[2]-40-100*(i-1), freq_prev, 30, false, false, TEXT_ALIGN_CENTER, color_curr)
+    sasl.gl.drawText(Font_Roboto, size[1]-100-perc*400,size[2]-40-100*(i-1), freq_prev, 30, false, false, TEXT_ALIGN_CENTER, color_curr)
 
 end
 
@@ -102,10 +102,10 @@ local function draw_page_vhf_dynamic_freq_stby_scratchpad(data, i, selected)
         num = num .. (s_len < 5 and "_" or "") .. (s_len < 6 and "_" or "")
     end
         
-    sasl.gl.drawText(Font_B612regular, size[1]-100,size[2]-55-100*(i-1), num, 35, false, false, TEXT_ALIGN_CENTER, valid and (selected and ECAM_BLUE or ECAM_WHITE) or ECAM_ORANGE)
+    sasl.gl.drawText(Font_Roboto, size[1]-100,size[2]-55-100*(i-1), num, 35, false, false, TEXT_ALIGN_CENTER, valid and (selected and ECAM_BLUE or ECAM_WHITE) or ECAM_ORANGE)
 
     if not valid then
-                sasl.gl.drawText(Font_B612regular, size[1]-100,size[2]+15-100*(i), "NOT VALID", 23, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+                sasl.gl.drawText(Font_Roboto, size[1]-100,size[2]+15-100*(i), "NOT VALID", 23, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
 
 end
@@ -132,13 +132,13 @@ local function draw_page_vhf_dynamic_freq_stby_numbers(data, freq, i)
         if #DRAIMS_common.scratchpad[i] > 0 then
             draw_page_vhf_dynamic_freq_stby_scratchpad(data, i, data.vhf_selected_line == i and not data.sqwk_select)
         else
-            sasl.gl.drawText(Font_B612regular, size[1]-100,size[2]-55-100*(i-1), freq_str, 35, false, false, TEXT_ALIGN_CENTER, data.vhf_selected_line == i and not data.sqwk_select and ECAM_BLUE or ECAM_WHITE)
+            sasl.gl.drawText(Font_Roboto, size[1]-100,size[2]-55-100*(i-1), freq_str, 35, false, false, TEXT_ALIGN_CENTER, data.vhf_selected_line == i and not data.sqwk_select and ECAM_BLUE or ECAM_WHITE)
             
             if data.vhf_selected_line == i and not data.sqwk_select then
                 if freq == 121.500 then
-                    sasl.gl.drawText(Font_B612regular, size[1]-100,size[2]+15-100*data.vhf_selected_line, "EMER", 23, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+                    sasl.gl.drawText(Font_Roboto, size[1]-100,size[2]+15-100*data.vhf_selected_line, "EMER", 23, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
                 elseif freq > 0 then
-                    sasl.gl.drawText(Font_B612regular, size[1]-100,size[2]+15-100*data.vhf_selected_line, "STBY", 23, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+                    sasl.gl.drawText(Font_Roboto, size[1]-100,size[2]+15-100*data.vhf_selected_line, "STBY", 23, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
                 end
             end
         end
@@ -193,11 +193,11 @@ local function draw_page_atc_tcas_lbl(text, x, y, which_type)
     if which_type == 1 then
         draw_inverted_text(x, y, text, 25, TEXT_ALIGN_RIGHT, ECAM_BLUE)
     elseif which_type == 2 then
-        local w,h = sasl.gl.measureText(Font_B612regular, text, 25, false, false)
+        local w,h = sasl.gl.measureText(Font_Roboto, text, 25, false, false)
         Sasl_DrawWideFrame(x-w, y-3, w, 26, 2, 1, ECAM_BLUE)
-        sasl.gl.drawText(Font_B612regular, x, y, text, 25, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+        sasl.gl.drawText(Font_Roboto, x, y, text, 25, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
     elseif which_type == 3 then
-        sasl.gl.drawText(Font_B612regular, x, y, text, 25, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+        sasl.gl.drawText(Font_Roboto, x, y, text, 25, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
     end
 end
 
@@ -258,17 +258,17 @@ local function draw_page_atc_dynamic(data)
 
     if get(TCAS_atc_sel) == 1 then
         draw_inverted_text(20,size[2]-75, "XPDR1", 25, TEXT_ALIGN_LEFT, ECAM_BLUE)
-        sasl.gl.drawText(Font_B612regular, 110, size[2]-75, "XPDR2", 25, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+        sasl.gl.drawText(Font_Roboto, 110, size[2]-75, "XPDR2", 25, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
     else
-        sasl.gl.drawText(Font_B612regular, 20, size[2]-75, "XPDR1", 25, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+        sasl.gl.drawText(Font_Roboto, 20, size[2]-75, "XPDR1", 25, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
         draw_inverted_text(110,size[2]-75, "XPDR2", 25, TEXT_ALIGN_LEFT, ECAM_BLUE)
     end
 
     if get(TCAS_master) == 0 then
         draw_inverted_text(20,size[2]-175, "STBY", 25, TEXT_ALIGN_LEFT, ECAM_BLUE)
-        sasl.gl.drawText(Font_B612regular, 90, size[2]-175, "AUTO", 25, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+        sasl.gl.drawText(Font_Roboto, 90, size[2]-175, "AUTO", 25, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
     else
-        sasl.gl.drawText(Font_B612regular, 20, size[2]-175, "STBY", 25, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+        sasl.gl.drawText(Font_Roboto, 20, size[2]-175, "STBY", 25, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
         draw_inverted_text(90, size[2]-175, "AUTO", 25, TEXT_ALIGN_LEFT, ECAM_BLUE)
     end
 
@@ -293,7 +293,7 @@ local function draw_tcas_shortcuts(data)
         color = ECAM_WHITE
     end
     
-    sasl.gl.drawText(Font_B612regular, 185, 20, text, 24, false, false, TEXT_ALIGN_CENTER, color)
+    sasl.gl.drawText(Font_Roboto, 185, 20, text, 24, false, false, TEXT_ALIGN_CENTER, color)
 
     if get(TCAS_mode) == 0 then
         text = "STBY"
@@ -306,14 +306,14 @@ local function draw_tcas_shortcuts(data)
         color = ECAM_GREEN
     end
 
-    sasl.gl.drawText(Font_B612regular, 275, 20, text, 24, false, false, TEXT_ALIGN_CENTER, color)
+    sasl.gl.drawText(Font_Roboto, 275, 20, text, 24, false, false, TEXT_ALIGN_CENTER, color)
 end
 
 
 local function draw_tcas_sqwk(data)
 
-    sasl.gl.drawText(Font_B612regular, 65, 70, "SQWK" .. get(TCAS_atc_sel), 24, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    sasl.gl.drawText(Font_B612regular, 65, 25, get(TCAS_code), 38, false, false, TEXT_ALIGN_CENTER, data.sqwk_select and ECAM_BLUE or ECAM_GREEN)
+    sasl.gl.drawText(Font_Roboto, 65, 70, "SQWK" .. get(TCAS_atc_sel), 24, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawText(Font_Roboto, 65, 25, get(TCAS_code), 38, false, false, TEXT_ALIGN_CENTER, data.sqwk_select and ECAM_BLUE or ECAM_GREEN)
 
     if data.sqwk_select then
         Sasl_DrawWideFrame(10, 20, 115, 74, 2, 1, ECAM_BLUE)
@@ -327,9 +327,9 @@ end
 
 
 local function draw_info_messages(data)
-    sasl.gl.drawText(Font_B612regular, 430, 70, data.info_message[1], 24, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
-    sasl.gl.drawText(Font_B612regular, 430, 45, data.info_message[2], 24, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
-    sasl.gl.drawText(Font_B612regular, 430, 20, data.info_message[3], 24, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(Font_Roboto, 430, 70, data.info_message[1], 24, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(Font_Roboto, 430, 45, data.info_message[2], 24, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(Font_Roboto, 430, 20, data.info_message[3], 24, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
 end
 
 function draw_page_dynamic(data)

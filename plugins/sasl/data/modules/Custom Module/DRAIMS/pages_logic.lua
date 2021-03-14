@@ -17,12 +17,8 @@
 -------------------------------------------------------------------------------
 include("DRAIMS/radio_logic.lua")
 
-function update_scratchpad(data)
+function update_scratchpad_vhf(data)
     local value = data.scratchpad_input
-    if value < 0 then
-        return
-    end
-
     local sel = data.vhf_selected_line
 
     if value == 2 and #DRAIMS_common.scratchpad[sel] == 0 then
@@ -36,11 +32,36 @@ function update_scratchpad(data)
             DRAIMS_common.scratchpad[sel] = value
         end
     elseif value == 10 then
-
+        -- We don't need to do anything special for the dot
     elseif value == 11 then
         DRAIMS_common.scratchpad[sel] = string.sub(DRAIMS_common.scratchpad[sel], 1, -2)
     end
+end
 
+function update_scratchpad_sqwk(data)
+    if value <= 7 then
+        if #DRAIMS_common.scratchpad_sqwk < 4 then
+            DRAIMS_common.scratchpad_sqwk = DRAIMS_common.scratchpad_sqwk .. value
+        else
+            DRAIMS_common.scratchpad_sqwk = value
+        end
+    elseif value == 11 then
+        DRAIMS_common.scratchpad_sqwk = string.sub(DRAIMS_common.scratchpad_sqwk, 1, -2)
+    end
+end
+
+
+function update_scratchpad(data)
+    local value = data.scratchpad_input
+    if value < 0 then
+        return
+    end
+
+    if data.current_page == PAGE_VHF and not data.sqwk_select then
+        update_scratchpad_vhf(data)
+    elseif data.sqwk_select then
+        update_scratchpad_sqwk(data)
+    end
     data.scratchpad_input = -1   -- Reset to no key pressed
 end
 
