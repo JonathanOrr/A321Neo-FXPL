@@ -35,12 +35,6 @@
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 
--- Fonts
-Font_7_digits         = sasl.gl.loadFont("fonts/digital-7.mono.ttf")
-Font_B612regular      = sasl.gl.loadFont("fonts/B612-Regular.ttf")
-Font_B612MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
-Font_B612MONO_bold    = sasl.gl.loadFont("fonts/B612Mono-Bold.ttf")
-
 -- Performance array (used only when debug_performance_measure in main_debug.lua is `true`)
 Perf_array = {}
 
@@ -51,8 +45,9 @@ FIRE_sys = {}
 AI_sys   = {}
 ADIRS_sys= {}
 ND_terrain = {}
+DRAIMS_common = {}
 
--- Engine data dependig on the user choice
+-- Engine data depending on the user choice
 ENG = { data_is_loaded = false }
 
 AvionicsBay = {}

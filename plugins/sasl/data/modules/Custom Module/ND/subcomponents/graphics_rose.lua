@@ -25,6 +25,7 @@ include("ND/subcomponents/graphics_oans.lua")
 include('ND/subcomponents/terrain.lua')
 
 local image_mask_rose = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/mask-rose.png")
+local image_mask_rose_terr = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/mask-rose-terrain.png")
 local image_bkg_ring        = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/ring.png")
 local image_bkg_ring_red    = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/ring-red.png")
 local image_bkg_ring_tcas   = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/tcas-ring.png")
@@ -347,7 +348,16 @@ local function refresh_terrain_texture(data)
             get_x_y_heading = rose_get_x_y_heading
         }
         data.terrain.texture_in_use = data.terrain.texture_in_use == 1 and 2 or 1
-        update_terrain(data, functions_for_terrain)
+        
+        local x1,y1 = rose_get_lat_lon(data, 900, 450)
+        local x2,y2 = rose_get_lat_lon(data, 0, 450)
+        local x3,y3 = rose_get_lat_lon(data, 0, 900)
+        geo_rectangle = { 
+            A = {x1,y1}, -- Middle right
+            B = {x2,y2}, -- Middle left
+            C = {x3,y3}, -- Top left
+        }
+        update_terrain(data, functions_for_terrain, geo_rectangle)
         data.terrain.last_update = get(TIME)
     end
 
@@ -381,6 +391,7 @@ local function draw_terrain(data)
         local diff_x, diff_y = rose_get_x_y_heading(data, data.terrain.center[incoming_texture][1], data.terrain.center[incoming_texture][2], data.inputs.heading)
         local shift_x = 450-diff_x
         local shift_y = 450-diff_y
+        reset_terrain_mask(data, image_mask_rose_terr)
         sasl.gl.drawRotatedTexture(data.terrain.texture[incoming_texture], -data.inputs.heading, -shift_x-70, -shift_y-70, 900+140,900+140, {1,1,1})
         if DEBUG_terrain_center then
             -- Draw an X where the terrain center is located
@@ -394,7 +405,7 @@ local function draw_terrain(data)
         local shift_x = 450-diff_x
         local shift_y = 450-diff_y
 
-        draw_terrain_mask(data, image_mask_rose)
+        draw_terrain_mask(data, image_mask_rose_terr)
         sasl.gl.drawRotatedTexture(data.terrain.texture[outgoing_texture], -data.inputs.heading, -shift_x-70, -shift_y-70, 900+140,900+140, {1,1,1})
         reset_terrain_mask(data, image_mask_rose)
 

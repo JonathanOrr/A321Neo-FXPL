@@ -41,6 +41,7 @@ math.randomseed( os.time() )
 include(moduleDirectory .. "/main_debug.lua")
 addSearchPath(moduleDirectory .. "/Custom Module/PFD/")
 addSearchPath(moduleDirectory .. "/Custom Module/ND/")
+addSearchPath(moduleDirectory .. "/Custom Module/DRAIMS/")
 addSearchPath(moduleDirectory .. "/Custom Module/EFB/")
 addSearchPath(moduleDirectory .. "/Custom Module/PFD/PFD_subcomponents/")
 addSearchPath(moduleDirectory .. "/Custom Module/FBW/")
@@ -78,7 +79,6 @@ components = {
   EWD_flight_phases {},
   HUD {},
   DCDU {},
-  DRAIMS {},
   clock {},
   LED_screens {},
   failures_manager {},
@@ -96,7 +96,10 @@ components = {
   GPWS {},
   sounds {},
   graphics {},
-
+  radio_logic {},
+  DRAIMS_CAPT {},
+  DRAIMS_FO {},
+  
   display_brightness {}, -- This must stay at the bottom
 
   main_popup {},

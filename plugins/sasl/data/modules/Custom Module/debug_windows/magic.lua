@@ -19,9 +19,9 @@ end
 
 function status_indicator()
     if not magic_happening then
-        sasl.gl.drawText ( Airbus_panel_font , 150 , 37 , "DO SOME MAGIC" , 25 , false , false , TEXT_ALIGN_CENTER , EFB_BLACK)
+        sasl.gl.drawText ( Font_Airbus_panel , 150 , 37 , "DO SOME MAGIC" , 25 , false , false , TEXT_ALIGN_CENTER , EFB_BLACK)
     else
-        sasl.gl.drawText ( Airbus_panel_font , 150 , 37, "STOP THE MAGIC" , 25 , false , false , TEXT_ALIGN_CENTER , EFB_BLACK)
+        sasl.gl.drawText ( Font_Airbus_panel , 150 , 37, "STOP THE MAGIC" , 25 , false , false , TEXT_ALIGN_CENTER , EFB_BLACK)
     end
 end
 

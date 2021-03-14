@@ -55,11 +55,11 @@ function draw_reverse_indication()
         Draw_LCD_backlight(size[1]/2 - 195, size[2]/2 + 310, 100, 35, 0.5, 1, get(EWD_brightness_act))
         Sasl_DrawWideFrame(size[1]/2 - 195, size[2]/2 + 310, 100, 35, 2, 0, ECAM_LINE_GREY)
         if get(EWD_flight_phase) >= 5 and get(EWD_flight_phase) <= 7 then
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2 - 142, size[2]/2 + 315, "REV", 30, false, false, TEXT_ALIGN_CENTER, (math.floor(get(TIME)*2) % 2) == 1 and ECAM_RED or ECAM_ORANGE )-- Blink
+            sasl.gl.drawText(Font_ECAMfont, size[1]/2 - 142, size[2]/2 + 315, "REV", 30, false, false, TEXT_ALIGN_CENTER, (math.floor(get(TIME)*2) % 2) == 1 and ECAM_RED or ECAM_ORANGE )-- Blink
         elseif get(Eng_1_reverser_deployment) > 0.98 then
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2 - 142, size[2]/2 + 315, "REV", 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)-- Green
+            sasl.gl.drawText(Font_ECAMfont, size[1]/2 - 142, size[2]/2 + 315, "REV", 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)-- Green
         else
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2 - 142, size[2]/2 + 315, "REV", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)-- Amber
+            sasl.gl.drawText(Font_ECAMfont, size[1]/2 - 142, size[2]/2 + 315, "REV", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)-- Amber
         end
     end
 
@@ -69,11 +69,11 @@ function draw_reverse_indication()
         Sasl_DrawWideFrame(size[1]/2 + 155, size[2]/2 + 310, 100, 35, 2, 0, ECAM_LINE_GREY)
         if get(EWD_flight_phase) >= 5 and get(EWD_flight_phase) <= 7 then
             -- Blink
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2 + 208, size[2]/2 + 315, "REV", 30, false, false, TEXT_ALIGN_CENTER, (math.floor(get(TIME)*2) % 2) == 1 and ECAM_RED or ECAM_ORANGE )-- Blink
+            sasl.gl.drawText(Font_ECAMfont, size[1]/2 + 208, size[2]/2 + 315, "REV", 30, false, false, TEXT_ALIGN_CENTER, (math.floor(get(TIME)*2) % 2) == 1 and ECAM_RED or ECAM_ORANGE )-- Blink
         elseif get(Eng_2_reverser_deployment) > 0.98 then
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2 + 208, size[2]/2 + 315, "REV", 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)-- Green
+            sasl.gl.drawText(Font_ECAMfont, size[1]/2 + 208, size[2]/2 + 315, "REV", 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)-- Green
         else
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2 + 208, size[2]/2 + 315, "REV", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)-- Amber
+            sasl.gl.drawText(Font_ECAMfont, size[1]/2 + 208, size[2]/2 + 315, "REV", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)-- Amber
         end
     end
 end
@@ -138,7 +138,7 @@ local function draw_packs_wai_nai()
                 str = "WAI"
             end
         end
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+150, size[2]-30, str, 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+150, size[2]-30, str, 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     end
 
 end
@@ -167,7 +167,7 @@ local function draw_extra_indication()
 
     -- A FLOOR
     if true then    -- TODO Jon please add here a condition
-        sasl.gl.drawText(Font_AirbusDUL, 30, size[2]-40, "A FLOOR", 32, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, 30, size[2]-40, "A FLOOR", 32, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
     end
 
     local max_eng_n1_mode = math.min(get(Eng_N1_mode, 1), get(Eng_N1_mode, 2)) 
@@ -195,13 +195,13 @@ local function draw_extra_indication()
     
     mode_names = {"TOGA", "MCT", "CLB", "IDLE", "MREV", "FLEX", "GA SOFT"}
 
-    sasl.gl.drawText(Font_AirbusDUL, size[1]-80, size[2]-30, mode_names[displayed_mode], 32, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]-65, size[2]-55, math.floor(n1_max) .. ".", 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]-50, size[2]-55, math.floor((n1_max%1)*10), 24, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]-35, size[2]-55, "%", 24, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]-80, size[2]-30, mode_names[displayed_mode], 32, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]-65, size[2]-55, math.floor(n1_max) .. ".", 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(Font_ECAMfont, size[1]-50, size[2]-55, math.floor((n1_max%1)*10), 24, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(Font_ECAMfont, size[1]-35, size[2]-55, "%", 24, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
 
-    if max_eng_n1_mode == 6 then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]-80, size[2]-80, math.floor(get(Eng_N1_flex_temp)) .. "°C", 24, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    if displayed_mode == 6 then
+        sasl.gl.drawText(Font_ECAMfont, size[1]-80, size[2]-80, math.floor(get(Eng_N1_flex_temp)) .. "°C", 24, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
     end    
 end
 
@@ -323,40 +323,40 @@ local function draw_engines()
         --N1-- -- TODO COLORS
         Draw_LCD_backlight(size[1]/2 - 195, size[2]/2 + 275, 100, 35, 0.5, 1, get(EWD_brightness_act))
         Sasl_DrawWideFrame(size[1]/2 - 195, size[2]/2 + 275, 100, 35, 2, 0, ECAM_LINE_GREY)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-115, size[2]/2+280, math.floor(params.eng1_n1) .. "." , 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-100, size[2]/2+280, math.floor((params.eng1_n1%1)*10)  , 24, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-115, size[2]/2+280, math.floor(params.eng1_n1) .. "." , 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-100, size[2]/2+280, math.floor((params.eng1_n1%1)*10)  , 24, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
 
         --EGT--
         local egt_color_1 = params.eng1_egt > ENG.data.display.egt_red_limit and ECAM_RED or (params.eng1_egt > 1000 and ECAM_ORANGE or ECAM_GREEN)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-140, size[2]/2+150, params.eng1_egt, 28, false, false, TEXT_ALIGN_RIGHT, egt_color_1)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-140, size[2]/2+150, params.eng1_egt, 28, false, false, TEXT_ALIGN_RIGHT, egt_color_1)
 
         --N2--
         local n2_color_1 = params.eng1_n2 > 117 and ECAM_RED or ECAM_GREEN
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-145, size[2]/2+75, math.floor(params.eng1_n2) .. "." , 30, false, false, TEXT_ALIGN_RIGHT, n2_color_1)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-130, size[2]/2+75, math.floor((params.eng1_n2%1)*10) , 24, false, false, TEXT_ALIGN_RIGHT, n2_color_1)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-145, size[2]/2+75, math.floor(params.eng1_n2) .. "." , 30, false, false, TEXT_ALIGN_RIGHT, n2_color_1)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-130, size[2]/2+75, math.floor((params.eng1_n2%1)*10) , 24, false, false, TEXT_ALIGN_RIGHT, n2_color_1)
 
         --FF--
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-130, size[2]/2+3, params.eng1_ff, 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-130, size[2]/2+3, params.eng1_ff, 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     end
 
     if get(EWD_engine_2_XX) == 0 then
         --N1-- -- TODO COLORS
         Draw_LCD_backlight(size[1]/2 + 155, size[2]/2 + 275, 100, 35, 0.5, 1, get(EWD_brightness_act))
         Sasl_DrawWideFrame(size[1]/2 + 155, size[2]/2 + 275, 100, 35, 2, 0, ECAM_LINE_GREY)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+235, size[2]/2+280, math.floor(params.eng2_n1) .. "." , 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+250, size[2]/2+280, math.floor((params.eng2_n1%1)*10)  , 24, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+235, size[2]/2+280, math.floor(params.eng2_n1) .. "." , 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+250, size[2]/2+280, math.floor((params.eng2_n1%1)*10)  , 24, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
 
         --EGT--
         local egt_color_2 = params.eng2_egt > ENG.data.display.egt_red_limit and ECAM_RED or (params.eng2_egt > 1000 and ECAM_ORANGE or ECAM_GREEN)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+210, size[2]/2+150, params.eng2_egt, 28, false, false, TEXT_ALIGN_RIGHT, egt_color_2)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+210, size[2]/2+150, params.eng2_egt, 28, false, false, TEXT_ALIGN_RIGHT, egt_color_2)
 
         --N2--
         local n2_color_2 = params.eng2_n2 > 117 and ECAM_RED or ECAM_GREEN
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+180, size[2]/2+75, math.floor(params.eng2_n2) .. "." , 30, false, false, TEXT_ALIGN_RIGHT, n2_color_2)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+195, size[2]/2+75, math.floor((params.eng2_n2%1)*10) , 24, false, false, TEXT_ALIGN_RIGHT, n2_color_2)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+180, size[2]/2+75, math.floor(params.eng2_n2) .. "." , 30, false, false, TEXT_ALIGN_RIGHT, n2_color_2)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+195, size[2]/2+75, math.floor((params.eng2_n2%1)*10) , 24, false, false, TEXT_ALIGN_RIGHT, n2_color_2)
 
         --FF--
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+195, size[2]/2+3, params.eng2_ff, 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+195, size[2]/2+3, params.eng2_ff, 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     end
 
 
@@ -364,13 +364,13 @@ local function draw_engines()
     if get(EWD_engine_avail_ind_1_start) ~= 0 and get(TIME) - get(EWD_engine_avail_ind_1_start) < 10 then
         Draw_LCD_backlight(size[1]/2 - 195, size[2]/2 + 310, 100, 35, 0.5, 1, get(EWD_brightness_act))
         Sasl_DrawWideFrame(size[1]/2 - 195, size[2]/2 + 310, 100, 35, 2, 0, ECAM_LINE_GREY)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2 - 142, size[2]/2 + 315, "AVAIL", 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2 - 142, size[2]/2 + 315, "AVAIL", 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
     end
 
     if get(EWD_engine_avail_ind_2_start) ~= 0 and get(TIME) - get(EWD_engine_avail_ind_2_start) < 10 then
         Draw_LCD_backlight(size[1]/2 + 155, size[2]/2 + 310, 100, 35, 0.5, 1, get(EWD_brightness_act))
         Sasl_DrawWideFrame(size[1]/2 + 155, size[2]/2 + 310, 100, 35, 2, 0, ECAM_LINE_GREY)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2 + 208, size[2]/2 + 315, "AVAIL", 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2 + 208, size[2]/2 + 315, "AVAIL", 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
     end
 
     -- IDLE indication
@@ -381,63 +381,63 @@ local function draw_engines()
                 color = ECAM_HIGH_GREEN
             end
         end
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2+380, "IDLE" , 30, false, false, TEXT_ALIGN_CENTER, color)        
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2, size[2]/2+380, "IDLE" , 30, false, false, TEXT_ALIGN_CENTER, color)        
     end
 end
 
 
 local function draw_coolings()
     if get(EWD_engine_cooling, 1) == 1 then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-410, size[2]/2+75, "COOLING" , 30, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-410, size[2]/2+75, "COOLING" , 30, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
         local min = math.floor(get(EWD_engine_cooling_time, 1) / 60)
         local sec = math.floor(get(EWD_engine_cooling_time, 1) % 60)
         if min < 10 then min = "0" .. min end
         if sec < 10 then sec = "0" .. sec end
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-410, size[2]/2+40, min .. "'".. sec.. "\"" , 30, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-410, size[2]/2+40, min .. "'".. sec.. "\"" , 30, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
     end
 
     if get(EWD_engine_cooling, 2) == 1 then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+410, size[2]/2+75, "COOLING" , 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+410, size[2]/2+75, "COOLING" , 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
         local min = math.floor(get(EWD_engine_cooling_time, 2) / 60)
         local sec = math.floor(get(EWD_engine_cooling_time, 2) % 60)
         if min < 10 then min = "0" .. min end
         if sec < 10 then sec = "0" .. sec end
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+410, size[2]/2+40, min .. "'".. sec.. "\"" , 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+410, size[2]/2+40, min .. "'".. sec.. "\"" , 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     end
 
 end
 
 
 local function draw_left_memo()
-    local distance = 38
+    local distance = 34
 
     for i=0,6 do
         if get(EWD_left_memo_group_colors[i]) > 0 then
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2-430, size[2]/2-200-distance*i, get(EWD_left_memo_group[i]), 30, false, false, TEXT_ALIGN_LEFT, match_msg_colors[get(EWD_left_memo_group_colors[i])])
+            sasl.gl.drawText(Font_ECAMfont, size[1]/2-422, size[2]/2-191-distance*i, get(EWD_left_memo_group[i]), 26, false, false, TEXT_ALIGN_LEFT, match_msg_colors[get(EWD_left_memo_group_colors[i])])
 
             -- Print the underline
-            width, height = sasl.gl.measureText(Font_AirbusDUL, get(EWD_left_memo_group[i]), 30, false, false)
+            width, height = sasl.gl.measureText(Font_ECAMfont, get(EWD_left_memo_group[i]), 26, false, false)
             if width > 0 then
-                sasl.gl.drawWideLine(size[1]/2-430 + 1, size[2]/2-200-distance*i - 5, size[1]/2-430 + width + 2, size[2]/2-200-distance*i - 5, 3, match_msg_colors[get(EWD_left_memo_group_colors[i])])
+                sasl.gl.drawWideLine(size[1]/2-422 + 1, size[2]/2-191-distance*i - 5, size[1]/2-422 + width + 2, size[2]/2-191-distance*i - 5, 3, match_msg_colors[get(EWD_left_memo_group_colors[i])])
             end
         end
 
         if get(EWD_left_memo_colors[i]) > 0 then
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2-430, size[2]/2-200-distance*i, get(EWD_left_memo[i]), 30, false, false, TEXT_ALIGN_LEFT, match_msg_colors[get(EWD_left_memo_colors[i])])
+            sasl.gl.drawText(Font_ECAMfont, size[1]/2-422, size[2]/2-191-distance*i, get(EWD_left_memo[i]), 26, false, false, TEXT_ALIGN_LEFT, match_msg_colors[get(EWD_left_memo_colors[i])])
         end
     end
 
 end
 
 local function draw_right_memo()
-    local distance = 38
+    local distance = 34
 
     for i=0,6 do
         if get(EWD_right_memo_colors[i]) > 0 then
             if get(EWD_right_memo_colors[i]) ~= 7 or get(TIME) % 2 > 1 then -- If color is COL_INDICATION_BLINKING we blink for 1 second every 2 seconds.
-                sasl.gl.drawText(Font_AirbusDUL, size[1]/2+160, size[2]/2-200-distance*i, get(EWD_right_memo[i]), 30, false, false, TEXT_ALIGN_LEFT, match_msg_colors[get(EWD_right_memo_colors[i])])
+                sasl.gl.drawText(Font_ECAMfont, size[1]/2+160, size[2]/2-191-distance*i, get(EWD_right_memo[i]), 26, false, false, TEXT_ALIGN_LEFT, match_msg_colors[get(EWD_right_memo_colors[i])])
             else
-                sasl.gl.drawText(Font_AirbusDUL, size[1]/2+160, size[2]/2-200-distance*i, get(EWD_right_memo[i]), 30, false, false, TEXT_ALIGN_LEFT, ECAM_HIGH_GREEN)            
+                sasl.gl.drawText(Font_ECAMfont, size[1]/2+160, size[2]/2-191-distance*i, get(EWD_right_memo[i]), 26, false, false, TEXT_ALIGN_LEFT, ECAM_HIGH_GREEN)            
             end
         end
     end
@@ -447,7 +447,7 @@ local function draw_extras()
 
     -- STS BOX
     if get(EWD_box_sts) == 1 and get(EWD_arrow_overflow) == 0 then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+88, size[2]/2-440, "STS", 30, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)    
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+88, size[2]/2-440, "STS", 30, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)    
         sasl.gl.drawFrame ( size[1]/2+87, size[2]/2-442, 62, 28 , ECAM_WHITE)
     end 
 
@@ -459,7 +459,7 @@ local function draw_extras()
         if math.floor(sasl.getElapsedSeconds(time_blinking)) % 2 == 0 then
             color = ECAM_HIGH_GREY
         end
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+88, size[2]/2-165, "ADV", 30, false, false, TEXT_ALIGN_LEFT, color)    
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+88, size[2]/2-165, "ADV", 30, false, false, TEXT_ALIGN_LEFT, color)    
         sasl.gl.drawFrame ( size[1]/2+87, size[2]/2-167, 62, 28 , color)
     end
 
@@ -486,7 +486,7 @@ local function draw_fuel_stuffs()
         color = ECAM_ORANGE
     end
 
-    sasl.gl.drawText(Font_AirbusDUL, 240, size[2]/2-120, fuel_on_board, 36, false, false, TEXT_ALIGN_RIGHT, color)
+    sasl.gl.drawText(Font_ECAMfont, 240, size[2]/2-120, fuel_on_board, 36, false, false, TEXT_ALIGN_RIGHT, color)
     if not_all_fuel_available then
         sasl.gl.drawWideLine(120, size[2]/2-125, 250, size[2]/2-125, 3 , ECAM_ORANGE)
         sasl.gl.drawWideLine(120, size[2]/2-125, 120, size[2]/2-100, 3 , ECAM_ORANGE)
@@ -506,15 +506,15 @@ local function draw_slat_flap_legend()
     local flap_extra_text = flap_misaligned and " LOCKED" or ""
     
     if get(Slats) > 0 or slat_fail or slat_misaligned then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+70, size[2]/2-70, "S" .. slat_extra_text, 30, false, false, TEXT_ALIGN_RIGHT, (slat_fail or slat_misaligned) and ECAM_ORANGE or ECAM_WHITE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+70, size[2]/2-70, "S" .. slat_extra_text, 30, false, false, TEXT_ALIGN_RIGHT, (slat_fail or slat_misaligned) and ECAM_ORANGE or ECAM_WHITE)
     end
 
     if get(Flaps_deployed_ratio) > 0 or flap_fail or flap_misaligned then    
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+290, size[2]/2-70, "F" .. flap_extra_text, 30, false, false, TEXT_ALIGN_LEFT, (flap_fail or flap_misaligned) and ECAM_ORANGE or ECAM_WHITE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+290, size[2]/2-70, "F" .. flap_extra_text, 30, false, false, TEXT_ALIGN_LEFT, (flap_fail or flap_misaligned) and ECAM_ORANGE or ECAM_WHITE)
     end
     
     if a_lock then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+75, size[2]/2-40, "A LOCK", 30, false, false, TEXT_ALIGN_LEFT, get(TIME) % 1 > 0.5 and ECAM_GREEN or ECAM_HIGH_GREEN)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+75, size[2]/2-40, "A LOCK", 30, false, false, TEXT_ALIGN_LEFT, get(TIME) % 1 > 0.5 and ECAM_GREEN or ECAM_HIGH_GREEN)
     end
 
 end
@@ -577,7 +577,7 @@ local function draw_slat_flap_indications()
         sasl.gl.drawTexture(EWD_flap_tract_img, size[1]/2 + 248, size[2]/2 - 115, 143, 63, ECAM_WHITE)
     end
     if rounded_slat_ratio ~= 0 or rounded_flap_angle ~= 0 then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+170, size[2]/2-120, slat_flap_configs[get(Flaps_internal_config) + 1], 34, false, false, TEXT_ALIGN_CENTER, indication_text_cl)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+170, size[2]/2-120, slat_flap_configs[get(Flaps_internal_config) + 1], 34, false, false, TEXT_ALIGN_CENTER, indication_text_cl)
     end
 
     sasl.gl.setClipArea (size[1]/2 + 5, size[2]/2 - 122, 156, 71)

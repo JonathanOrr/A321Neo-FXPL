@@ -37,6 +37,9 @@ include('EWD_msgs/nav.lua')
 include('EWD_msgs/pressurization.lua')
 include('EWD_msgs/to_ldg_memos.lua')
 
+include('DRAIMS/radio_logic.lua')
+
+
 sasl.registerCommandHandler (Ecam_btn_cmd_CLR,   0 , function(phase) ewd_clear_button_handler(phase) end )
 sasl.registerCommandHandler (Ecam_btn_cmd_RCL,   0 , function(phase) ewd_recall_button_handler(phase) end )
 sasl.registerCommandHandler (Ecam_btn_cmd_EMERC, 0 , function(phase) ewd_emercanc_button_handler(phase) end )
@@ -149,6 +152,7 @@ local left_messages_list = {
     MessageGroup_ELEC_TR_ESS_FAULT,
     MessageGroup_ENG_FF_CLOG,
     MessageGroup_ENG_OIL_CLOG,
+    MessageGroup_SAT_ABOVE_FLEX,
     MessageGroup_FUEL_WING_LO_LVL_DOUBLE,
     MessageGroup_FUEL_WING_LO_LVL_SINGLE,
     MessageGroup_FUEL_FUSED_FOB_DISAGREE,
@@ -452,9 +456,9 @@ local function update_right_list()
     end
 
     -- TCAS
-    if get(DRAIMS_Sqwk_mode) < 2 then
+    if get(TCAS_master) == 0 or get(TCAS_mode) == 0 then
         list_right:put(COL_INDICATION, "TCAS STBY")
-    elseif get(DRAIMS_Sqwk_mode) == 2 then
+    elseif get(TCAS_mode) == 1 then
         list_right:put(COL_INDICATION, "TCAS TA ONLY")
     end
     
@@ -464,11 +468,11 @@ local function update_right_list()
     end
     
     if get(DCDU_new_msgs) ~= 0 then
-        list_right:put(COL_INDICATION_BLINKING, "ACARS MSG")    
+        list_right:put(COL_INDICATION_BLINKING, "ACARS MSG")
     end
     
-    if get(VHF_3_monitor_selected) == 1 then
-        list_right:put(COL_INDICATION_BLINKING, "VHF 3 VOICE")    
+    if radio_vhf_get_freq(3, false) > 0 then
+        list_right:put(COL_INDICATION_BLINKING, "VHF 3 VOICE")
     end
     
     if get(Ecam_fuel_valve_X_BLEED) < 2 or get(Ecam_fuel_valve_X_BLEED) == 4 then
@@ -577,6 +581,9 @@ local function update_left_list()
         return
     end
 
+    set(AtLeastOneMasterWarning, 0)
+    set(AtLeastOneMasterCaution, 0)
+
     list_left  = PriorityQueue()
     list_left:setmax(PRIORITY_LEVEL_MEMO)
 
@@ -613,6 +620,13 @@ local function update_left_list()
             if m.land_asap ~= nil and m.land_asap == true then
                 land_asap = true
             end
+
+            if m.color() == COL_WARNING then
+                set(AtLeastOneMasterWarning, 1)
+            end
+            if m.color() == COL_CAUTION then
+                set(AtLeastOneMasterCaution, 1)
+            end 
         end
     end
 

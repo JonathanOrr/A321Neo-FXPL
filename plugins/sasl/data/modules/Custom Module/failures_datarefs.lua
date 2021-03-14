@@ -19,6 +19,9 @@
 -- General
 ReqMasterCaution      = createGlobalPropertyi("a321neo/failures/req_master_caution", 0, false, true, false) -- When a component (typically EWD) wants to trigger a caution put this to 1
 ReqMasterWarning      = createGlobalPropertyi("a321neo/failures/req_master_warning", 0, false, true, false) -- When a component (typically EWD) wants to trigger a warning put this to 1
+AtLeastOneMasterCaution      = createGlobalPropertyi("a321neo/failures/at_least_master_caution", 0, false, true, false)
+AtLeastOneMasterWarning      = createGlobalPropertyi("a321neo/failures/at_least_master_warning", 0, false, true, false)
+
 
 XPlane_Auto_Failure   = globalProperty("sim/operation/failures/enable_random_failures")
 
@@ -285,6 +288,17 @@ FAILURE_FIRE_CARGO_AFT = createGlobalPropertyi("a321neo/failures/fire/cargo_aft"
 FAILURE_FIRE_APU = createGlobalPropertyi("a321neo/failures/fire/apu", 0, false, true, false)
 FAILURE_FIRE_ENG_1 = createGlobalPropertyi("a321neo/failures/fire/eng_1", 0, false, true, false)
 FAILURE_FIRE_ENG_2 = createGlobalPropertyi("a321neo/failures/fire/eng_2", 0, false, true, false)
+
+FAILURE_RADIO_VHF_1 = createGlobalPropertyi("a321neo/failures/radios/vhf_1", 0, false, true, false)
+FAILURE_RADIO_VHF_2 = createGlobalPropertyi("a321neo/failures/radios/vhf_2", 0, false, true, false)
+FAILURE_RADIO_VOR_1 = createGlobalPropertyi("a321neo/failures/radios/vor_1", 0, false, true, false)
+FAILURE_RADIO_VOR_2 = createGlobalPropertyi("a321neo/failures/radios/vor_2", 0, false, true, false)
+FAILURE_RADIO_ILS_1 = createGlobalPropertyi("a321neo/failures/radios/ils_1", 0, false, true, false)
+FAILURE_RADIO_ILS_2 = createGlobalPropertyi("a321neo/failures/radios/ils_2", 0, false, true, false)
+FAILURE_RADIO_ADF_1 = createGlobalPropertyi("a321neo/failures/radios/adf_1", 0, false, true, false)
+FAILURE_RADIO_ADF_2 = createGlobalPropertyi("a321neo/failures/radios/adf_2", 0, false, true, false)
+FAILURE_RADIO_DME_1 = createGlobalPropertyi("a321neo/failures/radios/dme_1", 0, false, true, false)
+FAILURE_RADIO_DME_2 = createGlobalPropertyi("a321neo/failures/radios/dme_2", 0, false, true, false)
 
 FAILURE_AP = createGlobalPropertyia("a321neo/failures/ap/ap", 2)
 

@@ -38,5 +38,5 @@ function EFB_draw_page_6()
 
     SASL_draw_img_center_aligned (EFB_INFO_selector, 1026,33, 147, 32, EFB_WHITE)
     --print(EFB_CURSOR_X, EFB_CURSOR_Y)
-    sasl.gl.drawText ( Airbus_panel_font , 880 , 24 , "Page "..PAGE_NUM.."/"..NUMBER_OF_PAGES.."", 25 , false , false , TEXT_ALIGN_CENTER , EFB_WHITE)
+    sasl.gl.drawText ( Font_Airbus_panel , 880 , 24 , "Page "..PAGE_NUM.."/"..NUMBER_OF_PAGES.."", 25 , false , false , TEXT_ALIGN_CENTER , EFB_WHITE)
 end

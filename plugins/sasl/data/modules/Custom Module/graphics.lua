@@ -110,6 +110,9 @@ local avionics_light_status  = false -- Status of the light for the avionics bay
 local service_int_ovr_status = false -- Status of the service interphone (it doesn't do actually anything)
 local last_toilette_time = 0
 
+local cockpit_door_level_pos = 0
+local cockpit_door_level_pos_time_open = 0
+
 ----------------------------------------------------------------------------------------------------
 -- Command function
 ----------------------------------------------------------------------------------------------------
@@ -164,6 +167,28 @@ sasl.registerCommandHandler (LIGHTS_cmd_emer_exit_dn, 0,  function(phase) Switch
 -- Trays
 sasl.registerCommandHandler (Cockpit_Capt_tray_toggle, 0,  function(phase) if phase == SASL_COMMAND_BEGIN then capt_tray = not capt_tray end end)
 sasl.registerCommandHandler (Cockpit_Fo_tray_toggle, 0,  function(phase) if phase == SASL_COMMAND_BEGIN then fo_tray = not fo_tray end end)
+
+----------------------------------------------------------------------------------------------------
+-- Cockpit door lever
+----------------------------------------------------------------------------------------------------
+sasl.registerCommandHandler (CKPT_DOOR_cmd_unlock, 0,
+function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        cockpit_door_level_pos = 1
+        cockpit_door_level_pos_time_open = get(TIME)
+    elseif phase == SASL_COMMAND_END then
+        cockpit_door_level_pos = 0
+    end 
+end)
+
+sasl.registerCommandHandler (CKPT_DOOR_cmd_lock, 0,
+function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        cockpit_door_level_pos = -1
+    elseif phase == SASL_COMMAND_END then
+        cockpit_door_level_pos = 0
+    end 
+end)
 
 ----------------------------------------------------------------------------------------------------
 -- Initialization function
@@ -305,6 +330,11 @@ local function update_trays()
     Set_dataref_linear_anim_nostop(Cockpit_Fo_tray_pos, fo_tray and 1 or 0, 0, 1, 0.75)
 end
 
+local function update_doorlock()
+    Set_dataref_linear_anim_nostop(Cockpit_door_lever_pos, cockpit_door_level_pos, -1, 1, 0.75)
+    pb_set(PB.ped.ckpt_door_light, false, cockpit_door_level_pos == 1 and get(TIME) - cockpit_door_level_pos_time_open > 1 and get(TIME) - cockpit_door_level_pos_time_open < 5)
+end
+
 local function default_view(phase)
     if phase == SASL_COMMAND_BEGIN then
         load_save_view()
@@ -334,6 +364,7 @@ function update()
     update_integral_datarefs()
     update_flood_and_spil_datarefs()
     update_trays()
+    update_doorlock()
     update_toilette()
 
     perf_measure_stop("graphics:update()")

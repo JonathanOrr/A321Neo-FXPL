@@ -42,6 +42,15 @@ function Failures_cancel_master_warning_handler(phase)
 end
 
 local function update_master_wc()
+    
+    if get(AtLeastOneMasterWarning) == 0 then
+        master_warning_active = false
+    end
+    
+    if get(AtLeastOneMasterCaution) == 0 then
+        master_caution_active = false
+    end
+    
     if get(ReqMasterCaution) == 1 then
         if not already_triggered_mc then
             master_caution_active = true
@@ -60,6 +69,7 @@ local function update_master_wc()
         already_triggered_mw = false
     end
 
+    
     if master_warning_active then
         if (math.floor(get(TIME) * WARNING_BLINK_HZ) % 2) == 0 then
             pb_set(PB.glare.master_warning_capt, is_fwc_2_ok, is_fwc_1_ok)

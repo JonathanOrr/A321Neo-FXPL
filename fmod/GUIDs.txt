@@ -55,6 +55,16 @@
 {78b8fd51-ea07-41b0-8e7a-6c6325c9a885} event:/Engines V2/HowlEnd
 {202a02c2-878b-40e8-ad75-a500bd51d2bb} event:/Engines V2/HowlLogic
 {e6a2abbe-7c23-46e2-9a42-26283e21c906} event:/Engines V2/HowlLogicR
+{4103ca70-07d5-4dc2-babf-bf9aa8111a0d} event:/Engines V3 LEAP/Boom
+{0401a595-e036-484a-9a97-ef19f151ce96} event:/Engines V3 LEAP/Engine Start Ext
+{6194f9e1-393c-46be-9623-345f2e882efc} event:/Engines V3 LEAP/Engine Start N2 L
+{c4d782d8-0831-45ab-8370-705255e9786a} event:/Engines V3 LEAP/Engine Start N2 R
+{3b32653f-7b06-4c9f-ae08-00818754a7c2} event:/Engines V3 LEAP/Engines Ext
+{96c6279f-3251-4b3f-85ad-3651cc5dd208} event:/Engines V3 LEAP/EnginesL
+{629bd367-e68a-474b-a5b4-865f32ea20d2} event:/Engines V3 LEAP/EnginesR
+{016b0ecc-f34a-4278-805e-94d2f2c7467a} event:/Engines V3 LEAP/HowlEnd
+{df5a49d6-0ca2-4862-be07-e46e04013c9e} event:/Engines V3 LEAP/HowlLogic
+{d6916c12-4c9c-4fb5-842d-fbecc7238050} event:/Engines V3 LEAP/HowlLogicR
 {60390ec1-f659-43b4-a63d-0618b686e0fe} event:/FCU/Selectors/1
 {9bcca77b-d316-4192-bb92-d796b32e9bd3} event:/FCU/Selectors/2
 {863d7dc0-0956-4ed3-8336-5ee2bf0b4213} event:/FCU/Selectors/3
@@ -206,4 +216,6 @@
 {6cee8772-2b5f-4158-9399-80dbe765bd69} bus:/Master/Exterior Unprocessed/Mechanical
 {15e9c653-fbca-41ca-8241-7cd3b3870fc8} snapshot:/Inside
 {e5b38f91-83fb-4cec-a2d2-a0170dddb70a} snapshot:/FadingBegin
+{6bb566cf-f4e3-43dd-85f1-2529a372f90b} bank:/Engines_CFM
+{b3d2fa4b-02c0-403c-8174-633cc9cef627} bank:/Engines_PW
 {9093ea6c-5d0d-441f-bf32-185dad4e3a17} bank:/Master Bank
