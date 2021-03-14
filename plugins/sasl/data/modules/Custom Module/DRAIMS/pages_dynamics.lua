@@ -20,6 +20,8 @@ include("DRAIMS/radio_logic.lua")
 include("DRAIMS/misc_drawings.lua")
 include("DRAIMS/constants.lua")
 
+local COLOR_DISABLED = {0.4, 0.4, 0.4}
+
 -------------------------------------------------------------------------------
 -- Helpers
 -------------------------------------------------------------------------------
@@ -293,6 +295,10 @@ local function draw_tcas_shortcuts(data)
         color = ECAM_WHITE
     end
     
+    if get(TCAS_master) == 0 then
+        color = COLOR_DISABLED
+    end
+    
     sasl.gl.drawText(Font_Roboto, 185, 20, text, 24, false, false, TEXT_ALIGN_CENTER, color)
 
     if get(TCAS_mode) == 0 then
@@ -306,14 +312,32 @@ local function draw_tcas_shortcuts(data)
         color = ECAM_GREEN
     end
 
+    if get(TCAS_master) == 0 then
+        color = COLOR_DISABLED
+    end
+
     sasl.gl.drawText(Font_Roboto, 275, 20, text, 24, false, false, TEXT_ALIGN_CENTER, color)
 end
 
 
 local function draw_tcas_sqwk(data)
-
-    sasl.gl.drawText(Font_Roboto, 65, 70, "SQWK" .. get(TCAS_atc_sel), 24, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    sasl.gl.drawText(Font_Roboto, 65, 25, get(TCAS_code), 38, false, false, TEXT_ALIGN_CENTER, data.sqwk_select and ECAM_BLUE or ECAM_GREEN)
+    if get(TCAS_master) == 1 then
+        sasl.gl.drawText(Font_Roboto, 65, 70, "SQWK" .. get(TCAS_atc_sel), 24, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    else
+        sasl.gl.drawText(Font_Roboto, 65, 70, "STBY", 24, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    end
+    
+    local curr_tcas_code = get(TCAS_code)
+    local font_size = 38
+    
+    if DRAIMS_common.scratchpad_sqwk ~= nil and #DRAIMS_common.scratchpad_sqwk > 0 then
+        curr_tcas_code = DRAIMS_common.scratchpad_sqwk
+        for i=#DRAIMS_common.scratchpad_sqwk,3 do
+            curr_tcas_code = curr_tcas_code .. "_"
+        end
+        font_size = 32
+    end
+    sasl.gl.drawText(Font_Roboto, 65, 25, curr_tcas_code, font_size, false, false, TEXT_ALIGN_CENTER, data.sqwk_select and ECAM_BLUE or (get(TCAS_master) == 1 and ECAM_GREEN or ECAM_WHITE))
 
     if data.sqwk_select then
         Sasl_DrawWideFrame(10, 20, 115, 74, 2, 1, ECAM_BLUE)

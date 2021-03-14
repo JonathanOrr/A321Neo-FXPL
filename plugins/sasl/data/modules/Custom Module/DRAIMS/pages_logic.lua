@@ -39,17 +39,37 @@ function update_scratchpad_vhf(data)
 end
 
 function update_scratchpad_sqwk(data)
+    local value = data.scratchpad_input
     if value <= 7 then
         if #DRAIMS_common.scratchpad_sqwk < 4 then
             DRAIMS_common.scratchpad_sqwk = DRAIMS_common.scratchpad_sqwk .. value
         else
-            DRAIMS_common.scratchpad_sqwk = value
+            DRAIMS_common.scratchpad_sqwk = "" .. value
         end
     elseif value == 11 then
         DRAIMS_common.scratchpad_sqwk = string.sub(DRAIMS_common.scratchpad_sqwk, 1, -2)
     end
+
+    if #DRAIMS_common.scratchpad_sqwk == 4 then
+        DRAIMS_common.scratchpad_sqwk_timeout = get(TIME)
+        DRAIMS_common.scratchpad_sqwk_data = data
+    else
+        DRAIMS_common.scratchpad_sqwk_timeout = 0
+    end
+
 end
 
+function save_scratchpad_sqwk(data)
+    DRAIMS_common.scratchpad_sqwk_timeout = 0
+    if #DRAIMS_common.scratchpad_sqwk == 4 then
+        set(TCAS_code, tonumber(DRAIMS_common.scratchpad_sqwk))
+    else
+        data.info_message[1] = "SQWK"
+        data.info_message[2] = "REVERTED TO"
+        data.info_message[3] = "PREV ENTRY"
+    end
+    DRAIMS_common.scratchpad_sqwk = ""
+end
 
 function update_scratchpad(data)
     local value = data.scratchpad_input
@@ -151,6 +171,9 @@ end
 
 function vhf_sel_line(data, i)
     save_scratchpad(data, i)
+    if #DRAIMS_common.scratchpad_sqwk > 0 then
+        save_scratchpad_sqwk(data)
+    end
     data.vhf_selected_line = i
     data.sqwk_select = false
 end
@@ -158,6 +181,9 @@ end
 function tcas_sqwk_num(data)
     if #DRAIMS_common.scratchpad[data.vhf_selected_line] > 0 then
         save_scratchpad(data, -1)
+    end
+    if #DRAIMS_common.scratchpad_sqwk > 0 then
+        save_scratchpad_sqwk(data)
     end
     data.sqwk_select = not data.sqwk_select
 end
@@ -176,4 +202,10 @@ function update_vhf_data()
     set(VHF_2_audio_selected, get(Capt_VHF_recv_selected, 2))
 end
 
+function update_sqkw_timeout()
+    if DRAIMS_common.scratchpad_sqwk_timeout > 0 and get(TIME) - DRAIMS_common.scratchpad_sqwk_timeout > 1 then
+        DRAIMS_common.scratchpad_sqwk_timeout = 0
+        save_scratchpad_sqwk(DRAIMS_common.scratchpad_sqwk_data)
+    end
+end
 

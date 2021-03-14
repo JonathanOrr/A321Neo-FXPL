@@ -266,6 +266,8 @@ function draims_init_handlers(data)
     DRAIMS_common.vhf_animate_which = 0
     DRAIMS_common.vhf_animate = 0
     DRAIMS_common.scratchpad = {"", "", ""}
+    DRAIMS_common.scratchpad_sqwk = ""
+    DRAIMS_common.scratchpad_sqwk_timeout = 0
 
     local prefix = data.id == DRAIMS_ID_CAPT and "capt_" or "fo_"
 
