@@ -39,28 +39,6 @@ local function draw_top_lines()
     sasl.gl.drawWideLine(0, 300, size[1], 300, 3, ECAM_WHITE)
 end
 
-local function draw_menu_item_right(line, text, color)
-
-    color = color or ECAM_WHITE
-    local x = size[1] - 10
-    local y = size[2] - ((line-1) * 100)-46
-    sasl.gl.drawText(Font_Roboto, x-29, y-10, text, 25, false, false, TEXT_ALIGN_RIGHT, color)
-
-    sasl.gl.drawConvexPolygon ({x, y, x-12, y+12, x-12, y-12}, true, 0, color)
-
-end
-
-local function draw_menu_item_left(line, text, color)
-
-    color = color or ECAM_WHITE
-    local x = 10
-    local y = size[2] - ((line-1) * 100)-46
-    sasl.gl.drawText(Font_Roboto, x+29, y-10, text, 25, false, false, TEXT_ALIGN_LEFT, color)
-
-    sasl.gl.drawConvexPolygon ({x, y, x+12, y-12, x+12, y+12}, true, 0, color)
-
-end
-
 
 local function draw_page_menu(data)
     sasl.gl.drawText(Font_Roboto, size[1]/2,size[2]-40, "MENU", 25, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)

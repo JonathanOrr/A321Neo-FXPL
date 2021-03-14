@@ -18,7 +18,7 @@
 
 function draw_inverted_text(x, y, text, size, align, color)
 
-    local w,h = sasl.gl.measureText(Font_B612regular, text, size, false, false)
+    local w,h = sasl.gl.measureText(Font_Roboto, text, size, false, false)
 
     if align == TEXT_ALIGN_LEFT then
         sasl.gl.drawRectangle(x-2,y-2, w+4, h+3, color)
@@ -27,7 +27,28 @@ function draw_inverted_text(x, y, text, size, align, color)
     elseif align == TEXT_ALIGN_RIGHT then
         sasl.gl.drawRectangle(x-w-2,y-2, w+4, h+3, color)
     end
-    sasl.gl.drawText(Font_B612regular, x, y, text, size, false, false, align, ECAM_BLACK)
+    sasl.gl.drawText(Font_Roboto, x, y, text, size, false, false, align, ECAM_BLACK)
     
 end
 
+function draw_menu_item_right(line, text, color)
+
+    color = color or ECAM_WHITE
+    local x = size[1] - 10
+    local y = size[2] - ((line-1) * 100)-46
+    sasl.gl.drawText(Font_Roboto, x-29, y-10, text, 25, false, false, TEXT_ALIGN_RIGHT, color)
+
+    sasl.gl.drawConvexPolygon ({x, y, x-12, y+12, x-12, y-12}, true, 0, color)
+
+end
+
+function draw_menu_item_left(line, text, color)
+
+    color = color or ECAM_WHITE
+    local x = 10
+    local y = size[2] - ((line-1) * 100)-46
+    sasl.gl.drawText(Font_Roboto, x+29, y-10, text, 25, false, false, TEXT_ALIGN_LEFT, color)
+
+    sasl.gl.drawConvexPolygon ({x, y, x+12, y-12, x+12, y+12}, true, 0, color)
+
+end

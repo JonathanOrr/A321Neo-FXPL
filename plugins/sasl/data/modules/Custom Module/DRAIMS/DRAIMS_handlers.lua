@@ -103,6 +103,17 @@ local page_routes = {   -- This tells you which page you go when you press a lat
         
     },
 
+    [PAGE_NAV] = {
+        [BTN_L2] = function(data) set(DRAIMS_nav_stby_mode, 1 - get(DRAIMS_nav_stby_mode)) end,
+        [BTN_L4] = function(data) set(DRAIMS_nav_voice_mode, 1 - get(DRAIMS_nav_voice_mode)) end,
+
+        [BTN_R1] = function(data) if get(DRAIMS_nav_stby_mode) == 1 then data.current_page = PAGE_LS end end,
+        [BTN_R2] = function(data) if get(DRAIMS_nav_stby_mode) == 1 then data.current_page = PAGE_VOR end end,
+        [BTN_R3] = function(data) if get(DRAIMS_nav_stby_mode) == 1 then data.current_page = PAGE_ADF end end,
+        [BTN_R4] = function(data) set(DRAIMS_nav_audio_sel, (get(DRAIMS_nav_audio_sel) + 1)%6) end,
+        
+    },
+
     [PAGE_MENU] = {
         [BTN_R2] = PAGE_MENU_SATCOM
     },
@@ -136,10 +147,12 @@ local function handler_lat_button(data, which_btn)
 end
 
 local function handler_tcas_button(data, which_btn)
-    if which_btn == BTN_TCAS_L then
-        set(TCAS_disp_mode, get(TCAS_disp_mode) ~= 3 and get(TCAS_disp_mode) + 1 or 0)
-    else
-        set(TCAS_mode, get(TCAS_mode) ~= 0 and get(TCAS_mode) - 1 or 2)
+    if data.current_page == PAGE_VHF or data.current_page == PAGE_HF or data.current_page == PAGE_TEL then
+        if which_btn == BTN_TCAS_L then
+            set(TCAS_disp_mode, get(TCAS_disp_mode) ~= 3 and get(TCAS_disp_mode) + 1 or 0)
+        else
+            set(TCAS_mode, get(TCAS_mode) ~= 0 and get(TCAS_mode) - 1 or 2)
+        end
     end
 end
 

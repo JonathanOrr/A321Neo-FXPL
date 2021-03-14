@@ -786,6 +786,10 @@ DRAIMS_vhf3_curr_freq_khz = createGlobalPropertyi("a321neo/cockpit/draims/legacy
 DRAIMS_vhf3_stby_freq_Mhz = createGlobalPropertyi("a321neo/cockpit/draims/legacy/actuators/com3_standby_frequency_Mhz", 122, false, true, false)
 DRAIMS_vhf3_stby_freq_khz = createGlobalPropertyi("a321neo/cockpit/draims/legacy/com3_standby_frequency_khz", 800, false, true, false)
 
+DRAIMS_nav_stby_mode  = createGlobalPropertyi("a321neo/cockpit/draims/nav_stby_mode", 0, false, true, false) -- 0 OFF, 1 ON
+DRAIMS_nav_voice_mode = createGlobalPropertyi("a321neo/cockpit/draims/nav_voice_mode", 0, false, true, false) -- 0 OFF, 1 ON
+DRAIMS_nav_audio_sel  = createGlobalPropertyi("a321neo/cockpit/draims/nav_audio_sel", 0, false, true, false) -- 0 LS, 1 MKR, 2 VOR1, 3 VOR2, 4 ADF1, 5 ADF2
+
 -- TCAS
 TCAS_atc_sel = createGlobalPropertyi("a321neo/dynamics/tcas/sel", 1, false, true, false) -- ATC 1 or 2?
 TCAS_master = createGlobalPropertyi("a321neo/dynamics/tcas/tcas_master", 1, false, true, false)--0 STBY, 1 AUTO

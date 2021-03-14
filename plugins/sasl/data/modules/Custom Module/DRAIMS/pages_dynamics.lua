@@ -344,6 +344,72 @@ local function draw_tcas_sqwk(data)
     end
 end
 
+-------------------------------------------------------------------------------
+-- NAV
+-------------------------------------------------------------------------------
+
+local function draw_page_nav_dynamic_stby_nav()
+    if get(DRAIMS_nav_stby_mode) == 0 then
+        draw_inverted_text(20, size[2]-175, "AUTO", 25, TEXT_ALIGN_LEFT, ECAM_BLUE)
+        sasl.gl.drawText(Font_Roboto, 100, size[2]-175, "STBY NAV", 25, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+
+        draw_menu_item_right(1, "LS", COLOR_DISABLED)
+        draw_menu_item_right(2, "VOR",COLOR_DISABLED)
+        draw_menu_item_right(3, "ADF",COLOR_DISABLED)
+    else
+        sasl.gl.drawText(Font_Roboto, 20, size[2]-175, "AUTO", 25, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+        draw_inverted_text(100, size[2]-175, "STBY NAV", 25, TEXT_ALIGN_LEFT, ECAM_BLUE)
+
+        draw_menu_item_right(1, "LS")
+        draw_menu_item_right(2, "VOR")
+        draw_menu_item_right(3, "ADF")
+    end
+end
+
+local function draw_page_nav_dynamic_voice()
+    if get(DRAIMS_nav_voice_mode) == 0 then
+        sasl.gl.drawText(Font_Roboto, 20, size[2]-375, "ON", 25, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+        draw_inverted_text(70, size[2]-375, "OFF", 25, TEXT_ALIGN_LEFT, ECAM_BLUE)
+    else
+        draw_inverted_text(20, size[2]-375, "ON", 25, TEXT_ALIGN_LEFT, ECAM_BLUE)
+        sasl.gl.drawText(Font_Roboto, 70, size[2]-375, "OFF", 25, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    end
+end
+
+local function draw_page_nav_dynamic_audio_nav_single(x, text, cond)
+    if cond then
+        draw_inverted_text(x, size[2]-375, text, 25, TEXT_ALIGN_RIGHT, ECAM_BLUE)
+    else
+        sasl.gl.drawText(Font_Roboto, x, size[2]-375, text, 25, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+    end
+end
+
+local function draw_page_nav_dynamic_audio_nav()
+
+    draw_page_nav_dynamic_audio_nav_single(size[1]-390, "LS", get(DRAIMS_nav_audio_sel) == 0)
+    draw_page_nav_dynamic_audio_nav_single(size[1]-320, "MKR", get(DRAIMS_nav_audio_sel) == 1)
+    draw_page_nav_dynamic_audio_nav_single(size[1]-245, "VOR1", get(DRAIMS_nav_audio_sel) == 2)
+    draw_page_nav_dynamic_audio_nav_single(size[1]-170, "VOR2", get(DRAIMS_nav_audio_sel) == 3)
+    draw_page_nav_dynamic_audio_nav_single(size[1]-95,  "ADF1", get(DRAIMS_nav_audio_sel) == 4)
+    draw_page_nav_dynamic_audio_nav_single(size[1]-20,  "ADF2", get(DRAIMS_nav_audio_sel) == 5)
+
+end
+
+local function draw_page_nav_dynamic(data)
+    draw_page_nav_dynamic_stby_nav()
+    draw_page_nav_dynamic_voice()
+    draw_page_nav_dynamic_audio_nav()
+end
+
+local function draw_nav_reminder()
+    if get(DRAIMS_nav_stby_mode) == 0 then
+        return
+    end
+
+    sasl.gl.drawRectangle(330, 15, 80, 75, ECAM_GREEN)
+    sasl.gl.drawText(Font_Roboto, 370, 60, "STBY", 30, false, false, TEXT_ALIGN_CENTER, ECAM_BLACK)
+    sasl.gl.drawText(Font_Roboto, 370, 28, "NAV", 30, false, false, TEXT_ALIGN_CENTER, ECAM_BLACK)
+end
 
 -------------------------------------------------------------------------------
 -- Generic
@@ -362,13 +428,18 @@ function draw_page_dynamic(data)
         draw_info_messages(data)
         draw_tcas_shortcuts(data)
         draw_tcas_sqwk(data)
+        draw_nav_reminder()
     elseif data.current_page == PAGE_HF or data.current_page == PAGE_TEL then
         draw_info_messages(data)
         draw_tcas_shortcuts(data)
         draw_tcas_sqwk(data)
+        draw_nav_reminder()
     elseif data.current_page == PAGE_ATC then
         draw_page_atc_dynamic(data)
         draw_info_messages(data)
         draw_tcas_sqwk(data)
+        draw_nav_reminder()
+    elseif data.current_page == PAGE_NAV then
+        draw_page_nav_dynamic(data)
     end
 end

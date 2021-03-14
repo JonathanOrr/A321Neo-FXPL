@@ -28,8 +28,8 @@ include("DRAIMS/constants.lua")
 
 local capt_data = {
     id = DRAIMS_ID_CAPT,
-    current_page = PAGE_VHF,
-    vhf_selected_line = 3,
+    current_page = PAGE_NAV,
+    vhf_selected_line = 1,
     scratchpad_input = -1,
     info_message = {"", "", ""},
     sqwk_select = false
