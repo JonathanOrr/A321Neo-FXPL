@@ -40,6 +40,11 @@ local vhf_datarefs = {
     }
 }
 
+local adf_datarefs = {
+    globalProperty("sim/cockpit2/radios/actuators/adf1_frequency_hz"),
+    globalProperty("sim/cockpit2/radios/actuators/adf2_frequency_hz")-- 190hz to 535hz
+}
+
 -------------------------------------------------------------------------------
 -- VHF
 -------------------------------------------------------------------------------
@@ -135,6 +140,19 @@ end
 -------------------------------------------------------------------------------
 -- ADF
 -------------------------------------------------------------------------------
+
+function radio_adf_get_freq(which_one)
+    assert(which_one ~= nil)
+    return get(adf_datarefs[which_one])
+end
+
+function radio_adf_set_freq(which_one, freq)
+    assert(which_one ~= nil)
+    assert(freq ~= nil)
+
+    set(adf_datarefs[which_one], Math_clamp(freq, 190, 535))
+end
+
 
 -------------------------------------------------------------------------------
 -- DME

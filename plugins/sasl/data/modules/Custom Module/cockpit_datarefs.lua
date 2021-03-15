@@ -87,9 +87,6 @@ NAV_2_freq_10khz = globalProperty("sim/cockpit2/radios/actuators/nav2_frequency_
 NAV_2_capt_obs = globalProperty("sim/cockpit2/radios/actuators/nav2_obs_deg_mag_pilot")--captain nav 2 obs
 NAV_2_fo_obs = globalProperty("sim/cockpit2/radios/actuators/nav2_obs_deg_mag_copilot")--first officer nav 2 obs
 
-ADF_1_freq_hz = globalProperty("sim/cockpit2/radios/actuators/adf1_frequency_hz")--adf 1 freq hz typically 190hz to 535hz
-ADF_2_freq_hz = globalProperty("sim/cockpit2/radios/actuators/adf2_frequency_hz")--adf 2 freq hz typically 190hz to 535hz
-
 NAV_1_is_valid = globalProperty("sim/cockpit2/radios/indicators/nav1_display_horizontal")
 NAV_1_bearing_deg = globalProperty("sim/cockpit2/radios/indicators/nav1_bearing_deg_mag")
 NAV_2_is_valid = globalProperty("sim/cockpit2/radios/indicators/nav2_display_horizontal")

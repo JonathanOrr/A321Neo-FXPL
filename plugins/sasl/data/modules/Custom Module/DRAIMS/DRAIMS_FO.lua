@@ -33,7 +33,8 @@ local fo_data = {
     scratchpad_input = -1,
     info_message = {"", "", ""},
     sqwk_select = false,
-    nav_selected = 1,
+    nav_vor_selected_line = 1,
+    nav_adf_selected_line = 1,
 }
 
 draims_init_handlers(fo_data)

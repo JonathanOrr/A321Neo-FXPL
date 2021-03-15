@@ -526,6 +526,70 @@ local function draw_page_nav_vor_dynamic(data)
 end
 
 -------------------------------------------------------------------------------
+-- NAV - ADF
+-------------------------------------------------------------------------------
+
+local function draw_page_adf_dynamic_sel_box(data)
+    if data.nav_adf_selected_line == 1 then
+        Sasl_DrawWideFrame(45, size[2]+5-100, 180, 80, 2, 1, ECAM_BLUE)
+    elseif data.nav_adf_selected_line == 2 then
+        Sasl_DrawWideFrame(45, size[2]+5-200, 180, 80, 2, 1, ECAM_BLUE)
+    end
+end
+
+local function get_page_adf_dynamic_freq_scratchpad(adf_freq, i)
+    local s_len = #DRAIMS_common.scratchpad_nav_adf[i]
+
+    if s_len == 0 then
+        return adf_freq, ECAM_BLUE, 40
+    end
+
+    local num = tonumber(DRAIMS_common.scratchpad_nav_adf[i])
+
+    local valid = (num >= 190 and num <= 535) or num < 100
+
+    return num, valid and ECAM_BLUE or ECAM_ORANGE, 32
+end
+
+local function draw_page_adf_dynamic_freq(data)
+    local adf1_freq = radio_adf_get_freq(1)
+    local adf2_freq = radio_adf_get_freq(2)
+
+    local adf1_color = ECAM_WHITE
+    local adf2_color = ECAM_WHITE
+
+    local adf1_font_size = 40
+    local adf2_font_size = 40
+    
+
+    if data.nav_adf_selected_line == 1 then
+        adf1_freq,adf1_color,adf1_font_size = get_page_adf_dynamic_freq_scratchpad(adf1_freq, 1)
+    elseif data.nav_adf_selected_line == 2 then
+        adf2_freq,adf2_color,adf2_font_size = get_page_adf_dynamic_freq_scratchpad(adf2_freq, 2)
+    end
+    
+    if not radio_is_adf_working(1) then
+        adf1_color = ECAM_ORANGE
+        adf1_freq = "---"
+    end
+
+    if not radio_is_adf_working(2) then
+        adf2_color = ECAM_ORANGE
+        adf2_freq = "---"
+    end
+    
+    sasl.gl.drawText(Font_Roboto, 130,size[2]-80, adf1_freq, adf1_font_size, false, false, TEXT_ALIGN_CENTER, adf1_color)
+    sasl.gl.drawText(Font_Roboto, 130,size[2]-180, adf2_freq, adf2_font_size, false, false, TEXT_ALIGN_CENTER, adf2_color)
+
+end
+
+
+local function draw_page_nav_adf_dynamic(data)
+    draw_page_adf_dynamic_freq(data)
+    draw_page_adf_dynamic_sel_box(data)
+end
+
+-------------------------------------------------------------------------------
 -- Generic
 -------------------------------------------------------------------------------
 
@@ -557,5 +621,7 @@ function draw_page_dynamic(data)
         draw_page_nav_dynamic(data)
     elseif data.current_page == PAGE_NAV_VOR then
         draw_page_nav_vor_dynamic(data)
+    elseif data.current_page == PAGE_NAV_ADF then
+        draw_page_nav_adf_dynamic(data)
     end
 end

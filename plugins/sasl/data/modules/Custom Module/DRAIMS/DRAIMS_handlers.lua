@@ -125,6 +125,14 @@ local page_routes = {   -- This tells you which page you go when you press a lat
 
         
     },
+    
+    [PAGE_NAV_ADF] = {
+        [BTN_L4] = PAGE_NAV,
+
+        [BTN_L1] = function(data) adf_sel_line(data, 1) end,
+        [BTN_L2] = function(data) adf_sel_line(data, 2) end,
+
+    },
 
     [PAGE_MENU] = {
         [BTN_R2] = PAGE_MENU_SATCOM
@@ -294,6 +302,7 @@ function draims_init_handlers(data)
     DRAIMS_common.scratchpad_sqwk = ""
     DRAIMS_common.scratchpad_sqwk_timeout = 0
     DRAIMS_common.scratchpad_nav_vor = {"", "", "", ""}
+    DRAIMS_common.scratchpad_nav_adf = {"", ""}
 
     local prefix = data.id == DRAIMS_ID_CAPT and "capt_" or "fo_"
 

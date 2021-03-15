@@ -85,6 +85,30 @@ local function update_scratchpad_nav_vor(data)
 
 end
 
+
+local function update_scratchpad_nav_adf(data)
+    local value = data.scratchpad_input
+    local sel = data.nav_adf_selected_line
+    
+    if value == 0 and #DRAIMS_common.scratchpad_nav_adf[sel] == 0 then
+        DRAIMS_common.scratchpad_nav_adf[sel] = "1"
+    end
+    
+    if value < 10 then
+        if (#DRAIMS_common.scratchpad_nav_adf[sel] < 3) then
+            DRAIMS_common.scratchpad_nav_adf[sel] = DRAIMS_common.scratchpad_nav_adf[sel] .. value
+        else
+            DRAIMS_common.scratchpad_nav_adf[sel] = "" .. value
+        end
+    elseif value == 10 then
+        -- We don't need to do anything special for the dot
+    elseif value == 11 then
+        DRAIMS_common.scratchpad_nav_adf[sel] = string.sub(DRAIMS_common.scratchpad_nav_adf[sel], 1, -2)
+    end
+
+end
+
+
 function save_scratchpad_sqwk(data)
     DRAIMS_common.scratchpad_sqwk_timeout = 0
     if #DRAIMS_common.scratchpad_sqwk == 4 then
@@ -112,6 +136,8 @@ function update_scratchpad(data)
         update_scratchpad_sqwk(data)
     elseif data.current_page == PAGE_NAV_VOR then
         update_scratchpad_nav_vor(data)
+    elseif data.current_page == PAGE_NAV_ADF then
+        update_scratchpad_nav_adf(data)
     end
     data.scratchpad_input = -1   -- Reset to no key pressed
 end
@@ -196,6 +222,24 @@ function save_scratchpad_vor(data, new_sel)
     end
 end
 
+function save_scratchpad_adf(data, new_sel)
+    local old_sel = data.nav_adf_selected_line
+
+    if old_sel == new_sel and #DRAIMS_common.scratchpad_nav_adf[old_sel] > 0 then   -- Save
+        local num = tonumber(DRAIMS_common.scratchpad_nav_adf[old_sel])
+
+        -- FREQUENCY
+        if num >= 190 and num <= 535 then
+            radio_adf_set_freq(old_sel, num)
+            DRAIMS_common.scratchpad_nav_adf[old_sel] = ""
+        end
+    else    -- Revert
+        if #DRAIMS_common.scratchpad_nav_adf[old_sel] > 0 then
+            DRAIMS_common.scratchpad_nav_adf[old_sel] = ""
+        end
+    end
+end
+
 -------------------------------------------------------------------------------
 -- Info messages
 -------------------------------------------------------------------------------
@@ -252,6 +296,11 @@ end
 function vor_sel_line(data, i)
     save_scratchpad_vor(data, i)
     data.nav_vor_selected_line = i
+end
+
+function adf_sel_line(data, i)
+    save_scratchpad_adf(data, i)
+    data.nav_adf_selected_line = i
 end
 
 -------------------------------------------------------------------------------

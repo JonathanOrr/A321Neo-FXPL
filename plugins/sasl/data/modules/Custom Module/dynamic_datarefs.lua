@@ -801,6 +801,7 @@ DRAIMS_vor_stby_freq[2] = createGlobalPropertyf("a321neo/cockpit/draims/vor2_stb
 DRAIMS_vor_crs[1] = createGlobalPropertyi("a321neo/cockpit/draims/vor1_crs", 0, false, true, false)
 DRAIMS_vor_crs[2] = createGlobalPropertyi("a321neo/cockpit/draims/vor2_crs", 0, false, true, false)
 
+
 -- TCAS
 TCAS_atc_sel = createGlobalPropertyi("a321neo/dynamics/tcas/sel", 1, false, true, false) -- ATC 1 or 2?
 TCAS_master = createGlobalPropertyi("a321neo/dynamics/tcas/tcas_master", 1, false, true, false)--0 STBY, 1 AUTO
