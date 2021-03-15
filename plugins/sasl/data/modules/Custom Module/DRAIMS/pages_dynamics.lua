@@ -22,6 +22,18 @@ include("DRAIMS/constants.lua")
 
 local COLOR_DISABLED = {0.4, 0.4, 0.4}
 
+local tel_directory = {
+    "OPS AIRLINE",
+    "TECH AIRLINE",
+    "CARGO OPS",
+    "EMERG CALL",
+    "JONATHAN",
+    "HENRICK",
+    "RICORICO",
+    "CHAI",
+    "THE US PRESIDENT"
+}
+
 -------------------------------------------------------------------------------
 -- Helpers
 -------------------------------------------------------------------------------
@@ -590,6 +602,58 @@ local function draw_page_nav_adf_dynamic(data)
 end
 
 -------------------------------------------------------------------------------
+-- TEL
+-------------------------------------------------------------------------------
+
+local function draw_tel_directory(data)
+
+    if data.tel_directory_selected <= 0 then
+        data.tel_directory_selected = 1
+    elseif data.tel_directory_selected > #tel_directory then
+        data.tel_directory_selected = #tel_directory
+    end
+
+    local spacing_y = 35
+    local initial_y_offset_n = 238
+    local initial_y_offset_t = 238
+
+    local c_i = data.tel_directory_selected
+    local center_item = tel_directory[c_i]
+    sasl.gl.drawText(Font_Roboto, 70, initial_y_offset_n, Fwd_string_fill(""..c_i, "0", 3), 26, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+    sasl.gl.drawText(Font_Roboto, 130, initial_y_offset_t, center_item, 34, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+
+    local min = math.max(1, c_i - 3)
+    local max = math.min(#tel_directory, c_i + 3)
+
+    if c_i > 1 then
+        draw_arrow_up(430,360)
+    end
+
+    if c_i < #tel_directory then
+        draw_arrow_dn(430,140)
+    end
+
+
+    -- DOWN
+    for i=c_i+1,max do
+        local j = i - c_i
+        sasl.gl.drawText(Font_Roboto, 70, initial_y_offset_n - j*spacing_y - 15, Fwd_string_fill(""..i, "0", 3), 26, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+        sasl.gl.drawText(Font_Roboto, 130, initial_y_offset_t- j*spacing_y - 15, tel_directory[i], 26, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    end
+
+    -- UP
+    for i=min,c_i-1 do
+        local j = i - min + 1
+        local rev_i = c_i - i + min - 1
+        sasl.gl.drawText(Font_Roboto, 70, initial_y_offset_n + j*spacing_y + 15, Fwd_string_fill(""..rev_i, "0", 3), 26, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+        sasl.gl.drawText(Font_Roboto, 130, initial_y_offset_t+ j*spacing_y + 15, tel_directory[rev_i], 26, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    end
+
+
+end
+
+
+-------------------------------------------------------------------------------
 -- Generic
 -------------------------------------------------------------------------------
 
@@ -612,6 +676,12 @@ function draw_page_dynamic(data)
         draw_tcas_shortcuts(data)
         draw_tcas_sqwk(data)
         draw_nav_reminder()
+    elseif data.current_page == PAGE_TEL_DIRECTORY then
+        draw_info_messages(data)
+        draw_tcas_shortcuts(data)
+        draw_tcas_sqwk(data)
+        draw_nav_reminder()
+        draw_tel_directory(data)
     elseif data.current_page == PAGE_ATC then
         draw_page_atc_dynamic(data)
         draw_info_messages(data)

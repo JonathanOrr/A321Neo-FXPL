@@ -28,13 +28,14 @@ include("DRAIMS/constants.lua")
 
 local capt_data = {
     id = DRAIMS_ID_CAPT,
-    current_page = PAGE_NAV_ADF,
+    current_page = PAGE_TEL_DIRECTORY,
     vhf_selected_line = 1,
     scratchpad_input = -1,
     info_message = {"", "", ""},
     sqwk_select = false,
     nav_vor_selected_line = 1,   -- 1: vor 1 freq, 2 vor 2 freq, 3 vor 1 crs, 4 vor 2 crs
     nav_adf_selected_line = 1,
+    tel_directory_selected = 1,
 }
 
 draims_init_handlers(capt_data)

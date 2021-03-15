@@ -35,6 +35,7 @@ local fo_data = {
     sqwk_select = false,
     nav_vor_selected_line = 1,
     nav_adf_selected_line = 1,
+    tel_directory_selected = 1,
 }
 
 draims_init_handlers(fo_data)

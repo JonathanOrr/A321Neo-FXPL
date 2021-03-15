@@ -89,6 +89,11 @@ local page_routes = {   -- This tells you which page you go when you press a lat
         [BTN_L3] = function(data) info_no_conf(data) end,
         [BTN_L4] = function(data) tcas_sqwk_num(data) end
     },
+    
+    [PAGE_TEL_DIRECTORY] = {
+        [BTN_R3] = PAGE_TEL,
+        [BTN_L4] = function(data) tcas_sqwk_num(data) end
+    },
 
     [PAGE_ATC] = {
         [BTN_L1] = function(data) set(TCAS_atc_sel, get(TCAS_atc_sel) == 1 and 2 or 1) end,
@@ -196,6 +201,16 @@ local function handler_arrows(data, which_btn)
             end
         end
     end
+    
+    if data.current_page == PAGE_TEL_DIRECTORY then
+        if which_btn == BTN_ARROW_UP then
+            data.tel_directory_selected = data.tel_directory_selected - 1
+        else
+            data.tel_directory_selected = data.tel_directory_selected + 1
+        end
+    end
+    
+    
 end
 
 local function handler_trans_recv(data, which_btn)

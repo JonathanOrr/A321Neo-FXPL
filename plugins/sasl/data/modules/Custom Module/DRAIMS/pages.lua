@@ -238,6 +238,22 @@ local function draw_page_nav_adf(data)
     draw_menu_item_left(4, "RETURN", ECAM_WHITE)
 end
 
+local function draw_page_tel_directory(data)
+    draw_line_bottom_area(true)
+    draw_tcas_fixed_indication()
+    
+    sasl.gl.drawWideLine(size[1]-150, 100, size[1]-150, size[2], 3, ECAM_WHITE)
+    
+    sasl.gl.drawText(Font_Roboto, size[1]-70,size[2]-160, "TEL INOP", 25, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+
+    sasl.gl.drawWideLine(70, 280, size[1]-220, 280, 2, ECAM_WHITE)
+    sasl.gl.drawWideLine(70, 220, size[1]-220, 220, 2, ECAM_WHITE)
+
+    sasl.gl.drawWideLine(size[1]-150, 300, size[1], 300, 3, ECAM_WHITE)
+    sasl.gl.drawWideLine(size[1]-150, 200, size[1], 200, 3, ECAM_WHITE)
+    draw_menu_item_right(3, "RETURN", ECAM_WHITE)
+end
+
 function draw_page_static(data)
 
     if data.current_page == PAGE_VHF then
@@ -246,6 +262,8 @@ function draw_page_static(data)
         draw_page_hf(data)
     elseif data.current_page == PAGE_TEL then
         draw_page_tel(data)
+    elseif data.current_page == PAGE_TEL_DIRECTORY then
+        draw_page_tel_directory(data)
     elseif data.current_page == PAGE_ATC then
         draw_page_atc(data)
     elseif data.current_page == PAGE_MENU then
