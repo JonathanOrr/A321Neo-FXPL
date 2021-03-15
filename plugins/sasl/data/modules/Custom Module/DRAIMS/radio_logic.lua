@@ -38,8 +38,6 @@ local vhf_datarefs = {
         stby_freq_Mhz = DRAIMS_vhf3_stby_freq_Mhz,
         stby_freq_khz = DRAIMS_vhf3_stby_freq_khz
     }
-
-
 }
 
 -------------------------------------------------------------------------------
@@ -90,9 +88,45 @@ function radio_is_vhf_working(which_one)
     end
 end
 
+
 -------------------------------------------------------------------------------
 -- VOR
 -------------------------------------------------------------------------------
+
+function radio_vor_get_freq(which_one, stby)
+    stby = stby or false
+    if stby then
+        return get(DRAIMS_vor_stby_freq[which_one])
+    else
+        return get(DRAIMS_vor_freq[which_one])
+    end
+end
+
+function radio_vor_set_freq(which_one, stby, freq)
+    assert(which_one ~= nil)
+    assert(freq ~= nil)
+    stby = stby or false
+
+    if stby then
+        set(DRAIMS_vor_stby_freq[which_one], freq)
+    else
+        set(DRAIMS_vor_freq[which_one], freq)
+    end
+end
+
+function radio_vor_swap_freq()
+    local temp = get(DRAIMS_vor_stby_freq[which_one])
+    set(DRAIMS_vor_stby_freq[which_one], get(DRAIMS_vor1_freq))
+    set(DRAIMS_vor_freq[which_one], temp)
+end
+
+function radio_vor_get_crs(which_one)
+    return get(DRAIMS_vor_crs[which_one])
+end
+
+function radio_vor_set_crs(which_one, crs)
+    set(DRAIMS_vor_crs[which_one], math.floor(crs % 360))
+end
 
 -------------------------------------------------------------------------------
 -- ILS

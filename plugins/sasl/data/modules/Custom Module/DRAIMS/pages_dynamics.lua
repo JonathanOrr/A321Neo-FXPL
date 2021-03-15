@@ -43,6 +43,18 @@ local function draw_arrow_dn(x,y)
     sasl.gl.drawWideLine(x, y-5, x, y-ARROW_LENGTH, 5, ECAM_WHITE)
 end
 
+local function complete_frequency(num, str_len)
+
+    num = Round_fill(num, math.max(0,str_len-3))
+
+    if str_len < 4 then
+        num = math.floor(num) .. (str_len < 2 and "_" or "") .. (str_len < 3 and "_" or "") .. ".___"
+    else
+        num = num .. (str_len < 5 and "_" or "") .. (str_len < 6 and "_" or "")
+    end
+    return num
+end
+
 -------------------------------------------------------------------------------
 -- VHF
 -------------------------------------------------------------------------------
@@ -80,11 +92,19 @@ local function draw_page_vhf_dynamic_freq_animate(perc, freq_prev, freq_curr, i,
 
 end
 
-local function is_valid(num)
+local function is_valid_vhf(num)
     return num >= 118.000 and num <= 136.975
 end
 
-local function can_be_extended(num)
+local function is_valid_vor(num)
+    return num >= 108.000 and num <= 117.975
+end
+
+local function can_be_extended_vor(num)
+    return num <= 1 or (num >= 10 and num < 12)
+end
+
+local function can_be_extended_vhf(num)
     return num <= 2 or (num >= 11 and num < 14)
 end
 
@@ -94,20 +114,14 @@ local function draw_page_vhf_dynamic_freq_stby_scratchpad(data, i, selected)
     local num = tonumber(DRAIMS_common.scratchpad[i])
     num = num / math.max(1, (10 ^ (s_len-3)))
 
-    local valid = is_valid(num) or can_be_extended(num)
+    local valid = is_valid_vhf(num) or can_be_extended_vhf(num)
 
-    num = Round_fill(num, math.max(0,s_len-3))
-    
-    if s_len < 4 then
-        num = math.floor(num) .. (s_len < 2 and "_" or "") .. (s_len < 3 and "_" or "") .. ".___"
-    else
-        num = num .. (s_len < 5 and "_" or "") .. (s_len < 6 and "_" or "")
-    end
-        
+    num = complete_frequency(num, s_len)
+
     sasl.gl.drawText(Font_Roboto, size[1]-100,size[2]-55-100*(i-1), num, 35, false, false, TEXT_ALIGN_CENTER, valid and (selected and ECAM_BLUE or ECAM_WHITE) or ECAM_ORANGE)
 
     if not valid then
-                sasl.gl.drawText(Font_Roboto, size[1]-100,size[2]+15-100*(i), "NOT VALID", 23, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_Roboto, size[1]-100,size[2]+15-100*(i), "NOT VALID", 23, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
 
 end
@@ -412,6 +426,106 @@ local function draw_nav_reminder()
 end
 
 -------------------------------------------------------------------------------
+-- NAV - VOR
+-------------------------------------------------------------------------------
+
+local function draw_page_vor_dynamic_sel_box(data)
+    if data.nav_vor_selected_line == 1 then
+        Sasl_DrawWideFrame(45, size[2]+5-100, 180, 80, 2, 1, ECAM_BLUE)
+    elseif data.nav_vor_selected_line == 2 then
+        Sasl_DrawWideFrame(45, size[2]+5-200, 180, 80, 2, 1, ECAM_BLUE)
+    elseif data.nav_vor_selected_line == 3 then
+        Sasl_DrawWideFrame(size[1]-190, size[2]+5-100, 180, 80, 2, 1, ECAM_BLUE)
+    elseif data.nav_vor_selected_line == 4 then
+        Sasl_DrawWideFrame(size[1]-190, size[2]+5-200, 180, 80, 2, 1, ECAM_BLUE)
+    end
+end
+
+local function get_page_vor_dynamic_freq_scratchpad(vor_freq, i)
+    local s_len = #DRAIMS_common.scratchpad_nav_vor[i]
+
+    if s_len == 0 then
+        return vor_freq, ECAM_BLUE, 40
+    end
+
+    local num = tonumber(DRAIMS_common.scratchpad_nav_vor[i])
+    num = num / math.max(1, (10 ^ (s_len-3)))
+
+    local valid = is_valid_vor(num) or can_be_extended_vor(num)
+
+    num = complete_frequency(num, s_len)
+    
+    return num, valid and ECAM_BLUE or ECAM_ORANGE, 32
+end
+
+local function get_page_vor_dynamic_freq_crs(vor_crs, i)
+    local s_len = #DRAIMS_common.scratchpad_nav_vor[i]
+
+    if s_len == 0 then
+        return vor_crs, ECAM_BLUE, 40
+    end
+
+    local num = tonumber(DRAIMS_common.scratchpad_nav_vor[i])
+    local valid = num <= 360
+    
+    return num, valid and ECAM_BLUE or ECAM_ORANGE, 32
+end
+
+local function draw_page_vor_dynamic_freq(data)
+    local vor1_freq = Round_fill(radio_vor_get_freq(1), 3)
+    local vor2_freq = Round_fill(radio_vor_get_freq(2), 3)
+    local vor1_crs = Fwd_string_fill(""..radio_vor_get_crs(1), "0", 3)
+    local vor2_crs = Fwd_string_fill(""..radio_vor_get_crs(2), "0", 3)
+
+    local vor1_color = ECAM_WHITE
+    local vor2_color = ECAM_WHITE
+    local crs1_color = ECAM_WHITE
+    local crs2_color = ECAM_WHITE
+
+    local vor1_font_size = 40
+    local vor2_font_size = 40
+    local crs1_font_size = 40
+    local crs2_font_size = 40
+    
+
+    if data.nav_vor_selected_line == 1 then
+        vor1_freq,vor1_color,vor1_font_size = get_page_vor_dynamic_freq_scratchpad(vor1_freq, 1)
+    elseif data.nav_vor_selected_line == 2 then
+        vor2_freq,vor2_color,vor2_font_size = get_page_vor_dynamic_freq_scratchpad(vor2_freq, 2)
+    elseif data.nav_vor_selected_line == 3 then
+        vor1_crs,crs1_color,crs1_font_size = get_page_vor_dynamic_freq_crs(vor1_crs, 3)
+    elseif data.nav_vor_selected_line == 4 then
+        vor2_crs,crs2_color,crs2_font_size = get_page_vor_dynamic_freq_crs(vor2_crs, 4)
+    end
+    
+    if not radio_is_vor_working(1) then
+        vor1_color = ECAM_ORANGE
+        crs1_color = ECAM_ORANGE
+        vor1_freq = "---.---"
+        vor1_crs = "---"
+    end
+
+    if not radio_is_vor_working(2) then
+        vor2_color = ECAM_ORANGE
+        crs2_color = ECAM_ORANGE
+        vor2_freq = "---.---"
+        vor2_crs = "---"
+    end
+    
+    sasl.gl.drawText(Font_Roboto, 130,size[2]-80, vor1_freq, vor1_font_size, false, false, TEXT_ALIGN_CENTER, vor1_color)
+    sasl.gl.drawText(Font_Roboto, 130,size[2]-180, vor2_freq, vor2_font_size, false, false, TEXT_ALIGN_CENTER, vor2_color)
+
+    sasl.gl.drawText(Font_Roboto, size[1]-100,size[2]-80, vor1_crs, crs1_font_size, false, false, TEXT_ALIGN_CENTER, crs1_color)
+    sasl.gl.drawText(Font_Roboto, size[1]-100,size[2]-180, vor2_crs, crs2_font_size, false, false, TEXT_ALIGN_CENTER, crs2_color)
+
+end
+
+local function draw_page_nav_vor_dynamic(data)
+    draw_page_vor_dynamic_freq(data)
+    draw_page_vor_dynamic_sel_box(data)
+end
+
+-------------------------------------------------------------------------------
 -- Generic
 -------------------------------------------------------------------------------
 
@@ -441,5 +555,7 @@ function draw_page_dynamic(data)
         draw_nav_reminder()
     elseif data.current_page == PAGE_NAV then
         draw_page_nav_dynamic(data)
+    elseif data.current_page == PAGE_NAV_VOR then
+        draw_page_nav_vor_dynamic(data)
     end
 end

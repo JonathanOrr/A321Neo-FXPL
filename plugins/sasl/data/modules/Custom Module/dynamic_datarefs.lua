@@ -790,6 +790,17 @@ DRAIMS_nav_stby_mode  = createGlobalPropertyi("a321neo/cockpit/draims/nav_stby_m
 DRAIMS_nav_voice_mode = createGlobalPropertyi("a321neo/cockpit/draims/nav_voice_mode", 0, false, true, false) -- 0 OFF, 1 ON
 DRAIMS_nav_audio_sel  = createGlobalPropertyi("a321neo/cockpit/draims/nav_audio_sel", 0, false, true, false) -- 0 LS, 1 MKR, 2 VOR1, 3 VOR2, 4 ADF1, 5 ADF2
 
+DRAIMS_vor_freq = {}
+DRAIMS_vor_stby_freq = {}
+DRAIMS_vor_crs = {}
+
+DRAIMS_vor_freq[1] = createGlobalPropertyf("a321neo/cockpit/draims/vor1_freq", 110.1, false, true, false)
+DRAIMS_vor_freq[2] = createGlobalPropertyf("a321neo/cockpit/draims/vor2_freq", 115.95, false, true, false)
+DRAIMS_vor_stby_freq[1] = createGlobalPropertyf("a321neo/cockpit/draims/vor1_stby_freq", 109.5, false, true, false)
+DRAIMS_vor_stby_freq[2] = createGlobalPropertyf("a321neo/cockpit/draims/vor2_stby_freq", 108.0, false, true, false)
+DRAIMS_vor_crs[1] = createGlobalPropertyi("a321neo/cockpit/draims/vor1_crs", 0, false, true, false)
+DRAIMS_vor_crs[2] = createGlobalPropertyi("a321neo/cockpit/draims/vor2_crs", 0, false, true, false)
+
 -- TCAS
 TCAS_atc_sel = createGlobalPropertyi("a321neo/dynamics/tcas/sel", 1, false, true, false) -- ATC 1 or 2?
 TCAS_master = createGlobalPropertyi("a321neo/dynamics/tcas/tcas_master", 1, false, true, false)--0 STBY, 1 AUTO

@@ -107,10 +107,22 @@ local page_routes = {   -- This tells you which page you go when you press a lat
         [BTN_L2] = function(data) set(DRAIMS_nav_stby_mode, 1 - get(DRAIMS_nav_stby_mode)) end,
         [BTN_L4] = function(data) set(DRAIMS_nav_voice_mode, 1 - get(DRAIMS_nav_voice_mode)) end,
 
-        [BTN_R1] = function(data) if get(DRAIMS_nav_stby_mode) == 1 then data.current_page = PAGE_LS end end,
-        [BTN_R2] = function(data) if get(DRAIMS_nav_stby_mode) == 1 then data.current_page = PAGE_VOR end end,
-        [BTN_R3] = function(data) if get(DRAIMS_nav_stby_mode) == 1 then data.current_page = PAGE_ADF end end,
+        [BTN_R1] = function(data) if get(DRAIMS_nav_stby_mode) == 1 then data.current_page = PAGE_NAV_LS end end,
+        [BTN_R2] = function(data) if get(DRAIMS_nav_stby_mode) == 1 then data.current_page = PAGE_NAV_VOR end end,
+        [BTN_R3] = function(data) if get(DRAIMS_nav_stby_mode) == 1 then data.current_page = PAGE_NAV_ADF end end,
         [BTN_R4] = function(data) set(DRAIMS_nav_audio_sel, (get(DRAIMS_nav_audio_sel) + 1)%6) end,
+        
+    },
+
+    [PAGE_NAV_VOR] = {
+        [BTN_L4] = PAGE_NAV,
+
+        [BTN_L1] = function(data) vor_sel_line(data, 1) end,
+        [BTN_L2] = function(data) vor_sel_line(data, 2) end,
+
+        [BTN_R1] = function(data) vor_sel_line(data, 3) end,
+        [BTN_R2] = function(data) vor_sel_line(data, 4) end,
+
         
     },
 
@@ -281,6 +293,7 @@ function draims_init_handlers(data)
     DRAIMS_common.scratchpad = {"", "", ""}
     DRAIMS_common.scratchpad_sqwk = ""
     DRAIMS_common.scratchpad_sqwk_timeout = 0
+    DRAIMS_common.scratchpad_nav_vor = {"", "", "", ""}
 
     local prefix = data.id == DRAIMS_ID_CAPT and "capt_" or "fo_"
 

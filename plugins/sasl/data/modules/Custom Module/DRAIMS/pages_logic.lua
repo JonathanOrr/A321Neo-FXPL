@@ -17,7 +17,11 @@
 -------------------------------------------------------------------------------
 include("DRAIMS/radio_logic.lua")
 
-function update_scratchpad_vhf(data)
+-------------------------------------------------------------------------------
+-- Scratchpad functinos
+-------------------------------------------------------------------------------
+
+local function update_scratchpad_vhf(data)
     local value = data.scratchpad_input
     local sel = data.vhf_selected_line
 
@@ -29,7 +33,7 @@ function update_scratchpad_vhf(data)
         if #DRAIMS_common.scratchpad[sel] < 6 then
             DRAIMS_common.scratchpad[sel] = DRAIMS_common.scratchpad[sel] .. value
         else
-            DRAIMS_common.scratchpad[sel] = value
+            DRAIMS_common.scratchpad[sel] = "" .. value
         end
     elseif value == 10 then
         -- We don't need to do anything special for the dot
@@ -38,7 +42,7 @@ function update_scratchpad_vhf(data)
     end
 end
 
-function update_scratchpad_sqwk(data)
+local function update_scratchpad_sqwk(data)
     local value = data.scratchpad_input
     if value <= 7 then
         if #DRAIMS_common.scratchpad_sqwk < 4 then
@@ -55,6 +59,28 @@ function update_scratchpad_sqwk(data)
         DRAIMS_common.scratchpad_sqwk_data = data
     else
         DRAIMS_common.scratchpad_sqwk_timeout = 0
+    end
+
+end
+
+local function update_scratchpad_nav_vor(data)
+    local value = data.scratchpad_input
+    local sel = data.nav_vor_selected_line
+    
+    if value == 0 and #DRAIMS_common.scratchpad_nav_vor[sel] == 0 then
+        DRAIMS_common.scratchpad_nav_vor[sel] = "1"
+    end
+    
+    if value < 10 then
+        if (sel <= 2 and #DRAIMS_common.scratchpad_nav_vor[sel] < 6) or (#DRAIMS_common.scratchpad_nav_vor[sel] < 3) then
+            DRAIMS_common.scratchpad_nav_vor[sel] = DRAIMS_common.scratchpad_nav_vor[sel] .. value
+        else
+            DRAIMS_common.scratchpad_nav_vor[sel] = "" .. value
+        end
+    elseif value == 10 then
+        -- We don't need to do anything special for the dot
+    elseif value == 11 then
+        DRAIMS_common.scratchpad_nav_vor[sel] = string.sub(DRAIMS_common.scratchpad_nav_vor[sel], 1, -2)
     end
 
 end
@@ -79,10 +105,39 @@ function update_scratchpad(data)
 
     if data.current_page == PAGE_VHF and not data.sqwk_select then
         update_scratchpad_vhf(data)
-    elseif data.sqwk_select then
+    elseif (data.current_page == PAGE_VHF
+         or data.current_page == PAGE_HF
+         or data.current_page == PAGE_TEL
+         or data.current_page == PAGE_ATC) and data.sqwk_select then
         update_scratchpad_sqwk(data)
+    elseif data.current_page == PAGE_NAV_VOR then
+        update_scratchpad_nav_vor(data)
     end
     data.scratchpad_input = -1   -- Reset to no key pressed
+end
+
+local function frequency_hinter(num, min, max)
+    local freq_to_set = 0
+    if num/1000 >= min and num/1000 <= max then
+        freq_to_set = num/1000
+    end
+    if num/100 >= min and num/100 <= max then
+        freq_to_set = num/100
+    end
+    if num/10 >= min and num/10 <= max then
+        freq_to_set = num/10
+    end
+    if num >= min and num <= max then
+        freq_to_set = num
+    end
+    if num == 1 then
+        freq_to_set = min
+    end
+    if (num >= math.floor(min/10) and num < math.ceil(max/10)) then
+        freq_to_set = num * 10
+    end
+
+    return freq_to_set
 end
 
 function save_scratchpad(data, new_sel)
@@ -91,25 +146,8 @@ function save_scratchpad(data, new_sel)
     if old_sel == new_sel and #DRAIMS_common.scratchpad[old_sel] > 0 then   -- Save
         local num = tonumber(DRAIMS_common.scratchpad[old_sel])
 
-        local freq_to_set = 0
-        if num/1000 >= 118.000 and num/1000 <= 136.975 then
-            freq_to_set = num/1000
-        end
-        if num/100 >= 118.000 and num/100 <= 136.975 then
-            freq_to_set = num/100
-        end
-        if num/10 >= 118.000 and num/10 <= 136.975 then
-            freq_to_set = num/10
-        end
-        if num >= 118.000 and num <= 136.975 then
-            freq_to_set = num
-        end
-        if num == 1 then
-            freq_to_set = 118.000
-        end
-        if (num >= 11 and num < 14) then
-            freq_to_set = num * 10
-        end
+        local freq_to_set = frequency_hinter(num, 118.000, 136.975)
+
         if freq_to_set > 0 then
             freq_to_set = freq_to_set - (freq_to_set % 0.005)
             radio_vhf_set_freq(old_sel, true, freq_to_set)
@@ -128,6 +166,39 @@ function save_scratchpad(data, new_sel)
     return false
 
 end
+
+function save_scratchpad_vor(data, new_sel)
+    local old_sel = data.nav_vor_selected_line
+
+    if old_sel == new_sel and #DRAIMS_common.scratchpad_nav_vor[old_sel] > 0 then   -- Save
+        local num = tonumber(DRAIMS_common.scratchpad_nav_vor[old_sel])
+        
+        if old_sel <= 2 then
+            -- FREQUENCY
+            local freq_to_set = frequency_hinter(num, 108.000, 117.975)
+            
+            if freq_to_set > 0 then
+                freq_to_set = freq_to_set - (freq_to_set % 0.005)
+                radio_vor_set_freq(old_sel, false, freq_to_set)
+                DRAIMS_common.scratchpad_nav_vor[old_sel] = ""
+            end
+        else
+            -- CRS
+            if num <= 360 then
+                radio_vor_set_crs(old_sel-2, num)
+            end
+            DRAIMS_common.scratchpad_nav_vor[old_sel] = ""
+        end
+    else    -- Revert
+        if #DRAIMS_common.scratchpad_nav_vor[old_sel] > 0 then
+            DRAIMS_common.scratchpad_nav_vor[old_sel] = ""
+        end
+    end
+end
+
+-------------------------------------------------------------------------------
+-- Info messages
+-------------------------------------------------------------------------------
 
 function clear_info_message(data)
     data.info_message[1] = ""
@@ -153,9 +224,9 @@ function info_no_conf(data)
     data.info_message[3] = ""
 end
 
-function tcas_ident()
-    sasl.commandOnce(sasl.findCommand("sim/transponder/transponder_ident"))
-end
+-------------------------------------------------------------------------------
+-- VHF freq
+-------------------------------------------------------------------------------
 
 function vhf_swap_freq(data, i)
 
@@ -178,6 +249,19 @@ function vhf_sel_line(data, i)
     data.sqwk_select = false
 end
 
+function vor_sel_line(data, i)
+    save_scratchpad_vor(data, i)
+    data.nav_vor_selected_line = i
+end
+
+-------------------------------------------------------------------------------
+-- TCAS
+-------------------------------------------------------------------------------
+
+function tcas_ident()
+    sasl.commandOnce(sasl.findCommand("sim/transponder/transponder_ident"))
+end
+
 function tcas_sqwk_num(data)
     if #DRAIMS_common.scratchpad[data.vhf_selected_line] > 0 then
         save_scratchpad(data, -1)
@@ -187,6 +271,11 @@ function tcas_sqwk_num(data)
     end
     data.sqwk_select = not data.sqwk_select
 end
+
+-------------------------------------------------------------------------------
+-- Misc updates
+-------------------------------------------------------------------------------
+
 
 function update_lights()
     local bright_dr = globalPropertyf("a321neo/cockpit/lights/mip_pedestal_integral_value")

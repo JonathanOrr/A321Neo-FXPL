@@ -208,6 +208,23 @@ local function draw_page_nav(data)
 
 end
 
+local function draw_page_nav_vor(data)
+    sasl.gl.drawWideLine(0, 100, size[1], 100, 3, ECAM_WHITE)
+    draw_top_lines()
+
+    sasl.gl.drawText(Font_Roboto, size[1]/2+40,size[2]-55, "VOR1", 38, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawText(Font_Roboto, size[1]/2+40,size[2]-155, "VOR2", 38, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+
+    sasl.gl.drawText(Font_Roboto, 130,size[2]-35, "FREQ", 22, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawText(Font_Roboto, size[1]-100,size[2]-35, "CRS", 22, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+
+    sasl.gl.drawText(Font_Roboto, 130,size[2]-135, "FREQ", 22, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawText(Font_Roboto, size[1]-100,size[2]-135, "CRS", 22, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+
+
+    draw_menu_item_left(4, "RETURN", ECAM_WHITE)
+end
+
 function draw_page_static(data)
 
     if data.current_page == PAGE_VHF then
@@ -224,6 +241,8 @@ function draw_page_static(data)
         draw_page_menu_satcom(data)
     elseif data.current_page == PAGE_NAV then
         draw_page_nav(data)
+    elseif data.current_page == PAGE_NAV_VOR then
+        draw_page_nav_vor(data)
     end
 
 end
