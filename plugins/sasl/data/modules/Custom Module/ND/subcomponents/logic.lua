@@ -80,7 +80,7 @@ local function update_navaid_raw(data)
     end
 
     if data.nav[1].selector == ND_SEL_VOR then
-        data.nav[1].frequency = get(NAV_1_freq_Mhz)*100 + get(NAV_1_freq_10khz)
+        data.nav[1].frequency = 0 --get(NAV_1_freq_Mhz)*100 + get(NAV_1_freq_10khz)
         data.nav[1].identifier = ""
         data.nav[1].is_valid = get(NAV_1_is_valid) == 1
         data.nav[1].dme_distance = get(NAV_1_dme_value)
@@ -91,7 +91,7 @@ local function update_navaid_raw(data)
     end
 
     if data.nav[2].selector == ND_SEL_VOR then
-        data.nav[2].frequency = get(NAV_2_freq_Mhz)*100 + get(NAV_2_freq_10khz)
+        data.nav[2].frequency = 0 --get(NAV_2_freq_Mhz)*100 + get(NAV_2_freq_10khz)
         data.nav[2].identifier = ""
         data.nav[2].is_valid = get(NAV_2_is_valid) == 1
         data.nav[2].dme_distance = get(NAV_2_dme_value)
@@ -108,9 +108,9 @@ local function update_navaid_bearing(data)
     
     -- These are necessary for ROSE-VOR and ROSE-ILS mode even if the
     -- VOR is not selected
-    data.nav[1].crs = get(NAV_1_capt_obs)
+    data.nav[1].crs = 0 --get(NAV_1_capt_obs)
     data.nav[1].crs_is_computed = adirs_is_hdg_ok(id)
-    data.nav[2].crs = get(NAV_2_fo_obs)
+    data.nav[2].crs = 0 --get(NAV_2_fo_obs)
     data.nav[2].crs_is_computed = adirs_is_hdg_ok(id)
     data.inputs.which_nav_is_active = data.id == ND_CAPT and 1 or 2
     

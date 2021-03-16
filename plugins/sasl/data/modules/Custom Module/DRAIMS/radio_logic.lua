@@ -126,7 +126,7 @@ function radio_vor_swap_freq()
 end
 
 function radio_vor_get_crs(which_one)
-    return get(DRAIMS_vor_crs[which_one])
+    return math.floor(get(DRAIMS_vor_crs[which_one]))
 end
 
 function radio_vor_set_crs(which_one, crs)
@@ -136,6 +136,27 @@ end
 -------------------------------------------------------------------------------
 -- ILS
 -------------------------------------------------------------------------------
+function radio_ils_get_freq()
+    return get(NAV_1_freq_Mhz) + get(NAV_1_freq_khz)/100
+end
+
+function radio_ils_set_freq(freq)
+
+    local Mhz = math.floor(freq)
+    local khz = math.floor((freq-math.floor(freq))*100)
+
+    set(NAV_1_freq_Mhz, Mhz)
+    set(NAV_1_freq_khz, khz)
+end
+
+function radio_ils_get_crs()
+    return math.floor(get(NAV_1_capt_obs))
+end
+
+function radio_ils_set_crs(crs)
+    assert(crs ~= nil)
+    set(NAV_1_capt_obs, math.floor(crs % 360))
+end
 
 -------------------------------------------------------------------------------
 -- ADF

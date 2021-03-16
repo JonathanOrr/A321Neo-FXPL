@@ -67,6 +67,18 @@ local function complete_frequency(num, str_len)
     return num
 end
 
+local function complete_frequency_nav(num, str_len)
+
+    num = Round_fill(num, math.max(0,str_len-3))
+
+    if str_len < 4 then
+        num = math.floor(num) .. (str_len < 2 and "_" or "") .. (str_len < 3 and "_" or "") .. ".__"
+    else
+        num = num .. (str_len < 5 and "_" or "")
+    end
+    return num
+end
+
 -------------------------------------------------------------------------------
 -- VHF
 -------------------------------------------------------------------------------
@@ -109,12 +121,21 @@ local function is_valid_vhf(num)
 end
 
 local function is_valid_vor(num)
-    return num >= 108.000 and num <= 117.975
+    return num >= 108.000 and num <= 117.95
 end
 
 local function can_be_extended_vor(num)
     return num <= 1 or (num >= 10 and num < 12)
 end
+
+local function is_valid_ls(num)
+    return num >= 108.100 and num <= 111.95
+end
+
+local function can_be_extended_ls(num)
+    return num <= 1 or (num >= 10 and num < 12)
+end
+
 
 local function can_be_extended_vhf(num)
     return num <= 2 or (num >= 11 and num < 14)
@@ -438,6 +459,84 @@ local function draw_nav_reminder()
 end
 
 -------------------------------------------------------------------------------
+-- NAV - ILS
+-------------------------------------------------------------------------------
+
+local function draw_page_ls_dynamic_sel_box(data)
+    if data.nav_ls_selected_line == 1 then
+        Sasl_DrawWideFrame(45, size[2]+5-100, 180, 80, 2, 1, ECAM_BLUE)
+    elseif data.nav_ls_selected_line == 2 then
+        Sasl_DrawWideFrame(size[1]-190, size[2]+5-100, 180, 80, 2, 1, ECAM_BLUE)
+    end
+end
+
+local function get_page_ls_dynamic_freq_scratchpad(ls_freq, i)
+    local s_len = #DRAIMS_common.scratchpad_nav_ls[i]
+
+    if s_len == 0 then
+        return ls_freq, ECAM_BLUE, 40
+    end
+
+    local num = tonumber(DRAIMS_common.scratchpad_nav_ls[i])
+    num = num / math.max(1, (10 ^ (s_len-3)))
+
+    local valid = is_valid_ls(num) or can_be_extended_ls(num)
+
+    num = complete_frequency_nav(num, s_len)
+    
+    return num, valid and ECAM_BLUE or ECAM_ORANGE, 32
+end
+
+local function get_page_ls_dynamic_freq_crs(ls_crs, i)
+    local s_len = #DRAIMS_common.scratchpad_nav_ls[i]
+
+    if s_len == 0 then
+        return ls_crs, ECAM_BLUE, 40
+    end
+
+    local num = tonumber(DRAIMS_common.scratchpad_nav_ls[i])
+    local valid = num <= 360
+    
+    return num, valid and ECAM_BLUE or ECAM_ORANGE, 32
+end
+
+local function draw_page_ls_dynamic_freq(data)
+    local ls1_freq = Round_fill(radio_ils_get_freq(), 2)
+    local ls1_crs = Fwd_string_fill(""..radio_ils_get_crs(), "0", 3)
+
+    local ls1_color = ECAM_WHITE
+    local crs1_color = ECAM_WHITE
+
+    local ls1_font_size = 40
+    local crs1_font_size = 40
+    
+
+    if data.nav_ls_selected_line == 1 then
+        ls1_freq,ls1_color,ls1_font_size = get_page_ls_dynamic_freq_scratchpad(ls1_freq, 1)
+    elseif data.nav_ls_selected_line == 2 then
+        ls1_crs,crs1_color,crs1_font_size = get_page_ls_dynamic_freq_crs(ls1_crs, 2)
+    end
+    
+    if not radio_is_ils_working(1) and not not radio_is_ils_working(2) then
+        ls1_color = ECAM_ORANGE
+        crs1_color = ECAM_ORANGE
+        ls1_freq = "---.--"
+        ls1_crs = "---"
+    end
+
+    sasl.gl.drawText(Font_Roboto, 130,size[2]-80, ls1_freq, ls1_font_size, false, false, TEXT_ALIGN_CENTER, ls1_color)
+
+    sasl.gl.drawText(Font_Roboto, size[1]-100,size[2]-80, ls1_crs, crs1_font_size, false, false, TEXT_ALIGN_CENTER, crs1_color)
+
+end
+
+local function draw_page_nav_ls_dynamic(data)
+    draw_page_ls_dynamic_freq(data)
+    draw_page_ls_dynamic_sel_box(data)
+end
+
+
+-------------------------------------------------------------------------------
 -- NAV - VOR
 -------------------------------------------------------------------------------
 
@@ -465,7 +564,7 @@ local function get_page_vor_dynamic_freq_scratchpad(vor_freq, i)
 
     local valid = is_valid_vor(num) or can_be_extended_vor(num)
 
-    num = complete_frequency(num, s_len)
+    num = complete_frequency_nav(num, s_len)
     
     return num, valid and ECAM_BLUE or ECAM_ORANGE, 32
 end
@@ -484,8 +583,8 @@ local function get_page_vor_dynamic_freq_crs(vor_crs, i)
 end
 
 local function draw_page_vor_dynamic_freq(data)
-    local vor1_freq = Round_fill(radio_vor_get_freq(1), 3)
-    local vor2_freq = Round_fill(radio_vor_get_freq(2), 3)
+    local vor1_freq = Round_fill(radio_vor_get_freq(1), 2)
+    local vor2_freq = Round_fill(radio_vor_get_freq(2), 2)
     local vor1_crs = Fwd_string_fill(""..radio_vor_get_crs(1), "0", 3)
     local vor2_crs = Fwd_string_fill(""..radio_vor_get_crs(2), "0", 3)
 
@@ -513,14 +612,14 @@ local function draw_page_vor_dynamic_freq(data)
     if not radio_is_vor_working(1) then
         vor1_color = ECAM_ORANGE
         crs1_color = ECAM_ORANGE
-        vor1_freq = "---.---"
+        vor1_freq = "---.--"
         vor1_crs = "---"
     end
 
     if not radio_is_vor_working(2) then
         vor2_color = ECAM_ORANGE
         crs2_color = ECAM_ORANGE
-        vor2_freq = "---.---"
+        vor2_freq = "---.--"
         vor2_crs = "---"
     end
     
@@ -689,6 +788,8 @@ function draw_page_dynamic(data)
         draw_nav_reminder()
     elseif data.current_page == PAGE_NAV then
         draw_page_nav_dynamic(data)
+    elseif data.current_page == PAGE_NAV_LS then
+        draw_page_nav_ls_dynamic(data)
     elseif data.current_page == PAGE_NAV_VOR then
         draw_page_nav_vor_dynamic(data)
     elseif data.current_page == PAGE_NAV_ADF then

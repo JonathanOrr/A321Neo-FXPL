@@ -63,6 +63,29 @@ local function update_scratchpad_sqwk(data)
 
 end
 
+local function update_scratchpad_nav_ls(data)
+    local value = data.scratchpad_input
+    local sel = data.nav_ls_selected_line
+    
+    if value == 0 and #DRAIMS_common.scratchpad_nav_ls[sel] == 0 then
+        DRAIMS_common.scratchpad_nav_ls[sel] = "1"
+    end
+    
+    if value < 10 then
+        if (sel == 1 and #DRAIMS_common.scratchpad_nav_ls[sel] < 5) or (#DRAIMS_common.scratchpad_nav_ls[sel] < 3) then
+            DRAIMS_common.scratchpad_nav_ls[sel] = DRAIMS_common.scratchpad_nav_ls[sel] .. value
+        else
+            DRAIMS_common.scratchpad_nav_ls[sel] = "" .. value
+        end
+    elseif value == 10 then
+        -- We don't need to do anything special for the dot
+    elseif value == 11 then
+        DRAIMS_common.scratchpad_nav_ls[sel] = string.sub(DRAIMS_common.scratchpad_nav_ls[sel], 1, -2)
+    end
+
+end
+
+
 local function update_scratchpad_nav_vor(data)
     local value = data.scratchpad_input
     local sel = data.nav_vor_selected_line
@@ -72,7 +95,7 @@ local function update_scratchpad_nav_vor(data)
     end
     
     if value < 10 then
-        if (sel <= 2 and #DRAIMS_common.scratchpad_nav_vor[sel] < 6) or (#DRAIMS_common.scratchpad_nav_vor[sel] < 3) then
+        if (sel <= 2 and #DRAIMS_common.scratchpad_nav_vor[sel] < 5) or (#DRAIMS_common.scratchpad_nav_vor[sel] < 3) then
             DRAIMS_common.scratchpad_nav_vor[sel] = DRAIMS_common.scratchpad_nav_vor[sel] .. value
         else
             DRAIMS_common.scratchpad_nav_vor[sel] = "" .. value
@@ -134,6 +157,8 @@ function update_scratchpad(data)
          or data.current_page == PAGE_TEL
          or data.current_page == PAGE_ATC) and data.sqwk_select then
         update_scratchpad_sqwk(data)
+    elseif data.current_page == PAGE_NAV_LS then
+        update_scratchpad_nav_ls(data)
     elseif data.current_page == PAGE_NAV_VOR then
         update_scratchpad_nav_vor(data)
     elseif data.current_page == PAGE_NAV_ADF then
@@ -192,6 +217,35 @@ function save_scratchpad(data, new_sel)
     return false
 
 end
+
+function save_scratchpad_ls(data, new_sel)
+    local old_sel = data.nav_ls_selected_line
+
+    if old_sel == new_sel and #DRAIMS_common.scratchpad_nav_ls[old_sel] > 0 then   -- Save
+        local num = tonumber(DRAIMS_common.scratchpad_nav_ls[old_sel])
+        
+        if old_sel == 1 then
+            -- FREQUENCY
+            local freq_to_set = frequency_hinter(num, 108.000, 111.95)
+            if freq_to_set > 0 then
+                freq_to_set = freq_to_set - (freq_to_set % 0.005)
+                radio_ils_set_freq(freq_to_set)
+                DRAIMS_common.scratchpad_nav_ls[old_sel] = ""
+            end
+        else
+            -- CRS
+            if num <= 360 then
+                radio_ils_set_crs(num)
+            end
+            DRAIMS_common.scratchpad_nav_ls[old_sel] = ""
+        end
+    else    -- Revert
+        if #DRAIMS_common.scratchpad_nav_ls[old_sel] > 0 then
+            DRAIMS_common.scratchpad_nav_ls[old_sel] = ""
+        end
+    end
+end
+
 
 function save_scratchpad_vor(data, new_sel)
     local old_sel = data.nav_vor_selected_line
@@ -291,6 +345,11 @@ function vhf_sel_line(data, i)
     end
     data.vhf_selected_line = i
     data.sqwk_select = false
+end
+
+function ls_sel_line(data, i)
+    save_scratchpad_ls(data, i)
+    data.nav_ls_selected_line = i
 end
 
 function vor_sel_line(data, i)

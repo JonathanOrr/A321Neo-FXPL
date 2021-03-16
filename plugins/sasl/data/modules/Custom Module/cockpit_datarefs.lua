@@ -75,17 +75,9 @@ DRAIMS_2_brightness_act = createGlobalPropertyf("a321neo/cockpit/brightness/drai
 ISIS_brightness_act = createGlobalPropertyf("a321neo/cockpit/brightness/isis_brightness_act", 1, false, true, false)
 
 Audio_nav_selection = globalProperty("sim/cockpit2/radios/actuators/audio_nav_selection")--0=nav1, 1=nav2, 2=adf1, 3=adf2, 9=none
-NAV_1_freq_hz = globalProperty("sim/cockpit2/radios/actuators/nav1_frequency_hz")
-NAV_1_freq_Mhz = globalProperty("sim/cockpit2/radios/actuators/nav1_frequency_Mhz")--nav 1 freq Mhz >xxx<.xx, ILS range from 108.100 to 111.950 with xxx.>x<xx always being odd, VOR from 108.000 to 117.950 with 50 khz spacing and first 4 Mhz shared with ILS
-NAV_1_freq_10khz = globalProperty("sim/cockpit2/radios/actuators/nav1_frequency_khz")--nav 1 freq khz xxx.>xx<, ILS range from 108.100 to 111.950 with xxx.>x<xx always being odd, VOR from 108.00 to 117.950 with 50 khz spacing and first 4 Mhz shared with ILS
+NAV_1_freq_Mhz = globalProperty("sim/cockpit2/radios/actuators/nav1_frequency_Mhz")
+NAV_1_freq_khz = globalProperty("sim/cockpit2/radios/actuators/nav1_frequency_khz")
 NAV_1_capt_obs = globalProperty("sim/cockpit2/radios/actuators/nav1_obs_deg_mag_pilot")--captain nav 1 obs
-NAV_1_fo_obs = globalProperty("sim/cockpit2/radios/actuators/nav1_obs_deg_mag_copilot")--first officer nav 1 obs
-
-NAV_2_freq_hz = globalProperty("sim/cockpit2/radios/actuators/nav2_frequency_hz")
-NAV_2_freq_Mhz = globalProperty("sim/cockpit2/radios/actuators/nav2_frequency_Mhz")--nav 2 freq Mhz >xxx<.xx, ILS range from 108.100 to 111.950 with xxx.>x<xx always being odd, VOR from 108.00 to 117.950 with 50 khz spacing and first 4 Mhz shared with ILS
-NAV_2_freq_10khz = globalProperty("sim/cockpit2/radios/actuators/nav2_frequency_khz")--nav 2 freq khz xxx.>xx<, ILS range from 108.100 to 111.950 with xxx.>x<xx always being odd, VOR from 108.00 to 117.950 with 50 khz spacing and first 4 Mhz shared with ILS
-NAV_2_capt_obs = globalProperty("sim/cockpit2/radios/actuators/nav2_obs_deg_mag_pilot")--captain nav 2 obs
-NAV_2_fo_obs = globalProperty("sim/cockpit2/radios/actuators/nav2_obs_deg_mag_copilot")--first officer nav 2 obs
 
 NAV_1_is_valid = globalProperty("sim/cockpit2/radios/indicators/nav1_display_horizontal")
 NAV_1_bearing_deg = globalProperty("sim/cockpit2/radios/indicators/nav1_bearing_deg_mag")
