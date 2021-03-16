@@ -85,6 +85,22 @@ local function update_scratchpad_nav_ls(data)
 
 end
 
+local function update_scratchpad_nav_gls(data)
+    local value = data.scratchpad_input
+    
+    if value < 10 then
+        if #DRAIMS_common.scratchpad_nav_gls < 5 then
+            DRAIMS_common.scratchpad_nav_gls = DRAIMS_common.scratchpad_nav_gls .. value
+        else
+            DRAIMS_common.scratchpad_nav_gls = "" .. value
+        end
+    elseif value == 10 then
+        -- We don't need to do anything special for the dot
+    elseif value == 11 then
+        DRAIMS_common.scratchpad_nav_gls = string.sub(DRAIMS_common.scratchpad_nav_gls, 1, -2)
+    end
+
+end
 
 local function update_scratchpad_nav_vor(data)
     local value = data.scratchpad_input
@@ -159,6 +175,8 @@ function update_scratchpad(data)
         update_scratchpad_sqwk(data)
     elseif data.current_page == PAGE_NAV_LS then
         update_scratchpad_nav_ls(data)
+    elseif data.current_page == PAGE_NAV_GLS then
+        update_scratchpad_nav_gls(data)
     elseif data.current_page == PAGE_NAV_VOR then
         update_scratchpad_nav_vor(data)
     elseif data.current_page == PAGE_NAV_ADF then
@@ -243,6 +261,18 @@ function save_scratchpad_ls(data, new_sel)
         if #DRAIMS_common.scratchpad_nav_ls[old_sel] > 0 then
             DRAIMS_common.scratchpad_nav_ls[old_sel] = ""
         end
+    end
+end
+
+function save_scratchpad_gls(data)
+
+    if #DRAIMS_common.scratchpad_nav_gls > 0 then   -- Save
+        local num = tonumber(DRAIMS_common.scratchpad_nav_gls)
+        -- CRS
+        if num <= 99999 then
+            radio_gls_set_channel(num)
+        end
+        DRAIMS_common.scratchpad_nav_gls = ""
     end
 end
 
@@ -350,6 +380,10 @@ end
 function ls_sel_line(data, i)
     save_scratchpad_ls(data, i)
     data.nav_ls_selected_line = i
+end
+
+function gls_sel_line(data)
+    save_scratchpad_gls(data)
 end
 
 function vor_sel_line(data, i)

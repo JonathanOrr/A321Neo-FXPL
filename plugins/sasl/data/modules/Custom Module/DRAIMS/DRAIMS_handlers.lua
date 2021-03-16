@@ -124,6 +124,13 @@ local page_routes = {   -- This tells you which page you go when you press a lat
 
         [BTN_L1] = function(data) ls_sel_line(data, 1) end,
         [BTN_R1] = function(data) ls_sel_line(data, 2) end,
+        [BTN_R3] = PAGE_NAV_GLS,
+    },
+
+    [PAGE_NAV_GLS] = {
+        [BTN_L4] = PAGE_NAV_LS,
+
+        [BTN_L1] = function(data) gls_sel_line(data) end,
     },
 
     [PAGE_NAV_VOR] = {
@@ -321,6 +328,7 @@ function draims_init_handlers(data)
     DRAIMS_common.scratchpad = {"", "", ""}
     DRAIMS_common.scratchpad_sqwk = ""
     DRAIMS_common.scratchpad_sqwk_timeout = 0
+    DRAIMS_common.scratchpad_nav_gls = ""
     DRAIMS_common.scratchpad_nav_ls  = {"", ""}
     DRAIMS_common.scratchpad_nav_vor = {"", "", "", ""}
     DRAIMS_common.scratchpad_nav_adf = {"", ""}

@@ -234,9 +234,23 @@ local function draw_page_nav_ls(data)
     sasl.gl.drawText(Font_Roboto, 130,size[2]-35, "FREQ", 22, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
     sasl.gl.drawText(Font_Roboto, size[1]-100,size[2]-35, "CRS", 22, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
 
+    draw_menu_item_right(3, "GLS", ECAM_WHITE)
+    draw_menu_item_left(4, "RETURN", ECAM_WHITE)
+end
+
+local function draw_page_nav_gls(data)
+    sasl.gl.drawWideLine(0, 100, size[1], 100, 3, ECAM_WHITE)
+    draw_top_lines()
+
+    sasl.gl.drawText(Font_Roboto, size[1]/2+40,size[2]-55, "GLS", 38, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+
+    sasl.gl.drawText(Font_Roboto, 130,size[2]-35, "CHANNEL", 22, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawText(Font_Roboto, size[1]-100,size[2]-35, "CRS", 22, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawText(Font_Roboto, size[1]-100,size[2]-90, "AUTO", 22, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
 
     draw_menu_item_left(4, "RETURN", ECAM_WHITE)
 end
+
 
 local function draw_page_nav_adf(data)
     sasl.gl.drawWideLine(0, 100, size[1], 100, 3, ECAM_WHITE)
@@ -287,6 +301,8 @@ function draw_page_static(data)
         draw_page_nav(data)
     elseif data.current_page == PAGE_NAV_LS then
         draw_page_nav_ls(data)
+    elseif data.current_page == PAGE_NAV_GLS then
+        draw_page_nav_gls(data)
     elseif data.current_page == PAGE_NAV_VOR then
         draw_page_nav_vor(data)
     elseif data.current_page == PAGE_NAV_ADF then

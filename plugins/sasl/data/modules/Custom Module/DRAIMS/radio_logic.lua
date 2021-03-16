@@ -159,6 +159,23 @@ function radio_ils_set_crs(crs)
 end
 
 -------------------------------------------------------------------------------
+-- GLS
+-------------------------------------------------------------------------------
+function radio_gls_get_channel()
+    return get(DRAIMS_gls_channel)
+end
+
+function radio_gls_set_channel(ch)
+    assert(ch >= 0 and ch <= 99999)
+    set(DRAIMS_gls_channel, ch)
+end
+
+function radio_gls_get_crs()
+    return -1
+end
+
+
+-------------------------------------------------------------------------------
 -- ADF
 -------------------------------------------------------------------------------
 
@@ -197,6 +214,10 @@ function radio_is_ils_working(which_one)
     else
         return get(AC_bus_2_pwrd) == 1 and get(FAILURE_RADIO_ILS_2) == 0
     end
+end
+
+function radio_is_gls_working()
+    return get(AC_bus_2_pwrd) == 1 and get(FAILURE_RADIO_GLS) == 0
 end
 
 function radio_is_adf_working(which_one)

@@ -299,6 +299,7 @@ FAILURE_RADIO_ADF_1 = createGlobalPropertyi("a321neo/failures/radios/adf_1", 0, 
 FAILURE_RADIO_ADF_2 = createGlobalPropertyi("a321neo/failures/radios/adf_2", 0, false, true, false)
 FAILURE_RADIO_DME_1 = createGlobalPropertyi("a321neo/failures/radios/dme_1", 0, false, true, false)
 FAILURE_RADIO_DME_2 = createGlobalPropertyi("a321neo/failures/radios/dme_2", 0, false, true, false)
+FAILURE_RADIO_GLS = createGlobalPropertyi("a321neo/failures/radios/gls", 0, false, true, false)
 
 FAILURE_AP = createGlobalPropertyia("a321neo/failures/ap/ap", 2)
 

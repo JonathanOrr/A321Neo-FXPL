@@ -780,27 +780,28 @@ BUSS_Capt_man_enabled = createGlobalPropertyi("a321neo/dynamics/pfd/buss_capt_ma
 BUSS_Fo_man_enabled = createGlobalPropertyi("a321neo/dynamics/pfd/buss_fo_man", 0, false, true, false)
 
 
-DRAIMS_vhf3_swap = createGlobalPropertyi("a321neo/cockpit/draims/legacy/actuators/com3_right_is_selected", 0, false, true, false)
-DRAIMS_vhf3_curr_freq_Mhz = createGlobalPropertyi("a321neo/cockpit/draims/legacy/actuators/com3_frequency_Mhz", -1, false, true, false)
-DRAIMS_vhf3_curr_freq_khz = createGlobalPropertyi("a321neo/cockpit/draims/legacy/actuators/com3_frequency_khz", 0, false, true, false)
-DRAIMS_vhf3_stby_freq_Mhz = createGlobalPropertyi("a321neo/cockpit/draims/legacy/actuators/com3_standby_frequency_Mhz", 122, false, true, false)
-DRAIMS_vhf3_stby_freq_khz = createGlobalPropertyi("a321neo/cockpit/draims/legacy/com3_standby_frequency_khz", 800, false, true, false)
+DRAIMS_vhf3_swap = createGlobalPropertyi("a321neo/dynamics/draims/legacy/actuators/com3_right_is_selected", 0, false, true, false)
+DRAIMS_vhf3_curr_freq_Mhz = createGlobalPropertyi("a321neo/dynamics/draims/legacy/actuators/com3_frequency_Mhz", -1, false, true, false)
+DRAIMS_vhf3_curr_freq_khz = createGlobalPropertyi("a321neo/dynamics/draims/legacy/actuators/com3_frequency_khz", 0, false, true, false)
+DRAIMS_vhf3_stby_freq_Mhz = createGlobalPropertyi("a321neo/dynamics/draims/legacy/actuators/com3_standby_frequency_Mhz", 122, false, true, false)
+DRAIMS_vhf3_stby_freq_khz = createGlobalPropertyi("a321neo/dynamics/draims/legacy/com3_standby_frequency_khz", 800, false, true, false)
 
-DRAIMS_nav_stby_mode  = createGlobalPropertyi("a321neo/cockpit/draims/nav_stby_mode", 0, false, true, false) -- 0 OFF, 1 ON
-DRAIMS_nav_voice_mode = createGlobalPropertyi("a321neo/cockpit/draims/nav_voice_mode", 0, false, true, false) -- 0 OFF, 1 ON
-DRAIMS_nav_audio_sel  = createGlobalPropertyi("a321neo/cockpit/draims/nav_audio_sel", 0, false, true, false) -- 0 LS, 1 MKR, 2 VOR1, 3 VOR2, 4 ADF1, 5 ADF2
+DRAIMS_nav_stby_mode  = createGlobalPropertyi("a321neo/dynamics/draims/nav_stby_mode", 0, false, true, false) -- 0 OFF, 1 ON
+DRAIMS_nav_voice_mode = createGlobalPropertyi("a321neo/dynamics/draims/nav_voice_mode", 0, false, true, false) -- 0 OFF, 1 ON
+DRAIMS_nav_audio_sel  = createGlobalPropertyi("a321neo/dynamics/draims/nav_audio_sel", 0, false, true, false) -- 0 LS, 1 MKR, 2 VOR1, 3 VOR2, 4 ADF1, 5 ADF2
 
 DRAIMS_vor_freq = {}
 DRAIMS_vor_stby_freq = {}
 DRAIMS_vor_crs = {}
 
-DRAIMS_vor_freq[1] = createGlobalPropertyf("a321neo/cockpit/draims/vor1_freq", 110.1, false, true, false)
-DRAIMS_vor_freq[2] = createGlobalPropertyf("a321neo/cockpit/draims/vor2_freq", 115.95, false, true, false)
-DRAIMS_vor_stby_freq[1] = createGlobalPropertyf("a321neo/cockpit/draims/vor1_stby_freq", 109.5, false, true, false)
-DRAIMS_vor_stby_freq[2] = createGlobalPropertyf("a321neo/cockpit/draims/vor2_stby_freq", 108.0, false, true, false)
-DRAIMS_vor_crs[1] = createGlobalPropertyi("a321neo/cockpit/draims/vor1_crs", 0, false, true, false)
-DRAIMS_vor_crs[2] = createGlobalPropertyi("a321neo/cockpit/draims/vor2_crs", 0, false, true, false)
+DRAIMS_vor_freq[1] = createGlobalPropertyf("a321neo/dynamics/draims/vor1_freq", 110.1, false, true, false)
+DRAIMS_vor_freq[2] = createGlobalPropertyf("a321neo/dynamics/draims/vor2_freq", 115.95, false, true, false)
+DRAIMS_vor_stby_freq[1] = createGlobalPropertyf("a321neo/dynamics/draims/vor1_stby_freq", 109.5, false, true, false)
+DRAIMS_vor_stby_freq[2] = createGlobalPropertyf("a321neo/dynamics/draims/vor2_stby_freq", 108.0, false, true, false)
+DRAIMS_vor_crs[1] = createGlobalPropertyi("a321neo/dynamics/draims/vor1_crs", 0, false, true, false)
+DRAIMS_vor_crs[2] = createGlobalPropertyi("a321neo/dynamics/draims/vor2_crs", 0, false, true, false)
 
+DRAIMS_gls_channel = createGlobalPropertyi("a321neo/dynamics/draims/gls_ch", 0, false, true, false)
 
 -- TCAS
 TCAS_atc_sel = createGlobalPropertyi("a321neo/dynamics/tcas/sel", 1, false, true, false) -- ATC 1 or 2?

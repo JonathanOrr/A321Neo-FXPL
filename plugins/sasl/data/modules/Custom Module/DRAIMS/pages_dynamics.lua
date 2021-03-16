@@ -537,6 +537,50 @@ end
 
 
 -------------------------------------------------------------------------------
+-- NAV - GLS
+-------------------------------------------------------------------------------
+
+local function get_page_gls_dynamic_freq_scratchpad(ls_freq)
+    local s_len = #DRAIMS_common.scratchpad_nav_gls
+
+    if s_len == 0 then
+        return ls_freq, ECAM_BLUE, 40
+    end
+
+    local num = tonumber(DRAIMS_common.scratchpad_nav_gls)
+
+    return num, ECAM_BLUE, 32
+end
+
+local function draw_page_gls_dynamic_freq(data)
+    local ls1_freq = Fwd_string_fill(radio_gls_get_channel().."", "0", 5)
+    local crs = radio_gls_get_crs()
+    local ls1_crs = crs >= 0 and Fwd_string_fill(""..radio_gls_get_crs(), "0", 3) or "---"
+
+    local ls1_color = ECAM_WHITE
+
+    local ls1_font_size = 40
+
+    ls1_freq,ls1_color,ls1_font_size = get_page_gls_dynamic_freq_scratchpad(ls1_freq)
+    
+    if not radio_is_gls_working() then
+        ls1_color = ECAM_ORANGE
+        ls1_freq = "----"
+        ls1_crs = "---"
+    end
+
+    sasl.gl.drawText(Font_Roboto, 130,size[2]-80, ls1_freq, ls1_font_size, false, false, TEXT_ALIGN_CENTER, ls1_color)
+
+    sasl.gl.drawText(Font_Roboto, size[1]-100,size[2]-68, ls1_crs, 35, false, false, TEXT_ALIGN_CENTER, ls1_crs == "---" and ECAM_ORANGE or ECAM_GREEN)
+
+end
+
+local function draw_page_nav_gls_dynamic(data)
+    draw_page_gls_dynamic_freq(data)
+    Sasl_DrawWideFrame(45, size[2]+5-100, 180, 80, 2, 1, ECAM_BLUE)
+end
+
+-------------------------------------------------------------------------------
 -- NAV - VOR
 -------------------------------------------------------------------------------
 
@@ -788,6 +832,8 @@ function draw_page_dynamic(data)
         draw_nav_reminder()
     elseif data.current_page == PAGE_NAV then
         draw_page_nav_dynamic(data)
+    elseif data.current_page == PAGE_NAV_GLS then
+        draw_page_nav_gls_dynamic(data)
     elseif data.current_page == PAGE_NAV_LS then
         draw_page_nav_ls_dynamic(data)
     elseif data.current_page == PAGE_NAV_VOR then
