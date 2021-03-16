@@ -442,3 +442,565 @@ MessageGroup_SAT_ABOVE_FLEX = {
     end
 
 }
+
+
+
+----------------------------------------------------------------------------------------------------
+-- WARNING: ENG FIRE - Ground
+----------------------------------------------------------------------------------------------------
+local Message_ENG_FIRE = {
+    text = function()
+        return "      FIRE"
+    end,
+
+    color = function()
+        return COL_WARNING
+    end,
+
+    is_active = function()
+      return true
+    end
+}
+
+local Message_ENG_THR_IDLE = {
+    text = function()
+        return " - THR LEVERS........IDLE"
+    end,
+
+    color = function()
+        return COL_ACTIONS
+    end,
+
+    is_active = function()
+      return math.abs(get(Cockpit_throttle_lever_L)) > 0.05 or math.abs(get(Cockpit_throttle_lever_R)) > 0.05
+    end
+}
+
+local Message_AC_STOPPED = {
+    text = function()
+        return " . WHEN A/C IS STOPPED:"
+    end,
+
+    color = function()
+        return COL_REMARKS
+    end,
+
+    is_active = function()
+      return true
+    end
+}
+
+local Message_PARK_BRK_ON = {
+    text = function()
+        return "   - PARKING BRK.......ON"
+    end,
+
+    color = function()
+        return COL_ACTIONS
+    end,
+
+    is_active = function()
+      return get(Parkbrake_switch_pos) == 0
+    end
+}
+
+local Message_ATC_NOTIFY_LVL2 = {
+    text = function()
+        return "   - ATC...........NOTIFY"
+    end,
+
+    color = function()
+        return COL_ACTIONS
+    end,
+
+    is_active = function()
+      return true
+    end
+}
+
+local Message_CABIN_CREW_ALERT = {
+    text = function()
+        return "   - CABIN CREW.....ALERT"
+    end,
+
+    color = function()
+        return COL_ACTIONS
+    end,
+
+    is_active = function()
+      return true
+    end
+}
+
+local Message_ENG_MASTER_1_OFF_LVL2 = {
+    text = function()
+        return "   - ENG MASTER 1.....OFF"
+    end,
+
+    color = function()
+        return COL_ACTIONS
+    end,
+
+    is_active = function()
+      return get(Engine_1_master_switch) == 1
+    end
+}
+
+local Message_ENG_MASTER_2_OFF_LVL2 = {
+    text = function()
+        return "   - ENG MASTER 2.....OFF"
+    end,
+
+    color = function()
+        return COL_ACTIONS
+    end,
+
+    is_active = function()
+      return get(Engine_2_master_switch) == 1
+    end
+}
+
+local Message_ENG_MASTER_1_FIRE_PB_LVL2 = {
+    text = function()
+        return "   - ENG FIRE P/B 1..PUSH"
+    end,
+
+    color = function()
+        return COL_ACTIONS
+    end,
+
+    is_active = function()
+      return get(Fire_pb_ENG1_status) == 0
+    end
+}
+
+local Message_ENG_MASTER_2_FIRE_PB_LVL2 = {
+    text = function()
+        return "   - ENG FIRE P/B 2..PUSH"
+    end,
+
+    color = function()
+        return COL_ACTIONS
+    end,
+
+    is_active = function()
+      return get(Fire_pb_ENG2_status) == 0
+    end
+}
+
+local Message_ENG_1_AGENTS_DISCH = {
+    text = function()
+        return "   - AGENT 1+2......DISCH"
+    end,
+
+    color = function()
+        return COL_ACTIONS
+    end,
+
+    is_active = function()
+      return not (FIRE_sys.eng[1].squib_1_disch and FIRE_sys.eng[1].squib_2_disch)
+    end
+}
+
+local Message_ENG_2_AGENTS_DISCH = {
+    text = function()
+        return "   - AGENT 1+2......DISCH"
+    end,
+
+    color = function()
+        return COL_ACTIONS
+    end,
+
+    is_active = function()
+      return not (FIRE_sys.eng[2].squib_1_disch and FIRE_sys.eng[2].squib_2_disch)
+    end
+}
+
+
+local Message_EMER_EVAC_APPLY = {
+    text = function()
+        return "   EMER EVAC PROC APPLY"
+    end,
+
+    color = function()
+        return COL_ACTIONS
+    end,
+
+    is_active = function()
+      return true
+    end
+}
+
+MessageGroup_ENG_1_FIRE_GROUND = {
+
+    shown = false,
+
+    text  = function()
+                return "ENG 1"
+            end,
+    color = function()
+                return COL_WARNING
+            end,
+
+    sd_page = ECAM_PAGE_ENG,
+
+    priority = PRIORITY_LEVEL_3,
+
+    messages = {
+        Message_ENG_FIRE,
+        Message_ENG_THR_IDLE,
+        Message_AC_STOPPED,
+        Message_PARK_BRK_ON,
+        Message_ATC_NOTIFY_LVL2,
+        Message_CABIN_CREW_ALERT,
+        Message_ENG_MASTER_1_OFF_LVL2,
+        Message_ENG_MASTER_1_FIRE_PB_LVL2,
+        Message_ENG_1_AGENTS_DISCH,
+        Message_EMER_EVAC_APPLY
+    },
+
+    is_active = function()
+        return get(FAILURE_FIRE_ENG_1) == 1 and FIRE_sys.eng[1].still_on_fire and get(All_on_ground) == 1
+    end,
+
+    is_inhibited = function()
+        return false
+    end
+
+}
+
+MessageGroup_ENG_2_FIRE_GROUND = {
+
+    shown = false,
+
+    text  = function()
+                return "ENG 2"
+            end,
+    color = function()
+                return COL_WARNING
+            end,
+
+    sd_page = ECAM_PAGE_ENG,
+
+    priority = PRIORITY_LEVEL_3,
+
+    messages = {
+        Message_ENG_FIRE,
+        Message_ENG_THR_IDLE,
+        Message_AC_STOPPED,
+        Message_PARK_BRK_ON,
+        Message_ATC_NOTIFY_LVL2,
+        Message_CABIN_CREW_ALERT,
+        Message_ENG_MASTER_2_OFF_LVL2,
+        Message_ENG_MASTER_2_FIRE_PB_LVL2,
+        Message_ENG_2_AGENTS_DISCH,
+        Message_EMER_EVAC_APPLY
+    },
+
+    is_active = function()
+        return get(FAILURE_FIRE_ENG_2) == 1 and FIRE_sys.eng[2].still_on_fire and get(All_on_ground) == 1
+    end,
+
+    is_inhibited = function()
+        return false
+    end
+
+}
+
+
+----------------------------------------------------------------------------------------------------
+-- WARNING: ENG FIRE - Flight
+----------------------------------------------------------------------------------------------------
+local Message_ENG_THR_1_IDLE = {
+    text = function()
+        return " - THR LEVER 1.......IDLE"
+    end,
+
+    color = function()
+        return COL_ACTIONS
+    end,
+
+    is_active = function()
+      return math.abs(get(Cockpit_throttle_lever_L)) > 0.05
+    end
+}
+
+local Message_ENG_THR_2_IDLE = {
+    text = function()
+        return " - THR LEVER 2.......IDLE"
+    end,
+
+    color = function()
+        return COL_ACTIONS
+    end,
+
+    is_active = function()
+      return math.abs(get(Cockpit_throttle_lever_R)) > 0.05
+    end
+}
+
+local Message_ENG_MASTER_1_OFF = {
+    text = function()
+        return " - ENG MASTER 1.......OFF"
+    end,
+
+    color = function()
+        return COL_ACTIONS
+    end,
+
+    is_active = function()
+      return get(Engine_1_master_switch) == 1
+    end
+}
+
+local Message_ENG_MASTER_2_OFF = {
+    text = function()
+        return " - ENG MASTER 2.......OFF"
+    end,
+
+    color = function()
+        return COL_ACTIONS
+    end,
+
+    is_active = function()
+      return get(Engine_2_master_switch) == 1
+    end
+}
+
+local Message_ENG_MASTER_1_FIRE_PB = {
+    text = function()
+        return " - ENG FIRE P/B 1....PUSH"
+    end,
+
+    color = function()
+        return COL_ACTIONS
+    end,
+
+    is_active = function()
+      return get(Fire_pb_ENG1_status) == 0
+    end
+}
+
+local Message_ENG_MASTER_2_FIRE_PB = {
+    text = function()
+        return " - ENG FIRE P/B 2....PUSH"
+    end,
+
+    color = function()
+        return COL_ACTIONS
+    end,
+
+    is_active = function()
+      return get(Fire_pb_ENG2_status) == 0
+    end
+}
+
+Message_ENG_1_AGENT_1_DISCH = {
+    text = function()
+        local remaining_sec = math.ceil(10 - (get(TIME) - Message_ENG_1_AGENT_1_DISCH.start_time))
+        if remaining_sec <= 0 then
+            return " - AGENT 1..........DISCH"
+        elseif remaining_sec == 10 then
+            return " - AGENT 1 AFT 10S..DISCH"
+        else
+            return " - AGENT 1 AFT ".. remaining_sec .."S...DISCH"
+        end
+        
+    end,
+
+    start_time = 0,
+
+    color = function()
+        return COL_ACTIONS
+    end,
+
+    is_active = function()
+        local active = get(Fire_pb_ENG1_status) == 1 and not FIRE_sys.eng[1].squib_1_disch
+        if active and Message_ENG_1_AGENT_1_DISCH.start_time == 0 then
+            Message_ENG_1_AGENT_1_DISCH.start_time = get(TIME)
+        end
+        if not active then
+            Message_ENG_1_AGENT_1_DISCH.start_time = 0
+        end
+        return active
+    end
+}
+
+Message_ENG_2_AGENT_1_DISCH = {
+    text = function()
+        local remaining_sec = math.ceil(10 - (get(TIME) - Message_ENG_2_AGENT_1_DISCH.start_time))
+        if remaining_sec <= 0 then
+            return " - AGENT 1..........DISCH"
+        elseif remaining_sec == 10 then
+            return " - AGENT 1 AFT 10S..DISCH"
+        else
+            return " - AGENT 1 AFT ".. remaining_sec .."S...DISCH"
+        end
+        
+    end,
+
+    start_time = 0,
+
+    color = function()
+        return COL_ACTIONS
+    end,
+
+    is_active = function()
+        local active = get(Fire_pb_ENG2_status) == 1 and not FIRE_sys.eng[2].squib_1_disch
+        if active and Message_ENG_2_AGENT_1_DISCH.start_time == 0 then
+            Message_ENG_2_AGENT_1_DISCH.start_time = get(TIME)
+        end
+        if not active then
+            Message_ENG_2_AGENT_1_DISCH.start_time = 0
+        end
+        return active
+    end
+}
+
+
+local Message_ATC_NOTIFY = {
+    text = function()
+        return " - ATC.............NOTIFY"
+    end,
+
+    color = function()
+        return COL_ACTIONS
+    end,
+
+    is_active = function()
+      return true
+    end
+}
+
+local Message_AFTER_30SEC_ENG2 = {
+    text = function()
+        return " . IF FIRE AFTER 30 S:"
+    end,
+
+    color = function()
+        return COL_REMARKS
+    end,
+
+    is_active = function()
+      return FIRE_sys.eng[2].squib_1_disch and not FIRE_sys.eng[2].squib_2_disch
+    end
+}
+
+local Message_ENG_2_AGENT_2 = {
+    text = function()
+        return "   - AGENT 2........DISCH"
+    end,
+
+    color = function()
+        return COL_ACTIONS
+    end,
+
+    is_active = function()
+      return FIRE_sys.eng[2].squib_1_disch and not FIRE_sys.eng[2].squib_2_disch
+    end
+}
+
+local Message_AFTER_30SEC_ENG1 = {
+    text = function()
+        return " . IF FIRE AFTER 30 S:"
+    end,
+
+    color = function()
+        return COL_REMARKS
+    end,
+
+    is_active = function()
+      return FIRE_sys.eng[1].squib_1_disch and not FIRE_sys.eng[1].squib_2_disch
+    end
+}
+
+local Message_ENG_1_AGENT_2 = {
+    text = function()
+        return "   - AGENT 2........DISCH"
+    end,
+
+    color = function()
+        return COL_ACTIONS
+    end,
+
+    is_active = function()
+      return FIRE_sys.eng[1].squib_1_disch and not FIRE_sys.eng[1].squib_2_disch
+    end
+}
+
+MessageGroup_ENG_1_FIRE_FLIGHT = {
+
+    shown = false,
+
+    text  = function()
+                return "ENG 1"
+            end,
+    color = function()
+                return COL_WARNING
+            end,
+
+    sd_page = ECAM_PAGE_ENG,
+    
+    land_asap = true,
+
+    priority = PRIORITY_LEVEL_3,
+
+    messages = {
+        Message_ENG_FIRE,
+        Message_ENG_THR_1_IDLE,
+        Message_ENG_MASTER_1_OFF,
+        Message_ENG_MASTER_1_FIRE_PB,
+        Message_ENG_1_AGENT_1_DISCH,
+        Message_ATC_NOTIFY,
+        Message_AFTER_30SEC_ENG1,
+        Message_ENG_1_AGENT_2
+    },
+
+    is_active = function()
+        return get(FAILURE_FIRE_ENG_1) == 1 and FIRE_sys.eng[1].still_on_fire and get(All_on_ground) == 0
+    end,
+
+    is_inhibited = function()
+        return false
+    end
+
+}
+
+MessageGroup_ENG_2_FIRE_FLIGHT = {
+
+    shown = false,
+
+    text  = function()
+                return "ENG 2"
+            end,
+    color = function()
+                return COL_WARNING
+            end,
+
+    sd_page = ECAM_PAGE_ENG,
+    
+    land_asap = true,
+
+    priority = PRIORITY_LEVEL_3,
+
+    messages = {
+        Message_ENG_FIRE,
+        Message_ENG_THR_2_IDLE,
+        Message_ENG_MASTER_2_OFF,
+        Message_ENG_MASTER_2_FIRE_PB,
+        Message_ENG_2_AGENT_1_DISCH,
+        Message_ATC_NOTIFY,
+        Message_AFTER_30SEC_ENG2,
+        Message_ENG_2_AGENT_2
+    },
+
+    is_active = function()
+        return get(FAILURE_FIRE_ENG_2) == 1 and FIRE_sys.eng[2].still_on_fire and get(All_on_ground) == 0
+    end,
+
+    is_inhibited = function()
+        return false
+    end
+
+}
+

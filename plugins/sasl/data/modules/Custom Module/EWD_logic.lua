@@ -234,6 +234,10 @@ local left_messages_list = {
     -- Warnings
     MessageGroup_OVERSPEED,
     MessageGroup_CONFIG_TAKEOFF,
+    MessageGroup_ENG_1_FIRE_GROUND,
+    MessageGroup_ENG_2_FIRE_GROUND,
+    MessageGroup_ENG_1_FIRE_FLIGHT,
+    MessageGroup_ENG_2_FIRE_FLIGHT,
     MessageGroup_CAB_PRESS_EXCESS_ALT,
     MessageGroup_APU_FIRE,
     MessageGroup_ELEC_EMER_CONFIG,

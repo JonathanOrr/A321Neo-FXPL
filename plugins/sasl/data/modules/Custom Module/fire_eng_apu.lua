@@ -206,7 +206,7 @@ end
 local function update_eng_fire(eng)
 
     -- FIRE PB
-    FIRE_sys.eng[eng].still_on_fire = eng == 1 and get(FAILURE_FIRE_ENG_1) == 1 or get(FAILURE_FIRE_ENG_2) == 1
+    FIRE_sys.eng[eng].still_on_fire = ((eng == 1) and (get(FAILURE_FIRE_ENG_1) == 1)) or ((eng == 2) and get(FAILURE_FIRE_ENG_2) == 1)
 
     if FIRE_sys.eng[eng].block_position then
         set(eng == 1 and Fire_pb_ENG1_status or Fire_pb_ENG2_status, 1)  -- This is for fuel system 
