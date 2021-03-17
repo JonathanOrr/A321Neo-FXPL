@@ -1,6 +1,7 @@
 include('ND/subcomponents/constants.lua')
 include('ADIRS_data_source.lua')
 include('ND/subcomponents/logic_poi.lua')
+include('DRAIMS/radio_logic.lua')
 
 local function update_speed_and_wind(data)
     local id = data.id
@@ -83,24 +84,24 @@ local function update_navaid_raw(data)
     end
 
     if data.nav[1].selector == ND_SEL_VOR then
-        data.nav[1].frequency = get(NAV_1_freq_Mhz)*100 + get(NAV_1_freq_10khz)
+        data.nav[1].frequency = radio_vor_get_freq(1)
         data.nav[1].identifier = ""
         data.nav[1].is_valid = get(NAV_1_is_valid) == 1
         data.nav[1].dme_distance = get(NAV_1_dme_value)
         data.nav[1].dme_computed = get(NAV_1_dme_valid) == 1
     elseif data.nav[1].selector == ND_SEL_ADF then
-        data.nav[1].frequency = get(ADF_1_freq_hz)
+        data.nav[1].frequency = radio_adf_get_freq(1)
         data.nav[1].identifier = ""
     end
 
     if data.nav[2].selector == ND_SEL_VOR then
-        data.nav[2].frequency = get(NAV_2_freq_Mhz)*100 + get(NAV_2_freq_10khz)
+        data.nav[2].frequency = radio_vor_get_freq(2)
         data.nav[2].identifier = ""
         data.nav[2].is_valid = get(NAV_2_is_valid) == 1
         data.nav[2].dme_distance = get(NAV_2_dme_value)
         data.nav[2].dme_computed = get(NAV_2_dme_valid) == 1
     elseif data.nav[2].selector == ND_SEL_ADF then
-        data.nav[2].frequency = get(ADF_2_freq_hz)
+        data.nav[2].frequency = radio_adf_get_freq(2)
         data.nav[2].identifier = ""
     end
 
@@ -111,16 +112,16 @@ local function update_navaid_bearing(data)
     
     -- These are necessary for ROSE-VOR and ROSE-ILS mode even if the
     -- VOR is not selected
-    data.nav[1].crs = get(NAV_1_capt_obs)
+    data.nav[1].crs = radio_vor_get_crs(1)
     data.nav[1].crs_is_computed = adirs_is_hdg_ok(id)
-    data.nav[2].crs = get(NAV_2_fo_obs)
+    data.nav[2].crs = radio_vor_get_crs(2)
     data.nav[2].crs_is_computed = adirs_is_hdg_ok(id)
     data.inputs.which_nav_is_active = data.id == ND_CAPT and 1 or 2
     
-    data.nav[1].deviation_is_visible = get(NAV_1_is_valid) == 1
-    data.nav[2].deviation_is_visible = get(NAV_2_is_valid) == 1
-    data.nav[1].deviation_deg = get(NAV_1_bearing_deg) - data.nav[1].crs
-    data.nav[2].deviation_deg = get(NAV_2_bearing_deg) - data.nav[2].crs
+    data.nav[1].deviation_is_visible = false -- TODO
+    data.nav[2].deviation_is_visible = false -- TODO
+    data.nav[1].deviation_deg = 0 -- get(NAV_1_bearing_deg) - data.nav[1].crs -- TODO
+    data.nav[2].deviation_deg = 0 -- get(NAV_2_bearing_deg) - data.nav[2].crs -- TODO
     
 end
 

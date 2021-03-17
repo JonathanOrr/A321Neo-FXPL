@@ -32,7 +32,11 @@ local fo_data = {
     vhf_selected_line = 3,
     scratchpad_input = -1,
     info_message = {"", "", ""},
-    sqwk_select = false
+    sqwk_select = false,
+    nav_ls_selected_line = 1,   -- 1: ils 1 freq, 2 ils crs
+    nav_vor_selected_line = 1,
+    nav_adf_selected_line = 1,
+    tel_directory_selected = 1,
 }
 
 draims_init_handlers(fo_data)

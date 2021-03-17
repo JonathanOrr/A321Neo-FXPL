@@ -2970,42 +2970,35 @@ function (phase)
     if phase == "render" then
         mcdu_dat_title.txt = "        radio nav"
         mcdu_dat["s"]["L"][1].txt = "vor1/freq"
-
-        mcdu_dat["l"]["L"][1][1] = {txt = " [ ]", col = "cyan"}
-        mcdu_dat["l"]["L"][1][2] = {txt = "    /111.00", col = "cyan", size = "s"}
-
         mcdu_dat["s"]["R"][1].txt = "freq/vor2"
-
-        mcdu_dat["l"]["R"][1][1] = {txt = "[ ] ", col = "cyan"}
-        mcdu_dat["l"]["R"][1][2] = {txt = "110.90/    ", col = "cyan", size = "s"}
-
         mcdu_dat["s"]["L"][2].txt = "crs"
-        mcdu_dat["l"]["L"][2] = {txt = "315", col = "cyan"}
         mcdu_dat["s"]["R"][2].txt = "crs"
-        mcdu_dat["l"]["R"][2] = {txt = "315", col = "cyan"}
-
         mcdu_dat["s"]["L"][3].txt = "ils /freq"
-        mcdu_dat["l"]["L"][3][1] = {txt = "[  ]", col = "cyan"}
-        mcdu_dat["l"]["L"][3][2] = {txt = "    /08.10", col = "cyan", size = "s"}
-
-        mcdu_dat["s"]["R"][3].txt = "chan/ mls"
-        mcdu_dat["l"]["R"][3].txt = "---/--- "
-
         mcdu_dat["s"]["L"][4].txt = "crs"
-        mcdu_dat["l"]["L"][4].txt = "---"
-
-        mcdu_dat["s"]["R"][4].txt = "slope   crs"
-        mcdu_dat["l"]["R"][4].txt = " -.-    ---"
-
         mcdu_dat["s"]["L"][5].txt = "adf1/freq"
-        mcdu_dat["l"]["L"][5][1] = {txt = " [ ]", col = "cyan"}
-        mcdu_dat["l"]["L"][5][2] = {txt = "    / 210.0", col = "cyan", size = "s"}
-
         mcdu_dat["s"]["R"][5].txt = "freq/adf2"
-        mcdu_dat["l"]["R"][5][1] = {txt = "[ ] ", col = "cyan"}
-        mcdu_dat["l"]["R"][5][2] = {txt = "210.0/    ", col = "cyan", size = "s"}
 
-		mcdu_dat["l"]["L"][6] = {txt = "        inop page", col = "amber"}
+        if get(DRAIMS_nav_stby_mode) == 0 then
+            mcdu_dat["l"]["L"][1][1] = {txt = " [ ]", col = "cyan"}
+            mcdu_dat["l"]["L"][1][2] = {txt = "    /111.00", col = "cyan", size = "s"}
+
+            mcdu_dat["l"]["R"][1][1] = {txt = "[ ] ", col = "cyan"}
+            mcdu_dat["l"]["R"][1][2] = {txt = "110.90/    ", col = "cyan", size = "s"}
+
+            mcdu_dat["l"]["L"][2] = {txt = "315", col = "cyan"}
+            mcdu_dat["l"]["R"][2] = {txt = "315", col = "cyan"}
+
+            mcdu_dat["l"]["L"][3][1] = {txt = "[  ]", col = "cyan"}
+            mcdu_dat["l"]["L"][3][2] = {txt = "    /08.10", col = "cyan", size = "s"}
+
+            mcdu_dat["l"]["L"][4].txt = "---"
+
+            mcdu_dat["l"]["L"][5][1] = {txt = " [ ]", col = "cyan"}
+            mcdu_dat["l"]["L"][5][2] = {txt = "    / 210.0", col = "cyan", size = "s"}
+
+            mcdu_dat["l"]["R"][5][1] = {txt = "[ ] ", col = "cyan"}
+            mcdu_dat["l"]["R"][5][2] = {txt = "210.0/    ", col = "cyan", size = "s"}
+        end
         draw_update()
     end
 end

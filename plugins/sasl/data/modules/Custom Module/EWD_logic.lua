@@ -150,6 +150,7 @@ local left_messages_list = {
     MessageGroup_ELEC_STATIC_INV_FAULT,
     MessageGroup_ELEC_TR_1_2_FAULT,
     MessageGroup_ELEC_TR_ESS_FAULT,
+    MessageGroup_ENG_REV_SET,
     MessageGroup_ENG_FF_CLOG,
     MessageGroup_ENG_OIL_CLOG,
     MessageGroup_SAT_ABOVE_FLEX,
@@ -234,6 +235,10 @@ local left_messages_list = {
     -- Warnings
     MessageGroup_OVERSPEED,
     MessageGroup_CONFIG_TAKEOFF,
+    MessageGroup_ENG_1_FIRE_GROUND,
+    MessageGroup_ENG_2_FIRE_GROUND,
+    MessageGroup_ENG_1_FIRE_FLIGHT,
+    MessageGroup_ENG_2_FIRE_FLIGHT,
     MessageGroup_CAB_PRESS_EXCESS_ALT,
     MessageGroup_APU_FIRE,
     MessageGroup_ELEC_EMER_CONFIG,

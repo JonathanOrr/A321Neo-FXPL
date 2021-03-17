@@ -38,8 +38,11 @@ local vhf_datarefs = {
         stby_freq_Mhz = DRAIMS_vhf3_stby_freq_Mhz,
         stby_freq_khz = DRAIMS_vhf3_stby_freq_khz
     }
+}
 
-
+local adf_datarefs = {
+    globalProperty("sim/cockpit2/radios/actuators/adf1_frequency_hz"),
+    globalProperty("sim/cockpit2/radios/actuators/adf2_frequency_hz")-- 190hz to 535hz
 }
 
 -------------------------------------------------------------------------------
@@ -90,17 +93,104 @@ function radio_is_vhf_working(which_one)
     end
 end
 
+
 -------------------------------------------------------------------------------
 -- VOR
 -------------------------------------------------------------------------------
 
+function radio_vor_get_freq(which_one, stby)
+    stby = stby or false
+    if stby then
+        return get(DRAIMS_vor_stby_freq[which_one])
+    else
+        return get(DRAIMS_vor_freq[which_one])
+    end
+end
+
+function radio_vor_set_freq(which_one, stby, freq)
+    assert(which_one ~= nil)
+    assert(freq ~= nil)
+    stby = stby or false
+
+    if stby then
+        set(DRAIMS_vor_stby_freq[which_one], freq)
+    else
+        set(DRAIMS_vor_freq[which_one], freq)
+    end
+end
+
+function radio_vor_swap_freq()
+    local temp = get(DRAIMS_vor_stby_freq[which_one])
+    set(DRAIMS_vor_stby_freq[which_one], get(DRAIMS_vor1_freq))
+    set(DRAIMS_vor_freq[which_one], temp)
+end
+
+function radio_vor_get_crs(which_one)
+    return math.floor(get(DRAIMS_vor_crs[which_one]))
+end
+
+function radio_vor_set_crs(which_one, crs)
+    set(DRAIMS_vor_crs[which_one], math.floor(crs % 360))
+end
+
 -------------------------------------------------------------------------------
 -- ILS
 -------------------------------------------------------------------------------
+function radio_ils_get_freq()
+    return get(NAV_1_freq_Mhz) + get(NAV_1_freq_khz)/100
+end
+
+function radio_ils_set_freq(freq)
+
+    local Mhz = math.floor(freq)
+    local khz = math.floor((freq-math.floor(freq))*100)
+
+    set(NAV_1_freq_Mhz, Mhz)
+    set(NAV_1_freq_khz, khz)
+end
+
+function radio_ils_get_crs()
+    return math.floor(get(NAV_1_capt_obs))
+end
+
+function radio_ils_set_crs(crs)
+    assert(crs ~= nil)
+    set(NAV_1_capt_obs, math.floor(crs % 360))
+end
+
+-------------------------------------------------------------------------------
+-- GLS
+-------------------------------------------------------------------------------
+function radio_gls_get_channel()
+    return get(DRAIMS_gls_channel)
+end
+
+function radio_gls_set_channel(ch)
+    assert(ch >= 0 and ch <= 99999)
+    set(DRAIMS_gls_channel, ch)
+end
+
+function radio_gls_get_crs()
+    return -1
+end
+
 
 -------------------------------------------------------------------------------
 -- ADF
 -------------------------------------------------------------------------------
+
+function radio_adf_get_freq(which_one)
+    assert(which_one ~= nil)
+    return get(adf_datarefs[which_one])
+end
+
+function radio_adf_set_freq(which_one, freq)
+    assert(which_one ~= nil)
+    assert(freq ~= nil)
+
+    set(adf_datarefs[which_one], Math_clamp(freq, 190, 535))
+end
+
 
 -------------------------------------------------------------------------------
 -- DME
@@ -124,6 +214,10 @@ function radio_is_ils_working(which_one)
     else
         return get(AC_bus_2_pwrd) == 1 and get(FAILURE_RADIO_ILS_2) == 0
     end
+end
+
+function radio_is_gls_working()
+    return get(AC_bus_2_pwrd) == 1 and get(FAILURE_RADIO_GLS) == 0
 end
 
 function radio_is_adf_working(which_one)
