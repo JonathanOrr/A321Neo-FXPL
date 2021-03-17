@@ -1004,3 +1004,62 @@ MessageGroup_ENG_2_FIRE_FLIGHT = {
 
 }
 
+
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: ENG REV SET
+----------------------------------------------------------------------------------------------------
+
+MessageGroup_ENG_REV_SET = {
+
+    shown = false,
+
+    text  = function()
+                return "ENG"
+            end,
+    color = function()
+                return COL_CAUTION
+            end,
+
+    sd_page = nil,
+    
+    priority = PRIORITY_LEVEL_2,
+
+    messages = {
+        {
+            text = function() return "    REV SET" end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        },
+        {
+            text = function()
+                N = ""
+                if get(Cockpit_throttle_lever_L) < 0 then
+                    N = "1"
+                end
+                if get(Cockpit_throttle_lever_R) < 0 then
+                    if #N > 0 then
+                        N = N .. "+"
+                    end
+                    N = N .. "2"
+                end
+                return " - THR LEVER " .. Aft_string_fill(N, ".", 3) .. "..FWD THR"
+            end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return true end
+        }
+
+    },
+
+    is_active = function()
+        return (get(Cockpit_throttle_lever_L) < 0 or get(Cockpit_throttle_lever_R) < 0) and get(Any_wheel_on_ground) == 0
+    end,
+
+    is_inhibited = function()
+        return is_active_in({PHASE_LIFTOFF, PHASE_AIRBONE, PHASE_FINAL})
+    end
+
+}
+
+
+
