@@ -2460,17 +2460,16 @@ END_SOUND_ATTACHMENT
 #############################################################################################
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /RevL
+  EVENT_NAME /Engines V3 LEAP/RevL V3
   VEH_PART engine 0
-  EVENT_ALWAYS
-  PARAM_DREF_IDX 0
+  EVENT_START_COND sim/cockpit2/annunciators/reverser_on[1] == 1
+  CUE_TRIGGER_COND sim/cockpit2/annunciators/reverser_on[1] == 0
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /RevR
   VEH_PART engine 1
   EVENT_ALWAYS
-  PARAM_DREF_IDX 1
 END_SOUND_ATTACHMENT
 
 #############################################################################################METAL SWITCHES

@@ -65,6 +65,7 @@
 {016b0ecc-f34a-4278-805e-94d2f2c7467a} event:/Engines V3 LEAP/HowlEnd
 {df5a49d6-0ca2-4862-be07-e46e04013c9e} event:/Engines V3 LEAP/HowlLogic
 {d6916c12-4c9c-4fb5-842d-fbecc7238050} event:/Engines V3 LEAP/HowlLogicR
+{f579556e-5a00-462d-8120-a1add3ca52fe} event:/Engines V3 LEAP/RevL V3
 {60390ec1-f659-43b4-a63d-0618b686e0fe} event:/FCU/Selectors/1
 {9bcca77b-d316-4192-bb92-d796b32e9bd3} event:/FCU/Selectors/2
 {863d7dc0-0956-4ed3-8336-5ee2bf0b4213} event:/FCU/Selectors/3
