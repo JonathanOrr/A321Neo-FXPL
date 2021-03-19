@@ -32,13 +32,6 @@ ACF_SOUNDS
 ##                                                                                                                                    .........                                        ##
 ##                                                                                                                                                                                     ##
 ##                                                                                                                                                                                     ##
-##                                             @@@@@@@@@  @@@   @@@@@@@@    .@@@@@@@@@@   @@@@@@@@  @@@@@@@@@@  @@    @@@@@@@@   @@      @@@                                           ##
-##                                            @@#         @@@   @@&    @@@  .@@          @@             @@      @@   @@#         @@   %@@@                                             ##
-##                                            /@@%        @@@   @@&     @@@ .@@          @@@            @@      @@   @@          @@ @@@@                                               ##
-##                                                .(@@@@  @@@   @@&     @@@ .@@@@@@,         *&@@@@     @@      @@   @@          @@@@ @@@                                              ##
-##                                                    @@% @@@   @@&     @@  .@@                 #@@     @@      @@   @@/         @@    @@@                                             ##
-##                                            @@@@@@@@@/  @@@   @@@@@@@@@   .@@@@@@@@@/ ,@@@@@@@@@      @@      @@    @@@@@@@@@  @@      @@@                                           ##
-##                                                                                                                                                                                     ##
 #########################################################################################################################################################################################                                                                         
 
 DISABLE_LEGACY_ALERT_SOUNDS
@@ -2378,11 +2371,21 @@ END_SOUND_ATTACHMENT
 ########################################################################################################APU
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /APU
+  EVENT_NAME /APU V2
   VEH_XYZ 0 2.4 24
-  EVENT_START_COND DELTA=sim/cockpit/engine/APU_N1 > 0.5
-  CUE_TRIGGER_COND  DELTA=sim/cockpit/engine/APU_N1 < -0.5
-  EVENT_END_COND sim/cockpit/engine/APU_N1 == 0
+  EVENT_ALWAYS
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /APU V2 Start
+  VEH_XYZ 0 2.4 24
+  EVENT_START_COND sim/cockpit2/electrical/APU_N1_percent > 0.01
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /APU V2 Stop
+  VEH_XYZ 0 2.4 24
+  EVENT_START_COND sim/cockpit2/electrical/APU_N1_percent < 99.2
 END_SOUND_ATTACHMENT
 
 ########################################################################################################CABIN

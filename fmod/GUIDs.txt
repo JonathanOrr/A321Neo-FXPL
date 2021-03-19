@@ -163,6 +163,9 @@
 {fe71437b-4936-4842-8b50-c346ceb04145} event:/Wipers/Wiper
 {eba1c552-d477-4c98-9d5f-00c2f3378ecd} event:/APButton
 {a50ec509-2f82-4177-bf54-8821bc565bed} event:/APU
+{4c5ca5ed-8bbe-4626-ad11-f45fe9ea2d17} event:/APU V2
+{85c97c79-e3ba-43ad-b793-834e87f3531d} event:/APU V2 Start
+{1b68ef91-4ecc-4913-a53b-3c26aed75793} event:/APU V2 Stop
 {3f2cc16b-2f56-46a4-891c-860965e1474f} event:/ASkidOff
 {fda10398-11aa-48db-9a23-9d3a9443a422} event:/ASkidOn
 {baf9bc41-c708-42a2-bfac-b33deb7ddbc4} event:/Avionics
@@ -178,6 +181,7 @@
 {df97eb35-a18e-494e-b074-1d496aa0cda2} event:/Evac Horn
 {06a66501-2a11-4b1a-a6f7-4fe5d089bc41} event:/Ext
 {f86c05b1-253e-4508-a475-4d354dd045c6} event:/Extractor
+{10895804-bfcf-41ab-9b56-5d472c68d276} event:/Fuel Pump
 {c97b703e-898e-4918-bc8c-259807c5ada1} event:/Gear
 {ea49942b-ab02-4afc-808b-ef17fbd68ef0} event:/GearDrag
 {5339da63-baf2-40c8-aafd-6bf6a0fe8aac} event:/Ground Roll
