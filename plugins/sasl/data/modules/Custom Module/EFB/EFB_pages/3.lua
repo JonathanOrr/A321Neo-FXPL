@@ -32,6 +32,8 @@ local load_target = {0,0,0,0,0,0}
 local load_actual = {0,0,0,0,0,0} -- not a live value! does not change in flight!!!!!!!
 local total_load_target = 0
 
+local predicted_tow = 0
+
 local tank_index_center = {
     {5000,   -1},
     {10000 , -1},
@@ -146,8 +148,6 @@ include("EFB/efb_topcat.lua")
 
 efb_subpage_number = 1
 
-
-
 -------------------EFB
 
 local function drawTextCentered(font, x, y, string, size, isbold, isitalic, alignment, colour)
@@ -221,16 +221,22 @@ local function predict_cg()
     + Table_extrapolate(cargo_index_aft, load_target[5]) --coefficient of the after cargo hold
 end
 
+local function predict_tow()
+    predicted_tow = ((load_target[1]+load_target[2]+load_target[3]) * weight_per_passenger) 
+    + load_target[4] + load_target[5] 
+    + load_target[6] 
+    + dry_operating_weight  
+end
+
 local function set_cg()
     set(CG_Pos, 0.04232395*(final_cg) - 1.06312)
 end
 
 local function set_values()
-    calculate_cg()
-    load_button_begin = get(TIME) --the button animation
     load_actual = load_target -- set the load actual array for the next line
     set(Payload_weight, (load_actual[1] + load_actual[2] + load_actual[3])*weight_per_passenger + load_actual[4] + load_actual[5])
     set_fuel(load_actual[6])
+    calculate_cg()
     sum_weights_up()
     set_cg()
 end
@@ -338,14 +344,19 @@ local function Subpage_1_buttons()
 --------------------------------------------------------------------------------------------------------
 
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 108, 50, 378, 80,function ()
+        load_button_begin = get(TIME) --the button animation
         set_values()
         save_to_file()
+        --print("hello")
     end)
 end
 
 local function EFB_update_page_3_subpage_1() --UPDATE LOOP
+    predict_tow()
     predict_cg()
-    print(predicted_cg)
+    --print(predicted_cg)
+    --print_r(load_target)
+    print_r(load_actual)
 end
 
 local function EFB_draw_page_3_subpage_1() -- DRAW LOOP
@@ -373,7 +384,7 @@ local function EFB_draw_page_3_subpage_1() -- DRAW LOOP
 --------------------------------------------------------------------------
 
     if math.floor(final_cg) ~= math.floor(predicted_cg) then
-        sasl.gl.drawWideLine ( 470 , Table_extrapolate(tow_to_coordinates, get(Gross_weight)/1000) , 1093 , Table_extrapolate(tow_to_coordinates, get(Gross_weight)/1000) , 3, EFB_FULL_YELLOW )
+        sasl.gl.drawWideLine ( 470 , Table_extrapolate(tow_to_coordinates, predicted_tow/1000) , 1093 , Table_extrapolate(tow_to_coordinates, predicted_tow/1000) , 3, EFB_FULL_YELLOW )
         sasl.gl.drawWideLine ( Table_extrapolate(percent_cg_to_coordinates, predicted_cg ) ,77, Table_extrapolate(percent_cg_to_coordinates, predicted_cg ),440, 3, EFB_FULL_YELLOW )
     else
         sasl.gl.drawWideLine ( 470 , Table_extrapolate(tow_to_coordinates, get(Gross_weight)/1000) , 1093 , Table_extrapolate(tow_to_coordinates, get(Gross_weight)/1000) , 3, EFB_WHITE )
