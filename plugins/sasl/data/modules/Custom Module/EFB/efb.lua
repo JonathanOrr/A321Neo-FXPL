@@ -70,8 +70,8 @@ else
 end
 
 function onKeyDown(component, char, key, shiftDown, ctrlDown, altOptDown)
-    if EFB_PAGE == 3 then
-        return EFB_onKeyDown_page3(component, char, key, shiftDown, ctrlDown, altOptDown)
+    if EFB_PAGE == 3 and efb_subpage_number == 1 then
+        return EFB_onKeyDown_page3_subpage_1(component, char, key, shiftDown, ctrlDown, altOptDown)
     end
 end
 
@@ -167,13 +167,13 @@ local function draw_cursor()------------------------------DONT U DARE REMOVE THI
 end
 
 local function update_battery()
-    CHARGE_TIME_LEFT = get(TIME) - CHARGE_START_TIME
+    CHARGE_TIME_LEFT = (get(TIME) - get(CHARGE_START_TIME))
     Charging_alpha_controller = {1,1,1,Table_interpolate(charge_fade_table, CHARGE_TIME_LEFT)}
     Ac_ess_delta = get(AC_ess_bus_pwrd) - Ac_ess_past_value
     Ac_ess_past_value = get(AC_ess_bus_pwrd)
     if Ac_ess_delta > 0 then
         CHARGE_START_TIME = get(TIME)
-    end  
+    end 
 end
 
 --SASL callbacks-------------------------------------------------------------------------------------------------
@@ -204,14 +204,7 @@ function draw()  ------KEEP THE draw_cursor() AT THE BOTTOM YOU DUMBASS!!!!!
 
     if EFB_PAGE ~= 10 then
         jon_told_me_not_to_create_super_long_names_for_functions_but_this_function_draw_horizontal_line_with_certain_width_centered(EFB_UNDERLINE_POS, 738,EFB_UNDERLINE_THICKNESS ,EFB_UNDERLINE_WIDTH ,EFB_WHITE) --DRAWS THE UNDERLINE OF THE PAGE TITLE
-    end
-
-    if CHARGE_START_TIME == 0 then
-        --do sth
-    elseif CHARGE_TIME_LEFT < CHARGE_SCREEN_TIME then	-- Screen is showing charge icon
         sasl.gl.drawTexture (EFB_Charging, 0 , 0 , 1143 , 800 , Charging_alpha_controller )
-    else
-        CHARGE_START_TIME = 0 -- Let's reset it for the future
     end
 
     if EFB_OFF == false then

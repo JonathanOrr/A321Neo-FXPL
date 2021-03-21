@@ -32,13 +32,6 @@ ACF_SOUNDS
 ##                                                                                                                                    .........                                        ##
 ##                                                                                                                                                                                     ##
 ##                                                                                                                                                                                     ##
-##                                             @@@@@@@@@  @@@   @@@@@@@@    .@@@@@@@@@@   @@@@@@@@  @@@@@@@@@@  @@    @@@@@@@@   @@      @@@                                           ##
-##                                            @@#         @@@   @@&    @@@  .@@          @@             @@      @@   @@#         @@   %@@@                                             ##
-##                                            /@@%        @@@   @@&     @@@ .@@          @@@            @@      @@   @@          @@ @@@@                                               ##
-##                                                .(@@@@  @@@   @@&     @@@ .@@@@@@,         *&@@@@     @@      @@   @@          @@@@ @@@                                              ##
-##                                                    @@% @@@   @@&     @@  .@@                 #@@     @@      @@   @@/         @@    @@@                                             ##
-##                                            @@@@@@@@@/  @@@   @@@@@@@@@   .@@@@@@@@@/ ,@@@@@@@@@      @@      @@    @@@@@@@@@  @@      @@@                                           ##
-##                                                                                                                                                                                     ##
 #########################################################################################################################################################################################                                                                         
 
 DISABLE_LEGACY_ALERT_SOUNDS
@@ -2378,11 +2371,21 @@ END_SOUND_ATTACHMENT
 ########################################################################################################APU
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /APU
+  EVENT_NAME /APU V2
   VEH_XYZ 0 2.4 24
-  EVENT_START_COND DELTA=sim/cockpit/engine/APU_N1 > 0.5
-  CUE_TRIGGER_COND  DELTA=sim/cockpit/engine/APU_N1 < -0.5
-  EVENT_END_COND sim/cockpit/engine/APU_N1 == 0
+  EVENT_ALWAYS
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /APU V2 Start
+  VEH_XYZ 0 2.4 24
+  EVENT_START_COND sim/cockpit2/electrical/APU_N1_percent > 0.01
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /APU V2 Stop
+  VEH_XYZ 0 2.4 24
+  EVENT_START_COND sim/cockpit2/electrical/APU_N1_percent < 99.2
 END_SOUND_ATTACHMENT
 
 ########################################################################################################CABIN
@@ -2460,17 +2463,16 @@ END_SOUND_ATTACHMENT
 #############################################################################################
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /RevL
+  EVENT_NAME /Engines V3 LEAP/RevL V3
   VEH_PART engine 0
-  EVENT_ALWAYS
-  PARAM_DREF_IDX 0
+  EVENT_START_COND sim/cockpit2/annunciators/reverser_on[1] == 1
+  CUE_TRIGGER_COND sim/cockpit2/annunciators/reverser_on[1] == 0
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /RevR
   VEH_PART engine 1
   EVENT_ALWAYS
-  PARAM_DREF_IDX 1
 END_SOUND_ATTACHMENT
 
 #############################################################################################METAL SWITCHES
