@@ -9,7 +9,7 @@
 -- source is not available. This means that you immediately get all the electrical power on all
 -- buses. This is useful for development. Please consider that eletrical load is no more valid if
 -- you enable this option and other strange effects on electrical system may happen.
-override_ELEC_always_on = true
+override_ELEC_always_on = false
 
 
 --If you set this variable to true, MCDU automatically generates a Look Up Table (LUT) for all airports.
@@ -19,7 +19,7 @@ override_MCDU_dontcreateairportlut = true
 
 -- If you set this variable to true, all the ADIRS are ON and IRS are ALIGNED. Button switches have
 -- no effects on adirs alignment
-override_ADIRS_ok = true
+override_ADIRS_ok = false
 
 
 -- If you set the following variable to a number different than 0, the corresponding ecam page is
@@ -30,11 +30,7 @@ local ecam_force_page = 0
 
 -- The following flag enables the performance measuring of each component. It is possible to
 -- visualize it in the debug window
-debug_performance_measure = true
-
--- The following flag disable the data manager, i.e., ND and MCDU do not load any point from X-Plane
--- files. This is useful to reduce the startup time
-disable_data_manager = true
+debug_performance_measure = false
 
 --
 --
