@@ -16,7 +16,6 @@
 -- Short description: OANS mode file
 -------------------------------------------------------------------------------
 include("ND/subcomponents/helpers.lua")
-include("ND/libs/polygon.lua")
 
 local ffi = require("ffi")  -- This is needed to convert C string of raw data
 
