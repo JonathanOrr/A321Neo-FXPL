@@ -146,7 +146,7 @@ function draw_mouse(data)
 
     draw_menu(data)
 
-    if data.plan_mouse_x ~= nil then
+    if data.plan_mouse_x ~= nil and not data.plan_holding then
         local cursor_size_w = 93
         local cursor_size_h = 115
 
