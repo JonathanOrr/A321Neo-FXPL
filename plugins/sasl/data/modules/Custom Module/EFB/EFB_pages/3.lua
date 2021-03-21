@@ -150,9 +150,7 @@ efb_subpage_number = 1
 
 -------------------EFB
 
-local function drawTextCentered(font, x, y, string, size, isbold, isitalic, alignment, colour)
-    sasl.gl.drawText (font, x, y - (size/3),string, size, isbold, isitalic, alignment, colour)
-end
+include("EFB/efb_functions.lua")
 
 local function performance_data()
 end
@@ -356,7 +354,7 @@ local function EFB_update_page_3_subpage_1() --UPDATE LOOP
     predict_cg()
     --print(predicted_cg)
     --print_r(load_target)
-    print_r(load_actual)
+    --print_r(load_actual)
 end
 
 local function EFB_draw_page_3_subpage_1() -- DRAW LOOP
