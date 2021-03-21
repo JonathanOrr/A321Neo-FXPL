@@ -12,7 +12,7 @@
 --    Please check the LICENSE file in the root of the repository for further
 --    details or check <https://www.gnu.org/licenses/>
 -------------------------------------------------------------------------------
--- File: graphics_plan.lua
+-- File: graphics_mouse.lua
 -- Short description: PLAN mode mouse management file
 -------------------------------------------------------------------------------
 

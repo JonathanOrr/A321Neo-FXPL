@@ -68,12 +68,20 @@ local function update_knobs()
     Set_dataref_linear_anim_nostop(ND_Fo_nav2_level, nd_data.config.nav_2_selector, -1, 1, 10)
 end
 
+local function update_disable_click()
+    if nd_data.config.range < ND_RANGE_10 then
+        set(Fo_PFD_disable_click, get(Fo_pfd_displaying_status) == DMC_ND_FO and 1 or 0)
+        set(Fo_ND_disable_click, get(Fo_nd_displaying_status) == DMC_ND_FO and 1 or 0)
+    end
+end
+
 function update()
 
     position = {get(Fo_nd_position, 1), get(Fo_nd_position, 2), get(Fo_nd_position, 3), get(Fo_nd_position, 4)}
 
     update_buttons()
     update_knobs()
+    update_disable_click()
 
     update_main(nd_data)
 end

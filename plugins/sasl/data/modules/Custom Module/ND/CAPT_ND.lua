@@ -85,6 +85,13 @@ local function update_knobs()
     
 end
 
+local function update_disable_click()
+    if nd_data.config.range < ND_RANGE_10 then
+        set(Capt_PFD_disable_click, get(Capt_pfd_displaying_status) == DMC_ND_CAPT and 1 or 0)
+        set(Capt_ND_disable_click, get(Capt_nd_displaying_status) == DMC_ND_CAPT and 1 or 0)
+    end
+end
+
 function update()
 
     perf_measure_start("CAPT_ND:update()")
@@ -93,6 +100,7 @@ function update()
 
     update_buttons()
     update_knobs()
+    update_disable_click()
 
     update_main(nd_data)
 
