@@ -136,15 +136,7 @@ function new_dataset(input_id)
     },
     
     poi = { -- Point of interests
-        arpt = { --[[
-            { lat = 45.4522, lon=9.2763, id="LIML" },
-            { lat = 45.6301, lon=8.7255, id="LIMC" },
-            { lat = 45.540287, lon=9.202300, id="LIMC" },
-            { lat = 45.531059, lon=8.669050, id="LIMN" },
-            { lat = 45.672005, lon=9.706893, id="LIME" },
-            { lat = 45.720001, lon=9.593889, id="LILV" },
-            { lat = 45.769444, lon=9.161111, id="LILB" },
-            ]]--
+        arpt = {
         },
         vor = {
         },

@@ -218,14 +218,14 @@ local function draw_oans_mark_lines(data, functions, apt, apt_details)
     end
 
     for i=len-1, 0, -1 do
-        local line = apt_details.linear_features[i] 
+        local line = apt_details.linear_features[i]
         
-        if    line.color == 1 or line.color == 51   -- Taxiway centerlines 
+        if    line.color == 1 or line.color == 51 or line.color == 60 or line.color == 61   -- Taxiway centerlines 
            or line.color == 4 or line.color == 54   -- Runways hold positions
            or line.color == 5 or line.color == 55   -- Non-runway hold positions
            or line.color == 8 or line.color == 58   -- Lanes queue
            or line.color == 9 or line.color == 59   -- Lanes queue
-           or line.color == 22                      -- Roadway centerline
+           or line.color == 22 or line.color == 62  -- Roadway centerline
         then
 
             local color = COLOR_YELLOW
@@ -235,8 +235,8 @@ local function draw_oans_mark_lines(data, functions, apt, apt_details)
                 color = ECAM_WHITE
             elseif line.color == 8 or line.color == 58 or line.color == 9 or line.color == 59 then
                 color = ECAM_WHITE
-            elseif line.color == 22 then
-                color = {0.6, 0.6, 0}
+            elseif line.color == 22 or line.color == 62 then
+                color = {0.5, 0.5, 0}
             end
 
             local last_prev_x = nil
@@ -387,7 +387,7 @@ local function update_oans_cache(data, functions, apt)
     
     local x_now, y_now = functions.get_x_y(data, data.plan_ctr_lat, data.plan_ctr_lon)
     local x_orig, y_orig = functions.get_x_y(data, data.oans_cache.ref_lat, data.oans_cache.ref_lon)
-    
+
     data.oans_cache.diff_x = x_now - x_orig
     data.oans_cache.diff_y = y_now - y_orig
 end
@@ -396,14 +396,14 @@ function draw_oans(data, functions)
     if data.config.range > ND_RANGE_ZOOM_2 then
         return  -- No OANS over zoom
     end
+    
+    data.misc.range_change = true
 
     local nearest_airport = AvionicsBay.apts.get_nearest_apt(true)
     
     local apt = nearest_airport -- TODO: Change depending on MCDU ecc.
 
     if apt ~= nil then
-
-
 
         AvionicsBay.apts.request_details(apt.id)
         
@@ -413,8 +413,7 @@ function draw_oans(data, functions)
 
         local apt_details = AvionicsBay.apts.get_details(apt.id)
     
-        
-        if data.plan_ctr_lat == 0 and data.plan_ctr_lon == 0 then
+        if (data.plan_ctr_lat == 0 and data.plan_ctr_lon == 0) or (data.oans_cache == nil or data.oans_cache.apt_id ~= apt.id) then
             data.plan_ctr_lat = apt.lat
             data.plan_ctr_lon = apt.lon
         end
@@ -424,9 +423,6 @@ function draw_oans(data, functions)
         draw_oans_airport_bounds(data, functions, apt, apt_details)
 
         draw_oans_taxiways(data, functions, apt, apt_details)
-
-        local timer = sasl.createPerformanceTimer()
-        sasl.startTimer(timer)
 
         if data.config.range <= ND_RANGE_ZOOM_1 then
             draw_oans_mark_lines(data, functions, apt, apt_details)
@@ -446,8 +442,10 @@ function draw_oans(data, functions)
         if data.config.range <= ND_RANGE_ZOOM_1 then
             draw_oans_flags_and_crosses(data,functions)
         end
-
     end
+
+    
+    data.misc.range_change = false
 end
 
 
