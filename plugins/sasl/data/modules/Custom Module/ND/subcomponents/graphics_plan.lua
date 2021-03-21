@@ -19,9 +19,19 @@
 include("ND/subcomponents/graphics_oans.lua")
 size = {900, 900}
 
-
 local image_bkg_plan        = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/plan.png")
 local image_bkg_plan_middle = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/ring-middle.png")
+
+-------------------------------------------------------------------------------
+-- Caching math functions
+-------------------------------------------------------------------------------
+local msin = math.sin
+local mcos = math.cos
+local mrad = math.rad
+local mdeg = math.deg
+local msqrt = math.sqrt
+local matan2 = math.atan2
+
 
 local function plan_get_px_per_nm(data)
     -- 588 px is the diameter of our ring, so this corresponds to the range scale selected:
@@ -46,22 +56,6 @@ local function draw_background(data)
     sasl.gl.drawTexture(image_bkg_plan_middle, (size[1]-750)/2,(size[2]-750)/2,750,750, {1,1,1})
 end
 
-
-
-
-local function rotate_point(point_to_rotate_x, point_to_rotate_y, center_of_rotation_x, center_of_rotation_y, angle)
-    local cos_t = math.cos(math.rad(angle))
-    local sin_t = math.sin(math.rad(angle))
-
-    local x = cos_t * (point_to_rotate_x - center_of_rotation_x) - 
-              sin_t * (point_to_rotate_y - center_of_rotation_y) + center_of_rotation_x
-
-    local y = sin_t * (point_to_rotate_x - center_of_rotation_x) +
-              cos_t * (point_to_rotate_y - center_of_rotation_y) + center_of_rotation_y
-
-    return x,y
-end
-
 local function draw_plane(data)
 
     if not data.inputs.is_heading_valid then
@@ -80,21 +74,21 @@ local function draw_plane(data)
     local bearing  = get_bearing(data.plan_ctr_lat, data.plan_ctr_lon, data.inputs.plane_coords_lat,data.inputs.plane_coords_lon)
     local distance_px = distance * px_per_nm
 
-    local plane_pos_x = size[1]/2 + distance_px * math.cos(math.rad(bearing))
-    local plane_pos_y = size[1]/2 + distance_px * math.sin(math.rad(bearing))
+    local plane_pos_x = size[1]/2 + distance_px * mcos(mrad(bearing))
+    local plane_pos_y = size[1]/2 + distance_px * msin(mrad(bearing))
     local angle = -data.inputs.true_heading
     
     -- Plane
-    local x1, y1 = rotate_point(plane_pos_x, plane_pos_y-37, plane_pos_x, plane_pos_y, angle)
-    local x2, y2 = rotate_point(plane_pos_x, plane_pos_y+37, plane_pos_x, plane_pos_y, angle)    
+    local x1, y1 = rotate_xy_point(plane_pos_x, plane_pos_y-37, plane_pos_x, plane_pos_y, angle)
+    local x2, y2 = rotate_xy_point(plane_pos_x, plane_pos_y+37, plane_pos_x, plane_pos_y, angle)    
     sasl.gl.drawWideLine(x1, y1, x2, y2, 4, data.config.range > ND_RANGE_ZOOM_2 and COLOR_YELLOW or ECAM_MAGENTA)
 
-    local x1, y1 = rotate_point(plane_pos_x-40, plane_pos_y+13, plane_pos_x, plane_pos_y, angle)
-    local x2, y2 = rotate_point(plane_pos_x+40, plane_pos_y+13, plane_pos_x, plane_pos_y, angle)    
+    local x1, y1 = rotate_xy_point(plane_pos_x-40, plane_pos_y+13, plane_pos_x, plane_pos_y, angle)
+    local x2, y2 = rotate_xy_point(plane_pos_x+40, plane_pos_y+13, plane_pos_x, plane_pos_y, angle)    
     sasl.gl.drawWideLine(x1, y1, x2, y2, 4, data.config.range > ND_RANGE_ZOOM_2 and COLOR_YELLOW or ECAM_MAGENTA)
 
-    local x1, y1 = rotate_point(plane_pos_x-15, plane_pos_y-22, plane_pos_x, plane_pos_y, angle)
-    local x2, y2 = rotate_point(plane_pos_x+15, plane_pos_y-22, plane_pos_x, plane_pos_y, angle)    
+    local x1, y1 = rotate_xy_point(plane_pos_x-15, plane_pos_y-22, plane_pos_x, plane_pos_y, angle)
+    local x2, y2 = rotate_xy_point(plane_pos_x+15, plane_pos_y-22, plane_pos_x, plane_pos_y, angle)    
     sasl.gl.drawWideLine(x1, y1, x2, y2, 4, data.config.range > ND_RANGE_ZOOM_2 and COLOR_YELLOW or ECAM_MAGENTA)
     
 end
@@ -107,17 +101,17 @@ local function plan_get_x_y(data, lat, lon)  -- Do not use this for poi
     local distance_px = distance * px_per_nm
     local bearing  = get_bearing(data.plan_ctr_lat, data.plan_ctr_lon,lat,lon)
 
-    local x = size[1]/2 + distance_px * math.cos(math.rad(bearing))
-    local y = size[2]/2 + distance_px * math.sin(math.rad(bearing))
+    local x = size[1]/2 + distance_px * mcos(mrad(bearing))
+    local y = size[2]/2 + distance_px * msin(mrad(bearing))
     
     return x,y
 end
 
 local function plan_get_lat_lon(data, x, y)
-    local bearing     = 180+math.deg(math.atan2((size[1]/2 - x), (size[2]/2 -    y)))
+    local bearing     = 180+mdeg(matan2((size[1]/2 - x), (size[2]/2 -    y)))
     
     local px_per_nm = plan_get_px_per_nm(data)
-    local distance_nm = math.sqrt((size[1]/2 - x)*(size[1]/2 - x) + (size[2]/2 - y)*(size[2]/2 - y)) / px_per_nm
+    local distance_nm = msqrt((size[1]/2 - x)*(size[1]/2 - x) + (size[2]/2 - y)*(size[2]/2 - y)) / px_per_nm
 
     return Move_along_distance(data.plan_ctr_lat, data.plan_ctr_lon, distance_nm*1852, bearing)
 end

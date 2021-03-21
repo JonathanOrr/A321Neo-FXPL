@@ -20,9 +20,21 @@ include("ND/libs/polygon.lua")
 
 local ffi = require("ffi")
 
+-------------------------------------------------------------------------------
+-- Textures
+-------------------------------------------------------------------------------
+
 local image_black_square    = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/black-square.png")
 local image_icon_flag       = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/icon-flag.png")
 local image_icon_cross      = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/icon-cross.png")
+
+-------------------------------------------------------------------------------
+-- Caching math functions
+-------------------------------------------------------------------------------
+local msin = math.sin
+local mcos = math.cos
+local mdeg = math.deg
+
 
 local function draw_oans_rwy(data, rwy_start, functions)
 
@@ -37,8 +49,8 @@ local function draw_oans_rwy(data, rwy_start, functions)
     
     -- Draw runway
     
-    local x_shift = semiwidth_px * math.cos(perp_angle)
-    local y_shift = semiwidth_px * math.sin(perp_angle)
+    local x_shift = semiwidth_px * mcos(perp_angle)
+    local y_shift = semiwidth_px * msin(perp_angle)
     
     local ll_x = x_start + x_shift
     local ll_y = y_start + y_shift
@@ -53,10 +65,10 @@ local function draw_oans_rwy(data, rwy_start, functions)
     
     -- Draw runway marks
     local dist_line = 7
-    local x_shift_line = (semiwidth_px-dist_line) * math.cos(perp_angle)
-    local y_shift_line = (semiwidth_px-dist_line) * math.sin(perp_angle)
-    local x_shift_inner = dist_line * math.cos(angle)
-    local y_shift_inner = dist_line * math.sin(angle)
+    local x_shift_line = (semiwidth_px-dist_line) * mcos(perp_angle)
+    local y_shift_line = (semiwidth_px-dist_line) * msin(perp_angle)
+    local x_shift_inner = dist_line * mcos(angle)
+    local y_shift_inner = dist_line * msin(angle)
 
     local ll_x = x_start + x_shift_line + x_shift_inner
     local ll_y = y_start + y_shift_line + y_shift_inner
@@ -75,7 +87,7 @@ local function draw_oans_rwy(data, rwy_start, functions)
     -- Draw sign middle
     local m_x = (x_start + x_end) / 2
     local m_y = (y_start + y_end) / 2
-    local m_angle = -math.deg(angle)
+    local m_angle = -mdeg(angle)
     if m_angle > 180 then m_angle = m_angle - 180 end
     if m_angle < 0 then m_angle = m_angle + 180 end
     
@@ -106,15 +118,15 @@ local function draw_oans_rwy(data, rwy_start, functions)
     end
     
     local dist_text = -70
-    local x_shift = x_start + dist_text * math.cos(angle)
-    local y_shift = y_start + dist_text * math.sin(angle)
+    local x_shift = x_start + dist_text * mcos(angle)
+    local y_shift = y_start + dist_text * msin(angle)
     local font_size = 60
     local width = 30 * #rwy_start.name
 
     sasl.gl.drawRotatedText(Font_AirbusDUL, x_shift, y_shift, x_shift, y_shift, m_angle, rwy_start.name, font_size, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
 
-    local x_shift = x_end - dist_text * math.cos(angle)
-    local y_shift = y_end - dist_text * math.sin(angle)
+    local x_shift = x_end - dist_text * mcos(angle)
+    local y_shift = y_end - dist_text * msin(angle)
     sasl.gl.drawRotatedText(Font_AirbusDUL, x_shift, y_shift, x_shift, y_shift, 180+m_angle, rwy_start.sibl_name, font_size, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
 
 end
@@ -124,6 +136,20 @@ local function draw_oans_rwys(data, functions, apt)
     for rwyname,rwy in pairs(apt.rwys) do
         draw_oans_rwy(data, rwy, functions)
     end
+end
+
+local function rotate_cached_triangle(data, points)
+    local rot_ctr_x = 450 - data.oans_cache.diff_x
+    local rot_ctr_y = 450 - data.oans_cache.diff_y
+    points[1], points[2] = rotate_xy_point(points[1], points[2], rot_ctr_x, rot_ctr_y, data.oans_cache.diff_bear)
+    points[3], points[4] = rotate_xy_point(points[3], points[4], rot_ctr_x, rot_ctr_y, data.oans_cache.diff_bear)
+    points[5], points[6] = rotate_xy_point(points[5], points[6], rot_ctr_x, rot_ctr_y, data.oans_cache.diff_bear)
+end
+
+local function rotate_cached_point(data, x, y)
+    local rot_ctr_x = 450 - data.oans_cache.diff_x
+    local rot_ctr_y = 450 - data.oans_cache.diff_y
+    return rotate_xy_point(x, y, rot_ctr_x, rot_ctr_y, data.oans_cache.diff_bear)
 end
 
 local function draw_oans_taxiways(data, functions, apt, apt_details)
@@ -165,6 +191,7 @@ local function draw_oans_taxiways(data, functions, apt, apt_details)
                                  data.oans_cache.taxi_c_p[i][k-1] - data.oans_cache.diff_x,
                                  data.oans_cache.taxi_c_p[i][k] - data.oans_cache.diff_y
                                }
+                rotate_cached_triangle(data, points)
                 sasl.gl.drawConvexPolygon (points, true, 0, color)
             end
         end
@@ -203,6 +230,7 @@ local function draw_oans_airport_bounds(data, functions, apt, apt_details)
                                  data.oans_cache.apt_bounds[i][k-1] - data.oans_cache.diff_x,
                                  data.oans_cache.apt_bounds[i][k] - data.oans_cache.diff_y
                                }
+                rotate_cached_triangle(data, points)
                 sasl.gl.drawConvexPolygon (points, true, 0, {0.1,0.1,0.1})
             end
         end
@@ -236,7 +264,7 @@ local function draw_oans_mark_lines(data, functions, apt, apt_details)
             elseif line.color == 8 or line.color == 58 or line.color == 9 or line.color == 59 then
                 color = ECAM_WHITE
             elseif line.color == 22 or line.color == 62 then
-                color = {0.5, 0.5, 0}
+                color = {0.55, 0.55, 0}
             end
 
             local last_prev_x = nil
@@ -255,6 +283,8 @@ local function draw_oans_mark_lines(data, functions, apt, apt_details)
 
                 local x = data.oans_cache.mark_lines[i][j][1] - data.oans_cache.diff_x
                 local y = data.oans_cache.mark_lines[i][j][2] - data.oans_cache.diff_y
+
+                x, y = rotate_cached_point(data, x, y)
 
                 if last_prev_x ~= nil and last_prev_y ~= nil then
                     sasl.gl.drawWideLine(last_prev_x, last_prev_y, x, y, 3, color)
@@ -306,6 +336,8 @@ local function draw_oans_mark_taxi(data, functions, apt, apt_details)
             local x = data.oans_cache.routes_four[i][1] - data.oans_cache.diff_x
             local y = data.oans_cache.routes_four[i][2] - data.oans_cache.diff_y
 
+            x, y = rotate_cached_point(data, x, y)
+
             local name = ffi.string(route.name, route.name_len);
 
             local width  = 20 * #name
@@ -336,6 +368,8 @@ local function draw_oans_mark_gate(data, functions, apt, apt_details)
 
         local x = data.oans_cache.gates[i][1] - data.oans_cache.diff_x
         local y = data.oans_cache.gates[i][2] - data.oans_cache.diff_y
+
+        x, y = rotate_cached_point(data, x, y)
 
         local width  = 20 * #name
         local height = 36
@@ -371,25 +405,32 @@ end
 
 local function update_oans_cache(data, functions, apt)
 
+    local local_lat = nd_data.config.mode == ND_MODE_PLAN and data.plan_ctr_lat or data.inputs.plane_coords_lat
+    local local_lon = nd_data.config.mode == ND_MODE_PLAN and data.plan_ctr_lon or data.inputs.plane_coords_lon
+    local local_angle = nd_data.config.mode == ND_MODE_PLAN and 0 or data.inputs.heading
+
     if    data.oans_cache == nil or data.oans_cache.mode ~= data.config.mode
        or data.oans_cache.range ~= data.config.range or data.oans_cache.apt_id ~= apt.id then
         data.oans_cache = {
             mode = data.config.mode,
             range = data.config.range,
             apt_id = apt.id,
-            ref_lat = data.plan_ctr_lat,
-            ref_lon = data.plan_ctr_lon
+            ref_lat = local_lat,
+            ref_lon = local_lon,
+            ref_bear = local_angle
         }
     end
 
     -- Compute the difference position in px from the original one to the current position,
     -- so that we can use the cache data
     
-    local x_now, y_now = functions.get_x_y(data, data.plan_ctr_lat, data.plan_ctr_lon)
+
+    local x_now, y_now = functions.get_x_y(data, local_lat, local_lon)
     local x_orig, y_orig = functions.get_x_y(data, data.oans_cache.ref_lat, data.oans_cache.ref_lon)
 
-    data.oans_cache.diff_x = x_now - x_orig
-    data.oans_cache.diff_y = y_now - y_orig
+    data.oans_cache.diff_x    = x_now - x_orig
+    data.oans_cache.diff_y    = y_now - y_orig
+    data.oans_cache.diff_bear = nd_data.config.mode == ND_MODE_PLAN and 0 or data.inputs.heading - data.oans_cache.ref_bear
 end
 
 function draw_oans(data, functions)
