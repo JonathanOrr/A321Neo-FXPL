@@ -125,10 +125,8 @@ function onMouseDown ( component , x , y , button , parentX , parentY )
         if button == MB_LEFT or button == MB_RIGHT then
             keyboard_focus = 0
             keyboard_subpage_2_focus = 0
-            print("Hi")
         end
     end
-    print("Bye")
     return true
 end
 
@@ -548,7 +546,7 @@ local function mutual_button_loop()
 end
 
 local function mutual_update_loop()
-    print(EFB_CURSOR_X, EFB_CURSOR_Y)
+
 end
 
 local function mutual_draw_loop()

@@ -175,6 +175,5 @@ function EFB_draw_page_4()
     draw_toggle_switches()
     draw_volume_sliders()
 
-    print(EFB_CURSOR_X, EFB_CURSOR_Y)
     --print(get(Cockpit_throttle_lever_L))
 end

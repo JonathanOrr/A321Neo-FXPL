@@ -124,9 +124,14 @@ function update_egt()
     end
 end
 
+local function single_battery_condition_fault()
+    return (ELEC_sys.batteries[1].is_connected_to_dc_bus and not ELEC_sys.batteries[2].is_connected_to_dc_bus)
+        or (not ELEC_sys.batteries[1].is_connected_to_dc_bus and ELEC_sys.batteries[2].is_connected_to_dc_bus)
+end
+
 local function update_button_datarefs()
 
-    local is_faulty = get(FAILURE_ENG_APU_FAIL) == 1 or get(DC_bat_bus_pwrd) == 0
+    local is_faulty = get(FAILURE_ENG_APU_FAIL) == 1 or get(DC_bat_bus_pwrd) == 0 or single_battery_condition_fault()
 
     set(Apu_master_button_state,(master_switch_status and 1 or 0))
 
@@ -146,7 +151,7 @@ end
 local function update_start()
     if master_switch_status and get(FAILURE_ENG_APU_FAIL) == 0 and not test_in_progress and get(Fire_pb_APU_status) == 0 then 
 
-        if start_requested and get(APU_flap) == 1 and get(Apu_avail) == 0 and get(DC_bat_bus_pwrd) == 1 and get(Apu_fuel_source) > 0 then
+        if start_requested and get(APU_flap) == 1 and get(Apu_avail) == 0 and get(DC_bat_bus_pwrd) == 1 and get(Apu_fuel_source) > 0 and not single_battery_condition_fault() then
             set(Apu_start_position, 2)
         elseif get(Apu_avail) == 1 and get(Apu_fuel_source) > 0 then
             set(Apu_start_position, 1)

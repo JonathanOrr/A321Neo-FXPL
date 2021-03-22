@@ -946,11 +946,12 @@ end
 
 local function update_failing_eng(x)
     local eng_ms    = (x == 1 and get(Engine_1_master_switch) or get(Engine_2_master_switch)) == 1
-    local n2_below  = (x == 1 and get(Eng_1_N2) or get(Eng_2_N2)) < 65
+    local n2_below  = (x == 1 and get(Eng_1_N2) or get(Eng_2_N2)) < 62
+    local not_avail = (x == 1 and get(Engine_1_avail) or get(Engine_2_avail)) == 0
     local eng_st    = already_started_eng[x]
     local no_fire_pb= (x == 1 and get(Fire_pb_ENG1_status) or get(Fire_pb_ENG2_status)) == 0
 
-    if eng_ms and n2_below and eng_st and no_fire_pb then
+    if eng_ms and n2_below and eng_st and no_fire_pb and not_avail then
         set(Eng_is_failed, 1, x)
     end
     
