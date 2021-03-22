@@ -19,9 +19,27 @@
 position = {get(EWD_displaying_position, 1), get(EWD_displaying_position, 2), get(EWD_displaying_position, 3), get(EWD_displaying_position, 4)}
 size = {900, 900}
 
-local PARAM_DELAY    = 0.15 -- Time to filter out the parameters (they are updated every PARAM_DELAY seconds)
-local last_params_update = 0
+-------------------------------------------------------------------------------
+-- Constants
+-------------------------------------------------------------------------------
 
+local PARAM_DELAY    = 0.15 -- Time to filter out the parameters (they are updated every PARAM_DELAY seconds)
+local MATCH_MSG_COLORS = { ECAM_WHITE, 
+                           ECAM_RED,
+                           ECAM_MAGENTA,
+                           ECAM_ORANGE,
+                           ECAM_GREEN,
+                           ECAM_WHITE,
+                           ECAM_BLUE,
+                           ECAM_GREEN -- Blinking
+                           }
+
+local COLOR_FIXED_EL = {0.2, 0.3, 0.4}
+
+-------------------------------------------------------------------------------
+-- Variables
+-------------------------------------------------------------------------------
+local last_params_update = 0
 local params = {
     eng1_n1 = 0,
     eng2_n1 = 0,
@@ -36,18 +54,9 @@ local params = {
 
 local eng_idle_start = 0  -- When the engines went to IDLE
 
-local match_msg_colors = {}
-match_msg_colors[0] = ECAM_WHITE
-match_msg_colors[1] = ECAM_RED
-match_msg_colors[2] = ECAM_MAGENTA
-match_msg_colors[3] = ECAM_ORANGE
-match_msg_colors[4] = ECAM_GREEN
-match_msg_colors[5] = ECAM_WHITE
-match_msg_colors[6] = ECAM_BLUE
-match_msg_colors[7] = ECAM_GREEN -- Blinking
-
-local time_blinking = sasl.createTimer()
-sasl.startTimer(time_blinking)
+-------------------------------------------------------------------------------
+-- EWD - Engines
+-------------------------------------------------------------------------------
 
 function draw_reverse_indication()
     -- ENG1 Reverse
@@ -78,71 +87,6 @@ function draw_reverse_indication()
     end
 end
 
-function update()
-    position = {get(EWD_displaying_position, 1), get(EWD_displaying_position, 2), get(EWD_displaying_position, 3), get(EWD_displaying_position, 4)}
-
-    -- Update the parameter every PARAM_DELAY seconds
-    if get(TIME) - params.last_update > PARAM_DELAY then
-        params.eng1_n1 = get(Eng_1_N1)
-        params.eng2_n1 = get(Eng_2_N1)
-        params.eng1_n2 = get(Eng_1_N2)
-        params.eng2_n2 = get(Eng_2_N2)
-        if params.eng1_n1 < 5 then params.eng1_n1 = 0 end
-        if params.eng2_n1 < 5 then params.eng2_n1 = 0 end
-
-        params.eng1_egt = math.floor(get(Eng_1_EGT_c))
-        params.eng2_egt = math.floor(get(Eng_2_EGT_c))
-
-        params.eng1_ff = math.floor(get(Eng_1_FF_kgs)*360)*10
-        params.eng2_ff = math.floor(get(Eng_2_FF_kgs)*360)*10
-
-
-        params.last_update = get(TIME)
-    end
-
-    if params.eng1_n1 < get(Eng_N1_idle) + 2 and params.eng2_n1 < get(Eng_N1_idle) + 2 and get(Any_wheel_on_ground) == 0 then
-        if eng_idle_start == 0 then
-            eng_idle_start = get(TIME)
-        end
-    else
-        eng_idle_start = 0
-    end
-
-end
-
-local function draw_packs_wai_nai()
-    if get(Engine_1_avail) == 0 and get(Engine_2_avail) == 0 then
-        return
-    end
-    local max_eng_n1_mode = math.max(get(Eng_N1_mode, 1), get(Eng_N1_mode, 2)) 
-    
-    -- PACKS / WAI / NAI indication
-    if get(Any_wheel_on_ground) == 1 or max_eng_n1_mode < 3 or max_eng_n1_mode > 5 then
-        local str = ""
-        if get(Pack_L) == 1 or get(Pack_R) == 1 then
-            str = "PACKS"
-        end
-        
-        if AI_sys.switches[1] or AI_sys.switches[2] then
-            if #str > 0 then
-                str = str .. " / NAI"
-            else
-                str = "NAI"
-            end    
-        end
-        
-        if AI_sys.switches[3] then
-            if #str > 0 then
-                str = str .. " / WAI"
-            else
-                str = "WAI"
-            end
-        end
-        sasl.gl.drawText(Font_ECAMfont, size[1]/2+150, size[2]-30, str, 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    end
-
-end
-
 local function draw_n1_limits()
 
     --draw needle limits--
@@ -162,48 +106,6 @@ local function draw_n1_limits()
     sasl.gl.drawRotatedTextureCenter ( EWD_req_thrust_img, Math_rescale_lim_lower(20, -132, 100, 42, get(R_throttle_blue_dot)), size[1]/2 + 175, size[2]/2 + 333, size[1]/2 + 166, size[2]/2 + 331, 18, 97, {1, 1, 1})
 end
 
-local function draw_extra_indication()
-    draw_packs_wai_nai()
-
-    -- A FLOOR
-    if true then    -- TODO Jon please add here a condition
-        sasl.gl.drawText(Font_ECAMfont, 30, size[2]-40, "A FLOOR", 32, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
-    end
-
-    local max_eng_n1_mode = math.min(get(Eng_N1_mode, 1), get(Eng_N1_mode, 2)) 
-
-    if max_eng_n1_mode == 0 then
-        return
-    end
-    
-    displayed_mode = max_eng_n1_mode
-
-    local n1_max = get(Eng_N1_max)
-    
-    if get(All_on_ground) == 1 and max_eng_n1_mode ~= 1 then
-        if get(Engine_1_avail) == 0 and get(Engine_1_avail) == 0 then
-            displayed_mode = 3 -- When engines OFF, the mode is CLB
-            n1_max = get(Eng_N1_max_detent_clb)
-        elseif get(Eng_N1_flex_temp) ~= 0 then
-            displayed_mode = 6
-            n1_max = get(Eng_N1_max_detent_flex)
-        else
-            displayed_mode = 1
-            n1_max = get(Eng_N1_max_detent_toga)
-        end
-    end
-    
-    mode_names = {"TOGA", "MCT", "CLB", "IDLE", "MREV", "FLEX", "GA SOFT"}
-
-    sasl.gl.drawText(Font_ECAMfont, size[1]-80, size[2]-30, mode_names[displayed_mode], 32, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
-    sasl.gl.drawText(Font_ECAMfont, size[1]-65, size[2]-55, math.floor(n1_max) .. ".", 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    sasl.gl.drawText(Font_ECAMfont, size[1]-50, size[2]-55, math.floor((n1_max%1)*10), 24, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    sasl.gl.drawText(Font_ECAMfont, size[1]-35, size[2]-55, "%", 24, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
-
-    if displayed_mode == 6 then
-        sasl.gl.drawText(Font_ECAMfont, size[1]-80, size[2]-80, math.floor(get(Eng_N1_flex_temp)) .. "°C", 24, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
-    end    
-end
 
 local function draw_engines_needles()
     -----------TODO-----------
@@ -386,6 +288,10 @@ local function draw_engines()
 end
 
 
+-------------------------------------------------------------------------------
+-- EWD - Extra stuffs
+-------------------------------------------------------------------------------
+
 local function draw_coolings()
     if get(EWD_engine_cooling, 1) == 1 then
         sasl.gl.drawText(Font_ECAMfont, size[1]/2-410, size[2]/2+75, "COOLING" , 30, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
@@ -408,39 +314,81 @@ local function draw_coolings()
 end
 
 
-local function draw_left_memo()
-    local distance = 34
 
-    for i=0,6 do
-        if get(EWD_left_memo_group_colors[i]) > 0 then
-            sasl.gl.drawText(Font_ECAMfont, size[1]/2-422, size[2]/2-191-distance*i, get(EWD_left_memo_group[i]), 26, false, false, TEXT_ALIGN_LEFT, match_msg_colors[get(EWD_left_memo_group_colors[i])])
-
-            -- Print the underline
-            width, height = sasl.gl.measureText(Font_ECAMfont, get(EWD_left_memo_group[i]), 26, false, false)
-            if width > 0 then
-                sasl.gl.drawWideLine(size[1]/2-422 + 1, size[2]/2-191-distance*i - 5, size[1]/2-422 + width + 2, size[2]/2-191-distance*i - 5, 3, match_msg_colors[get(EWD_left_memo_group_colors[i])])
+local function draw_packs_wai_nai()
+    if get(Engine_1_avail) == 0 and get(Engine_2_avail) == 0 then
+        return
+    end
+    local max_eng_n1_mode = math.max(get(Eng_N1_mode, 1), get(Eng_N1_mode, 2)) 
+    
+    -- PACKS / WAI / NAI indication
+    if get(Any_wheel_on_ground) == 1 or max_eng_n1_mode < 3 or max_eng_n1_mode > 5 then
+        local str = ""
+        if get(Pack_L) == 1 or get(Pack_R) == 1 then
+            str = "PACKS"
+        end
+        
+        if AI_sys.switches[1] or AI_sys.switches[2] then
+            if #str > 0 then
+                str = str .. " / NAI"
+            else
+                str = "NAI"
+            end    
+        end
+        
+        if AI_sys.switches[3] then
+            if #str > 0 then
+                str = str .. " / WAI"
+            else
+                str = "WAI"
             end
         end
-
-        if get(EWD_left_memo_colors[i]) > 0 then
-            sasl.gl.drawText(Font_ECAMfont, size[1]/2-422, size[2]/2-191-distance*i, get(EWD_left_memo[i]), 26, false, false, TEXT_ALIGN_LEFT, match_msg_colors[get(EWD_left_memo_colors[i])])
-        end
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+150, size[2]-30, str, 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     end
 
 end
 
-local function draw_right_memo()
-    local distance = 34
+local function draw_extra_indication()
+    draw_packs_wai_nai()
 
-    for i=0,6 do
-        if get(EWD_right_memo_colors[i]) > 0 then
-            if get(EWD_right_memo_colors[i]) ~= 7 or get(TIME) % 2 > 1 then -- If color is COL_INDICATION_BLINKING we blink for 1 second every 2 seconds.
-                sasl.gl.drawText(Font_ECAMfont, size[1]/2+160, size[2]/2-191-distance*i, get(EWD_right_memo[i]), 26, false, false, TEXT_ALIGN_LEFT, match_msg_colors[get(EWD_right_memo_colors[i])])
-            else
-                sasl.gl.drawText(Font_ECAMfont, size[1]/2+160, size[2]/2-191-distance*i, get(EWD_right_memo[i]), 26, false, false, TEXT_ALIGN_LEFT, ECAM_HIGH_GREEN)            
-            end
+    -- A FLOOR
+    if true then    -- TODO Jon please add here a condition
+        sasl.gl.drawText(Font_ECAMfont, 30, size[2]-40, "A FLOOR", 32, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
+    end
+
+    local max_eng_n1_mode = math.min(get(Eng_N1_mode, 1), get(Eng_N1_mode, 2)) 
+
+    if max_eng_n1_mode == 0 then
+        return
+    end
+    
+    displayed_mode = max_eng_n1_mode
+
+    local n1_max = get(Eng_N1_max)
+    
+    if get(All_on_ground) == 1 and max_eng_n1_mode ~= 1 then
+        if get(Engine_1_avail) == 0 and get(Engine_1_avail) == 0 then
+            displayed_mode = 3 -- When engines OFF, the mode is CLB
+            n1_max = get(Eng_N1_max_detent_clb)
+        elseif get(Eng_N1_flex_temp) ~= 0 then
+            displayed_mode = 6
+            n1_max = get(Eng_N1_max_detent_flex)
+        else
+            displayed_mode = 1
+            n1_max = get(Eng_N1_max_detent_toga)
         end
     end
+    
+    mode_names = {"TOGA", "MCT", "CLB", "IDLE", "MREV", "FLEX", "GA SOFT"}
+
+    sasl.gl.drawText(Font_ECAMfont, size[1]-80, size[2]-30, mode_names[displayed_mode], 32, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]-65, size[2]-55, math.floor(n1_max) .. ".", 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(Font_ECAMfont, size[1]-50, size[2]-55, math.floor((n1_max%1)*10), 24, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(Font_ECAMfont, size[1]-35, size[2]-55, "%", 24, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+
+    if displayed_mode == 6 then
+        sasl.gl.drawText(Font_ECAMfont, size[1]-80, size[2]-80, math.floor(get(Eng_N1_flex_temp)) .. "°C", 24, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    end    
 end
 
 local function draw_extras()
@@ -456,7 +404,7 @@ local function draw_extras()
         local color = ECAM_WHITE
 
         -- Blinking the ADV box with a period of 2 seconds (1 second WHITE, 1 second gray)
-        if math.floor(sasl.getElapsedSeconds(time_blinking)) % 2 == 0 then
+        if math.floor(get(TIME)) % 2 == 0 then
             color = ECAM_HIGH_GREY
         end
         sasl.gl.drawText(Font_ECAMfont, size[1]/2+88, size[2]/2-165, "ADV", 30, false, false, TEXT_ALIGN_LEFT, color)    
@@ -520,30 +468,9 @@ local function draw_slat_flap_legend()
 end
 
 local function draw_slat_flap_indications()
-    local slats_positions = {
-        0,
-        0.7,
-        0.7,
-        0.8,
-        0.8,
-        1
-    }
-    local flaps_positions = {
-        0,
-        0,
-        10,
-        14,
-        21,
-        25
-    }
-    local slat_flap_configs = {
-        "0",
-        "1",
-        "1+F",
-        "2",
-        "3",
-        "FULL"
-    }
+    local slats_positions = { 0, 0.7, 0.7, 0.8, 0.8, 1 }
+    local flaps_positions = { 0,   0,  10,  14,  21, 25}
+    local slat_flap_configs = { "0", "1", "1+F", "2", "3", "FULL" }
     local slat_anim_ratio = {
         {0, 0},
         {0.7, 0.34},
@@ -597,8 +524,91 @@ local function draw_slat_flap_indications()
     draw_slat_flap_legend()
 end
 
+
+-------------------------------------------------------------------------------
+-- EWD - Memos
+-------------------------------------------------------------------------------
+
+local function draw_left_memo()
+    local distance = 34
+
+    for i=0,6 do
+        if get(EWD_left_memo_group_colors[i]) > 0 then
+            local color_id = get(EWD_left_memo_group_colors[i]) - 1
+            sasl.gl.drawText(Font_ECAMfont, size[1]/2-422, size[2]/2-191-distance*i, get(EWD_left_memo_group[i]), 26, false, false, TEXT_ALIGN_LEFT, MATCH_MSG_COLORS[color_id])
+
+            -- Print the underline
+            width, height = sasl.gl.measureText(Font_ECAMfont, get(EWD_left_memo_group[i]), 26, false, false)
+            if width > 0 then
+                sasl.gl.drawWideLine(size[1]/2-422 + 1, size[2]/2-191-distance*i - 5, size[1]/2-422 + width + 2, size[2]/2-191-distance*i - 5, 3, MATCH_MSG_COLORS[color_id])
+            end
+        end
+
+        if get(EWD_left_memo_colors[i]) > 0 then
+            local color_id = get(EWD_left_memo_colors[i]) - 1
+            sasl.gl.drawText(Font_ECAMfont, size[1]/2-422, size[2]/2-191-distance*i, get(EWD_left_memo[i]), 26, false, false, TEXT_ALIGN_LEFT, MATCH_MSG_COLORS[color_id])
+        end
+    end
+
+end
+
+local function draw_right_memo()
+    local distance = 34
+
+    for i=0,6 do
+        if get(EWD_right_memo_colors[i]) > 0 then
+            if get(EWD_right_memo_colors[i]) ~= 7 or get(TIME) % 2 > 1 then -- If color is COL_INDICATION_BLINKING we blink for 1 second every 2 seconds.
+                local color_id = get(EWD_right_memo_colors[i]) - 1
+                sasl.gl.drawText(Font_ECAMfont, size[1]/2+160, size[2]/2-191-distance*i, get(EWD_right_memo[i]), 26, false, false, TEXT_ALIGN_LEFT, MATCH_MSG_COLORS[color_id])
+            else
+                sasl.gl.drawText(Font_ECAMfont, size[1]/2+160, size[2]/2-191-distance*i, get(EWD_right_memo[i]), 26, false, false, TEXT_ALIGN_LEFT, ECAM_HIGH_GREEN)            
+            end
+        end
+    end
+end
+
+-------------------------------------------------------------------------------
+-- EWD - Fixed things
+-------------------------------------------------------------------------------
+local function draw_fixed_objects()
+
+    -- Horizontal left line memos
+    sasl.gl.drawWideLine(10, 300, size[2]-375, 300, 3, COLOR_FIXED_EL)
+
+    -- Horizontal right line memos
+    sasl.gl.drawWideLine(size[2]-300, 300, size[2]-10, 300, 3, COLOR_FIXED_EL)
+
+    -- Vertical right line memos
+    sasl.gl.drawWideLine(size[2]-336, 270, size[2]-336, 40, 3, COLOR_FIXED_EL)
+
+    -- N2 diagonals
+    sasl.gl.drawWideLine(365, 535, 405, 545, 2, COLOR_FIXED_EL)
+    sasl.gl.drawWideLine(size[2]-365, 535, size[2]-405, 545, 2, COLOR_FIXED_EL)
+
+    -- FF diagonals
+    sasl.gl.drawWideLine(365, 465, 405, 475, 2, COLOR_FIXED_EL)
+    sasl.gl.drawWideLine(size[2]-365, 465, size[2]-405, 475, 2, COLOR_FIXED_EL)
+
+    -- Fixed text
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2, 750, "N1", 32, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2, 625, "EGT", 32, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2, 535, "N2", 32, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2, 465, "FF", 32, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2, 725, "%", 25, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2, 600, "°C", 25, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2, 505, "%", 25, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2, 440, "KG/H", 25, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+
+end
+
+-------------------------------------------------------------------------------
+-- Main functions
+-------------------------------------------------------------------------------
+
 local function draw_ewd()
-    sasl.gl.drawTexture(EWD_background_img, 0, 0, 900, 900, {1, 1, 1})
+    --sasl.gl.drawTexture(EWD_background_img, 0, 0, 900, 900, {1, 1, 1})
+    draw_fixed_objects()
     draw_extra_indication()
     if ENG.data_is_loaded then
         draw_engines_needles()
@@ -620,5 +630,38 @@ function draw()
     sasl.gl.restoreRenderTarget()
 
     sasl.gl.drawTexture(EWD_popup_texture, 0, 0, 900, 900, {1,1,1})
+end
+
+
+function update()
+    position = {get(EWD_displaying_position, 1), get(EWD_displaying_position, 2), get(EWD_displaying_position, 3), get(EWD_displaying_position, 4)}
+
+    -- Update the parameter every PARAM_DELAY seconds
+    if get(TIME) - params.last_update > PARAM_DELAY then
+        params.eng1_n1 = get(Eng_1_N1)
+        params.eng2_n1 = get(Eng_2_N1)
+        params.eng1_n2 = get(Eng_1_N2)
+        params.eng2_n2 = get(Eng_2_N2)
+        if params.eng1_n1 < 5 then params.eng1_n1 = 0 end
+        if params.eng2_n1 < 5 then params.eng2_n1 = 0 end
+
+        params.eng1_egt = math.floor(get(Eng_1_EGT_c))
+        params.eng2_egt = math.floor(get(Eng_2_EGT_c))
+
+        params.eng1_ff = math.floor(get(Eng_1_FF_kgs)*360)*10
+        params.eng2_ff = math.floor(get(Eng_2_FF_kgs)*360)*10
+
+
+        params.last_update = get(TIME)
+    end
+
+    if params.eng1_n1 < get(Eng_N1_idle) + 2 and params.eng2_n1 < get(Eng_N1_idle) + 2 and get(Any_wheel_on_ground) == 0 then
+        if eng_idle_start == 0 then
+            eng_idle_start = get(TIME)
+        end
+    else
+        eng_idle_start = 0
+    end
+
 end
 
