@@ -47,6 +47,8 @@ local last_press_target_update = 0
 
 local last_PTU_change_status = 0    -- To save the last time we changed the status of PTU
 
+local lost_elec_rat_time = 0
+
 local status_buttons = {
     eng1pump  = true,
     eng2pump  = true,
@@ -335,6 +337,19 @@ local function update_sys_status()
 
 end
 
+local function update_rat()
+    if get(All_on_ground) == 0 and get(AC_bus_1_pwrd) == 0 and get(AC_bus_2_pwrd) == 0 then
+        if lost_elec_rat_time == 0 then
+            lost_elec_rat_time = get(TIME)
+        end
+        if get(TIME) - lost_elec_rat_time > 2 then
+            set(is_RAT_out, 1)
+        end
+    else
+        lost_elec_rat_time = 0
+    end
+end
+
 local function update_datarefs() 
 
     set(Hydraulic_G_press, g_sys.press_curr)
@@ -362,6 +377,7 @@ function update()
     local curr_time = get(TIME) * 1000
 
     update_sys_status()
+    update_rat()
 
     if curr_time - last_press_target_update > 1000 then -- Update the pressure target every 1000ms
         last_press_target_update = curr_time
