@@ -496,6 +496,8 @@ Override_eng_2_lever = globalProperty("sim/flightmodel/engine/ENGN_thro_use[1]")
 Override_eng_1_prop_mode = globalProperty("sim/cockpit2/engine/actuators/prop_mode[0]")
 Override_eng_2_prop_mode = globalProperty("sim/cockpit2/engine/actuators/prop_mode[1]")
 
+A_FLOOR_active = createGlobalPropertyi("a321neo/dynamics/FBW/AFLOOR_active", 0, false, true, false)
+
 --flight controls
 Joystick_connected = globalProperty("sim/joystick/has_joystick")
 Servo_roll = globalProperty("sim/joystick/servo_roll_ratio")
