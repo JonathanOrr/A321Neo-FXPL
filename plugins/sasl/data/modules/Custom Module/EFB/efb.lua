@@ -72,6 +72,8 @@ end
 function onKeyDown(component, char, key, shiftDown, ctrlDown, altOptDown)
     if EFB_PAGE == 3 and efb_subpage_number == 1 then
         return EFB_onKeyDown_page3_subpage_1(component, char, key, shiftDown, ctrlDown, altOptDown)
+    elseif EFB_PAGE == 3 and efb_subpage_number == 2 then
+        return EFB_onKeyDown_page3_subpage_2(component, char, key, shiftDown, ctrlDown, altOptDown)
     end
 end
 

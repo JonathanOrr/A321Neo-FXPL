@@ -20,9 +20,16 @@ local tow_to_coordinates = {{-9999,78}, {45,78}, {102.6,440}, {9999,440}}
 ------------------------STUFF YOU CANNOT MESS WITH
 
 include("libs/table.save.lua")
+include("networking/metar_request.lua")
+
 
 local keyboard_focus = 0 --0 nothing, 1 oa, 2 ob, 3 oc, 4 cf, 5 ca, 6 fuel
 local keyboard_buffer = ""
+
+local keyboard_subpage_2_focus = 0
+local keyboard_subpage_2_buffer = ""
+local target_airport = ""
+local metar_button_begin = 0
 
 local looper_1 = 10 -- so on startup, it is 10 then loops down to 0, sets the values before the user.
 
@@ -96,52 +103,6 @@ local cargo_index_aft = {
     {7000, 12.5}
 }
 
-----------------KEYOARD STUFF
-
-
-function EFB_onKeyDown_page3_subpage_1(component, char, key, shiftDown, ctrlDown, altOptDown)
-    if keyboard_focus == 0 then
-        return false
-    end
-        if char == SASL_KEY_DELETE then --BACKSPACE
-            keyboard_buffer = string.sub(keyboard_buffer, 1, -2)
-        elseif char == SASL_VK_RETURN then --ENTER
-            if string.len(keyboard_buffer) <= 0 then --IF THE LENGTH OF THE STRING IS 0, THEN REVERT TO THE PREVIOUS VALUE. ELSE, PLUG-IN THE NEW VALUE.
-                keyboard_focus = 0
-                keyboard_buffer = ""
-            else
-                load_target[keyboard_focus] = math.min(max_values[keyboard_focus], keyboard_buffer) --PLUG THE SCRATCHPAD INTO THE ACTUAL TARGET ARRAY
-                keyboard_focus = 0
-                keyboard_buffer = ""
-            end
-        elseif char == SASL_VK_ESCAPE then --REVERT TO THE PREVIOUS VALUE.
-            keyboard_focus = 0
-            keyboard_buffer = ""
-        elseif char == SASL_KEY_DOWN then
-            if string.len(keyboard_buffer) > 0 then
-                load_target[keyboard_focus] = math.min(max_values[keyboard_focus], keyboard_buffer) --PLUG THE SCRATCHPAD INTO THE ACTUAL TARGET ARRAY
-            end
-            keyboard_buffer = ""
-            keyboard_focus = math.min(6, keyboard_focus + 1)
-        elseif char == SASL_KEY_UP then
-            if string.len(keyboard_buffer) > 0 then
-                load_target[keyboard_focus] = math.min(max_values[keyboard_focus], keyboard_buffer) --PLUG THE SCRATCHPAD INTO THE ACTUAL TARGET ARRAY
-            end
-            keyboard_buffer = ""
-            keyboard_focus = math.max(1, keyboard_focus - 1)
-        else
-            local read_n = tonumber(string.char(char)) --JUST TO MAKE SURE WHAT YOU TYPE IS A NUMBER
-            
-            if read_n ~= nil and string.len(keyboard_buffer) < 7 then -- "tonumber()" RETURNS nil IF NOT A NUMBER, ALSO MAKES SURE STRING LENGTH IS <7
-                keyboard_buffer = keyboard_buffer..string.char(char)
-            end
-        end
-    --print(keyboard_buffer)
-    --print(char)
-    return true
-end
-
-
 --------------------INTERESTING STUFF
 include("EFB/efb_systems.lua")
 include("EFB/efb_topcat.lua")
@@ -155,13 +116,60 @@ include("EFB/efb_functions.lua")
 local function performance_data()
 end
 
+----------------KEYOARD STUFF
+
+
+function EFB_onKeyDown_page3_subpage_1(component, char, key, shiftDown, ctrlDown, altOptDown)
+    if efb_subpage_number == 1 then
+        if keyboard_focus == 0 then
+            return false
+        end
+            if char == SASL_KEY_DELETE then --BACKSPACE
+                keyboard_buffer = string.sub(keyboard_buffer, 1, -2)
+            elseif char == SASL_VK_RETURN then --ENTER
+                if string.len(keyboard_buffer) <= 0 then --IF THE LENGTH OF THE STRING IS 0, THEN REVERT TO THE PREVIOUS VALUE. ELSE, PLUG-IN THE NEW VALUE.
+                    keyboard_focus = 0
+                    keyboard_buffer = ""
+                else
+                    load_target[keyboard_focus] = math.min(max_values[keyboard_focus], keyboard_buffer) --PLUG THE SCRATCHPAD INTO THE ACTUAL TARGET ARRAY
+                    keyboard_focus = 0
+                    keyboard_buffer = ""
+                end
+            elseif char == SASL_VK_ESCAPE then --REVERT TO THE PREVIOUS VALUE.
+                keyboard_focus = 0
+                keyboard_buffer = ""
+            elseif char == SASL_KEY_DOWN then
+                if string.len(keyboard_buffer) > 0 then
+                    load_target[keyboard_focus] = math.min(max_values[keyboard_focus], keyboard_buffer) --PLUG THE SCRATCHPAD INTO THE ACTUAL TARGET ARRAY
+                end
+                keyboard_buffer = ""
+                keyboard_focus = math.min(6, keyboard_focus + 1)
+            elseif char == SASL_KEY_UP then
+                if string.len(keyboard_buffer) > 0 then
+                    load_target[keyboard_focus] = math.min(max_values[keyboard_focus], keyboard_buffer) --PLUG THE SCRATCHPAD INTO THE ACTUAL TARGET ARRAY
+                end
+                keyboard_buffer = ""
+                keyboard_focus = math.max(1, keyboard_focus - 1)
+            else
+                local read_n = tonumber(string.char(char)) --JUST TO MAKE SURE WHAT YOU TYPE IS A NUMBER
+
+                if read_n ~= nil and string.len(keyboard_buffer) < 7 then -- "tonumber()" RETURNS nil IF NOT A NUMBER, ALSO MAKES SURE STRING LENGTH IS <7
+                    keyboard_buffer = keyboard_buffer..string.char(char)
+                end
+            end
+        --print(keyboard_buffer)
+        --print(char)
+        return true
+    end
+end
+
 --------------------------------------------------------------------------------------------------------------------------------SUBPAGE 1
 
-local function load_table_from_file()
+local function load_weights_from_file()
     load_target = table.load(moduleDirectory .. "/Custom Module/saved_configs/previous_load_target")
 end
 
-local function save_to_file()
+local function save_weights_to_file()
     --os.remove(moduleDirectory .. "/Custom Module/saved_configs/previous_load_target")
     table.save(load_target, moduleDirectory .. "/Custom Module/saved_configs/previous_load_target")
 end
@@ -344,7 +352,7 @@ local function Subpage_1_buttons()
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 108, 50, 378, 80,function ()
         load_button_begin = get(TIME) --the button animation
         set_values()
-        save_to_file()
+        save_weights_to_file()
         --print("hello")
     end)
 end
@@ -424,33 +432,88 @@ end
 
 
 -------DONT ASK ME WHY I PUT IT OUTSIDE, IT EXECUTES ON START
-load_table_from_file()
+load_weights_from_file()
 set_values()
 set_values()
 set_values()
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------SUBPAGE 2
 
+function EFB_onKeyDown_page3_subpage_2(component, char, key, shiftDown, ctrlDown, altOptDown)
+    if efb_subpage_number == 2 then
+        if keyboard_subpage_2_focus == 0 then
+            return false
+        end
+            if char == SASL_KEY_DELETE then --BACKSPACE
+                keyboard_subpage_2_buffer = string.sub(keyboard_subpage_2_buffer, 1, -2)
+            elseif char == SASL_VK_RETURN then --ENTER
+                if string.len(keyboard_subpage_2_buffer) <= 0 then --IF THE LENGTH OF THE STRING IS 0, THEN REVERT TO THE PREVIOUS VALUE. ELSE, PLUG-IN THE NEW VALUE.
+                    keyboard_subpage_2_focus = 0
+                    keyboard_subpage_2_buffer = ""
+                else
+                    target_airport = keyboard_subpage_2_buffer --PLUG THE SCRATCHPAD INTO THE ACTUAL TARGET AIRPORT
+                    keyboard_subpage_2_focus = 0
+                    keyboard_subpage_2_buffer = ""
+                end
+            elseif char == SASL_VK_ESCAPE then --REVERT TO THE PREVIOUS VALUE.
+                keyboard_subpage_2_focus = 0
+                keyboard_subpage_2_buffer = ""
+            else
+                local read_n = tonumber(string.char(char)) --JUST TO MAKE SURE WHAT YOU TYPE IS A NUMBER
+            
+                if read_n == nil and string.len(keyboard_subpage_2_buffer) < 7 then -- "tonumber()" RETURNS nil IF NOT A NUMBER, ALSO MAKES SURE STRING LENGTH IS <7
+                    keyboard_subpage_2_buffer = keyboard_subpage_2_buffer..string.char(char)
+                end
+            end
+        --print(keyboard_subpage_2_buffer)
+        --print(target_airport)
+        --print(char)
+        return true
+    end
+end
+
 local function EFB_draw_page_3_subpage_2()
+    sasl.gl.drawTexture (Metar_bgd, 0 , 0 , 1143 , 800 , EFB_WHITE )
+
+    if keyboard_subpage_2_focus == 1 then
+        sasl.gl.drawTexture (Metar_highlighter, 0 , 0 , 1143 , 800 , EFB_WHITE )
+    end
+
+    drawTextCentered( Font_Airbus_panel , 665 , 432, keyboard_subpage_2_focus == 1 and keyboard_subpage_2_buffer or target_airport , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
+
+    if get(TIME) -  metar_button_begin > BUTTON_PRESS_TIME then
+        SASL_drawSegmentedImg_xcenter_aligned (EFB_LOAD_compute_button, 572,350,544,32,2,1)
+    else
+        SASL_drawSegmentedImg_xcenter_aligned (EFB_LOAD_compute_button, 572,350,544,32,2,2)
+    end
+    drawTextCentered( Font_Airbus_panel , 572 , 365, "REQUEST" , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
 end
 
 local function EFB_update_page_3_subpage_2()
 end
 
 local function Subpage_2_buttons()
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 618,417,713,447, function ()
+        keyboard_subpage_2_focus = keyboard_subpage_2_focus == 1 and 0 or 1
+    end)
+
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 436,352,707,382, function ()
+        metar_button_begin = get(TIME)
+        fetch_atis(target_airport, onContentsDownloaded)
+    end)
 end
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------MUTUAL LOOPS
 
 local function mutual_button_loop()
-    --Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 1031,18,1099,48, function () --SELECTOR BUTTONS WORK AT ALL TIMES
-    --    efb_subpage_number = 2
-    --    keyboard_focus = 0
-    --    keyboard_buffer = ""
-    --end)
-    --Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 954,18,1021,48, function ()
-    --    efb_subpage_number = 1
-    --end)
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 1031,18,1099,48, function () --SELECTOR BUTTONS WORK AT ALL TIMES
+        efb_subpage_number = 2
+        keyboard_focus = 0
+        keyboard_buffer = ""
+    end)
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 954,18,1021,48, function ()
+        efb_subpage_number = 1
+    end)
 end
 
 local function mutual_update_loop()
@@ -458,7 +521,7 @@ local function mutual_update_loop()
 end
 
 local function mutual_draw_loop()
-    --SASL_draw_img_center_aligned (EFB_INFO_selector, 1026,33, 147, 32, EFB_WHITE) -- THIS IS THE SELECTOR, IT DRAWS ON ALL PAGES
+    SASL_draw_img_center_aligned (EFB_INFO_selector, 1026,33, 147, 32, EFB_WHITE) -- THIS IS THE SELECTOR, IT DRAWS ON ALL PAGES
 end
 
 --------------------------------------------------------------------------------------------------------------------------------
