@@ -221,3 +221,5 @@ LOADSHEET_compute =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/tex
 --METAR REQUEST
 Metar_bgd =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/Subpage 2/subpage_2_bgd.png")
 Metar_highlighter =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/Subpage 2/subpage_2_highlighter.png")
+Metar_waiting =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/Subpage 2/subpage_2_waiting.png")
+
