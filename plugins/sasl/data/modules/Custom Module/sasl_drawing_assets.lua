@@ -217,3 +217,9 @@ ECAM_popup_texture =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/te
 --LOADSHEET 
 LOADSHEET_bgd =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/loadsheet/loadsheet.png")
 LOADSHEET_compute =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/loadsheet/compute_button.png")
+
+--METAR REQUEST
+Metar_bgd =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/Subpage 2/subpage_2_bgd.png")
+Metar_highlighter =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/Subpage 2/subpage_2_highlighter.png")
+Metar_waiting =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/Subpage 2/subpage_2_waiting.png")
+

@@ -864,3 +864,7 @@ TOPCAT_flex = createGlobalPropertyi("a321neo/efb/topcat/flex", 0, false, true, f
 TOPCAT_CG_MAC = createGlobalPropertyi("a321neo/efb/topcat/cgmac", 0, false, true, false)
 TOPCAT_trim = createGlobalPropertyf("a321neo/efb/topcat/trim", 0, false, true, false)
 
+--Plug the obtained metar string into this, to transfer it from the callback to the EFB.
+
+EFB_metar_string = createGlobalPropertys("a321neo/metar", "", false, true, false)
+
