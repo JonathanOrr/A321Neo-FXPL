@@ -61,7 +61,7 @@ end
 
 local function compute_C_star(Nz, Q)
     --we define that 210kts as the crossoever V
-    return Nz + (210 * 0.514444 * math.rad(Q)) / 9.8
+    return Nz + (120 * math.rad(Q)) / 9.8
 end
 
 local function Max_C_STAR()
@@ -293,20 +293,20 @@ local input_limitations = {
     Vmax = function (G, var_table)
         local upwards_return_G = 2
 
-        local high_speed_prot_G = Math_rescale(get(Fixed_VMAX), G, get(VMAX_demand) + 10, upwards_return_G, var_table.Filtered_ias)
+        local high_speed_prot_G = Math_rescale(get(Fixed_VMAX), G, get(VMAX_demand) + 10, math.max(upwards_return_G, G), var_table.Filtered_ias)
 
         return high_speed_prot_G
     end,
 
     ALT_vmax = function (x, var_table)
-        local upwards_ratio = Math_rescale(-0.2, x, 0, 0.15, x)
+        local upwards_ratio = Math_rescale(-0.2, x, 0, math.max(0.15, x), x)
 
         local vmax_prot_x = Math_rescale(get(Fixed_VMAX), x, get(VMAX_demand) + 15, upwards_ratio, var_table.Filtered_ias)
 
         return vmax_prot_x
     end,
     ALT_vls = function (x, var_table)
-        local downwards_ratio = Math_rescale(0, -0.1, 0.2, x, x)
+        local downwards_ratio = Math_rescale(0, math.min(-0.1, x), 0.2, x, x)
 
         local vls_prot_x = Math_rescale(get(VLS) - 15, downwards_ratio, get(VLS), x, var_table.Filtered_ias)
 
