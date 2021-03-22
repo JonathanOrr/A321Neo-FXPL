@@ -170,8 +170,8 @@ local function update_pbs()
     
     pb_set(PB.ovhd.fire_eng1_block, FIRE_sys.eng[1].still_on_fire or FIRE_sys.eng[1].on_test, false)
     pb_set(PB.ovhd.fire_eng2_block, FIRE_sys.eng[2].still_on_fire or FIRE_sys.eng[2].on_test, false)
-    pb_set(PB.ped.eng_1_fire_fault, false, FIRE_sys.eng[1].still_on_fire or FIRE_sys.eng[1].on_test)    -- TODO Eng1 FAIL
-    pb_set(PB.ped.eng_2_fire_fault, false, FIRE_sys.eng[2].still_on_fire or FIRE_sys.eng[2].on_test)    -- TODO Eng1 FAIL
+    pb_set(PB.ped.eng_1_fire_fault, get(Eng_is_failed, 1) == 1, FIRE_sys.eng[1].still_on_fire or FIRE_sys.eng[1].on_test)
+    pb_set(PB.ped.eng_2_fire_fault, get(Eng_is_failed, 2) == 1, FIRE_sys.eng[2].still_on_fire or FIRE_sys.eng[2].on_test)
 
     pb_set(PB.ovhd.fire_eng_1_ag_1, FIRE_sys.eng[1].squib_1_disch or FIRE_sys.eng[1].on_test, FIRE_sys.eng[1].block_position or FIRE_sys.eng[1].on_test)
     pb_set(PB.ovhd.fire_eng_1_ag_2, FIRE_sys.eng[1].squib_2_disch or FIRE_sys.eng[1].on_test, FIRE_sys.eng[1].block_position or FIRE_sys.eng[1].on_test)

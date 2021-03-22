@@ -84,6 +84,8 @@ local already_back_to_norm = false -- This is used to check continuous ignition
 
 local last_time_toga = {0,0} -- Time point where thrust levers are set to TOGA
 
+local already_started_eng = {false, false}
+
 ----------------------------------------------------------------------------------------------------
 -- Various datarefs
 ----------------------------------------------------------------------------------------------------
@@ -283,7 +285,7 @@ local function update_avail()
     local eng_has_fuel = get(Fuel_tank_selector_eng_1) > 0
 
     -- ENG 1
-    if get(Eng_1_N1) > ENG_N1_LL_IDLE and get(Engine_1_master_switch) == 1 and eng_has_fuel and get(xp_avail_1) == 1 then
+    if get(Eng_1_N1) > ENG_N1_LL_IDLE and get(Engine_1_master_switch) == 1 and eng_has_fuel and get(xp_avail_1) == 1 and get(FAILURE_ENG_1_FAILURE) == 0 then
         if get(Engine_1_avail) == 0 then
             set(EWD_engine_avail_ind_1_start, get(TIME))
             set(Engine_1_avail, 1)
@@ -296,7 +298,7 @@ local function update_avail()
     local eng_has_fuel = get(Fuel_tank_selector_eng_2) > 0
     
     -- ENG 2
-    if get(Eng_2_N1) > ENG_N1_LL_IDLE and get(Engine_2_master_switch) == 1 and eng_has_fuel and get(xp_avail_2) == 1 then
+    if get(Eng_2_N1) > ENG_N1_LL_IDLE and get(Engine_2_master_switch) == 1 and eng_has_fuel and get(xp_avail_2) == 1 and get(FAILURE_ENG_2_FAILURE) == 0 then
         if get(Engine_2_avail) == 0 then
             set(EWD_engine_avail_ind_2_start, get(TIME))
             set(Engine_2_avail, 1)
@@ -942,6 +944,32 @@ local function update_engine_type()
     
 end
 
+local function update_failing_eng(x)
+    local eng_ms    = (x == 1 and get(Engine_1_master_switch) or get(Engine_2_master_switch)) == 1
+    local n2_below  = (x == 1 and get(Eng_1_N2) or get(Eng_2_N2)) < 65
+    local eng_st    = already_started_eng[x]
+    local no_fire_pb= (x == 1 and get(Fire_pb_ENG1_status) or get(Fire_pb_ENG2_status)) == 0
+
+    if eng_ms and n2_below and eng_st and no_fire_pb then
+        set(Eng_is_failed, 1, x)
+    end
+    
+    if not n2_below then
+        already_started_eng[x] = true
+        set(Eng_is_failed, 0, x)
+    end
+
+end
+local function update_failing()
+    
+    if get(EWD_flight_phase) == 1 or get(EWD_flight_phase) == 10 then
+        already_started_eng = {false, false}
+    end
+    
+    update_failing_eng(1)
+    update_failing_eng(2)
+end
+
 function update()
     perf_measure_start("engines:update()")
     
@@ -977,7 +1005,7 @@ function update()
 
     update_oil_qty()
     update_n1_mode_and_limits()
-
+    update_failing()
     
     perf_measure_stop("engines:update()")
 end

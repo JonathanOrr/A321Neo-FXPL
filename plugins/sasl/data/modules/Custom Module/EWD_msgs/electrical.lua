@@ -342,7 +342,7 @@ MessageGroup_ELEC_EMER_CONFIG = {
 
     is_active = function(self)
         local condition =  ((get(Gen_1_pwr) == 0 or get(Gen_1_line_active) == 1) and get(Gen_2_pwr) ==0 and get(Gen_APU_pwr) == 0 and get(Gen_EXT_pwr) == 0) and not override_ELEC_always_on
-
+        condition = condition and not MessageGroup_ENG_FAIL_DUAL.is_active()
         return condition
     end,
 

@@ -188,6 +188,8 @@ local failures_data = {
             {name="ENG 2 FADEC\nCH1 FAIL", status=false, dataref=FAILURE_ENG_FADEC_CH1, nr=2 },
             {name="ENG 1 FADEC\nCH2 FAIL", status=false, dataref=FAILURE_ENG_FADEC_CH2, nr=1 },
             {name="ENG 2 FADEC\nCH2 FAIL", status=false, dataref=FAILURE_ENG_FADEC_CH2, nr=2 },
+            {name="ENG 1\nFAILURE", status=false, dataref=FAILURE_ENG_1_FAILURE},
+            {name="ENG 2\nFAILURE", status=false, dataref=FAILURE_ENG_2_FAILURE},
             {name="ENG 1\nFIRE!", status=false, dataref=FAILURE_FIRE_ENG_1},
             {name="ENG 2\nFIRE!", status=false, dataref=FAILURE_FIRE_ENG_2},
             

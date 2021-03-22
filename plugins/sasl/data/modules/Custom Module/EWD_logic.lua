@@ -108,6 +108,7 @@ local left_messages_list = {
     MessageGroup_ATT_DISCREPANCY,
     MessageGroup_HDG_DISCREPANCY,
     MessageGroup_DMC_FAULT,
+    MessageGroup_ENG_FAIL_SINGLE,
     MessageGroup_HYD_G_RSVR_LO_LVL,
     MessageGroup_HYD_B_RSVR_LO_LVL,
     MessageGroup_HYD_Y_RSVR_LO_LVL,
@@ -239,10 +240,11 @@ local left_messages_list = {
     MessageGroup_ENG_2_FIRE_GROUND,
     MessageGroup_ENG_1_FIRE_FLIGHT,
     MessageGroup_ENG_2_FIRE_FLIGHT,
-    MessageGroup_CAB_PRESS_EXCESS_ALT,
     MessageGroup_APU_FIRE,
+    MessageGroup_ENG_FAIL_DUAL,
     MessageGroup_ELEC_EMER_CONFIG,
     MessageGroup_ELEC_ESS_BUSES_ON_BAT,
+    MessageGroup_CAB_PRESS_EXCESS_ALT,
     MessageGroup_GEAR_NOT_DOWNLOCKED,
     MessageGroup_GEAR_NOT_DOWN,
     MessageGroup_HYD_B_AND_Y_LO_PR,
@@ -274,6 +276,7 @@ local right_secondary_failures = {
 local left_current_message = nil;   -- It contains (if exists) the first message group *clearable*
 local left_was_clearing = false     -- True when a warning/caution message exists and status page not yet displayed
 local land_asap = false;            -- If true, the LAND ASAP message appears (according to flight phase)
+local land_asap_amber = false;            -- If true, the LAND ASAP amber message appears (according to flight phase)
 
 local rcl_start_press_time = 0;     -- The time the user started to press RCL button (this is needed to compute how many seconds elapsed for a long-press)
 local flight_phase_not_one = false; -- See function check_reset() 
@@ -349,13 +352,14 @@ local function update_right_list()
     list_right:setmax(PRIORITY_LEVEL_MEMO)
 
     -- Land ASAP    
-    if land_asap and get(EWD_flight_phase) >= PHASE_ABOVE_80_KTS and get(EWD_flight_phase) <= PHASE_TOUCHDOWN then
-        list_right:put(COL_WARNING, "LAND ASAP")
+    if (land_asap or land_asap_amber) and get(EWD_flight_phase) >= PHASE_ABOVE_80_KTS and get(EWD_flight_phase) <= PHASE_TOUCHDOWN then
+        list_right:put(land_asap and COL_WARNING or COL_CAUTION, "LAND ASAP")
     end
     
-    if land_asap and (get(EWD_flight_phase) >= PHASE_BELOW_80_KTS or get(EWD_flight_phase) < PHASE_1ST_ENG_TO_PWR) then
+    if (land_asap or land_asap_amber) and (get(EWD_flight_phase) >= PHASE_BELOW_80_KTS or get(EWD_flight_phase) < PHASE_1ST_ENG_TO_PWR) then
         -- Reset after landing
-        land_asap = false    
+        land_asap = false
+        land_asap_amber = false
     end
 
     -- Initbition messages, these are always triggered when the related modes are actives
@@ -624,6 +628,10 @@ local function update_left_list()
 
             if m.land_asap ~= nil and m.land_asap == true then
                 land_asap = true
+            end
+            
+            if m.land_asap_amber ~= nil and m.land_asap_amber then
+                land_asap_amber = true
             end
 
             if m.color() == COL_WARNING then

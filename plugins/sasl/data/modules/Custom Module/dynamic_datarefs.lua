@@ -319,6 +319,8 @@ Eng_2_Firewall_valve = createGlobalPropertyi("a321neo/dynamics/engines/eng_2_fir
 Eng_spool_time = globalProperty("sim/aircraft/engine/acf_spooltime_turbine")
 Eng_is_spooling_up  = createGlobalPropertyia("a321neo/dynamics/engines/is_spooling_up", 2)
 
+Eng_is_failed = createGlobalPropertyia("a321neo/dynamics/engines/eng_failed", 2) -- There's a special condition for this
+
 -- ATHR
 ATHR_desired_N1     = createGlobalPropertyfa("a321neo/dynamics/engines/athr_input_n1", 2)
 ATHR_is_controlling = createGlobalPropertyi("a321neo/dynamics/engines/athr_is_controlling", 0, false, true, false)

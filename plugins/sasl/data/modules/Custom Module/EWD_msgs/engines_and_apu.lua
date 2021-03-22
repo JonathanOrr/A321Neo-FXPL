@@ -1063,3 +1063,225 @@ MessageGroup_ENG_REV_SET = {
 
 
 
+----------------------------------------------------------------------------------------------------
+-- CAUTION: ENG 1(2) FAIL
+----------------------------------------------------------------------------------------------------
+
+local Message_EFAIL_THR_LEVER_IDLE = {
+    text = function()
+        local which_engine = get(Eng_is_failed, 1) == 1 and "1" or "2"
+        return " - THR LEVER " .. which_engine .. ".......IDLE"
+    end,
+
+    color = function()
+        return COL_ACTIONS
+    end,
+
+    is_active = function()
+        return (get(Eng_is_failed, 1) == 1 and math.abs(get(Cockpit_throttle_lever_L)) or math.abs(get(Cockpit_throttle_lever_R))) > 0.05
+    end
+}
+
+local Message_EFAIL_ENG_MASTER_OFF = {
+    text = function()
+        local which_engine = get(Eng_is_failed, 1) == 1 and "1" or "2"
+        return " - ENG MASTER " .. which_engine .. ".......OFF"
+    end,
+
+    color = function()
+        return COL_ACTIONS
+    end,
+
+    is_active = function()
+        return (get(Eng_is_failed, 1) == 1 and get(Engine_1_master_switch) or get(Engine_2_master_switch)) == 1
+    end
+}
+
+local Message_EFAIL_ENG_PB_PUSH = {
+    text = function()
+        local which_engine = get(Eng_is_failed, 1) == 1 and "1" or "2"
+        return "   - ENG FIRE P/B " .. which_engine .. "..PUSH"
+    end,
+
+    color = function()
+        return COL_ACTIONS
+    end,
+
+    is_active = function()
+      return (get(Eng_is_failed, 1) == 1 and get(Fire_pb_ENG1_status) or get(Fire_pb_ENG2_status)) == 0
+    end
+}
+
+local Message_EFAIL_AGENT_1 = {
+    text = function()
+        return "   - AGENT 1........DISCH"
+    end,
+
+    color = function()
+        return COL_ACTIONS
+    end,
+
+    is_active = function()
+        if get(Eng_is_failed, 1) == 1 then
+            return not FIRE_sys.eng[1].squib_1_disch
+        else
+            return not FIRE_sys.eng[2].squib_1_disch
+        end
+    end
+}
+
+MessageGroup_ENG_FAIL_SINGLE = {
+
+    shown = false,
+
+    text  = function()
+                return "ENG"
+            end,
+    color = function()
+                return COL_CAUTION
+            end,
+
+    sd_page = nil,
+    
+    priority = PRIORITY_LEVEL_2,
+
+    land_asap_amber = true,
+
+    messages = {
+        {
+            text = function()
+                local which_engine = get(Eng_is_failed, 1) == 1 and "1" or "2"
+                return "    " .. which_engine .. " FAIL"
+            end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        },
+        Message_EFAIL_THR_LEVER_IDLE,
+        Message_EFAIL_ENG_MASTER_OFF,
+        {
+            text = function() return " . IF DAMAGE:" end,
+            color = function() return COL_REMARKS end,
+            is_active = function() return true end
+        },
+        Message_EFAIL_ENG_PB_PUSH,
+        Message_EFAIL_AGENT_1,
+        {
+            text = function() return " . IF NOT DAMAGE:" end,
+            color = function() return COL_REMARKS end,
+            is_active = function() return true end
+        },
+        {
+            text = function()
+                local which_engine = get(Eng_is_failed, 1) == 1 and "1" or "2"
+                return "   ENG " .. which_engine .. " RELIGHT CONSIDER"
+            end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return true end
+        },
+    },
+
+    is_active = function()
+        return get(Eng_is_failed, 1) + get(Eng_is_failed, 2) == 1
+    end,
+
+    is_inhibited = function()
+        return false
+    end
+
+}
+
+
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: ENG ALL ENGINES FAILURE
+----------------------------------------------------------------------------------------------------
+
+local Message_EFAIL_ELEC_MAN_ON = {
+    text = function()
+        return " - EMER ELEC PWR...MAN ON"
+    end,
+
+    color = function()
+        return COL_ACTIONS
+    end,
+
+    is_active = function()
+        return get(Gen_EMER_pwr) == 0
+    end
+}
+
+local Message_EFAIL_APU_START = {
+    text = function()
+        return " - APU..............START"
+    end,
+
+    color = function()
+        return COL_ACTIONS
+    end,
+
+    is_active = function()
+        return get(Capt_Baro_Alt) < 25000 and get(Apu_master_button_state) == 0
+    end
+}
+
+MessageGroup_ENG_FAIL_DUAL = {
+
+    shown = false,
+
+    text  = function()
+                return "ENG"
+            end,
+    color = function()
+                return COL_WARNING
+            end,
+
+    sd_page = nil,
+    
+    priority = PRIORITY_LEVEL_3,
+
+    land_asap = true,
+
+    messages = {
+        {
+            text = function() return "    ALL ENGINES FAILURE"
+            end,
+            color = function() return COL_WARNING end,
+            is_active = function() return true end
+        },
+        Message_EFAIL_ELEC_MAN_ON,
+        {
+            text = function() return " OPT RELIGHT SPD 280/0.77" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return true end
+        },
+        Message_EFAIL_APU_START,
+        Message_ENG_THR_IDLE,
+        {
+            text = function() return " GLDG DIST: 2NM/1000FT" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return true end
+        },
+        {
+            text = function() return " - DIVERSION.........INIT" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return true end
+        },
+        {
+            text = function() return " ALL ENG FAIL PROC..APPLY" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return true end
+        },
+
+    },
+
+    is_active = function()
+        return get(Eng_is_failed, 1) + get(Eng_is_failed, 2) == 2
+    end,
+
+    is_inhibited = function()
+        return false
+    end
+
+}
+
+
