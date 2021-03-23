@@ -19,8 +19,8 @@ local tow_to_coordinates = {{-9999,78}, {45,78}, {102.6,440}, {9999,440}}
 
 ------------------------STUFF YOU CANNOT MESS WITH
 
+include("EFB/efb_functions.lua")
 include("libs/table.save.lua")
-include("networking/metar_request.lua")
 
 
 local keyboard_focus = 0 --0 nothing, 1 oa, 2 ob, 3 oc, 4 cf, 5 ca, 6 fuel
@@ -128,6 +128,45 @@ end
 
 ----------------KEYOARD STUFF
 
+local function plug_in_the_buffer()
+    if string.len(keyboard_buffer) <= 0 then --IF THE LENGTH OF THE STRING IS 0, THEN REVERT TO THE PREVIOUS VALUE. ELSE, PLUG-IN THE NEW VALUE.
+        keyboard_focus = 0
+        keyboard_buffer = ""
+    else
+        load_target[keyboard_focus] = math.min(max_values[keyboard_focus], keyboard_buffer) --PLUG THE SCRATCHPAD INTO THE ACTUAL TARGET ARRAY
+        keyboard_focus = 0
+        keyboard_buffer = ""
+    end
+end
+
+local function revert_to_previous_and_delete_buffer()
+    keyboard_focus = 0
+    keyboard_buffer = ""
+end
+
+local function go_to_next_box()
+    if string.len(keyboard_buffer) > 0 then
+        load_target[keyboard_focus] = math.min(max_values[keyboard_focus], keyboard_buffer) --PLUG THE SCRATCHPAD INTO THE ACTUAL TARGET ARRAY
+    end
+    keyboard_buffer = ""
+    keyboard_focus = math.min(6, keyboard_focus + 1)
+end
+
+local function go_to_previous_box()
+    if string.len(keyboard_buffer) > 0 then
+        load_target[keyboard_focus] = math.min(max_values[keyboard_focus], keyboard_buffer) --PLUG THE SCRATCHPAD INTO THE ACTUAL TARGET ARRAY
+    end
+    keyboard_buffer = ""
+    keyboard_focus = math.max(1, keyboard_focus - 1)
+end
+
+local function construct_the_buffer(char)
+    local read_n = tonumber(string.char(char)) --JUST TO MAKE SURE WHAT YOU TYPE IS A NUMBER
+
+    if read_n ~= nil and string.len(keyboard_buffer) < 7 then -- "tonumber()" RETURNS nil IF NOT A NUMBER, ALSO MAKES SURE STRING LENGTH IS <7
+        keyboard_buffer = keyboard_buffer..string.char(char)
+    end
+end
 
 function EFB_onKeyDown_page3_subpage_1(component, char, key, shiftDown, ctrlDown, altOptDown)
     if efb_subpage_number == 1 then
@@ -137,35 +176,15 @@ function EFB_onKeyDown_page3_subpage_1(component, char, key, shiftDown, ctrlDown
             if char == SASL_KEY_DELETE then --BACKSPACE
                 keyboard_buffer = string.sub(keyboard_buffer, 1, -2)
             elseif char == SASL_VK_RETURN then --ENTER
-                if string.len(keyboard_buffer) <= 0 then --IF THE LENGTH OF THE STRING IS 0, THEN REVERT TO THE PREVIOUS VALUE. ELSE, PLUG-IN THE NEW VALUE.
-                    keyboard_focus = 0
-                    keyboard_buffer = ""
-                else
-                    load_target[keyboard_focus] = math.min(max_values[keyboard_focus], keyboard_buffer) --PLUG THE SCRATCHPAD INTO THE ACTUAL TARGET ARRAY
-                    keyboard_focus = 0
-                    keyboard_buffer = ""
-                end
+                plug_in_the_buffer()
             elseif char == SASL_VK_ESCAPE then --REVERT TO THE PREVIOUS VALUE.
-                keyboard_focus = 0
-                keyboard_buffer = ""
+                revert_to_previous_and_delete_buffer()
             elseif char == SASL_KEY_DOWN then
-                if string.len(keyboard_buffer) > 0 then
-                    load_target[keyboard_focus] = math.min(max_values[keyboard_focus], keyboard_buffer) --PLUG THE SCRATCHPAD INTO THE ACTUAL TARGET ARRAY
-                end
-                keyboard_buffer = ""
-                keyboard_focus = math.min(6, keyboard_focus + 1)
+                go_to_next_box()
             elseif char == SASL_KEY_UP then
-                if string.len(keyboard_buffer) > 0 then
-                    load_target[keyboard_focus] = math.min(max_values[keyboard_focus], keyboard_buffer) --PLUG THE SCRATCHPAD INTO THE ACTUAL TARGET ARRAY
-                end
-                keyboard_buffer = ""
-                keyboard_focus = math.max(1, keyboard_focus - 1)
+                go_to_previous_box()
             else
-                local read_n = tonumber(string.char(char)) --JUST TO MAKE SURE WHAT YOU TYPE IS A NUMBER
-
-                if read_n ~= nil and string.len(keyboard_buffer) < 7 then -- "tonumber()" RETURNS nil IF NOT A NUMBER, ALSO MAKES SURE STRING LENGTH IS <7
-                    keyboard_buffer = keyboard_buffer..string.char(char)
-                end
+                construct_the_buffer(char)
             end
         --print(keyboard_buffer)
         --print(char)
@@ -356,6 +375,21 @@ local function Subpage_1_buttons()
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 216, 112, 308, 136,function ()
         keyboard_focus = keyboard_focus == 6 and 0 or 6
     end)
+--------------------------------------------------------------------------------------------------------
+
+if keyboard_focus == 1 then
+    click_anywhere_except_that_area( 216, 385, 308, 409, plug_in_the_buffer)
+elseif keyboard_focus == 2 then
+    click_anywhere_except_that_area( 216, 346, 308, 370, plug_in_the_buffer)
+elseif keyboard_focus == 3 then
+    click_anywhere_except_that_area( 216, 307, 308, 332, plug_in_the_buffer)
+elseif keyboard_focus == 4 then
+    click_anywhere_except_that_area( 216, 229, 308, 254, plug_in_the_buffer)
+elseif keyboard_focus == 5 then
+    click_anywhere_except_that_area( 216, 190, 308, 214, plug_in_the_buffer)
+elseif keyboard_focus == 6 then
+    click_anywhere_except_that_area( 216, 112, 308, 136, plug_in_the_buffer)
+end
 
 --------------------------------------------------------------------------------------------------------
 

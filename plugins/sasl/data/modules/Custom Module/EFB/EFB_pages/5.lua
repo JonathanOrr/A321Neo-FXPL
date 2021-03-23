@@ -12,6 +12,7 @@ local please_wait_cover_begin = 0
 
 local efb_subpage_number = 1
 
+include("EFB/efb_functions.lua")
 include("libs/table.save.lua")
 include("networking/metar_request.lua")
 
@@ -30,36 +31,53 @@ end
 
 --KEYBOARD CAPTURE
 
+local function plug_in_the_buffer()
+    if string.len(keyboard_subpage_1_buffer) <= 0 then --IF THE LENGTH OF THE STRING IS 0, THEN REVERT TO THE PREVIOUS VALUE. ELSE, PLUG-IN THE NEW VALUE.
+        keyboard_subpage_1_focus = 0
+        keyboard_subpage_1_buffer = ""
+    else
+        target_airport = keyboard_subpage_1_buffer --PLUG THE SCRATCHPAD INTO THE ACTUAL TARGET AIRPORT
+        keyboard_subpage_1_focus = 0
+        keyboard_subpage_1_buffer = ""
+    end
+end
+
+local function revert_to_previous_and_delete_buffer()
+    keyboard_subpage_1_focus = 0
+    keyboard_subpage_1_buffer = ""
+end
+
+local function backspace()
+    keyboard_subpage_1_buffer = string.sub(keyboard_subpage_1_buffer, 1, -2)
+end
+
+local function construct_the_buffer(char)
+    local read_n = tonumber(string.char(char)) --JUST TO MAKE SURE WHAT YOU TYPE IS A NUMBER
+            
+    if read_n == nil and string.len(keyboard_subpage_1_buffer) < 4 then -- "tonumber()" RETURNS nil IF NOT A NUMBER, ALSO MAKES SURE STRING LENGTH IS <7
+        keyboard_subpage_1_buffer = string.upper(keyboard_subpage_1_buffer..string.char(char))
+    end
+end
+
+
 function EFB_onKeyDown_page5(component, char, key, shiftDown, ctrlDown, altOptDown)
     if efb_subpage_number == 1 then
         if keyboard_subpage_1_focus == 0 then
             return false
         end
             if char == SASL_KEY_DELETE then --BACKSPACE
-                keyboard_subpage_1_buffer = string.sub(keyboard_subpage_1_buffer, 1, -2)
+                backspace()
             elseif char == SASL_VK_RETURN then --ENTER
-                if string.len(keyboard_subpage_1_buffer) <= 0 then --IF THE LENGTH OF THE STRING IS 0, THEN REVERT TO THE PREVIOUS VALUE. ELSE, PLUG-IN THE NEW VALUE.
-                    keyboard_subpage_1_focus = 0
-                    keyboard_subpage_1_buffer = ""
-                else
-                    target_airport = keyboard_subpage_1_buffer --PLUG THE SCRATCHPAD INTO THE ACTUAL TARGET AIRPORT
-                    keyboard_subpage_1_focus = 0
-                    keyboard_subpage_1_buffer = ""
-                end
+                plug_in_the_buffer()
             elseif char == SASL_VK_ESCAPE then --REVERT TO THE PREVIOUS VALUE.
-                keyboard_subpage_1_focus = 0
-                keyboard_subpage_1_buffer = ""
+                revert_to_previous_and_delete_buffer()
             else
-                local read_n = tonumber(string.char(char)) --JUST TO MAKE SURE WHAT YOU TYPE IS A NUMBER
-            
-                if read_n == nil and string.len(keyboard_subpage_1_buffer) < 4 then -- "tonumber()" RETURNS nil IF NOT A NUMBER, ALSO MAKES SURE STRING LENGTH IS <7
-                    keyboard_subpage_1_buffer = string.upper(keyboard_subpage_1_buffer..string.char(char))
-                end
+                construct_the_buffer(char)
             end
         --print(keyboard_subpage_1_buffer)
         --print(target_airport)
         --print(char)
-        return true
+        return true --sasl manual, callback has to return true in order to override default keys.
     end
 end
 
@@ -68,6 +86,8 @@ function EFB_execute_page_5_buttons()
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 618,417,713,447, function ()
         keyboard_subpage_1_focus = keyboard_subpage_1_focus == 1 and 0 or 1
     end)
+
+    click_anywhere_except_that_area( 618, 417, 713, 447, plug_in_the_buffer)
 
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 436,352,707,382, function ()
         metar_button_begin = get(TIME)
