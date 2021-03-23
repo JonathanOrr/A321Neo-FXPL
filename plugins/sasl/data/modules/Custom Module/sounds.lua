@@ -23,6 +23,14 @@ Sounds_blower_delayed   = createGlobalPropertyf("a321neo/sounds/blower_delayed",
 Sounds_extract_delayed  = createGlobalPropertyf("a321neo/sounds/extract_delayed", 0, false, true, false)
 
 local function thrust_rush()
+    local athr_pos_L = get(ATHR_is_overriding) == 1 and get(ATHR_desired_N1, 1) or math.min(get(Throttle_blue_dot, 1), get(ATHR_desired_N1, 1))
+    local athr_pos_R = get(ATHR_is_overriding) == 1 and get(ATHR_desired_N1, 2) or math.min(get(Throttle_blue_dot, 2), get(ATHR_desired_N1, 2))
+
+    if get(ATHR_is_controlling) == 0 and get(ATHR_is_overriding) == 0 then
+        athr_pos_L = get(Throttle_blue_dot, 1)
+        athr_pos_R = get(Throttle_blue_dot, 2)
+    end
+
     set(SOUND_rush_L , get(Throttle_blue_dot, 1) - get(Eng_1_N1))
     set(SOUND_rush_R , get(Throttle_blue_dot, 2) - get(Eng_2_N1))
 end

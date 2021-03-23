@@ -280,6 +280,8 @@ local function draw_engines_n1(x)
         return
     end
 
+    local athr_pos = get(ATHR_is_overriding) == 1 and get(ATHR_desired_N1, x) or math.min(get(Throttle_blue_dot, x), get(ATHR_desired_N1, x))
+
     local max_n1_scale = 110
     local max_n1_red   = ENG.data.display.n1_red_limit
     local red_angle    = Math_rescale(20, 205, max_n1_scale, 0, max_n1_red)
@@ -308,7 +310,7 @@ local function draw_engines_n1(x)
     -- Draw the arc
     draw_arc_n1(450+x_shift_3, 775, red_angle, yellow_angle, curr_angle, max_overrun_angle)
     -- Draw ath trend
-    if get(ATHR_is_overriding) == 1 then
+    if get(ATHR_is_overriding) == 1 or get(ATHR_is_controlling) == 1 then
         draw_athr_trend(x, curr_angle, athr_angle)
     end
     sasl.gl.drawMaskEnd()

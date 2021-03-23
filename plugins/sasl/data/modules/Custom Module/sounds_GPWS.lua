@@ -336,6 +336,7 @@ local function play_long_test()
     elseif curr_time > 44 then
         pb_set(PB.mip.gpws_capt, false, false)
         long_test = false
+        set(GPWS_long_test_in_progress, 0)
     end
 end
 
