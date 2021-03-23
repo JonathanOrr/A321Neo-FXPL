@@ -23,8 +23,8 @@ include("EFB/efb_functions.lua")
 include("libs/table.save.lua")
 
 
-local keyboard_focus = 0 --0 nothing, 1 oa, 2 ob, 3 oc, 4 cf, 5 ca, 6 fuel
-local keyboard_buffer = ""
+key_p3s1_focus = 0 --0 nothing, 1 oa, 2 ob, 3 oc, 4 cf, 5 ca, 6 fuel
+local key_p3s1_buffer = ""
 
 
 
@@ -115,9 +115,9 @@ end
 
 --MOUSE RESET
 function onMouseDown ( component , x , y , button , parentX , parentY )
-    if keyboard_focus ~= 0 or keyboard_subpage_2_focus ~= 0 then
+    if key_p3s1_focus ~= 0 or keyboard_subpage_2_focus ~= 0 then
         if button == MB_LEFT or button == MB_RIGHT then
-            keyboard_focus = 0
+            key_p3s1_focus = 0
             keyboard_subpage_2_focus = 0
             --print("Hi")
         end
@@ -128,65 +128,65 @@ end
 
 ----------------KEYOARD STUFF
 
-local function plug_in_the_buffer()
-    if string.len(keyboard_buffer) <= 0 then --IF THE LENGTH OF THE STRING IS 0, THEN REVERT TO THE PREVIOUS VALUE. ELSE, PLUG-IN THE NEW VALUE.
-        keyboard_focus = 0
-        keyboard_buffer = ""
+local function p3s1_plug_in_the_buffer()
+    if string.len(key_p3s1_buffer) <= 0 then --IF THE LENGTH OF THE STRING IS 0, THEN REVERT TO THE PREVIOUS VALUE. ELSE, PLUG-IN THE NEW VALUE.
+        key_p3s1_focus = 0
+        key_p3s1_buffer = ""
     else
-        load_target[keyboard_focus] = math.min(max_values[keyboard_focus], keyboard_buffer) --PLUG THE SCRATCHPAD INTO THE ACTUAL TARGET ARRAY
-        keyboard_focus = 0
-        keyboard_buffer = ""
+        load_target[key_p3s1_focus] = math.min(max_values[key_p3s1_focus], key_p3s1_buffer) --PLUG THE SCRATCHPAD INTO THE ACTUAL TARGET ARRAY
+        key_p3s1_focus = 0
+        key_p3s1_buffer = ""
     end
 end
 
-local function revert_to_previous_and_delete_buffer()
-    keyboard_focus = 0
-    keyboard_buffer = ""
+function p3s1_revert_to_previous_and_delete_buffer()
+    key_p3s1_focus = 0
+    key_p3s1_buffer = ""
 end
 
-local function go_to_next_box()
-    if string.len(keyboard_buffer) > 0 then
-        load_target[keyboard_focus] = math.min(max_values[keyboard_focus], keyboard_buffer) --PLUG THE SCRATCHPAD INTO THE ACTUAL TARGET ARRAY
+local function p3s1_go_to_next_box()
+    if string.len(key_p3s1_buffer) > 0 then
+        load_target[key_p3s1_focus] = math.min(max_values[key_p3s1_focus], key_p3s1_buffer) --PLUG THE SCRATCHPAD INTO THE ACTUAL TARGET ARRAY
     end
-    keyboard_buffer = ""
-    keyboard_focus = math.min(6, keyboard_focus + 1)
+    key_p3s1_buffer = ""
+    key_p3s1_focus = math.min(6, key_p3s1_focus + 1)
 end
 
-local function go_to_previous_box()
-    if string.len(keyboard_buffer) > 0 then
-        load_target[keyboard_focus] = math.min(max_values[keyboard_focus], keyboard_buffer) --PLUG THE SCRATCHPAD INTO THE ACTUAL TARGET ARRAY
+local function p3s1_go_to_previous_box()
+    if string.len(key_p3s1_buffer) > 0 then
+        load_target[key_p3s1_focus] = math.min(max_values[key_p3s1_focus], key_p3s1_buffer) --PLUG THE SCRATCHPAD INTO THE ACTUAL TARGET ARRAY
     end
-    keyboard_buffer = ""
-    keyboard_focus = math.max(1, keyboard_focus - 1)
+    key_p3s1_buffer = ""
+    key_p3s1_focus = math.max(1, key_p3s1_focus - 1)
 end
 
-local function construct_the_buffer(char)
+local function p3s1_construct_the_buffer(char)
     local read_n = tonumber(string.char(char)) --JUST TO MAKE SURE WHAT YOU TYPE IS A NUMBER
 
-    if read_n ~= nil and string.len(keyboard_buffer) < 7 then -- "tonumber()" RETURNS nil IF NOT A NUMBER, ALSO MAKES SURE STRING LENGTH IS <7
-        keyboard_buffer = keyboard_buffer..string.char(char)
+    if read_n ~= nil and string.len(key_p3s1_buffer) < 7 then -- "tonumber()" RETURNS nil IF NOT A NUMBER, ALSO MAKES SURE STRING LENGTH IS <7
+        key_p3s1_buffer = key_p3s1_buffer..string.char(char)
     end
 end
 
 function EFB_onKeyDown_page3_subpage_1(component, char, key, shiftDown, ctrlDown, altOptDown)
     if efb_subpage_number == 1 then
-        if keyboard_focus == 0 then
+        if key_p3s1_focus == 0 then
             return false
         end
             if char == SASL_KEY_DELETE then --BACKSPACE
-                keyboard_buffer = string.sub(keyboard_buffer, 1, -2)
+                key_p3s1_buffer = string.sub(key_p3s1_buffer, 1, -2)
             elseif char == SASL_VK_RETURN then --ENTER
-                plug_in_the_buffer()
+                p3s1_plug_in_the_buffer()
             elseif char == SASL_VK_ESCAPE then --REVERT TO THE PREVIOUS VALUE.
-                revert_to_previous_and_delete_buffer()
+                p3s1_revert_to_previous_and_delete_buffer()
             elseif char == SASL_KEY_DOWN then
-                go_to_next_box()
+                p3s1_go_to_next_box()
             elseif char == SASL_KEY_UP then
-                go_to_previous_box()
+                p3s1_go_to_previous_box()
             else
-                construct_the_buffer(char)
+                p3s1_construct_the_buffer(char)
             end
-        --print(keyboard_buffer)
+        --print(key_p3s1_buffer)
         --print(char)
         return true
     end
@@ -204,17 +204,17 @@ local function save_weights_to_file()
 end
 
 local function draw_focus_frame()
-    if keyboard_focus == 1 then
+    if key_p3s1_focus == 1 then
         sasl.gl.drawTexture (EFB_LOAD_selected_oa, 0 , 0 , 1143 , 800 , EFB_WHITE )
-    elseif keyboard_focus == 2 then
+    elseif key_p3s1_focus == 2 then
         sasl.gl.drawTexture (EFB_LOAD_selected_ob, 0 , 0 , 1143 , 800 , EFB_WHITE )
-    elseif keyboard_focus == 3 then
+    elseif key_p3s1_focus == 3 then
         sasl.gl.drawTexture (EFB_LOAD_selected_oc, 0 , 0 , 1143 , 800 , EFB_WHITE )
-    elseif keyboard_focus == 4 then
+    elseif key_p3s1_focus == 4 then
         sasl.gl.drawTexture (EFB_LOAD_selected_cf, 0 , 0 , 1143 , 800 , EFB_WHITE )
-    elseif keyboard_focus == 5 then
+    elseif key_p3s1_focus == 5 then
         sasl.gl.drawTexture (EFB_LOAD_selected_ca, 0 , 0 , 1143 , 800 , EFB_WHITE )
-    elseif keyboard_focus == 6 then
+    elseif key_p3s1_focus == 6 then
         sasl.gl.drawTexture (EFB_LOAD_selected_fuel, 0 , 0 , 1143 , 800 , EFB_WHITE )
     end
 end
@@ -268,7 +268,11 @@ local function set_cg()
 end
 
 local function set_values()
-    load_actual = load_target -- set the load actual array for the next line
+
+    for k, v in ipairs(load_target) do -- set the load actual array for the next line
+      load_actual[k] = v
+    end
+
     set(Payload_weight, (load_actual[1] + load_actual[2] + load_actual[3])*weight_per_passenger + load_actual[4] + load_actual[5])
     set_fuel(load_actual[6])
     calculate_cg()
@@ -358,37 +362,43 @@ local function Subpage_1_buttons()
 --------------------------------------------------------------------------------------------------------
 
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 216, 385, 308, 409,function () --THE SCRATCHPAD FOCUS BUTTONS
-        keyboard_focus = keyboard_focus == 1 and 0 or 1
+        p3s1_plug_in_the_buffer()
+        key_p3s1_focus = key_p3s1_focus == 1 and 0 or 1
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 216, 346, 308, 370,function ()
-        keyboard_focus = keyboard_focus == 2 and 0 or 2
+        p3s1_plug_in_the_buffer()
+        key_p3s1_focus = key_p3s1_focus == 2 and 0 or 2
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 216, 307, 308, 332,function ()
-        keyboard_focus = keyboard_focus == 3 and 0 or 3
+        p3s1_plug_in_the_buffer()
+        key_p3s1_focus = key_p3s1_focus == 3 and 0 or 3
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 216, 229, 308, 254,function ()
-        keyboard_focus = keyboard_focus == 4 and 0 or 4
+        p3s1_plug_in_the_buffer()
+        key_p3s1_focus = key_p3s1_focus == 4 and 0 or 4
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 216, 190, 308, 214,function ()
-        keyboard_focus = keyboard_focus == 5 and 0 or 5
+        p3s1_plug_in_the_buffer()
+        key_p3s1_focus = key_p3s1_focus == 5 and 0 or 5
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 216, 112, 308, 136,function ()
-        keyboard_focus = keyboard_focus == 6 and 0 or 6
+        p3s1_plug_in_the_buffer()
+        key_p3s1_focus = key_p3s1_focus == 6 and 0 or 6
     end)
 --------------------------------------------------------------------------------------------------------
 
-if keyboard_focus == 1 then
-    click_anywhere_except_that_area( 216, 385, 308, 409, plug_in_the_buffer)
-elseif keyboard_focus == 2 then
-    click_anywhere_except_that_area( 216, 346, 308, 370, plug_in_the_buffer)
-elseif keyboard_focus == 3 then
-    click_anywhere_except_that_area( 216, 307, 308, 332, plug_in_the_buffer)
-elseif keyboard_focus == 4 then
-    click_anywhere_except_that_area( 216, 229, 308, 254, plug_in_the_buffer)
-elseif keyboard_focus == 5 then
-    click_anywhere_except_that_area( 216, 190, 308, 214, plug_in_the_buffer)
-elseif keyboard_focus == 6 then
-    click_anywhere_except_that_area( 216, 112, 308, 136, plug_in_the_buffer)
+if key_p3s1_focus == 1 then
+    click_anywhere_except_that_area( 216, 385, 308, 409, p3s1_plug_in_the_buffer)
+elseif key_p3s1_focus == 2 then
+    click_anywhere_except_that_area( 216, 346, 308, 370, p3s1_plug_in_the_buffer)
+elseif key_p3s1_focus == 3 then
+    click_anywhere_except_that_area( 216, 307, 308, 332, p3s1_plug_in_the_buffer)
+elseif key_p3s1_focus == 4 then
+    click_anywhere_except_that_area( 216, 229, 308, 254, p3s1_plug_in_the_buffer)
+elseif key_p3s1_focus == 5 then
+    click_anywhere_except_that_area( 216, 190, 308, 214, p3s1_plug_in_the_buffer)
+elseif key_p3s1_focus == 6 then
+    click_anywhere_except_that_area( 216, 112, 308, 136, p3s1_plug_in_the_buffer)
 end
 
 --------------------------------------------------------------------------------------------------------
@@ -416,13 +426,13 @@ local function EFB_draw_page_3_subpage_1() -- DRAW LOOP
     sasl.gl.drawTexture (EFB_LOAD_chart, 0 , 0 , 1143 , 800 , EFB_WHITE )
     sasl.gl.drawText ( Font_Airbus_panel , 97 , 582, dry_operating_weight , 17 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
 
-    if string.len(keyboard_buffer) > 0 then --THE PURPOSE OF THIS IFELSE IS TO PREVENT THE CURSOR FROM COVERING UP THE PREVIOUS VALUE, WHEN THE SCRATCHPAD IS EMPTY.
-        drawTextCentered( Font_Airbus_panel , 263 , 397, keyboard_focus == 1 and keyboard_buffer or load_target[1] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
-        drawTextCentered( Font_Airbus_panel , 263 , 358, keyboard_focus == 2 and keyboard_buffer or load_target[2] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
-        drawTextCentered( Font_Airbus_panel , 263 , 319, keyboard_focus == 3 and keyboard_buffer or load_target[3] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
-        drawTextCentered( Font_Airbus_panel , 263 , 242, keyboard_focus == 4 and keyboard_buffer or load_target[4] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
-        drawTextCentered( Font_Airbus_panel , 263 , 203, keyboard_focus == 5 and keyboard_buffer or load_target[5] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
-        drawTextCentered( Font_Airbus_panel , 263 , 124, keyboard_focus == 6 and keyboard_buffer or load_target[6] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
+    if string.len(key_p3s1_buffer) > 0 then --THE PURPOSE OF THIS IFELSE IS TO PREVENT THE CURSOR FROM COVERING UP THE PREVIOUS VALUE, WHEN THE SCRATCHPAD IS EMPTY.
+        drawTextCentered( Font_Airbus_panel , 263 , 397, key_p3s1_focus == 1 and key_p3s1_buffer or load_target[1] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
+        drawTextCentered( Font_Airbus_panel , 263 , 358, key_p3s1_focus == 2 and key_p3s1_buffer or load_target[2] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
+        drawTextCentered( Font_Airbus_panel , 263 , 319, key_p3s1_focus == 3 and key_p3s1_buffer or load_target[3] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
+        drawTextCentered( Font_Airbus_panel , 263 , 242, key_p3s1_focus == 4 and key_p3s1_buffer or load_target[4] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
+        drawTextCentered( Font_Airbus_panel , 263 , 203, key_p3s1_focus == 5 and key_p3s1_buffer or load_target[5] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
+        drawTextCentered( Font_Airbus_panel , 263 , 124, key_p3s1_focus == 6 and key_p3s1_buffer or load_target[6] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
     else
         drawTextCentered( Font_Airbus_panel , 263 , 397, load_target[1] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
         drawTextCentered( Font_Airbus_panel , 263 , 358, load_target[2] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
@@ -450,23 +460,22 @@ local function EFB_draw_page_3_subpage_1() -- DRAW LOOP
     end
 --------------------------------------------------------------------------
 
+    local passenger_weight_actual = ((load_actual[1]+load_actual[2]+load_actual[3]) * weight_per_passenger)
+    local cargo_weight_actual = load_actual[4] + load_actual[5]
+    local fuel_weight_actual = load_actual[6]
+    local zfw_actual = passenger_weight_actual + cargo_weight_actual + dry_operating_weight
+    local taxi_fuel = math.min(taxi_fuel, load_actual[6]) 
+    local takeoff_weight_actual = passenger_weight_actual + cargo_weight_actual + fuel_weight_actual - taxi_fuel + dry_operating_weight
+
     drawTextCentered( Font_Airbus_panel , 1038 , 682, dry_operating_weight      , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
     drawTextCentered( Font_Airbus_panel , 1038 , 660, 0                         , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
     drawTextCentered( Font_Airbus_panel , 1038 , 637, dry_operating_weight      , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
-    drawTextCentered( Font_Airbus_panel , 1038 , 615, load_actual[4] + load_actual[5]      , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
-    drawTextCentered( Font_Airbus_panel , 1038 , 593, ((load_actual[1]+load_actual[2]+load_actual[3]) * weight_per_passenger)      , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
-    drawTextCentered( Font_Airbus_panel , 1038 , 571, ((load_actual[1]+load_actual[2]+load_actual[3]) * weight_per_passenger) 
-                                                        + load_actual[4] + load_actual[5] 
-                                                        + dry_operating_weight     
-                                                        , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
-    drawTextCentered( Font_Airbus_panel , 1038 , 551, load_actual[6]    , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
-    drawTextCentered( Font_Airbus_panel , 1038 , 528, math.min(taxi_fuel, load_actual[6])     , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
-    drawTextCentered( Font_Airbus_panel , 1038 , 506, ((load_actual[1]+load_actual[2]+load_actual[3]) * weight_per_passenger) 
-                                                        + load_actual[4] + load_actual[5] 
-                                                        + load_actual[6] 
-                                                        - math.min(taxi_fuel, load_actual[6])
-                                                        + dry_operating_weight   
-                                                        , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
+    drawTextCentered( Font_Airbus_panel , 1038 , 615, cargo_weight_actual       , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
+    drawTextCentered( Font_Airbus_panel , 1038 , 593, passenger_weight_actual   , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
+    drawTextCentered( Font_Airbus_panel , 1038 , 571, zfw_actual                , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
+    drawTextCentered( Font_Airbus_panel , 1038 , 551, fuel_weight_actual        , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
+    drawTextCentered( Font_Airbus_panel , 1038 , 528, taxi_fuel                 , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
+    drawTextCentered( Font_Airbus_panel , 1038 , 506, takeoff_weight_actual     , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
 
     drawTextCentered( Font_Airbus_panel , 243 , 63, "LOAD AIRCRAFT" , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
 
@@ -501,8 +510,8 @@ end
 local function mutual_button_loop()
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 1031,18,1099,48, function () --SELECTOR BUTTONS WORK AT ALL TIMES
         efb_subpage_number = 2
-        keyboard_focus = 0
-        keyboard_buffer = ""
+        key_p3s1_focus = 0
+        key_p3s1_buffer = ""
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 954,18,1021,48, function ()
         efb_subpage_number = 1
