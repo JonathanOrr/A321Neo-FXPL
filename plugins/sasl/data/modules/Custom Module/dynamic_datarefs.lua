@@ -864,5 +864,5 @@ TOPCAT_trim = createGlobalPropertyf("a321neo/efb/topcat/trim", 0, false, true, f
 
 --Plug the obtained metar string into this, to transfer it from the callback to the EFB.
 
-EFB_metar_string = createGlobalPropertys("a321neo/metar", "", false, true, false)
+EFB_metar_string = createGlobalPropertys("a321neo/metar", "No METAR report requested.", false, true, false)
 

@@ -50,8 +50,8 @@ local line_width_table = {
     {2, 42},
     {3, 54},
     {4, 69},
-    {5, 72},
-    {6, 48},
+    {5, 58},
+    {6, 77},
   }
 
 local charge_fade_table = {
@@ -72,8 +72,8 @@ end
 function onKeyDown(component, char, key, shiftDown, ctrlDown, altOptDown)
     if EFB_PAGE == 3 and efb_subpage_number == 1 then
         return EFB_onKeyDown_page3_subpage_1(component, char, key, shiftDown, ctrlDown, altOptDown)
-    elseif EFB_PAGE == 3 and efb_subpage_number == 2 then
-        return EFB_onKeyDown_page3_subpage_2(component, char, key, shiftDown, ctrlDown, altOptDown)
+    elseif EFB_PAGE == 5 then
+        return EFB_onKeyDown_page5(component, char, key, shiftDown, ctrlDown, altOptDown)
     end
 end
 
