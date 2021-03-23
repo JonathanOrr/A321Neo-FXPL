@@ -22,13 +22,13 @@ Sounds_elec_bus_delayed = createGlobalPropertyf("a321neo/sounds/elec_bus_delayed
 Sounds_blower_delayed   = createGlobalPropertyf("a321neo/sounds/blower_delayed", 0, false, true, false)
 Sounds_extract_delayed  = createGlobalPropertyf("a321neo/sounds/extract_delayed", 0, false, true, false)
 
-function thrust_rush()
-    set(SOUND_rush_L , get(L_throttle_blue_dot) - get(Eng_1_N1))
-    set(SOUND_rush_R , get(R_throttle_blue_dot) - get(Eng_2_N1))
+local function thrust_rush()
+    set(SOUND_rush_L , get(Throttle_blue_dot, 1) - get(Eng_1_N1))
+    set(SOUND_rush_R , get(Throttle_blue_dot, 2) - get(Eng_2_N1))
 end
 
 
-function blower_extract_delay()
+local function blower_extract_delay()
     if get(AC_ess_bus_pwrd) == 1 then
         set(Sounds_elec_bus_delayed, 1) 
     else

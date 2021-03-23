@@ -357,10 +357,7 @@ Fire_pb_ENG1_status = createGlobalPropertyi("a321neo/cockpit/fire/buttons/ENG1_p
 Fire_pb_ENG2_status = createGlobalPropertyi("a321neo/cockpit/fire/buttons/ENG2_pb", 0, false, true, false)
 
 -- EWD
-EWD_engine_avail_ind_1_start = createGlobalPropertyi("a321neo/cockpit/ewd/ENG1_avail_indicator_start", 0, false, true, false) -- Time point when the engine is avail
-EWD_engine_avail_ind_2_start = createGlobalPropertyi("a321neo/cockpit/ewd/ENG2_avail_indicator_start", 0, false, true, false) -- Time point when the engine is avail
-EWD_engine_avail_ind_1 = createGlobalPropertyi("a321neo/cockpit/ewd/ENG1_avail_indicator", 0, false, true, false) -- 1 : avail showed, 0 : none
-EWD_engine_avail_ind_2 = createGlobalPropertyi("a321neo/cockpit/ewd/ENG2_avail_indicator", 0, false, true, false) -- 1 : avail showed, 0 : none
+EWD_engine_avail_ind_start = createGlobalPropertyia("a321neo/cockpit/ewd/ENG_avail_indicator_start", 2) -- Time point when the engine is avail
 EWD_engine_1_rev_ind = createGlobalPropertyi("a321neo/cockpit/ewd/ENG1_rev_ind", 0, false, true, false) -- 0: no rev, 2: rev amber, 2: rev amber HIGH, 4: rev green
 EWD_engine_2_rev_ind = createGlobalPropertyi("a321neo/cockpit/ewd/ENG2_rev_ind", 0, false, true, false) -- 0: no rev, 2: rev amber, 2: rev amber HIGH, 4: rev green
 EWD_engine_1_XX = createGlobalPropertyi("a321neo/cockpit/EWD/ENG1_XX", 0, false, true, false) -- 0: normal, 1: XX on engine parameters
@@ -372,8 +369,7 @@ EWD_engine_cooling_time = createGlobalPropertyia("a321neo/cockpit/EWD/ENG_coolin
 --ENG
 Cockpit_throttle_lever_L = createGlobalPropertyf("a321neo/cockpit/engine/throttle_lever_L", 0, false, true, false)  -- From -1 to 1
 Cockpit_throttle_lever_R = createGlobalPropertyf("a321neo/cockpit/engine/throttle_lever_R", 0, false, true, false)  -- From -1 to 1
-L_throttle_blue_dot = createGlobalPropertyf("a321neo/cockpit/engine/l_lever_blue_dot", 0, false, true, false)
-R_throttle_blue_dot = createGlobalPropertyf("a321neo/cockpit/engine/r_lever_blue_dot", 0, false, true, false)
+Throttle_blue_dot = createGlobalPropertyfa("a321neo/cockpit/engine/lever_blue_dot", 2)
 
 -- AI
 No_ice_detected       = createGlobalPropertyi("a321neo/cockpit/anti_ice/no_ice_detected", 0, false, true, false) --0: ice detected or system off, 1: no ice detected and system ON

@@ -48,6 +48,9 @@ function N1_control(L_PID_array, R_PID_array, reversers)
     local N1_target_L = get_N1_target(get(Cockpit_throttle_lever_L), 1)
     local N1_target_R = get_N1_target(get(Cockpit_throttle_lever_R), 2)
 
+    set(Throttle_blue_dot, N1_target_L, 1)
+    set(Throttle_blue_dot, N1_target_R, 2)
+
     if get(ATHR_is_controlling) == 1 then
         N1_target_L = math.min(N1_target_L, get(ATHR_desired_N1, 1))
         N1_target_R = math.min(N1_target_R, get(ATHR_desired_N1, 2))
@@ -87,6 +90,4 @@ function N1_control(L_PID_array, R_PID_array, reversers)
         set(Override_eng_2_lever, 0)
     end
 
-    set(L_throttle_blue_dot, N1_target_L)
-    set(R_throttle_blue_dot, N1_target_R)
 end

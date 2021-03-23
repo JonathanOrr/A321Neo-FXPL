@@ -90,6 +90,7 @@ function configure_pw1133g()
         },
 
         display = {
+            n1_red_limit = 104,
             egt_scale = 1200,                -- [°C]
             egt_red_limit = 1083,            -- [°C]
             egt_amber_limit = 1043,          -- [°C]
