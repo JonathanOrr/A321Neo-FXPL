@@ -3,8 +3,8 @@ local BUTTON_PRESS_TIME = 0.5
 local metar_wait_time = 3
 
 ---STUFF YOU CANNOT MESS WITH
-local keyboard_subpage_1_focus = 0
-local keyboard_subpage_1_buffer = ""
+local key_p5s1_focus = 0
+local key_p5s1_buffer = ""
 local target_airport = ""
 local metar_button_begin = 0
 local metar_string = ""
@@ -12,6 +12,7 @@ local please_wait_cover_begin = 0
 
 local efb_subpage_number = 1
 
+include("EFB/efb_functions.lua")
 include("libs/table.save.lua")
 include("networking/metar_request.lua")
 
@@ -30,44 +31,63 @@ end
 
 --KEYBOARD CAPTURE
 
+local function p5s1_plug_in_the_buffer()
+    if string.len(key_p5s1_buffer) <= 0 then --IF THE LENGTH OF THE STRING IS 0, THEN REVERT TO THE PREVIOUS VALUE. ELSE, PLUG-IN THE NEW VALUE.
+        key_p5s1_focus = 0
+        key_p5s1_buffer = ""
+    else
+        target_airport = key_p5s1_buffer --PLUG THE SCRATCHPAD INTO THE ACTUAL TARGET AIRPORT
+        key_p5s1_focus = 0
+        key_p5s1_buffer = ""
+    end
+end
+
+function p5s1_revert_to_previous_and_delete_buffer()
+    key_p5s1_focus = 0
+    key_p5s1_buffer = ""
+end
+
+local function p5s1_backspace()
+    key_p5s1_buffer = string.sub(key_p5s1_buffer, 1, -2)
+end
+
+local function p5s1_construct_the_buffer(char)
+    local read_n = tonumber(string.char(char)) --JUST TO MAKE SURE WHAT YOU TYPE IS A NUMBER
+            
+    if read_n == nil and string.len(key_p5s1_buffer) < 4 then -- "tonumber()" RETURNS nil IF NOT A NUMBER, ALSO MAKES SURE STRING LENGTH IS <7
+        key_p5s1_buffer = string.upper(key_p5s1_buffer..string.char(char))
+    end
+end
+
+
 function EFB_onKeyDown_page5(component, char, key, shiftDown, ctrlDown, altOptDown)
     if efb_subpage_number == 1 then
-        if keyboard_subpage_1_focus == 0 then
+        if key_p5s1_focus == 0 then
             return false
         end
             if char == SASL_KEY_DELETE then --BACKSPACE
-                keyboard_subpage_1_buffer = string.sub(keyboard_subpage_1_buffer, 1, -2)
+                p5s1_backspace()
             elseif char == SASL_VK_RETURN then --ENTER
-                if string.len(keyboard_subpage_1_buffer) <= 0 then --IF THE LENGTH OF THE STRING IS 0, THEN REVERT TO THE PREVIOUS VALUE. ELSE, PLUG-IN THE NEW VALUE.
-                    keyboard_subpage_1_focus = 0
-                    keyboard_subpage_1_buffer = ""
-                else
-                    target_airport = keyboard_subpage_1_buffer --PLUG THE SCRATCHPAD INTO THE ACTUAL TARGET AIRPORT
-                    keyboard_subpage_1_focus = 0
-                    keyboard_subpage_1_buffer = ""
-                end
+                p5s1_plug_in_the_buffer()
             elseif char == SASL_VK_ESCAPE then --REVERT TO THE PREVIOUS VALUE.
-                keyboard_subpage_1_focus = 0
-                keyboard_subpage_1_buffer = ""
+                p5s1_revert_to_previous_and_delete_buffer()
             else
-                local read_n = tonumber(string.char(char)) --JUST TO MAKE SURE WHAT YOU TYPE IS A NUMBER
-            
-                if read_n == nil and string.len(keyboard_subpage_1_buffer) < 4 then -- "tonumber()" RETURNS nil IF NOT A NUMBER, ALSO MAKES SURE STRING LENGTH IS <7
-                    keyboard_subpage_1_buffer = string.upper(keyboard_subpage_1_buffer..string.char(char))
-                end
+                p5s1_construct_the_buffer(char)
             end
-        --print(keyboard_subpage_1_buffer)
+        --print(key_p5s1_buffer)
         --print(target_airport)
         --print(char)
-        return true
+        return true --sasl manual, callback has to return true in order to override default keys.
     end
 end
 
 --MOUSE & BUTTONS--
 function EFB_execute_page_5_buttons()
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 618,417,713,447, function ()
-        keyboard_subpage_1_focus = keyboard_subpage_1_focus == 1 and 0 or 1
+        key_p5s1_focus = key_p5s1_focus == 1 and 0 or 1
     end)
+
+    click_anywhere_except_that_area( 618, 417, 713, 447, p5s1_plug_in_the_buffer)
 
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 436,352,707,382, function ()
         metar_button_begin = get(TIME)
@@ -88,12 +108,12 @@ end
 function EFB_draw_page_5()
     sasl.gl.drawTexture (Metar_bgd, 0 , 0 , 1143 , 800 , EFB_WHITE )
 
-    if keyboard_subpage_1_focus == 1 then
+    if key_p5s1_focus == 1 then
         sasl.gl.drawTexture (Metar_highlighter, 0 , 0 , 1143 , 800 , EFB_WHITE )
     end
 
-    if string.len(keyboard_subpage_1_buffer) > 0 then
-        drawTextCentered( Font_Airbus_panel , 663 , 433, keyboard_subpage_1_focus == 1 and keyboard_subpage_1_buffer or target_airport , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
+    if string.len(key_p5s1_buffer) > 0 then
+        drawTextCentered( Font_Airbus_panel , 663 , 433, key_p5s1_focus == 1 and key_p5s1_buffer or target_airport , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
     else
         drawTextCentered( Font_Airbus_panel , 663 , 433, target_airport , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
     end

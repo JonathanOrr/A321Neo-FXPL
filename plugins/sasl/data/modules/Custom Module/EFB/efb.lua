@@ -77,6 +77,8 @@ function onKeyDown(component, char, key, shiftDown, ctrlDown, altOptDown)
     end
 end
 
+
+
 ---------------------------------------------------------------------------------------------------------------
 --load in the functions
 local EFB_pages_buttons = {
@@ -186,8 +188,15 @@ function update()
     EFB_updates_pages[EFB_PAGE]()
     update_battery()
 
+    if not EFB_CURSOR_on_screen then
+        p3s1_revert_to_previous_and_delete_buffer()
+        p5s1_revert_to_previous_and_delete_buffer()
+    end
+
     perf_measure_stop("EFB:update()")
+
 end
+
 
 function draw()  ------KEEP THE draw_cursor() AT THE BOTTOM YOU DUMBASS!!!!!
   
