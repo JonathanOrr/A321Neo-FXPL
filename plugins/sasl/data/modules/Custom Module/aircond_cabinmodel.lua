@@ -24,7 +24,6 @@ CARGO_AFT = 4
 local EXCHANGE_AFT_FWD_RATIO = 0.01  -- How much natural air mix we have from aft to fwd cabin
 
 local FUSELAGE_THERMAL_RESISTANCE = 0.75
-local NR_PEOPLE_CABIN=150   -- TODO This should come from EFB
 local WATT_PER_PEOPLE=100
 
 local SOLAR_GAIN = 0.1

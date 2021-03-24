@@ -129,7 +129,7 @@ Hot_air_temp       = createGlobalPropertyf("a321neo/dynamics/packs/cabin_hot_air
 Hot_air_temp_cargo = createGlobalPropertyf("a321neo/dynamics/packs/cargo_hot_air_temp", 0, false, true, false)
 Cab_fan_fwd_running= createGlobalPropertyi("a321neo/dynamics/packs/cabin_fan_fwd", 0, false, true, false)   -- 1 running, 0 not running
 Cab_fan_aft_running= createGlobalPropertyi("a321neo/dynamics/packs/cabin_fan_aft", 0, false, true, false)    -- 1 running, 0 not running
-Nr_people_onboard = createGlobalPropertyi("a321neo/efb/nr_people_onboard", 0, false, true, false)
+Nr_people_onboard = createGlobalPropertyi("a321neo/efb/nr_people_onboard", 10, false, true, false)
 
 --apu
 Apu_master_button_state = createGlobalPropertyi("a321neo/dynamics/engines/apu/state", 0, false, true, false)-- master off 0, master on 1 (do not use for button light)
