@@ -31,6 +31,8 @@
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 -- EMULATOR SHELL CODE (I of II)
+—- NOTICE: emulator is deprecated
+
 --    Simulates SASL running on a lua intrepreter (or https://repl.it)
 --    instead of booting up X-Plane everytime you want to run this.
 --    
