@@ -9,7 +9,7 @@ local max_aft_cargo = 7000
 local max_values = {8, 80, 100, 5700, 7000, 40000 }
 
 local default_cg = 25
-local final_cg = 0
+final_cg = 0
 local predicted_cg = 0
 
 local taxi_fuel = 500
@@ -19,6 +19,7 @@ local tow_to_coordinates = {{-9999,78}, {45,78}, {102.6,440}, {9999,440}}
 
 ------------------------STUFF YOU CANNOT MESS WITH
 
+include("EFB/EFB_pages/3_subpage2.lua")
 include("EFB/efb_functions.lua")
 include("libs/table.save.lua")
 
@@ -32,8 +33,8 @@ local looper_1 = 10 -- so on startup, it is 10 then loops down to 0, sets the va
 
 local load_button_begin = 0
 
-local load_target = {0,0,0,0,0,0}
-local load_actual = {0,0,0,0,0,0} -- not a live value! does not change in flight!!!!!!!
+load_target = {0,0,0,0,0,0}
+load_actual = {0,0,0,0,0,0} -- not a live value! does not change in flight!!!!!!!
 local total_load_target = 0
 
 local predicted_tow = 0
@@ -460,8 +461,8 @@ local function EFB_draw_page_3_subpage_1() -- DRAW LOOP
 
     local passenger_weight_actual = ((load_actual[1]+load_actual[2]+load_actual[3]) * weight_per_passenger)
     local cargo_weight_actual = load_actual[4] + load_actual[5]
-    local fuel_weight_actual = load_actual[6]
-    local zfw_actual = passenger_weight_actual + cargo_weight_actual + dry_operating_weight
+    fuel_weight_actual = load_actual[6]
+    zfw_actual = passenger_weight_actual + cargo_weight_actual + dry_operating_weight
     local taxi_fuel = math.min(taxi_fuel, load_actual[6]) 
     local takeoff_weight_actual = passenger_weight_actual + cargo_weight_actual + fuel_weight_actual - taxi_fuel + dry_operating_weight
 
@@ -490,17 +491,18 @@ set_values()
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------SUBPAGE 2
 
-
+local test_table = {"apple", "orange", "banana"}
 
 local function EFB_draw_page_3_subpage_2() --DRAW LOOP
-
+    p3s2_draw()
 end
 
 local function EFB_update_page_3_subpage_2() --UPDATE LOOP
+    p3s2_update()
 end
 
 local function Subpage_2_buttons()
-
+    p3s2_buttons()
 end
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------MUTUAL LOOPS

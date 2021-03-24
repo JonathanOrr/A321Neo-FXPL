@@ -240,7 +240,7 @@ function Math_rescale_no_lim(in1, out1, in2, out2, x)
 
 end
 
-function Table_interpolate(tab, x)
+function Table_interpolate(tab, x) --X VALUE MUST BE FROM SMALL TO BIG! OTHERWISE IT WILL BREAK!
     local a = 1
     local b = #tab
     assert(b > 1)

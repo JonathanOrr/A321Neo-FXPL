@@ -178,6 +178,10 @@ EFB_LOAD_selected_fuel =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module
 --EFB_LOAD_refuel_button =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/refuel_button.png")
 EFB_LOAD_compute_button =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/compute_button.png")
 
+------------LOAD_SUBPAGE2-------------
+
+EFB_LOAD_s2_bgd =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage 2/bgd.png")
+
 -----------CONFIG------------
 
 EFB_CONFIG_bgd =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/CONFIG page/overlay.png")

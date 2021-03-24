@@ -3,15 +3,16 @@
 --}
 
 pitch_trim_table = {
-    {43, -2.5},
-    {40, -2.5},
-    {35, -1.4},
-    {30, -0.3},
-    {25, 0.9},
-    {20, 1.9},
+    {10.5, 2.5},
     {17, 2.5},
-    {10.5, 2.5}
+    {20, 1.9},
+    {25, 0.9},
+    {30, -0.3},
+    {35, -1.4},
+    {40, -2.5},
+    {43, -2.5},
 }
+
 
 v2_table = {
     {-2000,0},
@@ -42,6 +43,7 @@ wet_correction = 0
 computed_v1 = 0
 computed_vr = 0
 computed_v2 = 0
+computed_trim = 0
 
 press_alt = 0
 qnh = 0
@@ -53,14 +55,18 @@ cg_mac = 0
 ----------------------------------------------------
 
 
-local function constant_conversions()
+--function constant_conversions()
+
+--    press_alt = get(acf_msl)+30*(1013-qnh)
+--end
+
+function constant_conversions()
+    press_alt = get(acf_msl)*3.281
     qnh = get(Weather_curr_press_sea_level)*33.864
-    press_alt = get(acf_msl)+30*(1013-qnh)
 end
 
-
-local function flex_calculation()
-        flex_temp_computed = Round(-0.02434027806956361259*(get(acf_msl)/100)^3 + 0.36824311548836550021*(get(acf_msl)/100)^2 - 2.95963831628837229790*(get(acf_msl)/100) + 54.96994092387330948740, 0)
+function flex_calculation()
+        flex_temp_computed = Round(-0.02434027806956361259*(get(acf_msl)*3.281/100)^3 + 0.36824311548836550021*(get(acf_msl)*3.281/100)^2 - 2.95963831628837229790*(get(acf_msl)*3.281/100) + 54.96994092387330948740, 0)
 
         if 1013-qnh < 0 then --if qnh > 1013
             flex_temp_correction = Round((qnh-1013)/12,0)
@@ -71,7 +77,7 @@ local function flex_calculation()
         flex_temp = flex_temp_computed + flex_temp_correction
 end
 
-local function v2_calculation()
+function v2_calculation()
     if get(LOAD_flapssetting) == 1 then
 
         v2_table[1][2] = Table_extrapolate({ -- -2000 ft
@@ -845,35 +851,19 @@ local function v2_calculation()
     end
 end
 
-local function other_spd_calculation()
-    if get(LOAD_runwaycond) == 1 then
-        computed_v1 = computed_v2 - 15
-    else
-        computed_v1 = computed_v2 - 5
-    end
+function other_spd_calculation()
 
+    computed_v1 = computed_v2 - 5
     computed_vr = computed_v2 - 4
 
     set(TOPCAT_v1, computed_v1)
     set(TOPCAT_vr, computed_vr)
     set(TOPCAT_v2, computed_v2)
     set(TOPCAT_flex, flex_temp)
-        
 end
 
-local function cg_calculation()
-
-    
-
-end
 
 function update()
-
-    other_spd_calculation()
-    constant_conversions()
-    v2_calculation()
-    flex_calculation()
-
     --print(qnh)
     --print(press_alt)
     --print(flex_temp)
