@@ -59,6 +59,17 @@ local function draw_needle(PFD_table)
             TEXT_ALIGN_CENTER,
             needle_color
         )
+        if math.abs(adirs_get_vs(PFD_table.Screen_ID)) >= 10000 then
+            Sasl_DrawWideFrame(
+                VS_box_x_pos - VS_box_margin,
+                VS_box_y_pos - VS_box_margin,
+                VS_box_width,
+                VS_box_height,
+                2,
+                1,
+                ECAM_GREEN
+            )
+        end
     end
 
     sasl.gl.drawWideLine(size[1]/2+400, size[2]/2-8 + Table_interpolate(vs_needle_outter_anim, adirs_get_vs(PFD_table.Screen_ID)), size[1]/2+450, size[2]/2-8 + Table_interpolate(vs_needle_inner_anim, adirs_get_vs(PFD_table.Screen_ID)), 4, needle_color)
