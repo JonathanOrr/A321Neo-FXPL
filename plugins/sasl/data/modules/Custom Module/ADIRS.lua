@@ -44,6 +44,15 @@ random_err[1] = math.random()
 random_err[2] = math.random()
 random_err[3] = math.random()
 
+while math.abs(random_err[2] - random_err[1]) < 0.1 do
+    random_err[2] = math.random()
+end
+
+while math.abs(random_err[3] - random_err[1]) < 0.1
+   or math.abs(random_err[3] - random_err[2]) < 0.1 do
+    random_err[3] = math.random()
+end
+
 ----------------------------------------------------------------------------------------------------
 -- Classes
 ----------------------------------------------------------------------------------------------------
@@ -285,7 +294,9 @@ end
 
 function ADIRS:update_ir_dr()
     local blink_start = get(TIME) - self.ir_align_start_time < 0.3
-    pb_set(self.ir_light_dataref, not self.ir_switch_status, self.ir_status == IR_STATUS_FAULT or blink_start)
+    local blink_partial_failure = get(FAILURE_IR[self.id]) == 1 and get(FAILURE_IR_ATT[self.id]) == 0 and self.adirs_switch_status == ADIRS_CONFIG_NAV
+    local light_fault_condition =  (self.ir_status == IR_STATUS_FAULT and not blink_partial_failure) or blink_start or (blink_partial_failure and get(TIME) % 0.4 < 0.2)
+    pb_set(self.ir_light_dataref, not self.ir_switch_status, light_fault_condition)
 end
 
 function ADIRS:update_ir_data()
