@@ -16,11 +16,17 @@ local Lever_in_MAN_thrust = createGlobalPropertyi("a321neo/cockpit/autothrust/le
 local sim_throttle_up =       sasl.findCommand("sim/engines/throttle_up")
 local sim_throttle_dn =       sasl.findCommand("sim/engines/throttle_down")
 local toggle_reverse_thrust = sasl.findCommand("sim/engines/thrust_reverse_toggle")
+local hold_reverse_thrust_all   = sasl.findCommand("sim/engines/thrust_reverse_hold")
+local hold_reverse_thrust_1   = sasl.findCommand("sim/engines/thrust_reverse_hold_1")
+local hold_reverse_thrust_2   = sasl.findCommand("sim/engines/thrust_reverse_hold_2")
 
 --register command handlers
 sasl.registerCommandHandler(sim_throttle_up, 1, Lever_fwd)
 sasl.registerCommandHandler(sim_throttle_dn, 1, Lever_revs)
-sasl.registerCommandHandler(toggle_reverse_thrust, 1, Toggle_reverse)
+sasl.registerCommandHandler(toggle_reverse_thrust,  1, Toggle_reverse)
+sasl.registerCommandHandler(hold_reverse_thrust_all,1, Hold_reverse_all)
+sasl.registerCommandHandler(hold_reverse_thrust_1,  1, function(phase) Hold_reverse_single(phase,1) end)
+sasl.registerCommandHandler(hold_reverse_thrust_2,  1, function(phase) Hold_reverse_single(phase,2) end)
 
 --ensure to override throttles
 set(Override_throttle, 1)

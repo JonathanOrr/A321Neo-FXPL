@@ -182,6 +182,36 @@ function Toggle_reverse(phase)
     return 1--inhibites the x-plane original command
 end
 
+function Hold_reverse_all(phase)
+    if phase == SASL_COMMAND_BEGIN or phase == SASL_COMMAND_CONTINUE then
+        thrust_in_reverse = true
+        set(Cockpit_throttle_lever_L, -1)
+        set(Cockpit_throttle_lever_R, -1)
+    elseif phase == SASL_COMMAND_END then
+        thrust_in_reverse = false
+        set(Cockpit_throttle_lever_L, 0)
+        set(Cockpit_throttle_lever_R, 0)
+    end
+end
+
+function Hold_reverse_single(phase, n)
+    if phase == SASL_COMMAND_BEGIN or phase == SASL_COMMAND_CONTINUE then
+        if n == 1 then
+            set(L_sim_throttle, -1)
+        end
+        if n == 2 then
+            set(R_sim_throttle, -1)
+        end
+    elseif phase == SASL_COMMAND_END then
+        if n == 1 then
+            set(L_sim_throttle, 0)
+        end
+        if n == 2 then
+            set(L_sim_throttle, 0)
+        end
+    end
+end
+
 local function can_reverse_open(eng)
 
     -- We need fadec elec power to open the reverser
