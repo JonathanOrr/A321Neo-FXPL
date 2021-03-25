@@ -17,6 +17,8 @@ local qnh_status = {
     }
 }
 
+ADIRS_sys.qnh_fo = qnh_status
+
 setup_cmd_handlers(qnh_status)
 
 function draw()
@@ -26,8 +28,8 @@ function draw()
 end
 
 function update()
-    if qnh_status.mode == MODE_QNH then
-        set(Fo_Baro, 29.93)
+    if qnh_status.mode == MODE_STD then
+        set(Fo_Baro, 29.92)
     else
         set(Fo_Baro, qnh_status.value)
     end
