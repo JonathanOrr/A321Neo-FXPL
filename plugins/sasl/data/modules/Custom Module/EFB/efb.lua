@@ -120,22 +120,22 @@ local EFB_draw_pages = {
     EFB_draw_page_10,
 }
 
-EFB_preferences = {
-    ["syncqnh"] = 0,
-    ["rolltonws"] = 0,
-    ["tca"] = 0,
-    ["pausetd"] = 0,
-    ["copilot"] = 0,
+EFB.preferences = {
+    ["syncqnh"] = false,
+    ["rolltonws"] = false,
+    ["tca"] = false,
+    ["pausetd"] = false,
+    ["copilot"] = false,
     ["flarelaw"] = 0
 }
 
 --load EFB preferences--
-local table_load_buffer = table.load(moduleDirectory .. "/Custom Module/saved_configs/EFB_preferences")
+local table_load_buffer = table.load(moduleDirectory .. "/Custom Module/saved_configs/EFB_preferences_v2")
 if table_load_buffer ~= nil then
-    EFB_preferences = table_load_buffer
+    EFB.preferences = table_load_buffer
 
     --init FBW flare law(special case)
-    set(FBW_mode_transition_version, EFB_preferences["flarelaw"])
+    set(FBW_mode_transition_version, EFB.preferences["flarelaw"])
 end
 
 ---------------------------------------------------------------------------------------------------------------

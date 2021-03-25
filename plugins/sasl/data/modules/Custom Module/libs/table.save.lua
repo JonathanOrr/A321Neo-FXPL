@@ -105,6 +105,8 @@ function table.save(  tbl,filename )
                  file:write( str..exportstring( v )..","..charE )
               elseif stype == "number" then
                  file:write( str..tostring( v )..","..charE )
+              elseif stype == "boolean" then
+                 file:write( str..tostring( v )..","..charE )
               end
            end
         end
@@ -120,6 +122,9 @@ function table.load( sfile )
   local ftables,err = loadfile( sfile )
   if err then return nil,err end
   local tables = ftables()
+  if tables == nil then
+    return nil
+  end
   for idx = 1,#tables do
      local tolinki = {}
      for i,v in pairs( tables[idx] ) do
