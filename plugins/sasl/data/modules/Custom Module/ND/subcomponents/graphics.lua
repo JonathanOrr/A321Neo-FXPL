@@ -10,6 +10,7 @@ include('ND/subcomponents/graphics_mouse.lua')
 local image_mask_rose = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/mask-rose.png")
 local image_mask_arc  = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/mask-arc.png")
 local image_mask_plan = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/mask-plan.png")
+local image_mask_oans = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/mask-oans.png")
 
 function draw_main(data)
 
@@ -21,7 +22,8 @@ function draw_main(data)
     if data.config.mode == ND_MODE_ILS or data.config.mode == ND_MODE_VOR or data.config.mode == ND_MODE_NAV then
 
         sasl.gl.drawMaskStart()
-        sasl.gl.drawTexture(image_mask_rose, 0,0,900,900)
+        local mask_texture = data.config.range <= ND_RANGE_ZOOM_2 and image_mask_oans or image_mask_rose
+        sasl.gl.drawTexture(mask_texture, 0,0,900,900)
         sasl.gl.drawUnderMask(true)
         
         draw_rose(data) -- The rose is drawn in all three cases
@@ -36,7 +38,8 @@ function draw_main(data)
         draw_rose_unmasked(data) -- The rose is drawn in all three cases
     elseif data.config.mode == ND_MODE_ARC then
         sasl.gl.drawMaskStart()
-        sasl.gl.drawTexture(image_mask_arc, 0,0,900,900)
+        local mask_texture = data.config.range <= ND_RANGE_ZOOM_2 and image_mask_oans or image_mask_arc
+        sasl.gl.drawTexture(mask_texture, 0,0,900,900)
         sasl.gl.drawUnderMask(true)
         draw_arc(data)
         sasl.gl.drawMaskEnd()
@@ -44,7 +47,8 @@ function draw_main(data)
         draw_arc_unmasked(data)
     elseif data.config.mode == ND_MODE_PLAN then
         sasl.gl.drawMaskStart()
-        sasl.gl.drawTexture(image_mask_plan, 0,0,900,900)
+        local mask_texture = data.config.range <= ND_RANGE_ZOOM_2 and image_mask_oans or image_mask_plan
+        sasl.gl.drawTexture(mask_texture, 0,0,900,900)
         sasl.gl.drawUnderMask(true)
         draw_plan(data)
         sasl.gl.drawMaskEnd()

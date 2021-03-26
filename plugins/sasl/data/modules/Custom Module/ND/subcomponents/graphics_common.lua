@@ -414,11 +414,14 @@ function draw_common(data)
     draw_common_gs_and_tas(data)
     draw_common_wind(data)
     draw_common_chrono(data)
-    draw_common_nav_stations(data)
+    if data.config.range > ND_RANGE_ZOOM_2 then
+        draw_common_nav_stations(data)
+        draw_common_terrain_numbers(data)
+    else
+        draw_common_oans_info(data)
+    end
     draw_common_messages(data)
     draw_common_rwy_and_true(data)
-    draw_common_oans_info(data)
-    draw_common_terrain_numbers(data)
     draw_test_gpws()
 end
 
