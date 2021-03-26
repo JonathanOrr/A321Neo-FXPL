@@ -93,7 +93,8 @@ local function update_navaid_raw_single(data, i)
         data.nav[i].dme_computed = radio_vor_is_dme_valid(i)
     elseif data.nav[i].selector == ND_SEL_ADF then
         data.nav[i].frequency = radio_adf_get_freq(i)
-        data.nav[i].identifier = ""
+        data.nav[i].is_valid = radio_adf_is_valid(i)
+        data.nav[i].identifier = DRAIMS_common.radio.adf[i] == nil and "" or DRAIMS_common.radio.adf[i].id
     end
 
 end

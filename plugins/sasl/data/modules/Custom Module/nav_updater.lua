@@ -33,6 +33,7 @@ local last_update = 0
 -------------------------------------------------------------------------------
 DRAIMS_common.radio = {}
 DRAIMS_common.radio.vor = {nil, nil}
+DRAIMS_common.radio.adf = {nil, nil}
 
 -------------------------------------------------------------------------------
 -- Helpers
@@ -62,7 +63,6 @@ local function update_vor_nearest(i)
     if AvionicsBay.is_initialized() and AvionicsBay.is_ready() then
         local frequency_int = Round(radio_vor_get_freq(i)*100, 0)
         local out = AvionicsBay.navaids.get_by_freq(NAV_ID_VOR, frequency_int, false)
-        print(i, frequency_int, #out)
         if #out > 0 then
             local nearest, dist_out = get_nearest_navaid(out)
             DRAIMS_common.radio.vor[i] = nearest
@@ -70,6 +70,20 @@ local function update_vor_nearest(i)
         end
     end
 end
+
+local function update_adf_nearest(i)
+    DRAIMS_common.radio.adf[i] = nil
+    if AvionicsBay.is_initialized() and AvionicsBay.is_ready() then
+        local frequency_int = math.floor(radio_adf_get_freq(i))
+        local out = AvionicsBay.navaids.get_by_freq(NAV_ID_NDB, frequency_int, false)
+        if #out > 0 then
+            local nearest, dist_out = get_nearest_navaid(out)
+            DRAIMS_common.radio.adf[i] = nearest
+            DRAIMS_common.radio.adf[i].curr_distance = dist_out
+        end
+    end
+end
+
 
 -------------------------------------------------------------------------------
 -- main update()
@@ -84,5 +98,8 @@ function update()
     
     update_vor_nearest(1)
     update_vor_nearest(2)
-    perf_measure_start("nav_updater:update()")
+    update_adf_nearest(1)
+    update_adf_nearest(2)
+    
+    perf_measure_stop("nav_updater:update()")
 end

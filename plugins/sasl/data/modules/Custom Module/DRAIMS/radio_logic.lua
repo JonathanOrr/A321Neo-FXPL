@@ -216,6 +216,14 @@ function radio_adf_set_freq(which_one, freq)
     set(adf_datarefs[which_one], Math_clamp(freq, 190, 535))
 end
 
+function radio_adf_is_valid(which_one)
+    if DRAIMS_common.radio.adf[which_one] then
+        return DRAIMS_common.radio.adf[which_one].curr_distance < 400
+    else
+        return false
+    end
+end
+
 
 -------------------------------------------------------------------------------
 -- DME
@@ -260,4 +268,6 @@ function radio_is_dme_working(which_one)
         return get(AC_bus_2_pwrd) == 1 and get(FAILURE_RADIO_DME_2) == 0
     end
 end
+
+
 
