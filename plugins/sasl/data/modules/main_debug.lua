@@ -21,6 +21,9 @@ override_MCDU_dontcreateairportlut = true
 -- no effects on adirs alignment
 override_ADIRS_ok = false
 
+-- The following variable allows you to disable avionicsbay. WARNING: many features of ND/OANS/MCDU
+-- will now be available.
+disable_avionicsbay = false
 
 -- If you set the following variable to a number different than 0, the corresponding ecam page is
 -- automatically selected at reboot
@@ -31,6 +34,7 @@ local ecam_force_page = 0
 -- The following flag enables the performance measuring of each component. It is possible to
 -- visualize it in the debug window
 debug_performance_measure = false
+
 
 --
 --

@@ -232,6 +232,10 @@ local function load_avionicsbay()
 
     AvionicsBay.c = ffi.load(path)
     
+    if not AvionicsBay.c then
+        logWarning("Unable to laod AvionicsBay FFI library.")
+    end
+    
     if AvionicsBay.c.initialize(sasl.getXPlanePath(), sasl.getAircraftPath() .. "/") then
         initialized = true
     else
@@ -244,14 +248,22 @@ local function load_avionicsbay()
     
 end
 
-
-load_avionicsbay()
+if not disable_avionicsbay then
+    load_avionicsbay()
+else
+    AvionicsBay.is_initialized = function() return false end
+    logWarning("AvionicsBay is disabled.")
+end
 
 function update()
-    AvionicsBay.c.set_acf_coords(get(Aircraft_lat), get(Aircraft_long));
+    if not disable_avionicsbay then
+        AvionicsBay.c.set_acf_coords(get(Aircraft_lat), get(Aircraft_long));
+    end
 end
 
 function onModuleShutdown()
-    print("Cleaning...")
-    AvionicsBay.c.terminate()
+    if initialized then
+        print("Cleaning...")
+        AvionicsBay.c.terminate()
+    end
 end

@@ -69,7 +69,7 @@ function onMouseUp ( component , x , y , button , parentX , parentY )
     return true
 end
 function onMouseHold ( component , x , y , button , parentX , parentY )
-    if button == MB_LEFT then
+    if button == MB_LEFT and component.nd_data.config.mode == ND_MODE_PLAN then
         component.nd_data.plan_holding = true
     end
     return true

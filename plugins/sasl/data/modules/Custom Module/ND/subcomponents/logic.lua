@@ -46,7 +46,7 @@ end
 function update_position(data)
     local id = data.id
 
-    data.misc.map_not_avail = (not adirs_is_position_ok(id) or (not AvionicsBay.apts.is_nearest_apt_computed() and data.config.range <= ND_RANGE_ZOOM_2)) or not AvionicsBay.is_initialized()
+    data.misc.map_not_avail = (not adirs_is_position_ok(id) or not AvionicsBay.is_initialized() or (not AvionicsBay.apts.is_nearest_apt_computed() and data.config.range <= ND_RANGE_ZOOM_2))
     data.misc.map_partially_displayed = (AvionicsBay.is_initialized() and not AvionicsBay.is_ready()) or data.misc.not_displaying_all_data
 
     data.misc.not_displaying_all_data = false -- reset it
