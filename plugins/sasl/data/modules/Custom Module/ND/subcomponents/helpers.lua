@@ -16,7 +16,10 @@
 -- Short description: Misc functions related to graphics
 -------------------------------------------------------------------------------
 
-
+local msin = math.sin
+local mcos = math.cos
+local mrad = math.rad
+local matan2 = math.atan2
 
 function get_range_in_nm(data)
     if data.config.range > ND_RANGE_ZOOM_2 then
@@ -38,20 +41,41 @@ function get_distance_nm(lat1,lon1,lat2,lon2)
 end
 
 function get_bearing(lat1,lon1,lat2,lon2)
-    local lat1_rad = math.rad(lat1)
-    local lat2_rad = math.rad(lat2)
-    local lon1_rad = math.rad(lon1)
-    local lon2_rad = math.rad(lon2)
+    local lat1_rad = mrad(lat1)
+    local lat2_rad = mrad(lat2)
+    local lon1_rad = mrad(lon1)
+    local lon2_rad = mrad(lon2)
 
-    local x = math.sin(lon2_rad - lon1_rad) * math.cos(lat2_rad)
-    local y = math.cos(lat1_rad) * math.sin(lat2_rad) - math.sin(lat1_rad)*math.cos(lat2_rad)*math.cos(lon2_rad - lon1_rad)
-    local theta = math.atan2(y, x)
+    local x = msin(lon2_rad - lon1_rad) * mcos(lat2_rad)
+    local y = mcos(lat1_rad) * msin(lat2_rad) - msin(lat1_rad)*mcos(lat2_rad)*mcos(lon2_rad - lon1_rad)
+    local theta = matan2(y, x)
     local brng = (theta * 180 / math.pi + 360) % 360
 
     return brng
 end
 
 function compute_angle(x1, y1, x2, y2)
-    return math.atan2(y1-y2, x1-x2)
+    return matan2(y1-y2, x1-x2)
 end 
+
+function rotate_xy_point(x, y, cx, cy, angle)
+
+    if angle == 0 then
+        return x,y
+    end
+
+    local s = msin(mrad(angle))
+    local c = mcos(mrad(angle))
+
+    x = x - cx
+    y = y - cy
+
+    local xnew = x * c - y * s
+    local ynew = x * s + y * c
+    
+    xnew = xnew + cx
+    ynew = ynew + cy
+
+    return xnew, ynew
+end
 

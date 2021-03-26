@@ -74,6 +74,11 @@ DRAIMS_1_brightness_act = createGlobalPropertyf("a321neo/cockpit/brightness/drai
 DRAIMS_2_brightness_act = createGlobalPropertyf("a321neo/cockpit/brightness/draims_2_brightness_act", 1, false, true, false)
 ISIS_brightness_act = createGlobalPropertyf("a321neo/cockpit/brightness/isis_brightness_act", 1, false, true, false)
 
+Capt_PFD_disable_click = createGlobalPropertyi("a321neo/cockpit/brightness/capt_pfd_disable_click", 0, false, true, false)
+Capt_ND_disable_click  = createGlobalPropertyi("a321neo/cockpit/brightness/capt_nd_disable_click", 0, false, true, false)
+Fo_PFD_disable_click   = createGlobalPropertyi("a321neo/cockpit/brightness/fo_pfd_disable_click", 0, false, true, false)
+Fo_ND_disable_click    = createGlobalPropertyi("a321neo/cockpit/brightness/fo_nd_disable_click", 0, false, true, false)
+
 Audio_nav_selection = globalProperty("sim/cockpit2/radios/actuators/audio_nav_selection")--0=nav1, 1=nav2, 2=adf1, 3=adf2, 9=none
 NAV_1_freq_Mhz = globalProperty("sim/cockpit2/radios/actuators/nav1_frequency_Mhz")
 NAV_1_freq_khz = globalProperty("sim/cockpit2/radios/actuators/nav1_frequency_khz")

@@ -16,28 +16,64 @@
 -- Short description: OANS mode file
 -------------------------------------------------------------------------------
 include("ND/subcomponents/helpers.lua")
-include("ND/libs/polygon.lua")
+
+local ffi = require("ffi")  -- This is needed to convert C string of raw data
+
+-------------------------------------------------------------------------------
+-- Textures
+-------------------------------------------------------------------------------
 
 local image_black_square    = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/black-square.png")
 local image_icon_flag       = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/icon-flag.png")
 local image_icon_cross      = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/icon-cross.png")
 
-local function draw_oans_rwy(data, rwy_start, rwy_end, functions)
+-------------------------------------------------------------------------------
+-- Caching math functions
+-------------------------------------------------------------------------------
+local msin = math.sin
+local mcos = math.cos
+local mdeg = math.deg
 
-    local x_start,y_start = functions.get_x_y(data, rwy_start.lat, rwy_start.lon)
-    local x_end,y_end = functions.get_x_y(data, rwy_end.lat, rwy_end.lon)
+-------------------------------------------------------------------------------
+-- Helpers
+-------------------------------------------------------------------------------
+
+local function rotate_cached_triangle(data, points)
+    local rot_ctr_x = 450 - data.oans_cache.diff_x  -- TODO Probably need to change for ARC
+    local rot_ctr_y = 450 - data.oans_cache.diff_y  -- TODO Probably need to change for ARC
+    points[1], points[2] = rotate_xy_point(points[1], points[2], rot_ctr_x, rot_ctr_y, data.oans_cache.diff_bear)
+    points[3], points[4] = rotate_xy_point(points[3], points[4], rot_ctr_x, rot_ctr_y, data.oans_cache.diff_bear)
+    points[5], points[6] = rotate_xy_point(points[5], points[6], rot_ctr_x, rot_ctr_y, data.oans_cache.diff_bear)
+end
+
+local function rotate_cached_point(data, x, y)
+    local rot_ctr_x = 450 - data.oans_cache.diff_x -- TODO Probably need to change for ARC
+    local rot_ctr_y = 450 - data.oans_cache.diff_y -- TODO Probably need to change for ARC
+    return rotate_xy_point(x, y, rot_ctr_x, rot_ctr_y, data.oans_cache.diff_bear)
+end
+
+-------------------------------------------------------------------------------
+-- Functions
+-------------------------------------------------------------------------------
+local function draw_oans_rwy(data, rwy_start, functions)
+
+    -- Welcome in the horrible world of drawing a runway...
+
+    local x_start,y_start = functions.get_x_y(data, rwy_start.lat, rwy_start.lon)   -- Start middle point of a runway
+    local x_end,y_end = functions.get_x_y(data, rwy_start.s_lat, rwy_start.s_lon)   -- End middle point of a runway
 
     local px_per_nm = functions.get_px_per_nm(data)
     local semiwidth_px = math.floor(rwy_start.width * 0.000539957 * px_per_nm / 2)
 
     local angle = compute_angle(x_end,y_end,x_start,y_start)    -- This is the runway angle
-    local perp_angle = angle + 3.14 / 2 -- This the angle of the base of the runway
+    local perp_angle = angle + 3.14 / 2 -- This the angle of the base of the runway (perpendicular to the runway)
     
     -- Draw runway
     
-    local x_shift = semiwidth_px * math.cos(perp_angle)
-    local y_shift = semiwidth_px * math.sin(perp_angle)
+    local x_shift = semiwidth_px * mcos(perp_angle)
+    local y_shift = semiwidth_px * msin(perp_angle)
     
+    -- LL = Lower-Left, LR=Lower-Right, UL=Upper-Left, UR=Upper-Right
     local ll_x = x_start + x_shift
     local ll_y = y_start + y_shift
     local lr_x = x_start - x_shift
@@ -47,14 +83,15 @@ local function draw_oans_rwy(data, rwy_start, rwy_end, functions)
     local ur_x = x_end   - x_shift
     local ur_y = y_end   - y_shift
 
+    -- Let's draw the pavement of the runway...
     sasl.gl.drawConvexPolygon ({ll_x, ll_y, lr_x, lr_y , ur_x, ur_y  , ul_x, ul_y} , true , 1 , {0.6,0.6,0.6})
     
     -- Draw runway marks
     local dist_line = 7
-    local x_shift_line = (semiwidth_px-dist_line) * math.cos(perp_angle)
-    local y_shift_line = (semiwidth_px-dist_line) * math.sin(perp_angle)
-    local x_shift_inner = dist_line * math.cos(angle)
-    local y_shift_inner = dist_line * math.sin(angle)
+    local x_shift_line = (semiwidth_px-dist_line) * mcos(perp_angle)
+    local y_shift_line = (semiwidth_px-dist_line) * msin(perp_angle)
+    local x_shift_inner = dist_line * mcos(angle)
+    local y_shift_inner = dist_line * msin(angle)
 
     local ll_x = x_start + x_shift_line + x_shift_inner
     local ll_y = y_start + y_shift_line + y_shift_inner
@@ -73,14 +110,14 @@ local function draw_oans_rwy(data, rwy_start, rwy_end, functions)
     -- Draw sign middle
     local m_x = (x_start + x_end) / 2
     local m_y = (y_start + y_end) / 2
-    local m_angle = -math.deg(angle)
+    local m_angle = -mdeg(angle)
     if m_angle > 180 then m_angle = m_angle - 180 end
     if m_angle < 0 then m_angle = m_angle + 180 end
     
     
-    if semiwidth_px*2 >= 40 then
+    if semiwidth_px*2 >= 40 then    -- When the runway is sufficiently large, we draw the number on it
         local font_size = 50
-        local text_rwy = rwy_start.sibling .. "-" .. rwy_end.sibling
+        local text_rwy = rwy_start.sibl_name .. "-" .. rwy_start.name
         
         local width, height = sasl.gl.measureText (Font_AirbusDUL, text_rwy, font_size, false, false)
         
@@ -90,7 +127,7 @@ local function draw_oans_rwy(data, rwy_start, rwy_end, functions)
     -- Runway sign start/end
     m_angle = m_angle+90
     
-    local direction = tonumber(string.sub(rwy_end.sibling,1,2))
+    local direction = tonumber(string.sub(rwy_start.name,1,2))
     if direction ~= nil then
         if direction >= 9 and direction < 27 then
             if  m_angle < 90 or m_angle > 270 then
@@ -99,105 +136,134 @@ local function draw_oans_rwy(data, rwy_start, rwy_end, functions)
         else
             if m_angle >= 90 and m_angle <= 270 then
                 m_angle = m_angle + 180
-            end        
+            end
         end
     end
-    
+
     local dist_text = -70
-    local x_shift = x_start + dist_text * math.cos(angle)
-    local y_shift = y_start + dist_text * math.sin(angle)
-    local font_size = 60
-    local width = 30 * #rwy_end.sibling
+    local x_shift = x_start + dist_text * mcos(angle)
+    local y_shift = y_start + dist_text * msin(angle)
+    local font_size = 50
+    local width = 30 * #rwy_start.name
+    sasl.gl.drawRotatedText(Font_AirbusDUL, x_shift, y_shift, x_shift, y_shift, m_angle, rwy_start.name, font_size, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
 
-    sasl.gl.drawRotatedText(Font_AirbusDUL, x_shift, y_shift, x_shift, y_shift, m_angle, rwy_end.sibling, font_size, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-
-    local x_shift = x_end - dist_text * math.cos(angle)
-    local y_shift = y_end - dist_text * math.sin(angle)
-    sasl.gl.drawRotatedText(Font_AirbusDUL, x_shift, y_shift, x_shift, y_shift, 180+m_angle, rwy_start.sibling, font_size, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    local x_shift = x_end - dist_text * mcos(angle)
+    local y_shift = y_end - dist_text * msin(angle)
+    sasl.gl.drawRotatedText(Font_AirbusDUL, x_shift, y_shift, x_shift, y_shift, 180+m_angle, rwy_start.sibl_name, font_size, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
 
 end
 
 local function draw_oans_rwys(data, functions, apt)
+    for rwyname,rwy in pairs(apt.rwys) do   -- For each runway...
+        draw_oans_rwy(data, rwy, functions)
+    end
+end
 
-    local already_seen_runways = {}
+local function draw_oans_airport_bounds(data, functions, apt, apt_details)
 
-    for rwyname,rwy in pairs(apt.rwys) do
-        
-        if already_seen_runways[rwyname] == nil then
-            already_seen_runways[rwyname] = true
-            already_seen_runways[rwy.sibling] = true
+    if data.oans_cache.apt_bounds == nil then
+       data.oans_cache.apt_bounds = {}
+    end
+
+    for i=0,apt_details.boundaries_len-1 do -- For each bound area (I expected there's only one per
+                                            -- airport, but don't trust this).
+    
+        ----- CACHING START
+        if data.oans_cache.apt_bounds[i] == nil then
+            data.oans_cache.apt_bounds[i] = {}
+            local bound_array = apt_details.boundaries[i]
+            local triangles = AvionicsBay.graphics.triangulate_apt_node(bound_array)    -- C++ call
             
-            local sibling_rwy = apt.rwys[rwy.sibling]
-            draw_oans_rwy(data, rwy, sibling_rwy, functions)
-        end            
+            for j=0,triangles.points_len-1 do
+                local x,y = functions.get_x_y(data, triangles.points[j].lat, triangles.points[j].lon)
+                table.insert(data.oans_cache.apt_bounds[i], x)
+                table.insert(data.oans_cache.apt_bounds[i], y)
+            end
+        end
+        ----- CACHING END
+
+        local curr_nr_points = #data.oans_cache.apt_bounds[i]
+        for k=1,curr_nr_points do
+            if k % 6 == 0 then  -- For each triangle
+                local points = { data.oans_cache.apt_bounds[i][k-5] - data.oans_cache.diff_x,
+                                 data.oans_cache.apt_bounds[i][k-4] - data.oans_cache.diff_y,
+                                 data.oans_cache.apt_bounds[i][k-3] - data.oans_cache.diff_x,
+                                 data.oans_cache.apt_bounds[i][k-2] - data.oans_cache.diff_y,
+                                 data.oans_cache.apt_bounds[i][k-1] - data.oans_cache.diff_x,
+                                 data.oans_cache.apt_bounds[i][k] - data.oans_cache.diff_y
+                               }
+                rotate_cached_triangle(data, points)
+                sasl.gl.drawConvexPolygon (points, true, 0, {0.1,0.1,0.1})
+            end
+        end
     end
 end
 
-local function draw_oans_taxiways(data, functions, apt)
-    for i,line in ipairs(apt.taxys) do
-    
-        local points = {}
-        for j,segment in ipairs(line.points) do
-            if #segment == 2 then
-                local x,y = functions.get_x_y(data, segment[1], segment[2])
-                table.insert(points, {x,y})
+
+local function draw_oans_taxiways(data, functions, apt, apt_details)
+
+    if data.oans_cache.taxi_c_p == nil then
+       data.oans_cache.taxi_c_p = {}
+    end
+
+    local color = {0.5,0.5,0.5}
+    if data.config.range == ND_RANGE_ZOOM_2 then    -- Color change for greater zooms
+        color = {0.2,0.2,0.2}
+    end
+
+    for i=0,apt_details.pavements_len-1 do  -- For each taxiway...
+        local bound_array = apt_details.pavements[i]
+
+        ----- CACHING START
+        if data.oans_cache.taxi_c_p[i] == nil then
+            local triangles = AvionicsBay.graphics.triangulate_apt_node(bound_array)
+
+            data.oans_cache.taxi_c_p[i] = {}
+            for j=0,triangles.points_len-1 do
+                local x,y = functions.get_x_y(data, triangles.points[j].lat, triangles.points[j].lon)
+                table.insert(data.oans_cache.taxi_c_p[i], x)
+                table.insert(data.oans_cache.taxi_c_p[i], y)
+
             end
         end
+        ----- CACHING END
 
-        triangles = polygon_triangulation(points)
-        
-        if #triangles > 0 then
-            for j,v in ipairs(triangles) do
-                if #v == 3 then
-                    local color = {0.5,0.5,0.5}
-                    if data.config.range == ND_RANGE_ZOOM_2 then
-                        color = {0.2,0.2,0.2}
-                    end
-                    sasl.gl.drawConvexPolygon ({ v[1][1], v[1][2], v[2][1], v[2][2], v[3][1], v[3][2] }, true, 0, color) 
-                end
+        local curr_nr_points = #data.oans_cache.taxi_c_p[i]
+        for k=1,curr_nr_points do
+            if k % 6 == 0 then  -- For each triangle
+                local points = { data.oans_cache.taxi_c_p[i][k-5] - data.oans_cache.diff_x,
+                                 data.oans_cache.taxi_c_p[i][k-4] - data.oans_cache.diff_y,
+                                 data.oans_cache.taxi_c_p[i][k-3] - data.oans_cache.diff_x,
+                                 data.oans_cache.taxi_c_p[i][k-2] - data.oans_cache.diff_y,
+                                 data.oans_cache.taxi_c_p[i][k-1] - data.oans_cache.diff_x,
+                                 data.oans_cache.taxi_c_p[i][k] - data.oans_cache.diff_y
+                               }
+                rotate_cached_triangle(data, points)
+                sasl.gl.drawConvexPolygon (points, true, 0, color)
             end
         end
-
     end
 end
 
-local function draw_oans_airport_bounds(data, functions, apt)
-    for i,line in ipairs(apt.bounds) do
-    
-        local points = {}
-        for j,segment in ipairs(line.points) do
-            if #segment == 2 then
-                local x,y = functions.get_x_y(data, segment[1], segment[2])
-                table.insert(points, {x,y})
-            end
-        end
+local function draw_oans_mark_lines(data, functions, apt, apt_details)
 
-        triangles = polygon_triangulation(points)
-        
-        if #triangles > 0 then
-            for j,v in ipairs(triangles) do
-                if #v == 3 then
-                    sasl.gl.drawConvexPolygon ({ v[1][1], v[1][2], v[2][1], v[2][2], v[3][1], v[3][2] }, true, 0, {0.1,0.1,0.1})
-                end
-            end
-        end
+    local len = apt_details.linear_features_len  -- They must be drawn in the opposite order
 
+    if data.oans_cache.mark_lines == nil then
+        data.oans_cache.mark_lines = {}
     end
-end
 
-local function draw_oans_mark_lines(data, functions, apt)
-
-    local len = #apt.mark_lines  -- They must be drawn in the opposite order
-
-    for i=len, 1, -1 do
-        local line = apt.mark_lines[i] 
+    for i=len-1, 0, -1 do   -- For each line
+        local line = apt_details.linear_features[i]
         
-        if    line.color == 1 or line.color == 51   -- Taxiway centerlines 
+        -- >= 60 numbering is not in apt.dat specification, but some airports have them, like KJFK
+
+        if    line.color == 1 or line.color == 51 or line.color == 60 or line.color == 61   -- Taxiway centerlines 
            or line.color == 4 or line.color == 54   -- Runways hold positions
            or line.color == 5 or line.color == 55   -- Non-runway hold positions
            or line.color == 8 or line.color == 58   -- Lanes queue
            or line.color == 9 or line.color == 59   -- Lanes queue
-           or line.color == 22                      -- Roadway centerline
+           or line.color == 22 or line.color == 62  -- Roadway centerline
         then
 
             local color = COLOR_YELLOW
@@ -207,43 +273,59 @@ local function draw_oans_mark_lines(data, functions, apt)
                 color = ECAM_WHITE
             elseif line.color == 8 or line.color == 58 or line.color == 9 or line.color == 59 then
                 color = ECAM_WHITE
-            elseif line.color == 22 then
-                color = {0.6, 0.6, 0}    
+            elseif line.color == 22 or line.color == 62 then
+                color = {0.55, 0.55, 0}
             end
 
-            local last_prev_x = nil 
-            local last_prev_y = nil 
+            local last_prev_x = nil
+            local last_prev_y = nil
 
-            for j,segment in ipairs(line.points) do
-                local x,y = functions.get_x_y(data, segment[1], segment[2])
-                --if #segment == 2 then
-                    if last_prev_x ~= nil and last_prev_y ~= nil then
-                        sasl.gl.drawWideLine (last_prev_x, last_prev_y, x,y, 3, color)
-                    end
-                --else
-                --    if last_prev_x ~= nil and last_prev_y ~= nil then
-                --        local c_x,c_y = get_x_y(data, segment[3], segment[4])
-                --        sasl.gl.drawWideBezierLineQAdaptive(last_prev_x,last_prev_y,c_x,c_y,x,y,3,color)
-                --    end
-                --end
-                last_prev_x = x
-                last_prev_y = y                
+            if data.oans_cache.mark_lines[i] == nil then
+                data.oans_cache.mark_lines[i] = {}
             end
+
+            -- Ok so, we have to do one segment at a time
+            -- DO NOT use PolyLine here for two reasons:
+            -- - At some point in the future we will implement curved lines and we cannot use PolyLine for them
+            -- - You have to rototranslate each single point in any case (then you need a for), so it's useless
+
+            for j=0,line.nodes_len-1 do -- For each line point
             
-        end        
+                ----- CACHING START
+                if data.oans_cache.mark_lines[i][j] == nil then
+                    local x,y = functions.get_x_y(data, line.nodes[j].coords.lat, line.nodes[j].coords.lon)
+                    data.oans_cache.mark_lines[i][j] = {x,y}
+                end
+                ----- CACHING END
+
+                -- Translate and rotate the original cache x,y to the actualy one
+                local x = data.oans_cache.mark_lines[i][j][1] - data.oans_cache.diff_x
+                local y = data.oans_cache.mark_lines[i][j][2] - data.oans_cache.diff_y
+                x, y = rotate_cached_point(data, x, y)
+
+                if last_prev_x ~= nil and last_prev_y ~= nil then   -- Skip the first point of the line
+                    sasl.gl.drawWideLine(last_prev_x, last_prev_y, x, y, 3, color)
+                end
+                last_prev_x = x
+                last_prev_y = y
+            end
+        end
     end
 
 end
 
-local function draw_oans_tower(data, functions, apt)
-    if apt.tower.lat ~= nil then
-        local x,y = functions.get_x_y(data, apt.tower.lat, apt.tower.lon)
+local function draw_oans_tower(data, functions, apt, apt_details)
+
+    if apt_details.tower_pos.lat ~= 0. then -- There's ONE and only ONE tower per airport in XP apt.dat
+    
+        -- No need to cache, just 1 call of get_x_y
+        local x,y = functions.get_x_y(data, apt_details.tower_pos.lat, apt_details.tower_pos.lon)
         
         local width  = 40
         local height =  36
         local y_shift = (height-3)/2
 
-        sasl.gl.drawRectangle (x-width/2, y-y_shift-3+data.config.range, width, height-4,  {0,0,0})
+        sasl.gl.drawRectangle (x-width/2-2, y-y_shift-3+data.config.range, width+4, height-4,  {0,0,0})
         sasl.gl.drawText(Font_AirbusDUL,x,y-y_shift, "TWR", height-4, false, false, TEXT_ALIGN_CENTER, {0., 0.6, 0.})
         k_v = height - 5
         sasl.gl.drawTriangle ( x-15, y+k_v, x+15, y+k_v , x, y+k_v+15, {0., 0.6, 0.})
@@ -251,101 +333,212 @@ local function draw_oans_tower(data, functions, apt)
     end
 end
 
-local function draw_oans_mark_taxi(data, functions, apt)
-    for i,line in ipairs(apt.taxi_routes) do
-    
-        if line.name ~= nil then
-            local point_1 = apt.routes[line.point_1]
-            local point_2 = apt.routes[line.point_2]
+local function draw_oans_mark_taxi(data, functions, apt, apt_details)
+    if data.oans_cache.routes_four == nil then
+        data.oans_cache.routes_four = {}
+    end
+
+    for i=0,apt_details.routes_len-1 do
+        local route = apt_details.routes[i]
+        if route.name_len > 0 then
         
-            local x1,y1 = functions.get_x_y(data, point_1.lat, point_1.lon)
-            local x2,y2 = functions.get_x_y(data, point_2.lat, point_2.lon)
+            ----- CACHING START
+            if data.oans_cache.routes_four[i] == nil then
+                local point_1 = AvionicsBay.apts.get_route(apt.ref_orig, route.route_node_1)
+                local point_2 = AvionicsBay.apts.get_route(apt.ref_orig, route.route_node_2)
+                local x1,y1 = functions.get_x_y(data, point_1.lat, point_1.lon)
+                local x2,y2 = functions.get_x_y(data, point_2.lat, point_2.lon)
 
-            local x = (x1+x2)/2
-            local y = (y1+y2)/2
+                local x = (x1+x2)/2
+                local y = (y1+y2)/2
 
-            local width  = 20 * #line.name
+                data.oans_cache.routes_four[i] = {x,y}
+            end
+            ----- CACHING END
+
+            -- Translate and rotate the original cache x,y to the actualy one
+            local x = data.oans_cache.routes_four[i][1] - data.oans_cache.diff_x
+            local y = data.oans_cache.routes_four[i][2] - data.oans_cache.diff_y
+            x, y = rotate_cached_point(data, x, y)
+
+            local name = ffi.string(route.name, route.name_len);
+
+            local width  = 20 * #name
             local height = 36
             local y_shift = (height-3)/2
 
             sasl.gl.drawRectangle (x-width/2, y-y_shift-3+data.config.range, width, height-4,  {0,0,0})
 
-            sasl.gl.drawText(Font_AirbusDUL,x,y-y_shift, line.name, height-4, false, false, TEXT_ALIGN_CENTER, COLOR_YELLOW)
-        end    
+            sasl.gl.drawText(Font_AirbusDUL,x,y-y_shift, name, height-4, false, false, TEXT_ALIGN_CENTER, COLOR_YELLOW)
+        end
     end
 end
 
-local function draw_oans_mark_gate(data, functions, apt)
-    for i,line in ipairs(apt.gates) do
-    
-        if line.name ~= nil then
-            local x,y = functions.get_x_y(data, line.lat, line.lon)
+local function draw_oans_mark_gate(data, functions, apt, apt_details)
 
-            local width  = 20 * #line.name
-            local height = 36
-            local y_shift = (height-3)/2
-
-            sasl.gl.drawRectangle (x-width/2, y-y_shift-3+data.config.range, width, height-4,  {0,0,0})
-
-            sasl.gl.drawText(Font_AirbusDUL,x,y-y_shift, line.name, height-4, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
-        end    
+    if data.oans_cache.gates == nil then
+        data.oans_cache.gates = {}
     end
+
+    for i=0,apt_details.gates_len-1 do  -- For each gate...
+        local gate = apt_details.gates[i]
+        local name = ffi.string(gate.name, gate.name_len);
+
+        ----- CACHING START
+        if data.oans_cache.gates[i] == nil then
+            local x,y = functions.get_x_y(data, gate.coords.lat, gate.coords.lon)
+            data.oans_cache.gates[i] = {x,y}
+        end
+        ----- CACHING END
+
+        -- Translate and rotate the original cache x,y to the actualy one
+        local x = data.oans_cache.gates[i][1] - data.oans_cache.diff_x
+        local y = data.oans_cache.gates[i][2] - data.oans_cache.diff_y
+        x, y = rotate_cached_point(data, x, y)
+
+        
+        local width  = 20 * #name -- Behind rectangle width
+        local height = 36         -- ... and height
+        local y_shift = (height-3)/2
+
+        sasl.gl.drawRectangle (x-width/2, y-y_shift-3+data.config.range, width, height-4,  {0,0,0})
+        sasl.gl.drawText(Font_AirbusDUL,x,y-y_shift, name, height-4, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    end
+
 end
 
 local function draw_oans_flags_and_crosses(data,functions)
+
+    -- Flags
     for i,flag in ipairs(data.poi.flag) do
         if flag.x ~= nil then
             flag.lat, flag.lon = functions.get_lat_lon(data,flag.x,flag.y)
             flag.x = nil
             flag.y = nil
         end
-        local x,y = functions.get_x_y(data, flag.lat, flag.lon)            
+        local x,y = functions.get_x_y(data, flag.lat, flag.lon)
         sasl.gl.drawTexture(image_icon_flag, x-25, y-35, 50, 70, {1,1,1})
     end
+
+    -- Crosses
     for i,cross in ipairs(data.poi.cross) do
         if cross.x ~= nil then
             cross.lat, cross.lon = functions.get_lat_lon(data,cross.x,cross.y)
             cross.x = nil
             cross.y = nil
         end
-        local x,y = functions.get_x_y(data, cross.lat, cross.lon)            
+        local x,y = functions.get_x_y(data, cross.lat, cross.lon)
         sasl.gl.drawTexture(image_icon_cross, x-25, y-25, 50, 50, {1,1,1})
     end
+end
+
+-------------------------------------------------------------------------------
+-- Cache-related
+-------------------------------------------------------------------------------
+
+local function update_oans_cache(data, functions, apt)
+
+    local local_lat = nd_data.config.mode == ND_MODE_PLAN and data.plan_ctr_lat or data.inputs.plane_coords_lat
+    local local_lon = nd_data.config.mode == ND_MODE_PLAN and data.plan_ctr_lon or data.inputs.plane_coords_lon
+    local local_angle = nd_data.config.mode == ND_MODE_PLAN and 0 or data.inputs.heading
+
+    if    data.oans_cache == nil or data.oans_cache.mode ~= data.config.mode
+       or data.oans_cache.range ~= data.config.range or data.oans_cache.apt_id ~= apt.id then
+        -- These are the cases when we need to wipe (or initialize) the cache
+        data.oans_cache = {
+            mode = data.config.mode,
+            range = data.config.range,
+            apt_id = apt.id,
+            ref_lat = local_lat,
+            ref_lon = local_lon,
+            ref_bear = local_angle
+        }
+    end
+
+    -- Compute the difference position in px from the original one to the current position,
+    -- so that we can use the cache data
+
+    local x_now, y_now = functions.get_x_y(data, local_lat, local_lon)
+    local x_orig, y_orig = functions.get_x_y(data, data.oans_cache.ref_lat, data.oans_cache.ref_lon)
+
+    data.oans_cache.diff_x    = x_now - x_orig  -- This is the offset between the center of the cache and the current center (X)
+    data.oans_cache.diff_y    = y_now - y_orig  -- This is the offset between the center of the cache and the current center (Y)
+    data.oans_cache.diff_bear = nd_data.config.mode == ND_MODE_PLAN and 0 or data.inputs.heading - data.oans_cache.ref_bear -- This is the bearing offset
+end
+
+-------------------------------------------------------------------------------
+-- Main draw functions
+-------------------------------------------------------------------------------
+
+function draw_oans_go(data, functions, apt, apt_details)
+
+    -- 1st Airport bounds (cached)
+    draw_oans_airport_bounds(data, functions, apt, apt_details)
+
+    -- 2nd Taxiways (cached)
+    draw_oans_taxiways(data, functions, apt, apt_details)
+
+    -- 2rd Various yellow and not lines (cached)
+    if data.config.range <= ND_RANGE_ZOOM_1 then
+        draw_oans_mark_lines(data, functions, apt, apt_details)
+    end
+
+    -- 3th Runways (NOT cached)
+    draw_oans_rwys(data, functions, apt)
+
+    if data.config.range <= ND_RANGE_ZOOM_05 then
+        -- 4th Tower position (NOT cached)
+        draw_oans_tower(data, functions, apt, apt_details)
+        -- 5th Taxi names (cached)
+        draw_oans_mark_taxi(data, functions, apt, apt_details)
+    end
+
+    -- 6th Gates names (cached)
+    if data.config.range <= ND_RANGE_ZOOM_02 then
+        draw_oans_mark_gate(data, functions, apt, apt_details)
+    end
+
+    -- 7th Flags and crosses (NOT cached)
+    if data.config.range <= ND_RANGE_ZOOM_1 then
+        draw_oans_flags_and_crosses(data,functions)
+    end
+
 end
 
 function draw_oans(data, functions)
     if data.config.range > ND_RANGE_ZOOM_2 then
         return  -- No OANS over zoom
     end
+    
+    data.misc.range_change = true   -- Let's turn on the message
 
-    local nearest_airport = Data_manager.nearest_airport
-    if nearest_airport ~= nil then
-        local apt = Data_manager.get_arpt_by_name(nearest_airport.id)
-        
-        if data.plan_ctr_lat == 0 and data.plan_ctr_lon == 0 then
-            data.plan_ctr_lat = apt.lat
-            data.plan_ctr_lon = apt.lon
-        end
-        
-        draw_oans_airport_bounds(data, functions, apt)
-        draw_oans_taxiways(data, functions, apt)
-        if data.config.range <= ND_RANGE_ZOOM_1 then
-            draw_oans_mark_lines(data, functions, apt)
-        end
-        draw_oans_rwys(data, functions, apt)
-        
-        if data.config.range <= ND_RANGE_ZOOM_05 then
-            draw_oans_tower(data, functions, apt)
-            draw_oans_mark_taxi(data, functions, apt)
-        end        
-        if data.config.range <= ND_RANGE_ZOOM_02 then
-            draw_oans_mark_gate(data, functions, apt)
-        end
-        
-        if data.config.range <= ND_RANGE_ZOOM_1 then
-            draw_oans_flags_and_crosses(data,functions)
-        end
+    local nearest_airport = AvionicsBay.apts.get_nearest_apt(true)
+    
+    local apt = nearest_airport -- TODO: Change depending on MCDU ecc.
+
+    if apt == nil then
+        return  -- Nearest airport not yet loaded
     end
+
+    AvionicsBay.apts.request_details(apt.id)
+    
+    if not AvionicsBay.apts.details_available(apt.id) then
+        return -- Still loading the details
+    end
+
+    local apt_details = AvionicsBay.apts.get_details(apt.id)
+
+    if (data.plan_ctr_lat == 0 and data.plan_ctr_lon == 0) or (data.oans_cache == nil or data.oans_cache.apt_id ~= apt.id) then
+        -- This is for PLAN only, PLAN initial position is the airport center
+        data.plan_ctr_lat = apt.lat
+        data.plan_ctr_lon = apt.lon
+    end
+
+    update_oans_cache(data, functions, apt) -- Init/Wipe the cache if needed and update the offsets
+    
+    draw_oans_go(data, functions, apt, apt_details)
+
+    data.misc.range_change = false  -- If we reached this point, the the OANS is actually drawn
 end
 
 

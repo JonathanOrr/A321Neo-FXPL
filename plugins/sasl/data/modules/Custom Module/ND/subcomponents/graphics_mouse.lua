@@ -12,7 +12,7 @@
 --    Please check the LICENSE file in the root of the repository for further
 --    details or check <https://www.gnu.org/licenses/>
 -------------------------------------------------------------------------------
--- File: graphics_plan.lua
+-- File: graphics_mouse.lua
 -- Short description: PLAN mode mouse management file
 -------------------------------------------------------------------------------
 
@@ -146,7 +146,7 @@ function draw_mouse(data)
 
     draw_menu(data)
 
-    if data.plan_mouse_x ~= nil then
+    if data.plan_mouse_x ~= nil and not data.plan_holding then
         local cursor_size_w = 93
         local cursor_size_h = 115
 

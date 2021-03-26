@@ -33,9 +33,12 @@ local image_bkg_ring_arrows = sasl.gl.loadImage(moduleDirectory .. "/Custom Modu
 local image_bkg_ring_middle = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/ring-middle.png")
 
 local image_point_apt = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/point-apt.png")
-local image_point_vor = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/point-vor.png")
+local image_point_vor_only = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/point-vor-only.png")
+local image_point_vor_dme  = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/point-vor-dme.png")
+local image_point_dme_only  = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/point-dme-only.png")
 local image_point_ndb = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/point-ndb.png")
 local image_point_wpt = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/point-wpt.png")
+
 
 local image_vor_1 = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/needle-VOR1.png")
 local image_vor_2 = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/needle-VOR2.png")
@@ -51,7 +54,7 @@ local COLOR_YELLOW = {1,1,0}
 
 local poi_position_last_update = 0
 local POI_UPDATE_RATE = 0.1
-local MAX_LIMIT_WPT = 500
+local MAX_LIMIT_WPT = 750
 
 -------------------------------------------------------------------------------
 -- Helpers functions
@@ -225,7 +228,7 @@ local function draw_poi_array(data, poi, texture, color)
 
     if poi.x > 0 and poi.x < size[1] and poi.y > 0 and poi.y < size[2] then
         sasl.gl.drawTexture(texture, poi.x-16, poi.y-16, 32,32, color)
-        sasl.gl.drawText(Font_AirbusDUL, poi.x+25, poi.y-16, poi.id, 36, false, false, TEXT_ALIGN_LEFT, color)
+        sasl.gl.drawText(Font_AirbusDUL, poi.x+20, poi.y-20, poi.id, 32, false, false, TEXT_ALIGN_LEFT, color)
     end
     
     return modified, poi
@@ -253,9 +256,25 @@ local function draw_vors(data)
 
     -- For each airtport visible...
     for i,vor in ipairs(data.poi.vor) do
-        local modified, poi = draw_poi_array(data, vor, image_point_vor, ECAM_MAGENTA)
+        local modified, poi = draw_poi_array(data, vor, vor.is_coupled_dme and image_point_vor_dme or image_point_vor_only, ECAM_MAGENTA)
         if modified then
             data.poi.vor[i] = poi
+        end
+    end
+    
+end
+
+local function draw_dmes(data)
+
+    if data.config.extra_data ~= ND_DATA_VORD then
+        return  -- Vor button not selected
+    end
+
+    -- For each airtport visible...
+    for i,dme in ipairs(data.poi.dme) do
+        local modified, poi = draw_poi_array(data, dme, image_point_dme_only, ECAM_MAGENTA)
+        if modified then
+            data.poi.dme[i] = poi
         end
     end
     
@@ -284,20 +303,22 @@ local function draw_wpts(data)
     end
 
     local displayed_num = 0
-    data.misc.map_partially_displayed = false
+    data.misc.not_displaying_all_data = false
     
     -- For each waypoint visible...
-    for i,wpt in ipairs(data.poi.wpt) do
-        displayed_num = displayed_num + 1
-        local modified, poi = draw_poi_array(data, wpt, image_point_wpt, ECAM_MAGENTA)
-        if modified then
-            data.poi.wpt[i] = poi
-        end
-        
-        if displayed_num > MAX_LIMIT_WPT and data.config.range >= ND_RANGE_160 then
-            data.misc.map_partially_displayed = true
-            break
-        end
+    local nr_wpts = #data.poi.wpt
+    if nr_wpts > MAX_LIMIT_WPT and data.config.range >= ND_RANGE_160 then
+        data.misc.not_displaying_all_data = true
+    end
+    
+    for i=1,nr_wpts do
+        local wpt = data.poi.wpt[i]
+        if nr_wpts <= MAX_LIMIT_WPT or i % math.ceil(nr_wpts/MAX_LIMIT_WPT) == 0 or data.config.range < ND_RANGE_160 then
+            local modified, poi = draw_poi_array(data, wpt, image_point_wpt, ECAM_MAGENTA)
+            if modified then
+                data.poi.wpt[i] = poi
+            end
+       end
     end
     
 end
@@ -400,6 +421,7 @@ local function draw_pois(data)
     
     draw_airports(data)
     draw_vors(data)
+    draw_dmes(data)
     draw_ndbs(data)
     draw_wpts(data)
 

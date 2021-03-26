@@ -52,7 +52,7 @@ ENG = { data_is_loaded = false }
 
 EFB = {}
 
-Data_manager = {}    -- Will be removed soon
+AvionicsBay = {}
 
 -- MCDU
 Mcdu_popup = {}

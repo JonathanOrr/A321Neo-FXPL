@@ -55,7 +55,7 @@ panelWidth3d = 4096
 panelHeight3d = 4096
 
 components = {
-  data_manager {},
+  avionics_bay {},
   efb{},
   display_backlights {},    -- This must stay at the top
   display_switching {},
