@@ -66,23 +66,11 @@ local function update_tcas(data)
     data.misc.tcas_status = ND_TCAS_OK
 end
 
-local function update_navaid_bearing_single(data, i)
-
-    local id = data.id
-    
-    -- These are necessary for ROSE-VOR and ROSE-ILS mode even if the
-    -- VOR is not selected
-    data.nav[i].crs = radio_vor_get_crs(i)
-    data.nav[i].crs_is_computed = adirs_is_hdg_ok(id)
-    data.nav[i].deviation_is_visible = false -- TODO
-    data.nav[i].deviation_deg = 0 -- get(NAV_1_bearing_deg) - data.nav[1].crs -- TODO
-end
-
 local function update_navaid_raw_single(data, i)
     if data.nav[i].selector == ND_SEL_OFF then
         -- TODO Auto-FMS NAV1
     else
-        data.nav[i].tuning_type = ND_NAV_TUNED_R
+        data.nav[i].tuning_type = radio_vor_get_tuning_source()
     end
 
     if data.nav[i].selector == ND_SEL_VOR then
@@ -106,9 +94,7 @@ local function update_navaid_raw(data)
     
     update_navaid_raw_single(data, 1)
     update_navaid_raw_single(data, 2)
-    
-    update_navaid_bearing_single(data, 1)
-    update_navaid_bearing_single(data, 2)
+
 end
 
 

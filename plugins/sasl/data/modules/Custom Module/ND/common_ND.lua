@@ -49,9 +49,6 @@ function new_dataset(input_id)
         ls_is_visible = false,
         ls_is_precise = false,
         
-        -- VOR
-        which_nav_is_active = 0,    -- 0,1, or 2
-        
         -- Alitudes -- Needed for Terrain
         altitude = 0,
         vs = 0

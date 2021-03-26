@@ -36,6 +36,9 @@ function draw_main(data)
         sasl.gl.drawMaskEnd()
 
         draw_rose_unmasked(data) -- The rose is drawn in all three cases
+        if data.config.mode == ND_MODE_VOR or data.config.mode == ND_MODE_ILS then
+            draw_rose_vorils_unmasked(data)
+        end
     elseif data.config.mode == ND_MODE_ARC then
         sasl.gl.drawMaskStart()
         local mask_texture = data.config.range <= ND_RANGE_ZOOM_2 and image_mask_oans or image_mask_arc

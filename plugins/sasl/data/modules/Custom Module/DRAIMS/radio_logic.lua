@@ -157,6 +157,10 @@ function radio_vor_get_dme_value(which_one)
     end
 end
 
+function radio_vor_get_tuning_source()
+    return 3    -- 1: FMGS auto, 2: MCDU manual, 3: DRAIMS manual TODO
+end
+
 
 -------------------------------------------------------------------------------
 -- ILS
