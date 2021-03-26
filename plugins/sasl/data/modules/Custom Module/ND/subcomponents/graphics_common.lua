@@ -146,7 +146,7 @@ local function draw_common_nav_stations_single(data, id)
     else
         local freq_str = ""
         if data.nav[id].selector == ND_SEL_VOR then
-            freq_str = Round_fill(data.nav[id].frequency/100, 2)
+            freq_str = Round_fill(data.nav[id].frequency, 2)
         else
             freq_str = math.floor(data.nav[id].frequency)
         end

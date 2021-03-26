@@ -99,7 +99,7 @@ components = {
   radio_logic {},
   DRAIMS_CAPT {},
   DRAIMS_FO {},
-  
+  nav_updater {},
   display_brightness {}, -- This must stay at the bottom
 
   main_popup {},

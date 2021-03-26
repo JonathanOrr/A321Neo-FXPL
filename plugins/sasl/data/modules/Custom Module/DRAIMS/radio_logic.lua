@@ -133,6 +133,31 @@ function radio_vor_set_crs(which_one, crs)
     set(DRAIMS_vor_crs[which_one], math.floor(crs % 360))
 end
 
+function radio_vor_is_valid(which_one)
+    if DRAIMS_common.radio.vor[which_one] then
+        return DRAIMS_common.radio.vor[which_one].curr_distance < 130
+    else
+        return false
+    end
+end
+
+function radio_vor_is_dme_valid(which_one)
+    if DRAIMS_common.radio.vor[which_one] then
+        return DRAIMS_common.radio.vor[which_one].is_coupled_dme and radio_vor_is_valid(which_one)
+    else
+        return false
+    end
+end
+
+function radio_vor_get_dme_value(which_one)
+    if DRAIMS_common.radio.vor[which_one] then
+        return DRAIMS_common.radio.vor[which_one].curr_distance
+    else
+        return 0
+    end
+end
+
+
 -------------------------------------------------------------------------------
 -- ILS
 -------------------------------------------------------------------------------

@@ -66,64 +66,50 @@ local function update_tcas(data)
     data.misc.tcas_status = ND_TCAS_OK
 end
 
-local function update_navaid_raw(data)
+local function update_navaid_bearing_single(data, i)
 
-    data.nav[1].selector = data.config.nav_1_selector
-    data.nav[2].selector = data.config.nav_2_selector
-
-    if data.nav[1].selector == ND_SEL_OFF then
-        -- TODO Auto-FMS NAV1
-    else
-        data.nav[1].tuning_type = ND_NAV_TUNED_R
-    end
-
-    if data.nav[2].selector == ND_SEL_OFF then
-        -- TODO Auto-FMS NAV1
-    else
-        data.nav[2].tuning_type = ND_NAV_TUNED_R
-    end
-
-    if data.nav[1].selector == ND_SEL_VOR then
-        data.nav[1].frequency = radio_vor_get_freq(1)
-        data.nav[1].identifier = ""
-        data.nav[1].is_valid = get(NAV_1_is_valid) == 1
-        data.nav[1].dme_distance = get(NAV_1_dme_value)
-        data.nav[1].dme_computed = get(NAV_1_dme_valid) == 1
-    elseif data.nav[1].selector == ND_SEL_ADF then
-        data.nav[1].frequency = radio_adf_get_freq(1)
-        data.nav[1].identifier = ""
-    end
-
-    if data.nav[2].selector == ND_SEL_VOR then
-        data.nav[2].frequency = radio_vor_get_freq(2)
-        data.nav[2].identifier = ""
-        data.nav[2].is_valid = get(NAV_2_is_valid) == 1
-        data.nav[2].dme_distance = get(NAV_2_dme_value)
-        data.nav[2].dme_computed = get(NAV_2_dme_valid) == 1
-    elseif data.nav[2].selector == ND_SEL_ADF then
-        data.nav[2].frequency = radio_adf_get_freq(2)
-        data.nav[2].identifier = ""
-    end
-
-end
-
-local function update_navaid_bearing(data)
     local id = data.id
     
     -- These are necessary for ROSE-VOR and ROSE-ILS mode even if the
     -- VOR is not selected
-    data.nav[1].crs = radio_vor_get_crs(1)
-    data.nav[1].crs_is_computed = adirs_is_hdg_ok(id)
-    data.nav[2].crs = radio_vor_get_crs(2)
-    data.nav[2].crs_is_computed = adirs_is_hdg_ok(id)
-    data.inputs.which_nav_is_active = data.id == ND_CAPT and 1 or 2
-    
-    data.nav[1].deviation_is_visible = false -- TODO
-    data.nav[2].deviation_is_visible = false -- TODO
-    data.nav[1].deviation_deg = 0 -- get(NAV_1_bearing_deg) - data.nav[1].crs -- TODO
-    data.nav[2].deviation_deg = 0 -- get(NAV_2_bearing_deg) - data.nav[2].crs -- TODO
-    
+    data.nav[i].crs = radio_vor_get_crs(i)
+    data.nav[i].crs_is_computed = adirs_is_hdg_ok(id)
+    data.nav[i].deviation_is_visible = false -- TODO
+    data.nav[i].deviation_deg = 0 -- get(NAV_1_bearing_deg) - data.nav[1].crs -- TODO
 end
+
+local function update_navaid_raw_single(data, i)
+    if data.nav[i].selector == ND_SEL_OFF then
+        -- TODO Auto-FMS NAV1
+    else
+        data.nav[i].tuning_type = ND_NAV_TUNED_R
+    end
+
+    if data.nav[i].selector == ND_SEL_VOR then
+        data.nav[i].frequency = radio_vor_get_freq(i)
+        data.nav[i].identifier = DRAIMS_common.radio.vor[i] == nil and "" or DRAIMS_common.radio.vor[i].id
+        data.nav[i].is_valid = radio_vor_is_valid(i)
+        data.nav[i].dme_distance = radio_vor_get_dme_value(i)
+        data.nav[i].dme_computed = radio_vor_is_dme_valid(i)
+    elseif data.nav[i].selector == ND_SEL_ADF then
+        data.nav[i].frequency = radio_adf_get_freq(i)
+        data.nav[i].identifier = ""
+    end
+
+end
+
+local function update_navaid_raw(data)
+
+    data.nav[1].selector = data.config.nav_1_selector
+    data.nav[2].selector = data.config.nav_2_selector
+    
+    update_navaid_raw_single(data, 1)
+    update_navaid_raw_single(data, 2)
+    
+    update_navaid_bearing_single(data, 1)
+    update_navaid_bearing_single(data, 2)
+end
+
 
 function update_main(data)
     update_speed_and_wind(data)
@@ -132,7 +118,7 @@ function update_main(data)
     update_tcas(data)
     update_position(data)
     update_navaid_raw(data)
-    update_navaid_bearing(data)
+
     update_poi(data)
     update_altitude(data)
 end
