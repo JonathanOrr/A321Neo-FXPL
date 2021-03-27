@@ -246,7 +246,6 @@ function save_scratchpad_ls(data, new_sel)
             -- FREQUENCY
             local freq_to_set = frequency_hinter(num, 108.000, 111.95)
             if freq_to_set > 0 then
-                freq_to_set = freq_to_set - (freq_to_set % 0.005)
                 radio_ils_set_freq(freq_to_set)
                 DRAIMS_common.scratchpad_nav_ls[old_sel] = ""
             end
@@ -288,7 +287,6 @@ function save_scratchpad_vor(data, new_sel)
             local freq_to_set = frequency_hinter(num, 108.000, 117.975)
             
             if freq_to_set > 0 then
-                freq_to_set = freq_to_set - (freq_to_set % 0.005)
                 radio_vor_set_freq(old_sel, false, freq_to_set)
                 DRAIMS_common.scratchpad_nav_vor[old_sel] = ""
             end

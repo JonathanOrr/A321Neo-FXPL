@@ -95,7 +95,8 @@ NAV_1_dme_valid = globalProperty("sim/cockpit2/radios/indicators/nav1_has_dme")
 NAV_2_dme_valid = globalProperty("sim/cockpit2/radios/indicators/nav2_has_dme")
 
 ILS_1_glideslope_flag = globalProperty("sim/cockpit2/radios/indicators/nav1_flag_glideslope") -- 1: no signal received, 0: signal received
-ILS_1_glideslope_dots = globalProperty("sim/cockpit/radios/nav1_vdef_dot") -- Dot position for NAV1
+ILS_1_loc_dots = globalProperty("sim/cockpit/radios/nav1_hdef_dot") -- Nr. Dots for NAV1/LOC - each dot = 1.5 deg
+ILS_1_glideslope_dots = globalProperty("sim/cockpit/radios/nav1_vdef_dot") -- Nr. Dots for NAV1/GS - each dot = 0.28 deg
 
 VHF_transmit_dest = globalProperty("sim/cockpit2/radios/actuators/audio_com_selection")--6=com1,7=com2
 VHF_transmit_dest_manual = globalProperty("sim/cockpit2/radios/actuators/audio_com_selection_man")--6=com1,7=com2, manual without auto switching monitor source

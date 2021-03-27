@@ -22,7 +22,7 @@ include('ND/subcomponents/helpers.lua') -- for get_bearing
 -------------------------------------------------------------------------------
 -- Constants
 -------------------------------------------------------------------------------
-local UPDATE_INTERVAL = 0.2
+local UPDATE_INTERVAL = 0.15
 
 -------------------------------------------------------------------------------
 -- Variables
@@ -92,6 +92,27 @@ local function update_adf_nearest(i)
     end
 end
 
+local function update_ils_nearest()
+    DRAIMS_common.radio.ils = nil
+    if AvionicsBay.is_initialized() and AvionicsBay.is_ready() then
+        local frequency_int = Round(radio_ils_get_freq()*100, 0)
+        local out1 = AvionicsBay.navaids.get_by_freq(NAV_ID_LOC, frequency_int, false)
+        local out2 = AvionicsBay.navaids.get_by_freq(NAV_ID_LOC_ALONE, frequency_int, false)
+        if #out1 > 0 then
+            local nearest, dist_out = get_nearest_navaid(out1)
+            DRAIMS_common.radio.ils = nearest
+            DRAIMS_common.radio.ils.curr_distance = dist_out
+        end
+        if #out2 > 0 then
+            local nearest, dist_out = get_nearest_navaid(out2)
+            if #out2 == 0 or dist_out < DRAIMS_common.radio.ils.curr_distance then
+                DRAIMS_common.radio.ils = nearest
+                DRAIMS_common.radio.ils.curr_distance = dist_out
+            end
+        end
+    end
+end
+
 
 -------------------------------------------------------------------------------
 -- main update()
@@ -108,6 +129,7 @@ function update()
     update_vor_nearest(2)
     update_adf_nearest(1)
     update_adf_nearest(2)
+    update_ils_nearest()
     
     perf_measure_stop("nav_updater:update()")
 end

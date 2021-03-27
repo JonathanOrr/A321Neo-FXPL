@@ -172,7 +172,7 @@ end
 function radio_ils_set_freq(freq)
 
     local Mhz = math.floor(freq)
-    local khz = math.floor((freq-math.floor(freq))*100)
+    local khz = Round((freq-math.floor(freq))*100, 0)
 
     set(NAV_1_freq_Mhz, Mhz)
     set(NAV_1_freq_khz, khz)
@@ -185,6 +185,35 @@ end
 function radio_ils_set_crs(crs)
     assert(crs ~= nil)
     set(NAV_1_capt_obs, math.floor(crs % 360))
+end
+
+function radio_ils_is_valid()
+    if DRAIMS_common.radio.ils then
+        return get(NAV_1_is_valid) == 1
+    else
+        return false
+    end
+end
+
+function radio_gs_is_valid()
+    if DRAIMS_common.radio.ils then
+        return get(ILS_1_glideslope_flag) == 0
+    else
+        return false
+    end
+end
+
+function radio_get_ils_deviation_h()
+    return get(ILS_1_loc_dots) * 1.5
+end
+
+function radio_get_ils_deviation_v()
+    return get(ILS_1_glideslope_dots) * 0.28
+end
+
+
+function radio_ils_get_tuning_source()
+    return 3    -- 1: FMGS auto, 2: MCDU manual, 3: DRAIMS manual TODO
 end
 
 -------------------------------------------------------------------------------
