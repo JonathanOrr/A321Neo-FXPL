@@ -1739,6 +1739,7 @@ function (phase)
             end
         end
 		mcdu_dat["l"]["L"][6].txt = "<return"
+		--[[
         if fmgs_dat["init irs latlon sel"] ~= "lock" then
             if fmgs_dat["confirm align on ref"] then
                 mcdu_dat["l"]["R"][6] = {txt = "confirm align*", col = "amber"}
@@ -1746,13 +1747,14 @@ function (phase)
                 mcdu_dat["l"]["R"][6] = {txt = "align on ref→", col = "cyan"}
             end
         end
-
+        ]]--
         draw_update()
     end
     if phase == "L6" then
         mcdu_open_page(400) -- open 400 init
     end
     if phase == "R6" then
+        --[[
         -- if not confirmed
         if not fmgs_dat["confirm align on ref"] then
             fmgs_dat["confirm align on ref"] = true
@@ -1768,6 +1770,7 @@ function (phase)
             end
         end
         mcdu_open_page(402) -- reload
+        ]]--
     end
 
     -- slew left/right (used for lat lon)
