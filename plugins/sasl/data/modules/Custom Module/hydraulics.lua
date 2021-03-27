@@ -409,4 +409,13 @@ function update()
     perf_measure_stop("hydraulics:update()")
 end
 
+function onAirportLoaded()
+    if get(Startup_running) == 1 or get(Capt_ra_alt_ft) > 20 then
+        g_sys.press_curr = 2900
+        b_sys.press_curr = 2900
+        y_sys.press_curr = 2900
+    end
+end
+
+onAirportLoaded() -- Ensure if sasl has been reboot to check the already running condition
 
