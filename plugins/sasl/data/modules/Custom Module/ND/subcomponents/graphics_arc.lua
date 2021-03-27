@@ -22,7 +22,13 @@ include("ND/subcomponents/helpers.lua")
 include("ND/subcomponents/graphics_oans.lua")
 include('ND/subcomponents/terrain.lua')
 
-local y_center = 145
+local DEBUG_terrain_center = false
+local Y_CENTER = 145
+
+local COLOR_YELLOW = {1,1,0}
+local poi_position_last_update = 0
+local POI_UPDATE_RATE = 0.1
+local MAX_LIMIT_WPT = 750
 
 -------------------------------------------------------------------------------
 -- Textures
@@ -47,10 +53,6 @@ local image_hdgsel_sym = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/te
 local image_ils_sym = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/sym-ils-arc.png")
 local image_ils_nonprec_sym = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/sym-ils-nonprec-arc.png")
 
-local COLOR_YELLOW = {1,1,0}
-local poi_position_last_update = 0
-local POI_UPDATE_RATE = 0.1
-local MAX_LIMIT_WPT = 750
 
 -------------------------------------------------------------------------------
 -- Helpers functions
@@ -63,7 +65,7 @@ local function arc_get_px_per_nm(data)
 end
 
 local function arc_get_x_y_heading(data, lat, lon, heading)  -- Do not use this for poi
-    local px_per_nm = rose_get_px_per_nm(data)
+    local px_per_nm = arc_get_px_per_nm(data)
     
     local distance = get_distance_nm(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon,lat,lon)
     local distance_px = distance * px_per_nm
@@ -72,25 +74,25 @@ local function arc_get_x_y_heading(data, lat, lon, heading)  -- Do not use this 
     local bear_shift = bearing+heading
     bear_shift = bear_shift - Local_magnetic_deviation()
     local x = size[1]/2 + distance_px * math.cos(math.rad(bear_shift))
-    local y = y_center + distance_px * math.sin(math.rad(bear_shift))
+    local y = Y_CENTER + distance_px * math.sin(math.rad(bear_shift))
     
     return x,y
 end
 
 local function arc_get_lat_lon_with_heading(data, x, y, heading)
-    local bearing     = 180+math.deg(math.atan2((size[1]/2 - x), (y_center - y))) + heading
-    local px_per_nm = rose_get_px_per_nm(data)
-    local distance_nm = math.sqrt((size[1]/2 - x)*(size[1]/2 - x) + (y_center - y)*(y_center - y)) / px_per_nm
+    local bearing     = 180+math.deg(math.atan2((size[1]/2 - x), (Y_CENTER - y))) + heading
+    local px_per_nm = arc_get_px_per_nm(data)
+    local distance_nm = math.sqrt((size[1]/2 - x)*(size[1]/2 - x) + (Y_CENTER - y)*(Y_CENTER - y)) / px_per_nm
 
     return Move_along_distance(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon, distance_nm*1852, bearing)
 end
 
 local function arc_get_lat_lon(data, x, y)
-    return rose_get_lat_lon_with_heading(data, x, y, Local_magnetic_deviation() + data.inputs.heading)
+    return arc_get_lat_lon_with_heading(data, x, y, Local_magnetic_deviation() + data.inputs.heading)
 end
 
 local function arc_get_x_y(data, lat, lon)  -- Do not use this for poi
-    return rose_get_x_y_heading(data, lat, lon, data.inputs.heading)
+    return arc_get_x_y_heading(data, lat, lon, data.inputs.heading)
 end
 
 
@@ -99,7 +101,7 @@ end
 -------------------------------------------------------------------------------
 
 local function draw_backgrounds(data)
-    -- Main rose background
+    -- Main arc background
     if data.inputs.is_heading_valid then
         sasl.gl.drawRotatedTexture(image_bkg_arc, -data.inputs.heading, (size[1]-1330)/2,(size[2]-1330)/2-312,1330,1330, {1,1,1})
         sasl.gl.drawTexture(image_bkg_arc_inner, (size[1]-898)/2,(size[2]-568)/2-13,898,568, {1,1,1})
@@ -224,7 +226,7 @@ local function draw_poi_array(data, poi, texture, color)
         local distance_px = poi.distance * px_per_nm
 
         poi.x = size[1]/2 + distance_px * math.cos(math.rad(bearing+data.inputs.heading))
-        poi.y = y_center + distance_px * math.sin(math.rad(bearing+data.inputs.heading))
+        poi.y = Y_CENTER + distance_px * math.sin(math.rad(bearing+data.inputs.heading))
     end
 
 
@@ -362,5 +364,19 @@ function draw_arc_unmasked(data)
 end
 
 function draw_arc(data)
+    --draw_terrain(data)
     draw_pois(data)
+    
+    local functions_for_oans = {
+        get_lat_lon = arc_get_lat_lon,
+        get_x_y = arc_get_x_y,
+        get_px_per_nm = arc_get_px_per_nm
+    }
+
+--[[    lat,lon = arc_get_lat_lon(data, 450, 450)
+    x,y = arc_get_x_y(data, lat, lon)
+    print(lat,lon,x,y)
+]]--
+    draw_oans(data, functions_for_oans)
+    
 end

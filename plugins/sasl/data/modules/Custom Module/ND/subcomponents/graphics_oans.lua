@@ -19,6 +19,7 @@ include("ND/subcomponents/helpers.lua")
 
 local ffi = require("ffi")  -- This is needed to convert C string of raw data
 
+local Y_ARC_CENTER = 145
 -------------------------------------------------------------------------------
 -- Textures
 -------------------------------------------------------------------------------
@@ -39,16 +40,18 @@ local mdeg = math.deg
 -------------------------------------------------------------------------------
 
 local function rotate_cached_triangle(data, points)
-    local rot_ctr_x = 450 - data.oans_cache.diff_x  -- TODO Probably need to change for ARC
-    local rot_ctr_y = 450 - data.oans_cache.diff_y  -- TODO Probably need to change for ARC
+    local y_center = data.config.mode == ND_MODE_ARC and Y_ARC_CENTER or 450
+    local rot_ctr_x = 450 - data.oans_cache.diff_x
+    local rot_ctr_y = y_center - data.oans_cache.diff_y
     points[1], points[2] = rotate_xy_point(points[1], points[2], rot_ctr_x, rot_ctr_y, data.oans_cache.diff_bear)
     points[3], points[4] = rotate_xy_point(points[3], points[4], rot_ctr_x, rot_ctr_y, data.oans_cache.diff_bear)
     points[5], points[6] = rotate_xy_point(points[5], points[6], rot_ctr_x, rot_ctr_y, data.oans_cache.diff_bear)
 end
 
 local function rotate_cached_point(data, x, y)
-    local rot_ctr_x = 450 - data.oans_cache.diff_x -- TODO Probably need to change for ARC
-    local rot_ctr_y = 450 - data.oans_cache.diff_y -- TODO Probably need to change for ARC
+    local y_center = data.config.mode == ND_MODE_ARC and Y_ARC_CENTER or 450
+    local rot_ctr_x = 450 - data.oans_cache.diff_x
+    local rot_ctr_y = y_center - data.oans_cache.diff_y
     return rotate_xy_point(x, y, rot_ctr_x, rot_ctr_y, data.oans_cache.diff_bear)
 end
 
@@ -506,6 +509,8 @@ function draw_oans_go(data, functions, apt, apt_details)
 end
 
 function draw_oans(data, functions)
+    assert(data)
+
     if data.config.range > ND_RANGE_ZOOM_2 then
         return  -- No OANS over zoom
     end
