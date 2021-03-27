@@ -430,7 +430,6 @@ local function draw_pois(data)
         poi_position_last_update = get(TIME)
     end
 
-    sasl.gl.drawWideLine(435, 415, 465, 415, 4, ECAM_MAGENTA)
 end
 
 -------------------------------------------------------------------------------

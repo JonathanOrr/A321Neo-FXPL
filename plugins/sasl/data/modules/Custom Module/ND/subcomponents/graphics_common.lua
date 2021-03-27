@@ -282,21 +282,26 @@ local function draw_common_messages_center(data)
     if color ~= nil then
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2, 465, text, 36, false, false, TEXT_ALIGN_CENTER, color)
     end
+
+    if data.config.mode == ND_MODE_VOR then
+        if data.misc.vor_failure then
+            sasl.gl.drawText(Font_AirbusDUL, size[1]/2, 360, "VOR", 48, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
+        end
+    end
+
+
+    if data.config.mode == ND_MODE_ILS then
+        if data.misc.loc_failure then
+            sasl.gl.drawText(Font_AirbusDUL, size[1]/2, 500, "LOC", 48, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
+        end
+
+        if data.misc.gs_failure then
+            sasl.gl.drawText(Font_AirbusDUL, size[1]-50, size[2]/2+40, "G", 32, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
+            sasl.gl.drawText(Font_AirbusDUL, size[1]-50, size[2]/2,    "/", 32, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
+            sasl.gl.drawText(Font_AirbusDUL, size[1]-50, size[2]/2-40, "S", 32, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
+        end
+    end
     
-    if data.misc.loc_failure then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, 500, "LOC", 48, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
-    end
-
-    if data.misc.vor_failure then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, 360, "VOR", 48, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
-    end
-
-    if data.misc.gs_failure then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]-50, size[2]/2+40, "G", 32, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]-50, size[2]/2,    "/", 32, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]-50, size[2]/2-40, "S", 32, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
-    end
-
     if data.misc.windshear_pred_fail then
         sasl.gl.drawText(Font_AirbusDUL, size[1]-120, size[2]/2-170, "PRED W/S", 30, false, false, TEXT_ALIGN_CENTER, ECAM_RED)    
     end

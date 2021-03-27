@@ -214,7 +214,7 @@ local function draw_rose_gs_indication(data)
 
         return -- No active GS
     end
-    data.misc.vor_failure_time = nil
+    data.misc.gs_failure_time = nil
     
     -- image_deviation_arrow
 

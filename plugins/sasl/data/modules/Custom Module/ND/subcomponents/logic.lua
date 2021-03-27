@@ -73,16 +73,21 @@ local function update_navaid_raw_single(data, i)
         data.nav[i].tuning_type = radio_vor_get_tuning_source()
     end
 
+    data.nav[i].needle_visible = false
     if data.nav[i].selector == ND_SEL_VOR then
         data.nav[i].frequency = radio_vor_get_freq(i)
         data.nav[i].identifier = DRAIMS_common.radio.vor[i] == nil and "" or DRAIMS_common.radio.vor[i].id
         data.nav[i].is_valid = radio_vor_is_valid(i)
+        data.nav[i].needle_visible = data.nav[i].is_valid
+        data.nav[i].needle_angle = DRAIMS_common.radio.vor[i] == nil and 0 or DRAIMS_common.radio.vor[i].curr_bearing
         data.nav[i].dme_distance = radio_vor_get_dme_value(i)
         data.nav[i].dme_computed = radio_vor_is_dme_valid(i)
     elseif data.nav[i].selector == ND_SEL_ADF then
         data.nav[i].frequency = radio_adf_get_freq(i)
         data.nav[i].is_valid = radio_adf_is_valid(i)
         data.nav[i].identifier = DRAIMS_common.radio.adf[i] == nil and "" or DRAIMS_common.radio.adf[i].id
+        data.nav[i].needle_visible = radio_adf_is_valid(i)
+        data.nav[i].needle_angle = DRAIMS_common.radio.adf[i] == nil and 0 or DRAIMS_common.radio.adf[i].curr_bearing
     end
 
 end
