@@ -22,6 +22,8 @@ include("ND/subcomponents/helpers.lua")
 include("ND/subcomponents/graphics_oans.lua")
 include('ND/subcomponents/terrain.lua')
 
+local y_center = 145
+
 -------------------------------------------------------------------------------
 -- Textures
 -------------------------------------------------------------------------------
@@ -31,6 +33,14 @@ local image_bkg_arc_red    = sasl.gl.loadImage(moduleDirectory .. "/Custom Modul
 local image_bkg_arc_inner  = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/arc-inner.png")
 local image_bkg_arc_tcas   = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/tcas-arc.png")
 
+local image_point_apt = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/point-apt.png")
+local image_point_vor_only = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/point-vor-only.png")
+local image_point_vor_dme  = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/point-vor-dme.png")
+local image_point_dme_only  = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/point-dme-only.png")
+local image_point_ndb = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/point-ndb.png")
+local image_point_wpt = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/point-wpt.png")
+
+
 local image_track_sym = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/sym-track-arc.png")
 local image_hdgsel_sym = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/sym-hdgsel-arc.png")
 
@@ -38,10 +48,51 @@ local image_ils_sym = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textu
 local image_ils_nonprec_sym = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/sym-ils-nonprec-arc.png")
 
 local COLOR_YELLOW = {1,1,0}
+local poi_position_last_update = 0
+local POI_UPDATE_RATE = 0.1
+local MAX_LIMIT_WPT = 750
 
 -------------------------------------------------------------------------------
 -- Helpers functions
 -------------------------------------------------------------------------------
+local function arc_get_px_per_nm(data)
+    -- 1155 px is the diameter of our ring, so this corresponds to the range scale selected:
+    local range_in_nm = get_range_in_nm(data)
+    -- The the per_px nm is:
+    return 1155 / range_in_nm
+end
+
+local function arc_get_x_y_heading(data, lat, lon, heading)  -- Do not use this for poi
+    local px_per_nm = rose_get_px_per_nm(data)
+    
+    local distance = get_distance_nm(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon,lat,lon)
+    local distance_px = distance * px_per_nm
+    local bearing  = get_bearing(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon,lat,lon)
+    
+    local bear_shift = bearing+heading
+    bear_shift = bear_shift - Local_magnetic_deviation()
+    local x = size[1]/2 + distance_px * math.cos(math.rad(bear_shift))
+    local y = y_center + distance_px * math.sin(math.rad(bear_shift))
+    
+    return x,y
+end
+
+local function arc_get_lat_lon_with_heading(data, x, y, heading)
+    local bearing     = 180+math.deg(math.atan2((size[1]/2 - x), (y_center - y))) + heading
+    local px_per_nm = rose_get_px_per_nm(data)
+    local distance_nm = math.sqrt((size[1]/2 - x)*(size[1]/2 - x) + (y_center - y)*(y_center - y)) / px_per_nm
+
+    return Move_along_distance(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon, distance_nm*1852, bearing)
+end
+
+local function arc_get_lat_lon(data, x, y)
+    return rose_get_lat_lon_with_heading(data, x, y, Local_magnetic_deviation() + data.inputs.heading)
+end
+
+local function arc_get_x_y(data, lat, lon)  -- Do not use this for poi
+    return rose_get_x_y_heading(data, lat, lon, data.inputs.heading)
+end
+
 
 -------------------------------------------------------------------------------
 -- draw_* functions
@@ -141,9 +192,161 @@ local function draw_ranges(data)
         sasl.gl.drawText(Font_AirbusDUL, size[2]/2-370, 320, second_ring, 24, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
         sasl.gl.drawText(Font_AirbusDUL, size[2]/2+240, 250, third_ring, 24, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
         sasl.gl.drawText(Font_AirbusDUL, size[2]/2+370, 320, second_ring, 24, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
-    end    
+    end
     
 end
+
+-------------------------------------------------------------------------------
+-- POIs
+-------------------------------------------------------------------------------
+
+local function draw_poi_array(data, poi, texture, color)
+    local modified = false
+
+    -- 588 px is the diameter of our ring, so this corresponds to the range scale selected:
+    local range_in_nm = get_range_in_nm(data)
+    -- The the per_px nm is:
+    local px_per_nm = 1155 / range_in_nm
+
+    if poi.distance == nil or (get(TIME) - poi_position_last_update) > POI_UPDATE_RATE then
+       poi.distance = get_distance_nm(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon,poi.lat,poi.lon)
+    end
+    
+    if poi.distance > range_in_nm * 2 then
+        return true, poi
+    end
+
+    if poi.x == nil or poi.y == nil or (get(TIME) - poi_position_last_update) > POI_UPDATE_RATE then
+        modified = true
+        
+        local bearing  = get_bearing(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon,poi.lat,poi.lon)
+        
+        local distance_px = poi.distance * px_per_nm
+
+        poi.x = size[1]/2 + distance_px * math.cos(math.rad(bearing+data.inputs.heading))
+        poi.y = y_center + distance_px * math.sin(math.rad(bearing+data.inputs.heading))
+    end
+
+
+    if poi.x > 0 and poi.x < size[1] and poi.y > 0 and poi.y < size[2] then
+        sasl.gl.drawTexture(texture, poi.x-16, poi.y-16, 32,32, color)
+        sasl.gl.drawText(Font_AirbusDUL, poi.x+20, poi.y-20, poi.id, 32, false, false, TEXT_ALIGN_LEFT, color)
+    end
+    
+    return modified, poi
+end
+
+local function draw_airports(data)
+    if data.config.extra_data ~= ND_DATA_ARPT then
+        return  -- Airport button not selected
+    end
+    
+    -- For each airtport visible...
+    for i,airport in ipairs(data.poi.arpt) do
+        local modified, poi = draw_poi_array(data, airport, image_point_apt, ECAM_MAGENTA)
+        if modified then
+            data.poi.arpt[i] = poi
+        end
+    end
+end
+
+local function draw_vors(data)
+
+    if data.config.extra_data ~= ND_DATA_VORD then
+        return  -- Vor button not selected
+    end
+
+    -- For each airtport visible...
+    for i,vor in ipairs(data.poi.vor) do
+        local modified, poi = draw_poi_array(data, vor, vor.is_coupled_dme and image_point_vor_dme or image_point_vor_only, ECAM_MAGENTA)
+        if modified then
+            data.poi.vor[i] = poi
+        end
+    end
+    
+end
+
+local function draw_dmes(data)
+
+    if data.config.extra_data ~= ND_DATA_VORD then
+        return  -- Vor button not selected
+    end
+
+    -- For each airtport visible...
+    for i,dme in ipairs(data.poi.dme) do
+        local modified, poi = draw_poi_array(data, dme, image_point_dme_only, ECAM_MAGENTA)
+        if modified then
+            data.poi.dme[i] = poi
+        end
+    end
+    
+end
+
+local function draw_ndbs(data)
+
+    if data.config.extra_data ~= ND_DATA_NDB then
+        return  -- Vor button not selected
+    end
+
+    -- For each airtport visible...
+    for i,ndb in ipairs(data.poi.ndb) do
+        local modified, poi = draw_poi_array(data, ndb, image_point_ndb, ECAM_MAGENTA)
+        if modified then
+            data.poi.ndb[i] = poi
+        end
+    end
+    
+end
+
+local function draw_wpts(data)
+
+    if data.config.extra_data ~= ND_DATA_WPT then
+        return  -- Vor button not selected
+    end
+
+    local displayed_num = 0
+    data.misc.not_displaying_all_data = false
+    
+    -- For each waypoint visible...
+    local nr_wpts = #data.poi.wpt
+    if nr_wpts > MAX_LIMIT_WPT and data.config.range >= ND_RANGE_160 then
+        data.misc.not_displaying_all_data = true
+    end
+    
+    for i=1,nr_wpts do
+        local wpt = data.poi.wpt[i]
+        if nr_wpts <= MAX_LIMIT_WPT or i % math.ceil(nr_wpts/MAX_LIMIT_WPT) == 0 or data.config.range < ND_RANGE_160 then
+            local modified, poi = draw_poi_array(data, wpt, image_point_wpt, ECAM_MAGENTA)
+            if modified then
+                data.poi.wpt[i] = poi
+            end
+       end
+    end
+    
+end
+
+local function draw_pois(data)
+
+    if data.config.range <= ND_RANGE_ZOOM_2 then
+        return  -- POIs are not drawn during the zoom mode
+    end
+
+    
+    draw_airports(data)
+    draw_vors(data)
+    draw_dmes(data)
+    draw_ndbs(data)
+    draw_wpts(data)
+
+    local need_to_update_poi = (get(TIME) - poi_position_last_update) > POI_UPDATE_RATE
+    if need_to_update_poi then
+        poi_position_last_update = get(TIME)
+    end
+
+end
+-------------------------------------------------------------------------------
+-- Terrain
+-------------------------------------------------------------------------------
 
 -------------------------------------------------------------------------------
 -- Main draw_* functions
@@ -159,5 +362,5 @@ function draw_arc_unmasked(data)
 end
 
 function draw_arc(data)
-
+    draw_pois(data)
 end
