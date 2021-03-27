@@ -12,7 +12,13 @@ local image_mask_arc  = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/tex
 local image_mask_plan = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/mask-plan.png")
 local image_mask_oans = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/mask-oans.png")
 
+local function reset_flags(data)
+    data.misc.vor_failure = false
+end
+
 function draw_main(data)
+
+    reset_flags(data)
 
     if data.config.mode ~= ND_MODE_PLAN then
         data.plan_ctr_lat = 0

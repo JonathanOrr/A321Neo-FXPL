@@ -284,11 +284,11 @@ local function draw_common_messages_center(data)
     end
     
     if data.misc.loc_failure then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, 500, "LOC", 42, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, 500, "LOC", 48, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
     end
 
     if data.misc.vor_failure then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, 380, "VOR", 42, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, 360, "VOR", 48, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
     end
 
     if data.misc.gs_failure then

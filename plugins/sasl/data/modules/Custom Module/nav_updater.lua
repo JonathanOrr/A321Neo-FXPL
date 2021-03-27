@@ -17,11 +17,12 @@
 -------------------------------------------------------------------------------
 
 include('DRAIMS/radio_logic.lua')
+include('ND/subcomponents/helpers.lua') -- for get_bearing
 
 -------------------------------------------------------------------------------
 -- Constants
 -------------------------------------------------------------------------------
-local UPDATE_INTERVAL = 0.25
+local UPDATE_INTERVAL = 0.2
 
 -------------------------------------------------------------------------------
 -- Variables
@@ -55,6 +56,12 @@ local function get_nearest_navaid(list)
     return list[min_distance_i], min_distance
 end
 
+local function vor_get_bearing(navaid)
+    local acf_lat = get(Aircraft_lat)
+    local acf_lon = get(Aircraft_long)
+    return get_bearing(acf_lat, acf_lon, navaid.lat, navaid.lon)
+end
+
 -------------------------------------------------------------------------------
 -- Functions
 -------------------------------------------------------------------------------
@@ -67,6 +74,7 @@ local function update_vor_nearest(i)
             local nearest, dist_out = get_nearest_navaid(out)
             DRAIMS_common.radio.vor[i] = nearest
             DRAIMS_common.radio.vor[i].curr_distance = dist_out
+            DRAIMS_common.radio.vor[i].curr_bearing = (90 - vor_get_bearing(nearest)) % 360
         end
     end
 end

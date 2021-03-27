@@ -791,7 +791,7 @@ DRAIMS_vhf3_curr_freq_khz = createGlobalPropertyi("a321neo/dynamics/draims/legac
 DRAIMS_vhf3_stby_freq_Mhz = createGlobalPropertyi("a321neo/dynamics/draims/legacy/actuators/com3_standby_frequency_Mhz", 122, false, true, false)
 DRAIMS_vhf3_stby_freq_khz = createGlobalPropertyi("a321neo/dynamics/draims/legacy/com3_standby_frequency_khz", 800, false, true, false)
 
-DRAIMS_nav_stby_mode  = createGlobalPropertyi("a321neo/dynamics/draims/nav_stby_mode", 0, false, true, false) -- 0 OFF, 1 ON
+DRAIMS_nav_stby_mode  = createGlobalPropertyi("a321neo/dynamics/draims/nav_stby_mode", 1, false, true, false) -- 0 OFF, 1 ON
 DRAIMS_nav_voice_mode = createGlobalPropertyi("a321neo/dynamics/draims/nav_voice_mode", 0, false, true, false) -- 0 OFF, 1 ON
 DRAIMS_nav_audio_sel  = createGlobalPropertyi("a321neo/dynamics/draims/nav_audio_sel", 0, false, true, false) -- 0 LS, 1 MKR, 2 VOR1, 3 VOR2, 4 ADF1, 5 ADF2
 
@@ -799,7 +799,7 @@ DRAIMS_vor_freq = {}
 DRAIMS_vor_stby_freq = {}
 DRAIMS_vor_crs = {}
 
-DRAIMS_vor_freq[1] = createGlobalPropertyf("a321neo/dynamics/draims/vor1_freq", 110.1, false, true, false)
+DRAIMS_vor_freq[1] = createGlobalPropertyf("a321neo/dynamics/draims/vor1_freq", 112.25, false, true, false)
 DRAIMS_vor_freq[2] = createGlobalPropertyf("a321neo/dynamics/draims/vor2_freq", 115.95, false, true, false)
 DRAIMS_vor_stby_freq[1] = createGlobalPropertyf("a321neo/dynamics/draims/vor1_stby_freq", 109.5, false, true, false)
 DRAIMS_vor_stby_freq[2] = createGlobalPropertyf("a321neo/dynamics/draims/vor2_stby_freq", 108.0, false, true, false)
