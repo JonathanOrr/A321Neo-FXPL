@@ -234,6 +234,10 @@ local function update_steering()
     local hyd_steer_coeff = Math_clamp(Math_rescale(10, 0, 1450, 1, get(Hydraulic_Y_press)), 0, 1)
     
     local pedals_pos = get(Yaw)    -- TODO Add also autopilot effect on wheels
+
+    if EFB.preferences["rolltonws"] then
+        pedals_pos = get(Capt_Roll)
+    end
     
     local speed = get(Ground_speed_kts)
     local steer_limit = 0
