@@ -348,14 +348,14 @@ function update_terrain(data, functions, geo_rectangle)
 
 end
 
-function draw_terrain_mask(data, normal_mask_texture)
+function draw_terrain_mask(data, normal_mask_texture, y_start)
     sasl.gl.drawMaskEnd()
     sasl.gl.drawMaskStart()
     sasl.gl.drawTexture(normal_mask_texture, 0,0,900,900)
     local time_ratio = (get(TIME)-data.terrain.last_update)/3   --from 0 (new texture) to 1 (old texture)
 
-    sasl.gl.drawRotatedTextureCenter(image_terrain_mask, 360-90*time_ratio, 450, 450, 0, 450, 450, 900)
-    sasl.gl.drawRotatedTextureCenter(image_terrain_mask, 90*time_ratio, 450, 450, 450, 450, 450, 900)
+    sasl.gl.drawRotatedTextureCenter(image_terrain_mask, 360-90*time_ratio, 450, y_start, 0, y_start, 450, 900)
+    sasl.gl.drawRotatedTextureCenter(image_terrain_mask, 90*time_ratio, 450, y_start, 450, y_start, 450, 900)
 
     sasl.gl.drawUnderMask(true)
 end

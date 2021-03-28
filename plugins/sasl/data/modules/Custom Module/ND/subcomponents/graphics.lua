@@ -20,6 +20,8 @@ function draw_main(data)
 
     reset_flags(data)
 
+    update_terrain_texture_rose(data)
+
     if data.config.mode ~= ND_MODE_PLAN then
         data.plan_ctr_lat = 0
         data.plan_ctr_lon = 0

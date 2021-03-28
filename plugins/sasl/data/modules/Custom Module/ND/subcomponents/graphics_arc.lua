@@ -53,7 +53,8 @@ local image_hdgsel_sym = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/te
 
 local image_ils_sym = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/sym-ils-arc.png")
 local image_ils_nonprec_sym = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/sym-ils-nonprec-arc.png")
-
+local image_mask_arc  = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/mask-arc.png")
+local image_mask_arc_terr  = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/mask-arc-terrain.png")
 
 -------------------------------------------------------------------------------
 -- Helpers functions
@@ -348,6 +349,49 @@ end
 -- Terrain
 -------------------------------------------------------------------------------
 
+local function draw_terrain(data)
+    if    (data.id == ND_CAPT and get(ND_Capt_Terrain) == 0)
+       or (data.id == ND_FO and get(ND_Fo_Terrain) == 0)
+       or get(GPWS_long_test_in_progress) == 1 then
+        -- Terrain disabled
+        return
+    end
+
+    if data.config.range <= ND_RANGE_ZOOM_2 then
+        -- No terrain on oans
+        return
+    end
+    
+    data.terrain.request_refresh = true
+
+    local incoming_texture = data.terrain.texture_in_use == 1 and 2 or 1
+    local outgoing_texture = data.terrain.texture_in_use
+    
+    if data.terrain.texture[incoming_texture] then
+        local diff_x, diff_y = arc_get_x_y_heading(data, data.terrain.center[incoming_texture][1], data.terrain.center[incoming_texture][2], data.inputs.heading)
+        local shift_x = 900-diff_x
+        local shift_y = 900-diff_y
+        reset_terrain_mask(data, image_mask_arc_terr)
+        sasl.gl.drawRotatedTexture(data.terrain.texture[incoming_texture], -data.inputs.heading, -shift_x-70, -shift_y-70, 900*2+140,900*2+140, {1,1,1})
+        if DEBUG_terrain_center then
+            -- Draw an X where the terrain center is located
+            sasl.gl.drawWideLine(diff_x-10, diff_y-10, diff_x+10, diff_y+10, 4, ECAM_MAGENTA)
+            sasl.gl.drawWideLine(diff_x-10, diff_y+10, diff_x+10, diff_y-10, 4, ECAM_MAGENTA)
+        end
+    end
+    
+    if data.terrain.texture[outgoing_texture] then
+        local diff_x, diff_y = arc_get_x_y_heading(data, data.terrain.center[outgoing_texture][1], data.terrain.center[outgoing_texture][2], data.inputs.heading)
+        local shift_x = 900-diff_x
+        local shift_y = 900-diff_y
+
+        draw_terrain_mask(data, image_mask_arc_terr, 145)
+        sasl.gl.drawRotatedTexture(data.terrain.texture[outgoing_texture], -data.inputs.heading, -shift_x-70, -shift_y-70, 900*2+140,900*2+140, {1,1,1})
+        reset_terrain_mask(data, image_mask_arc)
+
+    end
+end
+
 -------------------------------------------------------------------------------
 -- Main draw_* functions
 -------------------------------------------------------------------------------
@@ -362,7 +406,7 @@ function draw_arc_unmasked(data)
 end
 
 function draw_arc(data)
-    --draw_terrain(data)
+    draw_terrain(data)
     draw_pois(data)
     
     local functions_for_oans = {

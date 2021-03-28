@@ -320,6 +320,11 @@ local function draw_wpts(data)
 end
 
 local function refresh_terrain_texture(data)
+    if ND_terrain.is_ready == nil then
+        -- This may happen on sasl reboot
+        update_terrain_altitudes(data)
+    end
+    
     -- if the zoom changes or we are too far from the reference point,
     -- we ask to recompute all the coordinates
     
@@ -328,7 +333,7 @@ local function refresh_terrain_texture(data)
     local approx_limit_up = Math_rescale(ND_RANGE_10, 0.1, ND_RANGE_320, 3.0, data.config.range)
     local approx_limit = Math_rescale(0, 0.1, 90, approx_limit_up, math.abs(data.inputs.plane_coords_lat))
     
-    local refresh_condition = data.config.prev_range ~= data.config.range
+    local refresh_condition = data.config.prev_range ~= data.config.range  or data.config.prev_mode ~= data.config.mode
        or math.abs(data.terrain.center[data.terrain.texture_in_use][1] - data.inputs.plane_coords_lat) > approx_limit
        or math.abs(data.terrain.center[data.terrain.texture_in_use][2] - data.inputs.plane_coords_lon) > approx_limit
 
@@ -337,17 +342,14 @@ local function refresh_terrain_texture(data)
         data.bl_lon = nil
         data.tr_lat = nil
         data.tr_lon = nil
-
-        print("COND")
     end
     
-    if data.config.prev_range ~= data.config.range then
+    if data.config.prev_range ~= data.config.range or data.config.prev_mode ~= data.config.mode then
         data.terrain.texture[1] = nil
         data.terrain.texture[2] = nil
     end
     
     if get(TIME) - data.terrain.last_update > 3 or refresh_condition then
-        print("UP")
         local functions_for_terrain = {
             get_lat_lon_heading = rose_get_lat_lon_with_heading,
             get_x_y_heading = rose_get_x_y_heading
@@ -367,6 +369,8 @@ local function refresh_terrain_texture(data)
     end
 
     data.config.prev_range = data.config.range
+    data.config.prev_mode = data.config.mode
+
 end
 
 local function draw_terrain(data)
@@ -387,7 +391,7 @@ local function draw_terrain(data)
         update_terrain_altitudes(data)
     end
 
-    refresh_terrain_texture(data)
+    data.terrain.request_refresh = true
 
     local incoming_texture = data.terrain.texture_in_use == 1 and 2 or 1
     local outgoing_texture = data.terrain.texture_in_use
@@ -410,7 +414,7 @@ local function draw_terrain(data)
         local shift_x = 450-diff_x
         local shift_y = 450-diff_y
 
-        draw_terrain_mask(data, image_mask_rose_terr)
+        draw_terrain_mask(data, image_mask_rose_terr, 450)
         sasl.gl.drawRotatedTexture(data.terrain.texture[outgoing_texture], -data.inputs.heading, -shift_x-70, -shift_y-70, 900+140,900+140, {1,1,1})
         reset_terrain_mask(data, image_mask_rose)
 
@@ -469,3 +473,10 @@ function draw_rose(data)
 
 end
 
+function update_terrain_texture_rose(data)
+
+    if data.terrain.request_refresh then
+        refresh_terrain_texture(data)
+    end
+    data.terrain.request_refresh = false
+end
