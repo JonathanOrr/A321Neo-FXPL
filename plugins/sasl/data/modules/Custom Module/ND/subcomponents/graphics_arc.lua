@@ -21,6 +21,7 @@ size = {900, 900}
 include("ND/subcomponents/helpers.lua")
 include("ND/subcomponents/graphics_oans.lua")
 include('ND/subcomponents/terrain.lua')
+include('libs/geo-helpers.lua')
 
 local DEBUG_terrain_center = false
 local Y_CENTER = 145
@@ -64,7 +65,7 @@ local function arc_get_px_per_nm(data)
     return 1155 / range_in_nm
 end
 
-local function arc_get_x_y_heading(data, lat, lon, heading)  -- Do not use this for poi
+local function arc_get_x_y_heading(data, lat, lon, heading)
     local px_per_nm = arc_get_px_per_nm(data)
     
     local distance = get_distance_nm(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon,lat,lon)
@@ -80,15 +81,17 @@ local function arc_get_x_y_heading(data, lat, lon, heading)  -- Do not use this 
 end
 
 local function arc_get_lat_lon_with_heading(data, x, y, heading)
-    local bearing     = 180+math.deg(math.atan2((size[1]/2 - x), (Y_CENTER - y))) + heading
+    local angle_respect_dir = math.deg(math.atan2((x-size[1]/2), (y-Y_CENTER)))
+    
+    local bearing     = (heading + angle_respect_dir) % 360
     local px_per_nm = arc_get_px_per_nm(data)
     local distance_nm = math.sqrt((size[1]/2 - x)*(size[1]/2 - x) + (Y_CENTER - y)*(Y_CENTER - y)) / px_per_nm
 
-    return Move_along_distance(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon, distance_nm*1852, bearing)
+    return Move_along_distance_v2(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon, distance_nm*1852, bearing)
 end
 
 local function arc_get_lat_lon(data, x, y)
-    return arc_get_lat_lon_with_heading(data, x, y, Local_magnetic_deviation() + data.inputs.heading)
+    return arc_get_lat_lon_with_heading(data, x, y, data.inputs.heading-Local_magnetic_deviation())
 end
 
 local function arc_get_x_y(data, lat, lon)  -- Do not use this for poi
@@ -220,13 +223,8 @@ local function draw_poi_array(data, poi, texture, color)
 
     if poi.x == nil or poi.y == nil or (get(TIME) - poi_position_last_update) > POI_UPDATE_RATE then
         modified = true
-        
-        local bearing  = get_bearing(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon,poi.lat,poi.lon)
-        
-        local distance_px = poi.distance * px_per_nm
 
-        poi.x = size[1]/2 + distance_px * math.cos(math.rad(bearing+data.inputs.heading))
-        poi.y = Y_CENTER + distance_px * math.sin(math.rad(bearing+data.inputs.heading))
+        poi.x, poi.y = arc_get_x_y_heading(data, poi.lat,poi.lon, data.inputs.heading)
     end
 
 
@@ -372,11 +370,7 @@ function draw_arc(data)
         get_x_y = arc_get_x_y,
         get_px_per_nm = arc_get_px_per_nm
     }
-
---[[    lat,lon = arc_get_lat_lon(data, 450, 450)
-    x,y = arc_get_x_y(data, lat, lon)
-    print(lat,lon,x,y)
-]]--
+    
     draw_oans(data, functions_for_oans)
     
 end

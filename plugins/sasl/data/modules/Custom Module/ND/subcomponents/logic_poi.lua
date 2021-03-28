@@ -13,54 +13,44 @@ end
 local function update_airports(data)
 
     data.poi.arpt =  AvionicsBay.apts.get_by_coords(adirs_get_lat(data.id), adirs_get_lon(data.id), false)
-    if data.config.range >= ND_RANGE_160 then
-        data.poi.arpt = table_concat(data.poi.arpt, AvionicsBay.apts.get_by_coords(adirs_get_lat(data.id)+4, adirs_get_lon(data.id), false))
-        data.poi.arpt = table_concat(data.poi.arpt, AvionicsBay.apts.get_by_coords(adirs_get_lat(data.id),   adirs_get_lon(data.id)+4, false))
-        data.poi.arpt = table_concat(data.poi.arpt, AvionicsBay.apts.get_by_coords(adirs_get_lat(data.id)-4, adirs_get_lon(data.id), false))
-        data.poi.arpt = table_concat(data.poi.arpt, AvionicsBay.apts.get_by_coords(adirs_get_lat(data.id),   adirs_get_lon(data.id)-4, false))
-    end
+    data.poi.arpt = table_concat(data.poi.arpt, AvionicsBay.apts.get_by_coords(adirs_get_lat(data.id)+4, adirs_get_lon(data.id), false))
+    data.poi.arpt = table_concat(data.poi.arpt, AvionicsBay.apts.get_by_coords(adirs_get_lat(data.id),   adirs_get_lon(data.id)+4, false))
+    data.poi.arpt = table_concat(data.poi.arpt, AvionicsBay.apts.get_by_coords(adirs_get_lat(data.id)-4, adirs_get_lon(data.id), false))
+    data.poi.arpt = table_concat(data.poi.arpt, AvionicsBay.apts.get_by_coords(adirs_get_lat(data.id),   adirs_get_lon(data.id)-4, false))
 
 end
 
 local function update_vor(data)
     data.poi.vor =  AvionicsBay.navaids.get_by_coords(NAV_ID_VOR, adirs_get_lat(data.id), adirs_get_lon(data.id), false)
-    if data.config.range >= ND_RANGE_160 then
-        data.poi.vor = table_concat(data.poi.vor, AvionicsBay.navaids.get_by_coords(NAV_ID_VOR, adirs_get_lat(data.id)+4, adirs_get_lon(data.id), false))
-        data.poi.vor = table_concat(data.poi.vor, AvionicsBay.navaids.get_by_coords(NAV_ID_VOR, adirs_get_lat(data.id),   adirs_get_lon(data.id)+4, false))
-        data.poi.vor = table_concat(data.poi.vor, AvionicsBay.navaids.get_by_coords(NAV_ID_VOR, adirs_get_lat(data.id)-4, adirs_get_lon(data.id), false))
-        data.poi.vor = table_concat(data.poi.vor, AvionicsBay.navaids.get_by_coords(NAV_ID_VOR, adirs_get_lat(data.id),   adirs_get_lon(data.id)-4, false))
-    end
+    data.poi.vor = table_concat(data.poi.vor, AvionicsBay.navaids.get_by_coords(NAV_ID_VOR, adirs_get_lat(data.id)+4, adirs_get_lon(data.id), false))
+    data.poi.vor = table_concat(data.poi.vor, AvionicsBay.navaids.get_by_coords(NAV_ID_VOR, adirs_get_lat(data.id),   adirs_get_lon(data.id)+4, false))
+    data.poi.vor = table_concat(data.poi.vor, AvionicsBay.navaids.get_by_coords(NAV_ID_VOR, adirs_get_lat(data.id)-4, adirs_get_lon(data.id), false))
+    data.poi.vor = table_concat(data.poi.vor, AvionicsBay.navaids.get_by_coords(NAV_ID_VOR, adirs_get_lat(data.id),   adirs_get_lon(data.id)-4, false))
 end
 
 local function update_dme(data)
     data.poi.dme =  AvionicsBay.navaids.get_by_coords(NAV_ID_DME_ALONE, adirs_get_lat(data.id), adirs_get_lon(data.id), false)
-    if data.config.range >= ND_RANGE_160 then
-        data.poi.dme = table_concat(data.poi.dme, AvionicsBay.navaids.get_by_coords(NAV_ID_DME_ALONE, adirs_get_lat(data.id)+4, adirs_get_lon(data.id), false))
-        data.poi.dme = table_concat(data.poi.dme, AvionicsBay.navaids.get_by_coords(NAV_ID_DME_ALONE, adirs_get_lat(data.id),   adirs_get_lon(data.id)+4, false))
-        data.poi.dme = table_concat(data.poi.dme, AvionicsBay.navaids.get_by_coords(NAV_ID_DME_ALONE, adirs_get_lat(data.id)-4, adirs_get_lon(data.id), false))
-        data.poi.dme = table_concat(data.poi.dme, AvionicsBay.navaids.get_by_coords(NAV_ID_DME_ALONE, adirs_get_lat(data.id),   adirs_get_lon(data.id)-4, false))
-    end
+    data.poi.dme = table_concat(data.poi.dme, AvionicsBay.navaids.get_by_coords(NAV_ID_DME_ALONE, adirs_get_lat(data.id)+4, adirs_get_lon(data.id), false))
+    data.poi.dme = table_concat(data.poi.dme, AvionicsBay.navaids.get_by_coords(NAV_ID_DME_ALONE, adirs_get_lat(data.id),   adirs_get_lon(data.id)+4, false))
+    data.poi.dme = table_concat(data.poi.dme, AvionicsBay.navaids.get_by_coords(NAV_ID_DME_ALONE, adirs_get_lat(data.id)-4, adirs_get_lon(data.id), false))
+    data.poi.dme = table_concat(data.poi.dme, AvionicsBay.navaids.get_by_coords(NAV_ID_DME_ALONE, adirs_get_lat(data.id),   adirs_get_lon(data.id)-4, false))
 end
 
 
 local function update_ndb(data)
     data.poi.ndb =  AvionicsBay.navaids.get_by_coords(NAV_ID_NDB, adirs_get_lat(data.id), adirs_get_lon(data.id), false)
-    if data.config.range >= ND_RANGE_160 then
-        data.poi.ndb = table_concat(data.poi.ndb, AvionicsBay.navaids.get_by_coords(NAV_ID_NDB, adirs_get_lat(data.id)+4, adirs_get_lon(data.id), false))
-        data.poi.ndb = table_concat(data.poi.ndb, AvionicsBay.navaids.get_by_coords(NAV_ID_NDB, adirs_get_lat(data.id),   adirs_get_lon(data.id)+4, false))
-        data.poi.ndb = table_concat(data.poi.ndb, AvionicsBay.navaids.get_by_coords(NAV_ID_NDB, adirs_get_lat(data.id)-4, adirs_get_lon(data.id), false))
-        data.poi.ndb = table_concat(data.poi.ndb, AvionicsBay.navaids.get_by_coords(NAV_ID_NDB, adirs_get_lat(data.id),   adirs_get_lon(data.id)-4, false))
-    end
+    data.poi.ndb = table_concat(data.poi.ndb, AvionicsBay.navaids.get_by_coords(NAV_ID_NDB, adirs_get_lat(data.id)+4, adirs_get_lon(data.id), false))
+    data.poi.ndb = table_concat(data.poi.ndb, AvionicsBay.navaids.get_by_coords(NAV_ID_NDB, adirs_get_lat(data.id),   adirs_get_lon(data.id)+4, false))
+    data.poi.ndb = table_concat(data.poi.ndb, AvionicsBay.navaids.get_by_coords(NAV_ID_NDB, adirs_get_lat(data.id)-4, adirs_get_lon(data.id), false))
+    data.poi.ndb = table_concat(data.poi.ndb, AvionicsBay.navaids.get_by_coords(NAV_ID_NDB, adirs_get_lat(data.id),   adirs_get_lon(data.id)-4, false))
 end
 
 local function update_wpt(data)
     data.poi.wpt = AvionicsBay.fixes.get_by_coords(adirs_get_lat(data.id), adirs_get_lon(data.id), false)
-    if data.config.range >= ND_RANGE_160 then
-        data.poi.wpt = table_concat(data.poi.wpt, AvionicsBay.fixes.get_by_coords(adirs_get_lat(data.id)+4, adirs_get_lon(data.id), false))
-        data.poi.wpt = table_concat(data.poi.wpt, AvionicsBay.fixes.get_by_coords(adirs_get_lat(data.id), adirs_get_lon(data.id)+4, false))
-        data.poi.wpt = table_concat(data.poi.wpt, AvionicsBay.fixes.get_by_coords(adirs_get_lat(data.id)-4, adirs_get_lon(data.id), false))
-        data.poi.wpt = table_concat(data.poi.wpt, AvionicsBay.fixes.get_by_coords(adirs_get_lat(data.id), adirs_get_lon(data.id)-4, false))
-    end
+    data.poi.wpt = table_concat(data.poi.wpt, AvionicsBay.fixes.get_by_coords(adirs_get_lat(data.id)+4, adirs_get_lon(data.id), false))
+    data.poi.wpt = table_concat(data.poi.wpt, AvionicsBay.fixes.get_by_coords(adirs_get_lat(data.id), adirs_get_lon(data.id)+4, false))
+    data.poi.wpt = table_concat(data.poi.wpt, AvionicsBay.fixes.get_by_coords(adirs_get_lat(data.id)-4, adirs_get_lon(data.id), false))
+    data.poi.wpt = table_concat(data.poi.wpt, AvionicsBay.fixes.get_by_coords(adirs_get_lat(data.id), adirs_get_lon(data.id)-4, false))
 end
 
 

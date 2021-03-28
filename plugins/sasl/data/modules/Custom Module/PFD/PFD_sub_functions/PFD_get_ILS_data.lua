@@ -1,3 +1,5 @@
+include('libs/geo-helpers.lua')
+
 function Get_ILS_data(PFD_table)
     local update_per_sec = 5
     PFD_table.NAVDATA_update_timer = PFD_table.NAVDATA_update_timer + get(DELTA_TIME)

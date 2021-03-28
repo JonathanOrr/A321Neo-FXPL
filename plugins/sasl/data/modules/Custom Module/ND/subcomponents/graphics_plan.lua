@@ -17,6 +17,7 @@
 -------------------------------------------------------------------------------
 
 include("ND/subcomponents/graphics_oans.lua")
+include('libs/geo-helpers.lua')
 size = {900, 900}
 
 local image_bkg_plan        = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/plan.png")

@@ -15,6 +15,7 @@
 -- File: vnav_debug.lua 
 -- Short description: Debug window for vertical path visualization
 -------------------------------------------------------------------------------
+include('libs/geo-helpers.lua')
 
 position = { 0 , 0 , 750 , 450 }
 local black = {0,0,0}

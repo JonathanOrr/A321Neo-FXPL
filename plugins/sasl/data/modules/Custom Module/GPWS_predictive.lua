@@ -15,7 +15,7 @@
 -- File: GPWS_predictive.lua 
 -- Short description: GPWS Predictive system
 -------------------------------------------------------------------------------
-
+include('libs/geo-helpers.lua')
 
 local last_update_time = 0
 

@@ -18,6 +18,7 @@
 
 include('DRAIMS/radio_logic.lua')
 include('ND/subcomponents/helpers.lua') -- for get_bearing
+include('libs/geo-helpers.lua')
 
 -------------------------------------------------------------------------------
 -- Constants

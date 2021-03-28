@@ -23,6 +23,7 @@ local DEBUG_terrain_center = false
 include("ND/subcomponents/helpers.lua")
 include("ND/subcomponents/graphics_oans.lua")
 include('ND/subcomponents/terrain.lua')
+include('libs/geo-helpers.lua')
 
 local image_mask_rose = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/mask-rose.png")
 local image_mask_rose_terr = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/mask-rose-terrain.png")
@@ -68,7 +69,7 @@ local function rose_get_px_per_nm(data)
 end
 
 
-local function rose_get_x_y_heading(data, lat, lon, heading)  -- Do not use this for poi
+local function rose_get_x_y_heading(data, lat, lon, heading)
     local px_per_nm = rose_get_px_per_nm(data)
     
     local distance = get_distance_nm(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon,lat,lon)
@@ -89,14 +90,14 @@ local function rose_get_lat_lon_with_heading(data, x, y, heading)
     local px_per_nm = rose_get_px_per_nm(data)
     local distance_nm = math.sqrt((size[1]/2 - x)*(size[1]/2 - x) + (size[2]/2 - y)*(size[2]/2 - y)) / px_per_nm
 
-    return Move_along_distance(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon, distance_nm*1852, bearing)
+    return Move_along_distance_v2(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon, distance_nm*1852, bearing)
 end
 
 local function rose_get_lat_lon(data, x, y)
-    return rose_get_lat_lon_with_heading(data, x, y, Local_magnetic_deviation() + data.inputs.heading)
+    return rose_get_lat_lon_with_heading(data, x, y, data.inputs.heading - Local_magnetic_deviation())
 end
 
-local function rose_get_x_y(data, lat, lon)  -- Do not use this for poi
+local function rose_get_x_y(data, lat, lon)
     return rose_get_x_y_heading(data, lat, lon, data.inputs.heading)
 end
 
@@ -217,12 +218,7 @@ local function draw_poi_array(data, poi, texture, color)
     if poi.x == nil or poi.y == nil or (get(TIME) - poi_position_last_update) > POI_UPDATE_RATE then
         modified = true
         
-        local bearing  = get_bearing(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon,poi.lat,poi.lon)
-        
-        local distance_px = poi.distance * px_per_nm
-
-        poi.x = size[1]/2 + distance_px * math.cos(math.rad(bearing+data.inputs.heading))
-        poi.y = size[1]/2 + distance_px * math.sin(math.rad(bearing+data.inputs.heading))
+        poi.x, poi.y = rose_get_x_y_heading(data, poi.lat,poi.lon, data.inputs.heading)
     end
 
 
@@ -326,15 +322,23 @@ end
 local function refresh_terrain_texture(data)
     -- if the zoom changes or we are too far from the reference point,
     -- we ask to recompute all the coordinates
-    local refresh_condition = data.config.prev_range ~= data.config.range
-       or math.abs(data.terrain.center[data.terrain.texture_in_use][1] - data.inputs.plane_coords_lat) > 0.1
-       or math.abs(data.terrain.center[data.terrain.texture_in_use][2] - data.inputs.plane_coords_lon) > 0.1
     
+    -- Unfortuntaely, the precision of the map depends on teh latitude. At high latitude and large
+    -- range, the limit of the reference point increases
+    local approx_limit_up = Math_rescale(ND_RANGE_10, 0.1, ND_RANGE_320, 3.0, data.config.range)
+    local approx_limit = Math_rescale(0, 0.1, 90, approx_limit_up, math.abs(data.inputs.plane_coords_lat))
+    
+    local refresh_condition = data.config.prev_range ~= data.config.range
+       or math.abs(data.terrain.center[data.terrain.texture_in_use][1] - data.inputs.plane_coords_lat) > approx_limit
+       or math.abs(data.terrain.center[data.terrain.texture_in_use][2] - data.inputs.plane_coords_lon) > approx_limit
+
     if refresh_condition then
         data.bl_lat = nil
         data.bl_lon = nil
         data.tr_lat = nil
         data.tr_lon = nil
+
+        print("COND")
     end
     
     if data.config.prev_range ~= data.config.range then
@@ -343,6 +347,7 @@ local function refresh_terrain_texture(data)
     end
     
     if get(TIME) - data.terrain.last_update > 3 or refresh_condition then
+        print("UP")
         local functions_for_terrain = {
             get_lat_lon_heading = rose_get_lat_lon_with_heading,
             get_x_y_heading = rose_get_x_y_heading
@@ -459,7 +464,7 @@ function draw_rose(data)
 
         draw_oans(data, functions_for_oans)
     end
-    
+
     draw_navaid_pointers(data)
 
 end

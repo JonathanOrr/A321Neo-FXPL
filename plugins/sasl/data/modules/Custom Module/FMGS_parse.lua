@@ -17,7 +17,7 @@
 --                    This is a helper file used by FMGS.lua
 -------------------------------------------------------------------------------
 
-
+include('libs/geo-helpers.lua')
 
 --[[
 --

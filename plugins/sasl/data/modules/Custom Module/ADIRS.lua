@@ -232,7 +232,8 @@ end
 
 function ADIRS:update_ir_nav()
     if self.ir_align_start_time ~= 0 then
-        if get(TIME) - self.ir_align_start_time > get(Adirs_total_time_to_align) then
+        local time_to_align = get(Adirs_total_time_to_align)
+        if self.ir_align_start_time == -10000 or (time_to_align ~= 0 and get(TIME) - self.ir_align_start_time > time_to_align) then
             self.ir_status = IR_STATUS_ALIGNED
         end
     else
@@ -560,7 +561,7 @@ function get_time_to_align()
     elseif lat < 0 and lat > -60 then
         return lerp(300, 600, (get(Aircraft_lat) / -60))
     else
-        return nil -- Latitude is greater than 78.25- too high for IRS alignment
+        return 0 -- Latitude is greater than 78.25- too high for IRS alignment
     end
 end
 
