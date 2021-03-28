@@ -72,6 +72,9 @@ local function update_disable_click()
     if nd_data.config.range < ND_RANGE_10 then
         set(Fo_PFD_disable_click, get(Fo_pfd_displaying_status) == DMC_ND_FO and 1 or 0)
         set(Fo_ND_disable_click, get(Fo_nd_displaying_status) == DMC_ND_FO and 1 or 0)
+    else
+        set(Fo_PFD_disable_click, 0)
+        set(Fo_ND_disable_click,  0)
     end
 end
 

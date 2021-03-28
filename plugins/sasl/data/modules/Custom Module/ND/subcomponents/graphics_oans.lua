@@ -512,6 +512,7 @@ function draw_oans(data, functions)
     assert(data)
 
     if data.config.range > ND_RANGE_ZOOM_2 then
+        data.misc.range_change = false
         return  -- No OANS over zoom
     end
     
