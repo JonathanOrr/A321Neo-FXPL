@@ -814,12 +814,14 @@ TCAS_master = createGlobalPropertyi("a321neo/dynamics/tcas/tcas_master", 1, fals
 TCAS_mode = createGlobalPropertyi("a321neo/dynamics/tcas/tcas_mode", 2, false, true, false)--0off, 1 TA, 2 TA/RA
 TCAS_disp_mode = createGlobalPropertyi("a321neo/dynamics/tcas/tcas_disp_mode", 0, false, true, false)--0 norm, 1 abv, 2 blw, 3 thtr
 
+TCAS_actual_mode = createGlobalPropertyi("a321neo/dynamics/tcas/tcas_actual_mode", 0, false, true, false)--0off, 1 TA, 2 TA/RA, 3 FAULT
+
 TCAS_alt_rptg = createGlobalPropertyi("a321neo/dynamics/tcas/tcas_alt_rptg", 1, false, true, false)--0 off, 1 on
 
 TCAS_ident = globalProperty("sim/cockpit2/radios/indicators/transponder_id")--if the transponder is identifiying right now
 TCAS_code = globalProperty("sim/cockpit2/radios/actuators/transponder_code")--sqwk code range 0000 to 7777
 TCAS_xplane_mode = globalProperty("sim/cockpit2/radios/actuators/transponder_mode") --Transponder mode (off=0,stdby=1,on=2,test=3) --> a321 0off, 1stby, 2TA, 2RA
----------------------------------------------------------------------BELOW THIS LINE IS EFB DATAREFS--------------------------------------------------------------------------
+---------------------------------------------------------------------BELOW THIS LINE IS EFB DATAREFS-------------------------------------------------------------
 
 --Toggle Options
 OPTIONS_sybpage_no = createGlobalPropertyi("a321neo/options/subpage_number", 0, false, true, false)

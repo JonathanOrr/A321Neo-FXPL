@@ -100,6 +100,7 @@ components = {
   DRAIMS_CAPT {},
   DRAIMS_FO {},
   nav_updater {},
+  tcas {},
   display_brightness {}, -- This must stay at the bottom
 
   main_popup {},

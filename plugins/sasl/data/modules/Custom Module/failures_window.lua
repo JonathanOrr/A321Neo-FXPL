@@ -350,6 +350,11 @@ local failures_data = {
             {name="VOR 1\nFAIL", status=false, dataref=FAILURE_RADIO_VOR_1 },
             {name="VOR 2\nFAIL", status=false, dataref=FAILURE_RADIO_VOR_2 },
 
+            {name="ATC 1\nFAIL", status=false, dataref=FAILURE_ATC_1 },
+            {name="ATC 2\nFAIL", status=false, dataref=FAILURE_ATC_2 },
+            {name="TCAS\nFAIL",  status=false, dataref=FAILURE_TCAS },
+
+
         }
     }
 }
