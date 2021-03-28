@@ -165,7 +165,8 @@ function new_dataset(input_id)
         max_altitude_tile = 0,
         min_altitude_tile_color = ECAM_GREEN,
         max_altitude_tile_color = ECAM_GREEN,
-        request_refresh = false
+        request_refresh = false,
+        brightness = 0
     }
 }
 

@@ -436,6 +436,9 @@ ND_Fo_nav2_level = createGlobalPropertyf("a321neo/cockpit/nd/fo_nav2_lever", 0, 
 ND_Capt_Terrain = createGlobalPropertyi("a321neo/cockpit/nd/terrain_capt", 0, false, true, false) -- 0,1
 ND_Fo_Terrain   = createGlobalPropertyi("a321neo/cockpit/nd/terrain_fo", 0, false, true, false) -- 0,1
 
+ND_Capt_picture_brightness = createGlobalPropertyf("a321neo/cockpit/nd/terrain_bright_capt", 1, false, true, false) 
+ND_Fo_picture_brightness = createGlobalPropertyf("a321neo/cockpit/nd/terrain_bright_fo", 1, false, true, false) 
+
 ND_GPIRS_indication = createGlobalPropertyi("a321neo/cockpit/nd/gpirs_is_on", 0, false, true, false) -- 0,1,2
 
 --PFD--

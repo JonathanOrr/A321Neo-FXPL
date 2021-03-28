@@ -390,6 +390,8 @@ local function draw_terrain(data)
         reset_terrain_mask(data, image_mask_arc)
 
     end
+    
+    sasl.gl.drawRectangle(0, 0, 900, 900, {10/255, 15/255, 25/255 , 1-data.terrain.brightness})
 end
 
 -------------------------------------------------------------------------------

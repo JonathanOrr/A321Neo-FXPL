@@ -417,8 +417,9 @@ local function draw_terrain(data)
         draw_terrain_mask(data, image_mask_rose_terr, 450)
         sasl.gl.drawRotatedTexture(data.terrain.texture[outgoing_texture], -data.inputs.heading, -shift_x-70, -shift_y-70, 900+140,900+140, {1,1,1})
         reset_terrain_mask(data, image_mask_rose)
-
     end
+    
+    sasl.gl.drawRectangle(0, 450, 900, 450, {10/255, 15/255, 25/255 , 1-data.terrain.brightness})
 end
 
 local function draw_pois(data)

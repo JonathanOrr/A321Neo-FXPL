@@ -58,6 +58,8 @@ sasl.registerCommandHandler (Chrono_cmd_Capt_button, 0, function(phase) nd_chron
 
 sasl.registerCommandHandler (ND_Capt_terrain_toggle, 0, function(phase) if phase == SASL_COMMAND_BEGIN then set(ND_Capt_Terrain, 1 - get(ND_Capt_Terrain)) end end)
 
+sasl.registerCommandHandler (Capt_ND_picture_brightness_up, 0, function(phase) Knob_handler_up_float(phase, ND_Capt_picture_brightness, 0, 1, 0.5) end)
+sasl.registerCommandHandler (Capt_ND_picture_brightness_dn, 0, function(phase) Knob_handler_down_float(phase, ND_Capt_picture_brightness, 0, 1, 0.5) end)
 
 local function update_buttons()
     pb_set(PB.mip.terr_nd_capt, get(ND_Capt_Terrain) == 1, false)
@@ -83,6 +85,7 @@ local function update_knobs()
     Set_dataref_linear_anim_nostop(ND_Capt_nav1_level, nd_data.config.nav_1_selector, -1, 1, 10)
     Set_dataref_linear_anim_nostop(ND_Capt_nav2_level, nd_data.config.nav_2_selector, -1, 1, 10)
     
+    nd_data.terrain.brightness = get(ND_Capt_picture_brightness)
 end
 
 local function update_disable_click()
