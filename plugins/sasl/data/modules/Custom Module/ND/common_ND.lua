@@ -66,12 +66,13 @@ function new_dataset(input_id)
         tcas_ta_triggered = false,
         tcas_ra_triggered = false,
         off_side_control  = false,
+        off_side_control_rng  = false,
+        off_side_control_mode  = false,
         gpirs_is_on       = false,
         gps_primary_lost  = false,
+        backup_nav = false,
         
         map_partially_displayed = false,
-        map_precision_downgraded = false,
-        map_precision_upgraded = false,
         
         hdg_discrepancy = false,
         ewd_discrepancy = false,

@@ -465,10 +465,10 @@ local function update_right_list()
     end
 
     -- TCAS
-    if get(TCAS_master) == 0 or get(TCAS_mode) == 0 then
+    if (get(TCAS_master) == 0 or get(TCAS_mode) == 0) and get(EWD_flight_phase) == PHASE_AIRBONE then
+        list_right:put(COL_CAUTION, "TCAS STBY")
+    elseif get(TCAS_actual_mode) == TCAS_MODE_OFF or get(TCAS_actual_mode) == TCAS_MODE_FAULT then
         list_right:put(COL_INDICATION, "TCAS STBY")
-    elseif get(TCAS_mode) == 1 then
-        list_right:put(COL_INDICATION, "TCAS TA ONLY")
     end
     
     -- ACARS

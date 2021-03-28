@@ -605,6 +605,11 @@ local MCDU_ENTRY =
         ref_entries = {"clr"},
         ref_callback = 
         function (count, val)
+            if mcdu_entry == "GPS PRIMARY" then
+                mcdu_entry = "X"
+                set(ND_GPIRS_indication, 0)
+            end
+
             if mcdu_message_showing then
                 mcdu_entry = mcdu_entry_cache
                 mcdu_message_showing = false
@@ -946,6 +951,12 @@ function update()
        --mcdu_open_page(1106) --open 1106 mcdu menu options debug
 	   --mcdu_open_page(400)
     end
+
+    if get(ND_GPIRS_indication) == 1 then
+        mcdu_send_message("GPS PRIMARY")
+        set(ND_GPIRS_indication, 2)
+    end
+
 
     -- display next message
     if #mcdu_messages > 0 and not mcdu_message_showing then

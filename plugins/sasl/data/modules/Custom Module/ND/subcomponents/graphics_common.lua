@@ -192,9 +192,6 @@ local function draw_common_messages_bottom_1(data)
     local text = ""
     local color = nil
 
-    sasl.gl.drawRectangle(200, 55, size[2]-400, 35, {0,0,0})
-    Sasl_DrawWideFrame(200, 55, size[2]-400, 35, 2, 0, ECAM_HIGH_GREY)
-
     if data.misc.tcas_status == ND_TCAS_OFF then
         text = "TCAS STBY"
         color = ECAM_ORANGE
@@ -213,6 +210,7 @@ local function draw_common_messages_bottom_1(data)
         assert(false) -- This should not happen
     end
     
+    Sasl_DrawWideFrame(200, 55, size[2]-400, 35, 2, 0, ECAM_HIGH_GREY)
     sasl.gl.drawText(Font_AirbusDUL, 450, 61, text, 34, false, false, TEXT_ALIGN_CENTER, color)
     
 end
@@ -222,21 +220,28 @@ local function draw_common_messages_bottom_2(data)
     local text = ""
     local color = nil
 
-    if data.misc.map_partially_displayed then
-        text  = "MAP PARTLY DISPLAYED"
+    -- ** IMPORTANT **
+    -- If you add another condition here, please update also
+    -- the condition list in graphics.lua
+
+    if data.misc.off_side_control_mode then
+        text  = "SET OFFSIDE MODE"
         color = ECAM_ORANGE
-    elseif data.misc.map_precision_downgraded then
-        text  = "NAV ACCUR DOWNGRADED"
-        color = ECAM_ORANGE    
-    elseif data.misc.off_side_control then
-        text  = "OFFSIDE FM CONTROL"
+    elseif data.misc.off_side_control_rng then
+        text  = "SET OFFSIDE RNG"
+        color = ECAM_ORANGE
+    elseif data.misc.backup_nav then
+        text  = "BACK-UP NAV"
         color = ECAM_ORANGE
     elseif data.misc.gps_primary_lost then
         text  = "GPS PRIMARY LOST"
         color = ECAM_ORANGE
-    elseif data.misc.map_precision_upgraded then
-        text  = "NAV ACCUR UPGRADED"
-        color = ECAM_WHITE
+    elseif data.misc.map_partially_displayed then
+        text  = "MAP PARTLY DISPLAYED"
+        color = ECAM_ORANGE
+    elseif data.misc.off_side_control then
+        text  = "OFFSIDE FM CONTROL"
+        color = ECAM_ORANGE
     elseif data.misc.gpirs_is_on then
         text  = "GPS PRIMARY"
         color = ECAM_WHITE

@@ -58,12 +58,26 @@ function update_position(data)
 end
 
 local function update_gps(data)
+    local was_lost = data.misc.gps_primary_lost 
     data.misc.gps_primary_lost = get(GPS_1_is_available) == 0 and get(GPS_2_is_available) == 0
-    -- TODO gpirs_is_on
+
+    if not data.misc.gps_primary_lost and was_lost then
+        set(ND_GPIRS_indication, 1)    -- it can be killed by MCDU
+    end
+
+    data.misc.gpirs_is_on = get(ND_GPIRS_indication) > 0
 end
 
 local function update_tcas(data)
-    data.misc.tcas_status = ND_TCAS_OK
+    if get(TCAS_actual_mode) == TCAS_MODE_OFF then
+        data.misc.tcas_status = ND_TCAS_OFF
+    elseif get(TCAS_actual_mode) == TCAS_MODE_TA then
+        data.misc.tcas_status = ND_TCAS_TA_ONLY
+    elseif get(TCAS_actual_mode) == TCAS_MODE_TARA then
+        data.misc.tcas_status = ND_TCAS_OK
+    elseif get(TCAS_actual_mode) == TCAS_MODE_FAULT then
+        data.misc.tcas_status = ND_TCAS_FAULT
+    end
 end
 
 local function update_navaid_raw_single(data, i)

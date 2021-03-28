@@ -436,6 +436,8 @@ ND_Fo_nav2_level = createGlobalPropertyf("a321neo/cockpit/nd/fo_nav2_lever", 0, 
 ND_Capt_Terrain = createGlobalPropertyi("a321neo/cockpit/nd/terrain_capt", 0, false, true, false) -- 0,1
 ND_Fo_Terrain   = createGlobalPropertyi("a321neo/cockpit/nd/terrain_fo", 0, false, true, false) -- 0,1
 
+ND_GPIRS_indication = createGlobalPropertyi("a321neo/cockpit/nd/gpirs_is_on", 0, false, true, false) -- 0,1,2
+
 --PFD--
 Current_heading = globalProperty("sim/cockpit2/gauges/indicators/heading_AHARS_deg_mag_pilot")
 Ground_track = globalProperty("sim/cockpit2/gauges/indicators/ground_track_mag_pilot")

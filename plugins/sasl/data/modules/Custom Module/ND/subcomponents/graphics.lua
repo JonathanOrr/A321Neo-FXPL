@@ -16,6 +16,20 @@ local function reset_flags(data)
     data.misc.vor_failure = false
 end
 
+local function draw_mask_messages(data)
+    -- TOP BOX
+    if data.misc.tcas_status ~= ND_TCAS_OK then
+        sasl.gl.drawRectangle(200, 55, size[2]-400, 35, {1,1,1})
+    end
+    
+    -- BOTTOM BOX
+    if    data.misc.map_partially_displayed or data.misc.off_side_control
+       or data.misc.off_side_control_mode or data.misc.off_side_control_rng
+       or data.misc.gps_primary_lost or data.misc.backup_nav or data.misc.gpirs_is_on then
+        sasl.gl.drawRectangle(200, 20, size[2]-400, 35, {1,1,1})
+    end
+end
+
 function draw_main(data)
 
     reset_flags(data)
@@ -32,6 +46,7 @@ function draw_main(data)
         sasl.gl.drawMaskStart()
         local mask_texture = data.config.range <= ND_RANGE_ZOOM_2 and image_mask_oans or image_mask_rose
         sasl.gl.drawTexture(mask_texture, 0,0,900,900)
+        draw_mask_messages(data)
         sasl.gl.drawUnderMask(true)
         
         draw_rose(data) -- The rose is drawn in all three cases
@@ -51,6 +66,7 @@ function draw_main(data)
         sasl.gl.drawMaskStart()
         local mask_texture = data.config.range <= ND_RANGE_ZOOM_2 and image_mask_oans or image_mask_arc
         sasl.gl.drawTexture(mask_texture, 0,0,900,900)
+        draw_mask_messages(data)
         sasl.gl.drawUnderMask(true)
         draw_arc(data)
         sasl.gl.drawMaskEnd()
@@ -60,6 +76,7 @@ function draw_main(data)
         sasl.gl.drawMaskStart()
         local mask_texture = data.config.range <= ND_RANGE_ZOOM_2 and image_mask_oans or image_mask_plan
         sasl.gl.drawTexture(mask_texture, 0,0,900,900)
+        draw_mask_messages(data)
         sasl.gl.drawUnderMask(true)
         draw_plan(data)
         sasl.gl.drawMaskEnd()
