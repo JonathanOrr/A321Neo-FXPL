@@ -58,7 +58,7 @@ end
 function onMouseWheel(component, x, y, button, parentX, parentY, value)
     --scrolling target hdg
     if x >= 5 * size[1]/8 - 70 and x <= 5 * size[1]/8 - 70+140 and y >= size[2]/2 - 5 and y <= size[2]/2 - 5+40 then
-        set(target_hdg, get(target_hdg) + value)
+        set(target_hdg, Math_cycle(get(target_hdg) + value, 0, 360))
     end
 
     --scrolling target v/s
@@ -70,6 +70,20 @@ end
 --reset overrides
 function onModuleShutdown()
     set(SimDR_override_artstab, 1)
+end
+
+local function compute_hdg_delta(current, target)
+    local target_delta = 0
+
+    if target - current <= -180 then
+      target_delta = (360 - current) + target
+    elseif target - current > 180 then
+      target_delta = -(360 - (target - current))
+    else
+      target_delta = target - current
+    end
+
+    return target_delta
 end
 
 function update()
@@ -85,7 +99,7 @@ function update()
     end
 
     if get(DELTA_TIME) ~= 0 then
-        FD_roll = Set_linear_anim_value(FD_roll, FBW_PID_BP(Bank_angle_PID_array, get(target_hdg) - get(aircraft_heading), get(aircraft_heading)), -25, 25, 10)
+        FD_roll = Set_linear_anim_value(FD_roll, FBW_PID_BP(Bank_angle_PID_array, compute_hdg_delta(get(aircraft_heading), get(target_hdg)), get(aircraft_heading)), -25, 25, 10)
         --FD_pitch = Set_linear_anim_value(FD_pitch, A32nx_PID_new_neg_avail(A32nx_FD_pitch, get(target_vs) - get(vvi)) * 25, -25, 25, 10)
         FD_pitch = Set_linear_anim_value(FD_pitch, FBW_PID_BP(Pitch_PID_array, get(target_vs) - get(vvi), get(vvi)), -25, 25, 10)
         Pitch_PID_array.Actual_output = get(aircraft_pitch)
