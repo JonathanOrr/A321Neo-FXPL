@@ -72,18 +72,27 @@ FIRE_sys.eng[2].block_position = false
 
 -- Big red buttons
 sasl.registerCommandHandler (FIRE_cmd_push_APU, 0, function(phase)
-    if phase == SASL_COMMAND_BEGIN then 
+    if phase == SASL_COMMAND_BEGIN then
+        local guard_dr = globalProperty ("a321neo/cockpit/overhead/guards/state/FIRE_APU")
+        if get(guard_dr) == 0 then
+            return  -- guard is not open
+        end
+
         FIRE_sys.apu_block_position = not FIRE_sys.apu_block_position
     end
 end)
 
 function handler_eng_push_btn(phase, id)
-    if phase == SASL_COMMAND_BEGIN then 
+    if phase == SASL_COMMAND_BEGIN then
+        local guard_dr = globalProperty ("a321neo/cockpit/overhead/guards/state/FIRE_ENG" .. id)
+        if get(guard_dr) == 0 then
+            return  -- guard is not open
+        end
         FIRE_sys.eng[id].block_position = not FIRE_sys.eng[id].block_position
         if FIRE_sys.eng[id].block_position then
             eng_pb_triggered_time[id] = get(TIME)
         else
-            eng_pb_triggered_time[id] = 0        
+            eng_pb_triggered_time[id] = 0
         end
     end
 end

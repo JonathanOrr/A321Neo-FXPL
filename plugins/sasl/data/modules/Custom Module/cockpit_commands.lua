@@ -495,3 +495,10 @@ MCDU_DMC_cmd_test_3 = sasl.createCommand("a321neo/cockpit/mcdu/trigger_dmc_test_
 
 --misc--
 Default_view = sasl.findCommand("sim/view/default_view")
+
+-- MANUAL GEAR EXT --
+Emer_ldg_gear_v_cmd_up = createGlobalPropertyf("a321neo/cockpit/misc/landing_gear_v_up", 0, false, true, false)
+Emer_ldg_gear_v_cmd_dn = createGlobalPropertyf("a321neo/cockpit/misc/landing_gear_v_dn", 0, false, true, false)
+Emer_ldg_gear_h_cmd_c  = createGlobalPropertyf("a321neo/cockpit/misc/landing_gear_h_c", 0, false, true, false) -- Clockwise
+Emer_ldg_gear_h_cmd_cc = createGlobalPropertyf("a321neo/cockpit/misc/landing_gear_h_cc", 0, false, true, false) -- Counter-clockwise
+

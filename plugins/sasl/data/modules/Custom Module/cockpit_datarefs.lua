@@ -462,3 +462,11 @@ AUTOFLT_FCU_SPD_KNOB_CLICKS = createGlobalPropertyi("a321neo/cockpit/AUTOFLT/FCU
 AUTOFLT_FCU_HDG_KNOB_CLICKS = createGlobalPropertyi("a321neo/cockpit/AUTOFLT/FCU/animation/hdg_knob_clicks", 0, false, true, false)
 AUTOFLT_FCU_ALT_KNOB_CLICKS = createGlobalPropertyi("a321neo/cockpit/AUTOFLT/FCU/animation/alt_knob_clicks", 0, false, true, false)
 AUTOFLT_FCU_VS_KNOB_CLICKS  = createGlobalPropertyi("a321neo/cockpit/AUTOFLT/FCU/animation/vs_knob_clicks", 0, false, true, false)
+
+-- MANUAL GEAR EXT --
+Emer_ldg_gear_v_pos = createGlobalPropertyf("a321neo/cockpit/misc/landing_gear_v_pos", 0, false, true, false) -- 0 retract, 1 extended
+Emer_ldg_gear_h_pos = createGlobalPropertyf("a321neo/cockpit/misc/landing_gear_h_pos", 0, false, true, false) -- 0 initial,  1 final
+
+
+
+

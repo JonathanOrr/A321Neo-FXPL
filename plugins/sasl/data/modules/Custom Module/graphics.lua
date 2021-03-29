@@ -64,9 +64,9 @@ local guards = {
     {name = "MNTN_HYD_Y"},
     {name = "MNTN_FADEC_1"},
     {name = "MNTN_FADEC_2"},
-    {name = "FIRE_APU"},
-    {name = "FIRE_ENG1"},
-    {name = "FIRE_ENG2"},
+    {name = "FIRE_APU",  depends_on = Fire_pb_APU_lever },
+    {name = "FIRE_ENG1", depends_on = Fire_pb_ENG_1_lever},
+    {name = "FIRE_ENG2", depends_on = Fire_pb_ENG_2_lever},
 }
 
 local integral_lights = {
@@ -118,14 +118,16 @@ local cockpit_door_level_pos_time_open = 0
 ----------------------------------------------------------------------------------------------------
 function guard_click_handler(phase, object)
     if phase == SASL_COMMAND_BEGIN then
-        set(object.state_dataref, 1 - get(object.state_dataref))
+        if object.depends_on ~= nil and get(object.depends_on) == 0 then
+            set(object.state_dataref, 1 - get(object.state_dataref))
+        end
     end
 end
 
 
 function change_switch(phase, dr, direction)
      if phase == SASL_COMMAND_BEGIN then
-        set(dr, Math_clamp(get(dr) + direction, -1, 1))
+        set(dr, Math_clamp(get(dr) + direction, 0, 1))
      end
 end
 
@@ -224,7 +226,7 @@ end
 local function create_flood_and_spill_datarefs()
 
     for i,x in ipairs(flood_and_spill_lights) do
-        x.dr_value = createGlobalPropertyf("a321neo/cockpit/lights/"  .. x.name .. "_value", 0, false, true, false)
+        x.dr_value = createGlobalPropertyf("a321neo/cockpit/lights/"  .. x.name .. "_value", 0.5, false, true, false)
         x.dr_pos  = createGlobalPropertyf("a321neo/cockpit/lights/"  .. x.name .. "_pos", 0, false, true, false)
 
         x.dr_array = createGlobalPropertyfa("a321neo/cockpit/lights/" .. x.name .. "_array", 9, false, true, false)
@@ -235,8 +237,8 @@ local function create_flood_and_spill_datarefs()
             sasl.registerCommandHandler (x.cmd_up,   0, function(phase) Knob_handler_up_float(phase, x.dr_pos, 0, 1, 1) end)
             sasl.registerCommandHandler (x.cmd_down, 0, function(phase) Knob_handler_down_float(phase, x.dr_pos, 0, 1, 1) end)
         else
-            sasl.registerCommandHandler (x.cmd_up, 0,   function(phase) change_switch(phase, x.dr_pos, 1) end)
-            sasl.registerCommandHandler (x.cmd_down, 0, function(phase) change_switch(phase, x.dr_pos, -1) end)
+            sasl.registerCommandHandler (x.cmd_up, 0,   function(phase) change_switch(phase, x.dr_value, 0.5) end)
+            sasl.registerCommandHandler (x.cmd_down, 0, function(phase) change_switch(phase, x.dr_value, -0.5) end)
         end
     end
 
@@ -270,7 +272,7 @@ local function update_flood_and_spil_datarefs()
         if x.is_knob then
             set(x.dr_value, get(x.dr_pos))
         else
-            set(x.dr_value, (get(x.dr_pos) + 1) / 2)
+            set(x.dr_pos, Set_linear_anim_value_nostop(get(x.dr_pos), get(x.dr_value)*2-1, -1, 1, 7))
         end
 
         --feed the light array
@@ -331,7 +333,7 @@ local function update_trays()
 end
 
 local function update_doorlock()
-    Set_dataref_linear_anim_nostop(Cockpit_door_lever_pos, cockpit_door_level_pos, -1, 1, 0.75)
+    Set_dataref_linear_anim_nostop(Cockpit_door_lever_pos, cockpit_door_level_pos, -1, 1, 7)
     pb_set(PB.ped.ckpt_door_light, false, cockpit_door_level_pos == 1 and get(TIME) - cockpit_door_level_pos_time_open > 1 and get(TIME) - cockpit_door_level_pos_time_open < 5)
 end
 
