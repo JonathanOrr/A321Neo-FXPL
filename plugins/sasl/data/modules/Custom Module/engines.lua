@@ -487,7 +487,6 @@ end
 
 local function perform_starting_procedure_follow_n1(eng)
     -- This is PHASE 3
-
     set(eng_mixture, 1, eng)  -- Mixture in this phase
     set(eng_igniters, 1, eng) -- and igniters as well
 
@@ -496,7 +495,7 @@ local function perform_starting_procedure_follow_n1(eng)
         -- For each phase...
         
         -- Get the current N1, but it can't be zero 
-        local curr_N1 = math.max(eng_N1_off[eng],2)
+        local curr_N1 = math.max(math.max(eng_N1_off[eng],2), eng == 1 and get(Eng_1_N1) or get(Eng_2_N1))
         
         if curr_N1 < ENG.data.startup.n1[i+1].n1_set then
             -- We have found the correct phase
@@ -640,9 +639,13 @@ local function update_startup()
 
     local windmill_condition_1 = get(IAS) > windmill_min_speed[1]
     local windmill_condition_2 = get(IAS) > windmill_min_speed[2]
+    
+    -- When the pilot moves very fast master switch ON -> OFF -> ON
+    local fast_restart_1 = get(Eng_1_N1) > 25
+    local fast_restart_2 = get(Eng_2_N1) > 25
 
-    local does_engine_1_can_start_or_crank = get(Engine_1_avail) == 0 and (get(L_bleed_press) > 10 or windmill_condition_1) and get(Eng_1_FADEC_powered) == 1
-    local does_engine_2_can_start_or_crank = get(Engine_2_avail) == 0 and (get(R_bleed_press) > 10 or windmill_condition_2) and get(Eng_2_FADEC_powered) == 1
+    local does_engine_1_can_start_or_crank = get(Engine_1_avail) == 0 and (get(L_bleed_press) > 10 or windmill_condition_1 or fast_restart_1) and get(Eng_1_FADEC_powered) == 1
+    local does_engine_2_can_start_or_crank = get(Engine_2_avail) == 0 and (get(R_bleed_press) > 10 or windmill_condition_2 or fast_restart_2) and get(Eng_2_FADEC_powered) == 1
 
     if get(FAILURE_ENG_FADEC_CH1, 1) == 1 and get(FAILURE_ENG_FADEC_CH2, 1) == 1 then
         does_engine_1_can_start_or_crank = false -- No fadec? No start
@@ -713,6 +716,16 @@ local function update_startup()
         end
         if eng_manual_switch[2] and does_engine_2_can_start_or_crank then
             perform_crank_procedure(2, get(Engine_2_master_switch) == 1)
+            require_cooldown[2] = false
+        end
+    -- CASE 3: Master Switch protection
+    else
+        if get(Engine_1_avail) == 0 and fast_restart_1 and get(Engine_1_master_switch) then
+            perform_starting_procedure(1, get(All_on_ground) == 0)
+            require_cooldown[1] = false
+        end
+        if get(Engine_2_avail) == 0 and fast_restart_2 and get(Engine_2_master_switch) then
+            perform_starting_procedure(2, get(All_on_ground) == 0)
             require_cooldown[2] = false
         end
     end
@@ -825,8 +838,8 @@ local function update_continuous_ignition()
     -- - Engine flameout
     -- - Manually move the mode selection to IGN but after start!
 
-    local cond_1 = (get(Engine_1_master_switch) == 1 and get(FAILURE_ENG_1_FAILURE) == 1)
-                or (get(Engine_2_master_switch) == 1 and get(FAILURE_ENG_2_FAILURE) == 1)
+    local cond_1 = (get(Engine_1_master_switch) == 1 and get(Eng_is_failed, 1) == 1)
+                or (get(Engine_2_master_switch) == 1 and get(Eng_is_failed, 2) == 1)
     
     local cond_2 = get(Engine_1_avail) == 1 and get(Engine_2_avail) == 1 and get(Engine_mode_knob) == 1 and already_back_to_norm
 
