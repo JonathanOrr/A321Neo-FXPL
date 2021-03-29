@@ -163,6 +163,17 @@ function Math_clamp(val, min, max)
     end
 end
 
+function Math_cycle(val, start, finish)
+    if start > finish then LogWarning("start is larger than finish, invalid") end
+    if val < start then
+        return finish
+    elseif val > finish then
+        return start
+    elseif val <= finish and val >= start then
+        return val
+    end
+end
+
 function Math_clamp_lower(val, min)
     if val < min then
         return min
