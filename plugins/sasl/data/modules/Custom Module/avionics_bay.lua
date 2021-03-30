@@ -33,13 +33,13 @@ local function convert_bearing(type, bearing_raw)
     if type == NAV_ID_LOC or type == NAV_ID_LOC_ALONE then
         local true_bearing = bearing_raw % 360
         local mag_front_course = (bearing_raw - true_bearing) / 360
-        return true_bearing, mag_front_course
+        return {true_bearing, mag_front_course}
     end
     
     if type == NAV_ID_GS or type == NAV_ID_LTPFTP or type == NAV_ID_GLS then
         local glideslope = math.floor(bearing_raw / 1000) / 100
         local true_angle = bearing_raw % 1000
-        return glideslope, true_angle
+        return {glideslope, true_angle}
     end
 end
 

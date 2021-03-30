@@ -36,24 +36,6 @@ function get_range_in_nm(data)
     assert(false) -- Should never happen
 end
 
-function get_distance_nm(lat1,lon1,lat2,lon2)
-    return GC_distance_km(lat1, lon1, lat2, lon2) * 0.539957
-end
-
-function get_bearing(lat1,lon1,lat2,lon2)
-    local lat1_rad = mrad(lat1)
-    local lat2_rad = mrad(lat2)
-    local lon1_rad = mrad(lon1)
-    local lon2_rad = mrad(lon2)
-
-    local x = msin(lon2_rad - lon1_rad) * mcos(lat2_rad)
-    local y = mcos(lat1_rad) * msin(lat2_rad) - msin(lat1_rad)*mcos(lat2_rad)*mcos(lon2_rad - lon1_rad)
-    local theta = matan2(y, x)
-    local brng = (theta * 180 / math.pi + 360) % 360
-
-    return brng
-end
-
 function compute_angle(x1, y1, x2, y2)
     return matan2(y1-y2, x1-x2)
 end 

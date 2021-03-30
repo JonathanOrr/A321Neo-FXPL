@@ -57,16 +57,16 @@ cg_mac = 0
 
 --function constant_conversions()
 
---    press_alt = get(acf_msl)+30*(1013-qnh)
+--    press_alt = get(ACF_elevation)+30*(1013-qnh)
 --end
 
 function constant_conversions()
-    press_alt = get(acf_msl)*3.281
+    press_alt = get(ACF_elevation)*3.281
     qnh = get(Weather_curr_press_sea_level)*33.864
 end
 
 function flex_calculation()
-        flex_temp_computed = Round(-0.02434027806956361259*(get(acf_msl)*3.281/100)^3 + 0.36824311548836550021*(get(acf_msl)*3.281/100)^2 - 2.95963831628837229790*(get(acf_msl)*3.281/100) + 54.96994092387330948740, 0)
+        flex_temp_computed = Round(-0.02434027806956361259*(get(ACF_elevation)*3.281/100)^3 + 0.36824311548836550021*(get(ACF_elevation)*3.281/100)^2 - 2.95963831628837229790*(get(ACF_elevation)*3.281/100) + 54.96994092387330948740, 0)
 
         if 1013-qnh < 0 then --if qnh > 1013
             flex_temp_correction = Round((qnh-1013)/12,0)

@@ -24,11 +24,17 @@ include('libs/geo-helpers.lua')
 -- Constants
 -------------------------------------------------------------------------------
 local UPDATE_INTERVAL = 0.15
+local UPDATE_INTERVAL_ILS = 0.05
+
+local GS_LATERAL_RANGE = 6 -- 6 on the right, 6 on the left
+local GS_PERC_UP_RANGE = 1.75
+local GS_PERC_DN_RANGE = 0.45
 
 -------------------------------------------------------------------------------
 -- Variables
 -------------------------------------------------------------------------------
 local last_update = 0
+local last_update_ils = 0
 
 -------------------------------------------------------------------------------
 -- Initialization
@@ -94,6 +100,15 @@ local function update_adf_nearest(i)
     end
 end
 
+local function update_gs_nearest()
+    local out = AvionicsBay.navaids.get_by_freq(NAV_ID_GS, DRAIMS_common.radio.ils.freq, false)
+    if #out > 0 then
+        local nearest, dist_out = get_nearest_navaid(out)
+        DRAIMS_common.radio.ils.gs = nearest
+        DRAIMS_common.radio.ils.gs.curr_distance = dist_out
+    end
+end
+
 local function update_ils_nearest()
     DRAIMS_common.radio.ils = nil
     if AvionicsBay.is_initialized() and AvionicsBay.is_ready() then
@@ -104,6 +119,7 @@ local function update_ils_nearest()
             local nearest, dist_out = get_nearest_navaid(out1)
             DRAIMS_common.radio.ils = nearest
             DRAIMS_common.radio.ils.curr_distance = dist_out
+            update_gs_nearest()
         end
         if #out2 > 0 then
             local nearest, dist_out = get_nearest_navaid(out2)
@@ -117,10 +133,78 @@ end
 
 
 -------------------------------------------------------------------------------
+-- ILS-related computations
+-------------------------------------------------------------------------------
+
+local function update_gs()
+
+    -- G/S
+    local d = DRAIMS_common.radio.ils.gs.curr_distance * 1852       -- Distance from the G/S in m 
+
+    local gs_angle = DRAIMS_common.radio.ils.gs.extra_bearing[1]    -- Beam angle (vertical)
+    local gs_angle_sin = math.sin(math.rad(gs_angle))
+    local d_extended    = d / math.cos(math.rad(gs_angle))
+    local gs_alt = DRAIMS_common.radio.ils.gs.alt*0.3048
+    local ctr_alt = gs_alt + gs_angle_sin * d_extended
+
+    local max_alt = GS_PERC_UP_RANGE * ctr_alt
+    local min_alt = GS_PERC_DN_RANGE * ctr_alt
+    local cur_alt   = get(ACF_elevation)
+
+    if cur_alt > max_alt or cur_alt < min_alt then
+        -- Too high too low
+        return
+    end
+
+
+    local gs_lat  = DRAIMS_common.radio.ils.gs.lat
+    local gs_lon  = DRAIMS_common.radio.ils.gs.lon
+    local acf_lat = get(Aircraft_lat)
+    local acf_lon = get(Aircraft_long)
+
+    local distance = get_distance_nm(gs_lat, gs_lon, acf_lat, acf_lon)
+
+    if distance > DRAIMS_common.radio.ils.gs.category then
+        -- Too far
+        return
+    end
+
+    local gs_bearing = DRAIMS_common.radio.ils.gs.extra_bearing[2]    -- Beam angle (horizontal)
+    local bearing = get_bearing(gs_lat, gs_lon, acf_lat, acf_lon)
+    bearing = (-bearing-90) % 360 -- Report to nord-centric bearing
+    local lat_range_m = Math_rescale(100, 45, 5555, GS_LATERAL_RANGE, d)
+    if math.abs(bearing - gs_bearing) > lat_range_m then
+        -- Not centered
+        return
+    end
+
+    DRAIMS_common.radio.ils.gs.is_ok = true
+    DRAIMS_common.radio.ils.gs.deviation = math.deg(math.atan2(cur_alt-gs_alt, d)) - gs_angle
+end
+
+local function update_ils()
+    if get(TIME) - last_update_ils <= UPDATE_INTERVAL_ILS then
+        --return
+    end
+    last_update_ils = get(TIME)
+
+    if DRAIMS_common.radio.ils == nil then
+        return
+    end
+    
+    if DRAIMS_common.radio.ils.gs then
+        DRAIMS_common.radio.ils.gs.is_ok = false
+        update_gs()
+    end
+end
+
+-------------------------------------------------------------------------------
 -- main update()
 -------------------------------------------------------------------------------
 function update()
     perf_measure_start("nav_updater:update()")
+
+
     if get(TIME) - last_update <= UPDATE_INTERVAL then
         return
     end
@@ -132,6 +216,7 @@ function update()
     update_adf_nearest(1)
     update_adf_nearest(2)
     update_ils_nearest()
+    update_ils()
     
     perf_measure_stop("nav_updater:update()")
 end

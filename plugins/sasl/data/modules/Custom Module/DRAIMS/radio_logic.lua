@@ -189,15 +189,15 @@ end
 
 function radio_ils_is_valid()
     if DRAIMS_common.radio.ils then
-        return get(NAV_1_is_valid) == 1
+        return true
     else
         return false
     end
 end
 
 function radio_gs_is_valid()
-    if DRAIMS_common.radio.ils then
-        return get(ILS_1_glideslope_flag) == 0
+    if DRAIMS_common.radio.ils and DRAIMS_common.radio.ils.gs then
+        return DRAIMS_common.radio.ils.gs.is_ok
     else
         return false
     end
@@ -208,12 +208,32 @@ function radio_get_ils_deviation_h()
 end
 
 function radio_get_ils_deviation_v()
-    return get(ILS_1_glideslope_dots) * 0.28
+    if DRAIMS_common.radio.ils and DRAIMS_common.radio.ils.gs then
+        return DRAIMS_common.radio.ils.gs.deviation
+    else
+        return 0
+    end
 end
 
 
 function radio_ils_get_tuning_source()
     return 3    -- 1: FMGS auto, 2: MCDU manual, 3: DRAIMS manual TODO
+end
+
+function radio_ils_is_dme_valid()
+    if DRAIMS_common.radio.ils then
+        return get(NAV_1_dme_valid) == 1
+    else
+        return false
+    end
+end
+
+function radio_vor_get_dme_value(which_one)
+    if DRAIMS_common.radio.ils then
+        return get(NAV_1_dme_value)
+    else
+        return 0
+    end
 end
 
 -------------------------------------------------------------------------------
