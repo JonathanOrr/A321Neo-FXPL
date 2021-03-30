@@ -346,7 +346,7 @@ end
 
 sasl.registerCommandHandler (Default_view, 0, default_view)
 
-function update_toilette()
+local function update_toilette()
     if math.random() < 0.00005 then -- ~8% of probability every minute, 99% probability every hour
         last_toilette_time = get(TIME)
     end

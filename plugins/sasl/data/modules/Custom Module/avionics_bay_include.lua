@@ -18,6 +18,8 @@ typedef struct xpdata_navaid_t {
     int altitude;
     unsigned int frequency;
     bool is_coupled_dme;    // True if the vor is coupled with DME
+    int category;           // Category (also range in nm)
+    int bearing;            // Check XP documentation, multiplied by 1000
 } xpdata_navaid_t;
 
 typedef struct xpdata_navaid_array_t {
@@ -128,15 +130,11 @@ typedef struct xpdata_apt_array_t {
     int len;
 } xpdata_apt_array_t;
 
-
 typedef struct xpdata_triangulation_t {
     const xpdata_coords_t* points;
     int points_len;
 } xpdata_triangulation_t;
 
-bool initialize(const char* xplane_path, const char* plane_path);
-const char* get_error(void);
-void terminate(void);
 xpdata_navaid_array_t get_navaid_by_name  (xpdata_navaid_type_t, const char*);
 xpdata_navaid_array_t get_navaid_by_freq  (xpdata_navaid_type_t, unsigned int);
 xpdata_navaid_array_t get_navaid_by_coords(xpdata_navaid_type_t, double, double);
@@ -150,8 +148,15 @@ xpdata_apt_array_t get_apts_by_coords(double, double);
 const xpdata_apt_t* get_nearest_apt();
 void set_acf_coords(double lat, double lon);
 void request_apts_details(const char* arpt_id);
+    
 xpdata_coords_t get_route_pos(const xpdata_apt_t *apt, int route_id);
+
 xpdata_triangulation_t triangulate(const xpdata_apt_node_array_t* array);
+
 bool xpdata_is_ready(void);
+
+bool initialize(const char* xplane_path, const char* plane_path);
+const char* get_error(void);
+void terminate(void);
 
 ]]

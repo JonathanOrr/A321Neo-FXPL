@@ -19,6 +19,30 @@
 local initialized = false
 local ffi = require("ffi")
 
+local function convert_bearing(type, bearing_raw)
+    if type == NAV_ID_NDB then
+        return 0
+    end
+    
+    bearing_raw = bearing_raw / 1000
+    
+    if type == NAV_ID_VOR or type == NAV_ID_OM or type == NAV_ID_IM or type == NAV_ID_MM or type == NAV_ID_DME or type == NAV_ID_DME_ALONE or type == NAV_ID_FPAP then
+        return bearing_raw  -- Please check XP file for details
+    end
+    
+    if type == NAV_ID_LOC or type == NAV_ID_LOC_ALONE then
+        local true_bearing = bearing_raw % 360
+        local mag_front_course = (bearing_raw - true_bearing) / 360
+        return true_bearing, mag_front_course
+    end
+    
+    if type == NAV_ID_GS or type == NAV_ID_LTPFTP or type == NAV_ID_GLS then
+        local glideslope = math.floor(bearing_raw / 1000) / 100
+        local true_angle = bearing_raw % 1000
+        return glideslope, true_angle
+    end
+end
+
 local function convert_navaid_array(rawdata, nav_array)
     if rawdata then
         return {
@@ -36,7 +60,9 @@ local function convert_navaid_array(rawdata, nav_array)
                 lon  = nav_array.navaids[i-1].coords.lon,
                 alt  = nav_array.navaids[i-1].altitude,
                 freq = nav_array.navaids[i-1].frequency,
-                is_coupled_dme = nav_array.navaids[i-1].is_coupled_dme
+                is_coupled_dme = nav_array.navaids[i-1].is_coupled_dme,
+                category = nav_array.navaids[i-1].category,
+                extra_bearing = convert_bearing(nav_array.navaids[i-1].type, nav_array.navaids[i-1].bearing),
             })
         end
         return to_return

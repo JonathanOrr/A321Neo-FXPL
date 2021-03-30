@@ -162,6 +162,9 @@ NAV_ID_MM   = 8
 NAV_ID_IM   = 9
 NAV_ID_DME  = 12
 NAV_ID_DME_ALONE  = 13
+NAV_ID_FPAP    = 14
+NAV_ID_GLS     = 15
+NAV_ID_LTPFTP  = 16
 
 -- Fonts
 Font_AirbusDUL       = sasl.gl.loadFont("fonts/AirbusDULiberationMono.ttf")
