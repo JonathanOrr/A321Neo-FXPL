@@ -513,6 +513,7 @@ function draw_oans(data, functions)
 
     if data.config.range > ND_RANGE_ZOOM_2 then
         data.misc.please_wait = false
+        data.misc.apt_pos_lost = false
         return  -- No OANS over zoom
     end
     
