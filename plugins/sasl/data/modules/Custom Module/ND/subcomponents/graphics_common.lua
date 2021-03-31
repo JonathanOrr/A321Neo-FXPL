@@ -264,28 +264,37 @@ local function draw_common_messages_center(data)
     if data.misc.map_not_avail then
         text = "MAP NOT AVAIL"
         color = ECAM_RED
+    elseif data.misc.apt_pos_lost then
+        text = "ARPT NAV POS LOST"
+        color = ECAM_RED
     elseif (data.misc.windshear_warning or data.misc.windshear_caution) and not is_nav_or_rose then
-        text = "W/S CHANGE MODE"
+        text = "W/S:CHANGE MODE"
         color = data.misc.windshear_warning and ECAM_RED or ECAM_ORANGE
     elseif (data.misc.windshear_warning or data.misc.windshear_caution) and data.config.range > ND_RANGE_10 then
-        text = "W/S SET RNG 10 NM"
+        text = "W/S:SET RNG 10 NM"
         color = data.misc.windshear_warning and ECAM_RED or ECAM_ORANGE
+    elseif data.misc.windshear_inc_range then
+        text = "W/S:INCREASE RANGE"
+        color = ECAM_RED
     elseif (get(GPWS_pred_terr) == 1 or get(GPWS_pred_terr_pull) == 1) and data.config.mode == ND_MODE_PLAN then
-        text = "TERR CHANGE MODE"
+        text = "TERR:CHANGE MODE"
         color = get(GPWS_pred_terr_pull) == 1 and ECAM_RED or ECAM_ORANGE
     elseif (get(GPWS_pred_terr) == 1 or get(GPWS_pred_terr_pull) == 1) and data.config.range > ND_RANGE_80 then
-        text = "TERR REDUCE CHANGE"
+        text = "TERR:REDUCE CHANGE"
         color = get(GPWS_pred_terr_pull) == 1 and ECAM_RED or ECAM_ORANGE
     elseif data.misc.mode_change then
         text = "MODE CHANGE"
-        color = ECAM_GREEN    
+        color = ECAM_GREEN
     elseif data.misc.range_change then
         text = "RANGE CHANGE"
-        color = ECAM_GREEN    
+        color = ECAM_GREEN
+    elseif data.misc.please_wait then
+        text = "PLEASE WAIT"
+        color = ECAM_GREEN
     end
     
     if color ~= nil then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, 465, text, 36, false, false, TEXT_ALIGN_CENTER, color)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, 480, text, 36, false, false, TEXT_ALIGN_CENTER, color)
     end
 
     if data.config.mode == ND_MODE_VOR then
@@ -421,6 +430,7 @@ function draw_test_gpws()
 end
 
 function draw_common(data)
+
     draw_common_gs_and_tas(data)
     draw_common_wind(data)
     draw_common_chrono(data)

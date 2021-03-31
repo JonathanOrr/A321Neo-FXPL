@@ -240,15 +240,26 @@ local function draw_rose_gs_indication(data)
 end
 
 function draw_rose_vor(data)
+    if data.config.range <= ND_RANGE_ZOOM_2 then
+        return  -- Not drawn
+    end
+
     draw_rose_vor_indication(data)
 end
 
 function draw_rose_ils(data)
+    if data.config.range <= ND_RANGE_ZOOM_2 then
+        return  -- Not drawn
+    end
+
     draw_rose_loc_indication(data)
     draw_rose_gs_indication(data)
 end
 
 function draw_rose_vorils_unmasked(data)
+    if data.config.range <= ND_RANGE_ZOOM_2 then
+        return  -- Not drawn
+    end
     if data.config.mode == ND_MODE_VOR then
         draw_upper_right_info_vor(data)
     elseif data.config.mode == ND_MODE_ILS then

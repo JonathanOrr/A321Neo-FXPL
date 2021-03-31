@@ -46,7 +46,8 @@ end
 function update_position(data)
     local id = data.id
 
-    data.misc.map_not_avail = (not adirs_is_position_ok(id) or not AvionicsBay.is_initialized() or (not AvionicsBay.apts.is_nearest_apt_computed() and data.config.range <= ND_RANGE_ZOOM_2))
+    data.misc.map_not_avail = ((not adirs_is_position_ok(id) and data.config.range > ND_RANGE_ZOOM_2) 
+                              or not AvionicsBay.is_initialized() or (not AvionicsBay.apts.is_nearest_apt_computed() and data.config.range <= ND_RANGE_ZOOM_2))
     data.misc.map_partially_displayed = (AvionicsBay.is_initialized() and not AvionicsBay.is_ready()) or data.misc.not_displaying_all_data
 
     data.misc.not_displaying_all_data = false -- reset it
@@ -116,6 +117,13 @@ local function update_navaid_raw(data)
 
 end
 
+local function update_whr_shear(data)
+    if data.config.range <= ND_RANGE_ZOOM_2 and (data.config.mode == ND_MODE_VOR or data.config.mode == ND_MODE_ILS) then
+        data.misc.windshear_inc_range = true
+    else
+        data.misc.windshear_inc_range = false
+    end
+end
 
 function update_main(data)
     update_speed_and_wind(data)
@@ -124,7 +132,9 @@ function update_main(data)
     update_tcas(data)
     update_position(data)
     update_navaid_raw(data)
+    update_whr_shear(data)
 
     update_poi(data)
     update_altitude(data)
+
 end

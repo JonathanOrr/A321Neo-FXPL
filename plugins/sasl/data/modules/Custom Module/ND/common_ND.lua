@@ -82,10 +82,12 @@ function new_dataset(input_id)
         mode_change = false,
         range_change = false,
         map_not_avail = false,
+        please_wait = false,
         
         windshear_warning = false,
         windshear_caution = false,
         windshear_pred_fail = false,
+        windshear_inc_range = false,
         
         loc_failure = false,
         vor_failure = false,

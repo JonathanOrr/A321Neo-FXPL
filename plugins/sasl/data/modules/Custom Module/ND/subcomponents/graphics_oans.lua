@@ -512,11 +512,18 @@ function draw_oans(data, functions)
     assert(data)
 
     if data.config.range > ND_RANGE_ZOOM_2 then
-        data.misc.range_change = false
+        data.misc.please_wait = false
         return  -- No OANS over zoom
     end
     
-    data.misc.range_change = true   -- Let's turn on the message
+    local failure_condition = (get(GPS_1_is_available) == 0 and get(GPS_2_is_available) == 0) or adirs_how_many_irs_fully_work() < 3
+    if failure_condition then
+        data.misc.apt_pos_lost = true
+        return
+    end
+    
+    data.misc.apt_pos_lost = false
+    data.misc.please_wait  = true   -- Let's turn on the message
 
     local nearest_airport = AvionicsBay.apts.get_nearest_apt(true)
     
@@ -544,7 +551,7 @@ function draw_oans(data, functions)
     
     draw_oans_go(data, functions, apt, apt_details)
 
-    data.misc.range_change = false  -- If we reached this point, the the OANS is actually drawn
+    data.misc.please_wait = false  -- If we reached this point, the the OANS is actually drawn
 end
 
 
