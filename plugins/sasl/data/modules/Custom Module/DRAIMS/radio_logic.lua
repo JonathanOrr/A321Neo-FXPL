@@ -203,8 +203,34 @@ function radio_gs_is_valid()
     end
 end
 
+function radio_loc_is_valid()
+    if DRAIMS_common.radio.ils and DRAIMS_common.radio.ils.loc then
+        return DRAIMS_common.radio.ils.loc.is_ok
+    else
+        return false
+    end
+end
+
+function radio_get_ils_is_backcourse()
+    if DRAIMS_common.radio.ils and DRAIMS_common.radio.ils.loc then
+        if DRAIMS_common.radio.ils.loc.deviation > 90 then
+            return true
+        end
+    end
+    return false
+end
+
 function radio_get_ils_deviation_h()
-    return get(ILS_1_loc_dots) * 1.5
+    if DRAIMS_common.radio.ils and DRAIMS_common.radio.ils.loc then
+        local deviation = DRAIMS_common.radio.ils.loc.deviation
+        if deviation > 90 then
+            return -(deviation - 180)
+        else
+            return deviation
+        end
+    else
+        return 0
+    end
 end
 
 function radio_get_ils_deviation_v()

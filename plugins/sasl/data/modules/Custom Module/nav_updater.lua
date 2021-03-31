@@ -30,6 +30,9 @@ local GS_LATERAL_RANGE = 6 -- 6 on the right, 6 on the left
 local GS_PERC_UP_RANGE = 1.75
 local GS_PERC_DN_RANGE = 0.45
 
+local LOC_NEAR_RANGE = 35
+local LOC_FAR_RANGE  = 10
+
 -------------------------------------------------------------------------------
 -- Variables
 -------------------------------------------------------------------------------
@@ -182,6 +185,50 @@ local function update_gs()
     DRAIMS_common.radio.ils.gs.deviation = math.deg(math.atan2(cur_alt-gs_alt, d)) - gs_angle
 end
 
+local function update_loc()
+    local d = DRAIMS_common.radio.ils.curr_distance * 1852       -- Distance from the LOC in m
+    
+    local max_alt = DRAIMS_common.radio.ils.alt + 1371.6  -- Max altitude is the altitude of the LOC + 4500
+    local min_alt = DRAIMS_common.radio.ils.alt + Math_rescale(5500, -150, 50000, 300, d) -- It actually depends on the terrain, but we cannot look that. Let's estimate a sort of gradient
+
+    local cur_alt   = get(ACF_elevation)
+    if cur_alt > max_alt or cur_alt < min_alt then
+        -- Too high too low
+        return
+    end
+    
+    local loc_lat  = DRAIMS_common.radio.ils.lat
+    local loc_lon  = DRAIMS_common.radio.ils.lon
+    local acf_lat = get(Aircraft_lat)
+    local acf_lon = get(Aircraft_long)
+
+    local distance = get_distance_nm(loc_lat, loc_lon, acf_lat, acf_lon)
+
+    if distance > DRAIMS_common.radio.ils.category then
+        -- Too far
+        return
+    end
+
+    local loc_bearing = DRAIMS_common.radio.ils.extra_bearing[1]
+    local bearing = get_bearing(loc_lat, loc_lon, acf_lat, acf_lon)
+    bearing = (-bearing-90) % 360 -- Report to nord-centric bearing
+    
+    local angle = d < 31.48 and LOC_NEAR_RANGE or LOC_FAR_RANGE -- ICAO Version
+    if DRAIMS_common.radio.ils.category < 20 then
+        angle = d < 18.52 and LOC_NEAR_RANGE or LOC_FAR_RANGE   -- FAA Version
+    end
+    
+    local deviation = bearing - loc_bearing
+
+    if math.abs(deviation) > angle and math.abs(deviation-180) > angle then
+        -- Not centered
+        return
+    end
+
+    DRAIMS_common.radio.ils.loc.is_ok = true
+    DRAIMS_common.radio.ils.loc.deviation = deviation
+end
+
 local function update_ils()
     if get(TIME) - last_update_ils <= UPDATE_INTERVAL_ILS then
         --return
@@ -196,6 +243,13 @@ local function update_ils()
         DRAIMS_common.radio.ils.gs.is_ok = false
         update_gs()
     end
+    
+    if not DRAIMS_common.radio.ils.loc then
+        DRAIMS_common.radio.ils.loc = {}
+    end
+    DRAIMS_common.radio.ils.loc.is_ok = false
+    update_loc()
+    
 end
 
 -------------------------------------------------------------------------------

@@ -174,34 +174,38 @@ local function draw_rose_loc_indication(data)
     sasl.gl.drawRotatedTexture(image_deviation_ind_ils, -data.inputs.heading+crs_angle, (size[1]-75)/2,(size[2]-590)/2,75,590, {1,1,1})
 
     
-    local is_valid = radio_ils_is_valid()
+    local is_valid = radio_ils_is_valid() and radio_loc_is_valid()
     if not is_valid then
         return -- No active ils
     end
 
     -- image_deviation_arrow
-    if is_valid then
         
-        local degrees = radio_get_ils_deviation_h()
+    local degrees = radio_get_ils_deviation_h()
 
-        local degrees_clamp = Math_clamp(degrees, -1.7, 1.7)
-        local ralt = data.id == ND_CAPT and get(Capt_ra_alt_ft) or get(Fo_ra_alt_ft)
-        if degrees_clamp ~= degrees and get(TIME) % 1 < 0.5 and ralt > 15 then
-            return  -- Pulsing if excessive
-        end
-
-        local degrees_px = degrees_clamp / 5 * 569
-        sasl.gl.drawRotatedTexture(image_h_deviation_sym, -data.inputs.heading+crs_angle, (size[1]-500)/2,(size[2]-176)/2,500,176, {1,1,1})
-        sasl.gl.drawRotatedTextureCenter(image_deviation_arrow_ils, -data.inputs.heading+crs_angle, size[1]/2, size[2]/2, (size[1]-28)/2+degrees_px,(size[2]-176)/2, 28,176, {1,1,1})
+    local degrees_clamp = Math_clamp(degrees, -1.7, 1.7)
+    local ralt = data.id == ND_CAPT and get(Capt_ra_alt_ft) or get(Fo_ra_alt_ft)
+    if degrees_clamp ~= degrees and get(TIME) % 1 < 0.5 and ralt > 15 then
+        return  -- Pulsing if excessive
     end
 
+    local degrees_px = degrees_clamp / 5 * 569
+
+    local angle = -data.inputs.heading+crs_angle
+    sasl.gl.drawRotatedTexture(image_h_deviation_sym, angle, (size[1]-500)/2,(size[2]-176)/2,500,176, {1,1,1})
+    sasl.gl.drawRotatedTextureCenter(image_deviation_arrow_ils, angle, size[1]/2, size[2]/2, (size[1]-28)/2+degrees_px,(size[2]-176)/2, 28,176, {1,1,1})
+    if math.abs(angle) > 90 then
+        angle = angle - 180
+    end
+    local text = radio_get_ils_is_backcourse() and "B/C" or "LOC"
+    sasl.gl.drawRotatedText(Font_AirbusDUL, size[1]/2-180, size[1]/2+20, size[1]/2, size[1]/2, angle, text, 30, false , false , TEXT_ALIGN_CENTER , ECAM_MAGENTA )
 end
 
 local function draw_rose_gs_indication(data)
 
 
 
-    local is_valid = radio_gs_is_valid()
+    local is_valid = radio_ils_is_valid()
     data.misc.gs_failure = not is_valid
 
     if not is_valid then
@@ -218,18 +222,21 @@ local function draw_rose_gs_indication(data)
     
     -- image_deviation_arrow
 
-    local degrees = -radio_get_ils_deviation_v()
+    if radio_gs_is_valid() then
+        local degrees = -radio_get_ils_deviation_v()
+        local degrees_clamp = Math_clamp(degrees, -0.9, 0.9)
+        local ralt = data.id == ND_CAPT and get(Capt_ra_alt_ft) or get(Fo_ra_alt_ft)
+        
+        if degrees_clamp ~= degrees and get(TIME) % 1 < 0.5 and ralt then
+            return  -- Pulsing if excessive
+        end
 
-    local degrees_clamp = Math_clamp(degrees, -0.9, 0.9)
-
-    local ralt = data.id == ND_CAPT and get(Capt_ra_alt_ft) or get(Fo_ra_alt_ft)
-    if degrees_clamp ~= degrees and get(TIME) % 1 < 0.5 and ralt then
-        return  -- Pulsing if excessive
+        sasl.gl.drawTexture(image_v_deviation_sym, size[1]-75, 201, 29, 500, {1,1,1})
+        local degrees_px = Math_rescale_no_lim(0, 0, 0.9, 240, degrees_clamp)
+        sasl.gl.drawTexture(image_deviation_diamond_ils, size[1]-77, 428 + degrees_px, 32, 45, {1,1,1})
+    else
+        sasl.gl.drawTexture(image_v_deviation_sym, size[1]-75, 201, 29, 500, {1,1,1})
     end
-
-    local degrees_px = Math_rescale_no_lim(0, 0, 0.9, 240, degrees_clamp)
-    sasl.gl.drawTexture(image_v_deviation_sym, size[1]-75, 201, 29, 500, {1,1,1})
-    sasl.gl.drawTexture(image_deviation_diamond_ils, size[1]-77, 428 + degrees_px, 32, 45, {1,1,1})
 end
 
 function draw_rose_vor(data)

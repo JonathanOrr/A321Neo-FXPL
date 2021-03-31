@@ -17,7 +17,7 @@
 -------------------------------------------------------------------------------
 
 include('GPWS_predictive.lua')
-
+include('DRAIMS/radio_logic.lua')
 
 local PRELIMINARY_MODE_2_TIME = 5
 local UPDATE_INTERVAL = 0.5
@@ -384,7 +384,7 @@ function update_mode_5(alt)
         return false -- Manually disabled
     end
 
-    if get(ILS_1_glideslope_flag) == 1 then
+    if not radio_ils_is_valid() or not radio_gs_is_valid() then
         return false -- No ILS signal received
     end
 
@@ -407,25 +407,27 @@ function update_mode_5(alt)
     -- if 180 < RA < 350: it's "light" if < -1.3 or "hard" if < -2
     -- if 30 < RA < 180: we have two lines
 
-    if alt < 350 and alt >= 180 and get(ILS_1_glideslope_dots) <= -2 then
+    local dev = radio_get_ils_deviation_v()
+
+    if alt < 350 and alt >= 180 and dev <= -2*0.4 then
         set(GPWS_mode_5_glideslope_hard, mode_5_inhibited and 0 or 1)
         return mode_5_inhibited
     end
 
-    if alt < 180 and get(ILS_1_glideslope_dots) <= Math_rescale(30, -3.6, 180, -2, alt) then
+    if alt < 180 and dev <= Math_rescale(30, -3.6*0.4, 180, -2*0.4, alt) then
         set(GPWS_mode_5_glideslope_hard, mode_5_inhibited and 0 or 1)
         return mode_5_inhibited 
-    elseif alt < 180 and  get(ILS_1_glideslope_dots) <= Math_rescale(30, -3, 180, -1, alt)  then
+    elseif alt < 180 and  dev <= Math_rescale(30, -3*0.4, 180, -0.4, alt)  then
         set(GPWS_mode_5_glideslope, mode_5_inhibited and 0 or 1)
         return mode_5_inhibited
     end
     
-    if alt >= 350 and get(ILS_1_glideslope_dots) <= -1.3 then
+    if alt >= 350 and dev <= -1.3*0.4 then
         set(GPWS_mode_5_glideslope, mode_5_inhibited and 0 or 1)
         return mode_5_inhibited
     end
 
-    if alt < 350 and alt >= 180 and get(ILS_1_glideslope_dots) <= -1.3 and get(ILS_1_glideslope_dots) > -2 then
+    if alt < 350 and alt >= 180 and dev <= -1.3*0.4 and dev > -2*0.4 then
         set(GPWS_mode_5_glideslope, mode_5_inhibited and 0 or 1)
         return mode_5_inhibited
     end
