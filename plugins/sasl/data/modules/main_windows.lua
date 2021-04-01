@@ -262,6 +262,21 @@ GPWS_debug_window = contextWindow {
 }
 
 
+NAVAIDs_debug_window = contextWindow {
+  name = "NAVAIDs DEBUG";
+  position = { 150 , 150 , 600, 600 };
+  noBackground = true ;
+  proportional = false ;
+  minimumSize = { 600, 600 };
+  maximumSize = { 600, 600 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = false;
+  components = {
+    navaids_debug {position = { 0 , 0 , 600, 600 }}
+  };
+}
+
+
 --popups--
 CAPT_PFD_window = contextWindow {
   name = "CAPT PFD";

@@ -88,6 +88,10 @@ function Show_hide_GPWS_Debug()
   GPWS_debug_window:setIsVisible(not GPWS_debug_window:isVisible())
 end
 
+function Show_hide_NAVAIDs_Debug()
+  NAVAIDs_debug_window:setIsVisible(not NAVAIDs_debug_window:isVisible())
+end
+
 function Show_hide_MAGIC_Debug()
   MAGIC_window:setIsVisible(not MAGIC_window:isVisible())
 end
@@ -192,6 +196,7 @@ ShowHideECAMDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide ECAM Debug", Show
 ShowHideELECDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide ELEC Debug", Show_hide_ELEC_debug)
 ShowHideENGDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide ENG Debug", Show_hide_ENG_debug)
 ShowHideGPWSDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide GPWS Debug", Show_hide_GPWS_Debug)
+ShowHideNAVAIDsDebug= sasl.appendMenuItem(Menu_debug, "Show/Hide NAVAIDs Debug", Show_hide_NAVAIDs_Debug)
 ShowHidePacksDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide PACKS Debug", Show_hide_packs_debug)
 ShowHidePerfDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide PERF Debug", Show_hide_Performance_Debug)
 ShowHidePressDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide PRESS Debug", Show_hide_PRESS_debug)
