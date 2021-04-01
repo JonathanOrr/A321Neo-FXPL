@@ -23,7 +23,7 @@ include('libs/geo-helpers.lua')
 -------------------------------------------------------------------------------
 -- Constants
 -------------------------------------------------------------------------------
-local UPDATE_INTERVAL = 0.05
+local UPDATE_INTERVAL = 0.20
 local UPDATE_INTERVAL_ILS = 0.05
 
 local GS_LATERAL_RANGE = 6 -- 6 on the right, 6 on the left
@@ -85,7 +85,9 @@ local function update_vor_nearest(i)
         if #out > 0 then
             local nearest, dist_out = get_nearest_navaid(out)
             DRAIMS_common.radio.vor[i] = nearest
-            DRAIMS_common.radio.vor[i].curr_distance = dist_out -- TODO Fix slant range
+            DRAIMS_common.radio.vor[i].curr_distance = dist_out
+            local alt_nm = (get(ACF_elevation) - nearest.alt*0.3048) * 0.000539957
+            DRAIMS_common.radio.vor[i].slant_distance = math.sqrt(dist_out * dist_out + alt_nm*alt_nm)
             DRAIMS_common.radio.vor[i].curr_bearing = (90 - navaid_get_bearing(nearest)) % 360
         end
     end
@@ -157,6 +159,7 @@ local function update_gs()
     local cur_alt   = get(ACF_elevation)
 
     if cur_alt > max_alt or cur_alt < min_alt then
+        DRAIMS_common.radio.ils.gs.reason = 1
         -- Too high too low
         return
     end
@@ -170,6 +173,7 @@ local function update_gs()
     local distance = get_distance_nm(gs_lat, gs_lon, acf_lat, acf_lon)
 
     if distance > DRAIMS_common.radio.ils.gs.category then
+        DRAIMS_common.radio.ils.gs.reason = 2
         -- Too far
         return
     end
@@ -179,10 +183,12 @@ local function update_gs()
     bearing = (-bearing-90) % 360 -- Report to nord-centric bearing
     local lat_range_m = Math_rescale(100, 45, 5555, GS_LATERAL_RANGE, d)
     if math.abs(bearing - gs_bearing) > lat_range_m then
+        DRAIMS_common.radio.ils.gs.reason = 3
         -- Not centered
         return
     end
 
+    DRAIMS_common.radio.ils.gs.reason = 0
     DRAIMS_common.radio.ils.gs.is_ok = true
     DRAIMS_common.radio.ils.gs.deviation = math.deg(math.atan2(cur_alt-gs_alt, d)) - gs_angle
 end
@@ -190,11 +196,13 @@ end
 local function update_loc()
     local d = DRAIMS_common.radio.ils.curr_distance * 1852       -- Distance from the LOC in m
     
-    local max_alt = DRAIMS_common.radio.ils.alt + 1371.6  -- Max altitude is the altitude of the LOC + 4500
-    local min_alt = DRAIMS_common.radio.ils.alt + Math_rescale(5500, -150, 50000, 300, d) -- It actually depends on the terrain, but we cannot look that. Let's estimate a sort of gradient
+    local max_alt = DRAIMS_common.radio.ils.alt*0.3048 + 1371.6  -- Max altitude is the altitude of the LOC + 4500
+    local min_alt = DRAIMS_common.radio.ils.alt*0.3048 + Math_rescale(5500, -50, 50000, 300, d) -- It actually depends on the terrain, but we cannot look that. Let's estimate a sort of gradient
 
     local cur_alt   = get(ACF_elevation)
+
     if cur_alt > max_alt or cur_alt < min_alt then
+        DRAIMS_common.radio.ils.loc.reason = 1
         -- Too high too low
         return
     end
@@ -207,12 +215,14 @@ local function update_loc()
     local distance = get_distance_nm(loc_lat, loc_lon, acf_lat, acf_lon)
 
     if distance > DRAIMS_common.radio.ils.category then
+        DRAIMS_common.radio.ils.loc.reason = 2
         -- Too far
         return
     end
 
     local loc_bearing = DRAIMS_common.radio.ils.extra_bearing[1]
     local bearing = get_bearing(loc_lat, loc_lon, acf_lat, acf_lon)
+    DRAIMS_common.radio.ils.loc.bearing = bearing
     bearing = (-bearing-90) % 360 -- Report to nord-centric bearing
     
     local angle = d < 31.48 and LOC_NEAR_RANGE or LOC_FAR_RANGE -- ICAO Version
@@ -220,22 +230,20 @@ local function update_loc()
         angle = d < 18.52 and LOC_NEAR_RANGE or LOC_FAR_RANGE   -- FAA Version
     end
     
-    local deviation = bearing - loc_bearing
+    local deviation = (bearing - loc_bearing) % 360
 
     if math.abs(deviation) > angle and math.abs(deviation-180) > angle then
+        DRAIMS_common.radio.ils.loc.reason = 3
         -- Not centered
         return
     end
 
+    DRAIMS_common.radio.ils.loc.reason = 0
     DRAIMS_common.radio.ils.loc.is_ok = true
     DRAIMS_common.radio.ils.loc.deviation = deviation
 end
 
 local function update_ils()
-    if get(TIME) - last_update_ils <= UPDATE_INTERVAL_ILS then
-        --return
-    end
-    last_update_ils = get(TIME)
 
     if DRAIMS_common.radio.ils == nil then
         return
@@ -250,6 +258,7 @@ local function update_ils()
         DRAIMS_common.radio.ils.loc = {}
     end
     DRAIMS_common.radio.ils.loc.is_ok = false
+    DRAIMS_common.radio.ils.loc.bearing = nil
     update_loc()
     
 end
@@ -257,10 +266,8 @@ end
 -------------------------------------------------------------------------------
 -- main update()
 -------------------------------------------------------------------------------
-function update()
-    perf_measure_start("nav_updater:update()")
 
-
+local function update_navaids()
     if get(TIME) - last_update <= UPDATE_INTERVAL then
         return
     end
@@ -272,7 +279,23 @@ function update()
     update_adf_nearest(1)
     update_adf_nearest(2)
     update_ils_nearest()
+end
+
+local function update_landings()
+    if get(TIME) - last_update_ils <= UPDATE_INTERVAL_ILS then
+        --return
+    end
+    last_update_ils = get(TIME)
+
     update_ils()
-    
+end
+
+
+function update()
+    perf_measure_start("nav_updater:update()")
+
+    update_navaids()
+    update_landings()
+
     perf_measure_stop("nav_updater:update()")
 end

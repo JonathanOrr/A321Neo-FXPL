@@ -151,7 +151,7 @@ end
 
 function radio_vor_get_dme_value(which_one)
     if DRAIMS_common.radio.vor[which_one] then
-        return DRAIMS_common.radio.vor[which_one].curr_distance
+        return DRAIMS_common.radio.vor[which_one].slant_distance
     else
         return 0
     end
