@@ -172,7 +172,8 @@
 {baf9bc41-c708-42a2-bfac-b33deb7ddbc4} event:/Avionics
 {356cf20a-c643-42c5-8a6d-7a00fb3d4288} event:/Battery
 {1edd836c-b29a-4101-a732-2d2eef744bbe} event:/Blower
-{89d27a8f-0f45-4230-905b-f244fdde49a4} event:/Brake Fan
+{89d27a8f-0f45-4230-905b-f244fdde49a4} event:/Brake Fan L
+{87259c62-a9fb-4b18-b7e4-d93a6e30c0a1} event:/Brake Fan R
 {5db7e5fc-e4e5-4189-b301-596d1f1dd3c2} event:/BrightnessClick
 {fbc642bf-0e6c-4030-9901-0f1ce878cfe7} event:/BusKick
 {5c5f1485-bce5-419e-9d5c-a5ff2ec145e8} event:/BusKick2
