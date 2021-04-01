@@ -3306,6 +3306,20 @@ BEGIN_SOUND_ATTACHMENT
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FCU/Rotate2
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND ABS_DELTA=sim/cockpit/misc/barometer_setting > 0
+  EVENT_END_COND ABS_DELTA=sim/cockpit/misc/barometer_setting == 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FCU/Rotate2
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND ABS_DELTA=sim/cockpit/misc/barometer_setting2 > 0
+  EVENT_END_COND ABS_DELTA=sim/cockpit/misc/barometer_setting2 == 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /FCU/Round Button Press
   VEH_XYZ 0 1.5 -18.4
   EVENT_CMND_DOWN a321neo/cockpit/fcu/spd_mach
@@ -3548,16 +3562,29 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_START_COND a321neo/cockpit/fire/buttons/APU_lever_pos < 1
 END_SOUND_ATTACHMENT
 
+###########################################################################################################FUEL PUMP
 
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Fuel Pump
+  VEH_XYZ 0 0 0
+  EVENT_START_COND sim/cockpit2/engine/actuators/fuel_pump_on[0] > 0
+  EVENT_START_COND sim/cockpit2/engine/actuators/fuel_pump_on[1] > 0
+  EVENT_START_COND sim/cockpit2/engine/actuators/fuel_pump_on[2] > 0
+  EVENT_START_COND sim/cockpit2/engine/actuators/fuel_pump_on[3] > 0
+  EVENT_START_COND sim/cockpit2/engine/actuators/fuel_pump_on[4] > 0
+  EVENT_START_COND sim/cockpit2/engine/actuators/fuel_pump_on[5] > 0
+  EVENT_START_COND sim/cockpit2/engine/actuators/fuel_pump_on[6] > 0
+  EVENT_START_COND sim/cockpit2/engine/actuators/fuel_pump_on[7] > 0
 
-
-
-
-
-
-
-
-
+  CUE_TRIGGER_COND sim/cockpit2/engine/actuators/fuel_pump_on[0] = 0
+  CUE_TRIGGER_COND sim/cockpit2/engine/actuators/fuel_pump_on[1] = 0
+  CUE_TRIGGER_COND sim/cockpit2/engine/actuators/fuel_pump_on[2] = 0
+  CUE_TRIGGER_COND sim/cockpit2/engine/actuators/fuel_pump_on[3] = 0
+  CUE_TRIGGER_COND sim/cockpit2/engine/actuators/fuel_pump_on[4] = 0
+  CUE_TRIGGER_COND sim/cockpit2/engine/actuators/fuel_pump_on[5] = 0
+  CUE_TRIGGER_COND sim/cockpit2/engine/actuators/fuel_pump_on[6] = 0
+  CUE_TRIGGER_COND sim/cockpit2/engine/actuators/fuel_pump_on[7] = 0
+END_SOUND_ATTACHMENT
 
 
 

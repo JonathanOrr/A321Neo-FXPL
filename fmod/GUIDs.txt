@@ -66,6 +66,7 @@
 {df5a49d6-0ca2-4862-be07-e46e04013c9e} event:/Engines V3 LEAP/HowlLogic
 {d6916c12-4c9c-4fb5-842d-fbecc7238050} event:/Engines V3 LEAP/HowlLogicR
 {f579556e-5a00-462d-8120-a1add3ca52fe} event:/Engines V3 LEAP/RevL V3
+{395dbcdd-625a-465f-a0af-8ea50c2e0409} event:/Engines V3 LEAP/RevR V3
 {60390ec1-f659-43b4-a63d-0618b686e0fe} event:/FCU/Selectors/1
 {9bcca77b-d316-4192-bb92-d796b32e9bd3} event:/FCU/Selectors/2
 {863d7dc0-0956-4ed3-8336-5ee2bf0b4213} event:/FCU/Selectors/3
@@ -191,7 +192,6 @@
 {e7f2d612-cc52-44a5-b11f-3eadbe3cb078} event:/NoSmoke
 {d5bc7710-4cf2-4544-ba28-726b316c7f21} event:/Packs
 {0e7dff21-7b4d-4b72-9343-4928951e126a} event:/PTU
-{ae0d038d-fec0-41da-828a-279e74f65900} event:/RevL
 {b0452156-9936-4b1e-9c0d-ec4992821fd2} event:/RevR
 {bd64a731-4c73-4553-b22a-33505b7c3684} event:/Seatbelt
 {e17ea26c-dd4f-4bc1-873e-8fc5e0da491d} event:/SpoilerArm
