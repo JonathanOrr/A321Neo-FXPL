@@ -2073,20 +2073,6 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_START_COND 	sim/cockpit/switches/gear_handle_status == 0
 END_SOUND_ATTACHMENT
 
-#################################################################################################
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
-  VEH_XYZ 0 1.4 -18.7
-  EVENT_START_COND 	a321neo/cockpit/mip/brk_fan_bottom == 1
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Soft Button Press
-  VEH_XYZ 0 1.4 -18.7
-  EVENT_START_COND 	a321neo/cockpit/mip/brk_fan_bottom == 0
-END_SOUND_ATTACHMENT
-
 #################################################################################################FLAPS
 
 BEGIN_SOUND_ATTACHMENT
@@ -2414,14 +2400,14 @@ END_SOUND_ATTACHMENT
 #############################################################################################
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /Brake Fan
+  EVENT_NAME /Brake Fan L
   VEH_PART tire 1
   EVENT_START_COND 	a321neo/dynamics/wheel/brakes_fan == 1
   CUE_TRIGGER_COND  a321neo/dynamics/wheel/brakes_fan == 0
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /Brake Fan
+  EVENT_NAME /Brake Fan R
   VEH_PART tire 2
   EVENT_START_COND 	a321neo/dynamics/wheel/brakes_fan == 1
   CUE_TRIGGER_COND  a321neo/dynamics/wheel/brakes_fan == 0
@@ -2456,8 +2442,7 @@ END_SOUND_ATTACHMENT
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /GearDrag
   VEH_XYZ 0 0 0
-  EVENT_START_COND 	sim/flightmodel/position/true_airspeed >= 1
-  EVENT_END_COND 	a321neo/dynamics/wheel/either_aft_on_ground == 1
+  EVENT_ALWAYS
 END_SOUND_ATTACHMENT
 
 #############################################################################################
@@ -3427,6 +3412,14 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /FCU/Pull
   VEH_XYZ 0 1.5 -18.4
   EVENT_CMND_DOWN a321neo/cockpit/fcu/fo_qnh_push
+END_SOUND_ATTACHMENT
+
+###########################################################################################################FCU INTEVRAL
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FCU/Selectors/1
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND ABS_DELTA=a321neo/cockpit/AUTOFLT/FCU/altitude_1000_or_100 > 0
 END_SOUND_ATTACHMENT
 
 ###########################################################################################################TRAYTABLE
