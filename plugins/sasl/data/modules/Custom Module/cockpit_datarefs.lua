@@ -446,6 +446,10 @@ Current_heading = globalProperty("sim/cockpit2/gauges/indicators/heading_AHARS_d
 Ground_track = globalProperty("sim/cockpit2/gauges/indicators/ground_track_mag_pilot")
 VVI = globalProperty("sim/cockpit2/gauges/indicators/vvi_fpm_pilot")
 
+Marker_OM_lit = globalProperty("sim/cockpit2/radios/indicators/outer_marker_lit")
+Marker_MM_lit = globalProperty("sim/cockpit2/radios/indicators/middle_marker_lit")
+Marker_IM_lit = globalProperty("sim/cockpit2/radios/indicators/inner_marker_lit")
+
 --AUTOFLT--
 AUTOFLT_FCU_SPD_or_MACH     = createGlobalPropertyi("a321neo/cockpit/AUTOFLT/FCU/spd_or_mach", 0, false, true, false)
 AUTOFLT_FCU_HDGVS_or_TRKFPA = createGlobalPropertyi("a321neo/cockpit/AUTOFLT/FCU/hdgvs_or_trkfpa", 0, false, true, false)

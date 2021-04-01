@@ -79,7 +79,19 @@ end
 
 local function PFD_draw_extras(PFD_table)
     -- TODO ADD GLS
-    sasl.gl.drawText(Font_AirbusDUL, 550, 215, "ILS", 42, false, false, TEXT_ALIGN_LEFT, ECAM_MAGENTA)
+    sasl.gl.drawText(Font_AirbusDUL, 550, 210, "ILS", 42, false, false, TEXT_ALIGN_LEFT, ECAM_MAGENTA)
+    
+    -- OM/MM/IM
+
+    if get(Marker_OM_lit) == 1 then
+        sasl.gl.drawText(Font_AirbusDUL, 600, 150, "OM", 38, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+    end
+    if get(Marker_MM_lit) == 1 then
+        sasl.gl.drawText(Font_AirbusDUL, 600, 150, "MM", 38, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
+    end
+    if get(Marker_IM_lit) == 1 then
+        sasl.gl.drawText(Font_AirbusDUL, 600, 150, "IM", 38, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    end
 end
 
 function PFD_draw_LS(PFD_table)
