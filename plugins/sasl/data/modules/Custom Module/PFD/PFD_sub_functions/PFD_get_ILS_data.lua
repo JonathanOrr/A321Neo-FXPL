@@ -1,22 +1,28 @@
 include('libs/geo-helpers.lua')
+include('DRAIMS/radio_logic.lua')
 
 function Get_ILS_data(PFD_table)
-    local update_per_sec = 5
+    local update_per_sec = 10
     PFD_table.NAVDATA_update_timer = PFD_table.NAVDATA_update_timer + get(DELTA_TIME)
 
-    --collect navaid id
-    PFD_table.ILS_data.Navaid_ID = sasl.findNavAid (nil, nil, get(Aircraft_lat), get(Aircraft_long), get(PFD_table.NAV_1_hz), NAV_ILS)
-    PFD_table.DME_data.Navaid_ID = sasl.findNavAid (nil, nil, get(Aircraft_lat), get(Aircraft_long), get(PFD_table.NAV_1_hz), NAV_DME)
-
     if PFD_table.NAVDATA_update_timer >= 1 / update_per_sec then
-        --update all ILS data
-        PFD_table.ILS_data.NavAidType, PFD_table.ILS_data.latitude, PFD_table.ILS_data.longitude, PFD_table.ILS_data.height, PFD_table.ILS_data.frequency, PFD_table.ILS_data.heading, PFD_table.ILS_data.id, PFD_table.ILS_data.name, PFD_table.ILS_data.isInsideLoadedDSFs = sasl.getNavAidInfo(PFD_table.ILS_data.Navaid_ID)
-        PFD_table.DME_data.NavAidType, PFD_table.DME_data.latitude, PFD_table.DME_data.longitude, PFD_table.DME_data.height, PFD_table.DME_data.frequency, PFD_table.DME_data.heading, PFD_table.DME_data.id, PFD_table.DME_data.name, PFD_table.DME_data.isInsideLoadedDSFs = sasl.getNavAidInfo(PFD_table.DME_data.Navaid_ID)
+        local is_ils_valid = radio_ils_is_valid()
+        PFD_table.ILS_data.is_valid = is_ils_valid
+        if is_ils_valid then
+            PFD_table.ILS_data.frequency = radio_ils_get_freq()
+            PFD_table.ILS_data.course    = radio_ils_get_crs()
+            PFD_table.ILS_data.id        = DRAIMS_common.radio.ils.id
+            PFD_table.ILS_data.gs_is_valid = radio_ils_is_valid() and radio_gs_is_valid()
+            PFD_table.ILS_data.loc_is_valid= radio_ils_is_valid() and radio_loc_is_valid()
 
-        --update DME distance
-        if PFD_table.DME_data.latitude ~= nil and PFD_table.DME_data.longitude ~= nil then
-            PFD_table.Distance_to_dme = GC_distance_kt(get(Aircraft_lat), get(Aircraft_long), PFD_table.DME_data.latitude, PFD_table.DME_data.longitude)
+            PFD_table.ILS_data.gs_deviation = -radio_get_ils_deviation_v()
+            PFD_table.ILS_data.loc_deviation= radio_get_ils_deviation_h()
         end
-        PFD_table.NAVDATA_update_timer = 0
+        local is_dme_valid = radio_ils_is_dme_valid()
+        PFD_table.DME_data.is_valid = is_dme_valid
+        if is_dme_valid then
+            PFD_table.DME_data.value = radio_ils_get_dme_value()
+        end
     end
+
 end

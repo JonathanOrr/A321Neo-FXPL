@@ -59,3 +59,11 @@ PFD_att_hdg_tape = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures
 PFD_att_bird = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/PFD/Bird.png")
 PFD_gs_scale = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/PFD/LSV.png")
 PFD_loc_scale = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/PFD/LSH.png")
+
+PFD_H_diamond = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/PFD/Diamond.png")
+PFD_H_diamond_L = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/PFD/Diamond Left.png")
+PFD_H_diamond_R = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/PFD/Diamond Right.png")
+
+PFD_V_diamond = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/PFD/VDiamond.png")
+PFD_V_diamond_U = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/PFD/Diamond Up.png")
+PFD_V_diamond_D = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/PFD/Diamond Down.png")

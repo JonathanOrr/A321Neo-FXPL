@@ -222,7 +222,7 @@ end
 
 function radio_get_ils_deviation_h()
     if DRAIMS_common.radio.ils and DRAIMS_common.radio.ils.loc then
-        local deviation = DRAIMS_common.radio.ils.loc.deviation
+        local deviation = DRAIMS_common.radio.ils.loc.deviation or 0
         if deviation > 90 then
             return -(deviation - 180)
         else
@@ -235,7 +235,7 @@ end
 
 function radio_get_ils_deviation_v()
     if DRAIMS_common.radio.ils and DRAIMS_common.radio.ils.gs then
-        return DRAIMS_common.radio.ils.gs.deviation
+        return DRAIMS_common.radio.ils.gs.deviation or 0
     else
         return 0
     end
@@ -254,7 +254,7 @@ function radio_ils_is_dme_valid()
     end
 end
 
-function radio_vor_get_dme_value(which_one)
+function radio_ils_get_dme_value()
     if DRAIMS_common.radio.ils then
         return get(NAV_1_dme_value)
     else

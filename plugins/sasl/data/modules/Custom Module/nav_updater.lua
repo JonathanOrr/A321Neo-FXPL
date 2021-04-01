@@ -23,7 +23,7 @@ include('libs/geo-helpers.lua')
 -------------------------------------------------------------------------------
 -- Constants
 -------------------------------------------------------------------------------
-local UPDATE_INTERVAL = 0.15
+local UPDATE_INTERVAL = 0.05
 local UPDATE_INTERVAL_ILS = 0.05
 
 local GS_LATERAL_RANGE = 6 -- 6 on the right, 6 on the left
@@ -45,6 +45,8 @@ local last_update_ils = 0
 DRAIMS_common.radio = {}
 DRAIMS_common.radio.vor = {nil, nil}
 DRAIMS_common.radio.adf = {nil, nil}
+
+radio_ils_set_freq(109.5)
 
 -------------------------------------------------------------------------------
 -- Helpers
@@ -83,7 +85,7 @@ local function update_vor_nearest(i)
         if #out > 0 then
             local nearest, dist_out = get_nearest_navaid(out)
             DRAIMS_common.radio.vor[i] = nearest
-            DRAIMS_common.radio.vor[i].curr_distance = dist_out
+            DRAIMS_common.radio.vor[i].curr_distance = dist_out -- TODO Fix slant range
             DRAIMS_common.radio.vor[i].curr_bearing = (90 - navaid_get_bearing(nearest)) % 360
         end
     end
