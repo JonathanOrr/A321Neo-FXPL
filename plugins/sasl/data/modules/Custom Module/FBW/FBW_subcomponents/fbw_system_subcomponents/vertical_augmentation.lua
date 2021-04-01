@@ -250,6 +250,10 @@ local input_limitations = {
         --demand Q to reach Alpha--
         local V_demand_Q = Math_rescale(0, 0, 30, -4, var_table.AoA_V_SP - var_table.Filtered_ias)
         local alpha_demand_Q = FBW_PID_BP(pid_array, var_table.AoA_SP - var_table.Filtered_AoA, var_table.Filtered_AoA) + V_demand_Q
+        --summing V demand into the desire for correct BP
+        if get(DELTA_TIME) ~= 0 then
+            pid_array.Desired_output = pid_array.Desired_output + V_demand_Q
+        end
         alpha_demand_Q = Math_clamp(alpha_demand_Q, -4, 4)
 
         --blend ratio between the inputed Q and the alpha demand Q--
@@ -285,6 +289,10 @@ local input_limitations = {
         --demand Q to reach Alpha--
         local V_demand_Q = Math_rescale(0, 0, 30, -4, var_table.AoA_V_SP - var_table.Filtered_ias)
         local alpha_demand_Q = FBW_PID_BP(pid_array, var_table.AoA_SP - var_table.Filtered_AoA, var_table.Filtered_AoA) + V_demand_Q
+        --summing V demand into the desire for correct BP
+        if get(DELTA_TIME) ~= 0 then
+            pid_array.Desired_output = pid_array.Desired_output + V_demand_Q
+        end
         alpha_demand_Q = Math_clamp(alpha_demand_Q, -4, 4)
 
         return alpha_demand_Q
