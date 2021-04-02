@@ -149,7 +149,7 @@ function Ground_spoilers_output(var_table)
             set(Ground_spoilers_act_method, 0)
         end
     elseif get(Ground_spoilers_act_method) == 1 then
-        if BoolToNum(get(Cockpit_throttle_lever_L) >= THR_IDLE_START and get(Cockpit_throttle_lever_L) <= THR_IDLE_END and get(Cockpit_throttle_lever_R) >= THR_IDLE_START and get(Cockpit_throttle_lever_R) <= THR_IDLE_END) then
+        if get(Cockpit_throttle_lever_L) >= THR_IDLE_START and get(Cockpit_throttle_lever_L) <= THR_IDLE_END and get(Cockpit_throttle_lever_R) >= THR_IDLE_START and get(Cockpit_throttle_lever_R) <= THR_IDLE_END then
             set(Ground_spoilers_mode, 0)
             set(Ground_spoilers_act_method, 0)
         end
