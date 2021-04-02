@@ -24,6 +24,18 @@ local config = {
 
 FMGS_sys.config = config
 
+FMGS_sys.fpln = {
+    active = {
+        {ptr_type = FMGS_PTR_APT, id="LIML", lat=45.454124, lon=9.272948},
+        {ptr_type = FMGS_PTR_WPT, id="TREVI", lat=45.603333, lon=9.693333},
+        {ptr_type = FMGS_PTR_NAVAID, navaid=NAV_ID_NDB, id="TZO", lat=45.558334, lon=9.509444},
+        {ptr_type = FMGS_PTR_WPT, id="RODRU", lat=45.670834, lon=9.393333},
+        {ptr_type = FMGS_PTR_COORDS, lat=45.53575658841703, lon=9.259678021183182},
+        {ptr_type = FMGS_PTR_NAVAID, navaid=NAV_ID_VOR, id="SRN", lat=45.645962, lon=9.021610, has_dme = true},
+    }
+
+}
+
 local function update_status()
     -- NOTE: As far as I know, INDEPENDENT MODE is activated only when databases of FMCUs is different
     --       This has no sense in our aircraft, so this mode doesn't exist.

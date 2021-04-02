@@ -23,6 +23,7 @@ local DEBUG_terrain_center = false
 include("ND/subcomponents/helpers.lua")
 include("ND/subcomponents/graphics_oans.lua")
 include('ND/subcomponents/terrain.lua')
+include('ND/subcomponents/helpers_fmgs.lua')
 include('libs/geo-helpers.lua')
 
 local image_mask_rose = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/mask-rose.png")
@@ -225,6 +226,7 @@ local function draw_poi_array(data, poi, texture, color)
 
 
     if poi.x > 0 and poi.x < size[1] and poi.y > 0 and poi.y < size[2] then
+    
         sasl.gl.drawTexture(texture, poi.x-16, poi.y-16, 32,32, color)
         sasl.gl.drawText(Font_AirbusDUL, poi.x+20, poi.y-20, poi.id, 32, false, false, TEXT_ALIGN_LEFT, color)
     end
@@ -312,6 +314,7 @@ local function draw_wpts(data)
     for i=1,nr_wpts do
         local wpt = data.poi.wpt[i]
         if nr_wpts <= MAX_LIMIT_WPT or i % math.ceil(nr_wpts/MAX_LIMIT_WPT) == 0 or data.config.range < ND_RANGE_160 then
+
             local modified, poi = draw_poi_array(data, wpt, image_point_wpt, ECAM_MAGENTA)
             if modified then
                 data.poi.wpt[i] = poi
@@ -424,6 +427,44 @@ local function draw_terrain(data)
     sasl.gl.drawRectangle(0, 450, 900, 450, {10/255, 15/255, 25/255 , 1-data.terrain.brightness})
 end
 
+local function draw_active_fpln(data)
+
+    local fpln_active = FMGS_sys.fpln.active
+
+    local route = {}
+
+    -- For each point in the FPLN...
+    for k,x in ipairs(fpln_active) do
+
+        local c_x,c_y = rose_get_x_y_heading(data, x.lat, x.lon, data.inputs.heading)
+        table.insert(route, c_x)
+        table.insert(route, c_y)
+        x.x = c_x
+        x.y = c_y
+
+        local color = k == 1 and ECAM_WHITE or ECAM_GREEN
+
+        if x.ptr_type == FMGS_PTR_WPT then
+            draw_poi_array(data, x, image_point_wpt, color)
+        elseif x.ptr_type == FMGS_PTR_NAVAID then
+            if x.navaid == NAV_ID_NDB then
+                draw_poi_array(data, x, image_point_ndb, color)
+            elseif x.navaid == NAV_ID_VOR then
+                draw_poi_array(data, x, x.has_dme and image_point_vor_dme or image_point_vor_only, color)
+            end
+        elseif x.ptr_type == FMGS_PTR_APT then
+            draw_poi_array(data, x, image_point_apt, color)
+        elseif x.ptr_type == FMGS_PTR_COORDS then
+        
+        end
+
+    end
+    
+    if #route > 1 then
+        sasl.gl.drawWidePolyLine(route, 2, ECAM_GREEN)
+    end
+end
+
 local function draw_pois(data)
 
     if data.config.range <= ND_RANGE_ZOOM_2 then
@@ -436,6 +477,8 @@ local function draw_pois(data)
     draw_dmes(data)
     draw_ndbs(data)
     draw_wpts(data)
+
+    draw_active_fpln(data)
 
     local need_to_update_poi = (get(TIME) - poi_position_last_update) > POI_UPDATE_RATE
     if need_to_update_poi then
