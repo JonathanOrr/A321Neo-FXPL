@@ -12,8 +12,8 @@
 --    Please check the LICENSE file in the root of the repository for further
 --    details or check <https://www.gnu.org/licenses/>
 -------------------------------------------------------------------------------
--- File: main.lua 
--- Short description: The main file for the project 
+-- File: main.lua
+-- Short description: The main file for the project
 -------------------------------------------------------------------------------
 
 include("cockpit_commands.lua")
@@ -64,6 +64,7 @@ components = {
   engines {},
   cabin_screens {},
   ADIRS {},
+  FMGS {},
   MCDU {},
   packs {},
   aircond {},

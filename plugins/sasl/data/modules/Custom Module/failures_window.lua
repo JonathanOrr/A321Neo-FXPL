@@ -106,10 +106,12 @@ local failures_data = {
         }
     },
     {
-        group="AUTOPILOT",
+        group="AUTOFLT",
         failures={
             {name="AP 1\nFAIL", status=false, dataref=FAILURE_AP, nr=1 },
             {name="AP 2\nFAIL", status=false, dataref=FAILURE_AP, nr=2 },
+            {name="FMGC 1\nFAIL", status=false, dataref=FAILURE_FMGC_1 },
+            {name="FMGC 2\nFAIL", status=false, dataref=FAILURE_FMGC_2 }
         }
     },
     {
