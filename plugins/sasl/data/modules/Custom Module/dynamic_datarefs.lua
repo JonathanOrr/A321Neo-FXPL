@@ -793,7 +793,7 @@ DRAIMS_vhf3_stby_freq_khz = createGlobalPropertyi("a321neo/dynamics/draims/legac
 
 DRAIMS_nav_stby_mode  = createGlobalPropertyi("a321neo/dynamics/draims/nav_stby_mode", 1, false, true, false) -- 0 OFF, 1 ON
 DRAIMS_nav_voice_mode = createGlobalPropertyi("a321neo/dynamics/draims/nav_voice_mode", 0, false, true, false) -- 0 OFF, 1 ON
-DRAIMS_nav_audio_sel  = createGlobalPropertyi("a321neo/dynamics/draims/nav_audio_sel", 0, false, true, false) -- 0 LS, 1 MKR, 2 VOR1, 3 VOR2, 4 ADF1, 5 ADF2
+DRAIMS_nav_audio_sel  = createGlobalPropertyi("a321neo/dynamics/draims/nav_audio_sel", 1, false, true, false) -- 0 LS, 1 MKR, 2 VOR1, 3 VOR2, 4 ADF1, 5 ADF2
 
 DRAIMS_vor_freq = {}
 DRAIMS_vor_stby_freq = {}

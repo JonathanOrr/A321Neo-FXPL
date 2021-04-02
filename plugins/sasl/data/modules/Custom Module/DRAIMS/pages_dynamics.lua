@@ -444,7 +444,9 @@ end
 
 local function draw_page_nav_dynamic(data)
     draw_page_nav_dynamic_stby_nav()
-    draw_page_nav_dynamic_voice()
+    if get(DRAIMS_nav_audio_sel) == 2 or get(DRAIMS_nav_audio_sel) == 3 then
+        draw_page_nav_dynamic_voice()
+    end
     draw_page_nav_dynamic_audio_nav()
 end
 

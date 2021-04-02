@@ -204,8 +204,9 @@ local function draw_page_nav(data)
 
 
     sasl.gl.drawText(Font_Roboto, size[1]-20,size[2]-335, "AUDIO NAV", 25, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
-    sasl.gl.drawText(Font_Roboto, 20,size[2]-335, "VOICE", 25, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
-
+    if get(DRAIMS_nav_audio_sel) == 2 or get(DRAIMS_nav_audio_sel) == 3 then
+        sasl.gl.drawText(Font_Roboto, 20,size[2]-335, "VOICE", 25, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    end
 end
 
 local function draw_page_nav_vor(data)
