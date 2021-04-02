@@ -39,6 +39,10 @@ local function draw_buttons()
     else
         SASL_drawSegmentedImg_xcenter_aligned (EFB_LOAD_compute_button, 800,215,544,32,2,2)
     end
+
+    drawTextCentered( Font_Airbus_panel , 343 , 230, "REFRESH"    , 22 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
+    drawTextCentered( Font_Airbus_panel , 800 , 230, "FORWARD TO MCDU"    , 22 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
+
 end
 
 local function draw_column_1_values()
@@ -56,6 +60,12 @@ local function draw_column_2_values()
     drawTextCentered( Font_Airbus_panel , 549 , 331, displayed_flex , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
 end
 
+local function refresh_data_reminder()
+    if New_takeoff_data_available then
+        drawTextCentered( Font_Airbus_panel , 370 , 108, "NEW PERFORMANCE DATA AVAILABLE, PLEASE REFRESH"  , 22 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_RED )
+    end
+end
+
 local function refresh_data()
     displayed_zfw = zfw_actual
     displayed_zfwcg = Round(final_cg,0)
@@ -66,6 +76,8 @@ local function refresh_data()
     displayed_flaps = flaps_table[get(LOAD_flapssetting)]
     displayed_trim = Round(Table_extrapolate(pitch_trim_table, final_cg),0)
     displayed_flex = flex_temp
+
+    New_takeoff_data_available = false
 end
 
 --MOUSE & BUTTONS--
@@ -96,5 +108,7 @@ function p3s2_draw()
     draw_buttons()
     draw_column_1_values()
     draw_column_2_values()
+    refresh_data_reminder()
 end
 
+--DO AT THE BEGINNING

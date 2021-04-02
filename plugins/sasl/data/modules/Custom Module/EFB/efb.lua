@@ -32,7 +32,7 @@ EFB_CURSOR_on_screen = false
 
 EFB_OFF = false
 
-AVITAB_INSTALLED = false
+New_takeoff_data_available = false
 
 ---CHARGING
 local CHARGE_START_TIME = 0
@@ -60,14 +60,6 @@ local charge_fade_table = {
     {CHARGE_SCREEN_TIME-0.3, 1},
     {CHARGE_SCREEN_TIME, 0},
   }
-
-if findPluginBySignature("org.solhost.folko.avitab") ~= NO_PLUGIN_ID then
-    Avitab_Enabled = globalProperty("avitab/panel_enabled")
-    AVITAB_INSTALLED = true
-    set(Avitab_Enabled, 0)
-else
-    AVITAB_INSTALLED = false
-end
 
 function onKeyDown(component, char, key, shiftDown, ctrlDown, altOptDown)
     if EFB_PAGE == 3 and efb_subpage_number == 1 then

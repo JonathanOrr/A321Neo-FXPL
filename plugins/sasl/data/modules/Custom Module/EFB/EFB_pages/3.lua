@@ -17,12 +17,13 @@ local taxi_fuel = 500
 local percent_cg_to_coordinates = {{-9999,471}, {14, 471}, {22, 676}, {30,882}, {38.2,1092}, {9999,1085}}
 local tow_to_coordinates = {{-9999,78}, {45,78}, {102.6,440}, {9999,440}}
 
+local NUMBER_OF_PAGES = 2
+
 ------------------------STUFF YOU CANNOT MESS WITH
 
 include("EFB/EFB_pages/3_subpage2.lua")
 include("EFB/efb_functions.lua")
 include("libs/table.save.lua")
-
 
 key_p3s1_focus = 0 --0 nothing, 1 oa, 2 ob, 3 oc, 4 cf, 5 ca, 6 fuel
 local key_p3s1_buffer = ""
@@ -406,6 +407,7 @@ end
         load_button_begin = get(TIME) --the button animation
         set_values()
         save_weights_to_file()
+        New_takeoff_data_available = true
         --print("hello")
     end)
 end
@@ -523,6 +525,11 @@ end
 
 local function mutual_draw_loop()
     SASL_draw_img_center_aligned (EFB_INFO_selector, 1026,33, 147, 32, EFB_WHITE) -- THIS IS THE SELECTOR, IT DRAWS ON ALL PAGES
+
+        sasl.gl.drawText ( Font_Airbus_panel , 880 , 24 , "Page "..efb_subpage_number.."/"..NUMBER_OF_PAGES.."", 20 , false , false , TEXT_ALIGN_CENTER , EFB_WHITE)
+
+    --print(EFB_CURSOR_X, EFB_CURSOR_Y)
+
 end
 
 --------------------------------------------------------------------------------------------------------------------------------
