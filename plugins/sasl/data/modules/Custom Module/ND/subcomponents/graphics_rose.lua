@@ -130,13 +130,15 @@ local function draw_fixed_symbols(data)
         return
     end
 
+    local plane_color = data.config.range > ND_RANGE_ZOOM_2 and COLOR_YELLOW or ECAM_MAGENTA
+
     -- Plane
-    sasl.gl.drawWideLine(410, 450, 490, 450, 4, data.config.range > ND_RANGE_ZOOM_2 and COLOR_YELLOW or ECAM_MAGENTA)
-    sasl.gl.drawWideLine(450, 400, 450, 475, 4, data.config.range > ND_RANGE_ZOOM_2 and COLOR_YELLOW or ECAM_MAGENTA)
-    sasl.gl.drawWideLine(435, 415, 465, 415, 4, data.config.range > ND_RANGE_ZOOM_2 and COLOR_YELLOW or ECAM_MAGENTA)
+    sasl.gl.drawWideLine(410, 450, 490, 450, 4, plane_color)
+    sasl.gl.drawWideLine(450, 400, 450, 475, 4, plane_color)
+    sasl.gl.drawWideLine(435, 415, 465, 415, 4, plane_color)
 
     -- Top heading indicator (yellow)
-    sasl.gl.drawWideLine(450, 720, 450, 770, 5, data.config.range > ND_RANGE_ZOOM_2 and COLOR_YELLOW or ECAM_MAGENTA)
+    sasl.gl.drawWideLine(450, 720, 450, 770, 5, plane_color)
 
     sasl.gl.drawTexture(image_bkg_ring_arrows, (size[1]-750)/2,(size[2]-750)/2,750,750, {1,1,1})
     sasl.gl.drawTexture(image_bkg_ring_middle, (size[1]-750)/2,(size[2]-750)/2,750,750, {1,1,1})

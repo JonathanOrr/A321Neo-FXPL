@@ -129,14 +129,16 @@ local function draw_fixed_symbols(data)
     if not data.inputs.is_heading_valid then
         return
     end
+    
+    local plane_color = data.config.range > ND_RANGE_ZOOM_2 and COLOR_YELLOW or ECAM_MAGENTA
 
     -- Plane
-    sasl.gl.drawWideLine(410, 145, 490, 145, 4, COLOR_YELLOW)
-    sasl.gl.drawWideLine(450, 95, 450, 170, 4, COLOR_YELLOW)   -- H=75
-    sasl.gl.drawWideLine(435, 110, 465, 110, 4, COLOR_YELLOW)
+    sasl.gl.drawWideLine(410, 145, 490, 145, 4, plane_color)
+    sasl.gl.drawWideLine(450, 95, 450, 170, 4,  plane_color)   -- H=75
+    sasl.gl.drawWideLine(435, 110, 465, 110, 4, plane_color)
 
     -- Top heading indicator (yellow)
-    sasl.gl.drawWideLine(450, 690, 450, 740, 5, COLOR_YELLOW)
+    sasl.gl.drawWideLine(450, 690, 450, 740, 5, plane_color)
     
 end
 
@@ -187,18 +189,15 @@ end
 
 local function draw_ranges(data)
 
-    if data.config.range > 0 then
-        local second_ring = math.floor(2^(data.config.range-1) * 10 * 3 / 4)
-        local third_ring  = math.floor(2^(data.config.range-1) * 10 * 2 / 4)
+    local ext_range = get_range_in_nm(data)
+    local second_ring = ext_range * 3 / 4
+    local third_ring  = ext_range * 2 / 4
 
-        if data.config.range == 1 then
-            second_ring = "7.5"  -- This is the only one not integer
-        end
-        sasl.gl.drawText(Font_AirbusDUL, size[2]/2-240, 250, third_ring, 24, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
-        sasl.gl.drawText(Font_AirbusDUL, size[2]/2-370, 320, second_ring, 24, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
-        sasl.gl.drawText(Font_AirbusDUL, size[2]/2+240, 250, third_ring, 24, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
-        sasl.gl.drawText(Font_AirbusDUL, size[2]/2+370, 320, second_ring, 24, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
-    end
+
+    sasl.gl.drawText(Font_AirbusDUL, size[2]/2-240, 250, third_ring, 24, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+    sasl.gl.drawText(Font_AirbusDUL, size[2]/2-370, 320, second_ring, 24, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+    sasl.gl.drawText(Font_AirbusDUL, size[2]/2+240, 250, third_ring, 24, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
+    sasl.gl.drawText(Font_AirbusDUL, size[2]/2+370, 320, second_ring, 24, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
     
 end
 
