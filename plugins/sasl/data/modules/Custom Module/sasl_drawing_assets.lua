@@ -181,6 +181,11 @@ EFB_LOAD_compute_button =    sasl.gl.loadImage(moduleDirectory .. "/Custom Modul
 ------------LOAD_SUBPAGE2-------------
 
 EFB_LOAD_s2_bgd =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage 2/bgd.png")
+EFB_LOAD_s2_dropdown1 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage 2/dropdown1.png")
+EFB_LOAD_s2_dropdown2 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage 2/dropdown2.png")
+EFB_LOAD_s2_dropdown3 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage 2/dropdown3.png")
+
+
 
 -----------CONFIG------------
 
@@ -188,6 +193,7 @@ EFB_CONFIG_bgd =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/texture
 EFB_CONFIG_slider =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/CONFIG page/slider_ball.png")
 EFB_CONFIG_save =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/CONFIG page/save_button.png")
 EFB_CONFIG_hud =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/CONFIG page/hud.png")
+EFB_CONFIG_dropdown1 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/CONFIG page/dropdown1.png")
 
 
 -----------HOME------------
@@ -197,18 +203,18 @@ EFB_HOME_bgd =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/
 -----------INFO------------
 EFB_INFO_page = {} --I'll be the first once to add sth non-image related here, Yay!
 
-EFB_INFO_page[1] =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/1.png")
-EFB_INFO_page[2] =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/2.png")
-EFB_INFO_page[3] =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/3.png")
-EFB_INFO_page[4] =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/4.png")
-EFB_INFO_page[5] =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/5.png")
-EFB_INFO_page[6] =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/6.png")
-EFB_INFO_page[7] =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/7.png")
-EFB_INFO_page[8] =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/8.png")
-EFB_INFO_page[9] =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/9.png")
-EFB_INFO_page[10]=    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/10.png")
+EFB_INFO_page[1] =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/MANUAL page/1.png")
+EFB_INFO_page[2] =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/MANUAL page/2.png")
+EFB_INFO_page[3] =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/MANUAL page/3.png")
+EFB_INFO_page[4] =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/MANUAL page/4.png")
+EFB_INFO_page[5] =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/MANUAL page/5.png")
+EFB_INFO_page[6] =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/MANUAL page/6.png")
+EFB_INFO_page[7] =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/MANUAL page/7.png")
+EFB_INFO_page[8] =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/MANUAL page/8.png")
+EFB_INFO_page[9] =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/MANUAL page/9.png")
+EFB_INFO_page[10]=    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/MANUAL page/10.png")
 
-EFB_INFO_selector =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/INFO page/page_selector.png")
+EFB_INFO_selector =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/MANUAL page/page_selector.png")
 
 --temp textures for popup windows rendering--
 CAPT_PFD_popup_texture = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/popups/capt_pfd.png")

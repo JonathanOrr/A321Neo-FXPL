@@ -32,7 +32,7 @@ EFB_CURSOR_on_screen = false
 
 EFB_OFF = false
 
-New_takeoff_data_available = false
+New_takeoff_data_available = true
 
 ---CHARGING
 local CHARGE_START_TIME = 0
@@ -118,7 +118,7 @@ EFB.preferences = {
     ["tca"] = false,
     ["pausetd"] = false,
     ["copilot"] = false,
-    ["flarelaw"] = 0
+    ["nws"] = 0,
 }
 
 --load EFB preferences--
@@ -184,6 +184,8 @@ function update()
         p3s1_revert_to_previous_and_delete_buffer()
         p5s1_revert_to_previous_and_delete_buffer()
     end
+
+    EFB.preferences["nws"] = get(CONFIG_nws_axis)
 
     perf_measure_stop("EFB:update()")
 
