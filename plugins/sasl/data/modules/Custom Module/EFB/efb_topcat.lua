@@ -853,9 +853,14 @@ end
 
 function other_spd_calculation()
 
-    computed_v1 = computed_v2 - 5
-    computed_vr = computed_v2 - 4
-
+    if get(LOAD_runwaycond) == 0 then
+        computed_v1 = computed_v2 - 5
+        computed_vr = computed_v2 - 4
+    else
+        computed_v1 = computed_v2 - 13
+        computed_vr = computed_v2 - 4
+    end
+    
     set(TOPCAT_v1, computed_v1)
     set(TOPCAT_vr, computed_vr)
     set(TOPCAT_v2, computed_v2)

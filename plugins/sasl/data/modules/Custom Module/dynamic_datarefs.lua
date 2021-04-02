@@ -852,7 +852,7 @@ VOLUME_cabin = createGlobalPropertyf("a321neo/volume/cabin", 1, false, true, fal
 --LOAD VALUES
 LOAD_flapssetting = createGlobalPropertyi("a321neo/efb/load", 1, false, true, false) --1 is 1+F, 2 is 2, 3 is 3
 LOAD_runwaycond = createGlobalPropertyi("a321neo/efb/runwaycond", 0, false, true, false) --0 is dry 1 is wet
-LOAD_thrustto = createGlobalPropertyi("a321neo/efb/thrustto", 0, false, true, false) --0 is dry 1 is wet
+LOAD_thrustto = createGlobalPropertyi("a321neo/efb/thrustto", 0, false, true, false) --0 is toga 1 is flex
 
 --Sounds Datarefs for Fmod
 
