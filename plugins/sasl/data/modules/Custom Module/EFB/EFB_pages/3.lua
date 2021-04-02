@@ -28,8 +28,6 @@ include("libs/table.save.lua")
 key_p3s1_focus = 0 --0 nothing, 1 oa, 2 ob, 3 oc, 4 cf, 5 ca, 6 fuel
 local key_p3s1_buffer = ""
 
-
-
 local looper_1 = 10 -- so on startup, it is 10 then loops down to 0, sets the values before the user.
 
 local load_button_begin = 0

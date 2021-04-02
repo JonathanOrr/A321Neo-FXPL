@@ -4,6 +4,8 @@ local efb_down_button_begin = 0
 local efb_save_buttn_begin = 0
 --------------------------------------------------------------
 
+local dropdown_expanded = {false}
+
 
 include("libs/table.save.lua")
 include("EFB/efb_functions.lua")
@@ -12,15 +14,15 @@ include("EFB/efb_functions.lua")
 
 local function draw_throttle_value()
     if Round(get(Cockpit_throttle_lever_L),2) == 0 then
-        drawTextCentered( Font_Airbus_panel , 331 , 357, "L:0.00" , 17 ,false , false , TEXT_ALIGN_LEFT , EFB_WHITE )
+        drawTextCentered( Font_Airbus_panel , 331 , 367, "L:0.00" , 17 ,false , false , TEXT_ALIGN_LEFT , EFB_WHITE )
     else
-        drawTextCentered( Font_Airbus_panel , 331 , 357, Round(get(Cockpit_throttle_lever_L),2) == 1 and "L:1.00" or "L:"..Round(get(Cockpit_throttle_lever_L),2) , 17 ,false , false , TEXT_ALIGN_LEFT , EFB_WHITE )
+        drawTextCentered( Font_Airbus_panel , 331 , 367, Round(get(Cockpit_throttle_lever_L),2) == 1 and "L:1.00" or "L:"..Round(get(Cockpit_throttle_lever_L),2) , 17 ,false , false , TEXT_ALIGN_LEFT , EFB_WHITE )
     end
 
     if Round(get(Cockpit_throttle_lever_R),2) == 0 then
-        drawTextCentered( Font_Airbus_panel , 389 , 357, "R:0.00" , 17 ,false , false , TEXT_ALIGN_LEFT , EFB_WHITE )
+        drawTextCentered( Font_Airbus_panel , 389 , 367, "R:0.00" , 17 ,false , false , TEXT_ALIGN_LEFT , EFB_WHITE )
     else
-        drawTextCentered( Font_Airbus_panel , 389 , 357, Round(get(Cockpit_throttle_lever_L),2) == 1 and "R:1.00" or "R:"..Round(get(Cockpit_throttle_lever_L),2) , 17 ,false , false , TEXT_ALIGN_LEFT , EFB_WHITE )
+        drawTextCentered( Font_Airbus_panel , 389 , 367, Round(get(Cockpit_throttle_lever_L),2) == 1 and "R:1.00" or "R:"..Round(get(Cockpit_throttle_lever_L),2) , 17 ,false , false , TEXT_ALIGN_LEFT , EFB_WHITE )
     end
 end
 
@@ -61,10 +63,8 @@ end
 local function draw_toggle_switches()
     SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 364, 78, 18, 2, EFB.preferences["syncqnh"] and 2 or 1)
     SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 330, 78, 18, 2, EFB.preferences["rolltonws"] and 2 or 1)
-    SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 296, 78, 18, 2, EFB.preferences["tca"] and 2 or 1)
-    SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 262, 78, 18, 2, EFB.preferences["pausetd"] and 2 or 1)
-    SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 228, 78, 18, 2, EFB.preferences["copilot"] and 2 or 1)
-    SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 194, 78, 18, 2, EFB.preferences["flarelaw"] == 1 and 2 or 1)
+    SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 296, 78, 18, 2, EFB.preferences["pausetd"] and 2 or 1)
+    SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 262, 78, 18, 2, EFB.preferences["copilot"] and 2 or 1)
 end
 
 local function draw_volume_sliders()
@@ -74,6 +74,22 @@ local function draw_volume_sliders()
     sasl.gl.drawTexture ( EFB_CONFIG_slider, get(VOLUME_cabin)*333+680 , 439 , 22 , 22 , ECAM_WHITE )
 end
 
+local function draw_dropdowns()
+    if dropdown_expanded[1] then
+        sasl.gl.drawTexture (EFB_CONFIG_dropdown1 , 0 , 0 , 1143 , 800 , ECAM_WHITE )
+    end
+    if get(CONFIG_nws_axis) == 0 then
+        drawTextCentered( Font_Airbus_panel , 141 , 294, "ROLL"  , 19 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
+    elseif get(CONFIG_nws_axis) == 1 then
+        drawTextCentered( Font_Airbus_panel , 141 , 294, "YAW"  , 19 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
+    elseif get(CONFIG_nws_axis) == 2 then
+        drawTextCentered( Font_Airbus_panel , 141 , 294, "TILTER"  , 19 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
+    end
+end
+
+local function close_menu_1()
+    dropdown_expanded[1] = false
+end
 
 --MOUSE & BUTTONS--
 function EFB_execute_page_4_buttons()
@@ -138,26 +154,41 @@ function EFB_execute_page_4_buttons()
         --print("toggle_options_roll")
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 620,295,659,313, function ()
-        EFB.preferences["tca"] = not EFB.preferences["tca"]
+        EFB.preferences["pausetd"] = not EFB.preferences["pausetd"]
         --print("toggle_options_tca")
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 620,261,659,279, function ()
-        EFB.preferences["pausetd"] = not EFB.preferences["pausetd"]
+        EFB.preferences["copilot"] = not EFB.preferences["copilot"]
         --print("toggle_options_pausetd")
     end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 620,227,659,245, function ()
-        EFB.preferences["copilot"] = not EFB.preferences["copilot"]
-        --print("toggle_options_callout")
+
+    ----------------------------------------------OPEN DROPDOWNS
+
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 61,280,248,309, function ()
+        dropdown_expanded[1] = not dropdown_expanded[1]
     end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 620,193,659,211, function ()
-        set(FBW_mode_transition_version, 1 - get(FBW_mode_transition_version))
-        EFB.preferences["flarelaw"] = get(FBW_mode_transition_version)
-        --print("toggle_flarelaw_mode")
-    end)
+    if dropdown_expanded[1] then
+        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 61,252,248,280, function ()
+            set(CONFIG_nws_axis, 0)
+            close_menu_1()
+        end)   
+        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 61,228,248,252, function ()
+            set(CONFIG_nws_axis, 1)
+            close_menu_1()
+        end)   
+        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 61,200,248,228, function ()
+            set(CONFIG_nws_axis, 2)
+            close_menu_1()
+        end)   
+        click_anywhere_except_that_area( 61, 200, 220, 309, close_menu_1)
+    end
 end
+
+
 
 --UPDATE LOOPS--
 function EFB_update_page_4() -- update loop
+    --print(EFB_CURSOR_X, EFB_CURSOR_Y)
 end
 
 --DRAW LOOPS--
@@ -171,6 +202,7 @@ function EFB_draw_page_4()
     sasl.gl.drawTexture ( EFB_CONFIG_bgd, 0 , 0 , 1143 , 800 , ECAM_WHITE ) --place the bgd in the middle or it'll cover up the highlighter buttons.
     draw_toggle_switches()
     draw_volume_sliders()
+    draw_dropdowns()
 
     --print(get(Cockpit_throttle_lever_L))
 end
