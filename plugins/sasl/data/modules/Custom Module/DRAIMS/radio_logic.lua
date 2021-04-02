@@ -213,7 +213,7 @@ end
 
 function radio_get_ils_is_backcourse()
     if DRAIMS_common.radio.ils and DRAIMS_common.radio.ils.loc then
-        if DRAIMS_common.radio.ils.loc.deviation > 90 then
+        if math.abs(DRAIMS_common.radio.ils.loc.deviation) > 90 then
             return true
         end
     end
@@ -224,7 +224,9 @@ function radio_get_ils_deviation_h()
     if DRAIMS_common.radio.ils and DRAIMS_common.radio.ils.loc then
         local deviation = DRAIMS_common.radio.ils.loc.deviation or 0
         if deviation > 90 then
-            return -(deviation - 180)
+            return deviation-180
+        elseif deviation < -90 then
+            return -(deviation+180)
         else
             return deviation
         end
