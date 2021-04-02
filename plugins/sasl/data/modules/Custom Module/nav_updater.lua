@@ -46,7 +46,7 @@ DRAIMS_common.radio = {}
 DRAIMS_common.radio.vor = {nil, nil}
 DRAIMS_common.radio.adf = {nil, nil}
 
-radio_ils_set_freq(109.5)
+radio_ils_set_freq(109.9)
 
 -------------------------------------------------------------------------------
 -- Helpers
@@ -230,9 +230,10 @@ local function update_loc()
         angle = d < 18.52 and LOC_NEAR_RANGE or LOC_FAR_RANGE   -- FAA Version
     end
     
-    local deviation = (bearing - loc_bearing) % 360
+    local deviation_loc = bearing - loc_bearing
+    local deviation_bc  = bearing - (loc_bearing-180)
 
-    if math.abs(deviation) > angle and math.abs(deviation-180) > angle then
+    if math.abs(deviation_loc) > angle and math.abs(deviation_bc) > angle then
         DRAIMS_common.radio.ils.loc.reason = 3
         -- Not centered
         return
@@ -240,7 +241,7 @@ local function update_loc()
 
     DRAIMS_common.radio.ils.loc.reason = 0
     DRAIMS_common.radio.ils.loc.is_ok = true
-    DRAIMS_common.radio.ils.loc.deviation = deviation
+    DRAIMS_common.radio.ils.loc.deviation = deviation_loc
 end
 
 local function update_ils()
