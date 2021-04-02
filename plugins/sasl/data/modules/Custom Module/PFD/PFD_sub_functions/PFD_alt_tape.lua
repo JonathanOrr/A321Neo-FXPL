@@ -1,3 +1,34 @@
+-------------------------------------------------------------------------------
+-- A32NX Freeware Project
+-- Copyright (C) 2020
+-------------------------------------------------------------------------------
+-- LICENSE: GNU General Public License v3.0
+--
+--    This program is free software: you can redistribute it and/or modify
+--    it under the terms of the GNU General Public License as published by
+--    the Free Software Foundation, either version 3 of the License, or
+--    (at your option) any later version.
+--
+--    Please check the LICENSE file in the root of the repository for further
+--    details or check <https://www.gnu.org/licenses/>
+-------------------------------------------------------------------------------
+-- File: PFD_alt_tap.lua 
+-- Short description: Altitude tape on PFD
+-------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------
+-- Constants
+-------------------------------------------------------------------------------
+local MODE_QNH = 1
+local MODE_QFE = 2
+local MODE_STD = 3
+
+local UNIT_INHG = 1
+local UNIT_HPA  = 2
+
+-------------------------------------------------------------------------------
+-- Functions
+-------------------------------------------------------------------------------
 
 local function draw_alt_digits(PFD_table)
     local altitude = adirs_is_gps_alt_visible(PFD_table.Screen_ID) and adirs_get_gps_alt(PFD_table.Screen_ID) or adirs_get_alt(PFD_table.Screen_ID)
@@ -89,4 +120,43 @@ function PFD_draw_alt_tape(PFD_table)
             sasl.gl.drawText(Font_AirbusDUL, size[1]/2+395, size[2]/2-22, "GPS", 42, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
         end
     end
+end
+
+
+function PFD_draw_alt_ref(PFD_table)
+
+    -- All failed: no indication
+    if not adirs_is_alt_ok(PFD_table.Screen_ID) and not adirs_is_gps_alt_visible(PFD_table.Screen_ID) then
+        return
+    end
+
+    -- GPS Alt indication
+    if adirs_is_gps_alt_visible(PFD_table.Screen_ID) then
+        sasl.gl.drawText(Font_ECAMfont, 670, 120, "GPS ALT", 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+        return
+    end
+
+    local qnh_status = PFD_table.Screen_ID == PFD_CAPT and ADIRS_sys.qnh_capt or ADIRS_sys.qnh_fo
+
+    -- STD
+    if qnh_status.mode == MODE_STD then
+        sasl.gl.drawText(Font_ECAMfont, 750, 120, "STD", 36, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+        Sasl_DrawWideFrame(715, 117, 70, 35, 3, 1, {1., 1., 0.})
+        return
+    end
+
+    -- QNH/QFE
+
+    local text = "QNH"
+    if qnh_status.mode == MODE_QFE then
+        text = "QFE"
+    end
+    sasl.gl.drawText(Font_ECAMfont, 670, 120, text, 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    
+    local value = qnh_status.value * 100 -- e.g. 2992
+    if qnh_status.unit == UNIT_HPA then
+        value = value * 0.338639
+    end
+    sasl.gl.drawText(Font_ECAMfont, 795, 120, math.floor(value), 28, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+
 end
