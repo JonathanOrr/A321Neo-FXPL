@@ -3540,6 +3540,30 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_START_COND ABS_DELTA=a321neo/cockpit/AUTOFLT/FCU/altitude_1000_or_100 > 0
 END_SOUND_ATTACHMENT
 
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FCU/Selectors/1
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/cockpit/fcu/capt_qnh_right
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FCU/Selectors/1
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/cockpit/fcu/capt_qnh_left
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FCU/Selectors/1
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/cockpit/fcu/fo_qnh_right
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FCU/Selectors/1
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_DOWN a321neo/cockpit/fcu/fo_qnh_left
+END_SOUND_ATTACHMENT
+
 ###########################################################################################################TRAYTABLE
 
 BEGIN_SOUND_ATTACHMENT
@@ -3695,6 +3719,27 @@ BEGIN_SOUND_ATTACHMENT
   CUE_TRIGGER_COND sim/cockpit2/engine/actuators/fuel_pump_on[5] = 0
   CUE_TRIGGER_COND sim/cockpit2/engine/actuators/fuel_pump_on[6] = 0
   CUE_TRIGGER_COND sim/cockpit2/engine/actuators/fuel_pump_on[7] = 0
+END_SOUND_ATTACHMENT
+
+
+###########################################################################################################MARKERS
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Markers/OM
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_ALWAYS
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Markers/MM
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_ALWAYS
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Markers/IM
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_ALWAYS
 END_SOUND_ATTACHMENT
 
 

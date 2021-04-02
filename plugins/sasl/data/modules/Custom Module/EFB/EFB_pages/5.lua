@@ -12,6 +12,8 @@ local please_wait_cover_begin = 0
 
 local efb_subpage_number = 1
 
+local metar_buffer = "No METAR report requested."
+
 include("EFB/efb_functions.lua")
 include("libs/table.save.lua")
 include("networking/metar_request.lua")
@@ -23,7 +25,7 @@ function onContentsDownloaded ( inUrl , inString , inIsOk , inError )
         --logInfo ( " String downloaded ! " )
         --logInfo ( inUrl )
         --logInfo ( inString )
-        set(EFB_metar_string, inString)
+        metar_buffer = inString
     else
         set(EFB_metar_string, "Error: Could not obtain valid METAR report for the entered airport.")
     end
@@ -101,7 +103,6 @@ end
 
 --UPDATE LOOPS--
 function EFB_update_page_5()
-
 end
 
 --DRAW LOOPS--
@@ -124,7 +125,17 @@ function EFB_draw_page_5()
         SASL_drawSegmentedImg_xcenter_aligned (EFB_LOAD_compute_button, 572,350,544,32,2,2)
     end
     drawTextCentered( Font_Airbus_panel , 572 , 365, "REQUEST" , 19 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
-    drawTextCentered( Font_Airbus_panel , 172 , 235, get(EFB_metar_string) , 20 ,false , false , TEXT_ALIGN_LEFT , EFB_FULL_YELLOW )
+
+    if string.len(metar_buffer) <= 62 then
+        drawTextCentered( Font_ECAMfont  , 172 , 235, metar_buffer , 20 ,false , false , TEXT_ALIGN_LEFT , EFB_FULL_YELLOW )
+    elseif string.len(metar_buffer) > 62 and string.len(metar_buffer) <= 124 then
+        drawTextCentered( Font_ECAMfont  , 172 , 235, string.sub(metar_buffer,1,-(string.len(metar_buffer)-61) ) , 20 ,false , false , TEXT_ALIGN_LEFT , EFB_FULL_YELLOW )
+        drawTextCentered( Font_ECAMfont  , 172 , 205, string.sub(metar_buffer,63, string.len(metar_buffer)) , 20 ,false , false , TEXT_ALIGN_LEFT , EFB_FULL_YELLOW )
+    else 
+        drawTextCentered( Font_ECAMfont  , 172 , 235, string.sub(metar_buffer,1, (string.len(metar_buffer)-61-string.len(metar_buffer)%61) ) , 20 ,false , false , TEXT_ALIGN_LEFT , EFB_FULL_YELLOW )
+        drawTextCentered( Font_ECAMfont  , 172 , 205, string.sub(metar_buffer,62, (string.len(metar_buffer)-string.len(metar_buffer)%61)) , 20 ,false , false , TEXT_ALIGN_LEFT , EFB_FULL_YELLOW )
+        drawTextCentered( Font_ECAMfont  , 172 , 175, string.sub(metar_buffer,123, string.len(metar_buffer)) , 20 ,false , false , TEXT_ALIGN_LEFT , EFB_FULL_YELLOW )
+    end
 
     if get(TIME) - please_wait_cover_begin < metar_wait_time then
         sasl.gl.drawTexture (Metar_waiting , 0 , 0 , 1143 , 800 , EFB_WHITE )

@@ -83,7 +83,7 @@ local function draw_dropdowns()
     elseif get(CONFIG_nws_axis) == 1 then
         drawTextCentered( Font_Airbus_panel , 141 , 294, "YAW"  , 19 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
     elseif get(CONFIG_nws_axis) == 2 then
-        drawTextCentered( Font_Airbus_panel , 141 , 294, "TILTER"  , 19 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
+        drawTextCentered( Font_Airbus_panel , 141 , 294, "TILLER"  , 19 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
     end
 end
 

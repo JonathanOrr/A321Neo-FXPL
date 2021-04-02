@@ -128,6 +128,9 @@
 {c5026dad-5d9f-4216-8704-8c70dda24ccf} event:/GPWS/tlgear
 {3e6916a8-a12b-48c8-a1b3-6bb67fcfc52d} event:/GPWS/tlterr
 {a1ca98db-c1d8-4efd-812b-67caeb038088} event:/GPWS/windshear
+{1797518a-7ff2-454e-9ee2-7b42132805f6} event:/Markers/IM
+{172b8abb-b2ca-4ee0-b795-04ff6636e2dd} event:/Markers/MM
+{6b92f900-dda8-4220-9b85-5404c507c625} event:/Markers/OM
 {8624c408-c3bf-4286-949d-6bde20e3c138} event:/RA/10
 {f90a33bb-5bb2-4b81-9208-e419f99b9aab} event:/RA/100
 {e6174a5e-0e61-4a00-8404-d26a7706cabd} event:/RA/1000
