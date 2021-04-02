@@ -239,7 +239,7 @@ end
 position = {1020, 1666, 560, 530}
 size = {560, 530}
 
-include('FMGS.lua') -- Flight Management Guidance System implementation
+include('MCDU-FMGS.lua') -- Flight Management Guidance System implementation
 
 local NIL = 0 -- used for input return and checking
 
