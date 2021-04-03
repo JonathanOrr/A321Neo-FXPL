@@ -233,3 +233,8 @@ Metar_bgd =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EF
 Metar_highlighter =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/TOOLS page/METAR/subpage_2_highlighter.png")
 Metar_waiting =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/TOOLS page/METAR/subpage_2_waiting.png")
 
+--SIMBRIEF
+
+Simbrief_bgd =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/TOOLS page/SIMBRIEF/subpage_2_bgd.png")
+Simbrief_apply =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/TOOLS page/SIMBRIEF/apply_button.png")
+Simbrief_highlighter =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/TOOLS page/SIMBRIEF/subpage_2_highlighter.png")
