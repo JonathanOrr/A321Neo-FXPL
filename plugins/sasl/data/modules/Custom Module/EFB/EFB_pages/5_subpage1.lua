@@ -11,14 +11,14 @@ local metar_wait_time = 3
 
 --METAR REQUEST CALLBACK
 
-function onContentsDownloaded ( inUrl , inString , inIsOk , inError )
+local function onContentsDownloaded ( inUrl , inString , inIsOk , inError )
     if inIsOk and string.len(inString) > 0 then
         --logInfo ( " String downloaded ! " )
         --logInfo ( inUrl )
         --logInfo ( inString )
         metar_buffer = inString
     else
-        set(EFB_metar_string, "Error: Could not obtain valid METAR report for the entered airport.")
+        metar_buffer = "Error: Could not obtain valid METAR report for the entered airport."
     end
 end
 
@@ -53,7 +53,7 @@ local function p5s1_construct_the_buffer(char)
 end
 
 function EFB_onKeyDown_page5(component, char, key, shiftDown, ctrlDown, altOptDown)
-    if efb_subpage_number == 1 then
+    if efb_p5_subpage_number == 1 then
         if key_p5s1_focus == 0 then
             return false
         end

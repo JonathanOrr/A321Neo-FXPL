@@ -108,8 +108,6 @@ efb_subpage_number = 1
 
 -------------------EFB
 
-include("EFB/efb_functions.lua")
-
 local function performance_data()
 end
 
@@ -484,7 +482,9 @@ end
 
 
 -------DONT ASK ME WHY I PUT IT OUTSIDE, IT EXECUTES ON START
-load_weights_from_file()
+if table.load(moduleDirectory .. "/Custom Module/saved_configs/previous_load_target") ~= nil then
+    load_weights_from_file()
+end
 set_values()
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------SUBPAGE 2
