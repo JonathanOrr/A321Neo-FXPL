@@ -14,8 +14,7 @@ local qnh_status = {
         cmd_value_up = FCU_Fo_knob_qnh_up,
         cmd_knob_push = FCU_Fo_knob_qnh_push,
         cmd_knob_pull = FCU_Fo_knob_qnh_pull,
-        cmd_knob_left = FCU_Fo_knob_qnh_left,
-        cmd_knob_right = FCU_Fo_knob_qnh_right,
+        cmd_knob_toggle = FCU_Fo_knob_qnh_unit_toggle,
     }
 }
 

@@ -118,7 +118,7 @@ local cockpit_door_level_pos_time_open = 0
 ----------------------------------------------------------------------------------------------------
 function guard_click_handler(phase, object)
     if phase == SASL_COMMAND_BEGIN then
-        if object.depends_on ~= nil and get(object.depends_on) == 0 then
+        if object.depends_on == nil or get(object.depends_on) == 0 then
             set(object.state_dataref, 1 - get(object.state_dataref))
         end
     end

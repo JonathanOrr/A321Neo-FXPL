@@ -90,7 +90,7 @@ end
 
 function handler_unit_change(phase, data, direction)
     if phase == SASL_COMMAND_BEGIN then
-        data.unit = direction == -1 and UNIT_INHG or UNIT_HPA
+        data.unit = data.unit == UNIT_HPA and UNIT_INHG or UNIT_HPA
 
         if EFB.preferences["syncqnh"] then
             ADIRS_sys.qnh_capt.unit = data.unit
@@ -106,8 +106,7 @@ function setup_cmd_handlers(data)
     sasl.registerCommandHandler (data.dr.cmd_value_dn, 0, function(phase) handler_update_value(phase, data, -1) end )
     sasl.registerCommandHandler (data.dr.cmd_value_up, 0, function(phase) handler_update_value(phase, data, 1) end )
 
-    sasl.registerCommandHandler (data.dr.cmd_knob_left, 0, function(phase) handler_unit_change(phase, data, -1) end )
-    sasl.registerCommandHandler (data.dr.cmd_knob_right, 0, function(phase) handler_unit_change(phase, data, 1) end )
+    sasl.registerCommandHandler (data.dr.cmd_knob_toggle, 0, function(phase) handler_unit_change(phase, data) end )
 
 end
 
