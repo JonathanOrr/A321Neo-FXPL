@@ -66,7 +66,7 @@ cg_mac = 0
 --    press_alt = get(ACF_elevation)+30*(1013-qnh)
 --end
 
-local function constant_conversions()
+function constant_conversions()
     press_alt = get(ACF_elevation)*3.281
     qnh = get(Weather_curr_press_sea_level)*33.864
     return qnh

@@ -57,8 +57,8 @@ local function draw_buttons()
 end
 
 local function draw_qnh_oat()
-    drawTextCentered( Font_Airbus_panel , 909 , 518, constant_conversions() , 22 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
-    drawTextCentered( Font_Airbus_panel , 909 , 489, get(OTA) , 22 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
+    drawTextCentered( Font_Airbus_panel , 909 , 518, Round(constant_conversions() ,0) , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_FULL_GREEN )
+    drawTextCentered( Font_Airbus_panel , 909 , 491, Round(get(OTA),0) , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_FULL_GREEN  )
 end
 
 
@@ -270,7 +270,7 @@ end
 
 --UPDATE LOOPS--
 function p3s2_update()
-    print(EFB_CURSOR_X, EFB_CURSOR_Y)
+    --print(EFB_CURSOR_X, EFB_CURSOR_Y)
 end
 
 --DRAW LOOPS--
@@ -283,6 +283,7 @@ function p3s2_draw()
     refresh_data_reminder()
     draw_dropdowns()
     draw_dropdown_selected_items()
+    draw_qnh_oat()
 end
 
 --DO AT THE BEGINNING
