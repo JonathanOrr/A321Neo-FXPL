@@ -1,5 +1,5 @@
 
-NUMBER_OF_PAGES = 5
+local NUMBER_OF_PAGES = 5
 PAGE_NUM = 1
 
 local acf_directory = 0

@@ -15,3 +15,6 @@ The sound package (everything under `fmod/`) is released with [CC BY-NC-SA 4.0](
 
 ## Font
 The font (plugins\sasl\data\modules\Custom Module\fonts\ECAMFontRegular.ttf) is released with [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/). It contains contributions from [A32NX MSFS Project](https://github.com/flybywiresim/a32nx), which are released under the same license.
+
+## JSON Parser
+The JSON parser script (plugins\sasl\data\modules\Custom Module\networking) is released under MIT. It contains scripts from (https://github.com/rxi/json.lua).
