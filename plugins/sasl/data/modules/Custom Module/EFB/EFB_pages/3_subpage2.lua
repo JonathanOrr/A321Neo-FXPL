@@ -16,10 +16,12 @@ local displayed_trim = 0
 local displayed_flex = 0
 local displayed_wind = 0
 local displayed_tow = 0
+local displayed_flex_corr = 0
+local displayed_mtow_corr = 0
 
-local dropdown_expanded = {false, false, false}
-local dropdown_names = {EFB_LOAD_s2_dropdown1, EFB_LOAD_s2_dropdown2, EFB_LOAD_s2_dropdown3}
-local dropdown_current = {"1+F", "TOGA", "DRY"}
+local dropdown_expanded = {false, false, false, false, false, false}
+local dropdown_names = {EFB_LOAD_s2_dropdown1, EFB_LOAD_s2_dropdown2, EFB_LOAD_s2_dropdown3, EFB_LOAD_s2_dropdown4, EFB_LOAD_s2_dropdown5, EFB_LOAD_s2_dropdown6}
+local dropdown_current = {"1+F", "TOGA", "DRY", "ON", "OFF", "OFF"}
 
 include("EFB/efb_topcat.lua")
 
@@ -39,44 +41,53 @@ end
 
 local function draw_buttons()
     if get(TIME) -  refresh_button_begin > BUTTON_PRESS_TIME then
-        SASL_drawSegmentedImg_xcenter_aligned (EFB_LOAD_compute_button, 343,215,544,32,2,1)
+        SASL_drawSegmentedImg_xcenter_aligned (EFB_LOAD_compute_button, 343,115,544,32,2,1)
     else
-        SASL_drawSegmentedImg_xcenter_aligned (EFB_LOAD_compute_button, 343,215,544,32,2,2)
+        SASL_drawSegmentedImg_xcenter_aligned (EFB_LOAD_compute_button, 343,115,544,32,2,2)
     end
     if get(TIME) -  send_data_button_begin > BUTTON_PRESS_TIME then
-        SASL_drawSegmentedImg_xcenter_aligned (EFB_LOAD_compute_button, 800,215,544,32,2,1)
+        SASL_drawSegmentedImg_xcenter_aligned (EFB_LOAD_compute_button, 800,115,544,32,2,1)
     else
-        SASL_drawSegmentedImg_xcenter_aligned (EFB_LOAD_compute_button, 800,215,544,32,2,2)
+        SASL_drawSegmentedImg_xcenter_aligned (EFB_LOAD_compute_button, 800,115,544,32,2,2)
     end
 
-    drawTextCentered( Font_Airbus_panel , 343 , 230, "REFRESH"    , 22 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
-    drawTextCentered( Font_Airbus_panel , 800 , 230, "FORWARD TO MCDU"    , 22 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
+    drawTextCentered( Font_Airbus_panel , 343 , 130, "REFRESH"    , 22 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
+    drawTextCentered( Font_Airbus_panel , 800 , 130, "FORWARD TO MCDU"    , 22 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
 
 end
 
+local function draw_qnh_oat()
+    drawTextCentered( Font_Airbus_panel , 909 , 518, constant_conversions() , 22 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
+    drawTextCentered( Font_Airbus_panel , 909 , 489, get(OTA) , 22 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
+end
+
+
+
 local function draw_column_1_values()
-    drawTextCentered( Font_Airbus_panel , 225 , 461, displayed_zfw      , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
-    drawTextCentered( Font_Airbus_panel , 225 , 435, displayed_zfwcg    , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
-    drawTextCentered( Font_Airbus_panel , 225 , 409, displayed_block_fuel     , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
+    drawTextCentered( Font_Airbus_panel , 225 , 361, displayed_zfw      , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
+    drawTextCentered( Font_Airbus_panel , 225 , 335, displayed_zfwcg    , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
+    drawTextCentered( Font_Airbus_panel , 225 , 309, displayed_block_fuel     , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
 end
 
 local function draw_column_2_values()
-    drawTextCentered( Font_Airbus_panel , 549 , 461, displayed_v1    , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
-    drawTextCentered( Font_Airbus_panel , 549 , 435, displayed_vr    , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
-    drawTextCentered( Font_Airbus_panel , 549 , 409, displayed_v2    , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
-    drawTextCentered( Font_Airbus_panel , 549 , 383, displayed_flaps , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
-    drawTextCentered( Font_Airbus_panel , 549 , 357, displayed_trim , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
-    drawTextCentered( Font_Airbus_panel , 549 , 331, displayed_flex , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
+    drawTextCentered( Font_Airbus_panel , 549 , 361, displayed_v1    , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
+    drawTextCentered( Font_Airbus_panel , 549 , 335, displayed_vr    , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
+    drawTextCentered( Font_Airbus_panel , 549 , 309, displayed_v2    , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
+    drawTextCentered( Font_Airbus_panel , 549 , 283, displayed_flaps , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
+    drawTextCentered( Font_Airbus_panel , 549 , 257, displayed_trim , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
+    drawTextCentered( Font_Airbus_panel , 549 , 231, displayed_flex , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
 end
 
 local function draw_column_3_values()
-    drawTextCentered( Font_Airbus_panel , 885 , 461, displayed_wind  , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
-    drawTextCentered( Font_Airbus_panel , 885 , 435, displayed_tow  , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
+    drawTextCentered( Font_Airbus_panel , 885 , 361, displayed_wind  , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
+    drawTextCentered( Font_Airbus_panel , 885 , 335, displayed_tow  , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
+    drawTextCentered( Font_Airbus_panel , 885 , 309, displayed_flex_corr, 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
+    drawTextCentered( Font_Airbus_panel , 885 , 283, displayed_mtow_corr, 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
 end
 
 local function refresh_data_reminder()
     if New_takeoff_data_available then
-        drawTextCentered( Font_Airbus_panel , 370 , 108, "NEW PERFORMANCE DATA AVAILABLE, PLEASE REFRESH"  , 22 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_RED )
+        drawTextCentered( Font_Airbus_panel , 370 , 45, "NEW PERFORMANCE DATA AVAILABLE, PLEASE REFRESH"  , 22 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_RED )
     end
 end
 
@@ -90,6 +101,8 @@ local function refresh_data()
     displayed_flaps = flaps_table[get(LOAD_flapssetting)]
     displayed_flex = get(LOAD_thrustto) == 0 and "NO FLEX" or flex_temp
     displayed_tow = takeoff_weight_actual
+    displayed_flex_corr = get(LOAD_thrustto) == 0 and "N/A" or get(LOAD_total_flex_correction) 
+    displayed_mtow_corr = Round(math.abs(get(LOAD_total_mtow_correction)), -2)
 
     trim_raw = Round(Table_extrapolate(pitch_trim_table, final_cg),1)
     if trim_raw > 0 then
@@ -113,6 +126,10 @@ local function draw_dropdown_selected_items()
     drawTextCentered( Font_Airbus_panel , 482 , 594, dropdown_current[1]  , 19 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
     drawTextCentered( Font_Airbus_panel , 727 , 594, dropdown_current[2]  , 19 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
     drawTextCentered( Font_Airbus_panel , 960 , 594, dropdown_current[3]  , 19 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
+    drawTextCentered( Font_Airbus_panel , 197 , 487, dropdown_current[4]  , 19 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
+    drawTextCentered( Font_Airbus_panel , 430 , 487, dropdown_current[5]  , 19 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
+    drawTextCentered( Font_Airbus_panel , 689 , 487, dropdown_current[6]  , 19 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
+
 end
 
 local function close_menu_1()
@@ -124,20 +141,26 @@ end
 local function close_menu_3()
     dropdown_expanded[3] = false
 end
+local function close_menu_4()
+    dropdown_expanded[4] = false
+end
+local function close_menu_5()
+    dropdown_expanded[5] = false
+end
+local function close_menu_6()
+    dropdown_expanded[6] = false
+end
 
 --MOUSE & BUTTONS--
 function p3s2_buttons()
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 206, 215, 480, 247,function () --refresh
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 206, 115, 480, 147,function () --refresh
         refresh_button_begin = get(TIME)
-        constant_conversions()
-        v2_calculation()
-        flex_calculation()
-        other_spd_calculation()
+        execute_takeoff_performance() --see bottom of topcat script
         fetch_wind_data()
         -----------------------------------put this at the bottom
         refresh_data()
     end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 663, 215, 936, 247,function () --SEND TO MCDU
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 663, 115, 936, 147,function () --SEND TO MCDU
         send_data_button_begin = get(TIME)
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 401, 580, 588, 609,function () --DROPDOWN 1 EXPAND
@@ -148,6 +171,15 @@ function p3s2_buttons()
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 877, 580, 1062, 609,function () --DROPDOWN 3 EXPAND
         dropdown_expanded[3] = not dropdown_expanded[3]
+    end)
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 114, 473, 302, 503,function () --DROPDOWN 3 EXPAND
+        dropdown_expanded[4] = not dropdown_expanded[4]
+    end)
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 348, 473, 495, 503,function () --DROPDOWN 3 EXPAND
+        dropdown_expanded[5] = not dropdown_expanded[5]
+    end)
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 609, 473, 794, 503,function () --DROPDOWN 3 EXPAND
+        dropdown_expanded[6] = not dropdown_expanded[6]
     end)
 
 
@@ -194,11 +226,51 @@ function p3s2_buttons()
             close_menu_3()
         end)
         click_anywhere_except_that_area( 877, 501, 1035, 608, close_menu_3)
+
+    elseif dropdown_expanded[4] then
+        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 114, 449, 272, 475,function () --DROPDOWN 3 EXPAND
+            dropdown_current[4] = "ON"
+            set(LOAD_aircon , 1)
+            close_menu_4()
+        end)
+        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 114, 423, 272, 449,function () --DROPDOWN 3 EXPAND
+            dropdown_current[4] = "OFF"
+            set(LOAD_aircon , 0)
+            close_menu_4()
+        end)
+        click_anywhere_except_that_area( 114, 423, 272, 501, close_menu_4)
+
+    elseif dropdown_expanded[5] then
+        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 349, 449, 506, 475,function () --DROPDOWN 3 EXPAND
+            dropdown_current[5] = "ON"
+            set(LOAD_eng_aice, 1)
+            close_menu_5()
+        end)
+        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 349, 423, 506, 449,function () --DROPDOWN 3 EXPAND
+            dropdown_current[5] = "OFF"
+            set(LOAD_eng_aice, 0)
+            close_menu_5()
+        end)
+        click_anywhere_except_that_area( 349, 423, 506, 501, close_menu_5)
+
+    elseif dropdown_expanded[6] then
+        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 609, 449, 766, 475,function () --DROPDOWN 3 EXPAND
+            dropdown_current[6] = "ON"
+            set(LOAD_all_aice, 1)
+            close_menu_6()
+        end)
+        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 609, 423, 766, 449,function () --DROPDOWN 3 EXPAND
+            dropdown_current[6] = "OFF"
+            set(LOAD_all_aice, 0)
+            close_menu_6()
+        end)
+        click_anywhere_except_that_area( 609, 423, 766, 501, close_menu_6)
     end
 end
 
 --UPDATE LOOPS--
 function p3s2_update()
+    print(EFB_CURSOR_X, EFB_CURSOR_Y)
 end
 
 --DRAW LOOPS--

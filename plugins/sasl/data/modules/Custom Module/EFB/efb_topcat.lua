@@ -38,7 +38,13 @@ v2_table = {
 flex_temp = 0
 flex_temp_computed = 0
 flex_temp_correction = 0
+flex_temp_aice_correction = 0
+flex_temp_aircon_correction = 0
 wet_correction = 0
+
+mtow_qnh_correction = 0
+mtow_aice_correction = 0
+mtow_aircon_correction = 0
 
 computed_v1 = 0
 computed_vr = 0
@@ -60,12 +66,13 @@ cg_mac = 0
 --    press_alt = get(ACF_elevation)+30*(1013-qnh)
 --end
 
-function constant_conversions()
+local function constant_conversions()
     press_alt = get(ACF_elevation)*3.281
     qnh = get(Weather_curr_press_sea_level)*33.864
+    return qnh
 end
 
-function flex_calculation()
+local function flex_calculation()
         flex_temp_computed = Round(-0.02434027806956361259*(get(ACF_elevation)*3.281/100)^3 + 0.36824311548836550021*(get(ACF_elevation)*3.281/100)^2 - 2.95963831628837229790*(get(ACF_elevation)*3.281/100) + 54.96994092387330948740, 0)
 
         if 1013-qnh < 0 then --if qnh > 1013
@@ -74,10 +81,52 @@ function flex_calculation()
             flex_temp_correction = Round((1013-qnh)/2,0)
         end
 
-        flex_temp = flex_temp_computed + flex_temp_correction
+        if get(LOAD_all_aice) == 1 then
+            flex_temp_aice_correction = -11
+        elseif get(LOAD_eng_aice) == 1 and get(LOAD_all_aice) == 0 then
+            flex_temp_aice_correction = -2
+        elseif get(LOAD_eng_aice) == 0 and get(LOAD_all_aice) == 0 then
+            flex_temp_aice_correction = 0      
+        else
+            flex_temp_aice_correction = 0      
+        end
+
+        if get(LOAD_aircon) == 1 then
+            flex_temp_aircon_correction = -3
+        else
+            flex_temp_aircon_correction = 0
+        end
+
+        flex_temp = flex_temp_computed + flex_temp_correction + flex_temp_aice_correction
+
+        set(LOAD_total_flex_correction, flex_temp_correction + flex_temp_aice_correction)
 end
 
-function v2_calculation()
+local function mtow_decrease_calculation()
+    if qnh > 1013 then --if qnh < 1013
+        mtow_qnh_correction = -Round((1013-qnh)*100,0)
+    end
+
+    if get(LOAD_all_aice) == 1 then
+        mtow_aice_correction = -4100
+    elseif get(LOAD_eng_aice) == 1 and get(LOAD_all_aice) == 0 then
+        mtow_aice_correction = -400
+    elseif get(LOAD_eng_aice) == 0 and get(LOAD_all_aice) == 0 then
+        mtow_aice_correction = 0      
+    else
+        mtow_aice_correction = 0    
+    end
+
+    if get(LOAD_aircon) == 1 then
+        mtow_aircon_correction = -3600
+    else
+        mtow_aircon_correction = 0
+    end
+
+    set(LOAD_total_mtow_correction, mtow_qnh_correction + mtow_aice_correction + mtow_aircon_correction)
+end
+
+local function v2_calculation()
     if get(LOAD_flapssetting) == 1 then
 
         v2_table[1][2] = Table_extrapolate({ -- -2000 ft
@@ -851,7 +900,7 @@ function v2_calculation()
     end
 end
 
-function other_spd_calculation()
+local function other_spd_calculation()
 
     if get(LOAD_runwaycond) == 0 then
         computed_v1 = computed_v2 - 5
@@ -865,8 +914,17 @@ function other_spd_calculation()
     set(TOPCAT_vr, computed_vr)
     set(TOPCAT_v2, computed_v2)
     set(TOPCAT_flex, flex_temp)
+
+    print(mtow_qnh_correction + mtow_aice_correction + mtow_aircon_correction)
 end
 
+function execute_takeoff_performance()
+    constant_conversions()
+    v2_calculation()
+    flex_calculation()
+    mtow_decrease_calculation()
+    other_spd_calculation()
+end
 
 function update()
     --print(qnh)

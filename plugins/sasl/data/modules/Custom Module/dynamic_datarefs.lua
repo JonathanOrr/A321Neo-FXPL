@@ -856,6 +856,11 @@ CONFIG_nws_axis = createGlobalPropertyi("a321neo/efb/config/nws_axis", 1, false,
 LOAD_flapssetting = createGlobalPropertyi("a321neo/efb/load", 1, false, true, false) --1 is 1+F, 2 is 2, 3 is 3
 LOAD_runwaycond = createGlobalPropertyi("a321neo/efb/runwaycond", 0, false, true, false) --0 is dry 1 is wet
 LOAD_thrustto = createGlobalPropertyi("a321neo/efb/thrustto", 0, false, true, false) --0 is toga 1 is flex
+LOAD_aircon = createGlobalPropertyi("a321neo/efb/aircon", 1, false, true, false) --1 is use 0 is not use
+LOAD_eng_aice = createGlobalPropertyi("a321neo/efb/eng_aice", 0, false, true, false) --1 is use 0 is not use
+LOAD_all_aice = createGlobalPropertyi("a321neo/efb/all_aice", 0, false, true, false) --1 is use 0 is not use
+LOAD_total_flex_correction = createGlobalPropertyi("a321neo/efb/total_flex_corr", 0, false, true, false) --1 is use 0 is not use
+LOAD_total_mtow_correction = createGlobalPropertyi("a321neo/efb/total_mtow_corr", 0, false, true, false) --1 is use 0 is not use
 
 --Sounds Datarefs for Fmod
 
@@ -870,4 +875,5 @@ TOPCAT_v2 = createGlobalPropertyi("a321neo/efb/topcat/v2", 0, false, true, false
 TOPCAT_flex = createGlobalPropertyi("a321neo/efb/topcat/flex", 0, false, true, false)
 TOPCAT_CG_MAC = createGlobalPropertyi("a321neo/efb/topcat/cgmac", 0, false, true, false)
 TOPCAT_trim = createGlobalPropertyf("a321neo/efb/topcat/trim", 0, false, true, false)
+
 
