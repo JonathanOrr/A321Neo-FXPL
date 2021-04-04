@@ -4,6 +4,7 @@ fbo = true
 ----------CONTROLLABLE STUFF---------
 local EFB_DELAYED_TRANSIT_FACTOR = 7 --THE SPEED OF THE UNDERLINE MOVING WHEN CHANGINE PAGE, THE LARGER THE FASTER
 local CHARGE_SCREEN_TIME = 5
+local TRANSITION_FADE_TIME = 0.7
 local EFB_UNDERLINE_THICKNESS = 2
 -------------------------------------
 
@@ -24,6 +25,7 @@ position = {2943, 1248, 1143, 800}
 size = {1143, 800}
 
 EFB_PAGE = 1
+EFB_FRAME_AGO_PAGE = 1 --USED FOR CALCULATING DELTA
 EFB_DELAYED_PAGE = 1 --FLOAD AND CONTROLLED BY NON-LINEAR CONTROLLER, FOLLOWS EFB PAGE, USED FOR UNDERLINE
 EFB_PREV_PAGE = 1
 EFB_CURSOR_X = 0
@@ -40,10 +42,15 @@ local CHARGE_TIME_LEFT = 0
 local Ac_ess_past_value = 0
 local Ac_ess_delta = 0
 local Charging_alpha_controller = {1,1,1,1}
+local Change_alpha_controller = {17/255, 24/255, 39/255,1}
 
 --UNDERLINE
 local EFB_UNDERLINE_POS = 1 --THE POSITION OF THE UNDERLINE
 local EFB_selector_transit_start = 0 --THE START TIME OF THE TRANSIT, FOR CONTROLLERS
+
+--CHANGE PAGE FADING
+local CHANGE_PAGE_FADING_START_TIME = 0
+local CHANGE_PAGE_FADING_TIME_LEFT = 0
 
 local line_width_table = {
     {1, 57},
@@ -61,6 +68,11 @@ local charge_fade_table = {
     {CHARGE_SCREEN_TIME, 0},
   }
 
+local change_page_fade_table = {
+    {0,1},
+    {TRANSITION_FADE_TIME,0},
+}
+
 function onKeyDown(component, char, key, shiftDown, ctrlDown, altOptDown)
     if EFB_PAGE == 3 and efb_subpage_number == 1 then
         return EFB_onKeyDown_page3_subpage_1(component, char, key, shiftDown, ctrlDown, altOptDown)
@@ -71,7 +83,18 @@ function onKeyDown(component, char, key, shiftDown, ctrlDown, altOptDown)
     end
 end
 
+function calculate_page_delta()
+    local delta = EFB_PAGE - EFB_FRAME_AGO_PAGE
+    EFB_FRAME_AGO_PAGE = EFB_PAGE
+    return delta
+end
 
+function draw_fading_transition()
+    Change_alpha_controller[4] = Table_interpolate(change_page_fade_table, CHANGE_PAGE_FADING_TIME_LEFT)
+    if EFB_PAGE ~= 10 then
+        sasl.gl.drawRectangle ( 0 , 0 , 1143, 710, Change_alpha_controller)
+    end
+end
 
 ---------------------------------------------------------------------------------------------------------------
 --load in the functions
@@ -185,12 +208,17 @@ function update()
     if not EFB_CURSOR_on_screen then
         p3s1_revert_to_previous_and_delete_buffer()
         p5s1_revert_to_previous_and_delete_buffer()
+        p5s2_revert_to_previous_and_delete_buffer()
     end
 
     EFB.preferences["nws"] = get(CONFIG_nws_axis)
 
-    perf_measure_stop("EFB:update()")
+    if calculate_page_delta() ~= 0 then
+        CHANGE_PAGE_FADING_START_TIME = get(TIME)
+    end
+    CHANGE_PAGE_FADING_TIME_LEFT = math.abs(CHANGE_PAGE_FADING_START_TIME - get(TIME))
 
+    perf_measure_stop("EFB:update()")
 end
 
 
@@ -214,6 +242,8 @@ function draw()  ------KEEP THE draw_cursor() AT THE BOTTOM YOU DUMBASS!!!!!
         sasl.gl.drawTexture (EFB_Charging, 0 , 0 , 1143 , 800 , Charging_alpha_controller )
     end
 
+    draw_fading_transition()
+
     if EFB_OFF == false then
         draw_cursor()
     end
@@ -222,7 +252,7 @@ function draw()  ------KEEP THE draw_cursor() AT THE BOTTOM YOU DUMBASS!!!!!
         sasl.gl.drawTexture (EFB_Charging_Overlay, 0 , 0 , 1143 , 800 , EFB_WHITE )
     end
 
+
+
     perf_measure_stop("EFB:draw()")
 end
-
-

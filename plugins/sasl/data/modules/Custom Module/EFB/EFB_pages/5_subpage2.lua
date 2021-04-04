@@ -10,8 +10,14 @@ local send_button_begin = 0
 local fxxk_the_tablesave = {}
 local save_delay = 0
 
+local characters_per_line = 35
+local drawing_table = {}
+fetch_fail_warning_1 = false
+simbrief_standby = false
+
 local displayed_info = {
     ["departure"] = "",
+    ["deprwy_length"] = "",
     ["arrival"] = "",
     ["flightno"] = "",
     ["acf"] = "",
@@ -21,6 +27,8 @@ local displayed_info = {
     ["ci"] = "",
     ["deprwy"] = "",
     ["arrrwy"] = "",
+    ["route"] = "",
+    ["alternate_route"] = "",
 }
 
 local function save_id_to_file()
@@ -33,10 +41,20 @@ local function load_id_from_file()
     userid = fxxk_the_tablesave[1]
 end
 
+local function load_route_table()
+    for i = 1, math.ceil(#displayed_info["route"] / characters_per_line) do --BEGIN ROUTE DRAWING LOGIC
+        table.insert(
+            drawing_table,
+            #drawing_table + 1,
+            string.sub(displayed_info["route"], (i - 1) * characters_per_line + 1, i * characters_per_line)
+        )
+    end
+end
+
 local function simbrief_to_local()
     displayed_info["departure"] = x["origin"]["icao_code"]
     displayed_info["arrival"] = x["destination"]["icao_code"]
-    displayed_info["flightno"] = x["general"]["flight_number"]
+    displayed_info["flightno"] = x["general"]["icao_airline"]..x["general"]["flight_number"]
     displayed_info["acf"] = x["aircraft"]["icaocode"]
     displayed_info["pax"] = x["weights"]["pax_count"]
     displayed_info["cargo"] = x["weights"]["cargo"]
@@ -44,16 +62,24 @@ local function simbrief_to_local()
     displayed_info["ci"] = x["general"]["costindex"]
     displayed_info["deprwy"] = x["origin"]["plan_rwy"]
     displayed_info["arrrwy"] = x["destination"]["plan_rwy"]
+    displayed_info["route"] = x["general"]["route"]
+    displayed_info["alternate_route"] = x["alternate"]["route"]
+
+    drawing_table = {}
+    load_route_table()
 end
+
+sasl.net.setDownloadTimeout(SASL_TIMEOUT_CONNECTION, 3 )
 
 local function onContentsDownloaded ( inUrl , inString , inIsOk , inError )
     if inIsOk then
-        logInfo ( " String downloaded ! " )
         x = json.decode(inString)
         simbrief_to_local()
+        fetch_fail_warning_1 = false
+        simbrief_standby = false
     else
-        logInfo ( inUrl )
-        logWarning ( inError )
+        fetch_fail_warning_1 = true
+        simbrief_standby = false
     end
 end
 
@@ -120,6 +146,7 @@ function p5s2_buttons()
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 116,326,258,357, function ()
         fetch_button_begin = get(TIME)
         sasl.net.downloadFileContentsAsync ( "https://www.simbrief.com/api/xml.fetcher.php?userid="..userid.."&json=1" ,onContentsDownloaded)
+        simbrief_standby = true
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 579,53,764,84, function ()
         send_button_begin = get(TIME)
@@ -140,8 +167,7 @@ function p5s2_update()
         save_id_to_file()
     end
 
-    print(EFB_CURSOR_X, EFB_CURSOR_Y)
-
+    --print(EFB_CURSOR_X, EFB_CURSOR_Y)
 end
 
 --DRAW LOOPS--
@@ -178,17 +204,29 @@ function p5s2_draw()
     drawTextCentered( Font_Airbus_panel ,  187, 342 ,"FETCH" , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
     drawTextCentered( Font_Airbus_panel ,  672, 68 ,"APPLY TO ACF" , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
 
-    drawTextCentered( Font_Airbus_panel ,  446, 528 ,displayed_info["departure"] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN  )
-    drawTextCentered( Font_Airbus_panel ,  446, 463 ,displayed_info["arrival"] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN  )
-    drawTextCentered( Font_Airbus_panel ,  446, 398 ,displayed_info["flightno"] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN  )
-    drawTextCentered( Font_Airbus_panel ,  446, 333 ,displayed_info["acf"] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN  )
-    drawTextCentered( Font_Airbus_panel ,  446, 268 ,displayed_info["pax"] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN  )
-    drawTextCentered( Font_Airbus_panel ,  446, 203 ,displayed_info["cargo"] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN  )
-    drawTextCentered( Font_Airbus_panel ,  446, 138 ,displayed_info["fuel"] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN  )
-    drawTextCentered( Font_Airbus_panel ,  446, 73 ,displayed_info["ci"] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN  )
-    drawTextCentered( Font_Airbus_panel ,  696, 528 ,displayed_info["deprwy"] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN  )
-    drawTextCentered( Font_Airbus_panel ,  902, 528 ,displayed_info["arrrwy"] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN  )
+    drawTextCentered( Font_ECAMfont ,  446, 527 ,displayed_info["departure"] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN  )
+    drawTextCentered( Font_ECAMfont ,  446, 462 ,displayed_info["arrival"] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN  )
+    drawTextCentered( Font_ECAMfont ,  446, 397 ,displayed_info["flightno"] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN  )
+    drawTextCentered( Font_ECAMfont ,  446, 332 ,displayed_info["acf"] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN  )
+    drawTextCentered( Font_ECAMfont ,  446, 267 ,displayed_info["pax"] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN  )
+    drawTextCentered( Font_ECAMfont ,  446, 202 ,displayed_info["cargo"] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN  )
+    drawTextCentered( Font_ECAMfont ,  446, 137 ,displayed_info["fuel"] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN  )
+    drawTextCentered( Font_ECAMfont ,  446, 72 ,displayed_info["ci"] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN  )
+    drawTextCentered( Font_ECAMfont ,  696, 527 ,displayed_info["deprwy"] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN  )
+    drawTextCentered( Font_ECAMfont ,  902, 527 ,displayed_info["arrrwy"] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN  )
 
+    for i = 1, #drawing_table do
+        drawTextCentered(Font_ECAMfont,  588, 438 - (28 * (i - 1)), drawing_table[i], 19, false, false, TEXT_ALIGN_LEFT, EFB_FULL_GREEN)
+    end
+
+    if fetch_fail_warning_1 then
+        drawTextCentered(Font_ECAMfont,  99, 291, "NO NETWORK", 19, false, false, TEXT_ALIGN_LEFT, EFB_FULL_RED)
+    end
+
+    if simbrief_standby then
+        sasl.gl.drawRectangle ( 0 , 0 , 1143, 710, EFB_BACKGROUND_COLOUR)
+        drawTextCentered(Font_Airbus_panel,  572, 355, "PLEASE STANDBY...", 30, false, false, TEXT_ALIGN_CENTER, EFB_WHITE)
+    end
 end
 
 
