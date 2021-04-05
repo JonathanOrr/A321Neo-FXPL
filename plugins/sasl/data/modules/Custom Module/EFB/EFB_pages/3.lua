@@ -17,11 +17,12 @@ local taxi_fuel = 500
 local percent_cg_to_coordinates = {{-9999,471}, {14, 471}, {22, 676}, {30,882}, {38.2,1092}, {9999,1085}}
 local tow_to_coordinates = {{-9999,78}, {45,78}, {102.6,440}, {9999,440}}
 
-local NUMBER_OF_PAGES = 2
+local NUMBER_OF_PAGES = 3
 
 ------------------------STUFF YOU CANNOT MESS WITH
 
 include("EFB/EFB_pages/3_subpage2.lua")
+include("EFB/EFB_pages/3_subpage3.lua")
 include("EFB/efb_functions.lua")
 include("libs/table.save.lua")
 
@@ -489,8 +490,6 @@ set_values()
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------SUBPAGE 2
 
-local test_table = {"apple", "orange", "banana"}
-
 local function EFB_draw_page_3_subpage_2() --DRAW LOOP
     p3s2_draw()
 end
@@ -503,16 +502,31 @@ local function Subpage_2_buttons()
     p3s2_buttons()
 end
 
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------SUBPAGE 3
+
+local function EFB_draw_page_3_subpage_3() --DRAW LOOP
+    p3s3_draw()
+end
+
+local function EFB_update_page_3_subpage_3() --UPDATE LOOP
+    p3s3_update()
+end
+
+local function Subpage_3_buttons()
+    p3s3_buttons()
+end
+
+
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------MUTUAL LOOPS
 
 local function mutual_button_loop()
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 1031,18,1099,48, function () --SELECTOR BUTTONS WORK AT ALL TIMES
-        efb_subpage_number = 2
+        efb_subpage_number = math.min(efb_subpage_number + 1, NUMBER_OF_PAGES)
         key_p3s1_focus = 0
         key_p3s1_buffer = ""
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 954,18,1021,48, function ()
-        efb_subpage_number = 1
+        efb_subpage_number = math.max( efb_subpage_number - 1, 1)
     end)
 end
 
@@ -536,6 +550,8 @@ function EFB_execute_page_3_buttons()
         Subpage_1_buttons()
     elseif efb_subpage_number == 2 then
         Subpage_2_buttons()
+    elseif efb_subpage_number == 2 then
+        Subpage_3_buttons()
     end
 
     mutual_button_loop()
@@ -548,6 +564,8 @@ function EFB_update_page_3()
         EFB_update_page_3_subpage_1()
     elseif efb_subpage_number == 2 then
         EFB_update_page_3_subpage_2()
+    elseif efb_subpage_number == 3 then
+        EFB_update_page_3_subpage_3()
     end
     mutual_update_loop()
 end
@@ -558,6 +576,8 @@ function EFB_draw_page_3()
         EFB_draw_page_3_subpage_1()
     elseif efb_subpage_number == 2 then
         EFB_draw_page_3_subpage_2()
+    elseif efb_subpage_number == 3 then
+        EFB_draw_page_3_subpage_3()
     end
     mutual_draw_loop()
 end

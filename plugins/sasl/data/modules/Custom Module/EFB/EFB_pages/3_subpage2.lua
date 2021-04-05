@@ -132,23 +132,8 @@ local function draw_dropdown_selected_items()
 
 end
 
-local function close_menu_1()
-    dropdown_expanded[1] = false
-end
-local function close_menu_2()
-    dropdown_expanded[2] = false
-end
-local function close_menu_3()
-    dropdown_expanded[3] = false
-end
-local function close_menu_4()
-    dropdown_expanded[4] = false
-end
-local function close_menu_5()
-    dropdown_expanded[5] = false
-end
-local function close_menu_6()
-    dropdown_expanded[6] = false
+local function close_menu(number)
+    dropdown_expanded[number] = false
 end
 
 --MOUSE & BUTTONS--
@@ -187,17 +172,17 @@ function p3s2_buttons()
         Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 403, 553, 560, 580,function () --DROPDOWN 3 EXPAND
             dropdown_current[1] = "1+F"
             set(LOAD_flapssetting, 1)
-            close_menu_1()
+            close_menu(1)
         end)
         Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 403, 529, 560, 553,function () --DROPDOWN 3 EXPAND
             dropdown_current[1] = "2"
             set(LOAD_flapssetting, 2)
-            close_menu_1()
+            close_menu(1)
         end)
         Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 403, 501, 560, 529,function () --DROPDOWN 3 EXPAND
             dropdown_current[1] = "3"
             set(LOAD_flapssetting, 3)
-            close_menu_1()
+            close_menu(1)
         end)
         click_anywhere_except_that_area( 401, 501, 559, 608, close_menu_1)
 
@@ -205,12 +190,12 @@ function p3s2_buttons()
         Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 645, 556, 802, 580,function () --DROPDOWN 3 EXPAND
             dropdown_current[2] = "TOGA"
             set(LOAD_thrustto, 0)
-            close_menu_2()
+            close_menu(2)
         end)
         Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 645, 529, 802, 556,function () --DROPDOWN 3 EXPAND
             dropdown_current[2] = "FLEX"
             set(LOAD_thrustto, 1)
-            close_menu_2()
+            close_menu(2)
         end)
         click_anywhere_except_that_area( 645, 501, 802, 608, close_menu_2)
 
@@ -218,12 +203,12 @@ function p3s2_buttons()
         Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 878, 556, 1034, 580,function () --DROPDOWN 3 EXPAND
             dropdown_current[3] = "DRY"
             set(LOAD_runwaycond, 0)
-            close_menu_3()
+            close_menu(3)
         end)
         Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 878, 529, 1034, 556,function () --DROPDOWN 3 EXPAND
             dropdown_current[3] = "WET"
             set(LOAD_runwaycond, 1)
-            close_menu_3()
+            close_menu(3)
         end)
         click_anywhere_except_that_area( 877, 501, 1035, 608, close_menu_3)
 
@@ -231,12 +216,12 @@ function p3s2_buttons()
         Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 114, 449, 272, 475,function () --DROPDOWN 3 EXPAND
             dropdown_current[4] = "ON"
             set(LOAD_aircon , 1)
-            close_menu_4()
+            close_menu(4)
         end)
         Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 114, 423, 272, 449,function () --DROPDOWN 3 EXPAND
             dropdown_current[4] = "OFF"
             set(LOAD_aircon , 0)
-            close_menu_4()
+            close_menu(4)
         end)
         click_anywhere_except_that_area( 114, 423, 272, 501, close_menu_4)
 
@@ -244,12 +229,12 @@ function p3s2_buttons()
         Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 349, 449, 506, 475,function () --DROPDOWN 3 EXPAND
             dropdown_current[5] = "ON"
             set(LOAD_eng_aice, 1)
-            close_menu_5()
+            close_menu(5)
         end)
         Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 349, 423, 506, 449,function () --DROPDOWN 3 EXPAND
             dropdown_current[5] = "OFF"
             set(LOAD_eng_aice, 0)
-            close_menu_5()
+            close_menu(5)
         end)
         click_anywhere_except_that_area( 349, 423, 506, 501, close_menu_5)
 
@@ -257,12 +242,12 @@ function p3s2_buttons()
         Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 609, 449, 766, 475,function () --DROPDOWN 3 EXPAND
             dropdown_current[6] = "ON"
             set(LOAD_all_aice, 1)
-            close_menu_6()
+            close_menu(6)
         end)
         Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 609, 423, 766, 449,function () --DROPDOWN 3 EXPAND
             dropdown_current[6] = "OFF"
             set(LOAD_all_aice, 0)
-            close_menu_6()
+            close_menu(6)
         end)
         click_anywhere_except_that_area( 609, 423, 766, 501, close_menu_6)
     end

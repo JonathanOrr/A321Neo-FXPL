@@ -101,8 +101,8 @@ local landing_distance_config_3 = {
     }
     
 
---CONDITION 1-6, AIRCRAFT WEIGHT IN KG, ELEVATION IN FT, vapp_difference = VAPP-VLS, WIND_CORR IN KT, TAILWIND IN KT, REVERSE OPERATIVE 0-2, AUTOLAND BOOLEAN, CONFIG3 BOOLEAN
-function landing_distance(condition, aircraft_weight, elevation, vapp_difference, wind_corr, tailwind, reversers_number, isautoland, isconfig3) 
+--CONDITION 1-6, AIRCRAFT WEIGHT IN KG, ELEVATION IN FT, vapp_difference = VAPP-VLS, TAILWIND IN KT, REVERSE OPERATIVE 0-2, AUTOLAND BOOLEAN, CONFIG3 BOOLEAN
+function landing_distance(condition, aircraft_weight, elevation, vapp_difference,  tailwind, reversers_number, isautoland, isconfig3) 
     if condition == 1 then
         local altitude_corr = (get(ACF_elevation)/1000)*130
     elseif condition == 2 then
@@ -199,51 +199,56 @@ end
 
 --FAILURE CODE
 
-local config3_adviced = false
-
-local failure_refrence_table = {
-    {3, 10, 2}, --ELEC
-    {4, 0, 1.7},
-    {4, 0, 1.5},
-    {4, 0, 1.15},
-    {4, 0, 1},
-    {4, 0, 1.1},
-    {3, 10, 1.2}, --FLIGHT CONTROL
-    {4, 0, 1.1},
-    {4, 0, 1.1},
-    {4, 0, 1.35},
-    {4, 0, 1.1},
-    {4, 0, 1},
-    {4, 0, 1.2},
-    {4, 0, 1.4},
-    {3, 10, 1.6},
-    {1, 60, 1.8},--FLAPS_SLATS 0
-    {3, 45, 1.8}, --FLAPS 0-1
-    {3, 25, 1.3}, 
-    {3, 30, 1.4},--FLAPS 1-2
-    {3, 15, 1.2},
-    {3, 25, 1.35}, --FLAPS 2
-    {3, 10, 1.15},
-    {3, 25, 1.35}, --FLAPS 3
-    {3, 10, 1.15},
-    {3, 5, 1.1},
-    {4, 0, 1}, --FLAPS >3
-    {4, 10, 5},
-    {4, 5, 1.1},
-    {4, 0, 1.1}, --HYD
-    {4, 0, 1},
-    {3, 25, 1.6},
-    {3, 25, 2.6},
-    {4, 0, 1.5},
-    {4, 0, 1.5}, --BRK
-    {4, 0, 1.1},
-    {3, 10, 1.2}, --NAV
-    {3, 10, 2.35},
-    {1, 55, 1.75},--ENG
-    {3, 10, 1.2},
+local failure_refrence_table = { --FLAPS LEVER POS, DELTA VREF, LDG DISTANCE FACTOR, IS-ASTERISK
+    {3, 10, 2, 0}, --ELEC
+    {4, 0, 1.7, 0},
+    {4, 0, 1.5, 0},
+    {4, 0, 1.15, 0},
+    {4, 0, 1, 0},
+    {4, 0, 1.1, 0},
+    {3, 10, 1.2, 1}, --FLIGHT CONTROL
+    {4, 0, 1.1, 0},
+    {4, 0, 1.1, 0},
+    {4, 0, 1.35, 0},
+    {4, 0, 1.1, 0},
+    {4, 0, 1, 0},
+    {4, 0, 1.2, 0},
+    {4, 0, 1.4, 0},
+    {3, 10, 1.6, 0},
+    {1, 60, 1.8, 1},--FLAPS_SLATS 0
+    {3, 45, 1.8, 1}, --FLAPS 0-1
+    {3, 25, 1.3, 1}, 
+    {3, 30, 1.4, 1},--FLAPS 1-2
+    {3, 15, 1.2, 1},
+    {3, 25, 1.35, 1}, --FLAPS 2
+    {3, 10, 1.15, 1},
+    {3, 25, 1.35, 1}, --FLAPS 3
+    {3, 10, 1.15, 1},
+    {3, 5, 1.1, 1},
+    {4, 0, 1, 0}, --FLAPS >3
+    {4, 10, 1.15, 1},
+    {4, 5, 1.1, 1},
+    {4, 0, 1.1, 0}, --HYD
+    {4, 0, 1, 0},
+    {3, 25, 1.6, 0},
+    {3, 25, 2.6, 0},
+    {4, 0, 1.5, 0},
+    {4, 0, 1.5, 0}, --BRK
+    {4, 0, 1.1, 0},
+    {3, 10, 1.2, 1}, --NAV
+    {3, 10, 2.35, 0},
+    {1, 55, 1.75, 1},--ENG
+    {3, 10, 1.2, 1},
 }
 
 function failure_correction(failure_code_array) --CODE == 0 IS RESERVED FOR NO FAILURE
+
+    local recommended_flaps1 = failure_refrence_table[failure_code_array[1]][1]
+    local recommended_flaps2 = failure_refrence_table[failure_code_array[2]][1]
+    local recommended_flaps3 = failure_refrence_table[failure_code_array[3]][1]
+    local recommended_flaps4 = failure_refrence_table[failure_code_array[4]][1]
+    local recommended_flaps_final = math.max(recommended_flaps1, recommended_flaps2, recommended_flaps3, recommended_flaps4)
+
     local delta_vref1 = failure_refrence_table[failure_code_array[1]][2]
     local delta_vref2 = failure_refrence_table[failure_code_array[2]][2]
     local delta_vref3 = failure_refrence_table[failure_code_array[3]][2]
@@ -254,8 +259,13 @@ function failure_correction(failure_code_array) --CODE == 0 IS RESERVED FOR NO F
     local ldg_distance_factor2 = failure_refrence_table[failure_code_array[2]][3]
     local ldg_distance_factor3 = failure_refrence_table[failure_code_array[3]][3]
     local ldg_distance_factor4 = failure_refrence_table[failure_code_array[4]][3]
-    local ldg_distance_factor_final = ldg_distance_factor1 * ldg_distance_factor2 * ldg_distance_factor3 * ldg_distance_factor4
 
-    return vref_final, ldg_distance_factor_final
+    if failure_code_array[1] == 1 or failure_code_array[2] == 1 or failure_code_array[3] == 1 or failure_code_array[4] == 1
+        local ldg_distance_factor_final = ldg_distance_factor1 + ldg_distance_factor2 + ldg_distance_factor3 + ldg_distance_factor4
+    else
+        local ldg_distance_factor_final = ldg_distance_factor1 * ldg_distance_factor2 * ldg_distance_factor3 * ldg_distance_factor4
+    end
+
+    return recommended_flaps_final, vref_final, ldg_distance_factor_final
 end
     
