@@ -192,6 +192,12 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_START_COND a321neo/cockpit/engine/throttle_lever_L == 0
 END_SOUND_ATTACHMENT
 
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Thrust Levers Right/ThrLvrIdle
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/cockpit/engine/throttle_lever_R == 0
+END_SOUND_ATTACHMENT
+
 ###########################################################################
 
 BEGIN_SOUND_ATTACHMENT
@@ -205,6 +211,19 @@ BEGIN_SOUND_ATTACHMENT
   VEH_XYZ 0 1.5 -18.4
   EVENT_START_COND a321neo/cockpit/engine/throttle_lever_L < 0.75
 END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Thrust Levers Right/ThrLvrCL
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/cockpit/engine/throttle_lever_R > 0.65
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Thrust Levers Right/ThrLvrCL
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/cockpit/engine/throttle_lever_R < 0.75
+END_SOUND_ATTACHMENT
+
 
 ##########################################################################
 
@@ -220,12 +239,30 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_START_COND a321neo/cockpit/engine/throttle_lever_L < 0.85
 END_SOUND_ATTACHMENT
 
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Thrust Levers Right/ThrLvrFLX
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/cockpit/engine/throttle_lever_R > 0.75
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Thrust Levers Right/ThrLvrFLX
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/cockpit/engine/throttle_lever_R < 0.85
+END_SOUND_ATTACHMENT
+
 ##########################################################################
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/Thrust Levers/ThrLvrTOGA
   VEH_XYZ 0 1.5 -18.4
   EVENT_START_COND a321neo/cockpit/engine/throttle_lever_L > 0.95
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Thrust Levers Right/ThrLvrTOGA
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/cockpit/engine/throttle_lever_R > 0.95
 END_SOUND_ATTACHMENT
 
 ##########################################################################REV
@@ -236,12 +273,22 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_START_COND a321neo/cockpit/engine/throttle_lever_L < 0
 END_SOUND_ATTACHMENT
 
-sim/cockpit2/engine/actuators/throttle_jet_rev_ratio
-
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/Thrust Levers/ThrLvrRevFull
   VEH_XYZ 0 1.5 -18.4
   EVENT_START_COND a321neo/cockpit/engine/throttle_lever_L == -1
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Thrust Levers Right/ThrLvrRev
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/cockpit/engine/throttle_lever_R < 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Thrust Levers Right/ThrLvrRevFull
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/cockpit/engine/throttle_lever_R == -1
 END_SOUND_ATTACHMENT
 
 ##############################################################################################################################################################################################################################

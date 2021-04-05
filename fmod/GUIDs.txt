@@ -21,6 +21,13 @@
 {4f37aed1-3eb9-4a5c-b3da-7a0308da4a78} event:/CockpitMechanical/Thrust Levers/ThrLvrRev
 {014c34dd-cc81-463a-a539-2e5fc4b75ea7} event:/CockpitMechanical/Thrust Levers/ThrLvrRevFull
 {b91efb68-0853-461b-8e6a-91b68abbb0b5} event:/CockpitMechanical/Thrust Levers/ThrLvrTOGA
+{e9316ea8-aa11-4442-87d1-28415b190d9a} event:/CockpitMechanical/Thrust Levers Right/ThrLvrCL
+{82061ef3-fc7e-4f36-9dac-e9d3fe3e13f7} event:/CockpitMechanical/Thrust Levers Right/ThrLvrExit
+{9aa08157-97df-4575-9477-4bf69cc7c931} event:/CockpitMechanical/Thrust Levers Right/ThrLvrFLX
+{cbb863a3-7184-4301-96e0-0ed02551b65b} event:/CockpitMechanical/Thrust Levers Right/ThrLvrIdle
+{bc2ed00d-477b-45dd-acc2-8275bdd82552} event:/CockpitMechanical/Thrust Levers Right/ThrLvrRev
+{20fbc712-ab6d-4c52-b4b6-4651d30bcd00} event:/CockpitMechanical/Thrust Levers Right/ThrLvrRevFull
+{8d28c374-6b76-4938-a97a-5254d0eb430a} event:/CockpitMechanical/Thrust Levers Right/ThrLvrTOGA
 {850bb3a5-fa7f-4d22-bf9d-a80868eee0e7} event:/CockpitMechanical/Big Round Button Press
 {bafd0ab7-85f5-4e8f-8898-00cef3bbf4d3} event:/CockpitMechanical/Big Round Button Release
 {ed910ed0-bdc8-47e6-a8cb-d025b4ba55d4} event:/CockpitMechanical/Engine Master
