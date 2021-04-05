@@ -190,16 +190,16 @@ EFB_LOAD_s2_dropdown6 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/
 
 ------------LOAD_SUBPAGE3-------------
 
-EFB_LOAD_s3_bgd =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage 3/bgd.png")
-EFB_LOAD_s3_dropdown1 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage 3/dropdown1.png")
-EFB_LOAD_s3_dropdown2 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage 3/dropdown2.png")
-EFB_LOAD_s3_dropdown3 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage 3/dropdown3.png")
-EFB_LOAD_s3_dropdown4 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage 3/dropdown4.png")
-EFB_LOAD_s3_dropdown5 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage 3/dropdown5.png")
-EFB_LOAD_s3_dropdown6 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage 3/dropdown6.png")
-EFB_LOAD_s3_dropdown7 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage 3/dropdown7.png")
-EFB_LOAD_s3_dropdown8 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage 3/dropdown8.png")
-EFB_LOAD_s3_failuretext =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage 3/failuretext.png")
+EFB_LOAD_s3_bgd =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage3/bgd.png")
+EFB_LOAD_s3_dropdown1 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage3/dropdown1.png")
+EFB_LOAD_s3_dropdown2 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage3/dropdown2.png")
+EFB_LOAD_s3_dropdown3 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage3/dropdown3.png")
+EFB_LOAD_s3_dropdown4 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage3/dropdown4.png")
+EFB_LOAD_s3_dropdown5 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage3/dropdown5.png")
+EFB_LOAD_s3_dropdown6 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage3/dropdown6.png")
+EFB_LOAD_s3_dropdown7 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage3/dropdown7.png")
+EFB_LOAD_s3_dropdown8 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage3/dropdown8.png")
+EFB_LOAD_s3_failuretext =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage3/failuretext.png")
 
 
 -----------CONFIG------------

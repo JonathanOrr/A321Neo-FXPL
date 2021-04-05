@@ -8,6 +8,15 @@ local function draw_background()
     sasl.gl.drawTexture (EFB_LOAD_s3_bgd, 0 , 0 , 1143 , 800 , EFB_WHITE )
 end
 
+local function draw_dropdowns()
+    for i, v in ipairs(dropdown_expanded) do
+        if dropdown_expanded[i] then
+            sasl.gl.drawTexture (dropdown_names[i] , 0 , 0 , 1143 , 800 , EFB_WHITE )
+        end
+    end
+end
+
+
 local function close_menu(number)
     dropdown_expanded[number] = false
 end
@@ -21,7 +30,7 @@ end
 
 --UPDATE LOOPS--
 function p3s3_update()
-    --print(EFB_CURSOR_X, EFB_CURSOR_Y)
+    print(EFB_CURSOR_X, EFB_CURSOR_Y)
 end
 
 --DRAW LOOPS--
