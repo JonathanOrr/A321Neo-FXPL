@@ -68,6 +68,17 @@ batteries = {
 
 ELEC_sys.batteries = batteries
 
+
+----------------------------------------------------------------------------------------------------
+-- Init
+----------------------------------------------------------------------------------------------------
+
+-- What we are doing here? We simulate 1000 Amps injected into the x-plane battery to avoid them to
+-- discharge (this may cause various problems)
+Plugin_Load_BUS = globalProperty("sim/cockpit2/electrical/plugin_bus_load_amps")
+set(Plugin_Load_BUS, -1000, 1)
+set(Plugin_Load_BUS, -1000, 2)
+
 ----------------------------------------------------------------------------------------------------
 -- Functions
 ----------------------------------------------------------------------------------------------------
