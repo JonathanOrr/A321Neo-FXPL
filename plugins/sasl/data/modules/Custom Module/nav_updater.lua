@@ -146,7 +146,9 @@ end
 local function update_gs()
 
     -- G/S
-    local d = DRAIMS_common.radio.ils.gs.curr_distance * 1852       -- Distance from the G/S in m 
+    local acf_lat = get(Aircraft_lat)
+    local acf_lon = get(Aircraft_long)
+    local d = GC_distance_km(acf_lat, acf_lon, DRAIMS_common.radio.ils.gs.lat, DRAIMS_common.radio.ils.gs.lon) * 1000
 
     local gs_angle = DRAIMS_common.radio.ils.gs.extra_bearing[1]    -- Beam angle (vertical)
     local gs_angle_sin = math.sin(math.rad(gs_angle))
