@@ -155,8 +155,10 @@ function PFD_draw_alt_ref(PFD_table)
     
     local value = qnh_status.value * 100 -- e.g. 2992
     if qnh_status.unit == UNIT_HPA then
-        value = value * 0.338639
+        value = math.floor(value * 0.338639)
+    else
+        value = math.floor(value) / 100
     end
-    sasl.gl.drawText(Font_ECAMfont, 795, 120, math.floor(value), 28, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    sasl.gl.drawText(Font_ECAMfont, 795, 120, value, 28, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
 
 end

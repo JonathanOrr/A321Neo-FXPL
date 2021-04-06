@@ -40,7 +40,7 @@ end
 local function draw_common_wind_arrow(data)
     if data.inputs.is_wind_valid and data.inputs.wind_speed >= 2 then
         local rotation_angle = (data.inputs.wind_direction - data.inputs.true_heading)
-        sasl.gl.drawRotatedTexture(image_wind_arrow, rotation_angle, 100, size[2]-150, 44/3,112/3, {1,1,1})    
+        sasl.gl.drawRotatedTexture(image_wind_arrow, rotation_angle-180, 100, size[2]-150, 44/3,112/3, {1,1,1})    
     end
 end
 

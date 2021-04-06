@@ -78,11 +78,11 @@ local function draw_dropdowns()
     if dropdown_expanded[1] then
         sasl.gl.drawTexture (EFB_CONFIG_dropdown1 , 0 , 0 , 1143 , 800 , ECAM_WHITE )
     end
-    if get(CONFIG_nws_axis) == 0 then
+    if EFB.preferences["nws"] == 0 then
         drawTextCentered( Font_Airbus_panel , 141 , 294, "ROLL"  , 19 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
-    elseif get(CONFIG_nws_axis) == 1 then
+    elseif EFB.preferences["nws"] == 1 then
         drawTextCentered( Font_Airbus_panel , 141 , 294, "YAW"  , 19 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
-    elseif get(CONFIG_nws_axis) == 2 then
+    elseif EFB.preferences["nws"] == 2 then
         drawTextCentered( Font_Airbus_panel , 141 , 294, "TILLER"  , 19 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
     end
 end
@@ -149,10 +149,6 @@ function EFB_execute_page_4_buttons()
         EFB.preferences["syncqnh"] = not EFB.preferences["syncqnh"]
         --print("toggle_options_sync")
     end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 620,329,659,347, function ()
-        EFB.preferences["rolltonws"] = not EFB.preferences["rolltonws"]
-        --print("toggle_options_roll")
-    end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 620,295,659,313, function ()
         EFB.preferences["pausetd"] = not EFB.preferences["pausetd"]
         --print("toggle_options_tca")
@@ -169,15 +165,15 @@ function EFB_execute_page_4_buttons()
     end)
     if dropdown_expanded[1] then
         Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 61,252,248,280, function ()
-            set(CONFIG_nws_axis, 0)
+            EFB.preferences["nws"] = 0
             close_menu_1()
         end)   
         Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 61,228,248,252, function ()
-            set(CONFIG_nws_axis, 1)
+            EFB.preferences["nws"] = 1
             close_menu_1()
         end)   
         Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 61,200,248,228, function ()
-            set(CONFIG_nws_axis, 2)
+            EFB.preferences["nws"] = 2
             close_menu_1()
         end)   
         click_anywhere_except_that_area( 61, 200, 220, 309, close_menu_1)

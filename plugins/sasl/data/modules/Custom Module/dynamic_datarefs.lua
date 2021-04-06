@@ -507,6 +507,7 @@ Roll_rate = globalProperty("sim/flightmodel/position/P")
 Pitch_rate = globalProperty("sim/flightmodel/position/Q")
 Joystick_toe_brakes_L = globalProperty("sim/joystick/joy_mapped_axis_value[6]")
 Joystick_toe_brakes_R = globalProperty("sim/joystick/joy_mapped_axis_value[7]")
+Joystick_tiller       = globalProperty("sim/joystick/joy_mapped_axis_value[37]")
 
 --Surfaces / FBW / flight controls--
 --dev & debuging
@@ -848,9 +849,6 @@ VOLUME_ext = createGlobalPropertyf("a321neo/volume/ext", 1, false, true, false)
 VOLUME_int = createGlobalPropertyf("a321neo/volume/int", 1, false, true, false)
 VOLUME_wind = createGlobalPropertyf("a321neo/volume/wind", 1, false, true, false)
 VOLUME_cabin = createGlobalPropertyf("a321neo/volume/cabin", 1, false, true, false)
-
---CONFIG PAGE
-CONFIG_nws_axis = createGlobalPropertyi("a321neo/efb/config/nws_axis", 1, false, true, false) --0 is roll, 1 is yaw, 2 is tilter
 
 --LOAD VALUES
 LOAD_flapssetting = createGlobalPropertyi("a321neo/efb/load", 1, false, true, false) --1 is 1+F, 2 is 2, 3 is 3

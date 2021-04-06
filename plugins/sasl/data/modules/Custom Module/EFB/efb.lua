@@ -139,21 +139,33 @@ local EFB_draw_pages = {
 
 EFB.preferences = {
     ["syncqnh"] = false,
-    ["rolltonws"] = false,
+    ["nws"] = 1,
     ["tca"] = false,
     ["pausetd"] = false,
     ["copilot"] = false,
-    ["nws"] = 0,
+    ["flarelaw"] = 0,
 }
 
 --load EFB preferences--
-local table_load_buffer = table.load(moduleDirectory .. "/Custom Module/saved_configs/EFB_preferences_v2")
-if table_load_buffer ~= nil then
-    EFB.preferences = table_load_buffer
+local function load_EFB_pref()
+    local table_load_buffer = table.load(moduleDirectory .. "/Custom Module/saved_configs/EFB_preferences_v2")
+    if table_load_buffer ~= nil then
 
-    --init FBW flare law(special case)
-    set(FBW_mode_transition_version, EFB.preferences["flarelaw"])
+        -- Sanitize check
+        for k,x in pairs(EFB.preferences) do
+            if table_load_buffer[k] == nil then
+                return  -- Saved file is invalid, let's overwrite it
+            end
+        end
+
+        -- If we are here, the saved file is ok
+        EFB.preferences = table_load_buffer
+
+        --init FBW flare law(special case)
+        set(FBW_mode_transition_version, EFB.preferences["flarelaw"])
+    end
 end
+load_EFB_pref()
 
 ---------------------------------------------------------------------------------------------------------------
 --TOP BAR SELECTOR LOGIC--
@@ -210,8 +222,6 @@ function update()
         p5s1_revert_to_previous_and_delete_buffer()
         p5s2_revert_to_previous_and_delete_buffer()
     end
-
-    EFB.preferences["nws"] = get(CONFIG_nws_axis)
 
     if calculate_page_delta() ~= 0 then
         CHANGE_PAGE_FADING_START_TIME = get(TIME)
