@@ -1,54 +1,54 @@
 local landing_distance_config_full = {
-{   {58, 1310}, --DRY (1)
-    {62, 1360},
-    {66, 1410},
-    {70, 1460},
-    {74,1510},
-    {80, 1620},
-    {85, 1750},
-    {90,1900},},
-{   {58, 1500}, --WET (2)
-    {62, 1560},
-    {66, 1620},
-    {70, 1680},
-    {74, 1740},
-    {80, 1860},
-    {85, 2010},
-    {90, 2190},},
-{   {58, 1410},--COMPACTED SNOW (3)
-    {62, 1490},
-    {66, 1560},
-    {70, 1630},
-    {74, 1700},
-    {80, 1800},
-    {85, 1880},
-    {90, 1970},},
-{   {58, 1580}, --DRY_WET_SNOW (4)
-    {62, 1660},
-    {66, 1750},
-    {70, 1830},
-    {74, 1900},
-    {80, 2020},
-    {85, 2110},
-    {90, 2210},},
-{   {58, 1490}, --SLUSH (5)
-    {62, 1580},
-    {66, 1670},
-    {70, 1760},
-    {74, 1850},
-    {80, 1990},
-    {85, 2120},
-    {90, 2250},},
-{   {58, 1530}, --STANDING WATER (6)
-    {62, 1620},
-    {66, 1720},
-    {70, 1810},
-    {74, 1900},
-    {80, 2050},
-    {85, 2190},
-    {90, 2320},},
-}
-
+    {   {58, 1310}, --DRY (1)
+        {62, 1360},
+        {66, 1410},
+        {70, 1460},
+        {74,1510},
+        {80, 1620},
+        {85, 1750},
+        {90,1900},},
+    {   {58, 1500}, --WET (2)
+        {62, 1560},
+        {66, 1620},
+        {70, 1680},
+        {74, 1740},
+        {80, 1860},
+        {85, 2010},
+        {90, 2190},},
+    {   {58, 1410},--COMPACTED SNOW (3)
+        {62, 1490},
+        {66, 1560},
+        {70, 1630},
+        {74, 1700},
+        {80, 1800},
+        {85, 1880},
+        {90, 1970},},
+    {   {58, 1580}, --DRY_WET_SNOW (4)
+        {62, 1660},
+        {66, 1750},
+        {70, 1830},
+        {74, 1900},
+        {80, 2020},
+        {85, 2110},
+        {90, 2210},},
+    {   {58, 1490}, --SLUSH (5)
+        {62, 1580},
+        {66, 1670},
+        {70, 1760},
+        {74, 1850},
+        {80, 1990},
+        {85, 2120},
+        {90, 2250},},
+    {   {58, 1530}, --STANDING WATER (6)
+        {62, 1620},
+        {66, 1720},
+        {70, 1810},
+        {74, 1900},
+        {80, 2050},
+        {85, 2190},
+        {90, 2320},},
+    }
+    
 local landing_distance_config_3 = {
     {   {58, 1420}, --DRY (1)
         {62, 1470},
@@ -243,29 +243,33 @@ local failure_refrence_table = { --FLAPS LEVER POS, DELTA VREF, LDG DISTANCE FAC
 
 function failure_correction(failure_code_array) --CODE == 0 IS RESERVED FOR NO FAILURE
 
-    local recommended_flaps1 = failure_refrence_table[failure_code_array[1]][1]
-    local recommended_flaps2 = failure_refrence_table[failure_code_array[2]][1]
-    local recommended_flaps3 = failure_refrence_table[failure_code_array[3]][1]
-    local recommended_flaps4 = failure_refrence_table[failure_code_array[4]][1]
-    local recommended_flaps_final = math.max(recommended_flaps1, recommended_flaps2, recommended_flaps3, recommended_flaps4)
-
-    local delta_vref1 = failure_refrence_table[failure_code_array[1]][2]
-    local delta_vref2 = failure_refrence_table[failure_code_array[2]][2]
-    local delta_vref3 = failure_refrence_table[failure_code_array[3]][2]
-    local delta_vref4 = failure_refrence_table[failure_code_array[4]][2]
-    local vref_final = math.max(delta_vref1, delta_vref2, delta_vref3, delta_vref4)
-
-    local ldg_distance_factor1 = failure_refrence_table[failure_code_array[1]][3]
-    local ldg_distance_factor2 = failure_refrence_table[failure_code_array[2]][3]
-    local ldg_distance_factor3 = failure_refrence_table[failure_code_array[3]][3]
-    local ldg_distance_factor4 = failure_refrence_table[failure_code_array[4]][3]
-
-    if failure_code_array[1] == 1 or failure_code_array[2] == 1 or failure_code_array[3] == 1 or failure_code_array[4] == 1
-        local ldg_distance_factor_final = ldg_distance_factor1 + ldg_distance_factor2 + ldg_distance_factor3 + ldg_distance_factor4
-    else
-        local ldg_distance_factor_final = ldg_distance_factor1 * ldg_distance_factor2 * ldg_distance_factor3 * ldg_distance_factor4
+      local final_flaps   = 4
+      local final_vref    = 0
+      local ldg_dist_max  = 0
+    local ldg_dist_mult = 1
+      local dont_multiply = true
+  
+    for k,v in ipairs(failure_code_array) do
+        if v ~= 0 then
+            local reccomended_flaps = failure_refrence_table[v][1]
+              local delta_vref = failure_refrence_table[v][2]
+              local ldg_distance_factor = failure_refrence_table[v][3]
+              local asterisk = failure_refrence_table[v][4] == 1
+              
+              final_flaps = math.min(final_flaps, reccomended_flaps)
+              final_vref  = math.max(final_vref, delta_vref)
+              ldg_dist_max = math.max(ldg_dist_max, ldg_distance_factor)
+              ldg_dist_mult= ldg_dist_mult * ldg_distance_factor
+              dont_multiply = dont_multiply and asterisk
+        end
     end
 
-    return recommended_flaps_final, vref_final, ldg_distance_factor_final
+      local ret_ldg_dist = 0
+    if dont_multiply then
+        ret_ldg_dist = ldg_dist_max
+    else
+        ret_ldg_dist = ldg_dist_mult
+    end
+
+    return final_flaps, final_vref, ret_ldg_dist
 end
-    

@@ -184,7 +184,7 @@ function p3s2_buttons()
             set(LOAD_flapssetting, 3)
             close_menu(1)
         end)
-        click_anywhere_except_that_area( 401, 501, 559, 608, close_menu_1)
+        click_anywhere_except_that_area( 401, 501, 559, 608, close_menu(1))
 
     elseif dropdown_expanded[2] then
         Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 645, 556, 802, 580,function () --DROPDOWN 3 EXPAND
@@ -197,7 +197,7 @@ function p3s2_buttons()
             set(LOAD_thrustto, 1)
             close_menu(2)
         end)
-        click_anywhere_except_that_area( 645, 501, 802, 608, close_menu_2)
+        click_anywhere_except_that_area( 645, 501, 802, 608, close_menu(2))
 
     elseif dropdown_expanded[3] then
         Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 878, 556, 1034, 580,function () --DROPDOWN 3 EXPAND
@@ -210,7 +210,7 @@ function p3s2_buttons()
             set(LOAD_runwaycond, 1)
             close_menu(3)
         end)
-        click_anywhere_except_that_area( 877, 501, 1035, 608, close_menu_3)
+        click_anywhere_except_that_area( 877, 501, 1035, 608, close_menu(3))
 
     elseif dropdown_expanded[4] then
         Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 114, 449, 272, 475,function () --DROPDOWN 3 EXPAND
@@ -223,7 +223,7 @@ function p3s2_buttons()
             set(LOAD_aircon , 0)
             close_menu(4)
         end)
-        click_anywhere_except_that_area( 114, 423, 272, 501, close_menu_4)
+        click_anywhere_except_that_area( 114, 423, 272, 501, close_menu(4))
 
     elseif dropdown_expanded[5] then
         Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 349, 449, 506, 475,function () --DROPDOWN 3 EXPAND
@@ -236,7 +236,7 @@ function p3s2_buttons()
             set(LOAD_eng_aice, 0)
             close_menu(5)
         end)
-        click_anywhere_except_that_area( 349, 423, 506, 501, close_menu_5)
+        click_anywhere_except_that_area( 349, 423, 506, 501,close_menu(5))
 
     elseif dropdown_expanded[6] then
         Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 609, 449, 766, 475,function () --DROPDOWN 3 EXPAND
@@ -249,7 +249,7 @@ function p3s2_buttons()
             set(LOAD_all_aice, 0)
             close_menu(6)
         end)
-        click_anywhere_except_that_area( 609, 423, 766, 501, close_menu_6)
+        click_anywhere_except_that_area( 609, 423, 766, 501, close_menu(6))
     end
 end
 

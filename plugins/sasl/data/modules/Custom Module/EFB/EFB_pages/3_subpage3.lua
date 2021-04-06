@@ -4,6 +4,8 @@ local dropdown_names = {EFB_LOAD_s3_dropdown1, EFB_LOAD_s3_dropdown2, EFB_LOAD_s
 
 ---------------------------------------------------------------------------------------------------------------------------------
 
+include("EFB/efb_functions.lua")
+
 local function draw_background()
     sasl.gl.drawTexture (EFB_LOAD_s3_bgd, 0 , 0 , 1143 , 800 , EFB_WHITE )
 end
@@ -30,12 +32,15 @@ end
 
 --UPDATE LOOPS--
 function p3s3_update()
-    print(EFB_CURSOR_X, EFB_CURSOR_Y)
+    --print(EFB_CURSOR_X, EFB_CURSOR_Y)
 end
+
+local test_table = {"Hello", "Rico", "This", "Is", "A", "Dropdown", "Drawn"}
 
 --DRAW LOOPS--
 function p3s3_draw()
     draw_background()
+    draw_dropdown_menu(800, 500, 186, 29, EFB_DROPDOWN_OUTSIDE, EFB_DROPDOWN_INSIDE, test_table, true, "LOL")
 end
 
 --DO AT THE BEGINNING
