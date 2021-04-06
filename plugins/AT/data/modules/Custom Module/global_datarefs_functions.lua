@@ -102,7 +102,7 @@ Bank_angle_PID_array = {
 Pitch_PID_array = {
     P_gain = 0.0018,
     I_gain = 0.0020,
-    D_gain = 0.0001,
+    D_gain = 0.0002,
     B_gain = 1,
     Schedule_gains = false,
     Schedule_table = {
@@ -132,11 +132,13 @@ Pitch_PID_array = {
 }
 
 A32nx_auto_thrust = {P_gain = 1.6, I_time = 5, D_gain = 4.5, Proportional = 0, Integral_sum = 0, Integral = 0, Derivative = 0, PV = 0, Min_out = 0, Max_out = 1, Error_margin = 15}
+
 A32nx_FD_roll = {P_gain = 1, I_gain = 0, D_gain = 0.32, Proportional = 0, Integral_sum = 0, Integral = 0, Derivative = 0, Current_error = 0, Min_error = -15, Max_error = 15}
 A32nx_FD_pitch = {P_gain = 1, I_gain = 1/3, D_gain = 0.35, Proportional = 0, Integral_sum = 0, Integral = 0, Derivative = 0, Current_error = 0, Min_error = -12000, Max_error = 12000}
+
 A32nx_rwy_roll = {P_gain = 1, I_gain = 0, D_gain = 2, Proportional = 0, Integral_sum = 0, Integral = 0, Derivative = 0, Current_error = 0, Min_error = -30, Max_error = 30}
 A32nx_stick_roll = {P_gain = 1, I_gain = 0, D_gain = 2, Proportional = 0, Integral_sum = 0, Integral = 0, Derivative = 0, Current_error = 0, Min_error = -30, Max_error = 30}
-A32nx_stick_pitch = {P_gain = 4, I_gain = 0.5, D_gain = 6, Proportional = 0, Integral_sum = 0, Integral = 0, Derivative = 0, Current_error = 0, Min_error = -30, Max_error = 30}
+A32nx_stick_pitch = {P_gain = 0.32, I_gain = 0, D_gain = 0.5, Proportional = 0, Integral_sum = 0, Integral = 0, Derivative = 0, Current_error = 0, Min_error = -5, Max_error = 5}
 
 Autothrust_output = 0
 Smoothed_PV = 0
