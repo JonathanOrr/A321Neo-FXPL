@@ -507,6 +507,7 @@ Roll_rate = globalProperty("sim/flightmodel/position/P")
 Pitch_rate = globalProperty("sim/flightmodel/position/Q")
 Joystick_toe_brakes_L = globalProperty("sim/joystick/joy_mapped_axis_value[6]")
 Joystick_toe_brakes_R = globalProperty("sim/joystick/joy_mapped_axis_value[7]")
+Joystick_tiller       = globalProperty("sim/joystick/joy_mapped_axis_value[37]")
 
 --Surfaces / FBW / flight controls--
 --dev & debuging
