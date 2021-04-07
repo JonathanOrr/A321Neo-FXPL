@@ -38,6 +38,7 @@ local MAX_LIMIT_WPT = 750
 local image_bkg_arc        = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/arc.png")
 local image_bkg_arc_red    = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/arc-red.png")
 local image_bkg_arc_inner  = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/arc-inner.png")
+local image_bkg_arc_inner_zoom  = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/arc-inner-zoom.png")
 local image_bkg_arc_tcas   = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/tcas-arc.png")
 
 local image_point_apt = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/point-apt.png")
@@ -108,7 +109,8 @@ local function draw_backgrounds(data)
     -- Main arc background
     if data.inputs.is_heading_valid then
         sasl.gl.drawRotatedTexture(image_bkg_arc, -data.inputs.heading, (size[1]-1330)/2,(size[2]-1330)/2-312,1330,1330, {1,1,1})
-        sasl.gl.drawTexture(image_bkg_arc_inner, (size[1]-898)/2,(size[2]-568)/2-13,898,568, {1,1,1})
+        
+        sasl.gl.drawTexture(data.config.range > ND_RANGE_ZOOM_2 and image_bkg_arc_inner or image_bkg_arc_inner_zoom, (size[1]-898)/2,(size[2]-568)/2-13,898,568, {1,1,1})
         
         if data.misc.tcas_ta_triggered or data.misc.tcas_ra_triggered or data.config.range == ND_RANGE_20 then
 
@@ -194,10 +196,12 @@ local function draw_ranges(data)
     local third_ring  = ext_range * 2 / 4
 
 
+    if data.config.range > ND_RANGE_ZOOM_2 then
+        sasl.gl.drawText(Font_AirbusDUL, size[2]/2-370, 320, second_ring, 24, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+        sasl.gl.drawText(Font_AirbusDUL, size[2]/2+370, 320, second_ring, 24, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
+    end
     sasl.gl.drawText(Font_AirbusDUL, size[2]/2-240, 250, third_ring, 24, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
-    sasl.gl.drawText(Font_AirbusDUL, size[2]/2-370, 320, second_ring, 24, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
     sasl.gl.drawText(Font_AirbusDUL, size[2]/2+240, 250, third_ring, 24, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
-    sasl.gl.drawText(Font_AirbusDUL, size[2]/2+370, 320, second_ring, 24, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
     
 end
 
