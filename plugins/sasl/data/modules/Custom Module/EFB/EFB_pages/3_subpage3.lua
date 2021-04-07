@@ -40,7 +40,8 @@ local test_table = {"Hello", "Rico", "This", "Is", "A", "Dropdown", "Drawn"}
 --DRAW LOOPS--
 function p3s3_draw()
     draw_background()
-    draw_dropdown_menu(800, 500, 186, 29, EFB_DROPDOWN_OUTSIDE, EFB_DROPDOWN_INSIDE, test_table, true, "LOL")
+    draw_dropdown_menu(800, 500, 260, 29, EFB_DROPDOWN_OUTSIDE, EFB_DROPDOWN_INSIDE, test_table, true, 1)
+
 end
 
 --DO AT THE BEGINNING
