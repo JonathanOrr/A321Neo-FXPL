@@ -182,7 +182,9 @@ local function draw_rose_loc_indication(data)
     -- image_deviation_arrow
         
     local degrees = radio_get_ils_deviation_h()
-
+    if radio_get_ils_is_backcourse() then
+        degrees = - degrees
+    end
     local degrees_clamp = Math_clamp(degrees, -1.7, 1.7)
     local ralt = data.id == ND_CAPT and get(Capt_ra_alt_ft) or get(Fo_ra_alt_ft)
     if degrees_clamp ~= degrees and get(TIME) % 1 < 0.5 and ralt > 15 then

@@ -53,19 +53,48 @@ radio_ils_set_freq(109.9)
 -------------------------------------------------------------------------------
 local function get_nearest_navaid(list)
     local min_distance = 999999999
+    local min_distance_prev = 999999999
     local min_distance_i = 0
+    local min_distance_i_prev = 0
     local acf_lat = get(Aircraft_lat)
     local acf_lon = get(Aircraft_long)
     for k,v in ipairs(list) do
         local distance = GC_distance_kt(acf_lat, acf_lon, v.lat, v.lon)
         if distance < min_distance then
+            min_distance_prev = min_distance
+            min_distance_i_prev = min_distance_i
             min_distance = distance
             min_distance_i = k
+        elseif distance < min_distance_prev then
+            min_distance_prev = distance
+            min_distance_i_prev = k
         end
     end
     
     assert(min_distance_i ~= 0) -- This is not possible
-    return list[min_distance_i], min_distance
+    
+    if min_distance_i_prev == 0 then
+        return list[min_distance_i], min_distance, nil, nil
+    else
+        return list[min_distance_i], min_distance, list[min_distance_i_prev], min_distance_prev
+    end
+end
+
+local function angular_abs_diff(a,b)
+    local phi = math.abs(a - b) % 360
+    local distance = phi > 180 and 360 - phi or phi
+    return distance
+end
+
+local function angular_diff(a,b)
+    local phi = (a - b)
+    local distance = phi
+    if phi > 180 then 
+        distance = 360 - phi
+    elseif phi < -180 then
+        distance = -(360 + phi)
+    end
+    return distance
 end
 
 local function navaid_get_bearing(navaid)
@@ -122,18 +151,31 @@ local function update_ils_nearest()
         local frequency_int = Round(radio_ils_get_freq()*100, 0)
         local out1 = AvionicsBay.navaids.get_by_freq(NAV_ID_LOC, frequency_int, false)
         local out2 = AvionicsBay.navaids.get_by_freq(NAV_ID_LOC_ALONE, frequency_int, false)
+        
+        for k,x in ipairs(out2) do  -- Merge LOC and LOC_ALONE arrays
+            out1[#out1+1] = out2[k]
+        end
+        
         if #out1 > 0 then
-            local nearest, dist_out = get_nearest_navaid(out1)
+            -- We need to take two ILS because in some
+            -- airports the two localizer on the same
+            -- runway have the same frequency (so B/C
+            -- doesn't exist)
+            local nearest, dist_out, nearest2, dist_out2 = get_nearest_navaid(out1)
+            
+            if math.abs(dist_out-dist_out2) < 5 then
+                local loc_bearing_1 = nearest.extra_bearing[1]
+                local loc_bearing_2 = nearest2.extra_bearing[1]
+                if angular_abs_diff(radio_ils_get_crs(), loc_bearing_2) < angular_abs_diff(radio_ils_get_crs(), loc_bearing_1) then
+                    nearest = nearest2
+                    dist_out = dist_out2
+                end
+            end
+            
             DRAIMS_common.radio.ils = nearest
             DRAIMS_common.radio.ils.curr_distance = dist_out
+
             update_gs_nearest()
-        end
-        if #out2 > 0 then
-            local nearest, dist_out = get_nearest_navaid(out2)
-            if #out2 == 0 or dist_out < DRAIMS_common.radio.ils.curr_distance then
-                DRAIMS_common.radio.ils = nearest
-                DRAIMS_common.radio.ils.curr_distance = dist_out
-            end
         end
     end
 end
@@ -232,8 +274,8 @@ local function update_loc()
         angle = d < 18.52 and LOC_NEAR_RANGE or LOC_FAR_RANGE   -- FAA Version
     end
     
-    local deviation_loc = bearing - loc_bearing
-    local deviation_bc  = bearing - (loc_bearing-180)
+    local deviation_loc = angular_diff(bearing, loc_bearing)
+    local deviation_bc  = angular_diff(bearing, (loc_bearing-180)%360)
 
     if math.abs(deviation_loc) > angle and math.abs(deviation_bc) > angle then
         DRAIMS_common.radio.ils.loc.reason = 3
@@ -243,7 +285,8 @@ local function update_loc()
 
     DRAIMS_common.radio.ils.loc.reason = 0
     DRAIMS_common.radio.ils.loc.is_ok = true
-    DRAIMS_common.radio.ils.loc.deviation = deviation_loc
+    DRAIMS_common.radio.ils.loc.deviation = math.abs(deviation_bc) < angle and deviation_bc or deviation_loc
+    DRAIMS_common.radio.ils.loc.is_bc = math.abs(deviation_bc) < angle
 end
 
 local function update_ils()
@@ -251,12 +294,12 @@ local function update_ils()
     if DRAIMS_common.radio.ils == nil then
         return
     end
-    
+
     if DRAIMS_common.radio.ils.gs then
         DRAIMS_common.radio.ils.gs.is_ok = false
         update_gs()
     end
-    
+
     if not DRAIMS_common.radio.ils.loc then
         DRAIMS_common.radio.ils.loc = {}
     end

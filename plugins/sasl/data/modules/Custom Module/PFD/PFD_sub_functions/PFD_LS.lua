@@ -44,6 +44,9 @@ local function PFD_draw_deviations(PFD_table)
 
         if PFD_table.ILS_data.loc_is_valid then
             local degrees = PFD_table.ILS_data.loc_deviation
+            if radio_get_ils_is_backcourse() then
+                degrees = - degrees
+            end
             local degrees_clamp = Math_clamp(degrees, -1.7, 1.7)
             if math.abs(degrees_clamp) <= 1.6 then
                 -- Normal diamond

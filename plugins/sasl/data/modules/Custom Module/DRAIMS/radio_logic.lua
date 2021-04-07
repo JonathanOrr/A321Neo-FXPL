@@ -213,9 +213,7 @@ end
 
 function radio_get_ils_is_backcourse()
     if DRAIMS_common.radio.ils and DRAIMS_common.radio.ils.loc then
-        if math.abs(DRAIMS_common.radio.ils.loc.deviation) > 90 then
-            return true
-        end
+        return DRAIMS_common.radio.ils.loc.is_bc
     end
     return false
 end
