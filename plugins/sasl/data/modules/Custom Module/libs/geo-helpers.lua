@@ -83,4 +83,20 @@ function get_bearing(lat1,lon1,lat2,lon2)
     return brng
 end
 
+function geo_get_mora(lat, lon)
+    if not (AvionicsBay.is_initialized() and AvionicsBay.is_ready()) then
+        return 0
+    end
 
+    local mora_curr = AvionicsBay.c.get_mora(lat, lon)
+
+    local directions = {0, 45, 90, 135, 180, 235, 270, 315}
+    for k,x in ipairs(directions) do
+        local n_lat, n_lon = Move_along_distance_v2(lat, lon, 74080, x)   -- 40nm
+        if (math.floor(n_lat) ~= math.floor(lat)) or (math.floor(n_lon) ~= math.floor(lon)) then
+            mora_curr = math.max(mora_curr, AvionicsBay.c.get_mora(n_lat, n_lon))
+        end
+    end
+    
+    return mora_curr
+end

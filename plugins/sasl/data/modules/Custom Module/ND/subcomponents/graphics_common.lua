@@ -67,7 +67,7 @@ local function draw_common_chrono(data)
         return
     end
 
-    sasl.gl.drawRectangle(30, 120, 120, 35, ECAM_GREY)
+    sasl.gl.drawRectangle(30, 110, 120, 35, ECAM_GREY)
 
     -- The chrono can show two format:
     -- 1) if then value is lower than 1 hour, that the value is shown as MM'SS"
@@ -91,10 +91,10 @@ local function draw_common_chrono(data)
         chrono_text = minutes .. "'" .. seconds .. "\"" 
     end
     
-    sasl.gl.drawText(Font_AirbusDUL, 30, 125, chrono_text, 34, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, 30, 115, chrono_text, 34, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
     if show_upper_H then
         -- Draw the H between hours and minutes
-        sasl.gl.drawText(Font_AirbusDUL, 74, 135, "H", 24, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, 74, 125, "H", 24, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
     end
 end
 
@@ -115,7 +115,7 @@ local function draw_common_nav_stations_single(data, id)
         color = ECAM_GREEN
         sym_image = image_symbols[3]
     else
-        text = "VOR" .. id    
+        text = "VOR" .. id
         color = ECAM_WHITE
         sym_image = image_symbols[id]
     end
@@ -423,6 +423,35 @@ local function draw_common_terrain_numbers(data)
     end
 end
 
+local function draw_common_mora(data)
+
+    if data.config.extra_data ~= ND_DATA_CSTR then
+        return
+    end
+
+    if data.config.range < ND_RANGE_40 then
+        return
+    end
+
+    if data.config.mode ~= ND_MODE_ARC and data.config.mode ~= ND_MODE_NAV then
+        return
+    end
+
+    sasl.gl.drawText(Font_ECAMfont, 5, 171, "40NM MORA", 24, false, false, TEXT_ALIGN_LEFT, ECAM_MAGENTA)
+
+    local mora_text = "N/A"
+    
+    if AvionicsBay.is_initialized() and AvionicsBay.is_ready() then
+        if data.misc.mora_value_time == nil or get(TIME) - data.misc.mora_value_time > 5.1 then    -- Update every 5 seconds
+            data.misc.mora_value = geo_get_mora(data.inputs.plane_coords_lat, data.inputs.plane_coords_lon)
+            data.misc.mora_value_time = get(TIME)
+        end
+    
+        mora_text = data.misc.mora_value
+    end
+    sasl.gl.drawText(Font_ECAMfont, 25, 147, mora_text, 24, false, false, TEXT_ALIGN_LEFT, ECAM_MAGENTA)
+end
+
 function draw_test_gpws()
     if get(GPWS_long_test_in_progress) == 1 then
         draw_terrain_test_gpws()
@@ -433,6 +462,7 @@ function draw_common(data)
 
     draw_common_gs_and_tas(data)
     draw_common_wind(data)
+    draw_common_mora(data)
     draw_common_chrono(data)
     if data.config.range > ND_RANGE_ZOOM_2 then
         draw_common_nav_stations(data)
