@@ -88,6 +88,50 @@ local function convert_fixes_array(rawdata, fix_array)
     end
 end
 
+local function convert_cifp_array(rawdata, cifp_arr)
+    if rawdata then
+        return {
+            data = cifp_arr.data,
+            len  = cifp_arr.len
+        }
+    end
+    
+    to_return = {}
+    for i=1,cifp_arr.len do
+        local new_dat =  {
+            proc_name   = ffi.string(cifp_arr.data[i-1].proc_name,  cifp_arr.data[i-1].proc_name_len),
+            trans_name  = ffi.string(cifp_arr.data[i-1].trans_name,  cifp_arr.data[i-1].trans_name_len),
+            legs = {}
+        }
+        
+        for j=1,cifp_arr.data[i-1].legs_len do
+            local l = cifp_arr.data[i-1].legs[j-1]
+            table.insert(new_dat.legs, {
+                leg_name = ffi.string(l.leg_name, l.leg_name_len),
+                turn_direction = l.turn_direction,
+                leg_type = l.leg_type,
+                radius = l.radius,
+                theta = l.theta,
+                rho = l.rho,
+                outb_mag = l.outb_mag,
+                rte_hold = l.rte_hold,
+                outb_mag_in_true = l.outb_mag_in_true,
+                rte_hold_in_time = l.rte_hold_in_time,
+                cstr_alt_type = l.cstr_alt_type,
+                cstr_altitude1 = l.cstr_altitude1,
+                cstr_altitude2 = l.cstr_altitude2,
+                cstr_speed_type = l.cstr_speed_type,
+                cstr_speed = l.cstr_speed,
+                vpath_angle = l.vpath_angle,
+                center_fix = ffi.string(l.center_fix, l.center_fix_len)
+            })
+        end
+        
+        table.insert(to_return, new_dat)
+    end
+    return to_return
+end
+
 local function convert_single_apt(apt, load_rwys)
     local new_apt = {
         ref_orig = apt,
@@ -255,6 +299,31 @@ local function expose_functions()
     AvionicsBay.graphics.triangulate_apt_node = function(array)
         return AvionicsBay.c.triangulate(array);
     end
+
+    AvionicsBay.cifp = {}
+    AvionicsBay.cifp.is_ready = function()
+        return AvionicsBay.c.is_cifp_ready()
+    end
+
+    AvionicsBay.cifp.load_apt = function(name)
+        assert(AvionicsBay.c.is_cifp_ready())
+        assert(type(name) == "string", "name must be a string")
+        AvionicsBay.c.load_cifp(name)
+    end
+
+    AvionicsBay.cifp.get = function(name, rawdata)
+        assert(AvionicsBay.c.is_cifp_ready())
+        assert(type(name) == "string", "name must be a string")
+        rawdata = rawdata or false
+        local cifp_data = AvionicsBay.c.get_cifp(name)
+        
+        return {
+            sids  = convert_cifp_array(rawdata, cifp_data.sids),
+            stars = convert_cifp_array(rawdata, cifp_data.stars),
+            apprs = convert_cifp_array(rawdata, cifp_data.apprs)
+        }
+    end
+
 
 end
 
