@@ -550,7 +550,7 @@ function EFB_execute_page_3_buttons()
         Subpage_1_buttons()
     elseif efb_subpage_number == 2 then
         Subpage_2_buttons()
-    elseif efb_subpage_number == 2 then
+    elseif efb_subpage_number == 3 then
         Subpage_3_buttons()
     end
 
