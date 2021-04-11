@@ -49,3 +49,13 @@ function draw_dropdown_menu(x, y, width, height, outside_colour, inside_colour, 
     local component_x = x
     local component_y = y
 end
+
+function dropdown_menu_buttons(x, y, width, height, table, selected)
+    --print("I love you")
+    for i, v in pairs(table) do
+        if EFB_CURSOR_Y > y-1 - height*i - 15 and EFB_CURSOR_Y < y-1 - height*i + 14 and  EFB_CURSOR_X >  x - width/2 and EFB_CURSOR_X <  x + width/2 then
+            --sasl.gl.drawFrame (  x - width/2 + 5 , y-1 - height*i - 10 - 3 , width - 8 , height , EFB_WHITE )
+            print(i)
+        end
+    end
+end
