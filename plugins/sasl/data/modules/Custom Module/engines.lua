@@ -870,6 +870,14 @@ local function update_n1_mode_and_limits_per_engine(thr_pos, engine)
     local ai_eng_oper  = AI_sys.comp[ANTIICE_ENG_1].valve_status == true or AI_sys.comp[ANTIICE_ENG_2].valve_status == true 
     local pack_oper    = get(Pack_L) + get(Pack_R) > 0
 
+    local reverse_forced_idle = get(Either_Aft_on_ground) == 0 or get(FAILURE_ENG_REV_FAULT, engine) == 1
+    local emergency_force_idle = get(FAILURE_ENG_REV_UNLOCK, engine) == 1
+    
+    if emergency_force_idle then    -- If reverser unlock (failure), then the engine is auto put to idle
+        set(Eng_N1_mode, 4, engine) -- IDLE
+        return
+    end
+
     if thr_pos > THR_TOGA_THRESHOLD + 0.001 or get(ATHR_is_overriding) == 1 then -- TOGA Region
     
         if thr_pos >= 0.99 and last_time_toga[engine] == 0 then
@@ -903,7 +911,7 @@ local function update_n1_mode_and_limits_per_engine(thr_pos, engine)
             set(Eng_N1_flex_temp, 0) -- Reset FLEX temp to avoid G/A triggering of FLEX or other situations
         end
 
-    elseif thr_pos > -THR_CLB_THRESHOLD or get(Either_Aft_on_ground) == 0 then   -- Reverse protection
+    elseif thr_pos > -THR_CLB_THRESHOLD or reverse_forced_idle then   -- Reverse protection
         set(Eng_N1_mode, 4, engine) -- IDLE
         last_time_toga[engine] = 0
     elseif thr_pos <= -THR_CLB_THRESHOLD then

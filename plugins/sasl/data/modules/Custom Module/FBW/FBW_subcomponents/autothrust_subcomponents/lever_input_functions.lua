@@ -228,7 +228,9 @@ local function can_reverse_open(eng)
         return false
     end
 
-    -- TODO Reverser failures
+    if get(FAILURE_ENG_REV_FAULT, eng) == 1 then
+        return false
+    end
 
     -- Ok here we need a de-bouncing behavior: if the aircraft bounces a little bit,
     -- let's keep the reversers open. This is not the real behavior, but it would surprise
@@ -244,7 +246,7 @@ local function can_reverse_open(eng)
 end
 
 local function update_prop_mode(manual_reverse_L, manual_reverse_R)
-    if (manual_reverse_L or thrust_in_reverse) and can_reverse_open(1) then
+    if ((manual_reverse_L or thrust_in_reverse) and can_reverse_open(1)) or get(FAILURE_ENG_REV_UNLOCK, 1) == 1 then
         set(Override_eng_1_prop_mode, 3)
     else
         set(Override_eng_1_prop_mode, 1)
@@ -254,7 +256,7 @@ local function update_prop_mode(manual_reverse_L, manual_reverse_R)
         end
     end
 
-    if (manual_reverse_R or thrust_in_reverse) and can_reverse_open(2) then
+    if ((manual_reverse_R or thrust_in_reverse) and can_reverse_open(2)) or get(FAILURE_ENG_REV_UNLOCK, 2) == 1 then
         set(Override_eng_2_prop_mode, 3)
     else
         set(Override_eng_2_prop_mode, 1)

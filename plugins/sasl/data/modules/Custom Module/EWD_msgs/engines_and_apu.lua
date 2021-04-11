@@ -1193,7 +1193,7 @@ MessageGroup_ENG_FAIL_SINGLE = {
 
 
 ----------------------------------------------------------------------------------------------------
--- CAUTION: ENG ALL ENGINES FAILURE
+-- WARNING: ENG ALL ENGINES FAILURE
 ----------------------------------------------------------------------------------------------------
 
 local Message_EFAIL_ELEC_MAN_ON = {
@@ -1284,4 +1284,290 @@ MessageGroup_ENG_FAIL_DUAL = {
 
 }
 
+----------------------------------------------------------------------------------------------------
+-- CAUTION: ENG 1(2) REV FAULT
+----------------------------------------------------------------------------------------------------
+
+MessageGroup_ENG_REV_FAULT = {
+
+    shown = false,
+
+    text  = function()
+                return "ENG"
+            end,
+    color = function()
+                return COL_CAUTION
+            end,
+
+    sd_page = nil,
+    
+    priority = PRIORITY_LEVEL_2,
+
+    messages = {
+        {
+            text = function()
+                local N = ""
+                if get(FAILURE_ENG_REV_FAULT, 1) == 1 then
+                    N = "1"
+                end
+                if get(FAILURE_ENG_REV_FAULT, 2) == 1 then
+                    if #N > 0 then
+                        N = N .. "+"
+                    end
+                    N = N .. "2"
+                end
+                return "    " .. N .. " REVERSER FAULT"
+            end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        }
+    },
+
+    is_active = function()
+        return get(FAILURE_ENG_REV_FAULT, 1) + get(FAILURE_ENG_REV_FAULT, 2) > 0
+    end,
+
+    is_inhibited = function()
+        return is_inibithed_in({PHASE_1ST_ENG_TO_PWR, PHASE_ABOVE_80_KTS, PHASE_LIFTOFF})
+    end
+
+}
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: ENG 1(2) REV PRESSURIZED
+----------------------------------------------------------------------------------------------------
+
+MessageGroup_ENG_REV_PRESS = {
+
+    shown = false,
+
+    text  = function()
+                return "ENG"
+            end,
+    color = function()
+                return COL_CAUTION
+            end,
+
+    sd_page = nil,
+    
+    priority = PRIORITY_LEVEL_2,
+
+    messages = {
+        {
+            text = function()
+                local N = ""
+                if get(FAILURE_ENG_REV_PRESS, 1) == 1 then
+                    N = "1"
+                end
+                if get(FAILURE_ENG_REV_PRESS, 2) == 1 then
+                    if #N > 0 then
+                        N = N .. "+"
+                    end
+                    N = N .. "2"
+                end
+                return "    " .. N .. " REV PRESSURIZED"
+            end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        },
+        {
+            text = function()
+                if get(FAILURE_ENG_REV_PRESS, 1) == 1 and get(FAILURE_ENG_REV_PRESS, 2) == 1  then
+                    return " - THR LEVER 1+2.....IDLE"
+                elseif get(FAILURE_ENG_REV_PRESS, 1) == 1 then
+                    return " - THR LEVER 1.......IDLE"
+                elseif get(FAILURE_ENG_REV_PRESS, 2) == 1 then
+                    return " - THR LEVER 2.......IDLE"
+                end
+            end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return true end
+        }
+    },
+
+    is_active = function()
+        return get(FAILURE_ENG_REV_PRESS, 1) + get(FAILURE_ENG_REV_PRESS, 2) > 0
+    end,
+
+    is_inhibited = function()
+        return is_inibithed_in({PHASE_ABOVE_80_KTS, PHASE_LIFTOFF, PHASE_TOUCHDOWN})
+    end
+
+}
+
+
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: ENG 1(2) REV UNLOCKED
+----------------------------------------------------------------------------------------------------
+
+local function which_eng_rev_unlockes()
+    if get(FAILURE_ENG_REV_UNLOCK, 1) == 1 and get(FAILURE_ENG_REV_UNLOCK, 2) == 1  then
+        return "1+2"
+    elseif get(FAILURE_ENG_REV_UNLOCK, 1) == 1 then
+        return "1.."
+    elseif get(FAILURE_ENG_REV_UNLOCK, 2) == 1 then
+        return "2.."
+    end
+end
+
+local Message_THR_IDLE_REV_UNLOCK = {
+    text = function() return " - THR LEVER ".. which_eng_rev_unlockes() ..".....IDLE" end,
+    color = function() return COL_ACTIONS end,
+    is_active = function() 
+        return (math.abs(get(Cockpit_throttle_lever_L)) > 0.1 and get(FAILURE_ENG_REV_UNLOCK, 1) == 1)
+            or (math.abs(get(Cockpit_throttle_lever_R)) > 0.1 and get(FAILURE_ENG_REV_UNLOCK, 2) == 1)
+    end
+}
+
+local Message_ENG_MASTER_OFF_REV = {
+    text = function() return " - ENG MASTER ".. which_eng_rev_unlockes() ..".....OFF" end,
+    color = function() return COL_ACTIONS end,
+    is_active = function()
+        return get(All_on_ground) == 1
+            and ((get(FAILURE_ENG_REV_UNLOCK, 1) == 1 and get(Engine_1_master_switch) == 1)
+            or (get(FAILURE_ENG_REV_UNLOCK, 2) == 1 and get(Engine_2_master_switch) == 1))
+    end
+}
+
+
+local Message_ENG_MASTER_OFF_REV_2 = {
+    text = function() return "   - ENG MASTER ".. which_eng_rev_unlockes() .."...OFF" end,
+    color = function() return COL_ACTIONS end,
+    is_active = function()
+        return get(All_on_ground) == 0
+            and ((get(FAILURE_ENG_REV_UNLOCK, 1) == 1 and get(Engine_1_master_switch) == 1)
+            or (get(FAILURE_ENG_REV_UNLOCK, 2) == 1 and get(Engine_2_master_switch) == 1))
+    end
+}
+
+local Message_MAX_SPEED_REV = {
+    text = function() return " MAX SPEED........300/.78" end,
+    color = function() return COL_ACTIONS end,
+    is_active = function()
+        return get(All_on_ground) == 0
+    end
+}
+
+local Message_MAX_SPEED_REV_2 = {
+    text = function() return "   MAX SPEED..........240" end,
+    color = function() return COL_ACTIONS end,
+    is_active = function()
+        return get(All_on_ground) == 0
+    end
+}
+
+
+local Message_IF_BUFFET_REV = {
+    text = function() return " . IF BUFFET:" end,
+    color = function() return COL_REMARKS end,
+    is_active = function()
+        return get(All_on_ground) == 0
+    end
+}
+
+
+local Message_IF_DEPLOYED_REV = {
+    text = function() return " . IF REVERSER DEPLOYED:" end,
+    color = function() return COL_REMARKS end,
+    is_active = function()
+        return get(All_on_ground) == 0
+    end
+}
+
+local Message_RUD_TRIM_REV = {
+    text = function()
+        local rot = get(FAILURE_ENG_REV_UNLOCK, 1)  == 1 and "R" or "L"
+        return "   - RUD TRIM......FULL " .. rot
+    end,
+    color = function() return COL_ACTIONS end,
+    is_active = function()
+        return get(All_on_ground) == 0 and (get(FAILURE_ENG_REV_UNLOCK, 1) + get(FAILURE_ENG_REV_UNLOCK, 2) == 1) and (
+              (get(FAILURE_ENG_REV_UNLOCK, 1) == 1 and get(Rudder_trim_target_angle) < 19) or (get(FAILURE_ENG_REV_UNLOCK, 2) == 1 and get(Rudder_trim_target_angle) > -19))
+    end
+}
+
+local Message_CTRL_HDG_ROLL_REV = {
+    text = function() return "   CONTROL HDG WITH ROLL" end,
+    color = function() return COL_ACTIONS end,
+    is_active = function()
+        return get(All_on_ground) == 0 and (get(FAILURE_ENG_REV_UNLOCK, 1) + get(FAILURE_ENG_REV_UNLOCK, 2) == 1)
+    end
+}
+
+
+
+
+MessageGroup_ENG_REV_UNLOCKED = {
+
+    shown = false,
+
+    text  = function()
+                return "ENG"
+            end,
+    color = function()
+                return COL_CAUTION
+            end,
+
+    sd_page = nil,
+    
+    priority = PRIORITY_LEVEL_2,
+
+    land_asap_amber = true,
+
+    messages = {
+        {
+            text = function()
+                local N = ""
+                if get(FAILURE_ENG_REV_UNLOCK, 1) == 1 then
+                    N = "1"
+                end
+                if get(FAILURE_ENG_REV_UNLOCK, 2) == 1 then
+                    if #N > 0 then
+                        N = N .. "+"
+                    end
+                    N = N .. "2"
+                end
+                return "    " .. N .. " REV UNLOCKED"
+            end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        },
+        {
+            text = function()
+                local N = ""
+                if get(FAILURE_ENG_REV_UNLOCK, 1) == 1 then
+                    N = "1"
+                end
+                if get(FAILURE_ENG_REV_UNLOCK, 2) == 1 then
+                    if #N > 0 then
+                        N = N .. "+"
+                    end
+                    N = N .. "2"
+                end
+                return "ENG " .. N .. " AT IDLE"
+            end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        },
+        Message_THR_IDLE_REV_UNLOCK,
+        Message_ENG_MASTER_OFF_REV,
+        Message_MAX_SPEED_REV,
+        Message_IF_BUFFET_REV,
+        Message_MAX_SPEED_REV_2,
+        Message_ENG_MASTER_OFF_REV_2,
+        Message_IF_DEPLOYED_REV,
+        Message_RUD_TRIM_REV,
+        Message_CTRL_HDG_ROLL_REV
+    },
+
+    is_active = function()
+        return get(FAILURE_ENG_REV_UNLOCK, 1) + get(FAILURE_ENG_REV_UNLOCK, 2) > 0
+    end,
+
+    is_inhibited = function()
+        return is_inibithed_in({PHASE_ABOVE_80_KTS, PHASE_LIFTOFF, PHASE_TOUCHDOWN})
+    end
+
+}
 
