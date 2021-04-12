@@ -84,6 +84,7 @@ local left_messages_list = {
 
     -- Cautions
     MessageGroup_FBW_ALTN_DIRECT_LAW,
+    MessageGroup_ENG_REV_UNLOCKED,
     MessageGroup_AVIONICS_SMOKE,
     MessageGroup_BRAKES_HOT,
     MessageGroup_APU_SHUTDOWN,
@@ -154,6 +155,8 @@ local left_messages_list = {
     MessageGroup_ENG_REV_SET,
     MessageGroup_ENG_FF_CLOG,
     MessageGroup_ENG_OIL_CLOG,
+    MessageGroup_ENG_REV_FAULT,
+    MessageGroup_ENG_REV_PRESS,
     MessageGroup_SAT_ABOVE_FLEX,
     MessageGroup_FUEL_WING_LO_LVL_DOUBLE,
     MessageGroup_FUEL_WING_LO_LVL_SINGLE,

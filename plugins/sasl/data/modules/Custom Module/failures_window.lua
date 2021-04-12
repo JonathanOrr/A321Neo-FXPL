@@ -194,6 +194,12 @@ local failures_data = {
             {name="ENG 2\nFAILURE", status=false, dataref=FAILURE_ENG_2_FAILURE},
             {name="ENG 1\nFIRE!", status=false, dataref=FAILURE_FIRE_ENG_1},
             {name="ENG 2\nFIRE!", status=false, dataref=FAILURE_FIRE_ENG_2},
+            {name="ENG 1 REV\nFAIL LOCKED", status=false, dataref=FAILURE_ENG_REV_FAULT, nr=1 },
+            {name="ENG 2 REV\nFAIL LOCKED", status=false, dataref=FAILURE_ENG_REV_FAULT, nr=2 },
+            {name="ENG 1 REV\nUNLOCKED!", status=false, dataref=FAILURE_ENG_REV_UNLOCK, nr=1 },
+            {name="ENG 2 REV\nUNLOCKED!", status=false, dataref=FAILURE_ENG_REV_UNLOCK, nr=2 },
+            {name="ENG 1 REV\nPRESSURIZED", status=false, dataref=FAILURE_ENG_REV_PRESS, nr=1 },
+            {name="ENG 2 REV\nPRESSURIZED", status=false, dataref=FAILURE_ENG_REV_PRESS, nr=2 },
             
             {name="APU\nFAILURE", status=false, dataref=FAILURE_ENG_APU_FAIL},
             {name="APU\nFIRE!", status=false, dataref=FAILURE_FIRE_APU},
