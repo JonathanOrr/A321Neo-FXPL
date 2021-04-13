@@ -25,24 +25,29 @@ end
 
 local test_table = {"Hello", "Rico", "This", "Is", "A", "Dropdown", "Drawn"}
 
-local function p3s3_dropdown1_buttons(x,y,w,h)
+local function p3s3_dropdown0_buttons(x,y,w,h)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, x - w/2, y-h/2,x + w/2, y + h/2,function ()
         test_dropdown_expanded = not test_dropdown_expanded
     end)
     for i=1, #test_table do
         if test_dropdown_expanded then
-            Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y,x - w/2,y-1 - h*i - 15 - 15, x + w/2, y-1 - h*i + 14,function ()
+            Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, x - w/2 + 5, y - h*i - 14, w-10 + ( x - w/2 + 5), h-2 + ( y - h*i - 14),function ()
                 print(i)
                 test_dropdown_selected = i
                 test_dropdown_expanded = false
             end)
         end
     end
+    if test_dropdown_expanded then
+        I_hate_button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, x - w/2, y-h/2,x + w/2, y + h/2,function ()
+            test_dropdown_expanded = false
+        end)
+    end
 end
 
 --MOUSE & BUTTONS--
 function p3s3_buttons()
-    p3s3_dropdown1_buttons(800, 500, 260, 29)
+    p3s3_dropdown0_buttons(800, 500, 260, 29)
 end
 
 --UPDATE LOOPS--
