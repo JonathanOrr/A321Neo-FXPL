@@ -161,7 +161,7 @@ function HydSystem:update_press()
         self.press_target = 0
     elseif self.is_engine_pump_on then
         -- Ok engine pump is ON, this is the best, no matter about the others pumps
-        self.press_target = math.random(PSI_AVG_ENGINE_PUMP - PSI_VAR_EE_PUMP, PSI_AVG_ENGINE_PUMP + PSI_VAR_EE_PUMP)           
+        self.press_target = math.random(PSI_AVG_ENGINE_PUMP - PSI_VAR_EE_PUMP, PSI_AVG_ENGINE_PUMP + PSI_VAR_EE_PUMP)
     elseif self.is_elec_pump_on then
         self.press_target = math.random(PSI_AVG_ELEC_PUMP - PSI_VAR_EE_PUMP, PSI_AVG_ELEC_PUMP + PSI_VAR_EE_PUMP)
     elseif self.is_ptu_on then
@@ -271,8 +271,8 @@ local function is_ptu_enabled()
     end
 
     -- PTU has a complex activation logic:
+    local first_and = get(Parkbrake_switch_pos) == 0  and get(Wheel_better_pushback_connected) == 0
 
-    local first_and = get(Actual_brake_ratio) == 0  -- TODO NWS STEERING
     -- Engines Both OFF or both ON
     local engines_both_off_or_on = get(Engine_1_master_switch) + get(Engine_2_master_switch) ~= 1
     local the_or = first_and or engines_both_off_or_on or get(All_on_ground) == 0
@@ -304,19 +304,19 @@ local function update_sys_status()
         end
     else
         g_sys.is_ptu_on = false
-        y_sys.is_ptu_on = false    
+        y_sys.is_ptu_on = false
     end
 
     if status_buttons.PTU and get(FAILURE_HYD_PTU) == 0 and get(DC_bus_2_pwrd) == 1 then
         if y_sys.is_ptu_on then
-            set(Hydraulic_PTU_status, 3)    
+            set(Hydraulic_PTU_status, 3)
         elseif g_sys.is_ptu_on then
-            set(Hydraulic_PTU_status, 2)            
+            set(Hydraulic_PTU_status, 2)
         else
-            set(Hydraulic_PTU_status, 1)            
+            set(Hydraulic_PTU_status, 1)
         end
     else
-            set(Hydraulic_PTU_status, 0)    
+            set(Hydraulic_PTU_status, 0)
     end
 
     
