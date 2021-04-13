@@ -155,6 +155,10 @@
 {22f80e6a-40fc-4fd9-9f77-f0ef5077c622} event:/RA/500
 {ceccdb65-09f6-4303-9230-4cb86b263170} event:/RA/Minimum
 {a897e617-89e1-43d6-8d15-a52e71fda8e9} event:/RA/retard
+{6a77bde7-2555-4a7c-a588-f176cc4c8c38} event:/ROWS/Brake
+{d5fb9fdc-25a1-4c78-9e24-6fb19b333b3b} event:/ROWS/KeepMaxRev
+{98776330-6780-43b7-b12b-9782a82b00e0} event:/ROWS/MaxBraking
+{c7f62ef3-47af-441f-906f-a97dbcbec7af} event:/ROWS/Rwytooshort
 {e455cdef-a81f-498e-b21d-793aa0ebd2dc} event:/SSPriority/Dual Input
 {f29dba50-d417-4b8c-b2f0-9a3966caf7cc} event:/SSPriority/Left
 {8fc35da0-ff79-4c98-9b39-e007109072ad} event:/SSPriority/Right

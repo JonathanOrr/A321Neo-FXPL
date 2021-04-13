@@ -914,8 +914,6 @@ local function other_spd_calculation()
     set(TOPCAT_vr, computed_vr)
     set(TOPCAT_v2, computed_v2)
     set(TOPCAT_flex, flex_temp)
-
-    print(mtow_qnh_correction + mtow_aice_correction + mtow_aircon_correction)
 end
 
 function execute_takeoff_performance()
