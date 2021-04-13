@@ -203,7 +203,9 @@ function p3s2_buttons()
             set(LOAD_flapssetting, 3)
             close_menu(1)
         end)
-        click_anywhere_except_that_area( 401, 501, 559, 608, close_menu_1)
+        I_hate_button_check_and_action (EFB_CURSOR_X, EFB_CURSOR_Y, 401, 501, 559, 608,function () --DROPDOWN 3 EXPAND
+            close_menu(1)
+        end)
 
     elseif dropdown_expanded[2] then
         Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 645, 556, 802, 580,function () --DROPDOWN 3 EXPAND
@@ -216,7 +218,10 @@ function p3s2_buttons()
             set(LOAD_thrustto, 1)
             close_menu(2)
         end)
-        click_anywhere_except_that_area( 645, 529, 802, 608, close_menu_2)
+        I_hate_button_check_and_action (EFB_CURSOR_X, EFB_CURSOR_Y, 645, 529, 802, 608,function () --DROPDOWN 3 EXPAND
+            close_menu(2)
+        end)
+
 
     elseif dropdown_expanded[3] then
         Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 878, 556, 1034, 580,function () --DROPDOWN 3 EXPAND
@@ -229,7 +234,9 @@ function p3s2_buttons()
             set(LOAD_runwaycond, 1)
             close_menu(3)
         end)
-        click_anywhere_except_that_area( 877, 529, 1035, 608, close_menu_3)
+        I_hate_button_check_and_action (EFB_CURSOR_X, EFB_CURSOR_Y,877, 529, 1035, 608, function () --DROPDOWN 3 EXPAND
+            close_menu(3)
+        end)
 
     elseif dropdown_expanded[4] then
         Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 114, 449, 272, 475,function () --DROPDOWN 3 EXPAND
@@ -242,8 +249,10 @@ function p3s2_buttons()
             set(LOAD_aircon , 0)
             close_menu(4)
         end)
-        click_anywhere_except_that_area( 114, 423, 272, 501, close_menu_4)
-
+        I_hate_button_check_and_action (EFB_CURSOR_X, EFB_CURSOR_Y,114, 423, 272, 501, function () --DROPDOWN 3 EXPAND
+            close_menu(4)
+        end)
+        
     elseif dropdown_expanded[5] then
         Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 349, 449, 506, 475,function () --DROPDOWN 3 EXPAND
             dropdown_current[5] = "ON"
@@ -255,7 +264,9 @@ function p3s2_buttons()
             set(LOAD_eng_aice, 0)
             close_menu(5)
         end)
-        click_anywhere_except_that_area( 349, 423, 506, 501,close_menu_5)
+        I_hate_button_check_and_action (EFB_CURSOR_X, EFB_CURSOR_Y,349, 423, 506, 501,function () --DROPDOWN 3 EXPAND
+            close_menu(5)
+        end)
 
     elseif dropdown_expanded[6] then
         Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 609, 449, 766, 475,function () --DROPDOWN 3 EXPAND
@@ -268,7 +279,9 @@ function p3s2_buttons()
             set(LOAD_all_aice, 0)
             close_menu(6)
         end)
-        click_anywhere_except_that_area( 609, 423, 766, 501, close_menu_6)
+        I_hate_button_check_and_action (EFB_CURSOR_X, EFB_CURSOR_Y,609, 423, 766, 501,function () --DROPDOWN 3 EXPAND
+            close_menu(6)
+        end)
     end
 end
 

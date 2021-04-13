@@ -9,6 +9,7 @@ local EFB_UNDERLINE_THICKNESS = 2
 -------------------------------------
 
 include("EFB/efb_common_buttons.lua")
+include("EFB/efb_functions.lua")
 include("EFB/EFB_pages/1.lua")
 include("EFB/EFB_pages/2.lua")
 include("EFB/EFB_pages/3.lua")

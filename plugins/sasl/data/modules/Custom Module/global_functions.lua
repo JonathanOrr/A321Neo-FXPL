@@ -703,13 +703,6 @@ function MCDU_set_data(reference, val)
     Mcdu_data[reference] = val 
 end
 
---mouse functions
-function Button_check_and_action(cursor_x, cursor_y, lower_x, lower_y, higher_x, higher_y, callback)
-    if cursor_x >= lower_x and cursor_x <= higher_x and cursor_y >= lower_y and cursor_y <= higher_y then
-        callback()
-    end
-end
-
 function Cursor_texture_to_local_pos(x, y, component_width, component_height, panel_width, panel_height)
     local tex_x, tex_y = sasl.getCSPanelMousePos()
 

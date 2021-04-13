@@ -8,7 +8,6 @@ local dropdown_expanded = {false}
 
 
 include("libs/table.save.lua")
-include("EFB/efb_functions.lua")
 
 
 

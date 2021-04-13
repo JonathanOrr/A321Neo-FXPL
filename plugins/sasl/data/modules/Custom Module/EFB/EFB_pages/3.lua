@@ -23,7 +23,6 @@ local NUMBER_OF_PAGES = 3
 
 include("EFB/EFB_pages/3_subpage2.lua")
 include("EFB/EFB_pages/3_subpage3.lua")
-include("EFB/efb_functions.lua")
 include("libs/table.save.lua")
 
 key_p3s1_focus = 0 --0 nothing, 1 oa, 2 ob, 3 oc, 4 cf, 5 ca, 6 fuel

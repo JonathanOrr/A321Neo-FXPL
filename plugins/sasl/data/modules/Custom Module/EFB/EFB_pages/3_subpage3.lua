@@ -4,7 +4,6 @@ local dropdown_selected = {0,0,0,0,0,0,0,0}
 local test_dropdown_selected = 1
 local test_dropdown_expanded = false
 ---------------------------------------------------------------------------------------------------------------------------------
-include("EFB/efb_functions.lua")
 
 local function draw_background()
     sasl.gl.drawTexture (EFB_LOAD_s3_bgd, 0 , 0 , 1143 , 800 , EFB_WHITE )
@@ -26,22 +25,24 @@ end
 
 local test_table = {"Hello", "Rico", "This", "Is", "A", "Dropdown", "Drawn"}
 
---MOUSE & BUTTONS--
-function p3s3_buttons()
+local function p3s3_dropdown1_buttons(x,y,w,h)
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, x - w/2, y-h/2,x + w/2, y + h/2,function ()
+        test_dropdown_expanded = not test_dropdown_expanded
+    end)
     for i=1, #test_table do
-        local xywh = {800, 500, 260, 29}
         if test_dropdown_expanded then
-            print(i)
-            Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, xywh[1] - xywh[3]/2, xywh[2]-1 - xywh[2]*i - 15, xywh[1] + xywh[3]/2, xywh[2]-1 - xywh[4]*i + 14,function ()
+            Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y,x - w/2,y-1 - h*i - 15 - 15, x + w/2, y-1 - h*i + 14,function ()
                 print(i)
                 test_dropdown_selected = i
                 test_dropdown_expanded = false
             end)
         end
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, xywh[1] - xywh[3]/2, xywh[2]-xywh[4]/2,xywh[1] + xywh[3]/2, xywh[2] + xywh[4]/2,function ()
-            test_dropdown_expanded = not test_dropdown_expanded
-        end)
     end
+end
+
+--MOUSE & BUTTONS--
+function p3s3_buttons()
+    p3s3_dropdown1_buttons(800, 500, 260, 29)
 end
 
 --UPDATE LOOPS--

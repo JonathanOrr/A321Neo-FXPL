@@ -6,7 +6,6 @@ BUTTON_PRESS_TIME = 0.5
 local NUMBER_OF_PAGES = 2
 efb_p5_subpage_number = 1
 
-include("EFB/efb_functions.lua")
 include("EFB/EFB_pages/5_subpage1.lua")
 include("EFB/EFB_pages/5_subpage2.lua")
 include("libs/table.save.lua")
