@@ -173,6 +173,8 @@ EFB_LOAD_selected_oc =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/t
 EFB_LOAD_selected_cf =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/selected_cf.png")
 EFB_LOAD_selected_ca =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/selected_ca.png")
 EFB_LOAD_selected_fuel =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/selected_fuel.png")
+EFB_LOAD_selected_dep =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/dep_highlight.png")
+EFB_LOAD_selected_arr =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/arr_highlight.png")
 
 --EFB_LOAD_bgd =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/overlay.png")
 --EFB_LOAD_refuel_button =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/refuel_button.png")

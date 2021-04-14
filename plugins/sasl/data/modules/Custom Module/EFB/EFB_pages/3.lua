@@ -24,6 +24,14 @@ local NUMBER_OF_PAGES = 3
 include("EFB/EFB_pages/3_subpage2.lua")
 include("EFB/EFB_pages/3_subpage3.lua")
 include("libs/table.save.lua")
+include('libs/geo-helpers.lua')
+
+local dropdown_expanded = {false, false}
+local dropdown_selected = {1,1}
+local dropdown_1 = {}
+local dropdown_2 = {}
+
+local avionics_bay_is_initialising = false
 
 key_p3s1_focus = 0 --0 nothing, 1 oa, 2 ob, 3 oc, 4 cf, 5 ca, 6 fuel
 local key_p3s1_buffer = ""
@@ -35,6 +43,8 @@ local load_button_begin = 0
 load_target = {0,0,0,0,0,0}
 load_actual = {0,0,0,0,0,0} -- not a live value! does not change in flight!!!!!!!
 local total_load_target = 0
+
+local deparr_apts = {"", ""}
 
 local predicted_tow = 0
 
@@ -124,14 +134,92 @@ end
 
 ----------------KEYOARD STUFF
 
+local function p3s1_dropdown_buttons( x,y,w,h, table, identifier)
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, x - w/2, y-h/2,x + w/2, y + h/2,function ()
+        dropdown_expanded[identifier] = not dropdown_expanded[identifier]
+    end)
+    for i=1, #table do
+        if dropdown_expanded[identifier] then
+            Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, x - w/2 + 5, y - h*i - 14, w-10 + ( x - w/2 + 5), h-2 + ( y - h*i - 14),function ()
+                print(i)
+                dropdown_selected[identifier] = i
+                dropdown_expanded[identifier] = false
+            end)
+        end
+    end
+    if dropdown_expanded[identifier] then
+        I_hate_button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, x - w/2, y-h/2,x + w/2, y + h/2,function ()
+            dropdown_expanded[identifier] = false
+        end)
+    end
+end
+
+local airport_reset_flags = {true,true} -- 1 is dep 2 is arr
+local function request_runway_data(reset_flag_index)
+    if AvionicsBay.is_initialized() and AvionicsBay.is_ready() and not airport_reset_flags[reset_flag_index] then
+        local apts = AvionicsBay.apts.get_by_name(deparr_apts[reset_flag_index])
+        
+        if #apts > 0 then    -- If the airport exists
+        local apt = apts[1]    -- Take the airport
+        
+        --print(apt.alt)
+        for i=1, #apt.rwys do
+            dropdown_1 = {}
+            print(apt.rwys[i].name, apt.rwys[i].sibl_name)
+            table.insert(dropdown_1, apt.rwys[i].name) 
+            table.insert(dropdown_1, apt.rwys[i].sibl_name) 
+            --print(  GC_distance_km(apt.rwys[i].lat, apt.rwys[i].lon, apt.rwys[i].s_lat, apt.rwys[i].s_lon) * 1000   )
+        end
+    
+        --local bearing = get_bearing(apt.rwys[1].lat, apt.rwys[1].lon, apt.rwys[1].s_lat, apt.rwys[1].s_lon) 
+        end
+
+        airport_reset_flags[reset_flag_index] = true
+        avionics_bay_is_initialising = false
+    elseif not airport_reset_flags[reset_flag_index] then
+        avionics_bay_is_initialising = true
+    end
+end
+
+local function draw_avionics_bay_standby()
+    if avionics_bay_is_initialising then
+        sasl.gl.drawRectangle ( 0 , 0 , 1143, 710, EFB_BACKGROUND_COLOUR)
+        drawTextCentered(Font_Airbus_panel,  572, 355, "INITIALISING AVIONICS BAY", 30, false, false, TEXT_ALIGN_CENTER, EFB_WHITE)
+    end
+end
+
 local function p3s1_plug_in_the_buffer()
-    if string.len(key_p3s1_buffer) <= 0 then --IF THE LENGTH OF THE STRING IS 0, THEN REVERT TO THE PREVIOUS VALUE. ELSE, PLUG-IN THE NEW VALUE.
-        key_p3s1_focus = 0
-        key_p3s1_buffer = ""
+    if key_p3s1_focus < 7 then
+        if string.len(key_p3s1_buffer) <= 0 then --IF THE LENGTH OF THE STRING IS 0, THEN REVERT TO THE PREVIOUS VALUE. ELSE, PLUG-IN THE NEW VALUE.
+            key_p3s1_focus = 0
+            key_p3s1_buffer = ""
+        else
+            load_target[key_p3s1_focus] = math.min(max_values[key_p3s1_focus], key_p3s1_buffer) --PLUG THE SCRATCHPAD INTO THE ACTUAL TARGET ARRAY
+            key_p3s1_focus = 0
+            key_p3s1_buffer = ""
+        end
+    elseif key_p3s1_focus == 7 then
+        if string.len(key_p3s1_buffer) <= 3 then --IF THE LENGTH OF THE STRING IS 0, THEN REVERT TO THE PREVIOUS VALUE. ELSE, PLUG-IN THE NEW VALUE.
+            key_p3s1_focus = 0
+            key_p3s1_buffer = ""
+        else
+            deparr_apts[1] = key_p3s1_buffer --PLUG THE SCRATCHPAD INTO THE ACTUAL TARGET AIRPORT
+            key_p3s1_focus = 0
+            key_p3s1_buffer = ""
+            airport_reset_flags[1] = false
+        end
+    elseif key_p3s1_focus == 8 then
+        if string.len(key_p3s1_buffer) <= 3 then --IF THE LENGTH OF THE STRING IS 0, THEN REVERT TO THE PREVIOUS VALUE. ELSE, PLUG-IN THE NEW VALUE.
+            key_p3s1_focus = 0
+            key_p3s1_buffer = ""
+        else
+            deparr_apts[2] = key_p3s1_buffer --PLUG THE SCRATCHPAD INTO THE ACTUAL TARGET AIRPORT
+            key_p3s1_focus = 0
+            key_p3s1_buffer = ""
+            airport_reset_flags[2] = false
+        end
     else
-        load_target[key_p3s1_focus] = math.min(max_values[key_p3s1_focus], key_p3s1_buffer) --PLUG THE SCRATCHPAD INTO THE ACTUAL TARGET ARRAY
-        key_p3s1_focus = 0
-        key_p3s1_buffer = ""
+        assert(key_p3s1_focus > 8, "P3S1 KEYBOARD OUT OF FOCUS, CONTACT HENRICK KU")
     end
 end
 
@@ -140,27 +228,17 @@ function p3s1_revert_to_previous_and_delete_buffer()
     key_p3s1_buffer = ""
 end
 
-local function p3s1_go_to_next_box()
-    if string.len(key_p3s1_buffer) > 0 then
-        load_target[key_p3s1_focus] = math.min(max_values[key_p3s1_focus], key_p3s1_buffer) --PLUG THE SCRATCHPAD INTO THE ACTUAL TARGET ARRAY
-    end
-    key_p3s1_buffer = ""
-    key_p3s1_focus = math.min(6, key_p3s1_focus + 1)
-end
-
-local function p3s1_go_to_previous_box()
-    if string.len(key_p3s1_buffer) > 0 then
-        load_target[key_p3s1_focus] = math.min(max_values[key_p3s1_focus], key_p3s1_buffer) --PLUG THE SCRATCHPAD INTO THE ACTUAL TARGET ARRAY
-    end
-    key_p3s1_buffer = ""
-    key_p3s1_focus = math.max(1, key_p3s1_focus - 1)
-end
-
 local function p3s1_construct_the_buffer(char)
-    local read_n = tonumber(string.char(char)) --JUST TO MAKE SURE WHAT YOU TYPE IS A NUMBER
-
-    if read_n ~= nil and string.len(key_p3s1_buffer) < 7 then -- "tonumber()" RETURNS nil IF NOT A NUMBER, ALSO MAKES SURE STRING LENGTH IS <7
-        key_p3s1_buffer = key_p3s1_buffer..string.char(char)
+    if key_p3s1_focus < 7 then
+        local read_n = tonumber(string.char(char)) --JUST TO MAKE SURE WHAT YOU TYPE IS A NUMBER
+        if read_n ~= nil and string.len(key_p3s1_buffer) < 7 then -- "tonumber()" RETURNS nil IF NOT A NUMBER, ALSO MAKES SURE STRING LENGTH IS <7
+            key_p3s1_buffer = key_p3s1_buffer..string.char(char)
+        end
+    elseif key_p3s1_focus >= 7 then
+        local read_n = tonumber(string.char(char)) --JUST TO MAKE SURE WHAT YOU TYPE IS AN ALPHABET
+        if read_n == nil and string.len(key_p3s1_buffer) < 7 then -- "tonumber()" RETURNS nil IF NOT A NUMBER, ALSO MAKES SURE STRING LENGTH IS <7
+            key_p3s1_buffer = string.upper(key_p3s1_buffer..string.char(char))
+        end
     end
 end
 
@@ -175,10 +253,6 @@ function EFB_onKeyDown_page3_subpage_1(component, char, key, shiftDown, ctrlDown
                 p3s1_plug_in_the_buffer()
             elseif char == SASL_VK_ESCAPE then --REVERT TO THE PREVIOUS VALUE.
                 p3s1_revert_to_previous_and_delete_buffer()
-            elseif char == SASL_KEY_DOWN then
-                p3s1_go_to_next_box()
-            elseif char == SASL_KEY_UP then
-                p3s1_go_to_previous_box()
             else
                 p3s1_construct_the_buffer(char)
             end
@@ -187,6 +261,7 @@ function EFB_onKeyDown_page3_subpage_1(component, char, key, shiftDown, ctrlDown
         return true
     end
 end
+
 
 --------------------------------------------------------------------------------------------------------------------------------SUBPAGE 1
 
@@ -212,6 +287,10 @@ local function draw_focus_frame()
         sasl.gl.drawTexture (EFB_LOAD_selected_ca, 0 , 0 , 1143 , 800 , EFB_WHITE )
     elseif key_p3s1_focus == 6 then
         sasl.gl.drawTexture (EFB_LOAD_selected_fuel, 0 , 0 , 1143 , 800 , EFB_WHITE )
+    elseif key_p3s1_focus == 7 then
+        sasl.gl.drawTexture (EFB_LOAD_selected_dep, 0 , 0 , 1143 , 800 , EFB_WHITE )
+    elseif key_p3s1_focus == 8 then
+        sasl.gl.drawTexture (EFB_LOAD_selected_arr, 0 , 0 , 1143 , 800 , EFB_WHITE )
     end
 end
 
@@ -381,6 +460,14 @@ local function Subpage_1_buttons()
         p3s1_plug_in_the_buffer()
         key_p3s1_focus = key_p3s1_focus == 6 and 0 or 6
     end)
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 71 , 565, 163, 591,function ()
+        p3s1_plug_in_the_buffer()
+        key_p3s1_focus = key_p3s1_focus == 7 and 0 or 7
+    end)
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 357 , 565, 449, 591,function ()
+        p3s1_plug_in_the_buffer()
+        key_p3s1_focus = key_p3s1_focus == 8 and 0 or 8
+    end)
 --------------------------------------------------------------------------------------------------------
 
 if key_p3s1_focus == 1 then
@@ -395,7 +482,17 @@ elseif key_p3s1_focus == 5 then
     click_anywhere_except_that_area( 216, 190, 308, 214, p3s1_plug_in_the_buffer)
 elseif key_p3s1_focus == 6 then
     click_anywhere_except_that_area( 216, 112, 308, 136, p3s1_plug_in_the_buffer)
+elseif key_p3s1_focus == 7 then
+    click_anywhere_except_that_area( 71 , 565, 163, 591, p3s1_plug_in_the_buffer)
+elseif key_p3s1_focus == 8 then
+    click_anywhere_except_that_area( 357, 565, 449, 591, p3s1_plug_in_the_buffer)
 end
+
+--------------------------------------------------------------------------------------------------------
+
+
+    p3s1_dropdown_buttons(230, 578, 90, 26,    dropdown_1, 1)
+    p3s1_dropdown_buttons(511, 578, 90, 26,    dropdown_2, 2)
 
 --------------------------------------------------------------------------------------------------------
 
@@ -411,6 +508,8 @@ end
 local function EFB_update_page_3_subpage_1() --UPDATE LOOP
     predict_tow()
     predict_cg()
+    request_runway_data(1)
+    request_runway_data(2)
     --print(predicted_cg)
     --print_r(load_target)
     --print_r(load_actual)
@@ -421,7 +520,11 @@ local function EFB_draw_page_3_subpage_1() -- DRAW LOOP
     sasl.gl.drawTexture (EFB_LOAD_bgd, 0 , 0 , 1143 , 800 , EFB_WHITE )
     sasl.gl.drawTexture (EFB_LOAD_bound_takeoff, 0 , 0 , 1143 , 800 , EFB_WHITE )
     sasl.gl.drawTexture (EFB_LOAD_chart, 0 , 0 , 1143 , 800 , EFB_WHITE )
-    sasl.gl.drawText ( Font_Airbus_panel , 97 , 582, dry_operating_weight , 17 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
+
+
+    draw_dropdown_menu(230, 578, 90, 26, EFB_DROPDOWN_OUTSIDE, EFB_DROPDOWN_INSIDE, dropdown_1, dropdown_expanded[1], dropdown_selected[1])
+    draw_dropdown_menu(511, 578, 90, 26, EFB_DROPDOWN_OUTSIDE, EFB_DROPDOWN_INSIDE, dropdown_2, dropdown_expanded[2], dropdown_selected[2])
+
 
     if string.len(key_p3s1_buffer) > 0 then --THE PURPOSE OF THIS IFELSE IS TO PREVENT THE CURSOR FROM COVERING UP THE PREVIOUS VALUE, WHEN THE SCRATCHPAD IS EMPTY.
         drawTextCentered( Font_Airbus_panel , 263 , 397, key_p3s1_focus == 1 and key_p3s1_buffer or load_target[1] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
@@ -430,6 +533,9 @@ local function EFB_draw_page_3_subpage_1() -- DRAW LOOP
         drawTextCentered( Font_Airbus_panel , 263 , 242, key_p3s1_focus == 4 and key_p3s1_buffer or load_target[4] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
         drawTextCentered( Font_Airbus_panel , 263 , 203, key_p3s1_focus == 5 and key_p3s1_buffer or load_target[5] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
         drawTextCentered( Font_Airbus_panel , 263 , 124, key_p3s1_focus == 6 and key_p3s1_buffer or load_target[6] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
+
+        drawTextCentered( Font_Airbus_panel , 116 , 578, key_p3s1_focus == 7 and key_p3s1_buffer or deparr_apts[1] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
+        drawTextCentered( Font_Airbus_panel , 403 , 578, key_p3s1_focus == 8 and key_p3s1_buffer or deparr_apts[2] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
     else
         drawTextCentered( Font_Airbus_panel , 263 , 397, load_target[1] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
         drawTextCentered( Font_Airbus_panel , 263 , 358, load_target[2] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
@@ -437,6 +543,9 @@ local function EFB_draw_page_3_subpage_1() -- DRAW LOOP
         drawTextCentered( Font_Airbus_panel , 263 , 242, load_target[4] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
         drawTextCentered( Font_Airbus_panel , 263 , 203, load_target[5] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
         drawTextCentered( Font_Airbus_panel , 263 , 124, load_target[6] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
+
+        drawTextCentered( Font_Airbus_panel , 116 , 578, deparr_apts[1] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
+        drawTextCentered( Font_Airbus_panel , 403 , 578, deparr_apts[2] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
     end
 --------------------------------------------------------------------------
 
@@ -477,6 +586,7 @@ local function EFB_draw_page_3_subpage_1() -- DRAW LOOP
     drawTextCentered( Font_Airbus_panel , 243 , 63, "LOAD AIRCRAFT" , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
 
     draw_focus_frame()
+    draw_avionics_bay_standby()
 
 end
 
