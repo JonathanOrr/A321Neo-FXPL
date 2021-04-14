@@ -44,7 +44,8 @@ local image_point_wpt = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/tex
 
 local image_vor_1 = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/needle-VOR1.png")
 local image_vor_2 = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/needle-VOR2.png")
-local image_adf   = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/needle-ADF1.png")
+local image_adf_1 = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/needle-ADF1.png")
+local image_adf_2 = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/needle-ADF2.png")
 
 local image_track_sym = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/sym-track-ring.png")
 local image_hdgsel_sym = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/sym-hdgsel-ring.png")
@@ -191,9 +192,9 @@ local function draw_navaid_pointer_single(data, id)
         return
     end
 
-    local image = data.nav[id].selector == ND_SEL_ADF and image_adf or (id == 1 and image_vor_1 or image_vor_2)
+    local image = data.nav[id].selector == ND_SEL_ADF and (id == 1 and image_adf_1 or image_adf_2) or (id == 1 and image_vor_1 or image_vor_2)
 
-    sasl.gl.drawRotatedTexture(image, 180+data.nav[id].needle_angle, (size[1]-42)/2,(size[2]-586)/2,42,586, {1,1,1})
+    sasl.gl.drawRotatedTexture(image, data.nav[id].needle_angle-data.inputs.heading+180, (size[1]-42)/2,(size[2]-586)/2,42,586, {1,1,1})
 
 end
 

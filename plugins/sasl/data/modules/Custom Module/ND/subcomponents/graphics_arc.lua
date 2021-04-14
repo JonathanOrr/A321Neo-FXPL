@@ -48,6 +48,10 @@ local image_point_dme_only  = sasl.gl.loadImage(moduleDirectory .. "/Custom Modu
 local image_point_ndb = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/point-ndb.png")
 local image_point_wpt = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/point-wpt.png")
 
+local image_vor_1 = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/needle-VOR1-arc.png")
+local image_vor_2 = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/needle-VOR2-arc.png")
+local image_adf_1 = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/needle-VOR1-arc.png")  -- FIXME
+local image_adf_2 = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/needle-VOR2-arc.png")  -- FIXME
 
 local image_track_sym = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/sym-track-arc.png")
 local image_hdgsel_sym = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/sym-hdgsel-arc.png")
@@ -204,6 +208,23 @@ local function draw_ranges(data)
     sasl.gl.drawText(Font_AirbusDUL, size[2]/2+240, 250, third_ring, 24, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
     
 end
+
+local function draw_navaid_pointer_single(data, id)
+    if not data.nav[id].needle_visible then
+        return
+    end
+
+    local image = data.nav[id].selector == ND_SEL_ADF and (id == 1 and image_adf_1 or image_adf_2) or (id == 1 and image_vor_1 or image_vor_2)
+
+    sasl.gl.drawRotatedTexture(image, data.nav[id].needle_angle-data.inputs.heading+180, (size[1]-44)/2,(size[2]-1153)/2-312,44,1153, {1,1,1})
+
+end
+
+local function draw_navaid_pointers(data)
+    draw_navaid_pointer_single(data, 1)
+    draw_navaid_pointer_single(data, 2)
+end
+
 
 -------------------------------------------------------------------------------
 -- POIs
@@ -421,5 +442,6 @@ function draw_arc(data)
     }
     
     draw_oans(data, functions_for_oans)
-    
+
+    draw_navaid_pointers(data)
 end
