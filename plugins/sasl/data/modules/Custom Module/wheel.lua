@@ -235,7 +235,7 @@ local function update_steering()
     
     local pedals_pos = get(Yaw)    -- TODO Add also autopilot effect on wheels
     
-    if EFB.preferences["nws"] == 1 then
+    if EFB.preferences["nws"] == 0 then
         pedals_pos = get(Capt_Roll)
     elseif EFB.preferences["nws"] == 2 then
         pedals_pos = get(Joystick_tiller)
