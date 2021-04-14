@@ -200,6 +200,7 @@ EFB_LOAD_s3_dropdown6 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/
 EFB_LOAD_s3_dropdown7 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage3/dropdown7.png")
 EFB_LOAD_s3_dropdown8 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage3/dropdown8.png")
 EFB_LOAD_s3_failuretext =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage3/failuretext.png")
+EFB_LOAD_s3_generate_button =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage3/generate_button.png")
 
 
 -----------CONFIG------------

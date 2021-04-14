@@ -102,7 +102,7 @@ local landing_distance_config_3 = {
     
 
 --CONDITION 1-6, AIRCRAFT WEIGHT IN KG, ELEVATION IN FT, vapp_difference = VAPP-VLS, TAILWIND IN KT, REVERSE OPERATIVE 0-2, AUTOLAND BOOLEAN, CONFIG3 BOOLEAN
-function landing_distance(condition, aircraft_weight, elevation, vapp_difference,  tailwind, reversers_number, isautoland, isconfig3) 
+function landing_distance(condition, aircraft_weight, elevation, vapp_difference,  tailwind, reversers_number, autoland, isconfig3) 
     if condition == 1 then
         local altitude_corr = (get(ACF_elevation)/1000)*130
     elseif condition == 2 then
@@ -159,7 +159,7 @@ function landing_distance(condition, aircraft_weight, elevation, vapp_difference
         local reverse_corr = 0
     end
 
-    if isautoland then
+    if autoland == 1 then
         if aircraft_weight < 60000 then
             if isconfig3 then
                 local autoland_corr = 190
@@ -179,7 +179,7 @@ function landing_distance(condition, aircraft_weight, elevation, vapp_difference
         end
     end
     
-    if isconfig3 then
+    if config3 == 1 then
         local original_will_flap_corr = Table_extrapolate(landing_distance_config_3[condition], aircraft_weight)
     else
         local original_will_flap_corr = Table_extrapolate(landing_distance_config_full[condition], aircraft_weight)
