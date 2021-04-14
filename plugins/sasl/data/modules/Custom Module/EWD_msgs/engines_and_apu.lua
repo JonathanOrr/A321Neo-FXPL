@@ -1728,3 +1728,88 @@ MessageGroup_ENG_OIL_LO_PR_RED = {
 }
 
 
+----------------------------------------------------------------------------------------------------
+-- WARNING: THR ABV IDLE
+----------------------------------------------------------------------------------------------------
+
+MessageGroup_THR_ABV_IDLE_1 = {
+
+    shown = false,
+
+    text  = function()
+                return "ENG"
+            end,
+    color = function()
+                return COL_WARNING
+            end,
+
+    sd_page = nil,
+    
+    priority = PRIORITY_LEVEL_3,
+
+    messages = {
+        {
+            text = function() return "    1 THR LEVER ABV IDLE" end,
+            color = function() return COL_WARNING end,
+            is_active = function() return true end
+        },
+        {
+            text = function()
+                    return " - THR LEVER 1.......IDLE"
+            end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return true end
+        }
+    },
+
+    is_active = function()
+        return get(Cockpit_throttle_lever_L) > THR_IDLE_END and get(Cockpit_throttle_lever_R) < 0
+               or (get(Cockpit_throttle_lever_L) > THR_IDLE_END and get(Cockpit_throttle_lever_R) <= THR_IDLE_END and get(EWD_flight_phase) == PHASE_BELOW_80_KTS)
+    end,
+
+    is_inhibited = function()
+        return is_inibithed_in({PHASE_ELEC_PWR, PHASE_LIFTOFF, PHASE_AIRBONE, PHASE_FINAL, PHASE_2ND_ENG_OFF})
+    end
+}
+
+MessageGroup_THR_ABV_IDLE_2 = {
+
+    shown = false,
+
+    text  = function()
+                return "ENG"
+            end,
+    color = function()
+                return COL_WARNING
+            end,
+
+    sd_page = nil,
+    
+    priority = PRIORITY_LEVEL_3,
+
+    messages = {
+        {
+            text = function() return "    2 THR LEVER ABV IDLE" end,
+            color = function() return COL_WARNING end,
+            is_active = function() return true end
+        },
+        {
+            text = function()
+                    return " - THR LEVER 2.......IDLE"
+            end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return true end
+        }
+    },
+
+    is_active = function()
+        return get(Cockpit_throttle_lever_R) > THR_IDLE_END and get(Cockpit_throttle_lever_L) < 0
+               or (get(Cockpit_throttle_lever_R) > THR_IDLE_END and get(Cockpit_throttle_lever_L) <= THR_IDLE_END and get(EWD_flight_phase) == PHASE_BELOW_80_KTS)
+    end,
+
+    is_inhibited = function()
+        return is_inibithed_in({PHASE_ELEC_PWR, PHASE_LIFTOFF, PHASE_AIRBONE, PHASE_FINAL, PHASE_2ND_ENG_OFF})
+    end
+}
+
+
