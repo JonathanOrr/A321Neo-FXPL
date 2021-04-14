@@ -1141,7 +1141,7 @@ MessageGroup_ENG_FAIL_SINGLE = {
                 return COL_CAUTION
             end,
 
-    sd_page = nil,
+    sd_page = ECAM_PAGE_ENG,
     
     priority = PRIORITY_LEVEL_2,
 
@@ -1235,7 +1235,7 @@ MessageGroup_ENG_FAIL_DUAL = {
                 return COL_WARNING
             end,
 
-    sd_page = nil,
+    sd_page = ECAM_PAGE_ENG,
     
     priority = PRIORITY_LEVEL_3,
 
@@ -1299,7 +1299,7 @@ MessageGroup_ENG_REV_FAULT = {
                 return COL_CAUTION
             end,
 
-    sd_page = nil,
+    sd_page = ECAM_PAGE_ENG,
     
     priority = PRIORITY_LEVEL_2,
 
@@ -1348,7 +1348,7 @@ MessageGroup_ENG_REV_PRESS = {
                 return COL_CAUTION
             end,
 
-    sd_page = nil,
+    sd_page = ECAM_PAGE_ENG,
     
     priority = PRIORITY_LEVEL_2,
 
@@ -1509,7 +1509,7 @@ MessageGroup_ENG_REV_UNLOCKED = {
                 return COL_CAUTION
             end,
 
-    sd_page = nil,
+    sd_page = ECAM_PAGE_ENG,
     
     priority = PRIORITY_LEVEL_2,
 
@@ -1570,4 +1570,161 @@ MessageGroup_ENG_REV_UNLOCKED = {
     end
 
 }
+
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION/WARNING: ENG 1 OIL LO PR
+----------------------------------------------------------------------------------------------------
+
+local function get_press_red_limit(n2)
+    return ENG.data.display.oil_press_low_red[1] + ENG.data.display.oil_press_low_red[2] * n2
+end
+
+local function get_press_amber_limit(n2)
+    return ENG.data.display.oil_press_low_amber[1] + ENG.data.display.oil_press_low_amber[2] * n2
+end
+
+local function eng_1_lo_pr_amber()
+    return (get(Engine_1_avail) == 1 and (get(Eng_1_OIL_press) >= get_press_red_limit(get(Eng_1_N2)) and get(Eng_1_OIL_press) < get_press_amber_limit(get(Eng_1_N2))))
+end
+
+local function eng_2_lo_pr_amber()
+    return (get(Engine_2_avail) == 1 and (get(Eng_2_OIL_press) >= get_press_red_limit(get(Eng_2_N2)) and get(Eng_2_OIL_press) < get_press_amber_limit(get(Eng_2_N2))))
+end
+
+local function eng_1_lo_pr_red()
+    return (get(Engine_1_avail) == 1 and (get(Eng_1_OIL_press) < get_press_red_limit(get(Eng_1_N2))))
+end
+
+local function eng_2_lo_pr_red()
+    return (get(Engine_2_avail) == 1 and (get(Eng_2_OIL_press) < get_press_red_limit(get(Eng_2_N2))))
+end
+
+
+MessageGroup_ENG_OIL_LO_PR_AMBER = {
+
+    shown = false,
+
+    text  = function()
+                return "ENG"
+            end,
+    color = function()
+                return COL_CAUTION
+            end,
+
+    sd_page = ECAM_PAGE_ENG,
+    
+    priority = PRIORITY_LEVEL_2,
+
+    land_asap_amber = true,
+
+    messages = {
+        {
+            text = function()
+                local N = ""
+                if eng_1_lo_pr_amber() then
+                    N = "1"
+                end
+                if eng_2_lo_pr_amber() then
+                    if #N > 0 then
+                        N = N .. "+"
+                    end
+                    N = N .. "2"
+                end
+                return "    " .. N .. " OIL LO PR"
+            end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        }
+    },
+
+    is_active = function()
+        return eng_1_lo_pr_amber() or eng_2_lo_pr_amber()
+    end,
+
+    is_inhibited = function()
+        return is_active_in({PHASE_AIRBONE, PHASE_FINAL, PHASE_BELOW_80_KTS, PHASE_2ND_ENG_OFF})
+    end
+
+}
+
+local function which_eng_oil_lo_pr()
+    if eng_1_lo_pr_red() and eng_2_lo_pr_red()  then
+        return "1+2"
+    elseif eng_1_lo_pr_red() then
+        return "1.."
+    elseif eng_2_lo_pr_red() then
+        return "2.."
+    end
+end
+
+local Message_THR_IDLE_ENG_LOW_OIL_PR = {
+    text = function() return " - THR LEVER ".. which_eng_oil_lo_pr() ..".....IDLE" end,
+    color = function() return COL_ACTIONS end,
+    is_active = function() 
+        return (math.abs(get(Cockpit_throttle_lever_L)) > 0.1 and eng_1_lo_pr_red())
+            or (math.abs(get(Cockpit_throttle_lever_R)) > 0.1 and eng_2_lo_pr_red())
+    end
+}
+
+local Message_ENG_MASTER_LOW_OIL_PR = {
+    text = function() return " - ENG MASTER ".. which_eng_oil_lo_pr() ..".....OFF" end,
+    color = function() return COL_ACTIONS end,
+    is_active = function()
+        return ((eng_1_lo_pr_red()and get(Engine_1_master_switch) == 1)
+            or (eng_2_lo_pr_red() and get(Engine_2_master_switch) == 1))
+    end
+}
+
+
+
+MessageGroup_ENG_OIL_LO_PR_RED = {
+
+    shown = false,
+
+    text  = function()
+                return "ENG"
+            end,
+    color = function()
+                return COL_WARNING
+            end,
+
+    sd_page = ECAM_PAGE_ENG,
+    
+    priority = PRIORITY_LEVEL_3,
+
+    land_asap_amber = true,
+
+    messages = {
+        {
+            text = function()
+                local N = ""
+                if eng_1_lo_pr_red() then
+                    N = "1"
+                end
+                if eng_2_lo_pr_red() then
+                    if #N > 0 then
+                        N = N .. "+"
+                    end
+                    N = N .. "2"
+                end
+                return "    " .. N .. " OIL LO PR"
+            end,
+            color = function() return COL_WARNING end,
+            is_active = function() return true end
+        },
+        Message_THR_IDLE_ENG_LOW_OIL_PR,
+        Message_ENG_MASTER_LOW_OIL_PR
+    },
+
+    is_active = function()
+        return eng_1_lo_pr_red() or eng_2_lo_pr_red()
+    end,
+
+    is_inhibited = function()
+        return is_inibithed_in({PHASE_ELEC_PWR, PHASE_2ND_ENG_OFF})
+    end
+
+}
+
 
