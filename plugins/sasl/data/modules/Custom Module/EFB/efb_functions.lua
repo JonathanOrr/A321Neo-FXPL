@@ -40,7 +40,7 @@ function draw_dropdown_menu(x, y, width, height, outside_colour, inside_colour, 
     sasl.gl.drawRectangle ( x - width/2 ,  y - height/2 ,  width + selector_extend_distance , height , outside_colour)
     sasl.gl.drawRectangle ( x - width/2 + 2 ,  y - height/2 + 2 ,  width - 4 , height - 4 , inside_colour)
 
-    if expanded then
+    if expanded and #table > 0 then
         sasl.gl.drawRectangle ( x - width/2 ,  y - height/2 - (number_of_rows)*height - 4,  width , height + (number_of_rows -1)*height + 4, outside_colour)
         sasl.gl.drawRectangle ( x - width/2 + 2 ,  y - height/2 - (number_of_rows)*height + 2 - 4,  width - 4 , height + (number_of_rows -1)*height - 3 + 5, inside_colour)
 
@@ -57,7 +57,9 @@ function draw_dropdown_menu(x, y, width, height, outside_colour, inside_colour, 
     sasl.gl.drawTriangle ( x + width/2 + 2 ,  y + height/2 - 8 , x + width/2 + selector_extend_distance - 2 -2 , y + height/2 - 8 , ((x + width/2 + 2) + (x + width/2 + selector_extend_distance - 2 ))/2 - 1  ,  y - height/2 + 2 , inside_colour )
     sasl.gl.drawTriangle ( x + width/2 + 6 ,  y + height/2 - 8 , x + width/2 + selector_extend_distance - 6 -2 , y + height/2 - 8 , ((x + width/2 + 2) + (x + width/2 + selector_extend_distance - 2 ))/2 - 1  ,  y - height/2 + 8 , outside_colour )
 
-    drawTextCentered(Font_Airbus_panel, x  ,  y-1 , table[selected] , 20, false, false, TEXT_ALIGN_CENTER, EFB_FULL_GREEN)
+    if #table > 0 then
+        drawTextCentered(Font_Airbus_panel, x  ,  y-1 , table[selected] , 20, false, false, TEXT_ALIGN_CENTER, EFB_FULL_GREEN)
+    end
 
     local component_x = x
     local component_y = y

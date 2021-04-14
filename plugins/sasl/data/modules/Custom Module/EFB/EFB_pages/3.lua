@@ -26,6 +26,11 @@ include("EFB/EFB_pages/3_subpage3.lua")
 include("libs/table.save.lua")
 include('libs/geo-helpers.lua')
 
+local dropdown_expanded = {false, false}
+local dropdown_selected = {1,1}
+local dropdown_1 = {}
+local dropdown_2 = {}
+
 local avionics_bay_is_initialising = false
 
 key_p3s1_focus = 0 --0 nothing, 1 oa, 2 ob, 3 oc, 4 cf, 5 ca, 6 fuel
@@ -129,6 +134,26 @@ end
 
 ----------------KEYOARD STUFF
 
+local function p3s1_dropdown_buttons( x,y,w,h, table, identifier)
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, x - w/2, y-h/2,x + w/2, y + h/2,function ()
+        dropdown_expanded[identifier] = not dropdown_expanded[identifier]
+    end)
+    for i=1, #table do
+        if dropdown_expanded[identifier] then
+            Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, x - w/2 + 5, y - h*i - 14, w-10 + ( x - w/2 + 5), h-2 + ( y - h*i - 14),function ()
+                print(i)
+                dropdown_selected[identifier] = i
+                dropdown_expanded[identifier] = false
+            end)
+        end
+    end
+    if dropdown_expanded[identifier] then
+        I_hate_button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, x - w/2, y-h/2,x + w/2, y + h/2,function ()
+            dropdown_expanded[identifier] = false
+        end)
+    end
+end
+
 local airport_reset_flags = {true,true} -- 1 is dep 2 is arr
 local function request_runway_data(reset_flag_index)
     if AvionicsBay.is_initialized() and AvionicsBay.is_ready() and not airport_reset_flags[reset_flag_index] then
@@ -139,12 +164,13 @@ local function request_runway_data(reset_flag_index)
         
         --print(apt.alt)
         for i=1, #apt.rwys do
+            dropdown_1 = {}
             print(apt.rwys[i].name, apt.rwys[i].sibl_name)
-            print(  GC_distance_km(apt.rwys[i].lat, apt.rwys[i].lon, apt.rwys[i].s_lat, apt.rwys[i].s_lon) * 1000   )
+            table.insert(dropdown_1, apt.rwys[i].name) 
+            table.insert(dropdown_1, apt.rwys[i].sibl_name) 
+            --print(  GC_distance_km(apt.rwys[i].lat, apt.rwys[i].lon, apt.rwys[i].s_lat, apt.rwys[i].s_lon) * 1000   )
         end
     
-
-        
         --local bearing = get_bearing(apt.rwys[1].lat, apt.rwys[1].lon, apt.rwys[1].s_lat, apt.rwys[1].s_lon) 
         end
 
@@ -464,6 +490,12 @@ end
 
 --------------------------------------------------------------------------------------------------------
 
+
+    p3s1_dropdown_buttons(230, 578, 90, 26,    dropdown_1, 1)
+    p3s1_dropdown_buttons(511, 578, 90, 26,    dropdown_2, 2)
+
+--------------------------------------------------------------------------------------------------------
+
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 108, 50, 378, 80,function ()
         load_button_begin = get(TIME) --the button animation
         set_values()
@@ -488,6 +520,11 @@ local function EFB_draw_page_3_subpage_1() -- DRAW LOOP
     sasl.gl.drawTexture (EFB_LOAD_bgd, 0 , 0 , 1143 , 800 , EFB_WHITE )
     sasl.gl.drawTexture (EFB_LOAD_bound_takeoff, 0 , 0 , 1143 , 800 , EFB_WHITE )
     sasl.gl.drawTexture (EFB_LOAD_chart, 0 , 0 , 1143 , 800 , EFB_WHITE )
+
+
+    draw_dropdown_menu(230, 578, 90, 26, EFB_DROPDOWN_OUTSIDE, EFB_DROPDOWN_INSIDE, dropdown_1, dropdown_expanded[1], dropdown_selected[1])
+    draw_dropdown_menu(511, 578, 90, 26, EFB_DROPDOWN_OUTSIDE, EFB_DROPDOWN_INSIDE, dropdown_2, dropdown_expanded[2], dropdown_selected[2])
+
 
     if string.len(key_p3s1_buffer) > 0 then --THE PURPOSE OF THIS IFELSE IS TO PREVENT THE CURSOR FROM COVERING UP THE PREVIOUS VALUE, WHEN THE SCRATCHPAD IS EMPTY.
         drawTextCentered( Font_Airbus_panel , 263 , 397, key_p3s1_focus == 1 and key_p3s1_buffer or load_target[1] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
