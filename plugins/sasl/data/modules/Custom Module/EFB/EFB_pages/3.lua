@@ -173,10 +173,11 @@ local function request_runway_data(reset_flag_index)
             print(apt.rwys[i].name, apt.rwys[i].sibl_name)
             table.insert(dropdown_1, apt.rwys[i].name) 
             table.insert(dropdown_1, apt.rwys[i].sibl_name) 
-            --print(  GC_distance_km(apt.rwys[i].lat, apt.rwys[i].lon, apt.rwys[i].s_lat, apt.rwys[i].s_lon) * 1000   )
+            print("DISTANCE " .. apt.rwys[i].distance)
+            print("BEARING " .. apt.rwys[i].bearing)
+
         end
     
-        --local bearing = get_bearing(apt.rwys[1].lat, apt.rwys[1].lon, apt.rwys[1].s_lat, apt.rwys[1].s_lon) 
         end
 
         airport_reset_flags[reset_flag_index] = true
@@ -196,9 +197,9 @@ local function set_runway_data_to_global()
             local bearing = get_bearing(apt.rwys[selected1].lat, apt.rwys[selected1].lon, apt.rwys[selected1].s_lat, apt.rwys[selected1].s_lon)
             --print(selected1)
             if Round(dropdown_selected[1]/2, 0) == dropdown_selected[1]/2 then
-                print(bearing+180)
+--                print(bearing+180)
             else
-                print((bearing))
+--                print((bearing))
             end
         end
 
@@ -543,7 +544,7 @@ local function EFB_update_page_3_subpage_1() --UPDATE LOOP
     --print(deparr_runway_data[1][2])
     --print(deparr_runway_data[2][1])
     --print(deparr_runway_data[2][2])
-    set_runway_data_to_global()
+    --set_runway_data_to_global()
 end
 
 local function EFB_draw_page_3_subpage_1() -- DRAW LOOP

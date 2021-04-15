@@ -16,6 +16,8 @@
 -- Short description: Interface file with the AvioncisBay library
 -------------------------------------------------------------------------------
 
+include('libs/geo-helpers.lua')
+
 local initialized = false
 local ffi = require("ffi")
 
@@ -144,15 +146,23 @@ local function convert_single_apt(apt, load_rwys)
     };
 
     for j=1,apt.rwys_len do
+        local rwy_lat = apt.rwys[j-1].coords.lat
+        local rwy_lon = apt.rwys[j-1].coords.lon
+        local rwy_lat_s = apt.rwys[j-1].sibl_coords.lat
+        local rwy_lon_s = apt.rwys[j-1].sibl_coords.lon
+        
+    
         table.insert(new_apt.rwys, {
-            name = ffi.string(apt.rwys[j-1].name),
-            sibl_name = ffi.string(apt.rwys[j-1].sibl_name),
-            lat  = apt.rwys[j-1].coords.lat,
-            lon  = apt.rwys[j-1].coords.lon,
-            s_lat  = apt.rwys[j-1].sibl_coords.lat,
-            s_lon  = apt.rwys[j-1].sibl_coords.lon,
-            width = apt.rwys[j-1].width,
-            surf_type = apt.rwys[j-1].surface_type,
+            name     = ffi.string(apt.rwys[j-1].name),
+            sibl_name= ffi.string(apt.rwys[j-1].sibl_name),
+            lat      = rwy_lat,
+            lon      = rwy_lon,
+            s_lat    = rwy_lat_s,
+            s_lon    = rwy_lon_s,
+            bearing  = get_earth_bearing(rwy_lat,rwy_lon,rwy_lat_s,rwy_lon_s),
+            distance = GC_distance_km(rwy_lat,rwy_lon,rwy_lat_s,rwy_lon_s) * 1000,
+            width    = apt.rwys[j-1].width,
+            surf_type= apt.rwys[j-1].surface_type,
             has_ctr_lights = apt.rwys[j-1].has_ctr_lights
         })
     end

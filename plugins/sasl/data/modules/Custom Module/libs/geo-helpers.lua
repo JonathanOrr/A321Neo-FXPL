@@ -83,6 +83,10 @@ function get_bearing(lat1,lon1,lat2,lon2)
     return brng
 end
 
+function get_earth_bearing(lat1,lon1,lat2,lon2)
+    return (90 - get_bearing(lat1,lon1,lat2,lon2)) % 360
+end
+
 function geo_get_mora(lat, lon)
     if not (AvionicsBay.is_initialized() and AvionicsBay.is_ready()) then
         return 0
