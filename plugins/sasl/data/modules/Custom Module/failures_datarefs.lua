@@ -189,6 +189,7 @@ FAILURE_ENG_FADEC_CH2 = createGlobalPropertyia("a321neo/failures/engines/fadec_c
 FAILURE_ENG_REV_FAULT  = createGlobalPropertyia("a321neo/failures/engines/rev_fault", 2)
 FAILURE_ENG_REV_UNLOCK = createGlobalPropertyia("a321neo/failures/engines/rev_unlock", 2)
 FAILURE_ENG_REV_PRESS  = createGlobalPropertyia("a321neo/failures/engines/rev_press", 2)
+FAILURE_ENG_LEAK_OIL   = createGlobalPropertyia("a321neo/failures/engines/eng_leak_oil", 2)
 
 
 FAILURE_ENG_APU_FAIL   = createGlobalPropertyi("a321neo/failures/engines/apu_fail", 0, false, true, false)

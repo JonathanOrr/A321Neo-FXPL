@@ -329,7 +329,12 @@ local function update_oil_stuffs()
     if get(Engine_1_avail) == 1 then
         local n2_value = get(Eng_1_N2)
         local press = Math_rescale(60, ENG.data.oil.pressure_min_idle+1, ENG.data.max_n2-10, ENG.data.oil.pressure_max_mct, n2_value)
-        Set_dataref_linear_anim(Eng_1_OIL_press, press, 0, 500, 28 + random_pool_3 * 4)
+        
+        if get(FAILURE_ENG_LEAK_OIL, 1) == 1 then   -- OIL is leaking from engine T_T
+            Set_dataref_linear_anim(Eng_1_OIL_press, 0, 0, 500, 0.75 - 0.25 * press / ENG.data.oil.pressure_max_mct )
+        else
+            Set_dataref_linear_anim(Eng_1_OIL_press, press, 0, 500, 28 + random_pool_3 * 4)
+        end
     else
         -- During startup
         local n2_value = math.max(10,get(Eng_1_N2))
@@ -353,7 +358,11 @@ local function update_oil_stuffs()
     if get(Engine_2_avail) == 1 then
         local n2_value = get(Eng_2_N2)
         local press = Math_rescale(60, ENG.data.oil.pressure_min_idle+1, ENG.data.max_n2-10, ENG.data.oil.pressure_max_mct, n2_value)
-        Set_dataref_linear_anim(Eng_2_OIL_press, press, 0, 500, 28 + random_pool_2 * 4)
+        if get(FAILURE_ENG_LEAK_OIL, 2) == 1 then   -- OIL is leaking from engine T_T
+            Set_dataref_linear_anim(Eng_2_OIL_press, 0, 0, 500, 0.75 - 0.25 * press / ENG.data.oil.pressure_max_mct )
+        else
+            Set_dataref_linear_anim(Eng_2_OIL_press, press, 0, 500, 28 + random_pool_2 * 4)
+        end
     else
         -- During startup
         local n2_value = math.max(10,get(Eng_2_N2))

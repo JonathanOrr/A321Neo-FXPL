@@ -10,7 +10,7 @@ include('EWD_msgs/common.lua')
 -- CAUTION: B ELEC PUMP OVHT
 ----------------------------------------------------------------------------------------------------
 
-Message_HYD_TURN_OFF_B = {
+local Message_HYD_TURN_OFF_B = {
     text = function()
         return " - BLUE ELEC PUMP.....OFF"
     end,
@@ -137,7 +137,7 @@ MessageGroup_HYD_B_RSVR_LO_LVL = {
 ----------------------------------------------------------------------------------------------------
 
 
-Message_HYD_IF_B_PRESS_FLUCTUATE = {
+local Message_HYD_IF_B_PRESS_FLUCTUATE = {
     text = function()
         return " · IF PRESS FLUCTUATES:"
     end,
@@ -214,9 +214,10 @@ MessageGroup_HYD_B_SYS_LO_PR = {
 
     already_trig = false,
 
-    is_active = function()
+    check_active = function()
+
         if get(EWD_flight_phase) == PHASE_ELEC_PWR or get(EWD_flight_phase) == PHASE_2ND_ENG_OFF then
-            return  -- Not a valid message in these phases
+            return false -- Not a valid message in these phases
         end
     
         if get(Hydraulic_B_press) <= 1450 then
@@ -228,6 +229,16 @@ MessageGroup_HYD_B_SYS_LO_PR = {
             MessageGroup_HYD_B_SYS_LO_PR.already_trig = false
             return false
         end
+    end,
+
+    is_active = function()
+       
+        if MessageGroup_HYD_B_AND_Y_LO_PR.is_active() or MessageGroup_HYD_G_AND_B_LO_PR.is_active() then
+            return false -- Do not trigger if the double fail is triggered
+        end
+
+        return MessageGroup_HYD_B_SYS_LO_PR.check_active()
+
     end,
 
     is_inhibited = function()
@@ -282,7 +293,7 @@ MessageGroup_HYD_B_ELEC_PUMP_LO_PR = {
 ----------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 
-Message_HYD_TURN_OFF_PTU = {
+local Message_HYD_TURN_OFF_PTU = {
     text = function()
         return " - PTU................OFF"
     end,
@@ -297,7 +308,7 @@ Message_HYD_TURN_OFF_PTU = {
 }
 
 
-Message_HYD_TURN_OFF_G = {
+local Message_HYD_TURN_OFF_G = {
     text = function()
         return " - GREEN ENG 1 PUMP...OFF"
     end,
@@ -392,7 +403,7 @@ MessageGroup_HYD_G_RSVR_LO_LVL = {
 ----------------------------------------------------------------------------------------------------
 
 
-Message_HYD_IF_G_PRESS_FLUCTUATE = {
+local Message_HYD_IF_G_PRESS_FLUCTUATE = {
     text = function()
         return " · IF PRESS FLUCTUATES:"
     end,
@@ -470,7 +481,7 @@ MessageGroup_HYD_G_SYS_LO_PR = {
 
     already_trig = false,
 
-    is_active = function()
+    check_active = function()
         if get(Hydraulic_G_press) <= 1450 then
             MessageGroup_HYD_G_SYS_LO_PR.already_trig = true
             return true
@@ -480,6 +491,16 @@ MessageGroup_HYD_G_SYS_LO_PR = {
             MessageGroup_HYD_G_SYS_LO_PR.already_trig = false
             return false
         end
+    end,
+
+    is_active = function()
+    
+        if MessageGroup_HYD_G_AND_Y_LO_PR.is_active() or MessageGroup_HYD_G_AND_B_LO_PR.is_active() then
+            return false -- Do not trigger if the double fail is triggered
+        end
+
+        return MessageGroup_HYD_G_SYS_LO_PR.check_active()
+
     end,
 
     is_inhibited = function()
@@ -539,7 +560,7 @@ MessageGroup_HYD_G_ENG1_PUMP_LO_PR = {
 -- CAUTION: Y ELEC PUMP OVHT
 ----------------------------------------------------------------------------------------------------
 
-Message_HYD_TURN_OFF_ENG2_Y = {
+local Message_HYD_TURN_OFF_ENG2_Y = {
     text = function()
         return " - YELLOW ENG2 PUMP...OFF"
     end,
@@ -553,7 +574,7 @@ Message_HYD_TURN_OFF_ENG2_Y = {
   end
 }
 
-Message_HYD_TURN_OFF_ELEC_Y = {
+local Message_HYD_TURN_OFF_ELEC_Y = {
     text = function()
         return " - YELLOW ELEC PUMP...OFF"
     end,
@@ -718,7 +739,7 @@ MessageGroup_HYD_Y_RSVR_LO_LVL = {
 ----------------------------------------------------------------------------------------------------
 
 
-Message_HYD_IF_Y_PRESS_FLUCTUATE = {
+local Message_HYD_IF_Y_PRESS_FLUCTUATE = {
     text = function()
         return " · IF PRESS FLUCTUATES:"
     end,
@@ -799,7 +820,7 @@ MessageGroup_HYD_Y_SYS_LO_PR = {
 
     already_trig = false,
 
-    is_active = function()
+    check_active = function()
         if get(Hydraulic_Y_press) <= 1450 then
             MessageGroup_HYD_Y_SYS_LO_PR.already_trig = true
             return true
@@ -809,6 +830,15 @@ MessageGroup_HYD_Y_SYS_LO_PR = {
             MessageGroup_HYD_Y_SYS_LO_PR.already_trig = false
             return false
         end
+    end,
+
+    is_active = function()
+    
+        if MessageGroup_HYD_G_AND_Y_LO_PR.is_active() or MessageGroup_HYD_B_AND_Y_LO_PR.is_active() then
+            return false -- Do not trigger if the double fail is triggered
+        end
+        
+        return MessageGroup_HYD_Y_SYS_LO_PR.check_active()
     end,
 
     is_inhibited = function()
@@ -942,7 +972,7 @@ MessageGroup_HYD_RAT_FAULT = {
 -- WARNING: B + Y SYS LO PR
 ----------------------------------------------------------------------------------------------------
 
-Message_HYD_TURN_OFF_ELEC_Y_IF_ENG_FAIL = {
+local Message_HYD_TURN_OFF_ELEC_Y_IF_ENG_FAIL = {
     text = function()
         return " - YELLOW ELEC PUMP....ON"
     end,
@@ -956,7 +986,7 @@ Message_HYD_TURN_OFF_ELEC_Y_IF_ENG_FAIL = {
   end
 }
 
-Message_HYD_RAT_MAN_ON_IF_B_LOST = {
+local Message_HYD_RAT_MAN_ON_IF_B_LOST = {
     text = function()
         return " - RAT.............MAN ON"
     end,
@@ -970,7 +1000,7 @@ Message_HYD_RAT_MAN_ON_IF_B_LOST = {
   end
 }
 
-Message_HYD_RAT_MIN_ON_IF_B_LOST = {
+local Message_HYD_RAT_MIN_ON_IF_B_LOST = {
     text = function()
         return " MIN RAT SPD.......140 KT"
     end,
@@ -984,7 +1014,7 @@ Message_HYD_RAT_MIN_ON_IF_B_LOST = {
   end
 }
 
-Message_HYD_MANEUVER_WITH_CARE = {
+local Message_HYD_MANEUVER_WITH_CARE = {
     text = function()
         return " MANEUVER WITH CARE"
     end,
@@ -1032,7 +1062,7 @@ MessageGroup_HYD_B_AND_Y_LO_PR = {
     land_asap = true,
 
     is_active = function()
-        return MessageGroup_HYD_Y_SYS_LO_PR:is_active() and MessageGroup_HYD_B_SYS_LO_PR:is_active()
+        return MessageGroup_HYD_Y_SYS_LO_PR:check_active() and MessageGroup_HYD_B_SYS_LO_PR:check_active()
     end,
 
     is_inhibited = function()
@@ -1075,7 +1105,7 @@ MessageGroup_HYD_G_AND_Y_LO_PR = {
     land_asap = true,
 
     is_active = function()
-        return MessageGroup_HYD_Y_SYS_LO_PR:is_active() and MessageGroup_HYD_G_SYS_LO_PR:is_active()
+        return MessageGroup_HYD_Y_SYS_LO_PR:check_active() and MessageGroup_HYD_G_SYS_LO_PR:check_active()
     end,
 
     is_inhibited = function()
@@ -1119,7 +1149,7 @@ MessageGroup_HYD_G_AND_B_LO_PR = {
     land_asap = true,
 
     is_active = function()
-        return MessageGroup_HYD_G_SYS_LO_PR:is_active() and MessageGroup_HYD_B_SYS_LO_PR:is_active()
+        return MessageGroup_HYD_G_SYS_LO_PR:check_active() and MessageGroup_HYD_B_SYS_LO_PR:check_active()
     end,
 
     is_inhibited = function()

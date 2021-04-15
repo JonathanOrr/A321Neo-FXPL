@@ -120,9 +120,9 @@ local function draw_oil_qt_press_temp_eng_1()
                      false, false, TEXT_ALIGN_CENTER, eng_1_oil_color)
 
     else
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-153, 625, "XX" , 36, false, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-165, 525, "XX" , 36, false, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-187, 455, "XX" , 36, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-187, 625, "XX" , 36, false, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-187, 525, "XX" , 36, false, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-187, 455, "XX" , 36, false, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
     end
 end
 
@@ -169,9 +169,9 @@ local function draw_oil_qt_press_temp_eng_2()
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2+187, 455, params.eng2_oil_temp ,36,
                         false, false, TEXT_ALIGN_CENTER, eng_2_oil_color)
     else
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+223, 625, "XX" , 36, false, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+213, 525, "XX" , 36, false, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+187, 455, "XX" , 36, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+187, 625, "XX" , 36, false, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+187, 525, "XX" , 36, false, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+187, 455, "XX" , 36, false, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
     end
 end
 
@@ -186,7 +186,7 @@ end
 local function draw_vibrations()
 
 
-    if xx_statuses[1] then
+    if xx_statuses[1] and get(AC_bus_1_pwrd) == 1 then
         local eng1_vib1_color = pulse_green(params.eng1_vib_n1 > ENG.data.vibrations.max_n1_nominal)
         local eng1_vib2_color = pulse_green(params.eng1_vib_n2 > ENG.data.vibrations.max_n2_nominal)
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2-175, 385, math.floor(params.eng1_vib_n1) .. "." , 36,
@@ -198,13 +198,13 @@ local function draw_vibrations()
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2-155, 350, math.floor((params.eng1_vib_n2%1)*10), 28,
                         false, false, TEXT_ALIGN_RIGHT, eng1_vib2_color)
     else
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-175, 385, "XX" , 36,
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-187, 385, "XX" , 36,
                      false, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-175, 350, "XX" , 36,
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-187, 350, "XX" , 36,
                          false, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
     end
 
-    if xx_statuses[2] then
+    if xx_statuses[2] and get(AC_bus_1_pwrd) == 1 then
         local eng2_vib1_color = pulse_green(params.eng2_vib_n1 > ENG.data.vibrations.max_n1_nominal)
         local eng2_vib2_color = pulse_green(params.eng2_vib_n2 > ENG.data.vibrations.max_n2_nominal)
 
@@ -217,9 +217,9 @@ local function draw_vibrations()
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2+220, 350, math.floor((params.eng2_vib_n2%1)*10) , 28,
                         false, false, TEXT_ALIGN_RIGHT, eng2_vib2_color)
     else
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+200, 385, "XX" , 36,
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+187, 385, "XX" , 36,
                         false, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+200, 350, "XX" , 36,
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+187, 350, "XX" , 36,
                         false, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
     end
 end

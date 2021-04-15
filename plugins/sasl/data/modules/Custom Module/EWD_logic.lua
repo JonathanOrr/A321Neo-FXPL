@@ -157,6 +157,7 @@ local left_messages_list = {
     MessageGroup_ENG_OIL_CLOG,
     MessageGroup_ENG_REV_FAULT,
     MessageGroup_ENG_REV_PRESS,
+    MessageGroup_ENG_OIL_LO_PR_AMBER,
     MessageGroup_SAT_ABOVE_FLEX,
     MessageGroup_FUEL_WING_LO_LVL_DOUBLE,
     MessageGroup_FUEL_WING_LO_LVL_SINGLE,
@@ -254,6 +255,9 @@ local left_messages_list = {
     MessageGroup_HYD_G_AND_B_LO_PR,
     MessageGroup_HYD_G_AND_Y_LO_PR,
     MessageGroup_ADR_FAULT_TRIPLE,
+    MessageGroup_ENG_OIL_LO_PR_RED,
+    MessageGroup_THR_ABV_IDLE_1,
+    MessageGroup_THR_ABV_IDLE_2,
     
     -- Misc
     MessageGroup_MEMO_TAKEOFF,
