@@ -47,6 +47,9 @@ local image_vor_2 = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/texture
 local image_adf_1 = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/needle-ADF1.png")
 local image_adf_2 = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/needle-ADF2.png")
 
+local image_oans_needle = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/needle-oans.png")
+
+
 local image_track_sym = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/sym-track-ring.png")
 local image_hdgsel_sym = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/sym-hdgsel-ring.png")
 
@@ -488,6 +491,18 @@ local function draw_pois(data)
 
 end
 
+function draw_oans_arrow(data)
+
+    if AvionicsBay.is_initialized() and AvionicsBay.is_ready() then
+        local nearest_airport = AvionicsBay.apts.get_nearest_apt(false)
+        local lat = nearest_airport ~= nil and nearest_airport.lat or 0
+        local lon = nearest_airport ~= nil and nearest_airport.lon or 0
+
+        local bearing = get_bearing(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon,lat,lon)
+        sasl.gl.drawRotatedTexture(image_oans_needle, ((-90-bearing)%360)-data.inputs.heading, (size[1]-37)/2,(size[2]-556)/2,37,556, {1,1,1})
+    end
+end
+
 -------------------------------------------------------------------------------
 -- Main draw_* functions
 -------------------------------------------------------------------------------
@@ -514,6 +529,10 @@ function draw_rose(data)
         }
 
         draw_oans(data, functions_for_oans)
+        
+        if data.config.range <= ND_RANGE_ZOOM_2 and data.oans_cache and not data.oans_cache.is_visible then
+            draw_oans_arrow(data)
+        end
     end
 
     draw_navaid_pointers(data)
