@@ -102,92 +102,99 @@ local landing_distance_config_3 = {
     
 
 --CONDITION 1-6, AIRCRAFT WEIGHT IN KG, ELEVATION IN FT, vapp_difference = VAPP-VLS, TAILWIND IN KT, REVERSE OPERATIVE 0-2, AUTOLAND BOOLEAN, CONFIG3 BOOLEAN
-function landing_distance(condition, aircraft_weight, elevation, vapp_difference,  tailwind, reversers_number, autoland, isconfig3) 
+function landing_distance(condition, aircraft_weight, vapp_difference,  tailwind, reversers_number, autoland, config3) 
+    local altitude_corr = 0
     if condition == 1 then
-        local altitude_corr = (get(ACF_elevation)/1000)*130
+        altitude_corr = (get(TOPCAT_ldgrwy_elev)/1000)*130
     elseif condition == 2 then
-        local altitude_corr = (get(ACF_elevation)/1000)*150
+        altitude_corr = (get(TOPCAT_ldgrwy_elev)/1000)*150
     elseif condition == 3 then
-        local altitude_corr = (get(ACF_elevation)/1000)*120
+        altitude_corr = (get(TOPCAT_ldgrwy_elev)/1000)*120
     elseif condition == 4 then
-        local altitude_corr = (get(ACF_elevation)/1000)*140
+        altitude_corr = (get(TOPCAT_ldgrwy_elev)/1000)*140
     elseif condition == 5 then
-        local altitude_corr = (get(ACF_elevation)/1000)*220
+        altitude_corr = (get(TOPCAT_ldgrwy_elev)/1000)*220
     elseif condition == 6 then
-        local altitude_corr = (get(ACF_elevation)/1000)*200
+        altitude_corr = (get(TOPCAT_ldgrwy_elev)/1000)*200
     end
 
+    local speed_corr = 0
     if condition == 1 then
-        local speed_corr = ( vapp_difference/5)*150
+        speed_corr = ( vapp_difference/5)*150
     elseif condition == 2 then
-        local speed_corr = ( vapp_difference/5)*170
+        speed_corr = ( vapp_difference/5)*170
     elseif condition == 3 then
-        local speed_corr = ( vapp_difference/5)*110
+        speed_corr = ( vapp_difference/5)*110
     elseif condition == 4 then
-        local speed_corr = ( vapp_difference/5)*120
+        speed_corr = ( vapp_difference/5)*120
     elseif condition == 5 then
-        local speed_corr = ( vapp_difference/5)*170
+        speed_corr = ( vapp_difference/5)*170
     elseif condition == 6 then
-        local speed_corr = ( vapp_difference/5)*210
+        speed_corr = ( vapp_difference/5)*210
     end
 
+    local tailwind_corr = 0
     if tailwind > 0 then
         if condition == 1 then
-            local tailwind_corr = (tailwind/5)*250
+            tailwind_corr = (tailwind/5)*250
         elseif condition == 2 then
-            local tailwind_corr = (tailwind/5)*280
+            tailwind_corr = (tailwind/5)*280
         elseif condition == 3 then
-            local tailwind_corr = (tailwind/5)*170
+            tailwind_corr = (tailwind/5)*170
         elseif condition == 4 then
-            local tailwind_corr = (tailwind/5)*210
+            tailwind_corr = (tailwind/5)*210
         elseif condition == 5 then
-            local tailwind_corr = (tailwind/5)*320
+            tailwind_corr = (tailwind/5)*320
         elseif condition == 6 then
-            local tailwind_corr = (tailwind/5)*400
+            tailwind_corr = (tailwind/5)*400
         end
     end
 
-    if condition ==  3
-        local reverse_corr = reversers_number * -110
-    elseif condition ==  4
-        local reverse_corr = reversers_number * -160
-    elseif condition ==  5
-        local reverse_corr = reversers_number * -150
-    elseif condition ==  6
-        local reverse_corr = reversers_number * -150
+    local reverse_corr = 0
+    if condition ==  3 then
+        reverse_corr = reversers_number * -110
+    elseif condition ==  4 then
+        reverse_corr = reversers_number * -160
+    elseif condition ==  5 then
+        reverse_corr = reversers_number * -150
+    elseif condition ==  6 then
+        reverse_corr = reversers_number * -150
     else
-        local reverse_corr = 0
+        reverse_corr = 0
     end
 
+    local autoland_corr = 0
     if autoland == 1 then
         if aircraft_weight < 60000 then
-            if isconfig3 then
-                local autoland_corr = 190
+            if config3 == 1 then
+                autoland_corr = 190
             else
-                local autoland_corr = 120
+                autoland_corr = 120
             end
         elseif aircraft_weight >= 60000 and aircraft_weight < 70000 then
-            if isconfig3 then
-                local autoland_corr = 90
+            if config3 == 1 then
+                autoland_corr = 90
             else
-                local autoland_corr = 69
+                autoland_corr = 69
             end
         elseif aircraft_weight >= 60000 and aircraft_weight > 70000 then --CONFIG 3 INHIBITED ABOVE 70000kg
-            if not isconfig3 then
-                local autoland_corr = 85
+            if config3 == 0 then
+                autoland_corr = 85
             end
         end
     end
-    
+
+    local original_will_flap_corr = 0    
     if config3 == 1 then
-        local original_will_flap_corr = Table_extrapolate(landing_distance_config_3[condition], aircraft_weight)
+        original_will_flap_corr = Table_extrapolate(landing_distance_config_3[condition], aircraft_weight/1000)
     else
-        local original_will_flap_corr = Table_extrapolate(landing_distance_config_full[condition], aircraft_weight)
+        original_will_flap_corr = Table_extrapolate(landing_distance_config_full[condition], aircraft_weight/1000)
     end
 
-    local landing_distance = 
+    print(original_will_flap_corr,  altitude_corr, speed_corr, tailwind_corr, reverse_corr, autoland_corr)
 
-    + original_will_flap_corr
+    local landing_distance = 
+     original_will_flap_corr
     + altitude_corr
     + speed_corr
     + tailwind_corr
@@ -236,6 +243,8 @@ local failure_refrence_table = { --FLAPS LEVER POS, DELTA VREF, LDG DISTANCE FAC
     {4, 0, 1.5, 0}, --BRK
     {4, 0, 1.1, 0},
     {3, 10, 1.2, 1}, --NAV
+    {3, 10, 1.2, 1},
+    {3, 10, 1.2, 1},
     {3, 10, 2.35, 0},
     {1, 55, 1.75, 1},--ENG
     {3, 10, 1.2, 1},
@@ -271,5 +280,5 @@ function failure_correction(failure_code_array) --CODE == 0 IS RESERVED FOR NO F
         ret_ldg_dist = ldg_dist_mult
     end
 
-    return final_flaps, final_vref, ret_ldg_dist
+    return final_flaps, final_vref, math.max(ret_ldg_dist, 1)
 end
