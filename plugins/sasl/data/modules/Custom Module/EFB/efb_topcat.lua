@@ -900,6 +900,24 @@ local function v2_calculation()
     end
 end
 
+local v1_f1_decrease_table = {
+    {2500, 10},
+    {3000, 10},
+    {3500, 3},
+}
+
+local v1_f2_decrease_table = {
+    {2500, 10},
+    {3000, 10},
+    {3500, 3},
+}
+
+local v1_f3_decrease_table = {
+    {2500, 10},
+    {3000, 10},
+    {3500, 3},
+}
+
 local function other_spd_calculation()
 
     if get(LOAD_runwaycond) == 0 then

@@ -176,6 +176,7 @@ local function set_landing_runway_data_to_global()
                     set(TOPCAT_ldgrwy_bearing, apt.rwys[selected2].bearing)
                     set(TOPCAT_ldgrwy_length, apt.rwys[selected2].distance)
                 end
+                set(TOPCAT_ldgrwy_elev, apt.alt)
             end
         end 
     end
@@ -193,7 +194,7 @@ local function request_departure_runway_data()
                 --print(apt.rwys[i].name, apt.rwys[i].sibl_name)
                 table.insert(dropdown_1, apt.rwys[i].name) 
                 table.insert(dropdown_1, apt.rwys[i].sibl_name) 
-                set_takeoff_runway_data_to_global()
+                set_takeoff_runway_data_to_global() -- SET THE RUNWAY DATA AFTER PLUGGING IN THE TABLE, SO THAT THE NUMBERS DO NOT REMAIN IN 0,0 IN CASE THE USER DOESN'T TOUCH THE DROPDOWN AT ALL
                 --print("DISTANCE " .. apt.rwys[i].distance)
                 --print("BEARING " .. apt.rwys[i].bearing)
             end
@@ -216,7 +217,7 @@ local function request_arrival_runway_data()
                 --print(apt.rwys[i].name, apt.rwys[i].sibl_name)
                 table.insert(dropdown_2, apt.rwys[i].name) 
                 table.insert(dropdown_2, apt.rwys[i].sibl_name) 
-                set_landing_runway_data_to_global()
+                set_landing_runway_data_to_global() -- SET THE RUNWAY DATA AFTER PLUGGING IN THE TABLE, SO THAT THE NUMBERS DO NOT REMAIN IN 0,0 IN CASE THE USER DOESN'T TOUCH THE DROPDOWN AT ALL
                 --print("DISTANCE " .. apt.rwys[i].distance)
                 --print("BEARING " .. apt.rwys[i].bearing)
             end
@@ -238,7 +239,7 @@ local function p3s1_dropdown_buttons( x,y,w,h, table, identifier)
                 print(i)
                 dropdown_selected[identifier] = i
                 dropdown_expanded[identifier] = false
-                set_takeoff_runway_data_to_global()
+                set_takeoff_runway_data_to_global()--EVERYTIME THE USER CLICKS THE RUNWAY DROPDOWN MENU, IT REQUESTS THE RUNWAY DATA ONCE. THAT IS THE ONLY WAY I CAN THINK OF TO REFRESH RUNWAY DATA WITHOUT USING UPDATE LOOP.
                 set_landing_runway_data_to_global()
             end)
         end

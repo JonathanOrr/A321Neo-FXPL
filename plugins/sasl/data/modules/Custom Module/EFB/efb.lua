@@ -77,6 +77,8 @@ local change_page_fade_table = {
 function onKeyDown(component, char, key, shiftDown, ctrlDown, altOptDown)
     if EFB_PAGE == 3 and efb_subpage_number == 1 then
         return EFB_onKeyDown_page3_subpage_1(component, char, key, shiftDown, ctrlDown, altOptDown)
+    elseif EFB_PAGE == 3 and efb_subpage_number == 3 then
+        return EFB_onKeyDown_page3_subpage_3(component, char, key, shiftDown, ctrlDown, altOptDown)
     elseif EFB_PAGE == 5 and efb_p5_subpage_number == 1 then
         return EFB_onKeyDown_page5(component, char, key, shiftDown, ctrlDown, altOptDown)
     elseif EFB_PAGE == 5 and efb_p5_subpage_number == 2 then

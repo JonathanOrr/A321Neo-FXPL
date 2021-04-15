@@ -877,4 +877,5 @@ TOPCAT_torwy_length = createGlobalPropertyf("a321neo/efb/topcat/torwy_length", 0
 TOPCAT_torwy_bearing = createGlobalPropertyf("a321neo/efb/topcat/torwy_bearing", 0, false, true, false)
 TOPCAT_ldgrwy_length = createGlobalPropertyf("a321neo/efb/topcat/ldgrwy_length", 0, false, true, false)
 TOPCAT_ldgrwy_bearing = createGlobalPropertyf("a321neo/efb/topcat/ldgrwy_bearing", 0, false, true, false)
+TOPCAT_ldgrwy_elev = createGlobalPropertyf("a321neo/efb/topcat/ldgrwy_elev", 0, false, true, false)
 

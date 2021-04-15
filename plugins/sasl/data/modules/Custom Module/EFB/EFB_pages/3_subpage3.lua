@@ -1,6 +1,6 @@
 local BUTTON_PRESS_TIME = 0.5
 local dropdown_1 = {"DRY", "WET", "COMPACT SNOW", "DRY/WET SNOW", "SLUSH", "STAND WATER"}
-local dropdown_2 = {"SINGLE FAULT", "DUAL FAULT", "NONE"}
+local dropdown_2 = {"DUAL FAULT", "SINGLE FAULT", "NONE"}
 local dropdown_3 = {"MANUAL", "AUTOMATIC"}
 local dropdown_4 = {"CONFIG FULL", "CONFIG 3"}
 local dropdown_5 = {"EMER ELEC CFG", "DC EMER CONFIG", "DC BUS 1+2", "DC BUS 2", "DC ESS BUS", "AC BUS 1", "NONE"}
@@ -16,6 +16,71 @@ local dropdown_selected = {1, #dropdown_2, 1, 1,#dropdown_5, #dropdown_6, #dropd
 local failure_buffer_array = {0, 0, 0, 0, 0, 0}
 
 local generate_button_begin = 0
+
+selected_box = 0
+key_p3s3_buffer = ""
+
+local selected_box = 0
+local landing_aircraft_data = {47777,0,0}
+
+include("EFB/EFB_ldgcat.lua")
+---------------------------------------------------------------------------------------------------------------------------------
+
+local function p3s3_plug_in_the_buffer()
+    if string.len(key_p3s3_buffer) <= 0 then --IF THE LENGTH OF THE STRING IS 0, THEN REVERT TO THE PREVIOUS VALUE. ELSE, PLUG-IN THE NEW VALUE.
+        selected_box = 0
+        key_p3s3_buffer = ""
+    elseif selected_box == 1 then
+        landing_aircraft_data[selected_box] = Math_clamp(tonumber(key_p3s3_buffer), 47777, 101000) --PLUG THE SCRATCHPAD INTO THE ACTUAL TARGET AIRPORT
+        selected_box = 0
+        key_p3s3_buffer = ""
+    elseif selected_box == 2 then
+        landing_aircraft_data[selected_box] = Math_clamp(tonumber(key_p3s3_buffer), 0, 359) --PLUG THE SCRATCHPAD INTO THE ACTUAL TARGET AIRPORT
+        selected_box = 0
+        key_p3s3_buffer = ""
+    elseif selected_box == 3 then
+        landing_aircraft_data[selected_box] = Math_clamp(tonumber(key_p3s3_buffer), 0, 50) --PLUG THE SCRATCHPAD INTO THE ACTUAL TARGET AIRPORT
+        selected_box = 0
+        key_p3s3_buffer = ""
+    end
+end
+
+function p3s3_revert_to_previous_and_delete_buffer()
+    selected_box = 0
+    key_p3s3_buffer = ""
+end
+
+local function p3s3_backspace()
+    key_p3s3_buffer = string.sub(key_p3s3_buffer, 1, -2)
+end
+
+local function p3s3_construct_the_buffer(char)
+    local read_n = tonumber(string.char(char)) --JUST TO MAKE SURE WHAT YOU TYPE IS A NUMBER
+            
+    if read_n ~= nil and string.len(key_p3s3_buffer) < 6 then -- "tonumber()" RETURNS nil IF NOT A NUMBER, ALSO MAKES SURE STRING LENGTH IS <7
+        key_p3s3_buffer = string.upper(key_p3s3_buffer..string.char(char))
+    end
+end
+
+function EFB_onKeyDown_page3_subpage_3(component, char, key, shiftDown, ctrlDown, altOptDown)
+    if selected_box == 0 then
+        return false
+    end
+        if char == SASL_KEY_DELETE then --BACKSPACE
+            p3s3_backspace()
+        elseif char == SASL_VK_RETURN then --ENTER
+            p3s3_plug_in_the_buffer()
+        elseif char == SASL_VK_ESCAPE then --REVERT TO THE PREVIOUS VALUE.
+            p3s3_revert_to_previous_and_delete_buffer()
+        else
+            p3s3_construct_the_buffer(char)
+        end
+    --print(key_p3s3_buffer)
+    --print(target_airport)
+    --print(char)
+    return true --sasl manual, callback has to return true in order to override default keys.
+end
+
 ---------------------------------------------------------------------------------------------------------------------------------
 
 local function draw_background()
@@ -38,6 +103,16 @@ end
 local function general_buttons()
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 903, 384, 1086, 415,function () --DROPDOWN 3 EXPAND
         generate_button_begin = get(TIME)
+        local headwind_component = math.cos(math.rad((landing_aircraft_data[2] - get(TOPCAT_ldgrwy_bearing))%360)) * landing_aircraft_data[3]
+        print(headwind_component)
+        print(landing_distance(
+            dropdown_selected[1], 
+            landing_aircraft_data[1], 
+            Math_clamp(headwind_component/3, 5, 15),
+            -math.min(headwind_component, 0), 
+            2-dropdown_selected[2], 
+            dropdown_selected[3]-1, 
+            dropdown_selected[4]-1))
     end)
 end
 
@@ -61,6 +136,16 @@ local function p3s3_dropdown_buttons( x,y,w,h, table, identifier)
     end
 end
 
+local function draw_hightlighted_boxes()
+    if selected_box == 1 then
+        sasl.gl.drawTexture (EFB_LOAD_s3_ldgweight_highlighter, 0 , 0 , 1143 , 800 , EFB_WHITE )
+    elseif selected_box == 2 then
+        sasl.gl.drawTexture (EFB_LOAD_s3_wind_dir_highlighter, 0 , 0 , 1143 , 800 , EFB_WHITE )
+    elseif selected_box == 3 then
+        sasl.gl.drawTexture (EFB_LOAD_s3_wind_int_highlighter, 0 , 0 , 1143 , 800 , EFB_WHITE )
+    end
+end
+
 --MOUSE & BUTTONS--
 function p3s3_buttons()
     p3s3_dropdown_buttons(194, 273, 157, 28,    dropdown_1, 1)
@@ -75,11 +160,37 @@ function p3s3_buttons()
     p3s3_dropdown_buttons(434, 380, 157, 28,      dropdown_10, 10)
     p3s3_dropdown_buttons(709-20, 380, 157, 28,   dropdown_11, 11)
     general_buttons()
+
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 408, 581, 570, 609,function () 
+        selected_box = 1
+    end)
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 629, 581, 749, 609,function ()
+        selected_box = 2
+    end)
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 769, 581, 878, 609,function ()
+        selected_box = 3
+    end)
+    if selected_box == 1 then
+        I_hate_button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 408, 581, 570, 609,function ()
+            p3s3_plug_in_the_buffer()
+            selected_box = 0
+        end)
+    elseif selected_box == 2 then
+        I_hate_button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 629, 581, 749, 609,function ()
+            p3s3_plug_in_the_buffer()
+            selected_box = 0
+        end)
+    elseif selected_box == 3 then
+        I_hate_button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 769, 581, 878, 609,function ()
+            p3s3_plug_in_the_buffer()
+            selected_box = 0
+        end)
+    end
 end
 
 --UPDATE LOOPS--
 function p3s3_update()
-    print(EFB_CURSOR_X, EFB_CURSOR_Y)
+    --print(EFB_CURSOR_X, EFB_CURSOR_Y)
 end
 
 
@@ -98,6 +209,17 @@ function p3s3_draw()
     draw_dropdown_menu(434, 488, 157, 28,       EFB_DROPDOWN_OUTSIDE, EFB_DROPDOWN_INSIDE, dropdown_6, dropdown_expanded[6], dropdown_selected[6])
     draw_dropdown_menu(709-20, 488, 157, 28,    EFB_DROPDOWN_OUTSIDE, EFB_DROPDOWN_INSIDE, dropdown_7, dropdown_expanded[7], dropdown_selected[7])
     draw_dropdown_menu(949-20, 488, 157, 28,    EFB_DROPDOWN_OUTSIDE, EFB_DROPDOWN_INSIDE, dropdown_8, dropdown_expanded[8], dropdown_selected[8])
+    draw_hightlighted_boxes()
+
+    if string.len(key_p3s3_buffer) > 0 then --THE PURPOSE OF THIS IFELSE IS TO PREVENT THE CURSOR FROM COVERING UP THE PREVIOUS VALUE, WHEN THE SCRATCHPAD IS EMPTY.
+        drawTextCentered( Font_ECAMfont , 487 , 595, selected_box == 1 and key_p3s3_buffer or landing_aircraft_data[1] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
+        drawTextCentered( Font_ECAMfont , 686 , 595, selected_box == 2 and key_p3s3_buffer or landing_aircraft_data[2] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
+        drawTextCentered( Font_ECAMfont , 821 , 595, selected_box == 3 and key_p3s3_buffer or landing_aircraft_data[3] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
+    else
+        drawTextCentered( Font_ECAMfont , 487 , 595, landing_aircraft_data[1] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
+        drawTextCentered( Font_ECAMfont , 686 , 595, landing_aircraft_data[2] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
+        drawTextCentered( Font_ECAMfont , 821 , 595, landing_aircraft_data[3] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
+    end
 end
 
 --DO AT THE BEGINNING

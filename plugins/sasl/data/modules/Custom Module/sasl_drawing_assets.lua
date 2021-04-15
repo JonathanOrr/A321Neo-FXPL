@@ -204,6 +204,11 @@ EFB_LOAD_s3_dropdown8 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/
 EFB_LOAD_s3_failuretext =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage3/failuretext.png")
 EFB_LOAD_s3_generate_button =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage3/generate_button.png")
 
+EFB_LOAD_s3_ldgweight_highlighter=    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage3/ldgweight_highlighter.png")
+EFB_LOAD_s3_wind_dir_highlighter =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage3/winddir_highlighter.png")
+EFB_LOAD_s3_wind_int_highlighter =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage3/windint_highlighter.png")
+
+
 
 -----------CONFIG------------
 

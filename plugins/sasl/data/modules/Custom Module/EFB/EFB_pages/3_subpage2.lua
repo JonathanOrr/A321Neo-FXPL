@@ -18,6 +18,7 @@ local displayed_wind = 0
 local displayed_tow = 0
 local displayed_flex_corr = 0
 local displayed_mtow_corr = 0
+local displayed_rwy_length = 0
 
 local dropdown_expanded = {false, false, false, false, false, false}
 local dropdown_names = {EFB_LOAD_s2_dropdown1, EFB_LOAD_s2_dropdown2, EFB_LOAD_s2_dropdown3, EFB_LOAD_s2_dropdown4, EFB_LOAD_s2_dropdown5, EFB_LOAD_s2_dropdown6}
@@ -83,6 +84,7 @@ local function draw_column_3_values()
     drawTextCentered( Font_Airbus_panel , 885 , 335, displayed_tow  , 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
     drawTextCentered( Font_Airbus_panel , 885 , 309, displayed_flex_corr, 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
     drawTextCentered( Font_Airbus_panel , 885 , 283, displayed_mtow_corr, 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
+    drawTextCentered( Font_Airbus_panel , 885 , 257, displayed_rwy_length, 22 ,false , false , TEXT_ALIGN_LEFT , EFB_LIGHTBLUE )
 end
 
 local function refresh_data_reminder()
@@ -103,6 +105,11 @@ local function refresh_data()
     displayed_tow = takeoff_weight_actual
     displayed_flex_corr = get(LOAD_thrustto) == 0 and "N/A" or get(LOAD_total_flex_correction) 
     displayed_mtow_corr = Round(math.abs(get(LOAD_total_mtow_correction)), -2)
+    if get(TOPCAT_torwy_length) ~= 0 then
+        displayed_rwy_length = Round(get(TOPCAT_torwy_length),-1)
+    else
+        displayed_rwy_length = "NO DATA"
+    end
 
     trim_raw = Round(Table_extrapolate(pitch_trim_table, final_cg),1)
     if trim_raw > 0 then
