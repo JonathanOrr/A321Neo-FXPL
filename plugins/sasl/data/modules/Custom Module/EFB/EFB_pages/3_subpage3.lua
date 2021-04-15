@@ -13,7 +13,8 @@ local dropdown_11 = {"REV UNLK CFG1", "REV UNLK CFG3", "NONE"}
 local dropdown_expanded = {false, false, false, false, false, false, false, false, false, false, false}
 local dropdown_selected = {1, #dropdown_2, 1, 1,#dropdown_5, #dropdown_6, #dropdown_7, #dropdown_8, #dropdown_9, #dropdown_10, #dropdown_11} ---CHANGE THE DEFAULT VALUE OF THE DROPDOWN HERE
 
-local failure_buffer_array = {0, 0, 0, 0, 0, 0}
+local failure_code = {0,0,0,0,0,0,0}
+local final_min_landing_distance = 0
 
 local generate_button_begin = 0
 
@@ -22,6 +23,8 @@ key_p3s3_buffer = ""
 
 local selected_box = 0
 local landing_aircraft_data = {47777,0,0}
+
+
 
 include("EFB/EFB_ldgcat.lua")
 ---------------------------------------------------------------------------------------------------------------------------------
@@ -100,19 +103,64 @@ local function draw_buttons()
     drawTextCentered(Font_Airbus_panel, 996, 398, "GENERATE", 18, false, false, TEXT_ALIGN_CENTER, EFB_BACKGROUND_COLOUR)
 end
 
+local function compute_landing_distance()
+    if dropdown_selected[5] ~= #dropdown_5 then
+        failure_code[1] = dropdown_selected[5]
+    else
+        failure_code[1] = 0
+    end
+    if dropdown_selected[6] ~= #dropdown_6 then
+        failure_code[2] = dropdown_selected[6] + 6
+    else
+        failure_code[2] = 0
+    end
+    if dropdown_selected[7] ~= #dropdown_7 then
+        failure_code[3] = dropdown_selected[7] + 15
+    else
+        failure_code[3] = 0
+    end
+    if dropdown_selected[8] ~= #dropdown_8 then
+        failure_code[4] = dropdown_selected[8] + 28
+    else
+        failure_code[4] = 0
+    end
+    if dropdown_selected[9] ~= #dropdown_9 then
+        failure_code[5] = dropdown_selected[9] + 33
+    else
+        failure_code[5] = 0
+    end
+    if dropdown_selected[10] ~= #dropdown_10 then
+        failure_code[6] = dropdown_selected[10] + 35
+    else
+        failure_code[6] = 0
+    end
+    if dropdown_selected[11] ~= #dropdown_11 then
+        failure_code[7] = dropdown_selected[11] + 37
+    else
+        failure_code[7] = 0
+    end
+
+    for i, v in pairs(failure_code) do
+        print(v)
+    end
+    print(failure_correction(failure_code))
+
+    local headwind_component = math.cos(math.rad((landing_aircraft_data[2] - get(TOPCAT_ldgrwy_bearing))%360)) * landing_aircraft_data[3]
+    --print(headwind_component)
+    --print(landing_distance(
+    --    dropdown_selected[1], 
+    --    landing_aircraft_data[1], 
+    --    Math_clamp(headwind_component/3, 5, 15),
+    --    -math.min(headwind_component, 0), 
+    --    2-dropdown_selected[2], 
+    --    dropdown_selected[3]-1, 
+    --    dropdown_selected[4]-1))
+end
+
 local function general_buttons()
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 903, 384, 1086, 415,function () --DROPDOWN 3 EXPAND
         generate_button_begin = get(TIME)
-        local headwind_component = math.cos(math.rad((landing_aircraft_data[2] - get(TOPCAT_ldgrwy_bearing))%360)) * landing_aircraft_data[3]
-        print(headwind_component)
-        print(landing_distance(
-            dropdown_selected[1], 
-            landing_aircraft_data[1], 
-            Math_clamp(headwind_component/3, 5, 15),
-            -math.min(headwind_component, 0), 
-            2-dropdown_selected[2], 
-            dropdown_selected[3]-1, 
-            dropdown_selected[4]-1))
+        compute_landing_distance()
     end)
 end
 
@@ -123,7 +171,7 @@ local function p3s3_dropdown_buttons( x,y,w,h, table, identifier)
     for i=1, #table do
         if dropdown_expanded[identifier] then
             Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, x - w/2 + 5, y - h*i - 14, w-10 + ( x - w/2 + 5), h-2 + ( y - h*i - 14),function ()
-                print(i)
+                --print(i)
                 dropdown_selected[identifier] = i
                 dropdown_expanded[identifier] = false
             end)
