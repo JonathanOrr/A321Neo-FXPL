@@ -25,6 +25,12 @@ local config = {
 FMGS_sys.config = config
 
 FMGS_sys.fpln = {
+    apts = {
+        dep=nil,    -- As returned by AvionicsBay, runways included
+        arr=nil,    -- As returned by AvionicsBay, runways included
+        alt=nil     -- As returned by AvionicsBay, runways included
+    },
+
     active = {
         {ptr_type = FMGS_PTR_APT, id="LIML", lat=45.454124, lon=9.272948},
         {ptr_type = FMGS_PTR_WPT, id="TREVI", lat=45.603333, lon=9.693333},
