@@ -236,7 +236,7 @@ local function draw_common_messages_bottom_2(data)
     elseif data.misc.gps_primary_lost then
         text  = "GPS PRIMARY LOST"
         color = ECAM_ORANGE
-    elseif data.misc.oans_arpt_not_active and data.config.mode == ND_MODE_PLAN then
+    elseif data.misc.oans_arpt_not_active and data.config.range <= ND_RANGE_ZOOM_2 then
         text  = "ARPT NOT IN ACTIVE F-PLN"
         color = ECAM_ORANGE
     elseif data.misc.map_partially_displayed then
