@@ -618,9 +618,14 @@ local function update_gps()
 
     local roll_is_ok = math.abs(get(Flightmodel_roll)) <= 90
 
-    set(GPS_1_is_available, update_gps_single(1, get(AC_ess_bus_pwrd) == 1, get(FAILURE_GPS_1) == 0 and roll_is_ok))
-    set(GPS_2_is_available, update_gps_single(2, get(AC_bus_2_pwrd) == 1,   get(FAILURE_GPS_2) == 0 and roll_is_ok))
-    
+    if override_ADIRS_ok then
+        set(GPS_1_is_available, 1)
+        set(GPS_2_is_available, 1)
+    else
+        set(GPS_1_is_available, update_gps_single(1, get(AC_ess_bus_pwrd) == 1, get(FAILURE_GPS_1) == 0 and roll_is_ok))
+        set(GPS_2_is_available, update_gps_single(2, get(AC_bus_2_pwrd) == 1,   get(FAILURE_GPS_2) == 0 and roll_is_ok))
+    end
+
     if get(GPS_1_is_available) == 1 then
         set(GPS_1_altitude, gps_1_offset + get(Elevation_m) * 3.28084)
     end
