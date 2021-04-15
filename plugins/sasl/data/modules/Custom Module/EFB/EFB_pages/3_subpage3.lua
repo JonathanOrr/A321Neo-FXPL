@@ -135,26 +135,26 @@ local function compute_landing_distance()
         failure_code[6] = 0
     end
     if dropdown_selected[11] ~= #dropdown_11 then
-        failure_code[7] = dropdown_selected[11] + 37
+        failure_code[7] = dropdown_selected[11] + 39
     else
         failure_code[7] = 0
     end
 
-    for i, v in pairs(failure_code) do
-        print(v)
-    end
-    print(failure_correction(failure_code))
+    local a, b, c = failure_correction(failure_code)
+    --print(c)
 
     local headwind_component = math.cos(math.rad((landing_aircraft_data[2] - get(TOPCAT_ldgrwy_bearing))%360)) * landing_aircraft_data[3]
-    --print(headwind_component)
-    --print(landing_distance(
-    --    dropdown_selected[1], 
-    --    landing_aircraft_data[1], 
-    --    Math_clamp(headwind_component/3, 5, 15),
-    --    -math.min(headwind_component, 0), 
-    --    2-dropdown_selected[2], 
-    --    dropdown_selected[3]-1, 
-    --    dropdown_selected[4]-1))
+    final_min_landing_distance =   landing_distance(
+                                    dropdown_selected[1], 
+                                    landing_aircraft_data[1], 
+                                    Math_clamp(headwind_component/3, 5, 15),
+                                    -math.min(headwind_component, 0), 
+                                    2-dropdown_selected[2], 
+                                    dropdown_selected[3]-1, 
+                                    dropdown_selected[4]-1
+                                )
+                                * c --   local a, b, c  at a few lines above, c is the rwy distance factor in failure.
+    print(final_min_landing_distance)
 end
 
 local function general_buttons()
@@ -241,7 +241,24 @@ function p3s3_update()
     --print(EFB_CURSOR_X, EFB_CURSOR_Y)
 end
 
+local function draw_landing_distance_bar()
+    local distance_ratio_to_x_coords = {
+        {-999999, 39},
+        {0, 39},
+        {1, 1105},
+        {999999, 1105},
+    }
+    local TRANSLUCENT_RED = {1,0,0,0.7}
+    sasl.gl.drawWideLine ( 39, 78 , 39 , 227 , 3, EFB_WHITE )
+    local min_landing_runway_distance_ratio = final_min_landing_distance / get(TOPCAT_ldgrwy_length)
+    local min_distance_in_pixels = Table_interpolate(distance_ratio_to_x_coords, min_landing_runway_distance_ratio )
+    sasl.gl.drawRectangle ( 39 , 130 , min_distance_in_pixels - 39 , 13, TRANSLUCENT_RED)
+    drawTextCentered(Font_Airbus_panel, (39 + min_distance_in_pixels) / 2, 136, Round(final_min_landing_distance, 0).." MAX BRAKE" , 17, true, false, TEXT_ALIGN_CENTER, EFB_WHITE)
+    sasl.gl.drawWideLine ( min_distance_in_pixels, 127 , min_distance_in_pixels , 151 , 3, EFB_WHITE )
 
+    sasl.gl.drawRectangle ( size[1]/2 - 70 , 167 , 140 , 30, EFB_BLACK)
+    drawTextCentered(Font_Airbus_panel, size[1]/2, 182, Round(get(TOPCAT_ldgrwy_length), 0).."m" , 24, true, false, TEXT_ALIGN_CENTER, EFB_WHITE)
+end
 --DRAW LOOPS--
 function p3s3_draw()
     draw_background()
@@ -268,6 +285,8 @@ function p3s3_draw()
         drawTextCentered( Font_ECAMfont , 686 , 595, landing_aircraft_data[2] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
         drawTextCentered( Font_ECAMfont , 821 , 595, landing_aircraft_data[3] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
     end
+    draw_landing_distance_bar()
 end
+
 
 --DO AT THE BEGINNING

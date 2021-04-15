@@ -243,6 +243,8 @@ local failure_refrence_table = { --FLAPS LEVER POS, DELTA VREF, LDG DISTANCE FAC
     {4, 0, 1.5, 0}, --BRK
     {4, 0, 1.1, 0},
     {3, 10, 1.2, 1}, --NAV
+    {3, 10, 1.2, 1},
+    {3, 10, 1.2, 1},
     {3, 10, 2.35, 0},
     {1, 55, 1.75, 1},--ENG
     {3, 10, 1.2, 1},
@@ -278,5 +280,5 @@ function failure_correction(failure_code_array) --CODE == 0 IS RESERVED FOR NO F
         ret_ldg_dist = ldg_dist_mult
     end
 
-    return final_flaps, final_vref, ret_ldg_dist
+    return final_flaps, final_vref, math.max(ret_ldg_dist, 1)
 end
