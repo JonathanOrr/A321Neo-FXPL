@@ -493,13 +493,21 @@ end
 
 function draw_oans_arrow(data)
 
-    if AvionicsBay.is_initialized() and AvionicsBay.is_ready() then
-        local nearest_airport = AvionicsBay.apts.get_nearest_apt(false)
-        local lat = nearest_airport ~= nil and nearest_airport.lat or 0
-        local lon = nearest_airport ~= nil and nearest_airport.lon or 0
+    if data.oans.displayed_apt then
+        local lat = data.oans.displayed_apt.lat
+        local lon = data.oans.displayed_apt.lon
 
         local bearing = get_bearing(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon,lat,lon)
-        sasl.gl.drawRotatedTexture(image_oans_needle, ((-90-bearing)%360)-data.inputs.heading, (size[1]-37)/2,(size[2]-556)/2,37,556, {1,1,1})
+        
+        local angle = ((-90-bearing)%360)-data.inputs.heading
+        sasl.gl.drawRotatedTexture(image_oans_needle, angle, (size[1]-37)/2,(size[2]-556)/2,37,556, {1,1,1})
+        
+        local new_angle = angle + Math_rescale(0, 30, 180, 15, (angle < 180 and angle > 0) and angle or math.abs(360-(angle%360)))
+
+        local R = 230
+        local x = 420 + R * math.sin(math.rad(new_angle-180))
+        local y = 450 + R * math.cos(math.rad(new_angle-180))
+        sasl.gl.drawText(Font_ECAMfont, x, y, data.oans.displayed_apt.id, 32, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
     end
 end
 

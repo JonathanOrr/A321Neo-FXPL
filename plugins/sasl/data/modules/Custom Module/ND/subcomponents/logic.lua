@@ -125,6 +125,94 @@ local function update_whr_shear(data)
     end
 end
 
+local function update_oans_inflight_no_plan(data)
+
+    local at_least_one = false
+
+    if FMGS_sys.fpln.apts.arr then
+        -- Arrival airport
+        local arr_distance    = get_distance_nm(data.inputs.plane_coords_lat, data.inputs.plane_coords_lon, FMGS_sys.fpln.apts.arr.lat, FMGS_sys.fpln.apts.arr.lon)
+        local arr_diff_height = math.abs(data.inputs.altitude - FMGS_sys.fpln.apts.arr.alt)
+        if arr_distance < 20 and arr_diff_height < 5000 then
+            data.oans.displayed_apt = FMGS_sys.fpln.apts.arr
+            return
+        end
+        at_least_one = true
+    end
+    if FMGS_sys.fpln.apts.alt then
+        -- Alternate airport
+        local alt_distance    = get_distance_nm(data.inputs.plane_coords_lat, data.inputs.plane_coords_lon, FMGS_sys.fpln.apts.alt.lat, FMGS_sys.fpln.apts.alt.lon)
+        local alt_diff_height = math.abs(data.inputs.altitude - FMGS_sys.fpln.apts.alt.alt)
+        if alt_distance < 20 and alt_diff_height < 5000 then
+            data.oans.displayed_apt = FMGS_sys.fpln.apts.alt
+            return
+        end
+        at_least_one = true
+    end
+    if FMGS_sys.fpln.apts.dep then
+        -- Departure airport
+        local dep_distance    = get_distance_nm(data.inputs.plane_coords_lat, data.inputs.plane_coords_lon, FMGS_sys.fpln.apts.dep.lat, FMGS_sys.fpln.apts.dep.lon)
+        local dep_diff_height = math.abs(data.inputs.altitude - FMGS_sys.fpln.apts.dep.alt)
+        if dep_distance < 20 and dep_diff_height < 5000 then
+            data.oans.displayed_apt = FMGS_sys.fpln.apts.dep
+            return
+        end
+        at_least_one = true
+    end
+
+    if data.oans.displayed_apt == nil and FMGS_sys.fpln.apts.arr then
+        data.oans.displayed_apt = FMGS_sys.fpln.apts.arr -- Far from all, display the destination for the arrow purposes
+    end
+    
+    if not at_least_one then
+    
+        data.misc.oans_arpt_not_active = true
+    end
+end
+
+local function update_oans(data)
+    data.oans.displayed_apt = nil
+    data.misc.oans_arpt_not_active = false
+
+    if not (AvionicsBay.is_initialized() and AvionicsBay.is_ready()) then
+        return
+    end
+
+    local nearest_airport = AvionicsBay.apts.get_nearest_apt(true)
+    if get(All_on_ground) == 1 and data.config.mode ~= ND_MODE_PLAN then
+        data.oans.displayed_apt = nearest_airport
+        return
+    end
+
+    -- In flight or in PLAN
+
+    if data.config.mode == ND_MODE_PLAN then
+        data.misc.oans_arpt_not_active = get(All_on_ground) == 1 and not (FMGS_sys.fpln.apts.dep and nearest_airport.id == FMGS_sys.fpln.apts.dep)
+        
+        if FMGS_sys.fpln.apts.dep and FMGS_sys.fpln.apts.arr then
+            -- Departure and Arrival airport
+            local cross_dist = get_distance_nm(FMGS_sys.fpln.apts.arr.lat, FMGS_sys.fpln.apts.arr.lon, FMGS_sys.fpln.apts.dep.lat, FMGS_sys.fpln.apts.dep.lon)
+            if cross_dist < 300 then
+                data.oans.displayed_apt = FMGS_sys.fpln.apts.arr
+            elseif get_distance_nm(data.inputs.plane_coords_lat, data.inputs.plane_coords_lon, FMGS_sys.fpln.apts.dep.lat, FMGS_sys.fpln.apts.dep.lon) < 50 then
+                data.oans.displayed_apt = FMGS_sys.fpln.apts.dep
+            else
+                data.oans.displayed_apt = FMGS_sys.fpln.apts.arr
+            end
+            return
+        else
+            data.misc.oans_arpt_not_active = true
+            return
+        end
+
+    else
+        -- In flight, ARC or ROSE
+        update_oans_inflight_no_plan(data)
+    end
+
+
+end
+
 function update_main(data)
     update_speed_and_wind(data)
     update_hdg_track(data)
@@ -137,4 +225,5 @@ function update_main(data)
     update_poi(data)
     update_altitude(data)
 
+    update_oans(data)
 end
