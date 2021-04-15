@@ -873,5 +873,8 @@ TOPCAT_v2 = createGlobalPropertyi("a321neo/efb/topcat/v2", 0, false, true, false
 TOPCAT_flex = createGlobalPropertyi("a321neo/efb/topcat/flex", 0, false, true, false)
 TOPCAT_CG_MAC = createGlobalPropertyi("a321neo/efb/topcat/cgmac", 0, false, true, false)
 TOPCAT_trim = createGlobalPropertyf("a321neo/efb/topcat/trim", 0, false, true, false)
-
+TOPCAT_torwy_length = createGlobalPropertyf("a321neo/efb/topcat/torwy_length", 0, false, true, false)
+TOPCAT_torwy_bearing = createGlobalPropertyf("a321neo/efb/topcat/torwy_bearing", 0, false, true, false)
+TOPCAT_ldgrwy_length = createGlobalPropertyf("a321neo/efb/topcat/ldgrwy_length", 0, false, true, false)
+TOPCAT_ldgrwy_bearing = createGlobalPropertyf("a321neo/efb/topcat/ldgrwy_bearing", 0, false, true, false)
 

@@ -160,51 +160,91 @@ local function p3s1_dropdown_buttons( x,y,w,h, table, identifier)
 end
 
 local airport_reset_flags = {true,true} -- 1 is dep 2 is arr
-local function request_runway_data(reset_flag_index)
-    if AvionicsBay.is_initialized() and AvionicsBay.is_ready() and not airport_reset_flags[reset_flag_index] then
-        local apts = AvionicsBay.apts.get_by_name(deparr_apts[reset_flag_index])
-        
+local function request_departure_runway_data()
+    if AvionicsBay.is_initialized() and AvionicsBay.is_ready() and not airport_reset_flags[1] then
+        local apts = AvionicsBay.apts.get_by_name(deparr_apts[1])
         if #apts > 0 then    -- If the airport exists
-        local apt = apts[1]    -- Take the airport
-        
-        --print(apt.alt)
-        dropdown_1 = {} -- CLEAR IT FIRST
-        for i=1, #apt.rwys do
-            print(apt.rwys[i].name, apt.rwys[i].sibl_name)
-            table.insert(dropdown_1, apt.rwys[i].name) 
-            table.insert(dropdown_1, apt.rwys[i].sibl_name) 
-            print("DISTANCE " .. apt.rwys[i].distance)
-            print("BEARING " .. apt.rwys[i].bearing)
-
+            local apt = apts[1]    -- Take the airport
+            --print(apt.alt)
+            dropdown_1 = {} -- CLEAR IT FIRST
+            for i=1, #apt.rwys do
+                --print(apt.rwys[i].name, apt.rwys[i].sibl_name)
+                table.insert(dropdown_1, apt.rwys[i].name) 
+                table.insert(dropdown_1, apt.rwys[i].sibl_name) 
+                --print("DISTANCE " .. apt.rwys[i].distance)
+                --print("BEARING " .. apt.rwys[i].bearing)
+            end
         end
-    
-        end
-
-        airport_reset_flags[reset_flag_index] = true
+        airport_reset_flags[1] = true
         avionics_bay_is_initialising = false
-    elseif not airport_reset_flags[reset_flag_index] then
+    elseif not airport_reset_flags[1] then
         avionics_bay_is_initialising = true
     end
 end
 
-local function set_runway_data_to_global()
-    local apts = AvionicsBay.apts.get_by_name(deparr_apts[1])
-    if #apts > 0 then    -- If the airport exists
-    local apt = apts[1] 
-
-        local selected1 = Round(dropdown_selected[1]/2, 0)
-        if selected1 > 0 and apt ~= nil then
-            local bearing = get_bearing(apt.rwys[selected1].lat, apt.rwys[selected1].lon, apt.rwys[selected1].s_lat, apt.rwys[selected1].s_lon)
-            --print(selected1)
-            if Round(dropdown_selected[1]/2, 0) == dropdown_selected[1]/2 then
---                print(bearing+180)
-            else
---                print((bearing))
+local function request_arrival_runway_data()
+    if AvionicsBay.is_initialized() and AvionicsBay.is_ready() and not airport_reset_flags[2] then
+        local apts = AvionicsBay.apts.get_by_name(deparr_apts[2])
+        if #apts > 0 then    -- If the airport exists
+            local apt = apts[1]    -- Take the airport
+            --print(apt.alt)
+            dropdown_2 = {} -- CLEAR IT FIRST
+            for i=1, #apt.rwys do
+                --print(apt.rwys[i].name, apt.rwys[i].sibl_name)
+                table.insert(dropdown_2, apt.rwys[i].name) 
+                table.insert(dropdown_2, apt.rwys[i].sibl_name) 
+                --print("DISTANCE " .. apt.rwys[i].distance)
+                --print("BEARING " .. apt.rwys[i].bearing)
             end
         end
+        airport_reset_flags[2] = true
+        avionics_bay_is_initialising = false
+    elseif not airport_reset_flags[2] then
+        avionics_bay_is_initialising = true
+    end
+end
 
-        --table.insert(deparr_runway_data[1][1], bearing) 
-    end 
+
+local function set_takeoff_runway_data_to_global()
+    if AvionicsBay.is_initialized() and AvionicsBay.is_ready() then
+        local apts = AvionicsBay.apts.get_by_name(deparr_apts[1])
+        if #apts > 0 then    -- If the airport exists
+        local apt = apts[1] 
+
+            local selected1 = Round(dropdown_selected[1]/2, 0)
+            if selected1 > 0 and apt ~= nil then
+                local bearing = apt.rwys[selected1].bearing
+                if Round(dropdown_selected[1]/2, 0) == dropdown_selected[1]/2 then
+                    set(TOPCAT_torwy_bearing, apt.rwys[selected1].bearing + 180)
+                    set(TOPCAT_torwy_length, apt.rwys[selected1].distance)
+                else
+                    set(TOPCAT_torwy_bearing, apt.rwys[selected1].bearing)
+                    set(TOPCAT_torwy_length, apt.rwys[selected1].distance)
+                end
+            end
+        end 
+    end
+end
+
+local function set_landing_runway_data_to_global()
+    if AvionicsBay.is_initialized() and AvionicsBay.is_ready() then
+        local apts = AvionicsBay.apts.get_by_name(deparr_apts[2])
+        if #apts > 0 then    -- If the airport exists
+        local apt = apts[1] 
+
+            local selected2 = Round(dropdown_selected[2]/2, 0)
+            if selected2 > 0 and apt ~= nil then
+                local bearing = apt.rwys[selected2].bearing
+                if Round(dropdown_selected[2]/2, 0) == dropdown_selected[2]/2 then
+                    set(TOPCAT_ldgrwy_bearing, apt.rwys[selected2].bearing + 180)
+                    set(TOPCAT_ldgrwy_length, apt.rwys[selected2].distance)
+                else
+                    set(TOPCAT_ldgrwy_bearing, apt.rwys[selected2].bearing)
+                    set(TOPCAT_ldgrwy_length, apt.rwys[selected2].distance)
+                end
+            end
+        end 
+    end
 end
 
 local function draw_avionics_bay_standby()
@@ -534,8 +574,8 @@ end
 local function EFB_update_page_3_subpage_1() --UPDATE LOOP
     predict_tow()
     predict_cg()
-    request_runway_data(1)
-    request_runway_data(2)
+    request_departure_runway_data()
+    request_arrival_runway_data()
     --print(predicted_cg)
     --print_r(load_target)
     --print_r(load_actual)
@@ -544,7 +584,8 @@ local function EFB_update_page_3_subpage_1() --UPDATE LOOP
     --print(deparr_runway_data[1][2])
     --print(deparr_runway_data[2][1])
     --print(deparr_runway_data[2][2])
-    --set_runway_data_to_global()
+    set_takeoff_runway_data_to_global()
+    set_landing_runway_data_to_global()
 end
 
 local function EFB_draw_page_3_subpage_1() -- DRAW LOOP
