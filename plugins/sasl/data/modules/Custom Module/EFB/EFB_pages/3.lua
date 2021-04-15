@@ -46,6 +46,11 @@ local total_load_target = 0
 
 local deparr_apts = {"", ""}
 
+local deparr_runway_data = {
+    {0,0},
+    {0,0},
+}
+
 local predicted_tow = 0
 
 local tank_index_center = {
@@ -163,8 +168,8 @@ local function request_runway_data(reset_flag_index)
         local apt = apts[1]    -- Take the airport
         
         --print(apt.alt)
+        dropdown_1 = {} -- CLEAR IT FIRST
         for i=1, #apt.rwys do
-            dropdown_1 = {}
             print(apt.rwys[i].name, apt.rwys[i].sibl_name)
             table.insert(dropdown_1, apt.rwys[i].name) 
             table.insert(dropdown_1, apt.rwys[i].sibl_name) 
@@ -179,6 +184,26 @@ local function request_runway_data(reset_flag_index)
     elseif not airport_reset_flags[reset_flag_index] then
         avionics_bay_is_initialising = true
     end
+end
+
+local function set_runway_data_to_global()
+    local apts = AvionicsBay.apts.get_by_name(deparr_apts[1])
+    if #apts > 0 then    -- If the airport exists
+    local apt = apts[1] 
+
+        local selected1 = Round(dropdown_selected[1]/2, 0)
+        if selected1 > 0 and apt ~= nil then
+            local bearing = get_bearing(apt.rwys[selected1].lat, apt.rwys[selected1].lon, apt.rwys[selected1].s_lat, apt.rwys[selected1].s_lon)
+            --print(selected1)
+            if Round(dropdown_selected[1]/2, 0) == dropdown_selected[1]/2 then
+                print(bearing+180)
+            else
+                print((bearing))
+            end
+        end
+
+        --table.insert(deparr_runway_data[1][1], bearing) 
+    end 
 end
 
 local function draw_avionics_bay_standby()
@@ -491,8 +516,8 @@ end
 --------------------------------------------------------------------------------------------------------
 
 
-    p3s1_dropdown_buttons(230, 578, 90, 26,    dropdown_1, 1)
-    p3s1_dropdown_buttons(511, 578, 90, 26,    dropdown_2, 2)
+    p3s1_dropdown_buttons(230, 578, 90, 28,    dropdown_1, 1)
+    p3s1_dropdown_buttons(511, 578, 90, 28,    dropdown_2, 2)
 
 --------------------------------------------------------------------------------------------------------
 
@@ -513,6 +538,12 @@ local function EFB_update_page_3_subpage_1() --UPDATE LOOP
     --print(predicted_cg)
     --print_r(load_target)
     --print_r(load_actual)
+
+    --print(deparr_runway_data[1][1])
+    --print(deparr_runway_data[1][2])
+    --print(deparr_runway_data[2][1])
+    --print(deparr_runway_data[2][2])
+    set_runway_data_to_global()
 end
 
 local function EFB_draw_page_3_subpage_1() -- DRAW LOOP
@@ -522,8 +553,8 @@ local function EFB_draw_page_3_subpage_1() -- DRAW LOOP
     sasl.gl.drawTexture (EFB_LOAD_chart, 0 , 0 , 1143 , 800 , EFB_WHITE )
 
 
-    draw_dropdown_menu(230, 578, 90, 26, EFB_DROPDOWN_OUTSIDE, EFB_DROPDOWN_INSIDE, dropdown_1, dropdown_expanded[1], dropdown_selected[1])
-    draw_dropdown_menu(511, 578, 90, 26, EFB_DROPDOWN_OUTSIDE, EFB_DROPDOWN_INSIDE, dropdown_2, dropdown_expanded[2], dropdown_selected[2])
+    draw_dropdown_menu(230, 578, 90, 28, EFB_DROPDOWN_OUTSIDE, EFB_DROPDOWN_INSIDE, dropdown_1, dropdown_expanded[1], dropdown_selected[1])
+    draw_dropdown_menu(511, 578, 90, 28, EFB_DROPDOWN_OUTSIDE, EFB_DROPDOWN_INSIDE, dropdown_2, dropdown_expanded[2], dropdown_selected[2])
 
 
     if string.len(key_p3s1_buffer) > 0 then --THE PURPOSE OF THIS IFELSE IS TO PREVENT THE CURSOR FROM COVERING UP THE PREVIOUS VALUE, WHEN THE SCRATCHPAD IS EMPTY.
