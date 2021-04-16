@@ -112,8 +112,8 @@ local function set_fwc_status()
 end
 
 local function update_xp_eng_fail_datarefs()
-    set(xp_fail_dr_eng_1_stall, get(FAILURE_ENG_STALL, 1)*6)
-    set(xp_fail_dr_eng_2_stall, get(FAILURE_ENG_STALL, 2)*6)
+    set(xp_fail_dr_eng_1_stall, get(FAILURE_ENG_STALL, 1)*6*get(Engine_1_master_switch))
+    set(xp_fail_dr_eng_2_stall, get(FAILURE_ENG_STALL, 2)*6*get(Engine_2_master_switch))
 end
 
 function update()

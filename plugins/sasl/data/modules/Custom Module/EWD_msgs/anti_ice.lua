@@ -162,7 +162,7 @@ MessageGroup_WAI_SYS_FAULT_2 = {
     start_time = 0,
 
     is_active = function()
-        return AI_sys.switches[WINGS] == true and (not AI_sys.comp[ANTIICE_WING_L].valve_status or not AI_sys.comp[ANTIICE_WING_R].valve_status) and (get(L_bleed_press) <= 5 and get(R_bleed_press) > 5) or (get(L_bleed_press) > 5 and get(R_bleed_press) <= 5)
+        return AI_sys.switches[WINGS] == true and (not AI_sys.comp[ANTIICE_WING_L].valve_status or not AI_sys.comp[ANTIICE_WING_R].valve_status) and ((get(L_bleed_press) <= 5 and get(R_bleed_press) > 5) or (get(L_bleed_press) > 5 and get(R_bleed_press) <= 5))
     end,
 
     is_inhibited = function()
