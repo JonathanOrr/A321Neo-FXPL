@@ -200,8 +200,39 @@ function landing_distance(condition, aircraft_weight, vapp_difference,  tailwind
     + tailwind_corr
     + reverse_corr
     + autoland_corr
+    
+    --------------------------------------------------------------------------------BELOW ARE FOR AUTOBRAKE WITH FIXED DECELLERATION.
 
-    return landing_distance
+    local vref_table_cfg3 = {
+        {40, 115},
+        {45, 116},
+        {50, 123},
+        {55, 129},
+        {60, 135},
+        {65, 140},
+        {70, 145},
+        {75, 150},
+        {80, 155},
+    }
+    local vref_table_cfgf = {
+        {40, 115},
+        {45, 115},
+        {50, 115},
+        {55, 119},
+        {60, 124},
+        {65, 129},
+        {70, 134},
+        {75, 139},
+        {80, 143},
+    }
+
+    local vref_cfgf_in_ms = ( Table_extrapolate(vref_table_cfgf, aircraft_weight/1000) + vapp_difference  )/1.944
+    print(vref_cfgf_in_ms)
+    local landing_distance_med_ab = (vref_cfgf_in_ms ^ 2) / 6 + 304 + 80 + vref_cfgf_in_ms * 2
+    local landing_distance_low_ab = ((vref_cfgf_in_ms^ 2)) / 3.4 + 304 + 80 + vref_cfgf_in_ms * 4
+
+    print(landing_distance_med_ab, landing_distance_low_ab)
+    return landing_distance, landing_distance_med_ab, landing_distance_low_ab
 end
 
 --FAILURE CODE
@@ -282,3 +313,5 @@ function failure_correction(failure_code_array) --CODE == 0 IS RESERVED FOR NO F
 
     return final_flaps, final_vref, math.max(ret_ldg_dist, 1)
 end
+
+

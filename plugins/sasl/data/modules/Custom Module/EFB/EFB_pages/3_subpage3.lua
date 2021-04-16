@@ -15,6 +15,8 @@ local dropdown_selected = {1, #dropdown_2, 1, 1,#dropdown_5, #dropdown_6, #dropd
 
 local failure_code = {0,0,0,0,0,0,0}
 local final_min_landing_distance = 0
+local final_min_landing_distance_med_ab = 0
+local final_min_landing_distance_low_ab = 0
 
 local generate_button_begin = 0
 
@@ -144,7 +146,8 @@ local function compute_landing_distance()
     --print(c)
 
     local headwind_component = math.cos(math.rad((landing_aircraft_data[2] - get(TOPCAT_ldgrwy_bearing))%360)) * landing_aircraft_data[3]
-    final_min_landing_distance =   landing_distance(
+    final_min_landing_distance, final_min_landing_distance_med_ab, final_min_landing_distance_low_ab = 
+                                    landing_distance(
                                     dropdown_selected[1], 
                                     landing_aircraft_data[1], 
                                     Math_clamp(headwind_component/3, 5, 15),
@@ -153,8 +156,11 @@ local function compute_landing_distance()
                                     dropdown_selected[3]-1, 
                                     dropdown_selected[4]-1
                                 )
-                                * c --   local a, b, c  at a few lines above, c is the rwy distance factor in failure.
-    print(final_min_landing_distance)
+                                --   local a, b, c  at a few lines above, c is the rwy distance factor in failure.
+    final_min_landing_distance = final_min_landing_distance * c
+    final_min_landing_distance_med_ab = final_min_landing_distance_med_ab * c
+    final_min_landing_distance_low_ab = final_min_landing_distance_low_ab * c
+    print(final_min_landing_distance, final_min_landing_distance_med_ab, final_min_landing_distance_low_ab)
 end
 
 local function general_buttons()
@@ -249,12 +255,36 @@ local function draw_landing_distance_bar()
         {999999, 1105},
     }
     local TRANSLUCENT_RED = {1,0,0,0.7}
+    local TRANSLUCENT_YELLOW = {1,1,0,0.7}
+    local TRANSLUCENT_GREEN = {0,1,0,0.7}
+
     sasl.gl.drawWideLine ( 39, 78 , 39 , 227 , 3, EFB_WHITE )
     local min_landing_runway_distance_ratio = final_min_landing_distance / get(TOPCAT_ldgrwy_length)
+    local med_landing_runway_distance_ratio = final_min_landing_distance_med_ab / get(TOPCAT_ldgrwy_length)
+    local low_landing_runway_distance_ratio = final_min_landing_distance_low_ab / get(TOPCAT_ldgrwy_length)
+
     local min_distance_in_pixels = Table_interpolate(distance_ratio_to_x_coords, min_landing_runway_distance_ratio )
-    sasl.gl.drawRectangle ( 39 , 130 , min_distance_in_pixels - 39 , 13, TRANSLUCENT_RED)
-    drawTextCentered(Font_Airbus_panel, (39 + min_distance_in_pixels) / 2, 136, Round(final_min_landing_distance, 0).." MAX BRAKE" , 17, true, false, TEXT_ALIGN_CENTER, EFB_WHITE)
+    local med_distance_in_pixels = Table_interpolate(distance_ratio_to_x_coords, med_landing_runway_distance_ratio )
+    local low_distance_in_pixels = Table_interpolate(distance_ratio_to_x_coords, low_landing_runway_distance_ratio )
+
+
     sasl.gl.drawWideLine ( min_distance_in_pixels, 127 , min_distance_in_pixels , 151 , 3, EFB_WHITE )
+    sasl.gl.drawRectangle ( 39 , 130 , min_distance_in_pixels - 39 , 13, TRANSLUCENT_RED)
+    if min_distance_in_pixels > 39 then
+        drawTextCentered(Font_Airbus_panel, (39 + min_distance_in_pixels) / 2, 136, Round(final_min_landing_distance, 0).." MAX BRAKE" , 17, true, false, TEXT_ALIGN_CENTER, EFB_WHITE)
+    end
+
+    sasl.gl.drawWideLine ( med_distance_in_pixels, 103 , med_distance_in_pixels , 151 , 3, EFB_WHITE )
+    sasl.gl.drawRectangle ( 39 , 106 , med_distance_in_pixels - 39 , 13, TRANSLUCENT_YELLOW)
+    if med_distance_in_pixels > 39 then
+        drawTextCentered(Font_Airbus_panel, (39 + min_distance_in_pixels) / 2, 112, Round(final_min_landing_distance_med_ab, 0).." MED BRAKE" , 17, true, false, TEXT_ALIGN_CENTER, EFB_WHITE)
+    end
+
+    sasl.gl.drawWideLine ( low_distance_in_pixels, 79 , low_distance_in_pixels , 151 , 3, EFB_WHITE )
+    sasl.gl.drawRectangle ( 39 , 82 , low_distance_in_pixels - 39 , 13, TRANSLUCENT_GREEN)
+    if low_distance_in_pixels > 39 then
+        drawTextCentered(Font_Airbus_panel, (39 + min_distance_in_pixels) / 2, 88, Round(final_min_landing_distance_low_ab, 0).." LOW BRAKE" , 17, true, false, TEXT_ALIGN_CENTER, EFB_WHITE)
+    end
 
     sasl.gl.drawRectangle ( size[1]/2 - 70 , 167 , 140 , 30, EFB_BLACK)
     drawTextCentered(Font_Airbus_panel, size[1]/2, 182, Round(get(TOPCAT_ldgrwy_length), 0).."m" , 24, true, false, TEXT_ALIGN_CENTER, EFB_WHITE)
