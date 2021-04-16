@@ -491,7 +491,7 @@ local function draw_pois(data)
 
 end
 
-function draw_oans_arrow(data)
+local function draw_oans_arrow(data)
 
     if data.oans.displayed_apt then
         local lat = data.oans.displayed_apt.lat
