@@ -152,6 +152,7 @@ local left_messages_list = {
     MessageGroup_ELEC_STATIC_INV_FAULT,
     MessageGroup_ELEC_TR_1_2_FAULT,
     MessageGroup_ELEC_TR_ESS_FAULT,
+    MessageGroup_ENG_STALL,
     MessageGroup_ENG_REV_SET,
     MessageGroup_ENG_FF_CLOG,
     MessageGroup_ENG_OIL_CLOG,

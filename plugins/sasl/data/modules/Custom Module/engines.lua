@@ -251,6 +251,7 @@ local function update_egt()
     local eng_1_n1 = get(Eng_1_N1)
     if eng_1_n1 > ENG_N1_LL_IDLE then
         local computed_egt = ENG.data.n1_to_egt_fun(eng_1_n1, get(OTA))
+        computed_egt = computed_egt * (1 + get(FAILURE_ENG_STALL, 1) * get(eng_1_n1)/90 * math.random())
         computed_egt = computed_egt + egt_eng_1_offset + random_pool_1*2 -- Let's add a bit of randomness
         Set_dataref_linear_anim(Eng_1_EGT_c, computed_egt, -50, 1500, 70)
     else
@@ -260,6 +261,7 @@ local function update_egt()
     local eng_2_n1 = get(Eng_2_N1)
     if eng_2_n1 > ENG_N1_LL_IDLE then
         local computed_egt = ENG.data.n1_to_egt_fun(eng_2_n1, get(OTA))
+        computed_egt = computed_egt * (1 + get(FAILURE_ENG_STALL, 2) * get(eng_1_n1)/90 * math.random())
         computed_egt = computed_egt + egt_eng_2_offset + random_pool_2*2 -- Let's add a bit of randomness
         Set_dataref_linear_anim(Eng_2_EGT_c, computed_egt, -50, 1500, 70)
     else
