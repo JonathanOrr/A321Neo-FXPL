@@ -431,7 +431,7 @@ local function draw_terrain(data)
     sasl.gl.drawRectangle(0, 450, 900, 450, {10/255, 15/255, 25/255 , 1-data.terrain.brightness})
 end
 
-local function draw_active_fpln(data)
+local function draw_active_fpln(data)   -- This is just a test
 
     local fpln_active = FMGS_sys.fpln.active
 
@@ -441,11 +441,11 @@ local function draw_active_fpln(data)
     for k,x in ipairs(fpln_active) do
 
         local c_x,c_y = rose_get_x_y_heading(data, x.lat, x.lon, data.inputs.heading)
-        table.insert(route, c_x)
-        table.insert(route, c_y)
+        table.insert(route, {c_x, c_y})
+--        table.insert(route, c_y)
         x.x = c_x
         x.y = c_y
-
+        
         local color = k == 1 and ECAM_WHITE or ECAM_GREEN
 
         if x.ptr_type == FMGS_PTR_WPT then
@@ -463,9 +463,38 @@ local function draw_active_fpln(data)
         end
 
     end
+
+    local range_in_nm = get_range_in_nm(data)
+    local px_per_nm = 588 / range_in_nm
     
+    local NM_ARC =  math.floor(data.inputs.tas)^2 / (0.577 * 11.294) * 0.000164579
+
+    local last_x, last_y = nil, nil
+
     if #route > 1 then
-        sasl.gl.drawWidePolyLine(route, 2, ECAM_GREEN)
+        local n = #route
+        for k,r in ipairs(route) do
+        
+            if k > 1 and k < n then
+            
+                x_start, y_start = point_from_a_segment(route[k][1], route[k][2], route[k-1][1], route[k-1][2], px_per_nm*NM_ARC)
+                x_end, y_end     = point_from_a_segment(route[k][1], route[k][2], route[k+1][1], route[k+1][2], px_per_nm*NM_ARC)
+                
+                sasl.gl.drawWideBezierLineQAdaptive ( x_start, y_start, route[k][1], route[k][2], x_end, y_end, 2 , ECAM_RED )
+
+            
+                if last_x ~= nil then
+                    sasl.gl.drawWideLine(last_x, last_y, x_start, y_start, 2, ECAM_GREEN)
+                else
+                    sasl.gl.drawWideLine(route[k-1][1], route[k-1][2], x_start, y_start, 2, ECAM_GREEN)
+                end
+
+                last_x = x_end
+                last_y = y_end
+
+            end
+        end
+        sasl.gl.drawWideLine(last_x, last_y, route[#route][1], route[#route][2], 2, ECAM_GREEN)
     end
 end
 
