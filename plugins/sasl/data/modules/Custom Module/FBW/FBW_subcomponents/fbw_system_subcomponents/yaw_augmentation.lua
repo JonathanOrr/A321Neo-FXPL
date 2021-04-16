@@ -136,7 +136,7 @@ local function yaw_controlling(var_table)
         FBW_PID_arrays.FBW_NRM_YAW_PID_array.Integral = 0
     end
 
-    var_table.NRM_controller_output = FBW_PID_BP(FBW_PID_arrays.FBW_NRM_YAW_PID_array, var_table.filtered_sideslip_err, var_table.filtered_sideslip, math.max(get_curr_turbolence(), get_curr_windshear()))
+    var_table.NRM_controller_output = FBW_PID_BP(FBW_PID_arrays.FBW_NRM_YAW_PID_array, var_table.filtered_sideslip_err, var_table.filtered_sideslip, get_curr_turbolence())--math.max(get_curr_turbolence(), get_curr_windshear()))
 
     --back propagation--
     FBW_PID_arrays.FBW_YAW_DAMPER_PID_array.Actual_output = get(Rudder) / 30
@@ -147,7 +147,7 @@ local function FBW_yaw_mode_blending(var_table)
     set(
         FBW_yaw_output,
         Math_clamp(
-            (get(Total_input_yaw) + var_table.Yaw_damper_controller_output)                        * get(FBW_lateral_ground_mode_ratio) +
+            (get(Total_input_yaw) + var_table.Yaw_damper_controller_output)            * get(FBW_lateral_ground_mode_ratio) +
             (var_table.NRM_controller_output + var_table.Yaw_damper_controller_output) * get(FBW_lateral_flight_mode_ratio)
         , -get(Rudder_travel_lim) / 30, get(Rudder_travel_lim) / 30)
     )
