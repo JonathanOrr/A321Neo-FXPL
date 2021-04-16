@@ -158,6 +158,7 @@ local left_messages_list = {
     MessageGroup_ENG_REV_FAULT,
     MessageGroup_ENG_REV_PRESS,
     MessageGroup_ENG_OIL_LO_PR_AMBER,
+    MessageGroup_ENG_THR_LEVERS_NOT_SET,
     MessageGroup_SAT_ABOVE_FLEX,
     MessageGroup_FUEL_WING_LO_LVL_DOUBLE,
     MessageGroup_FUEL_WING_LO_LVL_SINGLE,

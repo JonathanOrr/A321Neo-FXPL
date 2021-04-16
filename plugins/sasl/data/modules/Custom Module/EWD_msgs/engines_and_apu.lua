@@ -1813,3 +1813,62 @@ MessageGroup_THR_ABV_IDLE_2 = {
 }
 
 
+----------------------------------------------------------------------------------------------------
+-- CAUTION: ENG THR LEVERS NOT SET
+----------------------------------------------------------------------------------------------------
+
+MessageGroup_ENG_THR_LEVERS_NOT_SET = {
+
+    shown = false,
+
+    text  = function()
+                return "ENG"
+            end,
+    color = function()
+                return COL_CAUTION
+            end,
+
+    sd_page = ECAM_PAGE_ENG,
+    
+    priority = PRIORITY_LEVEL_2,
+
+    messages = {
+        {
+            text = function()
+                return "    THR LEVERS NOT SET"
+            end,
+
+            color = function()
+                return COL_CAUTION
+            end,
+
+            is_active = function()
+              return true
+            end
+        },
+        {
+            text = function()
+                    return " - THR LEVERS........" .. (get(Eng_N1_flex_temp) == 0 and "TOGA" or "FLEX")
+            end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return true end
+        }
+
+    },
+
+    is_active = function()
+        local lvr1 = get(Cockpit_throttle_lever_L)
+        local lvr2 = get(Cockpit_throttle_lever_R)
+        return (lvr1 >= THR_MCT_THRESHOLD or lvr2 >= THR_MCT_THRESHOLD)
+               and ((     get(Eng_N1_flex_temp) == 0 and (lvr1 < 0.99 or lvr2 < 0.99))
+                    or ( get(Eng_N1_flex_temp) ~= 0 and (lvr1 < THR_TOGA_THRESHOLD or lvr2 < THR_TOGA_THRESHOLD))
+               )
+    end,
+
+    is_inhibited = function()
+        return is_active_in({PHASE_1ST_ENG_ON, PHASE_1ST_ENG_TO_PWR, PHASE_ABOVE_80_KTS})
+    end
+
+}
+
+
