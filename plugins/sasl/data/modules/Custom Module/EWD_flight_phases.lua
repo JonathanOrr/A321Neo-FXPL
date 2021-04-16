@@ -41,6 +41,14 @@ function check_and_stop_timer()
     end
 end
 
+function onAirportLoaded()
+    if get(Capt_ra_alt_ft) <= 20 then
+        already_took_off = false
+        was_above_80_kts = false
+        timer_is_running = false
+    end
+end
+
 function update()
 
     -- We update the flight phase only if the previous update was more than 1 seconds ago
