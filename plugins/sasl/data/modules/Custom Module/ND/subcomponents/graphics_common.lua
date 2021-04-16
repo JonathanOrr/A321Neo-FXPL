@@ -236,6 +236,9 @@ local function draw_common_messages_bottom_2(data)
     elseif data.misc.gps_primary_lost then
         text  = "GPS PRIMARY LOST"
         color = ECAM_ORANGE
+    elseif data.misc.oans_arpt_not_active and data.config.range <= ND_RANGE_ZOOM_2 then
+        text  = "ARPT NOT IN ACTIVE F-PLN"
+        color = ECAM_ORANGE
     elseif data.misc.map_partially_displayed then
         text  = "MAP PARTLY DISPLAYED"
         color = ECAM_ORANGE
@@ -263,6 +266,9 @@ local function draw_common_messages_center(data)
 
     if data.misc.map_not_avail then
         text = "MAP NOT AVAIL"
+        color = ECAM_RED
+    elseif data.misc.not_avail then
+        text = "NOT AVAIL"
         color = ECAM_RED
     elseif data.misc.apt_pos_lost then
         text = "ARPT NAV POS LOST"
@@ -383,10 +389,16 @@ local function draw_common_oans_info(data)
         return  -- No OANS over zoom
     end
     
-    local nearest_airport = AvionicsBay.apts.get_nearest_apt(false)
-    if nearest_airport ~= nil then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]-30, size[2]-40, nearest_airport.name, 32, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]-30, size[2]-75, nearest_airport.id, 32, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+    local oans_airport = data.oans.displayed_apt
+    if oans_airport ~= nil then
+        sasl.gl.drawText(Font_AirbusDUL, size[1]-30, size[2]-40, oans_airport.name, 32, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]-30, size[2]-75, oans_airport.id, 32, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+        
+        local distance = get_distance_nm(data.inputs.plane_coords_lat, data.inputs.plane_coords_lon, oans_airport.lat, oans_airport.lon)
+        if distance >= 5 then
+            sasl.gl.drawText(Font_AirbusDUL, size[1]-70, size[2]-110, math.floor(distance), 32, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+            sasl.gl.drawText(Font_AirbusDUL, size[1]-30, size[2]-110, "NM", 28, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
+        end
     end
 end
 

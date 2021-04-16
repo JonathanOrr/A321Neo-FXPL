@@ -239,6 +239,7 @@ end
 position = {1020, 1666, 560, 530}
 size = {560, 530}
 
+include('FMGS_functions.lua')
 include('MCDU-FMGS.lua') -- Flight Management Guidance System implementation
 
 local NIL = 0 -- used for input return and checking
@@ -1582,6 +1583,9 @@ function (phase)
 			fmgs_dat["fmgs init"] = true
 			fmgs_dat["origin"] = airp_origin.id
 			fmgs_dat["dest"] = airp_dest.id
+			
+			FMGS_set_apt_dep(airp_origin.id)
+			FMGS_set_apt_arr(airp_dest.id)
 
             fmgs_dat["origin lat"] = airp_origin.lat
             fmgs_dat["origin lon"] = airp_origin.lon

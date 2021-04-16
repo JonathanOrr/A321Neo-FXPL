@@ -28,7 +28,7 @@ local landing_aircraft_data = {47777,0,0}
 
 
 
-include("EFB/EFB_ldgcat.lua")
+include("EFB/efb_ldgcat.lua")
 ---------------------------------------------------------------------------------------------------------------------------------
 
 local function p3s3_plug_in_the_buffer()

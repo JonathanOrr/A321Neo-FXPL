@@ -71,6 +71,7 @@ function new_dataset(input_id)
         gpirs_is_on       = false,
         gps_primary_lost  = false,
         backup_nav = false,
+        oans_arpt_not_active = false,
         
         map_partially_displayed = false,
         
@@ -82,6 +83,7 @@ function new_dataset(input_id)
         mode_change = false,
         range_change = false,
         map_not_avail = false,
+        not_avail = false, -- For OANS only
         please_wait = false,
         
         windshear_warning = false,
@@ -169,6 +171,10 @@ function new_dataset(input_id)
         max_altitude_tile_color = ECAM_GREEN,
         request_refresh = false,
         brightness = 0
+    },
+    
+    oans = {
+        displayed_apt = nil,
     }
 }
 

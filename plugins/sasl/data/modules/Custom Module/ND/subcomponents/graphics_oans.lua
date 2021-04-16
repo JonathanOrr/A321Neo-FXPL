@@ -185,6 +185,8 @@ local function draw_oans_airport_bounds(data, functions, apt, apt_details)
         end
         ----- CACHING END
 
+        data.oans_cache.is_visible = is_polygon_visible(data.oans_cache.apt_bounds[i], size, data.oans_cache.diff_x, data.oans_cache.diff_y)
+
         local curr_nr_points = #data.oans_cache.apt_bounds[i]
         for k=1,curr_nr_points do
             if k % 6 == 0 then  -- For each triangle
@@ -511,6 +513,8 @@ end
 function draw_oans(data, functions)
     assert(data)
 
+    data.misc.not_avail = false
+
     if data.config.range > ND_RANGE_ZOOM_2 then
         data.misc.please_wait = false
         data.misc.apt_pos_lost = false
@@ -526,12 +530,17 @@ function draw_oans(data, functions)
     data.misc.apt_pos_lost = false
     data.misc.please_wait  = true   -- Let's turn on the message
 
-    local nearest_airport = AvionicsBay.apts.get_nearest_apt(true)
-    
-    local apt = nearest_airport -- TODO: Change depending on MCDU ecc.
+    local apt = data.oans.displayed_apt -- See logic.lua
 
     if apt == nil then
-        return  -- Nearest airport not yet loaded
+        if data.misc.oans_arpt_not_active then
+            -- Missing airport in the MCDU
+            data.misc.please_wait = false
+            data.misc.not_avail = true
+        else
+            -- Nearest airport not yet loaded
+        end
+        return
     end
 
     AvionicsBay.apts.request_details(apt.id)
@@ -543,9 +552,9 @@ function draw_oans(data, functions)
     local apt_details = AvionicsBay.apts.get_details(apt.id)
 
     if (data.plan_ctr_lat == 0 and data.plan_ctr_lon == 0) or (data.oans_cache == nil or data.oans_cache.apt_id ~= apt.id) then
-        -- This is for PLAN only, PLAN initial position is the airport center
-        data.plan_ctr_lat = apt.lat
-        data.plan_ctr_lon = apt.lon
+        -- This is for PLAN only, PLAN initial position is the airport center if in flight
+        data.plan_ctr_lat = get(All_on_ground) == 0 and apt.lat or data.inputs.plane_coords_lat
+        data.plan_ctr_lon = get(All_on_ground) == 0 and apt.lon or data.inputs.plane_coords_lon
     end
 
     update_oans_cache(data, functions, apt) -- Init/Wipe the cache if needed and update the offsets
