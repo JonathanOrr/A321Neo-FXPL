@@ -1,32 +1,11 @@
---MOUSE & BUTTONS--
 
---function EFB_load_ground_objects()
---    GPUobj = sasl.loadObject ( moduleDirectory .. "/Custom Module/ground_vehicles/GPU.obj" ) 
---end
---
---local loc_x = globalPropertyf("sim/flightmodel/position/local_x")
---local loc_y = globalPropertyf("sim/flightmodel/position/local_y")
---local loc_z = globalPropertyf("sim/flightmodel/position/local_z")
---
---local vehicle_drawn = false
---local gpu_instance = {}
+local efb_subpage_number = 1
+local NUMBER_OF_PAGES = 2
 
---function EFB_draw_vehicles()
---    -- toggle, so doesn't need to be called every frame
---    if not vehicle_drawn then
---        vehicle_drawn = true
---        print("attempting to draw obj")
---        gpu_instance = sasl.createInstance(GPUobj, {})
---        sasl.setInstancePosition(gpu_instance, get(loc_x), get(loc_y)-2.95, get(loc_z), 0, 0, 0)
---    end
---end
+include("EFB/EFB_pages/2_subpage2.lua")
+------------------------------------------------------------------------------
 
---function EFB_delete_vehicles()
---    vehicle_drawn = false
---    sasl.destroyInstance(gpu_instance)
---end
-
-function EFB_execute_page_2_buttons()
+local function p2s1_buttons()
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 44, 108, 427, 130, function ()
         set(VEHICLE_ac,1)
         set(VEHICLE_as,1)
@@ -119,12 +98,7 @@ function EFB_execute_page_2_buttons()
     end)
 end
 
---UPDATE LOOPS--
-function EFB_update_page_2()
-end
-
---DRAW LOOPS--
-function EFB_draw_page_2()
+local function p2s1_draw()
     sasl.gl.drawTexture ( EFB_GROUND_bgd, 0 , 0 , 1143 , 800 , EFB_WHITE )
     sasl.gl.drawTexture ( EFB_GROUND_plane, 0 , 0 , 1143 , 800 , EFB_WHITE )
     ----------------------------------------------------------------------
@@ -229,10 +203,69 @@ function EFB_draw_page_2()
     end
 end
 
-----OBJECTS-----
---function drawObjects()
---    EFB_draw_vehicles()
---end
+local function p2s1_update()
+end
+
+------------------------------------------------------------------------------
+
+
+------------------------------------------------------------------------------
+
+local function mutual_button_loop()
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 1031,18,1099,48, function () --SELECTOR BUTTONS WORK AT ALL TIMES
+        efb_subpage_number = math.min(efb_subpage_number + 1, NUMBER_OF_PAGES)
+        key_p3s1_focus = 0
+        key_p3s1_buffer = ""
+    end)
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 954,18,1021,48, function ()
+        efb_subpage_number = math.max( efb_subpage_number - 1, 1)
+    end)
+end
+
+local function mutual_update_loop()
+end
+
+local function mutual_draw_loop()
+    SASL_draw_img_center_aligned (EFB_INFO_selector, 1026,33, 147, 32, EFB_WHITE) -- THIS IS THE SELECTOR, IT DRAWS ON ALL PAGES
+
+        sasl.gl.drawText ( Font_Airbus_panel , 880 , 24 , "Page "..efb_subpage_number.."/"..NUMBER_OF_PAGES.."", 20 , false , false , TEXT_ALIGN_CENTER , EFB_WHITE)
+
+    --print(EFB_CURSOR_X, EFB_CURSOR_Y)
+
+end
+
+------------------------------------------------------------------------------
+
+
+function EFB_execute_page_2_buttons()
+    if efb_subpage_number == 1 then
+        p2s1_buttons()
+    elseif efb_subpage_number == 2 then
+        p2s2_buttons()
+    end
+    mutual_button_loop()
+end
+
+--UPDATE LOOPS--
+function EFB_update_page_2()
+    if efb_subpage_number == 1 then
+        p2s1_update()
+    elseif efb_subpage_number == 2 then
+        p2s2_update()
+    end
+    mutual_update_loop()
+end
+
+--DRAW LOOPS--
+function EFB_draw_page_2()
+    if efb_subpage_number == 1 then
+        p2s1_draw()
+    elseif efb_subpage_number == 2 then
+        p2s2_draw()
+    end
+    mutual_draw_loop()
+end
+
 
  
 
