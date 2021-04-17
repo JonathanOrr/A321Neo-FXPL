@@ -1813,3 +1813,176 @@ MessageGroup_THR_ABV_IDLE_2 = {
 }
 
 
+----------------------------------------------------------------------------------------------------
+-- CAUTION: ENG THR LEVERS NOT SET
+----------------------------------------------------------------------------------------------------
+
+MessageGroup_ENG_THR_LEVERS_NOT_SET = {
+
+    shown = false,
+
+    text  = function()
+                return "ENG"
+            end,
+    color = function()
+                return COL_CAUTION
+            end,
+
+    sd_page = ECAM_PAGE_ENG,
+    
+    priority = PRIORITY_LEVEL_2,
+
+    messages = {
+        {
+            text = function()
+                return "    THR LEVERS NOT SET"
+            end,
+
+            color = function()
+                return COL_CAUTION
+            end,
+
+            is_active = function()
+              return true
+            end
+        },
+        {
+            text = function()
+                    return " - THR LEVERS........" .. (get(Eng_N1_flex_temp) == 0 and "TOGA" or "FLEX")
+            end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return true end
+        }
+
+    },
+
+    is_active = function()
+        local lvr1 = get(Cockpit_throttle_lever_L)
+        local lvr2 = get(Cockpit_throttle_lever_R)
+        return (lvr1 >= THR_MCT_THRESHOLD or lvr2 >= THR_MCT_THRESHOLD)
+               and ((     get(Eng_N1_flex_temp) == 0 and (lvr1 < 0.99 or lvr2 < 0.99))
+                    or ( get(Eng_N1_flex_temp) ~= 0 and (lvr1 < THR_TOGA_THRESHOLD or lvr2 < THR_TOGA_THRESHOLD))
+               )
+    end,
+
+    is_inhibited = function()
+        return is_active_in({PHASE_1ST_ENG_ON, PHASE_1ST_ENG_TO_PWR, PHASE_ABOVE_80_KTS})
+    end
+
+}
+
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: ENG 1(2) STALL
+----------------------------------------------------------------------------------------------------
+
+local function which_eng_stall()
+    if get(FAILURE_ENG_STALL, 1) == 1 and get(FAILURE_ENG_STALL, 2) == 1  then
+        return "1+2"
+    elseif get(FAILURE_ENG_STALL, 1) == 1 then
+        return "1.."
+    elseif get(FAILURE_ENG_STALL, 2) == 1 then
+        return "2.."
+    end
+end
+
+local Message_THR_IDLE_STALL = {
+    text = function() return " - THR LEVER ".. which_eng_stall() ..".....IDLE" end,
+    color = function() return COL_ACTIONS end,
+    is_active = function() 
+        return (math.abs(get(Cockpit_throttle_lever_L)) > 0.1 and get(FAILURE_ENG_STALL, 1) == 1)
+            or (math.abs(get(Cockpit_throttle_lever_R)) > 0.1 and get(FAILURE_ENG_STALL, 2) == 1)
+    end
+}
+
+local Message_ENG_MASTER_STALL = {
+    text = function() return " - ENG MASTER ".. which_eng_stall() ..".....OFF" end,
+    color = function() return COL_ACTIONS end,
+    is_active = function()
+        return (((get(Engine_1_master_switch) == 1)and get(FAILURE_ENG_STALL, 1) == 1)
+            or (get(Engine_2_master_switch) == 1 and get(FAILURE_ENG_STALL, 2) == 1)) and get(All_on_ground) == 1
+    end
+}
+
+
+local Message_ENG_CHECK_PARAM_STALL = {
+    text = function() return " - ENG PARAMS ".. which_eng_stall() .."...CHECK" end,
+    color = function() return COL_ACTIONS end,
+    is_active = function()
+        return get(All_on_ground) == 0
+    end
+}
+
+local Message_ENG_STALL_PROC_APPLY = {
+    text = function() 
+                local N = ""
+                if get(FAILURE_ENG_STALL, 1) == 1 then
+                    N = "1"
+                end
+                if get(FAILURE_ENG_STALL, 2) == 1 then
+                    if #N > 0 then
+                        N = N .. "+"
+                    end
+                    N = N .. "2"
+                end
+    
+                return " ENG ".. N .." STALL PROC APPLY" end,
+    color = function() return COL_ACTIONS end,
+    is_active = function()
+        return get(All_on_ground) == 0
+    end
+}
+
+
+
+MessageGroup_ENG_STALL = {
+
+    shown = false,
+
+    text  = function()
+                return "ENG"
+            end,
+    color = function()
+                return COL_CAUTION
+            end,
+
+    sd_page = ECAM_PAGE_ENG,
+    
+    priority = PRIORITY_LEVEL_2,
+
+    land_asap_amber = true,
+
+    messages = {
+        {
+            text = function()
+                local N = ""
+                if get(FAILURE_ENG_STALL, 1) == 1 then
+                    N = "1"
+                end
+                if get(FAILURE_ENG_STALL, 2) == 1 then
+                    if #N > 0 then
+                        N = N .. "+"
+                    end
+                    N = N .. "2"
+                end
+                return "    " .. N .. " STALL"
+            end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        },
+        Message_THR_IDLE_STALL,
+        Message_ENG_MASTER_STALL,
+        Message_ENG_CHECK_PARAM_STALL,
+        Message_ENG_STALL_PROC_APPLY
+    },
+
+    is_active = function()
+        return get(FAILURE_ENG_STALL, 1) == 1 or get(FAILURE_ENG_STALL, 2) == 1
+    end,
+
+    is_inhibited = function()
+        return is_inibithed_in({PHASE_1ST_ENG_TO_PWR, PHASE_ABOVE_80_KTS, PHASE_LIFTOFF, PHASE_FINAL, PHASE_TOUCHDOWN})
+    end
+
+}
+

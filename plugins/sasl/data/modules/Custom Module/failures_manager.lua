@@ -26,6 +26,9 @@ local master_caution_active = false
 local is_fwc_1_ok = false
 local is_fwc_2_ok = false
 
+local xp_fail_dr_eng_1_stall = globalProperty("sim/operation/failures/rel_comsta0")
+local xp_fail_dr_eng_2_stall = globalProperty("sim/operation/failures/rel_comsta1")
+
 sasl.registerCommandHandler (Failures_cancel_master_caution, 0,  function(phase) Failures_cancel_master_caution_handler(phase) end )
 sasl.registerCommandHandler (Failures_cancel_master_warning, 0,  function(phase) Failures_cancel_master_warning_handler(phase) end )
 
@@ -108,11 +111,17 @@ local function set_fwc_status()
     end
 end
 
+local function update_xp_eng_fail_datarefs()
+    set(xp_fail_dr_eng_1_stall, get(FAILURE_ENG_STALL, 1)*6*get(Engine_1_master_switch))
+    set(xp_fail_dr_eng_2_stall, get(FAILURE_ENG_STALL, 2)*6*get(Engine_2_master_switch))
+end
+
 function update()
     set(XPlane_Auto_Failure, 0) -- Enforce the X-Plane failures to off: bad things happen if you don't
                                 -- use our failure manager.
 
     set_fwc_status()
     update_master_wc()
+    update_xp_eng_fail_datarefs()
 end
 

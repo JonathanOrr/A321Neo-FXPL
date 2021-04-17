@@ -53,6 +53,8 @@ local image_vor_2 = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/texture
 local image_adf_1 = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/needle-VOR1-arc.png")  -- FIXME
 local image_adf_2 = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/needle-VOR2-arc.png")  -- FIXME
 
+local image_oans_needle = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/needle-oans-arc.png")
+
 local image_track_sym = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/sym-track-arc.png")
 local image_hdgsel_sym = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/sym-hdgsel-arc.png")
 
@@ -418,6 +420,27 @@ local function draw_terrain(data)
     sasl.gl.drawRectangle(0, 0, 900, 900, {10/255, 15/255, 25/255 , 1-data.terrain.brightness})
 end
 
+local function draw_oans_arrow(data)
+
+    if data.oans.displayed_apt then
+        local lat = data.oans.displayed_apt.lat
+        local lon = data.oans.displayed_apt.lon
+
+        local bearing = get_bearing(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon,lat,lon)
+        
+        local angle = ((-90-bearing)%360)-data.inputs.heading
+        sasl.gl.drawRotatedTexture(image_oans_needle, angle, (size[1]-37)/2,(size[2]-1153)/2-312,37,1153, {1,1,1})
+        
+        local new_angle = angle + Math_rescale(0, 30, 180, 7, (angle < 180 and angle > 0) and angle or math.abs(360-(angle%360)))
+
+        local R = 460
+        local x = 420 + R * math.sin(math.rad(new_angle-180))
+        local y = 450 -312 + R * math.cos(math.rad(new_angle-180))
+        sasl.gl.drawText(Font_ECAMfont, x, y, data.oans.displayed_apt.id, 32, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    end
+end
+
+
 -------------------------------------------------------------------------------
 -- Main draw_* functions
 -------------------------------------------------------------------------------
@@ -442,6 +465,10 @@ function draw_arc(data)
     }
     
     draw_oans(data, functions_for_oans)
+
+    if data.config.range <= ND_RANGE_ZOOM_2 and data.oans_cache and not data.oans_cache.is_visible then
+        draw_oans_arrow(data)
+    end
 
     draw_navaid_pointers(data)
 end
