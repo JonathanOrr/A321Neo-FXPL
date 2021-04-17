@@ -36,6 +36,7 @@ ACF_SOUNDS
 
 DISABLE_LEGACY_ALERT_SOUNDS
 REQUIRES_BANK Engines_CFM.bank
+REQUIRES_BANK Engines_PW.bank
 
 ###################################################################################
 BEGIN_SOUND_SPACE
@@ -107,22 +108,42 @@ BEGIN_SOUND_ATTACHMENT
   PARAM_DREF_IDX 1
 END_SOUND_ATTACHMENT
 
+## BEGIN_SOUND_ATTACHMENT
+##   EVENT_NAME /Engines V3 LEAP/EnginesL
+##   VEH_PART engine 0
+##   EVENT_START_COND sim/flightmodel2/engines/N1_percent[0] > 0
+##   EVENT_END_COND sim/flightmodel2/engines/N1_percent[0] == 0
+##   PARAM_DREF_IDX 0
+## END_SOUND_ATTACHMENT
+## 
+## BEGIN_SOUND_ATTACHMENT
+##   EVENT_NAME /Engines V3 LEAP/EnginesR
+##   VEH_PART engine 1
+##   EVENT_START_COND sim/flightmodel2/engines/N1_percent[1] > 0
+##   EVENT_END_COND sim/flightmodel2/engines/N1_percent[1] == 0
+##   PARAM_DREF_IDX 1
+## END_SOUND_ATTACHMENT
+
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /Engines V3 LEAP/EnginesL
+  EVENT_NAME /Engines V1 PW1100G/EnginesR
   VEH_PART engine 0
-  EVENT_START_COND sim/flightmodel2/engines/N1_percent[0] > 0
-  EVENT_END_COND sim/flightmodel2/engines/N1_percent[0] == 0
+  EVENT_ALWAYS
   PARAM_DREF_IDX 0
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /Engines V3 LEAP/EnginesR
-  VEH_PART engine 1
-  EVENT_START_COND sim/flightmodel2/engines/N1_percent[1] > 0
-  EVENT_END_COND sim/flightmodel2/engines/N1_percent[1] == 0
-  PARAM_DREF_IDX 1
+  EVENT_NAME /Engines V1 PW1100G/HowlEnd
+  VEH_PART engine 0
+  EVENT_START_COND a321neo/sounds/rush_L < 15
+  PARAM_DREF_IDX 0
 END_SOUND_ATTACHMENT
 
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Engines V1 PW1100G/HowlLogic
+  VEH_PART engine 0
+  EVENT_ALWAYS
+  PARAM_DREF_IDX 0
+END_SOUND_ATTACHMENT
 
 ##   BEGIN_SOUND_ATTACHMENT
 ##     EVENT_NAME /Engines V2/HowlEnd

@@ -55,6 +55,10 @@
 {bdd3f6e0-b7ff-46ac-aadd-d8b6b9c45201} event:/Engines/Engines
 {05aa7e46-d0ef-4817-84df-6599e3fd87f6} event:/Engines/Engines Ext
 {3c1896b4-b137-42d9-a178-78d93f2c0308} event:/Engines/HowlEnd
+{4a3670cd-e3c8-4e1c-8b62-f35b4713d64a} event:/Engines V1 PW1100G/EnginesR
+{b12656ef-bd01-488e-bc99-8688bcd537d5} event:/Engines V1 PW1100G/HowlEnd
+{67fe6698-1117-48ce-8a94-c8009aabacca} event:/Engines V1 PW1100G/HowlLogic
+{1b319b94-3579-427d-a30f-8a1482ecaf5f} event:/Engines V1 PW1100G/HowlLogicR
 {71483e42-1521-4ce6-a01b-56876658a229} event:/Engines V2/Boom
 {3428542a-0973-45d3-b8f9-c0e46de082e2} event:/Engines V2/Engine Start Ext
 {956efd44-c2c5-4ab7-a510-f35c74dcd905} event:/Engines V2/Engine Start N2 L
@@ -237,6 +241,7 @@
 {10525979-1fa1-4401-8583-bec00053b160} bus:/Master/Exterior Unprocessed/ExteriorWI
 {15a189d8-7334-4c3f-92d8-7395f3687cc7} bus:/Master/Exterior Unprocessed/GroundRoll
 {6cee8772-2b5f-4158-9399-80dbe765bd69} bus:/Master/Exterior Unprocessed/Mechanical
+{b61e991d-32d3-4702-a3a5-08048a3ecd6a} bus:/Master/Exterior Unprocessed/NewMuchQuieterIn
 {15e9c653-fbca-41ca-8241-7cd3b3870fc8} snapshot:/Inside
 {e5b38f91-83fb-4cec-a2d2-a0170dddb70a} snapshot:/FadingBegin
 {6bb566cf-f4e3-43dd-85f1-2529a372f90b} bank:/Engines_CFM
