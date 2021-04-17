@@ -27,7 +27,7 @@ local function hdg_trk_knob_rotated_cc(phase)
     if phase == SASL_COMMAND_BEGIN then
         set(AUTOFLT_FCU_HDG_KNOB_CLICKS, Math_cycle(get(AUTOFLT_FCU_HDG_KNOB_CLICKS) - 1, 0, 32))
 
-        set(AUTOFLT_FCU_HDG_TRK, Math_clamp_lower(get(AUTOFLT_FCU_HDG_TRK) - 1, 0))
+        set(AUTOFLT_FCU_HDG_TRK, Math_cycle(get(AUTOFLT_FCU_HDG_TRK) - 1, 0, 359))
     end
 end
 
@@ -35,7 +35,7 @@ local function hdg_trk_knob_rotated_cw(phase)
     if phase == SASL_COMMAND_BEGIN then
         set(AUTOFLT_FCU_HDG_KNOB_CLICKS, Math_cycle(get(AUTOFLT_FCU_HDG_KNOB_CLICKS) + 1, 0, 32))
 
-        set(AUTOFLT_FCU_HDG_TRK, Math_clamp_higher(get(AUTOFLT_FCU_HDG_TRK) + 1, 359))
+        set(AUTOFLT_FCU_HDG_TRK, Math_cycle(get(AUTOFLT_FCU_HDG_TRK) + 1, 0, 359))
     end
 end
 
