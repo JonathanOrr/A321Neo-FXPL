@@ -95,7 +95,7 @@ end
 
 --UPDATE LOOPS--
 function p2s2_update()
-    print(EFB_CURSOR_X, EFB_CURSOR_Y)
+    --print(EFB_CURSOR_X, EFB_CURSOR_Y)
 end
 
 --DRAW LOOPS--
