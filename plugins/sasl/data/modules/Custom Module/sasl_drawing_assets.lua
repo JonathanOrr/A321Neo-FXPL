@@ -176,6 +176,8 @@ EFB_GROUND2_r2 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/texture
 EFB_GROUND2_r3 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/GND page/Page 2/r3.png")
 EFB_GROUND2_r4 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/GND page/Page 2/r4.png")
 EFB_GROUND2_r5 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/GND page/Page 2/r5.png")
+
+EFB_GROUND2_closeall_button =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/GND page/Page 2/closeall_button.png")
 ------------LOAD-------------
 
 EFB_LOAD_bgd =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/bgd.png")

@@ -1,3 +1,6 @@
+local close_button_start_time = 0
+local  BUTTON_PRESS_TIME = 0.5
+
 
 local door_image_names = {
 EFB_GROUND2_l1,
@@ -54,7 +57,6 @@ function p2s2_buttons()
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 507,483,534,522, function ()
         set(door_switch_drf_names[3], get(door_switch_drf_names[3]) ==  1 and 0 or 1)
     end)
-
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 612,482,651,527, function ()
         set(door_switch_drf_names[4], get(door_switch_drf_names[4]) ==  1 and 0 or 1)
     end)
@@ -82,6 +84,13 @@ function p2s2_buttons()
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 395,164,458,199, function ()
         set(door_switch_drf_names[12], get(door_switch_drf_names[12]) ==  1 and 0 or 1)
     end)
+
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 52,56,382,94, function ()
+        close_button_start_time = get(TIME)
+        for i=1, #door_switch_drf_names do
+            set(door_switch_drf_names[i], 0)
+        end
+    end)
 end
 
 --UPDATE LOOPS--
@@ -91,6 +100,14 @@ end
 
 --DRAW LOOPS--
 function p2s2_draw()
+
+    if get(TIME) - close_button_start_time > BUTTON_PRESS_TIME then
+        SASL_drawSegmentedImg_xcenter_aligned (EFB_GROUND2_closeall_button, 220,60,634,32,2,1)
+    else
+        SASL_drawSegmentedImg_xcenter_aligned (EFB_GROUND2_closeall_button, 220,60,634,32,2,2)
+    end
+    drawTextCentered( Font_Airbus_panel ,  214, 75 ,"CLOSE ALL DOORS" , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
+
     for i=1, #door_anim_drf_names do
         local door_state = get(door_anim_drf_names[i])
         if door_state == 0 then
