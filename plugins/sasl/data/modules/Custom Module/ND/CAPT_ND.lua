@@ -24,6 +24,7 @@ include('ND/common_ND.lua')
 include('ND/subcomponents/terrain.lua')
 
 nd_data = new_dataset(ND_CAPT)
+ND_all_data[ND_CAPT] = nd_data
 
 function draw()
 

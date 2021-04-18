@@ -42,8 +42,31 @@ local function update_altitude(data)
 
 end
 
+local function update_position_fmgs(data)
+    data.misc.off_side_control      = false
+    data.misc.off_side_control_mode = false
+    data.misc.off_side_control_rng  = false
+    
+    if FMGS_sys.config.status == FMGS_MODE_SINGLE then
+        data.misc.off_side_control = FMGS_sys.config.master ~= data.id
+        if data.misc.off_side_control then
+            if ND_all_data[ND_CAPT].config.mode ~= ND_all_data[ND_FO].config.mode then
+                data.misc.off_side_control_mode = true
+                data.misc.map_not_avail = true
+            end
+            if ND_all_data[ND_CAPT].config.range ~= ND_all_data[ND_FO].config.range then
+                data.misc.off_side_control_rng = true
+                data.misc.map_not_avail = true
+            end
+        end
+    elseif FMGS_sys.config.status == FMGS_MODE_BACKUP then
+        FMGS_sys.config.backup_nav = true
+    elseif FMGS_sys.config.status == FMGS_MODE_OFF then
+        data.misc.map_not_avail = true
+    end
+end
 
-function update_position(data)
+local function update_position(data)
     local id = data.id
 
     data.misc.map_not_avail = ((not adirs_is_position_ok(id) and data.config.range > ND_RANGE_ZOOM_2) 
@@ -51,6 +74,8 @@ function update_position(data)
     data.misc.map_partially_displayed = (AvionicsBay.is_initialized() and not AvionicsBay.is_ready()) or data.misc.not_displaying_all_data
 
     data.misc.not_displaying_all_data = false -- reset it
+
+    update_position_fmgs(data) -- This may change data.misc.map_not_avail
 
     if not data.misc.map_not_avail then
         data.inputs.plane_coords_lat = adirs_get_lat(id) 

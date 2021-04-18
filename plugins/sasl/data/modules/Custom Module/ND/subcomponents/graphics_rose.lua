@@ -390,6 +390,10 @@ local function draw_terrain(data)
         return
     end
 
+    if not data.inputs.is_heading_valid or not adirs_is_position_ok(data.id) or data.misc.map_not_avail then
+        return  -- Cannot show terrain if I don't know where I am
+    end
+
     if data.config.range <= ND_RANGE_ZOOM_2 then
         -- No terrain on oans
         return
@@ -502,6 +506,10 @@ local function draw_pois(data)
 
     if data.config.range <= ND_RANGE_ZOOM_2 then
         return  -- POIs are not drawn during the zoom mode
+    end
+    
+    if data.misc.map_not_avail then
+        return -- No POI is map not avail
     end
 
     
