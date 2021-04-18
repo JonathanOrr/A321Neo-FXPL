@@ -30,6 +30,10 @@
 {bc2ed00d-477b-45dd-acc2-8275bdd82552} event:/CockpitMechanical/Thrust Levers Right/ThrLvrRev
 {20fbc712-ab6d-4c52-b4b6-4651d30bcd00} event:/CockpitMechanical/Thrust Levers Right/ThrLvrRevFull
 {8d28c374-6b76-4938-a97a-5254d0eb430a} event:/CockpitMechanical/Thrust Levers Right/ThrLvrTOGA
+{fa3ccb63-2201-42a0-9ba9-80eea8c41f31} event:/CockpitMechanical/Lights/1
+{7c1f3bc8-8a78-496c-929d-a763939df0aa} event:/CockpitMechanical/Lights/2
+{180bfc42-72ad-426e-9893-90b2e97a68a6} event:/CockpitMechanical/Lights/3
+{1128d7c8-5fbf-40c8-ad21-965a9183189a} event:/CockpitMechanical/Lights/4
 {850bb3a5-fa7f-4d22-bf9d-a80868eee0e7} event:/CockpitMechanical/Big Round Button Press
 {bafd0ab7-85f5-4e8f-8898-00cef3bbf4d3} event:/CockpitMechanical/Big Round Button Release
 {ed910ed0-bdc8-47e6-a8cb-d025b4ba55d4} event:/CockpitMechanical/Engine Master

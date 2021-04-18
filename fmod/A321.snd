@@ -1258,11 +1258,6 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_CMND_HOLD_CUE a321neo/cockpit/mcdu/misc/clr
 END_SOUND_ATTACHMENT
 
-
-
-
-
-
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
@@ -1422,18 +1417,6 @@ END_SOUND_ATTACHMENT
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
   VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_HOLD_CUE a321neo/cockpit/draims/draims_transmit_vhf_1_button
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MCDU Button Press
-  VEH_XYZ 0 1.4 -18.7
-  EVENT_CMND_HOLD_CUE a321neo/cockpit/draims/draims_transmit_vhf_2_button
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MCDU Button Press
-  VEH_XYZ 0 1.4 -18.7
   EVENT_CMND_HOLD_CUE a321neo/cockpit/brightness/isis_brightness_dn
 END_SOUND_ATTACHMENT
 
@@ -1448,6 +1431,7 @@ BEGIN_SOUND_ATTACHMENT
   VEH_XYZ 0 1.4 -18.7
   EVENT_CMND_HOLD_CUE a321neo/cockpit/ISIS/LS
 END_SOUND_ATTACHMENT
+
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
@@ -2647,195 +2631,259 @@ END_SOUND_ATTACHMENT
 #############################################################################################METAL SWITCHES
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MetalOn
+  EVENT_NAME /CockpitMechanical/Lights/1
   VEH_XYZ 0 2.4 -18.1
   EVENT_START_COND a321neo/cockpit/misc/buttons/seatbelts_pos == 0
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MetalOff
+  EVENT_NAME /CockpitMechanical/Lights/2
   VEH_XYZ 0 2.4 -18.1
-  EVENT_START_COND a321neo/cockpit/misc/buttons/seatbelts_pos == 1
+  EVENT_START_COND a321neo/cockpit/misc/buttons/seatbelts_pos > 0.98 1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MetalOn
+  EVENT_NAME /CockpitMechanical/Lights/2
+  VEH_XYZ 0 2.4 -18.1
+  EVENT_START_COND a321neo/cockpit/misc/buttons/seatbelts_pos < 1.02 1
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Lights/3
   VEH_XYZ 0 2.4 -18.1
   EVENT_START_COND a321neo/cockpit/misc/buttons/seatbelts_pos == 2
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MetalOn
+  EVENT_NAME /CockpitMechanical/Lights/3
   VEH_XYZ 0 2.4 -18.1
   EVENT_START_COND a321neo/cockpit/misc/buttons/noped_pos == 0
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MetalOff
+  EVENT_NAME /CockpitMechanical/Lights/2
   VEH_XYZ 0 2.4 -18.1
-  EVENT_START_COND a321neo/cockpit/misc/buttons/noped_pos == 1
+  EVENT_START_COND a321neo/cockpit/misc/buttons/noped_pos > 0.98
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MetalOn
+  EVENT_NAME /CockpitMechanical/Lights/2
+  VEH_XYZ 0 2.4 -18.1
+  EVENT_START_COND a321neo/cockpit/misc/buttons/noped_pos < 1.02
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Lights/4
   VEH_XYZ 0 2.4 -18.1
   EVENT_START_COND a321neo/cockpit/misc/buttons/noped_pos == 2
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MetalOn
+  EVENT_NAME /CockpitMechanical/Lights/2
   VEH_XYZ 0 2.4 -18.1
   EVENT_START_COND a321neo/cockpit/lights/buttons/emer_exit_pos == 0
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MetalOff
+  EVENT_NAME /CockpitMechanical/Lights/4
   VEH_XYZ 0 2.4 -18.1
-  EVENT_START_COND a321neo/cockpit/lights/buttons/emer_exit_pos == 1
+  EVENT_START_COND a321neo/cockpit/lights/buttons/emer_exit_pos > 0.98
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MetalOn
+  EVENT_NAME /CockpitMechanical/Lights/4
+  VEH_XYZ 0 2.4 -18.1
+  EVENT_START_COND a321neo/cockpit/lights/buttons/emer_exit_pos < 1.02
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Lights/3
   VEH_XYZ 0 2.4 -18.1
   EVENT_START_COND a321neo/cockpit/lights/buttons/emer_exit_pos == 2
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MetalOn
+  EVENT_NAME /CockpitMechanical/Lights/1
   VEH_XYZ 0 2.4 -18.1
   EVENT_START_COND a321neo/cockpit/lights/ovhd_ann_lt_pos == -1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MetalOff
+  EVENT_NAME /CockpitMechanical/Lights/2
   VEH_XYZ 0 2.4 -18.1
-  EVENT_START_COND a321neo/cockpit/lights/ovhd_ann_lt_pos == 0
+  EVENT_START_COND a321neo/cockpit/lights/ovhd_ann_lt_pos > -0.02
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MetalOn
+  EVENT_NAME /CockpitMechanical/Lights/2
+  VEH_XYZ 0 2.4 -18.1
+  EVENT_START_COND a321neo/cockpit/lights/ovhd_ann_lt_pos < 0.02
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Lights/1
   VEH_XYZ 0 2.4 -18.1
   EVENT_START_COND a321neo/cockpit/lights/ovhd_ann_lt_pos == 1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MetalOn
+  EVENT_NAME /CockpitMechanical/Lights/1
   VEH_XYZ 0 2.4 -18.1
-  EVENT_START_COND a321neo/cockpit/lights/capt_console_floor_pos == 0
+  EVENT_START_COND a321neo/cockpit/lights/capt_console_floor_pos > -0.02
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MetalOff
+  EVENT_NAME /CockpitMechanical/Lights/1
+  VEH_XYZ 0 2.4 -18.1
+  EVENT_START_COND a321neo/cockpit/lights/capt_console_floor_pos < 0.02
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Lights/2
   VEH_XYZ 0 2.4 -18.1
   EVENT_START_COND a321neo/cockpit/lights/capt_console_floor_pos == 1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MetalOn
+  EVENT_NAME /CockpitMechanical/Lights/4
   VEH_XYZ 0 2.4 -18.1
   EVENT_START_COND a321neo/cockpit/lights/capt_console_floor_pos == -1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MetalOn
+  EVENT_NAME /CockpitMechanical/Lights/1
   VEH_XYZ 0 2.4 -18.1
-  EVENT_START_COND a321neo/cockpit/lights/fo_console_floor_pos == 0
+  EVENT_START_COND a321neo/cockpit/lights/fo_console_floor_pos > -0.02
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MetalOff
+  EVENT_NAME /CockpitMechanical/Lights/1
+  VEH_XYZ 0 2.4 -18.1
+  EVENT_START_COND a321neo/cockpit/lights/fo_console_floor_pos < 0.02
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Lights/2
   VEH_XYZ 0 2.4 -18.1
   EVENT_START_COND a321neo/cockpit/lights/fo_console_floor_pos == 1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MetalOn
+  EVENT_NAME /CockpitMechanical/Lights/4
   VEH_XYZ 0 2.4 -18.1
   EVENT_START_COND a321neo/cockpit/lights/fo_console_floor_pos == -1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MetalOff
+  EVENT_NAME /CockpitMechanical/Lights/1
   VEH_XYZ 0 2.4 -18.1
-  EVENT_START_COND a321neo/cockpit/evac/buttons/capt_purs_pos == 0
+  EVENT_START_COND a321neo/cockpit/evac/buttons/capt_purs_pos > -0.02
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MetalOn
+  EVENT_NAME /CockpitMechanical/Lights/1
+  VEH_XYZ 0 2.4 -18.1
+  EVENT_START_COND a321neo/cockpit/evac/buttons/capt_purs_pos < 0.02
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Lights/4
   VEH_XYZ 0 2.4 -18.1
   EVENT_START_COND a321neo/cockpit/evac/buttons/capt_purs_pos == 1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MetalOff
+  EVENT_NAME /CockpitMechanical/Lights/2
   VEH_XYZ 0 2.4 -18.1
   EVENT_START_COND a321neo/cockpit/nd/capt_nav1_lever == -1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MetalOff
+  EVENT_NAME /CockpitMechanical/Lights/1
   VEH_XYZ 0 2.4 -18.1
-  EVENT_START_COND a321neo/cockpit/nd/capt_nav1_lever == 0
+  EVENT_START_COND a321neo/cockpit/nd/capt_nav1_lever > -0.02
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MetalOff
+  EVENT_NAME /CockpitMechanical/Lights/1
+  VEH_XYZ 0 2.4 -18.1
+  EVENT_START_COND a321neo/cockpit/nd/capt_nav1_lever < 0.02
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Lights/3
   VEH_XYZ 0 2.4 -18.1
   EVENT_START_COND a321neo/cockpit/nd/capt_nav1_lever == 1
 END_SOUND_ATTACHMENT
 
-
-
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MetalOff
+  EVENT_NAME /CockpitMechanical/Lights/3
   VEH_XYZ 0 2.4 -18.1
   EVENT_START_COND a321neo/cockpit/nd/capt_nav2_lever == -1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MetalOff
+  EVENT_NAME /CockpitMechanical/Lights/1
   VEH_XYZ 0 2.4 -18.1
-  EVENT_START_COND a321neo/cockpit/nd/capt_nav2_lever == 0
+  EVENT_START_COND a321neo/cockpit/nd/capt_nav2_lever > -0.02
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MetalOff
+  EVENT_NAME /CockpitMechanical/Lights/2
+  VEH_XYZ 0 2.4 -18.1
+  EVENT_START_COND a321neo/cockpit/nd/capt_nav2_lever < 0.02
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Lights/1
   VEH_XYZ 0 2.4 -18.1
   EVENT_START_COND a321neo/cockpit/nd/capt_nav2_lever == 1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MetalOff
+  EVENT_NAME /CockpitMechanical/Lights/1
   VEH_XYZ 0 2.4 -18.1
   EVENT_START_COND a321neo/cockpit/nd/fo_nav1_lever == -1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MetalOff
+  EVENT_NAME /CockpitMechanical/Lights/2
   VEH_XYZ 0 2.4 -18.1
-  EVENT_START_COND a321neo/cockpit/nd/fo_nav1_lever == 0
+  EVENT_START_COND a321neo/cockpit/nd/fo_nav1_lever > -0.02
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MetalOff
+  EVENT_NAME /CockpitMechanical/Lights/3
+  VEH_XYZ 0 2.4 -18.1
+  EVENT_START_COND a321neo/cockpit/nd/fo_nav1_lever < 0.02
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Lights/1
   VEH_XYZ 0 2.4 -18.1
   EVENT_START_COND a321neo/cockpit/nd/fo_nav1_lever == 1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MetalOff
+  EVENT_NAME /CockpitMechanical/Lights/1
   VEH_XYZ 0 2.4 -18.1
   EVENT_START_COND a321neo/cockpit/nd/fo_nav2_lever == -1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MetalOff
+  EVENT_NAME /CockpitMechanical/Lights/3
   VEH_XYZ 0 2.4 -18.1
-  EVENT_START_COND a321neo/cockpit/nd/fo_nav2_lever == 0
+  EVENT_START_COND a321neo/cockpit/nd/fo_nav2_lever > -0.02
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/MetalOff
+  EVENT_NAME /CockpitMechanical/Lights/2
+  VEH_XYZ 0 2.4 -18.1
+  EVENT_START_COND a321neo/cockpit/nd/fo_nav2_lever < 0.02
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Lights/3
   VEH_XYZ 0 2.4 -18.1
   EVENT_START_COND a321neo/cockpit/nd/fo_nav2_lever == 1
 END_SOUND_ATTACHMENT
