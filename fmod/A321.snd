@@ -83,13 +83,13 @@ END_SOUND_ATTACHMENT
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /Engines V3 LEAP/Boom
   VEH_PART engine 0
-  EVENT_START_COND a321neo/dynamics/engines/eng_1_n2 > 36
+  EVENT_START_COND sim/flightmodel2/engines/engine_is_burning_fuel[0] > 0
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /Engines V3 LEAP/Boom
   VEH_PART engine 1
-  EVENT_START_COND a321neo/dynamics/engines/eng_2_n2 > 36
+  EVENT_START_COND sim/flightmodel2/engines/engine_is_burning_fuel[1] > 0
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
@@ -124,26 +124,44 @@ END_SOUND_ATTACHMENT
 ##   PARAM_DREF_IDX 1
 ## END_SOUND_ATTACHMENT
 
+## BEGIN_SOUND_ATTACHMENT
+##   EVENT_NAME /Engines V1 PW1100G/HowlEnd
+##   VEH_PART engine 0
+##   EVENT_START_COND a321neo/sounds/rush_L < 15
+##   PARAM_DREF_IDX 0
+## END_SOUND_ATTACHMENT
+
+
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Engines V1 PW1100G/EnginesL
+  VEH_PART engine 0
+  EVENT_ALWAYS
+  PARAM_DREF_IDX 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Engines V1 PW1100G/HowlLogicL
+  VEH_PART engine 0
+  EVENT_ALWAYS
+  PARAM_DREF_IDX 0
+END_SOUND_ATTACHMENT
+
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /Engines V1 PW1100G/EnginesR
-  VEH_PART engine 0
+  VEH_PART engine 1
   EVENT_ALWAYS
-  PARAM_DREF_IDX 0
+  PARAM_DREF_IDX 1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /Engines V1 PW1100G/HowlEnd
-  VEH_PART engine 0
-  EVENT_START_COND a321neo/sounds/rush_L < 15
-  PARAM_DREF_IDX 0
+  EVENT_NAME /Engines V1 PW1100G/HowlLogicR
+  VEH_PART engine 1
+  EVENT_ALWAYS
+  PARAM_DREF_IDX 1
 END_SOUND_ATTACHMENT
 
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /Engines V1 PW1100G/HowlLogic
-  VEH_PART engine 0
-  EVENT_ALWAYS
-  PARAM_DREF_IDX 0
-END_SOUND_ATTACHMENT
+
 
 ##   BEGIN_SOUND_ATTACHMENT
 ##     EVENT_NAME /Engines V2/HowlEnd
@@ -2621,13 +2639,6 @@ END_SOUND_ATTACHMENT
 #############################################################################################
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /Engines V3 LEAP/RevL V3
-  VEH_PART engine 0
-  EVENT_START_COND sim/cockpit2/annunciators/reverser_on[1] == 1
-  CUE_TRIGGER_COND sim/cockpit2/annunciators/reverser_on[1] == 0
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /RevR
   VEH_PART engine 1
   EVENT_ALWAYS
@@ -3610,26 +3621,15 @@ END_SOUND_ATTACHMENT
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /FCU/Selectors/1
   VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_DOWN a321neo/cockpit/fcu/capt_qnh_right
+  EVENT_CMND_DOWN a321neo/cockpit/fcu/capt_qnh_unit_toggle
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /FCU/Selectors/1
   VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_DOWN a321neo/cockpit/fcu/capt_qnh_left
+  EVENT_CMND_DOWN a321neo/cockpit/fcu/fo_qnh_unit_toggle
 END_SOUND_ATTACHMENT
 
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /FCU/Selectors/1
-  VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_DOWN a321neo/cockpit/fcu/fo_qnh_right
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /FCU/Selectors/1
-  VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_DOWN a321neo/cockpit/fcu/fo_qnh_left
-END_SOUND_ATTACHMENT
 
 ###########################################################################################################TRAYTABLE
 
@@ -3669,6 +3669,18 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /BatteryRelay/2
   VEH_XYZ 0 1.5 -16
   EVENT_START_COND sim/cockpit2/electrical/battery_on[1] == 1
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /BatteryRelay/1 Off
+  VEH_XYZ 0 1.5 -16
+  EVENT_START_COND sim/cockpit2/electrical/battery_on[0] == 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /BatteryRelay/2 Off
+  VEH_XYZ 0 1.5 -16
+  EVENT_START_COND sim/cockpit2/electrical/battery_on[1] == 0
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
