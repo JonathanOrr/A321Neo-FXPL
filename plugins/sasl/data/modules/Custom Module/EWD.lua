@@ -538,9 +538,9 @@ local function draw_fuel_stuffs()
 
     sasl.gl.drawText(Font_ECAMfont, 260, 330, fuel_on_board, 36, false, false, TEXT_ALIGN_RIGHT, color)
     if not_all_fuel_available then
-        sasl.gl.drawWideLine(120, size[2]/2-125, 250, size[2]/2-125, 3 , ECAM_ORANGE)
-        sasl.gl.drawWideLine(120, size[2]/2-125, 120, size[2]/2-100, 3 , ECAM_ORANGE)
-        sasl.gl.drawWideLine(250, size[2]/2-125, 250, size[2]/2-100, 3 , ECAM_ORANGE)
+        sasl.gl.drawWideLine(138, size[2]/2-125, 268, size[2]/2-125, 3 , ECAM_ORANGE)
+        sasl.gl.drawWideLine(138, size[2]/2-125, 138, size[2]/2-100, 3 , ECAM_ORANGE)
+        sasl.gl.drawWideLine(268, size[2]/2-125, 268, size[2]/2-100, 3 , ECAM_ORANGE)
     end
 end
 
