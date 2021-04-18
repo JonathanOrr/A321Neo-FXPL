@@ -160,7 +160,7 @@ local function compute_landing_distance()
     final_min_landing_distance = final_min_landing_distance * c
     final_min_landing_distance_med_ab = final_min_landing_distance_med_ab * c
     final_min_landing_distance_low_ab = final_min_landing_distance_low_ab * c
-    print(final_min_landing_distance, final_min_landing_distance_med_ab, final_min_landing_distance_low_ab)
+    --print(final_min_landing_distance, final_min_landing_distance_med_ab, final_min_landing_distance_low_ab)
 end
 
 local function general_buttons()

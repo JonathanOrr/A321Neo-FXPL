@@ -162,6 +162,22 @@ EFB_GROUND_uld1  =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textu
 EFB_GROUND_uld2  =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/GND page/Ground Vehicles/ULD2.png")
 EFB_GROUND_wv    =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/GND page/Ground Vehicles/WV.png")
 
+------------GROUND SUBPAGE2-------------
+EFB_GROUND2_bgd =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/GND page/Page 2/airplanes.png")
+EFB_GROUND2_caft =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/GND page/Page 2/caft.png")
+EFB_GROUND2_cfront =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/GND page/Page 2/cfront.png")
+EFB_GROUND2_l1 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/GND page/Page 2/l1.png")
+EFB_GROUND2_l2 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/GND page/Page 2/l2.png")
+EFB_GROUND2_l3 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/GND page/Page 2/l3.png")
+EFB_GROUND2_l4 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/GND page/Page 2/l4.png")
+EFB_GROUND2_l5 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/GND page/Page 2/l5.png")
+EFB_GROUND2_r1 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/GND page/Page 2/r1.png")
+EFB_GROUND2_r2 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/GND page/Page 2/r2.png")
+EFB_GROUND2_r3 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/GND page/Page 2/r3.png")
+EFB_GROUND2_r4 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/GND page/Page 2/r4.png")
+EFB_GROUND2_r5 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/GND page/Page 2/r5.png")
+
+EFB_GROUND2_closeall_button =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/GND page/Page 2/closeall_button.png")
 ------------LOAD-------------
 
 EFB_LOAD_bgd =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/bgd.png")

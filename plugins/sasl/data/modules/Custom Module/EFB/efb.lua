@@ -250,12 +250,13 @@ function draw()  ------KEEP THE draw_cursor() AT THE BOTTOM YOU DUMBASS!!!!!
     draw_efb_bgd()
     EFB_draw_pages[EFB_PAGE]()
 
+    draw_fading_transition()
+
+    
     if EFB_PAGE ~= 10 then
         jon_told_me_not_to_create_super_long_names_for_functions_but_this_function_draw_horizontal_line_with_certain_width_centered(EFB_UNDERLINE_POS, 738,EFB_UNDERLINE_THICKNESS ,EFB_UNDERLINE_WIDTH ,EFB_WHITE) --DRAWS THE UNDERLINE OF THE PAGE TITLE
         sasl.gl.drawTexture (EFB_Charging, 0 , 0 , 1143 , 800 , Charging_alpha_controller )
     end
-
-    draw_fading_transition()
 
     if EFB_OFF == false then
         draw_cursor()

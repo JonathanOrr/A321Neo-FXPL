@@ -191,7 +191,7 @@ function landing_distance(condition, aircraft_weight, vapp_difference,  tailwind
         original_will_flap_corr = Table_extrapolate(landing_distance_config_full[condition], aircraft_weight/1000)
     end
 
-    print(original_will_flap_corr,  altitude_corr, speed_corr, tailwind_corr, reverse_corr, autoland_corr)
+    --print(original_will_flap_corr,  altitude_corr, speed_corr, tailwind_corr, reverse_corr, autoland_corr)
 
     local landing_distance = 
      original_will_flap_corr
@@ -227,7 +227,7 @@ function landing_distance(condition, aircraft_weight, vapp_difference,  tailwind
     }
 
     local vref_cfgf_in_ms = ( Table_extrapolate(vref_table_cfgf, aircraft_weight/1000) + vapp_difference  )/1.944
-    print(vref_cfgf_in_ms)
+    --print(vref_cfgf_in_ms)
     local landing_distance_med_ab = (vref_cfgf_in_ms ^ 2) / 6 + 604 + 80 + vref_cfgf_in_ms * 2          + autoland_corr
     local landing_distance_low_ab = ((vref_cfgf_in_ms^ 2)) / 3.4 + 504 + 80 + vref_cfgf_in_ms * 4       + autoland_corr
 
