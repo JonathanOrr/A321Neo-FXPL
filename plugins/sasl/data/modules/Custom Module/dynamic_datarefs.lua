@@ -264,15 +264,7 @@ Flight_director_2_mode = globalProperty("sim/cockpit2/autopilot/flight_director2
 --electrical system
 XP_Battery_1 = globalProperty("sim/cockpit2/electrical/battery_on[0]")
 XP_Battery_2 = globalProperty("sim/cockpit2/electrical/battery_on[1]")
---fuel
-Fuel_pump_1 = globalProperty("sim/cockpit2/engine/actuators/fuel_pump_on[0]")
-Fuel_pump_2 = globalProperty("sim/cockpit2/engine/actuators/fuel_pump_on[1]")
-Fuel_pump_3 = globalProperty("sim/cockpit2/engine/actuators/fuel_pump_on[2]")
-Fuel_pump_4 = globalProperty("sim/cockpit2/engine/actuators/fuel_pump_on[3]")
-Fuel_pump_5 = globalProperty("sim/cockpit2/engine/actuators/fuel_pump_on[4]")
-Fuel_pump_6 = globalProperty("sim/cockpit2/engine/actuators/fuel_pump_on[5]")
-Fuel_pump_7 = globalProperty("sim/cockpit2/engine/actuators/fuel_pump_on[6]")
-Fuel_pump_8 = globalProperty("sim/cockpit2/engine/actuators/fuel_pump_on[7]")
+
 --ENG
 Engine_1_avail = createGlobalPropertyi("a321neo/dynamics/engines/eng_1_avail", 0, false, true, false)
 Engine_2_avail = createGlobalPropertyi("a321neo/dynamics/engines/eng_2_avail", 0, false, true, false)
