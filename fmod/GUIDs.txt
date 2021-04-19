@@ -53,8 +53,8 @@
 {f876080e-f9a4-4eb5-8ae2-d6fd1a9d1509} event:/CockpitMechanical/Tray Table Close
 {3c593132-73eb-4d34-9184-c67400174bf2} event:/CockpitMechanical/Tray Table Open
 {498a6973-0776-4cb2-897d-5a634f715111} event:/Door/Cabin/Close
-{d97dbc83-53bc-4e08-9f95-69ac17ec8a41} event:/Door/Cabin/FullyOpen
 {02a94314-2b65-472e-bb80-3b0ee065f737} event:/Door/Cabin/FullyClose
+{d97dbc83-53bc-4e08-9f95-69ac17ec8a41} event:/Door/Cabin/FullyOpen
 {0bf135d1-3c07-4b76-8a95-bc7d99232dcd} event:/Door/Cabin/Open
 {c98bea57-e385-49fe-89da-f2eb79555406} event:/Engines/Engine Start
 {ced3bc6e-ec20-43f0-a5a3-6f7602aec5e9} event:/Engines/Engine Start Ext
@@ -66,6 +66,7 @@
 {b12656ef-bd01-488e-bc99-8688bcd537d5} event:/Engines V1 PW1100G/HowlEnd
 {67fe6698-1117-48ce-8a94-c8009aabacca} event:/Engines V1 PW1100G/HowlLogicL
 {c66ab21e-1b9f-4f80-b86b-1511dff925f4} event:/Engines V1 PW1100G/HowlLogicR
+{d840045c-95bc-42cf-a0d9-17093fde8b8d} event:/Engines V1 PW1100G/Engine Start N2 L
 {71483e42-1521-4ce6-a01b-56876658a229} event:/Engines V2/Boom
 {3428542a-0973-45d3-b8f9-c0e46de082e2} event:/Engines V2/Engine Start Ext
 {956efd44-c2c5-4ab7-a510-f35c74dcd905} event:/Engines V2/Engine Start N2 L
@@ -246,7 +247,6 @@
 {072bd7fb-5c8f-4dc1-a84e-d21ca9930c53} bus:/Master/Exterior Unprocessed/Engines
 {7a0b49ba-aead-4c30-af12-561f455d9c0b} bus:/Master/Exterior Unprocessed/ExteriorNI
 {10525979-1fa1-4401-8583-bec00053b160} bus:/Master/Exterior Unprocessed/ExteriorWI
-{15a189d8-7334-4c3f-92d8-7395f3687cc7} bus:/Master/Exterior Unprocessed/GroundRoll
 {6cee8772-2b5f-4158-9399-80dbe765bd69} bus:/Master/Exterior Unprocessed/Mechanical
 {b61e991d-32d3-4702-a3a5-08048a3ecd6a} bus:/Master/Exterior Unprocessed/NewMuchQuieterIn
 {15e9c653-fbca-41ca-8241-7cd3b3870fc8} snapshot:/Inside
