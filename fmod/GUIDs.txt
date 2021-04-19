@@ -6,6 +6,10 @@
 {2f6e7063-8c77-4f8d-a1c9-393a1f21d5b7} event:/BatteryRelay/1 Off
 {2b35580e-c22e-49d8-b6e1-8079883b310e} event:/BatteryRelay/2
 {76004d39-cc8a-48fa-82f6-2e5f037893c8} event:/BatteryRelay/2 Off
+{fa3ccb63-2201-42a0-9ba9-80eea8c41f31} event:/CockpitMechanical/Lights/1
+{7c1f3bc8-8a78-496c-929d-a763939df0aa} event:/CockpitMechanical/Lights/2
+{180bfc42-72ad-426e-9893-90b2e97a68a6} event:/CockpitMechanical/Lights/3
+{1128d7c8-5fbf-40c8-ad21-965a9183189a} event:/CockpitMechanical/Lights/4
 {ba144e8c-f08f-4650-bb8f-ea1fdda166e2} event:/CockpitMechanical/Rotary/Rotary1
 {6278ba00-52a0-476a-8a87-43fb61e0a189} event:/CockpitMechanical/Rotary/Rotary2
 {4c126686-6c9f-44a1-b45a-dd4a04ef8a46} event:/CockpitMechanical/Rotary/Rotary3
@@ -30,10 +34,6 @@
 {bc2ed00d-477b-45dd-acc2-8275bdd82552} event:/CockpitMechanical/Thrust Levers Right/ThrLvrRev
 {20fbc712-ab6d-4c52-b4b6-4651d30bcd00} event:/CockpitMechanical/Thrust Levers Right/ThrLvrRevFull
 {8d28c374-6b76-4938-a97a-5254d0eb430a} event:/CockpitMechanical/Thrust Levers Right/ThrLvrTOGA
-{fa3ccb63-2201-42a0-9ba9-80eea8c41f31} event:/CockpitMechanical/Lights/1
-{7c1f3bc8-8a78-496c-929d-a763939df0aa} event:/CockpitMechanical/Lights/2
-{180bfc42-72ad-426e-9893-90b2e97a68a6} event:/CockpitMechanical/Lights/3
-{1128d7c8-5fbf-40c8-ad21-965a9183189a} event:/CockpitMechanical/Lights/4
 {850bb3a5-fa7f-4d22-bf9d-a80868eee0e7} event:/CockpitMechanical/Big Round Button Press
 {bafd0ab7-85f5-4e8f-8898-00cef3bbf4d3} event:/CockpitMechanical/Big Round Button Release
 {ed910ed0-bdc8-47e6-a8cb-d025b4ba55d4} event:/CockpitMechanical/Engine Master
@@ -53,7 +53,7 @@
 {f876080e-f9a4-4eb5-8ae2-d6fd1a9d1509} event:/CockpitMechanical/Tray Table Close
 {3c593132-73eb-4d34-9184-c67400174bf2} event:/CockpitMechanical/Tray Table Open
 {498a6973-0776-4cb2-897d-5a634f715111} event:/Door/Cabin/Close
-{d97dbc83-53bc-4e08-9f95-69ac17ec8a41} event:/Door/Cabin/Fully Open
+{d97dbc83-53bc-4e08-9f95-69ac17ec8a41} event:/Door/Cabin/FullyOpen
 {02a94314-2b65-472e-bb80-3b0ee065f737} event:/Door/Cabin/FullyClose
 {0bf135d1-3c07-4b76-8a95-bc7d99232dcd} event:/Door/Cabin/Open
 {c98bea57-e385-49fe-89da-f2eb79555406} event:/Engines/Engine Start
