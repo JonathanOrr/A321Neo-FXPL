@@ -10,17 +10,17 @@ FBW.filtered_sensors = {
             cut_frequency = 10,
         },
     },
-    --[[P_error = {
+    P_error = {
         high_pass = false,
         filtered = 0,
         value = function ()
-            return get(Total_input_roll) * 15 - get(True_roll_rate)
+            return FBW.lateral.inputs.x_to_P(get(Total_input_roll), get(Flightmodel_roll)) - get(True_roll_rate)
         end,
         {
             x = 0,
             cut_frequency = 10,
         },
-    },]]
+    },
 
     Q = {
         high_pass = false,
