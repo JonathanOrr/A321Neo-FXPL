@@ -17,10 +17,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.]]
 --global dataref variable from the Sim
 SimDR_aircraft_ias = globalProperty("sim/cockpit2/gauges/indicators/airspeed_kts_pilot")
 SimDR_aircraft_acceleration = globalProperty("sim/cockpit2/gauges/indicators/airspeed_acceleration_kts_sec_pilot") --kts per second
-SimDR_manual_set_thro = globalProperty("sim/flightmodel/engine/ENGN_thro_use[0]")
 SimDR_throttle = globalProperty("sim/cockpit2/engine/actuators/throttle_jet_rev_ratio_all")
-SimDR_override_throttle = globalProperty("sim/operation/override/override_throttles")
-SimDR_override_artstab = globalProperty("sim/operation/override/override_artstab")
 DELTA_TIME = globalProperty("sim/operation/misc/frame_rate_period")
 
 --global a32nx datarefs
@@ -29,43 +26,10 @@ A32nx_target_spd = createGlobalPropertyi("a32nx/debug/target_speed", 180, false,
 A32nx_thrust_control_output = createGlobalPropertyf("a32nx/debug/thrust_control_output", 0, false, true, false)
 
 --flight controls
-Roll = globalProperty("sim/joystick/yoke_roll_ratio")
-Pitch = globalProperty("sim/joystick/yoke_pitch_ratio")
-Yaw = globalProperty("sim/joystick/yoke_heading_ratio")
-Roll_artstab = globalProperty("sim/joystick/artstab_roll_ratio")
-Pitch_artstab = globalProperty("sim/joystick/artstab_pitch_ratio")
-Yaw_artstab = globalProperty("sim/joystick/artstab_heading_ratio")
-Servo_roll = globalProperty("sim/joystick/servo_roll_ratio")
-Servo_pitch = globalProperty("sim/joystick/servo_pitch_ratio")
-Servo_yaw = globalProperty("sim/joystick/servo_heading_ratio")
-Speedbrake_handle_ratio = globalProperty("sim/cockpit2/controls/speedbrake_ratio")
 Flaps_handle_ratio = globalProperty("sim/cockpit2/controls/flap_ratio")
 Flaps_handle_deploy_ratio = globalProperty("sim/cockpit2/controls/flap_handle_deploy_ratio")
 
-Total_vertical_g_load = globalProperty("sim/flightmodel/forces/g_nrml")
-Vpath = globalProperty("sim/flightmodel/position/vpath")
-Alpha = globalProperty("sim/flightmodel/position/alpha")
-
-Capt_IAS     = globalProperty("sim/cockpit2/gauges/indicators/airspeed_kts_pilot")
-Fo_IAS       = globalProperty("sim/cockpit2/gauges/indicators/airspeed_kts_copilot")
-Capt_Baro_Alt= globalProperty("sim/cockpit2/gauges/indicators/altitude_ft_pilot")
-Fo_Baro_Alt  = globalProperty("sim/cockpit2/gauges/indicators/altitude_ft_copilot")
-Capt_TAT = globalProperty("sim/cockpit2/gauges/indicators/true_airspeed_kts_pilot")
-Ground_speed_ms = globalProperty("sim/flightmodel/position/groundspeed")
-Gear_handle = globalProperty("sim/cockpit2/controls/gear_handle_down")
-Aircraft_total_weight_kgs = globalProperty("sim/flightmodel/weight/m_total")
-Flightmodel_roll = globalProperty("sim/flightmodel/position/true_phi")
-Flightmodel_pitch = globalProperty("sim/flightmodel/position/true_theta")
-Roll_rate = globalProperty("sim/flightmodel/position/P")
-Pitch_rate = globalProperty("sim/flightmodel/position/Q")
-
-Elev_trim_ratio = globalProperty("sim/cockpit2/controls/elevator_trim")
-Rudder_trim_ratio = globalProperty("sim/cockpit2/controls/rudder_trim")
-Horizontal_stabilizer_pitch = globalProperty("sim/flightmodel2/controls/stabilizer_deflection_degrees")
-
-Override_artstab = globalProperty("sim/operation/override/override_artstab")
-Override_control_surfaces = globalProperty("sim/operation/override/override_control_surfaces")
-
+Baro_Alt= globalProperty("sim/cockpit2/gauges/indicators/altitude_ft_pilot")
 
 --global pid array
 Bank_angle_PID_array = {
@@ -132,9 +96,6 @@ Pitch_PID_array = {
 }
 
 A32nx_auto_thrust = {P_gain = 1.6, I_time = 5, D_gain = 4.5, Proportional = 0, Integral_sum = 0, Integral = 0, Derivative = 0, PV = 0, Min_out = 0, Max_out = 1, Error_margin = 15}
-
-A32nx_FD_roll = {P_gain = 1, I_gain = 0, D_gain = 0.32, Proportional = 0, Integral_sum = 0, Integral = 0, Derivative = 0, Current_error = 0, Min_error = -15, Max_error = 15}
-A32nx_FD_pitch = {P_gain = 1, I_gain = 1/3, D_gain = 0.35, Proportional = 0, Integral_sum = 0, Integral = 0, Derivative = 0, Current_error = 0, Min_error = -12000, Max_error = 12000}
 
 A32nx_rwy_roll = {P_gain = 1, I_gain = 0, D_gain = 2, Proportional = 0, Integral_sum = 0, Integral = 0, Derivative = 0, Current_error = 0, Min_error = -30, Max_error = 30}
 A32nx_stick_roll = {P_gain = 1, I_gain = 0, D_gain = 2, Proportional = 0, Integral_sum = 0, Integral = 0, Derivative = 0, Current_error = 0, Min_error = -30, Max_error = 30}

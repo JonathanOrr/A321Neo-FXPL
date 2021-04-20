@@ -11,8 +11,6 @@ local FD_button_color = LIGHT_GREY
 local FD_button_text = "ENABLE"
 
 --fonts
-local B612_regular = sasl.gl.loadFont("fonts/B612-Regular.ttf")
-local B612_bold = sasl.gl.loadFont("fonts/B612-Bold.ttf")
 local B612_MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
 local B612_MONO_bold = sasl.gl.loadFont("fonts/B612Mono-Bold.ttf")
 
@@ -67,11 +65,6 @@ function onMouseWheel(component, x, y, button, parentX, parentY, value)
     end
 end
 
---reset overrides
-function onModuleShutdown()
-    set(SimDR_override_artstab, 1)
-end
-
 local function compute_hdg_delta(current, target)
     local target_delta = 0
 
@@ -87,9 +80,6 @@ local function compute_hdg_delta(current, target)
 end
 
 function update()
-    --calculate V/S
-    --print(get(Capt_TAT) * math.tan(get(Vpath)) * 101.269)
-
     delta_active = get(FD_activated) - last_active
     last_active = get(FD_activated)
     if delta_active == -1 then
@@ -100,13 +90,11 @@ function update()
 
     if get(DELTA_TIME) ~= 0 then
         FD_roll = Set_linear_anim_value(FD_roll, FBW_PID_BP(Bank_angle_PID_array, compute_hdg_delta(get(aircraft_heading), get(target_hdg)), get(aircraft_heading)), -25, 25, 10)
-        --FD_pitch = Set_linear_anim_value(FD_pitch, A32nx_PID_new_neg_avail(A32nx_FD_pitch, get(target_vs) - get(vvi)) * 25, -25, 25, 10)
         FD_pitch = Set_linear_anim_value(FD_pitch, FBW_PID_BP(Pitch_PID_array, get(target_vs) - get(vvi), get(vvi)), -25, 25, 10)
         Pitch_PID_array.Actual_output = get(aircraft_pitch)
 
         if get(FD_activated) == 1 then
             A32nx_FD_pitch.I_gain = 1/3
-            set(SimDR_override_artstab, 1)
             set(roll_artstab, Set_anim_value(get(roll_artstab), A32nx_PID_new_neg_avail(A32nx_stick_roll, FD_roll - get(aircraft_roll)), -1, 1, 0.5))
 
             if get(front_gear_on_ground) == 1 then
