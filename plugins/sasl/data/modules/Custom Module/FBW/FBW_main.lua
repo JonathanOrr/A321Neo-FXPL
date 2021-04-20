@@ -25,6 +25,7 @@ include("FBW/FBW_subcomponents/fbw_system_subcomponents/vertical_augmentation.lu
 include("FBW/FBW_subcomponents/fbw_system_subcomponents/law_reconfiguration.lua")
 addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/")
 addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/fbw_system_subcomponents")
+addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/fbw_system_subcomponents/sensor_filtering")
 
 --xplane landing gear attitude correction--
 local front_gear_length =  globalProperty("sim/aircraft/parts/acf_gear_leglen[0]")
@@ -48,7 +49,10 @@ function onAirportLoaded()
     set(r_main_gear_length, 2.23)
 end
 
+FBW = {}
+
 components = {
+    filtering {},
     law_reconfiguration {},
     autothrust {},
     flight_controls {},

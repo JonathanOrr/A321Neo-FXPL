@@ -1,41 +1,17 @@
 local yaw_control_var_table = {
     sideslip_input = 0,
 
-    filtered_R = 0,
-    filtered_R_err = 0,
-
-    filtered_sideslip = 0,
     filtered_sideslip_err = 0,
-
-    Filtered_ias = 0,
 
     NRM_controller_output = 0,
     Yaw_damper_controller_output = 0,
 }
 
-local lateral_control_filter_table = {
-    R_damp_pv_filter_table = {
-        x = get(True_yaw_rate),
-        cut_frequency = 200,
-    },
-    R_damp_err_filter_table = {
-        x = -get(True_yaw_rate),
-        cut_frequency = 200,
-    },
-
-    sideslip_pv_filter_table = {
-        x = -get(Slide_slip_angle),
-        cut_frequency = 1.5,
-    },
+local yaw_control_filter_table = {
     sideslip_err_filter_table = {
         x = get(Slide_slip_angle),
         cut_frequency = 1.5,
     },
-
-    IAS_filter_table = {
-        x = adirs_get_avg_ias(),
-        cut_frequency = 2,
-    }
 }
 
 local function get_curr_turbolence()  -- returns [0;1] range
@@ -96,32 +72,19 @@ local function yaw_input(x, var_table)
     --blend max SI according to speed of the aircraft and the A350 FCOM
     --15 degrees of SI at 160kts to 2 degrees at VMO
     --linear interpolation is used to avoid significant change in value during circular falloff
-    set(Max_SI_demand_lim, Math_rescale(160, 15, get(Fixed_VMAX), 2, var_table.Filtered_ias))
+    set(Max_SI_demand_lim, Math_rescale(160, 15, get(Fixed_VMAX), 2, FBW.filtered_sensors.IAS.filtered))
 
     var_table.sideslip_input = -x * get(Max_SI_demand_lim) + (-get(Rudder_trim_target_angle) / max_rudder_deflection) * get(Max_SI_demand_lim)
 end
 
 local function filter_values(var_table, filter_table)
-    --yaw damper filters--
-    filter_table.R_damp_pv_filter_table.x = get(True_yaw_rate)
-    var_table.filtered_R = high_pass_filter(filter_table.R_damp_pv_filter_table)
-    filter_table.R_damp_err_filter_table.x = -get(True_yaw_rate)
-    var_table.filtered_R_err = high_pass_filter(filter_table.R_damp_err_filter_table)
-
-    --turn coordinator filters--
-    filter_table.sideslip_pv_filter_table.x = -get(Slide_slip_angle)
-    var_table.filtered_sideslip = low_pass_filter(filter_table.sideslip_pv_filter_table)
     filter_table.sideslip_err_filter_table.x = get(Slide_slip_angle) - var_table.sideslip_input
     var_table.filtered_sideslip_err = low_pass_filter(filter_table.sideslip_err_filter_table)
-
-    --filter the IAS
-    filter_table.IAS_filter_table.x = adirs_get_avg_ias()
-    var_table.Filtered_ias = low_pass_filter(filter_table.IAS_filter_table)
 end
 
 local function yaw_controlling(var_table)
     --Yaw damper control
-    var_table.Yaw_damper_controller_output = FBW_PID_BP(FBW_PID_arrays.FBW_YAW_DAMPER_PID_array, var_table.filtered_R_err, var_table.filtered_R)
+    var_table.Yaw_damper_controller_output = FBW_PID_BP(FBW_PID_arrays.FBW_YAW_DAMPER_PID_array, FBW.filtered_sensors.R_err.filtered, FBW.filtered_sensors.R.filtered)
     --law reconfiguration
     if get(FBW_yaw_law) == FBW_ALT_NO_PROT_LAW then
         var_table.Yaw_damper_controller_output = Math_clamp(var_table.Yaw_damper_controller_output, -5/30, 5/30)--limit travel ability to 5 degrees of rudder
@@ -136,7 +99,7 @@ local function yaw_controlling(var_table)
         FBW_PID_arrays.FBW_NRM_YAW_PID_array.Integral = 0
     end
 
-    var_table.NRM_controller_output = FBW_PID_BP(FBW_PID_arrays.FBW_NRM_YAW_PID_array, var_table.filtered_sideslip_err, var_table.filtered_sideslip, get_curr_turbolence())--math.max(get_curr_turbolence(), get_curr_windshear()))
+    var_table.NRM_controller_output = FBW_PID_BP(FBW_PID_arrays.FBW_NRM_YAW_PID_array, var_table.filtered_sideslip_err, FBW.filtered_sensors.sideslip.filtered, get_curr_turbolence())--math.max(get_curr_turbolence(), get_curr_windshear()))
 
     --back propagation--
     FBW_PID_arrays.FBW_YAW_DAMPER_PID_array.Actual_output = get(Rudder) / 30
@@ -155,7 +118,7 @@ end
 
 function update()
     yaw_input(get(Total_input_yaw), yaw_control_var_table)
-    filter_values(yaw_control_var_table, lateral_control_filter_table)
+    filter_values(yaw_control_var_table, yaw_control_filter_table)
     yaw_controlling(yaw_control_var_table)
     FBW_yaw_mode_blending(yaw_control_var_table)
 end

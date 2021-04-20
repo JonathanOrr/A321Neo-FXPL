@@ -2,7 +2,7 @@
 function Ailerons_control(lateral_input, has_florence_kit, ground_spoilers_mode)
     --hyd source B or G (1450PSI)
     --reversion of flight computers: ELAC 1 --> 2
-    --surface range -25 up +25 down, 5 degrees droop with flaps(calculated by ELAC 1/2)
+    --surface range -25 up +25 down, 10 degrees droop with flaps(calculated by ELAC 1/2)
 
     --properties
     local no_hyd_recenter_ias = 80
@@ -116,26 +116,13 @@ Spoilers_obj = {
 
 --ROLL SPOILERS & SPD BRAKES--
 function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_auto_flight, var_table)
-    --spoilers 2 3 4 are speedbrakes(still rolls with ailerons, deflection is 25/ 25/ 25, [on ground spoiler 1 can be open up to 6 degreess for maintainance with the spdbrk handle])
-    --spoilers 2 3 4 5 are roll spoilers(can roll up to 35 degrees, on ground full roll is 35/ 7/ 35/ 35, in air is 25/ 7/ 25/ 25 [although this rarely happens unless on ground])
-    --spoilers 3 4 5 are roll spoilers if in direct law(in air max deflection is 7/ 25/ 25[if spoiler 4 has failed spoiler 3 takes over the roll])
-    --spoilers 1 2 3 4 5 are all ground spoilers(deploys to 40 degrees)
-    --ground spoiler partially extends(10 degrees) if one of the main gear is on the ground while one of the reversers is selected and the other throttle is at or near idle(this will lead to a full extention)
-    --ground spoiler is deployed(40 degrees) if during takeoff airspeed is higher than 72kts and levers are moved to idle(if armed)
-    --also during touchdown if the throttle is idle or one of the throttle in reverse(other level must be idle) if the spoilers are not armed
-
-    --if the spoilers are armed then the spoilers will be retracted when the handle is disarmed
-    --if the spoilers are not armed then when the thrust levers goes back to idle the spoilers will retract
-    --if the aircraft bounced during the landing the spoilers will still be extented until disarmed
-
     --during a touch and go one of the thrust levers has to be advanced beyond 20 degrees to disarm the spoilers
 
-    --spoiler        1 2 3 4 5
-    --HYDs           G Y B Y G
-    --SECs           3 3 1 1 2
+    --spoiler 1 2 3 4 5
+    --HYD     G Y B Y G
+    --SEC     3 3 1 1 2
 
     --DATAREFS FOR SURFACES
-
     local l_spoilers_hyd_sys_dataref = {Hydraulic_G_press, Hydraulic_Y_press, Hydraulic_B_press, Hydraulic_Y_press, Hydraulic_G_press}
     local r_spoilers_hyd_sys_dataref = {Hydraulic_G_press, Hydraulic_Y_press, Hydraulic_B_press, Hydraulic_Y_press, Hydraulic_G_press}
 
@@ -149,7 +136,6 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
     spdbrk_input = Math_clamp(spdbrk_input, 0, 1)
 
     --properties
-
     local roll_spoilers_threshold = {0.1, 0.1, 0.3, 0.1, 0.1}--amount of sidestick deflection needed to trigger the roll spoilers
 
     --speeds--

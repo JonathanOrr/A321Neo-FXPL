@@ -7,25 +7,15 @@ local Lateral_control_var_table = {
     neutral_bank_angle = 0,
     maximum_bank_angle = 0,
 
-    filtered_P = 0,
     filtered_error = 0,
-    filtered_ias = 0,
     controller_output = 0,
 }
 
 local lateral_control_filter_table = {
-    P_rate_pv_filter_table = {
-        x = get(True_roll_rate),
-        cut_frequency = 10,
-    },
     P_err_filter_table = {
         x = get(Total_input_roll) * 15 - get(True_roll_rate),
         cut_frequency = 10,
     },
-    IAS_filter_table = {
-        x = adirs_get_avg_ias(),
-        cut_frequency = 2,
-    }
 }
 
 local function limit_input(x, bank, neutral_bank, max_bank)
@@ -104,32 +94,19 @@ local function lateral_input_and_protection(var_table)
 end
 
 local function filter_values(var_table, filter_table)
-    --FILTERING--
-    --filter the PV
-    filter_table.P_rate_pv_filter_table.x = get(True_roll_rate)
-    var_table.filtered_P = low_pass_filter(filter_table.P_rate_pv_filter_table)
     --filter the error
     filter_table.P_err_filter_table.x = var_table.P_input - get(True_roll_rate)
     var_table.filtered_error = low_pass_filter(filter_table.P_err_filter_table)
-    --filter the scheduling variable
-    filter_table.IAS_filter_table.x = adirs_get_avg_ias()
-    var_table.filtered_ias = low_pass_filter(filter_table.IAS_filter_table)
 end
 
 local function lateral_controlling(var_table)
     --ensure bumpless transfer--
     if get(FBW_lateral_flight_mode_ratio) == 0 or get(FBW_lateral_law) ~= FBW_NORMAL_LAW then
-        FBW_PID_arrays.FBW_ROLL_RATE_PID_array.Schedule_gains = false
-        FBW_PID_arrays.FBW_ROLL_RATE_PID_array.I_gain = 0
-        FBW_PID_arrays.FBW_ROLL_RATE_PID_array.B_gain = 0
         FBW_PID_arrays.FBW_ROLL_RATE_PID_array.Integral = 0
-    else
-        FBW_PID_arrays.FBW_ROLL_RATE_PID_array.Schedule_gains = true
-        FBW_PID_arrays.FBW_ROLL_RATE_PID_array.B_gain = 1
     end
 
     --OUTPUT--
-    var_table.controller_output = FBW_PID_BP(FBW_PID_arrays.FBW_ROLL_RATE_PID_array, var_table.filtered_error, var_table.filtered_P, var_table.filtered_ias)
+    var_table.controller_output = FBW_PID_BP(FBW_PID_arrays.FBW_ROLL_RATE_PID_array, var_table.filtered_error, FBW.filtered_sensors.P.filtered, FBW.filtered_sensors.IAS.filtered)
     FBW_PID_arrays.FBW_ROLL_RATE_PID_array.Actual_output = get(FBW_roll_output)
 end
 
@@ -137,7 +114,7 @@ local function FBW_lateral_mode_blending(var_table)
     set(
         FBW_roll_output,
         Math_clamp(
-            get(Total_input_roll)   * get(FBW_lateral_ground_mode_ratio) +
+            get(Total_input_roll)       * get(FBW_lateral_ground_mode_ratio) +
             var_table.controller_output * get(FBW_lateral_flight_mode_ratio),
         -1, 1)
     )

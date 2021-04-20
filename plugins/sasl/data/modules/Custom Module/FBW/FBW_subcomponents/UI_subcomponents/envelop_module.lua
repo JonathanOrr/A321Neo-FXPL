@@ -4,25 +4,25 @@ Lower_g_lim = -1
 
 function Draw_envelop_module_480x240(x_pos, y_pos)
     local vsw_aprot_alphas = {
-        7,
+        8.5,
         13,
         13,
-        14,
-        13,
-        12
+        12,
+        12,
+        11.5
     }
 
     local alpha_max_alphas = {
-        11,
+        10,
         16,
         16,
-        17,
         16,
-        16
+        15,
+        15
     }
 
     --updates FBW G constraints
-    if get(Flaps_handle_ratio) > 0.1 then 
+    if get(Flaps_handle_ratio) > 0.1 then
         Upper_g_lim = Set_anim_value(Upper_g_lim, 2, -1, 2.5, 1)
         Lower_g_lim = Set_anim_value(Lower_g_lim, 0, -1, 2.5, 1)
     else
@@ -52,10 +52,10 @@ function Draw_envelop_module_480x240(x_pos, y_pos)
     sasl.gl.drawArc(CENTER_X - 120, CENTER_Y, 94, 101, 0, 360, LIGHT_GREY)
     sasl.gl.drawArc(CENTER_X - 120, CENTER_Y, 94, 101, -15, 30, WHITE)
     sasl.gl.drawArc(CENTER_X - 120, CENTER_Y, 94, 101, 165, 30, WHITE)
-    sasl.gl.drawArc(CENTER_X - 120, CENTER_Y, 94, 101, 0, -get(Roll_rate), ORANGE)
-    sasl.gl.drawArc(CENTER_X - 120, CENTER_Y, 94, 101, 180, -get(Roll_rate), ORANGE)
-    sasl.gl.drawArc(CENTER_X - 120, CENTER_Y, 94, 101, 0, Math_clamp(-get(Roll_rate), -15, 15), LIGHT_BLUE)
-    sasl.gl.drawArc(CENTER_X - 120, CENTER_Y, 94, 101, 180, Math_clamp(-get(Roll_rate), -15, 15), LIGHT_BLUE)
+    sasl.gl.drawArc(CENTER_X - 120, CENTER_Y, 94, 101, 0, -get(True_roll_rate), ORANGE)
+    sasl.gl.drawArc(CENTER_X - 120, CENTER_Y, 94, 101, 180, -get(True_roll_rate), ORANGE)
+    sasl.gl.drawArc(CENTER_X - 120, CENTER_Y, 94, 101, 0, Math_clamp(-get(True_roll_rate), -15, 15), LIGHT_BLUE)
+    sasl.gl.drawArc(CENTER_X - 120, CENTER_Y, 94, 101, 180, Math_clamp(-get(True_roll_rate), -15, 15), LIGHT_BLUE)
     --side slip indications
     sasl.gl.drawArc(CENTER_X - 120, CENTER_Y, 85, 92, 0, 360, LIGHT_GREY)
     sasl.gl.drawArc(CENTER_X - 120, CENTER_Y, 85, 92, -get(Flightmodel_roll) + 90 + 7.5, -15, WHITE)
@@ -71,7 +71,7 @@ function Draw_envelop_module_480x240(x_pos, y_pos)
     sasl.gl.drawText(B612_MONO_bold, CENTER_X - 120, CENTER_Y - 35, "ROLL", 12, false, false, TEXT_ALIGN_CENTER, WHITE)
     sasl.gl.drawText(B612_MONO_bold, CENTER_X - 120, CENTER_Y - 50, string.format("%.2f", tostring(get(Flightmodel_roll))) .. "°", 12, false, false, TEXT_ALIGN_CENTER, LIGHT_BLUE)
     sasl.gl.drawText(B612_MONO_bold, CENTER_X - 120, CENTER_Y - 65, "ROLL RATE", 12, false, false, TEXT_ALIGN_CENTER, WHITE)
-    sasl.gl.drawText(B612_MONO_bold, CENTER_X - 120, CENTER_Y - 80, string.format("%.0f", tostring(get(Roll_rate))) .. "°/S", 12, false, false, TEXT_ALIGN_CENTER, LIGHT_BLUE)
+    sasl.gl.drawText(B612_MONO_bold, CENTER_X - 120, CENTER_Y - 80, string.format("%.0f", tostring(get(True_roll_rate))) .. "°/S", 12, false, false, TEXT_ALIGN_CENTER, LIGHT_BLUE)
 
     --draw G load control ring
     --pitch indications
