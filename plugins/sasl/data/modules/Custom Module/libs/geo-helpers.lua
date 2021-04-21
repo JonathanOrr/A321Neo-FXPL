@@ -114,3 +114,12 @@ function point_from_a_segment(x1, y1, x2, y2, distance)
 
     return x3,y3
 end
+
+function point_from_a_segment_lat_lon(lat1, lon1, lat2, lon2, distance_nm)  -- APPROXIMATED! Only for short distances
+    local den = get_distance_nm(lat1,lon1,lat2,lon2)
+    local t = distance_nm / den
+    local lat3 = (1-t) * lat1 + t * lat2
+    local lon3 = (1-t) * lon1 + t * lon2
+
+    return lat3, lon3
+end

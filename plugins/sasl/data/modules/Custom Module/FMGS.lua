@@ -42,9 +42,11 @@ FMGS_sys.fpln = {
     
     
     next_waypoint = 2,
+    curr_segment  = FMGS_SEGMENT_NONE,
 
 }
 
+-------------------------------------------
 local function update_status()
     -- NOTE: As far as I know, INDEPENDENT MODE is activated only when databases of FMCUs is different
     --       This has no sense in our aircraft, so this mode doesn't exist.
