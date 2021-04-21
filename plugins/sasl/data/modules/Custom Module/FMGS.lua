@@ -16,6 +16,8 @@
 -- Short description: The Flight Management Systems main file
 -------------------------------------------------------------------------------
 
+include('FMGS/route.lua')
+
 local config = {
     status = FMGS_MODE_OFF,
     master = 0,
@@ -47,6 +49,11 @@ FMGS_sys.fpln = {
 }
 
 -------------------------------------------
+-- TODO Tips Current segment computation:
+-- EN ROUTE defined as: > 15.500 ft or > 50.8 nm from departure or dest airport (and not off route)
+-- OFF ROUTE: 2 nm / terminal 1nm / appr gps 0.3 or oth 0.5 nm
+-- 
+
 local function update_status()
     -- NOTE: As far as I know, INDEPENDENT MODE is activated only when databases of FMCUs is different
     --       This has no sense in our aircraft, so this mode doesn't exist.
@@ -75,4 +82,5 @@ end
 
 function update()
     update_status()
+    update_route()
 end
