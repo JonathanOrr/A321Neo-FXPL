@@ -123,3 +123,14 @@ function point_from_a_segment_lat_lon(lat1, lon1, lat2, lon2, distance_nm)  -- A
 
     return lat3, lon3
 end
+
+function point_from_a_segment_lat_lon_limited(lat1, lon1, lat2, lon2, distance_nm, limit)  -- APPROXIMATED! Only for short distances
+    local den = get_distance_nm(lat1,lon1,lat2,lon2)
+    local t = distance_nm / den
+    t = math.min(limit, t)
+    local lat3 = (1-t) * lat1 + t * lat2
+    local lon3 = (1-t) * lon1 + t * lon2
+
+    return lat3, lon3
+end
+

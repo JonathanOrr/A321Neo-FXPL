@@ -491,8 +491,10 @@ local function draw_active_fpln(data)   -- This is just a test
 
             end
         end
-        local x,y = rose_get_x_y_heading(data, fpln_active[n].lat, fpln_active[n].lon, data.inputs.heading)
-        sasl.gl.drawWideLine(last_x, last_y, x, y, 2, ECAM_GREEN)
+        if last_x ~= nil then
+            local x,y = rose_get_x_y_heading(data, fpln_active[n].lat, fpln_active[n].lon, data.inputs.heading)
+            sasl.gl.drawWideLine(last_x, last_y, x, y, 2, ECAM_GREEN)
+        end
     end
 end
 

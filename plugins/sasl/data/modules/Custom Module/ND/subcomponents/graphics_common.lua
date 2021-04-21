@@ -502,7 +502,7 @@ local function draw_next_waypoint_info(data)
     -- Distance
     local distance = get_distance_nm(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon,next_wpt.lat,next_wpt.lon)
     sasl.gl.drawText(Font_ECAMfont, size[1]-80, size[2]-82, Round(distance, 0) .. ".", 28, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    sasl.gl.drawText(Font_ECAMfont, size[1]-65, size[2]-82, Round((distance%1)*10, 0), 22, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(Font_ECAMfont, size[1]-65, size[2]-82, math.floor((distance%1)*10, 0), 22, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     sasl.gl.drawText(Font_ECAMfont, size[1]-20, size[2]-82, "NM", 22, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
 
 

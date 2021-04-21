@@ -43,7 +43,7 @@ FMGS_sys.fpln = {
     },
     
     
-    next_waypoint = 2,
+    next_waypoint = 4,
     curr_segment  = FMGS_SEGMENT_NONE,
 
 }
@@ -81,6 +81,8 @@ local function update_status()
 end
 
 function update()
+    perf_measure_start("FMGS:update()")
     update_status()
     update_route()
+    perf_measure_stop("FMGS:update()")
 end

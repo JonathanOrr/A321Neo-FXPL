@@ -238,6 +238,21 @@ local function update_oans(data)
 
 end
 
+local function update_plan_coords(data)
+    if data.config.mode ~= ND_MODE_PLAN or data.config.range <= ND_RANGE_ZOOM_2 then
+        return
+    end
+    
+    if #FMGS_sys.fpln.active > 0  then
+        local n_wpt = FMGS_sys.fpln.active[FMGS_sys.fpln.next_waypoint]
+        data.plan_ctr_lat = n_wpt.lat
+        data.plan_ctr_lon = n_wpt.lon
+    else
+        data.plan_ctr_lat = data.inputs.plane_coords_lat
+        data.plan_ctr_lon = data.inputs.plane_coords_lon
+    end -- TODO There are other cases (page scrolls, etc.)
+end
+
 function update_main(data)
     update_speed_and_wind(data)
     update_hdg_track(data)
@@ -249,6 +264,8 @@ function update_main(data)
 
     update_poi(data)
     update_altitude(data)
+
+    update_plan_coords(data)
 
     update_oans(data)
 end
