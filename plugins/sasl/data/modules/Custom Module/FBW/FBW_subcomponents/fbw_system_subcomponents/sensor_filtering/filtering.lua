@@ -1,27 +1,4 @@
 FBW.filtered_sensors = {
-    P = {
-        high_pass = false,
-        filtered = 0,
-        value = function ()
-            return get(True_roll_rate)
-        end,
-        {
-            x = 0,
-            cut_frequency = 10,
-        },
-    },
-    P_error = {
-        high_pass = false,
-        filtered = 0,
-        value = function ()
-            return FBW.lateral.inputs.x_to_P(get(Total_input_roll), get(Flightmodel_roll)) - get(True_roll_rate)
-        end,
-        {
-            x = 0,
-            cut_frequency = 10,
-        },
-    },
-
     Q = {
         high_pass = false,
         filtered = 0,
@@ -91,52 +68,6 @@ FBW.filtered_sensors = {
             cut_frequency = 1,
         },
     },
-
-    R = {
-        high_pass = true,
-        filtered = 0,
-        value = function ()
-            return get(True_yaw_rate)
-        end,
-        {
-            x = 0,
-            cut_frequency = 200,
-        },
-    },
-    R_err = {
-        high_pass = true,
-        filtered = 0,
-        value = function ()
-            return -get(True_yaw_rate)
-        end,
-        {
-            x = 0,
-            cut_frequency = 200,
-        },
-    },
-
-    sideslip = {
-        high_pass = false,
-        filtered = 0,
-        value = function ()
-            return -get(Slide_slip_angle)
-        end,
-        {
-            x = 0,
-            cut_frequency = 1.5,
-        },
-    },
-    --[[sideslip_err = {
-        high_pass = false,
-        filtered = 0,
-        value = function ()
-            return get(Slide_slip_angle)
-        end,
-        {
-            x = 0,
-            cut_frequency = 1.5,
-        },
-    },]]
 
     IAS = {
         high_pass = false,

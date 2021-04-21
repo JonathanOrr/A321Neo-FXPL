@@ -94,7 +94,6 @@ function update()
         Pitch_PID_array.Actual_output = get(aircraft_pitch)
 
         if get(FD_activated) == 1 then
-            A32nx_FD_pitch.I_gain = 1/3
             set(roll_artstab, Set_anim_value(get(roll_artstab), A32nx_PID_new_neg_avail(A32nx_stick_roll, FD_roll - get(aircraft_roll)), -1, 1, 0.5))
 
             if get(front_gear_on_ground) == 1 then
@@ -104,9 +103,6 @@ function update()
             end
 
             set(pitch_artstab, Set_anim_value(get(pitch_artstab), A32nx_PID_new_neg_avail(A32nx_stick_pitch, FD_pitch - get(aircraft_pitch)), -0.32, 0.32, 1))
-        else
-            A32nx_FD_pitch.I_gain = 0
-            A32nx_FD_pitch.Integral_sum = 0
         end
     end
 
