@@ -632,7 +632,6 @@ Slats_ecam_amber = 	    createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_fl
 Slats_in_transit = 	    createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/slats_in_transit", 0, false, true, false)--slats moving
 Flaps_ecam_amber = 	    createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/flaps_ecam_amber", 0, false, true, false)--flaps indication on the ecam is amber
 Flaps_in_transit = 	    createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/flaps_in_transit", 0, false, true, false)--flaps moving
-Flaps_deployed_ratio =  createGlobalPropertyf("a321neo/dynamics/FBW/slats_and_flaps/flaps_deployed_ratio", 0, false, true, false)--0, 0, 10, 14, 21, 25
 Flaps_deployed_angle =  createGlobalPropertyf("a321neo/dynamics/FBW/slats_and_flaps/flaps_deployed_angle", 0, false, true, false)--0, 0, 10, 14, 21, 25
 --hstabs
 THS_trim_range_limited = createGlobalPropertyi("a321neo/dynamics/FBW/controls/ths_trim_range_limited", 0, false, true, false)
