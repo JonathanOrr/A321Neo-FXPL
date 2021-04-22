@@ -48,8 +48,8 @@ local MAX_LIMIT_WPT = 750
 -------------------------------------------------------------------------------
 
 local function plan_get_px_per_nm(data)
-    -- 588 px is the diameter of our ring, so this corresponds to the range scale selected:
-    local range_in_nm = get_range_in_nm(data) / 2
+    -- 621 px is the diameter of our ring, so this corresponds to the range scale selected:
+    local range_in_nm = get_range_in_nm(data)
     -- The the per_px nm is:
     return 621 / range_in_nm
 end
@@ -136,16 +136,17 @@ end
 local function draw_poi_array(data, poi, texture, color)
     local modified = false
 
-    -- 588 px is the diameter of our ring, so this corresponds to the range scale selected:
-    local range_in_nm = get_range_in_nm(data) / 2
+    -- 621 px is the diameter of our ring, so this corresponds to the range scale selected:
+    local range_in_nm = get_range_in_nm(data)
     -- The the per_px nm is:
     local px_per_nm = 621 / range_in_nm
 
-    if poi.distance == nil or (get(TIME) - poi_position_last_update) > POI_UPDATE_RATE then
-       poi.distance = get_distance_nm(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon,poi.lat,poi.lon)
+    if poi.plan_dist == nil or (get(TIME) - poi_position_last_update) > POI_UPDATE_RATE then
+       poi.plan_dist = get_distance_nm(data.plan_ctr_lat, data.plan_ctr_lon,poi.lat,poi.lon)
     end
     
-    if poi.distance > range_in_nm * 2 then
+    if poi.plan_dist > range_in_nm * 2 then
+
         return true, poi
     end
 
@@ -268,7 +269,7 @@ local function draw_active_fpln(data)   -- This is just a test
         table.insert(route, c_y)
         x.x = c_x
         x.y = c_y
-        
+
         local color = k == 1 and ECAM_WHITE or ECAM_GREEN
 
         if x.ptr_type == FMGS_PTR_WPT then
