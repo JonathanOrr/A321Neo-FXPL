@@ -312,65 +312,79 @@ MessageGroup_MEMO_LANDING = {
 ----------------------------------------------------------------------------------------------------
 -- WARNING: TAKEOFF CONFIG
 ----------------------------------------------------------------------------------------------------
-Message_CONFIG_TAKEOFF_BRAKES = {
-            text = function(self)
-                    return "       PARK BRK ON"
-            end,
-            color = function(self)
-                    return COL_WARNING
-            end,
-            is_active = function(self)
-              return get(Parkbrake_switch_pos) > 0
-            end
+local Message_CONFIG_TAKEOFF_BRAKES = {
+    text = function(self)
+            return "       PARK BRK ON"
+    end,
+    color = function(self)
+            return COL_WARNING
+    end,
+    is_active = function(self)
+      return get(Parkbrake_switch_pos) > 0
+    end
 }
 
-Message_CONFIG_TAKEOFF_SPDBRK = {
-            text = function(self)
-                    return "       SPDBRK NOT RETRACTED"
-            end,
-            color = function(self)
-                    return COL_WARNING
-            end,
-            is_active = function(self)
-              return get(Speedbrake_handle_ratio) > 0
-            end
+local Message_CONFIG_TAKEOFF_SPDBRK = {
+    text = function(self)
+            return "       SPDBRK NOT RETRACTED"
+    end,
+    color = function(self)
+            return COL_WARNING
+    end,
+    is_active = function(self)
+      return get(Speedbrake_handle_ratio) > 0
+    end
 }
 
-Message_CONFIG_TAKEOFF_FLAPS = {
-            text = function(self)
-                    return "       FLAPS NOT IN T.O CFG"
-            end,
-            color = function(self)
-                    return COL_WARNING
-            end,
-            is_active = function(self)
-              return get(Flaps_internal_config) < 2 or get(Flaps_internal_config) == 5 
-            end
+local Message_CONFIG_TAKEOFF_FLAPS = {
+    text = function(self)
+            return "       FLAPS NOT IN T.O CFG"
+    end,
+    color = function(self)
+            return COL_WARNING
+    end,
+    is_active = function(self)
+      return get(Flaps_internal_config) < 2 or get(Flaps_internal_config) == 5 
+    end
 }
 
-Message_CONFIG_TAKEOFF_PITCH_TRIM = {
-            text = function(self)
-                    return "       PITCH TRIM NOT IN TO"
-            end,
-            color = function(self)
-                    return COL_WARNING
-            end,
-            is_active = function(self)
-              return get(Elev_trim_ratio) > (3.5/13.5) or get(Elev_trim_ratio) < (-3/4)
-            end
+local Message_CONFIG_TAKEOFF_PITCH_TRIM = {
+    text = function(self)
+            return "       PITCH TRIM NOT IN TO"
+    end,
+    color = function(self)
+            return COL_WARNING
+    end,
+    is_active = function(self)
+      return get(Elev_trim_ratio) > (3.5/13.5) or get(Elev_trim_ratio) < (-3/4)
+    end
 }
 
-Message_CONFIG_TAKEOFF_RUD_TRIM = {
-            text = function(self)
-                    return "       RUD TRIM NOT IN T.O "
+local Message_CONFIG_TAKEOFF_RUD_TRIM = {
+    text = function(self)
+            return "       RUD TRIM NOT IN T.O "
 
-            end,
-            color = function(self)
-                    return COL_WARNING
-            end,
-            is_active = function(self)
-              return get(Rudder_trim_target_angle) ~= 0
-            end
+    end,
+    color = function(self)
+            return COL_WARNING
+    end,
+    is_active = function(self)
+      return get(Rudder_trim_target_angle) ~= 0
+    end
+}
+
+local Message_CONFIG_SIDESTICK_OFF = {
+    text = function(self)
+            local which = get(Capt_sidestick_disabled) == 1 and "L" or "R"
+            return "       " .. which .. " SIDESTICK FAULT"
+
+    end,
+    color = function(self)
+            return COL_WARNING
+    end,
+    is_active = function(self)
+      return get(Capt_sidestick_disabled) + get(Fo_sidestick_disabled) > 0
+    end
 }
 
 MessageGroup_CONFIG_TAKEOFF = {
@@ -391,7 +405,8 @@ MessageGroup_CONFIG_TAKEOFF = {
         Message_CONFIG_TAKEOFF_SPDBRK,
         Message_CONFIG_TAKEOFF_FLAPS,
         Message_CONFIG_TAKEOFF_PITCH_TRIM,
-        Message_CONFIG_TAKEOFF_RUD_TRIM
+        Message_CONFIG_TAKEOFF_RUD_TRIM,
+        Message_CONFIG_SIDESTICK_OFF
     },
 
     is_active = function(self)
