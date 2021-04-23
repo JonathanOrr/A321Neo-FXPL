@@ -28,6 +28,8 @@ include('wheel_autobrake.lua')
 ----------------------------------------------------------------------------------------------------
 local antiskid_and_ns_switch = true -- Status of the ANTI-SKID and N/S switch
 
+local brake_temps = {get(OTA), get(OTA), get(OTA), get(OTA)}
+
 local left_brakes_temp_no_delay = get(OTA)
 local right_brakes_temp_no_delay = get(OTA)
 local left_tire_psi_no_delay = 210
@@ -108,8 +110,10 @@ end
 ----------------------------------------------------------------------------------------------------
 
 function onAirportLoaded()
-    set(Left_brakes_temp, get(OTA))
-    set(Right_brakes_temp, get(OTA))
+    brake_temps[1] = get(OTA)
+    brake_temps[2] = get(OTA)
+    brake_temps[3] = get(OTA)
+    brake_temps[4] = get(OTA)
 
     -- When the aircraft is loaded in flight no park brake, otherwise, put on the park brakes :)
     if get(Capt_ra_alt_ft) > 20 then
@@ -139,7 +143,7 @@ end
 local function update_pb_lights()
 	--update Brake fan button states follwing 00, 01, 10, 11
 	
-	pb_set(PB.mip.brk_fan, get(Brakes_fan) == 1, get(Left_brakes_temp) > 400 or get(Right_brakes_temp) > 400)
+	pb_set(PB.mip.brk_fan, get(Brakes_fan) == 1, brake_temps[1] > 300 or brake_temps[2] > 300 or brake_temps[3] > 300 or brake_temps[4] > 300)
 
 	if is_lgciu_1_working then
 	    pb_set(PB.mip.ldg_gear_C, get(Front_gear_deployment) == 1, get(Front_gear_deployment) ~= get(Gear_handle))
@@ -153,49 +157,48 @@ local function update_pb_lights()
 	
 end
 
+local function compute_temp_braking(speed, curr_temp, curr_braking, curr_skidding)
+    local derivative = math.max(0, Math_rescale_no_lim(100, 50, 200, 100, speed)) + math.random()*20 -- in °C/s
+    derivative = derivative * (curr_braking - curr_skidding)
+    return curr_temp + derivative * get(DELTA_TIME)
+end
+
+local function update_brake_temp_single(i)
+    local brake_fan = get(Brakes_fan) == 1
+    local brake_value = i <= 2 and get(Wheel_brake_L) or get(Wheel_brake_R)
+    local skid_value  = i <= 2 and get(Wheel_skidding_L) or get(Wheel_skidding_R)
+    
+    -- CASE 1 : On ground
+    if get(Aft_wheel_on_ground) == 1 then
+    
+        if get(Wheel_brake_L) > 0 and get(Ground_speed_kts) > 1 then
+		    brake_temps[i] = compute_temp_braking(get(Ground_speed_kts), brake_temps[i], brake_value, skid_value)
+        else
+            brake_temps[i] = Set_anim_value(brake_temps[i], get(OTA), -100, 1000, 0.00075 + (brake_fan and 0.01 or 0))
+        end
+    else
+        -- In Flight
+        if (get(Left_gear_deployment) + get(Right_gear_deployment)) / 2 > 0.2 then
+            local speed = Math_clamp(((39/160000) * get(Ground_speed_kts)) + 0.00075 + (brake_fan and 0.01 or 0), 0.00125, 0.05)
+            brake_temps[i] = Set_anim_value(brake_temps[i], get(OTA), -100, 1000, speed)
+        else
+            local speed = 0.00075 + (brake_fan and 0.01 or 0)
+            brake_temps[i] = Set_anim_value(brake_temps[i], get(OTA), -100, 1000, speed)
+        end
+    end
+end
+
 local function update_brake_temps()
 
-    local brake_fan = get(Brakes_fan)
+    update_brake_temp_single(1)
+    update_brake_temp_single(2)
+    update_brake_temp_single(3)
+    update_brake_temp_single(4)
 
-	if get(Aft_wheel_on_ground) == 1 then
-
-		if get(Wheel_brake_L) > 0 and get(Ground_speed_kts) > 1 then
-			left_brakes_temp_no_delay = left_brakes_temp_no_delay + (get(Wheel_brake_L) * ((0.10 * get(Ground_speed_kts)) ^ 1.975) * get(DELTA_TIME))
-        else
-            left_brakes_temp_no_delay = Set_anim_value(left_brakes_temp_no_delay, get(OTA), -100, 1000, 0.00075 + brake_fan * 0.00075)
-        end
-
-        if get(Wheel_brake_R) > 0 and get(Ground_speed_kts) > 1 then
-			right_brakes_temp_no_delay = right_brakes_temp_no_delay + (get(Wheel_brake_R) * ((0.10 * get(Ground_speed_kts)) ^ 1.975) * get(DELTA_TIME))
-        else
-			right_brakes_temp_no_delay = Set_anim_value(right_brakes_temp_no_delay, get(OTA), -100, 1000, 0.00075 + brake_fan * 0.00075)
-		end
-	else
-		if (get(Left_gear_deployment) + get(Right_gear_deployment)) / 2 > 0.2 then
-			if brake_fan == 1 then
-				--fan cooled
-				left_brakes_temp_no_delay = Set_anim_value(left_brakes_temp_no_delay, get(OTA), -100, 1000, Math_clamp(((39/160000) * get(IAS)) + 0.00125, 0.00125, 0.05))
-				right_brakes_temp_no_delay = Set_anim_value(right_brakes_temp_no_delay, get(OTA), -100, 1000, Math_clamp(((39/160000) * get(IAS)) + 0.00125, 0.00125, 0.05))
-			else
-				--natural cool down
-				left_brakes_temp_no_delay = Set_anim_value(left_brakes_temp_no_delay, get(OTA), -100, 1000, Math_clamp(((197/800000) * get(IAS)) + 0.00075, 0.00125, 0.05))
-				right_brakes_temp_no_delay = Set_anim_value(right_brakes_temp_no_delay, get(OTA), -100, 1000, Math_clamp(((197/800000) * get(IAS)) + 0.00075, 0.00125, 0.05))
-			end
-		else
-			if brake_fan == 1 then
-				--fan cooled
-				left_brakes_temp_no_delay = Set_anim_value(left_brakes_temp_no_delay, get(OTA), -100, 1000, 0.00125)
-				right_brakes_temp_no_delay = Set_anim_value(right_brakes_temp_no_delay, get(OTA), -100, 1000, 0.00125)
-			else
-				--natural cool down
-				left_brakes_temp_no_delay = Set_anim_value(left_brakes_temp_no_delay, get(OTA), -100, 1000, 0.00075)
-				right_brakes_temp_no_delay = Set_anim_value(right_brakes_temp_no_delay, get(OTA), -100, 1000, 0.00075)
-			end
-		end
-	end
-	
-    set(Left_brakes_temp, Set_anim_value(get(Left_brakes_temp), left_brakes_temp_no_delay, -100, 1000, 0.5))
-	set(Right_brakes_temp, Set_anim_value(get(Right_brakes_temp), right_brakes_temp_no_delay, -100, 1000, 0.5))
+    set(L_brakes_temp, brake_temps[1])
+    set(LL_brakes_temp, brake_temps[2])
+	set(R_brakes_temp, brake_temps[3])
+	set(RR_brakes_temp, brake_temps[4])
 
 end
 
@@ -405,8 +408,10 @@ local function update_brakes()
     set(Override_wheel_gear_and_brk, 1)
     set(Wheel_better_pushback, 0)
 
-    local L_temp_degradation = get(Left_brakes_temp) < 550 and 1 or Math_clamp((1-(get(Left_brakes_temp) - 550) / 550), 0, 1)
-    local R_temp_degradation = get(Right_brakes_temp) < 550 and 1 or Math_clamp((1-(get(Left_brakes_temp) - 550) / 550), 0, 1)
+    local L_avg_temp = (brake_temps[1] + brake_temps[2]) / 2
+    local R_avg_temp = (brake_temps[3] + brake_temps[4]) / 2
+    local L_temp_degradation = L_avg_temp < 550 and 1 or Math_clamp((1-(L_avg_temp - 550) / 550), 0, 1)
+    local R_temp_degradation = R_avg_temp < 550 and 1 or Math_clamp((1-(R_avg_temp - 550) / 550), 0, 1)
 
     local up_limit = Math_rescale(0, 0, 2500, 1.4, 1000) -- 1000 PSI upper limit
 

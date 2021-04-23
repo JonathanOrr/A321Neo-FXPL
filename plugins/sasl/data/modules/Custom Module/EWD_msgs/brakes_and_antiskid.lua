@@ -118,7 +118,7 @@ MessageGroup_BRAKES_HOT = {
     -- Method to check if this message group is active
     is_active = function(self)
         -- Active if any brakes over 300 C
-        return get(Left_brakes_temp) > 300 or get(Right_brakes_temp) > 300
+        return get(L_brakes_temp) > 300 or get(R_brakes_temp) > 300 or get(LL_brakes_temp) > 300 or get(RR_brakes_temp) > 300
     end,
 
     -- Method to check if this message is currently inhibithed
