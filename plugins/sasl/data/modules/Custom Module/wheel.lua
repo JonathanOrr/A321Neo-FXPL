@@ -263,15 +263,11 @@ local function update_steering()
     -- Ok so nosewheel is ok
     set(Nosewheel_Steering_working, 1)
     
-    if get(Any_wheel_on_ground) == 0 then
-        return -- Inhibition condition
-    end
-    
     -- If HYD Y > 1450 then we have full steering, otherwise let's compute a linear
     -- degradation of steering
     local hyd_steer_coeff = Math_clamp(Math_rescale(10, 0, 1450, 1, get(Hydraulic_Y_press)), 0, 1)
     
-    local pedals_pos = get(Yaw)    -- TODO Add also autopilot effect on wheels
+    local pedals_pos = get(Yaw)
     
     if EFB.preferences["nws"] == 0 then
         pedals_pos = get(Capt_Roll)
@@ -279,6 +275,17 @@ local function update_steering()
         pedals_pos = get(Joystick_tiller)
     end
     
+    -- Update graphical positions for the rudder pedals
+    pedals_pos = Math_clamp((get(Rudder_trim_target_angle)/30) + pedals_pos, -1, 1)
+    set(Rudder_pedal_pos, pedals_pos)
+    
+    -- And now add the AUTOFLT component
+    pedals_pos = Math_clamp(pedals_pos + get(AUTOFLT_yaw), -1, 1)
+
+    if get(Any_wheel_on_ground) == 0 then
+        return -- Inhibition condition
+    end
+
     local speed = get(Ground_speed_kts)
     local steer_limit = 0
     
