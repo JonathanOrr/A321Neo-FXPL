@@ -204,6 +204,8 @@ local failures_data = {
             {name="ENG 2\nLEAK OIL", status=false, dataref=FAILURE_ENG_LEAK_OIL, nr=2 },
             {name="ENG 1\nSTALL", status=false, dataref=FAILURE_ENG_STALL, nr=1 },
             {name="ENG 2\nSTALL", status=false, dataref=FAILURE_ENG_STALL, nr=2 },
+            {name="ENG 1\nHUNG START", status=false, dataref=FAILURE_ENG_HUNG_START, nr=1 },
+            {name="ENG 2\nHUNG START", status=false, dataref=FAILURE_ENG_HUNG_START, nr=1 },
             
             {name="APU\nFAILURE", status=false, dataref=FAILURE_ENG_APU_FAIL},
             {name="APU\nFIRE!", status=false, dataref=FAILURE_FIRE_APU},

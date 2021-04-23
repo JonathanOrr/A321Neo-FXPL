@@ -566,7 +566,7 @@ local function perform_starting_procedure(eng, inflight_restart)
         -- Phase 2: Controlling the N2  
         perform_starting_procedure_follow_n2(eng)
         
-    elseif eng_N1_off[eng] < ENG.data.startup.n1[#ENG.data.startup.n1].n1_set then
+    elseif eng_N1_off[eng] < ENG.data.startup.n1[#ENG.data.startup.n1].n1_set and get(FAILURE_ENG_HUNG_START, eng) == 0 then
         -- Phase 3: Controlling the N1
         perform_starting_procedure_follow_n1(eng)
     else
@@ -655,8 +655,10 @@ local function update_startup()
     local fast_restart_1 = get(Eng_1_N1) > 25
     local fast_restart_2 = get(Eng_2_N1) > 25
 
-    local does_engine_1_can_start_or_crank = get(Engine_1_avail) == 0 and (get(L_bleed_press) > 10 or windmill_condition_1 or fast_restart_1) and get(Eng_1_FADEC_powered) == 1
-    local does_engine_2_can_start_or_crank = get(Engine_2_avail) == 0 and (get(R_bleed_press) > 10 or windmill_condition_2 or fast_restart_2) and get(Eng_2_FADEC_powered) == 1
+    local eng_1_air_cond = (get(L_bleed_press) > 10 or windmill_condition_1 or fast_restart_1)
+    local eng_2_air_cond = (get(R_bleed_press) > 10 or windmill_condition_2 or fast_restart_2)
+    local does_engine_1_can_start_or_crank = get(Engine_1_avail) == 0 and eng_1_air_cond and get(Eng_1_FADEC_powered) == 1 and math.abs(get(Cockpit_throttle_lever_L)) < 0.05
+    local does_engine_2_can_start_or_crank = get(Engine_2_avail) == 0 and eng_2_air_cond and get(Eng_2_FADEC_powered) == 1 and math.abs(get(Cockpit_throttle_lever_R)) < 0.05
 
     if get(FAILURE_ENG_FADEC_CH1, 1) == 1 and get(FAILURE_ENG_FADEC_CH2, 1) == 1 then
         does_engine_1_can_start_or_crank = false -- No fadec? No start
