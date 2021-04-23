@@ -231,7 +231,7 @@ MessageGroup_ADKIS_NWS_FAULT = {
     },
 
     is_active = function()
-        return get(FAILURE_GEAR_NWS) == 1 or (get(Brakes_mode) == 2 or get(Brakes_mode) == 3) 
+        return get(Brakes_mode) == 2 or get(Brakes_mode) == 3
     end,
 
     is_inhibited = function()

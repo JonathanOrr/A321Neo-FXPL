@@ -341,4 +341,138 @@ MessageGroup_TPIU_FAULT = {
 
 }
 
+----------------------------------------------------------------------------------------------------
+-- CAUTION: TYRE LO PR
+----------------------------------------------------------------------------------------------------
+
+MessageGroup_TIRE_LO_PR = {
+
+    shown = false,
+
+    text  = function()
+                return "WHEEL"
+            end,
+    color = function()
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_WHEEL,
+    
+    messages = {
+         { text = function() return "      TYRE LO PR" end,
+           color = function() return COL_CAUTION end,
+           is_active = function() return true end
+        }
+    },
+
+    is_active = function()
+        return get(FAILURE_GEAR_TPIU) == 0 and (get(LL_tire_psi) < 180 or get(L_tire_psi) < 180 or get(R_tire_psi) < 180 or get(RR_tire_psi) < 180 or get(NL_tire_psi) < 160 or get(NR_tire_psi) < 160)
+    end,
+
+    is_inhibited = function()
+        -- During takeoff and landing at high speed
+        return is_active_in({PHASE_ELEC_PWR, PHASE_1ST_ENG_ON, PHASE_AIRBONE, PHASE_FINAL, PHASE_BELOW_80_KTS, PHASE_2ND_ENG_OFF})
+    end
+
+}
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: N/W STRG FAULT
+----------------------------------------------------------------------------------------------------
+
+MessageGroup_NW_STRG_FAULT = {
+
+    shown = false,
+
+    text  = function()
+                return "WHEEL"
+            end,
+    color = function()
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_WHEEL,
+    
+    messages = {
+         { text = function() return "      N/W STRG FAULT" end,
+           color = function() return COL_CAUTION end,
+           is_active = function() return true end
+        }
+    },
+
+    is_active = function()
+        return get(FAILURE_GEAR_NWS) == 1
+    end,
+
+    is_inhibited = function()
+        -- During takeoff and landing at high speed
+        return is_active_in({PHASE_ELEC_PWR, PHASE_1ST_ENG_ON, PHASE_AIRBONE, PHASE_FINAL, PHASE_BELOW_80_KTS, PHASE_2ND_ENG_OFF})
+    end
+
+}
+
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: LGCIU 1 2
+----------------------------------------------------------------------------------------------------
+
+MessageGroup_LGCIU_FAULT = {
+
+    shown = false,
+
+    text  = function()
+                return "L/G"
+            end,
+    color = function()
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+    
+    sd_page = ECAM_PAGE_WHEEL,
+    
+    messages = {
+         { 
+
+           text = function()
+                local N = ""
+                if get(FAILURE_GEAR_LGIU1) == 1 then
+                    N = "1"
+                end
+                if get(FAILURE_GEAR_LGIU2) == 1 then
+                    if #N > 0 then
+                        N = N .. "+"
+                    end
+                    N = N .. "2"
+                end
+                return "    LGCIU " .. N .. " FAULT" 
+           end,
+           color = function() return COL_CAUTION end,
+           is_active = function() return true end
+        },
+        {  text = function() return " - L/G.........GRVTY EXTN" end,
+           color = function() return COL_ACTIONS end,
+           is_active = function() return get(FAILURE_GEAR_LGIU1) == 1 and get(FAILURE_GEAR_LGIU2) == 1 end
+        },
+        {  text = function() return " - GPWS SYS...........OFF" end,
+           color = function() return COL_ACTIONS end,
+           is_active = function() return  get(FAILURE_GEAR_LGIU1) == 1 and (not PB.ovhd.gpws_sys.status_bottom) end
+        }
+    },
+
+    is_active = function()
+        return get(FAILURE_GEAR_LGIU1) == 1 or get(FAILURE_GEAR_LGIU2) == 1
+    end,
+
+    is_inhibited = function()
+        -- During takeoff and landing at high speed
+        return is_active_in({PHASE_ELEC_PWR, PHASE_1ST_ENG_ON, PHASE_1ST_ENG_TO_PWR, PHASE_AIRBONE, PHASE_BELOW_80_KTS, PHASE_2ND_ENG_OFF})
+    end
+
+}
+
 
