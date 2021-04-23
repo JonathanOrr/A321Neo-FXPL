@@ -273,6 +273,13 @@ local failures_data = {
             {name="BSCU 2\nFAULT", status=false, dataref=FAILURE_GEAR_BSCU2 },
             {name="ABCU\nFAULT", status=false, dataref=FAILURE_GEAR_ABCU },
             {name="TPIU\nFAULT", status=false, dataref=FAILURE_GEAR_TPIU },
+            {name="LEFT OUT\nTIRE BLOWN", status=false, dataref=FAILURE_GEAR_MAIN_TIRE, nr=1 },
+            {name="LEFT IN\nTIRE BLOWN", status=false, dataref=FAILURE_GEAR_MAIN_TIRE, nr=2 },
+            {name="RIGHT IN\nTIRE BLOWN", status=false, dataref=FAILURE_GEAR_MAIN_TIRE, nr=3 },
+            {name="RIGHT OUT\nTIRE BLOWN", status=false, dataref=FAILURE_GEAR_MAIN_TIRE, nr=4 },
+            
+            {name="NOSE LEFT\nTIRE BLOWN", status=false, dataref=FAILURE_GEAR_NOSE_TIRE, nr=1 },
+            {name="NOSE RIGHT\nTIRE BLOWN", status=false, dataref=FAILURE_GEAR_NOSE_TIRE, nr=2 },
         }
     },
     {

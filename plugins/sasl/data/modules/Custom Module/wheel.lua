@@ -30,10 +30,8 @@ local antiskid_and_ns_switch = true -- Status of the ANTI-SKID and N/S switch
 
 local brake_temps = {get(OTA), get(OTA), get(OTA), get(OTA)}
 
-local left_brakes_temp_no_delay = get(OTA)
-local right_brakes_temp_no_delay = get(OTA)
-local left_tire_psi_no_delay = 210
-local right_tire_psi_no_delay = 210
+local wheel_psi_baseline = {0, 0, 0, 0}
+local nose_wheel_psi_baseline = {0, 0}
 
 --sim dataref
 local Front_gear_on_ground = globalProperty("sim/flightmodel2/gear/on_ground[0]")
@@ -109,11 +107,33 @@ end
 -- Initialization
 ----------------------------------------------------------------------------------------------------
 
+local function randomize_psi_at_start()
+
+    local random1 = math.random()
+    random1 = random1 > 0.3 and 5 or (random1 > 0.7 and 10 or 0)
+    local random2 = math.random()
+    random2 = random2 > 0.3 and 5 or (random2 > 0.7 and 10 or 0)
+    local random3 = math.random()
+    random3 = random3 > 0.3 and 5 or (random3 > 0.7 and 10 or 0)
+    local random4 = math.random()
+    random4 = random4 > 0.3 and 5 or (random4 > 0.7 and 10 or 0)
+    wheel_psi_baseline = {205 + random1, 205 + random2, 205 + random3, 205 + random4}
+
+    local random1 = math.random()
+    random1 = random1 > 0.3 and 5 or (random1 > 0.7 and 10 or 0)
+    local random2 = math.random()
+    random2 = random2 > 0.3 and 5 or (random2 > 0.7 and 10 or 0)
+    nose_wheel_psi_baseline = {175+random1, 175+random2}
+
+end
+
 function onAirportLoaded()
     brake_temps[1] = get(OTA)
     brake_temps[2] = get(OTA)
     brake_temps[3] = get(OTA)
     brake_temps[4] = get(OTA)
+
+    randomize_psi_at_start()
 
     -- When the aircraft is loaded in flight no park brake, otherwise, put on the park brakes :)
     if get(Capt_ra_alt_ft) > 20 then
@@ -195,20 +215,35 @@ local function update_brake_temps()
     update_brake_temp_single(3)
     update_brake_temp_single(4)
 
-    set(L_brakes_temp, brake_temps[1])
-    set(LL_brakes_temp, brake_temps[2])
+    set(LL_brakes_temp, brake_temps[1])
+    set(L_brakes_temp, brake_temps[2])
 	set(R_brakes_temp, brake_temps[3])
 	set(RR_brakes_temp, brake_temps[4])
 
 end
 
+
+local function compute_psi(i)
+    local press = wheel_psi_baseline[i] + brake_temps[i] / 600 * 30
+    if press > 250 then
+        set(FAILURE_GEAR_MAIN_TIRE, 1, i)
+    end
+
+    if get(FAILURE_GEAR_MAIN_TIRE, i) == 1 then
+        return 0
+    end
+    return press
+end
+
 local function update_wheel_psi()
 
-	left_tire_psi_no_delay = 1/39 * (left_brakes_temp_no_delay - 10) + 210
-	right_tire_psi_no_delay = 1/39 * (right_brakes_temp_no_delay - 10) + 210
+	set(LL_tire_psi, compute_psi(1))
+	set(L_tire_psi,  compute_psi(2))
+	set(R_tire_psi,  compute_psi(3))
+	set(RR_tire_psi, compute_psi(4))
 
-	set(Left_tire_psi,  Set_anim_value(get(Left_tire_psi), left_tire_psi_no_delay, -100, 1000, 0.5))
-	set(Right_tire_psi, Set_anim_value(get(Right_tire_psi), left_tire_psi_no_delay, -100, 1000, 0.5))
+	set(NL_tire_psi, get(FAILURE_GEAR_NOSE_TIRE, 1) == 0 and nose_wheel_psi_baseline[1] or 0)
+	set(NR_tire_psi, get(FAILURE_GEAR_NOSE_TIRE, 2) == 0 and nose_wheel_psi_baseline[2] or 0)
 end
 
 local function update_steering()
@@ -412,6 +447,10 @@ local function update_brakes()
     local R_avg_temp = (brake_temps[3] + brake_temps[4]) / 2
     local L_temp_degradation = L_avg_temp < 550 and 1 or Math_clamp((1-(L_avg_temp - 550) / 550), 0, 1)
     local R_temp_degradation = R_avg_temp < 550 and 1 or Math_clamp((1-(R_avg_temp - 550) / 550), 0, 1)
+
+    -- Tire blown degradation
+    L_temp_degradation = L_temp_degradation / 2^(get(FAILURE_GEAR_MAIN_TIRE, 1) + get(FAILURE_GEAR_MAIN_TIRE, 2))
+    R_temp_degradation = R_temp_degradation / 2^(get(FAILURE_GEAR_MAIN_TIRE, 3) + get(FAILURE_GEAR_MAIN_TIRE, 4))
 
     local up_limit = Math_rescale(0, 0, 2500, 1.4, 1000) -- 1000 PSI upper limit
 

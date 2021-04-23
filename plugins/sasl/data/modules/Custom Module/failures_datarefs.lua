@@ -44,6 +44,9 @@ FAILURE_GEAR_ABCU  = createGlobalPropertyi("a321neo/failures/abcu", 0, false, tr
 FAILURE_GEAR_TPIU  = createGlobalPropertyi("a321neo/failures/tpiu", 0, false, true, false)
 FAILURE_GEAR_AUTOBRAKES  = createGlobalPropertyi("a321neo/failures/autobrakes", 0, false, true, false)
 
+FAILURE_GEAR_MAIN_TIRE = createGlobalPropertyia("a321neo/failures/main_tires", 4)
+FAILURE_GEAR_NOSE_TIRE = createGlobalPropertyia("a321neo/failures/nose_tires", 2)
+
 FAILURE_ADR = {}
 FAILURE_ADR[1] = createGlobalPropertyi("a321neo/failures/adirs/adr_1", 0, false, true, false) -- 0: OK, 1: FAILED
 FAILURE_ADR[2] = createGlobalPropertyi("a321neo/failures/adirs/adr_2", 0, false, true, false) -- 0: OK, 1: FAILED

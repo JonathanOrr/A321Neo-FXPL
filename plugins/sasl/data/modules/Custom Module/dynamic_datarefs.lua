@@ -48,9 +48,12 @@ L_brakes_temp = 			  createGlobalPropertyf("a321neo/dynamics/wheel/left_brakes_t
 R_brakes_temp = 		  createGlobalPropertyf("a321neo/dynamics/wheel/right_brakes_temp", 10, false, true, false) --right brakes temperature
 LL_brakes_temp = 			  createGlobalPropertyf("a321neo/dynamics/wheel/left_left_brakes_temp", 10, false, true, false) --left brakes temperature
 RR_brakes_temp = 		  createGlobalPropertyf("a321neo/dynamics/wheel/right_right_brakes_temp", 10, false, true, false) --right brakes temperature
-Nose_tire_psi = 			  createGlobalPropertyf("a321neo/dynamics/wheel/nose_tire_psi", 180, false, true, false) --left tire psi
-Left_tire_psi = 			  createGlobalPropertyf("a321neo/dynamics/wheel/left_tire_psi", 210, false, true, false) --left tire psi
-Right_tire_psi = 			  createGlobalPropertyf("a321neo/dynamics/wheel/right_tire_psi", 210, false, true, false) --right tire psi
+NL_tire_psi = 			  createGlobalPropertyf("a321neo/dynamics/wheel/nose_tire_l_psi", 180, false, true, false) --left tire psi
+NR_tire_psi =             createGlobalPropertyf("a321neo/dynamics/wheel/nose_tire_r_psi", 180, false, true, false)
+LL_tire_psi = 			  createGlobalPropertyf("a321neo/dynamics/wheel/left_left_tire_psi", 210, false, true, false) --left tire psi
+L_tire_psi = 			  createGlobalPropertyf("a321neo/dynamics/wheel/left_tire_psi", 210, false, true, false) --left tire psi
+R_tire_psi = 			  createGlobalPropertyf("a321neo/dynamics/wheel/right_right_tire_psi", 210, false, true, false) --right tire psi
+RR_tire_psi = 			  createGlobalPropertyf("a321neo/dynamics/wheel/right_tire_psi", 210, false, true, false) --right tire psi
 
 Brakes_mode = createGlobalPropertyi("a321neo/dynamics/wheel/brake_mode", 4, false, true, false) -- 0: unknown, 1: normal, 2: alternate with antiskid, 3: alternate without antiskid, 4: parking
 Wheel_status_LGCIU_1 = createGlobalPropertyi("a321neo/dynamics/wheel/computers/lgciu_1_status", 0, false, true, false)
