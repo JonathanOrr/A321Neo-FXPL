@@ -33,7 +33,7 @@ FBW.yaw.controllers = {
             FBW.yaw.controllers.SI_demand_PID.output = FBW_PID_BP_ADV(
                 FBW_PID_arrays.FBW_NRM_YAW_PID_array,
                 FBW.yaw.inputs.x_to_SI(get(Total_input_yaw)),
-                get(Slide_slip_angle),
+                -get(Slide_slip_angle),
                 FBW.yaw.inputs.get_curr_turbolence()
             )
         end,
@@ -49,8 +49,8 @@ FBW.yaw.controllers = {
             Math_clamp(
                 (get(Total_input_yaw) + FBW.yaw.controllers.yaw_damper_PD.output)                     * get(FBW_lateral_ground_mode_ratio) +
                 (FBW.yaw.controllers.SI_demand_PID.output + FBW.yaw.controllers.yaw_damper_PD.output) * get(FBW_lateral_flight_mode_ratio),
-                -get(Rudder_travel_lim) / 30,
-                get(Rudder_travel_lim) / 30
+                -1,
+                1
             )
         )
     end

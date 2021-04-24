@@ -25,13 +25,22 @@ FBW.yaw.inputs = {
     end,
 
     x_to_SI = function (x)
-        local max_rudder_deflection = 30
+        local max_rudder_def = 30
 
         --blend max SI according to speed of the aircraft and the A350 FCOM
         --15 degrees of SI at 160kts to 2 degrees at VMO
         --linear interpolation is used to avoid significant change in value during circular falloff
-        set(Max_SI_demand_lim, Math_rescale(160, 15, get(Fixed_VMAX), 2, FBW.filtered_sensors.IAS.filtered))
+        local max_SI = 15
+        local min_SI = 2
+        set(Max_SI_demand_lim, Math_rescale(160, max_SI, get(Fixed_VMAX), min_SI, FBW.filtered_sensors.IAS.filtered))
 
-        return -x * get(Max_SI_demand_lim) + (-get(Rudder_trim_target_angle) / max_rudder_deflection) * get(Max_SI_demand_lim)
+        local SI_demand = {
+            {-1, -max_SI},
+            {0,  get(Rudder_trim_target_angle) / max_rudder_def * max_SI},
+            {1,  max_SI},
+        }
+
+        print(Math_clamp(Table_interpolate(SI_demand, x), -get(Max_SI_demand_lim), get(Max_SI_demand_lim)))
+        return Math_clamp(Table_interpolate(SI_demand, x), -get(Max_SI_demand_lim), get(Max_SI_demand_lim))
     end
 }
