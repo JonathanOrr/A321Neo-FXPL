@@ -30,7 +30,7 @@ local function Capt_sidestick_bp_callback(phase)
         end
 
         --takeover the priority--
-        if get(Capt_sidestick_disabled) == 0 and Capt_priority_timer < 2 then
+        if get(Capt_sidestick_disabled) == 0 and Capt_priority_timer < 40 then
             Capt_priority_timer = Capt_priority_timer + get(DELTA_TIME)
         end
 
@@ -70,7 +70,7 @@ local function Fo_sidestick_bp_callback(phase)
         end
 
         --takeover the priority--
-        if Fo_priority_timer < 40 then
+        if get(Fo_sidestick_disabled) == 0 and Fo_priority_timer < 40 then
             Fo_priority_timer = Fo_priority_timer + get(DELTA_TIME)
         end
 
