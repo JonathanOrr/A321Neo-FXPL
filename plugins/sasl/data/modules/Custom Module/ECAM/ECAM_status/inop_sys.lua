@@ -114,10 +114,6 @@ local inop_systems_desc = {
      cond_1 = function() return get(Brakes_mode) == 3 end,
     },
     {
-     text = "N/W STRG", nr = 1,
-     cond_1 = function() return get(FAILURE_GEAR_NWS) == 1 or get(Nosewheel_Steering_working) == 0 end,
-    },
-    {
      text = "NORM BRK", nr = 1,
      cond_1 = function() return get(Brakes_mode) ~= 1 and get(Brakes_mode) ~= 4 end,
     },
@@ -186,6 +182,10 @@ local inop_systems_desc = {
      text = "TR ESS", nr = 1,
      cond_1 = function() return get(FAILURE_ELEC_TR_ESS) == 1 end,
     },
+    {
+     text = "EMER GEN", nr = 1,
+     cond_1 = function() return get(Hydraulic_B_qty) < 0.1 or get(Hydraulic_RAT_status) == 2 or get(FAILURE_HYD_RAT) == 1 or get(FAILURE_ELEC_GEN_EMER) == 1 end,
+    },
 
     -- F/CTL
     {
@@ -208,6 +208,124 @@ local inop_systems_desc = {
      cond_2 = function() return get(FAILURE_FCTL_FAC_2) == 1 or not (get(AC_bus_2_pwrd) == 1 and get(DC_bus_2_pwrd) == 1) end,
     },
 
+    -- FUEL
+    {
+     text = "ACT PUMP", nr = 1,
+     cond_1 = function() return get(FAILURE_FUEL, ACT_TK_XFR) == 1 or (get(AC_bus_1_pwrd) == 0 or get(DC_bus_1_pwrd) == 0) end,
+    },
+    {
+     text = "RCT PUMP", nr = 1,
+     cond_1 = function() return get(FAILURE_FUEL, RCT_TK_XFR) == 1 or (get(AC_bus_2_pwrd) == 0 or get(DC_bus_2_pwrd) == 0) end,
+    },
+    {
+     text = "CTR TK PUMP",
+     nr = 2,
+     cond_1 = function() return get(FAILURE_FUEL, C_TK_XFR_1) == 1 or (get(AC_bus_1_pwrd) == 0 or get(DC_bus_1_pwrd) == 0) end,
+     cond_2 = function() return get(FAILURE_FUEL, C_TK_XFR_2) == 1 or (get(AC_bus_2_pwrd) == 0 or get(DC_bus_2_pwrd) == 0) end,
+    },
+    {
+     text = "L TK PUMP",
+     nr = 2,
+     cond_1 = function() return get(FAILURE_FUEL, L_TK_PUMP_1) == 1 or not ((get(Gen_1_line_active) == 0 and get(AC_bus_1_pwrd) == 1 and get(DC_bus_1_pwrd) == 1) or (get(Gen_1_line_active) == 1 and get(Gen_1_pwr) == 1 and (get(DC_bus_1_pwrd) == 1 or get(DC_ess_bus_pwrd) == 1))) end,
+     cond_2 = function() return get(FAILURE_FUEL, L_TK_PUMP_2) == 1 or not (get(AC_bus_2_pwrd) == 1 and get(DC_bus_2_pwrd) == 1) end,
+    },
+    {
+     text = "R TK PUMP",
+     nr = 2,
+     cond_1 = function() return get(FAILURE_FUEL, R_TK_PUMP_1) == 1 or not ((get(Gen_1_line_active) == 0 and get(AC_bus_1_pwrd) == 1 and get(DC_bus_1_pwrd) == 1) or (get(Gen_1_line_active) == 1 and get(Gen_1_pwr) == 1 and (get(DC_bus_1_pwrd) == 1 or get(DC_ess_bus_pwrd) == 1))) end,
+     cond_2 = function() return get(FAILURE_FUEL, R_TK_PUMP_2) == 1 or not (get(AC_bus_2_pwrd) == 1 and get(DC_bus_2_pwrd) == 1) end,
+    },
+    {
+     text = "FUEL X FEED", nr = 1,
+     cond_1 = function() return get(FAILURE_FUEL_X_FEED) == 1 or (get(DC_shed_ess_pwrd) == 0 and get(DC_bus_2_pwrd) == 0) end,
+    },
+
+    -- FWC
+    {
+     text = "FWC", nr = 2,
+     cond_1 = function() return get(FAILURE_DISPLAY_FWC_1) == 1 or get(AC_ess_bus_pwrd) == 0 end,
+     cond_2 = function() return get(FAILURE_DISPLAY_FWC_2) == 1 or get(AC_bus_2_pwrd) == 0 end,
+    },
+    {
+     text = "ECAM WARN", nr = 1,
+     cond_1 = function() return (get(FAILURE_DISPLAY_FWC_1) == 1 or get(AC_ess_bus_pwrd) == 0) and (get(FAILURE_DISPLAY_FWC_2) == 1 or get(AC_bus_2_pwrd) == 0) end,
+    },
+    {
+     text = "ALTI ALERT", nr = 1,
+     cond_1 = function() return (get(FAILURE_DISPLAY_FWC_1) == 1 or get(AC_ess_bus_pwrd) == 0) and (get(FAILURE_DISPLAY_FWC_2) == 1 or get(AC_bus_2_pwrd) == 0) end,
+    },
+    {
+     text = "STATUS", nr = 1,
+     cond_1 = function() return (get(FAILURE_DISPLAY_FWC_1) == 1 or get(AC_ess_bus_pwrd) == 0) and (get(FAILURE_DISPLAY_FWC_2) == 1 or get(AC_bus_2_pwrd) == 0) end,
+    },
+    {
+     text = "SDAC", nr = 2,
+     cond_1 = function() return get(FAILURE_DISPLAY_SDAC_1) == 1 or get(AC_ess_bus_pwrd) == 0 end,
+     cond_2 = function() return get(FAILURE_DISPLAY_SDAC_2) == 1 or get(AC_bus_2_pwrd) == 0 end,
+    },
+    
+    -- HYD
+    {
+     text = "GREEN HYD", nr = 1,
+     cond_1 = function() return get(FAILURE_HYD_G_R_overheat) == 1 or get(Hydraulic_G_press) < 1450 or get(Hydraulic_G_qty) == 0 end,
+    },
+    {
+     text = "BLUE HYD", nr = 1,
+     cond_1 = function() return get(FAILURE_HYD_B_R_overheat) == 1 or get(Hydraulic_B_press) < 1450 or get(Hydraulic_B_qty) == 0 end,
+    },
+    {
+     text = "YELLOW HYD", nr = 1,
+     cond_1 = function() return get(FAILURE_HYD_Y_R_overheat) == 1 or get(Hydraulic_Y_press) < 1450 or get(Hydraulic_Y_qty) == 0 end,
+    },
+    {
+     text = "B ELEC PUMP", nr = 1,
+     cond_1 = function() return get(FAILURE_HYD_B_R_overheat) == 1 or get(FAILURE_HYD_B_E_overheat) == 1 or get(FAILURE_HYD_B_pump) == 1 or get(AC_bus_1_pwrd) == 0 or get(DC_ess_bus_pwrd) == 0 or get(Hydraulic_B_qty) == 0 end,
+    },
+    {
+     text = "Y ELEC PUMP", nr = 1,
+     cond_1 = function() return get(FAILURE_HYD_Y_R_overheat) == 1 or get(FAILURE_HYD_Y_E_overheat) == 1 or get(FAILURE_HYD_Y_E_pump) == 1 or get(AC_bus_1_pwrd) == 0 or get(DC_bus_2_pwrd) == 0 or get(AC_bus_2_pwrd) == 0 end,
+    },
+    {
+     text = "G ENG 1 PUMP", nr = 1,
+     cond_1 = function() return (get(Engine_1_avail) == 0 and get(All_on_ground) == 0) or get(FAILURE_HYD_G_pump) == 1 or get(FAILURE_HYD_G_R_overheat) == 1 or get(Hydraulic_G_qty) == 0 end,
+    },
+    {
+     text = "Y ENG 2 PUMP", nr = 1,
+     cond_1 = function() return (get(Engine_2_avail) == 0 and get(All_on_ground) == 0) or get(FAILURE_HYD_Y_pump) == 1 or get(FAILURE_HYD_Y_R_overheat) == 1 or get(Hydraulic_Y_qty) == 0 end,
+    },
+    {
+     text = "PTU", nr = 1,
+     cond_1 = function() return get(FAILURE_HYD_PTU) == 1 or get(FAILURE_HYD_G_R_overheat) == 1 or get(FAILURE_HYD_Y_R_overheat) == 1 or ((get(Hydraulic_Y_press) < 1450 or get(Hydraulic_Y_qty) == 0) and (get(Hydraulic_G_press) < 1450 or get(Hydraulic_G_qty) == 0)) or get(DC_bus_2_pwrd) == 0 end,
+    },
+    {
+     text = "CARGO DOOR", nr = 1,
+     cond_1 = function() return get(Hydraulic_Y_press) < 1450 or get(Hydraulic_Y_qty) == 0 end,
+    },
+    {
+     text = "RAT", nr = 1,
+     cond_1 = function() return get(FAILURE_HYD_RAT) == 1 end,
+    },
+
+    -- GEAR
+    {
+     text = "N/W STEER", nr = 1,
+     cond_1 = function() return get(FAILURE_GEAR_NWS) == 1 or get(Nosewheel_Steering_working) == 0 or (get(FAILURE_GEAR_LGIU1) == 1  and get(FAILURE_GEAR_LGIU2) == 1 ) end,
+    },
+    {
+     text = "LGCIU", nr = 2,
+     cond_1 = function() return get(FAILURE_GEAR_LGIU1) == 1 or get(DC_ess_bus_pwrd) == 0 end,
+     cond_2 = function() return get(FAILURE_GEAR_LGIU2) == 1 or get(DC_bus_2_pwrd) == 0 end,
+    },
+    
+    -- GPWS
+    {
+     text = "GPWS", nr = 1,
+     cond_1 = function() return get(FAILURE_GPWS) == 1 or get(FAILURE_GEAR_LGIU1) == 1 or get(AC_bus_1_pwrd) == 0 end,
+    },
+    {
+     text = "GPWS TERR", nr = 1,
+     cond_1 = function() return get(FAILURE_GPWS_TERR) == 1 end,
+    },
 }
 
 

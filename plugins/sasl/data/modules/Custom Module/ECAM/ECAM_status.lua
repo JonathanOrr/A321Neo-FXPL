@@ -304,6 +304,11 @@ function draw_sts_page()
 
     sasl.gl.drawTexture(ECAM_STS_bgd_img, 0, 0, 900, 900, {1,1,1})
 
+    if get(FAILURE_DISPLAY_FWC_1) == 1 and get(FAILURE_DISPLAY_FWC_2) == 1 then
+        sasl.gl.drawText(Font_AirbusDUL, 50, 450, "STATUS UNAVAIL", 28, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
+        return
+    end
+
     set(Ecam_arrow_overflow, 0)
 
     local left_messages = prepare_sts_page_left()
