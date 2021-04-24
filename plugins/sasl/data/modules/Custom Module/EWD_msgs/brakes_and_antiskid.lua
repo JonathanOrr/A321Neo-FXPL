@@ -456,7 +456,7 @@ MessageGroup_BRAKE_NORM_ALTN_FAULT = {
 -- CAUTION: BRK Y LO PR
 ----------------------------------------------------------------------------------------------------
 
-MessageGroup_BRAKE_NORM_ALTN_FAULT = {
+MessageGroup_BRAKE_Y_LO_PR = {
 
     shown = false,
 

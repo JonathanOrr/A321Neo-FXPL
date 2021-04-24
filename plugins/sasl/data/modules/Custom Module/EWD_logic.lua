@@ -96,6 +96,7 @@ local left_messages_list = {
     MessageGroup_NW_STRG_FAULT,
     MessageGroup_BRAKE_NORM_FAULT,
     MessageGroup_BRAKE_ALTN_FAULT,
+    MessageGroup_BRAKE_Y_LO_PR,
     MessageGroup_TIRE_LO_PR,
     MessageGroup_LGCIU_FAULT,
     MessageGroup_BSCU_FAULT,
