@@ -185,8 +185,6 @@ local function draw_oans_airport_bounds(data, functions, apt, apt_details)
         end
         ----- CACHING END
 
-        data.oans_cache.is_visible = is_polygon_visible(data.oans_cache.apt_bounds[i], size, data.oans_cache.diff_x, data.oans_cache.diff_y)
-
         local curr_nr_points = #data.oans_cache.apt_bounds[i]
         for k=1,curr_nr_points do
             if k % 6 == 0 then  -- For each triangle

@@ -395,9 +395,9 @@ local function draw_common_oans_info(data)
         sasl.gl.drawText(Font_AirbusDUL, size[1]-30, size[2]-40, oans_airport.name, 32, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
         sasl.gl.drawText(Font_AirbusDUL, size[1]-30, size[2]-75, oans_airport.id, 32, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
         
-        local distance = get_distance_nm(data.inputs.plane_coords_lat, data.inputs.plane_coords_lon, oans_airport.lat, oans_airport.lon)
-        if distance >= 5 then
-            sasl.gl.drawText(Font_AirbusDUL, size[1]-70, size[2]-110, math.floor(distance), 32, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        data.oans.displayed_apt.distance = get_distance_nm(data.inputs.plane_coords_lat, data.inputs.plane_coords_lon, oans_airport.lat, oans_airport.lon)
+        if data.oans.displayed_apt.distance >= 5 then
+            sasl.gl.drawText(Font_AirbusDUL, size[1]-70, size[2]-110, math.floor(data.oans.displayed_apt.distance), 32, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
             sasl.gl.drawText(Font_AirbusDUL, size[1]-30, size[2]-110, "NM", 28, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
         end
     end
@@ -475,7 +475,11 @@ local function draw_next_waypoint_info(data)
     if data.config.mode == ND_MODE_ILS or data.config.mode == ND_MODE_VOR then
         return -- Not present in these modes
     end
-    
+
+    if data.config.range <= ND_RANGE_ZOOM_2 then
+        return -- Not present in OANS mode
+    end
+
     if #FMGS_sys.fpln.active == 0 or FMGS_sys.fpln.active[FMGS_sys.fpln.next_waypoint] == nil then
         return
     end
