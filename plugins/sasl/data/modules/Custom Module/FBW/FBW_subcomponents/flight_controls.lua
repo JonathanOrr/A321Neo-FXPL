@@ -77,7 +77,7 @@ function update()
             Elevator_control(get(FBW_pitch_output), false)
             Slats_flaps_calc_and_control()
             THS_control(Augmented_pitch_trim_ratio, get(Human_pitch_trim))
-            Rudder_control(get(FBW_yaw_output), 2, false, get(Human_rudder_trim), get(Resetting_rudder_trim))
+            Rudder_control(get(FBW_yaw_output), get(Human_rudder_trim), get(Resetting_rudder_trim))
             Up_shit_creek(last_total_failure)
             last_total_failure = get(FAILURE_FCTL_UP_SHIT_CREEK)
         end

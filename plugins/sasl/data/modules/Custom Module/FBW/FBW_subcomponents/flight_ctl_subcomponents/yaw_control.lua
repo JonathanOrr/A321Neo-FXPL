@@ -34,7 +34,7 @@ function Reset_rudder_trim(phase)
     end
 end
 
-function Rudder_control(yaw_input, fbw_current_law, is_in_auto_flight, trim_input, resetting_trim)
+function Rudder_control(yaw_input, trim_input, resetting_trim)
     --[[in auto flight the rudder trim is controlled by the FMGC, otherwise the pilot can change the value by using the knob on the center pedestal
 
     reversions
@@ -55,7 +55,12 @@ function Rudder_control(yaw_input, fbw_current_law, is_in_auto_flight, trim_inpu
     local rudder_trim_speed = 1
     local rudder_trim_reset_speed = 1.5
     --the proportion is the same no matter the limits, hence at higher speed you'll reach the limit with less deflection
-    local rudder_travel_target = yaw_input * max_rudder_def
+    local rudder_travel_target_table = {
+        {-1, -max_rudder_def},
+        {0,  get(Rudder_trim_actual_angle)},
+        {1,  max_rudder_def},
+    }
+    local rudder_travel_target = Table_interpolate(rudder_travel_target_table, yaw_input)
 
     --RUDDER LIMITS--
     if get(Force_full_rudder_limit) ~= 1 then
@@ -109,10 +114,6 @@ function Rudder_control(yaw_input, fbw_current_law, is_in_auto_flight, trim_inpu
     --rudder failure--
     rudder_speed = Math_rescale(0, 0, 1450, rudder_speed, get(Hydraulic_G_press) + get(Hydraulic_B_press) + get(Hydraulic_Y_press)) * (1 - get(FAILURE_FCTL_RUDDER_MECH))
 
-    --limit rudder travel target--
-    rudder_travel_target = Math_clamp(rudder_travel_target, -get(Rudder_travel_lim) - get(Rudder_trim_actual_angle), get(Rudder_travel_lim) - get(Rudder_trim_actual_angle))
-
     --rudder position calculation--
-    set(Augmented_rudder_angle, Set_anim_value_linear_range(get(Augmented_rudder_angle), rudder_travel_target, -max_rudder_def, max_rudder_def, rudder_speed, 5))
-    set(Rudder, Math_clamp(get(Rudder_trim_actual_angle) + get(Augmented_rudder_angle), -get(Rudder_travel_lim), get(Rudder_travel_lim)))
+    set(Rudder, Set_anim_value_linear_range(get(Rudder), rudder_travel_target, -get(Rudder_travel_lim), get(Rudder_travel_lim), rudder_speed, 5))
 end

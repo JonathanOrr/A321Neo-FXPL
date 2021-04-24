@@ -654,7 +654,6 @@ Human_rudder_trim = createGlobalPropertyi("a321neo/dynamics/FBW/controls/human_r
 Rudder_trim_target_angle = createGlobalPropertyf("a321neo/dynamics/FBW/controls/rudder_trim_target_angle", 0, false, true, false)-- left -20 degrees, right 20 degrees
 Rudder_trim_actual_angle = createGlobalPropertyf("a321neo/dynamics/FBW/controls/rudder_trim_actual_angle", 0, false, true, false)-- left -20 degrees, right 20 degrees
 Resetting_rudder_trim = createGlobalPropertyi("a321neo/dynamics/FBW/controls/resetting_rudder_trim", 0, false, true, false)-- 0 no action, 1 resetting
-Augmented_rudder_angle = createGlobalPropertyf("a321neo/dynamics/FBW/controls/augmented_rudder_angle", 0, false, true, false)--the angle of deviation from the position of the rudder trim angle
 Rudder = globalProperty("sim/flightmodel/controls/vstab1_rud1def")--rudder 30 deg left -30 deg right
 Rudder_travel_lim = createGlobalPropertyf("a321neo/dynamics/FBW/control_limitations/rudder_travel_limit", 25, false, true, false)--25 degrees in augmented mode, 30 degrees in mechanical mode
 Max_SI_demand_lim = createGlobalPropertyf("a321neo/dynamics/FBW/control_limitations/max_SI_demand_lim", 25, false, true, false)--from 15 degrees to 2 degrees
