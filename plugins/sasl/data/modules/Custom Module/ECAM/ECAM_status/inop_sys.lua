@@ -138,8 +138,16 @@ local inop_systems_desc = {
     -- PRESS
     {
      text = "CAB PR", nr = 2,
-     cond_1 = function() return get(FAILURE_PRESS_SYS_1) == 1 or get(DC_ess_bus_pwrd) == 0 end,
-     cond_2 = function() return get(FAILURE_PRESS_SYS_2) == 1 or get(DC_bus_2_pwrd) == 0 end,
+     cond_1 = function() return get(FAILURE_PRESS_SYS_1) == 1 or get(DC_ess_bus_pwrd) == 0 
+              or ((ADIRS_sys[ADIRS_1].adr_status == ADR_STATUS_FAULT or ADIRS_sys[ADIRS_1].adr_status == ADR_STATUS_OFF) 
+              and (ADIRS_sys[ADIRS_2].adr_status == ADR_STATUS_FAULT or ADIRS_sys[ADIRS_2].adr_status == ADR_STATUS_OFF) 
+              and (ADIRS_sys[ADIRS_3].adr_status == ADR_STATUS_FAULT or ADIRS_sys[ADIRS_3].adr_status == ADR_STATUS_OFF)) 
+    end,
+     cond_2 = function() return get(FAILURE_PRESS_SYS_2) == 1 or get(DC_bus_2_pwrd) == 0
+              or ((ADIRS_sys[ADIRS_1].adr_status == ADR_STATUS_FAULT or ADIRS_sys[ADIRS_1].adr_status == ADR_STATUS_OFF) 
+              and (ADIRS_sys[ADIRS_2].adr_status == ADR_STATUS_FAULT or ADIRS_sys[ADIRS_2].adr_status == ADR_STATUS_OFF) 
+              and (ADIRS_sys[ADIRS_3].adr_status == ADR_STATUS_FAULT or ADIRS_sys[ADIRS_3].adr_status == ADR_STATUS_OFF))
+     end,
     },
 
     -- DMC
@@ -167,7 +175,7 @@ local inop_systems_desc = {
     },
     {
      text = "GALY/CAB", nr = 1,
-     cond_1 = function() return get(Gally_pwrd) == 1 and PB.ovhd.elec_galley.status_bottom == false end,
+     cond_1 = function() return get(Gally_pwrd) == 0 and PB.ovhd.elec_galley.status_bottom == false end,
     },
     {
      text = "MAIN GALLEY", nr = 1,
@@ -185,6 +193,10 @@ local inop_systems_desc = {
     {
      text = "EMER GEN", nr = 1,
      cond_1 = function() return get(Hydraulic_B_qty) < 0.1 or get(Hydraulic_RAT_status) == 2 or get(FAILURE_HYD_RAT) == 1 or get(FAILURE_ELEC_GEN_EMER) == 1 end,
+    },
+    {
+     text = "STAT.INV", nr = 1,
+     cond_1 = function() return get(FAILURE_ELEC_STATIC_INV) == 1 or get(FAILURE_ELEC_battery_1) == 1 end,
     },
 
     -- F/CTL
@@ -320,11 +332,96 @@ local inop_systems_desc = {
     -- GPWS
     {
      text = "GPWS", nr = 1,
-     cond_1 = function() return get(FAILURE_GPWS) == 1 or get(FAILURE_GEAR_LGIU1) == 1 or get(AC_bus_1_pwrd) == 0 end,
+     cond_1 = function() return get(FAILURE_GPWS) == 1 or get(FAILURE_GEAR_LGIU1) == 1 or get(AC_bus_1_pwrd) == 0 or ADIRS_sys[ADIRS_1].adr_status == ADR_STATUS_FAULT or ADIRS_sys[ADIRS_1].adr_status == ADR_STATUS_OFF end,
     },
     {
      text = "GPWS TERR", nr = 1,
-     cond_1 = function() return get(FAILURE_GPWS_TERR) == 1 end,
+     cond_1 = function() return get(FAILURE_GPWS_TERR) == 1 end
+    },
+    
+    -- NAV
+    {
+     text = "ADR", nr = 3,
+     cond_1 = function() return get(FAILURE_ADR[1]) == 1 or (get(AC_ess_bus_pwrd) == 0 and get(HOT_bus_2_pwrd) == 0) end,
+     cond_2 = function() return get(FAILURE_ADR[2]) == 1 or (get(AC_bus_2_pwrd) == 0 and get(HOT_bus_2_pwrd) == 0) end,
+     cond_3 = function() return get(FAILURE_ADR[3]) == 1 or (get(AC_bus_1_pwrd) == 0 and get(HOT_bus_1_pwrd) == 0) end,
+    },
+    {
+     text = "CAPT AOA", nr = 1,
+     cond_1 = function() return get(FAILURE_SENSOR_AOA_CAPT) == 1 end,
+    },
+    {
+     text = "F/O AOA", nr = 1,
+     cond_1 = function() return get(FAILURE_SENSOR_AOA_FO) == 1 end,
+    },
+    {
+     text = "STBY AOA", nr = 1,
+     cond_1 = function() return get(FAILURE_SENSOR_AOA_STBY) == 1 end,
+    },
+    {
+     text = "TCAS", nr = 1,
+     cond_1 = function() return get(FAILURE_TCAS) == 1 or get(AC_bus_1_pwrd) == 0 or
+            (
+            (get(FAILURE_ATC_1) == 1 or get(DC_shed_ess_pwrd) == 0) and
+            (get(FAILURE_ATC_2) == 1 or get(AC_bus_2_pwrd) == 0)
+            ) or
+            (get(FAILURE_IR[1]) == 1 or (get(AC_ess_bus_pwrd) == 0 and get(HOT_bus_2_pwrd) == 0))
+     end,
+    },
+    {
+     text = "ATC/XPDR", nr = 2,
+     cond_1 = function() return get(FAILURE_ATC_1) == 1 or get(AC_ess_shed_pwrd) == 0 
+              or
+              (get(FAILURE_IR[1]) == 1 or (get(AC_ess_bus_pwrd) == 0 and get(HOT_bus_2_pwrd) == 0))
+     end,
+     cond_2 = function() return get(FAILURE_ATC_2) == 1 or get(AC_bus_2_pwrd) == 0
+              or
+              (get(FAILURE_IR[2]) == 1 or (get(AC_bus_2_pwrd) == 0 and get(HOT_bus_2_pwrd) == 0))
+     end,
+    },
+    {
+     text = "GPS", nr = 2,
+     cond_1 = function() return get(FAILURE_GPS_1) == 1 or get(AC_ess_shed_pwrd) == 0 end,
+     cond_2 = function() return get(FAILURE_GPS_2) == 1 or get(AC_bus_2_pwrd) == 0 end,
+    },
+    {
+     text = "ILS", nr = 2,
+     cond_1 = function() return get(FAILURE_RADIO_ILS_1) == 1 or get(AC_ess_shed_pwrd) == 0 end,
+     cond_2 = function() return get(FAILURE_RADIO_ILS_2) == 1 or get(AC_bus_2_pwrd) == 0 end,
+    },
+    {
+     text = "ADR", nr = 3,
+     cond_1 = function() return get(FAILURE_IR[1]) == 1 or (get(AC_ess_bus_pwrd) == 0 and get(HOT_bus_2_pwrd) == 0) end,
+     cond_2 = function() return get(FAILURE_IR[2]) == 1 or (get(AC_bus_2_pwrd) == 0 and get(HOT_bus_2_pwrd) == 0) end,
+     cond_3 = function() return get(FAILURE_IR[3]) == 1 or (get(AC_bus_1_pwrd) == 0 and get(HOT_bus_1_pwrd) == 0) end,
+    },
+    
+    -- FIRE etc.
+    {
+     text = "AFT CRG VENT", nr = 1,
+     cond_1 = function() return get(FAILURE_FIRE_CARGO_AFT) == 1 end,
+    },
+    {
+     text = "AFT CRG HEAT", nr = 1,
+     cond_1 = function() return get(FAILURE_FIRE_CARGO_AFT) == 1 end,
+    },
+    {
+     text = "AVNCS VENT", nr = 1,
+     cond_1 = function() return get(FAILURE_AVIONICS_INLET) == 1 or get(FAILURE_AVIONICS_OUTLET) == 1 end,
+    },
+    {
+     text = "VENT BLOWER", nr = 1,
+     cond_1 = function() return get(FAILURE_AIRCOND_VENT_BLOWER) == 1 or get(AC_bus_1_pwrd) == 0 or get(DC_bus_1_pwrd) == 0 end,
+    },
+    {
+     text = "VENT EXTRACT", nr = 1,
+     cond_1 = function() return get(FAILURE_AIRCOND_VENT_EXTRACT) == 1 or get(AC_bus_2_pwrd) == 0 or get(DC_shed_ess_pwrd) == 0 end,
+    },
+    
+    -- ANTI-ICE
+    {
+     text = "WING ANTI ICE", nr = 1,
+     cond_1 = function() return get(FAILURE_AI_Wing_L_valve_stuck) == 1 or get(FAILURE_AI_Wing_L_valve_stuck) == 1 end,
     },
 }
 
