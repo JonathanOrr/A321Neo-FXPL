@@ -347,13 +347,13 @@ local function update_oil_stuffs()
     -- ENG 1 - TEMP
     if get(Engine_1_avail) == 1 then
         local n2_value = get(Eng_1_N2)
-        local temp = Math_rescale(60, 65, ENG.data.max_n2, ENG.data.oil.temp_max_mct, n2_value) + random_pool_2 * 5
-        Set_dataref_linear_anim(Eng_1_OIL_temp, temp, -50, 250, 1)
+        local temp = Math_rescale(60, 65, ENG.data.max_n2, ENG.data.oil.temp_max_mct, n2_value) + random_pool_2 * 5 + get(FAILURE_ENG_OIL_HI_TEMP, 1) * 70
+        Set_dataref_linear_anim(Eng_1_OIL_temp, temp, -50, 250, 2)
     else
         -- During startup
         local n2_value = math.max(10,get(Eng_1_N2))
         local temp = Math_rescale(10, get(OTA), 70, 75, n2_value)
-        Set_dataref_linear_anim(Eng_1_OIL_temp, temp, -50, 250, 1)
+        Set_dataref_linear_anim(Eng_1_OIL_temp, temp, -50, 250, 2)
     end
     
     -- ENG 2 - PRESS
@@ -375,7 +375,7 @@ local function update_oil_stuffs()
     -- ENG 2 - TEMP
     if get(Engine_2_avail) == 1 then
         local n2_value = get(Eng_2_N2)
-        local temp = Math_rescale(60, 65, ENG.data.max_n2, ENG.data.oil.temp_max_mct, n2_value) + random_pool_1 * 5
+        local temp = Math_rescale(60, 65, ENG.data.max_n2, ENG.data.oil.temp_max_mct, n2_value) + random_pool_1 * 5 + get(FAILURE_ENG_OIL_HI_TEMP, 2) * 70
         Set_dataref_linear_anim(Eng_2_OIL_temp, temp, -50, 250, 1)
     else
         -- During startup
