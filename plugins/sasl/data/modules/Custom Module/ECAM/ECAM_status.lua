@@ -87,6 +87,9 @@ function draw_sts_page_left(messages)
         if visible_left_offset <= default_visible_left_offset then
             msg.draw(visible_left_offset)
         end
+        if not msg.bottom_extra_padding then
+            msg.bottom_extra_padding = 0
+        end
         visible_left_offset = visible_left_offset - 35 - msg.bottom_extra_padding
     end
 end
@@ -95,30 +98,67 @@ end
 function prepare_sts_page_left()
     x_left_pos        = size[1]/2-410
 
-    messages = {}
+    local messages = {}
     
+
+
     -- SPEED LIMIT    
-    max_knots, max_mach = ecam_sts:get_max_speed()
-    if max_knots ~= 0 then
-        table.insert(messages, {
-            bottom_extra_padding = 0,
-            draw = function(top_position)
-                sasl.gl.drawText(Font_AirbusDUL, x_left_pos, top_position, "MAX SPD............".. max_knots .." / ." .. max_mach, 28, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
-            end
-            }
+    if get(is_RAT_out) == 1 then
+        table.insert(messages, { draw = function(top_position)
+                sasl.gl.drawText(Font_AirbusDUL, x_left_pos, top_position, "MIN RAT SPEED.........140 KT", 28, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+            end }
         )
     end
-    
+
+    max_knots, max_mach = ecam_sts:get_max_speed()
+    if max_knots ~= 0 then
+        table.insert(messages, { draw = function(top_position)
+                sasl.gl.drawText(Font_AirbusDUL, x_left_pos, top_position, "MAX SPD............".. max_knots .." / ." .. max_mach, 28, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+            end }
+        )
+    end
+
     -- FLIGHT LEVEL LIMIT
     max_fl = ecam_sts:get_max_fl()
-    if max_fl ~= 0 then
-        table.insert(messages, {
-            bottom_extra_padding = 0,
-            draw = function(top_position)
+    if max_fl ~= 0 and max_fl ~= 999 then
+        table.insert(messages, { draw = function(top_position)
                 sasl.gl.drawText(Font_AirbusDUL, x_left_pos, top_position, "MAX FL.............".. max_fl .." / MEA", 28, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
-            end
-            }
+            end }
         )
+    end
+
+    if get(Brakes_mode) ~= 1 and get(Brakes_mode) ~= 4 then
+        table.insert(messages, { draw = function(top_position)
+                sasl.gl.drawText(Font_AirbusDUL, x_left_pos, top_position, "MAX BRK PR.........1 000 PSI", 28, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+            end }
+        )
+    end
+
+    if get(All_on_ground) == 0 and 
+            (get(FBW_total_control_law) == FBW_DIRECT_LAW 
+            or get(FAILURE_FCTL_LELEV) == 1 
+            or get(FAILURE_FCTL_RELEV) == 1 
+            or get(Engine_1_avail) == 0 
+            or get(Engine_2_avail) == 0)
+            or get(FAILURE_FCTL_THS_MECH) == 1
+            or get(FAILURE_FCTL_THS) == 1
+            or (get(Hydraulic_Y_press) < 1450 and get(Hydraulic_G_press) < 1450)
+            or (get(Hydraulic_Y_press) < 1450 and get(Hydraulic_B_press) < 1450)
+            or (get(Hydraulic_B_press) < 1450 and get(Hydraulic_G_press) < 1450)
+             then
+        table.insert(messages, { draw = function(top_position)
+                sasl.gl.drawText(Font_AirbusDUL, x_left_pos, top_position, "MANEUVER WITH CARE", 28, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+            end }
+        )
+    end
+
+    if get(Fuel_engine_gravity) == 1 then
+        table.insert(messages, { draw = function(top_position)
+                sasl.gl.drawText(Font_AirbusDUL, x_left_pos, top_position, "FUEL GRVTY FEED", 28, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+            end })
+        table.insert(messages, { draw = function(top_position)
+                sasl.gl.drawText(Font_AirbusDUL, x_left_pos, top_position, "AVOID NEGATIVE G FACTOR", 28, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+            end })
     end
     
     -- APPR PROC
@@ -133,12 +173,9 @@ function prepare_sts_page_left()
         )
         
         for i,msg in ipairs(appr_proc) do
-            table.insert(messages, {
-                bottom_extra_padding = 0,
-                draw = function(top_position)
+            table.insert(messages, { draw = function(top_position)
                     sasl.gl.drawText(Font_AirbusDUL, x_left_pos, top_position, "   " .. msg.text, 28, false, false, TEXT_ALIGN_LEFT, msg.color)
-                end
-                }
+                end }
             )
         end
         
@@ -155,12 +192,9 @@ function prepare_sts_page_left()
     if #procedures > 0 then
        
         for i,msg in ipairs(procedures) do
-            table.insert(messages, {
-                bottom_extra_padding = 0,
-                draw = function(top_position)
+            table.insert(messages, { draw = function(top_position)
                     sasl.gl.drawText(Font_AirbusDUL, x_left_pos, top_position, msg.text, 28, false, false, TEXT_ALIGN_LEFT, msg.color)
-                end
-                }
+                end }
             )
         end
         
@@ -177,12 +211,9 @@ function prepare_sts_page_left()
      if #information > 0 then
        
         for i,msg in ipairs(information) do
-            table.insert(messages, {
-                bottom_extra_padding = 0,
-                draw = function(top_position)
+            table.insert(messages, { draw = function(top_position)
                     sasl.gl.drawText(Font_AirbusDUL, x_left_pos, top_position, msg, 28, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
-                end
-                }
+                end }
             )
         end
         
@@ -207,13 +238,10 @@ function prepare_sts_page_left()
         )
         
         for i,msg in ipairs(cancelled_cautions) do
-            table.insert(messages, {
-                bottom_extra_padding = 0,
-                draw = function(top_position)
+            table.insert(messages, { draw = function(top_position)
                     drawUnderlineText(Font_AirbusDUL, x_left_pos, top_position, msg.title, 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
                     sasl.gl.drawText(Font_AirbusDUL, x_left_pos, top_position, msg.text, 28, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
-                end
-                }
+                end }
             )
         end
     end

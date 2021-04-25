@@ -253,6 +253,8 @@ local function update_pump_dr()
     if eng_2_fw_valve_position == 0 then
         set(Fuel_tank_selector_eng_2, 0)    -- Emergency cutoff fuel    
     end
+    
+    set(Fuel_engine_gravity, (eng1_fuel_status == 1 or eng2_fuel_status == 2) and 1 or 0)
 
 end
 

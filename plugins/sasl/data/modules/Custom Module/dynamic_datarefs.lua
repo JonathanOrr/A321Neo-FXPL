@@ -706,6 +706,7 @@ Fuel_on_takeoff = createGlobalPropertyf("a321neo/dynamics/fuel/fot", 0, false, t
 Fuel_wing_L_overflow = createGlobalPropertyi("a321neo/dynamics/fuel/fuel_overflow_L", 0, false, true, false) -- 1: overflow, 0:normal
 Fuel_wing_R_overflow = createGlobalPropertyi("a321neo/dynamics/fuel/fuel_overflow_R", 0, false, true, false) -- 1: overflow, 0:normal
 
+Fuel_engine_gravity =  createGlobalPropertyi("a321neo/dynamics/fuel/engine_gravity", 0, false, true, false) -- 1: at least one engine is on gravity fuel
 
 -- Anti-ICE
 AI_wing_L_operating = createGlobalPropertyi("a321neo/dynamics/anti_ice/wing_L_operating", 0, false, true, false) -- 0: pause, 1: working

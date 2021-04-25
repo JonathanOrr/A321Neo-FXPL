@@ -7,26 +7,26 @@ local function put_inop_sys_msg_2(messages, dr_1, dr_2, t_1, t_2, title)
     elseif dr_2 then
         return ( title .. " " .. t_2)
     end
-    return "XXX"    -- Shold not happen
+    return "UNKWN"    -- Shold not happen
 end
 
 local function put_inop_sys_msg_3(messages, dr_1, dr_2, dr_3, title)
     if dr_1 and dr_2 and dr_3 then
         return ( title .. " 1 + 2 + 3")
-    elseif dr_1 == 0 and dr_2 == 0 then
+    elseif dr_1 and dr_2 then
         return ( title .. " 1 + 2")
-    elseif dr_1 == 0 and dr_3 == 0 then
+    elseif dr_1  and dr_3 then
         return ( title .. " 1 + 3")
-    elseif dr_2 == 0 and dr_3 == 0 then
+    elseif dr_2 and dr_3 then
         return ( title .. " 2 + 3")
-    elseif dr_1 == 0 then
+    elseif dr_1 then
         return ( title .. " 1")
-    elseif dr_2 == 0 then
+    elseif dr_2 then
         return ( title .. " 2")
-    elseif dr_3 == 0 then
+    elseif dr_3 then
         return ( title .. " 3")
     end
-    return "XXX"    -- Shold not happen
+    return "UNKWN"    -- Shold not happen
 end
 
 local inop_systems_desc = {
@@ -198,6 +198,14 @@ local inop_systems_desc = {
      text = "STAT.INV", nr = 1,
      cond_1 = function() return get(FAILURE_ELEC_STATIC_INV) == 1 or get(FAILURE_ELEC_battery_1) == 1 end,
     },
+
+    -- ENG
+    {
+     text = "REVERSER", nr = 2,
+     cond_1 = function() return get(FAILURE_ENG_REV_FAULT, 1) == 1 or get(Eng_1_FADEC_powered) == 0 or (get(FAILURE_ENG_FADEC_CH1, 1) == 1 and get(FAILURE_ENG_FADEC_CH2, 1) == 1) or get(Hydraulic_G_press) < 1000 end,
+     cond_2 = function() return get(FAILURE_ENG_REV_FAULT, 2) == 1 or get(Eng_2_FADEC_powered) == 0 or (get(FAILURE_ENG_FADEC_CH1, 2) == 1 and get(FAILURE_ENG_FADEC_CH2, 2) == 1) or get(Hydraulic_Y_press) < 1000 end,
+    },
+    
 
     -- F/CTL
     {
