@@ -340,6 +340,9 @@ local failures_data = {
             {name="X BLEED VLV\nSTUCK", status=false, dataref=FAILURE_BLEED_XBLEED_VALVE_STUCK },
             {name="PACK 1 VLV\nSTUCK", status=false, dataref=FAILURE_BLEED_PACK_1_VALVE_STUCK },
             {name="PACK 2 VLV\nSTUCK", status=false, dataref=FAILURE_BLEED_PACK_2_VALVE_STUCK },
+            {name="PACK 1 REG\nFAULT", status=false, dataref=FAILURE_BLEED_PACK_1_REGUL_FAULT },
+            {name="PACK 2 REG\nFAULT", status=false, dataref=FAILURE_BLEED_PACK_2_REGUL_FAULT },
+            
             {name="BMC 1\nFAIL", status=false, dataref=FAILURE_BLEED_BMC_1 },
             {name="BMC 2\nFAIL", status=false, dataref=FAILURE_BLEED_BMC_2 },
             {name="LEAK\nAPU", status=false, dataref=FAILURE_BLEED_APU_LEAK },
