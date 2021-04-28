@@ -275,15 +275,15 @@ local function update_datarefs()
     pb_set(PB.ovhd.ac_bleed_1, not eng_bleed_switch[1], cond_eng1_bleed_fail)
     pb_set(PB.ovhd.ac_bleed_2, not eng_bleed_switch[2], cond_eng2_bleed_fail)
     pb_set(PB.ovhd.ac_bleed_apu, apu_bleed_switch, get(FAILURE_BLEED_APU_VALVE_STUCK) == 1 or (get(FAILURE_BLEED_APU_LEAK) == 1 and apu_bleed_valve_pos))
-    pb_set(PB.ovhd.ac_hot_air,  not cabin_hot_air, false) -- TODO FAILURE
+    pb_set(PB.ovhd.ac_hot_air,  not cabin_hot_air, get(Aircond_injected_flow_temp,1) > 80 or get(Aircond_injected_flow_temp,2) > 80 or get(Aircond_injected_flow_temp,3) > 80)
     pb_set(PB.ovhd.ac_pack_1, not pack_valve_switch[1], false) -- TODO FAILURE
     pb_set(PB.ovhd.ac_pack_2, not pack_valve_switch[2], false) -- TODO FAILURE
 
     pb_set(PB.ovhd.ac_ram_air, get(Emer_ram_air) == 1, false) -- RAM air button does not have fault
     pb_set(PB.ovhd.ac_econ_flow, econ_flow_switch, false) -- ECON FLOW air button does not have fault
 
-    pb_set(PB.ovhd.cargo_hot_air, not cargo_hot_air, false) -- TODO FAILURE
-    pb_set(PB.ovhd.cargo_aft_isol, cargo_isol_valve, get(Fire_cargo_aft_smoke_detected) == 1) -- TODO FAILURE
+    pb_set(PB.ovhd.cargo_hot_air, not cargo_hot_air, get(Aircond_injected_flow_temp,4) > 80)
+    pb_set(PB.ovhd.cargo_aft_isol, cargo_isol_valve, get(Fire_cargo_aft_smoke_detected) == 1 or get(FAILURE_AIRCOND_ISOL_CARGO_IN_STUCK) == 1 or get(FAILURE_AIRCOND_ISOL_CARGO_OUT_STUCK) == 1)
 
     pb_set(PB.ovhd.press_ditching, ditching_switch, false)
     
@@ -344,15 +344,15 @@ end
 
 local function update_bleed_temperatures()
     
-    local eng_1_temp_fail = get(FAILURE_BLEED_ENG_1_hi_temp) * 100
-    local eng_2_temp_fail = get(FAILURE_BLEED_ENG_2_hi_temp) * 100
+    local eng_1_temp_fail = get(FAILURE_BLEED_ENG_1_hi_temp) * 200
+    local eng_2_temp_fail = get(FAILURE_BLEED_ENG_2_hi_temp) * 200
     
     --bleed temp--
     if bleed_pressure[1] > 4 then--left side has bleed air
         if not apu_bleed_valve_pos then
-            set(L_bleed_temp, Set_anim_value(get(L_bleed_temp), 180 + bleed_pressure[1]/2 + math.random()*10 + eng_1_temp_fail, -100, 350, 0.2))--eng bleed with 190C
+            set(L_bleed_temp, Set_anim_value(get(L_bleed_temp), 180 + bleed_pressure[1]/2 + math.random()*10 + eng_1_temp_fail, -100, 400, 0.2))--eng bleed with 190C
         else--apu bleed
-            set(L_bleed_temp, Set_anim_value(get(L_bleed_temp), 150 + bleed_pressure[1]/2 + math.random()*3, -100, 350, 0.2))--apu bleed with 150C
+            set(L_bleed_temp, Set_anim_value(get(L_bleed_temp), 150 + bleed_pressure[1]/2 + math.random()*3, -100, 400, 0.2))--apu bleed with 150C
         end
     else
         set(L_bleed_temp, Set_anim_value(get(L_bleed_temp), get(OTA), -100, 200, 0.15))--no bleed with outside temp
@@ -360,9 +360,9 @@ local function update_bleed_temperatures()
 
     if bleed_pressure[2] > 4 then--right side has bleed air
         if not apu_bleed_valve_pos then
-            set(R_bleed_temp, Set_anim_value(get(R_bleed_temp), 180 + bleed_pressure[2]/2 + math.random()*10 + eng_2_temp_fail, -100, 350, 0.2))--eng bleed with 190C
+            set(R_bleed_temp, Set_anim_value(get(R_bleed_temp), 180 + bleed_pressure[2]/2 + math.random()*10 + eng_2_temp_fail, -100, 400, 0.2))--eng bleed with 190C
         else--apu bleed
-            set(R_bleed_temp, Set_anim_value(get(R_bleed_temp), 150 + bleed_pressure[2]/2 + math.random()*3, -100, 350, 0.2))--apu bleed with 150C
+            set(R_bleed_temp, Set_anim_value(get(R_bleed_temp), 150 + bleed_pressure[2]/2 + math.random()*3, -100, 400, 0.2))--apu bleed with 150C
         end
     else
         set(R_bleed_temp, Set_anim_value(get(R_bleed_temp), get(OTA), -100, 200, 0.15))--no bleed with outside temp

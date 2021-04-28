@@ -40,7 +40,6 @@ FBW.yaw.inputs = {
             {1,  max_SI},
         }
 
-        print(Math_clamp(Table_interpolate(SI_demand, x), -get(Max_SI_demand_lim), get(Max_SI_demand_lim)))
         return Math_clamp(Table_interpolate(SI_demand, x), -get(Max_SI_demand_lim), get(Max_SI_demand_lim))
     end
 }

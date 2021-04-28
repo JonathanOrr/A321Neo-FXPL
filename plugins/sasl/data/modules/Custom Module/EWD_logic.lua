@@ -34,6 +34,7 @@ include('EWD_msgs/gpws_tcas.lua')
 include('EWD_msgs/hydraulic.lua')
 include('EWD_msgs/misc.lua')
 include('EWD_msgs/nav.lua')
+include('EWD_msgs/packs.lua')
 include('EWD_msgs/pressurization.lua')
 include('EWD_msgs/to_ldg_memos.lua')
 
@@ -249,6 +250,14 @@ local left_messages_list = {
     MessageGroup_FWC_FAULT,
     MessageGroup_BUSS_SPD_ALT_SINGLE,
     MessageGroup_BUSS_SPD_ALT_DOUBLE,
+    
+    MessageGroup_AIRCOND_CKPT_DUCT_OVHT,
+    MessageGroup_AIRCOND_FWD_CAB_DUCT_OVHT,
+    MessageGroup_AIRCOND_AFT_CAB_DUCT_OVHT,
+    MessageGroup_AIRCOND_CARGO_DUCT_OVHT,
+    MessageGroup_AIRCOND_AFT_CARGO_VLV_STUCK,
+    MessageGroup_AIRCOND_FANS_FAULT,
+    MessageGroup_AIRCOND_TRIM_AIR_SYS_FAULT,
     
     -- Warnings
     MessageGroup_OVERSPEED,
