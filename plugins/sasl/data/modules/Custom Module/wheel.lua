@@ -412,8 +412,8 @@ end
 local function brake_with_accumulator(L,R, L_temp_degradation, R_temp_degradation)
 
     local prev_brakes = get(Wheel_brake_L) + get(Wheel_brake_R)
-    Set_dataref_linear_anim(Wheel_brake_L, L * L_temp_degradation, 0, 1, 0.5)
-    Set_dataref_linear_anim(Wheel_brake_R, R * R_temp_degradation, 0, 1, 0.5)
+    Set_dataref_linear_anim(Wheel_brake_L, L * L_temp_degradation, 0, 1, 1)
+    Set_dataref_linear_anim(Wheel_brake_R, R * R_temp_degradation, 0, 1, 1)
     
     -- We need to reduce the accumulator when brake changes
     local diff = (get(Wheel_brake_L) + get(Wheel_brake_R)) - prev_brakes
@@ -432,15 +432,15 @@ local function brake_altn(L_temp_degradation, R_temp_degradation)
     if get(Hydraulic_Y_press) >= 1450 then
         -- Ok in this case let's brake, no pressure limit, no antiskid
         
-        Set_dataref_linear_anim(Wheel_brake_L, left_brake *L_temp_degradation, 0, 1, 0.5)
-        Set_dataref_linear_anim(Wheel_brake_R, right_brake*R_temp_degradation, 0, 1, 0.5)
+        Set_dataref_linear_anim(Wheel_brake_L, left_brake *L_temp_degradation, 0, 1, 1)
+        Set_dataref_linear_anim(Wheel_brake_R, right_brake*R_temp_degradation, 0, 1, 1)
     elseif get(Brakes_accumulator) > 1 then
         -- If we don't have hydraulic, we need to use the accumulator (if any)
         brake_with_accumulator(left_brake, right_brake, L_temp_degradation, R_temp_degradation)
     else
         -- Oh no, no hyd pressure to brake
-        Set_dataref_linear_anim(Wheel_brake_L, 0, 0, 1, 0.5)
-        Set_dataref_linear_anim(Wheel_brake_R, 0, 0, 1, 0.5)
+        Set_dataref_linear_anim(Wheel_brake_L, 0, 0, 1, 1)
+        Set_dataref_linear_anim(Wheel_brake_R, 0, 0, 1, 1)
         set(Brakes_accumulator, math.max(0,get(Brakes_accumulator) - 0.01))
     end
 end
@@ -478,16 +478,18 @@ local function update_brakes()
         
     elseif get(Brakes_mode) == 3 then
         -- Alternate brake no antiskid
+        local L_brake_set = Math_clamp(left_brake_power,  0, up_limit) * L_temp_degradation
+        local R_brake_set = Math_clamp(right_brake_power, 0, up_limit) * R_temp_degradation
         
-        brake_altn(L_temp_degradation, R_temp_degradation)
+        brake_altn(L_brake_set, R_brake_set)
         
     elseif get(Brakes_mode) == 4 then
         -- Parking brake
 
         if get(Hydraulic_Y_press) >= 1450 or get(Hydraulic_G_press) >= 1450 then
             -- Brake with hydraulic active
-            Set_dataref_linear_anim(Wheel_brake_L, 1 * L_temp_degradation, 0, 1, 1)
-            Set_dataref_linear_anim(Wheel_brake_R, 1 * R_temp_degradation, 0, 1, 1)
+            Set_dataref_linear_anim(Wheel_brake_L, 1 * L_temp_degradation, 0, 1, 2)
+            Set_dataref_linear_anim(Wheel_brake_R, 1 * R_temp_degradation, 0, 1, 2)
             set(Wheel_better_pushback, 1)
         elseif get(Brakes_accumulator) > 1 then
             -- Brake on accumulator only
@@ -495,8 +497,8 @@ local function update_brakes()
             set(Wheel_better_pushback, 1)
         else
             -- uh oh, no hydraulic
-            Set_dataref_linear_anim(Wheel_brake_L, 0, 0, 1, 1)
-            Set_dataref_linear_anim(Wheel_brake_R, 0, 0, 1, 1)        
+            Set_dataref_linear_anim(Wheel_brake_L, 0, 0, 1, 2)
+            Set_dataref_linear_anim(Wheel_brake_R, 0, 0, 1, 2)        
         end
     end
 
