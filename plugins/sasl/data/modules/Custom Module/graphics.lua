@@ -217,6 +217,8 @@ local function create_integral_datarefs()
         x.cmd_up   = createCommand("a321neo/cockpit/lights/" .. x.name .. "_knob_up", "Knob UP")
         x.cmd_down = createCommand("a321neo/cockpit/lights/" .. x.name .. "_knob_dn", "Knob DOWN")
 
+        set(x.dr_pos, 0.5)
+
         sasl.registerCommandHandler (x.cmd_up,   0, function(phase) Knob_handler_up_float(phase, x.dr_pos, 0, 1, 1) end)
         sasl.registerCommandHandler (x.cmd_down, 0, function(phase) Knob_handler_down_float(phase, x.dr_pos, 0, 1, 1) end)
     end
