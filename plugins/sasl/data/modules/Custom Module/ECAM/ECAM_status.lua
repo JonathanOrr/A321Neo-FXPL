@@ -58,7 +58,7 @@ ecam_sts = {
         local spd_1, spd_2 = ecam_sts:get_max_speed()
         local max_fl = ecam_sts:get_max_fl()
 
-        return spd_1 == 0 and spd_2 == 0 and max_fl == 0 and #ecam_sts:get_appr_proc() == 0 and
+        return spd_1 == 0 and (max_fl == 0 or max_fl == 999) and #ecam_sts:get_appr_proc() == 0 and
                #ecam_sts:get_information() == 0 and #ecam_sts:get_cancelled_cautions() == 0 and
                #ecam_sts:get_inop_sys() == 0
     end,

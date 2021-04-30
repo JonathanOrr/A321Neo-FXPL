@@ -42,3 +42,41 @@ MessageGroup_GND_SPEEDBRAKES = {
 
 }
 
+
+
+--------------------------------------------------------------------------------
+-- WARNING: FLAP LVR NOT ZERO
+--------------------------------------------------------------------------------
+
+MessageGroup_FLAP_LVR_NOT_ZERO = {
+
+    shown = false,
+
+    text  = function()
+                return "F/CTL"
+            end,
+    color = function()
+                return COL_WARNING
+            end,
+
+    priority = PRIORITY_LEVEL_3,
+
+    messages = {
+        {
+            text = function() return "      FLAP LVR NOT ZERO" end,
+            color = function() return COL_WARNING end,
+            is_active = function() return true end
+        }
+    },
+
+    sd_page = nil,
+
+    is_active = function()
+        return get(Flaps_internal_config) ~= 0 and get(Capt_baro_alt_ft) > 22000
+    end,
+
+    is_inhibited = function()
+        return is_active_in({PHASE_AIRBONE})
+    end
+
+}

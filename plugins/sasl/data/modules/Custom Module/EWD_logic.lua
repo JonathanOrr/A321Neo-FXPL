@@ -157,6 +157,9 @@ local left_messages_list = {
     MessageGroup_ELEC_STATIC_INV_FAULT,
     MessageGroup_ELEC_TR_1_2_FAULT,
     MessageGroup_ELEC_TR_ESS_FAULT,
+    MessageGroup_FBW_ELAC_FAULT,
+    MessageGroup_FBW_FLAPS_FAULT,
+    MessageGroup_FBW_FLAP_SYS_12_FAULT, 
     MessageGroup_ENG_1_SHUTDOWN,
     MessageGroup_ENG_2_SHUTDOWN,
     MessageGroup_ENG_STALL,
@@ -264,6 +267,7 @@ local left_messages_list = {
     -- Warnings
     MessageGroup_OVERSPEED,
     MessageGroup_CONFIG_TAKEOFF,
+    MessageGroup_FLAP_LVR_NOT_ZERO, 
     MessageGroup_ENG_1_FIRE_GROUND,
     MessageGroup_ENG_2_FIRE_GROUND,
     MessageGroup_ENG_1_FIRE_FLIGHT,
