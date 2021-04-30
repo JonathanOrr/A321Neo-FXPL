@@ -1,6 +1,7 @@
 size = {900, 900}
 
 include("ND/subcomponents/terrain.lua")
+include("libs/geo-helpers.lua")
 
 local function leading_zeros_int(num, num_total)
     return string.format("%0" .. num_total .. "d", num) 
@@ -286,7 +287,7 @@ local function draw_common_messages_center(data)
         text = "TERR:CHANGE MODE"
         color = get(GPWS_pred_terr_pull) == 1 and ECAM_RED or ECAM_ORANGE
     elseif (get(GPWS_pred_terr) == 1 or get(GPWS_pred_terr_pull) == 1) and data.config.range > ND_RANGE_80 then
-        text = "TERR:REDUCE CHANGE"
+        text = "TERR:REDUCE RANGE"
         color = get(GPWS_pred_terr_pull) == 1 and ECAM_RED or ECAM_ORANGE
     elseif data.misc.mode_change then
         text = "MODE CHANGE"
@@ -394,9 +395,9 @@ local function draw_common_oans_info(data)
         sasl.gl.drawText(Font_AirbusDUL, size[1]-30, size[2]-40, oans_airport.name, 32, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
         sasl.gl.drawText(Font_AirbusDUL, size[1]-30, size[2]-75, oans_airport.id, 32, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
         
-        local distance = get_distance_nm(data.inputs.plane_coords_lat, data.inputs.plane_coords_lon, oans_airport.lat, oans_airport.lon)
-        if distance >= 5 then
-            sasl.gl.drawText(Font_AirbusDUL, size[1]-70, size[2]-110, math.floor(distance), 32, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        data.oans.displayed_apt.distance = get_distance_nm(data.inputs.plane_coords_lat, data.inputs.plane_coords_lon, oans_airport.lat, oans_airport.lon)
+        if data.oans.displayed_apt.distance >= 5 then
+            sasl.gl.drawText(Font_AirbusDUL, size[1]-70, size[2]-110, math.floor(data.oans.displayed_apt.distance), 32, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
             sasl.gl.drawText(Font_AirbusDUL, size[1]-30, size[2]-110, "NM", 28, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
         end
     end
@@ -464,10 +465,66 @@ local function draw_common_mora(data)
     sasl.gl.drawText(Font_ECAMfont, 25, 147, mora_text, 24, false, false, TEXT_ALIGN_LEFT, ECAM_MAGENTA)
 end
 
-function draw_test_gpws()
+local function draw_test_gpws()
     if get(GPWS_long_test_in_progress) == 1 then
         draw_terrain_test_gpws()
     end
+end
+
+local function draw_next_waypoint_info(data)
+    if data.config.mode == ND_MODE_ILS or data.config.mode == ND_MODE_VOR then
+        return -- Not present in these modes
+    end
+
+    if data.config.range <= ND_RANGE_ZOOM_2 then
+        return -- Not present in OANS mode
+    end
+
+    if #FMGS_sys.fpln.active == 0 or FMGS_sys.fpln.active[FMGS_sys.fpln.next_waypoint] == nil then
+        return
+    end
+    
+    if data.misc.map_not_avail then
+        return
+    end
+    
+    local next_wpt = FMGS_sys.fpln.active[FMGS_sys.fpln.next_waypoint]
+    
+    -- WPT Name
+    local next_wpt_name = next_wpt.id == nil and "COORDS" or next_wpt.id    -- This is possible when the waypoint is coordinates
+    sasl.gl.drawText(Font_ECAMfont, size[1]-120, size[2]-50, next_wpt.id, 28, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+    
+    -- Bearing
+    local true_bearing = get_earth_bearing(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon,next_wpt.lat,next_wpt.lon)
+    if data.inputs.is_true_heading_showed then
+        true_bearing = true_bearing - Local_magnetic_deviation()
+    end
+    sasl.gl.drawText(Font_ECAMfont, size[1]-55, size[2]-50, Round(true_bearing, 0), 28, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(Font_ECAMfont, size[1]-30, size[2]-50, data.inputs.is_true_heading_showed and "T" or "°", 28, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
+
+
+    -- Distance
+    local distance = get_distance_nm(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon,next_wpt.lat,next_wpt.lon)
+    sasl.gl.drawText(Font_ECAMfont, size[1]-80, size[2]-82, Round(distance, 0) .. ".", 28, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(Font_ECAMfont, size[1]-65, size[2]-82, math.floor((distance%1)*10, 0), 22, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(Font_ECAMfont, size[1]-20, size[2]-82, "NM", 22, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
+
+
+    if data.inputs.is_gs_valid and data.inputs.gs > 100 then
+        local dist_hours = distance / data.inputs.gs -- [nm / (nm/h)] = [h]
+        local curr_hours = get(ZULU_hours) + get(ZULU_mins) / 60 + get(ZULU_secs) / 3600
+        
+        curr_hours = (curr_hours + dist_hours) % 24
+        
+        local hours   = math.floor(curr_hours)
+        local minutes = math.floor((curr_hours % 1) * 60)
+        
+        sasl.gl.drawText(Font_ECAMfont, size[1]-80, size[2]-114, Fwd_string_fill(""..hours, "0", 2), 28, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        sasl.gl.drawText(Font_ECAMfont, size[1]-57, size[2]-112, ":", 28, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]-20, size[2]-114, Fwd_string_fill(""..minutes, "0", 2), 28, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        
+    end
+
 end
 
 function draw_common(data)
@@ -484,6 +541,7 @@ function draw_common(data)
     end
     draw_common_messages(data)
     draw_common_rwy_and_true(data)
+    draw_next_waypoint_info(data)
     draw_test_gpws()
 end
 

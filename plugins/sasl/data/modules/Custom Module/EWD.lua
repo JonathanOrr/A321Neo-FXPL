@@ -538,9 +538,9 @@ local function draw_fuel_stuffs()
 
     sasl.gl.drawText(Font_ECAMfont, 260, 330, fuel_on_board, 36, false, false, TEXT_ALIGN_RIGHT, color)
     if not_all_fuel_available then
-        sasl.gl.drawWideLine(120, size[2]/2-125, 250, size[2]/2-125, 3 , ECAM_ORANGE)
-        sasl.gl.drawWideLine(120, size[2]/2-125, 120, size[2]/2-100, 3 , ECAM_ORANGE)
-        sasl.gl.drawWideLine(250, size[2]/2-125, 250, size[2]/2-100, 3 , ECAM_ORANGE)
+        sasl.gl.drawWideLine(138, size[2]/2-125, 268, size[2]/2-125, 3 , ECAM_ORANGE)
+        sasl.gl.drawWideLine(138, size[2]/2-125, 138, size[2]/2-100, 3 , ECAM_ORANGE)
+        sasl.gl.drawWideLine(268, size[2]/2-125, 268, size[2]/2-100, 3 , ECAM_ORANGE)
     end
 end
 
@@ -551,18 +551,18 @@ local function draw_slat_flap_legend()
     local slat_misaligned = false -- TODO if misaligned (and wingip brake)
     local flap_misaligned = false -- TODO if misaligned (and wingip brake)
     local a_lock = get(Slat_alpha_locked) == 1
-    
+
     local slat_extra_text = slat_misaligned and " LOCKED" or ""
     local flap_extra_text = flap_misaligned and " LOCKED" or ""
-    
+
     if get(Slats) > 0 or slat_fail or slat_misaligned then
         sasl.gl.drawText(Font_ECAMfont, size[1]/2+70, size[2]/2-70, "S" .. slat_extra_text, 30, false, false, TEXT_ALIGN_RIGHT, (slat_fail or slat_misaligned) and ECAM_ORANGE or ECAM_WHITE)
     end
 
-    if get(Flaps_deployed_ratio) > 0 or flap_fail or flap_misaligned then    
+    if get(Flaps_deployed_angle) > 0 or flap_fail or flap_misaligned then
         sasl.gl.drawText(Font_ECAMfont, size[1]/2+290, size[2]/2-70, "F" .. flap_extra_text, 30, false, false, TEXT_ALIGN_LEFT, (flap_fail or flap_misaligned) and ECAM_ORANGE or ECAM_WHITE)
     end
-    
+
     if a_lock then
         sasl.gl.drawText(Font_ECAMfont, size[1]/2+75, size[2]/2-40, "A LOCK", 30, false, false, TEXT_ALIGN_LEFT, get(TIME) % 1 > 0.5 and ECAM_GREEN or ECAM_HIGH_GREEN)
     end

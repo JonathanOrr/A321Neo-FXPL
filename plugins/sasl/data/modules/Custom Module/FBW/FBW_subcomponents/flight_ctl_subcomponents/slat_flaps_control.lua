@@ -5,41 +5,35 @@ function Slats_flaps_calc_and_control()
     set(SFCC_1_status, 1 * (1 - get(FAILURE_FCTL_SFCC_1)) * get(DC_ess_bus_pwrd))
     set(SFCC_2_status, 1 * (1 - get(FAILURE_FCTL_SFCC_2)) * get(DC_bus_2_pwrd))
 
+    local slat_ratios = {
+        0,
+        10,
+        10,
+        14,
+        21,
+        25
+    }
+    local flap_angles = {
+        0,
+        0,
+        10,
+        14,
+        21,
+        25,
+    }
+
     --surface speeds
-    local flaps_full_deploy_time = 15
-    local slat_ratio_spd = 1 / flaps_full_deploy_time
-    local flap_ratio_spd = 1 / flaps_full_deploy_time
+    local flaps_full_deploy_time = 18
+    local slat_spd = slat_ratios[#slat_ratios] / flaps_full_deploy_time
+    local flap_spd = flap_angles[#flap_angles] / flaps_full_deploy_time
 
     --positions--
-    local slat_ratio = {
-        0,
-        0.25,
-        0.25,
-        0.5,
-        0.75,
-        1
-    }
-    local flap_ratio = {
-        0,
-        0,
-        0.25,
-        0.5,
-        0.75,
-        1
-    }
     local slat_ratio_to_slat = {
         {0,    0},
-        {0.25, 0.7},
-        {0.5,  0.8},
-        {0.75, 0.8},
-        {1,    1},
-    }
-    local flap_ratio_to_angle = {
-        {0,    0},
-        {0.25, 10},
-        {0.5,  14},
-        {0.75, 21},
-        {1,    25},
+        {10, 0.7},
+        {14, 0.8},
+        {21, 0.8},
+        {25,   1},
     }
 
     --configuration logic--
@@ -110,25 +104,24 @@ function Slats_flaps_calc_and_control()
     end
 
     --SPEEDs logic--
-    slat_ratio_spd = slat_ratio_spd * ((get(Hydraulic_G_press) < 1450 or get(Hydraulic_B_press) < 1450) and 0.5 or 1)
-    slat_ratio_spd = slat_ratio_spd * ((get(SFCC_1_status) == 0 or get(SFCC_2_status) == 0) and 0.5 or 1)
-    slat_ratio_spd = slat_ratio_spd * (1 - get(Slat_alpha_locked))
-    flap_ratio_spd = flap_ratio_spd * ((get(Hydraulic_G_press) < 1450 or get(Hydraulic_Y_press) < 1450) and 0.5 or 1)
-    flap_ratio_spd = flap_ratio_spd * ((get(SFCC_1_status) == 0 or get(SFCC_2_status) == 0) and 0.5 or 1)
+    slat_spd = slat_spd * ((get(Hydraulic_G_press) < 1450 or get(Hydraulic_B_press) < 1450) and 0.5 or 1)
+    slat_spd = slat_spd * ((get(SFCC_1_status) == 0 or get(SFCC_2_status) == 0) and 0.5 or 1)
+    slat_spd = slat_spd * (1 - get(Slat_alpha_locked))
+    flap_spd = flap_spd * ((get(Hydraulic_G_press) < 1450 or get(Hydraulic_Y_press) < 1450) and 0.5 or 1)
+    flap_spd = flap_spd * ((get(SFCC_1_status) == 0 or get(SFCC_2_status) == 0) and 0.5 or 1)
 
-    slat_ratio_spd = Math_rescale(0, 0, 1450, slat_ratio_spd, get(Hydraulic_G_press) + get(Hydraulic_B_press))
-    flap_ratio_spd = Math_rescale(0, 0, 1450, flap_ratio_spd, get(Hydraulic_G_press) + get(Hydraulic_Y_press))
+    slat_spd = Math_rescale(0, 0, 1450, slat_spd, get(Hydraulic_G_press) + get(Hydraulic_B_press))
+    flap_spd = Math_rescale(0, 0, 1450, flap_spd, get(Hydraulic_G_press) + get(Hydraulic_Y_press))
 
     --SLAT FLAP MOVEMENT
     local past_slats_pos = get(Slats)
     local past_flaps_angle = get(Flaps_deployed_angle)
 
-    set(Slats_predeploy_ratio, Set_linear_anim_value(get(Slats_predeploy_ratio), slat_ratio[get(Flaps_internal_config) + 1], 0, 1, slat_ratio_spd))
-    set(Flaps_deployed_ratio,  Set_linear_anim_value(get(Flaps_deployed_ratio),  flap_ratio[get(Flaps_internal_config) + 1], 0, 1, flap_ratio_spd))
+    set(Slats_predeploy_ratio, Set_linear_anim_value(get(Slats_predeploy_ratio), slat_ratios[get(Flaps_internal_config) + 1], 0, slat_ratios[#slat_ratios], slat_spd))
 
     --convert flaps ratio to angle for normalised spd--
     set(Slats,                Table_interpolate(slat_ratio_to_slat,  get(Slats_predeploy_ratio)))
-    set(Flaps_deployed_angle, Table_interpolate(flap_ratio_to_angle, get(Flaps_deployed_ratio)))
+    set(Flaps_deployed_angle, Set_linear_anim_value(get(Flaps_deployed_angle), flap_angles[get(Flaps_internal_config) + 1], 0, flap_angles[#flap_angles], flap_spd))
 
     local new_slats_pos = get(Slats)
     local new_flaps_angle = get(Flaps_deployed_angle)

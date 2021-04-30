@@ -20,6 +20,10 @@ function ECAM_status_get_procedures()
         table.insert(messages, {text="APPR SPD...........VREF + 10", color=ECAM_BLUE})
         table.insert(messages, {text="LDG DIST PROC..........APPLY", color=ECAM_BLUE})
     end
+    
+    if get(FAILURE_AIRCOND_FAN_FWD) == 1 and get(FAILURE_AIRCOND_FAN_AFT) == 1 then
+        table.insert(messages, {text="ECON FLOW.........DO NOT USE", color=ECAM_BLUE})
+    end
 
     --if MessageGroup_ADR_FAULT_TRIPLE:is_active() then
     --    table.insert(messages, {text="RUD WITH CARE ABV 160 KT", color=ECAM_BLUE})

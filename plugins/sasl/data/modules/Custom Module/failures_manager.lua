@@ -28,6 +28,9 @@ local is_fwc_2_ok = false
 
 local xp_fail_dr_eng_1_stall = globalProperty("sim/operation/failures/rel_comsta0")
 local xp_fail_dr_eng_2_stall = globalProperty("sim/operation/failures/rel_comsta1")
+local xp_fail_dr_tire_n = globalProperty("sim/operation/failures/rel_tire1")
+local xp_fail_dr_tire_l = globalProperty("sim/operation/failures/rel_tire2")
+local xp_fail_dr_tire_r = globalProperty("sim/operation/failures/rel_tire3")
 
 sasl.registerCommandHandler (Failures_cancel_master_caution, 0,  function(phase) Failures_cancel_master_caution_handler(phase) end )
 sasl.registerCommandHandler (Failures_cancel_master_warning, 0,  function(phase) Failures_cancel_master_warning_handler(phase) end )
@@ -116,6 +119,12 @@ local function update_xp_eng_fail_datarefs()
     set(xp_fail_dr_eng_2_stall, get(FAILURE_ENG_STALL, 2)*6*get(Engine_2_master_switch))
 end
 
+local function update_xp_tire_fail_datarefs()
+    set(xp_fail_dr_tire_l, math.floor((get(FAILURE_GEAR_MAIN_TIRE, 1)+get(FAILURE_GEAR_MAIN_TIRE, 2)) / 2) * 6)
+    set(xp_fail_dr_tire_r, math.floor((get(FAILURE_GEAR_MAIN_TIRE, 3)+get(FAILURE_GEAR_MAIN_TIRE, 4)) / 2) * 6)
+    set(xp_fail_dr_tire_n, math.floor((get(FAILURE_GEAR_NOSE_TIRE, 1)+get(FAILURE_GEAR_NOSE_TIRE, 2)) / 2) * 6)
+end
+
 function update()
     set(XPlane_Auto_Failure, 0) -- Enforce the X-Plane failures to off: bad things happen if you don't
                                 -- use our failure manager.
@@ -123,5 +132,6 @@ function update()
     set_fwc_status()
     update_master_wc()
     update_xp_eng_fail_datarefs()
+    update_xp_tire_fail_datarefs()
 end
 

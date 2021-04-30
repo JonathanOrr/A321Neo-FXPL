@@ -390,6 +390,10 @@ local function draw_terrain(data)
         return
     end
 
+    if not data.inputs.is_heading_valid or not adirs_is_position_ok(data.id) or data.misc.map_not_avail then
+        return  -- Cannot show terrain if I don't know where I am
+    end
+
     if data.config.range <= ND_RANGE_ZOOM_2 then
         -- No terrain on oans
         return
@@ -431,21 +435,18 @@ local function draw_terrain(data)
     sasl.gl.drawRectangle(0, 450, 900, 450, {10/255, 15/255, 25/255 , 1-data.terrain.brightness})
 end
 
-local function draw_active_fpln(data)
+local function draw_active_fpln(data)   -- This is just a test
 
     local fpln_active = FMGS_sys.fpln.active
 
-    local route = {}
 
     -- For each point in the FPLN...
     for k,x in ipairs(fpln_active) do
 
         local c_x,c_y = rose_get_x_y_heading(data, x.lat, x.lon, data.inputs.heading)
-        table.insert(route, c_x)
-        table.insert(route, c_y)
         x.x = c_x
         x.y = c_y
-
+        
         local color = k == 1 and ECAM_WHITE or ECAM_GREEN
 
         if x.ptr_type == FMGS_PTR_WPT then
@@ -463,9 +464,37 @@ local function draw_active_fpln(data)
         end
 
     end
-    
-    if #route > 1 then
-        sasl.gl.drawWidePolyLine(route, 2, ECAM_GREEN)
+
+    local last_x, last_y = nil, nil
+
+    if #fpln_active > 1 then
+        local n = #fpln_active
+        for k,r in ipairs(fpln_active) do
+        
+            if k > 1 and k < n and r.beizer then
+
+                local x_start, y_start = rose_get_x_y_heading(data, r.beizer.start_lat, r.beizer.start_lon, data.inputs.heading)
+                local x_end, y_end     = rose_get_x_y_heading(data, r.beizer.end_lat, r.beizer.end_lon, data.inputs.heading)
+                local x_focus, y_focus = r.x, r.y
+                sasl.gl.drawWideBezierLineQAdaptive ( x_start, y_start, x_focus, y_focus, x_end, y_end, 2 , ECAM_RED )
+
+            
+                if last_x ~= nil then
+                    sasl.gl.drawWideLine(last_x, last_y, x_start, y_start, 2, ECAM_GREEN)
+                else
+                    local x,y = rose_get_x_y_heading(data, fpln_active[k-1].lat, fpln_active[k-1].lon, data.inputs.heading)
+                    sasl.gl.drawWideLine(x, y, x_start, y_start, 2, ECAM_GREEN)
+                end
+
+                last_x = x_end
+                last_y = y_end
+
+            end
+        end
+        if last_x ~= nil then
+            local x,y = rose_get_x_y_heading(data, fpln_active[n].lat, fpln_active[n].lon, data.inputs.heading)
+            sasl.gl.drawWideLine(last_x, last_y, x, y, 2, ECAM_GREEN)
+        end
     end
 end
 
@@ -473,6 +502,10 @@ local function draw_pois(data)
 
     if data.config.range <= ND_RANGE_ZOOM_2 then
         return  -- POIs are not drawn during the zoom mode
+    end
+    
+    if data.misc.map_not_avail then
+        return -- No POI is map not avail
     end
 
     
@@ -493,7 +526,7 @@ end
 
 local function draw_oans_arrow(data)
 
-    if data.oans.displayed_apt then
+    if data.oans.displayed_apt and data.oans.displayed_apt.distance and data.oans.displayed_apt.distance > 5 then
         local lat = data.oans.displayed_apt.lat
         local lon = data.oans.displayed_apt.lon
 
@@ -538,7 +571,7 @@ function draw_rose(data)
 
         draw_oans(data, functions_for_oans)
         
-        if data.config.range <= ND_RANGE_ZOOM_2 and data.oans_cache and not data.oans_cache.is_visible then
+        if data.config.range <= ND_RANGE_ZOOM_2 then
             draw_oans_arrow(data)
         end
     end

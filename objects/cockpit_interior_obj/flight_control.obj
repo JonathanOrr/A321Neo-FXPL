@@ -9709,17 +9709,17 @@ IDX	6938
 	TRIS	1794 11934
 		ANIM_begin
 		ANIM_trans	-0.54449999	-0.46033001	-20.54694	-0.54449999	-0.46033001	-20.54694
-		ANIM_rotate_begin	1	0	-0	sim/joystick/yoke_heading_ratio
+		ANIM_rotate_begin	1	0	-0	a321neo/dynamics/FBW/controls/rudder_pedals_angle
 		ANIM_rotate_key	0	0
-		ANIM_rotate_key	-1	-45.000104
-		ANIM_rotate_key	1	45.000104
+		ANIM_rotate_key	-20	-45.000104
+		ANIM_rotate_key	20	45.000104
 		ANIM_rotate_end
 			ANIM_begin
 			ANIM_trans	-0.049279999	0.31352001	0	-0.049279999	0.31352001	0
-			ANIM_rotate_begin	1	0	-0	sim/joystick/yoke_heading_ratio
+			ANIM_rotate_begin	1	0	-0	a321neo/dynamics/FBW/controls/rudder_pedals_angle
 			ANIM_rotate_key	0	-24.999867
-			ANIM_rotate_key	-1	20.000238
-			ANIM_rotate_key	1	-69.999972
+			ANIM_rotate_key	-20	20.000238
+			ANIM_rotate_key	20	-69.999972
 			ANIM_rotate_end
 				ANIM_begin
 				ANIM_trans	0.049279999	0	-0	0.049279999	0	-0
@@ -9733,17 +9733,17 @@ IDX	6938
 		ANIM_end
 		ANIM_begin
 		ANIM_trans	-0.54449999	-0.46033001	-20.54694	-0.54449999	-0.46033001	-20.54694
-		ANIM_rotate_begin	1	0	-0	sim/joystick/yoke_heading_ratio
+		ANIM_rotate_begin	1	0	-0	a321neo/dynamics/FBW/controls/rudder_pedals_angle
 		ANIM_rotate_key	0	0
-		ANIM_rotate_key	-1	45.000104
-		ANIM_rotate_key	1	-45.000104
+		ANIM_rotate_key	-20	45.000104
+		ANIM_rotate_key	20	-45.000104
 		ANIM_rotate_end
 			ANIM_begin
 			ANIM_trans	0.049279999	0.31352001	0	0.049279999	0.31352001	0
-			ANIM_rotate_begin	1	0	-0	sim/joystick/yoke_heading_ratio
+			ANIM_rotate_begin	1	0	-0	a321neo/dynamics/FBW/controls/rudder_pedals_angle
 			ANIM_rotate_key	0	-24.999867
-			ANIM_rotate_key	-1	-69.999972
-			ANIM_rotate_key	1	20.000238
+			ANIM_rotate_key	-20	-69.999972
+			ANIM_rotate_key	20	20.000238
 			ANIM_rotate_end
 				ANIM_begin
 				ANIM_trans	-0.049279999	0	-0	-0.049279999	0	-0
@@ -9758,17 +9758,17 @@ IDX	6938
 	TRIS	15522 11934
 		ANIM_begin
 		ANIM_trans	0.54449999	-0.46033001	-20.54694	0.54449999	-0.46033001	-20.54694
-		ANIM_rotate_begin	1	0	-0	sim/joystick/yoke_heading_ratio
+		ANIM_rotate_begin	1	0	-0	a321neo/dynamics/FBW/controls/rudder_pedals_angle
 		ANIM_rotate_key	0	0
-		ANIM_rotate_key	-1	-45.000104
-		ANIM_rotate_key	1	45.000104
+		ANIM_rotate_key	-20	-45.000104
+		ANIM_rotate_key	20	45.000104
 		ANIM_rotate_end
 			ANIM_begin
 			ANIM_trans	-0.049279999	0.31352001	0	-0.049279999	0.31352001	0
-			ANIM_rotate_begin	1	0	-0	sim/joystick/yoke_heading_ratio
+			ANIM_rotate_begin	1	0	-0	a321neo/dynamics/FBW/controls/rudder_pedals_angle
 			ANIM_rotate_key	0	-24.999867
-			ANIM_rotate_key	-1	20.000238
-			ANIM_rotate_key	1	-69.999972
+			ANIM_rotate_key	-20	20.000238
+			ANIM_rotate_key	20	-69.999972
 			ANIM_rotate_end
 				ANIM_begin
 				ANIM_trans	0.049279999	0	-0	0.049279999	0	-0
@@ -9782,17 +9782,17 @@ IDX	6938
 		ANIM_end
 		ANIM_begin
 		ANIM_trans	0.54449999	-0.46033001	-20.54694	0.54449999	-0.46033001	-20.54694
-		ANIM_rotate_begin	1	0	-0	sim/joystick/yoke_heading_ratio
+		ANIM_rotate_begin	1	0	-0	a321neo/dynamics/FBW/controls/rudder_pedals_angle
 		ANIM_rotate_key	0	0
-		ANIM_rotate_key	-1	45.000104
-		ANIM_rotate_key	1	-45.000104
+		ANIM_rotate_key	-20	45.000104
+		ANIM_rotate_key	20	-45.000104
 		ANIM_rotate_end
 			ANIM_begin
 			ANIM_trans	0.049279999	0.31352001	0	0.049279999	0.31352001	0
-			ANIM_rotate_begin	1	0	-0	sim/joystick/yoke_heading_ratio
+			ANIM_rotate_begin	1	0	-0	a321neo/dynamics/FBW/controls/rudder_pedals_angle
 			ANIM_rotate_key	0	-24.999867
-			ANIM_rotate_key	-1	-69.999972
-			ANIM_rotate_key	1	20.000238
+			ANIM_rotate_key	-20	-69.999972
+			ANIM_rotate_key	20	20.000238
 			ANIM_rotate_end
 				ANIM_begin
 				ANIM_trans	-0.049279999	0	-0	-0.049279999	0	-0
@@ -9805,4 +9805,4 @@ IDX	6938
 			ANIM_end
 		ANIM_end
 
-# Build with Blender 2.90.1 (build b'3e85bb34d0d7'). Exported with XPlane2Blender 4.1.0-beta.1+101.20201117225215
+# Build with Blender 2.92.0 (build b'02948a2cab44'). Exported with XPlane2Blender 4.1.0-beta.1+101.20201117225215

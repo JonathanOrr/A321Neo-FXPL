@@ -130,11 +130,11 @@ function Fctl_computuers_status_computation(var_table)
     local restart_wait = 1.2
 
     --ELAC 1--
-    set(ELAC_1_status, 1 * (1 - get(ELAC_1_off_button)) * BoolToNum(var_table.ELAC_1_restart_timer >= restart_wait) * BoolToNum(get(DC_ess_bus_pwrd) == 1 and get(HOT_bus_1_pwrd) == 1))
-    var_table.ELAC_1_restart_timer = Math_clamp_higher((var_table.ELAC_1_restart_timer + 1 * get(DELTA_TIME)) * (1 - get(ELAC_1_off_button)) * BoolToNum(get(DC_ess_bus_pwrd) == 1 and get(HOT_bus_1_pwrd) == 1), restart_wait)
+    set(ELAC_1_status, 1 * (1 - get(ELAC_1_off_button)) * BoolToNum(var_table.ELAC_1_restart_timer >= restart_wait) * BoolToNum(get(DC_ess_bus_pwrd) == 1 or get(HOT_bus_1_pwrd) == 1))
+    var_table.ELAC_1_restart_timer = Math_clamp_higher((var_table.ELAC_1_restart_timer + 1 * get(DELTA_TIME)) * (1 - get(ELAC_1_off_button)) * BoolToNum(get(DC_ess_bus_pwrd) == 1 or get(HOT_bus_1_pwrd) == 1), restart_wait)
     --ELAC 2--
-    set(ELAC_2_status, 1 * (1 - get(ELAC_2_off_button)) * BoolToNum(var_table.ELAC_2_restart_timer >= restart_wait) * BoolToNum(get(DC_bus_2_pwrd) == 1 and get(HOT_bus_2_pwrd) == 1))
-    var_table.ELAC_2_restart_timer = Math_clamp_higher((var_table.ELAC_2_restart_timer + 1 * get(DELTA_TIME)) * (1 - get(ELAC_2_off_button)) * BoolToNum(get(DC_bus_2_pwrd) == 1 and get(HOT_bus_2_pwrd) == 1), restart_wait)
+    set(ELAC_2_status, 1 * (1 - get(ELAC_2_off_button)) * BoolToNum(var_table.ELAC_2_restart_timer >= restart_wait) * BoolToNum(get(DC_bus_2_pwrd) == 1 or get(HOT_bus_2_pwrd) == 1))
+    var_table.ELAC_2_restart_timer = Math_clamp_higher((var_table.ELAC_2_restart_timer + 1 * get(DELTA_TIME)) * (1 - get(ELAC_2_off_button)) * BoolToNum(get(DC_bus_2_pwrd) == 1 or get(HOT_bus_2_pwrd) == 1), restart_wait)
 
     --FAC 1--
     set(FAC_1_status, 1 * (1 - get(FAC_1_off_button)) * BoolToNum(var_table.FAC_1_restart_timer >= restart_wait) * BoolToNum(get(AC_ess_bus_pwrd) == 1 and get(DC_shed_ess_pwrd) == 1))
@@ -144,8 +144,8 @@ function Fctl_computuers_status_computation(var_table)
     var_table.FAC_2_restart_timer = Math_clamp_higher((var_table.FAC_2_restart_timer + 1 * get(DELTA_TIME)) * (1 - get(FAC_2_off_button)) * BoolToNum(get(AC_bus_2_pwrd) == 1 and get(DC_bus_2_pwrd) == 1), restart_wait)
 
     --SEC 1--
-    set(SEC_1_status, 1 * (1 - get(SEC_1_off_button)) * BoolToNum(var_table.SEC_1_restart_timer >= restart_wait) * BoolToNum(get(DC_ess_bus_pwrd) == 1 and get(HOT_bus_1_pwrd) == 1))
-    var_table.SEC_1_restart_timer = Math_clamp_higher((var_table.SEC_1_restart_timer + 1 * get(DELTA_TIME)) * (1 - get(SEC_1_off_button)) * BoolToNum(get(DC_ess_bus_pwrd) == 1 and get(HOT_bus_1_pwrd) == 1), restart_wait)
+    set(SEC_1_status, 1 * (1 - get(SEC_1_off_button)) * BoolToNum(var_table.SEC_1_restart_timer >= restart_wait) * BoolToNum(get(DC_ess_bus_pwrd) == 1 or get(HOT_bus_1_pwrd) == 1))
+    var_table.SEC_1_restart_timer = Math_clamp_higher((var_table.SEC_1_restart_timer + 1 * get(DELTA_TIME)) * (1 - get(SEC_1_off_button)) * BoolToNum(get(DC_ess_bus_pwrd) == 1 or get(HOT_bus_1_pwrd) == 1), restart_wait)
     --SEC 2--
     set(SEC_2_status, 1 * (1 - get(SEC_2_off_button)) * BoolToNum(var_table.SEC_2_restart_timer >= restart_wait) * get(DC_bus_2_pwrd))
     var_table.SEC_2_restart_timer = Math_clamp_higher((var_table.SEC_2_restart_timer + 1 * get(DELTA_TIME)) * (1 - get(SEC_2_off_button)) * get(DC_bus_2_pwrd), restart_wait)

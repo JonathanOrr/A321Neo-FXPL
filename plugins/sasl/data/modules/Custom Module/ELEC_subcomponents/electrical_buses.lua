@@ -237,7 +237,7 @@ local function update_dc_ess()
         buses.dc_ess_powered_by = TR_ESS
     elseif buses.dc1_powered_by == TR_1 then
         buses.dc_ess_powered_by = TR_1
-    elseif get(HOT_bus_2_pwrd) and ELEC_sys.batteries[2].switch_status == true and get(ELEC_sys.batteries[2].drs.hotbus) == 1 then
+    elseif ELEC_sys.batteries[2].switch_status == true and get(ELEC_sys.batteries[2].drs.hotbus) == 1 and buses.is_stat_inv_bus_on then
         buses.dc_ess_powered_by = BAT_2
     end
 end

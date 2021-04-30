@@ -22,6 +22,12 @@ size = {900, 900}
 
 local image_bkg_plan        = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/plan.png")
 local image_bkg_plan_middle = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/ring-middle.png")
+local image_point_apt = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/point-apt.png")
+local image_point_vor_only = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/point-vor-only.png")
+local image_point_vor_dme  = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/point-vor-dme.png")
+local image_point_dme_only  = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/point-dme-only.png")
+local image_point_ndb = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/point-ndb.png")
+local image_point_wpt = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/point-wpt.png")
 
 -------------------------------------------------------------------------------
 -- Caching math functions
@@ -33,13 +39,46 @@ local mdeg = math.deg
 local msqrt = math.sqrt
 local matan2 = math.atan2
 
+local poi_position_last_update = 0
+local POI_UPDATE_RATE = 0.1
+local MAX_LIMIT_WPT = 750
+
+-------------------------------------------------------------------------------
+-- Helpers functions
+-------------------------------------------------------------------------------
 
 local function plan_get_px_per_nm(data)
-    -- 588 px is the diameter of our ring, so this corresponds to the range scale selected:
-    local range_in_nm = get_range_in_nm(data) / 2
+    -- 621 px is the diameter of our ring, so this corresponds to the range scale selected:
+    local range_in_nm = get_range_in_nm(data)
     -- The the per_px nm is:
     return 621 / range_in_nm
 end
+
+local function plan_get_x_y(data, lat, lon)  -- Do not use this for poi
+    local px_per_nm = plan_get_px_per_nm(data)
+    
+    local distance = get_distance_nm(data.plan_ctr_lat, data.plan_ctr_lon,lat,lon)
+    local distance_px = distance * px_per_nm
+    local bearing  = get_bearing(data.plan_ctr_lat, data.plan_ctr_lon,lat,lon)
+
+    local x = size[1]/2 + distance_px * mcos(mrad(bearing))
+    local y = size[2]/2 + distance_px * msin(mrad(bearing))
+    
+    return x,y
+end
+
+local function plan_get_lat_lon(data, x, y)
+    local bearing     = 180+mdeg(matan2((size[1]/2 - x), (size[2]/2 -    y)))
+    
+    local px_per_nm = plan_get_px_per_nm(data)
+    local distance_nm = msqrt((size[1]/2 - x)*(size[1]/2 - x) + (size[2]/2 - y)*(size[2]/2 - y)) / px_per_nm
+
+    return Move_along_distance(data.plan_ctr_lat, data.plan_ctr_lon, distance_nm*1852, bearing)
+end
+
+-------------------------------------------------------------------------------
+-- draw_* functions
+-------------------------------------------------------------------------------
 
 local function draw_ranges(data)
     -- Ranges
@@ -94,27 +133,189 @@ local function draw_plane(data)
     
 end
 
+local function draw_poi_array(data, poi, texture, color)
+    local modified = false
 
-local function plan_get_x_y(data, lat, lon)  -- Do not use this for poi
-    local px_per_nm = plan_get_px_per_nm(data)
-    
-    local distance = get_distance_nm(data.plan_ctr_lat, data.plan_ctr_lon,lat,lon)
-    local distance_px = distance * px_per_nm
-    local bearing  = get_bearing(data.plan_ctr_lat, data.plan_ctr_lon,lat,lon)
+    -- 621 px is the diameter of our ring, so this corresponds to the range scale selected:
+    local range_in_nm = get_range_in_nm(data)
+    -- The the per_px nm is:
+    local px_per_nm = 621 / range_in_nm
 
-    local x = size[1]/2 + distance_px * mcos(mrad(bearing))
-    local y = size[2]/2 + distance_px * msin(mrad(bearing))
+    if poi.plan_dist == nil or (get(TIME) - poi_position_last_update) > POI_UPDATE_RATE then
+       poi.plan_dist = get_distance_nm(data.plan_ctr_lat, data.plan_ctr_lon,poi.lat,poi.lon)
+    end
     
-    return x,y
+    if poi.plan_dist > range_in_nm * 2 then
+
+        return true, poi
+    end
+
+    if poi.x == nil or poi.y == nil or (get(TIME) - poi_position_last_update) > POI_UPDATE_RATE then
+        modified = true
+        
+        poi.x, poi.y = plan_get_x_y(data, poi.lat,poi.lon)
+    end
+
+
+    if poi.x > 0 and poi.x < size[1] and poi.y > 0 and poi.y < size[2] then
+    
+        sasl.gl.drawTexture(texture, poi.x-16, poi.y-16, 32,32, color)
+        sasl.gl.drawText(Font_AirbusDUL, poi.x+20, poi.y-20, poi.id, 32, false, false, TEXT_ALIGN_LEFT, color)
+    end
+    
+    return modified, poi
 end
 
-local function plan_get_lat_lon(data, x, y)
-    local bearing     = 180+mdeg(matan2((size[1]/2 - x), (size[2]/2 -    y)))
+local function draw_airports(data)
+    if data.config.extra_data ~= ND_DATA_ARPT then
+        return  -- Airport button not selected
+    end
     
-    local px_per_nm = plan_get_px_per_nm(data)
-    local distance_nm = msqrt((size[1]/2 - x)*(size[1]/2 - x) + (size[2]/2 - y)*(size[2]/2 - y)) / px_per_nm
+    -- For each airtport visible...
+    for i,airport in ipairs(data.poi.arpt) do
+        local modified, poi = draw_poi_array(data, airport, image_point_apt, ECAM_MAGENTA)
+        if modified then
+            data.poi.arpt[i] = poi
+        end
+    end
+end
 
-    return Move_along_distance(data.plan_ctr_lat, data.plan_ctr_lon, distance_nm*1852, bearing)
+local function draw_vors(data)
+
+    if data.config.extra_data ~= ND_DATA_VORD then
+        return  -- Vor button not selected
+    end
+
+    -- For each airtport visible...
+    for i,vor in ipairs(data.poi.vor) do
+        local modified, poi = draw_poi_array(data, vor, vor.is_coupled_dme and image_point_vor_dme or image_point_vor_only, ECAM_MAGENTA)
+        if modified then
+            data.poi.vor[i] = poi
+        end
+    end
+    
+end
+
+local function draw_dmes(data)
+
+    if data.config.extra_data ~= ND_DATA_VORD then
+        return  -- Vor button not selected
+    end
+
+    -- For each airtport visible...
+    for i,dme in ipairs(data.poi.dme) do
+        local modified, poi = draw_poi_array(data, dme, image_point_dme_only, ECAM_MAGENTA)
+        if modified then
+            data.poi.dme[i] = poi
+        end
+    end
+    
+end
+
+local function draw_ndbs(data)
+
+    if data.config.extra_data ~= ND_DATA_NDB then
+        return  -- Vor button not selected
+    end
+
+    -- For each airtport visible...
+    for i,ndb in ipairs(data.poi.ndb) do
+        local modified, poi = draw_poi_array(data, ndb, image_point_ndb, ECAM_MAGENTA)
+        if modified then
+            data.poi.ndb[i] = poi
+        end
+    end
+    
+end
+
+local function draw_wpts(data)
+
+    if data.config.extra_data ~= ND_DATA_WPT then
+        return  -- Vor button not selected
+    end
+
+    local displayed_num = 0
+    data.misc.not_displaying_all_data = false
+    
+    -- For each waypoint visible...
+    local nr_wpts = #data.poi.wpt
+    if nr_wpts > MAX_LIMIT_WPT and data.config.range >= ND_RANGE_160 then
+        data.misc.not_displaying_all_data = true
+    end
+    
+    for i=1,nr_wpts do
+        local wpt = data.poi.wpt[i]
+        if nr_wpts <= MAX_LIMIT_WPT or i % math.ceil(nr_wpts/MAX_LIMIT_WPT) == 0 or data.config.range < ND_RANGE_160 then
+
+            local modified, poi = draw_poi_array(data, wpt, image_point_wpt, ECAM_MAGENTA)
+            if modified then
+                data.poi.wpt[i] = poi
+            end
+       end
+    end
+    
+end
+
+local function draw_active_fpln(data)   -- This is just a test
+
+    local fpln_active = FMGS_sys.fpln.active
+
+    local route = {}
+    -- For each point in the FPLN...
+    for k,x in ipairs(fpln_active) do
+
+        local c_x,c_y = plan_get_x_y(data, x.lat, x.lon)
+        table.insert(route, c_x)
+        table.insert(route, c_y)
+        x.x = c_x
+        x.y = c_y
+
+        local color = k == 1 and ECAM_WHITE or ECAM_GREEN
+
+        if x.ptr_type == FMGS_PTR_WPT then
+            draw_poi_array(data, x, image_point_wpt, color)
+        elseif x.ptr_type == FMGS_PTR_NAVAID then
+            if x.navaid == NAV_ID_NDB then
+                draw_poi_array(data, x, image_point_ndb, color)
+            elseif x.navaid == NAV_ID_VOR then
+                draw_poi_array(data, x, x.has_dme and image_point_vor_dme or image_point_vor_only, color)
+            end
+        elseif x.ptr_type == FMGS_PTR_APT then
+            draw_poi_array(data, x, image_point_apt, color)
+        elseif x.ptr_type == FMGS_PTR_COORDS then
+        
+        end
+
+    end
+    
+    if #route > 0 then
+        sasl.gl.drawWidePolyLine(route, 2, ECAM_GREEN)
+    end
+end
+
+local function draw_pois(data)
+
+    if data.config.range <= ND_RANGE_ZOOM_2 then
+        return  -- POIs are not drawn during the zoom mode
+    end
+    
+    if data.misc.map_not_avail then
+        return -- No POI is map not avail
+    end
+    
+    draw_airports(data)
+    draw_vors(data)
+    draw_dmes(data)
+    draw_ndbs(data)
+    draw_wpts(data)
+
+    draw_active_fpln(data)
+
+    local need_to_update_poi = (get(TIME) - poi_position_last_update) > POI_UPDATE_RATE
+    if need_to_update_poi then
+        poi_position_last_update = get(TIME)
+    end
+
 end
 
 local functions_for_oans = {
@@ -127,7 +328,9 @@ function draw_plan_unmasked(data)
     draw_background(data)
     draw_ranges(data)
 end
+
 function draw_plan(data)
+    draw_pois(data)
     draw_oans(data, functions_for_oans)
     draw_plane(data)
 end

@@ -37,7 +37,7 @@ SEC_2_off_button = createGlobalPropertyi("a321neo/cockpit/FBW/sec_2_off", 0, fal
 SEC_3_off_button = createGlobalPropertyi("a321neo/cockpit/FBW/sec_3_off", 0, false, true, false) --0 is on 1 if off
 
 Rudder_trim_knob_pos = createGlobalPropertyf("a321neo/cockpit/FBW/rudder_trim_pos", 0, false, true, false) -- -1, 0, 1
-
+Rudder_pedal_pos = createGlobalPropertyf("a321neo/cockpit/FBW/rudder_pedals_pos", 0, false, true, false)  -- -1, 0, 1
 ---------------------------------------------------------------------------------------------------------------------------------------
 --display brightness
 Total_element_brightness = globalProperty("sim/cockpit/electrical/instrument_brightness")
@@ -415,6 +415,15 @@ Lights_compass_lever = createGlobalPropertyf("a321neo/cockpit/lights/buttons/rwy
 Lights_emer_exit_lever = createGlobalPropertyf("a321neo/cockpit/lights/buttons/emer_exit_pos", 0, false, true, false)
 Lights_seatbelts_lever = createGlobalPropertyf("a321neo/cockpit/misc/buttons/seatbelts_pos", 0, false, true, false)
 Lights_noped_lever = createGlobalPropertyf("a321neo/cockpit/misc/buttons/noped_pos", 0, false, true, false)
+
+Lights_strobe = createGlobalPropertyf("a321neo/cockpit/lights/buttons/strobe_lever", 0, false, true, false)
+Lights_land_L = createGlobalPropertyf("a321neo/cockpit/lights/buttons/land_L", 0, false, true, false)
+Lights_land_R = createGlobalPropertyf("a321neo/cockpit/lights/buttons/land_R", 0, false, true, false)
+Lights_nose = createGlobalPropertyf("a321neo/cockpit/lights/buttons/nose_lever", 0, false, true, false)
+Lights_beacon = createGlobalPropertyf("a321neo/cockpit/lights/buttons/beacon_lever", 0, false, true, false)
+Lights_wing = createGlobalPropertyf("a321neo/cockpit/lights/buttons/wing_lever", 0, false, true, false)
+Lights_navlogo = createGlobalPropertyf("a321neo/cockpit/lights/buttons/navlogo_lever", 0, false, true, false)
+Lights_rwy_turnoff = createGlobalPropertyf("a321neo/cockpit/lights/buttons/rwy_turnoff_lever", 0, false, true, false)
 
 
 

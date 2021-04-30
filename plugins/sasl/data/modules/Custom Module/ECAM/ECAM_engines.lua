@@ -114,7 +114,7 @@ local function draw_oil_qt_press_temp_eng_1()
         ------------------------------------------------------------------------------------
         local eng_1_oil_color = pulse_green(params.eng1_oil_temp > ENG.data.display.oil_temp_high_adv)
         if params.eng1_oil_temp > ENG.data.display.oil_temp_high_amber then
-            eng_1_oil_color = ECAM_AMBER
+            eng_1_oil_color = ECAM_ORANGE
         end
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2-187, 455, params.eng1_oil_temp ,36,
                      false, false, TEXT_ALIGN_CENTER, eng_1_oil_color)
@@ -164,7 +164,7 @@ local function draw_oil_qt_press_temp_eng_2()
         ------------------------------------------------------------------------------------
         local eng_2_oil_color = pulse_green(params.eng2_oil_temp > ENG.data.display.oil_temp_high_adv)
         if params.eng2_oil_temp > ENG.data.display.oil_temp_high_amber then
-            eng_2_oil_color = ECAM_AMBER
+            eng_2_oil_color = ECAM_ORANGE
         end
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2+187, 455, params.eng2_oil_temp ,36,
                         false, false, TEXT_ALIGN_CENTER, eng_2_oil_color)

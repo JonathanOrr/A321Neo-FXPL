@@ -167,9 +167,11 @@ local function update_temp_from_valves()
         local hot_air_temp = math.max(get(L_bleed_temp), get(R_bleed_temp))
         set(Hot_air_temp, hot_air_temp)
         
-        temp_duct_ckpt  = Math_lerp(mixer_temp, hot_air_temp, 0.2 * get(Aircond_trim_valve, CKPT))
-        temp_duct_c_fwd = Math_lerp(mixer_temp, hot_air_temp, 0.2 * get(Aircond_trim_valve, CABIN_FWD))
-        temp_duct_c_aft = Math_lerp(mixer_temp, hot_air_temp, 0.2 * get(Aircond_trim_valve, CABIN_AFT))
+        local K = 0.5*get(FAILURE_AIRCOND_HOT_AIR_REG_FAIL)
+        
+        temp_duct_ckpt  = Math_lerp(mixer_temp, hot_air_temp, 0.2 * get(Aircond_trim_valve, CKPT) + K)
+        temp_duct_c_fwd = Math_lerp(mixer_temp, hot_air_temp, 0.2 * get(Aircond_trim_valve, CABIN_FWD) + K)
+        temp_duct_c_aft = Math_lerp(mixer_temp, hot_air_temp, 0.2 * get(Aircond_trim_valve, CABIN_AFT) + K)
     
         set(Aircond_injected_flow_temp, Set_linear_anim_value(get(Aircond_injected_flow_temp, CKPT), temp_duct_ckpt, -30, 200, 5), CKPT)
         set(Aircond_injected_flow_temp, Set_linear_anim_value(get(Aircond_injected_flow_temp, CABIN_FWD), temp_duct_c_fwd, -30, 200, 5), CABIN_FWD)
@@ -187,7 +189,10 @@ local function update_temp_from_valves()
     else
         local hot_air_temp = math.max(get(L_bleed_temp), get(R_bleed_temp))
         set(Hot_air_temp_cargo, hot_air_temp)
-        temp_duct_cargo  = Math_lerp(cargo_flow_temp, hot_air_temp, 0.2 * get(Aircond_trim_valve, CARGO_AFT))
+
+        local K = 0.5*get(FAILURE_AIRCOND_HOT_AIR_CARGO_REG_FAIL)
+
+        temp_duct_cargo  = Math_lerp(cargo_flow_temp, hot_air_temp, 0.2 * get(Aircond_trim_valve, CARGO_AFT) + K)
         set(Aircond_injected_flow_temp, Set_linear_anim_value(get(Aircond_injected_flow_temp, CARGO_AFT), temp_duct_cargo, -30, 100, 5), CARGO_AFT)
     end
 end

@@ -24,7 +24,7 @@ local matan2 = math.atan2
 function get_range_in_nm(data)
     if data.config.range > ND_RANGE_ZOOM_2 then
         local zoom = math.floor(2^(data.config.range-1) * 10)
-        if data.config.mode == ND_MODE_NAV or data.config.mode == ND_MODE_ILS or data.config.mode == ND_MODE_VOR then
+        if data.config.mode ~= ND_MODE_ARC then
             zoom = zoom / 2
         end
         return zoom

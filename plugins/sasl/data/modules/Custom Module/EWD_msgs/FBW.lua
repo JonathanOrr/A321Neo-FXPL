@@ -126,7 +126,7 @@ MessageGroup_FBW_ALTN_DIRECT_LAW = {
 
     is_inhibited = function()
         -- Inhibited during takeoff and landing
-        return is_active_in({PHASE_1ST_ENG_ON, PHASE_1ST_ENG_TO_PWR, PHASE_AIRBONE, PHASE_BELOW_80_KTS})
+        return is_active_in({PHASE_1ST_ENG_TO_PWR, PHASE_AIRBONE, PHASE_BELOW_80_KTS})
     end
 
 }

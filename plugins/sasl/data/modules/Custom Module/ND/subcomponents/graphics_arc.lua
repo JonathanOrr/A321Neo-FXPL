@@ -50,8 +50,8 @@ local image_point_wpt = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/tex
 
 local image_vor_1 = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/needle-VOR1-arc.png")
 local image_vor_2 = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/needle-VOR2-arc.png")
-local image_adf_1 = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/needle-VOR1-arc.png")  -- FIXME
-local image_adf_2 = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/needle-VOR2-arc.png")  -- FIXME
+local image_adf_1 = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/needle-ADF1-arc.png")
+local image_adf_2 = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/needle-ADF2-arc.png")
 
 local image_oans_needle = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/needle-oans-arc.png")
 
@@ -358,7 +358,10 @@ local function draw_pois(data)
         return  -- POIs are not drawn during the zoom mode
     end
 
-    
+    if data.misc.map_not_avail then
+        return -- No POI is map not avail
+    end
+
     draw_airports(data)
     draw_vors(data)
     draw_dmes(data)
@@ -381,6 +384,10 @@ local function draw_terrain(data)
        or get(GPWS_long_test_in_progress) == 1 then
         -- Terrain disabled
         return
+    end
+
+    if not data.inputs.is_heading_valid or not adirs_is_position_ok(data.id) or data.misc.map_not_avail then
+        return  -- Cannot show terrain if I don't know where I am
     end
 
     if data.config.range <= ND_RANGE_ZOOM_2 then

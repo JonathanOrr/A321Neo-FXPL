@@ -44,6 +44,7 @@ Fuel_sys = {}
 FIRE_sys = {}
 AI_sys   = {}
 ADIRS_sys= {}
+ND_all_data  = {nil, nil}
 ND_terrain = {}
 DRAIMS_common = {}
 FMGS_sys = {}

@@ -104,3 +104,33 @@ function geo_get_mora(lat, lon)
     
     return mora_curr
 end
+
+
+function point_from_a_segment(x1, y1, x2, y2, distance)
+    local den = math.sqrt((x2-x1)^2 + (y2-y1)^2)
+    local t = distance / den
+    local x3 = (1-t) * x1 + t * x2
+    local y3 = (1-t) * y1 + t * y2
+
+    return x3,y3
+end
+
+function point_from_a_segment_lat_lon(lat1, lon1, lat2, lon2, distance_nm)  -- APPROXIMATED! Only for short distances
+    local den = get_distance_nm(lat1,lon1,lat2,lon2)
+    local t = distance_nm / den
+    local lat3 = (1-t) * lat1 + t * lat2
+    local lon3 = (1-t) * lon1 + t * lon2
+
+    return lat3, lon3
+end
+
+function point_from_a_segment_lat_lon_limited(lat1, lon1, lat2, lon2, distance_nm, limit)  -- APPROXIMATED! Only for short distances
+    local den = get_distance_nm(lat1,lon1,lat2,lon2)
+    local t = distance_nm / den
+    t = math.min(limit, t)
+    local lat3 = (1-t) * lat1 + t * lat2
+    local lon3 = (1-t) * lon1 + t * lon2
+
+    return lat3, lon3
+end
+

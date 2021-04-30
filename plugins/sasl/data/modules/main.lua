@@ -96,6 +96,7 @@ components = {
   calls {},
   GPWS {},
   sounds {},
+  lights_external {},
   graphics {},
   radio_logic {},
   DRAIMS_CAPT {},

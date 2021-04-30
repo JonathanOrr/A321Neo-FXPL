@@ -253,6 +253,8 @@ local function update_pump_dr()
     if eng_2_fw_valve_position == 0 then
         set(Fuel_tank_selector_eng_2, 0)    -- Emergency cutoff fuel    
     end
+    
+    set(Fuel_engine_gravity, (eng1_fuel_status == 1 or eng2_fuel_status == 2) and 1 or 0)
 
 end
 
@@ -738,6 +740,17 @@ local function fix_startup_fuel()
     end
 end
 
+local function update_pump_dr_for_sounds()
+    set(SOUND_fuel_pump, 0)
+
+    for i,x ipairs(tank_pump_and_xfr) do
+        if x.pressure_ok then
+            set(SOUND_fuel_pump, 1)
+        end
+    end
+
+end
+
 ----------------------------------------------------------------------------------------------------
 -- Functions - Main
 ----------------------------------------------------------------------------------------------------
@@ -777,6 +790,9 @@ function update()
     -- Step 5 : bad things
     update_fuel_leaks()
     update_fot()
+
+    -- Step 6 : Damn Henrick...
+    update_pump_dr_for_sounds()
 
     perf_measure_stop("fuel:update()")
 end

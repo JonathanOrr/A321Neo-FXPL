@@ -197,7 +197,7 @@ local function draw_needles_valves_and_mixer()
     SASL_draw_img_xcenter_aligned(ECAM_BLEED_mixer_img, size[1]/2+4, size[2]/2+352, 518, 62, (get(Emer_ram_air) == 0 and get(Pack_L) == 0 and get(Pack_R) == 0) and ECAM_ORANGE or ECAM_GREEN)
 
     --ram air
-    SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_BLEED_valves_img, size[1]/2+0, size[2]/2+287, 180, 58, 3, get(Emer_ram_air) == 0 and 1 or 3, (get(FAILURE_BLEED_PACK_1_VALVE_STUCK) == 1 or (get(All_on_ground) == 1 and get(Emer_ram_air) == 1) and ECAM_ORANGE or ECAM_GREEN))
+    SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_BLEED_valves_img, size[1]/2+0, size[2]/2+287, 180, 58, 3, get(Emer_ram_air) == 0 and 1 or 3, (get(FAILURE_BLEED_PACK_1_VALVE_STUCK) == 1 or (get(All_on_ground) == 1 and get(Emer_ram_air) == 1)) and ECAM_ORANGE or ECAM_GREEN)
 
     --PACK valves
     SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_BLEED_valves_img, size[1]/2-249, size[2]/2+88, 180, 58, 3, get(Pack_L) == 0 and 1 or 3, get(FAILURE_BLEED_PACK_1_VALVE_STUCK) == 0 and ECAM_GREEN or ECAM_ORANGE)

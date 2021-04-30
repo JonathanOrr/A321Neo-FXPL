@@ -239,7 +239,7 @@ end
 position = {1020, 1666, 560, 530}
 size = {560, 530}
 
-include('FMGS_functions.lua')
+include('FMGS/functions.lua')
 include('MCDU-FMGS.lua') -- Flight Management Guidance System implementation
 
 local NIL = 0 -- used for input return and checking
@@ -1961,6 +1961,8 @@ function (phase)
 		mcdu_dat["l"]["R"][2] = {txt = "ab49012001", col = "green"}
         mcdu_dat["s"]["L"][3].txt = " second data base"
         mcdu_dat["l"]["L"][3] = {txt = " none", col = "cyan", size = "s"}
+        mcdu_dat["s"]["L"][4] = {txt = "   MCDU IS UNSTABLE", col = "red"}
+        mcdu_dat["l"]["L"][4] = {txt = "     DO NOT USE", col = "red"}
 
         mcdu_dat["s"]["L"][5].txt = "chg code"
         fmgs_dat_init("chg code", "[ ]")

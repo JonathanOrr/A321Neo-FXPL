@@ -16,6 +16,8 @@
 -- Short description: The Flight Management Systems main file
 -------------------------------------------------------------------------------
 
+include('FMGS/route.lua')
+
 local config = {
     status = FMGS_MODE_OFF,
     master = 0,
@@ -38,9 +40,19 @@ FMGS_sys.fpln = {
         {ptr_type = FMGS_PTR_WPT, id="RODRU", lat=45.670834, lon=9.393333},
         {ptr_type = FMGS_PTR_COORDS, lat=45.53575658841703, lon=9.259678021183182},
         {ptr_type = FMGS_PTR_NAVAID, navaid=NAV_ID_VOR, id="SRN", lat=45.645962, lon=9.021610, has_dme = true},
-    }
+    },
+    
+    
+    next_waypoint = 4,
+    curr_segment  = FMGS_SEGMENT_NONE,
 
 }
+
+-------------------------------------------
+-- TODO Tips Current segment computation:
+-- EN ROUTE defined as: > 15.500 ft or > 50.8 nm from departure or dest airport (and not off route)
+-- OFF ROUTE: 2 nm / terminal 1nm / appr gps 0.3 or oth 0.5 nm
+-- 
 
 local function update_status()
     -- NOTE: As far as I know, INDEPENDENT MODE is activated only when databases of FMCUs is different
@@ -69,5 +81,8 @@ local function update_status()
 end
 
 function update()
+    perf_measure_start("FMGS:update()")
     update_status()
+    update_route()
+    perf_measure_stop("FMGS:update()")
 end

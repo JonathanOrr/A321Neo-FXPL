@@ -16,15 +16,33 @@
 -- Short description: Fly-by-wire main file
 -------------------------------------------------------------------------------
 
+FBW = {
+    lateral = {
+        protections = {},
+        inputs = {},
+    },
+    vertical = {
+        protections = {},
+        inputs = {},
+    },
+    yaw = {
+        protections = {},
+        inputs = {},
+    },
+    filtered_sensors = {}
+}
+
 --include("FBW_subcomponents/limits_calculations.lua")
 include("PID.lua")
 include("FBW/FBW_subcomponents/fbw_system_subcomponents/flt_computers.lua")
 include("FBW/FBW_subcomponents/fbw_system_subcomponents/mode_transition.lua")
-include("FBW/FBW_subcomponents/fbw_system_subcomponents/lateral_augmentation.lua")
 include("FBW/FBW_subcomponents/fbw_system_subcomponents/vertical_augmentation.lua")
 include("FBW/FBW_subcomponents/fbw_system_subcomponents/law_reconfiguration.lua")
 addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/")
 addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/fbw_system_subcomponents")
+addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/fbw_system_subcomponents/sensor_filtering")
+addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/fbw_system_subcomponents/lateral_augmentation")
+addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/fbw_system_subcomponents/yaw_augmentation")
 
 --xplane landing gear attitude correction--
 local front_gear_length =  globalProperty("sim/aircraft/parts/acf_gear_leglen[0]")
@@ -49,10 +67,20 @@ function onAirportLoaded()
 end
 
 components = {
+    filtering {},
+
+    lateral_protections {},
+    lateral_inputs {},
+    lateral_controllers {},
+
+    yaw_inputs {},
+    yaw_controllers {},
+
     law_reconfiguration {},
     autothrust {},
     flight_controls {},
     limits_calculations {},
+
     lateral_augmentation {},
     vertical_augmentation {},
     yaw_augmentation {},

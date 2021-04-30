@@ -19,10 +19,16 @@
 
 
 --colors
-local left_brake_temp_color = {1.0, 1.0, 1.0}
-local right_brake_temp_color = {1.0, 1.0, 1.0}
-local left_tire_psi_color = {1.0, 1.0, 1.0}
-local right_tire_psi_color = {1.0, 1.0, 1.0}
+local ll_brake_temp_color = {1.0, 1.0, 1.0}
+local l_brake_temp_color = {1.0, 1.0, 1.0}
+local r_brake_temp_color = {1.0, 1.0, 1.0}
+local rr_brake_temp_color = {1.0, 1.0, 1.0}
+local ll_tire_psi_color = {1.0, 1.0, 1.0}
+local l_tire_psi_color = {1.0, 1.0, 1.0}
+local r_tire_psi_color = {1.0, 1.0, 1.0}
+local rr_tire_psi_color = {1.0, 1.0, 1.0}
+local nl_tire_psi_color = {1.0, 1.0, 1.0}
+local nr_tire_psi_color = {1.0, 1.0, 1.0}
 
 local left_bleed_color = ECAM_ORANGE
 local right_bleed_color = ECAM_ORANGE
@@ -32,25 +38,39 @@ local right_eng_avail_cl = ECAM_ORANGE
 
 local function draw_brakes_and_tires()
     --brakes temps--
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-360, size[2]/2-75, math.floor(get(Left_brakes_temp)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-200, size[2]/2-75, math.floor(get(Left_brakes_temp)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+200, size[2]/2-75, math.floor(get(Right_brakes_temp)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+360, size[2]/2-75, math.floor(get(Right_brakes_temp)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+    local LL_temp = math.floor(get(LL_brakes_temp)) - math.floor(get(LL_brakes_temp)) % 5
+    local L_temp  = math.floor(get(L_brakes_temp)) - math.floor(get(L_brakes_temp)) % 5
+    local R_temp  = math.floor(get(R_brakes_temp)) - math.floor(get(R_brakes_temp)) % 5
+    local RR_temp = math.floor(get(RR_brakes_temp)) - math.floor(get(RR_brakes_temp)) % 5
+
+   
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-360+26, size[2]/2-75, LL_temp, 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-200+26, size[2]/2-75, L_temp,  30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+200+26, size[2]/2-75, R_temp,  30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+360+26, size[2]/2-75, RR_temp, 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     
     --tire press
     if get(Wheel_status_TPIU) == 1 then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-360, size[2]/2-165, math.floor(get(Left_tire_psi)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-200, size[2]/2-165, math.floor(get(Left_tire_psi)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+200, size[2]/2-165, math.floor(get(Right_tire_psi)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+360, size[2]/2-165, math.floor(get(Right_tire_psi)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+80, size[2]/2+175, math.floor(get(Nose_tire_psi)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-80, size[2]/2+175, math.floor(get(Nose_tire_psi)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        local LL_psi = math.floor(get(LL_tire_psi)) - math.floor(get(LL_tire_psi)) % 5
+        local L_psi  = math.floor(get(L_tire_psi)) - math.floor(get(L_tire_psi)) % 5
+        local R_psi  = math.floor(get(R_tire_psi)) - math.floor(get(R_tire_psi)) % 5
+        local RR_psi = math.floor(get(RR_tire_psi)) - math.floor(get(RR_tire_psi)) % 5
+
+        local NL_psi  = math.floor(get(NL_tire_psi)) - math.floor(get(NL_tire_psi)) % 5
+        local NR_psi = math.floor(get(NR_tire_psi)) - math.floor(get(NR_tire_psi)) % 5
+
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-360+26, size[2]/2-165, LL_psi, 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-200+26, size[2]/2-165, L_psi, 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+200+26, size[2]/2-165, R_psi, 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+360+26, size[2]/2-165, RR_psi, 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+80+26, size[2]/2+175, NL_psi, 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-80+26, size[2]/2+175, NR_psi, 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
 
     else
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2-360, size[2]/2-165, "XX", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2-200, size[2]/2-165, "XX", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2+200, size[2]/2-165, "XX", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+360, size[2]/2-165, "XX", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)    
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+360, size[2]/2-165, "XX", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
         
     --brakes indications
@@ -66,18 +86,37 @@ local function draw_brakes_and_tires()
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2+360, size[2]/2-120, "4", 26, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2+175, "PSI", 26, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
 
+
     --upper arcs
-    sasl.gl.drawArc(size[1]/2 - 360, size[2]/2 - 110, 76, 80, 60, 60, left_brake_temp_color)
-    sasl.gl.drawArc(size[1]/2 - 200, size[2]/2 - 110, 76, 80, 60, 60, left_brake_temp_color)
-    sasl.gl.drawArc(size[1]/2 + 200, size[2]/2 - 110, 76, 80, 60, 60, right_brake_temp_color)
-    sasl.gl.drawArc(size[1]/2 + 360, size[2]/2 - 110, 76, 80, 60, 60, right_brake_temp_color)
+    if LL_temp > L_temp and LL_temp > R_temp and LL_temp > RR_temp and ll_brake_temp_color ~= ECAM_ORANGE then
+        ll_brake_temp_color = ECAM_GREEN
+    end
+    if L_temp > LL_temp and L_temp > R_temp and L_temp > RR_temp and l_brake_temp_color ~= ECAM_ORANGE then
+        l_brake_temp_color = ECAM_GREEN
+    end
+    if R_temp > LL_temp and R_temp > L_temp and R_temp > RR_temp and r_brake_temp_color ~= ECAM_ORANGE then
+        r_brake_temp_color = ECAM_GREEN
+    end
+    if RR_temp > LL_temp and RR_temp > R_temp and RR_temp >L_temp and rr_brake_temp_color ~= ECAM_ORANGE then
+        rr_brake_temp_color = ECAM_GREEN
+    end
+
+
+    sasl.gl.drawArc(size[1]/2 - 360, size[2]/2 - 110, 76, 80, 60, 60, ll_brake_temp_color)
+    sasl.gl.drawArc(size[1]/2 - 200, size[2]/2 - 110, 76, 80, 60, 60, l_brake_temp_color)
+    sasl.gl.drawArc(size[1]/2 + 200, size[2]/2 - 110, 76, 80, 60, 60, r_brake_temp_color)
+    sasl.gl.drawArc(size[1]/2 + 360, size[2]/2 - 110, 76, 80, 60, 60, rr_brake_temp_color)
     
     --lower arcs
     if get(Wheel_status_TPIU) == 1 then
-        sasl.gl.drawArc(size[1]/2 - 360, size[2]/2 - 110, 76, 80, 240, 60, left_tire_psi_color)
-        sasl.gl.drawArc(size[1]/2 - 200, size[2]/2 - 110, 76, 80, 240, 60, left_tire_psi_color)
-        sasl.gl.drawArc(size[1]/2 + 200, size[2]/2 - 110, 76, 80, 240, 60, right_tire_psi_color)
-        sasl.gl.drawArc(size[1]/2 + 360, size[2]/2 - 110, 76, 80, 240, 60, right_tire_psi_color)
+        
+        sasl.gl.drawArc(size[1]/2 - 75, size[2]/2 + 230, 76, 80, 240, 60, nl_tire_psi_color)
+        sasl.gl.drawArc(size[1]/2 + 75, size[2]/2 + 230, 76, 80, 240, 60, nr_tire_psi_color)
+    
+        sasl.gl.drawArc(size[1]/2 - 360, size[2]/2 - 110, 76, 80, 240, 60, ll_tire_psi_color)
+        sasl.gl.drawArc(size[1]/2 - 200, size[2]/2 - 110, 76, 80, 240, 60, l_tire_psi_color)
+        sasl.gl.drawArc(size[1]/2 + 200, size[2]/2 - 110, 76, 80, 240, 60, r_tire_psi_color)
+        sasl.gl.drawArc(size[1]/2 + 360, size[2]/2 - 110, 76, 80, 240, 60, rr_tire_psi_color)
     end
 end
 
@@ -300,29 +339,19 @@ function ecam_update_wheel_page()
 
 
     --wheels indications--
-    if get(Left_brakes_temp) > 400 then
-		left_brake_temp_color = ECAM_ORANGE
-	else
-		left_brake_temp_color = ECAM_WHITE
-	end
+    ll_brake_temp_color = get(LL_brakes_temp) > 300 and ECAM_ORANGE or ECAM_WHITE
+    l_brake_temp_color  = get(L_brakes_temp)  > 300 and ECAM_ORANGE or ECAM_WHITE
+    r_brake_temp_color  = get(R_brakes_temp)  > 300 and ECAM_ORANGE or ECAM_WHITE
+    rr_brake_temp_color = get(RR_brakes_temp) > 300 and ECAM_ORANGE or ECAM_WHITE
 
-	if get(Right_brakes_temp) > 400 then
-		right_brake_temp_color = ECAM_ORANGE
-	else
-		right_brake_temp_color = ECAM_WHITE
-	end
+    ll_tire_psi_color = (get(LL_tire_psi) > 240 or get(LL_tire_psi) < 180) and ECAM_ORANGE or ECAM_WHITE
+    l_tire_psi_color  = (get(L_tire_psi) > 240  or get(L_tire_psi) < 180) and ECAM_ORANGE or ECAM_WHITE
+    r_tire_psi_color  = (get(R_tire_psi) > 240  or get(R_tire_psi) < 180) and ECAM_ORANGE or ECAM_WHITE
+    rr_tire_psi_color = (get(RR_tire_psi) > 240 or get(RR_tire_psi) < 180) and ECAM_ORANGE or ECAM_WHITE
 
-	if get(Left_tire_psi) > 280 then
-		left_tire_psi_color = ECAM_ORANGE
-	else
-		left_tire_psi_color = ECAM_WHITE
-	end
+    nl_tire_psi_color = (get(NL_tire_psi) > 210 or get(NL_tire_psi) < 160) and ECAM_ORANGE or ECAM_WHITE
+    nr_tire_psi_color = (get(NR_tire_psi) > 210 or get(NR_tire_psi) < 160) and ECAM_ORANGE or ECAM_WHITE
 
-	if get(Right_tire_psi) > 280 then
-		right_tire_psi_color = ECAM_ORANGE
-	else
-		right_tire_psi_color = ECAM_WHITE
-	end
 
 end
 

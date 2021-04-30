@@ -23,6 +23,7 @@ fbo = true
 include('ND/common_ND.lua')
 
 nd_data = new_dataset(ND_FO)
+ND_all_data[ND_FO] = nd_data
 
 sasl.registerCommandHandler (ND_Fo_terrain_toggle, 0, function(phase) if phase == SASL_COMMAND_BEGIN then set(ND_Fo_Terrain, 1 - get(ND_Fo_Terrain)) end end)
 

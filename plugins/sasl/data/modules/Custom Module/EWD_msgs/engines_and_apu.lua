@@ -1986,3 +1986,557 @@ MessageGroup_ENG_STALL = {
 
 }
 
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: ENG 1(2) LO START AIR
+----------------------------------------------------------------------------------------------------
+
+MessageGroup_ENG_LO_START_AIR = {
+
+    shown = false,
+
+    text  = function()
+                return "ENG"
+            end,
+    color = function()
+                return COL_CAUTION
+            end,
+
+    sd_page = ECAM_PAGE_ENG,
+    
+    priority = PRIORITY_LEVEL_2,
+
+    messages = {
+        {
+            text = function()
+                local N = ""
+                if (get(L_bleed_press) <= 10 and get(Engine_1_avail) == 0  and get(Engine_1_master_switch) == 1) then
+                    N = "1"
+                end
+                if (get(R_bleed_press) <= 10 and get(Engine_2_avail) == 0  and get(Engine_2_master_switch) == 1) then
+                    if #N > 0 then
+                        N = N .. "+"
+                    end
+                    N = N .. "2"
+                end
+                return "    " .. N .. " LO START AIR PRESS"
+            end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        },
+         {
+            text = function() return " - BLEED AIR........CHECK" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return true end
+        },
+        {
+            text = function() return " WINDMILL START ONLY" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function()
+                return get(All_on_ground) == 0
+            end
+        }
+    },
+
+    is_active = function()
+        return (get(L_bleed_press) <= 10 and get(Engine_1_avail) == 0  and get(Engine_1_master_switch) == 1) or (get(R_bleed_press) <= 10 and get(Engine_2_avail) == 0  and get(Engine_2_master_switch) == 1)
+    end,
+
+    is_inhibited = function()
+        return is_inibithed_in({PHASE_1ST_ENG_TO_PWR, PHASE_ABOVE_80_KTS, PHASE_LIFTOFF, PHASE_FINAL, PHASE_TOUCHDOWN})
+    end
+
+}
+
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: ENG 1(2) START FAULT
+----------------------------------------------------------------------------------------------------
+
+local function start_fault_1()
+    
+    if get(All_on_ground) == 1 and MessageGroup_ENG_START_FAULT.eng_1_s_time == 0 and get(Engine_1_avail) == 0  and get(Eng_1_N2) > 11 then
+        MessageGroup_ENG_START_FAULT.eng_1_s_time = get(TIME)
+    elseif get(Engine_1_avail) + get(Engine_1_master_switch) ~= 1 or get(All_on_ground) == 0 then
+        MessageGroup_ENG_START_FAULT.eng_1_s_time = 0
+    end
+    local TIME_LIMIT = 60
+    local engine_L = math.abs(get(Cockpit_throttle_lever_L))  >= 0.05
+                     or (MessageGroup_ENG_START_FAULT.eng_1_s_time ~= 0 and get(TIME) - MessageGroup_ENG_START_FAULT.eng_1_s_time > TIME_LIMIT)
+    return (engine_L and get(Engine_1_avail) == 0  and get(Engine_1_master_switch) == 1)
+end
+
+local function start_fault_2()
+
+    if get(All_on_ground) == 1 and  MessageGroup_ENG_START_FAULT.eng_2_s_time == 0 and get(Engine_2_avail) == 0  and get(Eng_2_N2) > 11 then
+        MessageGroup_ENG_START_FAULT.eng_2_s_time = get(TIME)
+    elseif get(Engine_2_avail) + get(Engine_2_master_switch) ~= 1 or get(All_on_ground) == 0  then
+        MessageGroup_ENG_START_FAULT.eng_2_s_time = 0
+    end
+    local TIME_LIMIT = 60
+
+    local engine_R = math.abs(get(Cockpit_throttle_lever_R))  >= 0.05
+                     or (MessageGroup_ENG_START_FAULT.eng_2_s_time ~= 0 and get(TIME) - MessageGroup_ENG_START_FAULT.eng_2_s_time > TIME_LIMIT)
+
+    return (engine_R and get(Engine_2_avail) == 0  and get(Engine_2_master_switch) == 1)
+
+end
+
+MessageGroup_ENG_START_FAULT = {
+
+    shown = false,
+
+    text  = function()
+                return "ENG"
+            end,
+    color = function()
+                return COL_CAUTION
+            end,
+
+    sd_page = ECAM_PAGE_ENG,
+    
+    priority = PRIORITY_LEVEL_2,
+
+    messages = {
+        {
+            text = function()
+                local N = ""
+                if start_fault_1() then
+                    N = "1"
+                end
+                if start_fault_2() then
+                    if #N > 0 then
+                        N = N .. "+"
+                    end
+                    N = N .. "2"
+                end
+                return "    " .. N .. " START FAULT"
+            end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        },
+        {
+            text = function() return " THR LEVER NOT AT IDLE" end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return math.abs(get(Cockpit_throttle_lever_L))  >= 0.05 or math.abs(get(Cockpit_throttle_lever_R))  >= 0.05 end
+        },
+        {
+            text = function() return " - THR LEVER.........IDLE" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return math.abs(get(Cockpit_throttle_lever_L))  >= 0.05 or math.abs(get(Cockpit_throttle_lever_R))  >= 0.05 end
+        },
+        {
+            text = function() return " HUNG START" end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return get(FAILURE_ENG_HUNG_START, 1) + get(FAILURE_ENG_HUNG_START, 2) > 0 end
+        },
+        {
+            text = function() return " AUTOCRANK IN PROGRESS" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return get(FAILURE_ENG_HUNG_START, 1) + get(FAILURE_ENG_HUNG_START, 2) > 0 end
+        },
+        {
+            text = function() return " STARTER TIME EXCEEDED" end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return get(FAILURE_ENG_HUNG_START, 1) + get(FAILURE_ENG_HUNG_START, 2) == 0 end
+        },
+        {
+            text = function() return " - ENG MASTER 1.......OFF" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return start_fault_1() and get(Engine_1_master_switch) == 1 end
+        },
+        {
+            text = function() return " - ENG MASTER 2.......OFF" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return start_fault_2() and get(Engine_2_master_switch) == 1 end
+        },
+        
+    },
+
+    eng_1_s_time = 0,
+    eng_2_s_time = 0,
+    
+    is_active = function()
+        return start_fault_1() or start_fault_2()
+    end,
+
+    is_inhibited = function()
+        return is_inibithed_in({PHASE_1ST_ENG_TO_PWR, PHASE_ABOVE_80_KTS, PHASE_LIFTOFF, PHASE_FINAL, PHASE_TOUCHDOWN})
+    end
+
+}
+
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: ENG 1(2) OIL HI TEMP
+----------------------------------------------------------------------------------------------------
+
+MessageGroup_ENG_OIL_HI_TEMP = {
+
+    shown = false,
+
+    text  = function()
+                return "ENG"
+            end,
+    color = function()
+                return COL_CAUTION
+            end,
+
+    sd_page = ECAM_PAGE_ENG,
+    
+    priority = PRIORITY_LEVEL_2,
+
+    messages = {
+        {
+            text = function()
+                local N = ""
+                if (get(Eng_1_OIL_temp) > ENG.data.display.oil_temp_high_amber) then
+                    N = "1"
+                end
+                if (get(Eng_2_OIL_temp) > ENG.data.display.oil_temp_high_amber)  then
+                    if #N > 0 then
+                        N = N .. "+"
+                    end
+                    N = N .. "2"
+                end
+                return "    " .. N .. " OIL HI TEMP"
+            end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        },
+        {
+            text = function() return " - THR LEVER....BLW LIMIT" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return true end
+        },
+        {
+            text = function() return " . IF UNSUCCESSFUL:" end,
+            color = function() return COL_REMARKS end,
+            is_active = function() return true end
+        },
+        {
+            text = function() return "   - ENG MASTER 1.....OFF" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return (get(Eng_1_OIL_temp) > ENG.data.display.oil_temp_high_amber)  and get(Engine_1_master_switch) == 1 end
+        },
+        {
+            text = function() return "   - ENG MASTER 2.....OFF" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return (get(Eng_2_OIL_temp) > ENG.data.display.oil_temp_high_amber)  and get(Engine_2_master_switch) == 1 end
+        },
+    },
+
+    is_active = function()
+        return get(Eng_1_OIL_temp) > ENG.data.display.oil_temp_high_amber or get(Eng_2_OIL_temp) > ENG.data.display.oil_temp_high_amber
+    end,
+
+    is_inhibited = function()
+        return is_inibithed_in({PHASE_ABOVE_80_KTS, PHASE_LIFTOFF, PHASE_FINAL, PHASE_TOUCHDOWN})
+    end
+
+}
+
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: ENG 1(2) SHUTDOWN
+----------------------------------------------------------------------------------------------------
+
+local Message_ENG_MODE_IGN = {
+    text = function() return " - ENG MODE SEL.......IGN" end,
+    color = function() return COL_ACTIONS end,
+    is_active = function() return get(Engine_mode_knob) ~= 1 end
+}
+local Message_FUEL_IMBALANCE_MONITOR = {
+    text = function() return " MONITOR FUEL IMBALANCE" end,
+    color = function() return COL_ACTIONS end,
+    is_active = function() return true end
+}
+local Message_TCAS_TA = {
+    text = function() return " - TCAS MODE SEL.......TA" end,
+    color = function() return COL_ACTIONS end,
+    is_active = function() return get(TCAS_mode) == 1 end
+}
+
+MessageGroup_ENG_1_SHUTDOWN = {
+
+    shown = false,
+
+    text  = function()
+                return "ENG"
+            end,
+    color = function()
+                return COL_CAUTION
+            end,
+
+    sd_page = ECAM_PAGE_ENG,
+    
+    priority = PRIORITY_LEVEL_2,
+
+    land_asap_amber = true,
+
+    messages = {
+        {
+            text = function()
+                return "    1 SHUTDOWN"
+            end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        },
+        {
+            text = function() return " - PACK 1.............OFF" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return not PB.ovhd.ac_pack_1.status_bottom end
+        },
+        {
+            text = function() return " - X BLEED...........OPEN" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return get(X_bleed_dial) ~= 2 and AI_sys.switches[3] and get(Fire_pb_ENG1_status) == 0 end
+        },
+        Message_ENG_MODE_IGN,
+        Message_FUEL_IMBALANCE_MONITOR,
+        Message_TCAS_TA,
+        {
+            text = function() return " - X BLEED...........SHUT" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return get(X_bleed_dial) ~= 0 and get(Fire_pb_ENG1_status) == 1 end
+        },
+        {
+            text = function() return " - WING ANTI ICE......OFF" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return AI_sys.switches[3] and get(Fire_pb_ENG1_status) == 1 end
+        },
+        {
+            text = function() return " AVOID ICING CONDITIONS" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return get(Fire_pb_ENG1_status) == 1 end
+        },
+    },
+
+    is_active = function()
+        return (get(Engine_1_master_switch) == 0 and get(EWD_flight_phase) >= PHASE_ABOVE_80_KTS and get(EWD_flight_phase) <= PHASE_TOUCHDOWN)
+               or ((get(EWD_flight_phase) < 3 or get(EWD_flight_phase) > 8) and get(Fire_pb_ENG1_status) == 1)
+    end,
+
+    is_inhibited = function()
+        return false
+    end
+
+}
+
+MessageGroup_ENG_2_SHUTDOWN = {
+
+    shown = false,
+
+    text  = function()
+                return "ENG"
+            end,
+    color = function()
+                return COL_CAUTION
+            end,
+
+    sd_page = ECAM_PAGE_ENG,
+    
+    priority = PRIORITY_LEVEL_2,
+
+    land_asap_amber = true,
+
+    messages = {
+        {
+            text = function()
+                return "    2 SHUTDOWN"
+            end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        },
+        {
+            text = function() return " - PACK 1.............OFF" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return MessageGroup_ELEC_EMER_CONFIG.is_active() and not PB.ovhd.ac_pack_1.status_bottom end
+        },
+        {
+            text = function() return " - PACK 2.............OFF" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return not MessageGroup_ELEC_EMER_CONFIG.is_active() and not PB.ovhd.ac_pack_2.status_bottom end
+        },
+        {
+            text = function() return " - X BLEED...........OPEN" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return get(X_bleed_dial) ~= 2 and AI_sys.switches[3] and get(Fire_pb_ENG2_status) == 0 end
+        },
+        Message_ENG_MODE_IGN,
+        Message_FUEL_IMBALANCE_MONITOR,
+        Message_TCAS_TA,
+        {
+            text = function() return " - X BLEED...........SHUT" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return get(X_bleed_dial) ~= 0 and get(Fire_pb_ENG2_status) == 1 end
+        },
+        {
+            text = function() return " - WING ANTI ICE......OFF" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return AI_sys.switches[3] and get(Fire_pb_ENG2_status) == 1 end
+        },
+        {
+            text = function() return " AVOID ICING CONDITIONS" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return get(Fire_pb_ENG1_status) == 1 end
+        },
+    },
+
+    is_active = function()
+        return (get(Engine_2_master_switch) == 0 and get(EWD_flight_phase) >= PHASE_ABOVE_80_KTS and get(EWD_flight_phase) <= PHASE_TOUCHDOWN)
+               or ((get(EWD_flight_phase) < 3 or get(EWD_flight_phase) > 8) and get(Fire_pb_ENG2_status) == 1) 
+
+    end,
+
+    is_inhibited = function()
+        return false
+    end
+
+}
+
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: ENG 1(2) COMPRESSOR VANE
+----------------------------------------------------------------------------------------------------
+
+MessageGroup_ENG_COMP_VANE = {
+
+    shown = false,
+
+    text  = function()
+                return "ENG"
+            end,
+    color = function()
+                return COL_CAUTION
+            end,
+
+    sd_page = ECAM_PAGE_ENG,
+    
+    priority = PRIORITY_LEVEL_2,
+
+    messages = {
+        {
+            text = function()
+                local N = ""
+                if (get(FAILURE_ENG_COMP_VANE, 1) == 1) then
+                    N = "1"
+                end
+                if (get(FAILURE_ENG_COMP_VANE, 2) == 1)  then
+                    if #N > 0 then
+                        N = N .. "+"
+                    end
+                    N = N .. "2"
+                end
+                return "    " .. N .. " COMPRESSOR VANE"
+            end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        },
+        {
+            text = function() return " - THR LEVER 1.......IDLE" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return math.abs(get(Cockpit_throttle_lever_L))  >= 0.05 and get(All_on_ground) == 1 and get(FAILURE_ENG_COMP_VANE, 1) == 1 end
+        },
+        {
+            text = function() return " - THR LEVER 2.......IDLE" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return math.abs(get(Cockpit_throttle_lever_R))  >= 0.05 and get(All_on_ground) == 1 and get(FAILURE_ENG_COMP_VANE, 2) == 1 end
+        },
+        {
+            text = function() return " - ENG MASTER 1.......OFF" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return (get(All_on_ground) == 1 and get(FAILURE_ENG_COMP_VANE, 1) == 1  and get(Engine_1_master_switch) == 1) end
+        },
+        {
+            text = function() return " - ENG MASTER 2.......OFF" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return (get(All_on_ground) == 1 and get(FAILURE_ENG_COMP_VANE, 2) == 1 and get(Engine_2_master_switch) == 1) end
+        },
+        {
+            text = function() return " AVOID RAPID THR CHANGES" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return get(All_on_ground) == 0 end
+        },
+        {
+            text = function() return " THRUST LIMITED" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return get(All_on_ground) == 0 end
+        },
+    },
+
+    is_active = function()
+        return get(FAILURE_ENG_COMP_VANE, 1) == 1 or get(FAILURE_ENG_COMP_VANE, 2) == 1
+    end,
+
+    is_inhibited = function()
+        return is_inibithed_in({PHASE_ABOVE_80_KTS, PHASE_LIFTOFF})
+    end
+
+}
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: ENG 1(2) SYSTEM FAULT
+----------------------------------------------------------------------------------------------------
+
+MessageGroup_ENG_SYS_FAULT = {
+
+    shown = false,
+
+    text  = function()
+                return "ENG"
+            end,
+    color = function()
+                return COL_CAUTION
+            end,
+
+    sd_page = ECAM_PAGE_ENG,
+    
+    priority = PRIORITY_LEVEL_2,
+
+    messages = {
+        {
+            text = function()
+                local N = ""
+                if (get(FAILURE_ENG_SYS_FAULT, 1) == 1) then
+                    N = "1"
+                end
+                if (get(FAILURE_ENG_SYS_FAULT, 2) == 1)  then
+                    if #N > 0 then
+                        N = N .. "+"
+                    end
+                    N = N .. "2"
+                end
+                return "    " .. N .. " SYSTEM FAULT"
+            end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        },
+        {
+            text = function() return " - THR LEVER 1.......IDLE" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return math.abs(get(Cockpit_throttle_lever_L))  >= 0.05 and get(All_on_ground) == 1 and get(FAILURE_ENG_SYS_FAULT, 1) == 1 end
+        },
+        {
+            text = function() return " - THR LEVER 2.......IDLE" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return math.abs(get(Cockpit_throttle_lever_R))  >= 0.05 and get(All_on_ground) == 1 and get(FAILURE_ENG_SYS_FAULT, 2) == 1 end
+        },
+        {
+            text = function() return " RISK OF HI EGT" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return true end
+        },
+    },
+
+    is_active = function()
+        return get(FAILURE_ENG_SYS_FAULT, 1) == 1 or get(FAILURE_ENG_SYS_FAULT, 2) == 1
+    end,
+
+    is_inhibited = function()
+        return is_active_in({PHASE_1ST_ENG_ON, PHASE_AIRBONE, PHASE_BELOW_80_KTS})
+    end
+
+}
+
+

@@ -347,13 +347,13 @@ local function update_oil_stuffs()
     -- ENG 1 - TEMP
     if get(Engine_1_avail) == 1 then
         local n2_value = get(Eng_1_N2)
-        local temp = Math_rescale(60, 65, ENG.data.max_n2, ENG.data.oil.temp_max_mct, n2_value) + random_pool_2 * 5
-        Set_dataref_linear_anim(Eng_1_OIL_temp, temp, -50, 250, 1)
+        local temp = Math_rescale(60, 65, ENG.data.max_n2, ENG.data.oil.temp_max_mct, n2_value) + random_pool_2 * 5 + get(FAILURE_ENG_OIL_HI_TEMP, 1) * 70
+        Set_dataref_linear_anim(Eng_1_OIL_temp, temp, -50, 250, 2)
     else
         -- During startup
         local n2_value = math.max(10,get(Eng_1_N2))
         local temp = Math_rescale(10, get(OTA), 70, 75, n2_value)
-        Set_dataref_linear_anim(Eng_1_OIL_temp, temp, -50, 250, 1)
+        Set_dataref_linear_anim(Eng_1_OIL_temp, temp, -50, 250, 2)
     end
     
     -- ENG 2 - PRESS
@@ -375,7 +375,7 @@ local function update_oil_stuffs()
     -- ENG 2 - TEMP
     if get(Engine_2_avail) == 1 then
         local n2_value = get(Eng_2_N2)
-        local temp = Math_rescale(60, 65, ENG.data.max_n2, ENG.data.oil.temp_max_mct, n2_value) + random_pool_1 * 5
+        local temp = Math_rescale(60, 65, ENG.data.max_n2, ENG.data.oil.temp_max_mct, n2_value) + random_pool_1 * 5 + get(FAILURE_ENG_OIL_HI_TEMP, 2) * 70
         Set_dataref_linear_anim(Eng_2_OIL_temp, temp, -50, 250, 1)
     else
         -- During startup
@@ -566,7 +566,7 @@ local function perform_starting_procedure(eng, inflight_restart)
         -- Phase 2: Controlling the N2  
         perform_starting_procedure_follow_n2(eng)
         
-    elseif eng_N1_off[eng] < ENG.data.startup.n1[#ENG.data.startup.n1].n1_set then
+    elseif eng_N1_off[eng] < ENG.data.startup.n1[#ENG.data.startup.n1].n1_set and get(FAILURE_ENG_HUNG_START, eng) == 0 then
         -- Phase 3: Controlling the N1
         perform_starting_procedure_follow_n1(eng)
     else
@@ -655,8 +655,10 @@ local function update_startup()
     local fast_restart_1 = get(Eng_1_N1) > 25
     local fast_restart_2 = get(Eng_2_N1) > 25
 
-    local does_engine_1_can_start_or_crank = get(Engine_1_avail) == 0 and (get(L_bleed_press) > 10 or windmill_condition_1 or fast_restart_1) and get(Eng_1_FADEC_powered) == 1
-    local does_engine_2_can_start_or_crank = get(Engine_2_avail) == 0 and (get(R_bleed_press) > 10 or windmill_condition_2 or fast_restart_2) and get(Eng_2_FADEC_powered) == 1
+    local eng_1_air_cond = (get(L_bleed_press) > 10 or windmill_condition_1 or fast_restart_1)
+    local eng_2_air_cond = (get(R_bleed_press) > 10 or windmill_condition_2 or fast_restart_2)
+    local does_engine_1_can_start_or_crank = get(Engine_1_avail) == 0 and eng_1_air_cond and get(Eng_1_FADEC_powered) == 1 and math.abs(get(Cockpit_throttle_lever_L)) < 0.05
+    local does_engine_2_can_start_or_crank = get(Engine_2_avail) == 0 and eng_2_air_cond and get(Eng_2_FADEC_powered) == 1 and math.abs(get(Cockpit_throttle_lever_R)) < 0.05
 
     if get(FAILURE_ENG_FADEC_CH1, 1) == 1 and get(FAILURE_ENG_FADEC_CH2, 1) == 1 then
         does_engine_1_can_start_or_crank = false -- No fadec? No start

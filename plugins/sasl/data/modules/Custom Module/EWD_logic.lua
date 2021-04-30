@@ -34,6 +34,7 @@ include('EWD_msgs/gpws_tcas.lua')
 include('EWD_msgs/hydraulic.lua')
 include('EWD_msgs/misc.lua')
 include('EWD_msgs/nav.lua')
+include('EWD_msgs/packs.lua')
 include('EWD_msgs/pressurization.lua')
 include('EWD_msgs/to_ldg_memos.lua')
 
@@ -93,8 +94,12 @@ local left_messages_list = {
     MessageGroup_AUTOBRAKES,
     MessageGroup_ADKIS_NWS,
     MessageGroup_ADKIS_NWS_FAULT,
+    MessageGroup_NW_STRG_FAULT,
     MessageGroup_BRAKE_NORM_FAULT,
     MessageGroup_BRAKE_ALTN_FAULT,
+    MessageGroup_BRAKE_Y_LO_PR,
+    MessageGroup_TIRE_LO_PR,
+    MessageGroup_LGCIU_FAULT,
     MessageGroup_BSCU_FAULT,
     MessageGroup_TCAS_FAULT,
     MessageGroup_ADR_FAULT_SINGLE,
@@ -152,14 +157,21 @@ local left_messages_list = {
     MessageGroup_ELEC_STATIC_INV_FAULT,
     MessageGroup_ELEC_TR_1_2_FAULT,
     MessageGroup_ELEC_TR_ESS_FAULT,
+    MessageGroup_ENG_1_SHUTDOWN,
+    MessageGroup_ENG_2_SHUTDOWN,
     MessageGroup_ENG_STALL,
     MessageGroup_ENG_REV_SET,
-    MessageGroup_ENG_FF_CLOG,
-    MessageGroup_ENG_OIL_CLOG,
     MessageGroup_ENG_REV_FAULT,
     MessageGroup_ENG_REV_PRESS,
     MessageGroup_ENG_OIL_LO_PR_AMBER,
+    MessageGroup_ENG_OIL_HI_TEMP,
+    MessageGroup_ENG_COMP_VANE,
+    MessageGroup_ENG_SYS_FAULT,
     MessageGroup_ENG_THR_LEVERS_NOT_SET,
+    MessageGroup_ENG_LO_START_AIR,
+    MessageGroup_ENG_START_FAULT,
+    MessageGroup_ENG_FF_CLOG,
+    MessageGroup_ENG_OIL_CLOG,
     MessageGroup_SAT_ABOVE_FLEX,
     MessageGroup_FUEL_WING_LO_LVL_DOUBLE,
     MessageGroup_FUEL_WING_LO_LVL_SINGLE,
@@ -200,7 +212,9 @@ local left_messages_list = {
     MessageGroup_BLEED_ENG_LEAK,
     MessageGroup_BLEED_WING_LEAK,
     MessageGroup_TPIU_FAULT,
+    MessageGroup_PACKS_FAULT,
     MessageGroup_PACKS_OFF,
+    MessageGroup_PACKS_REGUL_FAULT,
     MessageGroup_GPWS_FAULT,
     MessageGroup_GPWS_TERR_FAULT,
     MessageGroup_AOA_CAPT_FAULT,
@@ -238,6 +252,14 @@ local left_messages_list = {
     MessageGroup_FWC_FAULT,
     MessageGroup_BUSS_SPD_ALT_SINGLE,
     MessageGroup_BUSS_SPD_ALT_DOUBLE,
+    
+    MessageGroup_AIRCOND_CKPT_DUCT_OVHT,
+    MessageGroup_AIRCOND_FWD_CAB_DUCT_OVHT,
+    MessageGroup_AIRCOND_AFT_CAB_DUCT_OVHT,
+    MessageGroup_AIRCOND_CARGO_DUCT_OVHT,
+    MessageGroup_AIRCOND_AFT_CARGO_VLV_STUCK,
+    MessageGroup_AIRCOND_FANS_FAULT,
+    MessageGroup_AIRCOND_TRIM_AIR_SYS_FAULT,
     
     -- Warnings
     MessageGroup_OVERSPEED,
