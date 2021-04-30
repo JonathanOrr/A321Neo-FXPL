@@ -860,6 +860,7 @@ LOAD_total_mtow_correction = createGlobalPropertyi("a321neo/efb/total_mtow_corr"
 
 SOUND_rush_L = createGlobalPropertyi("a321neo/sounds/rush_L", 0, false, true, false) --0-1, difference of the target and actual thrust
 SOUND_rush_R = createGlobalPropertyi("a321neo/sounds/rush_R", 0, false, true, false) --0-1, difference of the target and actual thrust
+SOUND_fuel_pump = createGlobalPropertyi("a321neo/sounds/fuel_pump", 0, false, true, false)
 
 --computing v speeds and takeoff data
 
