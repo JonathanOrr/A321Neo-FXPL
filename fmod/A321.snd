@@ -2605,7 +2605,13 @@ END_SOUND_ATTACHMENT
 #############################################################################################
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /RevR
+  EVENT_NAME /Engines V1 PW1100G/RevL
+  VEH_PART engine 0
+  EVENT_ALWAYS
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Engines V1 PW1100G/RevR
   VEH_PART engine 1
   EVENT_ALWAYS
 END_SOUND_ATTACHMENT

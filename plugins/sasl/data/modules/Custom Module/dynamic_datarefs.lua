@@ -862,8 +862,10 @@ LOAD_total_mtow_correction = createGlobalPropertyi("a321neo/efb/total_mtow_corr"
 
 --Sounds Datarefs for Fmod
 
-SOUND_rush_L = createGlobalPropertyi("a321neo/sounds/rush_L", 0, false, true, false) --0-1, difference of the target and actual thrust
-SOUND_rush_R = createGlobalPropertyi("a321neo/sounds/rush_R", 0, false, true, false) --0-1, difference of the target and actual thrust
+SOUND_rush_L = createGlobalPropertyf("a321neo/sounds/rush_L", 0, false, true, false) --0-1, difference of the target and actual thrust
+SOUND_rush_R = createGlobalPropertyf("a321neo/sounds/rush_R", 0, false, true, false) --0-1, difference of the target and actual thrust
+REV_L = createGlobalPropertyf("a321neo/sounds/rev_L", 0, false, true, false)
+REV_R = createGlobalPropertyf("a321neo/sounds/rev_R", 0, false, true, false)
 
 --computing v speeds and takeoff data
 
@@ -878,4 +880,6 @@ TOPCAT_torwy_bearing = createGlobalPropertyf("a321neo/efb/topcat/torwy_bearing",
 TOPCAT_ldgrwy_length = createGlobalPropertyf("a321neo/efb/topcat/ldgrwy_length", 0, false, true, false)
 TOPCAT_ldgrwy_bearing = createGlobalPropertyf("a321neo/efb/topcat/ldgrwy_bearing", 0, false, true, false)
 TOPCAT_ldgrwy_elev = createGlobalPropertyf("a321neo/efb/topcat/ldgrwy_elev", 0, false, true, false)
+
+
 

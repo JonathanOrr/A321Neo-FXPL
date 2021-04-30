@@ -61,12 +61,14 @@
 {bdd3f6e0-b7ff-46ac-aadd-d8b6b9c45201} event:/Engines/Engines
 {05aa7e46-d0ef-4817-84df-6599e3fd87f6} event:/Engines/Engines Ext
 {3c1896b4-b137-42d9-a178-78d93f2c0308} event:/Engines/HowlEnd
+{d840045c-95bc-42cf-a0d9-17093fde8b8d} event:/Engines V1 PW1100G/Engine Start N2 L
 {12015a68-dfa0-4f0c-94d3-e2d639703cf2} event:/Engines V1 PW1100G/EnginesL
 {4a3670cd-e3c8-4e1c-8b62-f35b4713d64a} event:/Engines V1 PW1100G/EnginesR
 {b12656ef-bd01-488e-bc99-8688bcd537d5} event:/Engines V1 PW1100G/HowlEnd
 {67fe6698-1117-48ce-8a94-c8009aabacca} event:/Engines V1 PW1100G/HowlLogicL
 {c66ab21e-1b9f-4f80-b86b-1511dff925f4} event:/Engines V1 PW1100G/HowlLogicR
-{d840045c-95bc-42cf-a0d9-17093fde8b8d} event:/Engines V1 PW1100G/Engine Start N2 L
+{4003976e-bf49-44ca-a3d6-0476fd686d05} event:/Engines V1 PW1100G/RevL
+{da7db8cb-938d-4c23-ad53-76356ae83640} event:/Engines V1 PW1100G/RevR
 {71483e42-1521-4ce6-a01b-56876658a229} event:/Engines V2/Boom
 {3428542a-0973-45d3-b8f9-c0e46de082e2} event:/Engines V2/Engine Start Ext
 {956efd44-c2c5-4ab7-a510-f35c74dcd905} event:/Engines V2/Engine Start N2 L
@@ -222,7 +224,6 @@
 {e7f2d612-cc52-44a5-b11f-3eadbe3cb078} event:/NoSmoke
 {d5bc7710-4cf2-4544-ba28-726b316c7f21} event:/Packs
 {0e7dff21-7b4d-4b72-9343-4928951e126a} event:/PTU
-{b0452156-9936-4b1e-9c0d-ec4992821fd2} event:/RevR
 {bd64a731-4c73-4553-b22a-33505b7c3684} event:/Seatbelt
 {e17ea26c-dd4f-4bc1-873e-8fc5e0da491d} event:/SpoilerArm
 {86179178-a201-42c4-9cbc-eb3b28b70587} event:/SpoilerFull
