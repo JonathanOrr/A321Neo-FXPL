@@ -3,7 +3,13 @@
 {7a544849-2d24-4ae1-9bc9-3ceadda13c32} event:/Airport/Ext
 {bff33e0f-d439-438b-b953-a54d305e4ebb} event:/Airport/Int
 {b78a17ca-4056-4443-aa61-7f22f71b2e0c} event:/BatteryRelay/1
+{2f6e7063-8c77-4f8d-a1c9-393a1f21d5b7} event:/BatteryRelay/1 Off
 {2b35580e-c22e-49d8-b6e1-8079883b310e} event:/BatteryRelay/2
+{76004d39-cc8a-48fa-82f6-2e5f037893c8} event:/BatteryRelay/2 Off
+{fa3ccb63-2201-42a0-9ba9-80eea8c41f31} event:/CockpitMechanical/Lights/1
+{7c1f3bc8-8a78-496c-929d-a763939df0aa} event:/CockpitMechanical/Lights/2
+{180bfc42-72ad-426e-9893-90b2e97a68a6} event:/CockpitMechanical/Lights/3
+{1128d7c8-5fbf-40c8-ad21-965a9183189a} event:/CockpitMechanical/Lights/4
 {ba144e8c-f08f-4650-bb8f-ea1fdda166e2} event:/CockpitMechanical/Rotary/Rotary1
 {6278ba00-52a0-476a-8a87-43fb61e0a189} event:/CockpitMechanical/Rotary/Rotary2
 {4c126686-6c9f-44a1-b45a-dd4a04ef8a46} event:/CockpitMechanical/Rotary/Rotary3
@@ -47,14 +53,22 @@
 {f876080e-f9a4-4eb5-8ae2-d6fd1a9d1509} event:/CockpitMechanical/Tray Table Close
 {3c593132-73eb-4d34-9184-c67400174bf2} event:/CockpitMechanical/Tray Table Open
 {498a6973-0776-4cb2-897d-5a634f715111} event:/Door/Cabin/Close
-{d97dbc83-53bc-4e08-9f95-69ac17ec8a41} event:/Door/Cabin/Fully Open
 {02a94314-2b65-472e-bb80-3b0ee065f737} event:/Door/Cabin/FullyClose
+{d97dbc83-53bc-4e08-9f95-69ac17ec8a41} event:/Door/Cabin/FullyOpen
 {0bf135d1-3c07-4b76-8a95-bc7d99232dcd} event:/Door/Cabin/Open
 {c98bea57-e385-49fe-89da-f2eb79555406} event:/Engines/Engine Start
 {ced3bc6e-ec20-43f0-a5a3-6f7602aec5e9} event:/Engines/Engine Start Ext
 {bdd3f6e0-b7ff-46ac-aadd-d8b6b9c45201} event:/Engines/Engines
 {05aa7e46-d0ef-4817-84df-6599e3fd87f6} event:/Engines/Engines Ext
 {3c1896b4-b137-42d9-a178-78d93f2c0308} event:/Engines/HowlEnd
+{d840045c-95bc-42cf-a0d9-17093fde8b8d} event:/Engines V1 PW1100G/Engine Start N2 L
+{12015a68-dfa0-4f0c-94d3-e2d639703cf2} event:/Engines V1 PW1100G/EnginesL
+{4a3670cd-e3c8-4e1c-8b62-f35b4713d64a} event:/Engines V1 PW1100G/EnginesR
+{b12656ef-bd01-488e-bc99-8688bcd537d5} event:/Engines V1 PW1100G/HowlEnd
+{67fe6698-1117-48ce-8a94-c8009aabacca} event:/Engines V1 PW1100G/HowlLogicL
+{c66ab21e-1b9f-4f80-b86b-1511dff925f4} event:/Engines V1 PW1100G/HowlLogicR
+{4003976e-bf49-44ca-a3d6-0476fd686d05} event:/Engines V1 PW1100G/RevL
+{da7db8cb-938d-4c23-ad53-76356ae83640} event:/Engines V1 PW1100G/RevR
 {71483e42-1521-4ce6-a01b-56876658a229} event:/Engines V2/Boom
 {3428542a-0973-45d3-b8f9-c0e46de082e2} event:/Engines V2/Engine Start Ext
 {956efd44-c2c5-4ab7-a510-f35c74dcd905} event:/Engines V2/Engine Start N2 L
@@ -210,7 +224,6 @@
 {e7f2d612-cc52-44a5-b11f-3eadbe3cb078} event:/NoSmoke
 {d5bc7710-4cf2-4544-ba28-726b316c7f21} event:/Packs
 {0e7dff21-7b4d-4b72-9343-4928951e126a} event:/PTU
-{b0452156-9936-4b1e-9c0d-ec4992821fd2} event:/RevR
 {bd64a731-4c73-4553-b22a-33505b7c3684} event:/Seatbelt
 {e17ea26c-dd4f-4bc1-873e-8fc5e0da491d} event:/SpoilerArm
 {86179178-a201-42c4-9cbc-eb3b28b70587} event:/SpoilerFull
@@ -235,8 +248,8 @@
 {072bd7fb-5c8f-4dc1-a84e-d21ca9930c53} bus:/Master/Exterior Unprocessed/Engines
 {7a0b49ba-aead-4c30-af12-561f455d9c0b} bus:/Master/Exterior Unprocessed/ExteriorNI
 {10525979-1fa1-4401-8583-bec00053b160} bus:/Master/Exterior Unprocessed/ExteriorWI
-{15a189d8-7334-4c3f-92d8-7395f3687cc7} bus:/Master/Exterior Unprocessed/GroundRoll
 {6cee8772-2b5f-4158-9399-80dbe765bd69} bus:/Master/Exterior Unprocessed/Mechanical
+{b61e991d-32d3-4702-a3a5-08048a3ecd6a} bus:/Master/Exterior Unprocessed/NewMuchQuieterIn
 {15e9c653-fbca-41ca-8241-7cd3b3870fc8} snapshot:/Inside
 {e5b38f91-83fb-4cec-a2d2-a0170dddb70a} snapshot:/FadingBegin
 {6bb566cf-f4e3-43dd-85f1-2529a372f90b} bank:/Engines_CFM

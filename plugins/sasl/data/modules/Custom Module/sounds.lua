@@ -35,6 +35,19 @@ local function thrust_rush()
     set(SOUND_rush_R , get(Throttle_blue_dot, 2) - get(Eng_2_N1))
 end
 
+local function reverser_drfs()
+    if get(Eng_1_reverser_deployment) > 0.1 then
+        set(REV_L, Set_anim_value_no_lim(get(REV_L), get(Eng_1_N1), 1) )
+    else
+        set(REV_L, Set_anim_value_no_lim(get(REV_L), 0, 1) )
+    end
+
+    if get(Eng_2_reverser_deployment) > 0.1 then
+        set(REV_R, Set_anim_value_no_lim(get(REV_R), get(Eng_2_N1), 1) )
+    else
+        set(REV_R, Set_anim_value_no_lim(get(REV_R), 0, 1) )
+    end
+end
 
 local function blower_extract_delay()
     if get(AC_ess_bus_pwrd) == 1 then
@@ -57,4 +70,5 @@ end
 function update()
     blower_extract_delay()
     thrust_rush()
+    reverser_drfs()
 end
