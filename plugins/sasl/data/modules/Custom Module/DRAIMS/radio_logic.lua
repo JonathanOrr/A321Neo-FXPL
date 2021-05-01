@@ -119,12 +119,6 @@ function radio_vor_set_freq(which_one, stby, freq)
     end
 end
 
-function radio_vor_swap_freq()
-    local temp = get(DRAIMS_vor_stby_freq[which_one])
-    set(DRAIMS_vor_stby_freq[which_one], get(DRAIMS_vor1_freq))
-    set(DRAIMS_vor_freq[which_one], temp)
-end
-
 function radio_vor_get_crs(which_one)
     return math.floor(get(DRAIMS_vor_crs[which_one]))
 end

@@ -68,7 +68,7 @@ end
 --used to cycle a value e.g. 1 --> 2 --> 3 |
 --                           ^<----------<--
 function Math_cycle(val, start, finish)
-    if start > finish then LogWarning("start is larger than finish, invalid") end
+    if start > finish then logWarning("start is larger than finish, invalid") end
     if val < start then
         return finish
     elseif val > finish then
