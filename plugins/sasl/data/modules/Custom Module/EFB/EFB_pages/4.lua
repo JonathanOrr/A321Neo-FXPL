@@ -61,9 +61,8 @@ end
 
 local function draw_toggle_switches()
     SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 364, 78, 18, 2, EFB.preferences["syncqnh"] and 2 or 1)
-    SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 330, 78, 18, 2, EFB.preferences["rolltonws"] and 2 or 1)
-    SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 296, 78, 18, 2, EFB.preferences["pausetd"] and 2 or 1)
-    SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 262, 78, 18, 2, EFB.preferences["copilot"] and 2 or 1)
+    SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 330, 78, 18, 2, EFB.preferences["pausetd"] and 2 or 1)
+    SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 296, 78, 18, 2, EFB.preferences["copilot"] and 2 or 1)
 end
 
 local function draw_volume_sliders()
@@ -140,7 +139,9 @@ function EFB_execute_page_4_buttons()
 
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 414,46,738,90, function ()
         efb_save_buttn_begin = get(TIME)
+        local volume_buffer_table = {get(VOLUME_ext), get(VOLUME_int), get(VOLUME_wind), get(VOLUME_cabin)}
         table.save(EFB.preferences, moduleDirectory .. "/Custom Module/saved_configs/EFB_preferences_v2")
+        table.save(volume_buffer_table, moduleDirectory .. "/Custom Module/saved_configs/EFB_volume_settings")
     end)
     
 ----------------------------------------------TOGGLE OPTIONS
@@ -148,11 +149,11 @@ function EFB_execute_page_4_buttons()
         EFB.preferences["syncqnh"] = not EFB.preferences["syncqnh"]
         --print("toggle_options_sync")
     end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 620,295,659,313, function ()
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 620,329,659,347, function ()
         EFB.preferences["pausetd"] = not EFB.preferences["pausetd"]
         --print("toggle_options_tca")
     end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 620,261,659,279, function ()
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 620,295,659,313, function ()
         EFB.preferences["copilot"] = not EFB.preferences["copilot"]
         --print("toggle_options_pausetd")
     end)
@@ -179,6 +180,21 @@ function EFB_execute_page_4_buttons()
     end
 end
 
+local function table_loading_on_start()
+    local table_loading_buffer = table.load(moduleDirectory .. "/Custom Module/saved_configs/EFB_preferences_v2")
+    for i=1, #table_loading_buffer do
+        EFB.preferences[i] = table_loading_buffer[i]
+    end
+
+    if table.load(moduleDirectory .. "/Custom Module/saved_configs/EFB_volume_settings") ~= nil then
+        local volume_table_load =  table.load(moduleDirectory .. "/Custom Module/saved_configs/EFB_volume_settings")
+        set(VOLUME_ext, volume_table_load[1])
+        set(VOLUME_int, volume_table_load[2])
+        set(VOLUME_wind, volume_table_load[3])
+        set(VOLUME_cabin, volume_table_load[4])
+    end
+end
+table_loading_on_start()
 
 
 --UPDATE LOOPS--
