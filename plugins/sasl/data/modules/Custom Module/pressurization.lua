@@ -126,10 +126,6 @@ function manual_control_handler(phase, direction)
     end
 end
 
-local function compute_pressure_diff(curr_press, volume, volume_increase)
-    return curr_pres * (volume_increase / volume)
-end
-
 local function get_air_density(pressure, temperature)
     return pressure / (DRY_AIR_CONSTANT * (temperature+273.15)) 
 end
