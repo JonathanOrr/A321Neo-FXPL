@@ -43,6 +43,81 @@ MessageGroup_GND_SPEEDBRAKES = {
 }
 
 
+--------------------------------------------------------------------------------
+-- CAUTION: GND SPLRS NOT ARMED
+--------------------------------------------------------------------------------
+
+MessageGroup_GND_SPLRS_NOT_ARMED = {
+
+    shown = false,
+
+    text  = function()
+                return "F/CTL"
+            end,
+    color = function()
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+
+    messages = {
+        {
+            text = function() return "      GND SPLR NOT ARMED" end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        }
+    },
+
+    sd_page = nil,
+
+    is_active = function()
+        return get(Speedbrake_handle_ratio) >= 0 and get(Gear_handle) > 0 and get(Capt_ra_alt_ft) <= 500
+    end,
+
+    is_inhibited = function()
+        return is_active_in({PHASE_FINAL})
+    end
+
+}
+
+--------------------------------------------------------------------------------
+-- CAUTION: SPD BRK STILL OUT
+--------------------------------------------------------------------------------
+
+MessageGroup_SPD_BRK_STILL_OUT = {
+
+    shown = false,
+
+    text  = function()
+                return "F/CTL"
+            end,
+    color = function()
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+
+    messages = {
+        {
+            text = function() return "      SPD BRK STILL OUT" end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        }
+    },
+
+    sd_page = nil,
+
+    is_active = function()
+        local limit = get(Eng_N1_idle) + 5
+        return get(Speedbrake_handle_ratio) > 0.05 and (get(Eng_1_N1) > limit or get(Eng_2_N1) > limit)
+    end,
+
+    is_inhibited = function()
+        return is_active_in({PHASE_AIRBONE, PHASE_FINAL})
+    end
+
+}
+
 
 --------------------------------------------------------------------------------
 -- WARNING: FLAP LVR NOT ZERO
