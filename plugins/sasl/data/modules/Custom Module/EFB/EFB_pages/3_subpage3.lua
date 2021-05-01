@@ -303,6 +303,7 @@ end
 --DRAW LOOPS--
 function p3s3_draw()
     draw_background()
+    draw_landing_distance_bar()
     draw_buttons()
     draw_dropdown_menu(194, 273, 157, 28,       EFB_DROPDOWN_OUTSIDE, EFB_DROPDOWN_INSIDE, dropdown_1, dropdown_expanded[1], dropdown_selected[1])
     draw_dropdown_menu(434, 273, 157, 28,       EFB_DROPDOWN_OUTSIDE, EFB_DROPDOWN_INSIDE, dropdown_2, dropdown_expanded[2], dropdown_selected[2])
@@ -326,7 +327,6 @@ function p3s3_draw()
         drawTextCentered( Font_ECAMfont , 686 , 595, landing_aircraft_data[2] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
         drawTextCentered( Font_ECAMfont , 821 , 595, landing_aircraft_data[3] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
     end
-    draw_landing_distance_bar()
     draw_no_arr_data()
 end
 

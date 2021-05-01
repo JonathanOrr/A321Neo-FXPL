@@ -236,7 +236,7 @@ local function p3s1_dropdown_buttons( x,y,w,h, table, identifier)
     for i=1, #table do
         if dropdown_expanded[identifier] then
             Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, x - w/2 + 5, y - h*i - 14, w-10 + ( x - w/2 + 5), h-2 + ( y - h*i - 14),function ()
-                print(i)
+                --print(i)
                 dropdown_selected[identifier] = i
                 dropdown_expanded[identifier] = false
                 set_takeoff_runway_data_to_global()--EVERYTIME THE USER CLICKS THE RUNWAY DROPDOWN MENU, IT REQUESTS THE RUNWAY DATA ONCE. THAT IS THE ONLY WAY I CAN THINK OF TO REFRESH RUNWAY DATA WITHOUT USING UPDATE LOOP.
