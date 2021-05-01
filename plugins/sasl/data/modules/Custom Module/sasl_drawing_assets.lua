@@ -278,3 +278,12 @@ Simbrief_bgd =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EF
 Simbrief_apply =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/TOOLS page/SIMBRIEF/apply_button.png")
 Simbrief_send =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/TOOLS page/SIMBRIEF/send_button.png")
 Simbrief_highlighter =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/TOOLS page/SIMBRIEF/subpage_2_highlighter.png")
+
+--FAILURES_UI
+
+Button_bgd =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/failures_ui/btn-empty.png")
+R_master =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/failures_ui/r_master.png")
+R_warn =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/failures_ui/r_warn.png")
+Y_master =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/failures_ui/y_master.png")
+Y_caut =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/failures_ui/y_caut.png")
+

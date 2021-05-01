@@ -316,6 +316,8 @@ end
 
 function draw()
 
+    sasl.gl.drawRectangle(0, 0, size[1], size[2], EFB_BACKGROUND_COLOUR)
+
     sasl.gl.drawTexture(image_background, 0, 0, 493, 586)
     sasl.gl.drawTexture(image_plane, 505, 0, 331, 404)
 

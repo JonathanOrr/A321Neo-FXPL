@@ -31,6 +31,14 @@ local landing_aircraft_data = {47777,0,0}
 include("EFB/efb_ldgcat.lua")
 ---------------------------------------------------------------------------------------------------------------------------------
 
+local function draw_no_arr_data()
+    if deparr_apts[2] == "" then
+        sasl.gl.drawRectangle ( 0 , 0 , 1143, 710, EFB_BACKGROUND_COLOUR)
+        drawTextCentered(Font_Airbus_panel,  572, 360, "NO ARRIVAL DATA", 30, false, false, TEXT_ALIGN_CENTER, EFB_WHITE)
+        drawTextCentered(Font_Airbus_panel,  572, 333, "RETURN TO PAGE 3 SUBPAGE 1", 20, false, false, TEXT_ALIGN_CENTER, EFB_WHITE)
+    end
+end
+
 local function p3s3_plug_in_the_buffer()
     if string.len(key_p3s3_buffer) <= 0 then --IF THE LENGTH OF THE STRING IS 0, THEN REVERT TO THE PREVIOUS VALUE. ELSE, PLUG-IN THE NEW VALUE.
         selected_box = 0
@@ -295,6 +303,7 @@ end
 --DRAW LOOPS--
 function p3s3_draw()
     draw_background()
+    draw_landing_distance_bar()
     draw_buttons()
     draw_dropdown_menu(194, 273, 157, 28,       EFB_DROPDOWN_OUTSIDE, EFB_DROPDOWN_INSIDE, dropdown_1, dropdown_expanded[1], dropdown_selected[1])
     draw_dropdown_menu(434, 273, 157, 28,       EFB_DROPDOWN_OUTSIDE, EFB_DROPDOWN_INSIDE, dropdown_2, dropdown_expanded[2], dropdown_selected[2])
@@ -318,7 +327,7 @@ function p3s3_draw()
         drawTextCentered( Font_ECAMfont , 686 , 595, landing_aircraft_data[2] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
         drawTextCentered( Font_ECAMfont , 821 , 595, landing_aircraft_data[3] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
     end
-    draw_landing_distance_bar()
+    draw_no_arr_data()
 end
 
 

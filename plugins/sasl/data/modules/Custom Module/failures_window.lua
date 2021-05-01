@@ -407,41 +407,38 @@ local function draw_warning_caution()
 
     -- WARNING
 
-    sasl.gl.drawRectangle (10, size[2]-110, 64, 64, {0,0,0})
+    sasl.gl.drawTexture (Button_bgd, 10 , size[2]-110 , 64 , 64 , EFB_WHITE )
     if PB.glare.master_warning_capt.status_top then
-        sasl.gl.drawText(B612MONO_regular, 42, size[2]-70, "MASTER", 14, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
+        sasl.gl.drawTexture (R_master, 10 , size[2]-110 , 64 , 64 , EFB_WHITE )
     end
     if PB.glare.master_warning_capt.status_bottom then
-        sasl.gl.drawText(B612MONO_regular, 42, size[2]-100, "WARN", 14, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
+        sasl.gl.drawTexture (R_warn, 10 , size[2]-110 , 64 , 64 , EFB_WHITE )
     end
 
-    sasl.gl.drawRectangle (90, size[2]-110, 64, 64, {0,0,0})
+    sasl.gl.drawTexture (Button_bgd, 90 , size[2]-110 , 64 , 64 , EFB_WHITE )
     if PB.glare.master_warning_fo.status_top then
-        sasl.gl.drawText(B612MONO_regular, 122, size[2]-70, "MASTER", 14, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
+        sasl.gl.drawTexture (R_master, 90 , size[2]-110 , 64 , 64 , EFB_WHITE )
     end
     if PB.glare.master_warning_fo.status_bottom then
-        sasl.gl.drawText(B612MONO_regular, 122, size[2]-100, "WARN", 14, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
+        sasl.gl.drawTexture (R_warn, 90 , size[2]-110 , 64 , 64 , EFB_WHITE )
     end
 
     -- CAUTION
 
-    sasl.gl.drawRectangle (10, size[2]-180, 64, 64, {0,0,0})
+    sasl.gl.drawTexture (Button_bgd, 10, size[2]-180, 64 , 64 , EFB_WHITE )
     if PB.glare.master_caution_capt.status_top then
-        sasl.gl.drawText(B612MONO_regular, 42, size[2]-140, "MASTER", 14, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawTexture (Y_master, 10, size[2]-180, 64 , 64 , EFB_WHITE )
     end
     if PB.glare.master_caution_capt.status_bottom then
-        sasl.gl.drawText(B612MONO_regular, 42, size[2]-170, "CAUT", 14, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawTexture (Y_caut, 10, size[2]-180, 64 , 64 , EFB_WHITE )
     end
 
-    sasl.gl.drawRectangle (90, size[2]-180, 64, 64, {0,0,0})
+    sasl.gl.drawTexture (Button_bgd, 90, size[2]-180, 64 , 64 , EFB_WHITE )
     if PB.glare.master_caution_fo.status_top then
-        sasl.gl.drawText(B612MONO_regular, 122, size[2]-140, "MASTER", 14, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawTexture (Y_master, 90, size[2]-180, 64 , 64 , EFB_WHITE )
     end
     if PB.glare.master_caution_fo.status_bottom then
-        sasl.gl.drawText(B612MONO_regular, 122, size[2]-170, "CAUT", 14, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
-    end
-
-
+        sasl.gl.drawTexture (Y_caut, 90, size[2]-180, 64 , 64 , EFB_WHITE )    end
 end
 
 local function create_button(text, offset_x, offset_y)
@@ -489,8 +486,8 @@ end
 function draw()
 
     --draw background
-    sasl.gl.drawRectangle(0, 0, size[1], size[2], UI_LIGHT_GREY)
-    sasl.gl.drawRectangle(5, 5, size[1]-10, size[2]-10, UI_DARK_GREY)
+    sasl.gl.drawRectangle(0, 0, size[1], size[2], EFB_BACKGROUND_TOP)
+    sasl.gl.drawRectangle(5, 5, size[1]-10, size[2]-10, EFB_BACKGROUND_COLOUR)
     -- Fixed elements
     sasl.gl.drawText(B612MONO_regular, 10, size[2]-40, "Failures Manager", 30, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
     sasl.gl.drawLine(160,10,160,550, ECAM_WHITE)

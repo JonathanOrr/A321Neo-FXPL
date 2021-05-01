@@ -44,7 +44,7 @@ load_target = {0,0,0,0,0,0}
 load_actual = {0,0,0,0,0,0} -- not a live value! does not change in flight!!!!!!!
 local total_load_target = 0
 
-local deparr_apts = {"", ""}
+deparr_apts = {"", ""}
 
 local deparr_runway_data = {
     {0,0},
@@ -236,7 +236,7 @@ local function p3s1_dropdown_buttons( x,y,w,h, table, identifier)
     for i=1, #table do
         if dropdown_expanded[identifier] then
             Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, x - w/2 + 5, y - h*i - 14, w-10 + ( x - w/2 + 5), h-2 + ( y - h*i - 14),function ()
-                print(i)
+                --print(i)
                 dropdown_selected[identifier] = i
                 dropdown_expanded[identifier] = false
                 set_takeoff_runway_data_to_global()--EVERYTIME THE USER CLICKS THE RUNWAY DROPDOWN MENU, IT REQUESTS THE RUNWAY DATA ONCE. THAT IS THE ONLY WAY I CAN THINK OF TO REFRESH RUNWAY DATA WITHOUT USING UPDATE LOOP.
@@ -597,11 +597,6 @@ local function EFB_draw_page_3_subpage_1() -- DRAW LOOP
     sasl.gl.drawTexture (EFB_LOAD_bound_takeoff, 0 , 0 , 1143 , 800 , EFB_WHITE )
     sasl.gl.drawTexture (EFB_LOAD_chart, 0 , 0 , 1143 , 800 , EFB_WHITE )
 
-
-    draw_dropdown_menu(230, 578, 90, 28, EFB_DROPDOWN_OUTSIDE, EFB_DROPDOWN_INSIDE, dropdown_1, dropdown_expanded[1], dropdown_selected[1])
-    draw_dropdown_menu(511, 578, 90, 28, EFB_DROPDOWN_OUTSIDE, EFB_DROPDOWN_INSIDE, dropdown_2, dropdown_expanded[2], dropdown_selected[2])
-
-
     if string.len(key_p3s1_buffer) > 0 then --THE PURPOSE OF THIS IFELSE IS TO PREVENT THE CURSOR FROM COVERING UP THE PREVIOUS VALUE, WHEN THE SCRATCHPAD IS EMPTY.
         drawTextCentered( Font_Airbus_panel , 263 , 397, key_p3s1_focus == 1 and key_p3s1_buffer or load_target[1] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
         drawTextCentered( Font_Airbus_panel , 263 , 358, key_p3s1_focus == 2 and key_p3s1_buffer or load_target[2] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
@@ -640,6 +635,10 @@ local function EFB_draw_page_3_subpage_1() -- DRAW LOOP
     else
         SASL_drawSegmentedImg_xcenter_aligned (EFB_LOAD_compute_button, 244,48,544,32,2,2)
     end
+
+    draw_dropdown_menu(230, 578, 90, 28, EFB_DROPDOWN_OUTSIDE, EFB_DROPDOWN_INSIDE, dropdown_1, dropdown_expanded[1], dropdown_selected[1])
+    draw_dropdown_menu(511, 578, 90, 28, EFB_DROPDOWN_OUTSIDE, EFB_DROPDOWN_INSIDE, dropdown_2, dropdown_expanded[2], dropdown_selected[2])
+
 --------------------------------------------------------------------------
 
     local passenger_weight_actual = ((load_actual[1]+load_actual[2]+load_actual[3]) * weight_per_passenger)

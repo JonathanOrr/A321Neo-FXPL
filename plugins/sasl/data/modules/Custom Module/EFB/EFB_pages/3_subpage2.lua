@@ -28,6 +28,15 @@ include("EFB/efb_topcat.lua")
 
 local flaps_table = {"1+F", 2, 3}
 ---------------------------------------------------------------------------------------------------------------------------------
+
+local function draw_no_dep_data()
+    if deparr_apts[1] == "" then
+        sasl.gl.drawRectangle ( 0 , 0 , 1143, 710, EFB_BACKGROUND_COLOUR)
+        drawTextCentered(Font_Airbus_panel,  572, 360, "NO DEPARTURE DATA", 30, false, false, TEXT_ALIGN_CENTER, EFB_WHITE)
+        drawTextCentered(Font_Airbus_panel,  572, 333, "RETURN TO PAGE 3 SUBPAGE 1", 20, false, false, TEXT_ALIGN_CENTER, EFB_WHITE)
+    end
+end
+
 local function compute_flaps()
     set(LOAD_flapssetting, 1)
 end
@@ -308,6 +317,7 @@ function p3s2_draw()
     draw_dropdowns()
     draw_dropdown_selected_items()
     draw_qnh_oat()
+    draw_no_dep_data()
 end
 
 --DO AT THE BEGINNING
