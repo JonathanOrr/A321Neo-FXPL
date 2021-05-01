@@ -743,7 +743,7 @@ end
 local function update_pump_dr_for_sounds()
     set(SOUND_fuel_pump, 0)
 
-    for i,x ipairs(tank_pump_and_xfr) do
+    for i,x in ipairs(tank_pump_and_xfr) do
         if x.pressure_ok then
             set(SOUND_fuel_pump, 1)
         end

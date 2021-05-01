@@ -209,17 +209,8 @@ END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /Ground Roll
-  VEH_PART tire 1
-  EVENT_START_COND 	a321neo/dynamics/wheel/either_aft_on_ground == 1
-  EVENT_END_COND 	a321neo/dynamics/wheel/either_aft_on_ground == 0
-  PARAM_DREF_IDX 0
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /Ground Roll
-  VEH_PART tire 2
-  EVENT_START_COND 	a321neo/dynamics/wheel/either_aft_on_ground == 1
-  EVENT_END_COND 	a321neo/dynamics/wheel/either_aft_on_ground == 0
+  VEH_XYZ 0 0 0
+  EVENT_ALWAYS
   PARAM_DREF_IDX 0
 END_SOUND_ATTACHMENT
 
@@ -3817,23 +3808,8 @@ END_SOUND_ATTACHMENT
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /Fuel Pump
   VEH_XYZ 0 0 0
-  EVENT_START_COND sim/cockpit2/engine/actuators/fuel_pump_on[0] > 0
-  EVENT_START_COND sim/cockpit2/engine/actuators/fuel_pump_on[1] > 0
-  EVENT_START_COND sim/cockpit2/engine/actuators/fuel_pump_on[2] > 0
-  EVENT_START_COND sim/cockpit2/engine/actuators/fuel_pump_on[3] > 0
-  EVENT_START_COND sim/cockpit2/engine/actuators/fuel_pump_on[4] > 0
-  EVENT_START_COND sim/cockpit2/engine/actuators/fuel_pump_on[5] > 0
-  EVENT_START_COND sim/cockpit2/engine/actuators/fuel_pump_on[6] > 0
-  EVENT_START_COND sim/cockpit2/engine/actuators/fuel_pump_on[7] > 0
-
-  CUE_TRIGGER_COND sim/cockpit2/engine/actuators/fuel_pump_on[0] = 0
-  CUE_TRIGGER_COND sim/cockpit2/engine/actuators/fuel_pump_on[1] = 0
-  CUE_TRIGGER_COND sim/cockpit2/engine/actuators/fuel_pump_on[2] = 0
-  CUE_TRIGGER_COND sim/cockpit2/engine/actuators/fuel_pump_on[3] = 0
-  CUE_TRIGGER_COND sim/cockpit2/engine/actuators/fuel_pump_on[4] = 0
-  CUE_TRIGGER_COND sim/cockpit2/engine/actuators/fuel_pump_on[5] = 0
-  CUE_TRIGGER_COND sim/cockpit2/engine/actuators/fuel_pump_on[6] = 0
-  CUE_TRIGGER_COND sim/cockpit2/engine/actuators/fuel_pump_on[7] = 0
+  EVENT_START_COND a321neo/sounds/fuel_pump > 0
+  CUE_TRIGGER_COND a321neo/sounds/fuel_pump == 0
 END_SOUND_ATTACHMENT
 
 
