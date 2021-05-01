@@ -181,10 +181,10 @@ function EFB_execute_page_4_buttons()
 end
 
 local function table_loading_on_start()
-    local table_loading_buffer = table.load(moduleDirectory .. "/Custom Module/saved_configs/EFB_preferences_v2")
-    for i=1, #table_loading_buffer do
-        EFB.preferences[i] = table_loading_buffer[i]
-    end
+    --local table_loading_buffer = table.load(moduleDirectory .. "/Custom Module/saved_configs/EFB_preferences_v2")
+    --for i=1, #table_loading_buffer do
+    --    EFB.preferences[i] = table_loading_buffer[i]
+    --end
 
     if table.load(moduleDirectory .. "/Custom Module/saved_configs/EFB_volume_settings") ~= nil then
         local volume_table_load =  table.load(moduleDirectory .. "/Custom Module/saved_configs/EFB_volume_settings")
