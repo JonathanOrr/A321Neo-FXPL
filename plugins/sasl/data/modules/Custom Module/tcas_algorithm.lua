@@ -123,6 +123,24 @@ local function which_ra_params(alt)
     end
 end
 
+local function which_ta_params(alt)
+    if alt <= 1000 then
+        return 1
+    elseif alt <= 2350 then
+        return 2
+    elseif alt <= 5000 then
+        return 3
+    elseif alt <= 10000 then
+        return 4
+    elseif alt <= 20000 then
+        return 5
+    elseif alt <= 42000 then
+        return 6
+    else
+        return 7
+    end
+end
+
 -------------------------------------------------------------------------------
 -- Math helpers
 -------------------------------------------------------------------------------
@@ -356,7 +374,7 @@ end
 
 local function compute_RA(my_acf, int_acf)
 
-    local parameters = parameters_RA[which_ra_params()]
+    local parameters = parameters_RA[which_ra_params(my_acf.alt)]
 
     local res = RA3DTimeInterval(my_acf, int_acf, 0, 1, parameters, true)
     return res[1] < res[2]
@@ -366,7 +384,7 @@ local function get_RA_result(my_acf, int_acf)
     local v = 1500  -- FPM
     local a = 0.25 *  1930.44 -- G
 
-    local parameters = parameters_RA[which_ra_params()]
+    local parameters = parameters_RA[which_ra_params(my_acf.alt)]
 
     local corr_low = corrective(my_acf, int_acf, parameters, v, a)
     if corr_low then
@@ -393,7 +411,10 @@ end
 -------------------------------------------------------------------------------
 
 local function compute_TA(my_acf, int_acf)
-
+    
+    local parameters = parameters_TA[which_ta_params(my_acf.alt)]
+    local t = RA3DTimeInterval(my_acf, int_acf, 0, 1, parameters, false)
+    return t[0] < t[1]
 end
 
 -------------------------------------------------------------------------------
@@ -413,12 +434,12 @@ function compute_tcas(my_acf, int_acf)
     -- }
 
     local ra_result = compute_RA(my_acf, int_acf)
-    if ra_result ~=0 then
+    if ra_result then
         return get_RA_result(my_acf, int_acf)
     end
 
     local ta_result = compute_TA(my_acf, int_acf)
-    if ta_result ~=0 then
+    if ta_result then
         return TCAS_TRAFFIC
     end
 
