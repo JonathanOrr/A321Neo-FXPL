@@ -48,6 +48,7 @@ ND_all_data  = {nil, nil}
 ND_terrain = {}
 DRAIMS_common = {}
 FMGS_sys = {}
+TCAS_sys = {}
 
 -- Engine data depending on the user choice
 ENG = { data_is_loaded = false }

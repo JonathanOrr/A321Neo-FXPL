@@ -23,7 +23,7 @@ TCAS_OUTPUT_CLIMB_LOW    = 1
 TCAS_OUTPUT_DESCEND_LOW  = 2
 TCAS_OUTPUT_CLIMB_HIGH   = 3
 TCAS_OUTPUT_DESCEND_HIGH = 4
-TCAS_TRAFFIC             = 5
+TCAS_OUTPUT_TRAFFIC             = 5
 
 -- Math functions to improve performance
 local mabs  = math.abs
@@ -216,12 +216,12 @@ local function RAZTimeInterval(diff_alt, diff_vs, zthr, tau, B, T)
 
 end
 
-local function RA2DTimeInterval(diff_alt, diff_vs, tau, dmod, B, T)
-    local a = item_mult(diff_vs, diff_vs)
-    local b = 2*item_mult(diff_alt, diff_vs) + tau * item_mult(diff_alt, diff_vs) - dmod*dmod
-    local c = item_mult(diff_alt, diff_alt) + tau*item_mult(diff_alt, diff_vs) - dmod*dmod
+local function RA2DTimeInterval(diff_pos, diff_spd, tau, dmod, B, T)
+    local a = item_mult(diff_spd, diff_spd)
+    local b = 2*item_mult(diff_pos, diff_spd) + tau * item_mult(diff_pos, diff_spd) - dmod*dmod
+    local c = item_mult(diff_pos, diff_pos) + tau*item_mult(diff_pos, diff_spd) - dmod*dmod
 
-    local m_alt = item_mult(diff_alt, diff_alt) 
+    local m_alt = item_mult(diff_pos, diff_pos) 
 
     if a == 0 then
         if m_alt <= dmod then
@@ -229,16 +229,16 @@ local function RA2DTimeInterval(diff_alt, diff_vs, tau, dmod, B, T)
         end
     end
 
-    local o = theta(diff_alt, diff_vs, dmod, 1)
+    local o = theta(diff_pos, diff_spd, dmod, 1)
     if m_alt <= dmod then
         return {B, o}
     end
 
-    if item_mult(diff_alt, diff_vs) >= 0 and (b*b-4*a*c < 0) then
+    if item_mult(diff_pos, diff_spd) >= 0 and (b*b-4*a*c < 0) then
         return {T+1, 0}
     end
 
-    if delta(diff_alt, diff_vs, dmod) >= 0 then
+    if delta(diff_pos, diff_spd, dmod) >= 0 then
         return {root(a,b,c,-1), 0}
     end
 
@@ -281,9 +281,9 @@ local function RA3DTimeInterval(my_acf, int_acf, B, T, parameters, use_hmdf)
 
     local t2 = { math.max(B, res_z[1]), math.min(T, res_z[2]) }
 
-    local res_2d = RA2DTimeInterval(diff_alt, diff_vs, B, T)
+    local res_2d = RA2DTimeInterval(diff_pos, diff_spd, parameters.tau, parameters.dmod, B, T)
 
-    if res_2d[0] > res_2d[1] or res_2d[2] < t2[1] or res_2d[1] > t2[2] then
+    if res_2d[1] > res_2d[1] or res_2d[2] < t2[1] or res_2d[1] > t2[2] then
         return {T,B} -- Too far, CLEAR
     end
 
@@ -414,7 +414,7 @@ local function compute_TA(my_acf, int_acf)
     
     local parameters = parameters_TA[which_ta_params(my_acf.alt)]
     local t = RA3DTimeInterval(my_acf, int_acf, 0, 1, parameters, false)
-    return t[0] < t[1]
+    return t[1] < t[2]
 end
 
 -------------------------------------------------------------------------------
@@ -440,7 +440,8 @@ function compute_tcas(my_acf, int_acf)
 
     local ta_result = compute_TA(my_acf, int_acf)
     if ta_result then
-        return TCAS_TRAFFIC
+        return TCAS_OUTPUT_TRAFFIC
     end
 
+    return TCAS_OUTPUT_CLEAR
 end

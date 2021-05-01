@@ -16,8 +16,49 @@
 -- Short description: TCAS
 -------------------------------------------------------------------------------
 
+include("tcas_algorithm.lua")
+
+-------------------------------------------------------------------------------
+-- Constants
+-------------------------------------------------------------------------------
+
 local MAX_H_RANGE = 100  -- NM radius
 local MAX_V_RANGE = 9900 -- Feet +/-
+local UPDATE_FREQ_SEC = 0.5
+
+-------------------------------------------------------------------------------
+-- Datarefs
+-------------------------------------------------------------------------------
+
+local dr_num_tcas_targets = globalProperty("sim/cockpit2/tcas/indicators/tcas_num_acf")
+local dr_tcas_targets_pos_x = globalProperty("sim/cockpit2/tcas/targets/position/x")
+local dr_tcas_targets_pos_y = globalProperty("sim/cockpit2/tcas/targets/position/y")
+local dr_tcas_targets_pos_lat = globalProperty("sim/cockpit2/tcas/targets/position/lat")
+local dr_tcas_targets_pos_lon = globalProperty("sim/cockpit2/tcas/targets/position/lon")
+local dr_tcas_targets_pos_ele = globalProperty("sim/cockpit2/tcas/targets/position/ele")
+local dr_tcas_targets_pos_vx = globalProperty("sim/cockpit2/tcas/targets/position/vx")
+local dr_tcas_targets_pos_vy = globalProperty("sim/cockpit2/tcas/targets/position/vy")
+local dr_tcas_targets_pos_vs = globalProperty("sim/cockpit2/tcas/targets/position/vertical_speed")
+
+local dr_my_x = globalProperty("sim/flightmodel/position/local_x")
+local dr_my_y = globalProperty("sim/flightmodel/position/local_y")
+local dr_my_vx = globalProperty("sim/flightmodel/position/local_vx")
+local dr_my_vy = globalProperty("sim/flightmodel/position/local_vy")
+
+-------------------------------------------------------------------------------
+-- Global variables
+-------------------------------------------------------------------------------
+local last_update_time = 0
+
+TCAS_sys.acf_data = {}  -- Array with all the acfs
+TCAS_sys.alert = {
+    active = false,
+    type = TCAS_ALERT_NONE,
+}
+
+-------------------------------------------------------------------------------
+-- Functions
+-------------------------------------------------------------------------------
 
 local function update_status()
 
@@ -58,6 +99,56 @@ local function update_status()
     set(TCAS_actual_mode, TCAS_MODE_TA)
 end
 
+local function update_tcas()
+    local n_acfs = get(dr_num_tcas_targets)
+
+    local my_acf = {
+        x = get(dr_my_x),
+        y = get(dr_my_y),
+        vx = get(dr_my_vx),
+        vy = get(dr_my_vy),
+        alt = get(Capt_ra_alt_ft),
+        vs = get(VVI)
+    }
+
+    TCAS_sys.acf_data = {}
+
+    for i=1,n_acfs do
+
+        local lat = get(dr_tcas_targets_pos_lat, i)
+        local lon = get(dr_tcas_targets_pos_lon, i)
+
+        local int_acf = {
+            x = get(dr_tcas_targets_pos_x, i),
+            y = get(dr_tcas_targets_pos_y, i),
+            alt = get(dr_tcas_targets_pos_ele, i) * 3.28084,
+            vx = get(dr_tcas_targets_pos_vx, i),
+            vy = get(dr_tcas_targets_pos_vy, i),
+            vs = get(dr_tcas_targets_pos_vs, i),
+        }
+
+        local tcas_result = compute_tcas(my_acf, int_acf)
+
+        local tcas_alert_value = TCAS_ALERT_NONE
+        if tcas_result == TCAS_OUTPUT_TRAFFIC then
+            tcas_alert_value = TCAS_ALERT_TA
+        elseif tcas_result ~= TCAS_OUTPUT_CLEAR then
+            tcas_alert_value = TCAS_ALERT_RA
+        end
+
+        table.insert(TCAS_sys.acf_data, {lat = lat, lon = lon, alert = tcas_alert_value})
+    end
+end
+
+-------------------------------------------------------------------------------
+-- Main update
+-------------------------------------------------------------------------------
 function update()
     update_status()
+
+    if get(TIME) - last_update_time > UPDATE_FREQ_SEC then
+        update_tcas()
+        last_update_time = get(TIME)
+    end
+
 end
