@@ -3,6 +3,7 @@ I
 OBJ
 
 TEXTURE	texture/cup.png
+TEXTURE_NORMAL	texture/cup_NML.png
 NORMAL_METALNESS
 GLOBAL_specular	1
 POINT_COUNTS	984	0	0	4236
@@ -1424,5 +1425,7 @@ IDX	534
 
 	TRIS	0 666
 	TRIS	666 3570
+
+ATTR_shiny_rat 0
 
 # Build with Blender 2.92.0 (build b'02948a2cab44'). Exported with XPlane2Blender 4.1.0-beta.1+101.20201117225215
