@@ -212,7 +212,7 @@ P _gear/0/_lonE 7.0
 P _gear/0/_lonN 7.0
 P _gear/0/_lonR 99.0
 P _gear/0/_scon 139161.984375000
-P _gear/0/_stat_def 0.120205767
+P _gear/0/_stat_def 0.120205775
 P _gear/0/_steerdeg_hispeed 5.0
 P _gear/0/_steerdeg_lospeed 75.0
 P _gear/0/_strut_comp 0.899999976
@@ -888,7 +888,7 @@ P _obja/41/_v10_att_phi_ref 0.0
 P _obja/41/_v10_att_psi_ref 0.0
 P _obja/41/_v10_att_the_ref 0.0
 P _obja/41/_v10_att_x_acf_prt_ref -3.769999981
-P _obja/41/_v10_att_y_acf_prt_ref 1.429999948
+P _obja/41/_v10_att_y_acf_prt_ref 1.220000029
 P _obja/41/_v10_att_z_acf_prt_ref 7.960000038
 P _obja/41/_v10_is_internal -885280352
 P _obja/41/_v10_steers_with_gear 0
