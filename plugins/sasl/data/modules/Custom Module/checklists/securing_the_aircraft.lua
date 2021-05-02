@@ -5,7 +5,7 @@ Securing_the_aircraft_checklist = {
     {
         Type = CHECKLIST_PROPERTIES,
         Title = "SECURING THE AIRCRAFT",
-        Color = CHECKLIST_ORANGE
+        Color = CHECKLIST_LIGHTGREEN
     },
 
     {

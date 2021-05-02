@@ -5,7 +5,7 @@ Before_leaving_the_aircraft_checklist = {
     {
         Type = CHECKLIST_PROPERTIES,
         Title = "BEFORE LEAVING THE AIRCRAFT",
-        Color = CHECKLIST_ORANGE
+        Color = CHECKLIST_LIGHTGREEN
     },
 
     {

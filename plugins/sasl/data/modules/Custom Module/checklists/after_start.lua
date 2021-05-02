@@ -5,7 +5,7 @@ After_start_checklist = {
     {
         Type = CHECKLIST_PROPERTIES,
         Title = "AFTER START",
-        Color = CHECKLIST_ORANGE
+        Color = CHECKLIST_LIGHTGREEN
     },
 
     {

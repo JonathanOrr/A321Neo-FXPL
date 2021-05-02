@@ -5,7 +5,7 @@ Push_start_checklist = {
     {
         Type = CHECKLIST_PROPERTIES,
         Title = "PUSH/ START",
-        Color = CHECKLIST_ORANGE
+        Color = CHECKLIST_LIGHTGREEN
     },
 
     {

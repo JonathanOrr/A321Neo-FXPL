@@ -5,7 +5,7 @@ Before_takeoff_checklist = {
     {
         Type = CHECKLIST_PROPERTIES,
         Title = "BEFORE TAKE OFF",
-        Color = CHECKLIST_ORANGE
+        Color = CHECKLIST_LIGHTGREEN
     },
 
     {

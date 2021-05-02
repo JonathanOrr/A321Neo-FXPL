@@ -5,7 +5,7 @@ Before_start_checklist = {
     {
         Type = CHECKLIST_PROPERTIES,
         Title = "BEFORE START",
-        Color = CHECKLIST_ORANGE
+        Color = CHECKLIST_LIGHTGREEN
     },
 
     {
@@ -67,11 +67,11 @@ Before_start_checklist = {
         Z_rot = 0,
         Quickview = VIEW_AVAILABLE,
         Head_x = 0.000000,
-        Head_y = 2.324731,
-        Head_z = -16.531816,
+        Head_y = 2.133134,
+        Head_z = -17.637266,
         Head_phi = 0,
         Head_psi = 0,
-        Head_the = 6
+        Head_the = -19.688848
     },
 
     {
@@ -88,12 +88,12 @@ Before_start_checklist = {
         Y_rot = 0,
         Z_rot = 0,
         Quickview = VIEW_AVAILABLE,
-        Head_x = -0.264239,
-        Head_y = 2.431462,
-        Head_z = -17.230143,
+        Head_x = -0.239854,
+        Head_y = 2.293589,
+        Head_z = -17.795485,
         Head_phi = 0,
         Head_psi = 0,
-        Head_the = 60
+        Head_the = 68.014626
     },
 
     {
@@ -110,12 +110,12 @@ Before_start_checklist = {
         Y_rot = 0,
         Z_rot = 0,
         Quickview = VIEW_AVAILABLE,
-        Head_x = -0.255,
-        Head_y = 2.108815,
-        Head_z = -17.939255,
+        Head_x = -0.211964,
+        Head_y = 1.986328,
+        Head_z = -18.493759,
         Head_phi = 0,
         Head_psi = 0,
-        Head_the = 0.178582
+        Head_the = -13.687655
     },
 
     {
@@ -159,12 +159,12 @@ Before_start_checklist = {
         Y_rot = 0,
         Z_rot = -47,
         Quickview = VIEW_AVAILABLE,
-        Head_x = -0.162552,
-        Head_y = 1.744817,
-        Head_z = -17.346319,
+        Head_x = 0.018439,
+        Head_y = 1.577976,
+        Head_z = -18.04661,
         Head_phi = 0,
-        Head_psi = 47,
-        Head_the = -32
+        Head_psi = 0,
+        Head_the = -83.871323
     },
 
     {
@@ -181,12 +181,12 @@ Before_start_checklist = {
         Y_rot = 0,
         Z_rot = 0,
         Quickview = VIEW_AVAILABLE,
-        Head_x = 0.058419,
-        Head_y = 2.261603,
-        Head_z = -17.659178,
+        Head_x = 0.094811,
+        Head_y = 2.118961,
+        Head_z = -18.271849,
         Head_phi = 0,
         Head_psi = 0,
-        Head_the = 56.5
+        Head_the = 68.160912
     },
 
     {
@@ -203,12 +203,12 @@ Before_start_checklist = {
         Y_rot = 0,
         Z_rot = 0,
         Quickview = VIEW_AVAILABLE,
-        Head_x = 0.0075,
-        Head_y = 1.759272,
-        Head_z = -17.835859,
+        Head_x = 0,
+        Head_y = 1.664305,
+        Head_z = -18.430998,
         Head_phi = 0,
         Head_psi = 0,
-        Head_the = -9.5
+        Head_the = -24.908045
     },
 
     {
@@ -225,11 +225,11 @@ Before_start_checklist = {
         Y_rot = 0,
         Z_rot = 0,
         Quickview = VIEW_AVAILABLE,
-        Head_x = -0.194911,
-        Head_y = 1.791466,
-        Head_z = -17.958818,
+        Head_x = -0.193404,
+        Head_y = 1.637769,
+        Head_z = -18.586006,
         Head_phi = 0,
         Head_psi = 0,
-        Head_the = -43.75
+        Head_the = -65.697182
     }
 }

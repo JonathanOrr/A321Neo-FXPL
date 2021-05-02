@@ -588,8 +588,8 @@ function update()
 end
 
 function draw()
-    sasl.gl.drawRectangle(0, 0, size[1], size[2], LIGHT_GREY)
-    sasl.gl.drawRectangle(10, 10, size[1] - 20, size[2] - 20, DARK_GREY)
+    sasl.gl.drawRectangle(0, 0, size[1], size[2], EFB_BACKGROUND_TOP)
+    sasl.gl.drawRectangle(10, 10, size[1] - 20, size[2] - 20, EFB_BACKGROUND_COLOUR)
 
     draw_checklist(all_checklist[get(current_checklist)])
 

@@ -5,7 +5,7 @@ Shutdown_checklist = {
     {
         Type = CHECKLIST_PROPERTIES,
         Title = "SHUTDOWN",
-        Color = CHECKLIST_ORANGE
+        Color = CHECKLIST_LIGHTGREEN
     },
 
     {

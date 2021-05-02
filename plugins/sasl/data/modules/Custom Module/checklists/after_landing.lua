@@ -5,7 +5,7 @@ After_landing_checklist = {
     {
         Type = CHECKLIST_PROPERTIES,
         Title = "AFTER LANDING",
-        Color = CHECKLIST_ORANGE
+        Color = CHECKLIST_LIGHTGREEN
     },
 
     {
