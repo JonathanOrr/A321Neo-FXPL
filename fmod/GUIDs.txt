@@ -181,6 +181,21 @@
 {1ac29002-a8e7-438f-bced-dd56cb5e0ba2} event:/TA Test/End
 {bd5c0769-ed87-4f2c-a3f4-9843f0ac8e30} event:/TA Test/Pass
 {f15aa472-2df9-4ba1-91ee-30ec710d40b1} event:/TA Test/Start
+{5774de97-8a9e-40b2-8c6f-aa4121b14f27} event:/TCAS/climb 2x
+{97ed8be6-5c18-4c34-9d61-ce9fb217467e} event:/TCAS/climbnow
+{17318e73-e162-41fa-8556-87abc836b112} event:/TCAS/coc
+{9bbac378-8205-4c00-a6bb-81e2ba5bd41d} event:/TCAS/crossingclimb
+{dabd28d2-f385-4a73-a2ad-3874eae35a20} event:/TCAS/crossingdescend
+{046f7406-15b0-4591-94ee-ff13d31c5947} event:/TCAS/crossingmaintain
+{d6392da5-f5d9-424a-8b14-6877a363da17} event:/TCAS/descend 2x
+{692414e4-16a1-46a6-bd06-d98323691689} event:/TCAS/descendnow
+{b700f082-e831-4933-9626-22dd61ea9508} event:/TCAS/inc climb
+{ac70966a-4495-4519-8a03-f7b8f453a101} event:/TCAS/inc descend
+{86b052a9-2c71-4aa3-851d-1b08fa665482} event:/TCAS/leveloff
+{a67fe6f3-6a5a-4831-826c-d1f07e8e3325} event:/TCAS/maintain
+{b575ea2b-7a6a-4e54-97ea-21c57f90f6c3} event:/TCAS/monitorvs
+{96a1dd4e-039c-45f1-8d60-87fbbb469edf} event:/TCAS/tfc 1x
+{0bd877d2-887d-45fc-b705-555c42287d47} event:/TCAS/tfc 2x
 {0a3ca941-541b-49ea-b0a6-654bfc0ba63f} event:/Warnings/Calvary
 {c46115eb-d151-4e54-ae83-4175129cabdb} event:/Warnings/Caution
 {ff1b5104-6805-45d0-8716-2f0c54177361} event:/Warnings/Cchord
