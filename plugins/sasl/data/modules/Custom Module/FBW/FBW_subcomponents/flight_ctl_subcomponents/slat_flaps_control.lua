@@ -104,14 +104,23 @@ function Slats_flaps_calc_and_control()
     end
 
     --SPEEDs logic--
-    slat_spd = slat_spd * ((get(Hydraulic_G_press) < 1450 or get(Hydraulic_B_press) < 1450) and 0.5 or 1)
-    slat_spd = slat_spd * ((get(SFCC_1_status) == 0 or get(SFCC_2_status) == 0) and 0.5 or 1)
-    slat_spd = slat_spd * (1 - get(Slat_alpha_locked))
-    flap_spd = flap_spd * ((get(Hydraulic_G_press) < 1450 or get(Hydraulic_Y_press) < 1450) and 0.5 or 1)
-    flap_spd = flap_spd * ((get(SFCC_1_status) == 0 or get(SFCC_2_status) == 0) and 0.5 or 1)
+    local hyd_spd = {
+        {0,      0},
+        {1450, 0.5},
+        {2900,   1},
+    }
+    local sfcc_spd = {
+        {0,   0},
+        {1, 0.5},
+        {2,   1},
+    }
+    slat_spd = slat_spd * Table_interpolate(hyd_spd, get(Hydraulic_G_press) + get(Hydraulic_B_press))
+    slat_spd = slat_spd * Table_interpolate(sfcc_spd, get(SFCC_1_status) + get(SFCC_2_status))
+    flap_spd = flap_spd * Table_interpolate(hyd_spd, get(Hydraulic_G_press) + get(Hydraulic_Y_press))
+    flap_spd = flap_spd * Table_interpolate(sfcc_spd, get(SFCC_1_status) + get(SFCC_1_status))
 
-    slat_spd = Math_rescale(0, 0, 1450, slat_spd, get(Hydraulic_G_press) + get(Hydraulic_B_press))
-    flap_spd = Math_rescale(0, 0, 1450, flap_spd, get(Hydraulic_G_press) + get(Hydraulic_Y_press))
+    --slat alpha inhibit
+    slat_spd = slat_spd * (1 - get(Slat_alpha_locked))
 
     --SLAT FLAP MOVEMENT
     local past_slats_pos = get(Slats)
