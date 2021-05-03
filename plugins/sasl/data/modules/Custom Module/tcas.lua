@@ -80,7 +80,7 @@ local function update_status()
         return
     end
     
-    set(TCAS_xplane_mode, 2)
+--    set(TCAS_xplane_mode, 2)
     
     if get(TCAS_mode) == 2 then
         local radio_altitude = get(TCAS_atc_sel) == 1 and get(Capt_ra_alt_ft) or get(Fo_ra_alt_ft)
@@ -113,7 +113,7 @@ local function update_tcas()
 
     TCAS_sys.acf_data = {}
 
-    for i=1,n_acfs do
+    for i=2,n_acfs do
 
         local lat = get(dr_tcas_targets_pos_lat, i)
         local lon = get(dr_tcas_targets_pos_lon, i)
@@ -124,10 +124,10 @@ local function update_tcas()
             alt = get(dr_tcas_targets_pos_ele, i) * 3.28084,
             vx = get(dr_tcas_targets_pos_vx, i),
             vy = get(dr_tcas_targets_pos_vy, i),
-            vs = get(dr_tcas_targets_pos_vs, i),
+            vs = get(dr_tcas_targets_pos_vs, i)
         }
 
-        local tcas_result = compute_tcas(my_acf, int_acf)
+        local tcas_result, debug_info = compute_tcas(my_acf, int_acf)
 
         local tcas_alert_value = TCAS_ALERT_NONE
         if tcas_result == TCAS_OUTPUT_TRAFFIC then
@@ -135,8 +135,8 @@ local function update_tcas()
         elseif tcas_result ~= TCAS_OUTPUT_CLEAR then
             tcas_alert_value = TCAS_ALERT_RA
         end
-
-        table.insert(TCAS_sys.acf_data, {lat = lat, lon = lon, alert = tcas_alert_value})
+        
+        table.insert(TCAS_sys.acf_data, {lat = lat, lon = lon, alt=int_acf.alt, vs=int_acf.vs, alert = tcas_alert_value, action = tcas_result, debug_reason=debug_info})
     end
 end
 
