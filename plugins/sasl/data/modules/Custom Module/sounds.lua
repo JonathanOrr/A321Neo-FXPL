@@ -18,9 +18,23 @@
 
 include('sounds_GPWS.lua')
 
+-------------------------------------------------------------------------------
+-- Datarefs
+-------------------------------------------------------------------------------
+
 Sounds_elec_bus_delayed = createGlobalPropertyf("a321neo/sounds/elec_bus_delayed", 0, false, true, false)
 Sounds_blower_delayed   = createGlobalPropertyf("a321neo/sounds/blower_delayed", 0, false, true, false)
 Sounds_extract_delayed  = createGlobalPropertyf("a321neo/sounds/extract_delayed", 0, false, true, false)
+
+-------------------------------------------------------------------------------
+-- Global variables
+-------------------------------------------------------------------------------
+local blower_start_time = 0
+
+-------------------------------------------------------------------------------
+-- Functions
+-------------------------------------------------------------------------------
+
 
 local function thrust_rush()
     local athr_pos_L = get(ATHR_is_overriding) == 1 and get(ATHR_desired_N1, 1) or math.min(get(Throttle_blue_dot, 1), get(ATHR_desired_N1, 1))
@@ -49,22 +63,22 @@ local function reverser_drfs()
     end
 end
 
-local blower_flag = false
-local blower_start_time = 0
 
-local function blower_extract_delay()
+local function elec_delays()
     if get(AC_ess_bus_pwrd) == 1 then
         set(Sounds_elec_bus_delayed, 1) 
     else
         Set_dataref_linear_anim(Sounds_elec_bus_delayed, 0, 0, 1, 0.5)
     end
 
-    if get(AC_bus_1_pwrd) == 1 and get(FAILURE_AIRCOND_VENT_BLOWER) == 0 and not blower_flag then
+end
+
+local function blower_extract_delay()
+
+    if get(AC_bus_1_pwrd) == 1 and get(FAILURE_AIRCOND_VENT_BLOWER) == 0 and blower_start_time == 0 then
         blower_start_time = get(TIME)
-        print(blower_start_time)
-        blower_flag = true
     elseif not(get(AC_bus_1_pwrd) == 1 and get(FAILURE_AIRCOND_VENT_BLOWER) == 0) then
-        blower_flag = false
+        blower_start_time = 0
     end
 
     if get(Ventilation_blower_running) == 1 and  get(TIME) - blower_start_time < 5 then
@@ -77,6 +91,9 @@ local function blower_extract_delay()
     
     Set_dataref_linear_anim(Sounds_extract_delayed, get(Ventilation_extract_running), 0, 1, 0.2)
 
+end
+
+local function gpws_sounds()
 
     if get(AC_bus_1_pwrd) == 1 then
         set_alt_callouts()
@@ -85,8 +102,15 @@ local function blower_extract_delay()
     end
 end
 
+-------------------------------------------------------------------------------
+-- update()
+-------------------------------------------------------------------------------
+
+
 function update()
+    elec_delays()
     blower_extract_delay()
+    gpws_sounds()
     thrust_rush()
     reverser_drfs()
 end
