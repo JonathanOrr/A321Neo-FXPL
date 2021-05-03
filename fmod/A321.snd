@@ -2272,8 +2272,8 @@ END_SOUND_ATTACHMENT
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /Extractor
   VEH_XYZ 0 1.4 -18.7
-  EVENT_START_COND 	a321neo/sounds/extract_delayed != 0
-  CUE_TRIGGER_COND  a321neo/sounds/extract_delayed == 0
+  EVENT_START_COND 	a321neo/sounds/extract_delayed == 1
+  CUE_TRIGGER_COND  a321neo/sounds/extract_delayed != 1
 END_SOUND_ATTACHMENT
 
 #################################################################################################BUSKICK
@@ -2288,7 +2288,13 @@ END_SOUND_ATTACHMENT
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /BusKick2
   VEH_XYZ 0 1.5 -16
-  EVENT_START_COND 	a321neo/dynamics/electrical/bus/ac_ess_powered == 0
+  EVENT_START_COND 	a321neo/dynamics/electrical/bus/ac_1_powered == 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /BusKick2
+  VEH_XYZ 0 1.5 -16
+  EVENT_START_COND 	a321neo/dynamics/electrical/bus/ac_2_powered == 0
 END_SOUND_ATTACHMENT
 
 #################################################################################################PACK

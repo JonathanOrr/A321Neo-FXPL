@@ -33,7 +33,7 @@ local ecam_force_page = 0
 
 -- The following flag enables the performance measuring of each component. It is possible to
 -- visualize it in the debug window
-debug_performance_measure = false
+debug_performance_measure = true
 
 
 --

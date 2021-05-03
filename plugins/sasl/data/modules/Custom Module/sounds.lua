@@ -49,6 +49,9 @@ local function reverser_drfs()
     end
 end
 
+local blower_flag = false
+local blower_start_time = 0
+
 local function blower_extract_delay()
     if get(AC_ess_bus_pwrd) == 1 then
         set(Sounds_elec_bus_delayed, 1) 
@@ -56,8 +59,23 @@ local function blower_extract_delay()
         Set_dataref_linear_anim(Sounds_elec_bus_delayed, 0, 0, 1, 0.5)
     end
 
-    Set_dataref_linear_anim(Sounds_blower_delayed, get(Ventilation_blower_running), 0, 1, 0.15)
-    Set_dataref_linear_anim(Sounds_extract_delayed, get(Ventilation_extract_running), 0, 1, 0.15)
+    if get(AC_bus_1_pwrd) == 1 and get(FAILURE_AIRCOND_VENT_BLOWER) == 0 and not blower_flag then
+        blower_start_time = get(TIME)
+        print(blower_start_time)
+        blower_flag = true
+    elseif not(get(AC_bus_1_pwrd) == 1 and get(FAILURE_AIRCOND_VENT_BLOWER) == 0) then
+        blower_flag = false
+    end
+
+    if get(Ventilation_blower_running) == 1 and  get(TIME) - blower_start_time < 5 then
+        set(Sounds_blower_delayed, 0)
+    elseif get(Ventilation_blower_running) == 1 and  get(TIME) - blower_start_time > 5 then
+        set(Sounds_blower_delayed, 1)
+    else
+        set(Sounds_blower_delayed, 0)
+    end
+    
+    Set_dataref_linear_anim(Sounds_extract_delayed, get(Ventilation_extract_running), 0, 1, 0.2)
 
 
     if get(AC_bus_1_pwrd) == 1 then
