@@ -48,6 +48,12 @@ local image_point_dme_only  = sasl.gl.loadImage(moduleDirectory .. "/Custom Modu
 local image_point_ndb = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/point-ndb.png")
 local image_point_wpt = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/point-wpt.png")
 
+local image_tcas_far  = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/tcas-far.png")
+local image_tcas_prox = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/tcas-prox.png")
+local image_tcas_ta   = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/tcas-ta.png")
+local image_tcas_ra   = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/tcas-ra.png")
+
+
 local image_vor_1 = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/needle-VOR1-arc.png")
 local image_vor_2 = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/needle-VOR2-arc.png")
 local image_adf_1 = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/needle-ADF1-arc.png")
@@ -243,7 +249,7 @@ local function draw_poi_array(data, poi, texture, color)
     if poi.distance == nil or (get(TIME) - poi_position_last_update) > POI_UPDATE_RATE then
        poi.distance = get_distance_nm(data.inputs.plane_coords_lat,data.inputs.plane_coords_lon,poi.lat,poi.lon)
     end
-    
+   
     if poi.distance > range_in_nm * 2 then
         return true, poi
     end
@@ -331,7 +337,6 @@ local function draw_wpts(data)
         return  -- Vor button not selected
     end
 
-    local displayed_num = 0
     data.misc.not_displaying_all_data = false
     
     -- For each waypoint visible...
@@ -447,7 +452,61 @@ local function draw_oans_arrow(data)
     end
 end
 
+local function draw_tcas_altitude(data, acf, poi)
+    if poi.x == nil then
+        return
+    end
 
+    local alt_diff = math.abs(acf.alt - data.inputs.altitude)
+    local alt_diff_text = Fwd_string_fill(""..math.floor(alt_diff/100), "0", 2)
+    if acf.alt >= data.inputs.altitude then
+        alt_diff_text = "+" .. alt_diff_text
+    else
+        alt_diff_text = "-" .. alt_diff_text
+    end
+    local color = acf.alert == TCAS_ALERT_TA and COLOR_YELLOW or (acf.alert == TCAS_ALERT_RA and ECAM_RED or ECAM_WHITE)
+
+    sasl.gl.drawText(Font_ECAMfont, poi.x-25, poi.y-40, alt_diff_text, 26, false, false, TEXT_ALIGN_LEFT, color)
+
+    -- DEBUG INFOs
+    if debug_tcas_system then
+        local labels = { [0] = "-", "TA", "RA"}
+        local labels_act = { [0] = "-", "CL L", "DS L", "CL H", "CL L", "T"}
+    
+        sasl.gl.drawText(Font_ECAMfont, poi.x-25, poi.y-70, "STATUS: " .. (labels[acf.alert] .. " (" .. acf.alert .. ")") , 26, false, false, TEXT_ALIGN_LEFT, ECAM_MAGENTA)
+        sasl.gl.drawText(Font_ECAMfont, poi.x-25, poi.y-100, "ACTION: " .. (labels_act[acf.action] .. " (" .. acf.action .. ")") , 26, false, false, TEXT_ALIGN_LEFT, ECAM_MAGENTA)
+        sasl.gl.drawText(Font_ECAMfont, poi.x-25, poi.y-130, "REASON: " .. (acf.debug_reason or "NIL"), 26, false, false, TEXT_ALIGN_LEFT, ECAM_MAGENTA)
+    end
+end
+
+local function draw_tcas(data)
+    if get(TCAS_actual_mode) == TCAS_MODE_OFF or get(TCAS_actual_mode) == TCAS_MODE_FAULT then
+        return
+    end
+
+    for i,acf in ipairs(TCAS_sys.acf_data) do
+
+        local poi = {id="", lat=acf.lat, lon=acf.lon}
+        poi.distance = get_distance_nm(data.inputs.plane_coords_lat, data.inputs.plane_coords_lon, acf.lat, acf.lon)
+
+        local alt_diff = math.abs(acf.alt - data.inputs.altitude)
+
+        if poi.distance < 30 then
+            local texture = image_tcas_far
+            if acf.alert == TCAS_ALERT_TA then
+                texture = image_tcas_ta
+            elseif acf.alert == TCAS_ALERT_RA then
+                texture = image_tcas_ra
+            elseif poi.distance <= 6 and alt_diff <= 1200 then
+                texture = image_tcas_prox
+            end
+            draw_poi_array(data, poi, texture, ECAM_WHITE)
+            draw_tcas_altitude(data, acf, poi)
+
+        end
+    end
+
+end
 -------------------------------------------------------------------------------
 -- Main draw_* functions
 -------------------------------------------------------------------------------
@@ -464,6 +523,7 @@ end
 function draw_arc(data)
     draw_terrain(data)
     draw_pois(data)
+    draw_tcas(data)
     
     local functions_for_oans = {
         get_lat_lon = arc_get_lat_lon,

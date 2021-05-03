@@ -35,6 +35,8 @@ local ecam_force_page = 0
 -- visualize it in the debug window
 debug_performance_measure = false
 
+-- Enable the debug for tcas (directly on ND)
+debug_tcas_system = true
 
 --
 --
