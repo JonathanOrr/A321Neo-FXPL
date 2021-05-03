@@ -98,25 +98,13 @@ local function update_avio_ventilation()
     
 
     if get(AC_bus_1_pwrd) == 1 and get(FAILURE_AIRCOND_VENT_BLOWER) == 0 and get(Ventilation_blower_override) == 0 then
-        if time_started_blower == 0 then time_started_blower = get(TIME) end
-    else
-        time_started_blower = 0
-    end
-    
-    if time_started_blower ~= 0 and get(TIME) - time_started_blower > 0 then
         set(Ventilation_blower_running, 1)
         ELEC_sys.add_power_consumption(ELEC_BUS_AC_1, 0.05, 0.05)
     else
         set(Ventilation_blower_running, 0)
     end
     
-    if get(AC_bus_2_pwrd) == 1 and get(FAILURE_AIRCOND_VENT_EXTRACT) == 0 then
-        if time_started_extract == 0 then time_started_extract = get(TIME) end
-    else
-        time_started_extract = 0
-    end
-    
-    if time_started_extract ~= 0 and get(TIME) - time_started_extract > 0 and get(Fire_cargo_fwd_smoke_detected) == 0 then
+    if get(AC_bus_2_pwrd) == 1 and get(FAILURE_AIRCOND_VENT_EXTRACT) == 0 and get(Fire_cargo_fwd_smoke_detected) == 0 then
         set(Ventilation_extract_running, 1)
         ELEC_sys.add_power_consumption(ELEC_BUS_AC_2, 0.05, 0.05)
     else
