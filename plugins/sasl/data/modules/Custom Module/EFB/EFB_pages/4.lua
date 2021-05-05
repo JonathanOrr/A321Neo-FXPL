@@ -93,35 +93,27 @@ end
 function EFB_execute_page_4_buttons()
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 642,618,673,745, function ()
         set(VOLUME_ext, math.max(get(VOLUME_ext)-0.1, 0))
-        --print("ext_down")
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 1042,618,1073,745, function ()
         set(VOLUME_ext, math.min(get(VOLUME_ext)+0.1, 1))
-        --print("ext_up")
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 642,557,673,584, function ()
         set(VOLUME_int, math.max(get(VOLUME_int)-0.1, 0))
-        --print("int_down")
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 1042,557,1073,584, function ()
         set(VOLUME_int, math.min(get(VOLUME_int)+0.1, 1))
-        --print("int_up")
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 642,497,673,525, function ()
         set(VOLUME_wind, math.max(get(VOLUME_wind)-0.1, 0))
-        --print("wind_down")
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 1042,497,1073,525, function ()
         set(VOLUME_wind, math.min(get(VOLUME_wind)+0.1, 1))
-        --print("wind_up")
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 642,437,673,466, function ()
         set(VOLUME_cabin, math.max(get(VOLUME_cabin)-0.1, 0))
-        --print("cabin_down")
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 1042,437,1073,466, function ()
         set(VOLUME_cabin, math.min(get(VOLUME_cabin)+0.1, 1))
-        --print("cabin_up")
     end)
 
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 69,594,136,623, function ()
@@ -181,11 +173,6 @@ function EFB_execute_page_4_buttons()
 end
 
 local function table_loading_on_start()
-    --local table_loading_buffer = table.load(moduleDirectory .. "/Custom Module/saved_configs/EFB_preferences_v2")
-    --for i=1, #table_loading_buffer do
-    --    EFB.preferences[i] = table_loading_buffer[i]
-    --end
-
     if table.load(moduleDirectory .. "/Custom Module/saved_configs/EFB_volume_settings") ~= nil then
         local volume_table_load =  table.load(moduleDirectory .. "/Custom Module/saved_configs/EFB_volume_settings")
         set(VOLUME_ext, volume_table_load[1])
@@ -199,13 +186,10 @@ table_loading_on_start()
 
 --UPDATE LOOPS--
 function EFB_update_page_4() -- update loop
-    --print(EFB_CURSOR_X, EFB_CURSOR_Y)
 end
 
 --DRAW LOOPS--
 function EFB_draw_page_4()
-
-
 
     draw_throttle_value()
     draw_hud_buttons()
@@ -215,5 +199,4 @@ function EFB_draw_page_4()
     draw_volume_sliders()
     draw_dropdowns()
 
-    --print(get(Cockpit_throttle_lever_L))
 end

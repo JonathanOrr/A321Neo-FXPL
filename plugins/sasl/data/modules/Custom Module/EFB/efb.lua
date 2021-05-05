@@ -35,8 +35,6 @@ EFB_CURSOR_on_screen = false
 
 EFB_OFF = false
 
-New_takeoff_data_available = true
-
 ---CHARGING
 local CHARGE_START_TIME = 0
 local CHARGE_TIME_LEFT = 0

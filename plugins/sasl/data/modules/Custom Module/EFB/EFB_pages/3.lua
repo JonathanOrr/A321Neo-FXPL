@@ -1,31 +1,63 @@
-------------------------STUFF YOU CAN MESS WITH
-local BUTTON_PRESS_TIME = 0.5
-local weight_per_passenger = 90 --kg
-local dry_operating_weight = 47777
+-------------------------------------------------------------------------------
+-- A32NX Freeware Project
+-- Copyright (C) 2020
+-------------------------------------------------------------------------------
+-- LICENSE: GNU General Public License v3.0
+--
+--    This program is free software: you can redistribute it and/or modify
+--    it under the terms of the GNU General Public License as published by
+--    the Free Software Foundation, either version 3 of the License, or
+--    (at your option) any later version.
+--
+--    Please check the LICENSE file in the root of the repository for further
+--    details or check <https://www.gnu.org/licenses/>
+-------------------------------------------------------------------------------
+-- File: 3.lua 
+-- Short description: EFB page 3
+-------------------------------------------------------------------------------
 
-local max_fwd_cargo = 5700
-local max_aft_cargo = 7000
-
-local max_values = {8, 80, 100, 5700, 7000, 40000 }
-
-local default_cg = 25
-final_cg = 0
-local predicted_cg = 0
-
-local taxi_fuel = 500
-
-local percent_cg_to_coordinates = {{-9999,471}, {14, 471}, {22, 676}, {30,882}, {38.2,1092}, {9999,1085}}
-local tow_to_coordinates = {{-9999,78}, {45,78}, {102.6,440}, {9999,440}}
-
-local NUMBER_OF_PAGES = 3
-
-------------------------STUFF YOU CANNOT MESS WITH
-
+-------------------------------------------------------------------------------
+-- Includes
+-------------------------------------------------------------------------------
 include("EFB/EFB_pages/3_subpage2.lua")
 include("EFB/EFB_pages/3_subpage3.lua")
 include("libs/table.save.lua")
 include('libs/geo-helpers.lua')
+include("EFB/efb_systems.lua")
+include("EFB/efb_topcat.lua")
 
+
+-------------------------------------------------------------------------------
+-- Constants
+-------------------------------------------------------------------------------
+local BUTTON_PRESS_TIME = 0.5
+local WEIGHT_PER_PASSENGER = 90 --kg
+local DRY_OPERATING_WEIGHT = 47777
+local MAX_WEIGHT_VALUES = {8, 80, 100, 5700, 7000, 40000}
+local DEFAULT_TAXI_FUEL = 500
+local NUMBER_OF_SUBPAGES = 3
+
+-------------------------------------------------------------------------------
+-- Global variables
+-------------------------------------------------------------------------------
+
+New_takeoff_data_available = true
+
+-- LOAD & CG
+local load_target = {0,0,0,0,0,0}
+local load_actual = {0,0,0,0,0,0} -- not a live value! does not change in flight!!!!!!!
+local total_load_target = 0
+
+local default_cg = 25
+final_cg = 0    -- Need to be noon-local for subpages
+local predicted_cg = 0
+
+local percent_cg_to_coordinates = {{-9999,471}, {14, 471}, {22, 676}, {30,882}, {38.2,1092}, {9999,1085}}
+local tow_to_coordinates = {{-9999,78}, {45,78}, {102.6,440}, {9999,440}}
+
+local predicted_tow = 0
+
+-- Graphics and others
 local dropdown_expanded = {false, false}
 local dropdown_selected = {1,1}
 local dropdown_1 = {}
@@ -36,22 +68,11 @@ local avionics_bay_is_initialising = false
 key_p3s1_focus = 0 --0 nothing, 1 oa, 2 ob, 3 oc, 4 cf, 5 ca, 6 fuel
 local key_p3s1_buffer = ""
 
-local looper_1 = 10 -- so on startup, it is 10 then loops down to 0, sets the values before the user.
-
 local load_button_begin = 0
 
-load_target = {0,0,0,0,0,0}
-load_actual = {0,0,0,0,0,0} -- not a live value! does not change in flight!!!!!!!
-local total_load_target = 0
+efb_subpage_number = 1
 
 deparr_apts = {"", ""}
-
-local deparr_runway_data = {
-    {0,0},
-    {0,0},
-}
-
-local predicted_tow = 0
 
 local tank_index_center = {
     {5000,   -1},
@@ -115,16 +136,11 @@ local cargo_index_aft = {
     {7000, 12.5}
 }
 
---------------------INTERESTING STUFF
-include("EFB/efb_systems.lua")
-include("EFB/efb_topcat.lua")
 
-efb_subpage_number = 1
 
--------------------EFB
-
-local function performance_data()
-end
+-------------------------------------------------------------------------------
+-- Functions
+-------------------------------------------------------------------------------
 
 --MOUSE RESET
 function onMouseDown ( component , x , y , button , parentX , parentY )
@@ -188,15 +204,11 @@ local function request_departure_runway_data()
         local apts = AvionicsBay.apts.get_by_name(deparr_apts[1])
         if #apts > 0 then    -- If the airport exists
             local apt = apts[1]    -- Take the airport
-            --print(apt.alt)
             dropdown_1 = {} -- CLEAR IT FIRST
             for i=1, #apt.rwys do
-                --print(apt.rwys[i].name, apt.rwys[i].sibl_name)
                 table.insert(dropdown_1, apt.rwys[i].name) 
                 table.insert(dropdown_1, apt.rwys[i].sibl_name) 
                 set_takeoff_runway_data_to_global() -- SET THE RUNWAY DATA AFTER PLUGGING IN THE TABLE, SO THAT THE NUMBERS DO NOT REMAIN IN 0,0 IN CASE THE USER DOESN'T TOUCH THE DROPDOWN AT ALL
-                --print("DISTANCE " .. apt.rwys[i].distance)
-                --print("BEARING " .. apt.rwys[i].bearing)
             end
         end
         airport_reset_flags[1] = true
@@ -211,15 +223,12 @@ local function request_arrival_runway_data()
         local apts = AvionicsBay.apts.get_by_name(deparr_apts[2])
         if #apts > 0 then    -- If the airport exists
             local apt = apts[1]    -- Take the airport
-            --print(apt.alt)
             dropdown_2 = {} -- CLEAR IT FIRST
             for i=1, #apt.rwys do
-                --print(apt.rwys[i].name, apt.rwys[i].sibl_name)
+
                 table.insert(dropdown_2, apt.rwys[i].name) 
                 table.insert(dropdown_2, apt.rwys[i].sibl_name) 
                 set_landing_runway_data_to_global() -- SET THE RUNWAY DATA AFTER PLUGGING IN THE TABLE, SO THAT THE NUMBERS DO NOT REMAIN IN 0,0 IN CASE THE USER DOESN'T TOUCH THE DROPDOWN AT ALL
-                --print("DISTANCE " .. apt.rwys[i].distance)
-                --print("BEARING " .. apt.rwys[i].bearing)
             end
         end
         airport_reset_flags[2] = true
@@ -236,7 +245,6 @@ local function p3s1_dropdown_buttons( x,y,w,h, table, identifier)
     for i=1, #table do
         if dropdown_expanded[identifier] then
             Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, x - w/2 + 5, y - h*i - 14, w-10 + ( x - w/2 + 5), h-2 + ( y - h*i - 14),function ()
-                --print(i)
                 dropdown_selected[identifier] = i
                 dropdown_expanded[identifier] = false
                 set_takeoff_runway_data_to_global()--EVERYTIME THE USER CLICKS THE RUNWAY DROPDOWN MENU, IT REQUESTS THE RUNWAY DATA ONCE. THAT IS THE ONLY WAY I CAN THINK OF TO REFRESH RUNWAY DATA WITHOUT USING UPDATE LOOP.
@@ -264,7 +272,7 @@ local function p3s1_plug_in_the_buffer()
             key_p3s1_focus = 0
             key_p3s1_buffer = ""
         else
-            load_target[key_p3s1_focus] = math.min(max_values[key_p3s1_focus], key_p3s1_buffer) --PLUG THE SCRATCHPAD INTO THE ACTUAL TARGET ARRAY
+            load_target[key_p3s1_focus] = math.min(MAX_WEIGHT_VALUES[key_p3s1_focus], key_p3s1_buffer) --PLUG THE SCRATCHPAD INTO THE ACTUAL TARGET ARRAY
             key_p3s1_focus = 0
             key_p3s1_buffer = ""
         end
@@ -326,8 +334,6 @@ function EFB_onKeyDown_page3_subpage_1(component, char, key, shiftDown, ctrlDown
             else
                 p3s1_construct_the_buffer(char)
             end
-        --print(key_p3s1_buffer)
-        --print(char)
         return true
     end
 end
@@ -340,7 +346,6 @@ local function load_weights_from_file()
 end
 
 local function save_weights_to_file()
-    --os.remove(moduleDirectory .. "/Custom Module/saved_configs/previous_load_target")
     table.save(load_target, moduleDirectory .. "/Custom Module/saved_configs/previous_load_target")
 end
 
@@ -367,10 +372,10 @@ end
 
 
 local function sum_weights_up()
-    total_load_target = ((load_target[1]+load_target[2]+load_target[3]) * weight_per_passenger) -- passenger weight
+    total_load_target = ((load_target[1]+load_target[2]+load_target[3]) * WEIGHT_PER_PASSENGER) -- passenger weight
     + (load_target[4] + load_target[1]) --cargo weight
     + load_target[6] --fuel weight
-    + dry_operating_weight -- aircraft base weight
+    + DRY_OPERATING_WEIGHT -- aircraft base weight
 end
 
 
@@ -382,8 +387,8 @@ local function calculate_cg()
     -- + Table_extrapolate(tank_index_wing, get(Fuel_quantity[tank_RIGHT])) --coefficient of the right tank
     -- + Table_extrapolate(tank_index_act, get(Fuel_quantity[tank_ACT])) --coefficient of the act
     -- + Table_extrapolate(tank_index_rct, get(Fuel_quantity[tank_RCT])) --coefficient of the rct
-    + Table_extrapolate(passenger_index_front, (load_actual[1] + load_actual[2]) * weight_per_passenger) --coefficient of the zone a and b passenger
-    + Table_extrapolate(passenger_index_aft, load_actual[3] * weight_per_passenger) --coefficient of the zone c passenger
+    + Table_extrapolate(passenger_index_front, (load_actual[1] + load_actual[2]) * WEIGHT_PER_PASSENGER) --coefficient of the zone a and b passenger
+    + Table_extrapolate(passenger_index_aft, load_actual[3] * WEIGHT_PER_PASSENGER) --coefficient of the zone c passenger
     + Table_extrapolate(cargo_index_front, load_actual[4]) --coefficient of the forward cargo hold
     + Table_extrapolate(cargo_index_aft, load_actual[5]) --coefficient of the after cargo hold
 end
@@ -395,30 +400,35 @@ local function predict_cg()
     -- + Table_extrapolate(tank_index_wing, get(Fuel_quantity[tank_RIGHT])) --coefficient of the right tank
     -- + Table_extrapolate(tank_index_act, get(Fuel_quantity[tank_ACT])) --coefficient of the act
     -- + Table_extrapolate(tank_index_rct, get(Fuel_quantity[tank_RCT])) --coefficient of the rct
-    + Table_extrapolate(passenger_index_front, (load_target[1] + load_target[2]) * weight_per_passenger) --coefficient of the zone a and b passenger
-    + Table_extrapolate(passenger_index_aft, load_target[3] * weight_per_passenger) --coefficient of the zone c passenger
+    + Table_extrapolate(passenger_index_front, (load_target[1] + load_target[2]) * WEIGHT_PER_PASSENGER) --coefficient of the zone a and b passenger
+    + Table_extrapolate(passenger_index_aft, load_target[3] * WEIGHT_PER_PASSENGER) --coefficient of the zone c passenger
     + Table_extrapolate(cargo_index_front, load_target[4]) --coefficient of the forward cargo hold
     + Table_extrapolate(cargo_index_aft, load_target[5]) --coefficient of the after cargo hold
 end
 
 local function predict_tow()
-    predicted_tow = ((load_target[1]+load_target[2]+load_target[3]) * weight_per_passenger) 
+    predicted_tow = ((load_target[1]+load_target[2]+load_target[3]) * WEIGHT_PER_PASSENGER) 
     + load_target[4] + load_target[5] 
     + load_target[6] 
-    + dry_operating_weight  
+    + DRY_OPERATING_WEIGHT  
 end
 
 local function set_cg()
     set(CG_Pos, 0.04232395*(final_cg) - 1.06312)
 end
 
-local function set_values()
+local function set_values(startup)
 
     for k, v in ipairs(load_target) do -- set the load actual array for the next line
       load_actual[k] = v
     end
 
-    set(Payload_weight, (load_actual[1] + load_actual[2] + load_actual[3])*weight_per_passenger + load_actual[4] + load_actual[5])
+    if startup then
+        -- Give a minimum amount of fuel at start
+        load_actual[6] = math.max(load_actual[6], 2000)
+    end
+
+    set(Payload_weight, (load_actual[1] + load_actual[2] + load_actual[3])*WEIGHT_PER_PASSENGER + load_actual[4] + load_actual[5])
     set_fuel(load_actual[6])
     calculate_cg()
     sum_weights_up()
@@ -427,10 +437,10 @@ end
 
 local function Subpage_1_buttons()
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 348, 386, 378, 409,  function () -- OA SELECTOR
-        load_target[1] = math.min(max_values[1], load_target[1] + 10)
+        load_target[1] = math.min(MAX_WEIGHT_VALUES[1], load_target[1] + 10)
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 313, 385, 344, 409, function ()
-        load_target[1] = math.min(max_values[1], load_target[1] + 1)
+        load_target[1] = math.min(MAX_WEIGHT_VALUES[1], load_target[1] + 1)
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 182, 385, 212, 409,function ()
         load_target[1] = math.max(0, load_target[1] - 1)
@@ -440,10 +450,10 @@ local function Subpage_1_buttons()
     end)
 
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 348, 346, 378, 370,  function () -- OB SELECTOR
-        load_target[2] = math.min(max_values[2], load_target[2] + 10)
+        load_target[2] = math.min(MAX_WEIGHT_VALUES[2], load_target[2] + 10)
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 313, 346, 344, 370, function ()
-        load_target[2] = math.min(max_values[2], load_target[2] + 1)
+        load_target[2] = math.min(MAX_WEIGHT_VALUES[2], load_target[2] + 1)
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 182, 346, 212, 370,function ()
         load_target[2] = math.max(0, load_target[2] - 1)
@@ -454,10 +464,10 @@ local function Subpage_1_buttons()
 
 
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 348, 307, 378, 332,  function () -- OC SELECTOR
-        load_target[3] = math.min(max_values[3], load_target[3] + 10)
+        load_target[3] = math.min(MAX_WEIGHT_VALUES[3], load_target[3] + 10)
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 313, 307, 344, 332, function ()
-        load_target[3] = math.min(max_values[3], load_target[3] + 1)
+        load_target[3] = math.min(MAX_WEIGHT_VALUES[3], load_target[3] + 1)
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 182, 307, 212, 332,function ()
         load_target[3] = math.max(0, load_target[3] - 1)
@@ -467,10 +477,10 @@ local function Subpage_1_buttons()
     end)
     
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 348, 229, 378, 254,  function () -- Cargo 1-2 SELECTOR
-        load_target[4] = math.min(max_values[4], load_target[4] + 1000)
+        load_target[4] = math.min(MAX_WEIGHT_VALUES[4], load_target[4] + 1000)
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 313, 229, 344, 254, function ()
-        load_target[4] = math.min(max_values[4], load_target[4] + 100)
+        load_target[4] = math.min(MAX_WEIGHT_VALUES[4], load_target[4] + 100)
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 182, 229, 212, 254,function ()
         load_target[4] = math.max(0, load_target[4] - 100)
@@ -480,10 +490,10 @@ local function Subpage_1_buttons()
     end)
 
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 348, 190, 378, 214,  function () -- Cargo 3-5 SELECTOR
-        load_target[5] = math.min(max_values[5], load_target[5] + 1000)
+        load_target[5] = math.min(MAX_WEIGHT_VALUES[5], load_target[5] + 1000)
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 313, 190, 344, 214, function ()
-        load_target[5] = math.min(max_values[5], load_target[5] + 100)
+        load_target[5] = math.min(MAX_WEIGHT_VALUES[5], load_target[5] + 100)
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 182, 190, 212, 214,function ()
         load_target[5] = math.max(0, load_target[5] - 100)
@@ -493,10 +503,10 @@ local function Subpage_1_buttons()
     end)
 
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 348, 112, 378, 136,  function () -- Fuel SELECTOR
-        load_target[6] = math.min(max_values[6], load_target[6] + 1000)
+        load_target[6] = math.min(MAX_WEIGHT_VALUES[6], load_target[6] + 1000)
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 313, 112, 344, 136, function ()
-        load_target[6] = math.min(max_values[6], load_target[6] + 100)
+        load_target[6] = math.min(MAX_WEIGHT_VALUES[6], load_target[6] + 100)
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 182, 112, 212, 136,function ()
         load_target[6] = math.max(0, load_target[6] - 100)
@@ -540,26 +550,25 @@ local function Subpage_1_buttons()
     end)
 --------------------------------------------------------------------------------------------------------
 
-if key_p3s1_focus == 1 then
-    click_anywhere_except_that_area( 216, 385, 308, 409, p3s1_plug_in_the_buffer)
-elseif key_p3s1_focus == 2 then
-    click_anywhere_except_that_area( 216, 346, 308, 370, p3s1_plug_in_the_buffer)
-elseif key_p3s1_focus == 3 then
-    click_anywhere_except_that_area( 216, 307, 308, 332, p3s1_plug_in_the_buffer)
-elseif key_p3s1_focus == 4 then
-    click_anywhere_except_that_area( 216, 229, 308, 254, p3s1_plug_in_the_buffer)
-elseif key_p3s1_focus == 5 then
-    click_anywhere_except_that_area( 216, 190, 308, 214, p3s1_plug_in_the_buffer)
-elseif key_p3s1_focus == 6 then
-    click_anywhere_except_that_area( 216, 112, 308, 136, p3s1_plug_in_the_buffer)
-elseif key_p3s1_focus == 7 then
-    click_anywhere_except_that_area( 71 , 565, 163, 591, p3s1_plug_in_the_buffer)
-elseif key_p3s1_focus == 8 then
-    click_anywhere_except_that_area( 357, 565, 449, 591, p3s1_plug_in_the_buffer)
-end
+    if key_p3s1_focus == 1 then
+        click_anywhere_except_that_area( 216, 385, 308, 409, p3s1_plug_in_the_buffer)
+    elseif key_p3s1_focus == 2 then
+        click_anywhere_except_that_area( 216, 346, 308, 370, p3s1_plug_in_the_buffer)
+    elseif key_p3s1_focus == 3 then
+        click_anywhere_except_that_area( 216, 307, 308, 332, p3s1_plug_in_the_buffer)
+    elseif key_p3s1_focus == 4 then
+        click_anywhere_except_that_area( 216, 229, 308, 254, p3s1_plug_in_the_buffer)
+    elseif key_p3s1_focus == 5 then
+        click_anywhere_except_that_area( 216, 190, 308, 214, p3s1_plug_in_the_buffer)
+    elseif key_p3s1_focus == 6 then
+        click_anywhere_except_that_area( 216, 112, 308, 136, p3s1_plug_in_the_buffer)
+    elseif key_p3s1_focus == 7 then
+        click_anywhere_except_that_area( 71 , 565, 163, 591, p3s1_plug_in_the_buffer)
+    elseif key_p3s1_focus == 8 then
+        click_anywhere_except_that_area( 357, 565, 449, 591, p3s1_plug_in_the_buffer)
+    end
 
 --------------------------------------------------------------------------------------------------------
-
 
     p3s1_dropdown_buttons(230, 578, 90, 28,    dropdown_1, 1)
     p3s1_dropdown_buttons(511, 578, 90, 28,    dropdown_2, 2)
@@ -568,10 +577,9 @@ end
 
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 108, 50, 378, 80,function ()
         load_button_begin = get(TIME) --the button animation
-        set_values()
+        set_values(false)
         save_weights_to_file()
         New_takeoff_data_available = true
-        --print("hello")
     end)
 end
 
@@ -580,14 +588,6 @@ local function EFB_update_page_3_subpage_1() --UPDATE LOOP
     predict_cg()
     request_departure_runway_data()
     request_arrival_runway_data()
-    --print(predicted_cg)
-    --print_r(load_target)
-    --print_r(load_actual)
-
-    --print(deparr_runway_data[1][1])
-    --print(deparr_runway_data[1][2])
-    --print(deparr_runway_data[2][1])
-    --print(deparr_runway_data[2][2])
 
 end
 
@@ -641,16 +641,16 @@ local function EFB_draw_page_3_subpage_1() -- DRAW LOOP
 
 --------------------------------------------------------------------------
 
-    local passenger_weight_actual = ((load_actual[1]+load_actual[2]+load_actual[3]) * weight_per_passenger)
+    local passenger_weight_actual = ((load_actual[1]+load_actual[2]+load_actual[3]) * WEIGHT_PER_PASSENGER)
     local cargo_weight_actual = load_actual[4] + load_actual[5]
     fuel_weight_actual = load_actual[6]
-    zfw_actual = passenger_weight_actual + cargo_weight_actual + dry_operating_weight
-    local taxi_fuel = math.min(taxi_fuel, load_actual[6]) 
-    takeoff_weight_actual = passenger_weight_actual + cargo_weight_actual + fuel_weight_actual - taxi_fuel + dry_operating_weight
+    zfw_actual = passenger_weight_actual + cargo_weight_actual + DRY_OPERATING_WEIGHT
+    local taxi_fuel = math.min(DEFAULT_TAXI_FUEL, load_actual[6]) 
+    takeoff_weight_actual = passenger_weight_actual + cargo_weight_actual + fuel_weight_actual - taxi_fuel + DRY_OPERATING_WEIGHT
 
-    drawTextCentered( Font_Airbus_panel , 1038 , 682, dry_operating_weight      , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
+    drawTextCentered( Font_Airbus_panel , 1038 , 682, DRY_OPERATING_WEIGHT      , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
     drawTextCentered( Font_Airbus_panel , 1038 , 660, 0                         , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
-    drawTextCentered( Font_Airbus_panel , 1038 , 637, dry_operating_weight      , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
+    drawTextCentered( Font_Airbus_panel , 1038 , 637, DRY_OPERATING_WEIGHT      , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
     drawTextCentered( Font_Airbus_panel , 1038 , 615, cargo_weight_actual       , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
     drawTextCentered( Font_Airbus_panel , 1038 , 593, passenger_weight_actual   , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
     drawTextCentered( Font_Airbus_panel , 1038 , 571, zfw_actual                , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
@@ -665,12 +665,17 @@ local function EFB_draw_page_3_subpage_1() -- DRAW LOOP
 
 end
 
-
--------DONT ASK ME WHY I PUT IT OUTSIDE, IT EXECUTES ON START
-if table.load(moduleDirectory .. "/Custom Module/saved_configs/previous_load_target") ~= nil then
-    load_weights_from_file()
+-------------------------------------------------------------------------------
+-- Initialization
+-------------------------------------------------------------------------------
+local function initialize()
+    if table.load(moduleDirectory .. "/Custom Module/saved_configs/previous_load_target") ~= nil then
+        load_weights_from_file()
+    end
+    set_values(true)
 end
-set_values()
+
+initialize()
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------SUBPAGE 2
 
@@ -705,7 +710,7 @@ end
 
 local function mutual_button_loop()
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 1031,18,1099,48, function () --SELECTOR BUTTONS WORK AT ALL TIMES
-        efb_subpage_number = math.min(efb_subpage_number + 1, NUMBER_OF_PAGES)
+        efb_subpage_number = math.min(efb_subpage_number + 1, NUMBER_OF_SUBPAGES)
         key_p3s1_focus = 0
         key_p3s1_buffer = ""
     end)
@@ -720,13 +725,14 @@ end
 local function mutual_draw_loop()
     SASL_draw_img_center_aligned (EFB_INFO_selector, 1026,33, 147, 32, EFB_WHITE) -- THIS IS THE SELECTOR, IT DRAWS ON ALL PAGES
 
-        sasl.gl.drawText ( Font_Airbus_panel , 880 , 24 , "Page "..efb_subpage_number.."/"..NUMBER_OF_PAGES.."", 20 , false , false , TEXT_ALIGN_CENTER , EFB_WHITE)
-
-    --print(EFB_CURSOR_X, EFB_CURSOR_Y)
+        sasl.gl.drawText ( Font_Airbus_panel , 880 , 24 , "Page "..efb_subpage_number.."/"..NUMBER_OF_SUBPAGES.."", 20 , false , false , TEXT_ALIGN_CENTER , EFB_WHITE)
 
 end
 
---------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-- Main Functions
+-------------------------------------------------------------------------------
+
 
 function EFB_execute_page_3_buttons()
 
