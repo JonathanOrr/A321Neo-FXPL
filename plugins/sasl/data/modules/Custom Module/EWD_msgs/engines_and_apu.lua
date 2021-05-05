@@ -2039,7 +2039,7 @@ MessageGroup_ENG_LO_START_AIR = {
     },
 
     is_active = function()
-        return (get(L_bleed_press) <= 10 and get(Engine_1_avail) == 0  and get(Engine_1_master_switch) == 1) or (get(R_bleed_press) <= 10 and get(Engine_2_avail) == 0  and get(Engine_2_master_switch) == 1)
+        return get(Engine_mode_knob) == 1 and ((get(L_bleed_press) <= 10 and get(Engine_1_avail) == 0  and get(Engine_1_master_switch) == 1) or (get(R_bleed_press) <= 10 and get(Engine_2_avail) == 0  and get(Engine_2_master_switch) == 1))
     end,
 
     is_inhibited = function()

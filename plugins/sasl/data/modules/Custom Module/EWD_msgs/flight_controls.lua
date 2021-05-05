@@ -155,3 +155,254 @@ MessageGroup_FLAP_LVR_NOT_ZERO = {
     end
 
 }
+
+
+--------------------------------------------------------------------------------
+-- CAUTION: L+R AIL FAULT
+--------------------------------------------------------------------------------
+
+MessageGroup_FCTL_AIL_FAULT = {
+
+    shown = false,
+
+    text  = function()
+                return "F/CTL"
+            end,
+    color = function()
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+
+    messages = {
+        {
+            text = function()
+                local x = "?"
+                if get(FAILURE_FCTL_LAIL) == 1 and get(FAILURE_FCTL_RAIL) == 1 then
+                    x = "L+R"
+                elseif get(FAILURE_FCTL_LAIL) == 1 then
+                    x = "L"
+                elseif get(FAILURE_FCTL_RAIL) == 1 then
+                    x = "R"
+                end
+                return "      " .. x .. " AIL FAULT"
+            end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        },
+        {
+            text = function() return " FUEL CONSUMPT INCRD" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return true end
+        },
+        {
+            text = function() return " FMS PRED UNRELIABLE" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return true end
+        }
+    },
+
+    sd_page = ECAM_PAGE_FCTL,
+
+    is_active = function()
+        return get(FAILURE_FCTL_LAIL) == 1 or get(FAILURE_FCTL_RAIL) == 1
+    end,
+
+    is_inhibited = function()
+        return is_inibithed_in({PHASE_ABOVE_80_KTS, PHASE_LIFTOFF})
+    end
+
+}
+
+
+--------------------------------------------------------------------------------
+-- CAUTION: L or R ELEV FAULT
+--------------------------------------------------------------------------------
+
+MessageGroup_FCTL_LR_ELEV_FAULT_SINGLE = {
+
+    shown = false,
+
+    text  = function()
+                return "F/CTL"
+            end,
+    color = function()
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+
+    thr_lvl_cond = 0,
+
+    messages = {
+        {
+            text = function()
+                local x = "?"
+                if get(FAILURE_FCTL_LELEV) == 1 then
+                    x = "L"
+                elseif get(FAILURE_FCTL_RELEV) == 1 then
+                    x = "R"
+                end
+                return "      " .. x .. " ELEV FAULT"
+            end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        },
+        {
+            text = function() return " MANEUVER WITH CARE" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return true end
+        },
+        {
+            text = function() return " FOR GA: MAX PITCH 15 DEG" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return true end
+        },
+        {
+            text = function() return " - THE LVR..TOGA THEN MCT" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function()
+                if MessageGroup_FCTL_LR_ELEV_FAULT_SINGLE.thr_lvl_cond == 0 and get(Cockpit_throttle_lever_L) > 0.99 and get(Cockpit_throttle_lever_R) > 0.99 then
+                    MessageGroup_FCTL_LR_ELEV_FAULT_SINGLE.thr_lvl_cond = 1
+                elseif MessageGroup_FCTL_LR_ELEV_FAULT_SINGLE.thr_lvl_cond == 1 and get(Cockpit_throttle_lever_L) < 0.99 and get(Cockpit_throttle_lever_R) < 0.99 then
+                    MessageGroup_FCTL_LR_ELEV_FAULT_SINGLE.thr_lvl_cond = 2
+                end
+                return MessageGroup_FCTL_LR_ELEV_FAULT_SINGLE.thr_lvl_cond < 2
+            end
+        }
+    },
+
+    sd_page = ECAM_PAGE_FCTL,
+
+    is_active = function()
+        local condition = (get(FAILURE_FCTL_LELEV) == 1 or get(FAILURE_FCTL_RELEV) == 1) and not (get(FAILURE_FCTL_LELEV) == 1 and get(FAILURE_FCTL_RELEV) == 1)
+        if not condition then
+            MessageGroup_FCTL_LR_ELEV_FAULT_SINGLE.thr_lvl_cond = 0
+        end
+        return condition
+    end,
+
+    is_inhibited = function()
+        return is_inibithed_in({PHASE_ABOVE_80_KTS, PHASE_LIFTOFF})
+    end
+
+}
+
+
+--------------------------------------------------------------------------------
+-- WARNING: L+R ELEV FAULT
+--------------------------------------------------------------------------------
+
+MessageGroup_FCTL_LR_ELEV_FAULT_DOUBLE = {
+
+    shown = false,
+
+    text  = function()
+                return "F/CTL"
+            end,
+    color = function()
+                return COL_WARNING
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+
+    thr_lvl_cond = 0,
+
+    messages = {
+        {
+            text = function()
+                return "      L+R ELEV FAULT"
+            end,
+            color = function() return COL_WARNING end,
+            is_active = function() return true end
+        },
+        {
+            text = function() return " - MAX SPD........320/.77" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return true end
+        },
+        {
+            text = function() return " - MAN PITCH TRIM.....USE" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return true end
+        },
+        {
+            text = function() return " - SPD BRK.....DO NOT USE" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return true end
+        }
+    },
+
+    sd_page = ECAM_PAGE_FCTL,
+
+    is_active = function()
+        return get(L_elevator_avail) == 0 and get(R_elevator_avail) == 0
+    end,
+
+    is_inhibited = function()
+        return is_inibithed_in({PHASE_ELEC_PWR, PHASE_1ST_ENG_ON, PHASE_BELOW_80_KTS, PHASE_2ND_ENG_OFF})
+    end
+
+}
+
+
+
+--------------------------------------------------------------------------------
+-- CAUTION: STABILIZER JAM
+--------------------------------------------------------------------------------
+
+MessageGroup_FCTL_STAB_JAM = {
+
+    shown = false,
+
+    text  = function()
+                return "F/CTL"
+            end,
+    color = function()
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+
+    messages = {
+        {
+            text = function()
+                return "      STABILIZER JAM"
+            end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        },
+        {
+            text = function() return " - MAN PITCH TRIM...CHECK" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return true end
+        },
+        {
+            text = function() return " . IF MAN TRIM AVAIL:" end,
+            color = function() return COL_REMARKS end,
+            is_active = function() return true end
+        },
+        {
+            text = function() return "   TRIM FOR NEUTRAL ELEV" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return true end
+        },
+        {
+            text = function() return "   MANEUVER WITH CARE" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return true end
+        }
+    },
+
+    sd_page = ECAM_PAGE_FCTL,
+
+    is_active = function()
+        return get(FAILURE_FCTL_THS) == 1 or get(FAILURE_FCTL_THS_MECH) == 1
+    end,
+
+    is_inhibited = function()
+        return is_inibithed_in({PHASE_ABOVE_80_KTS, PHASE_LIFTOFF})
+    end
+
+}
+
