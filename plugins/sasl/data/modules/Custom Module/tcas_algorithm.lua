@@ -166,7 +166,7 @@ local function delta(s, v, D)
     local x = D * D * item_mult(v,v)
     v = perpendicular(v)
     local y = item_mult(s,v)
-    return x - y
+    return x - y * y
 end
 
 local function root(a, b, c, eps)   -- Find a 2nd order polynomial solution (if no solution exists returns 0)
@@ -194,7 +194,7 @@ end
 local function CD2D_inf(diff_pos, diff_spd, D, B)
     local spd_m = item_mult(diff_spd,diff_spd)
     if spd_m == 0 then
-        if item_mult(diff_pos,diff_pos) <= D then
+        if msqrt(item_mult(diff_pos,diff_pos)) <= D then
             return true
         end
     elseif spd_m > 0 then
@@ -215,9 +215,10 @@ local function RAZTimeInterval(diff_alt, diff_vs, zthr, tau, B, T)
     if diff_vs == 0 then
         return {B, T}
     end
+
     return {
-        (-sign(diff_vs)*H(diff_vs, zthr, tau))/diff_vs,
-        (sign(diff_vs)*zthr)/diff_vs;
+        (-sign(diff_vs)*H(diff_vs, zthr, tau)-diff_alt)/diff_vs,
+        (sign(diff_vs)*zthr-diff_alt)/diff_vs;
     }
 
 end
@@ -227,7 +228,7 @@ local function RA2DTimeInterval(diff_pos, diff_spd, tau, dmod, B, T)
     local b = 2*item_mult(diff_pos, diff_spd) + tau * item_mult(diff_pos, diff_spd)
     local c = item_mult(diff_pos, diff_pos) + tau*item_mult(diff_pos, diff_spd) - dmod*dmod
 
-    local m_alt = item_mult(diff_pos, diff_pos) 
+    local m_alt = msqrt(item_mult(diff_pos, diff_pos))
 
     if a == 0 then
         if m_alt <= dmod then
@@ -281,6 +282,7 @@ local function RA3DTimeInterval(my_acf, int_acf, B, T, parameters, use_hmdf)
     end
 
     local res_z = RAZTimeInterval(diff_alt, diff_vs, parameters.zthr, parameters.tau, B, T)
+    print(diff_alt, diff_vs, res_z[2] < B, T < res_z[1])
     if res_z[2] < B or T < res_z[1] then
         return {T,B}, 3    -- Too far with altitude even in case of V/S ~= 0, CLEAR here
     end
@@ -378,11 +380,11 @@ local function corrective(my_acf, int_acf, parameters, v, a)
     return false
 end
 
-local function compute_RA(my_acf, int_acf)
+local function compute_RA(my_acf, int_acf, interval_duration)
 
     local parameters = parameters_RA[which_ra_params(my_acf.alt)]
 
-    local res, debug_info = RA3DTimeInterval(my_acf, int_acf, 0, 1, parameters, true)
+    local res, debug_info = RA3DTimeInterval(my_acf, int_acf, 0, interval_duration, parameters, true)
     return res[1] < res[2], debug_info
 end
 
@@ -416,10 +418,10 @@ end
 -- TA
 -------------------------------------------------------------------------------
 
-local function compute_TA(my_acf, int_acf)
+local function compute_TA(my_acf, int_acf, interval_duration)
     
     local parameters = parameters_TA[which_ta_params(my_acf.alt)]
-    local t, debug_info = RA3DTimeInterval(my_acf, int_acf, 0, 1, parameters, false)
+    local t, debug_info = RA3DTimeInterval(my_acf, int_acf, 0, interval_duration, parameters, false)
     return t[1] < t[2], debug_info
 end
 
@@ -428,7 +430,7 @@ end
 -------------------------------------------------------------------------------
 
 
-function compute_tcas(my_acf, int_acf)
+function compute_tcas(my_acf, int_acf, interval_duration)
     -- Data format:
     -- my_acf / int_acf = {
     --     alt [feet]
@@ -439,13 +441,13 @@ function compute_tcas(my_acf, int_acf)
     --     vy [x-plane ref system]
     -- }
 
-    local ra_result, debug_info = compute_RA(my_acf, int_acf)
+    local ra_result, debug_info = compute_RA(my_acf, int_acf, interval_duration)
     if ra_result then
         return get_RA_result(my_acf, int_acf), debug_info
     end
  
 
-    local ta_result, debug_info = compute_TA(my_acf, int_acf)
+    local ta_result, debug_info = compute_TA(my_acf, int_acf, interval_duration)
     if ta_result then
         return TCAS_OUTPUT_TRAFFIC, 100+debug_info
     end

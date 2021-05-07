@@ -71,7 +71,7 @@ MessageGroup_GND_SPLRS_NOT_ARMED = {
     sd_page = nil,
 
     is_active = function()
-        return get(Speedbrake_handle_ratio) >= 0 and get(Gear_handle) > 0 and get(Capt_ra_alt_ft) <= 500
+        return get(Speedbrake_handle_ratio) >= 0 and get(Gear_handle) > 0 and get(Capt_ra_alt_ft) <= 500 and get(EWD_flight_phase) == PHASE_FINAL
     end,
 
     is_inhibited = function()

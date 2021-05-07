@@ -102,11 +102,13 @@ end
 local function update_tcas()
     local n_acfs = get(dr_num_tcas_targets)
 
+    local M_TO_NMI = 1852.0
+
     local my_acf = {
-        x = get(dr_my_x),
-        y = get(dr_my_y),
-        vx = get(dr_my_vx),
-        vy = get(dr_my_vy),
+        x = get(dr_my_x) / M_TO_NMI,
+        y = get(dr_my_y) / M_TO_NMI,
+        vx = get(dr_my_vx) / M_TO_NMI,
+        vy = get(dr_my_vy) / M_TO_NMI,
         alt = get(Capt_ra_alt_ft),
         vs = get(VVI)
     }
@@ -119,15 +121,15 @@ local function update_tcas()
         local lon = get(dr_tcas_targets_pos_lon, i)
 
         local int_acf = {
-            x = get(dr_tcas_targets_pos_x, i),
-            y = get(dr_tcas_targets_pos_y, i),
+            x = get(dr_tcas_targets_pos_x, i) / M_TO_NMI,
+            y = get(dr_tcas_targets_pos_y, i) / M_TO_NMI,
             alt = get(dr_tcas_targets_pos_ele, i) * 3.28084,
-            vx = get(dr_tcas_targets_pos_vx, i),
-            vy = get(dr_tcas_targets_pos_vy, i),
+            vx = get(dr_tcas_targets_pos_vx, i) / M_TO_NMI,
+            vy = get(dr_tcas_targets_pos_vy, i) / M_TO_NMI,
             vs = get(dr_tcas_targets_pos_vs, i)
         }
 
-        local tcas_result, debug_info = compute_tcas(my_acf, int_acf)
+        local tcas_result, debug_info = compute_tcas(my_acf, int_acf, UPDATE_FREQ_SEC)
 
         local tcas_alert_value = TCAS_ALERT_NONE
         if tcas_result == TCAS_OUTPUT_TRAFFIC then
