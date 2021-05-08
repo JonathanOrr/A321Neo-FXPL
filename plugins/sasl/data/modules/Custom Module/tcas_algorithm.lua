@@ -151,25 +151,26 @@ end
 -- Math helpers
 -------------------------------------------------------------------------------
 
-local function sign(number)
+local function sign(number)   -- CHECKED
     return number > 0 and 1 or (number == 0 and 0 or -1)
 end
-local function item_mult(a,b)
+local function item_mult(a,b)   -- CHECKED
     return a[1] * b[1] + a[2]*b[2]
 end
 
-local function perpendicular(a)
+local function perpendicular(a)   -- CHECKED
     return { a[2], -a[1] }
 end
 
-local function delta(s, v, D)
+local function delta(s, v, D)   -- CHECKED
     local x = D * D * item_mult(v,v)
     v = perpendicular(v)
     local y = item_mult(s,v)
     return x - y * y
 end
 
-local function root(a, b, c, eps)   -- Find a 2nd order polynomial solution (if no solution exists returns 0)
+local function root(a, b, c, eps)  -- CHECKED
+     -- Find a 2nd order polynomial solution (if no solution exists returns 0)
     if a == 0 then
         return 0
     end
@@ -179,11 +180,11 @@ local function root(a, b, c, eps)   -- Find a 2nd order polynomial solution (if 
     return (-b + eps*msqrt(b*b - 4*a*c)) / (2 * a)
 end
 
-local function theta(s, v, D, eps)
+local function theta(s, v, D, eps) -- CHECKED
     return root(item_mult(v,v), 2*item_mult(s,v), item_mult(s,s)-D*D, eps)
 end
 
-local function tau_mod (s, v, dmod)
+local function tau_mod (s, v, dmod) -- CHECKED
 	return (dmod*dmod - item_mult(s,s)) / item_mult(s,v);
 end
 
@@ -191,7 +192,7 @@ end
 -- Common RA + TA
 -------------------------------------------------------------------------------
 
-local function CD2D_inf(diff_pos, diff_spd, D, B)
+local function CD2D_inf(diff_pos, diff_spd, D, B)   -- CHECKED
     local spd_m = item_mult(diff_spd,diff_spd)
     if spd_m == 0 then
         if msqrt(item_mult(diff_pos,diff_pos)) <= D then
@@ -207,11 +208,11 @@ local function CD2D_inf(diff_pos, diff_spd, D, B)
     return false
 end
 
-local function H(vz, zthr, tau)
+local function H(vz, zthr, tau) -- CHECKED
 	return math.max(zthr, tau*mabs(vz));
 end
 
-local function RAZTimeInterval(diff_alt, diff_vs, zthr, tau, B, T)
+local function RAZTimeInterval(diff_alt, diff_vs, zthr, tau, B, T)  -- CHECKED
     if diff_vs == 0 then
         return {B, T}
     end
@@ -223,7 +224,7 @@ local function RAZTimeInterval(diff_alt, diff_vs, zthr, tau, B, T)
 
 end
 
-local function RA2DTimeInterval(diff_pos, diff_spd, tau, dmod, B, T)
+local function RA2DTimeInterval(diff_pos, diff_spd, tau, dmod, B, T)    -- CHECKED
     local a = item_mult(diff_spd, diff_spd)
     local b = 2*item_mult(diff_pos, diff_spd) + tau * item_mult(diff_pos, diff_spd)
     local c = item_mult(diff_pos, diff_pos) + tau*item_mult(diff_pos, diff_spd) - dmod*dmod
@@ -241,7 +242,7 @@ local function RA2DTimeInterval(diff_pos, diff_spd, tau, dmod, B, T)
         return {B, o}
     end
 
-    if item_mult(diff_pos, diff_spd) >= 0 and (b*b-4*a*c < 0) then
+    if item_mult(diff_pos, diff_spd) >= 0 or (b*b-4*a*c < 0) then
         return {T+1, 0}
     end
 
@@ -253,7 +254,7 @@ local function RA2DTimeInterval(diff_pos, diff_spd, tau, dmod, B, T)
 end
 
 
-local function RA3DTimeInterval(my_acf, int_acf, B, T, parameters, use_hmdf)
+local function RA3DTimeInterval(my_acf, int_acf, B, T, parameters, use_hmdf)    -- CHECKED
 
     local diff_pos = {
         my_acf.x - int_acf.x,
@@ -282,24 +283,25 @@ local function RA3DTimeInterval(my_acf, int_acf, B, T, parameters, use_hmdf)
     end
 
     local res_z = RAZTimeInterval(diff_alt, diff_vs, parameters.zthr, parameters.tau, B, T)
-    print(diff_alt, diff_vs, res_z[2] < B, T < res_z[1])
+
     if res_z[2] < B or T < res_z[1] then
         return {T,B}, 3    -- Too far with altitude even in case of V/S ~= 0, CLEAR here
     end
 
     local t2 = { math.max(B, res_z[1]), math.min(T, res_z[2]) }
 
-    local res_2d = RA2DTimeInterval(diff_pos, diff_spd, parameters.tau, parameters.dmod, B, T)
+    local txy = RA2DTimeInterval(diff_pos, diff_spd, parameters.tau, parameters.dmod, B, T)
 
-    if res_2d[1] > res_2d[2] or res_2d[2] < t2[1] or res_2d[1] > t2[2] then
+    if txy[1] > txy[2] or txy[2] < t2[1] or txy[1] > t2[2] then
         return {T,B}, 4 -- Too far, CLEAR
     end
 
-    return {
-        math.max(t2[1], math.min(t2[2], res_2d[1])),
-        math.max(t2[1], math.min(t2[2], res_2d[2]))
-    }, 5
+    local t_ret = {
+        math.max(t2[1], math.min(t2[2], txy[1])),
+        math.max(t2[1], math.min(t2[2], txy[2]))
+    }
 
+    return t_ret, 5
 end
 
 
@@ -310,21 +312,21 @@ end
 -- RA
 -------------------------------------------------------------------------------
 
-local function stop_accel(voz, v, a, eps, t)
+local function stop_accel(voz, v, a, eps, t)    -- CHECKED
 	if (t <= 0) or eps*voz >= v then
 		return 0
     end
 	return (eps*v - voz) / (eps*a);
 end
 
-local function own_alt_at(my_acf, v, a, eps, t)
+local function own_alt_at(my_acf, v, a, eps, t) -- CHECKED
 	local s = stop_accel(my_acf.vs,v,a,eps,t)
 	local q = math.min(t,s);
 	local l = math.max(0, t-s);
 	return eps*q*q*a/2 + q*my_acf.vs + my_acf.alt + eps*l*v;
 end
 
-local function RA_sense(my_acf, int_acf, parameters, v, a, t)
+local function RA_sense(my_acf, int_acf, parameters, v, a, t)   -- CHECKED
 
     local ou = own_alt_at(my_acf, v, a, 1, t)
     local od = own_alt_at(my_acf, v, a, -1, t)
@@ -353,7 +355,7 @@ local function RA_sense(my_acf, int_acf, parameters, v, a, t)
 end
 
 
-local function corrective(my_acf, int_acf, parameters, v, a)
+local function corrective(my_acf, int_acf, parameters, v, a)    -- CHECKED
     local diff_pos = {
         my_acf.x - int_acf.x,
         my_acf.y - int_acf.y
@@ -369,7 +371,7 @@ local function corrective(my_acf, int_acf, parameters, v, a)
 
     local t = tau_mod(diff_pos, diff_spd, parameters.dmod)
     local eps = RA_sense(my_acf, int_acf, parameters, v, a, t)
-    if item_mult(diff_pos, diff_pos) < parameters.dmod then
+    if msqrt(item_mult(diff_pos, diff_pos)) < parameters.dmod then
         return true
     end
     if item_mult(diff_pos, diff_spd) < 0 then
@@ -385,11 +387,11 @@ local function compute_RA(my_acf, int_acf, interval_duration)
     local parameters = parameters_RA[which_ra_params(my_acf.alt)]
 
     local res, debug_info = RA3DTimeInterval(my_acf, int_acf, 0, interval_duration, parameters, true)
-    return res[1] < res[2], debug_info
+    return res[1] < res[2], debug_info, res[2] - res[1]
 end
 
 local function get_RA_result(my_acf, int_acf)
-    local v = 1500  -- FPM
+    local v = 1500 / 60 -- [feet/sec]
     local a = 0.25 *  1930.44 -- G
 
     local parameters = parameters_RA[which_ra_params(my_acf.alt)]
@@ -402,7 +404,7 @@ local function get_RA_result(my_acf, int_acf)
             return TCAS_OUTPUT_DESCEND_LOW
         end
     else
-        v = 2500
+        v = 2500 / 60
         a = 0.35 * 1930.44
         if RA_sense(my_acf, int_acf, parameters, v, a, 0) == 1 then
             return TCAS_OUTPUT_CLIMB_HIGH
@@ -434,23 +436,23 @@ function compute_tcas(my_acf, int_acf, interval_duration)
     -- Data format:
     -- my_acf / int_acf = {
     --     alt [feet]
-    --     vs [fpm]
+    --     vs [feet per sec]
     --     x [lat, x-plane ref system]
     --     y [lon, x-plane ref system]
     --     vx [x-plane ref system]
     --     vy [x-plane ref system]
     -- }
 
-    local ra_result, debug_info = compute_RA(my_acf, int_acf, interval_duration)
+    local ra_result, debug_info, danger = compute_RA(my_acf, int_acf, interval_duration)
     if ra_result then
-        return get_RA_result(my_acf, int_acf), debug_info
+        return get_RA_result(my_acf, int_acf), debug_info, danger
     end
  
 
     local ta_result, debug_info = compute_TA(my_acf, int_acf, interval_duration)
     if ta_result then
-        return TCAS_OUTPUT_TRAFFIC, 100+debug_info
+        return TCAS_OUTPUT_TRAFFIC, 100+debug_info, 0
     end
 
-    return TCAS_OUTPUT_CLEAR, 100+debug_info
+    return TCAS_OUTPUT_CLEAR, 100+debug_info, 0
 end

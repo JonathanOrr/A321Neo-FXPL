@@ -471,7 +471,7 @@ local function draw_tcas_altitude(data, acf, poi)
     -- DEBUG INFOs
     if debug_tcas_system then
         local labels = { [0] = "-", "TA", "RA"}
-        local labels_act = { [0] = "-", "CL L", "DS L", "CL H", "CL L", "T"}
+        local labels_act = { [0] = "-", "CL L", "DS L", "CL H", "DS H", "T"}
     
         sasl.gl.drawText(Font_ECAMfont, poi.x-25, poi.y-70, "STATUS: " .. (labels[acf.alert] .. " (" .. acf.alert .. ")") , 26, false, false, TEXT_ALIGN_LEFT, ECAM_MAGENTA)
         sasl.gl.drawText(Font_ECAMfont, poi.x-25, poi.y-100, "ACTION: " .. (labels_act[acf.action] .. " (" .. acf.action .. ")") , 26, false, false, TEXT_ALIGN_LEFT, ECAM_MAGENTA)
