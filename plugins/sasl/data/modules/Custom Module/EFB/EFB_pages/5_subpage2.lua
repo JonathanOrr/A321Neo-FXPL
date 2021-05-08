@@ -54,7 +54,11 @@ end
 local function simbrief_to_local()
     displayed_info["departure"] = x["origin"]["icao_code"]
     displayed_info["arrival"] = x["destination"]["icao_code"]
-    displayed_info["flightno"] = x["general"]["icao_airline"]..x["general"]["flight_number"]
+    if istable(x["general"]["icao_airline"]) or istable(x["general"]["flight_number"]) then --SIMBRIEF RETURNS BLANK WHEN THERE IS NO FLIGHT NUMBER, LUA TAKES AN ARRAY CELL CONTAINING NOTHING AS A TABLE VALUE
+        displayed_info["flightno"] = "NONE"
+    else
+        displayed_info["flightno"] = x["general"]["icao_airline"]..x["general"]["flight_number"]
+    end
     displayed_info["acf"] = x["aircraft"]["icaocode"]
     displayed_info["pax"] = x["weights"]["pax_count"]
     displayed_info["cargo"] = x["weights"]["cargo"]
@@ -69,12 +73,16 @@ local function simbrief_to_local()
     load_route_table()
 end
 
+local function clear_simbrief_buffer_table()
+    x = {}
+end
 sasl.net.setDownloadTimeout(SASL_TIMEOUT_CONNECTION, 3 )
 
 local function onContentsDownloaded ( inUrl , inString , inIsOk , inError )
     if inIsOk then
         x = json.decode(inString)
         simbrief_to_local()
+        clear_simbrief_buffer_table()
         fetch_fail_warning_1 = false
         simbrief_standby = false
     else
@@ -190,7 +198,7 @@ function p5s2_draw()
     end
 
     if key_p5s2_focus == 1 then
-        sasl.gl.drawTexture (Simbrief_highlighter, 0 , 0 , 1143 , 800 , EFB_WHITE )
+        efb_draw_focus_frames(117,513,140,29)
     end
 
     if string.len(key_p5s2_buffer) > 0 then

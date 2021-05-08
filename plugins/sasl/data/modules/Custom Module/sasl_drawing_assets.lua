@@ -183,14 +183,6 @@ EFB_GROUND2_closeall_button =    sasl.gl.loadImage(moduleDirectory .. "/Custom M
 EFB_LOAD_bgd =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/bgd.png")
 EFB_LOAD_bound_takeoff =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/bound_takeoff.png")
 EFB_LOAD_chart =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/chart.png")
-EFB_LOAD_selected_oa =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/selected_oa.png")
-EFB_LOAD_selected_ob =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/selected_ob.png")
-EFB_LOAD_selected_oc =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/selected_oc.png")
-EFB_LOAD_selected_cf =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/selected_cf.png")
-EFB_LOAD_selected_ca =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/selected_ca.png")
-EFB_LOAD_selected_fuel =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/selected_fuel.png")
-EFB_LOAD_selected_dep =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/dep_highlight.png")
-EFB_LOAD_selected_arr =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/arr_highlight.png")
 
 --EFB_LOAD_bgd =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/overlay.png")
 --EFB_LOAD_refuel_button =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/refuel_button.png")
@@ -209,22 +201,7 @@ EFB_LOAD_s2_dropdown6 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/
 ------------LOAD_SUBPAGE3-------------
 
 EFB_LOAD_s3_bgd =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage3/bgd.png")
-EFB_LOAD_s3_dropdown1 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage3/dropdown1.png")
-EFB_LOAD_s3_dropdown2 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage3/dropdown2.png")
-EFB_LOAD_s3_dropdown3 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage3/dropdown3.png")
-EFB_LOAD_s3_dropdown4 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage3/dropdown4.png")
-EFB_LOAD_s3_dropdown5 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage3/dropdown5.png")
-EFB_LOAD_s3_dropdown6 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage3/dropdown6.png")
-EFB_LOAD_s3_dropdown7 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage3/dropdown7.png")
-EFB_LOAD_s3_dropdown8 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage3/dropdown8.png")
-EFB_LOAD_s3_failuretext =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage3/failuretext.png")
 EFB_LOAD_s3_generate_button =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage3/generate_button.png")
-
-EFB_LOAD_s3_ldgweight_highlighter=    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage3/ldgweight_highlighter.png")
-EFB_LOAD_s3_wind_dir_highlighter =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage3/winddir_highlighter.png")
-EFB_LOAD_s3_wind_int_highlighter =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/LOAD page/Version 2/subpage3/windint_highlighter.png")
-
-
 
 -----------CONFIG------------
 
@@ -269,15 +246,12 @@ LOADSHEET_compute =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/tex
 
 --METAR REQUEST
 Metar_bgd =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/TOOLS page/METAR/subpage_2_bgd.png")
-Metar_highlighter =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/TOOLS page/METAR/subpage_2_highlighter.png")
-Metar_waiting =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/TOOLS page/METAR/subpage_2_waiting.png")
 
 --SIMBRIEF
 
 Simbrief_bgd =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/TOOLS page/SIMBRIEF/subpage_2_bgd.png")
 Simbrief_apply =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/TOOLS page/SIMBRIEF/apply_button.png")
 Simbrief_send =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/TOOLS page/SIMBRIEF/send_button.png")
-Simbrief_highlighter =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/TOOLS page/SIMBRIEF/subpage_2_highlighter.png")
 
 --FAILURES_UI
 

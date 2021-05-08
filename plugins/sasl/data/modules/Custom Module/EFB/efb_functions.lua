@@ -34,6 +34,10 @@ function gimp2y(y)
     return 800-y
 end
 
+function efb_draw_focus_frames(x, y, w, h)
+    Sasl_DrawWideFrame(  x , y , w , h , 2, 2, EFB_FULL_YELLOW )
+end
+
 function draw_dropdown_menu(x, y, width, height, outside_colour, inside_colour, table, expanded, selected)
 
     local number_of_rows = #table
@@ -67,3 +71,7 @@ function draw_dropdown_menu(x, y, width, height, outside_colour, inside_colour, 
     local component_x = x
     local component_y = y
 end
+
+function istable(t) 
+    return type(t) == 'table'
+ end

@@ -351,21 +351,21 @@ end
 
 local function draw_focus_frame()
     if key_p3s1_focus == 1 then
-        sasl.gl.drawTexture (EFB_LOAD_selected_oa, 0 , 0 , 1143 , 800 , EFB_WHITE )
+        efb_draw_focus_frames(216, 384, 93, 27)
     elseif key_p3s1_focus == 2 then
-        sasl.gl.drawTexture (EFB_LOAD_selected_ob, 0 , 0 , 1143 , 800 , EFB_WHITE )
+        efb_draw_focus_frames(216, 345, 93, 27)
     elseif key_p3s1_focus == 3 then
-        sasl.gl.drawTexture (EFB_LOAD_selected_oc, 0 , 0 , 1143 , 800 , EFB_WHITE )
+        efb_draw_focus_frames(216, 306, 93, 27)
     elseif key_p3s1_focus == 4 then
-        sasl.gl.drawTexture (EFB_LOAD_selected_cf, 0 , 0 , 1143 , 800 , EFB_WHITE )
+        efb_draw_focus_frames(216, 228, 93, 27)
     elseif key_p3s1_focus == 5 then
-        sasl.gl.drawTexture (EFB_LOAD_selected_ca, 0 , 0 , 1143 , 800 , EFB_WHITE )
+        efb_draw_focus_frames(216, 189, 93, 27)
     elseif key_p3s1_focus == 6 then
-        sasl.gl.drawTexture (EFB_LOAD_selected_fuel, 0 , 0 , 1143 , 800 , EFB_WHITE )
+        efb_draw_focus_frames(216, 111, 93, 27)
     elseif key_p3s1_focus == 7 then
-        sasl.gl.drawTexture (EFB_LOAD_selected_dep, 0 , 0 , 1143 , 800 , EFB_WHITE )
+        efb_draw_focus_frames(71, 565, 93, 27)
     elseif key_p3s1_focus == 8 then
-        sasl.gl.drawTexture (EFB_LOAD_selected_arr, 0 , 0 , 1143 , 800 , EFB_WHITE )
+        efb_draw_focus_frames(357, 565, 93, 27)
     end
 end
 
@@ -594,8 +594,8 @@ end
 local function EFB_draw_page_3_subpage_1() -- DRAW LOOP
 
     sasl.gl.drawTexture (EFB_LOAD_bgd, 0 , 0 , 1143 , 800 , EFB_WHITE )
-    sasl.gl.drawTexture (EFB_LOAD_bound_takeoff, 0 , 0 , 1143 , 800 , EFB_WHITE )
-    sasl.gl.drawTexture (EFB_LOAD_chart, 0 , 0 , 1143 , 800 , EFB_WHITE )
+    sasl.gl.drawTexture (EFB_LOAD_bound_takeoff, 520 , 76 , 547 , 359 , EFB_WHITE )
+    sasl.gl.drawTexture (EFB_LOAD_chart, 448 , 73 , 650 , 380 , EFB_WHITE )
 
     if string.len(key_p3s1_buffer) > 0 then --THE PURPOSE OF THIS IFELSE IS TO PREVENT THE CURSOR FROM COVERING UP THE PREVIOUS VALUE, WHEN THE SCRATCHPAD IS EMPTY.
         drawTextCentered( Font_Airbus_panel , 263 , 397, key_p3s1_focus == 1 and key_p3s1_buffer or load_target[1] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
@@ -662,6 +662,7 @@ local function EFB_draw_page_3_subpage_1() -- DRAW LOOP
 
     draw_focus_frame()
     draw_avionics_bay_standby()
+
 
 end
 

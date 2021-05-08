@@ -130,10 +130,19 @@ local function refresh_data()
     New_takeoff_data_available = false
 end
 
+local dropdown_location = {
+    {402,501,158,80},
+    {645,529,158,52},
+    {877,529,158,52},
+    {115,422,158,52},
+    {349,422,158,52},
+    {609,422,158,52},
+}
+
 local function draw_dropdowns()
     for i, v in ipairs(dropdown_expanded) do
         if dropdown_expanded[i] then
-            sasl.gl.drawTexture (dropdown_names[i] , 0 , 0 , 1143 , 800 , EFB_WHITE )
+            sasl.gl.drawTexture (dropdown_names[i] , dropdown_location[i][1] , dropdown_location[i][2] , dropdown_location[i][3] , dropdown_location[i][4] , EFB_WHITE )
         end
     end
 end

@@ -21,21 +21,16 @@ local function draw_throttle_value()
     if Round(get(Cockpit_throttle_lever_R),2) == 0 then
         drawTextCentered( Font_Airbus_panel , 389 , 367, "R:0.00" , 17 ,false , false , TEXT_ALIGN_LEFT , EFB_WHITE )
     else
-        drawTextCentered( Font_Airbus_panel , 389 , 367, Round(get(Cockpit_throttle_lever_L),2) == 1 and "R:1.00" or "R:"..Round(get(Cockpit_throttle_lever_L),2) , 17 ,false , false , TEXT_ALIGN_LEFT , EFB_WHITE )
+        drawTextCentered( Font_Airbus_panel , 389 , 367, Round(get(Cockpit_throttle_lever_R),2) == 1 and "R:1.00" or "R:"..Round(get(Cockpit_throttle_lever_R),2) , 17 ,false , false , TEXT_ALIGN_LEFT , EFB_WHITE )
     end
 end
 
 local function draw_hud_buttons()
-    if hud_colour == "light" then
-        SASL_drawSegmentedImg_xcenter_aligned (EFB_highlighter, 102,580,192,58,2,1)
-        SASL_drawSegmentedImg_xcenter_aligned (EFB_highlighter, 188,580,192,58,2,2)
-        sasl.gl.drawTexture ( EFB_CONFIG_hud, 0 , 0 , 1143 , 800 , 0,255/255,0 )
-    else
-        SASL_drawSegmentedImg_xcenter_aligned (EFB_highlighter, 102,580,192,58,2,2)
-        SASL_drawSegmentedImg_xcenter_aligned (EFB_highlighter, 188,580,192,58,2,1)
-        sasl.gl.drawTexture ( EFB_CONFIG_hud, 0 , 0 , 1143 , 800 , 0,170/255,0 )
+    if hud_colour == "light" then --DRAW THE HUD DISPLAY ON THE EFB
+        SASL_drawSegmentedImg_xcenter_aligned (EFB_highlighter, 102,580,192,58,2,hud_colour == "light" and 1 or 2)
+        SASL_drawSegmentedImg_xcenter_aligned (EFB_highlighter, 188,580,192,58,2,hud_colour == "light" and 2 or 1)
+        sasl.gl.drawTexture ( EFB_CONFIG_hud, 280 , 498 , 124 , 93 , 0,hud_colour == "light" and 255/255 or 170/255 ,0 )
     end
-
 
     if get(TIME) - efb_up_button_begin < 0.5 then
     SASL_drawSegmentedImg_xcenter_aligned (EFB_highlighter, 144,524,192,58,2,2)
@@ -74,7 +69,7 @@ end
 
 local function draw_dropdowns()
     if dropdown_expanded[1] then
-        sasl.gl.drawTexture (EFB_CONFIG_dropdown1 , 0 , 0 , 1143 , 800 , ECAM_WHITE )
+        sasl.gl.drawTexture (EFB_CONFIG_dropdown1 , 63 , 200 , 158 , 80 , ECAM_WHITE )
     end
     if EFB.preferences["nws"] == 0 then
         drawTextCentered( Font_Airbus_panel , 141 , 294, "ROLL"  , 19 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )

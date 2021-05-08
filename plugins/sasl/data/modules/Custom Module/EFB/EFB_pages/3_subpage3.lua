@@ -200,11 +200,11 @@ end
 
 local function draw_hightlighted_boxes()
     if selected_box == 1 then
-        sasl.gl.drawTexture (EFB_LOAD_s3_ldgweight_highlighter, 0 , 0 , 1143 , 800 , EFB_WHITE )
+        efb_draw_focus_frames(409, 581, 161, 29)
     elseif selected_box == 2 then
-        sasl.gl.drawTexture (EFB_LOAD_s3_wind_dir_highlighter, 0 , 0 , 1143 , 800 , EFB_WHITE )
+        efb_draw_focus_frames(627, 581, 122, 29)
     elseif selected_box == 3 then
-        sasl.gl.drawTexture (EFB_LOAD_s3_wind_int_highlighter, 0 , 0 , 1143 , 800 , EFB_WHITE )
+        efb_draw_focus_frames(768, 581, 109, 29)
     end
 end
 
@@ -224,12 +224,15 @@ function p3s3_buttons()
     general_buttons()
 
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 408, 581, 570, 609,function () 
+        p3s3_plug_in_the_buffer()
         selected_box = 1
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 629, 581, 749, 609,function ()
+        p3s3_plug_in_the_buffer()
         selected_box = 2
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 769, 581, 878, 609,function ()
+        p3s3_plug_in_the_buffer()
         selected_box = 3
     end)
     if selected_box == 1 then

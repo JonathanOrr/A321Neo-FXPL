@@ -104,7 +104,7 @@ function p5s1_draw()
     sasl.gl.drawTexture (Metar_bgd, 0 , 0 , 1143 , 800 , EFB_WHITE )
 
     if key_p5s1_focus == 1 then
-        sasl.gl.drawTexture (Metar_highlighter, 0 , 0 , 1143 , 800 , EFB_WHITE )
+        efb_draw_focus_frames(616,420,93,27)
     end
 
     if string.len(key_p5s1_buffer) > 0 then
@@ -132,8 +132,9 @@ function p5s1_draw()
     end
 
     if get(TIME) - please_wait_cover_begin < metar_wait_time then
-        sasl.gl.drawTexture (Metar_waiting , 0 , 0 , 1143 , 800 , EFB_WHITE )
-        sasl.gl.drawWideLine ( 314 , 337 , 829 , 337 , 5, EFB_DARKGREY )
-        sasl.gl.drawWideLine ( 314 , 337 , 515*(get(TIME) - please_wait_cover_begin)/ metar_wait_time + 314 , 337 , 5, EFB_LIGHTBLUE )
+        sasl.gl.drawRectangle ( 0 , 0 , 1143, 710, EFB_BACKGROUND_COLOUR)
+        drawTextCentered(Font_Airbus_panel,  572, 355, "FETCHING DATA FROM SERVERS", 30, false, false, TEXT_ALIGN_CENTER, EFB_WHITE)
+        sasl.gl.drawWideLine ( 314 , 330 , 829 , 330 , 5, EFB_DARKGREY )
+        sasl.gl.drawWideLine ( 314 , 330 , 515*(get(TIME) - please_wait_cover_begin)/ metar_wait_time + 314 , 330 , 5, EFB_LIGHTBLUE )
     end
 end

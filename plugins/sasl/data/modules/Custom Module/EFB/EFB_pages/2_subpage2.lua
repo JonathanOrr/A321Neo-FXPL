@@ -98,6 +98,21 @@ function p2s2_update()
     --print(EFB_CURSOR_X, EFB_CURSOR_Y)
 end
 
+
+local door_pos_table = {
+    {216,483,21,40},
+    {494,490,13,27},
+    {510,490,13,27},
+    {622,486,19,38},
+    {847,485,21,40},
+    {904,196,21,41},
+    {634,203,15,28},
+    {618,202,15,29},
+    {500,199,20,40},
+    {273,199,21,40},
+    {836,167,36,30},
+    {407,167,34,29},
+}
 --DRAW LOOPS--
 function p2s2_draw()
 
@@ -111,14 +126,14 @@ function p2s2_draw()
     for i=1, #door_anim_drf_names do
         local door_state = get(door_anim_drf_names[i])
         if door_state == 0 then
-            sasl.gl.drawTexture ( door_image_names[i], 0 , 0 , 1143 , 800 , EFB_LIGHTBLUE )
+            sasl.gl.drawTexture ( door_image_names[i], door_pos_table[i][1] , door_pos_table[i][2] , door_pos_table[i][3] , door_pos_table[i][4] , EFB_LIGHTBLUE )
         elseif door_state > 0 and door_state < 1 then
-            sasl.gl.drawTexture ( door_image_names[i], 0 , 0 , 1143 , 800 , EFB_FULL_RED )
+            sasl.gl.drawTexture ( door_image_names[i], door_pos_table[i][1] , door_pos_table[i][2] , door_pos_table[i][3] , door_pos_table[i][4] , EFB_FULL_RED )
         elseif door_state == 1 then
-            sasl.gl.drawTexture ( door_image_names[i], 0 , 0 , 1143 , 800 , EFB_FULL_GREEN )
+            sasl.gl.drawTexture ( door_image_names[i], door_pos_table[i][1] , door_pos_table[i][2] , door_pos_table[i][3] , door_pos_table[i][4] , EFB_FULL_GREEN )
         end
     end
-    sasl.gl.drawTexture ( EFB_GROUND2_bgd, 0 , 0 , 1143 , 800 , EFB_WHITE )
+    sasl.gl.drawTexture ( EFB_GROUND2_bgd, 57 , 127 , 962 , 526 , EFB_WHITE )
 end
 
  
