@@ -85,6 +85,7 @@ local Sounds_TCAS_traffic = createGlobalPropertyi("a321neo/sounds/tcas/traffic_t
 local last_update_time = 0
 
 local at_least_one_ta = false
+local at_least_one_ra = false
 local last_tcas_sound = SOUND_NONE
 local coc_start_time  = 0
 
@@ -165,6 +166,7 @@ local function update_tcas_intruder(my_acf, i)
         at_least_one_ta = true
     elseif tcas_result ~= TCAS_OUTPUT_CLEAR then
         tcas_alert_value = TCAS_ALERT_RA
+        at_least_one_ra = true
     end
     
     local intruder_data = {
@@ -199,6 +201,7 @@ local function update_tcas()
     TCAS_sys.acf_data = {}
     TCAS_sys.most_dangerous = nil
     at_least_one_ta = false
+    at_least_one_ra = false
 
     for i=2,n_acfs do
 
@@ -207,6 +210,10 @@ local function update_tcas()
         end
 
     end
+    
+    TCAS_sys.alert.active = at_least_one_ta or at_least_one_ra
+    TCAS_sys.alert.type   = at_least_one_ra and TCAS_ALERT_RA or (at_least_one_ta and TCAS_ALERT_TA or TCAS_ALERT_NONE)
+
 end
 
 -------------------------------------------------------------------------------
@@ -216,7 +223,6 @@ end
 
 local function set_sound(x)
     last_tcas_sound = x
-    print(x)
 
     set(Sounds_TCAS_mnt_x,   x==SOUND_M_CROSS and 1 or 0)
     set(Sounds_TCAS_mnt,     x==SOUND_M and 1 or 0)
@@ -242,7 +248,7 @@ local function update_sounds()
     
     if TCAS_sys.most_dangerous == nil or TCAS_sys.most_dangerous.alert ~= TCAS_ALERT_RA then
         -- So, no aircraft here triggered an RA, just check for the traffic and that's it
-        if at_least_one_ta and (last_tcas_sound == SOUND_NONE or last_tcas_sound == SOUND_TT) then
+        if at_least_one_ta and (last_tcas_sound == SOUND_NONE or last_tcas_sound == SOUND_TT) and coc_start_time == 0 then
             set_sound(SOUND_TT)
         elseif last_tcas_sound ~= SOUND_NONE and last_tcas_sound ~= SOUND_TT and coc_start_time == 0 then
             coc_start_time = get(TIME)
@@ -284,8 +290,24 @@ local function update_sounds()
            or (what_i_want_to_say == SOUND_D_INC and get(Capt_VVI) < -2500) then
             what_i_want_to_say = SOUND_M
         end
+    elseif last_tcas_sound == SOUND_C_INC and (what_i_want_to_say == SOUND_C and get(Capt_VVI) > 2500) then
+            what_i_want_to_say = SOUND_M
+    elseif last_tcas_sound == SOUND_D_INC and (what_i_want_to_say == SOUND_D and get(Capt_VVI) < -2500) then
+            what_i_want_to_say = SOUND_M
     end
     
+    if what_i_want_to_say == SOUND_NONE then
+        return  -- This should not happen
+    end
+    
+    -- If last tcas sound was an INC, CROSS or NOW, let's get it back to normal
+    if (what_i_want_to_say == SOUND_C) and (last_tcas_sound == SOUND_C_INC or last_tcas_sound == SOUND_C_CROSS or last_tcas_sound == SOUND_C_NOW) then
+        last_tcas_sound = SOUND_C
+    end
+    if (what_i_want_to_say == SOUND_D) and (last_tcas_sound == SOUND_D_INC or last_tcas_sound == SOUND_D_CROSS or last_tcas_sound == SOUND_D_NOW) then
+        last_tcas_sound = SOUND_D
+    end
+
     if last_tcas_sound == what_i_want_to_say then
         -- Nothing to do
         return
@@ -351,8 +373,8 @@ function update()
 
     if get(TIME) - last_update_time > UPDATE_FREQ_SEC then
         update_tcas()
+        update_sounds()
         last_update_time = get(TIME)
     end
 
-    update_sounds()
 end
