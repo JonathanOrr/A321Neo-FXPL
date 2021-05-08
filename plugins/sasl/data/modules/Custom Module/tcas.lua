@@ -26,7 +26,23 @@ local MAX_H_RANGE = 100  -- NM radius
 local MAX_V_RANGE = 9900 -- Feet +/-
 local UPDATE_FREQ_SEC = 0.5
 local M_TO_NMI = 1852.0
-    
+local SOUND_COC_DURATION = 10 -- This does not correspond to the sound! A too small value can cause traffic-traffic after TA COC
+
+local SOUND_NONE    = 0
+local SOUND_M_CROSS = 11
+local SOUND_M       = 12
+local SOUND_C_NOW   = 21
+local SOUND_C_INC   = 22
+local SOUND_C_CROSS = 23
+local SOUND_C       = 24
+local SOUND_D_NOW   = 31
+local SOUND_D_INC   = 32
+local SOUND_D_CROSS = 33
+local SOUND_D       = 34
+local SOUND_MON     = 41
+local SOUND_COC     = 51
+local SOUND_TT      = 52
+
 -------------------------------------------------------------------------------
 -- Datarefs
 -------------------------------------------------------------------------------
@@ -49,9 +65,11 @@ local dr_my_vy = globalProperty("sim/flightmodel/position/local_vy")
 
 local Sounds_TCAS_mnt_x   = createGlobalPropertyi("a321neo/sounds/tcas/cross_maintain", 0, false, true, false)
 local Sounds_TCAS_mnt     = createGlobalPropertyi("a321neo/sounds/tcas/maintain",  0, false, true, false)
+local Sounds_TCAS_clb_now = createGlobalPropertyi("a321neo/sounds/tcas/climb_now",  0, false, true, false)
 local Sounds_TCAS_clb_inc = createGlobalPropertyi("a321neo/sounds/tcas/inc_climb",  0, false, true, false)
 local Sounds_TCAS_clb_x   = createGlobalPropertyi("a321neo/sounds/tcas/cross_climb",  0, false, true, false)
 local Sounds_TCAS_clb     = createGlobalPropertyi("a321neo/sounds/tcas/climb",  0, false, true, false)
+local Sounds_TCAS_des_now = createGlobalPropertyi("a321neo/sounds/tcas/descent_now",  0, false, true, false)
 local Sounds_TCAS_des_inc = createGlobalPropertyi("a321neo/sounds/tcas/inc_descent",  0, false, true, false)
 local Sounds_TCAS_des_x   = createGlobalPropertyi("a321neo/sounds/tcas/cross_descent",  0, false, true, false)
 local Sounds_TCAS_des     = createGlobalPropertyi("a321neo/sounds/tcas/descent",  0, false, true, false)
@@ -67,6 +85,8 @@ local Sounds_TCAS_traffic = createGlobalPropertyi("a321neo/sounds/tcas/traffic_t
 local last_update_time = 0
 
 local at_least_one_ta = false
+local last_tcas_sound = SOUND_NONE
+local coc_start_time  = 0
 
 TCAS_sys.acf_data = {}  -- Array with all the acfs
 TCAS_sys.alert = {
@@ -152,7 +172,8 @@ local function update_tcas_intruder(my_acf, i)
                            alert = tcas_alert_value,
                            action = tcas_result,
                            debug_reason = debug_info,
-                           danger = my_danger
+                           danger = my_danger,
+                           alt_diff = my_acf.alt - int_acf.alt
                           }
 
     table.insert(TCAS_sys.acf_data, intruder_data)
@@ -192,26 +213,19 @@ end
 -- Aural messages
 -------------------------------------------------------------------------------
 
-local SOUND_NONE    = 0
-local SOUND_M_CROSS = 1
-local SOUND_M       = 2
-local SOUND_C_INC   = 3
-local SOUND_C_CROSS = 4
-local SOUND_C       = 5
-local SOUND_D_INC   = 6
-local SOUND_D_CROSS = 7
-local SOUND_D       = 8
-local SOUND_MON     = 9
-local SOUND_COC     = 10
-local SOUND_TT      = 11
 
 local function set_sound(x)
+    last_tcas_sound = x
+    print(x)
+
     set(Sounds_TCAS_mnt_x,   x==SOUND_M_CROSS and 1 or 0)
     set(Sounds_TCAS_mnt,     x==SOUND_M and 1 or 0)
     set(Sounds_TCAS_clb_inc, x==SOUND_C_INC and 1 or 0)
+    set(Sounds_TCAS_clb_now, x==SOUND_C_NOW and 1 or 0)
     set(Sounds_TCAS_clb_x,   x==SOUND_C_CROSS and 1 or 0)
     set(Sounds_TCAS_clb,     x==SOUND_C and 1 or 0)
     set(Sounds_TCAS_des_inc, x==SOUND_D_INC and 1 or 0)
+    set(Sounds_TCAS_des_now, x==SOUND_D_NOW and 1 or 0)
     set(Sounds_TCAS_des_x,   x==SOUND_D_CROSS and 1 or 0)
     set(Sounds_TCAS_des,     x==SOUND_D and 1 or 0)
 
@@ -228,10 +242,14 @@ local function update_sounds()
     
     if TCAS_sys.most_dangerous == nil or TCAS_sys.most_dangerous.alert ~= TCAS_ALERT_RA then
         -- So, no aircraft here triggered an RA, just check for the traffic and that's it
-        if at_least_one_ta then
+        if at_least_one_ta and (last_tcas_sound == SOUND_NONE or last_tcas_sound == SOUND_TT) then
             set_sound(SOUND_TT)
-        else
+        elseif last_tcas_sound ~= SOUND_NONE and last_tcas_sound ~= SOUND_TT and coc_start_time == 0 then
+            coc_start_time = get(TIME)
+            set_sound(SOUND_COC)
+        elseif coc_start_time == 0 or get(TIME) - coc_start_time > SOUND_COC_DURATION then
             set_sound(SOUND_NONE)
+            coc_start_time = 0
         end
 
         return
@@ -241,6 +259,87 @@ local function update_sounds()
         set_sound(SOUND_NONE)
         return  -- No aural RA warnings in TA
     end
+    
+    local what_i_want_to_say = SOUND_NONE
+
+    -- Let's start with basic stuff
+    if TCAS_sys.most_dangerous.action == TCAS_OUTPUT_CLIMB_HIGH then
+        what_i_want_to_say = SOUND_C_INC
+    elseif TCAS_sys.most_dangerous.action == TCAS_OUTPUT_CLIMB_LOW then
+        what_i_want_to_say = SOUND_C
+    elseif TCAS_sys.most_dangerous.action == TCAS_OUTPUT_DESCEND_HIGH then
+        what_i_want_to_say = SOUND_D_INC
+    elseif TCAS_sys.most_dangerous.action == TCAS_OUTPUT_DESCEND_LOW then
+        what_i_want_to_say = SOUND_D
+    end
+    
+    if last_tcas_sound == SOUND_NONE then
+        -- Maintain V/S, only activable as the first message
+        if    (what_i_want_to_say == SOUND_C     and get(Capt_VVI) > 1500)
+           or (what_i_want_to_say == SOUND_C_INC and get(Capt_VVI) > 2500) then
+            what_i_want_to_say = SOUND_M
+        end
+        
+        if (what_i_want_to_say == SOUND_D and get(Capt_VVI) < -1500)
+           or (what_i_want_to_say == SOUND_D_INC and get(Capt_VVI) < -2500) then
+            what_i_want_to_say = SOUND_M
+        end
+    end
+    
+    if last_tcas_sound == what_i_want_to_say then
+        -- Nothing to do
+        return
+    end
+    
+    -- Case 1: we changed idea from descent to climb 
+    if     (what_i_want_to_say == SOUND_C_INC or what_i_want_to_say == SOUND_C) 
+       and (
+               (last_tcas_sound > 10 and last_tcas_sound < 20) or
+               (last_tcas_sound > 30 and last_tcas_sound < 50)
+           )
+       then
+        set_sound(SOUND_C_NOW)
+        last_tcas_sound = what_i_want_to_say
+        return
+    end
+
+    -- Case 2: we changed idea from climb to descent
+    if     (what_i_want_to_say == SOUND_D_INC or what_i_want_to_say == SOUND_D) 
+       and (
+               (last_tcas_sound > 10 and last_tcas_sound < 30) or
+               (last_tcas_sound > 40 and last_tcas_sound < 50)
+           )
+       then
+        set_sound(SOUND_D_NOW)
+        last_tcas_sound = what_i_want_to_say
+        return
+    end
+
+    -- Case 3: climb with crossing
+    if (what_i_want_to_say == SOUND_C_INC or what_i_want_to_say == SOUND_C) and TCAS_sys.most_dangerous.alt_diff < 0 then
+        set_sound(SOUND_C_CROSS)
+        last_tcas_sound = what_i_want_to_say
+        return
+    end
+
+    -- Case 4: descend with crossing
+    if (what_i_want_to_say == SOUND_D_INC or what_i_want_to_say == SOUND_D) and TCAS_sys.most_dangerous.alt_diff > 0 then
+        set_sound(SOUND_D_CROSS)
+        last_tcas_sound = what_i_want_to_say
+        return
+    end
+
+    -- Case 5: maintaining with crossing
+    if (what_i_want_to_say == SOUND_M) and
+       ((TCAS_sys.most_dangerous.alt_diff > 0 and get(Capt_VVI) < 0) or 
+        (TCAS_sys.most_dangerous.alt_diff < 0 and get(Capt_VVI) > 0)) then
+        set_sound(SOUND_M_CROSS)
+        last_tcas_sound = SOUND_M
+        return
+    end
+
+    -- Case 6: everything else
+    set_sound(what_i_want_to_say)
 
 end
 
