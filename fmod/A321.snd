@@ -2263,7 +2263,7 @@ END_SOUND_ATTACHMENT
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /Blower
   VEH_XYZ 0 1.4 -18.7
-  EVENT_START_COND 	a321neo/sounds/blower_volume != 0
+  EVENT_START_COND 	a321neo/sounds/blower_volume >= 0.5
   CUE_TRIGGER_COND  a321neo/sounds/blower_volume < 0.45
 END_SOUND_ATTACHMENT
 
