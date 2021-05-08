@@ -104,6 +104,9 @@ local function update_tcas(data)
     elseif get(TCAS_actual_mode) == TCAS_MODE_FAULT then
         data.misc.tcas_status = ND_TCAS_FAULT
     end
+
+    data.misc.tcas_ra_triggered = TCAS_sys.alert.type == TCAS_ALERT_RA
+    data.misc.tcas_ta_triggered = TCAS_sys.alert.type == TCAS_ALERT_TA
 end
 
 local function update_navaid_raw_single(data, i)
@@ -252,6 +255,7 @@ local function update_plan_coords(data)
         data.plan_ctr_lon = data.inputs.plane_coords_lon
     end -- TODO There are other cases (page scrolls, etc.)
 end
+
 
 function update_main(data)
     update_speed_and_wind(data)

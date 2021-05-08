@@ -479,30 +479,84 @@ local function draw_tcas_altitude(data, acf, poi)
     end
 end
 
+local function draw_tcas_vs(data, acf, poi)
+    if poi.x == nil then
+        return
+    end
+    
+    if math.abs(acf.vs * 60) < 500 then
+        return -- Show the arrow only if V/S > 500
+    end
+
+    local color = acf.alert == TCAS_ALERT_TA and COLOR_YELLOW or (acf.alert == TCAS_ALERT_RA and ECAM_RED or ECAM_WHITE)
+
+    sasl.gl.drawWideLine(poi.x+20, poi.y-14, poi.x+20, poi.y+14, 2, color)
+
+    if acf.vs > 0 then
+        sasl.gl.drawWideLine(poi.x+20, poi.y+14, poi.x+27, poi.y+3, 2, color)
+        sasl.gl.drawWideLine(poi.x+20, poi.y+14, poi.x+13, poi.y+3, 2, color)
+    else
+        sasl.gl.drawWideLine(poi.x+20, poi.y-14, poi.x+27, poi.y-3, 2, color)
+        sasl.gl.drawWideLine(poi.x+20, poi.y-14, poi.x+13, poi.y-3, 2, color)
+    end
+end
+
+local function draw_tcas_acf(data, acf, poi)
+    if poi.distance > 80 then
+        return -- Too far
+    end
+
+    local alt_diff = acf.alt - data.inputs.altitude
+
+    -- ABV or THRT
+    if (get(TCAS_disp_mode) == 1 or get(TCAS_disp_mode) == 3) and alt_diff < -2700 then
+        return false, nil
+    end
+
+    -- BLW or THRT
+    if (get(TCAS_disp_mode) == 2 or get(TCAS_disp_mode) == 3) and alt_diff > 2700 then
+        return false, nil
+    end
+
+    local texture = image_tcas_far
+    if acf.alert == TCAS_ALERT_TA then
+        texture = image_tcas_ta
+    elseif acf.alert == TCAS_ALERT_RA then
+        texture = image_tcas_ra
+    elseif poi.distance <= 6 and math.abs(alt_diff) <= 1200 then
+        texture = image_tcas_prox
+    end
+    modified, poi = draw_poi_array(data, poi, texture, ECAM_WHITE)
+
+    draw_tcas_altitude(data, acf, poi)
+    draw_tcas_vs(data, acf, poi)
+    
+    return modified, poi
+end
+
 local function draw_tcas(data)
+
+    if data.config.range <= ND_RANGE_ZOOM_2 or data.config.range >= ND_RANGE_80 then
+        return  -- TCASs are not drawn during the zoom mode or large modes
+    end
+
+    if data.misc.map_not_avail then
+        return -- No TCAS is map not avail
+    end
+    
     if get(TCAS_actual_mode) == TCAS_MODE_OFF or get(TCAS_actual_mode) == TCAS_MODE_FAULT then
         return
     end
 
     for i,acf in ipairs(TCAS_sys.acf_data) do
 
-        local poi = {id="", lat=acf.lat, lon=acf.lon}
+        local poi = acf.poi ~= nil and acf.poi or {id="", lat=acf.lat, lon=acf.lon}
         poi.distance = get_distance_nm(data.inputs.plane_coords_lat, data.inputs.plane_coords_lon, acf.lat, acf.lon)
 
-        local alt_diff = math.abs(acf.alt - data.inputs.altitude)
 
-        if poi.distance < 30 then
-            local texture = image_tcas_far
-            if acf.alert == TCAS_ALERT_TA then
-                texture = image_tcas_ta
-            elseif acf.alert == TCAS_ALERT_RA then
-                texture = image_tcas_ra
-            elseif poi.distance <= 6 and alt_diff <= 1200 then
-                texture = image_tcas_prox
-            end
-            draw_poi_array(data, poi, texture, ECAM_WHITE)
-            draw_tcas_altitude(data, acf, poi)
-
+        modified, poi = draw_tcas_acf(data, acf, poi)
+        if modified then
+            TCAS_sys.acf_data[i].poi = poi
         end
     end
 
