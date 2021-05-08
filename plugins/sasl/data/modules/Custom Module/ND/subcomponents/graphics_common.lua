@@ -274,6 +274,15 @@ local function draw_common_messages_center(data)
     elseif data.misc.apt_pos_lost then
         text = "ARPT NAV POS LOST"
         color = ECAM_RED
+    elseif (data.misc.tcas_ra_triggered or data.misc.tcas_ta_triggered) and not is_nav_or_rose then
+        text = "TCAS:CHANGE MODE"
+        color = data.misc.tcas_ra_triggered and ECAM_RED or ECAM_ORANGE
+    elseif (data.misc.tcas_ra_triggered or data.misc.tcas_ta_triggered) and data.config.range <= ND_RANGE_ZOOM_2 then
+        text = "TCAS:INCREASE RANGE"
+        color = data.misc.tcas_ra_triggered and ECAM_RED or ECAM_ORANGE
+    elseif (data.misc.tcas_ra_triggered or data.misc.tcas_ta_triggered) and data.config.range > ND_RANGE_40 then
+        text = "TCAS:REDUCE RANGE"
+        color = data.misc.tcas_ra_triggered and ECAM_RED or ECAM_ORANGE
     elseif (data.misc.windshear_warning or data.misc.windshear_caution) and not is_nav_or_rose then
         text = "W/S:CHANGE MODE"
         color = data.misc.windshear_warning and ECAM_RED or ECAM_ORANGE
