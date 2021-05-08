@@ -122,7 +122,6 @@
 {25bb3f48-4eea-40a2-a61f-7cfbf098c7c2} event:/Flaps/FlapLever2
 {c75c87ec-563c-4319-a7aa-786962e31e9d} event:/Flaps/FlapLever3
 {dcd36bd7-bf36-4324-8019-216506094656} event:/Flaps/FlapLever4
-{f7e08394-7b0f-4713-8834-554fc0fdf7b3} event:/Flaps/FlapLeverDown
 {ff956f46-ccbb-4395-a6bc-1d64dddaff41} event:/Flaps/FlapLeverUp
 {c9cf63f7-c575-4691-823b-716d0e5e1ba9} event:/Flaps/Flaps
 {e4faf4c8-f138-4114-a6a9-5e0f8dca1049} event:/Flaps/FlapsLeverFinal

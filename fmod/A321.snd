@@ -2141,54 +2141,52 @@ END_SOUND_ATTACHMENT
 
 #################################################################################################
 
-#BEGIN_SOUND_ATTACHMENT
-#  EVENT_NAME /Flaps/FlapLeverUp
-#  VEH_XYZ 0 1.5 -18.4
-#  EVENT_START_COND ABS_DELTA=a321neo/dynamics/surfaces/flaps_handle_position > 0
-#  EVENT_END_COND ABS_DELTA=a321neo/dynamics/surfaces/flaps_handle_position > 0.26
-#END_SOUND_ATTACHMENT
-#
-#BEGIN_SOUND_ATTACHMENT
-#  EVENT_NAME /Flaps/FlapLever1
-#  VEH_XYZ 0 1.5 -18.4
-#  EVENT_START_COND a321neo/dynamics/surfaces/flaps_handle_position == 0
-#END_SOUND_ATTACHMENT
-#
-#BEGIN_SOUND_ATTACHMENT
-#  EVENT_NAME /Flaps/FlapLever2
-#  VEH_XYZ 0 1.5 -18.4
-#  EVENT_START_COND a321neo/dynamics/surfaces/flaps_handle_position == 1
-#END_SOUND_ATTACHMENT
-#
-#BEGIN_SOUND_ATTACHMENT
-#  EVENT_NAME /Flaps/FlapLever3
-#  VEH_XYZ 0 1.5 -18.4
-#  EVENT_START_COND a321neo/dynamics/surfaces/flaps_handle_position == 2
-#END_SOUND_ATTACHMENT
-#
-#BEGIN_SOUND_ATTACHMENT
-#  EVENT_NAME /Flaps/FlapLever4
-#  VEH_XYZ 0 1.5 -18.4
-#  EVENT_START_COND a321neo/dynamics/surfaces/flaps_handle_position == 3
-#END_SOUND_ATTACHMENT
-#
-#BEGIN_SOUND_ATTACHMENT
-#  EVENT_NAME /Flaps/FlapLever1
-#  VEH_XYZ 0 1.5 -18.4
-#  EVENT_START_COND a321neo/dynamics/surfaces/flaps_handle_position == 4
-#END_SOUND_ATTACHMENT
-#
-#BEGIN_SOUND_ATTACHMENT
-#  EVENT_NAME /Flaps/FlapLeverDown
-#  VEH_XYZ 0 1.5 -18.4
-#  EVENT_START_COND DELTA=a321neo/dynamics/surfaces/flaps_handle_position == 0
-#  EVENT_END_COND ABS_DELTA=a321neo/dynamics/surfaces/flaps_handle_position > 0
-#END_SOUND_ATTACHMENT
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Flaps/FlapLeverUp
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/dynamics/surfaces/flaps_handle_position < 0.98
+END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /Flaps/FlapsLeverFinal
+  EVENT_NAME /Flaps/FlapLever1
   VEH_XYZ 0 1.5 -18.4
-  EVENT_START_COND ABS_DELTA=a321neo/dynamics/surfaces/flaps_handle_position > 0
+  EVENT_START_COND a321neo/dynamics/surfaces/flaps_handle_position > 0.02
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Flaps/FlapLever1
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/dynamics/surfaces/flaps_handle_position < 1.98
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Flaps/FlapLever2
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/dynamics/surfaces/flaps_handle_position > 1.02
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Flaps/FlapLever2
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/dynamics/surfaces/flaps_handle_position < 2.98
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Flaps/FlapLever3
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/dynamics/surfaces/flaps_handle_position > 2.02
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Flaps/FlapLever3
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/dynamics/surfaces/flaps_handle_position < 3.98
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Flaps/FlapLever4
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/dynamics/surfaces/flaps_handle_position > 3.02
 END_SOUND_ATTACHMENT
 
 
