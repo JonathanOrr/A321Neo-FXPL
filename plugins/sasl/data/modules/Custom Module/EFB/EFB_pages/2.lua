@@ -108,64 +108,40 @@ local function p2s1_draw()
     sasl.gl.drawTexture ( EFB_GROUND_as, 532 , 152 , 100 , 70 , get(VEHICLE_as) == 1 and EFB_LIGHTBLUE or EFB_DARKGREY)
     SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 48, 568, 78, 18, 2,  get(VEHICLE_as) == 1 and 2 or 1)
 
-    sasl.gl.drawTexture ( EFB_GROUND_cat1, 0 , 0 , 1143 , 800 , get(VEHICLE_cat1) == 1 and EFB_LIGHTBLUE or EFB_DARKGREY)
+    sasl.gl.drawTexture ( EFB_GROUND_cat1, 361 , 386 , 52 , 111 , get(VEHICLE_cat1) == 1 and EFB_LIGHTBLUE or EFB_DARKGREY)
     SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 48, 504, 78, 18, 2, get(VEHICLE_cat1) == 1 and 2 or 1)
 
-    sasl.gl.drawTexture ( EFB_GROUND_cat2, 0 , 0 , 1143 , 800 , get(VEHICLE_cat2) == 1 and EFB_LIGHTBLUE or EFB_DARKGREY)
+    sasl.gl.drawTexture ( EFB_GROUND_cat2, 887 , 386 , 54 , 109 , get(VEHICLE_cat2) == 1 and EFB_LIGHTBLUE or EFB_DARKGREY)
     SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 48, 472, 78, 18, 2, get(VEHICLE_cat2) == 1 and 2 or 1)
 
-    sasl.gl.drawTexture ( EFB_GROUND_fuel, 0 , 0 , 1143 , 800 , get(VEHICLE_fuel) == 1 and EFB_LIGHTBLUE or EFB_DARKGREY)
+    sasl.gl.drawTexture ( EFB_GROUND_fuel, 611 , 465 , 122 , 93 , get(VEHICLE_fuel) == 1 and EFB_LIGHTBLUE or EFB_DARKGREY)
     SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 48, 248, 78, 18, 2, get(VEHICLE_fuel) == 1 and 2 or 1)
 
-    sasl.gl.drawTexture ( EFB_GROUND_gpu, 0 , 0 , 1143 , 800 , get(VEHICLE_gpu) == 1 and EFB_LIGHTBLUE or EFB_DARKGREY )
+    sasl.gl.drawTexture ( EFB_GROUND_gpu, 277 , 380 , 65 , 69 , get(VEHICLE_gpu) == 1 and EFB_LIGHTBLUE or EFB_DARKGREY )
     SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 48, 600, 78, 18, 2, get(VEHICLE_gpu) == 1 and 2 or 1)
 
-    sasl.gl.drawTexture ( EFB_GROUND_ldcl1, 0 , 0 , 1143 , 800 , get(VEHICLE_ldcl1) == 1 and EFB_LIGHTBLUE or EFB_DARKGREY )
+    sasl.gl.drawTexture ( EFB_GROUND_ldcl1, 421 , 388 , 43 , 122 , get(VEHICLE_ldcl1) == 1 and EFB_LIGHTBLUE or EFB_DARKGREY )
     SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 48, 376, 78, 18, 2, get(VEHICLE_ldcl1) == 1 and 2 or 1)
 
-    sasl.gl.drawTexture ( EFB_GROUND_ldcl2, 0 , 0 , 1143 , 800 , get(VEHICLE_ldcl2) == 1 and EFB_LIGHTBLUE or EFB_DARKGREY )
+    sasl.gl.drawTexture ( EFB_GROUND_ldcl2, 777 , 388 , 43 , 122 , get(VEHICLE_ldcl2) == 1 and EFB_LIGHTBLUE or EFB_DARKGREY )
     SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle,  48, 344, 78, 18, 2, get(VEHICLE_ldcl2) == 1 and 2 or 1)
 
+    sasl.gl.drawTexture ( EFB_GROUND_lv, 973 , 328 , 95 , 57 , get(VEHICLE_lv) == 1 and EFB_LIGHTBLUE or EFB_DARKGREY )
+    SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle,  48, 216, 78, 18, 2, get(VEHICLE_lv) == 1 and 2 or 1)
 
+    sasl.gl.drawTexture ( EFB_GROUND_ps1, 359 , 165 , 58 , 158 , get(VEHICLE_ps1) == 1 and EFB_LIGHTBLUE or EFB_DARKGREY )
+    SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle,  48, 440, 78, 18, 2, get(VEHICLE_ps1) == 1 and 2 or 1)
 
+    sasl.gl.drawTexture ( EFB_GROUND_ps2, 895 , 167 , 58 , 158 , get(VEHICLE_ps2) == 1 and EFB_LIGHTBLUE or EFB_DARKGREY )
+    SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 48, 408, 78, 18, 2, get(VEHICLE_ps2) == 1 and 2 or 1)
 
-    if get(VEHICLE_lv) == 1 then
-        sasl.gl.drawTexture ( EFB_GROUND_lv, 0 , 0 , 1143 , 800 , EFB_LIGHTBLUE )
-        SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 48, 216, 78, 18, 2, 2)
-    else
-        sasl.gl.drawTexture ( EFB_GROUND_lv, 0 , 0 , 1143 , 800 , EFB_DARKGREY )
-        SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 48, 216, 78, 18, 2, 1)
-    end
-    if get(VEHICLE_ps1) == 1 then
-        sasl.gl.drawTexture ( EFB_GROUND_ps1, 0 , 0 , 1143 , 800 , EFB_LIGHTBLUE )
-        SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 48, 440, 78, 18, 2, 2)
-    else
-        sasl.gl.drawTexture ( EFB_GROUND_ps1, 0 , 0 , 1143 , 800 , EFB_DARKGREY )
-        SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 48, 440, 78, 18, 2, 1)
-    end
-    if get(VEHICLE_ps2) == 1 then
-        sasl.gl.drawTexture ( EFB_GROUND_ps2, 0 , 0 , 1143 , 800 , EFB_LIGHTBLUE )
-        SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 48, 408, 78, 18, 2, 2)
-    else
-        sasl.gl.drawTexture ( EFB_GROUND_ps2, 0 , 0 , 1143 , 800 , EFB_DARKGREY )
-        SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 48, 408, 78, 18, 2, 1)
-    end
-    if get(VEHICLE_uld1) == 1 then
-        sasl.gl.drawTexture ( EFB_GROUND_uld1, 0 , 0 , 1143 , 800 , EFB_LIGHTBLUE )
-        SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 48, 312, 78, 18, 2, 2)
-    else
-        sasl.gl.drawTexture ( EFB_GROUND_uld1, 0 , 0 , 1143 , 800 , EFB_DARKGREY )
-        SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 48, 312, 78, 18, 2, 1)
-    end
-    if get(VEHICLE_uld2) == 1 then
-        sasl.gl.drawTexture ( EFB_GROUND_uld2, 0 , 0 , 1143 , 800 , EFB_LIGHTBLUE )
-        SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 48, 280, 78, 18, 2, 2)
-    else
-        sasl.gl.drawTexture ( EFB_GROUND_uld2, 0 , 0 , 1143 , 800 , EFB_DARKGREY )
-        SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 48, 280, 78, 18, 2, 1)
-    end
+    sasl.gl.drawTexture ( EFB_GROUND_uld1, 288 , 515 , 255 , 82 , get(VEHICLE_uld1) == 1 and EFB_LIGHTBLUE or EFB_DARKGREY )
+    SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 48, 312, 78, 18, 2, get(VEHICLE_uld1) == 1 and 2 or 1)
 
-    sasl.gl.drawTexture ( EFB_GROUND_wv, 0 , 0 , 1143 , 800 , get(VEHICLE_wv) == 1 and EFB_LIGHTBLUE or EFB_DARKGREY)
+    sasl.gl.drawTexture ( EFB_GROUND_uld2, 657 , 515 , 237 , 111 , get(VEHICLE_uld2) == 1 and EFB_LIGHTBLUE or EFB_DARKGREY )
+    SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 48, 280, 78, 18, 2, get(VEHICLE_uld2) == 1 and 2 or 1)
+
+    sasl.gl.drawTexture ( EFB_GROUND_wv, 807 , 227 , 62 , 95 , get(VEHICLE_wv) == 1 and EFB_LIGHTBLUE or EFB_DARKGREY)
     SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 48, 184, 78, 18, 2, get(VEHICLE_wv) == 1 and 2 or 1)
 
 end
