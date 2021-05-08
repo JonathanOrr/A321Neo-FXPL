@@ -3,7 +3,7 @@ A
 ACF_SOUNDS
 
 #########################################################################################################################################################################################
-##                                                                              2021 by SideStick Simulations                                                                          ##
+##                                                                               2021 by C STAR SYSTEMS (CSS)                                                                          ##
 ##                                                                               FMOD Developer: Henrick Ku                                                                            ##
 ##                                                                        https://github.com/JonathanOrr/A321Neo-FXPL                                                                  ##
 ##                                                                 For Forking, contact Discord HkK#8179 to obtain fspro                                                               ##
@@ -2265,8 +2265,8 @@ END_SOUND_ATTACHMENT
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /Blower
   VEH_XYZ 0 1.4 -18.7
-  EVENT_START_COND 	a321neo/sounds/blower_delayed != 0
-  CUE_TRIGGER_COND  a321neo/sounds/blower_delayed == 0
+  EVENT_START_COND 	a321neo/sounds/blower_volume != 0
+  CUE_TRIGGER_COND  a321neo/sounds/blower_volume < 0.45
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
@@ -2507,6 +2507,99 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /SSPriority/Right
   VEH_XYZ 0 1.5 -18.4
   EVENT_CMND_DOWN a321neo/sounds/gpws/priority_right
+END_SOUND_ATTACHMENT
+
+########################################################################################################TCAS
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /TCAS/crossingmaintain
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/sounds/tcas/cross_maintain == 1
+  EVENT_END_COND a321neo/sounds/tcas/cross_maintain == 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /TCAS/maintain
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/sounds/tcas/maintain == 1
+  EVENT_END_COND a321neo/sounds/tcas/maintain == 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /TCAS/inc climb
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/sounds/tcas/inc_climb == 1
+  EVENT_END_COND a321neo/sounds/tcas/inc_climb == 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /TCAS/crossingclimb
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/sounds/tcas/cross_climb == 1
+  EVENT_END_COND a321neo/sounds/tcas/cross_climb == 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /TCAS/climb 2x
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/sounds/tcas/climb == 1
+  EVENT_END_COND a321neo/sounds/tcas/climb == 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /TCAS/climbnow
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/sounds/tcas/climb_now == 1
+  EVENT_END_COND a321neo/sounds/tcas/climb_now == 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /TCAS/inc descend
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/sounds/tcas/inc_descent == 1
+  EVENT_END_COND a321neo/sounds/tcas/inc_descent == 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /TCAS/crossingdescend
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/sounds/tcas/cross_descent == 1
+  EVENT_END_COND a321neo/sounds/tcas/cross_descent == 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /TCAS/descend 2x
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/sounds/tcas/descent == 1
+  EVENT_END_COND a321neo/sounds/tcas/descent == 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /TCAS/descendnow
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/sounds/tcas/descent_now == 1
+  EVENT_END_COND a321neo/sounds/tcas/descent_now == 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /TCAS/monitorvs
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/sounds/tcas/monitor_vs == 1
+  EVENT_END_COND a321neo/sounds/tcas/monitor_vs == 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /TCAS/coc
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/sounds/tcas/coc == 1
+  EVENT_END_COND a321neo/sounds/tcas/coc == 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /TCAS/tfc 2x
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/sounds/tcas/traffic_traffic == 1
+  EVENT_END_COND a321neo/sounds/tcas/traffic_traffic == 0
 END_SOUND_ATTACHMENT
 
 ########################################################################################################APU
