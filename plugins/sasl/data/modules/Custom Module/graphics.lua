@@ -358,6 +358,10 @@ local function update_toilette()
     pb_set(PB.ovhd.misc_toilet, false, is_toilette_busy)
 end
 
+local function update_handles()
+    Set_dataref_linear_anim_nostop(Flaps_handle_position_anim, get(Flaps_handle_position), 0, 5, 2)
+end
+
 function update()
     perf_measure_start("graphics:update()")
 
@@ -370,6 +374,7 @@ function update()
     update_trays()
     update_doorlock()
     update_toilette()
+    update_handles();
 
     perf_measure_stop("graphics:update()")
 end
