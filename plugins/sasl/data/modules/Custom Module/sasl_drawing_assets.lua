@@ -133,14 +133,14 @@ ECAM_CRUISE_bgd_img =      sasl.gl.loadImage(moduleDirectory .. "/Custom Module/
 ECAM_CRUISE_vs_arrow_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/CRUISE/Arrow.png")
 
 --EFB--
-EFB_cursor =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/cursor.png")
+EFB_cursor =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/cursor.png") 
 EFB_bgd =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/bgd.png")
 EFB_toggle =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Toggle.png")
 EFB_highlighter =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/highlighter.png")
 
 EFB_CSS_logo = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/OFF page/CSS.png")
 EFB_Charging = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/charging_cover.png")
-EFB_Charging_Overlay = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/charging_overlay.png")
+EFB_Charging_Overlay = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/charging_overlay.png") -- 1058, 5, 75x14
 
 ------------GROUND-------------
 

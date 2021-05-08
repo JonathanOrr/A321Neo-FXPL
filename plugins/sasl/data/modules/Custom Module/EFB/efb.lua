@@ -261,7 +261,7 @@ function draw()  ------KEEP THE draw_cursor() AT THE BOTTOM YOU DUMBASS!!!!!
     end
 
     if get(AC_ess_bus_pwrd) == 1 and EFB_OFF == false then
-        sasl.gl.drawTexture (EFB_Charging_Overlay, 0 , 0 , 1143 , 800 , EFB_WHITE )
+        sasl.gl.drawTexture(EFB_Charging_Overlay, 1058 , gimp2y(5) , 75 , 14 , EFB_WHITE )
     end
 
 

@@ -30,6 +30,9 @@ function click_anywhere_except_that_area( x1, y1, x2, y2, callback)
     end)
 end
 
+function gimp2y(y)
+    return 787-y
+end
 
 function draw_dropdown_menu(x, y, width, height, outside_colour, inside_colour, table, expanded, selected)
 

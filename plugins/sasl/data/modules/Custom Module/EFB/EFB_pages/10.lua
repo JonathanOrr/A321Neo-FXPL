@@ -19,7 +19,7 @@ local function draw_logo()
     local color = {1, 1, 1, 1}
   	-- Here, you have to compute color[4] based on a sin wave
 	color[4] = math.sin(Math_rescale_no_lim(0, math.pi/2, TIME_LOGO, 0, get(TIME) - click_time))
-    SASL_draw_img_center_aligned(EFB_CSS_logo, size[1]/2, size[2]/2, 589, 530, color)
+    SASL_draw_img_center_aligned(EFB_CSS_logo, size[1]/2, size[2]/2, 375, 342, color)
 end
 
 --DRAW LOOPS--
