@@ -39,7 +39,7 @@ include('EWD_msgs/pressurization.lua')
 include('EWD_msgs/to_ldg_memos.lua')
 
 include('DRAIMS/radio_logic.lua')
-
+include('FBW/FBW_subcomponents/flight_ctl_subcomponents/lateral_ctl.lua')
 
 sasl.registerCommandHandler (Ecam_btn_cmd_CLR,   0 , function(phase) ewd_clear_button_handler(phase) end )
 sasl.registerCommandHandler (Ecam_btn_cmd_RCL,   0 , function(phase) ewd_recall_button_handler(phase) end )
@@ -161,6 +161,7 @@ local left_messages_list = {
     MessageGroup_FCTL_LR_ELEV_FAULT_SINGLE,
     MessageGroup_FCTL_AIL_FAULT,
     MessageGroup_FCTL_STAB_JAM,
+    MessageGroup_FCTL_SPLR_FAULT,
     MessageGroup_FBW_FLAPS_FAULT,
     MessageGroup_FBW_FLAP_SYS_12_FAULT,
     MessageGroup_FBW_SEC_123_FAULT,
@@ -457,7 +458,7 @@ local function update_right_list()
     end
 
     -- Speedbrakes
-    if get(Speedbrake_handle_ratio) > 0 then
+    if Spoilers_obj.Get_curr_spdbrk_def() > 2.5 then
     
         if get(EWD_flight_phase) >= PHASE_LIFTOFF and get(EWD_flight_phase) <= PHASE_TOUCHDOWN then
             if get(Eng_1_N1) > 50 or get(Eng_2_N1) > 50 then
