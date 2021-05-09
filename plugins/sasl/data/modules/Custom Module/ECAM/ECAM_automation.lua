@@ -120,7 +120,17 @@ function ecam_user_press_clr_status(phase)
         return
     end
     
+    if get(Ecam_current_status) == ECAM_STATUS_SHOW_USER and get(Ecam_current_page) == ECAM_PAGE_STS then
+        if get(Ecam_arrow_overflow) == 1 then
+            set(Ecam_sts_scroll_page, get(Ecam_sts_scroll_page) + 1)
+        else
+            set(Ecam_sts_scroll_page, 0)
+        end
+        return  -- Not the mode we are interested in
+    end
+    
     if get(Ecam_current_status) ~= ECAM_STATUS_SHOW_EWD_STS then
+        set(Ecam_sts_scroll_page, 0)
         return  -- Not the mode we are interested in
     end
     
@@ -134,9 +144,11 @@ function ecam_user_press_clr_status(phase)
         return
     end
     
+    
     -- Ok we finished scrolling ECAM, so we can clear the status page, by resuming normal mode
     set(Ecam_is_sts_clearable, 0)
     set(Ecam_current_status, ECAM_STATUS_NORMAL)
+    set(Ecam_sts_scroll_page, 0)
     
 end
 
