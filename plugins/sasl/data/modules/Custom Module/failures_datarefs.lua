@@ -244,6 +244,9 @@ FAILURE_AIRCOND_TRIM_CAB_FWD = createGlobalPropertyi("a321neo/failures/aircond/v
 FAILURE_AIRCOND_TRIM_CAB_AFT = createGlobalPropertyi("a321neo/failures/aircond/vent/trim_cab_aft", 0, false, true, false)
 FAILURE_AIRCOND_TRIM_CARGO_AFT = createGlobalPropertyi("a321neo/failures/aircond/vent/trim_cargo_aft", 0, false, true, false)
 
+FAILURE_AIRCOND_REG_1 = createGlobalPropertyi("a321neo/failures/aircond/reg_1", 0, false, true, false)
+FAILURE_AIRCOND_REG_2 = createGlobalPropertyi("a321neo/failures/aircond/reg_2", 0, false, true, false)
+
 FAILURE_AI_PITOT_CAPT = createGlobalPropertyi("a321neo/failures/anti_ice/capt_pitot", 0, false, true, false)
 FAILURE_AI_PITOT_FO   = createGlobalPropertyi("a321neo/failures/anti_ice/fo_pitot", 0, false, true, false)
 FAILURE_AI_PITOT_STDBY= createGlobalPropertyi("a321neo/failures/anti_ice/stdby_pitot", 0, false, true, false)

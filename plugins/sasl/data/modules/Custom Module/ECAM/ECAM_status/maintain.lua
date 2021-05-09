@@ -37,6 +37,9 @@ function ECAM_status_get_maintain()
         table.insert(messages, "ENG 2 FADEC")
     end
 
+    if get(FAILURE_AIRCOND_REG_1) == 1 or get(FAILURE_AIRCOND_REG_2) == 1 then
+        table.insert(messages, "COND REGUL")
+    end
 
     return messages
 end

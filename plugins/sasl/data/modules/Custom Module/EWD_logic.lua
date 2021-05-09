@@ -227,6 +227,7 @@ local left_messages_list = {
     MessageGroup_PACKS_FAULT,
     MessageGroup_PACKS_OFF,
     MessageGroup_PACKS_REGUL_FAULT,
+    MessageGroup_AIRCOND_ZONE_REG_FAULT,
     MessageGroup_GPWS_FAULT,
     MessageGroup_GPWS_TERR_FAULT,
     MessageGroup_AOA_CAPT_FAULT,

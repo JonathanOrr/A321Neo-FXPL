@@ -357,7 +357,10 @@ function update()
     update_pack_valves()
     update_temp_from_valves()
 
-    run_pids()
+    local at_least_one_system_runs = not (get(FAILURE_AIRCOND_REG_1) == 1 and get(FAILURE_AIRCOND_REG_2) == 1) or ((get(AC_bus_1_pwrd) == 0 or get(DC_bus_1_pwrd) == 0) and (get(AC_bus_2_pwrd) == 0 or get(DC_ess_bus_pwrd) == 0))
+    if at_least_one_system_runs then
+        run_pids()
+    end
 
     perf_measure_stop("aircond:update()")
 end

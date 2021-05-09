@@ -479,6 +479,27 @@ local inop_systems_desc = {
      text = "WING ANTI ICE", nr = 1,
      cond_1 = function() return get(FAILURE_AI_Wing_L_valve_stuck) == 1 or get(FAILURE_AI_Wing_L_valve_stuck) == 1 end,
     },
+    
+    -- COND
+    {
+     text = "HOT AIR", nr = 1,
+     cond_1 = function() return get(FAILURE_AIRCOND_HOT_AIR_STUCK) == 1 end,
+    },
+    {
+     text = "CRG HOT AIR", nr = 1,
+     cond_1 = function() return get(FAILURE_AIRCOND_HOT_AIR_CARGO_STUCK) == 1 end,
+    },
+    {
+     text = "CAB FAN", nr = 2, text_1="L", text_2="R",
+     cond_1 = function() return get(Cab_fan_fwd_running) == 0 end,
+     cond_2 = function() return get(Cab_fan_aft_running) == 0 end
+    },
+    {
+     text = "ZONE REGUL", nr = 1,
+     cond_1 = function() return (get(FAILURE_AIRCOND_REG_1) == 1 and get(FAILURE_AIRCOND_REG_2) == 1) or ((get(AC_bus_1_pwrd) == 0 or get(DC_bus_1_pwrd) == 0) and (get(AC_bus_2_pwrd) == 0 or get(DC_ess_bus_pwrd) == 0)) end,
+    },
+
+
 }
 
 
