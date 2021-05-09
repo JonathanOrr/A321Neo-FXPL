@@ -1,7 +1,7 @@
 
 local function put_inop_sys_msg_2(messages, dr_1, dr_2, t_1, t_2, title)
     if dr_1 and dr_2 then
-        return ( title .. " " .. t_1 .. " + " .. t_2)
+        return ( title .. " " .. t_1 .. "+" .. t_2)
     elseif dr_1 then
         return ( title .. " " .. t_1)
     elseif dr_2 then
@@ -10,21 +10,21 @@ local function put_inop_sys_msg_2(messages, dr_1, dr_2, t_1, t_2, title)
     return "UNKWN"    -- Shold not happen
 end
 
-local function put_inop_sys_msg_3(messages, dr_1, dr_2, dr_3, title)
+local function put_inop_sys_msg_3(messages, dr_1, dr_2, dr_3, t_1, t_2, t_3, title)
     if dr_1 and dr_2 and dr_3 then
-        return ( title .. " 1 + 2 + 3")
+        return ( title .. " "..t_1.."+"..t_2.."+"..t_3)
     elseif dr_1 and dr_2 then
-        return ( title .. " 1 + 2")
+        return ( title .. " "..t_1.."+"..t_2.."")
     elseif dr_1  and dr_3 then
-        return ( title .. " 1 + 3")
+        return ( title .. " "..t_1.."+"..t_3.."")
     elseif dr_2 and dr_3 then
-        return ( title .. " 2 + 3")
+        return ( title .. " "..t_2.."+"..t_3.."")
     elseif dr_1 then
-        return ( title .. " 1")
+        return ( title .. " "..t_1)
     elseif dr_2 then
-        return ( title .. " 2")
+        return ( title .. " "..t_2)
     elseif dr_3 then
-        return ( title .. " 3")
+        return ( title .. " "..t_3)
     end
     return "UNKWN"    -- Shold not happen
 end
@@ -208,6 +208,54 @@ local inop_systems_desc = {
     
 
     -- F/CTL
+    {
+     text = "AIL", text_after = "", text_1="L", text_2="R", nr = 2,
+     cond_1 = function() return get(L_aileron_avail) == 0 end,
+     cond_2 = function() return get(R_aileron_avail) == 0 end,
+    },
+    {
+     text = "ELEV", text_after = "", text_1="L", text_2="R", nr = 2,
+     cond_1 = function() return get(L_elevator_avail) == 0 end,
+     cond_2 = function() return get(R_elevator_avail) == 0 end,
+    },
+    {
+     text = "SPLR", nr = 2, text_1="L1", text_2="L5",
+     cond_1 = function() return get(L_spoiler_1_avail) == 0 end,
+     cond_2 = function() return get(L_spoiler_5_avail) == 0 end,
+    },
+    {
+     text = "SPLR", nr = 3, text_1="L2", text_2="L3", text_3="L4",
+     cond_1 = function() return get(L_spoiler_2_avail) == 0 end,
+     cond_2 = function() return get(L_spoiler_3_avail) == 0 end,
+     cond_3 = function() return get(L_spoiler_4_avail) == 0 end,
+    },
+    {
+     text = "SPLR", nr = 2, text_1="R1", text_2="R5",
+     cond_1 = function() return get(R_spoiler_1_avail) == 0 end,
+     cond_2 = function() return get(R_spoiler_5_avail) == 0 end,
+    },
+    {
+     text = "SPLR", nr = 3, text_1="R2", text_2="R3", text_3="R4",
+     cond_1 = function() return get(R_spoiler_2_avail) == 0 end,
+     cond_2 = function() return get(R_spoiler_3_avail) == 0 end,
+     cond_3 = function() return get(R_spoiler_4_avail) == 0 end,
+    },
+    {
+     text = "SPD BRK", nr = 1,
+     cond_1 = function() return get(R_spoiler_2_avail) == 0 and get(R_spoiler_3_avail) == 0 and get(R_spoiler_4_avail) == 0 and get(L_spoiler_2_avail) == 0 and get(L_spoiler_3_avail) == 0 and get(L_spoiler_4_avail) == 0 end,
+    },
+    {
+     text = "STABILIZER", nr = 1,
+     cond_1 = function() return get(Rudder_avail) == 0 end,
+    },
+    {
+     text = "SLATS", nr = 1,
+     cond_1 = function() return get(Slats_ecam_amber) == 1 end,
+    },
+    {
+     text = "FLAPS", nr = 1,
+     cond_1 = function() return get(Flaps_ecam_amber) == 1 end,
+    },
     {
      text = "ELAC",
      nr = 2,
@@ -453,7 +501,10 @@ function ECAM_status_get_inop_sys()
                 if x.text_after then msg = msg .. " " .. x.text_after end
                 table.insert(messages, msg)
             elseif x.nr == 3 and (x.cond_1() or x.cond_2() or x.cond_3()) then
-                local msg = put_inop_sys_msg_3(messages, x.cond_1(), x.cond_2(), x.cond_3(), x.text)
+                local t1 = x.text_1 and x.text_1 or "1"
+                local t2 = x.text_2 and x.text_2 or "2"
+                local t3 = x.text_3 and x.text_3 or "3"
+                local msg = put_inop_sys_msg_3(messages, x.cond_1(), x.cond_2(), x.cond_3(), t1, t2, t3, x.text)
                 if x.text_after then msg = msg .. " " .. x.text_after end
                 table.insert(messages, msg)
             end
