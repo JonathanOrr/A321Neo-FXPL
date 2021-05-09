@@ -165,6 +165,8 @@ local left_messages_list = {
     MessageGroup_FBW_FLAPS_FAULT,
     MessageGroup_FBW_FLAP_SYS_12_FAULT,
     MessageGroup_FBW_SEC_123_FAULT,
+    MessageGroup_FCTL_GND_SPLR_1234_FAULT,
+    MessageGroup_FCTL_GND_SPLR_5_FAULT,
     MessageGroup_GND_SPLRS_NOT_ARMED,
     MessageGroup_SPD_BRK_STILL_OUT,
     MessageGroup_ENG_1_SHUTDOWN,
