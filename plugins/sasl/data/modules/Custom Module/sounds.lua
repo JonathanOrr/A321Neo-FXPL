@@ -147,6 +147,7 @@ local function update_extract()
 end
 
 local function gpws_sounds()
+    set(GPWS_at_least_one_triggered, 1)
 
     if get(AC_bus_1_pwrd) == 1 then
         set_alt_callouts()

@@ -138,6 +138,65 @@ local function update_status()
     set(TCAS_actual_mode, TCAS_MODE_TA)
 end
 
+local function inhibition_strategy(my_acf, int_acf, tcas_alert_value, tcas_result)
+    if tcas_alert_value == TCAS_ALERT_NONE then
+        -- Nothing to do
+        return TCAS_ALERT_NONE, tcas_result, 0
+    end
+
+    local agl = get(Capt_ra_alt_ft)
+    local vs  = get(Capt_VVI)
+
+    -- If intruder below 380ft and we are below 1700 AGL
+    -- Inhibit all advisories
+    if (int_acf.alt-agl) < 380 and agl < 1700 then
+        return TCAS_ALERT_NONE, tcas_result, 1
+    end
+    
+    local inhib = 0
+    
+    if tcas_alert_value == TCAS_ALERT_RA then
+        -- < 1100 on climb transform to TA
+        if agl < 1100 and vs > 0 then
+            tcas_alert_value = TCAS_ALERT_TA
+            inhib = 2
+        end
+
+        -- < 900 on descent transform to TA
+        if agl < 900 and vs <= 0 then
+            tcas_alert_value = TCAS_ALERT_TA
+            inhib = 3
+        end
+
+        if agl < 1200 and vs > 0 and tcas_result == TCAS_OUTPUT_DESCEND_LOW then
+            tcas_alert_value = TCAS_ALERT_TA
+            inhib = 4
+        end
+
+        if agl < 1000 and vs <= 0 and tcas_result == TCAS_OUTPUT_DESCEND_LOW then
+            tcas_alert_value = TCAS_ALERT_TA
+            inhib = 5
+        end
+
+        -- < 1450 increase descent transform to normal descent
+        if agl < 1450 and tcas_result == TCAS_OUTPUT_DESCEND_HIGH and tcas_alert_value == TCAS_ALERT_RA then
+            tcas_result = TCAS_OUTPUT_DESCEND_LOW
+            inhib = 6
+        end
+    end
+    
+    -- Inhibition of TA at very low altitude
+    if tcas_alert_value == TCAS_ALERT_TA then
+        if vs > 0 and agl < 600 then
+            return TCAS_ALERT_NONE, tcas_result, 7
+        elseif vs <= 0 and agl < 400 then
+            return TCAS_ALERT_NONE, tcas_result, 8
+        end
+    end
+    
+    return tcas_alert_value, tcas_result, inhib
+end
+
 local function update_tcas_intruder(my_acf, i)
     local lat = get(dr_tcas_targets_pos_lat, i)
     local lon = get(dr_tcas_targets_pos_lon, i)
@@ -163,19 +222,28 @@ local function update_tcas_intruder(my_acf, i)
     local tcas_alert_value = TCAS_ALERT_NONE
     if tcas_result == TCAS_OUTPUT_TRAFFIC then
         tcas_alert_value = TCAS_ALERT_TA
-        at_least_one_ta = true
     elseif tcas_result ~= TCAS_OUTPUT_CLEAR then
         tcas_alert_value = TCAS_ALERT_RA
-        at_least_one_ra = true
     end
     
+    tcas_alert_value, tcas_result, inhib = inhibition_strategy(my_acf, int_acf, tcas_alert_value, tcas_result)
+
+    if tcas_alert_value == TCAS_ALERT_TA then
+        at_least_one_ta = true
+    end
+
+    if tcas_alert_value == TCAS_ALERT_RA then
+        at_least_one_ra = true
+    end
+
     local intruder_data = {
-                           lat = lat, lon = lon, alt=int_acf.alt, vs=int_acf.vs,
-                           alert = tcas_alert_value,
-                           action = tcas_result,
-                           debug_reason = debug_info,
-                           danger = my_danger,
-                           alt_diff = my_acf.alt - int_acf.alt
+                            lat = lat, lon = lon, alt=int_acf.alt, vs=int_acf.vs,
+                            alert = tcas_alert_value,
+                            action = tcas_result,
+                            debug_reason = debug_info,
+                            debug_inhib  = inhib,
+                            danger = my_danger,
+                            alt_diff = my_acf.alt - int_acf.alt
                           }
 
     table.insert(TCAS_sys.acf_data, intruder_data)
@@ -204,11 +272,7 @@ local function update_tcas()
     at_least_one_ra = false
 
     for i=2,n_acfs do
-
-        if get(dr_tcas_targets_ground, i) == 0 then
-             update_tcas_intruder(my_acf, i)
-        end
-
+        update_tcas_intruder(my_acf, i)
     end
     
     TCAS_sys.alert.active = at_least_one_ta or at_least_one_ra
@@ -246,6 +310,11 @@ local function update_sounds()
         return  -- No aural warnings in other modes
     end
     
+    if get(GPWS_mode_stall) == 1 or get(GPWS_at_least_one_triggered) == 1 then
+        set_sound(SOUND_NONE)
+        return  -- No aural warnings if TCAS or STALL sounding
+    end
+
     if TCAS_sys.most_dangerous == nil or TCAS_sys.most_dangerous.alert ~= TCAS_ALERT_RA then
         -- So, no aircraft here triggered an RA, just check for the traffic and that's it
         if at_least_one_ta and (last_tcas_sound == SOUND_NONE or last_tcas_sound == SOUND_TT) and coc_start_time == 0 then
@@ -290,9 +359,9 @@ local function update_sounds()
            or (what_i_want_to_say == SOUND_D_INC and get(Capt_VVI) < -2500) then
             what_i_want_to_say = SOUND_M
         end
-    elseif last_tcas_sound == SOUND_C_INC and (what_i_want_to_say == SOUND_C and get(Capt_VVI) > 2500) then
+    elseif last_tcas_sound == SOUND_C_INC and (what_i_want_to_say == SOUND_C and get(Capt_VVI) > 2000) then
             what_i_want_to_say = SOUND_M
-    elseif last_tcas_sound == SOUND_D_INC and (what_i_want_to_say == SOUND_D and get(Capt_VVI) < -2500) then
+    elseif last_tcas_sound == SOUND_D_INC and (what_i_want_to_say == SOUND_D and get(Capt_VVI) < -2000) then
             what_i_want_to_say = SOUND_M
     end
     

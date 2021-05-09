@@ -370,10 +370,14 @@ function play_gpws_sounds()
         return
     end
 
+    local any_triggered = false
+
     for i,x in ipairs(gpws_sounds) do
         -- For each sound...
         if get(x.source) == 1 then
             -- Ok, we need to play this sound
+
+            any_triggered = true
 
             if x.last_exec == nil then
                 x.last_exec = 0
@@ -389,6 +393,8 @@ function play_gpws_sounds()
             end
         end
     end
+
+    set(GPWS_at_least_one_triggered, any_triggered and 1 or 0)
 
     if get(TIME) - no_sound_before >= 0 then
         if get(GPWS_req_inop) == 1 then
