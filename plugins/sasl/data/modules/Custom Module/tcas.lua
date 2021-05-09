@@ -112,7 +112,8 @@ local function update_status()
     local failure_cond = get(FAILURE_TCAS) == 1
           or (get(FAILURE_ATC_1) == 1 and get(TCAS_atc_sel) == 1)
           or (get(FAILURE_ATC_2) == 1 and get(TCAS_atc_sel) == 2)
-          or get(AC_bus_1_pwrd) == 0
+          or get(AC_bus_1_pwrd) == 0 
+          or (ADIRS_sys[ADIRS_1].ir_status ~= IR_STATUS_ATT_ALIGNED and ADIRS_sys[ADIRS_1].ir_status ~= IR_STATUS_ALIGNED)
 
     if failure_cond then
         set(TCAS_actual_mode, TCAS_MODE_FAULT)

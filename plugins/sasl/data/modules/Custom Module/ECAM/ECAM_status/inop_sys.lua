@@ -29,6 +29,10 @@ local function put_inop_sys_msg_3(messages, dr_1, dr_2, dr_3, t_1, t_2, t_3, tit
     return "UNKWN"    -- Shold not happen
 end
 
+local function base_cond()
+    return (get(Engine_1_avail) == 1 and get(Engine_2_avail) == 1) or (get(Any_wheel_on_ground)  == 0)
+end
+
 local inop_systems_desc = {
 
     -- ANTI-ICE
@@ -97,6 +101,26 @@ local inop_systems_desc = {
      cond_1 = function() return get(FAILURE_BLEED_BMC_1) == 1 or get(DC_shed_ess_pwrd) == 0 end,
      cond_2 = function() return get(FAILURE_BLEED_BMC_2) == 1 or get(DC_bus_2_pwrd) == 0 end,
     },
+    {
+     text = "ENG", text_after="BLEED", nr = 2,
+     cond_1 = function() return get(FAILURE_BLEED_APU_LEAK) == 1 or get(FAILURE_BLEED_ENG_1_hi_temp) == 1 or get(FAILURE_BLEED_ENG_1_hi_press) == 1 or get(FAILURE_BLEED_IP_1_VALVE_STUCK) == 1 end,
+     cond_2 = function() return get(FAILURE_BLEED_ENG_2_hi_temp) == 1 or get(FAILURE_BLEED_ENG_2_hi_press) == 1 or get(FAILURE_BLEED_IP_2_VALVE_STUCK) == 1  end,
+    },
+    {
+     text = "X BLEED", nr = 1,
+     cond_1 = function() return get(FAILURE_BLEED_XBLEED_VALVE_STUCK) == 1 or (get(DC_bus_2_pwrd) == 0 and get(DC_ess_bus_pwrd) == 0) end,
+    },
+    {
+     text = "PACK", nr = 2,
+     cond_1 = function() return get(FAILURE_BLEED_PACK_1_VALVE_STUCK) == 1 end,
+     cond_2 = function() return get(FAILURE_BLEED_PACK_2_VALVE_STUCK) == 1 end,
+    },
+    {
+     text = "PACK REGUL", nr = 2,
+     cond_1 = function() return get(FAILURE_BLEED_PACK_1_REGUL_FAULT) == 1 or get(DC_shed_ess_pwrd) == 0 end,
+     cond_2 = function() return get(FAILURE_BLEED_PACK_2_REGUL_FAULT) == 1 or get(DC_bus_2_pwrd) == 0 end,
+    },
+    
 
     -- APU
     {
@@ -202,6 +226,7 @@ local inop_systems_desc = {
     -- ENG
     {
      text = "REVERSER", nr = 2,
+     all_cond = base_cond,
      cond_1 = function() return get(FAILURE_ENG_REV_FAULT, 1) == 1 or get(Eng_1_FADEC_powered) == 0 or (get(FAILURE_ENG_FADEC_CH1, 1) == 1 and get(FAILURE_ENG_FADEC_CH2, 1) == 1) or get(Hydraulic_G_press) < 1000 end,
      cond_2 = function() return get(FAILURE_ENG_REV_FAULT, 2) == 1 or get(Eng_2_FADEC_powered) == 0 or (get(FAILURE_ENG_FADEC_CH1, 2) == 1 and get(FAILURE_ENG_FADEC_CH2, 2) == 1) or get(Hydraulic_Y_press) < 1000 end,
     },
@@ -210,42 +235,50 @@ local inop_systems_desc = {
     -- F/CTL
     {
      text = "AIL", text_after = "", text_1="L", text_2="R", nr = 2,
+     all_cond = base_cond,
      cond_1 = function() return get(L_aileron_avail) == 0 end,
      cond_2 = function() return get(R_aileron_avail) == 0 end,
     },
     {
      text = "ELEV", text_after = "", text_1="L", text_2="R", nr = 2,
+     all_cond = base_cond,
      cond_1 = function() return get(L_elevator_avail) == 0 end,
      cond_2 = function() return get(R_elevator_avail) == 0 end,
     },
     {
      text = "SPLR", nr = 2, text_1="L1", text_2="L5",
+     all_cond = base_cond,
      cond_1 = function() return get(L_spoiler_1_avail) == 0 end,
      cond_2 = function() return get(L_spoiler_5_avail) == 0 end,
     },
     {
      text = "SPLR", nr = 3, text_1="L2", text_2="L3", text_3="L4",
+     all_cond = base_cond,
      cond_1 = function() return get(L_spoiler_2_avail) == 0 end,
      cond_2 = function() return get(L_spoiler_3_avail) == 0 end,
      cond_3 = function() return get(L_spoiler_4_avail) == 0 end,
     },
     {
      text = "SPLR", nr = 2, text_1="R1", text_2="R5",
+     all_cond = base_cond,
      cond_1 = function() return get(R_spoiler_1_avail) == 0 end,
      cond_2 = function() return get(R_spoiler_5_avail) == 0 end,
     },
     {
      text = "SPLR", nr = 3, text_1="R2", text_2="R3", text_3="R4",
+     all_cond = base_cond,
      cond_1 = function() return get(R_spoiler_2_avail) == 0 end,
      cond_2 = function() return get(R_spoiler_3_avail) == 0 end,
      cond_3 = function() return get(R_spoiler_4_avail) == 0 end,
     },
     {
      text = "SPD BRK", nr = 1,
+     all_cond = base_cond,
      cond_1 = function() return get(R_spoiler_2_avail) == 0 and get(R_spoiler_3_avail) == 0 and get(R_spoiler_4_avail) == 0 and get(L_spoiler_2_avail) == 0 and get(L_spoiler_3_avail) == 0 and get(L_spoiler_4_avail) == 0 end,
     },
     {
      text = "STABILIZER", nr = 1,
+     all_cond = base_cond,
      cond_1 = function() return get(Rudder_avail) == 0 end,
     },
     {
@@ -335,15 +368,15 @@ local inop_systems_desc = {
     -- HYD
     {
      text = "GREEN HYD", nr = 1,
-     cond_1 = function() return get(FAILURE_HYD_G_R_overheat) == 1 or get(Hydraulic_G_press) < 1450 or get(Hydraulic_G_qty) == 0 end,
+     cond_1 = function() return get(FAILURE_HYD_G_R_overheat) == 1 or (base_cond() and get(Hydraulic_G_press) < 1450) or get(Hydraulic_G_qty) == 0 end,
     },
     {
      text = "BLUE HYD", nr = 1,
-     cond_1 = function() return get(FAILURE_HYD_B_R_overheat) == 1 or get(Hydraulic_B_press) < 1450 or get(Hydraulic_B_qty) == 0 end,
+     cond_1 = function() return get(FAILURE_HYD_B_R_overheat) == 1 or (base_cond() and get(Hydraulic_B_press) < 1450) or get(Hydraulic_B_qty) == 0 end,
     },
     {
      text = "YELLOW HYD", nr = 1,
-     cond_1 = function() return get(FAILURE_HYD_Y_R_overheat) == 1 or get(Hydraulic_Y_press) < 1450 or get(Hydraulic_Y_qty) == 0 end,
+     cond_1 = function() return get(FAILURE_HYD_Y_R_overheat) == 1 or (base_cond() and get(Hydraulic_Y_press) < 1450) or get(Hydraulic_Y_qty) == 0 end,
     },
     {
      text = "B ELEC PUMP", nr = 1,
@@ -363,6 +396,7 @@ local inop_systems_desc = {
     },
     {
      text = "PTU", nr = 1,
+     all_cond = base_cond,
      cond_1 = function() return get(FAILURE_HYD_PTU) == 1 or get(FAILURE_HYD_G_R_overheat) == 1 or get(FAILURE_HYD_Y_R_overheat) == 1 or ((get(Hydraulic_Y_press) < 1450 or get(Hydraulic_Y_qty) == 0) and (get(Hydraulic_G_press) < 1450 or get(Hydraulic_G_qty) == 0)) or get(DC_bus_2_pwrd) == 0 end,
     },
     {
@@ -377,6 +411,7 @@ local inop_systems_desc = {
     -- GEAR
     {
      text = "N/W STEER", nr = 1,
+     all_cond = base_cond,
      cond_1 = function() return get(FAILURE_GEAR_NWS) == 1 or get(Nosewheel_Steering_working) == 0 or (get(FAILURE_GEAR_LGIU1) == 1  and get(FAILURE_GEAR_LGIU2) == 1 ) end,
     },
     {
@@ -420,8 +455,8 @@ local inop_systems_desc = {
             (
             (get(FAILURE_ATC_1) == 1 or get(DC_shed_ess_pwrd) == 0) and
             (get(FAILURE_ATC_2) == 1 or get(AC_bus_2_pwrd) == 0)
-            ) or
-            (get(FAILURE_IR[1]) == 1 or (get(AC_ess_bus_pwrd) == 0 and get(HOT_bus_2_pwrd) == 0))
+            )
+            or (ADIRS_sys[ADIRS_1].ir_status ~= IR_STATUS_ATT_ALIGNED and ADIRS_sys[ADIRS_1].ir_status ~= IR_STATUS_ALIGNED)
      end,
     },
     {
@@ -477,7 +512,7 @@ local inop_systems_desc = {
     -- ANTI-ICE
     {
      text = "WING ANTI ICE", nr = 1,
-     cond_1 = function() return get(FAILURE_AI_Wing_L_valve_stuck) == 1 or get(FAILURE_AI_Wing_L_valve_stuck) == 1 end,
+     cond_1 = function() return get(FAILURE_AI_Wing_L_valve_stuck) == 1 or get(FAILURE_AI_Wing_L_valve_stuck) == 1 or get(FAILURE_BLEED_XBLEED_VALVE_STUCK) == 1 or get(FAILURE_BLEED_IP_1_VALVE_STUCK) == 1  or get(FAILURE_BLEED_IP_2_VALVE_STUCK) == 1  end,
     },
     
     -- COND
@@ -505,14 +540,15 @@ local inop_systems_desc = {
 
 function ECAM_status_get_inop_sys()
 
-        local messages = {}
+    local messages = {}
 
-        -- FBW
-        if get(FBW_total_control_law) < FBW_NORMAL_LAW then
-            table.insert(messages, "F/CTL PROT")
-        end
+    -- FBW
+    if base_cond() and get(FBW_total_control_law) < FBW_NORMAL_LAW then
+        table.insert(messages, "F/CTL PROT")
+    end
 
-        for l,x in pairs(inop_systems_desc) do
+    for l,x in pairs(inop_systems_desc) do
+        if x.all_cond == nil or x.all_cond() then
             if x.nr == 1 and x.cond_1() then
                 table.insert(messages, x.text)
             elseif x.nr == 2 and (x.cond_1() or x.cond_2()) then
@@ -530,9 +566,10 @@ function ECAM_status_get_inop_sys()
                 table.insert(messages, msg)
             end
         end
-
-
-
-        return messages
     end
+
+
+
+    return messages
+end
     
