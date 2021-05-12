@@ -242,7 +242,7 @@ function update_mode_3(alt, vs)
         set(GPWS_mode_is_active, 1, 3)
     end
     
-    local flap_gear_cond = get(Gear_handle) == 0 or is_flap_in_landing()
+    local flap_gear_cond = get(Gear_handle) == 0 and not is_flap_in_landing()
     
     if mode_3_armed and -vs >= alt/10 and flap_gear_cond then
         set(GPWS_mode_3_dontsink, 1)
