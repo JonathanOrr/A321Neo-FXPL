@@ -1,4 +1,124 @@
+-------------------------------------------------------------------------------
+-- A32NX Freeware Project
+-- Copyright (C) 2020
+-------------------------------------------------------------------------------
+-- LICENSE: GNU General Public License v3.0
+--
+--    This program is free software: you can redistribute it and/or modify
+--    it under the terms of the GNU General Public License as published by
+--    the Free Software Foundation, either version 3 of the License, or
+--    (at your option) any later version.
+--
+--    Please check the LICENSE file in the root of the repository for further
+--    details or check <https://www.gnu.org/licenses/>
+-------------------------------------------------------------------------------
+-- File: lateral_ctl.lua
+-- Short description: Lateral control functions
+-------------------------------------------------------------------------------
+
 --AILERONS--
+local aileron_filter_data = {
+    {cut_frequency = 3, x=0},   -- LEFT
+    {cut_frequency = 3, x=0}    -- RIGHT
+}
+
+local ailerons_max_def = 25        -- in °/s
+local ailerons_max_actuator = 21.5 -- in mm
+local sin_ailerons_max_def = math.sin(math.rad(ailerons_max_def))
+local aileron_curr_spd = {0,0}
+
+local function aileron_model_deg_to_mm(deg)
+    deg = Math_clamp(deg, -ailerons_max_def, ailerons_max_def)
+    return math.sin(math.rad(deg)) / sin_ailerons_max_def * ailerons_max_actuator
+end
+
+local function aileron_model_mm_to_deg(mm)
+    mm = Math_clamp(mm, -ailerons_max_actuator, ailerons_max_actuator)
+    return math.deg(math.asin(sin_ailerons_max_def * mm / ailerons_max_actuator))
+end
+
+
+local function aileron_model_spd(mm_target, mm_actual, ail_pos)
+    local IAS = get(IAS)
+    local A   = ail_pos
+    local rho = get(Weather_Rho)
+    local Cd  = 1
+    local Aail= 1.016
+     
+    local Ad = Aail * math.sin(math.rad(math.abs(A)))
+    local Fd = 0.5*rho * (IAS*0.514444)^2 * Cd * Ad
+    
+    local aero_forces = math.abs(get(Flightmodel_aero_norm_forces) / 900 * Aail)
+
+
+    local Ftot = aero_forces / 1e4
+
+    if math.abs(mm_target) > math.abs(mm_actual) then   -- Add the drag forces in this case
+        Ftot = Ftot + Fd / 1e4
+    end
+
+    local max_speed = 83.93358 - (2.031154/-0.8271113)*(1 - math.exp(0.8271113*Ftot))
+    
+    return max_speed
+end
+
+
+local function compute_acceleration_space(vnow, vtarget, acceleration)  -- distance where to start decelerating
+    local delta_time = (vtarget - vnow) / acceleration
+    return (vnow + vtarget) / (2 * delta_time)
+end
+
+local function aileron_actuation(request_pos, which_one)   -- which one: 1: LEFT, 2: RIGHT
+
+    local curr_pos    = which_one == 1 and get(Left_aileron) or get(Right_aileron)
+    local curr_pos_mm = aileron_model_deg_to_mm(curr_pos)
+    local req_pos_mm  = aileron_model_deg_to_mm(request_pos)
+    
+    local max_speed = aileron_model_spd(req_pos_mm, curr_pos_mm, curr_pos)
+
+    aileron_filter_data[which_one].x = max_speed
+    local target_max_speed = math.abs(low_pass_filter(aileron_filter_data[which_one]))
+
+    local max_hyd = math.max(get(Hydraulic_B_press), get(Hydraulic_G_press))
+    local max_spd_aft_hyd = Math_rescale(0, 0, 3000, 89, max_hyd)
+
+    if curr_pos < request_pos then
+        target_speed = math.min(max_spd_aft_hyd, target_max_speed)
+    elseif curr_pos > request_pos then
+        target_speed = -math.min(max_spd_aft_hyd, target_max_speed)
+    else
+        target_speed = 0
+    end
+
+    if target_speed ~= 0 and math.abs(curr_pos-request_pos) < 10 then -- Slow down near the target
+        target_speed = target_speed * math.abs(curr_pos-request_pos)/10
+    end
+
+    if (get(Hydraulic_B_press) < 1400 or get(Hydraulic_G_press) < 1400) then
+        -- If (at least) one actuator is failed, then we don't have dampening
+        aileron_curr_spd[which_one] = target_speed
+    else
+        local A_aileron = 400
+        aileron_curr_spd[which_one] = Set_linear_anim_value(aileron_curr_spd[which_one], target_speed, -100, 100, A_aileron)
+    end
+    
+    -- Failures (stuck)
+     aileron_curr_spd[which_one] = aileron_curr_spd[which_one] * (1 - get(which_one == 1 and FAILURE_FCTL_LAIL or FAILURE_FCTL_RAIL))
+
+    local ail_dataref = which_one == 1 and Left_aileron or Right_aileron
+
+    if (get(Hydraulic_B_press) < 1400 and get(Hydraulic_G_press) < 1400) then
+        -- Return to neutral depending on IAS (no hyd system)
+        local pos = Math_rescale(0, ailerons_max_def, 100, 0, get(IAS))
+        Set_dataref_linear_anim(ail_dataref, pos, -ailerons_max_def, ailerons_max_def, 10)
+    else
+        local actuator_value = curr_pos_mm + aileron_curr_spd[which_one] * get(DELTA_TIME)  -- DO NOT use the set_anim_linear here: the speed can be negative!
+        actuator_value = Math_clamp(actuator_value, -ailerons_max_actuator, ailerons_max_actuator)
+        set(ail_dataref, aileron_model_mm_to_deg(actuator_value))
+    end
+end
+
+
 function Ailerons_control(lateral_input, has_florence_kit, ground_spoilers_mode)
     --hyd source B or G (1450PSI)
     --reversion of flight computers: ELAC 1 --> 2
@@ -60,13 +180,12 @@ function Ailerons_control(lateral_input, has_florence_kit, ground_spoilers_mode)
         r_aileron_travel_target = 0
     end
 
-    --hydralics power detection-Both HYD not fully/ not working
-    l_aileron_travel_target = Math_rescale(0, Math_rescale(0, ailerons_max_def, no_hyd_recenter_ias, -get(Alpha), get(IAS)), 1450, l_aileron_travel_target, get(Hydraulic_B_press) + get(Hydraulic_G_press))
-    r_aileron_travel_target = Math_rescale(0, Math_rescale(0, ailerons_max_def, no_hyd_recenter_ias, -get(Alpha), get(IAS)), 1450, r_aileron_travel_target, get(Hydraulic_B_press) + get(Hydraulic_G_press))
-
     --output to the surfaces
-    set(Left_aileron,  Set_anim_value_linear_range(get(Left_aileron),  l_aileron_travel_target, -ailerons_max_def, ailerons_max_def, l_aileron_actual_speed, 5))
-    set(Right_aileron, Set_anim_value_linear_range(get(Right_aileron), r_aileron_travel_target, -ailerons_max_def, ailerons_max_def, r_aileron_actual_speed, 5))
+    aileron_actuation(l_aileron_travel_target, 1)
+    aileron_actuation(r_aileron_travel_target, 2)
+    
+    --set(Left_aileron,  Set_anim_value_linear_range(get(Left_aileron),  l_aileron_travel_target, -ailerons_max_def, ailerons_max_def, l_aileron_actual_speed, 5))
+    --set(Right_aileron, Set_anim_value_linear_range(get(Right_aileron), r_aileron_travel_target, -ailerons_max_def, ailerons_max_def, r_aileron_actual_speed, 5))
 end
 
 --permanent variables
