@@ -4,7 +4,8 @@ local wait_for_reverse_toggle = 0
 local FLEX_MCT_interval = {0.85, 0.8}
 local CL_interval = {0.7, 0.65}
 
-local thrust_in_reverse = false -- Switch
+local thrust_in_reverse_L = false -- Toggle / Hold
+local thrust_in_reverse_R = false -- Toggle / Hold
 local manual_reverse_L = false  -- Manual hw throttle reverse
 local manual_reverse_R = false  -- Manual hw throttle reverse
 
@@ -20,11 +21,7 @@ function Lever_fwd(phase)
     if phase == SASL_COMMAND_BEGIN then
         --sync throttle (avg)--
         local avg_lever_pos = 0
-        if thrust_in_reverse == false then
-            avg_lever_pos = Math_clamp((get(Cockpit_throttle_lever_L) + get(Cockpit_throttle_lever_R)) / 2, 0, 1)
-        else
-            avg_lever_pos = Math_clamp((get(Cockpit_throttle_lever_L) + get(Cockpit_throttle_lever_R)) / 2, -1, 0)
-        end
+        avg_lever_pos = Math_clamp((get(Cockpit_throttle_lever_L) + get(Cockpit_throttle_lever_R)) / 2, -1, 1)
         set(Cockpit_throttle_lever_L, avg_lever_pos)
         set(Cockpit_throttle_lever_R, avg_lever_pos)
 
@@ -37,8 +34,9 @@ function Lever_fwd(phase)
         end
 
         wait_for_reverse_toggle = 0
-        if get(Cockpit_throttle_lever_L) == 0 and get(Cockpit_throttle_lever_R) == 0 and thrust_in_reverse == true then
-            thrust_in_reverse = false
+        if get(Cockpit_throttle_lever_L) == 0 and get(Cockpit_throttle_lever_R) == 0 and (thrust_in_reverse_L == true or thrust_in_reverse_R == true) then
+            thrust_in_reverse_L = false
+            thrust_in_reverse_R = false
             wait_for_reverse_toggle = 0.15
         end
     end
@@ -68,11 +66,15 @@ function Lever_fwd(phase)
                     wait_for_detent = 0.8
                 end
             else
-                if thrust_in_reverse == false then
+                if thrust_in_reverse_L == false then
                     set(Cockpit_throttle_lever_L, Math_clamp(get(Cockpit_throttle_lever_L) + 0.4 * get(DELTA_TIME), 0, 1))
-                    set(Cockpit_throttle_lever_R, Math_clamp(get(Cockpit_throttle_lever_R) + 0.4 * get(DELTA_TIME), 0, 1))
                 else
                     set(Cockpit_throttle_lever_L, Math_clamp(get(Cockpit_throttle_lever_L) + 0.4 * get(DELTA_TIME), -1, 0))
+                end
+
+                if thrust_in_reverse_R == false then
+                    set(Cockpit_throttle_lever_R, Math_clamp(get(Cockpit_throttle_lever_R) + 0.4 * get(DELTA_TIME), 0, 1))
+                else
                     set(Cockpit_throttle_lever_R, Math_clamp(get(Cockpit_throttle_lever_R) + 0.4 * get(DELTA_TIME), -1, 0))
                 end
             end
@@ -94,11 +96,7 @@ function Lever_revs(phase)
     if phase == SASL_COMMAND_BEGIN then
         --sync throttle (avg)--
         local avg_lever_pos = 0
-        if thrust_in_reverse == false then
-            avg_lever_pos = Math_clamp((get(Cockpit_throttle_lever_L) + get(Cockpit_throttle_lever_R)) / 2, 0, 1)
-        else
-            avg_lever_pos = Math_clamp((get(Cockpit_throttle_lever_L) + get(Cockpit_throttle_lever_R)) / 2, -1, 0)
-        end
+        avg_lever_pos = Math_clamp((get(Cockpit_throttle_lever_L) + get(Cockpit_throttle_lever_R)) / 2, -1, 1)
         set(Cockpit_throttle_lever_L, avg_lever_pos)
         set(Cockpit_throttle_lever_R, avg_lever_pos)
 
@@ -111,8 +109,9 @@ function Lever_revs(phase)
         end
 
         wait_for_reverse_toggle = 0
-        if get(Cockpit_throttle_lever_L) == 0 and get(Cockpit_throttle_lever_R) == 0 and thrust_in_reverse == false then
-            thrust_in_reverse = true
+        if get(Cockpit_throttle_lever_L) == 0 and get(Cockpit_throttle_lever_R) == 0 and (thrust_in_reverse_R == false or thrust_in_reverse_L == false) then
+            thrust_in_reverse_L = true
+            thrust_in_reverse_R = true
             wait_for_reverse_toggle = 0.15
         end
     end
@@ -142,11 +141,14 @@ function Lever_revs(phase)
                     wait_for_detent = 0.8
                 end
             else
-                if thrust_in_reverse == false then
+                if thrust_in_reverse_L == false then
                     set(Cockpit_throttle_lever_L, Math_clamp(get(Cockpit_throttle_lever_L) - 0.4 * get(DELTA_TIME), 0, 1))
-                    set(Cockpit_throttle_lever_R, Math_clamp(get(Cockpit_throttle_lever_R) - 0.4 * get(DELTA_TIME), 0, 1))
                 else
                     set(Cockpit_throttle_lever_L, Math_clamp(get(Cockpit_throttle_lever_L) - 0.4 * get(DELTA_TIME), -1, 0))
+                end
+                if thrust_in_reverse_R == false then
+                    set(Cockpit_throttle_lever_R, Math_clamp(get(Cockpit_throttle_lever_R) - 0.4 * get(DELTA_TIME), 0, 1))
+                else
                     set(Cockpit_throttle_lever_R, Math_clamp(get(Cockpit_throttle_lever_R) - 0.4 * get(DELTA_TIME), -1, 0))
                 end
             end
@@ -166,14 +168,16 @@ end
 
 function Toggle_reverse(phase)
     if phase == SASL_COMMAND_BEGIN then
-        if thrust_in_reverse == false then
+        if thrust_in_reverse_L == false or thrust_in_reverse_R == false then
             if get(Cockpit_throttle_lever_L) <= 0.15 and get(Cockpit_throttle_lever_R) <= 0.15 then
-                thrust_in_reverse = true
+                thrust_in_reverse_L = true
+                thrust_in_reverse_R = true
                 set(Cockpit_throttle_lever_L, 0)
                 set(Cockpit_throttle_lever_R, 0)
             end
-        elseif thrust_in_reverse == true then
-            thrust_in_reverse = false
+        else
+            thrust_in_reverse_L = false
+            thrust_in_reverse_R = false
             set(Cockpit_throttle_lever_L, 0)
             set(Cockpit_throttle_lever_R, 0)
         end
@@ -184,32 +188,42 @@ end
 
 function Hold_reverse_all(phase)
     if phase == SASL_COMMAND_BEGIN or phase == SASL_COMMAND_CONTINUE then
-        thrust_in_reverse = true
+        thrust_in_reverse_L = true
+        thrust_in_reverse_R = true
         set(Cockpit_throttle_lever_L, -1)
         set(Cockpit_throttle_lever_R, -1)
     elseif phase == SASL_COMMAND_END then
-        thrust_in_reverse = false
-        set(Cockpit_throttle_lever_L, 0)
-        set(Cockpit_throttle_lever_R, 0)
+        thrust_in_reverse_L = false
+        thrust_in_reverse_R = false
+        set(Cockpit_throttle_lever_L, 0.01)
+        set(Cockpit_throttle_lever_R, 0.01)
     end
+    
+    return 1--inhibites the x-plane original command
 end
 
 function Hold_reverse_single(phase, n)
     if phase == SASL_COMMAND_BEGIN or phase == SASL_COMMAND_CONTINUE then
         if n == 1 then
-            set(L_sim_throttle, -1)
+            thrust_in_reverse_L = true
+            set(Cockpit_throttle_lever_L, -1)
         end
         if n == 2 then
-            set(R_sim_throttle, -1)
+            thrust_in_reverse_R = true
+            set(Cockpit_throttle_lever_R, -1)
         end
     elseif phase == SASL_COMMAND_END then
         if n == 1 then
-            set(L_sim_throttle, 0)
+            thrust_in_reverse_L = false
+            set(Cockpit_throttle_lever_L, 0.01)
         end
         if n == 2 then
-            set(L_sim_throttle, 0)
+            thrust_in_reverse_R = false
+            set(Cockpit_throttle_lever_R, 0.01)
         end
     end
+
+    return 1--inhibites the x-plane original command
 end
 
 local function can_reverse_open(eng)
@@ -246,7 +260,7 @@ local function can_reverse_open(eng)
 end
 
 local function update_prop_mode(manual_reverse_L, manual_reverse_R)
-    if ((manual_reverse_L or thrust_in_reverse) and can_reverse_open(1)) or get(FAILURE_ENG_REV_UNLOCK, 1) == 1 then
+    if ((manual_reverse_L or thrust_in_reverse_L) and can_reverse_open(1)) or get(FAILURE_ENG_REV_UNLOCK, 1) == 1 then
         set(Override_eng_1_prop_mode, 3)
     else
         set(Override_eng_1_prop_mode, 1)
@@ -256,7 +270,7 @@ local function update_prop_mode(manual_reverse_L, manual_reverse_R)
         end
     end
 
-    if ((manual_reverse_R or thrust_in_reverse) and can_reverse_open(2)) or get(FAILURE_ENG_REV_UNLOCK, 2) == 1 then
+    if ((manual_reverse_R or thrust_in_reverse_R) and can_reverse_open(2)) or get(FAILURE_ENG_REV_UNLOCK, 2) == 1 then
         set(Override_eng_2_prop_mode, 3)
     else
         set(Override_eng_2_prop_mode, 1)
@@ -274,12 +288,12 @@ end
 
 function update_levers()
 
-    local L_hw_throttle_curr = get(L_sim_throttle) * (thrust_in_reverse and -1 or 1)
-    local R_hw_throttle_curr = get(R_sim_throttle) * (thrust_in_reverse and -1 or 1)
+    local L_hw_throttle_curr = get(L_sim_throttle) * (thrust_in_reverse_L and -1 or 1)
+    local R_hw_throttle_curr = get(R_sim_throttle) * (thrust_in_reverse_R and -1 or 1)
 
     if prev_joy_L ~= L_hw_throttle_curr then
         prev_joy_L = L_hw_throttle_curr
-        set(Cockpit_throttle_lever_L, prev_joy_L*(thrust_in_reverse and -1 or 1) )
+        set(Cockpit_throttle_lever_L, prev_joy_L*(thrust_in_reverse_L and -1 or 1) )
         if prev_joy_L < 0 then
             manual_reverse_L = true
         else
@@ -288,7 +302,7 @@ function update_levers()
     end
     if prev_joy_R ~= R_hw_throttle_curr then
         prev_joy_R = R_hw_throttle_curr
-        set(Cockpit_throttle_lever_R, prev_joy_R *(thrust_in_reverse and -1 or 1))
+        set(Cockpit_throttle_lever_R, prev_joy_R *(thrust_in_reverse_R and -1 or 1))
         if prev_joy_R < 0 then
             manual_reverse_R = true
         else
