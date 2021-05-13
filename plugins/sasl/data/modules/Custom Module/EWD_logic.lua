@@ -319,13 +319,13 @@ local right_secondary_failures = {
 
 }
 
-local left_current_message = nil;   -- It contains (if exists) the first message group *clearable*
+local left_current_message = nil    -- It contains (if exists) the first message group *clearable*
 local left_was_clearing = false     -- True when a warning/caution message exists and status page not yet displayed
-local land_asap = false;            -- If true, the LAND ASAP message appears (according to flight phase)
-local land_asap_amber = false;            -- If true, the LAND ASAP amber message appears (according to flight phase)
+local land_asap = false             -- If true, the LAND ASAP message appears (according to flight phase)
+local land_asap_amber = false             -- If true, the LAND ASAP amber message appears (according to flight phase)
 
-local rcl_start_press_time = 0;     -- The time the user started to press RCL button (this is needed to compute how many seconds elapsed for a long-press)
-local flight_phase_not_one = false; -- See function check_reset() 
+local rcl_start_press_time = 0     -- The time the user started to press RCL button (this is needed to compute how many seconds elapsed for a long-press)
+local flight_phase_not_one = false  -- See function check_reset() 
 
 -- PriorityQueue external implementation (modified)
 -- Source: https://rosettacode.org/wiki/Priority_queue#Lua
@@ -635,6 +635,9 @@ local function update_left_list()
     if get(EWD_flight_phase) == 0 then  -- Don't update EWD is the flight phase is unknown. This should not happen.
         return
     end
+    
+    land_asap = false
+    land_asap_amber = false
 
     set(AtLeastOneMasterWarning, 0)
     set(AtLeastOneMasterCaution, 0)
@@ -789,9 +792,18 @@ local function check_cleared_list()
 
     -- Let's loop backward so that the remove of the item of the table is safe
     for i=#left_messages_list_cleared,1,-1 do
-        if not left_messages_list_cleared[i].is_active() then
+        local m = left_messages_list_cleared[i]
+        if not m.is_active() then
             table.insert(left_messages_list, left_messages_list_cleared[i])
             table.remove(left_messages_list_cleared, i)
+        else
+            if m.land_asap ~= nil and m.land_asap == true then
+                land_asap = true
+            end
+            
+            if m.land_asap_amber ~= nil and m.land_asap_amber then
+                land_asap_amber = true
+            end
         end
     end
 
@@ -847,10 +859,12 @@ function update()
     set(EWD_arrow_overflow, 0)
     update_left_list()
     publish_left_list()
+
+    check_cleared_list()
+
     update_right_list()
     publish_right_list()
     
-    check_cleared_list()
     check_reset()
 
     perf_measure_stop("EWD_logic:update()")
@@ -905,7 +919,7 @@ function ewd_recall_button_handler(phase)
                 table.insert(left_messages_list, msg)
             end
 
-            left_messages_list_cleared = {}            
+            left_messages_list_cleared = {}
         
         end
     end
