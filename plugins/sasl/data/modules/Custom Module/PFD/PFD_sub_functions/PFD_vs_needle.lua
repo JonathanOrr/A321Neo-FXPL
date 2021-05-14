@@ -81,7 +81,9 @@ function PFD_draw_vs_needle(PFD_table)
     end
 
     if adirs_is_vs_ok(PFD_table.Screen_ID) == false then
-        sasl.gl.drawTexture(PFD_vs_mask, 0, 0, 900, 900, PFD_TAPE_GREY)
+        sasl.gl.drawTexture(PFD_vs_mask, 831, 155, 53, 575, PFD_TAPE_GREY)
+        sasl.gl.drawTexture(PFD_vs_shader, 831, 372, 53, 357, {1,1,1,PFD_SHADE_INTENSITY}) --The shader, ask Henrick if you don't know what is this
+        
         if PFD_table.VS_blink_now == true then
             sasl.gl.drawText(Font_AirbusDUL_vert, size[1]/2+392, size[2]/2-10, "V/S", 42, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
         end
@@ -89,7 +91,8 @@ function PFD_draw_vs_needle(PFD_table)
         return
     end
 
-    sasl.gl.drawTexture(PFD_vs_bgd, 0, 0, 900, 900, ECAM_WHITE)
+    sasl.gl.drawTexture(PFD_vs_bgd, 831, 155, 53, 575, ECAM_WHITE)
+    sasl.gl.drawTexture(PFD_vs_shader, 831, 372, 53, 357, {1,1,1,PFD_SHADE_INTENSITY}) --The shader, ask Henrick if you don't know what is this
 
     draw_needle(PFD_table)
 end

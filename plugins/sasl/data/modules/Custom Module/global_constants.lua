@@ -16,6 +16,9 @@
 -- Short description: This file contains the global constants
 -------------------------------------------------------------------------------
 
+--pfd shader intensity
+PFD_SHADE_INTENSITY = 0.7 --transparency of the shader
+
 --colors
 ECAM_WHITE =  {1.0, 1.0, 1.0}
 ECAM_LINE_GREY = {62/255, 74/255, 91/255}

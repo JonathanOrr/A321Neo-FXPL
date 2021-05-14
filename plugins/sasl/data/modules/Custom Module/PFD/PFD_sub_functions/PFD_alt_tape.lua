@@ -64,6 +64,7 @@ function PFD_draw_alt_tape(PFD_table)
 
     sasl.gl.drawRectangle(size[1]/2+217, size[2]/2-244, 75, 212, PFD_TAPE_GREY)
     sasl.gl.drawRectangle(size[1]/2+217, size[2]/2+19, 75, 210, PFD_TAPE_GREY)
+    sasl.gl.drawTexture(PFD_alt_shader, 667, 336, 76, 342, {1,1,1,PFD_SHADE_INTENSITY}) --The shader, ask Henrick if you don't know what is this
 
     local altitude = adirs_is_gps_alt_visible(PFD_table.Screen_ID) and adirs_get_gps_alt(PFD_table.Screen_ID) or adirs_get_alt(PFD_table.Screen_ID)
 
