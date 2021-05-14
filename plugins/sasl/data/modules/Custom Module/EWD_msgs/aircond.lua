@@ -291,3 +291,39 @@ MessageGroup_AIRCOND_TRIM_AIR_SYS_FAULT = {
         return is_active_in({PHASE_ELEC_PWR, PHASE_1ST_ENG_ON, PHASE_AIRBONE, PHASE_BELOW_80_KTS, PHASE_2ND_ENG_OFF})
     end
 }
+
+
+
+----------------------------------------------------------------------------------------------------
+-- CAUTION: REGUL FAULT
+----------------------------------------------------------------------------------------------------
+
+MessageGroup_AIRCOND_ZONE_REG_FAULT = {
+
+    shown = false,
+
+    text  = function()
+                return "COND"
+            end,
+    color = function()
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_1,
+
+    sd_page = ECAM_PAGE_COND,
+
+    messages = {
+        {
+            text = function() return "     ZONE REGUL FAULT" end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        }
+    },
+    is_active = function()
+        return get(FAILURE_AIRCOND_REG_1) == 1 and get(FAILURE_AIRCOND_REG_2) == 1
+    end,
+    is_inhibited = function()
+        return is_active_in({PHASE_ELEC_PWR, PHASE_1ST_ENG_ON, PHASE_AIRBONE, PHASE_BELOW_80_KTS, PHASE_2ND_ENG_OFF})
+    end
+}

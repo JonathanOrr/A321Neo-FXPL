@@ -69,6 +69,14 @@ function draw_cond_page()
     if get(FAILURE_AIRCOND_FAN_AFT) == 1 then
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2+120, size[2]/2+330, "FAN", 38, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
+    
+    local num_failed = get(FAILURE_AIRCOND_REG_1) + get(FAILURE_AIRCOND_REG_2)
+    if num_failed == 2 then
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-50, size[2]/2+360, "PACK REG", 38, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+    elseif num_failed == 1 then
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-50, size[2]/2+360, "ALTN MODE", 38, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+    end
+    
     --cargo--
     --actual temperature
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2+168, size[2]/2-59, Round(get(Aft_cargo_temp),0), 32, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)

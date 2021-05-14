@@ -304,7 +304,7 @@ MessageGroup_FCTL_LR_ELEV_FAULT_DOUBLE = {
                 return COL_WARNING
             end,
 
-    priority = PRIORITY_LEVEL_2,
+    priority = PRIORITY_LEVEL_3,
 
     thr_lvl_cond = 0,
 
@@ -405,4 +405,201 @@ MessageGroup_FCTL_STAB_JAM = {
     end
 
 }
+
+
+--------------------------------------------------------------------------------
+-- CAUTION: SPLR FAULT
+--------------------------------------------------------------------------------
+
+local function any_extented_at(angle)
+    if get(FAILURE_FCTL_LSPOIL_1) == 1 and get(Left_spoiler_1) >= angle then
+        return true
+    end
+    if get(FAILURE_FCTL_LSPOIL_2) == 1 and get(Left_spoiler_2) >= angle then
+        return true
+    end
+    if get(FAILURE_FCTL_LSPOIL_3) == 1 and get(Left_spoiler_3) >= angle then
+        return true
+    end
+    if get(FAILURE_FCTL_LSPOIL_4) == 1 and get(Left_spoiler_4) >= angle then
+        return true
+    end
+    if get(FAILURE_FCTL_LSPOIL_5) == 1 and get(Left_spoiler_5) >= angle then
+        return true
+    end
+    if get(FAILURE_FCTL_RSPOIL_1) == 1 and get(Right_spoiler_1) >= angle then
+        return true
+    end
+    if get(FAILURE_FCTL_RSPOIL_2) == 1 and get(Right_spoiler_2) >= angle then
+        return true
+    end
+    if get(FAILURE_FCTL_RSPOIL_3) == 1 and get(Right_spoiler_3) >= angle then
+        return true
+    end
+    if get(FAILURE_FCTL_RSPOIL_4) == 1 and get(Right_spoiler_4) >= angle then
+        return true
+    end
+    if get(FAILURE_FCTL_RSPOIL_5) == 1 and get(Right_spoiler_5) >= angle then
+        return true
+    end
+
+    return false
+end
+
+MessageGroup_FCTL_SPLR_FAULT = {
+
+    shown = false,
+
+    text  = function()
+                return "F/CTL"
+            end,
+    color = function()
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+
+    messages = {
+        {
+            text = function()
+                return "      SPLR FAULT"
+            end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        },
+        {
+            text = function() return " - OPT SPD.....G.DOT+10KT" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return any_extented_at(24) end
+        },
+        {
+            text = function() return " - AP..........DO NOT USE" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return any_extented_at(24) end
+        },
+        {
+            text = function() return " - SPD BRK.....DO NOT USE" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return get(FAILURE_FCTL_LSPOIL_3) + get(FAILURE_FCTL_LSPOIL_4) + get(FAILURE_FCTL_RSPOIL_3) + get(FAILURE_FCTL_RSPOIL_4) > 0 end
+        },
+        {
+            text = function() return " FUEL CONSUMPT INCRSD" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return any_extented_at(2.5) end
+        },
+        {
+            text = function() return " FMS PRED UNRELIABLE" end,
+            color = function() return COL_ACTIONS end,
+            is_active = function() return any_extented_at(2.5) end
+        }
+    },
+
+    sd_page = ECAM_PAGE_FCTL,
+
+    is_active = function()
+        return get(FAILURE_FCTL_LSPOIL_1) + get(FAILURE_FCTL_LSPOIL_2) + get(FAILURE_FCTL_LSPOIL_3)
+             + get(FAILURE_FCTL_LSPOIL_4) + get(FAILURE_FCTL_LSPOIL_5)
+             + get(FAILURE_FCTL_RSPOIL_1) + get(FAILURE_FCTL_RSPOIL_2) + get(FAILURE_FCTL_RSPOIL_3)
+             + get(FAILURE_FCTL_RSPOIL_4) + get(FAILURE_FCTL_RSPOIL_5) > 0
+    end,
+
+    is_inhibited = function()
+        return is_inibithed_in({PHASE_1ST_ENG_TO_PWR, PHASE_ABOVE_80_KTS, PHASE_LIFTOFF, PHASE_FINAL})
+    end
+
+}
+
+--------------------------------------------------------------------------------
+-- CAUTION: GND SPLR 5 FAULT
+--------------------------------------------------------------------------------
+
+MessageGroup_FCTL_GND_SPLR_5_FAULT = {
+
+    shown = false,
+
+    text  = function()
+                return "F/CTL"
+            end,
+    color = function()
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+
+    messages = {
+        {
+            text = function()
+                return "      GND SPLR 5 FAULT"
+            end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return true end
+        }
+    },
+
+    sd_page = ECAM_PAGE_FCTL,
+
+    is_active = function()
+        return get(SEC_2_status) == 0 and get(SEC_1_status) + get(SEC_2_status) + get(SEC_3_status) >= 2
+    end,
+
+    is_inhibited = function()
+        return is_inibithed_in({PHASE_ELEC_PWR, PHASE_1ST_ENG_ON, PHASE_1ST_ENG_TO_PWR, PHASE_ABOVE_80_KTS, PHASE_LIFTOFF, PHASE_BELOW_80_KTS, PHASE_2ND_ENG_OFF})
+    end
+
+}
+
+--------------------------------------------------------------------------------
+-- CAUTION: GND SPLR 1+2/3+4/() FAULT
+--------------------------------------------------------------------------------
+
+MessageGroup_FCTL_GND_SPLR_1234_FAULT = {
+
+    shown = false,
+
+    text  = function()
+                return "F/CTL"
+            end,
+    color = function()
+                return COL_CAUTION
+            end,
+
+    priority = PRIORITY_LEVEL_2,
+
+    messages = {
+        {
+            text = function()
+                return "      GND SPLR 1+2 FAULT"
+            end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return get(SEC_3_status) == 0 and get(SEC_1_status) == 1 and get(SEC_2_status) == 1 end
+        },
+        {
+            text = function()
+                return "      GND SPLR 3+4 FAULT"
+            end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return get(SEC_1_status) == 0 and get(SEC_3_status) == 1 and get(SEC_2_status) == 1 end
+        },
+        {
+            text = function()
+                return "      GND SPLR FAULT"
+            end,
+            color = function() return COL_CAUTION end,
+            is_active = function() return get(SEC_1_status) + get(SEC_2_status) + get(SEC_3_status) < 2 end
+        }
+    },
+
+    sd_page = ECAM_PAGE_FCTL,
+
+    is_active = function()
+        return get(SEC_3_status) == 0 or get(SEC_1_status) == 0
+    end,
+
+    is_inhibited = function()
+        return is_inibithed_in({PHASE_ELEC_PWR, PHASE_1ST_ENG_ON, PHASE_1ST_ENG_TO_PWR, PHASE_ABOVE_80_KTS, PHASE_LIFTOFF, PHASE_BELOW_80_KTS, PHASE_2ND_ENG_OFF})
+    end
+
+}
+
+
 

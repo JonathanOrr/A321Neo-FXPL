@@ -39,7 +39,7 @@ include('EWD_msgs/pressurization.lua')
 include('EWD_msgs/to_ldg_memos.lua')
 
 include('DRAIMS/radio_logic.lua')
-
+include('FBW/FBW_subcomponents/flight_ctl_subcomponents/lateral_ctl.lua')
 
 sasl.registerCommandHandler (Ecam_btn_cmd_CLR,   0 , function(phase) ewd_clear_button_handler(phase) end )
 sasl.registerCommandHandler (Ecam_btn_cmd_RCL,   0 , function(phase) ewd_recall_button_handler(phase) end )
@@ -161,9 +161,12 @@ local left_messages_list = {
     MessageGroup_FCTL_LR_ELEV_FAULT_SINGLE,
     MessageGroup_FCTL_AIL_FAULT,
     MessageGroup_FCTL_STAB_JAM,
+    MessageGroup_FCTL_SPLR_FAULT,
     MessageGroup_FBW_FLAPS_FAULT,
     MessageGroup_FBW_FLAP_SYS_12_FAULT,
     MessageGroup_FBW_SEC_123_FAULT,
+    MessageGroup_FCTL_GND_SPLR_1234_FAULT,
+    MessageGroup_FCTL_GND_SPLR_5_FAULT,
     MessageGroup_GND_SPLRS_NOT_ARMED,
     MessageGroup_SPD_BRK_STILL_OUT,
     MessageGroup_ENG_1_SHUTDOWN,
@@ -224,6 +227,7 @@ local left_messages_list = {
     MessageGroup_PACKS_FAULT,
     MessageGroup_PACKS_OFF,
     MessageGroup_PACKS_REGUL_FAULT,
+    MessageGroup_AIRCOND_ZONE_REG_FAULT,
     MessageGroup_GPWS_FAULT,
     MessageGroup_GPWS_TERR_FAULT,
     MessageGroup_AOA_CAPT_FAULT,
@@ -315,13 +319,13 @@ local right_secondary_failures = {
 
 }
 
-local left_current_message = nil;   -- It contains (if exists) the first message group *clearable*
+local left_current_message = nil    -- It contains (if exists) the first message group *clearable*
 local left_was_clearing = false     -- True when a warning/caution message exists and status page not yet displayed
-local land_asap = false;            -- If true, the LAND ASAP message appears (according to flight phase)
-local land_asap_amber = false;            -- If true, the LAND ASAP amber message appears (according to flight phase)
+local land_asap = false             -- If true, the LAND ASAP message appears (according to flight phase)
+local land_asap_amber = false             -- If true, the LAND ASAP amber message appears (according to flight phase)
 
-local rcl_start_press_time = 0;     -- The time the user started to press RCL button (this is needed to compute how many seconds elapsed for a long-press)
-local flight_phase_not_one = false; -- See function check_reset() 
+local rcl_start_press_time = 0     -- The time the user started to press RCL button (this is needed to compute how many seconds elapsed for a long-press)
+local flight_phase_not_one = false  -- See function check_reset() 
 
 -- PriorityQueue external implementation (modified)
 -- Source: https://rosettacode.org/wiki/Priority_queue#Lua
@@ -457,7 +461,7 @@ local function update_right_list()
     end
 
     -- Speedbrakes
-    if get(Speedbrake_handle_ratio) > 0 then
+    if Spoilers_obj.Get_curr_spdbrk_def() > 2.5 then
     
         if get(EWD_flight_phase) >= PHASE_LIFTOFF and get(EWD_flight_phase) <= PHASE_TOUCHDOWN then
             if get(Eng_1_N1) > 50 or get(Eng_2_N1) > 50 then
@@ -631,6 +635,9 @@ local function update_left_list()
     if get(EWD_flight_phase) == 0 then  -- Don't update EWD is the flight phase is unknown. This should not happen.
         return
     end
+    
+    land_asap = false
+    land_asap_amber = false
 
     set(AtLeastOneMasterWarning, 0)
     set(AtLeastOneMasterCaution, 0)
@@ -785,9 +792,18 @@ local function check_cleared_list()
 
     -- Let's loop backward so that the remove of the item of the table is safe
     for i=#left_messages_list_cleared,1,-1 do
-        if not left_messages_list_cleared[i].is_active() then
+        local m = left_messages_list_cleared[i]
+        if not m.is_active() then
             table.insert(left_messages_list, left_messages_list_cleared[i])
             table.remove(left_messages_list_cleared, i)
+        else
+            if m.land_asap ~= nil and m.land_asap == true then
+                land_asap = true
+            end
+            
+            if m.land_asap_amber ~= nil and m.land_asap_amber then
+                land_asap_amber = true
+            end
         end
     end
 
@@ -843,10 +859,12 @@ function update()
     set(EWD_arrow_overflow, 0)
     update_left_list()
     publish_left_list()
+
+    check_cleared_list()
+
     update_right_list()
     publish_right_list()
     
-    check_cleared_list()
     check_reset()
 
     perf_measure_stop("EWD_logic:update()")
@@ -901,7 +919,7 @@ function ewd_recall_button_handler(phase)
                 table.insert(left_messages_list, msg)
             end
 
-            left_messages_list_cleared = {}            
+            left_messages_list_cleared = {}
         
         end
     end

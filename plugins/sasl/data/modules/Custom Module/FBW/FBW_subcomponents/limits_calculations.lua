@@ -23,6 +23,8 @@ local vls_reduced = 0
 local vls_reduced_ratio = 0
 local last_flap_lever_pos = 0
 
+local speed_speed_speed_time = 0
+
 local VMAX_speeds = {
     0.82,
     350,
@@ -317,6 +319,7 @@ local function SPEED_SPEED_SPEED()
        get(Capt_ra_alt_ft) > 2000 or get(Fo_ra_alt_ft) > 2000 or
        get(Cockpit_throttle_lever_L) >= THR_TOGA_START or get(Cockpit_throttle_lever_R) >= THR_TOGA_START or
        adirs_get_avg_ias() > get(VLS) and adirs_get_avg_ias_trend() >= 0 then--missing AFLOOR
+        speed_speed_speed_time = 0
         return
     end
 
@@ -326,7 +329,13 @@ local function SPEED_SPEED_SPEED()
     delta_vls = Math_clamp(delta_vls, -10, 10)
 
     if adirs_get_avg_ias() < (get(VLS) + delta_vls) then
-        set(GPWS_mode_speed, 1)
+        if speed_speed_speed_time == 0 then
+            speed_speed_speed_time = get(TIME)
+        elseif get(TIME) - speed_speed_speed_time > 0.5 then    -- It should be true for more than 0.5 sec to avoid spurious activations in turbolence
+            set(GPWS_mode_speed, 1)
+        end
+    else
+        speed_speed_speed_time = 0
     end
 end
 
