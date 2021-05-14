@@ -75,11 +75,7 @@ function update()
 
     Get_ILS_data(capt_PFD_table)
     PFD_update_timers(capt_PFD_table)
-end
-
-
-function draw()
-    --render into the popup texure
+    
     sasl.gl.setRenderTarget(CAPT_PFD_popup_texture, true)
     PFD_draw_FMA(PFD_ALL_FMA)
     PFD_draw_LS(capt_PFD_table)
@@ -90,6 +86,10 @@ function draw()
     PFD_draw_hdg_tape(capt_PFD_table)
     PFD_draw_vs_needle(capt_PFD_table)
     sasl.gl.restoreRenderTarget()
+end
 
+
+function draw()
+    --render into the popup texure
     sasl.gl.drawTexture(CAPT_PFD_popup_texture, 0, 0, 900, 900, {1,1,1})
 end
