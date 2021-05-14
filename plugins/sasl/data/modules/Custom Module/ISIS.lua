@@ -68,7 +68,7 @@ end
 
 function update()
 
-    if (get(IAS) > 50 and get(HOT_bus_1_pwrd) == 1) or get(DC_ess_bus_pwrd) == 1 then
+    if ((get(IAS) > 50 or get(All_on_ground) == 0) and get(HOT_bus_1_pwrd) == 1) or get(DC_ess_bus_pwrd) == 1 then
         set(ISIS_powered, 1)
     else
         set(ISIS_powered, 0)

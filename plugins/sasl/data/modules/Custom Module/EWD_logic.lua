@@ -882,6 +882,12 @@ function ewd_clear_button_handler(phase)
 
     if get(Ecam_is_sts_clearable) == 1 then
         return  -- STS is clearable, CLR should not affect EWD
+    end 
+    
+    local ECAM_STATUS_SHOW_USER = 1
+
+    if get(Ecam_current_status) == ECAM_STATUS_SHOW_USER and get(Ecam_current_page) == ECAM_PAGE_STS then
+        return -- STS has been manually selected, CLR cannot work on the EWD
     end
     
     -- Ok, we have a message, and STS page is not clearable.
