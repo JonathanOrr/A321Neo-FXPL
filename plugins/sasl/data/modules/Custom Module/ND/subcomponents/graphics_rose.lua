@@ -23,6 +23,7 @@ local DEBUG_terrain_center = false
 include("ND/subcomponents/helpers.lua")
 include("ND/subcomponents/graphics_oans.lua")
 include('ND/subcomponents/terrain.lua')
+include('ND/subcomponents/tcas.lua')
 include('ND/subcomponents/helpers_fmgs.lua')
 include('libs/geo-helpers.lua')
 
@@ -544,6 +545,34 @@ local function draw_oans_arrow(data)
     end
 end
 
+local function draw_tcas(data)
+
+    if data.config.range <= ND_RANGE_ZOOM_2 or data.config.range >= ND_RANGE_80 then
+        return  -- TCASs are not drawn during the zoom mode or large modes
+    end
+
+    if data.misc.map_not_avail then
+        return -- No TCAS is map not avail
+    end
+    
+    if get(TCAS_actual_mode) == TCAS_MODE_OFF or get(TCAS_actual_mode) == TCAS_MODE_FAULT then
+        return
+    end
+
+    for i,acf in ipairs(TCAS_sys.acf_data) do
+
+        local poi = acf.poi ~= nil and acf.poi or {id="", lat=acf.lat, lon=acf.lon}
+        poi.distance = get_distance_nm(data.inputs.plane_coords_lat, data.inputs.plane_coords_lon, acf.lat, acf.lon)
+
+
+        modified, poi = draw_tcas_acf(data, acf, poi, draw_poi_array)
+        if modified then
+            TCAS_sys.acf_data[i].poi = poi
+        end
+    end
+
+end
+
 -------------------------------------------------------------------------------
 -- Main draw_* functions
 -------------------------------------------------------------------------------
@@ -561,6 +590,7 @@ function draw_rose(data)
 
     draw_terrain(data)
     draw_pois(data)
+    draw_tcas(data)
     
     if data.config.mode == ND_MODE_NAV then
         local functions_for_oans = {
