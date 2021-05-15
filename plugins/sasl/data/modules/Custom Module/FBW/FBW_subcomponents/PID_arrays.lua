@@ -272,9 +272,9 @@ FBW_PID_arrays = {
     },
 
     FBW_YAW_DAMPER_PID_array = {
-        P_gain = 10.010,
+        P_gain = 30.010,
         I_gain = 0.000,
-        D_gain = 5.000,
+        D_gain = 0.000,
         B_gain = 0,
         Schedule_gains = false,
         Schedule_table = {
