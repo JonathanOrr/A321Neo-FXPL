@@ -882,5 +882,7 @@ TOPCAT_ldgrwy_length = createGlobalPropertyf("a321neo/efb/topcat/ldgrwy_length",
 TOPCAT_ldgrwy_bearing = createGlobalPropertyf("a321neo/efb/topcat/ldgrwy_bearing", 0, false, true, false)
 TOPCAT_ldgrwy_elev = createGlobalPropertyf("a321neo/efb/topcat/ldgrwy_elev", 0, false, true, false)
 
+FBW_sideload = globalProperty("sim/flightmodel/forces/fside_aero")
+
 
 
