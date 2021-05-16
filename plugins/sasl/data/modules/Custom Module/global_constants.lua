@@ -186,6 +186,7 @@ Font_B612MONO_bold   = sasl.gl.loadFont("fonts/B612Mono-Bold.ttf")
 Font_ECAMfont        = sasl.gl.loadFont("fonts/ECAMFontRegular.ttf")
 Font_7segment_led    = sasl.gl.loadFont("fonts/Segment7Standard.otf")
 Font_Roboto          = sasl.gl.loadFont("fonts/Roboto-Regular.ttf")
+Font_Chinese         = sasl.gl.loadFont("fonts/msjh_0.ttf")
 
 sasl.gl.setFontRenderMode(Font_AirbusDUL, TEXT_RENDER_FORCED_MONO, 0.6)
 sasl.gl.setFontDirection (Font_AirbusDUL_vert, TEXT_DIRECTION_VERTICAL)
