@@ -185,6 +185,5 @@ function draw()
         end
     end
 
-    drawTextCentered(Font_Chinese, size[1]/2 ,50, "女友调教：训练出最敏感的XXX!" , 40, true, false, TEXT_ALIGN_CENTER, rgb_cycle())
     Sasl_DrawWideFrame(size[1]/2-350 ,50-25, 700, 50, 4, 1, rgb_cycle())
 end
