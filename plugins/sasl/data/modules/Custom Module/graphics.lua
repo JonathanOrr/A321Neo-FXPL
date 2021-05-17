@@ -17,6 +17,7 @@
 -------------------------------------------------------------------------------
 
 include("libs/table.save.lua")
+include("ELEC_subcomponents/include.lua")
 
 local function load_save_view()
     local saved_view = table.load(moduleDirectory .. "/Custom Module/saved_configs/saved_view")
@@ -77,7 +78,7 @@ local integral_lights = {
     {name = "overhead_integral",     bus=ELEC_BUS_AC_1}, -- OK
 
     --- glareshield
-    {name = "glareshield_integral",  bus=AC_bus_1_pwrd},
+    {name = "glareshield_integral",  bus=ELEC_BUS_AC_1}, -- OK
 }
 
 local flood_and_spill_lights = {
@@ -85,14 +86,14 @@ local flood_and_spill_lights = {
     {name = "flood_main",  color = {1, 1, 1}, size_m = 0.45, cone_r = 0.76, max_brightness = 6, is_knob = true,  bus=ELEC_BUS_DC_ESS},  -- OK
     {name = "flood_ped",   color = {1, 1, 1}, size_m = 2.5,  cone_r = 0.95, max_brightness = 2, is_knob = true,  bus=ELEC_BUS_DC_1},    -- OK
     {name = "dome",        color = {1, 1, 1}, size_m = 1,    cone_r = 0.95, max_brightness = 5, is_knob = false, bus=ELEC_BUS_DC_ESS,}, -- OK
-    {name = "capt_reading",color = {1, 1, 1}, size_m = 2.5,  cone_r = 0.98, max_brightness = 4, is_knob = true,  bus=AC_bus_1_pwrd},
-    {name = "fo_reading",  color = {1, 1, 1}, size_m = 2.5,  cone_r = 0.98, max_brightness = 4, is_knob = true,  bus=AC_bus_1_pwrd},
+    {name = "capt_reading",color = {1, 1, 1}, size_m = 2.5,  cone_r = 0.98, max_brightness = 4, is_knob = true,  bus=ELEC_BUS_DC_1},    -- OK
+    {name = "fo_reading",  color = {1, 1, 1}, size_m = 2.5,  cone_r = 0.98, max_brightness = 4, is_knob = true,  bus=ELEC_BUS_DC_2},    -- OK
 
     -- CAPT/FO side
-    {name = "capt_led_strip",     color = {1, 1, 1}, size_m = 1, cone_r = 0.95, max_brightness = 5, is_knob = true,  bus=AC_bus_1_pwrd},
-    {name = "fo_led_strip",       color = {1, 1, 1}, size_m = 1, cone_r = 0.95, max_brightness = 5, is_knob = true,  bus=AC_bus_1_pwrd},
-    {name = "capt_window",        color = {1, 1, 1}, size_m = 1, cone_r = 0.95, max_brightness = 5, is_knob = true,  bus=AC_bus_1_pwrd},
-    {name = "fo_window",          color = {1, 1, 1}, size_m = 1, cone_r = 0.95, max_brightness = 5, is_knob = true,  bus=AC_bus_1_pwrd},
+    {name = "capt_led_strip",     color = {1, 1, 1}, size_m = 1, cone_r = 0.95, max_brightness = 5, is_knob = true,  bus=ELEC_BUS_DC_1}, -- OK
+    {name = "fo_led_strip",       color = {1, 1, 1}, size_m = 1, cone_r = 0.95, max_brightness = 5, is_knob = true,  bus=ELEC_BUS_DC_2}, -- OK
+    {name = "capt_window",        color = {1, 1, 1}, size_m = 1, cone_r = 0.95, max_brightness = 5, is_knob = true,  bus=ELEC_BUS_DC_1}, -- OK
+    {name = "fo_window",          color = {1, 1, 1}, size_m = 1, cone_r = 0.95, max_brightness = 5, is_knob = true,  bus=ELEC_BUS_DC_2}, -- OK
     {name = "capt_console_floor", color = {1, 1, 1}, size_m = 1, cone_r = 0.95, max_brightness = 5, is_knob = false, bus=ELEC_BUS_DC_1}, -- OK
     {name = "fo_console_floor",   color = {1, 1, 1}, size_m = 1, cone_r = 0.95, max_brightness = 5, is_knob = false, bus=ELEC_BUS_DC_2}, -- OK
 }
@@ -211,8 +212,8 @@ end
 local function create_integral_datarefs()
 
     for i,x in ipairs(integral_lights) do
-        x.dr_value = createGlobalPropertyf("a321neo/cockpit/lights/"  .. x.name .. "_value", 0, false, true, false)
-        x.dr_pos  = createGlobalPropertyf("a321neo/cockpit/lights/"  .. x.name .. "_pos", 0, false, true, false)
+        x.dr_value = createGlobalPropertyf("a321neo/cockpit/lights/"  .. x.name .. "_value", 0.5, false, true, false)
+        x.dr_pos  = createGlobalPropertyf("a321neo/cockpit/lights/"  .. x.name .. "_pos", 0.5, false, true, false)
 
         x.cmd_up   = createCommand("a321neo/cockpit/lights/" .. x.name .. "_knob_up", "Knob UP")
         x.cmd_down = createCommand("a321neo/cockpit/lights/" .. x.name .. "_knob_dn", "Knob DOWN")
@@ -263,8 +264,7 @@ end
 local function update_integral_datarefs()
 
     for i,x in ipairs(integral_lights) do
-        set(x.dr_value, get(x.dr_pos))
-        -- set(x.dr_value, get(x.dr_pos) * get(elec_const_to_dr(x.bus))) -- TODO Electrical
+        Set_dataref_linear_anim(x.dr_value, get(x.dr_pos) * get(elec_const_to_dr(x.bus)), 0, 1, 1)
     end
 end
 
@@ -272,9 +272,9 @@ local function update_flood_and_spil_datarefs()
 
     for i,x in ipairs(flood_and_spill_lights) do
         if x.is_knob then
-            set(x.dr_value, get(x.dr_pos))
+            set(x.dr_value, get(x.dr_pos) * get(elec_const_to_dr(x.bus)))
         else
-            set(x.dr_pos, Set_linear_anim_value_nostop(get(x.dr_pos), get(x.dr_value)*2-1, -1, 1, 7))
+            set(x.dr_pos, Set_linear_anim_value_nostop(get(x.dr_pos), (get(x.dr_value)*2-1)* get(elec_const_to_dr(x.bus)), -1, 1, 7))
         end
 
         --feed the light array
@@ -285,7 +285,6 @@ local function update_flood_and_spil_datarefs()
         set(x.dr_array, x.size_m, 5)
         set(x.dr_array, x.cone_r, 6)
         set(x.dr_array, -1, 8)
-        -- set(x.dr_value, get(x.dr_pos) * get(elec_const_to_dr(x.bus))) -- TODO Electrical
     end
 end
 

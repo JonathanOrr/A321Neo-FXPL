@@ -572,9 +572,9 @@ function Draw_blue_LED_backlight(x, y, width, hight, min_brightness_for_backligh
     sasl.gl.drawRectangle(x, y, width, hight, {blacklight_R, blacklight_G, blacklight_B})
 end
 
-function Draw_green_LED_num_and_letter(x, y, string, max_digits, size, alignment, min_brightness_for_backlight, max_brightness_for_backlight, brightness)
-    local LED_cl = {235/255, 200/255, 135/255, brightness}
-    local LED_backlight_cl = {15/255, 20/255, 15/255}
+function Draw_green_LED_num_and_letter(x, y, string, max_digits, size, alignment, min_brightness_for_backlight, max_brightness_for_backlight, brightness, LED_cl, LED_backlight_cl)
+    local LED_cl = LED_cl or {235/255, 200/255, 135/255, brightness}
+    local LED_backlight_cl = LED_backlight_cl or {15/255, 20/255, 15/255}
 
     local backlight_string = ""
 
