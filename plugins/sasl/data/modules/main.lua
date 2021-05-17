@@ -45,6 +45,7 @@ addSearchPath(moduleDirectory .. "/Custom Module/DRAIMS/")
 addSearchPath(moduleDirectory .. "/Custom Module/EFB/")
 addSearchPath(moduleDirectory .. "/Custom Module/PFD/PFD_subcomponents/")
 addSearchPath(moduleDirectory .. "/Custom Module/FBW/")
+addSearchPath(moduleDirectory .. "/Custom Module/MCDU/")
 addSearchPath(moduleDirectory .. "/Custom Module/AUTOFLT/")
 addSearchPath(moduleDirectory .. "/Custom Module/display_pop-ups/")
 
@@ -65,7 +66,8 @@ components = {
   cabin_screens {},
   ADIRS {},
   FMGS {},
-  MCDU {},
+  CAPT_MCDU {},
+  FO_MCDU {},
   packs {},
   aircond {},
   wheel {},

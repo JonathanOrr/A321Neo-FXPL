@@ -27,207 +27,6 @@
 -- MCDU PAGE SIMULATION
 -------------------------------------------------------------------------------
 
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
--- EMULATOR SHELL CODE (I of II)
--- NOTICE: emulator is deprecated
-
---    Simulates SASL running on a lua intrepreter (or https://repl.it)
---    instead of booting up X-Plane everytime you want to run this.
---    
---    Notes
---    - This code is continued also at the bottom of this file.
---    - Uses Linux OS-based system calls
---    - Very smelly code, can fail at any time!
-
-EMULATOR = false -- SET THIS TO ENABLE/DISABLE THE EMULATOR!!!
-
-EMULATOR_PROMPT_BEFORE_RUN = false -- Wait after initialization?
-
-if EMULATOR then
-	EMULATOR_HEADER = "\27[101;93mSASL EMULATOR\27[0m: "
-	os.execute("clear")
-	
-	-- MCDU popup
-	function MCDU_set_popup(str1, str2)
-	end
-
-	-- SASL Class
-	EmulatorSasl = {gl = nil}
-	commands = {}
-	SASL_COMMAND_BEGIN = "begin"
-
-	function EmulatorSasl:new (o)
-		o = o or {}   -- create object if user does not provide one
-		setmetatable(o, self)
-		self.__index = self
-		return o
-	end
-
-	function EmulatorSasl:test()
-		print(EMULATOR_HEADER .. "Test OK")
-	end
-
-	function EmulatorSasl.createCommand(str, str2)
-		print(EMULATOR_HEADER .. "Create command " .. str)
-	end
-
-	function EmulatorSasl.registerCommandHandler(str, int, ref)
-		if not str then
-			print(EMULATOR_HEADER .. "passed NIL for sasl.registerCommandHandler")
-			return
-		end
-		print(EMULATOR_HEADER .. "Register command " .. str)
-		for i = 1, #commands, 1 do
-			if commands[i].name == str then
-				commands[i].ref = ref
-				print("found.")
-			end
-		end	
-	end
-
-	function EmulatorSasl.commandOnce(str)
-		print(EMULATOR_HEADER .. "Command " .. str)
-	end
-
-	function EmulatorSasl:findNavAid(name, a, b, c, d, find_type)
-		return 1
-	end
-
-	function EmulatorSasl:getNavAidInfo(id)
-		return NAV_AIRPORT, 121, 141, 300, 110.500, 70, "id", "name", true
-	end
-
-	-- SASL OpenGL Class
-	EmulatorGL = {}
-
-	function EmulatorGL:new (o)
-		o = o or {}   -- create object if user does not provide one
-		setmetatable(o, self)
-		self.__index = self
-		return o
-	end
-
-	function EmulatorGL.loadFont(str)
-		print(EMULATOR_HEADER .. "Load font " .. str)
-	end
-
-	function EmulatorGL.drawText(font, x, y, str, size, bool1, bool2, align, color)
-	end
-
-	-- SASL Global Functions
-	function include(str)
-		print(EMULATOR_HEADER .. "Include file " .. str)
-	end
-
-	function createGlobalPropertyi(str)
-		print(EMULATOR_HEADER .. "Create global property (int) " .. str)
-	end
-
-	function globalPropertyi(str)
-		print(EMULATOR_HEADER .. "Referencing global property (int) " .. str)
-        return str
-	end
-
-	function createGlobalPropertys(str)
-		print(EMULATOR_HEADER .. "Create global property (string) " .. str)
-	end
-
-	function createCommand(str)
-		if not str then
-			print(EMULATOR_HEADER .. "passed NIL for createCommand")
-			return
-		end
-		print(EMULATOR_HEADER .. "Create global command " .. str)
-		table.insert(commands, {name = str})
-		return str
-	end
-
-	function globalPropertys(str)
-		return str
-	end
-
-	function findCommand(str)
-		print(EMULATOR_HEADER .. "Find command " .. str)
-		return str
-	end
-
-	-- profiler
-	function perf_measure_start(str)
-	end
-	function perf_measure_stop(str)
-	end
-
-	-- brightness
-	function Draw_LCD_backlight(a,b,c,d,e,f)
-	end
-
-	-- get set
-	variables = {}
-	function get(str)
-		return variables[str] 
-	end
-
-	function set(str, val)
-		variables[str] = val
-	end
-
-	-- elecs
-	EmulatorELEC = {}
-
-	function EmulatorELEC:new (o)
-		o = o or {}   -- create object if user does not provide one
-		setmetatable(o, self)
-		self.__index = self
-		return o
-	end
-
-	function EmulatorELEC.add_power_consumption(a,b,c)
-	end
-
-	ELEC_sys = EmulatorELEC
-	sasl = EmulatorSasl:new()
-	sasl.gl = EmulatorGL:new()
-	sasl.test()
-
-	ECAM_WHITE = {1.0, 1.0, 1.0}
-	ECAM_LINE_GREY = {62/255, 74/255, 91/255}
-	ECAM_HIGH_GREY = {0.6, 0.6, 0.6}
-	ECAM_BLUE = {0.004, 1.0, 1.0}
-	ECAM_GREEN = {0.20, 0.98, 0.20}
-	ECAM_HIGH_GREEN = {0.1, 0.6, 0.1}
-	ECAM_ORANGE = {1, 0.66, 0.16}
-	ECAM_RED = {1.0, 0.0, 0.0}
-	ECAM_MAGENTA = {1.0, 0.0, 1.0}
-	ECAM_GREY = {0.3, 0.3, 0.3}
-	ECAM_BLACK = {0, 0, 0}
-
-	NAV_UNKNOWN = -1
-	NAV_AIRPORT = 0
-	NAV_NDB = 1
-	NAV_VOR = 2
-	NAV_ILS = 3
-	NAV_LOCALIZER = 4
-	NAV_GLIDESLOPE = 5
-	NAV_OUTERMARKER = 6
-	NAV_MIDDLEMARKER = 7
-	NAV_INNERMARKER = 8
-	NAV_FIX = 9
-	NAV_DME = 10
-
-end
--- END OF EMULATOR SHELL CODE I OF II (CONTINUED AT END OF SCRIPT)
-----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-
-
-
--- START OF MCDU CODE
--- START OF MCDU CODE
--- START OF MCDU CODE
-
 --[[
 --
 --
@@ -241,8 +40,6 @@ size = {560, 530}
 
 include('FMGS/functions.lua')
 include('MCDU-FMGS.lua') -- Flight Management Guidance System implementation
-
-local NIL = 0 -- used for input return and checking
 
 --define the const size, align and row.
 local MCDU_DIV_SIZE = {"s", "l"}
@@ -318,12 +115,6 @@ local mcdu_message_showing = false
 --mcdu page call functions
 local mcdu_sim_page = {}
 
---create LUT for apt.dat for faster reference
-if not override_MCDU_dontcreateairportlut then
-    parser_apt = Parser_Apt:new(APT_PATH)
-    parser_apt:create_airport_lut()
-end
-
 --define custom functionalities
 local function mcdu_send_message(message)
     table.insert(mcdu_messages, message)
@@ -375,12 +166,12 @@ local function mcdu_eval_entries(entry, expected_formats)
                 return entry
             end
         end
-		return NIL
+		return nil
     else
         if mcdu_eval_entry(entry, expected_formats) then
             return entry
         else
-            return NIL
+            return nil
         end
     end
 end
@@ -438,8 +229,8 @@ local function mcdu_parse_entry(entry, expected_format)
 		table.insert(possible_inputs_c, "-" .. i)
 	end
 
-	output = mcdu_eval_entries(entry, possible_inputs_c)
-	if output == NIL then
+	local output = mcdu_eval_entries(entry, possible_inputs_c)
+	if output == nil then
 		return "$invalid"
 	end
 	return output
@@ -447,10 +238,10 @@ end
 
 -- the simpler way of getting mcdu entries
 local function mcdu_get_entry_simple(expected_formats)
-    output = mcdu_eval_entries(mcdu_entry, expected_formats)
-    if output == NIL then
+    local output = mcdu_eval_entries(mcdu_entry, expected_formats)
+    if output == nil then
         mcdu_send_message("format error")
-        return NIL
+        return nil
     else
         mcdu_entry = ""
         return output
@@ -465,8 +256,8 @@ end
 -- and /-20 is allowed (returns nil, -20)
 -- and 300 is allowed (returns 300, nil)
 local function mcdu_get_entry(format_a, format_b, dont_reset_entry)
-	a = NIL
-	b = NIL
+	local a = nil
+	local b = nil
 	if format_b then
 		-- e.g. /20
 		if string.sub(mcdu_entry, 1, 1) == "/" then
@@ -496,9 +287,9 @@ local function mcdu_get_entry(format_a, format_b, dont_reset_entry)
 	if a == "$invalid" or b == "$invalid" then
         mcdu_send_message("format error")
         if format_b then
-            return NIL, NIL
+            return nil, nil
         end
-		return NIL
+		return nil
 	end
 
     if not dont_reset_entry then
@@ -694,11 +485,7 @@ local function draw_dat(dat, draw_size, disp_x, disp_y, disp_text_align)
     text = ""
     for j = 1,#disp_text do
         if disp_text:sub(j,j) == "{" then
-            if EMULATOR then
-                text = text .. "b"
-            else
-                text = text .. "□"
-            end
+            text = text .. "□"
         else
             text = text .. disp_text:sub(j,j)
         end
@@ -757,72 +544,6 @@ local function draw_update()
         end
     end
 end
-
-local function colorize()
-    for i,f in ipairs({"white", "cyan", "amber", "green", "yellow", "magenta", "red"}) do
-        c = {}
-        c[0] = MCDU_DISP_COLOR[f][1];c[1] = MCDU_DISP_COLOR[f][2];c[2] = MCDU_DISP_COLOR[f][3]
-        inc = 0.1
-        if c[0] < 1 and c[1] == 0 and c[2] == 0 then
-            c[0] = c[0] + inc
-        elseif c[0] == 1 and c[1] < 1 and c[2] == 0 then
-            c[1] = c[1] + inc
-        elseif c[0] <= 1 and c[0] > 0 and c[1] == 1 and c[2] == 0 then
-            c[0] = c[0] - inc
-        elseif c[0] == 0 and c[1] == 1 and c[2] < 1 then
-            c[2] = c[2] + inc
-        elseif c[0] == 0 and c[1] <= 1 and c[1] > 0 and c[2] == 1 then
-            c[1] = c[1] - inc
-        elseif c[0] < 1 and c[1] == 0 and c[2] == 1 then
-            c[0] = c[0] + inc
-        elseif c[0] == 1 and c[1] == 0 and c[2] <= 1 and c[2] > 0 then
-            c[2] = c[2] - inc
-        end
-        MCDU_DISP_COLOR[f][1] = math.min(math.max(c[0], 0), 1); MCDU_DISP_COLOR[f][2] = math.min(math.max(c[1], 0), 1); MCDU_DISP_COLOR[f][3] = math.min(math.max(c[2], 0), 1)
-    end
-    draw_update()
-end
-
---drawing the MCDU display
-function draw()
-	perf_measure_start("MCDU:draw()")
-    --DEBUG TODO: commented out four lines because of debugging and the time it takes for it to load.
-    --[[
-    if get(AC_ess_bus_pwrd) == 0 then   -- TODO MCDU2 is on AC2
-        return -- Bus is not powered on, this component cannot work
-    end
-    ELEC_sys.add_power_consumption(ELEC_BUS_AC_ESS, 0.26, 0.26)   -- 30W (just hypothesis)
-    --]]
-
-    --sasl.gl.drawRectangle(0, 0, 560, 530, {1,0,0})
-    if hokey_pokey then
-        colorize()
-    end
-    if get(Mcdu_enabled) == 1 then
-        MCDU_set_popup("draw lines", draw_lines)
-        MCDU_set_popup("mcdu entry", mcdu_entry)
-        MCDU_set_popup("enabled", true)
-
-        --draw backlight--
-        Draw_LCD_backlight(0, 0, size[1], size[2], 0.5, 1, get(MCDU_1_brightness_act))
-
-        --draw all horizontal lines
-        for i,line in ipairs(draw_lines) do
-            if line.font == "l" then
-                font = Font_AirbusDUL
-            else
-                font = Font_AirbusDUL_small
-            end
-            sasl.gl.drawText(font, line.disp_x, line.disp_y, line.disp_text, line.disp_text_size, false, false, line.disp_text_align, line.disp_color)
-        end
-
-        --draw scratchpad
-        sasl.gl.drawText(Font_AirbusDUL, draw_get_x(1), draw_get_y(12), mcdu_entry, MCDU_DISP_TEXT_SIZE["l"], false, false, MCDU_DISP_TEXT_ALIGN["L"], MCDU_DISP_COLOR["white"])
-
-    end
-	perf_measure_stop("MCDU:draw()")
-end
-
 
 
 --[[
@@ -1114,8 +835,8 @@ function (phase)
     -- enter v1
     if phase == "L1" then
         --input, variation = mcdu_get_entry_simple({"UP%.%%", "DN%.%%"})
-        input, variation = mcdu_get_entry({"number", length = 3, dp = 0})
-        if input ~= NIL then
+        local input, variation = mcdu_get_entry({"number", length = 3, dp = 0})
+        if input ~= nil then
             v1 = tonumber(input)
             vr = tonumber(fmgs_dat["perf vr"]) or 200 
             v2 = tonumber(fmgs_dat["perf v2"]) or 200
@@ -1132,8 +853,8 @@ function (phase)
     -- enter vr
     if phase == "L2" then
         --input, variation = mcdu_get_entry_simple({"UP%.%%", "DN%.%%"})
-        input, variation = mcdu_get_entry({"number", length = 3, dp = 0})
-        if input ~= NIL then
+        local input, variation = mcdu_get_entry({"number", length = 3, dp = 0})
+        if input ~= nil then
             v1 = tonumber(fmgs_dat["perf v1"]) or 0
             vr = tonumber(input)
             v2 = tonumber(fmgs_dat["perf v2"]) or 200
@@ -1150,8 +871,8 @@ function (phase)
     -- enter v2
     if phase == "L3" then
         --input, variation = mcdu_get_entry_simple({"UP%.%%", "DN%.%%"})
-        input, variation = mcdu_get_entry({"number", length = 3, dp = 0})
-        if input ~= NIL then
+        local input, variation = mcdu_get_entry({"number", length = 3, dp = 0})
+        if input ~= nil then
             v1 = tonumber(fmgs_dat["perf v1"]) or 0
             vr = tonumber(fmgs_dat["perf vr"]) or 0 
             v2 = tonumber(input)
@@ -1520,8 +1241,8 @@ function (phase)
     -- cost index
     if phase == "L5" then
         --format e.g. 100
-        input, variation = mcdu_get_entry({"number", length = 3, dp = 0})
-        if input ~= NIL then
+        local input, variation = mcdu_get_entry({"number", length = 3, dp = 0})
+        if input ~= nil then
             fmgs_dat["cost index"] = input
         end
         mcdu_open_page(400) -- reload
@@ -1530,10 +1251,10 @@ function (phase)
     if phase == "L6" then
         -- e.g. mcdu_get_entry({"altitude"}, {"number", length = 2, dp = 0})
         --format e.g. FL230
-        input_a, input_b = mcdu_get_entry({"altitude"}, {"number", length = 2, dp = 0})
+        local input_a, input_b = mcdu_get_entry({"altitude"}, {"number", length = 2, dp = 0})
 
-        if input_a ~= NIL or input_b ~= NIL then
-            if input_a ~= NIL then
+        if input_a ~= nil or input_b ~= nil then
+            if input_a ~= nil then
                 alt = input_a * 100
                 if alt >= 1500 then
                     fmgs_dat["crz fl"] = tonumber(alt)
@@ -1543,7 +1264,7 @@ function (phase)
                     mcdu_send_message("invalid altitude")
                 end
             end
-            if input_b ~= NIL then
+            if input_b ~= nil then
                 fmgs_dat["crz temp"] = tonumber(input_b)
                 fmgs_dat["crz temp alt"] = true --crz temp has been manually altered
             end
@@ -1554,9 +1275,9 @@ function (phase)
     -- from/to
     if phase == "R1" then
         --format e.g. ksea/kbfi
-        input = mcdu_get_entry_simple({"####/####"})
+        local input = mcdu_get_entry_simple({"####/####"})
 
-        if input ~= NIL then
+        if input ~= nil then
 
 			-- parse data
 			airp_origin_name = input:sub(1,4):lower()
@@ -1611,8 +1332,8 @@ function (phase)
 
     -- tropo
     if phase == "R6" then
-        input = mcdu_get_entry({"number", length = 3, dp = 0})
-		if input ~= NIL then
+        local input = mcdu_get_entry({"number", length = 3, dp = 0})
+		if input ~= nil then
       	  fmgs_dat["tropo"] = input * 100
 		end
         mcdu_open_page(400) -- reload
@@ -2000,8 +1721,8 @@ function (phase)
 
     -- chg code
     if phase == "L5" then
-        input = mcdu_get_entry({"word", length = 3, dp = 0})
-        if input ~= NIL then
+        local input = mcdu_get_entry({"word", length = 3, dp = 0})
+        if input ~= nil then
             if input == "ARM" then
                 fmgs_dat["chg code"] = input
                 fmgs_dat["chg code lock"] = false
@@ -2018,14 +1739,14 @@ function (phase)
             mcdu_send_message("enter change code")
             return
         end
-        input_a, input_b = mcdu_get_entry({"number", length = 1, dp = 1}, {"number", length = 1, dp = 1})
+        local input_a, input_b = mcdu_get_entry({"number", length = 1, dp = 1}, {"number", length = 1, dp = 1})
 
          -- is input valid?
-        if input_a ~= NIL or input_b ~= NIL then
-            if input_a ~= NIL then
+        if input_a ~= nil or input_b ~= nil then
+            if input_a ~= nil then
                 fmgs_dat["idle"] = tonumber(input_a)
             end
-            if input_b ~= NIL then
+            if input_b ~= nil then
                 fmgs_dat["perf"] = tonumber(input_b)
             end
 
@@ -3236,8 +2957,8 @@ function (phase)
         draw_update()
     end
     if phase == "L1" then
-        input = mcdu_get_entry({"number", length = 3, dp = 1})
-        if input ~= NIL then
+        local input = mcdu_get_entry({"number", length = 3, dp = 1})
+        if input ~= nil then
             input_col = tonumber(input) / 100
             MCDU_DISP_COLOR[fmgs_dat["colour"]][1] = input_col
 
@@ -3247,8 +2968,8 @@ function (phase)
         end
     end
     if phase == "L2" then
-        input = mcdu_get_entry({"number", length = 3, dp = 1})
-        if input ~= NIL then
+        local input = mcdu_get_entry({"number", length = 3, dp = 1})
+        if input ~= nil then
             input_col = tonumber(input) / 100
             MCDU_DISP_COLOR[fmgs_dat["colour"]][2] = input_col
 
@@ -3258,8 +2979,8 @@ function (phase)
         end
     end
     if phase == "L3" then
-        input = mcdu_get_entry({"number", length = 3, dp = 1})
-        if input ~= NIL then
+        local input = mcdu_get_entry({"number", length = 3, dp = 1})
+        if input ~= nil then
             input_col = tonumber(input) / 100
             MCDU_DISP_COLOR[fmgs_dat["colour"]][3] = input_col
 
@@ -3492,180 +3213,4 @@ function (phase)
         draw_update()
     end
 end
-
-
--- END OF MCDU CODE
--- END OF MCDU CODE
--- END OF MCDU CODE
-
-----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
--- EMULATOR SHELL CODE CONTINUED (II of II)
---    Simulates SASL running on a lua intrepreter (or https://repl.it)
---    instead of booting up X-Plane everytime you want to run this.
-
-if EMULATOR then
-    -- initialize all global variables which would otherwise be done by other parts of the script
-	Mcdu_enabled = "Mcdu_enabled"
-	mcdu_page = "mcdu_page"
-	mcdu_debug_busy = "mcdu_debug_busy"
-	TIME = "time"
-	DELTA_TIME = "delta_time"
-	Engine_option = "Engine_option"
-	set(Mcdu_enabled, 1)
-	set(mcdu_page, 0)
-	set(TIME, 1)
-	set(DELTA_TIME, 0)
-	set(Engine_option, 0)
-
-	print("")
-	print(EMULATOR_HEADER .. "Initalization done!")
-	if EMULATOR_PROMPT_BEFORE_RUN then
-		print("")
-		print("PRESS ENTER TO RUN.")
-		s = io.read("*l")
-	end
-	os.execute("clear")
-	found_command = true
-	while true do
-		os.execute("clear")
-		set(TIME, get(TIME) + 1)
-		
-		print()
-		if not found_command then
-			print(EMULATOR_HEADER .. "COMMAND NOT FOUND")
-		end
-
-		update()
-		draw()
-
-		print()
-		print()
-		print()
-
-		chars = {}
-		for i = 0,14,1 do -- columns
-			chars[i] = "                        "
-		end
-
-		color_codes = {} -- colour codes, which are inserted later into the text
-
-		--draw all horizontal lines
-        for i,line in ipairs(draw_lines) do
-			str = line.disp_text
-			color = line.disp_color
-
-			x = math.floor(((line.disp_x - 20) / 520) + 1.1)
-			y = math.floor(14.1 -((line.disp_y - 31.7) / 35.3))
-
-			if x == 2 then
-				x = 25 - #str
-			end
-
-			if line.disp_color == MCDU_DISP_COLOR["cyan"] then
-				table.insert(color_codes, {x = x, y = y, word = "\27[1;36m"})
-				table.insert(color_codes, {x = x + #str + 1, y = y, word = "\27[0m"})
-			end
-			if line.disp_color == MCDU_DISP_COLOR["green"] then
-				table.insert(color_codes, {x = x, y = y, word = "\27[1;32m"})
-				table.insert(color_codes, {x = x + #str + 1, y = y, word = "\27[0m"})
-			end
-			if line.disp_color == MCDU_DISP_COLOR["amber"] then
-				table.insert(color_codes, {x = x, y = y, word = "\27[1;33m"})
-				table.insert(color_codes, {x = x + #str + 1, y = y, word = "\27[0m"})
-			end
-			if line.disp_color == MCDU_DISP_COLOR["yellow"] then
-				table.insert(color_codes, {x = x, y = y, word = "\27[0;33m"})
-				table.insert(color_codes, {x = x + #str + 1, y = y, word = "\27[0m"})
-			end
-			if line.disp_color == MCDU_DISP_COLOR["magenta"] then
-				table.insert(color_codes, {x = x, y = y, word = "\27[1;35m"})
-				table.insert(color_codes, {x = x + #str + 1, y = y, word = "\27[0m"})
-			end
-			if line.disp_color == MCDU_DISP_COLOR["red"] then
-				table.insert(color_codes, {x = x, y = y, word = "\27[1;31m"})
-				table.insert(color_codes, {x = x + #str + 1, y = y, word = "\27[0m"})
-			end
-
-			for i = 1, 24, 1 do
-				j = i - x + 1-- i relative to str
-				if j < 1 then
-					 j = 999
-				end
-				if string.sub(str,j,j) ~= " " then
-					chars[y] = string.sub(chars[y], 1, i) .. string.sub(str, j, j) .. string.sub(chars[y], i+1, #chars[y])
-				end
-			end
-        end 
-
-		for k = 1, #color_codes, 1 do
-			spec = color_codes[k]
-			i = 1
-			j = 1
-			while i <= spec.x do
-				if string.sub(chars[spec.y], j, j) == "\27" then
-					j = j + 7
-				end
-				--print(string.sub(chars[spec.y], j, j) .. " " .. i)
-				j = j + 1
-				i = i + 1
-			end 
-			j = j - 1
-			chars[spec.y] = string.sub(chars[spec.y], 1, j-1) .. spec.word .. string.sub(chars[spec.y], j, #chars[spec.y])
-		end
-
-		chars[14] = mcdu_entry
-
-		for i = 1,14,1 do -- columns
-			if (math.fmod((i+1)*0.5,1) == 0) then
-				out_line = (i - 1) / 2
-			else
-				out_line = " "
-			end
-			print(out_line .. "|" .. chars[i] .. "")
-		end
-
-		print()
-		print()
-		print()
-
-		print("List of commands:")
-		print("  a321neo/cockpit/mcdu/key <-- to enter key mode")
-		print("  a321neo/cockpit/mcdu/side/L1 <-- side keys: L1-L6, R1-R6")
-
-		for i = 1, #commands, 1 do
-			if string.sub(commands[i].name,0,24) ~= "a321neo/cockpit/mcdu/key" and
-			   string.sub(commands[i].name,0,25) ~= "a321neo/cockpit/mcdu/side" then
-				print("  " .. commands[i].name)
-			end
-		end
-
-		print()
-		print("\27[101;93mSCROLL UP TO FIND THE MCDU\27[0m")
-
-		print()
-		print("Please enter a command name.")
-		io.write("	a321neo/cockpit/mcdu/")
-		user_command = io.read("*l")
-		
-		if user_command == "key" then --enter keymode
-			print("Please enter mcdu entry")
-			user_entry = io.read("*l")
-			mcdu_entry = string.upper(user_entry)
-		end
-
-		found_command = false
-		for i = 1, #commands, 1 do
-			if string.sub(commands[i].name,22,-1) == user_command then
-				commands[i].ref(SASL_COMMAND_BEGIN) -- call the command
-				found_command = true
-			end
-		end
-	end
-end
--- END OF EMULATOR SHELL CODE II OF II (CONTINUED AT END OF SCRIPT)
-----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
 
