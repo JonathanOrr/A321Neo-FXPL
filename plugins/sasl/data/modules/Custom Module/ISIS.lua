@@ -30,8 +30,52 @@ sasl.registerCommandHandler (ISIS_cmd_Knob_cc, 0,  function(phase) if phase == S
 
 
 local isis_start_time = 0
+local spd_tape_x = 37
+local spd_tape_y = 241
+local spd_tape_y_offset = -13
+local spd_tape_per_reading = 20 --px per reading, 000 to 010 is 20px
+
+local function to_3_digits(number)
+    return #tostring(math.abs(number)) < 3  and "0"..number or number --30 returns 030, 40 returns 040, etc. 230 returns 230 as always.
+end
+
+local function draw_speed_tape()
+
+    local airspeed_y_offset = get(Stby_IAS) * 4 -- 4 px per airspeed notch
+    for i=-4, 100 do
+        
+        local dashes_y = (spd_tape_y + spd_tape_per_reading * i - airspeed_y_offset)
+
+
+        local curr_spd = i * 20
+
+        if (curr_spd <= get(Stby_IAS) + 50) and (curr_spd >= get(Stby_IAS) - 50) and i*20 <= 500 then
+            sasl.gl.drawText(Font_ECAMfont, spd_tape_x, dashes_y + spd_tape_y_offset + 60 * i, Fwd_string_fill( tostring(math.abs(i*20)), "0", 3) , 32, false, false, TEXT_ALIGN_CENTER, EFB_FULL_GREEN)
+        end
+        
+        local curr_spd_for_dashes = i * 5
+        if (curr_spd_for_dashes <= get(Stby_IAS) + 50) and (curr_spd_for_dashes >= get(Stby_IAS) - 50) then 
+            if (i+2)%4 == 0 then
+                sasl.gl.drawWideLine(spd_tape_x+21, dashes_y, spd_tape_x+38, dashes_y, 3, EFB_FULL_GREEN)
+            else
+                sasl.gl.drawWideLine(spd_tape_x+32, dashes_y, spd_tape_x+38, dashes_y, 3, EFB_FULL_GREEN)
+            end
+        end
+    end
+
+end
+
+
+local function draw_background()
+    sasl.gl.drawRectangle(0, 0, 500, 500, ECAM_BLACK)
+end
 
 function draw()
+
+    --draw_background()
+
+    draw_speed_tape()
+
     if get(ISIS_powered) == 0 then
         return
     end
@@ -54,21 +98,21 @@ function draw()
             sasl.gl.drawText (Font_AirbusDUL, 222, 40, "STD", 28, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
         end
 
-        if adirs_is_mach_ok(PFD_CAPT) then
-            -- Mach number, this is available only if the ADR for the Capt is ok
-            local good_mach = Round(adirs_get_mach(PFD_CAPT) * 100, 0)
-            if good_mach < 100 then
-                sasl.gl.drawText (Font_AirbusDUL, 60, 40, "." .. good_mach, 27, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-            else
-                sasl.gl.drawText (Font_AirbusDUL, 60, 40, good_mach/100, 27, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)            
-            end
-        end
+        --if adirs_is_mach_ok(PFD_CAPT) then
+        --    -- Mach number, this is available only if the ADR for the Capt is ok
+        --    local good_mach = Round(adirs_get_mach(PFD_CAPT) * 100, 0)
+        --    if good_mach < 100 then
+        --        sasl.gl.drawText (Font_AirbusDUL, 60, 40, "." .. good_mach, 27, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        --    else
+        --        sasl.gl.drawText (Font_AirbusDUL, 60, 40, good_mach/100, 27, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)            
+        --    end
+        --end
     end
 end
 
 function update()
 
-    if ((get(IAS) > 50 or get(All_on_ground) == 0) and get(HOT_bus_1_pwrd) == 1) or get(DC_ess_bus_pwrd) == 1 then
+    if ((get(Stby_IAS) > 50 or get(All_on_ground) == 0) and get(HOT_bus_1_pwrd) == 1) or get(DC_ess_bus_pwrd) == 1 then
         set(ISIS_powered, 1)
     else
         set(ISIS_powered, 0)
@@ -84,7 +128,7 @@ function update()
     if get(TIME) - isis_start_time > TIME_TO_ALIGN_SEC then
         set(ISIS_ready, 1)
     else
-        set(ISIS_ready, 0)
+        set(ISIS_ready, 1)
     end
 
 end
