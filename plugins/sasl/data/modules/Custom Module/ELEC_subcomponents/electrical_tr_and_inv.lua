@@ -31,7 +31,7 @@ local DC_VOLTAGE_NOM  = 28    -- Normal conditions - Nominal volt value
 local WAIT_TIME_STINV = 0.2   -- Wait time for static inverter to start (ms)
 
 local POWER_LOSS = 0.02 -- The TR is not perfect, it will loose some power...
-
+local MIN_STINV_LOAD = 1
 ----------------------------------------------------------------------------------------------------
 -- Global/Local variables
 ----------------------------------------------------------------------------------------------------
@@ -260,7 +260,7 @@ function update_stinv_loads()
     stat_inv.curr_out_amps = stat_inv.curr_out_amps + ELEC_sys.buses.pwr_consumption[ELEC_BUS_STAT_INV]
 
     stat_inv.curr_in_amps = stat_inv.curr_out_amps * stat_inv.curr_voltage / DC_VOLTAGE_NOM
-    stat_inv.curr_in_amps = stat_inv.curr_in_amps * (1+POWER_LOSS)
+    stat_inv.curr_in_amps = stat_inv.curr_in_amps * (1+POWER_LOSS) + MIN_STINV_LOAD
 
     ELEC_sys.add_power_consumption(ELEC_BUS_HOT_BUS_1, stat_inv.curr_in_amps, stat_inv.curr_in_amps)
 

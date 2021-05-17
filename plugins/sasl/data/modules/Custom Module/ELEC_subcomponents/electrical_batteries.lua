@@ -27,6 +27,7 @@ local BAT_RATED_VOLTAGE     = 24   -- Nominal battery voltage
 local BAT_CAPACITY_AMPH     = 23
 local BAT_LOSS_AMPS         = 0.05  -- Any battery loss some amps and discharge slooooowly
 local BAT_CHARGING_CURRENT  = BAT_CAPACITY_AMPH / 5
+local BAT_INTERNAL_RES      = 0.25  -- Internal resistance of the battery
 
 ----------------------------------------------------------------------------------------------------
 -- Global/Local variables
@@ -35,7 +36,7 @@ batteries = {
     {
         id = 1,
         switch_status = false, 
-        curr_voltage = 0,
+        curr_voltage = 24,
         curr_source_amps = 0,
         curr_sink_amps = 0,
         curr_charge  = BAT_CAPACITY_AMPH-math.random(0,10)/10,       -- In Ah (start fully charged, with a bit of noise)
@@ -51,7 +52,7 @@ batteries = {
     {
         id = 2,
         switch_status = false, 
-        curr_voltage = 0,
+        curr_voltage = 24,
         curr_source_amps = 0,
         curr_sink_amps = 0,
         curr_charge  = BAT_CAPACITY_AMPH-math.random(0,10)/10,       -- In Ah (start fully charged, with a bit of noise)
@@ -85,12 +86,19 @@ set(Plugin_Load_BUS, -1000, 2)
 
 local function update_battery_voltage(bat)
 
-    bat.curr_charge = bat.curr_charge + (bat.curr_sink_amps-bat.curr_source_amps) 
-                      * get(DELTA_TIME) / 3600
+    local net_amps = bat.curr_sink_amps-bat.curr_source_amps
+
+    bat.curr_charge = bat.curr_charge + net_amps * get(DELTA_TIME) / 3600   -- In Ah
     
-    -- Let's compute the voltage now    -- TODO Voltage is non-linear actually...
-    bat.curr_voltage = math.max(0, BAT_TOP_VOLTAGE_LIMIT * (bat.curr_charge/BAT_CAPACITY_AMPH))
+    -- Let's compute the voltage based on the charge only
+    local new_voltage = BAT_LOW_VOLTAGE_LIMIT + math.max(0, (BAT_TOP_VOLTAGE_LIMIT-BAT_LOW_VOLTAGE_LIMIT) * (bat.curr_charge/BAT_CAPACITY_AMPH))
+
+    -- Let's add the effect of the load
+    if net_amps < 0 then
+        new_voltage = new_voltage + BAT_INTERNAL_RES * net_amps
+    end
     
+    bat.curr_voltage = Set_anim_value_no_lim(bat.curr_voltage, new_voltage, 1)
 end
 
 local function update_battery_buses(bat)

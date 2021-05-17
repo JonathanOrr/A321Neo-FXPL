@@ -140,7 +140,7 @@ function ADIRS:update_adr_elec()
     
     -- Battery BUS
     local dr_secondary = elec_const_to_dr(self.elec_bus_secondary)
-    if get(dr_secondary) == 1 then
+    if get(dr_secondary) == 1 and self.is_on_bat then
         ELEC_sys.add_power_consumption(self.elec_bus_secondary, 1.2, 1.25)
         return true
     end
