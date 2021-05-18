@@ -267,3 +267,7 @@ ISIS_horizon =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/IS
 ISIS_horizon_mask = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/horizon_mask.png")
 ISIS_horizon_wings = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/horizon_wings.png")
 ISIS_spd_pointer = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/spd_pointer.png")
+ISIS_alt_window = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/alt_box.png")
+ISIS_alt_scrolling = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/AltDisplay_tens-1.png")
+ISIS_SI = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/Beta-1.png")
+ISIS_roll_arrow = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/Triangle-1.png")
