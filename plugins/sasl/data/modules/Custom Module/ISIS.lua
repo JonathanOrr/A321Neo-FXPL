@@ -36,12 +36,12 @@ local spd_tape_y_offset = -13
 local spd_tape_per_reading = 20 --px per reading, 000 to 010 is 20px
 
 local function draw_spd_stby()
-    sasl.gl.drawRectangle(50, spd_tape_y - 22, 80, 43, PFD_YELLOW)
-    sasl.gl.drawText(Font_ECAMfont, 90, spd_tape_y + spd_tape_y_offset, "SPD", 32, false, false, TEXT_ALIGN_CENTER, ECAM_BLACK)
+    sasl.gl.drawRectangle(50, spd_tape_y - 22 , 80, 45, PFD_YELLOW)
+    sasl.gl.drawText(Font_ECAMfont, 90, spd_tape_y + spd_tape_y_offset + 2, "SPD", 32, false, false, TEXT_ALIGN_CENTER, ECAM_BLACK)
 end
 
 local function draw_speed_tape()
-    if get(Stby_IAS) > 20 and get(Stby_IAS) < 520 then --add conditions for standby flag to draw here
+    if get(Stby_IAS) > -20 and get(Stby_IAS) < 520 then --add conditions for standby flag to draw here
         local airspeed_y_offset = get(Stby_IAS) * 4 -- 4 px per airspeed notch
         for i=-4, 104 do -- if you want to get the i for a certain airspeed, divided the airspeed by 5.
 
@@ -74,16 +74,33 @@ local function draw_speed_tape()
 end
 
 
+local att_x_center = 239
+local att_y_center = 250
+
+local function draw_att()
+    sasl.gl.drawMaskStart ()
+    sasl.gl.drawTexture(ISIS_horizon_mask, 0, 0, 500, 500, {1,1,1})
+    sasl.gl.drawUnderMask(true)
+
+    SASL_rotated_center_img_xcenter_aligned(
+        ISIS_horizon,
+        att_x_center,
+        att_y_center,
+        2000,
+        700,
+        90 - get(Capt_bank),
+        get(Capt_pitch) * 6.125 + 8,
+        -700/2,
+        ECAM_WHITE
+    )
+    sasl.gl.drawMaskEnd ()
+    sasl.gl.drawTexture(ISIS_horizon_wings, 0, 0, 500, 500, {1,1,1})
+end
+
 local function draw_background()
     sasl.gl.drawRectangle(0, 0, 500, 500, ECAM_BLACK)
 end
-
-function draw()
-
-    --draw_background()
-
-    draw_speed_tape()
-
+local function legacy_code()
     if get(ISIS_powered) == 0 then
         return
     end
@@ -116,6 +133,18 @@ function draw()
         --    end
         --end
     end
+end
+
+function draw()
+    sasl.gl.setRenderTarget(ISIS_popup_texture, true)
+    --draw_background()
+
+    draw_att()
+    draw_speed_tape()
+    legacy_code()
+
+    sasl.gl.restoreRenderTarget()
+    sasl.gl.drawTexture(ISIS_popup_texture, 0, 0, 500, 500, {1,1,1})
 end
 
 function update()

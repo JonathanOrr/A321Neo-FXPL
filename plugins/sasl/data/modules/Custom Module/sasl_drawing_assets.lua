@@ -239,6 +239,7 @@ CAPT_ND_popup_texture =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/te
 FO_ND_popup_texture =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/popups/fo_nd.png")
 EWD_popup_texture =      sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/popups/ewd.png")
 ECAM_popup_texture =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/popups/ecam.png")
+ISIS_popup_texture =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/popups/isis.png")
 
 --LOADSHEET 
 LOADSHEET_bgd =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/loadsheet/loadsheet.png")
@@ -262,3 +263,6 @@ Y_master =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/failur
 Y_caut =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/failures_ui/y_caut.png")
 
 --ISIS TEST DRAWINGS
+ISIS_horizon =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/isis horizon.png")
+ISIS_horizon_mask = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/horizon_mask.png")
+ISIS_horizon_wings = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/horizon_wings.png")
