@@ -189,19 +189,29 @@ end
 
 function ADIRS:update_adr_data()
     
+    local computed_ias = get(self.ias_dataref) + self.adr_ias_offset + get(self.err_pitot_dataref) * (random_err[self.id] > 0.5 and random_err[self.id] * 50 or (random_err[self.id]-1) * 50)
+    local computed_alt = get(self.baroalt_dataref) + self.adr_alt_offset + get(self.err_static_dataref) * (-10000*(random_err[self.id]+0.1))
+    local computed_mach = get(self.mach_dataref) + get(self.err_pitot_dataref) * (random_err[self.id]/2)
+    
     if self.adr_status == ADR_STATUS_ON then
-        self.ias = get(self.ias_dataref) + self.adr_ias_offset + get(self.err_pitot_dataref) * (random_err[self.id] > 0.5 and random_err[self.id] * 50 or (random_err[self.id]-1) * 50)
+        self.ias = computed_ias
         self.ias_trend = get(self.ias_trend_dataref) + get(self.err_pitot_dataref) * (math.random()*10)
         self.tas = get(self.tas_dataref) + self.adr_ias_offset + get(self.err_pitot_dataref) * (self.ias/10)
-        self.mach = get(self.mach_dataref) + get(self.err_pitot_dataref) * (random_err[self.id]/2)
-        self.alt = get(self.baroalt_dataref) + self.adr_alt_offset + get(self.err_static_dataref) * (-10000*(random_err[self.id]+0.1))
+        self.mach = computed_mach
+        self.alt = computed_alt
         self.vs  = get(self.vvi_dataref) + get(self.err_static_dataref) * ((random_err[self.id]-0.5)*1000)
         
         if self.ir_status == IR_STATUS_ALIGNED then
             self.wind_spd = get(Wind_SPD) + get(self.err_pitot_dataref) * (self.ias/10)
             self.wind_dir = get(Wind_HDG)
         end
-    end    
+    end
+    
+    if self.id == ADIRS_3 then
+        set(ISIS_IAS, computed_ias)
+        set(ISIS_Altitude, computed_alt)
+        set(ISIS_Mach, computed_mach)
+    end
 end
 
 ------------------------------------------- IR

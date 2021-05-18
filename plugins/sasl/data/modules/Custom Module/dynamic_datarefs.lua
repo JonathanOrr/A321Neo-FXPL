@@ -416,6 +416,11 @@ Fo_Track       = globalProperty("sim/cockpit2/gauges/indicators/ground_track_mag
 Wind_SPD     = globalProperty("sim/cockpit2/gauges/indicators/wind_speed_kts")
 Wind_HDG     = globalProperty("sim/cockpit2/gauges/indicators/wind_heading_deg_mag")
 
+-- ISIS datarefs
+ISIS_IAS      = createGlobalPropertyf("a321neo/dynamics/isis/ias", 0, false, true, false)
+ISIS_Altitude = createGlobalPropertyf("a321neo/dynamics/isis/altitude", 0, false, true, false)
+ISIS_Mach     = createGlobalPropertyf("a321neo/dynamics/isis/mach", 0, false, true, false)
+
 --gear
 Gear_handle = globalProperty("sim/cockpit2/controls/gear_handle_down")
 Front_gear_deployment = globalProperty("sim/flightmodel2/gear/deploy_ratio[0]")
