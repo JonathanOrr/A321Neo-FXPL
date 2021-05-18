@@ -31,6 +31,7 @@ ECAM_RED = {1.0, 0.0, 0.0}
 ECAM_MAGENTA = {1.0, 112/255, 1.0}
 ECAM_GREY = {0.3, 0.3, 0.3}
 ECAM_BLACK = {0, 0, 0}
+ECAM_YELLOW = {1, 1, 0}
 UI_WHITE = {1.0, 1.0, 1.0}
 UI_LIGHT_RED = {1.0, 0.3, 0.3}
 UI_LIGHT_BLUE = {0, 0.708, 1}

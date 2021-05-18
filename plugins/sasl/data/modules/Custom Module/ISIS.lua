@@ -22,7 +22,7 @@ size = {500, 500}
 include("ADIRS_data_source.lua")
 
 local TIME_TO_ALIGN_SEC = 90
-local baro_in_std = true
+local baro_in_std = false
 
 -- Toggle LS
 sasl.registerCommandHandler (ISIS_cmd_LS, 0, function(phase) 
@@ -51,10 +51,10 @@ local function draw_spd_stby()
 end
 
 local function draw_speed_tape()
-    if get(Stby_IAS) > -20 and get(Stby_IAS) < 520 then --add conditions for standby flag to draw here\
+    if get(ISIS_IAS) > -20 and get(ISIS_IAS) < 520 then --add conditions for standby flag to draw here\
         sasl.gl.drawTexture (ISIS_spd_pointer, 76, 219, 28, 45, {1, 1, 1})
         sasl.gl.setClipArea (0, 100, 76, 308)
-        local airspeed_y_offset = get(Stby_IAS) * 4 -- 4 px per airspeed notch
+        local airspeed_y_offset = get(ISIS_IAS) * 4 -- 4 px per airspeed notch
         for i=-4, 104 do -- if you want to get the i for a certain airspeed, divided the airspeed by 5.
 
             local dashes_y = (spd_tape_y + spd_tape_per_reading * i - airspeed_y_offset)
@@ -62,20 +62,20 @@ local function draw_speed_tape()
 
             local curr_spd = i * 20
 
-            if (curr_spd <= get(Stby_IAS) + 70) and (curr_spd >= get(Stby_IAS) - 50) and i*20 <= 520 and i*20 >= -20 then
-                sasl.gl.drawText(Font_ECAMfont, spd_tape_x, dashes_y + spd_tape_y_offset + 60 * i, Fwd_string_fill( tostring(math.abs(i*20)), "0", 3) , 32, false, false, TEXT_ALIGN_CENTER, EFB_FULL_GREEN)
+            if (curr_spd <= get(ISIS_IAS) + 70) and (curr_spd >= get(ISIS_IAS) - 50) and i*20 <= 520 and i*20 >= -20 then
+                sasl.gl.drawText(Font_ECAMfont, spd_tape_x, dashes_y + spd_tape_y_offset + 60 * i, Fwd_string_fill( tostring(math.abs(i*20)), "0", 3) , 32, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
             end
 
             local curr_spd_for_dashes = i * 5
-            if (curr_spd_for_dashes <= get(Stby_IAS) + 50) and (curr_spd_for_dashes >= get(Stby_IAS) - 50) then 
+            if (curr_spd_for_dashes <= get(ISIS_IAS) + 50) and (curr_spd_for_dashes >= get(ISIS_IAS) - 50) then 
                 if (i+2)%4 == 0 then -- if the airspeed notch should be displayed as a long dash
-                    sasl.gl.drawWideLine(spd_tape_x+21, dashes_y, spd_tape_x+38, dashes_y, 3, EFB_FULL_GREEN) --long dashes
+                    sasl.gl.drawWideLine(spd_tape_x+21, dashes_y, spd_tape_x+38, dashes_y, 3, ECAM_WHITE) --long dashes
                 else
                     if i < 50 then -- if airspeed below 250
-                        sasl.gl.drawWideLine(spd_tape_x+32, dashes_y, spd_tape_x+38, dashes_y, 3, EFB_FULL_GREEN) --draw short dashes for every 5kt as it should
+                        sasl.gl.drawWideLine(spd_tape_x+32, dashes_y, spd_tape_x+38, dashes_y, 3, ECAM_WHITE) --draw short dashes for every 5kt as it should
                     elseif (i+2)%2 == 0 then
                         local dashes_y_above_250 = (spd_tape_y + spd_tape_per_reading * i  - airspeed_y_offset) --draw short dashes only every 10kt
-                        sasl.gl.drawWideLine(spd_tape_x+32, dashes_y_above_250, spd_tape_x+38, dashes_y_above_250, 3, EFB_FULL_GREEN)
+                        sasl.gl.drawWideLine(spd_tape_x+32, dashes_y_above_250, spd_tape_x+38, dashes_y_above_250, 3, ECAM_WHITE)
                     end        
                 end
             end
@@ -95,10 +95,10 @@ local function draw_alt_stby()
 end
 
 local function draw_alt_tape()
-    if get(Stby_Alt) > -2000 and get(Stby_Alt) < 50000 then --add conditions for standby flag to draw here
+    if get(ISIS_Altitude) > -2000 and get(ISIS_Altitude) < 50000 then --add conditions for standby flag to draw here
         sasl.gl.setClipArea (403, 100, 97, 308)
         --sasl.gl.drawTexture (ISIS_spd_pointer, 76, 219, 28, 45, {1, 1, 1})
-        local alt_y_offset = get(Stby_Alt) * 0.216 + 10 -- 0.216 px per altitude notch
+        local alt_y_offset = get(ISIS_Altitude) * 0.216 + 10 -- 0.216 px per altitude notch
         for i=-16, 400 do -- 4 i for 500ft, 1 i is 125ft.
 
             local dashes_y = (spd_tape_y - alt_y_offset)
@@ -106,31 +106,30 @@ local function draw_alt_tape()
 
             local curr_alt = i * 500
 
-            if (curr_alt <= get(Stby_Alt) + 1000) and (curr_alt >= get(Stby_Alt) - 1000) and curr_alt <= 50000 and curr_alt >= -2000 then
-                sasl.gl.drawText(Font_ECAMfont, alt_tape_x, dashes_y + 108 * i, Fwd_string_fill( tostring(math.abs(curr_alt)/100), "0", 3) , 32, false, false, TEXT_ALIGN_CENTER, EFB_FULL_GREEN)
+            if (curr_alt <= get(ISIS_Altitude) + 1000) and (curr_alt >= get(ISIS_Altitude) - 1000) and curr_alt <= 50000 and curr_alt >= -2000 then
+                sasl.gl.drawText(Font_ECAMfont, alt_tape_x, dashes_y + 108 * i, Fwd_string_fill( tostring(math.abs(curr_alt)/100), "0", 3) , 32, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
             end
 
             local curr_alt_for_dashes = i * 500/4
-            if curr_alt_for_dashes < (get(Stby_Alt) + 1000) and curr_alt_for_dashes > (get(Stby_Alt) -1000) then
+            if curr_alt_for_dashes < (get(ISIS_Altitude) + 1000) and curr_alt_for_dashes > (get(ISIS_Altitude) -1000) then
                 if i%4 == 0 then
-                    sasl.gl.drawWideLine(alt_tape_x-38, dashes_y + 12 + i * 108/4, alt_tape_x-32, dashes_y + 12+ i * 108/4, 3, EFB_FULL_GREEN) --long dashes
+                    sasl.gl.drawWideLine(alt_tape_x-38, dashes_y + 12 + i * 108/4, alt_tape_x-32, dashes_y + 12+ i * 108/4, 3, ECAM_WHITE) --long dashes
                 else
-                    sasl.gl.drawWideLine(alt_tape_x-38, dashes_y + 12 + i * 108/4, alt_tape_x-18, dashes_y + 12+ i * 108/4, 3, EFB_FULL_GREEN) --long dashes
+                    sasl.gl.drawWideLine(alt_tape_x-38, dashes_y + 12 + i * 108/4, alt_tape_x-18, dashes_y + 12+ i * 108/4, 3, ECAM_WHITE) --long dashes
                 end
             end
         end
         sasl.gl.resetClipArea ()
         sasl.gl.drawTexture(ISIS_alt_window, 350, 212, 150, 61, {1,1,1})
-        sasl.gl.drawText(Font_ECAMfont, 500-62, spd_tape_y-11, math.floor(math.abs((get(Stby_Alt)/100)), 0), 34, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-        local alt_100_looping = get(Stby_Alt)%100
-        print(alt_100_looping)
+        sasl.gl.drawText(Font_ECAMfont, 500-62, spd_tape_y-11, math.floor(math.abs((get(ISIS_Altitude)/100)), 0), 34, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        local alt_100_looping = get(ISIS_Altitude)%100
         sasl.gl.setClipArea (450, 215, 45, 55)
             sasl.gl.drawTexture(ISIS_alt_scrolling, 452, 198 - 155*alt_100_looping/100, 36, 244, {1,1,1})
         sasl.gl.resetClipArea ()
     else 
         draw_alt_stby()
     end
-    if get(Stby_Alt) < 0 then
+    if get(ISIS_Altitude) < 0 then
         sasl.gl.drawText(Font_ECAMfont, 385, spd_tape_y-13 + 40, "N", 40, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
         sasl.gl.drawText(Font_ECAMfont, 385, spd_tape_y-13, "E", 40, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
         sasl.gl.drawText(Font_ECAMfont, 385, spd_tape_y-13 - 40, "G", 40, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
@@ -139,12 +138,12 @@ local function draw_alt_tape()
 end
 
 local function draw_meters_display()
-    Sasl_DrawWideFrame(214, 445, 194, 33, 2, 0, ECAM_GREEN)
-    local meter_alt = math.floor(math.abs(get(Stby_Alt)) * 0.3048)
-    sasl.gl.drawText (Font_AirbusDUL, 360, 451, meter_alt, 32, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-    sasl.gl.drawText (Font_AirbusDUL, 403, 449, "M", 35, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
-    if get(Stby_Alt) < 0 then
-        sasl.gl.drawText (Font_AirbusDUL, 222, 451, "NEG", 32, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+    Sasl_DrawWideFrame(210, 441, 198, 37, 2, 0, ECAM_YELLOW)
+    local meter_alt = math.floor(math.abs(get(ISIS_Altitude)) * 0.3048)
+    sasl.gl.drawText (Font_AirbusDUL, 360, 446, meter_alt, 37, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    sasl.gl.drawText (Font_AirbusDUL, 403, 446, "M", 34, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
+    if get(ISIS_Altitude) < 0 then
+        sasl.gl.drawText (Font_AirbusDUL, 218, 446, "NEG", 34, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
     end
 end
 
@@ -163,7 +162,7 @@ local function draw_att()
         2000,
         700,
         90 - get(Capt_bank),
-        get(Capt_pitch) * 6.125+8,
+        get(Capt_pitch) * 6.8+8,
         -700/2,
         ECAM_WHITE
     )
@@ -179,7 +178,7 @@ local function draw_att()
         466,
         -get(Capt_bank),
         4,
-        -700/2+45,
+        -700/2+33,
         ECAM_WHITE
     )
     SASL_rotated_center_img_xcenter_aligned(
@@ -190,7 +189,7 @@ local function draw_att()
         466,
         -get(Capt_bank),
         4 + Math_clamp(get(Slide_slip_angle),-10,10)*4,
-        -700/2+44,
+        -700/2+32,
         ECAM_WHITE
     )
 end
@@ -198,7 +197,7 @@ end
 local function draw_barometer()
     if baro_in_std then
         set(Stby_Baro, 29.92)
-        sasl.gl.drawText (Font_AirbusDUL, 240, 25, "STD", 36, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+        sasl.gl.drawText (Font_AirbusDUL, 240, 25, "STD", 40, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
     else
         local baro_mmhg = Round(get(Stby_Baro),2)
         local baro_kpa  = Round(33.8639 * get(Stby_Baro),0)
@@ -234,16 +233,43 @@ local function legacy_code()
     end
 end
 
+local mach_displayed = false
+
+local function draw_mach()
+    if get(ISIS_Mach) > 0.50 then
+        mach_displayed = true
+    elseif get(ISIS_Mach) < 0.45 then
+        mach_displayed = false
+    end
+    if mach_displayed then
+        sasl.gl.drawText (Font_AirbusDUL, 83, 35, string.sub(Aft_string_fill(tostring(Round(get(ISIS_Mach),2)), "0", 4), 2, 4), 37, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    end
+end
+
+local function draw_backlit()
+    sasl.gl.drawTexture(ISIS_backlit, 0, 0, 500, 500, {10/255, 15/255, 25/255})
+end
+    
+local function is_isis_powered()
+    return get(DC_ess_bus_pwrd) == 1 or (get(HOT_bus_1_pwrd) == 1 and get(ISIS_IAS) > 50)
+end
+
 function draw()
     sasl.gl.setRenderTarget(ISIS_popup_texture, true)
     --draw_background()
 
-    draw_att()
-    draw_speed_tape()
-    legacy_code()
-    draw_alt_tape()
-    draw_meters_display()
-    draw_barometer()
+    if is_isis_powered() then
+        draw_att()
+        draw_backlit()
+        draw_speed_tape()
+        legacy_code()
+        draw_alt_tape()
+        draw_meters_display()
+        draw_barometer()
+        draw_mach()
+    else
+        sasl.gl.drawRectangle(0, 0, 500, 500, ECAM_BLACK)
+    end
 
     sasl.gl.restoreRenderTarget()
     sasl.gl.drawTexture(ISIS_popup_texture, 0, 0, 500, 500, {1,1,1})
@@ -251,7 +277,7 @@ end
 
 function update()
 
-    if ((get(Stby_IAS) > 50 or get(All_on_ground) == 0) and get(HOT_bus_1_pwrd) == 1) or get(DC_ess_bus_pwrd) == 1 then
+    if ((get(ISIS_IAS) > 50 or get(All_on_ground) == 0) and get(HOT_bus_1_pwrd) == 1) or get(DC_ess_bus_pwrd) == 1 then
         set(ISIS_powered, 1)
     else
         set(ISIS_powered, 0)

@@ -362,6 +362,20 @@ ECAM_window = contextWindow {
   };
 }
 
+ISIS_window = contextWindow {
+  name = "ISIS";
+  position = { 0 , 0 , 500, 500 };
+  noBackground = true ;
+  proportional = true ;
+  minimumSize = { 300, 300 };
+  maximumSize = { 500, 500 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = false;
+  components = {
+      ISIS_popup {}
+  };
+}
+
 MAGIC_window = contextWindow {
   name = "Magic";
   position = { 0 , 0 , 300, 100 };

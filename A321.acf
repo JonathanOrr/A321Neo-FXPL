@@ -212,7 +212,7 @@ P _gear/0/_lonE 7.0
 P _gear/0/_lonN 7.0
 P _gear/0/_lonR 99.0
 P _gear/0/_scon 139161.984375000
-P _gear/0/_stat_def 0.120230190
+P _gear/0/_stat_def 0.120230213
 P _gear/0/_steerdeg_hispeed 5.0
 P _gear/0/_steerdeg_lospeed 75.0
 P _gear/0/_strut_comp 0.899999976
@@ -246,7 +246,7 @@ P _gear/1/_lonE -6.0
 P _gear/1/_lonN -6.0
 P _gear/1/_lonR 2.0
 P _gear/1/_scon 139161.984375000
-P _gear/1/_stat_def 0.739950061
+P _gear/1/_stat_def 0.739950001
 P _gear/1/_steerdeg_hispeed 0.0
 P _gear/1/_steerdeg_lospeed 0.0
 P _gear/1/_strut_comp 0.699999988
@@ -280,7 +280,7 @@ P _gear/2/_lonE -6.0
 P _gear/2/_lonN -6.0
 P _gear/2/_lonR 2.0
 P _gear/2/_scon 139161.984375000
-P _gear/2/_stat_def 0.739950061
+P _gear/2/_stat_def 0.739950001
 P _gear/2/_steerdeg_hispeed 0.0
 P _gear/2/_steerdeg_lospeed 0.0
 P _gear/2/_strut_comp 0.699999988
@@ -56798,7 +56798,7 @@ P _part/85/_part_specs_invis 0
 P _part/85/_part_tex 0
 P _part/85/_part_the -83.0
 P _part/85/_part_x 0.0
-P _part/85/_part_y -12.263556480
+P _part/85/_part_y -12.263555527
 P _part/85/_part_z 16.764410019
 P _part/85/_patt_con 0
 P _part/85/_patt_prt 0
@@ -72635,329 +72635,6 @@ GROUP PFD
     IS_DRAGGABLE 0
     IS_VERTICAL 1
     OFFSET 0.000000
-
-END_GROUP
-GROUP Isis
-  SHOW_EQUAL 1.000000 a321neo/cockpit/ISIS/isis_is_powered
-  LOCKED
-  gen_needle Isis Horizon
-    POS 272.000000 1297.000000
-    IMAGE MIP/isis/isis horizon
-    DATAREF sim/cockpit2/gauges/indicators/roll_AHARS_deg_pilot
-    LOCKED
-    CLIP
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 90.000000 1.000000
-    KEY_FRAME -45.000000 135.000000
-    IS_DRAGGABLE 0
-    OFFSET 0.000000
-    DEFLECT_SRC PITCH_ELEC
-    DEFLECT_PIX 553.000000
-
-  gen_rotary ISIS
-    POS 280.000000 1305.000000
-    IMAGE MIP/isis/isis
-    DATAREF 
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 6.000000
-    DIGITS 1
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_pointer isis alt
-    POS 472.500000 1306.000000
-    IMAGE MIP/isis/alt/1
-    DATAREF sim/cockpit2/gauges/indicators/altitude_ft_stby
-    LOCKED
-    CLIP
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 831.000000 1.000000
-    KEY_FRAME 9500.000000 -1202.000000
-    IS_DRAGGABLE 0
-    IS_VERTICAL 1
-    OFFSET 0.000000
-
-  gen_pointer isis alt 2
-    POS 472.500000 1306.000000
-    IMAGE MIP/isis/alt/2
-    DATAREF sim/cockpit2/gauges/indicators/altitude_ft_stby
-    LOCKED
-    CLIP
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 11000.000000 1318.000000 1.000000
-    KEY_FRAME 23000.000000 -1249.000000
-    IS_DRAGGABLE 0
-    IS_VERTICAL 1
-    OFFSET 0.000000
-
-  gen_pointer isis alt 3
-    POS 472.500000 1306.000000
-    IMAGE MIP/isis/alt/3
-    DATAREF sim/cockpit2/gauges/indicators/altitude_ft_stby
-    LOCKED
-    CLIP
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 24000.000000 1378.000000 1.000000
-    KEY_FRAME 37000.000000 -1404.000000
-    IS_DRAGGABLE 0
-    IS_VERTICAL 1
-    OFFSET 0.000000
-
-  gen_pointer isis alt 4
-    POS 472.500000 1306.000000
-    IMAGE MIP/isis/alt/4
-    DATAREF sim/cockpit2/gauges/indicators/altitude_ft_stby
-    LOCKED
-    CLIP
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 37500.000000 1331.000000 1.000000
-    KEY_FRAME 48000.000000 -916.000000 1.000000
-    KEY_FRAME 99999.000000 -916.000000
-    IS_DRAGGABLE 0
-    IS_VERTICAL 1
-    OFFSET 0.000000
-
-  gen_rotary altbox
-    POS 451.500000 1306.500000
-    IMAGE MIP/isis/altbox
-    DATAREF 
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 6.000000
-    DIGITS 1
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  gen_pointer isis spd
-    POS 68.500000 1306.000000
-    IMAGE MIP/isis/alt
-    DATAREF sim/cockpit2/gauges/indicators/airspeed_kts_pilot
-    LOCKED
-    CLIP
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 1080.000000 1.000000
-    KEY_FRAME 510.000000 -1002.000000
-    IS_DRAGGABLE 0
-    IS_VERTICAL 1
-    OFFSET 0.000000
-
-  gen_pointer Alt Tens 2
-    POS 499.000000 1307.500000
-    IMAGE MIP/isis/AltDisplay_tens
-    DATAREF sim/cockpit2/gauges/indicators/altitude_ft_pilot
-    SIZE 1.500000
-    LOCKED
-    KF_WRAP_BOTTOM
-    KF_WRAP_TOP
-    CLIP
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 65.000000 1.000000
-    KEY_FRAME 100.000000 -65.000000
-    IS_DRAGGABLE 0
-    IS_VERTICAL 1
-    OFFSET 0.000000
-
-  gen_LED Alt Display 2
-    POS 454.000000 1307.000000
-    IMAGE MIP/pfd/alt numbers/hud numbers
-    DATAREF sim/cockpit2/gauges/indicators/altitude_ft_pilot
-    SHOW_GREATER 99.989998 sim/cockpit2/gauges/indicators/altitude_ft_pilot
-    SIZE 1.300000
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 35000.000000 350.000000
-    DIGITS 4
-    DECIMALS 1
-    PERIOD_WIDTH 0
-    LED_ROWS 0
-
-  GROUP LS
-    SHOW_EQUAL 1.000000 a321neo/cockpit/ISIS/isis_ls_enabled
-    LOCKED
-    gen_rotary LSV
-      POS 364.500000 1296.500000
-      IMAGE MIP/isis/LS/lsv
-      DATAREF 
-      SHOW_LESS 0.000000 sim/cockpit2/gauges/indicators/altitude_ft_pilot
-      SIZE 0.940000
-      LOCKED
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 1.000000 0.000000
-      DIGITS 1
-      ROTARY_TYPE NO_CLICK
-      CLICK_RADIUS 10.000000
-      CLICK_RADIUS_DY 0.000000
-      OFFSET 0.000000
-      STEP1 1.000000
-      STEP2 1.000000
-      CURSOR DEFAULT
-      CLICK_DX 0
-      CLICK_DY 0
-
-    gen_rotary LSH
-      POS 269.500000 1185.500000
-      IMAGE MIP/isis/LS/lsh
-      DATAREF 
-      SHOW_LESS 0.000000 sim/cockpit2/gauges/indicators/altitude_ft_pilot
-      SIZE 0.940000
-      LOCKED
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 1.000000 0.000000
-      DIGITS 1
-      ROTARY_TYPE NO_CLICK
-      CLICK_RADIUS 10.000000
-      CLICK_RADIUS_DY 0.000000
-      OFFSET 0.000000
-      STEP1 1.000000
-      STEP2 1.000000
-      CURSOR DEFAULT
-      CLICK_DX 0
-      CLICK_DY 0
-
-    gen_pointer LSVD
-      POS 363.500000 1297.000000
-      IMAGE MIP/isis/LS/lsvdiamond
-      DATAREF sim/cockpit2/radios/indicators/hsi_vdef_dots_pilot
-      LOCKED
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME -2.000000 73.000000 1.000000
-      KEY_FRAME 2.000000 -73.000000
-      IS_DRAGGABLE 0
-      IS_VERTICAL 1
-      OFFSET 0.000000
-
-    gen_pointer LSHD
-      POS 269.000000 1185.500000
-      IMAGE MIP/isis/LS/lshdiamond
-      DATAREF sim/cockpit2/radios/indicators/hsi_hdef_dots_pilot
-      LOCKED
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME -2.000000 -73.000000 1.000000
-      KEY_FRAME 2.000000 73.000000
-      IS_DRAGGABLE 0
-      IS_VERTICAL 0
-      OFFSET 0.000000
-
-  END_GROUP
-  gen_rotary neg
-    POS 331.500000 1391.000000
-    IMAGE MIP/isis/neg
-    DATAREF 
-    SHOW_LESS 0.000000 sim/cockpit2/gauges/indicators/altitude_ft_pilot
-    SIZE 0.940000
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 0.000000
-    DIGITS 1
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
-
-  GROUP Rotation
-    LOCKED
-    GROUP_ANIMATE_MODE ROTATE
-    GROUP_WIDTH 0
-    GROUP_HEIGHT 0
-    DATAREF sim/cockpit2/gauges/indicators/roll_AHARS_deg_pilot
-    POS 268.500000 1295.500000
-    KEY_FRAME -999.000000 60.000000 1.000000
-    KEY_FRAME -60.000000 60.000000 1.000000
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 60.000000 -60.000000 1.000000
-    KEY_FRAME 999.000000 -60.000000
-    ROTATE_OFFSET_X 0.000000
-    ROTATE_OFFSET_Y 0.000000
-    gen_pointer Arrow
-      POS 274.500000 1296.000000
-      IMAGE MIP/isis/Triangle
-      DATAREF 
-      SIZE 0.720000
-      LOCKED
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME 0.000000 0.000000 1.000000
-      KEY_FRAME 1.000000 0.000000
-      IS_DRAGGABLE 0
-      IS_VERTICAL 0
-      OFFSET 0.000000
-
-    gen_pointer Arrow 2
-      POS 274.500000 1296.000000
-      IMAGE MIP/isis/Beta
-      DATAREF sim/cockpit2/gauges/indicators/sideslip_degrees
-      SIZE 0.720000
-      LOCKED
-      LIGHT_MODE GLASS_AUTO
-      LIGHT_RHEOSTAT 0
-      KEY_FRAME -10.000000 -20.000000 1.000000
-      KEY_FRAME 10.000000 20.000000
-      IS_DRAGGABLE 0
-      IS_VERTICAL 0
-      OFFSET 0.000000
-
-  END_GROUP
-  gen_rotary ISIS Standby
-    POS 280.000000 1305.000000
-    IMAGE MIP/isis/isis stby
-    DATAREF 
-    SHOW_EQUAL 0.000000 a321neo/cockpit/ISIS/isis_is_ready
-    LOCKED
-    LIGHT_MODE GLASS_AUTO
-    LIGHT_RHEOSTAT 0
-    KEY_FRAME 0.000000 0.000000 1.000000
-    KEY_FRAME 1.000000 6.000000
-    DIGITS 1
-    ROTARY_TYPE NO_CLICK
-    CLICK_RADIUS 10.000000
-    CLICK_RADIUS_DY 0.000000
-    OFFSET 0.000000
-    STEP1 1.000000
-    STEP2 1.000000
-    CURSOR DEFAULT
-    CLICK_DX 0
-    CLICK_DY 0
 
 END_GROUP
 GROUP hud vertical
