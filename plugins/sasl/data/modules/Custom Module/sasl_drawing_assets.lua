@@ -266,3 +266,4 @@ Y_caut =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/failures
 ISIS_horizon =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/isis horizon.png")
 ISIS_horizon_mask = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/horizon_mask.png")
 ISIS_horizon_wings = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/horizon_wings.png")
+ISIS_spd_pointer = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/spd_pointer.png")

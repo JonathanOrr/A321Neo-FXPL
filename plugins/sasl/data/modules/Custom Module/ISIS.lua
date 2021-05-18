@@ -36,12 +36,13 @@ local spd_tape_y_offset = -13
 local spd_tape_per_reading = 20 --px per reading, 000 to 010 is 20px
 
 local function draw_spd_stby()
-    sasl.gl.drawRectangle(50, spd_tape_y - 22 , 80, 45, PFD_YELLOW)
-    sasl.gl.drawText(Font_ECAMfont, 90, spd_tape_y + spd_tape_y_offset + 2, "SPD", 32, false, false, TEXT_ALIGN_CENTER, ECAM_BLACK)
+    sasl.gl.drawRectangle(20, spd_tape_y - 22 , 85, 45, PFD_YELLOW)
+    sasl.gl.drawText(Font_ECAMfont, 62, spd_tape_y + spd_tape_y_offset, "SPD", 34, false, false, TEXT_ALIGN_CENTER, ECAM_BLACK)
 end
 
 local function draw_speed_tape()
     if get(Stby_IAS) > -20 and get(Stby_IAS) < 520 then --add conditions for standby flag to draw here
+        sasl.gl.drawTexture (ISIS_spd_pointer, 76, 219, 28, 45, {1, 1, 1})
         local airspeed_y_offset = get(Stby_IAS) * 4 -- 4 px per airspeed notch
         for i=-4, 104 do -- if you want to get the i for a certain airspeed, divided the airspeed by 5.
 
@@ -70,6 +71,43 @@ local function draw_speed_tape()
         end
     else 
         draw_spd_stby()
+    end
+end
+
+local alt_tape_x = 446
+local alt_tape_per_reading = 20
+
+local function draw_alt_stby()
+    sasl.gl.drawRectangle(480-85, spd_tape_y - 22 , 85, 45, PFD_YELLOW)
+    sasl.gl.drawText(Font_ECAMfont, 500-62, spd_tape_y + spd_tape_y_offset, "ALT", 34, false, false, TEXT_ALIGN_CENTER, ECAM_BLACK)
+end
+
+local function draw_alt_tape()
+    if get(Stby_Alt) > -2000 and get(Stby_Alt) < 50000 then --add conditions for standby flag to draw here
+        --sasl.gl.drawTexture (ISIS_spd_pointer, 76, 219, 28, 45, {1, 1, 1})
+        local alt_y_offset = get(Stby_Alt) * 0.216 -- 0.216 px per altitude notch
+        for i=-16, 400 do -- 4 i for 500ft, 1 i is 125ft.
+
+            local dashes_y = (spd_tape_y - alt_y_offset)
+
+
+            local curr_alt = i * 500
+
+            if (curr_alt <= get(Stby_Alt) + 1000) and (curr_alt >= get(Stby_Alt) - 1000) and curr_alt <= 50000 and curr_alt >= -2000 then
+                sasl.gl.drawText(Font_ECAMfont, alt_tape_x, dashes_y + 108 * i, Fwd_string_fill( tostring(math.abs(curr_alt)/100), "0", 3) , 32, false, false, TEXT_ALIGN_CENTER, EFB_FULL_GREEN)
+            end
+
+            local curr_alt_for_dashes = i * 500/4
+            if curr_alt_for_dashes < (get(Stby_Alt) + 1000) and curr_alt_for_dashes > (get(Stby_Alt) -1000) then
+                if i%4 == 0 then
+                    sasl.gl.drawWideLine(alt_tape_x-38, dashes_y + 12 + i * 108/4, alt_tape_x-32, dashes_y + 12+ i * 108/4, 3, EFB_FULL_GREEN) --long dashes
+                else
+                    sasl.gl.drawWideLine(alt_tape_x-38, dashes_y + 12 + i * 108/4, alt_tape_x-18, dashes_y + 12+ i * 108/4, 3, EFB_FULL_GREEN) --long dashes
+                end
+            end
+        end
+    else 
+        draw_alt_stby()
     end
 end
 
@@ -142,6 +180,7 @@ function draw()
     draw_att()
     draw_speed_tape()
     legacy_code()
+    draw_alt_tape()
 
     sasl.gl.restoreRenderTarget()
     sasl.gl.drawTexture(ISIS_popup_texture, 0, 0, 500, 500, {1,1,1})
