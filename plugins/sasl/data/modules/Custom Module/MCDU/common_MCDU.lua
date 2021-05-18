@@ -16,6 +16,12 @@
 -- Short description: Various functions for MCDU
 -------------------------------------------------------------------------------
 include('MCDU/constants.lua')
+include('MCDU/inputs.lua')
+include('MCDU/handlers.lua')
+include('MCDU/format.lua')
+include('MCDU/rendering.lua')
+
+include('MCDU/pages/include_all.lua')   -- This must be the last
 
 --line spacing
 local MCDU_DRAW_OFFSET  = {x = 15, y = 420}   -- starting offset for line drawing
@@ -36,9 +42,10 @@ function init_data(mcdu_data, id)
     mcdu_data.entry = ""
     mcdu_data.entry_cache = ""
     mcdu_data.dat = {}
-    mcdu_data.title = ""
+    mcdu_data.title = {}
     mcdu_data.messages = {}
     mcdu_data.message_showing = false
+    mcdu_data.curr_page = 0
 
     for i,size in ipairs(MCDU_DIV_SIZE) do
 	    mcdu_data.dat[size] = {}
@@ -53,7 +60,7 @@ function common_draw(mcdu_data)
 
     --draw all horizontal lines
     for i,line in ipairs(mcdu_data.draw_lines) do
-        if line.font == "l" then
+        if line.font == MCDU_LARGE then
             font = Font_AirbusDUL
         else
             font = Font_AirbusDUL_small
@@ -65,8 +72,33 @@ function common_draw(mcdu_data)
     sasl.gl.drawText(Font_AirbusDUL, draw_get_x(1), draw_get_y(12), mcdu_data.entry, MCDU_DISP_TEXT_SIZE[MCDU_L], false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
 end
 
+function mcdu_clearall(mcdu_data)
+    mcdu_data.title = {txt = "", col = ECAM_WHITE, size = nil}
+    for i,size in ipairs(MCDU_DIV_SIZE) do
+        for j,align in ipairs(MCDU_DIV_ALIGN) do
+            for k,row in ipairs(MCDU_DIV_ROW) do
+                mcdu_data.dat[size][align][row] = {txt = nil, col = ECAM_WHITE, size = nil}
+            end
+        end
+    end
+end
+
+local function mcdu_open_page(mcdu_data, id)
+    mcdu_clearall(mcdu_data)
+    mcdu_data.curr_page = id
+    mcdu_pages[id]:exec_render(mcdu_data)
+end
+
+--define custom functionalities
+function mcdu_send_message(mcdu_data, message)
+    table.insert(mcdu_data.messages, message)
+end
 
 function common_update(mcdu_data)
+    
+    if mcdu_data.curr_page == 0 then
+        mcdu_open_page(mcdu_data, 505)
+    end
     
     if #mcdu_data.messages > 0 and not mcdu_data.message_showing then
         mcdu_data.entry_cache = mcdu_data.entry
@@ -76,3 +108,4 @@ function common_update(mcdu_data)
     end
 
 end
+

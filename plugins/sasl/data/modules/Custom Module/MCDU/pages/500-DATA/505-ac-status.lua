@@ -12,30 +12,20 @@
 --    Please check the LICENSE file in the root of the repository for further
 --    details or check <https://www.gnu.org/licenses/>
 -------------------------------------------------------------------------------
--- File: CAPT_MCDU.lua 
--- Short description: Captain MCDU
+-- File: 505-ac-status.lua 
 -------------------------------------------------------------------------------
 
-position = {1020, 1666, 560, 530}
-size = {560, 530}
-fbo = true
+THIS_PAGE = MCDU_Page:new()
 
-include('MCDU/common_MCDU.lua')
 
-local mcdu_data = {}
-init_data(mcdu_data, 1)
-init_mcdu_handlers("", mcdu_data)   -- TODO Replace "" with "capt/"
+function THIS_PAGE:render(mcdu_data)
+        mcdu_data.title.txt = "TEST"
 
-function draw()
-    perf_measure_start("CAPT_MCDU:draw()")
-    --draw backlight--
-
-    common_draw(mcdu_data)
-
-    perf_measure_stop("CAPT_MCDU:draw()")
+        mcdu_data.dat[MCDU_LARGE][MCDU_L][1].txt = "TEST"
+		mcdu_data.dat[MCDU_LARGE][MCDU_L][6] = {txt = "        TEST", col = ECAM_ORANGE}
 end
 
-function update()
-    common_update(mcdu_data)
-end
 
+
+
+mcdu_pages[505] = THIS_PAGE

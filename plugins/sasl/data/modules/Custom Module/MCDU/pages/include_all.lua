@@ -12,30 +12,31 @@
 --    Please check the LICENSE file in the root of the repository for further
 --    details or check <https://www.gnu.org/licenses/>
 -------------------------------------------------------------------------------
--- File: CAPT_MCDU.lua 
--- Short description: Captain MCDU
+-- File: include_all.lua 
+-- Short description: A script to include all the subpages
 -------------------------------------------------------------------------------
 
-position = {1020, 1666, 560, 530}
-size = {560, 530}
-fbo = true
+include('MCDU/pages/base.lua')
 
-include('MCDU/common_MCDU.lua')
+mcdu_pages = {}
 
-local mcdu_data = {}
-init_data(mcdu_data, 1)
-init_mcdu_handlers("", mcdu_data)   -- TODO Replace "" with "capt/"
+local dir_list = sasl.listFiles(moduleDirectory .. "/Custom Module/MCDU/pages/")
 
-function draw()
-    perf_measure_start("CAPT_MCDU:draw()")
-    --draw backlight--
+local dir_list_len = #dir_list
 
-    common_draw(mcdu_data)
+assert(dir_list_len > 0, "Hey! Where all the MCDU pages gone?")
 
-    perf_measure_stop("CAPT_MCDU:draw()")
+for i=1,dir_list_len do
+    local dir_name = dir_list[i].name
+
+    if dir_list[i].type == "directory" and dir_name ~= "." and dir_name ~= ".." then
+        local pages_list = sasl.listFiles(moduleDirectory .. "/Custom Module/MCDU/pages/" .. dir_name .."/")
+
+        local pages_len = #pages_list
+        for i=1,pages_len do
+            if pages_list[i].type == "file" then
+                include("MCDU/pages/" .. dir_name .. "/" .. pages_list[i].name)
+            end
+        end
+    end
 end
-
-function update()
-    common_update(mcdu_data)
-end
-
