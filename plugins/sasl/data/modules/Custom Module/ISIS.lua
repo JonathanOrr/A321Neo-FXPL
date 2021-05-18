@@ -35,34 +35,42 @@ local spd_tape_y = 241
 local spd_tape_y_offset = -13
 local spd_tape_per_reading = 20 --px per reading, 000 to 010 is 20px
 
-local function to_3_digits(number)
-    return #tostring(math.abs(number)) < 3  and "0"..number or number --30 returns 030, 40 returns 040, etc. 230 returns 230 as always.
+local function draw_spd_stby()
+    sasl.gl.drawRectangle(50, spd_tape_y - 22, 80, 43, PFD_YELLOW)
+    sasl.gl.drawText(Font_ECAMfont, 90, spd_tape_y + spd_tape_y_offset, "SPD", 32, false, false, TEXT_ALIGN_CENTER, ECAM_BLACK)
 end
 
 local function draw_speed_tape()
+    if get(Stby_IAS) > 20 and get(Stby_IAS) < 520 then --add conditions for standby flag to draw here
+        local airspeed_y_offset = get(Stby_IAS) * 4 -- 4 px per airspeed notch
+        for i=-4, 104 do -- if you want to get the i for a certain airspeed, divided the airspeed by 5.
 
-    local airspeed_y_offset = get(Stby_IAS) * 4 -- 4 px per airspeed notch
-    for i=-4, 100 do
-        
-        local dashes_y = (spd_tape_y + spd_tape_per_reading * i - airspeed_y_offset)
+            local dashes_y = (spd_tape_y + spd_tape_per_reading * i - airspeed_y_offset)
 
 
-        local curr_spd = i * 20
+            local curr_spd = i * 20
 
-        if (curr_spd <= get(Stby_IAS) + 50) and (curr_spd >= get(Stby_IAS) - 50) and i*20 <= 500 then
-            sasl.gl.drawText(Font_ECAMfont, spd_tape_x, dashes_y + spd_tape_y_offset + 60 * i, Fwd_string_fill( tostring(math.abs(i*20)), "0", 3) , 32, false, false, TEXT_ALIGN_CENTER, EFB_FULL_GREEN)
-        end
-        
-        local curr_spd_for_dashes = i * 5
-        if (curr_spd_for_dashes <= get(Stby_IAS) + 50) and (curr_spd_for_dashes >= get(Stby_IAS) - 50) then 
-            if (i+2)%4 == 0 then
-                sasl.gl.drawWideLine(spd_tape_x+21, dashes_y, spd_tape_x+38, dashes_y, 3, EFB_FULL_GREEN)
-            else
-                sasl.gl.drawWideLine(spd_tape_x+32, dashes_y, spd_tape_x+38, dashes_y, 3, EFB_FULL_GREEN)
+            if (curr_spd <= get(Stby_IAS) + 50) and (curr_spd >= get(Stby_IAS) - 50) and i*20 <= 520 and i*20 >= -20 then
+                sasl.gl.drawText(Font_ECAMfont, spd_tape_x, dashes_y + spd_tape_y_offset + 60 * i, Fwd_string_fill( tostring(math.abs(i*20)), "0", 3) , 32, false, false, TEXT_ALIGN_CENTER, EFB_FULL_GREEN)
+            end
+
+            local curr_spd_for_dashes = i * 5
+            if (curr_spd_for_dashes <= get(Stby_IAS) + 50) and (curr_spd_for_dashes >= get(Stby_IAS) - 50) then 
+                if (i+2)%4 == 0 then -- if the airspeed notch should be displayed as a long dash
+                    sasl.gl.drawWideLine(spd_tape_x+21, dashes_y, spd_tape_x+38, dashes_y, 3, EFB_FULL_GREEN) --long dashes
+                else
+                    if i < 50 then -- if airspeed below 250
+                        sasl.gl.drawWideLine(spd_tape_x+32, dashes_y, spd_tape_x+38, dashes_y, 3, EFB_FULL_GREEN) --draw short dashes for every 5kt as it should
+                    elseif (i+2)%2 == 0 then
+                        local dashes_y_above_250 = (spd_tape_y + spd_tape_per_reading * i  - airspeed_y_offset) --draw short dashes only every 10kt
+                        sasl.gl.drawWideLine(spd_tape_x+32, dashes_y_above_250, spd_tape_x+38, dashes_y_above_250, 3, EFB_FULL_GREEN)
+                    end        
+                end
             end
         end
+    else 
+        draw_spd_stby()
     end
-
 end
 
 

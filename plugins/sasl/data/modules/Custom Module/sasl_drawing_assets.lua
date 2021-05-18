@@ -261,3 +261,4 @@ R_warn =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/failures
 Y_master =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/failures_ui/y_master.png")
 Y_caut =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/failures_ui/y_caut.png")
 
+--ISIS TEST DRAWINGS
