@@ -75,6 +75,7 @@ end
 
 function mcdu_clearall(mcdu_data)
     mcdu_data.title = {txt = "", col = ECAM_WHITE, size = nil}
+    mcdu_data.num_pages = nil
     for i,size in ipairs(MCDU_DIV_SIZE) do
         for j,align in ipairs(MCDU_DIV_ALIGN) do
             for k,row in ipairs(MCDU_DIV_ROW) do

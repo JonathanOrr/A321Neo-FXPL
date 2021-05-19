@@ -15,7 +15,7 @@
 -- File: 505-ac-status.lua 
 -------------------------------------------------------------------------------
 
-local THIS_PAGE = MCDU_Page:new()
+local THIS_PAGE = MCDU_Page:new({id=505})
 
 
 function THIS_PAGE:render(mcdu_data)
@@ -42,7 +42,7 @@ function THIS_PAGE:render(mcdu_data)
     end
 
     self:set_line(mcdu_data, MCDU_LEFT, 6, "IDLE/PERF", MCDU_SMALL)
-    self:set_line(mcdu_data, MCDU_LEFT, 6, "+0.0/+0.0", MCDU_LARGE, ECAM_GREEN)
+    self:set_line(mcdu_data, MCDU_LEFT, 6, "+0.0/+0.0", MCDU_LARGE, mcdu_data.v.chg_code_unlocked and ECAM_BLUE or ECAM_GREEN)
 
 
     self:set_line(mcdu_data, MCDU_RIGHT, 6, "SOFTWARE",      MCDU_SMALL)
@@ -51,7 +51,12 @@ function THIS_PAGE:render(mcdu_data)
 end
 
 function THIS_PAGE:L5(mcdu_data)
-    local input = mcdu_get_entry({"word", length = 3, dp = 0})
+    if mcdu_data.v.chg_code_unlocked then
+        mcdu_data.v.chg_code_unlocked = false
+        return 
+    end
+
+    local input = mcdu_get_entry(mcdu_data, {"word", length = 3, dp = 0})
     if input == "A32" then
         mcdu_data.v.chg_code_unlocked = true
     else
@@ -64,4 +69,4 @@ function THIS_PAGE:R6(mcdu_data)
     mcdu_open_page(mcdu_data, 507)
 end
 
-mcdu_pages[505] = THIS_PAGE
+mcdu_pages[THIS_PAGE.id] = THIS_PAGE

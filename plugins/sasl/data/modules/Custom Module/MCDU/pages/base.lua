@@ -142,7 +142,12 @@ function MCDU_Page:press_button(mcdu_data, val)
     else
         assert(false, "Uknown button")
     end
-    self:exec_render(mcdu_data)
+    
+    if self.id == mcdu_data.curr_page then
+        -- If the page didn't change, then ask for a re-rendering
+        mcdu_clearall(mcdu_data)
+        self:exec_render(mcdu_data)
+    end
 end
 
 
@@ -158,4 +163,9 @@ function MCDU_Page:set_title(mcdu_data, text, color)
     color = color or ECAM_WHITE
     mcdu_data.title = {txt = text, col = color}
 end
+
+function MCDU_Page:set_subpages(mcdu_data, current, total)
+    mcdu_data.num_pages = {current, total}
+end
+
 

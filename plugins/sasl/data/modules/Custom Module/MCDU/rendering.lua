@@ -85,5 +85,9 @@ function mcdu_update_render(mcdu_data)
             draw_dat(mcdu_data, dat, MCDU_LARGE, draw_get_x(1.5), draw_get_y(-1), TEXT_ALIGN_CENTER)
         end
     end
+    
+    if mcdu_data.num_pages ~= nil then
+        draw_dat(mcdu_data, {txt=mcdu_data.num_pages[1] .. "/" .. mcdu_data.num_pages[2]}, MCDU_SMALL, draw_get_x(2), draw_get_y(-1), TEXT_ALIGN_RIGHT)
+    end
 end
 
