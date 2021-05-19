@@ -20,6 +20,7 @@ include('MCDU/inputs.lua')
 include('MCDU/handlers.lua')
 include('MCDU/format.lua')
 include('MCDU/rendering.lua')
+include('FMGS/functions.lua')
 
 include('MCDU/pages/include_all.lua')   -- This must be the last
 

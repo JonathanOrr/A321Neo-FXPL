@@ -18,7 +18,6 @@
 
 local function get_airport_or_nil(name)
     local apt = AvionicsBay.apts.get_by_name(name, false)
-    print(name, #apt)
     if #apt > 0 then
         return apt[1]
     else

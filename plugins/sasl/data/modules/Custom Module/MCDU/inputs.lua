@@ -79,9 +79,11 @@ local function mcdu_parse_entry(entry, expected_format)
 
 	if format_type == "altitude" then
 		format_type = "number"
-		expected_format = {"number", length = 3, dp = 0}
+		expected_format = {"number", length = 5, dp = 0}
 		if string.sub(entry, 1, 2) == "FL" then
 			entry = string.sub(entry, 3, -1) -- get rid of FL
+        else
+            entry = tostring(math.floor(tonumber(entry) / 100))
 		end
 	end
 	if format_type == "heading" then
@@ -135,15 +137,16 @@ local function mcdu_parse_entry(entry, expected_format)
 end
 
 -- the simpler way of getting mcdu entries
-function mcdu_get_entry_simple(mcdu_data, expected_formats)
+function mcdu_get_entry_simple(mcdu_data, expected_formats, preserve_entry)
+    assert(type(mcdu_data) == "table" and mcdu_data.id)
     local output = mcdu_eval_entries(mcdu_data.entry, expected_formats)
     if output == nil then
-        mcdu_send_message("format error")
+        mcdu_send_message(mcdu_data, "FORMAT ERROR")
         return nil
-    else
+    elseif not preserve_entry then
         mcdu_data.entry = ""
-        return output
     end
+    return output
 end
 
 
@@ -154,6 +157,7 @@ end
 -- and /-20 is allowed (returns nil, -20)
 -- and 300 is allowed (returns 300, nil)
 function mcdu_get_entry(mcdu_data, format_a, format_b, dont_reset_entry)
+    assert(type(mcdu_data) == "table" and mcdu_data.id)
 	local a = nil
 	local b = nil
 	if format_b then
@@ -183,7 +187,7 @@ function mcdu_get_entry(mcdu_data, format_a, format_b, dont_reset_entry)
 	end
 
 	if a == "$invalid" or b == "$invalid" then
-        mcdu_send_message("format error")
+        mcdu_send_message(mcdu_data, "FORMAT ERROR")
         if format_b then
             return nil, nil
         end

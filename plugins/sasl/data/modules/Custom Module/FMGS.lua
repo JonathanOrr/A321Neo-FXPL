@@ -28,6 +28,14 @@ local config = {
 FMGS_sys.config = config
 
 FMGS_sys.fpln = {
+    init = {
+        flt_nbr = nil,
+        cost_index = nil,
+        crz_fl = nil,
+        crz_temp = nil,
+        tropo = 36090
+    },
+    
     apts = {
         dep=nil,    -- As returned by AvionicsBay, runways included
         arr=nil,    -- As returned by AvionicsBay, runways included

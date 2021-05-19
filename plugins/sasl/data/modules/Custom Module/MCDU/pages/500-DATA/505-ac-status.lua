@@ -26,7 +26,7 @@ function THIS_PAGE:render(mcdu_data)
     self:set_line(mcdu_data, MCDU_LEFT, 1, "PW-1133G", MCDU_LARGE, ECAM_GREEN)
 
     self:set_line(mcdu_data, MCDU_LEFT, 2, "ACTIVE DATA BASE", MCDU_SMALL)
-    self:set_line(mcdu_data, MCDU_LEFT, 2, "03MAY-31MAY",      MCDU_LARGE, ECAM_BLUE)
+    self:set_line(mcdu_data, MCDU_LEFT, 2, "XP DEFAULT",      MCDU_LARGE, ECAM_BLUE)
     self:set_line(mcdu_data, MCDU_RIGHT,2, "NW93821172",       MCDU_LARGE, ECAM_GREEN)
 
     self:set_line(mcdu_data, MCDU_LEFT, 3, "SECOND DATA BASE", MCDU_SMALL)
