@@ -24,8 +24,8 @@ include('MCDU/rendering.lua')
 include('MCDU/pages/include_all.lua')   -- This must be the last
 
 --line spacing
-local MCDU_DRAW_OFFSET  = {x = 15, y = 420}   -- starting offset for line drawing
-local MCDU_DRAW_SPACING = {x = 530, y = -37} -- change in offset per line drawn
+local MCDU_DRAW_OFFSET  = {x = 25, y = 420}   -- starting offset for line drawing
+local MCDU_DRAW_SPACING = {x = 520, y = -37} -- change in offset per line drawn
 
 
 function draw_get_x(align)
@@ -62,15 +62,15 @@ function common_draw(mcdu_data)
     --draw all horizontal lines
     for i,line in ipairs(mcdu_data.draw_lines) do
         if line.font == MCDU_LARGE then
-            font = Font_AirbusDUL
+            font = Font_MCDU
         else
-            font = Font_AirbusDUL_small
+            font = Font_MCDUSmall
         end
         sasl.gl.drawText(font, line.disp_x, line.disp_y, line.disp_text, line.disp_text_size, false, false, line.disp_text_align, line.disp_color)
     end
 
     --draw scratchpad
-    sasl.gl.drawText(Font_AirbusDUL, draw_get_x(1), draw_get_y(12), mcdu_data.entry, MCDU_DISP_TEXT_SIZE[MCDU_LEFT], false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(Font_MCDUSmall, draw_get_x(1), draw_get_y(12), mcdu_data.entry, MCDU_DISP_TEXT_SIZE[MCDU_LEFT], false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
 end
 
 function mcdu_clearall(mcdu_data)

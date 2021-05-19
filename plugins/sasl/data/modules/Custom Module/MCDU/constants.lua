@@ -32,8 +32,8 @@ MCDU_DIV_ROW = {1,2,3,4,5,6}
 --font size
 MCDU_DISP_TEXT_SIZE =
 {
-    [MCDU_SMALL] = 25,
-    [MCDU_LARGE] = 37
+    [MCDU_SMALL] = 30,
+    [MCDU_LARGE] = 30
 }
 
 --alignment
