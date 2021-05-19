@@ -48,8 +48,8 @@ local spd_tape_y_offset = -13
 local spd_tape_per_reading = 20 --px per reading, 000 to 010 is 20px
 
 local function draw_spd_stby()
-    sasl.gl.drawRectangle(20, spd_tape_y - 22 , 85, 45, PFD_YELLOW)
-    sasl.gl.drawText(Font_ECAMfont, 62, spd_tape_y + spd_tape_y_offset, "SPD", 34, false, false, TEXT_ALIGN_CENTER, ECAM_BLACK)
+    sasl.gl.drawRectangle(20, spd_tape_y - 22 , 85, 45, ECAM_RED)
+    sasl.gl.drawText(Font_ECAMfont, 62, spd_tape_y + spd_tape_y_offset, "SPD", 34, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
 end
 
 local function draw_speed_tape()
@@ -92,8 +92,13 @@ local alt_tape_x = 446
 local alt_tape_per_reading = 20
 
 local function draw_alt_stby()
-    sasl.gl.drawRectangle(480-85, spd_tape_y - 22 , 85, 45, PFD_YELLOW)
-    sasl.gl.drawText(Font_ECAMfont, 500-62, spd_tape_y + spd_tape_y_offset, "ALT", 34, false, false, TEXT_ALIGN_CENTER, ECAM_BLACK)
+    sasl.gl.drawRectangle(480-85, spd_tape_y - 22 , 85, 45, ECAM_RED)
+    sasl.gl.drawText(Font_ECAMfont, 500-62, spd_tape_y + spd_tape_y_offset, "ALT", 34, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+end
+
+local function draw_mach_stby()
+    sasl.gl.drawRectangle(41, 25 , 58, 41, ECAM_RED)
+    sasl.gl.drawText(Font_ECAMfont, 41+58/2, 35, "M", 34, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
 end
 
 local function draw_alt_tape()
@@ -220,7 +225,11 @@ local function draw_mach()
         mach_displayed = false
     end
     if mach_displayed then
-        sasl.gl.drawText (Font_AirbusDUL, 83, 35, string.sub(Aft_string_fill(tostring(Round(get(ISIS_Mach),2)), "0", 4), 2, 4), 37, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        if get(ISIS_Mach) > 1 then
+            draw_mach_stby()
+        else
+            sasl.gl.drawText (Font_AirbusDUL, 83, 35, string.sub(Aft_string_fill(tostring(Round(get(ISIS_Mach),2)), "0", 4), 2, 4), 37, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        end
     end
 end
 
