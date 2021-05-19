@@ -45,3 +45,11 @@ sasl.registerCommandHandler(Pop_out_ECAM, 0, function(phase)
         ECAM_window:setIsVisible(not ECAM_window:isVisible())
     end
 end)
+
+sasl.registerCommandHandler(Pop_out_ISIS, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        local window_x, window_y, window_width, window_height = ISIS_window:getPosition()
+        ISIS_window:setPosition ( window_x , window_y , 500, 500)
+        ISIS_window:setIsVisible(not ISIS_window:isVisible())
+    end
+end)

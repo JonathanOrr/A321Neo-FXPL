@@ -25,6 +25,7 @@ Pop_out_CAPT_ND =  sasl.createCommand("a321neo/cockpit/popups/Pop_out_capt_nd", 
 Pop_out_FO_ND =    sasl.createCommand("a321neo/cockpit/popups/Pop_out_fo_nd", "Pop out the FO ND")
 Pop_out_EWD =      sasl.createCommand("a321neo/cockpit/popups/pop_out_ewd", "Pop out the EWD")
 Pop_out_ECAM =     sasl.createCommand("a321neo/cockpit/popups/Pop_out_ecam", "Pop out the ECAM")
+Pop_out_ISIS =     sasl.createCommand("a321neo/cockpit/popups/Pop_out_isis", "Pop out the ISIS")
 
 -- Buttons with light (check cockpit_datarefs.lua for light datarefs):
 Ecam_btn_cmd_ENG   = createCommand("a321neo/cockpit/ecam/buttons/cmd_eng", "ENG pushbutton")

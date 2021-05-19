@@ -272,3 +272,7 @@ ISIS_alt_window = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/
 ISIS_alt_scrolling = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/AltDisplay_tens-1.png")
 ISIS_SI = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/Beta-1.png")
 ISIS_roll_arrow = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/Triangle-1.png")
+ISIS_localiser = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/lshdiamond-1.png")
+ISIS_glideslope = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/lsvdiamond-1.png")
+ISIS_lsh = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/lsh-1.png")
+ISIS_lsv = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/lsv-1.png")

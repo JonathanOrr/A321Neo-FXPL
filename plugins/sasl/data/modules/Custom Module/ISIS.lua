@@ -20,14 +20,16 @@ position= {30,1311,500,500}
 size = {500, 500}
 
 include("ADIRS_data_source.lua")
+include("DRAIMS/radio_logic.lua")
 
 local TIME_TO_ALIGN_SEC = 90
 local baro_in_std = false
+local ls_enabled = false
 
 -- Toggle LS
 sasl.registerCommandHandler (ISIS_cmd_LS, 0, function(phase) 
     if phase == SASL_COMMAND_BEGIN then 
-        set(ISIS_landing_system_enabled, get(ISIS_landing_system_enabled) == 1 and 0 or 1) 
+        ls_enabled = not ls_enabled
     end 
 end)
 sasl.registerCommandHandler (ISIS_cmd_Knob_c, 0,  function(phase) if phase == SASL_COMMAND_BEGIN then set(Stby_Baro, Math_clamp(get(Stby_Baro) + 0.01, 28, 31))end baro_in_std = false end)
@@ -130,9 +132,9 @@ local function draw_alt_tape()
         draw_alt_stby()
     end
     if get(ISIS_Altitude) < 0 then
-        sasl.gl.drawText(Font_ECAMfont, 385, spd_tape_y-13 + 40, "N", 40, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-        sasl.gl.drawText(Font_ECAMfont, 385, spd_tape_y-13, "E", 40, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-        sasl.gl.drawText(Font_ECAMfont, 385, spd_tape_y-13 - 40, "G", 40, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        sasl.gl.drawText(Font_ECAMfont, 385, spd_tape_y-13 + 40, "N", 40, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+        sasl.gl.drawText(Font_ECAMfont, 385, spd_tape_y-13, "E", 40, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+        sasl.gl.drawText(Font_ECAMfont, 385, spd_tape_y-13 - 40, "G", 40, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
 
     end
 end
@@ -143,7 +145,7 @@ local function draw_meters_display()
     sasl.gl.drawText (Font_AirbusDUL, 360, 446, meter_alt, 37, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     sasl.gl.drawText (Font_AirbusDUL, 403, 446, "M", 34, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
     if get(ISIS_Altitude) < 0 then
-        sasl.gl.drawText (Font_AirbusDUL, 218, 446, "NEG", 34, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+        sasl.gl.drawText (Font_AirbusDUL, 218, 446, "NEG", 34, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
     end
 end
 
@@ -152,7 +154,7 @@ local att_y_center = 250
 
 local function draw_att()
     sasl.gl.drawMaskStart ()
-    sasl.gl.drawTexture(ISIS_horizon_mask, 0, 0, 500, 500, {1,1,1})
+    sasl.gl.drawTexture(ISIS_backlit, 0, 0, 500, 500, {0,0,0})
     sasl.gl.drawUnderMask(true)
 
     SASL_rotated_center_img_xcenter_aligned(
@@ -208,30 +210,6 @@ end
 local function draw_background()
     sasl.gl.drawRectangle(0, 0, 500, 500, ECAM_BLACK)
 end
-local function legacy_code()
-    if get(ISIS_powered) == 0 then
-        return
-    end
-    if get(ISIS_ready) == 0 then
-        -- Not ready, draw the countdown
-        local remaning_time = math.ceil(TIME_TO_ALIGN_SEC - get(TIME) + isis_start_time)
-        if remaning_time > 0 then
-            sasl.gl.drawText (Font_AirbusDUL, 308, 103, remaning_time, 37, false, false, TEXT_ALIGN_RIGHT, ECAM_BLACK)
-        end
-    else
-        -- Ready, draw the altitude in meters
-
-        --if adirs_is_mach_ok(PFD_CAPT) then
-        --    -- Mach number, this is available only if the ADR for the Capt is ok
-        --    local good_mach = Round(adirs_get_mach(PFD_CAPT) * 100, 0)
-        --    if good_mach < 100 then
-        --        sasl.gl.drawText (Font_AirbusDUL, 60, 40, "." .. good_mach, 27, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
-        --    else
-        --        sasl.gl.drawText (Font_AirbusDUL, 60, 40, good_mach/100, 27, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)            
-        --    end
-        --end
-    end
-end
 
 local mach_displayed = false
 
@@ -243,6 +221,21 @@ local function draw_mach()
     end
     if mach_displayed then
         sasl.gl.drawText (Font_AirbusDUL, 83, 35, string.sub(Aft_string_fill(tostring(Round(get(ISIS_Mach),2)), "0", 4), 2, 4), 37, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    end
+end
+
+local function draw_ls()
+    if ls_enabled then
+        sasl.gl.drawTexture(ISIS_lsh, att_x_center-100, 96, 201, 21, {1,1,1})
+        sasl.gl.drawTexture(ISIS_lsv, 328, 140, 21, 201, {1,1,1})
+
+        --if get(ILS_1_glideslope_flag) == 0 then
+        if radio_ils_is_valid() and radio_loc_is_valid() then
+            sasl.gl.drawTexture(ISIS_localiser, att_x_center-16 + Math_clamp(46 * radio_get_ils_deviation_h()/0.8, -92, 92), 97, 32, 19, {1,1,1})
+        end
+        if radio_ils_is_valid() and radio_gs_is_valid() then
+            sasl.gl.drawTexture(ISIS_glideslope, 329, 225 - Math_clamp(46 * radio_get_ils_deviation_v()/0.4, -92, 92), 19, 32, {1,1,1})
+        end
     end
 end
 
@@ -262,11 +255,11 @@ function draw()
         draw_att()
         draw_backlit()
         draw_speed_tape()
-        legacy_code()
         draw_alt_tape()
         draw_meters_display()
         draw_barometer()
         draw_mach()
+        draw_ls() 
     else
         sasl.gl.drawRectangle(0, 0, 500, 500, ECAM_BLACK)
     end
@@ -276,24 +269,4 @@ function draw()
 end
 
 function update()
-
-    if ((get(ISIS_IAS) > 50 or get(All_on_ground) == 0) and get(HOT_bus_1_pwrd) == 1) or get(DC_ess_bus_pwrd) == 1 then
-        set(ISIS_powered, 1)
-    else
-        set(ISIS_powered, 0)
-        set(ISIS_ready, 0)
-        isis_start_time = 0
-        return
-    end
-    
-    if isis_start_time == 0 then
-        isis_start_time = get(TIME)
-    end
-
-    if get(TIME) - isis_start_time > TIME_TO_ALIGN_SEC then
-        set(ISIS_ready, 1)
-    else
-        set(ISIS_ready, 1)
-    end
-
 end
