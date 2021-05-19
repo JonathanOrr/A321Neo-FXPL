@@ -305,6 +305,32 @@ local function is_isis_powered()
     return get(DC_ess_bus_pwrd) == 1 or (get(HOT_bus_1_pwrd) == 1 and get(ISIS_IAS) > 50)
 end
 
+local blinked_already = false
+local blink_start_time = 0
+local blinking_table = {
+    {0, 1},
+    {0.1, 0},
+    {0.799, 0},
+    {0.8, 1},
+    {0.85, 0},
+    {0.929, 0},
+    {0.93, 1},
+    {0.97, 1},
+    {0.98, 0},
+}
+
+local function start_blinks()
+    if not blinked_already and is_isis_powered() then
+        blinked_already = true
+        blink_start_time = get(TIME)
+    elseif not is_isis_powered() then
+        blinked_already = false
+    end
+    local elapsed_powered_time = get(TIME) - blink_start_time
+    local black_white_hex = Table_interpolate(blinking_table, elapsed_powered_time)
+    sasl.gl.drawRectangle(0, 0, 500, 500, {black_white_hex,black_white_hex,black_white_hex, elapsed_powered_time < 1 and 1 or 0})
+end
+
 function draw()
     sasl.gl.setRenderTarget(ISIS_popup_texture, true)
     --draw_background()
@@ -321,12 +347,13 @@ function draw()
     else
         sasl.gl.drawRectangle(0, 0, 500, 500, ECAM_BLACK)
     end
-
+    start_blinks()
     sasl.gl.restoreRenderTarget()
     sasl.gl.drawTexture(ISIS_popup_texture, 0, 0, 500, 500, {1,1,1})
 end
 
 function update()
+    
     if reset_button_elapsed_time > 2 then
         att_reset_start_time = get(TIME)
     end 
