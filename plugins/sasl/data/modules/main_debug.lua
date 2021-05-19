@@ -23,7 +23,7 @@ override_ADIRS_ok = false
 
 -- The following variable allows you to disable avionicsbay. WARNING: many features of ND/OANS/MCDU
 -- will now be available.
-disable_avionicsbay = false
+disable_avionicsbay = true
 
 -- If you set the following variable to a number different than 0, the corresponding ecam page is
 -- automatically selected at reboot

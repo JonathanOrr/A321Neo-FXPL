@@ -364,10 +364,10 @@ ECAM_window = contextWindow {
 
 ISIS_window = contextWindow {
   name = "ISIS";
-  position = { 0 , 0 , 500, 500 };
+  position = { 0 , 0 , 250, 250 };
   noBackground = true ;
   proportional = true ;
-  minimumSize = { 300, 300 };
+  minimumSize = { 250, 250 };
   maximumSize = { 500, 500 };
   gravity = { 0 , 1 , 0 , 1 };
   visible = true;

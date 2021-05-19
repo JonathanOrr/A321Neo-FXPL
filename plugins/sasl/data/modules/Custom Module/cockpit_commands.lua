@@ -233,8 +233,8 @@ FUEL_cmd_internal_qs      = sasl.createCommand("a321neo/internals/fuel/quick_sta
 ISIS_cmd_LS          = createCommand("a321neo/cockpit/ISIS/LS", "Press LS button on ISIS")
 ISIS_cmd_Knob_c      = createCommand("a321neo/cockpit/ISIS/Knob_C", "Rotate ISIS knob clockwise")  -- Knob clockwise
 ISIS_cmd_Knob_cc     = createCommand("a321neo/cockpit/ISIS/Knob_CC", "Rotate ISIS knob counter-clockwise") -- Knob counter-clockwise
-ISIS_cmd_RotaryPress = createCommand("a321neo/cockpit/ISIS/Knob_RotaryPress", "Push spring-loaded ISIS rotary knob inwards.") -- Knob counter-clockwise
-
+ISIS_cmd_RotaryPress = createCommand("a321neo/cockpit/ISIS/Knob_RotaryPress", "Push spring-loaded ISIS rotary knob inwards.")
+ISIS_cmd_rst = createCommand("a321neo/cockpit/ISIS/RST", "Press Reset button on ISIS")
 
 --FBW
 XP_Capt_sidestick_pb = sasl.findCommand("sim/autopilot/servos_fdir_off")

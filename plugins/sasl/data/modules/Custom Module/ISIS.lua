@@ -26,6 +26,25 @@ local TIME_TO_ALIGN_SEC = 90
 local baro_in_std = false
 local ls_enabled = false
 
+local spd_tape_x = 37
+local spd_tape_y = 241
+local spd_tape_y_offset = -13
+local spd_tape_per_reading = 20 --px per reading, 000 to 010 is 20px
+
+local alt_tape_x = 446
+local alt_tape_per_reading = 20
+
+local att_x_center = 239
+local att_y_center = 250
+
+local att_reset_start_time = 0
+local reset_button_start_time = 0
+local reset_button_elapsed_time = 0
+
+local att_has_to_be_realigned = false
+
+local mach_displayed = false
+
 -- Toggle LS
 sasl.registerCommandHandler (ISIS_cmd_LS, 0, function(phase) 
     if phase == SASL_COMMAND_BEGIN then 
@@ -41,11 +60,14 @@ sasl.registerCommandHandler (ISIS_cmd_RotaryPress, 0, function(phase)
     end 
 end)
 
-local isis_start_time = 0
-local spd_tape_x = 37
-local spd_tape_y = 241
-local spd_tape_y_offset = -13
-local spd_tape_per_reading = 20 --px per reading, 000 to 010 is 20px
+sasl.registerCommandHandler (ISIS_cmd_rst, 0, function(phase)
+    if phase == SASL_COMMAND_CONTINUE then
+        reset_button_elapsed_time = reset_button_elapsed_time + get(DELTA_TIME)
+    else
+        reset_button_elapsed_time = 0
+    end
+end)
+
 
 local function draw_spd_stby()
     sasl.gl.drawRectangle(20, spd_tape_y - 22 , 85, 45, ECAM_RED)
@@ -87,9 +109,6 @@ local function draw_speed_tape()
         draw_spd_stby()
     end
 end
-
-local alt_tape_x = 446
-local alt_tape_per_reading = 20
 
 local function draw_alt_stby()
     sasl.gl.drawRectangle(480-85, spd_tape_y - 22 , 85, 45, ECAM_RED)
@@ -154,51 +173,83 @@ local function draw_meters_display()
     end
 end
 
-local att_x_center = 239
-local att_y_center = 250
+local function draw_attitude_reset()
+    sasl.gl.drawRectangle(155, 180, 170, 34, ECAM_YELLOW)
+    sasl.gl.drawText(Font_ECAMfont, 240, 184, "ATT RST", 34, false, false, TEXT_ALIGN_CENTER, ECAM_BLACK)
+end
+
+local function draw_attitude_flag()
+    sasl.gl.drawRectangle(198, 257, 84, 34, ECAM_RED)
+    sasl.gl.drawText(Font_ECAMfont, 240, 261, "ATT", 34, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+end
+
+
+
+local time_remaining = 0
+
+local function draw_10s_flag()
+    local excessive_motion = math.abs(get(Capt_bank)) > 100 or math.abs(get(Capt_pitch)) > 75 or math.abs(get(Capt_IAS_trend)) > 0.5
+    att_has_to_be_realigned = false
+    sasl.gl.drawRectangle(157, 300, 166, 34, ECAM_YELLOW)
+    if excessive_motion then
+        att_reset_start_time = get(TIME) 
+        time_remaining = 10
+    else
+        time_remaining = Fwd_string_fill(tostring(Round(math.ceil(att_reset_start_time - get(TIME) + 10), 0)), " ", 2)
+    end
+    sasl.gl.drawText(Font_ECAMfont, 240, 304, "ATT"..time_remaining.."s", 34, false, false, TEXT_ALIGN_CENTER, ECAM_BLACK)
+end
 
 local function draw_att()
-    sasl.gl.drawMaskStart ()
-    sasl.gl.drawTexture(ISIS_backlit, 0, 0, 500, 500, {0,0,0})
-    sasl.gl.drawUnderMask(true)
+    if get(TIME) - att_reset_start_time < 11 then
+        sasl.gl.drawRectangle(0, 0, 500, 500, {10/255, 15/255, 25/255})
+        draw_10s_flag()
+    else
+        sasl.gl.drawMaskStart ()
+        sasl.gl.drawTexture(ISIS_backlit, 0, 0, 500, 500, {0,0,0})
+        sasl.gl.drawUnderMask(true)
 
-    SASL_rotated_center_img_xcenter_aligned(
-        ISIS_horizon,
-        att_x_center,
-        att_y_center,
-        2000,
-        700,
-        90 - get(Capt_bank),
-        get(Capt_pitch) * 6.8+8,
-        -700/2,
-        ECAM_WHITE
-    )
-    sasl.gl.drawMaskEnd ()
-    
-    sasl.gl.drawTexture(ISIS_horizon_wings, 0, 0, 500, 500, {1,1,1})
+        SASL_rotated_center_img_xcenter_aligned(
+            ISIS_horizon,
+            att_x_center,
+            att_y_center,
+            2000,
+            700,
+            90 - get(Capt_bank),
+            get(Capt_pitch) * 6.8+8,
+            -700/2,
+            ECAM_WHITE
+        )
+        sasl.gl.drawMaskEnd ()
 
-    SASL_rotated_center_img_xcenter_aligned(
-        ISIS_roll_arrow,
-        att_x_center,
-        att_y_center,
-        71,
-        466,
-        -get(Capt_bank),
-        4,
-        -700/2+33,
-        ECAM_WHITE
-    )
-    SASL_rotated_center_img_xcenter_aligned(
-        ISIS_SI,
-        att_x_center,
-        att_y_center,
-        71,
-        466,
-        -get(Capt_bank),
-        4 + Math_clamp(get(Slide_slip_angle),-10,10)*4,
-        -700/2+32,
-        ECAM_WHITE
-    )
+        sasl.gl.drawTexture(ISIS_horizon_wings, 0, 0, 500, 500, {1,1,1})
+
+        SASL_rotated_center_img_xcenter_aligned(
+            ISIS_roll_arrow,
+            att_x_center,
+            att_y_center,
+            71,
+            466,
+            -get(Capt_bank),
+            4,
+            -700/2+33,
+            ECAM_WHITE
+        )
+        SASL_rotated_center_img_xcenter_aligned(
+            ISIS_SI,
+            att_x_center,
+            att_y_center,
+            71,
+            466,
+            -get(Capt_bank),
+            4 + Math_clamp(get(Slide_slip_angle),-10,10)*4,
+            -700/2+32,
+            ECAM_WHITE
+        )
+    end
+    if att_has_to_be_realigned then
+        draw_attitude_reset()
+    end
 end
 
 local function draw_barometer()
@@ -215,8 +266,6 @@ end
 local function draw_background()
     sasl.gl.drawRectangle(0, 0, 500, 500, ECAM_BLACK)
 end
-
-local mach_displayed = false
 
 local function draw_mach()
     if get(ISIS_Mach) > 0.50 then
@@ -278,4 +327,10 @@ function draw()
 end
 
 function update()
+    if reset_button_elapsed_time > 2 then
+        att_reset_start_time = get(TIME)
+    end 
+    if math.abs(get(Capt_bank)) > 100 or math.abs(get(Capt_pitch)) > 75 then -- if bank angle exceeds 100 or pitch exceeds 75
+        att_has_to_be_realigned = true
+    end
 end
