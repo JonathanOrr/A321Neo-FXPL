@@ -15,17 +15,53 @@
 -- File: 505-ac-status.lua 
 -------------------------------------------------------------------------------
 
-THIS_PAGE = MCDU_Page:new()
+local THIS_PAGE = MCDU_Page:new()
 
 
 function THIS_PAGE:render(mcdu_data)
-        mcdu_data.title.txt = "TEST"
 
-        mcdu_data.dat[MCDU_LARGE][MCDU_L][1].txt = "TEST"
-		mcdu_data.dat[MCDU_LARGE][MCDU_L][6] = {txt = "        TEST", col = ECAM_ORANGE}
+    self:set_title(mcdu_data, "A321-271NX")
+
+    self:set_line(mcdu_data, MCDU_LEFT, 1, "ENG",         MCDU_SMALL)
+    self:set_line(mcdu_data, MCDU_LEFT, 1, "PW-1133G", MCDU_LARGE, ECAM_GREEN)
+
+    self:set_line(mcdu_data, MCDU_LEFT, 2, "ACTIVE DATA BASE", MCDU_SMALL)
+    self:set_line(mcdu_data, MCDU_LEFT, 2, "03MAY-31MAY",      MCDU_LARGE, ECAM_BLUE)
+    self:set_line(mcdu_data, MCDU_RIGHT,2, "NW93821172",       MCDU_LARGE, ECAM_GREEN)
+
+    self:set_line(mcdu_data, MCDU_LEFT, 3, "SECOND DATA BASE", MCDU_SMALL)
+    self:set_line(mcdu_data, MCDU_LEFT, 3, "N/A",              MCDU_LARGE, ECAM_BLUE)
+
+    if FMGS_sys.config.phase == FMGS_PHASE_PREFLIGHT or FMGS_sys.config.phase == FMGS_PHASE_DONE then
+        self:set_line(mcdu_data, MCDU_LEFT, 5, "CHG CODE", MCDU_SMALL)
+        local content = "   "
+        if mcdu_data.v.chg_code_unlocked then
+            content = "***"
+        end
+        self:set_line(mcdu_data, MCDU_LEFT, 5, "[".. content .. "]",    MCDU_LARGE, ECAM_BLUE)
+    end
+
+    self:set_line(mcdu_data, MCDU_LEFT, 6, "IDLE/PERF", MCDU_SMALL)
+    self:set_line(mcdu_data, MCDU_LEFT, 6, "+0.0/+0.0", MCDU_LARGE, ECAM_GREEN)
+
+
+    self:set_line(mcdu_data, MCDU_RIGHT, 6, "SOFTWARE",      MCDU_SMALL)
+    self:set_line(mcdu_data, MCDU_RIGHT, 6, "STATUS/XLOAD>", MCDU_LARGE)
+
 end
 
+function THIS_PAGE:L5(mcdu_data)
+    local input = mcdu_get_entry({"word", length = 3, dp = 0})
+    if input == "A32" then
+        mcdu_data.v.chg_code_unlocked = true
+    else
+        mcdu_data.v.chg_code_unlocked = false
+        mcdu_send_message(mcdu_data, "INVALID CODE")
+    end
+end
 
-
+function THIS_PAGE:R6(mcdu_data)
+    mcdu_open_page(mcdu_data, 507)
+end
 
 mcdu_pages[505] = THIS_PAGE

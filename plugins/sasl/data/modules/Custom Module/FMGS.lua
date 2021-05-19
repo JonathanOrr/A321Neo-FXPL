@@ -20,6 +20,7 @@ include('FMGS/route.lua')
 
 local config = {
     status = FMGS_MODE_OFF,
+    phase  = FMGS_PHASE_PREFLIGHT,
     master = 0,
     backup_req = false
 }

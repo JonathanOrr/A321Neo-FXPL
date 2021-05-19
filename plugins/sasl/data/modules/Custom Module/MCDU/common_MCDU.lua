@@ -46,7 +46,8 @@ function init_data(mcdu_data, id)
     mcdu_data.messages = {}
     mcdu_data.message_showing = false
     mcdu_data.curr_page = 0
-
+    mcdu_data.v = {}    -- Various values used in MCDU
+    
     for i,size in ipairs(MCDU_DIV_SIZE) do
 	    mcdu_data.dat[size] = {}
 	    for j,align in ipairs(MCDU_DIV_ALIGN) do
@@ -69,7 +70,7 @@ function common_draw(mcdu_data)
     end
 
     --draw scratchpad
-    sasl.gl.drawText(Font_AirbusDUL, draw_get_x(1), draw_get_y(12), mcdu_data.entry, MCDU_DISP_TEXT_SIZE[MCDU_L], false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(Font_AirbusDUL, draw_get_x(1), draw_get_y(12), mcdu_data.entry, MCDU_DISP_TEXT_SIZE[MCDU_LEFT], false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
 end
 
 function mcdu_clearall(mcdu_data)
@@ -83,9 +84,10 @@ function mcdu_clearall(mcdu_data)
     end
 end
 
-local function mcdu_open_page(mcdu_data, id)
+function mcdu_open_page(mcdu_data, id)
     mcdu_clearall(mcdu_data)
     mcdu_data.curr_page = id
+    assert(mcdu_pages[id] ~= nil, "Non existent page: " .. id)
     mcdu_pages[id]:exec_render(mcdu_data)
 end
 

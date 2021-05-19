@@ -32,7 +32,7 @@ local MCDU_ENTRIES =
         ref_entries = MCDU_ENTRY_PAGES,
         ref_callback = 
         function (mcdu_data, count, val)
-            mcdu_open_page(count * 100)
+            mcdu_open_page(mcdu_data,count * 100)
         end
     },
     {
@@ -41,7 +41,7 @@ local MCDU_ENTRIES =
         ref_entries = MCDU_ENTRY_SIDES,
         ref_callback = 
         function (mcdu_data, count, val)
-            mcdu_sim_page[get(mcdu_page)](val)
+            mcdu_pages[mcdu_data.curr_page]:press_button(mcdu_data, val)
         end
     },
     {
@@ -55,16 +55,16 @@ local MCDU_ENTRIES =
                 set(ND_GPIRS_indication, 0)
             end
 
-            if mcdu_message_showing then
+            if mcdu_data.message_showing then
                 mcdu_data.entry = mcdu_data.entry_cache
-                mcdu_message_showing = false
+                mcdu_data.message_showing = false
             else
                 if #mcdu_data.entry > 0 then
                     mcdu_data.entry = mcdu_data.entry:sub(1,#mcdu_data.entry - 1) 
                 else
                     if #mcdu_data.entry == 0 then
                         mcdu_data.entry = "CLR"
-                        mcdu_message_showing = true
+                        mcdu_data.message_showing = true
                     end
                 end
             end
