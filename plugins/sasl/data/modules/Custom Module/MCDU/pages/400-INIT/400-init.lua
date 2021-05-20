@@ -178,7 +178,7 @@ function THIS_PAGE:L3(mcdu_data)
 end
 
 function THIS_PAGE:R3(mcdu_data)
-    mcdu_open_page(mcdu_data, 403)
+    mcdu_open_page(mcdu_data, 402)
 end
 
 function THIS_PAGE:L4(mcdu_data)
@@ -213,7 +213,7 @@ function THIS_PAGE:L5(mcdu_data)
 end
 
 function THIS_PAGE:R5(mcdu_data)
-    mcdu_open_page(mcdu_data, 402)
+    mcdu_open_page(mcdu_data, 403)
 end
 
 

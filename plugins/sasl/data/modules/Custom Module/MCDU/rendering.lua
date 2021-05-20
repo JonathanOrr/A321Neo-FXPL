@@ -30,14 +30,9 @@ local function draw_dat(mcdu_data, dat, draw_size, disp_x, disp_y, disp_text_ali
     -- text size 
     local disp_text_size = MCDU_DISP_TEXT_SIZE[disp_size]
 
-    -- replace { with the box
     local text = ""
     for j = 1,#disp_text do
-        if disp_text:sub(j,j) == "{" then
-            text = text .. "□"
-        else
-            text = text .. disp_text:sub(j,j)
-        end
+        text = text .. disp_text:sub(j,j)
     end
     disp_text = text
 
@@ -87,7 +82,7 @@ function mcdu_update_render(mcdu_data)
     end
     
     if mcdu_data.num_pages ~= nil then
-        draw_dat(mcdu_data, {txt=mcdu_data.num_pages[1] .. "/" .. mcdu_data.num_pages[2]}, MCDU_SMALL, draw_get_x(2), draw_get_y(-1), TEXT_ALIGN_RIGHT)
+        draw_dat(mcdu_data, {txt=mcdu_data.num_pages[1] .. "/" .. mcdu_data.num_pages[2]}, MCDU_SMALL, draw_get_x(1.89), draw_get_y(-1), TEXT_ALIGN_RIGHT)
     end
 end
 

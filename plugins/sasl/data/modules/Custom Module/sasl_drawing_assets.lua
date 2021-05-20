@@ -261,3 +261,8 @@ R_warn =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/failures
 Y_master =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/failures_ui/y_master.png")
 Y_caut =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/failures_ui/y_caut.png")
 
+
+-- MCDU --
+MCDU_lr_arrows =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/MCDU/lr_arrows.png")
+MCDU_ud_arrows =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/MCDU/ud_arrows.png")
+

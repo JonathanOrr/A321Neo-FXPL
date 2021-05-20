@@ -28,6 +28,7 @@ end
 function MCDU_Page:exec_render(mcdu_data)
     self:render(mcdu_data)
     mcdu_update_render(mcdu_data)
+    mcdu_data.last_update = get(TIME)
 end
 
 function MCDU_Page:render(mcdu_data)
@@ -139,8 +140,16 @@ function MCDU_Page:press_button(mcdu_data, val)
         self:R5(mcdu_data)
     elseif val == "R6" then
         self:R6(mcdu_data)
+    elseif val == "slew_right" then
+        self:Slew_Right(mcdu_data)
+    elseif val == "slew_left" then
+        self:Slew_Left(mcdu_data)
+    elseif val == "slew_up" then
+        self:Slew_Up(mcdu_data)
+    elseif val == "slew_down" then
+        self:Slew_Down(mcdu_data)
     else
-        assert(false, "Uknown button")
+        assert(false, "Uknown button: " .. val)
     end
     
     if self.id == mcdu_data.curr_page then
@@ -168,4 +177,11 @@ function MCDU_Page:set_subpages(mcdu_data, current, total)
     mcdu_data.num_pages = {current, total}
 end
 
+function MCDU_Page:set_lr_arrows(mcdu_data, value)
+    mcdu_data.lr_arrows = value
+end
+
+function MCDU_Page:set_updn_arrows_bottom(mcdu_data, value)
+    mcdu_data.ud_arrows_btm = value
+end
 

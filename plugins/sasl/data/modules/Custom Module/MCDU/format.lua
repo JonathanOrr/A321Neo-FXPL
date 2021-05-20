@@ -28,7 +28,7 @@ end
 
 
 -- converts Decimal Degrees and Axis (lat/lon) to Degrees Minute Seconds Direction
-local function mcdu_ctrl_dd_to_dmsd(dd, axis)
+function mcdu_ctrl_dd_to_dmsd(dd, axis)
     local p  = ""
     if axis == "lat" then
         if dd > 0 then
@@ -70,4 +70,78 @@ function mcdu_ctrl_dmsd_to_dd(d,m,s,dir)
     return dd
 end
 
+function mcdu_format_force_to_small(text)
+
+    if type(text) ~= "string" then
+        text = tostring(text)
+    end
+    
+    text = text:lower()
+
+    local output = ""
+
+    local nr_letters = #text
+
+    for i=1,nr_letters do
+        if text:sub(i, i) == "0" then
+            output = output .."À"
+        elseif text:sub(i, i) == "1" then
+            output = output .. "Á"
+        elseif text:sub(i, i) == "2" then
+            output = output .. "Â"
+        elseif text:sub(i, i) == "3" then
+            output = output .. "Ã"
+        elseif text:sub(i, i) == "4" then
+            output = output .. "Ä"
+        elseif text:sub(i, i) == "5" then
+            output = output .. "Å"
+        elseif text:sub(i, i) == "6" then
+            output = output .. "Æ"
+        elseif text:sub(i, i) == "7" then
+            output = output .. "Ç"
+        elseif text:sub(i, i) == "8" then
+            output = output .. "È"
+        elseif text:sub(i, i) == "9" then
+            output = output .. "É"
+        elseif text:sub(i, i) == "-" then
+            output = output .. "Ê"
+        elseif text:sub(i, i) == "." then
+            output = output .. "Ë"
+        elseif text:sub(i, i) == "/" then
+            output = output .. "Ì"
+        elseif text:sub(i, i) == "(" then
+            output = output .. "Í"
+        elseif text:sub(i, i) == ")" then
+            output = output .. "Î"
+        elseif text:sub(i, i) == "*" then
+            output = output .. "Ï"
+        elseif text:sub(i, i) == "+" then
+            output = output .. "Ð"
+        elseif text:sub(i, i) == "%" then
+            output = output .. "Ñ"
+        elseif text:sub(i, i) == "\"" then
+            output = output .. "Ò"
+        elseif text:sub(i, i) == ":" then
+            output = output .. "Ó"
+        elseif text:sub(i, i) == "[" then
+            output = output .. "Ô"
+        elseif text:sub(i, i) == "]" then
+            output = output .. "Õ"
+        elseif text:sub(i, i) == "°" then
+            output = output .. "Ö"
+        elseif text:sub(i, i) == "←" then
+            output = output .. "×"
+        elseif text:sub(i, i) == "↑" then
+            output = output .. "Ø"
+        elseif text:sub(i, i) == "→" then
+            output = output .. "Ù"
+        elseif text:sub(i, i) == "↓" then
+            output = output .. "Ú"
+        else
+            output = output .. text[i]
+        end
+    end
+
+    return output
+end
 
