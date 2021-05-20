@@ -19,7 +19,7 @@ local THIS_PAGE = MCDU_Page:new({id=100})
 
 
 function THIS_PAGE:render(mcdu_data)
-    
+    self:set_title(mcdu_data, "DIR")
     self:set_line(mcdu_data, MCDU_LEFT, 1, "PAGE", MCDU_LARGE, ECAM_MAGENTA)
     self:set_line(mcdu_data, MCDU_LEFT, 2, "NOT YET IMPLEMENTED", MCDU_LARGE, ECAM_MAGENTA)
 end
