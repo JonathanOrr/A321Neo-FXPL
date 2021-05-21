@@ -491,7 +491,6 @@ Chrono_cmd_state_up    = sasl.createCommand("a321neo/cockpit/misc/chrono_state_u
 Chrono_cmd_state_dn    = sasl.createCommand("a321neo/cockpit/misc/chrono_state_dn","")
 
 -- MCDU/DMC
-MCDU_refresh_page   = sasl.createCommand("a321neo/cockpit/mcdu/refresh","")
 MCDU_DMC_cmd_test_1 = sasl.createCommand("a321neo/cockpit/mcdu/trigger_dmc_test_1","")
 MCDU_DMC_cmd_test_2 = sasl.createCommand("a321neo/cockpit/mcdu/trigger_dmc_test_2","")
 MCDU_DMC_cmd_test_3 = sasl.createCommand("a321neo/cockpit/mcdu/trigger_dmc_test_3","")

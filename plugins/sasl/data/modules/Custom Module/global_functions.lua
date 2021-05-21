@@ -685,24 +685,6 @@ function perf_measure_stop(name)
     sasl.pauseTimer(Perf_array[name].timer)
 end
 
-
-
-function MCDU_get_popup(id) return Mcdu_popup[id] end
-function MCDU_set_popup(id, val) Mcdu_popup[id] = val end
-
-function MCDU_get_lut(val) return Mcdu_popup_lut end
-function MCDU_set_lut(val) Mcdu_popup_lut = val end
-
-function MCDU_get_data(reference) 
-    if Mcdu_data[reference] == nil then
-        return 0
-    end
-    return Mcdu_data[reference] 
-end
-function MCDU_set_data(reference, val) 
-    Mcdu_data[reference] = val 
-end
-
 function Cursor_texture_to_local_pos(x, y, component_width, component_height, panel_width, panel_height)
     local tex_x, tex_y = sasl.getCSPanelMousePos()
 

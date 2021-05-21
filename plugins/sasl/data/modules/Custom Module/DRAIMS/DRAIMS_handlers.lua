@@ -109,7 +109,7 @@ local page_routes = {   -- This tells you which page you go when you press a lat
     },
 
     [PAGE_NAV] = {
-        [BTN_L2] = function(data) set(DRAIMS_nav_stby_mode, 1 - get(DRAIMS_nav_stby_mode)); sasl.commandOnce(MCDU_refresh_page) end,
+        [BTN_L2] = function(data) set(DRAIMS_nav_stby_mode, 1 - get(DRAIMS_nav_stby_mode)) end,
         [BTN_L4] = function(data) set(DRAIMS_nav_voice_mode, 1 - get(DRAIMS_nav_voice_mode)) end,
 
         [BTN_R1] = function(data) if get(DRAIMS_nav_stby_mode) == 1 then data.current_page = PAGE_NAV_LS end end,

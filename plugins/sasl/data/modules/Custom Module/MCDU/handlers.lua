@@ -22,8 +22,6 @@ local MCDU_ENTRIES =
                 val = " "
             end
 
-            print(mcdu_data.entry, val)
-
             if get(TIME) - entry_cooldown > get(DELTA_TIME) then
                 entry_cooldown = get(TIME)
                 if #mcdu_data.entry < 22 then

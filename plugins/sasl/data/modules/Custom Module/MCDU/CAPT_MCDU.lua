@@ -32,7 +32,11 @@ function draw()
     perf_measure_start("CAPT_MCDU:draw()")
     --draw backlight--
 
+    sasl.gl.setRenderTarget(MCDU_popup_texture, true)
     common_draw(mcdu_data)
+    sasl.gl.restoreRenderTarget()
+
+    sasl.gl.drawTexture(MCDU_popup_texture, 0, 0, 560, 530, {1,1,1})
 
     perf_measure_stop("CAPT_MCDU:draw()")
 end
