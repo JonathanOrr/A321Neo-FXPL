@@ -10,13 +10,19 @@ local MCDU_ENTRIES =
         ref_callback =                  --what they should do
         function (mcdu_data, count, val)
 
+            if mcdu_data.message_showing then
+                return  -- You need to CLR the message before this
+            end
+
             if val == "overfly" then
-                val = "Δ"
+                val = "$"
             elseif val == "slash" then
                 val = "/"
             elseif val == "space" then
                 val = " "
             end
+
+            print(mcdu_data.entry, val)
 
             if get(TIME) - entry_cooldown > get(DELTA_TIME) then
                 entry_cooldown = get(TIME)
@@ -48,26 +54,40 @@ local MCDU_ENTRIES =
         ref_name = "misc",
         ref_desc = "Clear key",
         ref_entries = {"clr"},
-        ref_callback = 
+        ref_callback = function (mcdu_data, count, val)
+            mcdu_data.clear_start = get(TIME)
+        end,
+        ref_callback_end = 
         function (mcdu_data, count, val)
-            if mcdu_data.entry == "GPS PRIMARY" then
-                mcdu_data.entry = "X"
-                set(ND_GPIRS_indication, 0)
+            if get(TIME) - mcdu_data.clear_start > 1 then
+                return
             end
-
             if mcdu_data.message_showing then
                 mcdu_data.entry = mcdu_data.entry_cache
+                table.remove(mcdu_data.messages)
                 mcdu_data.message_showing = false
             else
                 if #mcdu_data.entry > 0 then
-                    mcdu_data.entry = mcdu_data.entry:sub(1,#mcdu_data.entry - 1) 
+                    mcdu_data.entry = mcdu_data.entry:sub(1,#mcdu_data.entry - 1)
                 else
                     if #mcdu_data.entry == 0 then
-                        mcdu_data.entry = "CLR"
-                        mcdu_data.message_showing = true
+                        table.insert(mcdu_data.messages, "CLR")
                     end
                 end
             end
+        end,
+        ref_callback_cont = 
+        function (mcdu_data, count, val)
+            if get(TIME) - mcdu_data.clear_start > 1 then
+                if mcdu_data.message_showing then
+                    mcdu_data.entry = mcdu_data.entry_cache
+                    table.remove(mcdu_data.messages)
+                    mcdu_data.message_showing = false
+                else
+                    mcdu_data.entry = ""
+                end
+            end
+
         end
     },
     {
@@ -95,8 +115,12 @@ function init_mcdu_handlers(str_prefix, mcdu_data)
         for count,entry in ipairs(entry_category.ref_entries) do
             mcdu_inp[entry] = createCommand("a321neo/cockpit/mcdu/" .. str_prefix  .. entry_category.ref_name .. "/" .. entry, "MCDU " .. entry .. " " .. entry_category.ref_desc)
             sasl.registerCommandHandler(mcdu_inp[entry], 0, function (phase)
-                if phase == SASL_COMMAND_BEGIN then
+                if phase == SASL_COMMAND_BEGIN and entry_category.ref_callback then
                     entry_category.ref_callback(mcdu_data, count, entry)
+                elseif phase == SASL_COMMAND_CONTINUE and entry_category.ref_callback_cont then
+                    entry_category.ref_callback_cont(mcdu_data, count, entry)
+                elseif phase == SASL_COMMAND_END and entry_category.ref_callback_end then
+                    entry_category.ref_callback_end(mcdu_data, count, entry)
                 end
             end)
         end

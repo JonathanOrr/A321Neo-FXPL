@@ -72,7 +72,7 @@ function common_draw(mcdu_data)
     end
 
     --draw scratchpad
-    sasl.gl.drawText(Font_MCDUSmall, draw_get_x(1), draw_get_y(12), mcdu_data.entry, MCDU_DISP_TEXT_SIZE[MCDU_LEFT], false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(Font_MCDU, draw_get_x(1), draw_get_y(12), mcdu_data.entry, MCDU_DISP_TEXT_SIZE[MCDU_LARGE], false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
     
     if mcdu_data.lr_arrows then
         sasl.gl.drawTexture(MCDU_lr_arrows, 505, 495, 40, 16, 1, 1, 1)
@@ -110,6 +110,10 @@ end
 
 --define custom functionalities
 function mcdu_send_message(mcdu_data, message)
+
+    if mcdu_data.messages[#mcdu_data.messages] == message then
+        return
+    end
     table.insert(mcdu_data.messages, message)
 end
 
@@ -119,11 +123,12 @@ function common_update(mcdu_data)
         mcdu_open_page(mcdu_data, 500)
     end
     
-    if #mcdu_data.messages > 0 and not mcdu_data.message_showing then
-        mcdu_data.entry_cache = mcdu_data.entry
+    if #mcdu_data.messages > 0 then
+        if not mcdu_data.message_showing then
+            mcdu_data.entry_cache = mcdu_data.entry
+        end
         mcdu_data.entry = mcdu_data.messages[#mcdu_data.messages]:upper()
         mcdu_data.message_showing = true
-        table.remove(mcdu_data.messages)
     end
     
     if get(TIME) - mcdu_data.last_update > 1 then
@@ -131,4 +136,7 @@ function common_update(mcdu_data)
     end
 
 end
+
+MCDU.send_message = mcdu_send_message
+MCDU.force_update = mcdu_force_update
 

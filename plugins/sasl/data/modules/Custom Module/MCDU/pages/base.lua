@@ -37,82 +37,82 @@ end
 
 function MCDU_Page:L1(mcdu_data)
     -- Do nothing
-    table.insert(mcdu_data.messages, "NOT ALLOWED")
+    mcdu_send_message(mcdu_data, "NOT ALLOWED")
 end
 
 function MCDU_Page:L2(mcdu_data)
     -- Do nothing
-    table.insert(mcdu_data.messages, "NOT ALLOWED")
+    mcdu_send_message(mcdu_data, "NOT ALLOWED")
 end
 
 function MCDU_Page:L3(mcdu_data)
     -- Do nothing
-    table.insert(mcdu_data.messages, "NOT ALLOWED")
+    mcdu_send_message(mcdu_data, "NOT ALLOWED")
 end
 
 function MCDU_Page:L4(mcdu_data)
     -- Do nothing
-    table.insert(mcdu_data.messages, "NOT ALLOWED")
+    mcdu_send_message(mcdu_data, "NOT ALLOWED")
 end
 
 function MCDU_Page:L5(mcdu_data)
     -- Do nothing
-    table.insert(mcdu_data.messages, "NOT ALLOWED")
+    mcdu_send_message(mcdu_data, "NOT ALLOWED")
 end
 
 function MCDU_Page:L6(mcdu_data)
     -- Do nothing
-    table.insert(mcdu_data.messages, "NOT ALLOWED")
+    mcdu_send_message(mcdu_data, "NOT ALLOWED")
 end
 
 function MCDU_Page:R1(mcdu_data)
     -- Do nothing
-    table.insert(mcdu_data.messages, "NOT ALLOWED")
+    mcdu_send_message(mcdu_data, "NOT ALLOWED")
 end
 
 function MCDU_Page:R2(mcdu_data)
     -- Do nothing
-    table.insert(mcdu_data.messages, "NOT ALLOWED")
+    mcdu_send_message(mcdu_data, "NOT ALLOWED")
 end
 
 function MCDU_Page:R3(mcdu_data)
     -- Do nothing
-    table.insert(mcdu_data.messages, "NOT ALLOWED")
+    mcdu_send_message(mcdu_data, "NOT ALLOWED")
 end
 
 function MCDU_Page:R4(mcdu_data)
     -- Do nothing
-    table.insert(mcdu_data.messages, "NOT ALLOWED")
+    mcdu_send_message(mcdu_data, "NOT ALLOWED")
 end
 
 function MCDU_Page:R5(mcdu_data)
     -- Do nothing
-    table.insert(mcdu_data.messages, "NOT ALLOWED")
+    mcdu_send_message(mcdu_data, "NOT ALLOWED")
 end
 
 function MCDU_Page:R6(mcdu_data)
     -- Do nothing
-    table.insert(mcdu_data.messages, "NOT ALLOWED")
+    mcdu_send_message(mcdu_data, "NOT ALLOWED")
 end
 
 function MCDU_Page:Slew_Left(mcdu_data)
     -- Do nothing
-    table.insert(mcdu_data.messages, "NOT ALLOWED")
+    mcdu_send_message(mcdu_data, "NOT ALLOWED")
 end
 
 function MCDU_Page:Slew_Right(mcdu_data)
     -- Do nothing
-    table.insert(mcdu_data.messages, "NOT ALLOWED")
+    mcdu_send_message(mcdu_data, "NOT ALLOWED")
 end
 
 function MCDU_Page:Slew_Up(mcdu_data)
     -- Do nothing
-    table.insert(mcdu_data.messages, "NOT ALLOWED")
+    mcdu_send_message(mcdu_data, "NOT ALLOWED")
 end
 
 function MCDU_Page:Slew_Down(mcdu_data)
     -- Do nothing
-    table.insert(mcdu_data.messages, "NOT ALLOWED")
+    mcdu_send_message(mcdu_data, "NOT ALLOWED")
 end
 
 function MCDU_Page:press_button(mcdu_data, val)
