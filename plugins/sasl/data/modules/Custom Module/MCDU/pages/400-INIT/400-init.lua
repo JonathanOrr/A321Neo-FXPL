@@ -19,7 +19,8 @@ local THIS_PAGE = MCDU_Page:new({id=400})
 function THIS_PAGE:render(mcdu_data)
 
     self:set_title(mcdu_data, "INIT")
-
+    self:set_lr_arrows(mcdu_data, true)
+    
     -------------------------------------
     -- LEFT 1
     -------------------------------------
@@ -27,11 +28,11 @@ function THIS_PAGE:render(mcdu_data)
     if FMGS_sys.fpln.apts.dep == nil or FMGS_sys.fpln.apts.arr == nil then
         self:set_line(mcdu_data, MCDU_LEFT, 1, "__________", MCDU_LARGE, ECAM_ORANGE)
     end
-    self:set_line(mcdu_data, MCDU_RIGHT, 1, "FROM/TO  ", MCDU_SMALL, ECAM_WHITE)
 
     -------------------------------------
     -- RIGHT 1
     -------------------------------------
+    self:set_line(mcdu_data, MCDU_RIGHT, 1, "FROM/TO  ", MCDU_SMALL, ECAM_WHITE)
     if FMGS_sys.fpln.apts.dep == nil or FMGS_sys.fpln.apts.arr == nil then
         self:set_line(mcdu_data, MCDU_RIGHT, 1, "____/____", MCDU_LARGE, ECAM_ORANGE)
     else
@@ -145,6 +146,7 @@ function THIS_PAGE:R1(mcdu_data)
         mcdu_send_message(mcdu_data, "NOT IN DATABASE")
     else
         mcdu_data.entry = ""
+        mcdu_open_page(mcdu_data, 404)
     end
     
 end
@@ -246,5 +248,14 @@ function THIS_PAGE:R6(mcdu_data)
         FMGS_sys.fpln.init.tropo = tonumber(input)
     end
 end
+
+function THIS_PAGE:Slew_Right(mcdu_data)
+    mcdu_open_page(mcdu_data, 401)
+end
+
+function THIS_PAGE:Slew_Left(mcdu_data)
+    mcdu_open_page(mcdu_data, 401)
+end
+
 
 mcdu_pages[THIS_PAGE.id] = THIS_PAGE

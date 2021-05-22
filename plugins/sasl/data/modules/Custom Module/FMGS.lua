@@ -33,7 +33,22 @@ FMGS_sys.fpln = {
         cost_index = nil,
         crz_fl = nil,
         crz_temp = nil,
-        tropo = 36090
+        tropo = 36090,
+        weights = {
+            taxi_fuel = 0.2,
+            zfw   = nil, -- zero fuel weight
+            zfwcg = nil, -- zero fuel weight center of gravity
+            block_fuel = nil, -- Existing known fuel load
+            rsv_fuel_perc = 5.0,
+            rsv_fuel      = nil,
+        }
+    },
+    
+    pred = {    -- Various predictions
+        trip_fuel = nil,
+        trip_time = nil,
+        trip_dist = nil,
+        efob = nil,
     },
     
     apts = {

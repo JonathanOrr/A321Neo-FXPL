@@ -120,7 +120,7 @@ end
 function common_update(mcdu_data)
     
     if mcdu_data.curr_page == 0 then
-        mcdu_open_page(mcdu_data, 500)
+        mcdu_open_page(mcdu_data, 600)
     end
     
     if #mcdu_data.messages > 0 then
