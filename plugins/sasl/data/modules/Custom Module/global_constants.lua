@@ -193,6 +193,8 @@ Font_MCDUSmall       = sasl.gl.loadFont("fonts/MCDUSmall.ttf")
 sasl.gl.setFontRenderMode(Font_AirbusDUL, TEXT_RENDER_FORCED_MONO, 0.6)
 sasl.gl.setFontDirection (Font_AirbusDUL_vert, TEXT_DIRECTION_VERTICAL)
 sasl.gl.setFontRenderMode(Font_AirbusDUL_small, TEXT_RENDER_FORCED_MONO, 0.6*1.47)
+sasl.gl.setFontRenderMode(Font_MCDU, TEXT_RENDER_FORCED_MONO, 0.72)
+sasl.gl.setFontRenderMode(Font_MCDUSmall, TEXT_RENDER_FORCED_MONO, 0.72)
 
 -- Screens
 PFD_CAPT  = 1

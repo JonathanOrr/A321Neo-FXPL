@@ -16,11 +16,103 @@
 
 local THIS_PAGE = MCDU_Page:new({id=600})
 
+THIS_PAGE.curr_page = 1
+
+function THIS_PAGE:render_dep(mcdu_data)
+    local arpt_id    = FMGS_sys.fpln.apts.dep.id
+    local arpt_alt   = FMGS_sys.fpln.apts.dep.alt
+
+    THIS_PAGE:render_single(mcdu_data, 1, arpt_id, "0000", nil, tostring(arpt_alt), "", nil, nil, nil, true)
+
+end
+
+function THIS_PAGE:render_single(mcdu_data, i, id, time, spd, alt, proc_name, bearing, is_trk, distance, is_arpt)
+    time = is_arpt and time or mcdu_format_force_to_small(time) -- TIME is small only for airports
+
+    local left_side  = Aft_string_fill(id, " ", 8) 
+    local right_side = (spd and spd or "") .. "/" .. Fwd_string_fill(alt, " ", 6)
+    if not is_arpt then
+        left_side  = left_side .. mcdu_format_force_to_small(time)
+        right_side = mcdu_format_force_to_small(right_side)
+    else
+        left_side  = left_side .. time
+    end
+    self:set_line(mcdu_data, MCDU_LEFT, i, left_side, MCDU_LARGE, ECAM_GREEN)
+    self:set_line(mcdu_data, MCDU_RIGHT, i, right_side, MCDU_LARGE, ECAM_GREEN)
+    
+    if spd == nil then
+        self:set_line(mcdu_data, MCDU_CENTER, i, "       ---", is_arpt and MCDU_LARGE or MCDU_SMALL)
+    end
+    
+    if i ~= 1 then
+        local brg_trk = is_trk ~= nil and ((is_trk and "TRK" or "BRG") .. Fwd_string_fill(tostring(math.floor(bearing)), "0", 3) .. "°") or "       "
+        self:set_line(mcdu_data, MCDU_LEFT, i, " " .. Aft_string_fill(proc_name, " ", 8) .. brg_trk .. "  " .. distance .. "NM" , MCDU_SMALL, (i == 2 and THIS_PAGE.curr_page == 1) and ECAM_WHITE or ECAM_GREEN)
+    end
+    
+end
+
+function THIS_PAGE:render_dest(mcdu_data)
+    self:set_line(mcdu_data, MCDU_LEFT, 6, " DEST   TIME", MCDU_SMALL)
+    self:set_line(mcdu_data, MCDU_RIGHT, 6, "DIST  EFOB", MCDU_SMALL)
+
+    local arr_id    = FMGS_sys.fpln.apts.arr.id
+    local trip_time = (FMGS_sys.fpln.pred.trip_time and FMGS_sys.fpln.pred.trip_time or "----")
+    self:set_line(mcdu_data, MCDU_LEFT, 6, Aft_string_fill(arr_id, " ", 8, MCDU_LARGE) .. trip_time)
+
+    local trip_dist = (FMGS_sys.fpln.pred.trip_dist and FMGS_sys.fpln.pred.trip_dist or "----") 
+    local efob = (FMGS_sys.fpln.pred.efob and FMGS_sys.fpln.pred.efob or "----")
+    self:set_line(mcdu_data, MCDU_RIGHT, 6, trip_dist .. Fwd_string_fill(efob, " ", 6, MCDU_LARGE))
+
+end
+
 function THIS_PAGE:render(mcdu_data)
-    self:set_title(mcdu_data, "F-PLN")
+
+    local from_ppos = THIS_PAGE.curr_page == 1 and (FMGS_sys.fpln.apts.dep and "FROM" or "PPOS") or "    "
+    self:set_small_title(mcdu_data, from_ppos .. "         " .. Fwd_string_fill(FMGS_sys.fpln.init.flt_nbr and FMGS_sys.fpln.init.flt_nbr or "", " ", 8).. "  ")
+    self:set_lr_arrows(mcdu_data, true)
+
+    if FMGS_sys.fpln.apts.dep == nil or FMGS_sys.fpln.apts.arr == nil then
+        self:set_line(mcdu_data, MCDU_LEFT, 2, "------END OF F-PLN------", MCDU_LARGE)
+        return
+    end
+
+    THIS_PAGE:render_single(mcdu_data, 2, "2340", "0001", 153, "2340", "KMS118", 120, false, 2, false)
+    THIS_PAGE:render_single(mcdu_data, 3, "JACKO", "0002", 250, "4070", "", 119, true, 5, false)
+    THIS_PAGE:render_single(mcdu_data, 4, "(LIM)", "0004", 153, "10000", "(SPD)", nil, nil, 9, false)
+    THIS_PAGE:render_single(mcdu_data, 5, "(T/C)", "0023", ".78", "FL370", "", nil, nil, 131, false)
+
+    self:set_line(mcdu_data, MCDU_RIGHT, 1, "TIME  SPD/ALT   ", MCDU_SMALL)
+
+    if THIS_PAGE.curr_page == 1 then
+        THIS_PAGE:render_dep(mcdu_data)
+    end
 
     
-    self:set_line(mcdu_data, MCDU_LEFT, 4, "PAGE NOT YET IMPLEMENTED", MCDU_LARGE, ECAM_MAGENTA)
+    THIS_PAGE:render_dest(mcdu_data)
+end
+
+function THIS_PAGE:L1(mcdu_data)
+    if THIS_PAGE.curr_page == 1 then
+        if FMGS_sys.fpln.apts.dep then
+            mcdu_data.lat_rev_subject = {}
+            mcdu_data.lat_rev_subject.type = 1 -- ORIGIN
+            mcdu_data.lat_rev_subject.data = FMGS_sys.fpln.apts.dep
+        else
+            mcdu_data.lat_rev_subject = {}
+            mcdu_data.lat_rev_subject.type = 3 -- PPOS
+        end
+    end
+    
+    mcdu_open_page(mcdu_data, 602)
+end
+
+function THIS_PAGE:L6(mcdu_data)
+    if FMGS_sys.fpln.apts.arr then
+        mcdu_data.lat_rev_subject = {}
+        mcdu_data.lat_rev_subject.type = 4 -- DEST
+        mcdu_data.lat_rev_subject.data = FMGS_sys.fpln.apts.arr
+        mcdu_open_page(mcdu_data, 602)
+    end
 end
 
 

@@ -68,6 +68,7 @@ function common_draw(mcdu_data)
         else
             font = Font_MCDUSmall
         end
+
         sasl.gl.drawText(font, line.disp_x, line.disp_y, line.disp_text, line.disp_text_size, false, false, line.disp_text_align, line.disp_color)
     end
 

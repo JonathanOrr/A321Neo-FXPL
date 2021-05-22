@@ -70,6 +70,13 @@ function mcdu_ctrl_dmsd_to_dd(d,m,s,dir)
     return dd
 end
 
+function mcdu_lat_lon_to_str(lat, lon)
+    local aa,ab,ac,ad = mcdu_ctrl_dd_to_dmsd(lat, "lat")
+    local oa,ob,oc,od = mcdu_ctrl_dd_to_dmsd(lon, "lon")
+
+    return math.floor(aa).."°"..math.floor(ab).."."..math.floor(ac)..ad.."/"..math.floor(oa).."°"..math.floor(ob).."."..math.floor(oc)..od
+end
+
 function mcdu_format_force_to_small(text)
 
     if type(text) ~= "string" then
@@ -138,7 +145,7 @@ function mcdu_format_force_to_small(text)
         elseif text:sub(i, i) == "↓" then
             output = output .. "Ú"
         else
-            output = output .. text[i]
+            output = output .. text:sub(i, i)
         end
     end
 

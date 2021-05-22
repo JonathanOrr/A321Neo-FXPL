@@ -20,7 +20,7 @@ local function draw_dat(mcdu_data, dat, draw_size, disp_x, disp_y, disp_text_ali
     if dat.txt == nil then
         return
     end
-    local disp_text = tostring(dat.txt):upper()
+    local disp_text = tostring(dat.txt)
     dat.col = dat.col or ECAM_WHITE --default colour
     local disp_color = dat.col
 
@@ -53,7 +53,7 @@ function mcdu_update_render(mcdu_data)
             for k,draw_align in ipairs(MCDU_DIV_ALIGN) do
 
                 -- spacings
-                local disp_x = draw_get_x(k)
+                local disp_x = draw_get_x(draw_align)
                 local disp_y = draw_get_y(draw_act_row)
 
                 -- text alignment
@@ -76,7 +76,7 @@ function mcdu_update_render(mcdu_data)
     if mcdu_data.title[1] == nil then
         draw_dat(mcdu_data, mcdu_data.title, MCDU_LARGE, draw_get_x(1.5), draw_get_y(-1), TEXT_ALIGN_CENTER)
     else
-        for l,dat in pairs(mcdu_data.title) do
+        for l,dat in ipairs(mcdu_data.title) do
             draw_dat(mcdu_data, dat, MCDU_LARGE, draw_get_x(1.5), draw_get_y(-1), TEXT_ALIGN_CENTER)
         end
     end

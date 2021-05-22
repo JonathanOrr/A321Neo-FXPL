@@ -173,6 +173,16 @@ function MCDU_Page:set_title(mcdu_data, text, color)
     mcdu_data.title = {txt = text, col = color}
 end
 
+function MCDU_Page:set_small_title(mcdu_data, text, color)
+    color = color or ECAM_WHITE
+    mcdu_data.title = {txt = text, col = color, size=MCDU_SMALL}
+end
+
+function MCDU_Page:set_multi_title(mcdu_data, array_text_color)
+    mcdu_data.title = array_text_color
+end
+
+
 function MCDU_Page:set_subpages(mcdu_data, current, total)
     mcdu_data.num_pages = {current, total}
 end
