@@ -22,12 +22,12 @@ local MCDU_ENTRIES =
                 val = " "
             end
 
-            if get(TIME) - entry_cooldown > get(DELTA_TIME) then
+            --if get(TIME) - entry_cooldown > get(DELTA_TIME) then
                 entry_cooldown = get(TIME)
                 if #mcdu_data.entry < 22 then
                     mcdu_data.entry = mcdu_data.entry .. val
                 end
-            end
+            --end
         end
     },
     {

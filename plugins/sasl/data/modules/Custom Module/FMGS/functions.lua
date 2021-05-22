@@ -48,3 +48,16 @@ function FMGS_set_apt_alt(name)
     FMGS_sys.fpln.apts.alt = get_airport_or_nil(name)
 end
 
+function FMGS_dep_get_rwy()
+
+end
+
+function FMGS_dep_get_sid()
+
+end
+
+function FMGS_dep_get_trans()
+
+end
+
+

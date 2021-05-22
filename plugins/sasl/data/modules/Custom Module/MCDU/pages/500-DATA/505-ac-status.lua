@@ -32,6 +32,9 @@ function THIS_PAGE:render(mcdu_data)
     self:set_line(mcdu_data, MCDU_LEFT, 3, "SECOND DATA BASE", MCDU_SMALL)
     self:set_line(mcdu_data, MCDU_LEFT, 3, "N/A",              MCDU_LARGE, ECAM_BLUE)
 
+    self:set_line(mcdu_data, MCDU_LEFT, 4, "DO NOT USE MCDU", MCDU_SMALL, ECAM_RED)
+    self:set_line(mcdu_data, MCDU_LEFT, 4, "DEVELOPMENT IN PROGRESS", MCDU_LARGE, ECAM_RED)
+
     if FMGS_sys.config.phase == FMGS_PHASE_PREFLIGHT or FMGS_sys.config.phase == FMGS_PHASE_DONE then
         self:set_line(mcdu_data, MCDU_LEFT, 5, "CHG CODE", MCDU_SMALL)
         local content = "   "

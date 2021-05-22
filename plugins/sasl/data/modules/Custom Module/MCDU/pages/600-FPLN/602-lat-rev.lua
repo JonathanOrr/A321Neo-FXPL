@@ -128,6 +128,14 @@ function THIS_PAGE:render(mcdu_data)
     self:set_line(mcdu_data, MCDU_LEFT, 6, "<RETURN", MCDU_LARGE)
 end
 
+function THIS_PAGE:L1(mcdu_data)
+    if mcdu_data.lat_rev_subject.type == TYPE_ORIGIN then
+        mcdu_open_page(mcdu_data, 603)
+    else
+        MCDU_Page:L1(mcdu_data) -- Error
+    end
+end
+
 function THIS_PAGE:L6(mcdu_data)
     mcdu_open_page(mcdu_data, 600)
 end
