@@ -145,13 +145,16 @@ local function convert_single_apt(apt, load_rwys)
         rwys = {}
     };
 
+    if not load_rwys then
+        return new_apt
+    end
+
     for j=1,apt.rwys_len do
         local rwy_lat = apt.rwys[j-1].coords.lat
         local rwy_lon = apt.rwys[j-1].coords.lon
         local rwy_lat_s = apt.rwys[j-1].sibl_coords.lat
         local rwy_lon_s = apt.rwys[j-1].sibl_coords.lon
         
-    
         table.insert(new_apt.rwys, {
             name     = ffi.string(apt.rwys[j-1].name),
             sibl_name= ffi.string(apt.rwys[j-1].sibl_name),
