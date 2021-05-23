@@ -49,7 +49,15 @@ function FMGS_set_apt_alt(name)
 end
 
 function FMGS_dep_get_rwy()
+    if not FMGS_sys.fpln.apts.dep_rwy then
+        return nil, nil
+    else
+        return FMGS_sys.fpln.apts.dep_rwy[1], FMGS_sys.fpln.apts.dep_rwy[2]
+    end
+end
 
+function FMGS_dep_set_rwy(rwy, sibling)
+    FMGS_sys.fpln.apts.dep_rwy = {rwy, sibling}
 end
 
 function FMGS_dep_get_sid()

@@ -14,7 +14,7 @@
 -------------------------------------------------------------------------------
 
 
-local THIS_PAGE = MCDU_Page:new({id=603})
+local THIS_PAGE = MCDU_Page:new({id=604})
 
 THIS_PAGE.curr_page = 1
 
@@ -59,36 +59,20 @@ function THIS_PAGE:render(mcdu_data)
     -------------------------------------
     -- LEFT 2
     -------------------------------------
-    self:set_line(mcdu_data, MCDU_LEFT, 2, "   AVAILABLE RUNWAYS", MCDU_SMALL)
-    
-    local n = 2
-    local last_showed = true
-    for i,rwy in ipairs(mcdu_data.lat_rev_subject.data.rwys) do
-        if i > 2 * (THIS_PAGE.curr_page-1) and i <= 2 * (THIS_PAGE.curr_page) then
-
-            local arrow = (sel_rwy and rwy.name == sel_rwy.name and not sibl) and " " or "←"
-            self:set_line(mcdu_data, MCDU_LEFT, n, arrow .. Aft_string_fill(rwy.name, " ", 9) .. math.floor(rwy.distance) .. "M", MCDU_LARGE, ECAM_BLUE)
-            self:set_line(mcdu_data, MCDU_LEFT, n+1, "   " .. Fwd_string_fill(tostring(math.floor(rwy.bearing)), "0", 3), MCDU_SMALL, ECAM_BLUE)
-
-            local arrow = (sel_rwy and rwy.sibl_name == sel_rwy.sibl_name and sibl) and " " or "←"
-            self:set_line(mcdu_data, MCDU_LEFT, n+1, arrow .. Aft_string_fill(rwy.sibl_name, " ", 9) .. math.floor(rwy.distance) .. "M", MCDU_LARGE, ECAM_BLUE)
-            self:set_line(mcdu_data, MCDU_LEFT, n+2, "   " .. Fwd_string_fill(tostring(math.floor(rwy.bearing+180)%360), "0", 3), MCDU_SMALL, ECAM_BLUE)
-            n = n+2
-            last_showed = true
-        else
-            self:set_updn_arrows_bottom(mcdu_data, true)
-            last_showed = false
-        end
-    end
+    self:set_line(mcdu_data, MCDU_LEFT, 2, "SIDS   AVAILABLE   TRANS", MCDU_SMALL)
 
     -------------------------------------
     -- LEFT 6
     -------------------------------------
-    self:set_line(mcdu_data, MCDU_LEFT, 6, "<RETURN", MCDU_LARGE)
+    self:set_line(mcdu_data, MCDU_LEFT, 6, "←ERASE", MCDU_LARGE, ECAM_ORANGE)
 
-    if last_showed then
-        self:set_line(mcdu_data, MCDU_CENTER, 6, " END", MCDU_LARGE)
-    end
+    -------------------------------------
+    -- RIGHT 6
+    -------------------------------------
+    self:set_line(mcdu_data, MCDU_RIGHT, 6, "INSERT*", MCDU_LARGE, ECAM_ORANGE)
+
+    self:set_line(mcdu_data, MCDU_CENTER, 6, "EOSID", MCDU_SMALL)
+    self:set_line(mcdu_data, MCDU_CENTER, 6, "TODO ", MCDU_LARGE, ECAM_YELLOW)   -- TODO
 end
 
 function THIS_PAGE:sel_rwy(mcdu_data, i)
@@ -137,13 +121,15 @@ function THIS_PAGE:Slew_Up(mcdu_data)
     end
 end
 
+
 function THIS_PAGE:Slew_Left(mcdu_data)
-    mcdu_open_page(mcdu_data, 604)
+    mcdu_open_page(mcdu_data, 603)
 end
 
 function THIS_PAGE:Slew_Right(mcdu_data)
-    mcdu_open_page(mcdu_data, 604)
+    mcdu_open_page(mcdu_data, 603)
 end
+
 
 
 mcdu_pages[THIS_PAGE.id] = THIS_PAGE

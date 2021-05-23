@@ -53,6 +53,7 @@ FMGS_sys.fpln = {
     
     apts = {
         dep=nil,    -- As returned by AvionicsBay, runways included
+        dep_rwy = nil,
         arr=nil,    -- As returned by AvionicsBay, runways included
         alt=nil     -- As returned by AvionicsBay, runways included
     },
