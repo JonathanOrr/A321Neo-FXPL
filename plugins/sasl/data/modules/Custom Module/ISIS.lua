@@ -354,6 +354,11 @@ end
 
 function update()
     
+    if ISIS_window:isVisible() then
+        local window_x, window_y, window_width, window_height = ISIS_window:getPosition()
+        ISIS_window:setPosition ( window_x , window_y , window_width, window_width)
+    end
+
     if reset_button_elapsed_time > 2 then
         att_reset_start_time = get(TIME)
     end 

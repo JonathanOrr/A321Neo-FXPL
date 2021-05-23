@@ -1,15 +1,15 @@
 local BUTTON_PRESS_TIME = 0.5
 local dropdown_1 = {"DRY", "WET", "COMPACT SNOW", "DRY/WET SNOW", "SLUSH", "STAND WATER"}
-local dropdown_2 = {"DUAL FAULT", "SINGLE FAULT", "NONE"}
+local dropdown_2 = {"DUAL FAULT", "SINGLE FAULT", "NO FAULT"}
 local dropdown_3 = {"MANUAL", "AUTOMATIC"}
 local dropdown_4 = {"CONFIG FULL", "CONFIG 3"}
-local dropdown_5 = {"EMER ELEC CFG", "DC EMER CONFIG", "DC BUS 1+2", "DC BUS 2", "DC ESS BUS", "AC BUS 1", "NONE"}
-local dropdown_6 = {"ALT/DIR LAW", "1 SPLR FAULT", "2 SPLR FAULT", ">2 SPLR FAULT", "SEC1 OR SEC3", "SEC2", "SEC 1+2 OR 2+3", "SEC 1+3", "ALL SEC FAULT", "NONE"}
-local dropdown_7 = {"F: S: AT 0", "F: 0-1 S: <1", "F: 0-1 S: >1", "F: 1-2 S: <1 ", "F: 1-2 S: >1", "F: 2-3 S: <1", "F: 2-3 S: >1", "F: 3 S: <1", "F: 3 S: 1-3", "F: 3 S: >3","F: >3 S: <1","F: 3 S: 1-3", "F: >3 S: >3", "NONE"}
-local dropdown_8 = {"SYS G+Y", "SYS B", "SYS G+B", "SYS G+Y", "SYS Y+B", "NONE"}
-local dropdown_9 = {"ANTI SKID", "AUTO BRK FAULT", "NONE"}
-local dropdown_10 = {"DUAL IR", "DUAL ADR", "TRIPLE ADR", "TRIPLE IR", "NONE"}
-local dropdown_11 = {"REV UNLK CFG1", "REV UNLK CFG3", "NONE"}
+local dropdown_5 = {"EMER ELEC CFG", "DC EMER CONFIG", "DC BUS 1+2", "DC BUS 2", "DC ESS BUS", "AC BUS 1", "NO FAULT"}
+local dropdown_6 = {"ALT/DIR LAW", "1 SPLR FAULT", "2 SPLR FAULT", ">2 SPLR FAULT", "SEC1 OR SEC3", "SEC2", "SEC 1+2 OR 2+3", "SEC 1+3", "ALL SEC FAULT", "NO FAULT"}
+local dropdown_7 = {"F: S: AT 0", "F: 0-1 S: <1", "F: 0-1 S: >1", "F: 1-2 S: <1 ", "F: 1-2 S: >1", "F: 2-3 S: <1", "F: 2-3 S: >1", "F: 3 S: <1", "F: 3 S: 1-3", "F: 3 S: >3","F: >3 S: <1","F: 3 S: 1-3", "F: >3 S: >3", "NO FAULT"}
+local dropdown_8 = {"SYS G+Y", "SYS B", "SYS G+B", "SYS G+Y+B", "SYS Y+B", "NO FAULT"}
+local dropdown_9 = {"ANTI SKID", "AUTO BRK FAULT", "NO FAULT"}
+local dropdown_10 = {"DUAL IR", "DUAL ADR", "TRIPLE ADR", "TRIPLE IR", "NO FAULT"}
+local dropdown_11 = {"REV UNLK CFG1", "REV UNLK CFG3", "NO FAULT"}
 local dropdown_expanded = {false, false, false, false, false, false, false, false, false, false, false}
 local dropdown_selected = {1, #dropdown_2, 1, 1,#dropdown_5, #dropdown_6, #dropdown_7, #dropdown_8, #dropdown_9, #dropdown_10, #dropdown_11} ---CHANGE THE DEFAULT VALUE OF THE DROPDOWN HERE
 
