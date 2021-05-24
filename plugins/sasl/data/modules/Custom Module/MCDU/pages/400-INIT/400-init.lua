@@ -137,12 +137,15 @@ function THIS_PAGE:R1(mcdu_data)
 	local airp_origin_name = input:sub(1,4):upper()
     local airp_dest_name = input:sub(6,9):upper()
     
+    FMGS_reset_dep_arr_airports()
+    
     FMGS_set_apt_dep(airp_origin_name)
     FMGS_set_apt_arr(airp_dest_name)
     
+    mcdu_reset_fpln(mcdu_data)
+
     if FMGS_sys.fpln.apts.dep == nil or FMGS_sys.fpln.apts.arr == nil then
-        FMGS_sys.fpln.apts.dep = nil
-        FMGS_sys.fpln.apts.arr = nil
+        FMGS_reset_dep_arr_airports()
         mcdu_send_message(mcdu_data, "NOT IN DATABASE")
     else
         mcdu_data.entry = ""
@@ -158,6 +161,8 @@ function THIS_PAGE:L2(mcdu_data)
     end
     
 	local airp_name = input:sub(1,4):upper()
+    
+    FMGS_reset_alt_airports()
     
     FMGS_set_apt_alt(airp_name)
     

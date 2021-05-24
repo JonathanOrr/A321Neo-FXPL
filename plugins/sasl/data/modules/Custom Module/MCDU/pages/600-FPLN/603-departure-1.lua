@@ -46,12 +46,12 @@ function THIS_PAGE:render(mcdu_data)
         self:set_line(mcdu_data, MCDU_LEFT, 1, "---", MCDU_LARGE)
     end
     if sid then
-        self:set_line(mcdu_data, MCDU_CENTER, 1, Aft_string_fill(sid, " ", 7), MCDU_LARGE, ECAM_YELLOW)
+        self:set_line(mcdu_data, MCDU_CENTER, 1, Aft_string_fill(sid.proc_name, " ", 7), MCDU_LARGE, ECAM_YELLOW)
     else
         self:set_line(mcdu_data, MCDU_CENTER, 1, "------  ", MCDU_LARGE)
     end
     if trans then
-        self:set_line(mcdu_data, MCDU_RIGHT, 1, trans, MCDU_LARGE, ECAM_YELLOW)
+        self:set_line(mcdu_data, MCDU_RIGHT, 1, trans.proc_name, MCDU_LARGE, ECAM_YELLOW)
     else
         self:set_line(mcdu_data, MCDU_RIGHT, 1, "------", MCDU_LARGE)
     end
@@ -100,6 +100,7 @@ function THIS_PAGE:sel_rwy(mcdu_data, i)
         return
     end
     FMGS_dep_set_rwy(mcdu_data.lat_rev_subject.data.rwys[sel_rwy_i], i % 2 == 0)
+    mcdu_open_page(mcdu_data, 604)
 end
 
 

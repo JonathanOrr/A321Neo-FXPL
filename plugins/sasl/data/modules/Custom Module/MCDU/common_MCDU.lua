@@ -109,6 +109,11 @@ function mcdu_force_update(mcdu_data)
     mcdu_pages[mcdu_data.curr_page]:exec_render(mcdu_data)
 end
 
+function mcdu_reset_fpln(mcdu_data)
+    mcdu_pages[603].curr_page = 1
+    mcdu_pages[604].curr_page = 1
+end
+
 --define custom functionalities
 function mcdu_send_message(mcdu_data, message)
 
@@ -140,4 +145,4 @@ end
 
 MCDU.send_message = mcdu_send_message
 MCDU.force_update = mcdu_force_update
-
+MCDU.reset_fpln = mcdu_reset_fpln
