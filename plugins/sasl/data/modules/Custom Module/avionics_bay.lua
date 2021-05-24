@@ -101,6 +101,7 @@ local function convert_cifp_array(rawdata, cifp_arr)
     to_return = {}
     for i=1,cifp_arr.len do
         local new_dat =  {
+            type        = ("").char(cifp_arr.data[i-1].type),
             proc_name   = ffi.string(cifp_arr.data[i-1].proc_name,  cifp_arr.data[i-1].proc_name_len),
             trans_name  = ffi.string(cifp_arr.data[i-1].trans_name,  cifp_arr.data[i-1].trans_name_len),
             legs = {}
@@ -318,17 +319,17 @@ local function expose_functions()
         return AvionicsBay.c.is_cifp_ready()
     end
 
-    AvionicsBay.cifp.load_apt = function(name)
+    AvionicsBay.cifp.load_apt = function(arpt_id)
         assert(AvionicsBay.c.is_cifp_ready())
-        assert(type(name) == "string", "name must be a string")
-        AvionicsBay.c.load_cifp(name)
+        assert(type(arpt_id) == "string", "name must be a string")
+        AvionicsBay.c.load_cifp(arpt_id)
     end
 
-    AvionicsBay.cifp.get = function(name, rawdata)
+    AvionicsBay.cifp.get = function(arpt_id, rawdata)
         assert(AvionicsBay.c.is_cifp_ready())
-        assert(type(name) == "string", "name must be a string")
+        assert(type(arpt_id) == "string", "name must be a string")
         rawdata = rawdata or false
-        local cifp_data = AvionicsBay.c.get_cifp(name)
+        local cifp_data = AvionicsBay.c.get_cifp(arpt_id)
         
         return {
             sids  = convert_cifp_array(rawdata, cifp_data.sids),

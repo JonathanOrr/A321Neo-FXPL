@@ -18,6 +18,8 @@
 
 include('FMGS/route.lua')
 
+local loading_cifp = 0
+
 local config = {
     status = FMGS_MODE_OFF,
     phase  = FMGS_PHASE_PREFLIGHT,
@@ -52,10 +54,18 @@ FMGS_sys.fpln = {
     },
     
     apts = {
-        dep=nil,    -- As returned by AvionicsBay, runways included
-        dep_rwy = nil,
-        arr=nil,    -- As returned by AvionicsBay, runways included
-        alt=nil     -- As returned by AvionicsBay, runways included
+        dep=nil,        -- As returned by AvionicsBay, runways included
+        dep_cifp=nil,   -- All the loaded CIFP
+        dep_rwy=nil,
+        dep_sid=nil,    -- Selected SID for departure
+        dep_trans=nil,  -- Selected Transition for departure
+        
+        arr=nil,        -- As returned by AvionicsBay, runways included
+        arr_cifp=nil,   -- All the loaded CIFP
+        arr_rwy=nil,
+        
+        alt=nil,    -- As returned by AvionicsBay, runways included
+        alt_cifp=nil,
     },
 
     sid = nil,
@@ -109,9 +119,56 @@ local function update_status()
 
 end
 
+local function update_cifp()
+    if not AvionicsBay.is_initialized() or not AvionicsBay.is_ready() then
+        return
+    end
+
+    if not AvionicsBay.c.is_cifp_ready() then
+        return -- I'm already loading something related to CIFP
+    end
+    
+    -- DEP CIFP
+    if FMGS_sys.fpln.apts.dep ~= nil and FMGS_sys.fpln.apts.dep_cifp == nil then
+        if loading_cifp == 1 then
+            FMGS_sys.fpln.apts.dep_cifp = AvionicsBay.cifp.get(FMGS_sys.fpln.apts.dep.id)
+            loading_cifp = 0
+        else
+            FMGS_sys.fpln.apts.dep_cifp = AvionicsBay.cifp.load_apt(FMGS_sys.fpln.apts.dep.id)
+            loading_cifp = 1
+            return
+        end
+    end
+
+    if FMGS_sys.fpln.apts.arr ~= nil and FMGS_sys.fpln.apts.arr_cifp == nil then
+        if loading_cifp == 2 then
+            FMGS_sys.fpln.apts.arr_cifp = AvionicsBay.cifp.get(FMGS_sys.fpln.apts.arr.id)
+            loading_cifp = 0
+        else
+            FMGS_sys.fpln.apts.arr_cifp = AvionicsBay.cifp.load_apt(FMGS_sys.fpln.apts.arr.id)
+            loading_cifp = 2
+            return
+        end
+    end
+
+    if FMGS_sys.fpln.apts.alt ~= nil and FMGS_sys.fpln.apts.alt_cifp == nil then
+        if loading_cifp == 3 then
+            FMGS_sys.fpln.apts.alt_cifp = AvionicsBay.cifp.get(FMGS_sys.fpln.apts.alt.id)
+            loading_cifp = 0
+        else
+            FMGS_sys.fpln.apts.alt_cifp = AvionicsBay.cifp.load_apt(FMGS_sys.fpln.apts.alt.id)
+            loading_cifp = 3
+            return
+        end
+    end
+
+end
+
 function update()
     perf_measure_start("FMGS:update()")
     update_status()
     update_route()
+    update_cifp()
+    
     perf_measure_stop("FMGS:update()")
 end
