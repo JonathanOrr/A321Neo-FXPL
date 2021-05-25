@@ -25,7 +25,7 @@ function THIS_PAGE:render(mcdu_data)
     -- LEFT 1
     -------------------------------------
     self:set_line(mcdu_data, MCDU_LEFT, 1, " CO RTE", MCDU_SMALL, ECAM_WHITE)
-    if FMGS_sys.fpln.apts.dep == nil or FMGS_sys.fpln.apts.arr == nil then
+    if FMGS_sys.fpln.active.apts.dep == nil or FMGS_sys.fpln.active.apts.arr == nil then
         self:set_line(mcdu_data, MCDU_LEFT, 1, "__________", MCDU_LARGE, ECAM_ORANGE)
     end
 
@@ -33,10 +33,10 @@ function THIS_PAGE:render(mcdu_data)
     -- RIGHT 1
     -------------------------------------
     self:set_line(mcdu_data, MCDU_RIGHT, 1, "FROM/TO  ", MCDU_SMALL, ECAM_WHITE)
-    if FMGS_sys.fpln.apts.dep == nil or FMGS_sys.fpln.apts.arr == nil then
+    if FMGS_sys.fpln.active.apts.dep == nil or FMGS_sys.fpln.active.apts.arr == nil then
         self:set_line(mcdu_data, MCDU_RIGHT, 1, "____/____", MCDU_LARGE, ECAM_ORANGE)
     else
-        self:set_line(mcdu_data, MCDU_RIGHT, 1, FMGS_sys.fpln.apts.dep.id .. "/" .. FMGS_sys.fpln.apts.arr.id, MCDU_LARGE, ECAM_BLUE)
+        self:set_line(mcdu_data, MCDU_RIGHT, 1, FMGS_sys.fpln.active.apts.dep.id .. "/" .. FMGS_sys.fpln.active.apts.arr.id, MCDU_LARGE, ECAM_BLUE)
     end
     
     -------------------------------------
@@ -45,9 +45,9 @@ function THIS_PAGE:render(mcdu_data)
 
     self:set_line(mcdu_data, MCDU_LEFT, 2, "ALTN/CO RTE", MCDU_SMALL)
 
-    if FMGS_sys.fpln.apts.dep == nil or FMGS_sys.fpln.apts.arr == nil then
+    if FMGS_sys.fpln.active.apts.dep == nil or FMGS_sys.fpln.active.apts.arr == nil then
         self:set_line(mcdu_data, MCDU_LEFT, 2, "----/-------", MCDU_LARGE)
-    elseif FMGS_sys.fpln.apts.alt == nil then
+    elseif FMGS_sys.fpln.active.apts.alt == nil then
         self:set_line(mcdu_data, MCDU_LEFT, 2, "NONE", MCDU_LARGE, ECAM_BLUE)
    
     else
@@ -65,10 +65,10 @@ function THIS_PAGE:render(mcdu_data)
     -------------------------------------
     self:set_line(mcdu_data, MCDU_LEFT, 3, "FLT NBR", MCDU_SMALL)
 
-    if FMGS_sys.fpln.init.flt_nbr == nil then
+    if FMGS_sys.data.init.flt_nbr == nil then
         self:set_line(mcdu_data, MCDU_LEFT, 3, "________", MCDU_LARGE, ECAM_ORANGE)
     else
-        self:set_line(mcdu_data, MCDU_LEFT, 3, FMGS_sys.fpln.init.flt_nbr, MCDU_LARGE, ECAM_BLUE)
+        self:set_line(mcdu_data, MCDU_LEFT, 3, FMGS_sys.data.init.flt_nbr, MCDU_LARGE, ECAM_BLUE)
     end
     
     -------------------------------------
@@ -86,12 +86,12 @@ function THIS_PAGE:render(mcdu_data)
     -- LEFT 5
     -------------------------------------
     self:set_line(mcdu_data, MCDU_LEFT, 5, "COST INDEX", MCDU_SMALL)
-    if FMGS_sys.fpln.apts.dep == nil or FMGS_sys.fpln.apts.arr == nil then
+    if FMGS_sys.fpln.active.apts.dep == nil or FMGS_sys.fpln.active.apts.arr == nil then
         self:set_line(mcdu_data, MCDU_LEFT, 5, "---", MCDU_LARGE)
-    elseif FMGS_sys.fpln.init.cost_index == nil then
+    elseif FMGS_sys.data.init.cost_index == nil then
         self:set_line(mcdu_data, MCDU_LEFT, 5, "___", MCDU_LARGE, ECAM_ORANGE)
     else
-        self:set_line(mcdu_data, MCDU_LEFT, 5, FMGS_sys.fpln.init.cost_index, MCDU_LARGE, ECAM_BLUE)
+        self:set_line(mcdu_data, MCDU_LEFT, 5, FMGS_sys.data.init.cost_index, MCDU_LARGE, ECAM_BLUE)
     end
     
     -------------------------------------
@@ -103,19 +103,19 @@ function THIS_PAGE:render(mcdu_data)
     -- LEFT 6
     -------------------------------------
     self:set_line(mcdu_data, MCDU_LEFT, 6, "CRZ FL/TEMP", MCDU_SMALL)
-    if FMGS_sys.fpln.apts.dep == nil or FMGS_sys.fpln.apts.arr == nil then
+    if FMGS_sys.fpln.active.apts.dep == nil or FMGS_sys.fpln.active.apts.arr == nil then
         self:set_line(mcdu_data, MCDU_LEFT, 6, "-----/---", MCDU_LARGE)
-    elseif FMGS_sys.fpln.init.crz_fl == nil then
+    elseif FMGS_sys.data.init.crz_fl == nil then
         self:set_line(mcdu_data, MCDU_LEFT, 6, "_____/___", MCDU_LARGE, ECAM_ORANGE)
     else
-        self:set_line(mcdu_data, MCDU_LEFT, 6, FMGS_sys.fpln.init.crz_fl .. "/" .. FMGS_sys.fpln.init.crz_temp, MCDU_LARGE, ECAM_BLUE)
+        self:set_line(mcdu_data, MCDU_LEFT, 6, FMGS_sys.data.init.crz_fl .. "/" .. FMGS_sys.data.init.crz_temp, MCDU_LARGE, ECAM_BLUE)
     end
 
     -------------------------------------
     -- RIGHT 6
     -------------------------------------
     self:set_line(mcdu_data, MCDU_RIGHT, 6, "TROPO", MCDU_SMALL)
-    self:set_line(mcdu_data, MCDU_RIGHT, 6, FMGS_sys.fpln.init.tropo, MCDU_LARGE, ECAM_BLUE)
+    self:set_line(mcdu_data, MCDU_RIGHT, 6, FMGS_sys.data.init.tropo, MCDU_LARGE, ECAM_BLUE)
 
 end
 
@@ -144,7 +144,7 @@ function THIS_PAGE:R1(mcdu_data)
     
     mcdu_reset_fpln(mcdu_data)
 
-    if FMGS_sys.fpln.apts.dep == nil or FMGS_sys.fpln.apts.arr == nil then
+    if FMGS_sys.fpln.active.apts.dep == nil or FMGS_sys.fpln.active.apts.arr == nil then
         FMGS_reset_dep_arr_airports()
         mcdu_send_message(mcdu_data, "NOT IN DATABASE")
     else
@@ -166,7 +166,7 @@ function THIS_PAGE:L2(mcdu_data)
     
     FMGS_set_apt_alt(airp_name)
     
-    if FMGS_sys.fpln.apts.alt == nil then
+    if FMGS_sys.fpln.active.apts.alt == nil then
         mcdu_send_message(mcdu_data, "NOT IN DATABASE")
     else
         mcdu_data.entry = ""
@@ -178,7 +178,7 @@ end
 function THIS_PAGE:L3(mcdu_data)
     local input = mcdu_get_entry(mcdu_data)
     if input and string.len(input) < 9 then
-        FMGS_sys.fpln.init.flt_nbr = input
+        FMGS_sys.data.init.flt_nbr = input
     else
         mcdu_send_message(mcdu_data, "FORMAT ERROR")
     end
@@ -204,7 +204,7 @@ function THIS_PAGE:L4(mcdu_data)
 end
 
 function THIS_PAGE:L5(mcdu_data)
-    if FMGS_sys.fpln.apts.dep == nil or FMGS_sys.fpln.apts.arr == nil then
+    if FMGS_sys.fpln.active.apts.dep == nil or FMGS_sys.fpln.active.apts.arr == nil then
         mcdu_send_message(mcdu_data, "NOT ALLOWED")
         return
     end
@@ -215,7 +215,7 @@ function THIS_PAGE:L5(mcdu_data)
     elseif tonumber(input) <= 0 or tonumber(input) > 999 then
         mcdu_send_message(mcdu_data, "ENTRY OUT OF RANGE")
     else
-        FMGS_sys.fpln.init.cost_index = tonumber(input)
+        FMGS_sys.data.init.cost_index = tonumber(input)
     end
 end
 
@@ -230,14 +230,14 @@ function THIS_PAGE:L6(mcdu_data)
         if input_a ~= nil then
             local alt = tonumber(input_a) * 100
             if alt >= 1500 then
-                FMGS_sys.fpln.init.crz_fl = alt
-                FMGS_sys.fpln.init.crz_temp = math.floor(alt / 100 * -0.2 + 16)
+                FMGS_sys.data.init.crz_fl = alt
+                FMGS_sys.data.init.crz_temp = math.floor(alt / 100 * -0.2 + 16)
             else
                 mcdu_send_message(mcdu_data, "ENTRY OUT OF RANGE")
             end
         end
         if input_b ~= nil then
-            FMGS_sys.fpln.init.crz_temp = tonumber(input_b)
+            FMGS_sys.data.init.crz_temp = tonumber(input_b)
         end
     end
 end
@@ -250,7 +250,7 @@ function THIS_PAGE:R6(mcdu_data)
     elseif tonumber(input) <= 0 or tonumber(input) > 60000 then
         mcdu_send_message(mcdu_data, "ENTRY OUT OF RANGE")
     else
-        FMGS_sys.fpln.init.tropo = tonumber(input)
+        FMGS_sys.data.init.tropo = tonumber(input)
     end
 end
 

@@ -25,6 +25,7 @@ function THIS_PAGE:render(mcdu_data)
 
     assert(mcdu_data.lat_rev_subject)
 
+    local main_col = FMGS_sys.fpln.temp and ECAM_YELLOW or ECAM_GREEN
     local lrtype = mcdu_data.lat_rev_subject.type
 
     -- mcdu_data.lat_rev_subject
@@ -35,7 +36,7 @@ function THIS_PAGE:render(mcdu_data)
 
     self:set_multi_title(mcdu_data, {
         {txt="LAT REV " .. mcdu_format_force_to_small("FROM").."      ", col=ECAM_WHITE, size=MCDU_LARGE},
-        {txt="             " .. subject_id, col=ECAM_GREEN, size=MCDU_LARGE}
+        {txt="             " .. subject_id, col=main_col, size=MCDU_LARGE}
     })
 
     local lat, lon
@@ -46,7 +47,7 @@ function THIS_PAGE:render(mcdu_data)
     end
 
     if lat then
-        self:set_line(mcdu_data, MCDU_CENTER, 1, mcdu_lat_lon_to_str(lat, lon), MCDU_SMALL, ECAM_GREEN)
+        self:set_line(mcdu_data, MCDU_CENTER, 1, mcdu_lat_lon_to_str(lat, lon), MCDU_SMALL, main_col)
 
         -------------------------------------
         -- RIGHT 1

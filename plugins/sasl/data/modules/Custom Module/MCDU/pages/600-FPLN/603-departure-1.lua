@@ -21,13 +21,15 @@ THIS_PAGE.curr_page = 1
 function THIS_PAGE:render(mcdu_data)
     assert(mcdu_data.lat_rev_subject and mcdu_data.lat_rev_subject.type == 1)
 
+    local main_col = FMGS_sys.fpln.temp and ECAM_YELLOW or ECAM_GREEN
+
     self:set_lr_arrows(mcdu_data, true)
 
     local subject_id = mcdu_data.lat_rev_subject.data.id
 
     self:set_multi_title(mcdu_data, {
         {txt="DEPARTURES " .. mcdu_format_force_to_small("FROM").."           ", col=ECAM_WHITE, size=MCDU_LARGE},
-        {txt="             " .. subject_id, col=ECAM_GREEN, size=MCDU_LARGE}
+        {txt="             " .. subject_id, col=main_col, size=MCDU_LARGE}
     })
 
     -------------------------------------
@@ -37,21 +39,21 @@ function THIS_PAGE:render(mcdu_data)
     self:set_line(mcdu_data, MCDU_RIGHT, 1, "TRANS ", MCDU_SMALL)
     self:set_line(mcdu_data, MCDU_CENTER, 1, "SID", MCDU_SMALL)
 
-    local sel_rwy, sibl = FMGS_dep_get_rwy()
-    local sid = FMGS_dep_get_sid()
-    local trans = FMGS_dep_get_trans()
+    local sel_rwy, sibl = FMGS_dep_get_rwy(true)
+    local sid = FMGS_dep_get_sid(true)
+    local trans = FMGS_dep_get_trans(true)
     if sel_rwy then
-        self:set_line(mcdu_data, MCDU_LEFT, 1, sibl and sel_rwy.sibl_name or sel_rwy.name, MCDU_LARGE, ECAM_YELLOW)
+        self:set_line(mcdu_data, MCDU_LEFT, 1, sibl and sel_rwy.sibl_name or sel_rwy.name, MCDU_LARGE, main_col)
     else
         self:set_line(mcdu_data, MCDU_LEFT, 1, "---", MCDU_LARGE)
     end
     if sid then
-        self:set_line(mcdu_data, MCDU_CENTER, 1, Aft_string_fill(sid.proc_name, " ", 7), MCDU_LARGE, ECAM_YELLOW)
+        self:set_line(mcdu_data, MCDU_CENTER, 1, Aft_string_fill(sid.proc_name, " ", 7), MCDU_LARGE, main_col)
     else
         self:set_line(mcdu_data, MCDU_CENTER, 1, "------  ", MCDU_LARGE)
     end
     if trans then
-        self:set_line(mcdu_data, MCDU_RIGHT, 1, trans.proc_name, MCDU_LARGE, ECAM_YELLOW)
+        self:set_line(mcdu_data, MCDU_RIGHT, 1, trans.proc_name, MCDU_LARGE, main_col)
     else
         self:set_line(mcdu_data, MCDU_RIGHT, 1, "------", MCDU_LARGE)
     end
@@ -99,6 +101,7 @@ function THIS_PAGE:sel_rwy(mcdu_data, i)
         MCDU_Page:Slew_Down(mcdu_data)  -- Clicked on empty spot
         return
     end
+    FMGS_create_temp_fpln()
     FMGS_dep_set_rwy(mcdu_data.lat_rev_subject.data.rwys[sel_rwy_i], i % 2 == 0)
     mcdu_open_page(mcdu_data, 604)
 end

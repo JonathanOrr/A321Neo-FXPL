@@ -21,7 +21,7 @@ function THIS_PAGE:render(mcdu_data)
 
 
     self:set_line(mcdu_data, MCDU_RIGHT, 1, "FROM/TO  ", MCDU_SMALL)
-    self:set_line(mcdu_data, MCDU_RIGHT, 1, FMGS_sys.fpln.apts.dep.id .. "/" .. FMGS_sys.fpln.apts.arr.id, MCDU_LARGE, ECAM_BLUE)
+    self:set_line(mcdu_data, MCDU_RIGHT, 1, FMGS_sys.fpln.active.apts.dep.id .. "/" .. FMGS_sys.fpln.active.apts.arr.id, MCDU_LARGE, ECAM_BLUE)
 
     self:set_line(mcdu_data, MCDU_LEFT, 1, " CO RTE", MCDU_SMALL)
     self:set_line(mcdu_data, MCDU_LEFT, 1, "NONE", MCDU_LARGE, ECAM_GREEN)
