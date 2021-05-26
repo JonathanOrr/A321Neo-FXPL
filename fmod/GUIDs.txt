@@ -41,14 +41,9 @@
 {b7c55501-4395-4b64-8bd5-5ac794d5c763} event:/CockpitMechanical/GearDown
 {6acc591c-55ac-450c-bcb2-682e9204dfa3} event:/CockpitMechanical/GearUp
 {19a8de53-9601-4d68-9d4f-9199ad28bdd8} event:/CockpitMechanical/MCDU Button Press
-{591d615e-aae4-4bd2-b160-7ed57ba8e28f} event:/CockpitMechanical/MetalOff
-{734b27e4-0b32-4451-b348-11dac73ae9a6} event:/CockpitMechanical/MetalOn
 {748172b8-4c79-49ad-8dc5-eb75af6c8b1f} event:/CockpitMechanical/ParkBrakeOff
 {ee845653-3288-40de-8ca1-0546b9cc36e0} event:/CockpitMechanical/ParkBrakeOn
 {46e31fff-1edb-4eb0-9156-7a54aa775f98} event:/CockpitMechanical/Soft Button Press
-{e753ad2e-0852-49fc-8818-34856eda464a} event:/CockpitMechanical/Soft Button Press 2
-{8022fd30-2578-44f1-87c5-35c925912677} event:/CockpitMechanical/Soft Button Press 3
-{99e4d748-2281-4049-a26e-f32512cb17b6} event:/CockpitMechanical/Soft Button Press 4
 {3f10ae93-6ce9-4498-b258-bc2577898679} event:/CockpitMechanical/SSTakeOver
 {f876080e-f9a4-4eb5-8ae2-d6fd1a9d1509} event:/CockpitMechanical/Tray Table Close
 {3c593132-73eb-4d34-9184-c67400174bf2} event:/CockpitMechanical/Tray Table Open
@@ -217,6 +212,7 @@
 {baf9bc41-c708-42a2-bfac-b33deb7ddbc4} event:/Avionics
 {356cf20a-c643-42c5-8a6d-7a00fb3d4288} event:/Battery
 {1edd836c-b29a-4101-a732-2d2eef744bbe} event:/Blower
+{3d8092a4-9bd8-4b19-a02f-49fd954ffb79} event:/BlowerStart
 {89d27a8f-0f45-4230-905b-f244fdde49a4} event:/Brake Fan L
 {87259c62-a9fb-4b18-b7e4-d93a6e30c0a1} event:/Brake Fan R
 {5db7e5fc-e4e5-4189-b301-596d1f1dd3c2} event:/BrightnessClick

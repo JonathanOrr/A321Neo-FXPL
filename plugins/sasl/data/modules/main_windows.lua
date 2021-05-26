@@ -370,7 +370,7 @@ ISIS_window = contextWindow {
   minimumSize = { 250, 250 };
   maximumSize = { 500, 500 };
   gravity = { 0 , 1 , 0 , 1 };
-  visible = true;
+  visible = false;
   components = {
       ISIS_popup {}
   };
