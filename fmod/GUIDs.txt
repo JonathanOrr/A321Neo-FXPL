@@ -6,6 +6,8 @@
 {2f6e7063-8c77-4f8d-a1c9-393a1f21d5b7} event:/BatteryRelay/1 Off
 {2b35580e-c22e-49d8-b6e1-8079883b310e} event:/BatteryRelay/2
 {76004d39-cc8a-48fa-82f6-2e5f037893c8} event:/BatteryRelay/2 Off
+{4b76b401-4666-4589-b8fa-f3597102af21} event:/Brakes/Off
+{79db9fdb-19da-4194-b2da-62c8e683c1ad} event:/Brakes/On
 {fa3ccb63-2201-42a0-9ba9-80eea8c41f31} event:/CockpitMechanical/Lights/1
 {7c1f3bc8-8a78-496c-929d-a763939df0aa} event:/CockpitMechanical/Lights/2
 {180bfc42-72ad-426e-9893-90b2e97a68a6} event:/CockpitMechanical/Lights/3
