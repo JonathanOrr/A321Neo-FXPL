@@ -76,7 +76,6 @@ end
 
 local function draw_speed_tape()
     if get(ISIS_IAS) > -20 and get(ISIS_IAS) < 520 then --add conditions for standby flag to draw here\
-        sasl.gl.drawTexture (ISIS_spd_pointer, 76, 219, 28, 45, {1, 1, 1})
         sasl.gl.setClipArea (0, 100, 76, 308)
         local airspeed_y_offset = get(ISIS_IAS) * 4 -- 4 px per airspeed notch
         for i=-4, 104 do -- if you want to get the i for a certain airspeed, divided the airspeed by 5.
@@ -105,6 +104,8 @@ local function draw_speed_tape()
             end
         end
         sasl.gl.resetClipArea ()
+        sasl.gl.drawRectangle(76, 219 , 28, 45, {10/255, 15/255, 25/255})
+        sasl.gl.drawTexture (ISIS_spd_pointer, 76, 219, 28, 45, {1, 1, 1,1})
     else 
         draw_spd_stby()
     end
