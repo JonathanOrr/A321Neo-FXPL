@@ -2,14 +2,16 @@ local hud_colour = "light"
 local efb_up_button_begin = 0
 local efb_down_button_begin = 0
 local efb_save_buttn_begin = 0
+local efb_align_button_begin = 0
 --------------------------------------------------------------
 
 local dropdown_expanded = {false}
 
 
 include("libs/table.save.lua")
+include("FBW/FBW_subcomponents/autothrust.lua")
 
-
+local instant_align_command = findCommand("a321neo/cockpit/ADIRS/instantaneous_align")
 
 local function draw_throttle_value()
     if Round(get(Cockpit_throttle_lever_L),2) == 0 then
@@ -22,6 +24,20 @@ local function draw_throttle_value()
         drawTextCentered( Font_Airbus_panel , 389 , 367, "R:0.00" , 17 ,false , false , TEXT_ALIGN_LEFT , EFB_WHITE )
     else
         drawTextCentered( Font_Airbus_panel , 389 , 367, Round(get(Cockpit_throttle_lever_R),2) == 1 and "R:1.00" or "R:"..Round(get(Cockpit_throttle_lever_R),2) , 17 ,false , false , TEXT_ALIGN_LEFT , EFB_WHITE )
+    end
+
+    drawTextCentered( Font_Airbus_panel , 397 , 327, "REGISTERED DETENT:" , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_WHITE )
+
+    if get(Lever_in_CL) == 1 then
+        drawTextCentered( Font_Airbus_panel , 397 , 296, "CLIMB" , 23 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN)
+    elseif get(Lever_in_FLEX_MCT) == 1 then
+        drawTextCentered( Font_Airbus_panel , 397 , 296, "FLX/MCT" , 23 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN)
+    elseif get(Lever_in_TOGA) == 1 then
+        drawTextCentered( Font_Airbus_panel , 397 , 296, "TOGA" , 23 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN)
+    elseif Round(get(Cockpit_throttle_lever_L),2) == 0 and Round(get(Cockpit_throttle_lever_R),2) == 0 then
+        drawTextCentered( Font_Airbus_panel , 397 , 296, "IDLE" , 23 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE)
+    else
+        drawTextCentered( Font_Airbus_panel , 397 , 296, "MANUAL" , 23 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE)
     end
 end
 
@@ -41,6 +57,14 @@ local function draw_hud_buttons()
     SASL_drawSegmentedImg_xcenter_aligned (EFB_highlighter, 144,482,192,58,2,2)
     else
     SASL_drawSegmentedImg_xcenter_aligned (EFB_highlighter, 144,482,192,58,2,1)
+    end
+end
+
+local function draw_align_button()
+    if get(TIME) - efb_align_button_begin < 0.5 then
+        SASL_drawSegmentedImg_xcenter_aligned (EFB_CONFIG_align_button, 393,184,368,32,2,2)
+    else
+        SASL_drawSegmentedImg_xcenter_aligned (EFB_CONFIG_align_button, 393,184,368,32,2,1)
     end
 end
 
@@ -122,6 +146,11 @@ function EFB_execute_page_4_buttons()
         efb_down_button_begin = get(TIME)
     end)
 
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 301,184,485,216, function ()
+        efb_align_button_begin = get(TIME)
+        sasl.commandOnce(instant_align_command)
+    end)
+
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 414,46,738,90, function ()
         efb_save_buttn_begin = get(TIME)
         local volume_buffer_table = {get(VOLUME_ext), get(VOLUME_int), get(VOLUME_wind), get(VOLUME_cabin)}
@@ -183,13 +212,14 @@ end
 
 --DRAW LOOPS--
 function EFB_draw_page_4()
-
     draw_throttle_value()
     draw_hud_buttons()
+    draw_align_button()
     draw_save_config_button()
     sasl.gl.drawTexture ( EFB_CONFIG_bgd, 0 , 0 , 1143 , 800 , ECAM_WHITE ) --place the bgd in the middle or it'll cover up the highlighter buttons.
     draw_toggle_switches()
     draw_volume_sliders()
     draw_dropdowns()
 
+    print(EFB_CURSOR_X, EFB_CURSOR_Y)
 end

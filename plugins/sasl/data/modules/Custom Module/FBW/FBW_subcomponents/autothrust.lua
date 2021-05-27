@@ -7,10 +7,10 @@ local reverse_L_deployed = globalProperty("sim/cockpit2/annunciators/reverser_on
 local reverse_R_deployed = globalProperty("sim/cockpit2/annunciators/reverser_on[1]")
 
 --custom datarefs
-local Lever_in_TOGA =       createGlobalPropertyi("a321neo/cockpit/autothrust/lever_in_toga", 0, false, true, false)
-local Lever_in_FLEX_MCT =   createGlobalPropertyi("a321neo/cockpit/autothrust/lever_in_flex_mct", 0, false, true, false)
-local Lever_in_CL =         createGlobalPropertyi("a321neo/cockpit/autothrust/lever_in_cl", 0, false, true, false)
-local Lever_in_MAN_thrust = createGlobalPropertyi("a321neo/cockpit/autothrust/lever_in_man_thrust", 0, false, true, false)
+Lever_in_TOGA =       createGlobalPropertyi("a321neo/cockpit/autothrust/lever_in_toga", 0, false, true, false)
+Lever_in_FLEX_MCT =   createGlobalPropertyi("a321neo/cockpit/autothrust/lever_in_flex_mct", 0, false, true, false)
+Lever_in_CL =         createGlobalPropertyi("a321neo/cockpit/autothrust/lever_in_cl", 0, false, true, false)
+Lever_in_MAN_thrust = createGlobalPropertyi("a321neo/cockpit/autothrust/lever_in_man_thrust", 0, false, true, false)
 
 --sim commands
 local sim_throttle_up =       sasl.findCommand("sim/engines/throttle_up")

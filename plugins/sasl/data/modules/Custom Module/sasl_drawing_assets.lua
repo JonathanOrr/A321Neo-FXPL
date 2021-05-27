@@ -210,6 +210,7 @@ EFB_CONFIG_slider =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/text
 EFB_CONFIG_save =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/CONFIG page/save_button.png")
 EFB_CONFIG_hud =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/CONFIG page/hud.png")
 EFB_CONFIG_dropdown1 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/CONFIG page/dropdown1.png")
+EFB_CONFIG_align_button =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/CONFIG page/align_button.png")
 
 
 -----------HOME------------
