@@ -9,9 +9,6 @@ local dropdown_expanded = {false}
 
 
 include("libs/table.save.lua")
-include("FBW/FBW_subcomponents/autothrust.lua")
-
-local instant_align_command = findCommand("a321neo/cockpit/ADIRS/instantaneous_align")
 
 local function draw_throttle_value()
 
@@ -157,7 +154,7 @@ function EFB_execute_page_4_buttons()
 
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 301,184,485,216, function ()
         efb_align_button_begin = get(TIME)
-        sasl.commandOnce(instant_align_command)
+        sasl.commandOnce(findCommand("a321neo/cockpit/ADIRS/instantaneous_align"))
     end)
 
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 414,46,738,90, function ()

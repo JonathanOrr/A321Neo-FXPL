@@ -266,6 +266,18 @@ Head_the = globalProperty("sim/graphics/view/pilots_head_the")--pitch
 Flight_director_1_mode = globalProperty("sim/cockpit2/autopilot/flight_director_mode")
 Flight_director_2_mode = globalProperty("sim/cockpit2/autopilot/flight_director2_mode")
 
+--autothrust
+
+--sim dataref
+reverse_L_deployed = globalProperty("sim/cockpit2/annunciators/reverser_on[0]")
+reverse_R_deployed = globalProperty("sim/cockpit2/annunciators/reverser_on[1]")
+
+--custom datarefs
+Lever_in_TOGA =       createGlobalPropertyi("a321neo/cockpit/autothrust/lever_in_toga", 0, false, true, false)
+Lever_in_FLEX_MCT =   createGlobalPropertyi("a321neo/cockpit/autothrust/lever_in_flex_mct", 0, false, true, false)
+Lever_in_CL =         createGlobalPropertyi("a321neo/cockpit/autothrust/lever_in_cl", 0, false, true, false)
+Lever_in_MAN_thrust = createGlobalPropertyi("a321neo/cockpit/autothrust/lever_in_man_thrust", 0, false, true, false)
+
 --electrical system
 XP_Battery_1 = globalProperty("sim/cockpit2/electrical/battery_on[0]")
 XP_Battery_2 = globalProperty("sim/cockpit2/electrical/battery_on[1]")
