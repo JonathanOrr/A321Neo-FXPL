@@ -14,30 +14,39 @@ include("FBW/FBW_subcomponents/autothrust.lua")
 local instant_align_command = findCommand("a321neo/cockpit/ADIRS/instantaneous_align")
 
 local function draw_throttle_value()
-    if Round(get(Cockpit_throttle_lever_L),2) == 0 then
+
+    local left_throttle = Round(get(Cockpit_throttle_lever_L),2)
+    local right_throttle = Round(get(Cockpit_throttle_lever_R),2)
+
+    if left_throttle == 0 then
         drawTextCentered( Font_Airbus_panel , 331 , 367, "L:0.00" , 17 ,false , false , TEXT_ALIGN_LEFT , EFB_WHITE )
     else
-        drawTextCentered( Font_Airbus_panel , 331 , 367, Round(get(Cockpit_throttle_lever_L),2) == 1 and "L:1.00" or "L:"..Round(get(Cockpit_throttle_lever_L),2) , 17 ,false , false , TEXT_ALIGN_LEFT , EFB_WHITE )
+        drawTextCentered( Font_Airbus_panel , 331 , 367, left_throttle == 1 and "L:1.00" or "L:"..left_throttle , 17 ,false , false , TEXT_ALIGN_LEFT , EFB_WHITE )
     end
 
-    if Round(get(Cockpit_throttle_lever_R),2) == 0 then
+    if right_throttle == 0 then
         drawTextCentered( Font_Airbus_panel , 389 , 367, "R:0.00" , 17 ,false , false , TEXT_ALIGN_LEFT , EFB_WHITE )
     else
-        drawTextCentered( Font_Airbus_panel , 389 , 367, Round(get(Cockpit_throttle_lever_R),2) == 1 and "R:1.00" or "R:"..Round(get(Cockpit_throttle_lever_R),2) , 17 ,false , false , TEXT_ALIGN_LEFT , EFB_WHITE )
+        drawTextCentered( Font_Airbus_panel , 389 , 367, right_throttle == 1 and "R:1.00" or "R:"..right_throttle , 17 ,false , false , TEXT_ALIGN_LEFT , EFB_WHITE )
     end
 
     drawTextCentered( Font_Airbus_panel , 397 , 327, "REGISTERED DETENT:" , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_WHITE )
 
     if get(Lever_in_CL) == 1 then
-        drawTextCentered( Font_Airbus_panel , 397 , 296, "CLIMB" , 23 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN)
+        drawTextCentered( Font_Airbus_panel , 397 , 294, "CLIMB" , 23 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN)
+        Sasl_DrawWideFrame(341, 280, 110, 30, 2, 0, EFB_FULL_GREEN)
     elseif get(Lever_in_FLEX_MCT) == 1 then
-        drawTextCentered( Font_Airbus_panel , 397 , 296, "FLX/MCT" , 23 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN)
+        drawTextCentered( Font_Airbus_panel , 397 , 294, "FLX/MCT" , 23 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN)
+        Sasl_DrawWideFrame(341, 280, 110, 30, 2, 0, EFB_FULL_GREEN)
     elseif get(Lever_in_TOGA) == 1 then
-        drawTextCentered( Font_Airbus_panel , 397 , 296, "TOGA" , 23 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN)
-    elseif Round(get(Cockpit_throttle_lever_L),2) == 0 and Round(get(Cockpit_throttle_lever_R),2) == 0 then
-        drawTextCentered( Font_Airbus_panel , 397 , 296, "IDLE" , 23 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE)
+        drawTextCentered( Font_Airbus_panel , 397 , 294, "TOGA" , 23 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN)
+        Sasl_DrawWideFrame(341, 280, 110, 30, 2, 0, EFB_FULL_GREEN)
+    elseif left_throttle == 0 and right_throttle == 0 then
+        drawTextCentered( Font_Airbus_panel , 397 , 294, "IDLE" , 23 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE)
+        Sasl_DrawWideFrame(341, 280, 110, 30, 2, 0, EFB_LIGHTGREY)
     else
-        drawTextCentered( Font_Airbus_panel , 397 , 296, "MANUAL" , 23 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE)
+        drawTextCentered( Font_Airbus_panel , 397 , 294, "MANUAL" , 23 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE)
+        Sasl_DrawWideFrame(341, 280, 110, 30, 2, 0, EFB_LIGHTBLUE)
     end
 end
 
@@ -220,6 +229,4 @@ function EFB_draw_page_4()
     draw_toggle_switches()
     draw_volume_sliders()
     draw_dropdowns()
-
-    print(EFB_CURSOR_X, EFB_CURSOR_Y)
 end
