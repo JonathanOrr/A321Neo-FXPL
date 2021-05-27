@@ -109,9 +109,10 @@ local function convert_cifp_array(rawdata, cifp_arr)
         
         for j=1,cifp_arr.data[i-1].legs_len do
             local l = cifp_arr.data[i-1].legs[j-1]
+            assert(l.leg_type)
             table.insert(new_dat.legs, {
                 leg_name = ffi.string(l.leg_name, l.leg_name_len),
-                turn_direction = l.turn_direction,
+                turn_direction = ("").char(l.turn_direction),
                 leg_type = l.leg_type,
                 radius = l.radius,
                 theta = l.theta,
@@ -126,7 +127,8 @@ local function convert_cifp_array(rawdata, cifp_arr)
                 cstr_speed_type = l.cstr_speed_type,
                 cstr_speed = l.cstr_speed,
                 vpath_angle = l.vpath_angle,
-                center_fix = ffi.string(l.center_fix, l.center_fix_len)
+                center_fix = ffi.string(l.center_fix, l.center_fix_len),
+                recomm_navaid = ffi.string(l.recomm_navaid, l.recomm_navaid_len),
             })
         end
         

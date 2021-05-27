@@ -164,7 +164,10 @@ typedef struct xpdata_cifp_leg_t {
     
     const char *center_fix;
     int center_fix_len;
-    
+
+    const char *recomm_navaid;
+    int recomm_navaid_len;
+
 } xpdata_cifp_leg_t;
 
 typedef struct xpdata_cifp_data_t {
