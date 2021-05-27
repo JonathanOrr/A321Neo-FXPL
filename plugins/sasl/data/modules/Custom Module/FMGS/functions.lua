@@ -118,7 +118,7 @@ function FMGS_reset_alt_airport()
 end
 
 function FMGS_dep_get_sid(ret_temp_if_avail)
-    if ret_temp_if_avail and FMGS_sys.fpln.temp and FMGS_sys.fpln.temp.apts.dep_sid then
+    if ret_temp_if_avail and FMGS_sys.fpln.temp then
         return FMGS_sys.fpln.temp.apts.dep_sid
     else
         return FMGS_sys.fpln.active.apts.dep_sid
@@ -130,7 +130,7 @@ function FMGS_dep_set_sid(sid)
 end
 
 function FMGS_dep_get_trans(ret_temp_if_avail)
-    if ret_temp_if_avail and FMGS_sys.fpln.temp and FMGS_sys.fpln.temp.apts.dep_trans then
+    if ret_temp_if_avail and FMGS_sys.fpln.temp then
         return FMGS_sys.fpln.temp.apts.dep_trans
     else
         return FMGS_sys.fpln.active.apts.dep_trans

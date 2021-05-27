@@ -171,14 +171,12 @@ function THIS_PAGE:render(mcdu_data)
     THIS_PAGE:render_trans(mcdu_data, sel_rwy)
 
     -------------------------------------
-    -- LEFT 6
+    -- LEFT/RIGHT 6
     -------------------------------------
-    self:set_line(mcdu_data, MCDU_LEFT, 6, "←ERASE", MCDU_LARGE, ECAM_ORANGE)
-
-    -------------------------------------
-    -- RIGHT 6
-    -------------------------------------
-    self:set_line(mcdu_data, MCDU_RIGHT, 6, "INSERT*", MCDU_LARGE, ECAM_ORANGE)
+    if FMGS_sys.fpln.temp then
+        self:set_line(mcdu_data, MCDU_LEFT, 6, "←ERASE", MCDU_LARGE, ECAM_ORANGE)
+        self:set_line(mcdu_data, MCDU_RIGHT, 6, "INSERT*", MCDU_LARGE, ECAM_ORANGE)
+    end
 
     self:set_line(mcdu_data, MCDU_CENTER, 6, "EOSID", MCDU_SMALL)
     if THIS_PAGE.eosid then
@@ -189,6 +187,10 @@ function THIS_PAGE:render(mcdu_data)
 end
 
 function THIS_PAGE:sel_sid(mcdu_data, i)
+    
+    if not FMGS_sys.fpln.temp then
+        FMGS_create_temp_fpln()
+    end
     
     if THIS_PAGE.sid_references[i] > 0 then
         FMGS_dep_set_sid(THIS_PAGE.curr_fpln.apts.dep_cifp.sids[THIS_PAGE.sid_references[i]])
@@ -201,6 +203,10 @@ function THIS_PAGE:sel_sid(mcdu_data, i)
 end
 
 function THIS_PAGE:sel_trans(mcdu_data, i)
+    if not FMGS_sys.fpln.temp then
+        FMGS_create_temp_fpln()
+    end
+
     if THIS_PAGE.trans_references[i] > 0 then
         FMGS_dep_set_trans(THIS_PAGE.curr_fpln.apts.dep_cifp.sids[THIS_PAGE.trans_references[i]])
     else

@@ -23,29 +23,28 @@ function THIS_PAGE:render_dep(mcdu_data)
     local arpt_id    = THIS_PAGE.curr_fpln.apts.dep.id
     local arpt_alt   = THIS_PAGE.curr_fpln.apts.dep.alt
 
-    THIS_PAGE:render_single(mcdu_data, 1, arpt_id, "0000", nil, tostring(arpt_alt), "", nil, nil, nil, true)
+    THIS_PAGE:render_single(mcdu_data, 1, arpt_id, "0000", nil, tostring(arpt_alt), nil, "", nil, nil, nil, true)
 
 end
 
-function THIS_PAGE:render_single(mcdu_data, i, id, time, spd, alt, proc_name, bearing, is_trk, distance, is_arpt)
-    local main_col = FMGS_sys.fpln.temp and ECAM_YELLOW or ECAM_GREEN
+function THIS_PAGE:render_single(mcdu_data, i, id, time, spd, alt, alt_col, proc_name, bearing, is_trk, distance, is_arpt, is_the_first)
+    local main_col = is_the_first and ECAM_WHITE or (FMGS_sys.fpln.temp and ECAM_YELLOW or ECAM_GREEN)
 
     time = is_arpt and time or mcdu_format_force_to_small(time) -- TIME is small only for airports
 
     local left_side  = Aft_string_fill(id, " ", 8) 
-    local right_side = (spd and spd or "") .. "/" .. Fwd_string_fill(alt, " ", 6)
+    local ctr_side   = (spd and spd or "---")
+    local right_side = "/" .. Fwd_string_fill(alt or "", " ", 6)
     if not is_arpt then
         left_side  = left_side .. mcdu_format_force_to_small(time)
+        ctr_side   = mcdu_format_force_to_small(ctr_side)
         right_side = mcdu_format_force_to_small(right_side)
     else
         left_side  = left_side .. time
     end
     self:set_line(mcdu_data, MCDU_LEFT, i, left_side, MCDU_LARGE, main_col)
-    self:set_line(mcdu_data, MCDU_RIGHT, i, right_side, MCDU_LARGE, main_col)
-    
-    if spd == nil then
-        self:set_line(mcdu_data, MCDU_CENTER, i, "       ---", is_arpt and MCDU_LARGE or MCDU_SMALL)
-    end
+    self:set_line(mcdu_data, MCDU_CENTER, i, "       " .. ctr_side, MCDU_LARGE, spd and main_col or ECAM_WHITE)
+    self:set_line(mcdu_data, MCDU_RIGHT, i, right_side, MCDU_LARGE, alt_col or main_col)
     
     if i ~= 1 then
         local brg_trk = is_trk ~= nil and ((is_trk and "TRK" or "BRG") .. Fwd_string_fill(tostring(math.floor(bearing)), "0", 3) .. "°") or "       "
@@ -53,6 +52,10 @@ function THIS_PAGE:render_single(mcdu_data, i, id, time, spd, alt, proc_name, be
         self:set_line(mcdu_data, MCDU_LEFT, i, " " .. Aft_string_fill(proc_name, " ", 8) .. brg_trk .. "  " .. distance .. "NM" , MCDU_SMALL, (i == 2 and THIS_PAGE.curr_page == 1) and ECAM_WHITE or main_col)
     end
     
+end
+
+function THIS_PAGE:render_discontinuity(mcdu_data, i)
+    self:set_line(mcdu_data, MCDU_LEFT, i, "---F-PLN DISCONTINUITY--" , MCDU_LARGE)
 end
 
 function THIS_PAGE:render_dest(mcdu_data)
@@ -67,6 +70,116 @@ function THIS_PAGE:render_dest(mcdu_data)
     local efob = (FMGS_sys.data.pred.efob and FMGS_sys.data.pred.efob or "----")
     self:set_line(mcdu_data, MCDU_RIGHT, 6, trip_dist .. Fwd_string_fill(efob, " ", 6, MCDU_LARGE))
 
+end
+
+local function convert_alt_cstr(x)
+    if     x.cstr_alt_type == CIFP_CSTR_ALT_NONE then
+        return nil, nil
+    elseif x.cstr_alt_type == CIFP_CSTR_ALT_ABOVE or x.cstr_alt_type == CIFP_CSTR_ALT_ABOVE_BELOW then
+            return Fwd_string_fill("+" .. x.cstr_altitude1, " ", 5), ECAM_MAGENTA
+    elseif x.cstr_alt_type == CIFP_CSTR_ALT_BELOW then
+        return Fwd_string_fill("-" .. x.cstr_altitude1, " ", 5), ECAM_MAGENTA
+    elseif x.cstr_alt_type == CIFP_CSTR_ALT_AT or x.cstr_alt_type == CIFP_CSTR_ALT_GLIDE then
+        if x.cstr_altitude1 ~= 0 then
+            return Fwd_string_fill(tostring(x.cstr_altitude1), " ", 5), ECAM_GREEN
+        end
+    elseif x.cstr_alt_type == CIFP_CSTR_ALT_ABOVE_2ND then
+        return Fwd_string_fill("+" .. x.cstr_altitude2, " ", 5), ECAM_MAGENTA
+    end
+
+    return nil, nil
+end
+
+local function convert_leg_name(x)
+    local name = x.leg_name
+    local leg_type = x.leg_type
+    local outb_mag = Fwd_string_fill(tostring(math.floor(x.outb_mag/10)),"0", 3)
+    local theta    = Fwd_string_fill(tostring(math.floor(x.theta/10)),"0", 3)
+    local dd       = Fwd_string_fill(tostring(math.floor(x.rho/10)),"0", 2)
+    local rte      = Fwd_string_fill(tostring(math.floor(x.rte_hold/10)),"0", 2)
+    local cstr_alt = Fwd_string_fill(tostring(x.cstr_altitude1), "0", 5)
+    
+    if leg_type == CIFP_LEG_TYPE_IF then
+        return name, ""
+    elseif leg_type == CIFP_LEG_TYPE_TF then
+        return name, ""
+    elseif leg_type == CIFP_LEG_TYPE_CF then
+        return name, "C" .. outb_mag .. "°"
+    elseif leg_type == CIFP_LEG_TYPE_DF then
+        return name, ""
+    elseif leg_type == CIFP_LEG_TYPE_FA or leg_type == CIFP_LEG_TYPE_CA then
+        return cstr_alt, "C" .. outb_mag .. "°"
+    elseif leg_type == CIFP_LEG_TYPE_FC then
+        return "INTCPT", "C" .. theta .. "°"
+    elseif leg_type == CIFP_LEG_TYPE_FD or leg_type == CIFP_LEG_TYPE_CD then
+        return x.recomm_navaid .. "/" .. rte, "C" .. theta .. "°"
+    elseif leg_type == CIFP_LEG_TYPE_FM or leg_type == CIFP_LEG_TYPE_VM then
+        return "MANUAL", "H" .. outb_mag .. "°"
+    elseif leg_type == CIFP_LEG_TYPE_CI or leg_type == CIFP_LEG_TYPE_VI or leg_type == CIFP_LEG_TYPE_VR then
+        return "INTCPT", "H" .. outb_mag .. "°"
+    elseif leg_type == CIFP_LEG_TYPE_CR then
+        return x.center_fix .. outb_mag, "H" .. theta .. "°"
+    elseif leg_type == CIFP_LEG_TYPE_RF then
+        return name, dd .. " ARC"
+    elseif leg_type == CIFP_LEG_TYPE_AF then
+        return name, dd .. " " .. x.center_fix
+    elseif leg_type == CIFP_LEG_TYPE_VA then
+        return cstr_alt, "H" .. outb_mag .. "°"
+    elseif leg_type == CIFP_LEG_TYPE_VD then
+        return x.center_fix .. "/" .. rte, "H" .. outb_mag .. "°"
+    elseif leg_type == CIFP_LEG_TYPE_PI then
+        return "PROC " .. x.turn_direction
+    elseif leg_type == CIFP_LEG_TYPE_HA then
+        return cstr_alt, "HOLD " .. x.turn_direction
+    elseif leg_type == CIFP_LEG_TYPE_HF then
+        return name, "HOLD " .. x.turn_direction
+    elseif leg_type == CIFP_LEG_TYPE_HM then
+        return "MANUAL", "HOLD", x.turn_direction
+    end
+    
+    return "UKWN (" .. leg_type .. ")"
+end
+
+function THIS_PAGE:render_list(mcdu_data)
+    local list_messages = {
+        {} -- First one is always empty (it represents the departure airport)
+    }
+    
+    if not THIS_PAGE.curr_fpln.apts.dep_sid then
+        table.insert(list_messages, {discontinuity=true})
+    else
+        for i,x in ipairs(THIS_PAGE.curr_fpln.apts.dep_sid.legs) do
+            table.insert(list_messages, x)
+        end
+    end
+    
+    local start_i = (THIS_PAGE.curr_page-1) * 5 + 1
+    local line_id = 1
+    if THIS_PAGE.curr_page == 1 then
+        start_i = start_i + 1   -- Skip the departure airport if the first page
+        line_id = line_id + 1
+    end
+    local end_i = (THIS_PAGE.curr_page) * 5
+    
+    for i=start_i,end_i do
+        if not list_messages[i] then
+            break   -- end of list
+        end
+        if list_messages[i].discontinuity then
+            THIS_PAGE:render_discontinuity(mcdu_data, line_id)
+        else
+            local x = list_messages[i]
+            local name, proc = convert_leg_name(x)
+            if #proc == 0 then
+                proc = THIS_PAGE.curr_fpln.apts.dep_sid.proc_name
+            end
+            local alt_cstr, alt_cstr_col = convert_alt_cstr(x)
+            local spd_cstr = x.cstr_speed_type ~= CIFP_CSTR_SPD_NONE and tostring(x.cstr_speed) or ""
+            THIS_PAGE:render_single(mcdu_data, line_id, name, "----", spd_cstr, alt_cstr, alt_cstr_col, proc, nil, nil, 123, false, start_i == 2 and line_id == 2)
+        end
+        line_id = line_id + 1
+    end
+    
 end
 
 function THIS_PAGE:render(mcdu_data)
@@ -88,11 +201,14 @@ function THIS_PAGE:render(mcdu_data)
         return
     end
 
+    THIS_PAGE:render_list(mcdu_data)
+
+--[[
     THIS_PAGE:render_single(mcdu_data, 2, "2340", "0001", 153, "2340", "KMS118", 120, false, 2, false)
     THIS_PAGE:render_single(mcdu_data, 3, "JACKO", "0002", 250, "4070", "", 119, true, 5, false)
     THIS_PAGE:render_single(mcdu_data, 4, "(LIM)", "0004", 153, "10000", "(SPD)", nil, nil, 9, false)
     THIS_PAGE:render_single(mcdu_data, 5, "(T/C)", "0023", ".78", "FL370", "", nil, nil, 131, false)
-
+--]]
     self:set_line(mcdu_data, MCDU_RIGHT, 1, "TIME  SPD/ALT   ", MCDU_SMALL)
 
     if THIS_PAGE.curr_page == 1 then
@@ -147,6 +263,14 @@ function THIS_PAGE:R6(mcdu_data)
     else
         MCDU_Page:R6(mcdu_data) -- ERROR
     end
+end
+
+function THIS_PAGE:Slew_Down(mcdu_data)
+    THIS_PAGE.curr_page = THIS_PAGE.curr_page + 1
+end
+
+function THIS_PAGE:Slew_Up(mcdu_data)
+    THIS_PAGE.curr_page = math.max(1,THIS_PAGE.curr_page - 1)
 end
 
 
