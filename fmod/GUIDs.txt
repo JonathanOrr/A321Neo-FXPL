@@ -66,6 +66,7 @@
 {c66ab21e-1b9f-4f80-b86b-1511dff925f4} event:/Engines V1 PW1100G/HowlLogicR
 {4003976e-bf49-44ca-a3d6-0476fd686d05} event:/Engines V1 PW1100G/RevL
 {da7db8cb-938d-4c23-ad53-76356ae83640} event:/Engines V1 PW1100G/RevR
+{58b95598-64a1-494f-a493-9d9d6ad5ec17} event:/Engines V1 PW1100G/ThrottleVibration
 {71483e42-1521-4ce6-a01b-56876658a229} event:/Engines V2/Boom
 {3428542a-0973-45d3-b8f9-c0e46de082e2} event:/Engines V2/Engine Start Ext
 {956efd44-c2c5-4ab7-a510-f35c74dcd905} event:/Engines V2/Engine Start N2 L

@@ -131,7 +131,11 @@ END_SOUND_ATTACHMENT
 ##   PARAM_DREF_IDX 0
 ## END_SOUND_ATTACHMENT
 
-
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Engines V1 PW1100G/ThrottleVibration
+  VEH_XYZ 0 2.3 0
+  EVENT_ALWAYS
+END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /Engines V1 PW1100G/EnginesL
@@ -3141,20 +3145,6 @@ END_SOUND_ATTACHMENT
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /Cabin
   VEH_XYZ 0 2.3 11
-  EVENT_START_COND 	a321neo/dynamics/electrical/bus/ac_ess_powered == 1
-  CUE_TRIGGER_COND  a321neo/dynamics/electrical/bus/ac_ess_powered == 0
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /Cabin
-  VEH_XYZ 0 2.3 0
-  EVENT_START_COND 	a321neo/dynamics/electrical/bus/ac_ess_powered == 1
-  CUE_TRIGGER_COND  a321neo/dynamics/electrical/bus/ac_ess_powered == 0
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /Cabin
-  VEH_XYZ 0 2.3 -11
   EVENT_START_COND 	a321neo/dynamics/electrical/bus/ac_ess_powered == 1
   CUE_TRIGGER_COND  a321neo/dynamics/electrical/bus/ac_ess_powered == 0
 END_SOUND_ATTACHMENT
