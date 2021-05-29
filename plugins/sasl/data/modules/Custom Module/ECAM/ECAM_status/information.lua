@@ -191,8 +191,8 @@ end },
            and not
            -- Put CAT2 conditions here
            (get(AC_bus_1_pwrd) == 0) or
-           get(FAILURE_HYD_G_low_air) == 1 and get(FAILURE_HYD_Y_low_air) -- IT DOES NOT APPEAR ON DUAL HYD LOW PR
-           get(FAILURE_HYD_G_low_air) == 1 and get(FAILURE_HYD_B_low_air)
+           get(FAILURE_HYD_G_low_air) == 1 and get(FAILURE_HYD_Y_low_air) or-- IT DOES NOT APPEAR ON DUAL HYD LOW PR
+           get(FAILURE_HYD_G_low_air) == 1 and get(FAILURE_HYD_B_low_air) or
            get(FAILURE_HYD_Y_low_air) == 1 and get(FAILURE_HYD_B_low_air)
     end },
 
