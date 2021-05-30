@@ -171,7 +171,7 @@ Message_ELEC_GEN_1_2_OFF_ON_2 = {
 
 Message_ELEC_IF_UNSUCCESSFUL = {
     text = function(self)
-        return " · IF UNSUCCESSFUL:"
+        return " . IF UNSUCCESSFUL:"
     end,
 
     color = function(self)
@@ -995,7 +995,7 @@ Message_ELEC_GEN_2_OFF = {
 
 Message_ELEC_IF_UNSUCCESSFUL_GEN_FAULT = {
     text = function(self)
-        return " · IF UNSUCCESSFUL:"
+        return " . IF UNSUCCESSFUL:"
     end,
 
     color = function(self)
@@ -1095,7 +1095,7 @@ Message_ELEC_APU_GEN_OFF = {
 
 Message_ELEC_IF_UNSUCCESSFUL_APU_GEN_FAULT = {
     text = function(self)
-        return " · IF UNSUCCESSFUL:"
+        return " . IF UNSUCCESSFUL:"
     end,
 
     color = function(self)

@@ -47,7 +47,7 @@ Message_BRAKES_TO_DELAY = {
 
 Message_BRAKES_IF_PERMITS = {
     text = function(self)
-        return " · IF PERF PERMITS:"
+        return " . IF PERF PERMITS:"
     end,
 
     color = function(self)

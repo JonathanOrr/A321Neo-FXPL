@@ -219,7 +219,7 @@ Message_FUEL_CTR_TK_2_OFF = {
 }
 
 Message_FUEL_IF_NO_FUEL_LEAK_CTR_LO_PR = {
-    text = function() return " · IF NO FUEL LEAK:" end,
+    text = function() return " . IF NO FUEL LEAK:" end,
     color = function() return COL_REMARKS end,
     is_active = function() return Message_FUEL_X_FEED_ON.is_active() end
 }

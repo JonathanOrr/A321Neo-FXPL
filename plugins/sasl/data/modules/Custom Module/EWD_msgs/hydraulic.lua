@@ -139,7 +139,7 @@ MessageGroup_HYD_B_RSVR_LO_LVL = {
 
 local Message_HYD_IF_B_PRESS_FLUCTUATE = {
     text = function()
-        return " · IF PRESS FLUCTUATES:"
+        return " . IF PRESS FLUCTUATES:"
     end,
 
     color = function()
@@ -405,7 +405,7 @@ MessageGroup_HYD_G_RSVR_LO_LVL = {
 
 local Message_HYD_IF_G_PRESS_FLUCTUATE = {
     text = function()
-        return " · IF PRESS FLUCTUATES:"
+        return " . IF PRESS FLUCTUATES:"
     end,
 
     color = function()
@@ -741,7 +741,7 @@ MessageGroup_HYD_Y_RSVR_LO_LVL = {
 
 local Message_HYD_IF_Y_PRESS_FLUCTUATE = {
     text = function()
-        return " · IF PRESS FLUCTUATES:"
+        return " . IF PRESS FLUCTUATES:"
     end,
 
     color = function()

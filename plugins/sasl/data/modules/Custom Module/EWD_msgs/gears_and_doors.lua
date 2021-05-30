@@ -36,7 +36,7 @@ Message_GEAR_RECYCLE = {
 
 Message_GEAR_IF_UNSUCCESSFUL = {
     text = function(self)
-        return " · IF UNSUCCESSFUL:"
+        return " . IF UNSUCCESSFUL:"
     end,
 
     color = function(self)
