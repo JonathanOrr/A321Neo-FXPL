@@ -25,6 +25,7 @@ include("ND/subcomponents/graphics_oans.lua")
 include('ND/subcomponents/terrain.lua')
 include('ND/subcomponents/tcas.lua')
 include('ND/subcomponents/helpers_fmgs.lua')
+include('FMGS/functions.lua')
 include('libs/geo-helpers.lua')
 
 local image_mask_rose = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/mask-rose.png")
@@ -438,6 +439,10 @@ end
 
 local function draw_active_fpln(data)   -- This is just a test
 
+    sasl.gl.drawWideLine(100, 100, 100, 600, 2, ECAM_GREEN)
+    sasl.gl.drawWideLine(200, 100, 200, 600, 2.5, ECAM_GREEN)
+    sasl.gl.drawWideLine(300, 100, 300, 600, 3, ECAM_GREEN)
+
     local fpln_active = FMGS_sys.fpln.active
 
 
@@ -467,6 +472,17 @@ local function draw_active_fpln(data)   -- This is just a test
     end
 
     local last_x, last_y = nil, nil
+
+    if FMGS_sys.fpln.active.apts.dep_sid and FMGS_sys.fpln.active.apts.dep_sid.computed_legs then
+        local last_x, last_y
+        for i, point in ipairs(FMGS_sys.fpln.active.apts.dep_sid.computed_legs) do
+            local x, y = rose_get_x_y_heading(data, point.lat, point.lon, data.inputs.heading)
+            if i > 1 then
+                sasl.gl.drawWideLine(last_x, last_y, x, y, 2, ECAM_GREEN)
+            end
+            last_x, last_y = x,y
+        end
+    end
 
     if #fpln_active > 1 then
         local n = #fpln_active
@@ -499,6 +515,52 @@ local function draw_active_fpln(data)   -- This is just a test
     end
 end
 
+local function draw_arpt_symbol(data)
+    local apt = FMGS_sys.fpln.active.apts.dep
+    if not apt then
+        return
+    end
+    
+    local rwy, sibl = FMGS_dep_get_rwy(false)
+    if not rwy then
+        local x, y = rose_get_x_y_heading(data, apt.lat, apt.lon, data.inputs.heading)
+        apt.x = x
+        apt.y = y
+        draw_poi_array(data, apt, image_point_apt, ECAM_WHITE)
+    else
+        local x_start, y_start = rose_get_x_y_heading(data, rwy.lat, rwy.lon, data.inputs.heading)
+        local x_end, y_end     = rose_get_x_y_heading(data, rwy.s_lat, rwy.s_lon, data.inputs.heading)
+
+        local angle = compute_angle(x_end,y_end,x_start,y_start)    -- This is the runway angle
+        local perp_angle = angle + 3.14 / 2 -- This the angle of the base of the runway (perpendicular to the runway)
+        
+        -- Draw runway
+        
+        local x_shift = 7 * math.cos(perp_angle)
+        local y_shift = 7 * math.sin(perp_angle)
+        
+        -- LL = Lower-Left, LR=Lower-Right, UL=Upper-Left, UR=Upper-Right
+        local ll_x = x_start + x_shift
+        local ll_y = y_start + y_shift
+        local lr_x = x_start - x_shift
+        local lr_y = y_start - y_shift
+        local ul_x = x_end   + x_shift
+        local ul_y = y_end   + y_shift
+        local ur_x = x_end   - x_shift
+        local ur_y = y_end   - y_shift
+
+        sasl.gl.drawWideLine(ll_x, ll_y, ul_x, ul_y, 2, ECAM_WHITE)
+        sasl.gl.drawWideLine(ll_x, ll_y, lr_x, lr_y, 2, ECAM_WHITE)
+        sasl.gl.drawWideLine(lr_x, lr_y, ur_x, ur_y, 2, ECAM_WHITE)
+        sasl.gl.drawWideLine(ul_x, ul_y, ur_x, ur_y, 2, ECAM_WHITE)
+
+        local t_x, t_y = (x_end-x_start)/2+x_start+10*x_shift, (y_end-y_start)/2+y_start+10*y_shift
+        sasl.gl.drawText(Font_ECAMfont, t_x, t_y, apt.id, 28, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+        sasl.gl.drawText(Font_ECAMfont, t_x, t_y-30, sibl and rwy.sibl_name or rwy.name, 28, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    end
+end
+
+
 local function draw_pois(data)
 
     if data.config.range <= ND_RANGE_ZOOM_2 then
@@ -516,6 +578,7 @@ local function draw_pois(data)
     draw_ndbs(data)
     draw_wpts(data)
 
+    draw_arpt_symbol(data)
     draw_active_fpln(data)
 
     local need_to_update_poi = (get(TIME) - poi_position_last_update) > POI_UPDATE_RATE
