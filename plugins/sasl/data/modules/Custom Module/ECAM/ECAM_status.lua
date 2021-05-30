@@ -84,7 +84,7 @@ function draw_sts_page_left(messages)
             set(Ecam_arrow_overflow, 1)
             break
         end
-        if visible_left_offset <= default_visible_left_offset then
+        if visible_left_offset < default_visible_left_offset then
             msg.draw(visible_left_offset)
         end
         if not msg.bottom_extra_padding then
