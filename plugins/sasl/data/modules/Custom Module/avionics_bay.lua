@@ -124,6 +124,8 @@ local function convert_cifp_array(rawdata, cifp_arr)
                 cstr_alt_type = l.cstr_alt_type,
                 cstr_altitude1 = l.cstr_altitude1,
                 cstr_altitude2 = l.cstr_altitude2,
+                cstr_altitude1_fl = l.cstr_altitude1_fl,
+                cstr_altitude2_fl = l.cstr_altitude2_fl,
                 cstr_speed_type = l.cstr_speed_type,
                 cstr_speed = l.cstr_speed,
                 vpath_angle = l.vpath_angle,

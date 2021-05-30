@@ -154,6 +154,8 @@ typedef struct xpdata_cifp_leg_t {
     bool rte_hold_in_time;    // The rte_hold is in time not distance (MM.M where M = minutes)
     
     uint8_t cstr_alt_type;    // see constants
+    bool cstr_altitude1_fl;   // Is it in FL instead of baro ref altitude?
+    bool cstr_altitude2_fl;   // Is it in FL instead of baro ref altitude?
     uint32_t cstr_altitude1;
     uint32_t cstr_altitude2;
 
