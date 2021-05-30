@@ -17,6 +17,7 @@
 -------------------------------------------------------------------------------
 
 include('MCDU/pages/base.lua')
+include('MCDU/pages/cifp_helpers.lua')
 
 mcdu_pages = {}
 

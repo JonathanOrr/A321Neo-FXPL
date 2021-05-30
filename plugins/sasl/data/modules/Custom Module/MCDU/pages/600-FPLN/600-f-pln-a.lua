@@ -72,74 +72,6 @@ function THIS_PAGE:render_dest(mcdu_data)
 
 end
 
-local function convert_alt_cstr(x)
-    if     x.cstr_alt_type == CIFP_CSTR_ALT_NONE then
-        return nil, nil
-    elseif x.cstr_alt_type == CIFP_CSTR_ALT_ABOVE or x.cstr_alt_type == CIFP_CSTR_ALT_ABOVE_BELOW then
-            return Fwd_string_fill("+" .. x.cstr_altitude1, " ", 5), ECAM_MAGENTA
-    elseif x.cstr_alt_type == CIFP_CSTR_ALT_BELOW then
-        return Fwd_string_fill("-" .. x.cstr_altitude1, " ", 5), ECAM_MAGENTA
-    elseif x.cstr_alt_type == CIFP_CSTR_ALT_AT or x.cstr_alt_type == CIFP_CSTR_ALT_GLIDE then
-        if x.cstr_altitude1 ~= 0 then
-            return Fwd_string_fill(tostring(x.cstr_altitude1), " ", 5), ECAM_GREEN
-        end
-    elseif x.cstr_alt_type == CIFP_CSTR_ALT_ABOVE_2ND then
-        return Fwd_string_fill("+" .. x.cstr_altitude2, " ", 5), ECAM_MAGENTA
-    end
-
-    return nil, nil
-end
-
-local function convert_leg_name(x)
-    local name = x.leg_name
-    local leg_type = x.leg_type
-    local outb_mag = Fwd_string_fill(tostring(math.floor(x.outb_mag/10)),"0", 3)
-    local theta    = Fwd_string_fill(tostring(math.floor(x.theta/10)),"0", 3)
-    local dd       = Fwd_string_fill(tostring(math.floor(x.rho/10)),"0", 2)
-    local rte      = Fwd_string_fill(tostring(math.floor(x.rte_hold/10)),"0", 2)
-    local cstr_alt = Fwd_string_fill(tostring(x.cstr_altitude1), "0", 5)
-    
-    if leg_type == CIFP_LEG_TYPE_IF then
-        return name, ""
-    elseif leg_type == CIFP_LEG_TYPE_TF then
-        return name, ""
-    elseif leg_type == CIFP_LEG_TYPE_CF then
-        return name, "C" .. outb_mag .. "°"
-    elseif leg_type == CIFP_LEG_TYPE_DF then
-        return name, ""
-    elseif leg_type == CIFP_LEG_TYPE_FA or leg_type == CIFP_LEG_TYPE_CA then
-        return cstr_alt, "C" .. outb_mag .. "°"
-    elseif leg_type == CIFP_LEG_TYPE_FC then
-        return "INTCPT", "C" .. theta .. "°"
-    elseif leg_type == CIFP_LEG_TYPE_FD or leg_type == CIFP_LEG_TYPE_CD then
-        return x.recomm_navaid .. "/" .. rte, "C" .. theta .. "°"
-    elseif leg_type == CIFP_LEG_TYPE_FM or leg_type == CIFP_LEG_TYPE_VM then
-        return "MANUAL", "H" .. outb_mag .. "°"
-    elseif leg_type == CIFP_LEG_TYPE_CI or leg_type == CIFP_LEG_TYPE_VI or leg_type == CIFP_LEG_TYPE_VR then
-        return "INTCPT", "H" .. outb_mag .. "°"
-    elseif leg_type == CIFP_LEG_TYPE_CR then
-        return x.center_fix .. outb_mag, "H" .. theta .. "°"
-    elseif leg_type == CIFP_LEG_TYPE_RF then
-        return name, dd .. " ARC"
-    elseif leg_type == CIFP_LEG_TYPE_AF then
-        return name, dd .. " " .. x.center_fix
-    elseif leg_type == CIFP_LEG_TYPE_VA then
-        return cstr_alt, "H" .. outb_mag .. "°"
-    elseif leg_type == CIFP_LEG_TYPE_VD then
-        return x.center_fix .. "/" .. rte, "H" .. outb_mag .. "°"
-    elseif leg_type == CIFP_LEG_TYPE_PI then
-        return "PROC " .. x.turn_direction
-    elseif leg_type == CIFP_LEG_TYPE_HA then
-        return cstr_alt, "HOLD " .. x.turn_direction
-    elseif leg_type == CIFP_LEG_TYPE_HF then
-        return name, "HOLD " .. x.turn_direction
-    elseif leg_type == CIFP_LEG_TYPE_HM then
-        return "MANUAL", "HOLD", x.turn_direction
-    end
-    
-    return "UKWN (" .. leg_type .. ")"
-end
-
 function THIS_PAGE:render_list(mcdu_data)
     local list_messages = {
         {} -- First one is always empty (it represents the departure airport)
@@ -149,6 +81,11 @@ function THIS_PAGE:render_list(mcdu_data)
         table.insert(list_messages, {discontinuity=true})
     else
         for i,x in ipairs(THIS_PAGE.curr_fpln.apts.dep_sid.legs) do
+            table.insert(list_messages, x)
+        end
+    end
+    if THIS_PAGE.curr_fpln.apts.dep_trans then
+        for i,x in ipairs(THIS_PAGE.curr_fpln.apts.dep_trans.legs) do
             table.insert(list_messages, x)
         end
     end
@@ -169,11 +106,11 @@ function THIS_PAGE:render_list(mcdu_data)
             THIS_PAGE:render_discontinuity(mcdu_data, line_id)
         else
             local x = list_messages[i]
-            local name, proc = convert_leg_name(x)
+            local name, proc = cifp_convert_leg_name(x)
             if #proc == 0 then
                 proc = THIS_PAGE.curr_fpln.apts.dep_sid.proc_name
             end
-            local alt_cstr, alt_cstr_col = convert_alt_cstr(x)
+            local alt_cstr, alt_cstr_col = cifp_convert_alt_cstr(x)
             local spd_cstr = x.cstr_speed_type ~= CIFP_CSTR_SPD_NONE and tostring(x.cstr_speed) or ""
             THIS_PAGE:render_single(mcdu_data, line_id, name, "----", spd_cstr, alt_cstr, alt_cstr_col, proc, nil, nil, 123, false, start_i == 2 and line_id == 2)
         end
@@ -203,12 +140,6 @@ function THIS_PAGE:render(mcdu_data)
 
     THIS_PAGE:render_list(mcdu_data)
 
---[[
-    THIS_PAGE:render_single(mcdu_data, 2, "2340", "0001", 153, "2340", "KMS118", 120, false, 2, false)
-    THIS_PAGE:render_single(mcdu_data, 3, "JACKO", "0002", 250, "4070", "", 119, true, 5, false)
-    THIS_PAGE:render_single(mcdu_data, 4, "(LIM)", "0004", 153, "10000", "(SPD)", nil, nil, 9, false)
-    THIS_PAGE:render_single(mcdu_data, 5, "(T/C)", "0023", ".78", "FL370", "", nil, nil, 131, false)
---]]
     self:set_line(mcdu_data, MCDU_RIGHT, 1, "TIME  SPD/ALT   ", MCDU_SMALL)
 
     if THIS_PAGE.curr_page == 1 then

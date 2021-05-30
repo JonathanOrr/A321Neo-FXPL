@@ -190,6 +190,7 @@ function THIS_PAGE:sel_sid(mcdu_data, i)
     
     if not FMGS_sys.fpln.temp then
         FMGS_create_temp_fpln()
+        FMGS_sys.fpln.temp.apts.dep_rwy = FMGS_sys.fpln.active.apts.dep_rwy
     end
     
     if THIS_PAGE.sid_references[i] > 0 then
@@ -205,6 +206,8 @@ end
 function THIS_PAGE:sel_trans(mcdu_data, i)
     if not FMGS_sys.fpln.temp then
         FMGS_create_temp_fpln()
+        FMGS_sys.fpln.temp.apts.dep_rwy = FMGS_sys.fpln.active.apts.dep_rwy
+        FMGS_sys.fpln.temp.apts.dep_sid = FMGS_sys.fpln.active.apts.dep_sid
     end
 
     if THIS_PAGE.trans_references[i] > 0 then
