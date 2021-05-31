@@ -60,7 +60,7 @@ ecam_sts = {
 
         return spd_1 == 0 and (max_fl == 0 or max_fl == 999) and #ecam_sts:get_appr_proc() == 0 and
                #ecam_sts:get_information() == 0 and #ecam_sts:get_cancelled_cautions() == 0 and
-               #ecam_sts:get_inop_sys() == 0 and get(is_RAT_out) == 0
+               #ecam_sts:get_inop_sys() == 0 and #ecam_sts:get_procedures() == 0 and get(is_RAT_out) == 0 
     end,
     
     is_normal_maintenance = function()
@@ -84,7 +84,8 @@ function draw_sts_page_left(messages)
             set(Ecam_arrow_overflow, 1)
             break
         end
-        if visible_left_offset < default_visible_left_offset then
+
+        if visible_left_offset <= default_visible_left_offset then
             msg.draw(visible_left_offset)
         end
         if not msg.bottom_extra_padding then
@@ -174,7 +175,7 @@ function prepare_sts_page_left()
         
         for i,msg in ipairs(appr_proc) do
             table.insert(messages, { draw = function(top_position)
-                    sasl.gl.drawText(Font_AirbusDUL, x_left_pos, top_position, "   " .. msg.text, 28, false, false, TEXT_ALIGN_LEFT, msg.color)
+                    sasl.gl.drawText(Font_AirbusDUL, x_left_pos, top_position, msg.text, 28, false, false, TEXT_ALIGN_LEFT, msg.color)
                 end }
             )
         end
@@ -259,7 +260,7 @@ local function draw_sts_page_right(messages)
             set(Ecam_arrow_overflow, 1)
             break
         end
-        if visible_right_offset <= default_visible_right_offset then
+        if visible_right_offset < default_visible_right_offset or (get(Ecam_sts_scroll_page) == 0 and visible_right_offset == default_visible_right_offset) then
             msg.draw(visible_right_offset)
         end
         visible_right_offset = visible_right_offset - 35 - msg.bottom_extra_padding
