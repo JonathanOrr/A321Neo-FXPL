@@ -72,7 +72,6 @@ FMGS_sys.fpln = {
         },
 
         legs = {
-            {ptr_type = FMGS_PTR_APT, id="LIML", lat=45.454124, lon=9.272948, disc_after=false},
             {ptr_type = FMGS_PTR_WPT, id="TREVI", lat=45.603333, lon=9.693333, disc_after=false},
             {ptr_type = FMGS_PTR_NAVAID, navaid=NAV_ID_NDB, id="TZO", lat=45.558334, lon=9.509444, disc_after=false},
             {ptr_type = FMGS_PTR_WPT, id="RODRU", lat=45.670834, lon=9.393333, disc_after=true},

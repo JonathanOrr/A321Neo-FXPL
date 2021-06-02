@@ -18,7 +18,16 @@ local THIS_PAGE = MCDU_Page:new({id=600})
 
 THIS_PAGE.curr_page = 1
 THIS_PAGE.curr_fpln = nil
+THIS_PAGE.page_end = false
 
+local POINT_TYPE_DISCONTINUITY = 1
+local POINT_TYPE_SIDTRANS      = 2
+local POINT_TYPE_LEG           = 3
+local POINT_TYPE_STARAPPROACH  = 4
+
+-------------------------------------------------------------------------------
+-- DEPARTURE
+-------------------------------------------------------------------------------
 function THIS_PAGE:render_dep(mcdu_data)
     local arpt_id    = THIS_PAGE.curr_fpln.apts.dep.id
     local arpt_alt   = THIS_PAGE.curr_fpln.apts.dep.alt
@@ -27,6 +36,26 @@ function THIS_PAGE:render_dep(mcdu_data)
 
 end
 
+-------------------------------------------------------------------------------
+-- ARRIVAL
+-------------------------------------------------------------------------------
+function THIS_PAGE:render_dest(mcdu_data)
+    self:set_line(mcdu_data, MCDU_LEFT, 6, " DEST   TIME", MCDU_SMALL)
+    self:set_line(mcdu_data, MCDU_RIGHT, 6, "DIST  EFOB", MCDU_SMALL)
+
+    local arr_id    = THIS_PAGE.curr_fpln.apts.arr.id
+    local trip_time = (FMGS_sys.data.pred.trip_time and FMGS_sys.data.pred.trip_time or "----")
+    self:set_line(mcdu_data, MCDU_LEFT, 6, Aft_string_fill(arr_id, " ", 8, MCDU_LARGE) .. trip_time)
+
+    local trip_dist = (FMGS_sys.data.pred.trip_dist and FMGS_sys.data.pred.trip_dist or "----") 
+    local efob = (FMGS_sys.data.pred.efob and FMGS_sys.data.pred.efob or "----")
+    self:set_line(mcdu_data, MCDU_RIGHT, 6, trip_dist .. Fwd_string_fill(efob, " ", 6, MCDU_LARGE))
+
+end
+
+-------------------------------------------------------------------------------
+-- COMMON
+-------------------------------------------------------------------------------
 function THIS_PAGE:render_single(mcdu_data, i, id, time, spd, alt, alt_col, proc_name, bearing, is_trk, distance, is_arpt, is_the_first)
     local main_col = is_the_first and ECAM_WHITE or (FMGS_sys.fpln.temp and ECAM_YELLOW or ECAM_GREEN)
 
@@ -47,9 +76,14 @@ function THIS_PAGE:render_single(mcdu_data, i, id, time, spd, alt, alt_col, proc
     self:set_line(mcdu_data, MCDU_RIGHT, i, right_side, MCDU_LARGE, alt_col or main_col)
     
     if i ~= 1 then
-        local brg_trk = is_trk ~= nil and ((is_trk and "TRK" or "BRG") .. Fwd_string_fill(tostring(math.floor(bearing)), "0", 3) .. "°") or "       "
-        
-        self:set_line(mcdu_data, MCDU_LEFT, i, " " .. Aft_string_fill(proc_name, " ", 8) .. brg_trk .. "  " .. distance .. "NM" , MCDU_SMALL, (i == 2 and THIS_PAGE.curr_page == 1) and ECAM_WHITE or main_col)
+        local brg_trk = is_trk ~= nil and ((is_trk and "TRK" or "BRG") .. Fwd_string_fill(tostring(math.floor(bearing)), "0", 3) .. "°") or "    "
+
+        local dist_text=""
+        if distance ~= nil then
+            dist_text = Round(distance, 0) .. (i == 2 and "NM" or "  ")
+        end
+        dist_text = Fwd_string_fill(dist_text, " ", 6)
+        self:set_line(mcdu_data, MCDU_LEFT, i, " " .. Aft_string_fill(proc_name, " ", 8) .. brg_trk .. "  " .. dist_text, MCDU_SMALL, (i == 2 and THIS_PAGE.curr_page == 1) and ECAM_WHITE or main_col)
     end
     
 end
@@ -58,38 +92,48 @@ function THIS_PAGE:render_discontinuity(mcdu_data, i)
     self:set_line(mcdu_data, MCDU_LEFT, i, "---F-PLN DISCONTINUITY--" , MCDU_LARGE)
 end
 
-function THIS_PAGE:render_dest(mcdu_data)
-    self:set_line(mcdu_data, MCDU_LEFT, 6, " DEST   TIME", MCDU_SMALL)
-    self:set_line(mcdu_data, MCDU_RIGHT, 6, "DIST  EFOB", MCDU_SMALL)
-
-    local arr_id    = THIS_PAGE.curr_fpln.apts.arr.id
-    local trip_time = (FMGS_sys.data.pred.trip_time and FMGS_sys.data.pred.trip_time or "----")
-    self:set_line(mcdu_data, MCDU_LEFT, 6, Aft_string_fill(arr_id, " ", 8, MCDU_LARGE) .. trip_time)
-
-    local trip_dist = (FMGS_sys.data.pred.trip_dist and FMGS_sys.data.pred.trip_dist or "----") 
-    local efob = (FMGS_sys.data.pred.efob and FMGS_sys.data.pred.efob or "----")
-    self:set_line(mcdu_data, MCDU_RIGHT, 6, trip_dist .. Fwd_string_fill(efob, " ", 6, MCDU_LARGE))
-
-end
-
-function THIS_PAGE:render_list(mcdu_data)
+-------------------------------------------------------------------------------
+-- Prepare list
+-------------------------------------------------------------------------------
+function THIS_PAGE:prepare_list(mcdu_data)
     local list_messages = {
         {} -- First one is always empty (it represents the departure airport)
     }
-    
+
     if not THIS_PAGE.curr_fpln.apts.dep_sid then
-        table.insert(list_messages, {discontinuity=true})
+        table.insert(list_messages, {point_type = POINT_TYPE_DISCONTINUITY})
     else
         for i,x in ipairs(THIS_PAGE.curr_fpln.apts.dep_sid.legs) do
+            x.point_type = POINT_TYPE_SIDTRANS
             table.insert(list_messages, x)
         end
     end
     if THIS_PAGE.curr_fpln.apts.dep_trans then
         for i,x in ipairs(THIS_PAGE.curr_fpln.apts.dep_trans.legs) do
+            x.point_type = POINT_TYPE_SIDTRANS
+            table.insert(list_messages, x)
+        end
+    end
+    if THIS_PAGE.curr_fpln.legs then
+        if THIS_PAGE.curr_fpln.legs[1] and THIS_PAGE.curr_fpln.legs[1].id ~= list_messages[#list_messages].id then
+            -- Discontinuity between the SID/TRANS and the real FPLN
+            table.insert(list_messages, {point_type = POINT_TYPE_DISCONTINUITY})
+        end
+        for i,x in ipairs(THIS_PAGE.curr_fpln.legs) do
+            x.point_type = POINT_TYPE_LEG
             table.insert(list_messages, x)
         end
     end
     
+    return list_messages
+end
+-------------------------------------------------------------------------------
+-- Render list
+-------------------------------------------------------------------------------
+function THIS_PAGE:render_list(mcdu_data)
+
+    local list_messages = THIS_PAGE:prepare_list(mcdu_data)
+
     local start_i = (THIS_PAGE.curr_page-1) * 5 + 1
     local line_id = 1
     if THIS_PAGE.curr_page == 1 then
@@ -98,13 +142,18 @@ function THIS_PAGE:render_list(mcdu_data)
     end
     local end_i = (THIS_PAGE.curr_page) * 5
     
+    local last_i = 1000000 -- Arbitrarly large
     for i=start_i,end_i do
         if not list_messages[i] then
-            break   -- end of list
+            last_i = i
+            break   -- end of list, do not print other messages
         end
-        if list_messages[i].discontinuity then
+        
+        local x = list_messages[i]
+        
+        if x.point_type == POINT_TYPE_DISCONTINUITY then
             THIS_PAGE:render_discontinuity(mcdu_data, line_id)
-        else
+        elseif x.point_type == POINT_TYPE_SIDTRANS then
             local x = list_messages[i]
             local name, proc = cifp_convert_leg_name(x)
             if #proc == 0 then
@@ -112,12 +161,30 @@ function THIS_PAGE:render_list(mcdu_data)
             end
             local alt_cstr, alt_cstr_col = cifp_convert_alt_cstr(x)
             local spd_cstr = x.cstr_speed_type ~= CIFP_CSTR_SPD_NONE and tostring(x.cstr_speed) or ""
-            THIS_PAGE:render_single(mcdu_data, line_id, name, "----", spd_cstr, alt_cstr, alt_cstr_col, proc, nil, nil, 123, false, start_i == 2 and line_id == 2)
+            local distance = x.computed_distance
+            THIS_PAGE:render_single(mcdu_data, line_id, name, "----", spd_cstr, alt_cstr, alt_cstr_col, proc, nil, nil, distance, false, start_i == 2 and line_id == 2)
+        elseif x.point_type == POINT_TYPE_LEG then
+            local distance = x.computed_distance
+            local proc = "" -- TODO
+            local alt_cstr, alt_cstr_col = nil, nil
+            local spd_cstr = nil
+            local name = x.id or "(MAN)"
+            THIS_PAGE:render_single(mcdu_data, line_id, name, "----", spd_cstr, alt_cstr, alt_cstr_col, proc, nil, nil, distance, false, false)
         end
         line_id = line_id + 1
     end
-    
+
+    THIS_PAGE.page_end = false
+    if last_i < end_i then
+        self:set_line(mcdu_data, MCDU_LEFT, line_id, "------END OF F-PLN------", MCDU_LARGE)
+        THIS_PAGE.page_end = true  -- TODO move after ALTN
+    end
 end
+
+-------------------------------------------------------------------------------
+-- MAIN render() function
+-------------------------------------------------------------------------------
+
 
 function THIS_PAGE:render(mcdu_data)
 
@@ -153,6 +220,11 @@ function THIS_PAGE:render(mcdu_data)
         self:set_line(mcdu_data, MCDU_RIGHT, 6, "INSERT*", MCDU_LARGE, ECAM_ORANGE)
     end
 end
+
+-------------------------------------------------------------------------------
+-- ACTIONS
+-------------------------------------------------------------------------------
+
 
 function THIS_PAGE:L1(mcdu_data)
     if THIS_PAGE.curr_page == 1 then
@@ -197,7 +269,11 @@ function THIS_PAGE:R6(mcdu_data)
 end
 
 function THIS_PAGE:Slew_Down(mcdu_data)
-    THIS_PAGE.curr_page = THIS_PAGE.curr_page + 1
+    if not THIS_PAGE.page_end then
+        THIS_PAGE.curr_page = THIS_PAGE.curr_page + 1
+    else
+        MCDU_Page:Slew_Down(mcdu_data)
+    end
 end
 
 function THIS_PAGE:Slew_Up(mcdu_data)

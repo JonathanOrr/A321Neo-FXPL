@@ -153,11 +153,22 @@ local function update_sid()
 
     FMGS_sys.fpln.active.apts.dep_sid.computed_legs = {{lat=prev_point.lat, lon=prev_point.lon}}
 
-    for i,x in ipairs(FMGS_sys.fpln.active.apts.dep_sid.legs) do
-        local points = add_sid_point(prev_point,x)
-        for j,y in ipairs(points) do
-            table.insert(FMGS_sys.fpln.active.apts.dep_sid.computed_legs, y)
+    for i,leg in ipairs(FMGS_sys.fpln.active.apts.dep_sid.legs) do
+        local leg_points = add_sid_point(prev_point,leg)    -- Get the points for the single legs
+        local distance = 0
+        
+        local prev_leg_points = prev_point
+        for j,x in ipairs(leg_points) do
+            distance = distance + GC_distance_kt(prev_point.lat, prev_point.lon, x.lat, x.lon)
+            table.insert(FMGS_sys.fpln.active.apts.dep_sid.computed_legs, x)
+            prev_leg_points = x
             --print(i,j,y.id, y.lat, y.lon)
+        end
+
+        leg.computed_distance = distance
+        local nr_leg_points = #leg_points
+        if nr_leg_points > 0 then
+            prev_point = GeoPoint:create({ lat = leg_points[nr_leg_points].lat, lon = leg_points[nr_leg_points].lon})
         end
     end
 end
@@ -183,7 +194,7 @@ function update_route()
             end
             if FMGS_sys.fpln.temp.apts.dep_cifp then
                 for i,x in ipairs(FMGS_sys.fpln.temp.apts.dep_cifp.sids) do
-                    print(i, x.proc_name, x.leg_name)
+                    --print(i, x.proc_name, x.leg_name)
                 end
                 FMGS_dep_set_sid(FMGS_sys.fpln.temp.apts.dep_cifp.sids[49])
                 FMGS_dep_set_trans(FMGS_sys.fpln.temp.apts.dep_cifp.sids[50])

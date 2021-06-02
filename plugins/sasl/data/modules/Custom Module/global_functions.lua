@@ -368,7 +368,10 @@ end
 
 --string functions--
 --append string_to_fill_it_with to the front of a string to achive the length of to_what_length
-function Fwd_string_fill(string_to_fill, string_to_fill_it_with, to_what_length, use_utf8)
+function Fwd_string_fill(string_to_fill, string_to_fill_it_with, to_what_length)
+    assert(type(string_to_fill) == "string", "string_to_fill is a " .. type(string_to_fill) .. "!")
+    assert(type(string_to_fill_it_with) == "string", "string_to_fill_it_with is a " .. type(string_to_fill_it_with) .. "!")
+    assert(type(to_what_length) == "number", "to_what_length is a " .. type(to_what_length) .. "!")
     local curr_length = UTF8_str_len(string_to_fill)
     for i = curr_length, to_what_length - 1 do
         string_to_fill = string_to_fill_it_with .. string_to_fill
@@ -379,6 +382,10 @@ end
 
 --append string_to_fill_it_with to the end of a string to achive the length of to_what_length
 function Aft_string_fill(string_to_fill, string_to_fill_it_with, to_what_length)
+    assert(type(string_to_fill) == "string", "string_to_fill is a " .. type(string_to_fill) .. "!")
+    assert(type(string_to_fill_it_with) == "string", "string_to_fill_it_with is a " .. type(string_to_fill_it_with) .. "!")
+    assert(type(to_what_length) == "number", "to_what_length is a " .. type(to_what_length) .. "!")
+
     local curr_length = UTF8_str_len(string_to_fill)
     for i = curr_length, to_what_length - 1 do
         string_to_fill = string_to_fill .. string_to_fill_it_with
