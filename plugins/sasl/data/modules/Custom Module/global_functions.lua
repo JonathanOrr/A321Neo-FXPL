@@ -343,11 +343,34 @@ function Table_interpolate_2d(x,y,z,value_x, value_y)
     return (x_comp + y_comp) / 2
 end
 
+function UTF8_str_len(str)  -- Compute the string length for UTF-8 strings
+    local nrm_len  = #str
+    local real_len = 0
+    local i=1
+    while i<=nrm_len do
+        local c = string.byte(str, i)
+        if c <= 127 then
+            i = i + 1
+            real_len = real_len + 1
+        elseif c <= 223 then
+            i = i + 2
+            real_len = real_len + 1
+        elseif c <= 239 then
+            i = i + 3
+            real_len = real_len + 1
+        else
+            i = i + 4
+            real_len = real_len + 1
+        end
+    end
+    return real_len
+end
 
 --string functions--
 --append string_to_fill_it_with to the front of a string to achive the length of to_what_length
-function Fwd_string_fill(string_to_fill, string_to_fill_it_with, to_what_length)
-    for i = #string_to_fill, to_what_length - 1 do
+function Fwd_string_fill(string_to_fill, string_to_fill_it_with, to_what_length, use_utf8)
+    local curr_length = UTF8_str_len(string_to_fill)
+    for i = curr_length, to_what_length - 1 do
         string_to_fill = string_to_fill_it_with .. string_to_fill
     end
 
@@ -356,7 +379,8 @@ end
 
 --append string_to_fill_it_with to the end of a string to achive the length of to_what_length
 function Aft_string_fill(string_to_fill, string_to_fill_it_with, to_what_length)
-    for i = #string_to_fill, to_what_length - 1 do
+    local curr_length = UTF8_str_len(string_to_fill)
+    for i = curr_length, to_what_length - 1 do
         string_to_fill = string_to_fill .. string_to_fill_it_with
     end
 
