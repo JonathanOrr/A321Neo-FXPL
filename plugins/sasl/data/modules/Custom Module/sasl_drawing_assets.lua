@@ -241,6 +241,7 @@ FO_ND_popup_texture =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/te
 EWD_popup_texture =      sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/popups/ewd.png")
 ECAM_popup_texture =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/popups/ecam.png")
 ISIS_popup_texture =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/popups/isis.png")
+MCDU_popup_texture =     sasl.gl.createTexture(560, 530)
 
 --LOADSHEET 
 LOADSHEET_bgd =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/loadsheet/loadsheet.png")
@@ -277,3 +278,9 @@ ISIS_localiser = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/I
 ISIS_glideslope = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/lsvdiamond-1.png")
 ISIS_lsh = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/lsh-1.png")
 ISIS_lsv = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/lsv-1.png")
+
+-- MCDU --
+MCDU_lr_arrows =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/MCDU/lr_arrows.png")
+MCDU_ud_arrows =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/MCDU/ud_arrows.png")
+
+

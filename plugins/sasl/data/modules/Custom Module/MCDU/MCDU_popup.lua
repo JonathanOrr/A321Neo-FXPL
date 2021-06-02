@@ -38,6 +38,7 @@ function update()
     end
 end
 
+
 local mcdu_toggle_popup = sasl.createCommand("a321neo/cockpit/mcdu/toggle_popup", "Hide/Show the MCDU popup")
 sasl.registerCommandHandler(mcdu_toggle_popup, 0, function (phase)
     if phase == SASL_COMMAND_BEGIN then
@@ -206,42 +207,10 @@ end
 
 function draw()
     lit = get(globalPropertyf("sim/graphics/misc/light_attenuation")) 
-    lut = MCDU_get_lut()
     sasl.gl.drawTexture(MCDU_OVERLAY, 0, 0, 877, 1365)
     sasl.gl.drawTexture(MCDU_OVERLAY, 0, 0, 877, 1365,{0,0,0,lit*lit-0.1})
     sasl.gl.drawTexture(MCDU_OVERLAY_LIT, 0, 0, 877, 1365, {1, 1, 1, lit})
-    --sasl.gl.drawTexture(MCDU_OVERLAY_LIT, 0, 0, 877, 1365)
-    if get(Mcdu_enabled) == 1 then
-        --does enabled exist?
-        if MCDU_get_popup("enabled") ~= nil then
-            --is enabled true?
 
-            --draw backlight--
-            Draw_LCD_backlight(144, 708, 589, 558, 0.5, 1, get(MCDU_1_brightness_act))
-
-            if MCDU_get_popup("enabled") then
-                for i,line in ipairs(MCDU_get_popup("draw lines")) do
-                    scale_factor = 1.07
-                    scale_factor_y = 1.02
-                    scale_factor_font = 1.07 * 1.01
-
-                    if line.font == "l" then
-                        font = Font_AirbusDUL
-                    else
-                        font = Font_AirbusDUL_small
-                    end
-
-                    sasl.gl.drawText(font, (line.disp_x * scale_factor) + 140, (line.disp_y * scale_factor_y) + 720, line.disp_text, line.disp_text_size * scale_factor_font, false, false, line.disp_text_align, line.disp_color)
-                end
-            end
-            --drawing scratchpad
-            sasl.gl.drawText(Font_AirbusDUL, 155, 730, MCDU_get_popup("mcdu entry"), 37 * scale_factor_font, false, false, TEXT_ALIGN_LEFT, {1,1,1})
-            for i,click_rect in ipairs(click_rect_all) do
-                --sasl.gl.drawRectangle(click_rect.x, click_rect.y, click_rect.w, click_rect.h, {1,0,0})
-            end
-            
-        end
-    end
 
     -- draw close and popout buttons
     if MCDU_window:getMode() == SASL_CW_MODE_FREE then
@@ -249,7 +218,8 @@ function draw()
     end
     sasl.gl.drawCircle ( size[1] - 25 , size[2] - 25 , 12, true , {0.5, 0.5, 0.5})
     --MCDU_window:setMode (SASL_CW_MODE_POPOUT)
-    
+
+    sasl.gl.drawTexture(MCDU_popup_texture, 150, 720, 560, 530, {1,1,1})
 
     -- dragging
     if mouse == "DOWN" and MCDU_window:getMode() ~= SASL_CW_MODE_POPOUT then
@@ -341,7 +311,6 @@ function onMouseDown (component, x, y, button, parentX, parentY)
             if y > click_rect.y and y < click_rect.y + click_rect.h then
                 if button == MB_LEFT then
                     if click_rect.cmd ~= "nil" then
-                        print(click_rect.cmd)
                         clicking = true
                         sasl.commandOnce(sasl.findCommand(click_rect.cmd))
                     end

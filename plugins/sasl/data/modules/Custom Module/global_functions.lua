@@ -343,11 +343,37 @@ function Table_interpolate_2d(x,y,z,value_x, value_y)
     return (x_comp + y_comp) / 2
 end
 
+function UTF8_str_len(str)  -- Compute the string length for UTF-8 strings
+    local nrm_len  = #str
+    local real_len = 0
+    local i=1
+    while i<=nrm_len do
+        local c = string.byte(str, i)
+        if c <= 127 then
+            i = i + 1
+            real_len = real_len + 1
+        elseif c <= 223 then
+            i = i + 2
+            real_len = real_len + 1
+        elseif c <= 239 then
+            i = i + 3
+            real_len = real_len + 1
+        else
+            i = i + 4
+            real_len = real_len + 1
+        end
+    end
+    return real_len
+end
 
 --string functions--
 --append string_to_fill_it_with to the front of a string to achive the length of to_what_length
 function Fwd_string_fill(string_to_fill, string_to_fill_it_with, to_what_length)
-    for i = #string_to_fill, to_what_length - 1 do
+    assert(type(string_to_fill) == "string", "string_to_fill is a " .. type(string_to_fill) .. "!")
+    assert(type(string_to_fill_it_with) == "string", "string_to_fill_it_with is a " .. type(string_to_fill_it_with) .. "!")
+    assert(type(to_what_length) == "number", "to_what_length is a " .. type(to_what_length) .. "!")
+    local curr_length = UTF8_str_len(string_to_fill)
+    for i = curr_length, to_what_length - 1 do
         string_to_fill = string_to_fill_it_with .. string_to_fill
     end
 
@@ -356,7 +382,12 @@ end
 
 --append string_to_fill_it_with to the end of a string to achive the length of to_what_length
 function Aft_string_fill(string_to_fill, string_to_fill_it_with, to_what_length)
-    for i = #string_to_fill, to_what_length - 1 do
+    assert(type(string_to_fill) == "string", "string_to_fill is a " .. type(string_to_fill) .. "!")
+    assert(type(string_to_fill_it_with) == "string", "string_to_fill_it_with is a " .. type(string_to_fill_it_with) .. "!")
+    assert(type(to_what_length) == "number", "to_what_length is a " .. type(to_what_length) .. "!")
+
+    local curr_length = UTF8_str_len(string_to_fill)
+    for i = curr_length, to_what_length - 1 do
         string_to_fill = string_to_fill .. string_to_fill_it_with
     end
 
@@ -683,24 +714,6 @@ function perf_measure_stop(name)
 
 
     sasl.pauseTimer(Perf_array[name].timer)
-end
-
-
-
-function MCDU_get_popup(id) return Mcdu_popup[id] end
-function MCDU_set_popup(id, val) Mcdu_popup[id] = val end
-
-function MCDU_get_lut(val) return Mcdu_popup_lut end
-function MCDU_set_lut(val) Mcdu_popup_lut = val end
-
-function MCDU_get_data(reference) 
-    if Mcdu_data[reference] == nil then
-        return 0
-    end
-    return Mcdu_data[reference] 
-end
-function MCDU_set_data(reference, val) 
-    Mcdu_data[reference] = val 
 end
 
 function Cursor_texture_to_local_pos(x, y, component_width, component_height, panel_width, panel_height)

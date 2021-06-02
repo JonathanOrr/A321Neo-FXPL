@@ -42,7 +42,6 @@ local ecam_nd_xfr     = 0 -- -1, 0, 1
 local eis_selector    = 0 -- -1, 0, 1
 
 local test_start_time = 0
-local mcdu_page = globalProperty("a321neo/cockpit/mcdu/mcdu_page")
 
 ----------------------------------------------------------------------------------------------------
 -- Commands
@@ -169,8 +168,6 @@ local function update_dmc_status_maintain()
         if get(TIME) - test_start_time > 20 then
             test_start_time = 0
             set(DMC_which_test_in_progress, 0)
-            set(mcdu_page, 1302)
-            sasl.commandOnce(MCDU_refresh_page)
         elseif get(TIME) - test_start_time < 3 then
             mode = 4
         end
