@@ -49,7 +49,8 @@ function init_data(mcdu_data, id)
     mcdu_data.curr_page = 0
     mcdu_data.v = {}    -- Various values used in MCDU
     mcdu_data.last_update = get(TIME)
-    
+    mcdu_data.page_data = {}    -- Custom data for each page
+
     for i,size in ipairs(MCDU_DIV_SIZE) do
 	    mcdu_data.dat[size] = {}
 	    for j,align in ipairs(MCDU_DIV_ALIGN) do
