@@ -467,7 +467,7 @@ local function draw_tcas(data)
         poi.distance = get_distance_nm(data.inputs.plane_coords_lat, data.inputs.plane_coords_lon, acf.lat, acf.lon)
 
 
-        modified, poi = draw_tcas_acf(data, acf, poi, draw_poi_array)
+        local modified, poi = draw_tcas_acf(data, acf, poi, draw_poi_array)
         if modified then
             TCAS_sys.acf_data[i].poi = poi
         end
