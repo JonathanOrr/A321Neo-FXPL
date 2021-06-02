@@ -128,13 +128,22 @@ end },
 
     -- F/CTL
     { text="SLATS SLOW", cond=function() return
-           get(AC_bus_1_pwrd) == 0 or
+           (get(AC_bus_1_pwrd) == 0 or
            get(Slats_ecam_amber) == 1 or
            get(FAILURE_HYD_B_pump) == 1 or
            get(FAILURE_HYD_B_low_air) == 1 or
            get(Hydraulic_B_qty) < 0.31 or
            get(FAILURE_HYD_B_R_overheat) == 1 or
            get(FAILURE_HYD_G_low_air) == 1 and get(FAILURE_HYD_Y_low_air) == 1
+    )
+           and not(
+           get(DC_bus_2_pwrd) == 0 or
+           get(DC_ess_bus_pwrd) == 0 or
+           get(FAILURE_HYD_G_pump) == 1 or
+           get(FAILURE_HYD_G_low_air) == 1 or
+           get(Hydraulic_G_qty) < 0.18 or
+           get(FAILURE_HYD_G_R_overheat) == 1 or
+           get(FAILURE_HYD_Y_low_air) == 1 and get(FAILURE_HYD_B_low_air) == 1)
     end },
 
     { text="SLATS/FLAPS SLOW", cond=function() return
@@ -148,13 +157,22 @@ end },
     end },
     
     { text="FLAPS SLOW", cond=function() return
-       get(FAILURE_FCTL_SFCC_1) == 1 or get(FAILURE_FCTL_SFCC_2) == 1 or
+       (get(FAILURE_FCTL_SFCC_1) == 1 or get(FAILURE_FCTL_SFCC_2) == 1 or
        get(FAILURE_HYD_Y_E_overheat) == 1 or
        get(FAILURE_HYD_Y_pump) == 1 or
        get(FAILURE_HYD_Y_low_air) == 1 or
        get(Hydraulic_Y_qty) < 0.18 or
        get(FAILURE_HYD_Y_R_overheat) == 1 or
        get(FAILURE_HYD_G_low_air) == 1 and get(FAILURE_HYD_B_low_air) == 1
+)
+       and not(
+       get(DC_bus_2_pwrd) == 0 or
+       get(DC_ess_bus_pwrd) == 0 or
+       get(FAILURE_HYD_G_pump) == 1 or
+       get(FAILURE_HYD_G_low_air) == 1 or
+       get(Hydraulic_G_qty) < 0.18 or
+       get(FAILURE_HYD_G_R_overheat) == 1 or
+       get(FAILURE_HYD_Y_low_air) == 1 and get(FAILURE_HYD_B_low_air) == 1)
     end },
 
     { text="PITCH MECH BACK UP", cond=function() return
