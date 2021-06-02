@@ -247,7 +247,7 @@ local function update_plan_coords(data)
     end
     
     if #FMGS_sys.fpln.active.legs > 0  then
-        local n_wpt = FMGS_sys.fpln.active.legs[FMGS_sys.fpln.active.next_waypoint]
+        local n_wpt = FMGS_sys.fpln.active.legs[FMGS_sys.fpln.active.next_leg]
         data.plan_ctr_lat = n_wpt.lat
         data.plan_ctr_lon = n_wpt.lon
     else

@@ -439,10 +439,6 @@ end
 
 local function draw_active_fpln(data)   -- This is just a test
 
-    sasl.gl.drawWideLine(100, 100, 100, 600, 2, ECAM_GREEN)
-    sasl.gl.drawWideLine(200, 100, 200, 600, 2.5, ECAM_GREEN)
-    sasl.gl.drawWideLine(300, 100, 300, 600, 3, ECAM_GREEN)
-
     local fpln_active = FMGS_sys.fpln.active
 
 

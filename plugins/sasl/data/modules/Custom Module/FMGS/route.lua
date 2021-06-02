@@ -181,7 +181,6 @@ function update_route()
     end
     
     route_last_update = get(TIME)
-]]--
 
     if AvionicsBay.is_initialized() and AvionicsBay.is_ready() then
         if not FMGS_sys.fpln.active.apts.dep_sid then
@@ -205,6 +204,7 @@ function update_route()
     end
     update_sid()
     update_active_fpln()
+]]--
 
 end
 
