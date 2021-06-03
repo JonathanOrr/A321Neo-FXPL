@@ -2320,37 +2320,37 @@ BEGIN_SOUND_ATTACHMENT
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Rotary/Rotary2
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
   VEH_XYZ 0 1.4 -18.7
   EVENT_START_COND a321neo/cockpit/nd/capt_mode_knob > -2
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Rotary/Rotary3
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
   VEH_XYZ 0 1.4 -18.7
   EVENT_START_COND a321neo/cockpit/nd/capt_mode_knob <= -1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Rotary/Rotary3
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
   VEH_XYZ 0 1.4 -18.7
   EVENT_START_COND a321neo/cockpit/nd/capt_mode_knob > -1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Rotary/Rotary2
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
   VEH_XYZ 0 1.4 -18.7
   EVENT_START_COND a321neo/cockpit/nd/capt_mode_knob <= 0
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Rotary/Rotary2
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
   VEH_XYZ 0 1.4 -18.7
   EVENT_START_COND a321neo/cockpit/nd/capt_mode_knob > 0
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Rotary/Rotary3
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
   VEH_XYZ 0 1.4 -18.7
   EVENT_START_COND a321neo/cockpit/nd/capt_mode_knob <= 1
 END_SOUND_ATTACHMENT
@@ -2362,7 +2362,7 @@ BEGIN_SOUND_ATTACHMENT
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Rotary/Rotary2
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
   VEH_XYZ 0 1.4 -18.7
   EVENT_START_COND a321neo/cockpit/nd/fo_mode_knob == -2
 END_SOUND_ATTACHMENT
@@ -2374,31 +2374,31 @@ BEGIN_SOUND_ATTACHMENT
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Rotary/Rotary3
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
   VEH_XYZ 0 1.4 -18.7
   EVENT_START_COND a321neo/cockpit/nd/fo_mode_knob <= -1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Rotary/Rotary3
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
   VEH_XYZ 0 1.4 -18.7
   EVENT_START_COND a321neo/cockpit/nd/fo_mode_knob > -1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Rotary/Rotary3
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
   VEH_XYZ 0 1.4 -18.7
   EVENT_START_COND a321neo/cockpit/nd/fo_mode_knob <= 0
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Rotary/Rotary2
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
   VEH_XYZ 0 1.4 -18.7
   EVENT_START_COND a321neo/cockpit/nd/fo_mode_knob > 0
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Rotary/Rotary3
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
   VEH_XYZ 0 1.4 -18.7
   EVENT_START_COND a321neo/cockpit/nd/fo_mode_knob <= 1
 END_SOUND_ATTACHMENT
@@ -4360,19 +4360,19 @@ END_SOUND_ATTACHMENT
 ###########################################################################################################FCU INTEVRAL
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /FCU/Selectors/1
+  EVENT_NAME /FCU/Selectors/Rotary
   VEH_XYZ 0 1.5 -18.4
   EVENT_START_COND ABS_DELTA=a321neo/cockpit/AUTOFLT/FCU/altitude_1000_or_100 > 0
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /FCU/Selectors/1
+  EVENT_NAME /FCU/Selectors/Rotary
   VEH_XYZ 0 1.5 -18.4
   EVENT_CMND_DOWN a321neo/cockpit/fcu/capt_qnh_unit_toggle
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /FCU/Selectors/1
+  EVENT_NAME /FCU/Selectors/Rotary
   VEH_XYZ 0 1.5 -18.4
   EVENT_CMND_DOWN a321neo/cockpit/fcu/fo_qnh_unit_toggle
 END_SOUND_ATTACHMENT

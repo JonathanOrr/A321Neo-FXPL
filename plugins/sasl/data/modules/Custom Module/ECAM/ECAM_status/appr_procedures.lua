@@ -13,16 +13,245 @@
 --    details or check <https://www.gnu.org/licenses/>
 -------------------------------------------------------------------------------
 
+local function all_engine_failure()
+    return get(FAILURE_ENG_1_FAILURE) == 1 and get(FAILURE_ENG_2_FAILURE) == 1
+end
+
+local function flaps_slats_fault_in_config_0()
+    return (get(Slats_ecam_amber) == 1 or get(Flaps_ecam_amber) == 1) and get(Flaps_deployed_angle) == 0
+end
+
+local function spdbrk_2_or_3_and_4_fault() --fcom 5231
+    return get(FAILURE_FCTL_LSPOIL_2) == 1 or get(FAILURE_FCTL_LSPOIL_3) and get(FAILURE_FCTL_LSPOIL_4) or 
+    get(FAILURE_FCTL_RSPOIL_2) == 1 or get(FAILURE_FCTL_RSPOIL_3) and get(FAILURE_FCTL_RSPOIL_4)
+end
+
+local function elec_in_emer_config()
+    local condition =  ((get(Gen_1_pwr) == 0 or get(Gen_1_line_active) == 1) and get(Gen_2_pwr) ==0 and get(Gen_APU_pwr) == 0 and get(Gen_EXT_pwr) == 0)
+        condition = condition and not (get(Eng_is_failed, 1) and get(Eng_is_failed, 2))
+    return condition
+end
+
+local function spoilers_are_fucked()
+    return
+    get(FAILURE_FCTL_LSPOIL_1) == 1 or
+    get(FAILURE_FCTL_LSPOIL_2) == 1 or
+    get(FAILURE_FCTL_LSPOIL_3) == 1 or
+    get(FAILURE_FCTL_LSPOIL_4) == 1 or
+    get(FAILURE_FCTL_LSPOIL_5) == 1 or
+    get(FAILURE_FCTL_RSPOIL_1) == 1 or
+    get(FAILURE_FCTL_RSPOIL_2) == 1 or
+    get(FAILURE_FCTL_RSPOIL_3) == 1 or
+    get(FAILURE_FCTL_RSPOIL_4) == 1 or
+    get(FAILURE_FCTL_RSPOIL_5) == 1
+end
+
+local function stabliser_is_jammed()
+    return get(FAILURE_FCTL_THS_MECH) == 1
+end
+
+local function blue_pump_low_pr_or_ovht()
+    return  get(FAILURE_HYD_B_pump) == 1 or get(FAILURE_HYD_B_E_overheat) == 1
+end
+
+local function Y_is_low_pressure()
+    return get(Hydraulic_Y_press) <= 1450
+end
+
+local function G_is_low_pressure()
+    return get(Hydraulic_G_press) <= 1450
+end
+
+local function B_is_low_pressure()
+    return get(Hydraulic_B_press) <= 1450
+end
+
+local function B_is_low_level()
+    return get(Hydraulic_B_qty) < 0.31
+end
+
+local function Y_is_low_level()
+    return get(Hydraulic_Y_qty) < 0.18
+end
+
+local function G_is_low_level()
+    return get(Hydraulic_G_qty) < 0.18
+end
+
+local function dual_adr_failure()
+    return
+    get(FAILURE_ADR[1]) == 1 and get(FAILURE_ADR[2]) == 1 or
+    get(FAILURE_ADR[2]) == 1 and get(FAILURE_ADR[3]) == 1 or
+    get(FAILURE_ADR[1]) == 1 and get(FAILURE_ADR[3]) == 1
+end
+
+local function triple_adr_failure()
+    return
+    get(FAILURE_ADR[1]) == 1 and get(FAILURE_ADR[2]) == 1 and get(FAILURE_ADR[3]) == 1
+end
+
+local function adr_disagrees_on_stuff()
+    return adirs_pfds_disagree_on_hdg() and adirs_pfds_disagree_on_alt() and adirs_pfds_disagree_on_ias() and adirs_pfds_disagree_on_att()
+end
+
 local appr_proc_messages = {
+
+    -------------HYDRAULICS, FCOM 5332
+
+    {
+        text = "DUAL HYD LO PR", --fcom 5395
+        action = nil,
+        color = ECAM_RED,
+        indent_lvl = 0,
+        cond = function()
+            return Y_is_low_pressure() and B_is_low_pressure() or
+            G_is_low_pressure() and B_is_low_pressure() or
+            G_is_low_pressure() and Y_is_low_pressure()
+        end
+    },
+
+    {
+        text = "A/THR",
+        action = "OFF",
+        color = ECAM_BLUE,
+        indent_lvl = 0,
+        cond = function()
+            return G_is_low_pressure() and B_is_low_pressure()
+            and not G_is_low_level() and not B_is_low_level()
+        end
+    },
+
+    {
+        text = "IF BLUE OVHT OUT:",
+        action = nil,
+        color = ECAM_WHITE,
+        indent_lvl = 0,
+        cond = function()
+            return blue_pump_low_pr_or_ovht()
+        end
+    },
+    {
+        text = "BLUE ELEC PUMP",
+        action = "AUTO",
+        color = ECAM_BLUE,
+        indent_lvl = 1,
+        cond = function()
+            return blue_pump_low_pr_or_ovht() or
+            get(FAILURE_HYD_B_low_air) == 1
+        end
+    },
+    {
+        text = "GREEN ENG 1 PUMP",
+        action = "ON",
+        color = ECAM_BLUE,
+        indent_lvl = 0,
+        cond = function()
+            return 
+            get(FAILURE_HYD_G_low_air) == 1 or
+            get(FAILURE_HYD_G_R_overheat) == 1
+        end
+    },
+
+
+    {
+        text = "IF YELLOW OVHT OUT:", --fcom 5365
+        action = nil,
+        color = ECAM_WHITE,
+        indent_lvl = 0,
+        cond = function()
+            return get(FAILURE_HYD_Y_pump) == 1
+        end
+    },
+    {
+        text = "YELLOW ENG 2 PUMP",
+        action = "ON",
+        color = ECAM_BLUE,
+        indent_lvl = 1,
+        cond = function()
+            return get(FAILURE_HYD_Y_pump) == 1 or
+            get(FAILURE_HYD_Y_low_air) == 1
+        end
+    },
+    {
+        text = "PTU",
+        action = "AUTO",
+        color = ECAM_BLUE,
+        indent_lvl = 1,
+        cond = function()
+            return get(FAILURE_HYD_Y_pump) == 1
+        end
+    },
+
+    ----------------------------------------
+
     {
         text = "FOR LDG",
         action = "USE FLAP 3",
         color = ECAM_BLUE,
         indent_lvl = 0,
         cond = function()
-            return get(FBW_total_control_law) == FBW_ALT_NO_PROT_LAW
+            return (get(FBW_total_control_law) == FBW_ALT_NO_PROT_LAW
                 or get(FBW_total_control_law) == FBW_ALT_REDUCED_PROT_LAW
-                or get(FBW_total_control_law) == FBW_DIRECT_LAW
+                or get(FBW_total_control_law) == FBW_DIRECT_LAW or
+                elec_in_emer_config() or
+                (get(FBW_total_control_law) == FBW_ALT_REDUCED_PROT_LAW or get(FBW_total_control_law) == FBW_ALT_NO_PROT_LAW)
+                or get(FBW_total_control_law) == FBW_DIRECT_LAW or
+                get(FAILURE_FCTL_SEC_1) == 1 and
+                get(FAILURE_FCTL_SEC_2) == 1 and
+                get(FAILURE_FCTL_SEC_3) == 1 or
+                stabliser_is_jammed() or
+                Y_is_low_pressure() and B_is_low_pressure() and --B+Y LO PR
+                not Y_is_low_level() and not B_is_low_level() or
+                G_is_low_pressure() and B_is_low_pressure()
+            and not G_is_low_level() and not B_is_low_level() or
+            G_is_low_pressure() and Y_is_low_pressure() 
+            and not G_is_low_level() and not Y_is_low_level() or
+            dual_adr_failure() or
+            adr_disagrees_on_stuff()
+        )
+        and not all_engine_failure()
+        and not flaps_slats_fault_in_config_0()
+        end
+    },
+    {
+        text = "FOR LDG",
+        action = "USE FLAP 2",
+        color = ECAM_BLUE,
+        indent_lvl = 0,
+        cond = function()
+            return all_engine_failure() and not flaps_slats_fault_in_config_0()
+        end
+    },
+    {
+        text = "FOR LDG",
+        action = "USE FLAP 1",
+        color = ECAM_BLUE,
+        indent_lvl = 0,
+        cond = function()
+            return flaps_slats_fault_in_config_0()
+        end
+    },
+    {
+        text = "CTR TK PUMPS",
+        action = "OFF",
+        color = ECAM_BLUE,
+        indent_lvl = 0,
+        cond = function()
+            return flaps_slats_fault_in_config_0()
+        end
+    },
+    {
+        text = "GPWS FLAP MODE",
+        action = "OFF",
+        color = ECAM_BLUE,
+        indent_lvl = 0,
+        cond = function()
+            return
+            (get(Slats_ecam_amber) == 1 or get(Flaps_ecam_amber) == 1) 
+            and get(Flaps_handle_position) < 4 or
+            flaps_slats_fault_in_config_0() or
+            G_is_low_pressure() and Y_is_low_pressure() 
+            and not G_is_low_level() and not Y_is_low_level()
         end
     },
     {
@@ -33,7 +262,178 @@ local appr_proc_messages = {
         cond = function()
             return get(FBW_total_control_law) == FBW_ALT_NO_PROT_LAW
                 or get(FBW_total_control_law) == FBW_ALT_REDUCED_PROT_LAW
+                or get(FBW_total_control_law) == FBW_DIRECT_LAW or
+                (get(FBW_total_control_law) == FBW_ALT_REDUCED_PROT_LAW or get(FBW_total_control_law) == FBW_ALT_NO_PROT_LAW)
+                or get(FBW_total_control_law) == FBW_DIRECT_LAW or
+                (get(Slats_ecam_amber) == 1 or get(Flaps_ecam_amber) == 1) 
+            and get(Flaps_handle_position) == 4 or
+            stabliser_is_jammed() or
+            Y_is_low_pressure() and B_is_low_pressure() and --B+Y LO PR
+                not Y_is_low_level() and not B_is_low_level() or
+                G_is_low_pressure() and B_is_low_pressure()
+            and not G_is_low_level() and not B_is_low_level() or
+            dual_adr_failure() or
+            adr_disagrees_on_stuff()
+        end
+    },
+
+    ------------------STABLISER JAM, FCOM 5250
+    {
+        text = ".IF MAN TRIM NOT AVAIL:",
+        action = nil,
+        color = ECAM_WHITE,
+        indent_lvl = 0,
+        cond = function()
+            return 
+            stabliser_is_jammed()
+        end
+    },
+    {
+        text = ".WHEN CONF3 AND VAPP:",
+        action = nil,
+        color = ECAM_WHITE,
+        indent_lvl = 1,
+        cond = function()
+            return 
+            stabliser_is_jammed() or
+            G_is_low_pressure() and Y_is_low_pressure() 
+            and not G_is_low_level() and not Y_is_low_level()
+        end
+    },
+    {
+        text = "L/G",
+        action = "DOWN",
+        color = ECAM_BLUE,
+        indent_lvl = 2,
+        cond = function()
+            return 
+            stabliser_is_jammed() 
+        end
+    },
+
+    -----------------------------------
+    {
+        text = "APPR SPD",
+        action = "VREF+10KT",
+        color = ECAM_BLUE,
+        indent_lvl = 0,
+        cond = function()
+            return (get(FBW_total_control_law) == FBW_ALT_NO_PROT_LAW
+                or get(FBW_total_control_law) == FBW_ALT_REDUCED_PROT_LAW
                 or get(FBW_total_control_law) == FBW_DIRECT_LAW
+            or
+            (get(FBW_total_control_law) == FBW_ALT_REDUCED_PROT_LAW or get(FBW_total_control_law) == FBW_ALT_NO_PROT_LAW)
+            or 
+            get(FAILURE_FCTL_SEC_1) == 1 and --fcom 5207
+            get(FAILURE_FCTL_SEC_2) == 1 and
+            get(FAILURE_FCTL_SEC_3) == 1
+            or
+            Y_is_low_pressure() and B_is_low_pressure() and --B+Y LO PR
+                not Y_is_low_level() and not B_is_low_level() or
+                adr_disagrees_on_stuff()
+             ) --fucking hell this is a mess
+            and
+            not elec_in_emer_config()
+            and
+            not all_engine_failure()
+            and
+            not flaps_slats_fault_in_config_0()
+
+        end
+    },
+    {
+        text = "APPR SPD",
+        action = "VREF+60KT",
+        color = ECAM_BLUE,
+        indent_lvl = 0,
+        cond = function()
+            return flaps_slats_fault_in_config_0()
+            and not stabliser_is_jammed()
+        end
+    },
+    {
+        text = "MAN PITCH TRIM",
+        action = "USE",
+        color = ECAM_BLUE,
+        indent_lvl = 0,
+        cond = function()
+            return get(FBW_total_control_law) == FBW_DIRECT_LAW 
+            and not stabliser_is_jammed()
+        end
+    },
+
+    {
+        text = "APPR SPD",
+        action = "VREF+10/140KT",
+        color = ECAM_BLUE,
+        indent_lvl = 0,
+        cond = function()
+            return elec_in_emer_config() 
+            and 
+            not all_engine_failure() and not get(FBW_total_control_law) == FBW_DIRECT_LAW
+            and not flaps_slats_fault_in_config_0() 
+            and not stabliser_is_jammed()
+        end
+    },
+    {
+        text = "APPR SPD",
+        action = "VREF+15",
+        color = ECAM_BLUE,
+        indent_lvl = 0,
+        cond = function()
+            return get(FBW_total_control_law) == FBW_DIRECT_LAW or
+            stabliser_is_jammed()
+            and not flaps_slats_fault_in_config_0() or
+            dual_adr_failure()
+        end
+    },
+    {
+        text = "APPR SPD",
+        action = "VREF+25",
+        color = ECAM_BLUE,
+        indent_lvl = 0,
+        cond = function()
+            return     G_is_low_pressure() and B_is_low_pressure() or
+            G_is_low_pressure() and Y_is_low_pressure() 
+        end
+    },
+
+    {
+        text = "LDG DIST PROC",
+        action = "APPLY",
+        color = ECAM_BLUE,
+        indent_lvl = 0,
+        cond = function()
+            return (get(FBW_total_control_law) == FBW_ALT_NO_PROT_LAW
+                or get(FBW_total_control_law) == FBW_ALT_REDUCED_PROT_LAW
+                or get(FBW_total_control_law) == FBW_DIRECT_LAW or
+                elec_in_emer_config() or
+                (get(FBW_total_control_law) == FBW_ALT_REDUCED_PROT_LAW or get(FBW_total_control_law) == FBW_ALT_NO_PROT_LAW)
+                or get(FBW_total_control_law) == FBW_DIRECT_LAW or
+                (get(Slats_ecam_amber) == 1 or get(Flaps_ecam_amber) == 1) or
+                get(FAILURE_FCTL_SEC_1) == 1 and
+                get(FAILURE_FCTL_SEC_2) == 1 and
+                get(FAILURE_FCTL_SEC_3) == 1 or
+                spdbrk_2_or_3_and_4_fault() or
+                spoilers_are_fucked() or
+                stabliser_is_jammed() or
+                blue_pump_low_pr_or_ovht() or
+                get(FAILURE_HYD_B_low_air) == 1 or
+                get(FAILURE_HYD_G_pump) == 1 or
+                get(FAILURE_HYD_G_low_air) == 1 or
+                get(Hydraulic_G_qty) < 0.18 or
+                get(FAILURE_HYD_G_R_overheat) == 1 or
+                get(FAILURE_HYD_Y_pump) == 1 or
+                get(FAILURE_HYD_Y_low_air) == 1 or
+                get(Hydraulic_Y_qty) < 0.18 or
+                Y_is_low_pressure() and B_is_low_pressure() or --B+Y LO PR
+                G_is_low_pressure() and B_is_low_pressure() or
+                G_is_low_pressure() and Y_is_low_pressure() or
+                dual_adr_failure() or
+                adr_disagrees_on_stuff()
+        )
+        and 
+        not all_engine_failure()
         end
     },
     {
@@ -42,9 +442,96 @@ local appr_proc_messages = {
         color = ECAM_BLUE,
         indent_lvl = 0,
         cond = function()
-            return get(FAILURE_gear) == 2   -- TODO Replace dataref
+            return get(FAILURE_gear) == 2 or   -- TODO Replace dataref
+            get(FAILURE_HYD_G_low_air) == 1 or
+            get(Hydraulic_G_qty) < 0.18 or
+            get(FAILURE_HYD_G_R_overheat) == 1 or
+            Y_is_low_pressure() and B_is_low_pressure() or --B+Y LO PR
+                G_is_low_pressure() and B_is_low_pressure() or
+                G_is_low_pressure() and Y_is_low_pressure() 
+                and not G_is_low_level() and not Y_is_low_level() or
+                dual_adr_failure() or
+                triple_adr_failure()
         end
     },
+
+    ------------- BELOW IS A GROUP
+    {
+        text = ".AT 300FT AGL:",
+        action = nil,
+        color = ECAM_WHITE,
+        indent_lvl = 0,
+        cond = function()
+            return flaps_slats_fault_in_config_0()  -- TODO Replace dataref
+        end
+    },
+    {
+        text = "TARGET SPD",
+        action = "VREF+50KT",
+        color = ECAM_BLUE,
+        indent_lvl = 1,
+        cond = function()
+            return flaps_slats_fault_in_config_0()  -- TODO Replace dataref
+        end
+    },
+------------------------
+
+
+    ----------------------------------------------------------------------------------------------------
+    -- START - FLAPS FAULTgroup
+    ----------------------------------------------------------------------------------------------------
+    
+    {
+        text = "S/F JAMMED PROC",
+        action = "APPLY",
+        color = ECAM_BLUE,
+        indent_lvl = 0,
+        cond = function()
+            return get(Slats_ecam_amber) == 1 or get(Flaps_ecam_amber) == 1 
+        end
+    },
+    {
+        text = "FOR LDG",
+        action = "USE FLAP 3",
+        color = ECAM_BLUE,
+        indent_lvl = 0,
+        cond = function()
+            return (get(Slats_ecam_amber) == 1 or get(Flaps_ecam_amber) == 1) 
+            and get(Flaps_handle_position) < 4
+        end
+    },
+    {
+        text = "FLAPS",
+        action = "KEEP CONF FULL",
+        color = ECAM_BLUE,
+        indent_lvl = 0,
+        cond = function()
+            return (get(Slats_ecam_amber) == 1 or get(Flaps_ecam_amber) == 1) 
+            and get(Flaps_handle_position) == 4
+        end
+    },
+
+    {
+        text = "APPR SPD REFER TO PRO-ABN F-",
+        action = nil,
+        color = ECAM_BLUE,
+        indent_lvl = 0,
+        cond = function()
+            return (get(Slats_ecam_amber) == 1 or get(Flaps_ecam_amber) == 1) 
+        end
+    },
+    
+    {
+        text = "CTL FLAPS/SLATS FAULT/LOCKED",
+        action = nil,
+        color = ECAM_BLUE,
+        indent_lvl = 0,
+        cond = function()
+            return (get(Slats_ecam_amber) == 1 or get(Flaps_ecam_amber) == 1) 
+        end
+    },
+
+--------------------FUEL TANKS, FCOM 5307
 }
 
 function ECAM_status_get_appr_procedures()

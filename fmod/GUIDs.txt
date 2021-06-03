@@ -90,10 +90,7 @@
 {d6916c12-4c9c-4fb5-842d-fbecc7238050} event:/Engines V3 LEAP/HowlLogicR
 {f579556e-5a00-462d-8120-a1add3ca52fe} event:/Engines V3 LEAP/RevL V3
 {395dbcdd-625a-465f-a0af-8ea50c2e0409} event:/Engines V3 LEAP/RevR V3
-{60390ec1-f659-43b4-a63d-0618b686e0fe} event:/FCU/Selectors/1
-{9bcca77b-d316-4192-bb92-d796b32e9bd3} event:/FCU/Selectors/2
-{863d7dc0-0956-4ed3-8336-5ee2bf0b4213} event:/FCU/Selectors/3
-{9bdf25fc-2002-41ec-8dc9-a1b8aa2141b4} event:/FCU/Selectors/4
+{60390ec1-f659-43b4-a63d-0618b686e0fe} event:/FCU/Selectors/Rotary
 {89169dcb-7fdd-4d30-965a-1e968c8cdd8c} event:/FCU/Cont1
 {24c09701-ccde-4cfe-9a10-9c6a575bd1c9} event:/FCU/Cont2
 {24f42a48-6b93-40b1-a727-0c2c496b0965} event:/FCU/Cont3

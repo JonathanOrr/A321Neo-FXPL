@@ -31,10 +31,26 @@ local inf_messages = {
     { text="USE SPD BRK WITH CARE", cond=function() 
             return get(FBW_total_control_law) == FBW_DIRECT_LAW
     end },
+
+
+
+    { text="CKPT AT FIXED TEMP", cond=function() 
+       return get(FAILURE_BLEED_PACK_1_VALVE_STUCK) == 1 or
+       get(FAILURE_BLEED_PACK_2_VALVE_STUCK) == 1
+    end },
+    { text="CAB ZONE AT FIXED TEMP", cond=function() 
+           return  get(FAILURE_BLEED_PACK_1_VALVE_STUCK) == 1 or
+           get(FAILURE_BLEED_PACK_2_VALVE_STUCK) == 1 or
+           get(AC_bus_1_pwrd) == 0 or
+           get(DC_bus_1_pwrd) == 0 and get(DC_bus_2_pwrd) == 0
+    end },
+
     
     -- AUTO FLT
 
     { text="FLS LIMITED TO F-APP + RAW", cond=function() return
+       get(AC_bus_1_pwrd) == 0 or
+       get(DC_bus_1_pwrd) == 0 and get(DC_bus_2_pwrd) == 0 or
        get(FAILURE_ADR[1]) == 1 and get(FAILURE_ADR[2]) == 1 or 
        get(FAILURE_ADR[2]) == 1 and get(FAILURE_ADR[3]) == 1 or 
        get(FAILURE_ADR[1]) == 1 and get(FAILURE_ADR[3]) == 1 or
@@ -52,11 +68,14 @@ local inf_messages = {
     { text="BOTH PFD ON SAME FAC", cond=function() return
            (get(FAC_1_status) == 0 and get(FAC_2_status) == 0) and get(EWD_flight_phase) >= PHASE_ABOVE_80_KTS and get(EWD_flight_phase) <= PHASE_BELOW_80_KTS or
            get(FAILURE_ADR[2]) == 1 and get(FAILURE_ADR[3]) == 1 or 
-           get(FAILURE_ADR[1]) == 1 and get(FAILURE_ADR[3]) == 1
+           get(FAILURE_ADR[1]) == 1 and get(FAILURE_ADR[3]) == 1 or
+           get(DC_bus_1_pwrd) == 0 and get(DC_bus_2_pwrd) == 0 or
+           get(DC_ess_bus_pwrd) == 0
     end },
 
     { text="FMS PRED UNRELIABLE", cond=function() return
            get(AC_bus_1_pwrd) == 0 or get(DC_bus_2_pwrd) == 0 or
+           get(DC_bus_1_pwrd) == 0 and get(DC_bus_2_pwrd) == 0 or
            get(FAILURE_FCTL_ELAC_1) == 1 or get(FAILURE_FCTL_ELAC_2) == 1 or
            get(Slats_ecam_amber) == 1 or get(Flaps_ecam_amber) == 1 or
            get(FAILURE_FCTL_LAIL) == 1 or get(FAILURE_FCTL_RAIL) == 1 or
@@ -97,7 +116,26 @@ end },
 
     { text="FUEL CONSUMPT INCRSD", cond=function() return
        --get(FAILURE_FCTL_ELAC_1) == 1 or get(FAILURE_FCTL_ELAC_2) == 1 or
-       get(Slats_ecam_amber) == 1 or get(Flaps_ecam_amber) == 1
+       get(Slats_ecam_amber) == 1 or get(Flaps_ecam_amber) == 1 or
+       get(AC_bus_1_pwrd) == 0 or
+       get(DC_bus_2_pwrd) == 0 and get(DC_ess_bus_pwrd) == 0 or
+       get(DC_bus_1_pwrd) == 0 and get(DC_bus_2_pwrd) == 0 or
+       get(DC_ess_bus_pwrd) == 0 or
+       get(FAILURE_FCTL_ELAC_1) == 1 or
+       get(FAILURE_FCTL_ELAC_2) == 1
+       --elec_in_emer_config() --this function is not local, fix later
+       --get(FAILURE_ENG_COMP_VANE, 1) == 1 --same thing
+       --spoilers_are_fucked() --same thing
+       --blue_pump_low_pr_or_ovht()
+       --get(FAILURE_HYD_B_low_air) == 1
+       --get(FAILURE_HYD_G_low_air) == 1
+       --get(Hydraulic_G_qty) < 0.18
+       --get(FAILURE_HYD_G_R_overheat) == 1
+       --get(FAILURE_HYD_Y_low_air) == 1
+       --get(Hydraulic_Y_qty) < 0.18
+       --Y_is_low_pressure() and B_is_low_pressure()
+       -- G_is_low_pressure() and B_is_low_pressure()
+       --G_is_low_pressure() and Y_is_low_pressure() 
 end },
 
     -- ENG
@@ -143,7 +181,8 @@ end },
            get(FAILURE_HYD_G_low_air) == 1 or
            get(Hydraulic_G_qty) < 0.18 or
            get(FAILURE_HYD_G_R_overheat) == 1 or
-           get(FAILURE_HYD_Y_low_air) == 1 and get(FAILURE_HYD_B_low_air) == 1)
+           get(FAILURE_HYD_Y_low_air) == 1 and get(FAILURE_HYD_B_low_air) == 1 or
+           get(DC_bus_1_pwrd) == 0 and get(DC_bus_2_pwrd) == 0)
     end },
 
     { text="SLATS/FLAPS SLOW", cond=function() return
@@ -153,7 +192,8 @@ end },
            get(FAILURE_HYD_G_low_air) == 1 or
            get(Hydraulic_G_qty) < 0.18 or
            get(FAILURE_HYD_G_R_overheat) == 1 or
-           get(FAILURE_HYD_Y_low_air) == 1 and get(FAILURE_HYD_B_low_air) == 1
+           get(FAILURE_HYD_Y_low_air) == 1 and get(FAILURE_HYD_B_low_air) == 1 or
+           get(DC_bus_1_pwrd) == 0 and get(DC_bus_2_pwrd) == 0
     end },
     
     { text="FLAPS SLOW", cond=function() return
@@ -172,7 +212,8 @@ end },
        get(FAILURE_HYD_G_low_air) == 1 or
        get(Hydraulic_G_qty) < 0.18 or
        get(FAILURE_HYD_G_R_overheat) == 1 or
-       get(FAILURE_HYD_Y_low_air) == 1 and get(FAILURE_HYD_B_low_air) == 1)
+       get(FAILURE_HYD_Y_low_air) == 1 and get(FAILURE_HYD_B_low_air) == 1 or
+       get(DC_bus_1_pwrd) == 0 and get(DC_bus_2_pwrd) == 0)
     end },
 
     { text="PITCH MECH BACK UP", cond=function() return
@@ -218,14 +259,16 @@ end },
             get(Hydraulic_Y_qty) < 0.18 or
             get(FAILURE_HYD_Y_R_overheat) == 1 or
             get(FAILURE_ADR[1]) == 1 or get(FAILURE_ADR[2]) == 1 or get(FAILURE_ADR[3]) == 1 or
-            adirs_pfds_disagree_on_ias()
+            adirs_pfds_disagree_on_ias() or
+            get(DC_bus_1_pwrd) == 0 and get(DC_bus_2_pwrd) == 0
            )
            and not
            -- Put CAT2 conditions here
-           (get(AC_bus_1_pwrd) == 0) or
+           (get(AC_bus_1_pwrd) == 0 or
            get(FAILURE_HYD_G_low_air) == 1 and get(FAILURE_HYD_Y_low_air) or-- IT DOES NOT APPEAR ON DUAL HYD LOW PR
            get(FAILURE_HYD_G_low_air) == 1 and get(FAILURE_HYD_B_low_air) or
            get(FAILURE_HYD_Y_low_air) == 1 and get(FAILURE_HYD_B_low_air)
+           )
     end },
 
     -- ELEC
@@ -243,17 +286,22 @@ end },
     { text="ENG 1 APPR IDLE ONLY", cond=function() return
            (get(FAILURE_AIRCOND_REG_1) == 1 and get(FAILURE_AIRCOND_REG_2) == 1) or get(DC_ess_bus_pwrd) == 0 or
            get(Slats_ecam_amber) == 1 or get(Flaps_ecam_amber) == 1 or
-           get(FAILURE_FCTL_SFCC_1) == 1 or get(FAILURE_FCTL_SFCC_2) == 1
+           get(FAILURE_FCTL_SFCC_1) == 1 or get(FAILURE_FCTL_SFCC_2) == 1 or
+           get(DC_ess_bus_pwrd) == 0
     end },
     
     { text="ENG 2 APPR IDLE ONLY", cond=function() return
            (get(FAILURE_AIRCOND_REG_1) == 1 and get(FAILURE_AIRCOND_REG_2) == 1) or get(AC_bus_2_pwrd) == 0 or get(DC_bus_2_pwrd) == 0 or get(DC_ess_bus_pwrd) == 0 or
            get(Slats_ecam_amber) == 1 or get(Flaps_ecam_amber) == 1 or
-           get(FAILURE_FCTL_SFCC_1) == 1 or get(FAILURE_FCTL_SFCC_2) == 1
+           get(FAILURE_FCTL_SFCC_1) == 1 or get(FAILURE_FCTL_SFCC_2) == 1 or
+           get(AC_bus_1_pwrd) == 0 or
+           get(DC_bus_1_pwrd) == 0 and get(DC_bus_2_pwrd) == 0 or
+           get(DC_ess_bus_pwrd) == 0
     end },
 
     { text="L/G CONTROL NOT AVAIL", cond=function() return
-           get(DC_bus_2_pwrd) == 0 and get(DC_ess_bus_pwrd) == 0
+           get(DC_bus_2_pwrd) == 0 and get(DC_ess_bus_pwrd) == 0 or
+           get(FAILURE_HYD_G_pump) == 1
     end },
     
     
@@ -278,7 +326,9 @@ end },
         get(FAILURE_BLEED_ENG_1_hi_press) == 1 or 
         get(FAILURE_BLEED_ENG_2_hi_press) == 1 or 
         get(FAILURE_BLEED_IP_1_VALVE_STUCK) == 1 or 
-        get(FAILURE_BLEED_IP_2_VALVE_STUCK) == 1
+        get(FAILURE_BLEED_IP_2_VALVE_STUCK) == 1 or
+        get(FAILURE_BLEED_ENG_1_LEAK) == 1 or
+        get(FAILURE_BLEED_ENG_2_LEAK) == 1
     end },
     
     { text="AIR PRESS LOW AT IDLE", cond=function() return 
@@ -307,9 +357,13 @@ end },
     end },
     
     { text="PACKS AT FIXED TEMP", cond=function() return
-           get(FAILURE_AIRCOND_REG_1) == 1 and get(FAILURE_AIRCOND_REG_2) == 1
+           get(FAILURE_AIRCOND_REG_1) == 1 and get(FAILURE_AIRCOND_REG_2) == 1 or
+           get(DC_bus_1_pwrd) == 0 and get(DC_bus_2_pwrd) == 0
     end },
-
+    { text="PACK 2 AT FIXED TEMP", cond=function() return
+       get(AC_bus_1_pwrd) == 0
+    end },
+    
 }
 
 
