@@ -23,6 +23,8 @@ include('ECAM/ECAM_status/information.lua')
 include('ECAM/ECAM_status/inop_sys.lua')
 include('ECAM/ECAM_status/maintain.lua')
 
+local at_least_one_print = false
+    
 ecam_sts = {
     
     -- LEFT PART --
@@ -92,6 +94,7 @@ function draw_sts_page_left(messages)
         if visible_left_offset < default_visible_left_offset then
             if not msg.is_empty or msg_len ~= i then    -- Do not print empty spaces if it is the last message
                 msg.draw(visible_left_offset)
+                at_least_one_print = true
             end
         end
         if not msg.bottom_extra_padding then
@@ -99,6 +102,7 @@ function draw_sts_page_left(messages)
         end
         visible_left_offset = visible_left_offset - 35 - msg.bottom_extra_padding
     end
+    
 end
 
 
@@ -267,6 +271,7 @@ local function draw_sts_page_right(messages)
         if visible_right_offset < default_visible_right_offset then
             if not msg.is_empty or msg_len ~= i then    -- Do not print empty spaces if it is the last message
                 msg.draw(visible_right_offset)
+                at_least_one_print = true
             end
         end
         visible_right_offset = visible_right_offset - 35 - msg.bottom_extra_padding
@@ -347,11 +352,17 @@ function draw_sts_page()
 
     set(Ecam_arrow_overflow, 0)
 
+    at_least_one_print = false
+
     local left_messages = prepare_sts_page_left()
     draw_sts_page_left(left_messages)
     
     local right_messages = prepare_sts_page_right()
     draw_sts_page_right(right_messages)
+
+    if not at_least_one_print then
+        set(Ecam_sts_scroll_page, 0)    -- This happens when the failure is cleared and we are in the 2nd (or more) page.
+    end
 
     set(EWD_box_sts, 0)
 
