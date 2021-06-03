@@ -28,8 +28,8 @@ function THIS_PAGE:render(mcdu_data)
     local subject_id = mcdu_data.lat_rev_subject.data.id
 
     self:set_multi_title(mcdu_data, {
-        {txt="DEPARTURES " .. mcdu_format_force_to_small("FROM").."           ", col=ECAM_WHITE, size=MCDU_LARGE},
-        {txt="             " .. subject_id, col=main_col, size=MCDU_LARGE}
+        {txt="  DEPARTURES " .. mcdu_format_force_to_small("FROM").."         ", col=ECAM_WHITE, size=MCDU_LARGE},
+        {txt="              " .. subject_id, col=ECAM_GREEN, size=MCDU_LARGE}
     })
 
     -------------------------------------
@@ -126,18 +126,18 @@ function THIS_PAGE:L6(mcdu_data)
 end
 
 function THIS_PAGE:Slew_Down(mcdu_data)
-    if math.floor(#mcdu_data.lat_rev_subject.data.rwys / 2) <= THIS_PAGE.curr_page then
-        MCDU_Page:Slew_Down(mcdu_data)
-    else
-        THIS_PAGE.curr_page = THIS_PAGE.curr_page + 1
-    end
-end
-
-function THIS_PAGE:Slew_Up(mcdu_data)
     if THIS_PAGE.curr_page <= 1 then
         MCDU_Page:Slew_Up(mcdu_data)
     else
         THIS_PAGE.curr_page = THIS_PAGE.curr_page - 1
+    end
+end
+
+function THIS_PAGE:Slew_Up(mcdu_data)
+    if math.floor(#mcdu_data.lat_rev_subject.data.rwys / 2) <= THIS_PAGE.curr_page then
+        MCDU_Page:Slew_Down(mcdu_data)
+    else
+        THIS_PAGE.curr_page = THIS_PAGE.curr_page + 1
     end
 end
 

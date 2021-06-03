@@ -100,9 +100,7 @@ function THIS_PAGE:prepare_list(mcdu_data)
         {} -- First one is always empty (it represents the departure airport)
     }
 
-    if not THIS_PAGE.curr_fpln.apts.dep_sid then
-        table.insert(list_messages, {point_type = POINT_TYPE_DISCONTINUITY})
-    else
+    if THIS_PAGE.curr_fpln.apts.dep_sid then
         for i,x in ipairs(THIS_PAGE.curr_fpln.apts.dep_sid.legs) do
             x.point_type = POINT_TYPE_SIDTRANS
             table.insert(list_messages, x)
@@ -269,15 +267,15 @@ function THIS_PAGE:R6(mcdu_data)
 end
 
 function THIS_PAGE:Slew_Down(mcdu_data)
-    if not THIS_PAGE.page_end then
-        THIS_PAGE.curr_page = THIS_PAGE.curr_page + 1
-    else
-        MCDU_Page:Slew_Down(mcdu_data)
-    end
+    THIS_PAGE.curr_page = math.max(1,THIS_PAGE.curr_page - 1)
 end
 
 function THIS_PAGE:Slew_Up(mcdu_data)
-    THIS_PAGE.curr_page = math.max(1,THIS_PAGE.curr_page - 1)
+    if not THIS_PAGE.page_end then
+        THIS_PAGE.curr_page = THIS_PAGE.curr_page + 1
+    else
+        MCDU_Page:Slew_Up(mcdu_data)
+    end
 end
 
 
