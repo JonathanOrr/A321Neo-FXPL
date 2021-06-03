@@ -128,13 +128,6 @@ function prepare_sts_page_left()
         )
     end
 
-    if get(Brakes_mode) ~= 1 and get(Brakes_mode) ~= 4 then
-        table.insert(messages, { draw = function(top_position)
-                sasl.gl.drawText(Font_AirbusDUL, x_left_pos, top_position, "MAX BRK PR.........1 000 PSI", 28, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
-            end }
-        )
-    end
-
     if get(All_on_ground) == 0 and 
             (get(FBW_total_control_law) == FBW_DIRECT_LAW 
             or get(FAILURE_FCTL_LELEV) == 1 

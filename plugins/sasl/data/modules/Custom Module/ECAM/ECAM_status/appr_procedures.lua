@@ -13,8 +13,24 @@
 --    details or check <https://www.gnu.org/licenses/>
 -------------------------------------------------------------------------------
 
+local function is_bleed_fault()
+    return (get(L_bleed_press) > 57 
+    or get(L_bleed_temp) > 270) 
+    or (get(R_bleed_press) > 57 or get(R_bleed_temp) > 270) 
+    or get(FAILURE_BLEED_ENG_1_LEAK) == 1 
+    or get(FAILURE_BLEED_ENG_2_LEAK) == 1 
+    or get(FAILURE_BLEED_WING_L_LEAK) == 1
+    or get(FAILURE_BLEED_WING_R_LEAK) == 1 
+    or get(FAILURE_BLEED_XBLEED_VALVE_STUCK) == 1
+end
+
 local function all_engine_failure()
     return get(FAILURE_ENG_1_FAILURE) == 1 and get(FAILURE_ENG_2_FAILURE) == 1
+end
+
+local function engine_shuts_down()
+    return (get(Engine_1_master_switch) == 0 and get(EWD_flight_phase) >= PHASE_ABOVE_80_KTS and get(EWD_flight_phase) <= PHASE_TOUCHDOWN)
+    or ((get(EWD_flight_phase) < 3 or get(EWD_flight_phase) > 8) and get(Fire_pb_ENG1_status) == 1)
 end
 
 local function flaps_slats_fault_in_config_0()
@@ -44,6 +60,10 @@ local function spoilers_are_fucked()
     get(FAILURE_FCTL_RSPOIL_3) == 1 or
     get(FAILURE_FCTL_RSPOIL_4) == 1 or
     get(FAILURE_FCTL_RSPOIL_5) == 1
+end
+
+local function dc_in_emergency_config()
+    return get(DC_ess_bus_pwrd) == 0 and get(DC_bus_2_pwrd) == 0 and get(DC_bus_1_pwrd) == 0
 end
 
 local function stabliser_is_jammed()
@@ -93,6 +113,63 @@ end
 local function adr_disagrees_on_stuff()
     return adirs_pfds_disagree_on_hdg() and adirs_pfds_disagree_on_alt() and adirs_pfds_disagree_on_ias() and adirs_pfds_disagree_on_att()
 end
+
+local function vref_10()
+    return             (
+        (get(FBW_total_control_law) == FBW_ALT_NO_PROT_LAW
+            or get(FBW_total_control_law) == FBW_ALT_REDUCED_PROT_LAW
+            or get(FBW_total_control_law) == FBW_DIRECT_LAW
+        or
+        (get(FBW_total_control_law) == FBW_ALT_REDUCED_PROT_LAW or get(FBW_total_control_law) == FBW_ALT_NO_PROT_LAW)
+        or 
+        get(FAILURE_FCTL_SEC_1) == 1 and --fcom 5207
+        get(FAILURE_FCTL_SEC_2) == 1 and
+        get(FAILURE_FCTL_SEC_3) == 1
+        or
+        Y_is_low_pressure() and B_is_low_pressure() and --B+Y LO PR
+            not Y_is_low_level() and not B_is_low_level() or
+            adr_disagrees_on_stuff() or
+            get(FAILURE_FCTL_ELAC_1) == 1 or
+            get(FAILURE_FCTL_ELAC_2) == 1
+         ) --fucking hell this is a mess
+        and
+        not elec_in_emer_config()
+        and
+        not all_engine_failure()
+        and
+        not flaps_slats_fault_in_config_0()
+        )
+end
+
+local function vref_10_140()
+    return elec_in_emer_config() 
+    and 
+    not all_engine_failure() and not get(FBW_total_control_law) == FBW_DIRECT_LAW
+    and not flaps_slats_fault_in_config_0() 
+    and not stabliser_is_jammed()
+end
+
+local function vref_15()
+    return get(FBW_total_control_law) == FBW_DIRECT_LAW or
+    stabliser_is_jammed()
+    and not flaps_slats_fault_in_config_0() or
+    dual_adr_failure()
+end
+
+local function vref_25()
+    return  G_is_low_pressure() and B_is_low_pressure() or
+    G_is_low_pressure() and Y_is_low_pressure() 
+end
+
+local function vref_50()
+    return flaps_slats_fault_in_config_0()
+end
+
+local function vref_60()
+    return flaps_slats_fault_in_config_0()
+    and not stabliser_is_jammed()
+end
+
 
 local appr_proc_messages = {
 
@@ -318,27 +395,7 @@ local appr_proc_messages = {
         color = ECAM_BLUE,
         indent_lvl = 0,
         cond = function()
-            return (get(FBW_total_control_law) == FBW_ALT_NO_PROT_LAW
-                or get(FBW_total_control_law) == FBW_ALT_REDUCED_PROT_LAW
-                or get(FBW_total_control_law) == FBW_DIRECT_LAW
-            or
-            (get(FBW_total_control_law) == FBW_ALT_REDUCED_PROT_LAW or get(FBW_total_control_law) == FBW_ALT_NO_PROT_LAW)
-            or 
-            get(FAILURE_FCTL_SEC_1) == 1 and --fcom 5207
-            get(FAILURE_FCTL_SEC_2) == 1 and
-            get(FAILURE_FCTL_SEC_3) == 1
-            or
-            Y_is_low_pressure() and B_is_low_pressure() and --B+Y LO PR
-                not Y_is_low_level() and not B_is_low_level() or
-                adr_disagrees_on_stuff()
-             ) --fucking hell this is a mess
-            and
-            not elec_in_emer_config()
-            and
-            not all_engine_failure()
-            and
-            not flaps_slats_fault_in_config_0()
-
+            return vref_10() and not vref_10_140() and not vref_60() and not vref_50() and not vref_25() and not vref_15()
         end
     },
     {
@@ -347,8 +404,7 @@ local appr_proc_messages = {
         color = ECAM_BLUE,
         indent_lvl = 0,
         cond = function()
-            return flaps_slats_fault_in_config_0()
-            and not stabliser_is_jammed()
+            return vref_60()
         end
     },
     {
@@ -368,11 +424,7 @@ local appr_proc_messages = {
         color = ECAM_BLUE,
         indent_lvl = 0,
         cond = function()
-            return elec_in_emer_config() 
-            and 
-            not all_engine_failure() and not get(FBW_total_control_law) == FBW_DIRECT_LAW
-            and not flaps_slats_fault_in_config_0() 
-            and not stabliser_is_jammed()
+            return vref_10_140() and not vref_60() and not vref_50() and not vref_25() and not vref_15()
         end
     },
     {
@@ -381,10 +433,7 @@ local appr_proc_messages = {
         color = ECAM_BLUE,
         indent_lvl = 0,
         cond = function()
-            return get(FBW_total_control_law) == FBW_DIRECT_LAW or
-            stabliser_is_jammed()
-            and not flaps_slats_fault_in_config_0() or
-            dual_adr_failure()
+            return   vref_15() and not vref_60() and not vref_50() and not vref_25() 
         end
     },
     {
@@ -393,8 +442,7 @@ local appr_proc_messages = {
         color = ECAM_BLUE,
         indent_lvl = 0,
         cond = function()
-            return     G_is_low_pressure() and B_is_low_pressure() or
-            G_is_low_pressure() and Y_is_low_pressure() 
+            return    vref_25() and not vref_60() and not vref_50()
         end
     },
 
@@ -429,7 +477,23 @@ local appr_proc_messages = {
                 G_is_low_pressure() and B_is_low_pressure() or
                 G_is_low_pressure() and Y_is_low_pressure() or
                 dual_adr_failure() or
-                adr_disagrees_on_stuff()
+                adr_disagrees_on_stuff() or
+                is_bleed_fault() or
+                get(FAILURE_BLEED_APU_LEAK) == 1 or
+                get(AC_bus_1_pwrd) == 0 or
+                get(DC_ess_bus_pwrd) == 0 or
+                get(DC_shed_ess_pwrd) == 0 or
+                engine_shuts_down() or
+                get(Brakes_mode) == 3 and get(Brakes_accumulator) > 1 or
+            get(FAILURE_HYD_G_low_air) == 1 and get(FAILURE_HYD_Y_low_air) == 1 or
+            get(FAILURE_GEAR_AUTOBRAKES) == 1 or
+            get(DC_bus_1_pwrd) == 0 and get(DC_bus_2_pwrd) == 0 or
+            dc_in_emergency_config() or
+            elec_in_emer_config() or
+            get(FBW_total_control_law) == FBW_DIRECT_LAW
+                or get(FBW_total_control_law) == FBW_ALT_NO_PROT_LAW
+                or get(FBW_total_control_law) == FBW_ALT_REDUCED_PROT_LAW
+                or get(Nosewheel_Steering_working) == 0
         )
         and 
         not all_engine_failure()
@@ -461,7 +525,7 @@ local appr_proc_messages = {
         color = ECAM_WHITE,
         indent_lvl = 0,
         cond = function()
-            return flaps_slats_fault_in_config_0()  -- TODO Replace dataref
+            return flaps_slats_fault_in_config_0()  
         end
     },
     {
@@ -470,7 +534,7 @@ local appr_proc_messages = {
         color = ECAM_BLUE,
         indent_lvl = 1,
         cond = function()
-            return flaps_slats_fault_in_config_0()  -- TODO Replace dataref
+            return vref_50() and not vref_60()
         end
     },
 ------------------------

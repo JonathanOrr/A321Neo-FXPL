@@ -83,33 +83,7 @@ end
 
 
 function update()
-    print(
-        get(FBW_total_control_law) == FBW_ALT_NO_PROT_LAW
-    , get(FBW_total_control_law) == FBW_ALT_REDUCED_PROT_LAW
-    , get(FBW_total_control_law) == FBW_DIRECT_LAW ,
-    elec_in_emer_config() ,
-     get(FBW_total_control_law) == FBW_DIRECT_LAW ,
-    (get(Slats_ecam_amber) == 1 or get(Flaps_ecam_amber) == 1) ,
-    get(FAILURE_FCTL_SEC_1) == 1 and
-    get(FAILURE_FCTL_SEC_2) == 1 and
-    get(FAILURE_FCTL_SEC_3) == 1 ,
-    spdbrk_2_or_3_and_4_fault() ,
-    spoilers_are_fucked() ,
-    stabliser_is_jammed() ,
-    blue_pump_low_pr_or_ovht() ,
-    get(FAILURE_HYD_B_low_air) == 1 ,
-    get(FAILURE_HYD_G_pump) == 1 ,
-    get(FAILURE_HYD_G_low_air) == 1 ,
-    get(Hydraulic_G_qty) < 0.18 ,
-    get(FAILURE_HYD_G_R_overheat) == 1 ,
-    get(FAILURE_HYD_Y_pump) == 1 ,
-    get(FAILURE_HYD_Y_low_air) == 1 ,
-    get(Hydraulic_Y_qty) < 0.18 ,
-    Y_is_low_pressure() and B_is_low_pressure() , --B+Y LO PR
-    G_is_low_pressure() and B_is_low_pressure() ,
-    G_is_low_pressure() and Y_is_low_pressure() ,
-    dual_adr_failure() ,
-    adr_disagrees_on_stuff())
+
 end
 
 function draw()

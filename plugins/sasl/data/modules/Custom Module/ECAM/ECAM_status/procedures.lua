@@ -14,7 +14,14 @@
 -------------------------------------------------------------------------------
 
 local function is_bleed_fault()
-    return (get(L_bleed_press) > 57 or get(L_bleed_temp) > 270) or (get(R_bleed_press) > 57 or get(R_bleed_temp) > 270)
+    return (get(L_bleed_press) > 57 
+    or get(L_bleed_temp) > 270) 
+    or (get(R_bleed_press) > 57 or get(R_bleed_temp) > 270) 
+    or get(FAILURE_BLEED_ENG_1_LEAK) == 1 
+    or get(FAILURE_BLEED_ENG_2_LEAK) == 1 
+    or get(FAILURE_BLEED_WING_L_LEAK) == 1
+    or get(FAILURE_BLEED_WING_R_LEAK) == 1 
+    or get(FAILURE_BLEED_XBLEED_VALVE_STUCK) == 1
 end
 
 local function door_open_in_flight()
@@ -149,18 +156,6 @@ local proc_messages = {
         end
     },
     {
-        text = "APPR SPD",
-        action = "VREF + 10",
-        color = ECAM_BLUE,
-        indent_lvl = 0,
-        cond = function()
-            return get(FBW_total_control_law) == FBW_DIRECT_LAW
-                or get(FBW_total_control_law) == FBW_ALT_NO_PROT_LAW
-                or get(FBW_total_control_law) == FBW_ALT_REDUCED_PROT_LAW
-                or get(Nosewheel_Steering_working) == 0
-        end
-    },
-    {
         text = "AVOID ICING CONDITIONS",
         action = nil, -- <- use nil to avoid .............
         color = ECAM_BLUE,
@@ -170,7 +165,11 @@ local proc_messages = {
             get(L_bleed_temp) > 270 or 
             get(FAILURE_BLEED_APU_LEAK) == 1 or
             get(DC_shed_ess_pwrd) == 0 or
-            engine_shuts_down()
+            engine_shuts_down() or
+            is_bleed_fault() or
+            get(FAILURE_AI_Eng1_valve_stuck) == 1 or
+            get(FAILURE_AI_Eng2_valve_stuck) == 1 or
+            get(FAILURE_BLEED_XBLEED_VALVE_STUCK) == 1
         end
     },
 
@@ -197,37 +196,6 @@ local proc_messages = {
         cond = function()
             return is_bleed_fault() or
             get(FAILURE_BLEED_APU_LEAK) == 1 or
-            get(DC_shed_ess_pwrd) == 0 or
-            engine_shuts_down()
-        end
-    },
-    {
-        text = "MANEUVER WITH CARE",
-        action = nil,
-        color = ECAM_BLUE,
-        indent_lvl = 1, -- <- INDENT
-        cond = function()
-            return is_bleed_fault() or
-            get(FAILURE_BLEED_APU_LEAK) == 1 or
-            get(DC_shed_ess_pwrd) == 0 or
-            engine_shuts_down() or
-            get(FBW_total_control_law) == FBW_DIRECT_LAW or
-            stabliser_is_jammed() or
-            Y_is_low_pressure() and B_is_low_pressure() or
-            G_is_low_pressure() and B_is_low_pressure() or
-            triple_adr_failure()
-        end
-    },
-    {
-        text = "LDG DIST PROC",
-        action = "APPLY",
-        color = ECAM_BLUE,
-        indent_lvl = 1, -- <- INDENT
-        cond = function()
-            return is_bleed_fault() or
-            get(FAILURE_BLEED_APU_LEAK) == 1 or
-            get(AC_bus_1_pwrd) == 0 or
-            get(DC_ess_bus_pwrd) == 0 or
             get(DC_shed_ess_pwrd) == 0 or
             engine_shuts_down()
         end
@@ -274,19 +242,6 @@ local proc_messages = {
 -- END - . IF SEVERE ICE ACCRETION group
 ----------------------------------------------------------------------------------------------------
 
-    {
-        text = "LDG DIST PROC",
-        action = "APPLY",
-        color = ECAM_BLUE,
-        indent_lvl = 0,
-        cond = function()
-            return get(FBW_total_control_law) == FBW_DIRECT_LAW
-                or get(FBW_total_control_law) == FBW_ALT_NO_PROT_LAW
-                or get(FBW_total_control_law) == FBW_ALT_REDUCED_PROT_LAW
-                or get(Nosewheel_Steering_working) == 0
-        end
-    },
-
     ----------------------------------------------------------------------------------------------------
     -- START - . IF ICING EXPECTED group
     ----------------------------------------------------------------------------------------------------
@@ -299,25 +254,10 @@ local proc_messages = {
         cond = function()
             return get(FAILURE_AI_PITOT_CAPT) == 1 and 
                 get(FAILURE_AI_PITOT_FO) == 1 and 
-                get(FAILURE_AI_PITOT_STDBY) == 1
-        end
-    },
-
-    {
-        text = "ADR 2(3) P/B",
-        action = "OFF",
-        color = ECAM_BLUE,
-        indent_lvl = 1, -- <- INDENT
-        cond = function()
-            return get(FAILURE_AI_PITOT_CAPT) == 1 and 
-                get(FAILURE_AI_PITOT_FO) == 1 and 
+                get(FAILURE_AI_PITOT_STDBY) == 1 or
+                get(FAILURE_AI_PITOT_CAPT) == 1 and 
                 get(FAILURE_AI_PITOT_STDBY) == 1 and
-
-                (get(FAILURE_ADR[2]) ~= 1 or
-                ADIRS_sys[2].adr_status ~= ADR_STATUS_OFF or
-                ADIRS_sys[2].adr_status ~= ADR_STATUS_FAULT) and
-
-                (get(FAILURE_ADR[1]) == 1 or
+                (get(FAILURE_ADR[2]) == 1 or
                 ADIRS_sys[2].adr_status == ADR_STATUS_OFF or
                 ADIRS_sys[2].adr_status == ADR_STATUS_FAULT)
         end
@@ -330,16 +270,23 @@ local proc_messages = {
         indent_lvl = 1, -- <- INDENT
         cond = function()
             return get(FAILURE_AI_PITOT_CAPT) == 1 and 
-                get(FAILURE_AI_PITOT_FO) == 1 and 
-                get(FAILURE_AI_PITOT_STDBY) == 1 or
+                get(FAILURE_AI_PITOT_STDBY) == 1 and
 
                 (get(FAILURE_ADR[2]) == 1 or
                 ADIRS_sys[2].adr_status == ADR_STATUS_OFF or
-                ADIRS_sys[2].adr_status == ADR_STATUS_FAULT) and
+                ADIRS_sys[2].adr_status == ADR_STATUS_FAULT)
+        end
+    },
 
-                (get(FAILURE_ADR[1]) ~= 1 or
-                ADIRS_sys[2].adr_status ~= ADR_STATUS_OFF or
-                ADIRS_sys[2].adr_status ~= ADR_STATUS_FAULT)
+    {
+        text = "ADR 2(3) P/B",
+        action = "OFF",
+        color = ECAM_BLUE,
+        indent_lvl = 1, -- <- INDENT
+        cond = function()
+            return get(FAILURE_AI_PITOT_CAPT) == 1 and 
+                get(FAILURE_AI_PITOT_FO) == 1 and 
+                get(FAILURE_AI_PITOT_STDBY) == 1
         end
     },
 
@@ -351,7 +298,12 @@ local proc_messages = {
         cond = function()
             return get(FAILURE_AI_PITOT_CAPT) == 1 and 
                 get(FAILURE_AI_PITOT_FO) == 1 and 
-                get(FAILURE_AI_PITOT_STDBY) == 1
+                get(FAILURE_AI_PITOT_STDBY) == 1 or
+                get(FAILURE_AI_PITOT_CAPT) == 1 and 
+                get(FAILURE_AI_PITOT_STDBY) == 1 and
+                (get(FAILURE_ADR[2]) == 1 or
+                ADIRS_sys[2].adr_status == ADR_STATUS_OFF or
+                ADIRS_sys[2].adr_status == ADR_STATUS_FAULT)
         end
     },
         
@@ -359,24 +311,23 @@ local proc_messages = {
     -- END - . IF ICING EXPECTED group
     ----------------------------------------------------------------------------------------------------
 
-    {
-        text = "AVIOD ICING CONDITIONS",
-        action = nil,
-        color = ECAM_BLUE,
-        indent_lvl = 0, -- <- INDENT
-        cond = function()
-            return get(FAILURE_AI_Eng1_valve_stuck) == 1 or
-                get(FAILURE_AI_Eng2_valve_stuck) == 1 or
-                get(FAILURE_BLEED_XBLEED_VALVE_STUCK) == 1
-        end
-    },
     ----------------------------------------------------------------------------------------------------
     -- START - . IF PACKS NOT RECOVERED group
     ----------------------------------------------------------------------------------------------------
 
     -- ZONE AT FIXED TEMP MESSAGES SHOULD BE HERE, BETWEEN ABOVE AND BELOW
     -- I MOVED THEM TO THE GREEN MESSAGES SCRIPT (information.lua)
-
+    {
+        text = "MAX FL",
+        action = "100/MEA-MORA",
+        color = ECAM_BLUE,
+        indent_lvl = 0, -- <- INDENT
+        cond = function()
+            return
+            get(FAILURE_BLEED_PACK_1_VALVE_STUCK) == 1 or
+            get(FAILURE_BLEED_PACK_2_VALVE_STUCK) == 1
+        end
+    },
     {
         text = "WHEN PACK OVHR OUT:",
         action = nil,
@@ -411,17 +362,6 @@ local proc_messages = {
     ---THESE STUFF SHOULD BE TRIGGERED BEFORE THE ALTN OR DIRECT LAW MESSAGES
 
     {
-        text = "MAX SPEED",
-        action = "320KT",
-        color = ECAM_BLUE,
-        indent_lvl = 0,
-        cond = function()
-            return
-            get(FAILURE_FCTL_FAC_1) == 1 and
-            get(FAILURE_FCTL_FAC_2) == 1
-        end
-    },
-    {
         text = "RUD WITH CARE ABV 160KT",
         action = nil,
         color = ECAM_BLUE,
@@ -440,7 +380,7 @@ local proc_messages = {
         indent_lvl = 0, 
         cond = function()
             return
-            get(FAILURE_FCTL_FAC_1) == 1 and
+            get(FAILURE_FCTL_FAC_1) == 1 and --fcom 4412
             get(FAILURE_FCTL_FAC_2) == 1 or
             get(FAILURE_ENG_REV_FAULT, 1) == 1 or --fcom 5056
             get(FAILURE_ENG_REV_FAULT, 2) == 1 or
@@ -518,12 +458,7 @@ local proc_messages = {
         indent_lvl = 0, 
         cond = function()
             return
-            get(Brakes_mode) == 3 and get(Brakes_accumulator) > 1 or
-            get(FAILURE_HYD_G_low_air) == 1 and get(FAILURE_HYD_Y_low_air) == 1 or
-            get(FAILURE_GEAR_AUTOBRAKES) == 1 or
-            get(DC_bus_1_pwrd) == 0 and get(DC_bus_2_pwrd) == 0 or
-            dc_in_emergency_config() or
-            elec_in_emer_config()
+            
         end
     },
     ----------------------------------------------------------------------------------------------------
@@ -570,7 +505,7 @@ local proc_messages = {
         end
     },
     {
-        text ="  A/C FL       CAB ALT TGT  ",
+        text ="    A/C FL     CAB ALT TGT  ",
         action = nil,
         color = ECAM_WHITE,
         indent_lvl = 0, 
@@ -582,7 +517,7 @@ local proc_messages = {
         end
     },
     {
-        text ="   390             8000     ",
+        text ="     390           8000     ",
         action = nil,
         color = ECAM_BLUE,
         indent_lvl = 0, 
@@ -594,7 +529,7 @@ local proc_messages = {
         end
     },
     {
-        text ="   350             7000     ",
+        text ="     350           7000     ",
         action = nil,
         color = ECAM_BLUE,
         indent_lvl = 0, 
@@ -606,7 +541,7 @@ local proc_messages = {
         end
     },
     {
-        text = "   300             5500     ",
+        text = "     300           5500     ",
         action = nil,
         color = ECAM_BLUE,
         indent_lvl = 0, 
@@ -618,7 +553,7 @@ local proc_messages = {
         end
     },
     {
-        text = "   250             3000     ",
+        text = "     250           3000     ",
         action = nil,
         color = ECAM_BLUE,
         indent_lvl = 0, 
@@ -630,7 +565,7 @@ local proc_messages = {
         end
     },
     {
-        text = "  <200               0      ",
+        text = "    <200             0      ",
         action = nil,
         color = ECAM_BLUE,
         indent_lvl = 0, 
@@ -848,17 +783,17 @@ local proc_messages = {
             G_is_low_pressure() and B_is_low_pressure()
         end
     },
-    {
-        text = "THR LVR",
-        action = "TOGA THEN MCT",
-        color = ECAM_BLUE,
-        indent_lvl = 0, 
-        cond = function()
-            return
-            (get(FAILURE_FCTL_LELEV) == 1 or get(FAILURE_FCTL_RELEV) == 1) or
-            stabliser_is_jammed()
-        end
-    },
+--    {
+--        text = "THR LVR",
+--        action = "TOGA THEN MCT",
+--        color = ECAM_BLUE,
+--        indent_lvl = 0, 
+--        cond = function()
+--            return
+--            (get(FAILURE_FCTL_LELEV) == 1 or get(FAILURE_FCTL_RELEV) == 1) or
+--            stabliser_is_jammed()
+--        end
+--    },
     {
         text = "PROC:GRVTY FUEL FEEDING",
         action = nil,
