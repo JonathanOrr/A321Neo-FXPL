@@ -35,13 +35,25 @@ local function inhg_to_hpa(x)
     return 3386.39 * x
 end
 
+local function hpa_to_inhg(x)
+    return x / 3386.39
+end
+
 function handler_update_value(phase, data, direction)
     if phase == SASL_COMMAND_BEGIN then
         if data.mode ~= MODE_STD then
             if direction == -1 then
-                data.value = math.max(MIN_VALUE, data.value - 0.01)
+                if data.unit == UNIT_HPA then
+                    data.value = math.max(MIN_VALUE, hpa_to_inhg(inhg_to_hpa(data.value) - 100))
+                else
+                    data.value = math.max(MIN_VALUE, data.value - 0.01)
+                end
             else
-                data.value = math.min(MAX_VALUE, data.value + 0.01) 
+                if data.unit == UNIT_HPA then
+                    data.value = math.min(MAX_VALUE, hpa_to_inhg(inhg_to_hpa(data.value) + 100))
+                else
+                    data.value = math.min(MAX_VALUE, data.value + 0.01)
+                end
             end
         end
         
@@ -124,7 +136,7 @@ function draw_lcd(data)
             Draw_green_LED_num_and_letter_lc(20, 10, math.floor(data.value * 100), 4, 60, TEXT_ALIGN_LEFT, 0.2, 1, 1)
             sasl.gl.drawText(Font_7segment_led, 73, 10, ".", 60, false, false, TEXT_ALIGN_CENTER, LED_cl)
         else
-            local hpa = math.floor(inhg_to_hpa(data.value)/100)
+            local hpa = Round(inhg_to_hpa(data.value)/100, 0)
             Draw_green_LED_num_and_letter_lc(20, 10, hpa, 4, 60, TEXT_ALIGN_LEFT, 0.2, 1, 1)
         end
     end
