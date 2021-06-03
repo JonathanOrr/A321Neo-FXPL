@@ -151,7 +151,7 @@ local failures_data = {
             {name="SFCC 2\nFAILURE", status=false, dataref=FAILURE_FCTL_SFCC_2 },
             {name="ELAC 1\nFAILURE", status=false, dataref=FAILURE_FCTL_ELAC_1 },
             {name="ELAC 2\nFAILURE", status=false, dataref=FAILURE_FCTL_ELAC_2 },
-            {name="FAC 2\nFAILURE", status=false, dataref=FAILURE_FCTL_FAC_1 },
+            {name="FAC 1\nFAILURE", status=false, dataref=FAILURE_FCTL_FAC_1 },
             {name="FAC 2\nFAILURE", status=false, dataref=FAILURE_FCTL_FAC_2 },
             {name="SEC 1\nFAILURE", status=false, dataref=FAILURE_FCTL_SEC_1 },
             {name="SEC 2\nFAILURE", status=false, dataref=FAILURE_FCTL_SEC_2 },

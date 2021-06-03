@@ -41,8 +41,14 @@ end
 
 sasl.registerCommandHandler (ND_Capt_mode_cmd_up, 0, function(phase) if phase == SASL_COMMAND_BEGIN then nd_data.config.mode = math.min(ND_MODE_PLAN,nd_data.config.mode + 1) end end)
 sasl.registerCommandHandler (ND_Capt_mode_cmd_dn, 0, function(phase) if phase == SASL_COMMAND_BEGIN then nd_data.config.mode = math.max(ND_MODE_ILS, nd_data.config.mode - 1) end end)
-sasl.registerCommandHandler (ND_Capt_range_cmd_up, 0, function(phase) if phase == SASL_COMMAND_BEGIN then nd_data.config.range = math.min(ND_RANGE_320,nd_data.config.range + 1) end end)
-sasl.registerCommandHandler (ND_Capt_range_cmd_dn, 0, function(phase) if phase == SASL_COMMAND_BEGIN then nd_data.config.range = math.max(ND_RANGE_ZOOM_02, nd_data.config.range - 1) end end)
+sasl.registerCommandHandler (ND_Capt_range_cmd_up, 0, function(phase) if phase == SASL_COMMAND_BEGIN then
+    nd_data.config.range = math.min(ND_RANGE_320,nd_data.config.range + 1)
+    set(ND_Capt_range_knob, (get(ND_Capt_range_knob) + 1) % 11)
+end end)
+sasl.registerCommandHandler (ND_Capt_range_cmd_dn, 0, function(phase) if phase == SASL_COMMAND_BEGIN then
+    nd_data.config.range = math.max(ND_RANGE_ZOOM_02, nd_data.config.range - 1)
+    set(ND_Capt_range_knob, (get(ND_Capt_range_knob) - 1) % 11)
+end end)
 
 sasl.registerCommandHandler (ND_Capt_nav1_cmd_left, 0, function(phase) if phase == SASL_COMMAND_BEGIN then nd_data.config.nav_1_selector = math.max(-1, nd_data.config.nav_1_selector - 1) end end)
 sasl.registerCommandHandler (ND_Capt_nav1_cmd_right, 0, function(phase) if phase == SASL_COMMAND_BEGIN then nd_data.config.nav_1_selector = math.min(1,nd_data.config.nav_1_selector + 1) end end)
