@@ -312,7 +312,6 @@ end
 
 --UPDATE LOOPS--
 function p3s2_update()
-    --print(EFB_CURSOR_X, EFB_CURSOR_Y)
 end
 
 --DRAW LOOPS--

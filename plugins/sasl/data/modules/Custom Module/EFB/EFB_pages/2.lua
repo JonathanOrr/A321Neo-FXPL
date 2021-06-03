@@ -173,8 +173,6 @@ local function mutual_draw_loop()
 
         sasl.gl.drawText ( Font_Airbus_panel , 880 , 24 , "Page "..efb_subpage_number.."/"..NUMBER_OF_PAGES.."", 20 , false , false , TEXT_ALIGN_CENTER , EFB_WHITE)
 
-    --print(EFB_CURSOR_X, EFB_CURSOR_Y)
-
 end
 
 ------------------------------------------------------------------------------

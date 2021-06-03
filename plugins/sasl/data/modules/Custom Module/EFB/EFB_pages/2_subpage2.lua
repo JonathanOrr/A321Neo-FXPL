@@ -118,7 +118,6 @@ function p2s2_update()
         aircraft_in_air = true
     end
     door_closing_logic()
-    --print(EFB_CURSOR_X, EFB_CURSOR_Y)
 end
 
 

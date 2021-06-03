@@ -88,9 +88,6 @@ function EFB_onKeyDown_page3_subpage_3(component, char, key, shiftDown, ctrlDown
         else
             p3s3_construct_the_buffer(char)
         end
-    --print(key_p3s3_buffer)
-    --print(target_airport)
-    --print(char)
     return true --sasl manual, callback has to return true in order to override default keys.
 end
 
@@ -151,7 +148,6 @@ local function compute_landing_distance()
     end
 
     local a, b, c = failure_correction(failure_code)
-    --print(c)
 
     local headwind_component = math.cos(math.rad((landing_aircraft_data[2] - get(TOPCAT_ldgrwy_bearing))%360)) * landing_aircraft_data[3]
     final_min_landing_distance, final_min_landing_distance_med_ab, final_min_landing_distance_low_ab = 
@@ -168,7 +164,6 @@ local function compute_landing_distance()
     final_min_landing_distance = final_min_landing_distance * c
     final_min_landing_distance_med_ab = final_min_landing_distance_med_ab * c
     final_min_landing_distance_low_ab = final_min_landing_distance_low_ab * c
-    --print(final_min_landing_distance, final_min_landing_distance_med_ab, final_min_landing_distance_low_ab)
 end
 
 local function general_buttons()
@@ -185,7 +180,6 @@ local function p3s3_dropdown_buttons( x,y,w,h, table, identifier)
     for i=1, #table do
         if dropdown_expanded[identifier] then
             Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, x - w/2 + 5, y - h*i - 14, w-10 + ( x - w/2 + 5), h-2 + ( y - h*i - 14),function ()
-                --print(i)
                 dropdown_selected[identifier] = i
                 dropdown_expanded[identifier] = false
             end)
@@ -255,7 +249,6 @@ end
 
 --UPDATE LOOPS--
 function p3s3_update()
-    --print(EFB_CURSOR_X, EFB_CURSOR_Y)
 end
 
 local function draw_landing_distance_bar()

@@ -134,9 +134,6 @@ function EFB_onKeyDown_page5_subpage_2(component, char, key, shiftDown, ctrlDown
         else
             p5s2_construct_the_buffer(char)
         end
-    --print(key_p5s2_buffer)
-    --print(target_airport)
-    --print(char)
     return true --sasl manual, callback has to return true in order to override default keys.
 end
 
@@ -174,8 +171,6 @@ function p5s2_update()
     if save_delay == 1 then
         save_id_to_file()
     end
-
-    --print(EFB_CURSOR_X, EFB_CURSOR_Y)
 end
 
 --DRAW LOOPS--

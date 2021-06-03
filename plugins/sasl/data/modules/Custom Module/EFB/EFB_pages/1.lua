@@ -5,8 +5,6 @@ end
 
 --UPDATE LOOPS--
 function EFB_update_page_1()
-    --print(os.date("%Y"))
-    --print(EFB_CURSOR_X, EFB_CURSOR_Y)
 end
 
 local year = os.date("%Y")

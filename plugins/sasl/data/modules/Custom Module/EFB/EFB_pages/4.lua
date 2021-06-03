@@ -167,15 +167,12 @@ function EFB_execute_page_4_buttons()
 ----------------------------------------------TOGGLE OPTIONS
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 620,363,659,381, function ()
         EFB.preferences["syncqnh"] = not EFB.preferences["syncqnh"]
-        --print("toggle_options_sync")
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 620,329,659,347, function ()
         EFB.preferences["pausetd"] = not EFB.preferences["pausetd"]
-        --print("toggle_options_tca")
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 620,295,659,313, function ()
         EFB.preferences["copilot"] = not EFB.preferences["copilot"]
-        --print("toggle_options_pausetd")
     end)
 
     ----------------------------------------------OPEN DROPDOWNS

@@ -66,9 +66,6 @@ function EFB_onKeyDown_page5(component, char, key, shiftDown, ctrlDown, altOptDo
             else
                 p5s1_construct_the_buffer(char)
             end
-        --print(key_p5s1_buffer)
-        --print(target_airport)
-        --print(char)
         return true --sasl manual, callback has to return true in order to override default keys.
     end
 end
@@ -91,7 +88,6 @@ function p5s1_buttons()
         if string.len(target_airport) == 4 then
             fetch_atis(target_airport, onContentsDownloaded)
         end
-        --print(EFB_metar_string)
     end)
 end
 

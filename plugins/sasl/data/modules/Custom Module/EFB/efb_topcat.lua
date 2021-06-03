@@ -943,10 +943,4 @@ function execute_takeoff_performance()
 end
 
 function update()
-    --print(qnh)
-    --print(press_alt)
-    --print(flex_temp)
-    --print(computed_v1)
-    --print(computed_vr)
-    --print(computed_v2)
 end
