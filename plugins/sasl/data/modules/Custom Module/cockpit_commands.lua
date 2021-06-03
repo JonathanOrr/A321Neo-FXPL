@@ -493,9 +493,9 @@ Chrono_cmd_state_up    = sasl.createCommand("a321neo/cockpit/misc/chrono_state_u
 Chrono_cmd_state_dn    = sasl.createCommand("a321neo/cockpit/misc/chrono_state_dn","Chrono State DN")
 
 -- MCDU/DMC
-MCDU_DMC_cmd_test_1 = sasl.createCommand("a321neo/cockpit/mcdu/trigger_dmc_test_1","Internal use only.")
-MCDU_DMC_cmd_test_2 = sasl.createCommand("a321neo/cockpit/mcdu/trigger_dmc_test_2","Internal use only.")
-MCDU_DMC_cmd_test_3 = sasl.createCommand("a321neo/cockpit/mcdu/trigger_dmc_test_3","Internal use only.")
+MCDU_DMC_cmd_test_1 = sasl.createCommand("a321neo/cockpit/mcdu/trigger_dmc_test_1","Internal use only. DO NOT USE.")
+MCDU_DMC_cmd_test_2 = sasl.createCommand("a321neo/cockpit/mcdu/trigger_dmc_test_2","Internal use only. DO NOT USE.")
+MCDU_DMC_cmd_test_3 = sasl.createCommand("a321neo/cockpit/mcdu/trigger_dmc_test_3","Internal use only. DO NOT USE.")
 
 --misc--
 Default_view = sasl.findCommand("sim/view/default_view")

@@ -337,7 +337,7 @@ function draims_init_handlers(data)
 
     for k,v in pairs(command_list) do
         local cmd_name = "a321neo/cockpit/draims/" .. prefix .. k
-        local cmd = sasl.createCommand(cmd_name,"")
+        local cmd = sasl.createCommand(cmd_name,"DRAIMS " .. prefix .. k)
         sasl.registerCommandHandler(cmd, 0, function(phase) if phase == SASL_COMMAND_BEGIN then v(data) end end)
     end
 
