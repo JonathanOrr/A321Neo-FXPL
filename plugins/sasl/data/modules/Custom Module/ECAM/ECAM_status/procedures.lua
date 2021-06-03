@@ -504,7 +504,16 @@ local proc_messages = {
             get(DC_ess_bus_pwrd) == 0
         end
     },
-
+    {
+        text = "FUEL GRVTY FEED",
+        action = nil,
+        color = ECAM_BLUE,
+        indent_lvl = 0, 
+        cond = function()
+            return
+            get(Fuel_engine_gravity) == 1
+        end
+    },
     {
         text = "PROC: GRVTY FUEL FEEDING",
         action = nil,
@@ -523,16 +532,6 @@ local proc_messages = {
         cond = function()
             return
             dc_in_emergency_config() or
-            elec_in_emer_config()
-        end
-    },
-    {
-        text = "AVOID NEGATIVE G FAVTOR",
-        action = nil,
-        color = ECAM_BLUE,
-        indent_lvl = 0, 
-        cond = function()
-            return
             elec_in_emer_config()
         end
     },

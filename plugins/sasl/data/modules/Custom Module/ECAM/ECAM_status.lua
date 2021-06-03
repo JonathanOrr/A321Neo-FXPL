@@ -78,15 +78,21 @@ end
 function draw_sts_page_left(messages)
     local default_visible_left_offset = size[2]/2+320
     local visible_left_offset = size[2]/2+320 + 630 * get(Ecam_sts_scroll_page)
+    local msg_len = #messages
 
     for i,msg in ipairs(messages) do
         if visible_left_offset < 130 then
-            set(Ecam_arrow_overflow, 1)
+            if i ~= msg_len or not messages[msg_len].is_empty then
+                -- Do not show the arrow if only spaces is left
+                set(Ecam_arrow_overflow, 1)
+            end
             break
         end
 
-        if visible_left_offset <= default_visible_left_offset then
-            msg.draw(visible_left_offset)
+        if visible_left_offset < default_visible_left_offset then
+            if not msg.is_empty or msg_len ~= i then    -- Do not print empty spaces if it is the last message
+                msg.draw(visible_left_offset)
+            end
         end
         if not msg.bottom_extra_padding then
             msg.bottom_extra_padding = 0
@@ -149,10 +155,9 @@ function prepare_sts_page_left()
     if get(Fuel_engine_gravity) == 1 then
         table.insert(messages, { draw = function(top_position)
                 sasl.gl.drawText(Font_AirbusDUL, x_left_pos, top_position, "FUEL GRVTY FEED", 28, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
-            end })
-        table.insert(messages, { draw = function(top_position)
                 sasl.gl.drawText(Font_AirbusDUL, x_left_pos, top_position, "AVOID NEGATIVE G FACTOR", 28, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
             end })
+
     end
     
     -- APPR PROC
@@ -176,6 +181,7 @@ function prepare_sts_page_left()
         -- Extra spacing after APPR PROC
         table.insert(messages, {
             bottom_extra_padding = 15,
+            is_empty = true,
             draw = function(top_position) end
             }
         )
@@ -195,6 +201,7 @@ function prepare_sts_page_left()
         -- Extra spacing after PROCEDURES
         table.insert(messages, {
             bottom_extra_padding = 15,
+            is_empty = true,
             draw = function(top_position) end
             }
         )
@@ -214,6 +221,7 @@ function prepare_sts_page_left()
         -- Extra spacing after INFORMATION
         table.insert(messages, {
             bottom_extra_padding = 15,
+            is_empty = true,
             draw = function(top_position) end
             }
         )
@@ -247,14 +255,19 @@ end
 local function draw_sts_page_right(messages)
     local default_visible_right_offset = size[2]/2+330
     local visible_right_offset = size[2]/2+330 + 650 * get(Ecam_sts_scroll_page)
-
+    local msg_len = #messages
+    
     for i,msg in ipairs(messages) do
         if visible_right_offset < 130 then
-            set(Ecam_arrow_overflow, 1)
+            if i ~= msg_len or not messages[msg_len].is_empty then
+                set(Ecam_arrow_overflow, 1)
+            end
             break
         end
-        if visible_right_offset < default_visible_right_offset or (get(Ecam_sts_scroll_page) == 0 and visible_right_offset == default_visible_right_offset) then
-            msg.draw(visible_right_offset)
+        if visible_right_offset < default_visible_right_offset then
+            if not msg.is_empty or msg_len ~= i then    -- Do not print empty spaces if it is the last message
+                msg.draw(visible_right_offset)
+            end
         end
         visible_right_offset = visible_right_offset - 35 - msg.bottom_extra_padding
     end
@@ -292,6 +305,7 @@ function prepare_sts_page_right()
         -- Extra spacing between INOP SYS and maintenance
         table.insert(messages, {
             bottom_extra_padding = 15,
+            is_empty = true,
             draw = function(top_position) end
             }
         )
