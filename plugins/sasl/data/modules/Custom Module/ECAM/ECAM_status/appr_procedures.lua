@@ -22,8 +22,8 @@ local function flaps_slats_fault_in_config_0()
 end
 
 local function spdbrk_2_or_3_and_4_fault() --fcom 5231
-    return get(FAILURE_FCTL_LSPOIL_2) == 1 or get(FAILURE_FCTL_LSPOIL_3) and get(FAILURE_FCTL_LSPOIL_4) or 
-    get(FAILURE_FCTL_RSPOIL_2) == 1 or get(FAILURE_FCTL_RSPOIL_3) and get(FAILURE_FCTL_RSPOIL_4)
+    return get(FAILURE_FCTL_LSPOIL_2) == 1 or get(FAILURE_FCTL_LSPOIL_3) == 1 and get(FAILURE_FCTL_LSPOIL_4) == 1 or 
+    get(FAILURE_FCTL_RSPOIL_2) == 1 or get(FAILURE_FCTL_RSPOIL_3) == 1 and get(FAILURE_FCTL_RSPOIL_4) == 1
 end
 
 local function elec_in_emer_config()
@@ -407,8 +407,7 @@ local appr_proc_messages = {
             return (get(FBW_total_control_law) == FBW_ALT_NO_PROT_LAW
                 or get(FBW_total_control_law) == FBW_ALT_REDUCED_PROT_LAW
                 or get(FBW_total_control_law) == FBW_DIRECT_LAW or
-                elec_in_emer_config() or
-                (get(FBW_total_control_law) == FBW_ALT_REDUCED_PROT_LAW or get(FBW_total_control_law) == FBW_ALT_NO_PROT_LAW)
+                elec_in_emer_config()
                 or get(FBW_total_control_law) == FBW_DIRECT_LAW or
                 (get(Slats_ecam_amber) == 1 or get(Flaps_ecam_amber) == 1) or
                 get(FAILURE_FCTL_SEC_1) == 1 and
@@ -570,3 +569,4 @@ function ECAM_status_get_appr_procedures()
 
     return messages
 end
+

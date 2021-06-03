@@ -104,7 +104,7 @@ local function stabliser_is_jammed()
 end
 
 local function fwc_1_and_2_fault()
-    return get(FAILURE_DISPLAY_FWC_1) and get(FAILURE_DISPLAY_FWC_2)
+    return get(FAILURE_DISPLAY_FWC_1) == 1 and get(FAILURE_DISPLAY_FWC_2) == 1
 end
 
 local function dual_adr_failure()
@@ -315,7 +315,7 @@ local proc_messages = {
 
                 (get(FAILURE_ADR[2]) ~= 1 or
                 ADIRS_sys[2].adr_status ~= ADR_STATUS_OFF or
-                ADIRS_sys[2].adr_status ~= ADR_STATUS_FAULT) or
+                ADIRS_sys[2].adr_status ~= ADR_STATUS_FAULT) and
 
                 (get(FAILURE_ADR[1]) == 1 or
                 ADIRS_sys[2].adr_status == ADR_STATUS_OFF or
@@ -335,7 +335,7 @@ local proc_messages = {
 
                 (get(FAILURE_ADR[2]) == 1 or
                 ADIRS_sys[2].adr_status == ADR_STATUS_OFF or
-                ADIRS_sys[2].adr_status == ADR_STATUS_FAULT) or
+                ADIRS_sys[2].adr_status == ADR_STATUS_FAULT) and
 
                 (get(FAILURE_ADR[1]) ~= 1 or
                 ADIRS_sys[2].adr_status ~= ADR_STATUS_OFF or
