@@ -101,6 +101,7 @@ local function convert_cifp_array(rawdata, cifp_arr)
     to_return = {}
     for i=1,cifp_arr.len do
         local new_dat =  {
+            type        = ("").char(cifp_arr.data[i-1].type),
             proc_name   = ffi.string(cifp_arr.data[i-1].proc_name,  cifp_arr.data[i-1].proc_name_len),
             trans_name  = ffi.string(cifp_arr.data[i-1].trans_name,  cifp_arr.data[i-1].trans_name_len),
             legs = {}
@@ -108,9 +109,10 @@ local function convert_cifp_array(rawdata, cifp_arr)
         
         for j=1,cifp_arr.data[i-1].legs_len do
             local l = cifp_arr.data[i-1].legs[j-1]
+            assert(l.leg_type)
             table.insert(new_dat.legs, {
                 leg_name = ffi.string(l.leg_name, l.leg_name_len),
-                turn_direction = l.turn_direction,
+                turn_direction = ("").char(l.turn_direction),
                 leg_type = l.leg_type,
                 radius = l.radius,
                 theta = l.theta,
@@ -122,10 +124,13 @@ local function convert_cifp_array(rawdata, cifp_arr)
                 cstr_alt_type = l.cstr_alt_type,
                 cstr_altitude1 = l.cstr_altitude1,
                 cstr_altitude2 = l.cstr_altitude2,
+                cstr_altitude1_fl = l.cstr_altitude1_fl,
+                cstr_altitude2_fl = l.cstr_altitude2_fl,
                 cstr_speed_type = l.cstr_speed_type,
                 cstr_speed = l.cstr_speed,
                 vpath_angle = l.vpath_angle,
-                center_fix = ffi.string(l.center_fix, l.center_fix_len)
+                center_fix = ffi.string(l.center_fix, l.center_fix_len),
+                recomm_navaid = ffi.string(l.recomm_navaid, l.recomm_navaid_len),
             })
         end
         
@@ -145,13 +150,16 @@ local function convert_single_apt(apt, load_rwys)
         rwys = {}
     };
 
+    if not load_rwys then
+        return new_apt
+    end
+
     for j=1,apt.rwys_len do
         local rwy_lat = apt.rwys[j-1].coords.lat
         local rwy_lon = apt.rwys[j-1].coords.lon
         local rwy_lat_s = apt.rwys[j-1].sibl_coords.lat
         local rwy_lon_s = apt.rwys[j-1].sibl_coords.lon
         
-    
         table.insert(new_apt.rwys, {
             name     = ffi.string(apt.rwys[j-1].name),
             sibl_name= ffi.string(apt.rwys[j-1].sibl_name),
@@ -315,17 +323,17 @@ local function expose_functions()
         return AvionicsBay.c.is_cifp_ready()
     end
 
-    AvionicsBay.cifp.load_apt = function(name)
+    AvionicsBay.cifp.load_apt = function(arpt_id)
         assert(AvionicsBay.c.is_cifp_ready())
-        assert(type(name) == "string", "name must be a string")
-        AvionicsBay.c.load_cifp(name)
+        assert(type(arpt_id) == "string", "name must be a string")
+        AvionicsBay.c.load_cifp(arpt_id)
     end
 
-    AvionicsBay.cifp.get = function(name, rawdata)
+    AvionicsBay.cifp.get = function(arpt_id, rawdata)
         assert(AvionicsBay.c.is_cifp_ready())
-        assert(type(name) == "string", "name must be a string")
+        assert(type(arpt_id) == "string", "name must be a string")
         rawdata = rawdata or false
-        local cifp_data = AvionicsBay.c.get_cifp(name)
+        local cifp_data = AvionicsBay.c.get_cifp(arpt_id)
         
         return {
             sids  = convert_cifp_array(rawdata, cifp_data.sids),

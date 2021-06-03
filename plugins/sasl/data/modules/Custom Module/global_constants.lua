@@ -27,6 +27,7 @@ ECAM_BLUE = {0.004, 1.0, 1.0}
 ECAM_GREEN = {0.20, 0.98, 0.20}
 ECAM_HIGH_GREEN = {0.1, 0.6, 0.1}
 ECAM_ORANGE = {1, 0.66, 0.16}
+ECAM_YELLOW = {1, 1, 0}
 ECAM_RED = {1.0, 0.0, 0.0}
 ECAM_MAGENTA = {1.0, 112/255, 1.0}
 ECAM_GREY = {0.3, 0.3, 0.3}
@@ -187,10 +188,14 @@ Font_B612MONO_bold   = sasl.gl.loadFont("fonts/B612Mono-Bold.ttf")
 Font_ECAMfont        = sasl.gl.loadFont("fonts/ECAMFontRegular.ttf")
 Font_7segment_led    = sasl.gl.loadFont("fonts/Segment7Standard.otf")
 Font_Roboto          = sasl.gl.loadFont("fonts/Roboto-Regular.ttf")
+Font_MCDU            = sasl.gl.loadFont("fonts/MCDU.ttf")
+Font_MCDUSmall       = sasl.gl.loadFont("fonts/MCDUSmall.ttf")
 
 sasl.gl.setFontRenderMode(Font_AirbusDUL, TEXT_RENDER_FORCED_MONO, 0.6)
 sasl.gl.setFontDirection (Font_AirbusDUL_vert, TEXT_DIRECTION_VERTICAL)
 sasl.gl.setFontRenderMode(Font_AirbusDUL_small, TEXT_RENDER_FORCED_MONO, 0.6*1.47)
+sasl.gl.setFontRenderMode(Font_MCDU, TEXT_RENDER_FORCED_MONO, 0.72)
+sasl.gl.setFontRenderMode(Font_MCDUSmall, TEXT_RENDER_FORCED_MONO, 0.72)
 
 -- Screens
 PFD_CAPT  = 1
@@ -256,6 +261,15 @@ FMGS_MODE_DUAL   = 1
 FMGS_MODE_SINGLE = 2
 FMGS_MODE_BACKUP = 3
 FMGS_MODE_OFF    = 4
+
+FMGS_PHASE_PREFLIGHT = 1
+FMGS_PHASE_TAKEOFF   = 2
+FMGS_PHASE_CLIMB     = 3
+FMGS_PHASE_CRUISE    = 4
+FMGS_PHASE_DESCENT   = 5
+FMGS_PHASE_APPROACH  = 6
+FMGS_PHASE_GOAROUND  = 7
+FMGS_PHASE_DONE      = 8
 
 FMGS_PTR_NAVAID = 1
 FMGS_PTR_WPT    = 2

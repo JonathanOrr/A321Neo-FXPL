@@ -157,39 +157,39 @@ local function update_oans_inflight_no_plan(data)
 
     local at_least_one = false
 
-    if FMGS_sys.fpln.apts.arr then
+    if FMGS_sys.fpln.active.apts.arr then
         -- Arrival airport
-        local arr_distance    = get_distance_nm(data.inputs.plane_coords_lat, data.inputs.plane_coords_lon, FMGS_sys.fpln.apts.arr.lat, FMGS_sys.fpln.apts.arr.lon)
-        local arr_diff_height = math.abs(data.inputs.altitude - FMGS_sys.fpln.apts.arr.alt)
+        local arr_distance    = get_distance_nm(data.inputs.plane_coords_lat, data.inputs.plane_coords_lon, FMGS_sys.fpln.active.apts.arr.lat, FMGS_sys.fpln.active.apts.arr.lon)
+        local arr_diff_height = math.abs(data.inputs.altitude - FMGS_sys.fpln.active.apts.arr.alt)
         if arr_distance < 20 and arr_diff_height < 5000 then
-            data.oans.displayed_apt = FMGS_sys.fpln.apts.arr
+            data.oans.displayed_apt = FMGS_sys.fpln.active.apts.arr
             return
         end
         at_least_one = true
     end
-    if FMGS_sys.fpln.apts.alt then
+    if FMGS_sys.fpln.active.apts.alt then
         -- Alternate airport
-        local alt_distance    = get_distance_nm(data.inputs.plane_coords_lat, data.inputs.plane_coords_lon, FMGS_sys.fpln.apts.alt.lat, FMGS_sys.fpln.apts.alt.lon)
-        local alt_diff_height = math.abs(data.inputs.altitude - FMGS_sys.fpln.apts.alt.alt)
+        local alt_distance    = get_distance_nm(data.inputs.plane_coords_lat, data.inputs.plane_coords_lon, FMGS_sys.fpln.active.apts.alt.lat, FMGS_sys.fpln.active.apts.alt.lon)
+        local alt_diff_height = math.abs(data.inputs.altitude - FMGS_sys.fpln.active.apts.alt.alt)
         if alt_distance < 20 and alt_diff_height < 5000 then
-            data.oans.displayed_apt = FMGS_sys.fpln.apts.alt
+            data.oans.displayed_apt = FMGS_sys.fpln.active.apts.alt
             return
         end
         at_least_one = true
     end
-    if FMGS_sys.fpln.apts.dep then
+    if FMGS_sys.fpln.active.apts.dep then
         -- Departure airport
-        local dep_distance    = get_distance_nm(data.inputs.plane_coords_lat, data.inputs.plane_coords_lon, FMGS_sys.fpln.apts.dep.lat, FMGS_sys.fpln.apts.dep.lon)
-        local dep_diff_height = math.abs(data.inputs.altitude - FMGS_sys.fpln.apts.dep.alt)
+        local dep_distance    = get_distance_nm(data.inputs.plane_coords_lat, data.inputs.plane_coords_lon, FMGS_sys.fpln.active.apts.dep.lat, FMGS_sys.fpln.active.apts.dep.lon)
+        local dep_diff_height = math.abs(data.inputs.altitude - FMGS_sys.fpln.active.apts.dep.alt)
         if dep_distance < 20 and dep_diff_height < 5000 then
-            data.oans.displayed_apt = FMGS_sys.fpln.apts.dep
+            data.oans.displayed_apt = FMGS_sys.fpln.active.apts.dep
             return
         end
         at_least_one = true
     end
 
-    if data.oans.displayed_apt == nil and FMGS_sys.fpln.apts.arr then
-        data.oans.displayed_apt = FMGS_sys.fpln.apts.arr -- Far from all, display the destination for the arrow purposes
+    if data.oans.displayed_apt == nil and FMGS_sys.fpln.active.apts.arr then
+        data.oans.displayed_apt = FMGS_sys.fpln.active.apts.arr -- Far from all, display the destination for the arrow purposes
     end
     
     if not at_least_one then
@@ -215,17 +215,17 @@ local function update_oans(data)
     -- In flight or in PLAN
 
     if data.config.mode == ND_MODE_PLAN then
-        data.misc.oans_arpt_not_active = get(All_on_ground) == 1 and not (FMGS_sys.fpln.apts.dep and nearest_airport.id == FMGS_sys.fpln.apts.dep)
+        data.misc.oans_arpt_not_active = get(All_on_ground) == 1 and not (FMGS_sys.fpln.active.apts.dep and nearest_airport.id == FMGS_sys.fpln.active.apts.dep)
         
-        if FMGS_sys.fpln.apts.dep and FMGS_sys.fpln.apts.arr then
+        if FMGS_sys.fpln.active.apts.dep and FMGS_sys.fpln.active.apts.arr then
             -- Departure and Arrival airport
-            local cross_dist = get_distance_nm(FMGS_sys.fpln.apts.arr.lat, FMGS_sys.fpln.apts.arr.lon, FMGS_sys.fpln.apts.dep.lat, FMGS_sys.fpln.apts.dep.lon)
+            local cross_dist = get_distance_nm(FMGS_sys.fpln.active.apts.arr.lat, FMGS_sys.fpln.active.apts.arr.lon, FMGS_sys.fpln.active.apts.dep.lat, FMGS_sys.fpln.active.apts.dep.lon)
             if cross_dist < 300 then
-                data.oans.displayed_apt = FMGS_sys.fpln.apts.arr
-            elseif get_distance_nm(data.inputs.plane_coords_lat, data.inputs.plane_coords_lon, FMGS_sys.fpln.apts.dep.lat, FMGS_sys.fpln.apts.dep.lon) < 50 then
-                data.oans.displayed_apt = FMGS_sys.fpln.apts.dep
+                data.oans.displayed_apt = FMGS_sys.fpln.active.apts.arr
+            elseif get_distance_nm(data.inputs.plane_coords_lat, data.inputs.plane_coords_lon, FMGS_sys.fpln.active.apts.dep.lat, FMGS_sys.fpln.active.apts.dep.lon) < 50 then
+                data.oans.displayed_apt = FMGS_sys.fpln.active.apts.dep
             else
-                data.oans.displayed_apt = FMGS_sys.fpln.apts.arr
+                data.oans.displayed_apt = FMGS_sys.fpln.active.apts.arr
             end
             return
         else
@@ -246,8 +246,8 @@ local function update_plan_coords(data)
         return
     end
     
-    if #FMGS_sys.fpln.active > 0  then
-        local n_wpt = FMGS_sys.fpln.active[FMGS_sys.fpln.next_waypoint]
+    if #FMGS_sys.fpln.active.legs > 0  then
+        local n_wpt = FMGS_sys.fpln.active.legs[FMGS_sys.fpln.active.next_leg]
         data.plan_ctr_lat = n_wpt.lat
         data.plan_ctr_lon = n_wpt.lon
     else

@@ -99,7 +99,7 @@ function draw_tcas_acf(data, acf, poi, draw_poi_array)
     elseif poi.distance <= 6 and math.abs(alt_diff) <= 1200 then
         texture = image_tcas_prox
     end
-    modified, poi = draw_poi_array(data, poi, texture, ECAM_WHITE)
+    local modified, poi = draw_poi_array(data, poi, texture, ECAM_WHITE)
 
     draw_tcas_altitude(data, acf, poi)
     draw_tcas_vs(data, acf, poi)
