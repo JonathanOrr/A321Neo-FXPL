@@ -93,7 +93,8 @@ function FMGS_create_temp_fpln()
     FMGS_sys.fpln.temp.apts.alt = FMGS_sys.fpln.active.apts.alt
     FMGS_sys.fpln.temp.apts.alt_cifp = FMGS_sys.fpln.active.apts.alt_cifp
     
-    FMGS_sys.fpln.temp.legs = FMGS_sys.fpln.active.legs
+    FMGS_sys.fpln.temp.legs     = FMGS_sys.fpln.active.legs
+    FMGS_sys.fpln.temp.next_leg = FMGS_sys.fpln.active.next_leg
 
 end
 
