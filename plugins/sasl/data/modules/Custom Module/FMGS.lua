@@ -80,7 +80,7 @@ FMGS_sys.fpln = {
         },
         
         
-        next_leg = 4,
+        next_leg = 2,
         curr_segment  = FMGS_SEGMENT_NONE,
     },
     
