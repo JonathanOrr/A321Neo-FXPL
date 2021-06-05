@@ -75,12 +75,12 @@ function THIS_PAGE:render(mcdu_data)
 
 end
 
-function THIS_PAGE:L6(mcdu_data)
+function MCDU_Page:L6(mcdu_data)
     mcdu_is_frozen = not mcdu_is_frozen
     mcdu_freeze_time = Fwd_string_fill(tostring(get(ZULU_hours)), "0", 2)..Fwd_string_fill(tostring(get(ZULU_mins)), "0", 2)
 end
 
-function THIS_PAGE:R6(mcdu_data)
+function MCDU_Page:R6(mcdu_data)
     mcdu_open_page(mcdu_data, 508)
 end
 

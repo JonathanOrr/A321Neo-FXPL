@@ -48,7 +48,7 @@ function THIS_PAGE:render(mcdu_data)
     self:set_line(mcdu_data, MCDU_RIGHT, 6, "RETURN>" , MCDU_LARGE, ECAM_WHITE)
 end
 
-function THIS_PAGE:R6(mcdu_data)
+function MCDU_Page:R6(mcdu_data)
     mcdu_open_page(mcdu_data, 502)
 end
 
