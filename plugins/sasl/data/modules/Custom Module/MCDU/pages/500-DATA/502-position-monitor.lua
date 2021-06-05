@@ -63,9 +63,9 @@ function THIS_PAGE:render(mcdu_data)
         gpirs_latlon = coord_converter(gpirs_latlon_source[1], gpirs_latlon_source[2])
         avg_latlon = coord_converter(avg_latlon_source[1], avg_latlon_source[2])
 
-        drift[1] = Round_fill(get_distance_nm(ADIRS_sys[1].lat,ADIRS_sys[1].lon,avg_latlon_source[1],avg_latlon_source[2]),1)
-        drift[2] = Round_fill(get_distance_nm(ADIRS_sys[2].lat,ADIRS_sys[2].lon,avg_latlon_source[1],avg_latlon_source[2]),1)
-        drift[3] = Round_fill(get_distance_nm(ADIRS_sys[3].lat,ADIRS_sys[3].lon,avg_latlon_source[1],avg_latlon_source[2]),1)
+        for i=1, 3 do
+            drift[i] = Round_fill(get_distance_nm(ADIRS_sys[i].lat,ADIRS_sys[i].lon,avg_latlon_source[1],avg_latlon_source[2]),1)
+        end
     end
 
     self:set_line(mcdu_data, MCDU_RIGHT, 1, fms1_latlon ,  MCDU_LARGE, ECAM_GREEN)
@@ -80,7 +80,9 @@ function MCDU_Page:L6(mcdu_data)
     mcdu_freeze_time = Fwd_string_fill(tostring(get(ZULU_hours)), "0", 2)..Fwd_string_fill(tostring(get(ZULU_mins)), "0", 2)
 end
 
-    
+function MCDU_Page:R6(mcdu_data)
+    mcdu_open_page(mcdu_data, 508)
+end
 
 
 mcdu_pages[THIS_PAGE.id] = THIS_PAGE
