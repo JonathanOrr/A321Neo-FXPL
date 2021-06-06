@@ -41,6 +41,7 @@ function THIS_PAGE:render(mcdu_data)
     --})
     for i=1, 4 do
         self:set_line(mcdu_data, MCDU_LEFT, i, "<"..nav_info[i][1] , MCDU_LARGE, ECAM_BLUE)
+        self:set_line(mcdu_data, MCDU_CENTER, i,mcdu_format_force_to_small( nav_info[i][2].."   ") , MCDU_LARGE, ECAM_GREEN)
     end
 
     self:set_line(mcdu_data, MCDU_LEFT, 5, "←DESELECT" , MCDU_LARGE, ECAM_WHITE)
