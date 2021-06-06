@@ -38,6 +38,9 @@ debug_performance_measure = false
 -- Enable the debug for tcas (directly on ND)
 debug_tcas_system = false
 
+-- Force a startup page for MCDU (normally is 505)
+debug_mcdu_startup_page = 505
+
 --
 --
 -- Do not touch after this line

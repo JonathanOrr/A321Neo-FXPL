@@ -29,6 +29,8 @@ local TIME_TO_ONBAT = 5 --five seconds before onbat light extinguishes if AC ava
 local HOT_START_GPS  = 1    -- nr. of seconds required to get GPS fix if last time active < 1 hour
 local WARM_START_GPS = 20   -- nr. of seconds required to get GPS fix if last time active > 1 hour (we don't simulate cold start)
 
+local MAX_GPS_ERROR = 4 * 1e-5
+
 ----------------------------------------------------------------------------------------------------
 -- Global variables
 ----------------------------------------------------------------------------------------------------
@@ -52,6 +54,11 @@ while math.abs(random_err[3] - random_err[1]) < 0.1
    or math.abs(random_err[3] - random_err[2]) < 0.1 do
     random_err[3] = math.random()
 end
+
+ADIRS_sys.FMS_bias = {}
+ADIRS_sys.FMS_bias[1] = {0,0} -- Computed BIAS (lat,lon) between GPIRS(1) and MIX_ADIRS
+ADIRS_sys.FMS_bias[2] = {0,0} -- Computed BIAS (lat,lon) between GPIRS(2) and MIX_ADIRS
+
 
 ----------------------------------------------------------------------------------------------------
 -- Classes
@@ -638,10 +645,14 @@ local function update_gps()
 
     if get(GPS_1_is_available) == 1 then
         set(GPS_1_altitude, gps_1_offset + get(Elevation_m) * 3.28084)
+        set(GPS_1_lat, get(Aircraft_lat)  + gps_1_offset * MAX_GPS_ERROR)
+        set(GPS_1_lon, get(Aircraft_long) + gps_1_offset * MAX_GPS_ERROR)
     end
     
     if get(GPS_2_is_available) == 1 then
         set(GPS_2_altitude, gps_2_offset + get(Elevation_m) * 3.28084)
+        set(GPS_2_lat, get(Aircraft_lat)  + gps_2_offset * MAX_GPS_ERROR)
+        set(GPS_2_lon, get(Aircraft_long) + gps_2_offset * MAX_GPS_ERROR)
     end
     
 end
@@ -649,6 +660,21 @@ end
 local function update_buss()
     pb_set(PB.mip.capt_buss,get(BUSS_Capt_man_enabled) == 1, false)
     pb_set(PB.mip.fo_buss,  get(BUSS_Fo_man_enabled) == 1, false)
+end
+
+local function update_fms_bias()
+    local mixed_irs = adirs_get_mixed_irs()
+
+    local gpirs1 = adirs_get_gpirs(1)
+    local gpirs2 = adirs_get_gpirs(2)
+    
+    if mixed_irs[1] == nil or gpirs1[1] == nil or gpirs2[1] == nil then
+        return
+    end
+    
+    ADIRS_sys.FMS_bias[1] = {gpirs1[1] - mixed_irs[1], gpirs1[2] - mixed_irs[2]}
+    ADIRS_sys.FMS_bias[2] = {gpirs2[1] - mixed_irs[1], gpirs2[2] - mixed_irs[2]}
+    
 end
 
 ----------------------------------------------------------------------------------------------------
@@ -664,6 +690,7 @@ function update ()
     update_anim_knobs()
     update_gps()
     update_buss()
+    update_fms_bias()
     
     perf_measure_stop("ADIRS:update()")
     

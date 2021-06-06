@@ -234,7 +234,7 @@ function adirs_get_gps_alt(i)
     if i == PFD_CAPT then
         return get(GPS_1_altitude)
     else
-        return get(ADIRS_source_rotary_AIRDATA) ==  1 and get(GPS_1_altitude) or get(GPS_2_altitude)    
+        return get(ADIRS_source_rotary_AIRDATA) ==  1 and get(GPS_1_altitude) or get(GPS_2_altitude)
     end
 end
 
@@ -513,6 +513,102 @@ function adirs_how_many_ir_params_disagree()
     -- It does not include AoA that is managed with a dedicated function
 
     return (is_ir_valid(1) and 0 or 1) + (is_ir_valid(2) and 0 or 1) + (is_ir_valid(3) and 0 or 1)
+end
+
+----------------------------------------------------------------------------------------------------
+-- FMS/GPS/GPIRS
+----------------------------------------------------------------------------------------------------
+function adirs_gps_get_coords(i)    -- i = GPS 1 or GPS 2?
+    if i==1 then
+        if get(GPS_1_is_available) == 1 then
+            return {get(GPS_1_lat), get(GPS_1_lon)}
+        else
+            return {nil,nil}
+        end
+    else
+        if get(GPS_2_is_available) == 1 then
+            return {get(GPS_2_lat), get(GPS_2_lon)}
+        else
+            return {nil,nil}
+        end
+    end
+end
+
+function adirs_gps_get_altitude(i)  -- i = GPS 1 or GPS 2?
+    return i == 1 and get(GPS_1_altitude) or get(GPS_2_altitude)
+end
+
+function adirs_get_mixed_irs()
+    local lat = 0
+    local lon = 0
+    local n = 0
+    for i=1,3 do
+        if ADIRS_sys[i].ir_status == IR_STATUS_ALIGNED then
+            lat = lat + ADIRS_sys[i].lat
+            lon = lon + ADIRS_sys[i].lon
+            n = n + 1
+        end
+    end
+    
+    if n > 0 then
+        return {lat/n, lon/n}
+    else
+        return {nil,nil}
+    end
+end
+
+function adirs_get_fms(i) -- i==FMS1 or FMS2?
+    local gpirs = adirs_get_gpirs(i)
+    if gpirs[1] ~= nil and gpirs[2] ~= nil then
+        return gpirs
+    end
+    
+    local mixed_irs = adirs_get_mixed_irs()
+    if mixed_irs[1] == nil or mixed_irs[2] == nil then
+        return {nil,nil}
+    end
+    
+    return {mixed_irs[1]+ADIRS_sys.FMS_bias[i][1], mixed_irs[2]+ADIRS_sys.FMS_bias[i][2]}
+end
+
+function adirs_get_gpirs(i) -- i == 1 CAPT SIDE, i==2 FO SIDE. It returns lat,lon. It may return nil,nil!
+    local lat = 0
+    local lon = 0
+    local ok = false
+
+    local ref_adirs = (i-1)*2 + 1
+
+    if ADIRS_sys[ref_adirs].ir_status == IR_STATUS_ALIGNED then
+        lat = lat + ADIRS_sys[ref_adirs].lat
+        lon = lon + ADIRS_sys[ref_adirs].lon
+        ok = true
+    elseif ADIRS_sys[3].ir_status == IR_STATUS_ALIGNED then
+        lat = lat + ADIRS_sys[3].lat
+        lon = lon + ADIRS_sys[3].lon
+        ok = true
+    end
+
+    if not ok then
+        return {nil,nil}  -- Not ok, no GPIRS
+    end
+
+    if     i == 1 and get(GPS_1_is_available) == 1 then
+        lat = lat + get(GPS_1_lat)
+        lon = lon + get(GPS_1_lon)
+    elseif i == 1 and get(GPS_2_is_available) == 1 then
+        lat = lat + get(GPS_2_lat)
+        lon = lon + get(GPS_2_lon)
+    elseif i == 2 and get(GPS_2_is_available) == 1 then
+        lat = lat + get(GPS_2_lat)
+        lon = lon + get(GPS_2_lon)
+    elseif i == 2 and get(GPS_1_is_available) == 1 then
+        lat = lat + get(GPS_1_lat)
+        lon = lon + get(GPS_1_lon)
+    else
+        return {nil, nil} -- Not ok, no GPIRS
+    end
+    
+    return {lat/2, lon/2}
 end
 
 
