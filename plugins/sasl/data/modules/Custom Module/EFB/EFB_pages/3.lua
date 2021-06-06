@@ -369,7 +369,37 @@ local function draw_focus_frame()
     end
 end
 
+function equals(o1, o2, ignore_mt) --https://stackoverflow.com/questions/20325332/how-to-check-if-two-tablesobjects-have-the-same-value-in-lua
+    -- I used this function to check if any elements in load_target is equal to load_actual. If any of the elements are not equal, CG chart should show lines in yellow.
+    if o1 == o2 then return true end
+    local o1Type = type(o1)
+    local o2Type = type(o2)
+    if o1Type ~= o2Type then return false end
+    if o1Type ~= 'table' then return false end
 
+    if not ignore_mt then
+        local mt1 = getmetatable(o1)
+        if mt1 and mt1.__eq then
+            --compare using built in method
+            return o1 == o2
+        end
+    end
+
+    local keySet = {}
+
+    for key1, value1 in pairs(o1) do
+        local value2 = o2[key1]
+        if value2 == nil or equals(value1, value2, ignore_mt) == false then
+            return false
+        end
+        keySet[key1] = true
+    end
+
+    for key2, _ in pairs(o2) do
+        if not keySet[key2] then return false end
+    end
+    return true
+end
 
 local function sum_weights_up()
     total_load_target = ((load_target[1]+load_target[2]+load_target[3]) * WEIGHT_PER_PASSENGER) -- passenger weight
@@ -426,6 +456,7 @@ local function set_values(startup)
     if startup then
         -- Give a minimum amount of fuel at start
         load_actual[6] = math.max(load_actual[6], 2000)
+        load_target[6] = math.max(load_target[6], 2000)
     end
 
     set(Payload_weight, (load_actual[1] + load_actual[2] + load_actual[3])*WEIGHT_PER_PASSENGER + load_actual[4] + load_actual[5])
@@ -588,7 +619,7 @@ local function EFB_update_page_3_subpage_1() --UPDATE LOOP
     predict_cg()
     request_departure_runway_data()
     request_arrival_runway_data()
-
+    print(EFB_CURSOR_X, EFB_CURSOR_Y)
 end
 
 local function EFB_draw_page_3_subpage_1() -- DRAW LOOP
@@ -618,15 +649,6 @@ local function EFB_draw_page_3_subpage_1() -- DRAW LOOP
         drawTextCentered( Font_Airbus_panel , 116 , 578, deparr_apts[1] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
         drawTextCentered( Font_Airbus_panel , 403 , 578, deparr_apts[2] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
     end
---------------------------------------------------------------------------
-
-    if math.floor(final_cg) ~= math.floor(predicted_cg) then
-        sasl.gl.drawWideLine ( 470 , Table_extrapolate(tow_to_coordinates, predicted_tow/1000) , 1093 , Table_extrapolate(tow_to_coordinates, predicted_tow/1000) , 3, EFB_FULL_YELLOW )
-        sasl.gl.drawWideLine ( Table_extrapolate(percent_cg_to_coordinates, predicted_cg ) ,77, Table_extrapolate(percent_cg_to_coordinates, predicted_cg ),440, 3, EFB_FULL_YELLOW )
-    else
-        sasl.gl.drawWideLine ( 470 , Table_extrapolate(tow_to_coordinates, get(Gross_weight)/1000) , 1093 , Table_extrapolate(tow_to_coordinates, get(Gross_weight)/1000) , 3, EFB_WHITE )
-        sasl.gl.drawWideLine ( Table_extrapolate(percent_cg_to_coordinates, final_cg ) ,77, Table_extrapolate(percent_cg_to_coordinates, final_cg ),440, 3, EFB_WHITE )
-    end
 
 --------------------------------------------------------------------------
 
@@ -647,6 +669,27 @@ local function EFB_draw_page_3_subpage_1() -- DRAW LOOP
     zfw_actual = passenger_weight_actual + cargo_weight_actual + DRY_OPERATING_WEIGHT
     local taxi_fuel = math.min(DEFAULT_TAXI_FUEL, load_actual[6]) 
     takeoff_weight_actual = passenger_weight_actual + cargo_weight_actual + fuel_weight_actual - taxi_fuel + DRY_OPERATING_WEIGHT
+
+    local passenger_weight_target = ((load_target[1]+load_target[2]+load_target[3]) * WEIGHT_PER_PASSENGER)
+    local cargo_weight_target = load_target[4] + load_target[5]
+    local fuel_weight_target = load_target[6]
+    local taxi_fuel = math.min(DEFAULT_TAXI_FUEL, load_target[6]) 
+    takeoff_weight_target = passenger_weight_target + cargo_weight_target + fuel_weight_target - taxi_fuel + DRY_OPERATING_WEIGHT
+
+    if not equals(load_actual, load_target, true) then
+        local x_coords = Table_extrapolate(percent_cg_to_coordinates, predicted_cg )
+        local y_coords = Table_extrapolate(tow_to_coordinates, predicted_tow/1000) 
+        sasl.gl.drawWideLine ( 470 , y_coords, 1093 , y_coords , 3, EFB_FULL_YELLOW )
+        sasl.gl.drawWideLine ( x_coords ,77, x_coords ,440, 3, EFB_FULL_YELLOW )
+        drawTextCentered( Font_Airbus_panel , 632 , 34, "PAYLOAD NOT APPLIED" , 25 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_YELLOW )
+        drawTextCentered( Font_Airbus_panel ,x_coords + 18 , y_coords + 20, Round(takeoff_weight_target/1000,1).."T" , 25 ,false , false , TEXT_ALIGN_LEFT , EFB_FULL_YELLOW )
+    else
+        local x_coords = Table_extrapolate(percent_cg_to_coordinates, final_cg )
+        local y_coords = Table_extrapolate(tow_to_coordinates, get(Gross_weight)/1000)
+        sasl.gl.drawWideLine ( 470 ,y_coords , 1093 , y_coords, 3, EFB_WHITE )
+        sasl.gl.drawWideLine ( x_coords ,77,x_coords ,440, 3, EFB_WHITE )
+        drawTextCentered( Font_Airbus_panel , 632 , 34, "PAYLOAD APPLIED" , 25 ,false , false , TEXT_ALIGN_CENTER , EFB_WHITE )
+    end
 
     drawTextCentered( Font_Airbus_panel , 1038 , 682, DRY_OPERATING_WEIGHT      , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
     drawTextCentered( Font_Airbus_panel , 1038 , 660, 0                         , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )

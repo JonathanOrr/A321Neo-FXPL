@@ -29,6 +29,7 @@ Ground_speed_mph = createGlobalPropertyf("a321neo/dynamics/groundspeed_mph", 0, 
 Ground_speed_kts = createGlobalPropertyf("a321neo/dynamics/groundspeed_kts", 0, false, true, false) --ground speed in kts
 Ground_speed_ms = globalProperty("sim/flightmodel/position/groundspeed")
 Startup_running = globalProperty("sim/operation/prefs/startup_running") -- 1 if user asked to startup with engines running
+Time_since_last_rest = globalProperty("sim/time/total_flight_time_sec")
 --wheel
 Override_wheel_steering =     globalProperty("sim/operation/override/override_wheel_steer")
 Override_wheel_gear_and_brk = globalProperty("sim/operation/override/override_gearbrake")
