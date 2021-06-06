@@ -142,6 +142,13 @@ local cargo_index_aft = {
 -- Functions
 -------------------------------------------------------------------------------
 
+local function set_initial_weights_for_first_few_frames()
+    if get(Time_since_last_rest) < 1 then
+        load_actual[6] = Round(get(FOB), 0)
+        load_target[6] = Round(get(FOB), 0)
+    end
+end
+        
 local function draw_no_dep_data()
     if get(All_on_ground) == 0 then
         sasl.gl.drawRectangle ( 0 , 0 , 1143, 460, EFB_BACKGROUND_COLOUR)
@@ -458,12 +465,11 @@ local function set_values(startup)
         load_actual[6] = math.max(load_actual[6], 2000)
         load_target[6] = math.max(load_target[6], 2000)
     end
-
-    set(Payload_weight, (load_actual[1] + load_actual[2] + load_actual[3])*WEIGHT_PER_PASSENGER + load_actual[4] + load_actual[5])
     set_fuel(load_actual[6])
     calculate_cg()
     sum_weights_up()
     set_cg()
+    set(Payload_weight, (load_actual[1] + load_actual[2] + load_actual[3])*WEIGHT_PER_PASSENGER + load_actual[4] + load_actual[5])
 end
 
 local function Subpage_1_buttons()
@@ -617,6 +623,7 @@ local function Subpage_1_buttons()
 end
 
 local function EFB_update_page_3_subpage_1() --UPDATE LOOP
+    set_initial_weights_for_first_few_frames()
     predict_cg()
     request_departure_runway_data()
     request_arrival_runway_data()
