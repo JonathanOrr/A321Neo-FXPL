@@ -44,8 +44,8 @@ local NUMBER_OF_SUBPAGES = 3
 New_takeoff_data_available = true
 
 -- LOAD & CG
-local load_target = {0,0,0,0,0,0}
-local load_actual = {0,0,0,0,0,0} -- not a live value! does not change in flight!!!!!!!
+local load_target = {0,0,0,0,0,Round(get(FOB),0)}
+local load_actual = {0,0,0,0,0,Round(get(FOB),0)} -- not a live value! does not change in flight!!!!!!!
 local total_load_target = 0
 
 local default_cg = 25
@@ -141,6 +141,14 @@ local cargo_index_aft = {
 -------------------------------------------------------------------------------
 -- Functions
 -------------------------------------------------------------------------------
+
+local function draw_no_dep_data()
+    if get(All_on_ground) == 0 then
+        sasl.gl.drawRectangle ( 0 , 0 , 1143, 460, EFB_BACKGROUND_COLOUR)
+        drawTextCentered(Font_Airbus_panel,  572, 252, "AIRCRAFT IS AIRBORNE", 30, false, false, TEXT_ALIGN_CENTER, EFB_WHITE)
+        drawTextCentered(Font_Airbus_panel,  572, 222, "MANIPULATION OF WEIGHT & BLANCE UNAVAILABLE", 20, false, false, TEXT_ALIGN_CENTER, EFB_WHITE)
+    end
+end
 
 --MOUSE RESET
 function onMouseDown ( component , x , y , button , parentX , parentY )
@@ -342,7 +350,6 @@ end
 --------------------------------------------------------------------------------------------------------------------------------SUBPAGE 1
 
 local function load_weights_from_file()
-    load_target = table.load(moduleDirectory .. "/Custom Module/saved_configs/previous_load_target")
 end
 
 local function save_weights_to_file()
@@ -436,13 +443,6 @@ local function predict_cg()
     + Table_extrapolate(cargo_index_aft, load_target[5]) --coefficient of the after cargo hold
 end
 
-local function predict_tow()
-    predicted_tow = ((load_target[1]+load_target[2]+load_target[3]) * WEIGHT_PER_PASSENGER) 
-    + load_target[4] + load_target[5] 
-    + load_target[6] 
-    + DRY_OPERATING_WEIGHT  
-end
-
 local function set_cg()
     set(CG_Pos, 0.04232395*(final_cg) - 1.06312)
 end
@@ -467,136 +467,138 @@ local function set_values(startup)
 end
 
 local function Subpage_1_buttons()
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 348, 386, 378, 409,  function () -- OA SELECTOR
-        load_target[1] = math.min(MAX_WEIGHT_VALUES[1], load_target[1] + 10)
-    end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 313, 385, 344, 409, function ()
-        load_target[1] = math.min(MAX_WEIGHT_VALUES[1], load_target[1] + 1)
-    end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 182, 385, 212, 409,function ()
-        load_target[1] = math.max(0, load_target[1] - 1)
-    end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 147, 385, 177, 409,function ()
-        load_target[1] = math.max(0, load_target[1] - 10)
-    end)
+    if get(All_on_ground) ~= 0 then
+        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 348, 386, 378, 409,  function () -- OA SELECTOR
+            load_target[1] = math.min(MAX_WEIGHT_VALUES[1], load_target[1] + 10)
+        end)
+        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 313, 385, 344, 409, function ()
+            load_target[1] = math.min(MAX_WEIGHT_VALUES[1], load_target[1] + 1)
+        end)
+        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 182, 385, 212, 409,function ()
+            load_target[1] = math.max(0, load_target[1] - 1)
+        end)
+        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 147, 385, 177, 409,function ()
+            load_target[1] = math.max(0, load_target[1] - 10)
+        end)
 
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 348, 346, 378, 370,  function () -- OB SELECTOR
-        load_target[2] = math.min(MAX_WEIGHT_VALUES[2], load_target[2] + 10)
-    end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 313, 346, 344, 370, function ()
-        load_target[2] = math.min(MAX_WEIGHT_VALUES[2], load_target[2] + 1)
-    end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 182, 346, 212, 370,function ()
-        load_target[2] = math.max(0, load_target[2] - 1)
-    end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 147, 346, 177, 370,function ()
-        load_target[2] = math.max(0, load_target[2] - 10)
-    end)
+        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 348, 346, 378, 370,  function () -- OB SELECTOR
+            load_target[2] = math.min(MAX_WEIGHT_VALUES[2], load_target[2] + 10)
+        end)
+        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 313, 346, 344, 370, function ()
+            load_target[2] = math.min(MAX_WEIGHT_VALUES[2], load_target[2] + 1)
+        end)
+        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 182, 346, 212, 370,function ()
+            load_target[2] = math.max(0, load_target[2] - 1)
+        end)
+        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 147, 346, 177, 370,function ()
+            load_target[2] = math.max(0, load_target[2] - 10)
+        end)
 
 
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 348, 307, 378, 332,  function () -- OC SELECTOR
-        load_target[3] = math.min(MAX_WEIGHT_VALUES[3], load_target[3] + 10)
-    end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 313, 307, 344, 332, function ()
-        load_target[3] = math.min(MAX_WEIGHT_VALUES[3], load_target[3] + 1)
-    end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 182, 307, 212, 332,function ()
-        load_target[3] = math.max(0, load_target[3] - 1)
-    end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 147, 307, 177, 332,function ()
-        load_target[3] = math.max(0, load_target[3] - 10)
-    end)
-    
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 348, 229, 378, 254,  function () -- Cargo 1-2 SELECTOR
-        load_target[4] = math.min(MAX_WEIGHT_VALUES[4], load_target[4] + 1000)
-    end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 313, 229, 344, 254, function ()
-        load_target[4] = math.min(MAX_WEIGHT_VALUES[4], load_target[4] + 100)
-    end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 182, 229, 212, 254,function ()
-        load_target[4] = math.max(0, load_target[4] - 100)
-    end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 147, 229, 177, 254,function ()
-        load_target[4] = math.max(0, load_target[4] - 1000)
-    end)
+        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 348, 307, 378, 332,  function () -- OC SELECTOR
+            load_target[3] = math.min(MAX_WEIGHT_VALUES[3], load_target[3] + 10)
+        end)
+        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 313, 307, 344, 332, function ()
+            load_target[3] = math.min(MAX_WEIGHT_VALUES[3], load_target[3] + 1)
+        end)
+        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 182, 307, 212, 332,function ()
+            load_target[3] = math.max(0, load_target[3] - 1)
+        end)
+        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 147, 307, 177, 332,function ()
+            load_target[3] = math.max(0, load_target[3] - 10)
+        end)
 
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 348, 190, 378, 214,  function () -- Cargo 3-5 SELECTOR
-        load_target[5] = math.min(MAX_WEIGHT_VALUES[5], load_target[5] + 1000)
-    end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 313, 190, 344, 214, function ()
-        load_target[5] = math.min(MAX_WEIGHT_VALUES[5], load_target[5] + 100)
-    end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 182, 190, 212, 214,function ()
-        load_target[5] = math.max(0, load_target[5] - 100)
-    end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 147, 190, 177, 214,function ()
-        load_target[5] = math.max(0, load_target[5] - 1000)
-    end)
+        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 348, 229, 378, 254,  function () -- Cargo 1-2 SELECTOR
+            load_target[4] = math.min(MAX_WEIGHT_VALUES[4], load_target[4] + 1000)
+        end)
+        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 313, 229, 344, 254, function ()
+            load_target[4] = math.min(MAX_WEIGHT_VALUES[4], load_target[4] + 100)
+        end)
+        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 182, 229, 212, 254,function ()
+            load_target[4] = math.max(0, load_target[4] - 100)
+        end)
+        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 147, 229, 177, 254,function ()
+            load_target[4] = math.max(0, load_target[4] - 1000)
+        end)
 
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 348, 112, 378, 136,  function () -- Fuel SELECTOR
-        load_target[6] = math.min(MAX_WEIGHT_VALUES[6], load_target[6] + 1000)
-    end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 313, 112, 344, 136, function ()
-        load_target[6] = math.min(MAX_WEIGHT_VALUES[6], load_target[6] + 100)
-    end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 182, 112, 212, 136,function ()
-        load_target[6] = math.max(0, load_target[6] - 100)
-    end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 147, 112, 177, 136,function ()
-        load_target[6] = math.max(0, load_target[6] - 1000)
-    end)
---------------------------------------------------------------------------------------------------------
+        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 348, 190, 378, 214,  function () -- Cargo 3-5 SELECTOR
+            load_target[5] = math.min(MAX_WEIGHT_VALUES[5], load_target[5] + 1000)
+        end)
+        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 313, 190, 344, 214, function ()
+            load_target[5] = math.min(MAX_WEIGHT_VALUES[5], load_target[5] + 100)
+        end)
+        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 182, 190, 212, 214,function ()
+            load_target[5] = math.max(0, load_target[5] - 100)
+        end)
+        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 147, 190, 177, 214,function ()
+            load_target[5] = math.max(0, load_target[5] - 1000)
+        end)
 
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 216, 385, 308, 409,function () --THE SCRATCHPAD FOCUS BUTTONS
-        p3s1_plug_in_the_buffer()
-        key_p3s1_focus = key_p3s1_focus == 1 and 0 or 1
-    end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 216, 346, 308, 370,function ()
-        p3s1_plug_in_the_buffer()
-        key_p3s1_focus = key_p3s1_focus == 2 and 0 or 2
-    end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 216, 307, 308, 332,function ()
-        p3s1_plug_in_the_buffer()
-        key_p3s1_focus = key_p3s1_focus == 3 and 0 or 3
-    end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 216, 229, 308, 254,function ()
-        p3s1_plug_in_the_buffer()
-        key_p3s1_focus = key_p3s1_focus == 4 and 0 or 4
-    end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 216, 190, 308, 214,function ()
-        p3s1_plug_in_the_buffer()
-        key_p3s1_focus = key_p3s1_focus == 5 and 0 or 5
-    end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 216, 112, 308, 136,function ()
-        p3s1_plug_in_the_buffer()
-        key_p3s1_focus = key_p3s1_focus == 6 and 0 or 6
-    end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 71 , 565, 163, 591,function ()
-        p3s1_plug_in_the_buffer()
-        key_p3s1_focus = key_p3s1_focus == 7 and 0 or 7
-    end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 357 , 565, 449, 591,function ()
-        p3s1_plug_in_the_buffer()
-        key_p3s1_focus = key_p3s1_focus == 8 and 0 or 8
-    end)
---------------------------------------------------------------------------------------------------------
+        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 348, 112, 378, 136,  function () -- Fuel SELECTOR
+            load_target[6] = math.min(MAX_WEIGHT_VALUES[6], load_target[6] + 1000)
+        end)
+        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 313, 112, 344, 136, function ()
+            load_target[6] = math.min(MAX_WEIGHT_VALUES[6], load_target[6] + 100)
+        end)
+        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 182, 112, 212, 136,function ()
+            load_target[6] = math.max(0, load_target[6] - 100)
+        end)
+        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 147, 112, 177, 136,function ()
+            load_target[6] = math.max(0, load_target[6] - 1000)
+        end)
+----    ----------------------------------------------------------------------------------------------------
 
-    if key_p3s1_focus == 1 then
-        click_anywhere_except_that_area( 216, 385, 308, 409, p3s1_plug_in_the_buffer)
-    elseif key_p3s1_focus == 2 then
-        click_anywhere_except_that_area( 216, 346, 308, 370, p3s1_plug_in_the_buffer)
-    elseif key_p3s1_focus == 3 then
-        click_anywhere_except_that_area( 216, 307, 308, 332, p3s1_plug_in_the_buffer)
-    elseif key_p3s1_focus == 4 then
-        click_anywhere_except_that_area( 216, 229, 308, 254, p3s1_plug_in_the_buffer)
-    elseif key_p3s1_focus == 5 then
-        click_anywhere_except_that_area( 216, 190, 308, 214, p3s1_plug_in_the_buffer)
-    elseif key_p3s1_focus == 6 then
-        click_anywhere_except_that_area( 216, 112, 308, 136, p3s1_plug_in_the_buffer)
-    elseif key_p3s1_focus == 7 then
-        click_anywhere_except_that_area( 71 , 565, 163, 591, p3s1_plug_in_the_buffer)
-    elseif key_p3s1_focus == 8 then
-        click_anywhere_except_that_area( 357, 565, 449, 591, p3s1_plug_in_the_buffer)
+        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 216, 385, 308, 409,function () --THE SCRATCHPAD FOCUS BUTTONS
+            p3s1_plug_in_the_buffer()
+            key_p3s1_focus = key_p3s1_focus == 1 and 0 or 1
+        end)
+        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 216, 346, 308, 370,function ()
+            p3s1_plug_in_the_buffer()
+            key_p3s1_focus = key_p3s1_focus == 2 and 0 or 2
+        end)
+        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 216, 307, 308, 332,function ()
+            p3s1_plug_in_the_buffer()
+            key_p3s1_focus = key_p3s1_focus == 3 and 0 or 3
+        end)
+        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 216, 229, 308, 254,function ()
+            p3s1_plug_in_the_buffer()
+            key_p3s1_focus = key_p3s1_focus == 4 and 0 or 4
+        end)
+        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 216, 190, 308, 214,function ()
+            p3s1_plug_in_the_buffer()
+            key_p3s1_focus = key_p3s1_focus == 5 and 0 or 5
+        end)
+        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 216, 112, 308, 136,function ()
+            p3s1_plug_in_the_buffer()
+            key_p3s1_focus = key_p3s1_focus == 6 and 0 or 6
+        end)
+        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 71 , 565, 163, 591,function ()
+            p3s1_plug_in_the_buffer()
+            key_p3s1_focus = key_p3s1_focus == 7 and 0 or 7
+        end)
+        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 357 , 565, 449, 591,function ()
+            p3s1_plug_in_the_buffer()
+            key_p3s1_focus = key_p3s1_focus == 8 and 0 or 8
+        end)
+----    ----------------------------------------------------------------------------------------------------
+
+        if key_p3s1_focus == 1 then
+            click_anywhere_except_that_area( 216, 385, 308, 409, p3s1_plug_in_the_buffer)
+        elseif key_p3s1_focus == 2 then
+            click_anywhere_except_that_area( 216, 346, 308, 370, p3s1_plug_in_the_buffer)
+        elseif key_p3s1_focus == 3 then
+            click_anywhere_except_that_area( 216, 307, 308, 332, p3s1_plug_in_the_buffer)
+        elseif key_p3s1_focus == 4 then
+            click_anywhere_except_that_area( 216, 229, 308, 254, p3s1_plug_in_the_buffer)
+        elseif key_p3s1_focus == 5 then
+            click_anywhere_except_that_area( 216, 190, 308, 214, p3s1_plug_in_the_buffer)
+        elseif key_p3s1_focus == 6 then
+            click_anywhere_except_that_area( 216, 112, 308, 136, p3s1_plug_in_the_buffer)
+        elseif key_p3s1_focus == 7 then
+            click_anywhere_except_that_area( 71 , 565, 163, 591, p3s1_plug_in_the_buffer)
+        elseif key_p3s1_focus == 8 then
+            click_anywhere_except_that_area( 357, 565, 449, 591, p3s1_plug_in_the_buffer)
+        end
     end
 
 --------------------------------------------------------------------------------------------------------
@@ -615,11 +617,9 @@ local function Subpage_1_buttons()
 end
 
 local function EFB_update_page_3_subpage_1() --UPDATE LOOP
-    predict_tow()
     predict_cg()
     request_departure_runway_data()
     request_arrival_runway_data()
-    print(EFB_CURSOR_X, EFB_CURSOR_Y)
 end
 
 local function EFB_draw_page_3_subpage_1() -- DRAW LOOP
@@ -678,14 +678,14 @@ local function EFB_draw_page_3_subpage_1() -- DRAW LOOP
 
     if not equals(load_actual, load_target, true) then
         local x_coords = Table_extrapolate(percent_cg_to_coordinates, predicted_cg )
-        local y_coords = Table_extrapolate(tow_to_coordinates, predicted_tow/1000) 
+        local y_coords = Table_extrapolate(tow_to_coordinates, takeoff_weight_target/1000) 
         sasl.gl.drawWideLine ( 470 , y_coords, 1093 , y_coords , 3, EFB_FULL_YELLOW )
         sasl.gl.drawWideLine ( x_coords ,77, x_coords ,440, 3, EFB_FULL_YELLOW )
         drawTextCentered( Font_Airbus_panel , 632 , 34, "PAYLOAD NOT APPLIED" , 25 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_YELLOW )
         drawTextCentered( Font_Airbus_panel ,x_coords + 18 , y_coords + 20, Round(takeoff_weight_target/1000,1).."T" , 25 ,false , false , TEXT_ALIGN_LEFT , EFB_FULL_YELLOW )
     else
         local x_coords = Table_extrapolate(percent_cg_to_coordinates, final_cg )
-        local y_coords = Table_extrapolate(tow_to_coordinates, get(Gross_weight)/1000)
+        local y_coords = Table_extrapolate(tow_to_coordinates, takeoff_weight_actual/1000)
         sasl.gl.drawWideLine ( 470 ,y_coords , 1093 , y_coords, 3, EFB_WHITE )
         sasl.gl.drawWideLine ( x_coords ,77,x_coords ,440, 3, EFB_WHITE )
         drawTextCentered( Font_Airbus_panel , 632 , 34, "PAYLOAD APPLIED" , 25 ,false , false , TEXT_ALIGN_CENTER , EFB_WHITE )
@@ -705,7 +705,7 @@ local function EFB_draw_page_3_subpage_1() -- DRAW LOOP
 
     draw_focus_frame()
     draw_avionics_bay_standby()
-
+    draw_no_dep_data()
 
 end
 
@@ -713,9 +713,7 @@ end
 -- Initialization
 -------------------------------------------------------------------------------
 local function initialize()
-    if table.load(moduleDirectory .. "/Custom Module/saved_configs/previous_load_target") ~= nil then
-        load_weights_from_file()
-    end
+    load_weights_from_file()
     set_values(true)
 end
 
