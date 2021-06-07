@@ -312,6 +312,26 @@ function adirs_how_many_adrs_work()
     return adr1+adr2+adr3
 end
 
+function adirs_how_many_irs_in_align()
+    local ir1 = (ADIRS_sys[1].ir_status == IR_STATUS_IN_ALIGN and ADIRS_sys[1].ir_is_waiting_hdg) and 1 or 0
+    local ir2 = (ADIRS_sys[2].ir_status == IR_STATUS_IN_ALIGN and ADIRS_sys[2].ir_is_waiting_hdg) and 1 or 0
+    local ir3 = (ADIRS_sys[3].ir_status == IR_STATUS_IN_ALIGN and ADIRS_sys[3].ir_is_waiting_hdg) and 1 or 0
+
+    return ir1+ir2+ir3
+end
+
+function adirs_set_hdg(hdg_inserted_by_the_pilot)
+    local function set_hdg(adirs)
+        if adirs.ir_status == IR_STATUS_IN_ALIGN then
+            adirs.manual_hdg_offset = hdg_inserted_by_the_pilot - get(Flightmodel_mag_heading)
+            adirs.ir_is_waiting_hdg = false
+        end
+    end
+    set_hdg(ADIRS_sys[1])
+    set_hdg(ADIRS_sys[2])
+    set_hdg(ADIRS_sys[3])
+end
+
 function adirs_how_many_irs_fully_work()
     local ir1 = ADIRS_sys[1].ir_status == IR_STATUS_ALIGNED and 1 or 0
     local ir2 = ADIRS_sys[2].ir_status == IR_STATUS_ALIGNED and 1 or 0

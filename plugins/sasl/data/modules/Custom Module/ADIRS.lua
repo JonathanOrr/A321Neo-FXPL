@@ -78,6 +78,7 @@ local ADIRS = {
     ir_is_waiting_hdg = true,
     ir_is_aligning_gps = true,
     manual_hdg_offset = 0,
+    ir_drift = 0.0,
     
     -- ADR
     adr_status = ADR_STATUS_OFF,
@@ -351,6 +352,13 @@ function ADIRS:reset()
     self.ir_align_start_time = 0
 end
 
+function ADIRS:get_align_ttn()
+    local time_to_align = math.max(0, get(Adirs_total_time_to_align) - (get(TIME) - self.ir_align_start_time))
+    if self.adirs_switch_status == ADIRS_CONFIG_ATT then
+        time_to_align = math.max(0, 20 - (get(TIME) - self.ir_align_start_time))
+    end
+    return Round(time_to_align/60, 0)
+end
 
 ----------------------------------------------------------------------------------------------------
 -- Global/Local variables
