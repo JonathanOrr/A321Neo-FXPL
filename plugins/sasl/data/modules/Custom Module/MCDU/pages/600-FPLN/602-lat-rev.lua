@@ -137,6 +137,15 @@ function THIS_PAGE:L1(mcdu_data)
     end
 end
 
+function THIS_PAGE:R1(mcdu_data)
+    if mcdu_data.lat_rev_subject.type == TYPE_DEST then
+        mcdu_open_page(mcdu_data, 605)
+    else
+        MCDU_Page:R1(mcdu_data) -- Error
+    end
+end
+
+
 function THIS_PAGE:L6(mcdu_data)
     mcdu_open_page(mcdu_data, 600)
 end
