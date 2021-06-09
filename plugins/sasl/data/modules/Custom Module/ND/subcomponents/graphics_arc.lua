@@ -429,7 +429,7 @@ end
 
 local function draw_oans_arrow(data)
 
-    if data.oans.displayed_apt then
+    if data.oans.displayed_apt and data.oans.displayed_apt.distance and data.oans.displayed_apt.distance > 5 then
         local lat = data.oans.displayed_apt.lat
         local lon = data.oans.displayed_apt.lon
 
