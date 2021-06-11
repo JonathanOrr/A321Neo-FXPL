@@ -24,7 +24,8 @@ include('ECAM/ECAM_status/inop_sys.lua')
 include('ECAM/ECAM_status/maintain.lua')
 
 local at_least_one_print = false
-    
+local x_left_pos        = size[1]/2-410
+
 ecam_sts = {
     
     -- LEFT PART --
@@ -73,11 +74,15 @@ ecam_sts = {
 
 local function drawUnderlineText(font, x, y, text, size, bold, italic, align, color)
     sasl.gl.drawText(font, x, y, text, size, bold, italic, align, color)
-    width, height = sasl.gl.measureText(Font_AirbusDUL, text, size, false, false)
+    local width, height = sasl.gl.measureText(Font_AirbusDUL, text, size, false, false)
     sasl.gl.drawWideLine(x + 3, y - 5, x + width + 3, y - 5, 4, color)
 end
 
-function draw_sts_page_left(messages)
+local function not_inhibited_on_ground()
+    return (get(EWD_flight_phase) > PHASE_1ST_ENG_TO_PWR and get(EWD_flight_phase) < PHASE_BELOW_80_KTS) or (get(Engine_1_avail) == 1 and get(Engine_2_avail))
+end
+
+local function draw_sts_page_left(messages)
     local default_visible_left_offset = size[2]/2+320
     local visible_left_offset = size[2]/2+320 + 630 * get(Ecam_sts_scroll_page)
     local msg_len = #messages
@@ -91,7 +96,7 @@ function draw_sts_page_left(messages)
             break
         end
 
-        if visible_left_offset < default_visible_left_offset then
+        if visible_left_offset <= default_visible_left_offset then
             if not msg.is_empty or msg_len ~= i then    -- Do not print empty spaces if it is the last message
                 msg.draw(visible_left_offset)
                 at_least_one_print = true
@@ -106,12 +111,8 @@ function draw_sts_page_left(messages)
 end
 
 
-function prepare_sts_page_left()
-    x_left_pos        = size[1]/2-410
-
+local function prepare_sts_page_left()
     local messages = {}
-    
-
 
     -- SPEED LIMIT    
     if get(is_RAT_out) == 1 then
@@ -121,16 +122,16 @@ function prepare_sts_page_left()
         )
     end
 
-    max_knots, max_mach = ecam_sts:get_max_speed()
+    local max_knots, max_mach = ecam_sts:get_max_speed()
     if max_knots ~= 0 then
         table.insert(messages, { draw = function(top_position)
-                sasl.gl.drawText(Font_AirbusDUL, x_left_pos, top_position, "MAX SPD............".. max_knots .." / ." .. max_mach, 28, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+                sasl.gl.drawText(Font_AirbusDUL, x_left_pos, top_position, "MAX SPEED..........".. max_knots .." / ." .. max_mach, 28, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
             end }
         )
     end
 
     -- FLIGHT LEVEL LIMIT
-    max_fl = ecam_sts:get_max_fl()
+    local max_fl = ecam_sts:get_max_fl()
     if max_fl ~= 0 and max_fl ~= 999 then
         table.insert(messages, { draw = function(top_position)
                 sasl.gl.drawText(Font_AirbusDUL, x_left_pos, top_position, "MAX FL.............".. max_fl .." / MEA", 28, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
@@ -138,35 +139,38 @@ function prepare_sts_page_left()
         )
     end
 
-    if get(All_on_ground) == 0 and 
-            (get(FBW_total_control_law) == FBW_DIRECT_LAW 
-            or get(FAILURE_FCTL_LELEV) == 1 
-            or get(FAILURE_FCTL_RELEV) == 1 
-            or get(Engine_1_avail) == 0 
-            or get(Engine_2_avail) == 0)
-            or get(FAILURE_FCTL_THS_MECH) == 1
-            or get(FAILURE_FCTL_THS) == 1
-            or (get(Hydraulic_Y_press) < 1450 and get(Hydraulic_G_press) < 1450)
-            or (get(Hydraulic_Y_press) < 1450 and get(Hydraulic_B_press) < 1450)
-            or (get(Hydraulic_B_press) < 1450 and get(Hydraulic_G_press) < 1450)
-             then
-        table.insert(messages, { draw = function(top_position)
-                sasl.gl.drawText(Font_AirbusDUL, x_left_pos, top_position, "MANEUVER WITH CARE", 28, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
-            end }
-        )
+    if not_inhibited_on_ground() then
+        if get(All_on_ground) == 0 and 
+                (get(FBW_total_control_law) == FBW_DIRECT_LAW 
+                or get(FAILURE_FCTL_LELEV) == 1 
+                or get(FAILURE_FCTL_RELEV) == 1 
+                or get(Engine_1_avail) == 0 
+                or get(Engine_2_avail) == 0)
+                or get(FAILURE_FCTL_THS_MECH) == 1
+                or get(FAILURE_FCTL_THS) == 1
+                or (get(Hydraulic_Y_press) < 1450 and get(Hydraulic_G_press) < 1450)
+                or (get(Hydraulic_Y_press) < 1450 and get(Hydraulic_B_press) < 1450)
+                or (get(Hydraulic_B_press) < 1450 and get(Hydraulic_G_press) < 1450)
+                then
+            table.insert(messages, { draw = function(top_position)
+                    sasl.gl.drawText(Font_AirbusDUL, x_left_pos, top_position, "MANEUVER WITH CARE", 28, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+                end }
+            )
+        end
+
+        if get(Fuel_engine_gravity) == 1 then
+            table.insert(messages, { draw = function(top_position)
+                    sasl.gl.drawText(Font_AirbusDUL, x_left_pos, top_position, "FUEL GRVTY FEED", 28, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+                end })
+                table.insert(messages, { draw = function(top_position)
+                    sasl.gl.drawText(Font_AirbusDUL, x_left_pos, top_position, "AVOID NEGATIVE G FACTOR", 28, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+                end })
+        end
     end
 
-    if get(Fuel_engine_gravity) == 1 then
-        table.insert(messages, { draw = function(top_position)
-                sasl.gl.drawText(Font_AirbusDUL, x_left_pos, top_position, "FUEL GRVTY FEED", 28, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
-                sasl.gl.drawText(Font_AirbusDUL, x_left_pos, top_position, "AVOID NEGATIVE G FACTOR", 28, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
-            end })
-
-    end
-    
     -- APPR PROC
-    appr_proc = ecam_sts:get_appr_proc()
-    if #appr_proc > 0 then
+    local appr_proc = ecam_sts:get_appr_proc()
+    if #appr_proc > 0 and not_inhibited_on_ground() then
         table.insert(messages, {
             bottom_extra_padding = 5,
             draw = function(top_position)
@@ -192,8 +196,8 @@ function prepare_sts_page_left()
     end
 
     -- PROCEDURES
-    procedures = ecam_sts:get_procedures()
-    if #procedures > 0 then
+    local procedures = ecam_sts:get_procedures()
+    if #procedures > 0 and not_inhibited_on_ground() then
        
         for i,msg in ipairs(procedures) do
             table.insert(messages, { draw = function(top_position)
@@ -212,8 +216,8 @@ function prepare_sts_page_left()
     end
     
     -- INFORMATION
-    information = ecam_sts:get_information()
-     if #information > 0 then
+    local information = ecam_sts:get_information()
+    if #information > 0 and not_inhibited_on_ground() then
        
         for i,msg in ipairs(information) do
             table.insert(messages, { draw = function(top_position)
@@ -232,7 +236,7 @@ function prepare_sts_page_left()
     end
     
     -- CANCELLED CAUTION
-    cancelled_cautions = ecam_sts:get_cancelled_cautions()
+    local cancelled_cautions = ecam_sts:get_cancelled_cautions()
     if #cancelled_cautions > 0 then
        
         table.insert(messages, {
@@ -268,7 +272,7 @@ local function draw_sts_page_right(messages)
             end
             break
         end
-        if visible_right_offset < default_visible_right_offset then
+        if visible_right_offset <= default_visible_right_offset then
             if not msg.is_empty or msg_len ~= i then    -- Do not print empty spaces if it is the last message
                 msg.draw(visible_right_offset)
                 at_least_one_print = true
@@ -280,14 +284,14 @@ local function draw_sts_page_right(messages)
     
 end
 
-function prepare_sts_page_right()
-    x_right_pos       = size[1]/2 + 140
-    x_right_title_pos = size[1]/2 + 200
+local function prepare_sts_page_right()
+    local x_right_pos       = size[1]/2 + 140
+    local x_right_title_pos = size[1]/2 + 200
 
-    messages = {}
+    local messages = {}
     
     -- INOP SYS
-    inop_sys = ecam_sts:get_inop_sys()
+    local inop_sys = ecam_sts:get_inop_sys()
     if #inop_sys > 0 then
         table.insert(messages, {
             bottom_extra_padding = 5,
@@ -317,7 +321,7 @@ function prepare_sts_page_right()
     end
     
     -- MAINTENANCE
-    maintenance = ecam_sts:get_maintenance()
+    local maintenance = ecam_sts:get_maintenance()
     if #maintenance > 0 then
         table.insert(messages, {
             bottom_extra_padding = 5,

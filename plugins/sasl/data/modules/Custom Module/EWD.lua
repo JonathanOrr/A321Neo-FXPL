@@ -365,6 +365,9 @@ local function draw_engines_extra()
 
         --FF--
         sasl.gl.drawText(Font_ECAMfont, size[1]/2-130, size[2]/2+3, params.eng1_ff, 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    else
+        sasl.gl.drawText(Font_ECAMfont, 280, size[2]/2+75, "XX", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, 280, size[2]/2+3,  "XX", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
 
     if get(EWD_engine_2_XX) == 0 then
@@ -375,8 +378,11 @@ local function draw_engines_extra()
 
         --FF--
         sasl.gl.drawText(Font_ECAMfont, size[1]/2+195, size[2]/2+3, params.eng2_ff, 30, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+    else
+        sasl.gl.drawText(Font_ECAMfont, 620, size[2]/2+75, "XX", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, 620, size[2]/2+3,  "XX", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
-
+    
     -- IDLE indication
     if eng_idle_start ~= 0 then
         color = ECAM_GREEN
