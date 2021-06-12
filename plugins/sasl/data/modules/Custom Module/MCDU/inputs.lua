@@ -96,39 +96,42 @@ local function mcdu_parse_entry(entry, expected_format)
 		code = "#"
 	end
 
-	local possible_inputs_a = {code}
+    local possible_inputs_c = {}
+    if code then
+	    local possible_inputs_a = {code}
 
-    -- if dp isn't specified
-    if not expected_format.dp then
-        expected_format.dp = 0
+        -- if dp isn't specified
+        if not expected_format.dp then
+            expected_format.dp = 0
+        end
+
+	    -- add decimal places
+	    local s = code .. "."
+	    for i = 1, expected_format.dp, 1 do
+		    s = s .. code
+		    table.insert(possible_inputs_a, s)
+	    end
+
+	    local possible_inputs_b = {}
+
+	    -- add whole number places
+	    for _, j in ipairs(possible_inputs_a) do
+		    s = ""
+		    for i = 1, expected_format.length, 1 do
+			    table.insert(possible_inputs_b, s .. j)
+
+			    s = code .. s
+		    end
+	    end
+
+	    for _, i in ipairs(possible_inputs_b) do
+		    table.insert(possible_inputs_c, i)
+		    table.insert(possible_inputs_c, "+" .. i)
+		    table.insert(possible_inputs_c, "-" .. i)
+	    end
+    else
+        possible_inputs_c = expected_format
     end
-
-	-- add decimal places
-	local s = code .. "."
-	for i = 1, expected_format.dp, 1 do
-		s = s .. code
-		table.insert(possible_inputs_a, s)
-	end
-
-	local possible_inputs_b = {}
-
-	-- add whole number places
-	for _, j in ipairs(possible_inputs_a) do
-		s = ""
-		for i = 1, expected_format.length, 1 do
-			table.insert(possible_inputs_b, s .. j)
-
-			s = code .. s
-		end
-	end
-
-	local possible_inputs_c = {}
-	for _, i in ipairs(possible_inputs_b) do
-		table.insert(possible_inputs_c, i)
-		table.insert(possible_inputs_c, "+" .. i)
-		table.insert(possible_inputs_c, "-" .. i)
-	end
-
 	local output = mcdu_eval_entries(entry, possible_inputs_c)
 	if output == nil then
 		return "$invalid"
