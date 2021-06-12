@@ -88,6 +88,25 @@ FMGS_sys.fpln = {
     sec = nil
 }
 
+FMGS_sys.perf = {
+    takeoff = {
+        v1 = nil,
+        vr = nil,
+        v2 = nil,
+        v1_popped = nil,
+        vr_popped = nil,
+        v2_popped = nil,
+        trans_alt = 10000,
+        thr_red = nil,
+        acc = nil,
+        eng_out = nil,
+        toshift = nil,
+        flaps = nil,
+        ths = nil, --This is a number not a string (not DNXXX or UPXXX), safe to compare
+        flex_temp = nil,
+    }
+}
+
 -------------------------------------------
 -- TODO Tips Current segment computation:
 -- EN ROUTE defined as: > 15.500 ft or > 50.8 nm from departure or dest airport (and not off route)

@@ -97,5 +97,8 @@ function THIS_PAGE:render(mcdu_data)
     self:set_line(mcdu_data, MCDU_LEFT,  6, "<RETURN", MCDU_LARGE)
 end
 
+function THIS_PAGE:L6(mcdu_data)
+    mcdu_open_page(mcdu_data, 400)
+end
 
 mcdu_pages[THIS_PAGE.id] = THIS_PAGE
