@@ -470,7 +470,6 @@ local function draw_active_fpln(data)   -- This is just a test
     local last_x, last_y = nil, nil
 
     if FMGS_sys.fpln.active.apts.dep_sid and FMGS_sys.fpln.active.apts.dep_sid.computed_legs then
-        local last_x, last_y
         for i, point in ipairs(FMGS_sys.fpln.active.apts.dep_sid.computed_legs) do
             local x, y = rose_get_x_y_heading(data, point.lat, point.lon, data.inputs.heading)
             if i > 1 then

@@ -113,7 +113,7 @@ function FMGS_reset_dep_trans()
 end
 
 
-function FMGS_reset_alt_airport()
+function FMGS_reset_alt_airports()
     FMGS_sys.fpln.temp.apts.alt = nil
     FMGS_sys.fpln.temp.apts.alt_cifp = nil
 end
