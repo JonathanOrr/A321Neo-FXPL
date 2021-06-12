@@ -122,5 +122,54 @@ function THIS_PAGE:Slew_Right(mcdu_data)
     mcdu_open_page(mcdu_data, 400)
 end
 
+function THIS_PAGE:R1(mcdu_data)
+    local entru_out_of_range_msg = false
+    local a, b = mcdu_get_entry(mcdu_data, {"number", length = 2, dp = 1}, {"number", length = 2, dp = 1}, false)
+
+    if FMGS_sys.data.init.weights.zfw == nil and FMGS_sys.data.init.weights.zfwcg == nil and (a == nil or b == nil) then
+        mcdu_send_message(mcdu_data, "FORMAT ERROR")
+    return
+    end
+
+    if a ~= nil then
+        a = tonumber(a)
+        local a_is_in_range = a > 47.7 and a < 99
+        if a_is_in_range then
+            FMGS_sys.data.init.weights.zfw = a
+        else
+            entru_out_of_range_msg = true
+        end
+    end
+
+    if b ~= nil then
+        b = tonumber(b)
+        local b_is_in_range = b > 12 and b < 40
+        if b_is_in_range then
+            FMGS_sys.data.init.weights.zfwcg = b
+        else
+            entru_out_of_range_msg = true
+        end
+    end
+
+    if entru_out_of_range_msg then
+        mcdu_send_message(mcdu_data, "ENTRY OUT OF RANGE")
+    end
+end
+
+function THIS_PAGE:R2(mcdu_data)
+    local input = mcdu_get_entry(mcdu_data, {"number", length = 2, dp = 1}, false)
+    input = tonumber(input)
+    local input_out_of_range = input <= 0 or input > 40.0
+
+    if input_out_of_range then
+        mcdu_send_message(mcdu_data, "ENTRY OUT OF RANGE")
+    return end
+
+    if input ~= nil then
+        FMGS_sys.data.init.weights.block_fuel = Round_fill(tonumber(input), 1)
+    else
+        mcdu_send_message(mcdu_data, "FORMAT ERROR")
+    end
+end
 
 mcdu_pages[THIS_PAGE.id] = THIS_PAGE

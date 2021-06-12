@@ -20,7 +20,7 @@ local displayed_info = {
     ["deprwy_length"] = "",
     ["arrival"] = "",
     ["flightno"] = "",
-    ["acf"] = "",
+    ["crz_alt"] = "",
     ["pax"] = "",
     ["cargo"] = "",
     ["fuel"] = "",
@@ -59,7 +59,7 @@ local function simbrief_to_local()
     else
         displayed_info["flightno"] = x["general"]["icao_airline"]..x["general"]["flight_number"]
     end
-    displayed_info["acf"] = x["aircraft"]["icaocode"]
+    displayed_info["crz_alt"] = x["general"]["initial_altitude"]
     displayed_info["pax"] = x["weights"]["pax_count"]
     displayed_info["cargo"] = x["weights"]["cargo"]
     displayed_info["fuel"] = x["fuel"]["plan_takeoff"]
@@ -210,7 +210,7 @@ function p5s2_draw()
     drawTextCentered( Font_ECAMfont ,  446, 527 ,displayed_info["departure"] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN  )
     drawTextCentered( Font_ECAMfont ,  446, 462 ,displayed_info["arrival"] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN  )
     drawTextCentered( Font_ECAMfont ,  446, 397 ,displayed_info["flightno"] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN  )
-    drawTextCentered( Font_ECAMfont ,  446, 332 ,displayed_info["acf"] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN  )
+    drawTextCentered( Font_ECAMfont ,  446, 332 ,displayed_info["crz_alt"] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN  )
     drawTextCentered( Font_ECAMfont ,  446, 267 ,displayed_info["pax"] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN  )
     drawTextCentered( Font_ECAMfont ,  446, 202 ,displayed_info["cargo"] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN  )
     drawTextCentered( Font_ECAMfont ,  446, 137 ,displayed_info["fuel"] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN  )
