@@ -138,24 +138,7 @@ function THIS_PAGE:L3(mcdu_data)
 end
 
 function THIS_PAGE:L6(mcdu_data)
-    local uplinked_data = {get(TOPCAT_v1), get(TOPCAT_vr), get(TOPCAT_v2), get(TOPCAT_flex), get(TOPCAT_trim), get(LOAD_flapssetting)}
-    local efb_insufficient_data = false
 
-    if get(TOPCAT_v1) == 0 then -- the user probably haven't generated any data from the efb
-        efb_insufficient_data = true
-    end
-
-    if not efb_insufficient_data then
-        FMGS_sys.perf.takeoff.v1 = uplinked_data[1]
-        FMGS_sys.perf.takeoff.vr = uplinked_data[2]
-        FMGS_sys.perf.takeoff.v2 = uplinked_data[3]
-        FMGS_sys.perf.takeoff.flex_temp = uplinked_data[4]
-        FMGS_sys.perf.takeoff.ths = uplinked_data[5]
-        FMGS_sys.perf.takeoff.flaps = uplinked_data[6]
-        mcdu_send_message(mcdu_data, "EFB DATA INSERTED")
-    else
-        mcdu_send_message(mcdu_data, "EFB UPLINK NOT AVAIL")
-    end
 end
 
 function THIS_PAGE:R3(mcdu_data)

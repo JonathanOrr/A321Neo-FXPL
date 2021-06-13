@@ -107,8 +107,10 @@ function THIS_PAGE:render(mcdu_data)
         self:set_line(mcdu_data, MCDU_LEFT, 6, "-----/---", MCDU_LARGE)
     elseif FMGS_sys.data.init.crz_fl == nil then
         self:set_line(mcdu_data, MCDU_LEFT, 6, "_____/___", MCDU_LARGE, ECAM_ORANGE)
-    else
+    elseif FMGS_sys.data.init.crz_fl >= FMGS_sys.perf.takeoff.trans_alt then
         self:set_line(mcdu_data, MCDU_LEFT, 6, "FL"..Fwd_string_fill(tostring(FMGS_sys.data.init.crz_fl/100), "0", 3) .. "/" .. FMGS_sys.data.init.crz_temp, MCDU_LARGE, ECAM_BLUE)
+    else
+        self:set_line(mcdu_data, MCDU_LEFT, 6, tostring(FMGS_sys.data.init.crz_fl) .. "/" .. FMGS_sys.data.init.crz_temp, MCDU_LARGE, ECAM_BLUE)
     end
 
     -------------------------------------
@@ -225,8 +227,13 @@ end
 
 
 function THIS_PAGE:L6(mcdu_data)
-    local input_a, input_b = mcdu_get_entry(mcdu_data, {"FL!!!","!!!!!", "!!!"}, {"number", length = 2, dp = 0})
+    if FMGS_sys.fpln.active.apts.dep == nil or FMGS_sys.fpln.active.apts.arr == nil then --GUARD IT!!! No one can enter anythign when it shows ---/-- !!! You can only enter when it is ___/__ !!!
+        mcdu_send_message(mcdu_data, "NOT ALLOWED")
+    return end
+
+    local input_a, input_b = mcdu_get_entry(mcdu_data, {"FL!!!","!!!!!","!!!!", "!!!"}, {"number", length = 2, dp = 0})
     local entry_out_of_range = false
+
     if input_a ~= nil or input_b ~= nil then
         if input_a ~= nil then
 
@@ -234,14 +241,17 @@ function THIS_PAGE:L6(mcdu_data)
             if #input_a == 5 then
                 if string.sub(input_a,1,2) == "FL" then --if it begins with FL
                     alt = tonumber(string.sub(input_a,3,5)) * 100
-                else -- it is probably 5 number characters
+                else -- it is probably 5 number characters in feet
                     alt = tonumber(input_a)
                 end
-            elseif #input_a == 3 then
+            elseif #input_a == 3 then --it is probably also a flight level, just without FL
                 alt = tonumber(input_a) * 100
+            elseif #input_a == 4 then --it is in feet
+                alt = tonumber(input_a)
             end
 
-            if alt >= 1000 and alt <= 41000 then
+
+            if alt >= 0 and alt <= 41000 then
                 FMGS_sys.data.init.crz_fl = alt
                 FMGS_sys.data.init.crz_temp = math.floor(alt / 100 * -0.2 + 16)
             else
