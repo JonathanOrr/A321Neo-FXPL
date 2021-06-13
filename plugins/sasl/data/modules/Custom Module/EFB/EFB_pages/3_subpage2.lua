@@ -121,6 +121,7 @@ local function refresh_data()
     end
 
     trim_raw = Round(Table_extrapolate(pitch_trim_table, final_cg),1)
+    set(TOPCAT_trim, Round(trim_raw,1))
     if trim_raw > 0 then
         displayed_trim = "UP"..math.abs(trim_raw)
     else
