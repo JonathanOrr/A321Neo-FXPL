@@ -28,7 +28,7 @@ MCDU_window = contextWindow {
   minimumSize = { 463 , 683 };
   maximumSize = { 877 , 1365 };
   gravity = { 0 , 1 , 0 , 1 };
-  visible = false ;
+  visible = true ;
   noDecore = true ;
   components = {
     MCDU_popup {position = { 0 , 0 , 463 , 683 }, focused = true}
