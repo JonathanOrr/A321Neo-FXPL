@@ -14,31 +14,28 @@
 -------------------------------------------------------------------------------
 
 
-local THIS_PAGE = MCDU_Page:new({id=1100})
+local THIS_PAGE = MCDU_Page:new({id=1111})
 
 function THIS_PAGE:render(mcdu_data)
-    self:set_title(mcdu_data, "MCDU MENU")
+    self:set_title(mcdu_data, "NAV")
 
-    
-    self:set_line(mcdu_data, MCDU_LEFT, 1, "<FMGC", MCDU_LARGE, ECAM_GREEN)
+    self:set_line(mcdu_data, MCDU_LEFT, 1, "<ADIRS1", MCDU_LARGE, ECAM_WHITE)
+    self:set_line(mcdu_data, MCDU_LEFT, 2, "<ADIRS2", MCDU_LARGE, ECAM_WHITE)
+    self:set_line(mcdu_data, MCDU_LEFT, 3, "<ADIRS3", MCDU_LARGE, ECAM_WHITE)
+    self:set_line(mcdu_data, MCDU_LEFT, 6, "<RETURN", MCDU_LARGE, ECAM_WHITE)
 
-    self:set_line(mcdu_data, MCDU_LEFT, 3, "<AIDS", MCDU_LARGE)
-    self:set_line(mcdu_data, MCDU_LEFT, 4, "<CFDS", MCDU_LARGE)
-
-    self:set_line(mcdu_data, MCDU_LEFT, 6, "<ATSU", MCDU_LARGE)
-
-    self:set_line(mcdu_data, MCDU_RIGHT, 4, "MCDU MAINT>", MCDU_LARGE)
+    self:set_line(mcdu_data, MCDU_RIGHT, 1, "MIX>", MCDU_LARGE, ECAM_WHITE)
+    self:set_line(mcdu_data, MCDU_RIGHT, 2, "GPIRS>", MCDU_LARGE, ECAM_WHITE)
 
 end
 
 
 function THIS_PAGE:L6(mcdu_data)
-    mcdu_open_page(mcdu_data, 1000)
+    mcdu_open_page(mcdu_data, 1110)
 end
 
-function THIS_PAGE:L4(mcdu_data)
-    mcdu_open_page(mcdu_data, 1101)
+function THIS_PAGE:R1(mcdu_data)
+    mcdu_open_page(mcdu_data, 1112)
 end
-
 
 mcdu_pages[THIS_PAGE.id] = THIS_PAGE
