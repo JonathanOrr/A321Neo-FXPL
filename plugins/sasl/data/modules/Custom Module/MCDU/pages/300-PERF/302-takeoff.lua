@@ -51,10 +51,10 @@ function THIS_PAGE:render(mcdu_data)
     ----------
     --C1C2C3--
     ----------
-    local fso_spd = {0,0,0}
-    self:set_line(mcdu_data, MCDU_CENTER, 1, "F="..Fwd_string_fill(tostring(fso_spd[1]), "0", 3).."     ", MCDU_LARGE, ECAM_GREEN)
-    self:set_line(mcdu_data, MCDU_CENTER, 2, "S="..Fwd_string_fill(tostring(fso_spd[2]), "0", 3).."     ", MCDU_LARGE, ECAM_GREEN)
-    self:set_line(mcdu_data, MCDU_CENTER, 3, "O="..Fwd_string_fill(tostring(fso_spd[3]), "0", 3).."     ", MCDU_LARGE, ECAM_GREEN)
+    local fso_spd = {F_speed,S_speed,GD}
+    self:set_line(mcdu_data, MCDU_CENTER, 1, "F="..string.format("%03.f", tostring(get(fso_spd[1]))).."     ", MCDU_LARGE, ECAM_GREEN)
+    self:set_line(mcdu_data, MCDU_CENTER, 2, "S="..string.format("%03.f", tostring(get(fso_spd[2]))).."     ", MCDU_LARGE, ECAM_GREEN)
+    self:set_line(mcdu_data, MCDU_CENTER, 3, "O="..string.format("%03.f", tostring(get(fso_spd[3]))).."     ", MCDU_LARGE, ECAM_GREEN)
 
     ----------
     --  R1  --
