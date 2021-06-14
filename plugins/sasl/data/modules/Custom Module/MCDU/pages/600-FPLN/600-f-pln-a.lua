@@ -57,7 +57,7 @@ end
 -- COMMON
 -------------------------------------------------------------------------------
 function THIS_PAGE:render_single(mcdu_data, i, id, time, spd, alt, alt_col, proc_name, bearing, is_trk, distance, is_arpt, is_the_first)
-    local main_col = is_the_first and ECAM_WHITE or (FMGS_sys.fpln.temp and ECAM_YELLOW or ECAM_GREEN)
+    local main_col = is_the_first and ECAM_WHITE or (FMGS_does_temp_fpln_exist() and ECAM_YELLOW or ECAM_GREEN)
 
     time = is_arpt and time or mcdu_format_force_to_small(time) -- TIME is small only for airports
 
@@ -190,13 +190,13 @@ end
 
 function THIS_PAGE:render(mcdu_data)
 
-    THIS_PAGE.curr_fpln = FMGS_sys.fpln.temp and FMGS_sys.fpln.temp or FMGS_sys.fpln.active
+    THIS_PAGE.curr_fpln = FMGS_does_temp_fpln_exist() and FMGS_sys.fpln.temp or FMGS_sys.fpln.active
 
     local from_ppos = THIS_PAGE.curr_idx == 1 and (THIS_PAGE.curr_fpln.apts.dep and "FROM" or "PPOS") or ""
     
     self:set_multi_title(mcdu_data, {
         {txt=Aft_string_fill(from_ppos, " ", 22), col=ECAM_WHITE, size=MCDU_SMALL},
-        {txt=Aft_string_fill(THIS_PAGE.curr_fpln == FMGS_sys.fpln.temp and "TMPY" or "", " ", 12), col=ECAM_YELLOW, size=MCDU_LARGE},
+        {txt=Aft_string_fill(THIS_PAGE.curr_fpln == FMGS_does_temp_fpln_exist() and "TMPY" or "", " ", 12), col=ECAM_YELLOW, size=MCDU_LARGE},
         {txt=Fwd_string_fill(FMGS_sys.data.init.flt_nbr and FMGS_sys.data.init.flt_nbr or "", " ", 20) .. "  ", col=ECAM_WHITE, size=MCDU_SMALL}
     })
 
@@ -215,7 +215,7 @@ function THIS_PAGE:render(mcdu_data)
         THIS_PAGE:render_dep(mcdu_data)
     end
 
-    if not FMGS_sys.fpln.temp then
+    if not FMGS_does_temp_fpln_exist() then
         THIS_PAGE:render_dest(mcdu_data)
     else
         self:set_line(mcdu_data, MCDU_LEFT, 6, "←ERASE", MCDU_LARGE, ECAM_ORANGE)
@@ -245,7 +245,7 @@ end
 
 function THIS_PAGE:L6(mcdu_data)
 
-    if FMGS_sys.fpln.temp then
+    if FMGS_does_temp_fpln_exist() then
         FMGS_erase_temp_fpln()
     elseif THIS_PAGE.curr_fpln.apts.arr then
         mcdu_data.lat_rev_subject = {}
@@ -259,7 +259,7 @@ end
 
 
 function THIS_PAGE:R6(mcdu_data)
-    if FMGS_sys.fpln.temp then
+    if FMGS_does_temp_fpln_exist() then
         FMGS_insert_temp_fpln()
     else
         MCDU_Page:R6(mcdu_data) -- ERROR

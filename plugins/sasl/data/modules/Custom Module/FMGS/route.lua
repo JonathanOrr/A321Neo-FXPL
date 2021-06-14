@@ -93,12 +93,17 @@ end
 
 function update_route()
 
+    if true then
+        return -- Disabled in the master branch for now
+    end
+
     -- Disable for testing
     if get(TIME) - route_last_update < ROUTE_FREQ_UPDATE_SEC then
         return
     end
     
     route_last_update = get(TIME)
+
 
     if AvionicsBay.is_initialized() and AvionicsBay.is_ready() then
         if not FMGS_sys.fpln.active.apts.dep_sid then
