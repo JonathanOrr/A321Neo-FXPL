@@ -78,11 +78,12 @@ local ADIRS = {
     ir_is_waiting_hdg = true,
     ir_is_aligning_gps = true,
     manual_hdg_offset = 0,
+    manual_hdg = 0,
     ir_drift = 0.0,
     
     -- ADR
     adr_status = ADR_STATUS_OFF,
-    adr_switch_status = true,
+    adr_switch_status = ADIRS_CONFIG_OFF,
     adr_light_dataref = nil,
     adr_align_start_time = 0,
     
@@ -355,11 +356,18 @@ end
 function ADIRS:get_align_ttn()
     local time_to_align = math.max(0, get(Adirs_total_time_to_align) - (get(TIME) - self.ir_align_start_time))
     if self.adirs_switch_status == ADIRS_CONFIG_ATT then
-        time_to_align = math.max(0, 20 - (get(TIME) - self.ir_align_start_time))
+        time_to_align = math.max(0, IR_TIME_TO_GET_ATTITUDE - (get(TIME) - self.ir_align_start_time))
     end
     return Round(time_to_align/60, 0)
 end
 
+function ADIRS:set_hdg(hdg_inserted_by_the_pilot)
+    if self.adirs_switch_status == ADIRS_CONFIG_ATT then
+        self.manual_hdg = hdg_inserted_by_the_pilot
+        self.manual_hdg_offset = hdg_inserted_by_the_pilot - get(Flightmodel_mag_heading)
+        self.ir_is_waiting_hdg = false
+    end
+end
 ----------------------------------------------------------------------------------------------------
 -- Global/Local variables
 ----------------------------------------------------------------------------------------------------
@@ -379,9 +387,9 @@ sasl.registerCommandHandler (ADIRS_cmd_IR1, 0,  function(phase) ADIRS_handler_to
 sasl.registerCommandHandler (ADIRS_cmd_IR2, 0,  function(phase) ADIRS_handler_toggle_IR(phase, ADIRS_2); return 1 end )
 sasl.registerCommandHandler (ADIRS_cmd_IR3, 0,  function(phase) ADIRS_handler_toggle_IR(phase, ADIRS_3); return 1 end )
 
-sasl.registerCommandHandler (ADIRS_cmd_knob_1_up, 0,   function(phase) ADIRS_sys[ADIRS_1]:reset();  Knob_handler_up_int(phase, ADIRS_rotary_btn[1], 0, 2); return 1 end )
-sasl.registerCommandHandler (ADIRS_cmd_knob_2_up, 0,   function(phase) ADIRS_sys[ADIRS_2]:reset(); Knob_handler_up_int(phase, ADIRS_rotary_btn[2], 0, 2); return 1 end )
-sasl.registerCommandHandler (ADIRS_cmd_knob_3_up, 0,   function(phase) ADIRS_sys[ADIRS_3]:reset(); Knob_handler_up_int(phase, ADIRS_rotary_btn[3], 0, 2); return 1 end )
+sasl.registerCommandHandler (ADIRS_cmd_knob_1_up, 0,   function(phase) ADIRS_sys[ADIRS_1]:reset();   Knob_handler_up_int(phase, ADIRS_rotary_btn[1], 0, 2); return 1 end )
+sasl.registerCommandHandler (ADIRS_cmd_knob_2_up, 0,   function(phase) ADIRS_sys[ADIRS_2]:reset();   Knob_handler_up_int(phase, ADIRS_rotary_btn[2], 0, 2); return 1 end )
+sasl.registerCommandHandler (ADIRS_cmd_knob_3_up, 0,   function(phase) ADIRS_sys[ADIRS_3]:reset();   Knob_handler_up_int(phase, ADIRS_rotary_btn[3], 0, 2); return 1 end )
 sasl.registerCommandHandler (ADIRS_cmd_knob_1_down, 0, function(phase) ADIRS_sys[ADIRS_1]:reset(); Knob_handler_down_int(phase, ADIRS_rotary_btn[1], 0, 2); return 1 end )
 sasl.registerCommandHandler (ADIRS_cmd_knob_2_down, 0, function(phase) ADIRS_sys[ADIRS_2]:reset(); Knob_handler_down_int(phase, ADIRS_rotary_btn[2], 0, 2); return 1 end )
 sasl.registerCommandHandler (ADIRS_cmd_knob_3_down, 0, function(phase) ADIRS_sys[ADIRS_3]:reset(); Knob_handler_down_int(phase, ADIRS_rotary_btn[3], 0, 2); return 1 end )
@@ -598,11 +606,11 @@ local function update_anim_knobs()
 
     Set_dataref_linear_anim_nostop(ADIRS_source_rotary_ATHDG_anim, get(ADIRS_source_rotary_ATHDG), -1, 1, 10)
     Set_dataref_linear_anim_nostop(ADIRS_source_rotary_AIRDATA_anim, get(ADIRS_source_rotary_AIRDATA), -1, 1, 10)
-    
+
     Set_dataref_linear_anim_nostop(ADIRS_rotary_btn_anim[1], get(ADIRS_rotary_btn[1]), 0, 2, 10)
     Set_dataref_linear_anim_nostop(ADIRS_rotary_btn_anim[2], get(ADIRS_rotary_btn[2]), 0, 2, 10)
     Set_dataref_linear_anim_nostop(ADIRS_rotary_btn_anim[3], get(ADIRS_rotary_btn[3]), 0, 2, 10)
-    
+
 end
 
 ----------------------------------------------------------------------------------------------------
