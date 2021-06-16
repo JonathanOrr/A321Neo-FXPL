@@ -574,6 +574,9 @@ end
 
 -- It returns the time required to align the IRs
 function get_time_to_align()
+    if quick_align_ADIRS then
+        return 30
+    end
     --add function for linear interpolation (source: https://codea.io/talk/discussion/7448/linear-interpolation)
     function lerp(pos1, pos2, perc)
         return (1-perc)*pos1 + perc*pos2 -- Linear Interpolation
