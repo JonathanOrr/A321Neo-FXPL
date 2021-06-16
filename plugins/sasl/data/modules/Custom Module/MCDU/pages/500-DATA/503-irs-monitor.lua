@@ -15,7 +15,6 @@
 local THIS_PAGE = MCDU_Page:new({id = 503})
 
 function THIS_PAGE:calc(mcdu_data, i)
-    print(i .. " ir_status: " .. ADIRS_sys[i].ir_status)
     self:set_line(mcdu_data, MCDU_LEFT, i, "<IRS" .. i, MCDU_LARGE, ECAM_WHITE)
     if ADIRS_sys[i].ir_status == IR_STATUS_ATT_ALIGNED then
         self:set_line(mcdu_data, MCDU_RIGHT, 5, "SET HDG", MCDU_SMALL, ECAM_WHITE)
@@ -30,8 +29,7 @@ function THIS_PAGE:calc(mcdu_data, i)
         self:set_line(mcdu_data, MCDU_LEFT, i + 1, string.format(" NAV   DRIFT  %.2fNM/H", ADIRS_sys[i].ir_drift), MCDU_SMALL, ECAM_GREEN)
     elseif ADIRS_sys[i].ir_status == IR_STATUS_OFF or ADIRS_sys[i].ir_status == IR_STATUS_FAULT then
         self:set_line(mcdu_data, MCDU_LEFT, i + 1, " INVAL", MCDU_SMALL, ECAM_GREEN)
-    -- this could just be an else ?
-    else --if ADIRS_sys[i].ir_status == IR_STATUS_IN_ALIGN then
+    else
         self:set_line(mcdu_data, MCDU_LEFT, i + 1, " ALIGN TTN " .. ADIRS_sys[i]:get_align_ttn(), MCDU_SMALL, ECAM_GREEN)
     end
 end
