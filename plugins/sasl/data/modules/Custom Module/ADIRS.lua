@@ -83,7 +83,7 @@ local ADIRS = {
     
     -- ADR
     adr_status = ADR_STATUS_OFF,
-    adr_switch_status = ADIRS_CONFIG_OFF,
+    adr_switch_status = true, -- should this be ADIRS_CONFIG_OFF?
     adr_light_dataref = nil,
     adr_align_start_time = 0,
     
