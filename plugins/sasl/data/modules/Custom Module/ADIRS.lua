@@ -83,7 +83,7 @@ local ADIRS = {
     
     -- ADR
     adr_status = ADR_STATUS_OFF,
-    adr_switch_status = true, -- should this be ADIRS_CONFIG_OFF?
+    adr_switch_status = true,
     adr_light_dataref = nil,
     adr_align_start_time = 0,
     
@@ -161,7 +161,7 @@ end
 
 function ADIRS:update_adr()
 
-    if override_ADIRS_ok then
+    if debug_override_ADIRS_ok then
         -- DEBUG Override case
         self.adr_status = ADR_STATUS_ON
         return
@@ -276,7 +276,7 @@ function ADIRS:update_ir_att()
 end
 
 function ADIRS:update_ir()
-    if override_ADIRS_ok then
+    if debug_override_ADIRS_ok then
         -- DEBUG Override case
         self.ir_status = IR_STATUS_ALIGNED
         return
@@ -574,7 +574,7 @@ end
 
 -- It returns the time required to align the IRs
 function get_time_to_align()
-    if quick_align_ADIRS then
+    if debug_quick_align_ADIRS then
         return 30
     end
     --add function for linear interpolation (source: https://codea.io/talk/discussion/7448/linear-interpolation)
@@ -654,7 +654,7 @@ local function update_gps()
 
     local roll_is_ok = math.abs(get(Flightmodel_roll)) <= 90
 
-    if override_ADIRS_ok then
+    if debug_override_ADIRS_ok then
         set(GPS_1_is_available, 1)
         set(GPS_2_is_available, 1)
     else

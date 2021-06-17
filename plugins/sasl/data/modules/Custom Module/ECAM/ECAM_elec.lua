@@ -536,7 +536,7 @@ function draw_elec_page()
 
     draw_elec_boxes()
 
-    if override_ELEC_always_on then
+    if debug_override_ELEC_always_on then
         sasl.gl.drawText(Font_AirbusDUL, size[2]/2, size[2]/2+50, "OVERRIDE MODE", 80, false, false, TEXT_ALIGN_CENTER, ECAM_MAGENTA )
         sasl.gl.drawText(Font_AirbusDUL, size[2]/2, size[2]/2-100, "INCORRECT INFO", 80, false, false, TEXT_ALIGN_CENTER, ECAM_MAGENTA )
     end
