@@ -312,6 +312,12 @@ function adirs_how_many_adrs_work()
     return adr1+adr2+adr3
 end
 
+function adirs_set_hdg(hdg_inserted_by_the_pilot)
+    ADIRS_sys[1]:set_hdg(hdg_inserted_by_the_pilot)
+    ADIRS_sys[2]:set_hdg(hdg_inserted_by_the_pilot)
+    ADIRS_sys[3]:set_hdg(hdg_inserted_by_the_pilot)
+end
+
 function adirs_how_many_irs_fully_work()
     local ir1 = ADIRS_sys[1].ir_status == IR_STATUS_ALIGNED and 1 or 0
     local ir2 = ADIRS_sys[2].ir_status == IR_STATUS_ALIGNED and 1 or 0

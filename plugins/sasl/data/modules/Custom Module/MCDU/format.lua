@@ -82,6 +82,11 @@ function mcdu_lat_lon_to_str(lat, lon)
     return math.floor(aa).."°"..math.floor(ab).."."..math.floor(ac)..ad.."/"..math.floor(oa).."°"..math.floor(ob).."."..math.floor(oc)..od
 end
 
+-- converts wind speed and direction to DDD°/SSS format
+function mcdu_wind_to_str(dir, speed)
+    return mcdu_pad_num(math.floor(dir), 3).."°/"..mcdu_pad_num(math.floor(speed), 3)
+end
+
 function mcdu_format_force_to_small(text)
 
     if type(text) ~= "string" then

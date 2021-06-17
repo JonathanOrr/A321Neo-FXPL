@@ -21,6 +21,11 @@ override_MCDU_dontcreateairportlut = true
 -- no effects on adirs alignment
 override_ADIRS_ok = false
 
+
+-- If you set this variable to true, the ADIRS IRS align time is set to 30 secs
+quick_align_ADIRS = true
+
+
 -- The following variable allows you to disable avionicsbay. WARNING: many features of ND/OANS/MCDU
 -- will now be available.
 disable_avionicsbay = false
