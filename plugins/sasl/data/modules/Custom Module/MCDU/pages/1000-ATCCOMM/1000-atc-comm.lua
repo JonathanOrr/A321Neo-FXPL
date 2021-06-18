@@ -21,6 +21,13 @@ function THIS_PAGE:render(mcdu_data)
 
     
     self:set_line(mcdu_data, MCDU_LEFT, 4, "PAGE NOT YET IMPLEMENTED", MCDU_LARGE, ECAM_MAGENTA)
+
+    self:new_multi_line(mcdu_data, MCDU_LEFT, 2, MCDU_LARGE)
+    self:add_multi_line(mcdu_data, MCDU_LEFT, 2, "GREEN", MCDU_LARGE, ECAM_GREEN)
+    self:add_multi_line(mcdu_data, MCDU_LEFT, 2, "      RED", MCDU_LARGE, ECAM_RED)
+    self:add_multi_line(mcdu_data, MCDU_LEFT, 2, "          BLUE", MCDU_LARGE, ECAM_BLUE)
+    self:add_multi_line(mcdu_data, MCDU_LEFT, 2, "               MAGENTA", MCDU_LARGE, ECAM_MAGENTA)
+
 end
 
 
