@@ -30,6 +30,7 @@ local HOT_START_GPS  = 1    -- nr. of seconds required to get GPS fix if last ti
 local WARM_START_GPS = 20   -- nr. of seconds required to get GPS fix if last time active > 1 hour (we don't simulate cold start)
 
 local MAX_GPS_ERROR = 4 * 1e-5
+local MAX_DRIFT_NM_H = 1.0
 
 ----------------------------------------------------------------------------------------------------
 -- Global variables
@@ -80,7 +81,12 @@ local ADIRS = {
     manual_hdg_offset = 0,
     manual_hdg = 0,
     ir_drift = 0.0,
-    
+    ir_lat_drift_offset = 0,
+    ir_lon_drift_offset = 0,
+    ir_lat_align_offset = 0,    -- This is a fixed offset that depends on how the pilot aligned the IRS
+    ir_lon_align_offset = 0,    -- This is a fixed offset that depends on how the pilot aligned the IRS
+    ir_drift_start_time = 0,
+
     -- ADR
     adr_status = ADR_STATUS_OFF,
     adr_switch_status = true,
@@ -321,25 +327,41 @@ end
 
 function ADIRS:update_ir_data()
 
+    local failure_component =  get(self.err_hdg_dataref) * (random_err[self.id] > 0.5 and -1 or 1) * (random_err[self.id]+0.5) * 180
+
     if self.ir_status == IR_STATUS_ALIGNED then
-        self.track = get(self.track_dataref)
-        self.lat   = get(Aircraft_lat)
-        self.lon   = get(Aircraft_long)
+        self.track = get(self.track_dataref) + random_err[self.id]/2 + failure_component
+        self.lat   = get(Aircraft_lat)  + self.ir_lat_align_offset + self.ir_lat_drift_offset
+        self.lon   = get(Aircraft_long) + self.ir_lon_align_offset + self.ir_lon_drift_offset
         self.gs    = get(Ground_speed_kts)
-        self.hdg   = (get(Flightmodel_mag_heading) + get(self.err_hdg_dataref) * (random_err[self.id] > 0.5 and -1 or 1) * (random_err[self.id]+0.5) * 180) % 360
-        self.true_hdg = get(Flightmodel_true_heading)
         self.g_load_vert = get(Total_vertical_g_load)
         self.g_load_lat  = get(Total_lateral_g_load)
         self.g_load_long = get(Total_long_g_load)
+
+        -- Update drift
+        if self.ir_drift_start_time == 0 then
+            self.ir_drift_start_time = get(TIME)
+        end
+        self.ir_lat_drift_offset = self.ir_lat_drift_offset + math.random() * random_err[self.id] * MAX_DRIFT_NM_H / 3600 * get(DELTA_TIME) / 69 -- 1 deg is approx 69 nm
+        self.ir_lon_drift_offset = self.ir_lon_drift_offset + math.random() * random_err[self.id] * MAX_DRIFT_NM_H / 3600 * get(DELTA_TIME) / 69 -- 1 deg is approx 69 nm
+        self.ir_drift = math.sqrt(self.ir_lat_drift_offset*self.ir_lat_drift_offset + self.ir_lon_drift_offset*self.ir_lon_drift_offset) * 69 * 3600 / (get(TIME) - self.ir_drift_start_time)
+    else
+        self.ir_drift_start_time = 0
     end
 
     if self.ir_status == IR_STATUS_ALIGNED or self.ir_status == IR_STATUS_ATT_ALIGNED then
         self.pitch = get(self.pitch_dataref) + get(self.err_pitch_dataref) * (random_err[self.id] > 0.5 and -1 or 1) * (random_err[self.id]+0.5) * 50
         self.roll = get(self.roll_dataref) + get(self.err_roll_dataref) * (random_err[self.id] > 0.5 and -1 or 1) * (random_err[self.id]+0.5) * 50
         self.aoa = (get(Alpha) + get(self.err_aoa_dataref)*(random_err[self.id]+0.5)*10) * (1-get(self.fail_aoa_dataref))
+
+        self.hdg = (get(Flightmodel_mag_heading) + random_err[self.id]/2 + failure_component) % 360
+        self.true_hdg = (get(Flightmodel_true_heading) + random_err[self.id]/2 + failure_component) % 360
+
         if self.ir_status == IR_STATUS_ATT_ALIGNED and not self.ir_is_waiting_hdg then
-            self.hdg = (get(Flightmodel_mag_heading) + self.manual_hdg_offset + get(self.err_hdg_dataref) * (random_err[self.id] > 0.5 and -1 or 1) * (random_err[self.id]+0.5) * 180) % 360
+            self.hdg = (self.hdg + self.manual_hdg_offset) % 360
+            self.true_hdg = (self.true_hdg + self.manual_hdg_offset) % 360
         end
+
     end
     
 end
