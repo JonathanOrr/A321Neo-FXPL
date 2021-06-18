@@ -25,6 +25,18 @@ local function get_airport_or_nil(name)
     end
 end
 
+function FMGS_get_phase()
+    return FMGS_sys.config.phase
+end
+
+function FMGS_get_status()
+    return FMGS_sys.config.status
+end
+
+function FMGS_get_master()
+    return FMGS_sys.config.master
+end
+
 function FMGS_set_apt_dep(name)
     if not AvionicsBay.is_initialized() or not AvionicsBay.is_ready() then
         return
@@ -68,6 +80,17 @@ function FMGS_dep_set_rwy(rwy, sibling)
     FMGS_sys.fpln.temp.apts.dep_rwy = {rwy, sibling}
 end
 
+function FMGS_reset_dep_trans()
+    FMGS_sys.fpln.temp.apts.dep_trans = nil
+end
+
+
+function FMGS_reset_alt_airports()
+    FMGS_sys.fpln.temp.apts.alt = nil
+    FMGS_sys.fpln.temp.apts.alt_cifp = nil
+end
+
+
 function FMGS_reset_dep_arr_airports()
     FMGS_sys.fpln.active.apts.dep       = nil
     FMGS_sys.fpln.active.apts.dep_cifp  = nil
@@ -107,15 +130,8 @@ function FMGS_insert_temp_fpln()
     FMGS_erase_temp_fpln()
 end
 
-
-function FMGS_reset_dep_trans()
-    FMGS_sys.fpln.temp.apts.dep_trans = nil
-end
-
-
-function FMGS_reset_alt_airport()
-    FMGS_sys.fpln.temp.apts.alt = nil
-    FMGS_sys.fpln.temp.apts.alt_cifp = nil
+function FMGS_does_temp_fpln_exist()
+    return FMGS_sys.fpln.temp ~= nil
 end
 
 function FMGS_dep_get_sid(ret_temp_if_avail)

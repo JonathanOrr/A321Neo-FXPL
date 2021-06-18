@@ -16,9 +16,9 @@
 
 local THIS_PAGE = MCDU_Page:new({id=600})
 
-THIS_PAGE.curr_page = 1
+THIS_PAGE.curr_idx  = 1
 THIS_PAGE.curr_fpln = nil
-THIS_PAGE.page_end = false
+THIS_PAGE.page_end  = false
 
 local POINT_TYPE_DISCONTINUITY = 1
 local POINT_TYPE_SIDTRANS      = 2
@@ -57,7 +57,7 @@ end
 -- COMMON
 -------------------------------------------------------------------------------
 function THIS_PAGE:render_single(mcdu_data, i, id, time, spd, alt, alt_col, proc_name, bearing, is_trk, distance, is_arpt, is_the_first)
-    local main_col = is_the_first and ECAM_WHITE or (FMGS_sys.fpln.temp and ECAM_YELLOW or ECAM_GREEN)
+    local main_col = is_the_first and ECAM_WHITE or (FMGS_does_temp_fpln_exist() and ECAM_YELLOW or ECAM_GREEN)
 
     time = is_arpt and time or mcdu_format_force_to_small(time) -- TIME is small only for airports
 
@@ -83,7 +83,7 @@ function THIS_PAGE:render_single(mcdu_data, i, id, time, spd, alt, alt_col, proc
             dist_text = Round(distance, 0) .. (i == 2 and "NM" or "  ")
         end
         dist_text = Fwd_string_fill(dist_text, " ", 6)
-        self:set_line(mcdu_data, MCDU_LEFT, i, " " .. Aft_string_fill(proc_name, " ", 8) .. brg_trk .. "  " .. dist_text, MCDU_SMALL, (i == 2 and THIS_PAGE.curr_page == 1) and ECAM_WHITE or main_col)
+        self:set_line(mcdu_data, MCDU_LEFT, i, " " .. Aft_string_fill(proc_name, " ", 8) .. brg_trk .. "  " .. dist_text, MCDU_SMALL, (i == 2 and THIS_PAGE.curr_idx == 1) and ECAM_WHITE or main_col)
     end
     
 end
@@ -107,9 +107,13 @@ function THIS_PAGE:prepare_list(mcdu_data)
         end
     end
     if THIS_PAGE.curr_fpln.apts.dep_trans then
-        for i,x in ipairs(THIS_PAGE.curr_fpln.apts.dep_trans.legs) do
-            x.point_type = POINT_TYPE_SIDTRANS
-            table.insert(list_messages, x)
+        local i = 1
+        for _,x in ipairs(THIS_PAGE.curr_fpln.apts.dep_trans.legs) do
+            if i>1 then
+                x.point_type = POINT_TYPE_SIDTRANS
+                table.insert(list_messages, x)
+            end
+            i = i + 1
         end
     end
     if THIS_PAGE.curr_fpln.legs then
@@ -132,19 +136,19 @@ function THIS_PAGE:render_list(mcdu_data)
 
     local list_messages = THIS_PAGE:prepare_list(mcdu_data)
 
-    local start_i = (THIS_PAGE.curr_page-1) * 5 + 1
-    local line_id = 1
-    if THIS_PAGE.curr_page == 1 then
-        start_i = start_i + 1   -- Skip the departure airport if the first page
-        line_id = line_id + 1
-    end
-    local end_i = (THIS_PAGE.curr_page) * 5
+    local start_i = THIS_PAGE.curr_idx + 1
+    local line_id = 2
+    local end_i = THIS_PAGE.curr_idx + 5
     
     local last_i = 1000000 -- Arbitrarly large
     for i=start_i,end_i do
         if not list_messages[i] then
             last_i = i
             break   -- end of list, do not print other messages
+        end
+        
+        if line_id == 6 then    -- End of visible list
+            break
         end
         
         local x = list_messages[i]
@@ -186,13 +190,13 @@ end
 
 function THIS_PAGE:render(mcdu_data)
 
-    THIS_PAGE.curr_fpln = FMGS_sys.fpln.temp and FMGS_sys.fpln.temp or FMGS_sys.fpln.active
+    THIS_PAGE.curr_fpln = FMGS_does_temp_fpln_exist() and FMGS_sys.fpln.temp or FMGS_sys.fpln.active
 
-    local from_ppos = THIS_PAGE.curr_page == 1 and (THIS_PAGE.curr_fpln.apts.dep and "FROM" or "PPOS") or ""
+    local from_ppos = THIS_PAGE.curr_idx == 1 and (THIS_PAGE.curr_fpln.apts.dep and "FROM" or "PPOS") or ""
     
     self:set_multi_title(mcdu_data, {
         {txt=Aft_string_fill(from_ppos, " ", 22), col=ECAM_WHITE, size=MCDU_SMALL},
-        {txt=Aft_string_fill(THIS_PAGE.curr_fpln == FMGS_sys.fpln.temp and "TMPY" or "", " ", 12), col=ECAM_YELLOW, size=MCDU_LARGE},
+        {txt=Aft_string_fill(THIS_PAGE.curr_fpln == FMGS_does_temp_fpln_exist() and "TMPY" or "", " ", 12), col=ECAM_YELLOW, size=MCDU_LARGE},
         {txt=Fwd_string_fill(FMGS_sys.data.init.flt_nbr and FMGS_sys.data.init.flt_nbr or "", " ", 20) .. "  ", col=ECAM_WHITE, size=MCDU_SMALL}
     })
 
@@ -207,11 +211,11 @@ function THIS_PAGE:render(mcdu_data)
 
     self:set_line(mcdu_data, MCDU_RIGHT, 1, "TIME  SPD/ALT   ", MCDU_SMALL)
 
-    if THIS_PAGE.curr_page == 1 then
+    if THIS_PAGE.curr_idx == 1 then
         THIS_PAGE:render_dep(mcdu_data)
     end
 
-    if not FMGS_sys.fpln.temp then
+    if not FMGS_does_temp_fpln_exist() then
         THIS_PAGE:render_dest(mcdu_data)
     else
         self:set_line(mcdu_data, MCDU_LEFT, 6, "←ERASE", MCDU_LARGE, ECAM_ORANGE)
@@ -225,7 +229,7 @@ end
 
 
 function THIS_PAGE:L1(mcdu_data)
-    if THIS_PAGE.curr_page == 1 then
+    if THIS_PAGE.curr_idx == 1 then
         if THIS_PAGE.curr_fpln.apts.dep then
             mcdu_data.lat_rev_subject = {}
             mcdu_data.lat_rev_subject.type = 1 -- ORIGIN
@@ -240,7 +244,8 @@ function THIS_PAGE:L1(mcdu_data)
 end
 
 function THIS_PAGE:L6(mcdu_data)
-    if not FMGS_sys.fpln.temp then
+
+    if FMGS_does_temp_fpln_exist() then
         FMGS_erase_temp_fpln()
     elseif THIS_PAGE.curr_fpln.apts.arr then
         mcdu_data.lat_rev_subject = {}
@@ -253,13 +258,8 @@ function THIS_PAGE:L6(mcdu_data)
 end
 
 
-function THIS_PAGE:L6(mcdu_data)
-
-    mcdu_open_page(mcdu_data, 600)
-end
-
 function THIS_PAGE:R6(mcdu_data)
-    if not FMGS_sys.fpln.temp then
+    if FMGS_does_temp_fpln_exist() then
         FMGS_insert_temp_fpln()
     else
         MCDU_Page:R6(mcdu_data) -- ERROR
@@ -267,12 +267,17 @@ function THIS_PAGE:R6(mcdu_data)
 end
 
 function THIS_PAGE:Slew_Down(mcdu_data)
-    THIS_PAGE.curr_page = math.max(1,THIS_PAGE.curr_page - 1)
+    if THIS_PAGE.curr_idx - 1 > 0 then
+        THIS_PAGE.curr_idx = THIS_PAGE.curr_idx - 1
+    else
+        THIS_PAGE.curr_idx = 1
+        MCDU_Page:Slew_Down(mcdu_data)  -- Error
+    end
 end
 
 function THIS_PAGE:Slew_Up(mcdu_data)
     if not THIS_PAGE.page_end then
-        THIS_PAGE.curr_page = THIS_PAGE.curr_page + 1
+        THIS_PAGE.curr_idx = THIS_PAGE.curr_idx + 1
     else
         MCDU_Page:Slew_Up(mcdu_data)
     end

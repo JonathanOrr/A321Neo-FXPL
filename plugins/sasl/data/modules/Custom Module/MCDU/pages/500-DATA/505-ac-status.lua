@@ -35,7 +35,7 @@ function THIS_PAGE:render(mcdu_data)
     self:set_line(mcdu_data, MCDU_LEFT, 4, "DO NOT USE MCDU", MCDU_SMALL, ECAM_RED)
     self:set_line(mcdu_data, MCDU_LEFT, 4, "DEVELOPMENT IN PROGRESS", MCDU_LARGE, ECAM_RED)
 
-    if FMGS_sys.config.phase == FMGS_PHASE_PREFLIGHT or FMGS_sys.config.phase == FMGS_PHASE_DONE then
+    if FMGS_get_phase() == FMGS_PHASE_PREFLIGHT or FMGS_get_phase() == FMGS_PHASE_DONE then
         self:set_line(mcdu_data, MCDU_LEFT, 5, "CHG CODE", MCDU_SMALL)
         local content = "   "
         if mcdu_data.v.chg_code_unlocked then
