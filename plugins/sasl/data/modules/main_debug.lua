@@ -49,5 +49,5 @@ debug_mcdu_startup_page = 505
 
 if debug_ecam_force_page ~= 0 then
     set(Ecam_current_status, 1)
-    set(Ecam_current_page, ecam_force_page)
+    set(Ecam_current_page, debug_ecam_force_page)
 end

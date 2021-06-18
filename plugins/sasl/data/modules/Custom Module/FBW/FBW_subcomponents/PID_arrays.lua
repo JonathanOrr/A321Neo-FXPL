@@ -10,7 +10,7 @@ AT_PID_arrays = {
         Integral_sum = 0,
         Current_error = 0,
         Min_out = 0.095,
-        Max_out = 1
+        Max_out = 1.2
     },
     SSS_R_N1 = {
         P_gain = 0.001,
@@ -22,7 +22,7 @@ AT_PID_arrays = {
         Integral_sum = 0,
         Current_error = 0,
         Min_out = 0.095,
-        Max_out = 1
+        Max_out = 1.2
     },
 }
 
