@@ -28,10 +28,11 @@ local LIGHT_GREY = {0.2039, 0.2235, 0.247}
 local DARK_GREY = {0.1568, 0.1803, 0.2039}
 
 --dataref for live tunning
-local live_tunning_P = createGlobalPropertyf("a321neo/dynamics/FBW/PID/live_tunning_P", 1, false, true, false)
-local live_tunning_I = createGlobalPropertyf("a321neo/dynamics/FBW/PID/live_tunning_I", 0, false, true, false)
-local live_tunning_D = createGlobalPropertyf("a321neo/dynamics/FBW/PID/live_tunning_D", 0, false, true, false)
-local live_tunning_B = createGlobalPropertyf("a321neo/dynamics/FBW/PID/live_tunning_B", 0, false, true, false)
+local live_tunning_P =    createGlobalPropertyf("a321neo/dynamics/FBW/PID/live_tunning_P", 1, false, true, false)
+local live_tunning_I =    createGlobalPropertyf("a321neo/dynamics/FBW/PID/live_tunning_I", 0, false, true, false)
+local live_tunning_D =    createGlobalPropertyf("a321neo/dynamics/FBW/PID/live_tunning_D", 0, false, true, false)
+local live_tunning_B =    createGlobalPropertyf("a321neo/dynamics/FBW/PID/live_tunning_B", 0, false, true, false)
+local live_tunning_freq = createGlobalPropertyf("a321neo/dynamics/FBW/PID/live_tunning_freq", 0, false, true, false)
 
 --fonts
 local B612_MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
@@ -188,10 +189,11 @@ function Draw_value_graph(x_pos, y_pos, width, height, value_color)
 end
 
 local function init_tuning_PID(PID_array)
-    set(live_tunning_P, PID_array.P_gain)
-    set(live_tunning_I, PID_array.I_gain)
-    set(live_tunning_D, PID_array.D_gain)
-    set(live_tunning_B, PID_array.B_gain)
+    set(live_tunning_P,    PID_array.P_gain)
+    set(live_tunning_I,    PID_array.I_gain)
+    set(live_tunning_D,    PID_array.D_gain)
+    set(live_tunning_B,    PID_array.B_gain)
+    set(live_tunning_freq, PID_array.filter_freq)
 end
 
 local function live_tune_PID(PID_array)
@@ -199,10 +201,12 @@ local function live_tune_PID(PID_array)
         return
     end
 
-    PID_array.P_gain = get(live_tunning_P)
-    PID_array.I_gain = get(live_tunning_I)
-    PID_array.D_gain = get(live_tunning_D)
-    PID_array.B_gain = get(live_tunning_B)
+    PID_array.P_gain =                        get(live_tunning_P)
+    PID_array.I_gain =                        get(live_tunning_I)
+    PID_array.D_gain =                        get(live_tunning_D)
+    PID_array.B_gain =                        get(live_tunning_B)
+    PID_array.er_filter_table.cut_frequency = get(live_tunning_freq)
+    PID_array.pv_filter_table.cut_frequency = get(live_tunning_freq)
 end
 
 local function draw_gain_values(PID_array, x_pos, y_pos, width, height, P_color, I_color, D_color)
