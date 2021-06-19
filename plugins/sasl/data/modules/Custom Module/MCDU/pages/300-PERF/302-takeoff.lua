@@ -14,11 +14,40 @@
 -------------------------------------------------------------------------------
 local eng_out_acc = 1000
 local to_shift = nil
+local prev_rwy = nil --used to detect delta on runway, do not delete
 
 local THIS_PAGE = MCDU_Page:new({id=302})
 
 function THIS_PAGE:render(mcdu_data)
-    self:set_title(mcdu_data, "   TAKE OFF")
+
+
+
+    
+
+    --I KNOW I SHOULDN'T PUT LOGICS HERE, BUT HELP ME IDK WHERE ELSE TO PUT THEM -HENRICK
+    local dep_rwy = nil
+    local rwy, sibl = FMGS_dep_get_rwy(false)
+    if rwy ~= nil then
+        dep_rwy = sibl and rwy.sibl_name or rwy.name
+    end
+    if dep_rwy ~= prev_rwy and prev_rwy ~= nil then --runway change delta detector
+        FMGS_sys.perf.takeoff.v1_popped = FMGS_sys.perf.takeoff.v1
+        FMGS_sys.perf.takeoff.vr_popped = FMGS_sys.perf.takeoff.vr
+        FMGS_sys.perf.takeoff.v2_popped = FMGS_sys.perf.takeoff.v2
+        FMGS_sys.perf.takeoff.v1 = nil
+        FMGS_sys.perf.takeoff.vr = nil
+        FMGS_sys.perf.takeoff.v2 = nil
+        mcdu_send_message(mcdu_data, "CHECK TAKE OFF DATA")
+    end
+    prev_rwy = dep_rwy
+
+
+
+
+
+
+
+    self:set_title(mcdu_data, "   TAKE OFF ")
 
     --change later, load and read drfs here
 
@@ -27,9 +56,10 @@ function THIS_PAGE:render(mcdu_data)
     --L1L2L3--
     ----------
     local vspd_displayed = {FMGS_sys.perf.takeoff.v1, FMGS_sys.perf.takeoff.vr, FMGS_sys.perf.takeoff.v2}
-    self:set_line(mcdu_data, MCDU_LEFT, 1, vspd_displayed[1] == nil and "___" or vspd_displayed[1], MCDU_LARGE, vspd_displayed[1] == nil and ECAM_ORANGE or ECAM_BLUE)
-    self:set_line(mcdu_data, MCDU_LEFT, 2, vspd_displayed[2] == nil and "___" or vspd_displayed[2], MCDU_LARGE, vspd_displayed[2] == nil and ECAM_ORANGE or ECAM_BLUE)
-    self:set_line(mcdu_data, MCDU_LEFT, 3, vspd_displayed[3] == nil and "___" or vspd_displayed[3], MCDU_LARGE, vspd_displayed[3] == nil and ECAM_ORANGE or ECAM_BLUE)
+    local vspd_popped = {FMGS_sys.perf.takeoff.v1_popped, FMGS_sys.perf.takeoff.vr_popped, FMGS_sys.perf.takeoff.v2_popped}
+    for i=1, 3 do
+        self:set_line(mcdu_data, MCDU_LEFT, i, (vspd_displayed[i] == nil and "___" or vspd_displayed[i])..mcdu_format_force_to_small( vspd_popped[i] == nil and "" or vspd_popped[i]), MCDU_LARGE, vspd_displayed[i] == nil and ECAM_ORANGE or ECAM_BLUE)
+    end
 
     ----------
     --  L4  --
@@ -65,11 +95,6 @@ function THIS_PAGE:render(mcdu_data)
     ----------
     --  R1  --
     ----------
-    local dep_rwy = nil
-    local rwy, sibl = FMGS_dep_get_rwy(false)
-    if rwy ~= nil and sibl ~= false then
-        dep_rwy = sibl and rwy.sibl_name or rwy.name
-    end
     self:set_line(mcdu_data, MCDU_RIGHT, 1, dep_rwy == nil and "---" or dep_rwy, MCDU_LARGE,  dep_rwy == nil and ECAM_WHITE or ECAM_GREEN)
 
     ----------
@@ -117,37 +142,54 @@ function THIS_PAGE:render(mcdu_data)
     self:set_line(mcdu_data, MCDU_RIGHT, 4, "FLEX TO TEMP", MCDU_SMALL, ECAM_WHITE)
     self:set_line(mcdu_data, MCDU_RIGHT, 5, "ENG OUT ACC", MCDU_SMALL, ECAM_WHITE)
     self:set_line(mcdu_data, MCDU_RIGHT, 6, "NEXT ", MCDU_SMALL, ECAM_WHITE)
-
 end
 
 function THIS_PAGE:L1(mcdu_data)
-    local input = mcdu_get_entry(mcdu_data, {"number", length = 3, dp = 0})
-    input = tonumber(input)
-    if input > 100 and input <= 175 then
-        FMGS_sys.perf.takeoff.v1 = input
+    if FMGS_sys.perf.takeoff.v1_popped == nil then
+        local input = mcdu_get_entry(mcdu_data, {"number", length = 3, dp = 0})
+        if input == nil then return end
+        input = tonumber(input)
+        if input > 100 and input <= 175 then
+            FMGS_sys.perf.takeoff.v1 = input
+        else
+            mcdu_send_message(mcdu_data, "ENTRY OUT OF RANGE")
+        end
     else
-        mcdu_send_message(mcdu_data, "ENTRY OUT OF RANGE")
+        FMGS_sys.perf.takeoff.v1 = FMGS_sys.perf.takeoff.v1_popped
+        FMGS_sys.perf.takeoff.v1_popped = nil
     end
 end
 
 function THIS_PAGE:L2(mcdu_data)
-    local input = mcdu_get_entry(mcdu_data, {"number", length = 3, dp = 0})
-    input = tonumber(input)
-    if input > 100 and input <= 175 then
-        FMGS_sys.perf.takeoff.vr = input
+    if FMGS_sys.perf.takeoff.vr_popped == nil then
+        local input = mcdu_get_entry(mcdu_data, {"number", length = 3, dp = 0})
+        if input == nil then return end
+        input = tonumber(input)
+        if input > 100 and input <= 175 then
+            FMGS_sys.perf.takeoff.vr = input
+        else
+            mcdu_send_message(mcdu_data, "ENTRY OUT OF RANGE")
+        end
     else
-        mcdu_send_message(mcdu_data, "ENTRY OUT OF RANGE")
-    end
+        FMGS_sys.perf.takeoff.vr = FMGS_sys.perf.takeoff.vr_popped
+        FMGS_sys.perf.takeoff.vr_popped = nil
+    end 
 end
 
 function THIS_PAGE:L3(mcdu_data)
-    local input = mcdu_get_entry(mcdu_data, {"number", length = 3, dp = 0})
-    input = tonumber(input)
-    if input > 100 and input <= 175 then
-        FMGS_sys.perf.takeoff.v2 = input
+    if FMGS_sys.perf.takeoff.v2_popped == nil then
+        local input = mcdu_get_entry(mcdu_data, {"number", length = 3, dp = 0})
+        if input == nil then return end
+        input = tonumber(input)
+        if input > 100 and input <= 175 then
+            FMGS_sys.perf.takeoff.v2 = input
+        else
+            mcdu_send_message(mcdu_data, "ENTRY OUT OF RANGE")
+        end
     else
-        mcdu_send_message(mcdu_data, "ENTRY OUT OF RANGE")
-    end
+        FMGS_sys.perf.takeoff.v2 = FMGS_sys.perf.takeoff.v2_popped
+        FMGS_sys.perf.takeoff.v2_popped = nil
+    end 
 end
 
 function THIS_PAGE:L6(mcdu_data)
