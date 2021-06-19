@@ -16,17 +16,9 @@
 
 local THIS_PAGE = MCDU_Page:new({id=504})
 
-local function fz(x)
-  if x < 10 then
-    return "0" .. x
-  else
-    return x
-  end
-end
-
 local function get_gps_time()
   if get(GPS_1_is_available) == 1 or get(GPS_2_is_available) == 1 then
-    return fz(get(ZULU_hours)) .. mcdu_format_force_to_small(":") .. fz(get(ZULU_mins)) .. mcdu_format_force_to_small(":") .. fz(get(ZULU_secs))
+    return Fwd_string_fill(get(ZULU_hours), "0", 2) .. mcdu_format_force_to_small(":") .. Fwd_string_fill(get(ZULU_mins), "0", 2) .. mcdu_format_force_to_small(":") .. Fwd_string_fill(get(ZULU_secs), "0", 2)
   else
     -- No GPS info? No party
     return "------"
