@@ -182,11 +182,6 @@ end
 
 ----------------------------------------FBW PID----------------------------------------
 function FBW_PID_BP_ADV(pid_array, SP, PV, Scheduling_variable)
-    --sim paused no need to control
-    if get(DELTA_TIME) == 0 then
-        return 0
-    end
-
     --filtering--
     if pid_array.filter_inputs == true then
         if pid_array.er_filter_table == nil then
@@ -201,6 +196,11 @@ function FBW_PID_BP_ADV(pid_array, SP, PV, Scheduling_variable)
                 cut_frequency = pid_array.filter_freq,
             }
         end
+    end
+
+    --sim paused no need to control
+    if get(DELTA_TIME) == 0 then
+        return 0
     end
 
     --gain scheduling

@@ -60,3 +60,19 @@ AvionicsBay = {}
 -- MCDU
 MCDU = {}
 
+FBW = {
+    rates = {},
+    lateral = {
+        protections = {},
+        inputs = {},
+    },
+    vertical = {
+        protections = {},
+        inputs = {},
+    },
+    yaw = {
+        protections = {},
+        inputs = {},
+    },
+    filtered_sensors = {}
+}

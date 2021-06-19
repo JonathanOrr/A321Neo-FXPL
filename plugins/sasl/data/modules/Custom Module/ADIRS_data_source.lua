@@ -312,6 +312,12 @@ function adirs_how_many_adrs_work()
     return adr1+adr2+adr3
 end
 
+function adirs_set_hdg(hdg_inserted_by_the_pilot)
+    ADIRS_sys[1]:set_hdg(hdg_inserted_by_the_pilot)
+    ADIRS_sys[2]:set_hdg(hdg_inserted_by_the_pilot)
+    ADIRS_sys[3]:set_hdg(hdg_inserted_by_the_pilot)
+end
+
 function adirs_how_many_irs_fully_work()
     local ir1 = ADIRS_sys[1].ir_status == IR_STATUS_ALIGNED and 1 or 0
     local ir2 = ADIRS_sys[2].ir_status == IR_STATUS_ALIGNED and 1 or 0
@@ -420,8 +426,11 @@ local function is_adr_valid(i)
     local mach2 = ADIRS_sys[oth1].mach
     local mach3 = ADIRS_sys[oth2].mach
 
-    return (math.abs(mach1 - mach2) < mach_margin or math.abs(mach1 - mach3) < mach_margin) and
-           (math.abs(ias1  - ias2) < ias_margin   or math.abs(ias1  - ias3) < ias_margin)
+    local only_one_active = (ADIRS_sys[oth1].adr_status == ADR_STATUS_OFF or ADIRS_sys[oth1].adr_status == ADR_STATUS_FAULT)
+                        and (ADIRS_sys[oth2].adr_status == ADR_STATUS_OFF or ADIRS_sys[oth2].adr_status == ADR_STATUS_FAULT)
+
+    return ((math.abs(mach1 - mach2) < mach_margin or math.abs(mach1 - mach3) < mach_margin) and
+           (math.abs(ias1  - ias2) < ias_margin   or math.abs(ias1  - ias3) < ias_margin)) or only_one_active
 end
 
 
@@ -480,9 +489,12 @@ local function is_ir_valid(i)
     local hdg2 = ADIRS_sys[oth1].hdg
     local hdg3 = ADIRS_sys[oth2].hdg
 
-    return (math.abs(pitch1 - pitch2) < margin or math.abs(pitch1 - pitch3) < margin) and
+    local only_one_active = (ADIRS_sys[oth1].ir_status == IR_STATUS_OFF or ADIRS_sys[oth1].ir_status == IR_STATUS_FAULT)
+                        and (ADIRS_sys[oth2].ir_status == IR_STATUS_OFF or ADIRS_sys[oth2].ir_status == IR_STATUS_FAULT)
+
+    return ((math.abs(pitch1 - pitch2) < margin or math.abs(pitch1 - pitch3) < margin) and
            (math.abs(roll1  - roll2)  < margin or math.abs(roll1  - roll3) < margin)  and
-           (math.abs(hdg1   - hdg2)  < margin  or math.abs(hdg1   - hdg3) < margin)
+           (math.abs(hdg1   - hdg2)  < margin  or math.abs(hdg1   - hdg3) < margin)) or only_one_active
 end
 
 function adirs_get_avg_pitch()

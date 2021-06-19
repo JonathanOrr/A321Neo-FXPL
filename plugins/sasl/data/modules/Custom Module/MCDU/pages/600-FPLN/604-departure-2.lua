@@ -123,8 +123,8 @@ function THIS_PAGE:render(mcdu_data)
 
     self:set_lr_arrows(mcdu_data, true)
 
-    THIS_PAGE.main_col  = FMGS_sys.fpln.temp and ECAM_YELLOW or ECAM_GREEN
-    THIS_PAGE.curr_fpln = FMGS_sys.fpln.temp and FMGS_sys.fpln.temp or FMGS_sys.fpln.active
+    THIS_PAGE.main_col  = FMGS_does_temp_fpln_exist() and ECAM_YELLOW or ECAM_GREEN
+    THIS_PAGE.curr_fpln = FMGS_does_temp_fpln_exist() and FMGS_sys.fpln.temp or FMGS_sys.fpln.active
 
     local subject_id = mcdu_data.lat_rev_subject.data.id
 
@@ -173,7 +173,7 @@ function THIS_PAGE:render(mcdu_data)
     -------------------------------------
     -- LEFT/RIGHT 6
     -------------------------------------
-    if FMGS_sys.fpln.temp then
+    if FMGS_does_temp_fpln_exist() then
         self:set_line(mcdu_data, MCDU_LEFT, 6, "←ERASE", MCDU_LARGE, ECAM_ORANGE)
         self:set_line(mcdu_data, MCDU_RIGHT, 6, "INSERT*", MCDU_LARGE, ECAM_ORANGE)
     end
@@ -188,7 +188,7 @@ end
 
 function THIS_PAGE:sel_sid(mcdu_data, i)
     
-    if not FMGS_sys.fpln.temp then
+    if not FMGS_does_temp_fpln_exist() then
         FMGS_create_temp_fpln()
         FMGS_sys.fpln.temp.apts.dep_rwy = FMGS_sys.fpln.active.apts.dep_rwy
     end
@@ -204,7 +204,7 @@ function THIS_PAGE:sel_sid(mcdu_data, i)
 end
 
 function THIS_PAGE:sel_trans(mcdu_data, i)
-    if not FMGS_sys.fpln.temp then
+    if not FMGS_does_temp_fpln_exist() then
         FMGS_create_temp_fpln()
         FMGS_sys.fpln.temp.apts.dep_rwy = FMGS_sys.fpln.active.apts.dep_rwy
         FMGS_sys.fpln.temp.apts.dep_sid = FMGS_sys.fpln.active.apts.dep_sid

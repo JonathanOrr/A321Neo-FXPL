@@ -16,22 +16,6 @@
 -- Short description: Fly-by-wire main file
 -------------------------------------------------------------------------------
 
-FBW = {
-    lateral = {
-        protections = {},
-        inputs = {},
-    },
-    vertical = {
-        protections = {},
-        inputs = {},
-    },
-    yaw = {
-        protections = {},
-        inputs = {},
-    },
-    filtered_sensors = {}
-}
-
 --include("FBW_subcomponents/limits_calculations.lua")
 include("PID.lua")
 include("FBW/FBW_subcomponents/fbw_system_subcomponents/flt_computers.lua")
@@ -67,6 +51,8 @@ function onAirportLoaded()
 end
 
 components = {
+    rate_calculations {},
+
     filtering {},
 
     lateral_protections {},
@@ -95,12 +81,6 @@ sasl.registerCommandHandler (Toggle_SEC_1, 0, Toggle_sec_1_callback)
 sasl.registerCommandHandler (Toggle_SEC_2, 0, Toggle_sec_2_callback)
 sasl.registerCommandHandler (Toggle_SEC_3, 0, Toggle_sec_3_callback)
 
---previous values
-local last_roll = 0
-local last_pitch = 0
-local last_hdg = 0
-local last_vpath = 0
-
 function update()
     updateAll(components)
 
@@ -116,19 +96,4 @@ function update()
     else
         FBW_alternate_mode_transition(FBW_modes_var_table)
     end
-
-    if get(DELTA_TIME) ~= 0 then
-        --calculate true roll rate
-        set(True_roll_rate, (get(Flightmodel_roll) - last_roll) / get(DELTA_TIME))
-        --calculate true pitch rate
-        set(True_pitch_rate, (get(Flightmodel_pitch) - last_pitch) / get(DELTA_TIME))
-        --calculate true yaw rate
-        set(True_yaw_rate, (get(Flightmodel_true_heading) - last_hdg) / get(DELTA_TIME))
-        --calculate Vpath pitch rate
-        set(Vpath_pitch_rate, (get(Vpath) - last_vpath) / get(DELTA_TIME))
-    end
-    last_roll = get(Flightmodel_roll)
-    last_pitch = get(Flightmodel_pitch)
-    last_hdg = get(Flightmodel_true_heading)
-    last_vpath = get(Vpath)
 end

@@ -853,7 +853,7 @@ MessageGroup_HDG_DISCREPANCY = {
     },
 
     is_active = function()
-        return adirs_pfds_disagree_on_hdg()
+        return adirs_pfds_disagree_on_hdg() and adirs_ir_works_nav_mode(1) and adirs_ir_works_nav_mode(2)
     end,
 
     is_inhibited = function()
@@ -908,7 +908,7 @@ MessageGroup_ATT_DISCREPANCY = {
     },
 
     is_active = function()
-        return adirs_pfds_disagree_on_att()
+        return adirs_pfds_disagree_on_att() and adirs_ir_works_att_mode(1) and adirs_ir_works_att_mode(2)
     end,
 
     is_inhibited = function()
@@ -962,7 +962,7 @@ MessageGroup_ALTI_DISCREPANCY = {
     },
 
     is_active = function()
-        return adirs_pfds_disagree_on_alt()
+        return adirs_pfds_disagree_on_alt() and adirs_is_adr_working(1) and adirs_is_adr_working(2)
     end,
 
     is_inhibited = function()
@@ -1076,7 +1076,7 @@ MessageGroup_IAS_DISCREPANCY = {
     },
 
     is_active = function()
-        return adirs_pfds_disagree_on_ias()
+        return adirs_pfds_disagree_on_ias() and adirs_is_adr_working(1) and adirs_is_adr_working(2)
     end,
 
     is_inhibited = function()

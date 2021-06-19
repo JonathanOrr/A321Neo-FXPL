@@ -21,7 +21,7 @@ THIS_PAGE.curr_page = 1
 function THIS_PAGE:render(mcdu_data)
     assert(mcdu_data.lat_rev_subject and mcdu_data.lat_rev_subject.type == 1)
 
-    local main_col = FMGS_sys.fpln.temp and ECAM_YELLOW or ECAM_GREEN
+    local main_col = FMGS_does_temp_fpln_exist() and ECAM_YELLOW or ECAM_GREEN
 
     self:set_lr_arrows(mcdu_data, true)
 

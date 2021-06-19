@@ -22,34 +22,42 @@ end
 
 GeoPoint = {class="GeoPoint", lat = 0, lon = 0}
 function GeoPoint:create (o)
-  o = o or {}
-  setmetatable(o, self)
-  self.__index = self
-  return o
+    o = o or {}
+    setmetatable(o, self)
+    self.__index = self
+    return o
 end
 
 
 GeoLine = {class="GeoLine", a = 0, c = 0}   -- In the form lat = a * lon + c
 function GeoLine:create (o)
-  o = o or {}
-  setmetatable(o, self)
-  self.__index = self
-  return o
+    o = o or {}
+    setmetatable(o, self)
+    self.__index = self
+    return o
 end
 
 function GeoLine:point_at_min_distance(point)  -- Return the point on the line with the minimum distance with respect to the point
                                                -- This works ONLY for small distances!
     assert(point.class == "GeoPoint", "This function works only on one point")
-    
+
     local a = - self.a
     local b = 1
     local c = - self.c
-    
-    -- TODO fix division by zero
+
+    -- TODO is division by zero posssible?
     local lat = (a * (-b * point.lon + a * point.lat) - b * c) / (a*a + b*b)
     local lon = (b * (b * point.lon  - a * point.lat) - a * c) / (a*a + b*b)
-    
+
     return GeoPoint:create ({lat = lat, lon = lon})
+end
+
+function GeoLine:point_at_given_distance(orig_point, dist)
+    -- This works ONLY for small distances!
+    assert(orig_point.class == "GeoPoint", "This function works only on one point")
+
+    local r = math.sqrt(1+self.a*self.a)
+    return GeoPoint:create ({lat = orig_point.lat + dist * self.a / r, lon = orig_point.lon + dist / r})
 end
 
 function GeoLine:create_from_course(point, crs)  -- Return a line created from a point and a course

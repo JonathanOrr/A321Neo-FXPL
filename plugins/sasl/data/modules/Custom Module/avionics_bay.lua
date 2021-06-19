@@ -379,7 +379,7 @@ local function load_avionicsbay()
     
 end
 
-if not disable_avionicsbay then
+if not debug_disable_avionicsbay then
     load_avionicsbay()
 else
     AvionicsBay.is_initialized = function() return false end
@@ -387,7 +387,7 @@ else
 end
 
 function update()
-    if not disable_avionicsbay then
+    if not debug_disable_avionicsbay then
         AvionicsBay.c.set_acf_coords(get(Aircraft_lat), get(Aircraft_long));
     end
 end

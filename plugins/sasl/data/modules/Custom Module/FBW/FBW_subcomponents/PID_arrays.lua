@@ -10,7 +10,7 @@ AT_PID_arrays = {
         Integral_sum = 0,
         Current_error = 0,
         Min_out = 0.095,
-        Max_out = 1
+        Max_out = 1.2
     },
     SSS_R_N1 = {
         P_gain = 0.001,
@@ -22,7 +22,7 @@ AT_PID_arrays = {
         Integral_sum = 0,
         Current_error = 0,
         Min_out = 0.095,
-        Max_out = 1
+        Max_out = 1.2
     },
 }
 
@@ -275,7 +275,7 @@ FBW_PID_arrays = {
     },
 
     FBW_YAW_DAMPER_PID_array = {
-        P_gain = 0.055,
+        P_gain = 0.160,
         I_gain = 0.000,
         D_gain = 0.000,
         B_gain = 0,
@@ -297,7 +297,7 @@ FBW_PID_arrays = {
         Min_out = -1,
         Max_out = 1,
         filter_inputs = true,
-        filter_freq = 200,
+        filter_freq = 75,
         highpass_inputs = true,
         PV = 0,
         Error = 0,
@@ -309,11 +309,11 @@ FBW_PID_arrays = {
         Actual_output = 0,
     },
     FBW_NRM_YAW_PID_array = {
-        P_gain = 0.006,
-        I_gain = 0.013,
-        D_gain = 0.0010,
+        P_gain = 0.007,
+        I_gain = 0.011,
+        D_gain = 0.002,
         B_gain = 1,
-        Schedule_gains = true,
+        Schedule_gains = false,
         Schedule_table = {
             P = {
                 {0.00, 0.012},
@@ -346,7 +346,7 @@ FBW_PID_arrays = {
         Min_out = -1,
         Max_out = 1,
         filter_inputs = true,
-        filter_freq = 1.5,
+        filter_freq = 0.18,
         highpass_inputs = false,
         PV = 0,
         Error = 0,

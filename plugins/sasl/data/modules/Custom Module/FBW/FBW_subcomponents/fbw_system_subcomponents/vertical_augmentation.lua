@@ -346,7 +346,7 @@ local get_vertical_input = {
         local output_Q = input_limitations.G_to_Q_AoA(var_table, pid_array)
         output_Q = input_limitations.Q_Pitch(output_Q, var_table)
 
-        pid_array.Actual_output = get(True_pitch_rate)
+        pid_array.Actual_output = FBW.rates.Pitch.x
 
         return output_Q
     end,
@@ -382,7 +382,7 @@ local get_vertical_input = {
         output_Q = input_limitations.Pitch(output_Q)
 
         --BP the AoA demand PID
-        FBW_PID_arrays.FBW_ROTATION_APROT_PID_array.Actual_output = get(True_pitch_rate)
+        FBW_PID_arrays.FBW_ROTATION_APROT_PID_array.Actual_output = FBW.rates.Pitch.x
 
         return output_Q
     end,
@@ -419,7 +419,7 @@ local get_vertical_input = {
         output_Q = input_limitations.Q_AoA(x, output_Q, 3, 1.5, 3, var_table, FBW_PID_arrays.FBW_FLARE_APROT_PID_array)
 
         --BP the AoA demand PID
-        FBW_PID_arrays.FBW_FLARE_APROT_PID_array.Actual_output = get(True_pitch_rate)
+        FBW_PID_arrays.FBW_FLARE_APROT_PID_array.Actual_output = FBW.rates.Pitch.x
 
         return output_Q
     end,
@@ -445,18 +445,18 @@ end
 local function filter_values(var_table, filter_table)
     --Q--
     --filter the Q PV
-    filter_table.Q_pv_filter_table.x = get(True_pitch_rate)
+    filter_table.Q_pv_filter_table.x = FBW.rates.Pitch.x
     var_table.Filtered_Q = low_pass_filter(filter_table.Q_pv_filter_table)
     --filter the Q error
-    filter_table.Q_err_filter_table.x = var_table.Q_input - get(True_pitch_rate)
+    filter_table.Q_err_filter_table.x = var_table.Q_input - FBW.rates.Pitch.x
     var_table.Filtered_Q_err = low_pass_filter(filter_table.Q_err_filter_table)
 
     --C*--
     --filter the C* PV
-    filter_table.C_STAR_pv_filter_table.x = compute_C_star(get(Total_vertical_g_load), get(True_pitch_rate))
+    filter_table.C_STAR_pv_filter_table.x = compute_C_star(get(Total_vertical_g_load), FBW.rates.Pitch.x)
     var_table.Filtered_C_STAR = low_pass_filter(filter_table.C_STAR_pv_filter_table)
     --filter the C* error
-    filter_table.C_STAR_err_filter_table.x = var_table.C_star_input - compute_C_star(get(Total_vertical_g_load), get(True_pitch_rate))
+    filter_table.C_STAR_err_filter_table.x = var_table.C_star_input - compute_C_star(get(Total_vertical_g_load), FBW.rates.Pitch.x)
     var_table.Filtered_C_STAR_err = low_pass_filter(filter_table.C_STAR_err_filter_table)
 
     --filter the scheduling variable

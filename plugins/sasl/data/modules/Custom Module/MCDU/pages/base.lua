@@ -168,6 +168,22 @@ function MCDU_Page:set_line(mcdu_data, align, idx, text, size, color)
     mcdu_data.dat[size][align][idx] = {txt = text, col = color}
 end
 
+function MCDU_Page:new_multi_line(mcdu_data, align, idx, size)
+    size  = size  or MCDU_LARGE
+    align = align or MCDU_LEFT
+
+    mcdu_data.dat[size][align][idx] = {}
+end
+
+function MCDU_Page:add_multi_line(mcdu_data, align, idx, text, size, color)
+    size  = size  or MCDU_LARGE
+    align = align or MCDU_LEFT
+    color = color or ECAM_WHITE
+    
+    table.insert(mcdu_data.dat[size][align][idx], {txt = text, col = color})
+end
+
+
 function MCDU_Page:set_title(mcdu_data, text, color)
     color = color or ECAM_WHITE
     mcdu_data.title = {txt = text, col = color}
