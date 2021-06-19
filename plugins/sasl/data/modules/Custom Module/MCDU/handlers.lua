@@ -24,8 +24,8 @@ local MCDU_ENTRIES =
 
             --if get(TIME) - entry_cooldown > get(DELTA_TIME) then
                 entry_cooldown = get(TIME)
-                if #mcdu_data.entry < 22 then
-                    mcdu_data.entry = mcdu_data.entry .. val
+                if #mcdu_data.entry.text < 22 then
+                    mcdu_data.entry.text = mcdu_data.entry.text .. val
                 end
             --end
         end
@@ -65,11 +65,11 @@ local MCDU_ENTRIES =
                 table.remove(mcdu_data.messages)
                 mcdu_data.message_showing = false
             else
-                if #mcdu_data.entry > 0 then
-                    mcdu_data.entry = mcdu_data.entry:sub(1,#mcdu_data.entry - 1)
+                if #mcdu_data.entry.text > 0 then
+                    mcdu_data.entry.text = mcdu_data.entry.text:sub(1,#mcdu_data.entry.text - 1)
                 else
-                    if #mcdu_data.entry == 0 then
-                        table.insert(mcdu_data.messages, "CLR")
+                    if #mcdu_data.entry.text == 0 then
+                        table.insert(mcdu_data.messages, {text="CLR", color=ECAM_WHITE})
                     end
                 end
             end
@@ -82,7 +82,7 @@ local MCDU_ENTRIES =
                     table.remove(mcdu_data.messages)
                     mcdu_data.message_showing = false
                 else
-                    mcdu_data.entry = ""
+                    mcdu_data.entry = {text="", color=nil}
                 end
             end
 
@@ -94,13 +94,14 @@ local MCDU_ENTRIES =
         ref_entries = {"positive_negative"},
         ref_callback = 
         function (mcdu_data, count, val)
-            if #mcdu_data.entry < 22 then
-                if string.sub(mcdu_data.entry, #mcdu_data.entry, #mcdu_data.entry) == "-" then
-                    mcdu_data.entry = string.sub(mcdu_data.entry, 0, #mcdu_data.entry - 1) .. "+"
-                elseif string.sub(mcdu_data.entry, #mcdu_data.entry, #mcdu_data.entry) == "+" then
-                    mcdu_data.entry = string.sub(mcdu_data.entry, 0, #mcdu_data.entry - 1) .. "-"
-                elseif string.sub(mcdu_data.entry, #mcdu_data.entry, #mcdu_data.entry) ~= "+" and string.sub(mcdu_data.entry, #mcdu_data.entry, #mcdu_data.entry) ~= "-" then
-                    mcdu_data.entry = mcdu_data.entry .. "-"
+            local entry_len = #mcdu_data.entry.text
+            if entry_len < 22 then
+                if string.sub(mcdu_data.entry.text, entry_len, entry_len) == "-" then
+                    mcdu_data.entry.text = string.sub(mcdu_data.entry.text, 0, #mcdu_data.entry.text - 1) .. "+"
+                elseif string.sub(mcdu_data.entry.text, entry_len, entry_len) == "+" then
+                    mcdu_data.entry.text = string.sub(mcdu_data.entry.text, 0, entry_len - 1) .. "-"
+                elseif string.sub(mcdu_data.entry.text, entry_len, entry_len) ~= "+" and string.sub(mcdu_data.entry.text, entry_len, entry_len) ~= "-" then
+                    mcdu_data.entry.text = mcdu_data.entry.text .. "-"
                 end
             end
         end

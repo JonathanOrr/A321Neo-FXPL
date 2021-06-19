@@ -40,8 +40,8 @@ end
 function init_data(mcdu_data, id)
     mcdu_data.id = id
     mcdu_data.draw_lines = {}
-    mcdu_data.entry = ""
-    mcdu_data.entry_cache = ""
+    mcdu_data.entry = {text="", color=nil}
+    mcdu_data.entry_cache = {text="", color=nil}
     mcdu_data.dat = {}
     mcdu_data.title = {}
     mcdu_data.messages = {}
@@ -74,8 +74,11 @@ function common_draw(mcdu_data)
     end
 
     --draw scratchpad
-    sasl.gl.drawText(Font_MCDU, draw_get_x(1), draw_get_y(12), mcdu_data.entry, MCDU_DISP_TEXT_SIZE[MCDU_LARGE], false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
-    
+    if mcdu_data.entry.text ~= "" then
+        mcdu_data.entry.color = mcdu_data.entry.color or ECAM_WHITE
+        sasl.gl.drawText(Font_MCDU, draw_get_x(1), draw_get_y(12), mcdu_data.entry.text, MCDU_DISP_TEXT_SIZE[MCDU_LARGE], false, false, TEXT_ALIGN_LEFT, mcdu_data.entry.color)
+    end
+
     if mcdu_data.lr_arrows then
         sasl.gl.drawTexture(MCDU_lr_arrows, 505, 495, 40, 16, 1, 1, 1)
     end
@@ -116,12 +119,14 @@ function mcdu_reset_fpln(mcdu_data)
 end
 
 --define custom functionalities
-function mcdu_send_message(mcdu_data, message)
+function mcdu_send_message(mcdu_data, message, color)
 
-    if mcdu_data.messages[#mcdu_data.messages] == message then
+    color = color or ECAM_WHITE
+
+    if mcdu_data.messages[#mcdu_data.messages].text == message.text then
         return
     end
-    table.insert(mcdu_data.messages, message)
+    table.insert(mcdu_data.messages, {text=message, color=color})
 end
 
 function common_update(mcdu_data)
@@ -134,7 +139,7 @@ function common_update(mcdu_data)
         if not mcdu_data.message_showing then
             mcdu_data.entry_cache = mcdu_data.entry
         end
-        mcdu_data.entry = mcdu_data.messages[#mcdu_data.messages]:upper()
+        mcdu_data.entry = mcdu_data.messages[#mcdu_data.messages]
         mcdu_data.message_showing = true
     end
     
@@ -144,6 +149,15 @@ function common_update(mcdu_data)
 
 end
 
-MCDU.send_message = mcdu_send_message
-MCDU.force_update = mcdu_force_update
-MCDU.reset_fpln = mcdu_reset_fpln
+MCDU.send_message = function(message, color)
+    mcdu_send_message(MCDU.captain_side_data, message, color)
+    --mcdu_send_message(MCDU.fo_side_data, message) TODO
+end
+MCDU.force_update = function()
+    mcdu_force_update(MCDU.captain_side_data)
+    --mcdu_force_update(MCDU.fo_side_data, message) TODO
+end
+MCDU.reset_fpln = function()
+    mcdu_reset_fpln(MCDU.captain_side_data)
+    --mcdu_reset_fpln(MCDU.fo_side_data, message) TODO
+end
