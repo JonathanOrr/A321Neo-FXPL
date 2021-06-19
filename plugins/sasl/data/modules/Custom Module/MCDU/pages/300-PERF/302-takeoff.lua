@@ -58,7 +58,8 @@ function THIS_PAGE:render(mcdu_data)
     local vspd_displayed = {FMGS_sys.perf.takeoff.v1, FMGS_sys.perf.takeoff.vr, FMGS_sys.perf.takeoff.v2}
     local vspd_popped = {FMGS_sys.perf.takeoff.v1_popped, FMGS_sys.perf.takeoff.vr_popped, FMGS_sys.perf.takeoff.v2_popped}
     for i=1, 3 do
-        self:set_line(mcdu_data, MCDU_LEFT, i, (vspd_displayed[i] == nil and "___" or vspd_displayed[i])..mcdu_format_force_to_small( vspd_popped[i] == nil and "" or vspd_popped[i]), MCDU_LARGE, vspd_displayed[i] == nil and ECAM_ORANGE or ECAM_BLUE)
+        self:add_multi_line(mcdu_data, MCDU_LEFT, i, (vspd_displayed[i] == nil and "___" or vspd_displayed[i]), MCDU_LARGE, vspd_displayed[i] == nil and ECAM_ORANGE or ECAM_BLUE)
+        self:add_multi_line(mcdu_data, MCDU_LEFT, i, "   "..mcdu_format_force_to_small( vspd_popped[i] == nil and "" or vspd_popped[i]), MCDU_LARGE, ECAM_BLUE)
     end
 
     ----------
@@ -88,9 +89,13 @@ function THIS_PAGE:render(mcdu_data)
     --C1C2C3--
     ----------
     local fso_spd = {F_speed,S_speed,GD}
-    self:set_line(mcdu_data, MCDU_CENTER, 1, "F="..string.format("%03.f", tostring(get(fso_spd[1]))).."     ", MCDU_LARGE, ECAM_GREEN)
-    self:set_line(mcdu_data, MCDU_CENTER, 2, "S="..string.format("%03.f", tostring(get(fso_spd[2]))).."     ", MCDU_LARGE, ECAM_GREEN)
-    self:set_line(mcdu_data, MCDU_CENTER, 3, "O="..string.format("%03.f", tostring(get(fso_spd[3]))).."     ", MCDU_LARGE, ECAM_GREEN)
+    self:add_multi_line(mcdu_data, MCDU_CENTER, 1,"  "..string.format("%03.f", tostring(get(fso_spd[1]))).."     ", MCDU_LARGE, ECAM_GREEN)
+    self:add_multi_line(mcdu_data, MCDU_CENTER, 2,"  "..string.format("%03.f", tostring(get(fso_spd[2]))).."     ", MCDU_LARGE, ECAM_GREEN)
+    self:add_multi_line(mcdu_data, MCDU_CENTER, 3,"  "..string.format("%03.f", tostring(get(fso_spd[3]))).."     ", MCDU_LARGE, ECAM_GREEN)
+
+    self:add_multi_line(mcdu_data, MCDU_CENTER, 1,"F=        ", MCDU_LARGE, ECAM_WHITE)
+    self:add_multi_line(mcdu_data, MCDU_CENTER, 2,"S=        ", MCDU_LARGE, ECAM_WHITE)
+    self:add_multi_line(mcdu_data, MCDU_CENTER, 3,"O=        ", MCDU_LARGE, ECAM_WHITE)
 
     ----------
     --  R1  --
@@ -145,8 +150,9 @@ function THIS_PAGE:render(mcdu_data)
 end
 
 function THIS_PAGE:L1(mcdu_data)
-    if FMGS_sys.perf.takeoff.v1_popped == nil then
-        local input = mcdu_get_entry(mcdu_data, {"number", length = 3, dp = 0})
+    local input = mcdu_get_entry(mcdu_data, {"number", length = 3, dp = 0})
+
+    if FMGS_sys.perf.takeoff.v1_popped == nil then --if it is not popped
         if input == nil then return end
         input = tonumber(input)
         if input > 100 and input <= 175 then
@@ -154,9 +160,19 @@ function THIS_PAGE:L1(mcdu_data)
         else
             mcdu_send_message(mcdu_data, "ENTRY OUT OF RANGE")
         end
-    else
-        FMGS_sys.perf.takeoff.v1 = FMGS_sys.perf.takeoff.v1_popped
-        FMGS_sys.perf.takeoff.v1_popped = nil
+    else --if it is popped
+        if input ~= nil then --if it is popped and the user typed nothing
+            input = tonumber(input)
+            if input > 100 and input <= 175 then --plug the data in bla bla bla
+                FMGS_sys.perf.takeoff.v1 = input
+                FMGS_sys.perf.takeoff.v1_popped = nil
+            else
+                mcdu_send_message(mcdu_data, "ENTRY OUT OF RANGE")
+            end
+        else
+            FMGS_sys.perf.takeoff.v1 = FMGS_sys.perf.takeoff.v1_popped
+            FMGS_sys.perf.takeoff.v1_popped = nil
+        end
     end
 end
 
