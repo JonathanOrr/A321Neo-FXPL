@@ -309,11 +309,11 @@ FBW_PID_arrays = {
         Actual_output = 0,
     },
     FBW_NRM_YAW_PID_array = {
-        P_gain = 0.006,
-        I_gain = 0.012,
-        D_gain = 0.0010,
+        P_gain = 0.007,
+        I_gain = 0.011,
+        D_gain = 0.002,
         B_gain = 1,
-        Schedule_gains = true,
+        Schedule_gains = false,
         Schedule_table = {
             P = {
                 {0.00, 0.012},
@@ -346,7 +346,7 @@ FBW_PID_arrays = {
         Min_out = -1,
         Max_out = 1,
         filter_inputs = true,
-        filter_freq = 0.125,
+        filter_freq = 0.18,
         highpass_inputs = false,
         PV = 0,
         Error = 0,
