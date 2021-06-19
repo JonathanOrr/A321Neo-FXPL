@@ -3,7 +3,7 @@ FBW.filtered_sensors = {
         high_pass = false,
         filtered = 0,
         value = function ()
-            return get(True_yaw_rate)
+            return FBW.rates.Yaw.x
         end,
         {
             x = 0,
@@ -15,7 +15,7 @@ FBW.filtered_sensors = {
         high_pass = false,
         filtered = 0,
         value = function ()
-            return get(True_yaw_rate)
+            return FBW.rates.Yaw.x
         end,
         {
             x = 0,
@@ -27,7 +27,7 @@ FBW.filtered_sensors = {
         high_pass = false,
         filtered = 0,
         value = function ()
-            return get(True_yaw_rate)
+            return FBW.rates.Yaw.x
         end,
         {
             x = 0,
@@ -38,7 +38,7 @@ FBW.filtered_sensors = {
         high_pass = false,
         filtered = 0,
         value = function ()
-            return get(True_yaw_rate)
+            return FBW.rates.Yaw.x
         end,
         {
             x = 0,

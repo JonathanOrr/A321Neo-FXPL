@@ -10,7 +10,7 @@ FBW.lateral.controllers = {
             FBW.lateral.controllers.roll_rate_PID.output = FBW_PID_BP_ADV(
                 FBW_PID_arrays.FBW_ROLL_RATE_PID_array,
                 FBW.lateral.inputs.x_to_P(get(Total_input_roll), get(Flightmodel_roll)),
-                get(True_roll_rate),
+                FBW.rates.Roll.x,
                 FBW.filtered_sensors.IAS.filtered
             )
         end,

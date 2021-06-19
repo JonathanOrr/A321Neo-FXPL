@@ -233,7 +233,7 @@ function update()
     live_tune_PID(FBW_PID_arrays.FBW_YAW_DAMPER_PID_array)
 
     --update anything
-    --Update_value_historys(get(Total_input_pitch) * 6 - get(True_pitch_rate))
+    --Update_value_historys(get(Total_input_pitch) * 6 - FBW.rates.Pitch.x)
 end
 
 function draw()
