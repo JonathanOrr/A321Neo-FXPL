@@ -258,11 +258,11 @@ end
 
 local function draw_active_fpln(data)   -- This is just a test
 
-    local fpln_active = FMGS_sys.fpln.active
+    local active_legs = FMGS_get_route_legs()
 
     local route = {}
     -- For each point in the FPLN...
-    for k,x in ipairs(fpln_active) do
+    for k,x in ipairs(active_legs) do
 
         local c_x,c_y = plan_get_x_y(data, x.lat, x.lon)
         table.insert(route, c_x)

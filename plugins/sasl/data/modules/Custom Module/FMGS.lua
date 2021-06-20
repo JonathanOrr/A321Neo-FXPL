@@ -24,7 +24,8 @@ local config = {
     status = FMGS_MODE_OFF,
     phase  = FMGS_PHASE_PREFLIGHT,
     master = 0,
-    backup_req = false
+    backup_req = false,
+    gps_primary = false,
 }
 
 FMGS_sys.config = config
@@ -93,9 +94,9 @@ FMGS_sys.perf = {
         v1 = nil,
         vr = nil,
         v2 = nil,
-        v1_popped = nil,
-        vr_popped = nil,
-        v2_popped = nil,
+        v1_popped = nil,    -- This is for MCDU visualization purposes only
+        vr_popped = nil,    -- This is for MCDU visualization purposes only
+        v2_popped = nil,    -- This is for MCDU visualization purposes only
         trans_alt = 10000,
         thr_red = Round(get(GPS_1_altitude), -1) + 1500,
         acc = Round(get(GPS_1_altitude), -1) + 1500,
@@ -115,6 +116,21 @@ FMGS_sys.perf = {
 -- EN ROUTE defined as: > 15.500 ft or > 50.8 nm from departure or dest airport (and not off route)
 -- OFF ROUTE: 2 nm / terminal 1nm / appr gps 0.3 or oth 0.5 nm
 -- 
+
+local function update_gps_primary()
+    if not FMGS_sys.config.gps_primary then
+        if get(GPS_1_is_available) == 1 or get(GPS_2_is_available) == 1 then
+            FMGS_sys.config.gps_primary = true
+            MCDU.send_message("GPS PRIMARY", ECAM_WHITE)
+        end
+    else
+        if get(GPS_1_is_available) == 0 and get(GPS_2_is_available) == 0 then
+            FMGS_sys.config.gps_primary = false
+            MCDU.send_message("GPS PRIMARY LOST", ECAM_ORANGE)
+        end
+    end
+end
+
 
 local function update_status()
     -- NOTE: As far as I know, INDEPENDENT MODE is activated only when databases of FMCUs is different
@@ -139,6 +155,8 @@ local function update_status()
         FMGS_sys.config.status = FMGS_MODE_OFF
         FMGS_sys.config.master = 0
     end
+
+    update_gps_primary()
 
 end
 

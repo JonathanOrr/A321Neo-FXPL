@@ -44,11 +44,11 @@ function THIS_PAGE:render_dest(mcdu_data)
     self:set_line(mcdu_data, MCDU_RIGHT, 6, "DIST  EFOB", MCDU_SMALL)
 
     local arr_id    = THIS_PAGE.curr_fpln.apts.arr.id
-    local trip_time = (FMGS_sys.data.pred.trip_time and FMGS_sys.data.pred.trip_time or "----")
+    local trip_time = (FMGS_perf_get_pred_trip_time() and FMGS_perf_get_pred_trip_time() or "----")
     self:set_line(mcdu_data, MCDU_LEFT, 6, Aft_string_fill(arr_id, " ", 8, MCDU_LARGE) .. trip_time)
 
-    local trip_dist = (FMGS_sys.data.pred.trip_dist and FMGS_sys.data.pred.trip_dist or "----") 
-    local efob = (FMGS_sys.data.pred.efob and FMGS_sys.data.pred.efob or "----")
+    local trip_dist = (FMGS_perf_get_pred_trip_dist() and FMGS_perf_get_pred_trip_dist() or "----") 
+    local efob = (FMGS_perf_get_pred_trip_efob() and FMGS_perf_get_pred_trip_efob() or "----")
     self:set_line(mcdu_data, MCDU_RIGHT, 6, trip_dist .. Fwd_string_fill(efob, " ", 6, MCDU_LARGE))
 
 end
@@ -190,14 +190,14 @@ end
 
 function THIS_PAGE:render(mcdu_data)
 
-    THIS_PAGE.curr_fpln = FMGS_does_temp_fpln_exist() and FMGS_sys.fpln.temp or FMGS_sys.fpln.active
+    THIS_PAGE.curr_fpln = FMGS_get_current_fpln()
 
     local from_ppos = THIS_PAGE.curr_idx == 1 and (THIS_PAGE.curr_fpln.apts.dep and "FROM" or "PPOS") or ""
     
     self:set_multi_title(mcdu_data, {
         {txt=Aft_string_fill(from_ppos, " ", 22), col=ECAM_WHITE, size=MCDU_SMALL},
         {txt=Aft_string_fill(THIS_PAGE.curr_fpln == FMGS_does_temp_fpln_exist() and "TMPY" or "", " ", 12), col=ECAM_YELLOW, size=MCDU_LARGE},
-        {txt=Fwd_string_fill(FMGS_sys.data.init.flt_nbr and FMGS_sys.data.init.flt_nbr or "", " ", 20) .. "  ", col=ECAM_WHITE, size=MCDU_SMALL}
+        {txt=Fwd_string_fill(FMGS_init_get_flt_nbr() and FMGS_init_get_flt_nbr() or "", " ", 20) .. "  ", col=ECAM_WHITE, size=MCDU_SMALL}
     })
 
     self:set_lr_arrows(mcdu_data, true)

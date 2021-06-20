@@ -89,7 +89,7 @@ end
 function THIS_PAGE:render(mcdu_data)
     assert(mcdu_data.lat_rev_subject and mcdu_data.lat_rev_subject.type == 4)
     THIS_PAGE.main_col = FMGS_does_temp_fpln_exist() and ECAM_YELLOW or ECAM_GREEN
-    THIS_PAGE.curr_fpln = FMGS_does_temp_fpln_exist() and FMGS_sys.fpln.temp or FMGS_sys.fpln.active
+    THIS_PAGE.curr_fpln = FMGS_get_current_fpln()
 
     self:set_lr_arrows(mcdu_data, true)
 

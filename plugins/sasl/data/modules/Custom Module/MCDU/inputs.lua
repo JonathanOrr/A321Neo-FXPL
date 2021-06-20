@@ -36,7 +36,7 @@ local function mcdu_eval_entry(str, format)
         elseif string.sub(format, i, i) == "#" then
             -- do nothing
         else
-            if string.sub(str, i, i) ~= string.upper(string.sub(format, i, i)) then 
+            if string.sub(str, i, i) ~= string.upper(string.sub(format, i, i)) then
                 pass = false
             end
         end
@@ -142,12 +142,12 @@ end
 -- the simpler way of getting mcdu entries
 function mcdu_get_entry_simple(mcdu_data, expected_formats, preserve_entry)
     assert(type(mcdu_data) == "table" and mcdu_data.id)
-    local output = mcdu_eval_entries(mcdu_data.entry, expected_formats)
+    local output = mcdu_eval_entries(mcdu_data.entry.text, expected_formats)
     if output == nil then
         mcdu_send_message(mcdu_data, "FORMAT ERROR")
         return nil
     elseif not preserve_entry then
-        mcdu_data.entry = ""
+        mcdu_data.entry = {text="", color=nil}
     end
     return output
 end
@@ -161,31 +161,32 @@ end
 -- and 300 is allowed (returns 300, nil)
 function mcdu_get_entry(mcdu_data, format_a, format_b, dont_reset_entry)
     assert(type(mcdu_data) == "table" and mcdu_data.id)
+    local entry = mcdu_data.entry.text
 	local a = nil
 	local b = nil
 	if format_b then
 		-- e.g. /20
-		if string.sub(mcdu_data.entry, 1, 1) == "/" then
-			b = mcdu_parse_entry(string.sub(mcdu_data.entry, 2, -1), format_b)
+		if string.sub(entry, 1, 1) == "/" then
+			b = mcdu_parse_entry(string.sub(entry, 2, -1), format_b)
 		else
 			local i = 1
-			while string.sub(mcdu_data.entry, i, i) ~= "/" and i < #mcdu_data.entry do
+			while string.sub(entry, i, i) ~= "/" and i < #entry do
 				i = i + 1
 			end
 			-- e.g. 200
-			if i == #mcdu_data.entry then
-				a = mcdu_parse_entry(mcdu_data.entry, format_a)
+			if i == #entry then
+				a = mcdu_parse_entry(entry, format_a)
 			-- e.g. 200/20
 			else
-				a = mcdu_parse_entry(string.sub(mcdu_data.entry, 1, i-1), format_a)
-				b = mcdu_parse_entry(string.sub(mcdu_data.entry, i+1, -1), format_b)
+				a = mcdu_parse_entry(string.sub(entry, 1, i-1), format_a)
+				b = mcdu_parse_entry(string.sub(entry, i+1, -1), format_b)
 			end
 		end
 	else
         if format_a then
-            a = mcdu_parse_entry(mcdu_data.entry, format_a)
+            a = mcdu_parse_entry(entry, format_a)
         else
-            a = mcdu_data.entry
+            a = entry
         end
 	end
 
@@ -198,7 +199,7 @@ function mcdu_get_entry(mcdu_data, format_a, format_b, dont_reset_entry)
 	end
 
     if not dont_reset_entry then
-    	mcdu_data.entry = ""
+    	mcdu_data.entry = {text="", color=nil}
     end
     if format_b then
         return a, b

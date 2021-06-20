@@ -24,26 +24,30 @@ function THIS_PAGE:render(mcdu_data)
     -- LEFT 1
     -------------------------------------
     self:set_line(mcdu_data, MCDU_LEFT, 1, "TAXI", MCDU_SMALL, ECAM_WHITE)
-    self:set_line(mcdu_data, MCDU_LEFT, 1, FMGS_sys.data.init.weights.taxi_fuel, MCDU_LARGE, ECAM_BLUE)
+    self:set_line(mcdu_data, MCDU_LEFT, 1, FMGS_init_get_taxi_fuel(), MCDU_LARGE, ECAM_BLUE)
 
     -------------------------------------
     -- RIGHT 1
     -------------------------------------
     self:set_line(mcdu_data, MCDU_RIGHT, 1, "ZFW/ZFWCG", MCDU_SMALL, ECAM_WHITE)
-    if FMGS_sys.data.init.weights.zfw == nil or FMGS_sys.data.init.weights.zfwcg == nil then
+
+    local zfw, zfwcg = FMGS_init_get_weight_zfw_cg()
+    if zfw == nil or zfwcg == nil then
         self:set_line(mcdu_data, MCDU_RIGHT, 1, "___._/ __._", MCDU_LARGE, ECAM_ORANGE)
     else
-        self:set_line(mcdu_data, MCDU_RIGHT, 1, Round_fill(FMGS_sys.data.init.weights.zfw, 1) .. "/ " .. Round_fill(FMGS_sys.data.init.weights.zfwcg, 1), MCDU_LARGE, ECAM_BLUE)
+        self:set_line(mcdu_data, MCDU_RIGHT, 1, Round_fill(zfw, 1) .. "/ " .. Round_fill(zfwcg, 1), MCDU_LARGE, ECAM_BLUE)
     end
     
     -------------------------------------
     -- LEFT 2
     -------------------------------------
     self:set_line(mcdu_data, MCDU_LEFT, 2, "TRIP /TIME", MCDU_SMALL, ECAM_WHITE)
-    if FMGS_sys.data.pred.trip_fuel == nil or FMGS_sys.data.pred.trip_time == nil then
+    local trip_fuel = FMGS_perf_get_pred_trip_fuel()
+    local trip_time = FMGS_perf_get_pred_trip_time()
+    if trip_fuel == nil or trip_time == nil then
         self:set_line(mcdu_data, MCDU_LEFT, 2, "---.-/----", MCDU_LARGE, ECAM_WHITE)
     else
-        self:set_line(mcdu_data, MCDU_LEFT, 2, Round_fill(FMGS_sys.data.pred.trip_fuel,1) .. "/" .. FMGS_sys.data.pred.trip_time, MCDU_LARGE, ECAM_BLUE)
+        self:set_line(mcdu_data, MCDU_LEFT, 2, Round_fill(trip_fuel,1) .. "/" .. trip_time, MCDU_LARGE, ECAM_BLUE)
     end
 
 
@@ -51,26 +55,26 @@ function THIS_PAGE:render(mcdu_data)
     -- RIGHT 2
     -------------------------------------
     self:set_line(mcdu_data, MCDU_RIGHT, 2, "BLOCK", MCDU_SMALL, ECAM_WHITE)
-    if FMGS_sys.data.init.weights.block_fuel == nil then
+    if FMGS_init_get_block_fuel() == nil then
         self:set_line(mcdu_data, MCDU_RIGHT, 2, "___._", MCDU_LARGE, ECAM_ORANGE)
     else
-        self:set_line(mcdu_data, MCDU_RIGHT, 2, Round_fill(FMGS_sys.data.init.weights.block_fuel, 1), MCDU_LARGE, ECAM_BLUE)
+        self:set_line(mcdu_data, MCDU_RIGHT, 2, Round_fill(FMGS_init_get_block_fuel(), 1), MCDU_LARGE, ECAM_BLUE)
     end
     
     -------------------------------------
     -- LEFT 3
     -------------------------------------
     self:set_line(mcdu_data, MCDU_LEFT, 3, "RTE RSV/%", MCDU_SMALL, ECAM_WHITE)
-    if FMGS_sys.data.init.weights.rsv_fuel == nil then
-        self:set_line(mcdu_data, MCDU_LEFT, 3, "---.-/" .. Round_fill(FMGS_sys.data.init.weights.rsv_fuel_perc,1), MCDU_LARGE, ECAM_BLUE)
+    if FMGS_init_get_rsv_fuel() == nil then
+        self:set_line(mcdu_data, MCDU_LEFT, 3, "---.-/" .. Round_fill(FMGS_init_get_rsv_fuel_perc(),1), MCDU_LARGE, ECAM_BLUE)
     else
-        self:set_line(mcdu_data, MCDU_LEFT, 3, Round_fill(FMGS_sys.data.init.weights.rsv_fuel,1) .. "/" .. Round_fill(FMGS_sys.data.init.weights.rsv_fuel_perc,1), MCDU_LARGE, ECAM_BLUE)
+        self:set_line(mcdu_data, MCDU_LEFT, 3, Round_fill(FMGS_init_get_rsv_fuel(),1) .. "/" .. Round_fill(FMGS_init_get_rsv_fuel_perc(),1), MCDU_LARGE, ECAM_BLUE)
     end
 
     -------------------------------------
     -- RIGHT 3
     -------------------------------------
-    if FMGS_sys.data.init.weights.zfw ~= nil and FMGS_sys.data.init.weights.zfwcg ~= nil then
+    if zfw ~= nil and zfwcg ~= nil then
         self:set_line(mcdu_data, MCDU_RIGHT, 3, "FUEL ", MCDU_SMALL, ECAM_ORANGE)
         self:set_line(mcdu_data, MCDU_RIGHT, 3, "PLANNING→", MCDU_LARGE, ECAM_ORANGE)
     end
@@ -126,7 +130,8 @@ function THIS_PAGE:R1(mcdu_data)
     local entru_out_of_range_msg = false
     local a, b = mcdu_get_entry(mcdu_data, {"number", length = 2, dp = 1}, {"number", length = 2, dp = 1}, false)
 
-    if FMGS_sys.data.init.weights.zfw == nil and FMGS_sys.data.init.weights.zfwcg == nil and (a == nil or b == nil) then
+    local zfw, zfwcg = FMGS_init_get_weight_zfw_cg()
+    if zfw == nil and zfwcg == nil and (a == nil or b == nil) then
         mcdu_send_message(mcdu_data, "FORMAT ERROR")
     return
     end
@@ -135,7 +140,8 @@ function THIS_PAGE:R1(mcdu_data)
         a = tonumber(a)
         local a_is_in_range = a > 47.7 and a < 99
         if a_is_in_range then
-            FMGS_sys.data.init.weights.zfw = a
+            FMGS_init_set_weight_zfw_cg(a, zfwcg)
+            zfw = a
         else
             entru_out_of_range_msg = true
         end
@@ -145,7 +151,7 @@ function THIS_PAGE:R1(mcdu_data)
         b = tonumber(b)
         local b_is_in_range = b > 12 and b < 40
         if b_is_in_range then
-            FMGS_sys.data.init.weights.zfwcg = b
+            FMGS_init_set_weight_zfw_cg(zfw, b)
         else
             entru_out_of_range_msg = true
         end
@@ -166,7 +172,7 @@ function THIS_PAGE:R2(mcdu_data)
     return end
 
     if input ~= nil then
-        FMGS_sys.data.init.weights.block_fuel = Round_fill(tonumber(input), 1)
+        FMGS_init_set_block_fuel(tonumber(input))
     else
         mcdu_send_message(mcdu_data, "FORMAT ERROR")
     end
