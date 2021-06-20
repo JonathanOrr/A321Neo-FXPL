@@ -16,29 +16,54 @@
 local THIS_PAGE = MCDU_Page:new({id=509})
 
 local function has_pos_changed(last, pos)
-    return true
+  return Round(last.lat, 2) ~= Round(pos.lat, 2) and Round(last.lon, 2) ~= Round(pos.lon, 2)
 end
 
 function THIS_PAGE:render(mcdu_data)
     self:set_title(mcdu_data, "CLOSEST AIRPORTS")
-    
--- if current pos has changed significantly then
---   get nearest 4 airports
---   store current pos
 
-    mcdu_data.nrst = mcdu_data.nrst or {}
+    mcdu_data.nrst = mcdu_data.nrst or { frozen = false, freeze_time = "0000" }
+
     local acf_lat, acf_lon = get(Aircraft_lat), get(Aircraft_long)
     if has_pos_changed(mcdu_data.nrst.last, {lat=acf_lat, lon=acf_lon}) then
-        if AvionicsBay.is_initialized() and AvionicsBay.is_ready() then
-            local apts = AvionicsBay.apts.get_by_coords(acf_lat, acf_lon)
+        if not mcdu_data.nrst.frozen then
+          if AvionicsBay.is_initialized() and AvionicsBay.is_ready() then
+              local apts = AvionicsBay.apts.get_by_coords(acf_lat, acf_lon)
 
-            for _,x in ipairs(apts) do
-                local distance = GC_distance_kt(x.lat, x.lon, acf_lat, acf_lon)
-                local brg = get_bearing(x.lat, x.lon, acf_lat, acf_lon)
-            end
+              for _,x in ipairs(apts) do
+                  local distance = GC_distance_kt(x.lat, x.lon, acf_lat, acf_lon)
+                  local brg = get_bearing(x.lat, x.lon, acf_lat, acf_lon)
+                  x.distance = distance
+                  x.brg = brg
+              end
+              table.sort(apts, function(a, b) return a.distance < b.distance end)
+
+              for i,x in ipairs(apts) do
+                if i > 4 then
+                  break
+                end
+                print(x.id, x.distance, x.brg)
+                mcdu_data.nrst[i] = x
+              end
+              self:set_line(mcdu_data, MCDU_LEFT, 6, "←FREEZE", MCDU_LARGE, ECAM_BLUE)
+          end
+        else
+          self:set_line(mcdu_data, MCDU_LEFT, 6, "←UNFREEZE", MCDU_LARGE, ECAM_BLUE)
         end
     end
+
+    self:set_line(mcdu_data, MCDU_LEFT, 1, mcdu_data.nrst[1].id, MCDU_LARGE, ECAM_GREEN)
+    self:set_line(mcdu_data, MCDU_LEFT, 2, mcdu_data.nrst[2].id, MCDU_LARGE, ECAM_GREEN)
+    self:set_line(mcdu_data, MCDU_LEFT, 3, mcdu_data.nrst[3].id, MCDU_LARGE, ECAM_GREEN)
+    self:set_line(mcdu_data, MCDU_LEFT, 4, mcdu_data.nrst[4].id, MCDU_LARGE, ECAM_GREEN)
     mcdu_data.nrst.last = {lat=acf_lat, lon=acf_lon}
+end
+
+function THIS_PAGE:L6(mcdu_data)
+  mcdu_data.nrst.frozen = not mcdu_data.nrst.frozen
+  if mcdu_data.nrst.frozen then
+    mcdu_data.nrst.freeze_time = Fwd_string_fill(tostring(get(ZULU_hours)), "0", 2)..Fwd_string_fill(tostring(get(ZULU_mins)), "0", 2)
+  end
 end
 
 mcdu_pages[THIS_PAGE.id] = THIS_PAGE

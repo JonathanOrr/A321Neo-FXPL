@@ -58,6 +58,10 @@ function THIS_PAGE:L4(mcdu_data)
     mcdu_open_page(mcdu_data, 505)
 end
 
+function THIS_PAGE:L5(mcdu_data)
+  mcdu_open_page(mcdu_data, 509)
+end
+
 function THIS_PAGE:Slew_Right(mcdu_data)
     mcdu_open_page(mcdu_data, 501)
 end
