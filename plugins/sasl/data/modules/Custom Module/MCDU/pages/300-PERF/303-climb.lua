@@ -16,8 +16,8 @@ local THIS_PAGE = MCDU_Page:new({id=303})
 
 function THIS_PAGE:render(mcdu_data)
 
-    local climb_mode = true -- SPEED, TRUE IS MANAGED, FALSE IS SELECTED!
-    local predicted_reaching_altitude = 37000
+    local climb_speed_mode = true -- SPEED, TRUE IS MANAGED, FALSE IS SELECTED!
+    local prediction_altitude = 37000
     local managed_data = {250, 0000,123} --FORMAT IS SPEED, ARRIVING UTC, DISTANCE
     local selected_data = {nil, nil,nil}
     local expedite_data = {0000, 120} --ARRIVING UTC, DISTANCE
@@ -52,13 +52,13 @@ function THIS_PAGE:render(mcdu_data)
     ----------
     -- TITLE--
     ----------
-    self:set_title(mcdu_data, " CLB")
+    self:set_title(mcdu_data, " CLB", fms_is_in_climb_phase and ECAM_GREEN or ECAM_WHITE)
     ----------
     --  L1  --
     ----------
     
     self:set_line(mcdu_data, MCDU_LEFT, 1, "ACT MODE", MCDU_SMALL, ECAM_WHITE)
-    self:set_line(mcdu_data, MCDU_LEFT, 1, climb_mode and "MANAGED" or "SELECTED", MCDU_LARGE, ECAM_GREEN)
+    self:set_line(mcdu_data, MCDU_LEFT, 1, climb_speed_mode and "MANAGED" or "SELECTED", MCDU_LARGE, ECAM_GREEN)
 
     ----------
     --  L2  --
@@ -113,7 +113,7 @@ function THIS_PAGE:render(mcdu_data)
     ----------
 
     self:add_multi_line(mcdu_data, MCDU_RIGHT, 2,mcdu_format_force_to_small("PRED TO      "), MCDU_LARGE, ECAM_WHITE)
-    self:add_multi_line(mcdu_data, MCDU_RIGHT, 2,"FL"..predicted_reaching_altitude/100, MCDU_LARGE, ECAM_BLUE)
+    self:add_multi_line(mcdu_data, MCDU_RIGHT, 2,"FL"..prediction_altitude/100, MCDU_LARGE, ECAM_BLUE)
 
     ----------
     --  R3  --
@@ -152,6 +152,10 @@ end
 
 function THIS_PAGE:L6(mcdu_data)
     mcdu_open_page(mcdu_data, 302)
+end
+
+function THIS_PAGE:R6(mcdu_data)
+    mcdu_open_page(mcdu_data, 305)
 end
 
 mcdu_pages[THIS_PAGE.id] = THIS_PAGE

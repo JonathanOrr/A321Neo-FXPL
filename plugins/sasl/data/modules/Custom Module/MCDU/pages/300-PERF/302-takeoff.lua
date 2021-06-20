@@ -20,7 +20,12 @@ local THIS_PAGE = MCDU_Page:new({id=302})
 
 function THIS_PAGE:render(mcdu_data)
 
-    self:set_title(mcdu_data, "   TAKE OFF ")
+    local fms_is_in_takeoff_phase = false
+
+
+
+
+    self:set_title(mcdu_data, "   TAKE OFF ", fms_is_in_takeoff_phase and ECAM_GREEN or ECAM_WHITE)
 
     --change later, load and read drfs here
 
