@@ -213,6 +213,8 @@
 {0b09be96-18d3-4139-8da9-27db52a78f7a} event:/Wipers/Start
 {883c4ea2-ffcd-4845-939e-1f0a5dedda32} event:/Wipers/Top
 {fe71437b-4936-4842-8b50-c346ceb04145} event:/Wipers/Wiper
+{fdf01ad4-aa4c-4cbb-bd36-ac53d71bb992} event:/SVCBus/On
+{cc1697d6-3256-48e0-a0ff-43d29ca3ebf6} event:/SVCBus/Off
 {eba1c552-d477-4c98-9d5f-00c2f3378ecd} event:/APButton
 {a50ec509-2f82-4177-bf54-8821bc565bed} event:/APU
 {4c5ca5ed-8bbe-4626-ad11-f45fe9ea2d17} event:/APU V2
