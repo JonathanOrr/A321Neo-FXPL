@@ -123,7 +123,7 @@ function mcdu_send_message(mcdu_data, message, color)
 
     color = color or ECAM_WHITE
 
-    if mcdu_data.messages[#mcdu_data.messages].text == message.text then
+    if #mcdu_data.messages > 0 and mcdu_data.messages[#mcdu_data.messages].text == message.text then
         return
     end
     table.insert(mcdu_data.messages, {text=message, color=color})

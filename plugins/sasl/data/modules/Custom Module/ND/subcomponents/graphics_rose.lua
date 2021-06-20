@@ -439,11 +439,11 @@ end
 
 local function draw_active_fpln(data)   -- This is just a test
 
-    local fpln_active = FMGS_sys.fpln.active
+    local active_legs = FMGS_get_route_legs()
 
 
     -- For each point in the FPLN...
-    for k,x in ipairs(fpln_active) do
+    for k,x in ipairs(active_legs) do
 
         local c_x,c_y = rose_get_x_y_heading(data, x.lat, x.lon, data.inputs.heading)
         x.x = c_x
@@ -467,10 +467,11 @@ local function draw_active_fpln(data)   -- This is just a test
 
     end
 
+    local dep_sid = FMGS_dep_get_sid(false)
     local last_x, last_y = nil, nil
 
-    if FMGS_sys.fpln.active.apts.dep_sid and FMGS_sys.fpln.active.apts.dep_sid.computed_legs then
-        for i, point in ipairs(FMGS_sys.fpln.active.apts.dep_sid.computed_legs) do
+    if dep_sid and dep_sid.computed_legs then
+        for i, point in ipairs(dep_sid.dep_sid.computed_legs) do
             local x, y = rose_get_x_y_heading(data, point.lat, point.lon, data.inputs.heading)
             if i > 1 then
                 sasl.gl.drawWideLine(last_x, last_y, x, y, 2, ECAM_GREEN)
@@ -479,9 +480,9 @@ local function draw_active_fpln(data)   -- This is just a test
         end
     end
 
-    if #fpln_active > 1 then
-        local n = #fpln_active
-        for k,r in ipairs(fpln_active) do
+    if #active_legs > 1 then
+        local n = #active_legs
+        for k,r in ipairs(active_legs) do
         
             if k > 1 and k < n and r.beizer then
 
@@ -494,7 +495,7 @@ local function draw_active_fpln(data)   -- This is just a test
                 if last_x ~= nil then
                     sasl.gl.drawWideLine(last_x, last_y, x_start, y_start, 2, ECAM_GREEN)
                 else
-                    local x,y = rose_get_x_y_heading(data, fpln_active[k-1].lat, fpln_active[k-1].lon, data.inputs.heading)
+                    local x,y = rose_get_x_y_heading(data, active_legs[k-1].lat, active_legs[k-1].lon, data.inputs.heading)
                     sasl.gl.drawWideLine(x, y, x_start, y_start, 2, ECAM_GREEN)
                 end
 
@@ -504,14 +505,14 @@ local function draw_active_fpln(data)   -- This is just a test
             end
         end
         if last_x ~= nil then
-            local x,y = rose_get_x_y_heading(data, fpln_active[n].lat, fpln_active[n].lon, data.inputs.heading)
+            local x,y = rose_get_x_y_heading(data, active_legs[n].lat, active_legs[n].lon, data.inputs.heading)
             sasl.gl.drawWideLine(last_x, last_y, x, y, 2, ECAM_GREEN)
         end
     end
 end
 
 local function draw_arpt_symbol(data)
-    local apt = FMGS_sys.fpln.active.apts.dep
+    local apt = FMGS_get_apt_dep()
     if not apt then
         return
     end

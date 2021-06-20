@@ -124,7 +124,7 @@ function THIS_PAGE:render(mcdu_data)
     self:set_lr_arrows(mcdu_data, true)
 
     THIS_PAGE.main_col  = FMGS_does_temp_fpln_exist() and ECAM_YELLOW or ECAM_GREEN
-    THIS_PAGE.curr_fpln = FMGS_does_temp_fpln_exist() and FMGS_sys.fpln.temp or FMGS_sys.fpln.active
+    THIS_PAGE.curr_fpln = FMGS_get_current_fpln()
 
     local subject_id = mcdu_data.lat_rev_subject.data.id
 
@@ -190,7 +190,7 @@ function THIS_PAGE:sel_sid(mcdu_data, i)
     
     if not FMGS_does_temp_fpln_exist() then
         FMGS_create_temp_fpln()
-        FMGS_sys.fpln.temp.apts.dep_rwy = FMGS_sys.fpln.active.apts.dep_rwy
+        FMGS_copy_dep_rwy_active_to_temp()
     end
     
     if THIS_PAGE.sid_references[i] > 0 then
@@ -206,8 +206,8 @@ end
 function THIS_PAGE:sel_trans(mcdu_data, i)
     if not FMGS_does_temp_fpln_exist() then
         FMGS_create_temp_fpln()
-        FMGS_sys.fpln.temp.apts.dep_rwy = FMGS_sys.fpln.active.apts.dep_rwy
-        FMGS_sys.fpln.temp.apts.dep_sid = FMGS_sys.fpln.active.apts.dep_sid
+        FMGS_copy_dep_rwy_active_to_temp()
+        FMGS_copy_dep_sid_active_to_temp()     
     end
 
     if THIS_PAGE.trans_references[i] > 0 then

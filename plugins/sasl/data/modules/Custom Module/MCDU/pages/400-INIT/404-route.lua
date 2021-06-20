@@ -19,9 +19,12 @@ local THIS_PAGE = MCDU_Page:new({id=404})
 function THIS_PAGE:render(mcdu_data)
     self:set_title(mcdu_data, "ROUTE")
 
+    local dep_apt = FMGS_get_apt_dep()
+    local arr_apt = FMGS_get_apt_arr()
+    assert(dep_apt and arr_apt)
 
     self:set_line(mcdu_data, MCDU_RIGHT, 1, "FROM/TO  ", MCDU_SMALL)
-    self:set_line(mcdu_data, MCDU_RIGHT, 1, FMGS_sys.fpln.active.apts.dep.id .. "/" .. FMGS_sys.fpln.active.apts.arr.id, MCDU_LARGE, ECAM_BLUE)
+    self:set_line(mcdu_data, MCDU_RIGHT, 1, dep_apt.id .. "/" .. arr_apt.id, MCDU_LARGE, ECAM_BLUE)
 
     self:set_line(mcdu_data, MCDU_LEFT, 1, " CO RTE", MCDU_SMALL)
     self:set_line(mcdu_data, MCDU_LEFT, 1, "NONE", MCDU_LARGE, ECAM_GREEN)
