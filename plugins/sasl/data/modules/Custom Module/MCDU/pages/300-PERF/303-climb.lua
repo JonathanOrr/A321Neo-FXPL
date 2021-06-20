@@ -64,12 +64,12 @@ function THIS_PAGE:render(mcdu_data)
     --  L2  --
     ----------
     self:set_line(mcdu_data, MCDU_LEFT, 2, " CI", MCDU_SMALL, ECAM_WHITE)
-    if FMGS_sys.fpln.active.apts.dep == nil or FMGS_sys.fpln.active.apts.arr == nil then
+    if not FMGS_are_main_apts_set() then
         self:set_line(mcdu_data, MCDU_LEFT, 2, "---", MCDU_LARGE)
-    elseif FMGS_sys.data.init.cost_index == nil then
+    elseif not FMGS_init_get_cost_idx() then
         self:set_line(mcdu_data, MCDU_LEFT, 2, "___", MCDU_LARGE, ECAM_ORANGE)
     else
-        self:set_line(mcdu_data, MCDU_LEFT, 2, FMGS_sys.data.init.cost_index, MCDU_LARGE, ECAM_BLUE)
+        self:set_line(mcdu_data, MCDU_LEFT, 2, FMGS_init_get_cost_idx(), MCDU_LARGE, ECAM_BLUE)
     end
     
     ----------
