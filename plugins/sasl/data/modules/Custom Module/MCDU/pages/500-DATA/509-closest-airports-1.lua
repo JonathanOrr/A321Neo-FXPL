@@ -35,6 +35,12 @@ function THIS_PAGE:render(mcdu_data)
             if AvionicsBay.is_initialized() and AvionicsBay.is_ready() then
                 local apts = AvionicsBay.apts.get_by_coords(acf_lat, acf_lon)
 
+                if mcdu_data.nrst.user_added ~= nil then
+                    local user_apts = AvionicsBay.apts.get_by_name(mcdu_data.nrst.user_added)
+                    for k,v in pairs(user_apts) do
+                        apts[k] = v
+                    end
+                end
                 for _, x in ipairs(apts) do
                     local distance = GC_distance_kt(x.lat, x.lon, acf_lat, acf_lon)
                     local brg = get_bearing(x.lat, x.lon, acf_lat, acf_lon)
@@ -44,7 +50,8 @@ function THIS_PAGE:render(mcdu_data)
                 table.sort(apts, function(a, b) return a.distance < b.distance end)
 
                 for i, x in ipairs(apts) do
-                    if i > 5 then break end
+                    local max = mcdu_data.nrst.user_added ~= nil and 5 or 4
+                    if i > max then break end
                     mcdu_data.nrst[i] = x
                 end
             end
@@ -55,18 +62,23 @@ function THIS_PAGE:render(mcdu_data)
     self:set_line(mcdu_data, MCDU_RIGHT, 1, "DIST  UTC ", MCDU_SMALL, ECAM_WHITE)
 
     if mcdu_data.nrst[2] ~= nil then
-        self:set_line(mcdu_data, MCDU_LEFT, 1, mcdu_data.nrst[2].id .. "    " .. string.format("%.0f°", tostring(mcdu_data.nrst[2].brg)), MCDU_LARGE, ECAM_GREEN)
-        self:set_line(mcdu_data, MCDU_RIGHT, 1, string.format("%.0f", tostring(mcdu_data.nrst[2].distance)) .. "      ", MCDU_LARGE, ECAM_GREEN)
-        self:set_line(mcdu_data, MCDU_LEFT, 2, mcdu_data.nrst[3].id .. "    " .. string.format("%.0f°", tostring(mcdu_data.nrst[3].brg)), MCDU_LARGE, ECAM_GREEN)
-        self:set_line(mcdu_data, MCDU_RIGHT, 2, string.format("%.0f", tostring(mcdu_data.nrst[3].distance)) .. "      ", MCDU_LARGE, ECAM_GREEN)
-        self:set_line(mcdu_data, MCDU_LEFT, 3, mcdu_data.nrst[4].id .. "    " .. string.format("%.0f°", tostring(mcdu_data.nrst[4].brg)), MCDU_LARGE, ECAM_GREEN)
-        self:set_line(mcdu_data, MCDU_RIGHT, 3, string.format("%.0f", tostring(mcdu_data.nrst[4].distance)) .. "      ", MCDU_LARGE, ECAM_GREEN)
-        self:set_line(mcdu_data, MCDU_LEFT, 4, mcdu_data.nrst[5].id .. "    " .. string.format("%.0f°", tostring(mcdu_data.nrst[5].brg)), MCDU_LARGE, ECAM_GREEN)
-        self:set_line(mcdu_data, MCDU_RIGHT, 4, string.format("%.0f", tostring(mcdu_data.nrst[5].distance)) .. "      ", MCDU_LARGE, ECAM_GREEN)
+        for i = 1,4 do
+            self:set_line(mcdu_data, MCDU_LEFT, i, mcdu_data.nrst[i+1].id .. "    " .. string.format("%.0f°", tostring(mcdu_data.nrst[i+1].brg)), MCDU_LARGE, ECAM_GREEN)
+            self:set_line(mcdu_data, MCDU_RIGHT, i, string.format("%.0f", tostring(mcdu_data.nrst[i+1].distance)) .. "      ", MCDU_LARGE, ECAM_GREEN)
+        end
 
         self:set_line(mcdu_data, MCDU_LEFT, 6, mcdu_data.nrst.frozen and "←UNFREEZE" or "←FREEZE", MCDU_LARGE, ECAM_BLUE)
     end
     mcdu_data.nrst.last = {lat = acf_lat, lon = acf_lon}
+end
+
+function THIS_PAGE:L5(mcdu_data)
+    local input = mcdu_get_entry_simple(mcdu_data, {"#####"}, false)
+    if input == nil then
+        MCDU.send_message(mcdu_data, "INVALID INPUT")
+        return
+    end
+    mcdu_data.nrst.user_added = input
 end
 
 function THIS_PAGE:L6(mcdu_data)
