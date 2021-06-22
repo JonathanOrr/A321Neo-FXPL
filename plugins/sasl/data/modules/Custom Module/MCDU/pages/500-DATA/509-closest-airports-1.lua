@@ -61,10 +61,10 @@ function THIS_PAGE:render(mcdu_data)
     self:set_line(mcdu_data, MCDU_LEFT, 1, "        BRG", MCDU_SMALL, ECAM_WHITE)
     self:set_line(mcdu_data, MCDU_RIGHT, 1, "DIST  UTC ", MCDU_SMALL, ECAM_WHITE)
 
-    if mcdu_data.nrst[2] ~= nil then
+    if mcdu_data.nrst[1] ~= nil then
         for i = 1,4 do
-            self:set_line(mcdu_data, MCDU_LEFT, i, mcdu_data.nrst[i+1].id .. "    " .. string.format("%.0f°", tostring(mcdu_data.nrst[i+1].brg)), MCDU_LARGE, ECAM_GREEN)
-            self:set_line(mcdu_data, MCDU_RIGHT, i, string.format("%.0f", tostring(mcdu_data.nrst[i+1].distance)) .. "      ", MCDU_LARGE, ECAM_GREEN)
+            self:set_line(mcdu_data, MCDU_LEFT, i, mcdu_data.nrst[i].id .. "    " .. string.format("%.0f°", tostring(mcdu_data.nrst[i].brg)), MCDU_LARGE, ECAM_GREEN)
+            self:set_line(mcdu_data, MCDU_RIGHT, i, string.format("%.0f", tostring(mcdu_data.nrst[i].distance)) .. "      ", MCDU_LARGE, ECAM_GREEN)
         end
 
         self:set_line(mcdu_data, MCDU_LEFT, 6, mcdu_data.nrst.frozen and "←UNFREEZE" or "←FREEZE", MCDU_LARGE, ECAM_BLUE)
