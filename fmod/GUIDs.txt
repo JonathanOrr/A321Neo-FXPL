@@ -183,6 +183,8 @@
 {8fc35da0-ff79-4c98-9b39-e007109072ad} event:/SSPriority/Right
 {af369460-34d3-4c6e-a56c-fbe21efb91d5} event:/StickLock/StickLock
 {58a4e386-a3b3-4a0f-946e-6d836beb34f2} event:/StickLock/StickUnlock
+{cc1697d6-3256-48e0-a0ff-43d29ca3ebf6} event:/SVCBus/Off
+{fdf01ad4-aa4c-4cbb-bd36-ac53d71bb992} event:/SVCBus/On
 {1ac29002-a8e7-438f-bced-dd56cb5e0ba2} event:/TA Test/End
 {bd5c0769-ed87-4f2c-a3f4-9843f0ac8e30} event:/TA Test/Pass
 {f15aa472-2df9-4ba1-91ee-30ec710d40b1} event:/TA Test/Start
@@ -271,6 +273,7 @@
 {7a0b49ba-aead-4c30-af12-561f455d9c0b} bus:/Master/Exterior Unprocessed/ExteriorNI
 {10525979-1fa1-4401-8583-bec00053b160} bus:/Master/Exterior Unprocessed/ExteriorWI
 {6cee8772-2b5f-4158-9399-80dbe765bd69} bus:/Master/Exterior Unprocessed/Mechanical
+{b044900b-47b8-49df-a4ad-09b875247d7b} bus:/Master/Exterior Unprocessed/NewEvenQuieter
 {b61e991d-32d3-4702-a3a5-08048a3ecd6a} bus:/Master/Exterior Unprocessed/NewMuchQuieterIn
 {15e9c653-fbca-41ca-8241-7cd3b3870fc8} snapshot:/Inside
 {e5b38f91-83fb-4cec-a2d2-a0170dddb70a} snapshot:/FadingBegin
