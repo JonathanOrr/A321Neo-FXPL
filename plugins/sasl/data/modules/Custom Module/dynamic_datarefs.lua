@@ -864,8 +864,6 @@ VEHICLE_wv = createGlobalPropertyi("a321neo/efb/vehicles/wv", 0, false, true, fa
 
 VOLUME_ext = createGlobalPropertyf("a321neo/volume/ext", 1, false, true, false)
 VOLUME_int = createGlobalPropertyf("a321neo/volume/int", 1, false, true, false)
-VOLUME_wind = createGlobalPropertyf("a321neo/volume/wind", 1, false, true, false)
-VOLUME_cabin = createGlobalPropertyf("a321neo/volume/cabin", 1, false, true, false)
 
 --LOAD VALUES
 LOAD_flapssetting = createGlobalPropertyi("a321neo/efb/load", 1, false, true, false) --1 is 1+F, 2 is 2, 3 is 3
@@ -898,6 +896,8 @@ TOPCAT_torwy_bearing = createGlobalPropertyf("a321neo/efb/topcat/torwy_bearing",
 TOPCAT_ldgrwy_length = createGlobalPropertyf("a321neo/efb/topcat/ldgrwy_length", 0, false, true, false)
 TOPCAT_ldgrwy_bearing = createGlobalPropertyf("a321neo/efb/topcat/ldgrwy_bearing", 0, false, true, false)
 TOPCAT_ldgrwy_elev = createGlobalPropertyf("a321neo/efb/topcat/ldgrwy_elev", 0, false, true, false)
+
+PANEL_AA_LEVEL_1to32 = createGlobalPropertyi("a321neo/panels/antialiasing_lvl_actual", 1, false, true, false)
 
 
 
