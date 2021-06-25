@@ -43,9 +43,9 @@ local function draw_needle(PFD_table)
     if math.abs(adirs_get_vs(PFD_table.Screen_ID)) >= 200 then
         sasl.gl.drawRectangle(
             VS_box_x_pos - VS_box_margin,
-            VS_box_y_pos - VS_box_margin,
+            VS_box_y_pos - VS_box_margin - 2,
             VS_box_width,
-            VS_box_height,
+            VS_box_height + 4,
             ECAM_BLACK
         )
         sasl.gl.drawText(
@@ -71,8 +71,8 @@ local function draw_needle(PFD_table)
             )
         end
     end
+    sasl.gl.drawWideLine(size[1]/2+400, size[2]/2-8 + Table_interpolate(vs_needle_outter_anim, adirs_get_vs(PFD_table.Screen_ID)), size[1]/2+450, size[2]/2-8 + Table_interpolate(vs_needle_inner_anim, adirs_get_vs(PFD_table.Screen_ID)), 5, needle_color)
 
-    sasl.gl.drawWideLine(size[1]/2+400, size[2]/2-8 + Table_interpolate(vs_needle_outter_anim, adirs_get_vs(PFD_table.Screen_ID)), size[1]/2+450, size[2]/2-8 + Table_interpolate(vs_needle_inner_anim, adirs_get_vs(PFD_table.Screen_ID)), 4, needle_color)
 end
 
 function PFD_draw_vs_needle(PFD_table)
