@@ -66,6 +66,7 @@ components = {
   engines {},
   cabin_screens {},
   ADIRS {},
+  GPS {},
   FMGS {},
   CAPT_MCDU {},
   FO_MCDU {},
