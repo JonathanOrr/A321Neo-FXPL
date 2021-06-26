@@ -50,6 +50,52 @@ local function type_char_to_idx(x)
     end
 end
 
+local function extract_rwy_name(rwy_name_with_suffix)
+
+    local rwy_name = rwy_name_with_suffix:sub(1,2)
+
+    if rwy_name_with_suffix:sub(3,3) == "L" then
+        rwy_name = rwy_name .. "L"
+    elseif rwy_name_with_suffix:sub(3,3) == "R" then
+        rwy_name = rwy_name .. "R"
+    elseif rwy_name_with_suffix:sub(3,3) == "C" then
+        rwy_name = rwy_name .. "C"
+    end
+
+    return rwy_name
+end
+
+function THIS_PAGE:get_runway_info(rwy_name)
+    local rwy_info, ils_info
+
+    for k,x in ipairs(THIS_PAGE.curr_fpln.apts.arr.rwys) do
+        if x.name == rwy_name then
+            rwy_info = {math.floor(x.distance), math.floor(x.bearing)}
+            break
+        end
+        if x.sibl_name == rwy_name then
+            rwy_info = {math.floor(x.distance), math.floor(x.bearing+180)%360}
+            break
+        end
+    end
+
+    for k,x in ipairs(THIS_PAGE.curr_fpln.apts.arr_cifp.rwys) do
+        if x.name == rwy_name then
+
+            local nav_aid  = AvionicsBay.navaids.get_by_name(NAV_ID_LOC, x.loc_ident, false)
+            local nav_aid2 = AvionicsBay.navaids.get_by_name(NAV_ID_LOC_ALONE, x.loc_ident, false)
+
+            local freq = #nav_aid > 0 and nav_aid[1].freq or (#nav_aid2 > 0 and nav_aid2[1].freq or nil)
+            freq = freq and Round_fill(freq / 100, 2)
+
+            ils_info = {x.loc_ident, freq}
+            break
+        end
+    end
+
+    return rwy_info, ils_info
+end
+
 function THIS_PAGE:render_apprs(mcdu_data)
     if not THIS_PAGE.curr_fpln.apts.arr_cifp then
         return  -- This should not happen
@@ -64,7 +110,10 @@ function THIS_PAGE:render_apprs(mcdu_data)
             if not apprs_list[type_idx] then
                  apprs_list[type_idx] = {}
             end
-            table.insert(apprs_list[type_idx], {name=x.proc_name:sub(2), idx=i, prefix=type_str})
+            local rwy_name_with_suffix = x.proc_name:sub(2)
+            local rwy_name = extract_rwy_name(rwy_name_with_suffix)
+            local rwy_info, ils_info = self:get_runway_info(rwy_name)
+            table.insert(apprs_list[type_idx], {name=rwy_name_with_suffix, idx=i, prefix=type_str, rwy_info=rwy_info, ils_info=ils_info})
             THIS_PAGE.apprs_length = THIS_PAGE.apprs_length + 1
         end
     end
@@ -78,7 +127,14 @@ function THIS_PAGE:render_apprs(mcdu_data)
             i = i + 1
             if i > 3 * (THIS_PAGE.curr_page-1) and i <= 3 * (THIS_PAGE.curr_page) then
                 local arrow = "←" -- (FMGS_dep_get_sid(true) and FMGS_dep_get_sid(true).proc_name == k) and " " or "←"
-                self:set_line(mcdu_data, MCDU_LEFT, n_line, arrow .. data.prefix .. data.name, MCDU_LARGE, ECAM_BLUE)
+                local top_line = Aft_string_fill(arrow .. data.prefix .. data.name, " ", 11) .. (data.rwy_info and data.rwy_info[1] .. mcdu_format_force_to_small("M") or "")
+                local bottom_line = "   " .. Aft_string_fill(data.rwy_info and Fwd_string_fill(""..data.rwy_info[2], "0", 3) or "", " ", 5)
+                if data.ils_info then
+                    bottom_line = bottom_line .. (data.ils_info[1] and data.ils_info[1] or "") .. (data.ils_info[2] and "/".. data.ils_info[2] or "")
+                end
+                
+                self:set_line(mcdu_data, MCDU_LEFT, n_line, top_line, MCDU_LARGE, ECAM_BLUE)
+                self:set_line(mcdu_data, MCDU_LEFT, n_line+1, bottom_line, MCDU_SMALL, ECAM_BLUE)
                 THIS_PAGE.apprs_references[n_line-1] = data.idx    -- Let's same the array index so that we can use this for buttons
                 n_line = n_line + 1
             end
