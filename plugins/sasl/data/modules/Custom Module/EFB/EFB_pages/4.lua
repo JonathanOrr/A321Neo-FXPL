@@ -231,5 +231,4 @@ function EFB_draw_page_4()
     draw_toggle_switches()
     draw_volume_sliders()
     draw_dropdowns()
-    print(antialiasing_lvl_value, get(PANEL_AA_LEVEL_1to32))
 end

@@ -202,8 +202,6 @@ function THIS_PAGE:R3(mcdu_data)
     if entru_out_of_range_msg then
         mcdu_send_message(mcdu_data, "ENTRY OUT OF RANGE")
     end
-
-    print(b)
 end
 
 function THIS_PAGE:R4(mcdu_data)

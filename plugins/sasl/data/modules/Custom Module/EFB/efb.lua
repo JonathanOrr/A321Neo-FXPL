@@ -210,6 +210,30 @@ local function update_battery()
     end 
 end
 
+local function Cursor_texture_to_local_pos(x, y, component_width, component_height, panel_width, panel_height)
+    local tex_x, tex_y = sasl.getCSPanelMousePos()
+
+    --mouse not on the screen
+    if tex_x == nil or tex_y == nil then
+        return 0, 0, false
+    end
+
+    --0 --> 1 to px
+    local px_x = Math_rescale(0, 0, 1, panel_width,  tex_x)
+    local px_y = Math_rescale(0, 0, 1, panel_height, tex_y)
+
+    --px --> component
+    local component_x = Math_rescale(x, 0, x + component_width,  component_width,  px_x)
+    local component_y = Math_rescale(y, 0, y + component_height, component_height, px_y)
+
+    if px_x < x or px_x > x + component_width or px_y < y or px_y > y + component_height then
+        return 0, 0, false
+    end
+
+    --output converted coordinates
+    return component_x, component_y, true
+end
+
 --SASL callbacks-------------------------------------------------------------------------------------------------
 function update()
     perf_measure_start("EFB:update()")
@@ -248,7 +272,7 @@ function draw()  ------KEEP THE draw_cursor() AT THE BOTTOM YOU DUMBASS!!!!!
     draw_efb_bgd()
     EFB_draw_pages[EFB_PAGE]()
 
-    draw_fading_transition()
+    --draw_fading_transition()
 
     
     if EFB_PAGE ~= 10 then
