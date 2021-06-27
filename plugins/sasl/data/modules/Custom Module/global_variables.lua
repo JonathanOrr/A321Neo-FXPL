@@ -50,12 +50,15 @@ DRAIMS_common = {}
 FMGS_sys = {}
 TCAS_sys = {}
 
+WEIGHTS = {}
+
 -- Engine data depending on the user choice
 ENG = { data_is_loaded = false }
 
 EFB = {}
 
 AvionicsBay = {}
+
 
 -- MCDU
 MCDU = {}

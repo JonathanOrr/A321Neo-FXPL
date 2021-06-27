@@ -451,7 +451,7 @@ local function predict_cg()
 end
 
 local function set_cg()
-    set(CG_Pos, 0.04232395*(final_cg) - 1.06312)
+    --set(CG_Pos, 0.04232395*(final_cg) - 1.06312)
 end
 
 local function set_values(startup)
@@ -469,7 +469,7 @@ local function set_values(startup)
     calculate_cg()
     sum_weights_up()
     set_cg()
-    set(Payload_weight, (load_actual[1] + load_actual[2] + load_actual[3])*WEIGHT_PER_PASSENGER + load_actual[4] + load_actual[5])
+    --set(Payload_weight, (load_actual[1] + load_actual[2] + load_actual[3])*WEIGHT_PER_PASSENGER + load_actual[4] + load_actual[5])
 end
 
 local function Subpage_1_buttons()
