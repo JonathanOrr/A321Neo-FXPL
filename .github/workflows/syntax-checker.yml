@@ -26,6 +26,7 @@ jobs:
       run: |
         cd "plugins/sasl/data/modules/"
         for file in `find . -type f -name "*.lua"`; do
-            luajit -bl $file > /dev/null
+            echo "Checking $file ..."
+            luajit -bl "$file" > /dev/null
         done
         
