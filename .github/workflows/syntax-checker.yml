@@ -9,18 +9,23 @@ jobs:
     steps:
     - uses: actions/checkout@master
 
-    - run: echo "Install LuaJIT" |
-           sudo apt-get update -y |
-           sudo apt-get install -y luajit
+    - run: |
+       echo "Download & Install LuaJIT"
+       sudo apt-get update -y
+       sudo apt-get install -y luajit
 
-    - run: echo "Installed LuaJIT" |
-           luajit -v
+    - run: |
+       echo "Installed LuaJIT"
+       luajit -v
 
     - name: Check out repository code
       uses: actions/checkout@v2
     - run: echo "The ${{ github.repository }} repository has been cloned to the runner."
 
     - name: Switch to script files
-      run: cd "plugins/sasl/data/modules/" |
-           ls
+      run: |
+        cd "plugins/sasl/data/modules/"
+        for file in `ls *.lua`; do
+            echo $file
+        done
         
