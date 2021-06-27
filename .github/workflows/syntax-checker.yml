@@ -25,8 +25,11 @@ jobs:
     - name: Switch to script files
       run: |
         cd "plugins/sasl/data/modules/"
-        for file in `find . -type f -name "*.lua"`; do
+        OIFS="$IFS"
+        IFS=$'\n'
+        for file in $(find . -type f -name "*.lua"); do
             echo "Checking $file ..."
             luajit -bl "$file" > /dev/null
         done
+        IFS="$OIFS"
         
