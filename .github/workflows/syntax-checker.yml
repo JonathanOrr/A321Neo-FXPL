@@ -13,14 +13,14 @@ jobs:
       with:
         lua-version: "luajit-2.0.5"
 
-    - run: echo "Installed LuaJIT:"
-    - run: luajit -v
+    - run: echo "Installed LuaJIT" |
+           luajit -v
 
     - name: Check out repository code
       uses: actions/checkout@v2
     - run: echo "The ${{ github.repository }} repository has been cloned to the runner."
 
     - name: Switch to script files
-    - run: cd "plugins/sasl/data/modules/"
-    - run: ls
+      run: cd "plugins/sasl/data/modules/" |
+           ls
         
