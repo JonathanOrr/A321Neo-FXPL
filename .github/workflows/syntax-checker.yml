@@ -25,7 +25,7 @@ jobs:
     - name: Switch to script files
       run: |
         cd "plugins/sasl/data/modules/"
-        for file in `ls *.lua`; do
-            echo $file
+        for file in `find . -type f -name "*.lua"`; do
+            luajit -bl $file > /dev/null
         done
         
