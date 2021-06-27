@@ -1,0 +1,26 @@
+name: test
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@master
+
+    - uses: xpol/setup-lua@v1
+      with:
+        lua-version: "luajit-2.0.5"
+
+    - run: echo "Installed LuaJIT:"
+    - run: luajit -v
+
+    - name: Check out repository code
+      uses: actions/checkout@v2
+    - run: echo "The ${{ github.repository }} repository has been cloned to the runner."
+
+    - name: Switch to script files
+    - run: cd "plugins/sasl/data/modules/"
+    - run: ls
+        
