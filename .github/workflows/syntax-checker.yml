@@ -9,12 +9,12 @@ jobs:
     steps:
     - uses: actions/checkout@master
 
-    - uses: xpol/setup-lua@v1
+    - uses: xpol/setup-lua@v0.3
       with:
         lua-version: "luajit-2.0.5"
 
     - run: echo "Installed LuaJIT" |
-           luajit -v
+           .lua/bin/luajit -v
 
     - name: Check out repository code
       uses: actions/checkout@v2
