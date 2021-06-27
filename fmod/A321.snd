@@ -4334,7 +4334,7 @@ END_SOUND_ATTACHMENT
 ##################################################################################################################################################################################FCU Knobs
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /FCU/Rotate4
+  EVENT_NAME /FCU/Rotate2
   VEH_XYZ 0 1.5 -18.4
   EVENT_START_COND ABS_DELTA=a321neo/cockpit/AUTOFLT/FCU/animation/spd_knob_clicks > 0
   EVENT_END_COND ABS_DELTA=a321neo/cockpit/AUTOFLT/FCU/animation/spd_knob_clicks == 0
@@ -4348,14 +4348,14 @@ BEGIN_SOUND_ATTACHMENT
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /FCU/Rotate3
+  EVENT_NAME /FCU/Rotate2
   VEH_XYZ 0 1.5 -18.4
   EVENT_START_COND ABS_DELTA=a321neo/cockpit/AUTOFLT/FCU/animation/alt_knob_clicks > 0
   EVENT_END_COND ABS_DELTA=a321neo/cockpit/AUTOFLT/FCU/animation/alt_knob_clicks == 0
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /FCU/Rotate4
+  EVENT_NAME /FCU/Rotate2
   VEH_XYZ 0 1.5 -18.4
   EVENT_START_COND ABS_DELTA=a321neo/cockpit/AUTOFLT/FCU/animation/vs_knob_clicks > 0
   EVENT_END_COND ABS_DELTA=a321neo/cockpit/AUTOFLT/FCU/animation/vs_knob_clicks == 0
