@@ -107,6 +107,7 @@ components = {
   DRAIMS_FO {},
   nav_updater {},
   tcas {},
+  weights {},
   display_brightness {}, -- This must stay at the bottom
 
   main_popup {},
