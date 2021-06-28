@@ -74,8 +74,7 @@ sasl.registerCommandHandler ( DRAIMS_2_brightness_up, 0, function(phase) Knob_ha
 sasl.registerCommandHandler ( DRAIMS_2_brightness_dn, 0, function(phase) Knob_handler_down_float(phase, DRAIMS_2_brightness, 0, 1, BRIGHTNESS_KNOB_SPEED) end)
 
 --isis
-sasl.registerCommandHandler ( ISIS_brightness_up, 0, function(phase) Knob_handler_up_float(phase, ISIS_brightness, 0, 1, BRIGHTNESS_KNOB_SPEED) end)
-sasl.registerCommandHandler ( ISIS_brightness_dn, 0, function(phase) Knob_handler_down_float(phase, ISIS_brightness, 0, 1, BRIGHTNESS_KNOB_SPEED) end)
+--ISIS brightness control has been moved to main ISIS script, bexause + - signs also control the bugs oage.
 
 function update_actual_values()
     set(Capt_PFD_brightness_act, get(Capt_PFD_brightness) * get(AC_ess_bus_pwrd))
@@ -95,9 +94,6 @@ function update_actual_values()
 
     set(DCDU_1_brightness_act,   get(DCDU_1_brightness) * (1 - get(FAILURE_DISPLAY_DCDU_1)) * get(AC_bus_1_pwrd))
     set(DCDU_2_brightness_act,   get(DCDU_2_brightness) * (1 - get(FAILURE_DISPLAY_DCDU_2)) * get(AC_bus_1_pwrd))
-
-    set(ISIS_brightness_act,   get(ISIS_brightness) * (1 - get(FAILURE_DISPLAY_ISIS)) * get(DC_ess_bus_pwrd))
-
 end
 
 function update()

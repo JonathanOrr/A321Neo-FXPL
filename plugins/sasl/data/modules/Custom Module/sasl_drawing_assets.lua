@@ -279,6 +279,11 @@ ISIS_glideslope = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/
 ISIS_lsh = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/lsh-1.png")
 ISIS_lsv = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/lsv-1.png")
 
+--ISIS BUGS DRAWINGS
+ISIS_BUGS_bgd =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/BUGS/isis_bugs_bgd.png")
+ISIS_BUGS_big_box =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/BUGS/isis_big_box.png")
+ISIS_BUGS_small_box =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/BUGS/isis_small_box.png")
+
 -- MCDU --
 MCDU_lr_arrows =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/MCDU/lr_arrows.png")
 MCDU_ud_arrows =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/MCDU/ud_arrows.png")
