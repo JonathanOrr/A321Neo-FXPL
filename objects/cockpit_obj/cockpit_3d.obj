@@ -11020,7 +11020,7 @@ IDX	8427
 		TRIS	9126 66
 		ATTR_manip_command	button	a321neo/cockpit/misc/chrono_date	Press chronos date
 		TRIS	9192 66
-		ATTR_manip_command	rotate_medium	a321neo/cockpit/ISIS/Knob_RotaryPress	Press ISIS baro pressure reference
+		ATTR_manip_command	button	a321neo/cockpit/ISIS/Knob_RotaryPress	Press ISIS baro pressure reference
 		TRIS	9258 66
 		ATTR_manip_command	button	a321neo/cockpit/wheel/toggle_lo_autobrake	Toggle LO autobrake
 		TRIS	9612 6
