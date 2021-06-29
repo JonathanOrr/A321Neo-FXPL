@@ -152,6 +152,13 @@ BEGIN_SOUND_ATTACHMENT
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Engines V1 PW1100G/HowlLogicLX
+  VEH_PART engine 0
+  EVENT_ALWAYS
+  PARAM_DREF_IDX 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /Engines V1 PW1100G/EnginesR
   VEH_PART engine 1
   EVENT_ALWAYS
@@ -179,56 +186,20 @@ BEGIN_SOUND_ATTACHMENT
   PARAM_DREF_IDX 1
 END_SOUND_ATTACHMENT
 
-##   BEGIN_SOUND_ATTACHMENT
-##     EVENT_NAME /Engines V2/HowlEnd
-##     VEH_PART engine 0
-##     EVENT_START_COND a321neo/sounds/rush_L < 15
-##     PARAM_DREF_IDX 0
-##   END_SOUND_ATTACHMENT
-##   
-##   BEGIN_SOUND_ATTACHMENT
-##     EVENT_NAME /Engines V2/HowlEnd
-##     VEH_PART engine 1
-##     EVENT_START_COND a321neo/sounds/rush_R < 15
-##     PARAM_DREF_IDX 1
-##   END_SOUND_ATTACHMENT
-##   
-##   BEGIN_SOUND_ATTACHMENT
-##     EVENT_NAME /Engines V2/HowlLogic
-##     VEH_PART engine 0
-##     EVENT_ALWAYS
-##     PARAM_DREF_IDX 0
-##   END_SOUND_ATTACHMENT
-##   
-##   BEGIN_SOUND_ATTACHMENT
-##     EVENT_NAME /Engines V2/HowlLogic
-##     VEH_PART engine 1
-##     EVENT_ALWAYS
-##     PARAM_DREF_IDX 1
-##   END_SOUND_ATTACHMENT
-
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /Engines/Engines Ext
+  EVENT_NAME /Engines V1 PW1100G/EnginesLX
   VEH_PART engine 0
-  EVENT_START_COND sim/flightmodel2/engines/N1_percent[0] > 0
-  EVENT_END_COND sim/flightmodel2/engines/N1_percent[0] == 0
-  PARAM_DREF_IDX 0
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /Engines/Engines Ext
-  VEH_PART engine 1
-  EVENT_START_COND sim/flightmodel2/engines/N1_percent[1] > 0
-  EVENT_END_COND sim/flightmodel2/engines/N1_percent[1] == 0
-  PARAM_DREF_IDX 1
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /Ground Roll
-  VEH_XYZ 0 0 0
   EVENT_ALWAYS
   PARAM_DREF_IDX 0
 END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Engines V1 PW1100G/EnginesRX
+  VEH_PART engine 01
+  EVENT_ALWAYS
+  PARAM_DREF_IDX 1
+END_SOUND_ATTACHMENT
+
 
 ##############################################################THRUST LEVERS###################################################
 
