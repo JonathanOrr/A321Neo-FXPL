@@ -138,7 +138,7 @@ local function draw_ecam_lower_section()
     end
     --center section
     --adding a 0 to the front of the time when single digit
-    if get(GPS_1_is_available) == 1 or get(GPS_2_is_available) == 1 then
+    if GPS_sys[1].status == GPS_STATUS_NAV or GPS_sys[2].status == GPS_STATUS_NAV then
         if get(ZULU_hours) < 10 then
             sasl.gl.drawText(Font_AirbusDUL, size[1]/2-25, size[2]/2-408, "0" .. get(ZULU_hours), 38, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
         else

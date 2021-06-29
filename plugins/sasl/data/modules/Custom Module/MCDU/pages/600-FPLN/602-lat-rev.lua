@@ -40,7 +40,7 @@ function THIS_PAGE:render(mcdu_data)
     })
 
     local lat, lon
-    if lrtype == TYPE_PPOS and (get(GPS_1_is_available) == 1 or get(GPS_2_is_available) == 1) then
+    if lrtype == TYPE_PPOS and (GPS_sys[1].status == GPS_STATUS_NAV or GPS_sys[2].status == GPS_STATUS_NAV) then
         lat,lon = get(Aircraft_lat), get(Aircraft_long)
     elseif lrtype ~= TYPE_PPOS then
         lat,lon = mcdu_data.lat_rev_subject.data.lat, mcdu_data.lat_rev_subject.data.lon

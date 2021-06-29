@@ -152,7 +152,7 @@ end
 local function get_gps_data()
 
     local year = tonumber(os.date("%y"))
-    if get(GPS_1_is_available) == 1 or get(GPS_2_is_available) == 1 then
+    if GPS_sys[1].status == GPS_STATUS_NAV or GPS_sys[2].status == GPS_STATUS_NAV then
         if clock_is_showing_date then
             return fz(get(ZULU_month)) .. fz(get(ZULU_day)) .. fz(year)
         else

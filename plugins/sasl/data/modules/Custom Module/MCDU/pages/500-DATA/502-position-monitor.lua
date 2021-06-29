@@ -88,7 +88,7 @@ function THIS_PAGE:render(mcdu_data)
     local irs_working = adirs_how_many_irs_fully_work()
     if irs_working > 0 then
         irs_gps_str = irs_gps_str .. irs_working .. "IRS"
-        if get(GPS_1_is_available) == 1 or get(GPS_2_is_available) == 1 then
+        if GPS_sys[1].status == GPS_STATUS_NAV or GPS_sys[2].status == GPS_STATUS_NAV then
             irs_gps_str = irs_gps_str .. "/GPS"
         end
     end
@@ -100,9 +100,9 @@ function THIS_PAGE:render(mcdu_data)
     local gpirs_latlon_source= adirs_get_gpirs(mcdu_data.id)
     local avg_latlon_source  = adirs_get_mixed_irs()
 
-    if gpirs_latlon_source[1] == nil and (get(GPS_1_is_available) == 1 or get(GPS_2_is_available) == 1) then
+    if gpirs_latlon_source[1] == nil and (GPS_sys[1].status == GPS_STATUS_NAV or GPS_sys[2].status == GPS_STATUS_NAV) then
         self:set_line(mcdu_data, MCDU_LEFT, 3, mcdu_format_force_to_small("GPS"), MCDU_LARGE, ECAM_WHITE)
-        gpirs_latlon_source = get(GPS_1_is_available) == 1 and {get(GPS_1_lat), get(GPS_1_lon)} or {get(GPS_2_lat), get(GPS_2_lon)}
+        gpirs_latlon_source = GPS_sys[1].status == GPS_STATUS_NAV and {GPS_sys[1].lat, GPS_sys[1].lon} or {GPS_sys[2].lat, GPS_sys[2].lon}
     end
 
     THIS_PAGE:render_irs_status(mcdu_data)
