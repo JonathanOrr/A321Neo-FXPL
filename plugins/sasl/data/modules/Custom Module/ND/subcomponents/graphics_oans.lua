@@ -519,7 +519,7 @@ function draw_oans(data, functions)
         return  -- No OANS over zoom
     end
     
-    local failure_condition = (get(GPS_1_is_available) == 0 and get(GPS_2_is_available) == 0) or adirs_how_many_irs_fully_work() < 3
+    local failure_condition = (GPS_sys[1].status ~= GPS_STATUS_NAV and GPS_sys[2].status ~= GPS_STATUS_NAV) or adirs_how_many_irs_fully_work() < 3
     if failure_condition then
         data.misc.apt_pos_lost = true
         return
