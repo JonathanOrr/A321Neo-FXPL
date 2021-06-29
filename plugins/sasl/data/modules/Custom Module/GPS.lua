@@ -20,6 +20,8 @@
 -- Constants
 ----------------------------------------------------------------------------------------------------
 
+-- All times in seconds
+local INIT_START_GPS = 5
 local HOT_START_GPS  = 1    -- nr. of seconds required to get GPS fix if last time active < 1 hour
 local WARM_START_GPS = 20   -- nr. of seconds required to get GPS fix if last time active > 1 hour (we don't simulate cold start)
 
@@ -31,70 +33,120 @@ local MAX_GPS_ERROR = 4 * 1e-5
 
 local gps_last_time_on =  {0,0}
 local gps_start_time_point = {0,0}
-local gps_1_offset = math.random() * 200 - 100
-local gps_2_offset = math.random() * 200 - 100
+local gps_offset = {math.random() * 200 - 100, math.random() * 200 - 100}
 
+local function create_gps()
+    return  {
+                status = GPS_STATUS_OFF,
+                nr_satellites = 0,
+                lat = 0,
+                lon = 0,
+                alt = 0,
+                true_track = 0,
+                gs = 0,
 
-----------------------------------------------------------------------------------------------------
--- GPS
-----------------------------------------------------------------------------------------------------
-local function update_gps_single(nr, power_status, not_failure_status)
-    if power_status and not_failure_status then
-        -- GPS is online
-        if nr == 1 then
-            ELEC_sys.add_power_consumption(ELEC_BUS_AC_ESS, 0.1, 0.1)
-        else
-            ELEC_sys.add_power_consumption(ELEC_BUS_AC_2, 0.1, 0.1)        
-        end
-
-        if gps_start_time_point[nr] == 0 then
-            gps_start_time_point[nr] = get(TIME)
-        end
-        
-        if get(TIME) - gps_last_time_on[nr] > 3600 or gps_last_time_on[nr] == 0 then
-            -- We need a cold start
-            if get(TIME) - gps_start_time_point[nr] > WARM_START_GPS then
-                gps_last_time_on[nr] = get(TIME)
-                return 1
-            end
-        else
-            if get(TIME) - gps_start_time_point[nr] > HOT_START_GPS then
-                gps_last_time_on[nr] = get(TIME)
-                return 1
-            end        
-        end
-    else
-        gps_start_time_point[nr] = 0
-    end
-    return 0
+                private = {
+                    start_time   = 0,
+                    last_time_on = 999999, -- Arbitrarily large
+                    nr_satellites = 0,  -- Floating point value for animation
+                }
+            }
 end
 
-local function update_gps()
+GPS_sys[1] = create_gps()
+GPS_sys[2] = create_gps()
 
-    local roll_is_ok = math.abs(get(Flightmodel_roll)) <= 90
+----------------------------------------------------------------------------------------------------
+-- Functions
+----------------------------------------------------------------------------------------------------
+
+local function gps_state_machine(i)
 
     if debug_override_ADIRS_ok then
-        set(GPS_1_is_available, 1)
-        set(GPS_2_is_available, 1)
-    else
-        set(GPS_1_is_available, update_gps_single(1, get(AC_ess_bus_pwrd) == 1, get(FAILURE_GPS_1) == 0 and roll_is_ok))
-        set(GPS_2_is_available, update_gps_single(2, get(AC_bus_2_pwrd) == 1,   get(FAILURE_GPS_2) == 0 and roll_is_ok))
+        GPS_sys[i].status = GPS_STATUS_NAV
+        GPS_sys[i].nr_satellites = 14
+        return
     end
 
-    if get(GPS_1_is_available) == 1 then
-        set(GPS_1_altitude, gps_1_offset + get(Elevation_m) * 3.28084)
-        set(GPS_1_lat, get(Aircraft_lat)  + gps_1_offset * MAX_GPS_ERROR)
-        set(GPS_1_lon, get(Aircraft_long) + gps_1_offset * MAX_GPS_ERROR)
+    local elec_status = (i == 1 and get(AC_ess_bus_pwrd) or get(AC_bus_2_pwrd)) == 1
+
+    if not elec_status then
+        GPS_sys[i].status = GPS_STATUS_OFF
+        return
     end
-    
-    if get(GPS_2_is_available) == 1 then
-        set(GPS_2_altitude, gps_2_offset + get(Elevation_m) * 3.28084)
-        set(GPS_2_lat, get(Aircraft_lat)  + gps_2_offset * MAX_GPS_ERROR)
-        set(GPS_2_lon, get(Aircraft_long) + gps_2_offset * MAX_GPS_ERROR)
+
+    local failure_status = (i == 1 and get(FAILURE_GPS_1) or get(FAILURE_GPS_2)) == 1
+    if failure_status then
+        GPS_sys[i].status = GPS_STATUS_FAULT
+        return
     end
-    
+
+    if GPS_sys[i].private.start_time == 0 then
+        GPS_sys[i].private.start_time = get(TIME) + math.random()*2 -- Just create some randomness with the other GPS
+    end
+
+    local time_since_start = get(TIME) - GPS_sys[i].private.start_time
+
+    if  time_since_start < INIT_START_GPS then
+        GPS_sys[i].status = GPS_STATUS_INIT
+        return
+    end
+
+    local time_since_init = time_since_start - INIT_START_GPS
+
+    GPS_sys[i].status = GPS_STATUS_NAV
+
+    if GPS_sys[i].private.last_time_on < 3600 then
+        -- HOT START
+        if  time_since_init < HOT_START_GPS then
+            GPS_sys[i].status = GPS_STATUS_ACQ
+            GPS_sys[i].private.nr_satellites = 4 - (HOT_START_GPS - time_since_init) / HOT_START_GPS * 4
+        end
+    else
+        -- WARM START
+        if  time_since_init < WARM_START_GPS then
+            GPS_sys[i].status = GPS_STATUS_ACQ
+            GPS_sys[i].private.nr_satellites = 4 - (WARM_START_GPS - time_since_init) / WARM_START_GPS * 4
+        end
+    end
+
+    if GPS_sys[i].status == GPS_STATUS_NAV then
+
+        -- Roll check
+        local roll_is_ok = math.abs(get(Flightmodel_roll)) <= 90
+        if not roll_is_ok then
+            GPS_sys[i].status = GPS_STATUS_ACQ -- Go back to acquisition
+            GPS_sys[i].nr_satellites = 0
+            GPS_sys[i].private.nr_satellites = 0
+        end
+
+        -- NR. satellites simulation
+        GPS_sys[i].private.last_time_on = get(TIME)
+        local total_sat = math.ceil(8 + 6 * get(ZULU_hours) / 24) -- A random way to randomize visible satellites
+        GPS_sys[i].private.nr_satellites = Set_linear_anim_value(GPS_sys[i].private.nr_satellites, total_sat, 4, 14, 0.05)
+    end
+
+    GPS_sys[i].nr_satellites = math.floor(GPS_sys[i].private.nr_satellites)
+
+
+end
+
+local function update_gps_values(i)
+    if GPS_sys[i].status ~= GPS_STATUS_NAV then
+        return
+    end
+
+    GPS_sys[i].lat = get(Aircraft_lat)  + gps_offset[i] / 100 * MAX_GPS_ERROR
+    GPS_sys[i].lon = get(Aircraft_long)  + gps_offset[i] / 100 * MAX_GPS_ERROR
+    GPS_sys[i].alt = get(Elevation_m) * 3.28084 + gps_offset[i]
+
 end
 
 function update()
-    update_gps()
+    gps_state_machine(1)
+    gps_state_machine(2)
+
+    update_gps_values(1)
+    update_gps_values(2)
+
 end
