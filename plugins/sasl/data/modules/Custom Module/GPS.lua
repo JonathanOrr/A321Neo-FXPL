@@ -140,6 +140,8 @@ local function update_gps_values(i)
     GPS_sys[i].lon = get(Aircraft_long)  + gps_offset[i] / 100 * MAX_GPS_ERROR
     GPS_sys[i].alt = get(Elevation_m) * 3.28084 + gps_offset[i]
 
+    GPS_sys[i].true_track = get(Flightmodel_true_track) - gps_offset[i] / 200
+    GPS_sys[i].gs = get(Ground_speed_kts) + gps_offset[i] / 200
 end
 
 function update()
