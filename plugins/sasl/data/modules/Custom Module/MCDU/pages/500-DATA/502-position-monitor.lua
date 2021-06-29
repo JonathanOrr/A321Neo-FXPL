@@ -114,7 +114,7 @@ function THIS_PAGE:render(mcdu_data)
         avg_latlon   = coord_converter(avg_latlon_source[1], avg_latlon_source[2])
 
         for i=1, 3 do
-            drift[i] = "0.0" -- TODO -- Round_fill(get_distance_nm(ADIRS_sys[i].lat,ADIRS_sys[i].lon,avg_latlon_source[1],avg_latlon_source[2]),1)
+            drift[i] = Round_fill(ADIRS_sys[i].ir_drift,1)
         end
     end
 

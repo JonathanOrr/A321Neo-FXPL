@@ -335,7 +335,11 @@ function ADIRS:update_ir_data()
         end
         self.ir_lat_drift_offset = self.ir_lat_drift_offset + math.random() * random_err[self.id] * MAX_DRIFT_NM_H / 3600 * get(DELTA_TIME) / 69 -- 1 deg is approx 69 nm
         self.ir_lon_drift_offset = self.ir_lon_drift_offset + math.random() * random_err[self.id] * MAX_DRIFT_NM_H / 3600 * get(DELTA_TIME) / 69 -- 1 deg is approx 69 nm
-        self.ir_drift = math.sqrt(self.ir_lat_drift_offset*self.ir_lat_drift_offset + self.ir_lon_drift_offset*self.ir_lon_drift_offset) * 69 * 3600 / (get(TIME) - self.ir_drift_start_time)
+        if get(TIME) - self.ir_drift_start_time > 0 then
+            self.ir_drift = math.sqrt(self.ir_lat_drift_offset*self.ir_lat_drift_offset + self.ir_lon_drift_offset*self.ir_lon_drift_offset) * 69 * 3600 / (get(TIME) - self.ir_drift_start_time)
+        else
+            self.ir_drift = 0
+        end
     else
         self.ir_drift_start_time = 0
     end
