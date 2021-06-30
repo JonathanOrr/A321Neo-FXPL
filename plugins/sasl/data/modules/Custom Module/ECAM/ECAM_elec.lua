@@ -506,9 +506,21 @@ local function draw_elec_boxes()
     end
 end
 
+local function draw_elec_bgd()
+    draw_the_fucking_ecam_backdrop()
+    Sasl_DrawWideFrame(17, 541, 130, 108, 3, 0, ECAM_LINE_GREY)
+    Sasl_DrawWideFrame(762, 541, 130, 108, 3, 0, ECAM_LINE_GREY)
+    drawTextCentered(Font_ECAMfont, 68, 876, "ELEC", 44, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawWideLine(16, 855, 125, 855, 4, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 114, 559, "A", 27, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    drawTextCentered(Font_ECAMfont, 114, 590, "V", 27, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    drawTextCentered(Font_ECAMfont, 859, 559, "A", 27, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    drawTextCentered(Font_ECAMfont, 859, 590, "V", 27, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+end
+
 function draw_elec_page()
 
-    sasl.gl.drawTexture(ECAM_ELEC_bgd_img, 0, 0, 900, 900, {1,1,1})
+    draw_elec_bgd()
     update_elec_parameters()
     update_draw_datarefs()
 

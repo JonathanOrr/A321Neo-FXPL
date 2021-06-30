@@ -301,3 +301,13 @@ function Get_rotated_point_y_pos_offset(y, radius, angle, x_offset)
 
     return y + recalculated_r * math.sin(math.rad(recalculated_a))
 end
+
+function drawTextCentered(font, x, y, string, size, isbold, isitalic, alignment, colour)
+    sasl.gl.drawText (font, x, y - (size/3),string, size, isbold, isitalic, alignment, colour)
+end
+
+function draw_the_fucking_ecam_backdrop()
+    sasl.gl.drawWideLine(10, 112, 890, 112, 4,ECAM_WHITE)
+    sasl.gl.drawWideLine(600, 112, 600, 1, 4, ECAM_WHITE)
+    sasl.gl.drawWideLine(300, 112, 300, 1, 4, ECAM_WHITE)
+end

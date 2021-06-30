@@ -220,9 +220,50 @@ local function draw_needles_valves_and_mixer()
     end
 end
 
+local function fuck_my_ass(big_dick, small_dick, left_text, right_text)
+    sasl.gl.drawArc (big_dick, small_dick , 56, 59 , 30 , 120 , ECAM_WHITE)
+    sasl.gl.drawWideLine(big_dick, small_dick+57, big_dick, small_dick+64, 3, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, big_dick+88, small_dick+37, right_text, 25, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, big_dick-88, small_dick+37, left_text, 25, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+
+    drawTextCentered(Font_ECAMfont, big_dick+52, small_dick+81, "°C", 26, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+end
+
+local function draw_bleed_bgd()
+    drawTextCentered(Font_ECAMfont, 79, 870, "BLEED", 44, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawWideLine(12, 848, 150, 848, 4, ECAM_WHITE)
+
+    drawTextCentered(Font_ECAMfont, 346, 147, "HP", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 560, 147, "HP", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 200, 147, "IP", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 700, 147, "IP", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+
+    drawTextCentered(Font_ECAMfont, 283, 407, "PSI", 30, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    drawTextCentered(Font_ECAMfont, 283, 368, "°C", 30, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    drawTextCentered(Font_ECAMfont, 621, 407, "PSI", 30, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    drawTextCentered(Font_ECAMfont, 621, 368, "°C", 30, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+
+    drawTextCentered(Font_ECAMfont, 450, 649, "AIR", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 450, 683, "RAM", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+
+    sasl.gl.drawWideLine(201, 432, 201, 542, 3, ECAM_GREEN)
+    sasl.gl.drawWideLine(702, 432, 702, 542, 3, ECAM_GREEN)
+
+    fuck_my_ass(702, 571,"LO","HI")
+    fuck_my_ass(702, 675,"C","H")
+    fuck_my_ass(198, 571,"LO","HI")
+    fuck_my_ass(198, 675,"C","H")
+
+    Sasl_DrawWideFrame(158, 344, 84, 84, 3, 0, ECAM_LINE_GREY)
+    Sasl_DrawWideFrame(659, 344, 84, 84, 3, 0, ECAM_LINE_GREY)
+
+    sasl.gl.drawTexture(ECAM_BLEED_house_img, 125, 598, 149, 204, ECAM_LINE_GREY)
+    sasl.gl.drawTexture(ECAM_BLEED_house_img, 626, 598, 149, 204, ECAM_LINE_GREY)
+end
+
 function draw_bleed_page()
-    sasl.gl.drawTexture(ECAM_BLEED_bgd_img, 0, 0, 900, 900, {1,1,1})
-    sasl.gl.drawTexture(ECAM_BLEED_grey_lines_img, 0, 0, 900, 900, ECAM_LINE_GREY)
+    draw_the_fucking_ecam_backdrop()
+    draw_bleed_bgd()
     draw_apu_and_gas()
     draw_engines()    
     draw_bleed_numbers()
