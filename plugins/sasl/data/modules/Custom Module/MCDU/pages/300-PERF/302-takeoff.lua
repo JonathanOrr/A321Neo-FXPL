@@ -207,6 +207,7 @@ end
 function THIS_PAGE:R4(mcdu_data)
     local input = mcdu_get_entry(mcdu_data, {"number", length = 2, dp = 0})
     input = tonumber(input)
+    if input == nil then return end
     if input > 0 and input <= 80 then
         FMGS_sys.perf.takeoff.flex_temp = input
         set(Eng_N1_flex_temp, input)
