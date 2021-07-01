@@ -346,8 +346,36 @@ local function draw_needle_and_valves()
     end
 end
 
+local function draw_eng_bgd()
+    sasl.gl.drawWideLine(338, 157       , 368   ,   160         , 4, ECAM_LINE_GREY)
+    sasl.gl.drawWideLine(338, 157+205   , 368   ,   160+205     , 4, ECAM_LINE_GREY)
+    sasl.gl.drawWideLine(338, 157+242   , 368   ,   160+242     , 4, ECAM_LINE_GREY)
+    sasl.gl.drawWideLine(338, 157+326   , 368   ,   160+326     , 4, ECAM_LINE_GREY)
+    sasl.gl.drawWideLine(338, 157+620   , 368   ,   160+620     , 4, ECAM_LINE_GREY)
+    sasl.gl.drawWideLine(900-338, 157       , 900-368   ,   160         , 4, ECAM_LINE_GREY)
+    sasl.gl.drawWideLine(900-338, 157+205   , 900-368   ,   160+205     , 4, ECAM_LINE_GREY)
+    sasl.gl.drawWideLine(900-338, 157+242   , 900-368   ,   160+242     , 4, ECAM_LINE_GREY)
+    sasl.gl.drawWideLine(900-338, 157+326   , 900-368   ,   160+326     , 4, ECAM_LINE_GREY)
+    sasl.gl.drawWideLine(900-338, 157+620   , 900-368   ,   160+620     , 4, ECAM_LINE_GREY)
+
+    drawTextCentered(Font_ECAMfont, 450, 789, "F.USED", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 450, 751, "KG", 27, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    drawTextCentered(Font_ECAMfont, 450, 688, "OIL", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 450, 636, "QT", 27, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    drawTextCentered(Font_ECAMfont, 450, 535, "PSI", 30, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    drawTextCentered(Font_ECAMfont, 450, 478, "°C", 30, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    drawTextCentered(Font_ECAMfont, 450, 398, "VIB N1", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 450+30, 360, "N2", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 450, 258, "IGN", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 450, 150, "PSI", 30, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+
+    drawTextCentered(Font_ECAMfont, 93, 870, "ENGINE", 44, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawWideLine(8, 850, 176, 850, 4, ECAM_WHITE)
+end
+
 function draw_eng_page()
-    sasl.gl.drawTexture(ECAM_ENG_bgd_img, 0, 0, 900, 900, {1,1,1})
+    draw_the_fucking_ecam_backdrop()
+    draw_eng_bgd()
     draw_fuel_usage()
     draw_oil_qt_press_temp()
     draw_vibrations()

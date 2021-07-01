@@ -213,7 +213,7 @@ local function draw_press_bgd()
     sasl.gl.drawArc (size[1]/2+279, size[2]/2+190, 65, 75 , 66 , 3 , ECAM_WHITE)
     sasl.gl.drawArc (size[1]/2+279, size[2]/2+190, 65, 75 , 210 , 3 , ECAM_WHITE)
     drawTextCentered(Font_ECAMfont, 138, 861, "CAB PRESS", 44, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    sasl.gl.drawWideLine(264, 840, 18, 838, 4, ECAM_WHITE)
+    sasl.gl.drawWideLine(264, 840, 18, 840, 4, ECAM_WHITE)
 
     drawTextCentered(Font_ECAMfont, 180, 778, "ΔP", 33, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
     drawTextCentered(Font_ECAMfont, 450, 778, "V/S", 33, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)

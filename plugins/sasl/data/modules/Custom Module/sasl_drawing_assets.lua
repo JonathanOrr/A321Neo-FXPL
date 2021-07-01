@@ -31,7 +31,6 @@ EWD_req_thrust_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textur
 --ECAM
 --backgrounds
 --ENG--
-ECAM_ENG_bgd_img =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/ENG/ENGINE.png")
 ECAM_ENG_valve_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/ENG/valve.png")
 
 --BLEED--
@@ -45,20 +44,10 @@ ECAM_PRESS_outflow_needle_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Mo
 ECAM_PRESS_pack_triangle_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/PRESS/Triangle.png")
 
 --ELEC
-ECAM_ELEC_bat_box_img =          sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/ELEC/BAT.png")
-ECAM_ELEC_gen_box_img =          sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/ELEC/GEN.png")
 ECAM_ELEC_ess_tr_box_img =       sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/ELEC/ESS_TR.png")
 ECAM_ELEC_emer_box_img =         sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/ELEC/Emer_Gen.png")
 ECAM_ELEC_inv_box_img =          sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/ELEC/STAT_INV.png")
 ECAM_ELEC_apu_box_img =          sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/ELEC/APU_GEN.png")
-ECAM_ELEC_ext_box_img =          sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/ELEC/EXT_PWR.png")
-ECAM_ELEC_bat_bus_text_box_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/ELEC/DC_BAT.png")
-ECAM_ELEC_dc_1_text_box_img =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/ELEC/DC1.png")
-ECAM_ELEC_dc_2_text_box_img =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/ELEC/DC2.png")
-ECAM_ELEC_ac_1_text_box_img =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/ELEC/AC1.png")
-ECAM_ELEC_ac_2_text_box_img =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/ELEC/AC2.png")
-ECAM_ELEC_dc_ess_text_box_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/ELEC/DC_ESS.png")
-ECAM_ELEC_ac_ess_text_box_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/ELEC/AC_ESS.png")
 
 --HYD--
 ECAM_HYD_PTU_img =        sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/HYD/PTU.png")
