@@ -25,15 +25,12 @@ local INIT_START_GPS = 5
 local HOT_START_GPS  = 1    -- nr. of seconds required to get GPS fix if last time active < 1 hour
 local WARM_START_GPS = 20   -- nr. of seconds required to get GPS fix if last time active > 1 hour (we don't simulate cold start)
 
-local MAX_GPS_ERROR = 4 * 1e-5
+local MAX_GPS_ERROR = 1e-5
 
 ----------------------------------------------------------------------------------------------------
 -- Global variables
 ----------------------------------------------------------------------------------------------------
-
-local gps_last_time_on =  {0,0}
-local gps_start_time_point = {0,0}
-local gps_offset = {math.random() * 200 - 100, math.random() * 200 - 100}
+local gps_offset = {math.random() * 2 - 0.5, math.random() * 2 - 0.5}
 
 local function create_gps()
     return  {
@@ -136,12 +133,12 @@ local function update_gps_values(i)
         return
     end
 
-    GPS_sys[i].lat = get(Aircraft_lat)  + gps_offset[i] / 100 * MAX_GPS_ERROR
-    GPS_sys[i].lon = get(Aircraft_long)  + gps_offset[i] / 100 * MAX_GPS_ERROR
-    GPS_sys[i].alt = get(Elevation_m) * 3.28084 + gps_offset[i]
+    GPS_sys[i].lat = get(Aircraft_lat)  + gps_offset[i] * MAX_GPS_ERROR
+    GPS_sys[i].lon = get(Aircraft_long)  + gps_offset[i]  * MAX_GPS_ERROR
+    GPS_sys[i].alt = get(Elevation_m) * 3.28084 + gps_offset[i] * 50
 
-    GPS_sys[i].true_track = get(Flightmodel_true_track) - gps_offset[i] / 200
-    GPS_sys[i].gs = get(Ground_speed_kts) + gps_offset[i] / 200
+    GPS_sys[i].true_track = get(Flightmodel_true_track) - gps_offset[i] / 2
+    GPS_sys[i].gs = math.floor(get(Ground_speed_kts) + gps_offset[i] / 2)
 end
 
 function update()
