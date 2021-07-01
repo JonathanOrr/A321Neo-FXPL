@@ -81,8 +81,12 @@ local function update_position(data)
     update_position_fmgs(data) -- This may change data.misc.map_not_avail
 
     if not data.misc.map_not_avail then
-        data.inputs.plane_coords_lat = adirs_get_lat(id) 
-        data.inputs.plane_coords_lon = adirs_get_lon(id) 
+        local ret = adirs_get_fms(id)
+        if ret[1] == nil or ret[2] == nil then
+            data.misc.map_not_avail = true
+        else
+            data.inputs.plane_coords_lat, data.inputs.plane_coords_lon = ret[1], ret[2]
+        end
     end
 end
 
