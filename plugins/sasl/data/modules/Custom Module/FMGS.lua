@@ -201,6 +201,23 @@ local function update_cifp()
     if FMGS_sys.fpln.active.apts.arr ~= nil and FMGS_sys.fpln.active.apts.arr_cifp == nil then
         if loading_cifp == 2 then
             FMGS_sys.fpln.active.apts.arr_cifp = AvionicsBay.cifp.get(FMGS_sys.fpln.active.apts.arr.id)
+
+            -- Add plain RWYs to the arr_cifp
+            for i,x in ipairs(FMGS_sys.fpln.active.apts.arr.rwys) do
+                table.insert(FMGS_sys.fpln.active.apts.arr_cifp.apprs, {
+                    type        = CIFP_TYPE_APPR_RWY_DIRECT,
+                    proc_name   = "R" .. x.name,
+                    trans_name  = "ALL",
+                    legs = {}
+                })
+                table.insert(FMGS_sys.fpln.active.apts.arr_cifp.apprs, {
+                    type        = CIFP_TYPE_APPR_RWY_DIRECT,
+                    proc_name   = "R" .. x.sibl_name,
+                    trans_name  = "NO TRANS",
+                    legs = {}
+                })
+            end
+
             if FMGS_sys.fpln.temp then
                 FMGS_sys.fpln.temp.apts.arr_cifp = FMGS_sys.fpln.active.apts.arr_cifp
             end

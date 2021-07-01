@@ -45,6 +45,8 @@ local function type_char_to_idx(x)
         return 11, "VOR"
     elseif x == CIFP_TYPE_APPR_NDB or x == CIFP_TYPE_APPR_NDBDME then
         return 12, "NDB"
+    elseif x == CIFP_TYPE_APPR_RWY_DIRECT then
+        return 13, "RWY"
     else
         return nil, nil
     end
@@ -104,12 +106,13 @@ function THIS_PAGE:render_apprs(mcdu_data)
     local apprs_list = {}
     THIS_PAGE.apprs_length = 0
     
+    for i=1,20 do
+        apprs_list[i] = {}
+    end
+
     for i,x in ipairs(THIS_PAGE.curr_fpln.apts.arr_cifp.apprs) do
         local type_idx, type_str = type_char_to_idx(x.type)
         if type_idx ~= nil then
-            if not apprs_list[type_idx] then
-                 apprs_list[type_idx] = {}
-            end
             local rwy_name_with_suffix = x.proc_name:sub(2)
             local rwy_name = extract_rwy_name(rwy_name_with_suffix)
             local rwy_info, ils_info = self:get_runway_info(rwy_name)
@@ -122,7 +125,7 @@ function THIS_PAGE:render_apprs(mcdu_data)
 
     local i = 0
     local n_line = 3
-    for _,data_content in pairs(apprs_list) do
+    for _,data_content in ipairs(apprs_list) do
         for _,data in pairs(data_content) do
             i = i + 1
             if i > 3 * (THIS_PAGE.curr_page-1) and i <= 3 * (THIS_PAGE.curr_page) then
@@ -170,6 +173,29 @@ function THIS_PAGE:render(mcdu_data)
     -- DYNAMIC
     -------------------------------------
     THIS_PAGE:render_apprs(mcdu_data)
+end
+
+function THIS_PAGE:sel_appr(mcdu_data, i)
+    local start_appr = 3*(THIS_PAGE.curr_page-1)
+    
+    local sel_appr_i = start_appr + i
+    if sel_appr_i > #THIS_PAGE.curr_fpln.apts.arr_cifp.apprs then
+        MCDU_Page:Slew_Down(mcdu_data)  -- Clicked on empty spot
+        return
+    end
+    FMGS_create_temp_fpln()
+    FMGS_arr_set_appr(THIS_PAGE.curr_fpln.apts.arr_cifp.apprs[sel_appr_i])
+    mcdu_open_page(mcdu_data, 606)
+end
+
+function THIS_PAGE:L3(mcdu_data)
+    THIS_PAGE:sel_appr(mcdu_data, 1)
+end
+function THIS_PAGE:L4(mcdu_data)
+    THIS_PAGE:sel_appr(mcdu_data, 2)
+end
+function THIS_PAGE:L5(mcdu_data)
+    THIS_PAGE:sel_appr(mcdu_data, 3)
 end
 
 function THIS_PAGE:L6(mcdu_data)
