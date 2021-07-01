@@ -148,14 +148,6 @@ local function set_initial_weights_for_first_few_frames()
         load_target[6] = Round(get(FOB), 0)
     end
 end
-        
-local function draw_no_dep_data()
-    if get(All_on_ground) == 0 then
-        sasl.gl.drawRectangle ( 0 , 0 , 1143, 460, EFB_BACKGROUND_COLOUR)
-        drawTextCentered(Font_Airbus_panel,  572, 252, "AIRCRAFT IS AIRBORNE", 30, false, false, TEXT_ALIGN_CENTER, EFB_WHITE)
-        drawTextCentered(Font_Airbus_panel,  572, 222, "MANIPULATION OF WEIGHT & BLANCE UNAVAILABLE", 20, false, false, TEXT_ALIGN_CENTER, EFB_WHITE)
-    end
-end
 
 --MOUSE RESET
 function onMouseDown ( component , x , y , button , parentX , parentY )
@@ -364,267 +356,49 @@ local function save_weights_to_file()
 end
 
 local function draw_focus_frame()
-    if key_p3s1_focus == 1 then
-        efb_draw_focus_frames(216, 384, 93, 27)
-    elseif key_p3s1_focus == 2 then
-        efb_draw_focus_frames(216, 345, 93, 27)
-    elseif key_p3s1_focus == 3 then
-        efb_draw_focus_frames(216, 306, 93, 27)
-    elseif key_p3s1_focus == 4 then
-        efb_draw_focus_frames(216, 228, 93, 27)
-    elseif key_p3s1_focus == 5 then
-        efb_draw_focus_frames(216, 189, 93, 27)
-    elseif key_p3s1_focus == 6 then
-        efb_draw_focus_frames(216, 111, 93, 27)
-    elseif key_p3s1_focus == 7 then
+    if key_p3s1_focus == 7 then
         efb_draw_focus_frames(71, 565, 93, 27)
     elseif key_p3s1_focus == 8 then
         efb_draw_focus_frames(357, 565, 93, 27)
     end
 end
 
-function equals(o1, o2, ignore_mt) --https://stackoverflow.com/questions/20325332/how-to-check-if-two-tablesobjects-have-the-same-value-in-lua
-    -- I used this function to check if any elements in load_target is equal to load_actual. If any of the elements are not equal, CG chart should show lines in yellow.
-    if o1 == o2 then return true end
-    local o1Type = type(o1)
-    local o2Type = type(o2)
-    if o1Type ~= o2Type then return false end
-    if o1Type ~= 'table' then return false end
+local function runway_related_buttons()
+    --------------------------------BELOW ARE FOR RUNWAY SELECTION FOR PERF!!!!!!!!!!!!!!!!!!!!!!!!
+    --------------------------------BELOW ARE FOR RUNWAY SELECTION FOR PERF!!!!!!!!!!!!!!!!!!!!!!!!
 
-    if not ignore_mt then
-        local mt1 = getmetatable(o1)
-        if mt1 and mt1.__eq then
-            --compare using built in method
-            return o1 == o2
-        end
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 71 , 565, 163, 591,function ()
+        p3s1_plug_in_the_buffer()
+        key_p3s1_focus = key_p3s1_focus == 7 and 0 or 7
+    end)
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 357 , 565, 449, 591,function ()
+        p3s1_plug_in_the_buffer()
+        key_p3s1_focus = key_p3s1_focus == 8 and 0 or 8
+    end)
+
+    if key_p3s1_focus == 7 then
+        click_anywhere_except_that_area( 71 , 565, 163, 591, p3s1_plug_in_the_buffer)
+    elseif key_p3s1_focus == 8 then
+        click_anywhere_except_that_area( 357, 565, 449, 591, p3s1_plug_in_the_buffer)
     end
-
-    local keySet = {}
-
-    for key1, value1 in pairs(o1) do
-        local value2 = o2[key1]
-        if value2 == nil or equals(value1, value2, ignore_mt) == false then
-            return false
-        end
-        keySet[key1] = true
-    end
-
-    for key2, _ in pairs(o2) do
-        if not keySet[key2] then return false end
-    end
-    return true
-end
-
-local function sum_weights_up()
-    total_load_target = ((load_target[1]+load_target[2]+load_target[3]) * WEIGHT_PER_PASSENGER) -- passenger weight
-    + (load_target[4] + load_target[1]) --cargo weight
-    + load_target[6] --fuel weight
-    + DRY_OPERATING_WEIGHT -- aircraft base weight
-end
-
-
-
-local function calculate_cg()
-    final_cg = default_cg
-    -- + Table_extrapolate(tank_index_center, get(Fuel_quantity[tank_CENTER])) --coefficient of the center tank
-    -- + Table_extrapolate(tank_index_wing, get(Fuel_quantity[tank_LEFT])) --coefficient of the left tank
-    -- + Table_extrapolate(tank_index_wing, get(Fuel_quantity[tank_RIGHT])) --coefficient of the right tank
-    -- + Table_extrapolate(tank_index_act, get(Fuel_quantity[tank_ACT])) --coefficient of the act
-    -- + Table_extrapolate(tank_index_rct, get(Fuel_quantity[tank_RCT])) --coefficient of the rct
-    + Table_extrapolate(passenger_index_front, (load_actual[1] + load_actual[2]) * WEIGHT_PER_PASSENGER) --coefficient of the zone a and b passenger
-    + Table_extrapolate(passenger_index_aft, load_actual[3] * WEIGHT_PER_PASSENGER) --coefficient of the zone c passenger
-    + Table_extrapolate(cargo_index_front, load_actual[4]) --coefficient of the forward cargo hold
-    + Table_extrapolate(cargo_index_aft, load_actual[5]) --coefficient of the after cargo hold
-end
-
-local function predict_cg()
-    predicted_cg = default_cg
-    -- + Table_extrapolate(tank_index_center, get(Fuel_quantity[tank_CENTER])) --coefficient of the center tank
-    -- + Table_extrapolate(tank_index_wing, get(Fuel_quantity[tank_LEFT])) --coefficient of the left tank
-    -- + Table_extrapolate(tank_index_wing, get(Fuel_quantity[tank_RIGHT])) --coefficient of the right tank
-    -- + Table_extrapolate(tank_index_act, get(Fuel_quantity[tank_ACT])) --coefficient of the act
-    -- + Table_extrapolate(tank_index_rct, get(Fuel_quantity[tank_RCT])) --coefficient of the rct
-    + Table_extrapolate(passenger_index_front, (load_target[1] + load_target[2]) * WEIGHT_PER_PASSENGER) --coefficient of the zone a and b passenger
-    + Table_extrapolate(passenger_index_aft, load_target[3] * WEIGHT_PER_PASSENGER) --coefficient of the zone c passenger
-    + Table_extrapolate(cargo_index_front, load_target[4]) --coefficient of the forward cargo hold
-    + Table_extrapolate(cargo_index_aft, load_target[5]) --coefficient of the after cargo hold
-end
-
-local function set_cg()
-    --set(CG_Pos, 0.04232395*(final_cg) - 1.06312)
-end
-
-local function set_values(startup)
-
-    for k, v in ipairs(load_target) do -- set the load actual array for the next line
-      load_actual[k] = v
-    end
-
-    if startup then
-        -- Give a minimum amount of fuel at start
-        load_actual[6] = math.max(load_actual[6], 2000)
-        load_target[6] = math.max(load_target[6], 2000)
-    end
-    set_fuel(load_actual[6])
-    calculate_cg()
-    sum_weights_up()
-    set_cg()
-    --set(Payload_weight, (load_actual[1] + load_actual[2] + load_actual[3])*WEIGHT_PER_PASSENGER + load_actual[4] + load_actual[5])
-end
-
-local function Subpage_1_buttons()
-    if get(All_on_ground) ~= 0 then
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 348, 386, 378, 409,  function () -- OA SELECTOR
-            load_target[1] = math.min(MAX_WEIGHT_VALUES[1], load_target[1] + 10)
-        end)
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 313, 385, 344, 409, function ()
-            load_target[1] = math.min(MAX_WEIGHT_VALUES[1], load_target[1] + 1)
-        end)
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 182, 385, 212, 409,function ()
-            load_target[1] = math.max(0, load_target[1] - 1)
-        end)
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 147, 385, 177, 409,function ()
-            load_target[1] = math.max(0, load_target[1] - 10)
-        end)
-
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 348, 346, 378, 370,  function () -- OB SELECTOR
-            load_target[2] = math.min(MAX_WEIGHT_VALUES[2], load_target[2] + 10)
-        end)
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 313, 346, 344, 370, function ()
-            load_target[2] = math.min(MAX_WEIGHT_VALUES[2], load_target[2] + 1)
-        end)
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 182, 346, 212, 370,function ()
-            load_target[2] = math.max(0, load_target[2] - 1)
-        end)
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 147, 346, 177, 370,function ()
-            load_target[2] = math.max(0, load_target[2] - 10)
-        end)
-
-
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 348, 307, 378, 332,  function () -- OC SELECTOR
-            load_target[3] = math.min(MAX_WEIGHT_VALUES[3], load_target[3] + 10)
-        end)
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 313, 307, 344, 332, function ()
-            load_target[3] = math.min(MAX_WEIGHT_VALUES[3], load_target[3] + 1)
-        end)
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 182, 307, 212, 332,function ()
-            load_target[3] = math.max(0, load_target[3] - 1)
-        end)
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 147, 307, 177, 332,function ()
-            load_target[3] = math.max(0, load_target[3] - 10)
-        end)
-
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 348, 229, 378, 254,  function () -- Cargo 1-2 SELECTOR
-            load_target[4] = math.min(MAX_WEIGHT_VALUES[4], load_target[4] + 1000)
-        end)
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 313, 229, 344, 254, function ()
-            load_target[4] = math.min(MAX_WEIGHT_VALUES[4], load_target[4] + 100)
-        end)
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 182, 229, 212, 254,function ()
-            load_target[4] = math.max(0, load_target[4] - 100)
-        end)
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 147, 229, 177, 254,function ()
-            load_target[4] = math.max(0, load_target[4] - 1000)
-        end)
-
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 348, 190, 378, 214,  function () -- Cargo 3-5 SELECTOR
-            load_target[5] = math.min(MAX_WEIGHT_VALUES[5], load_target[5] + 1000)
-        end)
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 313, 190, 344, 214, function ()
-            load_target[5] = math.min(MAX_WEIGHT_VALUES[5], load_target[5] + 100)
-        end)
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 182, 190, 212, 214,function ()
-            load_target[5] = math.max(0, load_target[5] - 100)
-        end)
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 147, 190, 177, 214,function ()
-            load_target[5] = math.max(0, load_target[5] - 1000)
-        end)
-
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 348, 112, 378, 136,  function () -- Fuel SELECTOR
-            load_target[6] = math.min(MAX_WEIGHT_VALUES[6], load_target[6] + 1000)
-        end)
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 313, 112, 344, 136, function ()
-            load_target[6] = math.min(MAX_WEIGHT_VALUES[6], load_target[6] + 100)
-        end)
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 182, 112, 212, 136,function ()
-            load_target[6] = math.max(0, load_target[6] - 100)
-        end)
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 147, 112, 177, 136,function ()
-            load_target[6] = math.max(0, load_target[6] - 1000)
-        end)
-----    ----------------------------------------------------------------------------------------------------
-
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 216, 385, 308, 409,function () --THE SCRATCHPAD FOCUS BUTTONS
-            p3s1_plug_in_the_buffer()
-            key_p3s1_focus = key_p3s1_focus == 1 and 0 or 1
-        end)
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 216, 346, 308, 370,function ()
-            p3s1_plug_in_the_buffer()
-            key_p3s1_focus = key_p3s1_focus == 2 and 0 or 2
-        end)
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 216, 307, 308, 332,function ()
-            p3s1_plug_in_the_buffer()
-            key_p3s1_focus = key_p3s1_focus == 3 and 0 or 3
-        end)
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 216, 229, 308, 254,function ()
-            p3s1_plug_in_the_buffer()
-            key_p3s1_focus = key_p3s1_focus == 4 and 0 or 4
-        end)
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 216, 190, 308, 214,function ()
-            p3s1_plug_in_the_buffer()
-            key_p3s1_focus = key_p3s1_focus == 5 and 0 or 5
-        end)
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 216, 112, 308, 136,function ()
-            p3s1_plug_in_the_buffer()
-            key_p3s1_focus = key_p3s1_focus == 6 and 0 or 6
-        end)
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 71 , 565, 163, 591,function ()
-            p3s1_plug_in_the_buffer()
-            key_p3s1_focus = key_p3s1_focus == 7 and 0 or 7
-        end)
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 357 , 565, 449, 591,function ()
-            p3s1_plug_in_the_buffer()
-            key_p3s1_focus = key_p3s1_focus == 8 and 0 or 8
-        end)
-----    ----------------------------------------------------------------------------------------------------
-
-        if key_p3s1_focus == 1 then
-            click_anywhere_except_that_area( 216, 385, 308, 409, p3s1_plug_in_the_buffer)
-        elseif key_p3s1_focus == 2 then
-            click_anywhere_except_that_area( 216, 346, 308, 370, p3s1_plug_in_the_buffer)
-        elseif key_p3s1_focus == 3 then
-            click_anywhere_except_that_area( 216, 307, 308, 332, p3s1_plug_in_the_buffer)
-        elseif key_p3s1_focus == 4 then
-            click_anywhere_except_that_area( 216, 229, 308, 254, p3s1_plug_in_the_buffer)
-        elseif key_p3s1_focus == 5 then
-            click_anywhere_except_that_area( 216, 190, 308, 214, p3s1_plug_in_the_buffer)
-        elseif key_p3s1_focus == 6 then
-            click_anywhere_except_that_area( 216, 112, 308, 136, p3s1_plug_in_the_buffer)
-        elseif key_p3s1_focus == 7 then
-            click_anywhere_except_that_area( 71 , 565, 163, 591, p3s1_plug_in_the_buffer)
-        elseif key_p3s1_focus == 8 then
-            click_anywhere_except_that_area( 357, 565, 449, 591, p3s1_plug_in_the_buffer)
-        end
-    end
-
---------------------------------------------------------------------------------------------------------
 
     p3s1_dropdown_buttons(230, 578, 90, 28,    dropdown_1, 1)
     p3s1_dropdown_buttons(511, 578, 90, 28,    dropdown_2, 2)
 
---------------------------------------------------------------------------------------------------------
+    --------------------------------ABOVE ARE FOR RUNWAY SELECTION FOR PERF!!!!!!!!!!!!!!!!!!!!!!!!
+    --------------------------------ABOVE ARE FOR RUNWAY SELECTION FOR PERF!!!!!!!!!!!!!!!!!!!!!!!!
+end
 
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 108, 50, 378, 80,function ()
-        load_button_begin = get(TIME) --the button animation
-        set_values(false)
-        save_weights_to_file()
-        New_takeoff_data_available = true
-    end)
+
+--------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------BELOW ARE THE LOOPS AND BUTTONS
+--------------------------------------------------------------------------------------------------------------------------------
+
+local function Subpage_1_buttons()
+    runway_related_buttons()
 end
 
 local function EFB_update_page_3_subpage_1() --UPDATE LOOP
-    set_initial_weights_for_first_few_frames()
-    predict_cg()
     request_departure_runway_data()
     request_arrival_runway_data()
 end
@@ -632,96 +406,28 @@ end
 local function EFB_draw_page_3_subpage_1() -- DRAW LOOP
 
     sasl.gl.drawTexture (EFB_LOAD_bgd, 0 , 0 , 1143 , 800 , EFB_WHITE )
-    sasl.gl.drawTexture (EFB_LOAD_bound_takeoff, 520 , 76 , 547 , 359 , EFB_WHITE )
-    sasl.gl.drawTexture (EFB_LOAD_chart, 448 , 73 , 650 , 380 , EFB_WHITE )
 
     if string.len(key_p3s1_buffer) > 0 then --THE PURPOSE OF THIS IFELSE IS TO PREVENT THE CURSOR FROM COVERING UP THE PREVIOUS VALUE, WHEN THE SCRATCHPAD IS EMPTY.
-        drawTextCentered( Font_Airbus_panel , 263 , 397, key_p3s1_focus == 1 and key_p3s1_buffer or load_target[1] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
-        drawTextCentered( Font_Airbus_panel , 263 , 358, key_p3s1_focus == 2 and key_p3s1_buffer or load_target[2] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
-        drawTextCentered( Font_Airbus_panel , 263 , 319, key_p3s1_focus == 3 and key_p3s1_buffer or load_target[3] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
-        drawTextCentered( Font_Airbus_panel , 263 , 242, key_p3s1_focus == 4 and key_p3s1_buffer or load_target[4] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
-        drawTextCentered( Font_Airbus_panel , 263 , 203, key_p3s1_focus == 5 and key_p3s1_buffer or load_target[5] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
-        drawTextCentered( Font_Airbus_panel , 263 , 124, key_p3s1_focus == 6 and key_p3s1_buffer or load_target[6] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
-
         drawTextCentered( Font_Airbus_panel , 116 , 578, key_p3s1_focus == 7 and key_p3s1_buffer or deparr_apts[1] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
         drawTextCentered( Font_Airbus_panel , 403 , 578, key_p3s1_focus == 8 and key_p3s1_buffer or deparr_apts[2] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
     else
-        drawTextCentered( Font_Airbus_panel , 263 , 397, load_target[1] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
-        drawTextCentered( Font_Airbus_panel , 263 , 358, load_target[2] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
-        drawTextCentered( Font_Airbus_panel , 263 , 319, load_target[3] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
-        drawTextCentered( Font_Airbus_panel , 263 , 242, load_target[4] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
-        drawTextCentered( Font_Airbus_panel , 263 , 203, load_target[5] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
-        drawTextCentered( Font_Airbus_panel , 263 , 124, load_target[6] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
-
         drawTextCentered( Font_Airbus_panel , 116 , 578, deparr_apts[1] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
         drawTextCentered( Font_Airbus_panel , 403 , 578, deparr_apts[2] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
-    end
-
---------------------------------------------------------------------------
-
-    if get(TIME) -  load_button_begin > BUTTON_PRESS_TIME then
-        SASL_drawSegmentedImg_xcenter_aligned (EFB_LOAD_compute_button, 244,48,544,32,2,1)
-    else
-        SASL_drawSegmentedImg_xcenter_aligned (EFB_LOAD_compute_button, 244,48,544,32,2,2)
     end
 
     draw_dropdown_menu(230, 578, 90, 28, EFB_DROPDOWN_OUTSIDE, EFB_DROPDOWN_INSIDE, dropdown_1, dropdown_expanded[1], dropdown_selected[1])
     draw_dropdown_menu(511, 578, 90, 28, EFB_DROPDOWN_OUTSIDE, EFB_DROPDOWN_INSIDE, dropdown_2, dropdown_expanded[2], dropdown_selected[2])
 
---------------------------------------------------------------------------
-
-    local passenger_weight_actual = ((load_actual[1]+load_actual[2]+load_actual[3]) * WEIGHT_PER_PASSENGER)
-    local cargo_weight_actual = load_actual[4] + load_actual[5]
-    fuel_weight_actual = load_actual[6]
-    zfw_actual = passenger_weight_actual + cargo_weight_actual + DRY_OPERATING_WEIGHT
-    local taxi_fuel = math.min(DEFAULT_TAXI_FUEL, load_actual[6]) 
-    takeoff_weight_actual = passenger_weight_actual + cargo_weight_actual + fuel_weight_actual - taxi_fuel + DRY_OPERATING_WEIGHT
-
-    local passenger_weight_target = ((load_target[1]+load_target[2]+load_target[3]) * WEIGHT_PER_PASSENGER)
-    local cargo_weight_target = load_target[4] + load_target[5]
-    local fuel_weight_target = load_target[6]
-    local taxi_fuel = math.min(DEFAULT_TAXI_FUEL, load_target[6]) 
-    takeoff_weight_target = passenger_weight_target + cargo_weight_target + fuel_weight_target - taxi_fuel + DRY_OPERATING_WEIGHT
-
-    if not equals(load_actual, load_target, true) then
-        local x_coords = Table_extrapolate(percent_cg_to_coordinates, predicted_cg )
-        local y_coords = Table_extrapolate(tow_to_coordinates, takeoff_weight_target/1000) 
-        sasl.gl.drawWideLine ( 470 , y_coords, 1093 , y_coords , 3, EFB_FULL_YELLOW )
-        sasl.gl.drawWideLine ( x_coords ,77, x_coords ,440, 3, EFB_FULL_YELLOW )
-        drawTextCentered( Font_Airbus_panel , 632 , 34, "PAYLOAD NOT APPLIED" , 25 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_YELLOW )
-        drawTextCentered( Font_Airbus_panel ,x_coords + 18 , y_coords + 20, Round(takeoff_weight_target/1000,1).."T" , 25 ,false , false , TEXT_ALIGN_LEFT , EFB_FULL_YELLOW )
-    else
-        local x_coords = Table_extrapolate(percent_cg_to_coordinates, final_cg )
-        local y_coords = Table_extrapolate(tow_to_coordinates, takeoff_weight_actual/1000)
-        sasl.gl.drawWideLine ( 470 ,y_coords , 1093 , y_coords, 3, EFB_WHITE )
-        sasl.gl.drawWideLine ( x_coords ,77,x_coords ,440, 3, EFB_WHITE )
-        drawTextCentered( Font_Airbus_panel , 632 , 34, "PAYLOAD APPLIED" , 25 ,false , false , TEXT_ALIGN_CENTER , EFB_WHITE )
-    end
-
-    drawTextCentered( Font_Airbus_panel , 1038 , 682, DRY_OPERATING_WEIGHT      , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
-    drawTextCentered( Font_Airbus_panel , 1038 , 660, 0                         , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
-    drawTextCentered( Font_Airbus_panel , 1038 , 637, DRY_OPERATING_WEIGHT      , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
-    drawTextCentered( Font_Airbus_panel , 1038 , 615, cargo_weight_actual       , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
-    drawTextCentered( Font_Airbus_panel , 1038 , 593, passenger_weight_actual   , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
-    drawTextCentered( Font_Airbus_panel , 1038 , 571, zfw_actual                , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
-    drawTextCentered( Font_Airbus_panel , 1038 , 551, fuel_weight_actual        , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
-    drawTextCentered( Font_Airbus_panel , 1038 , 528, taxi_fuel                 , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
-    drawTextCentered( Font_Airbus_panel , 1038 , 506, takeoff_weight_actual     , 16 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
-
-    drawTextCentered( Font_Airbus_panel , 243 , 63, "LOAD AIRCRAFT" , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
-
     draw_focus_frame()
     draw_avionics_bay_standby()
-    draw_no_dep_data()
 
+--------------------------------------------------------------------------
 end
 
 -------------------------------------------------------------------------------
 -- Initialization
 -------------------------------------------------------------------------------
 local function initialize()
-    load_weights_from_file()
-    set_values(true)
 end
 
 initialize()

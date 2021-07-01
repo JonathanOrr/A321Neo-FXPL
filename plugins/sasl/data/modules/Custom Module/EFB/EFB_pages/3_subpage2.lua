@@ -103,15 +103,15 @@ local function refresh_data_reminder()
 end
 
 local function refresh_data()
-    displayed_zfw = zfw_actual
-    displayed_zfwcg = Round(final_cg,0)
-    displayed_block_fuel = fuel_weight_actual --see variables created inside draw lop in page 3 subpage 1
+    displayed_zfw =Round(get(Gross_weight) - get(FOB), 0)
+    displayed_zfwcg = "HENRICK FIX THIS"
+    displayed_block_fuel = Round(get(FOB), 0) --see variables created inside draw lop in page 3 subpage 1
     displayed_v1 = computed_v1
     displayed_vr = computed_vr
     displayed_v2 = computed_v2
     displayed_flaps = flaps_table[get(LOAD_flapssetting)]
     displayed_flex = get(LOAD_thrustto) == 0 and "NO FLEX" or flex_temp
-    displayed_tow = takeoff_weight_actual
+    displayed_tow = Round(get(Gross_weight),0)
     displayed_flex_corr = get(LOAD_thrustto) == 0 and "N/A" or get(LOAD_total_flex_correction) 
     displayed_mtow_corr = Round(math.abs(get(LOAD_total_mtow_correction)), -2)
     if get(TOPCAT_torwy_length) ~= 0 then
