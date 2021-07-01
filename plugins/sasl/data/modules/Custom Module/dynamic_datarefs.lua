@@ -587,6 +587,8 @@ Flightmodel_pitch = globalProperty("sim/flightmodel/position/true_theta")
 Flightmodel_true_heading = globalProperty("sim/flightmodel/position/true_psi")
 Flightmodel_mag_heading = globalProperty("sim/flightmodel/position/mag_psi")
 Flightmodel_true_track = globalProperty("sim/flightmodel/position/hpath")
+Flightmodel_yaw_rate = globalProperty("sim/flightmodel/position/R")
+
 Total_vertical_g_load = globalProperty("sim/flightmodel/forces/g_nrml")
 Total_lateral_g_load = globalProperty("sim/flightmodel/forces/g_side")
 Total_long_g_load = globalProperty("sim/flightmodel/forces/g_axil")
