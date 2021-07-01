@@ -237,7 +237,7 @@ local function draw_fuel_valves()
     local color = is_faulty and ECAM_ORANGE or  ECAM_GREEN
     local position = get(Eng_1_Firewall_valve) > 0 and get(Eng_1_Firewall_valve) or 3
 
-    SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_FUEL_valves_img, size[1]/2-218, size[2]/2+265, 180, 58, 3, position, color)
+    SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_FUEL_valves_img, size[1]/2-218, size[2]/2+264, 180, 58, 3, position, color)
 
     --engine 2 valve
     is_faulty = get(Eng_2_Firewall_valve) == 2
@@ -247,7 +247,7 @@ local function draw_fuel_valves()
     color = is_faulty and ECAM_ORANGE or  ECAM_GREEN
     position = get(Eng_2_Firewall_valve) > 0 and get(Eng_2_Firewall_valve) or 3
 
-    SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_FUEL_valves_img, size[1]/2+222, size[2]/2+265, 180, 58, 3, position, color)
+    SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_FUEL_valves_img, size[1]/2+220, size[2]/2+264, 180, 58, 3, position, color)
 
 
     SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_FUEL_pumps_img, size[1]/2-219, size[2]/2+70, 228, 56, 4, get(Ecam_fuel_valve_L_1) + 1, ECAM_WHITE)
@@ -260,9 +260,52 @@ local function draw_fuel_valves()
     SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_FUEL_pumps_img, size[1]/2+221, size[2]/2+70, 228, 56, 4, get(Ecam_fuel_valve_R_2) + 1, ECAM_WHITE)
 end
 
-function draw_fuel_page()
+local function draw_fuel_bgd()
+    sasl.gl.drawWideLine(201, 900-360, 020, 900-397, 4, ECAM_WHITE)
+    sasl.gl.drawWideLine(020, 900-397, 020, 900-497, 4, ECAM_WHITE)
+    sasl.gl.drawWideLine(333, 900-497, 352, 900-330, 4, ECAM_WHITE)
+    sasl.gl.drawWideLine(352, 900-330, 321, 900-338, 4, ECAM_WHITE)
+    sasl.gl.drawWideLine(352, 900-330, 380, 900-330, 4, ECAM_WHITE)
+    sasl.gl.drawWideLine(900-201, 900-360, 900-020, 900-397, 4, ECAM_WHITE)
+    sasl.gl.drawWideLine(900-020, 900-397, 900-020, 900-497, 4, ECAM_WHITE)
+    sasl.gl.drawWideLine(900-333, 900-497, 900-352, 900-330, 4, ECAM_WHITE)
+    sasl.gl.drawWideLine(900-352, 900-330, 900-321, 900-338, 4, ECAM_WHITE)
+    sasl.gl.drawWideLine(900-352, 900-330, 900-380, 900-330, 4, ECAM_WHITE)
 
-    sasl.gl.drawTexture(ECAM_FUEL_bgd_img, 0, 0, 900, 900, {1,1,1})
+    sasl.gl.drawWideLine(231, 900-125, 231, 900-131, 4, ECAM_GREEN)
+    sasl.gl.drawWideLine(231, 900-185, 231, 900-325, 4, ECAM_GREEN)
+    sasl.gl.drawWideLine(231, 900-290, 293, 900-290, 4, ECAM_GREEN)
+    sasl.gl.drawWideLine(293, 900-290, 293, 900-325, 4, ECAM_GREEN)
+    sasl.gl.drawWideLine(900-231, 900-125, 900-231, 900-131, 4, ECAM_GREEN)
+    sasl.gl.drawWideLine(900-231, 900-185, 900-231, 900-325, 4, ECAM_GREEN)
+    sasl.gl.drawWideLine(900-231, 900-290, 900-293, 900-290, 4, ECAM_GREEN)
+    sasl.gl.drawWideLine(900-293, 900-290, 900-293, 900-325, 4, ECAM_GREEN)
+
+    sasl.gl.drawWideLine(287, 900-068, 378, 900-51, 4, ECAM_WHITE)
+    sasl.gl.drawWideLine(900-287, 900-068, 900-378, 900-51, 4, ECAM_WHITE)
+
+    sasl.gl.drawWideLine(437, 900-330, 900-437, 900-330, 4, ECAM_WHITE)
+    sasl.gl.drawWideLine(020, 900-497, 900-020, 900-497, 4, ECAM_WHITE)
+
+    drawTextCentered(Font_ECAMfont, 451, 900-51, "F.USED", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 451, 900-80, "1+2", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 451, 900-146, "KG", 27, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    drawTextCentered(Font_ECAMfont, 392, 900-698, "KG/MIN", 27, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    drawTextCentered(Font_ECAMfont, 356, 900-749, "KG", 27, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+
+    drawTextCentered(Font_ECAMfont, 92, 900-668, "F.FLOW", 27, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 92, 900-698, "1+2", 27, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 70, 900-748, "FOB", 34, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 151, 900-748, ":", 34, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+
+    drawTextCentered(Font_ECAMfont, 74, 900-28, "FUEL", 44, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawWideLine(18, 850, 128, 850, 4, ECAM_WHITE)
+    Sasl_DrawWideFrame(25, 130, 374, 44, 4, 0, ECAM_WHITE)
+end
+
+function draw_fuel_page()
+    draw_the_fucking_ecam_backdrop()
+    draw_fuel_bgd()
     draw_tank_qty()
     draw_fob_qty()
     draw_arrows_act_rct()

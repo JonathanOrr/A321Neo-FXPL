@@ -49,9 +49,59 @@ local function draw_cond_page_valves()
     SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_COND_valves_img, size[1]/2+306, size[2]/2-311, 120, 58, 2, get(Hot_air_valve_pos_cargo) == 0 and 2 or 1, get(FAILURE_AIRCOND_HOT_AIR_CARGO_STUCK) == 0 and ECAM_GREEN or ECAM_ORANGE)
 end
 
+local function draw_an_arc(x,y)
+    sasl.gl.drawArc (x, y , 35, 38 , 45 , 90 , ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, x+45, y, "H", 27, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, x-45, y, "C", 27, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+end
+
+local function draw_cond_bgd()
+    sasl.gl.drawWideLine(237, 555, 237, 509, 4, ECAM_GREEN)
+    sasl.gl.drawWideLine(435, 555, 435, 509, 4, ECAM_GREEN)
+    sasl.gl.drawWideLine(621, 555, 621, 509, 4, ECAM_GREEN)
+    sasl.gl.drawWideLine(237, 509, 727, 509, 4, ECAM_GREEN)
+    sasl.gl.drawWideLine(784, 509, 826, 509, 4, ECAM_GREEN)
+    sasl.gl.drawWideLine(617, 326, 617, 312, 4, ECAM_GREEN)
+    sasl.gl.drawWideLine(617, 235, 617, 256, 4, ECAM_GREEN)
+    sasl.gl.drawWideLine(617, 195, 617, 168, 4, ECAM_GREEN)
+    sasl.gl.drawWideLine(617, 168, 728, 168, 4, ECAM_GREEN)
+    sasl.gl.drawWideLine(784, 168, 826, 168, 4, ECAM_GREEN)
+    draw_an_arc(237,558)
+    draw_an_arc(435, 558)
+    draw_an_arc(621, 558)
+    draw_an_arc(617, 197)
+    sasl.gl.drawWideLine(237, 594, 237, 604, 3, ECAM_WHITE)
+    sasl.gl.drawWideLine(435, 594, 435, 604, 3, ECAM_WHITE)
+    sasl.gl.drawWideLine(621, 594, 621, 604, 3, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 436, 721, "FWD", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 238, 721, "CKPT", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 626, 721, "AFT", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 562, 403, "AFT", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 786, 869, "TEMP:", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 850, 869, "°C", 30, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+
+    drawTextCentered(Font_ECAMfont, 856, 526, "HOT", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 856, 526-33, "AIR", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 856, 184, "HOT", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 856, 184-33, "AIR", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+
+    drawTextCentered(Font_ECAMfont, 69, 870, "COND", 44, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawWideLine(16, 850, 127, 850, 4, ECAM_WHITE)
+
+
+    sasl.gl.drawWideLine(713, 900-524, 713,900-532, 4, ECAM_LINE_GREY)
+    sasl.gl.drawWideLine(713, 900-532, 644,900-532, 4, ECAM_LINE_GREY)
+    sasl.gl.drawWideLine(590, 900-532, 521,900-532, 4, ECAM_LINE_GREY)
+    sasl.gl.drawWideLine(521, 900-532, 521,900-461, 4, ECAM_LINE_GREY)
+    sasl.gl.drawWideLine(521, 900-461, 713,900-461, 4, ECAM_LINE_GREY)
+    sasl.gl.drawWideLine(713, 900-461, 713,900-468, 4, ECAM_LINE_GREY)
+
+    sasl.gl.drawTexture(ECAM_COND_grey_lines_img, 108, 627, 600, 128, ECAM_LINE_GREY)
+end
+
 function draw_cond_page()
-    sasl.gl.drawTexture(ECAM_COND_bgd_img, 0, 0, 900, 900, {1,1,1})
-    sasl.gl.drawTexture(ECAM_COND_grey_lines_img, 0, 0, 900, 900, ECAM_LINE_GREY)
+    draw_the_fucking_ecam_backdrop()
+    draw_cond_bgd()
     --cabin--
     --actual temperature
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-212, size[2]/2+210, Round(get(Cockpit_temp),0), 32, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)

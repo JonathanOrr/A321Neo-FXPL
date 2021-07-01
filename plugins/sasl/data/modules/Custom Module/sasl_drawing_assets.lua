@@ -56,7 +56,6 @@ ECAM_HYD_B_status_img =   sasl.gl.loadImage(moduleDirectory .. "/Custom Module/t
 ECAM_HYD_Y_status_img =   sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/HYD/YELLOW.png")
 
 --FUEL
-ECAM_FUEL_bgd_img =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/FUEL/fuel.png")
 ECAM_FUEL_xfeed_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/FUEL/crossfeed.png")
 ECAM_FUEL_l_pump_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/FUEL/pump_left.png")
 ECAM_FUEL_r_pump_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/FUEL/pump_right.png")
@@ -70,7 +69,6 @@ ECAM_APU_gen_img =        sasl.gl.loadImage(moduleDirectory .. "/Custom Module/t
 ECAM_APU_triangle_img =   sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/APU/Triangle.png")
 
 --COND--
-ECAM_COND_bgd_img =        sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/COND/COND.png")
 ECAM_COND_grey_lines_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/COND/grey_lines.png")
 ECAM_COND_arrows_img =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/COND/Temp_Arrow.png")
 ECAM_COND_valves_img =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/COND/Valve.png")
@@ -84,7 +82,6 @@ ECAM_DOOR_r_cabin_door_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Modul
 ECAM_DOOR_vs_arrows_img =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/DOOR/Arrow.png")
 
 --WHEEL--
-ECAM_WHEEL_bgd_img =               sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/WHEEL/WHEEL.png")
 ECAM_WHEEL_hyd_boxes_img =         sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/WHEEL/hyd_squares.png")
 ECAM_WHEEL_l_nose_gear_door_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/WHEEL/leftnosegeardoor.png")
 ECAM_WHEEL_r_nose_gear_door_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/WHEEL/nosegeardoor.png")
@@ -106,7 +103,6 @@ ECAM_FCTL_rudder_trim_img =      sasl.gl.loadImage(moduleDirectory .. "/Custom M
 ECAM_FCTL_spoiler_arrow_img =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/FCTL/SpoilerArrow.png")
 
 --STS--
-ECAM_STS_bgd_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/STS/status.png")
 
 --CRUISE--
 ECAM_CRUISE_bgd_img =      sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/CRUISE/cruise.png")

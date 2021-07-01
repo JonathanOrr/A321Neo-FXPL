@@ -325,8 +325,20 @@ local function draw_gears_and_gear_doors()
     SASL_drawSegmentedImg(ECAM_WHEEL_r_main_gear_door_img, size[1]/2+199, size[2]/2-37, 480, 159, 3, Table_interpolate(r_gear_door_anim_table, get(Right_gear_deployment)))
 end
 
+local function draw_wheel_bgd()
+    sasl.gl.drawWideLine(49, 900-333, 77, 900-333, 4,ECAM_WHITE)
+    sasl.gl.drawWideLine(250, 900-333, 278, 900-333, 4,ECAM_WHITE)
+    sasl.gl.drawWideLine(338, 900-185, 365, 900-185, 4,ECAM_WHITE)
+
+    sasl.gl.drawWideLine(900-49, 900-333, 900-77, 900-333, 4,ECAM_WHITE)
+    sasl.gl.drawWideLine(900-250, 900-333, 900-278, 900-333, 4,ECAM_WHITE)
+    sasl.gl.drawWideLine(900-338, 900-185, 900-365, 900-185, 4,ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 89, 900-172, "WHEEL", 44, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawWideLine(22, 900-191, 158, 900-191, 4, ECAM_WHITE)
+end
+
 function draw_wheel_page()
-    sasl.gl.drawTexture(ECAM_WHEEL_bgd_img, 0, 0, 900, 900, {1,1,1})
+    draw_wheel_bgd()
     draw_gears_and_gear_doors()
     draw_wheel_page_spoilers()
     draw_brakes_and_tires()
