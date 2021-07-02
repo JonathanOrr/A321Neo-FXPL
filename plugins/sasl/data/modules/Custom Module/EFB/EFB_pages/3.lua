@@ -52,8 +52,6 @@ include("EFB/efb_topcat.lua")
 local BUTTON_PRESS_TIME = 0.5
 local WEIGHT_PER_PASSENGER = 80 --kg
 local DRY_OPERATING_WEIGHT = 47777
-local MAX_WEIGHT_VALUES = {8, 80, 100, 5700, 7000, 40000}
-local DEFAULT_TAXI_FUEL = 500
 local NUMBER_OF_SUBPAGES = 3
 
 -------------------------------------------------------------------------------
@@ -67,20 +65,6 @@ local NUMBER_OF_SUBPAGES = 3
 
 New_takeoff_data_available = true
 
--- LOAD & CG
-local load_target = {0,0,0,0,0,Round(get(FOB),0)}
-local load_actual = {0,0,0,0,0,Round(get(FOB),0)} -- not a live value! does not change in flight!!!!!!!
-local total_load_target = 0
-
-local default_cg = 25
-final_cg = 0    -- Need to be noon-local for subpages
-local predicted_cg = 0
-
-local percent_cg_to_coordinates = {{-9999,471}, {14, 471}, {22, 676}, {30,882}, {38.2,1092}, {9999,1085}}
-local tow_to_coordinates = {{-9999,78}, {45,78}, {102.6,440}, {9999,440}}
-
-local predicted_tow = 0
-
 -- Graphics and others
 local dropdown_expanded = {false, false}
 local dropdown_selected = {1,1}
@@ -89,7 +73,7 @@ local dropdown_2 = {}
 
 local avionics_bay_is_initialising = false
 
-key_p3s1_focus = 0 --0 nothing, 1 oa, 2 ob, 3 oc, 4 cf, 5 ca, 6 fuel
+key_p3s1_focus = 0 --0 nothing, 7 dep, 8 arr
 local key_p3s1_buffer = ""
 
 local load_button_begin = 0
@@ -107,10 +91,17 @@ deparr_apts = {"", ""}
 local slider_pos = {0,0.5,0,0,0,5000/40000}
 local slider_actual_values = {0,0.5,0,0,0,0}
 local focused_slider = 0
+local touched_sliders_after_loading = false
 
 -------------------------------------------------------------------------------
 -- Functions
 -------------------------------------------------------------------------------
+
+local function number_to_loadsheet_format(number)
+    return Fwd_string_fill(tostring(number), "0", 5)
+end
+
+
 
 local function within(what,min,max)
     if what <= max and what >= min then 
@@ -121,12 +112,56 @@ local function within(what,min,max)
 end
 
 local function draw_slider_corresponding_values()
-    drawTextCentered(Font_Airbus_panel,  630 ,426 - 52 * 0, tostring(Round(slider_actual_values[1]/WEIGHT_PER_PASSENGER,0).." PPL") , 17, true, false, TEXT_ALIGN_RIGHT, EFB_WHITE)
+    local passenger_weight = Round(slider_actual_values[1],1)
+    local passenger_number = tostring(Round(slider_actual_values[1]/WEIGHT_PER_PASSENGER,0).." PPL")
+    local fwd_cargo_weight = slider_actual_values[3]
+    local aft_cargo_weight = slider_actual_values[4]
+    local bulk_cargo_weight = slider_actual_values[5]
+    local fuel_weight = slider_actual_values[6]
+    local total_traffic_load = passenger_weight +fwd_cargo_weight + aft_cargo_weight + bulk_cargo_weight
+    local dow = DRY_OPERATING_WEIGHT
+    local zfw = DRY_OPERATING_WEIGHT + total_traffic_load
+    local tow = zfw + fuel_weight
+    local overweight = tonumber(tow) > 101000
+
+    drawTextCentered(Font_Airbus_panel,  630 ,426 - 52 * 0, passenger_number , 17, true, false, TEXT_ALIGN_RIGHT, EFB_WHITE)
     drawTextCentered(Font_Airbus_panel,  630 ,426 - 52 * 1, slider_actual_values[2] <= 0.5 and "FWD" or "AFT" , 17, true, false, TEXT_ALIGN_RIGHT, EFB_WHITE)
-    drawTextCentered(Font_Airbus_panel,  630 ,426 - 52 * 2, tostring(slider_actual_values[3]).." KG" , 17, true, false, TEXT_ALIGN_RIGHT, EFB_WHITE)
-    drawTextCentered(Font_Airbus_panel,  630 ,426 - 52 * 3, tostring(slider_actual_values[4]).." KG" , 17, true, false, TEXT_ALIGN_RIGHT, EFB_WHITE)
-    drawTextCentered(Font_Airbus_panel,  630 ,426 - 52 * 4, tostring(slider_actual_values[5]).." KG" , 17, true, false, TEXT_ALIGN_RIGHT, EFB_WHITE)
-    drawTextCentered(Font_Airbus_panel,  630 ,426 - 52 * 5, tostring(slider_actual_values[6]).." KG" , 17, true, false, TEXT_ALIGN_RIGHT, EFB_WHITE)
+    drawTextCentered(Font_Airbus_panel,  630 ,426 - 52 * 2, tostring(fwd_cargo_weight).." KG" , 17, true, false, TEXT_ALIGN_RIGHT, EFB_WHITE)
+    drawTextCentered(Font_Airbus_panel,  630 ,426 - 52 * 3, tostring(aft_cargo_weight).." KG" , 17, true, false, TEXT_ALIGN_RIGHT, EFB_WHITE)
+    drawTextCentered(Font_Airbus_panel,  630 ,426 - 52 * 4, tostring(bulk_cargo_weight).." KG" , 17, true, false, TEXT_ALIGN_RIGHT, EFB_WHITE)
+    drawTextCentered(Font_Airbus_panel,  630 ,426 - 52 * 5, tostring(fuel_weight).." KG" , 17, true, false, TEXT_ALIGN_RIGHT, EFB_WHITE)
+
+    passenger_weight = number_to_loadsheet_format(passenger_weight)
+    fwd_cargo_weight = number_to_loadsheet_format(fwd_cargo_weight)
+    aft_cargo_weight = number_to_loadsheet_format(aft_cargo_weight)
+    bulk_cargo_weight = number_to_loadsheet_format(bulk_cargo_weight)
+    fuel_weight = number_to_loadsheet_format(fuel_weight)
+    total_traffic_load = number_to_loadsheet_format(total_traffic_load)
+    dow = number_to_loadsheet_format(dow)
+    tow = Fwd_string_fill(tostring(tow), "0", 6)
+
+
+    local colour = touched_sliders_after_loading and ECAM_YELLOW or EFB_LIGHTBLUE
+
+    print(EFB_CURSOR_X, EFB_CURSOR_Y)
+    for i=1, 5 do
+        drawTextCentered(Font_ECAMfont,  933 + (i-1)*118/4 ,480 - 157/6*0 -99   , string.sub(passenger_weight, i,i) , 17, true, false, TEXT_ALIGN_RIGHT, colour)
+        drawTextCentered(Font_ECAMfont,  933 + (i-1)*118/4 ,480 - 157/6*1 -99   , string.sub(fwd_cargo_weight, i,i) , 17, true, false, TEXT_ALIGN_RIGHT, colour)
+        drawTextCentered(Font_ECAMfont,  933 + (i-1)*118/4 ,480 - 157/6*2 -99   , string.sub(aft_cargo_weight, i,i) , 17, true, false, TEXT_ALIGN_RIGHT, colour)
+        drawTextCentered(Font_ECAMfont,  933 + (i-1)*118/4 ,480 - 157/6*3 -99   , string.sub(bulk_cargo_weight, i,i) , 17, true, false, TEXT_ALIGN_RIGHT, colour)
+        drawTextCentered(Font_ECAMfont,  933 + (i-1)*118/4 ,480 - 157/6*4 -99   , string.sub("00000", i,i) , 17, true, false, TEXT_ALIGN_RIGHT, colour)
+        drawTextCentered(Font_ECAMfont,  933 + (i-1)*118/4 ,480 - 157/6*5 -99   , string.sub(total_traffic_load, i,i) , 17, true, false, TEXT_ALIGN_RIGHT, colour)
+        drawTextCentered(Font_ECAMfont,  933 + (i-1)*118/4 ,317           -99   , string.sub(dow, i,i) , 17, true, false, TEXT_ALIGN_RIGHT, colour)
+        drawTextCentered(Font_ECAMfont,  933 + (i-1)*118/4 ,273 - 157/6*0 -99   , string.sub(zfw, i,i) , 17, true, false, TEXT_ALIGN_RIGHT, colour)
+        drawTextCentered(Font_ECAMfont,  933 + (i-1)*118/4 ,243           -99   , string.sub(fuel_weight, i,i) , 17, true, false, TEXT_ALIGN_RIGHT, colour)
+    end
+    for i=1, 6 do
+        drawTextCentered(Font_ECAMfont,  933 + (i-2)*118/4 ,203 -99            , string.sub(tow, i,i) , 17, true, false, TEXT_ALIGN_RIGHT, overweight and ECAM_RED or colour)
+    end
+
+    local text = touched_sliders_after_loading and "WEIGHTS NOT APPLIED" or "WEIGHTS APPLIED" 
+    text = overweight and "AIRCRAFT IS OVERWEIGHT" or text
+    drawTextCentered(Font_ECAMfont,  877 ,540-99, text, 22, true, false, TEXT_ALIGN_CENTER, overweight and ECAM_RED or colour)
 end
 
 local function draw_sliders(x,y,i)
@@ -141,14 +176,15 @@ local function draw_sliders(x,y,i)
 
     local cursor_is_near_slider = within(EFB_CURSOR_X,(x-2)+ 560 * slider_pos[i],(x-2)+30+ 560 * slider_pos[i]) and within(EFB_CURSOR_Y,y-2,y-2+19) 
     if cursor_is_near_slider or focused_slider == i then
-        sasl.gl.drawRectangle( (x-2)+ 560 * slider_pos[i] + (1-slider_pos[i]) - 1,   y-2,      29 + 1,     18 + 1, focused_slider == i and EFB_WHITE or EFB_LIGHTBLUE)
+        sasl.gl.drawRectangle( (x-2)+ 560 * slider_pos[i] + (1-slider_pos[i]) - 1,   y-2,      29 + 1,     18 + 1, focused_slider == i and EFB_SLIDER_COLOUR or EFB_WHITE)
     end
-    sasl.gl.drawRectangle(      x + 559 * slider_pos[i],        y,      26,     15,  {248/255,165/255,27/255})
+    sasl.gl.drawRectangle(      x + 559 * slider_pos[i],        y,      26,     15,  focused_slider == i and EFB_SLIDER_COLOUR or EFB_LIGHTBLUE)
 end
 
 local function EFB_p3s1_onmousedown(x,y,i) --the mose down function is put inside the button loop
     if within(EFB_CURSOR_X,(x-2)+ 560 * slider_pos[i],(x-2)+30+ 560 * slider_pos[i]) and within(EFB_CURSOR_Y,y-2,y-2+19) then
         focused_slider = i
+        touched_sliders_after_loading = true
     end
 end
 
@@ -187,7 +223,8 @@ local function slider_to_weights_translator()
 end
 
 local function set_values()
-    local CG_effect = (1-slider_actual_values[1]/18800)
+    touched_sliders_after_loading = false
+    local CG_effect = (1-slider_actual_values[1]/18800)/2
     WEIGHTS.set_passengers_weight(slider_actual_values[1] ,(slider_actual_values[2]-0.5) * CG_effect + 0.5)
     WEIGHTS.set_fwd_cargo_weight(slider_actual_values[3])
     WEIGHTS.set_aft_cargo_weight(slider_actual_values[4])
@@ -313,16 +350,7 @@ local function draw_avionics_bay_standby()
 end
 
 local function p3s1_plug_in_the_buffer()
-    if key_p3s1_focus < 7 then
-        if string.len(key_p3s1_buffer) <= 0 then --IF THE LENGTH OF THE STRING IS 0, THEN REVERT TO THE PREVIOUS VALUE. ELSE, PLUG-IN THE NEW VALUE.
-            key_p3s1_focus = 0
-            key_p3s1_buffer = ""
-        else
-            load_target[key_p3s1_focus] = math.min(MAX_WEIGHT_VALUES[key_p3s1_focus], key_p3s1_buffer) --PLUG THE SCRATCHPAD INTO THE ACTUAL TARGET ARRAY
-            key_p3s1_focus = 0
-            key_p3s1_buffer = ""
-        end
-    elseif key_p3s1_focus == 7 then
+    if key_p3s1_focus == 7 then
         if string.len(key_p3s1_buffer) <= 3 then --IF THE LENGTH OF THE STRING IS 0, THEN REVERT TO THE PREVIOUS VALUE. ELSE, PLUG-IN THE NEW VALUE.
             key_p3s1_focus = 0
             key_p3s1_buffer = ""
@@ -342,8 +370,6 @@ local function p3s1_plug_in_the_buffer()
             key_p3s1_buffer = ""
             airport_reset_flags[2] = false
         end
-    else
-        assert(key_p3s1_focus > 8, "P3S1 KEYBOARD OUT OF FOCUS, CONTACT HENRICK KU")
     end
 end
 
@@ -388,10 +414,6 @@ end
 --------------------------------------------------------------------------------------------------------------------------------SUBPAGE 1
 
 local function load_weights_from_file()
-end
-
-local function save_weights_to_file()
-    table.save(load_target, moduleDirectory .. "/Custom Module/saved_configs/previous_load_target")
 end
 
 local function draw_focus_frame()
