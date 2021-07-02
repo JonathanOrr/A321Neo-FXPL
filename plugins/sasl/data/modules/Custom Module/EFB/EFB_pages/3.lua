@@ -16,6 +16,25 @@
 -- Short description: EFB page 3
 -------------------------------------------------------------------------------
 
+--------OK SO WORKFLOW OF THE SCRIPT!!!!!!! ~ Henrick 2 Jul 2021
+
+--EFB_p3s1_onmousedown(x,y,i) this kind of function consisting of x y and i, are always run in a for loop.
+--The for loop has to be looped from 1 to 6, because there are 6 sliders.
+--when you click a slider, a variable "selected_slider" will be changed to the corresponding slider.
+--This value is used to link the mouse cursor and the slider.
+--EFB_p3s1_onmouseup() or not EFB_CURSOR_on_screen will make the selected slider become 0.
+--
+--Now comes the fun part.
+--slider_to_weights_translator() is run every frame as it ensures that the actual values (in kg, ppl, etc) are always corresponding to the slider.
+--draw_slider_corresponding_values() is drawn on top of the slider as a graphical display of the slider corresponding value.
+--When the load button is called, set_values() is called. The slider corresponding value from slider_to_weights_translator() is set to the weights function.
+--Weights function are created by Rico, in weights.lua.
+
+-- To whoever is reading this, this is the ceiling of my coding ability. Please improve this if you can!
+-- It is the second attempt of me writing this page, I abandoned the first page as the workflow was a mess and I lost track.
+
+--11pm now, got to shower. Cheers!
+
 -------------------------------------------------------------------------------
 -- Includes
 -------------------------------------------------------------------------------
@@ -31,7 +50,7 @@ include("EFB/efb_topcat.lua")
 -- Constants
 -------------------------------------------------------------------------------
 local BUTTON_PRESS_TIME = 0.5
-local WEIGHT_PER_PASSENGER = 90 --kg
+local WEIGHT_PER_PASSENGER = 80 --kg
 local DRY_OPERATING_WEIGHT = 47777
 local MAX_WEIGHT_VALUES = {8, 80, 100, 5700, 7000, 40000}
 local DEFAULT_TAXI_FUEL = 500
@@ -74,6 +93,7 @@ key_p3s1_focus = 0 --0 nothing, 1 oa, 2 ob, 3 oc, 4 cf, 5 ca, 6 fuel
 local key_p3s1_buffer = ""
 
 local load_button_begin = 0
+local reset_button_begin = 0
 
 efb_subpage_number = 1
 
@@ -84,8 +104,9 @@ deparr_apts = {"", ""}
 -----------------------------------------------------------DO NOT TOUCH!!!!!!
 -------------------------------------------------------------------------------
 
-local slider_pos = {0,0,0,0,0,0}
-local mouse_slider_start_pos = {0,0}
+local slider_pos = {0,0.5,0,0,0,5000/40000}
+local slider_actual_values = {0,0.5,0,0,0,0}
+local focused_slider = 0
 
 -------------------------------------------------------------------------------
 -- Functions
@@ -99,24 +120,83 @@ local function within(what,min,max)
     end
 end
 
+local function draw_slider_corresponding_values()
+    drawTextCentered(Font_Airbus_panel,  630 ,426 - 52 * 0, tostring(Round(slider_actual_values[1]/WEIGHT_PER_PASSENGER,0).." PPL") , 17, true, false, TEXT_ALIGN_RIGHT, EFB_WHITE)
+    drawTextCentered(Font_Airbus_panel,  630 ,426 - 52 * 1, slider_actual_values[2] <= 0.5 and "FWD" or "AFT" , 17, true, false, TEXT_ALIGN_RIGHT, EFB_WHITE)
+    drawTextCentered(Font_Airbus_panel,  630 ,426 - 52 * 2, tostring(slider_actual_values[3]).." KG" , 17, true, false, TEXT_ALIGN_RIGHT, EFB_WHITE)
+    drawTextCentered(Font_Airbus_panel,  630 ,426 - 52 * 3, tostring(slider_actual_values[4]).." KG" , 17, true, false, TEXT_ALIGN_RIGHT, EFB_WHITE)
+    drawTextCentered(Font_Airbus_panel,  630 ,426 - 52 * 4, tostring(slider_actual_values[5]).." KG" , 17, true, false, TEXT_ALIGN_RIGHT, EFB_WHITE)
+    drawTextCentered(Font_Airbus_panel,  630 ,426 - 52 * 5, tostring(slider_actual_values[6]).." KG" , 17, true, false, TEXT_ALIGN_RIGHT, EFB_WHITE)
+end
+
 local function draw_sliders(x,y,i)
-    if within(EFB_CURSOR_X,(x-2)+ 560 * slider_pos[i],(x-2)+30+ 560 * slider_pos[i]) and within(EFB_CURSOR_Y,y-2,y-2+19) then
-        Sasl_DrawWideFrame( (x-2)+ 560 * slider_pos[i] + (1-slider_pos[i]),      y-1,       29,      18, 1, 0, EFB_WHITE)
+
+    if i ~= 2 then
+        sasl.gl.drawRectangle( 52 ,399 - (i-1)*52,  560 * slider_pos[i],     15, EFB_DARKGREY)
+    elseif slider_pos[2] > 0.5 then
+        sasl.gl.drawRectangle( 52+560/2 ,399 - (i-1)*52,  560 * (slider_pos[i]-0.5),     15, EFB_DARKGREY)
+    elseif slider_pos[2] < 0.5 then
+        sasl.gl.drawRectangle( 52+560/2+ 560 * (slider_pos[i]-0.5) ,399 - (i-1)*52,  -560 * (slider_pos[i]-0.5),     15, EFB_DARKGREY)
+    end
+
+    local cursor_is_near_slider = within(EFB_CURSOR_X,(x-2)+ 560 * slider_pos[i],(x-2)+30+ 560 * slider_pos[i]) and within(EFB_CURSOR_Y,y-2,y-2+19) 
+    if cursor_is_near_slider or focused_slider == i then
+        sasl.gl.drawRectangle( (x-2)+ 560 * slider_pos[i] + (1-slider_pos[i]) - 1,   y-2,      29 + 1,     18 + 1, focused_slider == i and EFB_WHITE or EFB_LIGHTBLUE)
     end
     sasl.gl.drawRectangle(      x + 559 * slider_pos[i],        y,      26,     15,  {248/255,165/255,27/255})
 end
 
-local function slider_onmousehold(x,y,i)
+local function EFB_p3s1_onmousedown(x,y,i) --the mose down function is put inside the button loop
     if within(EFB_CURSOR_X,(x-2)+ 560 * slider_pos[i],(x-2)+30+ 560 * slider_pos[i]) and within(EFB_CURSOR_Y,y-2,y-2+19) then
-        mouse_slider_start_pos[1] = EFB_CURSOR_X
-        mouse_slider_start_pos[2] = EFB_CURSOR_X
-        local cursor_x_translation = 0
-        slider_pos[i] = 0
+        focused_slider = i
     end
 end
 
-function EFB_page3_onmousehold()
-    print("hello")
+function EFB_p3s1_onmouseup()
+    focused_slider = 0
+end
+
+local function EFB_p3s1_move_slider()
+    if focused_slider ~= 0 then
+        slider_pos[focused_slider] = Math_rescale(52 + 13, 0, 52+560 + 13, 1, EFB_CURSOR_X)
+    end
+end
+
+local function reset_slider_when_mouse_leave()
+    if not EFB_CURSOR_on_screen then
+        focused_slider = 0
+    end
+end
+
+local function slider_to_weights_translator()
+    slider_actual_values[1] = Math_rescale(0, 0, 1, 18800, slider_pos[1])
+    slider_actual_values[2] = slider_pos[2]
+    slider_actual_values[3] = Math_rescale(0, 0, 1, 2400, slider_pos[3])
+    slider_actual_values[4] = Math_rescale(0, 0, 1, 2400, slider_pos[4])
+    slider_actual_values[5] = Math_rescale(0, 0, 1, 1500, slider_pos[5])
+    slider_actual_values[6] = Math_rescale(0, 0, 1, 40000, slider_pos[6])
+    for i=1, 6 do
+        if i == 1 then
+            slider_actual_values[i] = math.floor(slider_actual_values[i])
+        elseif i == 2 then
+            --do nothing
+        else
+            slider_actual_values[i] = Round(slider_actual_values[i],-2)
+        end
+    end
+end
+
+local function set_values()
+    local CG_effect = (1-slider_actual_values[1]/18800)
+    WEIGHTS.set_passengers_weight(slider_actual_values[1] ,(slider_actual_values[2]-0.5) * CG_effect + 0.5)
+    WEIGHTS.set_fwd_cargo_weight(slider_actual_values[3])
+    WEIGHTS.set_aft_cargo_weight(slider_actual_values[4])
+    WEIGHTS.set_bulk_cargo_weight(slider_actual_values[5])
+    set_fuel(slider_actual_values[6] + 10 * (slider_actual_values[6]/40000) )
+    -- so long story short, there was an issue which set_fuel(40000) will only add 39990 kg of fuel
+    --the issue is not in this script, it is rico's set fuel function.
+    --therefore, for every 40000 kg of fuel, 10 kg has to be added.
+    --that is where 10 * (slider_actual_values[6]/40000)  come from
 end
 
 ----------------KEYOARD STUFF
@@ -362,16 +442,58 @@ local function draw_dropdowns()
 
 end
 
+local function draw_buttons()
+    if get(TIME) -  load_button_begin > BUTTON_PRESS_TIME then
+        SASL_drawSegmentedImg_xcenter_aligned (EFB_LOAD_s3_generate_button, 200,70,368,32,2,1)
+    else
+        SASL_drawSegmentedImg_xcenter_aligned (EFB_LOAD_s3_generate_button, 200,70,368,32,2,2)
+    end
+
+    if get(TIME) -  reset_button_begin > BUTTON_PRESS_TIME then
+        SASL_drawSegmentedImg_xcenter_aligned (EFB_LOAD_s3_generate_button, 200 + 280,70,368,32,2,1)
+    else
+        SASL_drawSegmentedImg_xcenter_aligned (EFB_LOAD_s3_generate_button, 200 + 280,70,368,32,2,2)
+    end
+
+    drawTextCentered(Font_Airbus_panel,  197 ,85, "LOAD AIRCRAFT" , 18, true, false, TEXT_ALIGN_CENTER, EFB_BACKGROUND_COLOUR)
+    drawTextCentered(Font_Airbus_panel,  479 ,85, "RESET DEFAULTS" , 18, true, false, TEXT_ALIGN_CENTER, EFB_BACKGROUND_COLOUR)
+end
+
 
 --------------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------BELOW ARE THE LOOPS AND BUTTONS
 --------------------------------------------------------------------------------------------------------------------------------
 
+
 local function Subpage_1_buttons()
     runway_related_buttons()
+    for i=1, 6 do
+        EFB_p3s1_onmousedown(52,399 - (i-1)*52,i) 
+    end
+
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 108,70,108+368/2,70+32,function () --refresh
+        load_button_begin = get(TIME)
+        set_values()
+    end)
+
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 108+280,70,108+368/2+280,70+32,function () --refresh
+        reset_button_begin = get(TIME)
+        slider_pos[1] = 0
+        slider_pos[2] = 0.5
+        slider_pos[3] = 0
+        slider_pos[4] = 0
+        slider_pos[5] = 0
+        slider_pos[6] = 5000/40000
+        slider_to_weights_translator()
+        set_values()
+    end)
+
 end
 
 local function EFB_update_page_3_subpage_1() --UPDATE LOOP
+    EFB_p3s1_move_slider()
+    reset_slider_when_mouse_leave()
+    slider_to_weights_translator()
     request_departure_runway_data()
     request_arrival_runway_data()
 end
@@ -384,9 +506,12 @@ local function EFB_draw_page_3_subpage_1() -- DRAW LOOP
         draw_sliders(52,399 - (i-1)*52, i)
     end
 
+    draw_slider_corresponding_values()
+
     draw_dropdowns()
 
     draw_focus_frame()
+    draw_buttons()
     draw_avionics_bay_standby()
 
 --------------------------------------------------------------------------

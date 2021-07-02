@@ -179,7 +179,7 @@ end
 --MOUSE CLICK LOGIC--
 function onMouseDown(component, x, y, button, parentX, parentY)
     --mouse not on the screen
-    if EFB_CURSOR_on_screen == false then
+    if EFB_CURSOR_on_screen == false or button ~= MB_LEFT then
         return
     end
 
@@ -187,16 +187,20 @@ function onMouseDown(component, x, y, button, parentX, parentY)
         EFB_common_buttons()
         EFB_pages_buttons[EFB_PAGE]()
     end
+    return true
 end
 
-function onMouseHold(component, x, y, button, parentX, parentY)
+
+function onMouseUp(component , x , y , button , parentX , parentY)
     --mouse not on the screen
-    if EFB_CURSOR_on_screen == false then
+    if EFB_CURSOR_on_screen == false or button ~= MB_LEFT then
         return
     end
-    if button == MB_LEFT then
-        EFB_page3_onmousehold()
+    if EFB_PAGE == 3 and efb_subpage_number == 1 then
+        EFB_p3s1_onmouseup()
     end
+
+    return true
 end
 
 --common draw logic
