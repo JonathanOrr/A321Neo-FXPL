@@ -17,11 +17,119 @@
 local THIS_PAGE = MCDU_Page:new({id=606})
 
 
+function THIS_PAGE:render_trans(mcdu_data)
+    if not FMGS_arr_get_star(true) then
+        return -- No runways or star selected
+    end
+    
+    local trans_list = {}
+    local fpln = mcdu_data.page_data[606].curr_fpln
+    mcdu_data.page_data[606].trans_length = 0
+    
+    if not fpln.apts.arr_cifp then
+        return  -- This should not happen
+    end
+
+    -- Extract the trans
+    for i,x in ipairs(fpln.apts.arr_cifp.stars) do
+
+        print(x.proc_name, FMGS_arr_get_star(true).proc_name)
+
+
+        local rwy_match = x.proc_name == FMGS_arr_get_star(true).proc_name or x.proc_name == "ALL"
+        if     x.type == CIFP_TYPE_SS_ENR_TRANS
+            or x.type == CIFP_TYPE_SS_ENR_TRANS_RNAV
+            or x.type == CIFP_TYPE_SS_ENR_TRANS_FMS then
+
+            if rwy_match then
+                trans_list[x.trans_name] = i
+                mcdu_data.page_data[606].trans_length = mcdu_data.page_data[606].trans_length + 1
+            end
+        end
+    end
+
+    mcdu_data.page_data[606].trans_references = {0,0,0}    -- These will contain the references for buttons
+
+    local i = 0
+    local n_line = 3
+    local curr_page = mcdu_data.page_data[606].curr_page
+
+    for k,idx in pairs(trans_list) do
+        i = i + 1
+        if i > 3 * (curr_page-1) and i <= 3 * (curr_page) then
+            local arrow = (FMGS_arr_get_trans(true) and FMGS_arr_get_trans(true).trans_name == k) and " " or "→"
+            self:set_line(mcdu_data, MCDU_RIGHT, n_line, k .. arrow, MCDU_LARGE, ECAM_BLUE)
+            mcdu_data.page_data[606].trans_references[n_line-2] = idx    -- Let's same the array index so that we can use this for buttons
+            n_line = n_line + 1
+        end
+    end
+    
+
+end
+
+function THIS_PAGE:render_star(mcdu_data, sel_rwy, sibl)
+    if not sel_rwy then
+        return -- No approach selected
+    end
+    
+    local fpln = mcdu_data.page_data[606].curr_fpln
+    local star_list = {}
+    mcdu_data.page_data[606].star_length = 0
+    
+    if not fpln.apts.arr_cifp then
+        logWarning("ARR CIFP not available. This should not happen.")
+        return  -- This should not happen
+    end
+
+    local rwid = "RW" .. (sibl and sel_rwy.sibl_name or sel_rwy.name)
+    local rwid_both = rwid:sub(1,-2) .. "B" -- B stands for L, R, and C. If the runway doesn't have it, it doesn't matter, cannot match
+
+    -- Extract the stars
+    for i,x in ipairs(fpln.apts.arr_cifp.stars) do
+    
+        local rwy_match = x.trans_name == rwid or x.trans_name == rwid_both or x.trans_name == "ALL"
+
+        --print(x.proc_name, x.trans_name, x.type, rwid, rwid_both)
+
+        if     x.type == CIFP_TYPE_SS_RWY_TRANS
+            or x.type == CIFP_TYPE_SS_CMN_ROUTE
+            or x.type == CIFP_TYPE_SS_RWY_TRANS_RNAV
+            or x.type == CIFP_TYPE_SS_CMN_ROUTE_RNAV
+            or x.type == CIFP_TYPE_SS_RWY_TRANS_FMS
+            or x.type == CIFP_TYPE_SS_CMN_ROUTE_FMS then
+
+            if rwy_match then
+                star_list[x.proc_name] = i
+                mcdu_data.page_data[606].star_length = mcdu_data.page_data[606].star_length + 1
+            end
+        end
+    end
+
+    mcdu_data.page_data[606].star_references = {0,0,0}    -- These will contain the references for buttons
+
+    local i = 0
+    local n_line = 3
+    local curr_page = mcdu_data.page_data[606].curr_page
+    for k,idx in pairs(star_list) do
+        i = i + 1
+        if i > 3 * (curr_page-1) and i <= 3 * (curr_page) then
+            local arrow = (FMGS_arr_get_star(true) and FMGS_arr_get_star(true).proc_name == k) and " " or "←"
+            self:set_line(mcdu_data, MCDU_LEFT, n_line, arrow .. k, MCDU_LARGE, ECAM_BLUE)
+            mcdu_data.page_data[606].star_references[n_line-2] = idx    -- Let's same the array index so that we can use this for buttons
+            n_line = n_line + 1
+        end
+    end
+    
+end
+
 function THIS_PAGE:render(mcdu_data)
     assert(mcdu_data.lat_rev_subject and mcdu_data.lat_rev_subject.type == 4)
 
     if not mcdu_data.page_data[606] then
         mcdu_data.page_data[606] = {}
+        mcdu_data.page_data[606].star_references = {0,0,0}
+        mcdu_data.page_data[606].trans_references = {0,0,0}
+        mcdu_data.page_data[606].curr_page = 1
     end
 
     mcdu_data.page_data[606].main_col = FMGS_does_temp_fpln_exist() and ECAM_YELLOW or ECAM_GREEN
@@ -57,6 +165,11 @@ function THIS_PAGE:render(mcdu_data)
     -------------------------------------
     self:render_top_data(mcdu_data)
 
+    local rwy, sibl = FMGS_arr_get_rwy(true)
+    if rwy then
+        self:render_star(mcdu_data, rwy, sibl)
+        self:render_trans(mcdu_data)
+    end
 end
 
 function THIS_PAGE:render_top_data(mcdu_data)
@@ -64,11 +177,55 @@ function THIS_PAGE:render_top_data(mcdu_data)
     local main_col = FMGS_does_temp_fpln_exist() and ECAM_YELLOW or ECAM_GREEN
 
     local appr_name = dest_get_selected_appr_procedure()
+    local star_name = FMGS_arr_get_star(true) and FMGS_arr_get_star(true).proc_name or nil
     self:set_line(mcdu_data, MCDU_LEFT,  1, appr_name and appr_name or "------", MCDU_LARGE, appr_name and main_col or ECAM_WHITE)
-    self:set_line(mcdu_data, MCDU_RIGHT, 1, "------", MCDU_LARGE, main_col)
+    self:set_line(mcdu_data, MCDU_RIGHT, 1, star_name and star_name or "------", MCDU_LARGE, star_name and main_col or ECAM_WHITE)
     self:set_line(mcdu_data, MCDU_CENTER,1, " ------", MCDU_LARGE, main_col)
     self:set_line(mcdu_data, MCDU_RIGHT, 2, "------", MCDU_LARGE,  main_col)
 
+end
+
+
+function THIS_PAGE:sel_star(mcdu_data, i)
+    
+    if not FMGS_does_temp_fpln_exist() then
+        FMGS_create_temp_fpln()
+        FMGS_copy_dep_rwy_active_to_temp()
+    end
+    
+    if mcdu_data.page_data[606].star_references[i] > 0 then
+        FMGS_arr_set_star(mcdu_data.page_data[606].curr_fpln.apts.arr_cifp.stars[mcdu_data.page_data[606].star_references[i]])
+        FMGS_reset_arr_trans()
+        mcdu_data.page_data[606].curr_page = 1
+    else
+        MCDU_Page:L2(mcdu_data) -- Error
+    end
+    
+end
+
+function THIS_PAGE:L3(mcdu_data)
+    THIS_PAGE:sel_star(mcdu_data, 1)
+end
+function THIS_PAGE:L4(mcdu_data)
+    THIS_PAGE:sel_star(mcdu_data, 2)
+end
+function THIS_PAGE:L5(mcdu_data)
+    THIS_PAGE:sel_star(mcdu_data, 3)
+end
+
+
+function THIS_PAGE:sel_trans(mcdu_data, i)
+    if not FMGS_does_temp_fpln_exist() then
+        FMGS_create_temp_fpln()
+        --FMGS_copy_dep_rwy_active_to_temp()
+        --FMGS_copy_dep_sid_active_to_temp() TODO
+    end
+
+    if mcdu_data.page_data[606].trans_references[i] > 0 then
+        FMGS_arr_set_trans(mcdu_data.page_data[606].curr_fpln.apts.arr_cifp.stars[mcdu_data.page_data[606].trans_references[i]])
+    else
+        MCDU_Page:R2(mcdu_data) -- Error
+    end
 end
 
 function THIS_PAGE:Slew_Left(mcdu_data)

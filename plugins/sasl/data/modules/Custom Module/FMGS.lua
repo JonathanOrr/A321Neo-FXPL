@@ -213,10 +213,24 @@ local function update_cifp()
                 table.insert(FMGS_sys.fpln.active.apts.arr_cifp.apprs, {
                     type        = CIFP_TYPE_APPR_RWY_DIRECT,
                     proc_name   = "R" .. x.sibl_name,
-                    trans_name  = "NO TRANS",
+                    trans_name  = "ALL",
                     legs = {}
                 })
             end
+
+            -- Add STARs
+            table.insert(FMGS_sys.fpln.active.apts.arr_cifp.stars, {
+                type        = CIFP_TYPE_SS_RWY_TRANS_FMS,
+                proc_name   = "NO STAR",
+                trans_name  = "ALL",
+                legs = {}
+            })
+            table.insert(FMGS_sys.fpln.active.apts.arr_cifp.stars, {
+                type        = CIFP_TYPE_SS_ENR_TRANS_FMS,
+                proc_name   = "ALL",
+                trans_name  = "NO TRANS",
+                legs = {}
+            })
 
             if FMGS_sys.fpln.temp then
                 FMGS_sys.fpln.temp.apts.arr_cifp = FMGS_sys.fpln.active.apts.arr_cifp

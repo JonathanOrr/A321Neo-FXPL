@@ -36,17 +36,19 @@ local function extract_rwy_name(rwy_name_with_suffix)
 end
 
 function THIS_PAGE:get_runway_info(rwy_name)
-    local rwy_info, ils_info, rwy_obj
+    local rwy_info, ils_info, rwy_obj, rwy_sibl
 
     for k,x in ipairs(THIS_PAGE.curr_fpln.apts.arr.rwys) do
         if x.name == rwy_name then
             rwy_info = {math.floor(x.distance), math.floor(x.bearing)}
             rwy_obj = x
+            rwy_sibl = false
             break
         end
         if x.sibl_name == rwy_name then
             rwy_info = {math.floor(x.distance), math.floor(x.bearing+180)%360}
             rwy_obj = x
+            rwy_sibl = true
             break
         end
     end
@@ -65,7 +67,7 @@ function THIS_PAGE:get_runway_info(rwy_name)
         end
     end
 
-    return rwy_info, ils_info, rwy_obj
+    return rwy_info, ils_info, rwy_obj, rwy_sibl
 end
 
 function THIS_PAGE:render_apprs(mcdu_data)
@@ -85,8 +87,8 @@ function THIS_PAGE:render_apprs(mcdu_data)
         if type_idx ~= nil then
             local rwy_name_with_suffix = x.proc_name:sub(2)
             local rwy_name = extract_rwy_name(rwy_name_with_suffix)
-            local rwy_info, ils_info, rwy_obj = self:get_runway_info(rwy_name)
-            table.insert(apprs_list[type_idx], {name=rwy_name_with_suffix, idx=i, prefix=type_str, rwy_info=rwy_info, ils_info=ils_info, rwy_obj=rwy_obj})
+            local rwy_info, ils_info, rwy_obj, rwy_sibl = self:get_runway_info(rwy_name)
+            table.insert(apprs_list[type_idx], {name=rwy_name_with_suffix, idx=i, prefix=type_str, rwy_info=rwy_info, ils_info=ils_info, rwy_obj=rwy_obj, rwy_sibl=rwy_sibl})
             THIS_PAGE.apprs_length = THIS_PAGE.apprs_length + 1
         end
     end
@@ -124,8 +126,9 @@ function THIS_PAGE:render_top_data(mcdu_data)
     local main_col = FMGS_does_temp_fpln_exist() and ECAM_YELLOW or ECAM_GREEN
 
     local appr_name = dest_get_selected_appr_procedure()
+    local star_name = FMGS_arr_get_star(true) and FMGS_arr_get_star(true).proc_name or nil
     self:set_line(mcdu_data, MCDU_LEFT,  1, appr_name and appr_name or "------", MCDU_LARGE, appr_name and main_col or ECAM_WHITE)
-    self:set_line(mcdu_data, MCDU_RIGHT, 1, "------", MCDU_LARGE, main_col)
+    self:set_line(mcdu_data, MCDU_RIGHT, 1, star_name and star_name or "------", MCDU_LARGE, star_name and main_col or ECAM_WHITE)
     self:set_line(mcdu_data, MCDU_CENTER,1, " ------", MCDU_LARGE, main_col)
     self:set_line(mcdu_data, MCDU_RIGHT, 2, "------", MCDU_LARGE,  main_col)
 
@@ -177,7 +180,7 @@ function THIS_PAGE:sel_appr(mcdu_data, i)
     end
 
     FMGS_create_temp_fpln()
-    FMGS_arr_set_appr(THIS_PAGE.curr_fpln.apts.arr_cifp.apprs[data.idx], data.rwy_obj)
+    FMGS_arr_set_appr(THIS_PAGE.curr_fpln.apts.arr_cifp.apprs[data.idx], data.rwy_obj, data.rwy_sibl)
     mcdu_open_page(mcdu_data, 606)
 end
 

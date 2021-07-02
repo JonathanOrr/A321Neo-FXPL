@@ -179,6 +179,21 @@ function FMGS_dep_get_rwy(ret_temp_if_avail)
     end
 end
 
+function FMGS_arr_get_rwy(ret_temp_if_avail)
+
+    if ret_temp_if_avail and FMGS_sys.fpln.temp then
+        if not FMGS_sys.fpln.temp.apts.arr_rwy then
+            return nil,nil
+        else
+            return FMGS_sys.fpln.temp.apts.arr_rwy[1], FMGS_sys.fpln.temp.apts.arr_rwy[2]
+        end
+    elseif not FMGS_sys.fpln.active.apts.arr_rwy then
+        return nil, nil
+    else
+        return FMGS_sys.fpln.active.apts.arr_rwy[1], FMGS_sys.fpln.active.apts.arr_rwy[2]
+    end
+end
+
 function FMGS_dep_set_rwy(rwy, sibling)
     FMGS_sys.fpln.temp.apts.dep_rwy = {rwy, sibling}
 end
@@ -196,6 +211,9 @@ function FMGS_reset_dep_trans()
     FMGS_sys.fpln.temp.apts.dep_trans = nil
 end
 
+function FMGS_reset_arr_trans()
+    FMGS_sys.fpln.temp.apts.arr_trans = nil
+end
 
 function FMGS_reset_alt_airports()
     FMGS_sys.fpln.temp.apts.alt = nil
@@ -244,8 +262,8 @@ function FMGS_copy_dep_sid_active_to_temp()
     FMGS_sys.fpln.temp.apts.dep_sid = FMGS_sys.fpln.active.apts.dep_sid
 end
 
-function FMGS_arr_set_appr(appr, rwy)
-    FMGS_sys.fpln.temp.apts.arr_rwy = rwy
+function FMGS_arr_set_appr(appr, rwy, sibling)
+    FMGS_sys.fpln.temp.apts.arr_rwy = {rwy, sibling}
     FMGS_sys.fpln.temp.apts.arr_appr = appr
 end
 
@@ -256,6 +274,31 @@ function FMGS_arr_get_appr(ret_temp_if_avail)
         return FMGS_sys.fpln.active.apts.arr_appr
     end
 end
+
+function FMGS_arr_get_star(ret_temp_if_avail)
+    if ret_temp_if_avail and FMGS_sys.fpln.temp then
+        return FMGS_sys.fpln.temp.apts.arr_star
+    else
+        return FMGS_sys.fpln.active.apts.arr_star
+    end
+end
+
+function FMGS_arr_set_star(star)
+    FMGS_sys.fpln.temp.apts.arr_star = star
+end
+
+function FMGS_arr_get_trans(ret_temp_if_avail)
+    if ret_temp_if_avail and FMGS_sys.fpln.temp then
+        return FMGS_sys.fpln.temp.apts.arr_trans
+    else
+        return FMGS_sys.fpln.active.apts.arr_trans
+    end
+end
+
+function FMGS_arr_set_trans(trans)
+    FMGS_sys.fpln.temp.apts.arr_trans = trans
+end
+
 -------------------------------------------------------------------------------
 -- F/PLN
 -------------------------------------------------------------------------------
