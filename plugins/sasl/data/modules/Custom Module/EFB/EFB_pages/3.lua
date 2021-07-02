@@ -41,6 +41,11 @@ local NUMBER_OF_SUBPAGES = 3
 -- Global variables
 -------------------------------------------------------------------------------
 
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-----------------------------------------------------------DO NOT TOUCH!!!!!!
+-------------------------------------------------------------------------------
+
 New_takeoff_data_available = true
 
 -- LOAD & CG
@@ -74,90 +79,44 @@ efb_subpage_number = 1
 
 deparr_apts = {"", ""}
 
-local tank_index_center = {
-    {5000,   -1},
-    {10000 , -1},
-    {15000 , -2},
-    {20000 , -3},
-    {25000 , -4},
-    {30000 , -4},
-    {35000 , -5},
-    {40000 , -6},
-    {45000 , -7},
-    {50000 , -7},
-    {55000 , -8},
-    {60000 , -9},
-    {FUEL_C_MAX , -10},
-}
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-----------------------------------------------------------DO NOT TOUCH!!!!!!
+-------------------------------------------------------------------------------
 
-local tank_index_wing = {
-    {5000,   -1},
-    {10000 , -1},
-    {15000 , -2},
-    {20000 , -2},
-    {25000 , -2},
-    {30000 , -3},
-    {35000 , -3},
-    {40000 , -3},
-    {45000 , -3},
-    {50000 , -3},
-    {55000 , -2},
-    {60000 , -2},
-    {FUEL_LR_MAX, -1},
-}
-
-local tank_index_act = {
-    {0,     0},
-    {24500 , 0},
-}
-
-local tank_index_rct = {
-    {0,     0},
-    {24500 , 0},
-}
-
-local passenger_index_front = {
-    {0, 0},
-    {10200, -23}
-}
-
-local passenger_index_aft = {
-    {0, 0},
-    {10200, 24}
-}
-
-local cargo_index_front = {
-    {0, 0},
-    {5700, -15.7}
-}
-
-local cargo_index_aft = {
-    {0, 0},
-    {7000, 12.5}
-}
-
-
+local slider_pos = {0,0,0,0,0,0}
+local mouse_slider_start_pos = {0,0}
 
 -------------------------------------------------------------------------------
 -- Functions
 -------------------------------------------------------------------------------
 
-local function set_initial_weights_for_first_few_frames()
-    if get(Time_since_last_rest) < 1 then
-        load_actual[6] = Round(get(FOB), 0)
-        load_target[6] = Round(get(FOB), 0)
+local function within(what,min,max)
+    if what <= max and what >= min then 
+        return true 
+    else 
+        return false 
     end
 end
 
---MOUSE RESET
-function onMouseDown ( component , x , y , button , parentX , parentY )
-    if key_p3s1_focus ~= 0 or keyboard_subpage_2_focus ~= 0 then
-        if button == MB_LEFT or button == MB_RIGHT then
-            key_p3s1_focus = 0
-            keyboard_subpage_2_focus = 0
-        end
+local function draw_sliders(x,y,i)
+    if within(EFB_CURSOR_X,(x-2)+ 560 * slider_pos[i],(x-2)+30+ 560 * slider_pos[i]) and within(EFB_CURSOR_Y,y-2,y-2+19) then
+        Sasl_DrawWideFrame( (x-2)+ 560 * slider_pos[i] + (1-slider_pos[i]),      y-1,       29,      18, 1, 0, EFB_WHITE)
     end
-    return true
+    sasl.gl.drawRectangle(      x + 559 * slider_pos[i],        y,      26,     15,  {248/255,165/255,27/255})
+end
+
+local function slider_onmousehold(x,y,i)
+    if within(EFB_CURSOR_X,(x-2)+ 560 * slider_pos[i],(x-2)+30+ 560 * slider_pos[i]) and within(EFB_CURSOR_Y,y-2,y-2+19) then
+        mouse_slider_start_pos[1] = EFB_CURSOR_X
+        mouse_slider_start_pos[2] = EFB_CURSOR_X
+        local cursor_x_translation = 0
+        slider_pos[i] = 0
+    end
+end
+
+function EFB_page3_onmousehold()
+    print("hello")
 end
 
 ----------------KEYOARD STUFF
@@ -389,6 +348,20 @@ local function runway_related_buttons()
     --------------------------------ABOVE ARE FOR RUNWAY SELECTION FOR PERF!!!!!!!!!!!!!!!!!!!!!!!!
 end
 
+local function draw_dropdowns()
+    if string.len(key_p3s1_buffer) > 0 then --THE PURPOSE OF THIS IFELSE IS TO PREVENT THE CURSOR FROM COVERING UP THE PREVIOUS VALUE, WHEN THE SCRATCHPAD IS EMPTY.
+        drawTextCentered( Font_Airbus_panel , 116 , 578, key_p3s1_focus == 7 and key_p3s1_buffer or deparr_apts[1] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
+        drawTextCentered( Font_Airbus_panel , 403 , 578, key_p3s1_focus == 8 and key_p3s1_buffer or deparr_apts[2] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
+    else
+        drawTextCentered( Font_Airbus_panel , 116 , 578, deparr_apts[1] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
+        drawTextCentered( Font_Airbus_panel , 403 , 578, deparr_apts[2] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
+    end
+
+    draw_dropdown_menu(230, 578, 90, 28, EFB_DROPDOWN_OUTSIDE, EFB_DROPDOWN_INSIDE, dropdown_1, dropdown_expanded[1], dropdown_selected[1])
+    draw_dropdown_menu(511, 578, 90, 28, EFB_DROPDOWN_OUTSIDE, EFB_DROPDOWN_INSIDE, dropdown_2, dropdown_expanded[2], dropdown_selected[2])
+
+end
+
 
 --------------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------BELOW ARE THE LOOPS AND BUTTONS
@@ -407,16 +380,11 @@ local function EFB_draw_page_3_subpage_1() -- DRAW LOOP
 
     sasl.gl.drawTexture (EFB_LOAD_bgd, 0 , 0 , 1143 , 800 , EFB_WHITE )
 
-    if string.len(key_p3s1_buffer) > 0 then --THE PURPOSE OF THIS IFELSE IS TO PREVENT THE CURSOR FROM COVERING UP THE PREVIOUS VALUE, WHEN THE SCRATCHPAD IS EMPTY.
-        drawTextCentered( Font_Airbus_panel , 116 , 578, key_p3s1_focus == 7 and key_p3s1_buffer or deparr_apts[1] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
-        drawTextCentered( Font_Airbus_panel , 403 , 578, key_p3s1_focus == 8 and key_p3s1_buffer or deparr_apts[2] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
-    else
-        drawTextCentered( Font_Airbus_panel , 116 , 578, deparr_apts[1] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
-        drawTextCentered( Font_Airbus_panel , 403 , 578, deparr_apts[2] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
+    for i=1, 6 do
+        draw_sliders(52,399 - (i-1)*52, i)
     end
 
-    draw_dropdown_menu(230, 578, 90, 28, EFB_DROPDOWN_OUTSIDE, EFB_DROPDOWN_INSIDE, dropdown_1, dropdown_expanded[1], dropdown_selected[1])
-    draw_dropdown_menu(511, 578, 90, 28, EFB_DROPDOWN_OUTSIDE, EFB_DROPDOWN_INSIDE, dropdown_2, dropdown_expanded[2], dropdown_selected[2])
+    draw_dropdowns()
 
     draw_focus_frame()
     draw_avionics_bay_standby()

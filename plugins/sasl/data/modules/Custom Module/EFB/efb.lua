@@ -189,6 +189,16 @@ function onMouseDown(component, x, y, button, parentX, parentY)
     end
 end
 
+function onMouseHold(component, x, y, button, parentX, parentY)
+    --mouse not on the screen
+    if EFB_CURSOR_on_screen == false then
+        return
+    end
+    if button == MB_LEFT then
+        EFB_page3_onmousehold()
+    end
+end
+
 --common draw logic
 local function draw_efb_bgd()
     sasl.gl.drawTexture ( EFB_bgd, 0 , 0 , 1143 , 800 , ECAM_WHITE )
