@@ -244,10 +244,18 @@ function FMGS_copy_dep_sid_active_to_temp()
     FMGS_sys.fpln.temp.apts.dep_sid = FMGS_sys.fpln.active.apts.dep_sid
 end
 
-function FMGS_arr_set_appr(appr)
+function FMGS_arr_set_appr(appr, rwy)
+    FMGS_sys.fpln.temp.apts.arr_rwy = rwy
     FMGS_sys.fpln.temp.apts.arr_appr = appr
 end
 
+function FMGS_arr_get_appr(ret_temp_if_avail)
+    if ret_temp_if_avail and FMGS_sys.fpln.temp then
+        return FMGS_sys.fpln.temp.apts.arr_appr
+    else
+        return FMGS_sys.fpln.active.apts.arr_appr
+    end
+end
 -------------------------------------------------------------------------------
 -- F/PLN
 -------------------------------------------------------------------------------

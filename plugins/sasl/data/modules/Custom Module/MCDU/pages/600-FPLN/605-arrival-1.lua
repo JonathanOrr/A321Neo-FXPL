@@ -20,38 +20,6 @@ THIS_PAGE.curr_page = 1
 THIS_PAGE.apprs_length = 0
 THIS_PAGE.apprs_references = {0,0,0,0}
 
-local function type_char_to_idx(x)
-    if x == CIFP_TYPE_APPR_MLS then
-        return 1, "MLS"
-    elseif x == CIFP_TYPE_APPR_ILS then
-        return 2, "ILS"
-    elseif x == CIFP_TYPE_APPR_GLS then
-        return 3, "GLS"
-    elseif x == CIFP_TYPE_APPR_IGS then
-        return 4, "IGS"
-    elseif x == CIFP_TYPE_APPR_LOC_ONLY then
-        return 5, "LOC"
-    elseif x == CIFP_TYPE_APPR_LOC_BC then
-        return 6, "BAC"
-    elseif x == CIFP_TYPE_APPR_LDA then
-        return 7, "LDA"
-    elseif x == CIFP_TYPE_APPR_SDF then
-        return 8, "SDF"
-    elseif x == CIFP_TYPE_APPR_GPS then
-        return 9, "GPS"
-    elseif x == CIFP_TYPE_APPR_RNAV then
-        return 10, "RNAV"
-    elseif x == CIFP_TYPE_APPR_VOR or x == CIFP_TYPE_APPR_VORDMETAC then
-        return 11, "VOR"
-    elseif x == CIFP_TYPE_APPR_NDB or x == CIFP_TYPE_APPR_NDBDME then
-        return 12, "NDB"
-    elseif x == CIFP_TYPE_APPR_RWY_DIRECT then
-        return 13, "RWY"
-    else
-        return nil, nil
-    end
-end
-
 local function extract_rwy_name(rwy_name_with_suffix)
 
     local rwy_name = rwy_name_with_suffix:sub(1,2)
@@ -68,15 +36,17 @@ local function extract_rwy_name(rwy_name_with_suffix)
 end
 
 function THIS_PAGE:get_runway_info(rwy_name)
-    local rwy_info, ils_info
+    local rwy_info, ils_info, rwy_obj
 
     for k,x in ipairs(THIS_PAGE.curr_fpln.apts.arr.rwys) do
         if x.name == rwy_name then
             rwy_info = {math.floor(x.distance), math.floor(x.bearing)}
+            rwy_obj = x
             break
         end
         if x.sibl_name == rwy_name then
             rwy_info = {math.floor(x.distance), math.floor(x.bearing+180)%360}
+            rwy_obj = x
             break
         end
     end
@@ -95,7 +65,7 @@ function THIS_PAGE:get_runway_info(rwy_name)
         end
     end
 
-    return rwy_info, ils_info
+    return rwy_info, ils_info, rwy_obj
 end
 
 function THIS_PAGE:render_apprs(mcdu_data)
@@ -111,17 +81,17 @@ function THIS_PAGE:render_apprs(mcdu_data)
     end
 
     for i,x in ipairs(THIS_PAGE.curr_fpln.apts.arr_cifp.apprs) do
-        local type_idx, type_str = type_char_to_idx(x.type)
+        local type_idx, type_str = appr_type_char_to_idx(x.type)
         if type_idx ~= nil then
             local rwy_name_with_suffix = x.proc_name:sub(2)
             local rwy_name = extract_rwy_name(rwy_name_with_suffix)
-            local rwy_info, ils_info = self:get_runway_info(rwy_name)
-            table.insert(apprs_list[type_idx], {name=rwy_name_with_suffix, idx=i, prefix=type_str, rwy_info=rwy_info, ils_info=ils_info})
+            local rwy_info, ils_info, rwy_obj = self:get_runway_info(rwy_name)
+            table.insert(apprs_list[type_idx], {name=rwy_name_with_suffix, idx=i, prefix=type_str, rwy_info=rwy_info, ils_info=ils_info, rwy_obj=rwy_obj})
             THIS_PAGE.apprs_length = THIS_PAGE.apprs_length + 1
         end
     end
     
-    THIS_PAGE.apprs_references = {0,0,0,0}    -- These will contain the references for buttons
+    mcdu_data.page_data[605].apprs_references = {nil,nil,nil}    -- These will contain the references for buttons
 
     local i = 0
     local n_line = 3
@@ -129,8 +99,10 @@ function THIS_PAGE:render_apprs(mcdu_data)
         for _,data in pairs(data_content) do
             i = i + 1
             if i > 3 * (THIS_PAGE.curr_page-1) and i <= 3 * (THIS_PAGE.curr_page) then
-                local arrow = "←" -- (FMGS_dep_get_sid(true) and FMGS_dep_get_sid(true).proc_name == k) and " " or "←"
-                local top_line = Aft_string_fill(arrow .. data.prefix .. data.name, " ", 11) .. (data.rwy_info and data.rwy_info[1] .. mcdu_format_force_to_small("M") or "")
+                local full_name = data.prefix .. data.name
+                local select_appr_name = dest_get_selected_appr_procedure()
+                local arrow = (select_appr_name and select_appr_name == full_name) and " " or "←"
+                local top_line = Aft_string_fill(arrow .. full_name, " ", 11) .. (data.rwy_info and data.rwy_info[1] .. mcdu_format_force_to_small("M") or "")
                 local bottom_line = "   " .. Aft_string_fill(data.rwy_info and Fwd_string_fill(""..data.rwy_info[2], "0", 3) or "", " ", 5)
                 if data.ils_info then
                     bottom_line = bottom_line .. (data.ils_info[1] and data.ils_info[1] or "") .. (data.ils_info[2] and "/".. data.ils_info[2] or "")
@@ -138,14 +110,33 @@ function THIS_PAGE:render_apprs(mcdu_data)
                 
                 self:set_line(mcdu_data, MCDU_LEFT, n_line, top_line, MCDU_LARGE, ECAM_BLUE)
                 self:set_line(mcdu_data, MCDU_LEFT, n_line+1, bottom_line, MCDU_SMALL, ECAM_BLUE)
-                THIS_PAGE.apprs_references[n_line-1] = data.idx    -- Let's same the array index so that we can use this for buttons
+                mcdu_data.page_data[605].apprs_references[n_line-2] = data    -- Let's same the array index so that we can use this for buttons
                 n_line = n_line + 1
             end
         end
     end
+
+    mcdu_data.page_data[605].apprs_list = apprs_list
+end
+
+function THIS_PAGE:render_top_data(mcdu_data)
+
+    local main_col = FMGS_does_temp_fpln_exist() and ECAM_YELLOW or ECAM_GREEN
+
+    local appr_name = dest_get_selected_appr_procedure()
+    self:set_line(mcdu_data, MCDU_LEFT,  1, appr_name and appr_name or "------", MCDU_LARGE, appr_name and main_col or ECAM_WHITE)
+    self:set_line(mcdu_data, MCDU_RIGHT, 1, "------", MCDU_LARGE, main_col)
+    self:set_line(mcdu_data, MCDU_CENTER,1, " ------", MCDU_LARGE, main_col)
+    self:set_line(mcdu_data, MCDU_RIGHT, 2, "------", MCDU_LARGE,  main_col)
+
 end
 
 function THIS_PAGE:render(mcdu_data)
+
+    if not mcdu_data.page_data[605] then
+        mcdu_data.page_data[605] = {}
+    end
+
     assert(mcdu_data.lat_rev_subject and mcdu_data.lat_rev_subject.type == 4)
     THIS_PAGE.main_col = FMGS_does_temp_fpln_exist() and ECAM_YELLOW or ECAM_GREEN
     THIS_PAGE.curr_fpln = FMGS_get_current_fpln()
@@ -172,19 +163,21 @@ function THIS_PAGE:render(mcdu_data)
     -------------------------------------
     -- DYNAMIC
     -------------------------------------
+    THIS_PAGE:render_top_data(mcdu_data)
     THIS_PAGE:render_apprs(mcdu_data)
 end
 
 function THIS_PAGE:sel_appr(mcdu_data, i)
-    local start_appr = 3*(THIS_PAGE.curr_page-1)
-    
-    local sel_appr_i = start_appr + i
-    if sel_appr_i > #THIS_PAGE.curr_fpln.apts.arr_cifp.apprs then
+   
+    local data = mcdu_data.page_data[605].apprs_references[i]
+
+    if not data then
         MCDU_Page:Slew_Down(mcdu_data)  -- Clicked on empty spot
         return
     end
+
     FMGS_create_temp_fpln()
-    FMGS_arr_set_appr(THIS_PAGE.curr_fpln.apts.arr_cifp.apprs[sel_appr_i])
+    FMGS_arr_set_appr(THIS_PAGE.curr_fpln.apts.arr_cifp.apprs[data.idx], data.rwy_obj)
     mcdu_open_page(mcdu_data, 606)
 end
 
@@ -216,6 +209,14 @@ function THIS_PAGE:Slew_Up(mcdu_data)
     else
         THIS_PAGE.curr_page = THIS_PAGE.curr_page + 1
     end
+end
+
+function THIS_PAGE:Slew_Left(mcdu_data)
+    mcdu_open_page(mcdu_data, 606)
+end
+
+function THIS_PAGE:Slew_Right(mcdu_data)
+    mcdu_open_page(mcdu_data, 606)
 end
 
 
