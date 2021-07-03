@@ -33,13 +33,11 @@ function THIS_PAGE:render_trans(mcdu_data)
     -- Extract the trans
     for i,x in ipairs(fpln.apts.arr_cifp.stars) do
 
-        print(x.proc_name, FMGS_arr_get_star(true).proc_name)
-
-
         local rwy_match = x.proc_name == FMGS_arr_get_star(true).proc_name or x.proc_name == "ALL"
-        if     x.type == CIFP_TYPE_SS_ENR_TRANS
-            or x.type == CIFP_TYPE_SS_ENR_TRANS_RNAV
-            or x.type == CIFP_TYPE_SS_ENR_TRANS_FMS then
+        if     x.type == CIFP_TYPE_STAR_ENR_TRANS
+            or x.type == CIFP_TYPE_STAR_ENR_TRANS_RNAV
+            or x.type == CIFP_TYPE_STAR_ENR_PROF_DESC
+            or x.type == CIFP_TYPE_STAR_ENR_TRANS_FMS then
 
             if rwy_match then
                 trans_list[x.trans_name] = i
@@ -89,15 +87,15 @@ function THIS_PAGE:render_star(mcdu_data, sel_rwy, sibl)
     
         local rwy_match = x.trans_name == rwid or x.trans_name == rwid_both or x.trans_name == "ALL"
 
-        --print(x.proc_name, x.trans_name, x.type, rwid, rwid_both)
-
-        if     x.type == CIFP_TYPE_SS_RWY_TRANS
-            or x.type == CIFP_TYPE_SS_CMN_ROUTE
-            or x.type == CIFP_TYPE_SS_RWY_TRANS_RNAV
-            or x.type == CIFP_TYPE_SS_CMN_ROUTE_RNAV
-            or x.type == CIFP_TYPE_SS_RWY_TRANS_FMS
-            or x.type == CIFP_TYPE_SS_CMN_ROUTE_FMS then
-
+        if     x.type == CIFP_TYPE_STAR_RWY_TRANS
+            or x.type == CIFP_TYPE_STAR_CMN_ROUTE
+            or x.type == CIFP_TYPE_STAR_RWY_TRANS_RNAV
+            or x.type == CIFP_TYPE_STAR_CMN_ROUTE_RNAV
+            or x.type == CIFP_TYPE_STAR_RWY_PROF_DESC
+            or x.type == CIFP_TYPE_STAR_CMN_PROF_DESC
+            or x.type == CIFP_TYPE_STAR_RWY_TRANS_FMS
+            or x.type == CIFP_TYPE_STAR_CMN_ROUTE_FMS then
+    
             if rwy_match then
                 star_list[x.proc_name] = i
                 mcdu_data.page_data[606].star_length = mcdu_data.page_data[606].star_length + 1
@@ -244,6 +242,25 @@ end
 function THIS_PAGE:R6(mcdu_data)
     FMGS_insert_temp_fpln()
     mcdu_open_page(mcdu_data, 600)
+end
+
+function THIS_PAGE:Slew_Down(mcdu_data)
+    local pd_data = mcdu_data.page_data[606]
+
+    if pd_data.curr_page <= 1 then
+        MCDU_Page:Slew_Down(mcdu_data)
+    else
+        pd_data.curr_page = pd_data.curr_page - 1
+    end
+end
+
+function THIS_PAGE:Slew_Up(mcdu_data)
+    local pd_data = mcdu_data.page_data[606]
+    if math.floor(pd_data.star_length / 3) <= pd_data.curr_page then
+        MCDU_Page:Slew_Up(mcdu_data)
+    else
+        pd_data.curr_page = pd_data.curr_page + 1
+    end
 end
 
 mcdu_pages[THIS_PAGE.id] = THIS_PAGE
