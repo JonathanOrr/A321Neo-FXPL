@@ -413,7 +413,7 @@ end
 
 function set_alt_callouts()
 
-    if math.floor(get(Capt_ra_alt_ft)) + (get(Capt_VVI)/60)*0.38 <= radio_values[radio_values_current] then
+    if math.floor(get(Capt_ra_alt_ft)) <= radio_values[radio_values_current] then
         callouts_sound.command = radio_values_dr[radio_values_current]
         set(Sounds_alt_callout, 1)
         radio_values_current = radio_values_current - 1
