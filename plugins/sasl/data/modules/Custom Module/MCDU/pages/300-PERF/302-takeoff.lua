@@ -110,6 +110,7 @@ end
 function THIS_PAGE:L1(mcdu_data)
     local input = mcdu_get_entry(mcdu_data, {"number", length = 3, dp = 0})
     input = tonumber(input)
+    if input == nil then return end
     if input > 100 and input <= 175 then
         FMGS_sys.perf.takeoff.v1 = input
     else
@@ -120,6 +121,7 @@ end
 function THIS_PAGE:L2(mcdu_data)
     local input = mcdu_get_entry(mcdu_data, {"number", length = 3, dp = 0})
     input = tonumber(input)
+    if input == nil then return end
     if input > 100 and input <= 175 then
         FMGS_sys.perf.takeoff.vr = input
     else
@@ -130,6 +132,7 @@ end
 function THIS_PAGE:L3(mcdu_data)
     local input = mcdu_get_entry(mcdu_data, {"number", length = 3, dp = 0})
     input = tonumber(input)
+    if input == nil then return end
     if input > 100 and input <= 175 then
         FMGS_sys.perf.takeoff.v2 = input
     else
