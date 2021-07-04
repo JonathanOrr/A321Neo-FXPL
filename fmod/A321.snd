@@ -4329,9 +4329,21 @@ BEGIN_SOUND_ATTACHMENT
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Seatbelt
+  VEH_XYZ 0 2.3 0
+  EVENT_START_COND 	sim/cockpit2/switches/fasten_seat_belts == 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /NoSmoke
   VEH_XYZ 0 2.3 0
   EVENT_START_COND 	sim/cockpit2/switches/no_smoking == 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /NoSmoke
+  VEH_XYZ 0 2.3 0
+  EVENT_START_COND 	sim/cockpit2/switches/no_smoking == 1
 END_SOUND_ATTACHMENT
 
 ##################################################################################################################################################################################FCU Knobs
