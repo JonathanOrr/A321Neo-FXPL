@@ -220,13 +220,13 @@ local function update_cifp()
 
             -- Add STARs
             table.insert(FMGS_sys.fpln.active.apts.arr_cifp.stars, {
-                type        = CIFP_TYPE_SS_RWY_TRANS_FMS,
+                type        = CIFP_TYPE_STAR_RWY_TRANS_FMS,
                 proc_name   = "NO STAR",
                 trans_name  = "ALL",
                 legs = {}
             })
             table.insert(FMGS_sys.fpln.active.apts.arr_cifp.stars, {
-                type        = CIFP_TYPE_SS_ENR_TRANS_FMS,
+                type        = CIFP_TYPE_STAR_ENR_TRANS_FMS,
                 proc_name   = "ALL",
                 trans_name  = "NO TRANS",
                 legs = {}
