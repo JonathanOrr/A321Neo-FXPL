@@ -58,6 +58,7 @@ local tank_pump_and_xfr = {
     [RCT_TK_XFR]  = { switch = false, status = false, auto_status = false, has_elec_pwr = false, pressure_ok = false }
 }
 
+local pump_sound_dr_names = {SOUND_fuel_pump_L1, SOUND_fuel_pump_L2, SOUND_fuel_pump_R1, SOUND_fuel_pump_R2} --Added by Henrick, 5th July 2021
 
 local C_tank_mode   = false -- false AUTO, true MANUAL
 local C_tank_fault  = false -- This does not depend on a fault datarefs
@@ -741,15 +742,15 @@ local function fix_startup_fuel()
 end
 
 local function update_pump_dr_for_sounds()
-    set(SOUND_fuel_pump, 0)
-
-    for i,x in ipairs(tank_pump_and_xfr) do
-        if x.pressure_ok then
-            set(SOUND_fuel_pump, 1)
+    for i=1, 4 do
+        if tank_pump_and_xfr[i].pressure_ok then
+            set(pump_sound_dr_names[i], 1)
+        else
+            set(pump_sound_dr_names[i], 0)
         end
     end
-
 end
+
 
 ----------------------------------------------------------------------------------------------------
 -- Functions - Main

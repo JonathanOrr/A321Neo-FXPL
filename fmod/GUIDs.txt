@@ -210,6 +210,10 @@
 {0b09be96-18d3-4139-8da9-27db52a78f7a} event:/Wipers/Start
 {883c4ea2-ffcd-4845-939e-1f0a5dedda32} event:/Wipers/Top
 {fe71437b-4936-4842-8b50-c346ceb04145} event:/Wipers/Wiper
+{ae6a460c-d9db-47a1-a10c-86637d3052e7} event:/Fuel Pumps/L1
+{065968ad-e0c3-41e8-babf-96f49e058eb6} event:/Fuel Pumps/L2
+{7940a4ab-d163-4856-8993-39380552959c} event:/Fuel Pumps/R1
+{c0225676-6327-4b77-a874-ad178dc464bb} event:/Fuel Pumps/R2
 {eba1c552-d477-4c98-9d5f-00c2f3378ecd} event:/APButton
 {a50ec509-2f82-4177-bf54-8821bc565bed} event:/APU
 {4c5ca5ed-8bbe-4626-ad11-f45fe9ea2d17} event:/APU V2
@@ -233,7 +237,6 @@
 {df97eb35-a18e-494e-b074-1d496aa0cda2} event:/Evac Horn
 {06a66501-2a11-4b1a-a6f7-4fe5d089bc41} event:/Ext
 {f86c05b1-253e-4508-a475-4d354dd045c6} event:/Extractor
-{10895804-bfcf-41ab-9b56-5d472c68d276} event:/Fuel Pump
 {c97b703e-898e-4918-bc8c-259807c5ada1} event:/Gear
 {ea49942b-ab02-4afc-808b-ef17fbd68ef0} event:/GearDrag
 {5339da63-baf2-40c8-aafd-6bf6a0fe8aac} event:/Ground Roll
@@ -263,13 +266,9 @@
 {751f5066-4651-4afb-a410-4cb9db0894c9} bus:/Master/Exterior Unprocessed/Avionics/Interior
 {d8526059-b27c-4eae-9b14-a1ee1cb3dfa1} bus:/Master/Exterior Unprocessed/Avionics/Radios
 {77575f3b-b9cd-4bff-9056-637cff744a14} bus:/Master/Exterior Unprocessed/Avionics/UI
-{2b5380ad-4d25-42b1-a518-444155ff5014} bus:/Master/Exterior Unprocessed/Cabin
-{072bd7fb-5c8f-4dc1-a84e-d21ca9930c53} bus:/Master/Exterior Unprocessed/Engines
 {7a0b49ba-aead-4c30-af12-561f455d9c0b} bus:/Master/Exterior Unprocessed/ExteriorNI
 {10525979-1fa1-4401-8583-bec00053b160} bus:/Master/Exterior Unprocessed/ExteriorWI
-{6cee8772-2b5f-4158-9399-80dbe765bd69} bus:/Master/Exterior Unprocessed/Mechanical
 {b044900b-47b8-49df-a4ad-09b875247d7b} bus:/Master/Exterior Unprocessed/NewEvenQuieter
-{b61e991d-32d3-4702-a3a5-08048a3ecd6a} bus:/Master/Exterior Unprocessed/NewMuchQuieterIn
 {15e9c653-fbca-41ca-8241-7cd3b3870fc8} snapshot:/Inside
 {e5b38f91-83fb-4cec-a2d2-a0170dddb70a} snapshot:/FadingBegin
 {6bb566cf-f4e3-43dd-85f1-2529a372f90b} bank:/Engines_CFM

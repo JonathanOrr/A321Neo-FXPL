@@ -4676,12 +4676,32 @@ END_SOUND_ATTACHMENT
 ###########################################################################################################FUEL PUMP
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /Fuel Pump
+  EVENT_NAME /Fuel Pumps/L1
   VEH_XYZ 0 0 0
-  EVENT_START_COND a321neo/sounds/fuel_pump > 0
-  CUE_TRIGGER_COND a321neo/sounds/fuel_pump == 0
+  EVENT_START_COND a321neo/sounds/fuel_pump_l1 > 0
+  CUE_TRIGGER_COND a321neo/sounds/fuel_pump_l1 == 0
 END_SOUND_ATTACHMENT
 
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Fuel Pumps/L2
+  VEH_XYZ 0 0 0
+  EVENT_START_COND a321neo/sounds/fuel_pump_l2 > 0
+  CUE_TRIGGER_COND a321neo/sounds/fuel_pump_l2 == 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Fuel Pumps/R1
+  VEH_XYZ 0 0 0
+  EVENT_START_COND a321neo/sounds/fuel_pump_r1 > 0
+  CUE_TRIGGER_COND a321neo/sounds/fuel_pump_r1 == 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Fuel Pumps/R2
+  VEH_XYZ 0 0 0
+  EVENT_START_COND a321neo/sounds/fuel_pump_r2 > 0
+  CUE_TRIGGER_COND a321neo/sounds/fuel_pump_r2 == 0
+END_SOUND_ATTACHMENT
 
 ###########################################################################################################MARKERS
 
