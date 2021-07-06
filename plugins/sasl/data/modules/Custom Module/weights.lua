@@ -122,7 +122,7 @@ end
 WEIGHTS.set_bulk_cargo_weight = function(kgs)
     assert(kgs)
     assert(kgs >= 0)
-    if kgs > 1497 then logWarning("Bulk cargo overloaded") end
+    if kgs > 1500 then logWarning("Bulk cargo overloaded") end
 
     curr_weights.bulk_cargo = kgs
     update_xplane_cg()
@@ -133,7 +133,7 @@ WEIGHTS.set_passengers_weight = function(kgs, pos)
     --      1 full-aft  (all the passengers one over the other in the last row)
     assert(kgs and pos)
     assert(kgs >= 0)
-    if kgs > 16000 then logWarning("Cabin overloaded") end
+    if kgs > 18800 then logWarning("Cabin overloaded") end
 
     assert(pos >= 0 and pos <= 1)
 
