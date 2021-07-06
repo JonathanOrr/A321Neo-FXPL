@@ -30,6 +30,8 @@ local mabs  = math.abs
 local msqrt = math.sqrt
 
 -- Paramters from tabular data
+-- Legend:
+-- - 
 local parameters_RA = {
     {
         tau = 15,
@@ -372,11 +374,11 @@ local function corrective(my_acf, int_acf, parameters, v, a)    -- CHECKED
     local t = tau_mod(diff_pos, diff_spd, parameters.dmod)
     local eps = RA_sense(my_acf, int_acf, parameters, v, a, t)
     if msqrt(item_mult(diff_pos, diff_pos)) < parameters.dmod then
-        return true
+        return true, eps
     end
     if item_mult(diff_pos, diff_spd) < 0 then
         if eps * (diff_alt + t * diff_vs) < parameters.alim then
-            return true
+            return true, eps
         end
     end
     return false
@@ -396,9 +398,9 @@ local function get_RA_result(my_acf, int_acf)
 
     local parameters = parameters_RA[which_ra_params(my_acf.alt)]
 
-    local corr_low = corrective(my_acf, int_acf, parameters, v, a)
+    local corr_low, ra_dir = corrective(my_acf, int_acf, parameters, v, a)
     if corr_low then
-        if RA_sense(my_acf, int_acf, parameters, v, a, 0) == 1 then
+        if ra_dir == 1 then
             return TCAS_OUTPUT_CLIMB_LOW
         else
             return TCAS_OUTPUT_DESCEND_LOW
