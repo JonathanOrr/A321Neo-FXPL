@@ -113,6 +113,10 @@ WEIGHTS.set_fwd_cargo_weight = function(kgs)
     update_xplane_cg()
 end
 
+WEIGHTS.get_fwd_cargo_weight = function()
+    return curr_weights.fwd_cargo
+end
+
 WEIGHTS.set_aft_cargo_weight = function(kgs)
     assert(kgs)
     assert(kgs >= 0)
@@ -122,6 +126,10 @@ WEIGHTS.set_aft_cargo_weight = function(kgs)
     update_xplane_cg()
 end
 
+WEIGHTS.get_aft_cargo_weight = function()
+    return curr_weights.aft_cargo
+end
+
 WEIGHTS.set_bulk_cargo_weight = function(kgs)
     assert(kgs)
     assert(kgs >= 0)
@@ -129,6 +137,10 @@ WEIGHTS.set_bulk_cargo_weight = function(kgs)
 
     curr_weights.bulk_cargo = kgs
     update_xplane_cg()
+end
+
+WEIGHTS.get_bulk_cargo_weight = function()
+    return curr_weights.bulk_cargo
 end
 
 WEIGHTS.set_passengers_weight = function(kgs, pos)
@@ -143,6 +155,10 @@ WEIGHTS.set_passengers_weight = function(kgs, pos)
     curr_weights.passengers      = kgs
     curr_weights.passengers_perc = pos
     update_xplane_cg()
+end
+
+WEIGHTS.get_passengers_weight = function()
+    return curr_weights.passengers, curr_weights.passengers_perc
 end
 
 WEIGHTS.get_current_cg_perc = function()
