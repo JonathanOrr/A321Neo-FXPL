@@ -97,6 +97,15 @@ local touched_sliders_after_loading = false
 -- Functions
 -------------------------------------------------------------------------------
 
+function backpropagate_current_weights_to_local_sliders()
+    slider_pos[1] = WEIGHTS.get_passengers_weight()/18800 -- pax
+    slider_pos[2] = 0.5
+    slider_pos[3] = WEIGHTS.get_fwd_cargo_weight()/2400 -- front cargo
+    slider_pos[4] = WEIGHTS.get_aft_cargo_weight()/2400 -- aft cargo
+    slider_pos[5] = WEIGHTS.get_bulk_cargo_weight()/1500 -- bulk cargo
+    slider_pos[6] = get(FOB) / 40000
+end
+
 local function draw_each_component_UI() -- draw the lovely filling polygon animation
     local left_wing_ll = {643,514}
     local left_wing_ul = {643,552}
