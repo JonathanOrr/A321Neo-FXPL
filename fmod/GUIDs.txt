@@ -126,6 +126,10 @@
 {ff956f46-ccbb-4395-a6bc-1d64dddaff41} event:/Flaps/FlapLeverUp
 {c9cf63f7-c575-4691-823b-716d0e5e1ba9} event:/Flaps/Flaps
 {e4faf4c8-f138-4114-a6a9-5e0f8dca1049} event:/Flaps/FlapsLeverFinal
+{ae6a460c-d9db-47a1-a10c-86637d3052e7} event:/Fuel Pumps/L1
+{065968ad-e0c3-41e8-babf-96f49e058eb6} event:/Fuel Pumps/L2
+{7940a4ab-d163-4856-8993-39380552959c} event:/Fuel Pumps/R1
+{c0225676-6327-4b77-a874-ad178dc464bb} event:/Fuel Pumps/R2
 {c5925499-145f-464c-a9a5-68e8bf61c85a} event:/GPWS/dontsink
 {dee7d0b6-c5b3-4913-b44b-0b88c0cba1b3} event:/GPWS/glideslope
 {03a62505-77fa-4d1f-9909-235730bdae73} event:/GPWS/glideslopehard
@@ -210,10 +214,6 @@
 {0b09be96-18d3-4139-8da9-27db52a78f7a} event:/Wipers/Start
 {883c4ea2-ffcd-4845-939e-1f0a5dedda32} event:/Wipers/Top
 {fe71437b-4936-4842-8b50-c346ceb04145} event:/Wipers/Wiper
-{ae6a460c-d9db-47a1-a10c-86637d3052e7} event:/Fuel Pumps/L1
-{065968ad-e0c3-41e8-babf-96f49e058eb6} event:/Fuel Pumps/L2
-{7940a4ab-d163-4856-8993-39380552959c} event:/Fuel Pumps/R1
-{c0225676-6327-4b77-a874-ad178dc464bb} event:/Fuel Pumps/R2
 {eba1c552-d477-4c98-9d5f-00c2f3378ecd} event:/APButton
 {a50ec509-2f82-4177-bf54-8821bc565bed} event:/APU
 {4c5ca5ed-8bbe-4626-ad11-f45fe9ea2d17} event:/APU V2
