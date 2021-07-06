@@ -30,6 +30,11 @@ local CG_BULK_CARGO_M = 33.992
 local CG_PASS_START   =  5.560
 local CG_PASS_END     = 35.960
 
+local CG_WING_TANKS_M = 20.903
+local CG_CTR_TANK_M   = 18.595
+local CG_ACT_TANK_M   = 12.496
+local CG_RCT_TANK_M   = 26.640
+
 -------------------------------------------------------------------------------
 -- Datarefs
 -------------------------------------------------------------------------------
@@ -63,16 +68,36 @@ local function compute_cg(zero_fuel_weight)
     return default_cg + cargo_fwd_cg + cargo_aft_cg + cargo_bulk_cg + passengers_cg
 end
 
+local function compute_cg_with_fuel(zero_fuel_weight)
+    local cg_without_fuel = compute_cg(zero_fuel_weight)
+
+    local total_fuel = get(FOB)
+
+    local wings_fuel_cg = (get(Fuel_quantity[tank_LEFT]) + get(Fuel_quantity[tank_RIGHT])) * CG_WING_TANKS_M / total_fuel
+    local ctr_fuel_cg   = get(Fuel_quantity[tank_CENTER]) * CG_CTR_TANK_M / total_fuel
+    local act_fuel_cg   = get(Fuel_quantity[tank_ACT]) * CG_ACT_TANK_M / total_fuel
+    local rct_fuel_cg   = get(Fuel_quantity[tank_RCT]) * CG_RCT_TANK_M / total_fuel
+
+    local fuel_cg = wings_fuel_cg + ctr_fuel_cg + act_fuel_cg + rct_fuel_cg
+
+    return (cg_without_fuel * zero_fuel_weight + fuel_cg * total_fuel) / (zero_fuel_weight+total_fuel)
+
+end
+
+local function compute_zfw()
+    local total_payload = curr_weights.fwd_cargo + curr_weights.aft_cargo + curr_weights.bulk_cargo + curr_weights.passengers
+    return EMPTY_WEIGHT + total_payload
+end
+
 local function update_xplane_cg()
 
     -- First of all set the total payload
-    local total_payload = curr_weights.fwd_cargo + curr_weights.aft_cargo + curr_weights.bulk_cargo + curr_weights.passengers
-    set(dr_payload_weight, total_payload)
+    local zfw = compute_zfw()
+    set(dr_payload_weight, zfw - EMPTY_WEIGHT)
 
-    local zero_fuel_weight = EMPTY_WEIGHT + total_payload
 
     -- Second, compute the CG and set it (as default with default CG)
-    local cg = compute_cg(zero_fuel_weight)
+    local cg = compute_cg(zfw)
     set(dr_CG_pos, cg - DEFAULT_CG_M)
 end
 
@@ -117,6 +142,16 @@ WEIGHTS.set_passengers_weight = function(kgs, pos)
     update_xplane_cg()
 end
 
+WEIGHTS.get_current_cg_perc = function()
+    -- Return the current CG in percentage with respect to the MAC
+
+    local zfw = compute_zfw()
+    local cg = compute_cg_with_fuel(zfw)
+
+    local default_cg_offset = (DEFAULT_CG_PERC / 100 * MAC_VALUE_M)
+
+    return (cg - (DEFAULT_CG_M - default_cg_offset)) / MAC_VALUE_M * 100;
+end
 
 local function initialize()
     local payload = get(dr_payload_weight)
