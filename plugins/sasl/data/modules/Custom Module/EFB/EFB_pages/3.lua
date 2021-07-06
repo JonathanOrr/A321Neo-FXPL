@@ -97,6 +97,73 @@ local touched_sliders_after_loading = false
 -- Functions
 -------------------------------------------------------------------------------
 
+local function draw_each_component_UI() -- draw the lovely filling polygon animation
+    local left_wing_ll = {643,514}
+    local left_wing_ul = {643,552}
+    local left_wing_lr = {744,542}
+    local left_wing_ur = {744,610}
+
+    local right_wing_ll = {815,542}
+    local right_wing_ul = {815,611}
+    local right_wing_lr = {916,514}
+    local right_wing_ur = {916,552}
+
+    main_starting_point = {757,542}
+    act_starting_point = {757,621}
+    rct_starting_point = {757,502}
+
+    local act_rct_width = 46
+    local act_rct_hight = 30
+    local center_width = 46
+    local center_hight = 70
+
+    local cargo_bulk_starting_point = {949,468}
+    local cargo_aft_starting_point = {949,506}
+    local cargo_fwd_starting_point = {949,583}
+
+    local pax_starting_point = {1019,468}
+    local pax_height = 185
+
+    local filled_ratio = {
+        math.min(get(Fuel_quantity[1])/8440 ,1) , -- left wing tank
+        math.min(get(Fuel_quantity[2])/8440 ,1) , -- right wing tank
+        math.min(get(Fuel_quantity[0])/8940 ,1) , -- center tank
+        math.min(get(Fuel_quantity[3])/4080 ,1) , -- act
+        math.min(get(Fuel_quantity[4])/10080,1) , -- rct
+      WEIGHTS.get_bulk_cargo_weight()/1500, -- bulk cargo
+      WEIGHTS.get_aft_cargo_weight()/2400, -- aft cargo
+      WEIGHTS.get_fwd_cargo_weight()/2400, -- front cargo
+      WEIGHTS.get_passengers_weight()/18800, -- pax
+    }
+
+    sasl.gl.drawConvexPolygon ({    left_wing_ll[1] 
+                                    , left_wing_ll[2] 
+                                    , left_wing_ul[1] 
+                                    , Math_rescale(0    ,left_wing_ll[2], 1 ,left_wing_ll[2] + (left_wing_ul[2]-left_wing_ll[2]), filled_ratio[1])
+                                    , left_wing_ur[1]  
+                                    , Math_rescale(0    ,left_wing_lr[2], 1 ,left_wing_lr[2] + (left_wing_ur[2]-left_wing_lr[2]), filled_ratio[1])
+                                    , left_wing_lr[1] 
+                                    , left_wing_lr[2] 
+                                } , true , 0 ,EFB_SLIDER_COLOUR )
+
+    sasl.gl.drawConvexPolygon ({    right_wing_ll[1] 
+                                , right_wing_ll[2] 
+                                , right_wing_ul[1] 
+                                , Math_rescale(0    ,right_wing_ll[2], 1 ,right_wing_ll[2] + (right_wing_ul[2]-right_wing_ll[2]), filled_ratio[2])
+                                , right_wing_ur[1]  
+                                , Math_rescale(0    ,right_wing_lr[2], 1 ,right_wing_lr[2] + (right_wing_ur[2]-right_wing_lr[2]), filled_ratio[2])
+                                , right_wing_lr[1] 
+                                , right_wing_lr[2] 
+                                } , true , 0 ,EFB_SLIDER_COLOUR )
+    sasl.gl.drawRectangle( main_starting_point[1] , main_starting_point[2] ,center_width, center_hight * filled_ratio[3] , EFB_SLIDER_COLOUR)
+    sasl.gl.drawRectangle( act_starting_point[1] , act_starting_point[2] ,act_rct_width, act_rct_hight * filled_ratio[4] , EFB_SLIDER_COLOUR)
+    sasl.gl.drawRectangle( rct_starting_point[1] , rct_starting_point[2] ,act_rct_width, act_rct_hight * filled_ratio[5] , EFB_SLIDER_COLOUR)
+    sasl.gl.drawRectangle( cargo_bulk_starting_point[1] , cargo_bulk_starting_point[2] ,act_rct_width, act_rct_hight * filled_ratio[6] , EFB_SLIDER_COLOUR)
+    sasl.gl.drawRectangle( cargo_aft_starting_point[1] , cargo_aft_starting_point[2] ,center_width, center_hight * filled_ratio[7] , EFB_SLIDER_COLOUR)
+    sasl.gl.drawRectangle( cargo_fwd_starting_point[1] , cargo_fwd_starting_point[2] ,center_width, center_hight * filled_ratio[8] , EFB_SLIDER_COLOUR)
+    sasl.gl.drawRectangle( pax_starting_point[1] , pax_starting_point[2] ,center_width, pax_height * filled_ratio[9] , EFB_SLIDER_COLOUR)
+end
+
 local function number_to_loadsheet_format(number)
     return Fwd_string_fill(tostring(number), "0", 5)
 end
@@ -143,7 +210,6 @@ local function draw_slider_corresponding_values()
 
     local colour = touched_sliders_after_loading and ECAM_YELLOW or EFB_LIGHTBLUE
 
-    print(EFB_CURSOR_X, EFB_CURSOR_Y)
     for i=1, 5 do
         drawTextCentered(Font_ECAMfont,  933 + (i-1)*118/4 ,480 - 157/6*0 -99   , string.sub(passenger_weight, i,i) , 17, true, false, TEXT_ALIGN_RIGHT, colour)
         drawTextCentered(Font_ECAMfont,  933 + (i-1)*118/4 ,480 - 157/6*1 -99   , string.sub(fwd_cargo_weight, i,i) , 17, true, false, TEXT_ALIGN_RIGHT, colour)
@@ -155,13 +221,16 @@ local function draw_slider_corresponding_values()
         drawTextCentered(Font_ECAMfont,  933 + (i-1)*118/4 ,273 - 157/6*0 -99   , string.sub(zfw, i,i) , 17, true, false, TEXT_ALIGN_RIGHT, colour)
         drawTextCentered(Font_ECAMfont,  933 + (i-1)*118/4 ,243           -99   , string.sub(fuel_weight, i,i) , 17, true, false, TEXT_ALIGN_RIGHT, colour)
     end
+
+    drawTextCentered(Font_ECAMfont, 721+35,436, Round_fill(WEIGHTS.get_current_cg_perc(),1).."%" , 20, true, false, TEXT_ALIGN_CENTER, colour)
+
     for i=1, 6 do
         drawTextCentered(Font_ECAMfont,  933 + (i-2)*118/4 ,203 -99            , string.sub(tow, i,i) , 17, true, false, TEXT_ALIGN_RIGHT, overweight and ECAM_RED or colour)
     end
 
     local text = touched_sliders_after_loading and "WEIGHTS NOT APPLIED" or "WEIGHTS APPLIED" 
-    text = overweight and "AIRCRAFT IS OVERWEIGHT" or text
-    drawTextCentered(Font_ECAMfont,  877 ,540-99, text, 22, true, false, TEXT_ALIGN_CENTER, overweight and ECAM_RED or colour)
+    text = overweight and "ACFT OVERWEIGHT" or text
+    drawTextCentered(Font_ECAMfont,  963 ,429, text, 22, true, false, TEXT_ALIGN_CENTER, overweight and ECAM_RED or colour)
 end
 
 local function draw_sliders(x,y,i)
@@ -521,6 +590,8 @@ local function EFB_update_page_3_subpage_1() --UPDATE LOOP
 end
 
 local function EFB_draw_page_3_subpage_1() -- DRAW LOOP
+
+    draw_each_component_UI()
 
     sasl.gl.drawTexture (EFB_LOAD_bgd, 0 , 0 , 1143 , 800 , EFB_WHITE )
 
