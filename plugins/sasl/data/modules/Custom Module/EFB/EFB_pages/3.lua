@@ -106,6 +106,8 @@ function backpropagate_current_weights_to_local_sliders()
     slider_pos[6] = get(FOB) / 40000
 end
 
+EFB.load_page_backpropagate_current_weights = backpropagate_current_weights_to_local_sliders
+
 local function draw_each_component_UI() -- draw the lovely filling polygon animation
     local left_wing_ll = {643,514}
     local left_wing_ul = {643,552}

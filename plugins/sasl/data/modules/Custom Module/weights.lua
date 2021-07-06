@@ -35,6 +35,11 @@ local CG_CTR_TANK_M   = 18.595
 local CG_ACT_TANK_M   = 12.496
 local CG_RCT_TANK_M   = 26.640
 
+local WEIGHT_MAX_PASSENGERS = 18800
+local WEIGHT_MAX_FWD_CARGO  = 2400
+local WEIGHT_MAX_AFT_CARGO  = 2400
+local WEIGHT_MAX_BULK_CARGO = 1500
+
 -------------------------------------------------------------------------------
 -- Datarefs
 -------------------------------------------------------------------------------
@@ -52,6 +57,8 @@ local curr_weights = {
     passengers      = 0,
     passengers_perc = 0.5,
 };
+
+local must_reinitialize = true
 
 -------------------------------------------------------------------------------
 -- Functions
@@ -107,7 +114,7 @@ end
 WEIGHTS.set_fwd_cargo_weight = function(kgs)
     assert(kgs)
     assert(kgs >= 0)
-    if kgs > 2400 then logWarning("FWD cargo overloaded") end
+    if kgs > WEIGHT_MAX_FWD_CARGO then logWarning("FWD cargo overloaded") end
 
     curr_weights.fwd_cargo = kgs
     update_xplane_cg()
@@ -120,7 +127,7 @@ end
 WEIGHTS.set_aft_cargo_weight = function(kgs)
     assert(kgs)
     assert(kgs >= 0)
-    if kgs > 2400 then logWarning("AFT cargo overloaded") end
+    if kgs > WEIGHT_MAX_AFT_CARGO then logWarning("AFT cargo overloaded") end
 
     curr_weights.aft_cargo = kgs
     update_xplane_cg()
@@ -133,7 +140,7 @@ end
 WEIGHTS.set_bulk_cargo_weight = function(kgs)
     assert(kgs)
     assert(kgs >= 0)
-    if kgs > 1500 then logWarning("Bulk cargo overloaded") end
+    if kgs > WEIGHT_MAX_BULK_CARGO then logWarning("Bulk cargo overloaded") end
 
     curr_weights.bulk_cargo = kgs
     update_xplane_cg()
@@ -148,7 +155,7 @@ WEIGHTS.set_passengers_weight = function(kgs, pos)
     --      1 full-aft  (all the passengers one over the other in the last row)
     assert(kgs and pos)
     assert(kgs >= 0)
-    if kgs > 18800 then logWarning("Cabin overloaded") end
+    if kgs > WEIGHT_MAX_PASSENGERS then logWarning("Cabin overloaded") end
 
     assert(pos >= 0 and pos <= 1)
 
@@ -174,13 +181,28 @@ end
 
 local function initialize()
     local payload = get(dr_payload_weight)
-    local passengers = payload / 2
-    local cargo_each = payload / 12
+
+    local total_weight = WEIGHT_MAX_PASSENGERS + WEIGHT_MAX_FWD_CARGO + WEIGHT_MAX_AFT_CARGO + WEIGHT_MAX_BULK_CARGO
+    payload = math.min(payload, total_weight)
     
-    WEIGHTS.set_passengers_weight(passengers, 0.5)
-    WEIGHTS.set_bulk_cargo_weight(cargo_each)
-    WEIGHTS.set_fwd_cargo_weight(cargo_each*3)
-    WEIGHTS.set_aft_cargo_weight(cargo_each)
+    WEIGHTS.set_passengers_weight(payload*WEIGHT_MAX_PASSENGERS/total_weight, 0.5)
+    WEIGHTS.set_bulk_cargo_weight(payload*WEIGHT_MAX_BULK_CARGO/total_weight)
+    WEIGHTS.set_fwd_cargo_weight(payload*WEIGHT_MAX_FWD_CARGO/total_weight)
+    WEIGHTS.set_aft_cargo_weight(payload*WEIGHT_MAX_AFT_CARGO/total_weight)
+
+    EFB.load_page_backpropagate_current_weights()
 end
 
-initialize()
+sasl.registerCommandHandler(sasl.findCommand("sim/operation/open_weight_and_balance_window"), 1, function(phase)
+    if phase==SASL_COMMAND_END then
+        must_reinitialize = true
+    end
+end)
+
+
+function update()
+    if must_reinitialize then
+        initialize()
+        must_reinitialize = false
+    end
+end
