@@ -299,6 +299,19 @@ function FMGS_arr_set_trans(trans)
     FMGS_sys.fpln.temp.apts.arr_trans = trans
 end
 
+function FMGS_arr_get_via(ret_temp_if_avail)
+    if ret_temp_if_avail and FMGS_sys.fpln.temp then
+        return FMGS_sys.fpln.temp.apts.arr_via
+    else
+        return FMGS_sys.fpln.active.apts.arr_via
+    end
+end
+
+function FMGS_arr_set_via(via)
+    FMGS_sys.fpln.temp.apts.arr_via = via
+end
+
+
 -------------------------------------------------------------------------------
 -- F/PLN
 -------------------------------------------------------------------------------
