@@ -73,14 +73,17 @@ local function compute_cg_with_fuel(zero_fuel_weight)
 
     local total_fuel = get(FOB)
 
-    local wings_fuel_cg = (get(Fuel_quantity[tank_LEFT]) + get(Fuel_quantity[tank_RIGHT])) * CG_WING_TANKS_M / total_fuel
-    local ctr_fuel_cg   = get(Fuel_quantity[tank_CENTER]) * CG_CTR_TANK_M / total_fuel
-    local act_fuel_cg   = get(Fuel_quantity[tank_ACT]) * CG_ACT_TANK_M / total_fuel
-    local rct_fuel_cg   = get(Fuel_quantity[tank_RCT]) * CG_RCT_TANK_M / total_fuel
+    if total_fuel > 0 then 
 
-    local fuel_cg = wings_fuel_cg + ctr_fuel_cg + act_fuel_cg + rct_fuel_cg
-
-    return (cg_without_fuel * zero_fuel_weight + fuel_cg * total_fuel) / (zero_fuel_weight+total_fuel)
+        local wings_fuel_cg = (get(Fuel_quantity[tank_LEFT]) + get(Fuel_quantity[tank_RIGHT])) * CG_WING_TANKS_M / total_fuel
+        local ctr_fuel_cg   = get(Fuel_quantity[tank_CENTER]) * CG_CTR_TANK_M / total_fuel
+        local act_fuel_cg   = get(Fuel_quantity[tank_ACT]) * CG_ACT_TANK_M / total_fuel
+        local rct_fuel_cg   = get(Fuel_quantity[tank_RCT]) * CG_RCT_TANK_M / total_fuel
+        local fuel_cg = wings_fuel_cg + ctr_fuel_cg + act_fuel_cg + rct_fuel_cg
+        return (cg_without_fuel * zero_fuel_weight + fuel_cg * total_fuel) / (zero_fuel_weight+total_fuel)
+    else
+        return cg_without_fuel
+    end 
 
 end
 
