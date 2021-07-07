@@ -115,5 +115,7 @@ function Rudder_control(yaw_input, trim_input, resetting_trim)
     rudder_speed = Math_rescale(0, 0, 1450, rudder_speed, get(Hydraulic_G_press) + get(Hydraulic_B_press) + get(Hydraulic_Y_press)) * (1 - get(FAILURE_FCTL_RUDDER_MECH))
 
     --rudder position calculation--
-    set(Rudder, Set_anim_value_linear_range(get(Rudder), rudder_travel_target, -get(Rudder_travel_lim), get(Rudder_travel_lim), rudder_speed, 5))
+    set(Rudder_total, Set_anim_value_linear_range(get(Rudder_total), rudder_travel_target, -get(Rudder_travel_lim), get(Rudder_travel_lim), rudder_speed, 5))
+    set(Rudder_top, get(Rudder_total))
+    set(Rudder_btm, get(Rudder_total))
 end

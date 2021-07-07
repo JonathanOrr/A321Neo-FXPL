@@ -49,5 +49,5 @@ function Draw_flight_control_module_480x160(x_pos, y_pos)
     --rudder
     sasl.gl.drawWideLine(CENTER_X, y_pos + 160 - 158 + 130, CENTER_X - get(Rudder_travel_lim), y_pos + 160 - 158 + 130, 5, LIGHT_GREY)
     sasl.gl.drawWideLine(CENTER_X, y_pos + 160 - 158 + 130, CENTER_X + get(Rudder_travel_lim), y_pos + 160 - 158 + 130, 5, LIGHT_GREY)
-    sasl.gl.drawWideLine(CENTER_X, y_pos + 160 - 158 + 130, CENTER_X + get(Rudder), y_pos + 160 - 158 + 130, 5, get(Rudder_avail) == 1 and LIGHT_BLUE or ORANGE)
+    sasl.gl.drawWideLine(CENTER_X, y_pos + 160 - 158 + 130, CENTER_X + get(Rudder_total), y_pos + 160 - 158 + 130, 5, get(Rudder_avail) == 1 and LIGHT_BLUE or ORANGE)
 end
