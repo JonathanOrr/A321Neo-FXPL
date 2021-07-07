@@ -11,7 +11,7 @@ function Slats_flaps_calc_and_control()
         10,
         14,
         21,
-        25
+        30
     }
     local flap_angles = {
         0,
@@ -19,7 +19,7 @@ function Slats_flaps_calc_and_control()
         10,
         14,
         21,
-        25,
+        30,
     }
 
     --surface speeds
@@ -33,7 +33,7 @@ function Slats_flaps_calc_and_control()
         {10, 0.7},
         {14, 0.8},
         {21, 0.8},
-        {25,   1},
+        {30,   1},
     }
 
     --configuration logic--

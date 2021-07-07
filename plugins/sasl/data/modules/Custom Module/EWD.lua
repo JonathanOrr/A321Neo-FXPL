@@ -577,7 +577,7 @@ end
 
 local function draw_slat_flap_indications()
     local slats_positions = { 0, 0.7, 0.7, 0.8, 0.8, 1 }
-    local flaps_positions = { 0,   0,  10,  14,  21, 25}
+    local flaps_positions = { 0,   0,  10,  14,  21, 30}
     local slat_flap_configs = { "0", "1", "1+F", "2", "3", "FULL" }
     local slat_anim_ratio = {
         {0, 0},
@@ -590,7 +590,7 @@ local function draw_slat_flap_indications()
         {10, 0.3},
         {14, 0.52},
         {21, 0.76},
-        {25, 1}
+        {30, 1}
     }
 
     --stop approximation--

@@ -17,12 +17,12 @@ FBW.lateral.controllers = {
         bp = function ()
             local l_ail_rat = {
                 {-25, -1},
-                {10 * get(Flaps_deployed_angle) / 25, 0},
+                {10 * get(Flaps_deployed_angle) / 30, 0},
                 {25,   1},
             }
             local r_ail_rat = {
                 {-25, 1},
-                {10 * get(Flaps_deployed_angle) / 25, 0},
+                {10 * get(Flaps_deployed_angle) / 30, 0},
                 {25, -1},
             }
 
