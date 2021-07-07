@@ -242,7 +242,6 @@ local function draw_press_bgd()
 end
 
 function draw_press_page()
-    draw_the_fucking_ecam_backdrop()
     draw_press_bgd()
     draw_press_info()
     draw_valves_text()

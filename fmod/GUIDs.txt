@@ -16,6 +16,7 @@
 {6278ba00-52a0-476a-8a87-43fb61e0a189} event:/CockpitMechanical/Rotary/Rotary2
 {4c126686-6c9f-44a1-b45a-dd4a04ef8a46} event:/CockpitMechanical/Rotary/Rotary3
 {5573431a-a5bd-40cc-8c97-e4237e3a8940} event:/CockpitMechanical/Rotary/Rotary4
+{b4c354fe-8351-4062-8225-807c03a732ba} event:/CockpitMechanical/Rotary/Rotary_Range_0
 {a5f9480f-6b7e-42e2-a081-13b0764c74f3} event:/CockpitMechanical/RotaryPullOut/Rotary1
 {7f631cc3-4105-406c-ba42-4cef2159842b} event:/CockpitMechanical/RotaryPullOut/Rotary2
 {ec3a03c4-087b-4913-a35a-6783a6dbca91} event:/CockpitMechanical/RotaryPullOut/Rotary3

@@ -353,7 +353,6 @@ local function draw_status_bgd()
 end
 
 function draw_sts_page()
-    draw_the_fucking_ecam_backdrop()
     draw_status_bgd()
 
     if get(FAILURE_DISPLAY_FWC_1) == 1 and get(FAILURE_DISPLAY_FWC_2) == 1 then

@@ -289,7 +289,6 @@ local function draw_hyd_bgd()
 end
 
 function draw_hydraulic_page()
-    draw_the_fucking_ecam_backdrop()
     draw_hyd_bgd()
     draw_hyd_textures()
 

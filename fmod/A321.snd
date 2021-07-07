@@ -2413,138 +2413,18 @@ BEGIN_SOUND_ATTACHMENT
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary_Range_0
   VEH_XYZ 0 1.4 -18.7
-  EVENT_START_COND a321neo/cockpit/nd/capt_range_knob == 0
+  EVENT_START_COND ABS_DELTA=a321neo/cockpit/nd/capt_range_knob > 0
+  EVENT_END_COND ABS_DELTA=a321neo/cockpit/nd/capt_range_knob == 0
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary_Range_0
   VEH_XYZ 0 1.4 -18.7
-  EVENT_START_COND a321neo/cockpit/nd/capt_range_knob == 1
+  EVENT_START_COND ABS_DELTA=a321neo/cockpit/nd/fo_range_knob > 0
+  EVENT_END_COND ABS_DELTA=a321neo/cockpit/nd/fo_range_knob == 0
 END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
-  VEH_XYZ 0 1.4 -18.7
-  EVENT_START_COND a321neo/cockpit/nd/capt_range_knob == 2
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
-  VEH_XYZ 0 1.4 -18.7
-  EVENT_START_COND a321neo/cockpit/nd/capt_range_knob == 3
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
-  VEH_XYZ 0 1.4 -18.7
-  EVENT_START_COND a321neo/cockpit/nd/capt_range_knob == 4
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
-  VEH_XYZ 0 1.4 -18.7
-  EVENT_START_COND a321neo/cockpit/nd/capt_range_knob == 5
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
-  VEH_XYZ 0 1.4 -18.7
-  EVENT_START_COND a321neo/cockpit/nd/capt_range_knob == 6
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
-  VEH_XYZ 0 1.4 -18.7
-  EVENT_START_COND a321neo/cockpit/nd/capt_range_knob == 7
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
-  VEH_XYZ 0 1.4 -18.7
-  EVENT_START_COND a321neo/cockpit/nd/capt_range_knob == 8
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
-  VEH_XYZ 0 1.4 -18.7
-  EVENT_START_COND a321neo/cockpit/nd/capt_range_knob == 9
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
-  VEH_XYZ 0 1.4 -18.7
-  EVENT_START_COND a321neo/cockpit/nd/capt_range_knob == 10
-END_SOUND_ATTACHMENT
-
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
-  VEH_XYZ 0 1.4 -18.7
-  EVENT_START_COND a321neo/cockpit/nd/fo_range_knob == 0
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
-  VEH_XYZ 0 1.4 -18.7
-  EVENT_START_COND a321neo/cockpit/nd/fo_range_knob == 1
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
-  VEH_XYZ 0 1.4 -18.7
-  EVENT_START_COND a321neo/cockpit/nd/fo_range_knob == 2
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
-  VEH_XYZ 0 1.4 -18.7
-  EVENT_START_COND a321neo/cockpit/nd/fo_range_knob == 3
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
-  VEH_XYZ 0 1.4 -18.7
-  EVENT_START_COND a321neo/cockpit/nd/fo_range_knob == 4
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
-  VEH_XYZ 0 1.4 -18.7
-  EVENT_START_COND a321neo/cockpit/nd/fo_range_knob == 5
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
-  VEH_XYZ 0 1.4 -18.7
-  EVENT_START_COND a321neo/cockpit/nd/fo_range_knob == 6
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
-  VEH_XYZ 0 1.4 -18.7
-  EVENT_START_COND a321neo/cockpit/nd/fo_range_knob == 7
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
-  VEH_XYZ 0 1.4 -18.7
-  EVENT_START_COND a321neo/cockpit/nd/fo_range_knob == 8
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
-  VEH_XYZ 0 1.4 -18.7
-  EVENT_START_COND a321neo/cockpit/nd/fo_range_knob == 9
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Rotary/Rotary1
-  VEH_XYZ 0 1.4 -18.7
-  EVENT_START_COND a321neo/cockpit/nd/fo_range_knob == 10
-END_SOUND_ATTACHMENT
-
 
 
 ##############################################################################################################################BIG ROUND KNOB
@@ -2983,7 +2863,6 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /TouchMain
   VEH_XYZ 0 0 0
   EVENT_START_COND 	a321neo/dynamics/wheel/either_aft_on_ground == 1
-  EVENT_END_COND 	a321neo/dynamics/wheel/either_aft_on_ground == 0
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT

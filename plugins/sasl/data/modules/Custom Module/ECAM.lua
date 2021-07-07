@@ -207,7 +207,14 @@ local function draw_video()
     end
 end
 
+function draw_ecam_backdrop()
+    sasl.gl.drawWideLine(10, 112, 890, 112, 4,ECAM_WHITE)
+    sasl.gl.drawWideLine(600, 112, 600, 1, 4, ECAM_WHITE)
+    sasl.gl.drawWideLine(300, 112, 300, 1, 4, ECAM_WHITE)
+end
+
 local function draw_ecam_pages()
+    draw_ecam_backdrop()
     if get(Ecam_current_page) == 1 then --eng
         draw_eng_page()
     elseif get(Ecam_current_page) == 2 then --bleed

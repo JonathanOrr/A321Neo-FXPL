@@ -374,7 +374,6 @@ local function draw_eng_bgd()
 end
 
 function draw_eng_page()
-    draw_the_fucking_ecam_backdrop()
     draw_eng_bgd()
     draw_fuel_usage()
     draw_oil_qt_press_temp()

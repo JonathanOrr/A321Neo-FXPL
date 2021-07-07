@@ -262,7 +262,6 @@ local function draw_bleed_bgd()
 end
 
 function draw_bleed_page()
-    draw_the_fucking_ecam_backdrop()
     draw_bleed_bgd()
     draw_apu_and_gas()
     draw_engines()    

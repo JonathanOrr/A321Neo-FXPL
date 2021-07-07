@@ -304,7 +304,6 @@ local function draw_fuel_bgd()
 end
 
 function draw_fuel_page()
-    draw_the_fucking_ecam_backdrop()
     draw_fuel_bgd()
     draw_tank_qty()
     draw_fob_qty()

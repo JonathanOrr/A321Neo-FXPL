@@ -544,7 +544,6 @@ local function draw_elec_boxes()
 end
 
 local function draw_elec_bgd()
-    draw_the_fucking_ecam_backdrop()
     Sasl_DrawWideFrame(17, 541, 130, 108, 3, 0, ECAM_LINE_GREY)
     Sasl_DrawWideFrame(762, 541, 130, 108, 3, 0, ECAM_LINE_GREY)
     drawTextCentered(Font_ECAMfont, 68, 876, "ELEC", 44, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)

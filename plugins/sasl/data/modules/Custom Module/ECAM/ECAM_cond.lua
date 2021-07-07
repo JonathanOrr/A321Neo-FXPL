@@ -100,7 +100,6 @@ local function draw_cond_bgd()
 end
 
 function draw_cond_page()
-    draw_the_fucking_ecam_backdrop()
     draw_cond_bgd()
     --cabin--
     --actual temperature

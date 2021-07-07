@@ -96,7 +96,6 @@ local function draw_door_bgd()
 end
 
 function draw_door_page()
-    draw_the_fucking_ecam_backdrop()
     sasl.gl.drawTexture(ECAM_DOOR_grey_lines_img, 244, 169, 419, 639, ECAM_LINE_GREY)
     update_param()
     draw_oxygen()

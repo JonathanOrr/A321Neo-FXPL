@@ -67,7 +67,6 @@ local function draw_apu_page_bgd()
 end
 
 function draw_apu_page()
-    draw_the_fucking_ecam_backdrop()
     draw_apu_page_bgd()
     draw_apu_valve_and_needle()
 

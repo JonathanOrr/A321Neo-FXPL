@@ -241,10 +241,10 @@ Y_master =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/failur
 Y_caut =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/failures_ui/y_caut.png")
 
 --ISIS TEST DRAWINGS
-ISIS_horizon =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/isis horizon v2.png")
-ISIS_horizon_mask = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/horizon_mask_v2.png")
-ISIS_backlit = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/backlit_helper.png")
-ISIS_horizon_wings = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/horizon_wings_v2.png")
+ISIS_horizon =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/isis horizon v3.png")
+ISIS_horizon_mask = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/horizon_mask.png")
+ISIS_backlit = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/backlit_helper_v2.png")
+ISIS_horizon_wings = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/horizon_wings.png")
 ISIS_spd_pointer = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/spd_pointer.png")
 ISIS_alt_window = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/alt_box.png")
 ISIS_alt_scrolling = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/AltDisplay_tens-1.png")
