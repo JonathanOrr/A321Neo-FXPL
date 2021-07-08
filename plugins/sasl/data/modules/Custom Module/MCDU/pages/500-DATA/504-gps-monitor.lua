@@ -39,13 +39,27 @@ local function get_gps_status(i)
   end
 end
 
+local function get_gps_track(i)
+  if GPS_sys[i].gs < 2 then
+    return '-----'
+  end
+  return mcdu_pad_dp(GPS_sys[i].true_track, 0)
+end
+
+local function get_gps_gs(i)
+  if GPS_sys[i].gs < 2 then
+    return '0'
+  end
+  return math.floor(GPS_sys[i].gs)
+end
+
 function THIS_PAGE:render(mcdu_data)
     self:set_title(mcdu_data, "GPS MONITOR")
 
     self:set_line(mcdu_data, MCDU_LEFT, 1, "GPS1 POSITION", MCDU_SMALL, ECAM_WHITE)
     self:set_line(mcdu_data, MCDU_LEFT, 1, mcdu_lat_lon_to_str(GPS_sys[GPS_1].lat, GPS_sys[GPS_1].lon), MCDU_LARGE, ECAM_GREEN)
     self:set_line(mcdu_data, MCDU_LEFT, 2, "TTRK", MCDU_SMALL, ECAM_WHITE)
-    self:set_line(mcdu_data, MCDU_LEFT, 2, mcdu_pad_dp(GPS_sys[GPS_1].true_track, 1), MCDU_LARGE, ECAM_GREEN)
+    self:set_line(mcdu_data, MCDU_LEFT, 2, get_gps_track(GPS_1), MCDU_LARGE, ECAM_GREEN)
     self:set_line(mcdu_data, MCDU_LEFT, 3, "MERIT", MCDU_SMALL, ECAM_WHITE)
     self:set_line(mcdu_data, MCDU_LEFT, 3, "300FT",  MCDU_LARGE, ECAM_GREEN)
 
@@ -55,7 +69,7 @@ function THIS_PAGE:render(mcdu_data)
     self:set_line(mcdu_data, MCDU_CENTER, 3, mcdu_pad_dp(GPS_sys[GPS_1].alt, 1), MCDU_LARGE, ECAM_GREEN)
 
     self:set_line(mcdu_data, MCDU_RIGHT, 2, "GS", MCDU_SMALL, ECAM_WHITE)
-    self:set_line(mcdu_data, MCDU_RIGHT, 2, math.floor(GPS_sys[GPS_1].gs), MCDU_LARGE, ECAM_GREEN)
+    self:set_line(mcdu_data, MCDU_RIGHT, 2, get_gps_gs(GPS_1), MCDU_LARGE, ECAM_GREEN)
     self:set_line(mcdu_data, MCDU_RIGHT, 3, "MODE/SAT", MCDU_SMALL, ECAM_WHITE)
     self:set_line(mcdu_data, MCDU_RIGHT, 3, get_gps_status(GPS_1), MCDU_LARGE, ECAM_GREEN)
 
@@ -63,7 +77,7 @@ function THIS_PAGE:render(mcdu_data)
     self:set_line(mcdu_data, MCDU_LEFT, 4, "GPS2 POSITION", MCDU_SMALL, ECAM_WHITE)
     self:set_line(mcdu_data, MCDU_LEFT, 4, mcdu_lat_lon_to_str(GPS_sys[GPS_2].lat, GPS_sys[GPS_2].lon), MCDU_LARGE, ECAM_GREEN)
     self:set_line(mcdu_data, MCDU_LEFT, 5, "TTRK", MCDU_SMALL, ECAM_WHITE)
-    self:set_line(mcdu_data, MCDU_LEFT, 5, mcdu_pad_dp(GPS_sys[GPS_2].true_track, 1), MCDU_LARGE, ECAM_GREEN)
+    self:set_line(mcdu_data, MCDU_LEFT, 5, get_gps_track(GPS_2), MCDU_LARGE, ECAM_GREEN)
     self:set_line(mcdu_data, MCDU_LEFT, 6, "MERIT", MCDU_SMALL, ECAM_WHITE)
     self:set_line(mcdu_data, MCDU_LEFT, 6, "300FT",  MCDU_LARGE, ECAM_GREEN)
 
@@ -73,7 +87,7 @@ function THIS_PAGE:render(mcdu_data)
     self:set_line(mcdu_data, MCDU_CENTER, 6, mcdu_pad_dp(GPS_sys[GPS_2].alt, 1), MCDU_LARGE, ECAM_GREEN)
 
     self:set_line(mcdu_data, MCDU_RIGHT, 5, "GS", MCDU_SMALL, ECAM_WHITE)
-    self:set_line(mcdu_data, MCDU_RIGHT, 5, math.floor(GPS_sys[GPS_2].gs), MCDU_LARGE, ECAM_GREEN)
+    self:set_line(mcdu_data, MCDU_RIGHT, 5, get_gps_gs(GPS_2), MCDU_LARGE, ECAM_GREEN)
     self:set_line(mcdu_data, MCDU_RIGHT, 6, "MODE/SAT", MCDU_SMALL, ECAM_WHITE)
     self:set_line(mcdu_data, MCDU_RIGHT, 6, get_gps_status(GPS_2), MCDU_LARGE, ECAM_GREEN)
 end
