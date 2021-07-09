@@ -90,7 +90,7 @@ end
 ----------------------------------------------------------------------------------------------------
 
 function adirs_is_ias_ok(i)
-    return adirs_is_adr_working(i) and (get(All_on_ground) == 1 or adirs_get_ias(i) > 40) and adirs_get_ias(i) < 400
+    return adirs_is_adr_working(i) and (get(All_on_ground) == 1 or adirs_get_ias(i) > 40) and adirs_get_ias(i) < 450
 end
 
 function adirs_get_ias(i)
