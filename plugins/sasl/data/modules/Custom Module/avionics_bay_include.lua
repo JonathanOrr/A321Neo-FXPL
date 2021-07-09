@@ -192,37 +192,44 @@ return [[
     /** CIFP **/
     typedef struct xpdata_cifp_leg_t {
         const char *leg_name;   // FIX
+        const char *center_fix;
+        const char *recomm_navaid;
+    
+        int center_fix_len;
+        int recomm_navaid_len;
         int leg_name_len;
-        
-        char turn_direction;      // N - none, L - left, R - right, E - either, M - left required, S - right required, F - either required
-        uint8_t leg_type;         // 1 - IF, 2 - TF, 3 - CF, 4 - DF, 5 - FA, 6 - FC, 7 - FD, 8 - FM, 9 - CA, 10 - CD, 11 - CI, 12 - CR, 13 - RF, 14 - AF, 15 - VA, 16 - VD, 17 - VI, 18 - VM, 19 - VR, 20 - PI, 21 - HA, 22 - HF, 23 - HM
-        
+    
         uint32_t radius;          // in nm * 10000
+        uint32_t cstr_altitude1;
+        uint32_t cstr_altitude2;
+        uint32_t cstr_speed;     // Speed in kts
+    
         uint16_t theta;           // mag bearing in degees * 10
         uint16_t rho;             // distance in nm * 10
         uint16_t outb_mag;        // Outbound Magnetic Course in degees * 10
         uint16_t rte_hold;        // Route distance / Hold time/dist - distance in nm * 10 
-        bool outb_mag_in_true;    // The outb_mag is in TRUE not mag
-        bool rte_hold_in_time;    // The rte_hold is in time not distance (MM.M where M = minutes)
-        
+        uint16_t vpath_angle;   // Only for descent, to be considered as negative
+    
+    
+        uint8_t leg_type;         // 1 - IF, 2 - TF, 3 - CF, 4 - DF, 5 - FA, 6 - FC, 7 - FD, 8 - FM, 9 - CA, 10 - CD, 11 - CI, 12 - CR, 13 - RF, 14 - AF, 15 - VA, 16 - VD, 17 - VI, 18 - VM, 19 - VR, 20 - PI, 21 - HA, 22 - HF, 23 - HM
         uint8_t cstr_alt_type;    // see constants
+        uint8_t cstr_speed_type; // 0 - not present, 1 at or above, 2 at or below, 3 - at
+    
+        char turn_direction;      // N - none, L - left, R - right, E - either, M - left required, S - right required, F - either required
+    
         bool cstr_altitude1_fl;   // Is it in FL instead of baro ref altitude?
         bool cstr_altitude2_fl;   // Is it in FL instead of baro ref altitude?
     
-        uint32_t cstr_altitude1;
-        uint32_t cstr_altitude2;
+        bool outb_mag_in_true : 1;    // The outb_mag is in TRUE not mag
+        bool rte_hold_in_time : 1;    // The rte_hold is in time not distance (MM.M where M = minutes)
+        
+        
+        bool fly_over_wpt      : 1;   // Is it a fly-over waypoint? If not, it's a fly-by
     
-        uint8_t cstr_speed_type; // 0 - not present, 1 at or above, 2 at or below, 3 - at
-        uint32_t cstr_speed;     // Speed in kts
-        
-        uint16_t vpath_angle;   // Only for descent, to be considered as negative
-        
-        const char *center_fix;
-        int center_fix_len;
-        
-        const char *recomm_navaid;
-        int recomm_navaid_len;
-        
+        bool approach_iaf      : 1;   // Initial Approach Fix
+        bool approach_if       : 1;   // Intermediate Approach Fix
+        bool approach_faf      : 1;   // Final Approach Fix
+        bool holding_fix       : 1;   // Is an (approach) holding fix?
     } xpdata_cifp_leg_t;
     
     typedef struct xpdata_cifp_data_t {
