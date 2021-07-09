@@ -345,9 +345,15 @@ local function prepare_sts_page_right()
     return messages
 end
 
-function draw_sts_page()
+local function draw_status_bgd()
+    drawTextCentered(Font_ECAMfont, 450, 870, "STATUS", 44, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawWideLine(530, 850, 370, 850, 4, ECAM_WHITE)
+    sasl.gl.drawWideLine(570, 785, 570, 181, 4, ECAM_WHITE)
 
-    sasl.gl.drawTexture(ECAM_STS_bgd_img, 0, 0, 900, 900, {1,1,1})
+end
+
+function draw_sts_page()
+    draw_status_bgd()
 
     if get(FAILURE_DISPLAY_FWC_1) == 1 and get(FAILURE_DISPLAY_FWC_2) == 1 then
         sasl.gl.drawText(Font_AirbusDUL, 50, 450, "STATUS UNAVAIL", 28, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)

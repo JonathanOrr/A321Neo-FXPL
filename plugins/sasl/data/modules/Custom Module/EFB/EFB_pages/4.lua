@@ -3,12 +3,14 @@ local efb_up_button_begin = 0
 local efb_down_button_begin = 0
 local efb_save_buttn_begin = 0
 local efb_align_button_begin = 0
+local antialiasing_lvl_value = 0 -- 0 to 1
 --------------------------------------------------------------
 
 local dropdown_expanded = {false}
 
 
 include("libs/table.save.lua")
+
 
 local function draw_throttle_value()
 
@@ -88,11 +90,11 @@ local function draw_toggle_switches()
     SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 296, 78, 18, 2, EFB.preferences["copilot"] and 2 or 1)
 end
 
+
 local function draw_volume_sliders()
     sasl.gl.drawTexture ( EFB_CONFIG_slider, get(VOLUME_ext)*333+680 , 619 , 22 , 22 , ECAM_WHITE )
     sasl.gl.drawTexture ( EFB_CONFIG_slider, get(VOLUME_int)*333+680 , 559 , 22 , 22 , ECAM_WHITE )
-    sasl.gl.drawTexture ( EFB_CONFIG_slider, get(VOLUME_wind)*333+680 , 499 , 22 , 22 , ECAM_WHITE )
-    sasl.gl.drawTexture ( EFB_CONFIG_slider, get(VOLUME_cabin)*333+680 , 439 , 22 , 22 , ECAM_WHITE )
+    sasl.gl.drawTexture ( EFB_CONFIG_slider, antialiasing_lvl_value*333+680 , 499 , 22 , 22 , ECAM_WHITE )
 end
 
 local function draw_dropdowns()
@@ -127,16 +129,10 @@ function EFB_execute_page_4_buttons()
         set(VOLUME_int, math.min(get(VOLUME_int)+0.1, 1))
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 642,497,673,525, function ()
-        set(VOLUME_wind, math.max(get(VOLUME_wind)-0.1, 0))
+        antialiasing_lvl_value = Round(math.max(antialiasing_lvl_value -0.2, 0),1)
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 1042,497,1073,525, function ()
-        set(VOLUME_wind, math.min(get(VOLUME_wind)+0.1, 1))
-    end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 642,437,673,466, function ()
-        set(VOLUME_cabin, math.max(get(VOLUME_cabin)-0.1, 0))
-    end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 1042,437,1073,466, function ()
-        set(VOLUME_cabin, math.min(get(VOLUME_cabin)+0.1, 1))
+        antialiasing_lvl_value  =  Round(math.min(antialiasing_lvl_value +0.2, 1),1)
     end)
 
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 69,594,136,623, function ()
@@ -159,7 +155,7 @@ function EFB_execute_page_4_buttons()
 
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 414,46,738,90, function ()
         efb_save_buttn_begin = get(TIME)
-        local volume_buffer_table = {get(VOLUME_ext), get(VOLUME_int), get(VOLUME_wind), get(VOLUME_cabin)}
+        local volume_buffer_table = {get(VOLUME_ext), get(VOLUME_int), antialiasing_lvl_value}
         table.save(EFB.preferences, moduleDirectory .. "/Custom Module/saved_configs/EFB_preferences_v2")
         table.save(volume_buffer_table, moduleDirectory .. "/Custom Module/saved_configs/EFB_volume_settings")
     end)
@@ -197,13 +193,24 @@ function EFB_execute_page_4_buttons()
     end
 end
 
+local translator_table = {
+    {0, 1},
+    {0.2, 2},
+    {0.4, 4},
+    {0.6, 8},
+    {0.8, 16},
+    {1, 32},
+}
+local function aa_to_drf()
+    set(PANEL_AA_LEVEL_1to32, Table_interpolate(translator_table, antialiasing_lvl_value))
+end
+
 local function table_loading_on_start()
-    if table.load(moduleDirectory .. "/Custom Module/saved_configs/EFB_volume_settings") ~= nil then
-        local volume_table_load =  table.load(moduleDirectory .. "/Custom Module/saved_configs/EFB_volume_settings")
-        set(VOLUME_ext, volume_table_load[1])
-        set(VOLUME_int, volume_table_load[2])
-        set(VOLUME_wind, volume_table_load[3])
-        set(VOLUME_cabin, volume_table_load[4])
+    local tableloading_buffer = table.load(moduleDirectory .. "/Custom Module/saved_configs/EFB_volume_settings")
+    if tableloading_buffer ~= nil then
+        set(VOLUME_ext, tableloading_buffer[1])
+        set(VOLUME_int, tableloading_buffer[2])
+        antialiasing_lvl_value = tableloading_buffer[3]
     end
 end
 table_loading_on_start()
@@ -211,6 +218,7 @@ table_loading_on_start()
 
 --UPDATE LOOPS--
 function EFB_update_page_4() -- update loop
+    aa_to_drf()
 end
 
 --DRAW LOOPS--

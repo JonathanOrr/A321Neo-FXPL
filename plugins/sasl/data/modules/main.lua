@@ -22,6 +22,7 @@ include("dynamic_datarefs.lua")
 include("failures_datarefs.lua")
 include("global_variables.lua")
 include("global_functions.lua")
+include("graphics_helpers.lua")
 include("pushbuttons.lua")
 include("global_constants.lua")
 include("FBW/FBW_subcomponents/PID_arrays.lua")
@@ -65,6 +66,7 @@ components = {
   engines {},
   cabin_screens {},
   ADIRS {},
+  GPS {},
   FMGS {},
   CAPT_MCDU {},
   FO_MCDU {},
@@ -105,6 +107,7 @@ components = {
   DRAIMS_FO {},
   nav_updater {},
   tcas {},
+  weights {},
   display_brightness {}, -- This must stay at the bottom
 
   main_popup {},

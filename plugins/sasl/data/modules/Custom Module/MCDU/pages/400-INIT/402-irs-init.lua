@@ -23,9 +23,9 @@ end
 local function get_irs_status(i)
     if ADIRS_sys[i].ir_status == IR_STATUS_OFF then
         return "OFF", ECAM_WHITE
-    elseif ADIRS_sys[i].ir_status == IR_STATUS_IN_ALIGN and (get(GPS_1_is_available) == 1 or get(GPS_2_is_available) == 1) then
+    elseif ADIRS_sys[i].ir_status == IR_STATUS_IN_ALIGN and (GPS_sys[1].status == GPS_STATUS_NAV or GPS_sys[2].status == GPS_STATUS_NAV) then
         return "ALIGNING ON GPS", ECAM_WHITE
-    elseif ADIRS_sys[i].ir_status == IR_STATUS_IN_ALIGN and (get(GPS_1_is_available) == 0 and get(GPS_2_is_available) == 0) then
+    elseif ADIRS_sys[i].ir_status == IR_STATUS_IN_ALIGN and (GPS_sys[1].status ~= GPS_STATUS_NAV and GPS_sys[2].status ~= GPS_STATUS_NAV) then
         return "ALIGNING ON ---", ECAM_WHITE
     elseif ADIRS_sys[i].ir_status == IR_STATUS_ALIGNED then
         return "ALIGNED ON GPS", ECAM_WHITE
@@ -42,7 +42,7 @@ function THIS_PAGE:render_gps(mcdu_data)
     end
     
     self:set_line(mcdu_data, MCDU_LEFT, 2, "LAT   GPS POSITION  LONG", MCDU_SMALL, ECAM_WHITE)
-    if get(GPS_1_is_available) == 0 and get(GPS_2_is_available) == 0 then
+    if GPS_sys[1].status ~= GPS_STATUS_NAV and GPS_sys[2].status ~= GPS_STATUS_NAV then
         self:set_line(mcdu_data, MCDU_LEFT, 2, "--°"..mcdu_format_force_to_small("--")..".--", MCDU_LARGE, ECAM_WHITE)
         self:set_line(mcdu_data, MCDU_RIGHT, 2, "---°"..mcdu_format_force_to_small("--")..".--", MCDU_LARGE, ECAM_WHITE)
         return
@@ -66,7 +66,7 @@ function THIS_PAGE:render_irs(mcdu_data, i)
     self:set_line(mcdu_data, MCDU_LEFT, 2+i, "  IRS" .. i .. " " .. get_irs_status(i), MCDU_SMALL, ECAM_WHITE)
     
 
-    if ADIRS_sys[i].ir_status == IR_STATUS_ALIGNED or (ADIRS_sys[i].ir_status == IR_STATUS_IN_ALIGN and (get(GPS_1_is_available) == 1 or get(GPS_2_is_available) == 1)) then
+    if ADIRS_sys[i].ir_status == IR_STATUS_ALIGNED or (ADIRS_sys[i].ir_status == IR_STATUS_IN_ALIGN and (GPS_sys[1].status == GPS_STATUS_NAV or GPS_sys[2].status == GPS_STATUS_NAV)) then
         local lat_d, lat_m, lat_s, lat_p = mcdu_ctrl_dd_to_dmsd(get(Aircraft_lat), "lat")
         local lon_d, lon_m, lon_s, lon_p = mcdu_ctrl_dd_to_dmsd(get(Aircraft_long), "lon")
         

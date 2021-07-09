@@ -31,49 +31,31 @@ EWD_req_thrust_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textur
 --ECAM
 --backgrounds
 --ENG--
-ECAM_ENG_bgd_img =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/ENG/ENGINE.png")
 ECAM_ENG_valve_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/ENG/valve.png")
 
 --BLEED--
-ECAM_BLEED_bgd_img =        sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/BLEED/Background.png")
-ECAM_BLEED_grey_lines_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/BLEED/grey_lines.png")
 ECAM_BLEED_mixer_img =      sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/BLEED/Top Mix Bleed.png")
 ECAM_BLEED_valves_img =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/BLEED/Valve.png")
+ECAM_BLEED_house_img =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/BLEED/house.png")
 
 --PRESS--
-ECAM_PRESS_bgd_img =            sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/PRESS/cab_press.png")
-ECAM_PRESS_grey_lines_img =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/PRESS/cab_press_grey_lines.png")
 ECAM_PRESS_needle_img =         sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/PRESS/Needle.png")
 ECAM_PRESS_outflow_needle_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/PRESS/outflow_valve.png")
 ECAM_PRESS_pack_triangle_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/PRESS/Triangle.png")
 
 --ELEC
-ECAM_ELEC_bgd_img =              sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/ELEC/Background.png")
-ECAM_ELEC_bat_box_img =          sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/ELEC/BAT.png")
-ECAM_ELEC_gen_box_img =          sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/ELEC/GEN.png")
 ECAM_ELEC_ess_tr_box_img =       sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/ELEC/ESS_TR.png")
 ECAM_ELEC_emer_box_img =         sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/ELEC/Emer_Gen.png")
 ECAM_ELEC_inv_box_img =          sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/ELEC/STAT_INV.png")
 ECAM_ELEC_apu_box_img =          sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/ELEC/APU_GEN.png")
-ECAM_ELEC_ext_box_img =          sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/ELEC/EXT_PWR.png")
-ECAM_ELEC_bat_bus_text_box_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/ELEC/DC_BAT.png")
-ECAM_ELEC_dc_1_text_box_img =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/ELEC/DC1.png")
-ECAM_ELEC_dc_2_text_box_img =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/ELEC/DC2.png")
-ECAM_ELEC_ac_1_text_box_img =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/ELEC/AC1.png")
-ECAM_ELEC_ac_2_text_box_img =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/ELEC/AC2.png")
-ECAM_ELEC_dc_ess_text_box_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/ELEC/DC_ESS.png")
-ECAM_ELEC_ac_ess_text_box_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/ELEC/AC_ESS.png")
 
 --HYD--
-ECAM_HYD_bgd_img =        sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/HYD/bgd.png")
 ECAM_HYD_PTU_img =        sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/HYD/PTU.png")
-ECAM_HYD_fire_valve_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/HYD/FIREVALVE.png")
 ECAM_HYD_G_status_img =   sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/HYD/GREEN.png")
 ECAM_HYD_B_status_img =   sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/HYD/BLUE.png")
 ECAM_HYD_Y_status_img =   sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/HYD/YELLOW.png")
 
 --FUEL
-ECAM_FUEL_bgd_img =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/FUEL/fuel.png")
 ECAM_FUEL_xfeed_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/FUEL/crossfeed.png")
 ECAM_FUEL_l_pump_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/FUEL/pump_left.png")
 ECAM_FUEL_r_pump_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/FUEL/pump_right.png")
@@ -81,21 +63,17 @@ ECAM_FUEL_pumps_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/text
 ECAM_FUEL_valves_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/FUEL/Valve.png")
 
 --APU--
-ECAM_APU_bgd_img =        sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/APU/APU.png")
-ECAM_APU_grey_lines_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/APU/grey_lines.png")
 ECAM_APU_valve_img =      sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/APU/Valve.png")
 ECAM_APU_needle_img =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/APU/Needle.png")
 ECAM_APU_gen_img =        sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/APU/ApuGen.png")
 ECAM_APU_triangle_img =   sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/APU/Triangle.png")
 
 --COND--
-ECAM_COND_bgd_img =        sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/COND/COND.png")
 ECAM_COND_grey_lines_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/COND/grey_lines.png")
 ECAM_COND_arrows_img =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/COND/Temp_Arrow.png")
 ECAM_COND_valves_img =     sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/COND/Valve.png")
 
 --DOOR--
-ECAM_DOOR_bgd_img =          sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/DOOR/Background.png")
 ECAM_DOOR_grey_lines_img =   sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/DOOR/grey_lines.png")
 ECAM_DOOR_statics_img =      sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/DOOR/static_doors.png")
 ECAM_DOOR_cargo_door_img =   sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/DOOR/cargo.png")
@@ -104,7 +82,6 @@ ECAM_DOOR_r_cabin_door_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Modul
 ECAM_DOOR_vs_arrows_img =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/DOOR/Arrow.png")
 
 --WHEEL--
-ECAM_WHEEL_bgd_img =               sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/WHEEL/WHEEL.png")
 ECAM_WHEEL_hyd_boxes_img =         sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/WHEEL/hyd_squares.png")
 ECAM_WHEEL_l_nose_gear_door_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/WHEEL/leftnosegeardoor.png")
 ECAM_WHEEL_r_nose_gear_door_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/WHEEL/nosegeardoor.png")
@@ -126,7 +103,6 @@ ECAM_FCTL_rudder_trim_img =      sasl.gl.loadImage(moduleDirectory .. "/Custom M
 ECAM_FCTL_spoiler_arrow_img =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/FCTL/SpoilerArrow.png")
 
 --STS--
-ECAM_STS_bgd_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/STS/status.png")
 
 --CRUISE--
 ECAM_CRUISE_bgd_img =      sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ECAM/CRUISE/cruise.png")
@@ -265,10 +241,10 @@ Y_master =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/failur
 Y_caut =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/failures_ui/y_caut.png")
 
 --ISIS TEST DRAWINGS
-ISIS_horizon =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/isis horizon v2.png")
-ISIS_horizon_mask = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/horizon_mask_v2.png")
-ISIS_backlit = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/backlit_helper.png")
-ISIS_horizon_wings = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/horizon_wings_v2.png")
+ISIS_horizon =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/isis horizon v3.png")
+ISIS_horizon_mask = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/horizon_mask.png")
+ISIS_backlit = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/backlit_helper_v2.png")
+ISIS_horizon_wings = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/horizon_wings.png")
 ISIS_spd_pointer = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/spd_pointer.png")
 ISIS_alt_window = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/alt_box.png")
 ISIS_alt_scrolling = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/AltDisplay_tens-1.png")
@@ -278,6 +254,10 @@ ISIS_localiser = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/I
 ISIS_glideslope = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/lsvdiamond-1.png")
 ISIS_lsh = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/lsh-1.png")
 ISIS_lsv = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/lsv-1.png")
+
+--ISIS BUGS DRAWINGS
+ISIS_BUGS_arrow =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ISIS/V2/BUGS/arrow.png")
+
 
 -- MCDU --
 MCDU_lr_arrows =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/MCDU/lr_arrows.png")

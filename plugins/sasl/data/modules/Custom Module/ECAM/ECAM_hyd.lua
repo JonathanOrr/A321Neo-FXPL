@@ -233,6 +233,18 @@ local function draw_extra_pumps()
     end
 end
 
+local function draw_fire_valve(x,y,state, colour)
+    if state == 1 then
+        sasl.gl.drawWideLine(   x,    y,      x,    y+133,    4, colour)
+        sasl.gl.drawArc (       x,    y+65 ,  25,   29 ,    0 , 360 , colour)
+    elseif state == 2 then
+        sasl.gl.drawWideLine(   x,    y,      x,    y+35,    4, colour)
+        sasl.gl.drawWideLine(   x,    y+89,      x,    y+133,    4, colour)
+        sasl.gl.drawWideLine(   x-26,    y+64,      x+26,    y+64,    4, colour)
+        sasl.gl.drawArc (       x,    y+65 ,  25,   29 ,    0 , 360 , colour)
+    end
+end
+
 local function draw_hyd_textures()
     SASL_drawSegmentedImg_xcenter_aligned(ECAM_HYD_G_status_img, size[1]/2-290, size[2]/2+317, 192, 54, 2, get(Hydraulic_G_press) >= 1450 and 1 or 2)
     SASL_drawSegmentedImg_xcenter_aligned(ECAM_HYD_B_status_img, size[1]/2+3, size[2]/2+317, 152, 55, 2, get(Hydraulic_B_press) >= 1450 and 1 or 2)
@@ -240,14 +252,44 @@ local function draw_hyd_textures()
 
     SASL_drawSegmentedImg_xcenter_aligned(ECAM_HYD_PTU_img, size[1]/2+3, size[2]/2+160, 2360, 43, 4, get(Hydraulic_PTU_status) + 1)
 
-    SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_HYD_fire_valve_img, size[1]/2-290, size[2]/2-158, 114, 133, 2, get(Eng_1_Firewall_valve) == 1 and 2 or 1, get(Eng_1_Firewall_valve) == 1 and ECAM_ORANGE or ECAM_GREEN)
-    SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_HYD_fire_valve_img, size[1]/2+295, size[2]/2-158, 114, 133, 2, get(Eng_2_Firewall_valve) == 1 and 2 or 1, get(Eng_2_Firewall_valve) == 1 and ECAM_ORANGE or ECAM_GREEN)
+    draw_fire_valve(162,289, get(Eng_1_Firewall_valve) == 1 and 2 or 1, get(Eng_1_Firewall_valve) == 1 and ECAM_ORANGE or ECAM_GREEN)
+    draw_fire_valve(746,289, get(Eng_2_Firewall_valve) == 1 and 2 or 1, get(Eng_2_Firewall_valve) == 1 and ECAM_ORANGE or ECAM_GREEN)
+end
+
+local function draw_hyd_actuator_symbol(x,y)
+    sasl.gl.drawWideLine(x,     y-3,    x,    y+118, 4, ECAM_WHITE)
+    sasl.gl.drawWideLine(x,     y-4,    x,    y-30, 4, ECAM_ORANGE)
+    sasl.gl.drawWideLine(x+10,  y-4,    x+10,    y-30, 4, ECAM_ORANGE)
+    sasl.gl.drawWideLine(x,     y-4,    x+10,    y-4, 4, ECAM_ORANGE)
+    sasl.gl.drawWideLine(x,     y-30,    x+10,    y-30, 4, ECAM_ORANGE)
+    sasl.gl.drawWideLine(x,     y+93,    x+10,    y+93, 4, ECAM_GREEN)
+    sasl.gl.drawWideLine(x,     y+118,    x+10,    y+118, 4, ECAM_GREEN)
+    sasl.gl.drawWideLine(x+10,  y+93,    x+10,    y+118, 4, ECAM_GREEN)
+end
+
+local function draw_hyd_bgd()
+    drawTextCentered(Font_ECAMfont, 451, 870, "HYD", 44, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawWideLine(409, 849, 492, 848, 4, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 305, 735, "PSI", 27, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    drawTextCentered(Font_ECAMfont, 595, 735, "PSI", 27, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+
+    sasl.gl.drawWideLine(160, 172, 160, 290, 4, ECAM_WHITE)
+    sasl.gl.drawWideLine(160, 168, 160, 142, 4, ECAM_ORANGE)
+    sasl.gl.drawWideLine(170, 168, 170, 142, 4, ECAM_ORANGE)
+    sasl.gl.drawWideLine(160, 168, 170, 168, 4, ECAM_ORANGE)
+    sasl.gl.drawWideLine(160, 142, 170, 142, 4, ECAM_ORANGE)
+    sasl.gl.drawWideLine(161, 265, 170, 265, 4, ECAM_GREEN)
+    sasl.gl.drawWideLine(161, 290, 170, 290, 4, ECAM_GREEN)
+    sasl.gl.drawWideLine(170, 265, 170, 290, 4, ECAM_GREEN)
+
+    draw_hyd_actuator_symbol(160,172)
+    draw_hyd_actuator_symbol(451,172)
+    draw_hyd_actuator_symbol(745,172)
+    sasl.gl.drawWideLine(453, 292, 453, 376, 4, ECAM_GREEN)
 end
 
 function draw_hydraulic_page()
-
-    sasl.gl.drawTexture(ECAM_HYD_bgd_img, 0, 0, 900, 900, {1,1,1})
-
+    draw_hyd_bgd()
     draw_hyd_textures()
 
     -- Compute the hyd pressures

@@ -518,7 +518,7 @@ end
 
 function onModuleShutdown()
     if initialized then
-        print("Cleaning...")
+        logInfo("Cleaning...")
         AvionicsBay.c.terminate()
     end
 end

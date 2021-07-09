@@ -163,6 +163,7 @@ Engine_1_master_switch_anim = createGlobalPropertyf("a321neo/cockpit/engine/mast
 Engine_2_master_switch_anim = createGlobalPropertyf("a321neo/cockpit/engine/master_2", 0, false, true, false)
 
 APU_bleed_switch_pos = createGlobalPropertyi("a321neo/cockpit/bleed/apu_bleed_switch_pos", 0, false, true, false) -- Commaned position (not actual!) 1: enabled, 0: disabled
+APU_flap_open_pos    = createGlobalPropertyf("a321neo/cockpit/apu/apu_flap_pos", 0, false, true, false)   -- 0 closed, 1 open
 
 --pfd
 Capt_landing_system_enabled = createGlobalPropertyi("a321neo/cockpit/PFD/capt_ls_enabled", 0, false, true, false)--for the LS button on the PFD

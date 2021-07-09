@@ -1,13 +1,5 @@
 -- librain.lua
 
--- check if librain.plugin is present, otherwise bail out
--- in both case send message to log file
-if findPluginBySignature("skiselkov.librain") == NO_PLUGIN_ID then
-	logInfo("librain.plugin by Saso Kiselkov not found, disabling rain effects")
-	return
-end
-logInfo("librain.plugin by Saso Kiselkov found")
-
 -- prefix for objects used by librain
 local obj_path	= getAircraftPath() .. "/objects/librain/"
 
@@ -71,11 +63,12 @@ local drf	= {
 	"librain/initialize"				,  1,
 }
 
-local done = false
-function update()
-	-- do the initialization on first frame only
-	if done then return end
-	done = true
+function initialize()
+	if findPluginBySignature("skiselkov.librain") == NO_PLUGIN_ID then
+		logInfo("librain.plugin by Saso Kiselkov not found, disabling rain effects")
+		return
+	end
+	logInfo("librain.plugin by Saso Kiselkov found")
 
 	-- populate datarefs, last one being initialize
 	for i = 1, #drf, 2 do
@@ -83,3 +76,5 @@ function update()
 	end
 	logInfo("librain initialization complete")
 end
+
+initialize()

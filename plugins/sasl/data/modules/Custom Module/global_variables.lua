@@ -48,14 +48,18 @@ ND_all_data  = {nil, nil}
 ND_terrain = {}
 DRAIMS_common = {}
 FMGS_sys = {}
+GPS_sys = {}
 TCAS_sys = {}
+
+WEIGHTS = {}
 
 -- Engine data depending on the user choice
 ENG = { data_is_loaded = false }
 
-EFB = {}
+EFB = {} -- TODO: Remove from here. EFB is not used outside EFB
 
 AvionicsBay = {}
+
 
 -- MCDU
 MCDU = {}

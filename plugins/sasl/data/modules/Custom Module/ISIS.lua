@@ -22,6 +22,37 @@ size = {500, 500}
 include("ADIRS_data_source.lua")
 include("DRAIMS/radio_logic.lua")
 
+
+local isis_page_number = 1
+local isis_brightness = 1
+local last_time_you_touch_the_bugs_page = 0
+
+local function draw_brightness()
+    sasl.gl.drawRectangle(0, 0, 500, 500, {0,0,0,(1-isis_brightness) * (1 - get(FAILURE_DISPLAY_ISIS)) * get(DC_ess_bus_pwrd)})
+end
+
+local function reset_isis_goto_page1_timer()
+    last_time_you_touch_the_bugs_page = 0
+end
+
+local function auto_return_to_page_1()
+    if isis_page_number == 2 then
+        last_time_you_touch_the_bugs_page = last_time_you_touch_the_bugs_page + get(DELTA_TIME)
+    else
+        reset_isis_goto_page1_timer()
+    end
+    if last_time_you_touch_the_bugs_page > 15 then
+        isis_page_number = 1
+    end
+end
+
+-------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------PAGE ONE---
+-------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------
+
+
 local TIME_TO_ALIGN_SEC = 90
 local baro_in_std = false
 local ls_enabled = false
@@ -45,18 +76,98 @@ local att_has_to_be_realigned = false
 
 local mach_displayed = false
 
+------------------------------------------PAGE 2
+local box_arg = {
+    {106, 66, 90, 51},    
+    {106, 156, 90, 51},   
+    {106, 247, 90, 51},   
+    {106, 338, 90, 51},   
+    {297, 251, 107, 50},  
+    {297, 161, 107, 50},  
+}
+local speed_bug_coords = {
+    {180,82},
+    {180,172},
+    {180,263},
+    {180,354},
+}
+local alt_bug_coords = {
+    {400,265},
+    {400,175}
+}
+
+local selected_bug = 1
+local cycling_bool = false
+local bugs = {30,30,30,30,100,100}
+local bugs_enabled = {false,false,false,false,false,false}
+
+------------------------------------------
+
+sasl.registerCommandHandler ( ISIS_brightness_up, 0, function(phase) 
+    if isis_page_number == 1 and phase == SASL_COMMAND_CONTINUE then
+        isis_brightness = Math_clamp(isis_brightness + get(DELTA_TIME),0,1)
+    elseif isis_page_number == 2 and phase == SASL_COMMAND_BEGIN then
+        selected_bug = Math_cycle(selected_bug + 1, 1, 6)
+        reset_isis_goto_page1_timer()
+    end
+end)
+
+sasl.registerCommandHandler ( ISIS_brightness_dn, 0, function(phase) 
+    if isis_page_number == 1 and phase == SASL_COMMAND_CONTINUE then
+        isis_brightness = Math_clamp(isis_brightness - get(DELTA_TIME),0,1)
+    elseif isis_page_number == 2 and phase == SASL_COMMAND_BEGIN then
+        selected_bug = Math_cycle(selected_bug - 1, 1, 6)
+        reset_isis_goto_page1_timer()
+    end
+end)
+
 -- Toggle LS
 sasl.registerCommandHandler (ISIS_cmd_LS, 0, function(phase) 
     if phase == SASL_COMMAND_BEGIN then 
         ls_enabled = not ls_enabled
     end 
 end)
-sasl.registerCommandHandler (ISIS_cmd_Knob_c, 0,  function(phase) if phase == SASL_COMMAND_BEGIN then set(Stby_Baro, Math_clamp(get(Stby_Baro) + 0.01, 28, 31))end baro_in_std = false end)
-sasl.registerCommandHandler (ISIS_cmd_Knob_cc, 0,  function(phase) if phase == SASL_COMMAND_BEGIN then set(Stby_Baro, Math_clamp(get(Stby_Baro) - 0.01, 28, 31))end baro_in_std = false end)
+
+sasl.registerCommandHandler (ISIS_cmd_Knob_c, 0,  function(phase) 
+    if phase == SASL_COMMAND_BEGIN then 
+        if isis_page_number == 1 then
+            set(Stby_Baro, Math_clamp(get(Stby_Baro) + 0.01, 28, 31))
+            baro_in_std = false 
+        else
+            reset_isis_goto_page1_timer()
+            if selected_bug >= 1 and selected_bug <= 4 then
+                bugs[selected_bug] = Math_clamp(bugs[selected_bug] + 1, 30, 500)
+            else
+                bugs[selected_bug] = Math_clamp(bugs[selected_bug] + 100, 0, 50000)
+            end
+        end
+    end 
+end)
+
+sasl.registerCommandHandler (ISIS_cmd_Knob_cc, 0,  function(phase) 
+    if phase == SASL_COMMAND_BEGIN then 
+        if isis_page_number == 1 then
+            set(Stby_Baro, Math_clamp(get(Stby_Baro) - 0.01, 28, 31))
+            baro_in_std = false 
+        else
+            reset_isis_goto_page1_timer()
+            if selected_bug >= 1 and selected_bug <= 4 then
+                bugs[selected_bug] = Math_clamp(bugs[selected_bug] - 1, 30, 500)
+            else
+                bugs[selected_bug] = Math_clamp(bugs[selected_bug] - 100, 0, 50000)
+            end
+        end
+    end
+end)
 
 sasl.registerCommandHandler (ISIS_cmd_RotaryPress, 0, function(phase) 
     if phase == SASL_COMMAND_BEGIN then 
-        baro_in_std = not baro_in_std
+        if isis_page_number == 1 then
+            baro_in_std = not baro_in_std
+        else
+            reset_isis_goto_page1_timer()
+            bugs_enabled[selected_bug] = not bugs_enabled[selected_bug]
+        end   
     end 
 end)
 
@@ -68,29 +179,55 @@ sasl.registerCommandHandler (ISIS_cmd_rst, 0, function(phase)
     end
 end)
 
+sasl.registerCommandHandler (ISIS_cmd_bug, 0, function(phase)
+    if phase == SASL_COMMAND_BEGIN then
+        reset_isis_goto_page1_timer()
+        isis_page_number = isis_page_number == 1 and 2 or 1
+    end
+end)
+
+
+local function draw_backlit()
+    sasl.gl.drawTexture(ISIS_backlit, 0, 0, 500, 500, {10/255, 15/255, 25/255})
+end
+
 
 local function draw_spd_stby()
     sasl.gl.drawRectangle(20, spd_tape_y - 22 , 85, 45, ECAM_RED)
     sasl.gl.drawText(Font_ECAMfont, 62, spd_tape_y + spd_tape_y_offset, "SPD", 34, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
 end
 
+local function draw_speed_bugs(isenabled, speed)
+    if not isenabled then return end
+    local bug_y_offset = -speed * 4
+    local bug_y = (spd_tape_y - math.max(get(ISIS_IAS),30) * 4 - bug_y_offset)
+    sasl.gl.drawWideLine(spd_tape_x+13, bug_y, spd_tape_x+38, bug_y, 6, ECAM_BLUE)
+end
+
+local function draw_alt_bugs(isenabled, alt)
+    if not isenabled then return end
+    local bug_y_offset = (get(ISIS_Altitude)-alt) * 0.216 + 10
+    local bug_y = (spd_tape_y - bug_y_offset)
+    sasl.gl.drawWideLine(alt_tape_x-38, bug_y + 12 , alt_tape_x-14, bug_y + 12, 6, ECAM_BLUE)
+end
+
 local function draw_speed_tape()
     if get(ISIS_IAS) > -20 and get(ISIS_IAS) < 520 then --add conditions for standby flag to draw here\
         sasl.gl.setClipArea (0, 100, 76, 308)
-        local airspeed_y_offset = get(ISIS_IAS) * 4 -- 4 px per airspeed notch
-        for i=-4, 104 do -- if you want to get the i for a certain airspeed, divided the airspeed by 5.
+        local airspeed_y_offset = math.max(get(ISIS_IAS), 30) * 4 -- 4 px per airspeed notch
+        for i=2, 104 do -- if you want to get the i for a certain airspeed, divided the airspeed by 5.
 
             local dashes_y = (spd_tape_y + spd_tape_per_reading * i - airspeed_y_offset)
 
 
             local curr_spd = i * 20
 
-            if (curr_spd <= get(ISIS_IAS) + 70) and (curr_spd >= get(ISIS_IAS) - 50) and i*20 <= 520 and i*20 >= -20 then
-                sasl.gl.drawText(Font_ECAMfont, spd_tape_x, dashes_y + spd_tape_y_offset + 60 * i, Fwd_string_fill( tostring(math.abs(i*20)), "0", 3) , 32, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+            if (curr_spd <= get(ISIS_IAS) + 70) and (curr_spd >= get(ISIS_IAS) - 50) and curr_spd <= 520 and curr_spd >= -20 then
+                sasl.gl.drawText(Font_ECAMfont, spd_tape_x, dashes_y + spd_tape_y_offset + 60 * i, Fwd_string_fill( tostring(math.abs(i*20)), " ", 3) , 32, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
             end
 
             local curr_spd_for_dashes = i * 5
-            if (curr_spd_for_dashes <= get(ISIS_IAS) + 50) and (curr_spd_for_dashes >= get(ISIS_IAS) - 50) then 
+            if (curr_spd_for_dashes <= get(ISIS_IAS) + 100) and (curr_spd_for_dashes >= get(ISIS_IAS) - 50) and curr_spd_for_dashes >= 30 then 
                 if (i+2)%4 == 0 then -- if the airspeed notch should be displayed as a long dash
                     sasl.gl.drawWideLine(spd_tape_x+21, dashes_y, spd_tape_x+38, dashes_y, 3, ECAM_WHITE) --long dashes
                 else
@@ -102,14 +239,24 @@ local function draw_speed_tape()
                     end        
                 end
             end
+            sasl.gl.drawRectangle(76, 219 , 28, 45, {10/255, 15/255, 25/255})
+            sasl.gl.drawTexture (ISIS_spd_pointer, 76, 219, 28, 45, {1, 1, 1,1})
         end
+
+        for i=1, 4 do
+            draw_speed_bugs(bugs_enabled[i], bugs[i])
+        end
+        
+        -----------------NOW LETS DRAW THE SPEED BUGS FROM THE BUGS PAGE
+        ------------------I CAN'T UNDERSTAND MY OWN CODE EITHER, IT RANDOMLY WORKED.
+
         sasl.gl.resetClipArea ()
-        sasl.gl.drawRectangle(76, 219 , 28, 45, {10/255, 15/255, 25/255})
-        sasl.gl.drawTexture (ISIS_spd_pointer, 76, 219, 28, 45, {1, 1, 1,1})
     else 
         draw_spd_stby()
     end
 end
+
+
 
 local function draw_alt_stby()
     sasl.gl.drawRectangle(480-85, spd_tape_y - 22 , 85, 45, ECAM_RED)
@@ -126,10 +273,9 @@ local function draw_alt_tape()
         sasl.gl.setClipArea (403, 100, 97, 308)
         --sasl.gl.drawTexture (ISIS_spd_pointer, 76, 219, 28, 45, {1, 1, 1})
         local alt_y_offset = get(ISIS_Altitude) * 0.216 + 10 -- 0.216 px per altitude notch
-        for i=-16, 400 do -- 4 i for 500ft, 1 i is 125ft.
+        for i=-16, 500 do -- 5 i for 500ft, 1 i is 100ft.
 
             local dashes_y = (spd_tape_y - alt_y_offset)
-
 
             local curr_alt = i * 500
 
@@ -137,17 +283,28 @@ local function draw_alt_tape()
                 sasl.gl.drawText(Font_ECAMfont, alt_tape_x, dashes_y + 108 * i, Fwd_string_fill( tostring(math.abs(curr_alt)/100), "0", 3) , 32, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
             end
 
-            local curr_alt_for_dashes = i * 500/4
+            local curr_alt_for_dashes = i * 500/5
             if curr_alt_for_dashes < (get(ISIS_Altitude) + 1000) and curr_alt_for_dashes > (get(ISIS_Altitude) -1000) then
-                if i%4 == 0 then
-                    sasl.gl.drawWideLine(alt_tape_x-38, dashes_y + 12 + i * 108/4, alt_tape_x-32, dashes_y + 12+ i * 108/4, 3, ECAM_WHITE) --long dashes
+                if i%5 == 0 then
+                    sasl.gl.drawWideLine(alt_tape_x-38, dashes_y + 12 + i * 108/5, alt_tape_x-32, dashes_y + 12+ i * 108/5, 3, ECAM_WHITE) --long dashes
                 else
-                    sasl.gl.drawWideLine(alt_tape_x-38, dashes_y + 12 + i * 108/4, alt_tape_x-18, dashes_y + 12+ i * 108/4, 3, ECAM_WHITE) --long dashes
+                    sasl.gl.drawWideLine(alt_tape_x-38, dashes_y + 12 + i * 108/5, alt_tape_x-18, dashes_y + 12+ i * 108/5, 3, ECAM_WHITE) --long dashes
                 end
             end
         end
+
+        for i=5, 6 do
+            draw_alt_bugs(bugs_enabled[i], bugs[i])
+        end
+
         sasl.gl.resetClipArea ()
-        sasl.gl.drawTexture(ISIS_alt_window, 350, 212, 150, 61, {1,1,1})
+
+            if math.abs(get(ISIS_Altitude) - bugs[5]) < 100 and bugs_enabled[5] or math.abs(get(ISIS_Altitude) - bugs[6]) < 100 and bugs_enabled[6] then
+                sasl.gl.drawTexture(ISIS_alt_window, 350, 212, 150, 61, ECAM_BLUE)
+            else
+                sasl.gl.drawTexture(ISIS_alt_window, 350, 212, 150, 61, ECAM_YELLOW)
+            end
+
         sasl.gl.drawText(Font_ECAMfont, 500-62, spd_tape_y-11, math.floor(math.abs((get(ISIS_Altitude)/100)), 0), 34, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
         local alt_100_looping = get(ISIS_Altitude)%100
         sasl.gl.setClipArea (450, 215, 45, 55)
@@ -214,11 +371,11 @@ local function draw_att()
             ISIS_horizon,
             att_x_center,
             att_y_center,
-            2000,
-            700,
+            1480,
+            470,
             90 - get(Capt_bank),
-            get(Capt_pitch) * 6.8+8,
-            -700/2,
+            Math_clamp(get(Capt_pitch),-70,70) * 6.8+8,
+            -470/2,
             ECAM_WHITE
         )
         sasl.gl.drawMaskEnd ()
@@ -230,7 +387,7 @@ local function draw_att()
             att_x_center,
             att_y_center,
             71,
-            466,
+            475,
             -get(Capt_bank),
             4,
             -700/2+33,
@@ -241,7 +398,7 @@ local function draw_att()
             att_x_center,
             att_y_center,
             71,
-            466,
+            475,
             -get(Capt_bank),
             4 + Math_clamp(get(Slide_slip_angle),-10,10)*4,
             -700/2+32,
@@ -256,16 +413,12 @@ end
 local function draw_barometer()
     if baro_in_std then
         set(Stby_Baro, 29.92)
-        sasl.gl.drawText (Font_AirbusDUL, 240, 25, "STD", 40, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+        sasl.gl.drawText (Font_ECAMfont, 240, 28, "STD", 32, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
     else
         local baro_mmhg = Round(get(Stby_Baro),2)
         local baro_kpa  = Round(33.8639 * get(Stby_Baro),0)
-        sasl.gl.drawText (Font_AirbusDUL, 240, 25, tostring(Round(baro_kpa,0)) .. "/" .. string.format("%.2f", tostring(baro_mmhg)), 36, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+        sasl.gl.drawText (Font_ECAMfont, 240, 28, tostring(Round(baro_kpa,0)) .. "/" .. string.format("%.2f", tostring(baro_mmhg)), 32, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
     end
-end
-
-local function draw_background()
-    sasl.gl.drawRectangle(0, 0, 500, 500, ECAM_BLACK)
 end
 
 local function draw_mach()
@@ -296,10 +449,6 @@ local function draw_ls()
             sasl.gl.drawTexture(ISIS_glideslope, 329, 225 - Math_clamp(46 * radio_get_ils_deviation_v()/0.4, -92, 92), 19, 32, {1,1,1})
         end
     end
-end
-
-local function draw_backlit()
-    sasl.gl.drawTexture(ISIS_backlit, 0, 0, 500, 500, {10/255, 15/255, 25/255})
 end
     
 local function is_isis_powered()
@@ -332,19 +481,144 @@ local function start_blinks()
     sasl.gl.drawRectangle(0, 0, 500, 500, {black_white_hex,black_white_hex,black_white_hex, elapsed_powered_time < 1 and 1 or 0})
 end
 
+local function isis_draw_page_1()
+    draw_att()
+    draw_backlit()
+    draw_speed_tape()
+    draw_alt_tape()
+    draw_meters_display()
+    draw_barometer()
+    draw_mach()
+    draw_ls()
+end
+
+local function isis_update_page_1()
+    if reset_button_elapsed_time > 2 then
+        att_reset_start_time = get(TIME)
+    end 
+    if math.abs(get(Capt_bank)) > 100 or math.abs(get(Capt_pitch)) > 75 then -- if bank angle exceeds 100 or pitch exceeds 75
+        att_has_to_be_realigned = true
+    end
+end
+-------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------PAGE TWO---
+-------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------
+
+
+local function draw_bugs_bgd()
+    sasl.gl.drawWideLine ( 150 ,116, 150 ,156, 3, ECAM_WHITE )
+    sasl.gl.drawWideLine ( 150 ,206, 150 ,248, 3, ECAM_WHITE )
+    sasl.gl.drawWideLine ( 150 ,297, 150 ,339, 3, ECAM_WHITE )
+    sasl.gl.drawWideLine ( 197 ,363, 352 ,363, 3, ECAM_WHITE )
+    sasl.gl.drawWideLine ( 352 ,300, 352 ,363, 3, ECAM_WHITE )
+    sasl.gl.drawWideLine ( 352 ,251, 352 ,211, 3, ECAM_WHITE )
+    sasl.gl.drawWideLine ( 352 ,161, 352 ,088, 3, ECAM_WHITE )
+    sasl.gl.drawWideLine ( 195 ,088, 352 ,088, 3, ECAM_WHITE )
+    sasl.gl.drawText( Font_ECAMfont , 070 , 443, "EXIT" , 32 ,false , false , TEXT_ALIGN_CENTER , ECAM_BLUE )
+    sasl.gl.drawText( Font_ECAMfont , 414 , 021, "SET/SELECT" , 32 ,false , false , TEXT_ALIGN_RIGHT , ECAM_BLUE )
+    sasl.gl.drawTexture(ISIS_BUGS_arrow, 118 , 440, 19, 30,    ECAM_BLUE)
+    SASL_rotated_center_img_xcenter_aligned(ISIS_BUGS_arrow,417 , 32, 19, 30, 90, 0, 0, ECAM_BLUE)
+    sasl.gl.drawText( Font_ECAMfont , 250 , 443, "BUGS" , 32 ,false , false , TEXT_ALIGN_CENTER , ECAM_WHITE )
+    sasl.gl.drawText( Font_ECAMfont , 147 , 404, "SPD" , 32 ,false , false , TEXT_ALIGN_CENTER , ECAM_WHITE )
+    sasl.gl.drawText( Font_ECAMfont , 353 , 404, "ALT" , 32 ,false , false , TEXT_ALIGN_CENTER , ECAM_WHITE )
+end
+
+
+local function draw_backlit_2() --backlit 1 does not work on page 2 because it is a mask for the attitude display.
+    sasl.gl.drawRectangle(0, 0, 500, 500, {10/255, 15/255, 25/255})
+end
+
+
+---------------------------------------------------------HIGHLIGHT BUG DRAWING
+
+local function draw_boxes(which_one_is_focused)
+    for i=1, 6 do
+        if which_one_is_focused == i then
+            if cycling_bool then
+                Sasl_DrawWideFrame(box_arg[i][1], box_arg[i][2], box_arg[i][3], box_arg[i][4], 2, 0, ECAM_WHITE)
+            end
+        elseif selected_bug~= i then
+            Sasl_DrawWideFrame(box_arg[i][1], box_arg[i][2], box_arg[i][3], box_arg[i][4], 2, 0, ECAM_WHITE)
+        end
+    end
+end
+
+local function draw_plus_minus()
+    sasl.gl.drawText (Font_ECAMfont, 106+93,338+32, "(+)", 18, true, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText (Font_ECAMfont, 106,   338-17, "(-)", 18, true, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+end
+
+local function draw_off_signs()
+    for i=1, 6 do
+        if bugs_enabled[i] == false then
+            if i >= 1 and i <= 4 then
+                sasl.gl.drawText (Font_AirbusDUL, speed_bug_coords[i][1]-140, speed_bug_coords[i][2], "OFF", 32, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+            else
+                sasl.gl.drawText (Font_AirbusDUL, alt_bug_coords[i-4][1]+20, alt_bug_coords[i-4][2], "OFF", 32, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+            end
+        end
+    end
+end
+
+-------------------------------------------------------SPEED BUGS DRAWING
+
+local function draw_speeds()
+    for i=1, 4 do
+        sasl.gl.drawText (Font_AirbusDUL, speed_bug_coords[i][1], speed_bug_coords[i][2], Fwd_string_fill(tostring(bugs[i]), "0", 3), 32, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+    end
+end
+
+---------------------------------------------------------ALT BUG DRAWING
+
+local function draw_alts()
+    for i=1, 2 do
+        sasl.gl.drawText (Font_AirbusDUL, alt_bug_coords[i][1], alt_bug_coords[i][2], Fwd_string_fill(tostring(bugs[i+4]), "0", 5), 32, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+    end
+end
+
+---------------------------------------------------------FLASHING
+
+local function cycle_bool()
+    if Round(get(TIME)*4,0)%2 == 0 then
+        cycling_bool = false
+    else
+        cycling_bool = true
+    end
+end
+
+---------------------------------------------------------LOOPS
+
+local function isis_draw_page_2()
+    draw_backlit_2()
+    draw_bugs_bgd()
+    draw_boxes(selected_bug)
+    draw_plus_minus()
+    draw_speeds()
+    draw_alts()
+    cycle_bool()
+    draw_off_signs()
+end
+local function isis_update_page_2()
+end
+-------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------LOOPS---
+-------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------
+
 function draw()
     sasl.gl.setRenderTarget(ISIS_popup_texture, true)
     --draw_background()
 
     if is_isis_powered() then
-        draw_att()
-        draw_backlit()
-        draw_speed_tape()
-        draw_alt_tape()
-        draw_meters_display()
-        draw_barometer()
-        draw_mach()
-        draw_ls() 
+        if isis_page_number == 1 then
+            isis_draw_page_1()
+        elseif isis_page_number == 2 then
+            isis_draw_page_2()
+        end
+        draw_brightness()
     else
         sasl.gl.drawRectangle(0, 0, 500, 500, ECAM_BLACK)
     end
@@ -354,16 +628,10 @@ function draw()
 end
 
 function update()
-    
-    if ISIS_window:isVisible() then
-        local window_x, window_y, window_width, window_height = ISIS_window:getPosition()
-        ISIS_window:setPosition ( window_x , window_y , window_width, window_width)
-    end
-
-    if reset_button_elapsed_time > 2 then
-        att_reset_start_time = get(TIME)
-    end 
-    if math.abs(get(Capt_bank)) > 100 or math.abs(get(Capt_pitch)) > 75 then -- if bank angle exceeds 100 or pitch exceeds 75
-        att_has_to_be_realigned = true
+    auto_return_to_page_1()
+    if isis_page_number == 1 then
+        isis_update_page_1()
+    elseif isis_page_number == 2 then
+        isis_update_page_2()
     end
 end

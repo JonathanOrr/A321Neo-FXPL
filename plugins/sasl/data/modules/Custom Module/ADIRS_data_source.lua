@@ -90,7 +90,7 @@ end
 ----------------------------------------------------------------------------------------------------
 
 function adirs_is_ias_ok(i)
-    return adirs_is_adr_working(i) and (get(All_on_ground) == 1 or adirs_get_ias(i) > 40) and adirs_get_ias(i) < 400
+    return adirs_is_adr_working(i) and (get(All_on_ground) == 1 or adirs_get_ias(i) > 40) and adirs_get_ias(i) < 450
 end
 
 function adirs_get_ias(i)
@@ -219,27 +219,31 @@ function adirs_get_gs(i)
 end
 
 function adirs_get_gps_alt(i)
-    if get(GPS_1_is_available) == 0 and get(GPS_1_is_available) == 0 then
+
+    local gps1_ok = GPS_sys[1].status == GPS_STATUS_NAV
+    local gps2_ok = GPS_sys[2].status == GPS_STATUS_NAV
+
+    if not gps1_ok and not gps2_ok then
         return 0
     end
 
-    if get(GPS_1_is_available) == 1 and get(GPS_2_is_available) == 0 then
-        return get(GPS_1_altitude)
+    if gps1_ok and not gps2_ok then
+        return GPS_sys[1].alt
     end
 
-    if get(GPS_2_is_available) == 1 and get(GPS_1_is_available) == 0 then
-        return get(GPS_2_altitude)
+    if not gps1_ok and gps2_ok then
+        return GPS_sys[2].alt
     end
 
     if i == PFD_CAPT then
-        return get(GPS_1_altitude)
+        return GPS_sys[1].alt
     else
-        return get(ADIRS_source_rotary_AIRDATA) ==  1 and get(GPS_1_altitude) or get(GPS_2_altitude)
+        return get(ADIRS_source_rotary_AIRDATA) ==  1 and GPS_sys[1].alt or GPS_sys[2].alt
     end
 end
 
 function adirs_is_gps_alt_ok(i)
-    return adirs_ir_works_att_mode(i) and (get(GPS_1_is_available) == 1 or get(GPS_2_is_available) == 1)
+    return adirs_ir_works_att_mode(i) and (GPS_sys[1].status == GPS_STATUS_NAV or GPS_sys[2].status == GPS_STATUS_NAV)
 end
 
 function adirs_is_gloads_ok(i)
@@ -532,14 +536,14 @@ end
 ----------------------------------------------------------------------------------------------------
 function adirs_gps_get_coords(i)    -- i = GPS 1 or GPS 2?
     if i==1 then
-        if get(GPS_1_is_available) == 1 then
-            return {get(GPS_1_lat), get(GPS_1_lon)}
+        if GPS_sys[1].status == GPS_STATUS_NAV then
+            return {GPS_sys[1].lat, GPS_sys[1].lon}
         else
             return {nil,nil}
         end
     else
-        if get(GPS_2_is_available) == 1 then
-            return {get(GPS_2_lat), get(GPS_2_lon)}
+        if GPS_sys[2].status == GPS_STATUS_NAV then
+            return {GPS_sys[2].lat, GPS_sys[2].lon}
         else
             return {nil,nil}
         end
@@ -547,7 +551,7 @@ function adirs_gps_get_coords(i)    -- i = GPS 1 or GPS 2?
 end
 
 function adirs_gps_get_altitude(i)  -- i = GPS 1 or GPS 2?
-    return i == 1 and get(GPS_1_altitude) or get(GPS_2_altitude)
+    return i == 1 and GPS_sys[1].alt or GPS_sys[2].alt
 end
 
 function adirs_get_mixed_irs()
@@ -604,18 +608,18 @@ function adirs_get_gpirs(i) -- i == 1 CAPT SIDE, i==2 FO SIDE. It returns lat,lo
         return {nil,nil}  -- Not ok, no GPIRS
     end
 
-    if     i == 1 and get(GPS_1_is_available) == 1 then
-        lat = lat + get(GPS_1_lat)
-        lon = lon + get(GPS_1_lon)
-    elseif i == 1 and get(GPS_2_is_available) == 1 then
-        lat = lat + get(GPS_2_lat)
-        lon = lon + get(GPS_2_lon)
-    elseif i == 2 and get(GPS_2_is_available) == 1 then
-        lat = lat + get(GPS_2_lat)
-        lon = lon + get(GPS_2_lon)
-    elseif i == 2 and get(GPS_1_is_available) == 1 then
-        lat = lat + get(GPS_1_lat)
-        lon = lon + get(GPS_1_lon)
+    if     i == 1 and GPS_sys[1].status == GPS_STATUS_NAV then
+        lat = lat + GPS_sys[1].lat
+        lon = lon + GPS_sys[1].lon
+    elseif i == 1 and GPS_sys[2].status == GPS_STATUS_NAV then
+        lat = lat + GPS_sys[2].lat
+        lon = lon + GPS_sys[2].lon
+    elseif i == 2 and GPS_sys[2].status == GPS_STATUS_NAV then
+        lat = lat + GPS_sys[2].lat
+        lon = lon + GPS_sys[2].lon
+    elseif i == 2 and GPS_sys[1].status == GPS_STATUS_NAV then
+        lat = lat + GPS_sys[1].lat
+        lon = lon + GPS_sys[1].lon
     else
         return {nil, nil} -- Not ok, no GPIRS
     end

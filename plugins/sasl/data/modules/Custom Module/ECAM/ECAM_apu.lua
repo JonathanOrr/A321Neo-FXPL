@@ -36,10 +36,38 @@ local function draw_apu_valve_and_needle()
     SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_APU_valve_img, size[1]/2+261, size[2]/2+264, 120, 58, 2, valve_position, valve_color)
 end
 
-function draw_apu_page()
-    sasl.gl.drawTexture(ECAM_APU_bgd_img, 0, 0, 900, 900, {1,1,1})
-    sasl.gl.drawTexture(ECAM_APU_grey_lines_img, 0, 0, 900, 900, ECAM_LINE_GREY)
+local function draw_apu_page_bgd()
+    sasl.gl.drawArc (248, 231 , 77, 80 , 7 , 207 , ECAM_WHITE)
+    sasl.gl.drawArc (248, 431 , 77, 80 , 31 , 183 , ECAM_WHITE)
+    sasl.gl.drawWideLine(325, 243, 340, 243, 4, ECAM_ORANGE)
+    sasl.gl.drawWideLine(313, 472, 321, 479, 4, ECAM_ORANGE)
+    sasl.gl.drawWideLine(213, 300, 218, 294, 4, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 198, 198, "0", 21, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 288, 273, "10", 21, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 226, 281, "7", 21, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 297, 464, "10", 21, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 198, 396, "0", 21, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
 
+    drawTextCentered(Font_ECAMfont, 396, 455, "N", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 396, 419, "%", 30, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    drawTextCentered(Font_ECAMfont, 396, 260, "EGT", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 396, 223, "°C", 30, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+
+    drawTextCentered(Font_ECAMfont, 710, 678, "BLEED", 27, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 747, 642, "PSI", 23, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    sasl.gl.drawWideLine(711, 699, 711, 716, 4, ECAM_GREEN)
+    drawTextCentered(Font_ECAMfont, 450, 870, "APU", 44, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawWideLine(409, 850, 490, 850, 4, ECAM_WHITE)
+
+    Sasl_DrawWideFrame(641, 627, 135, 72, 4, 0, ECAM_LINE_GREY)
+
+    sasl.gl.drawWideLine(801, 517, 801, 563, 4, ECAM_LINE_GREY)
+    sasl.gl.drawWideLine(112, 563, 801, 563, 4, ECAM_LINE_GREY)
+    sasl.gl.drawWideLine(112, 517, 112, 563, 4, ECAM_LINE_GREY)
+end
+
+function draw_apu_page()
+    draw_apu_page_bgd()
     draw_apu_valve_and_needle()
 
     --avail--

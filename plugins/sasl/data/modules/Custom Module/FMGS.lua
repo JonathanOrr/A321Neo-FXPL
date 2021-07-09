@@ -120,12 +120,12 @@ FMGS_sys.perf = {
 
 local function update_gps_primary()
     if not FMGS_sys.config.gps_primary then
-        if get(GPS_1_is_available) == 1 or get(GPS_2_is_available) == 1 then
+        if GPS_sys[1].status == GPS_STATUS_NAV or GPS_sys[2].status == GPS_STATUS_NAV then
             FMGS_sys.config.gps_primary = true
             MCDU.send_message("GPS PRIMARY", ECAM_WHITE)
         end
     else
-        if get(GPS_1_is_available) == 0 and get(GPS_2_is_available) == 0 then
+        if GPS_sys[1].status ~= GPS_STATUS_NAV and GPS_sys[2].status ~= GPS_STATUS_NAV then
             FMGS_sys.config.gps_primary = false
             MCDU.send_message("GPS PRIMARY LOST", ECAM_ORANGE)
         end

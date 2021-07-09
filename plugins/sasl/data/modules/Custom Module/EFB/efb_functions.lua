@@ -1,7 +1,3 @@
-function drawTextCentered(font, x, y, string, size, isbold, isitalic, alignment, colour)
-    sasl.gl.drawText (font, x, y - (size/3),string, size, isbold, isitalic, alignment, colour)
-end
-
 --mouse functions
 function Button_check_and_action(cursor_x, cursor_y, lower_x, lower_y, higher_x, higher_y, callback)
     if cursor_x >= lower_x and cursor_x <= higher_x and cursor_y >= lower_y and cursor_y <= higher_y then

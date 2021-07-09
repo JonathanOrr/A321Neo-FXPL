@@ -32,7 +32,7 @@ function ecam_update_fctl_page()
         params.R_aileron   = get(Right_aileron)
         params.L_elevator  = get(Elevators_hstab_1)
         params.R_elevator  = get(Elevators_hstab_2)
-        params.rudder      = get(Rudder)
+        params.rudder      = get(Rudder_total)
         params.last_update = get(TIME)
     end
 end
