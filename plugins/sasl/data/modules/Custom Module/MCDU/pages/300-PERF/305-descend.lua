@@ -67,6 +67,8 @@ function THIS_PAGE:render(mcdu_data)
     ----------
     --  L4  --
     ----------
+    self:set_line(mcdu_data, MCDU_LEFT, 4, selected_data[1] == nil and " PRESEL" or " SELECTED", MCDU_SMALL, ECAM_WHITE)
+    self:set_line(mcdu_data, MCDU_LEFT, 4, selected_data[1] == nil and "*[ ]" or  " "..selected_data[1], MCDU_LARGE, selected_data[1] == nil and ECAM_BLUE or ECAM_GREEN)
     self:set_line(mcdu_data, MCDU_LEFT, 4, " "..selected_data[1], MCDU_LARGE, ECAM_GREEN)
 
     ----------
@@ -123,6 +125,10 @@ end
 
 function THIS_PAGE:L6(mcdu_data)
     mcdu_open_page(mcdu_data, 303)
+end
+
+function THIS_PAGE:R6(mcdu_data)
+    mcdu_open_page(mcdu_data, 306)
 end
 
 mcdu_pages[THIS_PAGE.id] = THIS_PAGE

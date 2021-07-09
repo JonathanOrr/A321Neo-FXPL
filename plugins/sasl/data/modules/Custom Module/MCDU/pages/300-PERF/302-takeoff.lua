@@ -219,4 +219,8 @@ function THIS_PAGE:R4(mcdu_data)
     end
 end
 
+function THIS_PAGE:R6(mcdu_data)
+    mcdu_open_page(mcdu_data, 303)
+end
+
 mcdu_pages[THIS_PAGE.id] = THIS_PAGE
