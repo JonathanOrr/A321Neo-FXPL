@@ -112,18 +112,6 @@ function PFD_draw_att(PFD_table)
         )
     end
 
-    SASL_rotated_center_img_center_aligned(
-        PFD_att_hdg_tape,
-        ATT_x_center,
-        ATT_y_center,
-        3429,
-        16,
-        -adirs_get_roll(PFD_table.Screen_ID),
-        1519 + Math_rescale_no_lim(0, 0, 10, -85, adirs_get_hdg(PFD_table.Screen_ID)),
-        -adirs_get_pitch(PFD_table.Screen_ID) * 10 - 4,
-        ECAM_WHITE
-    )
-
     SASL_rotated_center_img_xcenter_aligned(
         PFD_ground,
         ATT_x_center,
@@ -133,6 +121,18 @@ function PFD_draw_att(PFD_table)
         90 - adirs_get_roll(PFD_table.Screen_ID),
         Math_clamp(Math_rescale_no_lim(0, -187 + adirs_get_pitch(PFD_table.Screen_ID) * 10, 120, 0 + adirs_get_pitch(PFD_table.Screen_ID) * 10, get(PFD_table.RA_ALT)), -366, 0),
         -779/2,
+        ECAM_WHITE
+    )
+
+    SASL_rotated_center_img_center_aligned(
+        PFD_att_hdg_tape,
+        ATT_x_center,
+        ATT_y_center,
+        3429,
+        20,
+        -adirs_get_roll(PFD_table.Screen_ID),
+        1519 + Math_rescale_no_lim(0, 0, 10, -85, adirs_get_hdg(PFD_table.Screen_ID)),
+        -adirs_get_pitch(PFD_table.Screen_ID) * 10 - 4,
         ECAM_WHITE
     )
 

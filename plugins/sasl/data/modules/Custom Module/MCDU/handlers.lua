@@ -61,6 +61,9 @@ local MCDU_ENTRIES =
                 return
             end
             if mcdu_data.message_showing then
+                if mcdu_data.entry.text == "GPS PRIMARY" then
+                    set(ND_GPIRS_indication,0)
+                end
                 mcdu_data.entry = mcdu_data.entry_cache
                 table.remove(mcdu_data.messages)
                 mcdu_data.message_showing = false

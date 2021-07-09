@@ -173,20 +173,20 @@ end
 
 local function update_VLS()
     local VLS_flaps_spd_lerp_table = {
-        {0.0 + 0,  1.28 * Extract_vs1g(get(Aircraft_total_weight_kgs), 0, false)},
-        {0.7 + 0,  Math_rescale(0, 1.23, 1, 1.13, vls_reduced_ratio) * Extract_vs1g(get(Aircraft_total_weight_kgs), 1, false)},
-        {0.7 + 10, Math_rescale(0, 1.23, 1, 1.13, vls_reduced_ratio) * Extract_vs1g(get(Aircraft_total_weight_kgs), 2, false)},
-        {0.8 + 14, Math_rescale(0, 1.23, 1, 1.13, vls_reduced_ratio) * Extract_vs1g(get(Aircraft_total_weight_kgs), 3, false)},
-        {0.8 + 21, Math_rescale(0, 1.23, 1, 1.13, vls_reduced_ratio) * Math_rescale(0, Extract_vs1g(get(Aircraft_total_weight_kgs), 4, false), 1, Extract_vs1g(get(Aircraft_total_weight_kgs), 4, true), (get(Front_gear_deployment) + get(Left_gear_deployment) + get(Right_gear_deployment)) / 3)},
-        {1.0 + 25, Math_rescale(0, 1.23, 1, 1.13, vls_reduced_ratio) * Extract_vs1g(get(Aircraft_total_weight_kgs), 5, false)},
+        {0.0*27 + 0,  1.28 * Extract_vs1g(get(Aircraft_total_weight_kgs), 0, false)},
+        {0.7*27 + 0,  Math_rescale(0, 1.23, 1, 1.13, vls_reduced_ratio) * Extract_vs1g(get(Aircraft_total_weight_kgs), 1, false)},
+        {0.7*27 + 10, Math_rescale(0, 1.23, 1, 1.13, vls_reduced_ratio) * Extract_vs1g(get(Aircraft_total_weight_kgs), 2, false)},
+        {0.8*27 + 14, Math_rescale(0, 1.23, 1, 1.13, vls_reduced_ratio) * Extract_vs1g(get(Aircraft_total_weight_kgs), 3, false)},
+        {0.8*27 + 21, Math_rescale(0, 1.23, 1, 1.13, vls_reduced_ratio) * Math_rescale(0, Extract_vs1g(get(Aircraft_total_weight_kgs), 4, false), 1, Extract_vs1g(get(Aircraft_total_weight_kgs), 4, true), (get(Front_gear_deployment) + get(Left_gear_deployment) + get(Right_gear_deployment)) / 3)},
+        {1.0*27 + 30, Math_rescale(0, 1.23, 1, 1.13, vls_reduced_ratio) * Extract_vs1g(get(Aircraft_total_weight_kgs), 5, false)},
     }
     local VLS_spdbrake_fx_lerp_table = {
-        {0.0 + 0,  20},
-        {0.7 + 0,  10},
-        {0.7 + 10, 6},
-        {0.8 + 14, 6},
-        {0.8 + 21, 6},
-        {1.0 + 25, 6},
+        {0.0*27 + 0,  20},
+        {0.7*27 + 0,  10},
+        {0.7*27 + 10, 6},
+        {0.8*27 + 14, 6},
+        {0.8*27 + 21, 6},
+        {1.0*27 + 30, 6},
     }
 
     --reduced VLS in TO or TAG
@@ -206,8 +206,8 @@ local function update_VLS()
 
     set(
         VLS,
-        Table_interpolate(VLS_flaps_spd_lerp_table, get(Slats) + get(Flaps_deployed_angle))
-        + Math_rescale(0, 0, Spoilers_obj.Get_cmded_spdbrk_def(1), Table_interpolate(VLS_spdbrake_fx_lerp_table, get(Slats) + get(Flaps_deployed_angle)), Spoilers_obj.Get_curr_spdbrk_def())
+        Table_interpolate(VLS_flaps_spd_lerp_table, get(Slats)*27 + get(Flaps_deployed_angle))
+        + Math_rescale(0, 0, Spoilers_obj.Get_cmded_spdbrk_def(1), Table_interpolate(VLS_spdbrake_fx_lerp_table, get(Slats)*27 + get(Flaps_deployed_angle)), Spoilers_obj.Get_curr_spdbrk_def())
     )
 end
 
@@ -232,82 +232,82 @@ end
 
 local function BUSS_compute_VMAX_AoA()
     local BUSS_VMAX_alphas = {
-        {0.0 + 0,  get_aoa_upper_limit(0, get(Aircraft_total_weight_kgs))},
-        {0.7 + 0,  get_aoa_upper_limit(1, get(Aircraft_total_weight_kgs))},
-        {0.7 + 10, get_aoa_upper_limit(2, get(Aircraft_total_weight_kgs))},
-        {0.8 + 14, get_aoa_upper_limit(3, get(Aircraft_total_weight_kgs))},
-        {0.8 + 21, get_aoa_upper_limit(4, get(Aircraft_total_weight_kgs))},
-        {1.0 + 25, get_aoa_upper_limit(5, get(Aircraft_total_weight_kgs))},
+        {0.0*27 + 0,  get_aoa_upper_limit(0, get(Aircraft_total_weight_kgs))},
+        {0.7*27 + 0,  get_aoa_upper_limit(1, get(Aircraft_total_weight_kgs))},
+        {0.7*27 + 10, get_aoa_upper_limit(2, get(Aircraft_total_weight_kgs))},
+        {0.8*27 + 14, get_aoa_upper_limit(3, get(Aircraft_total_weight_kgs))},
+        {0.8*27 + 21, get_aoa_upper_limit(4, get(Aircraft_total_weight_kgs))},
+        {1.0*27 + 30, get_aoa_upper_limit(5, get(Aircraft_total_weight_kgs))},
     }
 
-    set(BUSS_VFE_red_AoA,  Table_interpolate(BUSS_VMAX_alphas, get(Slats) + get(Flaps_deployed_angle)) - 2)
-    set(BUSS_VFE_norm_AoA, Table_interpolate(BUSS_VMAX_alphas, get(Slats) + get(Flaps_deployed_angle)))
+    set(BUSS_VFE_red_AoA,  Table_interpolate(BUSS_VMAX_alphas, get(Slats)*27 + get(Flaps_deployed_angle)) - 2)
+    set(BUSS_VFE_norm_AoA, Table_interpolate(BUSS_VMAX_alphas, get(Slats)*27 + get(Flaps_deployed_angle)))
 end
 
 local function BUSS_compute_VLS_AoA()
     local BUSS_VLS_alphas = {
-        {0.0 + 0,  5.4},
-        {0.7 + 0,  9},
-        {0.7 + 10, 7.2},
-        {0.8 + 14, 7.2},
-        {0.8 + 21, 5.8},
-        {1.0 + 25, 6.6},
+        {0.0*27 + 0,  5.4},
+        {0.7*27 + 0,  9},
+        {0.7*27 + 10, 7.2},
+        {0.8*27 + 14, 7.2},
+        {0.8*27 + 21, 5.8},
+        {1.0*27 + 30, 6.6},
     }
 
-    set(BUSS_VLS_AoA, Table_interpolate(BUSS_VLS_alphas, get(Slats) + get(Flaps_deployed_angle)))
+    set(BUSS_VLS_AoA, Table_interpolate(BUSS_VLS_alphas, get(Slats)*27 + get(Flaps_deployed_angle)))
 end
 
 local function BUSS_compute_VSW_AoA()
     local BUSS_VSW_alphas = {
-        {0.0 + 0,  vsw_aprot_alphas[1]},
-        {0.7 + 0,  vsw_aprot_alphas[2]},
-        {0.7 + 10, vsw_aprot_alphas[3]},
-        {0.8 + 14, vsw_aprot_alphas[4]},
-        {0.8 + 21, vsw_aprot_alphas[5]},
-        {1.0 + 25, vsw_aprot_alphas[6]},
+        {0.0*27 + 0,  vsw_aprot_alphas[1]},
+        {0.7*27 + 0,  vsw_aprot_alphas[2]},
+        {0.7*27 + 10, vsw_aprot_alphas[3]},
+        {0.8*27 + 14, vsw_aprot_alphas[4]},
+        {0.8*27 + 21, vsw_aprot_alphas[5]},
+        {1.0*27 + 30, vsw_aprot_alphas[6]},
     }
 
-    set(BUSS_VSW_AoA, Table_interpolate(BUSS_VSW_alphas, get(Slats) + get(Flaps_deployed_angle)))
+    set(BUSS_VSW_AoA, Table_interpolate(BUSS_VSW_alphas, get(Slats)*27 + get(Flaps_deployed_angle)))
 end
 
 local function compute_aprot_vsw_amax_alphas()
     local a0_alphas = {
-        {0.0 + 0,  alpha0s[1]},
-        {0.7 + 0,  alpha0s[2]},
-        {0.7 + 10, alpha0s[3]},
-        {0.8 + 14, alpha0s[4]},
-        {0.8 + 21, alpha0s[5]},
-        {1.0 + 25, alpha0s[6]},
+        {0.0*27 + 0,  alpha0s[1]},
+        {0.7*27 + 0,  alpha0s[2]},
+        {0.7*27 + 10, alpha0s[3]},
+        {0.8*27 + 14, alpha0s[4]},
+        {0.8*27 + 21, alpha0s[5]},
+        {1.0*27 + 30, alpha0s[6]},
     }
     local aprot_alphas = {
-        {0.0 + 0,  vsw_aprot_alphas[1]},
-        {0.7 + 0,  vsw_aprot_alphas[2]},
-        {0.7 + 10, vsw_aprot_alphas[3]},
-        {0.8 + 14, vsw_aprot_alphas[4]},
-        {0.8 + 21, vsw_aprot_alphas[5]},
-        {1.0 + 25, vsw_aprot_alphas[6]},
+        {0.0*27 + 0,  vsw_aprot_alphas[1]},
+        {0.7*27 + 0,  vsw_aprot_alphas[2]},
+        {0.7*27 + 10, vsw_aprot_alphas[3]},
+        {0.8*27 + 14, vsw_aprot_alphas[4]},
+        {0.8*27 + 21, vsw_aprot_alphas[5]},
+        {1.0*27 + 30, vsw_aprot_alphas[6]},
     }
     local afloor_alphas = {
-        {0.0 + 0,  alpha_floor_alphas[1]},
-        {0.7 + 0,  alpha_floor_alphas[2]},
-        {0.7 + 10, alpha_floor_alphas[3]},
-        {0.8 + 14, alpha_floor_alphas[4]},
-        {0.8 + 21, alpha_floor_alphas[5]},
-        {1.0 + 25, alpha_floor_alphas[6]},
+        {0.0*27 + 0,  alpha_floor_alphas[1]},
+        {0.7*27 + 0,  alpha_floor_alphas[2]},
+        {0.7*27 + 10, alpha_floor_alphas[3]},
+        {0.8*27 + 14, alpha_floor_alphas[4]},
+        {0.8*27 + 21, alpha_floor_alphas[5]},
+        {1.0*27 + 30, alpha_floor_alphas[6]},
     }
     local amax_alphas = {
-        {0.0 + 0,  alpha_max_alphas[1]},
-        {0.7 + 0,  alpha_max_alphas[2]},
-        {0.7 + 10, alpha_max_alphas[3]},
-        {0.8 + 14, alpha_max_alphas[4]},
-        {0.8 + 21, alpha_max_alphas[5]},
-        {1.0 + 25, alpha_max_alphas[6]},
+        {0.0*27 + 0,  alpha_max_alphas[1]},
+        {0.7*27 + 0,  alpha_max_alphas[2]},
+        {0.7*27 + 10, alpha_max_alphas[3]},
+        {0.8*27 + 14, alpha_max_alphas[4]},
+        {0.8*27 + 21, alpha_max_alphas[5]},
+        {1.0*27 + 30, alpha_max_alphas[6]},
     }
 
-    set(A0_AoA,     Table_interpolate(a0_alphas,     get(Slats) + get(Flaps_deployed_angle)))
-    set(Aprot_AoA,  Table_interpolate(aprot_alphas,  get(Slats) + get(Flaps_deployed_angle)))
-    set(Afloor_AoA, Table_interpolate(afloor_alphas, get(Slats) + get(Flaps_deployed_angle)))
-    set(Amax_AoA,   Table_interpolate(amax_alphas,   get(Slats) + get(Flaps_deployed_angle)))
+    set(A0_AoA,     Table_interpolate(a0_alphas,     get(Slats)*27 + get(Flaps_deployed_angle)))
+    set(Aprot_AoA,  Table_interpolate(aprot_alphas,  get(Slats)*27 + get(Flaps_deployed_angle)))
+    set(Afloor_AoA, Table_interpolate(afloor_alphas, get(Slats)*27 + get(Flaps_deployed_angle)))
+    set(Amax_AoA,   Table_interpolate(amax_alphas,   get(Slats)*27 + get(Flaps_deployed_angle)))
 end
 
 local function SPEED_SPEED_SPEED()

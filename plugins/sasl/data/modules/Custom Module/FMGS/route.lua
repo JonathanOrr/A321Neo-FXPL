@@ -112,16 +112,13 @@ function update_route()
                 FMGS_set_apt_arr("LIRF")
                 FMGS_create_temp_fpln()
                 FMGS_dep_set_rwy(FMGS_sys.fpln.temp.apts.dep.rwys[1], true)
-               print("LOADED 1/2")
+                logInfo("DEBUG F/PLN is active: LOADED 1/2")
             end
             if FMGS_sys.fpln.temp.apts.dep_cifp then
-                for i,x in ipairs(FMGS_sys.fpln.temp.apts.dep_cifp.sids) do
-                    --print(i, x.proc_name, x.leg_name)
-                end
                 FMGS_dep_set_sid(FMGS_sys.fpln.temp.apts.dep_cifp.sids[49])
                 FMGS_dep_set_trans(FMGS_sys.fpln.temp.apts.dep_cifp.sids[50])
                 FMGS_insert_temp_fpln()
-               print("LOADED 2/2")
+                logInfo("DEBUG F/PLN is active: LOADED 1/2")
             end
         end
     end

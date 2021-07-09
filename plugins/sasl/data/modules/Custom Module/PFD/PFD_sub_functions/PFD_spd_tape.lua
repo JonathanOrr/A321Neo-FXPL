@@ -132,11 +132,9 @@ local function draw_BUSS(PFD_table)
     if PFD_table.BUSS_update_timer >= update_time then
         PFD_table.BUSS_vsw_pos = Table_extrapolate(AoA_anim_table, get(PFD_table.AoA))
 
-        local taget_anim_table = {
-            {get(BUSS_VFE_norm_AoA), size[2]/2-129 + PFD_table.BUSS_vsw_pos},
-            {get(BUSS_VLS_AoA),      size[2]/2-189 + PFD_table.BUSS_vsw_pos},
-        }
-        PFD_table.BUSS_target_pos = Math_clamp(Table_extrapolate(taget_anim_table, 4.5), size[2]/2-244, size[2]/2+229)
+        local target_pos = Math_rescale_no_lim(get(BUSS_VFE_norm_AoA), size[2]/2-129 + PFD_table.BUSS_vsw_pos, get(BUSS_VLS_AoA), size[2]/2-189 + PFD_table.BUSS_vsw_pos, 4.5)
+
+        PFD_table.BUSS_target_pos = Math_clamp(target_pos, size[2]/2-244, size[2]/2+229)
 
         PFD_table.BUSS_update_timer = 0
     end

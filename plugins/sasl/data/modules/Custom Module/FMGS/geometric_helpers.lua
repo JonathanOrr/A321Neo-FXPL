@@ -67,6 +67,5 @@ function GeoLine:create_from_course(point, crs)  -- Return a line created from a
     local angle = math.rad(angle_deg)
     local a = math.tan(angle)
     local c = point.lat - a*point.lon
-    print(point.lat,point.lon,crs,angle_deg,angle,a,c)
     return GeoLine:create ({a=a, c=c})
 end

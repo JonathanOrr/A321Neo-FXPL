@@ -193,7 +193,10 @@ local function init_tuning_PID(PID_array)
     set(live_tunning_I,    PID_array.I_gain)
     set(live_tunning_D,    PID_array.D_gain)
     set(live_tunning_B,    PID_array.B_gain)
-    set(live_tunning_freq, PID_array.filter_freq)
+
+    if PID_array.filter_inputs then
+        set(live_tunning_freq, PID_array.filter_freq)
+    end
 end
 
 local function live_tune_PID(PID_array)
@@ -201,12 +204,15 @@ local function live_tune_PID(PID_array)
         return
     end
 
-    PID_array.P_gain =                        get(live_tunning_P)
-    PID_array.I_gain =                        get(live_tunning_I)
-    PID_array.D_gain =                        get(live_tunning_D)
-    PID_array.B_gain =                        get(live_tunning_B)
-    PID_array.er_filter_table.cut_frequency = get(live_tunning_freq)
-    PID_array.pv_filter_table.cut_frequency = get(live_tunning_freq)
+    PID_array.P_gain = get(live_tunning_P)
+    PID_array.I_gain = get(live_tunning_I)
+    PID_array.D_gain = get(live_tunning_D)
+    PID_array.B_gain = get(live_tunning_B)
+
+    if PID_array.filter_inputs then
+        PID_array.er_filter_table.cut_frequency = get(live_tunning_freq)
+        PID_array.pv_filter_table.cut_frequency = get(live_tunning_freq)
+    end
 end
 
 local function draw_gain_values(PID_array, x_pos, y_pos, width, height, P_color, I_color, D_color)

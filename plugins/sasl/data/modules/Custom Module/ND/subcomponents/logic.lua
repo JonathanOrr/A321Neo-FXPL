@@ -81,14 +81,18 @@ local function update_position(data)
     update_position_fmgs(data) -- This may change data.misc.map_not_avail
 
     if not data.misc.map_not_avail then
-        data.inputs.plane_coords_lat = adirs_get_lat(id) 
-        data.inputs.plane_coords_lon = adirs_get_lon(id) 
+        local ret = adirs_get_fms(id)
+        if ret[1] == nil or ret[2] == nil then
+            data.misc.map_not_avail = true
+        else
+            data.inputs.plane_coords_lat, data.inputs.plane_coords_lon = ret[1], ret[2]
+        end
     end
 end
 
 local function update_gps(data)
     local was_lost = data.misc.gps_primary_lost 
-    data.misc.gps_primary_lost = get(GPS_1_is_available) == 0 and get(GPS_2_is_available) == 0
+    data.misc.gps_primary_lost = not FMGS_sys.config.gps_primary
 
     if not data.misc.gps_primary_lost and was_lost then
         set(ND_GPIRS_indication, 1)    -- it can be killed by MCDU

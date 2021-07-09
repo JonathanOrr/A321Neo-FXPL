@@ -64,6 +64,13 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_ALWAYS
 END_SOUND_ATTACHMENT
 
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Ground Roll
+  VEH_XYZ 0 0 0
+  EVENT_ALWAYS
+  PARAM_DREF_IDX 0
+END_SOUND_ATTACHMENT
+
 ###################################################################################
 
 ##BEGIN_SOUND_ATTACHMENT
@@ -152,6 +159,13 @@ BEGIN_SOUND_ATTACHMENT
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Engines V1 PW1100G/HowlLogicLX
+  VEH_PART engine 0
+  EVENT_ALWAYS
+  PARAM_DREF_IDX 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /Engines V1 PW1100G/EnginesR
   VEH_PART engine 1
   EVENT_ALWAYS
@@ -173,62 +187,40 @@ BEGIN_SOUND_ATTACHMENT
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Engines V1 PW1100G/PW N2LX
+  VEH_PART engine 0
+  EVENT_ALWAYS
+  PARAM_DREF_IDX 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Engines V1 PW1100G/PW N2RX
+  VEH_PART engine 1
+  EVENT_ALWAYS
+  PARAM_DREF_IDX 1
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /Engines V1 PW1100G/PW N2R
   VEH_PART engine 1
   EVENT_ALWAYS
   PARAM_DREF_IDX 1
 END_SOUND_ATTACHMENT
 
-##   BEGIN_SOUND_ATTACHMENT
-##     EVENT_NAME /Engines V2/HowlEnd
-##     VEH_PART engine 0
-##     EVENT_START_COND a321neo/sounds/rush_L < 15
-##     PARAM_DREF_IDX 0
-##   END_SOUND_ATTACHMENT
-##   
-##   BEGIN_SOUND_ATTACHMENT
-##     EVENT_NAME /Engines V2/HowlEnd
-##     VEH_PART engine 1
-##     EVENT_START_COND a321neo/sounds/rush_R < 15
-##     PARAM_DREF_IDX 1
-##   END_SOUND_ATTACHMENT
-##   
-##   BEGIN_SOUND_ATTACHMENT
-##     EVENT_NAME /Engines V2/HowlLogic
-##     VEH_PART engine 0
-##     EVENT_ALWAYS
-##     PARAM_DREF_IDX 0
-##   END_SOUND_ATTACHMENT
-##   
-##   BEGIN_SOUND_ATTACHMENT
-##     EVENT_NAME /Engines V2/HowlLogic
-##     VEH_PART engine 1
-##     EVENT_ALWAYS
-##     PARAM_DREF_IDX 1
-##   END_SOUND_ATTACHMENT
-
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /Engines/Engines Ext
+  EVENT_NAME /Engines V1 PW1100G/EnginesLX
   VEH_PART engine 0
-  EVENT_START_COND sim/flightmodel2/engines/N1_percent[0] > 0
-  EVENT_END_COND sim/flightmodel2/engines/N1_percent[0] == 0
-  PARAM_DREF_IDX 0
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /Engines/Engines Ext
-  VEH_PART engine 1
-  EVENT_START_COND sim/flightmodel2/engines/N1_percent[1] > 0
-  EVENT_END_COND sim/flightmodel2/engines/N1_percent[1] == 0
-  PARAM_DREF_IDX 1
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /Ground Roll
-  VEH_XYZ 0 0 0
   EVENT_ALWAYS
   PARAM_DREF_IDX 0
 END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Engines V1 PW1100G/EnginesRX
+  VEH_PART engine 01
+  EVENT_ALWAYS
+  PARAM_DREF_IDX 1
+END_SOUND_ATTACHMENT
+
 
 ##############################################################THRUST LEVERS###################################################
 
@@ -1439,6 +1431,17 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_CMND_HOLD_CUE a321neo/cockpit/ISIS/LS
 END_SOUND_ATTACHMENT
 
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MCDU Button Press
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/ISIS/BUG
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/MCDU Button Press
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/ISIS/RST
+END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /CockpitMechanical/MCDU Button Press
@@ -2409,6 +2412,20 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_START_COND a321neo/cockpit/nd/fo_mode_knob == 2
 END_SOUND_ATTACHMENT
 
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary_Range_0
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_START_COND ABS_DELTA=a321neo/cockpit/nd/capt_range_knob > 0
+  EVENT_END_COND ABS_DELTA=a321neo/cockpit/nd/capt_range_knob == 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Rotary/Rotary_Range_0
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_START_COND ABS_DELTA=a321neo/cockpit/nd/fo_range_knob > 0
+  EVENT_END_COND ABS_DELTA=a321neo/cockpit/nd/fo_range_knob == 0
+END_SOUND_ATTACHMENT
+
 
 ##############################################################################################################################BIG ROUND KNOB
 
@@ -2846,7 +2863,6 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /TouchMain
   VEH_XYZ 0 0 0
   EVENT_START_COND 	a321neo/dynamics/wheel/either_aft_on_ground == 1
-  EVENT_END_COND 	a321neo/dynamics/wheel/either_aft_on_ground == 0
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
@@ -4192,15 +4208,27 @@ BEGIN_SOUND_ATTACHMENT
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Seatbelt
+  VEH_XYZ 0 2.3 0
+  EVENT_START_COND 	sim/cockpit2/switches/fasten_seat_belts == 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /NoSmoke
   VEH_XYZ 0 2.3 0
   EVENT_START_COND 	sim/cockpit2/switches/no_smoking == 0
 END_SOUND_ATTACHMENT
 
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /NoSmoke
+  VEH_XYZ 0 2.3 0
+  EVENT_START_COND 	sim/cockpit2/switches/no_smoking == 1
+END_SOUND_ATTACHMENT
+
 ##################################################################################################################################################################################FCU Knobs
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /FCU/Rotate4
+  EVENT_NAME /FCU/Rotate2
   VEH_XYZ 0 1.5 -18.4
   EVENT_START_COND ABS_DELTA=a321neo/cockpit/AUTOFLT/FCU/animation/spd_knob_clicks > 0
   EVENT_END_COND ABS_DELTA=a321neo/cockpit/AUTOFLT/FCU/animation/spd_knob_clicks == 0
@@ -4214,14 +4242,21 @@ BEGIN_SOUND_ATTACHMENT
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /FCU/Rotate3
+  EVENT_NAME /FCU/Rotate2
   VEH_XYZ 0 1.5 -18.4
   EVENT_START_COND ABS_DELTA=a321neo/cockpit/AUTOFLT/FCU/animation/alt_knob_clicks > 0
   EVENT_END_COND ABS_DELTA=a321neo/cockpit/AUTOFLT/FCU/animation/alt_knob_clicks == 0
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /FCU/Rotate4
+  EVENT_NAME /FCU/Rotate2
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND ABS_DELTA=sim/cockpit2/gauges/actuators/barometer_setting_in_hg_stby > 0
+  EVENT_END_COND ABS_DELTA=sim/cockpit2/gauges/actuators/barometer_setting_in_hg_stby == 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /FCU/Rotate2
   VEH_XYZ 0 1.5 -18.4
   EVENT_START_COND ABS_DELTA=a321neo/cockpit/AUTOFLT/FCU/animation/vs_knob_clicks > 0
   EVENT_END_COND ABS_DELTA=a321neo/cockpit/AUTOFLT/FCU/animation/vs_knob_clicks == 0
@@ -4520,12 +4555,32 @@ END_SOUND_ATTACHMENT
 ###########################################################################################################FUEL PUMP
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /Fuel Pump
+  EVENT_NAME /Fuel Pumps/L1
   VEH_XYZ 0 0 0
-  EVENT_START_COND a321neo/sounds/fuel_pump > 0
-  CUE_TRIGGER_COND a321neo/sounds/fuel_pump == 0
+  EVENT_START_COND a321neo/sounds/fuel_pump_l1 > 0
+  CUE_TRIGGER_COND a321neo/sounds/fuel_pump_l1 == 0
 END_SOUND_ATTACHMENT
 
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Fuel Pumps/L2
+  VEH_XYZ 0 0 0
+  EVENT_START_COND a321neo/sounds/fuel_pump_l2 > 0
+  CUE_TRIGGER_COND a321neo/sounds/fuel_pump_l2 == 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Fuel Pumps/R1
+  VEH_XYZ 0 0 0
+  EVENT_START_COND a321neo/sounds/fuel_pump_r1 > 0
+  CUE_TRIGGER_COND a321neo/sounds/fuel_pump_r1 == 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Fuel Pumps/R2
+  VEH_XYZ 0 0 0
+  EVENT_START_COND a321neo/sounds/fuel_pump_r2 > 0
+  CUE_TRIGGER_COND a321neo/sounds/fuel_pump_r2 == 0
+END_SOUND_ATTACHMENT
 
 ###########################################################################################################MARKERS
 

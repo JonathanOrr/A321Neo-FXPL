@@ -90,12 +90,17 @@ local function draw_door_page_textures()
     SASL_drawSegmentedImg(ECAM_DOOR_r_cabin_door_img, size[1]/2+38, size[2]/2-245, 522, 33, 2, get(Door_3_r_ratio) >= 0.1 and 1 or 2)
 end
 
+local function draw_door_bgd()
+    drawTextCentered(Font_ECAMfont, 451, 852, "DOOR/OXY", 44, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawWideLine(344, 830, 561, 830, 4, ECAM_WHITE)
+end
+
 function draw_door_page()
-    sasl.gl.drawTexture(ECAM_DOOR_bgd_img, 0, 0, 900, 900, {1,1,1})
-    sasl.gl.drawTexture(ECAM_DOOR_grey_lines_img, 0, 0, 900, 900, ECAM_LINE_GREY)
+    sasl.gl.drawTexture(ECAM_DOOR_grey_lines_img, 244, 169, 419, 639, ECAM_LINE_GREY)
     update_param()
     draw_oxygen()
     draw_cabin_vs()
     draw_door_page_textures()
+    draw_door_bgd()
 end
 

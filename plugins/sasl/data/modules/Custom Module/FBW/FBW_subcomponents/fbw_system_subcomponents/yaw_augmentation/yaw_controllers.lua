@@ -18,7 +18,7 @@ FBW.yaw.controllers = {
             end
         end,
         bp = function ()
-            FBW_PID_arrays.FBW_YAW_DAMPER_PID_array.Actual_output = get(Rudder) / 30
+            FBW_PID_arrays.FBW_YAW_DAMPER_PID_array.Actual_output = get(Rudder_total) / 30
         end,
     },
 
@@ -39,7 +39,7 @@ FBW.yaw.controllers = {
         end,
         bp = function ()
             FBW_PID_arrays.FBW_NRM_YAW_PID_array.Desired_output = FBW_PID_arrays.FBW_NRM_YAW_PID_array.Desired_output + FBW.yaw.controllers.yaw_damper_PD.output
-            FBW_PID_arrays.FBW_NRM_YAW_PID_array.Actual_output = get(Rudder) / 30
+            FBW_PID_arrays.FBW_NRM_YAW_PID_array.Actual_output = get(Rudder_total) / 30
         end
     },
 

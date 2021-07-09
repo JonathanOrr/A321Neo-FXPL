@@ -1,0 +1,35 @@
+name: test
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@master
+
+    - run: |
+       echo "Download & Install LuaJIT"
+       sudo apt-get update -y
+       sudo apt-get install -y luajit
+
+    - run: |
+       echo "Installed LuaJIT"
+       luajit -v
+
+    - name: Check out repository code
+      uses: actions/checkout@v2
+    - run: echo "The ${{ github.repository }} repository has been cloned to the runner."
+
+    - name: Switch to script files
+      run: |
+        cd "plugins/sasl/data/modules/"
+        OIFS="$IFS"
+        IFS=$'\n'
+        for file in $(find . -type f -name "*.lua"); do
+            echo "Checking $file ..."
+            luajit -bl "$file" > /dev/null
+        done
+        IFS="$OIFS"
+        

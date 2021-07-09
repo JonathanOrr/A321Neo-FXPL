@@ -382,7 +382,7 @@ local function update_page_normal()
     elseif get(EWD_flight_phase) == 10 then
         Goto_ecam(ECAM_PAGE_DOOR)
     else
-        print("ERROR: This condition should never happen")
+        logWarning("ERROR: This condition should never happen")
     end    
 end
 

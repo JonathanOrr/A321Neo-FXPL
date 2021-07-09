@@ -147,12 +147,12 @@ function Ailerons_control(lateral_input, has_florence_kit, ground_spoilers_mode)
 
     local l_aileron_def_table = {
         {-1, -ailerons_max_def},
-        {0,   10 * get(Flaps_deployed_angle) / 25},
+        {0,   10 * get(Flaps_deployed_angle) / 30},
         {1,   ailerons_max_def},
     }
     local r_aileron_def_table = {
         {-1,  ailerons_max_def},
-        {0,   10 * get(Flaps_deployed_angle) / 25},
+        {0,   10 * get(Flaps_deployed_angle) / 30},
         {1,  -ailerons_max_def},
     }
 

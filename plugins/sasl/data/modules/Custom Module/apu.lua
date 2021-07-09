@@ -141,9 +141,24 @@ local function update_button_datarefs()
 end
 
 local function update_apu_flap()
-    if master_switch_status and get(TIME) - master_switch_enabled_time > FLAP_OPEN_TIME_SEC then
-        set(APU_flap, 1)
+    local elec_ok = get(DC_bat_bus_pwrd) == 1
+
+    if master_switch_status and elec_ok then
+        if get(TIME) - master_switch_enabled_time > FLAP_OPEN_TIME_SEC then
+            set(APU_flap, 1)
+        else
+            ELEC_sys.add_power_consumption(ELEC_BUS_DC_BAT_BUS, 1, 2)   -- Guess
+            set(APU_flap, 0)
+        end
+        Set_dataref_linear_anim(APU_flap_open_pos, 1, 0, 1, 1/FLAP_OPEN_TIME_SEC)
     else
+        if elec_ok then
+            -- Cannot move if not powered
+            Set_dataref_linear_anim(APU_flap_open_pos, 0, 0, 1, 1/FLAP_OPEN_TIME_SEC)
+            if get(APU_flap_open_pos) > 0 then
+                ELEC_sys.add_power_consumption(ELEC_BUS_DC_BAT_BUS, 1, 2)   -- Guess
+            end
+        end
         set(APU_flap, 0)
     end
 end

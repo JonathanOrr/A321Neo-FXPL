@@ -900,7 +900,7 @@ function ewd_clear_button_handler(phase)
         end
     end
     
-    print("ERROR: This should not happend, clearing a non-existent message.")
+    logWarning("ERROR: This should not happend, clearing a non-existent message.")
     
 end
 
