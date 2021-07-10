@@ -101,7 +101,9 @@ function THIS_PAGE:sel_rwy(mcdu_data, i)
         MCDU_Page:Slew_Down(mcdu_data)  -- Clicked on empty spot
         return
     end
-    FMGS_create_temp_fpln()
+    FMGS_create_copy_temp_fpln()
+    FMGS_reset_dep_sid()
+    FMGS_reset_dep_trans()
     FMGS_dep_set_rwy(mcdu_data.lat_rev_subject.data.rwys[sel_rwy_i], i % 2 == 0)
     mcdu_open_page(mcdu_data, 604)
 end

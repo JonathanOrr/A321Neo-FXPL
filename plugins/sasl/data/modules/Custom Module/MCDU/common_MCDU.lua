@@ -119,14 +119,14 @@ function mcdu_reset_fpln(mcdu_data)
 end
 
 --define custom functionalities
-function mcdu_send_message(mcdu_data, message, color)
+function mcdu_send_message(mcdu_data, text, color)
 
     color = color or ECAM_WHITE
 
-    if #mcdu_data.messages > 0 and mcdu_data.messages[#mcdu_data.messages].text == message.text then
+    if #mcdu_data.messages > 0 and mcdu_data.messages[#mcdu_data.messages].text == text then
         return
     end
-    table.insert(mcdu_data.messages, {text=message, color=color})
+    table.insert(mcdu_data.messages, {text=text, color=color})
 end
 
 function common_update(mcdu_data)

@@ -111,11 +111,11 @@ local MCDU_ENTRIES =
     }
 }
 
-function init_mcdu_handlers(str_prefix, mcdu_data)
+function init_mcdu_handlers(mcdu_data, str_suffix)
     --register all entry keys
     for i,entry_category in ipairs(MCDU_ENTRIES) do
         for count,entry in ipairs(entry_category.ref_entries) do
-            mcdu_inp[entry] = createCommand("a321neo/cockpit/mcdu/" .. str_prefix  .. entry_category.ref_name .. "/" .. entry, "MCDU " .. entry .. " " .. entry_category.ref_desc)
+            mcdu_inp[entry] = createCommand("a321neo/cockpit/mcdu" .. str_suffix .. "/"  .. entry_category.ref_name .. "/" .. entry, "MCDU " .. entry .. " " .. entry_category.ref_desc)
             sasl.registerCommandHandler(mcdu_inp[entry], 0, function (phase)
                 if phase == SASL_COMMAND_BEGIN and entry_category.ref_callback then
                     entry_category.ref_callback(mcdu_data, count, entry)
