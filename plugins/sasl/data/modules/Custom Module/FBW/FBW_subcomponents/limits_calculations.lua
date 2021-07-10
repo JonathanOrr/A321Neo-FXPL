@@ -367,6 +367,14 @@ end
 
 --calculate flight characteristics values
 function update()
+    --set VS1G
+    set(Current_VS1G, Extract_vs1g(
+        get(Aircraft_total_weight_kgs),
+        get(Flaps_internal_config),
+        (get(Front_gear_deployment) + get(Left_gear_deployment) + get(Right_gear_deployment)) / 3 == 1
+        )
+    )
+
     filter_AoA()
 
     update_VMAX_demand()
@@ -374,6 +382,7 @@ function update()
     update_VMAX()
     update_VFE()
 
+    --S, F, O speeds
     set(S_speed, 1.23 * Extract_vs1g(get(Aircraft_total_weight_kgs), 0, false))
     set(F_speed, 1.22 * Extract_vs1g(get(Aircraft_total_weight_kgs), 2, false))
     set(GD, (1.5 * get(Aircraft_total_weight_kgs) / 1000 + 110) + Math_clamp_lower((adirs_get_avg_alt() - 20000) / 1000, 0))

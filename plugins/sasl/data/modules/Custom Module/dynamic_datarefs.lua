@@ -489,6 +489,8 @@ Aprot_AoA =  createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/alpha_prot
 Afloor_AoA = createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/alpha_floor_aoa", 0, false, true, false)
 Amax_AoA =   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/alpha_max_aoa", 0, false, true, false)
 
+Current_VS1G =   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/current_VS1G", 0, false, true, false)
+
 --BUSS--
 BUSS_VFE_red_AoA =  createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/buss_vfe_red_aoa", 0, false, true, false)
 BUSS_VFE_norm_AoA = createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/buss_vfe_norm_aoa", 0, false, true, false)
