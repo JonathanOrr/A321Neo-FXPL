@@ -34,11 +34,11 @@ local vertical_control_filtering_table = {
     },
     C_STAR_pv_filter_table = {
         x = 0,
-        cut_frequency = 0.85,
+        cut_frequency = 0.75,
     },
     C_STAR_err_filter_table = {
         x = 0,
-        cut_frequency = 0.85,
+        cut_frequency = 0.75,
     },
     IAS_filter_table = {
         x = adirs_get_avg_ias(),
