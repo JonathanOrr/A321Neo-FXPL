@@ -50,6 +50,7 @@ function init_data(mcdu_data, id)
     mcdu_data.v = {}    -- Various values used in MCDU
     mcdu_data.last_update = get(TIME)
     mcdu_data.page_data = {}    -- Custom data for each page
+    mcdu_data.clr = false -- Is CLR active in the scratchpad or not?
 
     for i,size in ipairs(MCDU_DIV_SIZE) do
 	    mcdu_data.dat[size] = {}
@@ -135,12 +136,18 @@ function common_update(mcdu_data)
         mcdu_open_page(mcdu_data, debug_mcdu_startup_page)
     end
     
+    mcdu_data.clr = false
+
     if #mcdu_data.messages > 0 then
         if not mcdu_data.message_showing then
             mcdu_data.entry_cache = mcdu_data.entry
         end
+
         mcdu_data.entry = mcdu_data.messages[#mcdu_data.messages]
         mcdu_data.message_showing = true
+        if mcdu_data.entry.isclr then
+            mcdu_data.clr = true
+        end
     end
     
     if get(TIME) - mcdu_data.last_update > 1 then
