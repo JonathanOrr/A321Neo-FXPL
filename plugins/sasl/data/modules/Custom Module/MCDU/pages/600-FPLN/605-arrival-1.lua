@@ -182,7 +182,10 @@ function THIS_PAGE:sel_appr(mcdu_data, i)
         return
     end
 
-    FMGS_create_temp_fpln()
+    FMGS_create_copy_temp_fpln()
+    FMGS_reset_arr_star()
+    FMGS_reset_arr_via()
+    FMGS_reset_arr_trans()
     FMGS_arr_set_appr(THIS_PAGE.curr_fpln.apts.arr_cifp.apprs[data.idx], data.rwy_obj, data.rwy_sibl)
     mcdu_open_page(mcdu_data, 606)
 end

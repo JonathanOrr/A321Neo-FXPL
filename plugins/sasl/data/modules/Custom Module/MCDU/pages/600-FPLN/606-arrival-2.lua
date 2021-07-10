@@ -191,13 +191,14 @@ end
 
 function THIS_PAGE:sel_star(mcdu_data, i)
     
-    if not FMGS_does_temp_fpln_exist() then
-        FMGS_create_temp_fpln()
-        FMGS_copy_dep_rwy_active_to_temp()
-    end
-    
+   
     if mcdu_data.page_data[606].star_references[i] > 0 then
+        if not FMGS_does_temp_fpln_exist() then
+            FMGS_create_copy_temp_fpln()
+        end
+    
         FMGS_arr_set_star(mcdu_data.page_data[606].curr_fpln.apts.arr_cifp.stars[mcdu_data.page_data[606].star_references[i]])
+        FMGS_reset_arr_via()
         FMGS_reset_arr_trans()
         mcdu_data.page_data[606].curr_page = 1
     else
@@ -218,13 +219,11 @@ end
 
 
 function THIS_PAGE:sel_trans(mcdu_data, i)
-    if not FMGS_does_temp_fpln_exist() then
-        FMGS_create_temp_fpln()
-        --FMGS_copy_dep_rwy_active_to_temp()
-        --FMGS_copy_dep_sid_active_to_temp() TODO
-    end
 
     if mcdu_data.page_data[606].trans_references[i] > 0 then
+        if not FMGS_does_temp_fpln_exist() then
+            FMGS_create_copy_temp_fpln()
+        end
         FMGS_arr_set_trans(mcdu_data.page_data[606].curr_fpln.apts.arr_cifp.stars[mcdu_data.page_data[606].trans_references[i]])
     else
         MCDU_Page:R2(mcdu_data) -- Error

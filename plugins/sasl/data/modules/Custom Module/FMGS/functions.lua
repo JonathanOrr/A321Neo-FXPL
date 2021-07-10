@@ -198,17 +198,24 @@ function FMGS_dep_set_rwy(rwy, sibling)
     FMGS_sys.fpln.temp.apts.dep_rwy = {rwy, sibling}
 end
 
-function FMGS_copy_dep_rwy_active_to_temp()
-    FMGS_sys.fpln.temp.apts.dep_rwy = FMGS_sys.fpln.active.apts.dep_rwy
-end
-
 -------------------------------------------------------------------------------
 -- SID/STAR/TRANS
 -------------------------------------------------------------------------------
 
+function FMGS_reset_dep_sid()
+    FMGS_sys.fpln.temp.apts.dep_sid = nil
+end
 
 function FMGS_reset_dep_trans()
     FMGS_sys.fpln.temp.apts.dep_trans = nil
+end
+
+function FMGS_reset_arr_star()
+    FMGS_sys.fpln.temp.apts.arr_star = nil
+end
+
+function FMGS_reset_arr_via()
+    FMGS_sys.fpln.temp.apts.arr_via = nil
 end
 
 function FMGS_reset_arr_trans()
@@ -230,6 +237,10 @@ function FMGS_reset_dep_arr_airports()
     FMGS_sys.fpln.active.apts.arr = nil
     FMGS_sys.fpln.active.apts.arr_cifp = nil
     FMGS_sys.fpln.active.apts.arr_rwy = nil
+    FMGS_sys.fpln.active.apts.arr_appr=nil
+    FMGS_sys.fpln.active.apts.arr_star=nil
+    FMGS_sys.fpln.active.apts.arr_trans=nil
+    FMGS_sys.fpln.active.apts.arr_via=nil
     
     FMGS_sys.fpln.temp = nil
 end
@@ -256,10 +267,6 @@ end
 
 function FMGS_dep_set_trans(trans)
     FMGS_sys.fpln.temp.apts.dep_trans = trans
-end
-
-function FMGS_copy_dep_sid_active_to_temp()
-    FMGS_sys.fpln.temp.apts.dep_sid = FMGS_sys.fpln.active.apts.dep_sid
 end
 
 function FMGS_arr_set_appr(appr, rwy, sibling)
@@ -368,6 +375,17 @@ function FMGS_create_temp_fpln()
     FMGS_sys.fpln.temp.next_leg = FMGS_sys.fpln.active.next_leg
 
 end
+
+function FMGS_create_copy_temp_fpln()
+
+    FMGS_create_temp_fpln()
+
+    for k,x in pairs(FMGS_sys.fpln.active.apts) do
+        FMGS_sys.fpln.temp.apts[k] = FMGS_sys.fpln.active.apts[k]
+    end
+
+end
+
 
 function FMGS_erase_temp_fpln()
     FMGS_sys.fpln.temp = nil

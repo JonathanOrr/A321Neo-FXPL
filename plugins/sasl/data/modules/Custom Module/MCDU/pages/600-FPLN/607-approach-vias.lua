@@ -88,12 +88,11 @@ end
 
 function THIS_PAGE:sel_via(mcdu_data, i)
     
-    if not FMGS_does_temp_fpln_exist() then
-        FMGS_create_temp_fpln()
-        FMGS_copy_dep_rwy_active_to_temp()
-    end
     
     if mcdu_data.page_data[607].via_references[i] > 0 then
+        if not FMGS_does_temp_fpln_exist() then
+            FMGS_create_temp_fpln()
+        end
         FMGS_arr_set_via(FMGS_arr_get_available_vias(true)[mcdu_data.page_data[607].via_references[i]])
         mcdu_data.page_data[607].curr_page = 1
     else
