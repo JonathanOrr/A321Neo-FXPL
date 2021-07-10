@@ -15,13 +15,10 @@
 -- File: MCDU_popup.lua 
 -- Short description: MCDU popup code
 -------------------------------------------------------------------------------
-size = { 877 , 1365 }
+size = { 826, 1289 }
 
 
-local MCDU_OVERLAY = sasl.gl.loadImage("textures/MCDU.png", 0, 0, 877, 1365)
-local MCDU_OVERLAY_LIT = sasl.gl.loadImage("textures/MCDU_LIT.png", 0, 0, 877, 1365)
-local MCDU_OVERLAY_LUT = sasl.gl.loadImage("textures/MCDU_LUT.png", 0, 0, 877, 1365)
-local screen_lut_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/LUT.png")
+local texture_mcdu_background = sasl.gl.loadImage("textures/MCDU/popup.png", 0, 0, 826, 1289)
 
 local WHITELIST = "1234567890qwertyuiopasdfghjklzxcvbnm./ "
 
