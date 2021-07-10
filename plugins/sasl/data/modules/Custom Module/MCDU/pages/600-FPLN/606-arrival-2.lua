@@ -46,6 +46,14 @@ function THIS_PAGE:render_trans(mcdu_data)
         end
     end
 
+    -- If only one star exists, let's select it
+    if mcdu_data.page_data[606].trans_length == 1 and not FMGS_arr_get_trans() and FMGS_does_temp_fpln_exist() then
+        for k,idx in pairs(trans_list) do
+            FMGS_arr_set_trans(mcdu_data.page_data[606].curr_fpln.apts.arr_cifp.stars[idx])
+            break -- Well, actually only one is in the array
+        end
+    end
+
     mcdu_data.page_data[606].trans_references = {0,0,0}    -- These will contain the references for buttons
 
     local i = 0
@@ -61,7 +69,10 @@ function THIS_PAGE:render_trans(mcdu_data)
             n_line = n_line + 1
         end
     end
-    
+
+    if mcdu_data.page_data[606].trans_length > 3 then
+        self:set_updn_arrows_bottom(mcdu_data, true)
+    end
 
 end
 
@@ -117,7 +128,10 @@ function THIS_PAGE:render_star(mcdu_data, sel_rwy, sibl)
             n_line = n_line + 1
         end
     end
-    
+
+    if mcdu_data.page_data[606].star_length > 3 then
+        self:set_updn_arrows_bottom(mcdu_data, true)
+    end
 end
 
 function THIS_PAGE:render(mcdu_data)
@@ -134,6 +148,7 @@ function THIS_PAGE:render(mcdu_data)
     mcdu_data.page_data[606].curr_fpln = FMGS_get_current_fpln()
 
     self:set_lr_arrows(mcdu_data, true)
+    self:set_updn_arrows_bottom(mcdu_data, false)   -- Will be changed later in the code
 
     local subject_id = mcdu_data.lat_rev_subject.data.id
 
@@ -149,8 +164,6 @@ function THIS_PAGE:render(mcdu_data)
     self:set_line(mcdu_data, MCDU_RIGHT, 1, "STAR ", MCDU_SMALL)
     self:set_line(mcdu_data, MCDU_CENTER, 1, "VIA", MCDU_SMALL)
     self:set_line(mcdu_data, MCDU_RIGHT, 2, "TRANS ", MCDU_SMALL)
-    self:set_line(mcdu_data, MCDU_LEFT, 2, " APPR", MCDU_SMALL)
-    self:set_line(mcdu_data, MCDU_LEFT, 2, "<VIAS", MCDU_LARGE)
     self:set_line(mcdu_data, MCDU_LEFT, 3, "STARS  AVAILABLE   TRANS", MCDU_SMALL)
 
     if FMGS_does_temp_fpln_exist() then
@@ -168,6 +181,11 @@ function THIS_PAGE:render(mcdu_data)
         self:render_star(mcdu_data, rwy, sibl)
         self:render_trans(mcdu_data)
     end
+
+    if FMGS_arr_get_star(true) and #FMGS_arr_get_available_vias(true) > 1 then
+        self:set_line(mcdu_data, MCDU_LEFT, 2, " APPR", MCDU_SMALL)
+        self:set_line(mcdu_data, MCDU_LEFT, 2, "<VIAS", MCDU_LARGE)
+    end
 end
 
 function THIS_PAGE:render_top_data(mcdu_data)
@@ -177,6 +195,9 @@ function THIS_PAGE:render_top_data(mcdu_data)
     local appr_name  = dest_get_selected_appr_procedure()
     local star_name  = FMGS_arr_get_star(true) and FMGS_arr_get_star(true).proc_name or nil
     local via_name   = FMGS_arr_get_via(true) and FMGS_arr_get_via(true).trans_name or nil
+    if FMGS_arr_get_star(true) and via_name == nil and #FMGS_arr_get_available_vias(true) <= 1 then
+        via_name = "NONE"
+    end
     local trans_name = FMGS_arr_get_trans(true) and FMGS_arr_get_trans(true).trans_name or nil
     self:set_line(mcdu_data, MCDU_LEFT,  1, appr_name and appr_name or "------", MCDU_LARGE, appr_name and main_col or ECAM_WHITE)
     self:set_line(mcdu_data, MCDU_RIGHT, 1, star_name and star_name or "------", MCDU_LARGE, star_name and main_col or ECAM_WHITE)
@@ -186,7 +207,11 @@ function THIS_PAGE:render_top_data(mcdu_data)
 end
 
 function THIS_PAGE:L2(mcdu_data)
-    mcdu_open_page(mcdu_data, 607)
+    if #FMGS_arr_get_available_vias(true) > 1 then
+        mcdu_open_page(mcdu_data, 607)
+    else
+        MCDU_Page:L2(mcdu_data) -- Error
+    end
 end
 
 function THIS_PAGE:sel_star(mcdu_data, i)
@@ -200,6 +225,12 @@ function THIS_PAGE:sel_star(mcdu_data, i)
         FMGS_arr_set_star(mcdu_data.page_data[606].curr_fpln.apts.arr_cifp.stars[mcdu_data.page_data[606].star_references[i]])
         FMGS_reset_arr_via()
         FMGS_reset_arr_trans()
+
+        local available_vias = FMGS_arr_get_available_vias(true)
+        if #available_vias == 2 then
+            FMGS_arr_set_via(available_vias[2])
+        end
+
         mcdu_data.page_data[606].curr_page = 1
     else
         MCDU_Page:L2(mcdu_data) -- Error

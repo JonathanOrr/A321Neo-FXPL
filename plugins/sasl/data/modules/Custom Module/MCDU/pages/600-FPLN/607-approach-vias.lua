@@ -43,6 +43,11 @@ function THIS_PAGE:render_via(mcdu_data)
         end
     end
     mcdu_data.page_data[607].via_length = #vias
+
+    if mcdu_data.page_data[607].via_length > 3 then
+        self:set_updn_arrows_bottom(mcdu_data, true)
+    end
+
 end
 
 function THIS_PAGE:render(mcdu_data)
