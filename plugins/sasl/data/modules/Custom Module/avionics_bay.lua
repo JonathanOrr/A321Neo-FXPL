@@ -1,3 +1,4 @@
+---@diagnostic disable: undefined-field
 -------------------------------------------------------------------------------
 -- A32NX Freeware Project
 -- Copyright (C) 2020
@@ -166,25 +167,32 @@ local function convert_cifp_array(rawdata, cifp_arr)
             assert(l.leg_type)
             table.insert(new_dat.legs, {
                 leg_name = ffi.string(l.leg_name, l.leg_name_len),
-                turn_direction = ("").char(l.turn_direction),
-                leg_type = l.leg_type,
+                center_fix = ffi.string(l.center_fix, l.center_fix_len),
+                recomm_navaid = ffi.string(l.recomm_navaid, l.recomm_navaid_len),
                 radius = l.radius,
+                cstr_altitude1 = l.cstr_altitude1,
+                cstr_altitude2 = l.cstr_altitude2,
+                cstr_speed = l.cstr_speed,
                 theta = l.theta,
                 rho = l.rho,
                 outb_mag = l.outb_mag,
                 rte_hold = l.rte_hold,
-                outb_mag_in_true = l.outb_mag_in_true,
-                rte_hold_in_time = l.rte_hold_in_time,
+                vpath_angle = l.vpath_angle,
+
+                leg_type = l.leg_type,
                 cstr_alt_type = l.cstr_alt_type,
-                cstr_altitude1 = l.cstr_altitude1,
-                cstr_altitude2 = l.cstr_altitude2,
+                cstr_speed_type = l.cstr_speed_type,
+                turn_direction = ("").char(l.turn_direction),
                 cstr_altitude1_fl = l.cstr_altitude1_fl,
                 cstr_altitude2_fl = l.cstr_altitude2_fl,
-                cstr_speed_type = l.cstr_speed_type,
-                cstr_speed = l.cstr_speed,
-                vpath_angle = l.vpath_angle,
-                center_fix = ffi.string(l.center_fix, l.center_fix_len),
-                recomm_navaid = ffi.string(l.recomm_navaid, l.recomm_navaid_len),
+                outb_mag_in_true = l.outb_mag_in_true,
+                rte_hold_in_time = l.rte_hold_in_time,
+
+                fly_over_wpt = l.fly_over_wpt,
+                approach_iaf = l.approach_iaf,
+                approach_if  = l.approach_if,
+                approach_faf = l.approach_faf,
+                holding_fix  = l.holding_fix
             })
         end
         

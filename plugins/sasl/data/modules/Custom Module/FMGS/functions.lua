@@ -312,6 +312,42 @@ function FMGS_arr_set_via(via)
 end
 
 
+function FMGS_arr_get_available_vias(ret_temp_if_avail)
+
+    local curr_fpln = ret_temp_if_avail and (FMGS_sys.fpln.temp or FMGS_sys.fpln.active) or FMGS_sys.fpln.active
+
+    if not curr_fpln.apts.arr_appr or not curr_fpln.apts.arr_cifp then
+        return {}   -- No approach selected
+    end
+
+    local toret = {{trans_name="NO VIA", novia=true}}
+
+    if not curr_fpln.apts.arr_star or #curr_fpln.apts.arr_star.legs==0 then
+        -- If I do NOT select a STAR, the listed VIA are all the IAF points for that approach
+        for _,x in ipairs(curr_fpln.apts.arr_cifp.apprs) do
+            if x.type == CIFP_TYPE_APPR_APP_TRANS and x.proc_name == curr_fpln.apts.arr_appr.proc_name then
+                table.insert(toret, x)
+            end
+        end
+    else
+        -- If I DO select a STAR, the listed VIA are all the STAR waypoints that are also IAF points for that approach
+        for _,x in ipairs(curr_fpln.apts.arr_cifp.apprs) do
+            if x.type == CIFP_TYPE_APPR_APP_TRANS and x.proc_name == curr_fpln.apts.arr_appr.proc_name then
+                for _,y in ipairs(curr_fpln.apts.arr_star.legs) do
+                    if x.trans_name == y.leg_name then
+                        table.insert(toret, x)
+                    end
+                end
+                
+            end
+        end
+    end
+
+    return toret
+end
+
+
+
 -------------------------------------------------------------------------------
 -- F/PLN
 -------------------------------------------------------------------------------
