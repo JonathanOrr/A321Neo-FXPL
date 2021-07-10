@@ -127,10 +127,13 @@ function THIS_PAGE:render_top_data(mcdu_data)
 
     local appr_name = dest_get_selected_appr_procedure()
     local star_name = FMGS_arr_get_star(true) and FMGS_arr_get_star(true).proc_name or nil
+    local via_name   = FMGS_arr_get_via(true) and FMGS_arr_get_via(true).trans_name or nil
+    local trans_name = FMGS_arr_get_trans(true) and FMGS_arr_get_trans(true).trans_name or nil
+
     self:set_line(mcdu_data, MCDU_LEFT,  1, appr_name and appr_name or "------", MCDU_LARGE, appr_name and main_col or ECAM_WHITE)
     self:set_line(mcdu_data, MCDU_RIGHT, 1, star_name and star_name or "------", MCDU_LARGE, star_name and main_col or ECAM_WHITE)
-    self:set_line(mcdu_data, MCDU_CENTER,1, " ------", MCDU_LARGE, main_col)
-    self:set_line(mcdu_data, MCDU_RIGHT, 2, "------", MCDU_LARGE,  main_col)
+    self:set_line(mcdu_data, MCDU_CENTER,1, via_name and " " .. via_name or " ------", MCDU_LARGE, via_name and main_col or ECAM_WHITE)
+    self:set_line(mcdu_data, MCDU_RIGHT, 2, trans_name and trans_name or "------", MCDU_LARGE,  trans_name and main_col or ECAM_WHITE)
 
 end
 
