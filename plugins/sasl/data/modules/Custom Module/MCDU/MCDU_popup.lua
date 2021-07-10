@@ -203,11 +203,7 @@ for i,click_rect in ipairs(CLICK_RECTS) do
 end
 
 function draw()
-    lit = get(globalPropertyf("sim/graphics/misc/light_attenuation")) 
-    sasl.gl.drawTexture(MCDU_OVERLAY, 0, 0, 877, 1365)
-    sasl.gl.drawTexture(MCDU_OVERLAY, 0, 0, 877, 1365,{0,0,0,lit*lit-0.1})
-    sasl.gl.drawTexture(MCDU_OVERLAY_LIT, 0, 0, 877, 1365, {1, 1, 1, lit})
-
+    sasl.gl.drawTexture(texture_mcdu_background, 0, 0, 826, 1289)
 
     -- draw close and popout buttons
     if MCDU_window:getMode() == SASL_CW_MODE_FREE then
@@ -216,7 +212,7 @@ function draw()
     sasl.gl.drawCircle ( size[1] - 25 , size[2] - 25 , 12, true , {0.5, 0.5, 0.5})
     --MCDU_window:setMode (SASL_CW_MODE_POPOUT)
 
-    sasl.gl.drawTexture(MCDU_popup_texture, 150, 720, 560, 530, {1,1,1})
+    sasl.gl.drawTexture(MCDU_popup_texture, 134, 668, 560, 530, {1,1,1})
 
     -- dragging
     if mouse == "DOWN" and MCDU_window:getMode() ~= SASL_CW_MODE_POPOUT then
