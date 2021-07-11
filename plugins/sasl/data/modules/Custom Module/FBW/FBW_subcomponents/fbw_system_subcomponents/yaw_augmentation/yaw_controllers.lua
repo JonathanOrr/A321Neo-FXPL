@@ -3,8 +3,8 @@ FBW.yaw.controllers = {
         output = 0,
         control = function ()
             --Yaw damper control
-            FBW.yaw.controllers.yaw_damper_PD.output = FBW_PID_BP_ADV(
-                FBW_PID_arrays.FBW_YAW_DAMPER_PID_array,
+            FBW.yaw.controllers.yaw_damper_PD.output = FBW_PID_BP(
+                FBW_PID_arrays.FBW_YAW_DAMPER_PID,
                 0,
                 FBW.rates.Yaw.x
             )
@@ -18,7 +18,7 @@ FBW.yaw.controllers = {
             end
         end,
         bp = function ()
-            FBW_PID_arrays.FBW_YAW_DAMPER_PID_array.Actual_output = get(Rudder_total) / 30
+            FBW_PID_arrays.FBW_YAW_DAMPER_PID.Actual_output = get(Rudder_total) / 30
         end,
     },
 
@@ -26,20 +26,20 @@ FBW.yaw.controllers = {
         output = 0,
         bumpless_transfer = function ()
             if get(FBW_lateral_flight_mode_ratio) == 0 or get(FBW_yaw_law) ~= FBW_NORMAL_LAW then
-                FBW_PID_arrays.FBW_NRM_YAW_PID_array.Integral = 0
+                FBW_PID_arrays.FBW_NRM_YAW_PID.Integral = 0
             end
         end,
         control = function ()
-            FBW.yaw.controllers.SI_demand_PID.output = FBW_PID_BP_ADV(
-                FBW_PID_arrays.FBW_NRM_YAW_PID_array,
+            FBW.yaw.controllers.SI_demand_PID.output = FBW_PID_BP(
+                FBW_PID_arrays.FBW_NRM_YAW_PID,
                 FBW.yaw.inputs.x_to_SI(get(Total_input_yaw)),
                 -get(Slide_slip_angle),
                 FBW.yaw.inputs.get_curr_turbolence()
             )
         end,
         bp = function ()
-            FBW_PID_arrays.FBW_NRM_YAW_PID_array.Desired_output = FBW_PID_arrays.FBW_NRM_YAW_PID_array.Desired_output + FBW.yaw.controllers.yaw_damper_PD.output
-            FBW_PID_arrays.FBW_NRM_YAW_PID_array.Actual_output = get(Rudder_total) / 30
+            FBW_PID_arrays.FBW_NRM_YAW_PID.Desired_output = FBW_PID_arrays.FBW_NRM_YAW_PID.Desired_output + FBW.yaw.controllers.yaw_damper_PD.output
+            FBW_PID_arrays.FBW_NRM_YAW_PID.Actual_output = get(Rudder_total) / 30
         end
     },
 

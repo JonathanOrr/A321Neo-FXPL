@@ -55,8 +55,8 @@ function Elevator_control(vertical_input, in_direct_law)
     l_elev_target = Math_rescale(0, Math_rescale(0, max_dn_deflection, no_hyd_recenter_ias, -get(Alpha) - get(Horizontal_stabilizer_deflection), get(IAS)), 1450, l_elev_target, get(Hydraulic_G_press) + get(Hydraulic_B_press))
     r_elev_target = Math_rescale(0, Math_rescale(0, max_dn_deflection, no_hyd_recenter_ias, -get(Alpha) - get(Horizontal_stabilizer_deflection), get(IAS)), 1450, r_elev_target, get(Hydraulic_Y_press) + get(Hydraulic_B_press))
 
-    set(Elevators_hstab_1, Set_linear_anim_value(get(Elevators_hstab_1), l_elev_target, max_up_deflection, max_dn_deflection, l_elev_spd))
-    set(Elevators_hstab_2, Set_linear_anim_value(get(Elevators_hstab_2), r_elev_target, max_up_deflection, max_dn_deflection, r_elev_spd))
+    set(L_elevator, Set_linear_anim_value(get(L_elevator), l_elev_target, max_up_deflection, max_dn_deflection, l_elev_spd))
+    set(R_elevator, Set_linear_anim_value(get(R_elevator), r_elev_target, max_up_deflection, max_dn_deflection, r_elev_spd))
 end
 
 function XP_trim_up(phase)

@@ -28,10 +28,10 @@ local params = {
 
 function ecam_update_fctl_page()
     if get(TIME) - params.last_update > PARAM_DELAY then
-        params.L_aileron   = get(Left_aileron)
-        params.R_aileron   = get(Right_aileron)
-        params.L_elevator  = get(Elevators_hstab_1)
-        params.R_elevator  = get(Elevators_hstab_2)
+        params.L_aileron   = get(L_aileron)
+        params.R_aileron   = get(R_aileron)
+        params.L_elevator  = get(L_elevator)
+        params.R_elevator  = get(R_elevator)
         params.rudder      = get(Rudder_total)
         params.last_update = get(TIME)
     end
