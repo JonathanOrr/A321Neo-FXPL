@@ -24,7 +24,7 @@ include('MCDU/common_MCDU.lua')
 
 local mcdu_data = {}
 init_data(mcdu_data, 1)
-init_mcdu_handlers("", mcdu_data)   -- TODO Replace "" with "capt/"
+init_mcdu_handlers(mcdu_data, "")
 
 MCDU.captain_side_data = mcdu_data
 

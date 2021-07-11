@@ -180,7 +180,7 @@ function THIS_PAGE:render(mcdu_data)
 
     self:set_line(mcdu_data, MCDU_CENTER, 6, "EOSID", MCDU_SMALL)
     if THIS_PAGE.eosid then
-        self:set_line(mcdu_data, MCDU_CENTER, 6, x.proc_name, MCDU_LARGE, THIS_PAGE.main_col)
+        self:set_line(mcdu_data, MCDU_CENTER, 6, THIS_PAGE.eosid.proc_name, MCDU_LARGE, THIS_PAGE.main_col)
     else
         self:set_line(mcdu_data, MCDU_CENTER, 6, " NONE", MCDU_LARGE, ECAM_WHITE)
     end
@@ -189,8 +189,8 @@ end
 function THIS_PAGE:sel_sid(mcdu_data, i)
     
     if not FMGS_does_temp_fpln_exist() then
-        FMGS_create_temp_fpln()
-        FMGS_copy_dep_rwy_active_to_temp()
+        FMGS_create_copy_temp_fpln()
+        FMGS_reset_dep_trans()
     end
     
     if THIS_PAGE.sid_references[i] > 0 then
@@ -205,9 +205,7 @@ end
 
 function THIS_PAGE:sel_trans(mcdu_data, i)
     if not FMGS_does_temp_fpln_exist() then
-        FMGS_create_temp_fpln()
-        FMGS_copy_dep_rwy_active_to_temp()
-        FMGS_copy_dep_sid_active_to_temp()     
+        FMGS_create_copy_temp_fpln()
     end
 
     if THIS_PAGE.trans_references[i] > 0 then

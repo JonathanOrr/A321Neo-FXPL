@@ -21,17 +21,16 @@ addSearchPath(moduleDirectory .. "/Custom Module/display_pop-ups/")
 
  --windows
 MCDU_window = contextWindow {
-  name = "Airbus MCDU";
-  position = { 150 , 150 , 463 , 683 };
+  name = "Captain MCDU";
+  position = { 150 , 150 , 413 , 644 };
   noBackground = true ;
-  proportional = false ;
-  minimumSize = { 463 , 683 };
-  maximumSize = { 877 , 1365 };
+  proportional = true ;
+  minimumSize = { 413 , 644 };
+  maximumSize = { 826, 1290 };
   gravity = { 0 , 1 , 0 , 1 };
   visible = false ;
-  noDecore = true ;
   components = {
-    MCDU_popup {position = { 0 , 0 , 463 , 683 }, focused = true}
+    MCDU_popup {position = { 0 , 0 , 413 , 644 }, focused = true}
   };
 }
 

@@ -84,3 +84,46 @@ function cifp_convert_alt_cstr(x)
     return nil, nil
 end
 
+function appr_type_char_to_idx(x)
+    if x == CIFP_TYPE_APPR_MLS then
+        return 1, "MLS"
+    elseif x == CIFP_TYPE_APPR_ILS then
+        return 2, "ILS"
+    elseif x == CIFP_TYPE_APPR_GLS then
+        return 3, "GLS"
+    elseif x == CIFP_TYPE_APPR_IGS then
+        return 4, "IGS"
+    elseif x == CIFP_TYPE_APPR_LOC_ONLY then
+        return 5, "LOC"
+    elseif x == CIFP_TYPE_APPR_LOC_BC then
+        return 6, "BAC"
+    elseif x == CIFP_TYPE_APPR_LDA then
+        return 7, "LDA"
+    elseif x == CIFP_TYPE_APPR_SDF then
+        return 8, "SDF"
+    elseif x == CIFP_TYPE_APPR_GPS then
+        return 9, "GPS"
+    elseif x == CIFP_TYPE_APPR_RNAV then
+        return 10, "RNAV"
+    elseif x == CIFP_TYPE_APPR_VOR or x == CIFP_TYPE_APPR_VORDMETAC then
+        return 11, "VOR"
+    elseif x == CIFP_TYPE_APPR_NDB or x == CIFP_TYPE_APPR_NDBDME then
+        return 12, "NDB"
+    elseif x == CIFP_TYPE_APPR_RWY_DIRECT then
+        return 13, "RWY"
+    else
+        return nil, nil
+    end
+end
+
+
+function dest_get_selected_appr_procedure()
+    local appr_obj = FMGS_arr_get_appr(true)
+    if not appr_obj then
+        return nil
+    end
+    local _, type_str = appr_type_char_to_idx(appr_obj.type)
+    local rwy_name_with_suffix = appr_obj.proc_name:sub(2)
+    local appr_name = type_str .. rwy_name_with_suffix
+    return appr_name
+end
