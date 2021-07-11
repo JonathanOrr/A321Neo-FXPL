@@ -87,6 +87,10 @@ function mcdu_wind_to_str(dir, speed)
     return mcdu_pad_num(math.floor(dir), 3).."°/"..mcdu_pad_num(math.floor(speed), 3)
 end
 
+function mcdu_fl_to_str(fl)
+  return "FL"..mcdu_pad_num(math.floor(fl), 3)
+end
+
 function mcdu_format_force_to_small(text)
 
     if type(text) ~= "string" then

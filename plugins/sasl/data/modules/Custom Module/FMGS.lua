@@ -46,14 +46,21 @@ FMGS_sys.data = {
             rsv_fuel      = nil,
         }
     },
-    
+
     pred = {    -- Various predictions
         trip_fuel = nil,
         trip_time = nil,
         trip_dist = nil,
         efob = nil,
     },
+
+    winds = {}
 }
+
+FMGS_sys.data.winds[FMGS_PHASE_CLIMB] = {}
+FMGS_sys.data.winds[FMGS_PHASE_CRUISE] = {}
+FMGS_sys.data.winds[FMGS_PHASE_DESCENT] = {}
+
 FMGS_sys.fpln = {
 
     active = {
