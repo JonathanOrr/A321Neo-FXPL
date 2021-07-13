@@ -154,7 +154,7 @@ function THIS_PAGE:R1(mcdu_data)
         mcdu_send_message(mcdu_data, "NOT IN DATABASE")
     else
         mcdu_data.entry = {text="", color=nil}
-        mcdu_open_page(mcdu_data, 404)
+        mcdu_open_page(mcdu_data, 403)
     end
     
 end
@@ -225,7 +225,7 @@ function THIS_PAGE:L5(mcdu_data)
 end
 
 function THIS_PAGE:R5(mcdu_data)
-    mcdu_open_page(mcdu_data, 403)
+    mcdu_open_page(mcdu_data, 404)
 end
 
 

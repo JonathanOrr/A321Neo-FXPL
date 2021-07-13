@@ -446,3 +446,20 @@ end
 function FMGS_get_next_leg_id()
     return FMGS_sys.fpln.active.next_leg
 end
+
+
+-------------------------------------------------------------------------------
+-- Winds
+-------------------------------------------------------------------------------
+function FMGS_winds_clear_wind(phase, idx)
+  table.remove(FMGS_sys.data.winds[phase], idx)
+end
+
+function FMGS_winds_get_winds(phase)
+  table.sort(FMGS_sys.data.winds[phase], function(a, b) return a.fl > b.fl end)
+  return FMGS_sys.data.winds[phase]
+end
+
+function FMGS_winds_set_wind(phase, dir, spd, fl, pos)
+  table.insert(FMGS_sys.data.winds[phase], {fl = fl, dir = dir, spd = spd})
+end
