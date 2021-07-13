@@ -461,5 +461,5 @@ function FMGS_winds_get_winds(phase)
 end
 
 function FMGS_winds_set_wind(phase, dir, spd, fl, pos)
-  table.insert(FMGS_sys.data.winds[phase], {fl = fl, dir = dir, spd = spd})
+    table.insert(FMGS_sys.data.winds[phase], {fl = fl, dir = dir, spd = spd, pos = pos})
 end
