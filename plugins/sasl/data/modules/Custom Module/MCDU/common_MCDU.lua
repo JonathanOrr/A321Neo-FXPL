@@ -151,13 +151,13 @@ end
 
 MCDU.send_message = function(message, color)
     mcdu_send_message(MCDU.captain_side_data, message, color)
-    --mcdu_send_message(MCDU.fo_side_data, message) TODO
+    mcdu_send_message(MCDU.fo_side_data, message, color)
 end
 MCDU.force_update = function()
     mcdu_force_update(MCDU.captain_side_data)
-    --mcdu_force_update(MCDU.fo_side_data, message) TODO
+    mcdu_force_update(MCDU.fo_side_data) 
 end
 MCDU.reset_fpln = function()
     mcdu_reset_fpln(MCDU.captain_side_data)
-    --mcdu_reset_fpln(MCDU.fo_side_data, message) TODO
+    mcdu_reset_fpln(MCDU.fo_side_data)
 end

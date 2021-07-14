@@ -1,4 +1,3 @@
-local entry_cooldown = 0
 local mcdu_inp = {}
 
 local MCDU_ENTRIES = 
@@ -22,12 +21,10 @@ local MCDU_ENTRIES =
                 val = " "
             end
 
-            --if get(TIME) - entry_cooldown > get(DELTA_TIME) then
-                entry_cooldown = get(TIME)
-                if #mcdu_data.entry.text < 22 then
-                    mcdu_data.entry.text = mcdu_data.entry.text .. val
-                end
-            --end
+            if #mcdu_data.entry.text < 22 then
+                mcdu_data.entry.text = mcdu_data.entry.text .. val
+            end
+
         end
     },
     {
