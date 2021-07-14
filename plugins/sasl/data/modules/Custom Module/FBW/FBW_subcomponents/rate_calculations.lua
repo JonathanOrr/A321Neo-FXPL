@@ -27,6 +27,10 @@ FBW.rates ={
     Yaw = {
         x = 0,
     },
+    Slip = {
+        x = 0,
+        dataref = Slide_slip_angle
+    },
     Vpath_q = {
         x = 0,
         dataref = Vpath

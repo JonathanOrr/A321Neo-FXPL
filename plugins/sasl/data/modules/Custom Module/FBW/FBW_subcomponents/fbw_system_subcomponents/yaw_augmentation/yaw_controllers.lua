@@ -6,7 +6,7 @@ FBW.yaw.controllers = {
             FBW.yaw.controllers.yaw_damper_PD.output = FBW_PID_BP(
                 FBW_PID_arrays.FBW_YAW_DAMPER_PID,
                 0,
-                FBW.rates.Yaw.x
+                -FBW.rates.Slip.x
             )
             --law reconfiguration
             if get(FBW_yaw_law) == FBW_ALT_NO_PROT_LAW then
