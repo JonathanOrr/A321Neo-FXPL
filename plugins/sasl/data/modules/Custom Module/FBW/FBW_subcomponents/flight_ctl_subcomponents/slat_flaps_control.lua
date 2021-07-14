@@ -117,7 +117,7 @@ function Slats_flaps_calc_and_control()
     slat_spd = slat_spd * Table_interpolate(hyd_spd, get(Hydraulic_G_press) + get(Hydraulic_B_press))
     slat_spd = slat_spd * Table_interpolate(sfcc_spd, get(SFCC_1_status) + get(SFCC_2_status))
     flap_spd = flap_spd * Table_interpolate(hyd_spd, get(Hydraulic_G_press) + get(Hydraulic_Y_press))
-    flap_spd = flap_spd * Table_interpolate(sfcc_spd, get(SFCC_1_status) + get(SFCC_1_status))
+    flap_spd = flap_spd * Table_interpolate(sfcc_spd, get(SFCC_1_status) + get(SFCC_2_status))
 
     --slat alpha inhibit
     slat_spd = slat_spd * (1 - get(Slat_alpha_locked))

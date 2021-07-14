@@ -47,20 +47,20 @@ local alpha0s = {
 
 local vsw_aprot_alphas = {
     8.5,
-    13,
+    14,
+    14,
     13,
     12,
-    12,
-    11.5
+    11
 }
 
 local alpha_floor_alphas = {
     9.5,
+    15,
+    15,
+    15,
     14,
-    14,
-    13,
-    13,
-    12.5
+    13
 }
 
 local alpha_max_alphas = {
@@ -69,7 +69,7 @@ local alpha_max_alphas = {
     16,
     16,
     15,
-    15
+    14
 }
 
 --custom functions
@@ -403,12 +403,11 @@ function update()
     end
 
     --update smooth values of alpha speeds
-    if in_air_timer >= 5 then
-        set(Vaprot_vsw_smooth, Math_clamp_higher(adirs_get_avg_ias() * math.sqrt(Math_clamp_lower((get(Filtered_avg_AoA) - get(A0_AoA)) / (get(Aprot_AoA) - get(A0_AoA)), 0)), get(VMAX)))
-    else
-        set(Vaprot_vsw_smooth, Math_clamp_higher(adirs_get_avg_ias() * math.sqrt(Math_clamp_lower((get(Filtered_avg_AoA) - get(A0_AoA)) / (get(Amax_AoA) - get(A0_AoA)), 0)), get(VMAX)))
+    set(Vaprot_vsw_smooth, Math_clamp_higher(adirs_get_avg_ias() * math.sqrt(Math_clamp_lower((get(Filtered_avg_AoA) - get(A0_AoA)) / (get(Aprot_AoA) - get(A0_AoA)), 0)), get(VMAX)))
+    set(Valpha_MAX_smooth, Math_clamp_higher(adirs_get_avg_ias() * math.sqrt(Math_clamp_lower((get(Filtered_avg_AoA) - get(A0_AoA)) / (get(Amax_AoA)  - get(A0_AoA)), 0)), get(VMAX)))
+    if in_air_timer < 5 then
+        set(Vaprot_vsw_smooth, get(Valpha_MAX_smooth))
     end
-    set(Valpha_MAX_smooth, Math_clamp_higher(adirs_get_avg_ias() * math.sqrt(Math_clamp_lower((get(Filtered_avg_AoA) - get(A0_AoA)) / (get(Amax_AoA) - get(A0_AoA)), 0)), get(VMAX)))
 
     --VLS & alpha speeds update timer(accirding to video at 25fps updates every 3 <-> 4 frames: https://www.youtube.com/watch?v=3Suxhj9wQio&ab_channel=a321trainingteam)
     alpha_speed_update_timer = alpha_speed_update_timer + get(DELTA_TIME)
