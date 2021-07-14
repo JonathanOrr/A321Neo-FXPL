@@ -52,6 +52,16 @@ function init_data(mcdu_data, id)
     mcdu_data.page_data = {}    -- Custom data for each page
     mcdu_data.clr = false -- Is CLR active in the scratchpad or not?
 
+    mcdu_data.clear_the_clear = function()
+        local nr_msgs = #mcdu_data.messages
+        if nr_msgs > 0 and mcdu_data.messages[nr_msgs].isclr then
+            mcdu_data.entry = {text="", color=nil}
+            table.remove(mcdu_data.messages, nr_msgs)
+            mcdu_data.message_showing = false
+            mcdu_force_update(mcdu_data)
+        end
+    end
+
     for i,size in ipairs(MCDU_DIV_SIZE) do
 	    mcdu_data.dat[size] = {}
 	    for j,align in ipairs(MCDU_DIV_ALIGN) do
