@@ -223,8 +223,10 @@ function FMGS_reset_arr_trans()
 end
 
 function FMGS_reset_alt_airports()
-    FMGS_sys.fpln.temp.apts.alt = nil
-    FMGS_sys.fpln.temp.apts.alt_cifp = nil
+    if FMGS_sys.fpln.temp then
+        FMGS_sys.fpln.temp.apts.alt = nil
+        FMGS_sys.fpln.temp.apts.alt_cifp = nil
+    end
 end
 
 function FMGS_reset_dep_arr_airports()
