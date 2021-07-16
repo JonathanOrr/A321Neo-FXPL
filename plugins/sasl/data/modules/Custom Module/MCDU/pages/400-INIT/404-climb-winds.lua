@@ -58,13 +58,12 @@ end
 local function input_winds(mcdu_data, phase, i)
     if mcdu_data.clr then
         FMGS_winds_clear_wind(phase, i)
-        mcdu_data.clr = false
-        mcdu_send_message(mcdu_data, "")
+        mcdu_data.clear_the_clear()
         return
     end
     local input = mcdu_get_entry_simple(mcdu_data, {"###/###/###", "###/##/###", "###/###/FL###", "###/##/FL###"}, false)
     if input == nil then
-      --   MCDU.send_message(mcdu_data, "INVALID INPUT")
+        mcdu_send_message(mcdu_data, "INVALID INPUT")
         return
     end
     if FMGS_sys.data.winds[phase][i] ~= nil then
