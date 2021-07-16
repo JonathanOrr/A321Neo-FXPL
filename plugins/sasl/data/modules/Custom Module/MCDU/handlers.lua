@@ -33,6 +33,7 @@ local MCDU_ENTRIES =
         ref_entries = MCDU_ENTRY_PAGES,
         ref_callback = 
         function (mcdu_data, count, val)
+            mcdu_data.is_page_button_hit = true
             mcdu_open_page(mcdu_data,count * 100)
         end
     },

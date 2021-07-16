@@ -50,6 +50,7 @@ function init_data(mcdu_data, id)
     mcdu_data.v = {}    -- Various values used in MCDU
     mcdu_data.last_update = get(TIME)
     mcdu_data.page_data = {}    -- Custom data for each page
+    mcdu_data.is_page_button_hit = false    -- Tell you if the MCDU page has been just hit (you have to clear it if you need it)
 
     for i,size in ipairs(MCDU_DIV_SIZE) do
 	    mcdu_data.dat[size] = {}
