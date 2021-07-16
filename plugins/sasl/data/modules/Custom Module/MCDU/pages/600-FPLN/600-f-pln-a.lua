@@ -16,10 +16,6 @@
 
 local THIS_PAGE = MCDU_Page:new({id=600})
 
-THIS_PAGE.curr_idx  = 1
-THIS_PAGE.curr_fpln = nil
-THIS_PAGE.page_end  = false
-
 local POINT_TYPE_DISCONTINUITY = 1
 local POINT_TYPE_SIDTRANS      = 2
 local POINT_TYPE_LEG           = 3
@@ -29,8 +25,8 @@ local POINT_TYPE_STARAPPROACH  = 4
 -- DEPARTURE
 -------------------------------------------------------------------------------
 function THIS_PAGE:render_dep(mcdu_data)
-    local arpt_id    = THIS_PAGE.curr_fpln.apts.dep.id
-    local arpt_alt   = THIS_PAGE.curr_fpln.apts.dep.alt
+    local arpt_id    = mcdu_data.page_data[600].curr_fpln.apts.dep.id
+    local arpt_alt   = mcdu_data.page_data[600].curr_fpln.apts.dep.alt
 
     THIS_PAGE:render_single(mcdu_data, 1, arpt_id, "0000", nil, tostring(arpt_alt), nil, "", nil, nil, nil, true)
 
@@ -43,7 +39,7 @@ function THIS_PAGE:render_dest(mcdu_data)
     self:set_line(mcdu_data, MCDU_LEFT, 6, " DEST   TIME", MCDU_SMALL)
     self:set_line(mcdu_data, MCDU_RIGHT, 6, "DIST  EFOB", MCDU_SMALL)
 
-    local arr_id    = THIS_PAGE.curr_fpln.apts.arr.id
+    local arr_id    = mcdu_data.page_data[600].curr_fpln.apts.arr.id
     local trip_time = (FMGS_perf_get_pred_trip_time() and FMGS_perf_get_pred_trip_time() or "----")
     self:set_line(mcdu_data, MCDU_LEFT, 6, Aft_string_fill(arr_id, " ", 8, MCDU_LARGE) .. trip_time)
 
@@ -83,7 +79,7 @@ function THIS_PAGE:render_single(mcdu_data, i, id, time, spd, alt, alt_col, proc
             dist_text = Round(distance, 0) .. (i == 2 and "NM" or "  ")
         end
         dist_text = Fwd_string_fill(dist_text, " ", 6)
-        self:set_line(mcdu_data, MCDU_LEFT, i, " " .. Aft_string_fill(proc_name, " ", 8) .. brg_trk .. "  " .. dist_text, MCDU_SMALL, (i == 2 and THIS_PAGE.curr_idx == 1) and ECAM_WHITE or main_col)
+        self:set_line(mcdu_data, MCDU_LEFT, i, " " .. Aft_string_fill(proc_name, " ", 8) .. brg_trk .. "  " .. dist_text, MCDU_SMALL, (i == 2 and mcdu_data.page_data[600].curr_idx == 1) and ECAM_WHITE or main_col)
     end
     
 end
@@ -100,15 +96,15 @@ function THIS_PAGE:prepare_list(mcdu_data)
         {} -- First one is always empty (it represents the departure airport)
     }
 
-    if THIS_PAGE.curr_fpln.apts.dep_sid then
-        for i,x in ipairs(THIS_PAGE.curr_fpln.apts.dep_sid.legs) do
+    if mcdu_data.page_data[600].curr_fpln.apts.dep_sid then
+        for i,x in ipairs(mcdu_data.page_data[600].curr_fpln.apts.dep_sid.legs) do
             x.point_type = POINT_TYPE_SIDTRANS
             table.insert(list_messages, x)
         end
     end
-    if THIS_PAGE.curr_fpln.apts.dep_trans then
+    if mcdu_data.page_data[600].curr_fpln.apts.dep_trans then
         local i = 1
-        for _,x in ipairs(THIS_PAGE.curr_fpln.apts.dep_trans.legs) do
+        for _,x in ipairs(mcdu_data.page_data[600].curr_fpln.apts.dep_trans.legs) do
             if i>1 then
                 x.point_type = POINT_TYPE_SIDTRANS
                 table.insert(list_messages, x)
@@ -116,12 +112,12 @@ function THIS_PAGE:prepare_list(mcdu_data)
             i = i + 1
         end
     end
-    if THIS_PAGE.curr_fpln.legs then
-        if THIS_PAGE.curr_fpln.legs[1] and THIS_PAGE.curr_fpln.legs[1].id ~= list_messages[#list_messages].id then
+    if mcdu_data.page_data[600].curr_fpln.legs then
+        if mcdu_data.page_data[600].curr_fpln.legs[1] and mcdu_data.page_data[600].curr_fpln.legs[1].id ~= list_messages[#list_messages].id then
             -- Discontinuity between the SID/TRANS and the real FPLN
             table.insert(list_messages, {point_type = POINT_TYPE_DISCONTINUITY})
         end
-        for i,x in ipairs(THIS_PAGE.curr_fpln.legs) do
+        for i,x in ipairs(mcdu_data.page_data[600].curr_fpln.legs) do
             x.point_type = POINT_TYPE_LEG
             table.insert(list_messages, x)
         end
@@ -136,9 +132,9 @@ function THIS_PAGE:render_list(mcdu_data)
 
     local list_messages = THIS_PAGE:prepare_list(mcdu_data)
 
-    local start_i = THIS_PAGE.curr_idx + 1
-    local line_id = 2
-    local end_i = THIS_PAGE.curr_idx + 5
+    local start_i = mcdu_data.page_data[600].curr_idx + 1
+    local line_id = start_i == 2 and 2 or 1
+    local end_i = mcdu_data.page_data[600].curr_idx + 5
     
     local last_i = 1000000 -- Arbitrarly large
     for i=start_i,end_i do
@@ -159,7 +155,7 @@ function THIS_PAGE:render_list(mcdu_data)
             local x = list_messages[i]
             local name, proc = cifp_convert_leg_name(x)
             if #proc == 0 then
-                proc = THIS_PAGE.curr_fpln.apts.dep_sid.proc_name
+                proc = mcdu_data.page_data[600].curr_fpln.apts.dep_sid.proc_name
             end
             local alt_cstr, alt_cstr_col = cifp_convert_alt_cstr(x)
             local spd_cstr = x.cstr_speed_type ~= CIFP_CSTR_SPD_NONE and tostring(x.cstr_speed) or ""
@@ -176,10 +172,10 @@ function THIS_PAGE:render_list(mcdu_data)
         line_id = line_id + 1
     end
 
-    THIS_PAGE.page_end = false
+    mcdu_data.page_data[600].page_end = false
     if last_i < end_i then
         self:set_line(mcdu_data, MCDU_LEFT, line_id, "------END OF F-PLN------", MCDU_LARGE)
-        THIS_PAGE.page_end = true  -- TODO move after ALTN
+        mcdu_data.page_data[600].page_end = true  -- TODO move after ALTN
     end
 end
 
@@ -190,19 +186,25 @@ end
 
 function THIS_PAGE:render(mcdu_data)
 
-    THIS_PAGE.curr_fpln = FMGS_get_current_fpln()
+    if not mcdu_data.page_data[600] then
+        mcdu_data.page_data[600] = {}
+        mcdu_data.page_data[600].curr_idx  = 1
+        mcdu_data.page_data[600].page_end = false
+    end
 
-    local from_ppos = THIS_PAGE.curr_idx == 1 and (THIS_PAGE.curr_fpln.apts.dep and "FROM" or "PPOS") or ""
+    mcdu_data.page_data[600].curr_fpln = FMGS_get_current_fpln()
+
+    local from_ppos = mcdu_data.page_data[600].curr_idx == 1 and (mcdu_data.page_data[600].curr_fpln.apts.dep and "FROM" or "PPOS") or ""
     
     self:set_multi_title(mcdu_data, {
         {txt=Aft_string_fill(from_ppos, " ", 22), col=ECAM_WHITE, size=MCDU_SMALL},
-        {txt=Aft_string_fill(THIS_PAGE.curr_fpln == FMGS_does_temp_fpln_exist() and "TMPY" or "", " ", 12), col=ECAM_YELLOW, size=MCDU_LARGE},
+        {txt=Aft_string_fill(mcdu_data.page_data[600].curr_fpln == FMGS_does_temp_fpln_exist() and "TMPY" or "", " ", 12), col=ECAM_YELLOW, size=MCDU_LARGE},
         {txt=Fwd_string_fill(FMGS_init_get_flt_nbr() and FMGS_init_get_flt_nbr() or "", " ", 20) .. "  ", col=ECAM_WHITE, size=MCDU_SMALL}
     })
 
     self:set_lr_arrows(mcdu_data, true)
 
-    if THIS_PAGE.curr_fpln.apts.dep == nil or THIS_PAGE.curr_fpln.apts.arr == nil then
+    if mcdu_data.page_data[600].curr_fpln.apts.dep == nil or mcdu_data.page_data[600].curr_fpln.apts.arr == nil then
         self:set_line(mcdu_data, MCDU_LEFT, 2, "------END OF F-PLN------", MCDU_LARGE)
         return
     end
@@ -211,7 +213,7 @@ function THIS_PAGE:render(mcdu_data)
 
     self:set_line(mcdu_data, MCDU_RIGHT, 1, "TIME  SPD/ALT   ", MCDU_SMALL)
 
-    if THIS_PAGE.curr_idx == 1 then
+    if mcdu_data.page_data[600].curr_idx == 1 then
         THIS_PAGE:render_dep(mcdu_data)
     end
 
@@ -229,11 +231,11 @@ end
 
 
 function THIS_PAGE:L1(mcdu_data)
-    if THIS_PAGE.curr_idx == 1 then
-        if THIS_PAGE.curr_fpln.apts.dep then
+    if mcdu_data.page_data[600].curr_idx == 1 then
+        if mcdu_data.page_data[600].curr_fpln.apts.dep then
             mcdu_data.lat_rev_subject = {}
             mcdu_data.lat_rev_subject.type = 1 -- ORIGIN
-            mcdu_data.lat_rev_subject.data = THIS_PAGE.curr_fpln.apts.dep
+            mcdu_data.lat_rev_subject.data = mcdu_data.page_data[600].curr_fpln.apts.dep
         else
             mcdu_data.lat_rev_subject = {}
             mcdu_data.lat_rev_subject.type = 3 -- PPOS
@@ -247,10 +249,10 @@ function THIS_PAGE:L6(mcdu_data)
 
     if FMGS_does_temp_fpln_exist() then
         FMGS_erase_temp_fpln()
-    elseif THIS_PAGE.curr_fpln.apts.arr then
+    elseif mcdu_data.page_data[600].curr_fpln.apts.arr then
         mcdu_data.lat_rev_subject = {}
         mcdu_data.lat_rev_subject.type = 4 -- DEST
-        mcdu_data.lat_rev_subject.data = THIS_PAGE.curr_fpln.apts.arr
+        mcdu_data.lat_rev_subject.data = mcdu_data.page_data[600].curr_fpln.apts.arr
         mcdu_open_page(mcdu_data, 602)
     else
         MCDU_Page:L6(mcdu_data) -- ERROR
@@ -267,17 +269,17 @@ function THIS_PAGE:R6(mcdu_data)
 end
 
 function THIS_PAGE:Slew_Down(mcdu_data)
-    if THIS_PAGE.curr_idx - 1 > 0 then
-        THIS_PAGE.curr_idx = THIS_PAGE.curr_idx - 1
+    if mcdu_data.page_data[600].curr_idx - 1 > 0 then
+        mcdu_data.page_data[600].curr_idx = mcdu_data.page_data[600].curr_idx - 1
     else
-        THIS_PAGE.curr_idx = 1
+        mcdu_data.page_data[600].curr_idx = 1
         MCDU_Page:Slew_Down(mcdu_data)  -- Error
     end
 end
 
 function THIS_PAGE:Slew_Up(mcdu_data)
-    if not THIS_PAGE.page_end then
-        THIS_PAGE.curr_idx = THIS_PAGE.curr_idx + 1
+    if not mcdu_data.page_data[600].page_end then
+        mcdu_data.page_data[600].curr_idx = mcdu_data.page_data[600].curr_idx + 1
     else
         MCDU_Page:Slew_Up(mcdu_data)
     end
