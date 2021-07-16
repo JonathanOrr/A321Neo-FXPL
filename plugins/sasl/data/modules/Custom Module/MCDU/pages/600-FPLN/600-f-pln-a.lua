@@ -122,7 +122,7 @@ function THIS_PAGE:prepare_list(mcdu_data)
             table.insert(list_messages, x)
         end
     end
-    
+
     return list_messages
 end
 -------------------------------------------------------------------------------
@@ -131,6 +131,11 @@ end
 function THIS_PAGE:render_list(mcdu_data)
 
     local list_messages = THIS_PAGE:prepare_list(mcdu_data)
+
+    if mcdu_data.page_data[600].goto_last then
+        mcdu_data.page_data[600].goto_last = false
+        mcdu_data.page_data[600].curr_idx = math.max(1, #list_messages-4 + (FMGS_get_apt_alt() == nil and 1 or 4))
+    end
 
     local start_i = mcdu_data.page_data[600].curr_idx + 1
     local line_id = start_i == 2 and 2 or 1
@@ -172,11 +177,68 @@ function THIS_PAGE:render_list(mcdu_data)
         line_id = line_id + 1
     end
 
-    mcdu_data.page_data[600].page_end = false
-    if last_i < end_i then
+    if last_i < end_i or (last_i == end_i and line_id <= 5)  then
         self:set_line(mcdu_data, MCDU_LEFT, line_id, "------END OF F-PLN------", MCDU_LARGE)
-        mcdu_data.page_data[600].page_end = true  -- TODO move after ALTN
+        line_id = line_id + 1
     end
+
+    THIS_PAGE:render_list_altn(mcdu_data, line_id)
+
+end
+
+function THIS_PAGE:print_altn_list_airport(mcdu_data, line_id, apt, trip_time)
+    local arr_id    = apt.id
+    local arr_alt   = apt.alt
+    trip_time = trip_time or "----"
+    self:set_line(mcdu_data, MCDU_LEFT, line_id, Aft_string_fill(arr_id, " ", 8), MCDU_LARGE, ECAM_BLUE)
+    self:set_line(mcdu_data, MCDU_CENTER, line_id, " " .. trip_time .. "  ---", MCDU_LARGE, ECAM_WHITE)
+    self:set_line(mcdu_data, MCDU_RIGHT, line_id, "/" .. Fwd_string_fill(tostring(arr_alt)," ", 6), MCDU_LARGE, ECAM_BLUE)
+
+end
+
+function THIS_PAGE:render_list_altn(mcdu_data, line_id)
+    mcdu_data.page_data[600].page_end = false
+
+    if line_id >= 6 then
+        return  -- Outside the list
+    end
+
+    if FMGS_get_apt_alt() == nil then
+        self:set_line(mcdu_data, MCDU_LEFT, line_id, "-----NO ALTN F-PLN------", MCDU_LARGE)
+        mcdu_data.page_data[600].page_end = true
+        return
+    end
+
+    -- Arrival aiport
+    THIS_PAGE:print_altn_list_airport(mcdu_data, line_id, mcdu_data.page_data[600].curr_fpln.apts.arr, FMGS_perf_get_pred_trip_time())
+
+    line_id = line_id + 1 
+
+    if line_id >= 6 then
+        return  -- Outside the list
+    end
+
+    -- TODO: ALTN route
+    self:set_line(mcdu_data, MCDU_LEFT, line_id, "---F-PLN DISCONTINUITY--" , MCDU_LARGE)
+
+    line_id = line_id + 1 
+
+    if line_id >= 6 then
+        return  -- Outside the list
+    end
+
+    -- ALTN aiport
+    THIS_PAGE:print_altn_list_airport(mcdu_data, line_id, mcdu_data.page_data[600].curr_fpln.apts.alt, nil) -- TODO Trip time
+
+    line_id = line_id + 1 
+
+    if line_id >= 6 then
+        return  -- Outside the list
+    end
+
+    self:set_line(mcdu_data, MCDU_LEFT, line_id, "---END OF ALTN F-PLN----", MCDU_LARGE)
+
+    mcdu_data.page_data[600].page_end = true
 end
 
 -------------------------------------------------------------------------------
@@ -186,10 +248,12 @@ end
 
 function THIS_PAGE:render(mcdu_data)
 
-    if not mcdu_data.page_data[600] then
+    if not mcdu_data.page_data[600] or mcdu_data.is_page_button_hit then
         mcdu_data.page_data[600] = {}
         mcdu_data.page_data[600].curr_idx  = 1
         mcdu_data.page_data[600].page_end = false
+        mcdu_data.page_data[600].goto_last = false
+        mcdu_data.is_page_button_hit = false
     end
 
     mcdu_data.page_data[600].curr_fpln = FMGS_get_current_fpln()
@@ -272,8 +336,7 @@ function THIS_PAGE:Slew_Down(mcdu_data)
     if mcdu_data.page_data[600].curr_idx - 1 > 0 then
         mcdu_data.page_data[600].curr_idx = mcdu_data.page_data[600].curr_idx - 1
     else
-        mcdu_data.page_data[600].curr_idx = 1
-        MCDU_Page:Slew_Down(mcdu_data)  -- Error
+        mcdu_data.page_data[600].goto_last = true
     end
 end
 
@@ -281,7 +344,7 @@ function THIS_PAGE:Slew_Up(mcdu_data)
     if not mcdu_data.page_data[600].page_end then
         mcdu_data.page_data[600].curr_idx = mcdu_data.page_data[600].curr_idx + 1
     else
-        MCDU_Page:Slew_Up(mcdu_data)
+        mcdu_data.page_data[600].curr_idx = 1
     end
 end
 
