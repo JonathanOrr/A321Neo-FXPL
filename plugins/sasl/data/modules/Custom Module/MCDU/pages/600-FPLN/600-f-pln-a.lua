@@ -40,6 +40,10 @@ function THIS_PAGE:render_dest(mcdu_data)
     self:set_line(mcdu_data, MCDU_RIGHT, 6, "DIST  EFOB", MCDU_SMALL)
 
     local arr_id    = mcdu_data.page_data[600].curr_fpln.apts.arr.id
+    if mcdu_data.page_data[600].curr_fpln.apts.arr_rwy then
+        local rwy, sibl = FMGS_arr_get_rwy(false)
+        arr_id = arr_id .. (sibl and rwy.sibl_name or rwy.name)
+    end
     local trip_time = (FMGS_perf_get_pred_trip_time() and FMGS_perf_get_pred_trip_time() or "----")
     self:set_line(mcdu_data, MCDU_LEFT, 6, Aft_string_fill(arr_id, " ", 8, MCDU_LARGE) .. trip_time)
 
@@ -91,11 +95,7 @@ end
 -------------------------------------------------------------------------------
 -- Prepare list
 -------------------------------------------------------------------------------
-function THIS_PAGE:prepare_list(mcdu_data)
-    local list_messages = {
-        {} -- First one is always empty (it represents the departure airport)
-    }
-
+function THIS_PAGE:prepare_list_departure(mcdu_data, list_messages)
     if mcdu_data.page_data[600].curr_fpln.apts.dep_sid then
         for i,x in ipairs(mcdu_data.page_data[600].curr_fpln.apts.dep_sid.legs) do
             x.point_type = POINT_TYPE_SIDTRANS
@@ -112,6 +112,17 @@ function THIS_PAGE:prepare_list(mcdu_data)
             i = i + 1
         end
     end
+function THIS_PAGE:prepare_list_arrival(mcdu_data, list_messages)
+    local fpln = mcdu_data.page_data[600].curr_fpln
+end
+
+function THIS_PAGE:prepare_list(mcdu_data)
+    local list_messages = {
+        {} -- First one is always empty (it represents the departure airport)
+    }
+
+    THIS_PAGE:prepare_list_departure(mcdu_data, list_messages)
+
     if mcdu_data.page_data[600].curr_fpln.legs then
         if mcdu_data.page_data[600].curr_fpln.legs[1] and mcdu_data.page_data[600].curr_fpln.legs[1].id ~= list_messages[#list_messages].id then
             -- Discontinuity between the SID/TRANS and the real FPLN
@@ -123,6 +134,8 @@ function THIS_PAGE:prepare_list(mcdu_data)
         end
     end
 
+    THIS_PAGE:prepare_list_arrival(mcdu_data, list_messages)
+
     return list_messages
 end
 -------------------------------------------------------------------------------
@@ -132,32 +145,13 @@ function THIS_PAGE:render_list(mcdu_data)
 
     local list_messages = THIS_PAGE:prepare_list(mcdu_data)
 
-    if mcdu_data.page_data[600].goto_last then
-        mcdu_data.page_data[600].goto_last = false
-        mcdu_data.page_data[600].curr_idx = math.max(1, #list_messages-4 + (FMGS_get_apt_alt() == nil and 1 or 4))
-    end
-
-    local start_i = mcdu_data.page_data[600].curr_idx + 1
-    local line_id = start_i == 2 and 2 or 1
-    local end_i = mcdu_data.page_data[600].curr_idx + 5
-    
-    local last_i = 1000000 -- Arbitrarly large
-    for i=start_i,end_i do
-        if not list_messages[i] then
-            last_i = i
-            break   -- end of list, do not print other messages
-        end
-        
-        if line_id == 6 then    -- End of visible list
-            break
-        end
-        
-        local x = list_messages[i]
+    for i,x in ipairs(list_messages) do
         
         if x.point_type == POINT_TYPE_DISCONTINUITY then
-            THIS_PAGE:render_discontinuity(mcdu_data, line_id)
-        elseif x.point_type == POINT_TYPE_SIDTRANS then
-            local x = list_messages[i]
+            self:add_f(mcdu_data, function(line_id)
+                THIS_PAGE:render_discontinuity(mcdu_data, line_id)
+            end)
+        elseif x.point_type == POINT_TYPE_SIDTRANS or x.point_type == POINT_TYPE_STARAPPROACH then
             local name, proc = cifp_convert_leg_name(x)
             if #proc == 0 then
                 proc = mcdu_data.page_data[600].curr_fpln.apts.dep_sid.proc_name
@@ -165,80 +159,104 @@ function THIS_PAGE:render_list(mcdu_data)
             local alt_cstr, alt_cstr_col = cifp_convert_alt_cstr(x)
             local spd_cstr = x.cstr_speed_type ~= CIFP_CSTR_SPD_NONE and tostring(x.cstr_speed) or ""
             local distance = x.computed_distance
-            THIS_PAGE:render_single(mcdu_data, line_id, name, "----", spd_cstr, alt_cstr, alt_cstr_col, proc, nil, nil, distance, false, start_i == 2 and line_id == 2)
+            self:add_f(mcdu_data, function(line_id)
+                THIS_PAGE:render_single(mcdu_data, line_id, name, "----", spd_cstr, alt_cstr, alt_cstr_col, proc, nil, nil, distance, false, i == 2)
+            end)
         elseif x.point_type == POINT_TYPE_LEG then
             local distance = x.computed_distance
             local proc = "" -- TODO
             local alt_cstr, alt_cstr_col = nil, nil
             local spd_cstr = nil
             local name = x.id or "(MAN)"
-            THIS_PAGE:render_single(mcdu_data, line_id, name, "----", spd_cstr, alt_cstr, alt_cstr_col, proc, nil, nil, distance, false, false)
+            self:add_f(mcdu_data, function(line_id)
+                THIS_PAGE:render_single(mcdu_data, line_id, name, "----", spd_cstr, alt_cstr, alt_cstr_col, proc, nil, nil, distance, false, false)
+            end)
         end
-        line_id = line_id + 1
     end
 
-    if last_i < end_i or (last_i == end_i and line_id <= 5)  then
+    self:print_simple_airport(mcdu_data, mcdu_data.page_data[600].curr_fpln.apts.arr, FMGS_perf_get_pred_trip_time(), ECAM_GREEN)
+
+    self:add_f(mcdu_data, function(line_id)
         self:set_line(mcdu_data, MCDU_LEFT, line_id, "------END OF F-PLN------", MCDU_LARGE)
-        line_id = line_id + 1
-    end
-
-    THIS_PAGE:render_list_altn(mcdu_data, line_id)
-
+    end)
+    THIS_PAGE:render_list_altn(mcdu_data)
 end
 
-function THIS_PAGE:print_altn_list_airport(mcdu_data, line_id, apt, trip_time)
+function THIS_PAGE:print_simple_airport(mcdu_data, apt, trip_time, color)
     local arr_id    = apt.id
     local arr_alt   = apt.alt
     trip_time = trip_time or "----"
-    self:set_line(mcdu_data, MCDU_LEFT, line_id, Aft_string_fill(arr_id, " ", 8), MCDU_LARGE, ECAM_BLUE)
-    self:set_line(mcdu_data, MCDU_CENTER, line_id, " " .. trip_time .. "  ---", MCDU_LARGE, ECAM_WHITE)
-    self:set_line(mcdu_data, MCDU_RIGHT, line_id, "/" .. Fwd_string_fill(tostring(arr_alt)," ", 6), MCDU_LARGE, ECAM_BLUE)
 
+    local left_side  = arr_id
+    local ctr_side   = mcdu_format_force_to_small(" " .. trip_time .. "  ---")
+    local right_side = mcdu_format_force_to_small("/" .. Fwd_string_fill(tostring(arr_alt)," ", 6))
+
+    self:add_f(mcdu_data, function(line_id)
+        self:set_line(mcdu_data, MCDU_LEFT,   line_id, left_side, MCDU_LARGE, color)
+        self:set_line(mcdu_data, MCDU_CENTER, line_id, ctr_side, MCDU_LARGE, ECAM_WHITE)
+        self:set_line(mcdu_data, MCDU_RIGHT,  line_id, right_side, MCDU_LARGE, color)
+    end)
 end
 
-function THIS_PAGE:render_list_altn(mcdu_data, line_id)
+function THIS_PAGE:render_list_altn(mcdu_data, last_i, end_i)
     mcdu_data.page_data[600].page_end = false
 
-    if line_id >= 6 then
-        return  -- Outside the list
-    end
-
     if FMGS_get_apt_alt() == nil then
-        self:set_line(mcdu_data, MCDU_LEFT, line_id, "-----NO ALTN F-PLN------", MCDU_LARGE)
-        mcdu_data.page_data[600].page_end = true
+        self:add_f(mcdu_data, function(line_id)
+            self:set_line(mcdu_data, MCDU_LEFT, line_id, "-----NO ALTN F-PLN------", MCDU_LARGE)
+        end)
         return
     end
 
     -- Arrival aiport
-    THIS_PAGE:print_altn_list_airport(mcdu_data, line_id, mcdu_data.page_data[600].curr_fpln.apts.arr, FMGS_perf_get_pred_trip_time())
-
-    line_id = line_id + 1 
-
-    if line_id >= 6 then
-        return  -- Outside the list
-    end
+    THIS_PAGE:print_simple_airport(mcdu_data, mcdu_data.page_data[600].curr_fpln.apts.arr, FMGS_perf_get_pred_trip_time(), ECAM_BLUE)
 
     -- TODO: ALTN route
-    self:set_line(mcdu_data, MCDU_LEFT, line_id, "---F-PLN DISCONTINUITY--" , MCDU_LARGE)
-
-    line_id = line_id + 1 
-
-    if line_id >= 6 then
-        return  -- Outside the list
-    end
+    self:add_f(mcdu_data, function(line_id)
+        self:set_line(mcdu_data, MCDU_LEFT, line_id, "---F-PLN DISCONTINUITY--" , MCDU_LARGE)
+    end)
 
     -- ALTN aiport
-    THIS_PAGE:print_altn_list_airport(mcdu_data, line_id, mcdu_data.page_data[600].curr_fpln.apts.alt, nil) -- TODO Trip time
+    THIS_PAGE:print_simple_airport(mcdu_data, mcdu_data.page_data[600].curr_fpln.apts.alt, nil, ECAM_BLUE) -- TODO Trip time
 
-    line_id = line_id + 1 
+    self:add_f(mcdu_data, function(line_id)
+        self:set_line(mcdu_data, MCDU_LEFT, line_id, "---END OF ALTN F-PLN----", MCDU_LARGE)
+    end)
+ 
+    mcdu_data.page_data[600].page_end = true
+end
 
-    if line_id >= 6 then
-        return  -- Outside the list
+
+function THIS_PAGE:add_f(mcdu_data, add_f)
+    table.insert(mcdu_data.page_data[600].render_functions, add_f)
+end
+
+function THIS_PAGE:print_render_list(mcdu_data)
+
+    if mcdu_data.page_data[600].goto_last then
+        mcdu_data.page_data[600].goto_last = false
+        mcdu_data.page_data[600].curr_idx = math.max(1, #mcdu_data.page_data[600].render_functions-3)
     end
 
-    self:set_line(mcdu_data, MCDU_LEFT, line_id, "---END OF ALTN F-PLN----", MCDU_LARGE)
+    local start_i = math.max(1, mcdu_data.page_data[600].curr_idx - 1)
+    local line_id = mcdu_data.page_data[600].curr_idx == 1 and 2 or 1
+    local end_i = mcdu_data.page_data[600].curr_idx + 5
 
-    mcdu_data.page_data[600].page_end = true
+    local breaked = false
+    for i,x in ipairs(mcdu_data.page_data[600].render_functions) do
+        if i >= start_i then
+            if i <= end_i and line_id <= 5 then
+                x(line_id)
+                line_id = line_id + 1
+            else
+                breaked = true
+                break
+            end
+        end
+    end
+
+    mcdu_data.page_data[600].page_end = not breaked
+
 end
 
 -------------------------------------------------------------------------------
@@ -255,6 +273,7 @@ function THIS_PAGE:render(mcdu_data)
         mcdu_data.page_data[600].goto_last = false
         mcdu_data.is_page_button_hit = false
     end
+    mcdu_data.page_data[600].render_functions = {}
 
     mcdu_data.page_data[600].curr_fpln = FMGS_get_current_fpln()
 
@@ -274,6 +293,7 @@ function THIS_PAGE:render(mcdu_data)
     end
 
     THIS_PAGE:render_list(mcdu_data)
+    THIS_PAGE:print_render_list(mcdu_data)
 
     self:set_line(mcdu_data, MCDU_RIGHT, 1, "TIME  SPD/ALT   ", MCDU_SMALL)
 
