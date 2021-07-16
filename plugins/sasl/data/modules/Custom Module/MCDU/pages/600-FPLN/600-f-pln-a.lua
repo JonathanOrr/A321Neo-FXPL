@@ -71,6 +71,7 @@ function THIS_PAGE:render_single(mcdu_data, i, id, time, spd, alt, alt_col, proc
     else
         left_side  = left_side .. time
     end
+
     self:set_line(mcdu_data, MCDU_LEFT, i, left_side, MCDU_LARGE, main_col)
     self:set_line(mcdu_data, MCDU_CENTER, i, "       " .. ctr_side, MCDU_LARGE, spd and main_col or ECAM_WHITE)
     self:set_line(mcdu_data, MCDU_RIGHT, i, right_side, MCDU_LARGE, alt_col or main_col)
@@ -112,8 +113,47 @@ function THIS_PAGE:prepare_list_departure(mcdu_data, list_messages)
             i = i + 1
         end
     end
+end
+
 function THIS_PAGE:prepare_list_arrival(mcdu_data, list_messages)
     local fpln = mcdu_data.page_data[600].curr_fpln
+    if fpln.apts.arr_trans then
+        for _,x in ipairs(fpln.apts.arr_trans.legs) do
+            x.point_type = POINT_TYPE_STARAPPROACH
+            table.insert(list_messages, x)
+        end
+    end
+
+    local is_via_valid = fpln.apts.arr_via and not fpln.apts.arr_via.novia and fpln.apts.arr_via.legs and fpln.apts.arr_via.legs[1]
+
+    if fpln.apts.arr_star then
+        for i,x in ipairs(fpln.apts.arr_star.legs) do
+            if fpln.apts.arr_trans and i == 1 then
+                -- Do not print the double fix
+            else
+                if is_via_valid and x.leg_name == fpln.apts.arr_via.legs[1].leg_name then
+                    break
+                end
+                x.point_type = POINT_TYPE_STARAPPROACH
+                table.insert(list_messages, x)
+            end
+        end
+    end
+
+    if is_via_valid then
+        for i,x in ipairs(fpln.apts.arr_via.legs) do
+            x.point_type = POINT_TYPE_STARAPPROACH
+            table.insert(list_messages, x)
+        end
+    end
+
+    if fpln.apts.arr_appr then
+        for _,x in ipairs(fpln.apts.arr_appr.legs) do
+            x.point_type = POINT_TYPE_STARAPPROACH
+            table.insert(list_messages, x)
+        end
+    end
+
 end
 
 function THIS_PAGE:prepare_list(mcdu_data)
