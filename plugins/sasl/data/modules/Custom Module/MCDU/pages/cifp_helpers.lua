@@ -14,8 +14,20 @@
 -------------------------------------------------------------------------------
 
 function cifp_convert_leg_name(x)
-    local name = x.leg_name
+
+    assert(x)
+
+    -- Sanitize data
+    x.leg_type = x.leg_type or CIFP_LEG_TYPE_IF
+    x.outb_mag = x.outb_mag or 0
+    x.theta = x.theta or 0
+    x.rho = x.rho or 0
+    x.rte_hold = x.rte_hold or 0
+    x.cstr_altitude1 = x.cstr_altitude1 or 0
+
+    local name = x.leg_name or "(UKWN)"
     local leg_type = x.leg_type
+
     local outb_mag = Fwd_string_fill(tostring(math.floor(x.outb_mag/10)),"0", 3)
     local theta    = Fwd_string_fill(tostring(math.floor(x.theta/10)),"0", 3)
     local dd       = Fwd_string_fill(tostring(math.floor(x.rho/10)),"0", 2)
