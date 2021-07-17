@@ -299,7 +299,8 @@ function adirs_pfds_disagree_on_att()
 end
 
 function adirs_pfds_disagree_on_hdg()
-    return math.abs(adirs_get_hdg(PFD_CAPT) - adirs_get_hdg(PFD_FO)) > 5
+    local diff = Math_angle_diff(adirs_get_hdg(PFD_CAPT), adirs_get_hdg(PFD_FO))
+    return math.abs(diff) > 5
 end
 
 ----------------------------------------------------------------------------------------------------
