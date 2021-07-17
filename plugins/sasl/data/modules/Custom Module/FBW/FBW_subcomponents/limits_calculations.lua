@@ -64,7 +64,7 @@ local alpha_floor_alphas = {
 }
 
 local alpha_max_alphas = {
-    10,
+    10.5,
     16,
     16,
     16,
@@ -280,7 +280,7 @@ local function compute_aprot_vsw_amax_alphas()
         {1.0*27 + 30, alpha0s[6]},
     }
     local aprot_alphas = {
-        {0.0*27 + 0,  vsw_aprot_alphas[1]},
+        {0.0*27 + 0,  Math_rescale(0.5, vsw_aprot_alphas[1], 0.75, 3.5, adirs_get_avg_mach())},
         {0.7*27 + 0,  vsw_aprot_alphas[2]},
         {0.7*27 + 10, vsw_aprot_alphas[3]},
         {0.8*27 + 14, vsw_aprot_alphas[4]},
@@ -296,7 +296,7 @@ local function compute_aprot_vsw_amax_alphas()
         {1.0*27 + 30, alpha_floor_alphas[6]},
     }
     local amax_alphas = {
-        {0.0*27 + 0,  alpha_max_alphas[1]},
+        {0.0*27 + 0,  Math_rescale(0.5, alpha_max_alphas[1], 0.75, 5.5, adirs_get_avg_mach())},
         {0.7*27 + 0,  alpha_max_alphas[2]},
         {0.7*27 + 10, alpha_max_alphas[3]},
         {0.8*27 + 14, alpha_max_alphas[4]},

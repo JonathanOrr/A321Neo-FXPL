@@ -5,8 +5,8 @@ FBW.yaw.controllers = {
             --Yaw damper control
             FBW.yaw.controllers.yaw_damper_PD.output = FBW_PID_BP(
                 FBW_PID_arrays.FBW_YAW_DAMPER_PID,
-                0,
-                -FBW.rates.Slip.x
+                FBW.yaw.inputs.damper_input(adirs_get_avg_roll(), adirs_get_avg_tas()),
+                get(Flightmodel_yaw_rate)
             )
             --law reconfiguration
             if get(FBW_yaw_law) == FBW_ALT_NO_PROT_LAW then
@@ -18,7 +18,7 @@ FBW.yaw.controllers = {
             end
         end,
         bp = function ()
-            FBW_PID_arrays.FBW_YAW_DAMPER_PID.Actual_output = get(Rudder_total) / 30
+            --FBW_PID_arrays.FBW_YAW_DAMPER_PID.Actual_output = get(Rudder_total) / 30
         end,
     },
 
