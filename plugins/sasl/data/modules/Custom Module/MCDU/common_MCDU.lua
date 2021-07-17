@@ -52,6 +52,13 @@ function init_data(mcdu_data, id)
     mcdu_data.page_data = {}    -- Custom data for each page
     mcdu_data.is_page_button_hit = false    -- Tell you if the MCDU page has been just hit (you have to clear it if you need it)
 
+    mcdu_data.dup_names = {
+        req_text = "VOG",
+        selected_navaid = nil,
+        not_found = false,
+        return_page = 600
+    }
+
     for i,size in ipairs(MCDU_DIV_SIZE) do
 	    mcdu_data.dat[size] = {}
 	    for j,align in ipairs(MCDU_DIV_ALIGN) do
