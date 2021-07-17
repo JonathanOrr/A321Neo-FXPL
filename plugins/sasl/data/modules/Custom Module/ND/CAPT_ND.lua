@@ -26,11 +26,18 @@ include('ND/subcomponents/terrain.lua')
 nd_data = new_dataset(ND_CAPT)
 ND_all_data[ND_CAPT] = nd_data
 
+local skip_1st_frame_AA = true
 function draw()
 
     perf_measure_start("CAPT_ND:draw()")
 
-    sasl.gl.setRenderTarget(CAPT_ND_popup_texture, true)
+    if not skip_1st_frame_AA then
+        sasl.gl.setRenderTarget(CAPT_ND_popup_texture, true, get(PANEL_AA_LEVEL_1to32))
+    else
+        sasl.gl.setRenderTarget(CAPT_ND_popup_texture, true)
+    end
+    skip_1st_frame_AA = false
+    
     draw_main(nd_data)
     sasl.gl.restoreRenderTarget()
 

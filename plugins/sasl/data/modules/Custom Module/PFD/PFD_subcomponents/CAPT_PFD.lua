@@ -77,10 +77,17 @@ function update()
     PFD_update_timers(capt_PFD_table)
 end
 
-
+local skip_1st_frame_AA = true
 function draw()
     --render into the popup texure
-    sasl.gl.setRenderTarget(CAPT_PFD_popup_texture, true)
+
+    if not skip_1st_frame_AA then
+        sasl.gl.setRenderTarget(CAPT_PFD_popup_texture, true, get(PANEL_AA_LEVEL_1to32))
+    else
+        sasl.gl.setRenderTarget(CAPT_PFD_popup_texture, true)
+    end
+    skip_1st_frame_AA = false
+
     PFD_draw_FMA(PFD_ALL_FMA)
     PFD_draw_LS(capt_PFD_table)
     PFD_draw_att(capt_PFD_table)
