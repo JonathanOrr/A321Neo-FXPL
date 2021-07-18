@@ -446,6 +446,14 @@ function FMGS_perf_get_trans_alt()
     return FMGS_sys.perf.takeoff.trans_alt
 end
 
+function FMGS_perf_set_user_trans_alt(trans_alt)
+    FMGS_sys.perf.takeoff.user_trans_alt = trans_alt
+end
+
+function FMGS_perf_get_user_trans_alt()
+    return FMGS_sys.perf.takeoff.user_trans_alt
+end
+
 function FMGS_perf_get_v_speeds()
     return FMGS_sys.perf.takeoff.v1, FMGS_sys.perf.takeoff.vr, FMGS_sys.perf.takeoff.v2
 end
@@ -454,13 +462,39 @@ function FMGS_perf_set_v1(v1)
     FMGS_sys.perf.takeoff.v1 = v1
 end
 
+function FMGS_perf_set_vr(vr)
+    FMGS_sys.perf.takeoff.vr = vr
+end
+
+function FMGS_perf_set_v2(v2)
+    FMGS_sys.perf.takeoff.v2 = v2
+end
+
 function FMGS_perf_reset_v1_popped()
     FMGS_sys.perf.takeoff.v1_popped = nil
+end
+
+function FMGS_perf_reset_vr_popped()
+    FMGS_sys.perf.takeoff.vr_popped = nil
+end
+
+function FMGS_perf_reset_v2_popped()
+    FMGS_sys.perf.takeoff.v2_popped = nil
 end
 
 function FMGS_perf_swap_v1_popped()
     FMGS_sys.perf.takeoff.v1 = FMGS_sys.perf.takeoff.v1_popped
     FMGS_sys.perf.takeoff.v1_popped = nil
+end
+
+function FMGS_perf_swap_vr_popped()
+    FMGS_sys.perf.takeoff.vr = FMGS_sys.perf.takeoff.vr_popped
+    FMGS_sys.perf.takeoff.vr_popped = nil
+end
+
+function FMGS_perf_swap_v2_popped()
+    FMGS_sys.perf.takeoff.v2 = FMGS_sys.perf.takeoff.v2_popped
+    FMGS_sys.perf.takeoff.v2_popped = nil
 end
 
 function FMGS_perf_get_v_speeds_popped()
@@ -514,6 +548,14 @@ end
 
 function FMGS_set_takeoff_eng_out_alt(alt)
     FMGS_sys.perf.takeoff.user_eng_out = alt
+end
+
+function FMGS_get_takeoff_shift()
+    return FMGS_sys.perf.takeoff.toshift
+end
+
+function FMGS_set_takeoff_shift(shift)
+    FMGS_sys.perf.takeoff.toshift = shift
 end
 
 -------------------------------------------------------------------------------
