@@ -1,51 +1,4 @@
 FBW.filtered_sensors = {
-    Q = {
-        high_pass = false,
-        filtered = 0,
-        value = function ()
-            return FBW.rates.Yaw.x
-        end,
-        {
-            x = 0,
-            cut_frequency = 6,
-        },
-
-    },
-    --[[Q_err = {
-        high_pass = false,
-        filtered = 0,
-        value = function ()
-            return FBW.rates.Yaw.x
-        end,
-        {
-            x = 0,
-            cut_frequency = 6,
-        },
-    },
-
-    C_STAR = {
-        high_pass = false,
-        filtered = 0,
-        value = function ()
-            return FBW.rates.Yaw.x
-        end,
-        {
-            x = 0,
-            cut_frequency = 16,
-        },
-    },
-    C_STAR_err = {
-        high_pass = false,
-        filtered = 0,
-        value = function ()
-            return FBW.rates.Yaw.x
-        end,
-        {
-            x = 0,
-            cut_frequency = 16,
-        },
-    },]]
-
     AoA = {
         high_pass = false,
         filtered = 0,
@@ -55,17 +8,6 @@ FBW.filtered_sensors = {
         {
             x = 0,
             cut_frequency = 0.25,
-        },
-    },
-    pitch_artstab = {
-        high_pass = false,
-        filtered = 0,
-        value = function ()
-            return get(FBW_pitch_output)
-        end,
-        {
-            x = 0,
-            cut_frequency = 1,
         },
     },
 

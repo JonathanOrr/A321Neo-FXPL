@@ -193,16 +193,9 @@ function EFB_execute_page_4_buttons()
     end
 end
 
-local translator_table = {
-    {0, 1},
-    {0.2, 2},
-    {0.4, 4},
-    {0.6, 8},
-    {0.8, 16},
-    {1, 32},
-}
 local function aa_to_drf()
-    set(PANEL_AA_LEVEL_1to32, Table_interpolate(translator_table, antialiasing_lvl_value))
+    local one_to_32 = 2^(antialiasing_lvl_value * 5)
+    set(PANEL_AA_LEVEL_1to32, one_to_32)
 end
 
 local function table_loading_on_start()

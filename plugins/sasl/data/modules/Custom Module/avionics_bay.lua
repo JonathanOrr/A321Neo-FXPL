@@ -1,3 +1,4 @@
+---@diagnostic disable: undefined-field
 -------------------------------------------------------------------------------
 -- A32NX Freeware Project
 -- Copyright (C) 2020
@@ -90,6 +91,60 @@ local function convert_fixes_array(rawdata, fix_array)
     end
 end
 
+local function convert_holds_array(rawdata, hold_array)
+    if rawdata then
+        return {
+            holds = hold_array.holds,
+            len   = hold_array.len
+        }
+    else
+        to_return = {}
+        for i=1,hold_array.len do
+            local curr = hold_array.holds[i-1]
+            table.insert(to_return, {
+                id     = ffi.string(curr.id,     curr.id_len),
+                apt_id = ffi.string(curr.apt_id, curr.apt_id_len),
+                type   = tonumber(curr.navaid_type),
+                turn_direction = ("").char(curr.turn_direction),
+                inbound_course = curr.inbound_course / 10.,
+                leg_time = curr.leg_time,   -- In seconds
+                dme_leg_length = curr.dme_leg_length / 10., -- in NM
+                max_altitude = curr.max_altitude,   -- 0 if no limit
+                min_altitude = curr.min_altitude,   -- 0 if no limit
+                hold_spd_limit = curr.holding_speed_limit -- 0 if no limit
+            })
+        end
+        return to_return
+    end
+end
+
+local function convert_awys_array(rawdata, awy_array)
+    if rawdata then
+        return {
+            awys = awy_array.awys,
+            len  = awy_array.len
+        }
+    else
+        to_return = {}
+        for i=1,awy_array.len do
+            local curr = awy_array.awys[i-1]
+            table.insert(to_return, {
+                id     = ffi.string(curr.id,     curr.id_len),
+                
+                start_wpt = ffi.string(curr.start_wpt, curr.start_wpt_len),
+                start_wpt_type = tonumber(curr.start_wpt_type),
+                
+                end_wpt = ffi.string(curr.end_wpt, curr.end_wpt_len),
+                end_wpt_type = tonumber(curr.end_wpt_type),
+
+                max_altitude = curr.top_alt,   -- 0 if no limit
+                min_altitude = curr.base_alt,   -- 0 if no limit
+            })
+        end
+        return to_return
+    end
+end
+
 local function convert_cifp_array(rawdata, cifp_arr)
     if rawdata then
         return {
@@ -104,6 +159,7 @@ local function convert_cifp_array(rawdata, cifp_arr)
             type        = ("").char(cifp_arr.data[i-1].type),
             proc_name   = ffi.string(cifp_arr.data[i-1].proc_name,  cifp_arr.data[i-1].proc_name_len),
             trans_name  = ffi.string(cifp_arr.data[i-1].trans_name,  cifp_arr.data[i-1].trans_name_len),
+            trans_alt   = cifp_arr.data[i-1].transition_altitude,
             legs = {}
         }
         
@@ -112,25 +168,32 @@ local function convert_cifp_array(rawdata, cifp_arr)
             assert(l.leg_type)
             table.insert(new_dat.legs, {
                 leg_name = ffi.string(l.leg_name, l.leg_name_len),
-                turn_direction = ("").char(l.turn_direction),
-                leg_type = l.leg_type,
+                center_fix = ffi.string(l.center_fix, l.center_fix_len),
+                recomm_navaid = ffi.string(l.recomm_navaid, l.recomm_navaid_len),
                 radius = l.radius,
+                cstr_altitude1 = l.cstr_altitude1,
+                cstr_altitude2 = l.cstr_altitude2,
+                cstr_speed = l.cstr_speed,
                 theta = l.theta,
                 rho = l.rho,
                 outb_mag = l.outb_mag,
                 rte_hold = l.rte_hold,
-                outb_mag_in_true = l.outb_mag_in_true,
-                rte_hold_in_time = l.rte_hold_in_time,
+                vpath_angle = l.vpath_angle,
+
+                leg_type = l.leg_type,
                 cstr_alt_type = l.cstr_alt_type,
-                cstr_altitude1 = l.cstr_altitude1,
-                cstr_altitude2 = l.cstr_altitude2,
+                cstr_speed_type = l.cstr_speed_type,
+                turn_direction = ("").char(l.turn_direction),
                 cstr_altitude1_fl = l.cstr_altitude1_fl,
                 cstr_altitude2_fl = l.cstr_altitude2_fl,
-                cstr_speed_type = l.cstr_speed_type,
-                cstr_speed = l.cstr_speed,
-                vpath_angle = l.vpath_angle,
-                center_fix = ffi.string(l.center_fix, l.center_fix_len),
-                recomm_navaid = ffi.string(l.recomm_navaid, l.recomm_navaid_len),
+                outb_mag_in_true = l.outb_mag_in_true,
+                rte_hold_in_time = l.rte_hold_in_time,
+
+                fly_over_wpt = l.fly_over_wpt,
+                approach_iaf = l.approach_iaf,
+                approach_if  = l.approach_if,
+                approach_faf = l.approach_faf,
+                holding_fix  = l.holding_fix
             })
         end
         
@@ -138,6 +201,30 @@ local function convert_cifp_array(rawdata, cifp_arr)
     end
     return to_return
 end
+
+
+local function convert_cifp_rwy_array(rawdata, rwy_array)
+    if rawdata then
+        return {
+            rwys = rwy_array.data,
+            len  = rwy_array.len
+        }
+    else
+        to_return = {}
+        for i=1,rwy_array.len do
+            local curr = rwy_array.data[i-1]
+            table.insert(to_return, {
+                name     = ffi.string(curr.rwy_name,     curr.rwy_name_len),
+                loc_ident = ffi.string(curr.loc_ident, curr.loc_ident_len),
+
+                ldg_threshold_alt = tonumber(curr.ldg_threshold_alt),
+                ils_category = ("").char(curr.ils_category)
+            })
+        end
+        return to_return
+    end
+end
+
 
 local function convert_single_apt(apt, load_rwys)
     local new_apt = {
@@ -338,11 +425,57 @@ local function expose_functions()
         return {
             sids  = convert_cifp_array(rawdata, cifp_data.sids),
             stars = convert_cifp_array(rawdata, cifp_data.stars),
-            apprs = convert_cifp_array(rawdata, cifp_data.apprs)
+            apprs = convert_cifp_array(rawdata, cifp_data.apprs),
+            rwys  = convert_cifp_rwy_array(rawdata, cifp_data.rwys)
         }
     end
 
+    AvionicsBay.holds = {}
+    AvionicsBay.holds.get_by_name = function(name, rawdata)
+        assert(initialized, "You must initialize avionicsbay before use")
+        assert(type(name) == "string", "name must be a string")
+        rawdata = rawdata or false
+        
+        hold_array = AvionicsBay.c.get_hold_by_id(name);
+        return convert_holds_array(rawdata, hold_array)
+    end
 
+    AvionicsBay.holds.get_by_apt_id = function(apt_id, rawdata)
+        assert(initialized, "You must initialize avionicsbay before use")
+        assert(type(apt_id) == "string", "name must be a string")
+        rawdata = rawdata or false
+        
+        hold_array = AvionicsBay.c.get_hold_by_apt_id(apt_id);
+        return convert_holds_array(rawdata, hold_array)
+    end
+
+    AvionicsBay.awys = {}
+    AvionicsBay.awys.get_by_id = function(id, rawdata)
+        assert(initialized, "You must initialize avionicsbay before use")
+        assert(type(id) == "string", "name must be a string")
+        rawdata = rawdata or false
+        
+        awys_array = AvionicsBay.c.get_awy_by_id(id);
+        return convert_awys_array(rawdata, awys_array)
+    end
+
+    AvionicsBay.awys.get_by_start_wpt = function(id, rawdata)
+        assert(initialized, "You must initialize avionicsbay before use")
+        assert(type(id) == "string", "name must be a string")
+        rawdata = rawdata or false
+        
+        awys_array = AvionicsBay.c.get_awy_by_start_wpt(id);
+        return convert_awys_array(rawdata, awys_array)
+    end
+
+    AvionicsBay.awys.get_by_end_wpt = function(id, rawdata)
+        assert(initialized, "You must initialize avionicsbay before use")
+        assert(type(id) == "string", "name must be a string")
+        rawdata = rawdata or false
+        
+        awys_array = AvionicsBay.c.get_awy_by_end_wpt(id);
+        return convert_awys_array(rawdata, awys_array)
+    end
 end
 
 local function load_avionicsbay()

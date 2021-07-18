@@ -37,14 +37,14 @@ function Draw_flight_control_module_480x160(x_pos, y_pos)
     sasl.gl.drawWideLine(CENTER_X - 185, y_pos + 160 - 158 + 30, CENTER_X - 185, y_pos + 160 - 158 + 30 + 50, 5, LIGHT_GREY)
     sasl.gl.drawWideLine(CENTER_X + 185, y_pos + 160 - 158 + 30, CENTER_X + 185, y_pos + 160 - 158 + 30 + 50, 5, LIGHT_GREY)
 
-    sasl.gl.drawWideLine(CENTER_X - 185, y_pos + 160 - 158 + 30 + 25, CENTER_X - 185, y_pos + 160 - 158 + 30 + 25 - get(Left_aileron), 5, get(L_aileron_avail) == 1 and LIGHT_BLUE or ORANGE)
-    sasl.gl.drawWideLine(CENTER_X + 185, y_pos + 160 - 158 + 30 + 25, CENTER_X + 185, y_pos + 160 - 158 + 30 + 25 - get(Right_aileron), 5, get(R_aileron_avail) == 1 and LIGHT_BLUE or ORANGE)
+    sasl.gl.drawWideLine(CENTER_X - 185, y_pos + 160 - 158 + 30 + 25, CENTER_X - 185, y_pos + 160 - 158 + 30 + 25 - get(L_aileron), 5, get(L_aileron_avail) == 1 and LIGHT_BLUE or ORANGE)
+    sasl.gl.drawWideLine(CENTER_X + 185, y_pos + 160 - 158 + 30 + 25, CENTER_X + 185, y_pos + 160 - 158 + 30 + 25 - get(R_aileron), 5, get(R_aileron_avail) == 1 and LIGHT_BLUE or ORANGE)
 
     --elevators
     sasl.gl.drawWideLine(CENTER_X - 45, y_pos + 160 - 158 + 49, CENTER_X - 45, y_pos + 160 - 158 + 49 + 47, 5, LIGHT_GREY)
     sasl.gl.drawWideLine(CENTER_X + 45, y_pos + 160 - 158 + 49, CENTER_X + 45, y_pos + 160 - 158 + 49 + 47, 5, LIGHT_GREY)
-    sasl.gl.drawWideLine(CENTER_X - 45, y_pos + 160 - 158 + 49 + 17, CENTER_X - 45, y_pos + 160 - 158 + 49 + 17 - get(Elevators_hstab_1), 5, get(L_elevator_avail) == 1 and LIGHT_BLUE or ORANGE)
-    sasl.gl.drawWideLine(CENTER_X + 45, y_pos + 160 - 158 + 49 + 17, CENTER_X + 45, y_pos + 160 - 158 + 49 + 17 - get(Elevators_hstab_2), 5, get(R_elevator_avail) == 1 and LIGHT_BLUE or ORANGE)
+    sasl.gl.drawWideLine(CENTER_X - 45, y_pos + 160 - 158 + 49 + 17, CENTER_X - 45, y_pos + 160 - 158 + 49 + 17 - get(L_elevator), 5, get(L_elevator_avail) == 1 and LIGHT_BLUE or ORANGE)
+    sasl.gl.drawWideLine(CENTER_X + 45, y_pos + 160 - 158 + 49 + 17, CENTER_X + 45, y_pos + 160 - 158 + 49 + 17 - get(R_elevator), 5, get(R_elevator_avail) == 1 and LIGHT_BLUE or ORANGE)
 
     --rudder
     sasl.gl.drawWideLine(CENTER_X, y_pos + 160 - 158 + 130, CENTER_X - get(Rudder_travel_lim), y_pos + 160 - 158 + 130, 5, LIGHT_GREY)

@@ -471,7 +471,7 @@ local function draw_active_fpln(data)   -- This is just a test
     local last_x, last_y = nil, nil
 
     if dep_sid and dep_sid.computed_legs then
-        for i, point in ipairs(dep_sid.dep_sid.computed_legs) do
+        for i, point in ipairs(dep_sid.computed_legs) do
             local x, y = rose_get_x_y_heading(data, point.lat, point.lon, data.inputs.heading)
             if i > 1 then
                 sasl.gl.drawWideLine(last_x, last_y, x, y, 2, ECAM_GREEN)

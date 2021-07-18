@@ -21,9 +21,6 @@ size = {4096, 4096}
 
 local BRIGHTNESS_KNOB_SPEED = 0.1
 
---image textures
-local screen_lut_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/LUT.png")
-
 --register commands
 --capt pfd
 sasl.registerCommandHandler ( Capt_PFD_brightness_up, 0, function(phase) Knob_handler_up_float(phase, Capt_PFD_brightness, 0, 1, BRIGHTNESS_KNOB_SPEED) end)

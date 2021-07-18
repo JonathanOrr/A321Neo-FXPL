@@ -21,17 +21,16 @@ addSearchPath(moduleDirectory .. "/Custom Module/display_pop-ups/")
 
  --windows
 MCDU_window = contextWindow {
-  name = "Airbus MCDU";
-  position = { 150 , 150 , 463 , 683 };
+  name = "Captain MCDU";
+  position = { 150 , 150 , 413 , 644 };
   noBackground = true ;
-  proportional = false ;
-  minimumSize = { 463 , 683 };
-  maximumSize = { 877 , 1365 };
+  proportional = true ;
+  minimumSize = { 413 , 644 };
+  maximumSize = { 826, 1290 };
   gravity = { 0 , 1 , 0 , 1 };
   visible = false ;
-  noDecore = true ;
   components = {
-    MCDU_popup {position = { 0 , 0 , 463 , 683 }, focused = true}
+    MCDU_popup {position = { 0 , 0 , 413 , 644 }, focused = true}
   };
 }
 
@@ -202,20 +201,6 @@ fuel_window = contextWindow {
   visible = false ;
   components = {
     fuel_window {position = { 0 , 0 , 800 , 600 }}
-  };
-}
-
-PID_UI_window = contextWindow {
-  name = "PID TUNING UI";
-  position = { 150 , 150 , 600, 300 };
-  noBackground = true ;
-  proportional = false ;
-  minimumSize = { 600 , 300 };
-  maximumSize = { 600 , 300 };
-  gravity = { 0 , 1 , 0 , 1 };
-  visible = false ;
-  components = {
-    PID_UI {position = { 0 , 0 , 600 , 300 }}
   };
 }
 
@@ -401,5 +386,19 @@ TUNING_window = contextWindow {
   visible = false;
   components = {
       live_tuning_console {}
+  };
+}
+
+PID_UI_window = contextWindow {
+  name = "PID TUNING UI";
+  position = { 150 , 150 , 600, 300 };
+  noBackground = true ;
+  proportional = false ;
+  minimumSize = { 600 , 300 };
+  maximumSize = { 600 , 300 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = false ;
+  components = {
+    PID_UI {position = { 0 , 0 , 600 , 300 }}
   };
 }

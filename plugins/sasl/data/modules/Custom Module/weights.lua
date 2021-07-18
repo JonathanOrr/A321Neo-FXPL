@@ -20,7 +20,7 @@
 -- Constants
 -------------------------------------------------------------------------------
 local DEFAULT_CG_PERC = 22.2
-local DEFAULT_CG_M    = 21.511
+local DEFAULT_CG_M    = 20.4509
 local EMPTY_WEIGHT    = 47776
 local MAC_VALUE_M     = 4.1935
 

@@ -36,8 +36,11 @@ function THIS_PAGE:render(mcdu_data)
     ----------
     --  L4  --
     ----------
-    self:set_line(mcdu_data, MCDU_LEFT, 4, mcdu_format_force_to_small(FMGS_sys.perf.takeoff.trans_alt), MCDU_LARGE, ECAM_BLUE)
-
+    if FMGS_perf_get_trans_alt() then
+        self:set_line(mcdu_data, MCDU_LEFT, 4, mcdu_format_force_to_small(FMGS_perf_get_trans_alt()), MCDU_LARGE, ECAM_BLUE)
+    else
+        self:set_line(mcdu_data, MCDU_LEFT, 4, mcdu_format_force_to_small("[ ]"), MCDU_LARGE, ECAM_BLUE)
+    end
     ----------
     --  L5  --
     ----------

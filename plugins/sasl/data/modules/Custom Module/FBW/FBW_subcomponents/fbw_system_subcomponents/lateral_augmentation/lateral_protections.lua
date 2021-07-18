@@ -8,30 +8,15 @@ FBW.lateral.protections = {
         local bank_limit_target = {33, 67}
         local max_bank = 67
 
-        --check AoA bank angle--
-        if adirs_get_avg_aoa() > get(Aprot_AoA) then
-            FBW.lateral.protections.AoA_bank_angle_mode = true
-        elseif FBW.lateral.protections.AoA_bank_angle_mode == true and adirs_get_avg_aoa() < get(Aprot_AoA) - 1 then
-            FBW.lateral.protections.AoA_bank_angle_mode = false
+        if FBW.vertical.protections.General.AoA.H_AOA_PROT_ACTIVE then--alpha protection bank angle protection
+            bank_limit_target = {33, 45}
         end
-        --check HSP bank angle--
-        if adirs_get_avg_ias() >= get(VMAX_prot) then
-            FBW.lateral.protections.HSP_bank_angle_mode = true
-        elseif FBW.lateral.protections.HSP_bank_angle_mode == true and adirs_get_avg_ias() < get(VMAX) then
-            FBW.lateral.protections.HSP_bank_angle_mode = false
+        if FBW.vertical.protections.Flight.HSP.ACTIVE then--high speed bank angle protection
+            bank_limit_target = {0, 40}
         end
 
         --avoid strange reconfigurations--
         if get(FBW_lateral_law) ~= FBW_NORMAL_LAW then
-            FBW.lateral.protections.AoA_bank_angle_mode = false
-            FBW.lateral.protections.HSP_bank_angle_mode = false
-        end
-
-        if FBW.lateral.protections.AoA_bank_angle_mode == true then--alpha protection bank angle protection
-            bank_limit_target = {33, 45}
-        elseif FBW.lateral.protections.HSP_bank_angle_mode == true then--high speed bank angle protection
-            bank_limit_target = {0, 40}
-        else
             bank_limit_target = {33, 67}
         end
 

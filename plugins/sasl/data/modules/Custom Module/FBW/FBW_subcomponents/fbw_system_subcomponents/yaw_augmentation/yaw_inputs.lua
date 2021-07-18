@@ -24,6 +24,16 @@ FBW.yaw.inputs = {
         return wind_turb / 10 -- XP datarefs are on scale [0;10], we change it to [0;1]
     end,
 
+    damper_input = function (bank, TAS)
+        bank = Math_clamp(bank, -90, 90)
+        TAS = Math_clamp(TAS, 1, 530)
+        local abs_bank = math.abs(bank)
+
+        local TAS_ratio = -0.00348*TAS + 187/100
+        local R_curve = -0.0004*abs_bank^2 + 0.0849*abs_bank
+        return R_curve * TAS_ratio * (bank < 0 and -1 or 1)
+    end,
+
     x_to_SI = function (x)
         local max_rudder_def = 30
 

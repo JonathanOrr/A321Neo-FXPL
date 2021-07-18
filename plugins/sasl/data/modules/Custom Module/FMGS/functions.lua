@@ -206,23 +206,48 @@ function FMGS_dep_get_rwy(ret_temp_if_avail)
     end
 end
 
-function FMGS_dep_set_rwy(rwy, sibling)
-    FMGS_sys.fpln.temp.apts.dep_rwy = {rwy, sibling}
+function FMGS_arr_get_rwy(ret_temp_if_avail)
+
+    if ret_temp_if_avail and FMGS_sys.fpln.temp then
+        if not FMGS_sys.fpln.temp.apts.arr_rwy then
+            return nil,nil
+        else
+            return FMGS_sys.fpln.temp.apts.arr_rwy[1], FMGS_sys.fpln.temp.apts.arr_rwy[2]
+        end
+    elseif not FMGS_sys.fpln.active.apts.arr_rwy then
+        return nil, nil
+    else
+        return FMGS_sys.fpln.active.apts.arr_rwy[1], FMGS_sys.fpln.active.apts.arr_rwy[2]
+    end
 end
 
-function FMGS_copy_dep_rwy_active_to_temp()
-    FMGS_sys.fpln.temp.apts.dep_rwy = FMGS_sys.fpln.active.apts.dep_rwy
+function FMGS_dep_set_rwy(rwy, sibling)
+    FMGS_sys.fpln.temp.apts.dep_rwy = {rwy, sibling}
 end
 
 -------------------------------------------------------------------------------
 -- SID/STAR/TRANS
 -------------------------------------------------------------------------------
 
+function FMGS_reset_dep_sid()
+    FMGS_sys.fpln.temp.apts.dep_sid = nil
+end
 
 function FMGS_reset_dep_trans()
     FMGS_sys.fpln.temp.apts.dep_trans = nil
 end
 
+function FMGS_reset_arr_star()
+    FMGS_sys.fpln.temp.apts.arr_star = nil
+end
+
+function FMGS_reset_arr_via()
+    FMGS_sys.fpln.temp.apts.arr_via = nil
+end
+
+function FMGS_reset_arr_trans()
+    FMGS_sys.fpln.temp.apts.arr_trans = nil
+end
 
 function FMGS_reset_alt_airports()
     FMGS_sys.fpln.temp.apts.alt = nil
@@ -239,6 +264,10 @@ function FMGS_reset_dep_arr_airports()
     FMGS_sys.fpln.active.apts.arr = nil
     FMGS_sys.fpln.active.apts.arr_cifp = nil
     FMGS_sys.fpln.active.apts.arr_rwy = nil
+    FMGS_sys.fpln.active.apts.arr_appr=nil
+    FMGS_sys.fpln.active.apts.arr_star=nil
+    FMGS_sys.fpln.active.apts.arr_trans=nil
+    FMGS_sys.fpln.active.apts.arr_via=nil
     
     FMGS_sys.fpln.temp = nil
 end
@@ -267,9 +296,91 @@ function FMGS_dep_set_trans(trans)
     FMGS_sys.fpln.temp.apts.dep_trans = trans
 end
 
-function FMGS_copy_dep_sid_active_to_temp()
-    FMGS_sys.fpln.temp.apts.dep_sid = FMGS_sys.fpln.active.apts.dep_sid
+function FMGS_arr_set_appr(appr, rwy, sibling)
+    FMGS_sys.fpln.temp.apts.arr_rwy = {rwy, sibling}
+    FMGS_sys.fpln.temp.apts.arr_appr = appr
 end
+
+function FMGS_arr_get_appr(ret_temp_if_avail)
+    if ret_temp_if_avail and FMGS_sys.fpln.temp then
+        return FMGS_sys.fpln.temp.apts.arr_appr
+    else
+        return FMGS_sys.fpln.active.apts.arr_appr
+    end
+end
+
+function FMGS_arr_get_star(ret_temp_if_avail)
+    if ret_temp_if_avail and FMGS_sys.fpln.temp then
+        return FMGS_sys.fpln.temp.apts.arr_star
+    else
+        return FMGS_sys.fpln.active.apts.arr_star
+    end
+end
+
+function FMGS_arr_set_star(star)
+    FMGS_sys.fpln.temp.apts.arr_star = star
+end
+
+function FMGS_arr_get_trans(ret_temp_if_avail)
+    if ret_temp_if_avail and FMGS_sys.fpln.temp then
+        return FMGS_sys.fpln.temp.apts.arr_trans
+    else
+        return FMGS_sys.fpln.active.apts.arr_trans
+    end
+end
+
+function FMGS_arr_set_trans(trans)
+    FMGS_sys.fpln.temp.apts.arr_trans = trans
+end
+
+function FMGS_arr_get_via(ret_temp_if_avail)
+    if ret_temp_if_avail and FMGS_sys.fpln.temp then
+        return FMGS_sys.fpln.temp.apts.arr_via
+    else
+        return FMGS_sys.fpln.active.apts.arr_via
+    end
+end
+
+function FMGS_arr_set_via(via)
+    FMGS_sys.fpln.temp.apts.arr_via = via
+end
+
+
+function FMGS_arr_get_available_vias(ret_temp_if_avail)
+
+    local curr_fpln = ret_temp_if_avail and (FMGS_sys.fpln.temp or FMGS_sys.fpln.active) or FMGS_sys.fpln.active
+
+    if not curr_fpln.apts.arr_appr or not curr_fpln.apts.arr_cifp then
+        return {}   -- No approach selected
+    end
+
+    local toret = {{trans_name="NO VIA", novia=true}}
+
+    if not curr_fpln.apts.arr_star or #curr_fpln.apts.arr_star.legs==0 then
+        -- If I do NOT select a STAR, the listed VIA are all the IAF points for that approach
+        for _,x in ipairs(curr_fpln.apts.arr_cifp.apprs) do
+            if x.type == CIFP_TYPE_APPR_APP_TRANS and x.proc_name == curr_fpln.apts.arr_appr.proc_name then
+                table.insert(toret, x)
+            end
+        end
+    else
+        -- If I DO select a STAR, the listed VIA are all the STAR waypoints that are also IAF points for that approach
+        for _,x in ipairs(curr_fpln.apts.arr_cifp.apprs) do
+            if x.type == CIFP_TYPE_APPR_APP_TRANS and x.proc_name == curr_fpln.apts.arr_appr.proc_name then
+                for _,y in ipairs(curr_fpln.apts.arr_star.legs) do
+                    if x.trans_name == y.leg_name then
+                        table.insert(toret, x)
+                    end
+                end
+                
+            end
+        end
+    end
+
+    return toret
+end
+
+
 
 -------------------------------------------------------------------------------
 -- F/PLN
@@ -292,6 +403,17 @@ function FMGS_create_temp_fpln()
 
 end
 
+function FMGS_create_copy_temp_fpln()
+
+    FMGS_create_temp_fpln()
+
+    for k,x in pairs(FMGS_sys.fpln.active.apts) do
+        FMGS_sys.fpln.temp.apts[k] = FMGS_sys.fpln.active.apts[k]
+    end
+
+end
+
+
 function FMGS_erase_temp_fpln()
     FMGS_sys.fpln.temp = nil
 end
@@ -299,6 +421,8 @@ end
 function FMGS_insert_temp_fpln()
     check_rwy_change_triggers()
     FMGS_sys.fpln.active = FMGS_sys.fpln.temp
+    FMGS_sys.perf.takeoff.trans_alt = FMGS_sys.fpln.active.apts.dep_sid.trans_alt
+
     FMGS_erase_temp_fpln()
 end
 

@@ -184,15 +184,6 @@ IDG_2_temp = createGlobalPropertyf("a321neo/dynamics/electrical/IDG_2_temp", 0, 
 
 Adirs_total_time_to_align = createGlobalPropertyf("a321neo/cockpit/ADIRS/total_time", 0, false, true, false)  -- Total time (depending on latitude, to align the IRS)
 
-GPS_1_is_available = createGlobalPropertyi("a321neo/cockpit/ADIRS/gps_1_is_available", 0, false, true, false)
-GPS_2_is_available = createGlobalPropertyi("a321neo/cockpit/ADIRS/gps_2_is_available", 0, false, true, false)
-GPS_1_altitude = createGlobalPropertyf("a321neo/cockpit/ADIRS/gps_1_alt", 0, false, true, false)
-GPS_2_altitude = createGlobalPropertyf("a321neo/cockpit/ADIRS/gps_2_alt", 0, false, true, false)
-GPS_1_lat = createGlobalPropertyf("a321neo/cockpit/ADIRS/gps_1_lat", 0, false, true, false)
-GPS_1_lon = createGlobalPropertyf("a321neo/cockpit/ADIRS/gps_1_lon", 0, false, true, false)
-GPS_2_lat = createGlobalPropertyf("a321neo/cockpit/ADIRS/gps_2_lat", 0, false, true, false)
-GPS_2_lon = createGlobalPropertyf("a321neo/cockpit/ADIRS/gps_2_lon", 0, false, true, false)
-
 --doors
 Door_1_l_ratio = createGlobalPropertyf("a321neo/dynamics/door/door_1_l_rat", 0, false, true, false)
 Door_1_r_ratio = createGlobalPropertyf("a321neo/dynamics/door/door_1_r_rat", 0, false, true, false)
@@ -498,6 +489,8 @@ Aprot_AoA =  createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/alpha_prot
 Afloor_AoA = createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/alpha_floor_aoa", 0, false, true, false)
 Amax_AoA =   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/alpha_max_aoa", 0, false, true, false)
 
+Current_VS1G =   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/current_VS1G", 0, false, true, false)
+
 --BUSS--
 BUSS_VFE_red_AoA =  createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/buss_vfe_red_aoa", 0, false, true, false)
 BUSS_VFE_norm_AoA = createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/buss_vfe_norm_aoa", 0, false, true, false)
@@ -531,6 +524,7 @@ Override_control_surfaces = 			globalProperty("sim/operation/override/override_c
 Force_full_rudder_limit = 				createGlobalPropertyi("a321neo/dynamics/FBW/debug/force_full_rudder_limit", 0, false, true, false)
 Bypass_speedbrakes_inhibition = 		createGlobalPropertyi("a321neo/dynamics/FBW/debug/bypass_spdbrakes_inhibition", 0, false, true, false)
 Override_flap_auto_extend_and_retract = createGlobalPropertyi("a321neo/dynamics/FBW/debug/override_flap_auto_extend_and_retract", 0, false, true, false)
+Override_normal_flight_mode_blending =  createGlobalPropertyi("a321neo/dynamics/FBW/debug/override_normal_flight_mode_blending", 0, false, true, false)
 Debug_FBW_law_reconfig = 				createGlobalPropertyi("a321neo/dynamics/FBW/debug/debug_FBW_law_reconfig", 0, false, true, false)
 --customizations
 Project_square_input = 		  createGlobalPropertyi("a321neo/dynamics/FBW/customizations/projected_square_input", 0, false, true, false)
@@ -618,8 +612,8 @@ SEC_1_status = 	createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/sec
 SEC_2_status = 	createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/sec_2_status",  1, false, true, false)
 SEC_3_status = 	createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/sec_3_status",  1, false, true, false)
 --ailerons
-Left_aileron =  globalProperty("sim/flightmodel/controls/wing3l_ail1def") -- -25 deg up 25 deg down
-Right_aileron = globalProperty("sim/flightmodel/controls/wing3r_ail1def") -- -25 deg up 25 deg down
+L_aileron =  globalProperty("sim/flightmodel/controls/wing3l_ail1def") -- -25 deg up 25 deg down
+R_aileron = globalProperty("sim/flightmodel/controls/wing3r_ail1def") -- -25 deg up 25 deg down
 --spoilers
 Ground_spoilers_armed = createGlobalPropertyi("a321neo/dynamics/FBW/controls/ground_spoilers_armed", 0, false, true, false)--mostly used for animation but 0 is disarmed 1 is armed
 Ground_spoilers_mode = createGlobalPropertyi("a321neo/dynamics/FBW/controls/ground_spoilers_mode", 0, false, true, false)--0 retracted, 1 half deployed, 2 full extention
@@ -668,8 +662,8 @@ Horizontal_stabilizer_deflection = globalProperty("sim/flightmodel2/controls/sta
 Elev_trim_ratio = globalProperty("sim/flightmodel2/controls/elevator_trim")
 Max_THS_up = globalProperty("sim/aircraft/controls/acf_hstb_trim_up")--13.5 deggrees
 Max_THS_dn = globalProperty("sim/aircraft/controls/acf_hstb_trim_dn")--4 degrees
-Elevators_hstab_1 = globalProperty("sim/flightmodel/controls/hstab1_elv1def") --elevators 17 deg down -30 deg up
-Elevators_hstab_2 = globalProperty("sim/flightmodel/controls/hstab2_elv1def") --elevators 17 deg down -30 deg up
+L_elevator = globalProperty("sim/flightmodel/controls/hstab1_elv1def") --elevators 17 deg down -30 deg up
+R_elevator = globalProperty("sim/flightmodel/controls/hstab2_elv1def") --elevators 17 deg down -30 deg up
 --vstabs
 Human_rudder_trim = createGlobalPropertyi("a321neo/dynamics/FBW/controls/human_rudder_trim", 0, false, true, false)-- -1 trim left, 0 no action, 1 trim right
 Rudder_trim_target_angle = createGlobalPropertyf("a321neo/dynamics/FBW/controls/rudder_trim_target_angle", 0, false, true, false)-- left -20 degrees, right 20 degrees

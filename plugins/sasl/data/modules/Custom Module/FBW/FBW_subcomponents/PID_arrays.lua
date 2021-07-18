@@ -27,7 +27,7 @@ AT_PID_arrays = {
 }
 
 FBW_PID_arrays = {
-    FBW_ROLL_RATE_PID_array = {
+    FBW_ROLL_RATE_PID = {
         P_gain = 0.032,
         I_gain = 0.055,
         D_gain = 0.0001,
@@ -80,7 +80,7 @@ FBW_PID_arrays = {
         Actual_output = 0,
     },
 
-    FBW_ROTATION_APROT_PID_array = {
+    FBW_ROTATION_APROT_PID = {
         P_gain = 1.100,
         I_gain = 0.450,
         D_gain = 0.000,
@@ -102,6 +102,9 @@ FBW_PID_arrays = {
         max_integral = 4,
         Min_out = -4,
         Max_out = 4,
+        filter_inputs = true,
+        filter_freq = 0.25,
+        highpass_inputs = false,
         PV = 0,
         Error = 0,
         Proportional = 0,
@@ -111,7 +114,7 @@ FBW_PID_arrays = {
         Desired_output = 0,
         Actual_output = 0,
     },
-    FBW_FLIGHT_APROT_PID_array = {
+    FBW_FLIGHT_APROT_PID = {
         P_gain = 1.000,
         I_gain = 0.450,
         D_gain = 0.000,
@@ -133,6 +136,9 @@ FBW_PID_arrays = {
         max_integral = 4,
         Min_out = -4,
         Max_out = 4,
+        filter_inputs = true,
+        filter_freq = 0.25,
+        highpass_inputs = false,
         PV = 0,
         Error = 0,
         Proportional = 0,
@@ -142,7 +148,7 @@ FBW_PID_arrays = {
         Desired_output = 0,
         Actual_output = 0,
     },
-    FBW_FLARE_APROT_PID_array = {
+    FBW_FLARE_APROT_PID = {
         P_gain = 1.100,
         I_gain = 0.450,
         D_gain = 0.000,
@@ -164,6 +170,9 @@ FBW_PID_arrays = {
         max_integral = 4,
         Min_out = -4,
         Max_out = 4,
+        filter_inputs = true,
+        filter_freq = 0.25,
+        highpass_inputs = false,
         PV = 0,
         Error = 0,
         Proportional = 0,
@@ -174,7 +183,7 @@ FBW_PID_arrays = {
         Actual_output = 0,
     },
 
-    FBW_PITCH_RATE_PID_array = {
+    FBW_PITCH_RATE_PID = {
         P_gain = 0.055,
         I_gain = 0.150,
         D_gain = 0.000,
@@ -211,6 +220,9 @@ FBW_PID_arrays = {
         max_integral = 1,
         Min_out = -1,
         Max_out = 1,
+        filter_inputs = true,
+        filter_freq = 6,
+        highpass_inputs = false,
         PV = 0,
         Error = 0,
         Proportional = 0,
@@ -221,42 +233,51 @@ FBW_PID_arrays = {
         Actual_output = 0,
     },
 
-    FBW_CSTAR_PID_array = {
-        P_gain = 0.060,
-        I_gain = 0.185,
-        D_gain = 0.002,
+    FBW_CSTAR_PID = {
+        P_gain = 0.081,
+        I_gain = 0.134,
+        D_gain = 0.037,
         B_gain = 1,
         Schedule_gains = true,
         Schedule_table = {
             P = {
-                {135, 0.080},
-                {150, 0.075},
-                {180, 0.065},
-                {200, 0.060},
-                {250, 0.055},
-                {300, 0.045},
-                {340, 0.032},
-                {410, 0.028},
+                {130, 0.098},
+                {140, 0.096},
+                {160, 0.094},
+                {180, 0.092},
+                {200, 0.088},
+                {250, 0.081},
+                {280, 0.078},
+                {300, 0.074},
+                {340, 0.072},
+                {380, 0.070},
+                {380, 0.069},
             },
             I = {
-                {135, 0.270},
-                {150, 0.250},
-                {180, 0.200},
-                {200, 0.190},
-                {250, 0.185},
-                {300, 0.165},
-                {340, 0.145},
-                {410, 0.132},
+                {130, 0.155},
+                {140, 0.149},
+                {160, 0.145},
+                {180, 0.142},
+                {200, 0.137},
+                {250, 0.134},
+                {280, 0.123},
+                {300, 0.120},
+                {340, 0.118},
+                {380, 0.117},
+                {440, 0.115},
             },
             D = {
-                {135, 0.002},
-                {150, 0.002},
-                {180, 0.002},
-                {200, 0.002},
-                {250, 0.002},
-                {300, 0.002},
-                {340, 0.002},
-                {410, 0.002},
+                {130, 0.064},
+                {140, 0.058},
+                {160, 0.054},
+                {180, 0.052},
+                {200, 0.047},
+                {250, 0.037},
+                {280, 0.035},
+                {300, 0.032},
+                {340, 0.029},
+                {380, 0.028},
+                {440, 0.027},
             },
         },
         Limited_integral = true,
@@ -264,6 +285,9 @@ FBW_PID_arrays = {
         max_integral = 1,
         Min_out = -1,
         Max_out = 1,
+        filter_inputs = true,
+        filter_freq = 0.75,
+        highpass_inputs = false,
         PV = 0,
         Error = 0,
         Proportional = 0,
@@ -274,8 +298,8 @@ FBW_PID_arrays = {
         Actual_output = 0,
     },
 
-    FBW_YAW_DAMPER_PID_array = {
-        P_gain = 1.250,
+    FBW_YAW_DAMPER_PID = {
+        P_gain = 0.48,
         I_gain = 0.000,
         D_gain = 0.000,
         B_gain = 0,
@@ -308,7 +332,7 @@ FBW_PID_arrays = {
         Desired_output = 0,
         Actual_output = 0,
     },
-    FBW_NRM_YAW_PID_array = {
+    FBW_NRM_YAW_PID = {
         P_gain = 0.007,
         I_gain = 0.011,
         D_gain = 0.002,
@@ -358,7 +382,7 @@ FBW_PID_arrays = {
         Actual_output = 0,
     },
 
-    FBW_AUTOTRIM_PID_array = {
+    FBW_AUTOTRIM_PID = {
         P_gain = 0.250,
         I_gain = 0.160,
         D_gain = 0.000,
@@ -380,6 +404,9 @@ FBW_PID_arrays = {
         max_integral = 1,
         Min_out = -1,
         Max_out = 1,
+        filter_inputs = true,
+        filter_freq = 0.2,
+        highpass_inputs = false,
         PV = 0,
         Error = 0,
         Proportional = 0,
