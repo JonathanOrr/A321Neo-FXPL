@@ -183,6 +183,32 @@ local function draw_mach_info(PFD_table)
     end
 end
 
+local function draw_airspeed_numbers(string, ycord)
+    for i=1, 3 do
+        sasl.gl.drawText(Font_AirbusDUL, 30 + (i-1) * 21 , ycord, string.sub(string, i, i) , 38, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    end
+end
+
+local function draw_airspeed_tape(airspeed)
+
+    local airspeed_offset = Math_rescale_no_lim(30,0,60,-168,airspeed)
+
+    local weird_airspeed_error = Math_rescale_no_lim(30,0,500,3,airspeed)
+
+    local airspeed_to_s_lower_bound = Math_clamp_lower (   Round(Math_rescale_no_lim(30,-7,150,5   ,airspeed),0) , 0    ) 
+    local airspeed_to_s_upper_bound = Round(Math_rescale_no_lim(30,5, 150,17  ,airspeed),0)
+
+    for s=airspeed_to_s_lower_bound, airspeed_to_s_upper_bound do
+        local line_y = 500 + airspeed_offset + (s*10) * 5.592 + weird_airspeed_error
+
+        sasl.gl.drawWideLine(90, line_y, 110, line_y, 3, ECAM_WHITE) --long dashes
+
+        if s%2 == 0 then
+            draw_airspeed_numbers(Fwd_string_fill( tostring(30 + (s+1) * 10), "0", 3), 486  + airspeed_offset + (s*10) * 5.592 + weird_airspeed_error)
+        end
+    end
+end
+
 function PFD_draw_spd_tape(PFD_table)
     local boarder_cl = ECAM_WHITE
 
@@ -202,7 +228,7 @@ function PFD_draw_spd_tape(PFD_table)
     --clip to draw the speed tape
     if adirs_is_ias_ok(PFD_table.Screen_ID) == true and not adirs_is_buss_visible(PFD_table.Screen_ID) then
         sasl.gl.setClipArea(size[1]/2-437, size[2]/2-244, 99, 473)
-        sasl.gl.drawTexture(PFD_spd_tape, size[1]/2-437, size[2]/2-244 - Math_rescale(30, 355, 460, 2785, adirs_get_ias(PFD_table.Screen_ID)), 99, 4096, {1,1,1})
+            draw_airspeed_tape(Math_clamp_lower(adirs_get_ias(PFD_table.Screen_ID), 30))
         sasl.gl.resetClipArea ()
     end
 
@@ -210,8 +236,8 @@ function PFD_draw_spd_tape(PFD_table)
     if not adirs_is_buss_visible(PFD_table.Screen_ID) then
         sasl.gl.drawWideLine(size[1]/2-437, size[2]/2+231, size[1]/2-310, size[2]/2+231, 4, boarder_cl)
         if adirs_is_ias_ok(PFD_table.Screen_ID) == true then
-            sasl.gl.drawWideLine(size[1]/2-338, size[2]/2-7 + Math_clamp_lower(Math_rescale_lim_lower(30, 0, 50, -133, adirs_get_ias(PFD_table.Screen_ID)), -237), size[1]/2-338, size[2]/2+229, 4, boarder_cl)
-            if adirs_get_ias(PFD_table.Screen_ID) > 66 then
+            sasl.gl.drawWideLine(size[1]/2-338, size[2]/2-7 + Math_clamp_lower(Math_rescale_lim_lower(30, 0, 60, -168, adirs_get_ias(PFD_table.Screen_ID)), -237), size[1]/2-338, size[2]/2+229, 4, boarder_cl)
+            if adirs_get_ias(PFD_table.Screen_ID) > 72 then
                 sasl.gl.drawWideLine(size[1]/2-437, size[2]/2-246, size[1]/2-310, size[2]/2-246, 4, boarder_cl)
             end
         else
