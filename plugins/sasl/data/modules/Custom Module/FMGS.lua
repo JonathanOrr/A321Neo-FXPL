@@ -109,6 +109,19 @@ FMGS_sys.perf = {
         flaps = nil,
         ths = nil, --This is a number not a string (not DNXXX or UPXXX), safe to compare
         flex_temp = nil,
+    },
+    landing = {
+        qnh = nil,
+        mda = nil,
+        dh  = nil,
+        temp = nil,
+        mag = nil,
+        wind = nil,
+        trans_alt = 10000,
+        user_trans_alt = nil,
+        vapp = nil,
+        user_vapp = nil,
+        landing_config = 4 -- 3 is 3, 4 is full
     }
 }
 

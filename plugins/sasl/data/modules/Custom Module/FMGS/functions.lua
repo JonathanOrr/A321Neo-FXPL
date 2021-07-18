@@ -558,6 +558,80 @@ function FMGS_set_takeoff_shift(shift)
     FMGS_sys.perf.takeoff.toshift = shift
 end
 
+------------------------Landing!
+
+function FMGS_set_landing_qnh(qnh)
+    FMGS_sys.perf.landing.qnh = qnh
+end
+
+function FMGS_get_landing_qnh()
+    return FMGS_sys.perf.landing.qnh
+end
+
+function FMGS_set_landing_mda(mda)
+    FMGS_sys.perf.landing.mda = mda
+end
+
+function FMGS_get_landing_mda()
+    return FMGS_sys.perf.landing.mda
+end
+
+function FMGS_set_landing_dh(dh)
+    FMGS_sys.perf.landing.dh = dh
+end
+
+function FMGS_get_landing_dh()
+    return FMGS_sys.perf.landing.dh
+end
+
+function FMGS_set_landing_apt_temp(temp)
+    FMGS_sys.perf.landing.temp = temp
+end
+
+function FMGS_get_landing_apt_temp()
+    return FMGS_sys.perf.landing.temp
+end
+
+function FMGS_set_landing_wind_mag(mag)
+    FMGS_sys.perf.landing.mag = mag
+end
+
+function FMGS_get_landing_wind_mag()
+    return FMGS_sys.perf.landing.mag
+end
+
+function FMGS_set_landing_wind(wind)
+    FMGS_sys.perf.landing.wind = wind
+end
+
+function FMGS_get_landing_wind()
+    return FMGS_sys.perf.landing.wind
+end
+
+function FMGS_set_landing_trans_alt(alt) --caution! User! Not system default value!
+    FMGS_sys.perf.landing.user_trans_alt = alt
+end
+
+function FMGS_get_landing_trans_alt()
+    return FMGS_sys.perf.landing.trans_alt, FMGS_sys.perf.landing.user_trans_alt
+end
+
+function FMGS_set_landing_vapp(spd) --caution! User! Not system default value!
+    FMGS_sys.perf.landing.user_vapp = spd
+end
+
+function FMGS_get_landing_vapp()
+    return FMGS_sys.perf.landing.vapp, FMGS_sys.perf.landing.vappuser_vapp
+end
+
+function FMGS_set_landing_config(flaps)
+    FMGS_sys.perf.landing.landing_config = flaps
+end
+
+function FMGS_get_landing_config()
+    return FMGS_sys.perf.landing.landing_config
+end
+
 -------------------------------------------------------------------------------
 -- Predictions
 -------------------------------------------------------------------------------

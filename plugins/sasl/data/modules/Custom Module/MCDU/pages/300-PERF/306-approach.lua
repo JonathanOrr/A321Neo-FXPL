@@ -17,11 +17,6 @@ local THIS_PAGE = MCDU_Page:new({id=306})
 local dest_within_180_nm = true
 local qnh_in_inhg = false
 local qnh = nil
-local mda = nil
-local dh = nil
-local temp = nil
-local mag = 74
-local wind = 25
 local trans_alt= 10000
 local user_trans_alt= nil
 local vapp = 143
@@ -66,14 +61,14 @@ function THIS_PAGE:render(mcdu_data)
     --L2--
     ------
     
-    self:add_multi_line(mcdu_data, MCDU_LEFT, 2, temp == nil and "[ ]°" or temp.."°" , MCDU_LARGE, ECAM_BLUE)
+    self:add_multi_line(mcdu_data, MCDU_LEFT, 2, FMGS_get_landing_apt_temp() == nil and "[ ]°" or FMGS_get_landing_apt_temp().."°" , MCDU_LARGE, ECAM_BLUE)
 
     ------
     --L3--
     ------
 
-    local displayed_mag = mag == nil and "[ ]°" or Fwd_string_fill(tostring(mag), "0", 3)
-    local displayed_wind = wind == nil and "[ ]" or wind
+    local displayed_mag = FMGS_get_landing_wind_mag() == nil and "[ ]" or Fwd_string_fill(tostring(FMGS_get_landing_wind_mag()), "0", 3)
+    local displayed_wind =  FMGS_get_landing_wind() == nil and "[ ]" or  FMGS_get_landing_wind()
     self:add_multi_line(mcdu_data, MCDU_LEFT, 3, displayed_mag.."°/"..displayed_wind , MCDU_LARGE, ECAM_BLUE)
 
     ------
@@ -98,14 +93,14 @@ function THIS_PAGE:render(mcdu_data)
     --R2--
     ------
 
-    self:add_multi_line(mcdu_data, MCDU_RIGHT, 2, mda == nil and "[   ]" or mda , MCDU_LARGE, ECAM_BLUE)
+    self:add_multi_line(mcdu_data, MCDU_RIGHT, 2, FMGS_get_landing_mda() == nil and "[   ]" or FMGS_get_landing_mda() , MCDU_LARGE, ECAM_BLUE)
 
     ------
     --R3--
     ------
 
     if have_ils then
-        self:add_multi_line(mcdu_data, MCDU_RIGHT, 3, dh == nil and "[  ]" or dh , MCDU_LARGE, ECAM_BLUE)
+        self:add_multi_line(mcdu_data, MCDU_RIGHT, 3, FMGS_get_landing_dh() == nil and "[  ]" or FMGS_get_landing_dh() , MCDU_LARGE, ECAM_BLUE)
     end
 
     if landing_config == 4 then
@@ -153,9 +148,9 @@ function THIS_PAGE:L3(mcdu_data)
             entry_out_of_range_msg = true
         elseif a == 360 then
             a = 0
-            mag = a
+            FMGS_set_landing_wind_mag(a)
         else
-            mag = a
+            FMGS_set_landing_wind_mag(a)
         end
     end
     if b ~= nil then
@@ -163,7 +158,7 @@ function THIS_PAGE:L3(mcdu_data)
         if b < 0 or b > 50 then
             entry_out_of_range_msg = true
         else
-            wind = b
+            FMGS_set_landing_wind(b)
         end
     end
     if entry_out_of_range_msg then
@@ -193,9 +188,9 @@ function THIS_PAGE:R2(mcdu_data)
     local input = mcdu_get_entry(mcdu_data, {"!!!!","!!!","!!", "!","CLR"}, false)
     if input == nil then return end
     if input == "CLR" then
-        mda = nil
+        FMGS_set_landing_mda(nil)
     else
-        mda = input
+        FMGS_set_landing_mda(input)
     end
 end
 
@@ -204,10 +199,10 @@ function THIS_PAGE:R3(mcdu_data)
         local input = mcdu_get_entry(mcdu_data, {"!!!!","!!!","!!", "!","CLR"}, false)
         if input == nil then return end
         if input == "CLR" then
-            dh = nil
+            FMGS_set_landing_dh(nil)
         else
-            dh = input
-            mda = nil
+            FMGS_set_landing_dh(input)
+            FMGS_set_landing_mda(nil)
         end
     end
 end
