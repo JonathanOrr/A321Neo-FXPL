@@ -52,38 +52,40 @@ end
 function THIS_PAGE:render_list(mcdu_data, list_navaids)
     local my_coords = adirs_get_fms(mcdu_data.id)
 
-    for _, x in ipairs(list_navaids) do
-        local line_id = _ -- TODO
-        local geo_distance
-        if my_coords[1] then
-            geo_distance = tostring(Round(GC_distance_kt(x.lat, x.lon, my_coords[1], my_coords[2])))
-        else
-            geo_distance = "XXX"
-        end
+    local line_id = 1
 
-        local lat_value = Fwd_string_fill(tostring(Round(math.abs(x.lat))), "0", 2)
-        local lat_char = x.lat >= 0 and "N" or "S"
-
-        local lon_value = Fwd_string_fill(tostring(Round(math.abs(x.lon))), "0", 3)
-        local lon_char = x.lon >= 0 and "E" or "W"
-
-        local lat_lon =  lat_value .. lat_char .. "/" .. lon_value .. lon_char
-
-        local freq = x.freq and (Aft_string_fill(tostring(x.freq), " ", 6)) or "      "
-
-        self:set_line(mcdu_data, MCDU_LEFT, line_id, Fwd_string_fill(geo_distance, " ", 5), MCDU_SMALL, ECAM_GREEN)
-        if line_id == 1 then
-            self:set_line(mcdu_data, MCDU_RIGHT, line_id, "NM LAT/LONG   FREQ ", MCDU_SMALL, ECAM_WHITE)
-        else
-            self:set_line(mcdu_data, MCDU_RIGHT, line_id, "NM                 ", MCDU_SMALL, ECAM_WHITE)
-        end
-        self:set_line(mcdu_data, MCDU_LEFT, line_id, "*" .. x.id, MCDU_LARGE, ECAM_BLUE)
-        self:set_line(mcdu_data, MCDU_RIGHT, line_id, lat_lon .. "  " .. freq, MCDU_LARGE, ECAM_GREEN)
-
-        if line_id >= 5 then
+    for i, x in ipairs(list_navaids) do
+        if i > mcdu_data.page_data[610].curr_page*5 then
             break
-        end
+        elseif i > (mcdu_data.page_data[610].curr_page-1)*5 then
 
+            local geo_distance
+            if my_coords[1] then
+                geo_distance = tostring(Round(GC_distance_kt(x.lat, x.lon, my_coords[1], my_coords[2])))
+            else
+                geo_distance = "XXX"
+            end
+
+            local lat_value = Fwd_string_fill(tostring(Round(math.abs(x.lat))), "0", 2)
+            local lat_char = x.lat >= 0 and "N" or "S"
+
+            local lon_value = Fwd_string_fill(tostring(Round(math.abs(x.lon))), "0", 3)
+            local lon_char = x.lon >= 0 and "E" or "W"
+
+            local lat_lon =  lat_value .. lat_char .. "/" .. lon_value .. lon_char
+
+            local freq = x.freq and (Aft_string_fill(tostring(x.freq), " ", 6)) or "      "
+
+            self:set_line(mcdu_data, MCDU_LEFT, line_id, Fwd_string_fill(geo_distance, " ", 5), MCDU_SMALL, ECAM_GREEN)
+            if line_id == 1 then
+                self:set_line(mcdu_data, MCDU_RIGHT, line_id, "NM LAT/LONG   FREQ ", MCDU_SMALL, ECAM_WHITE)
+            else
+                self:set_line(mcdu_data, MCDU_RIGHT, line_id, "NM                 ", MCDU_SMALL, ECAM_WHITE)
+            end
+            self:set_line(mcdu_data, MCDU_LEFT, line_id, "*" .. x.id, MCDU_LARGE, ECAM_BLUE)
+            self:set_line(mcdu_data, MCDU_RIGHT, line_id, lat_lon .. "  " .. freq, MCDU_LARGE, ECAM_GREEN)
+            line_id = line_id + 1
+        end
     end
 end
 
@@ -93,11 +95,13 @@ function THIS_PAGE:render(mcdu_data)
     assert(mcdu_data.dup_names.req_text, "Provide me which navaid you want.")
     assert(mcdu_data.dup_names.return_page, "Provide me where to return")
 
-    mcdu_data.page_data[610] = {
-        list_navaids = {},
-        list_navaids_len = 0
-    }
-
+    if not mcdu_data.page_data[610] then
+        mcdu_data.page_data[610] = {
+            list_navaids = {},
+            list_navaids_len = 0,
+            curr_page = 1
+        }
+    end
 
     if not(AvionicsBay.is_initialized() and AvionicsBay.is_ready()) then
         self:set_line(mcdu_data, MCDU_LEFT, 2, "AVIONICSBAY INITIALIZING", MCDU_LARGE, ECAM_RED)
@@ -128,11 +132,18 @@ function THIS_PAGE:render(mcdu_data)
     mcdu_data.page_data[610].list_navaids = list_navaids
     mcdu_data.page_data[610].list_navaids_len = nr_navaids
 
+    if mcdu_data.page_data[610].list_navaids_len > 5 then
+        self:set_updn_arrows_bottom(mcdu_data, true)
+    end
+
     self:set_line(mcdu_data, MCDU_LEFT, 6, "<RETURN", MCDU_LARGE, ECAM_WHITE)
 
 end
 
 function THIS_PAGE:sel_navaid(mcdu_data, idx)
+
+    idx = idx + 5 * (mcdu_data.page_data[610].curr_page - 1)
+
     if idx > mcdu_data.page_data[610].list_navaids_len then
         return false
     end
@@ -172,11 +183,23 @@ function THIS_PAGE:L5(mcdu_data)
     end
 end
 
-
 function THIS_PAGE:L6(mcdu_data)
     mcdu_data.dup_names.selected_navaid = nil
     mcdu_open_page(mcdu_data, mcdu_data.dup_names.return_page)
 end
 
+function THIS_PAGE:Slew_Up(mcdu_data)
+    mcdu_data.page_data[610].curr_page = mcdu_data.page_data[610].curr_page + 1
+    if (mcdu_data.page_data[610].curr_page-1) * 5 > mcdu_data.page_data[610].list_navaids_len then
+        mcdu_data.page_data[610].curr_page = 1
+    end
+end
+
+function THIS_PAGE:Slew_Down(mcdu_data)
+    mcdu_data.page_data[610].curr_page = mcdu_data.page_data[610].curr_page - 1
+    if mcdu_data.page_data[610].curr_page == 0 then
+        mcdu_data.page_data[610].curr_page = math.floor(mcdu_data.page_data[610].list_navaids_len / 5) + 1
+    end
+end
 
 mcdu_pages[THIS_PAGE.id] = THIS_PAGE
