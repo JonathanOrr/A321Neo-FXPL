@@ -608,6 +608,10 @@ function FMGS_get_landing_wind()
     return FMGS_sys.perf.landing.wind
 end
 
+function FMGS_set_landing_trans_alt_internal(alt) --not user value! but fmgs computed value!
+    FMGS_sys.perf.landing.trans_alt = alt
+end
+
 function FMGS_set_landing_trans_alt(alt) --caution! User! Not system default value!
     FMGS_sys.perf.landing.user_trans_alt = alt
 end
@@ -616,12 +620,16 @@ function FMGS_get_landing_trans_alt()
     return FMGS_sys.perf.landing.trans_alt, FMGS_sys.perf.landing.user_trans_alt
 end
 
+function FMGS_set_landing_vapp_internal(spd) --not user value! but fmgs computed value!
+    FMGS_sys.perf.landing.vapp = spd
+end
+
 function FMGS_set_landing_vapp(spd) --caution! User! Not system default value!
     FMGS_sys.perf.landing.user_vapp = spd
 end
 
 function FMGS_get_landing_vapp()
-    return FMGS_sys.perf.landing.vapp, FMGS_sys.perf.landing.vappuser_vapp
+    return FMGS_sys.perf.landing.vapp, FMGS_sys.perf.landing.user_vapp
 end
 
 function FMGS_set_landing_config(flaps)
@@ -630,6 +638,14 @@ end
 
 function FMGS_get_landing_config()
     return FMGS_sys.perf.landing.landing_config
+end
+
+function FMGS_set_landing_vls(spd) -- user should not set it, for internal computation only
+    FMGS_sys.perf.landing.vls = spd
+end
+
+function FMGS_get_landing_vls()
+    return FMGS_sys.perf.landing.vls
 end
 
 -------------------------------------------------------------------------------

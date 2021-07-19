@@ -16,13 +16,6 @@ local THIS_PAGE = MCDU_Page:new({id=306})
 
 local dest_within_180_nm = true
 local qnh_in_inhg = false
-local qnh = nil
-local trans_alt= 10000
-local user_trans_alt= nil
-local vapp = 143
-local user_vapp = nil
-local vls = 138
-local landing_config = 4 -- 3 is 3, 4 is full
 local have_ils = true
 
 function THIS_PAGE:render(mcdu_data)
@@ -41,7 +34,7 @@ function THIS_PAGE:render(mcdu_data)
     --L1--
     ------
 
-    local displayed_qnh = qnh
+    local displayed_qnh = FMGS_get_landing_qnh()
     displayed_qnh = tostring(displayed_qnh)
     local qnhcolour = ECAM_BLUE
     if displayed_qnh == "nil" then
@@ -75,19 +68,21 @@ function THIS_PAGE:render(mcdu_data)
     --L4--
     ------
     
-    self:add_multi_line(mcdu_data, MCDU_LEFT, 4, user_trans_alt ~= nil and user_trans_alt or mcdu_format_force_to_small(trans_alt), MCDU_LARGE, ECAM_BLUE)
+    local a,b = FMGS_get_landing_trans_alt()
+    self:add_multi_line(mcdu_data, MCDU_LEFT, 4, b ~= nil and b or mcdu_format_force_to_small(a), MCDU_LARGE, ECAM_BLUE)
 
     ------
     --L5--
     ------
 
-    self:add_multi_line(mcdu_data, MCDU_LEFT, 5, user_vapp~= nil and user_vapp or mcdu_format_force_to_small(vapp), MCDU_LARGE, ECAM_BLUE)
+    local c,d = FMGS_get_landing_vapp()
+    self:add_multi_line(mcdu_data, MCDU_LEFT, 5, d~= nil and d or mcdu_format_force_to_small(c), MCDU_LARGE, ECAM_BLUE)
 
     ------
     --C5--
     ------
 
-    self:add_multi_line(mcdu_data, MCDU_LEFT, 5, "           "..vls, MCDU_LARGE, ECAM_GREEN)
+    self:add_multi_line(mcdu_data, MCDU_LEFT, 5, "           "..FMGS_get_landing_vls(), MCDU_LARGE, ECAM_GREEN)
 
     ------
     --R2--
@@ -103,10 +98,10 @@ function THIS_PAGE:render(mcdu_data)
         self:add_multi_line(mcdu_data, MCDU_RIGHT, 3, FMGS_get_landing_dh() == nil and "[  ]" or FMGS_get_landing_dh() , MCDU_LARGE, ECAM_BLUE)
     end
 
-    if landing_config == 4 then
+    if FMGS_get_landing_config() == 4 then
         self:add_multi_line(mcdu_data, MCDU_RIGHT, 4, mcdu_format_force_to_small("CONF3*") , MCDU_LARGE, ECAM_BLUE)
         self:add_multi_line(mcdu_data, MCDU_RIGHT, 5, "FULL" , MCDU_LARGE, ECAM_BLUE)
-    elseif landing_config == 3 then
+    elseif FMGS_get_landing_config() == 3 then
         self:add_multi_line(mcdu_data, MCDU_RIGHT, 4, "CONF3" , MCDU_LARGE, ECAM_BLUE)
         self:add_multi_line(mcdu_data, MCDU_RIGHT, 5, mcdu_format_force_to_small("FULL*") , MCDU_LARGE, ECAM_BLUE)
     end
@@ -169,18 +164,18 @@ end
 function THIS_PAGE:L4(mcdu_data)
     local input = mcdu_get_entry(mcdu_data, {"!!!!!","!!!!","!!!","!!", "!","CLR"}, false)
     if input == "CLR" then
-        user_trans_alt = nil
+        FMGS_set_landing_trans_alt(nil)
     else
-        user_trans_alt = input
+        FMGS_set_landing_trans_alt(input)
     end
 end
 
 function THIS_PAGE:L5(mcdu_data)
     local input = mcdu_get_entry(mcdu_data, {"!!!","!!", "!","CLR"}, false)
     if input == "CLR" then
-        user_vapp = nil
+        FMGS_set_landing_vapp(nil)
     else
-        user_vapp = input
+        FMGS_set_landing_vapp(input)
     end
 end
 
@@ -208,11 +203,11 @@ function THIS_PAGE:R3(mcdu_data)
 end
 
 function THIS_PAGE:R4(mcdu_data)
-    landing_config = 3
+    FMGS_set_landing_config(3)
 end
 
 function THIS_PAGE:R5(mcdu_data)
-    landing_config = 4
+    FMGS_set_landing_config(4)
 end
 
 function THIS_PAGE:L1(mcdu_data)
@@ -223,7 +218,7 @@ function THIS_PAGE:L1(mcdu_data)
         input = tonumber(input)
 
         if input >= 745 and input <= 1100 then
-            qnh = input
+            FMGS_set_landing_qnh(input)
         else
             mcdu_send_message(mcdu_data, "ENTRY OUT OF RANGE")
         end
@@ -234,7 +229,7 @@ function THIS_PAGE:L1(mcdu_data)
 
         if input >= 22 and input <= 32.49 then
             input = input * 100 -- change 29.92 to 2992 as required in drawing format
-            qnh = input
+            FMGS_set_landing_qnh(input)
         else 
             mcdu_send_message(mcdu_data, "ENTRY OUT OF RANGE")
         end
