@@ -21,10 +21,10 @@
 -------------------------------------------------------------------------------
 local DEFAULT_CG_PERC = 22.2
 local DEFAULT_CG_M    = 20.4509
-local EMPTY_WEIGHT    = 47776
+local EMPTY_WEIGHT    = 46300
 local MAC_VALUE_M     = 4.1935
 
-local CG_FWD_CARGO_M  =  8.869
+local CG_FWD_CARGO_M  =  9.759
 local CG_AFT_CARGO_M  = 30.530
 local CG_BULK_CARGO_M = 33.992
 local CG_PASS_START   =  5.560
@@ -32,13 +32,8 @@ local CG_PASS_END     = 35.960
 
 local CG_WING_TANKS_M = 20.903
 local CG_CTR_TANK_M   = 18.595
-local CG_ACT_TANK_M   = 12.496
+local CG_ACT_TANK_M   = 13.715
 local CG_RCT_TANK_M   = 26.640
-
-local WEIGHT_MAX_PASSENGERS = 18800
-local WEIGHT_MAX_FWD_CARGO  = 2400
-local WEIGHT_MAX_AFT_CARGO  = 2400
-local WEIGHT_MAX_BULK_CARGO = 1500
 
 -------------------------------------------------------------------------------
 -- Datarefs

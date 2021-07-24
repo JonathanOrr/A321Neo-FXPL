@@ -50,8 +50,8 @@ include("EFB/efb_topcat.lua")
 -- Constants
 -------------------------------------------------------------------------------
 local BUTTON_PRESS_TIME = 0.5
-local WEIGHT_PER_PASSENGER = 80 --kg
-local DRY_OPERATING_WEIGHT = 47777
+local WEIGHT_PER_PASSENGER = 88 --kg
+local DRY_OPERATING_WEIGHT = 46300
 local NUMBER_OF_SUBPAGES = 3
 
 -------------------------------------------------------------------------------
@@ -98,12 +98,12 @@ local touched_sliders_after_loading = false
 -------------------------------------------------------------------------------
 
 function backpropagate_current_weights_to_local_sliders()
-    slider_pos[1] = WEIGHTS.get_passengers_weight()/18800 -- pax
+    slider_pos[1] = WEIGHTS.get_passengers_weight()/WEIGHT_MAX_FWD_CARGO -- pax
     slider_pos[2] = 0.5
-    slider_pos[3] = WEIGHTS.get_fwd_cargo_weight()/2400 -- front cargo
-    slider_pos[4] = WEIGHTS.get_aft_cargo_weight()/2400 -- aft cargo
-    slider_pos[5] = WEIGHTS.get_bulk_cargo_weight()/1500 -- bulk cargo
-    slider_pos[6] = get(FOB) / 40000
+    slider_pos[3] = WEIGHTS.get_fwd_cargo_weight()/WEIGHT_MAX_FWD_CARGO -- front cargo
+    slider_pos[4] = WEIGHTS.get_aft_cargo_weight()/WEIGHT_MAX_AFT_CARGO -- aft cargo
+    slider_pos[5] = WEIGHTS.get_bulk_cargo_weight()/WEIGHT_MAX_BULK_CARGO -- bulk cargo
+    slider_pos[6] = get(FOB) / FUEL_TOT_MAX
 end
 
 EFB.load_page_backpropagate_current_weights = backpropagate_current_weights_to_local_sliders
@@ -136,15 +136,15 @@ local function draw_each_component_UI() -- draw the lovely filling polygon anima
     local pax_height = 185
 
     local filled_ratio = {
-        math.min(get(Fuel_quantity[1])/8440 ,1) , -- left wing tank
-        math.min(get(Fuel_quantity[2])/8440 ,1) , -- right wing tank
-        math.min(get(Fuel_quantity[0])/8940 ,1) , -- center tank
-        math.min(get(Fuel_quantity[3])/4080 ,1) , -- act
-        math.min(get(Fuel_quantity[4])/10080,1) , -- rct
-      WEIGHTS.get_bulk_cargo_weight()/1500, -- bulk cargo
-      WEIGHTS.get_aft_cargo_weight()/2400, -- aft cargo
-      WEIGHTS.get_fwd_cargo_weight()/2400, -- front cargo
-      WEIGHTS.get_passengers_weight()/18800, -- pax
+        math.min(get(Fuel_quantity[1])/FUEL_LR_MAX ,1) , -- left wing tank
+        math.min(get(Fuel_quantity[2])/FUEL_LR_MAX ,1) , -- right wing tank
+        math.min(get(Fuel_quantity[0])/FUEL_C_MAX ,1) , -- center tank
+        math.min(get(Fuel_quantity[3])/FUEL_ACT_MAX ,1) , -- act
+        math.min(get(Fuel_quantity[4])/FUEL_RCT_MAX,1) , -- rct
+      WEIGHTS.get_bulk_cargo_weight()/WEIGHT_MAX_BULK_CARGO, -- bulk cargo
+      WEIGHTS.get_aft_cargo_weight()/WEIGHT_MAX_AFT_CARGO, -- aft cargo
+      WEIGHTS.get_fwd_cargo_weight()/WEIGHT_MAX_FWD_CARGO, -- front cargo
+      WEIGHTS.get_passengers_weight()/WEIGHT_MAX_PASSENGERS, -- pax
     }
 
     sasl.gl.drawConvexPolygon ({    left_wing_ll[1] 
@@ -285,12 +285,12 @@ local function reset_slider_when_mouse_leave()
 end
 
 local function slider_to_weights_translator()
-    slider_actual_values[1] = Math_rescale(0, 0, 1, 18800, slider_pos[1])
+    slider_actual_values[1] = Math_rescale(0, 0, 1, WEIGHT_MAX_PASSENGERS, slider_pos[1])
     slider_actual_values[2] = slider_pos[2]
-    slider_actual_values[3] = Math_rescale(0, 0, 1, 2400, slider_pos[3])
-    slider_actual_values[4] = Math_rescale(0, 0, 1, 2400, slider_pos[4])
-    slider_actual_values[5] = Math_rescale(0, 0, 1, 1500, slider_pos[5])
-    slider_actual_values[6] = Math_rescale(0, 0, 1, 40000, slider_pos[6])
+    slider_actual_values[3] = Math_rescale(0, 0, 1, WEIGHT_MAX_FWD_CARGO, slider_pos[3])
+    slider_actual_values[4] = Math_rescale(0, 0, 1, WEIGHT_MAX_AFT_CARGO, slider_pos[4])
+    slider_actual_values[5] = Math_rescale(0, 0, 1, WEIGHT_MAX_BULK_CARGO, slider_pos[5])
+    slider_actual_values[6] = Math_rescale(0, 0, 1, FUEL_TOT_MAX, slider_pos[6])
     for i=1, 6 do
         if i == 1 then
             slider_actual_values[i] = math.floor(slider_actual_values[i])
@@ -304,7 +304,7 @@ end
 
 local function set_values()
     touched_sliders_after_loading = false
-    local CG_effect = (1-slider_actual_values[1]/18800)/2
+    local CG_effect = (1-slider_actual_values[1]/WEIGHT_MAX_PASSENGERS)/2
     WEIGHTS.set_passengers_weight(slider_actual_values[1] ,(slider_actual_values[2]-0.5) * CG_effect + 0.5)
     WEIGHTS.set_fwd_cargo_weight(slider_actual_values[3])
     WEIGHTS.set_aft_cargo_weight(slider_actual_values[4])
