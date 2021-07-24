@@ -109,7 +109,7 @@ end
 WEIGHTS.set_fwd_cargo_weight = function(kgs)
     assert(kgs)
     assert(kgs >= 0)
-    if kgs > WEIGHT_MAX_FWD_CARGO then logWarning("FWD cargo overloaded") end
+    if kgs > WEIGHT_MAX_FWD_CARGO then logWarning("FWD cargo overloaded: " .. tostring(kgs)) end
 
     curr_weights.fwd_cargo = kgs
     update_xplane_cg()
@@ -122,7 +122,7 @@ end
 WEIGHTS.set_aft_cargo_weight = function(kgs)
     assert(kgs)
     assert(kgs >= 0)
-    if kgs > WEIGHT_MAX_AFT_CARGO then logWarning("AFT cargo overloaded") end
+    if kgs > WEIGHT_MAX_AFT_CARGO then logWarning("AFT cargo overloaded: " .. tostring(kgs)) end
 
     curr_weights.aft_cargo = kgs
     update_xplane_cg()
@@ -135,7 +135,7 @@ end
 WEIGHTS.set_bulk_cargo_weight = function(kgs)
     assert(kgs)
     assert(kgs >= 0)
-    if kgs > WEIGHT_MAX_BULK_CARGO then logWarning("Bulk cargo overloaded") end
+    if kgs > WEIGHT_MAX_BULK_CARGO then logWarning("Bulk cargo overloaded: " .. tostring(kgs)) end
 
     curr_weights.bulk_cargo = kgs
     update_xplane_cg()

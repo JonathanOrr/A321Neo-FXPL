@@ -88,7 +88,7 @@ deparr_apts = {"", ""}
 -----------------------------------------------------------DO NOT TOUCH!!!!!!
 -------------------------------------------------------------------------------
 
-local slider_pos = {0,0.5,0,0,0,5000/40000}
+local slider_pos = {0,0.5,0,0,0,5000/FUEL_TOT_MAX}
 local slider_actual_values = {0,0.5,0,0,0,0}
 local focused_slider = 0
 local touched_sliders_after_loading = false
@@ -98,7 +98,7 @@ local touched_sliders_after_loading = false
 -------------------------------------------------------------------------------
 
 function backpropagate_current_weights_to_local_sliders()
-    slider_pos[1] = WEIGHTS.get_passengers_weight()/WEIGHT_MAX_FWD_CARGO -- pax
+    slider_pos[1] = WEIGHTS.get_passengers_weight()/WEIGHT_MAX_PASSENGERS -- pax
     slider_pos[2] = 0.5
     slider_pos[3] = WEIGHTS.get_fwd_cargo_weight()/WEIGHT_MAX_FWD_CARGO -- front cargo
     slider_pos[4] = WEIGHTS.get_aft_cargo_weight()/WEIGHT_MAX_AFT_CARGO -- aft cargo
@@ -309,7 +309,7 @@ local function set_values()
     WEIGHTS.set_fwd_cargo_weight(slider_actual_values[3])
     WEIGHTS.set_aft_cargo_weight(slider_actual_values[4])
     WEIGHTS.set_bulk_cargo_weight(slider_actual_values[5])
-    set_fuel(slider_actual_values[6] + 10 * (slider_actual_values[6]/40000) )
+    set_fuel(slider_actual_values[6] + 10 * (slider_actual_values[6]/FUEL_TOT_MAX) )
     -- so long story short, there was an issue which set_fuel(40000) will only add 39990 kg of fuel
     --the issue is not in this script, it is rico's set fuel function.
     --therefore, for every 40000 kg of fuel, 10 kg has to be added.
@@ -585,7 +585,7 @@ local function Subpage_1_buttons()
         slider_pos[3] = 0
         slider_pos[4] = 0
         slider_pos[5] = 0
-        slider_pos[6] = 5000/40000
+        slider_pos[6] = 5000/FUEL_TOT_MAX
         slider_to_weights_translator()
         set_values()
     end)
