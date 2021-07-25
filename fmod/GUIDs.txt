@@ -8,6 +8,8 @@
 {76004d39-cc8a-48fa-82f6-2e5f037893c8} event:/BatteryRelay/2 Off
 {4b76b401-4666-4589-b8fa-f3597102af21} event:/Brakes/Off
 {79db9fdb-19da-4194-b2da-62c8e683c1ad} event:/Brakes/On
+{bb6344c9-4ba5-48fd-bf91-9d10d49aa4bd} event:/Cockpit Door/Close
+{196a8bd5-db14-46c9-90df-fe770c9a4d21} event:/Cockpit Door/Open
 {fa3ccb63-2201-42a0-9ba9-80eea8c41f31} event:/CockpitMechanical/Lights/1
 {7c1f3bc8-8a78-496c-929d-a763939df0aa} event:/CockpitMechanical/Lights/2
 {180bfc42-72ad-426e-9893-90b2e97a68a6} event:/CockpitMechanical/Lights/3
@@ -30,13 +32,13 @@
 {4f37aed1-3eb9-4a5c-b3da-7a0308da4a78} event:/CockpitMechanical/Thrust Levers/ThrLvrRev
 {014c34dd-cc81-463a-a539-2e5fc4b75ea7} event:/CockpitMechanical/Thrust Levers/ThrLvrRevFull
 {b91efb68-0853-461b-8e6a-91b68abbb0b5} event:/CockpitMechanical/Thrust Levers/ThrLvrTOGA
-{05302b22-9185-4a99-9f3b-46cfd5548143} event:/CockpitMechanical/Thrust Levers Right/ThrLvrCL
-{573b9d9d-e0c3-41f9-8689-1edb324614d9} event:/CockpitMechanical/Thrust Levers Right/ThrLvrExit
-{e009b6a2-f60d-429a-9edd-f44695c0805a} event:/CockpitMechanical/Thrust Levers Right/ThrLvrFLX
-{b03c9b65-ffe6-4ec3-8129-f1b31e70a85c} event:/CockpitMechanical/Thrust Levers Right/ThrLvrIdle
-{56bc5e67-6c5a-4d32-bd8e-394e721b6199} event:/CockpitMechanical/Thrust Levers Right/ThrLvrRev
-{d23734e4-0df5-471e-b59a-21878dc69be9} event:/CockpitMechanical/Thrust Levers Right/ThrLvrRevFull
-{28680933-4625-41e3-b9f5-7a2402c69fec} event:/CockpitMechanical/Thrust Levers Right/ThrLvrTOGA
+{e82c13d4-5dee-4ce4-972b-5a0e4657d28d} event:/CockpitMechanical/Thrust Levers Right/ThrLvrCL
+{7baa045e-3891-4364-8af3-204deae5d418} event:/CockpitMechanical/Thrust Levers Right/ThrLvrExit
+{affa8b49-ce17-4e01-9f4e-1d00f80c595f} event:/CockpitMechanical/Thrust Levers Right/ThrLvrFLX
+{99dab0c2-6b44-43ab-bca8-0d126c979a16} event:/CockpitMechanical/Thrust Levers Right/ThrLvrIdle
+{8a3bd8e2-308f-44e8-816a-7170f0cac343} event:/CockpitMechanical/Thrust Levers Right/ThrLvrRev
+{59ed5759-1f81-4b74-84c7-6ee27c5ae628} event:/CockpitMechanical/Thrust Levers Right/ThrLvrRevFull
+{8e3211bf-fd66-4efe-bc5c-b69987ae646f} event:/CockpitMechanical/Thrust Levers Right/ThrLvrTOGA
 {850bb3a5-fa7f-4d22-bf9d-a80868eee0e7} event:/CockpitMechanical/Big Round Button Press
 {bafd0ab7-85f5-4e8f-8898-00cef3bbf4d3} event:/CockpitMechanical/Big Round Button Release
 {ed910ed0-bdc8-47e6-a8cb-d025b4ba55d4} event:/CockpitMechanical/Engine Master
@@ -60,8 +62,10 @@
 {05aa7e46-d0ef-4817-84df-6599e3fd87f6} event:/Engines/Engines Ext
 {3c1896b4-b137-42d9-a178-78d93f2c0308} event:/Engines/HowlEnd
 {12015a68-dfa0-4f0c-94d3-e2d639703cf2} event:/Engines V1 PW1100G/EnginesL
+{c595fbb5-79ed-4c79-95e6-8b0b7d81edb5} event:/Engines V1 PW1100G/EnginesL_Buzzsaw
 {1ad0c7ef-a4e8-43b4-b6ee-1d5b29347dff} event:/Engines V1 PW1100G/EnginesLX
 {4a3670cd-e3c8-4e1c-8b62-f35b4713d64a} event:/Engines V1 PW1100G/EnginesR
+{ad68add6-1b67-4bd5-8c3c-88961bce00ab} event:/Engines V1 PW1100G/EnginesR_Buzzsaw
 {02450afb-228d-4563-8a07-e216e97a89f0} event:/Engines V1 PW1100G/EnginesRX
 {b12656ef-bd01-488e-bc99-8688bcd537d5} event:/Engines V1 PW1100G/HowlEnd
 {67fe6698-1117-48ce-8a94-c8009aabacca} event:/Engines V1 PW1100G/HowlLogicL

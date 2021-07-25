@@ -159,6 +159,7 @@ local function convert_cifp_array(rawdata, cifp_arr)
             type        = ("").char(cifp_arr.data[i-1].type),
             proc_name   = ffi.string(cifp_arr.data[i-1].proc_name,  cifp_arr.data[i-1].proc_name_len),
             trans_name  = ffi.string(cifp_arr.data[i-1].trans_name,  cifp_arr.data[i-1].trans_name_len),
+            trans_alt   = cifp_arr.data[i-1].transition_altitude,
             legs = {}
         }
         
