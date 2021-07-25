@@ -80,3 +80,5 @@ FBW = {
     },
     filtered_sensors = {}
 }
+
+Cinetracker = {}

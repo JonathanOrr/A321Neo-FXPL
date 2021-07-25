@@ -18,6 +18,7 @@
 
 addSearchPath(moduleDirectory .. "/Custom Module/debug_windows/")
 addSearchPath(moduleDirectory .. "/Custom Module/display_pop-ups/")
+addSearchPath(moduleDirectory .. "/Custom Module/Cinetracker/")
 
  --windows
 MCDU_window = contextWindow {
@@ -400,5 +401,19 @@ PID_UI_window = contextWindow {
   visible = false ;
   components = {
     PID_UI {position = { 0 , 0 , 600 , 300 }}
+  };
+}
+
+Cinetracker_window = contextWindow {
+  name = "C* CINETRACKER";
+  position = { 50 , 50 , 480 , 550 };
+  noBackground = true ;
+  proportional = false ;
+  minimumSize = { 240 , 275 };
+  maximumSize = { 480 , 550 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = false ;
+  components = {
+    cinetracker_main {position = { 0 , 0 , 480 , 550 }}
   };
 }

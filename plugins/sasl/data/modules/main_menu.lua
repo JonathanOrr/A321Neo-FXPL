@@ -96,6 +96,10 @@ function Show_hide_MAGIC_Debug()
   MAGIC_window:setIsVisible(not MAGIC_window:isVisible())
 end
 
+function Show_hide_Cinetracker()
+  Cinetracker_window:setIsVisible(not Cinetracker_window:isVisible())
+end
+
 
 
 function IRs_instaneous_align()
@@ -171,6 +175,7 @@ ShowHideMCDU        = sasl.appendMenuItem(Menu_main, "Show/Hide MCDU", Show_hide
 ShowHideDCDU        = sasl.appendMenuItem(Menu_main, "Show/Hide DCDU Manager", Show_hide_DCDU)
 ShowHideFailures    = sasl.appendMenuItem(Menu_main, "Show/Hide Failures Manager", Show_hide_Failures)
 ShowHideFuel        = sasl.appendMenuItem(Menu_main, "Show/Hide Fuel Panel", Show_hide_Fuel)
+ShowHideCinetracker = sasl.appendMenuItem(Menu_main, "Show/Hide Cinetracker", Show_hide_Cinetracker)
 
 sasl.appendMenuSeparator(Menu_main)
 
