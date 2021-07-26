@@ -19,6 +19,7 @@
 addSearchPath(moduleDirectory .. "/Custom Module/debug_windows/")
 addSearchPath(moduleDirectory .. "/Custom Module/display_pop-ups/")
 addSearchPath(moduleDirectory .. "/Custom Module/Cinetracker/")
+addSearchPath(moduleDirectory .. "/Custom Module/Cinetracker/cinetracker_huds")
 
  --windows
 MCDU_window = contextWindow {
@@ -414,6 +415,23 @@ Cinetracker_window = contextWindow {
   gravity = { 0 , 1 , 0 , 1 };
   visible = false ;
   components = {
-    cinetracker_main {position = { 0 , 0 , 480 , 550 }}
+    cinetracker_main {}
+  };
+}
+
+Cinetracker_HUD = contextWindow {
+  name = "CINETRACKER HUD";
+  position = { 0 , 0 , 408 , 561 };
+  noBackground = true ;
+  proportional = true ;
+  minimumSize = { 408 / 4 , 561 / 4};
+  maximumSize = { 408 , 561 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = true ;
+  noDecore = true ;
+  layer = SASL_CW_LAYER_FLIGHT_OVERLAY;
+  noMove = true;
+  components = {
+    spd {}
   };
 }
