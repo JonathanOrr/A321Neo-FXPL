@@ -16,10 +16,13 @@
 
 local THIS_PAGE = MCDU_Page:new({id=600})
 
-local POINT_TYPE_DISCONTINUITY = 1
-local POINT_TYPE_SIDTRANS      = 2
+local POINT_TYPE_DEP_SID       = 1
+local POINT_TYPE_DEP_TRANS     = 2
 local POINT_TYPE_LEG           = 3
-local POINT_TYPE_STARAPPROACH  = 4
+local POINT_TYPE_ARR_TRANS     = 4
+local POINT_TYPE_ARR_STAR      = 5
+local POINT_TYPE_ARR_VIA       = 6
+local POINT_TYPE_ARR_APPR      = 7
 
 -------------------------------------------------------------------------------
 -- DEPARTURE
@@ -98,14 +101,16 @@ end
 -------------------------------------------------------------------------------
 function THIS_PAGE:prepare_list_departure(mcdu_data, list_messages)
     if mcdu_data.page_data[600].curr_fpln.apts.dep_sid then
-        for _,x in ipairs(mcdu_data.page_data[600].curr_fpln.apts.dep_sid.legs) do
-            x.point_type = POINT_TYPE_SIDTRANS
+        for i,x in ipairs(mcdu_data.page_data[600].curr_fpln.apts.dep_sid.legs) do
+            x.ref_id = i
+            x.point_type = POINT_TYPE_DEP_SID
             table.insert(list_messages, x)
         end
     end
     if mcdu_data.page_data[600].curr_fpln.apts.dep_trans then
-        for _,x in ipairs(mcdu_data.page_data[600].curr_fpln.apts.dep_trans.legs) do
-            x.point_type = POINT_TYPE_SIDTRANS
+        for i,x in ipairs(mcdu_data.page_data[600].curr_fpln.apts.dep_trans.legs) do
+            x.ref_id = i
+            x.point_type = POINT_TYPE_DEP_TRANS
             table.insert(list_messages, x)
         end
     end
@@ -114,8 +119,9 @@ end
 function THIS_PAGE:prepare_list_arrival(mcdu_data, list_messages)
     local fpln = mcdu_data.page_data[600].curr_fpln
     if fpln.apts.arr_trans then
-        for _,x in ipairs(fpln.apts.arr_trans.legs) do
-            x.point_type = POINT_TYPE_STARAPPROACH
+        for i,x in ipairs(fpln.apts.arr_trans.legs) do
+            x.ref_id = i
+            x.point_type = POINT_TYPE_ARR_TRANS
             table.insert(list_messages, x)
         end
     end
@@ -123,25 +129,28 @@ function THIS_PAGE:prepare_list_arrival(mcdu_data, list_messages)
     local is_via_valid = fpln.apts.arr_via and not fpln.apts.arr_via.novia and fpln.apts.arr_via.legs and fpln.apts.arr_via.legs[1]
 
     if fpln.apts.arr_star then
-        for _,x in ipairs(fpln.apts.arr_star.legs) do
+        for i,x in ipairs(fpln.apts.arr_star.legs) do
             if is_via_valid and x.leg_name == fpln.apts.arr_via.legs[1].leg_name then
                 break
             end
-            x.point_type = POINT_TYPE_STARAPPROACH
+            x.ref_id = i
+            x.point_type = POINT_TYPE_ARR_STAR
             table.insert(list_messages, x)
         end
     end
 
     if is_via_valid then
-        for _,x in ipairs(fpln.apts.arr_via.legs) do
-            x.point_type = POINT_TYPE_STARAPPROACH
+        for i,x in ipairs(fpln.apts.arr_via.legs) do
+            x.ref_id = i
+            x.point_type = POINT_TYPE_ARR_VIA
             table.insert(list_messages, x)
         end
     end
 
     if fpln.apts.arr_appr then
-        for _,x in ipairs(fpln.apts.arr_appr.legs) do
-            x.point_type = POINT_TYPE_STARAPPROACH
+        for i,x in ipairs(fpln.apts.arr_appr.legs) do
+            x.ref_id = i
+            x.point_type = POINT_TYPE_ARR_APPR
             table.insert(list_messages, x)
         end
     end
@@ -157,12 +166,9 @@ function THIS_PAGE:prepare_list(mcdu_data)
 
     if mcdu_data.page_data[600].curr_fpln.legs then
         for i,x in ipairs(mcdu_data.page_data[600].curr_fpln.legs) do
-            if x.discontinuity then
-                x.point_type = POINT_TYPE_DISCONTINUITY
-            else
-                x.point_type = POINT_TYPE_LEG
-            end
-        table.insert(list_messages, x)
+            x.ref_id = i
+            x.point_type = POINT_TYPE_LEG
+            table.insert(list_messages, x)
         end
     end
 
@@ -178,12 +184,15 @@ function THIS_PAGE:render_list(mcdu_data)
     local list_messages = THIS_PAGE:prepare_list(mcdu_data)
 
     for i,x in ipairs(list_messages) do
-        
-        if x.point_type == POINT_TYPE_DISCONTINUITY then
+
+        if x.discontinuity then
             self:add_f(mcdu_data, function(line_id)
                 THIS_PAGE:render_discontinuity(mcdu_data, line_id)
-            end)
-        elseif x.point_type == POINT_TYPE_SIDTRANS or x.point_type == POINT_TYPE_STARAPPROACH then
+            end, x)
+        elseif x.point_type == nil then
+             -- NOP -- This is normal: in some cases we add a non existent line
+                    -- to the array (see prepare_list)
+        elseif x.point_type ~= POINT_TYPE_LEG then
             local name, proc = cifp_convert_leg_name(x)
             if #proc == 0 then
                 proc = mcdu_data.page_data[600].curr_fpln.apts.dep_sid.proc_name
@@ -193,16 +202,16 @@ function THIS_PAGE:render_list(mcdu_data)
             local distance = x.computed_distance
             self:add_f(mcdu_data, function(line_id)
                 THIS_PAGE:render_single(mcdu_data, line_id, name, "----", spd_cstr, alt_cstr, alt_cstr_col, proc, nil, nil, distance, false, i == 2)
-            end)
-        elseif x.point_type == POINT_TYPE_LEG then
+            end, x)
+        else
             local distance = x.computed_distance
-            local proc = "" -- TODO
+            local proc = "" -- TODO airway
             local alt_cstr, alt_cstr_col = nil, nil
             local spd_cstr = nil
             local name = x.id or "(MAN)"
             self:add_f(mcdu_data, function(line_id)
                 THIS_PAGE:render_single(mcdu_data, line_id, name, "----", spd_cstr, alt_cstr, alt_cstr_col, proc, nil, nil, distance, false, false)
-            end)
+            end, x)
         end
     end
 
@@ -259,8 +268,8 @@ function THIS_PAGE:render_list_altn(mcdu_data, last_i, end_i)
 end
 
 
-function THIS_PAGE:add_f(mcdu_data, add_f)
-    table.insert(mcdu_data.page_data[600].render_functions, add_f)
+function THIS_PAGE:add_f(mcdu_data, func, ref_object)
+    table.insert(mcdu_data.page_data[600].render_functions, {func, ref_object})
 end
 
 function THIS_PAGE:print_render_list(mcdu_data)
@@ -275,10 +284,12 @@ function THIS_PAGE:print_render_list(mcdu_data)
     local end_i = mcdu_data.page_data[600].curr_idx + 5
 
     local breaked = false
+    mcdu_data.page_data[600].ref_lines = {}
     for i,x in ipairs(mcdu_data.page_data[600].render_functions) do
         if i >= start_i then
             if i <= end_i and line_id <= 5 then
-                x(line_id)
+                x[1](line_id)
+                mcdu_data.page_data[600].ref_lines[line_id] = x[2]
                 line_id = line_id + 1
             else
                 breaked = true
@@ -345,6 +356,48 @@ end
 -- ACTIONS
 -------------------------------------------------------------------------------
 
+local function point_get_table(mcdu_data, obj_type) 
+
+    if obj_type == POINT_TYPE_DEP_SID then
+        return mcdu_data.page_data[600].curr_fpln.apts.dep_sid.legs
+    elseif obj_type == POINT_TYPE_DEP_TRANS then
+        return mcdu_data.page_data[600].curr_fpln.apts.dep_trans.legs
+    elseif obj_type == POINT_TYPE_LEG then
+        return mcdu_data.page_data[600].curr_fpln.legs
+    elseif obj_type == POINT_TYPE_ARR_TRANS then
+        return mcdu_data.page_data[600].curr_fpln.apts.arr_trans.legs
+    elseif obj_type == POINT_TYPE_ARR_STAR then
+        return mcdu_data.page_data[600].curr_fpln.apts.arr_star.legs
+    elseif obj_type == POINT_TYPE_ARR_VIA then
+        return mcdu_data.page_data[600].curr_fpln.apts.arr_via.legs
+    elseif obj_type == POINT_TYPE_ARR_APPR then
+        return mcdu_data.page_data[600].curr_fpln.apts.arr_appr.legs
+    end
+
+    assert(false)   -- This should not happen
+end
+
+local function trigger_lat_rev(mcdu_data, id)
+    if mcdu_data.page_data[600].ref_lines and mcdu_data.page_data[600].ref_lines[id] then
+
+        local obj = mcdu_data.page_data[600].ref_lines[id]
+
+        if mcdu_data.clr then
+            local table_obj = point_get_table(mcdu_data, obj.point_type)
+            table.remove(table_obj, obj.ref_id)
+
+        elseif false then -- TODO new point
+
+        else
+            mcdu_data.lat_rev_subject = {}
+            mcdu_data.lat_rev_subject.type = 2 -- WPT
+            mcdu_data.lat_rev_subject.data = obj
+            --mcdu_open_page(mcdu_data, 602)
+        end
+        return true
+    end
+    return false
+end
 
 function THIS_PAGE:L1(mcdu_data)
     if mcdu_data.page_data[600].curr_idx == 1 then
@@ -352,14 +405,45 @@ function THIS_PAGE:L1(mcdu_data)
             mcdu_data.lat_rev_subject = {}
             mcdu_data.lat_rev_subject.type = 1 -- ORIGIN
             mcdu_data.lat_rev_subject.data = mcdu_data.page_data[600].curr_fpln.apts.dep
+            mcdu_open_page(mcdu_data, 602)
         else
             mcdu_data.lat_rev_subject = {}
             mcdu_data.lat_rev_subject.type = 3 -- PPOS
+            mcdu_open_page(mcdu_data, 602)
+        end
+    else
+        if not trigger_lat_rev(mcdu_data, 1) then
+            MCDU_Page:L2(mcdu_data) -- Error
+            return
         end
     end
     
-    mcdu_open_page(mcdu_data, 602)
 end
+
+
+function THIS_PAGE:L2(mcdu_data)
+    if not trigger_lat_rev(mcdu_data, 2) then
+        MCDU_Page:L2(mcdu_data) -- Error
+    end
+end
+
+function THIS_PAGE:L3(mcdu_data)
+    if not trigger_lat_rev(mcdu_data, 3) then
+        MCDU_Page:L3(mcdu_data) -- Error
+    end
+end
+
+function THIS_PAGE:L4(mcdu_data)
+    if not trigger_lat_rev(mcdu_data, 4) then
+        MCDU_Page:L4(mcdu_data) -- Error
+    end
+end
+function THIS_PAGE:L5(mcdu_data)
+    if not trigger_lat_rev(mcdu_data, 5) then
+        MCDU_Page:L5(mcdu_data) -- Error
+    end
+end
+
 
 function THIS_PAGE:L6(mcdu_data)
 

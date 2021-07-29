@@ -77,15 +77,10 @@ FMGS_sys.fpln = {
         },
 
         legs = {
-            {ptr_type = FMGS_PTR_WPT, id="TREVI", lat=45.603333, lon=9.693333},
-            {ptr_type = FMGS_PTR_NAVAID, navaid=NAV_ID_NDB, id="TZO", lat=45.558334, lon=9.509444},
-            {ptr_type = FMGS_PTR_WPT, id="RODRU", lat=45.670834, lon=9.393333},
-            {ptr_type = FMGS_PTR_COORDS, lat=45.53575658841703, lon=9.259678021183182},
-            {ptr_type = FMGS_PTR_NAVAID, navaid=NAV_ID_VOR, id="SRN", lat=45.645962, lon=9.021610, has_dme = true},
         },
         
         
-        next_leg = 2,
+        next_leg = 1,
         curr_segment  = FMGS_SEGMENT_NONE,
     },
     
