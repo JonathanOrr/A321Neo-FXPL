@@ -20,12 +20,12 @@
 include("PID.lua")
 include("FBW/FBW_subcomponents/fbw_system_subcomponents/flt_computers.lua")
 include("FBW/FBW_subcomponents/fbw_system_subcomponents/mode_transition.lua")
-include("FBW/FBW_subcomponents/fbw_system_subcomponents/vertical_augmentation.lua")
 include("FBW/FBW_subcomponents/fbw_system_subcomponents/law_reconfiguration.lua")
 addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/")
 addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/fbw_system_subcomponents")
 addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/fbw_system_subcomponents/sensor_filtering")
 addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/fbw_system_subcomponents/lateral_augmentation")
+addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/fbw_system_subcomponents/vertical_agumentation")
 addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/fbw_system_subcomponents/yaw_augmentation")
 
 --xplane landing gear attitude correction--
@@ -54,6 +54,11 @@ components = {
     rate_calculations {},
 
     filtering {},
+
+    vertical_dynamics {},
+    vertical_protections {},
+    vertical_inputs {},
+    vertical_controllers {},
 
     lateral_protections {},
     lateral_inputs {},

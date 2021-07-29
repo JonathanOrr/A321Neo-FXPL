@@ -4,10 +4,11 @@ FBW.lateral.inputs = {
         local degrade_margin = 15
         local max_return_rate = 7.5
         local max_roll_rate = 15
+        local max_aprot_roll_rate = 7.5
 
         --inputs
         local abs_x = math.abs(x)
-        local p = max_roll_rate * x
+        local p = (FBW.vertical.protections.General.AoA.H_AOA_PROT_ACTIVE and max_aprot_roll_rate or max_roll_rate) * x
 
         --manipulations
         local max_allowable_bank = Math_rescale(0, FBW.lateral.protections.bank_limit[1], 1, FBW.lateral.protections.bank_limit[2], abs_x)

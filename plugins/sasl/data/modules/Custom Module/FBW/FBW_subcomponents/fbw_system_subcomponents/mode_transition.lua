@@ -13,14 +13,10 @@ function FBW_normal_mode_transition(table)
     --FBW mode transfers to ground mode if (all wheels are on ground for 5+ seconds and att < 2.5 degrees)
     --ONLY 2 MODES CAN HAPPEN SIMUTANIOUSLY [GROUND + FLIGHT] / [FLIGHT + FLARE] / [FLARE + GROUND] ALL OTHER COMBINATIONS ARE IMPOSSIBLE
 
-    --FBW_vertical_ground_mode_ratio
-    --FBW_vertical_rotation_mode_ratio
-    --FBW_vertical_flight_mode_ratio
-    --FBW_vertical_flare_mode_ratio
-    --FBW_lateral_ground_mode_ratio
-    --FBW_lateral_flight_mode_ratio
-    --FBW_flare_mode_memorised_att
-    --FBW_flare_mode_computed_Q
+    --override
+    if get(Override_normal_flight_mode_blending) == 1 then
+        return
+    end
 
     --properties
     local lateral_ground_mode_transition_time = 0.5

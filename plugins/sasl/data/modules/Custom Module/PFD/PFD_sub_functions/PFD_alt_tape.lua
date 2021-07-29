@@ -30,6 +30,33 @@ local UNIT_HPA  = 2
 -- Functions
 -------------------------------------------------------------------------------
 
+local function draw_altitude_numbers(string, ycord)
+    for i=1, 3 do
+        sasl.gl.drawText(Font_AirbusDUL, 680 + (i-1) * 20 , ycord, string.sub(string, i, i) , 36, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    end
+end
+
+local function draw_altitude_tape(altitude)
+
+    -- 1000 ft is 420 pixels
+    -- 1 ft is 0.42 pixel
+
+    local i_lower_bound = Round(Math_rescale_no_lim(0, -8, 10000,92,altitude),0) -- so 1000ft is just 10 i
+    local i_upper_bound = Round(Math_rescale_no_lim(0,  8, 10000,108,altitude),0)
+
+    local altitude_offset = -altitude * 0.42
+
+    for i = i_lower_bound,i_upper_bound do --so 1 i is 100ft, which is 42px
+        local line_y = i * 42 + altitude_offset
+        sasl.gl.drawWideLine(731, 442 + line_y, 744, 442 + line_y, 3, ECAM_WHITE) --long dashes
+        if i%5 == 0 then
+            draw_altitude_numbers(Fwd_string_fill( tostring(Round(math.abs(i*100) / 100  , 0)), "0", 3), 432 + line_y) -- so 1 i is 100ft, number intevral is 500ft, we add i*100 to the altitude number
+            sasl.gl.drawTexture(PFD_alt_lovely_triangle, 658, 437 + line_y, 11, 14, ECAM_WHITE)
+        end
+    end
+
+end
+
 local function draw_alt_digits(PFD_table)
     local altitude = adirs_is_gps_alt_visible(PFD_table.Screen_ID) and adirs_get_gps_alt(PFD_table.Screen_ID) or adirs_get_alt(PFD_table.Screen_ID)
     local ALT_10K = Math_extract_digit(altitude, 5, true) + Math_rescale(9980,  0, 10000, 1, math.abs(altitude) % 10000)
@@ -71,14 +98,7 @@ function PFD_draw_alt_tape(PFD_table)
     --alt tape--
     if adirs_is_alt_ok(PFD_table.Screen_ID) == true or adirs_is_gps_alt_visible(PFD_table.Screen_ID) then
         sasl.gl.setClipArea(size[1]/2+209, size[2]/2-244, 84, 473)
-        sasl.gl.drawTexture(PFD_alt_tap_1, size[1]/2+209, size[2]/2-244 - Math_rescale_lim_lower(-1500,   13,  3500, 2113, altitude), 84, 2500, {1,1,1})
-        sasl.gl.drawTexture(PFD_alt_tap_2, size[1]/2+209, size[2]/2-244 - Math_rescale_no_lim(    4000, -177,  9500, 2132, altitude), 84, 2500, {1,1,1})
-        sasl.gl.drawTexture(PFD_alt_tap_3, size[1]/2+209, size[2]/2-244 - Math_rescale_no_lim(   10000, -157, 15500, 2153, altitude), 84, 2500, {1,1,1})
-        sasl.gl.drawTexture(PFD_alt_tap_4, size[1]/2+209, size[2]/2-244 - Math_rescale_no_lim(   16000, -137, 21500, 2173, altitude), 84, 2500, {1,1,1})
-        sasl.gl.drawTexture(PFD_alt_tap_5, size[1]/2+209, size[2]/2-244 - Math_rescale_no_lim(   22000, -117, 27500, 2193, altitude), 84, 2500, {1,1,1})
-        sasl.gl.drawTexture(PFD_alt_tap_6, size[1]/2+209, size[2]/2-244 - Math_rescale_no_lim(   28000,  -97, 33500, 2213, altitude), 84, 2500, {1,1,1})
-        sasl.gl.drawTexture(PFD_alt_tap_7, size[1]/2+209, size[2]/2-244 - Math_rescale_no_lim(   34000,  -77, 39500, 2233, altitude), 84, 2500, {1,1,1})
-        sasl.gl.drawTexture(PFD_alt_tap_8, size[1]/2+209, size[2]/2-244 - Math_rescale_lim_upper(40000,  -57, 45000, 2043, altitude), 84, 2500, {1,1,1})
+         draw_altitude_tape(altitude)
         sasl.gl.resetClipArea ()
     end
 
@@ -121,6 +141,8 @@ function PFD_draw_alt_tape(PFD_table)
             sasl.gl.drawText(Font_AirbusDUL, size[1]/2+395, size[2]/2-22, "GPS", 42, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
         end
     end
+
+
 end
 
 

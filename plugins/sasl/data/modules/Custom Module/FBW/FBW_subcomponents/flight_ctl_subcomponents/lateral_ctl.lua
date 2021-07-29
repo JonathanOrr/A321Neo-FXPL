@@ -80,7 +80,7 @@ end
 
 local function aileron_actuation(request_pos, which_one)   -- which one: 1: LEFT, 2: RIGHT
 
-    local curr_pos    = which_one == 1 and get(Left_aileron) or get(Right_aileron)
+    local curr_pos    = which_one == 1 and get(L_aileron) or get(R_aileron)
     local curr_pos_mm = aileron_model_deg_to_mm(curr_pos)
     local req_pos_mm  = aileron_model_deg_to_mm(request_pos)
     
@@ -121,7 +121,7 @@ local function aileron_actuation(request_pos, which_one)   -- which one: 1: LEFT
     -- 7: Failures (stuck)
      aileron_curr_spd[which_one] = aileron_curr_spd[which_one] * (1 - get(which_one == 1 and FAILURE_FCTL_LAIL or FAILURE_FCTL_RAIL))
 
-    local ail_dataref = which_one == 1 and Left_aileron or Right_aileron
+    local ail_dataref = which_one == 1 and L_aileron or R_aileron
 
     -- 8: Finally compute actuator value and set the surface position
     if (get(Hydraulic_B_press) < 1400 and get(Hydraulic_G_press) < 1400) then

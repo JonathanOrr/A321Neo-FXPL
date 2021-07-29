@@ -738,7 +738,7 @@ local skip_1st_frame_AA = true
 
 function draw()
     if not skip_1st_frame_AA then
-        sasl.gl.setRenderTarget(EWD_popup_texture, true, GRAPHICS_AA_SCREEN_LEVEL)
+        sasl.gl.setRenderTarget(EWD_popup_texture, true, get(PANEL_AA_LEVEL_1to32))
     else
         sasl.gl.setRenderTarget(EWD_popup_texture, true)
     end

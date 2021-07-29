@@ -70,7 +70,7 @@ local MCDU_ENTRIES =
                     mcdu_data.entry.text = mcdu_data.entry.text:sub(1,#mcdu_data.entry.text - 1)
                 else
                     if #mcdu_data.entry.text == 0 then
-                        table.insert(mcdu_data.messages, {text="CLR", color=ECAM_WHITE})
+                        table.insert(mcdu_data.messages, {text="CLR", color=ECAM_WHITE, isclr=true})
                     end
                 end
             end

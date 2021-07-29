@@ -15,7 +15,7 @@
 -- File: PID.lua
 -- Short description: This file contains several functions to manage PID controllers
 -------------------------------------------------------------------------------
-function FBW_PID_BP(pid_array, Error, PV, Scheduling_variable)
+--[[function OLD_FBW_PID(pid_array, Error, PV, Scheduling_variable)
     --sim paused no need to control
     if get(DELTA_TIME) == 0 then
         return 0
@@ -57,7 +57,7 @@ function FBW_PID_BP(pid_array, Error, PV, Scheduling_variable)
 
     --Output--
     return Math_clamp(pid_array.Desired_output, pid_array.Min_out, pid_array.Max_out)
-end
+end]]
 
 -- A standard PID with backpropagation as anti-windup
 -- You **must** set the pid_array.Actual_output outside of this PID
@@ -181,7 +181,7 @@ function low_pass_filter(data)
 end
 
 ----------------------------------------FBW PID----------------------------------------
-function FBW_PID_BP_ADV(pid_array, SP, PV, Scheduling_variable)
+function FBW_PID_BP(pid_array, SP, PV, Scheduling_variable)
     --filtering--
     if pid_array.filter_inputs == true then
         if pid_array.er_filter_table == nil then
