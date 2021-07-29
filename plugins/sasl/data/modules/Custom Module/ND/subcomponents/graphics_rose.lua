@@ -445,26 +445,28 @@ local function draw_active_fpln(data)   -- This is just a test
     -- For each point in the FPLN...
     for k,x in ipairs(active_legs) do
 
-        local c_x,c_y = rose_get_x_y_heading(data, x.lat, x.lon, data.inputs.heading)
-        x.x = c_x
-        x.y = c_y
-        
-        local color = k == 1 and ECAM_WHITE or ECAM_GREEN
+        if not x.discontinuity then
 
-        if x.ptr_type == FMGS_PTR_WPT then
-            draw_poi_array(data, x, image_point_wpt, color)
-        elseif x.ptr_type == FMGS_PTR_NAVAID then
-            if x.navaid == NAV_ID_NDB then
-                draw_poi_array(data, x, image_point_ndb, color)
-            elseif x.navaid == NAV_ID_VOR then
-                draw_poi_array(data, x, x.has_dme and image_point_vor_dme or image_point_vor_only, color)
+            local c_x,c_y = rose_get_x_y_heading(data, x.lat, x.lon, data.inputs.heading)
+            x.x = c_x
+            x.y = c_y
+            
+            local color = k == 1 and ECAM_WHITE or ECAM_GREEN
+
+            if x.ptr_type == FMGS_PTR_WPT then
+                draw_poi_array(data, x, image_point_wpt, color)
+            elseif x.ptr_type == FMGS_PTR_NAVAID then
+                if x.navaid == NAV_ID_NDB then
+                    draw_poi_array(data, x, image_point_ndb, color)
+                elseif x.navaid == NAV_ID_VOR then
+                    draw_poi_array(data, x, x.has_dme and image_point_vor_dme or image_point_vor_only, color)
+                end
+            elseif x.ptr_type == FMGS_PTR_APT then
+                draw_poi_array(data, x, image_point_apt, color)
+            elseif x.ptr_type == FMGS_PTR_COORDS then
+            
             end
-        elseif x.ptr_type == FMGS_PTR_APT then
-            draw_poi_array(data, x, image_point_apt, color)
-        elseif x.ptr_type == FMGS_PTR_COORDS then
-        
         end
-
     end
 
     local dep_sid = FMGS_dep_get_sid(false)
@@ -504,7 +506,7 @@ local function draw_active_fpln(data)   -- This is just a test
 
             end
         end
-        if last_x ~= nil then
+        if last_x ~= nil and not active_legs[n].discontinuity then
             local x,y = rose_get_x_y_heading(data, active_legs[n].lat, active_legs[n].lon, data.inputs.heading)
             sasl.gl.drawWideLine(last_x, last_y, x, y, 2, ECAM_GREEN)
         end

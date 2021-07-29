@@ -42,19 +42,23 @@ local function update_active_fpln()
     local NM_ARC = compute_arc_radius(adirs_get_avg_tas(), roll_limit)
     
     for k,r in ipairs(fpln_active) do
-        if k > 1 and k < nr_points then
-        
-            -- Limited to 0.5 to avoid that when the aircraft is too fast a too large curve would overshoot the next curve.
-            lat_start, lon_start = point_from_a_segment_lat_lon_limited(r.lat, r.lon, fpln_active[k-1].lat, fpln_active[k-1].lon, NM_ARC, 0.5)
-            lat_end,   lon_end   = point_from_a_segment_lat_lon_limited(r.lat, r.lon, fpln_active[k+1].lat, fpln_active[k+1].lon, NM_ARC, 0.5)
-            
-            fpln_active[k].beizer = {
-                start_lat =  lat_start,
-                start_lon =  lon_start,
-                end_lat   =  lat_end,
-                end_lon   =  lon_end,
-            }
 
+        if k > 1 and k < nr_points then
+            local in_between_discontinuity = r.discontinuity or fpln_active[k-1].discontinuity or fpln_active[k+1].discontinuity
+            if not in_between_discontinuity then
+                -- Limited to 0.5 to avoid that when the aircraft is too fast a too large curve would overshoot the next curve.
+                lat_start, lon_start = point_from_a_segment_lat_lon_limited(r.lat, r.lon, fpln_active[k-1].lat, fpln_active[k-1].lon, NM_ARC, 0.5)
+                lat_end,   lon_end   = point_from_a_segment_lat_lon_limited(r.lat, r.lon, fpln_active[k+1].lat, fpln_active[k+1].lon, NM_ARC, 0.5)
+                
+                fpln_active[k].beizer = {
+                    start_lat =  lat_start,
+                    start_lon =  lon_start,
+                    end_lat   =  lat_end,
+                    end_lon   =  lon_end,
+                }
+            else
+                 -- TODO manage discontinuity
+            end
         end
     end
     

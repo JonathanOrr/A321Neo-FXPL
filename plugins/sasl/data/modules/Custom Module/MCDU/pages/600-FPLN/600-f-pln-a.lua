@@ -98,19 +98,15 @@ end
 -------------------------------------------------------------------------------
 function THIS_PAGE:prepare_list_departure(mcdu_data, list_messages)
     if mcdu_data.page_data[600].curr_fpln.apts.dep_sid then
-        for i,x in ipairs(mcdu_data.page_data[600].curr_fpln.apts.dep_sid.legs) do
+        for _,x in ipairs(mcdu_data.page_data[600].curr_fpln.apts.dep_sid.legs) do
             x.point_type = POINT_TYPE_SIDTRANS
             table.insert(list_messages, x)
         end
     end
     if mcdu_data.page_data[600].curr_fpln.apts.dep_trans then
-        local i = 1
         for _,x in ipairs(mcdu_data.page_data[600].curr_fpln.apts.dep_trans.legs) do
-            if i>1 then
-                x.point_type = POINT_TYPE_SIDTRANS
-                table.insert(list_messages, x)
-            end
-            i = i + 1
+            x.point_type = POINT_TYPE_SIDTRANS
+            table.insert(list_messages, x)
         end
     end
 end
@@ -127,21 +123,17 @@ function THIS_PAGE:prepare_list_arrival(mcdu_data, list_messages)
     local is_via_valid = fpln.apts.arr_via and not fpln.apts.arr_via.novia and fpln.apts.arr_via.legs and fpln.apts.arr_via.legs[1]
 
     if fpln.apts.arr_star then
-        for i,x in ipairs(fpln.apts.arr_star.legs) do
-            if fpln.apts.arr_trans and i == 1 then
-                -- Do not print the double fix
-            else
-                if is_via_valid and x.leg_name == fpln.apts.arr_via.legs[1].leg_name then
-                    break
-                end
-                x.point_type = POINT_TYPE_STARAPPROACH
-                table.insert(list_messages, x)
+        for _,x in ipairs(fpln.apts.arr_star.legs) do
+            if is_via_valid and x.leg_name == fpln.apts.arr_via.legs[1].leg_name then
+                break
             end
+            x.point_type = POINT_TYPE_STARAPPROACH
+            table.insert(list_messages, x)
         end
     end
 
     if is_via_valid then
-        for i,x in ipairs(fpln.apts.arr_via.legs) do
+        for _,x in ipairs(fpln.apts.arr_via.legs) do
             x.point_type = POINT_TYPE_STARAPPROACH
             table.insert(list_messages, x)
         end
@@ -164,13 +156,13 @@ function THIS_PAGE:prepare_list(mcdu_data)
     THIS_PAGE:prepare_list_departure(mcdu_data, list_messages)
 
     if mcdu_data.page_data[600].curr_fpln.legs then
-        if mcdu_data.page_data[600].curr_fpln.legs[1] and mcdu_data.page_data[600].curr_fpln.legs[1].id ~= list_messages[#list_messages].id then
-            -- Discontinuity between the SID/TRANS and the real FPLN
-            table.insert(list_messages, {point_type = POINT_TYPE_DISCONTINUITY})
-        end
         for i,x in ipairs(mcdu_data.page_data[600].curr_fpln.legs) do
-            x.point_type = POINT_TYPE_LEG
-            table.insert(list_messages, x)
+            if x.discontinuity then
+                x.point_type = POINT_TYPE_DISCONTINUITY
+            else
+                x.point_type = POINT_TYPE_LEG
+            end
+        table.insert(list_messages, x)
         end
     end
 

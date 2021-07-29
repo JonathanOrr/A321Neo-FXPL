@@ -16,6 +16,10 @@
 -- Short description: FMGS functions used by non-FMGS modules
 -------------------------------------------------------------------------------
 
+-------------------------------------------------------------------------------
+-- Local Helpers
+-------------------------------------------------------------------------------
+
 local function get_airport_or_nil(name)
     local apt = AvionicsBay.apts.get_by_name(name, false)
     if #apt > 0 then
@@ -24,6 +28,25 @@ local function get_airport_or_nil(name)
         return nil
     end
 end
+
+local function itable_shallow_copy_legs(t1)
+    assert(t1)
+    assert(t1.legs)
+    local t2 = {}
+
+    -- Copy the whole table but NOT the legs
+    for k,v in pairs(t1) do
+        if k ~= "legs" then
+            t2[k] = v
+        end
+    end
+    t2.legs = {}
+    for k,v in ipairs(t1.legs) do
+      t2.legs[k] = v
+    end
+    return t2
+end
+  
 
 -------------------------------------------------------------------------------
 -- FMGS config
@@ -256,7 +279,7 @@ function FMGS_dep_get_sid(ret_temp_if_avail)
 end
 
 function FMGS_dep_set_sid(sid)
-    FMGS_sys.fpln.temp.apts.dep_sid = sid
+    FMGS_sys.fpln.temp.apts.dep_sid = itable_shallow_copy_legs(sid)
 end
 
 function FMGS_dep_get_trans(ret_temp_if_avail)
@@ -268,12 +291,12 @@ function FMGS_dep_get_trans(ret_temp_if_avail)
 end
 
 function FMGS_dep_set_trans(trans)
-    FMGS_sys.fpln.temp.apts.dep_trans = trans
+    FMGS_sys.fpln.temp.apts.dep_trans = itable_shallow_copy_legs(trans)
 end
 
 function FMGS_arr_set_appr(appr, rwy, sibling)
     FMGS_sys.fpln.temp.apts.arr_rwy = {rwy, sibling}
-    FMGS_sys.fpln.temp.apts.arr_appr = appr
+    FMGS_sys.fpln.temp.apts.arr_appr = itable_shallow_copy_legs(appr)
 end
 
 function FMGS_arr_get_appr(ret_temp_if_avail)
@@ -293,7 +316,7 @@ function FMGS_arr_get_star(ret_temp_if_avail)
 end
 
 function FMGS_arr_set_star(star)
-    FMGS_sys.fpln.temp.apts.arr_star = star
+    FMGS_sys.fpln.temp.apts.arr_star = itable_shallow_copy_legs(star)
 end
 
 function FMGS_arr_get_trans(ret_temp_if_avail)
@@ -305,7 +328,7 @@ function FMGS_arr_get_trans(ret_temp_if_avail)
 end
 
 function FMGS_arr_set_trans(trans)
-    FMGS_sys.fpln.temp.apts.arr_trans = trans
+    FMGS_sys.fpln.temp.apts.arr_trans = itable_shallow_copy_legs(trans)
 end
 
 function FMGS_arr_get_via(ret_temp_if_avail)
@@ -317,7 +340,7 @@ function FMGS_arr_get_via(ret_temp_if_avail)
 end
 
 function FMGS_arr_set_via(via)
-    FMGS_sys.fpln.temp.apts.arr_via = via
+    FMGS_sys.fpln.temp.apts.arr_via = itable_shallow_copy_legs(via)
 end
 
 
@@ -407,6 +430,50 @@ end
 function FMGS_get_current_fpln()    -- CAUTION: do not abuse of this
                                     -- Authorized use only in 6** MCDU pages
     return FMGS_does_temp_fpln_exist() and FMGS_sys.fpln.temp or FMGS_sys.fpln.active
+end
+
+function FMGS_reshape_temp_fpln()    -- This function removes duplicated elements and adds
+                                -- discontinuity where needed. You should call this
+                                -- function evertime (and after) you change the sid, 
+                                -- star, fpln points, etc.
+
+    local fpln = FMGS_sys.fpln.temp
+
+    local nr_legs_fpln = #fpln.legs
+
+    if nr_legs_fpln == 0 then
+        -- F/PLN is empty, thus just add a discontinuity
+        table.insert(fpln.legs, {discontinuity = true})
+    else
+        if not fpln.legs[1].discontinuity then
+            -- If there is only one point and it is not a discontinuity, then
+            -- check the point between the SID or TRANS and the first point of
+            -- the leg
+
+            local last_dep   = fpln.apts.dep_trans or fpln.apts.dep_sid
+            if last_dep then
+                local last_dep_p = last_dep.legs[#last_dep.legs]
+                if fpln.legs[1].id ~= last_dep_p.leg_name then
+                    table.insert(fpln.legs, 1, {discontinuity = true})
+                end
+            else
+                table.insert(fpln.legs, 1, {discontinuity = true})
+            end
+        end
+        if not fpln.legs[nr_legs_fpln].discontinuity then
+
+            local first_arr   = fpln.apts.arr_trans or fpln.apts.arr_appr 
+            if first_arr then
+                local first_arr_p = first_arr.legs[1]
+                if fpln.legs[nr_legs_fpln].id ~= first_arr_p.leg_name then
+                    table.insert(fpln.legs, {discontinuity = true})
+                end
+            else
+                table.insert(fpln.legs, {discontinuity = true})
+            end
+        end
+    end
+
 end
 
 -------------------------------------------------------------------------------
