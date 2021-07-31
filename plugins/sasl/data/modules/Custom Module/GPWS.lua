@@ -552,6 +552,9 @@ local function check_inop()
 end
 
 function update()
+
+    if get(DC_ess_bus_pwrd) == 0 then set(FAILURE_GPWS, 1) else set(FAILURE_GPWS, 0) end
+
     perf_measure_start("GPWS:update()")
 
     is_warning = false
