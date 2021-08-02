@@ -83,7 +83,7 @@ local function Goto_ecam(page_num)
 end
 
 function ecam_user_press_page_button(phase, which_page)
-    if phase == SASL_COMMAND_BEGIN then
+    if phase == SASL_COMMAND_BEGIN and get(DC_ess_bus_pwrd) == 1 then
         if get(Ecam_current_status) == ECAM_STATUS_SHOW_USER then
             -- We are already in user mode
 
@@ -93,12 +93,12 @@ function ecam_user_press_page_button(phase, which_page)
                 set(Ecam_current_status, ECAM_STATUS_NORMAL) 
                 -- If another mode was selected, page will change automatically at next sasl run
             else
-                if get(DC_ess_bus_pwrd) == 1 then Goto_ecam(which_page) end
+                Goto_ecam(which_page)
             end
         else
             -- Change the page in *any* case (forced by user)
             set(Ecam_current_status,ECAM_STATUS_SHOW_USER)
-            if get(DC_ess_bus_pwrd) == 1 then Goto_ecam(which_page) end
+            Goto_ecam(which_page)
         end
         press_start_time = get(TIME)
     elseif phase == SASL_COMMAND_CONTINUE then  -- Fail of ecam
