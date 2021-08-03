@@ -83,7 +83,7 @@ local function Goto_ecam(page_num)
 end
 
 function ecam_user_press_page_button(phase, which_page)
-    if phase == SASL_COMMAND_BEGIN and get(DC_ess_bus_pwrd) == 1 then
+    if phase == SASL_COMMAND_BEGIN and (get(DC_ess_bus_pwrd) == 1 or which_page == 12) then
         if get(Ecam_current_status) == ECAM_STATUS_SHOW_USER then
             -- We are already in user mode
 
