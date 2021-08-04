@@ -239,13 +239,13 @@ END_SOUND_ATTACHMENT
 ##############################################################THRUST LEVERS###################################################
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Thrust Levers/ThrLvrIdle
+  EVENT_NAME /Throttle Gates/Left/IDLE
   VEH_XYZ 0 1.5 -18.4
   EVENT_START_COND a321neo/cockpit/engine/throttle_lever_L == 0
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Thrust Levers Right/ThrLvrIdle
+  EVENT_NAME /Throttle Gates/Right/IDLE
   VEH_XYZ 0 1.5 -18.4
   EVENT_START_COND a321neo/cockpit/engine/throttle_lever_R == 0
 END_SOUND_ATTACHMENT
@@ -253,25 +253,25 @@ END_SOUND_ATTACHMENT
 ###########################################################################
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Thrust Levers/ThrLvrCL
+  EVENT_NAME /Throttle Gates/Left/CL
   VEH_XYZ 0 1.5 -18.4
   EVENT_START_COND a321neo/cockpit/engine/throttle_lever_L > 0.65
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Thrust Levers/ThrLvrCL
+  EVENT_NAME /Throttle Gates/Left/CL
   VEH_XYZ 0 1.5 -18.4
   EVENT_START_COND a321neo/cockpit/engine/throttle_lever_L < 0.75
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Thrust Levers Right/ThrLvrCL
+  EVENT_NAME /Throttle Gates/Right/CL
   VEH_XYZ 0 1.5 -18.4
   EVENT_START_COND a321neo/cockpit/engine/throttle_lever_R > 0.65
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Thrust Levers Right/ThrLvrCL
+  EVENT_NAME /Throttle Gates/Right/CL
   VEH_XYZ 0 1.5 -18.4
   EVENT_START_COND a321neo/cockpit/engine/throttle_lever_R < 0.75
 END_SOUND_ATTACHMENT
@@ -280,25 +280,25 @@ END_SOUND_ATTACHMENT
 ##########################################################################
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Thrust Levers/ThrLvrFLX
+  EVENT_NAME /Throttle Gates/Left/FLX
   VEH_XYZ 0 1.5 -18.4
   EVENT_START_COND a321neo/cockpit/engine/throttle_lever_L > 0.75
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Thrust Levers/ThrLvrFLX
+  EVENT_NAME /Throttle Gates/Left/FLX
   VEH_XYZ 0 1.5 -18.4
   EVENT_START_COND a321neo/cockpit/engine/throttle_lever_L < 0.85
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Thrust Levers Right/ThrLvrFLX
+  EVENT_NAME /Throttle Gates/Right/FLX
   VEH_XYZ 0 1.5 -18.4
   EVENT_START_COND a321neo/cockpit/engine/throttle_lever_R > 0.75
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Thrust Levers Right/ThrLvrFLX
+  EVENT_NAME /Throttle Gates/Right/FLX
   VEH_XYZ 0 1.5 -18.4
   EVENT_START_COND a321neo/cockpit/engine/throttle_lever_R < 0.85
 END_SOUND_ATTACHMENT
@@ -306,13 +306,13 @@ END_SOUND_ATTACHMENT
 ##########################################################################
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Thrust Levers/ThrLvrTOGA
+  EVENT_NAME /Throttle Gates/Left/TOGA
   VEH_XYZ 0 1.5 -18.4
   EVENT_START_COND a321neo/cockpit/engine/throttle_lever_L > 0.95
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Thrust Levers Right/ThrLvrTOGA
+  EVENT_NAME /Throttle Gates/Right/TOGA
   VEH_XYZ 0 1.5 -18.4
   EVENT_START_COND a321neo/cockpit/engine/throttle_lever_R > 0.95
 END_SOUND_ATTACHMENT
@@ -320,27 +320,39 @@ END_SOUND_ATTACHMENT
 ##########################################################################REV
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Thrust Levers/ThrLvrRev
+  EVENT_NAME /Throttle Gates/Left/REV
   VEH_XYZ 0 1.5 -18.4
   EVENT_START_COND a321neo/cockpit/engine/throttle_lever_L < 0
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Thrust Levers/ThrLvrRevFull
+  EVENT_NAME /Throttle Gates/Left/REVFULL
   VEH_XYZ 0 1.5 -18.4
   EVENT_START_COND a321neo/cockpit/engine/throttle_lever_L == -1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Thrust Levers Right/ThrLvrRev
+  EVENT_NAME /Throttle Gates/Left/REVSTOW
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/cockpit/engine/throttle_lever_L > -0.001
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Throttle Gates/Left/REV
   VEH_XYZ 0 1.5 -18.4
   EVENT_START_COND a321neo/cockpit/engine/throttle_lever_R < 0
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Thrust Levers Right/ThrLvrRevFull
+  EVENT_NAME /Throttle Gates/Left/REVFULL
   VEH_XYZ 0 1.5 -18.4
   EVENT_START_COND a321neo/cockpit/engine/throttle_lever_R == -1
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Throttle Gates/Left/REVSTOW
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/cockpit/engine/throttle_lever_R > -0.001
 END_SOUND_ATTACHMENT
 
 ##############################################################################################################################################################################################################################
@@ -2811,7 +2823,7 @@ END_SOUND_ATTACHMENT
 
 #################################################################################################BLOWER AND EXTRACTOR
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /Blower
+  EVENT_NAME /Blower2
   VEH_XYZ 0 1.4 -18.7
   EVENT_START_COND 	a321neo/sounds/blower_volume >= 0.5
   CUE_TRIGGER_COND  a321neo/sounds/blower_volume < 0.45
@@ -4450,25 +4462,25 @@ END_SOUND_ATTACHMENT
 ###########################################################################################################BATTERYRELAY
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /BatteryRelay/1
+  EVENT_NAME /BatteryRelay2/1
   VEH_XYZ 0 1.5 -16
   EVENT_START_COND sim/cockpit2/electrical/battery_on[0] == 1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /BatteryRelay/2
+  EVENT_NAME /BatteryRelay2/2
   VEH_XYZ 0 1.5 -16
   EVENT_START_COND sim/cockpit2/electrical/battery_on[1] == 1
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /BatteryRelay/1 Off
+  EVENT_NAME /BatteryRelay2/1off
   VEH_XYZ 0 1.5 -16
   EVENT_START_COND sim/cockpit2/electrical/battery_on[0] == 0
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /BatteryRelay/2 Off
+  EVENT_NAME /BatteryRelay2/2off
   VEH_XYZ 0 1.5 -16
   EVENT_START_COND sim/cockpit2/electrical/battery_on[1] == 0
 END_SOUND_ATTACHMENT
