@@ -435,6 +435,36 @@ function FMGS_get_current_fpln()    -- CAUTION: do not abuse of this
     return FMGS_does_temp_fpln_exist() and FMGS_sys.fpln.temp or FMGS_sys.fpln.active
 end
 
+
+-------------------------------------------------------------------------------
+-- Direct To
+-------------------------------------------------------------------------------
+
+function FMGS_dirto_get_direct_to_waypoint()
+    return FMGS_sys.dirto.directing_wpt
+end
+
+function FMGS_dirto_set_direct_to_waypoint(wpt)
+    FMGS_sys.dirto.directing_wpt = wpt
+end
+
+function FMGS_dirto_get_inbound_radial()
+    return FMGS_sys.dirto.radial_in
+end
+
+function FMGS_dirto_set_inbound_radial(hdg)
+    FMGS_sys.dirto.radial_in = hdg
+end
+
+function FMGS_dirto_get_outbound_radial()
+    return FMGS_sys.dirto.radial_out
+end
+
+function FMGS_dirto_set_outbound_radial(hdg)
+    FMGS_sys.dirto.radial_out = hdg
+end
+
+
 -------------------------------------------------------------------------------
 -- Performance
 -------------------------------------------------------------------------------
@@ -647,6 +677,7 @@ end
 function FMGS_get_landing_vls()
     return FMGS_sys.perf.landing.vls
 end
+
 
 -------------------------------------------------------------------------------
 -- Predictions

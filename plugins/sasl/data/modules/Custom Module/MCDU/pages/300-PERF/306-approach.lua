@@ -134,7 +134,24 @@ function THIS_PAGE:render(mcdu_data)
 
 end
 
+function THIS_PAGE:L2(mcdu_data)
+    if mcdu_data.clr then
+        FMGS_set_landing_apt_temp(nil)
+        mcdu_data.clear_the_clear()
+        return
+    end
+    local input = mcdu_get_entry(mcdu_data, {"!!!!!","!!!!","!!!","!!", "!"}, false)
+    if input == nil then return end
+    FMGS_set_landing_apt_temp(input)
+end
+
 function THIS_PAGE:L3(mcdu_data)
+    if mcdu_data.clr then
+        FMGS_set_landing_wind_mag(nil)
+        FMGS_set_landing_wind(nil)
+        mcdu_data.clear_the_clear()
+        return
+    end
     local a,b = mcdu_get_entry(mcdu_data, {"!!!","!!!","!!", "!"}, {"!!", "!"}, false)
     local entry_out_of_range_msg = false
     if a ~= nil then
@@ -162,43 +179,49 @@ function THIS_PAGE:L3(mcdu_data)
 end
 
 function THIS_PAGE:L4(mcdu_data)
-    local input = mcdu_get_entry(mcdu_data, {"!!!!!","!!!!","!!!","!!", "!","CLR"}, false)
-    if input == "CLR" then
+    if mcdu_data.clr then
         FMGS_set_landing_trans_alt(nil)
-    else
-        FMGS_set_landing_trans_alt(input)
+        mcdu_data.clear_the_clear()
+        return
     end
+    local input = mcdu_get_entry(mcdu_data, {"!!!!!","!!!!","!!!","!!", "!"}, false)
+    if input == nil then return end
+    FMGS_set_landing_trans_alt(input)
 end
 
 function THIS_PAGE:L5(mcdu_data)
-    local input = mcdu_get_entry(mcdu_data, {"!!!","!!", "!","CLR"}, false)
-    if input == "CLR" then
+    if mcdu_data.clr then
         FMGS_set_landing_vapp(nil)
-    else
-        FMGS_set_landing_vapp(input)
+        mcdu_data.clear_the_clear()
+        return
     end
+    local input = mcdu_get_entry(mcdu_data, {"!!!","!!", "!"}, false)
+    if input == nil then return end
+    FMGS_set_landing_vapp(input)
 end
 
 function THIS_PAGE:R2(mcdu_data)
-    local input = mcdu_get_entry(mcdu_data, {"!!!!","!!!","!!", "!","CLR"}, false)
-    if input == nil then return end
-    if input == "CLR" then
+    if mcdu_data.clr then
         FMGS_set_landing_mda(nil)
-    else
-        FMGS_set_landing_mda(input)
+        mcdu_data.clear_the_clear()
+        return
     end
+    local input = mcdu_get_entry(mcdu_data, {"!!!!","!!!","!!", "!"}, false)
+    if input == nil then return end
+    FMGS_set_landing_mda(input)
 end
 
 function THIS_PAGE:R3(mcdu_data)
+    if mcdu_data.clr then
+        FMGS_set_landing_dh(nil)
+        mcdu_data.clear_the_clear()
+        return
+    end
     if have_ils then
-        local input = mcdu_get_entry(mcdu_data, {"!!!!","!!!","!!", "!","CLR"}, false)
+        local input = mcdu_get_entry(mcdu_data, {"!!!!","!!!","!!", "!"}, false)
         if input == nil then return end
-        if input == "CLR" then
-            FMGS_set_landing_dh(nil)
-        else
-            FMGS_set_landing_dh(input)
-            FMGS_set_landing_mda(nil)
-        end
+        FMGS_set_landing_dh(input)
+        FMGS_set_landing_mda(nil)
     end
 end
 
@@ -211,6 +234,11 @@ function THIS_PAGE:R5(mcdu_data)
 end
 
 function THIS_PAGE:L1(mcdu_data)
+    if mcdu_data.clr then
+        FMGS_set_landing_qnh(nil)
+        mcdu_data.clear_the_clear()
+        return
+    end
     local input = 0
     if not qnh_in_inhg then
         input = mcdu_get_entry(mcdu_data, {"number", length = 4, dp = 0})

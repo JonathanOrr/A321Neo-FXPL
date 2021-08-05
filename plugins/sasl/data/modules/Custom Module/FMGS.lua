@@ -89,6 +89,12 @@ FMGS_sys.fpln = {
     sec = nil
 }
 
+FMGS_sys.dirto = {
+    directing_wpt = "RICOO",
+    radial_in = nil,
+    radial_out = nil
+}
+
 FMGS_sys.perf = {
     takeoff = {
         v1 = nil,

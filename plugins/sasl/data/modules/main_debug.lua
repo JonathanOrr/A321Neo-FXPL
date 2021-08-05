@@ -41,6 +41,9 @@ debug_tcas_system = false
 -- Force a startup page for MCDU (normally is 505)
 debug_mcdu_startup_page = 505
 
+--Disables the noisy blowers during coding.
+debug_kill_blowers = false
+
 --
 --
 -- Do not touch after this line
