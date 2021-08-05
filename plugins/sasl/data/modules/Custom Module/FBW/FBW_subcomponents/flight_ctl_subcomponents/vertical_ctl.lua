@@ -46,9 +46,11 @@ function Elevator_control(vertical_input, in_direct_law)
         r_elev_target = 0
     end
 
-    if get(FBW_vertical_law) == FBW_DIRECT_LAW then
-        l_elev_target = Math_clamp(l_elev_target, max_direct_law_up, max_direct_law_dn)
-        r_elev_target = Math_clamp(r_elev_target, max_direct_law_up, max_direct_law_dn)
+    if get(Force_full_elevator_limit) == 0 then
+        if get(FBW_vertical_law) == FBW_DIRECT_LAW then
+            l_elev_target = Math_clamp(l_elev_target, max_direct_law_up, max_direct_law_dn)
+            r_elev_target = Math_clamp(r_elev_target, max_direct_law_up, max_direct_law_dn)
+        end
     end
 
     --surface droop

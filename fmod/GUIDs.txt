@@ -6,6 +6,10 @@
 {2f6e7063-8c77-4f8d-a1c9-393a1f21d5b7} event:/BatteryRelay/1 Off
 {2b35580e-c22e-49d8-b6e1-8079883b310e} event:/BatteryRelay/2
 {76004d39-cc8a-48fa-82f6-2e5f037893c8} event:/BatteryRelay/2 Off
+{209943af-b64c-4cd4-acbc-ed93987e4ef7} event:/BatteryRelay2/1
+{af41ef3b-3d63-4339-9e28-bd200132d5c9} event:/BatteryRelay2/1off
+{ecefde90-caf8-46f6-bad5-49c880f8fb03} event:/BatteryRelay2/2
+{17cd29eb-77fd-49b5-9f70-e40338390ead} event:/BatteryRelay2/2off
 {4b76b401-4666-4589-b8fa-f3597102af21} event:/Brakes/Off
 {79db9fdb-19da-4194-b2da-62c8e683c1ad} event:/Brakes/On
 {bb6344c9-4ba5-48fd-bf91-9d10d49aa4bd} event:/Cockpit Door/Close
@@ -25,20 +29,6 @@
 {44912abb-344e-4cac-99bf-78146e19282c} event:/CockpitMechanical/RudderTrim/Left
 {bcd830bd-e1c3-4db9-a64e-8bec3ccf5e11} event:/CockpitMechanical/RudderTrim/Neutral
 {9ac79502-0add-42e5-88bb-da471001cdcc} event:/CockpitMechanical/RudderTrim/Right
-{2d285758-cb5a-4314-ac89-d3a2b5cbc04b} event:/CockpitMechanical/Thrust Levers/ThrLvrCL
-{c96b0094-28a7-4162-b5cf-135ac063d565} event:/CockpitMechanical/Thrust Levers/ThrLvrExit
-{a41422e6-cbf7-47f8-ac6b-98c7e2416b3b} event:/CockpitMechanical/Thrust Levers/ThrLvrFLX
-{5637522b-12b2-4a0f-88cd-437990804430} event:/CockpitMechanical/Thrust Levers/ThrLvrIdle
-{4f37aed1-3eb9-4a5c-b3da-7a0308da4a78} event:/CockpitMechanical/Thrust Levers/ThrLvrRev
-{014c34dd-cc81-463a-a539-2e5fc4b75ea7} event:/CockpitMechanical/Thrust Levers/ThrLvrRevFull
-{b91efb68-0853-461b-8e6a-91b68abbb0b5} event:/CockpitMechanical/Thrust Levers/ThrLvrTOGA
-{e82c13d4-5dee-4ce4-972b-5a0e4657d28d} event:/CockpitMechanical/Thrust Levers Right/ThrLvrCL
-{7baa045e-3891-4364-8af3-204deae5d418} event:/CockpitMechanical/Thrust Levers Right/ThrLvrExit
-{affa8b49-ce17-4e01-9f4e-1d00f80c595f} event:/CockpitMechanical/Thrust Levers Right/ThrLvrFLX
-{99dab0c2-6b44-43ab-bca8-0d126c979a16} event:/CockpitMechanical/Thrust Levers Right/ThrLvrIdle
-{8a3bd8e2-308f-44e8-816a-7170f0cac343} event:/CockpitMechanical/Thrust Levers Right/ThrLvrRev
-{59ed5759-1f81-4b74-84c7-6ee27c5ae628} event:/CockpitMechanical/Thrust Levers Right/ThrLvrRevFull
-{8e3211bf-fd66-4efe-bc5c-b69987ae646f} event:/CockpitMechanical/Thrust Levers Right/ThrLvrTOGA
 {850bb3a5-fa7f-4d22-bf9d-a80868eee0e7} event:/CockpitMechanical/Big Round Button Press
 {bafd0ab7-85f5-4e8f-8898-00cef3bbf4d3} event:/CockpitMechanical/Big Round Button Release
 {ed910ed0-bdc8-47e6-a8cb-d025b4ba55d4} event:/CockpitMechanical/Engine Master
@@ -207,6 +197,23 @@
 {b575ea2b-7a6a-4e54-97ea-21c57f90f6c3} event:/TCAS/monitorvs
 {96a1dd4e-039c-45f1-8d60-87fbbb469edf} event:/TCAS/tfc 1x
 {0bd877d2-887d-45fc-b705-555c42287d47} event:/TCAS/tfc 2x
+{f2670482-2871-48a7-98d9-6d252c266d81} event:/Throttle Gates/Enter/1
+{0b9fe559-a89c-402f-98cc-a45578e75314} event:/Throttle Gates/Enter/2
+{313c927b-26c5-4b48-ab5b-b1bea2270f6b} event:/Throttle Gates/Enter/3
+{fb58b593-49c1-4e1b-b111-589bb5a5b21c} event:/Throttle Gates/Left/CL
+{6853cb18-d8df-491d-9715-d9c61d35bb8c} event:/Throttle Gates/Left/FLX
+{5fb371b0-62ba-4198-85c6-e046a2ee2dce} event:/Throttle Gates/Left/IDLE
+{38230590-1bd3-45dc-b631-35246f208366} event:/Throttle Gates/Left/REV
+{55fcd1f6-6aea-4887-9c4e-40f7d0475a17} event:/Throttle Gates/Left/REVFULL
+{381452dd-89f4-414d-8052-ea2c2cf7e351} event:/Throttle Gates/Left/REVSTOW
+{fec8caca-79df-4429-be93-3cb6b88c93cb} event:/Throttle Gates/Left/TOGA
+{8fa9ed3f-930d-4520-9c78-f64f343630be} event:/Throttle Gates/Right/CL
+{42eec401-d38a-4a16-8c47-3af492a1a417} event:/Throttle Gates/Right/FLX
+{ac4c0405-c9e7-4b76-80ba-a26165d7407d} event:/Throttle Gates/Right/IDLE
+{24a2ec4b-6727-4b55-b646-da6e0b1bc7c6} event:/Throttle Gates/Right/REV
+{bc2497fb-8839-420f-bebc-d5f88dab4566} event:/Throttle Gates/Right/REVFULL
+{8f707050-64ea-4f12-97a7-cded2ceb9e9d} event:/Throttle Gates/Right/REVSTOW
+{4b10f012-5f94-4773-a9c8-8b7f969ef19d} event:/Throttle Gates/Right/TOGA
 {0a3ca941-541b-49ea-b0a6-654bfc0ba63f} event:/Warnings/Calvary
 {c46115eb-d151-4e54-ae83-4175129cabdb} event:/Warnings/Caution
 {ff1b5104-6805-45d0-8716-2f0c54177361} event:/Warnings/Cchord
@@ -230,6 +237,7 @@
 {baf9bc41-c708-42a2-bfac-b33deb7ddbc4} event:/Avionics
 {356cf20a-c643-42c5-8a6d-7a00fb3d4288} event:/Battery
 {1edd836c-b29a-4101-a732-2d2eef744bbe} event:/Blower
+{6c82538f-09c7-4944-ace2-20ef5e72157a} event:/Blower2
 {3d8092a4-9bd8-4b19-a02f-49fd954ffb79} event:/BlowerStart
 {89d27a8f-0f45-4230-905b-f244fdde49a4} event:/Brake Fan L
 {87259c62-a9fb-4b18-b7e4-d93a6e30c0a1} event:/Brake Fan R

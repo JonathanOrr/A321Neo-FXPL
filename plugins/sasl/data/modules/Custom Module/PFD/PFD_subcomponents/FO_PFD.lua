@@ -13,7 +13,7 @@ include('PFD/PFD_sub_functions/PFD_vs_needle.lua')
 include('PFD/PFD_sub_functions/PFD_timers.lua')
 fbo = true
 
-local fo_PFD_table = {
+PFD.Fo_PFD_table = {
     Screen_ID = PFD_FO,
     Opposite_screen_ID = PFD_CAPT,
     NAVDATA_update_timer = 0,
@@ -61,7 +61,7 @@ local fo_PFD_table = {
     Show_spd_trend = true,
     Show_mach = true,
     LS_enabled = Fo_landing_system_enabled,
-    BUSS_update_timer = 0,
+    BUSS_update_time = 0,
     BUSS_vsw_pos = 64,
     BUSS_target_pos = 400,
 }
@@ -73,8 +73,8 @@ function update()
 
     pb_set(PB.FCU.fo_ls, false, get(Fo_landing_system_enabled) == 1)
 
-    Get_ILS_data(fo_PFD_table)
-    PFD_update_timers(fo_PFD_table)
+    Get_ILS_data(PFD.Fo_PFD_table)
+    PFD_update_timers(PFD.Fo_PFD_table)
 end
 
 local skip_1st_frame_AA = true
@@ -88,13 +88,13 @@ function draw()
     skip_1st_frame_AA = false
 
     PFD_draw_FMA(PFD_ALL_FMA)
-    PFD_draw_LS(fo_PFD_table)
-    PFD_draw_att(fo_PFD_table)
-    PFD_draw_spd_tape(fo_PFD_table)
-    PFD_draw_alt_tape(fo_PFD_table)
-    PFD_draw_alt_ref(fo_PFD_table)
-    PFD_draw_hdg_tape(fo_PFD_table)
-    PFD_draw_vs_needle(fo_PFD_table)
+    PFD_draw_LS(PFD.Fo_PFD_table)
+    PFD_draw_att(PFD.Fo_PFD_table)
+    PFD_draw_spd_tape(0, 0, PFD.Fo_PFD_table)
+    PFD_draw_alt_tape(PFD.Fo_PFD_table)
+    PFD_draw_alt_ref(PFD.Fo_PFD_table)
+    PFD_draw_hdg_tape(PFD.Fo_PFD_table)
+    PFD_draw_vs_needle(PFD.Fo_PFD_table)
     sasl.gl.restoreRenderTarget()
 
     sasl.gl.drawTexture(FO_PFD_popup_texture, 0, 0, 900, 900, {1,1,1})

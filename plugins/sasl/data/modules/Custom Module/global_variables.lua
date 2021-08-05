@@ -44,6 +44,7 @@ Fuel_sys = {}
 FIRE_sys = {}
 AI_sys   = {}
 ADIRS_sys= {}
+PFD = {}
 ND_all_data  = {nil, nil}
 ND_terrain = {}
 DRAIMS_common = {}
@@ -80,3 +81,5 @@ FBW = {
     },
     filtered_sensors = {}
 }
+
+Cinetracker = {}
