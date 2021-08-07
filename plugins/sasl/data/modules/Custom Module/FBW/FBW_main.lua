@@ -18,11 +18,11 @@
 
 --include("FBW_subcomponents/limits_calculations.lua")
 include("PID.lua")
-include("FBW/FBW_subcomponents/fbw_system_subcomponents/flt_computers.lua")
 include("FBW/FBW_subcomponents/fbw_system_subcomponents/mode_transition.lua")
 include("FBW/FBW_subcomponents/fbw_system_subcomponents/law_reconfiguration.lua")
 addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/")
 addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/fbw_system_subcomponents")
+addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/fbw_system_subcomponents/FLT_computer")
 addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/fbw_system_subcomponents/sensor_filtering")
 addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/fbw_system_subcomponents/lateral_augmentation")
 addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/fbw_system_subcomponents/vertical_agumentation")
@@ -55,6 +55,8 @@ components = {
 
     filtering {},
 
+    FLT_computer_main {},
+
     vertical_dynamics {},
     vertical_protections {},
     vertical_inputs {},
@@ -77,21 +79,8 @@ components = {
     yaw_augmentation {},
 }
 
---register commands
-sasl.registerCommandHandler (Toggle_ELAC_1, 0, Toggle_elac_1_callback)
-sasl.registerCommandHandler (Toggle_ELAC_2, 0, Toggle_elac_2_callback)
-sasl.registerCommandHandler (Toggle_FAC_1, 0, Toggle_fac_1_callback)
-sasl.registerCommandHandler (Toggle_FAC_2, 0, Toggle_fac_2_callback)
-sasl.registerCommandHandler (Toggle_SEC_1, 0, Toggle_sec_1_callback)
-sasl.registerCommandHandler (Toggle_SEC_2, 0, Toggle_sec_2_callback)
-sasl.registerCommandHandler (Toggle_SEC_3, 0, Toggle_sec_3_callback)
-
 function update()
     updateAll(components)
-
-    --system subcomponents
-    Fctl_computuers_status_computation(Fctl_computers_var_table)
-    Compute_fctl_button_states()
 
     --Flight mode blending
     if get(FBW_total_control_law) == FBW_NORMAL_LAW then

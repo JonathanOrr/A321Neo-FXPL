@@ -147,6 +147,8 @@ local failures_data = {
     {
         group="F/CTL",
         failures={
+            {name="FCDC 1\nFAILURE", status=false, dataref=FAILURE_FCTL_FCDC_1 },
+            {name="FCDC 2\nFAILURE", status=false, dataref=FAILURE_FCTL_FCDC_2 },
             {name="SFCC 1\nFAILURE", status=false, dataref=FAILURE_FCTL_SFCC_1 },
             {name="SFCC 2\nFAILURE", status=false, dataref=FAILURE_FCTL_SFCC_2 },
             {name="ELAC 1\nFAILURE", status=false, dataref=FAILURE_FCTL_ELAC_1 },

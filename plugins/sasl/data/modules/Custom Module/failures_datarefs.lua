@@ -139,6 +139,8 @@ FAILURE_ELEC_DC_ESS_bus = createGlobalPropertyi("a321neo/failures/electrical/bus
 FAILURE_ELEC_DC_ESS_SHED_bus = createGlobalPropertyi("a321neo/failures/electrical/bus_dc_ess_shed", 0, false, true, false)
 FAILURE_ELEC_DC_BAT_bus = createGlobalPropertyi("a321neo/failures/electrical/bus_dc_bat", 0, false, true, false)
 
+FAILURE_FCTL_FCDC_1 =        createGlobalPropertyi("a321neo/failures/fctl/fcdc_1", 0, false, true, false)--flight control data concentrator 1 failure
+FAILURE_FCTL_FCDC_2 =        createGlobalPropertyi("a321neo/failures/fctl/fcdc_2", 0, false, true, false)--flight control data concentrator 2 failure
 FAILURE_FCTL_SFCC_1 =        createGlobalPropertyi("a321neo/failures/fctl/sfcc_1", 0, false, true, false)--slats flaps computer 1 failure
 FAILURE_FCTL_SFCC_2 =        createGlobalPropertyi("a321neo/failures/fctl/sfcc_2", 0, false, true, false)--slats flaps computer 2 failure
 FAILURE_FCTL_ELAC_1 =        createGlobalPropertyi("a321neo/failures/fctl/elac_1", 0, false, true, false)--elevator aileron computer 1 failure
