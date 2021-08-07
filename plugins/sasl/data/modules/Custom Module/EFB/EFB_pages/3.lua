@@ -300,6 +300,14 @@ local function slider_to_weights_translator()
             slider_actual_values[i] = Round(slider_actual_values[i],-2)
         end
     end
+
+    slider_actual_values[6] = slider_actual_values[6] >= 31085 and 31085 or slider_actual_values[6] 
+
+    -- Sooooooooooo
+    -- Rico made things very complicated lol
+    -- when I round the fuel value, FUEL_TOT_MAX = 31085 is rounded to 31000
+    -- Then his assert function in the set_fuel() denied me setting it as 31000, and the script crashes
+    -- this line is to prevent the maximum fuel after rounding to exceed 31085 no matter what
 end
 
 local function set_values()
@@ -309,7 +317,8 @@ local function set_values()
     WEIGHTS.set_fwd_cargo_weight(slider_actual_values[3])
     WEIGHTS.set_aft_cargo_weight(slider_actual_values[4])
     WEIGHTS.set_bulk_cargo_weight(slider_actual_values[5])
-    set_fuel(slider_actual_values[6] + 10 * (slider_actual_values[6]/FUEL_TOT_MAX) )
+    print(slider_actual_values[6])
+    set_fuel(slider_actual_values[6])
     -- so long story short, there was an issue which set_fuel(40000) will only add 39990 kg of fuel
     --the issue is not in this script, it is rico's set fuel function.
     --therefore, for every 40000 kg of fuel, 10 kg has to be added.
