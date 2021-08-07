@@ -39,7 +39,10 @@ function THIS_PAGE:render(mcdu_data)
     local c = optimum_crz
     local d = rec_max_crz
     local dash_the_crz_and_opt = FMGS_get_phase() >= 5 -- SEE MANUAL PAGE 340 FOR WHY
-    self:add_multi_line(mcdu_data, MCDU_LEFT, 1,(a == nil or dash_the_crz_and_opt) and "-----" or "FL"..tostring(a) , MCDU_LARGE, a == nil and ECAM_WHITE or ECAM_BLUE)
+
+
+    self:add_multi_line(mcdu_data, MCDU_LEFT, 1,(a == nil or dash_the_crz_and_opt) and "-----" or (a >= FMGS_perf_get_trans_alt() and "FL"..Fwd_string_fill(tostring(a/100), "0", 3) or " "..ostring(a)) , MCDU_LARGE, a == nil and ECAM_WHITE or ECAM_BLUE)
+    
     self:add_multi_line(mcdu_data, MCDU_LEFT, 1,(c == nil or dash_the_crz_and_opt) and "         -----" or "         FL"..tostring(c) , MCDU_LARGE, c == nil and ECAM_WHITE or ECAM_GREEN)
     self:add_multi_line(mcdu_data, MCDU_RIGHT, 1,d == nil and "----- " or "FL"..tostring(d).." " , MCDU_LARGE, d == nil and ECAM_WHITE or ECAM_MAGENTA)
 
@@ -69,7 +72,9 @@ function THIS_PAGE:render(mcdu_data)
     self:add_multi_line(mcdu_data, MCDU_LEFT, 5, " PREDICTIVE", MCDU_SMALL, ECAM_WHITE)
     self:add_multi_line(mcdu_data, MCDU_LEFT, 5, "<GPS", MCDU_LARGE, ECAM_WHITE)
 
-    self:add_multi_line(mcdu_data, MCDU_RIGHT, 5, "GPS PRIMARY", MCDU_LARGE, ECAM_GREEN)
+    if FMGS_sys.config.gps_primary then
+        self:add_multi_line(mcdu_data, MCDU_RIGHT, 5, "GPS PRIMARY", MCDU_LARGE, ECAM_GREEN)
+    end
 
     -----LINE 6
     self:add_multi_line(mcdu_data, MCDU_LEFT, 6, "REQUIRED ACCUR ESTIMATED", MCDU_SMALL, ECAM_WHITE)

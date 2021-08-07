@@ -317,7 +317,6 @@ local function set_values()
     WEIGHTS.set_fwd_cargo_weight(slider_actual_values[3])
     WEIGHTS.set_aft_cargo_weight(slider_actual_values[4])
     WEIGHTS.set_bulk_cargo_weight(slider_actual_values[5])
-    print(slider_actual_values[6])
     set_fuel(slider_actual_values[6])
     -- so long story short, there was an issue which set_fuel(40000) will only add 39990 kg of fuel
     --the issue is not in this script, it is rico's set fuel function.
