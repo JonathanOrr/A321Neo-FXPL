@@ -108,8 +108,9 @@ local function aileron_actuation(request_pos, which_one)   -- which one: 1: LEFT
     -- 8: Finally compute actuator value and set the surface position
     if not aileron_table[which_one].controlled then
         -- No HYD at all
-        -- Return to neutral depending on IAS (no hyd system)
-        local pos = Math_rescale(0, ailerons_max_def, no_hyd_recenter_ias, -get(Alpha), get(IAS)) --Math_rescale(0, ailerons_max_def, 100, 0, get(IAS))
+        -- Return to neutral depending on TAS (no hyd system)
+        local LOCAL_AIRSPD_KTS = get(TAS_ms) * 1.94384
+        local pos = Math_rescale(0, ailerons_max_def, no_hyd_recenter_ias, -get(Alpha), LOCAL_AIRSPD_KTS)
         Set_dataref_linear_anim(ail_dataref, pos, -ailerons_max_def, ailerons_max_def, ail_no_hyd_spd)
     else
         -- Normal situation

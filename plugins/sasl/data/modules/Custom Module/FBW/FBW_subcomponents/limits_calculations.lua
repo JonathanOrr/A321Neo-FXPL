@@ -1,4 +1,3 @@
-include("FBW_subcomponents/flight_ctl_subcomponents/lateral_ctl.lua")
 include("ADIRS_data_source.lua")
 
 local aoa_filtering_table = {
@@ -207,7 +206,7 @@ local function update_VLS()
     set(
         VLS,
         Table_interpolate(VLS_flaps_spd_lerp_table, get(Slats)*27 + get(Flaps_deployed_angle))
-        + Math_rescale(0, 0, Spoilers_obj.Get_cmded_spdbrk_def(1), Table_interpolate(VLS_spdbrake_fx_lerp_table, get(Slats)*27 + get(Flaps_deployed_angle)), Spoilers_obj.Get_curr_spdbrk_def())
+        + Math_rescale(0, 0, FBW.fctl.control.SPLR_COMMON.Get_cmded_spdbrk_def(1), Table_interpolate(VLS_spdbrake_fx_lerp_table, get(Slats)*27 + get(Flaps_deployed_angle)), get(TOTAL_SPDBRK_EXTENSION))
     )
 end
 

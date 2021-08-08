@@ -90,6 +90,13 @@ function draw_fctl_page()
     sasl.gl.drawText(Font_AirbusDUL, 649, 553, SEC_txt[3], 30, false, false, TEXT_ALIGN_CENTER, SEC_txt_cl[3])
     sasl.gl.drawTexture(ECAM_FCTL_computer_backets_img, 541, 538, 128, 52, SEC_box_cl[3])
 
+    --LAF--
+    if get(FBW_LAF_DATA_AVAIL) == 1 then
+        if get(FBW_LAF_DEGRADED_AIL) == 1 or get(FBW_LAF_DEGRADED_SPLR_4) == 1 or get(FBW_LAF_DEGRADED_SPLR_5) == 1 then
+            sasl.gl.drawText(Font_AirbusDUL, size[1]/2+2, size[2]/2+215, "LAF DEGRADED", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        end
+    end
+
     --track indication--
     local num_of_spoilers = 5
     local spoiler_track_length = 22
@@ -124,19 +131,19 @@ function draw_fctl_page()
     }
 
     local l_spoiler_dataref = {
-        Left_spoiler_1,
-        Left_spoiler_2,
-        Left_spoiler_3,
-        Left_spoiler_4,
-        Left_spoiler_5,
+        L_SPLR_1,
+        L_SPLR_2,
+        L_SPLR_3,
+        L_SPLR_4,
+        L_SPLR_5,
     }
 
     local r_spoiler_dataref = {
-        Right_spoiler_1,
-        Right_spoiler_2,
-        Right_spoiler_3,
-        Right_spoiler_4,
-        Right_spoiler_5,
+        R_SPLR_1,
+        R_SPLR_2,
+        R_SPLR_3,
+        R_SPLR_4,
+        R_SPLR_5,
     }
 
     local spoiler_track_x_y = {

@@ -1,0 +1,10 @@
+function update()
+    FBW.LAF.controllers.SYS_status()
+    FBW.LAF.controllers.MLA_PID.bumpless_transfer()
+    FBW.LAF.controllers.MLA_PID.control()
+    FBW.LAF.controllers.MLA_PID.bp()
+    FBW.LAF.controllers.GLA_PID.bumpless_transfer()
+    FBW.LAF.controllers.GLA_PID.control()
+    FBW.LAF.controllers.GLA_PID.bp()
+    FBW.LAF.controllers.output_blending()
+end

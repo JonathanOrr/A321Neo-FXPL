@@ -620,6 +620,11 @@ FBW_lateral_ground_mode_ratio =    createGlobalPropertyf("a321neo/dynamics/FBW/s
 FBW_lateral_flight_mode_ratio =    createGlobalPropertyf("a321neo/dynamics/FBW/system_status/lateral_flight_mode_ratio", 0, false, true, false)   --FBW lateral  flight   mode transition ratio
 FBW_flare_mode_memorised_att = createGlobalPropertyf("a321neo/dynamics/FBW/system_status/flare_mode_memorised_attitude", 0, false, true, false)--FBW flare mode memorised att at 50ft RA or 100ft RA
 FBW_flare_mode_computed_Q =    createGlobalPropertyf("a321neo/dynamics/FBW/system_status/flare_mode_computed_Q", 0, false, true, false)--FBW flare mode computed pitch rate 8 seconds from memorised ATT --> -2 degrees
+--LAF--
+FBW_LAF_DATA_AVAIL =    createGlobalPropertyi("a321neo/dynamics/FBW/system_status/laf_data_available", 0, false, true, false)
+FBW_LAF_DEGRADED_AIL =  createGlobalPropertyi("a321neo/dynamics/FBW/system_status/laf_degraded_aileron", 0, false, true, false)
+FBW_LAF_DEGRADED_SPLR_4 = createGlobalPropertyi("a321neo/dynamics/FBW/system_status/laf_degraded_spoiler_4", 0, false, true, false)
+FBW_LAF_DEGRADED_SPLR_5 = createGlobalPropertyi("a321neo/dynamics/FBW/system_status/laf_degraded_spoiler_5", 0, false, true, false)
 --flight computers status
 ELAC_1_status = createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/elac_1_status", 1, false, true, false)--elevator aileron computer(protection outputs)
 ELAC_2_status = createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/elac_2_status", 1, false, true, false)
@@ -633,7 +638,7 @@ SFCC_2_status = createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/sfc
 FCDC_1_status = createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/fcdc_1_status", 1, false, true, false)--slats flaps control computer
 FCDC_2_status = createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/fcdc_2_status", 1, false, true, false)
 --ailerons
-L_aileron =  globalProperty("sim/flightmodel/controls/wing3l_ail1def") -- -25 deg up 25 deg down
+L_aileron = globalProperty("sim/flightmodel/controls/wing3l_ail1def") -- -25 deg up 25 deg down
 R_aileron = globalProperty("sim/flightmodel/controls/wing3r_ail1def") -- -25 deg up 25 deg down
 --spoilers
 Ground_spoilers_armed = createGlobalPropertyi("a321neo/dynamics/FBW/controls/ground_spoilers_armed", 0, false, true, false)--mostly used for animation but 0 is disarmed 1 is armed
@@ -641,20 +646,22 @@ Ground_spoilers_mode = createGlobalPropertyi("a321neo/dynamics/FBW/controls/grou
 Ground_spoilers_act_method = createGlobalPropertyi("a321neo/dynamics/FBW/controls/ground_spoilers_activation_method", 0, false, true, false)--0 no action, 1 unarmed activation, 2 armed activation
 Speedbrakes_inhibited = createGlobalPropertyi("a321neo/dynamics/FBW/control_limitations/speedbrakes_inhibited", 0, false, true, false)--if the speedbrakes are inhibited, reset the lever to restore to 0
 Speedbrakes_ratio = globalProperty("sim/flightmodel2/controls/speedbrake_ratio")--used to enable the rotation of spoiler 2 & 3 feed the sum of sidestick input & speedbrake handle in
-L_roll_spoiler_extension = createGlobalPropertyfa("a321neo/dynamics/surfaces/l_roll_spoiler_extension", 5, false, true, false)
-R_roll_spoiler_extension = createGlobalPropertyfa("a321neo/dynamics/surfaces/r_roll_spoiler_extension", 5, false, true, false)
-L_speed_brakes_extension = createGlobalPropertyfa("a321neo/dynamics/surfaces/l_speed_brakes_extension", 5, false, true, false)
-R_speed_brakes_extension = createGlobalPropertyfa("a321neo/dynamics/surfaces/r_speed_brakes_extension", 5, false, true, false)
-Left_spoiler_1 =  globalProperty("sim/flightmodel/controls/wing1l_spo1def")
-Left_spoiler_2 =  globalProperty("sim/flightmodel2/wing/speedbrake1_deg[2]")
-Left_spoiler_3 =  globalProperty("sim/flightmodel2/wing/speedbrake2_deg[2]")
-Left_spoiler_4 =  globalProperty("sim/flightmodel/controls/wing2l_spo1def")
-Left_spoiler_5 =  globalProperty("sim/flightmodel/controls/wing2l_spo2def")
-Right_spoiler_1 = globalProperty("sim/flightmodel/controls/wing1r_spo1def")
-Right_spoiler_2 = globalProperty("sim/flightmodel2/wing/speedbrake1_deg[3]")
-Right_spoiler_3 = globalProperty("sim/flightmodel2/wing/speedbrake2_deg[3]")
-Right_spoiler_4 = globalProperty("sim/flightmodel/controls/wing2r_spo1def")
-Right_spoiler_5 = globalProperty("sim/flightmodel/controls/wing2r_spo2def")
+L_ROLL_SPLR_EXTENSION = createGlobalPropertyfa("a321neo/dynamics/surfaces/l_roll_spoiler_extension", 5, false, true, false)
+R_ROLL_SPLR_EXTENSION = createGlobalPropertyfa("a321neo/dynamics/surfaces/r_roll_spoiler_extension", 5, false, true, false)
+L_SPDBRK_EXTENSION = createGlobalPropertyfa("a321neo/dynamics/surfaces/l_speed_brakes_extension", 5, false, true, false)
+R_SPDBRK_EXTENSION = createGlobalPropertyfa("a321neo/dynamics/surfaces/r_speed_brakes_extension", 5, false, true, false)
+TOTAL_ROLL_SPLR_EXTENSION = createGlobalPropertyf("a321neo/dynamics/surfaces/total_roll_spoiler_extension", 0, false, true, false)
+TOTAL_SPDBRK_EXTENSION = createGlobalPropertyf("a321neo/dynamics/surfaces/total_speed_brake_extension", 0, false, true, false)
+L_SPLR_1 = globalProperty("sim/flightmodel/controls/wing1l_spo1def")
+L_SPLR_2 = globalProperty("sim/flightmodel2/wing/speedbrake1_deg[2]")
+L_SPLR_3 = globalProperty("sim/flightmodel2/wing/speedbrake2_deg[2]")
+L_SPLR_4 = globalProperty("sim/flightmodel/controls/wing2l_spo1def")
+L_SPLR_5 = globalProperty("sim/flightmodel/controls/wing2l_spo2def")
+R_SPLR_1 = globalProperty("sim/flightmodel/controls/wing1r_spo1def")
+R_SPLR_2 = globalProperty("sim/flightmodel2/wing/speedbrake1_deg[3]")
+R_SPLR_3 = globalProperty("sim/flightmodel2/wing/speedbrake2_deg[3]")
+R_SPLR_4 = globalProperty("sim/flightmodel/controls/wing2r_spo1def")
+R_SPLR_5 = globalProperty("sim/flightmodel/controls/wing2r_spo2def")
 --high lift devices
 Slat_alpha_locked =     createGlobalPropertyi("a321neo/dynamics/FBW/slats_and_flaps/slat_alpha_locked", 0, false, true, false)
 Flaps_handle_ratio = 	globalProperty("sim/cockpit2/controls/flap_ratio")

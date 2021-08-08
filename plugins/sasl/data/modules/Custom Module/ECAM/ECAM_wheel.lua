@@ -247,19 +247,19 @@ local function draw_wheel_page_spoilers()
     }
 
     local l_spoiler_dataref = {
-        Left_spoiler_1,
-        Left_spoiler_2,
-        Left_spoiler_3,
-        Left_spoiler_4,
-        Left_spoiler_5,
+        L_SPLR_1,
+        L_SPLR_2,
+        L_SPLR_3,
+        L_SPLR_4,
+        L_SPLR_5,
     }
 
     local r_spoiler_dataref = {
-        Right_spoiler_1,
-        Right_spoiler_2,
-        Right_spoiler_3,
-        Right_spoiler_4,
-        Right_spoiler_5,
+        R_SPLR_1,
+        R_SPLR_2,
+        R_SPLR_3,
+        R_SPLR_4,
+        R_SPLR_5,
     }
 
     local spoiler_track_x_y = {

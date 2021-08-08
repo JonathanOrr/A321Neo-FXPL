@@ -84,6 +84,9 @@ FBW = {
         protections = {},
         inputs = {},
     },
+    LAF = {
+        inputs = {},
+    },
     filtered_sensors = {}
 }
 

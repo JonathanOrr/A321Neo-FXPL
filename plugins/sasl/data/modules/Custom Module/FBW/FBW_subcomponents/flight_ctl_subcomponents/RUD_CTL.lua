@@ -40,7 +40,8 @@ FBW.fctl.control.RUD = function (yaw_input, trim_input, resetting_trim)
     local LOCAL_AIRSPD_KTS = get(TAS_ms) * 1.94384
     local max_rudder_def = 30
     local rudder_speed = 21.5
-    local rudder_no_hyd_spd = Math_rescale(0, 0, 100, 8, LOCAL_AIRSPD_KTS)
+    local no_hyd_recenter_TAS = 100
+    local rudder_no_hyd_spd = Math_rescale(0, 0, no_hyd_recenter_TAS, 8, LOCAL_AIRSPD_KTS)
     local rudder_trim_speed = 1
     local rudder_trim_reset_speed = 1.5
     --the proportion is the same no matter the limits, hence at higher speed you'll reach the limit with less deflection

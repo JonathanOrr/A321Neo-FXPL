@@ -27,6 +27,7 @@ addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/fbw_syste
 addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/fbw_system_subcomponents/lateral_augmentation")
 addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/fbw_system_subcomponents/vertical_agumentation")
 addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/fbw_system_subcomponents/yaw_augmentation")
+addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/fbw_system_subcomponents/LAF_augmentation")
 
 --xplane landing gear attitude correction--
 local front_gear_length =  globalProperty("sim/aircraft/parts/acf_gear_leglen[0]")
@@ -69,6 +70,9 @@ components = {
     yaw_inputs {},
     yaw_controllers {},
 
+    LAF_inputs {},
+    LAF_controllers {},
+
     law_reconfiguration {},
     autothrust {},
     flight_controls {},
@@ -77,6 +81,7 @@ components = {
     lateral_augmentation {},
     vertical_augmentation {},
     yaw_augmentation {},
+    LAF_augmentation {},
 }
 
 function update()
