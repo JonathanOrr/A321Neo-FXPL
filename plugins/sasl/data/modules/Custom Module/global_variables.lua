@@ -70,6 +70,7 @@ FBW = {
     fctl = {
         surfaces = {},
         status = {},
+        control = {},
     },
     lateral = {
         protections = {},
