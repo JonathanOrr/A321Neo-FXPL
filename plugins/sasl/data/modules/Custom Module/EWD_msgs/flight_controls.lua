@@ -397,7 +397,7 @@ MessageGroup_FCTL_STAB_JAM = {
     sd_page = ECAM_PAGE_FCTL,
 
     is_active = function()
-        return get(FAILURE_FCTL_THS) == 1 or get(FAILURE_FCTL_THS_MECH) == 1
+        return get(FAILURE_FCTL_THS_MECH) == 1
     end,
 
     is_inhibited = function()

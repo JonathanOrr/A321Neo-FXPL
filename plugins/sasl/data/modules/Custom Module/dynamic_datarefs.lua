@@ -529,6 +529,7 @@ Override_normal_flight_mode_blending =  createGlobalPropertyi("a321neo/dynamics/
 Print_ail_status =                      createGlobalPropertyi("a321neo/dynamics/FBW/debug/print_ail_control_status", 0, false, true, false)
 Print_splr_status =                     createGlobalPropertyi("a321neo/dynamics/FBW/debug/print_splr_control_status", 0, false, true, false)
 Print_elev_status =                     createGlobalPropertyi("a321neo/dynamics/FBW/debug/print_elev_control_status", 0, false, true, false)
+Print_ths_status =                      createGlobalPropertyi("a321neo/dynamics/FBW/debug/print_ths_control_status", 0, false, true, false)
 Print_rud_status =                      createGlobalPropertyi("a321neo/dynamics/FBW/debug/print_rud_control_status", 0, false, true, false)
 Debug_FBW_law_reconfig = 				createGlobalPropertyi("a321neo/dynamics/FBW/debug/debug_FBW_law_reconfig", 0, false, true, false)
 --customizations

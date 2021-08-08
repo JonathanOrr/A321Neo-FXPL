@@ -1,4 +1,4 @@
-function XP_trim_up(phase)
+local function XP_trim_up(phase)
     if phase == SASL_COMMAND_BEGIN or phase == SASL_COMMAND_CONTINUE then
         if get(THS_trim_range_limited) == 1 and get(Elev_trim_ratio) >= get(THS_trim_limit_ratio) then
             set(Human_pitch_trim, 0)
@@ -9,24 +9,19 @@ function XP_trim_up(phase)
 
     return 0--inhibites the x-plane original command
 end
-
-function XP_trim_dn(phase)
+local function XP_trim_dn(phase)
     if phase == SASL_COMMAND_BEGIN or phase == SASL_COMMAND_CONTINUE then
         set(Human_pitch_trim, -1)
     end
 
     return 0--inhibites the x-plane original command
 end
+sasl.registerCommandHandler(Trim_up, 1, XP_trim_up)
+sasl.registerCommandHandler(Trim_dn, 1, XP_trim_dn)
+sasl.registerCommandHandler(Trim_up_mechanical, 1, XP_trim_up)
+sasl.registerCommandHandler(Trim_dn_mechanical, 1, XP_trim_dn)
 
-function THS_control(THS_input_dataref, human_input)
-    --hydraulics system
-    --G <--> Y
-    --flt computer reversion
-    --ELAC 2 --> ELAC 1 --> SEC 2 --> SEC 1
-    --flight computer THS motor relation
-    --MOTOR 1 <--> MOTOR 2 <--> MOTOR 3
-    --ELECTRICAL --> MECHANICAL
-
+FBW.fctl.control.THS = function (THS_input_dataref, human_input_dataref)
     --input processing--
     local input = Math_clamp(get(THS_input_dataref), -1, 1)
 
@@ -65,16 +60,19 @@ function THS_control(THS_input_dataref, human_input)
     local max_upwards_trim_ratio = get(THS_trim_range_limited) == 1 and get(THS_trim_limit_ratio) or 1
 
     --Trim speed logic--
-    caculated_human_trim_speed = Math_rescale(0, 0, 1450, caculated_human_trim_speed, get(Hydraulic_G_press) + get(Hydraulic_Y_press))
-    caculated_trim_speed = Math_rescale(0, 0, 1450, caculated_trim_speed, get(Hydraulic_G_press) + get(Hydraulic_Y_press))
-    caculated_trim_speed = caculated_trim_speed * BoolToNum(get(ELAC_2_status) == 1 or get(ELAC_1_status) == 1 or get(SEC_2_status) == 1 or get(SEC_1_status) == 1)
-    caculated_trim_speed = caculated_trim_speed * (1 - get(FAILURE_FCTL_THS))
+    caculated_human_trim_speed = FBW.fctl.surfaces.THS.THS.mechanical and caculated_human_trim_speed or 0
+    caculated_trim_speed = FBW.fctl.surfaces.THS.THS.controlled and caculated_trim_speed or 0
+    set(human_input_dataref, FBW.fctl.surfaces.THS.THS.mechanical and get(human_input_dataref) or 0)
 
-    if human_input ~= 0 then
-        set(Elev_trim_ratio, Math_clamp(get(Elev_trim_ratio) + human_input * caculated_human_trim_speed * get(DELTA_TIME) * (1 - get(FAILURE_FCTL_THS_MECH)), -1, 1))
+    if get(human_input_dataref) ~= 0 then
+        set(Elev_trim_ratio, Math_clamp(get(Elev_trim_ratio) + get(human_input_dataref) * caculated_human_trim_speed * get(DELTA_TIME), -1, 1))
         set(THS_input_dataref, get(Elev_trim_ratio))
-        set(Human_pitch_trim, 0)
+        set(human_input_dataref, 0)
     else
         set(Elev_trim_ratio, Set_linear_anim_value(get(Elev_trim_ratio), THS_target, -1, max_upwards_trim_ratio, caculated_trim_speed))
     end
+end
+
+function update()
+    FBW.fctl.control.THS(Augmented_pitch_trim_ratio, Human_pitch_trim)
 end

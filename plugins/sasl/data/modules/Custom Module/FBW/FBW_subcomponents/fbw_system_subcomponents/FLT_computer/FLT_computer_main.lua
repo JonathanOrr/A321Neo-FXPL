@@ -232,6 +232,7 @@ components = {
     AIL {},
     SPLR {},
     ELEV {},
+    THS {},
 }
 
 function update()

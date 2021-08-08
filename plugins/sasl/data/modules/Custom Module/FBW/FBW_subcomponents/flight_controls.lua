@@ -1,6 +1,5 @@
 include("FBW_subcomponents/flight_ctl_subcomponents/slat_flaps_control.lua")
 include("FBW_subcomponents/flight_ctl_subcomponents/lateral_ctl.lua")
-include("FBW_subcomponents/flight_ctl_subcomponents/vertical_ctl.lua")
 include("FBW_subcomponents/flight_ctl_subcomponents/check_avil_and_failure.lua")
 include("FBW_subcomponents/flight_ctl_subcomponents/yaw_control.lua")
 include("FBW_subcomponents/flight_ctl_subcomponents/ground_spoilers.lua")
@@ -20,10 +19,6 @@ sasl.registerCommandHandler(Min_speedbrakes, 1, XP_min_speedbrakes)
 sasl.registerCommandHandler(Max_speedbrakes, 1, XP_max_speedbrakes)
 sasl.registerCommandHandler(Less_speedbrakes, 1, XP_less_speedbrakes)
 sasl.registerCommandHandler(More_speedbrakes, 1, XP_more_speedbrakes)
-sasl.registerCommandHandler(Trim_up, 1, XP_trim_up)
-sasl.registerCommandHandler(Trim_dn, 1, XP_trim_dn)
-sasl.registerCommandHandler(Trim_up_mechanical, 1, XP_trim_up)
-sasl.registerCommandHandler(Trim_dn_mechanical, 1, XP_trim_dn)
 sasl.registerCommandHandler(Rudd_trim_L, 1, Rudder_trim_left)
 sasl.registerCommandHandler(Rudd_trim_R, 1, Rudder_trim_right)
 sasl.registerCommandHandler(Rudd_trim_reset, 1, Reset_rudder_trim)
@@ -61,6 +56,7 @@ end
 components = {
     AIL_CTL {},
     ELEV_CTL {},
+    THS_CTL {},
 }
 
 function update()
@@ -79,7 +75,6 @@ function update()
             updateAll(components)
             Spoilers_control(get(FBW_roll_output), get(Speedbrake_handle_ratio), Ground_spoilers_output(Ground_spoilers_var_table), false, Spoilers_obj)
             Slats_flaps_calc_and_control()
-            THS_control(Augmented_pitch_trim_ratio, get(Human_pitch_trim))
             Rudder_control(get(FBW_yaw_output), get(Human_rudder_trim), get(Resetting_rudder_trim))
         end
     end

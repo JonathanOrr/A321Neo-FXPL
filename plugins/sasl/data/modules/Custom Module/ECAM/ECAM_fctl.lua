@@ -327,10 +327,14 @@ function draw_fctl_page()
 
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-28, size[2]/2-8, "PITCH TRIM", 31, false, false, TEXT_ALIGN_CENTER, get(FAILURE_FCTL_THS_MECH) == 0 and ECAM_WHITE or ECAM_ORANGE)
 
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-25, size[2]/2-50, string.format("%.1f", tostring(math.abs(get(Elev_trim_degrees)))), 30, false, false, TEXT_ALIGN_CENTER, get(THS_avail) == 1 and ECAM_GREEN or ECAM_ORANGE)
-    if get(Elev_trim_degrees) >= 0 then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+45, size[2]/2-50, "UP", 30, false, false, TEXT_ALIGN_CENTER, get(THS_avail) == 1 and ECAM_GREEN or ECAM_ORANGE)
+    if FBW.fctl.surfaces.THS.THS.data_avail then
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-25, size[2]/2-50, string.format("%.1f", tostring(math.abs(get(Elev_trim_degrees)))), 30, false, false, TEXT_ALIGN_CENTER, FBW.fctl.surfaces.THS.THS.controlled and ECAM_GREEN or ECAM_ORANGE)
+        if get(Elev_trim_degrees) >= 0 then
+            sasl.gl.drawText(Font_AirbusDUL, size[1]/2+45, size[2]/2-50, "UP", 30, false, false, TEXT_ALIGN_CENTER, FBW.fctl.surfaces.THS.THS.controlled and ECAM_GREEN or ECAM_ORANGE)
+        else
+            sasl.gl.drawText(Font_AirbusDUL, size[1]/2+45, size[2]/2-50, "DN", 30, false, false, TEXT_ALIGN_CENTER, FBW.fctl.surfaces.THS.THS.controlled and ECAM_GREEN or ECAM_ORANGE)
+        end
     else
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+45, size[2]/2-50, "DN", 30, false, false, TEXT_ALIGN_CENTER, get(THS_avail) == 1 and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-25, size[2]/2-50, "X.X", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
 end
