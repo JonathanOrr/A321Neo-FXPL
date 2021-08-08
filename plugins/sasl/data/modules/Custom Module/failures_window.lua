@@ -176,10 +176,11 @@ local failures_data = {
             {name="THS MOTOR 2\nFAILURE", status=false, dataref=FAILURE_FCTL_THS_MOT_2 },
             {name="THS MOTOR 3\nFAILURE", status=false, dataref=FAILURE_FCTL_THS_MOT_3 },
             {name="THS\nSTUCK", status=false, dataref=FAILURE_FCTL_THS_MECH },
-            {name="RUDDER LIMIT\nFAILURE", status=false, dataref=FAILURE_FCTL_RUDDER_LIM },
-            {name="RUDDER TRIM\nSTUCK", status=false, dataref=FAILURE_FCTL_RUDDER_TRIM },
+            {name="RUD LIM\nMOT 1 FAIL", status=false, dataref=FAILURE_FCTL_RUDDER_LIM_MOT_1 },
+            {name="RUD LIM\nMOT 2 FAIL", status=false, dataref=FAILURE_FCTL_RUDDER_LIM_MOT_2 },
+            {name="RUD TRIM\nMOT 1 FAIL", status=false, dataref=FAILURE_FCTL_RUDDER_TRIM_MOT_1 },
+            {name="RUD TRIM\nMOT 2 FAIL", status=false, dataref=FAILURE_FCTL_RUDDER_TRIM_MOT_2 },
             {name="RUDDER MECH\nSTUCK", status=false, dataref=FAILURE_FCTL_RUDDER_MECH },
-            {name="YAW DAMPER\nFAILURE", status=false, dataref=FAILURE_FCTL_YAW_DAMPER },
         }
     },
     {

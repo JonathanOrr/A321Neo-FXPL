@@ -124,10 +124,10 @@ function Check_surface_avail()
     set(L_elevator_avail, get(L_elevator_avail) * (1 - get(FAILURE_FCTL_LELEV)))
     set(R_elevator_avail, get(R_elevator_avail) * (1 - get(FAILURE_FCTL_RELEV)))
     set(THS_avail, get(THS_avail) * (1 - get(FAILURE_FCTL_THS_MECH)))
-    set(Rudder_lim_avail, get(Rudder_lim_avail) * (1 - get(FAILURE_FCTL_RUDDER_LIM)) * (1 - get(FAILURE_FCTL_RUDDER_MECH)))
-    set(Rudder_trim_avail, get(Rudder_trim_avail) * (1 - get(FAILURE_FCTL_RUDDER_TRIM)) * (1 - get(FAILURE_FCTL_RUDDER_MECH)))
+    set(Rudder_lim_avail, get(Rudder_lim_avail) * (1 - get(FAILURE_FCTL_RUDDER_MECH)))
+    set(Rudder_trim_avail, get(Rudder_trim_avail) * (1 - get(FAILURE_FCTL_RUDDER_MECH)))
     set(Rudder_avail, get(Rudder_avail) * (1 - get(FAILURE_FCTL_RUDDER_MECH)))
-    set(Yaw_damper_avail, get(Yaw_damper_avail) * (1 - get(FAILURE_FCTL_YAW_DAMPER)))
+    set(Yaw_damper_avail, 1)
 
     --if spoilers is faulty and more than 2.5 degrees of extention then go amber
     for i = 1, num_of_spoilers do

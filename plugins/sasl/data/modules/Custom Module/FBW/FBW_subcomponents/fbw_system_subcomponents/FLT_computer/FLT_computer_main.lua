@@ -7,6 +7,7 @@ FBW.FLT_computer.ELAC = {
         Test_time = function ()
             local LONG_TEST_TIME = 8
             local SHORT_TEST_TIME = 1.5
+            local TIMER_MAX = 10
 
             local G_press = get(Hydraulic_G_press)
             local B_press = get(Hydraulic_B_press)
@@ -14,9 +15,9 @@ FBW.FLT_computer.ELAC = {
 
             --find required start time (according to AMM 27-93-00-P60)--
             if G_press < 1450 and B_press < 1450 and Y_press < 1450 then
-                return LONG_TEST_TIME
+                return LONG_TEST_TIME, TIMER_MAX
             else
-                return SHORT_TEST_TIME
+                return SHORT_TEST_TIME, TIMER_MAX
             end
         end,
         Button_address = PB.ovhd.flt_ctl_elac_1,
@@ -32,6 +33,7 @@ FBW.FLT_computer.ELAC = {
         Test_time = function ()
             local LONG_TEST_TIME = 8
             local SHORT_TEST_TIME = 1.5
+            local TIMER_MAX = 10
 
             local G_press = get(Hydraulic_G_press)
             local B_press = get(Hydraulic_B_press)
@@ -39,9 +41,9 @@ FBW.FLT_computer.ELAC = {
 
             --find required start time (according to AMM 27-93-00-P60)--
             if G_press < 1450 and B_press < 1450 and Y_press < 1450 then
-                return LONG_TEST_TIME
+                return LONG_TEST_TIME, TIMER_MAX
             else
-                return SHORT_TEST_TIME
+                return SHORT_TEST_TIME, TIMER_MAX
             end
         end,
         Button_address = PB.ovhd.flt_ctl_elac_2,
@@ -59,7 +61,8 @@ FBW.FLT_computer.FAC = {
         Start_timer = 0,
         Test_time = function ()
             local TEST_TIME = 1.5
-            return TEST_TIME
+            local TIMER_MAX = 10
+            return TEST_TIME, TIMER_MAX
         end,
         Button_address = PB.ovhd.flt_ctl_fac_1,
         Status_dataref = FAC_1_status,
@@ -76,7 +79,8 @@ FBW.FLT_computer.FAC = {
         Start_timer = 0,
         Test_time = function ()
             local TEST_TIME = 1.5
-            return TEST_TIME
+            local TIMER_MAX = 10
+            return TEST_TIME, TIMER_MAX
         end,
         Button_address = PB.ovhd.flt_ctl_fac_2,
         Status_dataref = FAC_2_status,
@@ -96,7 +100,8 @@ FBW.FLT_computer.SEC = {
         Start_timer = 0,
         Test_time = function ()
             local TEST_TIME = 1.5
-            return TEST_TIME
+            local TIMER_MAX = 10
+            return TEST_TIME, TIMER_MAX
         end,
         Button_address = PB.ovhd.flt_ctl_sec_1,
         Status_dataref = SEC_1_status,
@@ -110,7 +115,8 @@ FBW.FLT_computer.SEC = {
         Start_timer = 0,
         Test_time = function ()
             local TEST_TIME = 1.5
-            return TEST_TIME
+            local TIMER_MAX = 10
+            return TEST_TIME, TIMER_MAX
         end,
         Button_address = PB.ovhd.flt_ctl_sec_2,
         Status_dataref = SEC_2_status,
@@ -124,7 +130,8 @@ FBW.FLT_computer.SEC = {
         Start_timer = 0,
         Test_time = function ()
             local TEST_TIME = 1.5
-            return TEST_TIME
+            local TIMER_MAX = 10
+            return TEST_TIME, TIMER_MAX
         end,
         Button_address = PB.ovhd.flt_ctl_sec_3,
         Status_dataref = SEC_3_status,
@@ -178,11 +185,11 @@ FBW.FLT_computer.common = {
                 set(computer_table[i].Status_dataref, 0)
 
                 --find required start time--
-                local START_TIME = computer_table[i].Test_time()
+                local START_TIME, TIMER_MAX = computer_table[i].Test_time()
 
                 --button set to on--
                 if get(computer_table[i].Button_dataref) == 0 then
-                    if computer_table[i].Start_timer < START_TIME then
+                    if computer_table[i].Start_timer < TIMER_MAX then
                         computer_table[i].Start_timer = computer_table[i].Start_timer + get(DELTA_TIME)
                     end
                 end
@@ -233,6 +240,7 @@ components = {
     SPLR {},
     ELEV {},
     THS {},
+    RUD {},
 }
 
 function update()
