@@ -1,9 +1,6 @@
 include("FBW_subcomponents/flight_ctl_subcomponents/slat_flaps_control.lua")
 include("FBW_subcomponents/flight_ctl_subcomponents/lateral_ctl.lua")
-include("FBW_subcomponents/flight_ctl_subcomponents/check_avil_and_failure.lua")
-include("FBW_subcomponents/flight_ctl_subcomponents/yaw_control.lua")
 include("FBW_subcomponents/flight_ctl_subcomponents/ground_spoilers.lua")
-include("FBW_subcomponents/flight_ctl_subcomponents/input_handling.lua")
 include("FBW_subcomponents/flight_ctl_subcomponents/input_handling.lua")
 addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/flight_ctl_subcomponents")
 
@@ -19,9 +16,6 @@ sasl.registerCommandHandler(Min_speedbrakes, 1, XP_min_speedbrakes)
 sasl.registerCommandHandler(Max_speedbrakes, 1, XP_max_speedbrakes)
 sasl.registerCommandHandler(Less_speedbrakes, 1, XP_less_speedbrakes)
 sasl.registerCommandHandler(More_speedbrakes, 1, XP_more_speedbrakes)
-sasl.registerCommandHandler(Rudd_trim_L, 1, Rudder_trim_left)
-sasl.registerCommandHandler(Rudd_trim_R, 1, Rudder_trim_right)
-sasl.registerCommandHandler(Rudd_trim_reset, 1, Reset_rudder_trim)
 
 --custom functions
 local function get_elev_trim_degrees()
@@ -57,6 +51,7 @@ components = {
     AIL_CTL {},
     ELEV_CTL {},
     THS_CTL {},
+    RUD_CTL {},
 }
 
 function update()
@@ -71,11 +66,9 @@ function update()
 
     if get(Override_control_surfaces) == 1 then
         if get(DELTA_TIME) ~= 0 then
-            Check_surface_avail()
             updateAll(components)
             Spoilers_control(get(FBW_roll_output), get(Speedbrake_handle_ratio), Ground_spoilers_output(Ground_spoilers_var_table), false, Spoilers_obj)
             Slats_flaps_calc_and_control()
-            Rudder_control(get(FBW_yaw_output), get(Human_rudder_trim), get(Resetting_rudder_trim))
         end
     end
 end

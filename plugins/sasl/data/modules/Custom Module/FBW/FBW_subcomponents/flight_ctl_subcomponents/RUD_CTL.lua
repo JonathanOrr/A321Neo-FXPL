@@ -1,8 +1,8 @@
-function Rudder_trim_left(phase)
+local function Rudder_trim_left(phase)
     if phase == SASL_COMMAND_BEGIN or phase == SASL_COMMAND_CONTINUE then
         set(Rudder_trim_knob_pos, -1)
 
-        if get(Rudder_trim_avail) == 1 then
+        if FBW.fctl.surfaces.rud.trim.controlled then
             set(Human_rudder_trim, -1)
         end
     end
@@ -11,12 +11,11 @@ function Rudder_trim_left(phase)
         set(Rudder_trim_knob_pos, 0)
     end
 end
-
-function Rudder_trim_right(phase)
+local function Rudder_trim_right(phase)
     if phase == SASL_COMMAND_BEGIN or phase == SASL_COMMAND_CONTINUE then
         set(Rudder_trim_knob_pos, 1)
 
-        if get(Rudder_trim_avail) == 1 then
+        if FBW.fctl.surfaces.rud.trim.controlled then
             set(Human_rudder_trim, 1)
         end
     end
@@ -25,33 +24,23 @@ function Rudder_trim_right(phase)
         set(Rudder_trim_knob_pos, 0)
     end
 end
-
-function Reset_rudder_trim(phase)
+local function Reset_rudder_trim(phase)
     if phase == SASL_COMMAND_BEGIN or phase == SASL_COMMAND_CONTINUE then
-        if get(Rudder_trim_avail) == 1 then
+        if FBW.fctl.surfaces.rud.trim.controlled then
             set(Resetting_rudder_trim, 1)
         end
     end
 end
+sasl.registerCommandHandler(Rudd_trim_L, 1, Rudder_trim_left)
+sasl.registerCommandHandler(Rudd_trim_R, 1, Rudder_trim_right)
+sasl.registerCommandHandler(Rudd_trim_reset, 1, Reset_rudder_trim)
 
-function Rudder_control(yaw_input, trim_input, resetting_trim)
-    --[[in auto flight the rudder trim is controlled by the FMGC, otherwise the pilot can change the value by using the knob on the center pedestal
-
-    reversions
-    flight computers FAC 1 --> FAC 2
-    hyd(rudder)      G | B | Y
-    hyd(damper)      G | Y
-    mech             full mechanical link
-    ]]
-
-    --FBW law constants--
-    --2 = NORMAL LAW
-    --1 = ALT LAW
-    --0 = DIRECT LAW
-
+FBW.fctl.control.RUD = function (yaw_input, trim_input, resetting_trim)
     --PROPERTIES--
+    local LOCAL_AIRSPD_KTS = get(TAS_ms) * 1.94384
     local max_rudder_def = 30
     local rudder_speed = 21.5
+    local rudder_no_hyd_spd = Math_rescale(0, 0, 100, 8, LOCAL_AIRSPD_KTS)
     local rudder_trim_speed = 1
     local rudder_trim_reset_speed = 1.5
     --the proportion is the same no matter the limits, hence at higher speed you'll reach the limit with less deflection
@@ -62,12 +51,20 @@ function Rudder_control(yaw_input, trim_input, resetting_trim)
     }
     local rudder_travel_target = Table_interpolate(rudder_travel_target_table, yaw_input)
 
+    --RUDDER DAMPING TARGET
+    local rud_damping_target = Math_clamp(get(Beta), -get(Rudder_travel_lim), get(Rudder_travel_lim))
+
+    --SWING WITH THE WIND--
+    if not FBW.fctl.surfaces.rud.rud.mechanical and not FBW.fctl.surfaces.rud.rud.controlled then
+        rudder_travel_target = rud_damping_target
+    end
+
     --RUDDER LIMITS--
-    if get(Force_full_rudder_limit) ~= 1 then
-        if get(Rudder_lim_avail) == 1 and get(Slats) == 0 then
+    if get(Force_full_rudder_limit) ~= 1 and FBW.fctl.surfaces.rud.lim.controlled then
+        if get(Slats) == 0 then
             set(Rudder_travel_lim, Set_linear_anim_value(get(Rudder_travel_lim), -22.1 * math.sqrt(1 - ( (Math_clamp(adirs_get_avg_ias(), 160, 380) - 380) / 220)^2 ) + 25, 0, max_rudder_def, rudder_trim_speed))
         end
-        if get(Slats) > 0 and get(Rudder_lim_avail) == 1 then
+        if get(Slats) > 0 then
             set(Rudder_travel_lim, Set_linear_anim_value(get(Rudder_travel_lim), 25, 0, max_rudder_def, rudder_trim_speed))
         end
     end
@@ -78,15 +75,15 @@ function Rudder_control(yaw_input, trim_input, resetting_trim)
 
     --rudder trim
     if resetting_trim == 1 then
-        if get(trim_input) ~= 0 then
+        if trim_input ~= 0 then
             set(Resetting_rudder_trim, 0)
         elseif get(Rudder_trim_target_angle) == 0 then
             set(Resetting_rudder_trim, 0)
         end
     end
 
-    --if the FACs are working and the electrical motors are working
-    if get(Rudder_trim_avail) == 1 then
+    --IF RUDDER IS ELECTRICALLY CONTROLLED--
+    if FBW.fctl.surfaces.rud.trim.controlled then
         if resetting_trim == 0 then--apply human input
             set(Rudder_trim_target_angle, Math_clamp(get(Rudder_trim_target_angle) + trim_input * rudder_trim_speed * get(DELTA_TIME), -20, 20))
             set(Human_rudder_trim, 0)
@@ -106,16 +103,22 @@ function Rudder_control(yaw_input, trim_input, resetting_trim)
     --set rudder pedal center
     local rudder_pedal_anim = {
         {-1, -20},
-        {0, 20 *get(Rudder_trim_target_angle) / max_rudder_def},
+        {0, 20 * get(Rudder_trim_target_angle) / max_rudder_def},
         {1, 20},
     }
     set(Rudder_pedal_angle, Table_interpolate(rudder_pedal_anim, get(Total_input_yaw)))
 
     --rudder failure--
-    rudder_speed = Math_rescale(0, 0, 1450, rudder_speed, get(Hydraulic_G_press) + get(Hydraulic_B_press) + get(Hydraulic_Y_press)) * (1 - get(FAILURE_FCTL_RUDDER_MECH))
+    rudder_speed = FBW.fctl.surfaces.rud.rud.mechanical and rudder_speed or rudder_no_hyd_spd
+    rudder_speed = rudder_speed * (1 - get(FAILURE_FCTL_RUDDER_MECH))
 
     --rudder position calculation--
     set(Rudder_total, Set_anim_value_linear_range(get(Rudder_total), rudder_travel_target, -get(Rudder_travel_lim), get(Rudder_travel_lim), rudder_speed, 5))
     set(Rudder_top, get(Rudder_total))
     set(Rudder_btm, get(Rudder_total))
+end
+
+
+function update()
+    FBW.fctl.control.RUD(get(FBW_yaw_output), get(Human_rudder_trim), get(Resetting_rudder_trim))
 end

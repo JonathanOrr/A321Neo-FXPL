@@ -336,7 +336,7 @@ MessageGroup_FCTL_LR_ELEV_FAULT_DOUBLE = {
     sd_page = ECAM_PAGE_FCTL,
 
     is_active = function()
-        return get(L_elevator_avail) == 0 and get(R_elevator_avail) == 0
+        return not FBW.fctl.surfaces.elev.L.controlled and not FBW.fctl.surfaces.elev.R.controlled
     end,
 
     is_inhibited = function()

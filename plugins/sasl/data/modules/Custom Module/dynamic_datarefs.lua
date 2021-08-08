@@ -385,6 +385,7 @@ Capt_ra_alt_ft = globalProperty("sim/cockpit2/gauges/indicators/radio_altimeter_
 Fo_ra_alt_ft = globalProperty("sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_copilot")
 Capt_baro_alt_ft = globalProperty("sim/cockpit2/gauges/indicators/altitude_ft_pilot")
 IAS = globalProperty("sim/flightmodel/position/indicated_airspeed")
+TAS_ms = globalProperty("sim/flightmodel/position/true_airspeed")
 DH_alt_ft = globalProperty("sim/cockpit/misc/radio_altimeter_minimum")
 ACF_elevation = globalProperty("sim/flightmodel/position/elevation")
 
@@ -693,27 +694,6 @@ Rudder_total = createGlobalPropertyf("a321neo/dynamics/FBW/surfaces/total_rudder
 Rudder_travel_lim = createGlobalPropertyf("a321neo/dynamics/FBW/control_limitations/rudder_travel_limit", 25, false, true, false)--25 degrees in augmented mode, 30 degrees in mechanical mode
 Max_SI_demand_lim = createGlobalPropertyf("a321neo/dynamics/FBW/control_limitations/max_SI_demand_lim", 25, false, true, false)--from 15 degrees to 2 degrees
 Rudder_pedal_angle = createGlobalPropertyf("a321neo/dynamics/FBW/controls/rudder_pedals_angle", 0, false, true, false)  -- -20, 0, 20
---surface availablility
-All_spoilers_failed = createGlobalPropertyi("a321neo/dynamics/FBW/surface_availability/all_spoilers_failed", 0, false, true, false)
-L_aileron_avail =     createGlobalPropertyi("a321neo/dynamics/FBW/surface_availability/l_aileron_avail", 1, false, true, false)
-R_aileron_avail =     createGlobalPropertyi("a321neo/dynamics/FBW/surface_availability/r_aileron_avail", 1, false, true, false)
-L_spoiler_1_avail =   createGlobalPropertyi("a321neo/dynamics/FBW/surface_availability/l_spoiler_1_avail", 1, false, true, false)
-L_spoiler_2_avail =   createGlobalPropertyi("a321neo/dynamics/FBW/surface_availability/l_spoiler_2_avail", 1, false, true, false)
-L_spoiler_3_avail =   createGlobalPropertyi("a321neo/dynamics/FBW/surface_availability/l_spoiler_3_avail", 1, false, true, false)
-L_spoiler_4_avail =   createGlobalPropertyi("a321neo/dynamics/FBW/surface_availability/l_spoiler_4_avail", 1, false, true, false)
-L_spoiler_5_avail =   createGlobalPropertyi("a321neo/dynamics/FBW/surface_availability/l_spoiler_5_avail", 1, false, true, false)
-R_spoiler_1_avail =   createGlobalPropertyi("a321neo/dynamics/FBW/surface_availability/r_spoiler_1_avail", 1, false, true, false)
-R_spoiler_2_avail =   createGlobalPropertyi("a321neo/dynamics/FBW/surface_availability/r_spoiler_2_avail", 1, false, true, false)
-R_spoiler_3_avail =   createGlobalPropertyi("a321neo/dynamics/FBW/surface_availability/r_spoiler_3_avail", 1, false, true, false)
-R_spoiler_4_avail =   createGlobalPropertyi("a321neo/dynamics/FBW/surface_availability/r_spoiler_4_avail", 1, false, true, false)
-R_spoiler_5_avail =   createGlobalPropertyi("a321neo/dynamics/FBW/surface_availability/r_spoiler_5_avail", 1, false, true, false)
-L_elevator_avail =    createGlobalPropertyi("a321neo/dynamics/FBW/surface_availability/l_elevator_avail", 1, false, true, false)
-R_elevator_avail =    createGlobalPropertyi("a321neo/dynamics/FBW/surface_availability/r_elevator_avail", 1, false, true, false)
-THS_avail = 		  createGlobalPropertyi("a321neo/dynamics/FBW/surface_availability/ths_avail", 1, false, true, false)
-Yaw_damper_avail =    createGlobalPropertyi("a321neo/dynamics/FBW/surface_availability/yaw_damper_avail", 1, false, true, false)
-Rudder_avail =  	  createGlobalPropertyi("a321neo/dynamics/FBW/surface_availability/rudder_avail", 1, false, true, false)
-Rudder_lim_avail =    createGlobalPropertyi("a321neo/dynamics/FBW/surface_availability/rudder_lim_avail", 1, false, true, false)
-Rudder_trim_avail =   createGlobalPropertyi("a321neo/dynamics/FBW/surface_availability/rudder_trim_avail", 1, false, true, false)
 
 
 -- Fuel

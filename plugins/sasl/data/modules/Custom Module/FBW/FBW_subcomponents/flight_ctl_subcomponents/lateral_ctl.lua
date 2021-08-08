@@ -177,7 +177,7 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
         if get(SEC_1_status) == 0 and get(SEC_3_status) == 0 then
             set(Speedbrakes_inhibited, 1)
         end
-        if get(L_elevator_avail) == 0 or get(R_elevator_avail) == 0 then
+        if not FBW.fctl.surfaces.elev.L.controlled or not FBW.fctl.surfaces.elev.R.controlled then
             set(Speedbrakes_inhibited, 1)
         end
         if get(FBW_lateral_law) == FBW_NORMAL_LAW and adirs_get_avg_aoa() > get(Aprot_AoA) - 1 then
@@ -211,8 +211,8 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
     end
 
     --if the aircraft is in roll direct law change the roll spoiler deflections to limit roll rate
-    if get(FBW_lateral_law) == FBW_DIRECT_LAW and (get(L_aileron_avail) == 1 or get(R_aileron_avail) == 1) then
-        if get(L_spoiler_4_avail) == 1 then
+    if get(FBW_lateral_law) == FBW_DIRECT_LAW and (FBW.fctl.surfaces.ail.L.controlled or FBW.fctl.surfaces.ail.R.controlled) then
+        if FBW.fctl.surfaces.splr.L[4].controlled then
             l_spoilers_roll_targets[1] = 0
             l_spoilers_roll_targets[2] = 0
             l_spoilers_roll_targets[3] = 0
@@ -221,7 +221,7 @@ function Spoilers_control(lateral_input, spdbrk_input, ground_spoilers_mode, in_
             l_spoilers_roll_targets[2] = 0
             l_spoilers_roll_targets[4] = 0
         end
-        if get(R_spoiler_4_avail) == 1 then
+        if FBW.fctl.surfaces.splr.R[4].controlled then
             r_spoilers_roll_targets[1] = 0
             r_spoilers_roll_targets[2] = 0
             r_spoilers_roll_targets[3] = 0

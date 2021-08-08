@@ -32,25 +32,34 @@ FBW.vertical.controllers = {
             )
         end,
         bp = function ()
-            local elev_rat = {
+            local elev_rat_table = {
                 {-30,  1},
                 {0,    0},
                 {17,  -1},
             }
 
-            local elevs_avail = get(L_elevator_avail) + get(R_elevator_avail)
+            local L_ELEV_OK = FBW.fctl.surfaces.elev.L.controlled
+            local R_ELEV_OK = FBW.fctl.surfaces.elev.R.controlled
 
-            if elevs_avail ~= 0 then
-                FBW_PID_arrays.FBW_PITCH_RATE_PID.Actual_output = (
-                    Table_interpolate(elev_rat, get(L_elevator)) * get(L_elevator_avail) +
-                    Table_interpolate(elev_rat, get(R_elevator)) * get(R_elevator_avail)
-                ) / elevs_avail
+            local elev_rat = 0
+
+            if L_ELEV_OK and R_ELEV_OK then
+                elev_rat = (
+                    Table_interpolate(elev_rat_table, get(L_elevator)) +
+                    Table_interpolate(elev_rat_table, get(R_elevator))
+                ) / 2
+            elseif L_ELEV_OK and not R_ELEV_OK then
+                elev_rat = Table_interpolate(elev_rat_table, get(L_elevator))
+            elseif not L_ELEV_OK and R_ELEV_OK then
+                elev_rat = Table_interpolate(elev_rat_table, get(R_elevator))
             else
-                FBW_PID_arrays.FBW_PITCH_RATE_PID.Actual_output = (
-                    Table_interpolate(elev_rat, get(L_elevator)) +
-                    Table_interpolate(elev_rat, get(R_elevator))
+                elev_rat = (
+                    Table_interpolate(elev_rat_table, get(L_elevator)) +
+                    Table_interpolate(elev_rat_table, get(R_elevator))
                 ) / 2
             end
+
+            FBW_PID_arrays.FBW_PITCH_RATE_PID.Actual_output = elev_rat
         end,
     },
 
@@ -102,25 +111,34 @@ FBW.vertical.controllers = {
             end
         end,
         bp = function ()
-            local elev_rat = {
+            local elev_rat_table = {
                 {-30,  1},
                 {0,    0},
                 {17,  -1},
             }
 
-            local elevs_avail = get(L_elevator_avail) + get(R_elevator_avail)
+            local L_ELEV_OK = FBW.fctl.surfaces.elev.L.controlled
+            local R_ELEV_OK = FBW.fctl.surfaces.elev.R.controlled
 
-            if elevs_avail ~= 0 then
-                FBW_PID_arrays.FBW_CSTAR_PID.Actual_output = (
-                    Table_interpolate(elev_rat, get(L_elevator)) * get(L_elevator_avail) +
-                    Table_interpolate(elev_rat, get(R_elevator)) * get(R_elevator_avail)
-                ) / elevs_avail
+            local elev_rat = 0
+
+            if L_ELEV_OK and R_ELEV_OK then
+                elev_rat = (
+                    Table_interpolate(elev_rat_table, get(L_elevator)) +
+                    Table_interpolate(elev_rat_table, get(R_elevator))
+                ) / 2
+            elseif L_ELEV_OK and not R_ELEV_OK then
+                elev_rat = Table_interpolate(elev_rat_table, get(L_elevator))
+            elseif not L_ELEV_OK and R_ELEV_OK then
+                elev_rat = Table_interpolate(elev_rat_table, get(R_elevator))
             else
-                FBW_PID_arrays.FBW_CSTAR_PID.Actual_output = (
-                    Table_interpolate(elev_rat, get(L_elevator)) +
-                    Table_interpolate(elev_rat, get(R_elevator))
+                elev_rat = (
+                    Table_interpolate(elev_rat_table, get(L_elevator)) +
+                    Table_interpolate(elev_rat_table, get(R_elevator))
                 ) / 2
             end
+
+            FBW_PID_arrays.FBW_CSTAR_PID.Actual_output = elev_rat
         end,
     },
 
@@ -157,25 +175,34 @@ FBW.vertical.controllers = {
             )
         end,
         bp = function ()
-            local elev_rat = {
+            local elev_rat_table = {
                 {-30,  1},
                 {0,    0},
                 {17,  -1},
             }
 
-            local elevs_avail = get(L_elevator_avail) + get(R_elevator_avail)
+            local L_ELEV_OK = FBW.fctl.surfaces.elev.L.controlled
+            local R_ELEV_OK = FBW.fctl.surfaces.elev.R.controlled
 
-            if elevs_avail ~= 0 then
-                FBW_PID_arrays.FBW_PITCH_RATE_PID.Actual_output = (
-                    Table_interpolate(elev_rat, get(L_elevator)) * get(L_elevator_avail) +
-                    Table_interpolate(elev_rat, get(R_elevator)) * get(R_elevator_avail)
-                ) / elevs_avail
+            local elev_rat = 0
+
+            if L_ELEV_OK and R_ELEV_OK then
+                elev_rat = (
+                    Table_interpolate(elev_rat_table, get(L_elevator)) +
+                    Table_interpolate(elev_rat_table, get(R_elevator))
+                ) / 2
+            elseif L_ELEV_OK and not R_ELEV_OK then
+                elev_rat = Table_interpolate(elev_rat_table, get(L_elevator))
+            elseif not L_ELEV_OK and R_ELEV_OK then
+                elev_rat = Table_interpolate(elev_rat_table, get(R_elevator))
             else
-                FBW_PID_arrays.FBW_PITCH_RATE_PID.Actual_output = (
-                    Table_interpolate(elev_rat, get(L_elevator)) +
-                    Table_interpolate(elev_rat, get(R_elevator))
+                elev_rat = (
+                    Table_interpolate(elev_rat_table, get(L_elevator)) +
+                    Table_interpolate(elev_rat_table, get(R_elevator))
                 ) / 2
             end
+
+            FBW_PID_arrays.FBW_PITCH_RATE_PID.Actual_output = elev_rat
         end,
     },
 

@@ -9,8 +9,19 @@ local function draw_trim_flag(PFD_table)
         return
     end
 
-    if (get(All_spoilers_failed) == 1 and get(L_aileron_avail) == 0 and get(R_aileron_avail) == 0) or
-       (get(L_elevator_avail) == 0 and get(R_elevator_avail) == 0) then
+    local ALL_SPLR_FAIL = not FBW.fctl.surfaces.splr.L[1].controlled and
+                          not FBW.fctl.surfaces.splr.L[2].controlled and
+                          not FBW.fctl.surfaces.splr.L[3].controlled and
+                          not FBW.fctl.surfaces.splr.L[4].controlled and
+                          not FBW.fctl.surfaces.splr.L[5].controlled and
+                          not FBW.fctl.surfaces.splr.R[1].controlled and
+                          not FBW.fctl.surfaces.splr.R[2].controlled and
+                          not FBW.fctl.surfaces.splr.R[3].controlled and
+                          not FBW.fctl.surfaces.splr.R[4].controlled and
+                          not FBW.fctl.surfaces.splr.R[5].controlled
+
+    if (ALL_SPLR_FAIL and not FBW.fctl.surfaces.ail.L.controlled and not FBW.fctl.surfaces.ail.R.controlled) or
+       (not FBW.fctl.surfaces.elev.L.controlled and not FBW.fctl.surfaces.elev.R.controlled) then
         sasl.gl.drawText(Font_AirbusDUL, ATT_x_center, ATT_y_center + 275, "MAN PITCH TRIM ONLY", 34, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
         return
     end
