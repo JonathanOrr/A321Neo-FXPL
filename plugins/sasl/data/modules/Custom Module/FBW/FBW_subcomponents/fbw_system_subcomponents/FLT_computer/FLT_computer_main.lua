@@ -231,6 +231,7 @@ components = {
     FLT_computer_cmd {},
     AIL {},
     SPLR {},
+    ELEV {},
 }
 
 function update()

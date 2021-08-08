@@ -95,32 +95,32 @@ function draw_fctl_page()
     local spoiler_track_length = 22
 
     local l_spoilers_avail = {
-        FBW.fctl.surfaces.splr.l[1].controlled,
-        FBW.fctl.surfaces.splr.l[2].controlled,
-        FBW.fctl.surfaces.splr.l[3].controlled,
-        FBW.fctl.surfaces.splr.l[4].controlled,
-        FBW.fctl.surfaces.splr.l[5].controlled,
+        FBW.fctl.surfaces.splr.L[1].controlled,
+        FBW.fctl.surfaces.splr.L[2].controlled,
+        FBW.fctl.surfaces.splr.L[3].controlled,
+        FBW.fctl.surfaces.splr.L[4].controlled,
+        FBW.fctl.surfaces.splr.L[5].controlled,
     }
     local r_spoilers_avail = {
-        FBW.fctl.surfaces.splr.r[1].controlled,
-        FBW.fctl.surfaces.splr.r[2].controlled,
-        FBW.fctl.surfaces.splr.r[3].controlled,
-        FBW.fctl.surfaces.splr.r[4].controlled,
-        FBW.fctl.surfaces.splr.r[5].controlled,
+        FBW.fctl.surfaces.splr.R[1].controlled,
+        FBW.fctl.surfaces.splr.R[2].controlled,
+        FBW.fctl.surfaces.splr.R[3].controlled,
+        FBW.fctl.surfaces.splr.R[4].controlled,
+        FBW.fctl.surfaces.splr.R[5].controlled,
     }
     local l_spoilers_data_avail = {
-        FBW.fctl.surfaces.splr.l[1].data_avail,
-        FBW.fctl.surfaces.splr.l[2].data_avail,
-        FBW.fctl.surfaces.splr.l[3].data_avail,
-        FBW.fctl.surfaces.splr.l[4].data_avail,
-        FBW.fctl.surfaces.splr.l[5].data_avail,
+        FBW.fctl.surfaces.splr.L[1].data_avail,
+        FBW.fctl.surfaces.splr.L[2].data_avail,
+        FBW.fctl.surfaces.splr.L[3].data_avail,
+        FBW.fctl.surfaces.splr.L[4].data_avail,
+        FBW.fctl.surfaces.splr.L[5].data_avail,
     }
     local r_spoilers_data_avail = {
-        FBW.fctl.surfaces.splr.r[1].data_avail,
-        FBW.fctl.surfaces.splr.r[2].data_avail,
-        FBW.fctl.surfaces.splr.r[3].data_avail,
-        FBW.fctl.surfaces.splr.r[4].data_avail,
-        FBW.fctl.surfaces.splr.r[5].data_avail,
+        FBW.fctl.surfaces.splr.R[1].data_avail,
+        FBW.fctl.surfaces.splr.R[2].data_avail,
+        FBW.fctl.surfaces.splr.R[3].data_avail,
+        FBW.fctl.surfaces.splr.R[4].data_avail,
+        FBW.fctl.surfaces.splr.R[5].data_avail,
     }
 
     local l_spoiler_dataref = {
@@ -240,8 +240,16 @@ function draw_fctl_page()
         sasl.gl.drawText(Font_AirbusDUL, 736, 564, "XX", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
     --elevators--
-    sasl.gl.drawTexture(ECAM_FCTL_left_arrows_img,  258, Table_interpolate(elevator_anim, params.L_elevator), 26, 30, get(L_elevator_avail) == 1 and ECAM_GREEN or ECAM_ORANGE)
-    sasl.gl.drawTexture(ECAM_FCTL_right_arrows_img, 617, Table_interpolate(elevator_anim, params.R_elevator), 26, 30, get(R_elevator_avail) == 1 and ECAM_GREEN or ECAM_ORANGE)
+    if FBW.fctl.surfaces.elev.L.data_avail then
+        sasl.gl.drawTexture(ECAM_FCTL_left_arrows_img,  258, Table_interpolate(elevator_anim, params.L_elevator), 26, 30, FBW.fctl.surfaces.elev.L.controlled and ECAM_GREEN or ECAM_ORANGE)
+    else
+        sasl.gl.drawText(Font_AirbusDUL, 284, 297, "XX", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+    end
+    if FBW.fctl.surfaces.elev.R.data_avail then
+        sasl.gl.drawTexture(ECAM_FCTL_right_arrows_img, 617, Table_interpolate(elevator_anim, params.R_elevator), 26, 30, FBW.fctl.surfaces.elev.R.controlled and ECAM_GREEN or ECAM_ORANGE)
+    else
+        sasl.gl.drawText(Font_AirbusDUL, 617, 297, "XX", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+    end
     --rudder
     SASL_rotated_center_img_xcenter_aligned(ECAM_FCTL_rudder_img,           size[1]/2+1, size[2]/2 - 135, 43, 155, Table_interpolate(rudder_anim, params.rudder), 0, -155, get(Rudder_avail) == 1 and ECAM_GREEN or ECAM_ORANGE)
     SASL_rotated_center_img_xcenter_aligned(ECAM_FCTL_left_rudder_lim_img,  size[1]/2+1, size[2]/2 - 150, 43, 155, Table_interpolate(rudder_lim_anim, -get(Rudder_travel_lim)),  4, -160, get(Rudder_lim_avail) == 1 and ECAM_GREEN or ECAM_ORANGE)

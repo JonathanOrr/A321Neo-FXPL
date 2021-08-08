@@ -1,5 +1,5 @@
 FBW.fctl.surfaces.splr = {
-    l ={
+    L ={
         [1]  = {
             controlled = true,
             data_avail = true,
@@ -41,7 +41,7 @@ FBW.fctl.surfaces.splr = {
             computer = SEC_2_status,
         },
     },
-    r ={
+    R ={
         [1]  = {
             controlled = true,
             data_avail = true,
@@ -87,8 +87,8 @@ FBW.fctl.surfaces.splr = {
 
 FBW.fctl.status.splr = function (fctl_table)
     local splr_sides = {
-        {"l", "r"},
-        {"r", "l"},
+        {"L", "R"},
+        {"R", "L"},
     }
 
     for i = 1, #splr_sides do

@@ -218,32 +218,32 @@ local function draw_wheel_page_spoilers()
     local spoiler_track_length = 22
 
     local l_spoilers_avail = {
-        FBW.fctl.surfaces.splr.l[1].controlled,
-        FBW.fctl.surfaces.splr.l[2].controlled,
-        FBW.fctl.surfaces.splr.l[3].controlled,
-        FBW.fctl.surfaces.splr.l[4].controlled,
-        FBW.fctl.surfaces.splr.l[5].controlled,
+        FBW.fctl.surfaces.splr.L[1].controlled,
+        FBW.fctl.surfaces.splr.L[2].controlled,
+        FBW.fctl.surfaces.splr.L[3].controlled,
+        FBW.fctl.surfaces.splr.L[4].controlled,
+        FBW.fctl.surfaces.splr.L[5].controlled,
     }
     local r_spoilers_avail = {
-        FBW.fctl.surfaces.splr.r[1].controlled,
-        FBW.fctl.surfaces.splr.r[2].controlled,
-        FBW.fctl.surfaces.splr.r[3].controlled,
-        FBW.fctl.surfaces.splr.r[4].controlled,
-        FBW.fctl.surfaces.splr.r[5].controlled,
+        FBW.fctl.surfaces.splr.R[1].controlled,
+        FBW.fctl.surfaces.splr.R[2].controlled,
+        FBW.fctl.surfaces.splr.R[3].controlled,
+        FBW.fctl.surfaces.splr.R[4].controlled,
+        FBW.fctl.surfaces.splr.R[5].controlled,
     }
     local l_spoilers_data_avail = {
-        FBW.fctl.surfaces.splr.l[1].data_avail,
-        FBW.fctl.surfaces.splr.l[2].data_avail,
-        FBW.fctl.surfaces.splr.l[3].data_avail,
-        FBW.fctl.surfaces.splr.l[4].data_avail,
-        FBW.fctl.surfaces.splr.l[5].data_avail,
+        FBW.fctl.surfaces.splr.L[1].data_avail,
+        FBW.fctl.surfaces.splr.L[2].data_avail,
+        FBW.fctl.surfaces.splr.L[3].data_avail,
+        FBW.fctl.surfaces.splr.L[4].data_avail,
+        FBW.fctl.surfaces.splr.L[5].data_avail,
     }
     local r_spoilers_data_avail = {
-        FBW.fctl.surfaces.splr.r[1].data_avail,
-        FBW.fctl.surfaces.splr.r[2].data_avail,
-        FBW.fctl.surfaces.splr.r[3].data_avail,
-        FBW.fctl.surfaces.splr.r[4].data_avail,
-        FBW.fctl.surfaces.splr.r[5].data_avail,
+        FBW.fctl.surfaces.splr.R[1].data_avail,
+        FBW.fctl.surfaces.splr.R[2].data_avail,
+        FBW.fctl.surfaces.splr.R[3].data_avail,
+        FBW.fctl.surfaces.splr.R[4].data_avail,
+        FBW.fctl.surfaces.splr.R[5].data_avail,
     }
 
     local l_spoiler_dataref = {
