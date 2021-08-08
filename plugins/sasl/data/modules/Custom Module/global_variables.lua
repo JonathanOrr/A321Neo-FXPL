@@ -67,6 +67,10 @@ MCDU = {}
 
 FBW = {
     rates = {},
+    fctl = {
+        surfaces = {},
+        status = {},
+    },
     lateral = {
         protections = {},
         inputs = {},

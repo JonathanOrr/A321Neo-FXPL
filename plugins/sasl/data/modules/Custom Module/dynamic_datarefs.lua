@@ -526,6 +526,10 @@ Force_full_elevator_limit = 			createGlobalPropertyi("a321neo/dynamics/FBW/debug
 Bypass_speedbrakes_inhibition = 		createGlobalPropertyi("a321neo/dynamics/FBW/debug/bypass_spdbrakes_inhibition", 0, false, true, false)
 Override_flap_auto_extend_and_retract = createGlobalPropertyi("a321neo/dynamics/FBW/debug/override_flap_auto_extend_and_retract", 0, false, true, false)
 Override_normal_flight_mode_blending =  createGlobalPropertyi("a321neo/dynamics/FBW/debug/override_normal_flight_mode_blending", 0, false, true, false)
+Print_ail_status =                      createGlobalPropertyi("a321neo/dynamics/FBW/debug/print_ail_control_status", 0, false, true, false)
+Print_splr_status =                     createGlobalPropertyi("a321neo/dynamics/FBW/debug/print_splr_control_status", 0, false, true, false)
+Print_elev_status =                     createGlobalPropertyi("a321neo/dynamics/FBW/debug/print_elev_control_status", 0, false, true, false)
+Print_rud_status =                      createGlobalPropertyi("a321neo/dynamics/FBW/debug/print_rud_control_status", 0, false, true, false)
 Debug_FBW_law_reconfig = 				createGlobalPropertyi("a321neo/dynamics/FBW/debug/debug_FBW_law_reconfig", 0, false, true, false)
 --customizations
 Project_square_input = 		  createGlobalPropertyi("a321neo/dynamics/FBW/customizations/projected_square_input", 0, false, true, false)

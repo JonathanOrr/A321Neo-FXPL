@@ -1,9 +1,5 @@
 addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/fbw_system_subcomponents/FLT_computer")
 
-components = {
-    FLT_computer_cmd {}
-}
-
 FBW.FLT_computer = {}
 FBW.FLT_computer.ELAC = {
     [1] = {
@@ -229,6 +225,12 @@ FBW.FLT_computer.common = {
             end
         end,
     }
+}
+
+components = {
+    FLT_computer_cmd {},
+    AIL {},
+    SPLR {},
 }
 
 function update()
