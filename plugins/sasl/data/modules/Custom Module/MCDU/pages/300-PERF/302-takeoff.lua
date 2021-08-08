@@ -18,6 +18,7 @@ local acceleration = 2340
 local THIS_PAGE = MCDU_Page:new({id=302})
 
 function THIS_PAGE:render(mcdu_data)
+    
     self:set_title(mcdu_data, "   TAKE OFF")
 
     --change later, load and read drfs here

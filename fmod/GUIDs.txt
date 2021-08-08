@@ -14,6 +14,7 @@
 {79db9fdb-19da-4194-b2da-62c8e683c1ad} event:/Brakes/On
 {bb6344c9-4ba5-48fd-bf91-9d10d49aa4bd} event:/Cockpit Door/Close
 {196a8bd5-db14-46c9-90df-fe770c9a4d21} event:/Cockpit Door/Open
+{62e24e35-6c42-4ffc-9457-c2935ed4b5a5} event:/CockpitMechanical/FireTest/1
 {fa3ccb63-2201-42a0-9ba9-80eea8c41f31} event:/CockpitMechanical/Lights/1
 {7c1f3bc8-8a78-496c-929d-a763939df0aa} event:/CockpitMechanical/Lights/2
 {180bfc42-72ad-426e-9893-90b2e97a68a6} event:/CockpitMechanical/Lights/3
@@ -29,6 +30,8 @@
 {44912abb-344e-4cac-99bf-78146e19282c} event:/CockpitMechanical/RudderTrim/Left
 {bcd830bd-e1c3-4db9-a64e-8bec3ccf5e11} event:/CockpitMechanical/RudderTrim/Neutral
 {9ac79502-0add-42e5-88bb-da471001cdcc} event:/CockpitMechanical/RudderTrim/Right
+{519ca1e0-04ab-4222-9516-a379d8789bb2} event:/CockpitMechanical/ATDisconnect
+{a5154429-6a4c-41fa-9158-7c79f0beb232} event:/CockpitMechanical/Big Round Button
 {850bb3a5-fa7f-4d22-bf9d-a80868eee0e7} event:/CockpitMechanical/Big Round Button Press
 {bafd0ab7-85f5-4e8f-8898-00cef3bbf4d3} event:/CockpitMechanical/Big Round Button Release
 {ed910ed0-bdc8-47e6-a8cb-d025b4ba55d4} event:/CockpitMechanical/Engine Master

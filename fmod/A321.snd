@@ -2456,247 +2456,134 @@ END_SOUND_ATTACHMENT
 ##############################################################################################################################BIG ROUND KNOB
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Big Round Button Press
+  EVENT_NAME /CockpitMechanical/Big Round Button
   VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_DOWN a321neo/cockpit/rcdr/cvr_test
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/rcdr/cvr_test
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Big Round Button Release
+  EVENT_NAME /CockpitMechanical/Big Round Button
   VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_UP a321neo/cockpit/rcdr/cvr_test
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/rcdr/cvr_erase
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Big Round Button Press
+  EVENT_NAME /CockpitMechanical/Big Round Button
   VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_DOWN a321neo/cockpit/rcdr/cvr_erase
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/rain/repellent_R
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Big Round Button Release
+  EVENT_NAME /CockpitMechanical/Big Round Button
   VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_UP a321neo/cockpit/rcdr/cvr_erase
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/rain/repellent_L
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Big Round Button Press
+  EVENT_NAME /CockpitMechanical/Big Round Button
   VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_DOWN a321neo/cockpit/rain/repellent_R
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/oxygen/man_mask_on
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Big Round Button Release
+  EVENT_NAME /CockpitMechanical/Big Round Button
   VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_UP a321neo/cockpit/rain/repellent_R
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/evac/horn_off
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Big Round Button Press
+  EVENT_NAME /CockpitMechanical/Big Round Button
   VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_DOWN a321neo/cockpit/rain/repellent_L
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/calls/mid
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Big Round Button Release
+  EVENT_NAME /CockpitMechanical/Big Round Button
   VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_UP a321neo/cockpit/rain/repellent_L
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/calls/mech
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Big Round Button Press
+  EVENT_NAME /CockpitMechanical/Big Round Button
   VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_DOWN a321neo/cockpit/oxygen/man_mask_on
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/calls/fwd
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Big Round Button Release
+  EVENT_NAME /CockpitMechanical/Big Round Button
   VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_UP a321neo/cockpit/oxygen/man_mask_on
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/calls/exit
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Big Round Button Press
+  EVENT_NAME /CockpitMechanical/Big Round Button
   VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_DOWN a321neo/cockpit/evac/horn_off
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/calls/all
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Big Round Button Release
+  EVENT_NAME /CockpitMechanical/Big Round Button
   VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_UP a321neo/cockpit/evac/horn_off
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/calls/aft
+END_SOUND_ATTACHMENT
+
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /CockpitMechanical/Big Round Button
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/misc/require_door_video
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Big Round Button Press
+  EVENT_NAME /CockpitMechanical/Big Round Button
   VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_DOWN a321neo/cockpit/calls/mid
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/FBW/rudder_trim_reset
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Big Round Button Release
+  EVENT_NAME /CockpitMechanical/Big Round Button
   VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_UP a321neo/cockpit/calls/mid
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/electrical/EMER_GEN_TEST
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Big Round Button Press
+  EVENT_NAME /CockpitMechanical/Big Round Button
   VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_DOWN a321neo/cockpit/calls/mech
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/dmc/pdf_nd_xfr_capt
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Big Round Button Release
+  EVENT_NAME /CockpitMechanical/Big Round Button
   VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_UP a321neo/cockpit/calls/mech
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/dmc/pdf_nd_xfr_fo
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Big Round Button Press
+  EVENT_NAME /CockpitMechanical/Big Round Button
   VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_DOWN a321neo/cockpit/calls/fwd
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/misc/fo_chrono_press
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Big Round Button Release
+  EVENT_NAME /CockpitMechanical/Big Round Button
   VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_UP a321neo/cockpit/calls/fwd
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/misc/capt_chrono_press
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Big Round Button Press
-  VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_DOWN a321neo/cockpit/calls/exit
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Big Round Button Release
-  VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_UP a321neo/cockpit/calls/exit
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Big Round Button Press
-  VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_DOWN a321neo/cockpit/calls/all
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Big Round Button Release
-  VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_UP a321neo/cockpit/calls/all
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Big Round Button Press
-  VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_DOWN a321neo/cockpit/calls/aft
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Big Round Button Release
-  VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_UP a321neo/cockpit/calls/aft
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Big Round Button Press
-  VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_DOWN a321neo/cockpit/misc/require_door_video
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Big Round Button Release
-  VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_UP a321neo/cockpit/misc/require_door_video
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Big Round Button Press
-  VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_DOWN a321neo/cockpit/FBW/rudder_trim_reset
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Big Round Button Release
-  VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_UP a321neo/cockpit/FBW/rudder_trim_reset
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Big Round Button Press
-  VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_DOWN a321neo/cockpit/electrical/EMER_GEN_TEST
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Big Round Button Release
-  VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_UP a321neo/cockpit/electrical/EMER_GEN_TEST
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Big Round Button Press
-  VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_DOWN a321neo/cockpit/dmc/pdf_nd_xfr_capt
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Big Round Button Release
-  VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_UP a321neo/cockpit/dmc/pdf_nd_xfr_capt
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Big Round Button Press
-  VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_DOWN a321neo/cockpit/dmc/pdf_nd_xfr_fo
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Big Round Button Release
-  VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_UP a321neo/cockpit/dmc/pdf_nd_xfr_fo
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Big Round Button Press
-  VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_DOWN a321neo/cockpit/misc/fo_chrono_press
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Big Round Button Release
-  VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_UP a321neo/cockpit/misc/fo_chrono_press
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Big Round Button Press
-  VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_DOWN a321neo/cockpit/misc/capt_chrono_press
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/Big Round Button Release
-  VEH_XYZ 0 1.5 -18.4
-  EVENT_CMND_UP a321neo/cockpit/misc/capt_chrono_press
-END_SOUND_ATTACHMENT
-
-BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/SSTakeOver
+  EVENT_NAME /CockpitMechanical/FireTest/1
   VEH_XYZ 0 1.5 -18.4
   EVENT_CMND_HOLD_CUE a321neo/cockpit/fire/eng_1_test
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/SSTakeOver
+  EVENT_NAME /CockpitMechanical/FireTest/1
   VEH_XYZ 0 1.5 -18.4
   EVENT_CMND_HOLD_CUE a321neo/cockpit/fire/eng_2_test
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /CockpitMechanical/SSTakeOver
+  EVENT_NAME /CockpitMechanical/FireTest/1
   VEH_XYZ 0 1.5 -18.4
   EVENT_CMND_HOLD_CUE a321neo/cockpit/fire/apu_test
 END_SOUND_ATTACHMENT
