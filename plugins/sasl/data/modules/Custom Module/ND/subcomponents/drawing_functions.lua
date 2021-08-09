@@ -1,5 +1,12 @@
 
 local small_triangle = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/small_triangle.png")
+local boc = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/Constrains/boc.png")
+local tod = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/Constrains/tod.png")
+local toc = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/Constrains/toc.png")
+local bod = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/Constrains/bod.png")
+local intercept = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/Constrains/intercept.png")
+local spdchange = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/Constrains/spdchange.png")
+local hold = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/Constrains/hold.png")
 
 function ND_DRAWING_dashed_ring(x,y, radius, dashes_width, dashes_length,start_angle, arc_angle, rotation, colour)
     local pi = math.pi
@@ -117,4 +124,37 @@ function ND_DRAWING_large_tcas_ring(x,y)
     for i=1, 5 do
         sasl.gl.drawArc(x+1, y, 54, 67 , i * 30 , 3, ECAM_WHITE)
     end
+end
+
+function ND_SYMBOLS_draw_decelleration(x,y)
+    sasl.gl.drawArc(x, y, 15.5, 17.5 , 0 , 360, ECAM_MAGENTA)
+    sasl.gl.drawText (Font_AirbusDUL, x+1, y-9,"D", 30, true, false, TEXT_ALIGN_CENTER, ECAM_MAGENTA)
+end
+
+function ND_SYMBOLS_draw_bottom_of_climb(x,y,colour)
+    SASL_draw_img_center_aligned(boc, x, y, 50, 23, colour)
+end
+
+function ND_SYMBOLS_draw_bottom_of_descent(x,y,colour)
+    SASL_draw_img_center_aligned(bod, x, y, 49, 21, colour)
+end
+
+function ND_SYMBOLS_draw_top_of_descent(x,y,colour)
+    SASL_draw_img_center_aligned(tod, x, y, 50, 23, colour)
+end
+
+function ND_SYMBOLS_draw_top_of_climb(x,y,colour)
+    SASL_draw_img_center_aligned(toc, x, y, 49, 21, colour)
+end
+
+function ND_SYMBOLS_draw_vpath_intercept(x,y,colour)
+    SASL_draw_img_center_aligned(intercept, x, y, 48, 16, colour)
+end
+
+function ND_SYMBOLS_draw_speed_change(x,y)
+    SASL_draw_img_center_aligned(spdchange, x, y, 34, 34, ECAM_MAGENTA)
+end
+
+function ND_SYMBOLS_draw_hold_symbol(x,y)
+    SASL_draw_img_center_aligned(hold, x, y, 33, 46, ECAM_WHITE)
 end
