@@ -34,7 +34,7 @@ FBW.rates ={
     Vpath_q = {
         x = 0,
         dataref = Vpath
-    }
+    },
 }
 
 local function update_rates(table)

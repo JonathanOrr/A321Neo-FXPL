@@ -64,6 +64,12 @@ function FBW_normal_mode_transition(table)
         set(FBW_lateral_flight_mode_ratio,  Set_linear_anim_value(get(FBW_lateral_flight_mode_ratio), 0, 0, 1, 1 / lateral_ground_mode_transition_time))
     end
 
+    if get(FBW_total_control_law) == FBW_ABNORMAL_LAW then
+        --inhibit lateral flight mode--
+        set(FBW_lateral_ground_mode_ratio, 1)
+        set(FBW_lateral_flight_mode_ratio, 0)
+    end
+
     --VERTICAL MODES--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     --ground mode --> Rotation mode
     if (get(FBW_vertical_ground_mode_ratio) ~= 0 or get(Aft_wheel_on_ground) == 1) and (get(Cockpit_throttle_lever_L) >= THR_CLB_START or get(Cockpit_throttle_lever_R) >= THR_CLB_START) and (adirs_get_ias(PFD_CAPT) >= 70 or adirs_get_ias(PFD_FO) >= 70) then

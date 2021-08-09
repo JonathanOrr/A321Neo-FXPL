@@ -162,7 +162,7 @@ FBW.vertical.controllers = {
                 return
             end
 
-            if get(FBW_vertical_law) ~= FBW_NORMAL_LAW then--alt law <-> direct law
+            if get(FBW_vertical_law) ~= FBW_NORMAL_LAW and get(FBW_vertical_law) ~= FBW_ABNORMAL_LAW then--alt law <-> direct law
                 FBW.vertical.controllers.Flare_PID.output = get(Total_input_pitch)
                 return
             end
@@ -217,7 +217,8 @@ FBW.vertical.controllers = {
                get(FBW_vertical_flight_mode_ratio) ~= 1 or
                FBW.filtered_sensors.IAS.filtered > get(Fixed_VMAX) or
                get(Total_vertical_g_load) < 0.5 or
-               get(FBW_vertical_law) ~= FBW_NORMAL_LAW and FBW.filtered_sensors.IAS.filtered < get(VLS) then
+               (get(FBW_vertical_law) ~= FBW_NORMAL_LAW and FBW.filtered_sensors.IAS.filtered < get(VLS)) or
+               get(FBW_ABN_LAW_TRIM_INHIB) == 1 then
                 return
             end
 
@@ -225,7 +226,7 @@ FBW.vertical.controllers = {
             local LAST_TRIM_LIM_STATUS = get(THS_trim_range_limited)
             set(THS_trim_range_limited, 0)
             if get(FBW_vertical_law) == FBW_NORMAL_LAW then
-                if adirs_get_avg_aoa() > get(Aprot_AoA) - 1 then
+                if FBW.vertical.protections.General.AoA.H_AOA_PROT_ACTIVE then
                     set(THS_trim_range_limited, 1)
                 elseif get(Total_vertical_g_load) > 1.25 then
                     set(THS_trim_range_limited, 1)

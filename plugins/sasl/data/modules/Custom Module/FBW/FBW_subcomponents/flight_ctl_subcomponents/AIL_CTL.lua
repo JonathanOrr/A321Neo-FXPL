@@ -9,7 +9,7 @@ local sin_ailerons_max_def = math.sin(math.rad(ailerons_max_def))
 local aileron_curr_spd = {0,0}
 local aileron_table = {FBW.fctl.surfaces.ail.L,FBW.fctl.surfaces.ail.R}
 local ail_no_hyd_spd = 8
-local no_hyd_recenter_ias = 80
+local no_hyd_recenter_TAS = 80
 
 -- Cache some functions to speed-up computation
 local mabs  = math.abs
@@ -109,8 +109,8 @@ local function aileron_actuation(request_pos, which_one)   -- which one: 1: LEFT
     if not aileron_table[which_one].controlled then
         -- No HYD at all
         -- Return to neutral depending on TAS (no hyd system)
-        local LOCAL_AIRSPD_KTS = get(TAS_ms) * 1.94384
-        local pos = Math_rescale(0, ailerons_max_def, no_hyd_recenter_ias, -get(Alpha), LOCAL_AIRSPD_KTS)
+        local LOCAL_AIRSPD_KTS = math.cos(math.rad(get(Beta))) * get(TAS_ms) * 1.94384
+        local pos = Math_rescale(0, ailerons_max_def, no_hyd_recenter_TAS, math.cos(math.rad(get(Beta))) * -get(Alpha), LOCAL_AIRSPD_KTS)
         Set_dataref_linear_anim(ail_dataref, pos, -ailerons_max_def, ailerons_max_def, ail_no_hyd_spd)
     else
         -- Normal situation
@@ -137,6 +137,14 @@ FBW.fctl.control.ail = function (lateral_input, has_florence_kit)
 
     local l_aileron_travel_target = Table_interpolate(l_aileron_def_table, lateral_input)
     local r_aileron_travel_target = Table_interpolate(r_aileron_def_table, lateral_input)
+
+    --ADD MLA & GLA--
+    if FBW.fctl.surfaces.ail.L.controlled and FBW.fctl.surfaces.ail.R.controlled then
+        l_aileron_travel_target = Math_clamp_lower(l_aileron_travel_target - get(FBW_MLA_output), -ailerons_max_def)
+        r_aileron_travel_target = Math_clamp_lower(r_aileron_travel_target - get(FBW_MLA_output), -ailerons_max_def)
+        l_aileron_travel_target = Math_clamp_lower(l_aileron_travel_target - get(FBW_GLA_output), -ailerons_max_def)
+        r_aileron_travel_target = Math_clamp_lower(r_aileron_travel_target - get(FBW_GLA_output), -ailerons_max_def)
+    end
 
     --TRAVEL TARGETS CALTULATION
     --ground spoilers

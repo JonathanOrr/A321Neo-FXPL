@@ -532,7 +532,9 @@ Print_splr_status =                     createGlobalPropertyi("a321neo/dynamics/
 Print_elev_status =                     createGlobalPropertyi("a321neo/dynamics/FBW/debug/print_elev_control_status", 0, false, true, false)
 Print_ths_status =                      createGlobalPropertyi("a321neo/dynamics/FBW/debug/print_ths_control_status", 0, false, true, false)
 Print_rud_status =                      createGlobalPropertyi("a321neo/dynamics/FBW/debug/print_rud_control_status", 0, false, true, false)
+Print_print_main_fcc_status =           createGlobalPropertyi("a321neo/dynamics/FBW/debug/print_main_fcc_status", 0, false, true, false)
 Debug_FBW_law_reconfig = 				createGlobalPropertyi("a321neo/dynamics/FBW/debug/debug_FBW_law_reconfig", 0, false, true, false)
+Debug_FBW_ABN_LAW_RESET = 				createGlobalPropertyi("a321neo/dynamics/FBW/debug/abnormal_law_reset", 0, false, true, false)
 --customizations
 Project_square_input = 		  createGlobalPropertyi("a321neo/dynamics/FBW/customizations/projected_square_input", 0, false, true, false)
 Trim_wheel_smoothing_on = 	  createGlobalPropertyi("a321neo/dynamics/FBW/customizations/trim_wheel_smoothing_on", 1, false, true, false)--is the trim wheel is smoothed
@@ -566,6 +568,8 @@ Speedbrake_handle_ratio = globalProperty("sim/cockpit2/controls/speedbrake_ratio
 FBW_roll_output =  createGlobalPropertyf("a321neo/dynamics/FBW/outputs/fbw_roll_output", 0, false, true, false)
 FBW_pitch_output = createGlobalPropertyf("a321neo/dynamics/FBW/outputs/fbw_pitch_output", 0, false, true, false)
 FBW_yaw_output =   createGlobalPropertyf("a321neo/dynamics/FBW/outputs/fbw_yaw_output", 0, false, true, false)
+FBW_MLA_output =   createGlobalPropertyf("a321neo/dynamics/FBW/outputs/fbw_mla_output", 0, false, true, false)
+FBW_GLA_output =   createGlobalPropertyf("a321neo/dynamics/FBW/outputs/fbw_gla_output", 0, false, true, false)
 --flight envelope "sensors"
 Turbulence_ratio = globalProperty("sim/weather/wind_turbulence_percent")
 Wind_layer_1_alt = globalProperty("sim/weather/wind_altitude_msl_m[0]")
@@ -612,6 +616,7 @@ FBW_lateral_law =       createGlobalPropertyi("a321neo/dynamics/FBW/system_statu
 FBW_vertical_law =      createGlobalPropertyi("a321neo/dynamics/FBW/system_status/vertical_control_law", 0, false, true, false)-- -2 mechanical backup law, -1 abnormal law, 0 direct law, 1 alternate law, 2 alternate law(reduced prot), 3 normal law
 FBW_yaw_law =           createGlobalPropertyi("a321neo/dynamics/FBW/system_status/yaw_control_law", 0, false, true, false)     -- -2 mechanical backup law, -1 abnormal law, 0 direct law, 1 alternate law, 							   3 normal law
 FBW_alt_to_direct_law = createGlobalPropertyi("a321neo/dynamics/FBW/system_status/alternate_to_direct_law", 0, false, true, false)-- if the reason for being inside direct law is because of gear down in alternate law(used for smooth transition into alt law flare mode)
+FBW_ABN_LAW_TRIM_INHIB = createGlobalPropertyi("a321neo/dynamics/FBW/system_status/abnormal_law_ths_inhibition", 0, false, true, false)
 FBW_vertical_ground_mode_ratio =   createGlobalPropertyf("a321neo/dynamics/FBW/system_status/vertical_ground_mode_ratio", 1, false, true, false)  --FBW vertical ground   mode transition ratio
 FBW_vertical_rotation_mode_ratio = createGlobalPropertyf("a321neo/dynamics/FBW/system_status/vertical_rotation_mode_ratio", 0, false, true, false)--FBW vertical rotation mode transition ratio(NEO only)
 FBW_vertical_flight_mode_ratio =   createGlobalPropertyf("a321neo/dynamics/FBW/system_status/vertical_flight_mode_ratio", 0, false, true, false)  --FBW vertical flight   mode transition ratio

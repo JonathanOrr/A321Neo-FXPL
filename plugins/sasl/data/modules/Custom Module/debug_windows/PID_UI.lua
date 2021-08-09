@@ -39,7 +39,7 @@ local B612_MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
 
 --GRAPH PROPERTIES--
 local graph_time_limit = 5 --seconds across the x axis
-local graph_max_error = 4
+local graph_max_error = 1
 
 Err_array = {}
 P_array = {}
@@ -210,8 +210,12 @@ local function live_tune_PID(PID_array)
     PID_array.B_gain = get(live_tunning_B)
 
     if PID_array.filter_inputs then
-        PID_array.er_filter_table.cut_frequency = get(live_tunning_freq)
-        PID_array.pv_filter_table.cut_frequency = get(live_tunning_freq)
+        if PID_array.er_filter_table ~= nil then
+            PID_array.er_filter_table.cut_frequency = get(live_tunning_freq)
+        end
+        if PID_array.pv_filter_table ~= nil then
+            PID_array.pv_filter_table.cut_frequency = get(live_tunning_freq)
+        end
     end
 end
 

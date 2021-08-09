@@ -1,5 +1,5 @@
 FBW.fctl.control.elev = function (vertical_input)
-    local LOCAL_AIRSPD_KTS = get(TAS_ms) * 1.94384
+    local LOCAL_AIRSPD_KTS = math.cos(math.rad(get(Beta))) * get(TAS_ms) * 1.94384
     local no_hyd_recenter_TAS = 80
     local elev_no_hyd_spd = 8
     local elevators_speed = 24 --degrees per second
@@ -53,8 +53,8 @@ FBW.fctl.control.elev = function (vertical_input)
     if FBW.fctl.surfaces.elev.R.centered then r_elev_target = 0 end
 
     --DROOP TARGET--
-    local l_elev_droop_target = Math_rescale(0, max_dn_deflection, no_hyd_recenter_TAS, -get(Alpha) - get(Horizontal_stabilizer_deflection), LOCAL_AIRSPD_KTS)
-    local r_elev_droop_target = Math_rescale(0, max_dn_deflection, no_hyd_recenter_TAS, -get(Alpha) - get(Horizontal_stabilizer_deflection), LOCAL_AIRSPD_KTS)
+    local l_elev_droop_target = Math_rescale(0, max_dn_deflection, no_hyd_recenter_TAS, math.cos(math.rad(get(Beta))) * -get(Alpha) - get(Horizontal_stabilizer_deflection), LOCAL_AIRSPD_KTS)
+    local r_elev_droop_target = Math_rescale(0, max_dn_deflection, no_hyd_recenter_TAS, math.cos(math.rad(get(Beta))) * -get(Alpha) - get(Horizontal_stabilizer_deflection), LOCAL_AIRSPD_KTS)
 
     --SURFACE DAMPING (with hyd power)--
     if not FBW.fctl.surfaces.elev.L.controlled and not FBW.fctl.surfaces.elev.L.centered then

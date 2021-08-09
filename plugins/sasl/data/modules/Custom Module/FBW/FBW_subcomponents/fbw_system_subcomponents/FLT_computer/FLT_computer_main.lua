@@ -23,6 +23,12 @@ FBW.FLT_computer.ELAC = {
         Button_address = PB.ovhd.flt_ctl_elac_1,
         Status_dataref = ELAC_1_status,
         Button_dataref = ELAC_1_off_button,
+        Last_button_status = 0,
+        Last_power_status = 0,
+        Transient_str_time = 0,
+        Transient_end_time = 0,
+        Transient_reset_required = false,
+        Transient_reset_pending = false,
         Failure_dataref = FAILURE_FCTL_ELAC_1,
         Power = function ()
             return get(HOT_bus_1_pwrd) == 1 or get(DC_ess_bus_pwrd) == 1
@@ -49,6 +55,12 @@ FBW.FLT_computer.ELAC = {
         Button_address = PB.ovhd.flt_ctl_elac_2,
         Status_dataref = ELAC_2_status,
         Button_dataref = ELAC_2_off_button,
+        Last_button_status = 0,
+        Last_power_status = 0,
+        Transient_str_time = 0,
+        Transient_end_time = 0,
+        Transient_reset_required = true,
+        Transient_reset_pending = false,
         Failure_dataref = FAILURE_FCTL_ELAC_2,
         Power = function ()
             return get(HOT_bus_2_pwrd) == 1 or get(DC_bus_2_pwrd) == 1
@@ -67,6 +79,12 @@ FBW.FLT_computer.FAC = {
         Button_address = PB.ovhd.flt_ctl_fac_1,
         Status_dataref = FAC_1_status,
         Button_dataref = FAC_1_off_button,
+        Last_button_status = 0,
+        Last_power_status = 0,
+        Transient_str_time = 0,
+        Transient_end_time = 0,
+        Transient_reset_required = true,
+        Transient_reset_pending = false,
         Failure_dataref = FAILURE_FCTL_FAC_1,
         Power = function ()
             return get(DC_shed_ess_pwrd) == 1 and get(AC_ess_bus_pwrd) == 1
@@ -85,6 +103,12 @@ FBW.FLT_computer.FAC = {
         Button_address = PB.ovhd.flt_ctl_fac_2,
         Status_dataref = FAC_2_status,
         Button_dataref = FAC_2_off_button,
+        Last_button_status = 0,
+        Last_power_status = 0,
+        Transient_str_time = 0,
+        Transient_end_time = 0,
+        Transient_reset_required = false,
+        Transient_reset_pending = false,
         Failure_dataref = FAILURE_FCTL_FAC_2,
         Power = function ()
             return get(DC_bus_2_pwrd) == 1 and get(AC_bus_2_pwrd) == 1
@@ -106,6 +130,12 @@ FBW.FLT_computer.SEC = {
         Button_address = PB.ovhd.flt_ctl_sec_1,
         Status_dataref = SEC_1_status,
         Button_dataref = SEC_1_off_button,
+        Last_button_status = 0,
+        Last_power_status = 0,
+        Transient_str_time = 0,
+        Transient_end_time = 0,
+        Transient_reset_required = false,
+        Transient_reset_pending = false,
         Failure_dataref = FAILURE_FCTL_SEC_1,
         Power = function ()
             return get(HOT_bus_1_pwrd) == 1 or get(DC_ess_bus_pwrd) == 1
@@ -121,6 +151,12 @@ FBW.FLT_computer.SEC = {
         Button_address = PB.ovhd.flt_ctl_sec_2,
         Status_dataref = SEC_2_status,
         Button_dataref = SEC_2_off_button,
+        Last_button_status = 0,
+        Last_power_status = 0,
+        Transient_str_time = 0,
+        Transient_end_time = 0,
+        Transient_reset_required = false,
+        Transient_reset_pending = false,
         Failure_dataref = FAILURE_FCTL_SEC_2,
         Power = function ()
             return get(DC_bus_2_pwrd) == 1
@@ -136,6 +172,12 @@ FBW.FLT_computer.SEC = {
         Button_address = PB.ovhd.flt_ctl_sec_3,
         Status_dataref = SEC_3_status,
         Button_dataref = SEC_3_off_button,
+        Last_button_status = 0,
+        Last_power_status = 0,
+        Transient_str_time = 0,
+        Transient_end_time = 0,
+        Transient_reset_required = false,
+        Transient_reset_pending = false,
         Failure_dataref = FAILURE_FCTL_SEC_3,
         Power = function ()
             return get(DC_bus_2_pwrd) == 1
@@ -187,6 +229,27 @@ FBW.FLT_computer.common = {
                 --find required start time--
                 local START_TIME, TIMER_MAX = computer_table[i].Test_time()
 
+                --find power delta--
+                local POWER_DELTA = BoolToNum(computer_table[i].Power()) - computer_table[i].Last_power_status
+                local BUTTTON_DELTA = get(computer_table[i].Button_dataref) - computer_table[i].Last_button_status
+                computer_table[i].Last_power_status = BoolToNum(computer_table[i].Power())
+                computer_table[i].Last_button_status = get(computer_table[i].Button_dataref)
+
+                --transient reset--
+                local TRANSIENT_LENGTH = computer_table[i].Transient_end_time - computer_table[i].Transient_str_time
+                if POWER_DELTA == 1 and computer_table[i].Transient_reset_required then
+                    computer_table[i].Transient_end_time = get(TIME)
+                end
+                if POWER_DELTA == -1 and computer_table[i].Transient_reset_required then
+                    computer_table[i].Transient_str_time = get(TIME)
+                    if TRANSIENT_LENGTH >= 0.025 and get(Any_wheel_on_ground) == 0 then
+                        computer_table[i].Transient_reset_pending = true
+                    end
+                end
+                if BUTTTON_DELTA == -1 and computer_table[i].Transient_reset_pending then
+                    computer_table[i].Transient_reset_pending = false
+                end
+
                 --button set to on--
                 if get(computer_table[i].Button_dataref) == 0 then
                     if computer_table[i].Start_timer < TIMER_MAX then
@@ -197,13 +260,22 @@ FBW.FLT_computer.common = {
                 --turn off computer--
                 if (get(computer_table[i].Button_dataref) == 1) or
                    (not computer_table[i].Power()) or
+                   computer_table[i].Transient_reset_pending or
                    (get(computer_table[i].Failure_dataref) == 1) then
                     computer_table[i].Start_timer = 0
                 end
 
-                --set system status
+                --set system status--
                 if computer_table[i].Start_timer >= START_TIME then
                     set(computer_table[i].Status_dataref, 1)
+                end
+
+                if get(Print_print_main_fcc_status) == 1 then
+                    print("COMPUTER " .. i .. ":")
+                    print("RESTART TIME LEFT:       " .. tostring(START_TIME - computer_table[i].Start_timer))
+                    print("POWERED:                 " .. tostring(computer_table[i].Power()))
+                    print("TRANSIENT LENGTH:        " .. TRANSIENT_LENGTH)
+                    print("PENDING TRANSIENT RESET: " .. tostring(computer_table[i].Transient_reset_pending))
                 end
             end
         end,

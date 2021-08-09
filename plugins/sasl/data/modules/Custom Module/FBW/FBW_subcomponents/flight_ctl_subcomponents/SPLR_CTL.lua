@@ -5,7 +5,7 @@ FBW.fctl.control.SPLR_COMMON = {
     SPLR_SPDBRK_GRD_SPD = {15, 15, 15, 15, 15},
     SPLR_SPDBRK_AIR_SPD = {5, 5, 5, 5, 5},
     SPLR_SPDBRK_HIGHSPD_AIR_SPD = {1, 1, 1, 1, 1},
-    NO_HYD_SPD = 4,
+    NO_HYD_SPD = 2,
     NO_HYD_RECENTER_TAS = 80,
     L_SPLR_DATAREFS = {L_SPLR_1, L_SPLR_2, L_SPLR_3, L_SPLR_4, L_SPLR_5},
     R_SPLR_DATAREFS = {R_SPLR_1, R_SPLR_2, R_SPLR_3, R_SPLR_4, R_SPLR_5},
@@ -126,7 +126,7 @@ FBW.fctl.control.SPLR = function (lateral_input, spdbrk_input, ground_spoilers_m
     local L_SPLR_ROLL_SPD = {0, 40, 40, 40, 40}
     local R_SPLR_ROLL_SPD = {0, 40, 40, 40, 40}
 
-    local LOCAL_AIRSPD_KTS = get(TAS_ms) * 1.94384
+    local LOCAL_AIRSPD_KTS = math.cos(math.rad(get(Beta))) * get(TAS_ms) * 1.94384
     local NO_HYD_SPD = Math_rescale(0, 0, FBW.fctl.control.SPLR_COMMON.NO_HYD_RECENTER_TAS, FBW.fctl.control.SPLR_COMMON.NO_HYD_SPD, LOCAL_AIRSPD_KTS)
 
     --targets--
@@ -155,8 +155,8 @@ FBW.fctl.control.SPLR = function (lateral_input, spdbrk_input, ground_spoilers_m
         L_SPLR_SPDBRK_SPD[i] = L_SPLR_HYD_PRESS[i] >= 1450 and L_SPLR_SPDBRK_SPD[i] or NO_HYD_SPD
         R_SPLR_SPDBRK_SPD[i] = R_SPLR_HYD_PRESS[i] >= 1450 and R_SPLR_SPDBRK_SPD[i] or NO_HYD_SPD
         --roll spoilers
-        L_SPLR_ROLL_SPD[i] = L_SPLR_HYD_PRESS[i] >= 1450 and L_SPLR_ROLL_SPD[i] or 0
-        R_SPLR_ROLL_SPD[i] = R_SPLR_HYD_PRESS[i] >= 1450 and R_SPLR_ROLL_SPD[i] or 0
+        L_SPLR_ROLL_SPD[i] = L_SPLR_HYD_PRESS[i] >= 1450 and L_SPLR_ROLL_SPD[i] or NO_HYD_SPD
+        R_SPLR_ROLL_SPD[i] = R_SPLR_HYD_PRESS[i] >= 1450 and R_SPLR_ROLL_SPD[i] or NO_HYD_SPD
     end
 
     --JAMMING--
@@ -176,6 +176,27 @@ FBW.fctl.control.SPLR = function (lateral_input, spdbrk_input, ground_spoilers_m
         --roll spoilers
         L_SPLR_ROLL_TGT[i] = Math_rescale(-1, SPLR_ROLL_MAX_DEF[i], -ROLL_SPLR_THRESHOLD[i], 0, lateral_input)
         R_SPLR_ROLL_TGT[i] = Math_rescale( ROLL_SPLR_THRESHOLD[i], 0,  1, SPLR_ROLL_MAX_DEF[i], lateral_input)
+    end
+
+    --GLA--
+    local L_SPLR_4_TOTAL_TGT = L_SPLR_SPDBRK_TGT[4] + L_SPLR_ROLL_TGT[4]
+    local R_SPLR_4_TOTAL_TGT = R_SPLR_SPDBRK_TGT[4] + R_SPLR_ROLL_TGT[4]
+    local L_SPLR_5_TOTAL_TGT = L_SPLR_SPDBRK_TGT[5] + L_SPLR_ROLL_TGT[5]
+    local R_SPLR_5_TOTAL_TGT = R_SPLR_SPDBRK_TGT[5] + R_SPLR_ROLL_TGT[5]
+
+    --get how much travel is left in actuator--
+    local L_SPLR_4_TRAVEL_LEFT = SPLR_TOTAL_MAX_DEF[4] - math.min(L_SPLR_4_TOTAL_TGT, SPLR_TOTAL_MAX_DEF[4])
+    local R_SPLR_4_TRAVEL_LEFT = SPLR_TOTAL_MAX_DEF[4] - math.min(R_SPLR_4_TOTAL_TGT, SPLR_TOTAL_MAX_DEF[4])
+    local L_SPLR_5_TRAVEL_LEFT = SPLR_TOTAL_MAX_DEF[5] - math.min(L_SPLR_5_TOTAL_TGT, SPLR_TOTAL_MAX_DEF[5])
+    local R_SPLR_5_TRAVEL_LEFT = SPLR_TOTAL_MAX_DEF[5] - math.min(R_SPLR_5_TOTAL_TGT, SPLR_TOTAL_MAX_DEF[5])
+
+    if L_SPLR_CONTROLLED[4] and R_SPLR_CONTROLLED[4] then
+        L_SPLR_ROLL_TGT[4] = L_SPLR_ROLL_TGT[4] + Math_clamp_higher(get(FBW_GLA_output), L_SPLR_4_TRAVEL_LEFT)
+        R_SPLR_ROLL_TGT[4] = R_SPLR_ROLL_TGT[4] + Math_clamp_higher(get(FBW_GLA_output), R_SPLR_4_TRAVEL_LEFT)
+    end
+    if L_SPLR_CONTROLLED[5] and R_SPLR_CONTROLLED[5] then
+        L_SPLR_ROLL_TGT[5] = L_SPLR_ROLL_TGT[5] + Math_clamp_higher(get(FBW_GLA_output), L_SPLR_5_TRAVEL_LEFT)
+        R_SPLR_ROLL_TGT[5] = R_SPLR_ROLL_TGT[5] + Math_clamp_higher(get(FBW_GLA_output), R_SPLR_5_TRAVEL_LEFT)
     end
 
     --SPEEDBRAKES INHIBITION--
@@ -244,6 +265,7 @@ FBW.fctl.control.SPLR = function (lateral_input, spdbrk_input, ground_spoilers_m
     end
 
     --RESET TO 0 OR FLAP AROUND--
+    local SWING_TARGET = math.cos(math.rad(get(Beta))) * get(Alpha)
     for i = 1, SPLR_PER_WING do
         --speedbrakes position reset
         if not L_SPLR_CONTROLLED[i] then
@@ -251,8 +273,8 @@ FBW.fctl.control.SPLR = function (lateral_input, spdbrk_input, ground_spoilers_m
                 L_SPLR_ROLL_TGT[i] = 0
                 L_SPLR_SPDBRK_TGT[i] = 0
             else--damp
-                L_SPLR_ROLL_TGT[i] = 0
-                L_SPLR_SPDBRK_TGT[i] = Math_clamp(get(Alpha), 0, SPLR_TOTAL_MAX_DEF[i])
+                L_SPLR_ROLL_TGT[i] = Math_clamp(SWING_TARGET, 0, get(R_SPLR_DATAREFS[i])) / 2
+                L_SPLR_SPDBRK_TGT[i] = Math_clamp(SWING_TARGET, 0, get(R_SPLR_DATAREFS[i])) / 2
             end
         end
         if not R_SPLR_CONTROLLED[i] then
@@ -260,11 +282,12 @@ FBW.fctl.control.SPLR = function (lateral_input, spdbrk_input, ground_spoilers_m
                 R_SPLR_ROLL_TGT[i] = 0
                 R_SPLR_SPDBRK_TGT[i] = 0
             else--damp
-                R_SPLR_ROLL_TGT[i] = 0
-                R_SPLR_SPDBRK_TGT[i] = Math_clamp(get(Alpha), 0, SPLR_TOTAL_MAX_DEF[i])
+                R_SPLR_ROLL_TGT[i] = Math_clamp(SWING_TARGET, 0, get(R_SPLR_DATAREFS[i])) / 2
+                R_SPLR_SPDBRK_TGT[i] = Math_clamp(SWING_TARGET, 0, get(R_SPLR_DATAREFS[i])) / 2
             end
         end
     end
+
 
     --PRE-EXTENTION DEFECTION VALUE CALCULATION --> OUTPUT OF CALCULATED VALUE TO THE SURFACES--
     set(TOTAL_SPDBRK_EXTENSION, 0)

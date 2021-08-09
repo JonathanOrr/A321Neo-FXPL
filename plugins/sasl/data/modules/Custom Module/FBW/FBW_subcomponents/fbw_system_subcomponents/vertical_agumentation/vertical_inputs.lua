@@ -1,7 +1,7 @@
 FBW.vertical.inputs = {
     X_to_G = function (x)
-        local max_G = get(Flaps_internal_config) ~= 0 and 2 or 2.5
-        local min_G = get(Flaps_internal_config) ~= 0 and 0 or -1
+        local max_G = get(Flaps_internal_config) > 1 and 2 or 2.5
+        local min_G = get(Flaps_internal_config) > 1 and 0 or -1
 
         local G_load_input_table = {
             {-1, min_G},
@@ -13,8 +13,8 @@ FBW.vertical.inputs = {
     end,
 
     G_to_CSTAR = function (G)
-        local max_G = get(Flaps_internal_config) ~= 0 and 2 or 2.5
-        local min_G = get(Flaps_internal_config) ~= 0 and 0 or -1
+        local max_G = get(Flaps_internal_config) > 1 and 2 or 2.5
+        local min_G = get(Flaps_internal_config) > 1 and 0 or -1
 
         local neutral_nz = FBW.vertical.dynamics.neutral_flight_G()
 
@@ -24,7 +24,16 @@ FBW.vertical.inputs = {
             {max_G,      FBW.vertical.dynamics.MAX_CSTAR()},
         }
 
-        return Table_interpolate(C_star_input_table, G)
+        local C_STAR_OUTPUT = Table_interpolate(C_star_input_table, G)
+
+        --ALT LAW LIMIT Q to 5 deg/s (AMM)--
+        local LO_ALT_Q_LIM = FBW.vertical.dynamics.GET_CSTAR(get(Total_vertical_g_load), -5)
+        local HI_ALT_Q_LIM = FBW.vertical.dynamics.GET_CSTAR(get(Total_vertical_g_load),  5)
+        if get(FBW_total_control_law) ~= FBW_NORMAL_LAW then
+            C_STAR_OUTPUT = math.max(math.min(C_STAR_OUTPUT, HI_ALT_Q_LIM), LO_ALT_Q_LIM)
+        end
+
+        return C_STAR_OUTPUT
     end,
 
     Rotation = {
@@ -33,8 +42,10 @@ FBW.vertical.inputs = {
             local OUT_Q = MAX_Q * math.abs(math.cos(math.rad(adirs_get_avg_roll()))) * X
 
             --PROT--
-            OUT_Q = FBW.vertical.protections.Rotation.AoA(X, OUT_Q)
-            OUT_Q = FBW.vertical.protections.Rotation.Pitch(OUT_Q)
+            if get(FBW_total_control_law) ~= FBW_ABNORMAL_LAW then
+                OUT_Q = FBW.vertical.protections.Rotation.AoA(X, OUT_Q)
+                OUT_Q = FBW.vertical.protections.Rotation.Pitch(OUT_Q)
+            end
 
             --BP AoA Q demand PID
             FBW_PID_arrays.FBW_ROTATION_APROT_PID.Actual_output = FBW.rates.Pitch.x
@@ -107,7 +118,9 @@ FBW.vertical.inputs = {
             local OUT_Q = Table_interpolate(Q_SP_table, ATT_SP - PITCH)
 
             --PROT--
-            OUT_Q = FBW.vertical.protections.Flare.AoA(X, OUT_Q)
+            if get(FBW_total_control_law) ~= FBW_ABNORMAL_LAW then
+                OUT_Q = FBW.vertical.protections.Flare.AoA(X, OUT_Q)
+            end
 
             --BP AoA Q demand PID
             FBW_PID_arrays.FBW_FLARE_APROT_PID.Actual_output = FBW.rates.Pitch.x

@@ -26,7 +26,7 @@ local function draw_trim_flag(PFD_table)
         return
     end
 
-    if get(FBW_total_control_law) == FBW_DIRECT_LAW then
+    if get(FBW_total_control_law) == FBW_DIRECT_LAW or get(FBW_ABN_LAW_TRIM_INHIB) == 1 then
         sasl.gl.drawText(Font_AirbusDUL, ATT_x_center, ATT_y_center + 275, "USE MAN PITCH TRIM", 34, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
         return
     end

@@ -13,7 +13,7 @@ FBW.yaw.controllers = {
                 --limit travel ability to 5 degrees of rudder
                 FBW.yaw.controllers.yaw_damper_PD.output = Math_clamp(FBW.yaw.controllers.yaw_damper_PD.output, -5/30, 5/30)
             end
-            if get(FBW_yaw_law) == FBW_MECHANICAL_BACKUP_LAW or not FBW.fctl.surfaces.rud.rud.controlled then
+            if get(FBW_yaw_law) == FBW_MECHANICAL_BACKUP_LAW or get(FBW_yaw_law) == FBW_ABNORMAL_LAW or not FBW.fctl.surfaces.rud.rud.controlled then
                 FBW.yaw.controllers.yaw_damper_PD.output = 0
             end
         end,

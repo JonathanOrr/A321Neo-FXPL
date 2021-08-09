@@ -88,7 +88,7 @@ function update()
     updateAll(components)
 
     --Flight mode blending
-    if get(FBW_total_control_law) == FBW_NORMAL_LAW then
+    if get(FBW_total_control_law) == FBW_NORMAL_LAW or get(FBW_total_control_law) == FBW_ABNORMAL_LAW then
         FBW_normal_mode_transition(FBW_modes_var_table)
     elseif get(FBW_total_control_law) == FBW_DIRECT_LAW and get(FBW_alt_to_direct_law) == 0 then
         FBW_direct_mode_transition()

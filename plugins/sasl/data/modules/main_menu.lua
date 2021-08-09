@@ -165,6 +165,10 @@ function Toggle_Ground_Air_Supply()
     end
 end
 
+function Reset_Abn_law()
+  set(Debug_FBW_ABN_LAW_RESET, 1)
+end
+
 -- create top level menu in plugins menu
 Menu_master	= sasl.appendMenuItem (PLUGINS_MENU_ID, "A321NEO" )
 -- add a submenu
@@ -182,6 +186,7 @@ sasl.appendMenuSeparator(Menu_main)
 SaveView          = sasl.appendMenuItem(Menu_main, "Save view as default", Save_current_view_as_default)
 ADIRSAlign        = sasl.appendMenuItem(Menu_main, "Instantaneous align IRs", IRs_instaneous_align)
 ADIRSAlign        = sasl.appendMenuItem(Menu_main, "Toggle Ground Air Supply", Toggle_Ground_Air_Supply)
+ResetAbnLaw       = sasl.appendMenuItem(Menu_main, "Reset Abnormal Law", Reset_Abn_law)
 -- Maintenance submenu
 Maintenance_item  = sasl.appendMenuItem (Menu_main, "Maintenance")
 Maintenance_menu  = sasl.createMenu ("", Menu_main, Maintenance_item)
