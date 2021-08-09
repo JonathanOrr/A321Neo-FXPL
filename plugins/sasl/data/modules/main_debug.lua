@@ -9,7 +9,7 @@
 -- source is not available. This means that you immediately get all the electrical power on all
 -- buses. This is useful for development. Please consider that eletrical load is no more valid if
 -- you enable this option and other strange effects on electrical system may happen.
-debug_override_ELEC_always_on = true
+debug_override_ELEC_always_on = false
 
 
 -- If you set this variable to true, all the ADIRS are ON and IRS are ALIGNED. Button switches have
