@@ -161,6 +161,7 @@ function high_pass_filter(data)
         return data.x
     else
         data.prev_y_value = a * (data.prev_y_value + data.x - data.prev_x_value)
+        data.prev_x_value = data.x
     end
 
     return data.prev_y_value
