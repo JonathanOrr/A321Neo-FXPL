@@ -30,11 +30,6 @@ include('libs/geo-helpers.lua')
 
 local image_mask_rose = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/mask-rose.png")
 local image_mask_rose_terr = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/mask-rose-terrain.png")
-local image_bkg_ring        = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/ring.png")
-local image_bkg_ring_red    = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/ring-red.png")
-local image_bkg_ring_tcas   = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/tcas-ring.png")
-local image_bkg_ring_arrows = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/ring-arrows.png")
-local image_bkg_ring_middle = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/ring-middle.png")
 
 local image_point_apt = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/point-apt.png")
 local image_point_vor_only = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/point-vor-only.png")
@@ -115,18 +110,19 @@ end
 local function draw_backgrounds(data)
     -- Main rose background
     if data.inputs.is_heading_valid then
-        sasl.gl.drawRotatedTexture(image_bkg_ring, -data.inputs.heading, (size[1]-750)/2,(size[2]-750)/2,750,750, {1,1,1})
+        ND_DRAWING_small_rose(450 ,450 , -data.inputs.heading)
 
         if data.misc.tcas_ta_triggered or data.misc.tcas_ra_triggered or data.config.range == ND_RANGE_10 then
 
             -- Inner (TCAS) circle is activated only when:
             -- - Range is 10, or
             -- - TCAS RA or TA activates
-            sasl.gl.drawRotatedTexture(image_bkg_ring_tcas, -data.inputs.heading, (size[1]-750)/2,(size[2]-750)/2,750,750, {1,1,1})
+            ND_DRAWING_small_tcas_ring(450,450)
+
         end
     else
         -- Heading not available
-        sasl.gl.drawTexture(image_bkg_ring_red, (size[1]-591)/2,(size[2]-590)/2,591,590, {1,1,1})
+        ND_DRAWING_small_red_ring(450,450)
     end
     
 end
@@ -147,8 +143,14 @@ local function draw_fixed_symbols(data)
     -- Top heading indicator (yellow)
     sasl.gl.drawWideLine(450, 720, 450, 770, 5, plane_color)
 
-    sasl.gl.drawTexture(image_bkg_ring_arrows, (size[1]-750)/2,(size[2]-750)/2,750,750, {1,1,1})
-    sasl.gl.drawTexture(image_bkg_ring_middle, (size[1]-750)/2,(size[2]-750)/2,750,750, {1,1,1})
+    ND_DRAWING_small_triangle(755 ,450 , 270)
+    ND_DRAWING_small_triangle(145 ,450 , 90)
+    ND_DRAWING_small_triangle(450 ,145 , 0)
+    ND_DRAWING_small_triangle(235 ,235 , 45)
+    ND_DRAWING_small_triangle(665 ,235 , 315)
+    ND_DRAWING_small_triangle(665 ,665 , 225)
+    ND_DRAWING_small_triangle(235 ,665, 135)
+    ND_DRAWING_dashed_ring(450,450, 147 , 3, 21, 0, 360, 0, ECAM_WHITE) -- middle ring
     
 end
 
@@ -157,8 +159,8 @@ local function draw_ranges(data)
     --if data.config.range > 0 then
         local ext_range = get_range_in_nm(data)
         local int_range = ext_range / 2
-        sasl.gl.drawText(Font_AirbusDUL, 250, 250, ext_range, 20, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
-        sasl.gl.drawText(Font_AirbusDUL, 350, 350, int_range, 20, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+        sasl.gl.drawText(Font_AirbusDUL, 250, 250, ext_range, 24, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+        sasl.gl.drawText(Font_AirbusDUL, 350, 350, int_range, 24, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
     --end
 
 end

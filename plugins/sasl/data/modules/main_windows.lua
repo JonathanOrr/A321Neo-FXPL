@@ -301,7 +301,7 @@ CAPT_ND_window = contextWindow {
   minimumSize = { 400, 400 };
   maximumSize = { 900, 900 };
   gravity = { 0 , 1 , 0 , 1 };
-  visible = false;
+  visible = true;
   components = {
       CAPT_ND_pop_up {}
   };

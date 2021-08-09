@@ -1,4 +1,5 @@
 include('ND/subcomponents/constants.lua')
+include('ND/subcomponents/drawing_functions.lua')
 include('ND/subcomponents/graphics_common.lua')
 include('ND/subcomponents/graphics_arc.lua')
 include('ND/subcomponents/graphics_rose.lua')
