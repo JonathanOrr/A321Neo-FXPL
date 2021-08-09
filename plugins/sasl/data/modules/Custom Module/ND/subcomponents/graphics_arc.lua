@@ -36,12 +36,6 @@ local MAX_LIMIT_WPT = 750
 -- Textures
 -------------------------------------------------------------------------------
 
-local image_bkg_arc        = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/arc.png")
-local image_bkg_arc_red    = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/arc-red.png")
-local image_bkg_arc_inner  = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/arc-inner.png")
-local image_bkg_arc_inner_zoom  = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/arc-inner-zoom.png")
-local image_bkg_arc_tcas   = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/tcas-arc.png")
-
 local image_point_apt = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/point-apt.png")
 local image_point_vor_only = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/point-vor-only.png")
 local image_point_vor_dme  = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/point-vor-dme.png")
@@ -115,21 +109,25 @@ end
 local function draw_backgrounds(data)
     -- Main arc background
     if data.inputs.is_heading_valid then
-        sasl.gl.drawRotatedTexture(image_bkg_arc, -data.inputs.heading, (size[1]-1330)/2,(size[2]-1330)/2-312,1330,1330, {1,1,1})
-        
-        sasl.gl.drawTexture(data.config.range > ND_RANGE_ZOOM_2 and image_bkg_arc_inner or image_bkg_arc_inner_zoom, (size[1]-898)/2,(size[2]-568)/2-13,898,568, {1,1,1})
-        
+        ND_DRAWING_large_rose(450,137 , -data.inputs.heading )
+
+        if data.config.range > ND_RANGE_ZOOM_2 then
+            ND_DRAWING_large_dashed_rings(450,137)
+        else
+            ND_DRAWING_large_dashed_rings_zoom(450,137)
+        end
+
         if data.misc.tcas_ta_triggered or data.misc.tcas_ra_triggered or data.config.range == ND_RANGE_20 then
 
             -- Inner (TCAS) circle is activated only when:
             -- - Range is 10, or
             -- - TCAS RA or TA activates
-            sasl.gl.drawTexture(image_bkg_arc_tcas, (size[1]-122)/2,(size[2]-41)/2-252,122,41, {1,1,1})
+            ND_DRAWING_large_tcas_ring(450,137)
         end
         
     else
         -- Heading not available
-       sasl.gl.drawTexture(image_bkg_arc_red, (size[1]-898)/2,(size[2]-600)/2-30,898,600, {1,1,1})
+       ND_DRAWING_hdg_not_avail(450,137)
     end
 end
 
