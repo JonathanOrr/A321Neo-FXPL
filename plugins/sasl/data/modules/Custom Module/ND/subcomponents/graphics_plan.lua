@@ -90,7 +90,7 @@ local function draw_ranges(data)
 end
 
 local function draw_background(data)
-    ND_DRAWING_dashed_ring(450,450, 147 , 3, 21, 0, 360, 0, ECAM_WHITE)
+    ND_DRAWING_dashed_arcs(450,450,147, 3, 20,20,0, 360, true, true, false, ECAM_WHITE)
     sasl.gl.drawArc(450, 450, 292, 295,0,360,ECAM_WHITE)
     ND_DRAWING_small_triangle(730 ,450 , 90)
     ND_DRAWING_small_triangle(170 ,450 , -90)
