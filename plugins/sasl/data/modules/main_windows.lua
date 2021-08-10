@@ -405,6 +405,20 @@ PID_UI_window = contextWindow {
   };
 }
 
+Lnav_debug_window = contextWindow {
+  name = "LNAV DEBUG";
+  position = { 0 , 0 , 900, 900 };
+  noBackground = true ;
+  proportional = true ;
+  minimumSize = { 400, 400 };
+  maximumSize = { 900, 900 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = true;
+  components = {
+      lnav_debug {}
+  };
+}
+
 Cinetracker_window = contextWindow {
   name = "C* CINETRACKER";
   position = { 50 , 50 , 480 , 550 };
