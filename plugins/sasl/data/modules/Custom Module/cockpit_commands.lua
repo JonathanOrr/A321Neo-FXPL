@@ -271,6 +271,14 @@ ENG_cmd_mode_up        = sasl.createCommand("a321neo/cockpit/engine/mode_up", "e
 ENG_cmd_mode_down      = sasl.createCommand("a321neo/cockpit/engine/mode_dn", "engine mode selector down")
 ENG_cmd_master_toggle_1= createCommand("a321neo/cockpit/engine/master_toggle_1", "Master Switch ENG1")
 ENG_cmd_master_toggle_2= createCommand("a321neo/cockpit/engine/master_toggle_2", "Master Switch ENG2")
+-- Airbus TCA support
+ENG_cmd_mode_ignite    = sasl.createCommand("a321neo/cockpit/engine/mode_ignite", "engine mode selector IGN/START")
+ENG_cmd_mode_norm      = sasl.createCommand("a321neo/cockpit/engine/mode_norm", "engine mode selector NORM")
+ENG_cmd_mode_crank     = sasl.createCommand("a321neo/cockpit/engine/mode_crank", "engine mode selector CRANK")
+ENG_cmd_master_on_1    = sasl.createCommand("a321neo/cockpit/engine/master_on_1", "Master Switch ENG1 on")
+ENG_cmd_master_off_1   = sasl.createCommand("a321neo/cockpit/engine/master_off_1", "Master Switch ENG1 off")
+ENG_cmd_master_on_2    = sasl.createCommand("a321neo/cockpit/engine/master_on_2", "Master Switch ENG2 on")
+ENG_cmd_master_off_2   = sasl.createCommand("a321neo/cockpit/engine/master_off_2", "Master Switch ENG2 off")
 
 -- APU
 APU_cmd_master = sasl.createCommand("a321neo/cockpit/engine/apu_master_toggle", "toggle APU master button")
