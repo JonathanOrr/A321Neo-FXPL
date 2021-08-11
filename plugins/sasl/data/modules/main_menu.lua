@@ -92,6 +92,10 @@ function Show_hide_NAVAIDs_Debug()
   NAVAIDs_debug_window:setIsVisible(not NAVAIDs_debug_window:isVisible())
 end
 
+function Show_hide_Lnav_Debug()
+  Lnav_debug_window:setIsVisible(not Lnav_debug_window:isVisible())
+end
+
 function Show_hide_MAGIC_Debug()
   MAGIC_window:setIsVisible(not MAGIC_window:isVisible())
 end
@@ -212,6 +216,7 @@ ShowHidePerfDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide PERF Debug", Show
 ShowHidePressDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide PRESS Debug", Show_hide_PRESS_debug)
 ShowHideWheelDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide WHEEL Debug", Show_hide_Wheel_Debug)
 --ShowHideVnavDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide VNAV Debug", Show_hide_vnav_debug)
+ShowHideLnavDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide LNAV Debug", Show_hide_Lnav_Debug)
 ShowHideGPWSDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide MAGIC Debug", Show_hide_MAGIC_Debug)
 
 

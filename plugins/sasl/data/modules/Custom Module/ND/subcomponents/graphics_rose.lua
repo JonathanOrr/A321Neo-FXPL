@@ -150,7 +150,7 @@ local function draw_fixed_symbols(data)
     ND_DRAWING_small_triangle(665 ,235 , 315)
     ND_DRAWING_small_triangle(665 ,665 , 225)
     ND_DRAWING_small_triangle(235 ,665, 135)
-    ND_DRAWING_dashed_ring(450,450, 147 , 3, 21, 0, 360, 0, ECAM_WHITE) -- middle ring
+    ND_DRAWING_dashed_arcs(450,450,147, 3, 20,20,0, 360, true, true, false, ECAM_WHITE)
     
 end
 
