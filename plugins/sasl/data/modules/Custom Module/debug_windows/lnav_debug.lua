@@ -1,7 +1,7 @@
 position = { 0 , 0 , 900 , 900 }
 size = {900, 900}
 
-local window_default_position = {22,113}
+local window_default_position = {22,115}
 local window_default_size = 0.5
 local slew_speed = 1
 
@@ -34,7 +34,7 @@ include("debug_windows/lnav_flightpaths.lua")
 
 function onMouseWheel( component,  x,  y,  button,  parentX,  parentY,  value)
     displayable_latitude = displayable_latitude - Math_rescale_no_lim(0, 0, 5, value, displayable_latitude)
-    displayable_latitude = math.max(0.001, displayable_latitude)
+    displayable_latitude = math.max(0.01, displayable_latitude)
 end
 
 function onMouseMove(_, x, y)
@@ -95,7 +95,7 @@ local function draw_backgrounds()
     local y_lower_bound = math.floor( window_center[2] - displayable_latitude/2 )
     local y_upper_bound = math.ceil( window_center[2] + displayable_latitude/2 )
 
-    if displayable_latitude <= 5 then
+    if displayable_latitude <= 7 then
         for i=x_lower_bound, x_upper_bound do
             for j=x_lower_bound*10, x_upper_bound*10 do
                 local x2 = coords_parser_x(j/10)
@@ -168,12 +168,74 @@ local function data_updating()
     distance_per_box = get_distance_nm(window_center[1],window_center[2],window_center[1]+1,window_center[2]+1)
 end
 
+
+-----------------------------------------LINE DRAWINGS
+
+function ND_FLIGHTPATH_drawarc(lat,lon,radius,start,arc,dash_or_not) --x y in lat long, radius in nautical miles 
+    local radius_in_lat = radius / distance_per_box
+    local x = lon
+    local y = lat
+    x = coords_parser_x(x)
+    y = coords_parser_y(y)
+    local real_rad = (900 / displayable_latitude) * (radius_in_lat)
+    if dash_or_not then
+        ND_DRAWING_dashed_arcs(x,y, real_rad, 3, 20,20,start, arc, true, false, true, ECAM_YELLOW)
+    else
+        sasl.gl.drawArc(x, y, real_rad - 1.5, (900 / displayable_latitude) * (radius_in_lat) + 1.5 , start, arc, ECAM_GREEN)
+    end
+
+    --Hints for drawing, not actual path
+    SASL_draw_needle(x,y, real_rad, start, 3, ECAM_BLUE)
+    drawTextCentered(Font_AirbusDUL, (2*x + real_rad * math.cos(math.rad(start)))/2 ,(2*y + real_rad * math.sin(math.rad(start)))/2 - math.min(Round(Math_rescale_no_lim(5, 24, 10, 12, displayable_latitude)),24),
+     radius.."NM", Round(Math_rescale_no_lim(5, 16, 10, 9, displayable_latitude),0), true, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+end
+
+function ND_FLIGHTPATH_drawline(lat1,lon1,lat2,lon2,dash_or_not)
+    local x1 = lon1
+    local y1 = lat1
+    local x2 = lon2
+    local y2 = lat2
+    x1 = coords_parser_x(x1)
+    y1 = coords_parser_y(y1)
+    x2 = coords_parser_x(x2)
+    y2 = coords_parser_y(y2)
+    sasl.gl.drawWideLine(x1, y1,x2,y2, 3, ECAM_GREEN)
+end
+
+function ND_FLIGHTPATH_drawline_special(lat1,lon1,lat2,lon2,colour)
+    local x1 = lon1
+    local y1 = lat1
+    local x2 = lon2
+    local y2 = lat2
+    x1 = coords_parser_x(x1)
+    y1 = coords_parser_y(y1)
+    x2 = coords_parser_x(x2)
+    y2 = coords_parser_y(y2)
+    sasl.gl.drawWideLine(x1, y1,x2,y2, 3, colour)
+end
+
+function ND_FLIGHTPATH_drawbezier(lat1,lon1,lat2,lon2,lat3,lon3,parts,colour)
+    sasl.gl.drawWideBezierLineQ (  coords_parser_x(lon1) ,  coords_parser_y(lat1) ,   coords_parser_x(lon2) ,  coords_parser_y(lat2) ,  coords_parser_x(lon3) ,  coords_parser_y(lat3) ,   parts ,  3 ,  colour )
+end
+
+function ND_FLIGHTPATH_drawfix(lat,lon,wpt_name)
+    local x = lon
+    local y = lat
+    x = coords_parser_x(x)
+    y = coords_parser_y(y)
+    local size_px = 6
+    sasl.gl.drawConvexPolygon( {x-size_px,y,x,y+size_px,x+size_px,y,x,y-size_px} ,  false ,  2 , ECAM_GREEN )
+    drawTextCentered(Font_AirbusDUL, x + 12, y, wpt_name, 19, true, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+end
+
+-----------------------------------------LOOPS
+
+
 function draw()
     draw_backgrounds()
+    draw_flightpaths()
     draw_reset_button()
     draw_crosshair()
-
-    ND_FLIGHTPATH_drawarc(22,113,20,0,250)
 end
 
 function update()

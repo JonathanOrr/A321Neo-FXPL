@@ -39,6 +39,26 @@ function Move_along_distance_v2(origin_lat, origin_lon, distance, angle) -- Dist
     return mdeg(lat2), mdeg(lon2)
 end
 
+function Move_along_distance_NM(origin_lat, origin_lon, distance, angle) -- Distance in M
+    local theta = mrad(angle)
+    local EARTH_RADIUS = 6378136.6
+    local angular_dist = distance * 1852 / EARTH_RADIUS
+
+    local s_lat1 = msin(mrad(origin_lat))
+    local c_lat1 = mcos(mrad(origin_lat))
+    local c_ang  = mcos(angular_dist)
+    local s_ang  = msin(angular_dist)
+    local c_theta= mcos(theta)
+    local s_theta= msin(theta)
+
+    local lat2 = masin(s_lat1 * c_ang + c_lat1 * s_ang * c_theta)
+    local s_lat2 = msin(lat2)
+
+    local lon2 = mrad(origin_lon) + matan2(s_theta * s_ang * c_lat1, c_ang - s_lat1 * s_lat2)
+    
+    return mdeg(lat2), mdeg(lon2)
+end
+
 
 
 function GC_distance_kt(lat1, lon1, lat2, lon2)
@@ -132,5 +152,16 @@ function point_from_a_segment_lat_lon_limited(lat1, lon1, lat2, lon2, distance_n
     local lon3 = (1-t) * lon1 + t * lon2
 
     return lat3, lon3
+end
+
+function heading_difference(hdg1,hdg2) -- range -180 to 180, difference between 2 bearings, +ve is right turn, -ve is left.
+    local turn = 0
+        turn =  (hdg1-hdg2)%360
+    turn = turn > 180 and (360-turn) or -turn
+    return turn
+end
+
+function mid_point(lat1, lon1, lat2, lon2)
+    return (lat1+lat2)/2,(lon1+lon2)/2
 end
 
