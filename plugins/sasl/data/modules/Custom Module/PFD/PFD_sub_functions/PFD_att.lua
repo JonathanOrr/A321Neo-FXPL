@@ -36,7 +36,7 @@ local function draw_stall_flag(PFD_table)
     local ATT_x_center = size[1]/2-55
     local ATT_y_center = size[2]/2-7
 
-    if get(FBW_total_control_law) == FBW_NORMAL_LAW or
+    if (get(FBW_total_control_law) == FBW_NORMAL_LAW and (get(Capt_ra_alt_ft) + get(Fo_ra_alt_ft)) / 2 < 1500) or
        get(Any_wheel_on_ground) == 1 or
        adirs_is_att_ok(PFD_table.Screen_ID) == false or
        get(FAC_1_status) == 0 and get(FAC_2_status) == 0 or
@@ -44,8 +44,17 @@ local function draw_stall_flag(PFD_table)
         return
     end
 
-    if adirs_get_aoa(PFD_table.Screen_ID) > get(FAC_MIXED_Aprot_AoA) - 0.5 then
-        sasl.gl.drawText(Font_AirbusDUL, ATT_x_center, ATT_y_center + 50, "STALL    STALL", 42, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
+    local NRM_LAW = {13.5, 21}
+    local ALT_LAW = {8,    13}
+
+    if get(FBW_total_control_law) == FBW_NORMAL_LAW then
+        if adirs_get_aoa(PFD_table.Screen_ID) > NRM_LAW[(get(Slats) <= 15/27) and 1 or 2] then
+            sasl.gl.drawText(Font_AirbusDUL, ATT_x_center, ATT_y_center + 50, "STALL    STALL", 42, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
+        end
+    else
+        if adirs_get_aoa(PFD_table.Screen_ID) > ALT_LAW[(get(Slats) <= 15/27) and 1 or 2] then
+            sasl.gl.drawText(Font_AirbusDUL, ATT_x_center, ATT_y_center + 50, "STALL    STALL", 42, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
+        end
     end
 end
 
