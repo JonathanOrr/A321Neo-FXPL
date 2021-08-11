@@ -34,6 +34,18 @@ FBW.filtered_sensors = {
             cut_frequency = 1.4,
         }
     },
+
+    GS_TAS_DELTA = {
+        high_pass = true,
+        filtered = 0,
+        value = function ()
+            return (get(TAS_ms) * 1.94384 - get(Ground_speed_kts))
+        end,
+        {
+            x = 0,
+            cut_frequency = 10,
+        }
+    },
 }
 
 local function filter_all_values(filter_table)

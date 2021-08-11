@@ -54,15 +54,11 @@ FBW.LAF.controllers = {
         bumpless_transfer = function ()
         end,
         control = function ()
-            local PROCESSED_HP_NX = FBW.filtered_sensors.HP_NX.filtered
-            PROCESSED_HP_NX = math.abs(PROCESSED_HP_NX)
-            PROCESSED_HP_NX = math.max(0, PROCESSED_HP_NX - 0.0065)
-
             --GUST LOAD ALLEVIATION--
             FBW.LAF.controllers.GLA_PID.output = FBW_PID_BP(
                 FBW_PID_arrays.FBW_GLA_PID,
                 0,
-                PROCESSED_HP_NX
+                math.abs(FBW.filtered_sensors.GS_TAS_DELTA.filtered)
             )
 
             if get(Flaps_internal_config) > 1 or

@@ -32,14 +32,23 @@ end
 local function STALL_STALL()
     set(GPWS_mode_stall, 0)
     --stall warning (needs to be further comfirmed)
-    if get(FBW_total_control_law) == FBW_NORMAL_LAW or
+    if (get(FBW_total_control_law) == FBW_NORMAL_LAW and (get(Capt_ra_alt_ft) + get(Fo_ra_alt_ft)) / 2 < 1500) or
        get(Any_wheel_on_ground) == 1 or
        get(FAC_1_status) == 0 and get(FAC_2_status) == 0 then
         return
     end
 
-    if FBW.FAC_COMPUTATION.MIXED.aoa > get(FAC_MIXED_Aprot_AoA) - 0.5 then
-        set(GPWS_mode_stall, 1)
+    local NRM_LAW = {13.5, 21}
+    local ALT_LAW = {8,    13}
+
+    if get(FBW_total_control_law) == FBW_NORMAL_LAW then
+        if FBW.FAC_COMPUTATION.MIXED.aoa > NRM_LAW[(get(Slats) <= 15/27) and 1 or 2] then
+            set(GPWS_mode_stall, 1)
+        end
+    else
+        if FBW.FAC_COMPUTATION.MIXED.aoa > ALT_LAW[(get(Slats) <= 15/27) and 1 or 2] then
+            set(GPWS_mode_stall, 1)
+        end
     end
 end
 
