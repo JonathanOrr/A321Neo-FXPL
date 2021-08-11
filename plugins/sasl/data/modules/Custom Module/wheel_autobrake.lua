@@ -65,6 +65,11 @@ local pid_array = {
 sasl.registerCommandHandler (Toggle_lo_autobrake, 0, function(phase) Toggle_autobrake(phase, AUTOBRK_LOW)  end)
 sasl.registerCommandHandler (Toggle_med_autobrake, 0, function(phase) Toggle_autobrake(phase, AUTOBRK_MED) end)
 sasl.registerCommandHandler (Toggle_max_autobrake, 0, function(phase) Toggle_autobrake(phase, AUTOBRK_MAX) end)
+-- Airbus TCA support
+sasl.registerCommandHandler (TCA_disable_autobrake, 0, function(phase) set(Wheel_autobrake_status, AUTOBRK_OFF) end)
+sasl.registerCommandHandler (TCA_lo_autobrake, 0, function(phase) Toggle_autobrake(phase, AUTOBRK_LOW) end)
+sasl.registerCommandHandler (TCA_med_autobrake, 0, function(phase) Toggle_autobrake(phase, AUTOBRK_MED) end)
+sasl.registerCommandHandler (TCA_max_autobrake, 0, function(phase) Toggle_autobrake(phase, AUTOBRK_MAX) end)
 
 
 function Toggle_autobrake(phase, value)
