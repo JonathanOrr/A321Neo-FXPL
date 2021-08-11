@@ -413,7 +413,7 @@ Lnav_debug_window = contextWindow {
   minimumSize = { 400, 400 };
   maximumSize = { 900, 900 };
   gravity = { 0 , 1 , 0 , 1 };
-  visible = true;
+  visible = false;
   components = {
       lnav_debug {}
   };

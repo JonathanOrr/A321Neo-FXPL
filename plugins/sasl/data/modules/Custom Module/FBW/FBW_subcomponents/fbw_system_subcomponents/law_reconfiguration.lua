@@ -20,7 +20,7 @@ function FBW_law_reconfiguration(var_table)
     local reconfiguration_conditions = {
         --ALT(NO PROTECTION), DIRECT, ALT
         {
-            {adirs_how_many_adr_params_disagree() == 3, "AIR DATA (IAS/MACH) DISAGREE ALT LAW PROT IMPOSSIBLE"},
+            {adirs_how_many_adrs_work() >= 2 and adirs_adr_params_disagree(), "DOUBLE ADR NOT SELF DETECTED (IAS/MACH) DISAGREE"},
             {adirs_how_many_adrs_work() == 0, "TRIPLE ADR FAILURE"},
             {get(SFCC_1_status) == 0 and get(SFCC_2_status) == 0, "DOUBLE SFCC FAILURE"},
             {get(Hydraulic_G_press) < 1450 and get(Hydraulic_B_press) < 1450, "GREEN AND BLUE HYDRAULIC FAILURE"},
@@ -29,7 +29,7 @@ function FBW_law_reconfiguration(var_table)
         --ALT(REDUCED PROTECTION), DIRECT, ALT
         {
             {adirs_how_many_adrs_work() == 1, "DOUBLE SELF DETECTED ADR FAILURE"},
-            {adirs_how_many_aoa_disagree() == 3 or adirs_how_many_aoa_failed() == 3, "AOA DISAGREEMENT/FAILURE NRM LAW PROT IMPOSSIBLE"},
+            {adirs_how_many_aoa_working() <= 1 or adirs_aoa_disagree(), "AOA DISAGREEMENT/FAILURE NRM LAW PROT IMPOSSIBLE"},
             {get(ELAC_1_status) == 0 and get(ELAC_2_status) == 0, "DOUBLE ELAC FAILURE"},
             {not FBW.fctl.surfaces.ail.L.controlled and not FBW.fctl.surfaces.ail.R.controlled, "DOUBLE AILERON FAILURE"},
             {not FBW.fctl.surfaces.THS.THS.controlled and not FBW.fctl.surfaces.THS.THS.mechanical, "THS JAMMED"},
@@ -52,6 +52,8 @@ function FBW_law_reconfiguration(var_table)
 
         --DIRECT, DIRECT, MECHANICAL
         {
+            {adirs_how_many_irs_fully_work() >= 2 and adirs_ir_disagree(), "DOUBLE NOT SELF DECTED IR FAILURE/DISAGREE"},
+            {FBW.FLT_computer.ELAC[1].IR_reset_pending or FBW.FLT_computer.ELAC[2].IR_reset_pending, "AWAITING ELAC 1 + 2 RESET FOR NOT SELF DECTED IR FAILURE/DISAGREE"},
             {adirs_how_many_irs_fully_work() == 0, "TRIPLE IR FAILURE"}
         },
 
@@ -62,11 +64,11 @@ function FBW_law_reconfiguration(var_table)
     }
 
     local abdnormal_condition = {
-        (adirs_get_avg_pitch() > 50 or adirs_get_avg_pitch() < -30)   and (adirs_how_many_irs_partially_work() ~= 0 or adirs_how_many_irs_fully_work() ~= 0)                                  and get(Any_wheel_on_ground) == 0,
-        (adirs_get_avg_roll() > 125 or adirs_get_avg_roll() < -125)   and (adirs_how_many_irs_partially_work() ~= 0 or adirs_how_many_irs_fully_work() ~= 0)                                  and get(Any_wheel_on_ground) == 0,
-        (adirs_get_avg_aoa() > 30 or adirs_get_avg_aoa() < -15)       and (adirs_how_many_irs_fully_work() ~= 0 and adirs_how_many_aoa_disagree() ~= 3 and  adirs_how_many_aoa_failed() ~= 3) and get(Any_wheel_on_ground) == 0,
-        (adirs_get_avg_ias() > 440 or adirs_get_avg_ias() < 80)       and adirs_how_many_adrs_work() ~= 0                                                                                     and get(Any_wheel_on_ground) == 0,
-        adirs_get_avg_mach() > 0.91                                   and adirs_how_many_adrs_work() ~= 0                                                                                     and get(Any_wheel_on_ground) == 0,
+        (adirs_get_avg_pitch() > 50 or adirs_get_avg_pitch() < -30)   and (adirs_how_many_irs_partially_work() ~= 0 or adirs_how_many_irs_fully_work() ~= 0) and get(Any_wheel_on_ground) == 0,
+        (adirs_get_avg_roll() > 125 or adirs_get_avg_roll() < -125)   and (adirs_how_many_irs_partially_work() ~= 0 or adirs_how_many_irs_fully_work() ~= 0) and get(Any_wheel_on_ground) == 0,
+        (adirs_get_avg_aoa() > 30 or adirs_get_avg_aoa() < -10)       and (not adirs_aoa_disagree() and adirs_how_many_aoa_working() ~= 0)                   and get(Any_wheel_on_ground) == 0,
+        (adirs_get_avg_ias() > 440 or adirs_get_avg_ias() < 80)       and adirs_how_many_adrs_work() ~= 0 and not adirs_adr_params_disagree()                and get(Any_wheel_on_ground) == 0,
+        adirs_get_avg_mach() > 0.91                                   and adirs_how_many_adrs_work() ~= 0 and not adirs_adr_params_disagree()                and get(Any_wheel_on_ground) == 0,
     }
 
     --TIMER--
@@ -74,9 +76,7 @@ function FBW_law_reconfiguration(var_table)
 
     --EXIT ABN AFTER 18 SEC OUT
     if (get(All_on_ground) == 1 and get(FBW_vertical_ground_mode_ratio) == 1) or get(Debug_FBW_ABN_LAW_RESET) == 1 then
-        if get(Debug_FBW_ABN_LAW_RESET) == 1 then
-            set(Debug_FBW_ABN_LAW_RESET, 0)
-        end
+        set(Debug_FBW_ABN_LAW_RESET, 0)
         var_table.ABN_LAW_WAS_ACTIVE = false--reset for next flight
     end
     if not var_table.ABN_LAW_WAS_ACTIVE then
@@ -89,7 +89,7 @@ function FBW_law_reconfiguration(var_table)
     end
     --IN ABN TIMER RESET
     for i = 1, #abdnormal_condition do
-        if abdnormal_condition[i] and var_table.in_air_timer >= 1 then
+        if abdnormal_condition[i] and var_table.in_air_timer >= 1 and get(FBW_alt_to_direct_law) == 0 then
             var_table.ABN_LAW_WAS_ACTIVE = true
             var_table.ABNRM_TO_NORM_TIME = 0
         end

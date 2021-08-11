@@ -43,8 +43,8 @@ FBW.fctl.surfaces.rud.trim = {
         Hydraulic_Y_press,
     },
     computer_priority = {
-        {FAC_1_status, FBW.fctl.surfaces.rud.motor.trim[1]},
-        {FAC_2_status, FBW.fctl.surfaces.rud.motor.trim[2]},
+        {FBW.FLT_computer.FAC[1].MON_CHANEL_avail, FBW.fctl.surfaces.rud.motor.trim[1]},
+        {FBW.FLT_computer.FAC[2].MON_CHANEL_avail, FBW.fctl.surfaces.rud.motor.trim[2]},
     },
 }
 FBW.fctl.surfaces.rud.lim = {
@@ -57,8 +57,8 @@ FBW.fctl.surfaces.rud.lim = {
         Hydraulic_Y_press,
     },
     computer_priority = {
-        {FAC_1_status, FBW.fctl.surfaces.rud.motor.limit[1]},
-        {FAC_2_status, FBW.fctl.surfaces.rud.motor.limit[2]},
+        {FBW.FLT_computer.FAC[1].MON_CHANEL_avail, FBW.fctl.surfaces.rud.motor.limit[1]},
+        {FBW.FLT_computer.FAC[2].MON_CHANEL_avail, FBW.fctl.surfaces.rud.motor.limit[2]},
     },
 }
 FBW.fctl.surfaces.rud.rud = {
@@ -73,8 +73,8 @@ FBW.fctl.surfaces.rud.rud = {
         Hydraulic_Y_press,
     },
     computer_priority = {
-        {FAC_1_status, Hydraulic_G_press},
-        {FAC_2_status, Hydraulic_Y_press},
+        {FBW.FLT_computer.FAC[1].MON_CHANEL_avail, Hydraulic_G_press},
+        {FBW.FLT_computer.FAC[2].MON_CHANEL_avail, Hydraulic_Y_press},
     }
 }
 
@@ -100,14 +100,14 @@ end
 
 FBW.fctl.status.RUDDER_LIM_TRIM = function (LIM_TRIM_table)
     local ACTIVE_CTL_PAIRS = 0
-    local ACTIVE_COMPUTER = 0
+    local ACTIVE_MON = 0
     for i = 1, #LIM_TRIM_table.computer_priority do
         --count the number of active computers--
-        if get(LIM_TRIM_table.computer_priority[i][1]) == 1 then
-            ACTIVE_COMPUTER = ACTIVE_COMPUTER + 1
+        if LIM_TRIM_table.computer_priority[i][1]() then
+            ACTIVE_MON = ACTIVE_MON + 1
         end
         --count the number of active control pairs--
-        if get(LIM_TRIM_table.computer_priority[i][1]) == 1 and LIM_TRIM_table.computer_priority[i][2].avail then
+        if LIM_TRIM_table.computer_priority[i][1]() and LIM_TRIM_table.computer_priority[i][2].avail then
             ACTIVE_CTL_PAIRS = ACTIVE_CTL_PAIRS + 1
         end
     end
@@ -126,7 +126,7 @@ FBW.fctl.status.RUDDER_LIM_TRIM = function (LIM_TRIM_table)
     end
 
     --see if data of the system is available--
-    if ACTIVE_COMPUTER >= 1 then
+    if ACTIVE_MON >= 1 then
         LIM_TRIM_table.data_avail = true
     else
         LIM_TRIM_table.data_avail = false
@@ -137,21 +137,21 @@ FBW.fctl.status.RUDDER_LIM_TRIM = function (LIM_TRIM_table)
         print("CONTROLLED:   " .. tostring(LIM_TRIM_table.controlled))
         print("DATA AVIAL:   " .. tostring(LIM_TRIM_table.data_avail))
         print("ACT PAIR:     " .. ACTIVE_CTL_PAIRS)
-        print("ACT COMPUTER: " .. ACTIVE_COMPUTER)
+        print("ACT FAC MON:  " .. ACTIVE_MON)
         print("TOTAL PRESS:  " .. LIM_TRIM_table.total_hyd_press)
     end
 end
 
 FBW.fctl.status.RUDDER = function (RUDDER_TABLE)
     local ACTIVE_CTL_PAIRS = 0
-    local ACTIVE_COMPUTER = 0
+    local ACTIVE_MON = 0
     for i = 1, #RUDDER_TABLE.computer_priority do
         --count the number of active computers--
-        if get(RUDDER_TABLE.computer_priority[i][1]) == 1 then
-            ACTIVE_COMPUTER = ACTIVE_COMPUTER + 1
+        if RUDDER_TABLE.computer_priority[i][1]() then
+            ACTIVE_MON = ACTIVE_MON + 1
         end
         --count the number of active control pairs--
-        if get(RUDDER_TABLE.computer_priority[i][1]) == 1 and get(RUDDER_TABLE.computer_priority[i][2]) >= 1450 then
+        if RUDDER_TABLE.computer_priority[i][1]() and get(RUDDER_TABLE.computer_priority[i][2]) >= 1450 then
             ACTIVE_CTL_PAIRS = ACTIVE_CTL_PAIRS + 1
         end
     end
@@ -176,7 +176,7 @@ FBW.fctl.status.RUDDER = function (RUDDER_TABLE)
     end
 
     --see if data of the surface is available--
-    if ACTIVE_COMPUTER >= 1 then
+    if ACTIVE_MON >= 1 then
         RUDDER_TABLE.data_avail = true
     else
         RUDDER_TABLE.data_avail = false
@@ -189,7 +189,7 @@ FBW.fctl.status.RUDDER = function (RUDDER_TABLE)
         print("MECHANICAL:   " .. tostring(RUDDER_TABLE.mechanical))
         print("DATA AVIAL:   " .. tostring(RUDDER_TABLE.data_avail))
         print("ACT PAIR:     " .. ACTIVE_CTL_PAIRS)
-        print("ACT COMPUTER: " .. ACTIVE_COMPUTER)
+        print("ACT FAC MON:  " .. ACTIVE_MON)
         print("TOTAL PRESS:  " .. RUDDER_TABLE.total_hyd_press)
     end
 end

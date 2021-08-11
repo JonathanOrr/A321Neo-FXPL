@@ -360,54 +360,98 @@ local function voter(field, check_function)
     end
 end
 
-
 ----------------------------------------------------------------------------------------------------
 -- AoA
 ----------------------------------------------------------------------------------------------------
 local function is_aoa_valid(i)
-    if get(ADIRS_sys[i].fail_aoa_dataref) == 1 then
-        return false -- Self-detected
+    local oth1 = (i) % 3 + 1
+    local oth2 = (oth1) % 3 + 1
+    local i_off =    not (ADIRS_sys[i].ir_status    == IR_STATUS_ALIGNED or ADIRS_sys[i].ir_status    == IR_STATUS_ATT_ALIGNED) or get(ADIRS_sys[i].fail_aoa_dataref)    == 1
+    local oth1_off = not (ADIRS_sys[oth1].ir_status == IR_STATUS_ALIGNED or ADIRS_sys[oth1].ir_status == IR_STATUS_ATT_ALIGNED) or get(ADIRS_sys[oth1].fail_aoa_dataref) == 1
+    local oth2_off = not (ADIRS_sys[oth2].ir_status == IR_STATUS_ALIGNED or ADIRS_sys[oth2].ir_status == IR_STATUS_ATT_ALIGNED) or get(ADIRS_sys[oth2].fail_aoa_dataref) == 1
+    local only_one_active = oth1_off and oth2_off
+
+    if i_off then
+        return false -- Self-detected, or shuntdown
     end
 
-    if ADIRS_sys[i].ir_status == IR_STATUS_OFF or ADIRS_sys[i].ir_status == IR_STATUS_FAULT then
-        return false -- Failed or OFF IR
+    if only_one_active then
+        return true --if there is only one IR left, the system can't tell which is correct
     end
 
     local margin = 0.3
 
-    local oth1 = (i) % 3 + 1
-    local oth2 = (oth1) % 3 + 1
     local aoa1 = ADIRS_sys[i].aoa
     local aoa2 = ADIRS_sys[oth1].aoa
     local aoa3 = ADIRS_sys[oth2].aoa
 
-    return math.abs(aoa1 - aoa2) < margin or math.abs(aoa1 - aoa3) < margin
+    local aoa_1v2 = false
+    local aoa_1v3 = false
+
+    if not oth1_off then
+        aoa_1v2 = math.abs(aoa1 - aoa2) < margin
+    end
+    if not oth2_off then
+        aoa_1v3 = math.abs(aoa1 - aoa3) < margin
+    end
+
+    return aoa_1v2 or aoa_1v3
 end
 
 function adirs_get_avg_aoa()
     return voter("aoa", is_aoa_valid)
 end
 
-function adirs_how_many_aoa_disagree()
-    -- This function can return only 0, 1 or 3
-    return (is_aoa_valid(1) and 0 or 1) + (is_aoa_valid(2) and 0 or 1) + (is_aoa_valid(3) and 0 or 1)
+function adirs_how_many_aoa_working()
+    local aoa1 = (ADIRS_sys[1].ir_status == IR_STATUS_ALIGNED or ADIRS_sys[1].ir_status == IR_STATUS_ATT_ALIGNED) and get(FAILURE_SENSOR_AOA_CAPT) == 0
+    local aoa2 = (ADIRS_sys[2].ir_status == IR_STATUS_ALIGNED or ADIRS_sys[2].ir_status == IR_STATUS_ATT_ALIGNED) and get(FAILURE_SENSOR_AOA_FO) == 0
+    local aoa3 = (ADIRS_sys[3].ir_status == IR_STATUS_ALIGNED or ADIRS_sys[3].ir_status == IR_STATUS_ATT_ALIGNED) and get(FAILURE_SENSOR_AOA_STBY) == 0
+
+    return (aoa1 and 1 or 0) + (aoa2 and 1 or 0) + (aoa3 and 1 or 0)
 end
 
-function adirs_how_many_aoa_failed()
-    local aoa1 = not (ADIRS_sys[1].ir_status == IR_STATUS_OFF or ADIRS_sys[1].ir_status == IR_STATUS_FAULT) and get(FAILURE_SENSOR_AOA_CAPT) == 0
-    local aoa2 = not (ADIRS_sys[2].ir_status == IR_STATUS_OFF or ADIRS_sys[2].ir_status == IR_STATUS_FAULT) and get(FAILURE_SENSOR_AOA_FO) == 0
-    local aoa3 = not (ADIRS_sys[3].ir_status == IR_STATUS_OFF or ADIRS_sys[3].ir_status == IR_STATUS_FAULT) and get(FAILURE_SENSOR_AOA_STBY) == 0
+function adirs_aoa_disagree()
+    --check disagreement between working IRs
+    if adirs_how_many_aoa_working() <= 1 then
+        return false
+    end
 
-    return (aoa1 and 0 or 1) + (aoa2 and 0 or 1) + (aoa3 and 0 or 1)
+    local TOTAL_DISAGREE = 0
+
+    if (ADIRS_sys[1].ir_status == IR_STATUS_ALIGNED or ADIRS_sys[1].ir_status == IR_STATUS_ATT_ALIGNED) and get(FAILURE_SENSOR_AOA_CAPT) == 0 then
+        TOTAL_DISAGREE = TOTAL_DISAGREE + (is_aoa_valid(1) and 0 or 1)
+    end
+    if (ADIRS_sys[2].ir_status == IR_STATUS_ALIGNED or ADIRS_sys[2].ir_status == IR_STATUS_ATT_ALIGNED) and get(FAILURE_SENSOR_AOA_FO) == 0 then
+        TOTAL_DISAGREE = TOTAL_DISAGREE + (is_aoa_valid(2) and 0 or 1)
+    end
+    if (ADIRS_sys[3].ir_status == IR_STATUS_ALIGNED or ADIRS_sys[3].ir_status == IR_STATUS_ATT_ALIGNED) and get(FAILURE_SENSOR_AOA_STBY) == 0 then
+        TOTAL_DISAGREE = TOTAL_DISAGREE + (is_aoa_valid(3) and 0 or 1)
+    end
+
+    if TOTAL_DISAGREE >= (adirs_how_many_aoa_working() - 1) then
+        return true
+    else
+        return false
+    end
 end
 
 ----------------------------------------------------------------------------------------------------
 -- ADR
 ----------------------------------------------------------------------------------------------------
 local function is_adr_valid(i)
+    local oth1 = (i) % 3 + 1
+    local oth2 = (oth1) % 3 + 1
+    local i_off =    ADIRS_sys[i].adr_status == ADR_STATUS_OFF    or ADIRS_sys[i].adr_status == ADR_STATUS_FAULT
+    local oth1_off = ADIRS_sys[oth1].adr_status == ADR_STATUS_OFF or ADIRS_sys[oth1].adr_status == ADR_STATUS_FAULT
+    local oth2_off = ADIRS_sys[oth2].adr_status == ADR_STATUS_OFF or ADIRS_sys[oth2].adr_status == ADR_STATUS_FAULT
+    local only_one_active = oth1_off and oth2_off
 
-    if ADIRS_sys[i].adr_status == ADR_STATUS_OFF or ADIRS_sys[i].adr_status == ADR_STATUS_FAULT then
+    if i_off then
         return false -- Failed or OFF ADR
+    end
+
+    if only_one_active then
+        return true --if there is only one ADR left, the system can't tell which is correct
     end
 
     if (i == 1 and get(FAILURE_SENSOR_STATIC_CAPT_ERR) == 1) or
@@ -418,11 +462,8 @@ local function is_adr_valid(i)
                         -- on the pilot input
     end
 
-    local oth1 = (i) % 3 + 1
-    local oth2 = (oth1) % 3 + 1
-
     local ias_margin = 3
-    local ias1 = ADIRS_sys[i].ias
+    local ias1    = ADIRS_sys[i].ias
     local ias2 = ADIRS_sys[oth1].ias
     local ias3 = ADIRS_sys[oth2].ias
 
@@ -431,13 +472,23 @@ local function is_adr_valid(i)
     local mach2 = ADIRS_sys[oth1].mach
     local mach3 = ADIRS_sys[oth2].mach
 
-    local only_one_active = (ADIRS_sys[oth1].adr_status == ADR_STATUS_OFF or ADIRS_sys[oth1].adr_status == ADR_STATUS_FAULT)
-                        and (ADIRS_sys[oth2].adr_status == ADR_STATUS_OFF or ADIRS_sys[oth2].adr_status == ADR_STATUS_FAULT)
+    local ias_1v2 = false
+    local ias_1v3 = false
+    local mach_1v2 = false
+    local mach_1v3 = false
 
-    return ((math.abs(mach1 - mach2) < mach_margin or math.abs(mach1 - mach3) < mach_margin) and
-           (math.abs(ias1  - ias2) < ias_margin   or math.abs(ias1  - ias3) < ias_margin)) or only_one_active
+    if not oth1_off then
+        ias_1v2 =  math.abs(ias1  -  ias2) < ias_margin
+        mach_1v2 = math.abs(mach1 - mach2) < mach_margin
+    end
+    if not oth2_off then
+        ias_1v3 =  math.abs(ias1  -  ias3) < ias_margin
+        mach_1v3 = math.abs(mach1 - mach3) < mach_margin
+    end
+
+    return ((mach_1v2 or mach_1v3) and
+           (ias_1v2   or ias_1v3))
 end
-
 
 function adirs_get_avg_ias()
     return voter("ias", is_adr_valid)
@@ -463,9 +514,31 @@ function adirs_get_avg_mach()
     return voter("mach", is_adr_valid)
 end
 
-function adirs_how_many_adr_params_disagree()
-    -- This function can return only 0, 1 or 3
-    return (is_adr_valid(1) and 0 or 1) + (is_adr_valid(2) and 0 or 1) + (is_adr_valid(3) and 0 or 1)
+function adirs_adr_params_disagree()
+    --check disagreement between working ADRs
+    if adirs_how_many_adrs_work() <= 1 then
+        return false
+    end
+
+    local TOTAL_DISAGREE = 0
+
+    if ADIRS_sys[1].adr_status == ADR_STATUS_ON then
+        TOTAL_DISAGREE = TOTAL_DISAGREE + (is_adr_valid(1) and 0 or 1)
+    end
+    if ADIRS_sys[2].adr_status == ADR_STATUS_ON then
+        TOTAL_DISAGREE = TOTAL_DISAGREE + (is_adr_valid(2) and 0 or 1)
+    end
+    if ADIRS_sys[3].adr_status == ADR_STATUS_ON then
+        TOTAL_DISAGREE = TOTAL_DISAGREE + (is_adr_valid(3) and 0 or 1)
+    end
+
+    if TOTAL_DISAGREE >= (adirs_how_many_adrs_work() - 1) then
+        return true
+    else
+        return false
+    end
+
+    return TOTAL_DISAGREE
 end
 
 ----------------------------------------------------------------------------------------------------
@@ -473,13 +546,20 @@ end
 ----------------------------------------------------------------------------------------------------
 
 local function is_ir_valid(i)
+    local oth1 = (i) % 3 + 1
+    local oth2 = (oth1) % 3 + 1
+    local i_off =    not (ADIRS_sys[i].ir_status    == IR_STATUS_ALIGNED or ADIRS_sys[i].ir_status    == IR_STATUS_ATT_ALIGNED)
+    local oth1_off = not (ADIRS_sys[oth1].ir_status == IR_STATUS_ALIGNED or ADIRS_sys[oth1].ir_status == IR_STATUS_ATT_ALIGNED)
+    local oth2_off = not (ADIRS_sys[oth2].ir_status == IR_STATUS_ALIGNED or ADIRS_sys[oth2].ir_status == IR_STATUS_ATT_ALIGNED)
+    local only_one_active = oth1_off and oth2_off
 
-    if ADIRS_sys[i].ir_status == IR_STATUS_OFF or ADIRS_sys[i].ir_status == IR_STATUS_FAULT then
+    if i_off then
         return false -- Failed or OFF IR
     end
 
-    local oth1 = (i) % 3 + 1
-    local oth2 = (oth1) % 3 + 1
+    if only_one_active then
+        return true --if there is only one IR left, the system can't tell which is correct
+    end
 
     local margin = 5
     local pitch1 = ADIRS_sys[i].pitch
@@ -494,12 +574,27 @@ local function is_ir_valid(i)
     local hdg2 = ADIRS_sys[oth1].hdg
     local hdg3 = ADIRS_sys[oth2].hdg
 
-    local only_one_active = (ADIRS_sys[oth1].ir_status == IR_STATUS_OFF or ADIRS_sys[oth1].ir_status == IR_STATUS_FAULT)
-                        and (ADIRS_sys[oth2].ir_status == IR_STATUS_OFF or ADIRS_sys[oth2].ir_status == IR_STATUS_FAULT)
+    local pitch_1v2 = false
+    local pitch_1v3 = false
+    local roll_1v2 = false
+    local roll_1v3 = false
+    local hdg_1v2 = false
+    local hdg_1v3 = false
 
-    return ((math.abs(pitch1 - pitch2) < margin or math.abs(pitch1 - pitch3) < margin) and
-           (math.abs(roll1  - roll2)  < margin or math.abs(roll1  - roll3) < margin)  and
-           (math.abs(hdg1   - hdg2)  < margin  or math.abs(hdg1   - hdg3) < margin)) or only_one_active
+    if not oth1_off then
+        pitch_1v2 = math.abs(pitch1 - pitch2) < margin
+        roll_1v2 =  math.abs(roll1  -  roll2) < margin
+        hdg_1v2 =   math.abs(hdg1   -   hdg2) < margin
+    end
+    if not oth2_off then
+        pitch_1v3 = math.abs(pitch1 - pitch3) < margin
+        roll_1v3 =  math.abs(roll1  -  roll3) < margin
+        hdg_1v3 =   math.abs(hdg1   -   hdg3) < margin
+    end
+
+    return ((pitch_1v2 or pitch_1v3) and
+           (roll_1v2   or  roll_1v3) and
+           (hdg_1v2    or  hdg_1v3))
 end
 
 function adirs_get_avg_pitch()
@@ -525,11 +620,30 @@ function adirs_get_avg_vpath()
 end
 
 
-function adirs_how_many_ir_params_disagree()
-    -- This function can return only 0, 1 or 3
+function adirs_ir_disagree()
     -- It does not include AoA that is managed with a dedicated function
+    --check disagreement between working IRs
+    if adirs_how_many_irs_partially_work() <= 1 then
+        return false
+    end
 
-    return (is_ir_valid(1) and 0 or 1) + (is_ir_valid(2) and 0 or 1) + (is_ir_valid(3) and 0 or 1)
+    local TOTAL_DISAGREE = 0
+
+    if (ADIRS_sys[1].ir_status == IR_STATUS_ALIGNED or ADIRS_sys[1].ir_status == IR_STATUS_ATT_ALIGNED) then
+        TOTAL_DISAGREE = TOTAL_DISAGREE + (is_ir_valid(1) and 0 or 1)
+    end
+    if (ADIRS_sys[2].ir_status == IR_STATUS_ALIGNED or ADIRS_sys[2].ir_status == IR_STATUS_ATT_ALIGNED) then
+        TOTAL_DISAGREE = TOTAL_DISAGREE + (is_ir_valid(2) and 0 or 1)
+    end
+    if (ADIRS_sys[3].ir_status == IR_STATUS_ALIGNED or ADIRS_sys[3].ir_status == IR_STATUS_ATT_ALIGNED) then
+        TOTAL_DISAGREE = TOTAL_DISAGREE + (is_ir_valid(3) and 0 or 1)
+    end
+
+    if TOTAL_DISAGREE >= (adirs_how_many_irs_partially_work() - 1) then
+        return true
+    else
+        return false
+    end
 end
 
 ----------------------------------------------------------------------------------------------------
