@@ -120,7 +120,7 @@ function FBW_normal_mode_transition(table)
     local trim_reset_begin = get(FBW_vertical_ground_mode_ratio) > 0 and 1 or 0
     local trim_reset_begin_delta = trim_reset_begin - table.Previous_trim_reset_begin
     table.Previous_trim_reset_begin = trim_reset_begin
-    if trim_reset_begin_delta == 1 then
+    if trim_reset_begin_delta == 1 and get(All_on_ground) == 1 then
         set(Augmented_pitch_trim_ratio, 0)
     end
 

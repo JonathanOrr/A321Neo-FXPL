@@ -1,8 +1,8 @@
 function Update_limit_speeds_module_480x160(x_pos, y_pos, variable_table)
     variable_table.left_speeds_names = {"VMAX", "S SPD", "F SPD", "VLS", "A.PROT", "A.MAX"}
     variable_table.right_speeds_names = {"VMAX", "S SPD", "F SPD", "VLS", "A.PROT", "A.MAX"}
-    variable_table.left_values = {VMAX, S_speed, F_speed, VLS, Vaprot_vsw, Valpha_MAX}
-    variable_table.right_values = {VMAX, S_speed, F_speed, VLS, Vaprot_vsw, Valpha_MAX}
+    variable_table.left_values = {VMAX, S_speed, F_speed, VLS, CA_Vaprot_VSW, CA_Valpha_MAX}
+    variable_table.right_values = {VMAX, S_speed, F_speed, VLS, FO_Vaprot_VSW, FO_Valpha_MAX}
     variable_table.left_colors = {RED, GREEN, GREEN, ORANGE, ORANGE, RED}
     variable_table.right_colors = {RED, GREEN, GREEN, ORANGE, ORANGE, RED}
 
@@ -244,13 +244,13 @@ function Draw_limit_speeds_module_480x160(x_pos, y_pos, variable_table)
         sasl.gl.drawText(B612_MONO_bold, CENTER_X, CENTER_Y-30, math.floor(get(VMAX_prot)) .. "KTS", 12, false, false, TEXT_ALIGN_CENTER, RED)
     end
 
-    if adirs_get_avg_ias() <= get(Vaprot_vsw) and adirs_get_avg_ias() > get(Valpha_MAX) then
+    if adirs_get_avg_ias() <= get(FAC_MIXED_Vaprot_VSW) and adirs_get_avg_ias() > get(FAC_MIXED_Valpha_MAX) then
         sasl.gl.drawRectangle(CENTER_X - 40, CENTER_Y-35, 80, 80, LIGHT_GREY)
         sasl.gl.drawText(B612_MONO_bold, CENTER_X, CENTER_Y+30, "A.FLOOR", 12, false, false, TEXT_ALIGN_CENTER, ORANGE)
         sasl.gl.drawText(B612_MONO_bold, CENTER_X, CENTER_Y+10, "COMING UP", 12, false, false, TEXT_ALIGN_CENTER, ORANGE)
     end
 
-    if adirs_get_avg_ias() <= get(Valpha_MAX) then
+    if adirs_get_avg_ias() <= get(FAC_MIXED_Valpha_MAX) then
         sasl.gl.drawRectangle(CENTER_X - 40, CENTER_Y-35, 80, 80, LIGHT_GREY)
         sasl.gl.drawText(B612_MONO_bold, CENTER_X, CENTER_Y+30, "A.MAX", 12, false, false, TEXT_ALIGN_CENTER, RED)
         sasl.gl.drawText(B612_MONO_bold, CENTER_X, CENTER_Y+10, "REACHED", 12, false, false, TEXT_ALIGN_CENTER, RED)

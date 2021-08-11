@@ -480,15 +480,25 @@ F_speed = 	        createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/f_sp
 VFE_speed =         createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/vfe_speed", 0, false, true, false)
 VLS = 		        createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/vls_speed", 0, false, true, false)
 GD =		        createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/green_dot_speed", 0, false, true, false)
-Vaprot_vsw =        createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/alpha_prot_speed", 0, false, true, false)
-Valpha_MAX =        createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/alpha_max_speed", 0, false, true, false)
-Vaprot_vsw_smooth = createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/smooth_alpha_prot_speed", 0, false, true, false)
-Valpha_MAX_smooth = createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/smooth_alpha_max_speed", 0, false, true, false)
+FAC_1_Vaprot_VSW =  createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fac_1_alpha_prot_speed", 0, false, true, false)
+FAC_1_Valpha_MAX =  createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fac_1_alpha_max_speed", 0, false, true, false)
+FAC_2_Vaprot_VSW =  createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fac_2_alpha_prot_speed", 0, false, true, false)
+FAC_2_Valpha_MAX =  createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fac_2_alpha_max_speed", 0, false, true, false)
+CA_Vaprot_VSW =     createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/captain_alpha_prot_speed", 0, false, true, false)
+CA_Valpha_MAX =     createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/captain_alpha_max_speed", 0, false, true, false)
+FO_Vaprot_VSW =     createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/first_officer_alpha_prot_speed", 0, false, true, false)
+FO_Valpha_MAX =     createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/first_officer_alpha_max_speed", 0, false, true, false)
+FAC_MIXED_Vaprot_VSW = createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fac_mixed_alpha_prot_speed", 0, false, true, false)
+FAC_MIXED_Valpha_MAX = createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fac_mixed_alpha_max_speed", 0, false, true, false)
 
 A0_AoA =     createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/alpha_0_aoa", 0, false, true, false)
-Aprot_AoA =  createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/alpha_prot_aoa", 0, false, true, false)
 Afloor_AoA = createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/alpha_floor_aoa", 0, false, true, false)
-Amax_AoA =   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/alpha_max_aoa", 0, false, true, false)
+FAC_1_Aprot_AoA =  createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fac_1_alpha_prot_aoa", 0, false, true, false)
+FAC_2_Aprot_AoA =  createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fac_2_alpha_prot_aoa", 0, false, true, false)
+FAC_1_Amax_AoA =   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fac_1_alpha_max_aoa", 0, false, true, false)
+FAC_2_Amax_AoA =   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fac_2_alpha_max_aoa", 0, false, true, false)
+FAC_MIXED_Aprot_AoA = createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fac_mixed_alpha_prot_aoa", 0, false, true, false)
+FAC_MIXED_Amax_AoA =  createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/fac_mixed_alpha_max_aoa", 0, false, true, false)
 
 Current_VS1G =   createGlobalPropertyf("a321neo/dynamics/FBW/limit_speeds/current_VS1G", 0, false, true, false)
 
@@ -533,6 +543,7 @@ Print_elev_status =                     createGlobalPropertyi("a321neo/dynamics/
 Print_ths_status =                      createGlobalPropertyi("a321neo/dynamics/FBW/debug/print_ths_control_status", 0, false, true, false)
 Print_rud_status =                      createGlobalPropertyi("a321neo/dynamics/FBW/debug/print_rud_control_status", 0, false, true, false)
 Print_print_main_fcc_status =           createGlobalPropertyi("a321neo/dynamics/FBW/debug/print_main_fcc_status", 0, false, true, false)
+Print_mixed_fac_input =                 createGlobalPropertyi("a321neo/dynamics/FBW/debug/print_mixed_fac_input", 0, false, true, false)
 Debug_FBW_law_reconfig = 				createGlobalPropertyi("a321neo/dynamics/FBW/debug/debug_FBW_law_reconfig", 0, false, true, false)
 Debug_FBW_ABN_LAW_RESET = 				createGlobalPropertyi("a321neo/dynamics/FBW/debug/abnormal_law_reset", 0, false, true, false)
 --customizations
@@ -607,9 +618,11 @@ Total_lateral_g_load = globalProperty("sim/flightmodel/forces/g_side")
 Total_long_g_load = globalProperty("sim/flightmodel/forces/g_axil")
 Flightmodel_aero_norm_forces = globalProperty("sim/flightmodel/forces/fnrml_aero")
 Slide_slip_angle = globalProperty("sim/cockpit2/gauges/indicators/sideslip_degrees")
-Filtered_avg_AoA =  createGlobalPropertyf("a321neo/dynamics/FBW/aerodynamics/filtered_avg_aoa", 0, false, true, false)
-Filtered_capt_AoA = createGlobalPropertyf("a321neo/dynamics/FBW/aerodynamics/filtered_capt_AoA", 0, false, true, false)
-Filtered_fo_AoA = 	createGlobalPropertyf("a321neo/dynamics/FBW/aerodynamics/filtered_fo_AoA", 0, false, true, false)
+Filtered_CA_AoA = createGlobalPropertyf("a321neo/dynamics/FBW/aerodynamics/filtered_capt_AoA", 0, false, true, false)
+Filtered_FO_AoA = 	createGlobalPropertyf("a321neo/dynamics/FBW/aerodynamics/filtered_fo_AoA", 0, false, true, false)
+Filtered_FAC_1_AoA = createGlobalPropertyf("a321neo/dynamics/FBW/aerodynamics/filtered_fac_1_AoA", 0, false, true, false)
+Filtered_FAC_2_AoA = createGlobalPropertyf("a321neo/dynamics/FBW/aerodynamics/filtered_fac_2_AoA", 0, false, true, false)
+Filtered_FAC_MIXED_AoA = createGlobalPropertyf("a321neo/dynamics/FBW/aerodynamics/filtered_mixed_AoA", 0, false, true, false)
 --FBW system status--
 FBW_total_control_law = createGlobalPropertyi("a321neo/dynamics/FBW/system_status/total_control_law", 0, false, true, false)   -- -2 mechanical backup law, -1 abnormal law, 0 direct law, 1 alternate law, 2 alternate law(reduced prot), 3 normal law
 FBW_lateral_law =       createGlobalPropertyi("a321neo/dynamics/FBW/system_status/lateral_control_law", 0, false, true, false) -- -2 mechanical backup law, -1 abnormal law, 0 direct law,                  							   3 normal law (abnormal law / alt law doesn't exist)
@@ -704,7 +717,7 @@ Rudder_btm =   globalProperty("sim/flightmodel/controls/vstab1_rud1def")--rudder
 Rudder_top =   globalProperty("sim/flightmodel/controls/vstab2_rud2def")--rudder 30 deg left -30 deg right
 Rudder_total = createGlobalPropertyf("a321neo/dynamics/FBW/surfaces/total_rudder_def", 0, false, true, false)-- left rudder 30 deg left -30 deg right
 Rudder_travel_lim = createGlobalPropertyf("a321neo/dynamics/FBW/control_limitations/rudder_travel_limit", 25, false, true, false)--25 degrees in augmented mode, 30 degrees in mechanical mode
-Max_SI_demand_lim = createGlobalPropertyf("a321neo/dynamics/FBW/control_limitations/max_SI_demand_lim", 25, false, true, false)--from 15 degrees to 2 degrees
+Max_beta_demand_lim = createGlobalPropertyf("a321neo/dynamics/FBW/control_limitations/max_SI_demand_lim", 25, false, true, false)--from 15 degrees to 2 degrees
 Rudder_pedal_angle = createGlobalPropertyf("a321neo/dynamics/FBW/controls/rudder_pedals_angle", 0, false, true, false)  -- -20, 0, 20
 
 

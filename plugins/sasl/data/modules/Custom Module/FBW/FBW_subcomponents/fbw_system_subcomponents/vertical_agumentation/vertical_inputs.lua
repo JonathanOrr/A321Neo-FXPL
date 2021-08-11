@@ -71,7 +71,7 @@ FBW.vertical.inputs = {
             --REDUCED PROT--
             if get(FBW_vertical_law) == FBW_ALT_REDUCED_PROT_LAW then
                 INPUT_X = FBW.vertical.protections.ALT_prot.VMAX(INPUT_X)
-                INPUT_X = FBW.vertical.protections.ALT_prot.VLS(INPUT_X)
+                INPUT_X = FBW.vertical.protections.ALT_prot.VSW(INPUT_X)
             end
 
             --convert sidestick to G load

@@ -8,7 +8,7 @@ local function draw_accel_arrow(x, y, PFD_table)
     if PFD_table.Show_spd_trend and math.abs(adirs_get_ias_trend(PFD_table.Screen_ID) * 10) < 1 then
         PFD_table.Show_spd_trend = false
     end
-    if get(PFD_table.Corresponding_FAC_status) == 0 and get(PFD_table.Opposite_FAC_status) == 0 then
+    if not PFD_table.FAC_SPD_LIM_AVAIL() then
         PFD_table.Show_spd_trend = false
     end
 
@@ -24,16 +24,16 @@ end
 
 local function draw_characteristics_spd(x, y, PFD_table)
     --SPD LIM flag
-    if (get(PFD_table.Corresponding_FAC_status) == 0 and get(PFD_table.Opposite_FAC_status) == 0) or (get(SFCC_1_status) == 0 and get(SFCC_2_status) == 0) then
+    if not PFD_table.FAC_SPD_LIM_AVAIL() or (get(SFCC_1_status) == 0 and get(SFCC_2_status) == 0) then
         sasl.gl.drawText(Font_AirbusDUL, x + size[1]/2-295, y + size[2]/2-200, "SPD", 42, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
         sasl.gl.drawText(Font_AirbusDUL, x + size[1]/2-295, y + size[2]/2-235, "LIM", 42, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
     end
 
-    if get(PFD_table.Corresponding_FAC_status) == 0 and get(PFD_table.Opposite_FAC_status) == 0 then
+    if not PFD_table.FAC_SPD_LIM_AVAIL() then
         return
     end
 
-    if PFD_table.PFD_aircraft_in_air_timer >= 10 then
+    if PFD_table.PFD_SPD_LIM_timer >= 10 then
         --let Aprot cover it with the mask
         sasl.gl.drawMaskStart ()
         --aprot
@@ -50,7 +50,7 @@ local function draw_characteristics_spd(x, y, PFD_table)
     end
 
     --show alpha based speed when in fly by wire flight mode
-    if PFD_table.PFD_aircraft_in_air_timer >= 0.7 then
+    if PFD_table.PFD_SPD_LIM_timer >= 0.7 then
         if get(FBW_total_control_law) == 3 then
             --aprot
             sasl.gl.drawTexture(

@@ -9,6 +9,8 @@ local DARK_GREY = {0.1568, 0.1803, 0.2039}
 
 local FD_button_color = LIGHT_GREY
 local FD_button_text = "ENABLE"
+local bank_button_color = LIGHT_GREY
+local bank_button_text = "ENABLE"
 
 --fonts
 local B612_MONO_regular = sasl.gl.loadFont("fonts/B612Mono-Regular.ttf")
@@ -34,6 +36,7 @@ local FD_roll = 0
 local FD_pitch_delta = 0
 local FD_roll_delta = 0
 
+local maintain_bank = createGlobalPropertyi("a32nx/debug/maintain_bank", 0, false, true, false)
 local FD_activated = createGlobalPropertyi("a32nx/debug/fd_activated", 0, false, true, false)
 local target_hdg = createGlobalPropertyi("a32nx/debug/target_hdg", 180, false, true, false)
 local target_vs = createGlobalPropertyi("a32nx/debug/target_vs", 0, false, true, false)
@@ -49,6 +52,10 @@ function onMouseDown ( component , x , y , button , parentX , parentY )
         --toggle FD--
         if x >= 3 * size[1] / 4 - 80 and x <= 3 * size[1] / 4 - 80+160 and y >= 20 and y <= 20+40 then
             set(FD_activated, 1 - get(FD_activated))
+        end
+        --toggle bank--
+        if x >= 3 * size[1] / 4 - 80 and x <= 3 * size[1] / 4 - 80+160 and y >= 80 and y <= 80+40 then
+            set(maintain_bank, 1 - get(maintain_bank))
         end
     end
 end
@@ -89,7 +96,13 @@ function update()
     end
 
     if get(DELTA_TIME) ~= 0 then
-        FD_roll = Set_linear_anim_value(FD_roll, FBW_PID_BP(Bank_angle_PID_array, compute_hdg_delta(get(aircraft_heading), get(target_hdg)), get(aircraft_heading)), -25, 25, 10)
+        if get(maintain_bank) == 0 then
+            FD_roll = Set_linear_anim_value(FD_roll, FBW_PID_BP(Bank_angle_PID_array, compute_hdg_delta(get(aircraft_heading), get(target_hdg)), get(aircraft_heading)), -25, 25, 10)
+            A32nx_stick_roll.P_gain = 1
+        else
+            FD_roll = Set_linear_anim_value(FD_roll, 0, -25, 25, 10)
+            A32nx_stick_roll.P_gain = 2.5
+        end
         FD_pitch = Set_linear_anim_value(FD_pitch, FBW_PID_BP(Pitch_PID_array, get(target_vs) - get(vvi), get(vvi)), -25, 25, 10)
         Pitch_PID_array.Actual_output = get(aircraft_pitch)
 
@@ -119,6 +132,13 @@ function update()
         FD_button_color = LIGHT_GREY
         FD_button_text = "ENABLE"
     end
+    if get(maintain_bank) == 1 then
+        bank_button_color = RED
+        bank_button_text = "DISABLE"
+    else
+        bank_button_color = LIGHT_GREY
+        bank_button_text = "ENABLE"
+    end
 end
 
 function draw()
@@ -147,6 +167,8 @@ function draw()
     sasl.gl.drawText(B612_MONO_regular, 7 * size[1]/8, size[2]/2 + 40, "TARGET V/S", 12, false, false, TEXT_ALIGN_CENTER, WHITE)
     sasl.gl.drawText(B612_MONO_bold,    7 * size[1]/8, size[2]/2, get(target_vs), 40, false, false, TEXT_ALIGN_CENTER, WHITE)
 
+    sasl.gl.drawRectangle(3 * size[1] / 4 - 80, 80, 160, 40, bank_button_color)
     sasl.gl.drawRectangle(3 * size[1] / 4 - 80, 20, 160, 40, FD_button_color)
+    sasl.gl.drawText(B612_MONO_bold, 3 * size[1] / 4, 90, bank_button_text, 25, false, false, TEXT_ALIGN_CENTER, WHITE)
     sasl.gl.drawText(B612_MONO_bold, 3 * size[1] / 4, 30, FD_button_text, 25, false, false, TEXT_ALIGN_CENTER, WHITE)
 end
