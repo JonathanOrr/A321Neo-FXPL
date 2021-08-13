@@ -175,14 +175,14 @@ MessageGroup_IRS_ALIGN = {
                 end
             
                 local minutes = math.floor(time_max / 60)
-                if get(EWD_flight_phase) <= 2 then
+                if get(EWD_flight_phase) <= PHASE_1ST_ENG_ON then
                     return "IRS IN ALIGN " .. minutes .. " MN"
                 else
                     return "IRS IN ALIGN"
                 end
             end,
             color = function(self)
-                if get(EWD_flight_phase) <= 1 then
+                if get(EWD_flight_phase) <= PHASE_ELEC_PWR then
                     return COL_INDICATION
                 else
                     return COL_CAUTION                

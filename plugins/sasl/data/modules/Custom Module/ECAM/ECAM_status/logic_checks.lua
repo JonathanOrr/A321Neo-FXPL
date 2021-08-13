@@ -36,7 +36,7 @@ end
 
 function engine_shuts_down()
     return (get(Engine_1_master_switch) == 0 and get(EWD_flight_phase) >= PHASE_ABOVE_80_KTS and get(EWD_flight_phase) <= PHASE_TOUCHDOWN)
-    or ((get(EWD_flight_phase) < 3 or get(EWD_flight_phase) > 8) and get(Fire_pb_ENG1_status) == 1)
+    or ((get(EWD_flight_phase) < PHASE_1ST_ENG_TO_PWR or get(EWD_flight_phase) > PHASE_TOUCHDOWN) and get(Fire_pb_ENG1_status) == 1)
 end
 
 function spdbrk_3_and_4_fault() --fcom 5231

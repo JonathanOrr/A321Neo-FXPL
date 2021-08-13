@@ -163,7 +163,7 @@ local function draw_fuel_usage_and_ff()
     fuel_usage_2 = fuel_usage_2 - fuel_usage_2 % 10
     local fuel_usage_tot = fuel_usage_1 + fuel_usage_2
 
-    local color = get(EWD_flight_phase) >= 2 and ECAM_GREEN or ECAM_WHITE
+    local color = get(EWD_flight_phase) >= PHASE_1ST_ENG_ON and ECAM_GREEN or ECAM_WHITE
 
     sasl.gl.drawText(Font_AirbusDUL, size[2]/2-220, size[2]-110, fuel_usage_1, 36, false, false, TEXT_ALIGN_CENTER, color)
     sasl.gl.drawText(Font_AirbusDUL, size[2]/2+220, size[2]-110, fuel_usage_2, 36, false, false, TEXT_ALIGN_CENTER, color)
