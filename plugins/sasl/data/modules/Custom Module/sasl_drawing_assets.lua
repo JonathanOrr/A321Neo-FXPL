@@ -17,8 +17,6 @@
 -------------------------------------------------------------------------------
 
 --EWD
-EWD_background_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EWD/background.png")
-EWD_engine_xx_img =  sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EWD/ENG_XX.png")
 EWD_slat_img =       sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EWD/slat.png")
 EWD_flap_img =       sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EWD/flap.png")
 EWD_slat_to_go_img = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EWD/slattogo.png")

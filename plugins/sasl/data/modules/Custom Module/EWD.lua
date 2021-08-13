@@ -718,7 +718,6 @@ end
 -------------------------------------------------------------------------------
 
 local function draw_ewd()
-    --sasl.gl.drawTexture(EWD_background_img, 0, 0, 900, 900, {1, 1, 1})
     draw_fixed_objects()
     draw_extra_indication()
     if ENG.data_is_loaded then
