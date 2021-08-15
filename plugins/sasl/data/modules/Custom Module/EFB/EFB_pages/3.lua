@@ -191,7 +191,7 @@ end
 
 local function draw_slider_corresponding_values()
     local passenger_weight = Round(slider_actual_values[1],1)
-    local passenger_number = tostring(Round(slider_actual_values[1]/WEIGHT_PER_PASSENGER,0).." PPL")
+    local passenger_number = tostring(Round(slider_actual_values[1]/WEIGHT_PER_PASSENGER,0).." PAX")
     local fwd_cargo_weight = slider_actual_values[3]
     local aft_cargo_weight = slider_actual_values[4]
     local bulk_cargo_weight = slider_actual_values[5]
@@ -313,7 +313,7 @@ end
 local function set_values()
     touched_sliders_after_loading = false
     local CG_effect = (1-slider_actual_values[1]/WEIGHT_MAX_PASSENGERS)/2
-    WEIGHTS.set_passengers_weight(slider_actual_values[1] ,(slider_actual_values[2]-0.5) * CG_effect + 0.5)
+    WEIGHTS.set_passengers_weight(Round(slider_actual_values[1]/WEIGHT_PER_PASSENGER,0)*WEIGHT_PER_PASSENGER ,(slider_actual_values[2]-0.5) * CG_effect + 0.5)
     WEIGHTS.set_fwd_cargo_weight(slider_actual_values[3])
     WEIGHTS.set_aft_cargo_weight(slider_actual_values[4])
     WEIGHTS.set_bulk_cargo_weight(slider_actual_values[5])

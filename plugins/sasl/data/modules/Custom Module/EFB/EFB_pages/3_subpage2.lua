@@ -20,14 +20,20 @@ local displayed_flex_corr = 0
 local displayed_mtow_corr = 0
 local displayed_rwy_length = 0
 
-local dropdown_expanded = {false, false, false, false, false, false}
-local dropdown_names = {EFB_LOAD_s2_dropdown1, EFB_LOAD_s2_dropdown2, EFB_LOAD_s2_dropdown3, EFB_LOAD_s2_dropdown4, EFB_LOAD_s2_dropdown5, EFB_LOAD_s2_dropdown6}
-local dropdown_current = {"1+F", "TOGA", "DRY", "ON", "OFF", "OFF"}
+local dropdown_1 = {"FLAPS 1+F", "FLAPS 2", "FLAPS 3"}
+local dropdown_2 = {"TOGA", "FLEX"}
+local dropdown_3 = {"DRY", "WET"}
+local dropdown_4 = {"ON", "OFF"}
+local dropdown_5 = {"ON", "OFF"}
+local dropdown_6 = {"ON", "OFF"}
+local dropdown_expanded = {false,false,false,false,false,false}
+local dropdown_selected = {1,1,1,1,#dropdown_5,#dropdown_6}
 
 include("EFB/efb_topcat.lua")
 
 local flaps_table = {"1+F", 2, 3}
 ---------------------------------------------------------------------------------------------------------------------------------
+
 
 local function draw_no_dep_data()
     if deparr_apts[1] == "" then
@@ -35,10 +41,6 @@ local function draw_no_dep_data()
         drawTextCentered(Font_Airbus_panel,  572, 360, "NO DEPARTURE DATA", 30, false, false, TEXT_ALIGN_CENTER, EFB_WHITE)
         drawTextCentered(Font_Airbus_panel,  572, 333, "RETURN TO PAGE 3 SUBPAGE 1", 20, false, false, TEXT_ALIGN_CENTER, EFB_WHITE)
     end
-end
-
-local function compute_flaps()
-    set(LOAD_flapssetting, 1)
 end
 
 local function fetch_wind_data()
@@ -103,17 +105,23 @@ local function refresh_data_reminder()
 end
 
 local function refresh_data()
+
+    --request data from the topcat
+    local flex_temp, flex_temp_corr = flex_calculation(dropdown_selected[4],dropdown_selected[5],dropdown_selected[6])
+    local mtwo_decrease = mtow_decrease_calculation(dropdown_selected[4],dropdown_selected[5],dropdown_selected[6])
+    local v1, vr, v2 = vspeeds_calculation(dropdown_selected[1], dropdown_selected[3])
+
     displayed_zfw =Round(get(Gross_weight) - get(FOB), 0)
     displayed_zfwcg = "HENRICK FIX THIS"
     displayed_block_fuel = Round(get(FOB), 0) --see variables created inside draw lop in page 3 subpage 1
-    displayed_v1 = computed_v1
-    displayed_vr = computed_vr
-    displayed_v2 = computed_v2
-    displayed_flaps = flaps_table[get(LOAD_flapssetting)]
-    displayed_flex = get(LOAD_thrustto) == 0 and "NO FLEX" or flex_temp
+    displayed_v1 = v1
+    displayed_vr = vr
+    displayed_v2 = v2
+    displayed_flaps = flaps_table[dropdown_selected[1]]
+    displayed_flex = dropdown_selected[2] == 1 and "NO FLEX" or flex_temp
     displayed_tow = Round(get(Gross_weight),0)
-    displayed_flex_corr = get(LOAD_thrustto) == 0 and "N/A" or get(LOAD_total_flex_correction) 
-    displayed_mtow_corr = Round(math.abs(get(LOAD_total_mtow_correction)), -2)
+    displayed_flex_corr = dropdown_selected[2] == 1 and "N/A" or flex_temp_corr
+    displayed_mtow_corr = Round(math.abs(mtwo_decrease), -2)
     if get(TOPCAT_torwy_length) ~= 0 then
         displayed_rwy_length = Round(get(TOPCAT_torwy_length),-1)
     else
@@ -140,23 +148,34 @@ local dropdown_location = {
     {609,422,158,52},
 }
 
-local function draw_dropdowns()
-    for i, v in ipairs(dropdown_expanded) do
-        if dropdown_expanded[i] then
-            sasl.gl.drawTexture (dropdown_names[i] , dropdown_location[i][1] , dropdown_location[i][2] , dropdown_location[i][3] , dropdown_location[i][4] , EFB_WHITE )
+local function p3s2_dropdown_buttons( x,y,w,h, table, identifier)
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, x - w/2, y-h/2,x + w/2, y + h/2,function ()
+        dropdown_expanded[identifier] = not dropdown_expanded[identifier]
+    end)
+    for i=1, #table do
+        if dropdown_expanded[identifier] then
+            Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, x - w/2 + 5, y - h*i - 14, w-10 + ( x - w/2 + 5), h-2 + ( y - h*i - 14),function ()
+                dropdown_selected[identifier] = i
+                dropdown_expanded[identifier] = false
+            end)
         end
+    end
+    if dropdown_expanded[identifier] then
+        I_hate_button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, x - w/2, y-h/2,x + w/2, y + h/2,function ()
+            dropdown_expanded[identifier] = false
+        end)
     end
 end
 
-local function draw_dropdown_selected_items()
-    drawTextCentered( Font_Airbus_panel , 482 , 594, dropdown_current[1]  , 19 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
-    drawTextCentered( Font_Airbus_panel , 727 , 594, dropdown_current[2]  , 19 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
-    drawTextCentered( Font_Airbus_panel , 960 , 594, dropdown_current[3]  , 19 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
-    drawTextCentered( Font_Airbus_panel , 197 , 487, dropdown_current[4]  , 19 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
-    drawTextCentered( Font_Airbus_panel , 430 , 487, dropdown_current[5]  , 19 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
-    drawTextCentered( Font_Airbus_panel , 689 , 487, dropdown_current[6]  , 19 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
-
+local function draw_dropdowns()
+    draw_dropdown_menu(688, 487, 155, 28,       EFB_DROPDOWN_OUTSIDE, EFB_DROPDOWN_INSIDE, dropdown_4, dropdown_expanded[6], dropdown_selected[6])
+    draw_dropdown_menu(432, 487, 155, 28,       EFB_DROPDOWN_OUTSIDE, EFB_DROPDOWN_INSIDE, dropdown_4, dropdown_expanded[5], dropdown_selected[5])
+    draw_dropdown_menu(194, 487, 155, 28,       EFB_DROPDOWN_OUTSIDE, EFB_DROPDOWN_INSIDE, dropdown_4, dropdown_expanded[4], dropdown_selected[4])
+    draw_dropdown_menu(960, 594, 155, 28,       EFB_DROPDOWN_OUTSIDE, EFB_DROPDOWN_INSIDE, dropdown_3, dropdown_expanded[3], dropdown_selected[3])
+    draw_dropdown_menu(720, 594, 155, 28,       EFB_DROPDOWN_OUTSIDE, EFB_DROPDOWN_INSIDE, dropdown_2, dropdown_expanded[2], dropdown_selected[2])
+    draw_dropdown_menu(480, 594, 155, 28,       EFB_DROPDOWN_OUTSIDE, EFB_DROPDOWN_INSIDE, dropdown_1, dropdown_expanded[1], dropdown_selected[1])
 end
+
 
 local function close_menu(number)
     dropdown_expanded[number] = false
@@ -190,125 +209,13 @@ function p3s2_buttons()
         -----------------------------------put this at the bottom
         refresh_data()
     end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 663, 115, 936, 147,function () --SEND TO MCDU
-        send_data_button_begin = get(TIME)
-    end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 401, 580, 588, 609,function () --DROPDOWN 1 EXPAND
-        dropdown_expanded[1] = not dropdown_expanded[1]
-    end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 644, 580, 830, 609,function () --DROPDOWN 2 EXPAND
-        dropdown_expanded[2] = not dropdown_expanded[2]
-    end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 877, 580, 1062, 609,function () --DROPDOWN 3 EXPAND
-        dropdown_expanded[3] = not dropdown_expanded[3]
-    end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 114, 473, 302, 503,function () --DROPDOWN 3 EXPAND
-        dropdown_expanded[4] = not dropdown_expanded[4]
-    end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 348, 473, 495, 503,function () --DROPDOWN 3 EXPAND
-        dropdown_expanded[5] = not dropdown_expanded[5]
-    end)
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 609, 473, 794, 503,function () --DROPDOWN 3 EXPAND
-        dropdown_expanded[6] = not dropdown_expanded[6]
-    end)
 
-
-    if dropdown_expanded[1] then
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 403, 553, 560, 580,function () --DROPDOWN 3 EXPAND
-            dropdown_current[1] = "1+F"
-            set(LOAD_flapssetting, 1)
-            close_menu(1)
-        end)
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 403, 529, 560, 553,function () --DROPDOWN 3 EXPAND
-            dropdown_current[1] = "2"
-            set(LOAD_flapssetting, 2)
-            close_menu(1)
-        end)
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 403, 501, 560, 529,function () --DROPDOWN 3 EXPAND
-            dropdown_current[1] = "3"
-            set(LOAD_flapssetting, 3)
-            close_menu(1)
-        end)
-        I_hate_button_check_and_action (EFB_CURSOR_X, EFB_CURSOR_Y, 401, 501, 559, 608,function () --DROPDOWN 3 EXPAND
-            close_menu(1)
-        end)
-
-    elseif dropdown_expanded[2] then
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 645, 556, 802, 580,function () --DROPDOWN 3 EXPAND
-            dropdown_current[2] = "TOGA"
-            set(LOAD_thrustto, 0)
-            close_menu(2)
-        end)
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 645, 529, 802, 556,function () --DROPDOWN 3 EXPAND
-            dropdown_current[2] = "FLEX"
-            set(LOAD_thrustto, 1)
-            close_menu(2)
-        end)
-        I_hate_button_check_and_action (EFB_CURSOR_X, EFB_CURSOR_Y, 645, 529, 802, 608,function () --DROPDOWN 3 EXPAND
-            close_menu(2)
-        end)
-
-
-    elseif dropdown_expanded[3] then
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 878, 556, 1034, 580,function () --DROPDOWN 3 EXPAND
-            dropdown_current[3] = "DRY"
-            set(LOAD_runwaycond, 0)
-            close_menu(3)
-        end)
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 878, 529, 1034, 556,function () --DROPDOWN 3 EXPAND
-            dropdown_current[3] = "WET"
-            set(LOAD_runwaycond, 1)
-            close_menu(3)
-        end)
-        I_hate_button_check_and_action (EFB_CURSOR_X, EFB_CURSOR_Y,877, 529, 1035, 608, function () --DROPDOWN 3 EXPAND
-            close_menu(3)
-        end)
-
-    elseif dropdown_expanded[4] then
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 114, 449, 272, 475,function () --DROPDOWN 3 EXPAND
-            dropdown_current[4] = "ON"
-            set(LOAD_aircon , 1)
-            close_menu(4)
-        end)
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 114, 423, 272, 449,function () --DROPDOWN 3 EXPAND
-            dropdown_current[4] = "OFF"
-            set(LOAD_aircon , 0)
-            close_menu(4)
-        end)
-        I_hate_button_check_and_action (EFB_CURSOR_X, EFB_CURSOR_Y,114, 423, 272, 501, function () --DROPDOWN 3 EXPAND
-            close_menu(4)
-        end)
-        
-    elseif dropdown_expanded[5] then
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 349, 449, 506, 475,function () --DROPDOWN 3 EXPAND
-            dropdown_current[5] = "ON"
-            set(LOAD_eng_aice, 1)
-            close_menu(5)
-        end)
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 349, 423, 506, 449,function () --DROPDOWN 3 EXPAND
-            dropdown_current[5] = "OFF"
-            set(LOAD_eng_aice, 0)
-            close_menu(5)
-        end)
-        I_hate_button_check_and_action (EFB_CURSOR_X, EFB_CURSOR_Y,349, 423, 506, 501,function () --DROPDOWN 3 EXPAND
-            close_menu(5)
-        end)
-
-    elseif dropdown_expanded[6] then
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 609, 449, 766, 475,function () --DROPDOWN 3 EXPAND
-            dropdown_current[6] = "ON"
-            set(LOAD_all_aice, 1)
-            close_menu(6)
-        end)
-        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 609, 423, 766, 449,function () --DROPDOWN 3 EXPAND
-            dropdown_current[6] = "OFF"
-            set(LOAD_all_aice, 0)
-            close_menu(6)
-        end)
-        I_hate_button_check_and_action (EFB_CURSOR_X, EFB_CURSOR_Y,609, 423, 766, 501,function () --DROPDOWN 3 EXPAND
-            close_menu(6)
-        end)
-    end
+    p3s2_dropdown_buttons(480, 594, 155, 28, dropdown_1, 1)
+    p3s2_dropdown_buttons(720, 594, 155, 28, dropdown_2, 2)
+    p3s2_dropdown_buttons(960, 594, 155, 28, dropdown_3, 3)
+    p3s2_dropdown_buttons(194, 487, 155, 28, dropdown_4, 4)
+    p3s2_dropdown_buttons(432, 487, 155, 28, dropdown_5, 5)
+    p3s2_dropdown_buttons(688, 487, 155, 28, dropdown_6, 6)
 end
 
 --UPDATE LOOPS--
@@ -323,9 +230,8 @@ function p3s2_draw()
     draw_column_2_values()
     draw_column_3_values()
     refresh_data_reminder()
-    draw_dropdowns()
-    draw_dropdown_selected_items()
     draw_qnh_oat()
+    draw_dropdowns()
     draw_no_dep_data()
 end
 

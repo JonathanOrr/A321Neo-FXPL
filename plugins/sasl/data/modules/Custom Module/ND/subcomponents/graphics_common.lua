@@ -344,7 +344,7 @@ local function draw_common_messages_top(data)
     end
     
     if data.misc.hdg_discrepancy then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, 670, "CHECK HDG", 48, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, 670, "CHECK HDG", 32, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
     
     local other_side = data.id == ND_CAPT and "FO" or "CAPT" 

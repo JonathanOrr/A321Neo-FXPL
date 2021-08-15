@@ -65,7 +65,7 @@ BEGIN_SOUND_ATTACHMENT
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
-  EVENT_NAME /Ground Roll
+  EVENT_NAME /Ground Roll 2/Nose
   VEH_XYZ 0 0 0
   EVENT_ALWAYS
   PARAM_DREF_IDX 0
@@ -2757,7 +2757,7 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /Packs
   VEH_XYZ -1.4 2.5 0
   EVENT_START_COND 	a321neo/dynamics/packs/l_pack_flow > 0
-    EVENT_START_COND 	a321neo/dynamics/packs/r_pack_flow > 0
+  EVENT_START_COND 	a321neo/dynamics/packs/r_pack_flow > 0
   CUE_TRIGGER_COND  a321neo/dynamics/packs/l_pack_flow == 0
 END_SOUND_ATTACHMENT
 
