@@ -322,7 +322,8 @@ Eng_1_Firewall_valve = createGlobalPropertyi("a321neo/dynamics/engines/eng_1_fir
 Eng_2_Firewall_valve = createGlobalPropertyi("a321neo/dynamics/engines/eng_2_firewall_valve_2", 1, false, true, false) -- 0 open, 1 - closed, 2 : transit - firewall valve
 
 Eng_spool_time = globalProperty("sim/aircraft/engine/acf_spooltime_turbine")
-Eng_is_spooling_up  = createGlobalPropertyia("a321neo/dynamics/engines/is_spooling_up", 2)
+Eng_is_spooling_up  = createGlobalPropertyia("a321neo/dynamics/engines/is_spooling_up", 2) -- cranking
+Eng_starter_valve_open  = createGlobalPropertyia("a321neo/dynamics/engines/sav_open", 2)  -- valve open time exceeds spool up so we need a separate property
 
 Eng_is_failed = createGlobalPropertyia("a321neo/dynamics/engines/eng_failed", 2) -- There's a special condition for this
 

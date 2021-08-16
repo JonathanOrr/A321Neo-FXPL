@@ -79,6 +79,7 @@ local eng_EGT_off = {get(OTA),get(OTA)}   -- EGT for startup procedure
 
 local slow_start_time_requested = false
 local igniter_eng = {0,0}
+local starter_valve_eng = {0,0}
 local windmill_min_speed = {250 + math.random()*30, 250 + math.random()*30}
 
 -- Engine startup cooling stuffs
@@ -461,17 +462,21 @@ local function perform_crank_procedure(eng, wet_cranking)
         -- Dry cranking
         eng_FF_off[eng] = 0
     end
-    
+    starter_valve_eng[eng] = 1 -- during cranking the starter valve is open
 end
 
 local function perform_starting_procedure_follow_n2(eng)
     -- This is PHASE 2
 
     set(eng_mixture, 0, eng) -- No mixture in this phase
+    -- TODO we have to switch the bleed valve symbol on eng page to on during start up based on some condition
+    -- TODO according SIA technical training manual, igniters will be activated when N2 > 18% which does not correspond to N2 tables at the moment
     if igniter_eng[eng] == 0 and not eng_manual_switch[eng] then
         igniter_eng[eng] = math.random() > 0.5 and 1 or 2  -- For ECAM visualization only, no practical effect
+        starter_valve_eng[eng] = 1
     elseif eng_manual_switch[eng] then
         igniter_eng[eng] = 3  -- Manual start uses both igniters
+        starter_valve_eng[eng] = 1 -- TODO is valve open on manual start?
     end
 
     set(Eng_is_spooling_up, 1, eng) -- Need for bleed air computation, see packs.lua
@@ -517,7 +522,6 @@ local function perform_starting_procedure_follow_n1(eng)
     set(eng_mixture, 1, eng)  -- Mixture in this phase
     set(eng_igniters, 1, eng) -- and igniters as well
 
-
     for i=1,(#ENG.data.startup.n1-1) do
         -- For each phase...
         
@@ -555,6 +559,8 @@ local function perform_starting_procedure_follow_n1(eng)
         -- engine will go over the minimum idle
         set(eng_igniters, 0, eng)
         igniter_eng[eng] = 0
+        starter_valve_eng[eng] = 0
+
     end
 end
 
@@ -571,7 +577,7 @@ local function perform_starting_procedure(eng, inflight_restart)
         eng_N1_off[eng] = eng == 1 and get(Eng_1_N1) or get(Eng_2_N1)
     end
     
-    -- If the N2 is larger than 10, then we can start the real startup procedure
+    -- If the N2 powered by bleed so far is larger than 10, then we can start the real startup procedure
     if eng_N2_off[eng] < ENG.data.startup.n2[#ENG.data.startup.n2].n2_start and not inflight_restart then  -- 1st phase, but not inflight_restart
 
         -- Oh yes, this is a funny thing. You need to set this dataref to 100 to cheat X-Plane
@@ -584,6 +590,8 @@ local function perform_starting_procedure(eng, inflight_restart)
         
     elseif eng_N1_off[eng] < ENG.data.startup.n1[#ENG.data.startup.n1].n1_set and get(FAILURE_ENG_HUNG_START, eng) == 0 then
         -- Phase 3: Controlling the N1
+        --   in a ENG_HUNG_START failure, N2 will stay at the last entry of N2 startup table with N1 following N2
+        --   and then exceeding startup timeout will eventually trigger ECAM
         perform_starting_procedure_follow_n1(eng)
     else
         -- Yeeeh engine ready
@@ -600,7 +608,13 @@ local function update_starter_datarefs()
     
     set(Ecam_eng_igniter_eng_1, igniter_eng[1])
     set(Ecam_eng_igniter_eng_2, igniter_eng[2])
-    
+
+    -- TODO for first iteration we just synchronize the starter valve with igniters.
+    -- We add dependency on cranking and slight switching delay later
+    set(Eng_starter_valve_open, starter_valve_eng[1],1)
+    set(Eng_starter_valve_open, starter_valve_eng[2],2)
+
+    -- TODO for how long bleed air consumption will be influenced? Why is spooling up resetted here?
     set(Eng_is_spooling_up, 0, 1) -- Need for bleed air computation, see packs.lua
     set(Eng_is_spooling_up, 0, 2) -- Need for bleed air computation, see packs.lua
  
@@ -759,7 +773,7 @@ local function update_startup()
         end
     end
     
-    -- CASE 3: No ignition, no crank, engine is off of shutting down
+    -- CASE 3: No ignition, no crank, engine is off or shutting down
     if get(Engine_1_avail) == 0  and require_cooldown[1] then    -- Turn off the engine
         -- Set N2 to zero
         local n2_target = get(IAS) > 50 and 10 + get(IAS)/10 + random_pool_1*2 or 0 -- In in-flight it rotates
@@ -772,6 +786,7 @@ local function update_startup()
         eng_N1_off[1] = Set_linear_anim_value(eng_N1_off[1], 0, 0, ENG.data.max_n2, 2)
         set(eng_igniters, 0, 1)
         igniter_eng[1] = 0
+        starter_valve_eng[1] = 0
     end
     if get(Engine_2_avail) == 0 and require_cooldown[2] then    -- Turn off the engine
         -- Set N2 to zero
@@ -785,6 +800,7 @@ local function update_startup()
         eng_N1_off[2] = Set_linear_anim_value(eng_N1_off[2], 0, 0, ENG.data.max_n2, 2)
         set(eng_igniters, 0, 2)
         igniter_eng[2] = 0
+        starter_valve_eng[2] = 0
     end
 
 end

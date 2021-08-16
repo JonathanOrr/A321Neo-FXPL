@@ -67,10 +67,13 @@ local function pulse_green(condition)
 end
 
 local function get_press_red_limit(n2)
+    -- TODO if N2 is < 10 this will has to be calculated in some other way TBC with manuals/sim
+    if n2 < 15 then return 5 end
     return ENG.data.display.oil_press_low_red[1] + ENG.data.display.oil_press_low_red[2] * n2
 end
 
 local function get_press_amber_limit(n2)
+    if n2 < 15 then return 7 end
     return ENG.data.display.oil_press_low_amber[1] + ENG.data.display.oil_press_low_amber[2] * n2
 end
 
@@ -98,6 +101,7 @@ local function draw_oil_qt_press_temp_eng_1()
               params.eng1_oil_press < ENG.data.display.oil_press_low_adv
               )
 
+        -- TODO in lower N2 range this seems to be not the correct formula to compute the limits?
         local press_red_limit = get_press_red_limit(get(Eng_1_N2))
         local press_amber_limit = get_press_amber_limit(get(Eng_1_N2))
 
@@ -148,7 +152,7 @@ local function draw_oil_qt_press_temp_eng_2()
               )
 
         local press_red_limit = get_press_red_limit(get(Eng_2_N2))
-        local press_amber_limit = get_press_amber_limit(get(Eng_1_N2))
+        local press_amber_limit = get_press_amber_limit(get(Eng_2_N2))
 
         if params.eng2_oil_press < press_red_limit then
             eng_2_oil_color = ECAM_RED
@@ -325,7 +329,7 @@ local function draw_needle_and_valves()
 
         draw_arcs_limits(size[1]/2-189, size[2]/2+78, oil_angle_red, oil_angle_amber, oil_angle, false)
 
-        SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_ENG_valve_img, size[1]/2-190, size[2]/2-272, 128, 80, 2, get(ENG_1_bleed_switch) == 1 and 2 or 1, ECAM_GREEN)
+        SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_ENG_valve_img, size[1]/2-190, size[2]/2-272, 128, 80, 2, get(Eng_starter_valve_open,1) == 1 and 2 or 1, ECAM_GREEN)
     end
     
     if xx_statuses[2] then
@@ -342,7 +346,7 @@ local function draw_needle_and_valves()
 
         draw_arcs_limits(size[1]/2+189, size[2]/2+78, oil_angle_red, oil_angle_amber, oil_angle, false)
 
-        SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_ENG_valve_img, size[1]/2+190, size[2]/2-272, 128, 80, 2, get(ENG_2_bleed_switch) == 1 and 2 or 1, ECAM_GREEN)
+        SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_ENG_valve_img, size[1]/2+190, size[2]/2-272, 128, 80, 2, get(Eng_starter_valve_open,2) == 1 and 2 or 1, ECAM_GREEN)
     end
 end
 
@@ -366,7 +370,11 @@ local function draw_eng_bgd()
     drawTextCentered(Font_ECAMfont, 450, 478, "°C", 30, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
     drawTextCentered(Font_ECAMfont, 450, 398, "VIB N1", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
     drawTextCentered(Font_ECAMfont, 450+30, 360, "N2", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    drawTextCentered(Font_ECAMfont, 450, 258, "IGN", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    -- draw IGN only, if eng mode is in start position TODO check valve/gauge display conditions
+    if(get(Engine_mode_knob) == 1) then
+        drawTextCentered(Font_ECAMfont, 450, 258, "IGN", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    end
+    -- TODO NAC temperature advisory threshold reached - draw engine nacelle temperature indication
     drawTextCentered(Font_ECAMfont, 450, 150, "PSI", 30, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
 
     drawTextCentered(Font_ECAMfont, 93, 870, "ENGINE", 44, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
