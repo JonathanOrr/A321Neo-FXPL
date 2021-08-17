@@ -81,6 +81,9 @@
 {78b8fd51-ea07-41b0-8e7a-6c6325c9a885} event:/Engines V2/HowlEnd
 {202a02c2-878b-40e8-ad75-a500bd51d2bb} event:/Engines V2/HowlLogic
 {e6a2abbe-7c23-46e2-9a42-26283e21c906} event:/Engines V2/HowlLogicR
+{1b6e849a-36b8-4051-ab44-6cf7bf826a5c} event:/Engines V2 PW1100G/EnginesL
+{4d1db343-0876-449e-be12-1c03c1e015f4} event:/Engines V2 PW1100G/EnginesR
+{3d34c4f6-8517-4a2f-8415-73bf979fa1c5} event:/Engines V2 PW1100G/EnginesTestbed
 {4103ca70-07d5-4dc2-babf-bf9aa8111a0d} event:/Engines V3 LEAP/Boom
 {0401a595-e036-484a-9a97-ef19f151ce96} event:/Engines V3 LEAP/Engine Start Ext
 {6194f9e1-393c-46be-9623-345f2e882efc} event:/Engines V3 LEAP/Engine Start N2 L
@@ -283,6 +286,7 @@
 {751f5066-4651-4afb-a410-4cb9db0894c9} bus:/Master/Exterior Unprocessed/Avionics/Interior
 {d8526059-b27c-4eae-9b14-a1ee1cb3dfa1} bus:/Master/Exterior Unprocessed/Avionics/Radios
 {77575f3b-b9cd-4bff-9056-637cff744a14} bus:/Master/Exterior Unprocessed/Avionics/UI
+{dd132ea2-eeb1-43a4-b83e-4177c68b7bd9} bus:/Master/Exterior Unprocessed/ENGN
 {7a0b49ba-aead-4c30-af12-561f455d9c0b} bus:/Master/Exterior Unprocessed/EXTR
 {317897e4-8970-4c6d-bb3a-7280ebb8060f} bus:/Master/Exterior Unprocessed/GNDRL
 {28180a05-2279-4e52-a471-e0f09c876cab} bus:/Master/Exterior Unprocessed/GPWS

@@ -432,8 +432,7 @@ end
 
 local function draw_avionics_bay_standby()
     if avionics_bay_is_initialising then
-        sasl.gl.drawRectangle ( 0 , 0 , 1143, 710, EFB_BACKGROUND_COLOUR)
-        drawTextCentered(Font_Airbus_panel,  572, 355, "INITIALISING AVIONICS BAY", 30, false, false, TEXT_ALIGN_CENTER, EFB_WHITE)
+        draw_standby_screen("INITIALISING AVIONICS BAY....")
     end
 end
 
@@ -540,11 +539,11 @@ end
 
 local function draw_dropdowns()
     if string.len(key_p3s1_buffer) > 0 then --THE PURPOSE OF THIS IFELSE IS TO PREVENT THE CURSOR FROM COVERING UP THE PREVIOUS VALUE, WHEN THE SCRATCHPAD IS EMPTY.
-        drawTextCentered( Font_Airbus_panel , 116 , 578, key_p3s1_focus == 7 and key_p3s1_buffer or deparr_apts[1] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
-        drawTextCentered( Font_Airbus_panel , 403 , 578, key_p3s1_focus == 8 and key_p3s1_buffer or deparr_apts[2] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
+        drawTextCentered( Font_ECAMfont , 116 , 578, key_p3s1_focus == 7 and key_p3s1_buffer or deparr_apts[1] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
+        drawTextCentered( Font_ECAMfont , 403 , 578, key_p3s1_focus == 8 and key_p3s1_buffer or deparr_apts[2] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
     else
-        drawTextCentered( Font_Airbus_panel , 116 , 578, deparr_apts[1] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
-        drawTextCentered( Font_Airbus_panel , 403 , 578, deparr_apts[2] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
+        drawTextCentered( Font_ECAMfont , 116 , 578, deparr_apts[1] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
+        drawTextCentered( Font_ECAMfont , 403 , 578, deparr_apts[2] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
     end
 
     draw_dropdown_menu(230, 578, 90, 28, EFB_DROPDOWN_OUTSIDE, EFB_DROPDOWN_INSIDE, dropdown_1, dropdown_expanded[1], dropdown_selected[1])

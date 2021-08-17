@@ -71,3 +71,28 @@ end
 function istable(t) 
     return type(t) == 'table'
  end
+
+local STANDBY_SCREEN_COLOURS = {
+    {0.800, 0.600 ,1.000},
+    {0.663, 0.820 ,0.969},
+    {0.706, 0.941 ,0.655},
+    {1.000, 1.000 ,0.749},
+    {1.000, 0.694 ,0.694},
+}
+
+function draw_standby_screen(onscreen_message)
+    sasl.gl.drawRectangle ( 0 , 0 , 1143, 710, EFB_BACKGROUND_COLOUR)
+
+    local center_point = {1143/2, 380}
+    local rotation_degrees = (100*get(TIME))%360
+    local radius = 70 + math.sin(get(TIME)*3) * 20
+
+    for i=1,5 do
+        local x = Get_rotated_point_x_pos(center_point[1], radius,  rotation_degrees + i * 72 )
+        local y = Get_rotated_point_y_pos(center_point[2], radius,  rotation_degrees + i * 72 )
+        sasl.gl.drawCircle(x, y, 13, true, STANDBY_SCREEN_COLOURS[i])
+    end
+
+    drawTextCentered(Font_Airbus_panel,  50, 105, "PLEASE WAIT", 25, false, false, TEXT_ALIGN_LEFT, EFB_LIGHTGREY)
+    drawTextCentered(Font_Airbus_panel,  50, 70, onscreen_message, 30, false, false, TEXT_ALIGN_LEFT, EFB_WHITE)
+end

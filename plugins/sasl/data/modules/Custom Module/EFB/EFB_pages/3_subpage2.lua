@@ -1,6 +1,11 @@
 local BUTTON_PRESS_TIME = 0.5
+local WAITING_SCREEN_TIME = 1.6
+
+-----------------------------------------------
+
 local refresh_button_begin = 0
 local send_data_button_begin = 0
+local waiting_screen_begin = 0
 
 --column 1 displayed data
 local displayed_zfw = 0
@@ -49,6 +54,12 @@ end
 
 local function draw_background()
     sasl.gl.drawTexture (EFB_LOAD_s2_bgd, 0 , 0 , 1143 , 800 , EFB_WHITE )
+end
+
+local function draw_standby()
+    if get(TIME) - waiting_screen_begin < WAITING_SCREEN_TIME then
+        draw_standby_screen("CALCULATING....")
+    end
 end
 
 local function draw_buttons()
@@ -148,6 +159,7 @@ local dropdown_location = {
     {609,422,158,52},
 }
 
+
 local function p3s2_dropdown_buttons( x,y,w,h, table, identifier)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, x - w/2, y-h/2,x + w/2, y + h/2,function ()
         dropdown_expanded[identifier] = not dropdown_expanded[identifier]
@@ -203,6 +215,7 @@ end
 --MOUSE & BUTTONS--
 function p3s2_buttons()
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 206, 115, 480, 147,function () --refresh
+        waiting_screen_begin = get(TIME)
         refresh_button_begin = get(TIME)
         execute_takeoff_performance() --see bottom of topcat script
         fetch_wind_data()
@@ -232,6 +245,7 @@ function p3s2_draw()
     refresh_data_reminder()
     draw_qnh_oat()
     draw_dropdowns()
+    draw_standby()
     draw_no_dep_data()
 end
 
