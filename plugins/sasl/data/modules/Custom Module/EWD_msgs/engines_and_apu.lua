@@ -660,7 +660,7 @@ MessageGroup_ENG_1_FIRE_GROUND = {
     },
 
     is_active = function()
-        return get(FAILURE_FIRE_ENG_1) == 1 and FIRE_sys.eng[1].still_on_fire and get(All_on_ground) == 1
+        return (( get(FAILURE_FIRE_ENG_1) == 1 and FIRE_sys.eng[1].still_on_fire) or FIRE_sys.eng[1].on_test)  and get(All_on_ground) == 1
     end,
 
     is_inhibited = function()
@@ -698,7 +698,7 @@ MessageGroup_ENG_2_FIRE_GROUND = {
     },
 
     is_active = function()
-        return get(FAILURE_FIRE_ENG_2) == 1 and FIRE_sys.eng[2].still_on_fire and get(All_on_ground) == 1
+        return (( get(FAILURE_FIRE_ENG_2) == 1 and FIRE_sys.eng[2].still_on_fire) or FIRE_sys.eng[2].on_test)  and get(All_on_ground) == 1
     end,
 
     is_inhibited = function()

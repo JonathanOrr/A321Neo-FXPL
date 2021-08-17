@@ -349,7 +349,7 @@ end
 
 local function draw_engines_extra()
 
-    -- N2 background box --
+    -- N2 grey background box -- show as long ENG is starting up but not fully available
     if get(Engine_1_master_switch) == 1 and get(Engine_1_avail) == 0 and get(EWD_engine_1_XX) == 0 then
           sasl.gl.drawRectangle(size[1]/2-210, size[2]/2+70, 85, 32, {0.2,0.2,0.2})
     end
@@ -360,7 +360,6 @@ local function draw_engines_extra()
     if get(EWD_engine_1_XX) == 0 then
         --N2--
         local n2_color_1 = params.eng1_n2 > 117 and ECAM_RED or ECAM_GREEN
-        -- TODO draw box with grey background in lower N2 range?
         sasl.gl.drawText(Font_ECAMfont, size[1]/2-145, size[2]/2+75, math.floor(params.eng1_n2) .. "." , 30, false, false, TEXT_ALIGN_RIGHT, n2_color_1)
         sasl.gl.drawText(Font_ECAMfont, size[1]/2-130, size[2]/2+75, math.floor((params.eng1_n2%1)*10) , 24, false, false, TEXT_ALIGN_RIGHT, n2_color_1)
 
