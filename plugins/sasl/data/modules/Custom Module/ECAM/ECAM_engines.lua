@@ -226,7 +226,7 @@ end
 
 local function draw_bleed()
     local bleed_1_press_color = get(L_bleed_press) < BLEED_MIN_LIMIT and ECAM_ORANGE or ECAM_GREEN
-    local bleed_2_press_color = get(L_bleed_press) < BLEED_MIN_LIMIT and ECAM_ORANGE or ECAM_GREEN
+    local bleed_2_press_color = get(R_bleed_press) < BLEED_MIN_LIMIT and ECAM_ORANGE or ECAM_GREEN
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-188, 136, math.floor(get(L_bleed_press)), 36, false, false, TEXT_ALIGN_CENTER, bleed_1_press_color)
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2+192, 136, math.floor(get(R_bleed_press)), 36, false, false, TEXT_ALIGN_CENTER, bleed_2_press_color)
 end
