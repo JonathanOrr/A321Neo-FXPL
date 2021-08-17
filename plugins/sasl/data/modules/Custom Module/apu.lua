@@ -25,14 +25,15 @@
 ----------------------------------------------------------------------------------------------------
 
 local FLAP_OPEN_TIME_SEC = 20
+local FLAP_CLOSE_N2 = 5         -- flap does not close immediately on master switch off but based on N2
 local APU_START_WAIT_TIME = 5
 local APU_TEST_TIME = 20
 
 ----------------------------------------------------------------------------------------------------
 -- Global variables
 ----------------------------------------------------------------------------------------------------
-local master_switch_status  = false
-local master_switch_disabled_time = 0
+local master_switch_status  = false    -- master switch is a toggle push button, actual status controlled by logic
+local master_switch_disabled_time = 0  -- startup and shutdown sequence is driven by some timers for some situations
 local master_switch_enabled_time = 0
 local start_requested = false
 local master_is_on_time = 0
@@ -142,11 +143,12 @@ end
 
 local function update_apu_flap()
     local elec_ok = get(DC_bat_bus_pwrd) == 1
-
+    local apu_n1 = get(Apu_N1)
     if master_switch_status and elec_ok then
         if get(TIME) - master_switch_enabled_time > FLAP_OPEN_TIME_SEC then
             set(APU_flap, 1)
         else
+            -- flap open delay not yet reached, keep it closed TODO what kind of power consumption is added here?
             ELEC_sys.add_power_consumption(ELEC_BUS_DC_BAT_BUS, 1, 2)   -- Guess
             set(APU_flap, 0)
         end
@@ -159,7 +161,8 @@ local function update_apu_flap()
                 ELEC_sys.add_power_consumption(ELEC_BUS_DC_BAT_BUS, 1, 2)   -- Guess
             end
         end
-        set(APU_flap, 0)
+        -- APU flap closes only below a certain N1, see https://www.youtube.com/watch?v=Ye8y90KD1JA
+        if apu_n1 < FLAP_CLOSE_N2 then set(APU_flap, 0) end
     end
 end
 
@@ -197,7 +200,9 @@ end
 local function update_off_status()
 
     if master_switch_disabled_time ~= 0 then
+        -- master switch turned off some time before
         if get(TIME) - master_switch_disabled_time > 60 or not PB.ovhd.ac_bleed_apu.status_bottom then
+            -- in case APU bleed has been used actual shutdown will be delayed
             master_switch_status = false
             master_switch_disabled_time = 0
         end
