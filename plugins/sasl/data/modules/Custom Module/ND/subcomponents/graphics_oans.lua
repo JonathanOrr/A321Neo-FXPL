@@ -508,6 +508,13 @@ function draw_oans_go(data, functions, apt, apt_details)
 
 end
 
+
+
+----------------------------------------------------------- HENRICK'S OANS MENU TESTBED
+
+
+-----------------------------------------------------------
+
 function draw_oans(data, functions)
     assert(data)
 
@@ -560,6 +567,9 @@ function draw_oans(data, functions)
     draw_oans_go(data, functions, apt, apt_details)
 
     data.misc.please_wait = false  -- If we reached this point, the the OANS is actually drawn
+
+
+
 end
 
 
