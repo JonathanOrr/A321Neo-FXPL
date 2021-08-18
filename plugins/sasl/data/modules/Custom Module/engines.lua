@@ -160,6 +160,14 @@ function engines_mode_down(phase)
     return 1
 end
 
+-- to support TCA quadrant switch we need to explicitly set the mode
+function engines_mode(phase,mode)
+    if phase == SASL_COMMAND_BEGIN then
+        set(Engine_mode_knob, mode)
+    end
+    return 1
+end
+
 ----------------------------------------------------------------------------------------------------
 -- Commands
 ----------------------------------------------------------------------------------------------------
@@ -169,10 +177,18 @@ sasl.registerCommandHandler (ENG_cmd_dual_cooling,    0, function(phase) if phas
 
 sasl.registerCommandHandler (ENG_cmd_master_toggle_1, 0, function(phase) if phase == SASL_COMMAND_BEGIN then set(Engine_1_master_switch, 1-get(Engine_1_master_switch)) end end )
 sasl.registerCommandHandler (ENG_cmd_master_toggle_2, 0, function(phase) if phase == SASL_COMMAND_BEGIN then set(Engine_2_master_switch, 1-get(Engine_2_master_switch)) end end )
-
+-- Airbus TCA support
+sasl.registerCommandHandler (ENG_cmd_master_on_1, 0, function(phase) if phase == SASL_COMMAND_BEGIN then set(Engine_1_master_switch, 1) end end )
+sasl.registerCommandHandler (ENG_cmd_master_off_1, 0, function(phase) if phase == SASL_COMMAND_BEGIN then set(Engine_1_master_switch, 0) end end )
+sasl.registerCommandHandler (ENG_cmd_master_on_2, 0, function(phase) if phase == SASL_COMMAND_BEGIN then set(Engine_2_master_switch, 1) end end )
+sasl.registerCommandHandler (ENG_cmd_master_off_2, 0, function(phase) if phase == SASL_COMMAND_BEGIN then set(Engine_2_master_switch, 0) end end )
 
 sasl.registerCommandHandler (ENG_cmd_mode_up,            0, function(phase) engines_mode_up(phase) end)
 sasl.registerCommandHandler (ENG_cmd_mode_down,          0, function(phase) engines_mode_down(phase) end)
+-- Airbus TCA support
+sasl.registerCommandHandler (ENG_cmd_mode_ignite,        0, function(phase) engines_mode(phase,1) end)
+sasl.registerCommandHandler (ENG_cmd_mode_norm,          0, function(phase) engines_mode(phase,0) end)
+sasl.registerCommandHandler (ENG_cmd_mode_crank,         0, function(phase) engines_mode(phase,-1) end)
 sasl.registerCommandHandler (sasl.findCommand("sim/operation/auto_start"),  1, engines_auto_slow_start )
 sasl.registerCommandHandler (sasl.findCommand("sim/operation/quick_start"), 1, engines_auto_quick_start )
 
