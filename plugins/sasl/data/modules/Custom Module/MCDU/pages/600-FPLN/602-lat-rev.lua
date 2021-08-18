@@ -32,19 +32,23 @@ function THIS_PAGE:render(mcdu_data)
     --                          .type = 1 -- ORIGIN, 2 -- WPT, 3 -- PPOS, 4 -- DEST
     --                          .data
 
-    local subject_id = lrtype == TYPE_PPOS and "PPOS" or mcdu_data.lat_rev_subject.data.id
+    local subject_id, lat, lon
+    if lrtype == TYPE_PPOS then
+        subject_id = "PPOS"
+        if GPS_sys[1].status == GPS_STATUS_NAV or GPS_sys[2].status == GPS_STATUS_NAV then
+            lat,lon = get(Aircraft_lat), get(Aircraft_long)
+        end
+    else
+        subject_id = mcdu_data.lat_rev_subject.data.id
+        lat,lon = mcdu_data.lat_rev_subject.data.lat, mcdu_data.lat_rev_subject.data.lon
+    end
+
+    assert(subject_id)
 
     self:set_multi_title(mcdu_data, {
         {txt="LAT REV " .. mcdu_format_force_to_small("FROM").."      ", col=ECAM_WHITE, size=MCDU_LARGE},
         {txt="             " .. subject_id, col=main_col, size=MCDU_LARGE}
     })
-
-    local lat, lon
-    if lrtype == TYPE_PPOS and (GPS_sys[1].status == GPS_STATUS_NAV or GPS_sys[2].status == GPS_STATUS_NAV) then
-        lat,lon = get(Aircraft_lat), get(Aircraft_long)
-    elseif lrtype ~= TYPE_PPOS then
-        lat,lon = mcdu_data.lat_rev_subject.data.lat, mcdu_data.lat_rev_subject.data.lon
-    end
 
     if lat then
         self:set_line(mcdu_data, MCDU_CENTER, 1, mcdu_lat_lon_to_str(lat, lon), MCDU_SMALL, main_col)
@@ -122,7 +126,7 @@ function THIS_PAGE:render(mcdu_data)
     -------------------------------------
     -- RIGHT 5
     -------------------------------------
-    if lrtype == TYPE_DEST then
+    if lrtype == TYPE_WPT then
         self:set_line(mcdu_data, MCDU_RIGHT, 5, "AIRWAYS>", MCDU_LARGE)
     end
 

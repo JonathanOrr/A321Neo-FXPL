@@ -194,6 +194,7 @@ function THIS_PAGE:render_list(mcdu_data)
                     -- to the array (see prepare_list)
         elseif x.point_type ~= POINT_TYPE_LEG then
             local name, proc = cifp_convert_leg_name(x)
+            x.id = name -- This is necessary for the LAT REV page
             if #proc == 0 then
                 proc = mcdu_data.page_data[600].curr_fpln.apts.dep_sid.proc_name
             end
@@ -382,17 +383,19 @@ local function trigger_lat_rev(mcdu_data, id)
 
         local obj = mcdu_data.page_data[600].ref_lines[id]
 
-        if mcdu_data.clr then
+        if mcdu_data.clr then   -- A clear is requested
             local table_obj = point_get_table(mcdu_data, obj.point_type)
             table.remove(table_obj, obj.ref_id)
 
         elseif false then -- TODO new point
 
-        else
+        elseif not obj.discontinuity then
             mcdu_data.lat_rev_subject = {}
             mcdu_data.lat_rev_subject.type = 2 -- WPT
             mcdu_data.lat_rev_subject.data = obj
-            --mcdu_open_page(mcdu_data, 602)
+            mcdu_open_page(mcdu_data, 602)
+        else
+            return false
         end
         return true
     end
