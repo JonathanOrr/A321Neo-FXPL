@@ -69,7 +69,16 @@ sasl.registerCommandHandler (Toggle_park_brake, 0, function(phase) Toggle_parkbr
 sasl.registerCommandHandler (Toggle_park_brake_XP, 0, function(phase) Toggle_parkbrake(phase) end)
 sasl.registerCommandHandler (Toggle_brake_regular_XP, 0, function(phase) Toggle_regular(phase) end)
 sasl.registerCommandHandler (Push_brake_regular_XP, 0, function(phase) Braking_regular(phase) end)
+-- Airbus TCA support
+sasl.registerCommandHandler (TCA_park_brake_set, 0, function(phase) Set_parkbrake(phase) end)
 
+function Set_parkbrake(phase)
+  if phase == SASL_COMMAND_CONTINUE then
+        set(Parkbrake_switch_pos, 1)
+    else
+        set(Parkbrake_switch_pos, 0)
+    end  
+end
 
 function Toggle_parkbrake(phase)
     if phase == SASL_COMMAND_BEGIN then
