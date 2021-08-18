@@ -27,8 +27,6 @@ nd_data = new_dataset(ND_CAPT)
 ND_all_data[ND_CAPT] = nd_data
 
 local skip_1st_frame_AA = true
-
-
 function draw()
 
     perf_measure_start("CAPT_ND:draw()")
