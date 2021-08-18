@@ -98,7 +98,7 @@ end
 function update_route()
 
     if true then
-        return -- Disabled in the master branch for now
+        --return -- Disabled in the master branch for now
     end
 
     -- Disable for testing
@@ -113,7 +113,8 @@ function update_route()
         if not FMGS_sys.fpln.active.apts.dep_sid then
             if not FMGS_sys.fpln.temp then
                 FMGS_set_apt_dep("LIML")
-                FMGS_set_apt_arr("LIRF")
+                FMGS_set_apt_arr("VABB")
+                FMGS_set_apt_alt("LIMC")
                 FMGS_create_temp_fpln()
                 FMGS_dep_set_rwy(FMGS_sys.fpln.temp.apts.dep.rwys[1], true)
                 logInfo("DEBUG F/PLN is active: LOADED 1/2")
@@ -121,6 +122,7 @@ function update_route()
             if FMGS_sys.fpln.temp.apts.dep_cifp then
                 FMGS_dep_set_sid(FMGS_sys.fpln.temp.apts.dep_cifp.sids[49])
                 FMGS_dep_set_trans(FMGS_sys.fpln.temp.apts.dep_cifp.sids[50])
+                FMGS_reshape_temp_fpln()
                 FMGS_insert_temp_fpln()
                 logInfo("DEBUG F/PLN is active: LOADED 1/2")
             end
