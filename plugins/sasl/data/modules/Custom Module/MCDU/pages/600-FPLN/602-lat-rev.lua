@@ -28,6 +28,17 @@ function THIS_PAGE:render(mcdu_data)
     local main_col = FMGS_does_temp_fpln_exist() and ECAM_YELLOW or ECAM_GREEN
     local lrtype = mcdu_data.lat_rev_subject.type
 
+    if not mcdu_data.page_data[602] then
+        mcdu_data.page_data[602] = {}
+    end
+
+    if mcdu_data.page_data[602].waiting_next_wpt then
+        if not mcdu_data.dup_names.not_found and mcdu_data.dup_names.selected_navaid then
+            -- TODO: Add the new navaid
+            print(mcdu_data.dup_names.selected_navaid)
+        end
+    end
+
     -- mcdu_data.lat_rev_subject
     --                          .type = 1 -- ORIGIN, 2 -- WPT, 3 -- PPOS, 4 -- DEST
     --                          .data
@@ -146,6 +157,22 @@ function THIS_PAGE:R1(mcdu_data)
         mcdu_open_page(mcdu_data, 605)
     else
         MCDU_Page:R1(mcdu_data) -- Error
+    end
+end
+
+function THIS_PAGE:R3(mcdu_data)
+    if mcdu_data.lat_rev_subject.type ~= TYPE_PPOS then
+        local input = mcdu_get_entry(mcdu_data)
+        if #input > 0 and #input < 6 then
+            mcdu_data.dup_names.req_text = input
+            mcdu_data.dup_names.return_page = 602
+            mcdu_data.page_data[602].waiting_next_wpt = true
+            mcdu_open_page(mcdu_data, 610)
+        else
+            mcdu_send_message(mcdu_data, "FORMAT ERROR")
+        end
+    else
+        MCDU_Page:R3(mcdu_data) -- Error
     end
 end
 
