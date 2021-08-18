@@ -36,10 +36,12 @@ local skip_1st_frame_AA = true
 ---------------------------------------------------------------------------------------
 
 local oans_menu = { 
-    selected_page = 1,
-    highlighted_page = 0, -- make it 0 when the mouse is not hovering
+    selected_page = 2,
+    highlighted_page = 2, -- make it 0 when the mouse is not hovering
     page_1_data = {
-        selected_facility = 4,
+        selected_facility = 1,
+        highlighted_facility = 0,
+
         dropdown_1 = {
             expanded = false,
             scroller_ratio = 0,
@@ -47,6 +49,7 @@ local oans_menu = {
             line_1 = "H",
             line_2 = "I",
             line_3 = "J",
+            highlighted_line = 0,
         },
         dropdown_2 = {
             expanded = false,
@@ -55,12 +58,14 @@ local oans_menu = {
             line_1 = "JONON",
             line_2 = "GONOW",
             line_3 = "MODEL",
+            highlighted_line = 0,
         },
         available_options = {
             addcross = true,
             addflag = true,
             ldgshift = true,
-            centermap = true
+            centermap = true,
+            highlighted = 0 -- in order like above 1-4, 1 is addcross, 4 is centermap
         }
     }
 }
@@ -79,7 +84,9 @@ end
 
 local function ND_OANS_page_1(table)
     
-    sasl.gl.drawArc(170, 28 + ( 5 - table.page_1_data.selected_facility-1) * 31 , 0, 10, 0, 360, ECAM_BLUE)
+    if table.page_1_data.selected_facility ~= 0 then
+        sasl.gl.drawArc(170, 28 + ( 5 - table.page_1_data.selected_facility-1) * 31 , 0, 10, 0, 360, ECAM_BLUE)
+    end
 
     local selection_text = {"RWY", "TWY", "STAND", "OTHER"}
     for i=1,4 do
@@ -161,6 +168,29 @@ local function ND_OANS_page_1(table)
 
     sasl.gl.drawText(Font_Airbus_panel, 678+114,44+71, "ADD", 21, false, false, TEXT_ALIGN_CENTER, table.page_1_data.available_options.addflag and ECAM_WHITE or ECAM_HIGH_GREY )
     sasl.gl.drawText(Font_Airbus_panel, 678+114,44+71-21, "FLAG", 21, false, false, TEXT_ALIGN_CENTER, table.page_1_data.available_options.addflag and ECAM_WHITE or ECAM_HIGH_GREY )
+
+    local a = table.page_1_data.available_options.highlighted --this is those 4 boxes on the right
+    if a == 1 then
+        Sasl_DrawWideFrame(628, 15, 101, 51,3,1,ECAM_BLUE)
+    elseif a == 2 then
+        Sasl_DrawWideFrame(743, 15, 101, 51,3,1,ECAM_BLUE)
+    elseif a == 3 then
+        Sasl_DrawWideFrame(628, 86, 101, 51,3,1,ECAM_BLUE)
+    elseif a == 4 then
+        Sasl_DrawWideFrame(743, 86, 101, 51,3,1,ECAM_BLUE)
+    end
+
+    if table.page_1_data.highlighted_facility ~= 0 then
+        Sasl_DrawWideFrame(153, 15 + (4-table.page_1_data.highlighted_facility) * 31, 123, 25, 3, 1, ECAM_BLUE)
+    end
+
+    if table.page_1_data.dropdown_1.highlighted_line ~= 0 and table.page_1_data.dropdown_1.expanded then
+        Sasl_DrawWideFrame(301, 9 + (3 - table.page_1_data.dropdown_1.highlighted_line) * 31, 35, 28, 3, 1, ECAM_BLUE)
+    end
+
+    if table.page_1_data.dropdown_2.highlighted_line ~= 0 and table.page_1_data.dropdown_2.expanded then
+        Sasl_DrawWideFrame(416, 9 + (3 - table.page_1_data.dropdown_2.highlighted_line) * 31, 130, 28, 3, 1, ECAM_BLUE)
+    end
 end
 
 function ND_OANS_draw_menu(table)
@@ -210,13 +240,17 @@ function ND_OANS_draw_menu(table)
     sasl.gl.drawText(Font_Airbus_panel, 72 ,51 + 38 * 0, "ARPT SEL", 21, false, false, TEXT_ALIGN_CENTER, table.selected_page == 2 and ECAM_BLUE or ECAM_WHITE )
     sasl.gl.drawText(Font_Airbus_panel, 72 ,51 + 38 * -1, "STATUS", 21, false, false, TEXT_ALIGN_CENTER, table.selected_page == 3 and ECAM_BLUE or ECAM_WHITE )
 
-    if table.highlighted_page ~= 0 then
+    if table.highlighted_page ~= 0 and table.highlighted_page ~= table.selected_page then
         Sasl_DrawWideFrame(1, (3-table.highlighted_page) * y_menu_sel_area/3 + 1 , x_menu_sel_area - 1, y_menu_sel_area/3 + 2 , 3, 2, ECAM_BLUE)
     end
     
     if table.selected_page == 1 then
         ND_OANS_page_1(table)
     end
+
+    ND_OANS_draw_3d_frame(857, 115, 33, 33) ---- the X on the top right
+    sasl.gl.drawWideLine(859+3,116+3,859+33-6,116+33-6, 4, ECAM_WHITE)
+    sasl.gl.drawWideLine(859+33-6,116+3,859+3,116+33-6, 4, ECAM_WHITE)
 end
 
 
