@@ -123,7 +123,7 @@ local function refresh_data()
     local v1, vr, v2 = vspeeds_calculation(dropdown_selected[1], dropdown_selected[3])
 
     displayed_zfw =Round(get(Gross_weight) - get(FOB), 0)
-    displayed_zfwcg = "HENRICK FIX THIS"
+    displayed_zfwcg = Round_fill(WEIGHTS.get_current_cg_perc(),1).."%"
     displayed_block_fuel = Round(get(FOB), 0) --see variables created inside draw lop in page 3 subpage 1
     displayed_v1 = v1
     displayed_vr = vr

@@ -491,9 +491,9 @@ end
 
 local function draw_elec_boxes()
     --batteries
-    draw_bat_box(635,767,ELEC_sys.batteries[1].switch_status and 1 or 2)
-    draw_bat_box(173,768,ELEC_sys.batteries[2].switch_status and 1 or 2)
-    
+    draw_bat_box(173,768,ELEC_sys.batteries[1].switch_status and 1 or 2)
+    draw_bat_box(635,767,ELEC_sys.batteries[2].switch_status and 1 or 2)
+
     --generators
     draw_generator(1,22,231,get(Gen_1_pwr) == 1 and 2 or 1)
     draw_generator(2,765,231,get(Gen_2_pwr) == 1 and 2 or 1)
