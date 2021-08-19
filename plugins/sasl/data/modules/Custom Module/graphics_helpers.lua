@@ -306,6 +306,12 @@ function drawTextCentered(font, x, y, string, size, isbold, isitalic, alignment,
     sasl.gl.drawText (font, x, y - (size/3),string, size, isbold, isitalic, alignment, colour)
 end
 
+function drawEmptyTriangle(x1,y1,x2,y2,x3,y3,width,colour)
+    sasl.gl.drawWideLine(x1, y1 , x2, y2, 3, colour)
+    sasl.gl.drawWideLine(x2, y2 , x3, y3, 3, colour)
+    sasl.gl.drawWideLine(x3, y3 , x1, y1, 3, colour)
+end
+
 function Init_local_coor(coor_table)
     coor_table.coor = {}
     coor_table.local_coor = {}
