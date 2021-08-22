@@ -49,9 +49,6 @@ function THIS_PAGE:render(mcdu_data)
     assert(mcdu_data.lat_rev_subject)
     assert(mcdu_data.lat_rev_subject.data.point_type)
 
-    local main_col = FMGS_does_temp_fpln_exist() and ECAM_YELLOW or ECAM_GREEN
-    local lrtype = mcdu_data.lat_rev_subject.type
-
     -- Create the page data table if not existent (first open of the page)
     if not mcdu_data.page_data[602] then
         mcdu_data.page_data[602] = {}
@@ -63,6 +60,8 @@ function THIS_PAGE:render(mcdu_data)
         if not mcdu_data.dup_names.not_found and mcdu_data.dup_names.selected_navaid then
             -- If we are here, then we have a valid waypoint to add as "next wpt"
             self:add_new_wpt(mcdu_data)
+            mcdu_open_page(mcdu_data, 600)
+            return
         end
 
         mcdu_data.page_data[602].waiting_next_wpt = false -- Reset the flag
@@ -71,6 +70,8 @@ function THIS_PAGE:render(mcdu_data)
     -- mcdu_data.lat_rev_subject
     --                          .type = 1 -- ORIGIN, 2 -- WPT, 3 -- PPOS, 4 -- DEST
     --                          .data
+    local main_col = FMGS_does_temp_fpln_exist() and ECAM_YELLOW or ECAM_GREEN
+    local lrtype = mcdu_data.lat_rev_subject.type
 
     local subject_id, lat, lon
     if lrtype == TYPE_PPOS then
@@ -79,7 +80,11 @@ function THIS_PAGE:render(mcdu_data)
             lat,lon = get(Aircraft_lat), get(Aircraft_long)
         end
     else
-        subject_id = mcdu_data.lat_rev_subject.data.id
+        if mcdu_data.lat_rev_subject.data.discontinuity then
+            subject_id = "DISCON"
+        else
+            subject_id = mcdu_data.lat_rev_subject.data.id
+        end
         lat,lon = mcdu_data.lat_rev_subject.data.lat, mcdu_data.lat_rev_subject.data.lon
     end
 
