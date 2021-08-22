@@ -477,6 +477,14 @@ function FMGS_reshape_temp_fpln()    -- This function removes duplicated element
 end
 
 -------------------------------------------------------------------------------
+-- LEGS
+-------------------------------------------------------------------------------
+function FMGS_fpln_temp_add_leg(leg, position)
+    assert(leg)
+    assert(position)
+    table.insert(FMGS_sys.fpln.temp.legs, position, leg)
+end
+-------------------------------------------------------------------------------
 -- Performance
 -------------------------------------------------------------------------------
 function FMGS_perf_set_trans_alt(trans_alt)
