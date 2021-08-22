@@ -47,7 +47,6 @@ end
 function THIS_PAGE:render(mcdu_data)
 
     assert(mcdu_data.lat_rev_subject)
-    assert(mcdu_data.lat_rev_subject.data.point_type)
 
     -- Create the page data table if not existent (first open of the page)
     if not mcdu_data.page_data[602] then
@@ -57,6 +56,7 @@ function THIS_PAGE:render(mcdu_data)
     -- If the following element exists, it means we are coming back from the
     -- 610-duplicated-names page.
     if mcdu_data.page_data[602].waiting_next_wpt then
+        mcdu_data.page_data[602].waiting_next_wpt = false -- Reset the flag
         if not mcdu_data.dup_names.not_found and mcdu_data.dup_names.selected_navaid then
             -- If we are here, then we have a valid waypoint to add as "next wpt"
             self:add_new_wpt(mcdu_data)
@@ -64,7 +64,6 @@ function THIS_PAGE:render(mcdu_data)
             return
         end
 
-        mcdu_data.page_data[602].waiting_next_wpt = false -- Reset the flag
     end
 
     -- mcdu_data.lat_rev_subject

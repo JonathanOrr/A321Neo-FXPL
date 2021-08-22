@@ -151,7 +151,7 @@ end
 
 function THIS_PAGE:prepare_list(mcdu_data)
     local list_messages = {
-        {} -- First one is always empty (it represents the departure airport)
+        {invalid=true} -- First one is always empty (it represents the departure airport)
     }
 
     THIS_PAGE:prepare_list_departure(mcdu_data, list_messages)
@@ -421,6 +421,10 @@ local function trigger_lat_rev(mcdu_data, id)
     if mcdu_data.page_data[600].ref_lines and mcdu_data.page_data[600].ref_lines[id] then
 
         local obj = mcdu_data.page_data[600].ref_lines[id]
+
+        if obj.invalid then
+            return false
+        end
 
         if mcdu_data.clr then   -- A clear is requested
             local table_obj = point_get_table(mcdu_data, obj.point_type)
