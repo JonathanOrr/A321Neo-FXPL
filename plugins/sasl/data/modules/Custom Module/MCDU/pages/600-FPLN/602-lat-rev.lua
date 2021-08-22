@@ -36,10 +36,10 @@ function THIS_PAGE:add_new_wpt(mcdu_data)
                     ptr_type = sel_navaid_type, 
                     id=sel_navaid.id,
                     lat=sel_navaid.lat,
-                    lon=sel_navaid.lon,
-                    disc_after=true
+                    lon=sel_navaid.lon
                 }
-        FMGS_fpln_temp_add_leg(leg, mcdu_data.lat_rev_subject.data.ref_id+1)
+        FMGS_fpln_temp_leg_add(leg, mcdu_data.lat_rev_subject.data.ref_id+1)
+        FMGS_fpln_temp_leg_add_disc(mcdu_data.lat_rev_subject.data.ref_id+2)
     end
 
 end

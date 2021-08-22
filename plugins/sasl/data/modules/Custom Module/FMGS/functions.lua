@@ -479,11 +479,22 @@ end
 -------------------------------------------------------------------------------
 -- LEGS
 -------------------------------------------------------------------------------
-function FMGS_fpln_temp_add_leg(leg, position)
+function FMGS_fpln_temp_leg_add(leg, position)
     assert(leg)
     assert(position)
     table.insert(FMGS_sys.fpln.temp.legs, position, leg)
 end
+
+function FMGS_fpln_temp_leg_add_disc(position)
+    assert(position)
+    local check_d = function(p) return FMGS_sys.fpln.temp.legs[p] and FMGS_sys.fpln.temp.legs[p].discontinuity end
+    if check_d(position) or check_d(position-1) then
+        -- Discontinuity already exists, don't add it
+        return
+    end
+    table.insert(FMGS_sys.fpln.temp.legs, position, {discontinuity = true})
+end
+
 -------------------------------------------------------------------------------
 -- Performance
 -------------------------------------------------------------------------------
