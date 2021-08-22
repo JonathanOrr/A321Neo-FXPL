@@ -21,22 +21,51 @@ local TYPE_WPT    = 2
 local TYPE_PPOS   = 3
 local TYPE_DEST   = 4
 
+function THIS_PAGE:add_new_wpt(mcdu_data)
+
+    -- LAT REV always creates a temporary flight plan
+    if not FMGS_does_temp_fpln_exist() then
+        FMGS_create_copy_temp_fpln()
+    end
+
+    -- How to add it depends on the type of navaid of the lateral revision
+    if mcdu_data.lat_rev_subject.data.point_type == POINT_TYPE_LEG then
+        local sel_navaid = mcdu_data.dup_names.selected_navaid
+        local sel_navaid_type = avionics_bay_generic_wpt_to_fmgs_type(sel_navaid)
+        local leg = {
+                    ptr_type = sel_navaid_type, 
+                    id=sel_navaid.id,
+                    lat=sel_navaid.lat,
+                    lon=sel_navaid.lon,
+                    disc_after=true
+                }
+        FMGS_fpln_temp_add_leg(leg, mcdu_data.lat_rev_subject.data.ref_id+1)
+    end
+
+end
+
 function THIS_PAGE:render(mcdu_data)
 
     assert(mcdu_data.lat_rev_subject)
+    assert(mcdu_data.lat_rev_subject.data.point_type)
 
     local main_col = FMGS_does_temp_fpln_exist() and ECAM_YELLOW or ECAM_GREEN
     local lrtype = mcdu_data.lat_rev_subject.type
 
+    -- Create the page data table if not existent (first open of the page)
     if not mcdu_data.page_data[602] then
         mcdu_data.page_data[602] = {}
     end
 
+    -- If the following element exists, it means we are coming back from the
+    -- 610-duplicated-names page.
     if mcdu_data.page_data[602].waiting_next_wpt then
         if not mcdu_data.dup_names.not_found and mcdu_data.dup_names.selected_navaid then
-            -- TODO: Add the new navaid
-            print(mcdu_data.dup_names.selected_navaid)
+            -- If we are here, then we have a valid waypoint to add as "next wpt"
+            self:add_new_wpt(mcdu_data)
         end
+
+        mcdu_data.page_data[602].waiting_next_wpt = false -- Reset the flag
     end
 
     -- mcdu_data.lat_rev_subject

@@ -13,6 +13,16 @@
 --    details or check <https://www.gnu.org/licenses/>
 -------------------------------------------------------------------------------
 
+-- Constants exposed to 6** pages. They should not be used elsewhere
+POINT_TYPE_DEP_SID       = 1
+POINT_TYPE_DEP_TRANS     = 2
+POINT_TYPE_LEG           = 3    -- enroute leg
+POINT_TYPE_ARR_TRANS     = 4
+POINT_TYPE_ARR_STAR      = 5
+POINT_TYPE_ARR_VIA       = 6
+POINT_TYPE_ARR_APPR      = 7
+
+
 function cifp_convert_leg_name(x)
 
     assert(x)
@@ -138,4 +148,15 @@ function dest_get_selected_appr_procedure()
     local rwy_name_with_suffix = appr_obj.proc_name:sub(2)
     local appr_name = type_str .. rwy_name_with_suffix
     return appr_name
+end
+
+function avionics_bay_generic_wpt_to_fmgs_type(x)
+    assert(x)
+    if x.freq then
+        return FMGS_PTR_NAVAID
+    elseif x.rwys then
+        return FMGS_PTR_APT
+    else
+        return FMGS_PTR_WPT
+    end
 end

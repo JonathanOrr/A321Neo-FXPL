@@ -16,14 +16,6 @@
 
 local THIS_PAGE = MCDU_Page:new({id=600})
 
-local POINT_TYPE_DEP_SID       = 1
-local POINT_TYPE_DEP_TRANS     = 2
-local POINT_TYPE_LEG           = 3
-local POINT_TYPE_ARR_TRANS     = 4
-local POINT_TYPE_ARR_STAR      = 5
-local POINT_TYPE_ARR_VIA       = 6
-local POINT_TYPE_ARR_APPR      = 7
-
 -------------------------------------------------------------------------------
 -- DEPARTURE
 -------------------------------------------------------------------------------
