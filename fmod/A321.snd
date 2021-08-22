@@ -3080,6 +3080,12 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_ALWAYS
 END_SOUND_ATTACHMENT
 
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Wind Fake
+  VEH_XYZ 0 2.3 0
+  EVENT_ALWAYS
+END_SOUND_ATTACHMENT
+
 #############################################################################################
 
 BEGIN_SOUND_ATTACHMENT

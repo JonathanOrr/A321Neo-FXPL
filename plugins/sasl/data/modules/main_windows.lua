@@ -449,3 +449,17 @@ Cinetracker_HUD = contextWindow {
     spd {}
   };
 }
+
+Cinetracker_ABNZ = contextWindow {
+  name = "CINETRACKER ABNZ";
+  position = { 0 , 0 , 600, 424 };
+  noBackground = false ;
+  proportional = true ;
+  minimumSize = { 600/10, 424/10 };
+  maximumSize = { 600, 424 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = true;
+  components = {
+      alpha_beta_nz {}
+  };
+}

@@ -274,6 +274,7 @@
 {7797c67b-9d14-445b-8cc9-e63e0eebabf3} event:/TouchMain
 {72dd99e0-d646-42c0-8cc7-4e3f356095cc} event:/TouchNose
 {341873bc-d31e-4ee3-9cb2-1b0c79682754} event:/Wind
+{0c5d5438-c24a-4fdf-8f39-231cdd63ed85} event:/Wind Fake
 {cba7ef70-43b1-4842-9d4b-51501041377c} event:/Yellow Hyd Pump
 {9f08114d-36ec-44cc-b8bf-b2babda09f9e} bus:/
 {7f7c05a4-e05a-4d44-94fe-d4691147a9b7} bus:/Master
