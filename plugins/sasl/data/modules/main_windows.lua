@@ -377,20 +377,6 @@ MAGIC_window = contextWindow {
   };
 }
 
-TUNING_window = contextWindow {
-  name = "Live Tuning Console";
-  position = { 0 , 0 , 900, 800 };
-  noBackground = true ;
-  proportional = true ;
-  minimumSize = { 900/3, 800/3 };
-  maximumSize = { 900, 800 };
-  gravity = { 0 , 1 , 0 , 1 };
-  visible = false;
-  components = {
-      live_tuning_console {}
-  };
-}
-
 PID_UI_window = contextWindow {
   name = "PID TUNING UI";
   position = { 150 , 150 , 600, 300 };
