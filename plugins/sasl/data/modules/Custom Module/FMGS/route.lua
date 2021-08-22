@@ -124,7 +124,7 @@ function update_route()
                 FMGS_dep_set_trans(FMGS_sys.fpln.temp.apts.dep_cifp.sids[50])
                 FMGS_reshape_temp_fpln()
                 FMGS_insert_temp_fpln()
-                logInfo("DEBUG F/PLN is active: LOADED 1/2")
+                logInfo("DEBUG F/PLN is active: LOADED 2/2")
             end
         end
     end

@@ -405,8 +405,16 @@ function FMGS_create_copy_temp_fpln()
 
     FMGS_create_temp_fpln()
 
+    -- Copy airport data
+    FMGS_sys.fpln.temp.apts = {}
     for k,x in pairs(FMGS_sys.fpln.active.apts) do
         FMGS_sys.fpln.temp.apts[k] = FMGS_sys.fpln.active.apts[k]
+    end
+
+    -- Copy leg data
+    FMGS_sys.fpln.temp.legs = {}
+    for i,x in ipairs(FMGS_sys.fpln.active.legs) do
+        FMGS_sys.fpln.temp.legs[i] = FMGS_sys.fpln.active.legs[i]
     end
 
 end
