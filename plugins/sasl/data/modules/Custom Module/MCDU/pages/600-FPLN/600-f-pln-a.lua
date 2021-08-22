@@ -296,6 +296,28 @@ function THIS_PAGE:print_render_list(mcdu_data)
 end
 
 -------------------------------------------------------------------------------
+-- Directly add a new waypoint after coming back from 610
+-------------------------------------------------------------------------------
+function THIS_PAGE:add_new_wpt(mcdu_data)
+
+    local obj_clicked = mcdu_data.page_data[600].in_direct_add
+    -- How to add it depends on the type of navaid of the lateral revision
+    if obj_clicked.point_type == POINT_TYPE_LEG then
+        local sel_navaid = mcdu_data.dup_names.selected_navaid
+        local sel_navaid_type = avionics_bay_generic_wpt_to_fmgs_type(sel_navaid)
+        local leg = {
+                    ptr_type = sel_navaid_type, 
+                    id=sel_navaid.id,
+                    lat=sel_navaid.lat,
+                    lon=sel_navaid.lon
+                }
+        FMGS_fpln_active_leg_add(leg, obj_clicked.ref_id)
+    end
+
+end
+
+
+-------------------------------------------------------------------------------
 -- MAIN render() function
 -------------------------------------------------------------------------------
 
@@ -312,6 +334,16 @@ function THIS_PAGE:render(mcdu_data)
     mcdu_data.page_data[600].render_functions = {}
 
     mcdu_data.page_data[600].curr_fpln = FMGS_get_current_fpln()
+
+    if mcdu_data.page_data[600].in_direct_add then
+        -- If we are here, we added a direct waypoint to the F/PLN, and we 
+        -- are coming back from the 610 page
+        if not mcdu_data.dup_names.not_found and mcdu_data.dup_names.selected_navaid then
+            -- If we are here, then we have a valid waypoint to add as "next wpt"
+            self:add_new_wpt(mcdu_data)
+        end
+        mcdu_data.page_data[600].in_direct_add = nil
+    end
 
     local from_ppos = mcdu_data.page_data[600].curr_idx == 1 and (mcdu_data.page_data[600].curr_fpln.apts.dep and "FROM" or "PPOS") or ""
     
@@ -343,6 +375,7 @@ function THIS_PAGE:render(mcdu_data)
         self:set_line(mcdu_data, MCDU_LEFT, 6, "←ERASE", MCDU_LARGE, ECAM_ORANGE)
         self:set_line(mcdu_data, MCDU_RIGHT, 6, "INSERT*", MCDU_LARGE, ECAM_ORANGE)
     end
+
 end
 
 -------------------------------------------------------------------------------
@@ -370,6 +403,20 @@ local function point_get_table(mcdu_data, obj_type)
     assert(false)   -- This should not happen
 end
 
+local function add_direct_waypoint(mcdu_data, x)
+    local input = mcdu_get_entry(mcdu_data)
+    if #input > 0 and #input < 6 then
+        mcdu_data.dup_names.req_text = input
+        mcdu_data.dup_names.return_page = 600
+        mcdu_data.page_data[600].waiting_next_wpt = true
+        mcdu_data.page_data[600].in_direct_add = x
+        mcdu_open_page(mcdu_data, 610)
+    else
+        mcdu_send_message(mcdu_data, "FORMAT ERROR")
+    end
+
+end
+
 local function trigger_lat_rev(mcdu_data, id)
     if mcdu_data.page_data[600].ref_lines and mcdu_data.page_data[600].ref_lines[id] then
 
@@ -379,15 +426,13 @@ local function trigger_lat_rev(mcdu_data, id)
             local table_obj = point_get_table(mcdu_data, obj.point_type)
             table.remove(table_obj, obj.ref_id)
 
-        elseif false then -- TODO new point
-
-        elseif not obj.discontinuity then
+        elseif #mcdu_data.entry.text > 0 then -- TODO new point
+            add_direct_waypoint(mcdu_data, obj)
+        else
             mcdu_data.lat_rev_subject = {}
             mcdu_data.lat_rev_subject.type = 2 -- WPT
             mcdu_data.lat_rev_subject.data = obj
             mcdu_open_page(mcdu_data, 602)
-        else
-            return false
         end
         return true
     end

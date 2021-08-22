@@ -503,6 +503,12 @@ function FMGS_fpln_temp_leg_add_disc(position)
     table.insert(FMGS_sys.fpln.temp.legs, position, {discontinuity = true})
 end
 
+function FMGS_fpln_active_leg_add(leg, position)
+    assert(leg)
+    assert(position)
+    table.insert(FMGS_sys.fpln.active.legs, position, leg)
+end
+
 -------------------------------------------------------------------------------
 -- Performance
 -------------------------------------------------------------------------------
