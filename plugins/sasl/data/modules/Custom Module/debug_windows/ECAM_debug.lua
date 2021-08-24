@@ -22,16 +22,6 @@ size = {340,400}
 local FBW_WHITE = {1.0, 1.0, 1.0}
 local FBW_RED   = {1.0, 0.0, 0.0}
 
-
-function update()
-    --change menu item state
-    if ECAM_debug_window:isVisible() == true then
-        sasl.setMenuItemState(Menu_debug, ShowHideECAMDebug, MENU_CHECKED)
-    else
-        sasl.setMenuItemState(Menu_debug, ShowHideECAMDebug, MENU_UNCHECKED)
-    end
-end
-
 function draw()
     sasl.gl.drawText(Font_B612MONO_regular, 140, 370, "EWD", 30, false, false, TEXT_ALIGN_LEFT, FBW_WHITE)
 

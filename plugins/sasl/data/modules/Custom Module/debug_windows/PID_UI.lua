@@ -232,13 +232,7 @@ end
 
 init_tuning_PID(FBW_PID_arrays.FBW_GLA_PID)
 
-function update()
-    if PID_UI_window:isVisible() == true then
-        sasl.setMenuItemState(Menu_debug, ShowHidePIDUI, MENU_CHECKED)
-    else
-        sasl.setMenuItemState(Menu_debug, ShowHidePIDUI, MENU_UNCHECKED)
-    end
-
+local function update_data()
     Update_PID_historys(0 + 5, 0 + 5, 400, 250, FBW_PID_arrays.FBW_GLA_PID)
     live_tune_PID(FBW_PID_arrays.FBW_GLA_PID)
 
@@ -247,6 +241,8 @@ function update()
 end
 
 function draw()
+    update_data()
+    
     sasl.gl.drawRectangle(0, 0, size[1], size[2], LIGHT_GREY)
     Draw_PID_graph(0 + 5, 0 + 5, 590, 290, WHITE, LIGHT_BLUE, GREEN, ORANGE, true, true, true, true, true)
     draw_gain_values(FBW_PID_arrays.FBW_GLA_PID, 0 + 5, 0 + 5, 590, 290, WHITE, LIGHT_BLUE, GREEN)

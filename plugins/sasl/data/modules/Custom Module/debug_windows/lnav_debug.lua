@@ -232,14 +232,11 @@ end
 
 
 function draw()
+    map_moving()
+    proportional_resizing()
+    data_updating()
     draw_backgrounds()
     draw_flightpaths()
     draw_reset_button()
     draw_crosshair()
-end
-
-function update()
-    map_moving()
-    proportional_resizing()
-    data_updating()
 end

@@ -81,11 +81,6 @@ local function adr_disagrees_on_stuff()
     return adirs_pfds_disagree_on_hdg() and adirs_pfds_disagree_on_alt() and adirs_pfds_disagree_on_ias() and adirs_pfds_disagree_on_att()
 end
 
-
-function update()
-
-end
-
 function draw()
     sasl.gl.drawRectangle ( 20 , 20 , 260 , 60 , EFB_WHITE )
 end

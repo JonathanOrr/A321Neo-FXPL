@@ -68,20 +68,12 @@ function onMouseWheel(component, x, y, button, parentX, parentY, value)
     UI_scroll_y_pos_command = Math_clamp( UI_scroll_y_pos_command - value * 40, size[2], 1000)
 end
 
-function update()
-    if SSS_FBW_UI:isVisible() == true then
-        sasl.setMenuItemState(Menu_debug, ShowHideFBWUI, MENU_CHECKED)
-    else
-        sasl.setMenuItemState(Menu_debug, ShowHideFBWUI, MENU_UNCHECKED)
-    end
-
+function draw()
     UI_scroll_y_pos = Set_anim_value(UI_scroll_y_pos, UI_scroll_y_pos_command, size[2], 1000, 8)
 
     Update_slats_flaps_module_480x180(Slats_flaps_module)
     Update_limit_speeds_module_480x160(5 + 480 + 5, UI_scroll_y_pos - 5 - 160, Limit_speeds_module)
-end
 
-function draw()
     --draw all background
     sasl.gl.drawRectangle(0, 0, size[1], size[2], LIGHT_GREY)
 
