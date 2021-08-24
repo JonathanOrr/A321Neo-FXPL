@@ -80,24 +80,48 @@ local function PFD_draw_deviations(PFD_table)
 
 end
 
-local function PFD_draw_extras(PFD_table)
-    -- TODO ADD GLS
-    sasl.gl.drawText(Font_AirbusDUL, 550, 210, "ILS", 42, false, false, TEXT_ALIGN_LEFT, ECAM_MAGENTA)
-    
+local function PFD_draw_markers(PFD_table)
     -- OM/MM/IM
+    if get(Marker_OM_over) == 1 then
+        local time = get(TIME)
+        local period = 0.5
+        local perc   = 0.75
+        if time % period <= perc * period then
+            sasl.gl.drawText(Font_AirbusDUL, 600, 150, "OM", 38, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+        end
+    end
+    if  get(Marker_MM_over) == 1 then
+        local period = 0.75
+        local time = get(TIME) % period
+        local perc1  = 0.16
+        local perc2  = 0.32
+        local perc3  = 0.82
+        if time <= perc1 * period then
+            sasl.gl.drawText(Font_AirbusDUL, 600, 150, "MM", 38, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
+        end
+        if time > perc2 * period and time <= perc3 * period then
+            sasl.gl.drawText(Font_AirbusDUL, 600, 150, "MM", 38, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
+        end
 
-    if get(Marker_OM_lit) == 1 then
-        sasl.gl.drawText(Font_AirbusDUL, 600, 150, "OM", 38, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
     end
-    if get(Marker_MM_lit) == 1 then
-        sasl.gl.drawText(Font_AirbusDUL, 600, 150, "MM", 38, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
-    end
-    if get(Marker_IM_lit) == 1 then
-        sasl.gl.drawText(Font_AirbusDUL, 600, 150, "IM", 38, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    if get(Marker_IM_over) == 1 then
+        local time = get(TIME)
+        local period = 0.25
+        local perc   = 0.5
+        if time % period <= perc * period then
+            sasl.gl.drawText(Font_AirbusDUL, 600, 150, "IM", 38, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+        end
     end
 end
 
+local function PFD_draw_extras(PFD_table)
+    -- TODO ADD GLS
+    sasl.gl.drawText(Font_AirbusDUL, 550, 210, "ILS", 42, false, false, TEXT_ALIGN_LEFT, ECAM_MAGENTA)
+end
+
 function PFD_draw_LS(PFD_table)
+    PFD_draw_markers(PFD_table)
+
     if get(PFD_table.LS_enabled) == 0 then
         return
     end
