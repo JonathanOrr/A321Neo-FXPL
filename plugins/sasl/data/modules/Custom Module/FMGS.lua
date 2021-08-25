@@ -77,7 +77,7 @@ FMGS_sys.fpln = {
         },
 
         legs = {
-            {ptr_type = FMGS_PTR_WPT, id="TREVI", lat=45.603333, lon=9.693333, disc_after=false},
+            {ptr_type = FMGS_PTR_WPT, id="LEGLO", lat=45.603333, lon=9.693333, disc_after=true},
         },
         
         

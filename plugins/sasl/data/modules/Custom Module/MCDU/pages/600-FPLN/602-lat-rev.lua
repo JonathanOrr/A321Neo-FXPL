@@ -209,6 +209,15 @@ function THIS_PAGE:R3(mcdu_data)
     end
 end
 
+function THIS_PAGE:R5(mcdu_data)
+    if mcdu_data.lat_rev_subject.type == TYPE_WPT and not mcdu_data.lat_rev_subject.data.discontinuity then
+        mcdu_data.airways.source_wpt  = mcdu_data.lat_rev_subject.data
+        mcdu_data.airways.return_page = 602
+        mcdu_open_page(mcdu_data, 611)
+    else
+        MCDU_Page:R5(mcdu_data) -- Error
+    end
+end
 
 function THIS_PAGE:L6(mcdu_data)
     mcdu_open_page(mcdu_data, 600)

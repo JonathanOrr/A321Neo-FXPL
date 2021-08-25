@@ -18,16 +18,16 @@ local THIS_PAGE = MCDU_Page:new({id=611})
 function THIS_PAGE:render_awys(mcdu_data)
 
     local curr_displayed_line = 1   -- Current MCDU line being drawn
-    local start_i = mcdu_data.page_data[602].curr_page * 5 + 1  -- Current airways
-    local end_i   = math.min(#mcdu_data.page_data[602].awys, start_i + 5) -- Current airways
+    local start_i = mcdu_data.page_data[611].curr_page * 5 + 1  -- Current airways
+    local end_i   = math.min(#mcdu_data.page_data[611].awys, start_i + 5) -- Current airways
     
     for i=start_i, end_i do
         self:set_line(mcdu_data, MCDU_LEFT, curr_displayed_line, " VIA", MCDU_SMALL, ECAM_WHITE)
-        self:set_line(mcdu_data, MCDU_LEFT, curr_displayed_line, mcdu_data.page_data[602].awys[i].id, MCDU_LARGE, ECAM_BLUE)
+        self:set_line(mcdu_data, MCDU_LEFT, curr_displayed_line, mcdu_data.page_data[611].awys[i].id, MCDU_LARGE, ECAM_BLUE)
 
         self:set_line(mcdu_data, MCDU_RIGHT, curr_displayed_line, "TO ", MCDU_SMALL, ECAM_WHITE)
         if i < end_i then
-            self:set_line(mcdu_data, MCDU_RIGHT, curr_displayed_line, mcdu_data.page_data[602].awys[i+1].begin_point, MCDU_LARGE, ECAM_BLUE)
+            self:set_line(mcdu_data, MCDU_RIGHT, curr_displayed_line, mcdu_data.page_data[611].awys[i+1].begin_point, MCDU_LARGE, ECAM_BLUE)
         else
             self:set_line(mcdu_data, MCDU_RIGHT, curr_displayed_line, "[     ]", MCDU_LARGE, ECAM_BLUE)    
         end
@@ -38,7 +38,7 @@ function THIS_PAGE:render_awys(mcdu_data)
         end
     end
 
-    if curr_displayed_line >= 6 or mcdu_data.page_data[602].curr_page > 0 then
+    if curr_displayed_line >= 6 or mcdu_data.page_data[611].curr_page > 0 then
         self:set_updn_arrows_bottom(mcdu_data, true)
     end
 
@@ -49,20 +49,19 @@ function THIS_PAGE:render_awys(mcdu_data)
 
 end
 
-function THIS_PAGE:render(mcdu_data)
+function THIS_PAGE:reset_page_data(mcdu_data)
+    mcdu_data.page_data[611] = { awys={}, curr_page=0 }
+end
 
-    --------------------------------------------------- TODO: REMOVE
-    mcdu_data.airways.source_wpt  = {id="ABESI"}
-    mcdu_data.airways.return_page = 200
-    --------------------------------------------------- END TODO: REMOVE
+function THIS_PAGE:render(mcdu_data)
 
     assert(mcdu_data.airways.source_wpt, "Provide me which navaid you want.")
     assert(mcdu_data.airways.return_page, "Provide me where to return")
 
     local source_name = mcdu_data.airways.source_wpt.id
 
-    if not mcdu_data.page_data[602] then
-        mcdu_data.page_data[602] = { awys={}, curr_page=0 }
+    if not mcdu_data.page_data[611] then
+        self:reset_page_data(mcdu_data)
     end
 
     local main_col = FMGS_does_temp_fpln_exist() and ECAM_YELLOW or ECAM_GREEN
@@ -75,6 +74,7 @@ function THIS_PAGE:render(mcdu_data)
     self:render_awys(mcdu_data)
 
     if not FMGS_does_temp_fpln_exist() then
+
         self:set_line(mcdu_data, MCDU_LEFT, 6, "<RETURN", MCDU_LARGE, ECAM_WHITE)
     else
         self:set_line(mcdu_data, MCDU_LEFT, 6, "←ERASE", MCDU_LARGE, ECAM_ORANGE)
@@ -84,8 +84,8 @@ function THIS_PAGE:render(mcdu_data)
 end
 
 function THIS_PAGE:add_airway(mcdu_data, id)
-    id = id + mcdu_data.page_data[602].curr_page * 5
-    if id > #mcdu_data.page_data[602].awys + 1 then
+    id = id + mcdu_data.page_data[611].curr_page * 5
+    if id > #mcdu_data.page_data[611].awys + 1 then
         MCDU_Page:L1(mcdu_data)
         return
     end
@@ -121,7 +121,7 @@ function THIS_PAGE:add_airway(mcdu_data, id)
         end
     else
         -- TODO find intersection point
-        local prev_points = mcdu_data.page_data[602].awys[id-1].all_points
+        local prev_points = mcdu_data.page_data[611].awys[id-1].all_points
         for _,a in ipairs(prev_points) do
             for _,b in ipairs(awy_points) do
                 if a.end_wpt == b.start_wpt then
@@ -136,7 +136,10 @@ function THIS_PAGE:add_airway(mcdu_data, id)
         mcdu_send_message(mcdu_data, "NO INTERSECTION FOUND")
         return
     else
-        table.insert(mcdu_data.page_data[602].awys, {id=input, begin_point=intersection_point, all_points=awy_points})
+        if not FMGS_does_temp_fpln_exist() then
+            FMGS_create_copy_temp_fpln()
+        end
+        table.insert(mcdu_data.page_data[611].awys, {id=input, begin_point=intersection_point, all_points=awy_points})
     end
 
 end
@@ -162,21 +165,38 @@ function THIS_PAGE:L5(mcdu_data)
     self:add_airway(mcdu_data, 5)
 end
 
+function THIS_PAGE:L6(mcdu_data)
+    if FMGS_does_temp_fpln_exist() then
+        FMGS_erase_temp_fpln()
+    end
+    self:reset_page_data(mcdu_data)
+    mcdu_open_page(mcdu_data, mcdu_data.airways.return_page)
+end
+
+function THIS_PAGE:R6(mcdu_data)
+    if not FMGS_does_temp_fpln_exist() then
+        MCDU_Page:R6(mcdu_data)
+        return
+    end
+    self:reset_page_data(mcdu_data)
+    -- TODO
+end
+
 
 function THIS_PAGE:Slew_Down(mcdu_data)
-    if mcdu_data.page_data[602].curr_page == 0 then
-        mcdu_data.page_data[602].curr_page = math.ceil(#mcdu_data.page_data[602].awys/5) - 1
+    if mcdu_data.page_data[611].curr_page == 0 then
+        mcdu_data.page_data[611].curr_page = math.ceil(#mcdu_data.page_data[611].awys/5) - 1
     else
-        mcdu_data.page_data[602].curr_page = mcdu_data.page_data[602].curr_page - 1
+        mcdu_data.page_data[611].curr_page = mcdu_data.page_data[611].curr_page - 1
     end
 end
 
 function THIS_PAGE:Slew_Up(mcdu_data)
-    local last_page = math.ceil(#mcdu_data.page_data[602].awys/5) - 1
-    if mcdu_data.page_data[602].curr_page == last_page then
-        mcdu_data.page_data[602].curr_page = 0
+    local last_page = math.ceil(#mcdu_data.page_data[611].awys/5) - 1
+    if mcdu_data.page_data[611].curr_page == last_page then
+        mcdu_data.page_data[611].curr_page = 0
     else
-        mcdu_data.page_data[602].curr_page = mcdu_data.page_data[602].curr_page + 1
+        mcdu_data.page_data[611].curr_page = mcdu_data.page_data[611].curr_page + 1
     end
 end
 
