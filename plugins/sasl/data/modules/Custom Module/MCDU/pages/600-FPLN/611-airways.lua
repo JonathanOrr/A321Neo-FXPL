@@ -104,6 +104,55 @@ local function reachable_from_awy(all_points, start_point)
     return result_set_expanded
 end
 
+local function build_awy_representation(all_points)
+
+    local next = {} -- This is a map mapping each fix to the next
+                    -- or nexts
+
+    for i,x in ipairs(all_points) do
+        if next[x.start_wpt] then
+            table.insert(next[x.start_wpt], x.end_wpt)
+        else
+            next[x.start_wpt] = {x.end_wpt}
+        end
+    end
+
+    return next
+end
+
+local function find_awy_path(awy_repr, prev_point, begin_point, end_point)
+    if begin_point == end_point then
+        return {end_point}
+    end
+
+    local to_explore = awy_repr[begin_point]
+
+    if to_explore == nil then
+        return nil
+    end
+
+    for _,p in ipairs(to_explore) do
+        local path
+        if p ~= prev_point then
+            path = find_awy_path(awy_repr, begin_point, p, end_point)
+        end
+        if path ~= nil then
+            table.insert(path, begin_point)
+            return path
+        end
+    end
+
+    return nil
+end
+
+local function table_reverse(t)
+	local len = #t
+	for i = len - 1, 1, -1 do
+		t[len] = table.remove(t, i)
+	end
+end
+
+
 function THIS_PAGE:add_airway(mcdu_data, id)
     id = id + mcdu_data.page_data[611].curr_page * 5
     if id > #mcdu_data.page_data[611].awys + 1 then
@@ -142,7 +191,7 @@ function THIS_PAGE:add_airway(mcdu_data, id)
         end
     else
         -- Find intersection point
-        local reachable_from_here = mcdu_data.page_data[611].awys[id-1].all_points
+        local reachable_from_here = mcdu_data.page_data[611].awys[id-1].all_reachable_points
         for _,a in ipairs(reachable_from_here) do
             for _,b in ipairs(awy_points) do
                 if a == b.start_wpt then
@@ -162,8 +211,10 @@ function THIS_PAGE:add_airway(mcdu_data, id)
         end
         -- Get (and save) all the points in the airways reachable from the starting intersection point
         local reachable = reachable_from_awy(awy_points, intersection_point)
-        table.insert(mcdu_data.page_data[611].awys, {id=input, begin_point=intersection_point, all_points=reachable})
+        table.insert(mcdu_data.page_data[611].awys, {id=input, begin_point=intersection_point, awy_points = awy_points, all_reachable_points=reachable})
     end
+
+    mcdu_data.page_data[611].manual_to = nil
 
 end
 
@@ -201,8 +252,37 @@ function THIS_PAGE:R6(mcdu_data)
         MCDU_Page:R6(mcdu_data)
         return
     end
+
+    local full_path = {}
+
+    for i,awy in ipairs(mcdu_data.page_data[611].awys) do
+
+        local next_awy = mcdu_data.page_data[611].awys[i+1]
+        if not next_awy and not mcdu_data.page_data[611].manual_to then
+            break
+        end
+
+        local last_point = next_awy and next_awy.begin_point or mcdu_data.page_data[611].manual_to
+
+        local awy_repr = build_awy_representation(awy.awy_points)
+        local path = find_awy_path(awy_repr, "", mcdu_data.page_data[611].awys[i].begin_point, last_point)
+        assert(path)
+
+        table_reverse(path)
+
+        for j,p in ipairs(path) do
+            local last = full_path[#full_path]
+            if last ~= p then
+                table.insert(full_path, p)
+            end
+        end
+    end
+
+    for i,awy in ipairs(full_path) do
+        print(awy)
+    end
+
     self:reset_page_data(mcdu_data)
-    -- TODO
 end
 
 
