@@ -26,8 +26,9 @@ function THIS_PAGE:render_awys(mcdu_data)
         self:set_line(mcdu_data, MCDU_LEFT, curr_displayed_line, mcdu_data.page_data[611].awys[i].id, MCDU_LARGE, ECAM_BLUE)
 
         self:set_line(mcdu_data, MCDU_RIGHT, curr_displayed_line, "TO ", MCDU_SMALL, ECAM_WHITE)
-        if i < end_i then
-            self:set_line(mcdu_data, MCDU_RIGHT, curr_displayed_line, mcdu_data.page_data[611].awys[i+1].begin_point, MCDU_LARGE, ECAM_BLUE)
+        if i < end_i or mcdu_data.page_data[611].manual_to then
+            local to_print = i == end_i and mcdu_data.page_data[611].manual_to or mcdu_data.page_data[611].awys[i+1].begin_point
+            self:set_line(mcdu_data, MCDU_RIGHT, curr_displayed_line, to_print, MCDU_LARGE, ECAM_BLUE)
         else
             self:set_line(mcdu_data, MCDU_RIGHT, curr_displayed_line, "[     ]", MCDU_LARGE, ECAM_BLUE)    
         end
@@ -246,6 +247,59 @@ function THIS_PAGE:L6(mcdu_data)
     self:reset_page_data(mcdu_data)
     mcdu_open_page(mcdu_data, mcdu_data.airways.return_page)
 end
+
+function THIS_PAGE:add_manual_to(mcdu_data, id)
+    id = id + mcdu_data.page_data[611].curr_page * 5
+
+    if id ~= #mcdu_data.page_data[611].awys then
+        MCDU_Page:L1(mcdu_data)
+        return
+    end
+
+    local my_awy = mcdu_data.page_data[611].awys[#mcdu_data.page_data[611].awys]
+
+    local input = mcdu_get_entry(mcdu_data)
+    if #input == 0 and #input > 6 then
+        mcdu_send_message(mcdu_data, "FORMAT ERROR")
+        return
+    end
+
+    local found = false
+    for _,p in ipairs(my_awy.all_reachable_points) do
+        if p == input then
+            found = true
+        end
+    end
+
+    if not found then
+        mcdu_send_message(mcdu_data, "NO INTERSECTION FOUND")
+        return
+    end
+
+    mcdu_data.page_data[611].manual_to = input
+
+end
+
+function THIS_PAGE:R1(mcdu_data)
+    self:add_manual_to(mcdu_data, 1)
+end
+
+function THIS_PAGE:R2(mcdu_data)
+    self:add_manual_to(mcdu_data, 2)
+end
+
+function THIS_PAGE:R3(mcdu_data)
+    self:add_manual_to(mcdu_data, 3)
+end
+
+function THIS_PAGE:R4(mcdu_data)
+    self:add_manual_to(mcdu_data, 4)
+end
+
+function THIS_PAGE:R5(mcdu_data)
+    self:add_manual_to(mcdu_data, 5)
+end
+
 
 function THIS_PAGE:R6(mcdu_data)
     if not FMGS_does_temp_fpln_exist() then
