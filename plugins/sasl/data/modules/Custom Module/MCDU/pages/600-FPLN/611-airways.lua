@@ -83,6 +83,27 @@ function THIS_PAGE:render(mcdu_data)
 
 end
 
+local function reachable_from_awy_recursion(result_set, all_set, start_point, prev)
+    for _,a in ipairs(all_set) do
+        if a.start_wpt == start_point and a.end_wpt ~= prev then
+            result_set[a.end_wpt] = true
+            reachable_from_awy_recursion(result_set, all_set, a.end_wpt, start_point)
+        end
+    end
+end
+
+local function reachable_from_awy(all_points, start_point)
+    local result_set = {}
+    local result_set_expanded = {}
+    reachable_from_awy_recursion(result_set, all_points, start_point, "FOR_SURE_NOT")
+
+    for k,_ in pairs(result_set) do
+        table.insert(result_set_expanded, k)
+    end
+
+    return result_set_expanded
+end
+
 function THIS_PAGE:add_airway(mcdu_data, id)
     id = id + mcdu_data.page_data[611].curr_page * 5
     if id > #mcdu_data.page_data[611].awys + 1 then
@@ -120,11 +141,11 @@ function THIS_PAGE:add_airway(mcdu_data, id)
             end
         end
     else
-        -- TODO find intersection point
-        local prev_points = mcdu_data.page_data[611].awys[id-1].all_points
-        for _,a in ipairs(prev_points) do
+        -- Find intersection point
+        local reachable_from_here = mcdu_data.page_data[611].awys[id-1].all_points
+        for _,a in ipairs(reachable_from_here) do
             for _,b in ipairs(awy_points) do
-                if a.end_wpt == b.start_wpt then
+                if a == b.start_wpt then
                     intersection_point = b.start_wpt
                     break
                 end
@@ -139,7 +160,9 @@ function THIS_PAGE:add_airway(mcdu_data, id)
         if not FMGS_does_temp_fpln_exist() then
             FMGS_create_copy_temp_fpln()
         end
-        table.insert(mcdu_data.page_data[611].awys, {id=input, begin_point=intersection_point, all_points=awy_points})
+        -- Get (and save) all the points in the airways reachable from the starting intersection point
+        local reachable = reachable_from_awy(awy_points, intersection_point)
+        table.insert(mcdu_data.page_data[611].awys, {id=input, begin_point=intersection_point, all_points=reachable})
     end
 
 end
