@@ -290,8 +290,8 @@ FBW.fctl.control.SPLR = function (lateral_input, spdbrk_input, ground_spoilers_m
 
 
     --PRE-EXTENTION DEFECTION VALUE CALCULATION --> OUTPUT OF CALCULATED VALUE TO THE SURFACES--
-    set(TOTAL_SPDBRK_EXTENSION, 0)
-    set(TOTAL_ROLL_SPLR_EXTENSION, 0)
+    local TEMP_TOTAL_SPDBRK_EXTENSION = 0
+    local TEMP_TOTAL_ROLL_SPLR_EXTENSION = 0
     set(Speedbrakes_ratio, math.abs(lateral_input) + spdbrk_input)
     for i = 1, SPLR_PER_WING do
         --speedbrakes
@@ -302,14 +302,17 @@ FBW.fctl.control.SPLR = function (lateral_input, spdbrk_input, ground_spoilers_m
         set(R_ROLL_SPLR_EXTENSION, Set_anim_value_linear_range(get(R_ROLL_SPLR_EXTENSION, i), R_SPLR_ROLL_TGT[i], 0, SPLR_TOTAL_MAX_DEF[i], R_SPLR_ROLL_SPD[i], 5), i)
 
         --sum outputs for total deflection datarefs--
-        set(TOTAL_SPDBRK_EXTENSION, get(TOTAL_ROLL_SPLR_EXTENSION) + get(L_SPDBRK_EXTENSION, i) + get(R_SPDBRK_EXTENSION, i))
-        set(TOTAL_ROLL_SPLR_EXTENSION, get(TOTAL_ROLL_SPLR_EXTENSION) + get(L_ROLL_SPLR_EXTENSION, i) + get(R_ROLL_SPLR_EXTENSION, i))
+        TEMP_TOTAL_SPDBRK_EXTENSION    = TEMP_TOTAL_SPDBRK_EXTENSION    + get(L_SPDBRK_EXTENSION, i)    + get(R_SPDBRK_EXTENSION, i)
+        TEMP_TOTAL_ROLL_SPLR_EXTENSION = TEMP_TOTAL_ROLL_SPLR_EXTENSION + get(L_ROLL_SPLR_EXTENSION, i) + get(R_ROLL_SPLR_EXTENSION, i)
 
         --TOTAL SPOILERS OUTPUT TO THE SURFACES--
         --if any surface exceeds the max deflection limit the othere side would reduce deflection by the exceeded amount
         set(L_SPLR_DATAREFS[i], Math_clamp_higher(get(L_SPDBRK_EXTENSION, i) + get(L_ROLL_SPLR_EXTENSION, i), SPLR_TOTAL_MAX_DEF[i]) - Math_clamp_lower(get(R_SPDBRK_EXTENSION, i) + get(R_ROLL_SPLR_EXTENSION, i) - SPLR_TOTAL_MAX_DEF[i], 0))
         set(R_SPLR_DATAREFS[i], Math_clamp_higher(get(R_SPDBRK_EXTENSION, i) + get(R_ROLL_SPLR_EXTENSION, i), SPLR_TOTAL_MAX_DEF[i]) - Math_clamp_lower(get(L_SPDBRK_EXTENSION, i) + get(L_ROLL_SPLR_EXTENSION, i) - SPLR_TOTAL_MAX_DEF[i], 0))
     end
+
+    set(TOTAL_SPDBRK_EXTENSION, TEMP_TOTAL_SPDBRK_EXTENSION)
+    set(TOTAL_ROLL_SPLR_EXTENSION, TEMP_TOTAL_ROLL_SPLR_EXTENSION)
 end
 
 function update()
