@@ -447,9 +447,7 @@ function FMGS_reshape_temp_fpln()    -- This function removes duplicated element
 
     local fpln = FMGS_sys.fpln.temp
 
-    local nr_legs_fpln = #fpln.legs
-
-    if nr_legs_fpln == 0 then
+    if #fpln.legs == 0 then
         -- F/PLN is empty, thus just add a discontinuity
         table.insert(fpln.legs, {discontinuity = true})
     else
@@ -468,12 +466,12 @@ function FMGS_reshape_temp_fpln()    -- This function removes duplicated element
                 table.insert(fpln.legs, 1, {discontinuity = true})
             end
         end
-        if not fpln.legs[nr_legs_fpln].discontinuity then
+        if not fpln.legs[#fpln.legs].discontinuity then
 
             local first_arr   = fpln.apts.arr_trans or fpln.apts.arr_appr 
             if first_arr then
                 local first_arr_p = first_arr.legs[1]
-                if fpln.legs[nr_legs_fpln].id ~= first_arr_p.leg_name then
+                if fpln.legs[#fpln.legs].id ~= first_arr_p.leg_name then
                     table.insert(fpln.legs, {discontinuity = true})
                 end
             else
