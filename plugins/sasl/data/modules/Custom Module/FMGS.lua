@@ -76,8 +76,14 @@ FMGS_sys.fpln = {
             alt_cifp=nil,
         },
 
+        -- Format:
+        -- {ptr_type = FMGS_PTR_*, id="AAA", lat=10.2, lon=10.3, obj={}}
+        -- or
+        -- {discontinuity = true}
+
         legs = {
-            {ptr_type = FMGS_PTR_WPT, id="LEGLO", lat=45.603333, lon=9.693333, disc_after=true},
+            {ptr_type = FMGS_PTR_WPT, id="LEGLO", lat=45.603333, lon=9.693333},
+            {discontinuity = true}
         },
         
         

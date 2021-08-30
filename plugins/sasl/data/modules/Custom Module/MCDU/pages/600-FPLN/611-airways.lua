@@ -13,6 +13,8 @@
 --    details or check <https://www.gnu.org/licenses/>
 -------------------------------------------------------------------------------
 
+include("libs/geo-helpers.lua")
+
 local THIS_PAGE = MCDU_Page:new({id=611})
 
 function THIS_PAGE:render_awys(mcdu_data)
@@ -110,7 +112,12 @@ local function build_awy_representation(all_points)
     local next = {} -- This is a map mapping each fix to the next
                     -- or nexts
 
+
+    local type_map = {} -- This is a map containing just the type given the name
+
     for i,x in ipairs(all_points) do
+        type_map[x.start_wpt] = x.start_wpt_type
+        type_map[x.end_wpt] = x.end_wpt_type
         if next[x.start_wpt] then
             table.insert(next[x.start_wpt], x.end_wpt)
         else
@@ -118,7 +125,7 @@ local function build_awy_representation(all_points)
         end
     end
 
-    return next
+    return next, type_map
 end
 
 local function find_awy_path(awy_repr, prev_point, begin_point, end_point)
@@ -300,6 +307,56 @@ function THIS_PAGE:R5(mcdu_data)
     self:add_manual_to(mcdu_data, 5)
 end
 
+local function get_nearest(to_who, array)
+    local min_dist = 10e10
+    local min_dist_obj = nil
+    for i,p in ipairs(array) do
+        local curr_dist = GC_distance_kt(to_who.lat, to_who.lon, p.lat, p.lon)
+        if curr_dist < min_dist then
+            min_dist = curr_dist
+            min_dist_obj = p
+        end
+    end
+    return min_dist_obj
+end
+
+local function add_to_fpln(mcdu_data, full_path, type_map)
+    assert(full_path)
+    assert(type_map)
+
+    for i,awy in ipairs(full_path) do
+
+        local to_add = {}
+        local nearest_point
+
+        if type_map[awy] == 11 then -- FIX
+            local fixes = AvionicsBay.fixes.get_by_name(awy, false)
+            nearest_point = get_nearest(mcdu_data.airways.source_wpt, fixes)
+            to_add.ptr_type = FMGS_PTR_WPT
+        elseif type_map[awy] == 2 then  -- NDB
+            local list_ndbs = AvionicsBay.navaids.get_by_name(NAV_ID_NDB, awy, false)
+            nearest_point = get_nearest(mcdu_data.airways.source_wpt, list_ndbs)
+            to_add.ptr_type = FMGS_PTR_NAVAID
+        elseif type_map[awy] == 3 then  -- VOR/DME
+            local list_vordmes1 = AvionicsBay.navaids.get_by_name(NAV_ID_VOR, awy, false)
+            local list_vordmes2 = AvionicsBay.navaids.get_by_name(NAV_ID_DME, awy, false)
+            local list_vordmes3 = AvionicsBay.navaids.get_by_name(NAV_ID_DME_ALONE, awy, false)
+            for k,v in pairs(list_vordmes2) do table.insert(list_vordmes1, v) end
+            for k,v in pairs(list_vordmes3) do table.insert(list_vordmes1, v) end
+            nearest_point = get_nearest(mcdu_data.airways.source_wpt, list_vordmes1)
+            to_add.ptr_type = FMGS_PTR_NAVAID
+        end
+
+        if to_add.ptr_type and nearest_point and i ~= 1 then    -- We skip the first fix because already there
+            to_add.id  = nearest_point.id
+            to_add.lat = nearest_point.lat
+            to_add.lon = nearest_point.lon
+            to_add.obj = nearest_point
+
+            FMGS_fpln_temp_leg_add(to_add, mcdu_data.airways.source_wpt.ref_id + i - 1)
+        end
+    end
+end
 
 function THIS_PAGE:R6(mcdu_data)
     if not FMGS_does_temp_fpln_exist() then
@@ -308,6 +365,7 @@ function THIS_PAGE:R6(mcdu_data)
     end
 
     local full_path = {}
+    local type_map = {}
 
     for i,awy in ipairs(mcdu_data.page_data[611].awys) do
 
@@ -318,7 +376,7 @@ function THIS_PAGE:R6(mcdu_data)
 
         local last_point = next_awy and next_awy.begin_point or mcdu_data.page_data[611].manual_to
 
-        local awy_repr = build_awy_representation(awy.awy_points)
+        local awy_repr, type_map_curr = build_awy_representation(awy.awy_points)
         local path = find_awy_path(awy_repr, "", mcdu_data.page_data[611].awys[i].begin_point, last_point)
         assert(path)
 
@@ -330,13 +388,18 @@ function THIS_PAGE:R6(mcdu_data)
                 table.insert(full_path, p)
             end
         end
+
+        for k,p in pairs(type_map_curr) do
+            type_map[k] = p
+        end
     end
 
-    for i,awy in ipairs(full_path) do
-        print(awy)
-    end
+    add_to_fpln(mcdu_data, full_path, type_map)
+
+    FMGS_insert_temp_fpln()
 
     self:reset_page_data(mcdu_data)
+    mcdu_open_page(mcdu_data, 600)
 end
 
 
