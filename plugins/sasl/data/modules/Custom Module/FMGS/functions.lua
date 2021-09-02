@@ -426,8 +426,9 @@ end
 
 function FMGS_insert_temp_fpln()
     FMGS_sys.fpln.active = FMGS_sys.fpln.temp
-    FMGS_sys.perf.takeoff.trans_alt = FMGS_sys.fpln.active.apts.dep_sid.trans_alt
-
+    if FMGS_sys.fpln.active.apts.dep_sid then
+        FMGS_sys.perf.takeoff.trans_alt = FMGS_sys.fpln.active.apts.dep_sid.trans_alt
+    end
     FMGS_erase_temp_fpln()
 end
 
