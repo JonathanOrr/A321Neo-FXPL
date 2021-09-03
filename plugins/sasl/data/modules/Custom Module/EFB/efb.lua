@@ -9,6 +9,7 @@ local EFB_UNDERLINE_THICKNESS = 2
 
 include("EFB/efb_common_buttons.lua")
 include("EFB/efb_functions.lua")
+include("EFB/efb_prefrences.lua")
 include("EFB/EFB_pages/1.lua")
 include("EFB/EFB_pages/2.lua")
 include("EFB/EFB_pages/3.lua")
@@ -116,35 +117,7 @@ local EFB_draw_pages = {
     EFB_draw_page_10,
 }
 
-EFB.preferences = {
-    ["syncqnh"] = false,
-    ["nws"] = 1,
-    ["tca"] = false,
-    ["pausetd"] = false,
-    ["copilot"] = false,
-    ["flarelaw"] = 0,
-}
-
 --load EFB preferences--
-local function load_EFB_pref()
-    local table_load_buffer = table.load(moduleDirectory .. "/Custom Module/saved_configs/EFB_preferences_v2")
-    if table_load_buffer ~= nil then
-
-        -- Sanitize check
-        for k,x in pairs(EFB.preferences) do
-            if table_load_buffer[k] == nil then
-                return  -- Saved file is invalid, let's overwrite it
-            end
-        end
-
-        -- If we are here, the saved file is ok
-        EFB.preferences = table_load_buffer
-
-        --init FBW flare law(special case)
-        set(FBW_mode_transition_version, EFB.preferences["flarelaw"])
-    end
-end
-load_EFB_pref()
 
 ---------------------------------------------------------------------------------------------------------------
 --TOP BAR SELECTOR LOGIC--
@@ -235,6 +208,16 @@ local function Cursor_texture_to_local_pos(x, y, component_width, component_heig
     return component_x, component_y, true
 end
 
+local function update_prefrences_corresponding_datarefs()
+    -- AA LEVEL
+    local one_to_32 = 2^(EFB_PREFRENCES_get_display_aa() * 5)
+    set(PANEL_AA_LEVEL_1to32, one_to_32)
+
+    --VOLUME SLIDERS
+    set(VOLUME_ext, EFB_PREFRENCES_get_sound_ext())
+    set(VOLUME_int, EFB_PREFRENCES_get_sound_int())
+end
+
 --SASL callbacks-------------------------------------------------------------------------------------------------
 function update()
     perf_measure_start("EFB:update()")
@@ -251,6 +234,9 @@ function update()
     compute_page_change_fade_transparency()
 
     perf_measure_stop("EFB:update()")
+
+
+    print(EFB_PREFRENCES_get_sound_ext())
 end
 
 

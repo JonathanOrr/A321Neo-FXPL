@@ -57,7 +57,7 @@ function handler_update_value(phase, data, direction)
             end
         end
         
-        if EFB.preferences["syncqnh"] then
+        if EFB_PREFRENCES_get_syncqnh() then
             -- If the option is active in the EFB, let's sync the values. One of these istructions has
             -- no effect because it's the same entity.
             ADIRS_sys.qnh_capt.value = data.value
@@ -76,7 +76,7 @@ function handler_knob_push(phase, data)
             data.mode_last = data.mode
         end
         
-        if EFB.preferences["syncqnh"] then
+        if EFB_PREFRENCES_get_syncqnh() then
             -- If the option is active in the EFB, let's sync the values. Two of these istructions have
             -- no effect because they are the same entity.
             ADIRS_sys.qnh_capt.mode = data.mode
@@ -91,7 +91,7 @@ end
 function handler_knob_pull(phase, data)
     if phase == SASL_COMMAND_BEGIN then
         data.mode = MODE_STD
-        if EFB.preferences["syncqnh"] then
+        if EFB_PREFRENCES_get_syncqnh() then
             -- If the option is active in the EFB, let's sync the values. One of these istructions has
             -- no effect because it's the same entity.
             ADIRS_sys.qnh_capt.mode = data.mode
@@ -104,7 +104,7 @@ function handler_unit_change(phase, data, direction)
     if phase == SASL_COMMAND_BEGIN then
         data.unit = data.unit == UNIT_HPA and UNIT_INHG or UNIT_HPA
 
-        if EFB.preferences["syncqnh"] then
+        if EFB_PREFRENCES_get_syncqnh() then
             ADIRS_sys.qnh_capt.unit = data.unit
             ADIRS_sys.qnh_fo.unit   = data.unit
         end

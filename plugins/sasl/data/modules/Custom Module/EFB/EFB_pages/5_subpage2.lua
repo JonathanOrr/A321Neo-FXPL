@@ -3,11 +3,9 @@ include("networking/json.lua")
 
 local key_p5s2_focus = 0
 local key_p5s2_buffer = ""
-local userid = ""
 local save_button_begin = 0
 local fetch_button_begin = 0
 local send_button_begin = 0
-local fxxk_the_tablesave = {}
 local save_delay = 0
 
 local characters_per_line = 35
@@ -31,15 +29,6 @@ local displayed_info = {
     ["alternate_route"] = "",
 }
 
-local function save_id_to_file()
-    fxxk_the_tablesave[1] = userid
-    table.save(fxxk_the_tablesave, moduleDirectory .. "/Custom Module/saved_configs/simbrief_id")
-end
-
-local function load_id_from_file()
-    fxxk_the_tablesave = table.load(moduleDirectory .. "/Custom Module/saved_configs/simbrief_id")
-    userid = fxxk_the_tablesave[1]
-end
 
 local function load_route_table()
     for i = 1, math.ceil(#displayed_info["route"] / characters_per_line) do --BEGIN ROUTE DRAWING LOGIC
@@ -98,7 +87,7 @@ local function p5s2_plug_in_the_buffer()
         key_p5s2_focus = 0
         key_p5s2_buffer = ""
     else
-        userid = key_p5s2_buffer --PLUG THE SCRATCHPAD INTO THE ACTUAL TARGET
+        EFB_PREFRENCES_set_simbrief_id(key_p5s2_buffer) --PLUG THE SCRATCHPAD INTO THE ACTUAL TARGET
         key_p5s2_focus = 0
         key_p5s2_buffer = ""
     end
@@ -150,7 +139,7 @@ function p5s2_buttons()
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 116,326,258,357, function ()
         fetch_button_begin = get(TIME)
-        sasl.net.downloadFileContentsAsync ( "https://www.simbrief.com/api/xml.fetcher.php?userid="..userid.."&json=1" ,onContentsDownloaded)
+        sasl.net.downloadFileContentsAsync ( "https://www.simbrief.com/api/xml.fetcher.php?userid="..EFB_PREFRENCES_get_simbrief_id().."&json=1" ,onContentsDownloaded)
         simbrief_standby = true
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 579,53,764,84, function ()
@@ -169,7 +158,7 @@ function p5s2_update()
         save_delay = save_delay -1
     end
     if save_delay == 1 then
-        save_id_to_file()
+        EFB_PREFRENCES_SAVE()
     end
 end
 
@@ -199,7 +188,7 @@ function p5s2_draw()
     if string.len(key_p5s2_buffer) > 0 then
         drawTextCentered( Font_ECAMfont ,  187, 527 ,key_p5s2_buffer , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
     else
-        drawTextCentered( Font_ECAMfont ,  187, 527 ,userid , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
+        drawTextCentered( Font_ECAMfont ,  187, 527 ,EFB_PREFRENCES_get_simbrief_id() , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
     end
 
 
@@ -231,11 +220,4 @@ function p5s2_draw()
     end
 end
 
-
-
----------DO AT THE BEGINNING
-
-if table.load(moduleDirectory .. "/Custom Module/saved_configs/simbrief_id") ~= nil then
-    load_id_from_file()
-end
 
