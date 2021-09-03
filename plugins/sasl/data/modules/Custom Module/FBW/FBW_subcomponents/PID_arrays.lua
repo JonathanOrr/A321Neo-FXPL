@@ -452,7 +452,7 @@ FBW_PID_arrays = {
         Actual_output = 0,
     },
     FBW_GLA_PID = {
-        P_gain = -12.50,
+        P_gain = -8.50,
         I_gain = 0.000,
         D_gain = 0.000,
         B_gain = 0,
@@ -474,7 +474,7 @@ FBW_PID_arrays = {
         Min_out = -5,
         Max_out = 5,
         filter_inputs = true,
-        filter_freq = 1,
+        filter_freq = 2,
         highpass_inputs = false,
         PV = 0,
         Error = 0,

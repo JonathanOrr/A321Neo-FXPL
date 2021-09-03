@@ -28,6 +28,8 @@ https://discord.gg/ByeyTXS
 
 
 ## Current Visual state
+### NOTE: The model is being redone: the external texture has been temporarily removed
+
 ![](https://cdn.discordapp.com/attachments/691973360556441610/759809658285326346/A321_-_2020-09-27_15.45.47.png)
 ![](https://cdn.discordapp.com/attachments/691973360556441610/759809671611285534/A321_-_2020-09-23_19.53.12.png)
 ![](https://cdn.discordapp.com/attachments/743487226607829003/800779152826957855/A321_-_2021-01-19_1.15.37_am.png)
