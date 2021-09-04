@@ -3,7 +3,7 @@ include("libs/table.save.lua")
 local EFB = {
     prefrences = {
         toggles = {
-            syncqnh = false,
+            syncqnh = true,
             pausetd = false,
             copilot = false,
         },
