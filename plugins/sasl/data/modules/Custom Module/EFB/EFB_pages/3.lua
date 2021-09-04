@@ -179,16 +179,6 @@ local function number_to_loadsheet_format(number)
     return Fwd_string_fill(tostring(number), "0", 5)
 end
 
-
-
-local function within(what,min,max)
-    if what <= max and what >= min then 
-        return true 
-    else 
-        return false 
-    end
-end
-
 local function draw_slider_corresponding_values()
     local passenger_weight = Round(slider_actual_values[1],1)
     local passenger_number = tostring(Round(slider_actual_values[1]/WEIGHT_PER_PASSENGER,0).." PAX")

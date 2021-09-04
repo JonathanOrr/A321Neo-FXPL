@@ -149,7 +149,10 @@ function onMouseUp(component , x , y , button , parentX , parentY)
     end
     if EFB_PAGE == 3 and efb_subpage_number == 1 then
         EFB_p3s1_onmouseup()
+    elseif EFB_PAGE == 4 and efb_p4_subpage_number == 2 then
+        EFB_p4s2_onmouseup()
     end
+
 
     return true
 end
@@ -210,12 +213,15 @@ end
 
 local function update_prefrences_corresponding_datarefs()
     -- AA LEVEL
-    local one_to_32 = 2^(EFB_PREFRENCES_get_display_aa() * 5)
+    local aa_lvl = EFB_PREFRENCES_get_display_aa() - EFB_PREFRENCES_get_display_aa()%0.2
+    local one_to_32 = 2^(aa_lvl * 5)
     set(PANEL_AA_LEVEL_1to32, one_to_32)
 
     --VOLUME SLIDERS
     set(VOLUME_ext, EFB_PREFRENCES_get_sound_ext())
     set(VOLUME_int, EFB_PREFRENCES_get_sound_int())
+    set(VOLUME_enviro, EFB_PREFRENCES_get_sound_enviro())
+    set(VOLUME_warn, EFB_PREFRENCES_get_sound_warn())
 end
 
 --SASL callbacks-------------------------------------------------------------------------------------------------
@@ -233,10 +239,9 @@ function update()
 
     compute_page_change_fade_transparency()
 
+    update_prefrences_corresponding_datarefs()
+
     perf_measure_stop("EFB:update()")
-
-
-    print(EFB_PREFRENCES_get_sound_ext())
 end
 
 
@@ -273,3 +278,5 @@ function draw()  ------KEEP THE draw_cursor() AT THE BOTTOM YOU DUMBASS!!!!!
     perf_measure_stop("EFB:draw()")
 
 end
+
+

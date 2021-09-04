@@ -10,7 +10,10 @@ local EFB = {
         sliders = {
             sound_int = 1,
             sound_ext = 1,
+            sound_warn = 1,
+            sound_enviro = 1,
             display_aa = 0,
+            brk_strength = 1,
         },
         dropdowns = {
             nws = 0,
@@ -20,21 +23,6 @@ local EFB = {
         },
     },
 }   
-
-function deepcopy(orig)
-    local orig_type = type(orig)
-    local copy
-    if orig_type == 'table' then
-        copy = {}
-        for orig_key, orig_value in next, orig, nil do
-            copy[deepcopy(orig_key)] = deepcopy(orig_value)
-        end
-        setmetatable(copy, deepcopy(getmetatable(orig)))
-    else -- number, string, boolean, etc
-        copy = orig
-    end
-    return copy
-end
 
 function EFB_PREFRENCES_set_syncqnh(boolean)
     EFB.prefrences.toggles.syncqnh = boolean
@@ -76,6 +64,30 @@ function EFB_PREFRENCES_get_sound_ext()
     return EFB.prefrences.sliders.sound_ext
 end
 
+function EFB_PREFRENCES_set_sound_warn(value)
+    EFB.prefrences.sliders.sound_warn = value
+end
+
+function EFB_PREFRENCES_get_sound_warn()
+    return EFB.prefrences.sliders.sound_warn
+end
+
+function EFB_PREFRENCES_set_sound_enviro(value)
+    EFB.prefrences.sliders.sound_enviro = value
+end
+
+function EFB_PREFRENCES_get_sound_enviro()
+    return EFB.prefrences.sliders.sound_enviro
+end
+
+function EFB_PREFRENCES_set_brk_strength(value)
+    EFB.prefrences.sliders.brk_strength = value
+end
+
+function EFB_PREFRENCES_get_brk_strength()
+    return EFB.prefrences.sliders.brk_strength
+end
+
 function EFB_PREFRENCES_set_display_aa(value)
     EFB.prefrences.sliders.display_aa = value
 end
@@ -101,12 +113,18 @@ function EFB_PREFRENCES_get_simbrief_id()
 end
 
 function EFB_PREFRENCES_SAVE()
-    table.save(EFB, moduleDirectory .. "/Custom Module/saved_configs/EFB_preferences.cfg")
+    table.save(EFB, moduleDirectory .. "/Custom Module/saved_configs/EFB_prefrences.cfg")
 end
 
 function EFB_PREFRENCES_LOAD()
     local table_load_buffer = table.load(moduleDirectory .. "/Custom Module/saved_configs/EFB_prefrences.cfg")
+    if table_load_buffer ~= nil then
+        EFB = table_load_buffer
+    end
 end
 
 EFB_PREFRENCES_LOAD()
+
+
+
 

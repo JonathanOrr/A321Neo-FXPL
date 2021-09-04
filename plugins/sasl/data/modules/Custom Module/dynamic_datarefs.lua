@@ -885,6 +885,8 @@ VEHICLE_wv = createGlobalPropertyi("a321neo/efb/vehicles/wv", 0, false, true, fa
 
 VOLUME_ext = createGlobalPropertyf("a321neo/volume/ext", 1, false, true, false)
 VOLUME_int = createGlobalPropertyf("a321neo/volume/int", 1, false, true, false)
+VOLUME_enviro = createGlobalPropertyf("a321neo/volume/enviro", 1, false, true, false)
+VOLUME_warn = createGlobalPropertyf("a321neo/volume/warn", 1, false, true, false)
 
 --LOAD VALUES
 LOAD_flapssetting = createGlobalPropertyi("a321neo/efb/load", 1, false, true, false) --1 is 1+F, 2 is 2, 3 is 3

@@ -96,3 +96,11 @@ function draw_standby_screen(onscreen_message)
     drawTextCentered(Font_Airbus_panel,  50, 105, "PLEASE WAIT", 25, false, false, TEXT_ALIGN_LEFT, EFB_LIGHTGREY)
     drawTextCentered(Font_Airbus_panel,  50, 70, onscreen_message, 30, false, false, TEXT_ALIGN_LEFT, EFB_WHITE)
 end
+
+function within(what,min,max)
+    if what <= max and what >= min then 
+        return true 
+    else 
+        return false 
+    end
+end
