@@ -40,6 +40,25 @@ local function load_route_table()
     end
 end
 
+local function clear_displayed_data()
+    displayed_info = {
+        ["departure"] = "",
+        ["deprwy_length"] = "",
+        ["arrival"] = "",
+        ["flightno"] = "",
+        ["crz_alt"] = "",
+        ["pax"] = "",
+        ["cargo"] = "",
+        ["fuel"] = "",
+        ["ci"] = "",
+        ["deprwy"] = "",
+        ["arrrwy"] = "",
+        ["route"] = "",
+        ["alternate_route"] = "",
+    }
+    drawing_table = {}
+end
+
 local function simbrief_to_local()
     displayed_info["departure"] = x["origin"]["icao_code"]
     displayed_info["arrival"] = x["destination"]["icao_code"]
@@ -77,6 +96,7 @@ local function onContentsDownloaded ( inUrl , inString , inIsOk , inError )
     else
         fetch_fail_warning_1 = true
         simbrief_standby = false
+        clear_displayed_data()
     end
 end
 
@@ -212,7 +232,7 @@ function p5s2_draw()
     end
 
     if fetch_fail_warning_1 then
-        drawTextCentered(Font_ECAMfont,  99, 291, "NO NETWORK", 19, false, false, TEXT_ALIGN_LEFT, EFB_FULL_RED)
+        drawTextCentered(Font_ECAMfont,  99, 291, "NO DATA", 19, false, false, TEXT_ALIGN_LEFT, EFB_FULL_RED)
     end
 
     if simbrief_standby then
