@@ -171,6 +171,23 @@ end
 -------------------------------------------------------------------------------
 -- Render list
 -------------------------------------------------------------------------------
+local function get_proc_name(mcdu_data,obj)
+    if obj.point_type == POINT_TYPE_DEP_SID then
+        return mcdu_data.page_data[600].curr_fpln.apts.dep_sid.proc_name
+    elseif obj.point_type == POINT_TYPE_DEP_TRANS then
+        return mcdu_data.page_data[600].curr_fpln.apts.dep_trans.proc_name
+    elseif obj.point_type == POINT_TYPE_ARR_APPR then
+        return mcdu_data.page_data[600].curr_fpln.apts.arr_appr.proc_name
+    elseif obj.point_type == POINT_TYPE_ARR_TRANS then
+        return mcdu_data.page_data[600].curr_fpln.apts.arr_trans.proc_name
+    elseif obj.point_type == POINT_TYPE_ARR_VIA then
+        return mcdu_data.page_data[600].curr_fpln.apts.arr_via.proc_name
+    elseif obj.point_type == POINT_TYPE_ARR_STAR then
+        return mcdu_data.page_data[600].curr_fpln.apts.arr_star.proc_name
+    end
+    return ""         
+end
+
 function THIS_PAGE:render_list(mcdu_data)
 
     local list_messages = THIS_PAGE:prepare_list(mcdu_data)
@@ -187,8 +204,9 @@ function THIS_PAGE:render_list(mcdu_data)
         elseif x.point_type ~= POINT_TYPE_LEG then
             local name, proc = cifp_convert_leg_name(x)
             x.id = name -- This is necessary for the LAT REV page
+
             if #proc == 0 then
-                proc = mcdu_data.page_data[600].curr_fpln.apts.dep_sid.proc_name
+                proc = get_proc_name(mcdu_data,x)
             end
             local alt_cstr, alt_cstr_col = cifp_convert_alt_cstr(x)
             local spd_cstr = x.cstr_speed_type ~= CIFP_CSTR_SPD_NONE and tostring(x.cstr_speed) or ""
