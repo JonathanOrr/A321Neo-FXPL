@@ -170,7 +170,7 @@ function THIS_PAGE:render(mcdu_data)
     -------------------------------------
     -- RIGHT 5
     -------------------------------------
-    if lrtype == TYPE_WPT then
+    if lrtype == TYPE_WPT and not mcdu_data.lat_rev_subject.is_cifp then
         self:set_line(mcdu_data, MCDU_RIGHT, 5, "AIRWAYS>", MCDU_LARGE)
     end
 

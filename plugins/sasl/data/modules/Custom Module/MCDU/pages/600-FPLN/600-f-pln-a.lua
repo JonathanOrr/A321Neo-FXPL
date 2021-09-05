@@ -336,7 +336,12 @@ function THIS_PAGE:add_new_wpt(mcdu_data)
                     lat=sel_navaid.lat,
                     lon=sel_navaid.lon
                 }
-        FMGS_fpln_active_leg_add(leg, obj_clicked.ref_id)
+        if not FMGS_does_temp_fpln_exist() then
+            FMGS_create_copy_temp_fpln()
+        end
+        FMGS_fpln_temp_leg_add(leg, obj_clicked.ref_id)
+        FMGS_reshape_temp_fpln()
+        FMGS_insert_temp_fpln()
     end
 
 end
@@ -460,6 +465,7 @@ local function trigger_lat_rev(mcdu_data, id)
 
         if mcdu_data.page_data[600].curr_fpln.apts.arr and obj.id == mcdu_data.page_data[600].curr_fpln.apts.arr.id then
             trigger_lat_rev_apt_dest(mcdu_data)
+            return true
         end
 
         if mcdu_data.clr then   -- A clear is requested
@@ -472,6 +478,7 @@ local function trigger_lat_rev(mcdu_data, id)
             mcdu_data.lat_rev_subject = {}
             mcdu_data.lat_rev_subject.type = 2 -- WPT
             mcdu_data.lat_rev_subject.data = obj
+            mcdu_data.lat_rev_subject.is_cifp = obj.leg_type ~= nil
             mcdu_open_page(mcdu_data, 602)
         end
         return true
@@ -539,6 +546,7 @@ end
 
 function THIS_PAGE:R6(mcdu_data)
     if FMGS_does_temp_fpln_exist() then
+        FMGS_reshape_temp_fpln()
         FMGS_insert_temp_fpln()
     else
         MCDU_Page:R6(mcdu_data) -- ERROR

@@ -468,6 +468,17 @@ function FMGS_reshape_temp_fpln()    -- This function removes duplicated element
             else
                 table.insert(fpln.legs, 1, {discontinuity = true})
             end
+        elseif #fpln.legs >= 2 then
+            -- The first item is a discontinuity, so let's check
+            -- there is no duplicated like ABESI -DISC- ABESI
+            local last_dep   = fpln.apts.dep_trans or fpln.apts.dep_sid
+            if last_dep then
+                local last_dep_p = last_dep.legs[#last_dep.legs]
+                if fpln.legs[2].id == last_dep_p.leg_name then
+                    table.remove(fpln.legs, 1)  -- Remove discontinuity
+                    table.remove(fpln.legs, 1)  -- Remove duplicated
+                end
+            end
         end
         if not fpln.legs[#fpln.legs].discontinuity then
 
@@ -479,6 +490,17 @@ function FMGS_reshape_temp_fpln()    -- This function removes duplicated element
                 end
             else
                 table.insert(fpln.legs, {discontinuity = true})
+            end
+        elseif #fpln.legs >= 2 then
+            -- The last item is a discontinuity, so let's check
+            -- there is no duplicated like ABESI -DISC- ABESI
+            local first_arr   = fpln.apts.arr_trans or fpln.apts.arr_appr
+            if first_arr then
+                local first_arr_p = first_arr.legs[1]
+                if fpln.legs[#fpln.legs-1].id == first_arr_p.leg_name then
+                    table.remove(fpln.legs, #fpln.legs)  -- Remove discontinuity
+                    table.remove(fpln.legs, #fpln.legs)  -- Remove duplicated
+                end
             end
         end
     end
