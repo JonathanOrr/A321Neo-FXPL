@@ -32,7 +32,7 @@ function THIS_PAGE:render_via(mcdu_data)
     local i = 0
     local n_line = 3
     local curr_page = mcdu_data.page_data[607].curr_page
-    for idx,via in pairs(vias) do
+    for idx,via in ipairs(vias) do
         i = i + 1
         if i > 3 * (curr_page-1) and i <= 3 * (curr_page) then
             local text = via.trans_name

@@ -31,7 +31,6 @@ end
 
 local function itable_shallow_copy_legs(t1)
     assert(t1)
-    assert(t1.legs)
     local t2 = {}
 
     -- Copy the whole table but NOT the legs
@@ -40,9 +39,12 @@ local function itable_shallow_copy_legs(t1)
             t2[k] = v
         end
     end
-    t2.legs = {}
-    for k,v in ipairs(t1.legs) do
-      t2.legs[k] = v
+
+    if t1.legs then -- VIA doesn't have leg
+        t2.legs = {}
+        for k,v in ipairs(t1.legs) do
+        t2.legs[k] = v
+        end
     end
     return t2
 end
