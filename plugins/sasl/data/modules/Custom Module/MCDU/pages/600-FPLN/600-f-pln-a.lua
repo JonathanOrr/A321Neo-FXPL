@@ -208,7 +208,11 @@ function THIS_PAGE:render_list(mcdu_data)
         end
     end
 
-    self:print_simple_airport(mcdu_data, mcdu_data.page_data[600].curr_fpln.apts.arr, FMGS_perf_get_pred_trip_time(), ECAM_GREEN)
+    self:print_simple_airport(mcdu_data,
+                              mcdu_data.page_data[600].curr_fpln.apts.arr,
+                              mcdu_data.page_data[600].curr_fpln.apts.arr,
+                              FMGS_perf_get_pred_trip_time(),
+                              ECAM_GREEN)
 
     self:add_f(mcdu_data, function(line_id)
         self:set_line(mcdu_data, MCDU_LEFT, line_id, "------END OF F-PLN------", MCDU_LARGE)
@@ -216,7 +220,10 @@ function THIS_PAGE:render_list(mcdu_data)
     THIS_PAGE:render_list_altn(mcdu_data)
 end
 
-function THIS_PAGE:print_simple_airport(mcdu_data, apt, trip_time, color)
+function THIS_PAGE:print_simple_airport(mcdu_data, apt, apt_obj, trip_time, color)
+    -- APT Obj represents the object we want to save for lateral revision
+    -- it should be nil, for instance, for the line with the arrival airport in the
+    -- altn fpln.
     local arr_id    = apt.id
     local arr_alt   = apt.alt
     trip_time = trip_time or "----"
@@ -229,7 +236,7 @@ function THIS_PAGE:print_simple_airport(mcdu_data, apt, trip_time, color)
         self:set_line(mcdu_data, MCDU_LEFT,   line_id, left_side, MCDU_LARGE, color)
         self:set_line(mcdu_data, MCDU_CENTER, line_id, ctr_side, MCDU_LARGE, ECAM_WHITE)
         self:set_line(mcdu_data, MCDU_RIGHT,  line_id, right_side, MCDU_LARGE, color)
-    end)
+    end, apt_obj)
 end
 
 function THIS_PAGE:render_list_altn(mcdu_data, last_i, end_i)
@@ -243,7 +250,7 @@ function THIS_PAGE:render_list_altn(mcdu_data, last_i, end_i)
     end
 
     -- Arrival aiport
-    THIS_PAGE:print_simple_airport(mcdu_data, mcdu_data.page_data[600].curr_fpln.apts.arr, FMGS_perf_get_pred_trip_time(), ECAM_BLUE)
+    THIS_PAGE:print_simple_airport(mcdu_data, mcdu_data.page_data[600].curr_fpln.apts.arr, nil, FMGS_perf_get_pred_trip_time(), ECAM_BLUE)
 
     -- TODO: ALTN route
     self:add_f(mcdu_data, function(line_id)
@@ -251,7 +258,7 @@ function THIS_PAGE:render_list_altn(mcdu_data, last_i, end_i)
     end)
 
     -- ALTN aiport
-    THIS_PAGE:print_simple_airport(mcdu_data, mcdu_data.page_data[600].curr_fpln.apts.alt, nil, ECAM_BLUE) -- TODO Trip time
+    THIS_PAGE:print_simple_airport(mcdu_data, mcdu_data.page_data[600].curr_fpln.apts.alt, nil, nil, ECAM_BLUE) -- TODO Trip time
 
     self:add_f(mcdu_data, function(line_id)
         self:set_line(mcdu_data, MCDU_LEFT, line_id, "---END OF ALTN F-PLN----", MCDU_LARGE)
@@ -417,6 +424,13 @@ local function add_direct_waypoint(mcdu_data, x)
 
 end
 
+local function trigger_lat_rev_apt_dest(mcdu_data)
+    mcdu_data.lat_rev_subject = {}
+    mcdu_data.lat_rev_subject.type = 4 -- DEST
+    mcdu_data.lat_rev_subject.data = mcdu_data.page_data[600].curr_fpln.apts.arr
+    mcdu_open_page(mcdu_data, 602)
+end
+
 local function trigger_lat_rev(mcdu_data, id)
     if mcdu_data.page_data[600].ref_lines and mcdu_data.page_data[600].ref_lines[id] then
 
@@ -426,11 +440,15 @@ local function trigger_lat_rev(mcdu_data, id)
             return false
         end
 
+        if mcdu_data.page_data[600].curr_fpln.apts.arr and obj.id == mcdu_data.page_data[600].curr_fpln.apts.arr.id then
+            trigger_lat_rev_apt_dest(mcdu_data)
+        end
+
         if mcdu_data.clr then   -- A clear is requested
             local table_obj = point_get_table(mcdu_data, obj.point_type)
             table.remove(table_obj, obj.ref_id)
 
-        elseif #mcdu_data.entry.text > 0 then -- TODO new point
+        elseif #mcdu_data.entry.text > 0 then
             add_direct_waypoint(mcdu_data, obj)
         else
             mcdu_data.lat_rev_subject = {}
@@ -494,10 +512,7 @@ function THIS_PAGE:L6(mcdu_data)
     if FMGS_does_temp_fpln_exist() then
         FMGS_erase_temp_fpln()
     elseif mcdu_data.page_data[600].curr_fpln.apts.arr then
-        mcdu_data.lat_rev_subject = {}
-        mcdu_data.lat_rev_subject.type = 4 -- DEST
-        mcdu_data.lat_rev_subject.data = mcdu_data.page_data[600].curr_fpln.apts.arr
-        mcdu_open_page(mcdu_data, 602)
+        trigger_lat_rev_apt_dest(mcdu_data)
     else
         MCDU_Page:L6(mcdu_data) -- ERROR
     end
