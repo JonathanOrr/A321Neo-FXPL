@@ -1,29 +1,5 @@
 include("libs/table.save.lua")
 
-local EFB = {
-    prefrences = {
-        toggles = {
-            syncqnh = true,
-            pausetd = false,
-            copilot = false,
-        },
-        sliders = {
-            sound_int = 1,
-            sound_ext = 1,
-            sound_warn = 1,
-            sound_enviro = 1,
-            display_aa = 0,
-            brk_strength = 1,
-        },
-        dropdowns = {
-            nws = 0,
-        },
-        networking = {
-            simbrief_id = ""
-        },
-    },
-}   
-
 function EFB_PREFRENCES_set_syncqnh(boolean)
     EFB.prefrences.toggles.syncqnh = boolean
 end

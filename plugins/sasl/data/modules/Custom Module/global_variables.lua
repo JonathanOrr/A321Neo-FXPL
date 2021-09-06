@@ -57,7 +57,30 @@ WEIGHTS = {}
 -- Engine data depending on the user choice
 ENG = { data_is_loaded = false }
 
-EFB = {} -- TODO: Remove from here. EFB is not used outside EFB
+EFB = {
+    prefrences = {
+        toggles = {
+            syncqnh = true,
+            pausetd = false,
+            copilot = false,
+        },
+        sliders = {
+            sound_int = 1,
+            sound_ext = 1,
+            sound_warn = 1,
+            sound_enviro = 1,
+            display_aa = 0,
+            brk_strength = 1,
+        },
+        dropdowns = {
+            nws = 0,
+        },
+        networking = {
+            simbrief_id = ""
+        },
+    },
+}   
+
 
 AvionicsBay = {}
 
