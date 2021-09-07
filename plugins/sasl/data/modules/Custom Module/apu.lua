@@ -126,8 +126,8 @@ function update_egt()
 end
 
 local function single_battery_condition_fault()
-    return (ELEC_sys.batteries[1].is_connected_to_dc_bus and not ELEC_sys.batteries[2].is_connected_to_dc_bus)
-        or (not ELEC_sys.batteries[1].is_connected_to_dc_bus and ELEC_sys.batteries[2].is_connected_to_dc_bus)
+    return master_switch_status and ((ELEC_sys.batteries[1].is_connected_to_dc_bus and not ELEC_sys.batteries[2].is_connected_to_dc_bus)
+        or (not ELEC_sys.batteries[1].is_connected_to_dc_bus and ELEC_sys.batteries[2].is_connected_to_dc_bus))
 end
 
 local function update_button_datarefs()
