@@ -9,6 +9,15 @@ local function update_liftoff_timer(PFD_table)
     end
 end
 
+local function update_spdlim_timer(PFD_table)
+    if get(All_on_ground) == 1 and adirs_get_ias(PFD_table.Screen_ID) <= 60 then
+        PFD_table.PFD_SPD_LIM_timer = 0
+    end
+    if PFD_table.PFD_SPD_LIM_timer < 10 and get(Any_wheel_on_ground) == 0 then
+        PFD_table.PFD_SPD_LIM_timer = PFD_table.PFD_SPD_LIM_timer + get(DELTA_TIME)
+    end
+end
+
 local function update_blinking_timers(PFD_table)
     local total_blink_duration_s = 8
 
@@ -53,5 +62,6 @@ end
 
 function PFD_update_timers(PFD_table)
     update_liftoff_timer(PFD_table)
+    update_spdlim_timer(PFD_table)
     update_blinking_timers(PFD_table)
 end

@@ -40,7 +40,9 @@ end
 
 --UPDATE LOOPS--
 function EFB_update_page_5()
-    if efb_p5_subpage_number ==  2 then
+    if efb_p5_subpage_number == 1 then
+        p5s1_update()
+    elseif efb_p5_subpage_number ==  2 then
         p5s2_update()
     end
     mutual_update_loop()

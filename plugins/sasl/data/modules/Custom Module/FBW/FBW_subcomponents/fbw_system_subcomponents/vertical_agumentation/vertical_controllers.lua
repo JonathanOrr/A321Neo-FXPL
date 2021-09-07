@@ -32,25 +32,34 @@ FBW.vertical.controllers = {
             )
         end,
         bp = function ()
-            local elev_rat = {
+            local elev_rat_table = {
                 {-30,  1},
                 {0,    0},
                 {17,  -1},
             }
 
-            local elevs_avail = get(L_elevator_avail) + get(R_elevator_avail)
+            local L_ELEV_OK = FBW.fctl.surfaces.elev.L.controlled
+            local R_ELEV_OK = FBW.fctl.surfaces.elev.R.controlled
 
-            if elevs_avail ~= 0 then
-                FBW_PID_arrays.FBW_PITCH_RATE_PID.Actual_output = (
-                    Table_interpolate(elev_rat, get(L_elevator)) * get(L_elevator_avail) +
-                    Table_interpolate(elev_rat, get(R_elevator)) * get(R_elevator_avail)
-                ) / elevs_avail
+            local elev_rat = 0
+
+            if L_ELEV_OK and R_ELEV_OK then
+                elev_rat = (
+                    Table_interpolate(elev_rat_table, get(L_elevator)) +
+                    Table_interpolate(elev_rat_table, get(R_elevator))
+                ) / 2
+            elseif L_ELEV_OK and not R_ELEV_OK then
+                elev_rat = Table_interpolate(elev_rat_table, get(L_elevator))
+            elseif not L_ELEV_OK and R_ELEV_OK then
+                elev_rat = Table_interpolate(elev_rat_table, get(R_elevator))
             else
-                FBW_PID_arrays.FBW_PITCH_RATE_PID.Actual_output = (
-                    Table_interpolate(elev_rat, get(L_elevator)) +
-                    Table_interpolate(elev_rat, get(R_elevator))
+                elev_rat = (
+                    Table_interpolate(elev_rat_table, get(L_elevator)) +
+                    Table_interpolate(elev_rat_table, get(R_elevator))
                 ) / 2
             end
+
+            FBW_PID_arrays.FBW_PITCH_RATE_PID.Actual_output = elev_rat
         end,
     },
 
@@ -102,25 +111,34 @@ FBW.vertical.controllers = {
             end
         end,
         bp = function ()
-            local elev_rat = {
+            local elev_rat_table = {
                 {-30,  1},
                 {0,    0},
                 {17,  -1},
             }
 
-            local elevs_avail = get(L_elevator_avail) + get(R_elevator_avail)
+            local L_ELEV_OK = FBW.fctl.surfaces.elev.L.controlled
+            local R_ELEV_OK = FBW.fctl.surfaces.elev.R.controlled
 
-            if elevs_avail ~= 0 then
-                FBW_PID_arrays.FBW_CSTAR_PID.Actual_output = (
-                    Table_interpolate(elev_rat, get(L_elevator)) * get(L_elevator_avail) +
-                    Table_interpolate(elev_rat, get(R_elevator)) * get(R_elevator_avail)
-                ) / elevs_avail
+            local elev_rat = 0
+
+            if L_ELEV_OK and R_ELEV_OK then
+                elev_rat = (
+                    Table_interpolate(elev_rat_table, get(L_elevator)) +
+                    Table_interpolate(elev_rat_table, get(R_elevator))
+                ) / 2
+            elseif L_ELEV_OK and not R_ELEV_OK then
+                elev_rat = Table_interpolate(elev_rat_table, get(L_elevator))
+            elseif not L_ELEV_OK and R_ELEV_OK then
+                elev_rat = Table_interpolate(elev_rat_table, get(R_elevator))
             else
-                FBW_PID_arrays.FBW_CSTAR_PID.Actual_output = (
-                    Table_interpolate(elev_rat, get(L_elevator)) +
-                    Table_interpolate(elev_rat, get(R_elevator))
+                elev_rat = (
+                    Table_interpolate(elev_rat_table, get(L_elevator)) +
+                    Table_interpolate(elev_rat_table, get(R_elevator))
                 ) / 2
             end
+
+            FBW_PID_arrays.FBW_CSTAR_PID.Actual_output = elev_rat
         end,
     },
 
@@ -144,7 +162,7 @@ FBW.vertical.controllers = {
                 return
             end
 
-            if get(FBW_vertical_law) ~= FBW_NORMAL_LAW then--alt law <-> direct law
+            if get(FBW_vertical_law) ~= FBW_NORMAL_LAW and get(FBW_vertical_law) ~= FBW_ABNORMAL_LAW then--alt law <-> direct law
                 FBW.vertical.controllers.Flare_PID.output = get(Total_input_pitch)
                 return
             end
@@ -157,25 +175,34 @@ FBW.vertical.controllers = {
             )
         end,
         bp = function ()
-            local elev_rat = {
+            local elev_rat_table = {
                 {-30,  1},
                 {0,    0},
                 {17,  -1},
             }
 
-            local elevs_avail = get(L_elevator_avail) + get(R_elevator_avail)
+            local L_ELEV_OK = FBW.fctl.surfaces.elev.L.controlled
+            local R_ELEV_OK = FBW.fctl.surfaces.elev.R.controlled
 
-            if elevs_avail ~= 0 then
-                FBW_PID_arrays.FBW_PITCH_RATE_PID.Actual_output = (
-                    Table_interpolate(elev_rat, get(L_elevator)) * get(L_elevator_avail) +
-                    Table_interpolate(elev_rat, get(R_elevator)) * get(R_elevator_avail)
-                ) / elevs_avail
+            local elev_rat = 0
+
+            if L_ELEV_OK and R_ELEV_OK then
+                elev_rat = (
+                    Table_interpolate(elev_rat_table, get(L_elevator)) +
+                    Table_interpolate(elev_rat_table, get(R_elevator))
+                ) / 2
+            elseif L_ELEV_OK and not R_ELEV_OK then
+                elev_rat = Table_interpolate(elev_rat_table, get(L_elevator))
+            elseif not L_ELEV_OK and R_ELEV_OK then
+                elev_rat = Table_interpolate(elev_rat_table, get(R_elevator))
             else
-                FBW_PID_arrays.FBW_PITCH_RATE_PID.Actual_output = (
-                    Table_interpolate(elev_rat, get(L_elevator)) +
-                    Table_interpolate(elev_rat, get(R_elevator))
+                elev_rat = (
+                    Table_interpolate(elev_rat_table, get(L_elevator)) +
+                    Table_interpolate(elev_rat_table, get(R_elevator))
                 ) / 2
             end
+
+            FBW_PID_arrays.FBW_PITCH_RATE_PID.Actual_output = elev_rat
         end,
     },
 
@@ -190,7 +217,8 @@ FBW.vertical.controllers = {
                get(FBW_vertical_flight_mode_ratio) ~= 1 or
                FBW.filtered_sensors.IAS.filtered > get(Fixed_VMAX) or
                get(Total_vertical_g_load) < 0.5 or
-               get(FBW_vertical_law) ~= FBW_NORMAL_LAW and FBW.filtered_sensors.IAS.filtered < get(VLS) then
+               (get(FBW_vertical_law) ~= FBW_NORMAL_LAW and FBW.filtered_sensors.IAS.filtered < get(VLS)) or
+               get(FBW_ABN_LAW_TRIM_INHIB) == 1 then
                 return
             end
 
@@ -198,7 +226,7 @@ FBW.vertical.controllers = {
             local LAST_TRIM_LIM_STATUS = get(THS_trim_range_limited)
             set(THS_trim_range_limited, 0)
             if get(FBW_vertical_law) == FBW_NORMAL_LAW then
-                if adirs_get_avg_aoa() > get(Aprot_AoA) - 1 then
+                if FBW.vertical.protections.General.AoA.H_AOA_PROT_ACTIVE then
                     set(THS_trim_range_limited, 1)
                 elseif get(Total_vertical_g_load) > 1.25 then
                     set(THS_trim_range_limited, 1)

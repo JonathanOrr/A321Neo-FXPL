@@ -305,3 +305,81 @@ end
 function drawTextCentered(font, x, y, string, size, isbold, isitalic, alignment, colour)
     sasl.gl.drawText (font, x, y - (size/3),string, size, isbold, isitalic, alignment, colour)
 end
+
+function drawEmptyTriangle(x1,y1,x2,y2,x3,y3,width,colour)
+    sasl.gl.drawWideLine(x1, y1 , x2, y2, width, colour)
+    sasl.gl.drawWideLine(x2, y2 , x3, y3, width, colour)
+    sasl.gl.drawWideLine(x3, y3 , x1, y1, width, colour)
+end
+
+function Init_local_coor(coor_table)
+    coor_table.coor = {}
+    coor_table.local_coor = {}
+    coor_table.curr_coor_idx = 1
+
+    coor_table.setX = function (global_X)
+        coor_table.coor[coor_table.curr_coor_idx] = {}
+        coor_table.coor[coor_table.curr_coor_idx].x = global_X
+
+        if coor_table.local_coor[coor_table.curr_coor_idx] == nil then
+            return coor_table.coor[coor_table.curr_coor_idx].x
+        else
+            return coor_table.local_coor[coor_table.curr_coor_idx].x
+        end
+    end
+
+    coor_table.setY = function (global_Y)
+        coor_table.coor[coor_table.curr_coor_idx].y = global_Y
+
+        if coor_table.local_coor[coor_table.curr_coor_idx] == nil then
+            local output = coor_table.coor[coor_table.curr_coor_idx].y
+            coor_table.curr_coor_idx = coor_table.curr_coor_idx + 1
+            return output
+        else
+            local output = coor_table.local_coor[coor_table.curr_coor_idx].y
+            coor_table.curr_coor_idx = coor_table.curr_coor_idx + 1
+            return output
+        end
+    end
+
+    coor_table.size = {}
+    coor_table.local_size = {}
+    coor_table.curr_size_idx = 1
+
+    coor_table.setSize = function (global_Size)
+        coor_table.size[coor_table.curr_size_idx] = global_Size
+
+        if coor_table.local_size[coor_table.curr_size_idx] == nil then
+            local output = coor_table.size[coor_table.curr_size_idx]
+            coor_table.curr_size_idx = coor_table.curr_size_idx + 1
+            return output
+        else
+            local output = coor_table.local_size[coor_table.curr_size_idx]
+            coor_table.curr_size_idx = coor_table.curr_size_idx + 1
+            return output
+        end
+    end
+
+    coor_table.scale = function (new_width, new_height)
+        local x_factor = new_width / coor_table.width
+        local y_factor = new_height / coor_table.height
+
+        if #coor_table.coor == 0 then
+            coor_table.curr_coor_idx = 1
+            return
+        end
+
+        for i = 1, #coor_table.coor do
+            coor_table.local_coor[i] = {}
+            coor_table.local_coor[i].x = coor_table.coor[i].x * x_factor
+            coor_table.local_coor[i].y = coor_table.coor[i].y * y_factor
+        end
+
+        for i = 1, #coor_table.size do
+            coor_table.local_size[i] = coor_table.size[i] * x_factor
+        end
+
+        coor_table.curr_coor_idx = 1
+        coor_table.curr_size_idx = 1
+    end
+end

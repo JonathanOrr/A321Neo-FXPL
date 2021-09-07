@@ -166,6 +166,20 @@ local function draw_ecam_lower_section()
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2+370, size[2]/2-375, GW, 36, false, false, TEXT_ALIGN_RIGHT, color)
 end
 
+
+local function update_sts()
+    set(EWD_box_sts, 0)
+    local is_normal = ecam_sts:is_normal()
+
+    set(Ecam_status_is_normal, is_normal and 1 or 0) -- Used in ECAM_automation.lua
+    if (not is_normal) or (not ecam_sts:is_normal_maintenance() and get(EWD_flight_phase) == PHASE_2ND_ENG_OFF ) then
+        if get(Ecam_current_status) ~= ECAM_STATUS_SHOW_EWD_STS and get(Ecam_current_status) ~= ECAM_STATUS_SHOW_EWD then
+            set(EWD_box_sts, 1)
+        end
+    end
+end
+
+
 function update()
     perf_measure_start("ECAM:update()")
 
@@ -188,6 +202,14 @@ function update()
     if get(TIME) - last_update_gload > 0.1 then
         last_update_gload = get(TIME)
         gload = get(Total_vertical_g_load)
+    end
+
+    -- Update STS box every 500ms
+    local last_update = math.random()
+
+    if get(TIME) - last_update > 0.5 then
+        update_sts()
+        last_update = get(TIME)
     end
 
     perf_measure_stop("ECAM:update()")
@@ -264,15 +286,6 @@ function draw()
     sasl.gl.restoreRenderTarget()
 
     sasl.gl.drawTexture(ECAM_popup_texture, 0, 0, 900, 900, {1,1,1})
-
-    -- Update STS box
-    set(EWD_box_sts, 0)
-    set(Ecam_status_is_normal, ecam_sts:is_normal() and 1 or 0) -- Used in ECAM_automation.lua
-    if (not ecam_sts:is_normal()) or (not ecam_sts:is_normal_maintenance() and get(EWD_flight_phase) == 10 ) then
-        if get(Ecam_current_status) ~= ECAM_STATUS_SHOW_EWD_STS and get(Ecam_current_status) ~= ECAM_STATUS_SHOW_EWD then
-            set(EWD_box_sts, 1)
-        end
-    end
 
     perf_measure_stop("ECAM:draw()")
 

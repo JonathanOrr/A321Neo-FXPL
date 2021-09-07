@@ -67,10 +67,6 @@ FMGS_sys.fpln = {
             arr=nil,        -- As returned by AvionicsBay, runways included
             arr_cifp=nil,   -- All the loaded CIFP
             arr_rwy=nil,
-            arr_appr=nil,
-            arr_star=nil,
-            arr_trans=nil,
-            arr_via=nil,
             
             alt=nil,    -- As returned by AvionicsBay, runways included
             alt_cifp=nil,
@@ -95,6 +91,12 @@ FMGS_sys.fpln = {
     sec = nil
 }
 
+FMGS_sys.dirto = {
+    directing_wpt = "RICOO",
+    radial_in = nil,
+    radial_out = nil
+}
+
 FMGS_sys.perf = {
     takeoff = {
         v1 = nil,
@@ -103,14 +105,32 @@ FMGS_sys.perf = {
         v1_popped = nil,    -- This is for MCDU visualization purposes only
         vr_popped = nil,    -- This is for MCDU visualization purposes only
         v2_popped = nil,    -- This is for MCDU visualization purposes only
-        trans_alt = nil,
-        thr_red = nil,
-        acc = nil,
-        eng_out = nil,
+        trans_alt = 10000,
+        user_trans_alt = nil,
+        thr_red = 0 + 1500,
+        acc = 0 + 1500,
+        eng_out = 0+ 1500,
+        user_thr_red = nil,
+        user_acc = nil,
+        user_eng_out = nil,
         toshift = nil,
         flaps = nil,
         ths = nil, --This is a number not a string (not DNXXX or UPXXX), safe to compare
         flex_temp = nil,
+    },
+    landing = {
+        qnh = nil,
+        mda = nil,
+        dh  = nil,
+        temp = nil,
+        mag = nil,
+        wind = nil,
+        trans_alt = 10000,
+        user_trans_alt = nil,
+        vapp = 143,
+        user_vapp = nil,
+        landing_config = 4, -- 3 is 3, 4 is full
+        vls = 138
     }
 }
 
@@ -203,37 +223,6 @@ local function update_cifp()
     if FMGS_sys.fpln.active.apts.arr ~= nil and FMGS_sys.fpln.active.apts.arr_cifp == nil then
         if loading_cifp == 2 then
             FMGS_sys.fpln.active.apts.arr_cifp = AvionicsBay.cifp.get(FMGS_sys.fpln.active.apts.arr.id)
-
-            -- Add plain RWYs to the arr_cifp
-            for i,x in ipairs(FMGS_sys.fpln.active.apts.arr.rwys) do
-                table.insert(FMGS_sys.fpln.active.apts.arr_cifp.apprs, {
-                    type        = CIFP_TYPE_APPR_RWY_DIRECT,
-                    proc_name   = "R" .. x.name,
-                    trans_name  = "ALL",
-                    legs = {}
-                })
-                table.insert(FMGS_sys.fpln.active.apts.arr_cifp.apprs, {
-                    type        = CIFP_TYPE_APPR_RWY_DIRECT,
-                    proc_name   = "R" .. x.sibl_name,
-                    trans_name  = "ALL",
-                    legs = {}
-                })
-            end
-
-            -- Add STARs
-            table.insert(FMGS_sys.fpln.active.apts.arr_cifp.stars, {
-                type        = CIFP_TYPE_STAR_RWY_TRANS_FMS,
-                proc_name   = "NO STAR",
-                trans_name  = "ALL",
-                legs = {}
-            })
-            table.insert(FMGS_sys.fpln.active.apts.arr_cifp.stars, {
-                type        = CIFP_TYPE_STAR_ENR_TRANS_FMS,
-                proc_name   = "ALL",
-                trans_name  = "NO TRANS",
-                legs = {}
-            })
-
             if FMGS_sys.fpln.temp then
                 FMGS_sys.fpln.temp.apts.arr_cifp = FMGS_sys.fpln.active.apts.arr_cifp
             end

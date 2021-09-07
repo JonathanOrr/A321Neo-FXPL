@@ -6,10 +6,15 @@
 {2f6e7063-8c77-4f8d-a1c9-393a1f21d5b7} event:/BatteryRelay/1 Off
 {2b35580e-c22e-49d8-b6e1-8079883b310e} event:/BatteryRelay/2
 {76004d39-cc8a-48fa-82f6-2e5f037893c8} event:/BatteryRelay/2 Off
+{209943af-b64c-4cd4-acbc-ed93987e4ef7} event:/BatteryRelay2/1
+{af41ef3b-3d63-4339-9e28-bd200132d5c9} event:/BatteryRelay2/1off
+{ecefde90-caf8-46f6-bad5-49c880f8fb03} event:/BatteryRelay2/2
+{17cd29eb-77fd-49b5-9f70-e40338390ead} event:/BatteryRelay2/2off
 {4b76b401-4666-4589-b8fa-f3597102af21} event:/Brakes/Off
 {79db9fdb-19da-4194-b2da-62c8e683c1ad} event:/Brakes/On
 {bb6344c9-4ba5-48fd-bf91-9d10d49aa4bd} event:/Cockpit Door/Close
 {196a8bd5-db14-46c9-90df-fe770c9a4d21} event:/Cockpit Door/Open
+{62e24e35-6c42-4ffc-9457-c2935ed4b5a5} event:/CockpitMechanical/FireTest/1
 {fa3ccb63-2201-42a0-9ba9-80eea8c41f31} event:/CockpitMechanical/Lights/1
 {7c1f3bc8-8a78-496c-929d-a763939df0aa} event:/CockpitMechanical/Lights/2
 {180bfc42-72ad-426e-9893-90b2e97a68a6} event:/CockpitMechanical/Lights/3
@@ -19,26 +24,18 @@
 {4c126686-6c9f-44a1-b45a-dd4a04ef8a46} event:/CockpitMechanical/Rotary/Rotary3
 {5573431a-a5bd-40cc-8c97-e4237e3a8940} event:/CockpitMechanical/Rotary/Rotary4
 {b4c354fe-8351-4062-8225-807c03a732ba} event:/CockpitMechanical/Rotary/Rotary_Range_0
+{b11badc4-0f38-4127-9334-3d061eee8280} event:/CockpitMechanical/RotaryPullOut/ADIRS/1
+{dfff1641-4a93-4aa8-a9e5-f40d711ba6c5} event:/CockpitMechanical/RotaryPullOut/Pack Flow/1
+{046ef6ea-d6e8-498c-8976-f4623039c49e} event:/CockpitMechanical/RotaryPullOut/Starter/1
+{e85abcbd-a347-45cd-b820-3b745c93906b} event:/CockpitMechanical/RotaryPullOut/Wiper/1
 {a5f9480f-6b7e-42e2-a081-13b0764c74f3} event:/CockpitMechanical/RotaryPullOut/Rotary1
 {7f631cc3-4105-406c-ba42-4cef2159842b} event:/CockpitMechanical/RotaryPullOut/Rotary2
 {ec3a03c4-087b-4913-a35a-6783a6dbca91} event:/CockpitMechanical/RotaryPullOut/Rotary3
 {44912abb-344e-4cac-99bf-78146e19282c} event:/CockpitMechanical/RudderTrim/Left
 {bcd830bd-e1c3-4db9-a64e-8bec3ccf5e11} event:/CockpitMechanical/RudderTrim/Neutral
 {9ac79502-0add-42e5-88bb-da471001cdcc} event:/CockpitMechanical/RudderTrim/Right
-{2d285758-cb5a-4314-ac89-d3a2b5cbc04b} event:/CockpitMechanical/Thrust Levers/ThrLvrCL
-{c96b0094-28a7-4162-b5cf-135ac063d565} event:/CockpitMechanical/Thrust Levers/ThrLvrExit
-{a41422e6-cbf7-47f8-ac6b-98c7e2416b3b} event:/CockpitMechanical/Thrust Levers/ThrLvrFLX
-{5637522b-12b2-4a0f-88cd-437990804430} event:/CockpitMechanical/Thrust Levers/ThrLvrIdle
-{4f37aed1-3eb9-4a5c-b3da-7a0308da4a78} event:/CockpitMechanical/Thrust Levers/ThrLvrRev
-{014c34dd-cc81-463a-a539-2e5fc4b75ea7} event:/CockpitMechanical/Thrust Levers/ThrLvrRevFull
-{b91efb68-0853-461b-8e6a-91b68abbb0b5} event:/CockpitMechanical/Thrust Levers/ThrLvrTOGA
-{e82c13d4-5dee-4ce4-972b-5a0e4657d28d} event:/CockpitMechanical/Thrust Levers Right/ThrLvrCL
-{7baa045e-3891-4364-8af3-204deae5d418} event:/CockpitMechanical/Thrust Levers Right/ThrLvrExit
-{affa8b49-ce17-4e01-9f4e-1d00f80c595f} event:/CockpitMechanical/Thrust Levers Right/ThrLvrFLX
-{99dab0c2-6b44-43ab-bca8-0d126c979a16} event:/CockpitMechanical/Thrust Levers Right/ThrLvrIdle
-{8a3bd8e2-308f-44e8-816a-7170f0cac343} event:/CockpitMechanical/Thrust Levers Right/ThrLvrRev
-{59ed5759-1f81-4b74-84c7-6ee27c5ae628} event:/CockpitMechanical/Thrust Levers Right/ThrLvrRevFull
-{8e3211bf-fd66-4efe-bc5c-b69987ae646f} event:/CockpitMechanical/Thrust Levers Right/ThrLvrTOGA
+{519ca1e0-04ab-4222-9516-a379d8789bb2} event:/CockpitMechanical/ATDisconnect
+{a5154429-6a4c-41fa-9158-7c79f0beb232} event:/CockpitMechanical/Big Round Button
 {850bb3a5-fa7f-4d22-bf9d-a80868eee0e7} event:/CockpitMechanical/Big Round Button Press
 {bafd0ab7-85f5-4e8f-8898-00cef3bbf4d3} event:/CockpitMechanical/Big Round Button Release
 {ed910ed0-bdc8-47e6-a8cb-d025b4ba55d4} event:/CockpitMechanical/Engine Master
@@ -88,6 +85,9 @@
 {78b8fd51-ea07-41b0-8e7a-6c6325c9a885} event:/Engines V2/HowlEnd
 {202a02c2-878b-40e8-ad75-a500bd51d2bb} event:/Engines V2/HowlLogic
 {e6a2abbe-7c23-46e2-9a42-26283e21c906} event:/Engines V2/HowlLogicR
+{1b6e849a-36b8-4051-ab44-6cf7bf826a5c} event:/Engines V2 PW1100G/EnginesL
+{4d1db343-0876-449e-be12-1c03c1e015f4} event:/Engines V2 PW1100G/EnginesR
+{3d34c4f6-8517-4a2f-8415-73bf979fa1c5} event:/Engines V2 PW1100G/EnginesTestbed
 {4103ca70-07d5-4dc2-babf-bf9aa8111a0d} event:/Engines V3 LEAP/Boom
 {0401a595-e036-484a-9a97-ef19f151ce96} event:/Engines V3 LEAP/Engine Start Ext
 {6194f9e1-393c-46be-9623-345f2e882efc} event:/Engines V3 LEAP/Engine Start N2 L
@@ -158,6 +158,7 @@
 {c5026dad-5d9f-4216-8704-8c70dda24ccf} event:/GPWS/tlgear
 {3e6916a8-a12b-48c8-a1b3-6bb67fcfc52d} event:/GPWS/tlterr
 {a1ca98db-c1d8-4efd-812b-67caeb038088} event:/GPWS/windshear
+{2e0d9edf-b1fc-4732-82ee-b03596fa73a8} event:/Ground Roll 2/Nose
 {1797518a-7ff2-454e-9ee2-7b42132805f6} event:/Markers/IM
 {172b8abb-b2ca-4ee0-b795-04ff6636e2dd} event:/Markers/MM
 {6b92f900-dda8-4220-9b85-5404c507c625} event:/Markers/OM
@@ -207,6 +208,23 @@
 {b575ea2b-7a6a-4e54-97ea-21c57f90f6c3} event:/TCAS/monitorvs
 {96a1dd4e-039c-45f1-8d60-87fbbb469edf} event:/TCAS/tfc 1x
 {0bd877d2-887d-45fc-b705-555c42287d47} event:/TCAS/tfc 2x
+{f2670482-2871-48a7-98d9-6d252c266d81} event:/Throttle Gates/Enter/1
+{0b9fe559-a89c-402f-98cc-a45578e75314} event:/Throttle Gates/Enter/2
+{313c927b-26c5-4b48-ab5b-b1bea2270f6b} event:/Throttle Gates/Enter/3
+{fb58b593-49c1-4e1b-b111-589bb5a5b21c} event:/Throttle Gates/Left/CL
+{6853cb18-d8df-491d-9715-d9c61d35bb8c} event:/Throttle Gates/Left/FLX
+{5fb371b0-62ba-4198-85c6-e046a2ee2dce} event:/Throttle Gates/Left/IDLE
+{38230590-1bd3-45dc-b631-35246f208366} event:/Throttle Gates/Left/REV
+{55fcd1f6-6aea-4887-9c4e-40f7d0475a17} event:/Throttle Gates/Left/REVFULL
+{381452dd-89f4-414d-8052-ea2c2cf7e351} event:/Throttle Gates/Left/REVSTOW
+{fec8caca-79df-4429-be93-3cb6b88c93cb} event:/Throttle Gates/Left/TOGA
+{8fa9ed3f-930d-4520-9c78-f64f343630be} event:/Throttle Gates/Right/CL
+{42eec401-d38a-4a16-8c47-3af492a1a417} event:/Throttle Gates/Right/FLX
+{ac4c0405-c9e7-4b76-80ba-a26165d7407d} event:/Throttle Gates/Right/IDLE
+{24a2ec4b-6727-4b55-b646-da6e0b1bc7c6} event:/Throttle Gates/Right/REV
+{bc2497fb-8839-420f-bebc-d5f88dab4566} event:/Throttle Gates/Right/REVFULL
+{8f707050-64ea-4f12-97a7-cded2ceb9e9d} event:/Throttle Gates/Right/REVSTOW
+{4b10f012-5f94-4773-a9c8-8b7f969ef19d} event:/Throttle Gates/Right/TOGA
 {0a3ca941-541b-49ea-b0a6-654bfc0ba63f} event:/Warnings/Calvary
 {c46115eb-d151-4e54-ae83-4175129cabdb} event:/Warnings/Caution
 {ff1b5104-6805-45d0-8716-2f0c54177361} event:/Warnings/Cchord
@@ -230,13 +248,13 @@
 {baf9bc41-c708-42a2-bfac-b33deb7ddbc4} event:/Avionics
 {356cf20a-c643-42c5-8a6d-7a00fb3d4288} event:/Battery
 {1edd836c-b29a-4101-a732-2d2eef744bbe} event:/Blower
+{6c82538f-09c7-4944-ace2-20ef5e72157a} event:/Blower2
 {3d8092a4-9bd8-4b19-a02f-49fd954ffb79} event:/BlowerStart
 {89d27a8f-0f45-4230-905b-f244fdde49a4} event:/Brake Fan L
 {87259c62-a9fb-4b18-b7e4-d93a6e30c0a1} event:/Brake Fan R
 {5db7e5fc-e4e5-4189-b301-596d1f1dd3c2} event:/BrightnessClick
-{fbc642bf-0e6c-4030-9901-0f1ce878cfe7} event:/BusKick
+{2326317b-30e3-4560-ac4d-9c19a033d8b7} event:/BusEnd
 {5c5f1485-bce5-419e-9d5c-a5ff2ec145e8} event:/BusKick2
-{635b86aa-7d9b-4dad-9a71-371b15257ae8} event:/BusOn
 {6c24dc2a-1727-448b-804d-7e73885411c3} event:/BusOn2
 {bf628244-9f1c-4c33-97bd-8b793852fd47} event:/Cabin
 {df97eb35-a18e-494e-b074-1d496aa0cda2} event:/Evac Horn
@@ -259,6 +277,7 @@
 {7797c67b-9d14-445b-8cc9-e63e0eebabf3} event:/TouchMain
 {72dd99e0-d646-42c0-8cc7-4e3f356095cc} event:/TouchNose
 {341873bc-d31e-4ee3-9cb2-1b0c79682754} event:/Wind
+{0c5d5438-c24a-4fdf-8f39-231cdd63ed85} event:/Wind Fake
 {cba7ef70-43b1-4842-9d4b-51501041377c} event:/Yellow Hyd Pump
 {9f08114d-36ec-44cc-b8bf-b2babda09f9e} bus:/
 {7f7c05a4-e05a-4d44-94fe-d4691147a9b7} bus:/Master
@@ -271,9 +290,11 @@
 {751f5066-4651-4afb-a410-4cb9db0894c9} bus:/Master/Exterior Unprocessed/Avionics/Interior
 {d8526059-b27c-4eae-9b14-a1ee1cb3dfa1} bus:/Master/Exterior Unprocessed/Avionics/Radios
 {77575f3b-b9cd-4bff-9056-637cff744a14} bus:/Master/Exterior Unprocessed/Avionics/UI
-{7a0b49ba-aead-4c30-af12-561f455d9c0b} bus:/Master/Exterior Unprocessed/ExteriorNI
-{10525979-1fa1-4401-8583-bec00053b160} bus:/Master/Exterior Unprocessed/ExteriorWI
-{b044900b-47b8-49df-a4ad-09b875247d7b} bus:/Master/Exterior Unprocessed/NewEvenQuieter
+{dd132ea2-eeb1-43a4-b83e-4177c68b7bd9} bus:/Master/Exterior Unprocessed/ENGN
+{7a0b49ba-aead-4c30-af12-561f455d9c0b} bus:/Master/Exterior Unprocessed/EXTR
+{317897e4-8970-4c6d-bb3a-7280ebb8060f} bus:/Master/Exterior Unprocessed/GNDRL
+{28180a05-2279-4e52-a471-e0f09c876cab} bus:/Master/Exterior Unprocessed/GPWS
+{b044900b-47b8-49df-a4ad-09b875247d7b} bus:/Master/Exterior Unprocessed/INTR
 {15e9c653-fbca-41ca-8241-7cd3b3870fc8} snapshot:/Inside
 {e5b38f91-83fb-4cec-a2d2-a0170dddb70a} snapshot:/FadingBegin
 {6bb566cf-f4e3-43dd-85f1-2529a372f90b} bank:/Engines_CFM

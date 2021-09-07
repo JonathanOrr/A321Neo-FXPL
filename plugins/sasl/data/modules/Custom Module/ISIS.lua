@@ -239,9 +239,12 @@ local function draw_speed_tape()
                     end        
                 end
             end
-            sasl.gl.drawRectangle(76, 219 , 28, 45, {10/255, 15/255, 25/255})
-            sasl.gl.drawTexture (ISIS_spd_pointer, 76, 219, 28, 45, {1, 1, 1,1})
         end
+
+        sasl.gl.resetClipArea ()
+
+        sasl.gl.drawRectangle(76, 219 , 28, 45, {10/255, 15/255, 25/255})
+        sasl.gl.drawTexture (ISIS_spd_pointer, 76, 219, 28, 45, {1, 1, 1,1})
 
         for i=1, 4 do
             draw_speed_bugs(bugs_enabled[i], bugs[i])
@@ -249,8 +252,6 @@ local function draw_speed_tape()
         
         -----------------NOW LETS DRAW THE SPEED BUGS FROM THE BUGS PAGE
         ------------------I CAN'T UNDERSTAND MY OWN CODE EITHER, IT RANDOMLY WORKED.
-
-        sasl.gl.resetClipArea ()
     else 
         draw_spd_stby()
     end

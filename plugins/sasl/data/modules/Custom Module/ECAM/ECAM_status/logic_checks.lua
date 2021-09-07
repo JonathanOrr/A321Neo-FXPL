@@ -36,7 +36,7 @@ end
 
 function engine_shuts_down()
     return (get(Engine_1_master_switch) == 0 and get(EWD_flight_phase) >= PHASE_ABOVE_80_KTS and get(EWD_flight_phase) <= PHASE_TOUCHDOWN)
-    or ((get(EWD_flight_phase) < 3 or get(EWD_flight_phase) > 8) and get(Fire_pb_ENG1_status) == 1)
+    or ((get(EWD_flight_phase) < PHASE_1ST_ENG_TO_PWR or get(EWD_flight_phase) > PHASE_TOUCHDOWN) and get(Fire_pb_ENG1_status) == 1)
 end
 
 function spdbrk_3_and_4_fault() --fcom 5231
@@ -77,16 +77,16 @@ end
 
 function one_or_more_spoiler_is_fully_extended_in_speedbrake_fault() --fcom 5231
     return 
-    (get(Left_spoiler_1) >= 25 or 
-    get(Left_spoiler_2) >= 25 or 
-    get(Left_spoiler_3) >= 25 or 
-    get(Left_spoiler_4) >= 25 or 
-    get(Left_spoiler_5) >= 25 or 
-    get(Right_spoiler_1) >= 25 or 
-    get(Right_spoiler_2) >= 25 or 
-    get(Right_spoiler_3) >= 25 or 
-    get(Right_spoiler_4) >= 25 or 
-    get(Right_spoiler_5) >= 25) and
+    (get(L_SPLR_1) >= 25 or 
+    get(L_SPLR_2) >= 25 or 
+    get(L_SPLR_3) >= 25 or 
+    get(L_SPLR_4) >= 25 or 
+    get(L_SPLR_5) >= 25 or 
+    get(R_SPLR_1) >= 25 or 
+    get(R_SPLR_2) >= 25 or 
+    get(R_SPLR_3) >= 25 or 
+    get(R_SPLR_4) >= 25 or 
+    get(R_SPLR_5) >= 25) and
     spoilers_are_fucked()
 end
 

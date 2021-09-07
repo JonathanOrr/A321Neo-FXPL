@@ -310,12 +310,12 @@ local function draw_common_messages_center(data)
     end
     
     if color ~= nil then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, 480, text, 36, false, false, TEXT_ALIGN_CENTER, color)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, 530, text, 48, false, false, TEXT_ALIGN_CENTER, color)
     end
 
     if data.config.mode == ND_MODE_VOR then
         if data.misc.vor_failure then
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2, 360, "VOR", 48, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
+            sasl.gl.drawText(Font_AirbusDUL, size[1]/2, 482, "VOR", 48, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
         end
     end
 
@@ -326,21 +326,21 @@ local function draw_common_messages_center(data)
         end
 
         if data.misc.gs_failure then
-            sasl.gl.drawText(Font_AirbusDUL, size[1]-50, size[2]/2+40, "G", 32, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
+            sasl.gl.drawText(Font_AirbusDUL, size[1]-50, size[2]/2+48, "G", 32, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
             sasl.gl.drawText(Font_AirbusDUL, size[1]-50, size[2]/2,    "/", 32, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
-            sasl.gl.drawText(Font_AirbusDUL, size[1]-50, size[2]/2-40, "S", 32, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
+            sasl.gl.drawText(Font_AirbusDUL, size[1]-50, size[2]/2-48, "S", 32, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
         end
     end
     
     if data.misc.windshear_pred_fail then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]-120, size[2]/2-170, "PRED W/S", 30, false, false, TEXT_ALIGN_CENTER, ECAM_RED)    
+        sasl.gl.drawText(Font_AirbusDUL, size[1]-120, size[2]/2-170, "PRED W/S", 48, false, false, TEXT_ALIGN_CENTER, ECAM_RED)    
     end
 
 end
 
 local function draw_common_messages_top(data)
     if not data.inputs.is_heading_valid then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, 630, "HDG", 42, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2, 612, "HDG", 48, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
     end
     
     if data.misc.hdg_discrepancy then

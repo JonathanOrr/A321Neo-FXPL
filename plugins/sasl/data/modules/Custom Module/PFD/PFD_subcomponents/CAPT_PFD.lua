@@ -13,7 +13,7 @@ include('PFD/PFD_sub_functions/PFD_vs_needle.lua')
 include('PFD/PFD_sub_functions/PFD_timers.lua')
 fbo = true
 
-local capt_PFD_table = {
+PFD.Capt_PFD_table = {
     Screen_ID = PFD_CAPT,
     Opposite_screen_ID = PFD_FO,
     NAVDATA_update_timer = 0,
@@ -33,6 +33,7 @@ local capt_PFD_table = {
     },
     Distance_to_dme = 0,
     PFD_aircraft_in_air_timer = 0,
+    PFD_SPD_LIM_timer = 0,
     ATT_blink_now = false,
     SPD_blink_now = false,
     ALT_blink_now = false,
@@ -46,9 +47,8 @@ local capt_PFD_table = {
     PFD_brightness = Capt_PFD_brightness_act,
     RA_ALT = Capt_ra_alt_ft,
     VS = PFD_Capt_VS,
-    AoA = Filtered_capt_AoA,
-    Corresponding_FAC_status = FAC_1_status,
-    Opposite_FAC_status = FAC_2_status,
+    AoA = Filtered_CA_AoA,
+    FAC_SPD_LIM_AVAIL = FBW.FAC_COMPUTATION.FAC_1.SPD_LIM_AVAIL,
     Vmax_prot_spd = VMAX_prot,
     Vmax_spd = VMAX,
     VFE = VFE_speed,
@@ -56,12 +56,12 @@ local capt_PFD_table = {
     F_spd = F_speed,
     S_spd = S_speed,
     GD_spd = GD,
-    Aprot_SPD = Vaprot_vsw,
-    Amax = Valpha_MAX,
+    Aprot_SPD = CA_Vaprot_VSW,
+    Amax = CA_Valpha_MAX,
     Show_spd_trend = true,
     Show_mach = true,
     LS_enabled = Capt_landing_system_enabled,
-    BUSS_update_timer = 0,
+    BUSS_update_time = 0,
     BUSS_vsw_pos = 85,
     BUSS_target_pos = 450,
 }
@@ -73,8 +73,8 @@ function update()
 
     pb_set(PB.FCU.capt_ls, false, get(Capt_landing_system_enabled) == 1)
 
-    Get_ILS_data(capt_PFD_table)
-    PFD_update_timers(capt_PFD_table)
+    Get_ILS_data(PFD.Capt_PFD_table)
+    PFD_update_timers(PFD.Capt_PFD_table)
 end
 
 local skip_1st_frame_AA = true
@@ -89,13 +89,13 @@ function draw()
     skip_1st_frame_AA = false
 
     PFD_draw_FMA(PFD_ALL_FMA)
-    PFD_draw_LS(capt_PFD_table)
-    PFD_draw_att(capt_PFD_table)
-    PFD_draw_spd_tape(capt_PFD_table)
-    PFD_draw_alt_tape(capt_PFD_table)
-    PFD_draw_alt_ref(capt_PFD_table)
-    PFD_draw_hdg_tape(capt_PFD_table)
-    PFD_draw_vs_needle(capt_PFD_table)
+    PFD_draw_LS(PFD.Capt_PFD_table)
+    PFD_draw_att(PFD.Capt_PFD_table)
+    PFD_draw_spd_tape(0, 0, PFD.Capt_PFD_table)
+    PFD_draw_alt_tape(PFD.Capt_PFD_table)
+    PFD_draw_alt_ref(PFD.Capt_PFD_table)
+    PFD_draw_hdg_tape(PFD.Capt_PFD_table)
+    PFD_draw_vs_needle(PFD.Capt_PFD_table)
     sasl.gl.restoreRenderTarget()
 
     sasl.gl.drawTexture(CAPT_PFD_popup_texture, 0, 0, 900, 900, {1,1,1})

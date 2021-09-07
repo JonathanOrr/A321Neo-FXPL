@@ -4,7 +4,7 @@ local target_airport = ""
 local metar_button_begin = 0
 local metar_string = ""
 local please_wait_cover_begin = 0
-local metar_buffer = "No METAR report requested."
+local metar_buffer = "NO METAR REPORT RECEIVED"
 local metar_wait_time = 3
 
 
@@ -18,14 +18,14 @@ local function onContentsDownloaded ( inUrl , inString , inIsOk , inError )
         --logInfo ( inString )
         metar_buffer = inString
     else
-        metar_buffer = "Error: Could not obtain valid METAR report for the entered airport."
+        metar_buffer = "NO METAR REPORT RECEIVED"
     end
 end
 
 --KEYBOARD CAPTURE
 
 local function p5s1_plug_in_the_buffer()
-    if string.len(key_p5s1_buffer) <= 0 then --IF THE LENGTH OF THE STRING IS 0, THEN REVERT TO THE PREVIOUS VALUE. ELSE, PLUG-IN THE NEW VALUE.
+    if string.len(key_p5s1_buffer) < 4 then --IF THE LENGTH OF THE STRING IS 0, THEN REVERT TO THE PREVIOUS VALUE. ELSE, PLUG-IN THE NEW VALUE.
         key_p5s1_focus = 0
         key_p5s1_buffer = ""
     else
@@ -76,13 +76,14 @@ end
 
 --MOUSE & BUTTONS--
 function p5s1_buttons()
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 618,417,713,447, function ()
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 400,566,470,592, function ()
         key_p5s1_focus = key_p5s1_focus == 1 and 0 or 1
     end)
 
-    click_anywhere_except_that_area( 618, 417, 713, 447, p5s1_plug_in_the_buffer)
+    click_anywhere_except_that_area( 400,566,470,592, p5s1_plug_in_the_buffer)
 
-    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 436,352,707,382, function ()
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 606,566,755,595, function ()
+        metar_buffer = "NO METAR REPORT RECEIVED"
         metar_button_begin = get(TIME)
         please_wait_cover_begin = get(TIME)
         if string.len(target_airport) == 4 then
@@ -91,46 +92,74 @@ function p5s1_buttons()
     end)
 end
 
+local function draw_request_button()
+    if get(TIME) -  metar_button_begin > BUTTON_PRESS_TIME then
+        SASL_drawSegmentedImg_xcenter_aligned (EFB_LOAD_compute_button, 680,565,300,32,2,1)
+    else
+        SASL_drawSegmentedImg_xcenter_aligned (EFB_LOAD_compute_button, 680,565,300,32,2,2)
+    end
+    drawTextCentered( Font_Airbus_panel , 680,580, "REQUEST" , 19 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
+end
+
+local function draw_metar_results()
+    local starting_y_coordinates  = 481
+    local metar_length = string.len(metar_buffer)
+    local char_per_line = 61
+    local number_of_lines = math.ceil(metar_length/char_per_line)
+    for i=1, number_of_lines do
+        drawTextCentered( Font_ECAMfont  , 172 , starting_y_coordinates - (i-1)*30, string.sub(metar_buffer,(i-1)*char_per_line+1, (i)*char_per_line) , 20 ,false , false , TEXT_ALIGN_LEFT , EFB_FULL_YELLOW )
+    end
+end
+
+local function draw_text_highlighter()
+    if key_p5s1_focus == 1 then
+        efb_draw_focus_frames(400,566,100,26)
+    end
+
+    if string.len(key_p5s1_buffer) > 0 then
+        drawTextCentered( Font_ECAMfont , 451 , 579, key_p5s1_focus == 1 and key_p5s1_buffer or target_airport , 20 ,false , false , TEXT_ALIGN_CENTER , ECAM_GREEN )
+    else
+        drawTextCentered( Font_ECAMfont , 451 , 579, target_airport , 20 ,false , false , TEXT_ALIGN_CENTER , ECAM_GREEN )
+    end
+end
+
+local function draw_text_window(x,y,w,h)
+    sasl.gl.drawRectangle( x-w/2 - 1 , y-h/2 - 1,w + 2, h +2 , EFB_DARKGREY)
+    sasl.gl.drawRectangle( x-w/2 , y-h/2 ,w, h , EFB_DROPDOWN_INSIDE)
+end
+
+local function draw_background()
+    drawTextCentered(Font_Airbus_panel,  1143/2, 640, "WEATHER REQUEST" , 30, false, false, TEXT_ALIGN_CENTER, EFB_LIGHTBLUE)
+    drawTextCentered(Font_Airbus_panel,  330, 579, "ARPT ICAO:" , 21, false, false, TEXT_ALIGN_CENTER, EFB_WHITE)
+    draw_text_window(450,579,100,24)
+    draw_text_window(572,295,843,430)
+end
+
+local function draw_waiting_screen()
+    local time_remaining = metar_wait_time - (get(TIME) - please_wait_cover_begin)
+    if time_remaining > 0.5 then
+        draw_standby_screen("FETCHING DATA FROM SERVER....")
+    elseif time_remaining <= 0.5 and time_remaining >= 0 then
+        draw_standby_screen("DONE!")
+    end
+end
+
+
+
 --UPDATE LOOPS--
 function p5s1_update()
+    --print(key_p3s1_focus)
 end
 
 --DRAW LOOPS--
 function p5s1_draw()
-    sasl.gl.drawTexture (Metar_bgd, 0 , 0 , 1143 , 800 , EFB_WHITE )
+    draw_background()
 
-    if key_p5s1_focus == 1 then
-        efb_draw_focus_frames(616,420,93,27)
-    end
+    draw_request_button()
 
-    if string.len(key_p5s1_buffer) > 0 then
-        drawTextCentered( Font_Airbus_panel , 663 , 433, key_p5s1_focus == 1 and key_p5s1_buffer or target_airport , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
-    else
-        drawTextCentered( Font_Airbus_panel , 663 , 433, target_airport , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE )
-    end
+    draw_text_highlighter()
 
-    if get(TIME) -  metar_button_begin > BUTTON_PRESS_TIME then
-        SASL_drawSegmentedImg_xcenter_aligned (EFB_LOAD_compute_button, 572,350,544,32,2,1)
-    else
-        SASL_drawSegmentedImg_xcenter_aligned (EFB_LOAD_compute_button, 572,350,544,32,2,2)
-    end
-    drawTextCentered( Font_Airbus_panel , 572 , 365, "REQUEST" , 19 ,false , false , TEXT_ALIGN_CENTER , EFB_BACKGROUND_COLOUR )
+    draw_metar_results()
 
-    if string.len(metar_buffer) <= 62 then
-        drawTextCentered( Font_ECAMfont  , 172 , 235, metar_buffer , 20 ,false , false , TEXT_ALIGN_LEFT , EFB_FULL_YELLOW )
-    elseif string.len(metar_buffer) > 62 and string.len(metar_buffer) <= 124 then
-        drawTextCentered( Font_ECAMfont  , 172 , 235, string.sub(metar_buffer,1,-(string.len(metar_buffer)-61) ) , 20 ,false , false , TEXT_ALIGN_LEFT , EFB_FULL_YELLOW )
-        drawTextCentered( Font_ECAMfont  , 172 , 205, string.sub(metar_buffer,63, string.len(metar_buffer)) , 20 ,false , false , TEXT_ALIGN_LEFT , EFB_FULL_YELLOW )
-    else 
-        drawTextCentered( Font_ECAMfont  , 172 , 235, string.sub(metar_buffer,1, (string.len(metar_buffer)-61-string.len(metar_buffer)%61) ) , 20 ,false , false , TEXT_ALIGN_LEFT , EFB_FULL_YELLOW )
-        drawTextCentered( Font_ECAMfont  , 172 , 205, string.sub(metar_buffer,62, (string.len(metar_buffer)-string.len(metar_buffer)%61)) , 20 ,false , false , TEXT_ALIGN_LEFT , EFB_FULL_YELLOW )
-        drawTextCentered( Font_ECAMfont  , 172 , 175, string.sub(metar_buffer,123, string.len(metar_buffer)) , 20 ,false , false , TEXT_ALIGN_LEFT , EFB_FULL_YELLOW )
-    end
-
-    if get(TIME) - please_wait_cover_begin < metar_wait_time then
-        sasl.gl.drawRectangle ( 0 , 0 , 1143, 710, EFB_BACKGROUND_COLOUR)
-        drawTextCentered(Font_Airbus_panel,  572, 355, "FETCHING DATA FROM SERVERS", 30, false, false, TEXT_ALIGN_CENTER, EFB_WHITE)
-        sasl.gl.drawWideLine ( 314 , 330 , 829 , 330 , 5, EFB_DARKGREY )
-        sasl.gl.drawWideLine ( 314 , 330 , 515*(get(TIME) - please_wait_cover_begin)/ metar_wait_time + 314 , 330 , 5, EFB_LIGHTBLUE )
-    end
+    draw_waiting_screen()
 end

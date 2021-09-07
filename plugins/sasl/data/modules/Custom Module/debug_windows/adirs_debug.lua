@@ -169,10 +169,20 @@ local function write_values(i)
     sasl.gl.drawText(Font_AirbusDUL, x_shift+225, size[2]-450, Round_fill(ADIRS_sys[i].mach,1), 14, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
 
 
-    -- ?? & Track
+    -- Alpha & Track
+
+    sasl.gl.drawText(Font_AirbusDUL, x_shift+20, size[2]-470, "ALPHA:", 14, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+
+    sasl.gl.drawText(Font_AirbusDUL, x_shift+110, size[2]-470, Round_fill(ADIRS_sys[i].aoa,1), 14, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
+
     sasl.gl.drawText(Font_AirbusDUL, x_shift+135, size[2]-470, "Track:", 14, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
 
     sasl.gl.drawText(Font_AirbusDUL, x_shift+225, size[2]-470, Round_fill(ADIRS_sys[i].track,1), 14, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
+
+    -- Vpath & ??
+    sasl.gl.drawText(Font_AirbusDUL, x_shift+20, size[2]-490, "VPath:", 14, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+
+    sasl.gl.drawText(Font_AirbusDUL, x_shift+110, size[2]-490, Round_fill(ADIRS_sys[i].pitch - ADIRS_sys[i].aoa,1), 14, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
 
 end
 

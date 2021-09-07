@@ -72,7 +72,7 @@ end
 
 local function get_reverse_color(x)
     local reverse_pos = x == 1 and get(Eng_1_reverser_deployment) or get(Eng_2_reverser_deployment)
-    if get(EWD_flight_phase) >= 5 and get(EWD_flight_phase) <= 7 then
+    if get(EWD_flight_phase) >= PHASE_LIFTOFF and get(EWD_flight_phase) <= PHASE_FINAL then
         return ((math.floor(get(TIME)*2) % 2) == 1 and ECAM_RED or ECAM_ORANGE) -- Blink
     elseif reverse_pos > 0.98 then
         return ECAM_GREEN
@@ -718,7 +718,6 @@ end
 -------------------------------------------------------------------------------
 
 local function draw_ewd()
-    --sasl.gl.drawTexture(EWD_background_img, 0, 0, 900, 900, {1, 1, 1})
     draw_fixed_objects()
     draw_extra_indication()
     if ENG.data_is_loaded then

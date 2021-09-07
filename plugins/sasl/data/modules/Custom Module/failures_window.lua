@@ -147,6 +147,8 @@ local failures_data = {
     {
         group="F/CTL",
         failures={
+            {name="FCDC 1\nFAILURE", status=false, dataref=FAILURE_FCTL_FCDC_1 },
+            {name="FCDC 2\nFAILURE", status=false, dataref=FAILURE_FCTL_FCDC_2 },
             {name="SFCC 1\nFAILURE", status=false, dataref=FAILURE_FCTL_SFCC_1 },
             {name="SFCC 2\nFAILURE", status=false, dataref=FAILURE_FCTL_SFCC_2 },
             {name="ELAC 1\nFAILURE", status=false, dataref=FAILURE_FCTL_ELAC_1 },
@@ -170,13 +172,15 @@ local failures_data = {
             {name="R SPOILER 5\nSTUCK", status=false, dataref=FAILURE_FCTL_RSPOIL_5 },
             {name="L ELEVATOR\nSTUCK", status=false, dataref=FAILURE_FCTL_LELEV },
             {name="R ELEVATOR\nSTUCK", status=false, dataref=FAILURE_FCTL_RELEV },
-            {name="THS MOTOR\nSTUCK", status=false, dataref=FAILURE_FCTL_THS },
+            {name="THS MOTOR 1\nFAILURE", status=false, dataref=FAILURE_FCTL_THS_MOT_1 },
+            {name="THS MOTOR 2\nFAILURE", status=false, dataref=FAILURE_FCTL_THS_MOT_2 },
+            {name="THS MOTOR 3\nFAILURE", status=false, dataref=FAILURE_FCTL_THS_MOT_3 },
             {name="THS\nSTUCK", status=false, dataref=FAILURE_FCTL_THS_MECH },
-            {name="RUDDER LIMIT\nFAILURE", status=false, dataref=FAILURE_FCTL_RUDDER_LIM },
-            {name="RUDDER TRIM\nSTUCK", status=false, dataref=FAILURE_FCTL_RUDDER_TRIM },
+            {name="RUD LIM\nMOT 1 FAIL", status=false, dataref=FAILURE_FCTL_RUDDER_LIM_MOT_1 },
+            {name="RUD LIM\nMOT 2 FAIL", status=false, dataref=FAILURE_FCTL_RUDDER_LIM_MOT_2 },
+            {name="RUD TRIM\nMOT 1 FAIL", status=false, dataref=FAILURE_FCTL_RUDDER_TRIM_MOT_1 },
+            {name="RUD TRIM\nMOT 2 FAIL", status=false, dataref=FAILURE_FCTL_RUDDER_TRIM_MOT_2 },
             {name="RUDDER MECH\nSTUCK", status=false, dataref=FAILURE_FCTL_RUDDER_MECH },
-            {name="YAW DAMPER\nFAILURE", status=false, dataref=FAILURE_FCTL_YAW_DAMPER },
-            {name="UP\nSHIT CREEK", status=false, dataref=FAILURE_FCTL_UP_SHIT_CREEK },
         }
     },
     {
@@ -212,7 +216,7 @@ local failures_data = {
             {name="ENG 1\nSTALL", status=false, dataref=FAILURE_ENG_STALL, nr=1 },
             {name="ENG 2\nSTALL", status=false, dataref=FAILURE_ENG_STALL, nr=2 },
             {name="ENG 1\nHUNG START", status=false, dataref=FAILURE_ENG_HUNG_START, nr=1 },
-            {name="ENG 2\nHUNG START", status=false, dataref=FAILURE_ENG_HUNG_START, nr=1 },
+            {name="ENG 2\nHUNG START", status=false, dataref=FAILURE_ENG_HUNG_START, nr=2 },
             
             {name="APU\nFAILURE", status=false, dataref=FAILURE_ENG_APU_FAIL},
             {name="APU\nFIRE!", status=false, dataref=FAILURE_FIRE_APU},

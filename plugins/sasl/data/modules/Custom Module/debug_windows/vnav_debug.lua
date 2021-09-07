@@ -59,13 +59,7 @@ sasl.registerCommandHandler(vnav_debug_enable, 0, function (phase)
     Vnav_debug_window: setIsVisible(true)
 end)
 
-function update()
-    --change menu item state
-    if Vnav_debug_window:isVisible() == true then
-        sasl.setMenuItemState(Menu_debug, ShowHideVnavDebug, MENU_CHECKED)
-    else
-        sasl.setMenuItemState(Menu_debug, ShowHideVnavDebug, MENU_UNCHECKED)
-    end
+local function update_data()
 
     --record crossover altitude
     if get(ap_airspeed_is_mach) - ap_airspeed_is_mach_previous == 1 then
@@ -102,6 +96,9 @@ function update()
 end
 
 function draw()
+    update_data()
+
+    
     leg_distance_sum = 0
     sasl.gl.drawRectangle(0, 0, 750 , 450, black)
     sasl.gl.drawWideLine(0, size[2]/2 - aircraft_vertical_offset, 750, size[2]/2 - aircraft_vertical_offset, 1.5, green)

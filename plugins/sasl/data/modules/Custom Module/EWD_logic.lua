@@ -39,7 +39,6 @@ include('EWD_msgs/pressurization.lua')
 include('EWD_msgs/to_ldg_memos.lua')
 
 include('DRAIMS/radio_logic.lua')
-include('FBW/FBW_subcomponents/flight_ctl_subcomponents/lateral_ctl.lua')
 
 sasl.registerCommandHandler (Ecam_btn_cmd_CLR,   0 , function(phase) ewd_clear_button_handler(phase) end )
 sasl.registerCommandHandler (Ecam_btn_cmd_RCL,   0 , function(phase) ewd_recall_button_handler(phase) end )
@@ -461,7 +460,7 @@ local function update_right_list()
     end
 
     -- Speedbrakes
-    if Spoilers_obj.Get_curr_spdbrk_def() > 2.5 then
+    if get(TOTAL_SPDBRK_EXTENSION) > 2.5 then
     
         if get(EWD_flight_phase) >= PHASE_LIFTOFF and get(EWD_flight_phase) <= PHASE_TOUCHDOWN then
             if get(Eng_1_N1) > 50 or get(Eng_2_N1) > 50 then

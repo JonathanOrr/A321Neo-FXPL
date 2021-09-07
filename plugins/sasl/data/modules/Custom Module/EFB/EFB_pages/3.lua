@@ -191,7 +191,7 @@ end
 
 local function draw_slider_corresponding_values()
     local passenger_weight = Round(slider_actual_values[1],1)
-    local passenger_number = tostring(Round(slider_actual_values[1]/WEIGHT_PER_PASSENGER,0).." PPL")
+    local passenger_number = tostring(Round(slider_actual_values[1]/WEIGHT_PER_PASSENGER,0).." PAX")
     local fwd_cargo_weight = slider_actual_values[3]
     local aft_cargo_weight = slider_actual_values[4]
     local bulk_cargo_weight = slider_actual_values[5]
@@ -300,16 +300,24 @@ local function slider_to_weights_translator()
             slider_actual_values[i] = Round(slider_actual_values[i],-2)
         end
     end
+
+    slider_actual_values[6] = slider_actual_values[6] >= 31085 and 31085 or slider_actual_values[6] 
+
+    -- Sooooooooooo
+    -- Rico made things very complicated lol
+    -- when I round the fuel value, FUEL_TOT_MAX = 31085 is rounded to 31000
+    -- Then his assert function in the set_fuel() denied me setting it as 31000, and the script crashes
+    -- this line is to prevent the maximum fuel after rounding to exceed 31085 no matter what
 end
 
 local function set_values()
     touched_sliders_after_loading = false
     local CG_effect = (1-slider_actual_values[1]/WEIGHT_MAX_PASSENGERS)/2
-    WEIGHTS.set_passengers_weight(slider_actual_values[1] ,(slider_actual_values[2]-0.5) * CG_effect + 0.5)
+    WEIGHTS.set_passengers_weight(Round(slider_actual_values[1]/WEIGHT_PER_PASSENGER,0)*WEIGHT_PER_PASSENGER ,(slider_actual_values[2]-0.5) * CG_effect + 0.5)
     WEIGHTS.set_fwd_cargo_weight(slider_actual_values[3])
     WEIGHTS.set_aft_cargo_weight(slider_actual_values[4])
     WEIGHTS.set_bulk_cargo_weight(slider_actual_values[5])
-    set_fuel(slider_actual_values[6] + 10 * (slider_actual_values[6]/FUEL_TOT_MAX) )
+    set_fuel(slider_actual_values[6])
     -- so long story short, there was an issue which set_fuel(40000) will only add 39990 kg of fuel
     --the issue is not in this script, it is rico's set fuel function.
     --therefore, for every 40000 kg of fuel, 10 kg has to be added.
@@ -424,8 +432,7 @@ end
 
 local function draw_avionics_bay_standby()
     if avionics_bay_is_initialising then
-        sasl.gl.drawRectangle ( 0 , 0 , 1143, 710, EFB_BACKGROUND_COLOUR)
-        drawTextCentered(Font_Airbus_panel,  572, 355, "INITIALISING AVIONICS BAY", 30, false, false, TEXT_ALIGN_CENTER, EFB_WHITE)
+        draw_standby_screen("INITIALISING AVIONICS BAY....")
     end
 end
 
@@ -532,11 +539,11 @@ end
 
 local function draw_dropdowns()
     if string.len(key_p3s1_buffer) > 0 then --THE PURPOSE OF THIS IFELSE IS TO PREVENT THE CURSOR FROM COVERING UP THE PREVIOUS VALUE, WHEN THE SCRATCHPAD IS EMPTY.
-        drawTextCentered( Font_Airbus_panel , 116 , 578, key_p3s1_focus == 7 and key_p3s1_buffer or deparr_apts[1] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
-        drawTextCentered( Font_Airbus_panel , 403 , 578, key_p3s1_focus == 8 and key_p3s1_buffer or deparr_apts[2] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
+        drawTextCentered( Font_ECAMfont , 116 , 578, key_p3s1_focus == 7 and key_p3s1_buffer or deparr_apts[1] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
+        drawTextCentered( Font_ECAMfont , 403 , 578, key_p3s1_focus == 8 and key_p3s1_buffer or deparr_apts[2] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
     else
-        drawTextCentered( Font_Airbus_panel , 116 , 578, deparr_apts[1] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
-        drawTextCentered( Font_Airbus_panel , 403 , 578, deparr_apts[2] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
+        drawTextCentered( Font_ECAMfont , 116 , 578, deparr_apts[1] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
+        drawTextCentered( Font_ECAMfont , 403 , 578, deparr_apts[2] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
     end
 
     draw_dropdown_menu(230, 578, 90, 28, EFB_DROPDOWN_OUTSIDE, EFB_DROPDOWN_INSIDE, dropdown_1, dropdown_expanded[1], dropdown_selected[1])

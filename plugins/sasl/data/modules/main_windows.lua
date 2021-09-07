@@ -18,6 +18,8 @@
 
 addSearchPath(moduleDirectory .. "/Custom Module/debug_windows/")
 addSearchPath(moduleDirectory .. "/Custom Module/display_pop-ups/")
+addSearchPath(moduleDirectory .. "/Custom Module/Cinetracker/")
+addSearchPath(moduleDirectory .. "/Custom Module/Cinetracker/cinetracker_huds")
 
  --windows
 MCDU_window = contextWindow {
@@ -375,20 +377,6 @@ MAGIC_window = contextWindow {
   };
 }
 
-TUNING_window = contextWindow {
-  name = "Live Tuning Console";
-  position = { 0 , 0 , 900, 800 };
-  noBackground = true ;
-  proportional = true ;
-  minimumSize = { 900/3, 800/3 };
-  maximumSize = { 900, 800 };
-  gravity = { 0 , 1 , 0 , 1 };
-  visible = false;
-  components = {
-      live_tuning_console {}
-  };
-}
-
 PID_UI_window = contextWindow {
   name = "PID TUNING UI";
   position = { 150 , 150 , 600, 300 };
@@ -400,5 +388,64 @@ PID_UI_window = contextWindow {
   visible = false ;
   components = {
     PID_UI {position = { 0 , 0 , 600 , 300 }}
+  };
+}
+
+Lnav_debug_window = contextWindow {
+  name = "LNAV DEBUG";
+  position = { 0 , 0 , 900, 900 };
+  noBackground = true ;
+  proportional = true ;
+  minimumSize = { 400, 400 };
+  maximumSize = { 900, 900 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = false;
+  components = {
+      lnav_debug {}
+  };
+}
+
+Cinetracker_window = contextWindow {
+  name = "C* CINETRACKER";
+  position = { 50 , 50 , 480 , 550 };
+  noBackground = true ;
+  proportional = false ;
+  minimumSize = { 240 , 275 };
+  maximumSize = { 480 , 550 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = false ;
+  components = {
+    cinetracker_main {}
+  };
+}
+
+Cinetracker_HUD = contextWindow {
+  name = "CINETRACKER HUD";
+  position = { 0 , 0 , 408 , 561 };
+  noBackground = true ;
+  proportional = true ;
+  minimumSize = { 408 / 4 , 561 / 4};
+  maximumSize = { 408 , 561 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = false ;
+  noDecore = true ;
+  layer = SASL_CW_LAYER_FLIGHT_OVERLAY;
+  noMove = true;
+  components = {
+    spd {}
+  };
+}
+
+Cinetracker_ABNZ = contextWindow {
+  name = "CINETRACKER ABNZ";
+  position = { 0 , 0 , 600, 424 };
+  noBackground = false ;
+  proportional = true ;
+  minimumSize = { 600/10, 424/10 };
+  maximumSize = { 600, 424 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = false;
+  components = {
+      alpha_beta_nz {}
   };
 }

@@ -43,6 +43,9 @@ local function draw_throttle_value()
     elseif left_throttle == 0 and right_throttle == 0 then
         drawTextCentered( Font_Airbus_panel , 397 , 294, "IDLE" , 23 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE)
         Sasl_DrawWideFrame(341, 280, 110, 30, 2, 0, EFB_LIGHTGREY)
+    elseif left_throttle < 0 and right_throttle < 0 then
+        drawTextCentered( Font_Airbus_panel , 397 , 294, "REVR" , 23 ,false , false , TEXT_ALIGN_CENTER , ECAM_ORANGE)
+        Sasl_DrawWideFrame(341, 280, 110, 30, 2, 0, ECAM_ORANGE)
     else
         drawTextCentered( Font_Airbus_panel , 397 , 294, "MANUAL" , 23 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE)
         Sasl_DrawWideFrame(341, 280, 110, 30, 2, 0, EFB_LIGHTBLUE)

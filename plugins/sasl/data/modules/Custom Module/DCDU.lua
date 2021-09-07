@@ -502,7 +502,7 @@ local function update_connected_atc()
     end
 
     -- But if we are airbone, let's switch to ACC
-    if get(EWD_flight_phase) == 6 and nearest_ctr ~= nil then
+    if get(EWD_flight_phase) == PHASE_AIRBONE and nearest_ctr ~= nil then
         temp_atc_id   = nearest_ctr[1]
         temp_atc_name = nearest_ctr[2] .. " ACC"
     end

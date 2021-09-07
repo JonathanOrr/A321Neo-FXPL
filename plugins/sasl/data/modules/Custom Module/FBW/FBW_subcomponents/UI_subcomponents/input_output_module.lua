@@ -121,7 +121,7 @@ function Draw_control_info_and_setting_110x180(x_pos, y_pos)
     sasl.gl.drawText(B612_MONO_bold, CENTER_X, CENTER_Y - 15 + 3, string.format("%.1f", tostring(get(Total_input_roll) * 15)) .. "°/S", 12, false, false, TEXT_ALIGN_CENTER, WHITE)
     sasl.gl.drawText(B612_MONO_bold, CENTER_X, CENTER_Y - 50 + 10, "PITCH", 12, false, false, TEXT_ALIGN_CENTER, WHITE)
     sasl.gl.drawText(B612_MONO_bold, CENTER_X, CENTER_Y - 85 + 17, string.format("%.1f", tostring(get(Total_input_pitch) * 16)) .. "°", 12, false, false, TEXT_ALIGN_CENTER, WHITE)
-    if get(Flaps_internal_config) == 0 then
+    if get(Flaps_internal_config) <= 1 then
         if get(Total_input_pitch) >= 0 then
             sasl.gl.drawText(B612_MONO_bold, CENTER_X, CENTER_Y - 85 + 3, string.format("%.1f", tostring(Math_rescale(0, lvl_flt_load_constant, 1, 2.5, get(Total_input_pitch)))) .. "G", 12, false, false, TEXT_ALIGN_CENTER, WHITE)
         else

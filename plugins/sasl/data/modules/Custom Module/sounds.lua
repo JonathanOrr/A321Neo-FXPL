@@ -85,6 +85,8 @@ end
 
 local function update_blower()
 
+    if debug_kill_blowers then set(Sounds_blower_volume, 0) return end
+
     -- Blower logic:
     -- 1. It delays for 5 second on startup +8 seconds for test
     -- 2. it turns on and off instantly on override switch

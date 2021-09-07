@@ -72,62 +72,67 @@ function constant_conversions()
     return qnh
 end
 
-local function flex_calculation()
-        flex_temp_computed = Round(-0.02434027806956361259*(get(ACF_elevation)*3.281/100)^3 + 0.36824311548836550021*(get(ACF_elevation)*3.281/100)^2 - 2.95963831628837229790*(get(ACF_elevation)*3.281/100) + 54.96994092387330948740, 0)
+function flex_calculation(LOAD_aircon,LOAD_eng_aice,LOAD_all_aice)
+    flex_temp_computed = Round(-0.02434027806956361259*(get(ACF_elevation)*3.281/100)^3 + 0.36824311548836550021*(get(ACF_elevation)*3.281/100)^2 - 2.95963831628837229790*(get(ACF_elevation)*3.281/100) + 54.96994092387330948740, 0)
 
-        if 1013-qnh < 0 then --if qnh > 1013
-            flex_temp_correction = Round((qnh-1013)/12,0)
-        elseif 1013-qnh > 0 then --if qnh < 1013
-            flex_temp_correction = Round((1013-qnh)/2,0)
-        end
+    if 1013-qnh < 0 then --if qnh > 1013
+        flex_temp_correction = Round((qnh-1013)/12,0)
+    elseif 1013-qnh > 0 then --if qnh < 1013
+        flex_temp_correction = Round((1013-qnh)/2,0)
+    end
 
-        if get(LOAD_all_aice) == 1 then
-            flex_temp_aice_correction = -11
-        elseif get(LOAD_eng_aice) == 1 and get(LOAD_all_aice) == 0 then
-            flex_temp_aice_correction = -2
-        elseif get(LOAD_eng_aice) == 0 and get(LOAD_all_aice) == 0 then
-            flex_temp_aice_correction = 0      
-        else
-            flex_temp_aice_correction = 0      
-        end
+    if LOAD_all_aice == 2 then
+        flex_temp_aice_correction = -11
+    elseif LOAD_eng_aice == 2 and LOAD_all_aice == 1 then
+        flex_temp_aice_correction = -2
+    elseif LOAD_eng_aice == 1 and LOAD_all_aice == 1 then
+        flex_temp_aice_correction = 0      
+    else
+        flex_temp_aice_correction = 0      
+    end
 
-        if get(LOAD_aircon) == 1 then
-            flex_temp_aircon_correction = -3
-        else
-            flex_temp_aircon_correction = 0
-        end
+    if LOAD_aircon == 2 then
+        flex_temp_aircon_correction = -3
+    else
+        flex_temp_aircon_correction = 0
+    end
 
-        flex_temp = flex_temp_computed + flex_temp_correction + flex_temp_aice_correction
+    local flex_temp = flex_temp_computed + flex_temp_correction + flex_temp_aice_correction
+    local corr = flex_temp_correction + flex_temp_aircon_correction + flex_temp_aice_correction
 
-        set(LOAD_total_flex_correction, flex_temp_correction + flex_temp_aice_correction)
+    return flex_temp_computed, corr
 end
 
-local function mtow_decrease_calculation()
+function mtow_decrease_calculation(LOAD_aircon,LOAD_eng_aice,LOAD_all_aice)
     if qnh > 1013 then --if qnh < 1013
         mtow_qnh_correction = -Round((1013-qnh)*100,0)
     end
 
-    if get(LOAD_all_aice) == 1 then
+    if LOAD_all_aice == 2 then
         mtow_aice_correction = -4100
-    elseif get(LOAD_eng_aice) == 1 and get(LOAD_all_aice) == 0 then
+    elseif LOAD_eng_aice == 2 and LOAD_all_aice == 1 then
         mtow_aice_correction = -400
-    elseif get(LOAD_eng_aice) == 0 and get(LOAD_all_aice) == 0 then
+    elseif LOAD_eng_aice == 1 and LOAD_all_aice == 1 then
         mtow_aice_correction = 0      
     else
         mtow_aice_correction = 0    
     end
 
-    if get(LOAD_aircon) == 1 then
+    if LOAD_aircon == 2 then
         mtow_aircon_correction = -3600
     else
         mtow_aircon_correction = 0
     end
 
-    set(LOAD_total_mtow_correction, mtow_qnh_correction + mtow_aice_correction + mtow_aircon_correction)
+    return mtow_qnh_correction + mtow_aice_correction + mtow_aircon_correction
 end
 
-local function v2_calculation()
-    if get(LOAD_flapssetting) == 1 then
+function vspeeds_calculation(LOAD_flapssetting, LOAD_runwaycond)
+    local computed_v1 = 0
+    local computed_vr = 0
+    local computed_v2 = 0
+
+    if LOAD_flapssetting == 1 then
 
         v2_table[1][2] = Table_extrapolate({ -- -2000 ft
             {54 , 131},
@@ -384,7 +389,7 @@ local function v2_calculation()
         computed_v2 = Math_clamp(Round(Table_extrapolate(v2_table, press_alt ),0), Round(press_alt*-0.0004+130.7802,0), 999) --for config 1
 
     
-    elseif get(LOAD_flapssetting) == 2 then
+    elseif LOAD_flapssetting == 2 then
 
         v2_table[1][2] = Table_extrapolate({ -- -2000 ft
         {54 , 123},
@@ -641,7 +646,7 @@ local function v2_calculation()
             computed_v2 = Math_clamp(Round(Table_extrapolate(v2_table, press_alt ),0), Round(-0.0003*press_alt+122.9231,0), 999) -- for config 2
 
 
-    elseif get(LOAD_flapssetting) == 3 then
+    elseif LOAD_flapssetting == 3 then
 
         v2_table[1][2] = Table_extrapolate({ -- -2000 ft
         {54 , 121},
@@ -894,10 +899,18 @@ local function v2_calculation()
         {90 , 147},
         {95 , 150},
         }, get(Gross_weight)/1000)
-        computed_v2 = Math_clamp(Round(Table_extrapolate(v2_table, press_alt ),0), Round(-0.008*press_alt+119.7363,0), 999) -- for config 3
-
-       
+        computed_v2 = Math_clamp(Round(Table_extrapolate(v2_table, press_alt ),0), Round(-0.008*press_alt+119.7363,0), 999) -- for config 3       
     end
+
+    if LOAD_runwaycond == 1 then
+        computed_v1 = computed_v2 - 5
+        computed_vr = computed_v2 - 4
+    elseif LOAD_runwaycond == 2 then
+        computed_v1 = computed_v2 - 13
+        computed_vr = computed_v2 - 4
+    end
+
+    return computed_v1, computed_vr, computed_v2
 end
 
 local v1_f1_decrease_table = {
@@ -918,28 +931,7 @@ local v1_f3_decrease_table = {
     {3500, 3},
 }
 
-local function other_spd_calculation()
-
-    if get(LOAD_runwaycond) == 0 then
-        computed_v1 = computed_v2 - 5
-        computed_vr = computed_v2 - 4
-    else
-        computed_v1 = computed_v2 - 13
-        computed_vr = computed_v2 - 4
-    end
-    
-    set(TOPCAT_v1, computed_v1)
-    set(TOPCAT_vr, computed_vr)
-    set(TOPCAT_v2, computed_v2)
-    set(TOPCAT_flex, flex_temp)
-end
-
 function execute_takeoff_performance()
-    constant_conversions()
-    v2_calculation()
-    flex_calculation()
-    mtow_decrease_calculation()
-    other_spd_calculation()
 end
 
 function update()

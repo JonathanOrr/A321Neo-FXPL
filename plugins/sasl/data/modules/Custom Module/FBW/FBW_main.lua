@@ -18,15 +18,17 @@
 
 --include("FBW_subcomponents/limits_calculations.lua")
 include("PID.lua")
-include("FBW/FBW_subcomponents/fbw_system_subcomponents/flt_computers.lua")
 include("FBW/FBW_subcomponents/fbw_system_subcomponents/mode_transition.lua")
 include("FBW/FBW_subcomponents/fbw_system_subcomponents/law_reconfiguration.lua")
 addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/")
 addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/fbw_system_subcomponents")
+addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/fbw_system_subcomponents/FLT_computer")
 addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/fbw_system_subcomponents/sensor_filtering")
 addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/fbw_system_subcomponents/lateral_augmentation")
 addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/fbw_system_subcomponents/vertical_agumentation")
 addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/fbw_system_subcomponents/yaw_augmentation")
+addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/fbw_system_subcomponents/LAF_augmentation")
+addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/fbw_system_subcomponents/FAC_computation")
 
 --xplane landing gear attitude correction--
 local front_gear_length =  globalProperty("sim/aircraft/parts/acf_gear_leglen[0]")
@@ -55,6 +57,8 @@ components = {
 
     filtering {},
 
+    FLT_computer_main {},
+
     vertical_dynamics {},
     vertical_protections {},
     vertical_inputs {},
@@ -67,34 +71,25 @@ components = {
     yaw_inputs {},
     yaw_controllers {},
 
+    LAF_inputs {},
+    LAF_controllers {},
+
     law_reconfiguration {},
     autothrust {},
     flight_controls {},
-    limits_calculations {},
+    FAC_compute_main {},
 
     lateral_augmentation {},
     vertical_augmentation {},
     yaw_augmentation {},
+    LAF_augmentation {},
 }
-
---register commands
-sasl.registerCommandHandler (Toggle_ELAC_1, 0, Toggle_elac_1_callback)
-sasl.registerCommandHandler (Toggle_ELAC_2, 0, Toggle_elac_2_callback)
-sasl.registerCommandHandler (Toggle_FAC_1, 0, Toggle_fac_1_callback)
-sasl.registerCommandHandler (Toggle_FAC_2, 0, Toggle_fac_2_callback)
-sasl.registerCommandHandler (Toggle_SEC_1, 0, Toggle_sec_1_callback)
-sasl.registerCommandHandler (Toggle_SEC_2, 0, Toggle_sec_2_callback)
-sasl.registerCommandHandler (Toggle_SEC_3, 0, Toggle_sec_3_callback)
 
 function update()
     updateAll(components)
 
-    --system subcomponents
-    Fctl_computuers_status_computation(Fctl_computers_var_table)
-    Compute_fctl_button_states()
-
     --Flight mode blending
-    if get(FBW_total_control_law) == FBW_NORMAL_LAW then
+    if get(FBW_total_control_law) == FBW_NORMAL_LAW or get(FBW_total_control_law) == FBW_ABNORMAL_LAW then
         FBW_normal_mode_transition(FBW_modes_var_table)
     elseif get(FBW_total_control_law) == FBW_DIRECT_LAW and get(FBW_alt_to_direct_law) == 0 then
         FBW_direct_mode_transition()

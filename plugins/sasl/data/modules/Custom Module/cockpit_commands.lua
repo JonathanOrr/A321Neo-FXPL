@@ -64,7 +64,9 @@ Toggle_med_autobrake = createCommand("a321neo/cockpit/wheel/toggle_med_autobrake
 Toggle_max_autobrake = createCommand("a321neo/cockpit/wheel/toggle_max_autobrake", "Toggle MAX autobrake")
 Toggle_antiskid_ns   = createCommand("a321neo/cockpit/wheel/toggle_antiskid_ns", "Toggle A/SKID and N/W STRG")
 Toggle_park_brake    = createCommand("a321neo/cockpit/wheel/toggle_park_brake", "Toggle Park Brake")
-
+-- Airbus TCA support - TCA quadrant has a dial switch and no toggle push buttons
+TCA_disable_autobrake= createCommand("a321neo/cockpit/wheel/autobrake_disable", "Disable autobrake")
+TCA_park_brake_set   = createCommand("a321neo/cockpit/wheel/park_break_set", "Set parking brake")
 Toggle_park_brake_XP    = findCommand("sim/flight_controls/brakes_toggle_max")
 Push_brake_regular_XP = findCommand("sim/flight_controls/brakes_regular")
 Toggle_brake_regular_XP = findCommand("sim/flight_controls/brakes_toggle_regular")
@@ -271,6 +273,14 @@ ENG_cmd_mode_up        = sasl.createCommand("a321neo/cockpit/engine/mode_up", "e
 ENG_cmd_mode_down      = sasl.createCommand("a321neo/cockpit/engine/mode_dn", "engine mode selector down")
 ENG_cmd_master_toggle_1= createCommand("a321neo/cockpit/engine/master_toggle_1", "Master Switch ENG1")
 ENG_cmd_master_toggle_2= createCommand("a321neo/cockpit/engine/master_toggle_2", "Master Switch ENG2")
+-- Airbus TCA support
+ENG_cmd_mode_ignite    = sasl.createCommand("a321neo/cockpit/engine/mode_ignite", "engine mode selector IGN/START")
+ENG_cmd_mode_norm      = sasl.createCommand("a321neo/cockpit/engine/mode_norm", "engine mode selector NORM")
+ENG_cmd_mode_crank     = sasl.createCommand("a321neo/cockpit/engine/mode_crank", "engine mode selector CRANK")
+ENG_cmd_master_on_1    = sasl.createCommand("a321neo/cockpit/engine/master_on_1", "Master Switch ENG1 on")
+ENG_cmd_master_off_1   = sasl.createCommand("a321neo/cockpit/engine/master_off_1", "Master Switch ENG1 off")
+ENG_cmd_master_on_2    = sasl.createCommand("a321neo/cockpit/engine/master_on_2", "Master Switch ENG2 on")
+ENG_cmd_master_off_2   = sasl.createCommand("a321neo/cockpit/engine/master_off_2", "Master Switch ENG2 off")
 
 -- APU
 APU_cmd_master = sasl.createCommand("a321neo/cockpit/engine/apu_master_toggle", "toggle APU master button")
@@ -499,10 +509,19 @@ MCDU_DMC_cmd_test_2 = sasl.createCommand("a321neo/cockpit/mcdu/trigger_dmc_test_
 MCDU_DMC_cmd_test_3 = sasl.createCommand("a321neo/cockpit/mcdu/trigger_dmc_test_3","Internal use only. DO NOT USE.")
 
 --misc--
-Default_view = sasl.findCommand("sim/view/default_view")
 
 -- MANUAL GEAR EXT --
 Emer_ldg_gear_v_cmd_toggle = sasl.createCommand("a321neo/cockpit/misc/lg_gravity_v_toggle", "Gravity Extension L/G handle toggle")
 Emer_ldg_gear_h_cmd_c  = sasl.createCommand("a321neo/cockpit/misc/lg_gravity_h_c", "Gravity Extension L/G handle C") -- Clockwise
 Emer_ldg_gear_h_cmd_cc = sasl.createCommand("a321neo/cockpit/misc/lg_gravity_h_cc", "Gravity Extension L/G handle CC") -- Counter-clockwise
 
+--view--
+Default_view =          sasl.findCommand("sim/view/default_view")
+EXT_linear_spot_view =  sasl.findCommand("sim/view/linear_spot")
+EXT_still_spot_view =   sasl.findCommand("sim/view/still_spot")
+EXT_runway_view =       sasl.findCommand("sim/view/runway")
+EXT_circle_view =       sasl.findCommand("sim/view/circle")
+EXT_tower_view =        sasl.findCommand("sim/view/tower")
+EXT_ride_along_view =   sasl.findCommand("sim/view/ridealong")
+EXT_track_weapon_view = sasl.findCommand("sim/view/track_weapon")
+EXT_chase_view =        sasl.findCommand("sim/view/chase")

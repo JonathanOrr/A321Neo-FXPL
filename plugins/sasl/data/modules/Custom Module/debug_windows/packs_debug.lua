@@ -43,13 +43,7 @@ local sim_l_iso_line_xy = {size[1]/2 - size[1]/4 - 65, size[2]/2+110, size[1]/2 
 local sim_r_iso_line_xy = {size[1]/2 - size[1]/4 + 35, size[2]/2+110, size[1]/2 - size[1]/4 + 65, size[2]/2+110}
 
 
-function update()
-    --change menu item state
-    if Packs_debug_window:isVisible() == true then
-        sasl.setMenuItemState(Menu_debug, ShowHidePacksDebug, MENU_CHECKED)
-    else
-        sasl.setMenuItemState(Menu_debug, ShowHidePacksDebug, MENU_UNCHECKED)
-    end
+local function update_data()
 
     if get(ENG_1_bleed_switch) == 1 then
         eng_1_bleed_cl = ECAM_GREEN
@@ -413,6 +407,10 @@ end
 
 
 function draw()
+
+    update_data()
+
+    
     sasl.gl.drawRectangle(0, 0, size[1], size[2], BLACK)
     sasl.gl.drawLine(size[1]/2-5, 0, size[1]/2-5, size[2], ECAM_BLUE)
     sasl.gl.drawLine(size[1]/2+20, 420, size[1]-20, 420, UI_LIGHT_GREY)

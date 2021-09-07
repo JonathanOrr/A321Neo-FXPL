@@ -13,7 +13,7 @@ FBW.yaw.controllers = {
                 --limit travel ability to 5 degrees of rudder
                 FBW.yaw.controllers.yaw_damper_PD.output = Math_clamp(FBW.yaw.controllers.yaw_damper_PD.output, -5/30, 5/30)
             end
-            if get(FBW_yaw_law) == FBW_MECHANICAL_BACKUP_LAW or get(Yaw_damper_avail) == 0 then
+            if get(FBW_yaw_law) == FBW_MECHANICAL_BACKUP_LAW or get(FBW_yaw_law) == FBW_ABNORMAL_LAW or not FBW.fctl.surfaces.rud.rud.controlled then
                 FBW.yaw.controllers.yaw_damper_PD.output = 0
             end
         end,
@@ -30,11 +30,13 @@ FBW.yaw.controllers = {
             end
         end,
         control = function ()
+            FBW_PID_arrays.FBW_NRM_YAW_PID.min_integral = -get(Rudder_travel_lim) / 30
+            FBW_PID_arrays.FBW_NRM_YAW_PID.max_integral =  get(Rudder_travel_lim) / 30
+
             FBW.yaw.controllers.SI_demand_PID.output = FBW_PID_BP(
                 FBW_PID_arrays.FBW_NRM_YAW_PID,
-                FBW.yaw.inputs.x_to_SI(get(Total_input_yaw)),
-                -get(Slide_slip_angle),
-                FBW.yaw.inputs.get_curr_turbolence()
+                FBW.yaw.inputs.x_to_beta(get(Total_input_yaw)),
+                get(Beta)
             )
         end,
         bp = function ()
