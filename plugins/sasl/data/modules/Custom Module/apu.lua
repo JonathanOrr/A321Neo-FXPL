@@ -24,9 +24,9 @@
 -- Constants
 ----------------------------------------------------------------------------------------------------
 
-local FLAP_OPEN_TIME_SEC = 20
-local FLAP_CLOSE_N2 = 5         -- flap does not close immediately on master switch off but based on N2
-local APU_START_WAIT_TIME = 5
+local FLAP_OPEN_TIME_SEC = 27   -- https://www.youtube.com/watch?v=qKbQVewLua8
+local FLAP_CLOSE_N2 = 7.5         -- flap does not close immediately on master switch off but based on N2
+local APU_START_WAIT_TIME = 5   -- ECB initialisation takes some time, delay from master switch on until start button indication goes on
 local APU_TEST_TIME = 20
 
 ----------------------------------------------------------------------------------------------------
@@ -162,7 +162,7 @@ local function update_apu_flap()
             end
         end
         -- APU flap closes only below a certain N1, see https://www.youtube.com/watch?v=Ye8y90KD1JA
-        if apu_n1 < FLAP_CLOSE_N2 then set(APU_flap, 0) end
+        if apu_n1 <= FLAP_CLOSE_N2 then set(APU_flap, 0) end
     end
 end
 
