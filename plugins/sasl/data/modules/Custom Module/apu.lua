@@ -46,7 +46,7 @@ local random_egt_apu_last_update = 0
 -- Init
 ----------------------------------------------------------------------------------------------------
 function onAirportLoaded()
-    set(Apu_bleed_xplane, 0)
+    set(Apu_bleed_xplane, 0)  -- initially we want to have APU bleed switch off in any case
     set(APU_EGT, get(OTA))
 end
 ----------------------------------------------------------------------------------------------------
