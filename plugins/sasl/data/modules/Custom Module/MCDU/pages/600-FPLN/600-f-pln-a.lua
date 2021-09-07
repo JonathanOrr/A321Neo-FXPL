@@ -23,8 +23,7 @@ function THIS_PAGE:render_dep(mcdu_data)
     local arpt_id    = mcdu_data.page_data[600].curr_fpln.apts.dep.id
     local arpt_alt   = mcdu_data.page_data[600].curr_fpln.apts.dep.alt
 
-    THIS_PAGE:render_single(mcdu_data, 1, arpt_id, "0000", nil, tostring(arpt_alt), nil, "", nil, nil, nil, true)
-
+    THIS_PAGE:render_single(mcdu_data, 1, arpt_id, "0000", FMGS_perf_get_v_speeds(), tostring(arpt_alt), nil, "", nil, nil, nil, true)
 end
 
 -------------------------------------------------------------------------------
@@ -208,6 +207,7 @@ function THIS_PAGE:render_list(mcdu_data)
             if #proc == 0 then
                 proc = get_proc_name(mcdu_data,x)
             end
+
             local alt_cstr, alt_cstr_col = cifp_convert_alt_cstr(x)
             local spd_cstr = x.cstr_speed_type ~= CIFP_CSTR_SPD_NONE and tostring(x.cstr_speed) or ""
             local distance = x.computed_distance
@@ -216,7 +216,7 @@ function THIS_PAGE:render_list(mcdu_data)
             end, x)
         else
             local distance = x.computed_distance
-            local proc = "" -- TODO airway
+            local proc = x.airway_name or ""
             local alt_cstr, alt_cstr_col = nil, nil
             local spd_cstr = nil
             local name = x.id or "(MAN)"

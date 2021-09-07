@@ -320,27 +320,27 @@ local function get_nearest(to_who, array)
     return min_dist_obj
 end
 
-local function add_to_fpln(mcdu_data, full_path, type_map)
+local function add_to_fpln(mcdu_data, full_path, type_map, awy_map)
     assert(full_path)
     assert(type_map)
 
-    for i,awy in ipairs(full_path) do
+    for i,fix in ipairs(full_path) do
 
         local to_add = {}
         local nearest_point
 
-        if type_map[awy] == 11 then -- FIX
-            local fixes = AvionicsBay.fixes.get_by_name(awy, false)
+        if type_map[fix] == 11 then -- FIX
+            local fixes = AvionicsBay.fixes.get_by_name(fix, false)
             nearest_point = get_nearest(mcdu_data.airways.source_wpt, fixes)
             to_add.ptr_type = FMGS_PTR_WPT
-        elseif type_map[awy] == 2 then  -- NDB
-            local list_ndbs = AvionicsBay.navaids.get_by_name(NAV_ID_NDB, awy, false)
+        elseif type_map[fix] == 2 then  -- NDB
+            local list_ndbs = AvionicsBay.navaids.get_by_name(NAV_ID_NDB, fix, false)
             nearest_point = get_nearest(mcdu_data.airways.source_wpt, list_ndbs)
             to_add.ptr_type = FMGS_PTR_NAVAID
-        elseif type_map[awy] == 3 then  -- VOR/DME
-            local list_vordmes1 = AvionicsBay.navaids.get_by_name(NAV_ID_VOR, awy, false)
-            local list_vordmes2 = AvionicsBay.navaids.get_by_name(NAV_ID_DME, awy, false)
-            local list_vordmes3 = AvionicsBay.navaids.get_by_name(NAV_ID_DME_ALONE, awy, false)
+        elseif type_map[fix] == 3 then  -- VOR/DME
+            local list_vordmes1 = AvionicsBay.navaids.get_by_name(NAV_ID_VOR, fix, false)
+            local list_vordmes2 = AvionicsBay.navaids.get_by_name(NAV_ID_DME, fix, false)
+            local list_vordmes3 = AvionicsBay.navaids.get_by_name(NAV_ID_DME_ALONE, fix, false)
             for k,v in pairs(list_vordmes2) do table.insert(list_vordmes1, v) end
             for k,v in pairs(list_vordmes3) do table.insert(list_vordmes1, v) end
             nearest_point = get_nearest(mcdu_data.airways.source_wpt, list_vordmes1)
@@ -352,6 +352,7 @@ local function add_to_fpln(mcdu_data, full_path, type_map)
             to_add.lat = nearest_point.lat
             to_add.lon = nearest_point.lon
             to_add.obj = nearest_point
+            to_add.airway_name = awy_map[fix]
 
             FMGS_fpln_temp_leg_add(to_add, mcdu_data.airways.source_wpt.ref_id + i - 1)
         end
@@ -366,6 +367,7 @@ function THIS_PAGE:R6(mcdu_data)
 
     local full_path = {}
     local type_map = {}
+    local awy_map = {}
 
     for i,awy in ipairs(mcdu_data.page_data[611].awys) do
 
@@ -385,6 +387,7 @@ function THIS_PAGE:R6(mcdu_data)
         for j,p in ipairs(path) do
             local last = full_path[#full_path]
             if last ~= p then
+                awy_map[p] = awy.id
                 table.insert(full_path, p)
             end
         end
@@ -394,7 +397,7 @@ function THIS_PAGE:R6(mcdu_data)
         end
     end
 
-    add_to_fpln(mcdu_data, full_path, type_map)
+    add_to_fpln(mcdu_data, full_path, type_map, awy_map)
 
     FMGS_reshape_temp_fpln()
     FMGS_insert_temp_fpln()
