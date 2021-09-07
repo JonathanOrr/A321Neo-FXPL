@@ -349,7 +349,7 @@ end
 
 local function draw_engines_extra()
 
-    -- N2 background box --
+    -- N2 grey background box -- show as long ENG is starting up but not fully available
     if get(Engine_1_master_switch) == 1 and get(Engine_1_avail) == 0 and get(EWD_engine_1_XX) == 0 then
           sasl.gl.drawRectangle(size[1]/2-210, size[2]/2+70, 85, 32, {0.2,0.2,0.2})
     end
