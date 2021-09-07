@@ -98,7 +98,7 @@ end
 function update_route()
 
     if true then
-        --return -- Disabled in the master branch for now
+        return -- Disabled in the master branch for now
     end
 
     -- Disable for testing

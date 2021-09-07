@@ -82,7 +82,7 @@ FMGS_sys.fpln = {
         -- {discontinuity = true}
 
         legs = {
-            {ptr_type = FMGS_PTR_WPT, id="LEGLO", lat=45.603333, lon=9.693333},
+--            {ptr_type = FMGS_PTR_WPT, id="LEGLO", lat=45.603333, lon=9.693333},
             {discontinuity = true}
         },
         

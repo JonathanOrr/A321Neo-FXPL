@@ -454,12 +454,19 @@ function FMGS_reshape_temp_fpln()    -- This function removes duplicated element
         -- F/PLN is empty, thus just add a discontinuity
         table.insert(fpln.legs, {discontinuity = true})
     else
+
+        local last_dep
+        if fpln.apts.dep_trans and #fpln.apts.dep_trans.legs>0 then
+            last_dep = fpln.apts.dep_trans
+        elseif fpln.apts.dep_sid  and #fpln.apts.dep_sid.legs>0 then
+            last_dep = fpln.apts.dep_sid
+        end
+
         if not fpln.legs[1].discontinuity then
             -- If there is only one point and it is not a discontinuity, then
             -- check the point between the SID or TRANS and the first point of
             -- the leg
 
-            local last_dep   = fpln.apts.dep_trans or fpln.apts.dep_sid
             if last_dep then
                 local last_dep_p = last_dep.legs[#last_dep.legs]
                 if fpln.legs[1].id ~= last_dep_p.leg_name then
@@ -471,7 +478,6 @@ function FMGS_reshape_temp_fpln()    -- This function removes duplicated element
         elseif #fpln.legs >= 2 then
             -- The first item is a discontinuity, so let's check
             -- there is no duplicated like ABESI -DISC- ABESI
-            local last_dep   = fpln.apts.dep_trans or fpln.apts.dep_sid
             if last_dep then
                 local last_dep_p = last_dep.legs[#last_dep.legs]
                 if fpln.legs[2].id == last_dep_p.leg_name then
@@ -480,9 +486,16 @@ function FMGS_reshape_temp_fpln()    -- This function removes duplicated element
                 end
             end
         end
+
+        local first_arr
+        if fpln.apts.arr_trans and #fpln.apts.arr_trans.legs>0 then
+            first_arr = fpln.apts.arr_trans
+        elseif fpln.apts.arr_appr  and #fpln.apts.arr_appr.legs>0 then
+            first_arr = fpln.apts.arr_appr
+        end
+
         if not fpln.legs[#fpln.legs].discontinuity then
 
-            local first_arr   = fpln.apts.arr_trans or fpln.apts.arr_appr 
             if first_arr then
                 local first_arr_p = first_arr.legs[1]
                 if fpln.legs[#fpln.legs].id ~= first_arr_p.leg_name then
@@ -494,7 +507,6 @@ function FMGS_reshape_temp_fpln()    -- This function removes duplicated element
         elseif #fpln.legs >= 2 then
             -- The last item is a discontinuity, so let's check
             -- there is no duplicated like ABESI -DISC- ABESI
-            local first_arr   = fpln.apts.arr_trans or fpln.apts.arr_appr
             if first_arr then
                 local first_arr_p = first_arr.legs[1]
                 if fpln.legs[#fpln.legs-1].id == first_arr_p.leg_name then
