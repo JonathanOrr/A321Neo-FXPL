@@ -97,11 +97,11 @@ local function draw_oil_qt_press_temp_eng_1()
         -- ENG 1 OIL PRESS
         ------------------------------------------------------------------------------------
         local eng_1_oil_color = pulse_green(
-              params.eng1_oil_press > ENG.data.display.oil_press_high_adv or 
+              params.eng1_oil_press > ENG.data.display.oil_press_high_adv or
               params.eng1_oil_press < ENG.data.display.oil_press_low_adv
               )
 
-        -- TODO in lower N2 range this seems to be not the correct formula to compute the limits?
+        --- N dependent limits may override actual color
         local press_red_limit = get_press_red_limit(get(Eng_1_N2))
         local press_amber_limit = get_press_amber_limit(get(Eng_1_N2))
 
@@ -147,7 +147,7 @@ local function draw_oil_qt_press_temp_eng_2()
         -- ENG 2 OIL PRESS
         ------------------------------------------------------------------------------------
         local eng_2_oil_color = pulse_green(
-              params.eng2_oil_press > ENG.data.display.oil_press_high_adv or 
+              params.eng2_oil_press > ENG.data.display.oil_press_high_adv or
               params.eng2_oil_press < ENG.data.display.oil_press_low_adv
               )
 
@@ -191,8 +191,9 @@ local function draw_vibrations()
 
 
     if xx_statuses[1] and get(AC_bus_1_pwrd) == 1 then
-        local eng1_vib1_color = pulse_green(params.eng1_vib_n1 > ENG.data.vibrations.max_n1_nominal)
-        local eng1_vib2_color = pulse_green(params.eng1_vib_n2 > ENG.data.vibrations.max_n2_nominal)
+
+        local eng1_vib1_color = params.eng1_vib_n1 > ENG.data.vibrations.max_n1_nominal and ECAM_ORANGE or ECAM_GREEN
+        local eng1_vib2_color = params.eng1_vib_n2 > ENG.data.vibrations.max_n2_nominal and ECAM_ORANGE or ECAM_GREEN
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2-175, 385, math.floor(params.eng1_vib_n1) .. "." , 36,
                      false, false, TEXT_ALIGN_RIGHT, eng1_vib1_color)
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2-155, 385, math.floor((params.eng1_vib_n1%1)*10), 28,
@@ -209,8 +210,8 @@ local function draw_vibrations()
     end
 
     if xx_statuses[2] and get(AC_bus_1_pwrd) == 1 then
-        local eng2_vib1_color = pulse_green(params.eng2_vib_n1 > ENG.data.vibrations.max_n1_nominal)
-        local eng2_vib2_color = pulse_green(params.eng2_vib_n2 > ENG.data.vibrations.max_n2_nominal)
+        local eng2_vib1_color = params.eng2_vib_n1 > ENG.data.vibrations.max_n1_nominal and ECAM_ORANGE or ECAM_GREEN
+        local eng2_vib2_color = params.eng2_vib_n2 > ENG.data.vibrations.max_n2_nominal and ECAM_ORANGE or ECAM_GREEN
 
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2+200, 385, math.floor(params.eng2_vib_n1) .. "." , 36,
                         false, false, TEXT_ALIGN_RIGHT, eng2_vib1_color)
