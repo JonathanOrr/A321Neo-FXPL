@@ -42,6 +42,7 @@ local function get_list_navaids(name)
             elseif type == NAV_ID_GLS then
                 x.id = x.id .. " (GLS)"
             end
+            x.navaid_type = type
             table.insert(to_return, x)
         end
     end

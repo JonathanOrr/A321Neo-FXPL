@@ -331,10 +331,11 @@ function THIS_PAGE:add_new_wpt(mcdu_data)
         local sel_navaid = mcdu_data.dup_names.selected_navaid
         local sel_navaid_type = avionics_bay_generic_wpt_to_fmgs_type(sel_navaid)
         local leg = {
-                    ptr_type = sel_navaid_type, 
+                    ptr_type = sel_navaid_type,
                     id=sel_navaid.id,
                     lat=sel_navaid.lat,
-                    lon=sel_navaid.lon
+                    lon=sel_navaid.lon,
+                    navaid_type = sel_navaid.navaid_type    -- VOR, LOC, etc. nil if WPT or APT
                 }
         if not FMGS_does_temp_fpln_exist() then
             FMGS_create_copy_temp_fpln()

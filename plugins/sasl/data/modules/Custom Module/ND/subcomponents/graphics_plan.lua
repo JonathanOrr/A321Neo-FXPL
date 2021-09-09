@@ -266,37 +266,48 @@ local function draw_active_fpln(data)   -- This is just a test
 
     local active_legs = FMGS_get_route_legs()
 
-    local route = {}
+    local routes = {{}}
+    local i_route = 1
     -- For each point in the FPLN...
     for k,x in ipairs(active_legs) do
 
-        local c_x,c_y = plan_get_x_y(data, x.lat, x.lon)
-        table.insert(route, c_x)
-        table.insert(route, c_y)
-        x.x = c_x
-        x.y = c_y
+        if not x.discontinuity then
 
-        local color = k == 1 and ECAM_WHITE or ECAM_GREEN
+            local c_x,c_y = plan_get_x_y(data, x.lat, x.lon)
+            table.insert(routes[i_route], c_x)
+            table.insert(routes[i_route], c_y)
+            x.x = c_x
+            x.y = c_y
 
-        if x.ptr_type == FMGS_PTR_WPT then
-            draw_poi_array(data, x, image_point_wpt, color)
-        elseif x.ptr_type == FMGS_PTR_NAVAID then
-            if x.navaid == NAV_ID_NDB then
-                draw_poi_array(data, x, image_point_ndb, color)
-            elseif x.navaid == NAV_ID_VOR then
-                draw_poi_array(data, x, x.has_dme and image_point_vor_dme or image_point_vor_only, color)
+            local color = k == 1 and ECAM_WHITE or ECAM_GREEN
+
+            if x.ptr_type == FMGS_PTR_WPT then
+                draw_poi_array(data, x, image_point_wpt, color)
+            elseif x.ptr_type == FMGS_PTR_NAVAID then
+                if x.navaid_type == NAV_ID_NDB then
+                    draw_poi_array(data, x, image_point_ndb, color)
+                elseif x.navaid_type == NAV_ID_VOR then
+                    draw_poi_array(data, x, x.has_dme and image_point_vor_dme or image_point_vor_only, color)
+                end -- TODO missing cases
+                print(x.navaid_type)
+            elseif x.ptr_type == FMGS_PTR_APT then
+                draw_poi_array(data, x, image_point_apt, color)
+            elseif x.ptr_type == FMGS_PTR_COORDS then
+                -- TODO Does it exist this case?
             end
-        elseif x.ptr_type == FMGS_PTR_APT then
-            draw_poi_array(data, x, image_point_apt, color)
-        elseif x.ptr_type == FMGS_PTR_COORDS then
-        
+        else
+            i_route = i_route + 1
+            routes[i_route] = {}
         end
-
     end
     
-    if #route > 0 then
-        sasl.gl.drawWidePolyLine(route, 2, ECAM_GREEN)
+    for i=1,i_route do
+        local route = routes[i]
+        if #route > 0 then
+            sasl.gl.drawWidePolyLine(route, 2, ECAM_GREEN)
+        end
     end
+
 end
 
 local function draw_pois(data)
