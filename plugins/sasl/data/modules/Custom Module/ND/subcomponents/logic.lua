@@ -255,19 +255,34 @@ local function update_oans(data)
 
 end
 
+local function update_plan_coords_plane(data)
+    data.plan_ctr_lat = data.inputs.plane_coords_lat
+    data.plan_ctr_lon = data.inputs.plane_coords_lon
+end
+
 local function update_plan_coords(data)
     if data.config.mode ~= ND_MODE_PLAN or data.config.range <= ND_RANGE_ZOOM_2 then
         return
     end
     
-    --[[if #FMGS_sys.fpln.active.legs > 0  then
+    local mcdu_data = data.id == ND_CAPT and MCDU.captain_side_data or MCDU.fo_side_data
+
+    if mcdu_data.curr_page == 600 and mcdu_data.page_data[600].ref_lines then
+        local obj = mcdu_data.page_data[600].ref_lines[2]
+        if not obj or obj.invalid or not obj.lat or not obj.lon then
+            update_plan_coords_plane(data)
+        else
+            data.plan_ctr_lat = obj.lat
+            data.plan_ctr_lon = obj.lon
+        end
+    elseif false then
         local n_wpt = FMGS_sys.fpln.active.legs[FMGS_sys.fpln.active.next_leg]
         data.plan_ctr_lat = n_wpt.lat
         data.plan_ctr_lon = n_wpt.lon
-    else]]--
-        data.plan_ctr_lat = data.inputs.plane_coords_lat
-        data.plan_ctr_lon = data.inputs.plane_coords_lon
-    --end -- TODO There are other cases (page scrolls, etc.)
+    else
+        update_plan_coords_plane(data)
+    end
+
 end
 
 
