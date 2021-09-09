@@ -52,17 +52,21 @@ function cifp_convert_leg_name(x)
         return name, "C" .. outb_mag .. "°"
     elseif leg_type == CIFP_LEG_TYPE_DF then
         return name, ""
-    elseif leg_type == CIFP_LEG_TYPE_FA or leg_type == CIFP_LEG_TYPE_CA then
+    elseif leg_type == CIFP_LEG_TYPE_FA then
+        return cstr_alt, string.sub(name,1,3) .. theta
+    elseif leg_type == CIFP_LEG_TYPE_CA then
         return cstr_alt, "C" .. outb_mag .. "°"
     elseif leg_type == CIFP_LEG_TYPE_FC then
-        return "INTCPT", "C" .. theta .. "°"
+        return string.sub(name,1,3) .. "/" .. rte, "C" .. theta .. "°"
     elseif leg_type == CIFP_LEG_TYPE_FD or leg_type == CIFP_LEG_TYPE_CD then
         return x.recomm_navaid .. "/" .. rte, "C" .. theta .. "°"
-    elseif leg_type == CIFP_LEG_TYPE_FM or leg_type == CIFP_LEG_TYPE_VM then
+    elseif leg_type == CIFP_LEG_TYPE_FM then
+        return "MANUAL", string.sub(name,1,3) .. outb_mag
+    elseif leg_type == CIFP_LEG_TYPE_VM then
         return "MANUAL", "H" .. outb_mag .. "°"
-    elseif leg_type == CIFP_LEG_TYPE_CI or leg_type == CIFP_LEG_TYPE_VI or leg_type == CIFP_LEG_TYPE_VR then
+    elseif leg_type == CIFP_LEG_TYPE_CI or leg_type == CIFP_LEG_TYPE_VI then
         return "INTCPT", "H" .. outb_mag .. "°"
-    elseif leg_type == CIFP_LEG_TYPE_CR then
+    elseif leg_type == CIFP_LEG_TYPE_CR or leg_type == CIFP_LEG_TYPE_VR then
         return x.center_fix .. outb_mag, "H" .. theta .. "°"
     elseif leg_type == CIFP_LEG_TYPE_RF then
         return name, dd .. " ARC"
@@ -73,7 +77,7 @@ function cifp_convert_leg_name(x)
     elseif leg_type == CIFP_LEG_TYPE_VD then
         return x.center_fix .. "/" .. rte, "H" .. outb_mag .. "°"
     elseif leg_type == CIFP_LEG_TYPE_PI then
-        return "PROC " .. x.turn_direction
+        return "INTCPT", "PROC " .. x.turn_direction
     elseif leg_type == CIFP_LEG_TYPE_HA then
         return cstr_alt, "HOLD " .. x.turn_direction
     elseif leg_type == CIFP_LEG_TYPE_HF then
