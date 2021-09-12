@@ -289,7 +289,6 @@ local function draw_active_fpln(data)   -- This is just a test
                 elseif x.navaid_type == NAV_ID_VOR then
                     draw_poi_array(data, x, x.has_dme and image_point_vor_dme or image_point_vor_only, color)
                 end -- TODO missing cases
-                print(x.navaid_type)
             elseif x.ptr_type == FMGS_PTR_APT then
                 draw_poi_array(data, x, image_point_apt, color)
             elseif x.ptr_type == FMGS_PTR_COORDS then

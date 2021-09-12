@@ -41,7 +41,8 @@ function THIS_PAGE:render_dest(mcdu_data)
     local trip_time = (FMGS_perf_get_pred_trip_time() and FMGS_perf_get_pred_trip_time() or "----")
     self:set_line(mcdu_data, MCDU_LEFT, 6, Aft_string_fill(arr_id, " ", 8, MCDU_LARGE) .. trip_time)
 
-    local trip_dist = (FMGS_perf_get_pred_trip_dist() and FMGS_perf_get_pred_trip_dist() or "----") 
+    local trip_dist_num = FMGS_perf_get_pred_trip_dist()
+    local trip_dist = trip_dist_num and math.ceil(trip_dist_num) or "----"
     local efob = (FMGS_perf_get_pred_trip_efob() and FMGS_perf_get_pred_trip_efob() or "----")
     self:set_line(mcdu_data, MCDU_RIGHT, 6, trip_dist .. Fwd_string_fill(efob, " ", 6, MCDU_LARGE))
 
@@ -77,8 +78,9 @@ function THIS_PAGE:render_single(mcdu_data, i, id, time, spd, alt, alt_col, proc
         if distance ~= nil then
             dist_text = Round(distance, 0) .. (i == 2 and "NM" or "  ")
         end
-        dist_text = Fwd_string_fill(dist_text, " ", 6)
-        self:set_line(mcdu_data, MCDU_LEFT, i, " " .. Aft_string_fill(proc_name, " ", 8) .. brg_trk .. "  " .. dist_text, MCDU_SMALL, (i == 2 and mcdu_data.page_data[600].curr_idx == 1) and ECAM_WHITE or main_col)
+        dist_text = Fwd_string_fill(dist_text, " ", 6) .. "   "
+        self:set_line(mcdu_data, MCDU_LEFT, i, " " .. proc_name, MCDU_SMALL, ECAM_WHITE)
+        self:set_line(mcdu_data, MCDU_RIGHT, i, brg_trk .. "  " .. dist_text, MCDU_SMALL, (i == 2 and mcdu_data.page_data[600].curr_idx == 1) and ECAM_WHITE or main_col)
     end
     
 end
