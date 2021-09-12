@@ -64,14 +64,15 @@ local function update_active_fpln()
     
 end
 
-local function update_cifp(reference)
+local function update_cifp(reference, initial_point)
     if not reference then
-        return -- No Data no party
+        return 0, initial_point -- No Data no party
     end
 
+    local total_distance = 0
+
     reference.computed_legs = {}
-    local dep_rwy, sibl = FMGS_dep_get_rwy(false)
-    local prev_point = GeoPoint:create({ lat=(not sibl and dep_rwy.s_lat or dep_rwy.lat), lon=(not sibl and dep_rwy.s_lon or dep_rwy.lon)})
+    local prev_point = initial_point
 
     reference.computed_legs = {{lat=prev_point.lat, lon=prev_point.lon}}
 
@@ -79,36 +80,29 @@ local function update_cifp(reference)
         local leg_points = add_cifp_point(reference, prev_point,leg)    -- Get the points for the single legs
         local distance = 0
         
-        local prev_leg_points = prev_point
-        for j,x in ipairs(leg_points) do
+        for _,x in ipairs(leg_points) do
             distance = distance + GC_distance_kt(prev_point.lat, prev_point.lon, x.lat, x.lon)
             table.insert(reference.computed_legs, x)
-            prev_leg_points = x
         end
 
         leg.computed_distance = distance
+        total_distance = total_distance + distance
         local nr_leg_points = #leg_points
         if nr_leg_points > 0 then
             prev_point = GeoPoint:create({ lat = leg_points[nr_leg_points].lat, lon = leg_points[nr_leg_points].lon})
         end
     end
 
+    return total_distance, prev_point
 end
 
-function update_route()
-
-    if true then
-        return -- Disabled in the master branch for now
-    end
+local function debug_add_route()
 
     -- Disable for testing
     if get(TIME) - route_last_update < ROUTE_FREQ_UPDATE_SEC then
         return
     end
     
-    route_last_update = get(TIME)
-
-
     if AvionicsBay.is_initialized() and AvionicsBay.is_ready() then
         if not FMGS_sys.fpln.active.apts.dep_sid then
             if not FMGS_sys.fpln.temp then
@@ -125,15 +119,88 @@ function update_route()
                 FMGS_reshape_temp_fpln()
                 FMGS_insert_temp_fpln()
                 logInfo("DEBUG F/PLN is active: LOADED 2/2")
+                route_last_update = get(TIME) + 100000000
             end
         end
     end
    
-    update_cifp(FMGS_sys.fpln.active.apts.dep_sid)
-    update_cifp(FMGS_sys.fpln.active.apts.dep_trans)
+    route_last_update = get(TIME)
+
+end
+
+local function fpln_recompute_distances_fplnlegs(fpln, prev_point)
+
+    local total_distance = 0
+    local prev
+    if prev_point then
+        prev = {lat=prev_point.lat, lon=prev_point.lon}
+    end
+
+    for k,x in ipairs(fpln.legs) do
+        if (prev and not prev.discontinuity) and not x.discontinuity then
+            assert(prev.lat and prev.lon and x.lat and x.lon)
+            fpln.legs[k].computed_distance = GC_distance_kt(prev.lat, prev.lon, x.lat, x.lon)
+            total_distance = total_distance + fpln.legs[k].computed_distance
+        end
+        prev = fpln.legs[k]
+    end
+
+    if prev.discontinuity then
+        return total_distance, nil
+    else
+        return total_distance, GeoPoint:create({ lat=prev.lat, lon=prev.lon})
+    end
+end
+
+
+function update_route()
+
+    debug_add_route()
+
+    local fpln
+    if FMGS_sys.fpln.active.require_recompute then
+        fpln = FMGS_sys.fpln.active
+    end
+    if FMGS_sys.fpln.temp and FMGS_sys.fpln.temp.require_recompute then
+        fpln = FMGS_sys.fpln.temp
+    end
+
+    if not fpln then
+        return
+    end
+
+    fpln.require_recompute = false
+
+    local dist, total_distance = 0, 0
+
+    local dep_rwy, sibl = FMGS_dep_get_rwy(FMGS_sys.fpln.temp and FMGS_sys.fpln.temp.require_recompute)
+    if not dep_rwy then
+        return
+    end
+
+    local init_pt = GeoPoint:create({ lat=(not sibl and dep_rwy.s_lat or dep_rwy.lat), lon=(not sibl and dep_rwy.s_lon or dep_rwy.lon)})
+
+    dist, init_pt  = update_cifp(fpln.apts.dep_sid, init_pt)
+    total_distance = total_distance + dist
+    dist, init_pt  = update_cifp(fpln.apts.dep_trans, init_pt)
+    total_distance = total_distance + dist
     
-    update_active_fpln()
+    dist, init_pt  = fpln_recompute_distances_fplnlegs(fpln, init_pt)
+    total_distance = total_distance + dist
 
+    dist, init_pt  = update_cifp(fpln.apts.arr_trans, init_pt)
+    total_distance = total_distance + dist
+    dist, init_pt  = update_cifp(fpln.apts.arr_star, init_pt)
+    total_distance = total_distance + dist
+    dist, init_pt  = update_cifp(fpln.apts.arr_via, init_pt)
+    total_distance = total_distance + dist
+    dist, init_pt  = update_cifp(fpln.apts.arr_appr, init_pt)
+    total_distance = total_distance + dist
 
+    if total_distance <= 9999 then
+        FMGS_sys.data.pred.trip_dist = total_distance
+    else
+        FMGS_sys.data.pred.trip_dist = nil -- This has no sense
+    end
 end
 

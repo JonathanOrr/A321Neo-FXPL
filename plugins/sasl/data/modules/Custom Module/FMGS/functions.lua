@@ -541,24 +541,9 @@ function FMGS_reshape_temp_fpln()    -- This function removes duplicated element
         end
     end
 
-    FMGS_fpln_recompute_distances(fpln)
+    fpln.require_recompute = true
 end
 
-local function FMGS_fpln_recompute_distances_fplnlegs(fpln)
-    for k,x in ipairs(fpln.legs) do
-        local prev = fpln.legs[k-1]
-        if k ~= 1 and (prev and not prev.discontinuity) and not x.discontinuity then
-            assert(prev.lat and prev.lon and x.lat and x.lon)
-            fpln.legs[k].computed_distance = GC_distance_kt(prev.lat, prev.lon, x.lat, x.lon)
-        end
-    end
-end
-
-function FMGS_fpln_recompute_distances(fpln)
-    -- TODO SID/TRANS
-    FMGS_fpln_recompute_distances_fplnlegs(fpln)
-    -- TODO TRANS/STAR/APPR
-end
 
 -------------------------------------------------------------------------------
 -- LEGS
