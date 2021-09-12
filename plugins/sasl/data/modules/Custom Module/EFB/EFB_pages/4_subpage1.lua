@@ -108,9 +108,9 @@ local function draw_save_config_button()
 end
 
 local function draw_toggle_switches()
-    SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 364, 78, 18, 2, EFB_PREFRENCES_get_syncqnh() and 2 or 1)
-    SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 330, 78, 18, 2, EFB_PREFRENCES_get_pausetd() and 2 or 1)
-    SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 296, 78, 18, 2, EFB_PREFRENCES_get_copilot() and 2 or 1)
+    SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 364, 78, 18, 2, EFB.pref_get_syncqnh() and 2 or 1)
+    SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 330, 78, 18, 2, EFB.pref_get_pausetd() and 2 or 1)
+    SASL_drawSegmentedImg_xcenter_aligned (EFB_toggle, 640, 296, 78, 18, 2, EFB.pref_get_copilot() and 2 or 1)
 end
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -136,7 +136,7 @@ function p4s1_buttons()
 
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 414,46,738,90, function ()
         efb_save_button_begin = get(TIME)
-        EFB_PREFRENCES_SAVE()
+        EFB.pref_save()
     end)
 
     -----------------------DROPDOWNS
@@ -145,18 +145,18 @@ function p4s1_buttons()
 
 ----------------------------------------------TOGGLE OPTIONS
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 620,363,659,381, function ()
-        EFB_PREFRENCES_set_syncqnh( not EFB_PREFRENCES_get_syncqnh() )
+        EFB.pref_set_syncqnh( not EFB.pref_get_syncqnh() )
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 620,329,659,347, function ()
-        EFB_PREFRENCES_set_pausetd( not EFB_PREFRENCES_get_pausetd() )
+        EFB.pref_set_pausetd( not EFB.pref_get_pausetd() )
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 620,295,659,313, function ()
-        EFB_PREFRENCES_set_copilot( not EFB_PREFRENCES_get_copilot() )
+        EFB.pref_set_copilot( not EFB.pref_get_copilot() )
     end)
 end
 
 function p4s1_update()
-    EFB_PREFRENCES_set_nws(dropdown_selected[1]-1)
+    EFB.pref_set_nws(dropdown_selected[1]-1)
 end
 
 function p4s1_draw()

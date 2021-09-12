@@ -31,12 +31,12 @@ local function EFB_p4s2_move_slider() -- this function sets the global table val
     end
 
     local functions_name = {
-        EFB_PREFRENCES_set_sound_ext,
-        EFB_PREFRENCES_set_sound_int,
-        EFB_PREFRENCES_set_sound_warn,
-        EFB_PREFRENCES_set_sound_enviro,
-        EFB_PREFRENCES_set_display_aa,
-        EFB_PREFRENCES_set_brk_strength,
+        EFB.pref_set_sound_ext,
+        EFB.pref_set_sound_int,
+        EFB.pref_set_sound_warn,
+        EFB.pref_set_sound_enviro,
+        EFB.pref_get_display_aa,
+        EFB.pref_set_brk_strength ,
     }
     for i=1,6 do
         functions_name[i](slider_pos[i])
@@ -53,15 +53,17 @@ end
 
 local function EFB_p4s2_update_global_table() -- this table set slider_pos to the value in the global table. Used for when global table is load from prefrences file.
     local functions_name = {
-        EFB_PREFRENCES_get_sound_ext,
-        EFB_PREFRENCES_get_sound_int,
-        EFB_PREFRENCES_get_sound_warn,
-        EFB_PREFRENCES_get_sound_enviro,
-        EFB_PREFRENCES_get_display_aa,
-        EFB_PREFRENCES_get_brk_strength,
+        EFB.pref_get_sound_ext,
+        EFB.pref_get_sound_int,
+        EFB.pref_get_sound_warn,
+        EFB.pref_get_sound_enviro,
+        EFB.pref_get_display_aa,
+        EFB.pref_get_brk_strength,
     }
     for i=1,6 do
-        slider_pos[i] = functions_name[i]()
+        if functions_name[i] ~= nil then
+            slider_pos[i] = functions_name[i]()
+        end
     end
 end
 
@@ -79,7 +81,7 @@ function p4s2_buttons()
 
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 414,46,738,90, function ()
         efb_save_button_begin = get(TIME)
-        EFB_PREFRENCES_SAVE()
+        EFB.pref_save()
     end)
 end
 

@@ -213,15 +213,15 @@ end
 
 local function update_prefrences_corresponding_datarefs()
     -- AA LEVEL
-    local aa_lvl = EFB_PREFRENCES_get_display_aa() - EFB_PREFRENCES_get_display_aa()%0.2
+    local aa_lvl = EFB.pref_get_display_aa() - EFB.pref_get_display_aa()%0.2
     local one_to_32 = 2^(aa_lvl * 5)
     set(PANEL_AA_LEVEL_1to32, one_to_32)
 
     --VOLUME SLIDERS
-    set(VOLUME_ext, EFB_PREFRENCES_get_sound_ext())
-    set(VOLUME_int, EFB_PREFRENCES_get_sound_int())
-    set(VOLUME_enviro, EFB_PREFRENCES_get_sound_enviro())
-    set(VOLUME_warn, EFB_PREFRENCES_get_sound_warn())
+    set(VOLUME_ext, EFB.pref_get_sound_ext())
+    set(VOLUME_int, EFB.pref_get_sound_int())
+    set(VOLUME_enviro, EFB.pref_get_sound_enviro())
+    set(VOLUME_warn, EFB.pref_get_sound_warn())
 end
 
 --SASL callbacks-------------------------------------------------------------------------------------------------

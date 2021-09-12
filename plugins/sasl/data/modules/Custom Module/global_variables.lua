@@ -52,35 +52,13 @@ FMGS_sys = {}
 GPS_sys = {}
 TCAS_sys = {}
 
+ -- do NOT name anything else as "EFB", this is super important, used to store functions. See efb_prefrences.lua 
+EFB = {}
+
 WEIGHTS = {}
 
 -- Engine data depending on the user choice
 ENG = { data_is_loaded = false }
-
-EFB = {
-    prefrences = {
-        toggles = {
-            syncqnh = true,
-            pausetd = false,
-            copilot = false,
-        },
-        sliders = {
-            sound_int = 1,
-            sound_ext = 1,
-            sound_warn = 1,
-            sound_enviro = 1,
-            display_aa = 0,
-            brk_strength = 1,
-        },
-        dropdowns = {
-            nws = 0,
-        },
-        networking = {
-            simbrief_id = ""
-        },
-    },
-}   
-
 
 AvionicsBay = {}
 
