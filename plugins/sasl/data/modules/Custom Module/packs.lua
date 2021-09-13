@@ -51,6 +51,7 @@ local pack_valve_pos      = {false, false}
 
 local apu_bleed_switch    = false
 local apu_bleed_valve_pos = false
+local apu_bleed_off_time = 0
 
 local econ_flow_switch = false
 
@@ -81,7 +82,17 @@ sasl.registerCommandHandler(Toggle_ECON_flow, 0, function(phase) if phase == SAS
 sasl.registerCommandHandler(X_bleed_dial_up, 0, function(phase) Knob_handler_up_int(phase, X_bleed_dial, 0, 2) end)
 sasl.registerCommandHandler(X_bleed_dial_dn, 0, function(phase) Knob_handler_down_int(phase, X_bleed_dial, 0, 2) end)
 
-sasl.registerCommandHandler (Toggle_apu_bleed, 0,  function(phase) if phase == SASL_COMMAND_BEGIN then apu_bleed_switch = not apu_bleed_switch end end)
+sasl.registerCommandHandler(Toggle_apu_bleed, 0,
+        function(phase)
+            if phase == SASL_COMMAND_BEGIN then
+                apu_bleed_switch = not apu_bleed_switch
+                if (apu_bleed_switch == false) then
+                    apu_bleed_off_time = get(TIME)
+                end
+            end
+        end
+)
+
 sasl.registerCommandHandler (Toggle_eng1_bleed, 0, function(phase) if phase == SASL_COMMAND_BEGIN then eng_bleed_switch[1] = not eng_bleed_switch[1] end end)
 sasl.registerCommandHandler (Toggle_eng2_bleed, 0, function(phase) if phase == SASL_COMMAND_BEGIN then eng_bleed_switch[2] = not eng_bleed_switch[2] end end)
 sasl.registerCommandHandler (Toggle_pack1, 0, function(phase) if phase == SASL_COMMAND_BEGIN then pack_valve_switch[1] = not pack_valve_switch[1] end end)
@@ -132,6 +143,7 @@ end
 local function update_bleed_valves()
 
     if get(FAILURE_BLEED_APU_VALVE_STUCK) == 0 then
+        -- TODO better don't hardcode APU values in several places
         apu_bleed_valve_pos = get(Apu_N1) > 95 and apu_bleed_switch and get(FAILURE_BLEED_APU_VALVE_STUCK) == 0
     end
     
@@ -260,6 +272,8 @@ local function update_datarefs()
     set(Pack_M, 0)--turning the center pack off as A320 doesn't have one
     set(Pack_R, pack_valve_pos[2] and 1 or 0)
     set(Gpu_bleed_switch, get(GAS_bleed_avail))
+
+    set(APU_bleed_off_time,apu_bleed_off_time)
 
     -- Pressures and temps
     set(Apu_bleed_psi, apu_pressure)

@@ -336,6 +336,7 @@ ATHR_is_overriding = createGlobalPropertyi("a321neo/dynamics/engines/athr_is_ove
 Apu_N1 = globalProperty("sim/cockpit2/electrical/APU_N1_percent")
 APU_EGT = createGlobalPropertyf("a321neo/cockpit/apu/EGT", 0, false, true, false)
 APU_flap = createGlobalPropertyi("a321neo/cockpit/apu/flap_open", 0, false, true, false)
+APU_bleed_off_time = createGlobalPropertyf("a321neo/cockpit/apu/bleed_off_time", 0, false, true, false)
 
 --PACKs system
 Apu_bleed_xplane = globalProperty("sim/cockpit2/bleedair/actuators/apu_bleed")
