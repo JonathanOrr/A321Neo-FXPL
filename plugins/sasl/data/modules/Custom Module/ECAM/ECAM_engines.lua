@@ -33,12 +33,13 @@ local params = {
     last_update = 0
 }
 
-local BLEED_MIN_LIMIT = 21
-
+local BLEED_MIN_LIMIT = 21 -- controls color of bleed pressure indication
+-- some logic during start or shutdown of FADEC is timer based
 local start_elec_fadec = {0,0}
 local start_shut_fadec = {0,0}
-local xx_statuses = {false,false}
-local manual_fadeec_on = {false, false}
+
+local xx_statuses = {false,false}        -- when *false* XX will be displayed instead of values
+local manual_fadeec_on = {false, false}  -- FADEC power override from maintenance panel
 
 
 sasl.registerCommandHandler (MNTN_FADEC_1_on,  0, function(phase) if phase == SASL_COMMAND_BEGIN then manual_fadeec_on[1] = not manual_fadeec_on[1] end end )
@@ -229,13 +230,6 @@ local function draw_vibrations()
     end
 end
 
-local function draw_bleed()
-    local bleed_1_press_color = get(L_bleed_press) < BLEED_MIN_LIMIT and ECAM_ORANGE or ECAM_GREEN
-    local bleed_2_press_color = get(R_bleed_press) < BLEED_MIN_LIMIT and ECAM_ORANGE or ECAM_GREEN
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-188, 136, math.floor(get(L_bleed_press)), 36, false, false, TEXT_ALIGN_CENTER, bleed_1_press_color)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+192, 136, math.floor(get(R_bleed_press)), 36, false, false, TEXT_ALIGN_CENTER, bleed_2_press_color)
-end
-
 local function draw_special()
 
     if get(FAILURE_ENG_1_FUEL_CLOG) == 1 then
@@ -256,9 +250,32 @@ local function draw_special()
     end
 end
 
-local function draw_ignition()
+local function ignition_section_visible()
+    -- draw IGN only, if eng mode is in start position TODO check valve/gauge display conditions
+    -- TODO after successful start (AVAIL) of BOTH engines the startup sequence display (IGN and PSI) section will disappear after some delay
+    -- TODO show up again on auto restart and continuous ignition
+    if( get(Engine_mode_knob) == 1) then
+        return true
+    end
+    return false;
+end
 
+local function nacelle_section_visible()
+    -- TODO handle visibililty of NACELLE display xor IGN section
+    return false
+end
+
+
+local function draw_bleed_psi()
+    local bleed_1_press_color = get(L_bleed_press) < BLEED_MIN_LIMIT and ECAM_ORANGE or ECAM_GREEN
+    local bleed_2_press_color = get(R_bleed_press) < BLEED_MIN_LIMIT and ECAM_ORANGE or ECAM_GREEN
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-188, 136, math.floor(get(L_bleed_press)), 36, false, false, TEXT_ALIGN_CENTER, bleed_1_press_color)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+192, 136, math.floor(get(R_bleed_press)), 36, false, false, TEXT_ALIGN_CENTER, bleed_2_press_color)
+end
+
+local function draw_valve_and_ignition()
     if xx_statuses[1] then
+        -- igniter indications A/B
         if get(Ecam_eng_igniter_eng_1) % 2 == 1 then
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2-202, 250, "A" , 36,
                      false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
@@ -267,8 +284,11 @@ local function draw_ignition()
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2-177, 250, "B" , 36,
                      false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
         end
+        -- starter valve
+        SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_ENG_valve_img, size[1]/2-190, size[2]/2-272, 128, 80, 2, get(Eng_starter_valve_open,1) == 1 and 2 or 1, ECAM_GREEN)
     end
     if xx_statuses[2] then
+        -- igniter indications A/B
         if get(Ecam_eng_igniter_eng_2) % 2 == 1 then
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2+180, 250, "A" , 36,
                      false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
@@ -277,8 +297,18 @@ local function draw_ignition()
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2+205, 250, "B" , 36,
                      false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
         end
+        -- starter valve
+        SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_ENG_valve_img, size[1]/2+190, size[2]/2-272, 128, 80, 2, get(Eng_starter_valve_open,2) == 1 and 2 or 1, ECAM_GREEN)
     end
 end
+
+local function draw_bleed_and_ignition()
+    if(ignition_section_visible()) then
+        draw_valve_and_ignition()
+        draw_bleed_psi()
+    end
+end
+
 
 local function draw_arcs_limits(x, y, red_angle, yellow_angle, current_angle, left_bottom_marker)
 
@@ -311,7 +341,7 @@ local function draw_arcs_limits(x, y, red_angle, yellow_angle, current_angle, le
         SASL_draw_needle_adv(x, y, 58, 80, current_angle, 3.5, needle_color)
 end
 
-local function draw_needle_and_valves()
+local function draw_oil_qty_and_pressure_gauges()
     local oil_qty_max = ENG.data.display.oil_qty_scale
     local oil_qty_adv = ENG.data.display.oil_qty_advisory
     local oil_press_max = ENG.data.display.oil_press_scale
@@ -330,7 +360,6 @@ local function draw_needle_and_valves()
 
         draw_arcs_limits(size[1]/2-189, size[2]/2+78, oil_angle_red, oil_angle_amber, oil_angle, false)
 
-        SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_ENG_valve_img, size[1]/2-190, size[2]/2-272, 128, 80, 2, get(Eng_starter_valve_open,1) == 1 and 2 or 1, ECAM_GREEN)
     end
     
     if xx_statuses[2] then
@@ -347,17 +376,14 @@ local function draw_needle_and_valves()
 
         draw_arcs_limits(size[1]/2+189, size[2]/2+78, oil_angle_red, oil_angle_amber, oil_angle, false)
 
-        SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_ENG_valve_img, size[1]/2+190, size[2]/2-272, 128, 80, 2, get(Eng_starter_valve_open,2) == 1 and 2 or 1, ECAM_GREEN)
     end
 end
 
 local function draw_eng_bgd()
-    sasl.gl.drawWideLine(338, 157       , 368   ,   160         , 4, ECAM_LINE_GREY)
     sasl.gl.drawWideLine(338, 157+205   , 368   ,   160+205     , 4, ECAM_LINE_GREY)
     sasl.gl.drawWideLine(338, 157+242   , 368   ,   160+242     , 4, ECAM_LINE_GREY)
     sasl.gl.drawWideLine(338, 157+326   , 368   ,   160+326     , 4, ECAM_LINE_GREY)
     sasl.gl.drawWideLine(338, 157+620   , 368   ,   160+620     , 4, ECAM_LINE_GREY)
-    sasl.gl.drawWideLine(900-338, 157       , 900-368   ,   160         , 4, ECAM_LINE_GREY)
     sasl.gl.drawWideLine(900-338, 157+205   , 900-368   ,   160+205     , 4, ECAM_LINE_GREY)
     sasl.gl.drawWideLine(900-338, 157+242   , 900-368   ,   160+242     , 4, ECAM_LINE_GREY)
     sasl.gl.drawWideLine(900-338, 157+326   , 900-368   ,   160+326     , 4, ECAM_LINE_GREY)
@@ -371,12 +397,14 @@ local function draw_eng_bgd()
     drawTextCentered(Font_ECAMfont, 450, 478, "°C", 30, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
     drawTextCentered(Font_ECAMfont, 450, 398, "VIB N1", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
     drawTextCentered(Font_ECAMfont, 450+30, 360, "N2", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    -- draw IGN only, if eng mode is in start position TODO check valve/gauge display conditions
-    if(get(Engine_mode_knob) == 1) then
+    if(ignition_section_visible()) then
+        sasl.gl.drawWideLine(338, 157       , 368   ,   160         , 4, ECAM_LINE_GREY)
+        sasl.gl.drawWideLine(900-338, 157       , 900-368   ,   160         , 4, ECAM_LINE_GREY)
         drawTextCentered(Font_ECAMfont, 450, 258, "IGN", 30, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+        drawTextCentered(Font_ECAMfont, 450, 150, "PSI", 30, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
     end
-    -- TODO NAC temperature advisory threshold reached - draw engine nacelle temperature indication
-    drawTextCentered(Font_ECAMfont, 450, 150, "PSI", 30, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    -- TODO NAC temperature advisory threshold reached - draw engine nacelle temperature indication instead of startup section of cause since
+    -- position is the same
 
     drawTextCentered(Font_ECAMfont, 93, 870, "ENGINE", 44, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
     sasl.gl.drawWideLine(8, 850, 176, 850, 4, ECAM_WHITE)
@@ -388,9 +416,8 @@ function draw_eng_page()
     draw_oil_qt_press_temp()
     draw_vibrations()
     draw_special()
-    draw_ignition()
-    draw_bleed()
-    draw_needle_and_valves()
+    draw_bleed_and_ignition()
+    draw_oil_qty_and_pressure_gauges()
 
 end
 
