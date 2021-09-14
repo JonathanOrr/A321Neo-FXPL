@@ -16,6 +16,7 @@
 -- Short description: ECAM file for the APU page
 -------------------------------------------------------------------------------
 
+local GEN_APU = 3  -- TODO only temporarily until GEN_xx as global constants has been discussed
 
 local function draw_triangle(x,y)
     sasl.gl.drawWideLine(x, y, x-10, y-25, 3, ECAM_GREEN)
@@ -25,7 +26,7 @@ end
 
 local function draw_apu_valve_and_needle()
 
-    --APU gen box
+    --APU gen box according state 0: invisible (white header only, no border), 1: OFF (amber + OFF), 2: online (white + values), 3: failed (amber + values)
     SASL_drawSegmentedImg(ECAM_APU_gen_img, size[1]/2-312, size[2]/2+178, 501, 139, 4, get(Ecam_apu_gen_state) + 1)
 
     --apu bleed valve
@@ -66,12 +67,18 @@ local function draw_apu_page_bgd()
     sasl.gl.drawWideLine(112, 517, 112, 563, 4, ECAM_LINE_GREY)
 end
 
+local function round_to_5(value)
+    local x = math.fmod(value,5)
+    return x < 3 and value - x or value + 5 - x
+end
+
 function draw_apu_page()
     draw_apu_page_bgd()
     draw_apu_valve_and_needle()
 
-    --avail--
-    if get(Apu_avail) == 1 then
+    --avail--  TODO what happens in cooling phase to generator, bleed and AVAIL?
+    local apu_avail = get(Apu_avail)
+    if  apu_avail == 1 then
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2+300, "AVAIL", 36, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
     end
 
@@ -85,7 +92,7 @@ function draw_apu_page()
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2+200, size[2]/2-130, "FLAP OPEN", 36, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
     end
 
-    --apu gen section--
+    -- APU Generator - online or failed - show values
     if get(Ecam_apu_gen_state) >= 2 then
         local color_amps = (-ELEC_sys.generators[3].curr_amps > 261) and ECAM_ORANGE or ECAM_GREEN
         local load_val = math.abs(math.floor(ELEC_sys.generators[3].curr_amps/261*100))
@@ -99,7 +106,8 @@ function draw_apu_page()
         local hz_val = math.floor(ELEC_sys.generators[3].curr_hz)
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2-235, size[2]/2+192, hz_val, 23, false, false, TEXT_ALIGN_RIGHT, color_hz)
 
-        if ELEC_sys.buses.ac1_powered_by == 3 then
+        -- if AC1 bus is powered by APU Generator
+        if ELEC_sys.buses.ac1_powered_by == GEN_APU then
             SASL_draw_img_xcenter_aligned(ECAM_APU_triangle_img, size[1]/2-250, size[2]/2+325, 27, 20, ECAM_GREEN)
         end
 
@@ -117,39 +125,47 @@ function draw_apu_page()
     end
 
     local needle_color = ECAM_GREEN
+    local apu_n = get(Apu_N1)
+    local apu_egt = get(APU_EGT)
 
     --needles--
-    if get(Apu_master_button_state) == 1 or get(Apu_N1) > 1 then
+    if get(Apu_master_button_state) == 1 or apu_n > 1 then
         --N1
-        if get(Apu_N1) >= 102 then
+        if apu_n >= 102 then
             needle_color = ECAM_ORANGE
         end
-        if get(Apu_N1) >= 107 then
+        if apu_n >= 107 then
             needle_color = ECAM_RED
         end
-        SASL_rotated_center_img_xcenter_aligned(ECAM_APU_needle_img, size[1]/2-200, size[2]/2-23, 4, 80, Math_rescale_lim_lower(0, -120, 100, 55, get(Apu_N1)), 0, 0, needle_color)
+        -- TODO draw N needle as line
+        SASL_rotated_center_img_xcenter_aligned(ECAM_APU_needle_img, size[1]/2-200, size[2]/2-23, 4, 80, Math_rescale_lim_lower(0, -120, 100, 55, apu_n), 0, 0, needle_color)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-180, size[2]/2-60, math.floor(apu_n), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
 
         --EGT
         needle_color = ECAM_GREEN
-        if get(Apu_avail) == 0 then
-            if get(APU_EGT) >= 1096 - 33 then
+        if apu_avail == 0 then
+            if apu_egt >= 1096 - 33 then
                 needle_color = ECAM_ORANGE
             end
-            if get(APU_EGT) >= 1096 then
+            if apu_egt >= 1096 then
                 needle_color = ECAM_RED
             end
         end
-        if get(Apu_avail) == 1 then
-            if get(APU_EGT) >= 675 - 33 then
+        if apu_avail == 1 then
+            if apu_egt >= 675 - 33 then
                 needle_color = ECAM_ORANGE
             end
-            if get(APU_EGT) >= 675 then
+            if apu_egt >= 675 then
                 needle_color = ECAM_RED
             end
         end
-        SASL_rotated_center_img_xcenter_aligned(ECAM_APU_needle_img, size[1]/2-200, size[2]/2-225, 4, 80, Math_rescale_lim_lower(0, -120, 1000, 40, get(APU_EGT)), 0, 0, needle_color)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-180, size[2]/2-60, math.floor(get(Apu_N1)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-180, size[2]/2-260, math.floor(get(APU_EGT)), 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        -- TODO draw EGT needle as line
+        -- TODO draw EGT margins
+        -- TODO TBD blend over from one value to the other by dimming? We would have to keep some state for that though
+        -- acc videos EGT is displayed in 5 degree steps and the needle also moves in steps
+        apu_egt = round_to_5(apu_egt)
+        SASL_rotated_center_img_xcenter_aligned(ECAM_APU_needle_img, size[1]/2-200, size[2]/2-225, 4, 80, Math_rescale_lim_lower(0, -120, 1000, 40, apu_egt), 0, 0, needle_color)
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-180, size[2]/2-260,apu_egt, 30, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
     else
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2-180, size[2]/2-60, "XX", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2-180, size[2]/2-260, "XX", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
