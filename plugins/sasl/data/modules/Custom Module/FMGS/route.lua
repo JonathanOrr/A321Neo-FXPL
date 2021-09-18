@@ -71,13 +71,16 @@ local function update_cifp(reference, initial_point)
 
     local total_distance = 0
 
-    reference.computed_legs = {}
+    if initial_point then
+        reference.computed_legs = {{lat=initial_point.lat, lon=initial_point.lon}}
+    else
+        reference.computed_legs = {}
+    end
+
     local prev_point = initial_point
 
-    reference.computed_legs = {{lat=prev_point.lat, lon=prev_point.lon}}
-
     for i,leg in ipairs(reference.legs) do
-        local leg_points = add_cifp_point(reference, prev_point,leg)    -- Get the points for the single legs
+        local leg_points = add_cifp_point(prev_point,leg)    -- Get the points for the single legs
         local distance = 0
         
         for _,x in ipairs(leg_points) do
@@ -116,7 +119,7 @@ local function debug_add_route()
             if FMGS_sys.fpln.temp.apts.dep_cifp then
                 FMGS_dep_set_sid(FMGS_sys.fpln.temp.apts.dep_cifp.sids[49])
                 FMGS_dep_set_trans(FMGS_sys.fpln.temp.apts.dep_cifp.sids[50])
-                FMGS_reshape_temp_fpln()
+                FMGS_reshape_fpln()
                 FMGS_insert_temp_fpln()
                 logInfo("DEBUG F/PLN is active: LOADED 2/2")
                 route_last_update = get(TIME) + 100000000
@@ -172,14 +175,14 @@ function update_route()
     fpln.require_recompute = false
 
     local dist, total_distance = 0, 0
+    local init_pt
 
     local dep_rwy, sibl = FMGS_dep_get_rwy(FMGS_sys.fpln.temp and FMGS_sys.fpln.temp.require_recompute)
-    if not dep_rwy then
-        return
+    if dep_rwy then
+        init_pt = GeoPoint:create({ lat=(not sibl and dep_rwy.s_lat or dep_rwy.lat), lon=(not sibl and dep_rwy.s_lon or dep_rwy.lon)})
     end
 
-    local init_pt = GeoPoint:create({ lat=(not sibl and dep_rwy.s_lat or dep_rwy.lat), lon=(not sibl and dep_rwy.s_lon or dep_rwy.lon)})
-
+    
     dist, init_pt  = update_cifp(fpln.apts.dep_sid, init_pt)
     total_distance = total_distance + dist
     dist, init_pt  = update_cifp(fpln.apts.dep_trans, init_pt)
@@ -196,6 +199,16 @@ function update_route()
     total_distance = total_distance + dist
     dist, init_pt  = update_cifp(fpln.apts.arr_appr, init_pt)
     total_distance = total_distance + dist
+
+    if init_pt then
+        local arr_rwy, sibl = FMGS_arr_get_rwy(FMGS_sys.fpln.temp and FMGS_sys.fpln.temp.require_recompute)
+        if arr_rwy then
+            local last_pt = GeoPoint:create({ lat=(not sibl and arr_rwy.s_lat or arr_rwy.lat), lon=(not sibl and arr_rwy.s_lon or arr_rwy.lon)})
+            local dest_apt_dist = GC_distance_kt(last_pt.lat, last_pt.lon, init_pt.lat, init_pt.lon)
+            arr_rwy.last_distance = dest_apt_dist
+            total_distance = total_distance + dest_apt_dist
+        end
+    end
 
     if total_distance <= 9999 then
         FMGS_sys.data.pred.trip_dist = total_distance

@@ -17,7 +17,7 @@
 -------------------------------------------------------------------------------
 
 
-local function read_fix_id(prev_point,fix_id)  -- Convert the FIX IDENT field of the CIFP to the avionics_bay object
+local function read_fix_id(fix_id, target_region_code)  -- Convert the a FIX field of the CIFP to the avionics_bay object
     local fixes_1 = nil
     local fixes_2 = nil
 
@@ -44,33 +44,30 @@ local function read_fix_id(prev_point,fix_id)  -- Convert the FIX IDENT field of
         fixes_1 = AvionicsBay.fixes.get_by_name(fix_id, false)
     end
     
-    -- Ok, now I need to find the nearest one
-    local nearest = nil
-    local nearest_distance = 10^50
-    
-    local check_minimum = function(fixes) 
+    local found_x
+
+    local check_correct= function(fixes)
         for _,x in ipairs(fixes) do
-            local this_dist = GC_distance_kt(x.lat, x.lon, prev_point.lat, prev_point.lon)
-            if this_dist < nearest_distance then
-                nearest_distance = this_dist
-                nearest = x
+            if x.region_code == target_region_code then
+                found_x = x
+                break
             end
         end
     end
 
     if fixes_1 then
-        check_minimum(fixes_1)
+        check_correct(fixes_1)
     end
 
     if fixes_2 then
-        check_minimum(fixes_2)
+        check_correct(fixes_2)
     end
     
-    return nearest
+    return found_x
 end
 
-local function add_sid_point_IF_TF(prev_point, x)
-    local point = read_fix_id(prev_point, x.leg_name)
+local function add_sid_point_IF_TF(x)
+    local point = read_fix_id(x.leg_name, x.region_code_leg_name)
     if point then
         return {point}
     else
@@ -79,18 +76,22 @@ local function add_sid_point_IF_TF(prev_point, x)
 end
 
 local function add_sid_point_CF(prev_point, x)
-    local point = read_fix_id(prev_point, x.leg_name)
+    local point = read_fix_id(x.leg_name, x.region_code_leg_name)
     if point then
-        local line = GeoLine:create_from_course(point, x.outb_mag/10)  -- TODO TRUE/MAG
-        local sec_point = line:point_at_min_distance(prev_point)
-        return {sec_point, point}
+        if prev_point then
+            local line = GeoLine:create_from_course(point, x.outb_mag/10)  -- TODO TRUE/MAG
+            local sec_point = line:point_at_min_distance(prev_point)
+            return {sec_point, point}
+        else
+            return {point}
+        end
     else
         return {}
     end
 end
 
-local function add_sid_point_FA(prev_point, x)
-    local point = read_fix_id(prev_point, x.leg_name)
+local function add_sid_point_FA(x)
+    local point = read_fix_id(x.leg_name, x.region_code_leg_name)
     if point then
         local line = GeoLine:create_from_course(point, x.outb_mag/10)  -- TODO TRUE/MAG
         local sec_point = line:point_at_given_distance(point, 1)
@@ -101,13 +102,15 @@ local function add_sid_point_FA(prev_point, x)
 end
 
 
-function add_cifp_point(reference, prev_point, x)
+function add_cifp_point(prev_point, x)
+    -- WARNING: prev_point may be nil
+    assert(x)
     if x.leg_type == CIFP_LEG_TYPE_IF or x.leg_type == CIFP_LEG_TYPE_TF or x.leg_type == CIFP_LEG_TYPE_DF then
-        return add_sid_point_IF_TF(prev_point,x)
+        return add_sid_point_IF_TF(x)
     elseif x.leg_type == CIFP_LEG_TYPE_CF then
         return add_sid_point_CF(prev_point, x)
     elseif x.leg_type == CIFP_LEG_TYPE_FA then
-        return add_sid_point_FA(prev_point, x)
+        return add_sid_point_FA(x)
     end
     return {}
 end
