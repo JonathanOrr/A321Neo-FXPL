@@ -467,78 +467,97 @@ function FMGS_get_current_fpln()    -- CAUTION: do not abuse of this
     return FMGS_does_temp_fpln_exist() and FMGS_sys.fpln.temp or FMGS_sys.fpln.active
 end
 
-function FMGS_reshape_temp_fpln()    -- This function removes duplicated elements and adds
+local function FMGS_reshape_add_discontinuity(fpln, dont_add_disc, i)
+    if dont_add_disc then
+        return
+    end
+    if i then
+        table.insert(fpln.legs, i, {discontinuity = true})
+    else
+        table.insert(fpln.legs, {discontinuity = true})
+    end
+end
+
+local function FMGS_reshape_fpln_dep(fpln, dont_add_disc)
+
+    local last_dep
+    if fpln.apts.dep_trans and #fpln.apts.dep_trans.legs>0 then
+        last_dep = fpln.apts.dep_trans
+    elseif fpln.apts.dep_sid  and #fpln.apts.dep_sid.legs>0 then
+        last_dep = fpln.apts.dep_sid
+    end
+
+    if not fpln.legs[1].discontinuity then
+        -- If there is only one point and it is not a discontinuity, then
+        -- check the point between the SID or TRANS and the first point of
+        -- the leg
+
+        if last_dep then
+            local last_dep_p = last_dep.legs[#last_dep.legs]
+            if fpln.legs[1].id ~= last_dep_p.leg_name then
+                FMGS_reshape_add_discontinuity(fpln, dont_add_disc, 1)
+            end
+        else
+            FMGS_reshape_add_discontinuity(fpln, dont_add_disc, 1)
+        end
+    elseif #fpln.legs >= 2 then
+        -- The first item is a discontinuity, so let's check
+        -- there is no duplicated like ABESI -DISC- ABESI
+        if last_dep then
+            local last_dep_p = last_dep.legs[#last_dep.legs]
+            if fpln.legs[2].id == last_dep_p.leg_name then
+                table.remove(fpln.legs, 1)  -- Remove discontinuity
+                table.remove(fpln.legs, 1)  -- Remove duplicated
+            end
+        end
+    end
+end
+
+local function FMGS_reshape_fpln_arr(fpln, dont_add_disc)
+
+    local first_arr
+    if fpln.apts.arr_trans and #fpln.apts.arr_trans.legs>0 then
+        first_arr = fpln.apts.arr_trans
+    elseif fpln.apts.arr_appr  and #fpln.apts.arr_appr.legs>0 then
+        first_arr = fpln.apts.arr_appr
+    end
+
+    if not fpln.legs[#fpln.legs].discontinuity then
+
+        if first_arr then
+            local first_arr_p = first_arr.legs[1]
+            if fpln.legs[#fpln.legs].id ~= first_arr_p.leg_name then
+                FMGS_reshape_add_discontinuity(fpln, dont_add_disc)
+            end
+        else
+            FMGS_reshape_add_discontinuity(fpln, dont_add_disc)
+        end
+    elseif #fpln.legs >= 2 then
+        -- The last item is a discontinuity, so let's check
+        -- there is no duplicated like ABESI -DISC- ABESI
+        if first_arr then
+            local first_arr_p = first_arr.legs[1]
+            if fpln.legs[#fpln.legs-1].id == first_arr_p.leg_name then
+                table.remove(fpln.legs, #fpln.legs)  -- Remove discontinuity
+                table.remove(fpln.legs, #fpln.legs)  -- Remove duplicated
+            end
+        end
+    end
+end
+
+function FMGS_reshape_fpln(dont_add_disc)    -- This function removes duplicated elements and adds
                                 -- discontinuity where needed. You should call this
                                 -- function evertime (and after) you change the sid, 
                                 -- star, fpln points, etc.
 
-    local fpln = FMGS_sys.fpln.temp
+    local fpln = FMGS_sys.fpln.temp or FMGS_sys.fpln.active
 
     if #fpln.legs == 0 then
         -- F/PLN is empty, thus just add a discontinuity
-        table.insert(fpln.legs, {discontinuity = true})
+        FMGS_reshape_add_discontinuity(fpln, dont_add_disc)
     else
-
-        local last_dep
-        if fpln.apts.dep_trans and #fpln.apts.dep_trans.legs>0 then
-            last_dep = fpln.apts.dep_trans
-        elseif fpln.apts.dep_sid  and #fpln.apts.dep_sid.legs>0 then
-            last_dep = fpln.apts.dep_sid
-        end
-
-        if not fpln.legs[1].discontinuity then
-            -- If there is only one point and it is not a discontinuity, then
-            -- check the point between the SID or TRANS and the first point of
-            -- the leg
-
-            if last_dep then
-                local last_dep_p = last_dep.legs[#last_dep.legs]
-                if fpln.legs[1].id ~= last_dep_p.leg_name then
-                    table.insert(fpln.legs, 1, {discontinuity = true})
-                end
-            else
-                table.insert(fpln.legs, 1, {discontinuity = true})
-            end
-        elseif #fpln.legs >= 2 then
-            -- The first item is a discontinuity, so let's check
-            -- there is no duplicated like ABESI -DISC- ABESI
-            if last_dep then
-                local last_dep_p = last_dep.legs[#last_dep.legs]
-                if fpln.legs[2].id == last_dep_p.leg_name then
-                    table.remove(fpln.legs, 1)  -- Remove discontinuity
-                    table.remove(fpln.legs, 1)  -- Remove duplicated
-                end
-            end
-        end
-
-        local first_arr
-        if fpln.apts.arr_trans and #fpln.apts.arr_trans.legs>0 then
-            first_arr = fpln.apts.arr_trans
-        elseif fpln.apts.arr_appr  and #fpln.apts.arr_appr.legs>0 then
-            first_arr = fpln.apts.arr_appr
-        end
-
-        if not fpln.legs[#fpln.legs].discontinuity then
-
-            if first_arr then
-                local first_arr_p = first_arr.legs[1]
-                if fpln.legs[#fpln.legs].id ~= first_arr_p.leg_name then
-                    table.insert(fpln.legs, {discontinuity = true})
-                end
-            else
-                table.insert(fpln.legs, {discontinuity = true})
-            end
-        elseif #fpln.legs >= 2 then
-            -- The last item is a discontinuity, so let's check
-            -- there is no duplicated like ABESI -DISC- ABESI
-            if first_arr then
-                local first_arr_p = first_arr.legs[1]
-                if fpln.legs[#fpln.legs-1].id == first_arr_p.leg_name then
-                    table.remove(fpln.legs, #fpln.legs)  -- Remove discontinuity
-                    table.remove(fpln.legs, #fpln.legs)  -- Remove duplicated
-                end
-            end
-        end
+        FMGS_reshape_fpln_dep(fpln, dont_add_disc)
+        FMGS_reshape_fpln_arr(fpln, dont_add_disc)
     end
 
     fpln.require_recompute = true

@@ -399,7 +399,7 @@ function THIS_PAGE:R6(mcdu_data)
 
     add_to_fpln(mcdu_data, full_path, type_map, awy_map)
 
-    FMGS_reshape_temp_fpln()
+    FMGS_reshape_fpln()
     FMGS_insert_temp_fpln()
 
     self:reset_page_data(mcdu_data)

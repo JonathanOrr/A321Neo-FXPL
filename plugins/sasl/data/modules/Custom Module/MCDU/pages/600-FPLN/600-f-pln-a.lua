@@ -343,7 +343,7 @@ function THIS_PAGE:add_new_wpt(mcdu_data)
             FMGS_create_copy_temp_fpln()
         end
         FMGS_fpln_temp_leg_add(leg, obj_clicked.ref_id)
-        FMGS_reshape_temp_fpln()
+        FMGS_reshape_fpln()
         FMGS_insert_temp_fpln()
     end
 
@@ -474,6 +474,7 @@ local function trigger_lat_rev(mcdu_data, id)
         if mcdu_data.clr then   -- A clear is requested
             local table_obj = point_get_table(mcdu_data, obj.point_type)
             table.remove(table_obj, obj.ref_id)
+            FMGS_reshape_fpln(true)
 
         elseif #mcdu_data.entry.text > 0 then
             add_direct_waypoint(mcdu_data, obj)
@@ -549,7 +550,7 @@ end
 
 function THIS_PAGE:R6(mcdu_data)
     if FMGS_does_temp_fpln_exist() then
-        FMGS_reshape_temp_fpln()
+        FMGS_reshape_fpln()
         FMGS_insert_temp_fpln()
     else
         MCDU_Page:R6(mcdu_data) -- ERROR
