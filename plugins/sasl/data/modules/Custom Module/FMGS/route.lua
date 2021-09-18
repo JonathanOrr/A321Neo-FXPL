@@ -110,8 +110,8 @@ local function debug_add_route()
         if not FMGS_sys.fpln.active.apts.dep_sid then
             if not FMGS_sys.fpln.temp then
                 FMGS_set_apt_dep("LIML")
-                FMGS_set_apt_arr("VABB")
-                FMGS_set_apt_alt("LIMC")
+                FMGS_set_apt_arr("LIMC")
+                FMGS_set_apt_alt("VABB")
                 FMGS_create_temp_fpln()
                 FMGS_dep_set_rwy(FMGS_sys.fpln.temp.apts.dep.rwys[1], true)
                 logInfo("DEBUG F/PLN is active: LOADED 1/2")

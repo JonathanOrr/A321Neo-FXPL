@@ -228,9 +228,11 @@ function THIS_PAGE:render_list(mcdu_data)
         end
     end
 
+
     self:print_simple_airport(mcdu_data,
                               mcdu_data.page_data[600].curr_fpln.apts.arr,
                               mcdu_data.page_data[600].curr_fpln.apts.arr,
+                              mcdu_data.page_data[600].curr_fpln.apts.arr_rwy and mcdu_data.page_data[600].curr_fpln.apts.arr_rwy[1].last_distance,
                               FMGS_perf_get_pred_trip_time(),
                               ECAM_GREEN)
 
@@ -240,7 +242,7 @@ function THIS_PAGE:render_list(mcdu_data)
     THIS_PAGE:render_list_altn(mcdu_data)
 end
 
-function THIS_PAGE:print_simple_airport(mcdu_data, apt, apt_obj, trip_time, color)
+function THIS_PAGE:print_simple_airport(mcdu_data, apt, apt_obj, distance, trip_time, color)
     -- APT Obj represents the object we want to save for lateral revision
     -- it should be nil, for instance, for the line with the arrival airport in the
     -- altn fpln.
@@ -252,10 +254,18 @@ function THIS_PAGE:print_simple_airport(mcdu_data, apt, apt_obj, trip_time, colo
     local ctr_side   = mcdu_format_force_to_small(" " .. trip_time .. "  ---")
     local right_side = mcdu_format_force_to_small("/" .. Fwd_string_fill(tostring(arr_alt)," ", 6))
 
+    local dist_text=""
+    if distance ~= nil then
+        dist_text = Round(distance, 0) .. "  "
+    end
+    dist_text = Fwd_string_fill(dist_text, " ", 6) .. "   "
+
+
     self:add_f(mcdu_data, function(line_id)
         self:set_line(mcdu_data, MCDU_LEFT,   line_id, left_side, MCDU_LARGE, color)
         self:set_line(mcdu_data, MCDU_CENTER, line_id, ctr_side, MCDU_LARGE, ECAM_WHITE)
         self:set_line(mcdu_data, MCDU_RIGHT,  line_id, right_side, MCDU_LARGE, color)
+        self:set_line(mcdu_data, MCDU_RIGHT,  line_id, dist_text, MCDU_SMALL, color)
     end, apt_obj)
 end
 
@@ -270,7 +280,7 @@ function THIS_PAGE:render_list_altn(mcdu_data, last_i, end_i)
     end
 
     -- Arrival aiport
-    THIS_PAGE:print_simple_airport(mcdu_data, mcdu_data.page_data[600].curr_fpln.apts.arr, nil, FMGS_perf_get_pred_trip_time(), ECAM_BLUE)
+    THIS_PAGE:print_simple_airport(mcdu_data, mcdu_data.page_data[600].curr_fpln.apts.arr, nil, nil, FMGS_perf_get_pred_trip_time(), ECAM_BLUE)
 
     -- TODO: ALTN route
     self:add_f(mcdu_data, function(line_id)
@@ -278,7 +288,7 @@ function THIS_PAGE:render_list_altn(mcdu_data, last_i, end_i)
     end)
 
     -- ALTN aiport
-    THIS_PAGE:print_simple_airport(mcdu_data, mcdu_data.page_data[600].curr_fpln.apts.alt, nil, nil, ECAM_BLUE) -- TODO Trip time
+    THIS_PAGE:print_simple_airport(mcdu_data, mcdu_data.page_data[600].curr_fpln.apts.alt, nil, nil, nil, ECAM_BLUE) -- TODO Trip time
 
     self:add_f(mcdu_data, function(line_id)
         self:set_line(mcdu_data, MCDU_LEFT, line_id, "---END OF ALTN F-PLN----", MCDU_LARGE)
