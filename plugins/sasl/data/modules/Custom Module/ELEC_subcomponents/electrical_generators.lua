@@ -161,56 +161,63 @@ function elec_gen_toggle(phase, id)
     
 end
 
-local function update_eng_gen(x)
+local function update_eng_gen(gen)
 
-    if x.id == 1 then
-        x.source_status = get(Engine_1_avail) == 1 and get(Eng_1_N1) > 10
+    if gen.id == 1 then
+        gen.source_status = get(Engine_1_avail) == 1 and get(Eng_1_N1) > 10
     else
-        x.source_status = get(Engine_2_avail) == 1 and get(Eng_2_N1) > 10
+        gen.source_status = get(Engine_2_avail) == 1 and get(Eng_2_N1) > 10
     end
     
-    if x.switch_status then
-        if x.source_status and get(x.drs.failure) == 0 and x.idg_status then
-            x.curr_voltage = Set_anim_value(x.curr_voltage, GEN_RANGE_VOLTAGE_NOM, 0, GEN_RANGE_VOLTAGE_NOM, 0.90)
-            x.curr_hz = Set_anim_value(x.curr_hz, GEN_RANGE_HZ_NOM, 0, 400, 0.90)
+    if gen.switch_status then
+        -- generator not switched off and engine is avail and IDG avail and no failure
+        if gen.source_status and get(gen.drs.failure) == 0 and gen.idg_status then
+            -- ramp up to nominal values
+            gen.curr_voltage = Set_anim_value(gen.curr_voltage, GEN_RANGE_VOLTAGE_NOM, 0, GEN_RANGE_VOLTAGE_NOM, 0.90)
+            gen.curr_hz = Set_anim_value(gen.curr_hz, GEN_RANGE_HZ_NOM, 0, 400, 0.90)
         else
-            x.curr_voltage = Set_anim_value(x.curr_voltage, 0, 0, GEN_RANGE_VOLTAGE_NOM, 0.90)
-            x.curr_hz = Set_anim_value(x.curr_hz, 0, 0, GEN_RANGE_HZ_NOM, 0.90)
+            gen.curr_voltage = Set_anim_value(gen.curr_voltage, 0, 0, GEN_RANGE_VOLTAGE_NOM, 0.90)
+            gen.curr_hz = Set_anim_value(gen.curr_hz, 0, 0, GEN_RANGE_HZ_NOM, 0.90)
         end
     else
-        x.curr_voltage = 0
-        x.curr_hz = 0
+        -- switched off
+        gen.curr_voltage = 0
+        gen.curr_hz = 0
     end    
 end
 
-local function update_apu_gen(x)
+local function update_apu_gen(gen)
 
-    x.source_status = get(Apu_avail) == 1
+    gen.source_status = get(Apu_avail) == 1
 
-    if x.switch_status then
-        if x.source_status and get(x.drs.failure) == 0 then
-            x.curr_voltage = Set_anim_value(x.curr_voltage, GEN_RANGE_VOLTAGE_NOM, 0, GEN_RANGE_VOLTAGE_NOM, 0.95)
-            x.curr_hz = Set_anim_value(x.curr_hz, GEN_RANGE_HZ_NOM, 0, 400, 0.90)
+    if gen.switch_status then
+        if gen.source_status and get(gen.drs.failure) == 0 then
+            gen.curr_voltage = Set_anim_value(gen.curr_voltage, GEN_RANGE_VOLTAGE_NOM, 0, GEN_RANGE_VOLTAGE_NOM, 0.95)
+            gen.curr_hz = Set_anim_value(gen.curr_hz, GEN_RANGE_HZ_NOM, 0, 400, 0.90)
         else
-            x.curr_voltage = Set_anim_value(x.curr_voltage, 0, 0, GEN_RANGE_VOLTAGE_NOM, 0.95)
-            x.curr_hz = Set_anim_value(x.curr_hz, 0, 0, GEN_RANGE_HZ_NOM, 0.95)
+            gen.curr_voltage = Set_anim_value(gen.curr_voltage, 0, 0, GEN_RANGE_VOLTAGE_NOM, 0.95)
+            gen.curr_hz = Set_anim_value(gen.curr_hz, 0, 0, GEN_RANGE_HZ_NOM, 0.95)
         end
     else
-        x.curr_voltage = 0
-        x.curr_hz = 0
+        gen.curr_voltage = 0
+        gen.curr_hz = 0
     end    
 end
 
-local function update_ext_gen(x)
+local function update_ext_gen(gen)
+    -- external power is handled like a A/C based generator
 
-    x.source_status = get(All_on_ground) == 1 and get(Brakes_mode) == 4 and get(Ground_speed_ms) < 0.10
+    -- TODO make the availabilty of external power configurable via EFB, currently is always on when conditions below are met
+    -- we assume a rolling A/C cannot have ground power and also parking break off is not allowed with ground power
+    gen.source_status = get(All_on_ground) == 1 and get(Brakes_mode) == 4 and get(Ground_speed_ms) < 0.10
 
-    if x.switch_status and x.source_status and get(x.drs.failure) == 0 then
-        x.curr_voltage = 115
-        x.curr_hz = 400
+    -- TODO can we have a ground power failure?
+    if gen.switch_status and gen.source_status and get(gen.drs.failure) == 0 then
+        gen.curr_voltage = 115
+        gen.curr_hz = 400
     else
-        x.curr_voltage = 0
-        x.curr_hz = 0
+        gen.curr_voltage = 0
+        gen.curr_hz = 0
     end
     
 end
@@ -252,36 +259,38 @@ local function update_generator_value(x)
     end
 end
 
-local function update_generator_datarefs(x)
+local function update_generator_datarefs(gen)
 
-    local top    = false
-    local bottom = not x.switch_status
-    
-    if x.id == GEN_EMER then
+    local top    = false                -- top is the failure indication
+    local bottom = not gen.switch_status  -- OFF indication for all but EMER GEN
+
+    -- EMER and external power have special handling. ENG and APU are handled in mostly same way
+    if gen.id == GEN_EMER then
         top    = false
-        bottom = get(x.drs.failure) == 1 -- Switch status not showed and top bottom swapped
-    elseif x.id == GEN_EXT then
-        top = x.source_status and bottom
-        bottom = x.source_status and not bottom
-    elseif x.drs.idg_light ~= nil then
-        top = (get(x.drs.failure)==1 or not x.idg_status)
+        bottom = get(gen.drs.failure) == 1 -- EMER GEN PB has only FAIL indication, so no OFF and top bottom swapped
+    elseif gen.id == GEN_EXT then
+        top = gen.source_status and bottom
+        bottom = gen.source_status and not bottom -- external power cannot fail other than not available
+    elseif gen.drs.idg_light ~= nil then -- Gens with separate IDG handling (ENG, not APU) to be considered for status as well
+        -- ENG GEN FAIL indication is illuminated until engine is available
+        top = (not gen.source_status or get(gen.drs.failure)==1 or not gen.idg_status )
     else
-        top = (get(x.drs.failure)==1)
+        top = (get(gen.drs.failure)==1)
     end
     
-    pb_set(x.drs.switch_light, bottom, top)
+    pb_set(gen.drs.switch_light, bottom, top)
     
-    if x.curr_voltage >= GEN_LOW_VOLTAGE_LIMIT and x.curr_hz >= GEN_LOW_HZ_LIMIT then
-        set(x.drs.pwr, 1)
+    if gen.curr_voltage >= GEN_LOW_VOLTAGE_LIMIT and gen.curr_hz >= GEN_LOW_HZ_LIMIT then
+        set(gen.drs.pwr, 1)
     else
-        set(x.drs.pwr, 0)
+        set(gen.drs.pwr, 0)
     end
     
-    if x.drs.idg_light ~= nil then
-        if get(x.drs.idg_fail_1) + get(x.drs.idg_fail_2) > 0 then
-            pb_set(x.drs.idg_light, false, true)
+    if gen.drs.idg_light ~= nil then
+        if get(gen.drs.idg_fail_1) + get(gen.drs.idg_fail_2) > 0 then
+            pb_set(gen.drs.idg_light, false, true)
         else
-            pb_set(x.drs.idg_light, false, false)
+            pb_set(gen.drs.idg_light, false, false)
         end
     end
     
