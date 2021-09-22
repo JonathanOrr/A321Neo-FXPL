@@ -316,13 +316,13 @@ function update()
 
     --apu availability
     if master_switch_disabled_time ~= 0 then
-        set(Apu_avail, 0)
+        -- set(Apu_avail, 0)  -- commented out, since avail is illuminated during cooling period as well
     else
         local apu_n = get(Apu_N1)
         if apu_n > 95 then
             if n95_time == 0 then n95_time = current_time end
             if master_switch_status and (apu_n >= 99 or current_time - n95_time >= 2) then set(Apu_avail, 1) end
-        elseif apu_n < 100  then -- TODO seems to be no longer required
+        elseif apu_n < 100  then
             set(Apu_avail, 0)
         end
     end
