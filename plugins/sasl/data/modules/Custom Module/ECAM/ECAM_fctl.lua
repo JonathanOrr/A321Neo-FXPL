@@ -102,32 +102,32 @@ function draw_fctl_page()
     local spoiler_track_length = 22
 
     local l_spoilers_avail = {
-        FBW.fctl.surfaces.splr.L[1].controlled,
-        FBW.fctl.surfaces.splr.L[2].controlled,
-        FBW.fctl.surfaces.splr.L[3].controlled,
-        FBW.fctl.surfaces.splr.L[4].controlled,
-        FBW.fctl.surfaces.splr.L[5].controlled,
+        FBW.fctl.SPLR.STAT.L[1].controlled,
+        FBW.fctl.SPLR.STAT.L[2].controlled,
+        FBW.fctl.SPLR.STAT.L[3].controlled,
+        FBW.fctl.SPLR.STAT.L[4].controlled,
+        FBW.fctl.SPLR.STAT.L[5].controlled,
     }
     local r_spoilers_avail = {
-        FBW.fctl.surfaces.splr.R[1].controlled,
-        FBW.fctl.surfaces.splr.R[2].controlled,
-        FBW.fctl.surfaces.splr.R[3].controlled,
-        FBW.fctl.surfaces.splr.R[4].controlled,
-        FBW.fctl.surfaces.splr.R[5].controlled,
+        FBW.fctl.SPLR.STAT.R[1].controlled,
+        FBW.fctl.SPLR.STAT.R[2].controlled,
+        FBW.fctl.SPLR.STAT.R[3].controlled,
+        FBW.fctl.SPLR.STAT.R[4].controlled,
+        FBW.fctl.SPLR.STAT.R[5].controlled,
     }
     local l_spoilers_data_avail = {
-        FBW.fctl.surfaces.splr.L[1].data_avail,
-        FBW.fctl.surfaces.splr.L[2].data_avail,
-        FBW.fctl.surfaces.splr.L[3].data_avail,
-        FBW.fctl.surfaces.splr.L[4].data_avail,
-        FBW.fctl.surfaces.splr.L[5].data_avail,
+        FBW.fctl.SPLR.STAT.L[1].data_avail,
+        FBW.fctl.SPLR.STAT.L[2].data_avail,
+        FBW.fctl.SPLR.STAT.L[3].data_avail,
+        FBW.fctl.SPLR.STAT.L[4].data_avail,
+        FBW.fctl.SPLR.STAT.L[5].data_avail,
     }
     local r_spoilers_data_avail = {
-        FBW.fctl.surfaces.splr.R[1].data_avail,
-        FBW.fctl.surfaces.splr.R[2].data_avail,
-        FBW.fctl.surfaces.splr.R[3].data_avail,
-        FBW.fctl.surfaces.splr.R[4].data_avail,
-        FBW.fctl.surfaces.splr.R[5].data_avail,
+        FBW.fctl.SPLR.STAT.R[1].data_avail,
+        FBW.fctl.SPLR.STAT.R[2].data_avail,
+        FBW.fctl.SPLR.STAT.R[3].data_avail,
+        FBW.fctl.SPLR.STAT.R[4].data_avail,
+        FBW.fctl.SPLR.STAT.R[5].data_avail,
     }
 
     local l_spoiler_dataref = {
@@ -236,24 +236,24 @@ function draw_fctl_page()
     }
 
     --ailerons--
-    if FBW.fctl.surfaces.ail.L.data_avail then
-        sasl.gl.drawTexture(ECAM_FCTL_left_arrows_img,  139, Table_interpolate(aileron_anim, params.L_aileron), 26, 30, FBW.fctl.surfaces.ail.L.controlled and ECAM_GREEN or ECAM_ORANGE)
+    if FBW.fctl.AIL.STAT.L.data_avail then
+        sasl.gl.drawTexture(ECAM_FCTL_left_arrows_img,  139, Table_interpolate(aileron_anim, params.L_aileron), 26, 30, FBW.fctl.AIL.STAT.L.controlled and ECAM_GREEN or ECAM_ORANGE)
     else
         sasl.gl.drawText(Font_AirbusDUL, 165, 564, "XX", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
-    if FBW.fctl.surfaces.ail.R.data_avail then
-        sasl.gl.drawTexture(ECAM_FCTL_right_arrows_img, 736, Table_interpolate(aileron_anim, params.R_aileron), 26, 30, FBW.fctl.surfaces.ail.R.controlled and ECAM_GREEN or ECAM_ORANGE)
+    if FBW.fctl.AIL.STAT.R.data_avail then
+        sasl.gl.drawTexture(ECAM_FCTL_right_arrows_img, 736, Table_interpolate(aileron_anim, params.R_aileron), 26, 30, FBW.fctl.AIL.STAT.R.controlled and ECAM_GREEN or ECAM_ORANGE)
     else
         sasl.gl.drawText(Font_AirbusDUL, 736, 564, "XX", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
     --elevators--
-    if FBW.fctl.surfaces.elev.L.data_avail then
-        sasl.gl.drawTexture(ECAM_FCTL_left_arrows_img,  258, Table_interpolate(elevator_anim, params.L_elevator), 26, 30, FBW.fctl.surfaces.elev.L.controlled and ECAM_GREEN or ECAM_ORANGE)
+    if FBW.fctl.ELEV.STAT.L.data_avail then
+        sasl.gl.drawTexture(ECAM_FCTL_left_arrows_img,  258, Table_interpolate(elevator_anim, params.L_elevator), 26, 30, FBW.fctl.ELEV.STAT.L.controlled and ECAM_GREEN or ECAM_ORANGE)
     else
         sasl.gl.drawText(Font_AirbusDUL, 284, 297, "XX", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
-    if FBW.fctl.surfaces.elev.R.data_avail then
-        sasl.gl.drawTexture(ECAM_FCTL_right_arrows_img, 617, Table_interpolate(elevator_anim, params.R_elevator), 26, 30, FBW.fctl.surfaces.elev.R.controlled and ECAM_GREEN or ECAM_ORANGE)
+    if FBW.fctl.ELEV.STAT.R.data_avail then
+        sasl.gl.drawTexture(ECAM_FCTL_right_arrows_img, 617, Table_interpolate(elevator_anim, params.R_elevator), 26, 30, FBW.fctl.ELEV.STAT.R.controlled and ECAM_GREEN or ECAM_ORANGE)
     else
         sasl.gl.drawText(Font_AirbusDUL, 617, 297, "XX", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
@@ -343,12 +343,12 @@ function draw_fctl_page()
 
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-28, size[2]/2-8, "PITCH TRIM", 31, false, false, TEXT_ALIGN_CENTER, get(FAILURE_FCTL_THS_MECH) == 0 and ECAM_WHITE or ECAM_ORANGE)
 
-    if FBW.fctl.surfaces.THS.THS.data_avail then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-25, size[2]/2-50, string.format("%.1f", tostring(math.abs(get(Elev_trim_degrees)))), 30, false, false, TEXT_ALIGN_CENTER, FBW.fctl.surfaces.THS.THS.controlled and ECAM_GREEN or ECAM_ORANGE)
-        if get(Elev_trim_degrees) >= 0 then
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2+45, size[2]/2-50, "UP", 30, false, false, TEXT_ALIGN_CENTER, FBW.fctl.surfaces.THS.THS.controlled and ECAM_GREEN or ECAM_ORANGE)
+    if FBW.fctl.THS.STAT.data_avail then
+        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-25, size[2]/2-50, string.format("%.1f", tostring(math.abs(get(THS_DEF)))), 30, false, false, TEXT_ALIGN_CENTER, FBW.fctl.THS.STAT.controlled and ECAM_GREEN or ECAM_ORANGE)
+        if get(THS_DEF) >= 0 then
+            sasl.gl.drawText(Font_AirbusDUL, size[1]/2+45, size[2]/2-50, "UP", 30, false, false, TEXT_ALIGN_CENTER, FBW.fctl.THS.STAT.controlled and ECAM_GREEN or ECAM_ORANGE)
         else
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2+45, size[2]/2-50, "DN", 30, false, false, TEXT_ALIGN_CENTER, FBW.fctl.surfaces.THS.THS.controlled and ECAM_GREEN or ECAM_ORANGE)
+            sasl.gl.drawText(Font_AirbusDUL, size[1]/2+45, size[2]/2-50, "DN", 30, false, false, TEXT_ALIGN_CENTER, FBW.fctl.THS.STAT.controlled and ECAM_GREEN or ECAM_ORANGE)
         end
     else
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2-25, size[2]/2-50, "X.X", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)

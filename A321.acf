@@ -246,7 +246,7 @@ P _gear/1/_lonE -6.0
 P _gear/1/_lonN -6.0
 P _gear/1/_lonR 2.0
 P _gear/1/_scon 139456.125000000
-P _gear/1/_stat_def 0.730473399
+P _gear/1/_stat_def 0.730473578
 P _gear/1/_steerdeg_hispeed 0.0
 P _gear/1/_steerdeg_lospeed 0.0
 P _gear/1/_strut_comp 0.699999988
@@ -280,7 +280,7 @@ P _gear/2/_lonE -6.0
 P _gear/2/_lonN -6.0
 P _gear/2/_lonR 2.0
 P _gear/2/_scon 139456.125000000
-P _gear/2/_stat_def 0.730473399
+P _gear/2/_stat_def 0.730473578
 P _gear/2/_steerdeg_hispeed 0.0
 P _gear/2/_steerdeg_lospeed 0.0
 P _gear/2/_strut_comp 0.699999988
@@ -51668,10 +51668,10 @@ P _wing/13/_yawbr/9 0
 P _wing/13/_yawbr/count 10
 P _wing/16/_Croot 11.640000343
 P _wing/16/_Ctip 4.320000172
-P _wing/16/_afl_file_R0 A321neo_THS_ROOT.afl
-P _wing/16/_afl_file_R1 A321neo_THS_ROOT.afl
-P _wing/16/_afl_file_T0 A321neo_THS_TIP.afl
-P _wing/16/_afl_file_T1 A321neo_THS_TIP.afl
+P _wing/16/_afl_file_R0 A321neo_THS.afl
+P _wing/16/_afl_file_R1 A321neo_THS.afl
+P _wing/16/_afl_file_T0 A321neo_THS.afl
+P _wing/16/_afl_file_T1 A321neo_THS.afl
 P _wing/16/_ailn1/0 0
 P _wing/16/_ailn1/1 0
 P _wing/16/_ailn1/2 0
@@ -52028,10 +52028,10 @@ P _wing/16/_yawbr/9 0
 P _wing/16/_yawbr/count 10
 P _wing/17/_Croot 11.640000343
 P _wing/17/_Ctip 4.320000172
-P _wing/17/_afl_file_R0 A321neo_THS_ROOT.afl
-P _wing/17/_afl_file_R1 A321neo_THS_ROOT.afl
-P _wing/17/_afl_file_T0 A321neo_THS_TIP.afl
-P _wing/17/_afl_file_T1 A321neo_THS_TIP.afl
+P _wing/17/_afl_file_R0 A321neo_THS.afl
+P _wing/17/_afl_file_R1 A321neo_THS.afl
+P _wing/17/_afl_file_T0 A321neo_THS.afl
+P _wing/17/_afl_file_T1 A321neo_THS.afl
 P _wing/17/_ailn1/0 0
 P _wing/17/_ailn1/1 0
 P _wing/17/_ailn1/2 0

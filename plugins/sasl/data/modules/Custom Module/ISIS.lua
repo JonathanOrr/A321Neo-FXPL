@@ -401,7 +401,7 @@ local function draw_att()
             71,
             475,
             -get(Capt_bank),
-            4 + Math_clamp(get(Slide_slip_angle),-10,10)*4,
+            4 + Math_clamp(get(Beta),-10,10)*4,
             -700/2+32,
             ECAM_WHITE
         )

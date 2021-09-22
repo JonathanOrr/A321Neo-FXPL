@@ -15,49 +15,6 @@
 -- File: PID.lua
 -- Short description: This file contains several functions to manage PID controllers
 -------------------------------------------------------------------------------
---[[function OLD_FBW_PID(pid_array, Error, PV, Scheduling_variable)
-    --sim paused no need to control
-    if get(DELTA_TIME) == 0 then
-        return 0
-    end
-
-    --gain scheduling
-    if pid_array.Schedule_gains == true then
-        pid_array.P_gain = Table_interpolate(pid_array.Schedule_table.P, Scheduling_variable)
-        pid_array.I_gain = Table_interpolate(pid_array.Schedule_table.I, Scheduling_variable)
-        pid_array.D_gain = Table_interpolate(pid_array.Schedule_table.D, Scheduling_variable)
-    end
-
-    --Properties--
-    local last_PV = pid_array.PV
-
-    --inputs--
-    pid_array.PV = PV
-    pid_array.Error = Error
-
-    --Proportional--
-    pid_array.Proportional = pid_array.Error * pid_array.P_gain
-
-    --Back Propagation--
-    pid_array.Backpropagation = pid_array.B_gain * (pid_array.Actual_output - pid_array.Desired_output)
-
-    --Integral--
-    local intergal_to_add = pid_array.I_gain * pid_array.Error + pid_array.Backpropagation
-    pid_array.Integral = pid_array.Integral + intergal_to_add * get(DELTA_TIME)
-
-    if pid_array.Limited_integral then
-        pid_array.Integral = Math_clamp(pid_array.Integral, pid_array.min_integral, pid_array.max_integral)
-    end
-
-    --Derivative
-    pid_array.Derivative = ((last_PV - pid_array.PV) / get(DELTA_TIME)) * pid_array.D_gain
-
-    --Sigma
-    pid_array.Desired_output = pid_array.Proportional + pid_array.Integral + pid_array.Derivative
-
-    --Output--
-    return Math_clamp(pid_array.Desired_output, pid_array.Min_out, pid_array.Max_out)
-end]]
 
 -- A standard PID with backpropagation as anti-windup
 -- You **must** set the pid_array.Actual_output outside of this PID
@@ -182,19 +139,19 @@ function low_pass_filter(data)
 end
 
 ----------------------------------------FBW PID----------------------------------------
-function FBW_PID_BP(pid_array, SP, PV, Scheduling_variable)
+function FBW_PID_BP(PID, SP, PV, Scheduling_variable)
     --filtering--
-    if pid_array.filter_inputs == true then
-        if pid_array.er_filter_table == nil then
-            pid_array.er_filter_table = {
+    if PID.filter_inputs == true then
+        if PID.er_filter_table == nil then
+            PID.er_filter_table = {
                 x = 0,
-                cut_frequency = pid_array.filter_freq,
+                cut_frequency = PID.error_freq,
             }
         end
-        if pid_array.pv_filter_table == nil then
-            pid_array.pv_filter_table = {
+        if PID.pv_filter_table == nil then
+            PID.pv_filter_table = {
                 x = 0,
-                cut_frequency = pid_array.filter_freq,
+                cut_frequency = PID.dpvdt_freq,
             }
         end
     end
@@ -205,51 +162,214 @@ function FBW_PID_BP(pid_array, SP, PV, Scheduling_variable)
     end
 
     --gain scheduling
-    if pid_array.Schedule_gains == true then
-        pid_array.P_gain = Table_interpolate(pid_array.Schedule_table.P, Scheduling_variable)
-        pid_array.I_gain = Table_interpolate(pid_array.Schedule_table.I, Scheduling_variable)
-        pid_array.D_gain = Table_interpolate(pid_array.Schedule_table.D, Scheduling_variable)
+    if PID.Schedule_gains == true then
+        PID.P_gain = Table_interpolate(PID.Schedule_table.P, Scheduling_variable)
+        PID.I_gain = Table_interpolate(PID.Schedule_table.I, Scheduling_variable)
+        PID.D_gain = Table_interpolate(PID.Schedule_table.D, Scheduling_variable)
     end
 
     --Properties--
-    local last_PV = pid_array.PV
+    local last_PV = PID.PV
 
     --inputs--
-    if pid_array.filter_inputs == true then
-        pid_array.er_filter_table.x = SP - PV
-        pid_array.pv_filter_table.x = PV
-        if pid_array.highpass_inputs == true then
-            pid_array.Error = high_pass_filter(pid_array.er_filter_table)
-            pid_array.PV = high_pass_filter(pid_array.pv_filter_table)
+    if PID.filter_inputs == true then
+        PID.er_filter_table.x = SP - PV
+        PID.pv_filter_table.x = PV
+        if PID.highpass_inputs == true then
+            PID.Error = high_pass_filter(PID.er_filter_table)
+            PID.PV = high_pass_filter(PID.pv_filter_table)
         else
-            pid_array.Error = low_pass_filter(pid_array.er_filter_table)
-            pid_array.PV = low_pass_filter(pid_array.pv_filter_table)
+            PID.Error = low_pass_filter(PID.er_filter_table)
+            PID.PV = low_pass_filter(PID.pv_filter_table)
         end
     else
-        pid_array.Error = SP - PV
-        pid_array.PV = PV
+        PID.Error = SP - PV
+        PID.PV = PV
     end
 
     --Proportional--
-    pid_array.Proportional = pid_array.Error * pid_array.P_gain
+    PID.Proportional = PID.Error * PID.P_gain
 
     --Back Propagation--
-    pid_array.Backpropagation = pid_array.B_gain * (pid_array.Actual_output - pid_array.Desired_output)
+    PID.Backpropagation = PID.B_gain * (PID.Actual_output - PID.Desired_output)
 
     --Integral--
-    local intergal_to_add = pid_array.I_gain * pid_array.Error + pid_array.Backpropagation
-    pid_array.Integral = pid_array.Integral + intergal_to_add * get(DELTA_TIME)
+    local intergal_to_add = PID.I_gain * PID.Error + PID.Backpropagation
+    PID.Integral = PID.Integral + intergal_to_add * get(DELTA_TIME)
 
-    if pid_array.Limited_integral then
-        pid_array.Integral = Math_clamp(pid_array.Integral, pid_array.min_integral, pid_array.max_integral)
+    if PID.Limited_integral then
+        PID.Integral = Math_clamp(PID.Integral, PID.Min_out, PID.Max_out)
     end
 
     --Derivative
-    pid_array.Derivative = ((last_PV - pid_array.PV) / get(DELTA_TIME)) * pid_array.D_gain
+    PID.Derivative = ((last_PV - PID.PV) / get(DELTA_TIME)) * PID.D_gain
 
     --Sigma
-    pid_array.Desired_output = pid_array.Proportional + pid_array.Integral + pid_array.Derivative
+    PID.Desired_output = PID.Proportional + PID.Integral + PID.Derivative
 
-    --Output--
-    return Math_clamp(pid_array.Desired_output, pid_array.Min_out, pid_array.Max_out)
+    --[SPECIAL CASE WITH LIMITED INTEGRALS]--
+    if PID.Limited_integral then
+        PID.Desired_output = Math_clamp(PID.Desired_output, PID.Min_out, PID.Max_out)
+        return PID.Desired_output
+    else
+        return Math_clamp(PID.Desired_output, PID.Min_out, PID.Max_out)
+    end
+end
+
+local PID_INTERNALS = {
+    INIT_PID = function (PID)
+        if not PID.filter_inputs then return end
+
+        --INIT FILTER TABLE--
+        if PID.er_filter_table == nil then
+            PID.er_filter_table = {
+                x = 0,
+                cut_frequency = PID.error_freq,
+            }
+        end
+        if PID.pv_filter_table == nil then
+            PID.pv_filter_table = {
+                x = 0,
+                cut_frequency = PID.dpvdt_freq,
+            }
+        end
+    end,
+    INIT_FEEDFWD = function (FF_PID, PID)
+        if PID.feedfwd == nil then
+            PID.feedfwd = 0
+        end
+
+        --INIT FEED-FORWARD FILTER TABLE--
+        if FF_PID.filter_feedfwd then
+            if FF_PID.feedfwd_filter_table == nil then
+                FF_PID.feedfwd_filter_table = {
+                    x = 0,
+                    cut_frequency = FF_PID.feedfwd_freq,
+                }
+            end
+        end
+    end,
+    GAIN_SCHEDULING = function (PID, SCHED_VAR)
+        if not PID.Schedule_gains then return end
+
+        PID.P_gain = Table_interpolate(PID.Schedule_table.P, SCHED_VAR)
+        PID.I_gain = Table_interpolate(PID.Schedule_table.I, SCHED_VAR)
+        PID.D_gain = Table_interpolate(PID.Schedule_table.D, SCHED_VAR)
+    end,
+    BP = function (PID)
+        PID.Backpropagation = PID.B_gain * (PID.Actual_output - PID.Desired_output)
+    end,
+    PID = function (PID, SP, PV)
+        if get(DELTA_TIME) == 0 then return end
+
+        local last_PV = PID.PV
+
+        --INPUTS--
+        if PID.filter_inputs == true then
+            PID.er_filter_table.x = SP - PV
+            PID.pv_filter_table.x = PV
+            if PID.highpass_inputs == true then
+                PID.Error = high_pass_filter(PID.er_filter_table)
+                PID.PV = high_pass_filter(PID.pv_filter_table)
+            else
+                PID.Error = low_pass_filter(PID.er_filter_table)
+                PID.PV = low_pass_filter(PID.pv_filter_table)
+            end
+        else
+            PID.Error = SP - PV
+            PID.PV = PV
+        end
+
+        --Proportional--
+        PID.Proportional = PID.Error * PID.P_gain
+
+        --Integral--
+        local intergal_to_add = PID.I_gain * PID.Error + PID.Backpropagation
+        PID.Integral = PID.Integral + intergal_to_add * get(DELTA_TIME)
+
+        if PID.Limited_integral then
+            PID.Integral = Math_clamp(PID.Integral, PID.Min_out, PID.Max_out)
+        end
+
+        --Derivative
+        PID.Derivative = ((last_PV - PID.PV) / get(DELTA_TIME)) * PID.D_gain
+    end,
+    FEED_FWD = function (FF_PID, PID, FF_PV)
+        if get(DELTA_TIME) == 0 then return end
+
+        local LAST_PV = FF_PID.feedfwd_pv
+
+        --INPUT--
+        if FF_PID.filter_feedfwd == true then
+            FF_PID.feedfwd_filter_table.x = FF_PV
+            if FF_PID.highpass_inputs == true then
+                FF_PID.feedfwd_pv = high_pass_filter(FF_PID.feedfwd_filter_table)
+            else
+                FF_PID.feedfwd_pv = low_pass_filter(FF_PID.feedfwd_filter_table)
+            end
+        else
+            FF_PID.feedfwd_pv = FF_PV
+        end
+
+        --FEED-FORWARD--
+        if FF_PID.derive_feedfwd then
+            FF_PID.feedfwd = ((LAST_PV - FF_PID.feedfwd_pv) / get(DELTA_TIME)) * FF_PID.FF_gain
+        else
+            FF_PID.feedfwd = FF_PID.feedfwd_pv * FF_PID.FF_gain
+        end
+
+        --SUM FF to the main PID--
+        PID.feedfwd = PID.feedfwd + FF_PID.feedfwd
+    end,
+    OUTPUT_NRM = function (PID)
+        --Sigma
+        PID.Desired_output = PID.Proportional + PID.Integral + PID.Derivative
+
+        --[SPECIAL CASE WITH LIMITED INTEGRALS]--
+        if PID.Limited_integral then
+            PID.Desired_output = Math_clamp(PID.Desired_output, PID.Min_out, PID.Max_out)
+        end
+
+        return Math_clamp(PID.Desired_output, PID.Min_out, PID.Max_out)
+    end,
+    OUTPUT_FF = function (PID)
+        --Sigma
+        PID.Desired_output = PID.Proportional + PID.Integral + PID.Derivative
+
+        --[SPECIAL CASE WITH LIMITED INTEGRALS]--
+        if PID.Limited_integral then
+            PID.Desired_output = Math_clamp(PID.Desired_output, PID.Min_out, PID.Max_out)
+        end
+
+        local PID_OUTPUT = Math_clamp(PID.Desired_output + PID.feedfwd, PID.Min_out, PID.Max_out)
+
+        --clear FF for the next loop--
+        PID.feedfwd = 0
+
+        return PID_OUTPUT
+    end
+}
+
+function PID_COMPUTE (PID, SP, PV, SCHED_VAR)
+    PID_INTERNALS.INIT_PID(PID)
+    PID_INTERNALS.GAIN_SCHEDULING(PID, SCHED_VAR)
+    PID_INTERNALS.BP(PID)
+    PID_INTERNALS.PID(PID, SP, PV)
+end
+
+function PID_FF (FF_PID, PID, FF_PV)
+    PID_INTERNALS.INIT_FEEDFWD(FF_PID, PID)
+    PID_INTERNALS.FEED_FWD(FF_PID, PID, FF_PV)
+end
+
+function PID_OUTPUT_FF (PID)
+    local PID_OUTPUT = PID_INTERNALS.OUTPUT_FF(PID)
+
+    return PID_OUTPUT
+end
+
+function PID_OUTPUT_NRM (PID)
+    local PID_OUTPUT = PID_INTERNALS.OUTPUT_NRM(PID)
+
+    return PID_OUTPUT
 end

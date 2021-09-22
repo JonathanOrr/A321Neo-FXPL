@@ -5,6 +5,7 @@ components = {
     bat_2 {},
     l_qnh {},
     r_qnh {},
+    rud_trim {},
 }
 
 function update()

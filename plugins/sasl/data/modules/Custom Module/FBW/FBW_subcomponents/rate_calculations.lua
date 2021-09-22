@@ -14,24 +14,9 @@
 -------------------------------------------------------------------------------
 
 FBW.rates ={
-    Roll = {
-        x = 0,
-        dataref = Flightmodel_roll
-    },
     Pitch = {
         x = 0,
         dataref = Flightmodel_pitch
-    },
-    Yaw = {
-        x = 0,
-    },
-    Slip = {
-        x = 0,
-        dataref = Slide_slip_angle
-    },
-    Vpath_q = {
-        x = 0,
-        dataref = Vpath
     },
 }
 
@@ -104,12 +89,6 @@ end
 
 end]]--
 
-function yaw_rate_computation()
-    FBW.rates.Yaw.x = get(Flightmodel_yaw_rate)
-end
-
-
 function update()
     update_rates(FBW.rates)
-    yaw_rate_computation()
 end
