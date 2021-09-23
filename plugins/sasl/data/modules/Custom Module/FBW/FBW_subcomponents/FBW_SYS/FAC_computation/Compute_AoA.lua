@@ -25,12 +25,12 @@ local ALPHA_SPD_update_time_s = 0.15
 local ALPHA_SPD_update_timer = 0
 
 local alpha0s = {
-    -1.88,
-    -1.88,
-    -6.62,
-    -8.71,
-    -11.55,
-    -13.65
+    -3.15,
+    -3.52,
+    -7.93,
+    -9.72,
+    -12.17,
+    -13.70
 }
 
 local vsw_aprot_alphas = {

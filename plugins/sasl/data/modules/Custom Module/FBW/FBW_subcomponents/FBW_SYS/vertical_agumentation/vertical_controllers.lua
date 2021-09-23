@@ -71,34 +71,35 @@ FBW.vertical.controllers = {
             local CURR_GW_T   = Math_clamp_lower(get(Gross_weight) / 1000, 60)
             local CURR_TAS    = FBW.filtered_sensors.TAS.filtered
             local VS1G_TAS    = get(Current_VS1G) * math.sqrt(1 / math.max(0.001, get(Weather_Sigma)))
-            local CLIPPED_TAS = Math_clamp(FBW.filtered_sensors.TAS.filtered, VS1G_TAS, 650)
+            local CLEAN_TAS = Math_clamp(FBW.filtered_sensors.TAS.filtered, VS1G_TAS, 650)
+            local FLAPS_TAS = Math_clamp(FBW.filtered_sensors.TAS.filtered, VS1G_TAS, 360)
 
             -----------------C* controller------------------
             local CLEAN = {
                 P_MASS_K = function (MASS)
-                    return -7.1429E-05 * MASS^2 + 2.7429E-02 * MASS - 3.8286E-01
+                    return -1.0000E-04 * MASS^2 + 3.1000E-02 * MASS - 5.0000E-01
                 end,
                 I_MASS_K = function (MASS)
                     return -4.2857E-05 * MASS^2 + 1.5857E-02 * MASS + 2.0229E-01
                 end,
                 D_MASS_K = function (MASS)
-                    return -5.1429E-04 * MASS^2 + 1.0449E-01 * MASS - 3.4106E+00
+                    return -2.4286E-04 * MASS^2 + 5.9257E-02 * MASS - 1.6797E+00
                 end,
                 P = function (TAS)
-                    return 2.2596E-11 * TAS^4 - 4.1719E-08 * TAS^3 + 2.7289E-05 * TAS^2 - 7.6647E-03 * TAS + 9.3456E-01
+                    return 1.7123E-11 * TAS^4 - 3.1191E-08 * TAS^3 + 2.0583E-05 * TAS^2 - 6.0785E-03 * TAS + 8.0815E-01
                 end,
                 I = function (TAS)
-                    return 1.8093E-11 * TAS^4 - 3.4740E-08 * TAS^3 + 2.3795E-05 * TAS^2 - 7.1148E-03 * TAS + 9.6187E-01
+                    return 1.5767E-11 * TAS^4 - 2.9252E-08 * TAS^3 + 1.9797E-05 * TAS^2 - 6.0573E-03 * TAS + 8.7224E-01
                 end,
                 D = function (TAS)
-                    return 3.3588E-12 * TAS^4 - 7.5473E-09 * TAS^3 + 5.6709E-06 * TAS^2 - 1.9053E-03 * TAS + 3.3067E-01
+                    return 4.8509E-12 * TAS^4 - 9.2272E-09 * TAS^3 + 6.2206E-06 * TAS^2 - 1.9643E-03 * TAS + 3.3176E-01
                 end,
 
                 FF_STABILITY_MASS_K = function (MASS)
                     return -1.0714E-04 * MASS^2 + 2.8643E-02 * MASS - 3.3229E-01
                 end,
                 FF_STABILITY = function (TAS)
-                    return 2.7904E-12 * TAS^4 - 6.2350E-09 * TAS^3 + 5.6108E-06 * TAS^2 - 3.3141E-03 * TAS + 1.6179E+00
+                    return -2.6267E-09 * TAS^3 + 4.8873E-06 * TAS^2 - 3.7138E-03 * TAS + 1.6902E+00
                 end,
 
                 FF_FLAPS = function (FLAP_DEF)
@@ -145,23 +146,23 @@ FBW.vertical.controllers = {
             -----------------C* CTL-------------------------
             FBW_PID_arrays.FBW_CSTAR_PID.P_gain = Math_rescale(
                 0,
-                Math_rescale(650, CLEAN.P(CLIPPED_TAS), 850, 0, CURR_TAS) * CLEAN.P_MASS_K(CURR_GW_T),
+                Math_rescale(650, CLEAN.P(CLEAN_TAS), 850, 0, CURR_TAS) * CLEAN.P_MASS_K(CURR_GW_T),
                 10,
-                Math_rescale(360, FLAPS.P(CLIPPED_TAS), 850, 0, CURR_TAS) * FLAPS.P_MASS_K(CURR_GW_T),
+                Math_rescale(360, FLAPS.P(FLAPS_TAS), 850, 0, CURR_TAS) * FLAPS.P_MASS_K(CURR_GW_T),
                 get(Flaps_deployed_angle)
             )
             FBW_PID_arrays.FBW_CSTAR_PID.I_gain = Math_rescale(
                 0,
-                Math_rescale(650, CLEAN.I(CLIPPED_TAS), 850, 0, CURR_TAS) * CLEAN.I_MASS_K(CURR_GW_T),
+                Math_rescale(650, CLEAN.I(CLEAN_TAS), 850, 0, CURR_TAS) * CLEAN.I_MASS_K(CURR_GW_T),
                 10,
-                Math_rescale(360, FLAPS.I(CLIPPED_TAS), 850, 0, CURR_TAS) * FLAPS.I_MASS_K(CURR_GW_T),
+                Math_rescale(360, FLAPS.I(FLAPS_TAS), 850, 0, CURR_TAS) * FLAPS.I_MASS_K(CURR_GW_T),
                 get(Flaps_deployed_angle)
             )
             FBW_PID_arrays.FBW_CSTAR_PID.D_gain = Math_rescale(
                 0,
-                Math_rescale(650, CLEAN.D(CLIPPED_TAS), 850, 0, CURR_TAS) * CLEAN.D_MASS_K(CURR_GW_T),
+                Math_rescale(650, CLEAN.D(CLEAN_TAS), 850, 0, CURR_TAS) * CLEAN.D_MASS_K(CURR_GW_T),
                 10,
-                Math_rescale(360, FLAPS.D(CLIPPED_TAS), 850, 0, CURR_TAS) * FLAPS.D_MASS_K(CURR_GW_T),
+                Math_rescale(360, FLAPS.D(FLAPS_TAS), 850, 0, CURR_TAS) * FLAPS.D_MASS_K(CURR_GW_T),
                 get(Flaps_deployed_angle)
             )
             ------------------------------------------------
@@ -169,9 +170,9 @@ FBW.vertical.controllers = {
             -----------------STABILITY FEEDFWD--------------
             FBW_PID_arrays.CSTAR_STABILITY_FF.FF_gain = Math_rescale(
                 0,
-                Math_rescale(650, CLEAN.FF_STABILITY(CLIPPED_TAS), 850, 0, CURR_TAS) * CLEAN.FF_STABILITY_MASS_K(CURR_GW_T),
+                Math_rescale(650, CLEAN.FF_STABILITY(CLEAN_TAS), 850, 0, CURR_TAS) * CLEAN.FF_STABILITY_MASS_K(CURR_GW_T),
                 10,
-                Math_rescale(360, FLAPS.FF_STABILITY(CLIPPED_TAS), 850, 0, CURR_TAS) * FLAPS.FF_STABILITY_MASS_K(CURR_GW_T),
+                Math_rescale(360, FLAPS.FF_STABILITY(FLAPS_TAS), 850, 0, CURR_TAS) * FLAPS.FF_STABILITY_MASS_K(CURR_GW_T),
                 get(Flaps_deployed_angle)
             )
             ------------------------------------------------

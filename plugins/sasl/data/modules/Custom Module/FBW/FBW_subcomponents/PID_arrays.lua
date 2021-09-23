@@ -291,7 +291,7 @@ FBW_PID_arrays = {
     },
 
     FBW_YAW_DAMPER_PID = {
-        P_gain = 0.038,
+        P_gain = 0.040,
         I_gain = 0.000,
         D_gain = 0.000,
         B_gain = 0,
@@ -311,8 +311,8 @@ FBW_PID_arrays = {
         Min_out = -1,
         Max_out = 1,
         filter_inputs = true,
-        error_freq = 25,
-        dpvdt_freq = 25,
+        error_freq = 2,
+        dpvdt_freq = 2,
         highpass_inputs = true,
         PV = 0,
         Error = 0,
