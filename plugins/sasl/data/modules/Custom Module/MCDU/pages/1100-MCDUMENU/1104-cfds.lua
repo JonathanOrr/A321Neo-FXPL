@@ -14,7 +14,7 @@
 -------------------------------------------------------------------------------
 
 
-local THIS_PAGE = MCDU_Page:new({id=1101})
+local THIS_PAGE = MCDU_Page:new({id=1104})
 
 function THIS_PAGE:render(mcdu_data)
     self:set_title(mcdu_data, "CFDS")
@@ -40,7 +40,7 @@ end
 
 
 function THIS_PAGE:L5(mcdu_data)
-    mcdu_open_page(mcdu_data, 1110)
+    mcdu_open_page(mcdu_data, 11045)
 end
 
 

@@ -14,10 +14,12 @@
 -------------------------------------------------------------------------------
 
 
-local THIS_PAGE = MCDU_Page:new({id=1110})
+local THIS_PAGE = MCDU_Page:new({id=11045})
 
 function THIS_PAGE:render(mcdu_data)
     self:set_title(mcdu_data, "SYSTEM REPORT/TEST")
+    --self:set_subpages(mcdu_data, 1, 2)
+    MCDU_Page:set_lr_arrows(mcdu_data, true)
 
     self:set_line(mcdu_data, MCDU_LEFT, 1, "<AIRCOND", MCDU_LARGE, ECAM_WHITE)
     self:set_line(mcdu_data, MCDU_LEFT, 2, "<AFS", MCDU_LARGE, ECAM_WHITE)
@@ -37,11 +39,18 @@ end
 
 
 function THIS_PAGE:L6(mcdu_data)
-    mcdu_open_page(mcdu_data, 1101)
+    mcdu_open_page(mcdu_data, 1104)
 end
 
 function THIS_PAGE:R6(mcdu_data)
-    mcdu_open_page(mcdu_data, 1111)
+    mcdu_open_page(mcdu_data, "11045c")
+end
+function THIS_PAGE:Slew_Right(mcdu_data)
+    mcdu_open_page(mcdu_data, "11045_")
+end
+
+function THIS_PAGE:Slew_Left(mcdu_data)
+    mcdu_open_page(mcdu_data, "11045_")
 end
 
 mcdu_pages[THIS_PAGE.id] = THIS_PAGE

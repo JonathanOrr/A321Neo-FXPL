@@ -12,7 +12,15 @@
 --    Please check the LICENSE file in the root of the repository for further
 --    details or check <https://www.gnu.org/licenses/>
 -------------------------------------------------------------------------------
-
+--  Due to deeply nested pages of MCDU, a hierarchical numbering scheme is used
+--  1100 main MCDU
+--  1104 CFDS  (as called by L4 in MCDU menu)
+--
+--  in case of level with two pages, the second page has an id with appended "_" like 11045 and 11045_ for System/Report/Test
+--  entries are numbered from 1 (L1) to c (R6)
+--
+--  the tradeoff of switching to hash based table entries is ok here, since access performance does not matter for MCDU'
+--
 
 local THIS_PAGE = MCDU_Page:new({id=1100})
 
@@ -37,7 +45,7 @@ function THIS_PAGE:L6(mcdu_data)
 end
 
 function THIS_PAGE:L4(mcdu_data)
-    mcdu_open_page(mcdu_data, 1101)
+    mcdu_open_page(mcdu_data, 1104)
 end
 
 

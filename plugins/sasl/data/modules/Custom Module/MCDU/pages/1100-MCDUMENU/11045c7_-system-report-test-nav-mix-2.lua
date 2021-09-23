@@ -14,7 +14,7 @@
 -------------------------------------------------------------------------------
 
 
-local THIS_PAGE = MCDU_Page:new({id=1113})
+local THIS_PAGE = MCDU_Page:new({id="11045c7_"})
 
 function THIS_PAGE:render(mcdu_data)
     self:set_title(mcdu_data, "NAV - MIX")
@@ -43,14 +43,14 @@ end
 
 
 function THIS_PAGE:L6(mcdu_data)
-    mcdu_open_page(mcdu_data, 1111)
+    mcdu_open_page(mcdu_data, "11045c")
 end
 
 function THIS_PAGE:Slew_Right(mcdu_data)
-    mcdu_open_page(mcdu_data, 1112)
+    mcdu_open_page(mcdu_data, "11045c7")
 end
 function THIS_PAGE:Slew_Left(mcdu_data)
-    mcdu_open_page(mcdu_data, 1112)
+    mcdu_open_page(mcdu_data, "11045c7")
 end
 
 mcdu_pages[THIS_PAGE.id] = THIS_PAGE

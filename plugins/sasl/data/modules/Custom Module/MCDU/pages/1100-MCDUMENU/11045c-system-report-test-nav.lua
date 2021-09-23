@@ -14,7 +14,7 @@
 -------------------------------------------------------------------------------
 
 
-local THIS_PAGE = MCDU_Page:new({id=1111})
+local THIS_PAGE = MCDU_Page:new({id="11045c"})
 
 function THIS_PAGE:render(mcdu_data)
     self:set_title(mcdu_data, "NAV")
@@ -31,11 +31,11 @@ end
 
 
 function THIS_PAGE:L6(mcdu_data)
-    mcdu_open_page(mcdu_data, 1110)
+    mcdu_open_page(mcdu_data, 11045)
 end
 
 function THIS_PAGE:R1(mcdu_data)
-    mcdu_open_page(mcdu_data, 1112)
+    mcdu_open_page(mcdu_data, "11045c7")
 end
 
 mcdu_pages[THIS_PAGE.id] = THIS_PAGE
