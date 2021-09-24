@@ -545,6 +545,26 @@ local function FMGS_reshape_fpln_arr(fpln, dont_add_disc)
     end
 end
 
+local function FMGS_reshape_fpln_del_double_disc(fpln)
+    -- Remove multiple close discontinuities when present like
+    -- ABESI -DISC- -DISC- SRN becomes ABESI -DISC- SRN
+    local pred_disc = nil
+    for i=#fpln.legs,1,-1 do
+        local x = fpln.legs[i]
+        if x.discontinuity then
+            if pred_disc == nil then
+                pred_disc = x
+            else
+                table.remove(fpln.legs, i)
+                pred_disc = x
+                i = i - 1
+            end
+        else
+            pred_disc = nil
+        end
+    end
+end
+
 function FMGS_reshape_fpln(dont_add_disc)    -- This function removes duplicated elements and adds
                                 -- discontinuity where needed. You should call this
                                 -- function evertime (and after) you change the sid, 
@@ -560,9 +580,17 @@ function FMGS_reshape_fpln(dont_add_disc)    -- This function removes duplicated
         FMGS_reshape_fpln_arr(fpln, dont_add_disc)
     end
 
+    FMGS_reshape_fpln_del_double_disc(fpln)
+
     fpln.require_recompute = true
 end
 
+function FMGS_remove_sidtrans_to_legs_disc()
+    local fpln = FMGS_sys.fpln.temp or FMGS_sys.fpln.active
+    if #fpln.legs > 0 and fpln.legs[1].discontinuity then
+        table.remove(fpln.legs, 1)
+    end
+end
 
 -------------------------------------------------------------------------------
 -- LEGS

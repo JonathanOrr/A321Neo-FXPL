@@ -353,8 +353,10 @@ function THIS_PAGE:add_new_wpt(mcdu_data)
             FMGS_create_copy_temp_fpln()
         end
         FMGS_fpln_temp_leg_add(leg, obj_clicked.ref_id)
-        FMGS_reshape_fpln()
+        FMGS_reshape_fpln(true)
         FMGS_insert_temp_fpln()
+    else
+        mcdu_send_message(mcdu_data, "NOT YET IMPLEMENTED")
     end
 
 end
