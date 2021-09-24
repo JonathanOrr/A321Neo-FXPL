@@ -67,8 +67,11 @@ local function read_fix_id(fix_id, target_region_code)  -- Convert the a FIX fie
 end
 
 local function add_sid_point_IF_TF(x)
-    local point = read_fix_id(x.leg_name, x.region_code_leg_name)
+    local point = read_fix_id(x.leg_name, x.leg_name_region_code)
     if point then
+        -- Save also on the cifp for later usage
+        x.lat = point.lat
+        x.lon = point.lon
         return {point}
     else
         return {}
@@ -76,8 +79,11 @@ local function add_sid_point_IF_TF(x)
 end
 
 local function add_sid_point_CF(prev_point, x)
-    local point = read_fix_id(x.leg_name, x.region_code_leg_name)
+    local point = read_fix_id(x.leg_name, x.leg_name_region_code)
     if point then
+        -- Save also on the cifp for later usage
+        x.lat = point.lat
+        x.lon = point.lon
         if prev_point then
             local line = GeoLine:create_from_course(point, x.outb_mag/10)  -- TODO TRUE/MAG
             local sec_point = line:point_at_min_distance(prev_point)
@@ -91,7 +97,7 @@ local function add_sid_point_CF(prev_point, x)
 end
 
 local function add_sid_point_FA(x)
-    local point = read_fix_id(x.leg_name, x.region_code_leg_name)
+    local point = read_fix_id(x.leg_name, x.leg_name_region_code)
     if point then
         local line = GeoLine:create_from_course(point, x.outb_mag/10)  -- TODO TRUE/MAG
         local sec_point = line:point_at_given_distance(point, 1)
@@ -104,6 +110,8 @@ end
 
 function add_cifp_point(prev_point, x)
     -- WARNING: prev_point may be nil
+    print(x.leg_name, x.leg_type)
+
     assert(x)
     if x.leg_type == CIFP_LEG_TYPE_IF or x.leg_type == CIFP_LEG_TYPE_TF or x.leg_type == CIFP_LEG_TYPE_DF then
         return add_sid_point_IF_TF(x)

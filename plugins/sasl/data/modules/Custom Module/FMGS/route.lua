@@ -84,16 +84,15 @@ local function update_cifp(reference, initial_point)
         local distance = 0
         
         for _,x in ipairs(leg_points) do
-            distance = distance + GC_distance_kt(prev_point.lat, prev_point.lon, x.lat, x.lon)
+            if prev_point then
+                distance = distance + GC_distance_kt(prev_point.lat, prev_point.lon, x.lat, x.lon)
+            end
+            prev_point = GeoPoint:create({ lat = x.lat, lon = x.lon})
             table.insert(reference.computed_legs, x)
         end
 
         leg.computed_distance = distance
         total_distance = total_distance + distance
-        local nr_leg_points = #leg_points
-        if nr_leg_points > 0 then
-            prev_point = GeoPoint:create({ lat = leg_points[nr_leg_points].lat, lon = leg_points[nr_leg_points].lon})
-        end
     end
 
     return total_distance, prev_point
@@ -181,7 +180,6 @@ function update_route()
     if dep_rwy then
         init_pt = GeoPoint:create({ lat=(not sibl and dep_rwy.s_lat or dep_rwy.lat), lon=(not sibl and dep_rwy.s_lon or dep_rwy.lon)})
     end
-
     
     dist, init_pt  = update_cifp(fpln.apts.dep_sid, init_pt)
     total_distance = total_distance + dist
