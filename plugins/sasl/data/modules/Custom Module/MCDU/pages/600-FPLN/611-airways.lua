@@ -354,7 +354,13 @@ local function add_to_fpln(mcdu_data, full_path, type_map, awy_map)
             to_add.obj = nearest_point
             to_add.airway_name = awy_map[fix]
 
-            FMGS_fpln_temp_leg_add(to_add, mcdu_data.airways.source_wpt.ref_id + i - 1)
+            if mcdu_data.airways.source_wpt.leg_type then
+                -- TODO Remove extra data on SID
+                FMGS_fpln_temp_leg_add(to_add, i - 1)
+                FMGS_remove_sidtrans_to_legs_disc()
+            else
+                FMGS_fpln_temp_leg_add(to_add, mcdu_data.airways.source_wpt.ref_id + i - 1)
+            end
         end
     end
 end

@@ -22,6 +22,17 @@ POINT_TYPE_ARR_STAR      = 5
 POINT_TYPE_ARR_VIA       = 6
 POINT_TYPE_ARR_APPR      = 7
 
+function cifp_is_a_fix(x)
+    assert(x)
+
+    local leg_type = x.leg_type or CIFP_LEG_TYPE_IF
+
+    return    leg_type == CIFP_LEG_TYPE_IF
+           or leg_type == CIFP_LEG_TYPE_TF
+           or leg_type == CIFP_LEG_TYPE_DF
+           or leg_type == CIFP_LEG_TYPE_AF
+           or leg_type == CIFP_LEG_TYPE_HF
+end
 
 function cifp_convert_leg_name(x)
 

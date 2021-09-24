@@ -33,7 +33,7 @@ function THIS_PAGE:add_new_wpt(mcdu_data)
         local sel_navaid = mcdu_data.dup_names.selected_navaid
         local sel_navaid_type = avionics_bay_generic_wpt_to_fmgs_type(sel_navaid)
         local leg = {
-                    ptr_type = sel_navaid_type, 
+                    ptr_type = sel_navaid_type,
                     id=sel_navaid.id,
                     lat=sel_navaid.lat,
                     lon=sel_navaid.lon
@@ -170,8 +170,12 @@ function THIS_PAGE:render(mcdu_data)
     -------------------------------------
     -- RIGHT 5
     -------------------------------------
-    if lrtype == TYPE_WPT and not mcdu_data.lat_rev_subject.is_cifp then
+    local cifp_condition = not mcdu_data.lat_rev_subject.is_cifp or cifp_is_a_fix(mcdu_data.lat_rev_subject.data)
+    if lrtype == TYPE_WPT and cifp_condition then
         self:set_line(mcdu_data, MCDU_RIGHT, 5, "AIRWAYS>", MCDU_LARGE)
+        mcdu_data.page_data[602].is_airways_enabled = true;
+    else
+        mcdu_data.page_data[602].is_airways_enabled = false;
     end
 
     self:set_line(mcdu_data, MCDU_LEFT, 6, "<RETURN", MCDU_LARGE)
@@ -210,7 +214,8 @@ function THIS_PAGE:R3(mcdu_data)
 end
 
 function THIS_PAGE:R5(mcdu_data)
-    if mcdu_data.lat_rev_subject.type == TYPE_WPT and not mcdu_data.lat_rev_subject.data.discontinuity then
+    if not mcdu_data.lat_rev_subject.data.discontinuity
+       and mcdu_data.page_data[602].is_airways_enabled then
         mcdu_data.airways.source_wpt  = mcdu_data.lat_rev_subject.data
         mcdu_data.airways.return_page = 602
         mcdu_open_page(mcdu_data, 611)
