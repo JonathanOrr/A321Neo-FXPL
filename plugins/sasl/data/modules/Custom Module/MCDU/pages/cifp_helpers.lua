@@ -13,7 +13,7 @@
 --    details or check <https://www.gnu.org/licenses/>
 -------------------------------------------------------------------------------
 
--- Constants exposed to 6** pages. They should not be used elsewhere
+-- Constants exposed to 6** pages. They should not be used elsewhere (but they are! Don't change the values)
 POINT_TYPE_DEP_SID       = 1
 POINT_TYPE_DEP_TRANS     = 2
 POINT_TYPE_LEG           = 3    -- enroute leg

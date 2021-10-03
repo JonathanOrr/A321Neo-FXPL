@@ -403,6 +403,30 @@ function FMGS_arr_get_available_vias(ret_temp_if_avail)
     return toret
 end
 
+function FMGS_dep_remove_sid_after(wpt)
+    -- Remove all the SID points after wpt and remove the TRANS if any
+    -- If wpt is part of the TRANS, then SID is untouched and removes
+    -- all waypoints in the TRANS after wpt
+
+    assert(wpt.ref_id)
+    assert(wpt.point_type)
+
+    local fpln = FMGS_sys.fpln.temp or FMGS_sys.fpln.active
+
+    if wpt.point_type == 1 then -- Please check cifp_helpers.lua in MCDU
+        FMGS_sys.fpln.active.apts.dep_trans = nil   -- Remove the TRANS
+
+        for i=#fpln.apts.dep_sid.legs, wpt.ref_id+1, -1 do
+            table.remove(fpln.apts.dep_sid.legs, i)
+        end
+    elseif wpt.point_type == 2 then
+        for i=#fpln.apts.dep_trans.legs, wpt.ref_id+1, -1 do
+            table.remove(fpln.apts.dep_trans.legs, i)
+        end
+    else
+        assert(false)
+    end
+end
 
 
 -------------------------------------------------------------------------------
