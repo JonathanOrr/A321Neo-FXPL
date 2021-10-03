@@ -110,8 +110,6 @@ end
 
 function add_cifp_point(prev_point, x)
     -- WARNING: prev_point may be nil
-    print(x.leg_name, x.leg_type)
-
     assert(x)
     if x.leg_type == CIFP_LEG_TYPE_IF or x.leg_type == CIFP_LEG_TYPE_TF or x.leg_type == CIFP_LEG_TYPE_DF then
         return add_sid_point_IF_TF(x)

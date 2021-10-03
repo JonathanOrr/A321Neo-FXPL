@@ -565,6 +565,29 @@ local function FMGS_reshape_fpln_del_double_disc(fpln)
     end
 end
 
+local function FMGS_remove_cascade_items(fpln)
+    -- Remove any F/PLN waypoints that have a sequence of
+    -- XXX - something - ... - something - XXX, then something must
+    -- be deleted
+
+    local i = 1
+    while i <=# fpln.legs do
+        for j=i+1,#fpln.legs do
+            local x = fpln.legs[i]
+            local y = fpln.legs[j]
+            if y and y.id and x.id == y.id then
+                for k=j, i+1, -1 do
+                    table.remove(fpln.legs, k)
+                end
+                i = i - 1
+                break
+            end
+        end    
+        i = i + 1
+    end
+
+end
+
 function FMGS_reshape_fpln(dont_add_disc)    -- This function removes duplicated elements and adds
                                 -- discontinuity where needed. You should call this
                                 -- function evertime (and after) you change the sid, 
@@ -581,6 +604,8 @@ function FMGS_reshape_fpln(dont_add_disc)    -- This function removes duplicated
     end
 
     FMGS_reshape_fpln_del_double_disc(fpln)
+
+    FMGS_remove_cascade_items(fpln)
 
     fpln.require_recompute = true
 end
