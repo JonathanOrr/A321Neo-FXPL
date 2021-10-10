@@ -94,7 +94,7 @@ end
 
 local function draw_pack_indications()
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-304, 140, "PACK 1", 36, false, false, TEXT_ALIGN_CENTER, (get(Pack_L) == 0 and get(Engine_1_avail) == 1) and ECAM_ORANGE or ECAM_WHITE)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+330, 140, "PACK 2", 36, false, false, TEXT_ALIGN_CENTER, (get(Pack_L) == 0 and get(Engine_1_avail) == 1) and ECAM_ORANGE or ECAM_WHITE)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+330, 140, "PACK 2", 36, false, false, TEXT_ALIGN_CENTER, (get(Pack_R) == 0 and get(Engine_2_avail) == 1) and ECAM_ORANGE or ECAM_WHITE)
 end
 
 local function draw_valves_text()
