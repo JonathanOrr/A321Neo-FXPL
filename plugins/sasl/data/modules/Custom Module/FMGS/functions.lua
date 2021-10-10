@@ -502,7 +502,7 @@ local function FMGS_reshape_add_discontinuity(fpln, dont_add_disc, i)
     end
 end
 
-local function FMGS_reshape_fpln_dep(fpln, dont_add_disc)
+function FMGS_reshape_fpln_dep(fpln)
 
     local last_dep
     if fpln.apts.dep_trans and #fpln.apts.dep_trans.legs>0 then
@@ -519,10 +519,10 @@ local function FMGS_reshape_fpln_dep(fpln, dont_add_disc)
         if last_dep then
             local last_dep_p = last_dep.legs[#last_dep.legs]
             if fpln.legs[1].id ~= last_dep_p.leg_name then
-                FMGS_reshape_add_discontinuity(fpln, dont_add_disc, 1)
+                FMGS_reshape_add_discontinuity(fpln, false, 1)
             end
         else
-            FMGS_reshape_add_discontinuity(fpln, dont_add_disc, 1)
+            FMGS_reshape_add_discontinuity(fpln, false, 1)
         end
     elseif #fpln.legs >= 2 then
         -- The first item is a discontinuity, so let's check
@@ -537,7 +537,7 @@ local function FMGS_reshape_fpln_dep(fpln, dont_add_disc)
     end
 end
 
-local function FMGS_reshape_fpln_arr(fpln, dont_add_disc)
+function FMGS_reshape_fpln_arr(fpln)
 
     local first_arr
     if fpln.apts.arr_trans and #fpln.apts.arr_trans.legs>0 then
@@ -551,10 +551,10 @@ local function FMGS_reshape_fpln_arr(fpln, dont_add_disc)
         if first_arr then
             local first_arr_p = first_arr.legs[1]
             if fpln.legs[#fpln.legs].id ~= first_arr_p.leg_name then
-                FMGS_reshape_add_discontinuity(fpln, dont_add_disc)
+                FMGS_reshape_add_discontinuity(fpln, false)
             end
         else
-            FMGS_reshape_add_discontinuity(fpln, dont_add_disc)
+            FMGS_reshape_add_discontinuity(fpln, false)
         end
     elseif #fpln.legs >= 2 then
         -- The last item is a discontinuity, so let's check
@@ -622,9 +622,6 @@ function FMGS_reshape_fpln(dont_add_disc)    -- This function removes duplicated
     if #fpln.legs == 0 then
         -- F/PLN is empty, thus just add a discontinuity
         FMGS_reshape_add_discontinuity(fpln, dont_add_disc)
-    else
-        FMGS_reshape_fpln_dep(fpln, dont_add_disc)
-        FMGS_reshape_fpln_arr(fpln, dont_add_disc)
     end
 
     FMGS_reshape_fpln_del_double_disc(fpln)

@@ -250,6 +250,7 @@ end
 
 function THIS_PAGE:R6(mcdu_data)
     FMGS_reshape_fpln()
+    FMGS_reshape_fpln_dep(FMGS_get_current_fpln()) -- Add discontinuity if necessary
     FMGS_insert_temp_fpln()
     mcdu_open_page(mcdu_data, 600)
 end
