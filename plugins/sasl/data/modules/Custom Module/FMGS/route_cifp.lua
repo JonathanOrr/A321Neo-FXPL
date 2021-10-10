@@ -17,7 +17,7 @@
 -------------------------------------------------------------------------------
 
 
-local function read_fix_id(fix_id, target_region_code)  -- Convert the a FIX field of the CIFP to the avionics_bay object
+local function read_fix_id(fix_id, target_region_code, airport)  -- Convert the a FIX field of the CIFP to the avionics_bay object
     local fixes_1 = nil
     local fixes_2 = nil
 
@@ -28,11 +28,15 @@ local function read_fix_id(fix_id, target_region_code)  -- Convert the a FIX fie
 
     -- RUNWAY identifier
     elseif fix_id:sub(1,2) == "RW" and tonumber(fix_id:sub(3,4)) ~= nil  then    -- Runway
-        local dep_rwy, sibl = FMGS_dep_get_rwy(false)
-        if (dep_rwy.name == fix_id:sub(3) and not sibl) or (dep_rwy.s_name == fix_id:sub(3) and not sibl) then
-            return dep_rwy
-        else
-            return nil
+
+        for i,rwy in ipairs(airport.rwys) do
+            if rwy.name == fix_id:sub(3) then
+                return {lat=rwy.lat, lon=rwy.lon}
+            elseif rwy.s_name == fix_id:sub(3) then
+                return {lat=rwy.s_lat, lon=rwy.s_lon}
+            else
+                return nil
+            end
         end
 
     -- AIRPORT
@@ -66,8 +70,8 @@ local function read_fix_id(fix_id, target_region_code)  -- Convert the a FIX fie
     return found_x
 end
 
-local function add_sid_point_IF_TF(x)
-    local point = read_fix_id(x.leg_name, x.leg_name_region_code)
+local function add_cifp_point_IF_TF(apt_ref, x)
+    local point = read_fix_id(x.leg_name, x.leg_name_region_code, apt_ref)
     if point then
         -- Save also on the cifp for later usage
         x.lat = point.lat
@@ -78,8 +82,8 @@ local function add_sid_point_IF_TF(x)
     end
 end
 
-local function add_sid_point_CF(prev_point, x)
-    local point = read_fix_id(x.leg_name, x.leg_name_region_code)
+local function add_cifp_point_CF(apt_ref, prev_point, x)
+    local point = read_fix_id(x.leg_name, x.leg_name_region_code, apt_ref)
     if point then
         -- Save also on the cifp for later usage
         x.lat = point.lat
@@ -96,9 +100,11 @@ local function add_sid_point_CF(prev_point, x)
     end
 end
 
-local function add_sid_point_FA(x)
-    local point = read_fix_id(x.leg_name, x.leg_name_region_code)
+local function add_cifp_point_FA(apt_ref, x)
+    local point = read_fix_id(x.leg_name, x.leg_name_region_code, apt_ref)
     if point then
+        x.lat = point.lat
+        x.lon = point.lon
         local line = GeoLine:create_from_course(point, x.outb_mag/10)  -- TODO TRUE/MAG
         local sec_point = line:point_at_given_distance(point, 1)
         return {sec_point, point}
@@ -107,16 +113,62 @@ local function add_sid_point_FA(x)
     end
 end
 
+local function add_cifp_point_RF(apt_ref, x)
+    local point     = read_fix_id(x.leg_name,  x.leg_name_region_code, apt_ref)
+    local point_ctr = read_fix_id(x.center_fix,x.center_fix_region_code, apt_ref)
+    if point and point_ctr then
+        -- Save also on the cifp for later usage
+        x.lat = point.lat
+        x.lon = point.lon
+        x.ctr_lat = point_ctr.lat
+        x.ctr_lon = point_ctr.lon
+        return {point}  -- TODO Not ok for distance
+    else
+        sasl.logWarning("Point RF " .. x.leg_name .. " or center " .. x.center_fix .. " not found.")
+        return {}
+    end
+end
 
-function add_cifp_point(prev_point, x)
+local function add_cifp_point_HM(apt_ref, x)
+    local point = read_fix_id(x.leg_name, x.leg_name_region_code, apt_ref)
+    if point then
+        -- Save also on the cifp for later usage
+        x.lat = point.lat
+        x.lon = point.lon
+        return {point}
+    else
+        return {}
+    end
+end
+
+local function add_cifp_point_DF(apt_ref, x)
+    local point = read_fix_id(x.leg_name, x.leg_name_region_code, apt_ref)
+    if point then
+        -- Save also on the cifp for later usage
+        x.lat = point.lat
+        x.lon = point.lon
+        return {point}
+    else
+        return {}
+    end
+end
+
+function add_cifp_point(apt_ref, prev_point, x)
     -- WARNING: prev_point may be nil
+    assert(apt_ref)
     assert(x)
     if x.leg_type == CIFP_LEG_TYPE_IF or x.leg_type == CIFP_LEG_TYPE_TF or x.leg_type == CIFP_LEG_TYPE_DF then
-        return add_sid_point_IF_TF(x)
+        return add_cifp_point_IF_TF(apt_ref, x)
     elseif x.leg_type == CIFP_LEG_TYPE_CF then
-        return add_sid_point_CF(prev_point, x)
+        return add_cifp_point_CF(apt_ref, prev_point, x)
     elseif x.leg_type == CIFP_LEG_TYPE_FA then
-        return add_sid_point_FA(x)
+        return add_cifp_point_FA(apt_ref, x)
+    elseif x.leg_type == CIFP_LEG_TYPE_RF then
+        return add_cifp_point_RF(apt_ref, x)
+    elseif x.leg_type == CIFP_LEG_TYPE_HM then
+        return add_cifp_point_HM(apt_ref, x)
+    elseif x.leg_type == CIFP_LEG_TYPE_DF then
+        return add_cifp_point_DF(apt_ref, x)
     end
     return {}
 end

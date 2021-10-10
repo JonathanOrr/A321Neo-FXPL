@@ -64,7 +64,7 @@ local function update_active_fpln()
     
 end
 
-local function update_cifp(reference, initial_point)
+local function update_cifp(apt_ref, reference, initial_point)
     if not reference then
         return 0, initial_point -- No Data no party
     end
@@ -80,7 +80,7 @@ local function update_cifp(reference, initial_point)
     local prev_point = initial_point
 
     for i,leg in ipairs(reference.legs) do
-        local leg_points = add_cifp_point(prev_point,leg)    -- Get the points for the single legs
+        local leg_points = add_cifp_point(apt_ref, prev_point,leg)    -- Get the points for the single legs
         local distance = 0
         
         for _,x in ipairs(leg_points) do
@@ -157,7 +157,7 @@ end
 
 function update_route()
 
-    debug_add_route()
+    --debug_add_route()
 
     local fpln
     if FMGS_sys.fpln.active.require_recompute then
@@ -181,21 +181,21 @@ function update_route()
         init_pt = GeoPoint:create({ lat=(not sibl and dep_rwy.s_lat or dep_rwy.lat), lon=(not sibl and dep_rwy.s_lon or dep_rwy.lon)})
     end
     
-    dist, init_pt  = update_cifp(fpln.apts.dep_sid, init_pt)
+    dist, init_pt  = update_cifp(fpln.apts.dep, fpln.apts.dep_sid, init_pt)
     total_distance = total_distance + dist
-    dist, init_pt  = update_cifp(fpln.apts.dep_trans, init_pt)
+    dist, init_pt  = update_cifp(fpln.apts.dep, fpln.apts.dep_trans, init_pt)
     total_distance = total_distance + dist
     
     dist, init_pt  = fpln_recompute_distances_fplnlegs(fpln, init_pt)
     total_distance = total_distance + dist
 
-    dist, init_pt  = update_cifp(fpln.apts.arr_trans, init_pt)
+    dist, init_pt  = update_cifp(fpln.apts.arr, fpln.apts.arr_trans, init_pt)
     total_distance = total_distance + dist
-    dist, init_pt  = update_cifp(fpln.apts.arr_star, init_pt)
+    dist, init_pt  = update_cifp(fpln.apts.arr, fpln.apts.arr_star, init_pt)
     total_distance = total_distance + dist
-    dist, init_pt  = update_cifp(fpln.apts.arr_via, init_pt)
+    dist, init_pt  = update_cifp(fpln.apts.arr, fpln.apts.arr_via, init_pt)
     total_distance = total_distance + dist
-    dist, init_pt  = update_cifp(fpln.apts.arr_appr, init_pt)
+    dist, init_pt  = update_cifp(fpln.apts.arr, fpln.apts.arr_appr, init_pt)
     total_distance = total_distance + dist
 
     if init_pt then

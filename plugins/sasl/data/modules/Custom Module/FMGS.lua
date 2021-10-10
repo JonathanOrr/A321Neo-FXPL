@@ -67,6 +67,10 @@ FMGS_sys.fpln = {
             arr=nil,        -- As returned by AvionicsBay, runways included
             arr_cifp=nil,   -- All the loaded CIFP
             arr_rwy=nil,
+            arr_trans =  nil,
+            arr_star = nil,
+            arr_via = nil,
+            arr_appr = nil,
             
             alt=nil,    -- As returned by AvionicsBay, runways included
             alt_cifp=nil,
