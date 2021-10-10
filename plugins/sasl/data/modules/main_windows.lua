@@ -441,7 +441,7 @@ Cinetracker_HUD = contextWindow {
   minimumSize = { 408 / 4 , 561 / 4};
   maximumSize = { 408 , 561 };
   gravity = { 0 , 1 , 0 , 1 };
-  visible = true ;
+  visible = false ;
   noDecore = true ;
   layer = SASL_CW_LAYER_FLIGHT_OVERLAY;
   noMove = true;
@@ -458,7 +458,7 @@ Cinetracker_ABNZ = contextWindow {
   minimumSize = { 600/10, 424/10 };
   maximumSize = { 600, 424 };
   gravity = { 0 , 1 , 0 , 1 };
-  visible = true;
+  visible = false;
   components = {
       alpha_beta_nz {}
   };
