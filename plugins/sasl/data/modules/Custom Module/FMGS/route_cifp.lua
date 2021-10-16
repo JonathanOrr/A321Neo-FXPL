@@ -153,6 +153,40 @@ local function add_cifp_point_DF(apt_ref, x)
     end
 end
 
+local function add_cifp_point_VR_CR(apt_ref, x)
+    local point = read_fix_id(x.recomm_navaid, x.recomm_navaid_region_code, apt_ref)
+    if point then
+        -- Save also on the cifp for later usage
+        x.recomm_navaid_lat = point.lat
+        x.recomm_navaid_lon = point.lon
+    end
+    return {}
+end
+
+local function add_cifp_point_FM(apt_ref, x)
+    local point = read_fix_id(x.leg_name, x.leg_name_region_code, apt_ref)
+    if point then
+        -- Save also on the cifp for later usage
+        x.lat = point.lat
+        x.lon = point.lon
+        return {point}
+    else
+        return {}
+    end
+end
+
+local function add_cifp_point_holds(apt_ref, x)
+    local point = read_fix_id(x.leg_name, x.leg_name_region_code, apt_ref)
+    if point then
+        -- Save also on the cifp for later usage
+        x.lat = point.lat
+        x.lon = point.lon
+        return {point}
+    else
+        return {}
+    end
+end
+
 function add_cifp_point(apt_ref, prev_point, x)
     -- WARNING: prev_point may be nil
     assert(apt_ref)
@@ -169,6 +203,12 @@ function add_cifp_point(apt_ref, prev_point, x)
         return add_cifp_point_HM(apt_ref, x)
     elseif x.leg_type == CIFP_LEG_TYPE_DF then
         return add_cifp_point_DF(apt_ref, x)
+    elseif x.leg_type == CIFP_LEG_TYPE_VR or x.leg_type == CIFP_LEG_TYPE_CR then
+        return add_cifp_point_VR_CR(apt_ref, x)
+    elseif x.leg_type == CIFP_LEG_TYPE_FM then
+        return add_cifp_point_FM(apt_ref, x)
+    elseif x.leg_type == CIFP_LEG_TYPE_HA or x.leg_type == CIFP_LEG_TYPE_HF or x.leg_type == CIFP_LEG_TYPE_HM then
+        return add_cifp_point_holds(apt_ref, x)
     end
     return {}
 end
