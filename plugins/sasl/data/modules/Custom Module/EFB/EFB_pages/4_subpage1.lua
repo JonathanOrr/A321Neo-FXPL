@@ -4,6 +4,8 @@ local efb_up_button_begin = 0
 local efb_down_button_begin = 0
 local efb_save_button_begin = 0
 local efb_align_button_begin = 0
+local efb_engine_next_button_begin = 0
+local efb_engine_prev_button_begin = 0
 
 local dropdown_1 = {"ROLL", "YAW", "TILLER"}
 local dropdown_expanded = {false}
@@ -76,6 +78,28 @@ local function draw_align_button()
     end
 end
 
+local function draw_engine_type()
+    local _=get(Engine_option)
+    if _== 1 then
+        sasl.gl.drawTexture ( EFB_CONFIG_engine_LEAP, 0 , 0 , 1143 , 800 , ECAM_WHITE )
+    elseif _==2 then
+        sasl.gl.drawTexture ( EFB_CONFIG_engine_PW, 0 , 0 , 1143 , 800 , ECAM_WHITE )
+    end
+end
+
+local function draw_engine_buttons()
+    if get(TIME) - efb_engine_next_button_begin < 0.5 then
+        SASL_drawSegmentedImg_xcenter_aligned (EFB_highlighter, 978+192/4,498,192,58,2,2)
+    else
+        SASL_drawSegmentedImg_xcenter_aligned (EFB_highlighter, 978+192/4,498,192,58,2,1)
+    end
+    if get(TIME) - efb_engine_prev_button_begin < 0.5 then
+        SASL_drawSegmentedImg_xcenter_aligned (EFB_highlighter, 978+192/4,554,192,58,2,2)
+    else
+        SASL_drawSegmentedImg_xcenter_aligned (EFB_highlighter, 978+192/4,554,192,58,2,1)
+    end
+end
+
 local function draw_dropdowns()
     draw_dropdown_menu(143, 294, 219-63, 307-281, EFB_DROPDOWN_OUTSIDE, EFB_DROPDOWN_INSIDE, dropdown_1, dropdown_expanded[1], dropdown_selected[1])
 end
@@ -117,10 +141,10 @@ end
 
 function p4s1_buttons()
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 69,594,136,623, function ()
-        hud_colour = "light"
+        hud_colour = "dark"
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 154,594,221,623, function ()
-        hud_colour = "dark"
+        hud_colour = "light"
     end)
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 110,537,179,567, function ()
         efb_up_button_begin = get(TIME)
@@ -153,6 +177,18 @@ function p4s1_buttons()
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 620,295,659,313, function ()
         EFB.pref_set_copilot( not EFB.pref_get_copilot() )
     end)
+
+----------------------------------------------ENGINE TYPE
+
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 978+192/4,498,978+192/4+192,498+58, function ()
+        efb_engine_next_button_begin = get(TIME)
+        set(Engine_option, Math_cycle(get(Engine_option)+1, 1, 2))
+    end)
+    Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 978+192/4,554,978+192/4+192,554+58, function ()
+        efb_engine_prev_button_begin = get(TIME)
+        set(Engine_option, Math_cycle(get(Engine_option)-1, 1, 2))
+    end)
+
 end
 
 function p4s1_update()
@@ -162,9 +198,11 @@ end
 function p4s1_draw()
     draw_throttle_value()
     draw_hud_buttons()
+    draw_engine_buttons()
     draw_align_button()
     draw_save_config_button()
     sasl.gl.drawTexture ( EFB_CONFIG_bgd, 0 , 0 , 1143 , 800 , ECAM_WHITE ) --place the bgd in the middle or it'll cover up the highlighter buttons.
+    draw_engine_type()
     draw_toggle_switches()
     draw_dropdowns()
 end

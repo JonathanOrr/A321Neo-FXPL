@@ -35,7 +35,7 @@ local function EFB_p4s2_move_slider() -- this function sets the global table val
         EFB.pref_set_sound_int,
         EFB.pref_set_sound_warn,
         EFB.pref_set_sound_enviro,
-        EFB.pref_get_display_aa,
+        EFB.pref_set_display_aa,
         EFB.pref_set_brk_strength ,
     }
     for i=1,6 do
@@ -61,7 +61,7 @@ local function EFB_p4s2_update_global_table() -- this table set slider_pos to th
         EFB.pref_get_brk_strength,
     }
     for i=1,6 do
-        if functions_name[i] ~= nil then
+        if functions_name[i] then
             slider_pos[i] = functions_name[i]()
         end
     end

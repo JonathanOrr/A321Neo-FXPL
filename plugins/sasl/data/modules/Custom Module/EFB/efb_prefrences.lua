@@ -1,5 +1,12 @@
 include("libs/table.save.lua")
 
+--Written 2021 September - October by Henrick Ku
+
+-- The purpose of this script is to make efb functions callable anywhere from the aircraft via the access functions.
+-- Below are some funcions, then a global table called "EFB" is used to bridge the function and the global cosmos.
+-- DO NOT ATTEMPT TO CALL EFB_PREFRENCES FUNCTIONS DIRECTLY, use EFB.pref_xxxxx() instead.
+-- The efb_graphics_table is used to store most of the states of the EFB, I hope to store more stuff here sooner or later to make it more structured.
+
 local efb_graphics_table = {
     prefrences = {
         toggles = {
