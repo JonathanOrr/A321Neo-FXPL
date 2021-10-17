@@ -70,145 +70,105 @@ local function read_fix_id(fix_id, target_region_code, airport)  -- Convert the 
     return found_x
 end
 
-local function add_cifp_point_IF_TF(apt_ref, x)
+local function decorate_cifp_point_fix(apt_ref, x)
     local point = read_fix_id(x.leg_name, x.leg_name_region_code, apt_ref)
     if point then
         -- Save also on the cifp for later usage
         x.lat = point.lat
         x.lon = point.lon
-        return {point}
     else
-        return {}
+        sasl.logWarning("[decorate_cifp_point_fix]", "Point " .. x.leg_name .. " not found in the database.")
     end
 end
 
-local function add_cifp_point_CF(apt_ref, prev_point, x)
+local function decorate_cifp_point_fix_rn(apt_ref, x)
     local point = read_fix_id(x.leg_name, x.leg_name_region_code, apt_ref)
+    local rn_point = read_fix_id(x.recomm_navaid, x.recomm_navaid_region_code, apt_ref)
     if point then
         -- Save also on the cifp for later usage
         x.lat = point.lat
         x.lon = point.lon
-        if prev_point then
-            local line = GeoLine:create_from_course(point, x.outb_mag/10)  -- TODO TRUE/MAG
-            local sec_point = line:point_at_min_distance(prev_point)
-            return {sec_point, point}
-        else
-            return {point}
-        end
     else
-        return {}
+        sasl.logWarning("[decorate_cifp_point_fix_rn]", "Point " .. x.leg_name .. " (" .. x.leg_name_region_code .. ") not found in the database.")
+    end
+    if rn_point then
+        -- Save also on the cifp for later usage
+        x.recomm_navaid_lat = rn_point.lat
+        x.recomm_navaid_lon = rn_point.lon
+    else
+        sasl.logWarning("[decorate_cifp_point_fix_rn]", "Point RN " .. x.recomm_navaid .. " (".. x.recomm_navaid_region_code ..") not found in the database.")
     end
 end
 
-local function add_cifp_point_FA(apt_ref, x)
-    local point = read_fix_id(x.leg_name, x.leg_name_region_code, apt_ref)
-    if point then
-        x.lat = point.lat
-        x.lon = point.lon
-        local line = GeoLine:create_from_course(point, x.outb_mag/10)  -- TODO TRUE/MAG
-        local sec_point = line:point_at_given_distance(point, 1)
-        return {sec_point, point}
-    else
-        return {}
-    end
-end
-
-local function add_cifp_point_RF(apt_ref, x)
+local function decorate_cifp_point_fix_ctr(apt_ref, x)
     local point     = read_fix_id(x.leg_name,  x.leg_name_region_code, apt_ref)
-    local point_ctr = read_fix_id(x.center_fix,x.center_fix_region_code, apt_ref)
-    if point and point_ctr then
-        -- Save also on the cifp for later usage
-        x.lat = point.lat
-        x.lon = point.lon
-        x.ctr_lat = point_ctr.lat
-        x.ctr_lon = point_ctr.lon
-        return {point}  -- TODO Not ok for distance
-    else
-        sasl.logWarning("Point RF " .. x.leg_name .. " or center " .. x.center_fix .. " not found.")
-        return {}
-    end
-end
-
-local function add_cifp_point_HM(apt_ref, x)
-    local point = read_fix_id(x.leg_name, x.leg_name_region_code, apt_ref)
+    local ctr_point = read_fix_id(x.center_fix,x.center_fix_region_code, apt_ref)
     if point then
         -- Save also on the cifp for later usage
         x.lat = point.lat
         x.lon = point.lon
-        return {point}
     else
-        return {}
+        sasl.logWarning("[decorate_cifp_point_fix_ctr]", "Point " .. x.leg_name .. " (" .. x.leg_name_region_code .. ") not found in the database.")
     end
-end
-
-local function add_cifp_point_DF(apt_ref, x)
-    local point = read_fix_id(x.leg_name, x.leg_name_region_code, apt_ref)
-    if point then
+    if ctr_point then
         -- Save also on the cifp for later usage
-        x.lat = point.lat
-        x.lon = point.lon
-        return {point}
+        x.ctr_lat = ctr_point.lat
+        x.ctr_lon = ctr_point.lon
     else
-        return {}
+        sasl.logWarning("[decorate_cifp_point_fix_ctr]", "Point CTR " .. x.recomm_navaid .. " (".. x.recomm_navaid_region_code ..") not found in the database.")
     end
 end
 
-local function add_cifp_point_VR_CR(apt_ref, x)
+local function decorate_cifp_point_rn(apt_ref, x)
     local point = read_fix_id(x.recomm_navaid, x.recomm_navaid_region_code, apt_ref)
     if point then
         -- Save also on the cifp for later usage
         x.recomm_navaid_lat = point.lat
         x.recomm_navaid_lon = point.lon
-    end
-    return {}
-end
-
-local function add_cifp_point_FM(apt_ref, x)
-    local point = read_fix_id(x.leg_name, x.leg_name_region_code, apt_ref)
-    if point then
-        -- Save also on the cifp for later usage
-        x.lat = point.lat
-        x.lon = point.lon
-        return {point}
     else
-        return {}
+        sasl.logWarning("[decorate_cifp_point_rn]", "Point " .. x.recomm_navaid .. " (" .. x.recomm_navaid_region_code .. ") not found in the database.")
     end
 end
 
-local function add_cifp_point_holds(apt_ref, x)
-    local point = read_fix_id(x.leg_name, x.leg_name_region_code, apt_ref)
-    if point then
-        -- Save also on the cifp for later usage
-        x.lat = point.lat
-        x.lon = point.lon
-        return {point}
-    else
-        return {}
-    end
-end
 
-function add_cifp_point(apt_ref, prev_point, x)
-    -- WARNING: prev_point may be nil
+function decorate_cifp_point(apt_ref, x)    -- Load LAT/LON of all the entities of the CIFP
     assert(apt_ref)
     assert(x)
-    if x.leg_type == CIFP_LEG_TYPE_IF or x.leg_type == CIFP_LEG_TYPE_TF or x.leg_type == CIFP_LEG_TYPE_DF then
-        return add_cifp_point_IF_TF(apt_ref, x)
-    elseif x.leg_type == CIFP_LEG_TYPE_CF then
-        return add_cifp_point_CF(apt_ref, prev_point, x)
-    elseif x.leg_type == CIFP_LEG_TYPE_FA then
-        return add_cifp_point_FA(apt_ref, x)
-    elseif x.leg_type == CIFP_LEG_TYPE_RF then
-        return add_cifp_point_RF(apt_ref, x)
-    elseif x.leg_type == CIFP_LEG_TYPE_HM then
-        return add_cifp_point_HM(apt_ref, x)
-    elseif x.leg_type == CIFP_LEG_TYPE_DF then
-        return add_cifp_point_DF(apt_ref, x)
-    elseif x.leg_type == CIFP_LEG_TYPE_VR or x.leg_type == CIFP_LEG_TYPE_CR then
-        return add_cifp_point_VR_CR(apt_ref, x)
-    elseif x.leg_type == CIFP_LEG_TYPE_FM then
-        return add_cifp_point_FM(apt_ref, x)
-    elseif x.leg_type == CIFP_LEG_TYPE_HA or x.leg_type == CIFP_LEG_TYPE_HF or x.leg_type == CIFP_LEG_TYPE_HM then
-        return add_cifp_point_holds(apt_ref, x)
+    if x.leg_type == CIFP_LEG_TYPE_IF or
+       x.leg_type == CIFP_LEG_TYPE_TF or
+       x.leg_type == CIFP_LEG_TYPE_CF or
+       x.leg_type == CIFP_LEG_TYPE_DF or
+       x.leg_type == CIFP_LEG_TYPE_FA or
+       x.leg_type == CIFP_LEG_TYPE_FC or 
+       x.leg_type == CIFP_LEG_TYPE_FM or
+       x.leg_type == CIFP_LEG_TYPE_HA or
+       x.leg_type == CIFP_LEG_TYPE_HF or
+       x.leg_type == CIFP_LEG_TYPE_HM or
+       x.leg_type == CIFP_LEG_TYPE_PI
+    then
+        decorate_cifp_point_fix(apt_ref, x)
+    elseif x.leg_type == CIFP_LEG_TYPE_FD or
+           x.leg_type == CIFP_LEG_TYPE_AF
+    then
+        decorate_cifp_point_fix_rn(apt_ref, x)
+    elseif x.leg_type == CIFP_LEG_TYPE_RF
+    then
+        decorate_cifp_point_fix_ctr(apt_ref, x)
+    elseif x.leg_type == CIFP_LEG_TYPE_VR or
+           x.leg_type == CIFP_LEG_TYPE_VD or
+           x.leg_type == CIFP_LEG_TYPE_CR or
+           x.leg_type == CIFP_LEG_TYPE_CD
+    then
+        decorate_cifp_point_rn(apt_ref, x)
+    elseif x.leg_type == CIFP_LEG_TYPE_CA or
+           x.leg_type == CIFP_LEG_TYPE_CI or
+           x.leg_type == CIFP_LEG_TYPE_VA or
+           x.leg_type == CIFP_LEG_TYPE_VI or
+           x.leg_type == CIFP_LEG_TYPE_VM
+    then
+        -- Nothing to do for these legs
+    else
+        assert(false, "Unknown CIFP leg type, this shouldn't occur.")
     end
-    return {}
+
 end

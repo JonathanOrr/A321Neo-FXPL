@@ -80,15 +80,18 @@ local function update_cifp(apt_ref, reference, initial_point)
     local prev_point = initial_point
 
     for i,leg in ipairs(reference.legs) do
-        local leg_points = add_cifp_point(apt_ref, prev_point,leg)    -- Get the points for the single legs
+        decorate_cifp_point(apt_ref, leg)   -- Add lat/lon from database where necessary
+
+        -- TODO: This is the very approximate version (lower than real)
+        -- replace when path drawing is available
+
         local distance = 0
-        
-        for _,x in ipairs(leg_points) do
+        if leg.lat and leg.lon then
             if prev_point then
-                distance = distance + GC_distance_kt(prev_point.lat, prev_point.lon, x.lat, x.lon)
+                distance = GC_distance_kt(prev_point.lat, prev_point.lon, leg.lat, leg.lon)
             end
-            prev_point = GeoPoint:create({ lat = x.lat, lon = x.lon})
-            table.insert(reference.computed_legs, x)
+            prev_point = GeoPoint:create({ lat = leg.lat, lon = leg.lon})
+            table.insert(reference.computed_legs, leg)
         end
 
         leg.computed_distance = distance
