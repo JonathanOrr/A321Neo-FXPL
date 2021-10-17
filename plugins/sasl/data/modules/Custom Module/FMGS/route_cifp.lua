@@ -32,7 +32,7 @@ local function read_fix_id(fix_id, target_region_code, airport)  -- Convert the 
         for i,rwy in ipairs(airport.rwys) do
             if rwy.name == fix_id:sub(3) then
                 return {lat=rwy.lat, lon=rwy.lon}
-            elseif rwy.s_name == fix_id:sub(3) then
+            elseif rwy.sibl_name == fix_id:sub(3) then
                 return {lat=rwy.s_lat, lon=rwy.s_lon}
             else
                 return nil
@@ -42,7 +42,8 @@ local function read_fix_id(fix_id, target_region_code, airport)  -- Convert the 
     -- AIRPORT
     elseif #fix_id == 4 then
         fixes_1 = AvionicsBay.apts.get_by_name(fix_id, false)
-    
+        fixes_2 = AvionicsBay.fixes.get_by_name(fix_id, false)
+
     -- Waypoint
     elseif #fix_id == 5 then
         fixes_1 = AvionicsBay.fixes.get_by_name(fix_id, false)
