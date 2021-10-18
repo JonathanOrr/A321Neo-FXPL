@@ -81,9 +81,9 @@ end
 local function draw_engine_type()
     local _=get(Engine_option)
     if _== 1 then
-        sasl.gl.drawTexture ( EFB_CONFIG_engine_LEAP, 0 , 0 , 1143 , 800 , ECAM_WHITE )
+        sasl.gl.drawTexture ( EFB_CONFIG_engine_LEAP, 652 , 455 , 299 , 171 , ECAM_WHITE )
     elseif _==2 then
-        sasl.gl.drawTexture ( EFB_CONFIG_engine_PW, 0 , 0 , 1143 , 800 , ECAM_WHITE )
+        sasl.gl.drawTexture ( EFB_CONFIG_engine_PW, 655 , 451 , 280,178, ECAM_WHITE )
     end
 end
 

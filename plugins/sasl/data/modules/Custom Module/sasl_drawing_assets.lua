@@ -174,8 +174,8 @@ EFB_CONFIG_hud =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/texture
 EFB_CONFIG_dropdown1 =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/CONFIG page/dropdown1.png")
 EFB_CONFIG_align_button =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/CONFIG page/align_button.png")
 
-EFB_CONFIG_engine_LEAP =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/CONFIG page/PW_icon.png")
-EFB_CONFIG_engine_PW =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/CONFIG page/LEAP_icon.png")
+EFB_CONFIG_engine_PW =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/CONFIG page/PW_icon.png")
+EFB_CONFIG_engine_LEAP =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/CONFIG page/LEAP_icon.png")
 
 EFB_CONFIG_s2_bgd =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/CONFIG page/subpage2/bgd.png")
 
