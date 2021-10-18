@@ -82,7 +82,7 @@ local function draw_SI_trapezoid(PFD_table)
     SASL_rotated_center_img_center_aligned(
         PFD_bank_angle_beta_angle,
         ATT_x_center,
-        ATT_y_center,
+        ATT_y_center-0.5,
         65,
         17,
         -adirs_get_roll(PFD_table.Screen_ID),
