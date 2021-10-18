@@ -1,3 +1,13 @@
+
+local STANDBY_SCREEN_COLOURS = {
+    {0.800, 0.600 ,1.000},
+    {0.663, 0.820 ,0.969},
+    {0.706, 0.941 ,0.655},
+    {1.000, 1.000 ,0.749},
+    {1.000, 0.694 ,0.694},
+}
+
+
 --mouse functions
 function Button_check_and_action(cursor_x, cursor_y, lower_x, lower_y, higher_x, higher_y, callback)
     if cursor_x >= lower_x and cursor_x <= higher_x and cursor_y >= lower_y and cursor_y <= higher_y then
@@ -72,14 +82,6 @@ function istable(t)
     return type(t) == 'table'
  end
 
-local STANDBY_SCREEN_COLOURS = {
-    {0.800, 0.600 ,1.000},
-    {0.663, 0.820 ,0.969},
-    {0.706, 0.941 ,0.655},
-    {1.000, 1.000 ,0.749},
-    {1.000, 0.694 ,0.694},
-}
-
 function draw_standby_screen(onscreen_message)
     sasl.gl.drawRectangle ( 0 , 0 , 1143, 710, EFB_BACKGROUND_COLOUR)
 
@@ -95,4 +97,12 @@ function draw_standby_screen(onscreen_message)
 
     drawTextCentered(Font_Airbus_panel,  50, 105, "PLEASE WAIT", 25, false, false, TEXT_ALIGN_LEFT, EFB_LIGHTGREY)
     drawTextCentered(Font_Airbus_panel,  50, 70, onscreen_message, 30, false, false, TEXT_ALIGN_LEFT, EFB_WHITE)
+end
+
+function within(what,min,max)
+    if what <= max and what >= min then 
+        return true 
+    else 
+        return false 
+    end
 end

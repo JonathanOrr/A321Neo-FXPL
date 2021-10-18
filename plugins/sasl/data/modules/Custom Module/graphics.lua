@@ -290,16 +290,16 @@ end
 
 local function anim_light_switches()
     -- OVH switches
-    Set_dataref_linear_anim_nostop(Cockpit_ann_ovhd_switch, ann_lt_pos, -1, 1, 10)
-    Set_dataref_linear_anim_nostop(Lights_emer_exit_lever, get(Lights_emer_exit), 0, 2, 10)
+    Set_dataref_linear_anim_nostop(Cockpit_ann_ovhd_switch, ann_lt_pos, -1, 1, TOGGLE_SWITCH_ANIMATION_SPEED)
+    Set_dataref_linear_anim_nostop(Lights_emer_exit_lever, get(Lights_emer_exit), 0, 2, TOGGLE_SWITCH_ANIMATION_SPEED)
 
     set(Cockpit_annnunciators_test, get(Cockpit_ann_ovhd_switch) > 0.5 and 1 or 0)
 
     -- Pedestal
-    Set_dataref_linear_anim_nostop(Engine_mode_knob_pos, get(Engine_mode_knob), -1, 1, 10)
+    Set_dataref_linear_anim_nostop(Engine_mode_knob_pos, get(Engine_mode_knob), -1, 1, TOGGLE_SWITCH_ANIMATION_SPEED)
 
-    Set_dataref_linear_anim_nostop(Lights_seatbelts_lever, signs_seat_belt, 0, 2, 10)
-    Set_dataref_linear_anim_nostop(Lights_noped_lever, signs_noped, 0, 2, 10)
+    Set_dataref_linear_anim_nostop(Lights_seatbelts_lever, signs_seat_belt, 0, 2, TOGGLE_SWITCH_ANIMATION_SPEED)
+    Set_dataref_linear_anim_nostop(Lights_noped_lever, signs_noped, 0, 2, TOGGLE_SWITCH_ANIMATION_SPEED)
 
 end
 

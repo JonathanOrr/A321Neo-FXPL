@@ -95,9 +95,9 @@ local function update_buttons()
 end
 
 local function update_knobs()
-    Set_dataref_linear_anim_nostop(ND_Capt_mode_knob, nd_data.config.mode-3, -2, 3, 20)
-    Set_dataref_linear_anim_nostop(ND_Capt_nav1_level, nd_data.config.nav_1_selector, -1, 1, 20)
-    Set_dataref_linear_anim_nostop(ND_Capt_nav2_level, nd_data.config.nav_2_selector, -1, 1, 20)
+    Set_dataref_linear_anim_nostop(ND_Capt_mode_knob, nd_data.config.mode-3, -2, 3, ROTARY_SWITCH_ANIMATION_SPEED)
+    Set_dataref_linear_anim_nostop(ND_Capt_nav1_level, nd_data.config.nav_1_selector, -1, 1, TOGGLE_SWITCH_ANIMATION_SPEED)
+    Set_dataref_linear_anim_nostop(ND_Capt_nav2_level, nd_data.config.nav_2_selector, -1, 1, TOGGLE_SWITCH_ANIMATION_SPEED)
     
     nd_data.terrain.brightness = get(ND_Capt_picture_brightness)
 end
