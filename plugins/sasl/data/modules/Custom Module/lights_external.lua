@@ -109,9 +109,9 @@ local function update_switch_position()
 
     for i,x in ipairs(three_positions_switches) do
         if x.cmd_up then
-            set(x.dr_pos, Set_linear_anim_value_nostop(get(x.dr_pos), get(x.dr_status), 0, 2, 10))
+            set(x.dr_pos, Set_linear_anim_value_nostop(get(x.dr_pos), get(x.dr_status), 0, 2, TOGGLE_SWITCH_ANIMATION_SPEED))
         else
-            set(x.dr_pos, Set_linear_anim_value_nostop(get(x.dr_pos), get(x.dr_status), 0, 1, 10))
+            set(x.dr_pos, Set_linear_anim_value_nostop(get(x.dr_pos), get(x.dr_status), 0, 1, TOGGLE_SWITCH_ANIMATION_SPEED))
         end
     end
 end
