@@ -278,13 +278,13 @@ local function update_steering()
     
     local pedals_pos = get(Yaw)
     
-    --    if false then
-    --        if EFB.pref_get_nws() == 0 then
-    --            pedals_pos = get(Capt_Roll)
-    --        elseif EFB.pref_get_nws() == 2 then
-    --            pedals_pos = get(Joystick_tiller)
-    --        end
-    --    end
+    if EFB then
+        if EFB.pref_get_nws() == 0 then
+            pedals_pos = get(Capt_Roll)
+        elseif EFB.pref_get_nws() == 2 then
+            pedals_pos = get(Joystick_tiller)
+        end
+    end
     -- Update graphical positions for the rudder pedals
     pedals_pos = Math_clamp((get(Rudder_trim_target_angle)/30) + pedals_pos, -1, 1)
     set(Rudder_pedal_pos, pedals_pos)
