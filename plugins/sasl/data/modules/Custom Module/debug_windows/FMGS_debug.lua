@@ -56,8 +56,8 @@ local function mouse_handler(x,y)
                 local_result = "WAIT"
                 load_result_color = ECAM_ORANGE
                 FMGS_set_apt_dep("LIML")
-                FMGS_set_apt_arr("LIMC")
-                FMGS_set_apt_alt("VABB")
+                FMGS_set_apt_arr("LIML")
+                FMGS_set_apt_alt("LIMC")
                 FMGS_create_temp_fpln()
                 FMGS_dep_set_rwy(FMGS_sys.fpln.temp.apts.dep.rwys[1], true)
             else
