@@ -17,6 +17,7 @@
 -------------------------------------------------------------------------------
 
 include("FMGS/functions.lua")
+include("debug_windows/FMGS_debug_vertical_profile.lua")
 
 size = {1000, 600}
 
@@ -27,6 +28,17 @@ local load_result_color = ECAM_GREEN
 
 local BTN_WIDTH  = 150
 local BTN_HEIGHT = 39
+
+-- vertical profile page
+local trip_distance = 500
+vprof_view_start = 0 -- ratio, 0-1 from start to end of leg
+vprof_view_end = 1
+local starting_px = 0
+local width_px = 0
+local hook_mouse = 0 -- 0 = nothing, 1 = start, 2 = end
+local MOUSE_X = 0
+local MOUSE_Y = 0
+
 
 local function draw_main_menu()
 
@@ -39,15 +51,38 @@ local function draw_main_menu()
     sasl.gl.drawFrame (30+BTN_WIDTH*2, size[2]-40, BTN_WIDTH, BTN_HEIGHT, curr_page == 3 and UI_LIGHT_BLUE or UI_WHITE)
     sasl.gl.drawText(Font_B612MONO_regular, 30+(5/2*BTN_WIDTH), size[2]-27, "Performance", 16, false, false, TEXT_ALIGN_CENTER,UI_WHITE)
 
+    sasl.gl.drawFrame (40+BTN_WIDTH*3, size[2]-40, BTN_WIDTH, BTN_HEIGHT, curr_page == 4 and UI_LIGHT_BLUE or UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 40+(7/2*BTN_WIDTH), size[2]-27, "Vert. Profile", 16, false, false, TEXT_ALIGN_CENTER,UI_WHITE)
+
 end
 
-local function mouse_handler(x,y)
+local function mouse_hold(x,y)
+    MOUSE_X = x
+    MOUSE_Y = y
+    if curr_page == 4 then
+        if x >= starting_px - 10 and x <= starting_px + 10 and y >= 440 and y <= 470 then
+            hook_mouse = 1
+        elseif x >= starting_px + width_px - 10 and x <= starting_px + width_px + 10 and y >= 440 and y <= 470 then
+            hook_mouse = 2
+        end
+    end
+end
+
+local function mouse_up(x,y)
+    if curr_page == 4 then
+        hook_mouse = 0
+    end
+end
+
+local function mouse_down(x,y)
     if x >=10 and x<=10+BTN_WIDTH and y >= size[2]-40 then
         curr_page = 1
     elseif x >=20+BTN_WIDTH and x<=20+BTN_WIDTH*2 and y >= size[2]-40 then
         curr_page = 2
     elseif x >=30+BTN_WIDTH*2 and x<=30+BTN_WIDTH*3 and y >= size[2]-40 then
         curr_page = 3
+    elseif x >=40+BTN_WIDTH*3 and x<=40+BTN_WIDTH*4 and y >= size[2]-40 then
+        curr_page = 4
     end
 
     if curr_page == 1 then
@@ -436,6 +471,30 @@ local function draw_leg_details()
 
 end
 
+local function draw_vprof_background()
+    sasl.gl.drawFrame (50, 440, 850, 30, UI_BRIGHT_GREY)
+    for i=1, 5 do
+        incr = (i-1) * 80
+        sasl.gl.drawWideLine (50,60 + incr,900,60 + incr, 1, UI_BRIGHT_GREY)
+        sasl.gl.drawText(Font_B612MONO_regular, 910, 50 + incr + 3, (i-1)*10000, 16, false, false, TEXT_ALIGN_LEFT,UI_BRIGHT_GREY)
+    end
+
+    starting_px = Math_rescale_no_lim(0, 50, 1, 900, vprof_view_start)
+    starting_px = math.min(870, starting_px)
+    width_px = Math_rescale_no_lim(0, 50, 1, 900, vprof_view_end) - starting_px
+    width_px = math.max(30, width_px)
+    sasl.gl.drawFrame (starting_px, 440, width_px, 30, UI_WHITE)
+end
+
+local function update_vprof_background()
+    if hook_mouse == 1 then
+        vprof_view_start =  Math_clamp(Math_rescale_no_lim(50, 0, 900, 1, MOUSE_X), 0, 1)
+    elseif hook_mouse == 2 then
+        vprof_view_end = Math_clamp(Math_rescale_no_lim(50, 0, 900, 1, MOUSE_X),0,1)
+    end
+end
+
+
 function draw()
 
     draw_main_menu()
@@ -448,13 +507,25 @@ function draw()
     elseif curr_page == 2 then
         draw_page_fpln()
         draw_leg_details()
+    elseif curr_page == 4 then
+        draw_vprof_background()
+        draw_vprof_actual()
     end
 
 end
 
-function onMouseDown (component , x , y , button , parentX , parentY)
-    mouse_handler(x,y)
+function onMouseHold( component,  x,  y,  button,  parentX,  parentY)
+    mouse_hold(x,y)
+    return 0
+end
 
+function onMouseDown (component , x , y , button , parentX , parentY)
+    mouse_down(x,y)
+    return 0
+end
+
+function onMouseUp( component,  x,  y, button,  parentX,  parentY)
+    mouse_up(x,y)
     return 0
 end
 
@@ -469,4 +540,6 @@ function update()
             load_result = "OK"
         end
     end
+    update_vprof_background()
+    update_vprof_actual()
 end
