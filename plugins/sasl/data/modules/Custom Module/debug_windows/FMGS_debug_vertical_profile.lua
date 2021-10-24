@@ -9,6 +9,9 @@ local arr_alt = 0
 local transition_distance = 10
 local acceleration_distance = 6
 local decelleration_distance = 10
+local climb_profile = {}
+local constrains = {}
+local legs_list = table.load(moduleDirectory .. "/Custom Module/debug_windows/FMGS Example Data/final_list.lua")
 
 local climb_gradient = {
     ["empty"] = {
@@ -41,8 +44,8 @@ local climb_gradient = {
     }
 }
 
-local legs_list = table.load(moduleDirectory .. "/Custom Module/debug_windows/FMGS Example Data/final_list.lua")
-local climb_profile = {}
+
+
 
 local function dist_to_px(dist)
     local point_relative_ratio = Math_rescale_no_lim(0,0,trip_dist,1,dist)
@@ -86,62 +89,56 @@ local function request_climb_distance(aircraft_mass, start_alt, end_alt)
     return distance
 end
 
-    -------------------------------------------- Actual Profile Computing
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 local function compute_ideal_profile()
+
+    climb_profile = {} -- climb profile table in format {cumulative_distance_from_start, altitude} e.g. {2,1000},{4,2000},{5,3000}, etc
+    constrains = {} -- constrains table in format {cumulative_distance_from_start, altitude, type}
+    local climb_distance = 0
+
+
     trip_dist = 0
-    for i=1, #legs_list do
-        trip_dist = trip_dist + get_distance_nm(legs_list[i]["start_lat"],legs_list[i]["start_lon"],legs_list[i]["end_lat"],legs_list[i]["end_lon"])
+    for i=1, #legs_list do -- trip distance (full length of flight including GA) is updated
+        trip_dist = trip_dist + get_distance_nm(legs_list[i]["start_lat"],legs_list[i]["start_lon"],legs_list[i]["end_lat"],legs_list[i]["end_lon"]) -- update trip distance
+
+        local cstr = legs_list[i]["orig_ref"]["cstr_altitude1"] -- generate constrains table
+        local cstr_in_fl = legs_list[i]["orig_ref"]["cstr_altitude1_fl"]
+        local cstr_type = legs_list[i]["orig_ref"]["cstr_alt_type"]
+        if cstr and cstr_type ~= 0 then
+            table.insert(constrains, {trip_dist, cstr_in_fl and cstr*100 or cstr, cstr_type})
+        end
     end
 
-    climb_profile = {}
-    local cumulative_dist = 0
     -- departure phase
     for i = math.floor(dep_alt/1000), crz_alt/1000 do --so every 1000ft we recompute the gradient,
-        cumulative_dist = cumulative_dist + request_climb_distance(88000, i*1000, (i+1)*1000)
+        climb_distance = climb_distance + request_climb_distance(88000, i*1000, (i+1)*1000) -- update the climb distance after every waypoint
 
         if (i-1)*1000 > accel_alt - 1000 and (i-1)*1000 <= accel_alt then -- the transition height is less than 1000 ft apart
-            print(i)
-            cumulative_dist = cumulative_dist + acceleration_distance -- the altitude rised is still 1000ft, assuming it uses 1000ft to accelerate (it doesn;t level off). However, the distance travelled is increased.
+            climb_distance = climb_distance + acceleration_distance -- the altitude rised is still 1000ft, assuming it uses 1000ft to accelerate (it doesn;t level off). However, the distance travelled is increased.
         end
 
         if (i-1)*1000 > climb_trans_alt - 1000 and (i-1)*1000 <= climb_trans_alt then -- the transition height is less than 1000 ft apart
-            print(i)
-            cumulative_dist = cumulative_dist + transition_distance -- the altitude rised is still 1000ft, assuming it uses 1000ft to accelerate (it doesn;t level off). However, the distance travelled is increased.
+            climb_distance = climb_distance + transition_distance -- the altitude rised is still 1000ft, assuming it uses 1000ft to accelerate (it doesn;t level off). However, the distance travelled is increased.
         end
-        table.insert(climb_profile, {cumulative_dist, i*1000})
+        table.insert(climb_profile, {climb_distance, i*1000})
     end
 
 end
 
 local function draw_ideal_profile()
-    local cumulative_dist = 0
+    local distance_from_start = 0
     for i=1, #legs_list do
+        -- for every item in this loop it is 1 waypoint being drawn
+        distance_from_start = distance_from_start + get_distance_nm(legs_list[i]["start_lat"],legs_list[i]["start_lon"],legs_list[i]["end_lat"],legs_list[i]["end_lon"]) --update distance from start
+
         -- draw the waypoint
-        cumulative_dist = cumulative_dist + get_distance_nm(legs_list[i]["start_lat"],legs_list[i]["start_lon"],legs_list[i]["end_lat"],legs_list[i]["end_lon"])
-        draw_wpt(cumulative_dist, Table_extrapolate(climb_profile, cumulative_dist), legs_list[i]["leg_name"])
+        draw_wpt(distance_from_start, Table_extrapolate(climb_profile, distance_from_start), legs_list[i]["leg_name"])
+    end
 
-                -- draw the constrains
-        local cstr = legs_list[i]["orig_ref"]["cstr_altitude1"]
-        local cstr_in_fl = legs_list[i]["orig_ref"]["cstr_altitude1_fl"]
-        local cstr_type = legs_list[i]["orig_ref"]["cstr_alt_type"]
-        local expected_alt = Table_extrapolate(climb_profile, cumulative_dist)
-        if cstr and cstr_type ~= 0 then
-            local missed = false
-            if cstr_type == CIFP_CSTR_ALT_ABOVE and expected_alt < cstr - 100 then
-                missed = true
-            elseif cstr_type == CIFP_CSTR_ALT_BELOW and expected_alt > cstr + 100 then
-                missed = true
-            elseif cstr_type == CIFP_CSTR_ALT_AT and math.abs(expected_alt - cstr) >100 then
-                missed = true
-            end
-
-            if cstr_in_fl then
-                draw_constrain(cumulative_dist, cstr*1000, cstr_type, missed)
-            else
-                draw_constrain(cumulative_dist, cstr, cstr_type, missed)
-            end
-        end
+    for i=1, #constrains do
+        draw_constrain(constrains[i][1], constrains[i][2], constrains[i][3], false)
     end
 
     for i=1, #climb_profile -1 do
