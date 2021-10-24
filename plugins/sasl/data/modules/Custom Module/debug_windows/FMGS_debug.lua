@@ -21,7 +21,7 @@ include("debug_windows/FMGS_debug_vertical_profile.lua")
 
 size = {1000, 600}
 
-local curr_page = 1
+local curr_page = 4
 local curr_detail = nil
 local load_result = ""
 local load_result_color = ECAM_GREEN
