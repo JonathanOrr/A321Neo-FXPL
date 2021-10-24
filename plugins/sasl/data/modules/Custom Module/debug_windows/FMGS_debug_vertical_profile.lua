@@ -9,6 +9,7 @@ local arr_alt = 0
 local transition_distance = 10
 local acceleration_distance = 6
 local decelleration_distance = 10
+local aircraft_mass = 88000
 local climb_profile = {}
 local constrains = {}
 local legs_list = table.load(moduleDirectory .. "/Custom Module/debug_windows/FMGS Example Data/final_list.lua")
@@ -95,27 +96,27 @@ end
 local function compute_ideal_profile()
 
     climb_profile = {} -- climb profile table in format {cumulative_distance_from_start, altitude} e.g. {2,1000},{4,2000},{5,3000}, etc
-    constrains = {} -- constrains table in format {cumulative_distance_from_start, altitude, type}
+    constrains = {} -- constrains table in format {cumulative_distance_from_start, altitude, type, waypoint number}
     local climb_distance = 0
 
 
     trip_dist = 0
     for i=1, #legs_list do -- trip distance (full length of flight including GA) is updated
         trip_dist = trip_dist + get_distance_nm(legs_list[i]["start_lat"],legs_list[i]["start_lon"],legs_list[i]["end_lat"],legs_list[i]["end_lon"]) -- update trip distance
-
         local cstr = legs_list[i]["orig_ref"]["cstr_altitude1"] -- generate constrains table
         local cstr_in_fl = legs_list[i]["orig_ref"]["cstr_altitude1_fl"]
         local cstr_type = legs_list[i]["orig_ref"]["cstr_alt_type"]
         if cstr and cstr_type ~= 0 then
-            table.insert(constrains, {trip_dist, cstr_in_fl and cstr*100 or cstr, cstr_type})
+            table.insert(constrains, {trip_dist, cstr_in_fl and cstr*100 or cstr, cstr_type, i})
         end
     end
 
     -- departure phase
     for i = math.floor(dep_alt/1000), crz_alt/1000 do --so every 1000ft we recompute the gradient,
-        climb_distance = climb_distance + request_climb_distance(88000, i*1000, (i+1)*1000) -- update the climb distance after every waypoint
+        local curr_alt = i*1000
+        climb_distance = climb_distance + request_climb_distance(aircraft_mass, curr_alt, curr_alt+1000) -- update the climb distance after every waypoint, this number is cumulative from start
 
-        if (i-1)*1000 > accel_alt - 1000 and (i-1)*1000 <= accel_alt then -- the transition height is less than 1000 ft apart
+        if (i-1)*1000 > accel_alt - 1000 and (i-1)*1000 <= accel_alt then -- the acceleration height is less than 1000 ft apart
             climb_distance = climb_distance + acceleration_distance -- the altitude rised is still 1000ft, assuming it uses 1000ft to accelerate (it doesn;t level off). However, the distance travelled is increased.
         end
 
@@ -123,6 +124,15 @@ local function compute_ideal_profile()
             climb_distance = climb_distance + transition_distance -- the altitude rised is still 1000ft, assuming it uses 1000ft to accelerate (it doesn;t level off). However, the distance travelled is increased.
         end
         table.insert(climb_profile, {climb_distance, i*1000})
+
+        for j=1, #constrains do
+            local constrain_not_stupidly_far = constrains[j][1] - climb_distance < 50
+            local test_1000ft_later = climb_distance < constrains[j][1] and curr_alt > constrains[j][2] and ( constrains[j][3] == CIFP_CSTR_ALT_BELOW or constrains[j][3] == CIFP_CSTR_ALT_AT)
+            if test_1000ft_later and constrain_not_stupidly_far then
+                print("Constrain busted! ID "..constrains[j][4]..", Name "..legs_list[constrains[j][4]]["leg_name"]..", Constraining at "..constrains[j][2])
+            end
+        end
+
     end
 
 end
