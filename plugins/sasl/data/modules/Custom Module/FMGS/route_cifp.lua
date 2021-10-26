@@ -34,10 +34,9 @@ local function read_fix_id(fix_id, target_region_code, airport)  -- Convert the 
                 return {lat=rwy.lat, lon=rwy.lon}
             elseif rwy.sibl_name == fix_id:sub(3) then
                 return {lat=rwy.s_lat, lon=rwy.s_lon}
-            else
-                return nil
             end
         end
+        return nil
 
     -- AIRPORT
     elseif #fix_id == 4 then
@@ -53,7 +52,9 @@ local function read_fix_id(fix_id, target_region_code, airport)  -- Convert the 
 
     local check_correct= function(fixes)
         for _,x in ipairs(fixes) do
-            if x.region_code == target_region_code then
+            if x.region_code == target_region_code and 
+               ((not x.airport_id) or x.airport_id == "ENRT" or x.airport_id == airport.id)
+            then
                 found_x = x
                 break
             end

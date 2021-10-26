@@ -21,7 +21,6 @@ include('FMGS/nav_helpers.lua')
 include('FMGS/geometric_helpers.lua')
 include('FMGS/route_cifp.lua')
 include('libs/geo-helpers.lua')
-
 local ROUTE_FREQ_UPDATE_SEC = 0.5
 
 local route_last_update = 0
@@ -216,5 +215,7 @@ function update_route()
     else
         FMGS_sys.data.pred.trip_dist = nil -- This has no sense
     end
+
+
 end
 
