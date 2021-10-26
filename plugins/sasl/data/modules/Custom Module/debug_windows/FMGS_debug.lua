@@ -17,6 +17,8 @@
 -------------------------------------------------------------------------------
 
 include("FMGS/functions.lua")
+include("libs/table.save.lua")
+
 
 size = {1000, 600}
 
@@ -64,6 +66,10 @@ local function mouse_handler(x,y)
                 load_result = "AvionicsBay not ready"
                 load_result_color = ECAM_RED
             end
+        elseif x>=450+BTN_WIDTH+40 and y <= 80 and x<=600+BTN_WIDTH+40 and y >= 40 then
+            table.save(FMGS_sys.fpln.active, "exported_fpln.saved")
+            load_result = "OK"
+            load_result_color = ECAM_GREEN
         end
     elseif curr_page == 2 then
         if x>=90 and y <= 520 and x<=110 and y >= 500 then
@@ -161,8 +167,10 @@ local function draw_page_config()
     ----------------------
     sasl.gl.drawFrame (450, 40, BTN_WIDTH, BTN_HEIGHT, UI_LIGHT_BLUE)
     sasl.gl.drawText(Font_B612MONO_regular, 450+(BTN_WIDTH/2), 52, "Load Example Data", 12, false, false, TEXT_ALIGN_CENTER, UI_WHITE)
+    sasl.gl.drawFrame (450+BTN_WIDTH+20, 40, BTN_WIDTH, BTN_HEIGHT, UI_LIGHT_BLUE)
+    sasl.gl.drawText(Font_B612MONO_regular, 450+(BTN_WIDTH/2)+BTN_WIDTH+20, 52, "Export Data", 12, false, false, TEXT_ALIGN_CENTER, UI_WHITE)
 
-    sasl.gl.drawText(Font_B612MONO_regular, 620, 52, load_result, 12, false, false, TEXT_ALIGN_LEFT, load_result_color)
+    sasl.gl.drawText(Font_B612MONO_regular, 800, 52, load_result, 12, false, false, TEXT_ALIGN_LEFT, load_result_color)
 
 
 end
