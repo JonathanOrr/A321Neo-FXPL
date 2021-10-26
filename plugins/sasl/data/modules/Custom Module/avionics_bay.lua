@@ -28,9 +28,16 @@ local function convert_region_code(rc)
     else
         return "  "
     end
-
-
 end
+
+local function convert_airport_id(rc)
+    if rc[0] ~= 0 and rc[1] ~= 0 and rc[2] ~= 0 and rc[3] ~= 0 then
+        return ("").char(rc[0]) .. ("").char(rc[1]) .. ("").char(rc[2]) .. ("").char(rc[3])
+    else
+        return "  "
+    end
+end
+
 
 local function convert_bearing(type, bearing_raw)
     if type == NAV_ID_NDB then
@@ -96,7 +103,8 @@ local function convert_fixes_array(rawdata, fix_array)
                 id   = ffi.string(fix_array.fixes[i-1].id,  fix_array.fixes[i-1].id_len),
                 lat  = fix_array.fixes[i-1].coords.lat,
                 lon  = fix_array.fixes[i-1].coords.lon,
-                region_code = convert_region_code(fix_array.fixes[i-1].region_code)
+                region_code = convert_region_code(fix_array.fixes[i-1].region_code),
+                airport_id = convert_airport_id(fix_array.fixes[i-1].airport_id)
             })
         end
         return to_return

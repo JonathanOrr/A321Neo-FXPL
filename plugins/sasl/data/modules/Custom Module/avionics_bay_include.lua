@@ -33,6 +33,7 @@ return [[
         int id_len;
         xpdata_coords_t coords;
         char region_code[2];
+        char airport_id[4];
     } xpdata_fix_t;
     
     typedef struct xpdata_fix_array_t {
