@@ -6,6 +6,7 @@ local climb_trans_alt = 10000
 local crz_alt = 33000
 local dep_alt = 0
 local arr_alt = 0
+local current_alt = 0
 local transition_distance = 10
 local acceleration_distance = 6
 local decelleration_distance = 10
@@ -111,29 +112,85 @@ local function compute_ideal_profile()
         end
     end
 
-    -- departure phase
-    for i = math.floor(dep_alt/1000), crz_alt/1000 do --so every 1000ft we recompute the gradient,
-        local curr_alt = i*1000
-        climb_distance = climb_distance + request_climb_distance(aircraft_mass, curr_alt, curr_alt+1000) -- update the climb distance after every waypoint, this number is cumulative from start
-
-        if (i-1)*1000 > accel_alt - 1000 and (i-1)*1000 <= accel_alt then -- the acceleration height is less than 1000 ft apart
-            climb_distance = climb_distance + acceleration_distance -- the altitude rised is still 1000ft, assuming it uses 1000ft to accelerate (it doesn;t level off). However, the distance travelled is increased.
-        end
-
-        if (i-1)*1000 > climb_trans_alt - 1000 and (i-1)*1000 <= climb_trans_alt then -- the transition height is less than 1000 ft apart
-            climb_distance = climb_distance + transition_distance -- the altitude rised is still 1000ft, assuming it uses 1000ft to accelerate (it doesn;t level off). However, the distance travelled is increased.
-        end
-        table.insert(climb_profile, {climb_distance, i*1000})
+    local current_alt = 0
+    local cum_distance = 0
+    for i = 1, 99 do 
+        local walk_distance = 0
+        local constrain_limited = false
+        local constrain_distance = 0
+        local constrain_alt = 0 
+        local constrain_name = ""
 
         for j=1, #constrains do
-            local constrain_not_stupidly_far = constrains[j][1] - climb_distance < 50
-            local test_1000ft_later = climb_distance < constrains[j][1] and curr_alt > constrains[j][2] and ( constrains[j][3] == CIFP_CSTR_ALT_BELOW or constrains[j][3] == CIFP_CSTR_ALT_AT)
+            local constrain_not_stupidly_far = constrains[j][1] - cum_distance < 100
+            local test_1000ft_later = cum_distance < constrains[j][1] and current_alt + 1000 > constrains[j][2] and ( constrains[j][3] == CIFP_CSTR_ALT_BELOW or constrains[j][3] == CIFP_CSTR_ALT_AT)
             if test_1000ft_later and constrain_not_stupidly_far then
-                print("Constrain busted! ID "..constrains[j][4]..", Name "..legs_list[constrains[j][4]]["leg_name"]..", Constraining at "..constrains[j][2])
+                constrain_limited = true
+                constrain_distance = constrains[j][1]
+                constrain_alt = constrains[j][2]
+                constrain_name = legs_list[constrains[j][4]]["leg_name"]
             end
         end
 
-    end
+        if constrain_limited then
+            --print("Constrain busted! ID "..constrains[j][4]..", Name "..legs_list[constrains[j][4]]["leg_name"]..", Constraining at "..constrains[j][2])
+ 
+            walk_distance = request_climb_distance(aircraft_mass, current_alt, constrain_alt)
+
+            current_alt = constrain_alt
+            cum_distance = cum_distance + walk_distance
+            table.insert(climb_profile, {cum_distance, current_alt})
+
+            -- level off at that point until the constrain itself.
+            table.insert(climb_profile, {constrain_distance, current_alt})      
+            cum_distance = constrain_distance
+        else
+            local cruise_alt_in_vincity = current_alt + 1000 > crz_alt
+            local limiting = 0 -- 0 nothing, 1 accel, 2 climb, 3 crz
+
+            if current_alt + 1000 > crz_alt then
+                limiting = 3
+            elseif current_alt + 1000 > climb_trans_alt then
+                limiting = 2
+            elseif current_alt + 1000 > accel_alt then
+                limiting = 1
+            end
+            
+            if not cruise_alt_in_vincity then
+                walk_distance = request_climb_distance(aircraft_mass, current_alt, current_alt+1000)
+                current_alt = current_alt + 1000
+                cum_distance = cum_distance + walk_distance
+                table.insert(climb_profile, {cum_distance, math.min(current_alt, crz_alt)})
+            else
+                walk_distance = request_climb_distance(aircraft_mass, current_alt, crz_alt)
+                current_alt = crz_alt
+                cum_distance = cum_distance + walk_distance
+            end
+        end
+
+        if crz_alt == climb_profile[i][2] then
+            break
+        end
+    end  
+    -- departure phase
+--    for i = math.floor(dep_alt/1000), crz_alt/1000 do --so every 1000ft we recompute the gradient,
+--        local curr_alt = i*1000
+--        climb_distance = climb_distance + request_climb_distance(aircraft_mass, curr_alt, curr_alt+1000) -- update the climb distance after every waypoint, this number is cumulative from start    
+--        if (i-1)*1000 > accel_alt - 1000 and (i-1)*1000 <= accel_alt then -- the acceleration height is less than 1000 ft apart
+--            climb_distance = climb_distance + acceleration_distance -- the altitude rised is still 1000ft, assuming it uses 1000ft to accelerate (it doesn;t level off). However, the distance travelled is increased.
+--        end 
+--        if (i-1)*1000 > climb_trans_alt - 1000 and (i-1)*1000 <= climb_trans_alt then -- the transition height is less than 1000 ft apart
+--            climb_distance = climb_distance + transition_distance -- the altitude rised is still 1000ft, assuming it uses 1000ft to accelerate (it doesn;t level off). However, the distance travelled is increased.
+--        end
+--        table.insert(climb_profile, {climb_distance, i*1000})   
+--        for j=1, #constrains do
+--            local constrain_not_stupidly_far = constrains[j][1] - climb_distance < 50
+--            local test_1000ft_later = climb_distance < constrains[j][1] and curr_alt > constrains[j][2] and ( constrains[j][3] == CIFP_CSTR_ALT_BELOW or constrains[j][3] == CIFP_CSTR_ALT_AT)
+--            if test_1000ft_later and constrain_not_stupidly_far then
+--                print("Constrain busted! ID "..constrains[j][4]..", Name "..legs_list[constrains[j][4]]["leg_name"]..", Constraining at "..constrains[j][2])
+--            end
+--        end 
+--    end
 
 end
 
@@ -153,7 +210,9 @@ local function draw_ideal_profile()
 
     for i=1, #climb_profile -1 do
         sasl.gl.drawLine(dist_to_px(climb_profile[i][1]), alt_to_px(climb_profile[i][2]), dist_to_px(climb_profile[i+1][1]), alt_to_px(climb_profile[i+1][2]), UI_LIGHT_RED)
+        print(climb_profile[i][1], climb_profile[i][2])
     end
+
 end
 
     -------------------------------------------- Loops
