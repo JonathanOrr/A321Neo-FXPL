@@ -7,13 +7,12 @@ local crz_alt = 35000
 local dep_alt = 0
 local arr_alt = 0
 local current_alt = 0
-local transition_distance = 10
+local trnsition_distanc_climb = 10
 local transition_climb = 1000
 local acceleration_distance = 6
 local acceleration_climb = 1000
 
 local aircraft_mass = 88000
-local climb_profile = {}
 local constrains = {}
 local legs_list = table.load(moduleDirectory .. "/Custom Module/debug_windows/FMGS Example Data/final_list.lua")
 
@@ -48,6 +47,36 @@ local climb_gradient = {
     }
 }
 
+local descend_gradient = {
+    ["empty"] = {
+            {0, -3},
+            {1000,-3},
+            {2000,-3},
+            {5000,-3},
+            {8000,-3},
+            {10000,-3},
+            {14000,-3},
+            {17000,-3},
+            {21000,-3},
+            {25000,-3},
+            {30000,-3},
+            {40000,-3},
+        },
+    ["full"] = {
+        {0, 3},
+        {1000,-3},
+        {2000,-3},
+        {5000,-3},
+        {8000,-3},
+        {10000,-3},
+        {14000,-3},
+        {17000,-3},
+        {21000,-3},
+        {25000,-3},
+        {30000,-3},
+        {40000,-3},
+    }
+}
 
 
 
@@ -97,7 +126,7 @@ end
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-local function compute_ideal_profile()
+local function compute_climb_profile(current_alt, starting_distance)
 
     climb_profile = {} -- climb profile table in format {cumulative_distance_from_start, altitude} e.g. {2,1000},{4,2000},{5,3000}, etc
     constrains = {} -- constrains table in format {cumulative_distance_from_start, altitude, type, waypoint number}
@@ -115,8 +144,6 @@ local function compute_ideal_profile()
         end
     end
 
-    local current_alt = 0
-    local starting_distance = 0
     local acceleration_completed = false
     local transition_completed = false
 
@@ -180,8 +207,8 @@ local function compute_ideal_profile()
                 current_alt = climb_trans_alt
                 starting_distance = starting_distance + walk_distance         
                 table.insert(climb_profile, {starting_distance , current_alt})
-                table.insert(climb_profile, {starting_distance + transition_distance, current_alt + transition_climb})
-                starting_distance = starting_distance + transition_distance
+                table.insert(climb_profile, {starting_distance + trnsition_distanc_climb, current_alt + transition_climb})
+                starting_distance = starting_distance + trnsition_distanc_climb
                 transition_completed = true
             elseif limiting == 3 then
                 walk_distance = request_climb_distance(aircraft_mass, current_alt, crz_alt)
@@ -194,9 +221,19 @@ local function compute_ideal_profile()
         --    break
         --end
     end  
+    return climb_profile
 end
 
+local function compute_descend_profile()
+    local distance_to_dest = legs_list[24]["leg_name"]
+    print(distance_to_dest)
+end
+
+
 local function draw_ideal_profile()
+
+    local climb_profile = compute_climb_profile(0, 0)
+
     local distance_from_start = 0
     for i=1, #legs_list do
         -- for every item in this loop it is 1 waypoint being drawn
@@ -210,6 +247,8 @@ local function draw_ideal_profile()
         draw_constrain(constrains[i][1], constrains[i][2], constrains[i][3], false)
     end
 
+
+
     for i=1, #climb_profile -1 do
         sasl.gl.drawLine(dist_to_px(climb_profile[i][1]), alt_to_px(climb_profile[i][2]), dist_to_px(climb_profile[i+1][1]), alt_to_px(climb_profile[i+1][2]), UI_LIGHT_RED)
     end
@@ -219,7 +258,7 @@ end
     -------------------------------------------- Loops
     
 function update_vprof_actual()
-    compute_ideal_profile()
+    compute_descend_profile()
 end
 
 function draw_vprof_actual()
