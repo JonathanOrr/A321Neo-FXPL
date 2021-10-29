@@ -243,7 +243,7 @@ return [[
         bool approach_if       : 1;   // Intermediate Approach Fix
         bool approach_faf      : 1;   // Final Approach Fix
         bool holding_fix       : 1;   // Is an (approach) holding fix?
-    
+        bool first_missed_app  : 1;   // Is first leg of missed approach procedure
     
     } xpdata_cifp_leg_t;
     
