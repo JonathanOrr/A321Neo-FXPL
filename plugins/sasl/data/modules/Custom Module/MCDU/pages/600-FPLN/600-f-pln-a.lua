@@ -228,11 +228,11 @@ function THIS_PAGE:render_list(mcdu_data)
         end
     end
 
-
+    local arr_rwy_valid = mcdu_data.page_data[600].curr_fpln.apts.arr_rwy and mcdu_data.page_data[600].curr_fpln.apts.arr_rwy[1]
     self:print_simple_airport(mcdu_data,
                               mcdu_data.page_data[600].curr_fpln.apts.arr,
                               mcdu_data.page_data[600].curr_fpln.apts.arr,
-                              mcdu_data.page_data[600].curr_fpln.apts.arr_rwy and mcdu_data.page_data[600].curr_fpln.apts.arr_rwy[1].last_distance,
+                              arr_rwy_valid and mcdu_data.page_data[600].curr_fpln.apts.arr_rwy[1].last_distance,
                               FMGS_perf_get_pred_trip_time(),
                               ECAM_GREEN)
 

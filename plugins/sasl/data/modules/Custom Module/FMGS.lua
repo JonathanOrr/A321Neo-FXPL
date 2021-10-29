@@ -71,6 +71,7 @@ FMGS_sys.fpln = {
             arr_star = nil,
             arr_via = nil,
             arr_appr = nil,
+            arr_map  = nil, -- Missed approach procedure
             
             alt=nil,    -- As returned by AvionicsBay, runways included
             alt_cifp=nil,

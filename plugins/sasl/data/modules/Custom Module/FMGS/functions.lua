@@ -288,6 +288,7 @@ function FMGS_reset_dep_arr_airports()
     FMGS_sys.fpln.active.apts.arr_cifp = nil
     FMGS_sys.fpln.active.apts.arr_rwy = nil
     FMGS_sys.fpln.active.apts.arr_appr=nil
+    FMGS_sys.fpln.active.apts.arr_map=nil
     FMGS_sys.fpln.active.apts.arr_star=nil
     FMGS_sys.fpln.active.apts.arr_trans=nil
     FMGS_sys.fpln.active.apts.arr_via=nil
@@ -321,7 +322,26 @@ end
 
 function FMGS_arr_set_appr(appr, rwy, sibling)
     FMGS_sys.fpln.temp.apts.arr_rwy = {rwy, sibling}
-    FMGS_sys.fpln.temp.apts.arr_appr = itable_shallow_copy_legs(appr)
+    local new_cifp_table = itable_shallow_copy_legs(appr)
+
+    FMGS_sys.fpln.temp.apts.arr_appr = new_cifp_table
+    FMGS_sys.fpln.temp.apts.arr_map = new_cifp_table
+
+    FMGS_sys.fpln.temp.apts.arr_appr.legs = {}
+    FMGS_sys.fpln.temp.apts.arr_map.legs  = {}
+
+    -- We have to split the missing approach procedure
+    local in_miss_approach = false
+    for i,x in ipairs(appr.legs) do
+        if x.first_missed_app then
+            in_miss_approach = true
+        end
+        if not in_miss_approach then
+            table.insert(FMGS_sys.fpln.temp.apts.arr_appr.legs, x)
+        else
+            table.insert(FMGS_sys.fpln.temp.apts.arr_map.legs, x)
+        end
+    end
 end
 
 function FMGS_arr_get_appr(ret_temp_if_avail)
@@ -331,6 +351,16 @@ function FMGS_arr_get_appr(ret_temp_if_avail)
         return FMGS_sys.fpln.active.apts.arr_appr
     end
 end
+
+function FMGS_arr_get_map(ret_temp_if_avail)
+    if ret_temp_if_avail and FMGS_sys.fpln.temp then
+        return FMGS_sys.fpln.temp.apts.arr_map
+    else
+        return FMGS_sys.fpln.active.apts.arr_map
+    end
+end
+
+
 
 function FMGS_arr_get_star(ret_temp_if_avail)
     if ret_temp_if_avail and FMGS_sys.fpln.temp then

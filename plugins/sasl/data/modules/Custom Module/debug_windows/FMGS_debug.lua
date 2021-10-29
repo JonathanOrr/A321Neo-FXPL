@@ -24,6 +24,7 @@ size = {1000, 600}
 
 local curr_page = 1
 local curr_detail = nil
+local curr_detail_2 = nil
 local load_result = ""
 local load_result_color = ECAM_GREEN
 
@@ -102,28 +103,37 @@ local function mouse_down(x,y)
             end
         elseif x>=450+BTN_WIDTH+40 and y <= 80 and x<=600+BTN_WIDTH+40 and y >= 40 then
             table.save(FMGS_sys.fpln.active, "exported_fpln.saved")
-            load_result = "OK"
+            load_result = "EXPORTED"
             load_result_color = ECAM_GREEN
         end
     elseif curr_page == 2 then
         if x>=90 and y <= 520 and x<=110 and y >= 500 then
             curr_detail = FMGS_sys.fpln.active.apts.dep_rwy
+            curr_detail_2 = nil
         elseif x>=90 and y <= 470 and x<=110 and y >= 450 then
             curr_detail = FMGS_sys.fpln.active.apts.dep_sid
+            curr_detail_2 = nil
         elseif x>=90 and y <= 420 and x<=110 and y >= 400 then
             curr_detail = FMGS_sys.fpln.active.apts.dep_trans
+            curr_detail_2 = nil
         elseif x>=90 and y <= 360 and x<=110 and y >= 340 then
             curr_detail = FMGS_sys.fpln.active.legs
+            curr_detail_2 = nil
         elseif x>=90 and y <= 300 and x<=110 and y >= 280 then
             curr_detail = FMGS_sys.fpln.active.apts.arr_trans
+            curr_detail_2 = nil
         elseif x>=90 and y <= 250 and x<=110 and y >= 230 then
             curr_detail = FMGS_sys.fpln.active.apts.arr_star
+            curr_detail_2 = nil
         elseif x>=90 and y <= 200 and x<=110 and y >= 180 then
             curr_detail = FMGS_sys.fpln.active.apts.arr_via
+            curr_detail_2 = nil
         elseif x>=90 and y <= 150 and x<=110 and y >= 130 then
             curr_detail = FMGS_sys.fpln.active.apts.arr_appr
+            curr_detail_2 = FMGS_sys.fpln.active.apts.arr_map
         elseif x>=90 and y <= 100 and x<=110 and y >= 80 then
             curr_detail = FMGS_sys.fpln.active.apts.arr_rwy
+            curr_detail_2 = nil
         end
     end
 end
@@ -451,14 +461,14 @@ local function draw_leg_details()
 
     if curr_detail then
         if #curr_detail == 2 and type(curr_detail[2]) == "boolean" then
-        -- Runway
+            -- Runway
         elseif #curr_detail > 0 then
             local start_y = size[2]-110
             for i,x in ipairs(curr_detail) do
                 if x.discontinuity then
                     sasl.gl.drawText(Font_B612MONO_regular, 610, start_y, Aft_string_fill(""..i, " ", 2) .. ": -- DISCONTINUITY --", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
                 else
-                    sasl.gl.drawText(Font_B612MONO_regular, 610, start_y, Aft_string_fill(""..i, " ", 2) .. ": " .. Fwd_string_fill(x.id, " ", 7) .. Aft_string_fill(" "..(x.lat and x.lat or ""), " ", 12) .. " " .. Aft_string_fill(""..(x.lon and x.lon or ""), " ", 12), 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+                    sasl.gl.drawText(Font_B612MONO_regular, 610, start_y, Aft_string_fill(""..i, " ", 2) .. ": " .. Fwd_string_fill(x.id or "[UNKN]", " ", 7) .. Aft_string_fill(" "..(x.lat and x.lat or ""), " ", 12) .. " " .. Aft_string_fill(""..(x.lon and x.lon or ""), " ", 12), 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
                 end
                 start_y = start_y - 20
             end
@@ -469,9 +479,21 @@ local function draw_leg_details()
                     sasl.gl.drawText(Font_B612MONO_regular, 610, start_y, Aft_string_fill(""..i, " ", 2) .. ": -- DISCONTINUITY --", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
                 else
                     local type = debug_leg_names[x.leg_type]
-                    sasl.gl.drawText(Font_B612MONO_regular, 610, start_y, Aft_string_fill(""..i, " ", 2) .. ": " .. Fwd_string_fill(x.id, " ", 7) .. Aft_string_fill(" "..(x.lat and x.lat or ""), " ", 12) .. " " .. Aft_string_fill(""..(x.lon and x.lon or ""), " ", 12) .. "  " .. type, 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+                    sasl.gl.drawText(Font_B612MONO_regular, 610, start_y, Aft_string_fill(""..i, " ", 2) .. ": " .. Fwd_string_fill(x.id or "[UNKN]", " ", 7) .. Aft_string_fill(" "..(x.lat and x.lat or ""), " ", 12) .. " " .. Aft_string_fill(""..(x.lon and x.lon or ""), " ", 12) .. "  " .. type, 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
                 end
                 start_y = start_y - 20
+            end
+            start_y = start_y - 20
+            if curr_detail_2 then
+                for i,x in ipairs(curr_detail_2.legs) do
+                    if x.discontinuity then
+                        sasl.gl.drawText(Font_B612MONO_regular, 610, start_y, Aft_string_fill("MAP"..i, " ", 2) .. ": -- DISCONTINUITY --", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+                    else
+                        local type = debug_leg_names[x.leg_type]
+                        sasl.gl.drawText(Font_B612MONO_regular, 610, start_y, Aft_string_fill("MAP"..i, " ", 2) .. ": " .. Fwd_string_fill(x.id or "[UNKN]", " ", 7) .. Aft_string_fill(" "..(x.lat and x.lat or ""), " ", 12) .. " " .. Aft_string_fill(""..(x.lon and x.lon or ""), " ", 12) .. "  " .. type, 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+                    end
+                    start_y = start_y - 20
+                end
             end
         end
     end
@@ -544,7 +566,7 @@ function update()
             FMGS_reshape_fpln()
             FMGS_insert_temp_fpln()
             load_result_color = ECAM_GREEN
-            load_result = "OK"
+            load_result = "LOADED"
         end
     end
     update_vprof_background()
