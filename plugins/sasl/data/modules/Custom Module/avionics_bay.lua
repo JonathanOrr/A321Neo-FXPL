@@ -220,7 +220,8 @@ local function convert_cifp_array(rawdata, cifp_arr)
                 approach_iaf = l.approach_iaf,
                 approach_if  = l.approach_if,
                 approach_faf = l.approach_faf,
-                holding_fix  = l.holding_fix
+                holding_fix  = l.holding_fix,
+                first_missed_app = l.first_missed_app
             })
         end
         
@@ -322,6 +323,14 @@ local function expose_functions()
         return AvionicsBay.c.xpdata_is_ready()
     end
     
+    AvionicsBay.get_declination = function(lat, lon, year)
+        assert(type(lat)=="number", "lat must be a number")
+        assert(type(lon)=="number", "lon must be a number")
+        assert(type(year)=="number", "year must be a number")
+        return AvionicsBay.c.get_declination(lat, lon, year)
+    end
+    
+
     AvionicsBay.navaids = {}
     AvionicsBay.navaids.get_by_name = function(nav_type, name, rawdata)
         assert(initialized, "You must initialize avionicsbay before use")
