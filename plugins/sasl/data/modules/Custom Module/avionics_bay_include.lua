@@ -330,6 +330,8 @@ bool is_cifp_ready();
 bool xpdata_is_ready(void);
 
 double get_declination(double lat, double lon, unsigned short year);
+unsigned int get_navdata_year();
+unsigned int get_navdata_month();
 
 bool initialize(const char* xplane_path, const char* plane_path);
 const char* get_error(void);

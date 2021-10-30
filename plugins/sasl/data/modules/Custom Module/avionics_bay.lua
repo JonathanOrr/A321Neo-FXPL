@@ -330,6 +330,9 @@ local function expose_functions()
         return AvionicsBay.c.get_declination(lat, lon, year)
     end
     
+    AvionicsBay.get_data_cycle = function()
+        return AvionicsBay.c.get_navdata_month(), AvionicsBay.c.get_navdata_year()
+    end
 
     AvionicsBay.navaids = {}
     AvionicsBay.navaids.get_by_name = function(nav_type, name, rawdata)
