@@ -78,6 +78,7 @@ local function decorate_cifp_point_fix(apt_ref, x)
         -- Save also on the cifp for later usage
         x.lat = point.lat
         x.lon = point.lon
+        x.mag_decl = AvionicsBay.get_declination(x.lat, x.lon, 2020)    -- TODO Year of the CIFP
     else
         sasl.logWarning("[decorate_cifp_point_fix]", "Point " .. x.leg_name .. " not found in the database.")
     end

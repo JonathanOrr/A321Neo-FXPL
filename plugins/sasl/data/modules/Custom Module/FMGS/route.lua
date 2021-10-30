@@ -199,6 +199,8 @@ function update_route()
     total_distance = total_distance + dist
     dist, init_pt  = update_cifp(fpln.apts.arr, fpln.apts.arr_appr, init_pt)
     total_distance = total_distance + dist
+    dist, init_pt  = update_cifp(fpln.apts.arr, fpln.apts.arr_map, init_pt)
+
 
     if init_pt then
         local arr_rwy, sibl = FMGS_arr_get_rwy(FMGS_sys.fpln.temp and FMGS_sys.fpln.temp.require_recompute)

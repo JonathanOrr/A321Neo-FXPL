@@ -490,7 +490,7 @@ local function draw_leg_details()
                         sasl.gl.drawText(Font_B612MONO_regular, 610, start_y, Aft_string_fill("MAP"..i, " ", 2) .. ": -- DISCONTINUITY --", 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
                     else
                         local type = debug_leg_names[x.leg_type]
-                        sasl.gl.drawText(Font_B612MONO_regular, 610, start_y, Aft_string_fill("MAP"..i, " ", 2) .. ": " .. Fwd_string_fill(x.id or "[UNKN]", " ", 7) .. Aft_string_fill(" "..(x.lat and x.lat or ""), " ", 12) .. " " .. Aft_string_fill(""..(x.lon and x.lon or ""), " ", 12) .. "  " .. type, 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+                        sasl.gl.drawText(Font_B612MONO_regular, 610, start_y, Aft_string_fill("MAP"..i, " ", 2) .. ": " .. Fwd_string_fill(x.leg_name or "[UNKN]", " ", 7) .. Aft_string_fill(" "..(x.lat and x.lat or ""), " ", 12) .. " " .. Aft_string_fill(""..(x.lon and x.lon or ""), " ", 12) .. "  " .. type, 12, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
                     end
                     start_y = start_y - 20
                 end

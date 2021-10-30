@@ -322,10 +322,9 @@ end
 
 function FMGS_arr_set_appr(appr, rwy, sibling)
     FMGS_sys.fpln.temp.apts.arr_rwy = {rwy, sibling}
-    local new_cifp_table = itable_shallow_copy_legs(appr)
 
-    FMGS_sys.fpln.temp.apts.arr_appr = new_cifp_table
-    FMGS_sys.fpln.temp.apts.arr_map = new_cifp_table
+    FMGS_sys.fpln.temp.apts.arr_appr = itable_shallow_copy_legs(appr)
+    FMGS_sys.fpln.temp.apts.arr_map = itable_shallow_copy_legs(appr)
 
     FMGS_sys.fpln.temp.apts.arr_appr.legs = {}
     FMGS_sys.fpln.temp.apts.arr_map.legs  = {}
