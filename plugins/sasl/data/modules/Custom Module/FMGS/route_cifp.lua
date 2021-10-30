@@ -78,7 +78,8 @@ local function decorate_cifp_point_fix(apt_ref, x)
         -- Save also on the cifp for later usage
         x.lat = point.lat
         x.lon = point.lon
-        x.mag_decl = AvionicsBay.get_declination(x.lat, x.lon, 2020)    -- TODO Year of the CIFP
+        local _, year = AvionicsBay.get_data_cycle()
+        x.mag_decl = AvionicsBay.get_declination(x.lat, x.lon, year)
     else
         sasl.logWarning("[decorate_cifp_point_fix]", "Point " .. x.leg_name .. " not found in the database.")
     end
@@ -91,6 +92,8 @@ local function decorate_cifp_point_fix_rn(apt_ref, x)
         -- Save also on the cifp for later usage
         x.lat = point.lat
         x.lon = point.lon
+        local _, year = AvionicsBay.get_data_cycle()
+        x.mag_decl = AvionicsBay.get_declination(x.lat, x.lon, year)
     else
         sasl.logWarning("[decorate_cifp_point_fix_rn]", "Point " .. x.leg_name .. " (" .. x.leg_name_region_code .. ") not found in the database.")
     end
@@ -110,6 +113,8 @@ local function decorate_cifp_point_fix_ctr(apt_ref, x)
         -- Save also on the cifp for later usage
         x.lat = point.lat
         x.lon = point.lon
+        local _, year = AvionicsBay.get_data_cycle()
+        x.mag_decl = AvionicsBay.get_declination(x.lat, x.lon, year)
     else
         sasl.logWarning("[decorate_cifp_point_fix_ctr]", "Point " .. x.leg_name .. " (" .. x.leg_name_region_code .. ") not found in the database.")
     end
