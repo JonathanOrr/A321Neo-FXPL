@@ -92,8 +92,16 @@ function Show_hide_NAVAIDs_Debug()
   NAVAIDs_debug_window:setIsVisible(not NAVAIDs_debug_window:isVisible())
 end
 
+function Show_hide_Lnav_Debug()
+  Lnav_debug_window:setIsVisible(not Lnav_debug_window:isVisible())
+end
+
 function Show_hide_MAGIC_Debug()
   MAGIC_window:setIsVisible(not MAGIC_window:isVisible())
+end
+
+function Show_hide_Cinetracker()
+  Cinetracker_window:setIsVisible(not Cinetracker_window:isVisible())
 end
 
 
@@ -161,6 +169,10 @@ function Toggle_Ground_Air_Supply()
     end
 end
 
+function Reset_Abn_law()
+  set(Debug_FBW_ABN_LAW_RESET, 1)
+end
+
 -- create top level menu in plugins menu
 Menu_master	= sasl.appendMenuItem (PLUGINS_MENU_ID, "A321NEO" )
 -- add a submenu
@@ -171,12 +183,14 @@ ShowHideMCDU        = sasl.appendMenuItem(Menu_main, "Show/Hide MCDU", Show_hide
 ShowHideDCDU        = sasl.appendMenuItem(Menu_main, "Show/Hide DCDU Manager", Show_hide_DCDU)
 ShowHideFailures    = sasl.appendMenuItem(Menu_main, "Show/Hide Failures Manager", Show_hide_Failures)
 ShowHideFuel        = sasl.appendMenuItem(Menu_main, "Show/Hide Fuel Panel", Show_hide_Fuel)
+ShowHideCinetracker = sasl.appendMenuItem(Menu_main, "Show/Hide Cinetracker", Show_hide_Cinetracker)
 
 sasl.appendMenuSeparator(Menu_main)
 
 SaveView          = sasl.appendMenuItem(Menu_main, "Save view as default", Save_current_view_as_default)
 ADIRSAlign        = sasl.appendMenuItem(Menu_main, "Instantaneous align IRs", IRs_instaneous_align)
 ADIRSAlign        = sasl.appendMenuItem(Menu_main, "Toggle Ground Air Supply", Toggle_Ground_Air_Supply)
+ResetAbnLaw       = sasl.appendMenuItem(Menu_main, "Reset Abnormal Law", Reset_Abn_law)
 -- Maintenance submenu
 Maintenance_item  = sasl.appendMenuItem (Menu_main, "Maintenance")
 Maintenance_menu  = sasl.createMenu ("", Menu_main, Maintenance_item)
@@ -202,6 +216,7 @@ ShowHidePerfDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide PERF Debug", Show
 ShowHidePressDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide PRESS Debug", Show_hide_PRESS_debug)
 ShowHideWheelDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide WHEEL Debug", Show_hide_Wheel_Debug)
 --ShowHideVnavDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide VNAV Debug", Show_hide_vnav_debug)
+ShowHideLnavDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide LNAV Debug", Show_hide_Lnav_Debug)
 ShowHideGPWSDebug	= sasl.appendMenuItem(Menu_debug, "Show/Hide MAGIC Debug", Show_hide_MAGIC_Debug)
 
 

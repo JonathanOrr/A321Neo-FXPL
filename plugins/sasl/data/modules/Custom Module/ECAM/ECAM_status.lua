@@ -147,7 +147,6 @@ local function prepare_sts_page_left()
                 or get(Engine_1_avail) == 0 
                 or get(Engine_2_avail) == 0)
                 or get(FAILURE_FCTL_THS_MECH) == 1
-                or get(FAILURE_FCTL_THS) == 1
                 or (get(Hydraulic_Y_press) < 1450 and get(Hydraulic_G_press) < 1450)
                 or (get(Hydraulic_Y_press) < 1450 and get(Hydraulic_B_press) < 1450)
                 or (get(Hydraulic_B_press) < 1450 and get(Hydraulic_G_press) < 1450)

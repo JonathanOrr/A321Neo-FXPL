@@ -50,8 +50,8 @@ include("EFB/efb_topcat.lua")
 -- Constants
 -------------------------------------------------------------------------------
 local BUTTON_PRESS_TIME = 0.5
-local WEIGHT_PER_PASSENGER = 80 --kg
-local DRY_OPERATING_WEIGHT = 47777
+local WEIGHT_PER_PASSENGER = 88 --kg
+local DRY_OPERATING_WEIGHT = 46300
 local NUMBER_OF_SUBPAGES = 3
 
 -------------------------------------------------------------------------------
@@ -88,7 +88,7 @@ deparr_apts = {"", ""}
 -----------------------------------------------------------DO NOT TOUCH!!!!!!
 -------------------------------------------------------------------------------
 
-local slider_pos = {0,0.5,0,0,0,5000/40000}
+local slider_pos = {0,0.5,0,0,0,5000/FUEL_TOT_MAX}
 local slider_actual_values = {0,0.5,0,0,0,0}
 local focused_slider = 0
 local touched_sliders_after_loading = false
@@ -98,12 +98,12 @@ local touched_sliders_after_loading = false
 -------------------------------------------------------------------------------
 
 function backpropagate_current_weights_to_local_sliders()
-    slider_pos[1] = WEIGHTS.get_passengers_weight()/18800 -- pax
+    slider_pos[1] = WEIGHTS.get_passengers_weight()/WEIGHT_MAX_PASSENGERS -- pax
     slider_pos[2] = 0.5
-    slider_pos[3] = WEIGHTS.get_fwd_cargo_weight()/2400 -- front cargo
-    slider_pos[4] = WEIGHTS.get_aft_cargo_weight()/2400 -- aft cargo
-    slider_pos[5] = WEIGHTS.get_bulk_cargo_weight()/1500 -- bulk cargo
-    slider_pos[6] = get(FOB) / 40000
+    slider_pos[3] = WEIGHTS.get_fwd_cargo_weight()/WEIGHT_MAX_FWD_CARGO -- front cargo
+    slider_pos[4] = WEIGHTS.get_aft_cargo_weight()/WEIGHT_MAX_AFT_CARGO -- aft cargo
+    slider_pos[5] = WEIGHTS.get_bulk_cargo_weight()/WEIGHT_MAX_BULK_CARGO -- bulk cargo
+    slider_pos[6] = get(FOB) / FUEL_TOT_MAX
 end
 
 EFB.load_page_backpropagate_current_weights = backpropagate_current_weights_to_local_sliders
@@ -136,15 +136,15 @@ local function draw_each_component_UI() -- draw the lovely filling polygon anima
     local pax_height = 185
 
     local filled_ratio = {
-        math.min(get(Fuel_quantity[1])/8440 ,1) , -- left wing tank
-        math.min(get(Fuel_quantity[2])/8440 ,1) , -- right wing tank
-        math.min(get(Fuel_quantity[0])/8940 ,1) , -- center tank
-        math.min(get(Fuel_quantity[3])/4080 ,1) , -- act
-        math.min(get(Fuel_quantity[4])/10080,1) , -- rct
-      WEIGHTS.get_bulk_cargo_weight()/1500, -- bulk cargo
-      WEIGHTS.get_aft_cargo_weight()/2400, -- aft cargo
-      WEIGHTS.get_fwd_cargo_weight()/2400, -- front cargo
-      WEIGHTS.get_passengers_weight()/18800, -- pax
+        math.min(get(Fuel_quantity[1])/FUEL_LR_MAX ,1) , -- left wing tank
+        math.min(get(Fuel_quantity[2])/FUEL_LR_MAX ,1) , -- right wing tank
+        math.min(get(Fuel_quantity[0])/FUEL_C_MAX ,1) , -- center tank
+        math.min(get(Fuel_quantity[3])/FUEL_ACT_MAX ,1) , -- act
+        math.min(get(Fuel_quantity[4])/FUEL_RCT_MAX,1) , -- rct
+      WEIGHTS.get_bulk_cargo_weight()/WEIGHT_MAX_BULK_CARGO, -- bulk cargo
+      WEIGHTS.get_aft_cargo_weight()/WEIGHT_MAX_AFT_CARGO, -- aft cargo
+      WEIGHTS.get_fwd_cargo_weight()/WEIGHT_MAX_FWD_CARGO, -- front cargo
+      WEIGHTS.get_passengers_weight()/WEIGHT_MAX_PASSENGERS, -- pax
     }
 
     sasl.gl.drawConvexPolygon ({    left_wing_ll[1] 
@@ -191,7 +191,7 @@ end
 
 local function draw_slider_corresponding_values()
     local passenger_weight = Round(slider_actual_values[1],1)
-    local passenger_number = tostring(Round(slider_actual_values[1]/WEIGHT_PER_PASSENGER,0).." PPL")
+    local passenger_number = tostring(Round(slider_actual_values[1]/WEIGHT_PER_PASSENGER,0).." PAX")
     local fwd_cargo_weight = slider_actual_values[3]
     local aft_cargo_weight = slider_actual_values[4]
     local bulk_cargo_weight = slider_actual_values[5]
@@ -285,12 +285,12 @@ local function reset_slider_when_mouse_leave()
 end
 
 local function slider_to_weights_translator()
-    slider_actual_values[1] = Math_rescale(0, 0, 1, 18800, slider_pos[1])
+    slider_actual_values[1] = Math_rescale(0, 0, 1, WEIGHT_MAX_PASSENGERS, slider_pos[1])
     slider_actual_values[2] = slider_pos[2]
-    slider_actual_values[3] = Math_rescale(0, 0, 1, 2400, slider_pos[3])
-    slider_actual_values[4] = Math_rescale(0, 0, 1, 2400, slider_pos[4])
-    slider_actual_values[5] = Math_rescale(0, 0, 1, 1500, slider_pos[5])
-    slider_actual_values[6] = Math_rescale(0, 0, 1, 40000, slider_pos[6])
+    slider_actual_values[3] = Math_rescale(0, 0, 1, WEIGHT_MAX_FWD_CARGO, slider_pos[3])
+    slider_actual_values[4] = Math_rescale(0, 0, 1, WEIGHT_MAX_AFT_CARGO, slider_pos[4])
+    slider_actual_values[5] = Math_rescale(0, 0, 1, WEIGHT_MAX_BULK_CARGO, slider_pos[5])
+    slider_actual_values[6] = Math_rescale(0, 0, 1, FUEL_TOT_MAX, slider_pos[6])
     for i=1, 6 do
         if i == 1 then
             slider_actual_values[i] = math.floor(slider_actual_values[i])
@@ -300,16 +300,24 @@ local function slider_to_weights_translator()
             slider_actual_values[i] = Round(slider_actual_values[i],-2)
         end
     end
+
+    slider_actual_values[6] = slider_actual_values[6] >= 31085 and 31085 or slider_actual_values[6] 
+
+    -- Sooooooooooo
+    -- Rico made things very complicated lol
+    -- when I round the fuel value, FUEL_TOT_MAX = 31085 is rounded to 31000
+    -- Then his assert function in the set_fuel() denied me setting it as 31000, and the script crashes
+    -- this line is to prevent the maximum fuel after rounding to exceed 31085 no matter what
 end
 
 local function set_values()
     touched_sliders_after_loading = false
-    local CG_effect = (1-slider_actual_values[1]/18800)/2
-    WEIGHTS.set_passengers_weight(slider_actual_values[1] ,(slider_actual_values[2]-0.5) * CG_effect + 0.5)
+    local CG_effect = (1-slider_actual_values[1]/WEIGHT_MAX_PASSENGERS)/2
+    WEIGHTS.set_passengers_weight(Round(slider_actual_values[1]/WEIGHT_PER_PASSENGER,0)*WEIGHT_PER_PASSENGER ,(slider_actual_values[2]-0.5) * CG_effect + 0.5)
     WEIGHTS.set_fwd_cargo_weight(slider_actual_values[3])
     WEIGHTS.set_aft_cargo_weight(slider_actual_values[4])
     WEIGHTS.set_bulk_cargo_weight(slider_actual_values[5])
-    set_fuel(slider_actual_values[6] + 10 * (slider_actual_values[6]/40000) )
+    set_fuel(slider_actual_values[6])
     -- so long story short, there was an issue which set_fuel(40000) will only add 39990 kg of fuel
     --the issue is not in this script, it is rico's set fuel function.
     --therefore, for every 40000 kg of fuel, 10 kg has to be added.
@@ -424,8 +432,7 @@ end
 
 local function draw_avionics_bay_standby()
     if avionics_bay_is_initialising then
-        sasl.gl.drawRectangle ( 0 , 0 , 1143, 710, EFB_BACKGROUND_COLOUR)
-        drawTextCentered(Font_Airbus_panel,  572, 355, "INITIALISING AVIONICS BAY", 30, false, false, TEXT_ALIGN_CENTER, EFB_WHITE)
+        draw_standby_screen("INITIALISING AVIONICS BAY....")
     end
 end
 
@@ -532,11 +539,11 @@ end
 
 local function draw_dropdowns()
     if string.len(key_p3s1_buffer) > 0 then --THE PURPOSE OF THIS IFELSE IS TO PREVENT THE CURSOR FROM COVERING UP THE PREVIOUS VALUE, WHEN THE SCRATCHPAD IS EMPTY.
-        drawTextCentered( Font_Airbus_panel , 116 , 578, key_p3s1_focus == 7 and key_p3s1_buffer or deparr_apts[1] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
-        drawTextCentered( Font_Airbus_panel , 403 , 578, key_p3s1_focus == 8 and key_p3s1_buffer or deparr_apts[2] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
+        drawTextCentered( Font_ECAMfont , 116 , 578, key_p3s1_focus == 7 and key_p3s1_buffer or deparr_apts[1] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
+        drawTextCentered( Font_ECAMfont , 403 , 578, key_p3s1_focus == 8 and key_p3s1_buffer or deparr_apts[2] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
     else
-        drawTextCentered( Font_Airbus_panel , 116 , 578, deparr_apts[1] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
-        drawTextCentered( Font_Airbus_panel , 403 , 578, deparr_apts[2] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
+        drawTextCentered( Font_ECAMfont , 116 , 578, deparr_apts[1] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
+        drawTextCentered( Font_ECAMfont , 403 , 578, deparr_apts[2] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
     end
 
     draw_dropdown_menu(230, 578, 90, 28, EFB_DROPDOWN_OUTSIDE, EFB_DROPDOWN_INSIDE, dropdown_1, dropdown_expanded[1], dropdown_selected[1])
@@ -585,7 +592,7 @@ local function Subpage_1_buttons()
         slider_pos[3] = 0
         slider_pos[4] = 0
         slider_pos[5] = 0
-        slider_pos[6] = 5000/40000
+        slider_pos[6] = 5000/FUEL_TOT_MAX
         slider_to_weights_translator()
         set_values()
     end)

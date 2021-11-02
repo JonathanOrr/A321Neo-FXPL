@@ -17,7 +17,7 @@ FBW.vertical.dynamics = {
     end,
 
     MAX_CSTAR = function ()
-        local max_G = get(Flaps_internal_config) ~= 0 and 2 or 2.4565
+        local max_G = get(Flaps_internal_config) > 1 and 2 or 2.4565
 
         local rad_vpath = math.rad(get(Vpath))
         local rad_bank  = math.rad(adirs_get_avg_roll())
@@ -33,7 +33,7 @@ FBW.vertical.dynamics = {
     end,
 
     MIN_CSTAR = function ()
-        local min_G = get(Flaps_internal_config) ~= 0 and 0 or -1
+        local min_G = get(Flaps_internal_config) > 1 and 0 or -1
 
         local rad_vpath = math.rad(get(Vpath))
         local rad_bank  = math.rad(adirs_get_avg_roll())

@@ -124,6 +124,12 @@ function Math_approx_value(num, approx_range, approx_to)
     end
 end
 
+function Math_angle_diff(angle1, angle2)
+    local a = angle1 - angle2
+    a = (a + 180) % 360 - 180
+    return a
+end
+
 function BoolToNum(value)
     return value and 1 or 0
 end

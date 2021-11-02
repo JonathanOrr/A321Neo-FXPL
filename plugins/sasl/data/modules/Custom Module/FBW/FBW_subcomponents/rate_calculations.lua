@@ -13,8 +13,6 @@
 --    details or check <https://www.gnu.org/licenses/>
 -------------------------------------------------------------------------------
 
-
-
 FBW.rates ={
     Roll = {
         x = 0,
@@ -34,7 +32,7 @@ FBW.rates ={
     Vpath_q = {
         x = 0,
         dataref = Vpath
-    }
+    },
 }
 
 local function update_rates(table)

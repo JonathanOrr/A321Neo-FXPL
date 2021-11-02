@@ -101,7 +101,7 @@ end
 
 function DMC_draw_invalid(pos, brightness)
     Draw_LCD_backlight(pos[1], pos[2], pos[3], pos[4], 0.5, 1, brightness)
-    sasl.gl.drawText(Font_AirbusDUL, pos[1]+pos[3]/2, pos[2]+pos[4]/2, "INVALID DATA", 40, false, false, TEXT_ALIGN_CENTER, {1, 0.66, 0.16})
+    sasl.gl.drawText(Font_ECAMfont, pos[1]+pos[3]/2, pos[2]+pos[4]/2, "INVALID DATA", 40, false, false, TEXT_ALIGN_CENTER, {1, 0.66, 0.16})
 end
 
 function DMC_draw_test(pos, brightness)
@@ -127,40 +127,40 @@ function DMC_draw_test(pos, brightness)
     sasl.gl.drawRectangle(pos[1]+6*pos[3]/8, pos[2]+0, pos[3]/8, pos[4]/3, {0.8, 0.8, 0.8})
     sasl.gl.drawRectangle(pos[1]+7*pos[3]/8, pos[2]+0, pos[3]/8, pos[4]/3, {1, 1, 1})
 
-    sasl.gl.drawText(Font_AirbusDUL, pos[1]+20, pos[2]+pos[4]/2+100, "P/N : C483719090304", 25, false, false, TEXT_ALIGN_LEFT,  {0,0,0})
-    sasl.gl.drawText(Font_AirbusDUL, pos[1]+20, pos[2]+pos[4]/2+70, "S/N : C483719090304-2323", 25, false, false, TEXT_ALIGN_LEFT,  {0,0,0})
-    sasl.gl.drawText(Font_AirbusDUL, pos[1]+20, pos[2]+pos[4]/2-80, "EIS SW", 25, false, false, TEXT_ALIGN_LEFT,  {0,0,0})
-    sasl.gl.drawText(Font_AirbusDUL, pos[1]+20, pos[2]+pos[4]/2-110, "P/N : SXT40DXE254628440023400", 25, false, false, TEXT_ALIGN_LEFT,  {0,0,0})
+    sasl.gl.drawText(Font_ECAMfont, pos[1]+20, pos[2]+pos[4]/2+100, "P/N : C483719090304", 25, false, false, TEXT_ALIGN_LEFT,  {0,0,0})
+    sasl.gl.drawText(Font_ECAMfont, pos[1]+20, pos[2]+pos[4]/2+70, "S/N : C483719090304-2323", 25, false, false, TEXT_ALIGN_LEFT,  {0,0,0})
+    sasl.gl.drawText(Font_ECAMfont, pos[1]+20, pos[2]+pos[4]/2-80, "EIS SW", 25, false, false, TEXT_ALIGN_LEFT,  {0,0,0})
+    sasl.gl.drawText(Font_ECAMfont, pos[1]+20, pos[2]+pos[4]/2-110, "P/N : SXT40DXE254628440023400", 25, false, false, TEXT_ALIGN_LEFT,  {0,0,0})
 
 
-    sasl.gl.drawText(Font_AirbusDUL, pos[1]+pos[3]-20, pos[2]+pos[4]/2+100, "SIDESTICKSIM AVIONICS", 25, false, false, TEXT_ALIGN_RIGHT,  {0,0,0})
-    sasl.gl.drawText(Font_AirbusDUL, pos[1]+pos[3]-20, pos[2]+pos[4]/2-110, "LCDU 725", 25, false, false, TEXT_ALIGN_RIGHT,  {0,0,0})
+    sasl.gl.drawText(Font_ECAMfont, pos[1]+pos[3]-20, pos[2]+pos[4]/2+100, "SIDESTICKSIM AVIONICS", 25, false, false, TEXT_ALIGN_RIGHT,  {0,0,0})
+    sasl.gl.drawText(Font_ECAMfont, pos[1]+pos[3]-20, pos[2]+pos[4]/2-110, "LCDU 725", 25, false, false, TEXT_ALIGN_RIGHT,  {0,0,0})
 end
 
 function DMC_draw_maintain(pos, brightness)
     Draw_LCD_backlight(pos[1], pos[2], pos[3], pos[4], 0.5, 1, brightness)
-    sasl.gl.drawText(Font_AirbusDUL, pos[1]+pos[3]/2, pos[2]+pos[4]/2, "MAINTENANCE MODE", 40, false, false, TEXT_ALIGN_CENTER, {0.20, 0.98, 0.20})
+    sasl.gl.drawText(Font_ECAMfont, pos[1]+pos[3]/2, pos[2]+pos[4]/2, "MAINTENANCE MODE", 40, false, false, TEXT_ALIGN_CENTER, {0.20, 0.98, 0.20})
 end
 
 function DMC_draw_wait_for_data(pos, brightness)
     Draw_LCD_backlight(pos[1], pos[2], pos[3], pos[4], 0.5, 1, brightness)
-    sasl.gl.drawText(Font_AirbusDUL, pos[1]+pos[3]/2, pos[2]+pos[4]/2, "WAITING FOR DATA", 40, false, false, TEXT_ALIGN_CENTER, {0.20, 0.98, 0.20})
+    sasl.gl.drawText(Font_ECAMfont, pos[1]+pos[3]/2, pos[2]+pos[4]/2, "WAITING FOR DATA", 40, false, false, TEXT_ALIGN_CENTER, {0.20, 0.98, 0.20})
 end
 
 function DMC_draw_self_test(pos, brightness)
     Draw_LCD_backlight(pos[1], pos[2], pos[3], pos[4], 0.5, 1, brightness)
-    sasl.gl.drawText(Font_AirbusDUL, pos[1]+pos[3]/2, pos[2]+pos[4]/2+20, "SELF-TEST IN PROGRESS", 40, false, false, TEXT_ALIGN_CENTER, {0.20, 0.98, 0.20})
-    sasl.gl.drawText(Font_AirbusDUL, pos[1]+pos[3]/2, pos[2]+pos[4]/2-20, "(MAX 30 SECONDS)", 40, false, false, TEXT_ALIGN_CENTER, {0.20, 0.98, 0.20})
+    sasl.gl.drawText(Font_ECAMfont, pos[1]+pos[3]/2, pos[2]+pos[4]/2+20, "SELF TEST IN PROGRESS", 40, false, false, TEXT_ALIGN_CENTER, {0.20, 0.98, 0.20})
+    sasl.gl.drawText(Font_ECAMfont, pos[1]+pos[3]/2, pos[2]+pos[4]/2-20, "(MAX 30 SECONDS)", 40, false, false, TEXT_ALIGN_CENTER, {0.20, 0.98, 0.20})
 end
 
 function DMC_draw_ecam_on_nd(pos, brightness)
     Draw_LCD_backlight(pos[1], pos[2], pos[3], pos[4], 0.5, 1, brightness)
-    sasl.gl.drawText(Font_AirbusDUL, pos[1]+pos[3]/2, pos[2]+pos[4]/2, "ECAM ON ND", 40, false, false, TEXT_ALIGN_CENTER, {0.20, 0.98, 0.20})
+    sasl.gl.drawText(Font_ECAMfont, pos[1]+pos[3]/2, pos[2]+pos[4]/2, "ECAM ON ND", 40, false, false, TEXT_ALIGN_CENTER, {0.20, 0.98, 0.20})
 end
 
 function DMC_draw_big_f(pos, brightness)
     Draw_LCD_backlight(pos[1], pos[2], pos[3], pos[4], 0.5, 1, brightness)
-    sasl.gl.drawText(Font_AirbusDUL, pos[1]+pos[3]/2, pos[2]+200, "F", 700, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+    sasl.gl.drawText(F, pos[1]+pos[3]/2, pos[2]+200, "F", 700, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
 end
 
 function DMC_display_special_mode(mode, pos, brightness)

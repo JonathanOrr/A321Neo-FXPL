@@ -1,10 +1,7 @@
 include("FBW_subcomponents/flight_ctl_subcomponents/slat_flaps_control.lua")
-include("FBW_subcomponents/flight_ctl_subcomponents/lateral_ctl.lua")
-include("FBW_subcomponents/flight_ctl_subcomponents/vertical_ctl.lua")
-include("FBW_subcomponents/flight_ctl_subcomponents/check_avil_and_failure.lua")
-include("FBW_subcomponents/flight_ctl_subcomponents/yaw_control.lua")
 include("FBW_subcomponents/flight_ctl_subcomponents/ground_spoilers.lua")
 include("FBW_subcomponents/flight_ctl_subcomponents/input_handling.lua")
+addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/flight_ctl_subcomponents")
 
 --draw properties
 position = {1914, 1405, 147, 57}
@@ -13,21 +10,11 @@ size = {147, 57}
 local LED_font = sasl.gl.loadFont("fonts/digital-7.mono.ttf")
 local LED_text_cl = {235/255, 200/255, 135/255}
 
---variables--
-local last_total_failure = 0--last value of the up shit creek dataref
-
 --modify xplane functions
 sasl.registerCommandHandler(Min_speedbrakes, 1, XP_min_speedbrakes)
 sasl.registerCommandHandler(Max_speedbrakes, 1, XP_max_speedbrakes)
 sasl.registerCommandHandler(Less_speedbrakes, 1, XP_less_speedbrakes)
 sasl.registerCommandHandler(More_speedbrakes, 1, XP_more_speedbrakes)
-sasl.registerCommandHandler(Trim_up, 1, XP_trim_up)
-sasl.registerCommandHandler(Trim_dn, 1, XP_trim_dn)
-sasl.registerCommandHandler(Trim_up_mechanical, 1, XP_trim_up)
-sasl.registerCommandHandler(Trim_dn_mechanical, 1, XP_trim_dn)
-sasl.registerCommandHandler(Rudd_trim_L, 1, Rudder_trim_left)
-sasl.registerCommandHandler(Rudd_trim_R, 1, Rudder_trim_right)
-sasl.registerCommandHandler(Rudd_trim_reset, 1, Reset_rudder_trim)
 
 --custom functions
 local function get_elev_trim_degrees()
@@ -59,6 +46,14 @@ function onModuleShutdown()--reset things back so other planes will work
     set(Override_control_surfaces, 0)
 end
 
+components = {
+    AIL_CTL {},
+    SPLR_CTL {},
+    ELEV_CTL {},
+    THS_CTL {},
+    RUD_CTL {},
+}
+
 function update()
     FBW_input_handling()
 
@@ -71,15 +66,8 @@ function update()
 
     if get(Override_control_surfaces) == 1 then
         if get(DELTA_TIME) ~= 0 then
-            Check_surface_avail()
-            Ailerons_control(get(FBW_roll_output), true, Ground_spoilers_output(Ground_spoilers_var_table))
-            Spoilers_control(get(FBW_roll_output), get(Speedbrake_handle_ratio), Ground_spoilers_output(Ground_spoilers_var_table), false, Spoilers_obj)
-            Elevator_control(get(FBW_pitch_output), false)
+            updateAll(components)
             Slats_flaps_calc_and_control()
-            THS_control(Augmented_pitch_trim_ratio, get(Human_pitch_trim))
-            Rudder_control(get(FBW_yaw_output), get(Human_rudder_trim), get(Resetting_rudder_trim))
-            Up_shit_creek(last_total_failure)
-            last_total_failure = get(FAILURE_FCTL_UP_SHIT_CREEK)
         end
     end
 end

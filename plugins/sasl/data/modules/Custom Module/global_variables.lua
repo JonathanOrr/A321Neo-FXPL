@@ -44,6 +44,7 @@ Fuel_sys = {}
 FIRE_sys = {}
 AI_sys   = {}
 ADIRS_sys= {}
+PFD = {}
 ND_all_data  = {nil, nil}
 ND_terrain = {}
 DRAIMS_common = {}
@@ -66,6 +67,11 @@ MCDU = {}
 
 FBW = {
     rates = {},
+    fctl = {
+        surfaces = {},
+        status = {},
+        control = {},
+    },
     lateral = {
         protections = {},
         inputs = {},
@@ -78,5 +84,10 @@ FBW = {
         protections = {},
         inputs = {},
     },
+    LAF = {
+        inputs = {},
+    },
     filtered_sensors = {}
 }
+
+Cinetracker = {}

@@ -3,7 +3,6 @@ fbo = true
 
 ----------CONTROLLABLE STUFF---------
 local EFB_DELAYED_TRANSIT_FACTOR = 7 --THE SPEED OF THE UNDERLINE MOVING WHEN CHANGINE PAGE, THE LARGER THE FASTER
-local CHARGE_SCREEN_TIME = 5
 local TRANSITION_FADE_TIME = 0.7
 local EFB_UNDERLINE_THICKNESS = 2
 -------------------------------------
@@ -32,16 +31,7 @@ EFB_PREV_PAGE = 1
 EFB_CURSOR_X = 0
 EFB_CURSOR_Y = 0
 EFB_CURSOR_on_screen = false
-
 EFB_OFF = false
-
----CHARGING
-local CHARGE_START_TIME = 0
-local CHARGE_TIME_LEFT = 0
-local Ac_ess_past_value = 0
-local Ac_ess_delta = 0
-local Charging_alpha_controller = {1,1,1,1}
-local Change_alpha_controller = {17/255, 24/255, 39/255,1}
 
 --UNDERLINE
 local EFB_UNDERLINE_POS = 1 --THE POSITION OF THE UNDERLINE
@@ -50,26 +40,19 @@ local EFB_selector_transit_start = 0 --THE START TIME OF THE TRANSIT, FOR CONTRO
 --CHANGE PAGE FADING
 local CHANGE_PAGE_FADING_START_TIME = 0
 local CHANGE_PAGE_FADING_TIME_LEFT = 0
+Change_alpha_controller = {17/255, 24/255, 39/255}
 
 local line_width_table = {
     {1, 57},
     {2, 42},
     {3, 54},
     {4, 69},
-    {5, 58},
-    {6, 77},
-  }
-
-local charge_fade_table = {
-    {0, 0},
-    {0.1, 1},
-    {CHARGE_SCREEN_TIME-0.3, 1},
-    {CHARGE_SCREEN_TIME, 0},
+    {5, 70},
   }
 
 local change_page_fade_table = {
-    {0,1},
-    {TRANSITION_FADE_TIME,0},
+    {0,0},
+    {TRANSITION_FADE_TIME,1},
 }
 
 function onKeyDown(component, char, key, shiftDown, ctrlDown, altOptDown)
@@ -84,14 +67,9 @@ function onKeyDown(component, char, key, shiftDown, ctrlDown, altOptDown)
     end
 end
 
-function calculate_page_delta()
-    local delta = EFB_PAGE - EFB_FRAME_AGO_PAGE
-    EFB_FRAME_AGO_PAGE = EFB_PAGE
-    return delta
-end
-
 function draw_fading_transition()
-    Change_alpha_controller[4] = Table_interpolate(change_page_fade_table, CHANGE_PAGE_FADING_TIME_LEFT)
+    Change_alpha_controller[4] = Math_rescale(0,0,TRANSITION_FADE_TIME,1,CHANGE_PAGE_FADING_TIME_LEFT)
+
     if EFB_PAGE ~= 10 then
         sasl.gl.drawRectangle ( 0 , 0 , 1143, 710, Change_alpha_controller)
     end
@@ -205,23 +183,32 @@ end
 
 --common draw logic
 local function draw_efb_bgd()
-    sasl.gl.drawTexture ( EFB_bgd, 0 , 0 , 1143 , 800 , ECAM_WHITE )
+    sasl.gl.drawRectangle ( 0 , 0 , 1143, 710, EFB_BACKGROUND_COLOUR)
+    sasl.gl.drawRectangle ( 0 , 710 , 1143, 90, EFB_BACKGROUND_TOP)
+    local efb_titles = {"HOME", "GND", "PERF", "CONFIG", "NETWK","","","","","OFF"}
+    for i=1, #efb_titles do
+        drawTextCentered(Font_Airbus_panel, (1143/10)*i - 56  ,  750 , efb_titles[i] , 20, false, false, TEXT_ALIGN_CENTER, EFB_WHITE)
+        drawTextCentered(Font_Airbus_panel, (1143/10)*i - 56  ,  750 , efb_titles[i] , 20, false, false, TEXT_ALIGN_CENTER, EFB_WHITE)
+    end
+end
+
+local function compute_page_change_fade_transparency()
+
+    local delta = EFB_PAGE - EFB_FRAME_AGO_PAGE
+    EFB_FRAME_AGO_PAGE = EFB_PAGE
+
+    if math.abs(delta) > 0 then
+        CHANGE_PAGE_FADING_TIME_LEFT = TRANSITION_FADE_TIME
+    end
+    if CHANGE_PAGE_FADING_TIME_LEFT > -1 then
+        CHANGE_PAGE_FADING_TIME_LEFT = CHANGE_PAGE_FADING_TIME_LEFT - get(DELTA_TIME)
+    end
 end
 
 local function draw_cursor()------------------------------DONT U DARE REMOVE THIS LINE, IT KEEPS THE CURSOR ON TOP
     if EFB_CURSOR_on_screen == true then
         SASL_draw_img_center_aligned ( EFB_cursor,EFB_CURSOR_X, EFB_CURSOR_Y, 50, 50, ECAM_WHITE )
     end
-end
-
-local function update_battery()
-    CHARGE_TIME_LEFT = (get(TIME) - get(CHARGE_START_TIME))
-    Charging_alpha_controller = {1,1,1,Table_interpolate(charge_fade_table, CHARGE_TIME_LEFT)}
-    Ac_ess_delta = get(AC_ess_bus_pwrd) - Ac_ess_past_value
-    Ac_ess_past_value = get(AC_ess_bus_pwrd)
-    if Ac_ess_delta > 0 then
-        CHARGE_START_TIME = get(TIME)
-    end 
 end
 
 local function Cursor_texture_to_local_pos(x, y, component_width, component_height, panel_width, panel_height)
@@ -254,7 +241,6 @@ function update()
   
     EFB_CURSOR_X, EFB_CURSOR_Y, EFB_CURSOR_on_screen = Cursor_texture_to_local_pos(position[1], position[2], position[3], position[4], 4096, 4096)
     EFB_updates_pages[EFB_PAGE]()
-    update_battery()
 
     if not EFB_CURSOR_on_screen then
         p3s1_revert_to_previous_and_delete_buffer()
@@ -262,10 +248,7 @@ function update()
         p5s2_revert_to_previous_and_delete_buffer()
     end
 
-    if calculate_page_delta() ~= 0 then
-        CHANGE_PAGE_FADING_START_TIME = get(TIME)
-    end
-    CHANGE_PAGE_FADING_TIME_LEFT = math.abs(CHANGE_PAGE_FADING_START_TIME - get(TIME))
+    compute_page_change_fade_transparency()
 
     perf_measure_stop("EFB:update()")
 end
@@ -286,12 +269,11 @@ function draw()  ------KEEP THE draw_cursor() AT THE BOTTOM YOU DUMBASS!!!!!
     draw_efb_bgd()
     EFB_draw_pages[EFB_PAGE]()
 
-    --draw_fading_transition()
+    draw_fading_transition()
 
     
     if EFB_PAGE ~= 10 then
         jon_told_me_not_to_create_super_long_names_for_functions_but_this_function_draw_horizontal_line_with_certain_width_centered(EFB_UNDERLINE_POS, 738,EFB_UNDERLINE_THICKNESS ,EFB_UNDERLINE_WIDTH ,EFB_WHITE) --DRAWS THE UNDERLINE OF THE PAGE TITLE
-        sasl.gl.drawTexture (EFB_Charging, 0 , 0 , 1143 , 800 , Charging_alpha_controller )
     end
 
     if EFB_OFF == false then
@@ -302,7 +284,6 @@ function draw()  ------KEEP THE draw_cursor() AT THE BOTTOM YOU DUMBASS!!!!!
         sasl.gl.drawTexture(EFB_Charging_Overlay, 1058 , 780 , 75 , 14 , EFB_WHITE )
     end
 
-
-
     perf_measure_stop("EFB:draw()")
+
 end

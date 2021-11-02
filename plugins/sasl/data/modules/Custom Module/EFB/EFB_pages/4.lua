@@ -43,6 +43,9 @@ local function draw_throttle_value()
     elseif left_throttle == 0 and right_throttle == 0 then
         drawTextCentered( Font_Airbus_panel , 397 , 294, "IDLE" , 23 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE)
         Sasl_DrawWideFrame(341, 280, 110, 30, 2, 0, EFB_LIGHTGREY)
+    elseif left_throttle < 0 and right_throttle < 0 then
+        drawTextCentered( Font_Airbus_panel , 397 , 294, "REVR" , 23 ,false , false , TEXT_ALIGN_CENTER , ECAM_ORANGE)
+        Sasl_DrawWideFrame(341, 280, 110, 30, 2, 0, ECAM_ORANGE)
     else
         drawTextCentered( Font_Airbus_panel , 397 , 294, "MANUAL" , 23 ,false , false , TEXT_ALIGN_CENTER , EFB_LIGHTBLUE)
         Sasl_DrawWideFrame(341, 280, 110, 30, 2, 0, EFB_LIGHTBLUE)
@@ -193,16 +196,9 @@ function EFB_execute_page_4_buttons()
     end
 end
 
-local translator_table = {
-    {0, 1},
-    {0.2, 2},
-    {0.4, 4},
-    {0.6, 8},
-    {0.8, 16},
-    {1, 32},
-}
 local function aa_to_drf()
-    set(PANEL_AA_LEVEL_1to32, Table_interpolate(translator_table, antialiasing_lvl_value))
+    local one_to_32 = 2^(antialiasing_lvl_value * 5)
+    set(PANEL_AA_LEVEL_1to32, one_to_32)
 end
 
 local function table_loading_on_start()

@@ -16,6 +16,10 @@
 -- Short description: FMGS functions used by non-FMGS modules
 -------------------------------------------------------------------------------
 
+-------------------------------------------------------------------------------
+-- Helper functions
+-------------------------------------------------------------------------------
+
 local function get_airport_or_nil(name)
     local apt = AvionicsBay.apts.get_by_name(name, false)
     if #apt > 0 then
@@ -25,6 +29,29 @@ local function get_airport_or_nil(name)
     end
 end
 
+local function pop_vspeeds()
+    FMGS_sys.perf.takeoff.v1_popped = FMGS_sys.perf.takeoff.v1
+    FMGS_sys.perf.takeoff.vr_popped = FMGS_sys.perf.takeoff.vr
+    FMGS_sys.perf.takeoff.v2_popped = FMGS_sys.perf.takeoff.v2
+    FMGS_sys.perf.takeoff.v1 = nil
+    FMGS_sys.perf.takeoff.vr = nil
+    FMGS_sys.perf.takeoff.v2 = nil
+end
+
+local function check_rwy_change_triggers()
+    if not FMGS_sys.fpln.temp then
+        return
+    end
+    if not FMGS_sys.fpln.active.apts.dep_rwy then
+        return
+    end
+    if FMGS_sys.fpln.active.apts.dep_rwy[1].id ~= FMGS_sys.fpln.temp.apts.dep_rwy[1].id
+       or FMGS_sys.fpln.active.apts.dep_rwy[2] ~= FMGS_sys.fpln.temp.apts.dep_rwy[2] then
+        -- Ok we have a runway change
+        pop_vspeeds()
+        MCDU.send_message("CHECK TAKE OFF DATA", ECAM_ORANGE)
+    end
+end
 -------------------------------------------------------------------------------
 -- FMGS config
 -------------------------------------------------------------------------------
@@ -392,7 +419,10 @@ function FMGS_erase_temp_fpln()
 end
 
 function FMGS_insert_temp_fpln()
+    check_rwy_change_triggers()
     FMGS_sys.fpln.active = FMGS_sys.fpln.temp
+    FMGS_sys.perf.takeoff.trans_alt = FMGS_sys.fpln.active.apts.dep_sid.trans_alt
+
     FMGS_erase_temp_fpln()
 end
 
@@ -405,6 +435,36 @@ function FMGS_get_current_fpln()    -- CAUTION: do not abuse of this
     return FMGS_does_temp_fpln_exist() and FMGS_sys.fpln.temp or FMGS_sys.fpln.active
 end
 
+
+-------------------------------------------------------------------------------
+-- Direct To
+-------------------------------------------------------------------------------
+
+function FMGS_dirto_get_direct_to_waypoint()
+    return FMGS_sys.dirto.directing_wpt
+end
+
+function FMGS_dirto_set_direct_to_waypoint(wpt)
+    FMGS_sys.dirto.directing_wpt = wpt
+end
+
+function FMGS_dirto_get_inbound_radial()
+    return FMGS_sys.dirto.radial_in
+end
+
+function FMGS_dirto_set_inbound_radial(hdg)
+    FMGS_sys.dirto.radial_in = hdg
+end
+
+function FMGS_dirto_get_outbound_radial()
+    return FMGS_sys.dirto.radial_out
+end
+
+function FMGS_dirto_set_outbound_radial(hdg)
+    FMGS_sys.dirto.radial_out = hdg
+end
+
+
 -------------------------------------------------------------------------------
 -- Performance
 -------------------------------------------------------------------------------
@@ -415,6 +475,209 @@ end
 function FMGS_perf_get_trans_alt()
     return FMGS_sys.perf.takeoff.trans_alt
 end
+
+function FMGS_perf_set_user_trans_alt(trans_alt)
+    FMGS_sys.perf.takeoff.user_trans_alt = trans_alt
+end
+
+function FMGS_perf_get_user_trans_alt()
+    return FMGS_sys.perf.takeoff.user_trans_alt
+end
+
+function FMGS_perf_get_v_speeds()
+    return FMGS_sys.perf.takeoff.v1, FMGS_sys.perf.takeoff.vr, FMGS_sys.perf.takeoff.v2
+end
+
+function FMGS_perf_set_v1(v1)
+    FMGS_sys.perf.takeoff.v1 = v1
+end
+
+function FMGS_perf_set_vr(vr)
+    FMGS_sys.perf.takeoff.vr = vr
+end
+
+function FMGS_perf_set_v2(v2)
+    FMGS_sys.perf.takeoff.v2 = v2
+end
+
+function FMGS_perf_reset_v1_popped()
+    FMGS_sys.perf.takeoff.v1_popped = nil
+end
+
+function FMGS_perf_reset_vr_popped()
+    FMGS_sys.perf.takeoff.vr_popped = nil
+end
+
+function FMGS_perf_reset_v2_popped()
+    FMGS_sys.perf.takeoff.v2_popped = nil
+end
+
+function FMGS_perf_swap_v1_popped()
+    FMGS_sys.perf.takeoff.v1 = FMGS_sys.perf.takeoff.v1_popped
+    FMGS_sys.perf.takeoff.v1_popped = nil
+end
+
+function FMGS_perf_swap_vr_popped()
+    FMGS_sys.perf.takeoff.vr = FMGS_sys.perf.takeoff.vr_popped
+    FMGS_sys.perf.takeoff.vr_popped = nil
+end
+
+function FMGS_perf_swap_v2_popped()
+    FMGS_sys.perf.takeoff.v2 = FMGS_sys.perf.takeoff.v2_popped
+    FMGS_sys.perf.takeoff.v2_popped = nil
+end
+
+function FMGS_perf_get_v_speeds_popped()
+    return FMGS_sys.perf.takeoff.v1_popped, FMGS_sys.perf.takeoff.vr_popped, FMGS_sys.perf.takeoff.v2_popped
+end
+
+function FMGS_get_takeoff_thrust_reduction()
+    return FMGS_sys.perf.takeoff.thr_red, FMGS_sys.perf.takeoff.user_thr_red
+end
+
+function FMGS_set_takeoff_thrust_reduction(user_thr_red)
+    FMGS_sys.perf.takeoff.user_thr_red = user_thr_red
+end
+
+function FMGS_get_takeoff_acc()
+    return FMGS_sys.perf.takeoff.acc, FMGS_sys.perf.takeoff.user_acc
+end
+
+function FMGS_set_takeoff_acc(user_acc)
+    FMGS_sys.perf.takeoff.user_acc = user_acc
+end
+
+function FMGS_get_takeoff_flaps()
+    return FMGS_sys.perf.takeoff.flaps
+end
+
+function FMGS_set_takeoff_flaps(f)
+    FMGS_sys.perf.takeoff.flaps = f
+end
+
+function FMGS_get_takeoff_ths()
+    return FMGS_sys.perf.takeoff.ths
+end
+
+function FMGS_set_takeoff_ths(t)
+    FMGS_sys.perf.takeoff.ths = t
+end
+
+function FMGS_get_takeoff_flex_temp()
+    return FMGS_sys.perf.takeoff.flex_temp
+end
+
+function FMGS_set_takeoff_flex_temp(temp)
+    FMGS_sys.perf.takeoff.flex_temp = temp
+    set(Eng_N1_flex_temp, temp)    -- TODO remove
+end
+
+function FMGS_get_takeoff_eng_out_alt()
+    return FMGS_sys.perf.takeoff.eng_out, FMGS_sys.perf.takeoff.user_eng_out
+end
+
+function FMGS_set_takeoff_eng_out_alt(alt)
+    FMGS_sys.perf.takeoff.user_eng_out = alt
+end
+
+function FMGS_get_takeoff_shift()
+    return FMGS_sys.perf.takeoff.toshift
+end
+
+function FMGS_set_takeoff_shift(shift)
+    FMGS_sys.perf.takeoff.toshift = shift
+end
+
+------------------------Landing!
+
+function FMGS_set_landing_qnh(qnh)
+    FMGS_sys.perf.landing.qnh = qnh
+end
+
+function FMGS_get_landing_qnh()
+    return FMGS_sys.perf.landing.qnh
+end
+
+function FMGS_set_landing_mda(mda)
+    FMGS_sys.perf.landing.mda = mda
+end
+
+function FMGS_get_landing_mda()
+    return FMGS_sys.perf.landing.mda
+end
+
+function FMGS_set_landing_dh(dh)
+    FMGS_sys.perf.landing.dh = dh
+end
+
+function FMGS_get_landing_dh()
+    return FMGS_sys.perf.landing.dh
+end
+
+function FMGS_set_landing_apt_temp(temp)
+    FMGS_sys.perf.landing.temp = temp
+end
+
+function FMGS_get_landing_apt_temp()
+    return FMGS_sys.perf.landing.temp
+end
+
+function FMGS_set_landing_wind_mag(mag)
+    FMGS_sys.perf.landing.mag = mag
+end
+
+function FMGS_get_landing_wind_mag()
+    return FMGS_sys.perf.landing.mag
+end
+
+function FMGS_set_landing_wind(wind)
+    FMGS_sys.perf.landing.wind = wind
+end
+
+function FMGS_get_landing_wind()
+    return FMGS_sys.perf.landing.wind
+end
+
+function FMGS_set_landing_trans_alt_internal(alt) --not user value! but fmgs computed value!
+    FMGS_sys.perf.landing.trans_alt = alt
+end
+
+function FMGS_set_landing_trans_alt(alt) --caution! User! Not system default value!
+    FMGS_sys.perf.landing.user_trans_alt = alt
+end
+
+function FMGS_get_landing_trans_alt()
+    return FMGS_sys.perf.landing.trans_alt, FMGS_sys.perf.landing.user_trans_alt
+end
+
+function FMGS_set_landing_vapp_internal(spd) --not user value! but fmgs computed value!
+    FMGS_sys.perf.landing.vapp = spd
+end
+
+function FMGS_set_landing_vapp(spd) --caution! User! Not system default value!
+    FMGS_sys.perf.landing.user_vapp = spd
+end
+
+function FMGS_get_landing_vapp()
+    return FMGS_sys.perf.landing.vapp, FMGS_sys.perf.landing.user_vapp
+end
+
+function FMGS_set_landing_config(flaps)
+    FMGS_sys.perf.landing.landing_config = flaps
+end
+
+function FMGS_get_landing_config()
+    return FMGS_sys.perf.landing.landing_config
+end
+
+function FMGS_set_landing_vls(spd) -- user should not set it, for internal computation only
+    FMGS_sys.perf.landing.vls = spd
+end
+
+function FMGS_get_landing_vls()
+    return FMGS_sys.perf.landing.vls
+end
+
 
 -------------------------------------------------------------------------------
 -- Predictions

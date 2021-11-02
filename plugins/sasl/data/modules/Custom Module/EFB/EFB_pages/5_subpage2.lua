@@ -197,9 +197,9 @@ function p5s2_draw()
     end
 
     if string.len(key_p5s2_buffer) > 0 then
-        drawTextCentered( Font_Airbus_panel ,  187, 527 ,key_p5s2_buffer , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
+        drawTextCentered( Font_ECAMfont ,  187, 527 ,key_p5s2_buffer , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
     else
-        drawTextCentered( Font_Airbus_panel ,  187, 527 ,userid , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
+        drawTextCentered( Font_ECAMfont ,  187, 527 ,userid , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
     end
 
 
@@ -227,8 +227,7 @@ function p5s2_draw()
     end
 
     if simbrief_standby then
-        sasl.gl.drawRectangle ( 0 , 0 , 1143, 710, EFB_BACKGROUND_COLOUR)
-        drawTextCentered(Font_Airbus_panel,  572, 355, "PLEASE STANDBY...", 30, false, false, TEXT_ALIGN_CENTER, EFB_WHITE)
+        draw_standby_screen("REQUESTING DATA FROM SIMBRIEF API....")
     end
 end
 

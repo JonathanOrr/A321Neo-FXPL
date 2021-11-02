@@ -22,7 +22,7 @@ function Draw_envelop_module_480x240(x_pos, y_pos)
     }
 
     --updates FBW G constraints
-    if get(Flaps_handle_ratio) > 0.1 then
+    if get(Flaps_internal_config) > 1 then
         Upper_g_lim = Set_anim_value(Upper_g_lim, 2, -1, 2.5, 1)
         Lower_g_lim = Set_anim_value(Lower_g_lim, 0, -1, 2.5, 1)
     else

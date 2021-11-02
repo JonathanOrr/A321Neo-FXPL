@@ -336,7 +336,7 @@ MessageGroup_FCTL_LR_ELEV_FAULT_DOUBLE = {
     sd_page = ECAM_PAGE_FCTL,
 
     is_active = function()
-        return get(L_elevator_avail) == 0 and get(R_elevator_avail) == 0
+        return not FBW.fctl.surfaces.elev.L.controlled and not FBW.fctl.surfaces.elev.R.controlled
     end,
 
     is_inhibited = function()
@@ -397,7 +397,7 @@ MessageGroup_FCTL_STAB_JAM = {
     sd_page = ECAM_PAGE_FCTL,
 
     is_active = function()
-        return get(FAILURE_FCTL_THS) == 1 or get(FAILURE_FCTL_THS_MECH) == 1
+        return get(FAILURE_FCTL_THS_MECH) == 1
     end,
 
     is_inhibited = function()
@@ -412,34 +412,34 @@ MessageGroup_FCTL_STAB_JAM = {
 --------------------------------------------------------------------------------
 
 local function any_extented_at(angle)
-    if get(FAILURE_FCTL_LSPOIL_1) == 1 and get(Left_spoiler_1) >= angle then
+    if get(FAILURE_FCTL_LSPOIL_1) == 1 and get(L_SPLR_1) >= angle then
         return true
     end
-    if get(FAILURE_FCTL_LSPOIL_2) == 1 and get(Left_spoiler_2) >= angle then
+    if get(FAILURE_FCTL_LSPOIL_2) == 1 and get(L_SPLR_2) >= angle then
         return true
     end
-    if get(FAILURE_FCTL_LSPOIL_3) == 1 and get(Left_spoiler_3) >= angle then
+    if get(FAILURE_FCTL_LSPOIL_3) == 1 and get(L_SPLR_3) >= angle then
         return true
     end
-    if get(FAILURE_FCTL_LSPOIL_4) == 1 and get(Left_spoiler_4) >= angle then
+    if get(FAILURE_FCTL_LSPOIL_4) == 1 and get(L_SPLR_4) >= angle then
         return true
     end
-    if get(FAILURE_FCTL_LSPOIL_5) == 1 and get(Left_spoiler_5) >= angle then
+    if get(FAILURE_FCTL_LSPOIL_5) == 1 and get(L_SPLR_5) >= angle then
         return true
     end
-    if get(FAILURE_FCTL_RSPOIL_1) == 1 and get(Right_spoiler_1) >= angle then
+    if get(FAILURE_FCTL_RSPOIL_1) == 1 and get(R_SPLR_1) >= angle then
         return true
     end
-    if get(FAILURE_FCTL_RSPOIL_2) == 1 and get(Right_spoiler_2) >= angle then
+    if get(FAILURE_FCTL_RSPOIL_2) == 1 and get(R_SPLR_2) >= angle then
         return true
     end
-    if get(FAILURE_FCTL_RSPOIL_3) == 1 and get(Right_spoiler_3) >= angle then
+    if get(FAILURE_FCTL_RSPOIL_3) == 1 and get(R_SPLR_3) >= angle then
         return true
     end
-    if get(FAILURE_FCTL_RSPOIL_4) == 1 and get(Right_spoiler_4) >= angle then
+    if get(FAILURE_FCTL_RSPOIL_4) == 1 and get(R_SPLR_4) >= angle then
         return true
     end
-    if get(FAILURE_FCTL_RSPOIL_5) == 1 and get(Right_spoiler_5) >= angle then
+    if get(FAILURE_FCTL_RSPOIL_5) == 1 and get(R_SPLR_5) >= angle then
         return true
     end
 

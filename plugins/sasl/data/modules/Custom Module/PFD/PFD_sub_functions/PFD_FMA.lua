@@ -10,7 +10,7 @@ function PFD_draw_FMA(fma_table)
 
                 --draw the FMA text--
                 local function draw_fma_text()
-                    local line_1_text_width, line_1_text_height = sasl.gl.measureText(Font_AirbusDUL, fma_table[i][j].text_line_1, 34, false, false)
+                    local line_1_text_width, line_1_text_height = sasl.gl.measureText(Font_ECAMfont, fma_table[i][j].text_line_1, 34, false, false)
                     local line_1_y_pos
 
                     --center or push up the first line depending on if there is a second line
@@ -22,7 +22,7 @@ function PFD_draw_FMA(fma_table)
 
                     --draw the first line--
                     sasl.gl.drawText(
-                        Font_AirbusDUL,
+                        Font_ECAMfont,
                         fma_table[i][j].position[1] + fma_table[i][j].size[1] / 2,
                         line_1_y_pos,
                         fma_table[i][j].text_line_1,
@@ -35,7 +35,7 @@ function PFD_draw_FMA(fma_table)
                     --draw the second line if there are any--
                     if fma_table[i][j].text_line_2 ~= nil then
                         sasl.gl.drawText(
-                            Font_AirbusDUL,
+                            Font_ECAMfont,
                             fma_table[i][j].position[1] + fma_table[i][j].size[1] / 2,
                             fma_table[i][j].position[2] + 1 * fma_table[i][j].size[2] / 4 - line_1_text_height / 2,
                             fma_table[i][j].text_line_2,

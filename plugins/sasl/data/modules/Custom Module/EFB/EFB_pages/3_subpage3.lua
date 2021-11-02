@@ -19,6 +19,8 @@ local final_min_landing_distance_med_ab = 0
 local final_min_landing_distance_low_ab = 0
 
 local generate_button_begin = 0
+local waiting_screen_begin = 0
+local WAITING_SCREEN_TIME = 1.8
 
 selected_box = 0
 key_p3s3_buffer = ""
@@ -101,6 +103,12 @@ local function close_menu(number)
     dropdown_expanded[number] = false
 end
 
+local function draw_standby()
+    if get(TIME) - waiting_screen_begin < WAITING_SCREEN_TIME then
+        draw_standby_screen("CALCULATING....")
+    end
+end
+
 local function draw_buttons()
     if get(TIME) -  generate_button_begin > BUTTON_PRESS_TIME then
         SASL_drawSegmentedImg_xcenter_aligned (EFB_LOAD_s3_generate_button, 995, 383,368,32,2,1)
@@ -169,6 +177,7 @@ end
 local function general_buttons()
     Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 903, 384, 1086, 415,function () --DROPDOWN 3 EXPAND
         generate_button_begin = get(TIME)
+        waiting_screen_begin = get(TIME)
         compute_landing_distance()
     end)
 end
@@ -315,14 +324,16 @@ function p3s3_draw()
     draw_hightlighted_boxes()
 
     if string.len(key_p3s3_buffer) > 0 then --THE PURPOSE OF THIS IFELSE IS TO PREVENT THE CURSOR FROM COVERING UP THE PREVIOUS VALUE, WHEN THE SCRATCHPAD IS EMPTY.
-        drawTextCentered( Font_ECAMfont , 487 , 595, selected_box == 1 and key_p3s3_buffer or landing_aircraft_data[1] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
-        drawTextCentered( Font_ECAMfont , 686 , 595, selected_box == 2 and key_p3s3_buffer or landing_aircraft_data[2] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
-        drawTextCentered( Font_ECAMfont , 821 , 595, selected_box == 3 and key_p3s3_buffer or landing_aircraft_data[3] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
+        drawTextCentered( Font_ECAMfont , 487 , 595, selected_box == 1 and key_p3s3_buffer or landing_aircraft_data[1] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
+        drawTextCentered( Font_ECAMfont , 686 , 595, selected_box == 2 and key_p3s3_buffer or landing_aircraft_data[2] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
+        drawTextCentered( Font_ECAMfont , 821 , 595, selected_box == 3 and key_p3s3_buffer or landing_aircraft_data[3] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
     else
-        drawTextCentered( Font_ECAMfont , 487 , 595, landing_aircraft_data[1] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
-        drawTextCentered( Font_ECAMfont , 686 , 595, landing_aircraft_data[2] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
-        drawTextCentered( Font_ECAMfont , 821 , 595, landing_aircraft_data[3] , 17 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
+        drawTextCentered( Font_ECAMfont , 487 , 595, landing_aircraft_data[1] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
+        drawTextCentered( Font_ECAMfont , 686 , 595, landing_aircraft_data[2] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
+        drawTextCentered( Font_ECAMfont , 821 , 595, landing_aircraft_data[3] , 20 ,false , false , TEXT_ALIGN_CENTER , EFB_FULL_GREEN )
     end
+    
+    draw_standby()
     draw_no_arr_data()
 end
 

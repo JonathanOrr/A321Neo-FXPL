@@ -20,8 +20,6 @@ include("ND/subcomponents/graphics_oans.lua")
 include('libs/geo-helpers.lua')
 size = {900, 900}
 
-local image_bkg_plan        = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/plan.png")
-local image_bkg_plan_middle = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/ring-middle.png")
 local image_point_apt = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/point-apt.png")
 local image_point_vor_only = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/point-vor-only.png")
 local image_point_vor_dme  = sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/ND/point-vor-dme.png")
@@ -85,15 +83,23 @@ local function draw_ranges(data)
     if data.config.range > 0 then
         local ext_range = math.floor(2^(data.config.range-1) * 10 / 2) 
         local int_range = math.floor(ext_range / 2)
-        sasl.gl.drawText(Font_AirbusDUL, 230, 250, ext_range, 20, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
-        sasl.gl.drawText(Font_AirbusDUL, 365, 340, int_range, 20, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+        sasl.gl.drawText(Font_AirbusDUL, 240, 260, ext_range, 24, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+        sasl.gl.drawText(Font_AirbusDUL, 365, 340, int_range, 24, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
     end
 
 end
 
 local function draw_background(data)
-    sasl.gl.drawTexture(image_bkg_plan, (size[1]-621)/2,(size[2]-621)/2,621,621, {1,1,1})
-    sasl.gl.drawTexture(image_bkg_plan_middle, (size[1]-750)/2,(size[2]-750)/2,750,750, {1,1,1})
+    ND_DRAWING_dashed_arcs(450,450,147, 3, 20,20,0, 360, true, true, false, ECAM_WHITE)
+    sasl.gl.drawArc(450, 450, 292, 295,0,360,ECAM_WHITE)
+    ND_DRAWING_small_triangle(730 ,450 , 90)
+    ND_DRAWING_small_triangle(170 ,450 , -90)
+    ND_DRAWING_small_triangle(450 ,730 , 0)
+    ND_DRAWING_small_triangle(450 ,170 , 180)
+    sasl.gl.drawText(Font_AirbusDUL, 440, 692, "N", 36, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(Font_AirbusDUL, 440, 185, "S", 36, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(Font_AirbusDUL, 694, 438, "E", 36, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+    sasl.gl.drawText(Font_AirbusDUL, 187, 438, "W", 36, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
 end
 
 local function draw_plane(data)

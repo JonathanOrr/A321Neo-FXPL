@@ -77,16 +77,16 @@ end
 
 function one_or_more_spoiler_is_fully_extended_in_speedbrake_fault() --fcom 5231
     return 
-    (get(Left_spoiler_1) >= 25 or 
-    get(Left_spoiler_2) >= 25 or 
-    get(Left_spoiler_3) >= 25 or 
-    get(Left_spoiler_4) >= 25 or 
-    get(Left_spoiler_5) >= 25 or 
-    get(Right_spoiler_1) >= 25 or 
-    get(Right_spoiler_2) >= 25 or 
-    get(Right_spoiler_3) >= 25 or 
-    get(Right_spoiler_4) >= 25 or 
-    get(Right_spoiler_5) >= 25) and
+    (get(L_SPLR_1) >= 25 or 
+    get(L_SPLR_2) >= 25 or 
+    get(L_SPLR_3) >= 25 or 
+    get(L_SPLR_4) >= 25 or 
+    get(L_SPLR_5) >= 25 or 
+    get(R_SPLR_1) >= 25 or 
+    get(R_SPLR_2) >= 25 or 
+    get(R_SPLR_3) >= 25 or 
+    get(R_SPLR_4) >= 25 or 
+    get(R_SPLR_5) >= 25) and
     spoilers_are_fucked()
 end
 

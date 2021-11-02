@@ -9,13 +9,24 @@ local function draw_trim_flag(PFD_table)
         return
     end
 
-    if (get(All_spoilers_failed) == 1 and get(L_aileron_avail) == 0 and get(R_aileron_avail) == 0) or
-       (get(L_elevator_avail) == 0 and get(R_elevator_avail) == 0) then
+    local ALL_SPLR_FAIL = not FBW.fctl.surfaces.splr.L[1].controlled and
+                          not FBW.fctl.surfaces.splr.L[2].controlled and
+                          not FBW.fctl.surfaces.splr.L[3].controlled and
+                          not FBW.fctl.surfaces.splr.L[4].controlled and
+                          not FBW.fctl.surfaces.splr.L[5].controlled and
+                          not FBW.fctl.surfaces.splr.R[1].controlled and
+                          not FBW.fctl.surfaces.splr.R[2].controlled and
+                          not FBW.fctl.surfaces.splr.R[3].controlled and
+                          not FBW.fctl.surfaces.splr.R[4].controlled and
+                          not FBW.fctl.surfaces.splr.R[5].controlled
+
+    if (ALL_SPLR_FAIL and not FBW.fctl.surfaces.ail.L.controlled and not FBW.fctl.surfaces.ail.R.controlled) or
+       (not FBW.fctl.surfaces.elev.L.controlled and not FBW.fctl.surfaces.elev.R.controlled) then
         sasl.gl.drawText(Font_AirbusDUL, ATT_x_center, ATT_y_center + 275, "MAN PITCH TRIM ONLY", 34, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
         return
     end
 
-    if get(FBW_total_control_law) == FBW_DIRECT_LAW then
+    if get(FBW_total_control_law) == FBW_DIRECT_LAW or get(FBW_ABN_LAW_TRIM_INHIB) == 1 then
         sasl.gl.drawText(Font_AirbusDUL, ATT_x_center, ATT_y_center + 275, "USE MAN PITCH TRIM", 34, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
         return
     end
@@ -25,7 +36,7 @@ local function draw_stall_flag(PFD_table)
     local ATT_x_center = size[1]/2-55
     local ATT_y_center = size[2]/2-7
 
-    if get(FBW_total_control_law) == FBW_NORMAL_LAW or
+    if (get(FBW_total_control_law) == FBW_NORMAL_LAW and (get(Capt_ra_alt_ft) + get(Fo_ra_alt_ft)) / 2 < 1500) or
        get(Any_wheel_on_ground) == 1 or
        adirs_is_att_ok(PFD_table.Screen_ID) == false or
        get(FAC_1_status) == 0 and get(FAC_2_status) == 0 or
@@ -33,8 +44,17 @@ local function draw_stall_flag(PFD_table)
         return
     end
 
-    if adirs_get_aoa(PFD_table.Screen_ID) > get(Aprot_AoA) - 0.5 then
-        sasl.gl.drawText(Font_AirbusDUL, ATT_x_center, ATT_y_center + 50, "STALL    STALL", 42, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
+    local NRM_LAW = {13.5, 21}
+    local ALT_LAW = {8,    13}
+
+    if get(FBW_total_control_law) == FBW_NORMAL_LAW then
+        if adirs_get_aoa(PFD_table.Screen_ID) > NRM_LAW[(get(Slats) <= 15/27) and 1 or 2] then
+            sasl.gl.drawText(Font_AirbusDUL, ATT_x_center, ATT_y_center + 50, "STALL    STALL", 42, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
+        end
+    else
+        if adirs_get_aoa(PFD_table.Screen_ID) > ALT_LAW[(get(Slats) <= 15/27) and 1 or 2] then
+            sasl.gl.drawText(Font_AirbusDUL, ATT_x_center, ATT_y_center + 50, "STALL    STALL", 42, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
+        end
     end
 end
 
