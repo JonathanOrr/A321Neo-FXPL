@@ -16,19 +16,18 @@
 -- Short description: Fly-by-wire main file
 -------------------------------------------------------------------------------
 
---include("FBW_subcomponents/limits_calculations.lua")
 include("PID.lua")
-include("FBW/FBW_subcomponents/fbw_system_subcomponents/mode_transition.lua")
-include("FBW/FBW_subcomponents/fbw_system_subcomponents/law_reconfiguration.lua")
+include("FBW/FBW_subcomponents/FBW_SYS/mode_transition.lua")
+include("FBW/FBW_subcomponents/FBW_SYS/law_reconfig.lua")
 addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/")
-addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/fbw_system_subcomponents")
-addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/fbw_system_subcomponents/FLT_computer")
-addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/fbw_system_subcomponents/sensor_filtering")
-addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/fbw_system_subcomponents/lateral_augmentation")
-addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/fbw_system_subcomponents/vertical_agumentation")
-addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/fbw_system_subcomponents/yaw_augmentation")
-addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/fbw_system_subcomponents/LAF_augmentation")
-addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/fbw_system_subcomponents/FAC_computation")
+addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/FBW_SYS")
+addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/FBW_SYS/FLT_computer")
+addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/FBW_SYS/sensor_filtering")
+addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/FBW_SYS/lateral_augmentation")
+addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/FBW_SYS/vertical_agumentation")
+addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/FBW_SYS/yaw_augmentation")
+addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/FBW_SYS/LAF_augmentation")
+addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/FBW_SYS/FAC_computation")
 
 --xplane landing gear attitude correction--
 local front_gear_length =  globalProperty("sim/aircraft/parts/acf_gear_leglen[0]")
@@ -74,9 +73,9 @@ components = {
     LAF_inputs {},
     LAF_controllers {},
 
-    law_reconfiguration {},
     autothrust {},
-    flight_controls {},
+    FCTL {},
+    law_reconfig {},
     FAC_compute_main {},
 
     lateral_augmentation {},

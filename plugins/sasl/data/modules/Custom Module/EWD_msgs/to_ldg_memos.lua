@@ -356,7 +356,7 @@ local Message_CONFIG_TAKEOFF_PITCH_TRIM = {
             return COL_WARNING
     end,
     is_active = function(self)
-      return get(Elev_trim_ratio) > (3.5/13.5) or get(Elev_trim_ratio) < (-3/4)
+      return get(THS_DEF) > 3.5 or get(THS_DEF) < -3
     end
 }
 

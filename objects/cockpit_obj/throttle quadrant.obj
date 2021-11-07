@@ -8369,7 +8369,7 @@ IDX10	5958	5905	5907	5958	5905	5958	5932	5906	5905	5932
 			ANIM_begin
 			ANIM_trans	0	0.04403	-20.06786	0	0.04403	-20.06786
 			ANIM_rotate	1	0	0	-81.809206	-81.809206
-			ANIM_rotate_begin	1	0	-0	a321neo/cockpit/controls/elevator_trim_degrees
+			ANIM_rotate_begin	1	0	-0	a321neo/dynamics/FBW/controls/THS_deflection
 			ANIM_rotate_key	-4	-51.000121
 			ANIM_rotate_key	0	0
 			ANIM_rotate_key	13.5	173.00002
@@ -8379,10 +8379,10 @@ IDX10	5958	5905	5907	5958	5905	5958	5932	5906	5905	5932
 			ANIM_begin
 			ANIM_trans	0	0.04403	-20.06786	0	0.04403	-20.06786
 			ANIM_rotate	1	0	0	-81.809206	-81.809206
-			ANIM_rotate_begin	1	0	-0	a321neo/cockpit/controls/elevator_trim_degrees
-			ANIM_rotate_key	-3.5	-1145
+			ANIM_rotate_begin	1	0	-0	a321neo/dynamics/FBW/controls/THS_deflection
+			ANIM_rotate_key	-4	-1150
 			ANIM_rotate_key	0	0
-			ANIM_rotate_key	11	3599.9997
+			ANIM_rotate_key	13.5	3600
 			ANIM_rotate_end
 			TRIS	18054 5376
 			ANIM_end

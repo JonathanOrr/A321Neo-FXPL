@@ -154,16 +154,10 @@ end
 function Set_anim_value_linear_range(current_value, target, min, max, linear_spd, curved_spd)
     local limited_target = Math_clamp(target, min, max)
 
-    if current_value > max then
-        return max
-    elseif current_value < min then
-        return min
-    else
-        local int_linear_speed = linear_spd / curved_spd
-        local adding_term = Math_clamp_lower(limited_target - current_value, -int_linear_speed)
-        adding_term = Math_clamp_higher(adding_term, int_linear_speed)
-        return current_value + adding_term * (curved_spd * get(DELTA_TIME))
-    end
+    local int_linear_speed = linear_spd / curved_spd
+    local adding_term = Math_clamp_lower(limited_target - current_value, -int_linear_speed)
+    adding_term = Math_clamp_higher(adding_term, int_linear_speed)
+    return Math_clamp(current_value + adding_term * (curved_spd * get(DELTA_TIME)), min, max)
 end
 
 function Set_anim_value_no_lim(current_value, target, speed)

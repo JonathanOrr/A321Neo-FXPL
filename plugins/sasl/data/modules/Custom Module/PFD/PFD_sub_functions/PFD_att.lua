@@ -9,19 +9,19 @@ local function draw_trim_flag(PFD_table)
         return
     end
 
-    local ALL_SPLR_FAIL = not FBW.fctl.surfaces.splr.L[1].controlled and
-                          not FBW.fctl.surfaces.splr.L[2].controlled and
-                          not FBW.fctl.surfaces.splr.L[3].controlled and
-                          not FBW.fctl.surfaces.splr.L[4].controlled and
-                          not FBW.fctl.surfaces.splr.L[5].controlled and
-                          not FBW.fctl.surfaces.splr.R[1].controlled and
-                          not FBW.fctl.surfaces.splr.R[2].controlled and
-                          not FBW.fctl.surfaces.splr.R[3].controlled and
-                          not FBW.fctl.surfaces.splr.R[4].controlled and
-                          not FBW.fctl.surfaces.splr.R[5].controlled
+    local ALL_SPLR_FAIL = not FBW.fctl.SPLR.STAT.L[1].controlled and
+                          not FBW.fctl.SPLR.STAT.L[2].controlled and
+                          not FBW.fctl.SPLR.STAT.L[3].controlled and
+                          not FBW.fctl.SPLR.STAT.L[4].controlled and
+                          not FBW.fctl.SPLR.STAT.L[5].controlled and
+                          not FBW.fctl.SPLR.STAT.R[1].controlled and
+                          not FBW.fctl.SPLR.STAT.R[2].controlled and
+                          not FBW.fctl.SPLR.STAT.R[3].controlled and
+                          not FBW.fctl.SPLR.STAT.R[4].controlled and
+                          not FBW.fctl.SPLR.STAT.R[5].controlled
 
-    if (ALL_SPLR_FAIL and not FBW.fctl.surfaces.ail.L.controlled and not FBW.fctl.surfaces.ail.R.controlled) or
-       (not FBW.fctl.surfaces.elev.L.controlled and not FBW.fctl.surfaces.elev.R.controlled) then
+    if (ALL_SPLR_FAIL and not FBW.fctl.AIL.STAT.L.controlled and not FBW.fctl.AIL.STAT.R.controlled) or
+       (not FBW.fctl.ELEV.STAT.L.controlled and not FBW.fctl.ELEV.STAT.R.controlled) then
         sasl.gl.drawText(Font_AirbusDUL, ATT_x_center, ATT_y_center + 275, "MAN PITCH TRIM ONLY", 34, false, false, TEXT_ALIGN_CENTER, ECAM_RED)
         return
     end
