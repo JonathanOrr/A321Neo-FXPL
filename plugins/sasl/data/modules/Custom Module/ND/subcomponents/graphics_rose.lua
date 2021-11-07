@@ -441,7 +441,7 @@ end
 
 local function draw_active_fpln(data)   -- This is just a test
 
-    local active_legs = FMGS_get_route_legs()
+    local active_legs = FMGS_get_enroute_legs()
 
 
     -- For each point in the FPLN...
@@ -471,48 +471,27 @@ local function draw_active_fpln(data)   -- This is just a test
         end
     end
 
-    local dep_sid = FMGS_dep_get_sid(false)
-    local last_x, last_y = nil, nil
-
-    if dep_sid and dep_sid.computed_legs then
-        for i, point in ipairs(dep_sid.computed_legs) do
-            local x, y = rose_get_x_y_heading(data, point.lat, point.lon, data.inputs.heading)
-            if i > 1 then
-                sasl.gl.drawWideLine(last_x, last_y, x, y, 2, ECAM_GREEN)
-            end
-            last_x, last_y = x,y
-        end
+    -- Now let's draw the flight path
+    local curved_route =  FMGS_get_active_curved_route() 
+    if not curved_route then
+        return
     end
 
-    if #active_legs > 1 then
-        local n = #active_legs
-        for k,r in ipairs(active_legs) do
-        
-            if k > 1 and k < n and r.beizer then
+    local LINE_SIZE = 2
 
-                local x_start, y_start = rose_get_x_y_heading(data, r.beizer.start_lat, r.beizer.start_lon, data.inputs.heading)
-                local x_end, y_end     = rose_get_x_y_heading(data, r.beizer.end_lat, r.beizer.end_lon, data.inputs.heading)
-                local x_focus, y_focus = r.x, r.y
-                sasl.gl.drawWideBezierLineQAdaptive ( x_start, y_start, x_focus, y_focus, x_end, y_end, 2 , ECAM_RED )
-
-            
-                if last_x ~= nil then
-                    sasl.gl.drawWideLine(last_x, last_y, x_start, y_start, 2, ECAM_GREEN)
-                else
-                    local x,y = rose_get_x_y_heading(data, active_legs[k-1].lat, active_legs[k-1].lon, data.inputs.heading)
-                    sasl.gl.drawWideLine(x, y, x_start, y_start, 2, ECAM_GREEN)
-                end
-
-                last_x = x_end
-                last_y = y_end
-
-            end
+    for i,x in ipairs(curved_route) do
+        if x.segment_type == FMGS_COMP_SEGMENT_LINE or x.segment_type == FMGS_COMP_SEGMENT_ENROUTE then
+            local x_start,y_start = rose_get_x_y_heading(data, x.start_lat, x.start_lon, data.inputs.heading)
+            local x_end,y_end     = rose_get_x_y_heading(data, x.end_lat, x.end_lon, data.inputs.heading)
+            sasl.gl.drawWideLine(x_start, y_start, x_end, y_end, LINE_SIZE, ECAM_GREEN)
+        elseif x.segment_type == FMGS_COMP_SEGMENT_ARC then
+            local x_ctr,y_ctr = rose_get_x_y_heading(data, x.ctr_lat, x.ctr_lon, data.inputs.heading)
+            local x_lat,y_lon = rose_get_x_y_heading(data, x.end_lat, x.end_lon, data.inputs.heading)
+            local xy_radius = rose_get_px_per_nm(data) * x.radius
+            sasl.gl.drawArc(x_ctr, y_ctr, xy_radius-LINE_SIZE/2, xy_radius+LINE_SIZE/2, x.start_angle+data.inputs.heading-Local_magnetic_deviation(), x.arc_length_deg, ECAM_GREEN)
         end
-        if last_x ~= nil and not active_legs[n].discontinuity then
-            local x,y = rose_get_x_y_heading(data, active_legs[n].lat, active_legs[n].lon, data.inputs.heading)
-            sasl.gl.drawWideLine(last_x, last_y, x, y, 2, ECAM_GREEN)
-        end
-    end
+    end   
+
 end
 
 local function draw_arpt_symbol(data)

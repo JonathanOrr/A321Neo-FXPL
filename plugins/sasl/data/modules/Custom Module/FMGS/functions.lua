@@ -965,10 +965,14 @@ end
 -------------------------------------------------------------------------------
 -- Route
 -------------------------------------------------------------------------------
-function FMGS_get_route_legs()
+function FMGS_get_enroute_legs()
     return FMGS_sys.fpln.active.legs
 end
 
 function FMGS_get_next_leg_id()
     return FMGS_sys.fpln.active.next_leg
+end
+
+function FMGS_get_active_curved_route()
+    return FMGS_sys.fpln.active.segment_curved_list
 end

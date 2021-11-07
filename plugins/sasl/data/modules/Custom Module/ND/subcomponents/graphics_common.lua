@@ -489,7 +489,7 @@ local function draw_next_waypoint_info(data)
         return -- Not present in OANS mode
     end
 
-    local active_legs = FMGS_get_route_legs()
+    local active_legs = FMGS_get_enroute_legs()
     local next_leg_id = FMGS_get_next_leg_id()
 
     if active_legs == nil or #active_legs == 0 or next_leg_id == nil then

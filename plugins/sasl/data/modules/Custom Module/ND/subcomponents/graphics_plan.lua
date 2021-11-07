@@ -264,7 +264,7 @@ end
 
 local function draw_active_fpln(data)   -- This is just a test
 
-    local active_legs = FMGS_get_route_legs()
+    local active_legs = FMGS_get_enroute_legs()
 
     local routes = {{}}
     local i_route = 1
