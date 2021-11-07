@@ -44,6 +44,9 @@ debug_mcdu_startup_page = 505
 --Disables the noisy blowers during coding.
 debug_kill_blowers = false
 
+-- Enable the debugging (in console) of path generation algorithm
+debug_FMGS_path_generation = false
+
 --
 --
 -- Do not touch after this line

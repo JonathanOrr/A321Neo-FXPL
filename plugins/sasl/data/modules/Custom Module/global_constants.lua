@@ -302,6 +302,15 @@ FMGS_SEGMENT_APPR     = 7
 FMGS_SEGMENT_HOLD     = 8
 FMGS_SEGMENT_OFF_ROUTE= 9
 
+-- The next constants are used in the FMGS path generation computer
+FMGS_COMP_SEGMENT_LINE    = 1
+FMGS_COMP_SEGMENT_ARC     = 2
+FMGS_COMP_SEGMENT_INFINITE_LINE = 3
+FMGS_COMP_SEGMENT_HOLD    = 4
+FMGS_COMP_SEGMENT_PI      = 5
+FMGS_COMP_SEGMENT_ENROUTE = 6
+FMGS_COMP_SEGMENT_DELETED = 7  -- Hide a leg (usually a segment) if it cannot be drawn
+
 -- CIFP 
 ------ SID
 CIFP_TYPE_SS_ENG_OUT   = '0'
