@@ -92,6 +92,7 @@ local function mouse_down(x,y)
             if AvionicsBay.is_initialized()  and AvionicsBay.is_ready() then
                 local_result = "WAIT"
                 load_result_color = ECAM_ORANGE
+                FMGS_reset_dep_arr_airports()
                 FMGS_set_apt_dep("LIML")
                 FMGS_set_apt_arr("LIML")
                 FMGS_set_apt_alt("LIMC")

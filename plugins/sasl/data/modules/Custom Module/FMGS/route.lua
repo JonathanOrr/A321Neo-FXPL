@@ -19,7 +19,7 @@
 include('FMGS/functions.lua')
 include('FMGS/nav_helpers.lua')
 include('FMGS/geometric_helpers.lua')
-include('FMGS/route_cifp.lua')
+include('FMGS/cifp_decorator.lua')
 include('libs/geo-helpers.lua')
 local ROUTE_FREQ_UPDATE_SEC = 0.5
 

@@ -22,7 +22,7 @@ local function read_fix_id(fix_id, target_region_code, airport)  -- Convert the 
     local fixes_2 = nil
 
     -- VOR or NDB
-    if #fix_id == 3 then
+    if #fix_id <= 3 then
         fixes_1 = AvionicsBay.navaids.get_by_name(NAV_ID_NDB, fix_id, false)
         fixes_2 = AvionicsBay.navaids.get_by_name(NAV_ID_VOR, fix_id, false)
 

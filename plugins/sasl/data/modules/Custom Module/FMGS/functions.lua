@@ -244,6 +244,12 @@ end
 
 function FMGS_dep_set_rwy(rwy, sibling)
     FMGS_sys.fpln.temp.apts.dep_rwy = {rwy, sibling}
+
+    -- It doesn't matter if we use the coordinates of the sibling or normal runway
+    -- the declination doesn't change significantly
+    local _, year = AvionicsBay.get_data_cycle()
+    rwy.mag_decl = AvionicsBay.get_declination(rwy.lat, rwy.lon, year)
+
 end
 
 -------------------------------------------------------------------------------
