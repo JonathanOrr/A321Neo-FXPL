@@ -476,9 +476,9 @@ local function debug_print_segments(points)
    end
 end
 
-function convert_from_FMGS_data()
+function convert_from_FMGS_data(fpln)
 
-   local apts = FMGS_sys.fpln.active.apts
+   local apts = fpln.apts
 
    local rwy_lon = apts.dep_rwy[2] and apts.dep_rwy[1].s_lon or apts.dep_rwy[1].lon
    local rwy_lat = apts.dep_rwy[2] and apts.dep_rwy[1].s_lat or apts.dep_rwy[1].lat
@@ -513,7 +513,7 @@ function convert_from_FMGS_data()
    parse_section("dep_trans", "-- DEP TRANS --")
 
 
-   for i,x in ipairs(FMGS_sys.fpln.active.legs) do
+   for i,x in ipairs(fpln.legs) do
       if not x.discontinuity then
          local seg = { segment_type=FMGS_COMP_SEGMENT_ENROUTE, start_lat=last_lat, start_lon=last_lon, end_lat=x.lat, end_lon=x.lon, leg_name = x.id, orig_ref=x }
          last_lat = x.lat
@@ -522,7 +522,7 @@ function convert_from_FMGS_data()
       end
    end
 
-   if #FMGS_sys.fpln.active.legs >= 2 then
+   if #fpln.legs >= 2 then
       last_ob = get_bearing(final_list[#final_list].start_lat,final_list[#final_list].start_lon,final_list[#final_list].end_lat,final_list[#final_list].end_lon)
    end
 
@@ -534,6 +534,6 @@ function convert_from_FMGS_data()
    if debug_FMGS_path_generation then
       table.save( final_list, "final_list.lua" )
    end
-   return final_list
 
+   return final_list
 end

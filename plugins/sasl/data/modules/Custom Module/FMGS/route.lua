@@ -86,6 +86,16 @@ local function fpln_recompute_distances_fplnlegs(fpln, prev_point)
     end
 end
 
+local function perform_FPLN_conversion(fpln)
+    local segment_list = convert_from_FMGS_data(fpln)
+    fpln.segment_list = segment_list
+
+    local converted_segment_list = convert_holds(segment_list)
+    converted_segment_list = convert_pi(converted_segment_list)
+
+    fpln.segment_curved_list = segment_list
+    create_turns(fpln.segment_curved_list)
+end
 
 function update_route()
 
@@ -148,6 +158,6 @@ function update_route()
         FMGS_sys.data.pred.trip_dist = nil -- This has no sense
     end
 
-
+    perform_FPLN_conversion(fpln)
 end
 
