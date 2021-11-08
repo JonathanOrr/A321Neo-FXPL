@@ -88,12 +88,11 @@ end
 
 local function perform_FPLN_conversion(fpln)
     local segment_list = convert_from_FMGS_data(fpln)
-    fpln.segment_list = segment_list
 
     local converted_segment_list = convert_holds(segment_list)
     converted_segment_list = convert_pi(converted_segment_list)
 
-    fpln.segment_curved_list = segment_list
+    fpln.segment_curved_list = converted_segment_list
     create_turns(fpln.segment_curved_list)
 end
 

@@ -478,62 +478,66 @@ end
 
 function convert_from_FMGS_data(fpln)
 
-   local apts = fpln.apts
+    local apts = FMGS_sys.fpln.active.apts
 
-   local rwy_lon = apts.dep_rwy[2] and apts.dep_rwy[1].s_lon or apts.dep_rwy[1].lon
-   local rwy_lat = apts.dep_rwy[2] and apts.dep_rwy[1].s_lat or apts.dep_rwy[1].lat
-   local bearing = apts.dep_rwy[2] and apts.dep_rwy[1].bearing or (apts.dep_rwy[1].bearing + 180) % 360
-
-   last_mag_decl = apts.dep_rwy[1].mag_decl or 0
-
-   local last_lat = rwy_lat
-   local last_lon = rwy_lon
-   local last_ob = bearing                              -- Outbound course
-   local last_c_alt = apts.dep.alt -- Last @ constraints altitude
-   local i_legs
-   local segments
-
-   local final_list = {}
-
-   local parse_section = function(name, str_desc)
-      i_legs = apts[name] and apts[name].legs
-
-      segments, last_lat, last_lon, last_ob, last_c_alt = convert_generic(i_legs,last_lat,last_lon,last_c_alt,last_ob)
-
-      if debug_FMGS_path_generation then
-         print(str_desc)
-         debug_print_segments(segments)
-      end
-      for i,x in ipairs(segments) do
-         table.insert(final_list, x)
-      end
-   end
-
-   parse_section("dep_sid", "-- DEP SID --")
-   parse_section("dep_trans", "-- DEP TRANS --")
-
-
-   for i,x in ipairs(fpln.legs) do
-      if not x.discontinuity then
-         local seg = { segment_type=FMGS_COMP_SEGMENT_ENROUTE, start_lat=last_lat, start_lon=last_lon, end_lat=x.lat, end_lon=x.lon, leg_name = x.id, orig_ref=x }
-         last_lat = x.lat
-         last_lon = x.lon
-         table.insert(final_list, seg)
-      end
-   end
-
-   if #fpln.legs >= 2 then
-      last_ob = get_bearing(final_list[#final_list].start_lat,final_list[#final_list].start_lon,final_list[#final_list].end_lat,final_list[#final_list].end_lon)
-   end
-
-   parse_section("arr_trans", "-- ARR TRANS --")
-   parse_section("arr_star", "-- ARR STAR --")
-   parse_section("arr_via", "-- ARR VIA --")
-   parse_section("arr_appr", "-- ARR APPR --")
-   
-   if debug_FMGS_path_generation then
-      table.save( final_list, "final_list.lua" )
-   end
-
-   return final_list
+    local rwy_lon = (not apts.dep_rwy[2]) and apts.dep_rwy[1].s_lon or apts.dep_rwy[1].lon
+    local rwy_lat = (not apts.dep_rwy[2]) and apts.dep_rwy[1].s_lat or apts.dep_rwy[1].lat
+    local rwy_s_lon = (apts.dep_rwy[2]) and apts.dep_rwy[1].s_lon or apts.dep_rwy[1].lon
+    local rwy_s_lat = (apts.dep_rwy[2]) and apts.dep_rwy[1].s_lat or apts.dep_rwy[1].lat
+    local bearing = (not apts.dep_rwy[2]) and apts.dep_rwy[1].bearing or (apts.dep_rwy[1].bearing + 180) % 360
+ 
+    last_mag_decl = apts.dep_rwy[1].mag_decl or 0
+ 
+    local last_lat = rwy_lat
+    local last_lon = rwy_lon
+    local last_ob = bearing                              -- Outbound course
+    local last_c_alt = apts.dep.alt -- Last @ constraints altitude
+    local i_legs
+    local segments
+ 
+    local final_list = {}
+ 
+    local parse_section = function(name, str_desc)
+       i_legs = apts[name] and apts[name].legs
+ 
+       segments, last_lat, last_lon, last_ob, last_c_alt = convert_generic(i_legs,last_lat,last_lon,last_c_alt,last_ob)
+ 
+       if debug_FMGS_path_generation then
+          print(str_desc)
+          debug_print_segments(segments)
+       end
+       for i,x in ipairs(segments) do
+          table.insert(final_list, x)
+       end
+    end
+ 
+    table.insert(final_list, {segment_type=FMGS_COMP_SEGMENT_RWY_LINE, start_lat=rwy_s_lat, start_lon=rwy_s_lon, end_lat=rwy_lat, end_lon=rwy_lon, orig_ref = {}})   
+ 
+    parse_section("dep_sid", "-- DEP SID --")
+    parse_section("dep_trans", "-- DEP TRANS --")
+ 
+ 
+    for i,x in ipairs(FMGS_sys.fpln.active.legs) do
+       if not x.discontinuity then
+          local seg = { segment_type=FMGS_COMP_SEGMENT_ENROUTE, start_lat=last_lat, start_lon=last_lon, end_lat=x.lat, end_lon=x.lon, leg_name = x.id, orig_ref=x }
+          last_lat = x.lat
+          last_lon = x.lon
+          table.insert(final_list, seg)
+       end
+    end
+ 
+    if #FMGS_sys.fpln.active.legs >= 2 then
+       last_ob = get_bearing(final_list[#final_list].start_lat,final_list[#final_list].start_lon,final_list[#final_list].end_lat,final_list[#final_list].end_lon)
+    end
+ 
+    parse_section("arr_trans", "-- ARR TRANS --")
+    parse_section("arr_star", "-- ARR STAR --")
+    parse_section("arr_via", "-- ARR VIA --")
+    parse_section("arr_appr", "-- ARR APPR --")
+    
+    if debug_FMGS_path_generation then
+       table.save( final_list, "final_list.lua" )
+    end
+    return final_list
+ 
 end
