@@ -336,7 +336,7 @@ local function add_to_fpln(mcdu_data, full_path, type_map, awy_map)
         elseif type_map[fix] == 2 then  -- NDB
             local list_ndbs = AvionicsBay.navaids.get_by_name(NAV_ID_NDB, fix, false)
             nearest_point = get_nearest(mcdu_data.airways.source_wpt, list_ndbs)
-            to_add.ptr_type = FMGS_PTR_NAVAID
+            to_add.ptr_type = FMGS_PTR_NDB
         elseif type_map[fix] == 3 then  -- VOR/DME
             local list_vordmes1 = AvionicsBay.navaids.get_by_name(NAV_ID_VOR, fix, false)
             local list_vordmes2 = AvionicsBay.navaids.get_by_name(NAV_ID_DME, fix, false)
@@ -344,7 +344,7 @@ local function add_to_fpln(mcdu_data, full_path, type_map, awy_map)
             for k,v in pairs(list_vordmes2) do table.insert(list_vordmes1, v) end
             for k,v in pairs(list_vordmes3) do table.insert(list_vordmes1, v) end
             nearest_point = get_nearest(mcdu_data.airways.source_wpt, list_vordmes1)
-            to_add.ptr_type = FMGS_PTR_NAVAID
+            to_add.ptr_type = FMGS_PTR_VOR
         end
 
         if to_add.ptr_type and nearest_point and i ~= 1 then    -- We skip the first fix because already there

@@ -20,11 +20,16 @@
 local function read_fix_id(fix_id, target_region_code, airport)  -- Convert the a FIX field of the CIFP to the avionics_bay object
     local fixes_1 = nil
     local fixes_2 = nil
+    local fixes_1_type = nil
+    local fixes_2_type = nil
 
     -- VOR or NDB
     if #fix_id <= 3 then
         fixes_1 = AvionicsBay.navaids.get_by_name(NAV_ID_NDB, fix_id, false)
         fixes_2 = AvionicsBay.navaids.get_by_name(NAV_ID_VOR, fix_id, false)
+
+        fixes_1_type = FMGS_PTR_NDB
+        fixes_2_type = FMGS_PTR_VOR
 
     -- RUNWAY identifier
     elseif fix_id:sub(1,2) == "RW" and tonumber(fix_id:sub(3,4)) ~= nil  then    -- Runway
@@ -46,15 +51,17 @@ local function read_fix_id(fix_id, target_region_code, airport)  -- Convert the 
     -- Waypoint
     elseif #fix_id == 5 then
         fixes_1 = AvionicsBay.fixes.get_by_name(fix_id, false)
+        fixes_1_type = FMGS_PTR_WPT
     end
     
     local found_x
 
-    local check_correct= function(fixes)
+    local check_correct= function(fixes, f_type)
         for _,x in ipairs(fixes) do
             if x.region_code == target_region_code and 
                ((not x.airport_id) or x.airport_id == "ENRT" or x.airport_id == airport.id)
             then
+                x.ptr_type = f_type
                 found_x = x
                 break
             end
@@ -62,11 +69,11 @@ local function read_fix_id(fix_id, target_region_code, airport)  -- Convert the 
     end
 
     if fixes_1 then
-        check_correct(fixes_1)
+        check_correct(fixes_1, fixes_1_type)
     end
 
     if fixes_2 then
-        check_correct(fixes_2)
+        check_correct(fixes_2, fixes_2_type)
     end
     
     return found_x
@@ -76,6 +83,7 @@ local function decorate_cifp_point_fix(apt_ref, x)
     local point = read_fix_id(x.leg_name, x.leg_name_region_code, apt_ref)
     if point then
         -- Save also on the cifp for later usage
+        x.leg_name_poi = point
         x.lat = point.lat
         x.lon = point.lon
         local _, year = AvionicsBay.get_data_cycle()
@@ -90,6 +98,7 @@ local function decorate_cifp_point_fix_rn(apt_ref, x)
     local rn_point = read_fix_id(x.recomm_navaid, x.recomm_navaid_region_code, apt_ref)
     if point then
         -- Save also on the cifp for later usage
+        x.leg_name_poi = point
         x.lat = point.lat
         x.lon = point.lon
         local _, year = AvionicsBay.get_data_cycle()
@@ -111,6 +120,7 @@ local function decorate_cifp_point_fix_ctr(apt_ref, x)
     local ctr_point = read_fix_id(x.center_fix,x.center_fix_region_code, apt_ref)
     if point then
         -- Save also on the cifp for later usage
+        x.leg_name_poi = point
         x.lat = point.lat
         x.lon = point.lon
         local _, year = AvionicsBay.get_data_cycle()

@@ -168,7 +168,7 @@ end
 function avionics_bay_generic_wpt_to_fmgs_type(x)
     assert(x)
     if x.freq then
-        return FMGS_PTR_NAVAID
+        return FMGS_PTR_VOR
     elseif x.rwys then
         return FMGS_PTR_APT
     else
