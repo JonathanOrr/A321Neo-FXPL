@@ -453,16 +453,14 @@ local function draw_active_fpln(data)   -- This is just a test
             x.x = c_x
             x.y = c_y
             
-            local color = k == 1 and ECAM_WHITE or ECAM_GREEN
+            local color = ECAM_GREEN
 
             if x.ptr_type == FMGS_PTR_WPT then
                 draw_poi_array(data, x, image_point_wpt, color)
-            elseif x.ptr_type == FMGS_PTR_NAVAID then
-                if x.navaid == NAV_ID_NDB then
-                    draw_poi_array(data, x, image_point_ndb, color)
-                elseif x.navaid == NAV_ID_VOR then
-                    draw_poi_array(data, x, x.has_dme and image_point_vor_dme or image_point_vor_only, color)
-                end
+            elseif x.ptr_type == FMGS_PTR_NDB then
+                draw_poi_array(data, x, image_point_ndb, color)
+            elseif x.ptr_type == FMGS_PTR_VOR then
+                draw_poi_array(data, x, x.is_coupled_dme and image_point_vor_dme or image_point_vor_only, color)
             elseif x.ptr_type == FMGS_PTR_APT then
                 draw_poi_array(data, x, image_point_apt, color)
             elseif x.ptr_type == FMGS_PTR_COORDS then
@@ -479,8 +477,11 @@ local function draw_active_fpln(data)   -- This is just a test
 
     local LINE_SIZE = 2
 
+    local already_drawn = {}
+    local first_point_drawn = false
+
     for i,x in ipairs(curved_route) do
-        if x.segment_type == FMGS_COMP_SEGMENT_LINE or x.segment_type == FMGS_COMP_SEGMENT_ENROUTE then
+        if x.segment_type == FMGS_COMP_SEGMENT_LINE or x.segment_type == FMGS_COMP_SEGMENT_ENROUTE or x.segment_type == FMGS_COMP_SEGMENT_RWY_LINE then
             local x_start,y_start = rose_get_x_y_heading(data, x.start_lat, x.start_lon, data.inputs.heading)
             local x_end,y_end     = rose_get_x_y_heading(data, x.end_lat, x.end_lon, data.inputs.heading)
             sasl.gl.drawWideLine(x_start, y_start, x_end, y_end, LINE_SIZE, ECAM_GREEN)
@@ -489,6 +490,22 @@ local function draw_active_fpln(data)   -- This is just a test
             local x_lat,y_lon = rose_get_x_y_heading(data, x.end_lat, x.end_lon, data.inputs.heading)
             local xy_radius = rose_get_px_per_nm(data) * x.radius
             sasl.gl.drawArc(x_ctr, y_ctr, xy_radius-LINE_SIZE/2, xy_radius+LINE_SIZE/2, x.start_angle+data.inputs.heading-Local_magnetic_deviation(), x.arc_length_deg, ECAM_GREEN)
+        end
+
+        local color = first_point_drawn and ECAM_GREEN or ECAM_WHITE
+
+        if x.orig_ref and x.orig_ref.leg_name_poi and not already_drawn[x.orig_ref.leg_name] then
+            already_drawn[x.orig_ref.leg_name] = true
+            first_point_drawn = true
+
+            local poi = x.orig_ref.leg_name_poi
+            if poi.ptr_type == FMGS_PTR_WPT then
+                draw_poi_array(data, poi, image_point_wpt, color)
+            elseif poi.ptr_type == FMGS_PTR_NDB then
+                draw_poi_array(data, poi, image_point_ndb, color)
+            elseif poi.ptr_type == FMGS_PTR_VOR then
+                draw_poi_array(data, poi, poi.is_coupled_dme and image_point_vor_dme or image_point_vor_only, color)
+            end
         end
     end   
 
