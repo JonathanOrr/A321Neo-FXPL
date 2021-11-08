@@ -334,6 +334,9 @@ local function draw_active_fpln(data)   -- This is just a test
             elseif poi.ptr_type == FMGS_PTR_VOR then
                 draw_poi_array(data, poi, poi.is_coupled_dme and image_point_vor_dme or image_point_vor_only, color)
             end
+            poi.x = nil
+            poi.y = nil
+
         end
     end   
 end
