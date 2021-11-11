@@ -63,9 +63,9 @@ function configure_pw1133g()
                 -- n2_increase_per_sec: N2 is increasing this value each second
                 -- fuel_flow: the fuel flow to use in this phase (static)
                 -- egt: the value for EGT at the beginning of this phase (it will increase towards the next value)
-                {n2_start = 0,    n2_increase_per_sec = 0.26, fuel_flow = 0,   egt=0},
-                {n2_start = 10,   n2_increase_per_sec = 1.5, fuel_flow = 0,    egt=97},
-                {n2_start = 16.2, n2_increase_per_sec = 1.5, fuel_flow = 120,  egt=97},
+                {n2_start = 0,    n2_increase_per_sec = 0.26, fuel_flow = 0,   egt=0}, -- egt 0 lead to OAT in display
+                {n2_start = 10,   n2_increase_per_sec = 1.5, fuel_flow = 0,    egt=0},
+                {n2_start = 16.2, n2_increase_per_sec = 1.5, fuel_flow = 120,  egt=0}, -- EGT can increase only with fuel
                 {n2_start = 16.7, n2_increase_per_sec = 1.8, fuel_flow = 180,  egt=97},
                 {n2_start = 24,   n2_increase_per_sec = 1.25, fuel_flow = 100, egt=162},
                 {n2_start = 26.8, n2_increase_per_sec = 1.25, fuel_flow = 100, egt=263},
