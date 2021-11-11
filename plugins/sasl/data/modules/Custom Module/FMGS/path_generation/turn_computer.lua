@@ -179,8 +179,8 @@ local function create_turn_fly_over(curr, next, speed)
     local start_first_segment
     local start_second_segment
     if is_left_turn then
-        start_first_segment = perp_angle+90
-        start_second_segment = perp_angle-90+epsilon
+        start_first_segment = -perp_angle-90
+        start_second_segment = -perp_angle+90+epsilon
         epsilon = -epsilon
         gamma = - gamma
     else

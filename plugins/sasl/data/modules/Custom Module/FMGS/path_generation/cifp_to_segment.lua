@@ -366,7 +366,6 @@ local function convert_generic(i_legs, begin_lat, begin_lon, begin_alt, begin_co
          leg1 = convert_generic_VR(x, last_lat, last_lon)
       elseif x.leg_type == CIFP_LEG_TYPE_VI or x.leg_type == CIFP_LEG_TYPE_CI then  -- TODO Wind
          -- No leg produced
-         enforce_intercept_course = true
       elseif x.leg_type == CIFP_LEG_TYPE_CF then
          leg1 = convert_generic_CF(x, last_lat, last_lon, last_outbound_course, enforce_intercept_course)
       elseif x.leg_type == CIFP_LEG_TYPE_FD or x.leg_type == CIFP_LEG_TYPE_CD then
@@ -405,6 +404,8 @@ local function convert_generic(i_legs, begin_lat, begin_lon, begin_alt, begin_co
       else
          sasl.logWarning("convert_generic: skipped leg: " .. x.leg_type)
       end
+
+      enforce_intercept_course = x.leg_type == CIFP_LEG_TYPE_VI or x.leg_type == CIFP_LEG_TYPE_CI
 
       -- Add the leg
       if leg1 then
