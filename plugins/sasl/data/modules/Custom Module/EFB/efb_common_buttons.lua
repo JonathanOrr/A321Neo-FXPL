@@ -18,9 +18,9 @@ function EFB_common_buttons()
         Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 461, 732, 567, 772, function ()
             EFB_PAGE = 5
         end)
-        --Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 575, 732, 681, 772, function ()
-        --    EFB_PAGE = 6
-        --end)
+        Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 575, 732, 681, 772, function ()
+            EFB_PAGE = 6
+        end)
         --Button_check_and_action(EFB_CURSOR_X, EFB_CURSOR_Y, 5, 732, 110, 772, function ()
         --    EFB_PAGE = 7
         --end)

@@ -179,6 +179,9 @@ EFB_CONFIG_engine_LEAP =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module
 
 EFB_CONFIG_s2_bgd =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/CONFIG page/subpage2/bgd.png")
 
+------- EFB ENG PAGE -------
+
+EFB_ENG_bgd =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/EFB/Icons/ENG page/overlay.png")
 
 --SIMBRIEF
 

@@ -327,6 +327,10 @@ Eng_starter_valve_open  = createGlobalPropertyia("a321neo/dynamics/engines/sav_o
 
 Eng_is_failed = createGlobalPropertyia("a321neo/dynamics/engines/eng_failed", 2) -- There's a special condition for this
 
+-- Engine startup config stuff
+ENG_config_cooling_time = createGlobalPropertyi("a321neo/config/eng/initial_cooling", 0, false, true, false)
+ENG_config_egt_drop = createGlobalPropertyi("a321neo/config/eng/pw11ßß_egt_drop", 0, false, true, false)
+
 -- ATHR
 ATHR_desired_N1     = createGlobalPropertyfa("a321neo/dynamics/engines/athr_input_n1", 2)
 ATHR_is_controlling = createGlobalPropertyi("a321neo/dynamics/engines/athr_is_controlling", 0, false, true, false)
