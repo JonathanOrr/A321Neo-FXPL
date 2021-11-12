@@ -190,13 +190,15 @@ local function convert_generic_CF(x, last_lat, last_lon, last_course, enforce_in
    -- Try to intercept from the bottom (or from the forced ones)
    local next_lat, next_lon = intersecting_radials(last_lat, last_lon, x.lat, x.lon, intercept_radial_1, goal_out_radial)
    if next_lat and next_lon then
-      return { segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=last_lat, start_lon=last_lon, end_lat=next_lat, end_lon=next_lon, leg_name = x.leg_name, orig_ref=x }
+      return { segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=last_lat, start_lon=last_lon, end_lat=next_lat, end_lon=next_lon, leg_name = x.leg_name, orig_ref=x },
+             { segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=next_lat, start_lon=next_lon, end_lat=x.lat, end_lon=x.lon, leg_name = x.leg_name, orig_ref=x }
    end
    
    -- Try to intercept from the top
    local next_lat, next_lon = intersecting_radials(last_lat, last_lon, x.lat, x.lon, intercept_radial_2, goal_out_radial)
    if next_lat and next_lon then
-      return { segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=last_lat, start_lon=last_lon, end_lat=next_lat, end_lon=next_lon, leg_name = x.leg_name, orig_ref=x }
+      return { segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=last_lat, start_lon=last_lon, end_lat=next_lat, end_lon=next_lon, leg_name = x.leg_name, orig_ref=x },
+             { segment_type=FMGS_COMP_SEGMENT_LINE, start_lat=next_lat, start_lon=next_lon, end_lat=x.lat, end_lon=x.lon, leg_name = x.leg_name, orig_ref=x }
    end
 
    -- This is something unexpected, but let's skip the radial connection
@@ -367,7 +369,7 @@ local function convert_generic(i_legs, begin_lat, begin_lon, begin_alt, begin_co
       elseif x.leg_type == CIFP_LEG_TYPE_VI or x.leg_type == CIFP_LEG_TYPE_CI then  -- TODO Wind
          -- No leg produced
       elseif x.leg_type == CIFP_LEG_TYPE_CF then
-         leg1 = convert_generic_CF(x, last_lat, last_lon, last_outbound_course, enforce_intercept_course)
+         leg1, leg2 = convert_generic_CF(x, last_lat, last_lon, last_outbound_course, enforce_intercept_course)
       elseif x.leg_type == CIFP_LEG_TYPE_FD or x.leg_type == CIFP_LEG_TYPE_CD then
          leg1, leg2 = convert_generic_FD_CD(x, last_lat, last_lon)
       elseif x.leg_type == CIFP_LEG_TYPE_FC then
