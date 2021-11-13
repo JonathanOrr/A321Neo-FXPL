@@ -926,6 +926,7 @@ local function update_continuous_ignition()
 end
 
 local function update_oil_qty()
+    -- TODO implement oil gulping during startup
     -- each engine consumes ~0.1 oil quantity each running hour
     local curr_oil = get(Eng_1_OIL_qty)
     curr_oil = curr_oil - ENG.data.oil.qty_consumption / 60 / 60 * get(DELTA_TIME) * get(Engine_1_avail)
@@ -1036,6 +1037,7 @@ local function update_engine_type()
         assert(ENG.data)    -- The engine should be correctly loaded now
         ENG.data_is_loaded = true
 
+        -- initial oil qty with some randomness
         set(Eng_1_OIL_qty, ENG.data.oil.qty_max*3/4 + ENG.data.oil.qty_max/4 * math.random())
         set(Eng_2_OIL_qty, ENG.data.oil.qty_max*3/4 + ENG.data.oil.qty_max/4 * math.random())
 

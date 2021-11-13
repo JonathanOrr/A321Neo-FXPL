@@ -38,9 +38,9 @@ function configure_pw1133g()
         end,
 
         oil = {
-            qty_max = 35,               -- [QT]
-            qty_min = 14,               -- [QT]
-            qty_consumption = 0.45,     -- [QT/hour]
+            qty_max = 22,               -- [QT] oil qty gauge shows a computed value which is about 1/2 actual just to have similar annunciations regardless engine type
+            qty_min = 14,               -- [QT] currently unused?! randomness of initial qty is coded in update_engine_type()
+            qty_consumption = 0.23,     -- [QT/hour]
             
             pressure_max_toga =  240,    -- [PSI]
             pressure_max_mct  =  220,    -- [PSI]
@@ -96,7 +96,7 @@ function configure_pw1133g()
             egt_amber_limit = 1043,          -- [°C]
             egt_amber_limit_on_start = nil,  -- [°C] Can be nil if not showed
 
-            oil_qty_scale     = 35,          -- [QT]
+            oil_qty_scale     = 22,          -- [QT]
             oil_qty_advisory  =  1.45,       -- [QT]
 
             oil_press_scale    = 450,       -- Scale of the ECAM object [PSI]

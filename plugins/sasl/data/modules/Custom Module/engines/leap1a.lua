@@ -90,6 +90,7 @@ function configure_leap_1a()
         },
         
         display = {
+            n1_red_limit = 101,
             egt_scale = 1200,               -- [°C]
             egt_red_limit = 1050,           -- [°C]
             egt_amber_limit = 950,          -- [°C]
