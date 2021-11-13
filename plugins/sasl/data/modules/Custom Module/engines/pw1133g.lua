@@ -88,7 +88,8 @@ function configure_pw1133g()
                 {n1_set = 18.5,   n1_increase_per_sec = 0.24, fuel_flow = 380, egt=637},
             },
             ign_on_n2 = 16,
-            ign_off_n2 = 55
+            ign_off_n2 = 55,
+            sav_close_n2 = 56
         },
 
         display = {

@@ -572,11 +572,13 @@ local function perform_starting_procedure_follow_n1(eng)
 
     -- Caution: eng_N2_off[] is not updated in the follow_n1 phase N2 is calculated in update_n2 function
     local eng_N2 = eng == 1 and get(Eng_1_N2) or get(Eng_2_N2)
-    if igniter_eng[eng] == 1 and eng_N2 > ENG.data.startup.ign_off_n2 then
+    if igniter_eng[eng] > 0 and eng_N2 > ENG.data.startup.ign_off_n2 then
         set(eng_igniters, 0, eng)
         igniter_eng[eng] = 0
-        starter_valve_eng[eng] = 0
+    end
 
+    if eng_N2 > ENG.data.startup.sav_close_n2 then  -- SAV close at a slightly different point in time than IGN off
+        starter_valve_eng[eng] = 0
     end
 end
 
