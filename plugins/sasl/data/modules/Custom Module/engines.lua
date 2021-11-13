@@ -480,9 +480,8 @@ local function perform_starting_procedure_follow_n2(eng)
 
     local oat = get(OTA)
     set(eng_mixture, 0, eng) -- No mixture in this phase
-    -- TODO we have to switch the bleed valve symbol on eng page to on during start up based on some condition
-    -- TODO according SIA technical training manual, igniters will be activated when N2 > 18% which does not correspond to N2 tables at the moment
-    if igniter_eng[eng] == 0 and not eng_manual_switch[eng] then
+    -- TODO we have to switch the starter valve symbol on eng page to on during start up based on some condition
+    if igniter_eng[eng] == 0 and not eng_manual_switch[eng] and eng_N2_off[eng] > ENG.data.startup.ign_on_n2 then
         igniter_eng[eng] = math.random() > 0.5 and 1 or 2  -- For ECAM visualization only, no practical effect
         starter_valve_eng[eng] = 1
     elseif eng_manual_switch[eng] then
@@ -490,7 +489,7 @@ local function perform_starting_procedure_follow_n2(eng)
         starter_valve_eng[eng] = 1 -- TODO is valve open on manual start?
     end
 
-    set(Eng_is_spooling_up, 1, eng) -- Need for bleed air computation, see packs.lua
+    set(Eng_is_spooling_up, 1, eng) -- Need for bleed air computation, see packs.lua, TODO bleed PSI seems to be to high currently
     
     for i=1,(#ENG.data.startup.n2-1) do
         -- For each phase... 
@@ -546,7 +545,7 @@ local function perform_starting_procedure_follow_n1(eng)
         local curr_N1 = math.max(math.max(eng_N1_off[eng],2), eng == 1 and get(Eng_1_N1) or get(Eng_2_N1))
         
         if curr_N1 < ENG.data.startup.n1[i+1].n1_set then
-            -- We have found the correct phase
+            -- We have found the correct row in phase table
 
             -- Let's set the fuel flow
             eng_FF_off[eng] = ENG.data.startup.n1[i].fuel_flow  / 3600
@@ -570,10 +569,10 @@ local function perform_starting_procedure_follow_n1(eng)
             break -- Don't need to check the other phases
         end
     end
-    
-    if eng_N1_off[eng] > 12 then
-        -- When N1 is more than 12 we can shutdown the igniters. This is necessary, otherwise the
-        -- engine will go over the minimum idle
+
+    -- Caution: eng_N2_off[] is not updated in the follow_n1 phase N2 is calculated in update_n2 function
+    local eng_N2 = eng == 1 and get(Eng_1_N2) or get(Eng_2_N2)
+    if igniter_eng[eng] == 1 and eng_N2 > ENG.data.startup.ign_off_n2 then
         set(eng_igniters, 0, eng)
         igniter_eng[eng] = 0
         starter_valve_eng[eng] = 0
@@ -582,6 +581,8 @@ local function perform_starting_procedure_follow_n1(eng)
 end
 
 local function perform_starting_procedure(eng, inflight_restart)
+    -- Note: startup-procedure is only called when cooling has been already done or not required
+
     if eng_N2_off[eng] < 9.5 and not inflight_restart then
         -- Phase 1: Ok let's start by cranking the engine to start rotation
         perform_crank_procedure(eng, false)
@@ -883,7 +884,8 @@ end
 
 local function update_time_since_shutdown()
     if get(Eng_1_EGT_c) < 100 then
-        if time_last_shutdown[1] == 0 and get(Engine_1_master_switch) == 0 then -- only when really in shutdown process
+        if time_last_shutdown[1] == 0 and get(Engine_1_master_switch) == 0 then
+            -- only when really in shutdown process otherwise cooling may appear again during startup after cranking/cooling
             time_last_shutdown[1] = get(TIME)
         end
     else
@@ -1021,6 +1023,7 @@ local function update_fadec_status()
 end
 
 local function update_spooling()
+    -- set XPlane dataref TODO: what is the reason behind this
     set(Eng_spool_time, Math_rescale(19, 6, 101, 1.5, (get(Eng_1_N1)+get(Eng_2_N1))/2))
 end
 
