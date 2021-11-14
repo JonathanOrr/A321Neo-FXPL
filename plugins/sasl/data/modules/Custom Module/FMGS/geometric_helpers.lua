@@ -54,7 +54,7 @@ end
 
 function GeoLine:point_at_given_distance(orig_point, dist)
     -- This works ONLY for small distances!
-    assert(orig_point.class == "GeoPoint", "This function works only on one point")
+    assert(orig_point.class == "GeoPoint", "This function works only on one GeoPoint")
 
     local r = math.sqrt(1+self.a*self.a)
     return GeoPoint:create ({lat = orig_point.lat + dist * self.a / r, lon = orig_point.lon + dist / r})

@@ -16,9 +16,10 @@ return [[
         xpdata_coords_t coords;
         int altitude;
         unsigned int frequency;
-        bool is_coupled_dme;    // True if the vor is coupled with DME
         int category;           // Category (also range in nm)
         int bearing;            // Check XP documentation, multiplied by 1000
+        char region_code[2];
+        bool is_coupled_dme;    // True if the vor is coupled with DME
     } xpdata_navaid_t;
     
     typedef struct xpdata_navaid_array_t {
@@ -31,6 +32,8 @@ return [[
         const char *id;         // e.g., ROMEO
         int id_len;
         xpdata_coords_t coords;
+        char region_code[2];
+        char airport_id[4];
     } xpdata_fix_t;
     
     typedef struct xpdata_fix_array_t {
@@ -134,13 +137,15 @@ return [[
     typedef struct xpdata_hold_t {
         const char *id;
         int id_len;
-        
+    
         const char *apt_id; // Airport id, ENRT if enroute
         int apt_id_len;
         
         uint8_t navaid_type;    // 11 fix, 2 ndb, 3 VHF (vor, tacan, or dme)
         char turn_direction;    // L or R
-        
+    
+        char region_code[2];
+    
         uint16_t inbound_course;// Inbound magnetic course * 10
         uint16_t leg_time;      // Leg time in seconds. 0 for DME holdings
         uint16_t dme_leg_length;// Leg length in nautical miles * 10
@@ -157,6 +162,7 @@ return [[
         int len;
     } xpdata_hold_array_t;
     
+    
     /** AWYS **/
     typedef struct xpdata_awy_t {
         const char *id;
@@ -165,10 +171,12 @@ return [[
         const char *start_wpt;
         int start_wpt_len;
         uint8_t start_wpt_type;   // 11 fix, 2 ndb, 3 VHF (vor, tacan, or dme)
+        char start_wpt_region_code[2];
     
         const char *end_wpt;
         int end_wpt_len;
         uint8_t end_wpt_type;     // 11 fix, 2 ndb, 3 VHF (vor, tacan, or dme)
+        char end_wpt_region_code[2];
     
         uint16_t base_alt;        // in feet * 100
         uint16_t top_alt;         // in feet * 100
@@ -179,7 +187,8 @@ return [[
         const struct xpdata_awy_t * const * awys;
         int len;
     } xpdata_awy_array_t;
-
+    
+    
     /** Triangulation **/
     
     
@@ -210,6 +219,10 @@ return [[
         uint16_t rte_hold;        // Route distance / Hold time/dist - distance in nm * 10 
         uint16_t vpath_angle;   // Only for descent, to be considered as negative
     
+        char region_code_leg_name[2];
+        char region_code_ctr_fix[2];
+        char region_code_rec_navaid[2];
+    
     
         uint8_t leg_type;         // 1 - IF, 2 - TF, 3 - CF, 4 - DF, 5 - FA, 6 - FC, 7 - FD, 8 - FM, 9 - CA, 10 - CD, 11 - CI, 12 - CR, 13 - RF, 14 - AF, 15 - VA, 16 - VD, 17 - VI, 18 - VM, 19 - VR, 20 - PI, 21 - HA, 22 - HF, 23 - HM
         uint8_t cstr_alt_type;    // see constants
@@ -230,6 +243,8 @@ return [[
         bool approach_if       : 1;   // Intermediate Approach Fix
         bool approach_faf      : 1;   // Final Approach Fix
         bool holding_fix       : 1;   // Is an (approach) holding fix?
+        bool first_missed_app  : 1;   // Is first leg of missed approach procedure
+    
     } xpdata_cifp_leg_t;
     
     typedef struct xpdata_cifp_data_t {
@@ -241,9 +256,9 @@ return [[
     
         xpdata_cifp_leg_t *legs;
         int legs_len;
-
+        
         uint32_t transition_altitude;
-
+    
         int _legs_arr_ref;   // For internal use only
         
     } xpdata_cifp_data_t;
@@ -279,7 +294,7 @@ return [[
         xpdata_cifp_array_t apprs;
         xpdata_cifp_rwy_array_t rwys;   // This contains extra info compared to no-cifp data
     } xpdata_cifp_t;
-    
+        
 
 xpdata_navaid_array_t get_navaid_by_name  (xpdata_navaid_type_t, const char*);
 xpdata_navaid_array_t get_navaid_by_freq  (xpdata_navaid_type_t, unsigned int);
@@ -313,6 +328,10 @@ void load_cifp(const char* airport_id);
 bool is_cifp_ready();
 
 bool xpdata_is_ready(void);
+
+double get_declination(double lat, double lon, unsigned short year);
+unsigned int get_navdata_year();
+unsigned int get_navdata_month();
 
 bool initialize(const char* xplane_path, const char* plane_path);
 const char* get_error(void);

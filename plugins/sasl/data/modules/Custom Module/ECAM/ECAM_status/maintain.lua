@@ -13,6 +13,40 @@
 --    details or check <https://www.gnu.org/licenses/>
 -------------------------------------------------------------------------------
 
+local possible_messages = {
+    {"PACK 1", "PRESS INSUF"},
+    {"PACK 2", "TEMP LOW"},
+    {"ZONE CONT", "T35 FAULT"},
+    {"CRG HEAT", "TEMP LOW"},
+    {"CIDS", "FAP COMM"},
+    {"DC BUS TIE", "REL INOP"},
+    {"AC GEN", "FREQ IRREG"},
+    {"SDCU", "CHAN FAIL"},
+    {"SMOKE","REPL SENSOR"},
+    {"F/CTL", "ELEV ACT OIL"},
+    {"SFCS", "SLATS SLOW"},
+    {"FUEL", "VALVE 1.3 INT FAULT"},
+    {"QAR", "MEMORY FULL"}, -- Quick Access Recorder
+    {"DAR", "UNEXP. REBOOT"}, -- Digital AIDS Recorder
+    {"CFDIU", "BACKUP FAIL"},
+    {"ACMS", "1225"},
+    {"DMC 1/3", ""},
+    {"DMC 2/3", ""},
+    {"ADR", "RECALIB"},
+    {"IR", "DRIFT HIGH"},
+    {"AIR BLEED", "PRESS FLUCT"},
+    {"APU", "OIL REPL"},
+    {"ENG EIU", "CH FAULT"},
+    {"ENG EVMU", "SENSOR INACC"}
+}
+
+local active_messages = {
+}
+
+MCDU.cfds_active_maintain_messages = active_messages
+
+local MTTF = 100 -- Mean time to failure in hour for maintenance
+
 function ECAM_status_get_maintain()
     local messages = {}
 
@@ -52,7 +86,11 @@ function ECAM_status_get_maintain()
     end
 
     if get(FAILURE_AIRCOND_REG_1) == 1 or get(FAILURE_AIRCOND_REG_2) == 1 then
-        table.insert(messages, "COND REGUL")
+        table.insert(messages, "TEMP CTL")
+    end
+
+    for _,x in ipairs(active_messages) do
+        table.insert(messages, x[1])
     end
 
     return messages
@@ -60,5 +98,15 @@ end
 
 
 function ecam_update_status_page_maintain()
-
+    local delta = get(DELTA_TIME)
+    local random = math.random()
+    local probability = 1 / (MTTF * 60 * 60) * delta
+    if random < probability then
+        local el_idx = math.ceil(math.random() * #possible_messages)
+        if el_idx == 0 then
+            return  -- no more messages
+        end
+        table.insert(active_messages, {possible_messages[el_idx][1], get(ZULU_hours), get(ZULU_mins), possible_messages[el_idx][2]})
+        table.remove(possible_messages, el_idx)
+    end
 end

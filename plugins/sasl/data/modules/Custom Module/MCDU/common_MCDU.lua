@@ -50,6 +50,19 @@ function init_data(mcdu_data, id)
     mcdu_data.v = {}    -- Various values used in MCDU
     mcdu_data.last_update = get(TIME)
     mcdu_data.page_data = {}    -- Custom data for each page
+    mcdu_data.is_page_button_hit = false    -- Tell you if the MCDU page has been just hit (you have to clear it if you need it)
+
+    mcdu_data.dup_names = { -- See page 610
+        req_text = "VOG",
+        selected_navaid = nil,
+        not_found = false,
+        return_page = 600
+    }
+
+    mcdu_data.airways = { -- See page 611
+
+    }
+
     mcdu_data.clr = false -- Is CLR active in the scratchpad or not?
 
     mcdu_data.clear_the_clear = function()
@@ -168,13 +181,13 @@ end
 
 MCDU.send_message = function(message, color)
     mcdu_send_message(MCDU.captain_side_data, message, color)
-    --mcdu_send_message(MCDU.fo_side_data, message) TODO
+    mcdu_send_message(MCDU.fo_side_data, message, color)
 end
 MCDU.force_update = function()
     mcdu_force_update(MCDU.captain_side_data)
-    --mcdu_force_update(MCDU.fo_side_data, message) TODO
+    mcdu_force_update(MCDU.fo_side_data) 
 end
 MCDU.reset_fpln = function()
     mcdu_reset_fpln(MCDU.captain_side_data)
-    --mcdu_reset_fpln(MCDU.fo_side_data, message) TODO
+    mcdu_reset_fpln(MCDU.fo_side_data)
 end

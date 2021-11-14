@@ -39,7 +39,7 @@ function Move_along_distance_v2(origin_lat, origin_lon, distance, angle) -- Dist
     return mdeg(lat2), mdeg(lon2)
 end
 
-function Move_along_distance_NM(origin_lat, origin_lon, distance, angle) -- Distance in M
+function Move_along_distance_NM(origin_lat, origin_lon, distance, angle) -- Distance in NM
     local theta = mrad(angle)
     local EARTH_RADIUS = 6378136.6
     local angular_dist = distance * 1852 / EARTH_RADIUS

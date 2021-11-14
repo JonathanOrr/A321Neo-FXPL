@@ -53,7 +53,8 @@ function THIS_PAGE:render(mcdu_data)
         self:set_line(mcdu_data, MCDU_CENTER, 1, "------  ", MCDU_LARGE)
     end
     if trans then
-        self:set_line(mcdu_data, MCDU_RIGHT, 1, trans.proc_name, MCDU_LARGE, main_col)
+        local name = trans.trans_name == "NO TRANS" and "NONE" or trans.trans_name
+        self:set_line(mcdu_data, MCDU_RIGHT, 1, name, MCDU_LARGE, main_col)
     else
         self:set_line(mcdu_data, MCDU_RIGHT, 1, "------", MCDU_LARGE)
     end
@@ -136,7 +137,7 @@ function THIS_PAGE:Slew_Down(mcdu_data)
 end
 
 function THIS_PAGE:Slew_Up(mcdu_data)
-    if math.floor(#mcdu_data.lat_rev_subject.data.rwys / 2) <= THIS_PAGE.curr_page then
+    if math.ceil(#mcdu_data.lat_rev_subject.data.rwys / 2) <= THIS_PAGE.curr_page then
         MCDU_Page:Slew_Down(mcdu_data)
     else
         THIS_PAGE.curr_page = THIS_PAGE.curr_page + 1

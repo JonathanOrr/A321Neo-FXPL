@@ -13,9 +13,42 @@
 --    details or check <https://www.gnu.org/licenses/>
 -------------------------------------------------------------------------------
 
+-- Constants exposed to 6** pages. They should not be used elsewhere (but they are! Don't change the values)
+POINT_TYPE_DEP_SID       = 1
+POINT_TYPE_DEP_TRANS     = 2
+POINT_TYPE_LEG           = 3    -- enroute leg
+POINT_TYPE_ARR_TRANS     = 4
+POINT_TYPE_ARR_STAR      = 5
+POINT_TYPE_ARR_VIA       = 6
+POINT_TYPE_ARR_APPR      = 7
+
+function cifp_is_a_fix(x)
+    assert(x)
+
+    local leg_type = x.leg_type or CIFP_LEG_TYPE_IF
+
+    return    leg_type == CIFP_LEG_TYPE_IF
+           or leg_type == CIFP_LEG_TYPE_TF
+           or leg_type == CIFP_LEG_TYPE_DF
+           or leg_type == CIFP_LEG_TYPE_AF
+           or leg_type == CIFP_LEG_TYPE_HF
+end
+
 function cifp_convert_leg_name(x)
-    local name = x.leg_name
+
+    assert(x)
+
+    -- Sanitize data
+    x.leg_type = x.leg_type or CIFP_LEG_TYPE_IF
+    x.outb_mag = x.outb_mag or 0
+    x.theta = x.theta or 0
+    x.rho = x.rho or 0
+    x.rte_hold = x.rte_hold or 0
+    x.cstr_altitude1 = x.cstr_altitude1 or 0
+
+    local name = x.leg_name or "(UKWN)"
     local leg_type = x.leg_type
+
     local outb_mag = Fwd_string_fill(tostring(math.floor(x.outb_mag/10)),"0", 3)
     local theta    = Fwd_string_fill(tostring(math.floor(x.theta/10)),"0", 3)
     local dd       = Fwd_string_fill(tostring(math.floor(x.rho/10)),"0", 2)
@@ -30,17 +63,21 @@ function cifp_convert_leg_name(x)
         return name, "C" .. outb_mag .. "°"
     elseif leg_type == CIFP_LEG_TYPE_DF then
         return name, ""
-    elseif leg_type == CIFP_LEG_TYPE_FA or leg_type == CIFP_LEG_TYPE_CA then
+    elseif leg_type == CIFP_LEG_TYPE_FA then
+        return cstr_alt, string.sub(name,1,3) .. theta
+    elseif leg_type == CIFP_LEG_TYPE_CA then
         return cstr_alt, "C" .. outb_mag .. "°"
     elseif leg_type == CIFP_LEG_TYPE_FC then
-        return "INTCPT", "C" .. theta .. "°"
+        return string.sub(name,1,3) .. "/" .. rte, "C" .. theta .. "°"
     elseif leg_type == CIFP_LEG_TYPE_FD or leg_type == CIFP_LEG_TYPE_CD then
         return x.recomm_navaid .. "/" .. rte, "C" .. theta .. "°"
-    elseif leg_type == CIFP_LEG_TYPE_FM or leg_type == CIFP_LEG_TYPE_VM then
+    elseif leg_type == CIFP_LEG_TYPE_FM then
+        return "MANUAL", string.sub(name,1,3) .. outb_mag
+    elseif leg_type == CIFP_LEG_TYPE_VM then
         return "MANUAL", "H" .. outb_mag .. "°"
-    elseif leg_type == CIFP_LEG_TYPE_CI or leg_type == CIFP_LEG_TYPE_VI or leg_type == CIFP_LEG_TYPE_VR then
+    elseif leg_type == CIFP_LEG_TYPE_CI or leg_type == CIFP_LEG_TYPE_VI then
         return "INTCPT", "H" .. outb_mag .. "°"
-    elseif leg_type == CIFP_LEG_TYPE_CR then
+    elseif leg_type == CIFP_LEG_TYPE_CR or leg_type == CIFP_LEG_TYPE_VR then
         return x.center_fix .. outb_mag, "H" .. theta .. "°"
     elseif leg_type == CIFP_LEG_TYPE_RF then
         return name, dd .. " ARC"
@@ -51,7 +88,7 @@ function cifp_convert_leg_name(x)
     elseif leg_type == CIFP_LEG_TYPE_VD then
         return x.center_fix .. "/" .. rte, "H" .. outb_mag .. "°"
     elseif leg_type == CIFP_LEG_TYPE_PI then
-        return "PROC " .. x.turn_direction
+        return "INTCPT", "PROC " .. x.turn_direction
     elseif leg_type == CIFP_LEG_TYPE_HA then
         return cstr_alt, "HOLD " .. x.turn_direction
     elseif leg_type == CIFP_LEG_TYPE_HF then
@@ -126,4 +163,15 @@ function dest_get_selected_appr_procedure()
     local rwy_name_with_suffix = appr_obj.proc_name:sub(2)
     local appr_name = type_str .. rwy_name_with_suffix
     return appr_name
+end
+
+function avionics_bay_generic_wpt_to_fmgs_type(x)
+    assert(x)
+    if x.freq then
+        return FMGS_PTR_VOR
+    elseif x.rwys then
+        return FMGS_PTR_APT
+    else
+        return FMGS_PTR_WPT
+    end
 end
