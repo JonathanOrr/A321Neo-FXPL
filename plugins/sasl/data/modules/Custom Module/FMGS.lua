@@ -17,6 +17,7 @@
 -------------------------------------------------------------------------------
 
 include('FMGS/route.lua')
+include('FMGS/limits.lua')
 
 local loading_cifp = 0
 
@@ -45,6 +46,11 @@ FMGS_sys.data = {
             rsv_fuel_perc = 5.0,
             rsv_fuel      = nil,
         }
+    },
+
+    limits = {
+        max_alt = nil,
+        opt_alt = nil
     },
     
     pred = {    -- Various predictions
@@ -262,6 +268,8 @@ function update()
     update_status()
     update_route()
     update_cifp()
+
+    update_limits()
     
     perf_measure_stop("FMGS:update()")
 end

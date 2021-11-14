@@ -976,3 +976,14 @@ end
 function FMGS_get_active_curved_route()
     return FMGS_sys.fpln.active.segment_curved_list
 end
+
+-------------------------------------------------------------------------------
+-- Limits
+-------------------------------------------------------------------------------
+function FMGS_get_limit_max_alt()
+    return FMGS_sys.data.limits.max_alt
+end
+
+function FMGS_get_limit_opt_alt()
+    return FMGS_sys.data.limits.opt_alt
+end
