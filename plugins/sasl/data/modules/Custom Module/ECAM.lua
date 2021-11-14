@@ -101,12 +101,6 @@ local function draw_ecam_lower_section_fixed()
     end
 end
 
-local function get_isa()
-    -- Source: http://fisicaatmo.at.fcen.uba.ar/practicas/ISAweb.pdf
-    local alt_meter = get(Capt_Baro_Alt) * 0.3048
-    return math.max(-56.5, 15 - 6.5 * alt_meter/1000)
-end
-
 --custom fucntions
 local function draw_ecam_lower_section()
 
@@ -130,7 +124,7 @@ local function draw_ecam_lower_section()
 
     local isa_displayed = get(Capt_Baro) > 29.91 and get(Capt_Baro) < 29.93 and adirs_is_adr_working(PFD_CAPT)
     if isa_displayed then
-        local delta_isa = Round(get(TAT) - get_isa(), 0)
+        local delta_isa = Round(get(TAT) - Temperature_get_ISA(), 0)
         if delta_isa > 0 then
             delta_isa = "+" .. delta_isa
         end

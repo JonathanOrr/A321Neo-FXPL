@@ -281,7 +281,7 @@ function Table_extrapolate(tab, x)  -- This works like Table_interpolate, but it
 
     assert(b > 1)
     if b == 2 then
-        logWarning("Don't use table interpolate for just 2 values, use Math_rescale_* functions.")
+        logWarning("Don't use table extrapolate for just 2 values, use Math_rescale_* functions.")
     end
 
     if x < tab[a][1] then
@@ -445,6 +445,10 @@ function Local_magnetic_deviation()
     return get(Flightmodel_mag_heading) - get(Flightmodel_true_heading)
 end
 
+function Temperature_get_ISA()
+    local alt_meter = get(ACF_elevation)
+    return math.max(-56.5, 15 - 6.5 * alt_meter/1000)
+end
 
 
 
