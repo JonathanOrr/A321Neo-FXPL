@@ -16,8 +16,6 @@
 
 local THIS_PAGE = MCDU_Page:new({id=200})
 
-local optimum_crz = nil
-local rec_max_crz = nil
 local to_certain_waypoint = { wpt_name = "RICOO", bearing = 58, distance = 308}
 local update_at_prompt = {wpt_name = nil, lat = nil, lon = nil}
 local vdev = nil -- enter a number here and the entire VDEV line will show
@@ -36,8 +34,8 @@ function THIS_PAGE:render(mcdu_data)
 
     self:add_multi_line(mcdu_data, MCDU_LEFT, 1, " CRZ      OPT    REC MAX" , MCDU_SMALL, ECAM_WHITE)
     local a,b = FMGS_init_get_crz_fl_temp()
-    local c = optimum_crz
-    local d = rec_max_crz
+    local c = math.floor(FMGS_get_limit_max_alt()/100)
+    local d = math.floor(FMGS_get_limit_opt_alt()/100)
     local dash_the_crz_and_opt = FMGS_get_phase() >= 5 -- SEE MANUAL PAGE 340 FOR WHY
 
 
