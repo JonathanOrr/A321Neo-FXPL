@@ -45,6 +45,14 @@ include('engines/n1_modes.lua')
 include('engines/leap1a.lua')
 include('engines/pw1133g.lua')
 
+-- engine states, simple ones right now for debugging, introduced for more flexible abnormals later
+-- TODO TBD use string values?
+local FSM_START_PHASE_CRANK = 1
+local FSM_START_PHASE_N2 = 2
+local FSM_START_PHASE_N1 = 3
+local FSM_START_COOLING = 4
+local FSM_SHUTDOWN = 5
+
 local MAX_EGT_OFFSET = 10  -- This is the maximum offset between one engine and the other in terms of EGT
 local ENG_N1_CRANK    = 10  -- N1 used for cranking and cooling
 local ENG_N1_CRANK_FF = 15  -- FF in case of wet cranking
@@ -75,7 +83,8 @@ local dual_cooling_switch = false
 local eng_N1_off  = {0,0}   -- N1 for startup procedure, off means here: engine not yet available TODO rename to starting?
 local eng_N2_off  = {0,0}   -- N2 for startup procedure
 local eng_FF_off  = {0,0}   -- FF for startup procedure
-local eng_EGT_off = {get(OTA),get(OTA)}   -- EGT for startup procedure
+local EGT_MAGIC = -999
+local eng_EGT_off = {EGT_MAGIC,EGT_MAGIC}  -- used during startup and shutdown, initialized with magic number for auto start support
 
 local slow_start_time_requested = false
 local igniter_eng = {0,0}
@@ -129,7 +138,11 @@ end
 function engines_auto_quick_start(phase)
     if phase == SASL_COMMAND_BEGIN then
         sasl.commandOnce(FUEL_cmd_internal_qs)
-    
+        -- in case we had a previous A/C load with manual startup there might be a value in this vars which lead to jump in EGT cooldown
+        -- so we have to init it here again after auto startup has been performed
+        eng_EGT_off[1] = EGT_MAGIC
+        eng_EGT_off[2] = EGT_MAGIC
+
         set(Engine_1_master_switch, 1)
         set(Engine_2_master_switch, 1)
         set(Engine_mode_knob, 0)
@@ -269,14 +282,22 @@ end
 local function update_egt()
     local eng_1_n1 = get(Eng_1_N1)
     if eng_1_n1 > ENG_N1_LL_IDLE then
-        -- engine avail
+        -- engine avail, also in the first phase of shutdown, since N1 then is about 1% above IDLE constant
         local computed_egt = ENG.data.n1_to_egt_fun(eng_1_n1, get(OTA))
         computed_egt = computed_egt * (1 + get(FAILURE_ENG_STALL, 1) * get(eng_1_n1)/90 * math.random())
         computed_egt = computed_egt + egt_eng_1_offset + random_pool_1*2 -- Let's add a bit of randomness
         Set_dataref_linear_anim(Eng_1_EGT_c, computed_egt, -50, 1500, 70)
     else
         -- engine off, starting or shutting down
-        set(Eng_1_EGT_c, eng_EGT_off[1])
+        -- TODO switching to this else branch lead to small jump to higher EGT value (about 30-40 °C) if no auto-start
+        -- last eng_EGT_off value seems to be from last row of startup.n1 table currently
+        local current_egt = get(Eng_1_EGT_c)
+        if eng_EGT_off[1] > current_egt and get(Engine_1_master_switch) == 0 then eng_EGT_off[1] = current_egt end  -- workaround to avoid jump up
+        if current_egt == EGT_MAGIC then
+            set(Eng_1_EGT_c, get(OTA))
+        else
+            set(Eng_1_EGT_c, eng_EGT_off[1])
+        end
     end
 
     local eng_2_n1 = get(Eng_2_N1)
@@ -286,7 +307,13 @@ local function update_egt()
         computed_egt = computed_egt + egt_eng_2_offset + random_pool_2*2 -- Let's add a bit of randomness
         Set_dataref_linear_anim(Eng_2_EGT_c, computed_egt, -50, 1500, 70)
     else
-        set(Eng_2_EGT_c, eng_EGT_off[2])
+        local current_egt = get(Eng_2_EGT_c)
+        if eng_EGT_off[2] > current_egt and get(Engine_2_master_switch) == 0  then eng_EGT_off[2] = current_egt end -- workaround to avoid jump up
+        if current_egt == EGT_MAGIC then
+            set(Eng_2_EGT_c, get(OTA)) -- display OAT in case A/C has just been initialized
+        else
+            set(Eng_2_EGT_c, eng_EGT_off[2])
+        end
     end
 
 end
@@ -440,7 +467,8 @@ end
 
 local function perform_crank_procedure(eng, wet_cranking)
     -- This is PHASE 1
-    
+    set(Eng_fsm_state, FSM_START_PHASE_CRANK, eng)
+
     if (eng==1 and get(Engine_1_avail) == 1) or (eng==2 and get(Engine_2_avail) == 1) then
         -- Just for precaution, crank has no sense if the engine is already running
         -- In chase, just don't do anything
@@ -458,7 +486,7 @@ local function perform_crank_procedure(eng, wet_cranking)
     -- Set EGT for cranking
     -- during initial startup when EGT is below CRANK_EGT  we MUST use OAT as target EGT here, otherwise EGT will increase without FF
     if  eng_EGT_off[eng] < ENG_N1_CRANK_EGT then
-        eng_EGT_off[eng] = get(OTA)
+        eng_EGT_off[eng] = get(OTA) -- TODO take more params into consideration
     else
         eng_EGT_off[eng] = Set_linear_anim_value(eng_EGT_off[eng], ENG_N1_CRANK_EGT, -50, 1500, 2)
     end
@@ -479,6 +507,7 @@ local function perform_starting_procedure_follow_n2(eng)
     -- This is PHASE 2 after spool-up / cranking
 
     local oat = get(OTA)
+    set(Eng_fsm_state, FSM_START_PHASE_N2, eng)
     set(eng_mixture, 0, eng) -- No mixture in this phase
     -- TODO we have to switch the starter valve symbol on eng page to on during start up based on some condition
     if igniter_eng[eng] == 0 and not eng_manual_switch[eng] and eng_N2_off[eng] > ENG.data.startup.ign_on_n2 then
@@ -535,6 +564,8 @@ end
 
 local function perform_starting_procedure_follow_n1(eng)
     -- This is PHASE 3
+    set(Eng_fsm_state, FSM_START_PHASE_N1,eng)
+
     set(eng_mixture, 1, eng)  -- Mixture in this phase
     set(eng_igniters, 1, eng) -- and igniters as well
 
@@ -630,8 +661,6 @@ local function update_starter_datarefs()
     set(Ecam_eng_igniter_eng_1, igniter_eng[1])
     set(Ecam_eng_igniter_eng_2, igniter_eng[2])
 
-    -- TODO for first iteration we just synchronize the starter valve with igniters.
-    -- We add dependency on cranking and slight switching delay later
     set(Eng_starter_valve_open, starter_valve_eng[1],1)
     set(Eng_starter_valve_open, starter_valve_eng[2],2)
 
@@ -683,6 +712,7 @@ local function needs_cooling(eng)
 end
 
 local function perform_cooling(eng)
+    set(Eng_fsm_state,FSM_START_COOLING,eng)
     if cooling_left_time[eng] == 0 then
         cooling_has_cooled[eng] = true
         return
@@ -804,13 +834,15 @@ local function update_startup()
     end
     
     -- CASE 3: No ignition, no crank, engine is off or shutting down
-    if get(Engine_1_avail) == 0  and require_cooldown[1] then    -- Turn off the engine
+    if get(Engine_1_avail) == 0  and require_cooldown[1] then    -- Turn off the engine TODO better use a state shutdown
+        set(Eng_fsm_state,FSM_SHUTDOWN,1)
         -- Set N2 to zero
         local n2_target = get(IAS) > 50 and 10 + get(IAS)/10 + random_pool_1*2 or 0 -- In in-flight it rotates
         eng_N2_off[1] = Set_linear_anim_value(eng_N2_off[1], n2_target, 0, ENG.data.max_n2, 1)
         set(eng_N2_enforce, eng_N2_off[1], 1)
         
-        -- Set EGT and FF to zero
+        -- Set FF to zero, drop EGT and N1 TODO check drop behavior based on SIM videos
+        if eng_EGT_off[1] == EGT_MAGIC then eng_EGT_off[1] = get(Eng_1_EGT_c) end -- otherwise in auto start case we will have a big jump since eng_EGT_off is not set before
         eng_EGT_off[1] = Set_linear_anim_value(eng_EGT_off[1], get(OTA), -50, 1500, eng_EGT_off[1] > 100 and 10 or 3)
         eng_FF_off[1] = 0
         eng_N1_off[1] = Set_linear_anim_value(eng_N1_off[1], 0, 0, ENG.data.max_n2, 2)
@@ -819,12 +851,14 @@ local function update_startup()
         starter_valve_eng[1] = 0
     end
     if get(Engine_2_avail) == 0 and require_cooldown[2] then    -- Turn off the engine
+        set(Eng_fsm_state,FSM_SHUTDOWN,2)
         -- Set N2 to zero
         local n2_target = get(IAS) > 50 and 10 + get(IAS)/10 + random_pool_3*2 or 0 -- In in-flight it rotates
         eng_N2_off[2] = Set_linear_anim_value(eng_N2_off[2], n2_target or 0 , 0, ENG.data.max_n2, 1)
         set(eng_N2_enforce, eng_N2_off[2], 2)
         
         -- Set EGT and FF to zero
+        if eng_EGT_off[2] == EGT_MAGIC then eng_EGT_off[2] = get(Eng_2_EGT_c) end -- otherwise in auto start case we will have a jump since eng_EGT_off is not set before
         eng_EGT_off[2] = Set_linear_anim_value(eng_EGT_off[2], get(OTA), -50, 1500, eng_EGT_off[2] > 100 and 10 or 3)
         eng_FF_off[2] = 0
         eng_N1_off[2] = Set_linear_anim_value(eng_N1_off[2], 0, 0, ENG.data.max_n2, 2)
@@ -839,7 +873,11 @@ local function update_auto_start()
     if not slow_start_time_requested then
         return  -- auto start not requested
     end
- 
+    -- in case we had a previous A/C load with manual startup there might be a value in this vars which lead to jump in EGT cooldown
+    -- so we have to init it here again after auto startup has been performed
+    eng_EGT_off[1] = EGT_MAGIC
+    eng_EGT_off[2] = EGT_MAGIC
+
     -- Turn on the batteries immediately and start the APU   
     ELEC_sys.batteries[1].switch_status = true
     ELEC_sys.batteries[2].switch_status = true
