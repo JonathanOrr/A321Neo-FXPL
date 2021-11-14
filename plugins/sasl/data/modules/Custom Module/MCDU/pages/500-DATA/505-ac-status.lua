@@ -17,6 +17,8 @@
 
 local THIS_PAGE = MCDU_Page:new({id=505})
 
+local months_name = { "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC" }
+
 
 function THIS_PAGE:render(mcdu_data)
 
@@ -26,8 +28,13 @@ function THIS_PAGE:render(mcdu_data)
     self:set_line(mcdu_data, MCDU_LEFT, 1, "PW-1133G", MCDU_LARGE, ECAM_GREEN)
 
     self:set_line(mcdu_data, MCDU_LEFT, 2, "ACTIVE DATA BASE", MCDU_SMALL)
-    self:set_line(mcdu_data, MCDU_LEFT, 2, "XP DEFAULT",      MCDU_LARGE, ECAM_BLUE)
-    self:set_line(mcdu_data, MCDU_RIGHT,2, "NW93821172",       MCDU_LARGE, ECAM_GREEN)
+    if AvionicsBay.is_initialized() and AvionicsBay.is_ready() then
+        local month, year = AvionicsBay.get_data_cycle()
+        self:set_line(mcdu_data, MCDU_LEFT, 2, " " .. year .. "-" .. months_name[month], MCDU_LARGE, ECAM_BLUE)
+        self:set_line(mcdu_data, MCDU_RIGHT,2, "NW93821172",       MCDU_LARGE, ECAM_GREEN)
+    else
+        self:set_line(mcdu_data, MCDU_LEFT, 2, " LOADING...", MCDU_LARGE, ECAM_BLUE)
+    end
 
     self:set_line(mcdu_data, MCDU_LEFT, 3, "SECOND DATA BASE", MCDU_SMALL)
     self:set_line(mcdu_data, MCDU_LEFT, 3, "N/A",              MCDU_LARGE, ECAM_BLUE)

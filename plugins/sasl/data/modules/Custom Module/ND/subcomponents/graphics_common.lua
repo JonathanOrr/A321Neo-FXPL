@@ -489,8 +489,9 @@ local function draw_next_waypoint_info(data)
         return -- Not present in OANS mode
     end
 
-    local active_legs = FMGS_get_route_legs()
+    local active_legs = FMGS_get_enroute_legs()
     local next_leg_id = FMGS_get_next_leg_id()
+
     if active_legs == nil or #active_legs == 0 or next_leg_id == nil then
         return
     end
@@ -501,6 +502,10 @@ local function draw_next_waypoint_info(data)
     
     local next_wpt = active_legs[next_leg_id]
     
+    if next_wpt.discontinuity then
+        return
+    end
+
     -- WPT Name
     local next_wpt_name = next_wpt.id == nil and "COORDS" or next_wpt.id    -- This is possible when the waypoint is coordinates
     sasl.gl.drawText(Font_ECAMfont, size[1]-120, size[2]-50, next_wpt.id, 28, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)

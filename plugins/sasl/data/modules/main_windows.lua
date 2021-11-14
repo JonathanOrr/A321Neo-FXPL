@@ -449,3 +449,18 @@ Cinetracker_ABNZ = contextWindow {
       alpha_beta_nz {}
   };
 }
+
+
+FMGS_debug_window = contextWindow {
+  name = "FMGS Debug";
+  position = { 150 , 150 , 1000 , 600 };
+  noBackground = true ;
+  proportional = false ;
+  minimumSize = { 1000 , 600 };
+  maximumSize = { 1000 , 600 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = true ;
+  components = {
+    FMGS_debug {position = { 0 , 0 , 1000 , 600 }}
+  };
+}

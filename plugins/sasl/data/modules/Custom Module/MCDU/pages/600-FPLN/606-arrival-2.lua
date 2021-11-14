@@ -286,6 +286,7 @@ function THIS_PAGE:L6(mcdu_data)
 end
 
 function THIS_PAGE:R6(mcdu_data)
+    FMGS_reshape_fpln()
     FMGS_insert_temp_fpln()
     mcdu_open_page(mcdu_data, 600)
 end

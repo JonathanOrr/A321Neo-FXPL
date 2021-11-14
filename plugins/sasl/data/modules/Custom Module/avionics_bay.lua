@@ -22,6 +22,23 @@ include('libs/geo-helpers.lua')
 local initialized = false
 local ffi = require("ffi")
 
+local function convert_region_code(rc)
+    if rc[0] ~= 0 and rc[1] ~= 0 then
+        return ("").char(rc[0]) .. ("").char(rc[1])
+    else
+        return "  "
+    end
+end
+
+local function convert_airport_id(rc)
+    if rc[0] ~= 0 and rc[1] ~= 0 and rc[2] ~= 0 and rc[3] ~= 0 then
+        return ("").char(rc[0]) .. ("").char(rc[1]) .. ("").char(rc[2]) .. ("").char(rc[3])
+    else
+        return "  "
+    end
+end
+
+
 local function convert_bearing(type, bearing_raw)
     if type == NAV_ID_NDB then
         return 0
@@ -63,6 +80,7 @@ local function convert_navaid_array(rawdata, nav_array)
                 lon  = nav_array.navaids[i-1].coords.lon,
                 alt  = nav_array.navaids[i-1].altitude,
                 freq = nav_array.navaids[i-1].frequency,
+                region_code = convert_region_code(nav_array.navaids[i-1].region_code),
                 is_coupled_dme = nav_array.navaids[i-1].is_coupled_dme,
                 category = nav_array.navaids[i-1].category,
                 extra_bearing = convert_bearing(nav_array.navaids[i-1].type, nav_array.navaids[i-1].bearing),
@@ -84,7 +102,9 @@ local function convert_fixes_array(rawdata, fix_array)
             table.insert(to_return, {
                 id   = ffi.string(fix_array.fixes[i-1].id,  fix_array.fixes[i-1].id_len),
                 lat  = fix_array.fixes[i-1].coords.lat,
-                lon  = fix_array.fixes[i-1].coords.lon
+                lon  = fix_array.fixes[i-1].coords.lon,
+                region_code = convert_region_code(fix_array.fixes[i-1].region_code),
+                airport_id = convert_airport_id(fix_array.fixes[i-1].airport_id)
             })
         end
         return to_return
@@ -111,7 +131,8 @@ local function convert_holds_array(rawdata, hold_array)
                 dme_leg_length = curr.dme_leg_length / 10., -- in NM
                 max_altitude = curr.max_altitude,   -- 0 if no limit
                 min_altitude = curr.min_altitude,   -- 0 if no limit
-                hold_spd_limit = curr.holding_speed_limit -- 0 if no limit
+                hold_spd_limit = curr.holding_speed_limit, -- 0 if no limit
+                region_code = convert_region_code(curr.region_code)
             })
         end
         return to_return
@@ -133,9 +154,11 @@ local function convert_awys_array(rawdata, awy_array)
                 
                 start_wpt = ffi.string(curr.start_wpt, curr.start_wpt_len),
                 start_wpt_type = tonumber(curr.start_wpt_type),
+                start_wpt_region_code = convert_region_code(curr.start_wpt_region_code),
                 
                 end_wpt = ffi.string(curr.end_wpt, curr.end_wpt_len),
                 end_wpt_type = tonumber(curr.end_wpt_type),
+                end_wpt_region_code = convert_region_code(curr.end_wpt_region_code),
 
                 max_altitude = curr.top_alt,   -- 0 if no limit
                 min_altitude = curr.base_alt,   -- 0 if no limit
@@ -168,8 +191,12 @@ local function convert_cifp_array(rawdata, cifp_arr)
             assert(l.leg_type)
             table.insert(new_dat.legs, {
                 leg_name = ffi.string(l.leg_name, l.leg_name_len),
+                leg_name_region_code = convert_region_code(l.region_code_leg_name),
                 center_fix = ffi.string(l.center_fix, l.center_fix_len),
+                center_fix_region_code = convert_region_code(l.region_code_ctr_fix),
+
                 recomm_navaid = ffi.string(l.recomm_navaid, l.recomm_navaid_len),
+                recomm_navaid_region_code = convert_region_code(l.region_code_rec_navaid),
                 radius = l.radius,
                 cstr_altitude1 = l.cstr_altitude1,
                 cstr_altitude2 = l.cstr_altitude2,
@@ -193,7 +220,8 @@ local function convert_cifp_array(rawdata, cifp_arr)
                 approach_iaf = l.approach_iaf,
                 approach_if  = l.approach_if,
                 approach_faf = l.approach_faf,
-                holding_fix  = l.holding_fix
+                holding_fix  = l.holding_fix,
+                first_missed_app = l.first_missed_app
             })
         end
         
@@ -295,6 +323,17 @@ local function expose_functions()
         return AvionicsBay.c.xpdata_is_ready()
     end
     
+    AvionicsBay.get_declination = function(lat, lon, year)
+        assert(type(lat)=="number", "lat must be a number")
+        assert(type(lon)=="number", "lon must be a number")
+        assert(type(year)=="number", "year must be a number")
+        return AvionicsBay.c.get_declination(lat, lon, year)
+    end
+    
+    AvionicsBay.get_data_cycle = function()
+        return AvionicsBay.c.get_navdata_month(), AvionicsBay.c.get_navdata_year()
+    end
+
     AvionicsBay.navaids = {}
     AvionicsBay.navaids.get_by_name = function(nav_type, name, rawdata)
         assert(initialized, "You must initialize avionicsbay before use")

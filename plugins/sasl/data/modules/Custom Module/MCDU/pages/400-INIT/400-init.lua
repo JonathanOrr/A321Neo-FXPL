@@ -53,7 +53,7 @@ function THIS_PAGE:render(mcdu_data)
     elseif altn_apt == nil then
         self:set_line(mcdu_data, MCDU_LEFT, 2, "NONE", MCDU_LARGE, ECAM_BLUE)
     else
-        self:set_line(mcdu_data, MCDU_LEFT, 2, "----/-------", MCDU_LARGE)
+        self:set_line(mcdu_data, MCDU_LEFT, 2, altn_apt.id, MCDU_LARGE, ECAM_BLUE)
     end
     
     -------------------------------------
@@ -110,7 +110,7 @@ function THIS_PAGE:render(mcdu_data)
         self:set_line(mcdu_data, MCDU_LEFT, 6, "-----/---", MCDU_LARGE)
     elseif crz_fl == nil then
         self:set_line(mcdu_data, MCDU_LEFT, 6, "_____/___", MCDU_LARGE, ECAM_ORANGE)
-    elseif crz_fl >= FMGS_perf_get_trans_alt() then
+    elseif FMGS_perf_get_trans_alt() and crz_fl >= FMGS_perf_get_trans_alt() then
         self:set_line(mcdu_data, MCDU_LEFT, 6, "FL"..Fwd_string_fill(tostring(crz_fl/100), "0", 3) .. "/" .. crz_temp, MCDU_LARGE, ECAM_BLUE)
     else
         self:set_line(mcdu_data, MCDU_LEFT, 6, tostring(crz_fl) .. "/" .. crz_temp, MCDU_LARGE, ECAM_BLUE)
@@ -160,7 +160,12 @@ function THIS_PAGE:R1(mcdu_data)
 end
 
 function THIS_PAGE:L2(mcdu_data)
-    local input = mcdu_get_entry_simple(mcdu_data, {"####/############"}, true)
+    if not FMGS_are_main_apts_set() then
+        mcdu_send_message(mcdu_data, "NOT ALLOWED")
+        return
+    end
+    
+    local input = mcdu_get_entry_simple(mcdu_data, {"####/############", "####"}, true)
     if input == nil then
         return
     end

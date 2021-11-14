@@ -22,7 +22,7 @@ function THIS_PAGE:render(mcdu_data)
     if get(All_on_ground) == 1 then
         self:set_line(mcdu_data, MCDU_LEFT, 1, "<LAST LEG REPORT", MCDU_LARGE, ECAM_WHITE)
         self:set_line(mcdu_data, MCDU_LEFT, 2, "<LAST LEG ECAM REPORT", MCDU_LARGE, ECAM_WHITE)
-        self:set_line(mcdu_data, MCDU_LEFT, 3, "<PREVIOUS LEGS REPORT", MCDU_LARGE, ECAM_WHITE)
+
         self:set_line(mcdu_data, MCDU_LEFT, 4, "<AVIONICS STATUS", MCDU_LARGE, ECAM_WHITE)
         self:set_line(mcdu_data, MCDU_LEFT, 5, "<SYSTEM REPORT/TEST", MCDU_LARGE, ECAM_WHITE)
         self:set_line(mcdu_data, MCDU_RIGHT, 6, "POST FLIGHT REP PRINT*", MCDU_LARGE, ECAM_ORANGE)
@@ -36,6 +36,13 @@ function THIS_PAGE:render(mcdu_data)
         self:set_line(mcdu_data, MCDU_CENTER, 6, "FLT REP", MCDU_LARGE, ECAM_WHITE)
     end
 
+end
+
+function THIS_PAGE:L1(mcdu_data)
+    mcdu_open_page(mcdu_data, 1120)
+end
+function THIS_PAGE:L2(mcdu_data)
+    mcdu_open_page(mcdu_data, 1121)
 end
 
 

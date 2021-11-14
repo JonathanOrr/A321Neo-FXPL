@@ -19,115 +19,144 @@
 include('FMGS/functions.lua')
 include('FMGS/nav_helpers.lua')
 include('FMGS/geometric_helpers.lua')
-include('FMGS/route_cifp.lua')
+include('FMGS/cifp_decorator.lua')
+include('FMGS/path_generation/cifp_to_segment.lua')
+include('FMGS/path_generation/turn_computer.lua')
 include('libs/geo-helpers.lua')
 
-local ROUTE_FREQ_UPDATE_SEC = 0.5
-
-local route_last_update = 0
-
-local function compute_arc_radius(tas, roll_limit)
-    return math.max(0, math.floor(tas)^2 / (math.tan(math.rad(roll_limit)) * 11.294) * 0.000164579)
-end
-
-local function update_active_fpln()
-    local fpln_active = FMGS_sys.fpln.active.legs
-    
-    local nr_points = #fpln_active
-    if nr_points <= 1 then
-        return  -- We need at least 2 waypoints to build a route...
-    end
-    
-    local roll_limit = FMGS_get_roll_limit()
-    local NM_ARC = compute_arc_radius(adirs_get_avg_tas(), roll_limit)
-    
-    for k,r in ipairs(fpln_active) do
-        if k > 1 and k < nr_points then
-        
-            -- Limited to 0.5 to avoid that when the aircraft is too fast a too large curve would overshoot the next curve.
-            lat_start, lon_start = point_from_a_segment_lat_lon_limited(r.lat, r.lon, fpln_active[k-1].lat, fpln_active[k-1].lon, NM_ARC, 0.5)
-            lat_end,   lon_end   = point_from_a_segment_lat_lon_limited(r.lat, r.lon, fpln_active[k+1].lat, fpln_active[k+1].lon, NM_ARC, 0.5)
-            
-            fpln_active[k].beizer = {
-                start_lat =  lat_start,
-                start_lon =  lon_start,
-                end_lat   =  lat_end,
-                end_lon   =  lon_end,
-            }
-
-        end
-    end
-    
-end
-
-local function update_cifp(reference)
+local function update_cifp(apt_ref, reference, initial_point)
     if not reference then
-        return -- No Data no party
+        return 0, initial_point -- No Data no party
     end
 
-    reference.computed_legs = {}
-    local dep_rwy, sibl = FMGS_dep_get_rwy(false)
-    local prev_point = GeoPoint:create({ lat=(not sibl and dep_rwy.s_lat or dep_rwy.lat), lon=(not sibl and dep_rwy.s_lon or dep_rwy.lon)})
+    local total_distance = 0
 
-    reference.computed_legs = {{lat=prev_point.lat, lon=prev_point.lon}}
+    if initial_point then
+        reference.computed_legs = {{lat=initial_point.lat, lon=initial_point.lon}}
+    else
+        reference.computed_legs = {}
+    end
+
+    local prev_point = initial_point
 
     for i,leg in ipairs(reference.legs) do
-        local leg_points = add_cifp_point(reference, prev_point,leg)    -- Get the points for the single legs
+        decorate_cifp_point(apt_ref, leg)   -- Add lat/lon from database where necessary
+
+        -- TODO: This is the very approximate version (lower than real)
+        -- replace when path drawing is available
+
         local distance = 0
-        
-        local prev_leg_points = prev_point
-        for j,x in ipairs(leg_points) do
-            distance = distance + GC_distance_kt(prev_point.lat, prev_point.lon, x.lat, x.lon)
-            table.insert(reference.computed_legs, x)
-            prev_leg_points = x
+        if leg.lat and leg.lon then
+            if prev_point then
+                distance = GC_distance_kt(prev_point.lat, prev_point.lon, leg.lat, leg.lon)
+            end
+            prev_point = GeoPoint:create({ lat = leg.lat, lon = leg.lon})
+            table.insert(reference.computed_legs, leg)
         end
 
         leg.computed_distance = distance
-        local nr_leg_points = #leg_points
-        if nr_leg_points > 0 then
-            prev_point = GeoPoint:create({ lat = leg_points[nr_leg_points].lat, lon = leg_points[nr_leg_points].lon})
-        end
+        total_distance = total_distance + distance
     end
 
+    return total_distance, prev_point
+end
+
+
+local function fpln_recompute_distances_fplnlegs(fpln, prev_point)
+
+    local total_distance = 0
+    local prev
+    if prev_point then
+        prev = {lat=prev_point.lat, lon=prev_point.lon}
+    end
+
+    for k,x in ipairs(fpln.legs) do
+        if (prev and not prev.discontinuity) and not x.discontinuity then
+            assert(prev.lat and prev.lon and x.lat and x.lon)
+            fpln.legs[k].computed_distance = GC_distance_kt(prev.lat, prev.lon, x.lat, x.lon)
+            total_distance = total_distance + fpln.legs[k].computed_distance
+        end
+        prev = fpln.legs[k]
+    end
+
+    if prev.discontinuity then
+        return total_distance, nil
+    else
+        return total_distance, GeoPoint:create({ lat=prev.lat, lon=prev.lon})
+    end
+end
+
+local function perform_FPLN_conversion(fpln)
+    local segment_list = convert_from_FMGS_data(fpln)
+
+    local converted_segment_list = convert_holds(segment_list)
+    converted_segment_list = convert_pi(converted_segment_list)
+
+    fpln.segment_curved_list = converted_segment_list
+    create_turns(fpln.segment_curved_list)
 end
 
 function update_route()
 
-    if true then
-        return -- Disabled in the master branch for now
+    -- First of all let's understand which flight plan needs recomputing (precedence given to active F/PLN)
+    local fpln
+    if FMGS_sys.fpln.active.require_recompute then
+        fpln = FMGS_sys.fpln.active
+    end
+    if FMGS_sys.fpln.temp and FMGS_sys.fpln.temp.require_recompute then
+        fpln = FMGS_sys.fpln.temp
     end
 
-    -- Disable for testing
-    if get(TIME) - route_last_update < ROUTE_FREQ_UPDATE_SEC then
+    if not fpln then
+        -- No F/PLN requires recomputing, bye bye
         return
     end
+
+    fpln.require_recompute = false
+
+    local dist, total_distance = 0, 0
+    local init_pt
+
+    local dep_rwy, sibl = FMGS_dep_get_rwy(FMGS_sys.fpln.temp and FMGS_sys.fpln.temp.require_recompute)
+    if dep_rwy then
+        init_pt = GeoPoint:create({ lat=(not sibl and dep_rwy.s_lat or dep_rwy.lat), lon=(not sibl and dep_rwy.s_lon or dep_rwy.lon)})
+    end
     
-    route_last_update = get(TIME)
+    dist, init_pt  = update_cifp(fpln.apts.dep, fpln.apts.dep_sid, init_pt)
+    total_distance = total_distance + dist
+    dist, init_pt  = update_cifp(fpln.apts.dep, fpln.apts.dep_trans, init_pt)
+    total_distance = total_distance + dist
+    
+    dist, init_pt  = fpln_recompute_distances_fplnlegs(fpln, init_pt)
+    total_distance = total_distance + dist
+
+    dist, init_pt  = update_cifp(fpln.apts.arr, fpln.apts.arr_trans, init_pt)
+    total_distance = total_distance + dist
+    dist, init_pt  = update_cifp(fpln.apts.arr, fpln.apts.arr_star, init_pt)
+    total_distance = total_distance + dist
+    dist, init_pt  = update_cifp(fpln.apts.arr, fpln.apts.arr_via, init_pt)
+    total_distance = total_distance + dist
+    dist, init_pt  = update_cifp(fpln.apts.arr, fpln.apts.arr_appr, init_pt)
+    total_distance = total_distance + dist
+    dist, init_pt  = update_cifp(fpln.apts.arr, fpln.apts.arr_map, init_pt)
 
 
-    if AvionicsBay.is_initialized() and AvionicsBay.is_ready() then
-        if not FMGS_sys.fpln.active.apts.dep_sid then
-            if not FMGS_sys.fpln.temp then
-                FMGS_set_apt_dep("LIML")
-                FMGS_set_apt_arr("LIRF")
-                FMGS_create_temp_fpln()
-                FMGS_dep_set_rwy(FMGS_sys.fpln.temp.apts.dep.rwys[1], true)
-                logInfo("DEBUG F/PLN is active: LOADED 1/2")
-            end
-            if FMGS_sys.fpln.temp.apts.dep_cifp then
-                FMGS_dep_set_sid(FMGS_sys.fpln.temp.apts.dep_cifp.sids[49])
-                FMGS_dep_set_trans(FMGS_sys.fpln.temp.apts.dep_cifp.sids[50])
-                FMGS_insert_temp_fpln()
-                logInfo("DEBUG F/PLN is active: LOADED 1/2")
-            end
+    if init_pt then
+        local arr_rwy, sibl = FMGS_arr_get_rwy(FMGS_sys.fpln.temp and FMGS_sys.fpln.temp.require_recompute)
+        if arr_rwy then
+            local last_pt = GeoPoint:create({ lat=(not sibl and arr_rwy.s_lat or arr_rwy.lat), lon=(not sibl and arr_rwy.s_lon or arr_rwy.lon)})
+            local dest_apt_dist = GC_distance_kt(last_pt.lat, last_pt.lon, init_pt.lat, init_pt.lon)
+            arr_rwy.last_distance = dest_apt_dist
+            total_distance = total_distance + dest_apt_dist
         end
     end
-   
-    update_cifp(FMGS_sys.fpln.active.apts.dep_sid)
-    update_cifp(FMGS_sys.fpln.active.apts.dep_trans)
-    
-    update_active_fpln()
 
+    if total_distance <= 9999 then
+        FMGS_sys.data.pred.trip_dist = total_distance
+    else
+        FMGS_sys.data.pred.trip_dist = nil -- This has no sense
+    end
 
+    perform_FPLN_conversion(fpln)
 end
 
