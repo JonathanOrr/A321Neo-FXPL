@@ -330,7 +330,7 @@ Eng_is_failed = createGlobalPropertyia("a321neo/dynamics/engines/eng_failed", 2)
 
 -- Engine startup config stuff
 ENG_config_cooling_time = createGlobalPropertyi("a321neo/config/eng/initial_cooling", 0, false, true, false)
-ENG_config_egt_drop = createGlobalPropertyi("a321neo/config/eng/pw11ßß_egt_drop", 0, false, true, false)
+ENG_config_egt_drop = createGlobalPropertyi("a321neo/config/eng/pw1100_egt_drop", 0, false, true, false)
 
 -- ATHR
 ATHR_desired_N1     = createGlobalPropertyfa("a321neo/dynamics/engines/athr_input_n1", 2)

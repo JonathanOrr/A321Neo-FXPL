@@ -53,8 +53,15 @@ local FSM_START_PHASE_N1 = 3
 local FSM_START_COOLING = 4
 local FSM_SHUTDOWN = 5
 
+-- configurable initial cooling support for first startup
+local COOLING_IDLE = 0
+local COOLING_RUN = 1
+local COOLING_DONE = 3
+local initial_cooling_phase = {COOLING_IDLE,COOLING_IDLE}
+
 local MAX_EGT_OFFSET = 10  -- This is the maximum offset between one engine and the other in terms of EGT
 local ENG_N1_CRANK    = 10  -- N1 used for cranking and cooling
+local ENG_N2_FULL_CRANK = 32 -- N2 used for full cranking on hot / hung start
 local ENG_N1_CRANK_FF = 15  -- FF in case of wet cranking
 local ENG_N1_CRANK_EGT= 95  -- Target EGT for cranking
 local ENG_N1_LL_IDLE  = 18.3 -- above this value some params like FF will be provided by X-Plane
@@ -227,10 +234,11 @@ local function cooling_time(time_since_last_shutdown)
         -- Less than 2 hour
         time_cool = Math_rescale(60*60,90,2*60*90, 0, time_since_last_shutdown)
     else
+        -- more than 2 hours cooling does not require any cooling on startup 
         return 0
     end
 
-    return Math_clamp(time_cool, 10, 90) -- TODO this lead to 10" cooling time currently
+    return Math_clamp(time_cool, 0, 90) -- limit from direct start to 90 seconds cooling max  TODO engine type specific values
 end
 
 local function min_n1(altitude)
@@ -464,7 +472,7 @@ end
 ----------------------------------------------------------------------------------------------------
 -- Functions - Ignition stuffs
 ----------------------------------------------------------------------------------------------------
-
+-- TODO we need to differentiate between full and low crank (cooling)
 local function perform_crank_procedure(eng, wet_cranking)
     -- This is PHASE 1
     set(Eng_fsm_state, FSM_START_PHASE_CRANK, eng)
@@ -480,15 +488,16 @@ local function perform_crank_procedure(eng, wet_cranking)
     set(eng_mixture, 0, eng) -- No mixture for dry cranking, dry cranking is used for cooling
 
     -- Set N2 for cranking
+    -- TODO some N2 randomness during cranking
     eng_N2_off[eng] = Set_linear_anim_value(eng_N2_off[eng], ENG_N1_CRANK, 0, ENG.data.max_n2, 0.25)
     set(eng_N2_enforce, eng_N2_off[eng], eng)
     
-    -- Set EGT for cranking
-    -- during initial startup when EGT is below CRANK_EGT  we MUST use OAT as target EGT here, otherwise EGT will increase without FF
-    if  eng_EGT_off[eng] < ENG_N1_CRANK_EGT then
-        eng_EGT_off[eng] = get(OTA) -- TODO take more params into consideration
-    else
-        eng_EGT_off[eng] = Set_linear_anim_value(eng_EGT_off[eng], ENG_N1_CRANK_EGT, -50, 1500, 2)
+    -- Handle  EGT during cranking
+    -- during initial startup we MUST use OAT as target EGT here, otherwise EGT will increase without FF
+    -- when in a hot restart situation where EGT is still above OAT we decrease to OAT TODO what in high altitudes with big delta t?
+    local oat = get(OTA)
+    if  eng_EGT_off[eng] > oat then
+        eng_EGT_off[eng] = Set_linear_anim_value(eng_EGT_off[eng], oat, -50, 1500, 2) -- TODO speed depends on delta t?
     end
     set(Eng_is_spooling_up, 1, eng) -- Need for bleed air computation, see packs.lua
     
@@ -509,7 +518,7 @@ local function perform_starting_procedure_follow_n2(eng)
     local oat = get(OTA)
     set(Eng_fsm_state, FSM_START_PHASE_N2, eng)
     set(eng_mixture, 0, eng) -- No mixture in this phase
-    -- TODO we have to switch the starter valve symbol on eng page to on during start up based on some condition
+
     if igniter_eng[eng] == 0 and not eng_manual_switch[eng] and eng_N2_off[eng] > ENG.data.startup.ign_on_n2 then
         igniter_eng[eng] = math.random() > 0.5 and 1 or 2  -- For ECAM visualization only, no practical effect
         starter_valve_eng[eng] = 1
@@ -693,28 +702,46 @@ end
 
 local function needs_cooling(eng)
     if not ENG.data.has_cooling then return false end
-
-    -- engine never started
     -- TODO do we want a cooling period in that case based on some condition like power availability?
-    --      handle first start of the day and first start after power supplied which lead to initial cooling
-    if time_last_shutdown[eng] <= 0 then return false end
+
+    if time_last_shutdown[eng] <= 0 then
+        -- engine never started before
+
+        if initial_cooling_phase[eng] == COOLING_RUN then -- in cooling phase
+            return true
+        elseif get(ENG_config_cooling_time) == 0  or initial_cooling_phase[eng] == COOLING_DONE then -- cooling done
+            return false
+        elseif get(ENG_config_cooling_time) ~= 0 and initial_cooling_phase[eng] == COOLING_IDLE then
+            initial_cooling_phase[eng] = COOLING_RUN
+            cooling_left_time[eng] = COOLING_REQUIRED_MAGIC -- force cooling
+        else
+        end
+    end
 
     -- start cooling timer
     if cooling_left_time[eng] == COOLING_REQUIRED_MAGIC and not cooling_has_cooled[eng] then
-        time_req = cooling_time(get(TIME) - time_last_shutdown[eng])
+        if initial_cooling_phase[eng] == COOLING_IDLE or initial_cooling_phase[eng] == COOLING_DONE then
+            -- when engine has been shutdown before than use calculated time regardless configured initial cooling time
+            time_req = cooling_time(get(TIME) - time_last_shutdown[eng])
+        else
+            time_req = get(ENG_config_cooling_time)
+            -- initial_cooling_phase[eng] = false  -- should be set to false after cooldown
+        end
         if time_req == 0 then
             return false
         end
         cooling_left_time[eng] = time_req -- initialize cooling timer
         return true
-    end    
-    return not cooling_has_cooled[eng]
+    end
+
+    return not cooling_has_cooled[eng]  -- this is set after one cooling only ...
 end
 
 local function perform_cooling(eng)
     set(Eng_fsm_state,FSM_START_COOLING,eng)
     if cooling_left_time[eng] == 0 then
         cooling_has_cooled[eng] = true
+        initial_cooling_phase[eng] = COOLING_DONE
         return
     end
     -- cooling is achieved by dry cranking driven by bleed air
@@ -722,7 +749,8 @@ local function perform_cooling(eng)
     -- cooling starts at certain N2 when spooling up TODO cooling timer starts before reaching 9.8% N2
     if (eng_N2_off[eng] > 9.8) then
         -- TODO actual cooling sequence starts earlier than about 10% N2 as soon as low cranking begins
-        -- during cooling N2 stays at N1 10% +-2%
+        -- TODO during cooling N2 stays at N1 10% +-2%
+        -- This is the actual cooling timer countdoen
         cooling_left_time[eng] = math.max(0, cooling_left_time[eng] - get(DELTA_TIME))
     end
     -- also update value displayed in EWD
@@ -733,7 +761,7 @@ end
 
 local function update_startup()
 
-    -- TODO shortcut if both engines are available we don't need this logic
+    if get(Engine_1_avail) == 1 and get(Engine_2_avail) == 1 then return end
 
     -- An array we need later to see if the engine requires cooldown (=shutdown) or not
     local require_cooldown = {true, true}
@@ -770,10 +798,10 @@ local function update_startup()
         
             -- Is cooling required before ignition?
             if get(Any_wheel_on_ground) == 1 and needs_cooling(1) then
-                set(EWD_engine_cooling, 1, 1)
+                set(EWD_engine_cooling, 1, 1) -- TODO adjust visibility of COOOLING in EWD...
                 perform_cooling(1)
 
-                -- Dual cooling
+                -- Dual cooling - show EWD TIMER even if Master switch is off for that ENG
                 if dual_cooling_switch and needs_cooling(2) and get(Engine_2_master_switch) == 0 then
                     perform_cooling(2)
                     require_cooldown[2] = false
@@ -792,8 +820,8 @@ local function update_startup()
             if get(Any_wheel_on_ground) == 1 and needs_cooling(2) then
                 set(EWD_engine_cooling, 1, 2)
                 perform_cooling(2)
-                
-                -- Dual cooling
+
+                -- Dual cooling - show EWD TIMER even if Master switch is off for that ENG
                 if dual_cooling_switch and needs_cooling(1) and get(Engine_1_master_switch) == 0 then
                     set(EWD_engine_cooling, 1, 1)
                     perform_cooling(1)
@@ -811,7 +839,7 @@ local function update_startup()
             set(eng_igniters, 1, 2)
         end
         
-    -- CASE 2: CRANK
+    -- CASE 2: manually selected CRANK
     elseif get(Engine_mode_knob) == -1 then -- Crank
         if eng_manual_switch[1] and does_engine_1_can_start_or_crank then
             perform_crank_procedure(1, get(Engine_1_master_switch) == 1)
@@ -897,7 +925,8 @@ local function update_auto_start()
         end
 
         set(Engine_mode_knob,1)
-        set(Engine_2_master_switch, 1)
+       -- TODO make APU only autostart possible set(Engine_2_master_switch, 1)
+        slow_start_time_requested = false
     end
 
     if get(Engine_2_avail) == 1 then
