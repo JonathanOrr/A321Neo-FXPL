@@ -58,9 +58,10 @@ local COOLING_IDLE = 0
 local COOLING_RUN = 1
 local COOLING_DONE = 3
 local initial_cooling_phase = {COOLING_IDLE,COOLING_IDLE}
+local COOLING_N2_START = 7.2  -- N2 at which cooling timer countdown starts to run
 
 local MAX_EGT_OFFSET = 10  -- This is the maximum offset between one engine and the other in terms of EGT
-local ENG_N1_CRANK    = 10  -- N1 used for cranking and cooling
+local ENG_N2_LOW_CRANK = 10  -- N1 used for cranking and cooling
 local ENG_N2_FULL_CRANK = 32 -- N2 used for full cranking on hot / hung start
 local ENG_N1_CRANK_FF = 15  -- FF in case of wet cranking
 local ENG_N1_CRANK_EGT= 95  -- Target EGT for cranking
@@ -80,6 +81,10 @@ local random_pool_1 = 0
 local random_pool_2 = 0
 local random_pool_3 = 0
 local random_pool_update = 0
+
+-- higher frequency random pool
+local random_pool_hf = 0
+local random_pool_hf_update = 0
 
 local egt_eng_1_offset = math.random() * MAX_EGT_OFFSET * 2 - MAX_EGT_OFFSET    -- Offset in engines to simulate realistic values
 local egt_eng_2_offset = math.random() * MAX_EGT_OFFSET * 2 - MAX_EGT_OFFSET    -- Offset in engines to simulate realistic values
@@ -489,7 +494,9 @@ local function perform_crank_procedure(eng, wet_cranking)
 
     -- Set N2 for cranking
     -- TODO some N2 randomness during cranking
-    eng_N2_off[eng] = Set_linear_anim_value(eng_N2_off[eng], ENG_N1_CRANK, 0, ENG.data.max_n2, 0.25)
+
+    local target_n2 = ENG_N2_LOW_CRANK - random_pool_hf * 0.4
+    eng_N2_off[eng] = Set_linear_anim_value(eng_N2_off[eng], target_n2, 0, ENG.data.max_n2, 0.25)
     set(eng_N2_enforce, eng_N2_off[eng], eng)
     
     -- Handle  EGT during cranking
@@ -746,15 +753,15 @@ local function perform_cooling(eng)
     end
     -- cooling is achieved by dry cranking driven by bleed air
     perform_crank_procedure(eng, false)
-    -- cooling starts at certain N2 when spooling up TODO cooling timer starts before reaching 9.8% N2
-    if (eng_N2_off[eng] > 9.8) then
-        -- TODO actual cooling sequence starts earlier than about 10% N2 as soon as low cranking begins
-        -- TODO during cooling N2 stays at N1 10% +-2%
-        -- This is the actual cooling timer countdoen
+    -- cooling starts at certain N2 when spooling up
+    if (eng_N2_off[eng] >= COOLING_N2_START) then
+        -- This is the actual cooling timer countdown
         cooling_left_time[eng] = math.max(0, cooling_left_time[eng] - get(DELTA_TIME))
     end
     -- also update value displayed in EWD
     set(EWD_engine_cooling_time, cooling_left_time[eng], eng)
+
+    -- TODO after timer is 0:00, COOLING without timer is displayed about 1-5 seconds in EWD (SW version dependent)
     
 end
 
@@ -1181,14 +1188,20 @@ function update()
     update_oil_qty()
     update_n1_mode_and_limits()
     update_failing()
-    
+
+
     if get(TIME) - random_pool_update > 2 then
         random_pool_update = get(TIME)
         random_pool_1 = math.random()
         random_pool_2 = math.random()
         random_pool_3 = math.random()
     end
-    
+
+    if get(TIME) - random_pool_hf_update > 0.6 then
+        random_pool_hf_update = get(TIME)
+        random_pool_hf = math.random()
+    end
+
     perf_measure_stop("engines:update()")
 end
 
