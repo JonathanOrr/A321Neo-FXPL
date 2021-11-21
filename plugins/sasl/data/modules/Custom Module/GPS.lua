@@ -41,6 +41,7 @@ local function create_gps()
                 alt = 0,
                 true_track = 0,
                 gs = 0,
+                est_error = 0,
 
                 private = {
                     start_time   = 0,
@@ -52,6 +53,8 @@ end
 
 GPS_sys[1] = create_gps()
 GPS_sys[2] = create_gps()
+GPS_sys[1].est_error = gps_offset[1]
+GPS_sys[2].est_error = gps_offset[2]
 
 ----------------------------------------------------------------------------------------------------
 -- Functions

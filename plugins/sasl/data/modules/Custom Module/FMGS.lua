@@ -59,6 +59,8 @@ FMGS_sys.data = {
         trip_dist = nil,
         efob = nil,
     },
+
+    nav_accuracy = 0.0,
 }
 FMGS_sys.fpln = {
 
@@ -167,6 +169,32 @@ local function update_gps_primary()
     end
 end
 
+local function update_nav_accuracy()
+    local err = 0
+    if FMGS_sys.config.gps_primary then
+        if GPS_sys[1].status == GPS_STATUS_NAV then
+            err = GPS_sys[1].est_error
+        end
+        if GPS_sys[2].status == GPS_STATUS_NAV then
+            err = err + GPS_sys[2].est_error
+        end
+
+        err = err * 111.111 * 0.539957;    -- Approx meters per degree (to NM)
+    else
+        -- TODO DME and VOR improvements
+        local n = 0
+        for i=1,3 do
+            if ADIRS_sys[i].ir_status == IR_STATUS_ALIGNED then
+                err = err + ADIRS_sys[i].ir_drift
+                n = n + 1
+            end
+        end
+        if n > 0 then
+            err = err / n
+        end
+    end
+    FMGS_sys.data.nav_accuracy = err
+end
 
 local function update_status()
     -- NOTE: As far as I know, INDEPENDENT MODE is activated only when databases of FMCUs is different
@@ -193,6 +221,7 @@ local function update_status()
     end
 
     update_gps_primary()
+    update_nav_accuracy()
 
 end
 

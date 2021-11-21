@@ -987,3 +987,15 @@ end
 function FMGS_get_limit_opt_alt()
     return FMGS_sys.data.limits.opt_alt
 end
+
+-------------------------------------------------------------------------------
+-- Accuracy & co.
+-------------------------------------------------------------------------------
+
+function FMGS_get_nav_accuracy()
+    return FMGS_sys.data.nav_accuracy
+end
+
+function FMGS_is_gps_primary()
+    return FMGS_sys.config.gps_primary
+end

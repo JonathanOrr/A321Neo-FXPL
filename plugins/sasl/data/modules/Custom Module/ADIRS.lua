@@ -26,7 +26,7 @@ local TIME_TO_START_ADR       = 2 -- In seconds
 local IR_TIME_TO_GET_ATTITUDE = 20 -- In seconds
 local TIME_TO_ONBAT = 5 --five seconds before onbat light extinguishes if AC available
 
-local MAX_DRIFT_NM_H = 1.0
+local MAX_DRIFT_NM_H = 2.0
 
 ----------------------------------------------------------------------------------------------------
 -- Global variables
