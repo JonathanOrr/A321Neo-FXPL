@@ -464,3 +464,17 @@ FMGS_debug_window = contextWindow {
     FMGS_debug {position = { 0 , 0 , 1000 , 600 }}
   };
 }
+
+Exporter_window = contextWindow {
+  name = "Data Exporter";
+  position = { 150 , 150 , 200 , 100 };
+  noBackground = true ;
+  proportional = false ;
+  minimumSize = { 200 , 100 };
+  maximumSize = { 200 , 100 };
+  gravity = { 0 , 1 , 0 , 1 };
+  visible = false ;
+  components = {
+    exporter {position = { 0 , 0 , 200 , 100 }}
+  };
+}
