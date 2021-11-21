@@ -66,19 +66,21 @@ local function draw_bleed_numbers()
         return
     end
 
-    bleed_1_press_col = (get(L_bleed_press) > 4 and get(L_bleed_press) < 57) and ECAM_GREEN or ECAM_ORANGE
-    bleed_2_press_col = (get(R_bleed_press) > 4 and get(R_bleed_press) < 57) and ECAM_GREEN or ECAM_ORANGE
+    local bleed_1_press = math.floor(get(L_bleed_press)) - math.floor(get(L_bleed_press))%2
+    local bleed_2_press = math.floor(get(R_bleed_press)) - math.floor(get(R_bleed_press))%2
+    local bleed_1_press_col = (bleed_1_press > 4 and bleed_1_press < 57) and ECAM_GREEN or ECAM_ORANGE
+    local bleed_2_press_col = (bleed_2_press > 4 and bleed_2_press < 57) and ECAM_GREEN or ECAM_ORANGE
 
-    bleed_1_temp = math.floor(get(L_bleed_temp)) - math.floor(get(L_bleed_temp))%5
-    bleed_2_temp = math.floor(get(R_bleed_temp)) - math.floor(get(R_bleed_temp))%5
+    local bleed_1_temp = math.floor(get(L_bleed_temp)) - math.floor(get(L_bleed_temp))%5
+    local bleed_2_temp = math.floor(get(R_bleed_temp)) - math.floor(get(R_bleed_temp))%5
 
-    bleed_1_temp_col = (bleed_1_temp >= 150 and bleed_1_temp < 270) and ECAM_GREEN or ECAM_ORANGE
-    bleed_2_temp_col = (bleed_2_temp >= 150 and bleed_2_temp < 270) and ECAM_GREEN or ECAM_ORANGE
+    local bleed_1_temp_col = (bleed_1_temp >= 150 and bleed_1_temp < 270) and ECAM_GREEN or ECAM_ORANGE
+    local bleed_2_temp_col = (bleed_2_temp >= 150 and bleed_2_temp < 270) and ECAM_GREEN or ECAM_ORANGE
 
     --bleed temperature & pressure--
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-250, size[2]/2-55, math.floor(get(L_bleed_press)), 32, false, false, TEXT_ALIGN_CENTER, bleed_1_press_col)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-250, size[2]/2-55, bleed_1_press, 32, false, false, TEXT_ALIGN_CENTER, bleed_1_press_col)
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-250, size[2]/2-90, bleed_1_temp, 32, false, false, TEXT_ALIGN_CENTER, bleed_1_temp_col)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+250, size[2]/2-55, math.floor(get(R_bleed_press)), 32, false, false, TEXT_ALIGN_CENTER, bleed_2_press_col)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+250, size[2]/2-55, bleed_2_press, 32, false, false, TEXT_ALIGN_CENTER, bleed_2_press_col)
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2+250, size[2]/2-90, bleed_2_temp, 32, false, false, TEXT_ALIGN_CENTER, bleed_2_temp_col)
 
 end
