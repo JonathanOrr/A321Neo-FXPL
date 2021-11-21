@@ -19,7 +19,6 @@ local THIS_PAGE = MCDU_Page:new({id=200})
 local to_certain_waypoint = { wpt_name = "RICOO", bearing = 58, distance = 308}
 local update_at_prompt = {wpt_name = nil, lat = nil, lon = nil}
 local vdev = nil -- enter a number here and the entire VDEV line will show
-local nav_accuracy = {required = 2, estimated_drift = 8}
 
 function THIS_PAGE:render(mcdu_data)
     local displayed_fmgs_phase = {"TO", "TO", "CLB", "CRZ", "DES", "APPR", "GA", " "}
@@ -70,15 +69,17 @@ function THIS_PAGE:render(mcdu_data)
     self:add_multi_line(mcdu_data, MCDU_LEFT, 5, " PREDICTIVE", MCDU_SMALL, ECAM_WHITE)
     self:add_multi_line(mcdu_data, MCDU_LEFT, 5, "<GPS", MCDU_LARGE, ECAM_WHITE)
 
-    if FMGS_sys.config.gps_primary then
+    if FMGS_is_gps_primary() then
         self:add_multi_line(mcdu_data, MCDU_RIGHT, 5, "GPS PRIMARY", MCDU_LARGE, ECAM_GREEN)
     end
 
     -----LINE 6
+    local nav_accuracy = {required = 2, estimated_drift = FMGS_get_nav_accuracy() }
+
     self:add_multi_line(mcdu_data, MCDU_LEFT, 6, "REQUIRED ACCUR ESTIMATED", MCDU_SMALL, ECAM_WHITE)
 
     self:add_multi_line(mcdu_data, MCDU_LEFT, 6, Fwd_string_fill(Round_fill(nav_accuracy.required,1), " ", 4).."NM", MCDU_LARGE, ECAM_GREEN)
-    self:add_multi_line(mcdu_data, MCDU_RIGHT, 6, mcdu_format_force_to_small(tostring(nav_accuracy.estimated_drift).."NM"), MCDU_LARGE, ECAM_GREEN)
+    self:add_multi_line(mcdu_data, MCDU_RIGHT, 6, mcdu_format_force_to_small(Round(nav_accuracy.estimated_drift, 2).."NM"), MCDU_LARGE, ECAM_GREEN)
     self:add_multi_line(mcdu_data, MCDU_LEFT, 6, Fwd_string_fill(nav_accuracy.required >= nav_accuracy.estimated_drift and "HIGH" or "LOW" , " ", 14), MCDU_LARGE, ECAM_GREEN)
 end
 

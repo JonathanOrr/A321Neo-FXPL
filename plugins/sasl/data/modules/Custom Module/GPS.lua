@@ -25,7 +25,7 @@ local INIT_START_GPS = 5
 local HOT_START_GPS  = 1    -- nr. of seconds required to get GPS fix if last time active < 1 hour
 local WARM_START_GPS = 20   -- nr. of seconds required to get GPS fix if last time active > 1 hour (we don't simulate cold start)
 
-local MAX_GPS_ERROR = 1e-5
+local MAX_GPS_ERROR = 1e-4
 
 ----------------------------------------------------------------------------------------------------
 -- Global variables
@@ -53,8 +53,8 @@ end
 
 GPS_sys[1] = create_gps()
 GPS_sys[2] = create_gps()
-GPS_sys[1].est_error = gps_offset[1]
-GPS_sys[2].est_error = gps_offset[2]
+GPS_sys[1].est_error = gps_offset[1]*MAX_GPS_ERROR
+GPS_sys[2].est_error = gps_offset[2]*MAX_GPS_ERROR
 
 ----------------------------------------------------------------------------------------------------
 -- Functions

@@ -178,8 +178,7 @@ local function update_nav_accuracy()
         if GPS_sys[2].status == GPS_STATUS_NAV then
             err = err + GPS_sys[2].est_error
         end
-
-        err = err * 111.111 * 0.539957;    -- Approx meters per degree (to NM)
+        err = math.abs(err * 111.111 * 0.539957);    -- Approx meters per degree (to NM)
     else
         -- TODO DME and VOR improvements
         local n = 0
@@ -190,7 +189,7 @@ local function update_nav_accuracy()
             end
         end
         if n > 0 then
-            err = err / n
+            err = math.abs(err / n)
         end
     end
     FMGS_sys.data.nav_accuracy = err
