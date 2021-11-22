@@ -438,7 +438,7 @@ local function draw_packs_wai_nai()
         
         if AI_sys.switches[1] or AI_sys.switches[2] then
             if #str > 0 then
-                str = str .. " / NAI"
+                str = str .. "/NAI"
             else
                 str = "NAI"
             end    
@@ -446,7 +446,7 @@ local function draw_packs_wai_nai()
         
         if AI_sys.switches[3] then
             if #str > 0 then
-                str = str .. " / WAI"
+                str = str .. "/WAI"
             else
                 str = "WAI"
             end
