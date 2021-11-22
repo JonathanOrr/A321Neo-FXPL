@@ -40,17 +40,17 @@ local function draw_engines()
     sasl.gl.drawWideLine(size[1]/2+110, size[2]/2-255, size[1]/2+110, size[2]/2-282, 3, eng2_bleed_ok and ECAM_GREEN or ECAM_ORANGE)
     sasl.gl.drawWideLine(size[1]/2+110, size[2]/2-255, size[1]/2+152, size[2]/2-255, 3, eng2_bleed_ok and ECAM_GREEN or ECAM_ORANGE)
 
-    if get(Ecam_bleed_hp_valve_L) >= 2 then
+    if get(L_HP_valve) == 1 then
         sasl.gl.drawWideLine(size[1]/2-204, size[2]/2-255, size[1]/2-248, size[2]/2-255, 3, eng1_bleed_ok and ECAM_GREEN or ECAM_ORANGE)
     end
-    if get(Ecam_bleed_hp_valve_R) >= 2 then
+    if get(R_HP_valve) == 1 then
         sasl.gl.drawWideLine(size[1]/2+206, size[2]/2-255, size[1]/2+248, size[2]/2-255, 3, eng2_bleed_ok and ECAM_GREEN or ECAM_ORANGE)
     end
 
-    if get(Ecam_bleed_ip_valve_L) >= 2 then
+    if get(L_IP_valve) == 1 then
         sasl.gl.drawWideLine(size[1]/2-249, size[2]/2-170, size[1]/2-249, size[2]/2-108, 3, ECAM_GREEN)
     end
-    if get(Ecam_bleed_ip_valve_R) >= 2 then
+    if get(R_IP_valve) == 1 then
         sasl.gl.drawWideLine(size[1]/2+251, size[2]/2-170, size[1]/2+251, size[2]/2-108, 3, ECAM_GREEN)
     end
 

@@ -150,11 +150,13 @@ local function update_bleed_valves()
     if get(FAILURE_BLEED_IP_1_VALVE_STUCK) == 0 then
         eng_bleed_valve_pos[1] = eng_bleed_switch[1] and (eng_lp_pressure[1] >= 8) 
                              and (get(Fire_pb_ENG1_status) == 0) and not apu_bleed_valve_pos and get(GAS_bleed_avail) == 0
+        set(L_IP_valve,eng_bleed_valve_pos[1] and 1 or 0)
     end
                              
     if get(FAILURE_BLEED_IP_2_VALVE_STUCK) == 0 then
         eng_bleed_valve_pos[2] = eng_bleed_switch[2] and (eng_lp_pressure[2] >= 8) 
                              and (get(Fire_pb_ENG2_status) == 0) and not apu_bleed_valve_pos and get(GAS_bleed_avail) == 0
+        set(R_IP_valve,eng_bleed_valve_pos[2] and 1 or 0)
     end
 
     --X bleed valve logic--
