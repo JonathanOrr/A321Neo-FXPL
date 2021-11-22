@@ -61,7 +61,8 @@ local initial_cooling_phase = {COOLING_IDLE,COOLING_IDLE}
 local COOLING_N2_START = 7.2  -- N2 at which cooling timer countdown starts to run
 
 local MAX_EGT_OFFSET = 10  -- This is the maximum offset between one engine and the other in terms of EGT
-local ENG_N2_LOW_CRANK = 10  -- N1 used for cranking and cooling
+local ENG_N2_CRANK_MARGIN = 9.5  -- N2 below which cranking is assumed in startup
+local ENG_N2_LOW_CRANK = 10  -- N2 used for cranking and cooling
 local ENG_N2_FULL_CRANK = 32 -- N2 used for full cranking on hot / hung start
 local ENG_N1_CRANK_FF = 15  -- FF in case of wet cranking
 local ENG_N1_CRANK_EGT= 95  -- Target EGT for cranking
@@ -111,6 +112,7 @@ local cooling_has_cooled = {false, false}
 
 local already_back_to_norm = false -- This is used to check continuous ignition
 
+local time_current_startup = { -1, -1}  -- time current engine start attempt has been made, resetted on shutdown
 local last_time_toga = {0,0} -- Time point where thrust levers are set to TOGA
 
 local already_started_eng = {false, false}
@@ -479,7 +481,7 @@ end
 ----------------------------------------------------------------------------------------------------
 -- TODO we need to differentiate between full and low crank (cooling)
 local function perform_crank_procedure(eng, wet_cranking)
-    -- This is PHASE 1
+    -- This is PHASE 1 which will be called during startup as long N2 is below ENG_N2_CRANK_MARGIN
     set(Eng_fsm_state, FSM_START_PHASE_CRANK, eng)
 
     if (eng==1 and get(Engine_1_avail) == 1) or (eng==2 and get(Engine_2_avail) == 1) then
@@ -493,10 +495,18 @@ local function perform_crank_procedure(eng, wet_cranking)
     set(eng_mixture, 0, eng) -- No mixture for dry cranking, dry cranking is used for cooling
 
     -- Set N2 for cranking
-    -- TODO some N2 randomness during cranking
 
-    local target_n2 = ENG_N2_LOW_CRANK - random_pool_hf * 0.4
-    eng_N2_off[eng] = Set_linear_anim_value(eng_N2_off[eng], target_n2, 0, ENG.data.max_n2, 0.25)
+    local starting_duration = get(TIME)- time_current_startup[eng]
+
+    local target_n2
+    if starting_duration < 3.82 then
+        target_n2 = 0   -- polynomal will return negative values below that
+    elseif starting_duration > 35 then
+        target_n2 = ENG_N2_LOW_CRANK - random_pool_hf * 0.4
+    else
+        target_n2 = ENG.data.n2_spoolup_fun(starting_duration)  -- this is ok only for low cranking
+    end
+    eng_N2_off[eng] = Set_linear_anim_value(eng_N2_off[eng], target_n2, 0, ENG.data.max_n2, 70)
     set(eng_N2_enforce, eng_N2_off[eng], eng)
     
     -- Handle  EGT during cranking
@@ -632,7 +642,7 @@ end
 local function perform_starting_procedure(eng, inflight_restart)
     -- Note: startup-procedure is only called when cooling has been already done or not required
 
-    if eng_N2_off[eng] < 9.5 and not inflight_restart then
+    if eng_N2_off[eng] < ENG_N2_CRANK_MARGIN and not inflight_restart then
         -- Phase 1: Ok let's start by cranking the engine to start rotation
         perform_crank_procedure(eng, false)
         return
@@ -802,7 +812,10 @@ local function update_startup()
 
         -- ENG 1
         if (eng_manual_switch[1] or get(Engine_1_master_switch) == 1) and does_engine_1_can_start_or_crank then
-        
+
+            if time_current_startup[1] == -1 then
+                time_current_startup[1] = get(TIME)
+            end
             -- Is cooling required before ignition?
             if get(Any_wheel_on_ground) == 1 and needs_cooling(1) then
                 set(EWD_engine_cooling, 1, 1) -- TODO adjust visibility of COOOLING in EWD...
@@ -822,6 +835,9 @@ local function update_startup()
 
         -- ENG 2
         if (eng_manual_switch[2] or get(Engine_2_master_switch) == 1) and does_engine_2_can_start_or_crank then
+            if time_current_startup[2] == -1 then
+                time_current_startup[2] = get(TIME)
+            end
 
             -- Is cooling required before ignition?
             if get(Any_wheel_on_ground) == 1 and needs_cooling(2) then
@@ -963,6 +979,7 @@ local function update_time_since_shutdown()
         if time_last_shutdown[1] == 0 and get(Engine_1_master_switch) == 0 then
             -- only when really in shutdown process otherwise cooling may appear again during startup after cranking/cooling
             time_last_shutdown[1] = get(TIME)
+            time_current_startup[1]  = -1
         end
     else
         -- init cooling requirement
@@ -974,6 +991,7 @@ local function update_time_since_shutdown()
     if get(Eng_2_EGT_c) < 100  then
         if time_last_shutdown[2] == 0 and get(Engine_2_master_switch) == 0 then
             time_last_shutdown[2] = get(TIME)
+            time_current_startup[2]  = -1
         end
     else
         cooling_has_cooled[2] = false

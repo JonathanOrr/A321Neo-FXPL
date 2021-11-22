@@ -37,6 +37,11 @@ function configure_pw1133g()
             return 1067.597 + (525.8561 - 1067.597)/(1 + (n1/76.42303)^4.611082) + (oat-6) *2
         end,
 
+        n2_spoolup_fun = function(t)
+            -- f( x ) = -51.28921087158405 + 26.341569276939737x - 4.888598740355502x2 + 0.4958496916187694x3 - 0.030213494410506178x4 + 0.0011400009575645398x5 - 0.00002614187911145765x6 + 3.3430175965887e-7x7 - 1.83007315404e-9x8
+            return  -51.28921087158405 + 26.341569276939737*t - 4.888598740355502*t^2 + 0.4958496916187694*t^3 - 0.030213494410506178*t^4 + 0.0011400009575645398*t^5 - 0.00002614187911145765*t^6 + 3.3430175965887e-7*t^7 - 1.83007315404e-9*t^8
+        end,
+
         oil = {
             qty_max = 22,               -- [QT] oil qty gauge shows a computed value which is about 1/2 actual just to have similar annunciations regardless engine type
             qty_min = 14,               -- [QT] currently unused?! randomness of initial qty is coded in update_engine_type()
