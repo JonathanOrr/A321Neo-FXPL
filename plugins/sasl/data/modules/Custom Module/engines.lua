@@ -68,7 +68,7 @@ local ENG_N1_CRANK_FF = 15  -- FF in case of wet cranking
 local ENG_N1_CRANK_EGT= 95  -- Target EGT for cranking
 local ENG_N1_LL_IDLE  = 18.3 -- above this value some params like FF will be provided by X-Plane
 local N1_INC_AI_ENG   = 1    -- Increase of minimum N1 if at least one ENG Anti-ice is activated
-local N1_INC_AI_WING  = 1.5  -- Increase of minimum N1 if at least one WING Anti-ice is activated
+local N1_INC_AI_WING  = 0.8  -- Increase of minimum N1 if per activated WING Anti-ice TBC
 local MAGIC_NUMBER = 100     -- This is a magic number, which value is necessary to start the engine (see later)
 
 local current_engine_id = 0  -- Just to check which is the current engine
@@ -258,7 +258,7 @@ local function update_n1_minimum()
     local comp_min_n1 = min_n1(curr_altitude) 
                       + ((AI_sys.comp[ANTIICE_ENG_1].valve_status
                           or AI_sys.comp[ANTIICE_ENG_2].valve_status) and N1_INC_AI_ENG or 0)
-    
+    comp_min_n1 = comp_min_n1 + (AI_sys.comp[ANTIICE_WING_L].valve_status and N1_INC_AI_WING or 0) + (AI_sys.comp[ANTIICE_WING_R].valve_status and N1_INC_AI_WING or 0)
     set(Eng_N1_idle, comp_min_n1)
 
     local always_a_minimum = ENG_N1_LL_IDLE + 0.2 -- regardless altitude and anti-ice N1 of running engine can never be lower
