@@ -164,6 +164,13 @@ function FMGS_init_set_weight_zfw_cg(zfw, zfwcg)
 end
 
 -------------------------------------------------------------------------------
+-- Predictions
+-------------------------------------------------------------------------------
+function FMGS_refresh_departure_pred()
+    FMGS_sys.data.pred.takeoff.require_update = true
+end
+
+-------------------------------------------------------------------------------
 -- Airports
 -------------------------------------------------------------------------------
 
@@ -515,6 +522,7 @@ function FMGS_insert_temp_fpln()
         FMGS_sys.perf.takeoff.trans_alt = FMGS_sys.fpln.active.apts.dep_sid.trans_alt
     end
     FMGS_erase_temp_fpln()
+    FMGS_refresh_departure_pred()
 end
 
 function FMGS_does_temp_fpln_exist()
@@ -761,6 +769,7 @@ end
 
 function FMGS_perf_set_v2(v2)
     FMGS_sys.perf.takeoff.v2 = v2
+    FMGS_refresh_departure_pred()
 end
 
 function FMGS_perf_reset_v1_popped()
@@ -788,6 +797,7 @@ end
 function FMGS_perf_swap_v2_popped()
     FMGS_sys.perf.takeoff.v2 = FMGS_sys.perf.takeoff.v2_popped
     FMGS_sys.perf.takeoff.v2_popped = nil
+    FMGS_refresh_departure_pred()
 end
 
 function FMGS_perf_get_v_speeds_popped()
@@ -999,3 +1009,4 @@ end
 function FMGS_is_gps_primary()
     return FMGS_sys.config.gps_primary
 end
+

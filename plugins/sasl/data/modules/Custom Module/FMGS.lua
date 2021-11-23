@@ -18,6 +18,7 @@
 
 include('FMGS/route.lua')
 include('FMGS/limits.lua')
+include('FMGS/vertical_profile.lua')
 
 local loading_cifp = 0
 
@@ -58,6 +59,12 @@ FMGS_sys.data = {
         trip_time = nil,
         trip_dist = nil,
         efob = nil,
+
+        takeoff = {
+            require_update = false,
+            gdot = nil,
+            ROC_init = nil
+        }
     },
 
     nav_accuracy = 0.0,
@@ -131,7 +138,7 @@ FMGS_sys.perf = {
         toshift = nil,
         flaps = nil,
         ths = nil, --This is a number not a string (not DNXXX or UPXXX), safe to compare
-        flex_temp = nil,
+        flex_temp = nil
     },
     landing = {
         qnh = nil,
@@ -291,6 +298,15 @@ local function update_cifp()
 
 end
 
+
+
+local function update_predictions()
+    if FMGS_sys.data.pred.takeoff.require_update then
+        vertical_profile_update()
+        FMGS_sys.data.pred.takeoff.require_update = false
+    end
+end
+
 function update()
     perf_measure_start("FMGS:update()")
     update_status()
@@ -298,6 +314,7 @@ function update()
     update_cifp()
 
     update_limits()
-    
+    update_predictions()
+
     perf_measure_stop("FMGS:update()")
 end
