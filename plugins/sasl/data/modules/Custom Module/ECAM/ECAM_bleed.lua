@@ -209,8 +209,8 @@ local function draw_needles_valves_and_mixer()
     SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_BLEED_valves_img, size[1]/2+82, size[2]/2+14, 180, 58, 3, get(X_bleed_valve) == 0 and 3 or 1, get(FAILURE_BLEED_XBLEED_VALVE_STUCK) == 0 and ECAM_GREEN or ECAM_ORANGE)
 
     --IP valves
-    SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_BLEED_valves_img, size[1]/2-249, size[2]/2-223, 180, 58, 3, get(ENG_1_bleed_switch) == 0 and 1 or 3, get(FAILURE_BLEED_IP_1_VALVE_STUCK) == 0 and ECAM_GREEN or ECAM_ORANGE)
-    SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_BLEED_valves_img, size[1]/2+252, size[2]/2-223, 180, 58, 3, get(ENG_2_bleed_switch) == 0 and 1 or 3, get(FAILURE_BLEED_IP_2_VALVE_STUCK) == 0 and ECAM_GREEN or ECAM_ORANGE)
+    SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_BLEED_valves_img, size[1]/2-249, size[2]/2-223, 180, 58, 3, (get(ENG_1_bleed_switch) == 0 or get(L_IP_valve) == 0) and 1 or 3, get(FAILURE_BLEED_IP_1_VALVE_STUCK) == 0 and ECAM_GREEN or ECAM_ORANGE)
+    SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_BLEED_valves_img, size[1]/2+252, size[2]/2-223, 180, 58, 3, (get(ENG_2_bleed_switch) == 0 or get(R_IP_valve) == 0) and 1 or 3, get(FAILURE_BLEED_IP_2_VALVE_STUCK) == 0 and ECAM_GREEN or ECAM_ORANGE)
 
     --HP valves
     SASL_drawSegmentedImgColored_xcenter_aligned(ECAM_BLEED_valves_img, size[1]/2-177, size[2]/2-283, 180, 58, 3, get(L_HP_valve) == 0 and 3 or 1, get(FAILURE_BLEED_HP_1_VALVE_STUCK) == 0 and ECAM_GREEN or ECAM_ORANGE)
