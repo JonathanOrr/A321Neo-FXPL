@@ -45,10 +45,16 @@ PACK_KG_PER_SEC_NOM    = 1
 -- Global variables
 ----------------------------------------------------------------------------------------------------
 local eng_bleed_switch    = {true, true}
+local eng_bleed_on_time = {0,0}
+local eng_bleed_off_time = {0,0}
 local eng_bleed_valve_pos = {false, false}
 
 local pack_valve_switch   = {true, true}
+local pack_valve_on_time = {0,0}
+local pack_valve_off_time = {0,0}
+
 local pack_valve_pos      = {false, false}
+-- actual times of valve position change
 local pack_time_open_valve = {0,0}
 local pack_time_close_valve = {0,0}
 
@@ -95,10 +101,64 @@ sasl.registerCommandHandler(Toggle_apu_bleed, 0,
         end
 )
 
-sasl.registerCommandHandler (Toggle_eng1_bleed, 0, function(phase) if phase == SASL_COMMAND_BEGIN then eng_bleed_switch[1] = not eng_bleed_switch[1] end end)
-sasl.registerCommandHandler (Toggle_eng2_bleed, 0, function(phase) if phase == SASL_COMMAND_BEGIN then eng_bleed_switch[2] = not eng_bleed_switch[2] end end)
-sasl.registerCommandHandler (Toggle_pack1, 0, function(phase) if phase == SASL_COMMAND_BEGIN then pack_valve_switch[1] = not pack_valve_switch[1] end end)
-sasl.registerCommandHandler (Toggle_pack2, 0, function(phase) if phase == SASL_COMMAND_BEGIN then pack_valve_switch[2] = not pack_valve_switch[2] end end)
+sasl.registerCommandHandler (Toggle_eng1_bleed, 0,
+        function(phase)
+            if phase == SASL_COMMAND_BEGIN then
+                eng_bleed_switch[1] = not eng_bleed_switch[1]
+                if eng_bleed_switch[1] == false then
+                    eng_bleed_off_time[1] = get(TIME)
+                    eng_bleed_on_time[1] = 0 -- reset
+                else
+                    eng_bleed_on_time[1] = get(TIME)
+                    eng_bleed_off_time[1] = 0 -- reset
+                end
+            end
+        end
+)
+sasl.registerCommandHandler (Toggle_eng2_bleed, 0,
+        function(phase)
+            if phase == SASL_COMMAND_BEGIN then
+                eng_bleed_switch[2] = not eng_bleed_switch[2]
+                if eng_bleed_switch[2] == false then
+                    eng_bleed_off_time[2] = get(TIME)
+                    eng_bleed_on_time[2] = 0 -- reset
+                else
+                    eng_bleed_on_time[2] = get(TIME)
+                    eng_bleed_off_time[2] = 0 -- reset
+                end
+            end
+        end
+)
+
+sasl.registerCommandHandler (Toggle_pack1, 0,
+        function(phase)
+            if phase == SASL_COMMAND_BEGIN then
+                pack_valve_switch[1] = not pack_valve_switch[1]
+                if pack_valve_switch[1] == false then
+                    pack_valve_off_time[1] = get(TIME)
+                    pack_valve_on_time[1] = 0 -- reset
+                else
+                    eng_bleed_on_time[1] = get(TIME)
+                    eng_bleed_off_time[1] = 0 -- reset
+                end
+            end
+        end
+)
+sasl.registerCommandHandler (Toggle_pack2, 0,
+        function(phase)
+            if phase == SASL_COMMAND_BEGIN then
+                pack_valve_switch[2] = not pack_valve_switch[2]
+                if pack_valve_switch[2] == false then
+                    pack_valve_off_time[2] = get(TIME)
+                    pack_valve_on_time[2] = 0 -- reset
+                else
+                    eng_bleed_on_time[2] = get(TIME)
+                    eng_bleed_off_time[2] = 0 -- reset
+                end
+            end
+        end
+)
+
 sasl.registerCommandHandler (Press_ditching, 0, function(phase) if phase == SASL_COMMAND_BEGIN then ditching_switch = not ditching_switch end end)
 
 sasl.registerCommandHandler (Toggle_cab_hotair,          0, function(phase) if phase == SASL_COMMAND_BEGIN then cabin_hot_air    = not cabin_hot_air end end)
