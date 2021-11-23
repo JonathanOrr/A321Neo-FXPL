@@ -132,5 +132,6 @@ local SVM_model = {
 }
 
 function predict_engine_thrust(mach, density, N1)
-    return predict_svm_gaussian(SVM_model, {mach, density, N1})
+    -- Model is in lbf, we return it in N
+    return predict_svm_gaussian(SVM_model, {mach, density, N1}) * 4.44822
 end

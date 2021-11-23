@@ -3135,6 +3135,7 @@ local SVM_model = {
     Sg = {0.258850908848021, 36.3768675446605, 0.129754116883430, 1.96138108163527}
 }
 
-function predict_engine_thrust(density, tas, mach, alpha)
-    return predict_svm_gaussian(SVM_model, {density, tas, mach, alpha})
+function predict_drag(density, tas, mach, alpha)
+    -- Model is in lbf, we return it in N
+    return predict_svm_gaussian(SVM_model, {density, tas, mach, alpha}) * 4.44822
 end
