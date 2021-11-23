@@ -29,9 +29,10 @@ local function get_N1_target(thr_position, eng)
         prev_max = get(Eng_N1_idle)
         N1_target =  Math_rescale(0, prev_max, 0.675, curr_max, thr)
     elseif get(Eng_N1_mode, eng) == 4 then -- IDLE
-        curr_max = get(Eng_N1_idle)
-        prev_max = get(Eng_N1_idle)
-        N1_target = get(Eng_N1_idle)
+        -- we have to take bleed/pack config into consideration which is eng specific in IDLE
+        curr_max = get(Eng_N1_bleed_corrected_idle,eng)
+        prev_max = get(Eng_N1_bleed_corrected_idle,eng)
+        N1_target = get(Eng_N1_bleed_corrected_idle,eng)
     elseif get(Eng_N1_mode, eng) == 5 then -- MREV
         curr_max = get(Eng_N1_max_detent_toga) * REVERSE_PERFORMANCE
         prev_max = get(Eng_N1_idle)
@@ -47,6 +48,8 @@ function N1_control(L_PID_array, R_PID_array, reversers)
     -- Compute the target based on the throttle position
     local N1_target_L = get_N1_target(get(Cockpit_throttle_lever_L), 1)
     local N1_target_R = get_N1_target(get(Cockpit_throttle_lever_R), 2)
+
+    -- TODO increase of blue circle legs behind actual N1 value indicated by gauge acc CAE FFS
 
     set(Throttle_blue_dot, N1_target_L, 1)
     set(Throttle_blue_dot, N1_target_R, 2)

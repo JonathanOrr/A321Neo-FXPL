@@ -252,14 +252,38 @@ local function min_n1(altitude)
     return 5.577955*math.log(0.03338352*altitude+23.66644)+1.724586
 end
 
-
 local function update_n1_minimum()
     local curr_altitude = get(Elevation_m) * 3.28084
     local comp_min_n1 = min_n1(curr_altitude) 
                       + ((AI_sys.comp[ANTIICE_ENG_1].valve_status
                           or AI_sys.comp[ANTIICE_ENG_2].valve_status) and N1_INC_AI_ENG or 0)
     comp_min_n1 = comp_min_n1 + (AI_sys.comp[ANTIICE_WING_L].valve_status and N1_INC_AI_WING or 0) + (AI_sys.comp[ANTIICE_WING_R].valve_status and N1_INC_AI_WING or 0)
-    set(Eng_N1_idle, comp_min_n1)
+
+    local curr_n1_idle_base = get(Eng_N1_idle)
+    local curr_n1_idle_L = get(Eng_N1_bleed_corrected_idle,1)
+    local curr_n1_idle_R = get(Eng_N1_bleed_corrected_idle,2)
+
+    -- read-out takes place in autothrust pid logic get_N1_target (AT_PID_functions)
+    set(Eng_N1_idle,Set_linear_anim_value(curr_n1_idle_base, comp_min_n1, 0, 100, 1) )-- TODO speed of animation? depend of delta?
+
+    -- TODO pack configuration has to be considered for N1 as well in combination of engine bleed availability and x-bleed
+    if (get(ENG_1_bleed_switch) == 0 or get(ENG_2_bleed_switch) == 0)
+            and get(Pack_L)==1 and get(Pack_R) == 1
+            and get(X_bleed_valve) == 1 then
+        comp_min_n1 = comp_min_n1 + 9.3
+        if get(ENG_1_bleed_switch) == 0 then
+            -- animation is used to avoid blue circle jump in EWD when switching bleed config
+            set(Eng_N1_bleed_corrected_idle,Set_linear_anim_value(curr_n1_idle_R,comp_min_n1,0,100,1.5),2) -- demand increase is on opposite engine
+            set(Eng_N1_bleed_corrected_idle,Set_linear_anim_value(curr_n1_idle_L,comp_min_n1-1.9,0,100,1),1) -- imbalance prevention
+        else
+            set(Eng_N1_bleed_corrected_idle,Set_linear_anim_value(curr_n1_idle_R,comp_min_n1-1.9,0,100,1),2) -- demand increase is on opposite engine
+            set(Eng_N1_bleed_corrected_idle,Set_linear_anim_value(curr_n1_idle_L,comp_min_n1,0,100,1.5),1) -- imbalance prevention
+        end
+    else
+        -- both engines bleeding TODO imbalance is possible here under various circumstances as well, TODO animation
+        set(Eng_N1_bleed_corrected_idle,comp_min_n1,1)
+        set(Eng_N1_bleed_corrected_idle,comp_min_n1,2)
+    end
 
     local always_a_minimum = ENG_N1_LL_IDLE + 0.2 -- regardless altitude and anti-ice N1 of running engine can never be lower
 
