@@ -22,7 +22,7 @@ include("debug_windows/FMGS_debug_vertical_profile.lua")
 
 size = {1000, 600}
 
-local curr_page = 1
+local curr_page = 4
 local curr_detail = nil
 local curr_detail_2 = nil
 local load_result = ""
@@ -30,17 +30,6 @@ local load_result_color = ECAM_GREEN
 
 local BTN_WIDTH  = 150
 local BTN_HEIGHT = 39
-
--- vertical profile page
-local trip_distance = 500
-vprof_view_start = 0 -- ratio, 0-1 from start to end of leg
-vprof_view_end = 1
-local starting_px = 0
-local width_px = 0
-local hook_mouse = 0 -- 0 = nothing, 1 = start, 2 = end
-local MOUSE_X = 0
-local MOUSE_Y = 0
-
 
 local function draw_main_menu()
 
@@ -58,23 +47,6 @@ local function draw_main_menu()
 
 end
 
-local function mouse_hold(x,y)
-    MOUSE_X = x
-    MOUSE_Y = y
-    if curr_page == 4 then
-        if x >= starting_px - 10 and x <= starting_px + 10 and y >= 440 and y <= 470 then
-            hook_mouse = 1
-        elseif x >= starting_px + width_px - 10 and x <= starting_px + width_px + 10 and y >= 440 and y <= 470 then
-            hook_mouse = 2
-        end
-    end
-end
-
-local function mouse_up(x,y)
-    if curr_page == 4 then
-        hook_mouse = 0
-    end
-end
 
 local function mouse_down(x,y)
     if x >=10 and x<=10+BTN_WIDTH and y >= size[2]-40 then
@@ -135,6 +107,12 @@ local function mouse_down(x,y)
         elseif x>=90 and y <= 100 and x<=110 and y >= 80 then
             curr_detail = FMGS_sys.fpln.active.apts.arr_rwy
             curr_detail_2 = nil
+        end
+    elseif curr_page == 4 then
+        if x >=10 and x<=10+BTN_WIDTH and y >= size[2]-85 and y <= size[2]-45 then
+            vprof_change_page(1)
+        elseif x >=20+BTN_WIDTH and x<=20+BTN_WIDTH*2 and y >= size[2]-85 and y <= size[2]-45 then
+            vprof_change_page(2)
         end
     end
 end
@@ -501,29 +479,6 @@ local function draw_leg_details()
 
 end
 
-local function draw_vprof_background()
-    sasl.gl.drawFrame (50, 440, 850, 30, UI_BRIGHT_GREY)
-    for i=1, 5 do
-        incr = (i-1) * 80
-        sasl.gl.drawWideLine (50,60 + incr,900,60 + incr, 1, UI_BRIGHT_GREY)
-        sasl.gl.drawText(Font_B612MONO_regular, 910, 50 + incr + 3, (i-1)*10000, 16, false, false, TEXT_ALIGN_LEFT,UI_BRIGHT_GREY)
-    end
-
-    starting_px = Math_rescale_no_lim(0, 50, 1, 900, vprof_view_start)
-    starting_px = math.min(870, starting_px)
-    width_px = Math_rescale_no_lim(0, 50, 1, 900, vprof_view_end) - starting_px
-    width_px = math.max(30, width_px)
-    sasl.gl.drawFrame (starting_px, 440, width_px, 30, UI_WHITE)
-end
-
-local function update_vprof_background()
-    if hook_mouse == 1 then
-        vprof_view_start =  Math_clamp(Math_rescale_no_lim(50, 0, 900, 1, MOUSE_X), 0, 1)
-    elseif hook_mouse == 2 then
-        vprof_view_end = Math_clamp(Math_rescale_no_lim(50, 0, 900, 1, MOUSE_X),0,1)
-    end
-end
-
 
 function draw()
 
@@ -538,24 +493,13 @@ function draw()
         draw_page_fpln()
         draw_leg_details()
     elseif curr_page == 4 then
-        draw_vprof_background()
-        draw_vprof_actual()
+        draw_vprof()
     end
 
 end
 
-function onMouseHold( component,  x,  y,  button,  parentX,  parentY)
-    mouse_hold(x,y)
-    return 0
-end
-
 function onMouseDown (component , x , y , button , parentX , parentY)
     mouse_down(x,y)
-    return 0
-end
-
-function onMouseUp( component,  x,  y, button,  parentX,  parentY)
-    mouse_up(x,y)
     return 0
 end
 
@@ -570,6 +514,5 @@ function update()
             load_result = "LOADED"
         end
     end
-    update_vprof_background()
-    update_vprof_actual()
+    update_vprof()
 end
