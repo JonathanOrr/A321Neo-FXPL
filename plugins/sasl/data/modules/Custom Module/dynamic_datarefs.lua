@@ -357,6 +357,7 @@ Right_bleed_avil = globalProperty("sim/cockpit2/bleedair/indicators/bleed_availa
 Pack_L = globalProperty("sim/cockpit2/bleedair/actuators/pack_left")
 Pack_M = globalProperty("sim/cockpit2/bleedair/actuators/pack_center") --needs to be turned off as the A320 does not have one
 Pack_R = globalProperty("sim/cockpit2/bleedair/actuators/pack_right")
+Pack_off_time = createGlobalPropertyfa("a321neo/dynamics/packs/pack_off_time", 2) -- time when pack has been switched off
 Sim_pack_flow = globalProperty("sim/cockpit2/pressurization/actuators/fan_setting") --Electric fan (vent blower) setting, consuming 0.1 of rel_HVAVC amps when running. 0 = Auto (Runs whenever air_cond_on or heater_on is on), 1 = Low, 2 = High
 Left_pack_iso_valve = globalProperty("sim/cockpit2/bleedair/actuators/isol_valve_left") --Isolation Valve for left duct, close or open. This separates all engines on the left side of the plane, the left wing, and the left pack from the rest of the system
 Right_pack_iso_valve = globalProperty("sim/cockpit2/bleedair/actuators/isol_valve_right") --Isolation Valve for right duct, close or open. This separates all engines on the right side of the plane, the right wing, and the right pack from the rest of the system

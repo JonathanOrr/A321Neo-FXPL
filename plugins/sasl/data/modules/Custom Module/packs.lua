@@ -27,8 +27,8 @@ APU_NOMINAL_PRESS = 42
 
 GAS_PRESSURE = 45
 
-BLEED_UP_TARGET = 40
-BLEED_LO_TARGET = 34
+HP_VALVE_HI_CLOSE_PRESS = 44    -- HP valve closes at this pressure acc CAE sim
+BLEED_LO_TARGET = 34            -- below this PSI value HP valve will open
 
 LOSS_PSI_HYD           = 0.5
 LOSS_PSI_WATER_TANK    = 0.5
@@ -46,8 +46,11 @@ PACK_KG_PER_SEC_NOM    = 1
 ----------------------------------------------------------------------------------------------------
 local eng_bleed_switch    = {true, true}
 local eng_bleed_valve_pos = {false, false}
+
 local pack_valve_switch   = {true, true}
 local pack_valve_pos      = {false, false}
+local pack_time_open_valve = {0,0}
+local pack_time_close_valve = {0,0}
 
 local apu_bleed_switch    = false
 local apu_bleed_valve_pos = false
@@ -62,7 +65,6 @@ local eng_lp_pressure      = {0,0}
 local apu_pressure         = 0
 local bleed_consumption    = {0,0}
 local bleed_pressure       = {0,0}
-local pack_time_open_valve = {0,0}
 
 local cabin_hot_air    = true
 local cargo_hot_air    = true
@@ -128,13 +130,15 @@ local function update_hp_valves()
     -- HP valve keep pressure in the range 32-40
     if get(Engine_1_avail) == 1 and eng_bleed_switch[1] and get(L_bleed_press) <= BLEED_LO_TARGET then
         set(L_HP_valve, 1)
-    elseif get(Engine_1_avail) == 0 or (not eng_bleed_switch[1]) or get(L_bleed_press) > BLEED_UP_TARGET then
+    elseif get(Engine_1_avail) == 0 or (not eng_bleed_switch[1]) or get(L_bleed_press) >= HP_VALVE_HI_CLOSE_PRESS then
+        -- TODO calculate max value based on pack status, how is the current pressure calculated right now?
+        -- TODO avoid opening when pack has been switched off
         set(L_HP_valve, 0)
     end
 
     if get(Engine_2_avail) == 1 and eng_bleed_switch[2] and get(R_bleed_press) <= BLEED_LO_TARGET then
         set(R_HP_valve, 1)
-    elseif get(Engine_2_avail) == 0 or (not eng_bleed_switch[2]) or get(R_bleed_press) > BLEED_UP_TARGET then
+    elseif get(Engine_2_avail) == 0 or (not eng_bleed_switch[2]) or get(R_bleed_press) >= HP_VALVE_HI_CLOSE_PRESS then
         set(R_HP_valve, 0)
     end
 
@@ -146,20 +150,34 @@ local function update_bleed_valves()
         -- TODO better don't hardcode APU values in several places
         apu_bleed_valve_pos = get(Apu_N1) > 95 and apu_bleed_switch and get(FAILURE_BLEED_APU_VALVE_STUCK) == 0
     end
-    
+
+
     if get(FAILURE_BLEED_IP_1_VALVE_STUCK) == 0 then
-        eng_bleed_valve_pos[1] = eng_bleed_switch[1] and (eng_lp_pressure[1] >= 8) 
-                             and (get(Fire_pb_ENG1_status) == 0) and not apu_bleed_valve_pos and get(GAS_bleed_avail) == 0
+        eng_bleed_valve_pos[1] = eng_bleed_switch[1] and (eng_lp_pressure[1] >= 8)
+                and (get(Fire_pb_ENG1_status) == 0) and not apu_bleed_valve_pos and get(GAS_bleed_avail) == 0
+
+        if pack_valve_switch[1] == false  and pack_time_close_valve[1] > 0 and get(TIME) - pack_time_close_valve[1] > 4 then
+            eng_bleed_valve_pos[1] = false -- close bleed valve when pack is off, but with delay
+        end
         set(L_IP_valve,eng_bleed_valve_pos[1] and 1 or 0)
     end
                              
     if get(FAILURE_BLEED_IP_2_VALVE_STUCK) == 0 then
         eng_bleed_valve_pos[2] = eng_bleed_switch[2] and (eng_lp_pressure[2] >= 8) 
                              and (get(Fire_pb_ENG2_status) == 0) and not apu_bleed_valve_pos and get(GAS_bleed_avail) == 0
+        if pack_valve_switch[2] == false   and pack_time_close_valve[2] > 0 and get(TIME) - pack_time_close_valve[2] > 4 then
+            -- close bleed valve when pack is off, but with delay
+            -- TODO based on pressure and/or pack_flow value (L/R_pack_Flow_value)
+            -- TODO pack valve closes about half pack flow value, then needle turns amber when pack valve is closed,
+            -- TODO pack flow values in/decrease in discrete steps (about 10 or so percent) not smoothly animated
+            -- TODO pack flow slowly increases (different rate than decreases)
+            eng_bleed_valve_pos[2] = false
+        end
         set(R_IP_valve,eng_bleed_valve_pos[2] and 1 or 0)
     end
 
     --X bleed valve logic--
+    -- TODO timer based x-bleed valve open/close with intermediate amber state
     if get(X_bleed_dial) == 0 then --closed
         x_bleed_status = false
     elseif get(X_bleed_dial) == 1 then --auto
@@ -172,8 +190,10 @@ end
 
 local function update_eng_pressures()
     if get(Engine_1_avail) == 0 then
+        -- shut down
         eng_lp_pressure[1] = Set_linear_anim_value(eng_lp_pressure[1], 0, 0, 100, 1)
     else
+        -- TODO demand based pressure at least in IDLE, not only based on N1
         local target = Math_rescale(18, ENG_NOMINAL_MIN_PRESS, 101, ENG_NOMINAL_MAX_PRESS, get(Eng_1_N1)) + math.random() + get(FAILURE_BLEED_ENG_1_hi_press) * 25
         eng_lp_pressure[1] = Set_linear_anim_value(eng_lp_pressure[1], target, 0, 100, 1)
     end
@@ -184,7 +204,8 @@ local function update_eng_pressures()
         local target = Math_rescale(18, ENG_NOMINAL_MIN_PRESS, 101, ENG_NOMINAL_MAX_PRESS, get(Eng_2_N1)) + math.random() + get(FAILURE_BLEED_ENG_2_hi_press) * 25
         eng_lp_pressure[2] = Set_linear_anim_value(eng_lp_pressure[2], target, 0, 100, 1)
     end
-    
+
+    -- NOTE dataref value is used for ECAM line color only, pressure value is used for demand based PSI calculations
     set(L_Eng_LP_press, eng_lp_pressure[1])
     set(R_Eng_LP_press, eng_lp_pressure[2])
     
@@ -217,6 +238,7 @@ local function update_bleed_pressures()
 
     local left_side_press = 0
     if eng_bleed_valve_pos[1] then
+        -- we simply add 10 PSI in case HP valve is open for now - TBC with sim
         left_side_press = left_side_press + eng_lp_pressure[1] + get(L_HP_valve) * 10 - get(FAILURE_BLEED_ENG_1_LEAK) * 10
     end
     if apu_bleed_valve_pos then
@@ -354,6 +376,10 @@ local function update_pack(n)
             pack_valve_pos[n] = true
         end    
     else
+        if pack_valve_pos[n] == true then
+            pack_time_close_valve[n] = get(TIME)
+            set(Pack_off_time,pack_time_close_valve[n],n) -- for debugging purposes
+        end -- need close time for bleed valve closing timing
         pack_valve_pos[n] = false
         pack_time_open_valve[n] = 0 -- Reset
     end
