@@ -191,9 +191,11 @@ local function draw_needles_valves_and_mixer()
     SASL_draw_needle(size[1]/2-250, size[2]/2+226, 67, Math_rescale(0, 150, 1, 30, get(L_pack_byp_valve)), 3.8, ECAM_GREEN)
     SASL_draw_needle(size[1]/2+251, size[2]/2+226, 67, Math_rescale(0, 150, 1, 30, get(R_pack_byp_valve)), 3.8, ECAM_GREEN)
 
-    --pack flow needle
-    SASL_draw_needle_adv(size[1]/2-250, size[2]/2+118, 26, 67, Math_rescale(0, 148, 1.2, 32, get(L_pack_Flow_value)), 2.8, (get(L_pack_Flow_value) <= 0.01 and get(Pack_L) == 1 or get(Pack_L) == 0) and ECAM_ORANGE or ECAM_GREEN)
-    SASL_draw_needle_adv(size[1]/2+252, size[2]/2+118, 26, 67, Math_rescale(0, 148, 1.2, 32, get(R_pack_Flow_value)), 2.8, (get(R_pack_Flow_value) <= 0.01 and get(Pack_R) == 1 or get(Pack_R) == 0) and ECAM_ORANGE or ECAM_GREEN)
+    --pack flow needle (displays discrete values)
+    local l_pack_flow = (math.floor(get(L_pack_Flow_value)*10) - math.floor(get(L_pack_Flow_value)*10)%1) / 10
+    local r_pack_flow = (math.floor(get(R_pack_Flow_value)*10) - math.floor(get(R_pack_Flow_value)*10)%1) / 10
+    SASL_draw_needle_adv(size[1]/2-250, size[2]/2+118, 26, 67, Math_rescale(0, 148, 1.2, 32, l_pack_flow), 2.8, (get(L_pack_Flow_value) <= 0.01 and get(Pack_L) == 1 or get(Pack_L) == 0) and ECAM_ORANGE or ECAM_GREEN)
+    SASL_draw_needle_adv(size[1]/2+252, size[2]/2+118, 26, 67, Math_rescale(0, 148, 1.2, 32, r_pack_flow), 2.8, (get(R_pack_Flow_value) <= 0.01 and get(Pack_R) == 1 or get(Pack_R) == 0) and ECAM_ORANGE or ECAM_GREEN)
 
     --mixer line
     SASL_draw_img_xcenter_aligned(ECAM_BLEED_mixer_img, size[1]/2+4, size[2]/2+352, 518, 62, (get(Emer_ram_air) == 0 and get(Pack_L) == 0 and get(Pack_R) == 0) and ECAM_ORANGE or ECAM_GREEN)
