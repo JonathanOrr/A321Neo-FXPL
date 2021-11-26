@@ -1,4 +1,4 @@
-addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/flight_ctl_subcomponents/AIL")
+addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/F_CTL/AIL")
 
 FBW.fctl.AIL = {}
 

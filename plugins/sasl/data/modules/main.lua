@@ -25,7 +25,8 @@ include("global_functions.lua")
 include("graphics_helpers.lua")
 include("pushbuttons.lua")
 include("global_constants.lua")
-include("FBW/FBW_subcomponents/PID_arrays.lua")
+include("PID.lua")
+include("FLT_SYS/FBW/PID_arrays.lua")
 include("sasl_drawing_assets.lua")
 include("ADIRS_data_source.lua")
 
@@ -45,7 +46,8 @@ addSearchPath(moduleDirectory .. "/Custom Module/ND/")
 addSearchPath(moduleDirectory .. "/Custom Module/DRAIMS/")
 addSearchPath(moduleDirectory .. "/Custom Module/EFB/")
 addSearchPath(moduleDirectory .. "/Custom Module/PFD/PFD_subcomponents/")
-addSearchPath(moduleDirectory .. "/Custom Module/FBW/")
+addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/F_CTL")
+addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/FBW")
 addSearchPath(moduleDirectory .. "/Custom Module/MCDU/")
 addSearchPath(moduleDirectory .. "/Custom Module/AUTOFLT/")
 addSearchPath(moduleDirectory .. "/Custom Module/display_pop-ups/")
@@ -93,8 +95,11 @@ components = {
   anti_ice {},
   fire_eng_apu {},
   fire_cargo {},
+
+  FCTL_main {},
   FBW_main {},
   AUTOFLT_main {},
+
   CAPT_PFD {},
   FO_PFD {},
   calls {},

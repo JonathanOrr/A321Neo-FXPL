@@ -16,18 +16,19 @@
 -- Short description: Fly-by-wire main file
 -------------------------------------------------------------------------------
 
-include("PID.lua")
-include("FBW/FBW_subcomponents/FBW_SYS/mode_transition.lua")
-include("FBW/FBW_subcomponents/FBW_SYS/law_reconfig.lua")
-addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/")
-addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/FBW_SYS")
-addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/FBW_SYS/FLT_computer")
-addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/FBW_SYS/sensor_filtering")
-addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/FBW_SYS/lateral_augmentation")
-addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/FBW_SYS/vertical_agumentation")
-addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/FBW_SYS/yaw_augmentation")
-addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/FBW_SYS/LAF_augmentation")
-addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/FBW_SYS/FAC_computation")
+include("FLT_SYS/FBW/Controllers/FBW_PID.lua")
+include("FLT_SYS/FBW/mode_transition/mode_transition.lua")
+
+addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/")
+addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/FBW")
+addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/FBW/FLT_computer")
+addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/FBW/FAC_computation")
+addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/FBW/sensor_filtering")
+addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/FBW/law_reconfig")
+addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/FBW/Augmentation/LAT")
+addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/FBW/Augmentation/VER")
+addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/FBW/Augmentation/YAW")
+addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/FBW/Augmentation/LAF")
 
 --xplane landing gear attitude correction--
 local front_gear_length =  globalProperty("sim/aircraft/parts/acf_gear_leglen[0]")
@@ -73,8 +74,6 @@ components = {
     LAF_inputs {},
     LAF_controllers {},
 
-    autothrust {},
-    FCTL {},
     law_reconfig {},
     FAC_compute_main {},
 

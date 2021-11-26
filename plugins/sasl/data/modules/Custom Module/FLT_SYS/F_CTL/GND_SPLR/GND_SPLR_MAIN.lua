@@ -1,4 +1,4 @@
-addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/flight_ctl_subcomponents/GND_SPLR")
+addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/F_CTL/GND_SPLR")
 
 FBW.fctl.GND_SPLR = {}
 

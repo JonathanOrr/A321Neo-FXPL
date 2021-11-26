@@ -1,4 +1,4 @@
-addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/flight_ctl_subcomponents/INPUT")
+addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/F_CTL/INPUT")
 
 FBW.fctl.INPUT = {}
 

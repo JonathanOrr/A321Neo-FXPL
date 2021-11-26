@@ -1,11 +1,11 @@
-include("FBW_subcomponents/FCTL_SYS/slat_flaps_control.lua")
-addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/FCTL_SYS")
-addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/FCTL_SYS/INPUT")
-addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/FCTL_SYS/AIL")
-addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/FCTL_SYS/GND_SPLR")
-addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/FCTL_SYS/SPLR")
-addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/FCTL_SYS/ELEV")
-addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/FCTL_SYS/THS")
+addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/F_CTL/INPUT")
+addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/F_CTL/SLAT_FLAP")
+addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/F_CTL/AIL")
+addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/F_CTL/GND_SPLR")
+addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/F_CTL/SPLR")
+addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/F_CTL/ELEV")
+addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/F_CTL/THS")
+addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/F_CTL/RUD")
 
 --initialise flight controls
 set(Override_control_surfaces, 1)
@@ -30,6 +30,7 @@ end
 
 components = {
     INPUT_MAIN    {},
+    SLAT_FLAP_CTL {},
     AIL_MAIN      {},
     GND_SPLR_MAIN {},
     SPLR_MAIN     {},
@@ -42,7 +43,6 @@ function update()
     if get(Override_control_surfaces) == 1 then
         if get(DELTA_TIME) ~= 0 then
             updateAll(components)
-            Slats_flaps_calc_and_control()
         end
     end
 end

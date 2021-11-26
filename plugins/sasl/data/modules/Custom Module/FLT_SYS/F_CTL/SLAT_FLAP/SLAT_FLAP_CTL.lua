@@ -139,3 +139,7 @@ function Slats_flaps_calc_and_control()
     set(Right_inboard_flaps,  get(Flaps_deployed_angle))
     set(Right_outboard_flaps, get(Flaps_deployed_angle))
 end
+
+function update()
+    Slats_flaps_calc_and_control()
+end

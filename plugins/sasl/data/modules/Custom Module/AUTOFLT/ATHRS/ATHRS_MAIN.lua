@@ -1,6 +1,6 @@
 --inclue components
-include("FBW_subcomponents/autothrust_subcomponents/lever_input_functions.lua")
-include("FBW_subcomponents/autothrust_subcomponents/AT_PID_functions.lua")
+include("AUTOFLT/ATHRS/lever_input_functions.lua")
+include("AUTOFLT/ATHRS/AT_PID_functions.lua")
 
 --sim commands
 local sim_throttle_up =       sasl.findCommand("sim/engines/throttle_up")

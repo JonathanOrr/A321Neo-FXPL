@@ -1,4 +1,4 @@
-addSearchPath(moduleDirectory .. "/Custom Module/FBW/FBW_subcomponents/flight_ctl_subcomponents/ELEV")
+addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/F_CTL/ELEV")
 
 FBW.fctl.ELEV = {}
 
