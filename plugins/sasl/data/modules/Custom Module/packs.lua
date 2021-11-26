@@ -21,14 +21,15 @@
 -- Constants, keep local until otherwise required
 ----------------------------------------------------------------------------------------------------
 
-local ENG_NOMINAL_MAX_PRESS = 55
+local ENG_NOMINAL_MAX_PRESS = 54  -- 53 psi +/- 2 acc documentation
 local ENG_NOMINAL_MIN_PRESS = 38
 local APU_NOMINAL_PRESS = 42
 
 local GAS_PRESSURE = 45
 
-local HP_VALVE_CLOSE_PSI_SINGLE_BLEED = 42  -- HP valve closes at this pressure acc CAE sim in single bleed situation
-local HP_VALVE_CLOSE_PSI_DUAL_BLEED = 52    -- HP valve closes at this pressure acc CAE sim in single bleed situation
+-- values observed in IDLE mode
+local HP_VALVE_CLOSE_PSI_DUAL_BLEED = 42    -- HP valve closes at this pressure acc CAE sim in dual eng bleed situation
+local HP_VALVE_CLOSE_PSI_SINGLE_BLEED = 51  -- or 52 HP valve closes at this pressure acc CAE sim in single eng bleed situation
 
 local LOSS_PSI_HYD           = 0.5
 local LOSS_PSI_WATER_TANK    = 0.5
@@ -48,7 +49,7 @@ local eng_bleed_switch    = {true, true}
 local eng_bleed_on_time = {0,0}
 local eng_bleed_off_time = {0,0}
 local eng_bleed_valve_pos = {false, false}
-local is_dual_bleed = false
+local is_single_bleed = false  -- only one engines supplies bleed air to both packs
 local target_max_bleed = 0
 
 
@@ -190,13 +191,13 @@ end
 
 local function update_bleed_config_and_targets()
     -- if x-bleed is on one engine feeds bleed air
-    is_dual_bleed = x_bleed_status and ((get(Engine_1_avail) + get(Engine_2_avail) <= 1) or (eng_bleed_switch[1] == false or  eng_bleed_switch[2] == false)) and 1 or 0
+    is_single_bleed = x_bleed_status and ((get(Engine_1_avail) + get(Engine_2_avail) <= 1) or (eng_bleed_switch[1] == false or  eng_bleed_switch[2] == false)) and 1 or 0
     -- only if we have both packs on, we have a dual bleed situation regarding demand
-    if not pack_valve_pos[1] or not pack_valve_pos[2] then is_dual_bleed = 0 end
+    if not pack_valve_pos[1] or not pack_valve_pos[2] then is_single_bleed = 0 end
 
-    set(Bleed_is_dual,is_dual_bleed)
+    set(Bleed_is_single, is_single_bleed)
 
-    target_max_bleed = is_dual_bleed == 1 and HP_VALVE_CLOSE_PSI_DUAL_BLEED or HP_VALVE_CLOSE_PSI_SINGLE_BLEED
+    target_max_bleed = is_single_bleed == 1 and HP_VALVE_CLOSE_PSI_SINGLE_BLEED or HP_VALVE_CLOSE_PSI_DUAL_BLEED
 end
 
 local function update_hp_valves()
@@ -313,7 +314,7 @@ local function update_bleed_consumption()
                          + get(Pack_L) * LOSS_PSI_PACK_L
                          + get(Eng_is_spooling_up, 1) * LOSS_PSI_ENG_CRANK
     -- in dual bleed with x-feed and other pack on this will add to consumption
-    if x_bleed_status == true and is_dual_bleed == true then  bleed_consumption[1] = bleed_consumption[1] + get(Pack_R) * LOSS_PSI_PACK_R end
+    if x_bleed_status == true and is_single_bleed == true then  bleed_consumption[1] = bleed_consumption[1] + get(Pack_R) * LOSS_PSI_PACK_R end
     
     -- Right side
     bleed_consumption[2] = get(AI_wing_R_operating) * LOSS_PSI_WING_ANTICE_R
@@ -322,7 +323,7 @@ local function update_bleed_consumption()
                          + get(Pack_R) * LOSS_PSI_PACK_R
                          + get(Eng_is_spooling_up, 2) * LOSS_PSI_ENG_CRANK
     -- TODO what is the demand in case of only one engine bleed available regarding demand and no x-feed?
-    if x_bleed_status == true and is_dual_bleed == true then  bleed_consumption[2] = bleed_consumption[2] + get(Pack_L) * LOSS_PSI_PACK_L end
+    if x_bleed_status == true and is_single_bleed == true then  bleed_consumption[2] = bleed_consumption[2] + get(Pack_L) * LOSS_PSI_PACK_L end
 
     set(L_bleed_demand,bleed_consumption[1])
     set(R_bleed_demand,bleed_consumption[2])
@@ -344,7 +345,7 @@ local function update_bleed_pressures()
     local left_side_press = 10
     if eng_bleed_valve_pos[1] then
         -- Demand has to control the valve not the other way round.
-        if is_dual_bleed == 1 then
+        if is_single_bleed == 1 then
             left_side_press  = left_side_press + 10
         end
         -- TODO eng_lp_pressure seems to be ~ 10 too low, possibly due to invalid factor in N1 to pressure calculation?!
@@ -362,7 +363,7 @@ local function update_bleed_pressures()
 
     local right_side_press = 10 -- just cause N1 based eng_lp_pressure is too low currently
     if eng_bleed_valve_pos[2] then
-        if is_dual_bleed == 1 then
+        if is_single_bleed == 1 then
             right_side_press  = right_side_press + 10
         end
 
@@ -393,10 +394,19 @@ local function update_bleed_pressures()
         end
     end
     
-    left_side_press  = math.max(0, left_side_press)
-    right_side_press = math.max(0, right_side_press)
+    -- prevent pressure above the MAX pressure of 53+/-2 psi, but only if not HI_PRESS error
+    if get(FAILURE_BLEED_ENG_1_hi_press) == 0 then
+        left_side_press = Math_clamp(left_side_press,0,ENG_NOMINAL_MAX_PRESS);
+    else
+        left_side_press = math.max(0,left_side_press)
+    end
 
-    -- TODO use a more linear curve or adjust curve parameters e.g. Set_linear_anim_value or Set_anim_value_linear_range
+    if get(FAILURE_BLEED_ENG_2_hi_press) == 0 then
+        right_side_press = Math_clamp(right_side_press,0,ENG_NOMINAL_MAX_PRESS);
+    else
+        right_side_press = math.max(0,right_side_press)
+    end
+
     if bleed_pressure[1] < left_side_press then
         bleed_pressure[1] = Set_anim_value(bleed_pressure[1], left_side_press, 0, 100, 0.6)
     else

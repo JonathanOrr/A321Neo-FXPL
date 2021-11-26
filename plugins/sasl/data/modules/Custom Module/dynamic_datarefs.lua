@@ -123,7 +123,7 @@ L_bleed_temp = createGlobalPropertyf("a321neo/dynamics/packs/l_bleed_temp", 10, 
 R_bleed_temp = createGlobalPropertyf("a321neo/dynamics/packs/r_bleed_temp", 10, false, true, false)
 L_bleed_demand = createGlobalPropertyf("a321neo/dynamics/packs/l_bleed_demand", 0, false, true, false)
 R_bleed_demand = createGlobalPropertyf("a321neo/dynamics/packs/r_bleed_demand", 0, false, true, false)
-Bleed_is_dual = createGlobalPropertyi("a321neo/dynamics/packs/dual_bleed", 0, false, true, false)
+Bleed_is_single = createGlobalPropertyi("a321neo/dynamics/packs/single_bleed", 0, false, true, false)
 
 L_compressor_temp = createGlobalPropertyf("a321neo/dynamics/packs/l_compressor_temp", 10, false, true, false)
 R_compressor_temp = createGlobalPropertyf("a321neo/dynamics/packs/r_compressor_temp", 10, false, true, false)
