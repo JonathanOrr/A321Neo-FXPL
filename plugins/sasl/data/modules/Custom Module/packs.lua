@@ -68,7 +68,9 @@ local apu_bleed_off_time = 0
 
 local econ_flow_switch = false
 
-local x_bleed_status = false
+local x_bleed_status = false -- x-bleed can be switched manually or automatically by BMC (e.g. GAS bleed or APU bleed)
+local x_bleed_switch_time = -1 -- time x-bleed status changed for switching animation of valve display
+
 local ditching_switch = false
 
 local eng_lp_pressure      = {0,0}
@@ -265,14 +267,35 @@ local function update_bleed_valves()
     end
 
     --X bleed valve logic--
-    -- TODO timer based x-bleed valve open/close with intermediate amber state
+    local current_time = get(TIME)
     if get(X_bleed_dial) == 0 then --closed
-        x_bleed_status = false
+        if x_bleed_status == true then
+            x_bleed_switch_time = current_time
+        end
+        x_bleed_status = false  -- TODO close with some delay as well?
     elseif get(X_bleed_dial) == 1 then --auto
-        x_bleed_status = apu_bleed_valve_pos or get(GAS_bleed_avail) == 1
+        -- automatic x-bleed switching occurs only by supplying APU and ground air support
+        local x_bleed_status_new = apu_bleed_valve_pos or get(GAS_bleed_avail) == 1
+        if x_bleed_status ~= x_bleed_status_new then
+            x_bleed_switch_time = current_time
+        end
+        x_bleed_status = x_bleed_status_new
     elseif get(X_bleed_dial) == 2 then --open
+        if x_bleed_status == false then
+            x_bleed_switch_time = current_time
+        end
         x_bleed_status = true
     end
+
+    if x_bleed_switch_time > 0 then
+        local delta = get(TIME)-x_bleed_switch_time
+        if delta > 3.7  then
+            set(X_bleed_valve_disp,x_bleed_status == true and 0 or 3) -- final position
+            x_bleed_switch_time = 0
+        elseif delta > 0.3 then
+            set(X_bleed_valve_disp,2) -- moving
+        end
+    elseif x_bleed_switch_time == -1 then set(X_bleed_valve_disp,3) end
 
 end
 
