@@ -414,7 +414,7 @@ end
 set(Eng_1_OIL_temp, get(OTA))
 set(Eng_2_OIL_temp, get(OTA))
 
-local function update_oil_stuffs()
+local function update_oil_temp_and_press()
 
     -- ENG 1 - PRESS
     if get(Engine_1_avail) == 1 then
@@ -434,15 +434,17 @@ local function update_oil_stuffs()
     end
 
     -- ENG 1 - TEMP
+    -- TODO oil temp increase/decrease is much slower, exception possibly failure situation
     if get(Engine_1_avail) == 1 then
+        -- temperature depends mainly on N2. At 60% N2 normal temp acc CAE sim is sustained about 65°C at 15° OAT
         local n2_value = get(Eng_1_N2)
         local temp = Math_rescale(60, 65, ENG.data.max_n2, ENG.data.oil.temp_max_mct, n2_value) + random_pool_2 * 5 + get(FAILURE_ENG_OIL_HI_TEMP, 1) * 70
-        Set_dataref_linear_anim(Eng_1_OIL_temp, temp, -50, 250, 2)
+        Set_dataref_linear_anim(Eng_1_OIL_temp, temp, -50, 250, 0.18 + get(FAILURE_ENG_OIL_HI_TEMP, 1)*2)
     else
-        -- During startup
+        -- During startup or shutdown
         local n2_value = math.max(10,get(Eng_1_N2))
         local temp = Math_rescale(10, get(OTA), 70, 75, n2_value)
-        Set_dataref_linear_anim(Eng_1_OIL_temp, temp, -50, 250, 2)
+        Set_dataref_linear_anim(Eng_1_OIL_temp, temp, -50, 250, 0.18)
     end
     
     -- ENG 2 - PRESS
@@ -455,7 +457,7 @@ local function update_oil_stuffs()
             Set_dataref_linear_anim(Eng_2_OIL_press, press, 0, 500, 28 + random_pool_2 * 4)
         end
     else
-        -- During startup
+        -- During startup or shutdown
         local n2_value = math.max(10,get(Eng_2_N2))
         local press = Math_rescale(10, 0, 70, ENG.data.oil.pressure_max_toga, n2_value)
         Set_dataref_linear_anim(Eng_2_OIL_press, press, 0, 500, 28 + random_pool_3 * 4)
@@ -465,12 +467,12 @@ local function update_oil_stuffs()
     if get(Engine_2_avail) == 1 then
         local n2_value = get(Eng_2_N2)
         local temp = Math_rescale(60, 65, ENG.data.max_n2, ENG.data.oil.temp_max_mct, n2_value) + random_pool_1 * 5 + get(FAILURE_ENG_OIL_HI_TEMP, 2) * 70
-        Set_dataref_linear_anim(Eng_2_OIL_temp, temp, -50, 250, 1)
+        Set_dataref_linear_anim(Eng_2_OIL_temp, temp, -50, 250, 0.18 + get(FAILURE_ENG_OIL_HI_TEMP, 2)*2)
     else
-        -- During startup
+        -- During startup or shutdown
         local n2_value = math.max(10,get(Eng_2_N2))
         local temp = Math_rescale(10, get(OTA), 70, 75, n2_value)
-        Set_dataref_linear_anim(Eng_2_OIL_temp, temp, -50, 250, 1)
+        Set_dataref_linear_anim(Eng_2_OIL_temp, temp, -50, 250, 0.18)
     end
 
 
@@ -1220,7 +1222,7 @@ function update()
     update_spooling()
     update_egt()
     update_ff()
-    update_oil_stuffs()
+    update_oil_temp_and_press()
     update_vibrations()
     
     update_auto_start()
