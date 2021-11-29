@@ -375,13 +375,14 @@ local function update_bleed_pressures()
         left_side_press = left_side_press + eng_lp_pressure[1]  - get(FAILURE_BLEED_ENG_1_LEAK) * 10
     end
 
-    -- TODO double check if APU bleed is added if engine bleed is already available on neo
+    -- APU bleed closes engine bleed valves and opens x-bleed, so apu is the only source
     if apu_bleed_valve_pos then
-        left_side_press = left_side_press + apu_pressure - get(FAILURE_BLEED_APU_LEAK) * 10 
+        left_side_press = apu_pressure - get(FAILURE_BLEED_APU_LEAK) * 10
     end
 
+    -- HP Ground air support closes bleed valves and opens x-bleed
     if get(GAS_bleed_avail) == 1 then
-        left_side_press = left_side_press + GAS_PRESSURE + math.random()
+        left_side_press = GAS_PRESSURE + math.random()
     end
 
     local right_side_press = 10 -- just cause N1 based eng_lp_pressure is too low currently
