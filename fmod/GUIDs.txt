@@ -62,9 +62,13 @@
 {30183d82-71ca-4b95-bc2b-0030df78758e} event:/Ties/Off
 {9f94419c-85f2-40c2-8e0b-e67a13036ed1} event:/Ties/On
 {addc9add-a1d0-4814-b32d-5761039bace6} event:/Ties/Swap
+{7cfa0c14-b52f-4cd3-b23f-5e25c467dddd} event:/Winds/Cabin
+{4f2d1706-dbe1-4df5-8948-67b43e6e57ef} event:/Winds/Cockpit
 {0f3c948d-7c51-47fa-9622-de4a5d75bb7e} event:/AvionicsStart
 {6a771f16-ea3a-4801-af88-78f66bd80e34} event:/Cabin
 {312f3339-8227-4aad-abe3-026feb4c99dd} event:/Engine
+{63e912cd-1eb2-4b29-aa2f-747df9f8ce6e} event:/Packs
+{f2c03dad-b3a1-476b-b501-78711ec701c3} event:/Rush
 {9bffc29f-9703-4b8f-9db3-63de2b32710a} event:/Transformer
 {9f08114d-36ec-44cc-b8bf-b2babda09f9e} bus:/
 {7f7c05a4-e05a-4d44-94fe-d4691147a9b7} bus:/Master

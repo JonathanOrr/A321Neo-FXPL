@@ -429,20 +429,20 @@ local function update_pack_flow()
 
             if get(Pack_L) == 1 then
                 set(L_pack_Flow, 3)
-                Set_dataref_linear_anim(L_pack_Flow_value, 1.2*PACK_KG_PER_SEC_NOM, 0, 2000, 0.1)
+                Set_dataref_linear_anim(L_pack_Flow_value, 1.2*PACK_KG_PER_SEC_NOM, 0, 2000, 0.6)
             else
                 set(L_pack_Flow, 0)
-                Set_dataref_linear_anim(L_pack_Flow_value, 0, 0, 2000, 0.1)
+                Set_dataref_linear_anim(L_pack_Flow_value, 0, 0, 2000, 0.6)
             end
         end
                
         if get(FAILURE_BLEED_PACK_2_REGUL_FAULT) == 0 then
             if get(Pack_R) == 1 then
                 set(R_pack_Flow, 3)
-                Set_dataref_linear_anim(R_pack_Flow_value, 1.2*PACK_KG_PER_SEC_NOM, 0, 2000, 0.1)
+                Set_dataref_linear_anim(R_pack_Flow_value, 1.2*PACK_KG_PER_SEC_NOM, 0, 2000, 0.6)
             else
                 set(R_pack_Flow, 0)
-                Set_dataref_linear_anim(R_pack_Flow_value, 0, 0, 2000, 0.1)
+                Set_dataref_linear_anim(R_pack_Flow_value, 0, 0, 2000, 0.6)
             end
         end
         return
@@ -454,20 +454,20 @@ local function update_pack_flow()
     if econ_flow_switch then    -- LO flow
         if get(FAILURE_BLEED_PACK_1_REGUL_FAULT) == 0 then
             set(L_pack_Flow, mult_L * 1)
-            Set_dataref_linear_anim(L_pack_Flow_value, mult_L*0.8*PACK_KG_PER_SEC_NOM, 0, 2000, 0.1)
+            Set_dataref_linear_anim(L_pack_Flow_value, mult_L*0.8*PACK_KG_PER_SEC_NOM, 0, 2000, 0.6)
         end
         if get(FAILURE_BLEED_PACK_2_REGUL_FAULT) == 0 then
             set(R_pack_Flow, mult_R * 1)
-            Set_dataref_linear_anim(R_pack_Flow_value, mult_R*0.8*PACK_KG_PER_SEC_NOM, 0, 2000, 0.1)
+            Set_dataref_linear_anim(R_pack_Flow_value, mult_R*0.8*PACK_KG_PER_SEC_NOM, 0, 2000, 0.6)
         end
     else                        -- NORM flow
         if get(FAILURE_BLEED_PACK_1_REGUL_FAULT) == 0 then
             set(L_pack_Flow, mult_L * 2)
-            Set_dataref_linear_anim(L_pack_Flow_value, mult_L*PACK_KG_PER_SEC_NOM, 0, 2000, 0.1)
+            Set_dataref_linear_anim(L_pack_Flow_value, mult_L*PACK_KG_PER_SEC_NOM, 0, 2000, 0.6)
         end
         if get(FAILURE_BLEED_PACK_2_REGUL_FAULT) == 0 then
             set(R_pack_Flow, mult_R * 2)
-            Set_dataref_linear_anim(R_pack_Flow_value, mult_R*PACK_KG_PER_SEC_NOM, 0, 2000, 0.1)
+            Set_dataref_linear_anim(R_pack_Flow_value, mult_R*PACK_KG_PER_SEC_NOM, 0, 2000, 0.6)
         end
     end
 
