@@ -45,20 +45,21 @@ function configure_pw1133g()
         oil = {
             qty_max = 22,               -- [QT] oil qty gauge shows a computed value which is about 1/2 actual just to have similar annunciations regardless engine type
             qty_min = 14,               -- [QT] currently unused?! randomness of initial qty is coded in update_engine_type()
-            qty_consumption = 0.23,     -- [QT/hour]
-            
+            qty_consumption = 0.2,      -- [QT/hour] acc AMM
+
+            pressure_max_limit=  270,    -- [PSI]
             pressure_max_toga =  240,    -- [PSI]
             pressure_max_mct  =  220,    -- [PSI]
-            pressure_min_idle =  100,     -- [PSI]
+            pressure_min_idle =  100,     -- [PSI] TODO acc AMM is linear N2 based from min@IDLE: 65 up to 166 at redline N2
             
             temp_min_start = -40,     -- [°C]
             temp_min_toga  = 51.7,    -- [°C]
-            temp_max_toga  = 120,     -- [°C]
+            temp_max_toga  = 120,     -- [°C] -- typical target values at thrust level
             temp_max_mct   = 100,     -- [°C]
         },
         
         vibrations = {
-            max_n1_nominal = 6,      -- [-]
+            max_n1_nominal = 6,      -- [-] TODO advisory level is 5 for N1 and N2 acc AMM
             max_n2_nominal = 4.3,    -- [-]
         },
 
@@ -114,7 +115,10 @@ function configure_pw1133g()
             oil_press_high_adv = 259,        -- [PSI]
 
             oil_temp_high_adv  = 135,        -- [°C]
-            oil_temp_high_amber= 152,        -- [°C]
+            oil_temp_high_amber= 152,        -- [°C] TODO dynamically adjust acc. thrust level based limits
+            oil_temp_limit_toga  = 140.56,  -- [°C] limits at thrust level acc AMM
+            oil_temp_limit_mct  = 146.11,   -- [°C]
+            oil_temp_limit_idle  = 151.67,  -- [°C]
 
         },
 

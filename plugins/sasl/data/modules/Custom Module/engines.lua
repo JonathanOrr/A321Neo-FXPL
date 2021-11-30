@@ -47,11 +47,11 @@ include('engines/pw1133g.lua')
 
 -- engine states, simple ones right now for debugging, introduced for more flexible abnormals later
 -- TODO TBD use string values?
-local FSM_START_PHASE_CRANK = 1
-local FSM_START_PHASE_N2 = 2
-local FSM_START_PHASE_N1 = 3
-local FSM_START_COOLING = 4
-local FSM_SHUTDOWN = 5
+local FSM_SHUTDOWN = 1
+local FSM_START_COOLING = 2
+local FSM_START_PHASE_CRANK = 3
+local FSM_START_PHASE_N2 = 4
+local FSM_START_PHASE_N1 = 5
 
 -- configurable initial cooling support for first startup
 local COOLING_IDLE = 0
@@ -117,6 +117,10 @@ local last_time_toga = {0,0} -- Time point where thrust levers are set to TOGA
 
 local already_started_eng = {false, false}
 
+local oil_gulp_timer = {0,0}  -- for timer based oil gulping implementation
+local initial_oil_qty = {0,0} -- initial oil qty on engine start
+local used_oil_qty = {0,0}    -- oil qty used during last engine run to update initial_oil_qty
+
 ----------------------------------------------------------------------------------------------------
 -- Various datarefs
 ----------------------------------------------------------------------------------------------------
@@ -160,6 +164,9 @@ function engines_auto_quick_start(phase)
         set(Engine_1_master_switch, 1)
         set(Engine_2_master_switch, 1)
         set(Engine_mode_knob, 0)
+        -- since oil temp changes slowly in autostart we need to set a initial temp
+        set(Eng_1_OIL_temp,60)
+        set(Eng_2_OIL_temp,60)
     end
     return 1
 end
@@ -1006,6 +1013,8 @@ local function update_time_since_shutdown()
             -- only when really in shutdown process otherwise cooling may appear again during startup after cranking/cooling
             time_last_shutdown[1] = get(TIME)
             time_current_startup[1]  = -1
+            initial_oil_qty[1] = initial_oil_qty[1] - used_oil_qty[1] -- we must take used qty into account for next start
+            set(Eng_OIL_initial_qty,initial_oil_qty[1],1)
         end
     else
         -- init cooling requirement
@@ -1018,6 +1027,8 @@ local function update_time_since_shutdown()
         if time_last_shutdown[2] == 0 and get(Engine_2_master_switch) == 0 then
             time_last_shutdown[2] = get(TIME)
             time_current_startup[2]  = -1
+            initial_oil_qty[2] = initial_oil_qty[2] - used_oil_qty[2]
+            set(Eng_OIL_initial_qty,initial_oil_qty[2],2)
         end
     else
         cooling_has_cooled[2] = false
@@ -1047,16 +1058,87 @@ local function update_continuous_ignition()
     set(Eng_Continuous_Ignition, (cond_1 or cond_2) and 1 or 0)
 end
 
-local function update_oil_qty()
-    -- TODO implement oil gulping during startup
-    -- each engine consumes ~0.1 oil quantity each running hour
-    local curr_oil = get(Eng_1_OIL_qty)
-    curr_oil = curr_oil - ENG.data.oil.qty_consumption / 60 / 60 * get(DELTA_TIME) * get(Engine_1_avail)
-    set(Eng_1_OIL_qty, curr_oil)
+local function update_oil_qty_startup(eng)
 
-    local curr_oil = get(Eng_2_OIL_qty)
-    curr_oil = curr_oil - ENG.data.oil.qty_consumption / 60 / 60 * get(DELTA_TIME) * get(Engine_2_avail)
-    set(Eng_2_OIL_qty, curr_oil)
+    local eng_n2
+    local curr_oil
+    local initial_qty
+
+    if eng == 1 then
+        eng_n2 = get(Eng_1_N2)
+        curr_oil = get(Eng_1_OIL_qty)
+        initial_qty = initial_oil_qty[eng]
+    else
+        eng_n2 = get(Eng_2_N2)
+        curr_oil = get(Eng_2_OIL_qty)
+        initial_qty = initial_oil_qty[eng]
+    end
+
+    if eng_n2 < 18 then
+        oil_gulp_timer[eng] = 0  -- TODO reset in shutdown for performance
+        return
+    end
+
+    if oil_gulp_timer[eng] == 0 then oil_gulp_timer[eng] = get(TIME) end
+
+    -- implement oil gulping during startup, TODO TBD: max delta scaled based on start qty?
+    -- start timer at N2 == 18 for normal startup
+    local delta = get(TIME) - oil_gulp_timer[eng]
+    if delta > 61.92 then
+       -- qty stays stable
+    elseif delta > 59.85 then
+        curr_oil = initial_qty - (-3.8846153846153846 + 0.2403846153846154 * delta)
+    elseif delta > 55.52 then
+        curr_oil = initial_qty - (6.412568306010929 + 0.06830601092896176 * delta)
+    elseif delta > 48.32 then
+        curr_oil = initial_qty - (16.252380952380953 - 0.11904761904761904 * delta)
+    elseif delta > 33.65 then
+        curr_oil = initial_qty - (12.136856368563686 - 0.03387533875338753 * delta)
+    elseif delta > 31.4 then
+        curr_oil = initial_qty - (18.76851851851852 - 0.23148148148148148 * delta)
+    elseif delta > 6.58 then
+        curr_oil = initial_qty -( 2.399849559917311 - 2.362859879874882*delta + 0.5321735837021373*delta^2 - 0.0451135273801746*delta^3 +
+                0.0020041578098679937*delta^4 - 0.00004525929443668085*delta^5  + 4.0534149582215e-7*delta^6)
+    end
+
+    if eng == 1 then
+        set(Eng_1_OIL_qty, curr_oil)
+    else
+        set(Eng_2_OIL_qty, curr_oil)
+    end
+
+end
+
+local function update_oil_qty()
+    -- initial oil qty is set when initializing engine type
+    if get(Eng_fsm_state, 1) >= FSM_START_PHASE_N2 and get(Engine_1_avail) == 0 then
+        update_oil_qty_startup(1)
+        return
+    end
+
+    if get(Eng_fsm_state, 2) >= FSM_START_PHASE_N2 and get(Engine_2_avail) == 0 then
+        update_oil_qty_startup(2)
+        return
+    end
+
+
+    if get(Eng_fsm_state, 1) == FSM_SHUTDOWN then
+        Set_dataref_linear_anim(Eng_1_OIL_qty, initial_oil_qty[1], 1,ENG.data.oil.qty_max , 0.1)
+    else
+        local curr_oil = get(Eng_1_OIL_qty)
+        used_oil_qty[1] = used_oil_qty[1] + ENG.data.oil.qty_consumption / 60 / 60 * get(DELTA_TIME) * get(Engine_1_avail)
+        curr_oil = curr_oil - ENG.data.oil.qty_consumption / 60 / 60 * get(DELTA_TIME) * get(Engine_1_avail)
+        set(Eng_1_OIL_qty, curr_oil)
+    end
+
+    if get(Eng_fsm_state, 2) == FSM_SHUTDOWN then
+        Set_dataref_linear_anim(Eng_2_OIL_qty, initial_oil_qty[2], 1,ENG.data.oil.qty_max , 0.1)
+    else
+        local curr_oil = get(Eng_2_OIL_qty)
+        used_oil_qty[2] = used_oil_qty[2] + ENG.data.oil.qty_consumption / 60 / 60 * get(DELTA_TIME) * get(Engine_2_avail)
+        curr_oil = curr_oil - ENG.data.oil.qty_consumption / 60 / 60 * get(DELTA_TIME) * get(Engine_2_avail)
+        set(Eng_2_OIL_qty, curr_oil)
+    end
 
 end
 
@@ -1163,8 +1245,10 @@ local function update_engine_type()
         -- initial oil qty with some randomness
         set(Eng_1_OIL_qty, ENG.data.oil.qty_max*3/4 + ENG.data.oil.qty_max/4 * math.random())
         set(Eng_2_OIL_qty, ENG.data.oil.qty_max*3/4 + ENG.data.oil.qty_max/4 * math.random())
-
-        
+        initial_oil_qty[1] = get(Eng_1_OIL_qty)
+        initial_oil_qty[2] = get(Eng_2_OIL_qty)
+        set(Eng_OIL_initial_qty,initial_oil_qty[1],1)
+        set(Eng_OIL_initial_qty,initial_oil_qty[2],2)
     end
     
 end
