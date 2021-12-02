@@ -64,11 +64,12 @@ FMGS_sys.data = {
             require_update = false,
             gdot = nil,
             ROC_init = nil,
-            time_to_400ft = 0,  -- In secs
-            dist_to_400ft = 0,  -- In nm
-            time_to_sec_climb = 0,  -- In secs
-            dist_to_sec_climb = 0,  -- In nm
-
+            time_to_400ft = 0,  -- In secs  -- From RWY to 400ft
+            dist_to_400ft = 0,  -- In nm    -- From RWY to 400ft
+            time_to_sec_climb = 0,  -- In secs -- Accelerate at 400ft
+            dist_to_sec_climb = 0,  -- In nm   -- Accelerate at 400ft
+            time_to_vacc = 0,  -- In secs   -- Climb from 400 to acc alt
+            dist_to_vacc = 0,  -- In nm     -- Climb from 400 to acc alt
         }
     },
 

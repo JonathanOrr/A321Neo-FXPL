@@ -54,7 +54,7 @@ local function draw_takeoff_dynamic()
     -- Altitudes
     sasl.gl.drawText(Font_B612MONO_regular, 110, 90, alt .. " ft", 14, false, false, TEXT_ALIGN_LEFT, alt_color)
     sasl.gl.drawText(Font_B612MONO_regular, 300, 320, (alt+400) .. " ft", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, 870, 450, (alt+1500) .. " ft", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 870, 450, (alt+FMGS_get_takeoff_acc()) .. " ft", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
 
     -- Speeds
     if FMGS_sys.perf.takeoff.v2 then
@@ -76,11 +76,15 @@ local function draw_takeoff_dynamic()
         local s = FMGS_sys.data.pred.takeoff.time_to_400ft
         local d = FMGS_sys.data.pred.takeoff.dist_to_400ft
         sasl.gl.drawText(Font_B612MONO_regular, 300, 60, math.floor(s/60) .. ":" .. math.floor(s%60), 14, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
-        sasl.gl.drawText(Font_B612MONO_regular, 300, 35, Round(d,2), 14, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
-        s = FMGS_sys.data.pred.takeoff.time_to_sec_climb
-        d = FMGS_sys.data.pred.takeoff.dist_to_sec_climb
+        sasl.gl.drawText(Font_B612MONO_regular, 300, 35, Round(d,3), 14, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
+        s = s + FMGS_sys.data.pred.takeoff.time_to_sec_climb
+        d = d + FMGS_sys.data.pred.takeoff.dist_to_sec_climb
         sasl.gl.drawText(Font_B612MONO_regular, 550, 60, math.floor(s/60) .. ":" .. math.floor(s%60), 14, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
-        sasl.gl.drawText(Font_B612MONO_regular, 550, 35, Round(d,2), 14, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
+        sasl.gl.drawText(Font_B612MONO_regular, 550, 35, Round(d,3), 14, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
+        s = s + FMGS_sys.data.pred.takeoff.time_to_vacc
+        d = d + FMGS_sys.data.pred.takeoff.dist_to_vacc
+        sasl.gl.drawText(Font_B612MONO_regular, 850, 60, math.floor(s/60) .. ":" .. math.floor(s%60), 14, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
+        sasl.gl.drawText(Font_B612MONO_regular, 850, 35, Round(d,3), 14, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
     else
         sasl.gl.drawText(Font_B612MONO_regular, 120, 250, "??? ft/min", 14, false, false, TEXT_ALIGN_LEFT, ECAM_RED)
     end
@@ -97,7 +101,7 @@ end
 function draw_vprof()
     draw_vprof_menu()
     if curr_subpage == 1 then
-        draw_takeoff();
+        draw_takeoff()
     end
 end
 
