@@ -100,3 +100,14 @@ end
 function kts_to_ms(kts)
     return kts * 0.514444
 end
+
+function fpm_to_kts(fpm)
+    return fpm * 0.00987473
+end
+
+-- return in [kts]
+-- inputs: tas [kts], vs [fpm], v_wind [kts], d_wind [deg, relative]
+function tas_to_gs(tas, vs, v_wind, d_wind)
+    vs = fpm_to_kts(vs)
+    return math.sqrt(tas*tas - vs*vs) + v_wind * math.cos(math.rad(d_wind))
+end
