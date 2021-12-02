@@ -3136,6 +3136,5 @@ local SVM_model = {
 }
 
 function predict_drag(density, tas, mach, alpha)
-    -- Model is in lbf, we return it in N
-    return predict_svm_gaussian(SVM_model, {density, tas, mach, alpha}) * 4.44822
+    return predict_svm_gaussian(SVM_model, {density, tas, mach, alpha})
 end
