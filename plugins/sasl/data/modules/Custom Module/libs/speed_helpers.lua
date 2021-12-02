@@ -89,3 +89,14 @@ function convert_to_eas_tas_mach(cas, alt)
     return kt(eas), kt(tas), M
 end
 
+function m_to_nm(m)
+    return m * 0.000539957;
+end
+
+function nm_to_m(nm)
+    return nm * 1852;
+end
+
+function kts_to_ms(kts)
+    return kts * 0.514444
+end
