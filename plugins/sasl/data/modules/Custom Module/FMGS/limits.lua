@@ -15,6 +15,8 @@
 -- File: FMGS/limits.lua
 -------------------------------------------------------------------------------
 
+include('libs/air_helpers.lua')
+
 local function compute_max_alt(curr_weight)
 
     local max_fl = Math_rescale_lim_lower(62000, 39100, 78000, 34500, curr_weight)

@@ -20,21 +20,7 @@ include("FBW/FBW_subcomponents/FBW_SYS/FAC_computation/common_functions.lua");
 include("FMGS/predictors/engine_thrust.lua")
 include("FMGS/predictors/drag.lua")
 include("libs/speed_helpers.lua")
-
-
-local function request_climb_gradient(aircraft_mass, altitude)
-    local empty_gradient = Table_extrapolate(climb_gradient[EMPTY], altitude)
-    local full_gradient = Table_extrapolate(climb_gradient[FULL], altitude)
-    local predicted_gradient = Math_rescale_no_lim(EMPTY_WEIGHT, empty_gradient, FULL_WEIGHT, full_gradient, aircraft_mass)
-    return predicted_gradient
-end
-
-local function request_climb_distance(aircraft_mass, start_alt, end_alt)
-    distance = (end_alt - start_alt) / math.tan(math.rad(request_climb_gradient(aircraft_mass, start_alt))) -- computing required climb distance from start_alt directly to end_alt
-    distance = distance* 0.00016457883 -- back into nautical miles
-    return distance
-end
-
+include('libs/air_helpers.lua')
 
 local function get_ROC_after_TO(rwy_alt, v2, takeoff_weight)
     -- This is the climb from rwy alt to rwy_alt + 400
@@ -48,20 +34,30 @@ local function get_ROC_after_TO(rwy_alt, v2, takeoff_weight)
     return tas * math.sin(gamma) * 60
 end
 
+local function get_time_dist_from_V2_to_VSRS(rwy_alt, v2, takeoff_weight)
+    local ref_alt = rwy_alt+400
+    local temp_sea_level = 15+get(OTA)-Temperature_get_ISA()
+    local press_sea_level = get(Weather_curr_press_sea_level) * 3386.38
+    local density = get_air_density(ref_alt, FMGS_sys.data.init.tropo, temp_sea_level, press_sea_level)
+    density = density_to_ratio(density)
+    local N1 = get(Eng_N1_flex_temp) == 0 and get(Eng_N1_max_detent_toga) or get(Eng_N1_max_detent_flex)
+    local _, tas, mach = convert_to_eas_tas_mach(v2, ref_alt)
+    local thrust = predict_engine_thrust(mach, density, N1) * 2
+    local drag   = predict_drag(density, tas, mach, 0)
+    local acc = (thrust - drag) / takeoff_weight    -- Acceleration in m/s2
 
-function vertical_profile_update()
-    -- Start with reset
+    local time = kts_to_ms(10) / acc -- 10 knots
+    local dist = 0.5 * acc * (time^2/3600) + kts_to_ms(v2) * time/3600
+    return time, m_to_nm(dist);  -- Time, dist
+end
+
+local function vertical_profile_reset()
     FMGS_sys.data.pred.takeoff.gdot = nil
     FMGS_sys.data.pred.takeoff.ROC_init = nil
 
-    if not FMGS_sys.fpln.active or not FMGS_sys.fpln.active.apts.dep then
-        return
-    end
+end
 
-    if not FMGS_sys.data.init.weights.zfw or not FMGS_sys.data.init.weights.block_fuel or not FMGS_sys.data.init.weights.taxi_fuel then
-        return
-    end
-
+local function vertical_profile_takeoff_update()
     local total_to_weight = FMGS_sys.data.init.weights.zfw
                           + FMGS_sys.data.init.weights.block_fuel
                           - FMGS_sys.data.init.weights.taxi_fuel
@@ -76,4 +72,27 @@ function vertical_profile_update()
     end
 
     FMGS_sys.data.pred.takeoff.ROC_init = get_ROC_after_TO(rwy_alt, FMGS_sys.perf.takeoff.v2, total_to_weight)
+    FMGS_sys.data.pred.takeoff.time_to_400ft = (400-30) / FMGS_sys.data.pred.takeoff.ROC_init * 60
+    FMGS_sys.data.pred.takeoff.dist_to_400ft = FMGS_sys.data.pred.takeoff.time_to_400ft * FMGS_sys.perf.takeoff.v2 / 3600
+
+    local time,dist = get_time_dist_from_V2_to_VSRS(rwy_alt, FMGS_sys.perf.takeoff.v2, total_to_weight)
+    FMGS_sys.data.pred.takeoff.time_to_sec_climb = time
+    FMGS_sys.data.pred.takeoff.dist_to_sec_climb = dist
+
+end
+
+function vertical_profile_update()
+    -- Start with reset
+    vertical_profile_reset()
+
+    if not FMGS_sys.fpln.active or not FMGS_sys.fpln.active.apts.dep then
+        return
+    end
+
+    if not FMGS_sys.data.init.weights.zfw or not FMGS_sys.data.init.weights.block_fuel or not FMGS_sys.data.init.weights.taxi_fuel then
+        return
+    end
+
+    vertical_profile_takeoff_update()
+
 end
