@@ -30,7 +30,8 @@ local function draw_takeoff_static()
 
     -- GD
     sasl.gl.drawCircle(550,300,7,false,ECAM_GREEN)
-    sasl.gl.drawText(Font_B612MONO_regular, 550, 270, "V_GD=     kt", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 550, 270, "V_GD =     kt", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
+    sasl.gl.drawText(Font_B612MONO_regular, 550, 240, "V_SRS=     kt", 14, false, false, TEXT_ALIGN_LEFT, UI_WHITE)
 
     -- Final segment
     sasl.gl.drawWideLine(550,300,850,450,2,UI_WHITE)
@@ -58,18 +59,28 @@ local function draw_takeoff_dynamic()
     -- Speeds
     if FMGS_sys.perf.takeoff.v2 then
         sasl.gl.drawText(Font_B612MONO_regular, 210, 200, "    " .. FMGS_sys.perf.takeoff.v2, 14, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
+        sasl.gl.drawText(Font_B612MONO_regular, 550, 240, "       " .. math.floor(FMGS_sys.perf.takeoff.v2+10), 14, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
     else
         sasl.gl.drawText(Font_B612MONO_regular, 210, 200, "    ???", 14, false, false, TEXT_ALIGN_LEFT, ECAM_RED)
+        sasl.gl.drawText(Font_B612MONO_regular, 550, 240, "       ???", 14, false, false, TEXT_ALIGN_LEFT, ECAM_RED)
     end
 
     if FMGS_sys.data.pred.takeoff.gdot then
-        sasl.gl.drawText(Font_B612MONO_regular, 550, 270, "      " .. math.floor(FMGS_sys.data.pred.takeoff.gdot), 14, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
+        sasl.gl.drawText(Font_B612MONO_regular, 550, 270, "       " .. math.floor(FMGS_sys.data.pred.takeoff.gdot), 14, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
     else
-        sasl.gl.drawText(Font_B612MONO_regular, 550, 270, "      ???", 14, false, false, TEXT_ALIGN_LEFT, ECAM_RED)
+        sasl.gl.drawText(Font_B612MONO_regular, 550, 270, "       ???", 14, false, false, TEXT_ALIGN_LEFT, ECAM_RED)
     end
 
     if FMGS_sys.data.pred.takeoff.ROC_init then
-        sasl.gl.drawText(Font_B612MONO_regular, 210, 400, math.floor(FMGS_sys.data.pred.takeoff.ROC_init) .. " ft/min", 14, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
+        sasl.gl.drawText(Font_B612MONO_regular, 120, 250, math.floor(FMGS_sys.data.pred.takeoff.ROC_init) .. " ft/min", 14, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
+        local s = FMGS_sys.data.pred.takeoff.time_to_400ft
+        local d = FMGS_sys.data.pred.takeoff.dist_to_400ft
+        sasl.gl.drawText(Font_B612MONO_regular, 300, 60, math.floor(s/60) .. ":" .. math.floor(s%60), 14, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
+        sasl.gl.drawText(Font_B612MONO_regular, 300, 35, Round(d,2), 14, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
+        s = FMGS_sys.data.pred.takeoff.time_to_sec_climb
+        d = FMGS_sys.data.pred.takeoff.dist_to_sec_climb
+        sasl.gl.drawText(Font_B612MONO_regular, 550, 60, math.floor(s/60) .. ":" .. math.floor(s%60), 14, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
+        sasl.gl.drawText(Font_B612MONO_regular, 550, 35, Round(d,2), 14, false, false, TEXT_ALIGN_LEFT, UI_LIGHT_BLUE)
     else
         sasl.gl.drawText(Font_B612MONO_regular, 120, 250, "??? ft/min", 14, false, false, TEXT_ALIGN_LEFT, ECAM_RED)
     end

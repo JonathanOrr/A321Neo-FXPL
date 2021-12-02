@@ -63,7 +63,12 @@ FMGS_sys.data = {
         takeoff = {
             require_update = false,
             gdot = nil,
-            ROC_init = nil
+            ROC_init = nil,
+            time_to_400ft = 0,  -- In secs
+            dist_to_400ft = 0,  -- In nm
+            time_to_sec_climb = 0,  -- In secs
+            dist_to_sec_climb = 0,  -- In nm
+
         }
     },
 
