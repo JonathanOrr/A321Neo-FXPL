@@ -445,10 +445,6 @@ function Local_magnetic_deviation()
     return get(Flightmodel_mag_heading) - get(Flightmodel_true_heading)
 end
 
-function Temperature_get_ISA()
-    local alt_meter = get(ACF_elevation)
-    return math.max(-56.5, 15 - 6.5 * alt_meter/1000)
-end
 
 
 

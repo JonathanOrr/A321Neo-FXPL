@@ -35,6 +35,9 @@ include('ECAM/ECAM_status.lua')
 include('ECAM/ECAM_wheel.lua')
 include('ADIRS_data_source.lua')
 
+include('libs/air_helpers.lua')
+
+
 --local variables
 local apu_avail_timer = -1
 local gload = 1
