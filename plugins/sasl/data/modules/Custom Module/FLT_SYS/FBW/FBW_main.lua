@@ -20,6 +20,7 @@ include("FLT_SYS/FBW/Controllers/FBW_PID.lua")
 include("FLT_SYS/FBW/mode_transition/mode_transition.lua")
 
 addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/")
+addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/F_CTL")
 addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/FBW")
 addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/FBW/FLT_computer")
 addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/FBW/FAC_computation")
@@ -74,6 +75,7 @@ components = {
     LAF_inputs {},
     LAF_controllers {},
 
+    FCTL_main {},
     law_reconfig {},
     FAC_compute_main {},
 

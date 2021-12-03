@@ -49,7 +49,7 @@ function FBW_law_reconfiguration(var_table)
         {
             {get(FAC_1_status) == 0 and get(FAC_2_status) == 0, "DOUBLE FAC FAILURE (FAC 1 TRANSIENT)"},
             {get(Hydraulic_G_press) < 1450 and get(Hydraulic_Y_press) < 1450, "HYDRAULIC G + Y FAILURE"},
-            {not FBW.fctl.surfaces.rud.rud.controlled, "YAW DAMPER FAILURE"},
+            {not FBW.fctl.RUD.RUD_STAT.controlled, "YAW DAMPER FAILURE"},
         },
 
         --DIRECT, DIRECT, MECHANICAL

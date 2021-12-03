@@ -36,7 +36,7 @@ components = {
     SPLR_MAIN     {},
     ELEV_MAIN     {},
     THS_MAIN      {},
-    RUD_CTL       {},
+    RUD_MAIN      {},
 }
 
 function update()

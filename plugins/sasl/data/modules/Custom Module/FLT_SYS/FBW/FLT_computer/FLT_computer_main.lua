@@ -109,7 +109,6 @@ components = {
     FACs  {},
     SFCCs {},
     FCDCs {},
-    RUD {},
 }
 
 function update()

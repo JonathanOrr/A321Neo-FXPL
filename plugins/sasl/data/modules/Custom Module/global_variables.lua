@@ -70,7 +70,6 @@ FBW = {
     rates = {},
     fctl = {
         surfaces = {},
-        status = {},
         control = {},
     },
     lateral = {

@@ -1,6 +1,5 @@
-FBW.fctl.surfaces.rud = {}
-FBW.fctl.surfaces.rud.motor = {
-    trim = {
+FBW.fctl.RUD.MOTOR_STAT = {
+    TRIM = {
         [1] = {
             avail = true,
             failure_dataref = FAILURE_FCTL_RUDDER_TRIM_MOT_1,
@@ -16,7 +15,7 @@ FBW.fctl.surfaces.rud.motor = {
             end
         },
     },
-    limit = {
+    LIMIT = {
         [1] = {
             avail = true,
             failure_dataref = FAILURE_FCTL_RUDDER_LIM_MOT_1,
@@ -33,35 +32,23 @@ FBW.fctl.surfaces.rud.motor = {
         },
     }
 }
-FBW.fctl.surfaces.rud.trim = {
+FBW.fctl.RUD.TRIM_STAT = {
     controlled = true,
     data_avail = true,
-    total_hyd_press = 0,
-    hyd_sys = {
-        Hydraulic_G_press,
-        Hydraulic_B_press,
-        Hydraulic_Y_press,
-    },
     computer_priority = {
-        {FBW.FLT_computer.FAC[1].MON_CHANEL_avail, FBW.fctl.surfaces.rud.motor.trim[1]},
-        {FBW.FLT_computer.FAC[2].MON_CHANEL_avail, FBW.fctl.surfaces.rud.motor.trim[2]},
+        {FBW.FLT_computer.FAC[1].MON_CHANEL_avail, FBW.fctl.RUD.MOTOR_STAT.TRIM[1]},
+        {FBW.FLT_computer.FAC[2].MON_CHANEL_avail, FBW.fctl.RUD.MOTOR_STAT.TRIM[2]},
     },
 }
-FBW.fctl.surfaces.rud.lim = {
+FBW.fctl.RUD.LIM_STAT = {
     controlled = true,
     data_avail = true,
-    total_hyd_press = 0,
-    hyd_sys = {
-        Hydraulic_G_press,
-        Hydraulic_B_press,
-        Hydraulic_Y_press,
-    },
     computer_priority = {
-        {FBW.FLT_computer.FAC[1].MON_CHANEL_avail, FBW.fctl.surfaces.rud.motor.limit[1]},
-        {FBW.FLT_computer.FAC[2].MON_CHANEL_avail, FBW.fctl.surfaces.rud.motor.limit[2]},
+        {FBW.FLT_computer.FAC[1].MON_CHANEL_avail, FBW.fctl.RUD.MOTOR_STAT.LIMIT[1]},
+        {FBW.FLT_computer.FAC[2].MON_CHANEL_avail, FBW.fctl.RUD.MOTOR_STAT.LIMIT[2]},
     },
 }
-FBW.fctl.surfaces.rud.rud = {
+FBW.fctl.RUD.RUD_STAT = {
     controlled = true,
     mechanical = true,
     data_avail = true,
@@ -78,7 +65,7 @@ FBW.fctl.surfaces.rud.rud = {
     }
 }
 
-FBW.fctl.status.RUDDER_MOTOR = function (fctl_table)
+local COMPUTE_MOTOR_STAT = function (fctl_table)
     for key, value in pairs(fctl_table) do
         if get(Print_rud_status) == 1 then
             print(key .. " MOT:")
@@ -98,7 +85,7 @@ FBW.fctl.status.RUDDER_MOTOR = function (fctl_table)
     end
 end
 
-FBW.fctl.status.RUDDER_LIM_TRIM = function (LIM_TRIM_table)
+local COMPUTE_LIM_TRIM_STAT = function (LIM_TRIM_table) --TODO: LIMIT FAILS WITH ADR
     local ACTIVE_CTL_PAIRS = 0
     local ACTIVE_MON = 0
     for i = 1, #LIM_TRIM_table.computer_priority do
@@ -112,14 +99,8 @@ FBW.fctl.status.RUDDER_LIM_TRIM = function (LIM_TRIM_table)
         end
     end
 
-    --calculate total hydraulic pressure to the system--
-    LIM_TRIM_table.total_hyd_press = 0
-    for i = 1, #LIM_TRIM_table.hyd_sys do
-        LIM_TRIM_table.total_hyd_press = LIM_TRIM_table.total_hyd_press + get(LIM_TRIM_table.hyd_sys[i])
-    end
-
     --decide if SYS is available--
-    if ACTIVE_CTL_PAIRS >= 1 and LIM_TRIM_table.total_hyd_press >= 1450 then
+    if ACTIVE_CTL_PAIRS >= 1 then
         LIM_TRIM_table.controlled = true
     else
         LIM_TRIM_table.controlled = false
@@ -138,11 +119,10 @@ FBW.fctl.status.RUDDER_LIM_TRIM = function (LIM_TRIM_table)
         print("DATA AVIAL:   " .. tostring(LIM_TRIM_table.data_avail))
         print("ACT PAIR:     " .. ACTIVE_CTL_PAIRS)
         print("ACT FAC MON:  " .. ACTIVE_MON)
-        print("TOTAL PRESS:  " .. LIM_TRIM_table.total_hyd_press)
     end
 end
 
-FBW.fctl.status.RUDDER = function (RUDDER_TABLE)
+local COMPUTE_RUDDER_STAT = function (RUDDER_TABLE)
     local ACTIVE_CTL_PAIRS = 0
     local ACTIVE_MON = 0
     for i = 1, #RUDDER_TABLE.computer_priority do
@@ -195,8 +175,8 @@ FBW.fctl.status.RUDDER = function (RUDDER_TABLE)
 end
 
 function update()
-    FBW.fctl.status.RUDDER_MOTOR(FBW.fctl.surfaces.rud.motor)
-    FBW.fctl.status.RUDDER_LIM_TRIM(FBW.fctl.surfaces.rud.lim)
-    FBW.fctl.status.RUDDER_LIM_TRIM(FBW.fctl.surfaces.rud.trim)
-    FBW.fctl.status.RUDDER(FBW.fctl.surfaces.rud.rud)
+    COMPUTE_MOTOR_STAT(FBW.fctl.RUD.MOTOR_STAT)
+    COMPUTE_LIM_TRIM_STAT(FBW.fctl.RUD.LIM_STAT)
+    COMPUTE_LIM_TRIM_STAT(FBW.fctl.RUD.TRIM_STAT)
+    COMPUTE_RUDDER_STAT(FBW.fctl.RUD.RUD_STAT)
 end

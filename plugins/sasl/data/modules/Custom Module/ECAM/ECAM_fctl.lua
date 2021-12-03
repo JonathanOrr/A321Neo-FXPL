@@ -221,18 +221,14 @@ function draw_fctl_page()
         {17, 235},
     }
     local rudder_anim = {
-        {-30, 28},
-        {-25, 20},
+        {-25, 24},
         {0, 0},
-        {25, -20},
-        {30, -28},
+        {25, -24},
     }
     local rudder_lim_anim = {
-        {-30, 31},
-        {-25, 23},
+        {-25, 27},
         {0, 0},
-        {25, -23},
-        {30, -31},
+        {25, -27},
     }
 
     --ailerons--
@@ -258,17 +254,17 @@ function draw_fctl_page()
         sasl.gl.drawText(Font_AirbusDUL, 617, 297, "XX", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
     --rudder
-    if FBW.fctl.surfaces.rud.rud.data_avail then
-        SASL_rotated_center_img_xcenter_aligned(ECAM_FCTL_rudder_img, size[1]/2+1, size[2]/2 - 135, 43, 155, Table_interpolate(rudder_anim, params.rudder), 0, -155, FBW.fctl.surfaces.rud.rud.mechanical and ECAM_GREEN or ECAM_ORANGE)
+    if FBW.fctl.RUD.RUD_STAT.data_avail then
+        SASL_rotated_center_img_xcenter_aligned(ECAM_FCTL_rudder_img, size[1]/2+1, size[2]/2 - 135, 43, 155, Table_interpolate(rudder_anim, params.rudder), 0, -155, FBW.fctl.RUD.RUD_STAT.mechanical and ECAM_GREEN or ECAM_ORANGE)
     else
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2+2, size[2]/2-250, "XX", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
-    if FBW.fctl.surfaces.rud.lim.data_avail then
-        SASL_rotated_center_img_xcenter_aligned(ECAM_FCTL_left_rudder_lim_img,  size[1]/2+1, size[2]/2 - 150, 43, 155, Table_interpolate(rudder_lim_anim, -get(Rudder_travel_lim)),  4, -160, FBW.fctl.surfaces.rud.lim.controlled and ECAM_GREEN or ECAM_ORANGE)
-        SASL_rotated_center_img_xcenter_aligned(ECAM_FCTL_right_rudder_lim_img, size[1]/2+1, size[2]/2 - 150, 43, 155, Table_interpolate(rudder_lim_anim,  get(Rudder_travel_lim)), -4, -160, FBW.fctl.surfaces.rud.lim.controlled and ECAM_GREEN or ECAM_ORANGE)
+    if FBW.fctl.RUD.LIM_STAT.data_avail then
+        SASL_rotated_center_img_xcenter_aligned(ECAM_FCTL_left_rudder_lim_img,  size[1]/2+1, size[2]/2 - 150, 43, 155, Table_interpolate(rudder_lim_anim, -get(Rudder_travel_lim)),  4, -160, FBW.fctl.RUD.LIM_STAT.controlled and ECAM_GREEN or ECAM_ORANGE)
+        SASL_rotated_center_img_xcenter_aligned(ECAM_FCTL_right_rudder_lim_img, size[1]/2+1, size[2]/2 - 150, 43, 155, Table_interpolate(rudder_lim_anim,  get(Rudder_travel_lim)), -4, -160, FBW.fctl.RUD.LIM_STAT.controlled and ECAM_GREEN or ECAM_ORANGE)
     end
-    if FBW.fctl.surfaces.rud.trim.data_avail then
-        SASL_rotated_center_img_xcenter_aligned(ECAM_FCTL_rudder_trim_img, size[1]/2+1, size[2]/2 - 150, 43, 155, Table_interpolate(rudder_lim_anim, Math_clamp(get(Rudder_trim_target_angle), -get(Rudder_travel_lim), get(Rudder_travel_lim))), 0, -160, FBW.fctl.surfaces.rud.trim.controlled and ECAM_BLUE or ECAM_ORANGE)
+    if FBW.fctl.RUD.TRIM_STAT.data_avail then
+        SASL_rotated_center_img_xcenter_aligned(ECAM_FCTL_rudder_trim_img, size[1]/2+1, size[2]/2 - 150, 43, 155, Table_interpolate(rudder_lim_anim, Math_clamp(get(Rudder_trim_target_angle), -get(Rudder_travel_lim), get(Rudder_travel_lim))), 0, -160, FBW.fctl.RUD.TRIM_STAT.controlled and ECAM_BLUE or ECAM_ORANGE)
     else
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2+2, size[2]/2-320, "XX", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end

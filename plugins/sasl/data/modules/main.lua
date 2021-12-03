@@ -96,7 +96,6 @@ components = {
   fire_eng_apu {},
   fire_cargo {},
 
-  FCTL_main {},
   FBW_main {},
   AUTOFLT_main {},
 
