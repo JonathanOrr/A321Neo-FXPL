@@ -72,7 +72,7 @@ FBW.fctl.control.SPLR = function (lateral_input, spdbrk_input, ground_spoilers_m
     local ROLL_SPLR_THRESHOLD = {0.1, 0.1, 0.3, 0.1, 0.1}--amount of sidestick deflection needed to trigger the roll spoilers
 
     --constant speeds--
-    local SPLR_TOTAL_MAX_DEF = {40, 40, 40, 40, 40}
+    local SPLR_TOTAL_MAX_DEF = {50, 50, 50, 50, 50}
     local SPLR_ROLL_MAX_DEF = {0, 35, 7, 35, 35}
     local SPLR_SPDBRK_MAX_DEF = FBW.fctl.control.SPLR_COMMON.SPLR_SPDBRK_MAX_DEF
 
@@ -183,8 +183,8 @@ FBW.fctl.control.SPLR = function (lateral_input, spdbrk_input, ground_spoilers_m
     elseif get(Ground_spoilers_mode) == 2 then
         L_SPLR_ROLL_TGT = {0, 0, 0, 0, 0}
         R_SPLR_ROLL_TGT = {0, 0, 0, 0, 0}
-        L_SPLR_SPDBRK_TGT = {40, 40, 40, 40, 40}
-        R_SPLR_SPDBRK_TGT = {40, 40, 40, 40, 40}
+        L_SPLR_SPDBRK_TGT = {50, 50, 50, 50, 50}
+        R_SPLR_SPDBRK_TGT = {50, 50, 50, 50, 50}
     end
 
     --ROLL DIRECT LAW------------------------------------------------------------------------------------------------

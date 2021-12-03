@@ -63,7 +63,7 @@ local SPLR_FAIL_DATAREF_TBL = {
         FAILURE_FCTL_RSPOIL_5,
     },
 }
-local SPLR_MAX_DEF   = 40   -- in °
+local SPLR_MAX_DEF   = 50   -- in °
 local MAX_STROKE_SPD = 99   -- in mm
 local SPLR_STROKE    = 84   -- in mm
 local STALL_LOAD     = 4.54 -- 10kN
