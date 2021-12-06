@@ -9,18 +9,18 @@ addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/F_CTL/RUD")
 
 --initialise flight controls
 set(Override_control_surfaces, 1)
-set(Speedbrake_handle_ratio, 0)
+set(SPDBRK_HANDLE_RATIO, 0)
 set(THS_DEF, 0)
 
 function onPlaneLoaded()
     set(Override_control_surfaces, 1)
-    set(Speedbrake_handle_ratio, 0)
+    set(SPDBRK_HANDLE_RATIO, 0)
     set(THS_DEF, 0)
 end
 
 function onAirportLoaded()
     set(Override_control_surfaces, 1)
-    set(Speedbrake_handle_ratio, 0)
+    set(SPDBRK_HANDLE_RATIO, 0)
     set(THS_DEF, 0)
 end
 

@@ -29,7 +29,7 @@ local function GND_SPLR_CTL()
     Thrust_levers_idled_prev = BoolToNum(get(Cockpit_throttle_lever_L) >= THR_IDLE_START and get(Cockpit_throttle_lever_L) <= THR_IDLE_END and get(Cockpit_throttle_lever_R) >= THR_IDLE_START and get(Cockpit_throttle_lever_R) <= THR_IDLE_END)
 
     --check if ground spoilers are armed
-    set(Ground_spoilers_armed, BoolToNum(get(Speedbrake_handle_ratio) <= -0.25))
+    set(Ground_spoilers_armed, BoolToNum(get(SPDBRK_HANDLE_RATIO) <= -0.25))
 
     --partial extension--
     if get(Either_Aft_on_ground) == 1 and get(Aft_wheel_on_ground) == 0 and (get(Cockpit_throttle_lever_L) <= -0.1 or get(Cockpit_throttle_lever_R) == -0.1) then
@@ -68,7 +68,7 @@ local function GND_SPLR_CTL()
         end
 
         --speedbrake handle in extended position and flaps is larger and equal to config 3
-        if Both_MLG_on_ground_delta == 1 and get(Speedbrake_handle_ratio) > 0.1 and get(Cockpit_throttle_lever_L) <= THR_IDLE_END and get(Cockpit_throttle_lever_R) <= THR_IDLE_END and get(Flaps_internal_config) >= 4 then
+        if Both_MLG_on_ground_delta == 1 and get(SPDBRK_HANDLE_RATIO) > 0.1 and get(Cockpit_throttle_lever_L) <= THR_IDLE_END and get(Cockpit_throttle_lever_R) <= THR_IDLE_END and get(Flaps_internal_config) >= 4 then
             set(Ground_spoilers_mode, 2)
             set(Ground_spoilers_act_method, 2)--a special case
         end
@@ -82,7 +82,7 @@ local function GND_SPLR_CTL()
     end
 
     if get(Ground_spoilers_act_method) == 2 then
-        if get(Speedbrake_handle_ratio) > -0.25 and get(Speedbrake_handle_ratio) <= 0.1 then
+        if get(SPDBRK_HANDLE_RATIO) > -0.25 and get(SPDBRK_HANDLE_RATIO) <= 0.1 then
             set(Ground_spoilers_mode, 0)
             set(Ground_spoilers_act_method, 0)
         end

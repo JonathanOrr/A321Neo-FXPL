@@ -78,7 +78,7 @@ Message_TOLDG_CABIN = {
 
 Message_TOLDG_SPLRS = {
     text = function(self)
-        if (get(Speedbrake_handle_ratio) < 0) then
+        if (get(SPDBRK_HANDLE_RATIO) < 0) then
             return "    SPLRS ARM"
         else
             return "    SPLRS.............ARM"
@@ -86,7 +86,7 @@ Message_TOLDG_SPLRS = {
     end,
 
     color = function(self)
-        if (get(Speedbrake_handle_ratio) < 0) then
+        if (get(SPDBRK_HANDLE_RATIO) < 0) then
             return COL_INDICATION
         else
             return COL_ACTIONS
@@ -332,7 +332,7 @@ local Message_CONFIG_TAKEOFF_SPDBRK = {
             return COL_WARNING
     end,
     is_active = function(self)
-      return get(Speedbrake_handle_ratio) > 0
+      return get(SPDBRK_HANDLE_RATIO) > 0
     end
 }
 

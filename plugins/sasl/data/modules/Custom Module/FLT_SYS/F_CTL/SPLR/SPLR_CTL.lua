@@ -145,7 +145,7 @@ local function SPLR_CTL(lateral_input, spdbrk_input, ground_spoilers_mode, in_au
     end
 
     --SPEEDBRAKES INHIBITION-----------------------------------------------------------------------------------------
-    if get(Speedbrake_handle_ratio) >= 0 and get(Speedbrake_handle_ratio) <= 0.1 then
+    if get(SPDBRK_HANDLE_RATIO) >= 0 and get(SPDBRK_HANDLE_RATIO) <= 0.1 then
         set(Speedbrakes_inhibited, 0)
     end
 
@@ -250,5 +250,5 @@ end
 
 function update()
     FBW.fctl.control.SPLR_COMMON.COMPUTE_SPDBRK_MAX_DEF()
-    SPLR_CTL(get(FBW_roll_output), get(Speedbrake_handle_ratio), false)
+    SPLR_CTL(get(FBW_roll_output), get(SPDBRK_HANDLE_RATIO), false)
 end

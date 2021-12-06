@@ -562,8 +562,6 @@ Print_mixed_fac_input =                 createGlobalPropertyi("a321neo/dynamics/
 Debug_FBW_law_reconfig = 				createGlobalPropertyi("a321neo/dynamics/FBW/debug/debug_FBW_law_reconfig", 0, false, true, false)
 Debug_FBW_ABN_LAW_RESET = 				createGlobalPropertyi("a321neo/dynamics/FBW/debug/abnormal_law_reset", 0, false, true, false)
 --customizations
-Project_square_input = 		  createGlobalPropertyi("a321neo/dynamics/FBW/customizations/projected_square_input", 0, false, true, false)
-Trim_wheel_smoothing_on = 	  createGlobalPropertyi("a321neo/dynamics/FBW/customizations/trim_wheel_smoothing_on", 1, false, true, false)--is the trim wheel is smoothed
 FBW_mode_transition_version = createGlobalPropertyi("a321neo/dynamics/FBW/customizations/mode_transition_version", 0, false, true, false)--0 slower transitions and flare mode at 100RA(default on newer aircraft), 1 faster transitions and flare mode at 50RA
 --inputs--
 Sidesitck_dual_input = createGlobalPropertyi("a321neo/dynamics/FBW/inputs_priority/sidesitck_dual_input", 0, false, true, false)
@@ -572,24 +570,31 @@ Priority_left =  createGlobalPropertyi("a321neo/dynamics/FBW/inputs_priority/pri
 Priority_right = createGlobalPropertyi("a321neo/dynamics/FBW/inputs_priority/priority_right", 0, false, true, false)
 Capt_sidestick_disabled = createGlobalPropertyi("a321neo/dynamics/FBW/inputs_priority/capt_sidestick_disabled", 0, false, true, false)
 Fo_sidestick_disabled =   createGlobalPropertyi("a321neo/dynamics/FBW/inputs_priority/fo_sidestick_disabled", 0, false, true, false)
-Capt_Roll =  globalProperty("sim/joystick/yoke_roll_ratio")
-Capt_Pitch = globalProperty("sim/joystick/yoke_pitch_ratio")
-Fo_Roll =  globalProperty("sim/cockpit2/weapons/gun_offset_heading_ratio")
-Fo_Pitch = globalProperty("sim/cockpit2/weapons/gun_offset_pitch_ratio")
-Yaw =   globalProperty("sim/joystick/yoke_heading_ratio")
-AUTOFLT_roll =  createGlobalPropertyf("a321neo/dynamics/FBW/inputs/autoflight_roll", 0, false, true, false)
-AUTOFLT_pitch = createGlobalPropertyf("a321neo/dynamics/FBW/inputs/autoflight_pitch", 0, false, true, false)
-AUTOFLT_yaw =   createGlobalPropertyf("a321neo/dynamics/FBW/inputs/autoflight_yaw", 0, false, true, false)
-Capt_sidestick_roll =   createGlobalPropertyf("a321neo/dynamics/FBW/inputs/capt_sidestick_roll", 0, false, true, false)
-Capt_sidestick_pitch =  createGlobalPropertyf("a321neo/dynamics/FBW/inputs/capt_sidestick_pitch", 0, false, true, false)
-Fo_sidestick_roll =     createGlobalPropertyf("a321neo/dynamics/FBW/inputs/fo_sidestick_roll", 0, false, true, false)
-Fo_sidestick_pitch =    createGlobalPropertyf("a321neo/dynamics/FBW/inputs/fo_sidestick_pitch", 0, false, true, false)
-Total_sidestick_roll =  createGlobalPropertyf("a321neo/dynamics/FBW/inputs/total_sidestick_roll", 0, false, true, false)
-Total_sidestick_pitch = createGlobalPropertyf("a321neo/dynamics/FBW/inputs/total_sidestick_pitch", 0, false, true, false)
+
+XP_CAPT_X = globalProperty("sim/joystick/yoke_roll_ratio")
+XP_CAPT_Y = globalProperty("sim/joystick/yoke_pitch_ratio")
+XP_FO_X   = globalProperty("sim/cockpit2/weapons/gun_offset_heading_ratio")
+XP_FO_Y   = globalProperty("sim/cockpit2/weapons/gun_offset_pitch_ratio")
+XP_YAW    = globalProperty("sim/joystick/yoke_heading_ratio")
+
+AUTOFLT_OUTPUT_P       = createGlobalPropertyf("a321neo/dynamics/AUTOFLY/outputs/P", 0, false, true, false)
+AUTOFLT_OUTPUT_Q       = createGlobalPropertyf("a321neo/dynamics/AUTOFLY/outputs/Q", 0, false, true, false)
+AUTOFLT_OUTPUT_C_STAR  = createGlobalPropertyf("a321neo/dynamics/AUTOFLY/outputs/C_STAR", 0, false, true, false)
+AUTOFLT_OUTPUT_VS      = createGlobalPropertyf("a321neo/dynamics/AUTOFLY/outputs/VS", 0, false, true, false)
+AUTOFLT_OUTPUT_R       = createGlobalPropertyf("a321neo/dynamics/AUTOFLY/outputs/R", 0, false, true, false)
+AUTOFLT_OUTPUT_PHI_DOT = createGlobalPropertyf("a321neo/dynamics/AUTOFLY/outputs/PHI_DOT", 0, false, true, false)
+
+CAPT_SSTICK_X =   createGlobalPropertyf("a321neo/dynamics/FBW/inputs/capt_sidestick_roll", 0, false, true, false)
+CAPT_SSTICK_Y =  createGlobalPropertyf("a321neo/dynamics/FBW/inputs/capt_sidestick_pitch", 0, false, true, false)
+FO_SSTICK_X =     createGlobalPropertyf("a321neo/dynamics/FBW/inputs/fo_sidestick_roll", 0, false, true, false)
+FO_SSTICK_Y =    createGlobalPropertyf("a321neo/dynamics/FBW/inputs/fo_sidestick_pitch", 0, false, true, false)
+TOT_SSTICK_X =  createGlobalPropertyf("a321neo/dynamics/FBW/inputs/total_sidestick_roll", 0, false, true, false)
+TOT_SSTICK_Y = createGlobalPropertyf("a321neo/dynamics/FBW/inputs/total_sidestick_pitch", 0, false, true, false)
+
 Total_input_roll =  createGlobalPropertyf("a321neo/dynamics/FBW/inputs/total_input_roll", 0, false, true, false)
 Total_input_pitch = createGlobalPropertyf("a321neo/dynamics/FBW/inputs/total_input_pitch", 0, false, true, false)
 Total_input_yaw =   createGlobalPropertyf("a321neo/dynamics/FBW/inputs/total_input_yaw", 0, false, true, false)
-Speedbrake_handle_ratio = globalProperty("sim/cockpit2/controls/speedbrake_ratio")
+SPDBRK_HANDLE_RATIO = globalProperty("sim/cockpit2/controls/speedbrake_ratio")
 --outputs--
 FBW_roll_output =  createGlobalPropertyf("a321neo/dynamics/FBW/outputs/fbw_roll_output", 0, false, true, false)
 FBW_pitch_output = createGlobalPropertyf("a321neo/dynamics/FBW/outputs/fbw_pitch_output", 0, false, true, false)

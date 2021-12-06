@@ -32,7 +32,7 @@ MessageGroup_GND_SPEEDBRAKES = {
     -- Method to check if this message group is active
     is_active = function(self)
         -- Not showed when any memo is active
-        return get(Speedbrake_handle_ratio) < 0 and get(EWD_is_to_memo_showed) == 0 and get(EWD_is_ldg_memo_showed) == 0
+        return get(SPDBRK_HANDLE_RATIO) < 0 and get(EWD_is_to_memo_showed) == 0 and get(EWD_is_ldg_memo_showed) == 0
     end,
 
     -- Method to check if this message is currently inhibithed
@@ -71,7 +71,7 @@ MessageGroup_GND_SPLRS_NOT_ARMED = {
     sd_page = nil,
 
     is_active = function()
-        return get(Speedbrake_handle_ratio) >= 0 and get(Gear_handle) > 0 and get(Capt_ra_alt_ft) <= 500 and get(EWD_flight_phase) == PHASE_FINAL
+        return get(SPDBRK_HANDLE_RATIO) >= 0 and get(Gear_handle) > 0 and get(Capt_ra_alt_ft) <= 500 and get(EWD_flight_phase) == PHASE_FINAL
     end,
 
     is_inhibited = function()
@@ -109,7 +109,7 @@ MessageGroup_SPD_BRK_STILL_OUT = {
 
     is_active = function()
         local limit = get(Eng_N1_idle) + 5
-        return get(Speedbrake_handle_ratio) > 0.05 and (get(Eng_1_N1) > limit or get(Eng_2_N1) > limit)
+        return get(SPDBRK_HANDLE_RATIO) > 0.05 and (get(Eng_1_N1) > limit or get(Eng_2_N1) > limit)
     end,
 
     is_inhibited = function()

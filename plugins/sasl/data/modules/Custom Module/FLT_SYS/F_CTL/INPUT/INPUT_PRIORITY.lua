@@ -8,15 +8,15 @@ local priority_left_delta = 0
 local priority_right_delta = 0
 
 local function priority_indications()
-    set(Sidesitck_dual_input, BoolToNum(get(Priority_left) + get(Priority_right) == 0 and get(Capt_sidestick_roll) + get(Capt_sidestick_pitch) ~= 0 and get(Fo_sidestick_roll) + get(Fo_sidestick_pitch) ~= 0))
+    set(Sidesitck_dual_input, BoolToNum(get(Priority_left) + get(Priority_right) == 0 and get(CAPT_SSTICK_X) + get(CAPT_SSTICK_Y) ~= 0 and get(FO_SSTICK_X) + get(FO_SSTICK_Y) ~= 0))
 
     --update timers--
-    if ((get(Fo_sidestick_disabled) == 1 or get(Priority_left) == 1) and get(Fo_sidestick_roll) + get(Fo_sidestick_pitch) ~= 0) or get(Sidesitck_dual_input) == 1 then
+    if ((get(Fo_sidestick_disabled) == 1 or get(Priority_left) == 1) and get(FO_SSTICK_X) + get(FO_SSTICK_Y) ~= 0) or get(Sidesitck_dual_input) == 1 then
         Capt_green_light_timer = Math_cycle(Capt_green_light_timer + get(DELTA_TIME), 0, 1)
     else
         Capt_green_light_timer = 0
     end
-    if ((get(Capt_sidestick_disabled) == 1 or get(Priority_right) == 1) and get(Capt_sidestick_roll) + get(Capt_sidestick_pitch) ~= 0) or get(Sidesitck_dual_input) == 1 then
+    if ((get(Capt_sidestick_disabled) == 1 or get(Priority_right) == 1) and get(CAPT_SSTICK_X) + get(CAPT_SSTICK_Y) ~= 0) or get(Sidesitck_dual_input) == 1 then
         Fo_green_light_timer = Math_cycle(Fo_green_light_timer + get(DELTA_TIME), 0, 1)
     else
         Fo_green_light_timer = 0

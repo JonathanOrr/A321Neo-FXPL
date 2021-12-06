@@ -50,40 +50,40 @@ end
 
     -- Step 1: compute delta
     local delta_x, delta_z, delta_l
-    if FBW.rates.Yaw.prev_x then
-        delta_x = curr_x - FBW.rates.Yaw.prev_x
-        delta_z = curr_z - FBW.rates.Yaw.prev_z
+    if FBW.rates.XP_YAW.prev_x then
+        delta_x = curr_x - FBW.rates.XP_YAW.prev_x
+        delta_z = curr_z - FBW.rates.XP_YAW.prev_z
     else
         delta_x = 0
         delta_z = 0
-        FBW.rates.Yaw.prev_x = curr_x
-        FBW.rates.Yaw.prev_z = curr_z
+        FBW.rates.XP_YAW.prev_x = curr_x
+        FBW.rates.XP_YAW.prev_z = curr_z
     end
 
     -- Step 2: compute theta
     local pi = math.pi
     local theta = math.atan2(delta_z, delta_x) + pi
     
-    if FBW.rates.Yaw.prev_theta == nil then
-        FBW.rates.Yaw.prev_theta = theta
+    if FBW.rates.XP_YAW.prev_theta == nil then
+        FBW.rates.XP_YAW.prev_theta = theta
     end
 
-    local prev_theta = FBW.rates.Yaw.prev_theta
+    local prev_theta = FBW.rates.XP_YAW.prev_theta
 
     -- Step 3: 
     if get(DELTA_TIME) > 0 then
         if prev_theta > pi and theta < pi and (prev_theta - theta) > pi then
-            FBW.rates.Yaw.x = (2*pi + theta - prev_theta) / get(DELTA_TIME)
+            FBW.rates.XP_YAW.x = (2*pi + theta - prev_theta) / get(DELTA_TIME)
         elseif prev_theta < pi and theta > pi and (theta - prev_theta) > pi then
-            FBW.rates.Yaw.x = (theta - prev_theta - 2*pi) / get(DELTA_TIME)
+            FBW.rates.XP_YAW.x = (theta - prev_theta - 2*pi) / get(DELTA_TIME)
         else
-            FBW.rates.Yaw.x = (theta - prev_theta) / get(DELTA_TIME)
+            FBW.rates.XP_YAW.x = (theta - prev_theta) / get(DELTA_TIME)
         end
-        FBW.rates.Yaw.x = math.deg(FBW.rates.Yaw.x)
+        FBW.rates.XP_YAW.x = math.deg(FBW.rates.XP_YAW.x)
 
-        FBW.rates.Yaw.prev_x = curr_x
-        FBW.rates.Yaw.prev_z = curr_z
-        FBW.rates.Yaw.prev_theta = theta
+        FBW.rates.XP_YAW.prev_x = curr_x
+        FBW.rates.XP_YAW.prev_z = curr_z
+        FBW.rates.XP_YAW.prev_theta = theta
     end
 
 

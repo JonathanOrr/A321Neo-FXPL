@@ -2,7 +2,7 @@ FBW.yaw.controllers = {
     yaw_damper_PD = {
         output = 0,
         control = function ()
-            --Yaw damper control
+            --XP_YAW damper control
             FBW.yaw.controllers.yaw_damper_PD.output = FBW_PID_BP(
                 FBW_PID_arrays.FBW_YAW_DAMPER_PID,
                 FBW.yaw.inputs.damper_input(adirs_get_avg_roll(), adirs_get_avg_tas()),

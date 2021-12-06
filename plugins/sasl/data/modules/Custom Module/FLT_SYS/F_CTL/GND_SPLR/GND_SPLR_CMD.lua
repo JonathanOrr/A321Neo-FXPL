@@ -7,13 +7,13 @@ local LVR_POS = {
 }
 
 local function More_speedbrakes(phase)
-    local LVR_POS_KEY = Round(get(Speedbrake_handle_ratio) * 4) + 1
+    local LVR_POS_KEY = Round(get(SPDBRK_HANDLE_RATIO) * 4) + 1
 
     if phase == SASL_COMMAND_BEGIN then
-        if get(Speedbrake_handle_ratio) < 0 then
-            set(Speedbrake_handle_ratio, 0)
+        if get(SPDBRK_HANDLE_RATIO) < 0 then
+            set(SPDBRK_HANDLE_RATIO, 0)
         else
-            set(Speedbrake_handle_ratio, LVR_POS[Math_clamp_higher(LVR_POS_KEY + 1, 5)])
+            set(SPDBRK_HANDLE_RATIO, LVR_POS[Math_clamp_higher(LVR_POS_KEY + 1, 5)])
         end
     end
 
@@ -21,13 +21,13 @@ local function More_speedbrakes(phase)
 end
 
 local function Less_speedbrakes(phase)
-    local LVR_POS_KEY = Round(get(Speedbrake_handle_ratio) * 4) + 1
+    local LVR_POS_KEY = Round(get(SPDBRK_HANDLE_RATIO) * 4) + 1
 
     if phase == SASL_COMMAND_BEGIN then
-        if get(Speedbrake_handle_ratio) <= 0 then
-            set(Speedbrake_handle_ratio, -0.5)
-        elseif get(Speedbrake_handle_ratio) > 0 then
-            set(Speedbrake_handle_ratio, LVR_POS[Math_clamp_lower(LVR_POS_KEY - 1, 1)])
+        if get(SPDBRK_HANDLE_RATIO) <= 0 then
+            set(SPDBRK_HANDLE_RATIO, -0.5)
+        elseif get(SPDBRK_HANDLE_RATIO) > 0 then
+            set(SPDBRK_HANDLE_RATIO, LVR_POS[Math_clamp_lower(LVR_POS_KEY - 1, 1)])
         end
     end
 
@@ -36,7 +36,7 @@ end
 
 local function Max_speedbrakes(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(Speedbrake_handle_ratio, 1)
+        set(SPDBRK_HANDLE_RATIO, 1)
     end
 
     return 0--inhibites the x-plane original command
@@ -44,7 +44,7 @@ end
 
 local function Min_speedbrakes(phase)
     if phase == SASL_COMMAND_BEGIN then
-        set(Speedbrake_handle_ratio, 0)
+        set(SPDBRK_HANDLE_RATIO, 0)
     end
 
     return 0--inhibites the x-plane original command
