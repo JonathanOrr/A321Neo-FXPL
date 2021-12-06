@@ -106,7 +106,6 @@ components = {
     FLT_computer_cmd {},
     ELACs {},
     SECs  {},
-    FACs  {},
     SFCCs {},
     FCDCs {},
 }
@@ -115,8 +114,6 @@ function update()
     updateAll(components)
     FBW.FLT_computer.common.main.Startup(FBW.FLT_computer.ELAC)
     FBW.FLT_computer.common.main.Button_status(FBW.FLT_computer.ELAC)
-    FBW.FLT_computer.common.main.Startup(FBW.FLT_computer.FAC)
-    FBW.FLT_computer.common.main.Button_status(FBW.FLT_computer.FAC)
     FBW.FLT_computer.common.main.Startup(FBW.FLT_computer.SEC)
     FBW.FLT_computer.common.main.Button_status(FBW.FLT_computer.SEC)
 

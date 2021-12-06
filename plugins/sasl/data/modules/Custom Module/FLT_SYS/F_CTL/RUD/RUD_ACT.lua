@@ -5,7 +5,7 @@ local MAX_STROKE_SPD = 110  -- in mm/s
 local RUD_STROKE     = 110  -- in mm
 local STALL_LOAD     = 4.43 -- 10kN
 local RUD_CURR_SPD   = 0
-local RUD_TBL = FBW.fctl.RUD.RUD_STAT
+local RUD_TBL = FBW.fctl.RUD.STAT
 local RUD_NO_HYD_SPD = 8    -- in °/s
 local NO_HYD_RECTR_TAS = 100 -- in kts
 
@@ -115,7 +115,7 @@ FBW.fctl.RUD.ACT = function (REQ_DEF)
     RUD_CURR_SPD = Set_linear_anim_value(RUD_CURR_SPD, TGT_SPD, -200, 200, A_rud)
 
     -- 7: Finally compute actuator value and set the surface position
-    if RUD_TBL.mechanical then
+    if RUD_TBL.controlled then
         -- Normal situation
         local ACTUATOR_VALUE = CURR_mm + RUD_CURR_SPD * (1 - RUD_STUCK) * get(DELTA_TIME)  -- DO NOT use the set_anim_linear here: the speed can be negative!
         ACTUATOR_VALUE = Math_clamp(ACTUATOR_VALUE, -RUD_STROKE, RUD_STROKE)

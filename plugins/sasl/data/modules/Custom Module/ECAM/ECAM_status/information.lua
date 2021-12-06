@@ -266,8 +266,8 @@ end },
             get(FAILURE_ADR[1]) == 1 or get(FAILURE_ADR[2]) == 1 or get(FAILURE_ADR[3]) == 1 or
             adirs_pfds_disagree_on_ias() or
             get(DC_bus_1_pwrd) == 0 and get(DC_bus_2_pwrd) == 0 or
-            not FBW.fctl.RUD.TRIM_STAT.controlled --fcom 4423
-            or not FBW.fctl.RUD.LIM_STAT.controlled --fcom 4429
+            not FBW.fctl.RUD.STAT.controlled --fcom 4423
+            or not FBW.fctl.RUD.STAT.controlled --fcom 4429
            )
            and not
            -- Put CAT2 conditions here

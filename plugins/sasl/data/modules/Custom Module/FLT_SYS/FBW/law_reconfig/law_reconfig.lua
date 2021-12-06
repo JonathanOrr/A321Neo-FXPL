@@ -16,43 +16,34 @@ function FBW_law_reconfiguration(var_table)
                           not FBW.fctl.SPLR.STAT.R[4].controlled and
                           not FBW.fctl.SPLR.STAT.R[5].controlled
 
-    local ALL_SEC_FAIL = get(SEC_1_status) == 0 and get(SEC_2_status) == 0 and get(SEC_3_status) == 0
-
-
     local reconfiguration_conditions = {
         --ALT(NO PROTECTION), DIRECT, ALT
         {
             {adirs_how_many_adrs_work() >= 2 and adirs_adr_params_disagree(), "DOUBLE ADR NOT SELF DETECTED (IAS/MACH) DISAGREE"},
             {adirs_how_many_adrs_work() == 0, "TRIPLE ADR FAILURE"},
-            {get(SFCC_1_status) == 0 and get(SFCC_2_status) == 0, "DOUBLE SFCC FAILURE"},
-            {get(Hydraulic_G_press) < 1450 and get(Hydraulic_B_press) < 1450, "GREEN AND BLUE HYDRAULIC FAILURE"},
+            {get(SFCC_1_status) == 0 and get(SFCC_2_status) == 0, "DOUBLE SFCC SLAT CHANNEL FAILURE"},
+            {get(Hydraulic_G_press) < 1450 and get(Hydraulic_B_press) < 1450, "DOUBLE HYD FAILURE (G+B)"},
         },
 
         --ALT(REDUCED PROTECTION), DIRECT, ALT
         {
             {adirs_how_many_adrs_work() == 1, "DOUBLE SELF DETECTED ADR FAILURE"},
-            {adirs_how_many_aoa_working() <= 1 or adirs_aoa_disagree(), "AOA DISAGREEMENT/FAILURE NRM LAW PROT IMPOSSIBLE"},
+            {adirs_how_many_aoa_working() >= 2 and adirs_aoa_disagree(), "DOUBLE NOT SELF DETECTED ADR FAILURE OR AOA DISAGREE"},
             {get(ELAC_1_status) == 0 and get(ELAC_2_status) == 0, "DOUBLE ELAC FAILURE"},
             {not FBW.fctl.AIL.STAT.L.controlled and not FBW.fctl.AIL.STAT.R.controlled, "DOUBLE AILERON FAILURE"},
             {not FBW.fctl.THS.STAT.controlled and not FBW.fctl.THS.STAT.mechanical, "THS JAMMED"},
-            {get(ELAC_2_status) == 0 and get(Hydraulic_B_press) < 1450, "ELAC 2 AND BLUE HYDRAULIC FAILURE"},
-            {get(ELAC_1_status) == 0 and get(Hydraulic_G_press) < 1450, "ELAC 1 AND GREEN HYDRAULIC FAILURE"},
-            {get(ELAC_1_status) == 0 and get(Hydraulic_Y_press) < 1450, "ELAC 1 AND YELLOW HYDRAULIC FAILURE"},
-            {not FBW.fctl.ELEV.STAT.L.controlled or not FBW.fctl.ELEV.STAT.R.controlled, "SINGLE ELEVATOR FAILURE"},
+            {get(ELAC_2_status) == 0 and get(Hydraulic_B_press) < 1450, "ELAC 2 + BLUE HYD FAILURE"},
+            {get(ELAC_1_status) == 0 and get(Hydraulic_G_press) < 1450, "ELAC 1 + GREEN HYD FAILURE"},
+            {get(ELAC_1_status) == 0 and get(Hydraulic_Y_press) < 1450, "ELAC 1 + YELLOW HYD FAILURE"},
+            {not FBW.fctl.ELEV.STAT.L.controlled or not FBW.fctl.ELEV.STAT.R.controlled, "ONE ELEVATOR FAILURE"},
             --MSSING SIDESTICK FAILURE
             {adirs_how_many_irs_fully_work() == 1, "DOUBLE SELF DETECTED IR FAILURE"},
+            {get(Hydraulic_G_press) < 1450 and get(Hydraulic_Y_press) < 1450, "DOUBLE HYD FAILURE (G+Y)"},
             {ALL_SPLR_FAIL, "ALL SPOILERS FAILURE"},
-            {ALL_SEC_FAIL, "TRIPLE SEC FAILURE"},
+            {get(SEC_1_status) == 0 and get(SEC_2_status) == 0, "DOUBLE SEC FAILURE"},
         },
 
-        --ALT(REDUCED PROTECTION), DIRECT, MECHANICAL
-        {
-            {get(FAC_1_status) == 0 and get(FAC_2_status) == 0, "DOUBLE FAC FAILURE (FAC 1 TRANSIENT)"},
-            {get(Hydraulic_G_press) < 1450 and get(Hydraulic_Y_press) < 1450, "HYDRAULIC G + Y FAILURE"},
-            {not FBW.fctl.RUD.RUD_STAT.controlled, "YAW DAMPER FAILURE"},
-        },
-
-        --DIRECT, DIRECT, MECHANICAL
+        --DIRECT, DIRECT, DIRECT
         {
             {adirs_how_many_irs_fully_work() >= 2 and adirs_ir_disagree(), "DOUBLE NOT SELF DECTED IR FAILURE/DISAGREE"},
             {FBW.FLT_computer.ELAC[1].IR_reset_pending or FBW.FLT_computer.ELAC[2].IR_reset_pending, "AWAITING ELAC 1 + 2 RESET FOR NOT SELF DECTED IR FAILURE/DISAGREE"},
@@ -61,7 +52,7 @@ function FBW_law_reconfiguration(var_table)
 
         --DIRECT, DIRECT, ALT
         {
-            {((get(Wheel_status_LGCIU_1) == 0 and get(Wheel_status_LGCIU_2) == 0) or ALL_SEC_FAIL) and get(Flaps_internal_config) >= 3, "LGCIU 1 + 2 OR SEC 1 + 2 + 3 FAILURE AND FLAPS >= CONFIG 2"},
+            {((get(Wheel_status_LGCIU_1) == 0 and get(Wheel_status_LGCIU_2) == 0) or (get(SEC_1_status) == 0 and get(SEC_2_status) == 0)) and get(Flaps_internal_config) >= 3, "LGCIU 1 + 2 OR SEC 1 + 2 + 3 FAILURE AND FLAPS >= CONFIG 2"},
         },
     }
 
@@ -98,21 +89,16 @@ function FBW_law_reconfiguration(var_table)
     end
 
     --start with normal law then degrade
-    set(FBW_total_control_law,  3)
-    set(FBW_lateral_law,        3)
-    set(FBW_vertical_law,       3)
-    set(FBW_yaw_law,            3)
+    set(FBW_total_control_law,  FBW_NORMAL_LAW)
+    set(FBW_lateral_law,        FBW_NORMAL_LAW)
+    set(FBW_vertical_law,       FBW_NORMAL_LAW)
+    set(FBW_yaw_law,            FBW_NORMAL_LAW)
     set(FBW_alt_to_direct_law,  0)
     set(FBW_ABN_LAW_TRIM_INHIB, 0)
 
-    --pitch law priority order 2 --> 3 --> 1 --> 5 --> 4
+    --Pitch law priority order 2 --> 1 --> 4 --> 3
     for i = 1, #reconfiguration_conditions[2] do
         if reconfiguration_conditions[2][i][1] then
-            set(FBW_vertical_law, FBW_ALT_REDUCED_PROT_LAW)
-        end
-    end
-    for i = 1, #reconfiguration_conditions[3] do
-        if reconfiguration_conditions[3][i][1] then
             set(FBW_vertical_law, FBW_ALT_REDUCED_PROT_LAW)
         end
     end
@@ -127,30 +113,25 @@ function FBW_law_reconfiguration(var_table)
             set(FBW_ABN_LAW_TRIM_INHIB, 1)
         end
     end
-    for i = 1, #reconfiguration_conditions[5] do
-        if reconfiguration_conditions[5][i][1] then
-            set(FBW_vertical_law, FBW_DIRECT_LAW)
-        end
-    end
     for i = 1, #reconfiguration_conditions[4] do
         if reconfiguration_conditions[4][i][1] then
             set(FBW_vertical_law, FBW_DIRECT_LAW)
         end
     end
-
-    --roll law priority order  1 <=> 2 <=> 3 <=> 5 --> 4
-    for i = 1, #reconfiguration_conditions[1] do
-        if reconfiguration_conditions[1][i][1] then
-            set(FBW_lateral_law, FBW_DIRECT_LAW)
+    for i = 1, #reconfiguration_conditions[3] do
+        if reconfiguration_conditions[3][i][1] then
+            set(FBW_vertical_law, FBW_DIRECT_LAW)
         end
     end
+
+    --Roll law priority order 2 <=> 1 <=> 4 -> 3
     for i = 1, #reconfiguration_conditions[2] do
         if reconfiguration_conditions[2][i][1] then
             set(FBW_lateral_law, FBW_DIRECT_LAW)
         end
     end
-    for i = 1, #reconfiguration_conditions[3] do
-        if reconfiguration_conditions[3][i][1] then
+    for i = 1, #reconfiguration_conditions[1] do
+        if reconfiguration_conditions[1][i][1] then
             set(FBW_lateral_law, FBW_DIRECT_LAW)
         end
     end
@@ -160,18 +141,18 @@ function FBW_law_reconfiguration(var_table)
     if var_table.ABNRM_TO_NORM_TIME < 18 then
         set(FBW_lateral_law, FBW_ABNORMAL_LAW)
     end
-    for i = 1, #reconfiguration_conditions[5] do
-        if reconfiguration_conditions[5][i][1] then
-            set(FBW_lateral_law, FBW_DIRECT_LAW)
-        end
-    end
     for i = 1, #reconfiguration_conditions[4] do
         if reconfiguration_conditions[4][i][1] then
             set(FBW_lateral_law, FBW_DIRECT_LAW)
         end
     end
+    for i = 1, #reconfiguration_conditions[3] do
+        if reconfiguration_conditions[3][i][1] then
+            set(FBW_lateral_law, FBW_DIRECT_LAW)
+        end
+    end
 
-    --yaw law priority order   2 <=> 1 <=> 5 --> 3 --> 4
+    --Yaw law priority order 2 <=> 1 <=> 4 --> 3
     for i = 1, #reconfiguration_conditions[2] do
         if reconfiguration_conditions[2][i][1] then
             set(FBW_yaw_law, FBW_ALT_NO_PROT_LAW)
@@ -182,25 +163,20 @@ function FBW_law_reconfiguration(var_table)
             set(FBW_yaw_law, FBW_ALT_NO_PROT_LAW)
         end
     end
-    for i = 1, #reconfiguration_conditions[5] do
-        if reconfiguration_conditions[5][i][1] then
-            set(FBW_yaw_law, FBW_ALT_NO_PROT_LAW)
-        end
-    end
     if var_table.ABN_LAW_WAS_ACTIVE then
         set(FBW_yaw_law, FBW_ALT_NO_PROT_LAW)
     end
     if var_table.ABNRM_TO_NORM_TIME < 18 then
         set(FBW_yaw_law, FBW_ABNORMAL_LAW)
     end
-    for i = 1, #reconfiguration_conditions[3] do
-        if reconfiguration_conditions[3][i][1] then
-            set(FBW_yaw_law, FBW_MECHANICAL_BACKUP_LAW)
-        end
-    end
     for i = 1, #reconfiguration_conditions[4] do
         if reconfiguration_conditions[4][i][1] then
-            set(FBW_yaw_law, FBW_MECHANICAL_BACKUP_LAW)
+            set(FBW_yaw_law, FBW_DIRECT_LAW)
+        end
+    end
+    for i = 1, #reconfiguration_conditions[3] do
+        if reconfiguration_conditions[2][i][1] then
+            set(FBW_yaw_law, FBW_DIRECT_LAW)
         end
     end
 
@@ -237,8 +213,7 @@ function FBW_law_reconfiguration(var_table)
         local colum_reconfig = {
             "----------------------------------------------------ALT(NO PROTECTION)--DIRECT---------ALT",
             "-----------------------------------------------ALT(REDUCED PROTECTION)--DIRECT---------ALT",
-            "-----------------------------------------------ALT(REDUCED PROTECTION)--DIRECT--MECHANICAL",
-            "----------------------------------------------------------------DIRECT--DIRECT--MECHANICAL",
+            "----------------------------------------------------------------DIRECT--DIRECT------DIRECT",
             "----------------------------------------------------------------DIRECT--DIRECT---------ALT",
         }
 

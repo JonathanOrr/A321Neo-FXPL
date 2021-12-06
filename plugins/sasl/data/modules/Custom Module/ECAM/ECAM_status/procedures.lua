@@ -258,7 +258,7 @@ local proc_messages = {
             return
             get(FAILURE_FCTL_FAC_1) == 1 and
             get(FAILURE_FCTL_FAC_2) == 1 or
-            not FBW.fctl.RUD.LIM_STAT.controlled
+            not FBW.fctl.RUD.STAT.controlled
         end
     },
     {
@@ -284,7 +284,7 @@ local proc_messages = {
         indent_lvl = 0,
         cond = function()
             return
-            not FBW.fctl.RUD.LIM_STAT.controlled
+            not FBW.fctl.RUD.STAT.controlled
         end
     },
     {
@@ -294,7 +294,7 @@ local proc_messages = {
         indent_lvl = 0, 
         cond = function()
             return
-            not FBW.fctl.RUD.LIM_STAT.controlled
+            not FBW.fctl.RUD.STAT.controlled
         end
     },
     {
@@ -304,7 +304,7 @@ local proc_messages = {
         indent_lvl = 0,
         cond = function()
             return
-            not FBW.fctl.RUD.LIM_STAT.controlled
+            not FBW.fctl.RUD.STAT.controlled
         end
     },
     {
@@ -314,7 +314,7 @@ local proc_messages = {
         indent_lvl = 1, 
         cond = function()
             return
-            not FBW.fctl.RUD.LIM_STAT.controlled
+            not FBW.fctl.RUD.STAT.controlled
         end
     },
     

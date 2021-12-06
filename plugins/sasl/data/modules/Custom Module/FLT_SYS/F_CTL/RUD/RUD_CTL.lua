@@ -12,7 +12,7 @@ local function RUD_CTL(yaw_input, trim_input, resetting_trim)
     local rudder_travel_target = Table_interpolate(rudder_travel_target_table, yaw_input)
 
     --RUDDER LIMITS--
-    if get(Force_full_rudder_limit) ~= 1 and FBW.fctl.RUD.LIM_STAT.controlled then
+    if get(Force_full_rudder_limit) ~= 1 and FBW.fctl.RUD.STAT.controlled then
         if get(Slats) == 0 then
             set(Rudder_travel_lim, Set_linear_anim_value(get(Rudder_travel_lim), -22.1 * math.sqrt(1 - ( (Math_clamp(adirs_get_avg_ias(), 160, 380) - 380) / 220)^2 ) + 25, 0, max_rudder_def, rudder_trim_speed))
         end
@@ -35,7 +35,7 @@ local function RUD_CTL(yaw_input, trim_input, resetting_trim)
     end
 
     --IF RUDDER IS ELECTRICALLY CONTROLLED--
-    if FBW.fctl.RUD.TRIM_STAT.controlled then
+    if FBW.fctl.RUD.STAT.controlled then
         if resetting_trim == 0 then--apply human input
             set(Rudder_trim_target_angle, Math_clamp(get(Rudder_trim_target_angle) + trim_input * rudder_trim_speed * get(DELTA_TIME), -20, 20))
             set(Human_rudder_trim, 0)

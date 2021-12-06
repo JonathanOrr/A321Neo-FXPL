@@ -194,7 +194,7 @@ function update()
 
     --VLS & stall speeds(configuration dependent)
     --on liftoff for 5 seconds the Aprot value is the same as Amax(FCOM 1.27.20.P4 or DSC 27-20-10-20 P4/6)
-    if ALPHA_SPD_update_timer >= ALPHA_SPD_update_time_s then
+    --[[if ALPHA_SPD_update_timer >= ALPHA_SPD_update_time_s then
         --update the delayed speeds
         local FAC_1_MON_AVAIL = FBW.FLT_computer.FAC[1].MON_CHANEL_avail()
         local FAC_2_MON_AVAIL = FBW.FLT_computer.FAC[2].MON_CHANEL_avail()
@@ -223,5 +223,5 @@ function update()
 
         --reset timer
         ALPHA_SPD_update_timer = 0
-    end
+    end]]
 end
