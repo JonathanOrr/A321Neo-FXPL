@@ -151,7 +151,7 @@ local function SPLR_CTL(lateral_input, spdbrk_input, ground_spoilers_mode, in_au
 
     --lacking upon a.prot toga [and restoring speedbrake avail by reseting the lever position]
     if get(Bypass_speedbrakes_inhibition) ~= 1 then
-        if get(SEC_1_status) == 0 and get(SEC_3_status) == 0 then
+        if get(SEC_1_status) == 0 and get(SEC_2_status) == 0 then
             set(Speedbrakes_inhibited, 1)
         end
         if not FBW.fctl.ELEV.STAT.L.controlled or not FBW.fctl.ELEV.STAT.R.controlled then

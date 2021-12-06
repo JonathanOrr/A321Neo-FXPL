@@ -678,11 +678,11 @@ FBW_LAF_DEGRADED_SPLR_5 = createGlobalPropertyi("a321neo/dynamics/FBW/system_sta
 --flight computers status
 ELAC_1_status = createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/elac_1_status", 1, false, true, false)--elevator aileron computer(protection outputs)
 ELAC_2_status = createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/elac_2_status", 1, false, true, false)
-FAC_1_status = 	createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/fac_1_status",  1, false, true, false)--flight augmentation computer(speeds calculations)
-FAC_2_status = 	createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/fac_2_status",  1, false, true, false)
-SEC_1_status = 	createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/sec_1_status",  1, false, true, false)--spolier and elevator computer
-SEC_2_status = 	createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/sec_2_status",  1, false, true, false)
-SEC_3_status = 	createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/sec_3_status",  1, false, true, false)
+FAC_1_status  =	createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/fac_1_status",  1, false, true, false)--flight augmentation computer(speeds calculations)
+FAC_2_status  =	createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/fac_2_status",  1, false, true, false)
+SEC_1_status  =	createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/sec_1_status",  1, false, true, false)--spolier and elevator computer
+SEC_2_status  =	createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/sec_2_status",  1, false, true, false)
+BCM_status    =	createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/bcm_status",    1, false, true, false)
 SFCC_1_status = createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/sfcc_1_status", 1, false, true, false)--slats flaps control computer
 SFCC_2_status = createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/sfcc_2_status", 1, false, true, false)
 FCDC_1_status = createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/fcdc_1_status", 1, false, true, false)--slats flaps control computer

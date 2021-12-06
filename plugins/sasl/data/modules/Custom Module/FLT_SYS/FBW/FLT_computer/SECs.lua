@@ -47,28 +47,4 @@ FBW.FLT_computer.SEC = {
             return get(DC_bus_2_pwrd) == 1
         end
     },
-    [3] = {
-        Start_timer = 0,
-        Test_time = function ()
-            local TEST_TIME = 1.5
-            local TIMER_MAX = 10
-            return TEST_TIME, TIMER_MAX
-        end,
-        Button_address = PB.ovhd.flt_ctl_sec_3,
-        Status_dataref = SEC_3_status,
-        Button_dataref = SEC_3_off_button,
-        Last_computer_status = 0,
-        Last_button_status = 0,
-        Last_power_status = 0,
-        Transient_str_time = 0,
-        Transient_end_time = 0,
-        Transient_reset_required = false,
-        Transient_reset_pending = false,
-        IR_reset_required = false,
-        IR_reset_pending = false,
-        Failure_dataref = FAILURE_FCTL_SEC_3,
-        Power = function ()
-            return get(DC_bus_2_pwrd) == 1
-        end
-    },
 }

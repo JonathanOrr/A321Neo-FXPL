@@ -1,8 +1,9 @@
 FBW.fctl.RUD.STAT = {
     controlled = true,
+    bkup_ctl   = true,
     data_avail = true,
     total_hyd_press = 0,
-    failure_dataref = FAILURE_FCTL_RUDDER_MECH,
+    failure_dataref = FAILURE_FCTL_RUDDER,
     hyd_sys = {
         Hydraulic_G_press,
         Hydraulic_B_press,
@@ -13,6 +14,7 @@ FBW.fctl.RUD.STAT = {
         {SEC_2_status,  Hydraulic_Y_press},
         {ELAC_1_status, Hydraulic_B_press},
         {SEC_1_status,  Hydraulic_B_press},
+        {BCM_status,    Hydraulic_Y_press},
     }
 }
 
@@ -43,6 +45,15 @@ local function COMPUTE_RUDDER_STAT(RUDDER_TABLE)
         RUDDER_TABLE.total_hyd_press = RUDDER_TABLE.total_hyd_press + get(RUDDER_TABLE.hyd_sys[i])
     end
 
+    --compute backup control status--
+    if ACTIVE_CTL_PAIRS == 1 and
+       get(RUDDER_TABLE.computer_priority[#RUDDER_TABLE.computer_priority][1]) == 1 and
+       get(RUDDER_TABLE.computer_priority[#RUDDER_TABLE.computer_priority][2]) >= 1450 then
+        RUDDER_TABLE.bkup_ctl = true
+    else
+        RUDDER_TABLE.bkup_ctl = false
+    end
+
     --see if data of the surface is available--
     if ACTIVE_COMPUTER >= 1 and (get(FCDC_1_status) == 1 or get(FCDC_2_status) == 1) then
         RUDDER_TABLE.data_avail = true
@@ -54,6 +65,7 @@ local function COMPUTE_RUDDER_STAT(RUDDER_TABLE)
     if get(Print_rud_status) == 1 then
         print("RUDDER: ")
         print("CONTROLLED:   " .. tostring(RUDDER_TABLE.controlled))
+        print("BKUP CTL:     " .. tostring(RUDDER_TABLE.bkup_ctl))
         print("DATA AVIAL:   " .. tostring(RUDDER_TABLE.data_avail))
         print("ACT PAIR:     " .. ACTIVE_CTL_PAIRS)
         print("ACT COMPUTER: " .. ACTIVE_COMPUTER)

@@ -108,6 +108,7 @@ components = {
     SECs  {},
     SFCCs {},
     FCDCs {},
+    BCM   {},
 }
 
 function update()
@@ -119,4 +120,5 @@ function update()
 
     FBW.FLT_computer.common.misc.Startup(FBW.FLT_computer.SFCC)
     FBW.FLT_computer.common.misc.Startup(FBW.FLT_computer.FCDC)
+    FBW.FLT_computer.common.misc.Startup(FBW.FLT_computer.BCM)
 end

@@ -539,7 +539,7 @@ MessageGroup_FCTL_GND_SPLR_5_FAULT = {
     sd_page = ECAM_PAGE_FCTL,
 
     is_active = function()
-        return get(SEC_2_status) == 0 and get(SEC_1_status) + get(SEC_2_status) + get(SEC_3_status) >= 2
+        return false --get(SEC_2_status) == 0 and get(SEC_1_status) + get(SEC_2_status) + get(SEC_3_status) >= 2
     end,
 
     is_inhibited = function()
@@ -571,28 +571,28 @@ MessageGroup_FCTL_GND_SPLR_1234_FAULT = {
                 return "      GND SPLR 1+2 FAULT"
             end,
             color = function() return COL_CAUTION end,
-            is_active = function() return get(SEC_3_status) == 0 and get(SEC_1_status) == 1 and get(SEC_2_status) == 1 end
+            is_active = function() return false end --get(SEC_3_status) == 0 and get(SEC_1_status) == 1 and get(SEC_2_status) == 1 end
         },
         {
             text = function()
                 return "      GND SPLR 3+4 FAULT"
             end,
             color = function() return COL_CAUTION end,
-            is_active = function() return get(SEC_1_status) == 0 and get(SEC_3_status) == 1 and get(SEC_2_status) == 1 end
+            is_active = function() return false end --get(SEC_1_status) == 0 and get(SEC_3_status) == 1 and get(SEC_2_status) == 1 end
         },
         {
             text = function()
                 return "      GND SPLR FAULT"
             end,
             color = function() return COL_CAUTION end,
-            is_active = function() return get(SEC_1_status) + get(SEC_2_status) + get(SEC_3_status) < 2 end
+            is_active = function() return false end--get(SEC_1_status) + get(SEC_2_status) + get(SEC_3_status) < 2 end
         }
     },
 
     sd_page = ECAM_PAGE_FCTL,
 
     is_active = function()
-        return get(SEC_3_status) == 0 or get(SEC_1_status) == 0
+        return false --get(SEC_3_status) == 0 or get(SEC_1_status) == 0
     end,
 
     is_inhibited = function()

@@ -100,17 +100,6 @@ function update_consumptions()
     if get(SEC_2_status) == 1 then
         ELEC_sys.add_power_consumption(ELEC_BUS_DC_2, 0.5, 0.5)
     end
-    if get(SEC_3_status) == 1 then
-        ELEC_sys.add_power_consumption(ELEC_BUS_DC_2, 0.5, 0.5)
-    end   
-    if get(FAC_1_status) == 1 then
-       ELEC_sys.add_power_consumption(ELEC_BUS_DC_ESS_SHED, 0.5, 0.5)
-       ELEC_sys.add_power_consumption(ELEC_BUS_AC_ESS, 0.05, 0.05)
-    end
-    if get(FAC_2_status) == 1 then
-       ELEC_sys.add_power_consumption(ELEC_BUS_DC_2, 0.5, 0.5)
-       ELEC_sys.add_power_consumption(ELEC_BUS_AC_2, 0.05, 0.05)
-    end
     -- Flap and slats ocmputer
     ELEC_sys.add_power_consumption(ELEC_BUS_DC_ESS, 0.5, 0.5)
     ELEC_sys.add_power_consumption(ELEC_BUS_DC_2, 0.5, 0.5)

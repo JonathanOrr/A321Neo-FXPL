@@ -204,9 +204,8 @@ end
         or
         (get(FBW_total_control_law) == FBW_ALT_REDUCED_PROT_LAW or get(FBW_total_control_law) == FBW_ALT_NO_PROT_LAW)
         or 
-        get(FAILURE_FCTL_SEC_1) == 1 and --fcom 5207
-        get(FAILURE_FCTL_SEC_2) == 1 and
-        get(FAILURE_FCTL_SEC_3) == 1
+        (get(FAILURE_FCTL_SEC_1) == 1 and --fcom 5207
+        get(FAILURE_FCTL_SEC_2) == 1)
         or
         Y_is_low_pressure() and B_is_low_pressure() and --B+Y LO PR
             not Y_is_low_level() and not B_is_low_level() or

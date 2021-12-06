@@ -6,7 +6,7 @@ FBW.fctl.SPLR.STAT = {
             total_hyd_press = 0,
             failure_dataref = FAILURE_FCTL_LSPOIL_1,
             hyd_sys = Hydraulic_G_press,
-            computer = SEC_3_status,
+            computer = ELAC_2_status,
         },
         [2]  = {
             controlled = true,
@@ -14,7 +14,7 @@ FBW.fctl.SPLR.STAT = {
             total_hyd_press = 0,
             failure_dataref = FAILURE_FCTL_LSPOIL_2,
             hyd_sys = Hydraulic_Y_press,
-            computer = SEC_3_status,
+            computer = SEC_2_status,
         },
         [3]  = {
             controlled = true,
@@ -48,7 +48,7 @@ FBW.fctl.SPLR.STAT = {
             total_hyd_press = 0,
             failure_dataref = FAILURE_FCTL_RSPOIL_1,
             hyd_sys = Hydraulic_G_press,
-            computer = SEC_3_status,
+            computer = ELAC_2_status,
         },
         [2]  = {
             controlled = true,
@@ -56,7 +56,7 @@ FBW.fctl.SPLR.STAT = {
             total_hyd_press = 0,
             failure_dataref = FAILURE_FCTL_RSPOIL_2,
             hyd_sys = Hydraulic_Y_press,
-            computer = SEC_3_status,
+            computer = SEC_2_status,
         },
         [3]  = {
             controlled = true,

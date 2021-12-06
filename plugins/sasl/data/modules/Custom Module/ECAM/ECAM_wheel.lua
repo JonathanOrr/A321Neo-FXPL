@@ -289,22 +289,22 @@ local function draw_wheel_page_spoilers()
     for i = 1, num_of_spoilers do
         if l_spoilers_data_avail[i] then
             if get(l_spoiler_dataref[i]) > 2.5 then
-                SASL_draw_img_xcenter_aligned(ECAM_FCTL_spoiler_arrow_img, size[1]/2 - spoiler_arrow_x_y[i][1], spoiler_arrow_x_y[i][2], 28, 50, l_spoilers_avail[i] and ECAM_GREEN or ECAM_ORANGE)
-            else
-                if not l_spoilers_avail[i] then
-                    sasl.gl.drawText(Font_AirbusDUL, size[1]/2 - spoiler_num_x_y[i][1], spoiler_num_x_y[i][2], i, 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
-                end
+                SASL_draw_img_xcenter_aligned(l_spoilers_avail[i] and ECAM_FCTL_splr_arrow_img or ECAM_FCTL_splr_arrow_fault_img, size[1]/2 - spoiler_arrow_x_y[i][1], spoiler_arrow_x_y[i][2], 22, 56, l_spoilers_avail[i] and ECAM_GREEN or ECAM_ORANGE)
+            end
+
+            if not l_spoilers_avail[i] then
+                sasl.gl.drawText(Font_AirbusDUL, size[1]/2 - spoiler_num_x_y[i][1], spoiler_num_x_y[i][2], i, 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
             end
         else
             sasl.gl.drawText(Font_AirbusDUL, size[1]/2 - spoiler_num_x_y[i][1], spoiler_num_x_y[i][2], "X", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
         end
         if r_spoilers_data_avail[i] then
             if get(r_spoiler_dataref[i]) > 2.5 then
-                SASL_draw_img_xcenter_aligned(ECAM_FCTL_spoiler_arrow_img, size[1]/2 + spoiler_arrow_x_y[i][1], spoiler_arrow_x_y[i][2], 28, 50, r_spoilers_avail[i] and ECAM_GREEN or ECAM_ORANGE)
-            else
-                if not r_spoilers_avail[i] then
-                    sasl.gl.drawText(Font_AirbusDUL, size[1]/2 + spoiler_num_x_y[i][1], spoiler_num_x_y[i][2], i, 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
-                end
+                SASL_draw_img_xcenter_aligned(r_spoilers_avail[i] and ECAM_FCTL_splr_arrow_img or ECAM_FCTL_splr_arrow_fault_img, size[1]/2 + spoiler_arrow_x_y[i][1], spoiler_arrow_x_y[i][2], 22, 56, r_spoilers_avail[i] and ECAM_GREEN or ECAM_ORANGE)
+            end
+
+            if not r_spoilers_avail[i] then
+                sasl.gl.drawText(Font_AirbusDUL, size[1]/2 + spoiler_num_x_y[i][1], spoiler_num_x_y[i][2], i, 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
             end
         else
             sasl.gl.drawText(Font_AirbusDUL, size[1]/2 + spoiler_num_x_y[i][1], spoiler_num_x_y[i][2], "X", 30, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)

@@ -115,7 +115,7 @@ local function draw_autobrakes()
     update_deleceration()
 
     local status_mode = "OK"
-    if get(SEC_1_status) + get(SEC_2_status) + get(SEC_3_status) < 2 then
+    if get(SEC_1_status) + get(SEC_2_status) < 2 then
         status_mode = "SEC FAIL"
     end
     

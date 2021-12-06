@@ -79,7 +79,7 @@ end
 
 FBW.fctl.RUD.ACT = function (REQ_DEF)
     local DEF_DATAREF = Rudder_total
-    local RUD_STUCK   = get(FAILURE_FCTL_RUDDER_MECH)
+    local RUD_STUCK   = get(FAILURE_FCTL_RUDDER)
     local CURR_DEF    = get(DEF_DATAREF)
     local CURR_mm     = rud_deg2mm(CURR_DEF)
     local REQ_mm      = rud_deg2mm(REQ_DEF)

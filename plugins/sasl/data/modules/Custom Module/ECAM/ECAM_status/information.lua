@@ -61,17 +61,8 @@ local inf_messages = {
            (ADIRS_sys[ADIRS_1].ir_status ~= IR_STATUS_FAULT and ADIRS_sys[ADIRS_2].ir_status == IR_STATUS_FAULT and ADIRS_sys[ADIRS_3].ir_status == IR_STATUS_FAULT)
     end },
 
-    { text="BOTH PFD ON SAME FAC", cond=function() return
-       (
-           (get(FAC_1_status) == 0 and get(FAC_2_status) == 0) and get(EWD_flight_phase) >= PHASE_ABOVE_80_KTS and get(EWD_flight_phase) <= PHASE_BELOW_80_KTS or
-           get(FAILURE_ADR[2]) == 1 and get(FAILURE_ADR[3]) == 1 or 
-           get(FAILURE_ADR[1]) == 1 and get(FAILURE_ADR[3]) == 1 or
-           get(DC_bus_1_pwrd) == 0 and get(DC_bus_2_pwrd) == 0 or
-           get(DC_ess_bus_pwrd) == 0)
-           and not 
-           (
-              get(FAILURE_FCTL_FAC_1) == 1 and get(FAILURE_FCTL_FAC_2) == 1
-           )
+    { text="BOTH PFD ON SAME FAC", cond=function()
+       return false
     end },
 
     { text="FMS PRED UNRELIABLE", cond=function() return
@@ -231,7 +222,7 @@ end },
            get(FAILURE_radioalt_cap) == 1
        ) and not
        (
-              get(FAILURE_FCTL_FAC_1) == 1 and get(FAILURE_FCTL_FAC_2) == 1
+              false
        )
     end },
 
@@ -275,7 +266,7 @@ end },
            get(FAILURE_HYD_G_low_air) == 1 and get(FAILURE_HYD_Y_low_air) or-- IT DOES NOT APPEAR ON DUAL HYD LOW PR
            get(FAILURE_HYD_G_low_air) == 1 and get(FAILURE_HYD_B_low_air) or
            get(FAILURE_HYD_Y_low_air) == 1 and get(FAILURE_HYD_B_low_air) or
-           get(FAILURE_FCTL_FAC_1) == 1 and get(FAILURE_FCTL_FAC_2) == 1 --fcom 4412
+           false --fcom 4412
            )
     end },
 
