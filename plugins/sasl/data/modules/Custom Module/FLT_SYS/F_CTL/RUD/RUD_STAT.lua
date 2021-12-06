@@ -65,7 +65,7 @@ FBW.fctl.RUD.RUD_STAT = {
     }
 }
 
-local COMPUTE_MOTOR_STAT = function (fctl_table)
+local function COMPUTE_MOTOR_STAT(fctl_table)
     for key, value in pairs(fctl_table) do
         if get(Print_rud_status) == 1 then
             print(key .. " MOT:")
@@ -85,7 +85,7 @@ local COMPUTE_MOTOR_STAT = function (fctl_table)
     end
 end
 
-local COMPUTE_LIM_TRIM_STAT = function (LIM_TRIM_table) --TODO: LIMIT FAILS WITH ADR
+local function COMPUTE_LIM_TRIM_STAT(LIM_TRIM_table) --TODO: LIMIT FAILS WITH ADR
     local ACTIVE_CTL_PAIRS = 0
     local ACTIVE_MON = 0
     for i = 1, #LIM_TRIM_table.computer_priority do
@@ -122,7 +122,7 @@ local COMPUTE_LIM_TRIM_STAT = function (LIM_TRIM_table) --TODO: LIMIT FAILS WITH
     end
 end
 
-local COMPUTE_RUDDER_STAT = function (RUDDER_TABLE)
+local function COMPUTE_RUDDER_STAT(RUDDER_TABLE)
     local ACTIVE_CTL_PAIRS = 0
     local ACTIVE_MON = 0
     for i = 1, #RUDDER_TABLE.computer_priority do

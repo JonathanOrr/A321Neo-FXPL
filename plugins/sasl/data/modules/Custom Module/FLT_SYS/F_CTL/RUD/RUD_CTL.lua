@@ -1,4 +1,4 @@
-FBW.fctl.control.RUD = function (yaw_input, trim_input, resetting_trim)
+local function RUD_CTL(yaw_input, trim_input, resetting_trim)
     --PROPERTIES--
     local max_rudder_def = 25
     local rudder_trim_speed = 1
@@ -68,5 +68,5 @@ end
 
 
 function update()
-    FBW.fctl.control.RUD(get(FBW_yaw_output), get(Human_rudder_trim), get(Resetting_rudder_trim))
+    RUD_CTL(get(FBW_yaw_output), get(Human_rudder_trim), get(Resetting_rudder_trim))
 end

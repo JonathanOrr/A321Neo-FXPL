@@ -37,7 +37,7 @@ FBW.fctl.ELEV.STAT = {
     },
 }
 
-FBW.fctl.ELEV.COMPUTE_STAT = function (fctl_table)
+local function COMPUTE_ELEV_STAT(fctl_table)
     local elev_sides = {
         {"L", "R"},
         {"R", "L"},
@@ -116,5 +116,5 @@ FBW.fctl.ELEV.COMPUTE_STAT = function (fctl_table)
 end
 
 function update()
-    FBW.fctl.ELEV.COMPUTE_STAT(FBW.fctl.ELEV.STAT)
+    COMPUTE_ELEV_STAT(FBW.fctl.ELEV.STAT)
 end

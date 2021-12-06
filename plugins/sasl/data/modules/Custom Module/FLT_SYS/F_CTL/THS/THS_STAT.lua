@@ -45,7 +45,7 @@ FBW.fctl.THS.STAT = {
     }
 }
 
-FBW.fctl.THS_MOTOR.COMPUTE_STAT = function (fctl_table)
+local function COMPUTE_THS_MOTOR_STAT(fctl_table)
     if get(Print_ths_status) == 1 then
         print(" ")
         print("MOTORS:")
@@ -63,7 +63,7 @@ FBW.fctl.THS_MOTOR.COMPUTE_STAT = function (fctl_table)
     end
 end
 
-FBW.fctl.THS.COMPUTE_STAT = function (THS_table, ELEV_table)
+local function COMPUTE_THS_STAT(THS_table, ELEV_table)
     local ACTIVE_CTL_PAIRS = 0
     local ACTIVE_COMPUTER = 0
     local ACTIVE_MOTOR = 0
@@ -137,7 +137,7 @@ FBW.fctl.THS.COMPUTE_STAT = function (THS_table, ELEV_table)
 end
 
 --ELAC 1 reset on ground, THS set to 0--
-FBW.fctl.THS.REST = function (THS_table, THS_POS_DATAREF)
+local function THS_REST(THS_table, THS_POS_DATAREF)
     if get(ELAC_1_status) - THS_table.last_ELAC_1_STAT == 1 then
         if get(All_on_ground) == 1 then
             set(THS_POS_DATAREF, 0)
@@ -147,7 +147,7 @@ FBW.fctl.THS.REST = function (THS_table, THS_POS_DATAREF)
 end
 
 function update()
-    FBW.fctl.THS_MOTOR.COMPUTE_STAT(FBW.fctl.THS_MOTOR.STAT)
-    FBW.fctl.THS.COMPUTE_STAT(FBW.fctl.THS.STAT, FBW.fctl.ELEV.STAT)
-    FBW.fctl.THS.REST(FBW.fctl.THS.STAT, Digital_THS_def_tgt)
+    COMPUTE_THS_MOTOR_STAT(FBW.fctl.THS_MOTOR.STAT)
+    COMPUTE_THS_STAT(FBW.fctl.THS.STAT, FBW.fctl.ELEV.STAT)
+    THS_REST(FBW.fctl.THS.STAT, Digital_THS_def_tgt)
 end

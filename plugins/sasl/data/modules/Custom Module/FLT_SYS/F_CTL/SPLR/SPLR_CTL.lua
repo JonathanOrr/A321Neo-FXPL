@@ -42,7 +42,7 @@ FBW.fctl.control.SPLR_COMMON = {
 -------------------------------------------------------------------------------
 -- ROLL SPOILERS & SPD BRAKES
 -------------------------------------------------------------------------------
-FBW.fctl.control.SPLR = function (lateral_input, spdbrk_input, ground_spoilers_mode, in_auto_flight)
+local function SPLR_CTL(lateral_input, spdbrk_input, ground_spoilers_mode, in_auto_flight)
     --during a touch and go one of the thrust levers has to be advanced beyond 20 degrees to disarm the spoilers
 
     --DATAREFS FOR SURFACES
@@ -250,5 +250,5 @@ end
 
 function update()
     FBW.fctl.control.SPLR_COMMON.COMPUTE_SPDBRK_MAX_DEF()
-    FBW.fctl.control.SPLR(get(FBW_roll_output), get(Speedbrake_handle_ratio), false)
+    SPLR_CTL(get(FBW_roll_output), get(Speedbrake_handle_ratio), false)
 end

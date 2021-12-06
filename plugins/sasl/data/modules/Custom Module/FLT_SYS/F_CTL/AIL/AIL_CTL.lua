@@ -1,4 +1,4 @@
-FBW.fctl.AIL.CTL = function (lateral_input)
+local function AIL_CTL(lateral_input)
     --surface range -25 up +25 down, 10 degrees droop with flaps(calculated by ELAC 1/2)
     local MAX_DEF = 25
 
@@ -41,5 +41,5 @@ FBW.fctl.AIL.CTL = function (lateral_input)
 end
 
 function update()
-    FBW.fctl.AIL.CTL(get(FBW_roll_output))
+    AIL_CTL(get(FBW_roll_output))
 end

@@ -1,7 +1,7 @@
 local Both_MLG_on_ground_prev = 1
 local Thrust_levers_idled_prev = 0
 
-FBW.fctl.GND_SPLR.CTL = function()
+local function GND_SPLR_CTL()
     --[[full extention with rejected takefoff: above 72kts, retard both throttles, if not armed one engine in reverse
     Full extesion landing: if armed all extends to full when both main gears touch down, if not armed when both main gear has touched down and one reverese selected then full extension,
     if speedbrakes are not retracted in config 3 or Full and all engine at idle, when both main gears touch down --> full extension
@@ -101,5 +101,5 @@ FBW.fctl.GND_SPLR.CTL = function()
 end
 
 function update()
-    FBW.fctl.GND_SPLR.CTL()
+    GND_SPLR_CTL()
 end

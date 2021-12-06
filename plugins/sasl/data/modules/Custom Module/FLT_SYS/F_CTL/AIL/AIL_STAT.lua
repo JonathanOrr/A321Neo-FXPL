@@ -29,7 +29,7 @@ FBW.fctl.AIL.STAT = {
     },
 }
 
-FBW.fctl.AIL.COMPUTE_STAT = function (fctl_table)
+local function COMPUTE_AIL_STAT(fctl_table)
     for key, value in pairs(fctl_table) do
         local ACTIVE_CTL_PAIRS = 0
         local ACTIVE_COMPUTER = 0
@@ -77,5 +77,5 @@ FBW.fctl.AIL.COMPUTE_STAT = function (fctl_table)
 end
 
 function update()
-    FBW.fctl.AIL.COMPUTE_STAT(FBW.fctl.AIL.STAT)
+    COMPUTE_AIL_STAT(FBW.fctl.AIL.STAT)
 end

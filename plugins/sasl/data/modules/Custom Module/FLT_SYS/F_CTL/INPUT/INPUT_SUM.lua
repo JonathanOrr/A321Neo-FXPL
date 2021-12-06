@@ -1,4 +1,4 @@
-FBW.fctl.INPUT.SUM = function ()
+local function SUM_INPUT()
 
     --raw input handling--
     set(Capt_sidestick_roll,  get(Capt_Roll)  * (1 - get(Capt_sidestick_disabled)))
@@ -30,5 +30,5 @@ FBW.fctl.INPUT.SUM = function ()
 end
 
 function update()
-    FBW.fctl.INPUT.SUM()
+    SUM_INPUT()
 end

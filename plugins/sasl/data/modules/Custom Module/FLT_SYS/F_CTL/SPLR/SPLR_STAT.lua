@@ -85,7 +85,7 @@ FBW.fctl.SPLR.STAT = {
     }
 }
 
-FBW.fctl.SPLR.COMPUTE_STAT = function (fctl_table)
+local function COMPUTE_SPLR_STAT(fctl_table)
     local splr_sides = {
         {"L", "R"},
         {"R", "L"},
@@ -138,5 +138,5 @@ FBW.fctl.SPLR.COMPUTE_STAT = function (fctl_table)
 end
 
 function update()
-    FBW.fctl.SPLR.COMPUTE_STAT(FBW.fctl.SPLR.STAT)
+    COMPUTE_SPLR_STAT(FBW.fctl.SPLR.STAT)
 end

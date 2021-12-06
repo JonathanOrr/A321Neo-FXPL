@@ -1,4 +1,4 @@
-FBW.fctl.ELEV.CTL = function (vertical_input)
+local function ELEV_CTL(vertical_input)
     local MAX_UP_DEF = -30
     local MAX_DN_DEF = 17
 
@@ -30,5 +30,5 @@ FBW.fctl.ELEV.CTL = function (vertical_input)
 end
 
 function update()
-    FBW.fctl.ELEV.CTL(get(FBW_pitch_output))
+    ELEV_CTL(get(FBW_pitch_output))
 end
