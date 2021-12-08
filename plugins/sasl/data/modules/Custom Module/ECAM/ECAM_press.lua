@@ -87,65 +87,65 @@ local function draw_press_info()
         color_alt = get_color_green_blinking()
     end
 
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-170, size[2]/2+150, Round_fill(params.delta_psi, 1), 40, false, false, TEXT_ALIGN_RIGHT, color_psi)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+140, size[2]/2+177, math.floor(params.cabin_vs-(params.cabin_vs%50)), 40, false, false, TEXT_ALIGN_RIGHT, color_vs)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]-50, size[2]/2+150, math.floor(params.cabin_alt-(params.cabin_alt%50)),40, false, false, TEXT_ALIGN_RIGHT, color_alt)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2-170, size[2]/2+150, Round_fill(params.delta_psi, 1), 40, true, false, TEXT_ALIGN_RIGHT, color_psi)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2+140, size[2]/2+177, math.floor(params.cabin_vs-(params.cabin_vs%50)), 40, true, false, TEXT_ALIGN_RIGHT, color_vs)
+    sasl.gl.drawText(Font_ECAMfont, size[1]-50, size[2]/2+150, math.floor(params.cabin_alt-(params.cabin_alt%50)),40, true, false, TEXT_ALIGN_RIGHT, color_alt)
 end
 
 local function draw_pack_indications()
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-304, 140, "PACK 1", 36, false, false, TEXT_ALIGN_CENTER, (get(Pack_L) == 0 and get(Engine_1_avail) == 1) and ECAM_ORANGE or ECAM_WHITE)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+330, 140, "PACK 2", 36, false, false, TEXT_ALIGN_CENTER, (get(Pack_R) == 0 and get(Engine_2_avail) == 1) and ECAM_ORANGE or ECAM_WHITE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2-304, 140, "PACK 1", 36, true, false, TEXT_ALIGN_CENTER, (get(Pack_L) == 0 and get(Engine_1_avail) == 1) and ECAM_ORANGE or ECAM_WHITE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2+330, 140, "PACK 2", 36, true, false, TEXT_ALIGN_CENTER, (get(Pack_R) == 0 and get(Engine_2_avail) == 1) and ECAM_ORANGE or ECAM_WHITE)
 end
 
 local function draw_valves_text()
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-205, 270, "INLET", 34, false, false, TEXT_ALIGN_CENTER, get(FAILURE_AVIONICS_INLET) == 1 and ECAM_ORANGE or ECAM_WHITE)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-10, 270, "OUTLET", 34, false, false, TEXT_ALIGN_CENTER, get(FAILURE_AVIONICS_OUTLET) == 1 and ECAM_ORANGE or ECAM_WHITE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2-205, 270, "INLET", 34, true, false, TEXT_ALIGN_CENTER, get(FAILURE_AVIONICS_INLET) == 1 and ECAM_ORANGE or ECAM_WHITE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2-10, 270, "OUTLET", 34, true, false, TEXT_ALIGN_CENTER, get(FAILURE_AVIONICS_OUTLET) == 1 and ECAM_ORANGE or ECAM_WHITE)
 
     local faulty_blower_or_extract = get(FAILURE_AIRCOND_VENT_BLOWER) == 1 or get(FAILURE_AIRCOND_VENT_EXTRACT) == 1 or get(Fire_cargo_fwd_smoke_detected) == 1
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-115, 330, "VENT", 34, false, false, TEXT_ALIGN_CENTER, faulty_blower_or_extract and ECAM_ORANGE or ECAM_WHITE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2-115, 330, "VENT", 34, true, false, TEXT_ALIGN_CENTER, faulty_blower_or_extract and ECAM_ORANGE or ECAM_WHITE)
 
     if get(FAILURE_AIRCOND_VENT_BLOWER) == 1 then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-240, 330, "BLOWER", 34, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-240, 330, "BLOWER", 34, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
     if get(FAILURE_AIRCOND_VENT_EXTRACT) == 1 or get(Fire_cargo_fwd_smoke_detected) == 1 then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+20, 330, "EXTRACT", 34, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+20, 330, "EXTRACT", 34, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
 end
 
 local function draw_ldg_elev()
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-100, size[2]-50, "LDG ELEV", 34, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2-100, size[2]-50, "LDG ELEV", 34, true, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
 
     if get(Press_ldg_elev_knob_pos) >= -2 then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+80, size[2]-50, "MAN", 34, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+80, size[2]-50, "MAN", 34, true, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
     else
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+80, size[2]-50, "AUTO", 34, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+80, size[2]-50, "AUTO", 34, true, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
     end
 
     if get(Press_mode_sel_is_man) == 0 then    -- Hide when MODE SEL NOT AUTO
         local selected = get(Press_ldg_elev_knob_pos) >= -2 and get(Press_ldg_elev_knob_pos)*1000 or 0 -- TODO ADD COMPUTED FROM MCDU HERE
         selected = selected - selected%50
-        sasl.gl.drawText(Font_AirbusDUL, size[1]-130, size[2]-50, "FT", 28, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]-150, size[2]-50, selected, 34, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        sasl.gl.drawText(Font_ECAMfont, size[1]-130, size[2]-50, "FT", 28, true, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]-150, size[2]-50, selected, 34, true, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     end
 end
 
 local function draw_sys_on()
 
     if get(Press_mode_sel_is_man) == 1 then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+160, 380, "MAN", 34, false, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+160, 380, "MAN", 34, true, false, TEXT_ALIGN_CENTER, ECAM_GREEN)
     end
     if get(Press_sys_in_use) == 1 or get(FAILURE_PRESS_SYS_1) == 1 then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-100, 450, "SYS 1", 34, false, false, TEXT_ALIGN_CENTER, get(FAILURE_PRESS_SYS_1) == 1 and ECAM_ORANGE or ECAM_GREEN)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-100, 450, "SYS 1", 34, true, false, TEXT_ALIGN_CENTER, get(FAILURE_PRESS_SYS_1) == 1 and ECAM_ORANGE or ECAM_GREEN)
     end
     if get(Press_sys_in_use) == 2 or get(FAILURE_PRESS_SYS_2) == 1 then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+100, 450, "SYS 2", 34, false, false, TEXT_ALIGN_CENTER, get(FAILURE_PRESS_SYS_2) == 1 and ECAM_ORANGE or ECAM_GREEN)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+100, 450, "SYS 2", 34, true, false, TEXT_ALIGN_CENTER, get(FAILURE_PRESS_SYS_2) == 1 and ECAM_ORANGE or ECAM_GREEN)
     end
 end
 
 local function draw_safety_valve()
     local is_open = get(Press_safety_valve_pos) == 1
 
-    sasl.gl.drawText(Font_AirbusDUL, size[1]-175, size[2]/2-15, "SAFETY", 34, false, false, TEXT_ALIGN_LEFT, is_open and ECAM_ORANGE or ECAM_WHITE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]-175, size[2]/2-15, "SAFETY", 34, true, false, TEXT_ALIGN_LEFT, is_open and ECAM_ORANGE or ECAM_WHITE)
 
     local length=58
     if is_open then
@@ -212,24 +212,24 @@ local function draw_press_bgd()
     sasl.gl.drawArc (size[1]/2+279, size[2]/2+190, 65, 75 , 137 , 3 , ECAM_WHITE)
     sasl.gl.drawArc (size[1]/2+279, size[2]/2+190, 65, 75 , 66 , 3 , ECAM_WHITE)
     sasl.gl.drawArc (size[1]/2+279, size[2]/2+190, 65, 75 , 210 , 3 , ECAM_WHITE)
-    drawTextCentered(Font_ECAMfont, 138, 861, "CAB PRESS", 44, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    sasl.gl.drawWideLine(264, 840, 18, 840, 4, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 138, 861, "CAB PRESS", 43, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawWideLine(264, 840, 18, 840, 3, ECAM_WHITE)
 
-    drawTextCentered(Font_ECAMfont, 180, 778, " P", 33, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 180, 778, " P", 33, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
     drawEmptyTriangle( 158, 770 , 175, 770, (158+175)/2, 791, 3 ,ECAM_WHITE)
-    drawTextCentered(Font_ECAMfont, 450, 778, "V/S", 33, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    drawTextCentered(Font_ECAMfont, 725, 778, "CAB ALT", 33, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    drawTextCentered(Font_ECAMfont, 180, 748, "PSI", 26, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
-    drawTextCentered(Font_ECAMfont, 450, 748, "FT/MIN", 26, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
-    drawTextCentered(Font_ECAMfont, 725, 748, "FT", 26, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    drawTextCentered(Font_ECAMfont, 450, 778, "V/S", 33, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 725, 778, "CAB ALT", 33, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 180, 748, "PSI", 26, true, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    drawTextCentered(Font_ECAMfont, 450, 748, "FT/MIN", 26, true, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    drawTextCentered(Font_ECAMfont, 725, 748, "FT", 26, true, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
 
-    drawTextCentered(Font_ECAMfont, 131, 615, "0", 21, false, false, TEXT_ALIGN_CENTER,  ECAM_WHITE)
-    drawTextCentered(Font_ECAMfont, 196, 690, "8", 21, false, false, TEXT_ALIGN_CENTER,  ECAM_WHITE)
-    drawTextCentered(Font_ECAMfont, 456, 587, "2", 21, false, false, TEXT_ALIGN_CENTER,  ECAM_WHITE)
-    drawTextCentered(Font_ECAMfont, 399, 639, "0", 21, false, false, TEXT_ALIGN_CENTER,  ECAM_WHITE)
-    drawTextCentered(Font_ECAMfont, 456, 694, "2", 21, false, false, TEXT_ALIGN_CENTER,  ECAM_WHITE)
-    drawTextCentered(Font_ECAMfont, 695, 600, "0", 21, false, false, TEXT_ALIGN_CENTER,  ECAM_WHITE)
-    drawTextCentered(Font_ECAMfont, 754, 679, "10", 21, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 131, 615, "0", 21, true, false, TEXT_ALIGN_CENTER,  ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 196, 690, "8", 21, true, false, TEXT_ALIGN_CENTER,  ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 456, 587, "2", 21, true, false, TEXT_ALIGN_CENTER,  ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 399, 639, "0", 21, true, false, TEXT_ALIGN_CENTER,  ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 456, 694, "2", 21, true, false, TEXT_ALIGN_CENTER,  ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 695, 600, "0", 21, true, false, TEXT_ALIGN_CENTER,  ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 754, 679, "10", 21, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
 
     sasl.gl.drawArc (695, 253, 101, 104 , 90 , 72 , ECAM_WHITE)
     sasl.gl.drawArc (695, 253, 104, 114 , 112 , 2 , ECAM_WHITE)

@@ -91,7 +91,6 @@ function PFD_draw_alt_tape(PFD_table)
 
     sasl.gl.drawRectangle(size[1]/2+217, size[2]/2-244, 75, 212, PFD_TAPE_GREY)
     sasl.gl.drawRectangle(size[1]/2+217, size[2]/2+19, 75, 210, PFD_TAPE_GREY)
-    sasl.gl.drawTexture(PFD_alt_shader, 667, 336, 76, 342, {1,1,1,PFD_SHADE_INTENSITY}) --The shader, ask Henrick if you don't know what is this
 
     local altitude = adirs_is_gps_alt_visible(PFD_table.Screen_ID) and adirs_get_gps_alt(PFD_table.Screen_ID) or adirs_get_alt(PFD_table.Screen_ID)
 
@@ -163,8 +162,8 @@ function PFD_draw_alt_ref(PFD_table)
 
     -- STD
     if qnh_status.mode == MODE_STD then
-        sasl.gl.drawText(Font_ECAMfont, 750, 120, "STD", 36, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
-        Sasl_DrawWideFrame(715, 117, 70, 35, 3, 1, {1., 1., 0.})
+        sasl.gl.drawText(Font_ECAMfont, 751, 121, "STD", 34, true, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+        Sasl_DrawWideFrame(715, 116, 70, 35, 2, 1, {1., 1., 0.})
         return
     end
 

@@ -35,10 +35,10 @@ end
 
 local function draw_cabin_vs()
     if get(All_on_ground) == 0 then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+150, size[2]-184, "V/S", 32, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+150, size[2]-184, "V/S", 32, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
         SASL_drawSegmentedImgColored(ECAM_DOOR_vs_arrows_img, size[1]/2+182, size[2]/2+264, 56, 27, 2, params.cabin_vs >= 0 and 1 or 2, ECAM_GREEN)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+327, size[2]-184, math.floor(params.cabin_vs), 36, false, false, TEXT_ALIGN_RIGHT, oxy_color)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+385, size[2]-184, "FT/MIN", 32, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+327, size[2]-184, math.floor(params.cabin_vs), 36, true, false, TEXT_ALIGN_RIGHT, oxy_color)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+385, size[2]-184, "FT/MIN", 32, true, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
     end
 end
 
@@ -53,7 +53,7 @@ end
 local function draw_oxygen()
 
     -- TODO fix color
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+250, size[2]-50, "CKPT OXY", 32, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2+250, size[2]-50, "CKPT OXY", 32, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
 
     oxy_color = ECAM_GREEN
     if get(Oxygen_ckpt_psi) < 300 then
@@ -61,7 +61,7 @@ local function draw_oxygen()
     elseif get(Oxygen_ckpt_psi) < 600 then
         oxy_color = get_color_green_blinking()
     end
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+300, size[2]-85, math.floor(params.oxygen_psi), 36, false, false, TEXT_ALIGN_RIGHT, oxy_color)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2+300, size[2]-85, math.floor(params.oxygen_psi), 36, true, false, TEXT_ALIGN_RIGHT, oxy_color)
 
     if params.oxygen_psi < 1000 and get(All_on_ground) == 1 then
         sasl.gl.drawWideLine(size[1]/2+210, size[2]-90, size[1]/2+305, size[2]-90, 3, ECAM_ORANGE)
@@ -69,7 +69,7 @@ local function draw_oxygen()
     end
 
     if get(FAILURE_OXY_REGUL_FAIL) == 1 then
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+270, size[2]-130, "REGUL LO PR", 36, false, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+270, size[2]-130, "REGUL LO PR", 36, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
 end
 
@@ -91,8 +91,8 @@ local function draw_door_page_textures()
 end
 
 local function draw_door_bgd()
-    drawTextCentered(Font_ECAMfont, 451, 852, "DOOR/OXY", 44, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
-    sasl.gl.drawWideLine(344, 830, 561, 830, 4, ECAM_WHITE)
+    drawTextCentered(Font_ECAMfont, 451, 852, "DOOR/OXY", 43, true, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
+    sasl.gl.drawWideLine(340, 830, 561, 830, 3, ECAM_WHITE)
 end
 
 function draw_door_page()

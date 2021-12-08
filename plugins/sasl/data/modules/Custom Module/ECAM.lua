@@ -16,6 +16,9 @@
 -- Short description: Main ECAM file 
 -------------------------------------------------------------------------------
 
+local Align_tool =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/alignment_tools/engine.png")
+
+
 position = {get(ECAM_displaying_position, 1), get(ECAM_displaying_position, 2), get(ECAM_displaying_position, 3), get(ECAM_displaying_position, 4)}
 size = {900, 900}
 
@@ -51,20 +54,20 @@ sasl.registerCommandHandler (VIDEO_cmd_toggle,  0, function(phase) if phase == S
 sasl.registerCommandHandler (VIDEO_cmd_require, 0, function(phase) if phase == SASL_COMMAND_BEGIN then current_door_video = (current_door_video + 1) % 3 end end )
 
 local function draw_ecam_lower_section_fixed()
-    sasl.gl.drawText(Font_AirbusDUL, 100, size[2]/2-372, "TAT", 32, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
-    sasl.gl.drawText(Font_AirbusDUL, 100, size[2]/2-407, "SAT", 32, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
-    sasl.gl.drawText(Font_AirbusDUL, 260, size[2]/2-372, "°C", 32, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
-    sasl.gl.drawText(Font_AirbusDUL, 260, size[2]/2-407, "°C", 32, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
+    sasl.gl.drawText(Font_ECAMfont, 100, size[2]/2-372, "TAT", 32, true, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+    sasl.gl.drawText(Font_ECAMfont, 100, size[2]/2-407, "SAT", 32, true, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+    sasl.gl.drawText(Font_ECAMfont, 260, size[2]/2-372, "°C", 32, true, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
+    sasl.gl.drawText(Font_ECAMfont, 260, size[2]/2-407, "°C", 32, true, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
 
-    sasl.gl.drawText(Font_AirbusDUL, size[1]-230, size[2]/2-372, "GW", 32, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]-15, size[2]/2-375, "KG", 32, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2, size[2]/2-407, "H", 30, false, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]-230, size[2]/2-372, "GW", 32, true, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]-15, size[2]/2-375, "KG", 32, true, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2, size[2]/2-407, "H", 30, true, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
 
     local isa_displayed = get(Capt_Baro) > 29.91 and get(Capt_Baro) < 29.93 and adirs_is_adr_working(PFD_CAPT)
 
     if isa_displayed then
-        sasl.gl.drawText(Font_AirbusDUL, 100, size[2]/2-442, "ISA", 32, false, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
-        sasl.gl.drawText(Font_AirbusDUL, 260, size[2]/2-442, "°C", 32, false, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
+        sasl.gl.drawText(Font_ECAMfont, 100, size[2]/2-442, "ISA", 32, true, false, TEXT_ALIGN_RIGHT, ECAM_WHITE)
+        sasl.gl.drawText(Font_ECAMfont, 260, size[2]/2-442, "°C", 32, true, false, TEXT_ALIGN_RIGHT, ECAM_BLUE)
     end
 
     if (gload >= 1.4 or gload <= 0.7) then
@@ -82,19 +85,19 @@ local function draw_ecam_lower_section_fixed()
         if trigger_in_condition then
             time_g_load_visible = get(TIME)
         end
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-115, size[2]/2-372, "G LOAD", 32, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+50, size[2]/2-372, Round_fill(gload,1), 32, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-115, size[2]/2-372, "G LOAD", 32, true, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+50, size[2]/2-372, Round_fill(gload,1), 32, true, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
     else
     
         if get(AUTOFLT_FCU_M_ALT) == 1 then
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2-130, size[2]/2-372, "ALT SEL", 32, false, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
+            sasl.gl.drawText(Font_ECAMfont, size[1]/2-130, size[2]/2-372, "ALT SEL", 32, true, false, TEXT_ALIGN_LEFT, ECAM_WHITE)
 
             local altitude_m = math.floor(get(AUTOFLT_FCU_ALT) * 0.3048)
 
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2+110, size[2]/2-372, altitude_m, 32, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+            sasl.gl.drawText(Font_ECAMfont, size[1]/2+110, size[2]/2-372, altitude_m, 32, true, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
 
 
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2+120, size[2]/2-372, "M", 24, false, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
+            sasl.gl.drawText(Font_ECAMfont, size[1]/2+120, size[2]/2-372, "M", 24, true, false, TEXT_ALIGN_LEFT, ECAM_BLUE)
 
         end
     
@@ -125,8 +128,8 @@ local function draw_ecam_lower_section()
             tat = "+" .. tat
         end
     end
-    sasl.gl.drawText(Font_AirbusDUL, 190, size[2]/2-372, tat, 32, false, false, TEXT_ALIGN_RIGHT, tat == "XX" and ECAM_ORANGE or ECAM_GREEN)
-    sasl.gl.drawText(Font_AirbusDUL, 190, size[2]/2-407, ota, 32, false, false, TEXT_ALIGN_RIGHT, ota == "XX" and ECAM_ORANGE or ECAM_GREEN)
+    sasl.gl.drawText(Font_ECAMfont, 190, size[2]/2-372, tat, 32, true, false, TEXT_ALIGN_RIGHT, tat == "XX" and ECAM_ORANGE or ECAM_GREEN)
+    sasl.gl.drawText(Font_ECAMfont, 190, size[2]/2-407, ota, 32, true, false, TEXT_ALIGN_RIGHT, ota == "XX" and ECAM_ORANGE or ECAM_GREEN)
 
     local isa_displayed = get(Capt_Baro) > 29.91 and get(Capt_Baro) < 29.93 and adirs_is_adr_working(PFD_CAPT)
     if isa_displayed then
@@ -134,25 +137,25 @@ local function draw_ecam_lower_section()
         if delta_isa > 0 then
             delta_isa = "+" .. delta_isa
         end
-        sasl.gl.drawText(Font_AirbusDUL, 190, size[2]/2-442, delta_isa, 32, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+        sasl.gl.drawText(Font_ECAMfont, 190, size[2]/2-442, delta_isa, 32, true, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     end
     --center section
     --adding a 0 to the front of the time when single digit
     if GPS_sys[1].status == GPS_STATUS_NAV or GPS_sys[2].status == GPS_STATUS_NAV then
         if get(ZULU_hours) < 10 then
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2-25, size[2]/2-408, "0" .. get(ZULU_hours), 38, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+            sasl.gl.drawText(Font_ECAMfont, size[1]/2-25, size[2]/2-408, "0" .. get(ZULU_hours), 38, true, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
         else
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2-25, size[2]/2-408, get(ZULU_hours), 38, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
+            sasl.gl.drawText(Font_ECAMfont, size[1]/2-25, size[2]/2-408, get(ZULU_hours), 38, true, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
         end
 
         if get(ZULU_mins) < 10 then
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2+25, size[2]/2-408, "0" .. get(ZULU_mins), 34, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+            sasl.gl.drawText(Font_ECAMfont, size[1]/2+25, size[2]/2-408, "0" .. get(ZULU_mins), 34, true, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
         else
-            sasl.gl.drawText(Font_AirbusDUL, size[1]/2+25, size[2]/2-408, get(ZULU_mins), 34, false, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
+            sasl.gl.drawText(Font_ECAMfont, size[1]/2+25, size[2]/2-408, get(ZULU_mins), 34, true, false, TEXT_ALIGN_LEFT, ECAM_GREEN)
         end
     else
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2-25, size[2]/2-408, "XX", 38, false, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
-        sasl.gl.drawText(Font_AirbusDUL, size[1]/2+25, size[2]/2-408, "XX", 34, false, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2-25, size[2]/2-408, "XX", 38, true, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
+        sasl.gl.drawText(Font_ECAMfont, size[1]/2+25, size[2]/2-408, "XX", 34, true, false, TEXT_ALIGN_LEFT, ECAM_ORANGE)
     end
     --right section
     if get(FAILURE_FUEL_FQI_1_FAULT) == 1 and get(FAILURE_FUEL_FQI_2_FAULT) == 1 then
@@ -163,7 +166,7 @@ local function draw_ecam_lower_section()
         GW = GW - GW%100
         color = ECAM_GREEN
     end
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+370, size[2]/2-375, GW, 36, false, false, TEXT_ALIGN_RIGHT, color)
+    sasl.gl.drawText(Font_ECAMfont, size[1]/2+370, size[2]/2-375, GW, 36, true, false, TEXT_ALIGN_RIGHT, color)
 end
 
 
@@ -283,6 +286,9 @@ function draw()
     draw_ecam_pages()
     draw_ecam_lower_section()
     draw_video()
+
+    --sasl.gl.drawTexture(Align_tool, 0, 0, 900, 900, {1,1,1})
+
     sasl.gl.restoreRenderTarget()
 
     sasl.gl.drawTexture(ECAM_popup_texture, 0, 0, 900, 900, {1,1,1})

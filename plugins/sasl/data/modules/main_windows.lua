@@ -444,7 +444,7 @@ Cinetracker_ABNZ = contextWindow {
   minimumSize = { 600/10, 424/10 };
   maximumSize = { 600, 424 };
   gravity = { 0 , 1 , 0 , 1 };
-  visible = false;
+  visible = true;
   components = {
       alpha_beta_nz {}
   };

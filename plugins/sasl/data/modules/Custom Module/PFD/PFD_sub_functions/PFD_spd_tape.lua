@@ -212,7 +212,6 @@ function PFD_draw_spd_tape(x, y, PFD_table)
     --speed tape background
     if not adirs_is_buss_visible(PFD_table.Screen_ID) then
         sasl.gl.drawRectangle(x + size[1]/2-437, y + size[2]/2-244, 99, 473, PFD_TAPE_GREY)
-        sasl.gl.drawTexture(PFD_spd_shader, x + size[1]/2-439, y + size[2]/2-243, 97, 472, {1,1,1,PFD_SHADE_INTENSITY}) --The shader, ask Henrick if you don't know what is this
     end
 
     if adirs_is_ias_ok(PFD_table.Screen_ID) == false and not adirs_is_buss_visible(PFD_table.Screen_ID) then

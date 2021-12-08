@@ -16,17 +16,14 @@
 -- Short description: This file contains the global constants
 -------------------------------------------------------------------------------
 
---pfd shader intensity
-PFD_SHADE_INTENSITY = 0.7 --transparency of the shader
-
 --colors
 ECAM_WHITE =  {1.0, 1.0, 1.0}
-ECAM_LINE_GREY = {62/255, 74/255, 91/255}
+ECAM_LINE_GREY = {113/255, 130/255, 151/255}
 ECAM_HIGH_GREY = {0.6, 0.6, 0.6}
 ECAM_BLUE = {0.004, 1.0, 1.0}
 ECAM_GREEN = {0.20, 0.98, 0.20}
 ECAM_HIGH_GREEN = {0.1, 0.6, 0.1}
-ECAM_ORANGE = {1, 0.66, 0.16}
+ECAM_ORANGE = {265/255, 179/255, 58/255}
 ECAM_YELLOW = {1, 1, 0}
 ECAM_RED = {1.0, 0.0, 0.0}
 ECAM_MAGENTA = {1.0, 112/255, 1.0}
@@ -62,7 +59,7 @@ EFB_DROPDOWN_INSIDE = {31/255, 41/255, 55/255}
 EFB_DROPDOWN_OUTSIDE = {141/255, 153/255, 170/255}
 EFB_SLIDER_COLOUR = {143/255,255/255,127/255}
 
-PFD_TAPE_GREY = {69/255, 86/255, 105/255}
+PFD_TAPE_GREY = {113/255, 130/255, 151/255}
 PFD_YELLOW = {1, 1, 0}
 
 LED_TEXT_CL = {235/255, 200/255, 135/255}

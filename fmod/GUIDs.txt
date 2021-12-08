@@ -1,6 +1,7 @@
 {05140d4f-719b-47fa-a87d-04be835c460c} event:/APU/In
 {0da72ba2-2507-433c-bb20-fe871b85ebbb} event:/APU/Out
 {fc473991-6ec9-41ba-a98e-45755ec48868} event:/Blower/In
+{9d0acfa9-b74a-4cca-ae59-3e316d682ad8} event:/Blower/In2
 {b71b4dff-1e2f-48c3-be6d-9371d788e109} event:/Blower/Out
 {591bc29d-b40c-4eb5-b3e3-f059d69d8ecd} event:/Fuel Pumps/In/L1
 {234905e9-e70e-4875-976b-b3a1191fe2b8} event:/Fuel Pumps/In/L2
@@ -14,26 +15,35 @@
 {bccb4139-7626-4c2d-a5b7-99aea47e2d7a} event:/Hyd Pump/Out
 {c0c34114-bb9e-42d2-9d26-1873f86e993f} event:/PTU/In
 {e33f3287-1e77-4ad6-847b-601a56d7f868} event:/PTU/Out
+{2bbabbb5-558f-4831-9cc1-bf5ce32e98a7} event:/Relays/Commercial/Off
+{87062157-dc92-4652-b364-9993ce0fec02} event:/Relays/Commercial/On
 {1e3ac6b6-9dff-4f66-8697-f903a6136578} event:/Relays/Off1
 {39407327-829b-45b8-b2ae-c31f5a7a1703} event:/Relays/Off2
 {dd2aa524-5a69-43fb-bf21-4e2e31b95708} event:/Relays/On1
 {3428473e-7941-4bb0-aefc-628b5e15defc} event:/Relays/On2
+{ebce89fb-2a44-4dec-bc09-add0e5f32326} event:/Switches/FCU/ADF/Mid
+{b1cecd76-b22b-4e26-ade5-e1c1878cc3d5} event:/Switches/FCU/ADF/Side
 {76e9ba6b-e077-43cc-a7ac-d8ac8147d0eb} event:/Switches/FCU/Chrono Round/1
-{ebae5734-9e00-45af-a6aa-a5f10fe84d99} event:/Switches/FCU/ND Control/Mode/1
-{616fab1c-185e-427d-8fac-4b7d6174c522} event:/Switches/FCU/ND Control/Mode/2
-{4e1f7375-aa40-43ac-9798-76cd583b8257} event:/Switches/FCU/ND Control/Mode/3
-{65ea254e-8fc6-476d-8b6f-e9994ff79e16} event:/Switches/FCU/ND Control/Mode/4
-{2dd3ebf7-ff64-41b4-993d-1361ab99dbc9} event:/Switches/FCU/ND Control/Mode/5
-{572c3a7c-3e7d-4999-bd62-40d530eab9e2} event:/Switches/FCU/ND Control/Mode/6
-{77ca70c0-ee5a-44d7-b0ee-061fa19c3877} event:/Switches/FCU/ND Control/Mode/7
-{d2ff2c57-bc79-4868-8d21-0b8a53399352} event:/Switches/FCU/ND Control/Range/1
-{40e5a231-27b8-46a6-8c14-d6ca7ab04e96} event:/Switches/FCU/ND Control/Range/2
-{ec158414-1fd7-4600-a908-d8869a281e8c} event:/Switches/FCU/ND Control/Range/3
-{30384b7b-8896-4967-b712-4943b42d9e7b} event:/Switches/FCU/ND Control/Range/4
-{fafdec50-0834-4cfa-baa1-c447f4047793} event:/Switches/FCU/ND Control/Range/5
-{ffe18b04-13fa-4839-9b30-fbd200f28ae5} event:/Switches/FCU/ND Control/Range/6
-{a9d7c26b-0be0-4280-800f-7f233d513286} event:/Switches/FCU/ND Control/Range/7
-{f0d6424f-bc57-4d77-a267-fa10d97eb204} event:/Switches/FCU/ND Control/Range/8
+{d9855203-3b71-4a65-a717-21fbdfdbfb10} event:/Switches/FCU/FDStyle/1
+{098c1700-d413-445f-958a-8df39c915332} event:/Switches/FCU/FDStyle/2
+{85a23e93-14b9-4e4d-b92b-ceacc714f7de} event:/Switches/FCU/FDStyle/3
+{10778766-03fa-4269-9c06-2faba0d4605b} event:/Switches/FCU/FDStyle/4
+{5d3fdcc5-d4e9-4d31-84b0-748f25367bc2} event:/Switches/FCU/Intevral/1
+{4df52317-f985-4433-95ed-00c8d916dbeb} event:/Switches/FCU/Intevral/2
+{65feec55-be5e-43fc-8b8e-83600dc635f6} event:/Switches/FCU/Range/1
+{35aea004-40d4-4309-9526-22e24abe6fc3} event:/Switches/FCU/Range/2
+{64249191-6324-4068-8878-d370f122a717} event:/Switches/FCU/Range/3
+{a588f597-cc90-4e81-87c8-75e942079d81} event:/Switches/FCU/Range/4
+{2bde6eee-da1a-4009-975a-52e08db88fd4} event:/Switches/FCU/Range/5
+{bac2ab82-5ba0-411b-8993-7d2bf5b6f582} event:/Switches/FCU/ap1
+{a0e090b0-635f-44ba-9c8e-c4c111b5edb8} event:/Switches/FCU/ap2
+{770a5df0-8c02-4514-a7eb-5e08a1c58bb9} event:/Switches/FCU/at
+{4bd0a4a9-6818-49d4-a982-dac476a83c57} event:/Switches/FCU/Exped
+{8c88478b-9e49-472b-821c-82488cad6e78} event:/Switches/FCU/Loc
+{2b497fa2-f227-4cfc-8011-2fdb8a947ebf} event:/Switches/FCU/MetricAlt
+{3eefa2ad-8f5e-4d90-9b82-ce7cc5c862be} event:/Switches/FCU/Spdmach
+{7076fab9-7d83-45a8-8b9f-a77901fb7a6b} event:/Switches/FCU/Vsfpa
+{91534c39-99db-4aa9-ac2f-8750e37fd15d} event:/Switches/MIP/Antiskid/1
 {7242fa62-a183-4793-99ec-46f4769a88c1} event:/Switches/MIP/DRAIMS/Int/Down
 {68aa6119-e0b9-4d85-ba9b-0e7793bb2ec6} event:/Switches/MIP/DRAIMS/Int/Med
 {bc6f7fd9-a490-45d6-9217-aba6cf8a5a8b} event:/Switches/MIP/DRAIMS/Int/Up
@@ -43,9 +53,49 @@
 {1fed56b5-ec23-4900-93b9-8b0240f09bbc} event:/Switches/MIP/DRAIMS/Round
 {fd92b4ec-1462-4a57-9bd3-03cb60445920} event:/Switches/Overhead/ADIRS/1
 {2cf287e7-5fd4-499e-9d64-68db575c4252} event:/Switches/Overhead/Cabin Call Round/1
+{03d260a2-edf6-4767-9b55-83e3b7b33fa6} event:/Switches/Overhead/Evac Round/1
 {5d071a17-f1a6-4501-9a93-8b2680ed82aa} event:/Switches/Overhead/FirePB/Capopen
 {aad2bfb8-cf81-4bce-9927-f64baccd3936} event:/Switches/Overhead/FirePB/In
 {cd0e943b-be5a-4611-8ecd-f57f1b71f914} event:/Switches/Overhead/FirePB/Out
+{097818f4-b463-421d-97ae-8124fb337afb} event:/Switches/Overhead/Heater/Down
+{7828e892-b714-4322-93bc-0f9da693c0d9} event:/Switches/Overhead/Heater/Mid
+{0a9cbec7-0cbb-498b-8c45-343633ed1b5a} event:/Switches/Overhead/Heater/Top
+{e0cb3922-422c-48b7-aba3-e125ee311d1d} event:/Switches/Overhead/Lights/Ann/Med
+{b8b3c543-b311-430f-9ae2-8b39e70a430d} event:/Switches/Overhead/Lights/Ann/Off
+{2f866a8b-fb1b-4441-b45f-83018d8f5164} event:/Switches/Overhead/Lights/Ann/On
+{d3a08612-fb76-4632-966e-37dca95ed96f} event:/Switches/Overhead/Lights/Beacon/On
+{049e96cb-45c1-464b-b7fd-3c300ffe2022} event:/Switches/Overhead/Lights/Cabpress/Down
+{d755ae64-3f2b-44ee-8d62-c2f33c02374c} event:/Switches/Overhead/Lights/Cabpress/Med
+{1d666329-d3c6-48b8-a73a-5145c8264c25} event:/Switches/Overhead/Lights/Cabpress/Up
+{2b135354-30d8-4fb0-bb5a-6f37843f0b57} event:/Switches/Overhead/Lights/Compass/Off
+{6955ca36-e61e-4dad-b3cf-83b3ff336abc} event:/Switches/Overhead/Lights/Compass/On
+{668ca8bc-4af8-4e9f-a6a8-fea2ac3c11cb} event:/Switches/Overhead/Lights/Dome/Med
+{ef6d677c-de66-4bc8-8dfc-2c5118d87f88} event:/Switches/Overhead/Lights/Dome/Off
+{139ab240-e97d-4f78-9f86-8204f424b0bd} event:/Switches/Overhead/Lights/Dome/On
+{effbb612-bf81-4e81-a610-ec76cb174d1c} event:/Switches/Overhead/Lights/Emer Exit/Down
+{170776aa-2e41-4de7-b271-e84cd9cb00cf} event:/Switches/Overhead/Lights/Emer Exit/Med
+{46072481-798a-48ce-a359-caa4ccdd51ca} event:/Switches/Overhead/Lights/Emer Exit/Up
+{1e34c190-0b30-46ff-a83e-cc1b928a0411} event:/Switches/Overhead/Lights/Nav/Med
+{44312dfb-317a-4117-9aa4-c64d21af4441} event:/Switches/Overhead/Lights/Nav/Off
+{a8014833-8046-4323-b9d3-7fda39dfe52d} event:/Switches/Overhead/Lights/Nav/On
+{c1b147ad-7475-4d63-8688-ea99cea19e42} event:/Switches/Overhead/Lights/No Smoking/Off
+{f823f71e-4ed6-4917-ac14-2ee35a542e69} event:/Switches/Overhead/Lights/No Smoking/On
+{38d04e02-172d-4395-81f0-a0626024fa4b} event:/Switches/Overhead/Lights/Runway/Off
+{486ffef5-062d-47f0-9997-6d1bc1865bf5} event:/Switches/Overhead/Lights/Runway/On
+{a05c7904-179f-4f62-8763-6e1c7357ece1} event:/Switches/Overhead/Lights/Seatbelt/Off
+{6b846dec-a53d-4e1d-8af7-f28b51c1d833} event:/Switches/Overhead/Lights/Seatbelt/On
+{5d8c83bb-457e-4d93-bb5f-6ecbd75efb81} event:/Switches/Overhead/Lights/Strobe/Med
+{ece2f798-9f53-46c1-bc06-d1370480f050} event:/Switches/Overhead/Lights/Strobe/Off
+{8685bfce-e4ae-4e24-89cc-dadefde58566} event:/Switches/Overhead/Lights/Strobe/On
+{40ed5a7a-b68c-4890-b4a5-3da93afb08b2} event:/Switches/Overhead/Lights/Wing/Off
+{d9d0d081-7f7b-444f-a492-806717a68a14} event:/Switches/Overhead/Lights/Wing/On
+{cd427212-3af3-4b8f-bb81-7188a2ae8e1f} event:/Switches/Overhead/Teethcap/1/Close
+{287a7eba-8c47-4680-aba5-2d6701ff23e7} event:/Switches/Overhead/Teethcap/1/Open
+{9edc1cac-1cd2-4a2f-9346-56f7fe17ee08} event:/Switches/Overhead/Teethcap/2/Close
+{99f7a513-caeb-4fde-90a8-c53a1a3e9959} event:/Switches/Overhead/Teethcap/2/Open
+{debff7bf-24ad-4af5-ac77-31a6c1f4d988} event:/Switches/Overhead/Wipers/1
+{15d79460-07b4-4d54-8014-b23e5b226fda} event:/Switches/Overhead/Wipers/2
+{547db264-8c60-4a9e-b465-7d0922e21cc0} event:/Switches/Overhead/Wipers/3
 {9dd8b20d-33c8-41f8-9014-1fc266e643ab} event:/Switches/Pedestal/Ecam Button/1
 {f2719bda-510c-4b72-8414-d197ac57dac5} event:/Switches/Pedestal/Ecam Button/10
 {d3c97af5-6260-475f-b016-bfcea25f54f3} event:/Switches/Pedestal/Ecam Button/11
@@ -59,11 +109,47 @@
 {989a28c0-4c28-4d88-ad43-73f3076b6515} event:/Switches/Pedestal/Ecam Button/9
 {bb7505c3-9752-4c02-a7f2-dc80e4bae741} event:/Switches/Pedestal/Engine Master/Off
 {6f501237-b991-4339-8570-57239be9d3d3} event:/Switches/Pedestal/Engine Master/On
-{30183d82-71ca-4b95-bc2b-0030df78758e} event:/Ties/Off
+{cd1e3aa3-b464-4881-898f-9ea83c0941a0} event:/Switches/Pedestal/Engine Mode/1
+{32f2cb05-1fed-4c9a-a1ab-eb4a471fd5ec} event:/Switches/Pedestal/Engine Mode/2
+{6afc799d-f953-4e35-b820-9e6ee3082e00} event:/Switches/Pedestal/Engine Mode/3
+{dc712795-2588-43e3-aa47-4d4f687ef5d9} event:/Switches/Pedestal/Park Brake/1
+{08d9b76c-f67d-41cd-b318-842b0c3d4046} event:/Switches/Pedestal/Park Brake/2
+{75da1f30-7608-4d59-a743-ecdfa91da22b} event:/Switches/Pedestal/Rudder Trim/Center
+{f5d53e53-d4a1-49c6-ba00-1e359128639a} event:/Switches/Pedestal/Rudder Trim/Left
+{b987204f-4c2c-499e-b85c-0e7bd9e1d55d} event:/Switches/Pedestal/Rudder Trim/Reset
+{b9847c77-3f9e-437f-bad7-9aa6a852716a} event:/Switches/Pedestal/Rudder Trim/Right
+{dac93f53-7e27-4237-9aa0-1bc53e6ca9d0} event:/Switches/Pedestal/SwitchingPanel/1/1
+{94cceb66-4f8d-4c90-a721-001265d20dbf} event:/Switches/Pedestal/SwitchingPanel/1/2
+{8e2bfeba-7b61-42dc-90bb-3879ebb5b277} event:/Switches/Pedestal/SwitchingPanel/1/3
+{55ed0976-2cf9-4811-bc8d-dbb51596788a} event:/Switches/Pedestal/SwitchingPanel/2/1
+{b7fa1a68-8c5c-4b71-8733-5dd1841c2ef9} event:/Switches/Pedestal/SwitchingPanel/2/2
+{635312b9-1116-4d34-900f-5b854c4a1f24} event:/Switches/Pedestal/SwitchingPanel/2/3
+{969cb893-a4cf-4561-860c-cb1581282d2c} event:/Switches/Pedestal/SwitchingPanel/3/1
+{666627b7-98d1-46c3-a7e3-38e3d39436f0} event:/Switches/Pedestal/SwitchingPanel/3/2
+{118b72f1-0073-4d37-bc6f-f3a5ae34958b} event:/Switches/Pedestal/SwitchingPanel/3/3
+{e6b3cbd8-8857-47e8-b8bb-7893e8ded8c2} event:/Switches/Pedestal/SwitchingPanel/4/1
+{3bcc3fe3-7127-4374-9d56-3da39531be06} event:/Switches/Pedestal/SwitchingPanel/4/2
+{19f84c33-5c2f-4299-9599-5e2ab7e37899} event:/Switches/Pedestal/SwitchingPanel/4/3
+{87359ce1-98b5-4c2a-baf1-fd806f50c2c4} event:/Thrust Levers/1/Climb
+{5d394de1-86ab-4175-9c70-48ffc2324aa3} event:/Thrust Levers/1/Flex
+{e3cd937e-121d-4c60-94f2-685d596ccae5} event:/Thrust Levers/1/Idle
+{04ef9d4f-edf6-492b-a7e6-aa568b7465d8} event:/Thrust Levers/1/Toga
+{c7c81a6d-afd8-4f62-b369-29113d5ada28} event:/Thrust Levers/2/Climb
+{7c7b33c3-d2f6-44c9-9d13-e029fa1a8340} event:/Thrust Levers/2/Flex
+{9f46a0df-070d-4a5a-a47f-b1b031108cc6} event:/Thrust Levers/2/Idle
+{001c2393-9dcc-42be-bc67-d21fbf40df31} event:/Thrust Levers/2/Toga
+{55cae3af-ab38-4703-abe5-cb4722fb6267} event:/Ties/Off
 {9f94419c-85f2-40c2-8e0b-e67a13036ed1} event:/Ties/On
 {addc9add-a1d0-4814-b32d-5761039bace6} event:/Ties/Swap
 {7cfa0c14-b52f-4cd3-b23f-5e25c467dddd} event:/Winds/Cabin
 {4f2d1706-dbe1-4df5-8948-67b43e6e57ef} event:/Winds/Cockpit
+{e4815977-6d76-4d74-bfc4-ccb63251483f} event:/Flaps/1
+{39d3c178-d068-4f10-a65f-ffda5e82d667} event:/Flaps/2
+{9e536b79-8f55-4b30-810c-d5ae09269f1b} event:/Flaps/3
+{342ae0e1-41b3-41bf-a05c-43a9c5624e6a} event:/Flaps/4
+{97f85cc6-ec30-4f37-99fa-5e5c11f81da3} event:/Flaps/5
+{47f20853-5d78-4e65-a934-b9f076bad8e1} event:/Flaps/6
+{e20f2371-b548-4ab2-9509-198e62e77773} event:/Flaps/7
 {0f3c948d-7c51-47fa-9622-de4a5d75bb7e} event:/AvionicsStart
 {6a771f16-ea3a-4801-af88-78f66bd80e34} event:/Cabin
 {312f3339-8227-4aad-abe3-026feb4c99dd} event:/Engine
@@ -77,6 +163,7 @@
 {06db5351-0b2f-4648-b97a-a33b40a00e11} bus:/Master/Exterior Processed/Aircraft
 {b6c156f1-9861-405c-a622-92b2ab8010a7} bus:/Master/Exterior Processed/Environment
 {8dbbc9d7-a954-4ed0-b1f1-f8111b03cbd1} bus:/Master/Exterior Unprocessed
+{e500f8b9-d510-4769-94bb-377aa2dcb375} bus:/Master/Exterior Unprocessed/Inside Unprocessed
 {1ddb4943-e1ca-4447-9ec2-4f643c2fa890} bus:/Master/Inside
 {e390f020-ed91-40b7-beb6-6cd513f68647} bus:/Master/Inside/Cabin
 {00802dba-d997-43f4-88ab-9ed2edb5821e} bus:/Master/Inside/Cabin/Fans
