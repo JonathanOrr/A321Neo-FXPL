@@ -77,7 +77,7 @@ local function poly_3rd_order(coeff, x, y)
                          coeff[1][2] * y + coeff[1][3] * y^2  + coeff[1][4] * y^3 +
                          coeff[2][2] * x * y + coeff[3][2] * x^2 * y   + coeff[4][2] * x^3 * y +
                                                coeff[2][3] * x   * y^2 + coeff[2][4] * x * y^3 +
-                         coeff[3][3] * x^2 * y^2 + coeff[4][3] * x^3 * y^2 + coeff[3][4] * x^2 * y^3
+                         coeff[3][3] * x^2 * y^2 + coeff[4][3] * x^3 * y^2 + coeff[3][4] * x^2 * y^3 +
                          coeff[4][4] * x^3 * y^3
 end
 

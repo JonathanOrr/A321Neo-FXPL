@@ -39,19 +39,19 @@ function thrust_main_equation(mach, T_takeoff, throttle, BPR, sigma, altitude_m)
     local l1,l2,l3,l4
 
     if mach > ENG.data.model.thr_mach_barrier then
-        l1 = thr_k_coeff[1][1]
-        l2 = thr_k_coeff[2][1]
-        l3 = thr_k_coeff[3][1]
-        l4 = thr_k_coeff[4][1]
+        l1 = ENG.data.model.thr_k_coeff[1][1]
+        l2 = ENG.data.model.thr_k_coeff[2][1]
+        l3 = ENG.data.model.thr_k_coeff[3][1]
+        l4 = ENG.data.model.thr_k_coeff[4][1]
     else
-        l1 = thr_k_coeff[1][2]
-        l2 = thr_k_coeff[2][2]
-        l3 = thr_k_coeff[3][2]
-        l4 = thr_k_coeff[4][2]
+        l1 = ENG.data.model.thr_k_coeff[1][2]
+        l2 = ENG.data.model.thr_k_coeff[2][2]
+        l3 = ENG.data.model.thr_k_coeff[3][2]
+        l4 = ENG.data.model.thr_k_coeff[4][2]
     end
 
-    local k2 = delta * l1
-    local k3_k4 = (l2 + l3 * delta) * mach
+    local k2 = BPR * l1
+    local k3_k4 = (l2 + l3 * BPR) * mach
     local k1 = l4
 
     local T_ratio = k1 + k2 + k3_k4
@@ -71,18 +71,22 @@ local function thrust_spool_derivative(n1)
 end
 
 local function delay_thrust(eng_state, thrust_target, T_max, N1_base_max)
-    local T_ratio = T_max / eng_state.T_current_value
+    assert(N1_base_max>0)
+    local T_ratio = T_max > 0 and eng_state.T_theoric / T_max or 0
     local N1_spooled = N1_base_max * T_ratio
-    local spd_N1 = thrust_spool_derivative(N1_spooled)
-    local T_ratio_inv = spd_N1 / N1_base_max;
-    local spd_T = T_max / T_ratio_inv
+    local spd_N1 = thrust_spool_derivative(math.max(19.5,N1_spooled))
+    local T_ratio_inv = spd_N1 / N1_base_max
+    local spd_T = T_max * T_ratio_inv
 
-    eng_state.T_theoric = Set_anim_value_no_lim(eng_state.T_theoric, thrust_target, spd_T)
+    eng_state.T_theoric = Set_linear_anim_value(eng_state.T_theoric, thrust_target, 0, 999999, spd_T)
+
+
+
     return eng_state.T_theoric
 end
 
 local function delay_penalty(eng_state, thrust_target)
-    eng_state.T_penalty_actual = Set_anim_value_no_lim(eng_state.T_penalty_actual, thrust_target, 1)
+    eng_state.T_penalty_actual = Set_linear_anim_value(eng_state.T_penalty_actual, thrust_target, 0, 999999, 10000)
     return eng_state.T_penalty_actual
 end
 
@@ -92,7 +96,8 @@ function thrust_spool(eng_state, T_desired, T_penalty, T_max, N1_base_max)
 
     local T_actual_spool = math.max(0, T_theoric - T_penalty_actual)
 
-    local T_ratio = T_max / T_theoric
+
+    local T_ratio = (T_max > 0) and (T_theoric / T_max) or 0
     local N1_spooled = N1_base_max * T_ratio
 
     return T_actual_spool, N1_spooled

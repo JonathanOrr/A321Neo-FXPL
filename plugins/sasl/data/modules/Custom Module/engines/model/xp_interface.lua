@@ -25,21 +25,20 @@ end
 
 initialize()
 
-local L_sim_throttle = globalProperty("sim/cockpit2/engine/actuators/throttle_jet_rev_ratio[0]")
-local R_sim_throttle = globalProperty("sim/cockpit2/engine/actuators/throttle_jet_rev_ratio[1]")
-
-
 function update_engine_model()
 
     local elev_feet = get(ACF_elevation) * 3.28084
 
     -- TODO: Fix AI_wing, one engine can provide both wings AI!
 
+    local m = get(Capt_Mach)
+    m = m ~= m and 0 or m
+
     local inputs_eng_1 = {
-        throttle = get(L_sim_throttle),
+        throttle = get(Override_eng_1_lever),
         alt_feet = elev_feet,
         oat = get(OTA),
-        mach = get(Capt_Mach),
+        mach = m,
         sigma = get(Weather_Sigma),
         AI_wing_on = AI_sys.comp[ANTIICE_WING_L].valve_status,
         AI_engine_on = AI_sys.comp[ANTIICE_ENG_1].valve_status,
@@ -47,10 +46,10 @@ function update_engine_model()
     }
     
     local inputs_eng_2 = {
-        throttle = get(R_sim_throttle),
+        throttle = get(Override_eng_2_lever),
         alt_feet = elev_feet,
         oat = get(OTA),
-        mach = get(Capt_Mach),
+        mach = m,
         sigma = get(Weather_Sigma),
         AI_wing_on = AI_sys.comp[ANTIICE_WING_R].valve_status,
         AI_engine_on = AI_sys.comp[ANTIICE_ENG_2].valve_status,
