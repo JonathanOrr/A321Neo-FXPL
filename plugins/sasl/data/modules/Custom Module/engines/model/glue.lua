@@ -1,0 +1,76 @@
+-------------------------------------------------------------------------------
+-- A32NX Freeware Project
+-- Copyright (C) 2020
+-------------------------------------------------------------------------------
+-- LICENSE: GNU General Public License v3.0
+--
+--    This program is free software: you can redistribute it and/or modify
+--    it under the terms of the GNU General Public License as published by
+--    the Free Software Foundation, either version 3 of the License, or
+--    (at your option) any later version.
+--
+--    Please check the LICENSE file in the root of the repository for further
+--    details or check <https://www.gnu.org/licenses/>
+-------------------------------------------------------------------------------
+
+include('engines/model/blocks.lua')
+include('engines/n1_modes.lua')
+
+function update_thrust(engine_state, inputs)
+    -- inputs: throttle, alt_feet, oat, mach, sigma
+    local altitude_m = inputs.alt_feet * 0.3048
+
+    local thrust_kgs = ENG.data.max_thrust * 4.44822
+    local crit_temp  = ENG.data.modes.toga_penalties.temp_function(inputs.alt_feet)
+    local T_takeoff = thrust_takeoff_computation(thrust_kgs, inputs.oat, crit_temp)
+
+    local BPR = ENG.data.bypass_ratio
+    local T_actual_th, T_max = thrust_main_equation(inputs.mach, T_takeoff, inputs.throttle, BPR, inputs.sigma, altitude_m)
+
+    engine_state.T_actual_th = T_actual_th
+    engine_state.T_max       = T_max
+end
+
+function update_thrust_penalty(engine_state, inputs)
+    -- inputs: AI_wing_on, AI_engine_on, bleed_ratio
+
+    local T_penalty = thrust_penalty_computation(inputs.AI_engine_on, inputs.AI_wing_on, inputs.bleed_ratio, engine_state.T_actual_th)
+    engine_state.T_penalty = T_penalty
+end
+
+function update_thrust_spooling(engine_state, inputs)
+    -- inputs: oat, alt_feet
+    local N1_base_max = eng_N1_limit_takeoff_clean(inputs.oat, inputs.alt_feet)
+
+    local T_desired = engine_state.T_actual_th
+    local T_max     = engine_state.T_max
+    local T_penalty = engine_state.T_penalty
+    T_actual_spool, N1_spooled = thrust_spool(engine_state, T_desired, T_penalty, T_max, N1_base_max)
+
+    engine_state.T_actual_spool = T_actual_spool
+    engine_state.N1_spooled = N1_spooled
+end
+
+function update_thrust_secondary(engine_state, inputs)
+    -- inputs: oat, alt_feet, mach
+    engine_state.N2   = ENG.data.n1_to_n2_fun(engine_state.N1_spooled)
+    engine_state.NFAN = ENG.data.n1_to_nfan(engine_state.N1_spooled)
+    engine_state.EGT  = ENG.data.n1_to_egt_fun(engine_state.N1_spooled)
+
+    local altitude_m = inputs.alt_feet * 0.3048
+    local isa_diff   = inputs.oat - thrust_ISA_temp(altitude_m)
+    engine_state.FF  = ENG.data.n1_to_FF(engine_state.N1_spooled, inputs.alt_feet, inputs.mach)
+end
+
+
+function engine_model_create_state()
+    return { 
+        T_actual_th = 0,
+        T_max = 0,
+        T_penalty = 0,
+        T_actual_spool = 0,
+        T_theoric = 0,
+        T_penalty_actual = 0,
+        N1_spooled = 0
+    }
+end

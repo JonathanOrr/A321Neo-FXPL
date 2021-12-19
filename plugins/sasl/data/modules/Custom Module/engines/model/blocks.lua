@@ -13,7 +13,7 @@
 --    details or check <https://www.gnu.org/licenses/>
 -------------------------------------------------------------------------------
 
-local function get_ISA_temp(alt_meter)
+function thrust_ISA_temp(alt_meter)
     return math.max(-56.5, 15 - 6.5 * alt_meter/1000)
 end
 
@@ -77,13 +77,13 @@ local function delay_thrust(eng_state, thrust_target, T_max, N1_base_max)
     local T_ratio_inv = spd_N1 / N1_base_max;
     local spd_T = T_max / T_ratio_inv
 
-    eng_state.T_current_value = Set_anim_value_no_lim(eng_state.T_current_value, thrust_target, spd_T)
-    return eng_state.T_current_value
+    eng_state.T_theoric = Set_anim_value_no_lim(eng_state.T_theoric, thrust_target, spd_T)
+    return eng_state.T_theoric
 end
 
 local function delay_penalty(eng_state, thrust_target)
-    eng_state.penalty_T_current_value = Set_anim_value_no_lim(eng_state.penalty_T_current_value, thrust_target, 1)
-    return eng_state.penalty_T_current_value
+    eng_state.T_penalty_actual = Set_anim_value_no_lim(eng_state.T_penalty_actual, thrust_target, 1)
+    return eng_state.T_penalty_actual
 end
 
 function thrust_spool(eng_state, T_desired, T_penalty, T_max, N1_base_max)
@@ -96,8 +96,4 @@ function thrust_spool(eng_state, T_desired, T_penalty, T_max, N1_base_max)
     local N1_spooled = N1_base_max * T_ratio
 
     return T_actual_spool, N1_spooled
-end
-
-function thrust_create_eng_state()
-    return { T_current_value = 0, penalty_T_current_value =0 }
 end
