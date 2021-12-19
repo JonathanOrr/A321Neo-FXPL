@@ -1,0 +1,73 @@
+-------------------------------------------------------------------------------
+-- A32NX Freeware Project
+-- Copyright (C) 2020
+-------------------------------------------------------------------------------
+-- LICENSE: GNU General Public License v3.0
+--
+--    This program is free software: you can redistribute it and/or modify
+--    it under the terms of the GNU General Public License as published by
+--    the Free Software Foundation, either version 3 of the License, or
+--    (at your option) any later version.
+--
+--    Please check the LICENSE file in the root of the repository for further
+--    details or check <https://www.gnu.org/licenses/>
+-------------------------------------------------------------------------------
+
+include('engines/model/glue.lua')
+
+local engine_1_state = nil
+local engine_2_state = nil
+
+local function initialize()
+    engine_1_state = engine_model_create_state()
+    engine_2_state = engine_model_create_state()
+end
+
+initialize()
+
+local L_sim_throttle = globalProperty("sim/cockpit2/engine/actuators/throttle_jet_rev_ratio[0]")
+local R_sim_throttle = globalProperty("sim/cockpit2/engine/actuators/throttle_jet_rev_ratio[1]")
+
+
+function update_engine_model()
+
+    local elev_feet = get(ACF_elevation) * 3.28084
+
+    -- TODO: Fix AI_wing, one engine can provide both wings AI!
+
+    local inputs_eng_1 = {
+        throttle = get(L_sim_throttle),
+        alt_feet = elev_feet,
+        oat = get(OTA),
+        mach = get(Capt_Mach),
+        sigma = get(Weather_Sigma),
+        AI_wing_on = AI_sys.comp[ANTIICE_WING_L].valve_status,
+        AI_engine_on = AI_sys.comp[ANTIICE_ENG_1].valve_status,
+        bleed_ratio = get(L_pack_Flow) / 3
+    }
+    
+    local inputs_eng_2 = {
+        throttle = get(R_sim_throttle),
+        alt_feet = elev_feet,
+        oat = get(OTA),
+        mach = get(Capt_Mach),
+        sigma = get(Weather_Sigma),
+        AI_wing_on = AI_sys.comp[ANTIICE_WING_R].valve_status,
+        AI_engine_on = AI_sys.comp[ANTIICE_ENG_2].valve_status,
+        bleed_ratio = get(R_pack_Flow) / 3
+    }
+
+    -- THE ORDER OR THE NExT FUNCTION CALL IS *IMPORTANT*
+    update_thrust(engine_1_state, inputs_eng_1)
+    update_thrust(engine_2_state, inputs_eng_2)
+    update_thrust_penalty(engine_1_state, inputs_eng_1)
+    update_thrust_penalty(engine_2_state, inputs_eng_2)
+    update_thrust_spooling(engine_1_state, inputs_eng_1)
+    update_thrust_spooling(engine_2_state, inputs_eng_2)
+    update_thrust_secondary(engine_1_state, inputs_eng_1)
+    update_thrust_secondary(engine_2_state, inputs_eng_2)
+
+    print("ENG1", engine_1_state.T_actual_spool, engine_1_state.N1_spooled)
+    print("ENG2", engine_2_state.T_actual_spool, engine_2_state.N1_spooled)
+
+end
