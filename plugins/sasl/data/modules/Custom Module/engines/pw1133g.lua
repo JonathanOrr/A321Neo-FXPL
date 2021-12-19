@@ -32,15 +32,27 @@ function configure_pw1133g()
         n1_to_n2_fun = function(n1)
             return -2.6492 + 22.1036*math.log(n1)
         end,
+
+        n1_to_nfan  = function(n1)
+            return n1 / 3.0625
+        end
         
         n1_to_egt_fun = function(n1, oat)
             return 1067.597 + (525.8561 - 1067.597)/(1 + (n1/76.42303)^4.611082) + (oat-6) *2
         end,
 
-        n2_spoolup_fun = function(t)
+        n2_spoolup_fun = function(t)    -- ONLY for start, do not use once started (use n1_to_n2_fun)
             -- f( x ) = -51.28921087158405 + 26.341569276939737x - 4.888598740355502x2 + 0.4958496916187694x3 - 0.030213494410506178x4 + 0.0011400009575645398x5 - 0.00002614187911145765x6 + 3.3430175965887e-7x7 - 1.83007315404e-9x8
             return  -51.28921087158405 + 26.341569276939737*t - 4.888598740355502*t^2 + 0.4958496916187694*t^3 - 0.030213494410506178*t^4 + 0.0011400009575645398*t^5 - 0.00002614187911145765*t^6 + 3.3430175965887e-7*t^7 - 1.83007315404e-9*t^8
         end,
+
+        n1_to_FF = function(alt_m, n1, mach, ISA_diff)
+            return 146.727863052605 + 0.0261181684784363 * alt_m + 11.5349714362869 * n1 + -2975.15872221267 * mach
+            -0.00118985331744109 * alt_m * n1 + 0.00789909488873666 * alt_m * mach + 7.6073360167464e-05 * alt_m * ISA_diff
+            +80.7328342498208 * n1 * mach -0.0747796055618955 * n1 * ISA_diff -7.14050794839843 * mach * ISA_diff
+            +3.61693670778034e-07 * alt_m^2 + 0.0734051071819252 * n1^2 -2515.81613588608 * mach^2
+            +0.228108903034049 * ISA_diff^2
+        end
 
         oil = {
             qty_max = 22,               -- [QT] oil qty gauge shows a computed value which is about 1/2 actual just to have similar annunciations regardless engine type
@@ -123,13 +135,13 @@ function configure_pw1133g()
         },
 
         modes = {
-            toga = { {  86.271, 0.00091623, -3.6944e-08, 8.3468e-13},
+            toga = { {  86.271, 0.00091623, -3.6944e-08, 8.3468e-13},   -- see eng_N1_limit_takeoff_clean
                      {  0.1937, -3.9445e-06, -5.07e-10,           0},
                      {-0.00133, -1.9656e-07,         0,           0}
                      {-3.6553e-05,        0,         0,           0}
             },
             toga_penalties = {
-                temp_function = function(altitude) return 34 - (altitude+2000)/500 end,
+                temp_function = function(altitude) return 34 - (altitude+2000)/700 end,
                 packs_dn_temp = -1.2,
                 packs_up_temp = -1.5,
                 nai_dn_temp = 0,
@@ -175,6 +187,22 @@ function configure_pw1133g()
                     oat_off = 0.1
                 }
             }
+
+
+        },
+        model = {
+            coeff_to_thrust_crit_temp = 0.0075, -- See thrust_takeoff_computation
+            perc_penalty_AI_engine    = 0.012,  -- See thrust_penalty_computation
+            perc_penalty_AI_wing      = 0.058,  -- See thrust_penalty_computation
+            perc_penalty_AI_bleed     = 0.03,   -- See thrust_penalty_computation
+            thr_mach_barrier          = 0.4,
+            thr_k_coeff = {
+                            { -0.014,    0 },
+                            { -0.3, -0.595 },
+                            { 0.005, -0.03 },
+                            { 0.89,      1 },
+                          },
+            thr_alt_penalty = {1, 0.7},
 
 
         }
