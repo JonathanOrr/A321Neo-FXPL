@@ -18,9 +18,14 @@ include('engines/model/glue.lua')
 local engine_1_state = nil
 local engine_2_state = nil
 
+local total_eng_forces = globalPropertyf("sim/flightmodel/forces/faxil_prop")
+
 local function initialize()
     engine_1_state = engine_model_create_state()
     engine_2_state = engine_model_create_state()
+
+    local override_eng = globalPropertyi("sim/operation/override/override_engine_forces")
+    set(override_eng, 1)
 end
 
 initialize()
@@ -69,4 +74,21 @@ function update_engine_model()
     print("ENG1", engine_1_state.T_actual_spool, engine_1_state.N1_spooled)
     print("ENG2", engine_2_state.T_actual_spool, engine_2_state.N1_spooled)
 
+    set(Eng_1_N1, engine_1_state.N1_spooled)
+    set(Eng_2_N1, engine_2_state.N1_spooled)
+
+    set(total_eng_forces, -(engine_1_state.T_actual_spool + engine_2_state.T_actual_spool))
+
+end
+
+
+function eng_model_enforce_n1(eng, n1)
+    local N1_max = eng_N1_limit_takeoff_clean(get(OTA), get(ACF_elevation) * 3.28084)
+    if eng == 1 then
+        engine_1_state.N1_spooled = n1
+        engine_1_state.T_theoric = n1 / N1_max * engine_1_state.T_max
+    else
+        engine_2_state.N1_spooled = n1
+        engine_2_state.T_theoric = n1 / N1_max * engine_2_state.T_max
+    end
 end

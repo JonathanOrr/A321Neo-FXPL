@@ -44,6 +44,7 @@
 include('engines/n1_modes.lua')
 include('engines/leap1a.lua')
 include('engines/pw1133g.lua')
+include('engines/model/xp_interface.lua')
 
 -- engine states, simple ones right now for debugging, introduced for more flexible abnormals later
 -- TODO TBD use string values?
@@ -130,7 +131,6 @@ local eng_igniters        = globalPropertyia("sim/cockpit2/engine/actuators/igni
 local starter_duration    = globalPropertyfa("sim/cockpit/engine/starter_duration")
 
 local eng_mixture         = globalPropertyfa("sim/cockpit2/engine/actuators/mixture_ratio")
-local eng_N1_enforce      = globalPropertyfa("sim/flightmodel/engine/ENGN_N1_")
 local eng_N2_enforce      = globalPropertyfa("sim/flightmodel/engine/ENGN_N2_")
 
 local xp_avail_1 = globalProperty("sim/flightmodel/engine/ENGN_running[0]")
@@ -167,6 +167,14 @@ function engines_auto_quick_start(phase)
         -- since oil temp changes slowly in autostart we need to set a initial temp
         set(Eng_1_OIL_temp,60)
         set(Eng_2_OIL_temp,60)
+
+        local always_a_minimum = ENG_N1_LL_IDLE + 0.2 -- regardless altitude and anti-ice N1 of running engine can never be lower
+        if not ENG.data then
+            update_engine_type()
+        end
+        eng_model_enforce_n1(1, always_a_minimum)
+        eng_model_enforce_n1(2, always_a_minimum)
+    
     end
     return 1
 end
@@ -297,13 +305,13 @@ local function update_n1_minimum()
     -- Update ENG1 N1 minimum
     local curr_n1 = get(Eng_1_N1)    
     if curr_n1 < always_a_minimum and get(Engine_1_avail) == 1 then
-        set(eng_N1_enforce, always_a_minimum, 1)
+        eng_model_enforce_n1(1, always_a_minimum)
     end
 
     -- Update ENG2 N1 minimum
     curr_n1 = get(Eng_2_N1)
     if curr_n1 < always_a_minimum and get(Engine_2_avail) == 1 then
-        set(eng_N1_enforce, always_a_minimum, 2)
+        eng_model_enforce_n1(2, always_a_minimum)
     end
 end
 
@@ -647,8 +655,7 @@ local function perform_starting_procedure_follow_n1(eng)
                 -- Let's compute the new N2
                 local new_N1 = curr_N1 + ENG.data.startup.n1[i].n1_increase_per_sec * get(DELTA_TIME)
                 eng_N1_off[eng] = new_N1
-                set(eng_N1_enforce, new_N1, eng)
-
+                eng_model_enforce_n1(eng, new_N1)
                 
                 -- Let's compute the EGT
                 perc = (curr_N1 - ENG.data.startup.n1[i].n1_set) / (ENG.data.startup.n1[i+1].n1_set - ENG.data.startup.n1[i].n1_set)
@@ -1229,7 +1236,7 @@ local function update_spooling()
     set(Eng_spool_time, Math_rescale(19, 6, 101, 1.5, (get(Eng_1_N1)+get(Eng_2_N1))/2))
 end
 
-local function update_engine_type()
+function update_engine_type()
     if current_engine_id ~= get(Engine_option) then
         current_engine_id = get(Engine_option)
         if current_engine_id == 1 then
@@ -1329,6 +1336,8 @@ function update()
         random_pool_hf_update = get(TIME)
         random_pool_hf = math.random()
     end
+
+    update_engine_model()
 
     perf_measure_stop("engines:update()")
 end

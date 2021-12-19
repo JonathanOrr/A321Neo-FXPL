@@ -288,8 +288,10 @@ XP_Battery_2 = globalProperty("sim/cockpit2/electrical/battery_on[1]")
 --ENG
 Engine_1_avail = createGlobalPropertyi("a321neo/dynamics/engines/eng_1_avail", 0, false, true, false)
 Engine_2_avail = createGlobalPropertyi("a321neo/dynamics/engines/eng_2_avail", 0, false, true, false)
-Eng_1_N1 = globalProperty("sim/flightmodel2/engines/N1_percent[0]")
-Eng_2_N1 = globalProperty("sim/flightmodel2/engines/N1_percent[1]")
+--Eng_1_N1 = globalProperty("sim/flightmodel2/engines/N1_percent[0]")
+--Eng_2_N1 = globalProperty("sim/flightmodel2/engines/N1_percent[1]")
+Eng_1_N1 = createGlobalPropertyf("a321neo/dynamics/engines/eng_1_n1", 0, false, true, false)
+Eng_2_N1 = createGlobalPropertyf("a321neo/dynamics/engines/eng_2_n1", 0, false, true, false)
 Eng_1_N2 = createGlobalPropertyf("a321neo/dynamics/engines/eng_1_n2", 0, false, true, false) -- Corrected value for N2
 Eng_2_N2 = createGlobalPropertyf("a321neo/dynamics/engines/eng_2_n2", 0, false, true, false) -- Corrected value for N2
 Eng_1_EGT_c = createGlobalPropertyf("a321neo/dynamics/engines/eng_1_EGT", 0, false, true, false)

@@ -86,7 +86,7 @@ local function delay_thrust(eng_state, thrust_target, T_max, N1_base_max)
 end
 
 local function delay_penalty(eng_state, thrust_target)
-    eng_state.T_penalty_actual = Set_linear_anim_value(eng_state.T_penalty_actual, thrust_target, 0, 999999, 10000)
+    eng_state.T_penalty_actual = Set_linear_anim_value(eng_state.T_penalty_actual, thrust_target, 0, 999999, 1000)
     return eng_state.T_penalty_actual
 end
 
