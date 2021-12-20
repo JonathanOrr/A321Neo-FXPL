@@ -47,11 +47,12 @@ function configure_pw1133g()
         end,
 
         n1_to_FF = function(n1, alt_feet, mach, ISA_diff)
-            return 146.727863052605 + 0.0261181684784363 * alt_feet + 11.5349714362869 * n1 + -2975.15872221267 * mach
+            local FF_kgh =  146.727863052605 + 0.0261181684784363 * alt_feet + 11.5349714362869 * n1 -2975.15872221267 * mach
             -0.00118985331744109 * alt_feet * n1 + 0.00789909488873666 * alt_feet * mach + 7.6073360167464e-05 * alt_feet * ISA_diff
             +80.7328342498208 * n1 * mach -0.0747796055618955 * n1 * ISA_diff -7.14050794839843 * mach * ISA_diff
             +3.61693670778034e-07 * alt_feet^2 + 0.0734051071819252 * n1^2 -2515.81613588608 * mach^2
             +0.228108903034049 * ISA_diff^2
+            return FF_kgh / 3600
         end,
 
         oil = {
