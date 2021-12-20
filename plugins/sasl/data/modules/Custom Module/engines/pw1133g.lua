@@ -149,7 +149,7 @@ function configure_pw1133g()
                 wai_dn_temp = 0,
                 wai_up_temp = -1.4,
             },
-            mct = {  { 8.86876385e+01,  5.00892548e-04, -9.41982308e-09},        -- + 3
+            mct = {  { 8.56876385e+01,  5.00892548e-04, -9.41982308e-09},        -- + 3
                      { 1.43874177e-01, -7.44232815e-06,  5.47076769e-11},
                      {-4.88562399e-04, -1.52254937e-07,  2.74045662e-12}
             },
@@ -162,7 +162,7 @@ function configure_pw1133g()
                 wai_dn_temp = 0.2,
                 wai_up_temp = -3.0,
             },
-            clb = {  { 8.45891154e+01, 5.99049610e-04, -8.66883834e-09},        -- + 2.5
+            clb = {  { 8.20891154e+01, 5.99049610e-04, -8.66883834e-09},        -- + 2.5
                      { 1.31937461e-01, -3.22712476e-06, -5.12397002e-11},
                      {-4.90067904e-04, -1.16452281e-07,  1.49889194e-12}
             },
@@ -191,16 +191,17 @@ function configure_pw1133g()
 
         },
         model = {
+            zero_thrust_n1            = 10,
             coeff_to_thrust_crit_temp = 0.0075, -- See thrust_takeoff_computation
             perc_penalty_AI_engine    = 0.012,  -- See thrust_penalty_computation
             perc_penalty_AI_wing      = 0.058,  -- See thrust_penalty_computation
             perc_penalty_AI_bleed     = 0.03,   -- See thrust_penalty_computation
             thr_mach_barrier          = 0.4,
             thr_k_coeff = {
-                            { -0.014,    0 },
+                            {    0  ,    0 },
                             { -0.3, -0.595 },
                             { 0.005, -0.03 },
-                            { 0.89,      1 },
+                            { 0.90,      1 },
                           },
             thr_alt_penalty = {1, 0.7},
             thr_alt_limit   = 11000,

@@ -133,13 +133,8 @@ local starter_duration    = globalPropertyfa("sim/cockpit/engine/starter_duratio
 local eng_mixture         = globalPropertyfa("sim/cockpit2/engine/actuators/mixture_ratio")
 local eng_N2_enforce      = globalPropertyfa("sim/flightmodel/engine/ENGN_N2_")
 
-local xp_avail_1 = globalProperty("sim/flightmodel/engine/ENGN_running[0]")
-local xp_avail_2 = globalProperty("sim/flightmodel/engine/ENGN_running[1]")
-
 local config_max_thrust = globalProperty("sim/aircraft/engine/acf_tmax")     -- [kN]
 local config_face_size = globalProperty("sim/aircraft/engine/acf_face_jet")  -- [m^2]
-
-local eng_FF_kgs          = globalPropertyfa("sim/cockpit2/engine/indicators/fuel_flow_kg_sec")
 
 ----------------------------------------------------------------------------------------------------
 -- Functions - Commands
@@ -318,18 +313,23 @@ end
 local function update_n2()
     local eng_1_n1 = get(Eng_1_N1)
     if eng_1_n1 > 5 and get(Engine_1_master_switch) == 1  then
-        Set_dataref_linear_anim(Eng_1_N2, ENG.data.n1_to_n2_fun(eng_1_n1), 0, 130, 10)
+        Set_dataref_linear_anim(Eng_1_N2, eng_model_get_N2(1), 0, 130, 10)
     else
         Set_dataref_linear_anim(Eng_1_N2, eng_N2_off[1], 0, 130, 10)
     end
 
     local eng_2_n1 = get(Eng_2_N1)
     if eng_2_n1 > 5 and get(Engine_2_master_switch) == 1  then
-        Set_dataref_linear_anim(Eng_2_N2, ENG.data.n1_to_n2_fun(eng_2_n1), 0, 130, 10)
+        Set_dataref_linear_anim(Eng_2_N2, eng_model_get_N2(2), 0, 130, 10)
     else
         Set_dataref_linear_anim(Eng_2_N2, eng_N2_off[2], 0, 130, 10)
     end
 
+end
+
+local function update_nfan()
+    set(Eng_1_NFAN, eng_model_get_NFAN(1))
+    set(Eng_2_NFAN, eng_model_get_NFAN(2))
 end
 
 
@@ -376,7 +376,7 @@ local function update_ff()
     local eng_1_n1 = get(Eng_1_N1)
     if eng_1_n1 > ENG_N1_LL_IDLE then
         -- when engines are avail, use fuel flow from X-Plane
-        set(Eng_1_FF_kgs, get(eng_FF_kgs,1))
+        set(Eng_1_FF_kgs, eng_model_get_FF(1))
     else
         -- during startup use our fuel flow values
         set(Eng_1_FF_kgs,eng_FF_off[1])
@@ -384,7 +384,7 @@ local function update_ff()
 
     local eng_2_n1 = get(Eng_2_N1)
     if eng_2_n1 > ENG_N1_LL_IDLE then
-        set(Eng_2_FF_kgs, get(eng_FF_kgs,2))
+        set(Eng_2_FF_kgs, eng_model_get_FF(2))
     else
         set(Eng_2_FF_kgs,eng_FF_off[2])
     end
@@ -397,7 +397,7 @@ local function update_avail()
     local eng_has_fuel = get(Fuel_tank_selector_eng_1) > 0
 
     -- ENG 1
-    if get(Eng_1_N1) > ENG_N1_LL_IDLE and get(Engine_1_master_switch) == 1 and eng_has_fuel and get(xp_avail_1) == 1 and get(FAILURE_ENG_1_FAILURE) == 0 then
+    if get(Eng_1_N1) > ENG_N1_LL_IDLE and get(Engine_1_master_switch) == 1 and eng_has_fuel and get(FAILURE_ENG_1_FAILURE) == 0 then
         if get(Engine_1_avail) == 0 then
             set(EWD_engine_avail_ind_start, get(TIME), 1)
             set(Engine_1_avail, 1)
@@ -410,7 +410,7 @@ local function update_avail()
     local eng_has_fuel = get(Fuel_tank_selector_eng_2) > 0
     
     -- ENG 2
-    if get(Eng_2_N1) > ENG_N1_LL_IDLE and get(Engine_2_master_switch) == 1 and eng_has_fuel and get(xp_avail_2) == 1 and get(FAILURE_ENG_2_FAILURE) == 0 then
+    if get(Eng_2_N1) > ENG_N1_LL_IDLE and get(Engine_2_master_switch) == 1 and eng_has_fuel and get(FAILURE_ENG_2_FAILURE) == 0 then
         if get(Engine_2_avail) == 0 then
             set(EWD_engine_avail_ind_start, get(TIME), 2)
             set(Engine_2_avail, 1)
@@ -1231,10 +1231,6 @@ local function update_fadec_status()
     set(Eng_2_FADEC_powered, fadec_has_elec_power(2) and 1 or 0)
 end
 
-local function update_spooling()
-    -- set XPlane dataref TODO: what is the reason behind this
-    set(Eng_spool_time, Math_rescale(19, 6, 101, 1.5, (get(Eng_1_N1)+get(Eng_2_N1))/2))
-end
 
 function update_engine_type()
     if current_engine_id ~= get(Engine_option) then
@@ -1310,7 +1306,7 @@ function update()
 
     update_n1_minimum()
     update_n2()
-    update_spooling()
+    update_nfan()
     update_egt()
     update_ff()
     update_oil_temp_and_press()
