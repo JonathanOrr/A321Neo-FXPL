@@ -203,7 +203,9 @@ function configure_pw1133g()
                             { 0.89,      1 },
                           },
             thr_alt_penalty = {1, 0.7},
-            thr_alt_limit   = 11000
+            thr_alt_limit   = 11000,
+            CG_vert_displacement = 1.0287,  -- in meters
+            CG_lat_displacement = 5.75,     -- in meters
         }
 
     }

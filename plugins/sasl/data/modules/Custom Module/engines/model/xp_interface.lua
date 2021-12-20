@@ -19,6 +19,9 @@ local engine_1_state = nil
 local engine_2_state = nil
 
 local total_eng_forces = globalPropertyf("sim/flightmodel/forces/faxil_prop")
+local pitch_moment = globalPropertyf("sim/flightmodel/forces/M_prop")
+local yaw_moment = globalPropertyf("sim/flightmodel/forces/N_prop")
+local total_eng_forces = globalPropertyf("sim/flightmodel/forces/faxil_prop")
 
 local function initialize()
     engine_1_state = engine_model_create_state()
@@ -78,7 +81,16 @@ function update_engine_model()
     set(Eng_2_N1, engine_2_state.N1_spooled)
 
     set(total_eng_forces, -(engine_1_state.T_actual_spool + engine_2_state.T_actual_spool))
+    update_moment()
+end
 
+function update_moment()
+
+    local thrust_total = engine_1_state.T_actual_spool + engine_2_state.T_actual_spool
+    set(pitch_moment, thrust_total * ENG.data.model.CG_vert_displacement)
+
+    local thrust_asymmetry = engine_1_state.T_actual_spool - engine_2_state.T_actual_spool
+    set(yaw_moment, thrust_asymmetry * ENG.data.model.CG_lat_displacement)
 end
 
 
