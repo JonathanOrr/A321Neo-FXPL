@@ -16,14 +16,14 @@ FBW.lateral.controllers = {
         end,
         bp = function ()
             local l_ail_rat = {
-                {-25, -1},
-                {10 * get(Flaps_deployed_angle) / 30, 0},
-                {25,   1},
+                {-25 + get(AIL_Droop), -1},
+                {get(AIL_Droop),        0},
+                {25,                    1},
             }
             local r_ail_rat = {
-                {-25, 1},
-                {10 * get(Flaps_deployed_angle) / 30, 0},
-                {25, -1},
+                {-25 + get(AIL_Droop),  1},
+                {get(AIL_Droop),        0},
+                {25,                   -1},
             }
 
             local L_AIL_OK = FBW.fctl.AIL.STAT.L.controlled

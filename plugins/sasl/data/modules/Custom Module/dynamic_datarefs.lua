@@ -688,6 +688,7 @@ SFCC_2_status = createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/sfc
 FCDC_1_status = createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/fcdc_1_status", 1, false, true, false)--slats flaps control computer
 FCDC_2_status = createGlobalPropertyi("a321neo/dynamics/FBW/flight_computers/fcdc_2_status", 1, false, true, false)
 --ailerons
+AIL_Droop = createGlobalPropertyf("a321neo/dynamics/FBW/system_status/aileron_droop_angle", 0, false, true, false)
 L_aileron = globalProperty("sim/flightmodel/controls/wing3l_ail1def") -- -25 deg up 25 deg down
 R_aileron = globalProperty("sim/flightmodel/controls/wing3r_ail1def") -- -25 deg up 25 deg down
 --spoilers

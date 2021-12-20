@@ -2,20 +2,27 @@ local function AIL_CTL(lateral_input)
     --surface range -25 up +25 down, 10 degrees droop with flaps(calculated by ELAC 1/2)
     local MAX_DEF = 25
 
+    --AIL_Droop (2deg/s counting frames)--
+    if get(Flaps_deployed_angle) > 0 then
+        set(AIL_Droop, Set_linear_anim_value(get(AIL_Droop), 10, 0, 10, 2))
+    else
+        set(AIL_Droop, Set_linear_anim_value(get(AIL_Droop), 0, 0, 10, 2))
+    end
+
     --properties
     local L_AIL_DEF_TBL = {
-        {-1, -MAX_DEF},
-        {0,   10 * get(Flaps_deployed_angle) / 30},
-        {1,   MAX_DEF},
+        {-1, -MAX_DEF + get(AIL_Droop)},
+        {0,             get(AIL_Droop)},
+        {1,   MAX_DEF + get(AIL_Droop)},
     }
     local R_AIL_DEF_TBL = {
-        {-1,  MAX_DEF},
-        {0,   10 * get(Flaps_deployed_angle) / 30},
-        {1,  -MAX_DEF},
+        {-1,  MAX_DEF + get(AIL_Droop)},
+        {0,             get(AIL_Droop)},
+        {1,  -MAX_DEF + get(AIL_Droop)},
     }
 
-    local L_AIL_TGT = Table_interpolate(L_AIL_DEF_TBL, lateral_input)
-    local R_AIL_TGT = Table_interpolate(R_AIL_DEF_TBL, lateral_input)
+    local L_AIL_TGT = Math_clamp(Table_interpolate(L_AIL_DEF_TBL, lateral_input), -MAX_DEF, MAX_DEF)
+    local R_AIL_TGT = Math_clamp(Table_interpolate(R_AIL_DEF_TBL, lateral_input), -MAX_DEF, MAX_DEF)
 
     --ADD MLA & GLA--
     if FBW.fctl.AIL.STAT.L.controlled and FBW.fctl.AIL.STAT.R.controlled then
