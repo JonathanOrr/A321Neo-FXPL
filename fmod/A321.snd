@@ -1421,7 +1421,6 @@ END_SOUND_ATTACHMENT
 
 ########################## LIGHTS
 
-
 BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /Switches/Overhead/Lights/Seatbelt/Off
   VEH_XYZ 0 2.4 -18.1
@@ -1432,6 +1431,12 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_NAME /Switches/Overhead/Lights/Seatbelt/On
   VEH_XYZ 0 2.4 -18.1
   EVENT_START_COND a321neo/cockpit/misc/buttons/seatbelts_pos == 1
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Switches/Overhead/Lights/Seatbelt/Off
+  VEH_XYZ 0 2.4 -18.1
+  EVENT_START_COND a321neo/cockpit/misc/buttons/seatbelts_pos == 2
 END_SOUND_ATTACHMENT
 
 BEGIN_SOUND_ATTACHMENT
@@ -1848,6 +1853,129 @@ BEGIN_SOUND_ATTACHMENT
   EVENT_START_COND a321neo/dynamics/surfaces/flaps_handle_position > 3.02
 END_SOUND_ATTACHMENT
 
+##########################SPOILERS
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Speedbrakes/Stow
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND sim/cockpit2/controls/speedbrake_ratio <= 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Speedbrakes/Full
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND sim/cockpit2/controls/speedbrake_ratio > 0.95
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Speedbrakes/Arm
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/dynamics/FBW/controls/ground_spoilers_armed == 1
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Speedbrakes/Stow
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/dynamics/FBW/controls/ground_spoilers_armed == 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Speedbrakes/Half
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND sim/cockpit2/controls/speedbrake_ratio >= 0.5
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Speedbrakes/Half
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND sim/cockpit2/controls/speedbrake_ratio <= 0.5
+END_SOUND_ATTACHMENT
+
+##########################RUDDER TRIm
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Switches/Pedestal/Rudder Trim/Left
+  VEH_XYZ 0.018532 1.295582 -18.122955
+  EVENT_START_COND a321neo/cockpit/FBW/rudder_trim_pos == -1
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Switches/Pedestal/Rudder Trim/Center
+  VEH_XYZ 0.018532 1.295582 -18.122955
+  EVENT_START_COND a321neo/cockpit/FBW/rudder_trim_pos == 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Switches/Pedestal/Rudder Trim/Right
+  VEH_XYZ 0.018532 1.295582 -18.122955
+  EVENT_START_COND a321neo/cockpit/FBW/rudder_trim_pos == 1
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Switches/Pedestal/Rudder Trim/Reset
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/FBW/rudder_trim_reset
+END_SOUND_ATTACHMENT
+
+##########################CABIN MAN CTL V/S
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Switches/Overhead/Lights/Cabpress/Down
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/cockpit/pressurization/manual_control_sw_pos == -1
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Switches/Overhead/Lights/Cabpress/Med
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/cockpit/pressurization/manual_control_sw_pos == 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Switches/Overhead/Lights/Cabpress/Up
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_START_COND a321neo/cockpit/pressurization/manual_control_sw_pos == 1
+END_SOUND_ATTACHMENT
+
+##########################FIRE TEST
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Switches/Overhead/FireTest/1
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/fire/eng_1_test
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Switches/Overhead/FireTest/1
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/fire/eng_2_test
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Switches/Overhead/FireTest/1
+  VEH_XYZ 0 1.5 -18.4
+  EVENT_CMND_HOLD_CUE a321neo/cockpit/fire/apu_test
+END_SOUND_ATTACHMENT
+
+##########################GEAR
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Gear/Lever
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_START_COND 	sim/cockpit/switches/gear_handle_status == 1
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Gear/Lever
+  VEH_XYZ 0 1.4 -18.7
+  EVENT_START_COND 	sim/cockpit/switches/gear_handle_status == 0
+END_SOUND_ATTACHMENT
+
+BEGIN_SOUND_ATTACHMENT
+  EVENT_NAME /Gear/Extend
+  VEH_XYZ 0 0 0
+  EVENT_START_COND 	ABS_DELTA=sim/flightmodel/movingparts/gear1def > 0.01
+END_SOUND_ATTACHMENT
 
 ###########
 

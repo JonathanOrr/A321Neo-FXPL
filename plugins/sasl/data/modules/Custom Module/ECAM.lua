@@ -16,8 +16,6 @@
 -- Short description: Main ECAM file 
 -------------------------------------------------------------------------------
 
-local Align_tool =    sasl.gl.loadImage(moduleDirectory .. "/Custom Module/textures/alignment_tools/engine.png")
-
 
 position = {get(ECAM_displaying_position, 1), get(ECAM_displaying_position, 2), get(ECAM_displaying_position, 3), get(ECAM_displaying_position, 4)}
 size = {900, 900}
@@ -286,8 +284,6 @@ function draw()
     draw_ecam_pages()
     draw_ecam_lower_section()
     draw_video()
-
-    --sasl.gl.drawTexture(Align_tool, 0, 0, 900, 900, {1,1,1})
 
     sasl.gl.restoreRenderTarget()
 
