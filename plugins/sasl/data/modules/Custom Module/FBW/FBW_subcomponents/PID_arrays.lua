@@ -2,27 +2,27 @@
 AT_PID_arrays = {
     SSS_L_N1 = {
         P_gain = 0.001,
-        I_gain = 0.00425,
-        D_gain = 0.0001,
+        I_gain = 0.0085,
+        D_gain = 0.00000,
         B_gain = 1,
         Actual_output = 0,
         Desired_output = 0,
         Integral_sum = 0,
         Current_error = 0,
-        Min_out = 0.095,
-        Max_out = 1.2
+        Min_out = 0.001,
+        Max_out = 1.0
     },
     SSS_R_N1 = {
         P_gain = 0.001,
-        I_gain = 0.00425,
-        D_gain = 0.0001,
+        I_gain = 0.0085,
+        D_gain = 0.00000,
         B_gain = 1,
         Actual_output = 0,
         Desired_output = 0,
         Integral_sum = 0,
         Current_error = 0,
-        Min_out = 0.095,
-        Max_out = 1.2
+        Min_out = 0.001,
+        Max_out = 1.0
     },
 }
 
