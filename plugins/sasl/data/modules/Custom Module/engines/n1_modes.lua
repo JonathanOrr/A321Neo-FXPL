@@ -113,13 +113,22 @@ end
 -------------------------------------------------------------------------------
 
 function eng_N1_limit_takeoff_clean(OAT, altitude)
+    if altitude > 16000 then
+        return 1 + eng_N1_limit_mct(OAT, TAT, altitude, false, false, false)
+    end
+
     local comp  = poly_3rd_order(ENG.data.modes.toga, OAT, altitude)
     return Math_clamp(comp, 50, ENG.data.max_n1)
 end
 
 function eng_N1_limit_takeoff(OAT, TAT, altitude, is_packs_on, is_eng_ai_on, is_wing_ai_on)
 
+    if altitude > 16000 then
+        return 1 + eng_N1_limit_mct(OAT, TAT, altitude, is_packs_on, is_eng_ai_on, is_wing_ai_on)
+    end
+
     local comp  = poly_3rd_order(ENG.data.modes.toga, OAT, altitude)
+
 
     local temp_corner_point = ENG.data.modes.toga_penalties.temp_function(altitude)
 
@@ -156,7 +165,6 @@ end
 
 function eng_N1_limit_clb(OAT, TAT, altitude, is_packs_on, is_eng_ai_on, is_wing_ai_on)
     local comp  = poly_2nd_order(ENG.data.modes.clb, OAT, altitude)
-
     local temp_corner_point = ENG.data.modes.clb_penalties.temp_function(altitude)
 
     local EXTRA = compute_penalties(ENG.data.modes.clb_penalties, OAT >= temp_corner_point, is_packs_on, is_eng_ai_on, is_wing_ai_on)
