@@ -10,20 +10,20 @@ FBW.lateral.controllers = {
             FBW.lateral.controllers.roll_rate_PID.output = FBW_PID_BP(
                 FBW_PID_arrays.FBW_ROLL_RATE_PID,
                 FBW.lateral.inputs.x_to_P(get(Total_input_roll), get(Flightmodel_roll)),
-                get(Flightmodel_p_deg),
+                FBW.rates.Roll.x,
                 FBW.filtered_sensors.IAS.filtered
             )
         end,
         bp = function ()
-            local l_ail_rat = {
+            local l_ail_rat_tbl = {
                 {-25 + get(AIL_Droop), -1},
                 {get(AIL_Droop),        0},
-                {25,                    1},
+                {25 + get(AIL_Droop),   1},
             }
-            local r_ail_rat = {
+            local r_ail_rat_tbl = {
                 {-25 + get(AIL_Droop),  1},
                 {get(AIL_Droop),        0},
-                {25,                   -1},
+                {25 + get(AIL_Droop),  -1},
             }
 
             local L_AIL_OK = FBW.fctl.AIL.STAT.L.controlled
@@ -33,27 +33,25 @@ FBW.lateral.controllers = {
             local R_LAF = get(FBW_MLA_output) + get(FBW_GLA_output)
             local L_AIL_WO_LAF = get(L_aileron)
             local R_AIL_WO_LAF = get(R_aileron)
-            if get(FBW_LAF_DEGRADED_AIL) == 1 then
+            if get(FBW_LAF_DEGRADED_AIL) ~= 1 then
                 L_AIL_WO_LAF = L_AIL_WO_LAF - L_LAF
                 R_AIL_WO_LAF = R_AIL_WO_LAF - R_LAF
             end
 
-
-            local ailrat = 0
+            local l_ailrat = Table_interpolate(l_ail_rat_tbl, L_AIL_WO_LAF) + Math_clamp_lower(get(FBW_roll_output) - Table_interpolate(l_ail_rat_tbl, 25),  0)
+            local r_ailrat = Table_interpolate(r_ail_rat_tbl, R_AIL_WO_LAF) + Math_clamp_higher(get(FBW_roll_output) - Table_interpolate(r_ail_rat_tbl, 25), 0)
+            local total_ailrat = 0
             if L_AIL_OK and R_AIL_OK then
-                ailrat = (
-                    Table_interpolate(l_ail_rat, L_AIL_WO_LAF) +
-                    Table_interpolate(r_ail_rat, R_AIL_WO_LAF)
-                ) / 2
+                total_ailrat = (l_ailrat + r_ailrat) / 2
             elseif L_AIL_OK and not R_AIL_OK then
-                ailrat = Table_interpolate(l_ail_rat, L_AIL_WO_LAF)
+                total_ailrat = l_ailrat
             elseif not L_AIL_OK and R_AIL_OK then
-                ailrat = Table_interpolate(r_ail_rat, R_AIL_WO_LAF)
+                total_ailrat = r_ailrat
             else
-                ailrat = 0
+                total_ailrat = 0
             end
 
-            FBW_PID_arrays.FBW_ROLL_RATE_PID.Actual_output = ailrat
+            FBW_PID_arrays.FBW_ROLL_RATE_PID.Actual_output = total_ailrat
         end,
     },
 

@@ -18,6 +18,10 @@ FBW.rates ={
         x = 0,
         dataref = Flightmodel_pitch
     },
+    Roll = {
+        x = 0,
+        dataref = Flightmodel_roll
+    },
 }
 
 local function update_rates(table)
@@ -63,14 +67,14 @@ end
     -- Step 2: compute theta
     local pi = math.pi
     local theta = math.atan2(delta_z, delta_x) + pi
-    
+
     if FBW.rates.XP_YAW.prev_theta == nil then
         FBW.rates.XP_YAW.prev_theta = theta
     end
 
     local prev_theta = FBW.rates.XP_YAW.prev_theta
 
-    -- Step 3: 
+    -- Step 3:
     if get(DELTA_TIME) > 0 then
         if prev_theta > pi and theta < pi and (prev_theta - theta) > pi then
             FBW.rates.XP_YAW.x = (2*pi + theta - prev_theta) / get(DELTA_TIME)
