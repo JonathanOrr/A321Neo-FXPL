@@ -8,7 +8,7 @@ local MAX_STROKE_SPD = 89   -- in mm/s
 local AIL_STROKE     = 43 -- in mm
 local STALL_LOAD     = 4.54 -- 10kN
 local AIL_CURR_SPD = {0,0}
-local AIL_TBL = {FBW.fctl.AIL.STAT.L, FBW.fctl.AIL.STAT.R}
+local AIL_TBL = {FCTL.AIL.STAT.L, FCTL.AIL.STAT.R}
 local AIL_NO_HYD_SPD = 8    -- in °/s
 local NO_HYD_RECTR_TAS = 80 -- in kts
 
@@ -82,7 +82,7 @@ local function ail_spd_model(REQ_DEF, CURR_DEF) -- Compute the maximum speed dep
     return MAX_SPD
 end
 
-FBW.fctl.AIL.ACT = function (REQ_DEF, index)-- index: 1: L, 2: R
+FCTL.AIL.ACT = function (REQ_DEF, index)-- index: 1: L, 2: R
     local DEF_DATAREF = index == 1 and L_aileron or R_aileron
     local AIL_STUCK   = index == 1 and get(FAILURE_FCTL_LAIL) or get(FAILURE_FCTL_RAIL)
     local CURR_DEF    = get(DEF_DATAREF)

@@ -37,7 +37,7 @@ function ecam_update_fctl_page()
         params.R_elevator  = get(R_elevator)
         params.rudder      = get(Rudder_total) * 30/25
         params.tlu         = get(Rudder_travel_lim) * 30/25
-        params.rudder_trim = Math_clamp(get(Rudder_trim_target_angle), -get(Rudder_travel_lim), get(Rudder_travel_lim)) * 30/25
+        params.rudder_trim = Math_clamp(get(RUD_TRIM_TGT_ANGLE), -get(Rudder_travel_lim), get(Rudder_travel_lim)) * 30/25
         params.last_update = get(TIME)
     end
 end
@@ -168,32 +168,32 @@ local function draw_spoilers()
     local spoiler_track_length = 22
 
     local l_spoilers_avail = {
-        FBW.fctl.SPLR.STAT.L[1].controlled,
-        FBW.fctl.SPLR.STAT.L[2].controlled,
-        FBW.fctl.SPLR.STAT.L[3].controlled,
-        FBW.fctl.SPLR.STAT.L[4].controlled,
-        FBW.fctl.SPLR.STAT.L[5].controlled,
+        FCTL.SPLR.STAT.L[1].controlled,
+        FCTL.SPLR.STAT.L[2].controlled,
+        FCTL.SPLR.STAT.L[3].controlled,
+        FCTL.SPLR.STAT.L[4].controlled,
+        FCTL.SPLR.STAT.L[5].controlled,
     }
     local r_spoilers_avail = {
-        FBW.fctl.SPLR.STAT.R[1].controlled,
-        FBW.fctl.SPLR.STAT.R[2].controlled,
-        FBW.fctl.SPLR.STAT.R[3].controlled,
-        FBW.fctl.SPLR.STAT.R[4].controlled,
-        FBW.fctl.SPLR.STAT.R[5].controlled,
+        FCTL.SPLR.STAT.R[1].controlled,
+        FCTL.SPLR.STAT.R[2].controlled,
+        FCTL.SPLR.STAT.R[3].controlled,
+        FCTL.SPLR.STAT.R[4].controlled,
+        FCTL.SPLR.STAT.R[5].controlled,
     }
     local l_spoilers_data_avail = {
-        FBW.fctl.SPLR.STAT.L[1].data_avail,
-        FBW.fctl.SPLR.STAT.L[2].data_avail,
-        FBW.fctl.SPLR.STAT.L[3].data_avail,
-        FBW.fctl.SPLR.STAT.L[4].data_avail,
-        FBW.fctl.SPLR.STAT.L[5].data_avail,
+        FCTL.SPLR.STAT.L[1].data_avail,
+        FCTL.SPLR.STAT.L[2].data_avail,
+        FCTL.SPLR.STAT.L[3].data_avail,
+        FCTL.SPLR.STAT.L[4].data_avail,
+        FCTL.SPLR.STAT.L[5].data_avail,
     }
     local r_spoilers_data_avail = {
-        FBW.fctl.SPLR.STAT.R[1].data_avail,
-        FBW.fctl.SPLR.STAT.R[2].data_avail,
-        FBW.fctl.SPLR.STAT.R[3].data_avail,
-        FBW.fctl.SPLR.STAT.R[4].data_avail,
-        FBW.fctl.SPLR.STAT.R[5].data_avail,
+        FCTL.SPLR.STAT.R[1].data_avail,
+        FCTL.SPLR.STAT.R[2].data_avail,
+        FCTL.SPLR.STAT.R[3].data_avail,
+        FCTL.SPLR.STAT.R[4].data_avail,
+        FCTL.SPLR.STAT.R[5].data_avail,
     }
 
     local l_spoiler_dataref = {
@@ -306,10 +306,10 @@ local function draw_aileron_index()
     sasl.gl.drawWideLine(99, 518, 109, 518, 3, ECAM_WHITE)
     sasl.gl.drawWideLine(101, 516, 101, 531, 3, ECAM_WHITE)
 
-    if FBW.fctl.AIL.STAT.L.data_avail then
-        sasl.gl.drawWideLine(106,    Table_interpolate(aileron_anim, params.L_aileron),    106+20, Table_interpolate(aileron_anim, params.L_aileron)+10, 3, FBW.fctl.AIL.STAT.L.controlled and ECAM_GREEN or ECAM_ORANGE)
-        sasl.gl.drawWideLine(106,    Table_interpolate(aileron_anim, params.L_aileron),    106+20, Table_interpolate(aileron_anim, params.L_aileron)-10, 3, FBW.fctl.AIL.STAT.L.controlled and ECAM_GREEN or ECAM_ORANGE)
-        sasl.gl.drawWideLine(106+20, Table_interpolate(aileron_anim, params.L_aileron)-11, 106+20, Table_interpolate(aileron_anim, params.L_aileron)+11, 3, FBW.fctl.AIL.STAT.L.controlled and ECAM_GREEN or ECAM_ORANGE)
+    if FCTL.AIL.STAT.L.data_avail then
+        sasl.gl.drawWideLine(106,    Table_interpolate(aileron_anim, params.L_aileron),    106+20, Table_interpolate(aileron_anim, params.L_aileron)+10, 3, FCTL.AIL.STAT.L.controlled and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawWideLine(106,    Table_interpolate(aileron_anim, params.L_aileron),    106+20, Table_interpolate(aileron_anim, params.L_aileron)-10, 3, FCTL.AIL.STAT.L.controlled and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawWideLine(106+20, Table_interpolate(aileron_anim, params.L_aileron)-11, 106+20, Table_interpolate(aileron_anim, params.L_aileron)+11, 3, FCTL.AIL.STAT.L.controlled and ECAM_GREEN or ECAM_ORANGE)
     else
         sasl.gl.drawText(AirbusDUFont, 132, 591, "XX", 29, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
@@ -335,10 +335,10 @@ local function draw_aileron_index()
     sasl.gl.drawWideLine(801, 518, 791, 518, 3, ECAM_WHITE)
     sasl.gl.drawWideLine(800, 516, 800, 531, 3, ECAM_WHITE)
 
-    if FBW.fctl.AIL.STAT.R.data_avail then
-        sasl.gl.drawWideLine(794,    Table_interpolate(aileron_anim, params.R_aileron),    794-20, Table_interpolate(aileron_anim, params.R_aileron)+10, 3, FBW.fctl.AIL.STAT.R.controlled and ECAM_GREEN or ECAM_ORANGE)
-        sasl.gl.drawWideLine(794,    Table_interpolate(aileron_anim, params.R_aileron),    794-20, Table_interpolate(aileron_anim, params.R_aileron)-10, 3, FBW.fctl.AIL.STAT.R.controlled and ECAM_GREEN or ECAM_ORANGE)
-        sasl.gl.drawWideLine(795-20, Table_interpolate(aileron_anim, params.R_aileron)-11, 795-20, Table_interpolate(aileron_anim, params.R_aileron)+11, 3, FBW.fctl.AIL.STAT.R.controlled and ECAM_GREEN or ECAM_ORANGE)
+    if FCTL.AIL.STAT.R.data_avail then
+        sasl.gl.drawWideLine(794,    Table_interpolate(aileron_anim, params.R_aileron),    794-20, Table_interpolate(aileron_anim, params.R_aileron)+10, 3, FCTL.AIL.STAT.R.controlled and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawWideLine(794,    Table_interpolate(aileron_anim, params.R_aileron),    794-20, Table_interpolate(aileron_anim, params.R_aileron)-10, 3, FCTL.AIL.STAT.R.controlled and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawWideLine(795-20, Table_interpolate(aileron_anim, params.R_aileron)-11, 795-20, Table_interpolate(aileron_anim, params.R_aileron)+11, 3, FCTL.AIL.STAT.R.controlled and ECAM_GREEN or ECAM_ORANGE)
     else
         sasl.gl.drawText(AirbusDUFont, 772, 591, "XX", 29, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
@@ -369,10 +369,10 @@ local function draw_elevator_index()
     sasl.gl.drawWideLine(243, 260, 253, 260, 3, ECAM_WHITE)
     sasl.gl.drawWideLine(245, 258, 245, 275, 3, ECAM_WHITE)
 
-    if FBW.fctl.ELEV.STAT.L.data_avail then
-        sasl.gl.drawWideLine(250,    Table_interpolate(elevator_anim, params.L_elevator),    250+20, Table_interpolate(elevator_anim, params.L_elevator)+10, 3, FBW.fctl.ELEV.STAT.L.controlled and ECAM_GREEN or ECAM_ORANGE)
-        sasl.gl.drawWideLine(250,    Table_interpolate(elevator_anim, params.L_elevator),    250+20, Table_interpolate(elevator_anim, params.L_elevator)-10, 3, FBW.fctl.ELEV.STAT.L.controlled and ECAM_GREEN or ECAM_ORANGE)
-        sasl.gl.drawWideLine(250+20, Table_interpolate(elevator_anim, params.L_elevator)-11, 250+20, Table_interpolate(elevator_anim, params.L_elevator)+11, 3, FBW.fctl.ELEV.STAT.L.controlled and ECAM_GREEN or ECAM_ORANGE)
+    if FCTL.ELEV.STAT.L.data_avail then
+        sasl.gl.drawWideLine(250,    Table_interpolate(elevator_anim, params.L_elevator),    250+20, Table_interpolate(elevator_anim, params.L_elevator)+10, 3, FCTL.ELEV.STAT.L.controlled and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawWideLine(250,    Table_interpolate(elevator_anim, params.L_elevator),    250+20, Table_interpolate(elevator_anim, params.L_elevator)-10, 3, FCTL.ELEV.STAT.L.controlled and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawWideLine(250+20, Table_interpolate(elevator_anim, params.L_elevator)-11, 250+20, Table_interpolate(elevator_anim, params.L_elevator)+11, 3, FCTL.ELEV.STAT.L.controlled and ECAM_GREEN or ECAM_ORANGE)
     else
         sasl.gl.drawText(AirbusDUFont, 276, 308, "XX", 29, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
@@ -395,10 +395,10 @@ local function draw_elevator_index()
     sasl.gl.drawWideLine(657, 260, 647, 260, 3, ECAM_WHITE)
     sasl.gl.drawWideLine(656, 258, 656, 275, 3, ECAM_WHITE)
 
-    if FBW.fctl.ELEV.STAT.R.data_avail then
-        sasl.gl.drawWideLine(650,    Table_interpolate(elevator_anim, params.R_elevator),    650-20, Table_interpolate(elevator_anim, params.R_elevator)+10, 3, FBW.fctl.ELEV.STAT.R.controlled and ECAM_GREEN or ECAM_ORANGE)
-        sasl.gl.drawWideLine(650,    Table_interpolate(elevator_anim, params.R_elevator),    650-20, Table_interpolate(elevator_anim, params.R_elevator)-10, 3, FBW.fctl.ELEV.STAT.R.controlled and ECAM_GREEN or ECAM_ORANGE)
-        sasl.gl.drawWideLine(651-20, Table_interpolate(elevator_anim, params.R_elevator)-11, 651-20, Table_interpolate(elevator_anim, params.R_elevator)+11, 3, FBW.fctl.ELEV.STAT.R.controlled and ECAM_GREEN or ECAM_ORANGE)
+    if FCTL.ELEV.STAT.R.data_avail then
+        sasl.gl.drawWideLine(650,    Table_interpolate(elevator_anim, params.R_elevator),    650-20, Table_interpolate(elevator_anim, params.R_elevator)+10, 3, FCTL.ELEV.STAT.R.controlled and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawWideLine(650,    Table_interpolate(elevator_anim, params.R_elevator),    650-20, Table_interpolate(elevator_anim, params.R_elevator)-10, 3, FCTL.ELEV.STAT.R.controlled and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawWideLine(651-20, Table_interpolate(elevator_anim, params.R_elevator)-11, 651-20, Table_interpolate(elevator_anim, params.R_elevator)+11, 3, FCTL.ELEV.STAT.R.controlled and ECAM_GREEN or ECAM_ORANGE)
     else
         sasl.gl.drawText(AirbusDUFont, 628, 308, "XX", 29, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
@@ -415,11 +415,11 @@ local function draw_pitch_trim()
 
     sasl.gl.drawText(AirbusDUFont, 417, 465, "PITCH TRIM", 29, true, false, TEXT_ALIGN_CENTER, get(FAILURE_FCTL_THS_MECH) == 0 and ECAM_WHITE or ECAM_ORANGE)
 
-    sasl.gl.drawText(AirbusDUFont, 415, 430, FBW.fctl.THS.STAT.data_avail and math.floor(math.abs(get(THS_DEF))) or "X",      34, true, false,  TEXT_ALIGN_RIGHT, (FBW.fctl.THS.STAT.controlled and FBW.fctl.THS.STAT.data_avail) and ECAM_GREEN or ECAM_ORANGE)
-    sasl.gl.drawText(AirbusDUFont, 420, 430, ".",                                                                             34, true, false, TEXT_ALIGN_CENTER, (FBW.fctl.THS.STAT.controlled and FBW.fctl.THS.STAT.data_avail) and ECAM_GREEN or ECAM_ORANGE)
-    sasl.gl.drawText(AirbusDUFont, 442, 430, FBW.fctl.THS.STAT.data_avail and math.floor(math.abs(get(THS_DEF))%1*10) or "X", 25, true, false, TEXT_ALIGN_CENTER, (FBW.fctl.THS.STAT.controlled and FBW.fctl.THS.STAT.data_avail) and ECAM_GREEN or ECAM_ORANGE)
+    sasl.gl.drawText(AirbusDUFont, 415, 430, FCTL.THS.STAT.data_avail and math.floor(math.abs(get(THS_DEF))) or "X",      34, true, false,  TEXT_ALIGN_RIGHT, (FCTL.THS.STAT.controlled and FCTL.THS.STAT.data_avail) and ECAM_GREEN or ECAM_ORANGE)
+    sasl.gl.drawText(AirbusDUFont, 420, 430, ".",                                                                             34, true, false, TEXT_ALIGN_CENTER, (FCTL.THS.STAT.controlled and FCTL.THS.STAT.data_avail) and ECAM_GREEN or ECAM_ORANGE)
+    sasl.gl.drawText(AirbusDUFont, 442, 430, FCTL.THS.STAT.data_avail and math.floor(math.abs(get(THS_DEF))%1*10) or "X", 25, true, false, TEXT_ALIGN_CENTER, (FCTL.THS.STAT.controlled and FCTL.THS.STAT.data_avail) and ECAM_GREEN or ECAM_ORANGE)
     sasl.gl.drawText(AirbusDUFont, 465, 430, "°",                                                                             34, true, false, TEXT_ALIGN_CENTER, ECAM_BLUE)
-    sasl.gl.drawText(AirbusDUFont, 501, 430, FBW.fctl.THS.STAT.data_avail and (get(THS_DEF) >= 0 and "UP" or "DN") or "",     25, true, false, TEXT_ALIGN_CENTER, (FBW.fctl.THS.STAT.controlled and FBW.fctl.THS.STAT.data_avail) and ECAM_GREEN or ECAM_ORANGE)
+    sasl.gl.drawText(AirbusDUFont, 501, 430, FCTL.THS.STAT.data_avail and (get(THS_DEF) >= 0 and "UP" or "DN") or "",     25, true, false, TEXT_ALIGN_CENTER, (FCTL.THS.STAT.controlled and FCTL.THS.STAT.data_avail) and ECAM_GREEN or ECAM_ORANGE)
 end
 
 local function draw_rudder()
@@ -435,15 +435,15 @@ local function draw_rudder()
     SASL_draw_needle_adv(450, 350, 150, 160, 300, 3, ECAM_WHITE)
     sasl.gl.drawArc(450, 350, 157, 160, 296, 4, ECAM_WHITE)
 
-    if FBW.fctl.RUD.STAT.data_avail then
+    if FCTL.RUD.STAT.data_avail then
         --RUDDER LIM--
-        SASL_draw_needle_adv(450, 350, 150, 178, 270 - params.tlu, 3, FBW.fctl.RUD.STAT.controlled and ECAM_GREEN or ECAM_ORANGE)
-        sasl.gl.drawArc(450, 350, 175, 178, 270 - params.tlu, 2, FBW.fctl.RUD.STAT.controlled and ECAM_GREEN or ECAM_ORANGE)
-        SASL_draw_needle_adv(450, 350, 150, 178, 270 + params.tlu, 3, FBW.fctl.RUD.STAT.controlled and ECAM_GREEN or ECAM_ORANGE)
-        sasl.gl.drawArc(450, 350, 175, 178, 270 + params.tlu - 2, 2, FBW.fctl.RUD.STAT.controlled and ECAM_GREEN or ECAM_ORANGE)
+        SASL_draw_needle_adv(450, 350, 150, 178, 270 - params.tlu, 3, FCTL.RUD.STAT.controlled and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawArc(450, 350, 175, 178, 270 - params.tlu, 2, FCTL.RUD.STAT.controlled and ECAM_GREEN or ECAM_ORANGE)
+        SASL_draw_needle_adv(450, 350, 150, 178, 270 + params.tlu, 3, FCTL.RUD.STAT.controlled and ECAM_GREEN or ECAM_ORANGE)
+        sasl.gl.drawArc(450, 350, 175, 178, 270 + params.tlu - 2, 2, FCTL.RUD.STAT.controlled and ECAM_GREEN or ECAM_ORANGE)
 
         --RUDDER TRIM--
-        SASL_draw_needle_adv(450, 350, 159, 179, 270 + params.rudder_trim, 4, FBW.fctl.RUD.STAT.controlled and ECAM_BLUE or ECAM_ORANGE)
+        SASL_draw_needle_adv(450, 350, 159, 179, 270 + params.rudder_trim, 4, FCTL.RUD.STAT.controlled and ECAM_BLUE or ECAM_ORANGE)
 
         --RUDDER SURFACE--
         sasl.gl.drawArc(
@@ -453,7 +453,7 @@ local function draw_rudder()
             12,
             params.rudder,
             180,
-            FBW.fctl.RUD.STAT.controlled and ECAM_GREEN or ECAM_ORANGE
+            FCTL.RUD.STAT.controlled and ECAM_GREEN or ECAM_ORANGE
         )
         sasl.gl.drawWideLine(
             Get_rotated_point_x_pos_offset(450, 84, 180 - params.rudder, 11),
@@ -461,7 +461,7 @@ local function draw_rudder()
             Get_rotated_point_x_CC_pos(450, 150, 180 - params.rudder),
             Get_rotated_point_y_CC_pos(350, 150, 180 - params.rudder),
             3,
-            FBW.fctl.RUD.STAT.controlled and ECAM_GREEN or ECAM_ORANGE
+            FCTL.RUD.STAT.controlled and ECAM_GREEN or ECAM_ORANGE
         )
         sasl.gl.drawWideLine(
             Get_rotated_point_x_pos_offset(450, 84, 180 - params.rudder, -11),
@@ -469,10 +469,10 @@ local function draw_rudder()
             Get_rotated_point_x_CC_pos(450, 150, 180 - params.rudder),
             Get_rotated_point_y_CC_pos(350, 150, 180 - params.rudder),
             3,
-            FBW.fctl.RUD.STAT.controlled and ECAM_GREEN or ECAM_ORANGE
+            FCTL.RUD.STAT.controlled and ECAM_GREEN or ECAM_ORANGE
         )
 
-        if FBW.fctl.RUD.STAT.bkup_ctl then
+        if FCTL.RUD.STAT.bkup_ctl then
             sasl.gl.drawText(AirbusDUFont, 450, size[2]/2-154, "NORM CTL", 29, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
         end
     else

@@ -10,9 +10,9 @@ local mabs = math.abs
 local function Compute_HUMAN_TRIM_SPD()
     local TRIM_WHEEL_SPD = HUMAN_WHEEL_SPD
 
-    TRIM_WHEEL_SPD = Math_rescale(0, 0, 3000, TRIM_WHEEL_SPD, FBW.fctl.THS.STAT.total_hyd_press)
-    TRIM_WHEEL_SPD = FBW.fctl.THS.STAT.mechanical and TRIM_WHEEL_SPD or 0
-    set(Human_pitch_trim, FBW.fctl.THS.STAT.mechanical and get(Human_pitch_trim) or 0)
+    TRIM_WHEEL_SPD = Math_rescale(0, 0, 3000, TRIM_WHEEL_SPD, FCTL.THS.STAT.total_hyd_press)
+    TRIM_WHEEL_SPD = FCTL.THS.STAT.mechanical and TRIM_WHEEL_SPD or 0
+    set(Human_pitch_trim, FCTL.THS.STAT.mechanical and get(Human_pitch_trim) or 0)
 
     return TRIM_WHEEL_SPD
 end
@@ -27,8 +27,8 @@ local function Compute_THS_HYD_SPD()
         HYD_SPD = THS_CLEAN_SPD
     end
 
-    HYD_SPD = Math_rescale(0, 0, 3000, HYD_SPD, FBW.fctl.THS.STAT.total_hyd_press)
-    HYD_SPD = FBW.fctl.THS.STAT.controlled and HYD_SPD or 0
+    HYD_SPD = Math_rescale(0, 0, 3000, HYD_SPD, FCTL.THS.STAT.total_hyd_press)
+    HYD_SPD = FCTL.THS.STAT.controlled and HYD_SPD or 0
 
     return HYD_SPD
 end
@@ -45,7 +45,7 @@ local function THS_DEF2RAT(CURR_DEF)
     set(XP_THS_ratio, THS_RATIO)
 end
 
-FBW.fctl.THS.ACT = function (REQ_DEF)
+FCTL.THS.ACT = function (REQ_DEF)
     local TGT_SPD = 0
     local DEF_DATAREF = THS_DEF
     local CURR_DEF = get(DEF_DATAREF)

@@ -1,4 +1,4 @@
-FBW.fctl.SPLR.STAT = {
+FCTL.SPLR.STAT = {
     L ={
         [1]  = {
             controlled = true,
@@ -138,5 +138,5 @@ local function COMPUTE_SPLR_STAT(fctl_table)
 end
 
 function update()
-    COMPUTE_SPLR_STAT(FBW.fctl.SPLR.STAT)
+    COMPUTE_SPLR_STAT(FCTL.SPLR.STAT)
 end

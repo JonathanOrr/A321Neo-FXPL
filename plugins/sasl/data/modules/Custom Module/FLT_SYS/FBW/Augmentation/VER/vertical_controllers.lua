@@ -38,8 +38,8 @@ FBW.vertical.controllers = {
                 {17,  -1},
             }
 
-            local L_ELEV_OK = FBW.fctl.ELEV.STAT.L.controlled
-            local R_ELEV_OK = FBW.fctl.ELEV.STAT.R.controlled
+            local L_ELEV_OK = FCTL.ELEV.STAT.L.controlled
+            local R_ELEV_OK = FCTL.ELEV.STAT.R.controlled
 
             local elev_rat = 0
 
@@ -254,8 +254,8 @@ FBW.vertical.controllers = {
                 {17,  -1},
             }
 
-            local L_ELEV_OK = FBW.fctl.ELEV.STAT.L.controlled
-            local R_ELEV_OK = FBW.fctl.ELEV.STAT.R.controlled
+            local L_ELEV_OK = FCTL.ELEV.STAT.L.controlled
+            local R_ELEV_OK = FCTL.ELEV.STAT.R.controlled
 
             local elev_rat = 0
 
@@ -318,8 +318,8 @@ FBW.vertical.controllers = {
                 {17,  -1},
             }
 
-            local L_ELEV_OK = FBW.fctl.ELEV.STAT.L.controlled
-            local R_ELEV_OK = FBW.fctl.ELEV.STAT.R.controlled
+            local L_ELEV_OK = FCTL.ELEV.STAT.L.controlled
+            local R_ELEV_OK = FCTL.ELEV.STAT.R.controlled
 
             local elev_rat = 0
 
@@ -349,8 +349,8 @@ FBW.vertical.controllers = {
             --FBW_PID_arrays.FBW_CSTAR_PID.Integral = 0
         end,
         elevator_pos = function ()
-            local L_ELEV_OK = FBW.fctl.ELEV.STAT.L.controlled
-            local R_ELEV_OK = FBW.fctl.ELEV.STAT.R.controlled
+            local L_ELEV_OK = FCTL.ELEV.STAT.L.controlled
+            local R_ELEV_OK = FCTL.ELEV.STAT.R.controlled
 
             local EVEL_DEF = 0
 

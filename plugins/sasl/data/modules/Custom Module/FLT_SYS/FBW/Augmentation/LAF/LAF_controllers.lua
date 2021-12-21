@@ -6,13 +6,13 @@ FBW.LAF.controllers = {
         set(FBW_LAF_DEGRADED_SPLR_5, 0)
 
         --surface degradation--
-        if not FBW.fctl.AIL.STAT.L.controlled or not FBW.fctl.AIL.STAT.R.controlled then
+        if not FCTL.AIL.STAT.L.controlled or not FCTL.AIL.STAT.R.controlled then
             set(FBW_LAF_DEGRADED_AIL, 1)
         end
-        if not FBW.fctl.SPLR.STAT.L[4].controlled or not FBW.fctl.SPLR.STAT.R[4].controlled then
+        if not FCTL.SPLR.STAT.L[4].controlled or not FCTL.SPLR.STAT.R[4].controlled then
             set(FBW_LAF_DEGRADED_SPLR_4, 1)
         end
-        if not FBW.fctl.SPLR.STAT.L[5].controlled or not FBW.fctl.SPLR.STAT.R[5].controlled then
+        if not FCTL.SPLR.STAT.L[5].controlled or not FCTL.SPLR.STAT.R[5].controlled then
             set(FBW_LAF_DEGRADED_SPLR_5, 1)
         end
 

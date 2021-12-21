@@ -51,18 +51,18 @@ local function SPLR_CTL(lateral_input, spdbrk_input, ground_spoilers_mode, in_au
     local R_SPLR_DATAREFS = FBW.fctl.control.SPLR_COMMON.R_SPLR_DATAREFS
 
     local L_SPLR_CONTROLLED = {
-        FBW.fctl.SPLR.STAT.L[1].controlled,
-        FBW.fctl.SPLR.STAT.L[2].controlled,
-        FBW.fctl.SPLR.STAT.L[3].controlled,
-        FBW.fctl.SPLR.STAT.L[4].controlled,
-        FBW.fctl.SPLR.STAT.L[5].controlled,
+        FCTL.SPLR.STAT.L[1].controlled,
+        FCTL.SPLR.STAT.L[2].controlled,
+        FCTL.SPLR.STAT.L[3].controlled,
+        FCTL.SPLR.STAT.L[4].controlled,
+        FCTL.SPLR.STAT.L[5].controlled,
     }
     local R_SPLR_CONTROLLED = {
-        FBW.fctl.SPLR.STAT.R[1].controlled,
-        FBW.fctl.SPLR.STAT.R[2].controlled,
-        FBW.fctl.SPLR.STAT.R[3].controlled,
-        FBW.fctl.SPLR.STAT.R[4].controlled,
-        FBW.fctl.SPLR.STAT.R[5].controlled,
+        FCTL.SPLR.STAT.R[1].controlled,
+        FCTL.SPLR.STAT.R[2].controlled,
+        FCTL.SPLR.STAT.R[3].controlled,
+        FCTL.SPLR.STAT.R[4].controlled,
+        FCTL.SPLR.STAT.R[5].controlled,
     }
 
     --limit input range
@@ -154,7 +154,7 @@ local function SPLR_CTL(lateral_input, spdbrk_input, ground_spoilers_mode, in_au
         if get(SEC_1_status) == 0 and get(SEC_2_status) == 0 then
             set(Speedbrakes_inhibited, 1)
         end
-        if not FBW.fctl.ELEV.STAT.L.controlled or not FBW.fctl.ELEV.STAT.R.controlled then
+        if not FCTL.ELEV.STAT.L.controlled or not FCTL.ELEV.STAT.R.controlled then
             set(Speedbrakes_inhibited, 1)
         end
         if FBW.vertical.protections.General.AoA.H_AOA_PROT_ACTIVE then
@@ -188,8 +188,8 @@ local function SPLR_CTL(lateral_input, spdbrk_input, ground_spoilers_mode, in_au
     end
 
     --ROLL DIRECT LAW------------------------------------------------------------------------------------------------
-    if get(FBW_lateral_law) == FBW_DIRECT_LAW and (FBW.fctl.AIL.STAT.L.controlled or FBW.fctl.AIL.STAT.R.controlled) then
-        if FBW.fctl.SPLR.STAT.L[4].controlled then
+    if get(FBW_lateral_law) == FBW_DIRECT_LAW and (FCTL.AIL.STAT.L.controlled or FCTL.AIL.STAT.R.controlled) then
+        if FCTL.SPLR.STAT.L[4].controlled then
             L_SPLR_ROLL_TGT[1] = 0
             L_SPLR_ROLL_TGT[2] = 0
             L_SPLR_ROLL_TGT[3] = 0
@@ -198,7 +198,7 @@ local function SPLR_CTL(lateral_input, spdbrk_input, ground_spoilers_mode, in_au
             L_SPLR_ROLL_TGT[2] = 0
             L_SPLR_ROLL_TGT[4] = 0
         end
-        if FBW.fctl.SPLR.STAT.R[4].controlled then
+        if FCTL.SPLR.STAT.R[4].controlled then
             R_SPLR_ROLL_TGT[1] = 0
             R_SPLR_ROLL_TGT[2] = 0
             R_SPLR_ROLL_TGT[3] = 0
@@ -240,8 +240,8 @@ local function SPLR_CTL(lateral_input, spdbrk_input, ground_spoilers_mode, in_au
 
         --TOTAL SPOILERS OUTPUT TO THE SURFACES--
         --if any surface exceeds the max deflection limit the othere side would reduce deflection by the exceeded amount
-        FBW.fctl.SPLR.ACT(Math_clamp_higher(get(L_SPDBRK_EXTENSION, i) + get(L_ROLL_SPLR_EXTENSION, i), SPLR_TOTAL_MAX_DEF[i]) - Math_clamp_lower(get(R_SPDBRK_EXTENSION, i) + get(R_ROLL_SPLR_EXTENSION, i) - SPLR_TOTAL_MAX_DEF[i], 0), "L", i)
-        FBW.fctl.SPLR.ACT(Math_clamp_higher(get(R_SPDBRK_EXTENSION, i) + get(R_ROLL_SPLR_EXTENSION, i), SPLR_TOTAL_MAX_DEF[i]) - Math_clamp_lower(get(L_SPDBRK_EXTENSION, i) + get(L_ROLL_SPLR_EXTENSION, i) - SPLR_TOTAL_MAX_DEF[i], 0), "R", i)
+        FCTL.SPLR.ACT(Math_clamp_higher(get(L_SPDBRK_EXTENSION, i) + get(L_ROLL_SPLR_EXTENSION, i), SPLR_TOTAL_MAX_DEF[i]) - Math_clamp_lower(get(R_SPDBRK_EXTENSION, i) + get(R_ROLL_SPLR_EXTENSION, i) - SPLR_TOTAL_MAX_DEF[i], 0), "L", i)
+        FCTL.SPLR.ACT(Math_clamp_higher(get(R_SPDBRK_EXTENSION, i) + get(R_ROLL_SPLR_EXTENSION, i), SPLR_TOTAL_MAX_DEF[i]) - Math_clamp_lower(get(L_SPDBRK_EXTENSION, i) + get(L_ROLL_SPLR_EXTENSION, i) - SPLR_TOTAL_MAX_DEF[i], 0), "R", i)
     end
 
     set(TOTAL_SPDBRK_EXTENSION, TEMP_TOTAL_SPDBRK_EXTENSION)

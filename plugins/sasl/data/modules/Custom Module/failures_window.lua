@@ -173,6 +173,9 @@ local failures_data = {
             {name="THS MOTOR 2\nFAILURE", status=false, dataref=FAILURE_FCTL_THS_MOT_2 },
             {name="THS MOTOR 3\nFAILURE", status=false, dataref=FAILURE_FCTL_THS_MOT_3 },
             {name="THS\nSTUCK", status=false, dataref=FAILURE_FCTL_THS_MECH },
+            {name="RUD TRIM MOT\n1 FAILURE", status=false, dataref=FAILURE_FCTL_RUDTRIM_MOT_1 },
+            {name="RUD TRIM MOT\n2 FAILURE", status=false, dataref=FAILURE_FCTL_RUDTRIM_MOT_2 },
+            {name="BPS\nFAILURE", status=false, dataref=FAILURE_FCTL_BPS },
             {name="BCM\nFAILURE", status=false, dataref=FAILURE_FCTL_BCM },
             {name="RUDDER\nSTUCK", status=false, dataref=FAILURE_FCTL_RUDDER },
         }

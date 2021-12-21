@@ -255,7 +255,7 @@ local proc_messages = {
         color = ECAM_BLUE,
         indent_lvl = 0, 
         cond = function()
-            return not FBW.fctl.RUD.STAT.controlled
+            return not FCTL.RUD.STAT.controlled
         end
     },
     {
@@ -279,7 +279,7 @@ local proc_messages = {
         indent_lvl = 0,
         cond = function()
             return
-            not FBW.fctl.RUD.STAT.controlled
+            not FCTL.RUD.STAT.controlled
         end
     },
     {
@@ -289,7 +289,7 @@ local proc_messages = {
         indent_lvl = 0, 
         cond = function()
             return
-            not FBW.fctl.RUD.STAT.controlled
+            not FCTL.RUD.STAT.controlled
         end
     },
     {
@@ -299,7 +299,7 @@ local proc_messages = {
         indent_lvl = 0,
         cond = function()
             return
-            not FBW.fctl.RUD.STAT.controlled
+            not FCTL.RUD.STAT.controlled
         end
     },
     {
@@ -309,7 +309,7 @@ local proc_messages = {
         indent_lvl = 1, 
         cond = function()
             return
-            not FBW.fctl.RUD.STAT.controlled
+            not FCTL.RUD.STAT.controlled
         end
     },
     

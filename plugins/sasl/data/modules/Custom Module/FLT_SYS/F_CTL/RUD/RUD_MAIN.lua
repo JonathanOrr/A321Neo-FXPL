@@ -1,6 +1,8 @@
 addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/F_CTL/RUD")
 
-FBW.fctl.RUD = {}
+FCTL.RUD = {}
+FCTL.RUDTRIM_MOTOR = {}
+FCTL.RUDTRIM = {}
 
 components = {
     RUD_CMD  {},

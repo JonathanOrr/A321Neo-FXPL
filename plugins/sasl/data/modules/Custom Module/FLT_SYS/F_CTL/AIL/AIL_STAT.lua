@@ -1,4 +1,4 @@
-FBW.fctl.AIL.STAT = {
+FCTL.AIL.STAT = {
     L  = {
         controlled = true,
         data_avail = true,
@@ -77,5 +77,5 @@ local function COMPUTE_AIL_STAT(fctl_table)
 end
 
 function update()
-    COMPUTE_AIL_STAT(FBW.fctl.AIL.STAT)
+    COMPUTE_AIL_STAT(FCTL.AIL.STAT)
 end

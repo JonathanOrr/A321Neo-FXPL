@@ -216,32 +216,32 @@ local function draw_wheel_page_spoilers()
     local spoiler_track_length = 22
 
     local l_spoilers_avail = {
-        FBW.fctl.SPLR.STAT.L[1].controlled,
-        FBW.fctl.SPLR.STAT.L[2].controlled,
-        FBW.fctl.SPLR.STAT.L[3].controlled,
-        FBW.fctl.SPLR.STAT.L[4].controlled,
-        FBW.fctl.SPLR.STAT.L[5].controlled,
+        FCTL.SPLR.STAT.L[1].controlled,
+        FCTL.SPLR.STAT.L[2].controlled,
+        FCTL.SPLR.STAT.L[3].controlled,
+        FCTL.SPLR.STAT.L[4].controlled,
+        FCTL.SPLR.STAT.L[5].controlled,
     }
     local r_spoilers_avail = {
-        FBW.fctl.SPLR.STAT.R[1].controlled,
-        FBW.fctl.SPLR.STAT.R[2].controlled,
-        FBW.fctl.SPLR.STAT.R[3].controlled,
-        FBW.fctl.SPLR.STAT.R[4].controlled,
-        FBW.fctl.SPLR.STAT.R[5].controlled,
+        FCTL.SPLR.STAT.R[1].controlled,
+        FCTL.SPLR.STAT.R[2].controlled,
+        FCTL.SPLR.STAT.R[3].controlled,
+        FCTL.SPLR.STAT.R[4].controlled,
+        FCTL.SPLR.STAT.R[5].controlled,
     }
     local l_spoilers_data_avail = {
-        FBW.fctl.SPLR.STAT.L[1].data_avail,
-        FBW.fctl.SPLR.STAT.L[2].data_avail,
-        FBW.fctl.SPLR.STAT.L[3].data_avail,
-        FBW.fctl.SPLR.STAT.L[4].data_avail,
-        FBW.fctl.SPLR.STAT.L[5].data_avail,
+        FCTL.SPLR.STAT.L[1].data_avail,
+        FCTL.SPLR.STAT.L[2].data_avail,
+        FCTL.SPLR.STAT.L[3].data_avail,
+        FCTL.SPLR.STAT.L[4].data_avail,
+        FCTL.SPLR.STAT.L[5].data_avail,
     }
     local r_spoilers_data_avail = {
-        FBW.fctl.SPLR.STAT.R[1].data_avail,
-        FBW.fctl.SPLR.STAT.R[2].data_avail,
-        FBW.fctl.SPLR.STAT.R[3].data_avail,
-        FBW.fctl.SPLR.STAT.R[4].data_avail,
-        FBW.fctl.SPLR.STAT.R[5].data_avail,
+        FCTL.SPLR.STAT.R[1].data_avail,
+        FCTL.SPLR.STAT.R[2].data_avail,
+        FCTL.SPLR.STAT.R[3].data_avail,
+        FCTL.SPLR.STAT.R[4].data_avail,
+        FCTL.SPLR.STAT.R[5].data_avail,
     }
 
     local l_spoiler_dataref = {

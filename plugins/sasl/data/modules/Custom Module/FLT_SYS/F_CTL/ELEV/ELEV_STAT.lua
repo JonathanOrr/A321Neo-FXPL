@@ -1,4 +1,4 @@
-FBW.fctl.ELEV.STAT = {
+FCTL.ELEV.STAT = {
     L  = {
         controlled = true,
         centered = false,
@@ -116,5 +116,5 @@ local function COMPUTE_ELEV_STAT(fctl_table)
 end
 
 function update()
-    COMPUTE_ELEV_STAT(FBW.fctl.ELEV.STAT)
+    COMPUTE_ELEV_STAT(FCTL.ELEV.STAT)
 end

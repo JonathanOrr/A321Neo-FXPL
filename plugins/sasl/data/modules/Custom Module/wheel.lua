@@ -286,7 +286,7 @@ local function update_steering()
         end
     end
     -- Update graphical positions for the rudder pedals
-    pedals_pos = Math_clamp((get(Rudder_trim_target_angle)/30) + pedals_pos, -1, 1)
+    pedals_pos = Math_clamp((get(RUD_TRIM_TGT_ANGLE)/30) + pedals_pos, -1, 1)
     set(Rudder_pedal_pos, pedals_pos)
     
     -- TODO: And now add the AUTOFLT component

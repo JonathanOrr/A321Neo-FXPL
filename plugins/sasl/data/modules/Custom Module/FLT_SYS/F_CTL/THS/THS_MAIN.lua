@@ -1,7 +1,7 @@
 addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/F_CTL/THS")
 
-FBW.fctl.THS = {}
-FBW.fctl.THS_MOTOR = {}
+FCTL.THS = {}
+FCTL.THS_MOTOR = {}
 
 components = {
     THS_CMD {},

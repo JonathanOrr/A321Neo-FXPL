@@ -1,6 +1,6 @@
 addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/F_CTL/AIL")
 
-FBW.fctl.AIL = {}
+FCTL.AIL = {}
 
 components = {
     AIL_STAT {},

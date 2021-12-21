@@ -1,6 +1,6 @@
 addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/F_CTL/INPUT")
 
-FBW.fctl.INPUT = {}
+FCTL.INPUT = {}
 
 components = {
     SIDESTICK      {},

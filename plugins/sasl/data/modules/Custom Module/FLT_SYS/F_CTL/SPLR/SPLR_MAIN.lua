@@ -1,6 +1,6 @@
 addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/F_CTL/SPLR")
 
-FBW.fctl.SPLR = {}
+FCTL.SPLR = {}
 
 components = {
     SPLR_STAT {},

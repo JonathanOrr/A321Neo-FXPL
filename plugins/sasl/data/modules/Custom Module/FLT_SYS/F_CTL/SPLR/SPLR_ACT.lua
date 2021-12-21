@@ -17,18 +17,18 @@ local SPLR_FILTER_TBL = {
 
 local SPLR_TBL = {
     L = {
-        FBW.fctl.SPLR.STAT.L[1],
-        FBW.fctl.SPLR.STAT.L[2],
-        FBW.fctl.SPLR.STAT.L[3],
-        FBW.fctl.SPLR.STAT.L[4],
-        FBW.fctl.SPLR.STAT.L[5],
+        FCTL.SPLR.STAT.L[1],
+        FCTL.SPLR.STAT.L[2],
+        FCTL.SPLR.STAT.L[3],
+        FCTL.SPLR.STAT.L[4],
+        FCTL.SPLR.STAT.L[5],
     },
     R = {
-        FBW.fctl.SPLR.STAT.R[1],
-        FBW.fctl.SPLR.STAT.R[2],
-        FBW.fctl.SPLR.STAT.R[3],
-        FBW.fctl.SPLR.STAT.R[4],
-        FBW.fctl.SPLR.STAT.R[5],
+        FCTL.SPLR.STAT.R[1],
+        FCTL.SPLR.STAT.R[2],
+        FCTL.SPLR.STAT.R[3],
+        FCTL.SPLR.STAT.R[4],
+        FCTL.SPLR.STAT.R[5],
     },
 }
 local SPLR_DATAREF_TBL = {
@@ -138,7 +138,7 @@ local function ail_spd_model(REQ_DEF, CURR_DEF) -- Compute the maximum speed dep
     return MAX_SPD
 end
 
-FBW.fctl.SPLR.ACT = function (REQ_DEF, side, index)
+FCTL.SPLR.ACT = function (REQ_DEF, side, index)
     local DEF_DATAREF = SPLR_DATAREF_TBL[side][index]
     local SPLR_STUCK  = get(SPLR_FAIL_DATAREF_TBL[side][index])
     local CURR_DEF    = get(DEF_DATAREF)

@@ -1,4 +1,4 @@
-FBW.fctl.THS_MOTOR.STAT = {
+FCTL.THS_MOTOR.STAT = {
     [1] = {
         avail = true,
         failure_dataref = FAILURE_FCTL_THS_MOT_1,
@@ -10,7 +10,7 @@ FBW.fctl.THS_MOTOR.STAT = {
         avail = true,
         failure_dataref = FAILURE_FCTL_THS_MOT_2,
         power = function ()
-            return get(DC_shed_ess_pwrd) == 1
+            return get(DC_ess_bus_pwrd) == 1
         end
     },
     [3] = {
@@ -21,7 +21,7 @@ FBW.fctl.THS_MOTOR.STAT = {
         end
     },
 }
-FBW.fctl.THS.STAT = {
+FCTL.THS.STAT = {
     controlled = true,
     mechanical = true,
     data_avail = true,
@@ -29,19 +29,19 @@ FBW.fctl.THS.STAT = {
     failure_dataref = FAILURE_FCTL_THS_MECH,
     last_ELAC_1_STAT = 0,
     motor = {
-        FBW.fctl.THS_MOTOR.STAT[1],
-        FBW.fctl.THS_MOTOR.STAT[2],
-        FBW.fctl.THS_MOTOR.STAT[3],
+        FCTL.THS_MOTOR.STAT[1],
+        FCTL.THS_MOTOR.STAT[2],
+        FCTL.THS_MOTOR.STAT[3],
     },
     hyd_sys = {
         Hydraulic_G_press,
         Hydraulic_Y_press,
     },
     computer_priority = {
-        {ELAC_2_status, FBW.fctl.THS_MOTOR.STAT[1]},
-        {ELAC_1_status, FBW.fctl.THS_MOTOR.STAT[2]},
-        {SEC_2_status,  FBW.fctl.THS_MOTOR.STAT[3]},
-        {SEC_1_status,  FBW.fctl.THS_MOTOR.STAT[2]},
+        {ELAC_2_status, FCTL.THS_MOTOR.STAT[1]},
+        {ELAC_1_status, FCTL.THS_MOTOR.STAT[2]},
+        {SEC_2_status,  FCTL.THS_MOTOR.STAT[3]},
+        {SEC_1_status,  FCTL.THS_MOTOR.STAT[2]},
     }
 }
 
@@ -147,7 +147,7 @@ local function THS_REST(THS_table, THS_POS_DATAREF)
 end
 
 function update()
-    COMPUTE_THS_MOTOR_STAT(FBW.fctl.THS_MOTOR.STAT)
-    COMPUTE_THS_STAT(FBW.fctl.THS.STAT, FBW.fctl.ELEV.STAT)
-    THS_REST(FBW.fctl.THS.STAT, Digital_THS_def_tgt)
+    COMPUTE_THS_MOTOR_STAT(FCTL.THS_MOTOR.STAT)
+    COMPUTE_THS_STAT(FCTL.THS.STAT, FCTL.ELEV.STAT)
+    THS_REST(FCTL.THS.STAT, Digital_THS_def_tgt)
 end

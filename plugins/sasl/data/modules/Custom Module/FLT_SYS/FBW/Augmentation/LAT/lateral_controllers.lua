@@ -26,8 +26,8 @@ FBW.lateral.controllers = {
                 {25 + get(AIL_Droop),  -1},
             }
 
-            local L_AIL_OK = FBW.fctl.AIL.STAT.L.controlled
-            local R_AIL_OK = FBW.fctl.AIL.STAT.R.controlled
+            local L_AIL_OK = FCTL.AIL.STAT.L.controlled
+            local R_AIL_OK = FCTL.AIL.STAT.R.controlled
 
             local L_LAF = get(FBW_MLA_output) + get(FBW_GLA_output)
             local R_LAF = get(FBW_MLA_output) + get(FBW_GLA_output)

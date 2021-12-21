@@ -66,6 +66,7 @@ AvionicsBay = {}
 -- MCDU
 MCDU = {}
 
+FCTL = {}
 FBW = {
     rates = {},
     fctl = {

@@ -5,16 +5,16 @@ FBW_law_var_table = {
 }
 
 function FBW_law_reconfiguration(var_table)
-    local ALL_SPLR_FAIL = not FBW.fctl.SPLR.STAT.L[1].controlled and
-                          not FBW.fctl.SPLR.STAT.L[2].controlled and
-                          not FBW.fctl.SPLR.STAT.L[3].controlled and
-                          not FBW.fctl.SPLR.STAT.L[4].controlled and
-                          not FBW.fctl.SPLR.STAT.L[5].controlled and
-                          not FBW.fctl.SPLR.STAT.R[1].controlled and
-                          not FBW.fctl.SPLR.STAT.R[2].controlled and
-                          not FBW.fctl.SPLR.STAT.R[3].controlled and
-                          not FBW.fctl.SPLR.STAT.R[4].controlled and
-                          not FBW.fctl.SPLR.STAT.R[5].controlled
+    local ALL_SPLR_FAIL = not FCTL.SPLR.STAT.L[1].controlled and
+                          not FCTL.SPLR.STAT.L[2].controlled and
+                          not FCTL.SPLR.STAT.L[3].controlled and
+                          not FCTL.SPLR.STAT.L[4].controlled and
+                          not FCTL.SPLR.STAT.L[5].controlled and
+                          not FCTL.SPLR.STAT.R[1].controlled and
+                          not FCTL.SPLR.STAT.R[2].controlled and
+                          not FCTL.SPLR.STAT.R[3].controlled and
+                          not FCTL.SPLR.STAT.R[4].controlled and
+                          not FCTL.SPLR.STAT.R[5].controlled
 
     local reconfiguration_conditions = {
         --ALT(NO PROTECTION), DIRECT, ALT
@@ -30,12 +30,12 @@ function FBW_law_reconfiguration(var_table)
             {adirs_how_many_adrs_work() == 1, "DOUBLE SELF DETECTED ADR FAILURE"},
             {adirs_how_many_aoa_working() >= 2 and adirs_aoa_disagree(), "DOUBLE NOT SELF DETECTED ADR FAILURE OR AOA DISAGREE"},
             {get(ELAC_1_status) == 0 and get(ELAC_2_status) == 0, "DOUBLE ELAC FAILURE"},
-            {not FBW.fctl.AIL.STAT.L.controlled and not FBW.fctl.AIL.STAT.R.controlled, "DOUBLE AILERON FAILURE"},
-            {not FBW.fctl.THS.STAT.controlled and not FBW.fctl.THS.STAT.mechanical, "THS JAMMED"},
+            {not FCTL.AIL.STAT.L.controlled and not FCTL.AIL.STAT.R.controlled, "DOUBLE AILERON FAILURE"},
+            {not FCTL.THS.STAT.controlled and not FCTL.THS.STAT.mechanical, "THS JAMMED"},
             {get(ELAC_2_status) == 0 and get(Hydraulic_B_press) < 1450, "ELAC 2 + BLUE HYD FAILURE"},
             {get(ELAC_1_status) == 0 and get(Hydraulic_G_press) < 1450, "ELAC 1 + GREEN HYD FAILURE"},
             {get(ELAC_1_status) == 0 and get(Hydraulic_Y_press) < 1450, "ELAC 1 + YELLOW HYD FAILURE"},
-            {not FBW.fctl.ELEV.STAT.L.controlled or not FBW.fctl.ELEV.STAT.R.controlled, "ONE ELEVATOR FAILURE"},
+            {not FCTL.ELEV.STAT.L.controlled or not FCTL.ELEV.STAT.R.controlled, "ONE ELEVATOR FAILURE"},
             --MSSING SIDESTICK FAILURE
             {adirs_how_many_irs_fully_work() == 1, "DOUBLE SELF DETECTED IR FAILURE"},
             {get(Hydraulic_G_press) < 1450 and get(Hydraulic_Y_press) < 1450, "DOUBLE HYD FAILURE (G+Y)"},

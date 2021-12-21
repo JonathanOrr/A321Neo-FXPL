@@ -22,11 +22,11 @@ local function ELEV_CTL(vertical_input)
     end
 
     --SURFACE CENTERING--
-    if FBW.fctl.ELEV.STAT.L.centered then L_ELEV_TGT = 0 end
-    if FBW.fctl.ELEV.STAT.R.centered then R_ELEV_TGT = 0 end
+    if FCTL.ELEV.STAT.L.centered then L_ELEV_TGT = 0 end
+    if FCTL.ELEV.STAT.R.centered then R_ELEV_TGT = 0 end
 
-    FBW.fctl.ELEV.ACT(L_ELEV_TGT, 1)
-    FBW.fctl.ELEV.ACT(R_ELEV_TGT, 2)
+    FCTL.ELEV.ACT(L_ELEV_TGT, 1)
+    FCTL.ELEV.ACT(R_ELEV_TGT, 2)
 end
 
 function update()

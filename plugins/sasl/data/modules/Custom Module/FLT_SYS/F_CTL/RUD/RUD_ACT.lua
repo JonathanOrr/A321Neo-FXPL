@@ -5,7 +5,7 @@ local MAX_STROKE_SPD = 110  -- in mm/s
 local RUD_STROKE     = 110  -- in mm
 local STALL_LOAD     = 4.43 -- 10kN
 local RUD_CURR_SPD   = 0
-local RUD_TBL = FBW.fctl.RUD.STAT
+local RUD_TBL = FCTL.RUD.STAT
 local RUD_NO_HYD_SPD = 8    -- in °/s
 local NO_HYD_RECTR_TAS = 100 -- in kts
 
@@ -77,7 +77,7 @@ local function rud_spd_model(REQ_DEF, CURR_DEF) -- Compute the maximum speed dep
     return MAX_SPD
 end
 
-FBW.fctl.RUD.ACT = function (REQ_DEF)
+FCTL.RUD.ACT = function (REQ_DEF)
     local DEF_DATAREF = Rudder_total
     local RUD_STUCK   = get(FAILURE_FCTL_RUDDER)
     local CURR_DEF    = get(DEF_DATAREF)

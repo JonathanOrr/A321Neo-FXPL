@@ -1,6 +1,6 @@
 addSearchPath(moduleDirectory .. "/Custom Module/FLT_SYS/F_CTL/GND_SPLR")
 
-FBW.fctl.GND_SPLR = {}
+FCTL.GND_SPLR = {}
 
 components = {
     GND_SPLR_CMD  {},

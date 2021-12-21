@@ -9,7 +9,7 @@ local MAX_STROKE_SPD = 60   -- in mm/s
 local ELEV_STOKE     = 60   -- in mm
 local STALL_LOAD     = 2.77 -- 10kN
 local ELEV_CURR_SPD = {0,0}
-local ELEV_TBL = {FBW.fctl.ELEV.STAT.L, FBW.fctl.ELEV.STAT.R}
+local ELEV_TBL = {FCTL.ELEV.STAT.L, FCTL.ELEV.STAT.R}
 local ELEV_NO_HYD_SPD = 8   -- in °/s
 local NO_HYD_RECTR_TAS = 80 -- in kts
 
@@ -83,7 +83,7 @@ local function elev_spd_model(REQ_DEF, CURR_DEF) -- Compute the maximum speed de
     return MAX_SPD
 end
 
-FBW.fctl.ELEV.ACT = function (REQ_DEF, index)-- index: 1: L, 2: R
+FCTL.ELEV.ACT = function (REQ_DEF, index)-- index: 1: L, 2: R
     local DEF_DATAREF = index == 1 and L_elevator or R_elevator
     local ELEV_STUCK  = index == 1 and get(FAILURE_FCTL_LELEV) or get(FAILURE_FCTL_RELEV)
     local CURR_DEF    = get(DEF_DATAREF)
