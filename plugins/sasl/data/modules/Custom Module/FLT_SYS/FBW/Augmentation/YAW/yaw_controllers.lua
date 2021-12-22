@@ -11,7 +11,7 @@ FBW.yaw.controllers = {
             --law reconfiguration
             if get(FBW_yaw_law) == FBW_ALT_NO_PROT_LAW then
                 --limit travel ability to 5 degrees of rudder
-                FBW.yaw.controllers.yaw_damper_PD.output = Math_clamp(FBW.yaw.controllers.yaw_damper_PD.output, -5/30, 5/30)
+                FBW.yaw.controllers.yaw_damper_PD.output = Math_clamp(FBW.yaw.controllers.yaw_damper_PD.output, -5, 5)
             end
             if get(FBW_yaw_law) == FBW_MECHANICAL_BACKUP_LAW or get(FBW_yaw_law) == FBW_ABNORMAL_LAW or not FCTL.RUD.STAT.controlled then
                 FBW.yaw.controllers.yaw_damper_PD.output = 0
@@ -29,9 +29,8 @@ FBW.yaw.controllers = {
             end
         end,
         control = function ()
-            local RUDDER_LIM_RAT = get(Rudder_travel_lim) / 30
-            FBW_PID_arrays.FBW_NRM_YAW_PID.Min_out = -RUDDER_LIM_RAT
-            FBW_PID_arrays.FBW_NRM_YAW_PID.Max_out =  RUDDER_LIM_RAT
+            FBW_PID_arrays.FBW_NRM_YAW_PID.Min_out = -get(Rudder_travel_lim)
+            FBW_PID_arrays.FBW_NRM_YAW_PID.Max_out =  get(Rudder_travel_lim)
 
             FBW.yaw.controllers.SI_demand_PID.output = FBW_PID_BP(
                 FBW_PID_arrays.FBW_NRM_YAW_PID,
@@ -40,11 +39,9 @@ FBW.yaw.controllers = {
             )
         end,
         bp = function ()
-            local RUDDER_LIM_RAT = get(Rudder_travel_lim) / 30
-
             FBW_PID_arrays.FBW_NRM_YAW_PID.Desired_output = FBW_PID_arrays.FBW_NRM_YAW_PID.Desired_output + FBW.yaw.controllers.yaw_damper_PD.output
-            FBW_PID_arrays.FBW_NRM_YAW_PID.Desired_output = Math_clamp(FBW_PID_arrays.FBW_NRM_YAW_PID.Desired_output, -RUDDER_LIM_RAT, RUDDER_LIM_RAT)
-            FBW_PID_arrays.FBW_NRM_YAW_PID.Actual_output = get(Rudder_total) / 30
+            FBW_PID_arrays.FBW_NRM_YAW_PID.Desired_output = Math_clamp(FBW_PID_arrays.FBW_NRM_YAW_PID.Desired_output, -get(Rudder_travel_lim), get(Rudder_travel_lim))
+            FBW_PID_arrays.FBW_NRM_YAW_PID.Actual_output = get(Rudder_total)
         end
     },
 
@@ -54,8 +51,8 @@ FBW.yaw.controllers = {
             Math_clamp(
                 (get(Total_input_yaw) + FBW.yaw.controllers.yaw_damper_PD.output)                     * get(FBW_lateral_ground_mode_ratio) +
                 (FBW.yaw.controllers.SI_demand_PID.output + FBW.yaw.controllers.yaw_damper_PD.output) * get(FBW_lateral_flight_mode_ratio),
-                -1,
-                1
+                -25,
+                25
             )
         )
     end

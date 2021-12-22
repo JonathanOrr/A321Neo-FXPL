@@ -35,22 +35,22 @@ FBW.yaw.inputs = {
     end,
 
     x_to_beta = function (x)
-        local max_rudder_def = 30
+        local MAX_RUD_DEF = 25
 
         --blend max beta according to speed of the aircraft and the A350 FCOM
         --15 degrees of beta at 160kts to 2 degrees at VMO [modified maximum beta to 8 due to difference in lateral static stability]
         --linear interpolation is used to avoid significant change in value during circular falloff
-        local max_beta = 8
-        local min_beta = 2
-        local beta_range = max_beta - min_beta
+        local MAX_BETA = 8
+        local MIN_BETA = 2
+        local beta_range = MAX_BETA - MIN_BETA
         local Speed_range = get(Fixed_VMAX) - 160
         local IAS_KTS = Math_clamp(FBW.filtered_sensors.IAS.filtered, 160, get(Fixed_VMAX))
-        set(Max_beta_demand_lim, -beta_range * math.sqrt(1 - ((IAS_KTS - get(Fixed_VMAX)) / Speed_range)^2) + max_beta)
+        set(Max_beta_demand_lim, -beta_range * math.sqrt(1 - ((IAS_KTS - get(Fixed_VMAX)) / Speed_range)^2) + MAX_BETA)
 
         local SI_demand = {
-            {-1, -max_beta},
-            {0,  get(RUD_TRIM_TGT_ANGLE) / max_rudder_def * max_beta},
-            {1,  max_beta},
+            {-MAX_RUD_DEF,                                        -MAX_BETA},
+            {0,            get(RUD_TRIM_TGT_ANGLE) / MAX_RUD_DEF * MAX_BETA},
+            {MAX_RUD_DEF,                                          MAX_BETA},
         }
 
         return Math_clamp(Table_interpolate(SI_demand, x), -get(Max_beta_demand_lim), get(Max_beta_demand_lim))

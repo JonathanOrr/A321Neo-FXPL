@@ -21,12 +21,10 @@ local function SUM_INPUT()
 
     set(Total_input_roll,  get(TOT_SSTICK_X))
     set(Total_input_pitch, get(TOT_SSTICK_Y))
-    set(Total_input_yaw,   get(XP_YAW))
 
     --clamping total input sum--
     set(Total_input_roll,  Math_clamp(get(Total_input_roll), -1, 1))
     set(Total_input_pitch, Math_clamp(get(Total_input_pitch), -1, 1))
-    set(Total_input_yaw,   Math_clamp(get(Total_input_yaw), -1, 1))
 end
 
 function update()

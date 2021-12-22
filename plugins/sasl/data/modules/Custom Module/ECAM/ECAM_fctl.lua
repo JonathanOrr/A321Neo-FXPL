@@ -442,9 +442,6 @@ local function draw_rudder()
         SASL_draw_needle_adv(450, 350, 150, 178, 270 + params.tlu, 3, FCTL.RUD.STAT.controlled and ECAM_GREEN or ECAM_ORANGE)
         sasl.gl.drawArc(450, 350, 175, 178, 270 + params.tlu - 2, 2, FCTL.RUD.STAT.controlled and ECAM_GREEN or ECAM_ORANGE)
 
-        --RUDDER TRIM--
-        SASL_draw_needle_adv(450, 350, 159, 179, 270 + params.rudder_trim, 4, FCTL.RUD.STAT.controlled and ECAM_BLUE or ECAM_ORANGE)
-
         --RUDDER SURFACE--
         sasl.gl.drawArc(
             Get_rotated_point_x_CC_pos(450, 84, 180 - params.rudder),
@@ -477,7 +474,15 @@ local function draw_rudder()
         end
     else
         sasl.gl.drawText(AirbusDUFont, 452, size[2]/2-220, "XX", 28, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
+    end
 
+    --RUDDER TRIM--
+    if FCTL.RUDTRIM.STAT.data_avail then
+        SASL_draw_needle_adv(450, 350, 159, 179, 270 + params.rudder_trim, 4, FCTL.RUDTRIM.STAT.controlled and ECAM_BLUE or ECAM_ORANGE)
+    end
+
+    --TRIM OR LIMIT XX
+    if not FCTL.RUDTRIM.STAT.data_avail or not FCTL.RUD.STAT.data_avail then
         sasl.gl.drawText(AirbusDUFont, 452, size[2]/2-285, "XX", 28, true, false, TEXT_ALIGN_CENTER, ECAM_ORANGE)
     end
 

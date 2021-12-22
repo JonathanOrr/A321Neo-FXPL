@@ -6,9 +6,9 @@ local RUD_TRIM_RST_SPD = 1.5
 local function RUD_PEDAL_CTL()
     --set rudder pedal center
     local rudder_pedal_anim = {
-        {-1,                                        -20},
-        {0,  get(RUD_TRIM_TGT_ANGLE) / MAX_RUD_DEF * 20},
-        {1,                                          20},
+        {-MAX_RUD_DEF, -20},
+        {0,              0},
+        {MAX_RUD_DEF,   20},
     }
     set(Rudder_pedal_angle, Table_interpolate(rudder_pedal_anim, get(Total_input_yaw)))
 end
@@ -24,7 +24,7 @@ local function RUD_TRIM_CTL(trim_input, resetting_trim)
     end
 
     --IF RUDDER IS ELECTRICALLY CONTROLLED--
-    if FCTL.RUD.STAT.controlled then
+    if FCTL.RUDTRIM.STAT.controlled then
         if resetting_trim == 0 then--apply human input
             set(RUD_TRIM_TGT_ANGLE, Math_clamp(get(RUD_TRIM_TGT_ANGLE) + trim_input * RUD_TRIM_SPD * get(DELTA_TIME), -20, 20))
             set(Human_rudder_trim, 0)
@@ -33,12 +33,7 @@ local function RUD_TRIM_CTL(trim_input, resetting_trim)
             set(Human_rudder_trim, 0)
         end
 
-        --as normal law uses Beta demand, the trim is always centered, and the controller determines the postition of the rudder
-        if get(FBW_yaw_law) ~= FBW_NORMAL_LAW or get(All_on_ground) == 1 then
-            set(RUD_TRIM_ACT_ANGLE, Set_linear_anim_value(get(RUD_TRIM_ACT_ANGLE), get(RUD_TRIM_TGT_ANGLE), -get(Rudder_travel_lim), get(Rudder_travel_lim), RUD_TRIM_RST_SPD))
-        else
-            set(RUD_TRIM_ACT_ANGLE, Set_linear_anim_value(get(RUD_TRIM_ACT_ANGLE), 0, -get(Rudder_travel_lim), get(Rudder_travel_lim), RUD_TRIM_RST_SPD))
-        end
+        set(RUD_TRIM_ACT_ANGLE, Set_linear_anim_value(get(RUD_TRIM_ACT_ANGLE), get(RUD_TRIM_TGT_ANGLE), -get(Rudder_travel_lim), get(Rudder_travel_lim), RUD_TRIM_RST_SPD))
     end
 end
 
@@ -59,17 +54,17 @@ local function RUD_TRV_LIM_CTL()
     end
 end
 
-local function RUD_CTL(yaw_input)
-    --the proportion is the same no matter the limits, hence at higher speed you'll reach the limit with less deflection
-    local rudder_travel_target_table = {
-        {-1, -MAX_RUD_DEF},
-        {0,  get(RUD_TRIM_ACT_ANGLE)},
-        {1,  MAX_RUD_DEF},
-    }
-    local rudder_travel_target = Table_interpolate(rudder_travel_target_table, yaw_input)
+local function COMPUTE_HUMAN_RUD_INPUT()
+    --the pedals are not limited, hence at higher speed you'll reach the limit with less deflection
+    local RUD_TGT = get(XP_YAW) * (MAX_RUD_DEF + math.abs(get(RUD_TRIM_ACT_ANGLE))) + get(RUD_TRIM_ACT_ANGLE)
 
-    --rudder position calculation--
-    FCTL.RUD.ACT(rudder_travel_target)
+    set(Total_input_yaw, RUD_TGT)
+
+    set(Total_input_yaw, Math_clamp(get(Total_input_yaw), -MAX_RUD_DEF, MAX_RUD_DEF))
+end
+
+local function RUD_CTL()
+    FCTL.RUD.ACT(get(FBW_yaw_output))
     set(Rudder_top, get(Rudder_total))
     set(Rudder_btm, get(Rudder_total))
 end
@@ -79,5 +74,6 @@ function update()
     RUD_PEDAL_CTL()
     RUD_TRIM_CTL(get(Human_rudder_trim), get(Resetting_rudder_trim))
     RUD_TRV_LIM_CTL()
-    RUD_CTL(get(FBW_yaw_output))
+    COMPUTE_HUMAN_RUD_INPUT()
+    RUD_CTL()
 end
