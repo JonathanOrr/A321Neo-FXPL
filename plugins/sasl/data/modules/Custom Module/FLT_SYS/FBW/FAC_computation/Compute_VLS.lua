@@ -43,7 +43,7 @@ FBW.FAC_COMPUTATION.COMPUTE_VLS = function()
         Math_rescale(
             0,
             0,
-            FBW.fctl.control.SPLR_COMMON.Get_cmded_spdbrk_def(1),
+            FCTL.SPLR.COMMON.Get_cmded_spdbrk_def(1),
             Table_interpolate(VLS_spdbrake_fx_lerp_table, get(Slats)*27 + get(Flaps_deployed_angle)),
             get(TOTAL_SPDBRK_EXTENSION)
         )

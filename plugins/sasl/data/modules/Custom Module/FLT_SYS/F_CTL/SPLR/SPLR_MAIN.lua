@@ -5,6 +5,7 @@ FCTL.SPLR = {}
 components = {
     SPLR_STAT {},
     SPLR_ACT  {},
+    SPDBRK_STAT {},
     SPLR_CTL  {},
 }
 

@@ -1,54 +1,15 @@
-FBW.fctl.control.SPLR_COMMON = {
-    SPLR_PER_WING = 5,
-    SPLR_SPDBRK_MAX_GRD_DEF = {6, 20, 40, 40, 0},
-    SPLR_SPDBRK_MAX_AIR_DEF = {0, 25, 25, 25, 0},
-    SPLR_SPDBRK_GRD_SPD = {20, 20, 20, 20, 20},
-    SPLR_SPDBRK_AIR_SPD = {5, 5, 5, 5, 5},
-    SPLR_SPDBRK_HIGHSPD_AIR_SPD = {1, 1, 1, 1, 1},
-    L_SPLR_DATAREFS = {L_SPLR_1, L_SPLR_2, L_SPLR_3, L_SPLR_4, L_SPLR_5},
-    R_SPLR_DATAREFS = {R_SPLR_1, R_SPLR_2, R_SPLR_3, R_SPLR_4, R_SPLR_5},
+--PROPERTIES--
+local SPLR_PER_WING = 5
+local L_SPLR_DATAREFS = {L_SPLR_1, L_SPLR_2, L_SPLR_3, L_SPLR_4, L_SPLR_5}
+local R_SPLR_DATAREFS = {L_SPLR_1, L_SPLR_2, L_SPLR_3, L_SPLR_4, L_SPLR_5}
 
-    SPLR_SPDBRK_MAX_DEF = {6, 20, 40, 40, 0},
-    SPLR_SPDBRK_MAX_SPD = {5, 5, 5, 5, 5},
-
-    COMPUTE_SPDBRK_MAX_DEF = function ()
-        if get(Aft_wheel_on_ground) == 1 then
-            --speed up ground spoilers deflection
-            FBW.fctl.control.SPLR_COMMON.SPLR_SPDBRK_MAX_SPD = FBW.fctl.control.SPLR_COMMON.SPLR_SPDBRK_GRD_SPD
-
-            --on ground and slightly open spoiler 1 with speedbrake handle
-            FBW.fctl.control.SPLR_COMMON.SPLR_SPDBRK_MAX_DEF = FBW.fctl.control.SPLR_COMMON.SPLR_SPDBRK_MAX_GRD_DEF
-        else
-            --slow down the spoilers for flight
-            FBW.fctl.control.SPLR_COMMON.SPLR_SPDBRK_MAX_SPD = FBW.fctl.control.SPLR_COMMON.SPLR_SPDBRK_AIR_SPD
-
-            --adujust max in air deflection of the speedbrakes
-            FBW.fctl.control.SPLR_COMMON.SPLR_SPDBRK_MAX_DEF = FBW.fctl.control.SPLR_COMMON.SPLR_SPDBRK_MAX_AIR_DEF
-        end
-    end,
-
-    Get_cmded_spdbrk_def = function (spdbrk_input)
-        spdbrk_input = Math_clamp(spdbrk_input, 0, 1)
-
-        local total_cmded_def = 0
-        for i = 1, FBW.fctl.control.SPLR_COMMON.SPLR_PER_WING do
-            total_cmded_def = total_cmded_def + FBW.fctl.control.SPLR_COMMON.SPLR_SPDBRK_MAX_DEF[i] * spdbrk_input * 2
-        end
-
-        return total_cmded_def
-    end,
-}
+local SPDBRK_HIGHSPD_AIR_SPD = {1, 1, 1, 1, 1}
 
 -------------------------------------------------------------------------------
 -- ROLL SPOILERS & SPD BRAKES
 -------------------------------------------------------------------------------
 local function SPLR_CTL(lateral_input, spdbrk_input, ground_spoilers_mode, in_auto_flight)
     --during a touch and go one of the thrust levers has to be advanced beyond 20 degrees to disarm the spoilers
-
-    --DATAREFS FOR SURFACES
-    local SPLR_PER_WING   = FBW.fctl.control.SPLR_COMMON.SPLR_PER_WING
-    local L_SPLR_DATAREFS = FBW.fctl.control.SPLR_COMMON.L_SPLR_DATAREFS
-    local R_SPLR_DATAREFS = FBW.fctl.control.SPLR_COMMON.R_SPLR_DATAREFS
 
     local L_SPLR_CONTROLLED = {
         FCTL.SPLR.STAT.L[1].controlled,
@@ -74,22 +35,22 @@ local function SPLR_CTL(lateral_input, spdbrk_input, ground_spoilers_mode, in_au
     --constant speeds--
     local SPLR_TOTAL_MAX_DEF = {50, 50, 50, 50, 50}
     local SPLR_ROLL_MAX_DEF = {0, 35, 7, 35, 35}
-    local SPLR_SPDBRK_MAX_DEF = FBW.fctl.control.SPLR_COMMON.SPLR_SPDBRK_MAX_DEF
+    local SPLR_SPDBRK_MAX_DEF = FCTL.SPLR.COMMON.SPLR_SPDBRK_MAX_DEF
 
     --actual speeds--
     local L_SPLR_SPDBRK_SPD = {
-        FBW.fctl.control.SPLR_COMMON.SPLR_SPDBRK_MAX_SPD[1],
-        FBW.fctl.control.SPLR_COMMON.SPLR_SPDBRK_MAX_SPD[2],
-        FBW.fctl.control.SPLR_COMMON.SPLR_SPDBRK_MAX_SPD[3],
-        FBW.fctl.control.SPLR_COMMON.SPLR_SPDBRK_MAX_SPD[4],
-        FBW.fctl.control.SPLR_COMMON.SPLR_SPDBRK_MAX_SPD[5],
+        FCTL.SPLR.COMMON.SPLR_SPDBRK_MAX_SPD[1],
+        FCTL.SPLR.COMMON.SPLR_SPDBRK_MAX_SPD[2],
+        FCTL.SPLR.COMMON.SPLR_SPDBRK_MAX_SPD[3],
+        FCTL.SPLR.COMMON.SPLR_SPDBRK_MAX_SPD[4],
+        FCTL.SPLR.COMMON.SPLR_SPDBRK_MAX_SPD[5],
     }
     local R_SPLR_SPDBRK_SPD = {
-        FBW.fctl.control.SPLR_COMMON.SPLR_SPDBRK_MAX_SPD[1],
-        FBW.fctl.control.SPLR_COMMON.SPLR_SPDBRK_MAX_SPD[2],
-        FBW.fctl.control.SPLR_COMMON.SPLR_SPDBRK_MAX_SPD[3],
-        FBW.fctl.control.SPLR_COMMON.SPLR_SPDBRK_MAX_SPD[4],
-        FBW.fctl.control.SPLR_COMMON.SPLR_SPDBRK_MAX_SPD[5],
+        FCTL.SPLR.COMMON.SPLR_SPDBRK_MAX_SPD[1],
+        FCTL.SPLR.COMMON.SPLR_SPDBRK_MAX_SPD[2],
+        FCTL.SPLR.COMMON.SPLR_SPDBRK_MAX_SPD[3],
+        FCTL.SPLR.COMMON.SPLR_SPDBRK_MAX_SPD[4],
+        FCTL.SPLR.COMMON.SPLR_SPDBRK_MAX_SPD[5],
     }
 
     --targets--
@@ -104,10 +65,10 @@ local function SPLR_CTL(lateral_input, spdbrk_input, ground_spoilers_mode, in_au
         --check if any spoilers are retracting and slow down accordingly
         for i = 1, SPLR_PER_WING do
             if L_SPLR_SPDBRK_TGT[i] < get(L_SPLR_DATAREFS[i]) then
-                L_SPLR_SPDBRK_SPD[i] = FBW.fctl.control.SPLR_COMMON.SPLR_SPDBRK_HIGHSPD_AIR_SPD[i]
+                L_SPLR_SPDBRK_SPD[i] = SPDBRK_HIGHSPD_AIR_SPD[i]
             end
             if R_SPLR_SPDBRK_TGT[i] < get(R_SPLR_DATAREFS[i])then
-                R_SPLR_SPDBRK_SPD[i] = FBW.fctl.control.SPLR_COMMON.SPLR_SPDBRK_HIGHSPD_AIR_SPD[i]
+                R_SPLR_SPDBRK_SPD[i] = SPDBRK_HIGHSPD_AIR_SPD[i]
             end
         end
     end
@@ -249,6 +210,5 @@ local function SPLR_CTL(lateral_input, spdbrk_input, ground_spoilers_mode, in_au
 end
 
 function update()
-    FBW.fctl.control.SPLR_COMMON.COMPUTE_SPDBRK_MAX_DEF()
     SPLR_CTL(get(FBW_roll_output), get(SPDBRK_HANDLE_RATIO), false)
 end
