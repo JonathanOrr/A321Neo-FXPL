@@ -37,7 +37,7 @@ function ecam_update_fctl_page()
         params.R_elevator  = get(R_elevator)
         params.rudder      = get(Rudder_total) * 30/25
         params.tlu         = get(Rudder_travel_lim) * 30/25
-        params.rudder_trim = Math_clamp(get(RUD_TRIM_TGT_ANGLE), -get(Rudder_travel_lim), get(Rudder_travel_lim)) * 30/25
+        params.rudder_trim = Math_clamp(get(RUD_TRIM_ANGLE), -get(Rudder_travel_lim), get(Rudder_travel_lim)) * 30/25
         params.last_update = get(TIME)
     end
 end

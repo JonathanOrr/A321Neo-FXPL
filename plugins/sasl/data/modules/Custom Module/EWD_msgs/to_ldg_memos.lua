@@ -369,7 +369,7 @@ local Message_CONFIG_TAKEOFF_RUD_TRIM = {
             return COL_WARNING
     end,
     is_active = function(self)
-      return get(RUD_TRIM_TGT_ANGLE) ~= 0
+      return get(RUD_TRIM_ANGLE) ~= 0
     end
 }
 

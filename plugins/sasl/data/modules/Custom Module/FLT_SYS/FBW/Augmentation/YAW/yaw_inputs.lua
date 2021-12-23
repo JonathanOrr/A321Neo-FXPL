@@ -49,7 +49,7 @@ FBW.yaw.inputs = {
 
         local SI_demand = {
             {-MAX_RUD_DEF,                                        -MAX_BETA},
-            {0,            get(RUD_TRIM_TGT_ANGLE) / MAX_RUD_DEF * MAX_BETA},
+            {0,            get(RUD_TRIM_ANGLE) / MAX_RUD_DEF * MAX_BETA},
             {MAX_RUD_DEF,                                          MAX_BETA},
         }
 

@@ -18,7 +18,7 @@ local function RUD_TRIM_CTL(trim_input, resetting_trim)
     if resetting_trim == 1 then
         if trim_input ~= 0 then
             set(Resetting_rudder_trim, 0)
-        elseif get(RUD_TRIM_TGT_ANGLE) == 0 then
+        elseif get(RUD_TRIM_ANGLE) == 0 then
             set(Resetting_rudder_trim, 0)
         end
     end
@@ -26,14 +26,12 @@ local function RUD_TRIM_CTL(trim_input, resetting_trim)
     --IF RUDDER IS ELECTRICALLY CONTROLLED--
     if FCTL.RUDTRIM.STAT.controlled then
         if resetting_trim == 0 then--apply human input
-            set(RUD_TRIM_TGT_ANGLE, Math_clamp(get(RUD_TRIM_TGT_ANGLE) + trim_input * RUD_TRIM_SPD * get(DELTA_TIME), -20, 20))
+            set(RUD_TRIM_ANGLE, Math_clamp(get(RUD_TRIM_ANGLE) + trim_input * RUD_TRIM_SPD * get(DELTA_TIME), -get(Rudder_travel_lim), get(Rudder_travel_lim)))
             set(Human_rudder_trim, 0)
         else--reset rudder trim
-            set(RUD_TRIM_TGT_ANGLE, Set_linear_anim_value(get(RUD_TRIM_TGT_ANGLE), 0, -20, 20, RUD_TRIM_RST_SPD))
+            set(RUD_TRIM_ANGLE, Set_linear_anim_value(get(RUD_TRIM_ANGLE), 0, -get(Rudder_travel_lim), get(Rudder_travel_lim), RUD_TRIM_RST_SPD))
             set(Human_rudder_trim, 0)
         end
-
-        set(RUD_TRIM_ACT_ANGLE, Set_linear_anim_value(get(RUD_TRIM_ACT_ANGLE), get(RUD_TRIM_TGT_ANGLE), -get(Rudder_travel_lim), get(Rudder_travel_lim), RUD_TRIM_RST_SPD))
     end
 end
 
@@ -56,7 +54,7 @@ end
 
 local function COMPUTE_HUMAN_RUD_INPUT()
     --the pedals are not limited, hence at higher speed you'll reach the limit with less deflection
-    local RUD_TGT = get(XP_YAW) * (MAX_RUD_DEF + math.abs(get(RUD_TRIM_ACT_ANGLE))) + get(RUD_TRIM_ACT_ANGLE)
+    local RUD_TGT = get(XP_YAW) * (MAX_RUD_DEF + math.abs(get(RUD_TRIM_ANGLE))) + get(RUD_TRIM_ANGLE)
 
     set(Total_input_yaw, RUD_TGT)
 
