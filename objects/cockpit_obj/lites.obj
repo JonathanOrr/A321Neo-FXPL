@@ -2917,7 +2917,7 @@ IDX	2534
 IDX	2536
 
 		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/lights/mip_pedestal_integral_value
-		ATTR_cockpit
+		ATTR_shiny_rat	0.5
 		TRIS	0 6
 		TRIS	6 6
 		TRIS	12 6

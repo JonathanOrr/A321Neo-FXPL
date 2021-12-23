@@ -23,7 +23,7 @@ IDX	4
 IDX	5
 
 		ATTR_light_level 0.000000 1.000000	a321neo/cockpit/lights/mip_pedestal_integral_value
-		ATTR_cockpit
+		ATTR_shiny_rat	0.5
 		TRIS	0 6
 
 # Build with Blender 3.0.0 (build b'f1cca3055776'). Exported with XPlane2Blender 4.2.0-alpha.1+101.20211103174028
