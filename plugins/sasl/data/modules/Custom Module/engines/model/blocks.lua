@@ -67,7 +67,7 @@ function thrust_main_equation(mach, T_takeoff, throttle, BPR, sigma, altitude_m)
 end
 
 local function thrust_spool_derivative(n1)
-    return math.max(0.5,-24.115 + 1.3727 * n1 - 0.011526 * n1^2);
+    return math.max(0.5,-21.639 + 1.256 * n1 - 0.010391 * n1^2);
 end
 
 local function delay_thrust(eng_state, thrust_target, T_max, N1_base_max)

@@ -43,6 +43,19 @@ local function get_N1_target(thr_position, eng)
     return N1_target
 end
 
+
+local function cap_integral_limit(n1, int_sum)
+    local up_limit = 1
+    local bottom_limit = 0.12
+
+    bottom_limit = 1.2 * n1 / 100 - 0.15
+    bottom_limit = math.max(0.12, bottom_limit)
+    up_limit = math.log(n1/100+0.15)+1.04
+    up_limit = math.max(0.25, up_limit)
+    int_sum = math.min(int_sum, up_limit)
+    int_sum = math.max(int_sum, bottom_limit)
+    return int_sum
+end
 function N1_control(L_PID_array, R_PID_array, reversers)
 
     -- Compute the target based on the throttle position
@@ -74,8 +87,9 @@ function N1_control(L_PID_array, R_PID_array, reversers)
 --    end
 
     local L_error = (N1_target_L - get(Eng_1_N1))
-    local L_error_limit = Math_rescale(10, 3, 40, 10, get(Eng_1_N1))
-    local controlled_T_L = SSS_PID_BP_LIM(L_PID_array, Math_clamp(L_error, -L_error_limit, L_error_limit))
+    local controlled_T_L = SSS_PID_BP_LIM(L_PID_array, L_error)
+    L_PID_array.Actual_output = controlled_T_L
+    L_PID_array.Integral_sum = cap_integral_limit(get(Eng_1_N1), L_PID_array.Integral_sum)
 
     if get(Engine_1_avail) == 1 then
         set(Override_eng_1_lever, controlled_T_L)
@@ -85,9 +99,10 @@ function N1_control(L_PID_array, R_PID_array, reversers)
     end
 
     local R_error = (N1_target_R - get(Eng_2_N1))
-    local R_error_limit = Math_rescale(10, 3, 40, 10, get(Eng_2_N1))
-    local controlled_T_R = SSS_PID_BP_LIM(R_PID_array, Math_clamp(R_error, -R_error_limit, R_error_limit))
-    
+    local controlled_T_R = SSS_PID_BP_LIM(R_PID_array, R_error)
+    R_PID_array.Actual_output = controlled_T_R
+    R_PID_array.Integral_sum = cap_integral_limit(get(Eng_2_N1), R_PID_array.Integral_sum)
+
     if get(Engine_2_avail) == 1 then
         set(Override_eng_2_lever, controlled_T_R)
     else

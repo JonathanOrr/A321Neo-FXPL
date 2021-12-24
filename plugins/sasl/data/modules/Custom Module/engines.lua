@@ -274,7 +274,7 @@ local function update_n1_minimum()
     local curr_n1_idle_R = get(Eng_N1_bleed_corrected_idle,2)
 
     -- read-out takes place in autothrust pid logic get_N1_target (AT_PID_functions)
-    set(Eng_N1_idle,Set_linear_anim_value(curr_n1_idle_base, comp_min_n1, 0, 100, 1) )-- TODO speed of animation? depend of delta?
+    set(Eng_N1_idle, curr_n1_idle_base)-- TODO speed of animation? depend of delta?
 
     -- TODO pack configuration has to be considered for N1 as well in combination of engine bleed availability and x-bleed
     if (get(ENG_1_bleed_switch) == 0 or get(ENG_2_bleed_switch) == 0)

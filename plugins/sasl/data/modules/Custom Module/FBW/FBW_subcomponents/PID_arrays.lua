@@ -1,27 +1,28 @@
 --example_array = {P_gain, I_time, D_gain, Proportional, Integral_sum, Integral, Derivative, Current_error, Min_error, Max_error}
 AT_PID_arrays = {
+    -- L=4.3, T=4.8
     SSS_L_N1 = {
-        P_gain = 0.001,
-        I_gain = 0.0085,
-        D_gain = 0.00000,
+        P_gain = 0.0026,
+        I_gain = 0.0083,
+        D_gain = 0.0000,
         B_gain = 1,
         Actual_output = 0,
         Desired_output = 0,
         Integral_sum = 0,
         Current_error = 0,
-        Min_out = 0.001,
-        Max_out = 1.0
+        Min_out = 0.05,
+        Max_out = 1
     },
     SSS_R_N1 = {
-        P_gain = 0.001,
-        I_gain = 0.0085,
-        D_gain = 0.00000,
+        P_gain = 0.0026,
+        I_gain = 0.0083,
+        D_gain = 0.0000,
         B_gain = 1,
         Actual_output = 0,
         Desired_output = 0,
         Integral_sum = 0,
         Current_error = 0,
-        Min_out = 0.001,
+        Min_out = 0.05,
         Max_out = 1.0
     },
 }
