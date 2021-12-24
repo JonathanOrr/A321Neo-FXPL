@@ -50,6 +50,7 @@ ND_terrain = {}
 DRAIMS_common = {}
 FMGS_sys = {}
 GPS_sys = {}
+RA_sys = {}
 TCAS_sys = {}
 
  -- do NOT name anything else as "EFB", this is super important, used to store functions. See efb_prefrences.lua 

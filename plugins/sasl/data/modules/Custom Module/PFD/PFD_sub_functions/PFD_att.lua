@@ -118,7 +118,7 @@ function PFD_draw_att(PFD_table)
     end
 
     --tailstrike arrow(TOGO GA and GS < 50)
-    if get(All_on_ground) == 0 and get(PFD_table.RA_ALT) < 400 and get(EWD_flight_phase) == PHASE_FINAL then
+    if get(All_on_ground) == 0 and RA_sys.single_RA_user(PFD_table.RA_sensor) < 400 and get(EWD_flight_phase) == PHASE_FINAL then
         SASL_rotated_center_img_center_aligned(
             PFD_tailstrike_arrow,
             ATT_x_center,
@@ -139,7 +139,7 @@ function PFD_draw_att(PFD_table)
         2870,
         779,
         90 - adirs_get_roll(PFD_table.Screen_ID),
-        Math_clamp(Math_rescale_no_lim(0, -187 + adirs_get_pitch(PFD_table.Screen_ID) * 10, 120, 0 + adirs_get_pitch(PFD_table.Screen_ID) * 10, get(PFD_table.RA_ALT)), -366, 0),
+        Math_clamp(Math_rescale_no_lim(0, -187 + adirs_get_pitch(PFD_table.Screen_ID) * 10, 120, 0 + adirs_get_pitch(PFD_table.Screen_ID) * 10, RA_sys.single_RA_user(PFD_table.RA_sensor)), -366, 0),
         -779/2,
         ECAM_WHITE
     )
@@ -197,14 +197,14 @@ function PFD_draw_att(PFD_table)
     draw_SI_trapezoid(PFD_table)
 
     --RA ALT (TODO LACKING DH logic waiting for MCDU)
-    local RA_color = get(PFD_table.RA_ALT) > 400 and ECAM_GREEN or ECAM_ORANGE
-        if get(PFD_table.RA_ALT) <= 2500 then
-        if get(PFD_table.RA_ALT) > 50 then
-            SASL_drawText_rotated(Font_AirbusDUL, 0, -225, ATT_x_center, ATT_y_center,  -adirs_get_roll(PFD_table.Screen_ID), math.floor(get(PFD_table.RA_ALT) - get(PFD_table.RA_ALT) % 10), 42, false, false, TEXT_ALIGN_CENTER, RA_color)
-        elseif get(PFD_table.RA_ALT) >= 10 then
-            SASL_drawText_rotated(Font_AirbusDUL, 0, -225, ATT_x_center, ATT_y_center, -adirs_get_roll(PFD_table.Screen_ID), math.floor(get(PFD_table.RA_ALT) - get(PFD_table.RA_ALT) % 5), 42, false, false, TEXT_ALIGN_CENTER, RA_color)
+    local RA_color = RA_sys.single_RA_user(PFD_table.RA_sensor) > 400 and ECAM_GREEN or ECAM_ORANGE
+        if RA_sys.single_RA_user(PFD_table.RA_sensor) <= 2500 then
+        if RA_sys.single_RA_user(PFD_table.RA_sensor) > 50 then
+            SASL_drawText_rotated(Font_AirbusDUL, 0, -225, ATT_x_center, ATT_y_center,  -adirs_get_roll(PFD_table.Screen_ID), math.floor(RA_sys.single_RA_user(PFD_table.RA_sensor) - RA_sys.single_RA_user(PFD_table.RA_sensor) % 10), 42, false, false, TEXT_ALIGN_CENTER, RA_color)
+        elseif RA_sys.single_RA_user(PFD_table.RA_sensor) >= 10 then
+            SASL_drawText_rotated(Font_AirbusDUL, 0, -225, ATT_x_center, ATT_y_center, -adirs_get_roll(PFD_table.Screen_ID), math.floor(RA_sys.single_RA_user(PFD_table.RA_sensor) - RA_sys.single_RA_user(PFD_table.RA_sensor) % 5), 42, false, false, TEXT_ALIGN_CENTER, RA_color)
         else
-            SASL_drawText_rotated(Font_AirbusDUL, 0, -225, ATT_x_center, ATT_y_center, -adirs_get_roll(PFD_table.Screen_ID), math.floor(get(PFD_table.RA_ALT)), 42, false, false, TEXT_ALIGN_CENTER, RA_color)
+            SASL_drawText_rotated(Font_AirbusDUL, 0, -225, ATT_x_center, ATT_y_center, -adirs_get_roll(PFD_table.Screen_ID), math.floor(RA_sys.single_RA_user(PFD_table.RA_sensor)), 42, false, false, TEXT_ALIGN_CENTER, RA_color)
         end
     end
     --terminate masked drawing

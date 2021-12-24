@@ -62,9 +62,6 @@ FAILURE_IR_ATT[1] = createGlobalPropertyi("a321neo/failures/adirs/ir_1_att", 0, 
 FAILURE_IR_ATT[2] = createGlobalPropertyi("a321neo/failures/adirs/ir_2_att", 0, false, true, false) -- 0: OK, 1: FAILED (it has no effect if FAILURE_IR == 0)
 FAILURE_IR_ATT[3] = createGlobalPropertyi("a321neo/failures/adirs/ir_3_att", 0, false, true, false) -- 0: OK, 1: FAILED (it has no effect if FAILURE_IR == 0)
 
-FAILURE_GPS_1 = createGlobalPropertyi("a321neo/failures/adirs/gps_1", 0, false, true, false) -- 0: OK, 1: FAILED
-FAILURE_GPS_2 = createGlobalPropertyi("a321neo/failures/adirs/gps_2", 0, false, true, false) -- 0: OK, 1: FAILED
-
 FAILURE_SENSOR_AOA_CAPT = createGlobalPropertyi("a321neo/failures/adirs/aoa_capt", 0, false, true, false) -- 0: OK, 1: FAILED
 FAILURE_SENSOR_AOA_FO   = createGlobalPropertyi("a321neo/failures/adirs/aoa_fo", 0, false, true, false) -- 0: OK, 1: FAILED
 FAILURE_SENSOR_AOA_STBY = createGlobalPropertyi("a321neo/failures/adirs/aoa_stby", 0, false, true, false) -- 0: OK, 1: FAILED
@@ -90,6 +87,14 @@ FAILURE_IR3_ATT_ROLL_ERR = createGlobalPropertyi("a321neo/failures/adirs/ir3_rol
 FAILURE_IR1_HDG_ERR = createGlobalPropertyi("a321neo/failures/adirs/ir1_hdg_err", 0, false, true, false) -- 0: OK, 1: FAILED
 FAILURE_IR2_HDG_ERR   = createGlobalPropertyi("a321neo/failures/adirs/ir2_hdg_err", 0, false, true, false) -- 0: OK, 1: FAILED
 FAILURE_IR3_HDG_ERR = createGlobalPropertyi("a321neo/failures/adirs/ir3_hdg_err", 0, false, true, false) -- 0: OK, 1: FAILED
+
+FAILURE_GPS_1 = createGlobalPropertyi("a321neo/failures/adirs/gps_1", 0, false, true, false) -- 0: OK, 1: FAILED
+FAILURE_GPS_2 = createGlobalPropertyi("a321neo/failures/adirs/gps_2", 0, false, true, false) -- 0: OK, 1: FAILED
+
+FAILURE_RA_1_FAIL = createGlobalPropertyi("a321neo/failures/nav/ra_1_fail", 0, false, true, false) -- 0: OK, 1: FAILED
+FAILURE_RA_2_FAIL = createGlobalPropertyi("a321neo/failures/nav/ra_2_fail", 0, false, true, false) -- 0: OK, 1: FAILED
+FAILURE_RA_1_ERR  = createGlobalPropertyi("a321neo/failures/nav/ra_1_erroneous", 0, false, true, false) -- 0: OK, 1: ERRONEOUS
+FAILURE_RA_2_ERR  = createGlobalPropertyi("a321neo/failures/nav/ra_2_erroneous", 0, false, true, false) -- 0: OK, 1: ERRONEOUS
 
 FAILURE_HYD_Y_E_overheat = createGlobalPropertyi("a321neo/failures/HYD/Y_E_overheat", 0, false, true, false) -- Yellow Elec pump 0: normal 1: overheat
 FAILURE_HYD_B_E_overheat = createGlobalPropertyi("a321neo/failures/HYD/B_E_overheat", 0, false, true, false) -- Blue Elec pump 0: normal 1: overheat

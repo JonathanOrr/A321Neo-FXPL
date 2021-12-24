@@ -396,8 +396,6 @@ VVI = globalProperty("sim/cockpit2/gauges/indicators/vvi_fpm_pilot")
 OTA = globalProperty("sim/cockpit2/temperature/outside_air_temp_degc")
 TAT = globalProperty("sim/weather/temperature_le_c")
 Gross_weight = globalProperty ("sim/flightmodel/weight/m_total")
-Capt_ra_alt_ft = globalProperty("sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot")
-Fo_ra_alt_ft = globalProperty("sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_copilot")
 Capt_baro_alt_ft = globalProperty("sim/cockpit2/gauges/indicators/altitude_ft_pilot")
 IAS = globalProperty("sim/flightmodel/position/indicated_airspeed")
 TAS_ms = globalProperty("sim/flightmodel/position/true_airspeed")
@@ -437,6 +435,12 @@ Fo_Track       = globalProperty("sim/cockpit2/gauges/indicators/ground_track_mag
 
 Wind_SPD     = globalProperty("sim/cockpit2/gauges/indicators/wind_speed_kts")
 Wind_HDG     = globalProperty("sim/cockpit2/gauges/indicators/wind_heading_deg_mag")
+
+--RA system datarefs--
+Capt_ra_alt_ft = globalProperty("sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot")
+Fo_ra_alt_ft =   globalProperty("sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_copilot")
+RA_1_status =    createGlobalPropertyi("a321neo/dynamics/nav/ra/ra_1_status", 0, false, true, false)--RA 1 sensor status
+RA_2_status =    createGlobalPropertyi("a321neo/dynamics/nav/ra/ra_2_status", 0, false, true, false)--RA 2 sensor status
 
 -- ISIS datarefs
 ISIS_IAS      = createGlobalPropertyf("a321neo/dynamics/isis/ias", 0, false, true, false)
