@@ -23,8 +23,27 @@ local function RA_sensor_validation(sensors)
     end
 end
 
+RA_sys.RA_disagree = function ()
+    local RA_1 = RA_sys.Sensors[1].ALT_FT
+    local RA_2 = RA_sys.Sensors[2].ALT_FT
+    local RA_1_on = get(RA_sys.Sensors[1].Status_dataref) == 1
+    local RA_2_on = get(RA_sys.Sensors[2].Status_dataref) == 1
+
+    local RAs_valid = (RA_1_on and 1 or 0) + (RA_2_on and 1 or 0)
+
+    --incapable of detection
+    if RAs_valid < 2 then
+        return false
+    end
+
+    --disagreement detection
+    if math.abs(RA_1 - RA_2) > DISAGREE_MARGIN then
+        return true
+    end
+end
+
 --uses both RA sensors, the voter will try to resturn the most sensible value
-RA_sys.general_user = function ()
+RA_sys.all_RA_user = function ()
     local RA_1 = RA_sys.Sensors[1].ALT_FT
     local RA_2 = RA_sys.Sensors[2].ALT_FT
     local RA_1_on = get(RA_sys.Sensors[1].Status_dataref) == 1
@@ -47,7 +66,7 @@ RA_sys.general_user = function ()
 
     --MIXED COMPUTATION
     if RAs_valid == 2 then
-        if math.abs(RA_1 - RA_2) > DISAGREE_MARGIN and RA_sys.flaps_full_time < 10 then--disagree
+        if RA_sys.RA_disagree() and RA_sys.flaps_full_time < 10 then--disagree
             RA_ouptut = Math_clamp_lower(RA_ouptut, 220)
         end
     elseif RAs_valid == 1 then
@@ -79,5 +98,5 @@ end
 function update()
     update_flaps_timer()
     RA_sensor_validation(RA_sys.Sensors)
-    RA_sys.general_user()
+    RA_sys.all_RA_user()
 end

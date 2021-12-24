@@ -112,6 +112,8 @@ local left_messages_list = {
     MessageGroup_ALTI_DISCREPANCY,
     MessageGroup_ATT_DISCREPANCY,
     MessageGroup_HDG_DISCREPANCY,
+    MessageGroup_RA_FAULT,
+    MessageGroup_RA_DEGRADED,
     MessageGroup_DMC_FAULT,
     MessageGroup_ENG_FAIL_SINGLE,
     MessageGroup_HYD_G_RSVR_LO_LVL,

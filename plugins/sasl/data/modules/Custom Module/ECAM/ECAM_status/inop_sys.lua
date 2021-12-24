@@ -453,6 +453,12 @@ local inop_systems_desc = {
      end,
     },
     {
+     text = "RA", nr = 2,
+     cond_1 = function() return not RA_sys.Sensors[1].Valid or get(RA_1_status) == 0 end,
+     cond_2 = function() return not RA_sys.Sensors[2].Valid or get(RA_2_status) == 0 end,
+    },
+
+    {
      text = "ATC/XPDR", nr = 2,
      cond_1 = function() return get(FAILURE_ATC_1) == 1 or get(AC_ess_shed_pwrd) == 0 
               or

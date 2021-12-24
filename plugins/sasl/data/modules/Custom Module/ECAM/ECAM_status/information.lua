@@ -21,7 +21,8 @@ local inf_messages = {
             return get(FBW_total_control_law) == FBW_ALT_REDUCED_PROT_LAW or get(FBW_total_control_law) == FBW_ALT_NO_PROT_LAW
       end },
     { text="WHEN L/G DN : DIRECT LAW", cond=function() 
-            return get(FBW_total_control_law) == FBW_ALT_REDUCED_PROT_LAW or get(FBW_total_control_law) == FBW_ALT_NO_PROT_LAW
+            return get(FBW_total_control_law) == FBW_ALT_REDUCED_PROT_LAW or get(FBW_total_control_law) == FBW_ALT_NO_PROT_LAW or
+                   (not RA_sys.Sensors[1].Valid or get(RA_1_status) == 0) and (not RA_sys.Sensors[2].Valid or get(RA_2_status) == 0)
       end },
     { text="DIRECT LAW", cond=function() 
             return get(FBW_total_control_law) == FBW_DIRECT_LAW
