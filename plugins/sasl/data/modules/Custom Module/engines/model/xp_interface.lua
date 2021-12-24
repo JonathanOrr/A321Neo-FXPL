@@ -25,7 +25,6 @@ local yaw_moment = globalPropertyf("sim/flightmodel/forces/N_prop")
 local total_eng_forces = globalPropertyf("sim/flightmodel/forces/faxil_prop")
 
 function eng_model_enforce_n1(eng, n1)
-    print("ENFORCE ", eng, n1)
     local N1_max = eng_N1_limit_takeoff_clean(get(OTA), get(ACF_elevation) * 3.28084)
     if eng == 1 then
         engine_1_state.N1_spooled = n1

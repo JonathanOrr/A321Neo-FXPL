@@ -1,12 +1,11 @@
 local function get_N1_target(thr_position, eng)
-
     local REVERSE_PERFORMANCE = 0.7
 
     local curr_max  = 0
     local prev_max = 0
     local thr = math.abs(thr_position)
     local N1_target = 0
-    
+
     -- So, the throttle is linear but in each region has a different coefficient:
     -- The throttle is linear between 0 and CLB, so 0.54 means 54%
     -- then, in the MCT region the rate depends on the CLB MAX N1 and MCT MAX N1,
@@ -56,6 +55,7 @@ local function cap_integral_limit(n1, int_sum)
     int_sum = math.max(int_sum, bottom_limit)
     return int_sum
 end
+
 function N1_control(L_PID_array, R_PID_array, reversers)
 
     -- Compute the target based on the throttle position
@@ -76,7 +76,6 @@ function N1_control(L_PID_array, R_PID_array, reversers)
         N1_target_L = get(ATHR_desired_N1, 1)
         N1_target_R = get(ATHR_desired_N1, 2)
     end
-
 
 --    local sigma = get(Weather_Sigma)
 --    local air_density_coeff = 1
