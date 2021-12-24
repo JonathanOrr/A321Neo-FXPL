@@ -192,7 +192,7 @@ function configure_pw1133g()
 
         },
         model = {
-            zero_thrust_n1            = 10,
+            zero_thrust_n1            = 14,
             coeff_to_thrust_crit_temp = 0.0075, -- See thrust_takeoff_computation
             perc_penalty_AI_engine    = 0.012,  -- See thrust_penalty_computation
             perc_penalty_AI_wing      = 0.058,  -- See thrust_penalty_computation
