@@ -39,13 +39,13 @@ function update_thrust_penalty(engine_state, inputs)
 end
 
 function update_thrust_spooling(engine_state, inputs)
-    -- inputs: oat, alt_feet
+    -- inputs: oat, alt_feet, engine_is_available
     local N1_base_max = eng_N1_limit_takeoff_clean(inputs.oat, inputs.alt_feet)
 
     local T_desired = engine_state.T_actual_th
     local T_max     = engine_state.T_max
     local T_penalty = engine_state.T_penalty
-    T_actual_spool, N1_spooled = thrust_spool(engine_state, T_desired, T_penalty, T_max, N1_base_max)
+    T_actual_spool, N1_spooled = thrust_spool(engine_state, T_desired, T_penalty, T_max, N1_base_max, inputs.engine_is_available)
 
     engine_state.T_actual_spool = T_actual_spool
     engine_state.N1_spooled = N1_spooled

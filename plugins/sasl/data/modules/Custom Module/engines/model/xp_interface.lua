@@ -74,7 +74,8 @@ function update_engine_model()
         AI_wing_on = AI_sys.comp[ANTIICE_WING_L].valve_status,
         AI_engine_on = AI_sys.comp[ANTIICE_ENG_1].valve_status,
         bleed_ratio = get(L_pack_Flow) / 3,
-        reverser_status = get(Eng_1_reverser_deployment)
+        reverser_status = get(Eng_1_reverser_deployment),
+        engine_is_available = get(Engine_1_avail) == 1
     }
     
     local inputs_eng_2 = {
@@ -86,10 +87,11 @@ function update_engine_model()
         AI_wing_on = AI_sys.comp[ANTIICE_WING_R].valve_status,
         AI_engine_on = AI_sys.comp[ANTIICE_ENG_2].valve_status,
         bleed_ratio = get(R_pack_Flow) / 3,
-        reverser_status = get(Eng_2_reverser_deployment)
+        reverser_status = get(Eng_2_reverser_deployment),
+        engine_is_available = get(Engine_2_avail) == 1
     }
 
-    -- THE ORDER OR THE NExT FUNCTION CALL IS *IMPORTANT*
+    -- THE ORDER OR THE NExT FUNCTION CALLS IS *IMPORTANT*
     update_thrust(engine_1_state, inputs_eng_1)
     update_thrust(engine_2_state, inputs_eng_2)
 
