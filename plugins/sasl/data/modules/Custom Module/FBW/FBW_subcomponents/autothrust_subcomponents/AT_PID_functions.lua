@@ -25,7 +25,7 @@ local function get_N1_target(thr_position, eng)
         N1_target =  Math_rescale(0.675, prev_max, 0.825, curr_max, thr)
     elseif get(Eng_N1_mode, eng) == 3 then -- CLB
         curr_max = get(Eng_N1_max_detent_clb)
-        prev_max = get(Eng_N1_idle)
+        prev_max = get(Eng_N1_bleed_corrected_idle,eng)
         N1_target =  Math_rescale(0, prev_max, 0.675, curr_max, thr)
     elseif get(Eng_N1_mode, eng) == 4 then -- IDLE
         -- we have to take bleed/pack config into consideration which is eng specific in IDLE
@@ -34,7 +34,7 @@ local function get_N1_target(thr_position, eng)
         N1_target = get(Eng_N1_bleed_corrected_idle,eng)
     elseif get(Eng_N1_mode, eng) == 5 then -- MREV
         curr_max = get(Eng_N1_max_detent_toga) * REVERSE_PERFORMANCE
-        prev_max = get(Eng_N1_idle)
+        prev_max = get(Eng_N1_bleed_corrected_idle,eng)
         N1_target =  Math_rescale(0, prev_max, 1, curr_max, thr)
     end
 
