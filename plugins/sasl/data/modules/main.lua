@@ -41,6 +41,7 @@ sasl.options.setLuaErrorsHandling(SASL_STOP_PROCESSING)
 math.randomseed( os.time() )
 
 include(moduleDirectory .. "/main_debug.lua")
+addSearchPath(moduleDirectory .. "/Custom Module/NAV/")
 addSearchPath(moduleDirectory .. "/Custom Module/PFD/")
 addSearchPath(moduleDirectory .. "/Custom Module/ND/")
 addSearchPath(moduleDirectory .. "/Custom Module/DRAIMS/")
@@ -67,8 +68,9 @@ components = {
   fuel {}, -- Please keep this before engines
   engines {},
   cabin_screens {},
-  ADIRS {},
-  GPS {},
+
+  NAV_main {},
+
   FMGS {},
   CAPT_MCDU {},
   FO_MCDU {},
