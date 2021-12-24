@@ -62,6 +62,28 @@ function update_thrust_secondary(engine_state, inputs)
     engine_state.FF  = ENG.data.n1_to_FF(engine_state.N1_spooled, inputs.alt_feet, inputs.mach, isa_diff)
 end
 
+function update_thrust_reversal(engine_state, inputs)
+    if  inputs.reverser_status < 0.01 then
+        return -- Nothing to do
+    end
+
+    -- Compute the core thrust, this must not be considered for the reverser 
+    local core_thrust = 1/(1+ENG.data.bypass_ratio) * engine_state.T_actual_spool
+
+    -- Now, let's get the remaining thrust
+    local full_rev_thr = math.max(0, engine_state.T_actual_spool - core_thrust)
+
+    -- And according to reverser position let's compute the forward thrust 
+    local forward_thr = full_rev_thr * inputs.reverser_status
+    local backward_thr = full_rev_thr * (1-inputs.reverser_status)
+
+    -- Then, the forward is inclined of 45 deg approx so
+    forward_thr = forward_thr * math.cos(math.pi/4)
+
+    -- And update the thrust (this is negative when reversers out)
+    engine_state.T_actual_spool = core_thrust + backward_thr - forward_thr
+
+end
 
 function engine_model_create_state()
     return { 

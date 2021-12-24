@@ -73,7 +73,8 @@ function update_engine_model()
         sigma = get(Weather_Sigma),
         AI_wing_on = AI_sys.comp[ANTIICE_WING_L].valve_status,
         AI_engine_on = AI_sys.comp[ANTIICE_ENG_1].valve_status,
-        bleed_ratio = get(L_pack_Flow) / 3
+        bleed_ratio = get(L_pack_Flow) / 3,
+        reverser_status = get(Eng_1_reverser_deployment)
     }
     
     local inputs_eng_2 = {
@@ -84,7 +85,8 @@ function update_engine_model()
         sigma = get(Weather_Sigma),
         AI_wing_on = AI_sys.comp[ANTIICE_WING_R].valve_status,
         AI_engine_on = AI_sys.comp[ANTIICE_ENG_2].valve_status,
-        bleed_ratio = get(R_pack_Flow) / 3
+        bleed_ratio = get(R_pack_Flow) / 3,
+        reverser_status = get(Eng_2_reverser_deployment)
     }
 
     -- THE ORDER OR THE NExT FUNCTION CALL IS *IMPORTANT*
@@ -104,6 +106,8 @@ function update_engine_model()
     update_thrust_penalty(engine_2_state, inputs_eng_2)
     update_thrust_spooling(engine_1_state, inputs_eng_1)
     update_thrust_spooling(engine_2_state, inputs_eng_2)
+    update_thrust_reversal(engine_1_state, inputs_eng_1)
+    update_thrust_reversal(engine_2_state, inputs_eng_2)
     update_thrust_secondary(engine_1_state, inputs_eng_1)
     update_thrust_secondary(engine_2_state, inputs_eng_2)
 
