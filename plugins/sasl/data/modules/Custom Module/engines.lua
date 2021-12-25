@@ -21,14 +21,6 @@
 ----------------------------------------------------------------------------------------------------
 
 -- Engine start procedure: how it works?
---
--- The following conditions switch the status of the engine to "avail" (in the x-plane dataref):
--- - sim/cockpit2/engine/actuators/igniter_on = 1
--- - sim/cockpit/engine/starter_duration = 100
--- - sim/flightmodel/engine/ENGNN1 > 5
--- DO NOT USE sim/cockpit2/engine/actuators/ignition_key, it will start the engine using the X-Plane
--- procedure (and we don't want that)
-
 -- Our procedure is divided in 3 phases:
 -- - Phase 1:  N2 from 0 to 10: cranking the engine using perform_crank_procedure()
 -- - Phase 2:  N2 from 10 to 34.2: it manually controls the N2 according to the
@@ -70,7 +62,6 @@ local ENG_N1_CRANK_EGT= 95  -- Target EGT for cranking
 local ENG_N1_LL_IDLE  = 18.3 -- above this value some params like FF will be provided by X-Plane
 local N1_INC_AI_ENG   = 1    -- Increase of minimum N1 if at least one ENG Anti-ice is activated
 local N1_INC_AI_WING  = 0.8  -- Increase of minimum N1 if per activated WING Anti-ice TBC
-local MAGIC_NUMBER = 100     -- This is a magic number, which value is necessary to start the engine (see later)
 
 local current_engine_id = 0  -- Just to check which is the current engine
 
@@ -125,16 +116,6 @@ local used_oil_qty = {0,0}    -- oil qty used during last engine run to update i
 ----------------------------------------------------------------------------------------------------
 -- Various datarefs
 ----------------------------------------------------------------------------------------------------
-
-local eng_ignition_switch = globalPropertyia("sim/cockpit2/engine/actuators/ignition_key")
-local eng_igniters        = globalPropertyia("sim/cockpit2/engine/actuators/igniter_on")
-local starter_duration    = globalPropertyfa("sim/cockpit/engine/starter_duration")
-
-local eng_mixture         = globalPropertyfa("sim/cockpit2/engine/actuators/mixture_ratio")
-local eng_N2_enforce      = globalPropertyfa("sim/flightmodel/engine/ENGN_N2_")
-
-local config_max_thrust = globalProperty("sim/aircraft/engine/acf_tmax")     -- [kN]
-local config_face_size = globalProperty("sim/aircraft/engine/acf_face_jet")  -- [m^2]
 
 ----------------------------------------------------------------------------------------------------
 -- Functions - Commands
@@ -263,6 +244,8 @@ local function min_n1(altitude)
 end
 
 local function update_n1_minimum()
+    -- WARNING! Mininmum N1 affects the controllers and the engine model, pay attention!
+
     local curr_altitude = get(Elevation_m) * 3.28084
     local comp_min_n1 = min_n1(curr_altitude) 
                       + ((AI_sys.comp[ANTIICE_ENG_1].valve_status
@@ -533,8 +516,6 @@ local function perform_crank_procedure(eng, wet_cranking)
     
     -- Crank doesn't do anything special. Just warm up and run the N2 turbine
 
-    set(eng_mixture, 0, eng) -- No mixture for dry cranking, dry cranking is used for cooling
-
     -- Set N2 for cranking
 
     local starting_duration = get(TIME)- time_current_startup[eng]
@@ -548,7 +529,6 @@ local function perform_crank_procedure(eng, wet_cranking)
         target_n2 = ENG.data.n2_spoolup_fun(starting_duration)  -- this is ok only for low cranking
     end
     eng_N2_off[eng] = Set_linear_anim_value(eng_N2_off[eng], target_n2, 0, ENG.data.max_n2, 70)
-    set(eng_N2_enforce, eng_N2_off[eng], eng)
     
     -- Handle  EGT during cranking
     -- during initial startup we MUST use OAT as target EGT here, otherwise EGT will increase without FF
@@ -575,7 +555,6 @@ local function perform_starting_procedure_follow_n2(eng)
 
     local oat = get(OTA)
     set(Eng_fsm_state, FSM_START_PHASE_N2, eng)
-    set(eng_mixture, 0, eng) -- No mixture in this phase
 
     if igniter_eng[eng] == 0 and not eng_manual_switch[eng] and eng_N2_off[eng] > ENG.data.startup.ign_on_n2 then
         igniter_eng[eng] = math.random() > 0.5 and 1 or 2  -- For ECAM visualization only, no practical effect
@@ -610,7 +589,6 @@ local function perform_starting_procedure_follow_n2(eng)
 
                 -- Let's compute the new N2
                 eng_N2_off[eng] = eng_N2_off[eng] + ENG.data.startup.n2[i].n2_increase_per_sec * get(DELTA_TIME)
-                set(eng_N2_enforce, eng_N2_off[eng], eng)
                     
                 -- And let's compute the EGT based on percent of progress in phase TODO separate engine type specific EGT, e.g. EGT drop as of PW SIL 013
                 perc = (eng_N2_off[eng] - ENG.data.startup.n2[i].n2_start) / (ENG.data.startup.n2[i+1].n2_start - ENG.data.startup.n2[i].n2_start)
@@ -632,9 +610,6 @@ end
 local function perform_starting_procedure_follow_n1(eng)
     -- This is PHASE 3
     set(Eng_fsm_state, FSM_START_PHASE_N1,eng)
-
-    set(eng_mixture, 1, eng)  -- Mixture in this phase
-    set(eng_igniters, 1, eng) -- and igniters as well
 
     for i=1,(#ENG.data.startup.n1-1) do
         -- For each phase...
@@ -670,7 +645,6 @@ local function perform_starting_procedure_follow_n1(eng)
     -- Caution: eng_N2_off[] is not updated in the follow_n1 phase N2 is calculated in update_n2 function
     local eng_N2 = eng == 1 and get(Eng_1_N2) or get(Eng_2_N2)
     if igniter_eng[eng] > 0 and eng_N2 > ENG.data.startup.ign_off_n2 then
-        set(eng_igniters, 0, eng)
         igniter_eng[eng] = 0
     end
 
@@ -696,12 +670,6 @@ local function perform_starting_procedure(eng, inflight_restart)
     
     -- If the N2 powered by bleed so far is larger than 10, then we can start the real startup procedure
     if eng_N2_off[eng] < ENG.data.startup.n2[#ENG.data.startup.n2].n2_start and not inflight_restart then  -- 1st phase, but not inflight_restart
-
-        -- Oh yes, this is a funny thing. You need to set this dataref to 100 to cheat X-Plane
-        -- to convince it that the engine has been ignited (but it's not! We don't want X-Plane to
-        -- control the ignition with the ignition_key).
-        set(starter_duration, MAGIC_NUMBER, eng)
-
         -- Phase 2: Controlling the N2  
         perform_starting_procedure_follow_n2(eng)
         
@@ -896,12 +864,6 @@ local function update_startup()
             require_cooldown[2] = false
         end
         
-        if get(Any_wheel_on_ground) == 0 then
-            -- If you are in flight, keep the igniters on for in-flight restart
-            set(eng_igniters, 1, 1)
-            set(eng_igniters, 1, 2)
-        end
-        
     -- CASE 2: manually selected CRANK
     elseif get(Engine_mode_knob) == -1 then -- Crank
         if eng_manual_switch[1] and does_engine_1_can_start_or_crank then
@@ -930,14 +892,12 @@ local function update_startup()
         -- Set N2 to zero
         local n2_target = get(IAS) > 50 and 10 + get(IAS)/10 + random_pool_1*2 or 0 -- In in-flight it rotates
         eng_N2_off[1] = Set_linear_anim_value(eng_N2_off[1], n2_target, 0, ENG.data.max_n2, 1)
-        set(eng_N2_enforce, eng_N2_off[1], 1)
         
         -- Set FF to zero, drop EGT and N1 TODO check drop behavior based on SIM videos
         if eng_EGT_off[1] == EGT_MAGIC then eng_EGT_off[1] = get(Eng_1_EGT_c) end -- otherwise in auto start case we will have a big jump since eng_EGT_off is not set before
         eng_EGT_off[1] = Set_linear_anim_value(eng_EGT_off[1], get(OTA), -50, 1500, eng_EGT_off[1] > 100 and 10 or 3)
         eng_FF_off[1] = 0
         eng_N1_off[1] = Set_linear_anim_value(eng_N1_off[1], 0, 0, ENG.data.max_n2, 2)
-        set(eng_igniters, 0, 1)
         igniter_eng[1] = 0
         starter_valve_eng[1] = 0
     end
@@ -946,14 +906,12 @@ local function update_startup()
         -- Set N2 to zero
         local n2_target = get(IAS) > 50 and 10 + get(IAS)/10 + random_pool_3*2 or 0 -- In in-flight it rotates
         eng_N2_off[2] = Set_linear_anim_value(eng_N2_off[2], n2_target or 0 , 0, ENG.data.max_n2, 1)
-        set(eng_N2_enforce, eng_N2_off[2], 2)
         
         -- Set EGT and FF to zero
         if eng_EGT_off[2] == EGT_MAGIC then eng_EGT_off[2] = get(Eng_2_EGT_c) end -- otherwise in auto start case we will have a jump since eng_EGT_off is not set before
         eng_EGT_off[2] = Set_linear_anim_value(eng_EGT_off[2], get(OTA), -50, 1500, eng_EGT_off[2] > 100 and 10 or 3)
         eng_FF_off[2] = 0
         eng_N1_off[2] = Set_linear_anim_value(eng_N1_off[2], 0, 0, ENG.data.max_n2, 2)
-        set(eng_igniters, 0, 2)
         igniter_eng[2] = 0
         starter_valve_eng[2] = 0
     end
@@ -972,9 +930,6 @@ local function update_auto_start()
     -- Turn on the batteries immediately and start the APU   
     ELEC_sys.batteries[1].switch_status = true
     ELEC_sys.batteries[2].switch_status = true
-
-    set(eng_ignition_switch, 0, 1) 
-    set(eng_ignition_switch, 0, 2) 
 
     if get(Apu_master_button_state) == 0 then
         sasl.commandOnce(APU_cmd_master)
