@@ -523,7 +523,7 @@ local function update_pack(n)
 
     
     local fire_push_button_status = (n == 1 and get(Fire_pb_ENG1_status) == 1) or (n == 2 and get(Fire_pb_ENG2_status) == 1) 
-    local eng_n2 = n == 1 and get(Eng_1_N2) or get(Eng_2_N2)
+    local eng_n2 = n == 1 and ENG.dyn[1].n2 or ENG.dyn[2].n2
     local both_eng_avail = ENG.dyn[1].is_avail and ENG.dyn[2].is_avail
     
     if  pack_valve_switch[n] 

@@ -171,8 +171,8 @@ function ecam_update_advisory_conditions()
 
     if cond_door then at_least_one = true; set(Ecam_advisory_DOOR, 1) end
 
-    local adv_1 = ENG.data.display.oil_press_low_amber[1] + ENG.data.display.oil_press_low_amber[2] * get(Eng_1_N2)
-    local adv_2 = ENG.data.display.oil_press_low_amber[1] + ENG.data.display.oil_press_low_amber[2] * get(Eng_2_N2)
+    local adv_1 = ENG.data.display.oil_press_low_amber[1] + ENG.data.display.oil_press_low_amber[2] * ENG.dyn[1].n2
+    local adv_2 = ENG.data.display.oil_press_low_amber[1] + ENG.data.display.oil_press_low_amber[2] * ENG.dyn[2].n2
 
     local cond_eng_1 =  get(Eng_1_OIL_qty) < ENG.data.display.oil_qty_advisory or
                         get(Eng_1_OIL_press) > ENG.data.display.oil_press_high_adv or

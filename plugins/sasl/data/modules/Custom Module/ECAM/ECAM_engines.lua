@@ -103,8 +103,8 @@ local function draw_oil_qt_press_temp_eng_1()
               )
 
         --- N dependent limits may override actual color
-        local press_red_limit = get_press_red_limit(get(Eng_1_N2))
-        local press_amber_limit = get_press_amber_limit(get(Eng_1_N2))
+        local press_red_limit = get_press_red_limit(ENG.dyn[1].n2)
+        local press_amber_limit = get_press_amber_limit(ENG.dyn[1].n2)
 
         if params.eng1_oil_press < press_red_limit then
             eng_1_oil_color = ECAM_RED
@@ -153,8 +153,8 @@ local function draw_oil_qt_press_temp_eng_2()
               params.eng2_oil_press < ENG.data.display.oil_press_low_adv
               )
 
-        local press_red_limit = get_press_red_limit(get(Eng_2_N2))
-        local press_amber_limit = get_press_amber_limit(get(Eng_2_N2))
+        local press_red_limit = get_press_red_limit(ENG.dyn[2].n2)
+        local press_amber_limit = get_press_amber_limit(ENG.dyn[2].n2)
 
         if params.eng2_oil_press < press_red_limit then
             eng_2_oil_color = ECAM_RED
@@ -355,9 +355,9 @@ local function draw_oil_qty_and_pressure_gauges()
         draw_arcs_limits(size[1]/2-187, size[2]/2+176, nil, oil_angle_adv, oil_angle, true)
         
         local oil_angle = Math_rescale(0, 180, oil_press_max, 0, get(Eng_1_OIL_press))
-        local oil_red_limit = math.max(0, get_press_red_limit(get(Eng_1_N2)))
+        local oil_red_limit = math.max(0, get_press_red_limit(ENG.dyn[1].n2))
         local oil_angle_red = Math_rescale(0, 180, oil_press_max, 0, oil_red_limit)
-        local oil_amber_limit = math.max(0, get_press_amber_limit(get(Eng_1_N2)))
+        local oil_amber_limit = math.max(0, get_press_amber_limit(ENG.dyn[1].n2))
         local oil_angle_amber = Math_rescale(0, 180, oil_press_max, 0, oil_amber_limit)
 
         draw_arcs_limits(size[1]/2-189, size[2]/2+78, oil_angle_red, oil_angle_amber, oil_angle, false)
@@ -371,9 +371,9 @@ local function draw_oil_qty_and_pressure_gauges()
         draw_arcs_limits(size[1]/2+187, size[2]/2+176, nil, oil_angle_adv, oil_angle, true)
 
         local oil_angle = Math_rescale(0, 180, oil_press_max, 0, get(Eng_2_OIL_press))
-        local oil_red_limit = math.max(0, get_press_red_limit(get(Eng_2_N2)))
+        local oil_red_limit = math.max(0, get_press_red_limit(ENG.dyn[2].n2))
         local oil_angle_red = Math_rescale(0, 180, oil_press_max, 0, oil_red_limit)
-        local oil_amber_limit = math.max(0, get_press_amber_limit(get(Eng_2_N2)))
+        local oil_amber_limit = math.max(0, get_press_amber_limit(ENG.dyn[2].n2))
         local oil_angle_amber = Math_rescale(0, 180, oil_press_max, 0, oil_amber_limit)
 
         draw_arcs_limits(size[1]/2+189, size[2]/2+78, oil_angle_red, oil_angle_amber, oil_angle, false)
@@ -457,7 +457,7 @@ local function update_XX_dr_eng(eng)
         start_shut_fadec[eng] = 0
     end
 
-    if (eng == 1 and get(Eng_1_N2) > 10) or (eng == 2 and get(Eng_2_N2) > 10) then
+    if (eng == 1 and ENG.dyn[1].n2 > 10) or (eng == 2 and ENG.dyn[2].n2 > 10) then
         xx_statuses[eng] = true
         return
     end

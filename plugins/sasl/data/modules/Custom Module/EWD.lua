@@ -756,16 +756,16 @@ function update()
     if get(TIME) - params.last_update > PARAM_DELAY then
         params.eng_n1[1] = ENG.dyn[1].n1
         params.eng_n1[2] = ENG.dyn[2].n1
-        params.eng1_n2 = get(Eng_1_N2)
-        params.eng2_n2 = get(Eng_2_N2)
+        params.eng1_n2 = ENG.dyn[1].n2
+        params.eng2_n2 = ENG.dyn[2].n2
         if params.eng_n1[1] < 5 then params.eng_n1[1] = 0 end
         if params.eng_n1[2] < 5 then params.eng_n1[2] = 0 end
 
-        params.eng_egt[1] = math.floor(get(Eng_1_EGT_c))
-        params.eng_egt[2] = math.floor(get(Eng_2_EGT_c))
+        params.eng_egt[1] = math.floor(ENG.dyn[1].egt)
+        params.eng_egt[2] = math.floor(ENG.dyn[2].egt)
 
-        params.eng1_ff = math.floor(get(Eng_1_FF_kgs)*360)*10
-        params.eng2_ff = math.floor(get(Eng_2_FF_kgs)*360)*10
+        params.eng1_ff = math.floor(ENG.dyn[1].ff*360)*10
+        params.eng2_ff = math.floor(ENG.dyn[2].ff*360)*10
 
 
         params.last_update = get(TIME)

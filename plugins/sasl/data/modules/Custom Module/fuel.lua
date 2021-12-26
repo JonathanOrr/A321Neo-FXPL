@@ -616,8 +616,8 @@ local function update_fuel_usage()
     
     local prev_eng1 = get(Ecam_fuel_usage_1)
     local prev_eng2 = get(Ecam_fuel_usage_2)
-    local curr_flow_per_sec_1 = get(Eng_1_FF_kgs)
-    local curr_flow_per_sec_2 = get(Eng_2_FF_kgs)
+    local curr_flow_per_sec_1 = ENG.dyn[1].ff
+    local curr_flow_per_sec_2 = ENG.dyn[2].ff
 
     set(Ecam_fuel_usage_1, prev_eng1 + curr_flow_per_sec_1 * get(DELTA_TIME))
     set(Ecam_fuel_usage_2, prev_eng2 + curr_flow_per_sec_2 * get(DELTA_TIME))

@@ -326,23 +326,23 @@ end
 local function update_n2()
     local eng_1_n1 = ENG.dyn[1].n1
     if eng_1_n1 > 5 and get(Engine_1_master_switch) == 1  then
-        Set_dataref_linear_anim(Eng_1_N2, eng_model_get_N2(1), 0, 130, 10)
+        ENG.dyn[1].n2 = Set_linear_anim_value(ENG.dyn[1].n2, eng_model_get_N2(1), 0, 130, 10)
     else
-        Set_dataref_linear_anim(Eng_1_N2, eng_N2_off[1], 0, 130, 10)
+        ENG.dyn[1].n2 = Set_linear_anim_value(ENG.dyn[1].n2, eng_N2_off[1], 0, 130, 10)
     end
 
     local eng_2_n1 = ENG.dyn[2].n1
     if eng_2_n1 > 5 and get(Engine_2_master_switch) == 1  then
-        Set_dataref_linear_anim(Eng_2_N2, eng_model_get_N2(2), 0, 130, 10)
+        ENG.dyn[2].n2 = Set_linear_anim_value(ENG.dyn[2].n2, eng_model_get_N2(2), 0, 130, 10)
     else
-        Set_dataref_linear_anim(Eng_2_N2, eng_N2_off[2], 0, 130, 10)
+        ENG.dyn[2].n2 = Set_linear_anim_value(ENG.dyn[2].n2, eng_N2_off[2], 0, 130, 10)
     end
 
 end
 
 local function update_nfan()
-    set(Eng_1_NFAN, eng_model_get_NFAN(1))
-    set(Eng_2_NFAN, eng_model_get_NFAN(2))
+    ENG.dyn[1].nfan = eng_model_get_NFAN(1)
+    ENG.dyn[2].nfan = eng_model_get_NFAN(2)
 end
 
 
@@ -353,17 +353,17 @@ local function update_egt()
         local computed_egt = ENG.data.n1_to_egt_fun(eng_1_n1, get(OTA))
         computed_egt = computed_egt * (1 + get(FAILURE_ENG_STALL, 1) * get(eng_1_n1)/90 * math.random())
         computed_egt = computed_egt + egt_eng_1_offset + random_pool_1*2 -- Let's add a bit of randomness
-        Set_dataref_linear_anim(Eng_1_EGT_c, computed_egt, -50, 1500, 70)
+        ENG.dyn[1].egt = Set_linear_anim_value(ENG.dyn[1].egt, computed_egt, -50, 1500, 70)
     else
         -- engine off, starting or shutting down
         -- TODO switching to this else branch lead to small jump to higher EGT value (about 30-40 °C) if no auto-start
         -- last eng_EGT_off value seems to be from last row of startup.n1 table currently
-        local current_egt = get(Eng_1_EGT_c)
+        local current_egt = ENG.dyn[1].egt
         if eng_EGT_off[1] > current_egt and get(Engine_1_master_switch) == 0 then eng_EGT_off[1] = current_egt end  -- workaround to avoid jump up
         if current_egt == EGT_MAGIC then
-            set(Eng_1_EGT_c, get(OTA))
+            ENG.dyn[1].egt = get(OTA)
         else
-            set(Eng_1_EGT_c, eng_EGT_off[1])
+            ENG.dyn[1].egt = eng_EGT_off[1]
         end
     end
 
@@ -372,14 +372,14 @@ local function update_egt()
         local computed_egt = ENG.data.n1_to_egt_fun(eng_2_n1, get(OTA))
         computed_egt = computed_egt * (1 + get(FAILURE_ENG_STALL, 2) * get(eng_1_n1)/90 * math.random())
         computed_egt = computed_egt + egt_eng_2_offset + random_pool_2*2 -- Let's add a bit of randomness
-        Set_dataref_linear_anim(Eng_2_EGT_c, computed_egt, -50, 1500, 70)
+        ENG.dyn[2].egt = Set_linear_anim_value(ENG.dyn[2].egt, computed_egt, -50, 1500, 70)
     else
-        local current_egt = get(Eng_2_EGT_c)
+        local current_egt = ENG.dyn[2].egt
         if eng_EGT_off[2] > current_egt and get(Engine_2_master_switch) == 0  then eng_EGT_off[2] = current_egt end -- workaround to avoid jump up
         if current_egt == EGT_MAGIC then
-            set(Eng_2_EGT_c, get(OTA)) -- display OAT in case A/C has just been initialized
+            ENG.dyn[2].egt = get(OTA) -- display OAT in case A/C has just been initialized
         else
-            set(Eng_2_EGT_c, eng_EGT_off[2])
+            ENG.dyn[2].egt = eng_EGT_off[2]
         end
     end
 
@@ -389,17 +389,17 @@ local function update_ff()
     local eng_1_n1 = ENG.dyn[1].n1
     if eng_1_n1 > ENG_N1_LL_IDLE then
         -- when engines are avail, use fuel flow from X-Plane
-        set(Eng_1_FF_kgs, eng_model_get_FF(1))
+        ENG.dyn[1].ff = eng_model_get_FF(1)
     else
         -- during startup use our fuel flow values
-        set(Eng_1_FF_kgs,eng_FF_off[1])
+        ENG.dyn[1].ff = eng_FF_off[1]
     end
 
     local eng_2_n1 = ENG.dyn[2].n1
     if eng_2_n1 > ENG_N1_LL_IDLE then
-        set(Eng_2_FF_kgs, eng_model_get_FF(2))
+        ENG.dyn[2].ff = eng_model_get_FF(2)
     else
-        set(Eng_2_FF_kgs,eng_FF_off[2])
+        ENG.dyn[2].ff = eng_FF_off[2]
     end
  
 end
@@ -446,7 +446,7 @@ local function update_oil_temp_and_press()
 
     -- ENG 1 - PRESS
     if ENG.dyn[1].is_avail then
-        local n2_value = get(Eng_1_N2)
+        local n2_value = ENG.dyn[1].n2
         local press = Math_rescale(60, ENG.data.oil.pressure_min_idle+1, ENG.data.max_n2-10, ENG.data.oil.pressure_max_mct, n2_value)
         
         if get(FAILURE_ENG_LEAK_OIL, 1) == 1 then   -- OIL is leaking from engine T_T
@@ -456,7 +456,7 @@ local function update_oil_temp_and_press()
         end
     else
         -- During startup after cranking (N2 10) no pressure until >10, N2 IDLE is about 60 so where is this 70 from?
-        local n2_value = math.max(10,get(Eng_1_N2))
+        local n2_value = math.max(10,ENG.dyn[1].n2)
         local press = Math_rescale(10, 0, 70, ENG.data.oil.pressure_max_toga, n2_value)
         Set_dataref_linear_anim(Eng_1_OIL_press, press, 0, 500, 28 + random_pool_1 * 4)
     end
@@ -465,19 +465,19 @@ local function update_oil_temp_and_press()
     -- TODO oil temp increase/decrease is much slower, exception possibly failure situation
     if ENG.dyn[1].is_avail then
         -- temperature depends mainly on N2. At 60% N2 normal temp acc CAE sim is sustained about 65°C at 15° OAT
-        local n2_value = get(Eng_1_N2)
+        local n2_value = ENG.dyn[1].n2
         local temp = Math_rescale(60, 65, ENG.data.max_n2, ENG.data.oil.temp_max_mct, n2_value) + random_pool_2 * 5 + get(FAILURE_ENG_OIL_HI_TEMP, 1) * 70
         Set_dataref_linear_anim(Eng_1_OIL_temp, temp, -50, 250, 0.18 + get(FAILURE_ENG_OIL_HI_TEMP, 1)*2)
     else
         -- During startup or shutdown
-        local n2_value = math.max(10,get(Eng_1_N2))
+        local n2_value = math.max(10,ENG.dyn[1].n2)
         local temp = Math_rescale(10, get(OTA), 70, 75, n2_value)
         Set_dataref_linear_anim(Eng_1_OIL_temp, temp, -50, 250, 0.18)
     end
     
     -- ENG 2 - PRESS
     if ENG.dyn[2].is_avail then
-        local n2_value = get(Eng_2_N2)
+        local n2_value = ENG.dyn[2].n2
         local press = Math_rescale(60, ENG.data.oil.pressure_min_idle+1, ENG.data.max_n2-10, ENG.data.oil.pressure_max_mct, n2_value)
         if get(FAILURE_ENG_LEAK_OIL, 2) == 1 then   -- OIL is leaking from engine T_T
             Set_dataref_linear_anim(Eng_2_OIL_press, 0, 0, 500, 0.75 - 0.25 * press / ENG.data.oil.pressure_max_mct )
@@ -486,19 +486,19 @@ local function update_oil_temp_and_press()
         end
     else
         -- During startup or shutdown
-        local n2_value = math.max(10,get(Eng_2_N2))
+        local n2_value = math.max(10,ENG.dyn[2].n2)
         local press = Math_rescale(10, 0, 70, ENG.data.oil.pressure_max_toga, n2_value)
         Set_dataref_linear_anim(Eng_2_OIL_press, press, 0, 500, 28 + random_pool_3 * 4)
     end
 
     -- ENG 2 - TEMP
     if ENG.dyn[2].is_avail then
-        local n2_value = get(Eng_2_N2)
+        local n2_value = ENG.dyn[2].n2
         local temp = Math_rescale(60, 65, ENG.data.max_n2, ENG.data.oil.temp_max_mct, n2_value) + random_pool_1 * 5 + get(FAILURE_ENG_OIL_HI_TEMP, 2) * 70
         Set_dataref_linear_anim(Eng_2_OIL_temp, temp, -50, 250, 0.18 + get(FAILURE_ENG_OIL_HI_TEMP, 2)*2)
     else
         -- During startup or shutdown
-        local n2_value = math.max(10,get(Eng_2_N2))
+        local n2_value = math.max(10,ENG.dyn[2].n2)
         local temp = Math_rescale(10, get(OTA), 70, 75, n2_value)
         Set_dataref_linear_anim(Eng_2_OIL_temp, temp, -50, 250, 0.18)
     end
@@ -512,7 +512,7 @@ function update_vibrations()
     if ENG.dyn[1].is_avail then vib_n1 = vib_n1 + 0.1*random_pool_3 end
     set(Eng_1_VIB_N1, vib_n1)
 
-    local n2_value = get(Eng_1_N2)
+    local n2_value = ENG.dyn[1].n2
     local vib_n2 = Math_rescale(0, 0, ENG.data.max_n2, ENG.data.vibrations.max_n2_nominal/4, n2_value)
     if ENG.dyn[1].is_avail then vib_n2 = vib_n2 + 0.1*random_pool_2 end
     set(Eng_1_VIB_N2, vib_n2)
@@ -522,7 +522,7 @@ function update_vibrations()
     if ENG.dyn[2].is_avail then vib_n1 = vib_n1 + 0.1*random_pool_1 end
     set(Eng_2_VIB_N1, vib_n1)
 
-    local n2_value = get(Eng_2_N2)
+    local n2_value = ENG.dyn[2].n2
     local vib_n2 = Math_rescale(0, 0, ENG.data.max_n2, ENG.data.vibrations.max_n2_nominal/4, n2_value)
     if ENG.dyn[2].is_avail then vib_n2 = vib_n2 + 0.1*random_pool_3 end
     set(Eng_2_VIB_N2, vib_n2)
@@ -673,7 +673,7 @@ local function perform_starting_procedure_follow_n1(eng)
     end
 
     -- Caution: eng_N2_off[] is not updated in the follow_n1 phase N2 is calculated in update_n2 function
-    local eng_N2 = eng == 1 and get(Eng_1_N2) or get(Eng_2_N2)
+    local eng_N2 = eng == 1 and ENG.dyn[1].n2 or ENG.dyn[2].n2
     if igniter_eng[eng] > 0 and eng_N2 > ENG.data.startup.ign_off_n2 then
         igniter_eng[eng] = 0
     end
@@ -924,7 +924,7 @@ local function update_startup()
         eng_N2_off[1] = Set_linear_anim_value(eng_N2_off[1], n2_target, 0, ENG.data.max_n2, 1)
         
         -- Set FF to zero, drop EGT and N1 TODO check drop behavior based on SIM videos
-        if eng_EGT_off[1] == EGT_MAGIC then eng_EGT_off[1] = get(Eng_1_EGT_c) end -- otherwise in auto start case we will have a big jump since eng_EGT_off is not set before
+        if eng_EGT_off[1] == EGT_MAGIC then eng_EGT_off[1] = ENG.dyn[1].egt end -- otherwise in auto start case we will have a big jump since eng_EGT_off is not set before
         eng_EGT_off[1] = Set_linear_anim_value(eng_EGT_off[1], get(OTA), -50, 1500, eng_EGT_off[1] > 100 and 10 or 3)
         eng_FF_off[1] = 0
         eng_N1_off[1] = Set_linear_anim_value(eng_N1_off[1], 0, 0, ENG.data.max_n2, 2)
@@ -938,7 +938,7 @@ local function update_startup()
         eng_N2_off[2] = Set_linear_anim_value(eng_N2_off[2], n2_target or 0 , 0, ENG.data.max_n2, 1)
         
         -- Set EGT and FF to zero
-        if eng_EGT_off[2] == EGT_MAGIC then eng_EGT_off[2] = get(Eng_2_EGT_c) end -- otherwise in auto start case we will have a jump since eng_EGT_off is not set before
+        if eng_EGT_off[2] == EGT_MAGIC then eng_EGT_off[2] = ENG.dyn[2].egt end -- otherwise in auto start case we will have a jump since eng_EGT_off is not set before
         eng_EGT_off[2] = Set_linear_anim_value(eng_EGT_off[2], get(OTA), -50, 1500, eng_EGT_off[2] > 100 and 10 or 3)
         eng_FF_off[2] = 0
         eng_N1_off[2] = Set_linear_anim_value(eng_N1_off[2], 0, 0, ENG.data.max_n2, 2)
@@ -1000,7 +1000,7 @@ local function update_buttons_datarefs()
 end
 
 local function update_time_since_shutdown()
-    if get(Eng_1_EGT_c) < 100 then
+    if ENG.dyn[1].egt < 100 then
         if time_last_shutdown[1] == 0 and get(Engine_1_master_switch) == 0 then
             -- only when really in shutdown process otherwise cooling may appear again during startup after cranking/cooling
             time_last_shutdown[1] = get(TIME)
@@ -1015,7 +1015,7 @@ local function update_time_since_shutdown()
         time_last_shutdown[1] = 0
     end 
 
-    if get(Eng_2_EGT_c) < 100  then
+    if ENG.dyn[2].egt < 100  then
         if time_last_shutdown[2] == 0 and get(Engine_2_master_switch) == 0 then
             time_last_shutdown[2] = get(TIME)
             time_current_startup[2]  = -1
@@ -1057,11 +1057,11 @@ local function update_oil_qty_startup(eng)
     local initial_qty
 
     if eng == 1 then
-        eng_n2 = get(Eng_1_N2)
+        eng_n2 = ENG.dyn[1].n2
         curr_oil = get(Eng_1_OIL_qty)
         initial_qty = initial_oil_qty[eng]
     else
-        eng_n2 = get(Eng_2_N2)
+        eng_n2 = ENG.dyn[2].n2
         curr_oil = get(Eng_2_OIL_qty)
         initial_qty = initial_oil_qty[eng]
     end
@@ -1243,7 +1243,7 @@ end
 
 local function update_failing_eng(x)
     local eng_ms    = (x == 1 and get(Engine_1_master_switch) or get(Engine_2_master_switch)) == 1
-    local n2_below  = (x == 1 and get(Eng_1_N2) or get(Eng_2_N2)) < 62
+    local n2_below  = (x == 1 and ENG.dyn[1].n2 or ENG.dyn[2].n2) < 62
     local not_avail = !ENG.dyn[x].is_avail
     local eng_st    = already_started_eng[x]
     local no_fire_pb= (x == 1 and get(Fire_pb_ENG1_status) or get(Fire_pb_ENG2_status)) == 0

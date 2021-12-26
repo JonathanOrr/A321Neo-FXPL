@@ -173,7 +173,7 @@ local function draw_fuel_usage_and_ff()
     if get(Engine_1_master_switch) == 0 and get(Engine_2_master_switch) == 0 then
         sasl.gl.drawText(Font_AirbusDUL, size[2]/2-120, size[2]/2-260, "xx", 36, false, false, TEXT_ALIGN_RIGHT, ECAM_ORANGE)
     else
-        local total_ff = math.ceil(get(Eng_1_FF_kgs)*60 + get(Eng_2_FF_kgs)*60)
+        local total_ff = math.ceil(ENG.dyn[1].ff*60 + ENG.dyn[2].ff*60)
         sasl.gl.drawText(Font_AirbusDUL, size[2]/2-120, size[2]/2-260, total_ff, 36, false, false, TEXT_ALIGN_RIGHT, ECAM_GREEN)
     end
 

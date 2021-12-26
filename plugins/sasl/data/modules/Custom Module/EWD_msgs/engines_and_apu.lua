@@ -1585,19 +1585,19 @@ local function get_press_amber_limit(n2)
 end
 
 local function eng_1_lo_pr_amber()
-    return (ENG.dyn[1].is_avail and (get(Eng_1_OIL_press) >= get_press_red_limit(get(Eng_1_N2)) and get(Eng_1_OIL_press) < get_press_amber_limit(get(Eng_1_N2))))
+    return (ENG.dyn[1].is_avail and (get(Eng_1_OIL_press) >= get_press_red_limit(ENG.dyn[1].n2) and get(Eng_1_OIL_press) < get_press_amber_limit(ENG.dyn[1].n2)))
 end
 
 local function eng_2_lo_pr_amber()
-    return (ENG.dyn[2].is_avail and (get(Eng_2_OIL_press) >= get_press_red_limit(get(Eng_2_N2)) and get(Eng_2_OIL_press) < get_press_amber_limit(get(Eng_2_N2))))
+    return (ENG.dyn[2].is_avail and (get(Eng_2_OIL_press) >= get_press_red_limit(ENG.dyn[2].n2) and get(Eng_2_OIL_press) < get_press_amber_limit(ENG.dyn[2].n2)))
 end
 
 local function eng_1_lo_pr_red()
-    return (ENG.dyn[1].is_avail and (get(Eng_1_OIL_press) < get_press_red_limit(get(Eng_1_N2))))
+    return (ENG.dyn[1].is_avail and (get(Eng_1_OIL_press) < get_press_red_limit(ENG.dyn[1].n2)))
 end
 
 local function eng_2_lo_pr_red()
-    return (ENG.dyn[2].is_avail and (get(Eng_2_OIL_press) < get_press_red_limit(get(Eng_2_N2))))
+    return (ENG.dyn[2].is_avail and (get(Eng_2_OIL_press) < get_press_red_limit(ENG.dyn[2].n2)))
 end
 
 
@@ -2055,7 +2055,7 @@ MessageGroup_ENG_LO_START_AIR = {
 
 local function start_fault_1()
     
-    if get(All_on_ground) == 1 and MessageGroup_ENG_START_FAULT.eng_1_s_time == 0 and !ENG.dyn[1].is_avail  and get(Eng_1_N2) > 11 then
+    if get(All_on_ground) == 1 and MessageGroup_ENG_START_FAULT.eng_1_s_time == 0 and !ENG.dyn[1].is_avail  and ENG.dyn[1].n2 > 11 then
         MessageGroup_ENG_START_FAULT.eng_1_s_time = get(TIME)
     elseif (ENG.dyn[1].is_avail and 1 or 0) + get(Engine_1_master_switch) ~= 1 or get(All_on_ground) == 0 then
         MessageGroup_ENG_START_FAULT.eng_1_s_time = 0
@@ -2068,7 +2068,7 @@ end
 
 local function start_fault_2()
 
-    if get(All_on_ground) == 1 and  MessageGroup_ENG_START_FAULT.eng_2_s_time == 0 and !ENG.dyn[2].is_avail  and get(Eng_2_N2) > 11 then
+    if get(All_on_ground) == 1 and  MessageGroup_ENG_START_FAULT.eng_2_s_time == 0 and !ENG.dyn[2].is_avail  and ENG.dyn[2].n2 > 11 then
         MessageGroup_ENG_START_FAULT.eng_2_s_time = get(TIME)
     elseif (ENG.dyn[2].is_avail and 1 or 0) + get(Engine_2_master_switch) ~= 1 or get(All_on_ground) == 0  then
         MessageGroup_ENG_START_FAULT.eng_2_s_time = 0
