@@ -286,18 +286,6 @@ XP_Battery_1 = globalProperty("sim/cockpit2/electrical/battery_on[0]")
 XP_Battery_2 = globalProperty("sim/cockpit2/electrical/battery_on[1]")
 
 --ENG
-Eng_1_OIL_qty = createGlobalPropertyf("a321neo/dynamics/engines/eng_1_oil_qty", 0, false, true, false)
-Eng_2_OIL_qty = createGlobalPropertyf("a321neo/dynamics/engines/eng_2_oil_qty", 0, false, true, false)
-Eng_1_OIL_press = createGlobalPropertyf("a321neo/dynamics/engines/eng_1_oil_press", 0, false, true, false)
-Eng_2_OIL_press = createGlobalPropertyf("a321neo/dynamics/engines/eng_2_oil_press", 0, false, true, false)
-Eng_1_OIL_temp  = createGlobalPropertyf("a321neo/dynamics/engines/eng_1_oil_temp", 0, false, true, false) -- In Celsius
-Eng_2_OIL_temp  = createGlobalPropertyf("a321neo/dynamics/engines/eng_2_oil_temp", 0, false, true, false) -- In Celsius
-Eng_1_VIB_N1  = createGlobalPropertyf("a321neo/dynamics/engines/eng_1_vib_n1", 0, false, true, false)
-Eng_2_VIB_N1  = createGlobalPropertyf("a321neo/dynamics/engines/eng_2_vib_n1", 0, false, true, false)
-Eng_1_VIB_N2  = createGlobalPropertyf("a321neo/dynamics/engines/eng_1_vib_n2", 0, false, true, false)
-Eng_2_VIB_N2  = createGlobalPropertyf("a321neo/dynamics/engines/eng_2_vib_n2", 0, false, true, false)
-Eng_OIL_initial_qty = createGlobalPropertyfa("a321neo/dynamics/engines/oil_initial_qty", 2)
-
 Eng_1_FADEC_powered = createGlobalPropertyi("a321neo/dynamics/engines/eng_1_fadec_powered", 0, false, true, false) -- do not consider fadec failures
 Eng_2_FADEC_powered = createGlobalPropertyi("a321neo/dynamics/engines/eng_2_fadec_powered", 0, false, true, false) -- do not consider fadec failures
 

@@ -61,11 +61,11 @@ function ECAM_status_get_maintain()
         table.insert(messages, "HYD G RSRV")
     end
 
-    if get(Eng_1_OIL_qty) < 5 then
+    if ENG.dyn[1].oil_qty < 5 then
         table.insert(messages, "ENG 1 OIL")
     end
     
-    if get(Eng_2_OIL_qty) < 5 then
+    if ENG.dyn[2].oil_qty < 5 then
         table.insert(messages, "ENG 2 OIL")
     end
     

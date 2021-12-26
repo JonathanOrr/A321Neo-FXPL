@@ -85,7 +85,7 @@ local function draw_oil_qt_press_temp_eng_1()
         ------------------------------------------------------------------------------------
         -- ENG 1 OIL QTY
         ------------------------------------------------------------------------------------
-        local oil_qty_1 = get(Eng_1_OIL_qty) 
+        local oil_qty_1 = ENG.dyn[1].oil_qty 
         local eng_1_oil_color = pulse_green(oil_qty_1 < ENG.data.display.oil_qty_advisory)
 
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2-153, 625, math.floor(oil_qty_1) .. "." , 36,
@@ -137,7 +137,7 @@ local function draw_oil_qt_press_temp_eng_2()
         ------------------------------------------------------------------------------------
         -- ENG 2 OIL QTY
         ------------------------------------------------------------------------------------
-        local oil_qty_2 = get(Eng_2_OIL_qty) 
+        local oil_qty_2 = ENG.dyn[2].oil_qty 
         local eng_2_oil_color = pulse_green(oil_qty_2 < ENG.data.display.oil_qty_advisory)
 
         sasl.gl.drawText(Font_AirbusDUL, size[1]/2+223, 625, math.floor(oil_qty_2) .. "." , 36,
@@ -350,11 +350,11 @@ local function draw_oil_qty_and_pressure_gauges()
 
     if xx_statuses[1] then
         -- OIL QTY
-        local oil_angle = Math_rescale(0, 180, oil_qty_max, 0, get(Eng_1_OIL_qty))
+        local oil_angle = Math_rescale(0, 180, oil_qty_max, 0, ENG.dyn[1].oil_qty)
         local oil_angle_adv = Math_rescale(0, 180, oil_qty_max, 0, oil_qty_adv)
         draw_arcs_limits(size[1]/2-187, size[2]/2+176, nil, oil_angle_adv, oil_angle, true)
         
-        local oil_angle = Math_rescale(0, 180, oil_press_max, 0, get(Eng_1_OIL_press))
+        local oil_angle = Math_rescale(0, 180, oil_press_max, 0, ENG.dyn[1].oil_press)
         local oil_red_limit = math.max(0, get_press_red_limit(ENG.dyn[1].n2))
         local oil_angle_red = Math_rescale(0, 180, oil_press_max, 0, oil_red_limit)
         local oil_amber_limit = math.max(0, get_press_amber_limit(ENG.dyn[1].n2))
@@ -366,11 +366,11 @@ local function draw_oil_qty_and_pressure_gauges()
     
     if xx_statuses[2] then
         -- OIL QTY
-        local oil_angle = Math_rescale(0, 180, oil_qty_max, 0, get(Eng_2_OIL_qty))
+        local oil_angle = Math_rescale(0, 180, oil_qty_max, 0, ENG.dyn[2].oil_qty)
         local oil_angle_adv = Math_rescale(0, 180, oil_qty_max, 0, oil_qty_adv)
         draw_arcs_limits(size[1]/2+187, size[2]/2+176, nil, oil_angle_adv, oil_angle, true)
 
-        local oil_angle = Math_rescale(0, 180, oil_press_max, 0, get(Eng_2_OIL_press))
+        local oil_angle = Math_rescale(0, 180, oil_press_max, 0, ENG.dyn[2].oil_press)
         local oil_red_limit = math.max(0, get_press_red_limit(ENG.dyn[2].n2))
         local oil_angle_red = Math_rescale(0, 180, oil_press_max, 0, oil_red_limit)
         local oil_amber_limit = math.max(0, get_press_amber_limit(ENG.dyn[2].n2))
@@ -511,14 +511,14 @@ end
 function ecam_update_eng_page()
 
     if get(TIME) - params.last_update > PARAM_DELAY then
-        params.eng1_oil_press = math.floor(get(Eng_1_OIL_press))
-        params.eng2_oil_press = math.floor(get(Eng_2_OIL_press))
-        params.eng1_oil_temp  = math.floor(get(Eng_1_OIL_temp))
-        params.eng2_oil_temp  = math.floor(get(Eng_2_OIL_temp))
-        params.eng1_vib_n1    = get(Eng_1_VIB_N1)
-        params.eng1_vib_n2    = get(Eng_1_VIB_N2)
-        params.eng2_vib_n1    = get(Eng_2_VIB_N1)
-        params.eng2_vib_n2    = get(Eng_2_VIB_N2)
+        params.eng1_oil_press = math.floor(ENG.dyn[1].oil_press)
+        params.eng2_oil_press = math.floor(ENG.dyn[2].oil_press)
+        params.eng1_oil_temp  = math.floor(ENG.dyn[1].oil_temp)
+        params.eng2_oil_temp  = math.floor(ENG.dyn[2].oil_temp)
+        params.eng1_vib_n1    = ENG.dyn[1].vib_n1
+        params.eng1_vib_n2    = ENG.dyn[1].vib_n2
+        params.eng2_vib_n1    = ENG.dyn[2].vib_n1
+        params.eng2_vib_n2    = ENG.dyn[2].vib_n2
         params.last_update = get(TIME)
     end
 

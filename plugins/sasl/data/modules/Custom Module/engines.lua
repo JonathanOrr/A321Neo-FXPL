@@ -125,7 +125,7 @@ local function engine_create_state()
                 ff=0,                   -- Fuel flow [kg/s] (not /hour!) 
                 oil_qty=0,              -- Oil qty [oil units (see fcom)]
                 oil_press=0,            -- Oil Pressure [psi]
-                oil_temp=0,             -- Oil Temperature [°C]
+                oil_temp=get(OTA),      -- Oil Temperature [°C]
                 vib_n1=0,               -- Vibration of N1 stage [see fcom]
                 vib_n2=0,               -- Vibration of N1 stage [see fcom]
                 fadec_pwrd=false,       -- Is FADEC on?    
@@ -171,8 +171,8 @@ function engines_auto_quick_start(phase)
         set(Engine_2_master_switch, 1)
         set(Engine_mode_knob, 0)
         -- since oil temp changes slowly in autostart we need to set a initial temp
-        set(Eng_1_OIL_temp,60)
-        set(Eng_2_OIL_temp,60)
+        ENG.dyn[1].oil_temp = 60
+        ENG.dyn[2].oil_temp = 60
 
         local always_a_minimum = ENG_N1_LL_IDLE + 0.2 -- regardless altitude and anti-ice N1 of running engine can never be lower
         if not ENG.data then
@@ -439,8 +439,6 @@ end
 ----------------------------------------------------------------------------------------------------
 -- Functions - Secondary parameters
 ----------------------------------------------------------------------------------------------------
-set(Eng_1_OIL_temp, get(OTA))
-set(Eng_2_OIL_temp, get(OTA))
 
 local function update_oil_temp_and_press()
 
@@ -450,15 +448,15 @@ local function update_oil_temp_and_press()
         local press = Math_rescale(60, ENG.data.oil.pressure_min_idle+1, ENG.data.max_n2-10, ENG.data.oil.pressure_max_mct, n2_value)
         
         if get(FAILURE_ENG_LEAK_OIL, 1) == 1 then   -- OIL is leaking from engine T_T
-            Set_dataref_linear_anim(Eng_1_OIL_press, 0, 0, 500, 0.75 - 0.25 * press / ENG.data.oil.pressure_max_mct )
+            ENG.dyn[1].oil_press = Set_linear_anim_value(ENG.dyn[1].oil_press, 0, 0, 500, 0.75 - 0.25 * press / ENG.data.oil.pressure_max_mct )
         else
-            Set_dataref_linear_anim(Eng_1_OIL_press, press, 0, 500, 28 + random_pool_3 * 4)
+            ENG.dyn[1].oil_press = Set_linear_anim_value(ENG.dyn[1].oil_press, press, 0, 500, 28 + random_pool_3 * 4)
         end
     else
         -- During startup after cranking (N2 10) no pressure until >10, N2 IDLE is about 60 so where is this 70 from?
         local n2_value = math.max(10,ENG.dyn[1].n2)
         local press = Math_rescale(10, 0, 70, ENG.data.oil.pressure_max_toga, n2_value)
-        Set_dataref_linear_anim(Eng_1_OIL_press, press, 0, 500, 28 + random_pool_1 * 4)
+        ENG.dyn[1].oil_press = Set_linear_anim_value(ENG.dyn[1].oil_press, press, 0, 500, 28 + random_pool_1 * 4)
     end
 
     -- ENG 1 - TEMP
@@ -467,12 +465,12 @@ local function update_oil_temp_and_press()
         -- temperature depends mainly on N2. At 60% N2 normal temp acc CAE sim is sustained about 65°C at 15° OAT
         local n2_value = ENG.dyn[1].n2
         local temp = Math_rescale(60, 65, ENG.data.max_n2, ENG.data.oil.temp_max_mct, n2_value) + random_pool_2 * 5 + get(FAILURE_ENG_OIL_HI_TEMP, 1) * 70
-        Set_dataref_linear_anim(Eng_1_OIL_temp, temp, -50, 250, 0.18 + get(FAILURE_ENG_OIL_HI_TEMP, 1)*2)
+        ENG.dyn[1].oil_temp = Set_linear_anim_value(ENG.dyn[1].oil_temp, temp, -50, 250, 0.18 + get(FAILURE_ENG_OIL_HI_TEMP, 1)*2)
     else
         -- During startup or shutdown
         local n2_value = math.max(10,ENG.dyn[1].n2)
         local temp = Math_rescale(10, get(OTA), 70, 75, n2_value)
-        Set_dataref_linear_anim(Eng_1_OIL_temp, temp, -50, 250, 0.18)
+        ENG.dyn[1].oil_temp = Set_linear_anim_value(ENG.dyn[1].oil_temp, temp, -50, 250, 0.18)
     end
     
     -- ENG 2 - PRESS
@@ -480,27 +478,27 @@ local function update_oil_temp_and_press()
         local n2_value = ENG.dyn[2].n2
         local press = Math_rescale(60, ENG.data.oil.pressure_min_idle+1, ENG.data.max_n2-10, ENG.data.oil.pressure_max_mct, n2_value)
         if get(FAILURE_ENG_LEAK_OIL, 2) == 1 then   -- OIL is leaking from engine T_T
-            Set_dataref_linear_anim(Eng_2_OIL_press, 0, 0, 500, 0.75 - 0.25 * press / ENG.data.oil.pressure_max_mct )
+            ENG.dyn[2].oil_press = Set_linear_anim_value(ENG.dyn[2].oil_press, 0, 0, 500, 0.75 - 0.25 * press / ENG.data.oil.pressure_max_mct )
         else
-            Set_dataref_linear_anim(Eng_2_OIL_press, press, 0, 500, 28 + random_pool_2 * 4)
+            ENG.dyn[2].oil_press = Set_linear_anim_value(ENG.dyn[2].oil_press, press, 0, 500, 28 + random_pool_2 * 4)
         end
     else
         -- During startup or shutdown
         local n2_value = math.max(10,ENG.dyn[2].n2)
         local press = Math_rescale(10, 0, 70, ENG.data.oil.pressure_max_toga, n2_value)
-        Set_dataref_linear_anim(Eng_2_OIL_press, press, 0, 500, 28 + random_pool_3 * 4)
+        ENG.dyn[2].oil_press = Set_linear_anim_value(ENG.dyn[2].oil_press, press, 0, 500, 28 + random_pool_3 * 4)
     end
 
     -- ENG 2 - TEMP
     if ENG.dyn[2].is_avail then
         local n2_value = ENG.dyn[2].n2
         local temp = Math_rescale(60, 65, ENG.data.max_n2, ENG.data.oil.temp_max_mct, n2_value) + random_pool_1 * 5 + get(FAILURE_ENG_OIL_HI_TEMP, 2) * 70
-        Set_dataref_linear_anim(Eng_2_OIL_temp, temp, -50, 250, 0.18 + get(FAILURE_ENG_OIL_HI_TEMP, 2)*2)
+        ENG.dyn[2].oil_temp = Set_linear_anim_value(ENG.dyn[2].oil_temp, temp, -50, 250, 0.18 + get(FAILURE_ENG_OIL_HI_TEMP, 2)*2)
     else
         -- During startup or shutdown
         local n2_value = math.max(10,ENG.dyn[2].n2)
         local temp = Math_rescale(10, get(OTA), 70, 75, n2_value)
-        Set_dataref_linear_anim(Eng_2_OIL_temp, temp, -50, 250, 0.18)
+        ENG.dyn[2].oil_temp = Set_linear_anim_value(ENG.dyn[2].oil_temp, temp, -50, 250, 0.18)
     end
 
 
@@ -510,22 +508,22 @@ function update_vibrations()
     local n1_value = ENG.dyn[1].n1
     local vib_n1 = Math_rescale(0, 0, ENG.data.max_n2, ENG.data.vibrations.max_n1_nominal/4, n1_value) 
     if ENG.dyn[1].is_avail then vib_n1 = vib_n1 + 0.1*random_pool_3 end
-    set(Eng_1_VIB_N1, vib_n1)
+    ENG.dyn[1].vib_n1 = vib_n1
 
     local n2_value = ENG.dyn[1].n2
     local vib_n2 = Math_rescale(0, 0, ENG.data.max_n2, ENG.data.vibrations.max_n2_nominal/4, n2_value)
     if ENG.dyn[1].is_avail then vib_n2 = vib_n2 + 0.1*random_pool_2 end
-    set(Eng_1_VIB_N2, vib_n2)
+    ENG.dyn[1].vib_n2 = vib_n2
 
     local n1_value = ENG.dyn[2].n1
     local vib_n1 = Math_rescale(0, 0, ENG.data.max_n2, ENG.data.vibrations.max_n1_nominal/4, n1_value)
     if ENG.dyn[2].is_avail then vib_n1 = vib_n1 + 0.1*random_pool_1 end
-    set(Eng_2_VIB_N1, vib_n1)
+    ENG.dyn[2].vib_n1 = vib_n1
 
     local n2_value = ENG.dyn[2].n2
     local vib_n2 = Math_rescale(0, 0, ENG.data.max_n2, ENG.data.vibrations.max_n2_nominal/4, n2_value)
     if ENG.dyn[2].is_avail then vib_n2 = vib_n2 + 0.1*random_pool_3 end
-    set(Eng_2_VIB_N2, vib_n2)
+    ENG.dyn[2].vib_n2 = vib_n2
 
 
 end 
@@ -1006,7 +1004,6 @@ local function update_time_since_shutdown()
             time_last_shutdown[1] = get(TIME)
             time_current_startup[1]  = -1
             initial_oil_qty[1] = initial_oil_qty[1] - used_oil_qty[1] -- we must take used qty into account for next start
-            set(Eng_OIL_initial_qty,initial_oil_qty[1],1)
         end
     else
         -- init cooling requirement
@@ -1020,7 +1017,6 @@ local function update_time_since_shutdown()
             time_last_shutdown[2] = get(TIME)
             time_current_startup[2]  = -1
             initial_oil_qty[2] = initial_oil_qty[2] - used_oil_qty[2]
-            set(Eng_OIL_initial_qty,initial_oil_qty[2],2)
         end
     else
         cooling_has_cooled[2] = false
@@ -1056,15 +1052,9 @@ local function update_oil_qty_startup(eng)
     local curr_oil
     local initial_qty
 
-    if eng == 1 then
-        eng_n2 = ENG.dyn[1].n2
-        curr_oil = get(Eng_1_OIL_qty)
-        initial_qty = initial_oil_qty[eng]
-    else
-        eng_n2 = ENG.dyn[2].n2
-        curr_oil = get(Eng_2_OIL_qty)
-        initial_qty = initial_oil_qty[eng]
-    end
+    eng_n2 = ENG.dyn[eng].n2
+    curr_oil = ENG.dyn[eng].oil_qty
+    initial_qty = initial_oil_qty[eng]
 
     if eng_n2 < 18 then
         oil_gulp_timer[eng] = 0  -- TODO reset in shutdown for performance
@@ -1093,11 +1083,7 @@ local function update_oil_qty_startup(eng)
                 0.0020041578098679937*delta^4 - 0.00004525929443668085*delta^5  + 4.0534149582215e-7*delta^6)
     end
 
-    if eng == 1 then
-        set(Eng_1_OIL_qty, curr_oil)
-    else
-        set(Eng_2_OIL_qty, curr_oil)
-    end
+    ENG.dyn[eng].oil_qty = curr_oil
 
 end
 
@@ -1115,21 +1101,21 @@ local function update_oil_qty()
 
 
     if get(Eng_fsm_state, 1) == FSM_SHUTDOWN then
-        Set_dataref_linear_anim(Eng_1_OIL_qty, initial_oil_qty[1], 1,ENG.data.oil.qty_max , 0.1)
+        ENG.dyn[1].oil_qty = Set_linear_anim_value(ENG.dyn[1].oil_qty, initial_oil_qty[1], 1,ENG.data.oil.qty_max , 0.1)
     else
-        local curr_oil = get(Eng_1_OIL_qty)
+        local curr_oil = ENG.dyn[1].oil_qty
         used_oil_qty[1] = used_oil_qty[1] + ENG.data.oil.qty_consumption / 60 / 60 * get(DELTA_TIME) * (ENG.dyn[1].is_avail and 1 or 0)
         curr_oil = curr_oil - ENG.data.oil.qty_consumption / 60 / 60 * get(DELTA_TIME) * (ENG.dyn[1].is_avail and 1 or 0)
-        set(Eng_1_OIL_qty, curr_oil)
+        ENG.dyn[1].oil_qty = curr_oil
     end
 
     if get(Eng_fsm_state, 2) == FSM_SHUTDOWN then
-        Set_dataref_linear_anim(Eng_2_OIL_qty, initial_oil_qty[2], 1,ENG.data.oil.qty_max , 0.1)
+        ENG.dyn[2].oil_qty = Set_linear_anim_value(ENG.dyn[2].oil_qty, initial_oil_qty[2], 1,ENG.data.oil.qty_max , 0.1)
     else
-        local curr_oil = get(Eng_2_OIL_qty)
+        local curr_oil = ENG.dyn[2].oil_qty
         used_oil_qty[2] = used_oil_qty[2] + ENG.data.oil.qty_consumption / 60 / 60 * get(DELTA_TIME) * (ENG.dyn[2].is_avail and 1 or 0)
         curr_oil = curr_oil - ENG.data.oil.qty_consumption / 60 / 60 * get(DELTA_TIME) * (ENG.dyn[2].is_avail and 1 or 0)
-        set(Eng_2_OIL_qty, curr_oil)
+        ENG.dyn[2].oil_qty = curr_oil
     end
 
 end
@@ -1231,12 +1217,10 @@ function update_engine_type()
         ENG.data_is_loaded = true
 
         -- initial oil qty with some randomness
-        set(Eng_1_OIL_qty, ENG.data.oil.qty_max*3/4 + ENG.data.oil.qty_max/4 * math.random())
-        set(Eng_2_OIL_qty, ENG.data.oil.qty_max*3/4 + ENG.data.oil.qty_max/4 * math.random())
-        initial_oil_qty[1] = get(Eng_1_OIL_qty)
-        initial_oil_qty[2] = get(Eng_2_OIL_qty)
-        set(Eng_OIL_initial_qty,initial_oil_qty[1],1)
-        set(Eng_OIL_initial_qty,initial_oil_qty[2],2)
+        ENG.dyn[1].oil_qty = ENG.data.oil.qty_max*3/4 + ENG.data.oil.qty_max/4 * math.random()
+        ENG.dyn[2].oil_qty = ENG.data.oil.qty_max*3/4 + ENG.data.oil.qty_max/4 * math.random()
+        initial_oil_qty[1] = ENG.dyn[1].oil_qty
+        initial_oil_qty[2] = ENG.dyn[2].oil_qty
     end
     
 end

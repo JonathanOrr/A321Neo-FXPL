@@ -1585,19 +1585,19 @@ local function get_press_amber_limit(n2)
 end
 
 local function eng_1_lo_pr_amber()
-    return (ENG.dyn[1].is_avail and (get(Eng_1_OIL_press) >= get_press_red_limit(ENG.dyn[1].n2) and get(Eng_1_OIL_press) < get_press_amber_limit(ENG.dyn[1].n2)))
+    return (ENG.dyn[1].is_avail and (ENG.dyn[1].oil_press >= get_press_red_limit(ENG.dyn[1].n2) and ENG.dyn[1].oil_press < get_press_amber_limit(ENG.dyn[1].n2)))
 end
 
 local function eng_2_lo_pr_amber()
-    return (ENG.dyn[2].is_avail and (get(Eng_2_OIL_press) >= get_press_red_limit(ENG.dyn[2].n2) and get(Eng_2_OIL_press) < get_press_amber_limit(ENG.dyn[2].n2)))
+    return (ENG.dyn[2].is_avail and (ENG.dyn[2].oil_press >= get_press_red_limit(ENG.dyn[2].n2) and ENG.dyn[2].oil_press < get_press_amber_limit(ENG.dyn[2].n2)))
 end
 
 local function eng_1_lo_pr_red()
-    return (ENG.dyn[1].is_avail and (get(Eng_1_OIL_press) < get_press_red_limit(ENG.dyn[1].n2)))
+    return (ENG.dyn[1].is_avail and (ENG.dyn[1].oil_press < get_press_red_limit(ENG.dyn[1].n2)))
 end
 
 local function eng_2_lo_pr_red()
-    return (ENG.dyn[2].is_avail and (get(Eng_2_OIL_press) < get_press_red_limit(ENG.dyn[2].n2)))
+    return (ENG.dyn[2].is_avail and (ENG.dyn[2].oil_press < get_press_red_limit(ENG.dyn[2].n2)))
 end
 
 
@@ -2190,10 +2190,10 @@ MessageGroup_ENG_OIL_HI_TEMP = {
         {
             text = function()
                 local N = ""
-                if (get(Eng_1_OIL_temp) > ENG.data.display.oil_temp_high_amber) then
+                if (ENG.dyn[1].oil_temp > ENG.data.display.oil_temp_high_amber) then
                     N = "1"
                 end
-                if (get(Eng_2_OIL_temp) > ENG.data.display.oil_temp_high_amber)  then
+                if (ENG.dyn[2].oil_temp > ENG.data.display.oil_temp_high_amber)  then
                     if #N > 0 then
                         N = N .. "+"
                     end
@@ -2217,17 +2217,17 @@ MessageGroup_ENG_OIL_HI_TEMP = {
         {
             text = function() return "   - ENG MASTER 1.....OFF" end,
             color = function() return COL_ACTIONS end,
-            is_active = function() return (get(Eng_1_OIL_temp) > ENG.data.display.oil_temp_high_amber)  and get(Engine_1_master_switch) == 1 end
+            is_active = function() return (ENG.dyn[1].oil_temp > ENG.data.display.oil_temp_high_amber)  and get(Engine_1_master_switch) == 1 end
         },
         {
             text = function() return "   - ENG MASTER 2.....OFF" end,
             color = function() return COL_ACTIONS end,
-            is_active = function() return (get(Eng_2_OIL_temp) > ENG.data.display.oil_temp_high_amber)  and get(Engine_2_master_switch) == 1 end
+            is_active = function() return (ENG.dyn[2].oil_temp > ENG.data.display.oil_temp_high_amber)  and get(Engine_2_master_switch) == 1 end
         },
     },
 
     is_active = function()
-        return get(Eng_1_OIL_temp) > ENG.data.display.oil_temp_high_amber or get(Eng_2_OIL_temp) > ENG.data.display.oil_temp_high_amber
+        return ENG.dyn[1].oil_temp > ENG.data.display.oil_temp_high_amber or ENG.dyn[2].oil_temp > ENG.data.display.oil_temp_high_amber
     end,
 
     is_inhibited = function()

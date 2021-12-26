@@ -174,18 +174,18 @@ function ecam_update_advisory_conditions()
     local adv_1 = ENG.data.display.oil_press_low_amber[1] + ENG.data.display.oil_press_low_amber[2] * ENG.dyn[1].n2
     local adv_2 = ENG.data.display.oil_press_low_amber[1] + ENG.data.display.oil_press_low_amber[2] * ENG.dyn[2].n2
 
-    local cond_eng_1 =  get(Eng_1_OIL_qty) < ENG.data.display.oil_qty_advisory or
-                        get(Eng_1_OIL_press) > ENG.data.display.oil_press_high_adv or
-                        get(Eng_1_OIL_press) < adv_1 or
-                        get(Eng_1_OIL_temp) > ENG.data.display.oil_temp_high_adv or
-                        get(Eng_1_VIB_N1) > ENG.data.vibrations.max_n1_nominal or
-                        get(Eng_1_VIB_N2) > ENG.data.vibrations.max_n2_nominal
+    local cond_eng_1 =  ENG.dyn[1].oil_qty < ENG.data.display.oil_qty_advisory or
+                        ENG.dyn[1].oil_press > ENG.data.display.oil_press_high_adv or
+                        ENG.dyn[1].oil_press < adv_1 or
+                        ENG.dyn[1].oil_temp > ENG.data.display.oil_temp_high_adv or
+                        ENG.dyn[1].vib_n1 > ENG.data.vibrations.max_n1_nominal or
+                        ENG.dyn[1].vib_n2 > ENG.data.vibrations.max_n2_nominal
 
-    local cond_eng_2 =  get(Eng_2_OIL_qty) < ENG.data.display.oil_qty_advisory or
-                        get(Eng_2_OIL_press) > ENG.data.display.oil_press_high_adv or
-                        get(Eng_2_OIL_press) < adv_2 or
-                        get(Eng_2_VIB_N1) > ENG.data.vibrations.max_n1_nominal or
-                        get(Eng_2_VIB_N2) > ENG.data.vibrations.max_n2_nominal
+    local cond_eng_2 =  ENG.dyn[2].oil_qty < ENG.data.display.oil_qty_advisory or
+                        ENG.dyn[2].oil_press > ENG.data.display.oil_press_high_adv or
+                        ENG.dyn[2].oil_press < adv_2 or
+                        ENG.dyn[2].vib_n1 > ENG.data.vibrations.max_n1_nominal or
+                        ENG.dyn[2].vib_n2 > ENG.data.vibrations.max_n2_nominal
 
 
     local cond_engines = (ENG.dyn[1].is_avail and cond_eng_1) or (ENG.dyn[2].is_avail and cond_eng_2)

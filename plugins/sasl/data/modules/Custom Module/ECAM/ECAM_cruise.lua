@@ -58,19 +58,19 @@ end
 
 local function draw_oil_qt()
 
-    local eng_1_oil_color = pulse_green(get(Eng_1_OIL_qty) < 2)
-    local eng_2_oil_color = pulse_green(get(Eng_2_OIL_qty) < 2)
+    local eng_1_oil_color = pulse_green(ENG.dyn[1].oil_qty < 2)
+    local eng_2_oil_color = pulse_green(ENG.dyn[2].oil_qty < 2)
 
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-150, 650, math.floor(get(Eng_1_OIL_qty)) .. "." , 36,
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-150, 650, math.floor(ENG.dyn[1].oil_qty) .. "." , 36,
                      false, false, TEXT_ALIGN_RIGHT, eng_1_oil_color)
 
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-135, 650, math.floor((get(Eng_1_OIL_qty)%1)*10), 28,
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-135, 650, math.floor((ENG.dyn[1].oil_qty%1)*10), 28,
                     false, false, TEXT_ALIGN_RIGHT, eng_1_oil_color)
 
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+235, 650, math.floor(get(Eng_2_OIL_qty)) .. "." , 36,
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+235, 650, math.floor(ENG.dyn[2].oil_qty) .. "." , 36,
                     false, false, TEXT_ALIGN_RIGHT, eng_2_oil_color)
 
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+250, 650, math.floor((get(Eng_2_OIL_qty)%1)*10) , 28,
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+250, 650, math.floor((ENG.dyn[2].oil_qty%1)*10) , 28,
                     false, false, TEXT_ALIGN_RIGHT, eng_2_oil_color)
 
 end
@@ -175,10 +175,10 @@ end
 function ecam_update_cruise_page()
 
     if get(TIME) - params.last_update > PARAM_DELAY then
-        params.eng1_vib_n1    = get(Eng_1_VIB_N1)
-        params.eng1_vib_n2    = get(Eng_1_VIB_N2)
-        params.eng2_vib_n1    = get(Eng_2_VIB_N1)
-        params.eng2_vib_n2    = get(Eng_2_VIB_N2)
+        params.eng1_vib_n1    = ENG.dyn[1].vib_n1
+        params.eng1_vib_n2    = ENG.dyn[1].vib_n2
+        params.eng2_vib_n1    = ENG.dyn[2].vib_n1
+        params.eng2_vib_n2    = ENG.dyn[2].vib_n2
         params.cabin_psi      = Round(get(Cabin_delta_psi),1)
         params.cabin_vs       = math.floor(get(Cabin_vs))
         params.cabin_alt      = math.floor(get(Cabin_alt_ft))
