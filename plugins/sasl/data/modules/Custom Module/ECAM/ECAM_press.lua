@@ -93,8 +93,8 @@ local function draw_press_info()
 end
 
 local function draw_pack_indications()
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-304, 140, "PACK 1", 36, false, false, TEXT_ALIGN_CENTER, (get(Pack_L) == 0 and get(Engine_1_avail) == 1) and ECAM_ORANGE or ECAM_WHITE)
-    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+330, 140, "PACK 2", 36, false, false, TEXT_ALIGN_CENTER, (get(Pack_R) == 0 and get(Engine_2_avail) == 1) and ECAM_ORANGE or ECAM_WHITE)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2-304, 140, "PACK 1", 36, false, false, TEXT_ALIGN_CENTER, (get(Pack_L) == 0 and ENG.dyn[1].is_avail) and ECAM_ORANGE or ECAM_WHITE)
+    sasl.gl.drawText(Font_AirbusDUL, size[1]/2+330, 140, "PACK 2", 36, false, false, TEXT_ALIGN_CENTER, (get(Pack_R) == 0 and ENG.dyn[2].is_avail) and ECAM_ORANGE or ECAM_WHITE)
 end
 
 local function draw_valves_text()
@@ -167,9 +167,9 @@ local function draw_press_textures_and_needle()
     SASL_rotated_center_img_xcenter_aligned(ECAM_PRESS_outflow_needle_img, size[1]/2+245, size[2]/2-197, 12, 101, Math_rescale(0, -90, 1, 0, params.overflow_valve), 0, 0, (params.overflow_valve > 0.95 and get(All_on_ground) == 0) and ECAM_ORANGE or ECAM_GREEN)
 
     --L pack
-    SASL_draw_img_xcenter_aligned(ECAM_PRESS_pack_triangle_img, size[1]/2-315, size[2]/2-263, 27, 20, (get(Pack_L) == 0 and get(Engine_1_avail) == 1) and ECAM_ORANGE or ECAM_GREEN)
+    SASL_draw_img_xcenter_aligned(ECAM_PRESS_pack_triangle_img, size[1]/2-315, size[2]/2-263, 27, 20, (get(Pack_L) == 0 and ENG.dyn[1].is_avail) and ECAM_ORANGE or ECAM_GREEN)
     --R pack
-    SASL_draw_img_xcenter_aligned(ECAM_PRESS_pack_triangle_img, size[1]/2+315, size[2]/2-263, 27, 20, (get(Pack_R) == 0 and get(Engine_2_avail) == 1) and ECAM_ORANGE or ECAM_GREEN)
+    SASL_draw_img_xcenter_aligned(ECAM_PRESS_pack_triangle_img, size[1]/2+315, size[2]/2-263, 27, 20, (get(Pack_R) == 0 and ENG.dyn[2].is_avail) and ECAM_ORANGE or ECAM_GREEN)
 end
 
 local function draw_the_big_grey_box()

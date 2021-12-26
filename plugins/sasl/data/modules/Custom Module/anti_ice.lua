@@ -276,7 +276,7 @@ local function update_logic()
     ai_sys_commanded_status[WINGS] = ai_btn_status[WINGS] 
         
     if get(Any_wheel_on_ground) == 1 then
-        ai_sys_commanded_status[PROBES] = ai_btn_status[PROBES] or get(Engine_1_avail) == 1 or get(Engine_2_avail) == 1
+        ai_sys_commanded_status[PROBES] = ai_btn_status[PROBES] or ENG.dyn[1].is_avail or ENG.dyn[2].is_avail
     else
         ai_sys_commanded_status[PROBES] = true -- Always on in flight
     end

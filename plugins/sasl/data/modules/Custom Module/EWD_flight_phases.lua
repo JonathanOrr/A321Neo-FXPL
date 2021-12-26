@@ -71,8 +71,8 @@ function update()
     -- - No engines
     -- - Never took off
     if  get(Any_wheel_on_ground)  == 1 
-    and get(Engine_1_avail) == 0
-    and get(Engine_2_avail) == 0
+    and !ENG.dyn[1].is_avail
+    and !ENG.dyn[2].is_avail
     and already_took_off  == false
     then
         set(EWD_flight_phase, PHASE_ELEC_PWR)
@@ -84,8 +84,8 @@ function update()
     -- - At least one engine ON
     -- - Never took off
     if  get(Any_wheel_on_ground)  == 1 
-    and (get(Engine_1_avail) == 1 or get(Engine_2_avail) == 1)
-    and ((get(Eng_1_N1) < TAKEOFF_N1_LIMIT and get(Eng_2_N1) < TAKEOFF_N1_LIMIT)
+    and (ENG.dyn[1].is_avail or ENG.dyn[2].is_avail)
+    and ((ENG.dyn[1].n1 < TAKEOFF_N1_LIMIT and ENG.dyn[2].n1 < TAKEOFF_N1_LIMIT)
     or (get(Eng_1_reverser_deployment) > 0.1 or get(get(Eng_2_reverser_deployment) > 0.1)))
     and already_took_off == false
     then
@@ -98,7 +98,7 @@ function update()
     -- - At least one engine at takeoff power
     -- - IAS <= 80
     if  get(Any_wheel_on_ground)  == 1 
-    and (get(Eng_1_N1) >= TAKEOFF_N1_LIMIT or get(Eng_2_N1) >= TAKEOFF_N1_LIMIT) 
+    and (ENG.dyn[1].n1 >= TAKEOFF_N1_LIMIT or ENG.dyn[2].n1 >= TAKEOFF_N1_LIMIT) 
     and get(Eng_1_reverser_deployment) < 0.1 
     and get(Eng_2_reverser_deployment) < 0.1
     and get(IAS) <= 80
@@ -113,7 +113,7 @@ function update()
     -- - At least one engine at takeoff power
     -- - IAS > 80
     if get(Any_wheel_on_ground) == 1
-    and (get(Eng_1_N1) >= TAKEOFF_N1_LIMIT or get(Eng_2_N1) >= TAKEOFF_N1_LIMIT)
+    and (ENG.dyn[1].n1 >= TAKEOFF_N1_LIMIT or ENG.dyn[2].n1 >= TAKEOFF_N1_LIMIT)
     and get(Eng_1_reverser_deployment) < 0.1
     and get(Eng_2_reverser_deployment) < 0.1
     and get(IAS) >= 80
@@ -199,7 +199,7 @@ function update()
     -- - Already took off
     
     if  get(Any_wheel_on_ground)  == 1 
-    and (get(Engine_1_avail) == 0 and get(Engine_2_avail) == 0)
+    and (!ENG.dyn[1].is_avail and !ENG.dyn[2].is_avail)
     and already_took_off  == true
     then
         set(EWD_flight_phase, PHASE_2ND_ENG_OFF)

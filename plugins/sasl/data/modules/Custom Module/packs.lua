@@ -193,7 +193,8 @@ end
 
 local function update_bleed_config_and_targets()
     -- if x-bleed is on one engine feeds bleed air
-    is_single_bleed = x_bleed_status and ((get(Engine_1_avail) + get(Engine_2_avail) <= 1) or (eng_bleed_switch[1] == false or  eng_bleed_switch[2] == false)) and 1 or 0
+    local not_both_engines = !(ENG.dyn[1].is_avail and ENG.dyn[2].is_avail)
+    is_single_bleed = x_bleed_status and not_both_engines or (eng_bleed_switch[1] == false or  eng_bleed_switch[2] == false)) and 1 or 0
     -- only if we have both packs on, we have a dual bleed situation regarding demand
     if not pack_valve_pos[1] or not pack_valve_pos[2] then is_single_bleed = 0 end
 
@@ -211,19 +212,19 @@ local function update_hp_valves()
     if  get(L_IP_valve) == 0 then
         -- if IP valve is closed, HP valve closes in any case
         set(L_HP_valve,0)
-    elseif get(Engine_1_avail) == 1 and eng_bleed_switch[1] and get(L_bleed_press) < target_max_bleed  then
+    elseif ENG.dyn[1].is_avail and eng_bleed_switch[1] and get(L_bleed_press) < target_max_bleed  then
         -- TODO just open the valve here will not increase pressure, since for display only
         set(L_HP_valve, 1)
-    elseif get(Engine_1_avail) == 0 or (not eng_bleed_switch[1]) or get(L_bleed_press) >= target_max_bleed then
+    elseif !ENG.dyn[1].is_avail or (not eng_bleed_switch[1]) or get(L_bleed_press) >= target_max_bleed then
         set(L_HP_valve, 0)
     end
 
     if  get(R_IP_valve) == 0 then
         -- if IP valve is closed, HP valve closes in any case
         set(R_HP_valve,0)
-    elseif get(Engine_2_avail) == 1 and eng_bleed_switch[2] and get(R_bleed_press) < target_max_bleed then
+    elseif ENG.dyn[2].is_avail and eng_bleed_switch[2] and get(R_bleed_press) < target_max_bleed then
         set(R_HP_valve, 1)
-    elseif get(Engine_2_avail) == 0 or (not eng_bleed_switch[2]) or get(R_bleed_press) >= target_max_bleed then
+    elseif !ENG.dyn[2].is_avail or (not eng_bleed_switch[2]) or get(R_bleed_press) >= target_max_bleed then
         set(R_HP_valve, 0)
     end
 
@@ -300,20 +301,20 @@ local function update_bleed_valves()
 end
 
 local function update_eng_pressures()
-    if get(Engine_1_avail) == 0 then
+    if !ENG.dyn[1].is_avail then
         -- shut down
         eng_lp_pressure[1] = Set_linear_anim_value(eng_lp_pressure[1], 0, 0, 100, 1)
     else
         -- scale 18 - 101 is the N1 range
-        local target = Math_rescale(18, ENG_NOMINAL_MIN_PRESS, 101, ENG_NOMINAL_MAX_PRESS, get(Eng_1_N1)) + math.random() + get(FAILURE_BLEED_ENG_1_hi_press) * 25
+        local target = Math_rescale(18, ENG_NOMINAL_MIN_PRESS, 101, ENG_NOMINAL_MAX_PRESS, ENG.dyn[1].n1) + math.random() + get(FAILURE_BLEED_ENG_1_hi_press) * 25
         eng_lp_pressure[1] = Set_linear_anim_value(eng_lp_pressure[1], target, 0, 100, 1)
         -- TODO N1 takes some demand into account (WAI/NAI) but not pack config situation which should be done here or is it done just by HP valve
     end
     
-    if get(Engine_2_avail) == 0 then
+    if !ENG.dyn[2].is_avail then
         eng_lp_pressure[2] = Set_linear_anim_value(eng_lp_pressure[2], 0, 0, 100, 1)
     else
-        local target = Math_rescale(18, ENG_NOMINAL_MIN_PRESS, 101, ENG_NOMINAL_MAX_PRESS, get(Eng_2_N1)) + math.random() + get(FAILURE_BLEED_ENG_2_hi_press) * 25
+        local target = Math_rescale(18, ENG_NOMINAL_MIN_PRESS, 101, ENG_NOMINAL_MAX_PRESS, ENG.dyn[2].n1) + math.random() + get(FAILURE_BLEED_ENG_2_hi_press) * 25
         eng_lp_pressure[2] = Set_linear_anim_value(eng_lp_pressure[2], target, 0, 100, 1)
     end
 
@@ -523,7 +524,7 @@ local function update_pack(n)
     
     local fire_push_button_status = (n == 1 and get(Fire_pb_ENG1_status) == 1) or (n == 2 and get(Fire_pb_ENG2_status) == 1) 
     local eng_n2 = n == 1 and get(Eng_1_N2) or get(Eng_2_N2)
-    local both_eng_avail = get(Engine_1_avail) == 1 and get(Engine_2_avail) == 1
+    local both_eng_avail = ENG.dyn[1].is_avail and ENG.dyn[2].is_avail
     
     if  pack_valve_switch[n] 
     and bleed_pressure[n] > 4 

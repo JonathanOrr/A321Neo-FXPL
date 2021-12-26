@@ -127,7 +127,7 @@ end
 
 local function draw_engines_egt(x)
     local xx         = (x == 1 and get(EWD_engine_1_XX) or get(EWD_engine_2_XX)) == 1
-    local avail      = (x == 1 and get(Engine_1_avail) or get(Engine_2_avail)) == 1
+    local avail      = ENG.dyn[x].is_avail
     local eng_mode = get(Eng_N1_mode, x)
     local x_shift    = x == 1 and -215 or 125
     local x_shift_2  = x == 1 and -140 or 200
@@ -268,7 +268,7 @@ end
 
 local function draw_engines_n1(x)
     local xx         = (x == 1 and get(EWD_engine_1_XX) or get(EWD_engine_2_XX)) == 1
-    local avail      = (x == 1 and get(Engine_1_avail) or get(Engine_2_avail)) == 1
+    local avail      = ENG.dyn[x].is_avail
     local x_shift    = x == 1 and -215 or 125
     local x_shift_2  = x == 1 and -140 or 200
     local x_shift_3  = x == 1 and -170 or 170
@@ -350,10 +350,10 @@ end
 local function draw_engines_extra()
 
     -- N2 grey background box -- show as long ENG is starting up but not fully available
-    if get(Engine_1_master_switch) == 1 and get(Engine_1_avail) == 0 and get(EWD_engine_1_XX) == 0 then
+    if get(Engine_1_master_switch) == 1 and !ENG.dyn[1].is_avail and get(EWD_engine_1_XX) == 0 then
           sasl.gl.drawRectangle(size[1]/2-210, size[2]/2+70, 85, 32, {0.2,0.2,0.2})
     end
-    if get(Engine_2_master_switch) == 1 and get(Engine_2_avail) == 0 and get(EWD_engine_2_XX) == 0 then
+    if get(Engine_2_master_switch) == 1 and !ENG.dyn[2].is_avail and get(EWD_engine_2_XX) == 0 then
           sasl.gl.drawRectangle(size[1]/2+115, size[2]/2+70, 85, 32, {0.2,0.2,0.2})
     end
 
@@ -424,7 +424,7 @@ end
 
 
 local function draw_packs_wai_nai()
-    if get(Engine_1_avail) == 0 and get(Engine_2_avail) == 0 then
+    if !ENG.dyn[1].is_avail and !ENG.dyn[2].is_avail then
         return
     end
     local max_eng_n1_mode = math.max(get(Eng_N1_mode, 1), get(Eng_N1_mode, 2)) 
@@ -475,7 +475,7 @@ local function draw_extra_indication()
     local n1_max = get(Eng_N1_max)
     
     if get(All_on_ground) == 1 and max_eng_n1_mode ~= 1 then
-        if get(Engine_1_avail) == 0 and get(Engine_1_avail) == 0 then
+        if !ENG.dyn[1].is_avail and !ENG.dyn[1].is_avail then
             displayed_mode = 3 -- When engines OFF, the mode is CLB
             n1_max = get(Eng_N1_max_detent_clb)
         elseif get(Eng_N1_flex_temp) ~= 0 then
@@ -754,8 +754,8 @@ function update()
 
     -- Update the parameter every PARAM_DELAY seconds
     if get(TIME) - params.last_update > PARAM_DELAY then
-        params.eng_n1[1] = get(Eng_1_N1)
-        params.eng_n1[2] = get(Eng_2_N1)
+        params.eng_n1[1] = ENG.dyn[1].n1
+        params.eng_n1[2] = ENG.dyn[2].n1
         params.eng1_n2 = get(Eng_1_N2)
         params.eng2_n2 = get(Eng_2_N2)
         if params.eng_n1[1] < 5 then params.eng_n1[1] = 0 end

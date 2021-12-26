@@ -55,19 +55,19 @@ local function thrust_rush()
         athr_pos_R = get(Throttle_blue_dot, 2)
     end
 
-    set(SOUND_rush_L , get(Throttle_blue_dot, 1) - get(Eng_1_N1))
-    set(SOUND_rush_R , get(Throttle_blue_dot, 2) - get(Eng_2_N1))
+    set(SOUND_rush_L , get(Throttle_blue_dot, 1) - ENG.dyn[1].n1)
+    set(SOUND_rush_R , get(Throttle_blue_dot, 2) - ENG.dyn[2].n1)
 end
 
 local function reverser_drfs()
     if get(Eng_1_reverser_deployment) > 0.1 then
-        set(REV_L, Set_anim_value_no_lim(get(REV_L), get(Eng_1_N1), 1) )
+        set(REV_L, Set_anim_value_no_lim(get(REV_L), ENG.dyn[1].n1, 1) )
     else
         set(REV_L, Set_anim_value_no_lim(get(REV_L), 0, 1) )
     end
 
     if get(Eng_2_reverser_deployment) > 0.1 then
-        set(REV_R, Set_anim_value_no_lim(get(REV_R), get(Eng_2_N1), 1) )
+        set(REV_R, Set_anim_value_no_lim(get(REV_R), ENG.dyn[2].n1, 1) )
     else
         set(REV_R, Set_anim_value_no_lim(get(REV_R), 0, 1) )
     end

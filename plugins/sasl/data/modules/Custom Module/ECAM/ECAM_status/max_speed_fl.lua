@@ -43,7 +43,7 @@ function ECAM_status_get_max_speed()
     end
 
     -- ENG
-    if get(Engine_2_avail) == 0 and get(Engine_1_avail) == 0 then
+    if !ENG.dyn[2].is_avail and !ENG.dyn[1].is_avail then
         max_kn   = math.min(max_kn, 320)
         max_mach = math.min(max_mach, 77)
     end

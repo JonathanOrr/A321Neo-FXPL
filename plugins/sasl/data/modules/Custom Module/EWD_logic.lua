@@ -430,7 +430,7 @@ local function update_right_list()
     -- Better Pushback support
     if get(Wheel_better_pushback_connected) == 1 then
         local color = COL_INDICATION
-        if get(Engine_1_avail) == 1 or get(Engine_2_avail) == 1 then
+        if ENG.dyn[1].is_avail or ENG.dyn[2].is_avail then
             color = COL_CAUTION
         end
         list_right:put(color, "NW STRG DISC")
@@ -463,7 +463,7 @@ local function update_right_list()
     if get(TOTAL_SPDBRK_EXTENSION) > 2.5 then
     
         if get(EWD_flight_phase) >= PHASE_LIFTOFF and get(EWD_flight_phase) <= PHASE_TOUCHDOWN then
-            if get(Eng_1_N1) > 50 or get(Eng_2_N1) > 50 then
+            if ENG.dyn[1].n1 > 50 or ENG.dyn[2].n1 > 50 then
                 list_right:put(COL_CAUTION, "SPEED BRK")
             else
                 list_right:put(COL_INDICATION, "SPEED BRK")

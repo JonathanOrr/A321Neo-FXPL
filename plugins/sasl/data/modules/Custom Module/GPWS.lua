@@ -230,7 +230,7 @@ function update_mode_3(alt, vs)
         return
     end
 
-    if alt < 245 and (get(Eng_1_N1) >= 74 or get(Eng_2_N1) >= 74) then
+    if alt < 245 and (ENG.dyn[1].n1 >= 74 or ENG.dyn[2].n1 >= 74) then
         -- Takeoff or go-around is defined as the aircraft being lower than 245
         -- and takeoff power applied
         mode_3_armed = true
@@ -448,7 +448,7 @@ local function update_mode_pitch()
         return -- Manually disabled
     end
 
-    if get(Eng_1_N1) >= 74 or get(Eng_2_N1) >= 74 then
+    if ENG.dyn[1].n1 >= 74 or ENG.dyn[2].n1 >= 74 then
         return -- Not working in T/O or G/A phase
     end
 

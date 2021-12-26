@@ -243,8 +243,8 @@ MessageGroup_HYD_B_SYS_LO_PR = {
 
     is_inhibited = function()
         return not(get(EWD_flight_phase) == PHASE_1ST_ENG_TO_PWR or get(EWD_flight_phase) == PHASE_AIRBONE or
-                (get(EWD_flight_phase) == PHASE_1ST_ENG_ON and get(Engine_1_avail) == 1
-                and get(Engine_2_avail) == 1))
+                (get(EWD_flight_phase) == PHASE_1ST_ENG_ON and ENG.dyn[1].is_avail
+                and ENG.dyn[2].is_avail))
 
     end
 }
@@ -505,8 +505,8 @@ MessageGroup_HYD_G_SYS_LO_PR = {
 
     is_inhibited = function()
         return not(get(EWD_flight_phase) == PHASE_1ST_ENG_TO_PWR or get(EWD_flight_phase) == PHASE_AIRBONE or
-                (get(EWD_flight_phase) == PHASE_1ST_ENG_ON and get(Engine_1_avail) == 1
-                and get(Engine_2_avail) == 1))
+                (get(EWD_flight_phase) == PHASE_1ST_ENG_ON and ENG.dyn[1].is_avail
+                and ENG.dyn[2].is_avail))
 
     end
 }
@@ -843,8 +843,8 @@ MessageGroup_HYD_Y_SYS_LO_PR = {
 
     is_inhibited = function()
         return not(get(EWD_flight_phase) == PHASE_1ST_ENG_TO_PWR or get(EWD_flight_phase) == PHASE_AIRBONE or
-                (get(EWD_flight_phase) == PHASE_1ST_ENG_ON and get(Engine_1_avail) == 1
-                and get(Engine_2_avail) == 1))
+                (get(EWD_flight_phase) == PHASE_1ST_ENG_ON and ENG.dyn[1].is_avail
+                and ENG.dyn[2].is_avail))
 
     end
 }
@@ -1067,7 +1067,7 @@ MessageGroup_HYD_B_AND_Y_LO_PR = {
 
     is_inhibited = function()
         return get(EWD_flight_phase) == PHASE_ELEC_PWR or get(EWD_flight_phase) == PHASE_ABOVE_80_KTS or get(EWD_flight_phase) == PHASE_LIFTOFF or get(EWD_flight_phase) == PHASE_2ND_ENG_OFF
-               or (get(EWD_flight_phase) == PHASE_1ST_ENG_ON and (get(Engine_1_avail) == 0 or get(Engine_2_avail) == 0))
+               or (get(EWD_flight_phase) == PHASE_1ST_ENG_ON and (!ENG.dyn[1].is_avail or !ENG.dyn[2].is_avail))
     end
 }
 
@@ -1110,7 +1110,7 @@ MessageGroup_HYD_G_AND_Y_LO_PR = {
 
     is_inhibited = function()
         return get(EWD_flight_phase) == PHASE_ELEC_PWR or get(EWD_flight_phase) == PHASE_ABOVE_80_KTS or get(EWD_flight_phase) == PHASE_LIFTOFF or get(EWD_flight_phase) == PHASE_2ND_ENG_OFF
-               or (get(EWD_flight_phase) == PHASE_1ST_ENG_ON and (get(Engine_1_avail) == 0 or get(Engine_2_avail) == 0))
+               or (get(EWD_flight_phase) == PHASE_1ST_ENG_ON and (!ENG.dyn[1].is_avail or !ENG.dyn[2].is_avail))
     end
 }
 
@@ -1154,7 +1154,7 @@ MessageGroup_HYD_G_AND_B_LO_PR = {
 
     is_inhibited = function()
         return get(EWD_flight_phase) == PHASE_ELEC_PWR or get(EWD_flight_phase) == PHASE_ABOVE_80_KTS or get(EWD_flight_phase) == PHASE_LIFTOFF or get(EWD_flight_phase) == PHASE_2ND_ENG_OFF
-               or (get(EWD_flight_phase) == PHASE_1ST_ENG_ON and (get(Engine_1_avail) == 0 or get(Engine_2_avail) == 0))
+               or (get(EWD_flight_phase) == PHASE_1ST_ENG_ON and (!ENG.dyn[1].is_avail or !ENG.dyn[2].is_avail))
     end
 }
 

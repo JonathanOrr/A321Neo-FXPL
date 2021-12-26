@@ -30,7 +30,7 @@ local function put_inop_sys_msg_3(messages, dr_1, dr_2, dr_3, t_1, t_2, t_3, tit
 end
 
 local function base_cond()
-    return (get(Engine_1_avail) == 1 and get(Engine_2_avail) == 1) or (get(Any_wheel_on_ground)  == 0)
+    return (ENG.dyn[1].is_avail and ENG.dyn[2].is_avail) or (get(Any_wheel_on_ground)  == 0)
 end
 
 local inop_systems_desc = {
@@ -189,8 +189,8 @@ local inop_systems_desc = {
     },
     {
      text = "GEN", nr = 2,
-     cond_1 = function() return get(FAILURE_ELEC_GEN_1) == 1 or (get(Engine_1_avail) == 0 and get(All_on_ground) == 0) or not ELEC_sys.generators[1].idg_status end,
-     cond_2 = function() return get(FAILURE_ELEC_GEN_2) == 1 or (get(Engine_2_avail) == 0 and get(All_on_ground) == 0) or not ELEC_sys.generators[2].idg_status end,
+     cond_1 = function() return get(FAILURE_ELEC_GEN_1) == 1 or (!ENG.dyn[1].is_avail and get(All_on_ground) == 0) or not ELEC_sys.generators[1].idg_status end,
+     cond_2 = function() return get(FAILURE_ELEC_GEN_2) == 1 or (!ENG.dyn[2].is_avail and get(All_on_ground) == 0) or not ELEC_sys.generators[2].idg_status end,
     },
     {
      text = "BAT", nr = 2,
@@ -388,11 +388,11 @@ local inop_systems_desc = {
     },
     {
      text = "G ENG 1 PUMP", nr = 1,
-     cond_1 = function() return (get(Engine_1_avail) == 0 and get(All_on_ground) == 0) or get(FAILURE_HYD_G_pump) == 1 or get(FAILURE_HYD_G_R_overheat) == 1 or get(Hydraulic_G_qty) == 0 end,
+     cond_1 = function() return (!ENG.dyn[1].is_avail and get(All_on_ground) == 0) or get(FAILURE_HYD_G_pump) == 1 or get(FAILURE_HYD_G_R_overheat) == 1 or get(Hydraulic_G_qty) == 0 end,
     },
     {
      text = "Y ENG 2 PUMP", nr = 1,
-     cond_1 = function() return (get(Engine_2_avail) == 0 and get(All_on_ground) == 0) or get(FAILURE_HYD_Y_pump) == 1 or get(FAILURE_HYD_Y_R_overheat) == 1 or get(Hydraulic_Y_qty) == 0 end,
+     cond_1 = function() return (!ENG.dyn[2].is_avail and get(All_on_ground) == 0) or get(FAILURE_HYD_Y_pump) == 1 or get(FAILURE_HYD_Y_R_overheat) == 1 or get(Hydraulic_Y_qty) == 0 end,
     },
     {
      text = "PTU", nr = 1,

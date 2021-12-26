@@ -234,7 +234,7 @@ MessageGroup_MEMO_TAKEOFF = {
     -- Method to check if this message group is active
     is_active = function(self)
         -- Active after 2 minutes from the second engine start this message is enabled
-        if (get(Engine_1_avail) == 1 and get(Engine_2_avail) == 1) then
+        if (ENG.dyn[1].is_avail and ENG.dyn[2].is_avail) then
             if not timer_2nd_engine_on_started then
                 sasl.startTimer(timer_2nd_engine_on)
                 timer_2nd_engine_on_started = true

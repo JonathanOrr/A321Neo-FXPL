@@ -118,7 +118,7 @@ local function draw_oil_qt_press_temp_eng_1()
         -- ENG 1 OIL TEMP
         ------------------------------------------------------------------------------------
         local eng_1_oil_color = pulse_green(params.eng1_oil_temp > ENG.data.display.oil_temp_high_adv)
-        if get(Engine_1_avail) == 1 and params.eng1_oil_temp < 54 or  params.eng1_oil_temp > ENG.data.display.oil_temp_high_amber then
+        if ENG.dyn[1].is_avail and params.eng1_oil_temp < 54 or  params.eng1_oil_temp > ENG.data.display.oil_temp_high_amber then
             eng_1_oil_color = ECAM_ORANGE
         end
         local temp = math.floor(params.eng1_oil_temp) - math.floor(params.eng1_oil_temp)%5
@@ -169,7 +169,7 @@ local function draw_oil_qt_press_temp_eng_2()
         -- ENG 2 OIL TEMP
         ------------------------------------------------------------------------------------
         local eng_2_oil_color = pulse_green(params.eng2_oil_temp > ENG.data.display.oil_temp_high_adv)
-        if get(Engine_2_avail) == 1 and params.eng2_oil_temp < 54 or  params.eng2_oil_temp > ENG.data.display.oil_temp_high_amber then
+        if ENG.dyn[2].is_avail and params.eng2_oil_temp < 54 or  params.eng2_oil_temp > ENG.data.display.oil_temp_high_amber then
             eng_2_oil_color = ECAM_ORANGE
         end
         local temp = math.floor(params.eng2_oil_temp) - math.floor(params.eng2_oil_temp)%5

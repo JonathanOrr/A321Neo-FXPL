@@ -55,8 +55,8 @@ function draw()
 
 
     -- AVAIL ENG1
-    text  = get(Engine_1_avail) == 1 and "AVAIL" or "NOT AVAIL"
-    color = get(Engine_1_avail) == 1 and UI_GREEN or UI_LIGHT_RED
+    text  = ENG.dyn[1].is_avail and "AVAIL" or "NOT AVAIL"
+    color = ENG.dyn[1].is_avail and UI_GREEN or UI_LIGHT_RED
     sasl.gl.drawText(Font_B612MONO_regular, 70, 375, text, 12, false, false, TEXT_ALIGN_CENTER, color)
     sasl.gl.drawFrame(30,370,80,20,color)
 
@@ -66,8 +66,8 @@ function draw()
     sasl.gl.drawFrame(130,370,100,20,color)
 
     -- AVAIL ENG2
-    text  = get(Engine_2_avail) == 1 and "AVAIL" or "NOT AVAIL"
-    color = get(Engine_2_avail) == 1 and UI_GREEN or UI_LIGHT_RED
+    text  = ENG.dyn[2].is_avail and "AVAIL" or "NOT AVAIL"
+    color = ENG.dyn[2].is_avail and UI_GREEN or UI_LIGHT_RED
     sasl.gl.drawText(Font_B612MONO_regular, size[1]/2+70, 375, text, 12, false, false, TEXT_ALIGN_CENTER, color)
     sasl.gl.drawFrame(size[1]/2+30,370,80,20,color)
 

@@ -265,7 +265,7 @@ local function update_steering()
                                      or (get(Hydraulic_Y_press) <= 10)
                                      or (not is_bscu_1_working and not is_bscu_2_working)
 
-    if is_steering_completely_off or (get(Engine_1_avail) == 0 and get(Engine_2_avail) == 0) then
+    if is_steering_completely_off or (!ENG.dyn[1].is_avail and !ENG.dyn[2].is_avail) then
         return -- Cannot move the wheel
     end
 

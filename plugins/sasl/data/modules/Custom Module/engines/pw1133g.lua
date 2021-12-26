@@ -24,10 +24,10 @@ function configure_pw1133g()
     
         max_n1     = 105,
         max_n2     = 105,
-        max_thrust = 33110.0,   -- [lbs]
-        fan_size   = 35.76,     -- [feet^2]
-        fan_rpm_max= 3281.0,    -- [RPM] at 100% N1
-        bypass_ratio = 12.5,    -- [-]
+        max_thrust = 33110.0,    -- [lbs]
+        fan_size   = 35.76,      -- [feet^2]
+        fan_n1_rpm_max= 3281.0,  -- [RPM] at 100% N1
+        bypass_ratio = 12.5,     -- [-]
 
         n1_to_n2_fun = function(n1)
             return -2.6492 + 22.1036*math.log(n1)

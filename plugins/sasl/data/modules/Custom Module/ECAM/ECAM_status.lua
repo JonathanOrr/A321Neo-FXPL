@@ -79,7 +79,7 @@ local function drawUnderlineText(font, x, y, text, size, bold, italic, align, co
 end
 
 local function not_inhibited_on_ground()
-    return (get(EWD_flight_phase) > PHASE_1ST_ENG_TO_PWR and get(EWD_flight_phase) < PHASE_BELOW_80_KTS) or (get(Engine_1_avail) == 1 and get(Engine_2_avail))
+    return (get(EWD_flight_phase) > PHASE_1ST_ENG_TO_PWR and get(EWD_flight_phase) < PHASE_BELOW_80_KTS) or (ENG.dyn[1].is_avail and ENG.dyn[2].is_avail)
 end
 
 local function draw_sts_page_left(messages)
@@ -144,8 +144,8 @@ local function prepare_sts_page_left()
                 (get(FBW_total_control_law) == FBW_DIRECT_LAW 
                 or get(FAILURE_FCTL_LELEV) == 1 
                 or get(FAILURE_FCTL_RELEV) == 1 
-                or get(Engine_1_avail) == 0 
-                or get(Engine_2_avail) == 0)
+                or !ENG.dyn[1].is_avail 
+                or !ENG.dyn[2].is_avail)
                 or get(FAILURE_FCTL_THS_MECH) == 1
                 or (get(Hydraulic_Y_press) < 1450 and get(Hydraulic_G_press) < 1450)
                 or (get(Hydraulic_Y_press) < 1450 and get(Hydraulic_B_press) < 1450)

@@ -284,9 +284,9 @@ end
 
 local function update_sys_status()
 
-    g_sys.is_engine_pump_on = status_buttons.eng1pump and get(Engine_1_avail) == 1 and get(FAILURE_HYD_G_pump) == 0 and get(Hydraulic_G_qty) > 0
-    y_sys.is_engine_pump_on = status_buttons.eng2pump and get(Engine_2_avail) == 1 and get(FAILURE_HYD_Y_pump) == 0 and get(Hydraulic_Y_qty) > 0
-    b_sys.is_elec_pump_on = status_buttons.elecBpump and (get(Engine_1_avail) == 1 or  get(Engine_2_avail) == 1) and get(FAILURE_HYD_B_pump) == 0 and get(AC_bus_1_pwrd) == 1 and get(Hydraulic_B_qty) > 0
+    g_sys.is_engine_pump_on = status_buttons.eng1pump and ENG.dyn[1].is_avail and get(FAILURE_HYD_G_pump) == 0 and get(Hydraulic_G_qty) > 0
+    y_sys.is_engine_pump_on = status_buttons.eng2pump and ENG.dyn[2].is_avail and get(FAILURE_HYD_Y_pump) == 0 and get(Hydraulic_Y_qty) > 0
+    b_sys.is_elec_pump_on = status_buttons.elecBpump and (ENG.dyn[1].is_avail or  ENG.dyn[2].is_avail) and get(FAILURE_HYD_B_pump) == 0 and get(AC_bus_1_pwrd) == 1 and get(Hydraulic_B_qty) > 0
     b_sys.is_elec_pump_on = b_sys.is_elec_pump_on or (get(AC_bus_1_pwrd) == 1 and status_buttons.overrideBpump and get(Hydraulic_B_qty) > 0)
     y_sys.is_elec_pump_on = status_buttons.elecYpump and get(FAILURE_HYD_Y_E_pump) == 0 and get(Hydraulic_Y_qty) > 0 and get(AC_bus_2_pwrd) == 1
 

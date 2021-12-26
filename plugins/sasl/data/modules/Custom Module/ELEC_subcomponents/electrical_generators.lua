@@ -163,11 +163,7 @@ end
 
 local function update_eng_gen(x)
 
-    if x.id == 1 then
-        x.source_status = get(Engine_1_avail) == 1 and get(Eng_1_N1) > 10
-    else
-        x.source_status = get(Engine_2_avail) == 1 and get(Eng_2_N1) > 10
-    end
+    x.source_status = ENG.dyn[x.id].is_avail and ENG.dyn[x.id].n1 > 15
     
     if x.switch_status then
         if x.source_status and get(x.drs.failure) == 0 and x.idg_status then
@@ -337,8 +333,8 @@ local function update_idg(x)
 
     local temperature = get(x.drs.idg_temp)
     
-    if x.idg_status and ((x.id == 1 and get(Eng_1_N1) > 5) or (x.id == 2 and get(Eng_2_N1) > 5)) then
-        local target = 80 + 50 * (get(Eng_1_N1))/100 + (get(x.drs.idg_fail_1) == 0 and 0 or 100)
+    if x.idg_status and ENG.dyn[x.id].n1 > 5 then
+        local target = 80 + 50 * (ENG.dyn[x.id].n1)/100 + (get(x.drs.idg_fail_1) == 0 and 0 or 100)
         temperature = Set_anim_value(temperature, target, get(OTA), 300, 0.02)
     else
         temperature = Set_anim_value(temperature, get(OTA), get(OTA), 300, 0.05)        

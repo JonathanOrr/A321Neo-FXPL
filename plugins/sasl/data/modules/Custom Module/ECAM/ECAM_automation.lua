@@ -188,7 +188,7 @@ function ecam_update_advisory_conditions()
                         get(Eng_2_VIB_N2) > ENG.data.vibrations.max_n2_nominal
 
 
-    local cond_engines = (get(Engine_1_avail) == 1 and cond_eng_1) or (get(Engine_2_avail) == 1 and cond_eng_2)
+    local cond_engines = (ENG.dyn[1].is_avail and cond_eng_1) or (ENG.dyn[2].is_avail and cond_eng_2)
 
     if cond_engines then at_least_one = true; set(Ecam_advisory_ENG, 1) end       
 
@@ -358,7 +358,7 @@ local function update_page_normal()
     elseif get(EWD_flight_phase) == 6 then
     
         -- Check FCOM for the following conditions
-        is_takeoff_power  = get(Eng_1_N1) >= 74 or get(Eng_2_N1) >= 74
+        is_takeoff_power  = ENG.dyn[1].n1 >= 74 or ENG.dyn[2].n1 >= 74
         top_condition     = get(Flaps_deployed_angle) > 0 or is_takeoff_power
         bottom_condition  = get(Flaps_deployed_angle) == 0 and not is_takeoff_power
         if top_condition and not timer_cruise_page then

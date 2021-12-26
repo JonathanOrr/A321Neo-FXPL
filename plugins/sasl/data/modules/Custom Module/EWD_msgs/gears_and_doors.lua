@@ -285,7 +285,7 @@ MessageGroup_GEAR_NOT_DOWN = {
                 return true
             end
 
-            if get(Capt_ra_alt_ft) < 750 and get(Eng_1_N1) < 75 and get(Eng_2_N1) < 75 then
+            if get(Capt_ra_alt_ft) < 750 and ENG.dyn[1].n1 < 75 and ENG.dyn[2].n1 < 75 then
                 pb_set(PB.mip.ldg_gear_red_light, true, true)
                 return true
             end

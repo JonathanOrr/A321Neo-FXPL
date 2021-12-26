@@ -85,24 +85,24 @@ function N1_control(L_PID_array, R_PID_array, reversers)
 --        air_density_coeff = -(-sigma+1) ^ 2.9 + 1
 --    end
 
-    local L_error = (N1_target_L - get(Eng_1_N1))
+    local L_error = (N1_target_L - ENG.dyn[1].n1)
     local controlled_T_L = SSS_PID_BP_LIM(L_PID_array, L_error)
     L_PID_array.Actual_output = controlled_T_L
-    L_PID_array.Integral_sum = cap_integral_limit(get(Eng_1_N1), L_PID_array.Integral_sum)
+    L_PID_array.Integral_sum = cap_integral_limit(ENG.dyn[1].n1, L_PID_array.Integral_sum)
 
-    if get(Engine_1_avail) == 1 then
+    if ENG.dyn[1].is_avail then
         set(Override_eng_1_lever, controlled_T_L)
     else
         L_PID_array.Actual_output = 0
         set(Override_eng_1_lever, 0)
     end
 
-    local R_error = (N1_target_R - get(Eng_2_N1))
+    local R_error = (N1_target_R - ENG.dyn[2].n1)
     local controlled_T_R = SSS_PID_BP_LIM(R_PID_array, R_error)
     R_PID_array.Actual_output = controlled_T_R
-    R_PID_array.Integral_sum = cap_integral_limit(get(Eng_2_N1), R_PID_array.Integral_sum)
+    R_PID_array.Integral_sum = cap_integral_limit(ENG.dyn[2].n1, R_PID_array.Integral_sum)
 
-    if get(Engine_2_avail) == 1 then
+    if ENG.dyn[2].is_avail then
         set(Override_eng_2_lever, controlled_T_R)
     else
         R_PID_array.Actual_output = 0

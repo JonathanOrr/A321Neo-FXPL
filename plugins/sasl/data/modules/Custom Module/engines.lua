@@ -39,7 +39,7 @@ include('engines/pw1133g.lua')
 include('engines/model/xp_interface.lua')
 
 -- engine states, simple ones right now for debugging, introduced for more flexible abnormals later
--- TODO TBD use string values?
+-- TODO TBD use string values? --> NO! Use integers = faster
 local FSM_SHUTDOWN = 1
 local FSM_START_COOLING = 2
 local FSM_START_PHASE_CRANK = 3
@@ -114,8 +114,38 @@ local initial_oil_qty = {0,0} -- initial oil qty on engine start
 local used_oil_qty = {0,0}    -- oil qty used during last engine run to update initial_oil_qty
 
 ----------------------------------------------------------------------------------------------------
--- Various datarefs
+-- Engine dynamics state
 ----------------------------------------------------------------------------------------------------
+
+local function engine_create_state()
+    return  {   n1=0,                   -- N1   [%] -- Use ENG.data.fan_n1_rpm_max to get RPM
+                n2=0,                   -- N2   [%]
+                nfan=0,                 -- NFAN [%] -- Use ENG.data.fan_n1_rpm_max to get RPM (use N1 really!)
+                egt=0,                  -- EGT  [°C]
+                ff=0,                   -- Fuel flow [kg/s] (not /hour!) 
+                oil_qty=0,              -- Oil qty [oil units (see fcom)]
+                oil_press=0,            -- Oil Pressure [psi]
+                oil_temp=0,             -- Oil Temperature [°C]
+                vib_n1=0,               -- Vibration of N1 stage [see fcom]
+                vib_n2=0,               -- Vibration of N1 stage [see fcom]
+                fadec_pwrd=false,       -- Is FADEC on?    
+                n1_idle=0,              -- Value for N1 idle [%]
+                n1_mode=0,              -- Current N1 mode for displaying AND N1 computation 
+                                        -- 0: not visible, 1: TOGA, 2:MCT, 3:CLB, 4: IDLE, 5: MREV, 6: FLEX, 7: SOFT GA
+                firewall_valve=1,       -- Status of the firewall valve
+                                        -- 0 open, 1 - closed, 2 : transit - firewall valve
+                cranking=false,         -- Is engine cranking?
+                starter_valve=false,    -- Is the bleed starting valve open?
+                start_fsm_state=0,      -- Status of the FSM for the startup procedure (see above FSM_* constants)
+                is_failed=false,        -- Is engine in failed condition?
+                is_avail=false          -- Is up and running?
+            }
+end
+
+ENG.dyn = {
+    engine_create_state(),
+    engine_create_state()
+}
 
 ----------------------------------------------------------------------------------------------------
 -- Functions - Commands
@@ -281,27 +311,27 @@ local function update_n1_minimum()
     local always_a_minimum = ENG_N1_LL_IDLE + 0.2 -- regardless altitude and anti-ice N1 of running engine can never be lower
 
     -- Update ENG1 N1 minimum
-    local curr_n1 = get(Eng_1_N1)    
-    if curr_n1 < always_a_minimum and get(Engine_1_avail) == 1 then
+    local curr_n1 = ENG.dyn[1].n1
+    if curr_n1 < always_a_minimum and ENG.dyn[1].is_avail then
         eng_model_enforce_n1(1, always_a_minimum)
     end
 
     -- Update ENG2 N1 minimum
-    curr_n1 = get(Eng_2_N1)
-    if curr_n1 < always_a_minimum and get(Engine_2_avail) == 1 then
+    curr_n1 = ENG.dyn[2].n1
+    if curr_n1 < always_a_minimum and ENG.dyn[2].is_avail then
         eng_model_enforce_n1(2, always_a_minimum)
     end
 end
 
 local function update_n2()
-    local eng_1_n1 = get(Eng_1_N1)
+    local eng_1_n1 = ENG.dyn[1].n1
     if eng_1_n1 > 5 and get(Engine_1_master_switch) == 1  then
         Set_dataref_linear_anim(Eng_1_N2, eng_model_get_N2(1), 0, 130, 10)
     else
         Set_dataref_linear_anim(Eng_1_N2, eng_N2_off[1], 0, 130, 10)
     end
 
-    local eng_2_n1 = get(Eng_2_N1)
+    local eng_2_n1 = ENG.dyn[2].n1
     if eng_2_n1 > 5 and get(Engine_2_master_switch) == 1  then
         Set_dataref_linear_anim(Eng_2_N2, eng_model_get_N2(2), 0, 130, 10)
     else
@@ -317,7 +347,7 @@ end
 
 
 local function update_egt()
-    local eng_1_n1 = get(Eng_1_N1)
+    local eng_1_n1 = ENG.dyn[1].n1
     if eng_1_n1 > ENG_N1_LL_IDLE then
         -- engine avail, also in the first phase of shutdown, since N1 then is about 1% above IDLE constant
         local computed_egt = ENG.data.n1_to_egt_fun(eng_1_n1, get(OTA))
@@ -337,7 +367,7 @@ local function update_egt()
         end
     end
 
-    local eng_2_n1 = get(Eng_2_N1)
+    local eng_2_n1 = ENG.dyn[2].n1
     if eng_2_n1 > ENG_N1_LL_IDLE then
         local computed_egt = ENG.data.n1_to_egt_fun(eng_2_n1, get(OTA))
         computed_egt = computed_egt * (1 + get(FAILURE_ENG_STALL, 2) * get(eng_1_n1)/90 * math.random())
@@ -356,7 +386,7 @@ local function update_egt()
 end
 
 local function update_ff()
-    local eng_1_n1 = get(Eng_1_N1)
+    local eng_1_n1 = ENG.dyn[1].n1
     if eng_1_n1 > ENG_N1_LL_IDLE then
         -- when engines are avail, use fuel flow from X-Plane
         set(Eng_1_FF_kgs, eng_model_get_FF(1))
@@ -365,7 +395,7 @@ local function update_ff()
         set(Eng_1_FF_kgs,eng_FF_off[1])
     end
 
-    local eng_2_n1 = get(Eng_2_N1)
+    local eng_2_n1 = ENG.dyn[2].n1
     if eng_2_n1 > ENG_N1_LL_IDLE then
         set(Eng_2_FF_kgs, eng_model_get_FF(2))
     else
@@ -380,26 +410,26 @@ local function update_avail()
     local eng_has_fuel = get(Fuel_tank_selector_eng_1) > 0
 
     -- ENG 1
-    if get(Eng_1_N1) > ENG_N1_LL_IDLE and get(Engine_1_master_switch) == 1 and eng_has_fuel and get(FAILURE_ENG_1_FAILURE) == 0 then
-        if get(Engine_1_avail) == 0 then
+    if ENG.dyn[1].n1 > ENG_N1_LL_IDLE and get(Engine_1_master_switch) == 1 and eng_has_fuel and get(FAILURE_ENG_1_FAILURE) == 0 then
+        if !ENG.dyn[1].is_avail then
             set(EWD_engine_avail_ind_start, get(TIME), 1)
-            set(Engine_1_avail, 1)
+            ENG.dyn[1].is_avail = true
         end
     else
-        set(Engine_1_avail, 0)    
+        ENG.dyn[1].is_avail = false
         set(EWD_engine_avail_ind_start, 0, 1)
     end
 
     local eng_has_fuel = get(Fuel_tank_selector_eng_2) > 0
     
     -- ENG 2
-    if get(Eng_2_N1) > ENG_N1_LL_IDLE and get(Engine_2_master_switch) == 1 and eng_has_fuel and get(FAILURE_ENG_2_FAILURE) == 0 then
-        if get(Engine_2_avail) == 0 then
+    if ENG.dyn[2].n1 > ENG_N1_LL_IDLE and get(Engine_2_master_switch) == 1 and eng_has_fuel and get(FAILURE_ENG_2_FAILURE) == 0 then
+        if !ENG.dyn[2].is_avail then
             set(EWD_engine_avail_ind_start, get(TIME), 2)
-            set(Engine_2_avail, 1)
+            ENG.dyn[2].is_avail = true
         end
     else
-        set(Engine_2_avail, 0)    
+        ENG.dyn[2].is_avail = false
         set(EWD_engine_avail_ind_start, 0, 2)
     end
 
@@ -415,7 +445,7 @@ set(Eng_2_OIL_temp, get(OTA))
 local function update_oil_temp_and_press()
 
     -- ENG 1 - PRESS
-    if get(Engine_1_avail) == 1 then
+    if ENG.dyn[1].is_avail then
         local n2_value = get(Eng_1_N2)
         local press = Math_rescale(60, ENG.data.oil.pressure_min_idle+1, ENG.data.max_n2-10, ENG.data.oil.pressure_max_mct, n2_value)
         
@@ -433,7 +463,7 @@ local function update_oil_temp_and_press()
 
     -- ENG 1 - TEMP
     -- TODO oil temp increase/decrease is much slower, exception possibly failure situation
-    if get(Engine_1_avail) == 1 then
+    if ENG.dyn[1].is_avail then
         -- temperature depends mainly on N2. At 60% N2 normal temp acc CAE sim is sustained about 65°C at 15° OAT
         local n2_value = get(Eng_1_N2)
         local temp = Math_rescale(60, 65, ENG.data.max_n2, ENG.data.oil.temp_max_mct, n2_value) + random_pool_2 * 5 + get(FAILURE_ENG_OIL_HI_TEMP, 1) * 70
@@ -446,7 +476,7 @@ local function update_oil_temp_and_press()
     end
     
     -- ENG 2 - PRESS
-    if get(Engine_2_avail) == 1 then
+    if ENG.dyn[2].is_avail then
         local n2_value = get(Eng_2_N2)
         local press = Math_rescale(60, ENG.data.oil.pressure_min_idle+1, ENG.data.max_n2-10, ENG.data.oil.pressure_max_mct, n2_value)
         if get(FAILURE_ENG_LEAK_OIL, 2) == 1 then   -- OIL is leaking from engine T_T
@@ -462,7 +492,7 @@ local function update_oil_temp_and_press()
     end
 
     -- ENG 2 - TEMP
-    if get(Engine_2_avail) == 1 then
+    if ENG.dyn[2].is_avail then
         local n2_value = get(Eng_2_N2)
         local temp = Math_rescale(60, 65, ENG.data.max_n2, ENG.data.oil.temp_max_mct, n2_value) + random_pool_1 * 5 + get(FAILURE_ENG_OIL_HI_TEMP, 2) * 70
         Set_dataref_linear_anim(Eng_2_OIL_temp, temp, -50, 250, 0.18 + get(FAILURE_ENG_OIL_HI_TEMP, 2)*2)
@@ -477,24 +507,24 @@ local function update_oil_temp_and_press()
 end
 
 function update_vibrations()
-    local n1_value = get(Eng_1_N1)
+    local n1_value = ENG.dyn[1].n1
     local vib_n1 = Math_rescale(0, 0, ENG.data.max_n2, ENG.data.vibrations.max_n1_nominal/4, n1_value) 
-    if get(Engine_1_avail) == 1 then vib_n1 = vib_n1 + 0.1*random_pool_3 end
+    if ENG.dyn[1].is_avail then vib_n1 = vib_n1 + 0.1*random_pool_3 end
     set(Eng_1_VIB_N1, vib_n1)
 
     local n2_value = get(Eng_1_N2)
     local vib_n2 = Math_rescale(0, 0, ENG.data.max_n2, ENG.data.vibrations.max_n2_nominal/4, n2_value)
-    if get(Engine_1_avail) == 1 then vib_n2 = vib_n2 + 0.1*random_pool_2 end
+    if ENG.dyn[1].is_avail then vib_n2 = vib_n2 + 0.1*random_pool_2 end
     set(Eng_1_VIB_N2, vib_n2)
 
-    local n1_value = get(Eng_2_N1)
+    local n1_value = ENG.dyn[2].n1
     local vib_n1 = Math_rescale(0, 0, ENG.data.max_n2, ENG.data.vibrations.max_n1_nominal/4, n1_value)
-    if get(Engine_2_avail) == 1 then vib_n1 = vib_n1 + 0.1*random_pool_1 end
+    if ENG.dyn[2].is_avail then vib_n1 = vib_n1 + 0.1*random_pool_1 end
     set(Eng_2_VIB_N1, vib_n1)
 
     local n2_value = get(Eng_2_N2)
     local vib_n2 = Math_rescale(0, 0, ENG.data.max_n2, ENG.data.vibrations.max_n2_nominal/4, n2_value)
-    if get(Engine_2_avail) == 1 then vib_n2 = vib_n2 + 0.1*random_pool_3 end
+    if ENG.dyn[2].is_avail then vib_n2 = vib_n2 + 0.1*random_pool_3 end
     set(Eng_2_VIB_N2, vib_n2)
 
 
@@ -508,7 +538,7 @@ local function perform_crank_procedure(eng, wet_cranking)
     -- This is PHASE 1 which will be called during startup as long N2 is below ENG_N2_CRANK_MARGIN
     set(Eng_fsm_state, FSM_START_PHASE_CRANK, eng)
 
-    if (eng==1 and get(Engine_1_avail) == 1) or (eng==2 and get(Engine_2_avail) == 1) then
+    if (eng==1 and ENG.dyn[1].is_avail) or (eng==2 and ENG.dyn[2].is_avail) then
         -- Just for precaution, crank has no sense if the engine is already running
         -- In chase, just don't do anything
         return
@@ -615,7 +645,7 @@ local function perform_starting_procedure_follow_n1(eng)
         -- For each phase...
         
         -- Get the current N1, but it can't be zero 
-        local curr_N1 = math.max(math.max(eng_N1_off[eng],2), eng == 1 and get(Eng_1_N1) or get(Eng_2_N1))
+        local curr_N1 = math.max(math.max(eng_N1_off[eng],2), Eng.dyn[eng].n1)
         
         if curr_N1 < ENG.data.startup.n1[i+1].n1_set then
             -- We have found the correct row in phase table
@@ -665,7 +695,7 @@ local function perform_starting_procedure(eng, inflight_restart)
     if inflight_restart and eng_N2_off[eng] < ENG.data.startup.n2[#ENG.data.startup.n2].n2_start then
         -- v is different, let's skip the first phase
         eng_N2_off[eng] = ENG.data.startup.n2[#ENG.data.startup.n2].n2_start
-        eng_N1_off[eng] = eng == 1 and get(Eng_1_N1) or get(Eng_2_N1)
+        eng_N1_off[eng] = Eng.dyn[eng].n1
     end
     
     -- If the N2 powered by bleed so far is larger than 10, then we can start the real startup procedure
@@ -786,7 +816,7 @@ end
 
 local function update_startup()
 
-    if get(Engine_1_avail) == 1 and get(Engine_2_avail) == 1 then return end
+    if ENG.dyn[1].is_avail and ENG.dyn[2].is_avail then return end
 
     -- An array we need later to see if the engine requires cooldown (=shutdown) or not
     local require_cooldown = {true, true}
@@ -795,13 +825,13 @@ local function update_startup()
     local windmill_condition_2 = get(IAS) > windmill_min_speed[2]
     
     -- When the pilot moves very fast master switch ON -> OFF -> ON
-    local fast_restart_1 = get(Eng_1_N1) > 25
-    local fast_restart_2 = get(Eng_2_N1) > 25
+    local fast_restart_1 = ENG.dyn[1].n1 > 25
+    local fast_restart_2 = Eng.dyn[2].n1 > 25
 
     local eng_1_air_cond = (get(L_bleed_press) > 10 or windmill_condition_1 or fast_restart_1)
     local eng_2_air_cond = (get(R_bleed_press) > 10 or windmill_condition_2 or fast_restart_2)
-    local does_engine_1_can_start_or_crank = get(Engine_1_avail) == 0 and eng_1_air_cond and get(Eng_1_FADEC_powered) == 1 and math.abs(get(Cockpit_throttle_lever_L)) < 0.05
-    local does_engine_2_can_start_or_crank = get(Engine_2_avail) == 0 and eng_2_air_cond and get(Eng_2_FADEC_powered) == 1 and math.abs(get(Cockpit_throttle_lever_R)) < 0.05
+    local does_engine_1_can_start_or_crank = !ENG.dyn[1].is_avail and eng_1_air_cond and get(Eng_1_FADEC_powered) == 1 and math.abs(get(Cockpit_throttle_lever_L)) < 0.05
+    local does_engine_2_can_start_or_crank = !ENG.dyn[2].is_avail and eng_2_air_cond and get(Eng_2_FADEC_powered) == 1 and math.abs(get(Cockpit_throttle_lever_R)) < 0.05
 
     if get(FAILURE_ENG_FADEC_CH1, 1) == 1 and get(FAILURE_ENG_FADEC_CH2, 1) == 1 then
         does_engine_1_can_start_or_crank = false -- No fadec? No start
@@ -876,18 +906,18 @@ local function update_startup()
         end
     -- CASE 3: Master Switch protection
     else
-        if get(Engine_1_avail) == 0 and fast_restart_1 and get(Engine_1_master_switch) then
+        if !ENG.dyn[1].is_avail and fast_restart_1 and get(Engine_1_master_switch) then
             perform_starting_procedure(1, get(All_on_ground) == 0)
             require_cooldown[1] = false
         end
-        if get(Engine_2_avail) == 0 and fast_restart_2 and get(Engine_2_master_switch) then
+        if !ENG.dyn[2].is_avail and fast_restart_2 and get(Engine_2_master_switch) then
             perform_starting_procedure(2, get(All_on_ground) == 0)
             require_cooldown[2] = false
         end
     end
     
     -- CASE 3: No ignition, no crank, engine is off or shutting down
-    if get(Engine_1_avail) == 0  and require_cooldown[1] then    -- Turn off the engine TODO better use a state shutdown
+    if !ENG.dyn[1].is_avail  and require_cooldown[1] then    -- Turn off the engine TODO better use a state shutdown
         set(Eng_fsm_state,FSM_SHUTDOWN,1)
         -- Set N2 to zero
         local n2_target = get(IAS) > 50 and 10 + get(IAS)/10 + random_pool_1*2 or 0 -- In in-flight it rotates
@@ -901,7 +931,7 @@ local function update_startup()
         igniter_eng[1] = 0
         starter_valve_eng[1] = 0
     end
-    if get(Engine_2_avail) == 0 and require_cooldown[2] then    -- Turn off the engine
+    if !ENG.dyn[2].is_avail and require_cooldown[2] then    -- Turn off the engine
         set(Eng_fsm_state,FSM_SHUTDOWN,2)
         -- Set N2 to zero
         local n2_target = get(IAS) > 50 and 10 + get(IAS)/10 + random_pool_3*2 or 0 -- In in-flight it rotates
@@ -947,11 +977,11 @@ local function update_auto_start()
         slow_start_time_requested = false
     end
 
-    if get(Engine_2_avail) == 1 then
+    if ENG.dyn[2].is_avail then
         set(Engine_1_master_switch, 1)
     end
 
-    if get(Engine_1_avail) == 1 and get(Engine_2_avail) == 1 then
+    if ENG.dyn[1].is_avail and ENG.dyn[2].is_avail then
         set(Engine_mode_knob, 0)
         slow_start_time_requested = false
     end
@@ -1009,11 +1039,11 @@ local function update_continuous_ignition()
     local cond_1 = (get(Engine_1_master_switch) == 1 and get(Eng_is_failed, 1) == 1)
                 or (get(Engine_2_master_switch) == 1 and get(Eng_is_failed, 2) == 1)
     
-    local cond_2 = get(Engine_1_avail) == 1 and get(Engine_2_avail) == 1 and get(Engine_mode_knob) == 1 and already_back_to_norm
+    local cond_2 = ENG.dyn[1].is_avail and ENG.dyn[2].is_avail and get(Engine_mode_knob) == 1 and already_back_to_norm
 
-    if get(Engine_1_avail) == 1 and get(Engine_2_avail) == 1 and get(Engine_mode_knob) == 0 then
+    if ENG.dyn[1].is_avail and ENG.dyn[2].is_avail and get(Engine_mode_knob) == 0 then
         already_back_to_norm = true
-    elseif get(Engine_1_avail) == 0 or get(Engine_2_avail) == 0 then
+    elseif !ENG.dyn[1].is_avail or !ENG.dyn[2].is_avail then
         already_back_to_norm = false
     end
     
@@ -1073,12 +1103,12 @@ end
 
 local function update_oil_qty()
     -- initial oil qty is set when initializing engine type
-    if get(Eng_fsm_state, 1) >= FSM_START_PHASE_N2 and get(Engine_1_avail) == 0 then
+    if get(Eng_fsm_state, 1) >= FSM_START_PHASE_N2 and !ENG.dyn[1].is_avail then
         update_oil_qty_startup(1)
         return
     end
 
-    if get(Eng_fsm_state, 2) >= FSM_START_PHASE_N2 and get(Engine_2_avail) == 0 then
+    if get(Eng_fsm_state, 2) >= FSM_START_PHASE_N2 and !ENG.dyn[2].is_avail then
         update_oil_qty_startup(2)
         return
     end
@@ -1088,8 +1118,8 @@ local function update_oil_qty()
         Set_dataref_linear_anim(Eng_1_OIL_qty, initial_oil_qty[1], 1,ENG.data.oil.qty_max , 0.1)
     else
         local curr_oil = get(Eng_1_OIL_qty)
-        used_oil_qty[1] = used_oil_qty[1] + ENG.data.oil.qty_consumption / 60 / 60 * get(DELTA_TIME) * get(Engine_1_avail)
-        curr_oil = curr_oil - ENG.data.oil.qty_consumption / 60 / 60 * get(DELTA_TIME) * get(Engine_1_avail)
+        used_oil_qty[1] = used_oil_qty[1] + ENG.data.oil.qty_consumption / 60 / 60 * get(DELTA_TIME) * (ENG.dyn[1].is_avail and 1 or 0)
+        curr_oil = curr_oil - ENG.data.oil.qty_consumption / 60 / 60 * get(DELTA_TIME) * (ENG.dyn[1].is_avail and 1 or 0)
         set(Eng_1_OIL_qty, curr_oil)
     end
 
@@ -1097,8 +1127,8 @@ local function update_oil_qty()
         Set_dataref_linear_anim(Eng_2_OIL_qty, initial_oil_qty[2], 1,ENG.data.oil.qty_max , 0.1)
     else
         local curr_oil = get(Eng_2_OIL_qty)
-        used_oil_qty[2] = used_oil_qty[2] + ENG.data.oil.qty_consumption / 60 / 60 * get(DELTA_TIME) * get(Engine_2_avail)
-        curr_oil = curr_oil - ENG.data.oil.qty_consumption / 60 / 60 * get(DELTA_TIME) * get(Engine_2_avail)
+        used_oil_qty[2] = used_oil_qty[2] + ENG.data.oil.qty_consumption / 60 / 60 * get(DELTA_TIME) * (ENG.dyn[2].is_avail and 1 or 0)
+        curr_oil = curr_oil - ENG.data.oil.qty_consumption / 60 / 60 * get(DELTA_TIME) * (ENG.dyn[2].is_avail and 1 or 0)
         set(Eng_2_OIL_qty, curr_oil)
     end
 
@@ -1134,7 +1164,7 @@ local function update_n1_mode_and_limits_per_engine(thr_pos, engine)
         -- than 3 seconds, then SOFT GA is enabled until it's back to TOGA or CLB
         -- Also, both engines must be available
         -- Further details here: https://safetyfirst.airbus.com/introduction-to-the-soft-go-around-function/
-        elseif (get(Eng_N1_mode, engine) == 7 or get(TIME) - last_time_toga[engine] < 3) and get(Engine_1_avail) == 1 and get(Engine_2_avail) == 1 then
+        elseif (get(Eng_N1_mode, engine) == 7 or get(TIME) - last_time_toga[engine] < 3) and ENG.dyn[1].is_avail and ENG.dyn[2].is_avail then
             set(Eng_N1_mode, 7, engine) -- SOFT GA
             
             -- In this case we replace the MCT value
@@ -1214,7 +1244,7 @@ end
 local function update_failing_eng(x)
     local eng_ms    = (x == 1 and get(Engine_1_master_switch) or get(Engine_2_master_switch)) == 1
     local n2_below  = (x == 1 and get(Eng_1_N2) or get(Eng_2_N2)) < 62
-    local not_avail = (x == 1 and get(Engine_1_avail) or get(Engine_2_avail)) == 0
+    local not_avail = !ENG.dyn[x].is_avail
     local eng_st    = already_started_eng[x]
     local no_fire_pb= (x == 1 and get(Fire_pb_ENG1_status) or get(Fire_pb_ENG2_status)) == 0
 

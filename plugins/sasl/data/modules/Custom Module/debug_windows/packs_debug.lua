@@ -192,7 +192,7 @@ local function draw_a32nx_part()
     -- Lower part - engines bleed
     
     sasl.gl.drawFrame(width_start+25 , 10, 50, 30, ECAM_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, width_start+50 , 20, "ENG 1", 10,false, false, TEXT_ALIGN_CENTER, get(Engine_1_avail) == 1 and ECAM_GREEN or ECAM_ORANGE)
+    sasl.gl.drawText(Font_B612MONO_regular, width_start+50 , 20, "ENG 1", 10,false, false, TEXT_ALIGN_CENTER, ENG.dyn[1].is_avail and ECAM_GREEN or ECAM_ORANGE)
     sasl.gl.drawText(Font_B612MONO_regular, width_start+60 , 45, "IP", 8, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
     sasl.gl.drawLine(width_start+50, 40, width_start+50, 100, ECAM_WHITE)
     sasl.gl.drawLine(width_start+75, 25, width_start+100, 25, ECAM_WHITE)
@@ -207,7 +207,7 @@ local function draw_a32nx_part()
     draw_valve_v(width_start+100, 65, get(L_HP_valve) == 1)
         
     sasl.gl.drawFrame(width_end-75 , 10, 50, 30, ECAM_WHITE)
-    sasl.gl.drawText(Font_B612MONO_regular, width_end-50 , 20, "ENG 2", 10,false, false, TEXT_ALIGN_CENTER, get(Engine_2_avail) == 1 and ECAM_GREEN or ECAM_ORANGE)
+    sasl.gl.drawText(Font_B612MONO_regular, width_end-50 , 20, "ENG 2", 10,false, false, TEXT_ALIGN_CENTER, ENG.dyn[2].is_avail and ECAM_GREEN or ECAM_ORANGE)
     sasl.gl.drawText(Font_B612MONO_regular, width_end-60 , 45, "IP", 8, false, false, TEXT_ALIGN_CENTER, ECAM_WHITE)
     sasl.gl.drawLine(width_end-50, 40, width_end-50, 100, ECAM_WHITE)
     sasl.gl.drawLine(width_end-75, 25, width_end-100, 25, ECAM_WHITE)

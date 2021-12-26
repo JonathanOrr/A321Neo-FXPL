@@ -286,10 +286,6 @@ XP_Battery_1 = globalProperty("sim/cockpit2/electrical/battery_on[0]")
 XP_Battery_2 = globalProperty("sim/cockpit2/electrical/battery_on[1]")
 
 --ENG
-Engine_1_avail = createGlobalPropertyi("a321neo/dynamics/engines/eng_1_avail", 0, false, true, false)
-Engine_2_avail = createGlobalPropertyi("a321neo/dynamics/engines/eng_2_avail", 0, false, true, false)
-Eng_1_N1 = createGlobalPropertyf("a321neo/dynamics/engines/eng_1_n1", 50, false, true, false)
-Eng_2_N1 = createGlobalPropertyf("a321neo/dynamics/engines/eng_2_n1", 50, false, true, false)
 Eng_1_N2 = createGlobalPropertyf("a321neo/dynamics/engines/eng_1_n2", 0, false, true, false) -- Corrected value for N2
 Eng_2_N2 = createGlobalPropertyf("a321neo/dynamics/engines/eng_2_n2", 0, false, true, false) -- Corrected value for N2
 Eng_1_NFAN = createGlobalPropertyf("a321neo/dynamics/engines/eng_1_nfan", 0, false, true, false) -- Corrected value for NFAN
@@ -332,7 +328,6 @@ Eng_2_reverser_deployment = createGlobalPropertyf("a321neo/dynamics/engines/reve
 Eng_1_Firewall_valve = createGlobalPropertyi("a321neo/dynamics/engines/eng_1_firewall_valve_1", 1, false, true, false) -- 0 open, 1 - closed, 2 : transit - firewall valve
 Eng_2_Firewall_valve = createGlobalPropertyi("a321neo/dynamics/engines/eng_2_firewall_valve_2", 1, false, true, false) -- 0 open, 1 - closed, 2 : transit - firewall valve
 
-Eng_spool_time = globalProperty("sim/aircraft/engine/acf_spooltime_turbine")
 Eng_is_spooling_up  = createGlobalPropertyia("a321neo/dynamics/engines/is_spooling_up", 2) -- cranking
 Eng_starter_valve_open  = createGlobalPropertyia("a321neo/dynamics/engines/sav_open", 2)  -- valve open time exceeds spool up so we need a separate property
 

@@ -82,7 +82,7 @@ function Slats_flaps_calc_and_control()
     end
 
     --make ecam slats or flaps indication yellow refer to FCOM 1.27.50 P6
-    if get(All_on_ground) == 0 or (get(Engine_1_avail) == 1 and get(Engine_2_avail) == 1) then
+    if get(All_on_ground) == 0 or (ENG.dyn[1].is_avail and ENG.dyn[2].is_avail) then
         if (get(Hydraulic_G_press) < 1450 and get(Hydraulic_B_press) < 1450) or (get(SFCC_1_status) == 0 and get(SFCC_2_status) == 0) then
             set(Slats_ecam_amber, 1)
         else

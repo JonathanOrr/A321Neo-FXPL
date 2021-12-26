@@ -29,11 +29,11 @@ function eng_model_enforce_n1(eng, n1)
     if eng == 1 then
         engine_1_state.N1_spooled = n1
         engine_1_state.T_theoric = n1 / N1_max * engine_1_state.T_max
-        set(Eng_1_N1, n1)
+        ENG.dyn[1].n1 = n1 or 0 -- Just to be safe, let's check it's not nil
     else
         engine_2_state.N1_spooled = n1
         engine_2_state.T_theoric = n1 / N1_max * engine_2_state.T_max
-        set(Eng_2_N1, n1)
+        ENG.dyn[2].n1 = n1 or 0 -- Just to be safe, let's check it's not nil
     end
 end
 
@@ -75,7 +75,7 @@ function update_engine_model()
         AI_engine_on = AI_sys.comp[ANTIICE_ENG_1].valve_status,
         bleed_ratio = get(L_pack_Flow) / 3,
         reverser_status = get(Eng_1_reverser_deployment),
-        engine_is_available = get(Engine_1_avail) == 1
+        engine_is_available = ENG.dyn[1].is_avail
     }
     
     local inputs_eng_2 = {
@@ -88,7 +88,7 @@ function update_engine_model()
         AI_engine_on = AI_sys.comp[ANTIICE_ENG_2].valve_status,
         bleed_ratio = get(R_pack_Flow) / 3,
         reverser_status = get(Eng_2_reverser_deployment),
-        engine_is_available = get(Engine_2_avail) == 1
+        engine_is_available = ENG.dyn[2].is_avail
     }
 
     -- THE ORDER OR THE NExT FUNCTION CALLS IS *IMPORTANT*
@@ -113,8 +113,8 @@ function update_engine_model()
     update_thrust_secondary(engine_1_state, inputs_eng_1)
     update_thrust_secondary(engine_2_state, inputs_eng_2)
 
-    set(Eng_1_N1, engine_1_state.N1_spooled)
-    set(Eng_2_N1, engine_2_state.N1_spooled)
+    ENG.dyn[1].n1 = engine_1_state.N1_spooled
+    ENG.dyn[2].n1 = engine_2_state.N1_spooled
 
     set(total_eng_forces, -(engine_1_state.T_actual_spool + engine_2_state.T_actual_spool))
     update_moment()

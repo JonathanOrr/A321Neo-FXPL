@@ -23,9 +23,9 @@ local function draw_engines()
 
     -- Numbers
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2-350, size[2]/2-200, "1", 50, false, false, 
-                     TEXT_ALIGN_CENTER, get(Engine_1_avail) == 1 and ECAM_WHITE or ECAM_ORANGE)
+                     TEXT_ALIGN_CENTER, ENG.dyn[1].is_avail and ECAM_WHITE or ECAM_ORANGE)
     sasl.gl.drawText(Font_AirbusDUL, size[1]/2+350, size[2]/2-200, "2", 50, false, false,
-                     TEXT_ALIGN_CENTER, get(Engine_2_avail) == 1 and ECAM_WHITE or ECAM_ORANGE)
+                     TEXT_ALIGN_CENTER, ENG.dyn[2].is_avail and ECAM_WHITE or ECAM_ORANGE)
 
     eng1_bleed_ok = get(L_Eng_LP_press) > 4
     eng2_bleed_ok = get(R_Eng_LP_press) > 4
